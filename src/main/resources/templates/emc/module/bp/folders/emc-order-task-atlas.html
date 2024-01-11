@@ -1,0 +1,10 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ 
+                      '/static/emc/module/bp/folders/emc-order-task.js',
+                      '/static/emc/module/bp/folders/emc-order-task-atlas.js'
+                    ]);
+    emcOrderTask.atlasPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>
+

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.emc.module.mdm.basemdm.mtl.mapper.PfMtlMaintainItemMapper">
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM (SELECT X.*,
+                   A.TESTID,
+                   D.TESTNAME,
+                   B.METHODNAME,
+                   C.ITEMNAME,
+                   C.ITEMALIASNAME,
+                   E.TESTCATEGORYDESC
+              FROM T_EMC_MTL_MAINTAIN_ITEM X,
+                   T_EMC_TEST_METHOD       A,
+                   T_EMC_METHOD            B,
+                   T_EMC_ITEM              C,
+                   T_EMC_TEST              D,
+                   T_EMC_TEST_CATEGORY     E
+        WHERE X.TESTMETHODID = A.ID
+               AND X.METHODID = B.ID
+               AND X.ITEMID = C.ID
+               AND A.TESTID = D.ID
+               AND A.TESTCATEGORYID = E.ID) T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ID DESC
+            </otherwise>
+        </choose>
+    </select>
+    
+    
+    <!-- 查询详情 -->
+    <select id="selectDetail" parameterType="java.lang.Long" resultType="map">
+        SELECT T.*
+          FROM T_EMC_MTL_MAINTAIN_ITEM T
+         WHERE T.ID = #{id}
+    </select>
+</mapper>

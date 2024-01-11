@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.emc.module.sys.report.mapper.EmcReportConfigLineMapper">
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM (SELECT L.*,
+                       C.NAME,
+                       C.REMARK,
+                       F.NAME FILENAME,
+                       F.BIZCATEGORY,
+                       F.ID AS FILEID
+                  FROM T_CORE_REPORT_CONFIG_LINE L
+             LEFT JOIN T_CORE_REPORT_CONFIG C
+                    ON L.REPORTCONFIGID = C.ID
+             LEFT JOIN T_CORE_FILE F
+                    ON F.TARGETID = CONCAT('T_CORE_REPORT_CONFIG_LINE$', L.ID)
+                    <if test="bizCategory != null">
+                        AND F.BIZCATEGORY = #{bizCategory}
+                    </if>
+                 WHERE 1 = 1) T
+         <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent"/>
+            <if test="filter_userId != null">
+            	AND EXISTS ( SELECT 1 from T_CORE_USER_PERMISSION P WHERE P.TARGETID = T.ID AND P.USERID=#{filter_userId})
+            </if>
+            <if test="filter_menuId != null">
+                AND (T.MENUID IS NULL
+                     OR T.MENUID LIKE '%'||#{filter_menuId}||'%')
+             </if>
+        </where>
+         ORDER BY T.REPORTCONFIGID,
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ORDERNO,T.ID
+            </otherwise>
+        </choose>
+    </select>
+
+</mapper>

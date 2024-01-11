@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.emc.module.bp.info.infotmpl.mapper.EmcInfoTmplFieldMapper">
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.*,
+               B.ITEMID
+          FROM T_EMC_INFO_TMPL_FIELD T
+          LEFT JOIN T_EMC_TMPL_FIELD_ITEM B
+            ON T.ID = B.INFOTMPLFIELDID
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+            <if test="filter_target_have_used == '1'">
+                AND NOT EXISTS(SELECT 1
+                                 FROM T_EMC_TMPL_FIELD_ITEM ITEM
+                                WHERE ITEM.INFOTMPLFIELDID = T.ID)
+            </if>
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ID
+            </otherwise>
+        </choose>
+    </select>
+
+
+    <!-- 查询详情 -->
+    <select id="selectDetail" parameterType="java.lang.Long" resultType="map">
+        SELECT T.*
+          FROM T_EMC_INFO_TMPL_FIELD T
+         WHERE T.ID = #{id}
+    </select>
+
+</mapper>

@@ -1,0 +1,344 @@
+package com.sunwayworld.emc.module.bp.report.report.template.table.dioxin;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
+
+import com.sunwayworld.emc.framework.constant.EmcBizConstant;
+import com.sunwayworld.emc.framework.constant.EmcConstant;
+import com.sunwayworld.emc.framework.constant.PfConstant;
+import com.sunwayworld.emc.framework.word.WordTemplateUtils;
+import com.sunwayworld.emc.module.bp.bp.bean.EmcOrderTaskBean;
+import com.sunwayworld.emc.module.bp.project.project.bean.EmcProjectBean;
+import com.sunwayworld.emc.module.bp.report.report.bean.EmcReportResultBean;
+import com.sunwayworld.emc.module.bp.report.report.bean.WordTemplateDynamicTableDTO;
+import com.sunwayworld.emc.module.bp.report.report.bean.WordTemplateMonitorItemDTO;
+import com.sunwayworld.emc.module.bp.report.report.constant.EmcReportConstant;
+import com.sunwayworld.emc.module.bp.report.report.template.DynamicTable;
+import com.sunwayworld.emc.module.bp.result.run.bean.EmcRunBean;
+import com.sunwayworld.emc.module.mdm.equipt.equipt.bean.EmcEquiptBean;
+import com.sunwayworld.framework.beans.BeanPropertyDescriptor;
+import com.sunwayworld.framework.beans.BeanPropertyHelper;
+import com.sunwayworld.framework.constant.Constant;
+import com.sunwayworld.framework.utils.NumberUtils;
+import com.sunwayworld.framework.utils.ObjectUtils;
+import com.sunwayworld.framework.utils.StringUtils;
+import com.sunwayworld.module.sys.code.bean.CoreCodeBean;
+
+/**
+ * 检测项目表（采样通用）
+ * @author zhengxy@sunwayworld.com 2020年09月03日
+ */
+public class DioxinMonitorItemTable implements DynamicTable {
+
+    private XWPFDocument document;
+    private List<EmcOrderTaskBean> orderTaskList;
+    private List<EmcReportResultBean> reportResultList;
+    private List<EmcEquiptBean> equiptList;
+    private List<EmcRunBean> runList;
+    private List<CoreCodeBean> coreCodeList;
+    private int tableIndex;
+    private boolean isDioxin;
+    private boolean sampling;
+
+    public DioxinMonitorItemTable(XWPFDocument document, EmcProjectBean project, List<EmcOrderTaskBean> orderTaskList, List<EmcReportResultBean> reportResultList, List<EmcEquiptBean> equiptList, List<EmcRunBean> runList, List<CoreCodeBean> coreCodeList, int tableIndex) {
+        this.document = document;
+        this.orderTaskList = orderTaskList;
+        this.reportResultList = reportResultList;
+        this.equiptList = equiptList;
+        this.runList = runList;
+        this.coreCodeList = coreCodeList;
+        this.tableIndex = tableIndex;
+        this.isDioxin = StringUtils.equalsIgnoreCase(project.getBizCategoryCode(), "C");
+        this.sampling = Constant.YES.equals(project.getSample());
+    }
+
+    @Override
+    public XWPFDocument getDocument() {
+        return this.document;
+    }
+
+    @Override
+    public String getTableTitle() {
+        return EmcReportConstant.MONITOR_ITEM_TABLE_TITLE;
+    }
+
+    @Override
+    public int getTableIndex() {
+        return 3;
+    }
+
+    @Override
+    public boolean isLast() {
+        return true;
+    }
+
+    @Override
+    public int getDynamicTableIndex() {
+        return 3;
+    }
+
+    @Override
+    public List<List<Object>> buildTableHeader(WordTemplateDynamicTableDTO dynamicTableDTO) {
+        List<List<Object>> headerDataList = buildTableDynamicHeader(EmcReportConstant.MONITOR_ITEM_TABLE_HEADER_TITLES, EmcReportConstant.MONITOR_ITEM_TABLE_HEADER_COLUMN_QTY, null);
+        setTableTitle(EmcReportConstant.MONITOR_ITEM_TABLE_HEADER_TITLES, EmcReportConstant.MONITOR_ITEM_TABLE_HEADER_COLUMN_QTY, headerDataList, dynamicTableDTO);
+
+        return headerDataList;
+    }
+
+    @Override
+    public List<Integer> getColumnWidthList() {
+        return WordTemplateUtils.cm2Ints(Arrays.asList(2.7D, 2.7D, 0D, 4.1D));
+    }
+
+    @Override
+    public List<List<Object>> buildTableBody(WordTemplateDynamicTableDTO dynamicTableDTO) {
+        List<List<Object>> tableBodyDataList = new ArrayList<>();
+        List<WordTemplateMonitorItemDTO> monitorItemDTOList = new ArrayList<>();
+
+        Map<Long, String> sampleEquiptMap = equiptList.stream().collect(Collectors.toMap(EmcEquiptBean::getId, equipt -> equipt.getEquiptName() + "-" + equipt.getSpecification() + " (" + equipt.getEquiptId() + ")", (k1, k2) -> k1));
+
+        // 去除包含参数的测试
+        List<EmcOrderTaskBean> validOrderTaskList = orderTaskList.stream().filter(r -> !StringUtils.contains(r.getTestName(), EmcConstant.PARAMETER_TEST_MATCH_KEYWORD)
+                /*&& !StringUtils.contains(r.getTestName(), EmcConstant.DRY_MATTER_TEST_MATCH_KEYWORD)
+                && !StringUtils.contains(r.getTestName(), PfConstant.WATER_CONTENT_TEST_MATCH_KEYWORD)*/
+                && !StringUtils.contains(r.getTestName(), PfConstant.WATER_CONTENT_TEST_MATCH_KEYWORD_2)
+                && !StringUtils.contains(r.getExt$Item("relatedTest"), Constant.YES)
+                && EmcConstant.N_A.equals(r.getQcCategoryCode())).collect(Collectors.toList());
+
+        // 如果是二噁英，则直接排除含水率测试
+        if (isDioxin) {
+            validOrderTaskList = validOrderTaskList.stream().filter(task -> !StringUtils.contains(task.getTestName(), PfConstant.WATER_CONTENT_TEST_MATCH_KEYWORD)).collect(Collectors.toList());
+        }
+
+        AtomicInteger mergedRowIndex = new AtomicInteger(0);
+        List<WordTemplateDynamicTableDTO.MergedRow> mergedRowList = Optional.ofNullable(dynamicTableDTO.getMergedRowList()).orElseGet(ArrayList::new);
+
+        Map<String, EmcRunBean> runMap = runList.stream().collect(Collectors.toMap(EmcRunBean::getId, Function.identity()));
+
+        Map<String, String> testItemSortCodeMap = coreCodeList.stream().filter(code -> StringUtils.equals(code.getCodeCategoryId(), "testitemsort")).collect(Collectors.toMap(CoreCodeBean::getCode, CoreCodeBean::getCodeName, (v1, v2) -> v1));
+        Map<String, Long> testItemSortNumMap = coreCodeList.stream().filter(code -> StringUtils.equals(code.getCodeCategoryId(), "testitemsort")).collect(Collectors.toMap(CoreCodeBean::getCode, code -> Optional.ofNullable(code.getOrderNo()).orElse(code.getId()), (v1, v2) -> v1));
+
+        // 按样品类型进行分组
+        validOrderTaskList.sort(Comparator.comparing(EmcOrderTaskBean::getOrderCategory));
+        Map<String, List<EmcOrderTaskBean>> orderTaskMap = validOrderTaskList.stream().collect(Collectors.groupingBy(EmcOrderTaskBean::getOrderCategory, LinkedHashMap::new, Collectors.toList()));
+        orderTaskMap.forEach((orderCategory, curOrderTaskList) -> {
+        	curOrderTaskList.stream().filter(task -> StringUtils.isEmpty(task.getExt$Item("itemGroup"))).forEach(task -> task.setExt$Item("itemGroup", task.getTestName()));
+
+            Map<String, List<EmcOrderTaskBean>> testOrderTaskMap = curOrderTaskList.stream().collect(Collectors.groupingBy(task -> task.getTestId() + "$" + task.getTestMethodId()+ "$" + task.getExt$Item("itemGroup")));
+
+            // 按分析科室进行排序展示
+            Set<String> uniqueTestIdSet = new HashSet<>();
+
+            curOrderTaskList.stream().filter(task -> StringUtils.isEmpty(task.getAnalysisOrgId())).forEach(task -> task.setAnalysisOrgId(""));
+
+            WordTemplateUtils.sortedByAnalysisOrg(curOrderTaskList);
+
+            Map<String, List<EmcOrderTaskBean>> orgOrderTaskMap = curOrderTaskList.stream().collect(Collectors.groupingBy(EmcOrderTaskBean::getAnalysisOrgId, LinkedHashMap::new, Collectors.toList()));
+            orgOrderTaskMap.forEach((analysisOrgId, orgTaskList) -> {
+                // 根据测试ID + 方法ID去重（一个任务中同一测试可能有多个方法），生成检测项目表数据
+                orgTaskList.stream().filter(task -> StringUtils.isEmpty(task.getExt$Item("itemGroup"))).forEach(task -> task.setExt$Item("itemGroup", task.getTestName()));
+                ArrayList<EmcOrderTaskBean> uniqueTaskList = orgTaskList.stream().collect(Collectors.collectingAndThen(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(task -> task.getExt$Item("itemGroup")))), ArrayList::new));
+                List<EmcOrderTaskBean> testItemSortTaskList = uniqueTaskList.stream().filter(task -> !StringUtils.isEmpty(task.getExt$Item("testItemSort"))).collect(Collectors.toList());
+
+                // 有设置检测项目分类的，按系统编码的维护顺序排序
+                testItemSortTaskList.forEach(task -> task.setExt$Item("testItemSortNum", Optional.ofNullable(testItemSortNumMap.get(task.getExt$Item("testItemSort"))).orElse((long) testItemSortNumMap.size()) + ""));
+                testItemSortTaskList.sort(Comparator.comparing(task -> NumberUtils.parseLong(task.getExt$Item("testItemSortNum"))));
+
+                List<Long> testItemSortTaskIdList = testItemSortTaskList.stream().map(EmcOrderTaskBean::getId).collect(Collectors.toList());
+                Map<String, List<EmcOrderTaskBean>> mergedTaskMap = testItemSortTaskList.stream().collect(Collectors.groupingBy(task -> String.join("$", task.getExt$Item("testItemSort"), task.getTestMethodBasis(), task.getEquiptId() + ""), LinkedHashMap::new, Collectors.toList()));
+
+                // 未设置检测项目分类的测试
+                List<EmcOrderTaskBean> otherTaskList = uniqueTaskList.stream().filter(task -> !testItemSortTaskIdList.contains(task.getId())).collect(Collectors.toList());
+
+                // 设置了检测项目分类的，合并显示
+                mergedTaskMap.forEach((groupKey, curTaskList) -> {
+                    EmcOrderTaskBean firstTask = curTaskList.get(0);
+                    String key = firstTask.getTestId() + "$" + firstTask.getTestMethodId()+ "$" + firstTask.getExt$Item("itemGroup");
+                    if (uniqueTestIdSet.contains(groupKey)) {
+                        return;
+                    }
+
+                    uniqueTestIdSet.add(groupKey);
+                    WordTemplateMonitorItemDTO monitorItemDTO = new WordTemplateMonitorItemDTO();
+                    monitorItemDTO.setOrderCategory(WordTemplateUtils.handleOrderCategory(orderCategory));
+
+                    String itemSortCode = groupKey.substring(0, groupKey.indexOf("$"));
+                    String sortName = testItemSortCodeMap.get(itemSortCode);
+                    if (StringUtils.isEmpty(sortName)) {
+                        return;
+                    }
+
+                    monitorItemDTO.setTestName(sortName);
+                    monitorItemDTO.setTestMethodName(firstTask.getTestMethodBasis());
+
+                    List<String> sampleDevices = getSampleDevices(testOrderTaskMap.get(key), sampleEquiptMap);
+                    String analysisDevice = getAnalysisDevice(testOrderTaskMap.get(key), sampleEquiptMap);
+                    List<String> weighingDevices = getWeighingDevice(runMap.get(firstTask.getRunId()), sampleEquiptMap);
+
+                    Set<String> deviceSet = new HashSet<>();
+                    // 既有采样仪器又有分析仪器的测试，不显示采样仪器，只有现场检测的才显示采样仪器
+                    if (StringUtils.isEmpty(analysisDevice) && !sampleDevices.isEmpty()) {
+                        deviceSet.addAll(sampleDevices);
+                    }
+                    if (!StringUtils.isEmpty(analysisDevice)) {
+                        deviceSet.add(analysisDevice);
+                    }
+                    deviceSet.addAll(weighingDevices);
+
+                    monitorItemDTO.setDetectDevice(StringUtils.contains(analysisDevice, EmcConstant.N_A) ? null : (deviceSet.isEmpty() ? null : String.join("、", deviceSet)));
+
+                    monitorItemDTOList.add(monitorItemDTO);
+                });
+
+                // 未设置检测项目分类，依然单独显示
+                otherTaskList.forEach(t -> {
+                    String key = t.getTestId() + "$" + t.getTestMethodId()+ "$" + t.getExt$Item("itemGroup");
+
+                    if (uniqueTestIdSet.contains(key)) {
+                        return;
+                    }
+
+                    uniqueTestIdSet.add(key);
+                    WordTemplateMonitorItemDTO monitorItemDTO = new WordTemplateMonitorItemDTO();
+                    monitorItemDTO.setOrderCategory(WordTemplateUtils.handleOrderCategory(orderCategory));
+                    String itemGroup = StringUtils.replace(t.getExt$Item("itemGroup"), PfConstant.SPECIAL_TEST_NAME, PfConstant.SPECIAL_REPLACED_TEST_NAME);
+                    monitorItemDTO.setTestName(itemGroup);
+                    monitorItemDTO.setTestMethodName(t.getTestMethodBasis());
+
+                    List<String> sampleDevices = getSampleDevices(testOrderTaskMap.get(key), sampleEquiptMap);
+                    String analysisDevice = getAnalysisDevice(testOrderTaskMap.get(key), sampleEquiptMap);
+                    List<String> weighingDevices = getWeighingDevice(runMap.get(t.getRunId()), sampleEquiptMap);
+
+                    Set<String> deviceSet = new HashSet<>();
+                    // 既有采样仪器又有分析仪器的测试，不显示采样仪器，只有现场检测的才显示采样仪器
+                    if (StringUtils.isEmpty(analysisDevice) && !sampleDevices.isEmpty()) {
+                        deviceSet.addAll(sampleDevices);
+                    }
+                    if (!StringUtils.isEmpty(analysisDevice)) {
+                        deviceSet.add(analysisDevice);
+                    }
+                    deviceSet.addAll(weighingDevices);
+
+                    monitorItemDTO.setDetectDevice(StringUtils.contains(analysisDevice, EmcConstant.N_A) ? null : (deviceSet.isEmpty() ? null : String.join("、", deviceSet)));
+
+                    monitorItemDTOList.add(monitorItemDTO);
+                });
+
+                mergedRowList.add(new WordTemplateDynamicTableDTO.MergedRow(0, mergedRowIndex.get() + 1, mergedRowIndex.addAndGet(uniqueTaskList.size())));
+            });
+        });
+
+        monitorItemDTOList.forEach(m -> {
+            List<BeanPropertyDescriptor> descriptors = BeanPropertyHelper.getBeanPropertyDescriptorList(WordTemplateMonitorItemDTO.class);
+            List<Object> rowDataList = descriptors.stream().map(d -> d.getPropertyValue(m)).collect(Collectors.toList());
+            tableBodyDataList.add(rowDataList);
+        });
+
+        return tableBodyDataList;
+    }
+
+    @SuppressWarnings("unused")
+	private String getSampleDevice(EmcOrderTaskBean orderTask, Map<Long, String> sampleEquiptMap) {
+        String samplingEquiptId = orderTask.getSamplingEquiptId();
+        Long equiptId = orderTask.getEquiptId();
+
+        // 采样设备包含两种，一种是现场使用的取样设备如取水器，另外就是现场直接分析设备如pH计
+        List<String> equiptNameList = new ArrayList<>();
+        if (!StringUtils.isEmpty(samplingEquiptId)) {
+            String[] sampleEquiptIdList = StringUtils.split(samplingEquiptId, ",");
+            Arrays.stream(sampleEquiptIdList).forEach(sampleEquiptId -> {
+                Optional.ofNullable(sampleEquiptMap.get(NumberUtils.parseLong(sampleEquiptId))).ifPresent(equiptNameList::add);
+            });
+        }
+
+        if (StringUtils.equals(orderTask.getAnalysisType(), EmcBizConstant.ANALYSISCATEGORY_SAMPLING) && !StringUtils.contains(sampleEquiptMap.get(equiptId), EmcConstant.EQUIPMENT_NA)) {
+            equiptNameList.add(sampleEquiptMap.get(equiptId));
+        }
+
+        if (equiptNameList.isEmpty()) {
+            return null;
+        }
+
+        return String.join("、", equiptNameList);
+    }
+
+    @SuppressWarnings("unused")
+    private String getSampleDevice(List<EmcOrderTaskBean> orderTaskList, Map<Long, String> sampleEquiptMap) {
+        return String.join("、", getSampleDevices(orderTaskList, sampleEquiptMap));
+    }
+
+    private List<String> getSampleDevices(List<EmcOrderTaskBean> orderTaskList, Map<Long, String> sampleEquiptMap) {
+        List<EmcOrderTaskBean> uniqueEquiptTaskList = orderTaskList.stream().filter(task -> !ObjectUtils.isEmpty(task.getEquiptId())).collect(Collectors.collectingAndThen(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(EmcOrderTaskBean::getEquiptId))), ArrayList::new));
+        List<String> samplingEquiptIdList = orderTaskList.stream().filter(task -> !StringUtils.isEmpty(task.getSamplingEquiptId())).map(EmcOrderTaskBean::getSamplingEquiptId).distinct().collect(Collectors.toList());
+
+        // 采样设备包含两种，一种是现场使用的取样设备如取水器，另外就是现场直接分析设备如pH计
+        List<String> equiptNameList = new ArrayList<>();
+
+        samplingEquiptIdList.forEach(samplingEquiptId -> {
+            String[] sampleEquiptIdList = StringUtils.split(samplingEquiptId, ",");
+            Arrays.stream(sampleEquiptIdList).forEach(sampleEquiptId -> Optional.ofNullable(sampleEquiptMap.get(NumberUtils.parseLong(sampleEquiptId))).ifPresent(equiptNameList::add));
+        });
+
+        uniqueEquiptTaskList.forEach(orderTask -> {
+            if (StringUtils.equals(orderTask.getAnalysisType(), EmcBizConstant.ANALYSISCATEGORY_SAMPLING) && !StringUtils.contains(sampleEquiptMap.get(orderTask.getEquiptId()), EmcConstant.EQUIPMENT_NA)) {
+                equiptNameList.add(sampleEquiptMap.get(orderTask.getEquiptId()));
+            }
+        });
+
+        return equiptNameList;
+    }
+
+    private String getAnalysisDevice(List<EmcOrderTaskBean> orderTaskList, Map<Long, String> sampleEquiptMap) {
+        if (null == orderTaskList) {
+            return null;
+        }
+
+        List<Long> equiptIdList = orderTaskList.stream().filter(task -> StringUtils.equals(task.getAnalysisType(), EmcBizConstant.ANALYSISCATEGORY_ANALYSIS)).map(EmcOrderTaskBean::getEquiptId).distinct().collect(Collectors.toList());
+        Set<String> equiptSet = new HashSet<>();
+        equiptIdList.forEach(equiptId -> Optional.ofNullable(sampleEquiptMap.get(equiptId)).ifPresent(equiptSet::add));
+
+        return equiptSet.isEmpty() ? null : String.join("、", equiptSet);
+    }
+
+    private List<String> getWeighingDevice(EmcRunBean run, Map<Long, String> sampleEquiptMap) {
+        if (run == null || StringUtils.isEmpty(run.getExt$Item("weighingEquiptId"))) {
+            return Collections.emptyList();
+        }
+
+        // 获取批上的称重设备
+        String weighingEquiptId = run.getExt$Item("weighingEquiptId");
+        List<Long> deviceIdList = Arrays.stream(StringUtils.split(weighingEquiptId, ",")).filter(NumberUtils::isNumber).mapToLong(NumberUtils::parseLong).boxed().collect(Collectors.toList());
+
+        List<String> excludeDeviceList = Arrays.asList(PfConstant.EXCLUDE_DEVICE_KEYWORDS);
+
+        List<String> deviceList = new ArrayList<>(deviceIdList.size());
+        deviceIdList.forEach(deviceId -> {
+            String deviceName = sampleEquiptMap.get(deviceId);
+            // 常规的需要排除特定的仪器设备
+            if (!isDioxin) {
+                boolean exclude = excludeDeviceList.stream().anyMatch(keyword -> StringUtils.contains(deviceName, keyword));
+                if (exclude) {
+                    return;
+                }
+            }
+            deviceList.add(deviceName);
+        });
+
+        return deviceList;
+    }
+
+}

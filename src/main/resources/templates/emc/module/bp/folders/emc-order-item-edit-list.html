@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/emc/module/bp/folders/emc-order.js',
+                      '/static/emc/module/bp/folders/emc-order-item-edit-list.js'
+                    ]);
+    emcOrder.itemEditPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>
+

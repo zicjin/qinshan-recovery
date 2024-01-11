@@ -1,0 +1,79 @@
+<th:block th:replace="module/gikam/workspace" />
+<script>
+    var option = {
+        xAxis : {
+            type : 'category',
+            axisLine : {
+                show : false
+            },
+            axisTick : {
+                show : false
+            },
+            axisLabel : {
+                interval : 0,
+            },
+            data : []
+        },
+        yAxis : {
+            type : 'value',
+            axisLine : {
+                show : false,
+            },
+            axisTick : {
+                show : false
+            },
+            splitLine : {
+                lineStyle : {
+                    color : '#eee',
+                    type : 'dashed'
+                }
+            },
+            minInterval: 1
+        },
+        series : [ {
+            data : [],
+            type : 'bar',
+            barWidth : 30
+        
+        } ],
+        color : [ '#51CFA0' ],
+        tooltip : {
+            show : true,
+            trigger : 'axis',
+            formatter : function (data) {
+                return (data[0]['name'] + '</br>报告数量: ' + data[0]['value'])
+            }
+        },
+        grid : {
+            left : 50,
+            right : 50,
+            top : 30,
+            bottom : 40
+        }
+    };
+
+    function init() {
+        Gikam.post(IFM_CONTEXT + '/secure/emc/module/bp/project/projects/project-statistics/queries',
+            Gikam.getJsonWrapper({}, [ '', [] ])).done(function (data) {
+            if (data) {
+                var rows = data.rows;
+                var bizCategoryNames = [];
+                var projectCounts = [];
+                rows.map(function(r) {
+                    bizCategoryNames.push(r.ext$.bizcategoryname);
+                    projectCounts.push(r.ext$.projectcount);
+                })
+                option.xAxis.data = bizCategoryNames
+                option.series[0].data = projectCounts
+                Gikam.create('echarts', {
+                    id : 'project-statistics-chart',
+                    renderTo : document.body,
+                    option : option
+                });
+            }
+        })
+    }
+
+    init();
+
+</script>

@@ -1,0 +1,8 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+Gikam.requirejs([ '/static/emc/module/bp/result/runs/emc-run.js',
+                  '/static/emc/module/bp/result/runs/emc-run-order-choose-list.js'
+                ]);
+    emcRun.orderChoosePage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>

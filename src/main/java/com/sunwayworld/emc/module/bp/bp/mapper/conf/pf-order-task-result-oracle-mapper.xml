@@ -1,0 +1,544 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.emc.module.bp.bp.mapper.PfOrderTaskResultMapper">
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM (SELECT A.*,
+                       O.SAMPLENUM,
+                       O.ORDERDESC,
+                       O.REMARK,
+                       O.SAMPLEID,
+                       O.SAMPLEBEGINDATE,
+                       O.SAMPLEBEGINTIME,
+                       O.SAMPLECOMPLETEDATE,
+                       O.SAMPLECOMPLETETIME,
+                       O.LABELNO,
+                       M.STATUS AS ORDERTASKSTATUS,
+                       M.MONITORTMPLID,
+                       M.ORDERCATEGORY,
+                       M.ANALYSISDATE,
+                       M.TESTNAME,
+                       M.METHODNAME,
+                       M.TESTMETHODBASIS,
+                       M.INDEXID,
+                       M.CUPNO,
+                       M.EQUIPTACQUNO,
+                       N.INDEXNAME,
+                       F.PLANSAMPLEDATE,
+                       F.FOLDERNO,
+                       F.MONITORPOINTID,
+                       F.MONITORPOINTNO,
+                       F.MONITORPOINTNAME,
+                       F.SAMPLEUSERNAME,
+                       P.TESTORGNAME,
+                       P.ENTRUSTORGNAME,
+                       P.PROJNO,
+                       P.PROJNAME,
+                       P.BIZCATEGORYCODE,
+                       P.REGISTDATE,
+                       R.ANALYSISUSERNAME,
+                       R.CHECKUSERNAME,
+                       R.ANALYSISBEGINDATE,
+                       E.EQUIPTNAME,
+                       E.EQUIPTID AS EQUIPTNO,
+                       B.USETYPE,
+                       B.NONSNRANGE,
+                       B.COEFFICIENT,
+                       B.THEORYCONTENT,
+                       B.JUDGEBASIS,
+                       B.CALQCRESULT,
+                       C.SETNAME
+                  FROM T_EMC_ORDER_TASK_RESULT A
+                  LEFT JOIN T_EMC_ORDER O
+                    ON O.ID = A.ORDERID
+                  LEFT JOIN T_EMC_ORDER_TASK M
+                    ON M.ID = A.ORDERTASKID
+                  LEFT JOIN T_EMC_ORDER_INDEX N
+                    ON N.ID = M.INDEXID
+                  LEFT JOIN T_EMC_FOLDER F
+                    ON F.ID = A.FOLDERID
+                  LEFT JOIN T_EMC_PROJECT P
+                    ON P.ID = A.PROJID
+                  LEFT JOIN T_EMC_RUN R
+                    ON R.ID = A.RUNID
+                  LEFT JOIN T_EMC_EQUIPT E
+                    ON E.ID = R.EQUIPTID
+                  LEFT JOIN T_EMC_ITEM B
+                    ON B.ID = A.ITEMID
+                  LEFT JOIN T_EMC_STANDARD_SET C
+                    ON C.ID = B.STANDSETID) T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+            <!-- 此SQL片段加上后，数据查询总数会不一致 -->
+            <!--<include refid="com.sunwayworld.emc.module.bp.project.project.mapper.EmcProjectMapper.projectStatusWhereClause">
+                <property name="tableAlias" value="T"/>
+                <property name="projectIdColumnName" value="PROJID"/>
+            </include>-->
+            <if test='originalResults == "empty"'>
+                AND T.REPORTRESULT IS NULL
+            </if>
+            <if test='targetType == "subcontractor"'>
+                AND EXISTS (SELECT 1
+                              FROM T_EMC_ORDER_TASK O,
+                                   T_EMC_SUBCONTRACT_RECORD S
+                             WHERE O.ID = S.ORDERTASKID
+                               AND O.ID = T.ORDERTASKID
+                               AND O.FOLDERID = #{targetFolderId}
+                               AND O.STATUS = 'done'
+                               AND O.SUBCONTRACTORID IS NOT NULL)
+            </if>
+            <if test='targetType == "dataSharing"'>
+                AND EXISTS (SELECT 1
+                              FROM T_EMC_ORDER_TASK O
+                             WHERE O.ID = T.ORDERTASKID
+                               AND O.FOLDERID = #{targetFolderId}
+                               AND O.STATUS = 'done'
+                               AND O.ANALYSISTYPE = 'analysis'
+                               AND O.DATASHARING = '1')
+            </if>
+            <!-- 现场采样数据录入 -->
+            <if test='targetType == "samplingInput"'>
+                AND EXISTS (SELECT 1
+                              FROM T_EMC_ORDER_TASK O
+                             WHERE O.ID = T.ORDERTASKID
+                               AND O.SUBCONTRACTORID IS NULL)
+            </if>
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                 T.ORDERNO, T.TESTNAME, T.ITEMORDERNO, T.REPEATNO
+            </otherwise>
+        </choose>
+    </select>
+
+    <!-- 查询结果录入结果数据，这里只查询所需的字段 -->
+    <select id="selectResultInputResultList" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM (SELECT A.ID,
+                        A.FOLDERID,
+                        A.RUNID,
+                        A.ORDERID,
+                        A.ORDERNO,
+                        A.ORDERTASKID,
+                        A.TESTID,
+                        A.ITEMID,
+                        A.ITEMNAME,
+                        A.ITEMALIASNAME,
+                        A.ITEMORDERNO,
+                        A.REPEATNO,
+                        A.RESULTCATEGORY,
+                        A.ANALYSISTYPE,
+                        A.UNITNAME,
+                        A.SCRIPTFLAG,
+                        A.ORIGINALRESULT,
+                        A.REPORTRESULT,
+                        A.SUBMITFLAG,
+                        A.QCNAME,
+                        A.QCCATEGORYCODE,
+                        B.STATUS,
+                        B.CUPNO,
+                        B.TESTNAME,
+                        B.ORDERCATEGORY,
+                        C.MONITORPOINTNAME,
+                        M.USETYPE,
+                        E.SAMPLEID,
+                        E.RELATEDQCORDERNO,
+                        B.WEIGHINGDATE,
+                        B.WEIGHTENDDATE,
+                        B.VOCBOTTLE,
+                        B.OILFILMNO,
+                        B.SAMPLEBOTTLENO,
+                        F.PROJNO
+                FROM T_EMC_ORDER_TASK_RESULT A
+                LEFT JOIN T_EMC_ORDER_TASK B
+                    ON B.ID = A.ORDERTASKID
+                LEFT JOIN T_EMC_FOLDER C
+                    ON C.ID = A.FOLDERID
+                LEFT JOIN T_EMC_ITEM M
+                    ON A.ITEMID = M.ID
+                LEFT JOIN T_EMC_ORDER E
+                    ON E.ID = A.ORDERID
+                LEFT JOIN T_EMC_PROJECT F
+                    ON C.PROJID = F.ID) T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ORDERNO,T.TESTNAME, T.ITEMORDERNO, T.REPEATNO
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="selectScriptByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM (SELECT OT.*,
+                       S.SCRIPT1,
+                       S.SCRIPT2,
+                       S.VALIDATESCRIPT,
+                       S.SETNAME,
+                       ITS.SETNAME ITEMSETNAME
+                  FROM (SELECT OTR.*,
+                               CASE OTR.QCCATEGORYCODE
+                                 WHEN 'N/A' THEN
+                                  I.STANDSETID
+                                 ELSE
+                                  QC.QCGROUP
+                               END STANDSETID,
+                               I.STANDSETID ITEMSTANDSETID,
+                               I.LIMITREVISION,
+                               CASE OTR.SCRIPTFLAG
+                                 WHEN '1' THEN
+                                  I.SCRIPT
+                                 ELSE
+                                  NULL
+                               END TESTSCRIPT,
+                               I.CALQCRESULT,
+                               I.INTERCEPTREVISION,
+                               I.SLOPEREVISION,
+                               I.LIMITFLAG,
+                               I.NEGATIVETOZERO,
+                               I.SCIENTIFICNOTATION,
+                               I.RESULTCATEGORY AS ITEMRESULTCATEGORY,
+                               I.AVGCALCTYPE,
+                               I.NONSNRANGE,
+                               I.DETECTEDQUANTITY,
+                               OT.STOCKBATCHNO,
+                               OT.TESTNAME,
+                               OT.METHODNAME,
+                               OT.PARENTID AS TASKPARENTID,
+                               OT.MONITORTMPLID,
+                               TM.RECOVERYRATE
+                          FROM T_EMC_ORDER_TASK_RESULT OTR
+                         INNER JOIN T_EMC_ORDER_TASK OT
+                            ON OTR.ORDERTASKID = OT.ID
+                          LEFT JOIN T_EMC_ITEM I
+                            ON OTR.ITEMID = I.ID
+                          LEFT JOIN T_EMC_QC_CATEGORY QC
+                            ON OTR.QCCATEGORYID = QC.ID
+                          LEFT JOIN T_EMC_TEST_METHOD TM
+                            ON I.TESTMETHODID = TM.ID) OT
+                  LEFT JOIN T_EMC_STANDARD_SET S
+                    ON OT.STANDSETID = S.ID
+                  LEFT JOIN T_EMC_STANDARD_SET ITS
+                    ON OT.ITEMSTANDSETID = ITS.ID) T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ORDERID, T.TESTID, T.ITEMORDERNO
+            </otherwise>
+        </choose>
+    </select>
+
+    <!-- 查询快速录入结果数据，这里只查询所需的字段 -->
+    <select id="selectQuickInputResultList" parameterType="map" resultType="map">
+        SELECT T.*
+        FROM (SELECT A.ID,
+        A.FOLDERID,
+        A.RUNID,
+        A.ORDERID,
+        A.ORDERNO,
+        A.ORDERTASKID,
+        A.TESTID,
+        A.ITEMID,
+        A.ITEMNAME,
+        A.ITEMALIASNAME,
+        A.ITEMORDERNO,
+        A.REPEATNO,
+        A.UNITNAME,
+        A.LOWLIMIT,
+        A.HIGHLIMIT,
+        A.SCRIPTFLAG,
+        A.SUBMITFLAG,
+        A.ORIGINALRESULT,
+        A.REPORTRESULT,
+        A.AVGRESULT,
+        A.RESULTSTATUS,
+        A.RESULTCATEGORY,
+        A.QCCATEGORYID,
+        A.QCNAME,
+        A.QCCATEGORYCODE,
+        A.REPORTDISPLAY,
+        A.PROJID,
+        P.PROJNO,
+        P.PROJNAME,
+        P.BIZCATEGORYCODE,
+        F.FOLDERNO,
+        F.SAMPLEORGID,
+        F.SAMPLEORGNAME,
+        F.TERMINATION,
+        O.SAMPLEBEGINDATE,
+        O.ORDERCATEGORY,
+        S.REPORTCONFIGLINEID AS SAMPLEREPORTCONFIGLINEID,
+        S.SAMPLENO,
+        OT.TESTNAME,
+        OT.CUPNO,
+        OT.ANALYSISORGID,
+        OT.ANALYSISORGNAME,
+        OT.ANALYSISTYPE,
+        OT.METHODNAME,
+        OT.TESTMETHODBASIS,
+        OT.STATUS AS ORDERTASKSTATUS,
+        OT.SCHEMENAME,
+        OT.EQUIPTACQUNO,
+        OC.ORDERCONTAINERNO,
+        QC.USECATEGORY
+        FROM T_EMC_ORDER_TASK_RESULT A
+        LEFT JOIN T_EMC_PROJECT P ON P.ID = A.PROJID
+        LEFT JOIN T_EMC_FOLDER F ON F.ID = A.FOLDERID
+        LEFT JOIN T_EMC_ORDER O ON O.ID = A.ORDERID
+        LEFT JOIN T_EMC_SAMPLE S ON S.ID = O.SAMPLEID
+        LEFT JOIN T_EMC_ORDER_TASK OT ON OT.ID = A.ORDERTASKID
+        LEFT JOIN T_EMC_ORDER_CONTAINER OC ON OT.ORDERCONTAINERID = OC.ID
+        LEFT JOIN T_EMC_MONITOR_POINT MP ON MP.ID = F.MONITORPOINTID
+        LEFT JOIN T_EMC_QC_CATEGORY QC ON A.QCCATEGORYID = QC.ID
+        WHERE (P.ID IS NULL OR P.STATUS != 'cancel')
+        ) T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+            <if test='hideReTest == "1"'>
+                AND T.RETESTORIGINALORDERTASKRESULTID IS NULL
+            </if>
+            <if test='targetType == "sampleAudit"'>
+                AND T.REPORTDISPLAY = '1'
+                AND T.ANALYSISTYPE = 'sampling'
+                AND T.QCNAME = 'N/A'
+            </if>
+            <if test='targetType == "analysisAudit"'>
+                AND T.REPORTDISPLAY = '1'
+                AND T.ANALYSISTYPE = 'analysis'
+                AND T.QCNAME = 'N/A'
+                AND T.RETESTORIGINALORDERTASKRESULTID IS NULL
+                AND T.ORDERTASKSTATUS = #{status}
+                AND NOT EXISTS (SELECT 1
+                FROM T_EMC_ORDER_TASK OT
+                WHERE OT.FOLDERID = T.FOLDERID
+                AND OT.QCCATEGORYCODE = 'N/A'
+                AND OT.ANALYSISTYPE = 'analysis'
+                AND OT.RETESTORIGINALORDERTASKID IS NULL
+                AND OT.TESTID != 1220/* 五日生化需氧量排除在外，可以不限制其状态 */
+                <choose>
+                    <when test='status == "auditFirst"'>
+                        AND (OT.STATUS != 'auditFirst' AND OT.STATUS != 'auditSecond' AND OT.STATUS != 'done')
+                    </when>
+                    <otherwise>
+                        AND (OT.STATUS != 'auditSecond' AND OT.STATUS != 'done')
+                    </otherwise>
+                </choose>
+                )
+            </if>
+            <if test='targetType == "qualityAudit"'>
+                AND T.REPORTDISPLAY = '1'
+                AND T.ANALYSISTYPE = 'analysis'
+                AND T.RETESTORIGINALORDERTASKRESULTID IS NULL
+                <choose>
+                    <when test="qcCategoryId != null and qcCategoryId != ''">
+                        AND T.QCCATEGORYID IN (${qcCategoryId})
+                    </when>
+                    <otherwise>
+                        AND (T.QCCATEGORYCODE = 'N/A' OR T.USECATEGORY = 'scene' OR T.USECATEGORY = 'orderAccept')
+                    </otherwise>
+                </choose>
+            </if>
+            <if test='targetType == "waterAudit"'>
+                AND T.TERMINATION != '1'
+                AND T.REPORTDISPLAY = '1'
+                AND T.QCCATEGORYCODE = 'N/A'
+                AND T.RETESTORIGINALORDERTASKRESULTID IS NULL
+                AND ((T.ANALYSISTYPE = 'sampling' AND (T.ORDERTASKSTATUS = 'audit' OR T.ORDERTASKSTATUS = 'done'))
+                OR T.ANALYSISTYPE = 'analysis' AND (T.ORDERTASKSTATUS = 'auditFirst' OR T.ORDERTASKSTATUS = 'auditSecond' OR T.ORDERTASKSTATUS = 'done')
+                )
+            </if>
+            <if test='targetType == "folderSearch"'>
+                AND T.REPORTDISPLAY = '1'
+                AND T.ANALYSISTYPE = 'analysis'
+                AND T.RETESTORIGINALORDERTASKRESULTID IS NULL
+                <if test="schemeName != null and schemeName != ''">
+                    AND T.SCHEMENAME LIKE CONCAT('%', #{schemeName}, '%')
+                </if>
+                <if test="analysisOrgId != null and analysisOrgId != ''">
+                    AND T.ANALYSISORGID = #{analysisOrgId}
+                </if>
+                <choose>
+                    <when test="qcCategoryId != null and qcCategoryId != ''">
+                        AND T.QCCATEGORYID IN (${qcCategoryId})
+                    </when>
+                    <otherwise>
+                        AND (T.QCCATEGORYCODE = 'N/A' OR T.USECATEGORY = 'scene' OR T.USECATEGORY = 'orderAccept')
+                    </otherwise>
+                </choose>
+            </if>
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ANALYSISORGID ASC, T.FOLDERNO ASC
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="selectResultRemind" parameterType="map" resultType="map">
+        SELECT R.*,
+               OT.TESTNAME,
+               O.ORDERNO AS LABELNUMBER
+          FROM T_EMC_ORDER_TASK_RESULT R
+          LEFT JOIN T_EMC_PROJECT P ON R.PROJID = P.ID
+          LEFT JOIN T_EMC_ORDER_TASK OT ON R.ORDERTASKID = OT.ID
+          LEFT JOIN T_EMC_ORDER O ON R.ORDERID = O.ID
+          LEFT JOIN T_EMC_ITEM I ON R.ITEMID = I.ID
+          WHERE R.RUNID = #{runId}
+          AND (R.PROJID IS NULL OR P.STATUS != 'cancel')
+          AND EXISTS (SELECT 1
+                         FROM T_EMC_TEST_METHOD_QC_ITEM I
+                    LEFT JOIN T_EMC_TEST_METHOD_QC Q ON I.TESTMETHODQCID = Q.ID
+                        WHERE Q.TESTMETHODID = R.TESTMETHODID
+                          AND Q.QCCATEGORYCODE = R.QCCATEGORYCODE
+                          AND I.ITEMID = R.ITEMID
+                       )
+    </select>
+
+    <select id="selectQuickInputResultListBySampleParam" parameterType="map" resultType="map">
+        SELECT T.*
+        FROM (SELECT A.ID,
+        A.FOLDERID,
+        A.RUNID,
+        A.ORDERID,
+        A.ORDERNO,
+        A.ORDERTASKID,
+        A.TESTID,
+        A.ITEMID,
+        A.ITEMNAME,
+        A.ITEMALIASNAME,
+        A.ITEMORDERNO,
+        A.REPEATNO,
+        A.UNITNAME,
+        A.SCRIPTFLAG,
+        A.ORIGINALRESULT,
+        A.REPORTRESULT,
+        A.ANALYSISTYPE,
+        A.SUBMITFLAG,
+        A.QCNAME,
+        A.QCCATEGORYCODE,
+        B.CUPNO,
+        B.TESTNAME,
+        B.ORDERCATEGORY,
+        C.MONITORPOINTNO,
+        C.MONITORPOINTNAME,
+        I.USETYPE,
+        case
+        when O.PARENTORDERNO is not null then O.PARENTORDERNO
+        else O.SAMPLEPARAMORDERNO
+        end as ORDERNUMBER,
+        O.PARENTORDERNO, C.PARAMPROJID, O.FREQUENCY ,O.`CYCLE` ,O.SAMPLEPARAMORDERNO ,C.FOLDERNO
+        FROM T_EMC_ORDER_TASK_RESULT A
+        LEFT JOIN T_EMC_ORDER_TASK B ON B.ID = A.ORDERTASKID
+        LEFT JOIN T_EMC_ORDER O ON O.ID = A.ORDERID
+        LEFT JOIN T_EMC_FOLDER C ON C.ID = A.FOLDERID
+        LEFT JOIN T_EMC_ITEM I ON I.ID = A.ITEMID
+        ) T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+            <if test='sampleId != null and paramProjId != null'>
+                AND T.PARAMPROJID = #{paramProjId}
+                and left(T.FOLDERNO,
+                length(T.FOLDERNO)-5) in (
+                select
+                F.FOLDERNO
+                from
+                t_emc_folder F
+                left join T_EMC_ORDER O on
+                F.ID = O.FOLDERID
+                where
+                F.PROJID =  #{paramProjId}
+                and O.SAMPLEID =  #{sampleId})
+            </if>
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ORDERNUMBER asc, T.PARENTORDERNO asc
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="selectQuickInputResultListBySampleId" parameterType="map" resultType="map">
+        SELECT T.*
+        FROM (SELECT A.ID,
+        A.FOLDERID,
+        A.RUNID,
+        A.ORDERID,
+        A.ORDERNO,
+        A.ORDERTASKID,
+        A.TESTID,
+        A.ITEMID,
+        A.ITEMNAME,
+        A.ITEMALIASNAME,
+        A.ITEMORDERNO,
+        A.REPEATNO,
+        A.UNITNAME,
+        A.SCRIPTFLAG,
+        A.ORIGINALRESULT,
+        A.REPORTRESULT,
+        A.ANALYSISTYPE,
+        A.SUBMITFLAG,
+        A.QCNAME,
+        A.QCCATEGORYCODE,
+        B.CUPNO,
+        B.TESTNAME,
+        B.ORDERCATEGORY,
+        C.MONITORPOINTNO,
+        C.MONITORPOINTNAME,
+        I.USETYPE,
+        case
+        when O.PARENTORDERNO is not null then O.PARENTORDERNO
+        else O.ORDERNO
+        end as ORDERNUMBER,
+        O.PARENTORDERNO, C.PARAMPROJID ,O.FREQUENCY ,O.`CYCLE` ,O.SAMPLEPARAMORDERNO ,C.FOLDERNO,I.SAMPLEPARAM
+        FROM T_EMC_ORDER_TASK_RESULT A
+        LEFT JOIN T_EMC_ORDER_TASK B ON B.ID = A.ORDERTASKID
+        LEFT JOIN T_EMC_ORDER O ON O.ID = A.ORDERID
+        LEFT JOIN T_EMC_FOLDER C ON C.ID = A.FOLDERID
+        LEFT JOIN T_EMC_ITEM I ON I.ID = A.ITEMID
+        ) T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+            <if test='targetType == "sampleParamInput"'>
+                AND T.ORDERID IN (SELECT O.ID  FROM T_EMC_ORDER O WHERE O.SAMPLEID=#{sampleId} )
+                AND T.ANALYSISTYPE ='sampling'
+                AND T.SAMPLEPARAM ='1'
+            </if>
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.orderno asc,
+                t.TESTID asc,
+                T.PARENTORDERNO asc
+            </otherwise>
+        </choose>
+    </select>
+</mapper>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.emc.module.bp.info.infotmpl.mapper.EmcInfoTmplPointMapper">
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM (SELECT TMPL_POINT.*,
+                       MONITOR_POINT.MONITORPOINTNO MONITORPOINTNO,
+                       MONITOR_POINT.MONITORPOINTNAME MONITORPOINTNAME
+                  FROM T_EMC_INFO_TMPL_POINT TMPL_POINT
+                  LEFT JOIN T_EMC_MONITOR_POINT MONITOR_POINT
+                    ON MONITOR_POINT.ID = TMPL_POINT.MONITORPOINTID) T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ID
+            </otherwise>
+        </choose>
+    </select>
+
+
+    <!-- 查询详情 -->
+    <select id="selectDetail" parameterType="java.lang.Long" resultType="map">
+        SELECT T.*
+          FROM T_EMC_INFO_TMPL_POINT T
+         WHERE T.ID = #{id}
+    </select>
+
+</mapper>

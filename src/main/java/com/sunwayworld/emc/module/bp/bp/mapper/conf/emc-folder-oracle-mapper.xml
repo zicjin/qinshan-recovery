@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.emc.module.bp.bp.mapper.EmcFolderMapper">
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM (SELECT A.*,
+                       (A.FOLDERNO || '-' || A.MONITORPOINTNAME) AS FOLDERNAME,
+                       B.PROJNO,
+                       B.PROJNAME,
+                       B.TESTORGNAME,
+                       B.TESTORGID,
+                       B.STATUS         PROJECTSTATUS,
+                       B.CREATEDBYNAME  AS PROJECTCREATEDBYNAME,
+                       B.ENTRUSTORGNAME,
+                       B.BIZCATEGORYID,
+                       B.BIZCATEGORYCODE,
+                       B.URGENT,B.ORGID,B.ORGNAME,
+                       D.AREANAME
+                  FROM T_EMC_FOLDER A
+                  LEFT JOIN T_EMC_PROJECT B
+                    ON A.PROJID = B.ID
+                  LEFT JOIN T_EMC_CLIENT C
+                    ON B.ENTRUSTORGID = C.ID
+                  LEFT JOIN T_EMC_AREA D
+                    ON C.AREAID = D.ID) T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+            <include refid="com.sunwayworld.emc.module.bp.project.project.mapper.EmcProjectMapper.projectStatusWhereClause">
+                <property name="tableAlias" value="T"/>
+                <property name="projectIdColumnName" value="PROJID"/>
+            </include>
+            <!-- 过滤本单位的点位 -->
+            <if test="orgId != null">
+            	AND T.ORGID like CONCAT(#{orgId}, '%')
+            </if>
+            <!-- 检测项目修改，去除实验室质控样folder -->
+            <if test='targetType == "checkProjects"'>
+                AND (T.RUNID IS NULL OR T.RUNID ='')
+            </if>
+            <if test='targetType == "subcontractor"'>
+                AND EXISTS (SELECT 1
+                              FROM T_EMC_ORDER_TASK O, T_EMC_SUBCONTRACT_RECORD S
+                             WHERE O.ID = S.ORDERTASKID
+                               AND O.FOLDERID = T.ID
+                               AND O.STATUS = 'done'
+                               AND O.ANALYSISTYPE = 'analysis'
+                               AND O.SUBCONTRACTORID IS NOT NULL)
+            </if>
+            <if test='targetType == "dataSharing"'>
+                AND EXISTS (SELECT 1
+                              FROM T_EMC_ORDER_TASK O
+                             WHERE O.FOLDERID = T.ID
+                               AND O.STATUS = 'done'
+                               AND O.ANALYSISTYPE = 'analysis'
+                               AND O.DATASHARING = '1')
+            </if>
+            <if test='targetType == "sampleprepare"'>
+                AND EXISTS (SELECT 1
+                              FROM T_EMC_ORDER O
+                             WHERE O.FOLDERID = T.ID
+                               AND (O.SAMPLEID IS NULL
+                                    OR O.SAMPLEID = ''))
+                <choose>
+                <when test="sampleUserId != null and sceneUserId != null">
+                     AND (INSTR( ',' || SAMPLEUSERID || ',',',' || #{sampleUserId} || ',' ) > 0
+                      OR  INSTR(',' || SCENEUSERID || ',',',' || #{sceneUserId} || ',' ) > 0
+                      OR  INSTR(',' || PLANSAMPLEUSERID || ',',',' || #{sampleUserId} || ',' ) > 0)
+
+                </when>
+                <when test="sceneUserId != null">
+                     AND INSTR(',' || SCENEUSERID || ',', ',' || #{sceneUserId} || ',' ) > 0
+                </when>
+                <when test="sampleUserId != null">
+                     AND (INSTR(',' || SAMPLEUSERID || ',',',' || #{sampleUserId} || ',') > 0
+                        OR INSTR(',' || PLANSAMPLEUSERID || ',',',' || #{sampleUserId} || ',' ) > 0
+                     )
+                </when>
+                </choose>
+            </if>
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.FOLDERNO, T.ID DESC
+            </otherwise>
+        </choose>
+    </select>
+
+
+    <!-- 查询详情 -->
+    <select id="selectDetail" parameterType="java.lang.Long" resultType="map">
+        SELECT T.*
+          FROM T_EMC_FOLDER T
+         WHERE T.ID = #{id}
+    </select>
+
+
+</mapper>

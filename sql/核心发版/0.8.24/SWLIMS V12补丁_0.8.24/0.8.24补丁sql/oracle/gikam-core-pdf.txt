@@ -1,0 +1,11 @@
+-- ----------------------------- 2020-12-05 add by zhangpf--------------begin
+ALTER TABLE T_CORE_PDF_DOCUMENT RENAME COLUMN AREAINFO TO AREAINFOTEMP;
+
+ALTER TABLE T_CORE_PDF_DOCUMENT ADD AREAINFO CLOB;
+
+UPDATE T_CORE_PDF_DOCUMENT SET AREAINFO = AREAINFOTEMP;
+
+ALTER TABLE T_CORE_PDF_DOCUMENT DROP COLUMN AREAINFOTEMP;
+
+commit;
+-- ----------------------------- 2020-12-05 add by zhangpf--------------end

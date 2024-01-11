@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.emc.module.bp.report.report.mapper.PfReportMapper">
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM (SELECT A.*,
+                        B.CREATEDBYNAME       AS PROJUSERNAME,
+                        B.PROJNO,
+                        B.PROJNAME,
+                        B.ORGID,
+                        B.ORGNAME,
+                        B.TESTORGNAME,
+                        B.ENTRUSTORGNAME,
+                        B.CREATEDBYNAME       AS PROJCREATEDBYNAME,
+                        B.REPORTREVIEWERID,
+                        B.REPORTREVIEWERNAME,
+                        B.REPORTISSUEUSERID,
+                        B.REPORTISSUEUSERNAME,
+                        B.REPORTEDITUSERNAME,
+                        B.REPORTEDITUSERID,
+                        B.CONTRACTNO,
+                        B.SAMPLE,
+                        C.ID                  AS BIZID,
+                        C.BIZCATEGORYID,
+                        C.BIZCATEGORYNAME,
+                        C.FLOWCONTROL,
+                        D.REPORTNAME AS TEMPLATENAME,
+                        F.MONITORTMPLGROUP,
+                        G.REPORTNAME          AS QCREPORTNAME
+                FROM T_EMC_REPORT A
+                LEFT JOIN T_EMC_PROJECT B
+                ON A.PROJID = B.ID
+                LEFT JOIN T_EMC_BIZ_CATEGORY C
+                ON B.BIZCATEGORYID = C.ID
+                LEFT JOIN T_CORE_REPORT_CONFIG_LINE D
+                ON A.REPORTCONFIGLINEID = D.ID
+                LEFT JOIN T_EMC_MONITOR_TMPL E
+                ON A.MONITORTMPLID = E.ID
+                LEFT JOIN T_EMC_MONITOR_TMPL_GROUP F
+                ON E.MONITORTMPLGROUPID = F.ID
+                LEFT JOIN T_CORE_REPORT_CONFIG_LINE G
+                ON A.QCREPORTLINEID = G.ID) T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+            <include refid="com.sunwayworld.emc.module.bp.project.project.mapper.EmcProjectMapper.projectStatusWhereClause">
+                <property name="tableAlias" value="T"/>
+                <property name="projectIdColumnName" value="PROJID"/>
+            </include>
+            <if test='targetType == "reportEdit"'>
+                AND (T.REPORTEDITUSERID = #{currentUserId} OR T.REPORTEDITUSERID IS NULL )
+            </if>
+            <if test='authority_audit == "1"'>
+                AND <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.auditAuthorityWhereClause" />
+            </if>
+            <!-- 报告审核 -->
+            <if test="targetType == 'reportAudit'">
+                AND EXISTS (SELECT 1 FROM T_EMC_PROJECT TAR_
+                WHERE TAR_.ID = T.PROJID
+                AND (IFNULL(TAR_.REPORTREVIEWERID,'') = '' OR  TAR_.REPORTREVIEWERID = #{currentUserId})
+                )
+            </if>
+            <!-- 报告签发 -->
+            <if test="targetType == 'reportIssue'">
+                AND EXISTS (SELECT 1 FROM T_EMC_PROJECT TAR_
+                WHERE TAR_.ID = T.PROJID
+                AND TAR_.REPORTISSUEUSERID = #{currentUserId}
+                )
+            </if>
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ID DESC
+            </otherwise>
+        </choose>
+    </select>
+
+
+    <!-- 查询详情 -->
+    <select id="selectDetail" parameterType="java.lang.Long" resultType="map">
+        SELECT T.*
+          FROM T_EMC_REPORT T
+         WHERE T.ID = #{id}
+    </select>
+
+    <select id="selectReportOverdue" parameterType="map" resultType="map">
+        SELECT A.*
+          FROM T_EMC_REPORT A
+          LEFT JOIN T_EMC_PROJECT B
+            ON A.PROJID = B.ID
+         WHERE A.PROCESSSTATUS = 'draft'
+           AND B.COMPLEDATE <![CDATA[<=]]> sysdate()
+    </select>
+
+</mapper>

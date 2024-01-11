@@ -1,0 +1,1654 @@
+emcProjectProspect.editPage = {
+
+    getGridParam : function() {
+        var _this = this;
+        return {
+            type : 'grid',
+            id : 'emc-project-prospect-edit-list-grid',
+            url : emcProject.baseUrl + '/queries/raw',
+            columns : emcProject.getEditListColumns(),
+            service : 'emcProjectServiceImpl',
+            page : true,
+            deleteFormatter : function(row) {
+                return row.projName || row.id;
+            },
+            requestData : {
+                targetType : 'projEdit',
+                orgId_SB: workspace.user.ext$.parentorgid,
+                filterOrder : '1',
+                prospect_SEQ : '0'
+            },
+            onLoadSuccess : function(data) {
+                if (!Gikam.isEmpty(data)) {
+                    this.activeRowByIndex(0);
+                } else {
+                    Gikam.cleanCompData([ "emc-project-prospect-edit-list-base-info-form", "emc-project-prospect-edit-list-order-grid", "emc-project-peospect-edit-list-order-item-group-grid", "emc-project-prospect-edit-list-director-grid", "emc-project-prospect-edit-list-schemeedit-grid", "emc-project-prospect-edit-list-order-grid" ]);
+                    Gikam.getComp('emc-project-prospect-edit-list-base-info-tab').removePanel('emc-project-prospect-edit-list-order-panel');
+                }
+            },
+            onRowActive : function(index, row) {
+                _this.onProjectActive(row);
+            },
+            toolbar : [ {
+                type : 'button',
+                text : 'GIKAM.BUTTON.INSERT',
+                icon : 'add',
+                onClick : function() {
+                    Gikam.preInsert({
+                        modalTitle : 'EMC.MODULE.BP.PROJECT.PROJECTS.MODAL.PROJECT_ADD',
+                        height : 300,
+                        fields : emcProject.getPreInsertFields(),
+                        url : emcProject.baseUrl,
+                        onFormRendered : function(form) {
+                            setTimeout(() => {
+                                this.options.id = 'emc-project-prospect-edit-list-preinsert-form';
+                                this.hideFields([ 'sample' ]);
+                                var date = new Date();
+                                var time=date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate();//表示当前日期
+                                this.setData({taskDate : time},false);
+                            }, 10)
+                        }
+                    }).done(function(id) {
+                        Gikam.getComp('emc-project-prospect-edit-list-grid').refresh();
+                    });
+                }
+            }, {
+                type : 'button',
+                text : 'GIKAM.WORKFLOW.BUTTON.SUBMIT',
+                icon : 'submit',
+                onClick : function() {
+                    _this.submit();
+                }
+            }, {
+                type : 'dropDownMenu',
+                text : 'GIKAM.BUTTON.MORE',
+                items : [ {
+                    type : 'button',
+                    text : 'GIKAM.BUTTON.PREVIEW',
+                    icon : 'print',
+                    onClick : function() {
+                        Gikam.viewReport('rasproject', Gikam.getComp('emc-project-prospect-edit-list-grid').getSelections());
+                    }
+                }, {
+                    type : 'button',
+                    text : 'EMC.MODULE.BP.PROJECT.PROJECTS.BUTTON.SUBMITTOREPORT',
+                    icon : 'submit',
+                    onClick : function() {
+                        _this.submitToReport();
+                    }
+                }, {
+                    type : 'button',
+                    text : 'EMC.MODULE.BP.PROJECT.PROJECTS.BUTTON.COPY',
+                    icon : 'copy',
+                    hidden : true,
+                    onClick : function() {
+                        Gikam.create('modal', {
+                            title : 'EMC.MODULE.BP.PROJECT.PROJECTS.MODAL.COPY_PROJECT',
+                            url : emcProject.baseUrl + '/page/copy-project'
+                        });
+                    }
+                }, {
+                    type : 'button',
+                    text : 'GIKAM.BUTTON.DELETE',
+                    icon : 'remove-row',
+                    hidden : true,
+                    onClick : function() {
+                        Gikam.getComp('emc-project-prospect-edit-list-grid').deleteRows(emcProject.baseUrl);
+                    }
+                } ]
+            } ]
+        }
+    },
+
+    copyProject : function() {
+        var selections = Gikam.getComp('emc-project-prospect-edit-list-grid').getSelections();
+        if (selections.length === 1) {
+            var url = Gikam.printf(emcProject.baseUrl + '/{id}/action/copy', {
+                id : selections[0].id
+            });
+            Gikam.getComp('emc-project-prospect-edit-list-grid').insert(url, selections);
+        } else {
+            Gikam.alert('GIKAM.TIP.CHOOSE_ONE_ITEM');
+            return;
+        }
+    },
+
+    copeOrder : function() {
+        var selections = Gikam.getComp('emc-project-prospect-edit-list-order-grid').getSelections();
+        if (selections.length > 0) {
+            Gikam.create('modal', {
+                title : 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.MODAL.COPY_SHARE',
+                width : 300,
+                height : 200,
+                url : IFM_CONTEXT + '/secure/emc/module/bp/project/proj-schemes/page/copy-share',
+                onAfterClose : function(data) {
+                    if (!Gikam.isEmpty(data)) {
+                        workspace.window.showMask(true);
+                        var url = emcProject.baseUrl + '/orders/actions/copy';
+                        Gikam.post(url, Gikam.getJsonWrapper({
+                            copies : data.copyShare
+                        }, [ '', selections ])).always(function() {
+                            workspace.window.closeMask();
+                            Gikam.getComp('emc-project-prospect-edit-list-order-grid').refresh();
+                        });
+                    }
+                }
+            });
+        } else {
+            Gikam.alert('GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM');
+        }
+    },
+
+    copeQcOrder : function() {
+        var selections = Gikam.getComp('emc-project-prospect-edit-list-order-grid').getSelections();
+        if (selections.length > 0) {
+            var copyEnabled = true;
+            selections.some(function(item) {
+                if (item.qcCategoryId) {
+                    copyEnabled = false;
+                    return true;
+                }
+            });
+            if (!copyEnabled) {
+                Gikam.alert('EMC.MODULE.BP.ORDER.ORDERRECEIPTS.TIP.COPYQCORDERTIP');
+                return;
+            }
+            Gikam.create('modal', {
+                title : Gikam.choose.getConfig('qcCategory').title,
+                width : '20%',
+                height : '50%',
+                url : Gikam.choose.getConfig('qcCategory').url + Gikam.param({
+                    single : true,
+                    useCategory_SEQ : 'scene'
+                }),
+                onAfterClose : function(rows) {
+                    if (Gikam.isEmpty(rows)) {
+                        return;
+                    }
+                    workspace.window.showMask(true);
+                    selections.map(function(item) {
+                        item.qcCategoryId = rows[0].id;
+                        item.qcCategoryCode = rows[0].qcCategoryCode;
+                        item.qcName = rows[0].qcName;
+                    });
+
+                    Gikam.getComp('emc-project-prospect-edit-list-order-grid').insert(emcProject.baseUrl + '/orders/actions/copy-qc', selections);
+                }
+            });
+        } else {
+            Gikam.alert('GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM');
+        }
+        Gikam.getComp('emc-project-prospect-edit-list-order-grid').refresh();
+    },
+
+    editItem : function() {
+        var activedRow = Gikam.getComp('emc-project-prospect-edit-list-order-grid').getActivedRow();
+        var selections = Gikam.getComp('emc-project-peospect-edit-list-order-item-group-grid').getSelections();
+        if (selections.length === 1) {
+
+            var orderItemGroupId = selections[0].id;
+            Gikam.create('modal', {
+                title : 'EMC.MODULE.BP.PROJECT.PROJECTS.MODAL.EDIT_ITEM',
+                url : '/secure/emc/module/bp/bp/folders/page/order-item-edit-list' + Gikam.param({
+                    itemGroupId : selections[0].itemGroupId,
+                    orderItemGroupId : orderItemGroupId
+                }),
+                width : '53%',
+            });
+        } else {
+            Gikam.alert('GIKAM.TIP.CHOOSE_ONE_ITEM');
+            return;
+        }
+    },
+
+    editTest : function() {
+        var selections = Gikam.getComp('emc-project-prospect-edit-list-order-grid').getSelections();
+        var orderIds = "";
+        selections.forEach(function(item) {
+            orderIds += item.id + ',';
+        });
+        orderIds = orderIds.substring(0, orderIds.length - 1);
+        if (selections.length > 0) {
+            Gikam.create('modal', {
+                title : 'EMC.MODULE.BP.PROJECT.PROJECTS.MODAL.TEST_EDIT',
+                width : '70%',
+                url : IFM_CONTEXT + '/secure/emc/module/bp/bp/folders/page/order-item-group-edit-list' + Gikam.param({
+                    monitorTmplId : selections[0].monitorTmplId,
+                    orderCategory : selections[0].orderCategory,
+                    orderIds : orderIds
+                }),
+                onAfterClose : function(chooseData) {
+                    if (!Gikam.isEmpty(chooseData)) {
+                        workspace.window.showMask(true);
+                        Gikam.put('/secure/emc/module/bp/bp/orders/action/edit', Gikam.getJsonWrapper(null, [ 'emcOrderServiceImpl', selections ], [ 'emcOrderItemGroupServiceImpl', chooseData ])).done(function() {
+                            Gikam.getComp('emc-project-peospect-edit-list-order-item-group-grid').refresh();
+                        }).always(function() {
+                            workspace.window.closeMask();
+                        });
+                    }
+                }
+            });
+        } else {
+            Gikam.alert('GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM');
+        }
+    },
+
+    submit : function() {
+        var baseForm = Gikam.getComp('emc-project-prospect-edit-list-base-info-form');
+        if (!baseForm.validate()) {
+            return;
+        }
+
+        var grid = Gikam.getComp('emc-project-prospect-edit-list-grid');
+
+        Gikam.create('workflow').submit({
+            data : grid.getSelections(),
+            pageObject : emcProject
+        }).done(function() {
+            grid.refresh();
+        });
+    },
+
+    submitToReport : function() {
+        var selections = Gikam.getComp('emc-project-prospect-edit-list-grid').getSelections();
+        if (selections.length > 0) {
+            Gikam.confirm('GIKAM.MODAL.SUBMIT', 'GIKAM.TIP.SUBMIT', function() {
+                workspace.window.showMask(true);
+                Gikam.post(emcProject.baseUrl + '/action/submit-to-report', Gikam.getJsonWrapper({}, [ '', selections ])).always(function() {
+                    Gikam.getComp('emc-project-prospect-edit-list-grid').refresh();
+                }).always(function() {
+                    workspace.window.closeMask();
+                });
+            });
+        } else {
+            Gikam.alert('GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM');
+        }
+    },
+
+    onProjectActive : function(row) {
+        var _this = this;
+        var tab = Gikam.getComp('emc-project-prospect-edit-list-base-info-tab');
+        tab.show();
+        if (row) {
+            if(_this.param == undefined) {
+                _this.param = {};
+            }
+            _this.param.editMonitorInfo = row.ext$.editmonitorinfo;
+            _this.param.sampleOrgId = row.ext$.sampleorgid;
+            _this.param.projId = row.id;
+            // 这里使用委托单位来过滤数据，之前是受检单位
+            _this.param.testOrgId = row.entrustOrgId;
+
+            var formStyle = row.ext$.formstyle;
+            
+            Gikam.getAsyncComp('emc-project-prospect-edit-list-prospect-form').done(function (form) {
+                form.refresh({
+                    url : Gikam.printf(emcProject.baseUrl + '/{id}', {
+                        id : row.id
+                    }),
+                });
+            });
+            
+            if (row.sample === "1") {
+                tab.removePanel('emc-project-prospect-edit-list-order-panel');
+                tab.showPanel('emc-project-prospect-edit-list-base-info-panel');
+                tab.revertPanel('emc-project-scheme-edit-panel');
+            } else {
+                tab.revertPanel('emc-project-prospect-edit-list-order-panel');
+                tab.removePanel('emc-project-scheme-edit-panel');
+            }
+            if (formStyle === 'form1') {
+                Gikam.getAsyncComp('emc-project-prospect-edit-list-base-info-form').done(function (form) {
+                    form.refreshFields(emcProject.getBaseInfoFormFields1());
+                });
+            } else if (formStyle === 'form2') {
+                Gikam.getAsyncComp('emc-project-prospect-edit-list-base-info-form').done(function (form) {
+                    form.refreshFields(emcProject.getBaseInfoFormFields2());
+                });
+            } else {
+                Gikam.getAsyncComp('emc-project-prospect-edit-list-base-info-form').done(function (form) {
+                    form.refreshFields(emcProject.getBaseInfoFormFields3());
+                });
+            }
+
+            Gikam.getAsyncComp('emc-project-prospect-edit-list-base-info-form').done(function (form) {
+                form.refresh({
+                    url : Gikam.printf(emcProject.baseUrl + '/{id}', {
+                        id : row.id
+                    }),
+                });
+
+                var url = IFM_CONTEXT + '/secure/emc/module/mdm/basemdm/biz-categories/projects/queries/selectable';
+                url += Gikam.param({
+                    bizCategoryId : row.bizCategoryId,
+                    activatedFlag : '1',
+                });
+                Gikam.getJson(url).done(function(items) {
+                    form.setSelectOptions('projName', items.map(function(item) {
+                        return {
+                            text : item.projName,
+                            value : item.projName
+                        };
+                    }), true);
+                });
+
+                // 添加延时处理
+                setTimeout(function () {
+                    _this.showOrHideFileds(row);
+                }, 100);
+            });
+
+            if (row.sample === "1") {
+                Gikam.getAsyncComp('emc-project-prospect-edit-list-schemeedit-grid').done(function(grid) {
+                    grid.setOptions({
+                        requestData : {
+                            projId_SEQ : row.id
+                        }
+                    });
+                    grid.refreshColumns(_this.param.editMonitorInfo === '1' ? emcProject.getSchemeEditListColumns1() : emcProject.getSchemeEditListColumns());
+                    grid.refresh({
+                        url : emcProject.schemeUrl + '/queries/raw',
+                        order : {
+                            'MONITORTMPLID' : 'asc',
+                            'FOLDERNO' : 'asc'
+                        }
+                    });
+                });
+            } else {
+                Gikam.getComp('emc-project-prospect-edit-list-order-grid').refresh({
+                    url : Gikam.printf(emcProject.baseUrl + '/{id}/orders/queries', {
+                        id : row.id
+                    })
+                });
+            }
+
+            Gikam.getComp('emc-project-prospect-edit-list-uploader').setOptions({
+                bizId : row.id,
+            });
+
+            _this._monitorPointType = '';
+            _this._sampleOrgId = '';
+            _this._sampleOrgName = '';
+            _this._selectId.splice(0, _this._selectId.length);
+
+        }
+    },
+
+    showOrHideFileds : function(project) {
+        // 只有比对任务显示运营单位，比对业务编码为603
+        var form = Gikam.getComp('emc-project-prospect-edit-list-base-info-form');
+        if (project.bizCategoryCode === '603') {
+            form.showFields([ 'ext$.operationorg' ]);
+            form.addFieldValidator('ext$.operationorg', ['notEmpty']);
+        } else {
+            form.hideFields([ 'ext$.operationorg' ]);
+        }
+    },
+    
+    onOrderActive : function(row) {
+        var _this = this;
+        if (row) {
+            Gikam.getComp('emc-project-peospect-edit-list-order-item-group-grid').refresh({
+                url : Gikam.printf('/secure/emc/module/bp/bp/orders/{id}/item-groups/queries', {
+                    id : row.id
+                })
+            });
+        }
+    },
+
+    loadSchemeItemGroupPage : function(schemeName) {
+        var activeRow = Gikam.getComp('emc-project-prospect-edit-list-grid').getActivedRow();
+        Gikam.create('modal', {
+            title : 'EMC.MODULE.BP.PROJECT.PROJECTS.MODAL.ORDER_ADD',
+            width : '70%',
+            url : IFM_CONTEXT + '/secure/emc/module/mdm/bizmdm/monitor-tmpls/page/scheme-item-group-choose-list',
+            onAfterClose : function(rows) {
+                if (rows && rows.length > 0) {
+                    workspace.window.showMask(true);
+                    Gikam.postText(Gikam.printf(emcProject.baseUrl + '/{id}/orders', {
+                        id : activeRow.id
+                    }), Gikam.getJsonWrapper(null, [ 'emcOrderServiceImpl', [ {
+                        monitorTmplId : rows[0].monitorTmplId,
+                        orderCategory : rows[0].monitorTmplName
+                    } ] ], [ 'emcOrderItemGroupService', rows ])).done(function(id) {
+                        Gikam.getComp('emc-project-prospect-edit-list-order-grid').refresh();
+                    }).always(function() {
+                        workspace.window.closeMask();
+                    });
+
+                }
+
+            }
+        });
+    },
+
+    batchUpdateOrder : function() {
+        var selections = Gikam.getComp('emc-project-prospect-edit-list-order-grid').getSelections();
+        if (selections.length > 0) {
+            var activedRow = Gikam.getComp('emc-project-prospect-edit-list-grid').getActivedRow();
+            Gikam.create('modal', {
+                width : 400,
+                height : 310,
+                title : 'EMC.MODULE.BP.PROJECT.PROJECTS.MODAL.BATCH_UPDATE_ORDER',
+                url : emcProject.baseUrl + '/page/batch-update-order',
+                onAfterClose : function(data) {
+                    if (!Gikam.isEmpty(data)) {
+                        workspace.window.showMask(true);
+                        selections.map(function(item) {
+                            item.sendDate = data.sendDate;
+                            item.sendTime = data.sendTime;
+                            item.orderDesc = data.orderDesc;
+                            item.remark = data.remark;
+                        });
+                        Gikam.put(emcProject.baseUrl + '/' + activedRow.id, Gikam.getJsonWrapper({}, [ 'emcOrderServiceImpl', selections ])).done(function() {
+                            Gikam.getComp('emc-project-prospect-edit-list-order-grid').refresh();
+                        }).always(function() {
+                            workspace.window.closeMask();
+                        });
+                    }
+                }
+            });
+        } else {
+            Gikam.alert('GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM');
+        }
+    },
+
+    updateMethod : function() {
+        var selections = Gikam.getComp('emc-project-peospect-edit-list-order-item-group-grid').getSelections();
+
+        if (selections.length === 1) {
+            var activedRow = Gikam.getComp('emc-project-prospect-edit-list-order-grid').getActivedRow();
+            Gikam.create('modal', {
+                title : Gikam.choose.getConfig('testMethod').title,
+                url : Gikam.choose.getConfig('monitorSchemeMethod').url + Gikam.param({
+                    single : true,
+                    monitorTmplId_SEQ : activedRow.monitorTmplId,
+                    schemeName_SEQ : selections[0].schemeName,
+                    itemGroup_SEQ : selections[0].itemGroup,
+                    methodId_DIFFER : selections[0].methodId
+                }),
+                width : '30%',
+                onAfterClose : function(rows) {
+                    if (!Gikam.isEmpty(rows)) {
+                        workspace.window.showMask(true);
+                        selections.map(function(item) {
+                            item.schemeName = rows[0].schemeName;
+                            item.testName = rows[0].ext$.testname;
+                            item.testId = rows[0].testId;
+                            item.testMethodId = rows[0].testMethodId;
+                            item.methodId = rows[0].methodId;
+                            item.methodName = rows[0].ext$.methodname;
+                            item.methodVersionId = rows[0].ext$.methodversionid;
+                            item.testMethodBasis = rows[0].ext$.testmethodbasis;
+                            item.analysisOrgId = rows[0].ext$.analysisorgid;
+                            item.analysisOrgName = rows[0].ext$.analysisorgname;
+                            item.inputUserId = rows[0].ext$.inputuserid;
+                            item.inputUserName = rows[0].ext$.inputusername;
+                        });
+                        Gikam.put('/secure/emc/module/bp/bp/orders/item-groups/' + selections[0].id + '/action/edit-method', Gikam.getJsonWrapper({}, [ 'emcOrderItemGroupServiceImpl', selections ])).done(function() {
+                            Gikam.getComp('emc-project-peospect-edit-list-order-item-group-grid').refresh();
+                        }).always(function() {
+                            workspace.window.closeMask();
+                        });
+                    }
+                }
+            });
+        } else {
+            Gikam.alert('GIKAM.TIP.CHOOSE_ONE_ITEM');
+            return;
+        }
+    },
+
+    updateContainer : function() {
+        var selections = Gikam.getComp('emc-project-peospect-edit-list-order-item-group-grid').getSelections();
+        if (selections.length > 0) {
+            var activedRow = Gikam.getComp('emc-project-prospect-edit-list-grid').getActivedRow();
+            Gikam.create('modal', {
+                title : Gikam.choose.getConfig('containerCategory').title,
+                url : Gikam.choose.getConfig('containerCategory').url + Gikam.param({
+                    single : true,
+                }),
+                width : '55%',
+                onAfterClose : function(rows) {
+                    if (!Gikam.isEmpty(rows)) {
+                        workspace.window.showMask(true);
+                        selections.map(function(item) {
+                            item.containerCategoryId = rows[0].id;
+                            item.containerCategoryCode = rows[0].containerCategoryId;
+                            item.containerCategoryName = rows[0].containerCategoryName;
+                        });
+                        Gikam.put(emcProject.baseUrl + '/' + activedRow.id, Gikam.getJsonWrapper({}, [ 'emcOrderItemGroupServiceImpl', selections ])).done(function() {
+                            Gikam.getComp('emc-project-peospect-edit-list-order-item-group-grid').refresh();
+                        }).always(function() {
+                            workspace.window.closeMask();
+                        });
+                    }
+                }
+            });
+        } else {
+            Gikam.alert('GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM');
+        }
+    },
+
+    updateContainerGroup : function() {
+        var selections = Gikam.getComp('emc-project-peospect-edit-list-order-item-group-grid').getSelections();
+        if (selections.length > 0) {
+            var activedRow = Gikam.getComp('emc-project-prospect-edit-list-grid').getActivedRow();
+            Gikam.create('modal', {
+                width : 400,
+                height : 250,
+                title : 'EMC.MODULE.BP.PROJECT.PROJECTS.MODAL.UPDATE_CONTAINER_GROUP',
+                url : emcProject.baseUrl + '/page/update-order-container-group',
+                onAfterClose : function(data) {
+                    if (!Gikam.isEmpty(data)) {
+                        workspace.window.showMask(true);
+                        selections.map(function(item) {
+                            item.containerGroup = data.containerGroup;
+                            item.fixative = data.fixative;
+                            item.storeCondition = data.storeCondition;
+                        });
+                        Gikam.put(emcProject.baseUrl + '/' + activedRow.id, Gikam.getJsonWrapper({}, [ 'emcOrderItemGroupServiceImpl', selections ])).done(function() {
+                            Gikam.getComp('emc-project-peospect-edit-list-order-item-group-grid').refresh();
+                        }).always(function() {
+                            workspace.window.closeMask();
+                        });
+                    }
+                }
+            });
+        } else {
+            Gikam.alert('GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM');
+        }
+    },
+
+    getBaseInfoTab : function() {
+        var _this = this;
+        return {
+            type : 'tab',
+            fill : true,
+            id : 'emc-project-prospect-edit-list-base-info-tab',
+            panels : [ {
+                title : 'EMC.MODULE.BP.PROJECT.PROJECTS.TAB.BASE_INFO',
+                id : 'emc-project-prospect-edit-list-base-info-panel',
+                items : [ {
+                    type : 'layout',
+                    north : {
+                        height : '60%',
+                        items : [ {
+                            type : 'form',
+                            columns : 3,
+                            service : 'emcProjectServiceImpl',
+                            id : 'emc-project-prospect-edit-list-base-info-form',
+                            fields : emcProject.getBaseInfoFormFields1(),
+                            onUpdated : function() {
+                                var grid = Gikam.getComp('emc-project-prospect-edit-list-grid');
+                                grid.refreshRowById(grid.getActivedRow().id);
+                            },
+                            onLoadSuccess : function(data) {
+                                Gikam.refreshGrids({
+                                    'emc-project-prospect-edit-list-director-grid' : emcProject.baseUrl + '/{id}/directors/queries',
+                                }, {
+                                    id : data.id
+                                });
+                            }
+                        } ]
+                    },
+                    center : {
+                        items : [ {
+                            type : 'tab',
+                            id : 'emc-project-prospect-edit-list-director-tab',
+                            fill : true,
+                            width : Gikam.width.XL,
+                            panels : [ {
+                                id : 'emc-project-prospect-edit-list-director-panel',
+                                title : 'EMC.MODULE.BP.PROJECT.PROJECTS.TITLE.PROJECT_DIRECTOR',
+                                items : [ {
+                                    type : 'grid',
+                                    id : 'emc-project-prospect-edit-list-director-grid',
+                                    filterOpen : false,
+                                    service : 'emcProjectDirectorServiceImpl',
+                                    page : false,
+                                    deleteFormatter : function(row) {
+                                        return row.ext$.username || row.empId || row.id;
+                                    },
+                                    toolbar : [ {
+                                        type : 'button',
+                                        text : 'GIKAM.BUTTON.INSERT',
+                                        icon : 'add-row',
+                                        onClick : function() {
+                                            _this.insertDirectorRow();
+                                        }
+                                    }, {
+                                        type : 'button',
+                                        text : 'GIKAM.BUTTON.DELETE',
+                                        icon : 'remove-row',
+                                        onClick : function() {
+                                            _this.deleteDirectorRow();
+                                        }
+                                    } ],
+                                    columns : emcProject.getProjectDirectorListColumns()
+                                } ]
+                            } ]
+
+                        } ]
+                    }
+                } ]
+            }, _this.getProspectPanel(), {
+                title : 'EMC.MODULE.BP.PROJECT.PROJECTS.TAB.ORDER',
+                id : 'emc-project-prospect-edit-list-order-panel',
+                items : [ {
+                    type : 'layout',
+                    north : {
+                        height : '50%',
+                        items : [ {
+                            type : 'grid',
+                            id : 'emc-project-prospect-edit-list-order-grid',
+                            columns : emcProject.getOrderColumns(),
+                            service : 'emcOrderServiceImpl',
+                            deleteFormatter : function(row) {
+                                return row.orderNo || row.id;
+                            },
+                            onLoadSuccess : function(data) {
+                                if (!Gikam.isEmpty(data)) {
+                                    this.activeRowByIndex(0);
+                                } else {
+                                    Gikam.cleanCompData([ 'emc-project-peospect-edit-list-order-item-group-grid' ]);
+                                }
+                            },
+                            onRowActive : function(index, row) {
+                                _this.onOrderActive(row);
+                            },
+                            toolbar : [ {
+                                type : 'button',
+                                text : 'GIKAM.BUTTON.INSERT',
+                                icon : 'add',
+                                onClick : function() {
+                                    _this.loadSchemeItemGroupPage();
+                                }
+                            }, {
+                                type : 'button',
+                                text : 'GIKAM.BUTTON.DELETE',
+                                icon : 'remove-row',
+                                onClick : function() {
+                                    Gikam.getComp('emc-project-prospect-edit-list-order-grid').deleteRows(Gikam.printf(emcProject.baseUrl + '/{id}/orders', {
+                                        id : Gikam.getComp('emc-project-prospect-edit-list-grid').getActivedRow().id
+                                    }));
+                                }
+                            }, {
+                                type : 'button',
+                                text : 'GIKAM.BUTTON.PREVIEW',
+                                icon : 'print',
+                                onClick : function() {
+                                    Gikam.viewReport('orderInfo', Gikam.getComp('emc-project-prospect-edit-list-order-grid').getSelections());
+                                }
+                            }, {
+                                type : 'dropDownMenu',
+                                text : 'EMC.MODULE.BP.PROJECT.PROJECTS.BUTTON.ORDER_QUICK_INPUT',
+                                items : [ {
+                                    type : 'button',
+                                    text : 'GIKAM.BUTTON.EXPORT',
+                                    icon : 'move-up',
+                                    onClick : function() {
+                                        _this.orderQuickExport();
+                                    }
+                                }, {
+                                    type : 'button',
+                                    text : 'GIKAM.BUTTON.IMPORT',
+                                    icon : 'move-down',
+                                    onClick : function() {
+                                        _this.orderQuickImport();
+                                    }
+                                } ]
+                            }, {
+                                type : 'dropDownMenu',
+                                text : 'GIKAM.BUTTON.MORE',
+                                items : [ {
+                                    type : 'button',
+                                    text : 'EMC.MODULE.BP.PROJECT.PROJECTS.BUTTON.BATCH_UPDATE',
+                                    icon : 'add',
+                                    onClick : function() {
+                                        _this.batchUpdateOrder();
+                                    }
+                                }, {
+                                    type : 'button',
+                                    text : 'EMC.MODULE.BP.PROJECT.PROJECTS.BUTTON.COPE_NORMAL',
+                                    icon : 'copy',
+                                    onClick : function() {
+                                        _this.copeOrder();
+                                    }
+                                }, {
+                                    type : 'button',
+                                    text : 'EMC.MODULE.BP.PROJECT.PROJECTS.BUTTON.COPE_QC',
+                                    icon : 'copy',
+                                    onClick : function() {
+                                        _this.copeQcOrder();
+                                    }
+                                } ]
+                            } ]
+                        } ]
+                    },
+                    center : {
+                        items : [ {
+                            type : 'grid',
+                            id : 'emc-project-peospect-edit-list-order-item-group-grid',// 样品分析项组
+                            columns : emcProject.getOrderItemGroupColumns(),
+                            service : 'emcOrderItemGroupServiceImpl',
+                            toolbar : [ {
+                                type : 'dropDownMenu',
+                                text : 'EMC.MODULE.BP.PROJECT.PROJECTS.BUTTON.EDIT',
+                                items : [ {
+                                    type : 'button',
+                                    text : 'EMC.MODULE.BP.PROJECT.PROJECTS.BUTTON.EDIT_TEST',
+                                    icon : 'add',
+                                    onClick : function() {
+                                        _this.editTest();
+                                    }
+                                }, {
+                                    type : 'button',
+                                    text : 'EMC.MODULE.BP.PROJECT.PROJECTS.BUTTON.UPDATE_METHOD',
+                                    icon : 'add',
+                                    onClick : function() {
+                                        _this.updateMethod();
+                                    }
+                                }, {
+                                    type : 'button',
+                                    text : 'EMC.MODULE.BP.PROJECT.PROJECTS.BUTTON.EDIT_ITEM',
+                                    icon : 'add',
+                                    onClick : function() {
+                                        _this.editItem();
+                                    }
+                                } ]
+                            }, {
+                                type : 'dropDownMenu',
+                                text : 'EMC.MODULE.BP.PROJECT.PROJECTS.BUTTON.CONTAINER',
+                                items : [ {
+                                    type : 'button',
+                                    text : 'EMC.MODULE.BP.PROJECT.PROJECTS.BUTTON.UPDATE_CONTAINER',
+                                    icon : 'add',
+                                    onClick : function() {
+                                        _this.updateContainer();
+                                    }
+                                }, {
+                                    type : 'button',
+                                    text : 'EMC.MODULE.BP.PROJECT.PROJECTS.BUTTON.UPDATE_CONTAINER_GROUP',
+                                    icon : 'add',
+                                    onClick : function() {
+                                        _this.updateContainerGroup();
+                                    }
+                                } ]
+                            }, {
+                                type : 'dropDownMenu',
+                                text : 'EMC.MODULE.BP.PROJECT.PROJECTS.BUTTON.SUBCONTRACTOR',
+                                items : [ {
+                                    type : 'button',
+                                    text : 'EMC.MODULE.BP.PROJECT.PROJECTS.BUTTON.ADD_SUBCONTRACTOR',
+                                    icon : 'add',
+                                    onClick : function() {
+                                        _this.addOrderSubcontractor();
+                                    }
+                                }, {
+                                    type : 'button',
+                                    text : 'EMC.MODULE.BP.PROJECT.PROJECTS.BUTTON.DEL_SUBCONTRACTOR',
+                                    icon : 'remove-row',
+                                    onClick : function() {
+                                        _this.delOrderSubcontractor();
+                                    }
+                                } ]
+                            }, {
+                                type : 'dropDownMenu',
+                                text : 'EMC.MODULE.BP.PROJECT.PROJECTS.BUTTON.DATASHARING',
+                                items : [ {
+                                    type : 'button',
+                                    text : 'EMC.MODULE.BP.PROJECT.PROJECTS.BUTTON.ADD_DATASHARING',
+                                    icon : 'add',
+                                    onClick : function() {
+                                        _this.addDataSharing();
+                                    }
+                                }, {
+                                    type : 'button',
+                                    text : 'EMC.MODULE.BP.PROJECT.PROJECTS.BUTTON.DEL_DATASHARING',
+                                    icon : 'remove-row',
+                                    onClick : function() {
+                                        _this.delDataSharing();
+                                    }
+                                } ]
+                            } ]
+                        } ]
+                    }
+                } ]
+            }, _this.getMonitorSchemePanel(), {
+                title : 'EMC.MODULE.BP.PROJECT.PROJECTS.TAB.FILE',
+                items : [ {
+                    type : 'uploader',
+                    id : 'emc-project-prospect-edit-list-uploader',
+                    dbTable : 'T_EMC_PROJECT',
+                } ]
+            } ]
+        }
+    },
+    
+    /** 样品登记设置分包商 */
+    addOrderSubcontractor : function() {
+        var selections = Gikam.getComp('emc-project-peospect-edit-list-order-item-group-grid').getSelections();
+        if (selections.length > 0) {
+            Gikam.create('modal', {
+                width : '20%',
+                height : '50%',
+                title : Gikam.choose.getConfig('subcontractor').title,
+                url : Gikam.choose.getConfig('subcontractor').url + Gikam.param({
+                    single : true,
+                }),
+                onAfterClose : function(data) {
+                    if (!Gikam.isEmpty(data)) {
+                        workspace.window.showMask(true);
+                        selections.map(function(item) {
+                            item.subcontractorId = data[0].id;
+                        });
+                        Gikam.put('/secure/emc/module/bp/bp/orders/item-groups/action/subcontractor-edit', Gikam.getJsonWrapper({}, [ 'emcOrderItemGroupServiceImpl', selections ])).done(function() {
+                            Gikam.getComp('emc-project-peospect-edit-list-order-item-group-grid').refresh();
+                        }).always(function() {
+                            workspace.window.closeMask();
+                        });
+                    }
+                }
+            });
+        } else {
+            Gikam.alert('GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM');
+        }
+    },
+
+    /** 样品登记删除分包商 */
+    delOrderSubcontractor : function() {
+        var selections = Gikam.getComp('emc-project-peospect-edit-list-order-item-group-grid').getSelections();
+        if (selections.length > 0) {
+            var activedRow = Gikam.getComp('emc-project-prospect-edit-list-grid').getActivedRow();
+            selections.map(function(item) {
+                item.subcontractorId = '';
+                item.subPackageNo = '';
+            });
+            workspace.window.showMask(true);
+            Gikam.put(emcProject.baseUrl + '/' + activedRow.id, Gikam.getJsonWrapper({}, [ 'emcOrderItemGroupServiceImpl', selections ])).done(function() {
+                Gikam.getComp('emc-project-peospect-edit-list-order-item-group-grid').refresh();
+            }).always(function() {
+                workspace.window.closeMask();
+            });
+        } else {
+            Gikam.alert('GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM');
+        }
+    },
+    
+    /** 现场踏勘 */
+    getProspectPanel : function () {
+        var _this = this;
+        return {
+            title : 'EMC.MODULE.BP.PROJECT.PROSPECTS.TAB.PROSPECT',
+            id : 'emc-project-scheme-edit-panel',
+            items : [ {
+                type : 'layout',
+                center : {
+                    items : [ {
+                        type : 'form',
+                        columns : 1,
+                        service : 'emcProjectServiceImpl',
+                        id : 'emc-project-prospect-edit-list-prospect-form',
+                        fields : emcProjectProspect.getProspectFormFields(),
+                    } ]
+                }
+            } ]
+        }
+    },
+
+    /** 监测方案 */
+    getMonitorSchemePanel : function () {
+        var _this = this;
+        return {
+            title : 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.TAB.PROJ_SCHEME',
+            id : 'emc-project-scheme-edit-panel',
+            items : [ {
+                type : 'layout',
+                north : {
+                    height : '50%',
+                    items : [ {
+                        type : 'grid',
+                        id : 'emc-project-prospect-edit-list-schemeedit-grid',
+                        url : '',
+                        columns : emcProject.getSchemeEditListColumns(),
+                        service : 'emcProjSchemeServiceImpl',
+                        checkOnActive : false,
+                        deleteFormatter : function(row) {
+                            return row.folderNo || row.id;
+                        },
+                        onLoadSuccess : function(data) {
+                            if (!Gikam.isEmpty(data)) {
+                                this.activeRowByIndex(1);
+                            } else {
+                                Gikam.cleanCompData([ 'emc-project-prospect-edit-list-order-grid' ]);
+                            }
+                        },
+                        onRowActive : function(index, row) {
+                            _this.onSchemeActive(row);
+                        },
+                        onRendered : function() {
+                            this.hideColumns([ 'ext$.monitortmplname' ]);
+                        },
+                        group : {
+                            fields : [ 'ext$.monitortmplname' ],
+                            formatter : function(row) {
+                                return Gikam.propI18N('T_EMC_PROJ_SCHEME.ORDERCATEGORY') + ':' + row.ext$.monitortmplname;
+                            }
+                        },
+                        toolbar : [ {
+                            type : 'button',
+                            text : 'GIKAM.BUTTON.INSERT',
+                            icon : 'add',
+                            onClick : function() {
+                                var projId = _this.param.projId;
+                                var activeRow = Gikam.getComp('emc-project-prospect-edit-list-grid').getActivedRow();
+                                if (Gikam.isEmpty(activeRow)) {
+                                    Gikam.alert("EMC.MODULE.BP.PROJECT.PROJSCHEMES.TIP.PROJECT_REQUIRED");
+                                    return;
+                                }
+
+                                var data = Gikam.getComp('emc-project-prospect-edit-list-base-info-form').getData();
+                                var editMonitorInfo = _this.param.editMonitorInfo;
+                                // 这里使用委托单位来过滤数据，之前是受检单位
+                                var testOrgId = data.entrustOrgId ? data.entrustOrgId : '-';
+                                var sampleOrgId = _this.param.sampleOrgId;
+                                _this.addProj(projId, editMonitorInfo, testOrgId, sampleOrgId);
+                            }
+                        }, {
+                            type : 'button',
+                            text : 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.BUTTON.INITIALIZ',
+                            icon : 'add',
+                            onClick : function() {
+                                var projId = _this.param.projId;
+                                if (Gikam.isEmpty(projId)) {
+                                    Gikam.alert("EMC.MODULE.BP.PROJECT.PROJSCHEMES.TIP.PROJECT_REQUIRED");
+                                    return;
+                                }
+
+                                // 这里使用委托单位来过滤数据，之前是受检单位
+                                var data = Gikam.getComp('emc-project-prospect-edit-list-base-info-form').getData();
+                                var testOrgId = data.entrustOrgId;
+                                _this.initAddProj(projId, testOrgId);
+                            }
+                        }, {
+                            type : 'button',
+                            text : 'GIKAM.BUTTON.DELETE',
+                            icon : 'remove-row',
+                            onClick : function() {
+                                Gikam.getComp('emc-project-prospect-edit-list-schemeedit-grid').deleteRows(emcProject.schemeUrl);
+                            }
+                        }, {
+                            type : 'dropDownMenu',
+                            text : 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.BUTTON.COPY_SHARE_OR_POINT',
+                            items : [ {
+                                type : 'button',
+                                text : 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.BUTTON.COPY_SHARE',
+                                icon : 'copy',
+                                onClick : function() {
+                                    _this.copyShare();
+                                }
+                            }, {
+                                type : 'button',
+                                text : 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.BUTTON.COPY_POINT',
+                                icon : 'copy',
+                                onClick : function() {
+                                    var data = Gikam.getComp('emc-project-prospect-edit-list-base-info-form').getData();
+                                    var testOrgId = data.entrustOrgId;
+                                    _this.copyPoint(testOrgId);
+                                }
+                            }, ]
+                        }, {
+                            type : 'dropDownMenu',
+                            text : 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.BUTTON.EDIT',
+                            items : [ {
+                                type : 'button',
+                                text : 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.BUTTON.UPDATE_CYCLEFREQUENCY',
+                                icon : 'edit',
+                                onClick : function() {
+                                    _this.updateCycleAndFrequency();
+                                }
+                            }, {
+                                type : 'button',
+                                text : 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.BUTTON.INDEX',
+                                icon : 'edit',
+                                onClick : function() {
+                                    _this.updateIndex();
+                                }
+                            }, {
+                                type : 'button',
+                                text : 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.BUTTON.UPDATE_ORG',
+                                icon : 'edit',
+                                onClick : function() {
+                                    _this.updateOrg();
+                                }
+                            } ]
+                        }, ]
+                    } ]
+                },
+                center : {
+                    items : [ {
+                        type : 'grid',
+                        id : 'emc-project-prospect-edit-list-order-grid',
+                        url : _this.getOrderUrl(),
+                        columns : emcProject.getOrderEditListColumns(),
+                        service : 'emcProjOrderServiceImpl',
+                        toolbar : [ {
+                            type : 'button',
+                            text : 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.BUTTON.UPDATE_TEST',
+                            icon : 'edit',
+                            onClick : function() {
+                                _this.updateItemGroup();
+                            }
+                        }, {
+                            type : 'button',
+                            text : 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.BUTTON.BATCH_UPDATE_NUM',
+                            icon : 'edit',
+                            onClick : function() {
+                                _this.batchUpdateSampleNum();
+                            }
+                        }, {
+                            type : 'dropDownMenu',
+                            text : 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.BUTTON.SUBCONTRACTOR',
+                            items : [ {
+                                type : 'button',
+                                text : 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.BUTTON.ADD_SUBCONTRACTOR',
+                                icon : 'add',
+                                onClick : function() {
+                                    _this.addSubcontractor();
+                                }
+                            }, {
+                                type : 'button',
+                                text : 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.BUTTON.DEL_SUBCONTRACTOR',
+                                icon : 'remove-row',
+                                onClick : function() {
+                                    _this.delSubcontractor();
+                                }
+                            } ]
+                        }, {
+                            type : 'dropDownMenu',
+                            text : 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.BUTTON.DATASHARING',
+                            items : [ {
+                                type : 'button',
+                                text : 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.BUTTON.ADD_DATASHARING',
+                                icon : 'add',
+                                onClick : function() {
+                                    _this.addDataSharing();
+                                }
+                            }, {
+                                type : 'button',
+                                text : 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.BUTTON.DEL_DATASHARING',
+                                icon : 'remove-row',
+                                onClick : function() {
+                                    _this.delDataSharing();
+                                }
+                            } ]
+                        } ]
+                    } ]
+                }
+            } ]
+        }
+    },
+    
+    onSchemeActive : function(row) {
+        var _this = this;
+        if (Gikam.isNumber(row.id)) {
+            Gikam.getAsyncComp('emc-project-prospect-edit-list-order-grid').done(function(grid) {
+                grid.refresh({
+                    url : _this.getOrderUrl(row.id)
+                });
+            });
+        }
+    },
+    
+    getOrderUrl : function(projSchemeId) {
+        if (projSchemeId) {
+            return Gikam.printf(emcProject.schemeUrl + '/{id}/proj-orders/queries', {
+                id : projSchemeId
+            })
+        }
+    },
+    
+    updateCycleAndFrequency : function() {
+        var gridData = Gikam.getComp('emc-project-prospect-edit-list-schemeedit-grid').getSelections();
+        if (gridData.length > 0) {
+            Gikam.create('modal', {
+                title : 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.MODAL.UPDATE_CYCLE_FREQUENCY',
+                width : 400,
+                height : 200,
+                url : emcProject.schemeUrl + '/page/update-cycle-and-frequency',
+                onAfterClose : function(data) {
+                    if (!Gikam.isEmpty(data)) {
+                        workspace.window.showMask(true);
+                        var selectedIds = gridData.map(function(item) {
+                            return {
+                                id : item.id
+                            }
+                        });
+                        Gikam.put(emcProject.schemeUrl + '/action/update-frequency', Gikam.getJsonWrapper({
+                            cycle : data.cycle,
+                            frequency : data.frequency
+                        }, [ 'emcProjSchemeServiceImpl', gridData ])).done(function() {
+                            Gikam.getComp('emc-project-prospect-edit-list-schemeedit-grid').refresh();
+                        }).always(function() {
+                            workspace.window.closeMask();
+                        });
+                    }
+                }
+            });
+        } else {
+            Gikam.alert('GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM');
+        }
+    },
+
+    batchUpdateSampleNum : function() {
+        var gridData = Gikam.getComp('emc-project-prospect-edit-list-order-grid').getSelections();
+        var activeRow = Gikam.getComp('emc-project-prospect-edit-list-schemeedit-grid').getActivedRow();
+        if (gridData.length > 0) {
+            Gikam.create('modal', {
+                title : 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.MODAL.UPDATE_SAMPLENUM',
+                width : 400,
+                height : 200,
+                url : emcProject.schemeUrl + '/page/proj-order-batch-update',
+                onAfterClose : function(data) {
+                    if (!Gikam.isEmpty(data)) {
+                        workspace.window.showMask(true);
+                        gridData.map(function(item) {
+                            item.sampleNum = data.sampleNum;
+                        });
+                        Gikam.put(emcProject.schemeUrl + '/' + activeRow.id, Gikam.getJsonWrapper({}, [ 'emcProjOrderServiceImpl', gridData ])).done(function() {
+                            Gikam.getComp('emc-project-prospect-edit-list-order-grid').refresh();
+                        }).always(function() {
+                            workspace.window.closeMask();
+                        });
+                    }
+                }
+            });
+        } else {
+            Gikam.alert('GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM');
+        }
+    },
+
+    updateItemGroup : function() {
+        var gridData = Gikam.getComp('emc-project-prospect-edit-list-schemeedit-grid').getSelections();
+        if (gridData.length > 0) {
+            Gikam.create('modal', {
+                title : 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.MODAL.UPDATE_TEST',
+                width : 1000,
+                height : 580,
+                url : emcProject.schemeUrl + '/page/proj-order-update-item-group' + Gikam.param({
+                    monitorTmplId : gridData[0].monitorTmplId,
+                    projSchemeId : gridData[0].id
+                }),
+                onAfterClose : function(data) {
+                    if (!Gikam.isEmpty(data)) {
+                        workspace.window.showMask(true);
+                        var orderData = data.map(function(item) {
+                            return {
+                                testId : item.testId,
+                                methodId : item.methodId,
+                                itemGroupId : item.itemGroupId,
+                                itemGroup : item.itemGroup,
+                                schemeName : item.schemeName
+                            }
+                        });
+                        var url = emcProject.schemeUrl + '/action/proj-orders/update-item-group';
+                        Gikam.post(url, Gikam.getJsonWrapper({}, [ 'emcProjSchemeServiceImpl', gridData ], [ 'emcProjOrderServiceImpl', orderData ])).always(function() {
+                            Gikam.getComp('emc-project-prospect-edit-list-order-grid').refresh();
+                            workspace.window.closeMask();
+                        });
+                    }
+                }
+            });
+        } else {
+            Gikam.alert('GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM');
+        }
+    },
+
+    updateIndex : function() {
+        var gridData = Gikam.getComp('emc-project-prospect-edit-list-schemeedit-grid').getSelections();
+        if (gridData.length > 0) {
+            var ids = "";
+            gridData.map(function(item, i) {
+                ids += gridData[i].id + ',';
+            });
+            ids = ids.substring(0, ids.length - 1);
+            Gikam.create('modal', {
+                title : 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.MODAL.UPDATE_INDEX',
+                width : 1500,
+                height : 650,
+                url : emcProject.schemeUrl + '/page/update-index' + Gikam.param({
+                    ids : ids,
+                    monitorTmplGroupId : gridData[0].ext$.monitortmplgroupid
+                }),
+                onAfterClose : function() {
+                    Gikam.getComp('emc-project-prospect-edit-list-order-grid').refresh();
+                }
+            });
+        } else {
+            Gikam.alert('GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM');
+        }
+    },
+
+    updateOrg : function() {
+        var gridData = Gikam.getComp('emc-project-prospect-edit-list-schemeedit-grid').getSelections();
+        if (gridData.length > 0) {
+            Gikam.create('modal', {
+                title : Gikam.choose.getConfig('org-simple').title,
+                width : 480,
+                height : 150,
+                url : '/secure/core/module/mdm/orgs/page/select-list',
+                onAfterClose : function(data) {
+                    if (!Gikam.isEmpty(data)) {
+                        workspace.window.showMask(true);
+                        gridData.map(function(item) {
+                            item.sampleOrgId = data.sampleOrgId;
+                        });
+                        Gikam.put(emcProject.schemeUrl + '/' + gridData[0].id, Gikam.getJsonWrapper({}, [ 'emcProjSchemeServiceImpl', gridData ])).done(function() {
+                            Gikam.getComp('emc-project-prospect-edit-list-schemeedit-grid').refresh();
+                        }).always(function() {
+                            workspace.window.closeMask();
+                        });
+                    }
+                }
+            });
+        } else {
+            Gikam.alert('GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM');
+        }
+    },
+    
+    copyShare : function() {
+        var gridData = Gikam.getComp('emc-project-prospect-edit-list-schemeedit-grid').getSelections();
+        if (gridData.length > 0) {
+            Gikam.create('modal', {
+                title : 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.MODAL.COPY_SHARE',
+                width : 300,
+                height : 200,
+                url : emcProject.schemeUrl + '/page/copy-share',
+                onAfterClose : function(data) {
+                    if (!Gikam.isEmpty(data)) {
+                        workspace.window.showMask(true);
+                        var url = emcProject.schemeUrl + '/action/copy';
+                        Gikam.post(url, Gikam.getJsonWrapper({
+                            copies : data.copyShare
+                        }, [ '', gridData ])).always(function() {
+                            workspace.window.closeMask();
+                            Gikam.getComp('emc-project-prospect-edit-list-schemeedit-grid').refresh();
+                        });
+                    }
+                }
+            });
+        } else {
+            Gikam.alert('GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM');
+        }
+    },
+    
+    copyPoint : function(testOrgId) {
+        var gridData = Gikam.getComp('emc-project-prospect-edit-list-schemeedit-grid').getSelections();
+        if (gridData.length != 1) {
+            Gikam.alert('GIKAM.TIP.CHOOSE_ONE_ITEM');
+            return;
+        }
+
+        Gikam.create('modal', {
+            title : 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.MODAL.COPY_POINT',
+            width : 800,
+            height : 600,
+            url : emcProject.schemeUrl + '/page/select-monitoring-point' + Gikam.param({
+                testOrgId : testOrgId,
+                monitorPointCategoryId : gridData[0].monitorPointCategoryId
+            }),
+            onAfterClose : function(pointData) {
+                if (!Gikam.isEmpty(pointData)) {
+                    workspace.window.showMask(true);
+                    var chooseSchemeData = pointData.map(function(item) {
+                        return {
+                            monitorPointCategoryId : item.monitorPointCategoryId,
+                            monitorPointCategoryName : item.ext$.templatename,
+                            monitorPointId : item.id,
+                            monitorPointNo : item.monitorPointNo,
+                            monitorPointName : item.monitorPointName
+                        }
+                    });
+
+                    var url = emcProject.schemeUrl + '/action/copy-point'
+                    Gikam.post(url, Gikam.getJsonWrapper({}, [ '', gridData ], [ '', chooseSchemeData ])).always(function() {
+                        Gikam.getComp('emc-project-prospect-edit-list-schemeedit-grid').refresh();
+                        workspace.window.closeMask();
+                    });
+                }
+            }
+        });
+    },
+
+    
+    _monitorPointType : '',
+    _sampleOrgId : '',
+    _sampleOrgName : '',
+    _selectId : [],
+    addProj : function(projId, editMonitorInfo, testOrgId, sampleOrgId) {
+        var _this = this;
+        var url = emcProject.schemeUrl;
+        if (editMonitorInfo === '1') {// 不选择监测点
+            Gikam.create('modal', {
+                title : 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.MODAL.SELECT_MONITOR_TMPL',
+                width : 1000,
+                height : 580,
+                url : emcProject.schemeUrl + '/page/select-monitor-tmpl' + Gikam.param({
+                    editMonitorInfo : editMonitorInfo
+                }),
+                onAfterClose : function(tmlData) {
+                    if (!Gikam.isEmpty(tmlData)) {
+                        var chooseSchemeData = {
+                            projId : projId,
+                            monitorTmplId : tmlData[0].monitorTmplId,
+                            sampleOrgId : sampleOrgId
+                        }
+
+                        workspace.window.showMask(true);
+                        Gikam.post(url, Gikam.getJsonWrapper({}, [ 'emcProjSchemeServiceImpl', [ chooseSchemeData ] ], [ 'emcProjOrderServiceImpl', tmlData ])).done(function() {
+                            Gikam.getComp('emc-project-prospect-edit-list-schemeedit-grid').refresh();
+                        }).always(function() {
+                            workspace.window.closeMask();
+                        });
+                    }
+                }
+            });
+        } else {
+            Gikam.create('modal', {
+                title : 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.MODAL.SELECT_MONITORING_POINT',
+                width : 800,
+                height : 500,
+                url : emcProject.schemeUrl + '/page/select-monitoring-point' + Gikam.param({
+                    testOrgId : testOrgId,
+                    monitorPointType : _this._monitorPointType,
+                    sampleOrgId : _this._sampleOrgId,
+                    sampleOrgName : _this._sampleOrgName,
+                    selectIds : _this._selectId,
+                    defaultOrgId : sampleOrgId
+                }),
+                onAfterClose : function(pointData) {
+                    if (!Gikam.isEmpty(pointData)) {
+                        _this._selectId.splice(0, _this._selectId.length);
+                        pointData.map(function(item) {
+                            _this._selectId.push(item.id);
+                        });
+                        _this._monitorPointType = pointData[0].monitorPointType;
+                        _this._sampleOrgId = pointData[0].sampleDepartmentId;
+                        _this._sampleOrgName = pointData[0].sampleDepartment;
+                        Gikam.create('modal', {
+                            title : 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.MODAL.SELECT_MONITOR_TMPL',
+                            width : 1000,
+                            height : 580,
+                            url : emcProject.schemeUrl + '/page/select-monitor-tmpl' + Gikam.param({
+                                editMonitorInfo : editMonitorInfo,
+                                monitorPointCategoryId : pointData[0].monitorPointCategoryId
+                            }),
+                            onAfterClose : function(tmlData) {
+                                if (!Gikam.isEmpty(tmlData)) {
+                                    if (tmlData == 'PREVIOUS') {
+                                        emcProject.editPage.addProj(projId, editMonitorInfo, testOrgId);
+                                    } else {
+                                        var chooseSchemeData = pointData.map(function(item) {
+                                            return {
+                                                projId : projId,
+                                                monitorPointCategoryId : item.monitorPointCategoryId,
+                                                monitorPointCategoryName : item.ext$.templatename,
+                                                monitorPointId : item.id,
+                                                monitorPointNo : item.monitorPointNo,
+                                                monitorPointName : item.monitorPointName,
+                                                monitorTmplId : tmlData[0].monitorTmplId,
+                                                sampleOrgId : item.sampleDepartmentId
+                                            }
+                                        });
+
+                                        var chooseOrderData = tmlData.map(function(item) {
+                                            return {
+                                                testId : item.testId,
+                                                methodId : item.methodId,
+                                                itemGroupId : item.itemGroupId,
+                                                itemGroup : item.itemGroup,
+                                                schemeName : item.schemeName
+                                            }
+                                        });
+                                        workspace.window.showMask(true);
+                                        Gikam.post(url, Gikam.getJsonWrapper({}, [ 'emcProjSchemeServiceImpl', chooseSchemeData ], [ 'emcProjOrderServiceImpl', chooseOrderData ])).done(function() {
+                                            Gikam.getComp('emc-project-prospect-edit-list-schemeedit-grid').refresh();
+                                            _this._monitorPointType = '';
+                                            _this._sampleOrgId = '';
+                                            _this._sampleOrgName = '';
+                                            _this._selectId.splice(0, _this._selectId.length);
+                                        }).always(function() {
+                                            workspace.window.closeMask();
+                                        });
+                                    }
+                                } else {
+                                    _this._monitorPointType = '';
+                                    _this._sampleOrgId = '';
+                                    _this._sampleOrgName = '';
+                                    _this._selectId.splice(0, _this._selectId.length);
+                                }
+                            }
+                        });
+                    }
+                }
+            });
+        }
+    },
+    
+    initAddProj : function(projId, testOrgId) {
+        if (Gikam.isEmpty(testOrgId)) {
+            Gikam.alert("EMC.MODULE.BP.PROJECT.PROJSCHEMES.TIP.PROJECT_TESTORGID");
+            return;
+        }
+
+        Gikam.create('modal', {
+            title : 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.MODAL.INITIALIZ_SCHEME',
+            width : 1500,
+            height : 600,
+            url : emcProject.schemeUrl + '/page/init-scheme' + Gikam.param({
+                projId : projId,
+                testOrgId : testOrgId
+            }),
+            onAfterClose : function(data) {
+                Gikam.getComp('emc-project-prospect-edit-list-schemeedit-grid').refresh();
+            }
+        });
+    },
+    
+    orderQuickExport : function() {
+        var orderData = Gikam.getComp('emc-project-prospect-edit-list-order-grid').getData();
+        if (Gikam.isEmpty(orderData)) {
+            Gikam.alert('EMC.MODULE.BP.PROJECT.PROJECTS.ORDER_CAN_NOT_EXPORT');
+            return;
+        }
+        var projectId = orderData[0].projId;
+        Gikam.getText(Gikam.printf('/core/module/item/files/{templateCode}/action/download-template/{service}/{id}', {
+            templateCode : 'emcOrderExportTemplate',
+            service : 'emcOrderExportTemplate',
+            id : projectId
+        })).done(function(fileUri) {
+            var fileUrl = IFM_CONTEXT + fileUri;
+            Gikam.download(fileUrl);
+        });
+
+    },
+
+    orderQuickImport : function() {
+        var orderData = Gikam.getComp('emc-project-prospect-edit-list-order-grid').getData();
+        if (Gikam.isEmpty(orderData)) {
+            Gikam.alert('EMC.MODULE.BP.PROJECT.PROJECTS.TIP.ORDER_CAN_NOT_IMPORT');
+            return;
+        }
+        var id = orderData[0].projId;
+
+        Gikam.create('simpleUploader', {
+            dbTable : 'T_EMC_ORDER',
+            bizId : id,
+            multiple : false,
+            onAfterClose : function(files) {
+                if (Gikam.isEmpty(files)) {
+                    return;
+                }
+                Gikam.window.showMask(true);
+
+                Gikam.post(
+                    Gikam.printf(IFM_CONTEXT + '/core/module/item/files/{id}/action/import/' + 'emcOrderImportFileFunction', {
+                        id: files[0].id
+                    })
+                ).done(function(result) {
+                        if (result.url) {
+                            Gikam.download(result.url);
+                        } else if (result.message) {
+                            Gikam.alert(result.message);
+                        }
+                        Gikam.getComp('emc-project-prospect-edit-list-order-grid').refresh();
+                    }).always(function() {
+                        Gikam.window.closeMask();
+                    });
+            }
+        });
+    },
+
+    /** 监测方案设置分包商 */
+    addSubcontractor : function() {
+        var schemeSelections = Gikam.getComp('emc-project-prospect-edit-list-schemeedit-grid').getSelections();
+        var orderSelections = Gikam.getComp('emc-project-prospect-edit-list-order-grid').getSelections();
+        if (schemeSelections.length <= 0) {
+            Gikam.alert('EMC.MODULE.BP.PROJECT.PROJSCHEMES.TIP.CHOOSE_AT_LEAST_ONE_SCHEME');
+            return;
+        }
+        if (orderSelections.length <= 0) {
+            Gikam.alert('EMC.MODULE.BP.PROJECT.PROJSCHEMES.TIP.CHOOSE_AT_LEAST_ONE_ORDER');
+            return;
+        }
+        Gikam.create('modal', {
+            width : 300,
+            height : 300,
+            title : Gikam.choose.getConfig('subcontractor').title,
+            url : Gikam.choose.getConfig('subcontractor').url + Gikam.param({
+                single : true,
+            }),
+            onAfterClose : function(data) {
+                if (!Gikam.isEmpty(data)) {
+                    workspace.window.showMask(true);
+                    orderSelections.map(function(item) {
+                        item.subcontractorId = data[0].id;
+                    });
+                    Gikam.post('/secure/emc/module/bp/project/proj-schemes/proj-orders/action/relevance-subcontractor-update', Gikam.getJsonWrapper({},[ 'emcProjSchemeServiceImpl', schemeSelections ], [ 'emcProjOrderServiceImpl', orderSelections ])).done(function() {
+                    }).always(function() {
+                        Gikam.getComp('emc-project-prospect-edit-list-order-grid').refresh();
+                        workspace.window.closeMask();
+                    });
+                }
+            }
+        });
+    },
+
+    /** 监测方案删除分包商 */
+    delSubcontractor : function() {
+        var _this = this;
+        var schemeSelections = Gikam.getComp('emc-project-prospect-edit-list-schemeedit-grid').getSelections();
+        var orderSelections = Gikam.getComp('emc-project-prospect-edit-list-order-grid').getSelections();
+        if (schemeSelections.length <= 0) {
+            Gikam.alert('EMC.MODULE.BP.PROJECT.PROJSCHEMES.TIP.CHOOSE_AT_LEAST_ONE_SCHEME');
+            return;
+        }
+        if (orderSelections.length <= 0) {
+            Gikam.alert('EMC.MODULE.BP.PROJECT.PROJSCHEMES.TIP.CHOOSE_AT_LEAST_ONE_ORDER');
+            return;
+        }
+        workspace.window.showMask(true);
+        Gikam.post('/secure/emc/module/bp/project/proj-schemes/proj-orders/action/relevance-subcontractor-delete', Gikam.getJsonWrapper({},[ 'emcProjSchemeServiceImpl', schemeSelections ], [ 'emcProjOrderServiceImpl', orderSelections ])).done(function() {
+        }).always(function() {
+            Gikam.getComp('emc-project-prospect-edit-list-order-grid').refresh();
+            workspace.window.closeMask();
+        });
+    },
+
+    addDataSharing : function() {
+        var selections = Gikam.getComp('emc-project-peospect-edit-list-order-item-group-grid').getSelections();
+        if (selections.length > 0) {
+            var activedRow = Gikam.getComp('emc-project-prospect-edit-list-grid').getActivedRow();
+            selections.map(function(item) {
+                item.dataSharing = 1;
+            });
+            workspace.window.showMask(true);
+            Gikam.put(emcProject.baseUrl + '/' + activedRow.id, Gikam.getJsonWrapper({}, [ 'emcOrderItemGroupServiceImpl', selections ])).done(function() {
+                Gikam.getComp('emc-project-peospect-edit-list-order-item-group-grid').refresh();
+            }).always(function() {
+                workspace.window.closeMask();
+            });
+        } else {
+            Gikam.alert('GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM');
+        }
+    },
+
+    delDataSharing : function() {
+        var selections = Gikam.getComp('emc-project-peospect-edit-list-order-item-group-grid').getSelections();
+        if (selections.length > 0) {
+            var activedRow = Gikam.getComp('emc-project-prospect-edit-list-grid').getActivedRow();
+            selections.map(function(item) {
+                item.dataSharing = 0;
+            });
+            workspace.window.showMask(true);
+            Gikam.put(emcProject.baseUrl + '/' + activedRow.id, Gikam.getJsonWrapper({}, [ 'emcOrderItemGroupServiceImpl', selections ])).done(function() {
+                Gikam.getComp('emc-project-peospect-edit-list-order-item-group-grid').refresh();
+            }).always(function() {
+                workspace.window.closeMask();
+            });
+        } else {
+            Gikam.alert('GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM');
+        }
+    },
+
+    insertDirectorRow : function() {
+        var formData = Gikam.getComp('emc-project-prospect-edit-list-base-info-form').getData();
+        Gikam.create('modal', {
+            title : Gikam.choose.getConfig('emp').title,
+            url : Gikam.choose.getConfig('emp').url + Gikam.param({
+                targetType : 'insertDirector',
+                projectId : formData.id
+            }),
+            width : 310,
+            onAfterClose : function(rows) {
+                if (Gikam.isEmpty(rows)) {
+                    return;
+                }
+                var chooseData = rows.map(function(item) {
+                    return {
+                        empId : item.id,
+                        projectId : formData.id
+                    }
+                });
+                Gikam.getComp('emc-project-prospect-edit-list-director-grid').insert(emcProject.baseUrl + '/directors', chooseData);
+            }
+        });
+    },
+
+    deleteDirectorRow : function() {
+        var url = emcProject.baseUrl + '/directors';
+        Gikam.getComp('emc-project-prospect-edit-list-director-grid').deleteRows(url).done(function() {
+        });
+    },
+
+    create : function() {
+        var _this = this;
+        Gikam.create('layout', {
+            id : 'emc-project-prospect-edit-list-layout',
+            renderTo : workspace.window.$dom,
+            west : {
+                width : '23%',
+                items : [ _this.getGridParam() ]
+            },
+            center : {
+                items : [ _this.getBaseInfoTab() ]
+            },
+        });
+    },
+
+    init : function(param) {
+        this.param = param;
+        this.create();
+    }
+};

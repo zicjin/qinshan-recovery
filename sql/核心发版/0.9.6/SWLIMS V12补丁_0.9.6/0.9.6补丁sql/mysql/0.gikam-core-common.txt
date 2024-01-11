@@ -1,0 +1,7 @@
+-- ----------------------------- 2021-3-2 add by zhangpf------------begin
+ALTER TABLE t_core_login_config ADD ADUSERIDIGNORECASE varchar(36) NULL COMMENT 'AD域用户编码忽略大小写（0-否 1-是）';
+
+CALL INSERTI18N('T_CORE_LOGIN_CONFIG.ADUSERIDIGNORECASE', 'AD域用户编码忽略大小写', 'AD域用户编码忽略大小写', 'zh-CN', 'AD域用户编码忽略大小写');
+
+COMMIT;
+-- ----------------------------- 2021-3-2 add by zhangpf------------end

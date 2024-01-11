@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ 
+                      '/static/emc/module/mdm/bizmdm/monitor-tmpls/emc-monitor-tmpl.js',
+                      '/static/emc/module/mdm/bizmdm/monitor-tmpls/emc-order-category-choose-list.js'
+                    ]);
+    emcMonitorTmpl.orderCategorychoosePage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>

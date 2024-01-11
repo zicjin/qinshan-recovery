@@ -1,0 +1,20 @@
+-- ----------------------------- 2020-10-20 add by shixw------------begin
+
+CREATE PROC DELETEI18N (
+    @CODEPARAM VARCHAR ( 128 ) 
+) AS DECLARE
+@V_ID BIGINT;
+SELECT
+    @V_ID = ID 
+FROM
+    T_CORE_I18N 
+WHERE
+    CODE = @CODEPARAM;
+IF
+    ( @V_ID IS NOT NULL ) BEGIN
+    DELETE FROM T_CORE_I18N_MESSAGE WHERE I18NID = @V_ID;
+    DELETE FROM T_CORE_I18N WHERE CODE = @CODEPARAM;
+    
+END;
+
+-- ----------------------------- 2020-10-20 add by shixw------------end

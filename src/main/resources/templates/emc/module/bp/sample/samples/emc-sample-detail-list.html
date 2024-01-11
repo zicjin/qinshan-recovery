@@ -1,0 +1,8 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/emc/module/bp/sample/samples/emc-sample-detail.js',
+                      '/static/emc/module/bp/sample/samples/emc-sample-detail-list.js'
+                    ]);
+    emcSampleDetail.editPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>

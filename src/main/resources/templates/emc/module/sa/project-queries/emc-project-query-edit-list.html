@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/emc/module/sa/project-queries/emc-project-query.js',
+                      '/static/emc/module/sa/project-queries/emc-project-query-edit-list.js'
+                    ]);
+    emcProjectQuery.editPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>
+

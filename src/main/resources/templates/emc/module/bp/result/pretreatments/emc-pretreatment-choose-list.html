@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/emc/module/bp/result/pretreatments/emc-pretreatment.js',
+                      '/static/emc/module/bp/result/pretreatments/emc-pretreatment-choose-list.js'
+                    ]);
+    emcPretreatment.choosePage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>
+

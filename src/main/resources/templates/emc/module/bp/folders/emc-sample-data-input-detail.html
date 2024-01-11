@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/emc/module/bp/folders/emc-folder.js',
+                      '/static/emc/module/bp/folders/emc-sample-data-input-detail.js'
+                    ]);
+    emcFolder.dataInputDetailPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>
+

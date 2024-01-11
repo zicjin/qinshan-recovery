@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/emc/module/mdm/basemdm/property-tmpls/emc-property-tmpl.js',
+                      '/static/emc/module/mdm/basemdm/property-tmpls/emc-property-field-detail.js'
+                    ]);
+    emcPropertyTmpl.fieldDetailPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>
+

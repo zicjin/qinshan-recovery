@@ -1,0 +1,415 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.emc.module.bp.project.project.mapper.PfProjectMapper">
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM (SELECT A.*,
+                       B.FORMSTYLE,
+                       B.BIZCATEGORYNAME,
+                       B.EDITMONITORINFO,
+                       B.SAMPLEORGID,
+                       C.ORGNAME AS REPORTORGNAME,
+                       CASE WHEN A.STATUS = 'cancel' THEN '终止' ELSE '正常' END CANCELSTATUS
+                  FROM T_EMC_PROJECT A
+                  LEFT JOIN T_EMC_BIZ_CATEGORY B
+                    ON A.BIZCATEGORYID = B.ID
+                  LEFT JOIN T_CORE_ORG C
+                    ON A.REPORTORGID = C.ID
+                  ) T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+            <if test='authority_audit == "1"'>
+                AND <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.auditAuthorityWhereClause" />
+            </if>
+            <if test='targetType == "sample"'>
+                AND EXISTS (SELECT 1
+                              FROM T_EMC_ORDER O, T_EMC_FOLDER F
+                             WHERE O.FOLDERID = F.ID
+                               AND F.PROJID = T.ID
+                               AND F.PROCESSSTATUS = 'done'
+                              <if test='sampleUserId != null'>
+                               AND (
+                               INSTR(CONCAT(',', SAMPLEUSERID, ','), CONCAT(',', #{sampleUserId}, ',') ) > 0
+                                 OR F.SCENEUSERID = #{sampleUserId})
+                              </if>)
+                AND (EXISTS (SELECT 1
+                              FROM T_EMC_SAMPLE A
+                             WHERE A.PROJID = T.ID
+                               AND A.PROCESSSTATUS LIKE 'draft%'
+                               AND A.STATUS = 'draft')
+                OR EXISTS (
+								SELECT
+									1
+								FROM
+									T_EMC_ORDER O,
+									T_EMC_FOLDER F
+								WHERE
+									O.FOLDERID = F.ID
+									AND F.PROJID = T.ID
+									AND F.PROCESSSTATUS = 'done'
+									AND (O.SAMPLEID IS NULL OR O.SAMPLEID='')
+							))
+            </if>
+            <if test='targetType == "samplePlaning"'>
+                AND EXISTS (SELECT 1
+                              FROM T_EMC_FOLDER F
+                             WHERE F.PROJID = T.ID
+                               AND F.PROCESSSTATUS LIKE 'draft%')
+            </if>
+            <if test='targetType == "resultInput"'>
+                AND EXISTS (SELECT 1
+                              FROM T_EMC_ORDER O, T_EMC_FOLDER F
+                             WHERE O.FOLDERID = F.ID
+                               AND F.PROJID = T.ID
+                               AND F.PROCESSSTATUS = 'done'
+                              <if test='sampleUserId != null'>
+                               AND (INSTR( ',' || SAMPLEUSERID || ',',',' || #{sampleUserId} || ',' ) > 0
+                                 OR F.SCENEUSERID = #{sampleUserId})
+                              </if>)
+                AND EXISTS (SELECT 1
+                              FROM T_EMC_SAMPLE A
+                             WHERE A.PROJID = T.ID
+                               AND A.PROCESSSTATUS LIKE 'draft%'
+                               AND A.STATUS = 'logged')
+            </if>
+            <if test='targetType == "analysis"'>
+                AND EXISTS (SELECT 1
+                              FROM T_EMC_ORDER_TASK O
+                             WHERE O.PROJID = T.ID
+                               AND O.STATUS = 'logged'
+                               AND O.ANALYSISTYPE = 'analysis'
+                               AND O.SAMPLERECEIVERFLAG = '1'
+                               AND (O.RUNID IS NULL or O.RUNID=''))
+            </if>
+            <if test='targetType == "subcontractor"'>
+                AND EXISTS (SELECT 1
+                              FROM T_EMC_ORDER_TASK O, T_EMC_SUBCONTRACT_RECORD S
+                             WHERE O.ID = S.ORDERTASKID
+                               AND O.PROJID = T.ID
+                               AND O.STATUS = 'done'
+                               AND O.ANALYSISTYPE = 'analysis'
+                               AND O.SUBCONTRACTORID IS NOT NULL)
+            </if>
+            <if test='targetType == "dataSharing"'>
+                AND EXISTS (SELECT 1
+                              FROM T_EMC_ORDER_TASK O
+                             WHERE O.PROJID = T.ID
+                               AND O.STATUS = 'done'
+                               AND O.ANALYSISTYPE = 'analysis'
+                               AND O.DATASHARING = '1')
+            </if>
+            <if test='targetType == "copyProject" and monitorTmplId != null '>
+                AND (EXISTS (SELECT 1
+                               FROM T_EMC_ORDER O
+                             WHERE O.PROJID = T.ID
+                               AND O.MONITORTMPLID = #{monitorTmplId})
+                  OR EXISTS (SELECT 1
+                              FROM T_EMC_PROJ_SCHEME PS
+                             WHERE PS.PROJID = T.ID
+                               AND PS.MONITORTMPLID = #{monitorTmplId}))
+            </if>
+            <if test='projectType == "folderProject"'>
+                AND EXISTS (SELECT 1
+                              FROM T_EMC_FOLDER R
+                              LEFT JOIN T_EMC_PROJECT M
+                                ON R.PROJID = M.ID
+                             WHERE R.PROCESSSTATUS='done'
+                               AND M.STATUS <![CDATA[<>]]> 'cancel'
+                               AND R.STATUS = #{folderStatus}
+                               AND R.PROJID=T.ID
+                  )
+            </if>
+            <if test='targetType == "deliveryAccept"'>
+                AND (EXISTS (SELECT 1
+                               FROM T_EMC_ORDER O
+                             WHERE O.PROJID = T.ID
+                               AND (O.SAMPLEID IS NULL OR O.SAMPLEID = '' ))
+                     OR EXISTS (SELECT 1
+                                  FROM T_EMC_SAMPLE S
+                                WHERE S.PROJID = T.ID
+                                  AND S.STATUS = 'draft'))
+            </if>
+            <if test='targetType == "deliveryAudit"'>
+                AND (NOT EXISTS (SELECT 1
+                FROM T_EMC_ORDER O
+                WHERE O.PROJID = T.ID
+                AND (O.SAMPLEID IS NULL OR O.SAMPLEID = '' ))
+                AND EXISTS (SELECT 1
+                FROM T_EMC_SAMPLE S
+                WHERE S.PROJID = T.ID
+                AND S.STATUS != 'draft'))
+            </if>
+            <if test='targetType != "modifyProjectInfo"'>
+                AND T.STATUS <![CDATA[<>]]> 'cancel'
+            </if>
+            <if test='targetType == "projEdit"'>
+                AND T.SOURCE IS NULL OR T.SOURCE = ''
+            </if>
+            <if test='samplingStartDate != null'>
+                AND EXISTS (SELECT 1
+                              FROM T_EMC_ORDER O
+                             WHERE O.PROJID=T.ID
+                               AND O.SAMPLEBEGINDATE <![CDATA[>=]]> #{samplingStartDate}
+                  )
+            </if>
+            <if test='samplingEndDate != null'>
+                AND EXISTS (SELECT 1
+                              FROM T_EMC_ORDER O
+                             WHERE O.PROJID=T.ID
+                               AND O.SAMPLECOMPLETEDATE <![CDATA[<=]]> #{samplingEndDate}
+                  )
+            </if>
+            <if test='targetType == "schemeQuery"'>
+                AND EXISTS (
+                SELECT
+                1
+                FROM
+                T_CORE_BPMN_COMMENT CBC
+                WHERE
+                CBC.TARGETID = CONCAT('T_EMC_PROJECT$',T.ID)
+                AND CBC.STATUS = 'APPROVED'
+                and CBC.TASKNAME = '方案审核'
+                AND CBC.USERID = #{loginUser.id}
+                )
+            </if>
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ID DESC
+            </otherwise>
+        </choose>
+    </select>
+
+
+    <!-- 查询详情 -->
+    <select id="selectDetail" parameterType="java.lang.Long" resultType="map">
+        SELECT A.*,
+               B.FORMSTYLE,
+               B.BIZCATEGORYNAME,
+               B.EDITMONITORINFO,
+               C.ORGNAME AS REPORTORGNAME
+          FROM T_EMC_PROJECT A
+          LEFT JOIN T_EMC_BIZ_CATEGORY B
+            ON A.BIZCATEGORYID = B.ID
+          LEFT JOIN T_CORE_ORG C
+            ON A.REPORTORGID = C.ID
+         WHERE A.ID = #{id}
+    </select>
+
+    <!-- 查询项目统计数据 -->
+    <select id="selectProjectStatistics" parameterType="map" resultType="map">
+        SELECT B.BIZCATEGORYNAME,
+               COUNT(*) AS projectCount
+        FROM T_EMC_PROJECT A
+        LEFT JOIN T_EMC_BIZ_CATEGORY B
+          ON A.BIZCATEGORYID = B.ID
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+        </where>
+        GROUP BY B.BIZCATEGORYNAME
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                B.BIZCATEGORYNAME ASC
+            </otherwise>
+        </choose>
+    </select>
+
+    <!-- 根据业务类型查询年度项目统计数据 -->
+    <select id="selectAnnualProjectStatistics" parameterType="map" resultType="map">
+		SELECT MONTHVALUE,COUNT(*)  AS projectCount FROM (
+		    SELECT DATE_FORMAT(taskdate,'%m')  AS MONTHVALUE
+		    FROM T_EMC_PROJECT A WHERE TASKDATE IS NOT NULL
+		) A
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+            AND DATE_FORMAT(TASKDATE, '%Y') = DATE_FORMAT(NOW(), '%Y')
+        </where>
+        GROUP BY monthValue
+        ORDER BY monthValue
+    </select>
+
+    <!-- 项目状态 -->
+    <sql id="projectStatusWhereClause">
+        AND (${tableAlias}.${projectIdColumnName} IS NULL OR EXISTS (SELECT 1
+                      FROM T_EMC_PROJECT EP_
+                    WHERE EP_.STATUS <![CDATA[<>]]> 'cancel'
+                       AND EP_.ID = ${tableAlias}.${projectIdColumnName}))
+    </sql>
+
+    <select id="selectAnalysisAuditProject" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM (SELECT A.*,
+                       B.BIZCATEGORYNAME,
+                       B.EDITMONITORINFO,
+                       C.ORDERCATEGORY,
+                       C.MONITORTMPLID
+                  FROM T_EMC_PROJECT A
+                  LEFT JOIN T_EMC_BIZ_CATEGORY B
+                    ON A.BIZCATEGORYID = B.ID
+                  LEFT JOIN T_EMC_REPORT C
+                    ON A.ID = C.PROJID) T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+            <if test='authority_audit == "1"'>
+                AND <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.auditAuthorityWhereClause" />
+            </if>
+            <!--<if test='targetType == "analysisAudit"'>
+                AND T.STATUS = 'auditFinished'
+                AND EXISTS (SELECT 1
+                       FROM T_EMC_FOLDER F
+                       LEFT JOIN T_EMC_ORDER_TASK OT
+                         ON F.ID = OT.FOLDERID
+                      WHERE F.PROJID = T.ID
+                        AND OT.ANALYSISTYPE = 'analysis'
+                        AND F.ORDERCATEGORY = T.ORDERCATEGORY
+                        AND OT. STATUS = 'audit')
+                AND NOT EXISTS (SELECT 1
+                       FROM T_EMC_FOLDER F
+                       LEFT JOIN T_EMC_ORDER_TASK OT
+                         ON F.ID = OT.FOLDERID
+                      WHERE F.PROJID = T.ID
+                        AND OT.ANALYSISTYPE = 'analysis'
+                        AND F.ORDERCATEGORY = T.ORDERCATEGORY
+                        AND (OT. STATUS != 'audit' AND OT.
+                             STATUS != 'done' OR OT. STATUS IS NULL))
+                AND EXISTS
+              (SELECT 1
+                       FROM T_EMC_FOLDER F
+                       LEFT JOIN T_EMC_ORDER_TASK OT
+                         ON F.ID = OT.FOLDERID
+                      WHERE F.PROJID = T.ID
+                        AND OT.ANALYSISTYPE = 'analysis'
+                        AND F.ORDERCATEGORY = T.ORDERCATEGORY
+                        AND EXISTS (SELECT 1
+                               FROM T_CORE_USER_PERMISSION UP_
+                              WHERE UP_.USERID = #{loginUser.id}
+                                AND UP_.PERMISSIONTYPEID = 'T_CORE_ORG'
+                                AND UP_.TARGETID = OT.ANALYSISORGID)
+
+                     )
+            </if>-->
+
+            <!-- 分析审核和分析预审数据源类似 -->
+            <if test='targetType == "analysisAudit"'>
+                AND EXISTS (SELECT 1
+                          FROM T_EMC_FOLDER F
+                          LEFT JOIN T_EMC_ORDER_TASK OT
+                            ON F.ID = OT.FOLDERID
+                          LEFT JOIN T_EMC_RUN R
+                            ON OT.RUNID = R.ID
+                        WHERE F.PROJID = T.ID
+                            AND F.ORDERCATEGORY = T.ORDERCATEGORY
+                            AND OT.STATUS = #{orderTaskStatus}
+                            AND EXISTS (SELECT 1
+                            FROM T_CORE_USER_PERMISSION UP_
+                            WHERE UP_.USERID = #{loginUser.id}
+                            AND UP_.PERMISSIONTYPEID = 'T_CORE_ORG'
+                            AND UP_.TARGETID = OT.ANALYSISORGID)
+                            AND OT.ANALYSISTYPE = 'analysis')
+            </if>
+            <!-- 未分析完成的数据-->
+            <if test='targetType == "projectRunUnAudit"'>
+                AND EXISTS (SELECT 1
+                FROM T_EMC_FOLDER F
+                LEFT JOIN T_EMC_ORDER_TASK OT
+                ON F.ID = OT.FOLDERID
+                LEFT JOIN T_EMC_RUN R
+                ON OT.RUNID = R.ID
+                WHERE F.PROJID = T.ID
+                AND F.ORDERCATEGORY = T.ORDERCATEGORY
+                AND OT.STATUS !='done'
+                AND OT.RUNID IS NOT NULL
+                AND EXISTS (SELECT 1
+                FROM T_CORE_USER_PERMISSION UP_
+                WHERE UP_.USERID = #{loginUser.id}
+                AND UP_.PERMISSIONTYPEID = 'T_CORE_ORG'
+                AND UP_.TARGETID = OT.ANALYSISORGID)
+                AND OT.ANALYSISTYPE = 'analysis')
+                AND T.LASTESTACCEPTEDDATE+ 4 <![CDATA[<=]]> sysdate()
+
+            </if>
+            <!-- 项目有未分析完成的数据也有完成的数据-->
+            <if test='targetType == "projectRunAudited"'>
+                AND EXISTS (SELECT 1
+                FROM T_EMC_FOLDER F
+                LEFT JOIN T_EMC_ORDER_TASK OT
+                ON F.ID = OT.FOLDERID
+                LEFT JOIN T_EMC_RUN R
+                ON OT.RUNID = R.ID
+                WHERE F.PROJID = T.ID
+                AND F.ORDERCATEGORY = T.ORDERCATEGORY
+                AND OT.STATUS !='done'
+                AND OT.RUNID IS NOT NULL
+                AND EXISTS (SELECT 1
+                FROM T_CORE_USER_PERMISSION UP_
+                WHERE UP_.USERID = #{loginUser.id}
+                AND UP_.PERMISSIONTYPEID = 'T_CORE_ORG'
+                AND UP_.TARGETID = OT.ANALYSISORGID)
+                AND OT.ANALYSISTYPE = 'analysis')
+                AND EXISTS (SELECT 1
+                FROM T_EMC_FOLDER F
+                LEFT JOIN T_EMC_ORDER_TASK OT
+                ON F.ID = OT.FOLDERID
+                LEFT JOIN T_EMC_RUN R
+                ON OT.RUNID = R.ID
+                WHERE F.PROJID = T.ID
+                AND F.ORDERCATEGORY = T.ORDERCATEGORY
+                AND OT.STATUS ='done'
+                AND OT.RUNID IS NOT NULL
+                AND EXISTS (SELECT 1
+                FROM T_CORE_USER_PERMISSION UP_
+                WHERE UP_.USERID = #{loginUser.id}
+                AND UP_.PERMISSIONTYPEID = 'T_CORE_ORG'
+                AND UP_.TARGETID = OT.ANALYSISORGID)
+                AND OT.ANALYSISTYPE = 'analysis')
+
+            </if>
+
+            <if test='targetType == "analysisPretrial"'>
+                AND T.STATUS = 'auditFinished'
+                AND EXISTS (SELECT 1
+                          FROM T_EMC_FOLDER F
+                          LEFT JOIN T_EMC_ORDER_TASK OT
+                            ON F.ID = OT.FOLDERID
+                         WHERE F.PROJID = T.ID
+                           AND F.ORDERCATEGORY = T.ORDERCATEGORY
+                           AND OT.STATUS = 'audit'
+                           AND OT.ANALYSISTYPE = 'analysis'
+                           AND (T.REPORTEDITUSERID = #{reportEditUserId} OR T.REPORTEDITUSERID IS NULL))
+            </if>
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ID DESC
+            </otherwise>
+        </choose>
+    </select>
+
+    <!-- 查询项目编号最大值 -->
+    <select id="selectMaxProjNoList" parameterType="map" resultType="map">
+        SELECT SUBSTR(PROJNO, 1, LENGTH(PROJNO) - 3) AS PRE,
+               MAX(SUBSTR(PROJNO, -3)) AS AFTER
+          FROM T_EMC_PROJECT
+         GROUP BY SUBSTR(PROJNO, 1, LENGTH(PROJNO) - 3)
+    </select>
+
+    <!-- 通过合同ID查找关联项目 -->
+    <select id="selectProjectByContractId" parameterType="map" resultType="com.sunwayworld.emc.module.bp.project.project.bean.EmcProjectBean">
+        SELECT A.*
+          FROM T_EMC_PROJECT A
+        WHERE INSTR( ',' || A.CONTRACTID || ',',',' || #{contractId} || ',' ) > 0
+    </select>
+</mapper>

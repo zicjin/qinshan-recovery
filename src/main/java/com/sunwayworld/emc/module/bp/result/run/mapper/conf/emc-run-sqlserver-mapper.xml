@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.emc.module.bp.result.run.mapper.EmcRunMapper">
+    
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM (SELECT TT.*,
+                       CASE
+                         WHEN TT.EQUIPTCODETEMP IS NULL THEN
+                          'N/A'
+                         ELSE
+                          TT.EQUIPTCODETEMP
+                       END AS EQUIPTCODE
+                  FROM (SELECT A.*,
+                               D.EQUIPTNAME,
+                               D.EQUIPTID     AS EQUIPTCODETEMP,
+                               M.MAXELNTMPLID,
+                               S1.SOLNAME     AS SOL1NAME,
+                               S2.SOLNAME     AS SOL2NAME,
+                               S1.SOLNO       AS SOL1NO,
+                               S2.SOLNO       AS SOL2NO,
+                               R.REAGENTNAME
+                          FROM T_EMC_RUN A
+                          LEFT JOIN T_EMC_EQUIPT D
+                            ON A.EQUIPTID = D.ID
+                          LEFT JOIN T_EMC_METHOD M
+                            ON A.METHODID = M.ID
+                          LEFT JOIN T_EMC_SOL S1
+                            ON A.SOL1ID = S1.ID
+                          LEFT JOIN T_EMC_SOL S2
+                            ON A.SOL2ID = S2.ID
+                          LEFT JOIN T_EMC_REAGENT R
+                            ON A.REAGENTID = R.ID) TT) T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+            <if test='authority_audit == "1"'>
+                AND <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.auditAuthorityWhereClause" />
+            </if>
+            <if test='showTotalFlag == "0"'>
+                AND (CHARINDEX(',' + #{checkUserId} + ',' , ',' + T.CHECKUSERID + ',') > 0 OR T.CHECKUSERID IS NULL OR T.CHECKUSERID = '')
+            </if>
+            <if test='targetType == "analysisAudit"'>
+                AND EXISTS (SELECT 1
+                              FROM T_EMC_ORDER_TASK OT
+                             WHERE OT.RUNID = T.ID
+                               AND OT.STATUS = 'audit'
+                               AND OT.MONITORTMPLID = #{monitorTmplId}
+                               AND OT.PROJID = #{projId}
+                               )
+            </if>
+            <if test='targetType == "analysisAudited"'>
+                AND EXISTS (SELECT 1
+                              FROM T_EMC_ORDER_TASK OT
+                             WHERE OT.RUNID = T.ID
+                               AND OT.STATUS = 'done'
+                               AND OT.MONITORTMPLID = #{monitorTmplId}
+                               AND OT.PROJID = #{projId}
+                               )
+            </if>
+            <!-- 报告阶段按照项目ID查询批原始记录 -->
+            <if test='targetType == "reportData"'>
+               AND EXISTS(SELECT 1
+							FROM T_EMC_ORDER_TASK OT
+							WHERE OT.RUNID = T.ID
+							and OT.PROJID = #{projId})
+            </if>
+            
+        </where>
+        ORDER BY 
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ID DESC
+            </otherwise>
+        </choose>
+    </select>
+    
+    <select id="selectDetail" parameterType="java.lang.String" resultType="map">
+        SELECT T.*,
+               C.EQUIPTNAME ASSISTEQUIPTNAME,
+               D.EQUIPTNAME,
+               D.EQUIPTID   AS EQUIPTCODE
+          FROM T_EMC_RUN T
+          LEFT JOIN T_EMC_EQUIPT C
+            ON T.ASSISTEQUIPTID = C.ID
+          LEFT JOIN T_EMC_EQUIPT D
+            ON T.EQUIPTID = D.ID
+         WHERE T.ID = #{id}
+    </select>
+    
+    <select id="selectCurveInfoByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM (SELECT A.ID,
+                       C.SLOPE       RN2,
+                       C.INTERCEPT   RN3,
+                       C.COEFFICIENT RN4
+                  FROM T_EMC_RUN A
+                  LEFT JOIN T_EMC_CURVE C
+                    ON A.CURVEID = C.ID) T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ID
+            </otherwise>
+        </choose>
+    </select>
+    
+    
+</mapper>

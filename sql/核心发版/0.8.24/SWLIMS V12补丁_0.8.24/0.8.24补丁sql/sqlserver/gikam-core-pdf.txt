@@ -1,0 +1,15 @@
+-- ----------------------------- 2020-12-05 add by zhangpf--------------begin
+EXEC sp_rename '[dbo].[T_CORE_PDF_DOCUMENT].[AREAINFO]', 'AREAINFOTEMP', 'COLUMN'
+
+ALTER TABLE dbo.T_CORE_PDF_DOCUMENT ADD AREAINFO text NULL
+
+EXEC sp_addextendedproperty
+'MS_Description', N'区域信息',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_PDF_DOCUMENT',
+'COLUMN', N'AREAINFO'
+
+UPDATE T_CORE_PDF_DOCUMENT SET AREAINFO = AREAINFOTEMP;
+
+ALTER TABLE [dbo].[T_CORE_PDF_DOCUMENT] DROP COLUMN [AREAINFOTEMP]
+-- ----------------------------- 2020-12-05 add by zhangpf--------------end

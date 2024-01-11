@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.emc.module.bp.result.temphum.mapper.PfRunTempHumidityMapper">
+    <select id="selectByCondition" parameterType="map" resultType="map">
+         SELECT T.*
+          FROM (SELECT A.*,
+                       P.PROJNO,
+                       T.TESTNAME,
+                       E.EQUIPTNAME,
+                       E.EQUIPTID AS TEMPHUMIDITYEQUIPT,
+                       O.ORDERNO
+                  FROM T_EMC_RUN_TEMP_HUMIDITY A
+                  LEFT JOIN T_EMC_PROJECT P
+                    ON P.ID = A.PROJID
+                  LEFT JOIN T_EMC_ORDER_TASK T
+                    ON T.ID = A.ORDERTASKID
+                  LEFT JOIN T_EMC_RUN R
+                    ON R.ID = A.RUNID
+                  LEFT JOIN T_EMC_EQUIPT E
+                    ON E.ID = A.EQUIPTID   
+                  LEFT JOIN T_EMC_ORDER O
+                    ON O.ID = A.ORDERID                   
+                  ) T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ID DESC
+            </otherwise>
+        </choose>
+    </select>
+
+</mapper>

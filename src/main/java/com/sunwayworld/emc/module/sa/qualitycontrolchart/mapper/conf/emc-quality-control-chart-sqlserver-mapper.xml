@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.emc.module.sa.qualitycontrolchart.mapper.EmcQualityControlChartMapper">
+    <select id="selectOrderTaskResultPagination" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM (SELECT A.ID,
+                       A.FOLDERID,
+                       A.ORDERID,
+                       A.ORDERNO,
+                       A.RUNID,
+                       A.REPORTRESULT,
+                       A.ITEMNAME,
+                       A.ITEMID,
+                       A.REPEATNO,
+                       A.STANDQTY,
+                       B.TESTID,
+                       B.TESTNAME,
+                       B.QCCATEGORYID,
+                       B.INPUTUSERID,
+                       B.INPUTUSERNAME,
+                       B.ANALYSISDATE,
+                       C.TESTCATEGORYID,
+                       D.TESTCATEGORYDESC
+                  FROM T_EMC_ORDER_TASK_RESULT A
+                  LEFT JOIN T_EMC_ORDER_TASK B
+                    ON B.ID = A.ORDERTASKID
+                  LEFT JOIN T_EMC_TEST_METHOD C
+                    ON C.ID = A.TESTMETHODID
+                  LEFT JOIN T_EMC_TEST_CATEGORY D
+                    ON C.TESTCATEGORYID = D.ID) T
+        <where>
+            <include
+                refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include
+                    refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ID DESC
+            </otherwise>
+        </choose>
+    </select>
+    
+    <select id="selectTestSelectableList" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM (SELECT DISTINCT A.TESTID,
+                                A.TESTNAME,
+                                B.TESTCATEGORYID
+                  FROM T_EMC_ORDER_TASK A
+                  LEFT JOIN T_EMC_TEST_METHOD B
+                    ON B.ID = A.TESTMETHODID) T
+        <where>
+            <include
+                refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include
+                    refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.TESTID
+            </otherwise>
+        </choose>
+    </select>
+    
+    <select id="selectItemSelectableList" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM (SELECT DISTINCT A.ITEMID,
+                                A.ITEMNAME,
+                                A.TESTID
+                  FROM T_EMC_ORDER_TASK_RESULT A
+                 WHERE A.REPORTDISPLAY = '1') T
+        <where>
+            <include
+                refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include
+                    refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ITEMID
+            </otherwise>
+        </choose>
+    </select>
+    
+    <select id="selectQcCategorySelectableList" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM (SELECT DISTINCT A.QCCATEGORYID,
+                                A.QCCATEGORYCODE,
+                                A.TESTID,
+                                A.QCNAME,
+                                B.ITEMID
+                  FROM T_EMC_ORDER_TASK A
+                  LEFT JOIN T_EMC_ORDER_TASK_RESULT B
+                    ON B.ORDERTASKID = A.ID) T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+            AND T.QCCATEGORYID IS NOT NULL
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include
+                    refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.QCCATEGORYCODE
+            </otherwise>
+        </choose>
+    </select>
+    
+    <select id="selectUserSelectableList" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM (SELECT DISTINCT A.INPUTUSERID,
+                                A.INPUTUSERNAME,
+                                A.TESTID,
+                                A.QCCATEGORYID,
+                                B.ITEMID
+                  FROM T_EMC_ORDER_TASK A
+                  LEFT JOIN T_EMC_ORDER_TASK_RESULT B
+                    ON B.ORDERTASKID = A.ID) T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include
+                    refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.INPUTUSERID
+            </otherwise>
+        </choose>
+    </select>
+
+</mapper>

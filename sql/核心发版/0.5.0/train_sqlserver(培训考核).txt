@@ -1,0 +1,1892 @@
+﻿-- --------------------------------------- 2020-03-21 zhangpf begin -----------------
+CREATE TABLE [dbo].[t_core_train_plan] (
+  [ID] bigint  NOT NULL,
+  [TRAINCATEGORY] nvarchar(36) COLLATE Chinese_PRC_CI_AS  NULL,
+  [TRAINSCOPE] nvarchar(36) COLLATE Chinese_PRC_CI_AS  NULL,
+  [THEME] nvarchar(540) COLLATE Chinese_PRC_CI_AS  NULL,
+  [LECTURER] nvarchar(270) COLLATE Chinese_PRC_CI_AS  NULL,
+  [TRAINTIME] nvarchar(270) COLLATE Chinese_PRC_CI_AS  NULL,
+  [REMARK] nvarchar(540) COLLATE Chinese_PRC_CI_AS  NULL,
+  [STATUS] nvarchar(36) COLLATE Chinese_PRC_CI_AS  NULL,
+  [PROCESSSTATUS] nvarchar(18) COLLATE Chinese_PRC_CI_AS  NULL,
+  [CREATEDBYID] nvarchar(36) COLLATE Chinese_PRC_CI_AS  NULL,
+  [CREATEDBYNAME] nvarchar(60) COLLATE Chinese_PRC_CI_AS  NULL,
+  [CREATEDTIME] datetime2(7)  NULL,
+  [CREATEDBYORGID] nvarchar(36) COLLATE Chinese_PRC_CI_AS  NULL,
+  [CREATEDBYORGNAME] nvarchar(270) COLLATE Chinese_PRC_CI_AS  NULL
+)
+GO
+
+ALTER TABLE [dbo].[t_core_train_plan] SET (LOCK_ESCALATION = TABLE)
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'主键',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_train_plan',
+'COLUMN', N'ID'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'培训类型',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_train_plan',
+'COLUMN', N'TRAINCATEGORY'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'内部/外部(培训范围)',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_train_plan',
+'COLUMN', N'TRAINSCOPE'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'培训主题',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_train_plan',
+'COLUMN', N'THEME'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'培训讲师',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_train_plan',
+'COLUMN', N'LECTURER'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'培训时间',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_train_plan',
+'COLUMN', N'TRAINTIME'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'备注说明',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_train_plan',
+'COLUMN', N'REMARK'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'状态(未提交,审核中,已退回,待实施,已实施)',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_train_plan',
+'COLUMN', N'STATUS'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'流程状态',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_train_plan',
+'COLUMN', N'PROCESSSTATUS'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'制单人编码',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_train_plan',
+'COLUMN', N'CREATEDBYID'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'制单人名称',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_train_plan',
+'COLUMN', N'CREATEDBYNAME'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'制单时间',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_train_plan',
+'COLUMN', N'CREATEDTIME'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'制单人单位编码',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_train_plan',
+'COLUMN', N'CREATEDBYORGID'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'制单人单位名称',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_train_plan',
+'COLUMN', N'CREATEDBYORGNAME'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'培训计划',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_train_plan'
+GO
+
+ALTER TABLE [dbo].[t_core_train_plan] ADD CONSTRAINT [PK_CORE_TRAIN_PLAN] PRIMARY KEY CLUSTERED ([ID])
+WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)  
+ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[t_core_train_plan_user] (
+  [ID] bigint  NOT NULL,
+  [TRAINPLANID] bigint  NULL,
+  [USERID] nvarchar(36) COLLATE Chinese_PRC_CI_AS  NULL,
+  [USERNAME] nvarchar(60) COLLATE Chinese_PRC_CI_AS  NULL,
+  [CREATEDBYID] nvarchar(36) COLLATE Chinese_PRC_CI_AS  NULL,
+  [CREATEDBYNAME] nvarchar(60) COLLATE Chinese_PRC_CI_AS  NULL,
+  [CREATEDTIME] datetime2(7)  NULL,
+  [CREATEDBYORGID] nvarchar(36) COLLATE Chinese_PRC_CI_AS  NULL,
+  [CREATEDBYORGNAME] nvarchar(270) COLLATE Chinese_PRC_CI_AS  NULL
+)
+GO
+
+ALTER TABLE [dbo].[t_core_train_plan_user] SET (LOCK_ESCALATION = TABLE)
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'主键',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_train_plan_user',
+'COLUMN', N'ID'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'培训计划ID',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_train_plan_user',
+'COLUMN', N'TRAINPLANID'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'培训计划培训参与人员编码',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_train_plan_user',
+'COLUMN', N'USERID'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'培训计划培训参与人员名称',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_train_plan_user',
+'COLUMN', N'USERNAME'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'制单人编码',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_train_plan_user',
+'COLUMN', N'CREATEDBYID'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'制单人名称',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_train_plan_user',
+'COLUMN', N'CREATEDBYNAME'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'制单时间',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_train_plan_user',
+'COLUMN', N'CREATEDTIME'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'制单人单位编码',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_train_plan_user',
+'COLUMN', N'CREATEDBYORGID'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'制单人单位名称',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_train_plan_user',
+'COLUMN', N'CREATEDBYORGNAME'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'培训计划参与人员',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_train_plan_user'
+GO
+
+CREATE NONCLUSTERED INDEX [IDX_CORE_TRAIN_PLAN_USER_TRAINPLANID]
+ON [dbo].[t_core_train_plan_user] (
+  [TRAINPLANID] ASC
+)
+GO
+
+ALTER TABLE [dbo].[t_core_train_plan_user] ADD CONSTRAINT [PK_CORE_PLAN_USER] PRIMARY KEY CLUSTERED ([ID])
+WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)  
+ON [PRIMARY]
+GO
+
+
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_TRAIN_PLAN', '1', '1');
+    
+INSERT INTO T_CORE_TABLE (ID,AUDITABLE,ATTACHMENT )
+VALUES ('T_CORE_TRAIN_PLAN_USER', '0', '0');
+    
+INSERT INTO T_CORE_TABLE_HIERARCHY (ID, TABLENAME, MASTERTABLENAME, REFERCOLUMN)
+VALUES ('20200306001', 'T_CORE_TRAIN_PLAN_USER', 'T_CORE_TRAIN_PLAN', 'TRAINPLANID');
+
+INSERT INTO T_CORE_ADMIN_CHOOSE_CONFIG(ID, NAME, TITLE, CATEGORY, URL, WIDTH)
+VALUES (NEXT VALUE FOR SEQ_CORE, '培训计划', '培训计划', 'train-plan', '/secure/core/module/train/train-plans/page/choose-list', '');
+
+INSERT INTO T_CORE_MENU_EXT(ID, SERVICENAME, TABLENAME, TYPE, ENABLE, EXT)
+VALUES ('9323', '培训计划', 'T_CORE_TRAIN_PLAN', 'audit_def', '1', NULL);
+
+INSERT INTO T_CORE_CODE_CATEGORY (ID, CODECATEGORYNAME, CODECLASSID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME) 
+VALUES ('coreTrainCategory', '培训类型', 'biz', NULL, '100', NULL, NULL, NULL, NULL);
+
+INSERT INTO T_CORE_CODE(ID, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME, CODE)
+VALUES (NEXT VALUE FOR SEQ_CORE, '安全培训', 'coreTrainCategory', NULL, NULL, NULL, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL, 'safetyTraining');
+INSERT INTO T_CORE_CODE(ID, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME, CODE)
+VALUES (NEXT VALUE FOR SEQ_CORE, '理论培训', 'coreTrainCategory', NULL, NULL, NULL, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL, 'theoreticalTraining');
+
+INSERT INTO T_CORE_CODE_CATEGORY (ID, CODECATEGORYNAME, CODECLASSID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME) 
+VALUES ('coreTrainScope', '内部/外部', 'sys', NULL, '101', NULL, NULL, NULL, NULL);
+
+INSERT INTO T_CORE_CODE(ID, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME, CODE)
+VALUES (NEXT VALUE FOR SEQ_CORE, '内部', 'coreTrainScope', NULL, NULL, NULL, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL, 'internal');
+INSERT INTO T_CORE_CODE(ID, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME, CODE)
+VALUES (NEXT VALUE FOR SEQ_CORE, '外部', 'coreTrainScope', NULL, NULL, NULL, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL, 'external');
+
+INSERT INTO t_core_menu (ID, MENUNAME, HREF, PARENTID, ORDERNO, MENUINITNAME, ICON, TODOICON)
+VALUES ('98', '培训考核', NULL, NULL, '98', '培训考核', '017.svg', '');
+
+INSERT INTO t_core_menu (ID, MENUNAME, HREF, PARENTID, ORDERNO, MENUINITNAME, ICON, TODOICON)
+VALUES ('9801', '培训计划管理', '/secure/core/module/train/train-plans/page/edit-list', '98', '9801', '培训计划编制列表', '005.svg', '');
+
+INSERT INTO t_core_menu (ID, MENUNAME, HREF, PARENTID, ORDERNO, MENUINITNAME, ICON, TODOICON)
+VALUES ('9802', '培训计划审核', '/secure/core/module/train/train-plans/page/audit-list?currentStatusCode=approve', '98', '9802', '培训计划编制列表', '022.svg', '');
+
+CREATE TABLE [dbo].[t_core_train] (
+  [ID] bigint  NOT NULL,
+  [TRAINPLANID] bigint  NULL,
+  [TRAINMETHOD] nvarchar(36) COLLATE Chinese_PRC_CI_AS  NULL,
+  [LOCATION] nvarchar(270) COLLATE Chinese_PRC_CI_AS  NULL,
+  [TRAINTIME] nvarchar(270) COLLATE Chinese_PRC_CI_AS  NULL,
+  [TRAININGMATERIAL] nvarchar(270) COLLATE Chinese_PRC_CI_AS  NULL,
+  [ASSESSMENTMETHOD] nvarchar(36) COLLATE Chinese_PRC_CI_AS  NULL,
+  [EXAMID] bigint  NULL,
+  [EVALUATION] nvarchar(540) COLLATE Chinese_PRC_CI_AS  NULL,
+  [CREATEDBYID] nvarchar(36) COLLATE Chinese_PRC_CI_AS  NULL,
+  [CREATEDBYNAME] nvarchar(60) COLLATE Chinese_PRC_CI_AS  NULL,
+  [CREATEDTIME] datetime2(7)  NULL,
+  [CREATEDBYORGID] nvarchar(36) COLLATE Chinese_PRC_CI_AS  NULL,
+  [CREATEDBYORGNAME] nvarchar(270) COLLATE Chinese_PRC_CI_AS  NULL,
+  [ACTIVATEDFLAG] nvarchar(1) COLLATE Chinese_PRC_CI_AS  NULL,
+  [ACTIVATEDBYID] nvarchar(36) COLLATE Chinese_PRC_CI_AS  NULL,
+  [ACTIVATEDBYNAME] nvarchar(60) COLLATE Chinese_PRC_CI_AS  NULL,
+  [ACTIVATEDTIME] datetime2(7)  NULL
+)
+GO
+
+ALTER TABLE [dbo].[t_core_train] SET (LOCK_ESCALATION = TABLE)
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'主键',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_train',
+'COLUMN', N'ID'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'培训计划ID',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_train',
+'COLUMN', N'TRAINPLANID'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'培训方式',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_train',
+'COLUMN', N'TRAINMETHOD'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'培训地点',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_train',
+'COLUMN', N'LOCATION'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'培训时间',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_train',
+'COLUMN', N'TRAINTIME'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'培训教材',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_train',
+'COLUMN', N'TRAININGMATERIAL'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'考核方式',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_train',
+'COLUMN', N'ASSESSMENTMETHOD'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'试卷ID',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_train',
+'COLUMN', N'EXAMID'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'考核效果评价',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_train',
+'COLUMN', N'EVALUATION'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'制单人编码',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_train',
+'COLUMN', N'CREATEDBYID'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'制单人名称',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_train',
+'COLUMN', N'CREATEDBYNAME'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'制单时间',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_train',
+'COLUMN', N'CREATEDTIME'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'制单人单位编码',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_train',
+'COLUMN', N'CREATEDBYORGID'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'制单人单位名称',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_train',
+'COLUMN', N'CREATEDBYORGNAME'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'启用标志',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_train',
+'COLUMN', N'ACTIVATEDFLAG'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'启用人ID',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_train',
+'COLUMN', N'ACTIVATEDBYID'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'启用人名称',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_train',
+'COLUMN', N'ACTIVATEDBYNAME'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'启用时间',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_train',
+'COLUMN', N'ACTIVATEDTIME'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'培训实施',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_train'
+GO
+
+CREATE NONCLUSTERED INDEX [IDX_CORE_TRAIN_TRAINPLANID]
+ON [dbo].[t_core_train] (
+  [TRAINPLANID] ASC
+)
+GO
+
+CREATE NONCLUSTERED INDEX [IDX_CORE_TRAIN_EXAMID]
+ON [dbo].[t_core_train] (
+  [EXAMID] ASC
+)
+GO
+
+ALTER TABLE [dbo].[t_core_train] ADD CONSTRAINT [PK_CORE_TRAIN] PRIMARY KEY CLUSTERED ([ID])
+WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)  
+ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[t_core_train_user] (
+  [ID] bigint  NOT NULL,
+  [TRAINID] bigint  NULL,
+  [USERID] nvarchar(36) COLLATE Chinese_PRC_CI_AS  NULL,
+  [USERNAME] nvarchar(60) COLLATE Chinese_PRC_CI_AS  NULL,
+  [CREATEDBYID] nvarchar(36) COLLATE Chinese_PRC_CI_AS  NULL,
+  [CREATEDBYNAME] nvarchar(60) COLLATE Chinese_PRC_CI_AS  NULL,
+  [CREATEDTIME] datetime2(7)  NULL,
+  [CREATEDBYORGID] nvarchar(36) COLLATE Chinese_PRC_CI_AS  NULL,
+  [CREATEDBYORGNAME] nvarchar(270) COLLATE Chinese_PRC_CI_AS  NULL,
+  [ACTIVATEDFLAG] nvarchar(1) COLLATE Chinese_PRC_CI_AS  NULL,
+  [ACTIVATEDBYID] nvarchar(36) COLLATE Chinese_PRC_CI_AS  NULL,
+  [ACTIVATEDBYNAME] nvarchar(60) COLLATE Chinese_PRC_CI_AS  NULL,
+  [ACTIVATEDTIME] datetime2(7)  NULL,
+  [SCORE] nvarchar(60) COLLATE Chinese_PRC_CI_AS  NULL
+)
+GO
+
+ALTER TABLE [dbo].[t_core_train_user] SET (LOCK_ESCALATION = TABLE)
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'主键',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_train_user',
+'COLUMN', N'ID'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'培训实施ID',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_train_user',
+'COLUMN', N'TRAINID'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'培训参与人员编码',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_train_user',
+'COLUMN', N'USERID'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'培训参与人员名称',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_train_user',
+'COLUMN', N'USERNAME'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'制单人编码',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_train_user',
+'COLUMN', N'CREATEDBYID'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'制单人名称',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_train_user',
+'COLUMN', N'CREATEDBYNAME'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'制单时间',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_train_user',
+'COLUMN', N'CREATEDTIME'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'制单人单位编码',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_train_user',
+'COLUMN', N'CREATEDBYORGID'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'制单人单位名称',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_train_user',
+'COLUMN', N'CREATEDBYORGNAME'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'启用标志/签到标志',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_train_user',
+'COLUMN', N'ACTIVATEDFLAG'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'启用人ID/签到人ID',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_train_user',
+'COLUMN', N'ACTIVATEDBYID'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'启用人名称/签到人名称',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_train_user',
+'COLUMN', N'ACTIVATEDBYNAME'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'启用时间/签到时间',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_train_user',
+'COLUMN', N'ACTIVATEDTIME'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'考核成绩',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_train_user',
+'COLUMN', N'SCORE'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'培训实施参与人员',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_train_user'
+GO
+
+CREATE NONCLUSTERED INDEX [IDX_CORE_TRAIN_USER_TRAINID]
+ON [dbo].[t_core_train_user] (
+  [TRAINID] ASC
+)
+GO
+
+ALTER TABLE [dbo].[t_core_train_user] ADD CONSTRAINT [PK_CORE_TRAIN_USER] PRIMARY KEY CLUSTERED ([ID])
+WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)  
+ON [PRIMARY]
+GO
+
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_TRAIN', '0', '0');
+    
+INSERT INTO T_CORE_TABLE (ID,AUDITABLE,ATTACHMENT )
+VALUES ('T_CORE_TRAIN_USER', '0', '0');
+    
+INSERT INTO T_CORE_TABLE_HIERARCHY (ID, TABLENAME, MASTERTABLENAME, REFERCOLUMN)
+VALUES ('20200306002', 'T_CORE_TRAIN_USER', 'T_CORE_TRAIN', 'TRAINID');
+
+INSERT INTO T_CORE_CODE_CATEGORY (ID, CODECATEGORYNAME, CODECLASSID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME) 
+VALUES ('coreTrainMethod', '培训方式', 'sys', NULL, '100', NULL, NULL, NULL, NULL);
+
+INSERT INTO T_CORE_CODE(ID, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME, CODE)
+VALUES (NEXT VALUE FOR SEQ_CORE, 'PPT课件', 'coreTrainMethod', NULL, NULL, NULL, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL, 'ppt');
+INSERT INTO T_CORE_CODE(ID, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME, CODE)
+VALUES (NEXT VALUE FOR SEQ_CORE, '实操', 'coreTrainMethod', NULL, NULL, NULL, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL, 'operation');
+INSERT INTO T_CORE_CODE(ID, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME, CODE)
+VALUES (NEXT VALUE FOR SEQ_CORE, '其他', 'coreTrainMethod', NULL, NULL, NULL, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL, 'other');
+
+INSERT INTO T_CORE_CODE_CATEGORY (ID, CODECATEGORYNAME, CODECLASSID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME) 
+VALUES ('coreAssessmentMethod', '考核方式', 'sys', NULL, '101', NULL, NULL, NULL, NULL);
+
+INSERT INTO T_CORE_CODE(ID, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME, CODE)
+VALUES (NEXT VALUE FOR SEQ_CORE, '在线考试', 'coreAssessmentMethod', NULL, NULL, NULL, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL, 'testOnline');
+INSERT INTO T_CORE_CODE(ID, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME, CODE)
+VALUES (NEXT VALUE FOR SEQ_CORE, '笔试', 'coreAssessmentMethod', NULL, NULL, NULL, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL, 'writtenExamination');
+INSERT INTO T_CORE_CODE(ID, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME, CODE)
+VALUES (NEXT VALUE FOR SEQ_CORE, '实操', 'coreAssessmentMethod', NULL, NULL, NULL, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL, 'operation');
+INSERT INTO T_CORE_CODE(ID, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME, CODE)
+VALUES (NEXT VALUE FOR SEQ_CORE, '其他', 'coreAssessmentMethod', NULL, NULL, NULL, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL, 'other');
+
+INSERT INTO t_core_menu (ID, MENUNAME, HREF, PARENTID, ORDERNO, MENUINITNAME, ICON, TODOICON)
+VALUES ('9803', '培训实施', '/secure/core/module/train/trains/page/edit-list', '98', '9803', '培训实施编制列表', '046.svg', '');
+
+INSERT INTO t_core_menu (ID, MENUNAME, HREF, PARENTID, ORDERNO, MENUINITNAME, ICON, TODOICON)
+VALUES ('9804', '培训实施签到', '/secure/core/module/train/trains/page/search-list', '98', '9804', '培训实施查询列表', '008.svg', '');
+
+
+CREATE TABLE [dbo].[t_core_exam_tmpl] (
+  [ID] bigint  NOT NULL,
+  [TMPLNAME] nvarchar(270) COLLATE Chinese_PRC_CI_AS  NULL,
+  [SINGLECHOICEQTY] int  NULL,
+  [SINGLECHOICESCORE] int  NULL,
+  [MULTIPLECHOICEQTY] int  NULL,
+  [MULTIPLECHOICESCORE] int  NULL,
+  [JUDGEMENTQTY] int  NULL,
+  [JUDGEMENTSCORE] int  NULL,
+  [SHORTANSWERQTY] int  NULL,
+  [SHORTANSWERSCORE] int  NULL,
+  [TOTALSCORE] int  NULL,
+  [CITATIONQTY] int  NULL,
+  [CREATEDBYID] nvarchar(36) COLLATE Chinese_PRC_CI_AS  NULL,
+  [CREATEDBYNAME] nvarchar(60) COLLATE Chinese_PRC_CI_AS  NULL,
+  [CREATEDTIME] datetime2(7)  NULL,
+  [CREATEDBYORGID] nvarchar(36) COLLATE Chinese_PRC_CI_AS  NULL,
+  [CREATEDBYORGNAME] nvarchar(270) COLLATE Chinese_PRC_CI_AS  NULL,
+  [ACTIVATEDFLAG] nvarchar(1) COLLATE Chinese_PRC_CI_AS  NULL,
+  [ACTIVATEDBYID] nvarchar(36) COLLATE Chinese_PRC_CI_AS  NULL,
+  [ACTIVATEDBYNAME] nvarchar(60) COLLATE Chinese_PRC_CI_AS  NULL,
+  [ACTIVATEDTIME] datetime2(7)  NULL
+)
+GO
+
+ALTER TABLE [dbo].[t_core_exam_tmpl] SET (LOCK_ESCALATION = TABLE)
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'主键',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam_tmpl',
+'COLUMN', N'ID'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'试卷模板名称',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam_tmpl',
+'COLUMN', N'TMPLNAME'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'单选题个数',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam_tmpl',
+'COLUMN', N'SINGLECHOICEQTY'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'单选题分值(/个)',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam_tmpl',
+'COLUMN', N'SINGLECHOICESCORE'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'多选题个数',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam_tmpl',
+'COLUMN', N'MULTIPLECHOICEQTY'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'多选题分值(/个)',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam_tmpl',
+'COLUMN', N'MULTIPLECHOICESCORE'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'判断题个数',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam_tmpl',
+'COLUMN', N'JUDGEMENTQTY'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'判断题分值(/个)',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam_tmpl',
+'COLUMN', N'JUDGEMENTSCORE'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'简答题个数',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam_tmpl',
+'COLUMN', N'SHORTANSWERQTY'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'简答题分值(/个)',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam_tmpl',
+'COLUMN', N'SHORTANSWERSCORE'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'试卷总分',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam_tmpl',
+'COLUMN', N'TOTALSCORE'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'引用次数',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam_tmpl',
+'COLUMN', N'CITATIONQTY'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'制单人编码',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam_tmpl',
+'COLUMN', N'CREATEDBYID'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'制单人名称',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam_tmpl',
+'COLUMN', N'CREATEDBYNAME'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'制单时间',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam_tmpl',
+'COLUMN', N'CREATEDTIME'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'制单人单位编码',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam_tmpl',
+'COLUMN', N'CREATEDBYORGID'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'制单人单位名称',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam_tmpl',
+'COLUMN', N'CREATEDBYORGNAME'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'启用标志',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam_tmpl',
+'COLUMN', N'ACTIVATEDFLAG'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'启用人ID',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam_tmpl',
+'COLUMN', N'ACTIVATEDBYID'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'启用人名称',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam_tmpl',
+'COLUMN', N'ACTIVATEDBYNAME'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'启用时间',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam_tmpl',
+'COLUMN', N'ACTIVATEDTIME'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'试卷模板',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam_tmpl'
+GO
+
+ALTER TABLE [dbo].[t_core_exam_tmpl] ADD CONSTRAINT [PK_CORE_EXAM_TMPL] PRIMARY KEY CLUSTERED ([ID])
+WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)  
+ON [PRIMARY]
+GO
+
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_EXAM_TMPL', '0', '0');
+
+INSERT INTO T_CORE_ADMIN_CHOOSE_CONFIG(ID, NAME, TITLE, CATEGORY, URL, WIDTH)
+VALUES (NEXT VALUE FOR SEQ_CORE, '试卷模板', '试卷模板', 'exam-tmpl', '/secure/core/module/train/exam-tmpls/page/choose-list', '');
+
+INSERT INTO t_core_menu (ID, MENUNAME, HREF, PARENTID, ORDERNO, MENUINITNAME, ICON, TODOICON)
+VALUES ('9805', '试卷模板', '/secure/core/module/train/exam-tmpls/page/edit-list', '98', '9805', '试卷模板编制列表', '029.svg', '');
+
+
+CREATE TABLE [dbo].[t_core_question] (
+  [ID] bigint  NOT NULL,
+  [QUESTIONCATEGORY] nvarchar(36) COLLATE Chinese_PRC_CI_AS  NULL,
+  [QUESTIONTYPE] nvarchar(36) COLLATE Chinese_PRC_CI_AS  NULL,
+  [QUESTIONCONTENT] nvarchar(540) COLLATE Chinese_PRC_CI_AS  NULL,
+  [ANSWER] nvarchar(1080) COLLATE Chinese_PRC_CI_AS  NULL,
+  [JUDGEMENTANSWER] nvarchar(36) COLLATE Chinese_PRC_CI_AS  NULL,
+  [QUESTIONTYPEORDERNO] int  NULL,
+  [LASTUPDATEDBYID] nvarchar(36) COLLATE Chinese_PRC_CI_AS  NULL,
+  [LASTUPDATEDBYNAME] nvarchar(60) COLLATE Chinese_PRC_CI_AS  NULL,
+  [LASTUPDATEDTIME] datetime2(7)  NULL,
+  [LASTSUSPENDEDFLAG] nvarchar(1) COLLATE Chinese_PRC_CI_AS  NULL,
+  [LASTSUSPENDEDBYID] nvarchar(36) COLLATE Chinese_PRC_CI_AS  NULL,
+  [LASTSUSPENDEDBYNAME] nvarchar(60) COLLATE Chinese_PRC_CI_AS  NULL,
+  [LASTSUSPENDEDTIME] datetime2(7)  NULL,
+  [ACTIVATEDFLAG] nvarchar(1) COLLATE Chinese_PRC_CI_AS  NULL,
+  [ACTIVATEDBYID] nvarchar(36) COLLATE Chinese_PRC_CI_AS  NULL,
+  [ACTIVATEDBYNAME] nvarchar(60) COLLATE Chinese_PRC_CI_AS  NULL,
+  [ACTIVATEDTIME] datetime2(7)  NULL,
+  [CREATEDBYID] nvarchar(36) COLLATE Chinese_PRC_CI_AS  NULL,
+  [CREATEDBYNAME] nvarchar(60) COLLATE Chinese_PRC_CI_AS  NULL,
+  [CREATEDTIME] datetime2(7)  NULL,
+  [CREATEDBYORGID] nvarchar(36) COLLATE Chinese_PRC_CI_AS  NULL,
+  [CREATEDBYORGNAME] nvarchar(270) COLLATE Chinese_PRC_CI_AS  NULL
+)
+GO
+
+ALTER TABLE [dbo].[t_core_question] SET (LOCK_ESCALATION = TABLE)
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'主键',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_question',
+'COLUMN', N'ID'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'题目类别',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_question',
+'COLUMN', N'QUESTIONCATEGORY'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'题目类型',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_question',
+'COLUMN', N'QUESTIONTYPE'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'题目内容',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_question',
+'COLUMN', N'QUESTIONCONTENT'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'答案',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_question',
+'COLUMN', N'ANSWER'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'判断题答案',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_question',
+'COLUMN', N'JUDGEMENTANSWER'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'题目类型排序号',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_question',
+'COLUMN', N'QUESTIONTYPEORDERNO'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'维护人编码',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_question',
+'COLUMN', N'LASTUPDATEDBYID'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'维护人名称',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_question',
+'COLUMN', N'LASTUPDATEDBYNAME'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'维护时间',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_question',
+'COLUMN', N'LASTUPDATEDTIME'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'注销标志(逻辑删除标志)(0-正常,1-停用) 默认为0',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_question',
+'COLUMN', N'LASTSUSPENDEDFLAG'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'注销人ID',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_question',
+'COLUMN', N'LASTSUSPENDEDBYID'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'注销人名称',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_question',
+'COLUMN', N'LASTSUSPENDEDBYNAME'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'注销时间',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_question',
+'COLUMN', N'LASTSUSPENDEDTIME'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'启用标志',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_question',
+'COLUMN', N'ACTIVATEDFLAG'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'启用人ID',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_question',
+'COLUMN', N'ACTIVATEDBYID'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'启用人名称',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_question',
+'COLUMN', N'ACTIVATEDBYNAME'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'启用时间',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_question',
+'COLUMN', N'ACTIVATEDTIME'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'制单人编码',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_question',
+'COLUMN', N'CREATEDBYID'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'制单人名称',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_question',
+'COLUMN', N'CREATEDBYNAME'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'制单时间',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_question',
+'COLUMN', N'CREATEDTIME'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'制单人单位编码',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_question',
+'COLUMN', N'CREATEDBYORGID'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'制单人单位名称',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_question',
+'COLUMN', N'CREATEDBYORGNAME'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'题目',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_question'
+GO
+
+ALTER TABLE [dbo].[t_core_question] ADD CONSTRAINT [PK_CORE_QUESTION] PRIMARY KEY CLUSTERED ([ID])
+WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)  
+ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[t_core_question_opt] (
+  [ID] bigint  NOT NULL,
+  [QUESTIONID] bigint  NULL,
+  [OPTCODE] nvarchar(30) COLLATE Chinese_PRC_CI_AS  NULL,
+  [OPTCONTENT] nvarchar(540) COLLATE Chinese_PRC_CI_AS  NULL,
+  [CREATEDBYID] nvarchar(36) COLLATE Chinese_PRC_CI_AS  NULL,
+  [CREATEDBYNAME] nvarchar(60) COLLATE Chinese_PRC_CI_AS  NULL,
+  [CREATEDTIME] datetime2(7)  NULL,
+  [CREATEDBYORGID] nvarchar(36) COLLATE Chinese_PRC_CI_AS  NULL,
+  [CREATEDBYORGNAME] nvarchar(270) COLLATE Chinese_PRC_CI_AS  NULL
+)
+GO
+
+ALTER TABLE [dbo].[t_core_question_opt] SET (LOCK_ESCALATION = TABLE)
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'主键',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_question_opt',
+'COLUMN', N'ID'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'题目ID',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_question_opt',
+'COLUMN', N'QUESTIONID'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'序号',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_question_opt',
+'COLUMN', N'OPTCODE'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'选项内容',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_question_opt',
+'COLUMN', N'OPTCONTENT'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'制单人编码',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_question_opt',
+'COLUMN', N'CREATEDBYID'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'制单人名称',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_question_opt',
+'COLUMN', N'CREATEDBYNAME'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'制单时间',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_question_opt',
+'COLUMN', N'CREATEDTIME'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'制单人单位编码',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_question_opt',
+'COLUMN', N'CREATEDBYORGID'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'制单人单位名称',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_question_opt',
+'COLUMN', N'CREATEDBYORGNAME'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'题目选项',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_question_opt'
+GO
+
+CREATE NONCLUSTERED INDEX [IDX_CORE_QUESTION_OPT_QUESTIONID]
+ON [dbo].[t_core_question_opt] (
+  [QUESTIONID] ASC
+)
+GO
+
+ALTER TABLE [dbo].[t_core_question_opt] ADD CONSTRAINT [PK_CORE_QUESTION_OPT] PRIMARY KEY CLUSTERED ([ID])
+WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)  
+ON [PRIMARY]
+GO
+
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_QUESTION', '0', '0');
+    
+INSERT INTO T_CORE_TABLE (ID,AUDITABLE,ATTACHMENT )
+VALUES ('T_CORE_QUESTION_OPT', '0', '0');
+    
+INSERT INTO T_CORE_TABLE_HIERARCHY (ID, TABLENAME, MASTERTABLENAME, REFERCOLUMN)
+VALUES ('20200306003', 'T_CORE_QUESTION_OPT', 'T_CORE_QUESTION', 'QUESTIONID');
+
+INSERT INTO T_CORE_CODE_CATEGORY (ID, CODECATEGORYNAME, CODECLASSID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME) 
+VALUES ('coreQuestionCategory', '题目类别', 'biz', NULL, '100', NULL, NULL, NULL, NULL);
+
+INSERT INTO T_CORE_CODE(ID, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME, CODE)
+VALUES (NEXT VALUE FOR SEQ_CORE, '安全培训', 'coreQuestionCategory', NULL, NULL, NULL, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL, 'safetyTraining');
+INSERT INTO T_CORE_CODE(ID, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME, CODE)
+VALUES (NEXT VALUE FOR SEQ_CORE, '理论培训', 'coreQuestionCategory', NULL, NULL, NULL, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL, 'theoreticalTraining');
+
+INSERT INTO T_CORE_CODE_CATEGORY (ID, CODECATEGORYNAME, CODECLASSID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME) 
+VALUES ('coreQuestionType', '题目类型', 'sys', NULL, '100', NULL, NULL, NULL, NULL);
+
+INSERT INTO T_CORE_CODE(ID, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME, CODE)
+VALUES (NEXT VALUE FOR SEQ_CORE, '单选题', 'coreQuestionType', NULL, NULL, NULL, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL, 'singleChoice');
+INSERT INTO T_CORE_CODE(ID, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME, CODE)
+VALUES (NEXT VALUE FOR SEQ_CORE, '多选题', 'coreQuestionType', NULL, NULL, NULL, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL, 'multipleChoice');
+INSERT INTO T_CORE_CODE(ID, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME, CODE)
+VALUES (NEXT VALUE FOR SEQ_CORE, '判断题', 'coreQuestionType', NULL, NULL, NULL, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL, 'judgement');
+INSERT INTO T_CORE_CODE(ID, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME, CODE)
+VALUES (NEXT VALUE FOR SEQ_CORE, '简答题', 'coreQuestionType', NULL, NULL, NULL, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL, 'shortAnswer');
+
+INSERT INTO t_core_menu (ID, MENUNAME, HREF, PARENTID, ORDERNO, MENUINITNAME, ICON, TODOICON)
+VALUES ('9806', '题库管理', '/secure/core/module/train/questions/page/edit-list', '98', '9806', '题目编制列表', '066.svg', '');
+
+INSERT INTO T_CORE_CODE_CATEGORY (ID, CODECATEGORYNAME, CODECLASSID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME) 
+VALUES ('coreJudgementOption', '判断题选项', 'sys', NULL, '100', NULL, NULL, NULL, NULL);
+INSERT INTO T_CORE_CODE(ID, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME, CODE)
+VALUES (NEXT VALUE FOR SEQ_CORE, '对', 'coreJudgementOption', NULL, NULL, NULL, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL, 'correct');
+INSERT INTO T_CORE_CODE(ID, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME, CODE)
+VALUES (NEXT VALUE FOR SEQ_CORE, '错', 'coreJudgementOption', NULL, NULL, NULL, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL, 'incorrect');
+
+
+CREATE TABLE [dbo].[t_core_exam] (
+  [ID] bigint  NOT NULL,
+  [EXAMNAME] nvarchar(270) COLLATE Chinese_PRC_CI_AS  NULL,
+  [QUESTIONMETHOD] nvarchar(36) COLLATE Chinese_PRC_CI_AS  NULL,
+  [EXAMTMPLID] bigint  NULL,
+  [EXAMBEGINTIME] datetime2(7)  NULL,
+  [EXAMENDTIME] datetime2(7)  NULL,
+  [EXAMDURATION] int  NULL,
+  [EXAMCATEGORY] nvarchar(36) COLLATE Chinese_PRC_CI_AS  NULL,
+  [SINGLECHOICEQTY] int  NULL,
+  [MULTIPLECHOICEQTY] int  NULL,
+  [JUDGEMENTQTY] int  NULL,
+  [SHORTANSWERQTY] int  NULL,
+  [TMPLSINGLECHOICEQTY] int  NULL,
+  [TMPLMULTIPLECHOICEQTY] int  NULL,
+  [TMPLJUDGEMENTQTY] int  NULL,
+  [TMPLSHORTANSWERQTY] int  NULL,
+  [LASTUPDATEDBYID] nvarchar(36) COLLATE Chinese_PRC_CI_AS  NULL,
+  [LASTUPDATEDBYNAME] nvarchar(60) COLLATE Chinese_PRC_CI_AS  NULL,
+  [LASTUPDATEDTIME] datetime2(7)  NULL,
+  [ACTIVATEDFLAG] nvarchar(1) COLLATE Chinese_PRC_CI_AS  NULL,
+  [ACTIVATEDBYID] nvarchar(36) COLLATE Chinese_PRC_CI_AS  NULL,
+  [ACTIVATEDBYNAME] nvarchar(60) COLLATE Chinese_PRC_CI_AS  NULL,
+  [ACTIVATEDTIME] datetime2(7)  NULL,
+  [CREATEDBYID] nvarchar(36) COLLATE Chinese_PRC_CI_AS  NULL,
+  [CREATEDBYNAME] nvarchar(60) COLLATE Chinese_PRC_CI_AS  NULL,
+  [CREATEDTIME] datetime2(7)  NULL,
+  [CREATEDBYORGID] nvarchar(36) COLLATE Chinese_PRC_CI_AS  NULL,
+  [CREATEDBYORGNAME] nvarchar(270) COLLATE Chinese_PRC_CI_AS  NULL
+)
+GO
+
+ALTER TABLE [dbo].[t_core_exam] SET (LOCK_ESCALATION = TABLE)
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'主键',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam',
+'COLUMN', N'ID'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'试卷名称',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam',
+'COLUMN', N'EXAMNAME'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'组卷方式',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam',
+'COLUMN', N'QUESTIONMETHOD'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'试卷模板ID',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam',
+'COLUMN', N'EXAMTMPLID'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'考试开始时间',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam',
+'COLUMN', N'EXAMBEGINTIME'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'考试结束时间',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam',
+'COLUMN', N'EXAMENDTIME'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'考试时长',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam',
+'COLUMN', N'EXAMDURATION'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'试卷类别',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam',
+'COLUMN', N'EXAMCATEGORY'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'单选题个数',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam',
+'COLUMN', N'SINGLECHOICEQTY'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'多选题个数',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam',
+'COLUMN', N'MULTIPLECHOICEQTY'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'判断题个数',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam',
+'COLUMN', N'JUDGEMENTQTY'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'简答题个数',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam',
+'COLUMN', N'SHORTANSWERQTY'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'模板单选题个数',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam',
+'COLUMN', N'TMPLSINGLECHOICEQTY'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'模板多选题个数',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam',
+'COLUMN', N'TMPLMULTIPLECHOICEQTY'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'模板判断题个数',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam',
+'COLUMN', N'TMPLJUDGEMENTQTY'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'模板简答题个数',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam',
+'COLUMN', N'TMPLSHORTANSWERQTY'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'维护人编码',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam',
+'COLUMN', N'LASTUPDATEDBYID'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'维护人名称',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam',
+'COLUMN', N'LASTUPDATEDBYNAME'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'维护时间',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam',
+'COLUMN', N'LASTUPDATEDTIME'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'启用标志',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam',
+'COLUMN', N'ACTIVATEDFLAG'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'启用人ID',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam',
+'COLUMN', N'ACTIVATEDBYID'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'启用人名称',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam',
+'COLUMN', N'ACTIVATEDBYNAME'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'启用时间',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam',
+'COLUMN', N'ACTIVATEDTIME'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'制单人编码',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam',
+'COLUMN', N'CREATEDBYID'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'制单人名称',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam',
+'COLUMN', N'CREATEDBYNAME'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'制单时间',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam',
+'COLUMN', N'CREATEDTIME'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'制单人单位编码',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam',
+'COLUMN', N'CREATEDBYORGID'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'制单人单位名称',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam',
+'COLUMN', N'CREATEDBYORGNAME'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'试卷',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam'
+GO
+
+CREATE NONCLUSTERED INDEX [IDX_CORE_EXAM_EXAMTMPLID]
+ON [dbo].[t_core_exam] (
+  [EXAMTMPLID] ASC
+)
+GO
+
+ALTER TABLE [dbo].[t_core_exam] ADD CONSTRAINT [PK_CORE_EXAM] PRIMARY KEY CLUSTERED ([ID])
+WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)  
+ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[t_core_exam_question] (
+  [ID] bigint  NOT NULL,
+  [QUESTIONID] bigint  NULL,
+  [EXAMID] bigint  NULL,
+  [CREATEDBYID] nvarchar(36) COLLATE Chinese_PRC_CI_AS  NULL,
+  [CREATEDBYNAME] nvarchar(60) COLLATE Chinese_PRC_CI_AS  NULL,
+  [CREATEDTIME] datetime2(7)  NULL,
+  [CREATEDBYORGID] nvarchar(36) COLLATE Chinese_PRC_CI_AS  NULL,
+  [CREATEDBYORGNAME] nvarchar(270) COLLATE Chinese_PRC_CI_AS  NULL
+)
+GO
+
+ALTER TABLE [dbo].[t_core_exam_question] SET (LOCK_ESCALATION = TABLE)
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'主键',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam_question',
+'COLUMN', N'ID'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'题目ID',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam_question',
+'COLUMN', N'QUESTIONID'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'试卷ID',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam_question',
+'COLUMN', N'EXAMID'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'制单人编码',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam_question',
+'COLUMN', N'CREATEDBYID'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'制单人名称',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam_question',
+'COLUMN', N'CREATEDBYNAME'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'制单时间',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam_question',
+'COLUMN', N'CREATEDTIME'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'制单人单位编码',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam_question',
+'COLUMN', N'CREATEDBYORGID'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'制单人单位名称',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam_question',
+'COLUMN', N'CREATEDBYORGNAME'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'试卷题目',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam_question'
+GO
+
+CREATE NONCLUSTERED INDEX [IDX_CORE_EXAM_QUESTION_QUESTIONID]
+ON [dbo].[t_core_exam_question] (
+  [QUESTIONID] ASC
+)
+GO
+
+CREATE NONCLUSTERED INDEX [IDX_CORE_EXAM_QUESTION_EXAMID]
+ON [dbo].[t_core_exam_question] (
+  [EXAMID] ASC
+)
+GO
+
+ALTER TABLE [dbo].[t_core_exam_question] ADD CONSTRAINT [PK_CORE_EXAM_QUESTION] PRIMARY KEY CLUSTERED ([ID])
+WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)  
+ON [PRIMARY]
+GO
+
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_EXAM', '0', '0');
+    
+INSERT INTO T_CORE_TABLE (ID,AUDITABLE,ATTACHMENT )
+VALUES ('T_CORE_EXAM_QUESTION', '0', '0');
+    
+INSERT INTO T_CORE_TABLE_HIERARCHY (ID, TABLENAME, MASTERTABLENAME, REFERCOLUMN)
+VALUES ('20200306004', 'T_CORE_EXAM_QUESTION', 'T_CORE_EXAM', 'EXAMID');
+
+INSERT INTO T_CORE_CODE_CATEGORY (ID, CODECATEGORYNAME, CODECLASSID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME) 
+VALUES ('coreQuestionMethod', '组卷方式', 'sys', NULL, '100', NULL, NULL, NULL, NULL);
+
+INSERT INTO T_CORE_CODE(ID, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME, CODE)
+VALUES (NEXT VALUE FOR SEQ_CORE, '系统随机', 'coreQuestionMethod', NULL, NULL, NULL, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL, 'random');
+INSERT INTO T_CORE_CODE(ID, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME, CODE)
+VALUES (NEXT VALUE FOR SEQ_CORE, '人工组卷', 'coreQuestionMethod', NULL, NULL, NULL, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL, 'manual');
+
+INSERT INTO T_CORE_ADMIN_CHOOSE_CONFIG(ID, NAME, TITLE, CATEGORY, URL, WIDTH)
+VALUES (NEXT VALUE FOR SEQ_CORE, '试卷', '试卷', 'exam', '/secure/core/module/train/exams/page/choose-list', '');
+
+INSERT INTO t_core_menu (ID, MENUNAME, HREF, PARENTID, ORDERNO, MENUINITNAME, ICON, TODOICON)
+VALUES ('9807', '试卷管理', '/secure/core/module/train/exams/page/edit-list', '98', '9807', '试卷编制列表', '055.svg', '');
+
+CREATE TABLE [dbo].[t_core_exam_paper] (
+  [ID] bigint  NOT NULL,
+  [EXAMID] bigint  NULL,
+  [TRAINID] bigint  NULL,
+  [ACTBEGINTIME] datetime2(7)  NULL,
+  [ACTENDTIME] datetime2(7)  NULL,
+  [SCORE] bigint  NULL,
+  [USERID] nvarchar(36) COLLATE Chinese_PRC_CI_AS  NULL,
+  [USERNAME] nvarchar(60) COLLATE Chinese_PRC_CI_AS  NULL,
+  [STATUS] nvarchar(18) COLLATE Chinese_PRC_CI_AS  NULL,
+  [CREATEDBYID] nvarchar(36) COLLATE Chinese_PRC_CI_AS  NULL,
+  [CREATEDBYNAME] nvarchar(60) COLLATE Chinese_PRC_CI_AS  NULL,
+  [CREATEDTIME] datetime2(7)  NULL,
+  [CREATEDBYORGID] nvarchar(36) COLLATE Chinese_PRC_CI_AS  NULL,
+  [CREATEDBYORGNAME] nvarchar(270) COLLATE Chinese_PRC_CI_AS  NULL,
+  [ACTIVATEDFLAG] nvarchar(1) COLLATE Chinese_PRC_CI_AS  NULL,
+  [ACTIVATEDBYID] nvarchar(36) COLLATE Chinese_PRC_CI_AS  NULL,
+  [ACTIVATEDBYNAME] nvarchar(60) COLLATE Chinese_PRC_CI_AS  NULL,
+  [ACTIVATEDTIME] datetime2(7)  NULL
+)
+GO
+
+ALTER TABLE [dbo].[t_core_exam_paper] SET (LOCK_ESCALATION = TABLE)
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'主键',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam_paper',
+'COLUMN', N'ID'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'试卷ID',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam_paper',
+'COLUMN', N'EXAMID'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'培训实施ID',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam_paper',
+'COLUMN', N'TRAINID'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'开始时间',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam_paper',
+'COLUMN', N'ACTBEGINTIME'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'结束时间',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam_paper',
+'COLUMN', N'ACTENDTIME'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'考试成绩',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam_paper',
+'COLUMN', N'SCORE'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'考卷用户Id',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam_paper',
+'COLUMN', N'USERID'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'考卷用户名称',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam_paper',
+'COLUMN', N'USERNAME'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'考试状态(draft-未考/done-已考)',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam_paper',
+'COLUMN', N'STATUS'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'制单人编码',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam_paper',
+'COLUMN', N'CREATEDBYID'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'制单人名称',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam_paper',
+'COLUMN', N'CREATEDBYNAME'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'制单时间',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam_paper',
+'COLUMN', N'CREATEDTIME'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'制单人单位编码',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam_paper',
+'COLUMN', N'CREATEDBYORGID'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'制单人单位名称',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam_paper',
+'COLUMN', N'CREATEDBYORGNAME'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'阅卷完成标志',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam_paper',
+'COLUMN', N'ACTIVATEDFLAG'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'阅卷人编码',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam_paper',
+'COLUMN', N'ACTIVATEDBYID'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'阅卷人名称',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam_paper',
+'COLUMN', N'ACTIVATEDBYNAME'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'启用时间/签到时间',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam_paper',
+'COLUMN', N'ACTIVATEDTIME'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'考卷',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam_paper'
+GO
+
+ALTER TABLE [dbo].[t_core_exam_paper] ADD CONSTRAINT [PK_CORE_EXAM_PAPER] PRIMARY KEY CLUSTERED ([ID])
+WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)  
+ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[t_core_exam_paper_answer] (
+  [ID] bigint  NOT NULL,
+  [EXAMID] bigint  NULL,
+  [EXAMPAPERID] bigint  NULL,
+  [EXAMQUESTIONID] bigint  NULL,
+  [QUESTIONID] bigint  NULL,
+  [ANSWER] nvarchar(1080) COLLATE Chinese_PRC_CI_AS  NULL,
+  [JUDGEMENTANSWER] nvarchar(36) COLLATE Chinese_PRC_CI_AS  NULL,
+  [SCORE] bigint  NULL,
+  [ORDERNO] int  NULL,
+  [CREATEDBYID] nvarchar(36) COLLATE Chinese_PRC_CI_AS  NULL,
+  [CREATEDBYNAME] nvarchar(60) COLLATE Chinese_PRC_CI_AS  NULL,
+  [CREATEDTIME] datetime2(7)  NULL,
+  [CREATEDBYORGID] nvarchar(36) COLLATE Chinese_PRC_CI_AS  NULL,
+  [CREATEDBYORGNAME] nvarchar(270) COLLATE Chinese_PRC_CI_AS  NULL
+)
+GO
+
+ALTER TABLE [dbo].[t_core_exam_paper_answer] SET (LOCK_ESCALATION = TABLE)
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'主键',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam_paper_answer',
+'COLUMN', N'ID'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'试卷ID',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam_paper_answer',
+'COLUMN', N'EXAMID'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'考卷ID',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam_paper_answer',
+'COLUMN', N'EXAMPAPERID'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'试卷题目ID',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam_paper_answer',
+'COLUMN', N'EXAMQUESTIONID'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'题目ID',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam_paper_answer',
+'COLUMN', N'QUESTIONID'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'答案',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam_paper_answer',
+'COLUMN', N'ANSWER'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'判断题答案',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam_paper_answer',
+'COLUMN', N'JUDGEMENTANSWER'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'得分',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam_paper_answer',
+'COLUMN', N'SCORE'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'排序号',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam_paper_answer',
+'COLUMN', N'ORDERNO'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'制单人编码',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam_paper_answer',
+'COLUMN', N'CREATEDBYID'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'制单人名称',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam_paper_answer',
+'COLUMN', N'CREATEDBYNAME'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'制单时间',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam_paper_answer',
+'COLUMN', N'CREATEDTIME'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'制单人单位编码',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam_paper_answer',
+'COLUMN', N'CREATEDBYORGID'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'制单人单位名称',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam_paper_answer',
+'COLUMN', N'CREATEDBYORGNAME'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'考卷答案',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_exam_paper_answer'
+GO
+
+
+CREATE NONCLUSTERED INDEX [IDX_CORE_EXAM_PAPER_ANSWER_EXAMPAPERID]
+ON [dbo].[t_core_exam_paper_answer] (
+  [EXAMPAPERID] ASC
+)
+GO
+
+ALTER TABLE [dbo].[t_core_exam_paper_answer] ADD CONSTRAINT [PK_CORE_EXAM_PAPER_ANSWER] PRIMARY KEY CLUSTERED ([ID])
+WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)  
+ON [PRIMARY]
+GO
+
+INSERT INTO T_CORE_MENU (ID, MENUNAME, HREF, PARENTID, ORDERNO, ICON, MENUINITNAME)
+VALUES ('9808', '我的考试', '/secure/core/module/train/exam-papers/page/edit-list', '98', '9808', '009.svg', '我的考试');
+
+INSERT INTO T_CORE_MENU (ID, MENUNAME, HREF, PARENTID, ORDERNO, ICON, MENUINITNAME)
+VALUES ('9809', '考试阅卷', '/secure/core/module/train/exam-papers/page/review-list', '98', '9809', '041.svg', '考试阅卷');
+
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_EXAM_PAPER', '0', '0');
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_EXAM_PAPER_ANSWER', '0', '0');
+
+INSERT INTO T_CORE_TABLE_HIERARCHY (ID, TABLENAME, MASTERTABLENAME, REFERCOLUMN)
+VALUES ('20200306005','T_CORE_EXAM_PAPER_ANSWER', 'T_CORE_EXAM_PAPER', 'EXAMPAPERID');
+
+INSERT INTO t_core_page_view_config VALUES ('T_CORE_EXAM$ACTIVE$0', '{\r\n	\"readonly\": false\r\n}');
+INSERT INTO t_core_page_view_config VALUES ('T_CORE_EXAM$ACTIVE$1', '{\r\n	\"readonly\": true,\r\n	\"button\": {\r\n		\"core-exam-detail-btn-back\": {\r\n			\"hidden\": false\r\n		}\r\n	}\r\n}');
+INSERT INTO t_core_page_view_config VALUES ('T_CORE_EXAM_PAPER$ACTIVE$0', '{\r\n	\"readonly\": false\r\n}');
+INSERT INTO t_core_page_view_config VALUES ('T_CORE_EXAM_PAPER$ACTIVE$1', '{\r\n	\"readonly\": true,\r\n	\"button\": {\r\n		\"core-exam-paper-review-detail-btn-back\": {\r\n			\"hidden\": false\r\n		}\r\n	}\r\n}');
+INSERT INTO t_core_page_view_config VALUES ('T_CORE_EXAM_TMPL$ACTIVE$0', '{\r\n	\"readonly\": false\r\n}');
+INSERT INTO t_core_page_view_config VALUES ('T_CORE_EXAM_TMPL$ACTIVE$1', '{\r\n	\"readonly\": true,\r\n	\"button\": {\r\n		\"core-exam-tmpl-detail-btn-back\": {\r\n			\"hidden\": false\r\n		}\r\n	}\r\n}');
+INSERT INTO t_core_page_view_config VALUES ('T_CORE_QUESTION$ACTIVE$0', '{\r\n	\"readonly\": false\r\n}');
+INSERT INTO t_core_page_view_config VALUES ('T_CORE_QUESTION$ACTIVE$1', '{\r\n	\"readonly\": true\r\n}');
+INSERT INTO t_core_page_view_config VALUES ('T_CORE_TRAIN$ACTIVE$0', '{\r\n	\"readonly\": false\r\n}');
+INSERT INTO t_core_page_view_config VALUES ('T_CORE_TRAIN$ACTIVE$1', '{\r\n	\"readonly\": true,\r\n	\"button\": {\r\n		\"core-train-detail-btn-back\": {\r\n			\"hidden\": false\r\n		}\r\n	},\r\n	\"form\": {\r\n		\"core-train-detail-base-info-form\": {\r\n			\"evaluation\": {\r\n				\"readonly\": false\r\n			}\r\n		}\r\n	},\r\n	\"grid\": {\r\n		\"core-train-detail-user-list-grid\": {\r\n			\"score\": {\r\n				\"readonly\": false\r\n			}\r\n		}\r\n	}\r\n}');
+INSERT INTO t_core_page_view_config VALUES ('T_CORE_TRAIN_PLAN$BPMN$approve', '{\r\n	\"readonly\": true,\r\n	\"button\": {\r\n		\"core-train-plan-detail-btn-pass\": {\r\n			\"hidden\": false\r\n		},\r\n		\"core-train-plan-detail-btn-reject\": {\r\n			\"hidden\": false\r\n		},\r\n		\"core-train-plan-detail-btn-back\": {\r\n			\"hidden\": false\r\n		}\r\n	}\r\n}');
+INSERT INTO t_core_page_view_config VALUES ('T_CORE_TRAIN_PLAN$BPMN$draft', '{\r\n	\"readonly\": false,\r\n	\"button\": {\r\n		\"core-train-plan-detail-btn-pass\": {\r\n			\"hidden\": true\r\n		},\r\n		\"core-train-plan-detail-btn-reject\": {\r\n			\"hidden\": true\r\n		}\r\n	}\r\n}');
+
+-- --------------------------------------- 2020-03-21 zhangpf end -----------------
+-- --------------------------------------- 2020-04-22 zhangpf begin -----------------
+ UPDATE T_CORE_PAGE_VIEW_CONFIG 
+    SET CONFIG = '{"readonly": false,"button":{"core-train-plan-detail-btn-pass":{"hidden": true},"core-train-plan-detail-btn-reject": {"hidden": true}}}' 
+  WHERE ID = 'T_CORE_TRAIN_PLAN$BPMN$draft';
+
+ UPDATE T_CORE_PAGE_VIEW_CONFIG 
+    SET CONFIG = '{"readonly": true,"button":{"core-train-plan-detail-btn-pass":{"hidden": false},"core-train-plan-detail-btn-reject":{"hidden": false},"core-train-plan-detail-btn-back": {"hidden": false}}}' 
+  WHERE ID = 'T_CORE_TRAIN_PLAN$BPMN$approve';
+  
+ UPDATE T_CORE_PAGE_VIEW_CONFIG 
+    SET CONFIG = '{"readonly": false}' 
+  WHERE ID = 'T_CORE_TRAIN$ACTIVE$0';  
+
+ UPDATE T_CORE_PAGE_VIEW_CONFIG 
+    SET CONFIG = '{"readonly": true,"button": {"core-train-detail-btn-back": {"hidden": false}},"form": {"core-train-detail-base-info-form": 
+{"evaluation": {"readonly": false}}},"grid": {"core-train-detail-user-list-grid": {"score": {"readonly": false}}}}' 
+  WHERE ID = 'T_CORE_TRAIN$ACTIVE$1';
+  
+ UPDATE T_CORE_PAGE_VIEW_CONFIG 
+    SET CONFIG = '{"readonly": false}' 
+  WHERE ID = 'T_CORE_QUESTION$ACTIVE$0';
+  
+ UPDATE T_CORE_PAGE_VIEW_CONFIG 
+    SET CONFIG = '{"readonly": true}' 
+  WHERE ID = 'T_CORE_QUESTION$ACTIVE$1';
+  
+ UPDATE T_CORE_PAGE_VIEW_CONFIG 
+    SET CONFIG = '{"readonly": false}' 
+  WHERE ID = 'T_CORE_EXAM_TMPL$ACTIVE$0';
+  
+ UPDATE T_CORE_PAGE_VIEW_CONFIG 
+    SET CONFIG = '{"readonly": true,"button": {"core-exam-tmpl-detail-btn-back": {"hidden": false}}}' 
+  WHERE ID = 'T_CORE_EXAM_TMPL$ACTIVE$1';
+
+ UPDATE T_CORE_PAGE_VIEW_CONFIG 
+    SET CONFIG = '{"readonly": false}' 
+  WHERE ID = 'T_CORE_EXAM_PAPER$ACTIVE$0';
+
+ UPDATE T_CORE_PAGE_VIEW_CONFIG 
+    SET CONFIG = '{"readonly": true,"button": {"core-exam-paper-review-detail-btn-back": {"hidden": false}}}' 
+  WHERE ID = 'T_CORE_EXAM_PAPER$ACTIVE$1';
+  
+ UPDATE T_CORE_PAGE_VIEW_CONFIG 
+    SET CONFIG = '{"readonly": false}' 
+  WHERE ID = 'T_CORE_EXAM$ACTIVE$0';
+
+ UPDATE T_CORE_PAGE_VIEW_CONFIG 
+    SET CONFIG = '{"readonly": true,"button": {"core-exam-detail-btn-back": {"hidden": false}}}' 
+  WHERE ID = 'T_CORE_EXAM$ACTIVE$1';
+-- --------------------------------------- 2020-04-22 zhangpf end -----------------

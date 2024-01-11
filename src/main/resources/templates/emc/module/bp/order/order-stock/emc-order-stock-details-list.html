@@ -1,0 +1,10 @@
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    Gikam.requirejs([
+        '/static/emc/module/bp/order/order-stock/emc-order-stock.js',
+        '/static/emc/module/bp/order/order-stock/emc-order-stock-details-list.js'
+    ]);
+    emcOrderStock.detailsPage.init(Gikam.getElParam([[${param}]]));
+
+    /*]]>*/
+</script>

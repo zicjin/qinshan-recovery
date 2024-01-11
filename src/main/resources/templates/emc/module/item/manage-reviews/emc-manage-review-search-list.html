@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/emc/module/item/manage-reviews/emc-manage-review.js',
+                      '/static/emc/module/item/manage-reviews/emc-manage-review-search-list.js'
+                    ]);
+    emcManageReview.searchPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>
+

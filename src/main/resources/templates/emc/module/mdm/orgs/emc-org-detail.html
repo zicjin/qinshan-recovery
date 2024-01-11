@@ -1,0 +1,10 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/module/mdm/orgs/core-org.js',
+                      '/static/emc/module/mdm/orgs/emc-org.js',
+                      '/static/emc/module/mdm/orgs/emc-org-detail.js'
+                    ]);
+    coreOrg.detailPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>
+

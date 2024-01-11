@@ -1,0 +1,8 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/emc/module/mdm/equipt/equipt-cali-result/emc-equipt-cali-result.js',
+                      '/static/emc/module/mdm/equipt/equipt-cali-result/emc-equipt-cali-result-audit-list.js'
+                    ]);
+    emcEquiptCaliResult.auditPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>

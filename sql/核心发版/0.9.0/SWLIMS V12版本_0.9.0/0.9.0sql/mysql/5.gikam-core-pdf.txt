@@ -1,0 +1,41 @@
+-- ----------------------------- 2020-11-28 add by guozhijian--------------begin      0.8.23补丁已发布
+
+CREATE TABLE `T_CORE_PDF_DOCUMENT` (
+`ID` BIGINT NOT NULL COMMENT '主键',
+`FILEID` BIGINT DEFAULT NULL COMMENT '文件Id',
+`WIDTH` DOUBLE ( 20, 15 ) DEFAULT NULL COMMENT '宽度',
+`HEIGHT` DOUBLE ( 20, 15 ) DEFAULT NULL COMMENT '高度',
+`PAGENUMBER` INT DEFAULT NULL COMMENT '页码',
+`ROTATION` INT DEFAULT NULL COMMENT '旋转数',
+`IMAGEURL` VARCHAR ( 270 ) DEFAULT NULL COMMENT '预览图片地址',
+`AREAINFO` VARCHAR ( 540 ) DEFAULT NULL COMMENT '区域信息',
+`CREATEDBYID` VARCHAR ( 32 ) DEFAULT NULL COMMENT '制单人编码',
+`CREATEDBYNAME` VARCHAR ( 64 ) DEFAULT NULL COMMENT '制单人名称',
+`CREATEDTIME` DATETIME NULL DEFAULT NULL COMMENT '制单时间',
+`CREATEDBYORGID` VARCHAR ( 32 ) DEFAULT NULL COMMENT '制单人单位编码',
+`CREATEDBYORGNAME` VARCHAR ( 256 ) DEFAULT NULL COMMENT '制单人单位名称',
+PRIMARY KEY ( `ID` ) 
+) ENGINE = INNODB DEFAULT CHARSET = utf8 COMMENT = 'PDF页面信息';
+
+CALL INSERTI18N('T_CORE_PDF_DOCUMENT.TIP.PARSING_FAILED', 'PDF解析异常提醒', '文件解析失败', 'zh-CN', '文件解析失败');
+
+-- ----------------------------- 2020-11-28 add by guozhijian--------------end      0.8.23补丁已发布
+
+-- ----------------------------- 2020-12-05 add by zhangpf--------------begin      0.8.24补丁已发布
+ALTER TABLE `T_CORE_PDF_DOCUMENT` 
+CHANGE COLUMN `AREAINFO` `AREAINFOTEMP` varchar(540) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '区域信息' AFTER `IMAGEURL`;
+
+ALTER TABLE `T_CORE_PDF_DOCUMENT` 
+ADD COLUMN `AREAINFO` blob NULL COMMENT '区域信息' AFTER `AREAINFOTEMP`;
+
+UPDATE T_CORE_PDF_DOCUMENT SET AREAINFO = AREAINFOTEMP;
+
+ALTER TABLE `T_CORE_PDF_DOCUMENT` 
+DROP COLUMN `AREAINFOTEMP`;
+
+commit;
+-- ----------------------------- 2020-12-05 add by zhangpf--------------end      0.8.24补丁已发布
+
+-- ----------------------------- 2020-12-09 add by zhangpf--------------begin
+ALTER TABLE t_core_pdf_document MODIFY COLUMN AREAINFO LONGTEXT NULL COMMENT '区域信息';
+-- ----------------------------- 2020-12-09 add by zhangpf--------------end

@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ 
+                      '/static/emc/module/bp/result/runs/emc-run.js',
+                      '/static/emc/module/bp/result/runs/emc-run-phys-chemic-edit-list.js'
+                    ]);
+    emcRun.physChemicPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>

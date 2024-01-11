@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.emc.module.mdm.basemdm.mtl.mapper.EmcStockConcentMapper">
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.* 
+          FROM T_EMC_STOCK_CONCENT T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ID DESC
+            </otherwise>
+        </choose>
+    </select>
+    
+    
+    <!-- 查询详情 -->
+    <select id="selectDetail" parameterType="java.lang.Long" resultType="map">
+        SELECT T.*
+          FROM T_EMC_STOCK_CONCENT T
+         WHERE T.ID = #{id}
+    </select>
+    
+    <select id="selectLimitByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM (SELECT S.BATCHNO, 
+                       SC.LOWLIMIT, 
+                       SC.HIGHLIMIT, 
+                       MI.ITEMID
+                  FROM T_EMC_STOCK             S,
+                       T_EMC_STOCK_CONCENT     SC,
+                       T_EMC_MTL_MAINTAIN      M,
+                       T_EMC_MTL_MAINTAIN_ITEM MI
+                 WHERE S.ID = SC.STOCKID
+                   AND S.MTLID = M.MTLID
+                   AND SC.CATEGORY = M.CATEGORY
+                   AND M.ID = MI.MTLMAITAINID) T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ITEMID DESC
+            </otherwise>
+        </choose>
+    </select>
+    
+</mapper>

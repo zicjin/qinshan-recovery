@@ -1,0 +1,8 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/emc/module/mdm/basemdm/mtls/emc-mtl.js',
+                      '/static/emc/module/mdm/basemdm/mtls/emc-mtl-general-edit-list.js'
+                    ]);
+    emcMtl.generalEditPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>

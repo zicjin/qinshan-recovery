@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/emc/module/mdm/basemdm/seal-rules/emc-seal-rule.js',
+                      '/static/emc/module/mdm/basemdm/seal-rules/emc-seal-rule-details-choose-list.js'
+                    ]);
+    emcSealRule.detailsChoosePage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>
+

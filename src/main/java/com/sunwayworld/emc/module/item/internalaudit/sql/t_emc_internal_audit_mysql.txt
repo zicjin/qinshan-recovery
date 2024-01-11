@@ -1,0 +1,81 @@
+
+
+
+
+
+
+
+
+DROP TABLE IF EXISTS `t_emc_internal_audit`;
+CREATE TABLE `t_emc_internal_audit`  (
+  `id` bigint(32) NOT NULL COMMENT '主键',
+	`qualityControlNo` varchar(18) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '质控编号',
+  `auditPurpose` varchar(540) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '审核目的',
+  `auditBasis` varchar(540) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '审核依据',
+  `auditOrg` varchar(270) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '被审核部门',
+  `auditGroupUser` varchar(360) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '内审组成员',
+  `auditTime` datetime NULL DEFAULT NULL COMMENT '拟计划审核时间',
+  `auditContent` varchar(540) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '拟计划审核内容',
+  `userTrain` varchar(540) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '内审人员培训（必要时）',
+  `recordTable` varchar(540) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '记录表格',
+  `startTime` datetime NULL DEFAULT NULL COMMENT '内审开始时间',
+  `endTime` datetime NULL DEFAULT NULL COMMENT '内审结束时间',
+  `auditDate` datetime NULL DEFAULT NULL COMMENT '审核日期',
+  `lastAuditDate` datetime NULL DEFAULT NULL COMMENT '上次审核日期',
+  `division` varchar(540) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '审核成员分工及审核部门',
+  `auditSituation` varchar(540) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '审核情况综述',
+  `inconformity` varchar(540) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '不符合项目归纳分类及分布项',
+  `manageSystem` varchar(540) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '受审方的管理体系执行情况的整体综合评价',
+  `correct` varchar(540) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '纠正措施或预防措施执行情况',
+  `auditRequest` varchar(540) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '审核后续活动要求',
+  `auditReview` varchar(540) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '审核综述',
+  `sendScope` varchar(540) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '发送范围',
+   `CREATEDBYID` varchar(32) DEFAULT NULL COMMENT '制单人ID',
+  `CREATEDBYNAME` varchar(64) DEFAULT NULL COMMENT '制单人名称',
+  `CREATEDTIME` datetime  DEFAULT NULL COMMENT '制单日期',
+  `CREATEDBYORGID` varchar(32) DEFAULT NULL COMMENT '制单人单位编码',
+  `CREATEDBYORGNAME` varchar(256) DEFAULT NULL COMMENT '制单人单位名称',
+	`PROCESSSTATUS` VARCHAR(36)  DEFAULT NULL COMMENT '流程状态',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+
+
+INSERT INTO t_core_table(`ID`, `AUDITABLE`, `ATTACHMENT`) VALUES ('T_EMC_INTERNAL_AUDIT', '1', '1');
+
+INSERT INTO `t_core_at_config`(`ID`, `AUDITTRAIL`, `VERSION`, `CREATEDBYID`, `CREATEDBYNAME`, `CREATEDTIME`, `CREATEDBYORGID`, `CREATEDBYORGNAME`) VALUES ('T_EMC_INTERNAL_AUDIT', '1', NULL, '001', '李慧01', '2019-11-29 16:31:35', '为', '为');
+
+INSERT INTO `t_core_at_config_line`(`ID`, `CONFIGID`, `COLUMNID`, `AUDITTRAIL`, `VERSION`, `CREATEDBYID`, `CREATEDBYNAME`, `CREATEDTIME`, `CREATEDBYORGID`, `CREATEDBYORGNAME`) VALUES (F_GET_SEQ_CORE(), 'T_EMC_INTERNAL_AUDIT', 'qualityControlNo', '1', NULL, 'admin', '系统管理员', '2019-09-05 15:06:21', '901901', '北京三维天地科技有限公司');
+
+INSERT INTO `t_core_at_config_line`(`ID`, `CONFIGID`, `COLUMNID`, `AUDITTRAIL`, `VERSION`, `CREATEDBYID`, `CREATEDBYNAME`, `CREATEDTIME`, `CREATEDBYORGID`, `CREATEDBYORGNAME`) VALUES (F_GET_SEQ_CORE(), 'T_EMC_INTERNAL_AUDIT', 'auditPurpose', '1', NULL, 'admin', '系统管理员', '2019-09-05 15:06:21', '901901', '北京三维天地科技有限公司');
+INSERT INTO `t_core_at_config_line`(`ID`, `CONFIGID`, `COLUMNID`, `AUDITTRAIL`, `VERSION`, `CREATEDBYID`, `CREATEDBYNAME`, `CREATEDTIME`, `CREATEDBYORGID`, `CREATEDBYORGNAME`) VALUES (F_GET_SEQ_CORE(), 'T_EMC_INTERNAL_AUDIT', 'auditBasis', '1', NULL, 'admin', '系统管理员', '2019-09-05 15:06:21', '901901', '北京三维天地科技有限公司');
+INSERT INTO `t_core_at_config_line`(`ID`, `CONFIGID`, `COLUMNID`, `AUDITTRAIL`, `VERSION`, `CREATEDBYID`, `CREATEDBYNAME`, `CREATEDTIME`, `CREATEDBYORGID`, `CREATEDBYORGNAME`) VALUES (F_GET_SEQ_CORE(), 'T_EMC_INTERNAL_AUDIT', 'auditOrg', '1', NULL, 'admin', '系统管理员', '2019-09-05 15:06:21', '901901', '北京三维天地科技有限公司');
+INSERT INTO `t_core_at_config_line`(`ID`, `CONFIGID`, `COLUMNID`, `AUDITTRAIL`, `VERSION`, `CREATEDBYID`, `CREATEDBYNAME`, `CREATEDTIME`, `CREATEDBYORGID`, `CREATEDBYORGNAME`) VALUES (F_GET_SEQ_CORE(), 'T_EMC_INTERNAL_AUDIT', 'auditGroupUser', '1', NULL, 'admin', '系统管理员', '2019-09-05 15:06:21', '901901', '北京三维天地科技有限公司');
+INSERT INTO `t_core_at_config_line`(`ID`, `CONFIGID`, `COLUMNID`, `AUDITTRAIL`, `VERSION`, `CREATEDBYID`, `CREATEDBYNAME`, `CREATEDTIME`, `CREATEDBYORGID`, `CREATEDBYORGNAME`) VALUES (F_GET_SEQ_CORE(), 'T_EMC_INTERNAL_AUDIT', 'auditTime', '1', NULL, 'admin', '系统管理员', '2019-09-05 15:06:21', '901901', '北京三维天地科技有限公司');
+INSERT INTO `t_core_at_config_line`(`ID`, `CONFIGID`, `COLUMNID`, `AUDITTRAIL`, `VERSION`, `CREATEDBYID`, `CREATEDBYNAME`, `CREATEDTIME`, `CREATEDBYORGID`, `CREATEDBYORGNAME`) VALUES (F_GET_SEQ_CORE(), 'T_EMC_INTERNAL_AUDIT', 'auditContent', '1', NULL, 'admin', '系统管理员', '2019-09-05 15:06:21', '901901', '北京三维天地科技有限公司');
+INSERT INTO `t_core_at_config_line`(`ID`, `CONFIGID`, `COLUMNID`, `AUDITTRAIL`, `VERSION`, `CREATEDBYID`, `CREATEDBYNAME`, `CREATEDTIME`, `CREATEDBYORGID`, `CREATEDBYORGNAME`) VALUES (F_GET_SEQ_CORE(), 'T_EMC_INTERNAL_AUDIT', 'userTrain', '1', NULL, 'admin', '系统管理员', '2019-09-05 15:06:21', '901901', '北京三维天地科技有限公司');
+INSERT INTO `t_core_at_config_line`(`ID`, `CONFIGID`, `COLUMNID`, `AUDITTRAIL`, `VERSION`, `CREATEDBYID`, `CREATEDBYNAME`, `CREATEDTIME`, `CREATEDBYORGID`, `CREATEDBYORGNAME`) VALUES (F_GET_SEQ_CORE(), 'T_EMC_INTERNAL_AUDIT', 'recordTable', '1', NULL, 'admin', '系统管理员', '2019-09-05 15:06:21', '901901', '北京三维天地科技有限公司');
+INSERT INTO `t_core_at_config_line`(`ID`, `CONFIGID`, `COLUMNID`, `AUDITTRAIL`, `VERSION`, `CREATEDBYID`, `CREATEDBYNAME`, `CREATEDTIME`, `CREATEDBYORGID`, `CREATEDBYORGNAME`) VALUES (F_GET_SEQ_CORE(), 'T_EMC_INTERNAL_AUDIT', 'startTime', '1', NULL, 'admin', '系统管理员', '2019-09-05 15:06:21', '901901', '北京三维天地科技有限公司');
+INSERT INTO `t_core_at_config_line`(`ID`, `CONFIGID`, `COLUMNID`, `AUDITTRAIL`, `VERSION`, `CREATEDBYID`, `CREATEDBYNAME`, `CREATEDTIME`, `CREATEDBYORGID`, `CREATEDBYORGNAME`) VALUES (F_GET_SEQ_CORE(), 'T_EMC_INTERNAL_AUDIT', 'endTime', '1', NULL, 'admin', '系统管理员', '2019-09-05 15:06:21', '901901', '北京三维天地科技有限公司');
+INSERT INTO `t_core_at_config_line`(`ID`, `CONFIGID`, `COLUMNID`, `AUDITTRAIL`, `VERSION`, `CREATEDBYID`, `CREATEDBYNAME`, `CREATEDTIME`, `CREATEDBYORGID`, `CREATEDBYORGNAME`) VALUES (F_GET_SEQ_CORE(), 'T_EMC_INTERNAL_AUDIT', 'auditDate', '1', NULL, 'admin', '系统管理员', '2019-09-05 15:06:21', '901901', '北京三维天地科技有限公司');
+INSERT INTO `t_core_at_config_line`(`ID`, `CONFIGID`, `COLUMNID`, `AUDITTRAIL`, `VERSION`, `CREATEDBYID`, `CREATEDBYNAME`, `CREATEDTIME`, `CREATEDBYORGID`, `CREATEDBYORGNAME`) VALUES (F_GET_SEQ_CORE(), 'T_EMC_INTERNAL_AUDIT', 'lastAuditDate', '1', NULL, 'admin', '系统管理员', '2019-09-05 15:06:21', '901901', '北京三维天地科技有限公司');
+INSERT INTO `t_core_at_config_line`(`ID`, `CONFIGID`, `COLUMNID`, `AUDITTRAIL`, `VERSION`, `CREATEDBYID`, `CREATEDBYNAME`, `CREATEDTIME`, `CREATEDBYORGID`, `CREATEDBYORGNAME`) VALUES (F_GET_SEQ_CORE(), 'T_EMC_INTERNAL_AUDIT', 'division', '1', NULL, 'admin', '系统管理员', '2019-09-05 15:06:21', '901901', '北京三维天地科技有限公司');
+INSERT INTO `t_core_at_config_line`(`ID`, `CONFIGID`, `COLUMNID`, `AUDITTRAIL`, `VERSION`, `CREATEDBYID`, `CREATEDBYNAME`, `CREATEDTIME`, `CREATEDBYORGID`, `CREATEDBYORGNAME`) VALUES (F_GET_SEQ_CORE(), 'T_EMC_INTERNAL_AUDIT', 'auditSituation', '1', NULL, 'admin', '系统管理员', '2019-09-05 15:06:21', '901901', '北京三维天地科技有限公司');
+INSERT INTO `t_core_at_config_line`(`ID`, `CONFIGID`, `COLUMNID`, `AUDITTRAIL`, `VERSION`, `CREATEDBYID`, `CREATEDBYNAME`, `CREATEDTIME`, `CREATEDBYORGID`, `CREATEDBYORGNAME`) VALUES (F_GET_SEQ_CORE(), 'T_EMC_INTERNAL_AUDIT', 'inconformity', '1', NULL, 'admin', '系统管理员', '2019-09-05 15:06:21', '901901', '北京三维天地科技有限公司');
+INSERT INTO `t_core_at_config_line`(`ID`, `CONFIGID`, `COLUMNID`, `AUDITTRAIL`, `VERSION`, `CREATEDBYID`, `CREATEDBYNAME`, `CREATEDTIME`, `CREATEDBYORGID`, `CREATEDBYORGNAME`) VALUES (F_GET_SEQ_CORE(), 'T_EMC_INTERNAL_AUDIT', 'manageSystem', '1', NULL, 'admin', '系统管理员', '2019-09-05 15:06:21', '901901', '北京三维天地科技有限公司');
+INSERT INTO `t_core_at_config_line`(`ID`, `CONFIGID`, `COLUMNID`, `AUDITTRAIL`, `VERSION`, `CREATEDBYID`, `CREATEDBYNAME`, `CREATEDTIME`, `CREATEDBYORGID`, `CREATEDBYORGNAME`) VALUES (F_GET_SEQ_CORE(), 'T_EMC_INTERNAL_AUDIT', 'correct', '1', NULL, 'admin', '系统管理员', '2019-09-05 15:06:21', '901901', '北京三维天地科技有限公司');
+INSERT INTO `t_core_at_config_line`(`ID`, `CONFIGID`, `COLUMNID`, `AUDITTRAIL`, `VERSION`, `CREATEDBYID`, `CREATEDBYNAME`, `CREATEDTIME`, `CREATEDBYORGID`, `CREATEDBYORGNAME`) VALUES (F_GET_SEQ_CORE(), 'T_EMC_INTERNAL_AUDIT', 'auditRequest', '1', NULL, 'admin', '系统管理员', '2019-09-05 15:06:21', '901901', '北京三维天地科技有限公司');
+INSERT INTO `t_core_at_config_line`(`ID`, `CONFIGID`, `COLUMNID`, `AUDITTRAIL`, `VERSION`, `CREATEDBYID`, `CREATEDBYNAME`, `CREATEDTIME`, `CREATEDBYORGID`, `CREATEDBYORGNAME`) VALUES (F_GET_SEQ_CORE(), 'T_EMC_INTERNAL_AUDIT', 'auditReview', '1', NULL, 'admin', '系统管理员', '2019-09-05 15:06:21', '901901', '北京三维天地科技有限公司');
+INSERT INTO `t_core_at_config_line`(`ID`, `CONFIGID`, `COLUMNID`, `AUDITTRAIL`, `VERSION`, `CREATEDBYID`, `CREATEDBYNAME`, `CREATEDTIME`, `CREATEDBYORGID`, `CREATEDBYORGNAME`) VALUES (F_GET_SEQ_CORE(), 'T_EMC_INTERNAL_AUDIT', 'sendScope', '1', NULL, 'admin', '系统管理员', '2019-09-05 15:06:21', '901901', '北京三维天地科技有限公司');
+
+
+INSERT INTO `t_core_menu`(`ID`, `MENUNAME`, `HREF`, `PARENTID`, `ORDERNO`, `MENUINITNAME`, `ICON`, `MENUICON`, `TODOICON`) VALUES ('4030', '内审计划', '/secure/emc/module/item/internal-audits', '40', 4030, '内审计划', NULL, '001.svg', NULL);
+INSERT INTO `t_core_menu`(`ID`, `MENUNAME`, `HREF`, `PARENTID`, `ORDERNO`, `MENUINITNAME`, `ICON`, `MENUICON`, `TODOICON`) VALUES ('403001', '内审计划申请', '/secure/emc/module/item/internal-audits/page/edit-list', '4030', 403001, '内审计划申请', NULL, '001.svg', NULL);
+INSERT INTO `t_core_menu`(`ID`, `MENUNAME`, `HREF`, `PARENTID`, `ORDERNO`, `MENUINITNAME`, `ICON`, `MENUICON`, `TODOICON`) VALUES ('403002', '内审计划审批', '/secure/emc/module/item/internal-audits/page/audit-list', '4030', 403002, '内审计划审批', NULL, '001.svg', NULL);
+INSERT INTO `t_core_menu`(`ID`, `MENUNAME`, `HREF`, `PARENTID`, `ORDERNO`, `MENUINITNAME`, `ICON`, `MENUICON`, `TODOICON`) VALUES ('403003', '内审计划查询', '/secure/emc/module/item/internal-audits/page/search-list', '4030', 403003, '内审计划查询', NULL, '001.svg', NULL);
+
+
+INSERT INTO `t_core_sequence`(`ID`, `PATTERN`, `JSONPARAM`) VALUES ('T_EMC_Internal_Audit', 'NBSH[yyyy][nnn]', '');
+
+
+INSERT INTO `t_core_menu_ext`(`ID`, `SERVICENAME`, `TABLENAME`, `TYPE`, `ENABLE`, `EXT`) VALUES ('9330', '内审计划', 'T_EMC_INTERNAL_AUDIT', 'audit_def', '1', NULL);

@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/emc/module/bp/order/order-receipts/emc-order-receipt.js',
+                      '/static/emc/module/bp/order/order-receipts/emc-order-receipt-container-batch.js'
+                    ]);
+    emcOrderReceipt.orderContainerBatchPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>
+

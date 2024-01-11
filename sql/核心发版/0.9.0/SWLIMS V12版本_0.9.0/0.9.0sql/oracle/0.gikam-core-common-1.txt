@@ -1,0 +1,24 @@
+-- ----------------------------- 2020-10-20 add by shixw------------begin
+-- Automation Deployment Single SQL ---begin
+CREATE OR REPLACE PROCEDURE DELETEI18N(CODEPARAM   VARCHAR) AS
+  V_ID    NUMBER;
+  V_COUNT NUMBER;
+BEGIN
+
+  SELECT COUNT(*) INTO V_COUNT FROM T_CORE_I18N WHERE CODE = CODEPARAM;
+
+  IF V_COUNT > 0 THEN
+    SELECT ID
+      INTO V_ID
+      FROM T_CORE_I18N
+     WHERE CODE = CODEPARAM
+       AND ROWNUM = 1;
+    DELETE FROM T_CORE_I18N_MESSAGE WHERE I18NID = V_ID;
+    DELETE FROM T_CORE_I18N WHERE CODE = CODEPARAM;
+
+    COMMIT;
+  END IF;
+END;
+/
+-- Automation Deployment Single SQL ---end
+-- ----------------------------- 2020-10-20 add by shixw------------end

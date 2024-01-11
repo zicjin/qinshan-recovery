@@ -1,0 +1,10 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ 
+                      '/static/emc/module/bp/result/runs/emc-browse-analysis-record.js',
+                      '/static/emc/module/bp/result/runs/emc-browse-analysis-record-search-list.js'
+                    ]);
+    emcBrowseRecord.searchPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>
+

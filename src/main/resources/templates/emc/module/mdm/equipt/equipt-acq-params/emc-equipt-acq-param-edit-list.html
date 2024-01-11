@@ -1,0 +1,8 @@
+
+<script th:inline="javascript">
+    Gikam.requirejs([ '/static/emc/module/mdm/equipt/equipt-acq-params/emc-equipt-acq-param.js',
+                      '/static/emc/module/mdm/equipt/equipt-acq-params/emc-equipt-acq-param-edit-list.js'
+                    ]);
+    emcEquiptAcqParam.editPage.init(Gikam.getElParam([[${param}]]));
+</script>
+

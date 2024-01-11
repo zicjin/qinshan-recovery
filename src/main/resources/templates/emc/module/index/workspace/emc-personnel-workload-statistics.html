@@ -1,0 +1,241 @@
+<th:block th:replace="module/gikam/workspace" />
+
+<!-- 引入项目自定义下拉框和choose选择框配置 -->
+<script th:src="@{/static/emc/config/emc-select-config.js}"></script>
+
+<script>
+    Date.prototype.format = function(fmt) { //author: meizz 
+        var o = {
+            "M+" : this.getMonth() + 1, //月份 
+            "d+" : this.getDate(), //日 
+            "h+" : this.getHours(), //小时 
+            "m+" : this.getMinutes(), //分 
+            "s+" : this.getSeconds(), //秒 
+            "q+" : Math.floor((this.getMonth() + 3) / 3), //季度 
+            "S" : this.getMilliseconds()
+        //毫秒 
+        };
+        if (/(y+)/.test(fmt))
+            fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+        for ( var k in o)
+            if (new RegExp("(" + k + ")").test(fmt))
+                fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+        return fmt;
+    }
+
+    var lastDate = new Date();
+    lastDate.setDate(lastDate.getDate() - 6);
+
+    var startTime = lastDate.format('yyyy-MM-dd');
+    var endTime = new Date().format('yyyy-MM-dd');
+
+    var analysisOrg = null;
+    var echarts = null;
+    function setData() {
+        if (!Gikam.isEmpty(startTime) && !Gikam.isEmpty(endTime) && !Gikam.isEmpty(analysisOrg)) {
+            Gikam.post(IFM_CONTEXT + '/secure/emc/module/bp/bp/order-tasks/personnel-workload-statistics/queries', Gikam.getJsonWrapper({
+                f : {
+                    ANALYSISORGID_SEQ : analysisOrg,
+                    ANALYSISDATE_DGOE : startTime,
+                    ANALYSISDATE_DLOE : endTime,
+                }
+            }, [ '', [] ])).done(function(statistics) {
+
+                Gikam.postSync(IFM_CONTEXT + '/secure/core/module/mdm/users/queries', Gikam.getJsonWrapper({
+                    f : {
+                        target_filter : JSON.stringify({
+                            type : 'assigned',
+                            targetTable : "T_CORE_USER_PERMISSION",
+                            targetMatchColumn : "USERID",
+                            thisMatchColumn : "ID",
+                            filter : [ {
+                                targetFilterColumn : 'TARGETID',
+                                targetFilterValue : analysisOrg,
+                            }, ]
+                        })
+                    }
+                }, [ '', [] ])).done(function(users) {
+
+                    var userIds = [];
+                    var userNames = [];
+                    var testCounts = [];
+                    var result = {};
+                    Gikam.each(users.rows, function(index, row) {
+                        userIds.push(row.id);
+                        userNames.push(row.userName);
+                    });
+
+                    Gikam.each(statistics.rows, function(index, row) {
+                        result[row.analysisUserId] = row.ext$.testcount;
+                    });
+
+                    Gikam.each(userIds, function(index, userId) {
+                        testCounts.push(Gikam.isEmpty(result[userId]) ? 0 : result[userId]);
+                    });
+
+                    echarts && echarts.setOption({
+                        xAxis : [ {
+                            data : userNames
+                        } ],
+                        series : [ {
+                            data : testCounts
+                        } ]
+                    });
+                });
+
+            });
+        }
+
+    };
+    Gikam.create('echarts', {
+        renderTo : document.body,
+        type : 'echarts',
+        id : 'emc-personnel-workload-statistics-echarts',
+        onReady : function() {
+            echarts = Gikam.getComp('emc-personnel-workload-statistics-echarts');
+            analysisOrg = Gikam.getComp('emc-personnel-workload-statistics-form').getData().analysisOrg;
+            setData();
+        },
+        config : {
+            search : {
+                titleWidthAuto : true,
+                type : 'form',
+                id : 'emc-personnel-workload-statistics-form',
+                columns : 4,
+                fields : [ {
+                    title : '开始时间',
+                    field : 'startTime',
+                    type : 'date',
+                    width : 200,
+                    onChange : function(field, value) {
+                        startTime = value;
+                        setData();
+                    },
+                }, {
+                    title : '结束时间',
+                    field : 'endTime',
+                    type : 'date',
+                    width : 200,
+                    onChange : function(field, value) {
+                        endTime = value;
+                        setData();
+                    },
+                }, {
+                    title : '分析科室',
+                    field : 'analysisOrg',
+                    width : 200,
+                    type : 'select',
+                    search : true,
+                    onChange : function(field, value, rowIndex, oldValue, text) {
+                        analysisOrg = value;
+                        setData();
+                    },
+                }, ],
+                onRendered : function() {
+                    Gikam.post('/secure/core/module/mdm/user-permissions/login-org/queries/post-selectable').done(function(rows) {
+                        var items = rows.map(function(item) {
+                            return {
+                                text : item.ext$.orgname,
+                                value : item.targetId
+                            };
+                        });
+                        Gikam.getComp('emc-personnel-workload-statistics-form').setSelectOptions('analysisOrg', items, true);
+                        Gikam.getComp('emc-personnel-workload-statistics-form').setData({
+                            analysisOrg : !Gikam.isEmpty(items[0].value) ? items[0].value : "",
+                            startTime : startTime,
+                            endTime : endTime
+                        });
+                    });
+                },
+            }
+        },
+        option : {
+            xAxis : {
+                type : 'category',
+                axisLine : {
+                    show : false
+                },
+                axisTick : {
+                    show : false
+                },
+                axisLabel : {
+                    interval : 0,
+                    rotate : 45
+                },
+                data : []
+            },
+            yAxis : {
+                type : 'value',
+                axisLine : {
+                    show : false,
+                },
+                axisTick : {
+                    show : false
+                },
+                splitLine : {
+                    lineStyle : {
+                        color : '#eee',
+                        type : 'dashed'
+                    }
+                },
+                minInterval : 1
+            },
+            series : [ {
+                data : [],
+                type : 'bar',
+                barWidth : 30
+            } ],
+            color : [ '#51CFA0' ],
+            tooltip : {
+                show : true,
+                trigger : 'axis',
+                formatter : function(data) {
+                    return (data[0]['name'] + '</br>测试数量: ' + data[0]['value'])
+                }
+            },
+            grid : {
+                left : 50,
+                right : 50,
+                top : 18,
+                bottom : 40
+            }
+        },
+    });
+</script>
+
+<style>
+@media screen and (max-width: 760px) {
+    .main-container {
+        width: 100%;
+    }
+    .layout>.center-container>.west>.body .tab {
+        padding-right: 0;
+    }
+    .layout>.center-container>.east>.body .tab {
+        padding-left: 0;
+    }
+    .layout>div.center-container {
+        display: flex;
+    }
+    .layout>.center-container>.center, .layout>.center-container>.east,
+        .layout>.center-container>.north, .layout>.center-container>.south,
+        .layout>.center-container>.west {
+        width: auto !important;
+    }
+    .layout .split {
+        display: block;
+    }
+    .layout .region>.body, .layout .tab .panel-body {
+        position: absolute;
+    }
+    .grid>div.grid-body {
+        height: 0;
+    }
+    .form .form-group {
+        width: 200px !important;
+    }
+    .north.region {
+        height: 60px !important;
+    }
+}
+</style>

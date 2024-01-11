@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/emc/module/mdm/basemdm/certs/emc-cert.js',
+                      '/static/emc/module/mdm/basemdm/certs/emc-cert-detail.js'
+                    ]);
+    emcCert.detailPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>
+

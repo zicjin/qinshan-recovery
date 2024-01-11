@@ -1,0 +1,385 @@
+-- ----------------------------- 2020-02-12 add by zhangxt--------------begin
+INSERT INTO T_CORE_CODE (ID, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME, CODE, CREATEDBYID, CREATEDBYNAME, CREATEDTIME) VALUES (NEXT VALUE FOR SEQ_CORE, '弹出选择框', 'columnType', NULL, 1, 0, '0', NULL, NULL, NULL, 'CHOOSE', 'admin', '系统管理员', NULL);
+INSERT INTO T_CORE_CODE (ID, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME, CODE, CREATEDBYID, CREATEDBYNAME, CREATEDTIME) VALUES (NEXT VALUE FOR SEQ_CORE, '复选框', 'columnType', NULL, 1, 0, '0', NULL, NULL, NULL, 'CHECKBOX', 'admin', '系统管理员', NULL);
+
+
+INSERT INTO T_CORE_ADMIN_SELECT_CONFIG(ID, NAME, CATEGORY, URL, VALUEFIELD, TEXTFIELD)
+VALUES (NEXT VALUE FOR SEQ_CORE, '下拉列表配置', 'select-config', '/secure/core/module/admin/select-configs/queries/selectable', 'category', 'name');
+
+INSERT INTO T_CORE_ADMIN_SELECT_CONFIG(ID, NAME, CATEGORY, URL, VALUEFIELD, TEXTFIELD)
+VALUES (NEXT VALUE FOR SEQ_CORE, '弹框选择页面配置', 'choose-config', '/secure/core/module/admin/choose-configs/queries/selectable', 'category', 'name');
+
+
+INSERT INTO T_CORE_ADMIN_SELECT_CONFIG(ID, NAME, CATEGORY, URL, VALUEFIELD, TEXTFIELD)
+select NEXT VALUE FOR SEQ_CORE, a.CODECATEGORYNAME, a.id, '/secure/core/module/sys/codes/queries/selectable?codeCategoryId=' + a.ID, 'code', 'codeName'
+  from t_core_code_category a
+ where a.id not in (select t.CATEGORY from T_CORE_ADMIN_SELECT_CONFIG t);
+ 
+-- 建表语句
+CREATE TABlE DBO.T_CORE_PAGE_TABLE_FIELD_CONF(
+     ID BIGINT ,
+     CONFID BIGINT NULL ,
+     FIELDNAME VARCHAR(36)  NULL ,
+     PAGEFIELD VARCHAR(120)  NULL ,
+     PAGETITLE VARCHAR(120)  NULL ,
+     TYPE VARCHAR(36)  NULL ,
+     TYPEDS VARCHAR(36)  NULL ,
+     COLSPAN VARCHAR(6)  NULL ,
+     READONLY VARCHAR(36)  NULL ,
+     VALUE VARCHAR(36)  NULL ,
+     WIDTH VARCHAR(6)  NULL ,
+     EDITOR VARCHAR(36)  NULL ,
+     EXTCONF TEXT NULL ,
+     ORDERNO BIGINT NULL ,
+     CREATEDBYID VARCHAR(36)  NULL ,
+     CREATEDBYNAME VARCHAR(60)  NULL ,
+     CREATEDTIME DATETIME NULL ,
+     CREATEDBYORGID VARCHAR(36)  NULL ,
+     CREATEDBYORGNAME VARCHAR(270)  NULL ,
+ CONSTRAINT PK_CORE_PAGE_TABLE_FIELD_CONF PRIMARY KEY(ID));
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'页面字段配置-表中字段' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PAGE_TABLE_FIELD_CONF';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'主键' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PAGE_TABLE_FIELD_CONF', @level2type=N'COLUMN',@level2name=N'id';
+ 
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'配置主表ID' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PAGE_TABLE_FIELD_CONF', @level2type=N'COLUMN',@level2name=N'confId';
+ 
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'表中字段名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PAGE_TABLE_FIELD_CONF', @level2type=N'COLUMN',@level2name=N'fieldName';
+ 
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'页面配置中的field' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PAGE_TABLE_FIELD_CONF', @level2type=N'COLUMN',@level2name=N'pageField';
+ 
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'页面配置中的title' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PAGE_TABLE_FIELD_CONF', @level2type=N'COLUMN',@level2name=N'pageTitle';
+ 
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'表单/表格用-类型(日期/SELECT/文本等)' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PAGE_TABLE_FIELD_CONF', @level2type=N'COLUMN',@level2name=N'type';
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'下拉框/Choose所用数据源' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PAGE_TABLE_FIELD_CONF', @level2type=N'COLUMN',@level2name=N'typeds';
+ 
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'表单用-列宽' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PAGE_TABLE_FIELD_CONF', @level2type=N'COLUMN',@level2name=N'colspan';
+ 
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'表单用-是否只读' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PAGE_TABLE_FIELD_CONF', @level2type=N'COLUMN',@level2name=N'readonly';
+ 
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'表单用-默认值' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PAGE_TABLE_FIELD_CONF', @level2type=N'COLUMN',@level2name=N'value';
+ 
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'表格用-宽度' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PAGE_TABLE_FIELD_CONF', @level2type=N'COLUMN',@level2name=N'width';
+ 
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'表格用-是否渲染为编辑器' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PAGE_TABLE_FIELD_CONF', @level2type=N'COLUMN',@level2name=N'editor';
+ 
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'额外配置(json格式)' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PAGE_TABLE_FIELD_CONF', @level2type=N'COLUMN',@level2name=N'extConf';
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'排序码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PAGE_TABLE_FIELD_CONF', @level2type=N'COLUMN',@level2name=N'ORDERNO';
+ 
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PAGE_TABLE_FIELD_CONF', @level2type=N'COLUMN',@level2name=N'createdById';
+ 
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PAGE_TABLE_FIELD_CONF', @level2type=N'COLUMN',@level2name=N'createdByName';
+ 
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PAGE_TABLE_FIELD_CONF', @level2type=N'COLUMN',@level2name=N'createdTime';
+ 
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PAGE_TABLE_FIELD_CONF', @level2type=N'COLUMN',@level2name=N'createdByOrgId';
+ 
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PAGE_TABLE_FIELD_CONF', @level2type=N'COLUMN',@level2name=N'createdByOrgName';
+ 
+CREATE NONCLUSTERED INDEX [IDX_CORE_PTFC_CONFID] ON [dbo].[T_CORE_PAGE_TABLE_FIELD_CONF] ([CONFID]);
+    
+CREATE TABlE DBO.T_CORE_PAGE_TABLE_CONF(
+    ID BIGINT NOT NULL ,
+     CONFNO VARCHAR(60)  NULL ,
+     CONFNAME VARCHAR(120)  NULL ,
+     TABLENAME VARCHAR(60)  NULL ,
+     CONFCATEGORY VARCHAR(36)  NULL ,
+ CONSTRAINT PK_CORE_PAGE_TABLE_CONF PRIMARY KEY(ID));
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'页面字段配置-表中字段' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PAGE_TABLE_CONF';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'主键' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PAGE_TABLE_CONF', @level2type=N'COLUMN',@level2name=N'id';
+ 
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'配置编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PAGE_TABLE_CONF', @level2type=N'COLUMN',@level2name=N'confNo';
+ 
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'配置名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PAGE_TABLE_CONF', @level2type=N'COLUMN',@level2name=N'confName';
+ 
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'表名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PAGE_TABLE_CONF', @level2type=N'COLUMN',@level2name=N'tableName';
+ 
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'配置类型(表格/表单)' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PAGE_TABLE_CONF', @level2type=N'COLUMN',@level2name=N'confCategory';
+ 
+
+
+-- 创建菜单语句
+INSERT INTO T_CORE_MENU(ID ,MENUNAME, HREF, PARENTID, ORDERNO, MENUINITNAME, ICON, TODOICON)
+VALUES ('9323', '页面字段配置', '/secure/module/item/core-page-table-confs/page/edit-list', '93', '9323', '页面字段配置', '076.svg', '');
+    
+INSERT INTO T_CORE_TABLE (ID,AUDITABLE,ATTACHMENT )
+VALUES ('T_CORE_PAGE_TABLE_FIELD_CONF', '0', '0');
+    
+INSERT INTO T_CORE_TABLE_HIERARCHY (ID, TABLENAME, MASTERTABLENAME, REFERCOLUMN)
+VALUES ('932301','T_CORE_PAGE_TABLE_FIELD_CONF', 'T_CORE_PAGE_TABLE_CONF', 'CONFID');
+    
+INSERT INTO T_CORE_TABLE (ID,AUDITABLE,ATTACHMENT)
+VALUES ('T_CORE_PAGE_TABLE_CONF', '0', '0');
+    
+-- ----------------------------- 2020-02-12 add by zhangxt--------------end
+
+-- ----------------------------- 2020-02-13 add by liyang--------------begin
+
+-- 创建菜单语句
+INSERT INTO t_core_menu (ID, MENUNAME, HREF, PARENTID, ORDERNO, MENUINITNAME, ICON, TODOICON) VALUES 
+('96', 'LES功能', NULL, NULL, '96', 'LES功能', '076.svg', '');
+
+INSERT INTO t_core_menu (ID, MENUNAME, HREF, PARENTID, ORDERNO, MENUINITNAME, ICON, TODOICON) VALUES 
+('9601', 'LES模板', '/secure/core/module/item/les-templates/page/edit-list', '96', '9601', 'LES模板编制列表', '076.svg', '');
+
+IF EXISTS (SELECT * FROM sys.all_objects WHERE object_id = OBJECT_ID(N'[dbo].[t_core_les_template_ut]') AND type IN ('U'))
+	DROP TABLE [dbo].[t_core_les_template_ut]
+GO
+
+CREATE TABLE [dbo].[t_core_les_template_ut] (
+  [ID] int  NOT NULL,
+  [TYPE] varchar(32) COLLATE Chinese_PRC_CI_AS  NULL,
+  [UNITTITLE] varchar(64) COLLATE Chinese_PRC_CI_AS  NULL,
+  [UNITBODY] text COLLATE Chinese_PRC_CI_AS  NULL
+)
+GO
+
+ALTER TABLE [dbo].[t_core_les_template_ut] SET (LOCK_ESCALATION = TABLE)
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'主键',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_les_template_ut',
+'COLUMN', N'ID'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'类型',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_les_template_ut',
+'COLUMN', N'TYPE'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'组件标题',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_les_template_ut',
+'COLUMN', N'UNITTITLE'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'组件主体',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_les_template_ut',
+'COLUMN', N'UNITBODY'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'LES模板的主体',
+'SCHEMA', N'dbo',
+'TABLE', N't_core_les_template_ut'
+GO
+
+-- ----------------------------- 2020-02-13 add by liyang--------------end
+
+-- ----------------------------- 2020-02-13 add by shixw--------------begin
+
+ALTER TABLE [dbo].[T_CORE_PV_MASTER_CONF] ALTER COLUMN [ORDERNO] bigint NULL
+
+ALTER TABLE [dbo].[T_CORE_PV_SUB_CONF] ALTER COLUMN [ORDERNO] bigint NULL
+
+-- ----------------------------- 2020-02-13 add by shixw--------------end
+
+-- ----------------------------- 2020-02-14 add by liyang--------------begin
+
+alter table T_CORE_LES_TEMPLATE_UT alter  column id bigint not null ;
+
+-- ----------------------------- 2020-02-14 add by liyang--------------end
+
+-- ----------------------------- 2020-02-21 add by liyang--------------begin
+
+INSERT INTO t_core_table(ID, AUDITABLE, ATTACHMENT) VALUES ('T_CORE_LES_TEMPLATE_UT', '0', '0');
+
+-- ----------------------------- 2020-02-21 add by liyang--------------end
+
+
+-- ----------------------------- 2020-02-23 add by zhangxt--------------begin
+
+DROP TABLE T_CORE_PAGE_TABLE_FIELD_CONF;
+DROP TABLE T_CORE_PAGE_TABLE_CONF;
+
+DELETE FROM T_CORE_MENU WHERE ID = '9323';
+DELETE FROM T_CORE_TABLE WHERE ID = 'T_CORE_PAGE_TABLE_FIELD_CONF';
+DELETE FROM T_CORE_TABLE WHERE ID = 'T_CORE_PAGE_TABLE_CONF';
+DELETE FROM T_CORE_TABLE_HIERARCHY WHERE ID = '932301';
+
+
+INSERT INTO T_CORE_CODE_CATEGORY(ID, CODECATEGORYNAME, CODECLASSID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME) VALUES ('pageCompCategory', '页面组件类型', 'sys', NULL, 27, NULL, NULL, NULL, NULL);
+INSERT INTO T_CORE_CODE (ID, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME, CODE, CREATEDBYID, CREATEDBYNAME, CREATEDTIME) VALUES (NEXT VALUE FOR SEQ_CORE, '表单', 'pageCompCategory', NULL, 1, 0, '0', NULL, NULL, NULL, 'form', 'admin', '系统管理员', NULL);
+INSERT INTO T_CORE_CODE (ID, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME, CODE, CREATEDBYID, CREATEDBYNAME, CREATEDTIME) VALUES (NEXT VALUE FOR SEQ_CORE, '表格', 'pageCompCategory', NULL, 1, 0, '0', NULL, NULL, NULL, 'grid', 'admin', '系统管理员', NULL);
+
+INSERT INTO T_CORE_ADMIN_SELECT_CONFIG(ID, NAME, CATEGORY, URL, VALUEFIELD, TEXTFIELD)
+select NEXT VALUE FOR SEQ_CORE, a.CODECATEGORYNAME, a.id, '/secure/core/module/sys/codes/queries/selectable?codeCategoryId=' + a.ID, 'code', 'codeName'
+  from t_core_code_category a
+ where a.id not in (select t.CATEGORY from T_CORE_ADMIN_SELECT_CONFIG t);
+
+INSERT INTO t_core_admin_choose_config(ID, NAME, TITLE, CATEGORY, URL, WIDTH) VALUES (NEXT VALUE FOR SEQ_CORE, '页面字段配置' , '页面字段配置', 'pageField', '/secure/module/item/page-fields/page/choose-list', '30%');
+
+
+CREATE TABlE DBO.T_CORE_PAGE_FIELD(
+     ID BIGINT NOT NULL,
+     PFNAME VARCHAR(120)  NULL ,
+     CREATEDBYID VARCHAR(36)  NULL ,
+     CREATEDBYNAME VARCHAR(60)  NULL ,
+     CREATEDTIME DATETIME NULL ,
+     CREATEDBYORGID VARCHAR(36)  NULL ,
+     CREATEDBYORGNAME VARCHAR(270)  NULL ,
+ CONSTRAINT PK_CORE_PAGE_FIELD PRIMARY KEY(ID));
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'页面字段配置' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PAGE_FIELD';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'主键' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PAGE_FIELD', @level2type=N'COLUMN',@level2name=N'ID';
+ 
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'配置名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PAGE_FIELD', @level2type=N'COLUMN',@level2name=N'PFNAME';
+ 
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PAGE_FIELD', @level2type=N'COLUMN',@level2name=N'CREATEDBYID';
+ 
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PAGE_FIELD', @level2type=N'COLUMN',@level2name=N'CREATEDBYNAME';
+ 
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PAGE_FIELD', @level2type=N'COLUMN',@level2name=N'CREATEDTIME';
+ 
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PAGE_FIELD', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGID';
+ 
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PAGE_FIELD', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGNAME';
+ 
+CREATE TABlE DBO.T_CORE_PAGE_FIELD_COMP(
+    ID BIGINT NOT NULL,
+     PFID BIGINT NULL ,
+     COMPID VARCHAR(120)  NULL ,
+     TABLENAME VARCHAR(60)  NULL ,
+     COMPCATEGORY VARCHAR(36)  NULL ,
+     CREATEDBYID VARCHAR(36)  NULL ,
+     CREATEDBYNAME VARCHAR(60)  NULL ,
+     CREATEDTIME DATETIME NULL ,
+     CREATEDBYORGID VARCHAR(36)  NULL ,
+     CREATEDBYORGNAME VARCHAR(270)  NULL ,
+ CONSTRAINT PK_CORE_PAGE_FIELD_COMP PRIMARY KEY(ID));
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'页面字段配置-组件(表格/表单)' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PAGE_FIELD_COMP';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'主键' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PAGE_FIELD_COMP', @level2type=N'COLUMN',@level2name=N'ID';
+ 
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'配置表主键' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PAGE_FIELD_COMP', @level2type=N'COLUMN',@level2name=N'PFID';
+ 
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'页面组件ID' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PAGE_FIELD_COMP', @level2type=N'COLUMN',@level2name=N'COMPID';
+ 
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'表名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PAGE_FIELD_COMP', @level2type=N'COLUMN',@level2name=N'TABLENAME';
+ 
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'组件类型(表格/表单)' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PAGE_FIELD_COMP', @level2type=N'COLUMN',@level2name=N'COMPCATEGORY';
+ 
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PAGE_FIELD_COMP', @level2type=N'COLUMN',@level2name=N'CREATEDBYID';
+ 
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PAGE_FIELD_COMP', @level2type=N'COLUMN',@level2name=N'CREATEDBYNAME';
+ 
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PAGE_FIELD_COMP', @level2type=N'COLUMN',@level2name=N'CREATEDTIME';
+ 
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PAGE_FIELD_COMP', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGID';
+ 
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PAGE_FIELD_COMP', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGNAME';
+ 
+CREATE NONCLUSTERED INDEX [IDX_PFC_PFID] ON [dbo].[T_CORE_PAGE_FIELD_COMP] ([PFID]);
+
+CREATE TABlE DBO.T_CORE_PAGE_FIELD_COMP_FIELD(
+     ID BIGINT NOT NULL,
+     PFCID BIGINT NULL ,
+     FIELDNAME VARCHAR(36)  NULL ,
+     PAGEFIELD VARCHAR(120)  NULL ,
+     PAGETITLE VARCHAR(120)  NULL ,
+     TYPE VARCHAR(36)  NULL ,
+     COLSPAN VARCHAR(6)  NULL ,
+     READONLY VARCHAR(36)  NULL ,
+     VALUE VARCHAR(36)  NULL ,
+     WIDTH VARCHAR(6)  NULL ,
+     EDITOR VARCHAR(36)  NULL ,
+     EXTCONF TEXT NULL ,
+     ORDERNO BIGINT NULL ,
+     CREATEDBYID VARCHAR(36)  NULL ,
+     CREATEDBYNAME VARCHAR(60)  NULL ,
+     CREATEDTIME DATETIME NULL ,
+     CREATEDBYORGID VARCHAR(36)  NULL ,
+     CREATEDBYORGNAME VARCHAR(270)  NULL ,
+ CONSTRAINT PK_CORE_PAGE_FIELD_COMP_FIELD PRIMARY KEY(ID));
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'页面字段配置-表中字段' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PAGE_FIELD_COMP_FIELD';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'主键' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PAGE_FIELD_COMP_FIELD', @level2type=N'COLUMN',@level2name=N'id';
+ 
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'配置组件表ID' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PAGE_FIELD_COMP_FIELD', @level2type=N'COLUMN',@level2name=N'pfcId';
+ 
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'表中字段名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PAGE_FIELD_COMP_FIELD', @level2type=N'COLUMN',@level2name=N'fieldName';
+ 
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'页面配置中的field' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PAGE_FIELD_COMP_FIELD', @level2type=N'COLUMN',@level2name=N'pageField';
+ 
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'页面配置中的title' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PAGE_FIELD_COMP_FIELD', @level2type=N'COLUMN',@level2name=N'pageTitle';
+ 
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'表单/表格用-类型(日期/SELECT/文本等)' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PAGE_FIELD_COMP_FIELD', @level2type=N'COLUMN',@level2name=N'type';
+ 
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'表单用-列宽' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PAGE_FIELD_COMP_FIELD', @level2type=N'COLUMN',@level2name=N'COLSPAN';
+ 
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'表单用-是否只读' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PAGE_FIELD_COMP_FIELD', @level2type=N'COLUMN',@level2name=N'READONLY';
+ 
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'表单用-默认值' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PAGE_FIELD_COMP_FIELD', @level2type=N'COLUMN',@level2name=N'VALUE';
+ 
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'表格用-宽度' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PAGE_FIELD_COMP_FIELD', @level2type=N'COLUMN',@level2namE=N'WIDTH';
+ 
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'表格用-是否渲染为编辑器' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PAGE_FIELD_COMP_FIELD', @level2type=N'COLUMN',@level2name=N'EDITOR';
+ 
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'额外配置(json格式)' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PAGE_FIELD_COMP_FIELD', @level2type=N'COLUMN',@level2name=N'EXTCONF';
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'排序码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PAGE_FIELD_COMP_FIELD', @level2type=N'COLUMN',@level2name=N'ORDERNO';
+ 
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PAGE_FIELD_COMP_FIELD', @level2type=N'COLUMN',@level2name=N'CREATEDBYID';
+ 
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PAGE_FIELD_COMP_FIELD', @level2type=N'COLUMN',@level2name=N'CREATEDBYNAME';
+ 
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PAGE_FIELD_COMP_FIELD', @level2type=N'COLUMN',@level2name=N'CREATEDTIME';
+ 
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PAGE_FIELD_COMP_FIELD', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGID';
+ 
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PAGE_FIELD_COMP_FIELD', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGNAME';
+ 
+CREATE NONCLUSTERED INDEX [IDX_PFCF_PFCID] ON [dbo].[T_CORE_PAGE_FIELD_COMP_FIELD] ([PFCID]);
+
+
+-- 创建菜单语句
+INSERT INTO T_CORE_MENU(ID ,MENUNAME, HREF, PARENTID, ORDERNO, MENUINITNAME, ICON, TODOICON)
+VALUES ('9323', '页面字段配置', '/secure/module/item/page-fields/page/edit-list', '93', '9323', '页面字段配置', '076.svg', '');
+
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_PAGE_FIELD', '0', '0');
+
+INSERT INTO T_CORE_TABLE (ID,AUDITABLE,ATTACHMENT )
+VALUES ('T_CORE_PAGE_FIELD_COMP', '0', '0');
+    
+INSERT INTO T_CORE_TABLE (ID,AUDITABLE,ATTACHMENT )
+VALUES ('T_CORE_PAGE_FIELD_COMP_FIELD', '0', '0');
+
+INSERT INTO T_CORE_TABLE_HIERARCHY (ID, TABLENAME, MASTERTABLENAME, REFERCOLUMN)
+VALUES ('932301', 'T_CORE_PAGE_FIELD_COMP', 'T_CORE_PAGE_FIELD', 'PFID');
+    
+INSERT INTO T_CORE_TABLE_HIERARCHY (ID, TABLENAME, MASTERTABLENAME, REFERCOLUMN)
+VALUES ('932302','T_CORE_PAGE_FIELD_COMP_FIELD', 'T_CORE_PAGE_FIELD_COMP', 'PFCID');
+
+-- ----------------------------- 2020-02-23 add by zhangxt--------------end
+
+-- ----------------------------- 2020-02-25 add by gengjs--------------begin
+insert into T_CORE_CONSTANT (ID, CONSTANTVALUE, CONSTANTDESC, CLASSFICATION, SHOW, CREATEDTIME, CREATEDBYID, CREATEDBYNAME, VERSION)
+values ('TODO_VOICEREMIND', '0', '待办是否语音提醒（0否，1是）', '系统', '1', null, null, null, null);
+-- ----------------------------- 2020-02-25 add by gengjs--------------end
+
+-- ----------------------------- 2020-02-26 add by zhangxt--------------begin
+ALTER TABLE [dbo].[T_CORE_PAGE_FIELD_COMP_FIELD] ADD [SELECTDS] VARCHAR(36) NULL
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'下拉列表数据源',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_PAGE_FIELD_COMP_FIELD',
+'COLUMN', N'SELECTDS'
+GO
+
+ALTER TABLE [dbo].[T_CORE_PAGE_FIELD_COMP_FIELD] ADD [CHOOSEDS] VARCHAR(36) NULL
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'选择框数据源',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_PAGE_FIELD_COMP_FIELD',
+'COLUMN', N'CHOOSEDS'
+GO
+-- ----------------------------- 2020-02-26 add by zhangxt--------------end

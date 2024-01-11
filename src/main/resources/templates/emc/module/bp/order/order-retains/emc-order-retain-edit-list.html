@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    Gikam.requirejs([
+        '/static/emc/module/bp/order/order-retains/emc-order-retain.js',
+        '/static/emc/module/bp/order/order-retains/emc-order-retain-edit-list.js'
+    ]);
+    emcOrderRetain.editPage.init(Gikam.getElParam([[${param}]]));
+    /*]]>*/
+</script>

@@ -1,0 +1,27 @@
+-- ----------------------------- 2020-10-19 add by shixw------------begin
+
+alter table T_CORE_LES_INSTANCE add column READONLYFLAG VARCHAR(1) null comment '只读标志';
+
+CALL INSERTI18N('T_CORE_LES_INSTANCE.READONLYFLAG', 'LES实例的只读标志', '只读标志', 'zh-CN', '只读标志');
+
+
+commit;
+
+-- ----------------------------- 2020-10-19 add by shixw------------end
+
+-- ----------------------------- 2020-10-19 add by shixw------------begin
+
+alter table T_CORE_LES_TEMPLATE_UNIT add column EDITFLAG VARCHAR(36) null comment '编辑标志';
+
+CALL INSERTI18N('T_CORE_LES_TEMPLATE_UNIT.EDITFLAG', 'LES模板组件的编辑标志', '编辑标志', 'zh-CN', '编辑标志');
+
+
+alter table T_CORE_LES_INSTANCE_UNIT add column EDITFLAG VARCHAR(36) null comment '编辑标志';
+
+CALL INSERTI18N('T_CORE_LES_INSTANCE_UNIT.EDITFLAG', 'LES实例组件的编辑标志', '编辑标志', 'zh-CN', '编辑标志');
+
+
+
+commit;
+
+-- ----------------------------- 2020-10-19 add by shixw------------end

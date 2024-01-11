@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ 
+                      '/static/emc/module/mdm/bizmdm/clients/emc-client.js',
+                      '/static/emc/module/mdm/bizmdm/clients/emc-monitor-point-simple-choose-list.js'
+                    ]);
+    emcClient.monitorPointSimpleChoosePage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>

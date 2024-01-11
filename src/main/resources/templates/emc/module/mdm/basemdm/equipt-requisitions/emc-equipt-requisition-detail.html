@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/emc/module/mdm/basemdm/equipt-requisitions/emc-equipt-requisition.js',
+                      '/static/emc/module/mdm/basemdm/equipt-requisitions/emc-equipt-requisition-detail.js'
+                    ]);
+    emcEquiptRequisition.detailPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>
+

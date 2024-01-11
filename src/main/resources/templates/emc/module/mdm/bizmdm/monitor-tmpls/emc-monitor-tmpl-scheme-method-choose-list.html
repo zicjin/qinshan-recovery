@@ -1,0 +1,8 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/emc/module/mdm/bizmdm/monitor-tmpls/emc-monitor-tmpl.js',
+                      '/static/emc/module/mdm/bizmdm/monitor-tmpls/emc-monitor-tmpl-scheme-method-choose-list.js'
+                    ]);
+    emcMonitorTmpl.schemeMethodChoosePage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>

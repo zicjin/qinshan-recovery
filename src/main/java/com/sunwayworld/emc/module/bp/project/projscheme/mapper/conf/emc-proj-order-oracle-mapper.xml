@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.emc.module.bp.project.projscheme.mapper.EmcProjOrderMapper">
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM (SELECT A.*,
+                       B.METHODNAME,
+                       B.TESTMETHODBASIS,
+                       B.MAXVERSIONID AS METHODVERSIONID,
+                       D.STDNAME,
+                       E.INDEXNAME,
+                       E.INDEX1,
+                       E.INDEX2,
+                       E.INDEX3,
+                       F.TESTMETHODID,
+                       G.TESTNAME
+                  FROM T_EMC_PROJ_ORDER A
+                  LEFT JOIN T_EMC_METHOD B
+                    ON A.METHODID = B.ID
+                  LEFT JOIN T_EMC_INDEX_CATEGORY D
+                    ON A.INDEXCATEGORYID = D.ID
+                  LEFT JOIN T_EMC_ORDER_INDEX E
+                    ON A.INDEXID = E.ID
+                  LEFT JOIN T_EMC_ITEM_GROUP F
+                    ON A.ITEMGROUPID = F.ID
+                  LEFT JOIN T_EMC_TEST G
+                    ON A.TESTID = G.ID) T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ID ASC
+            </otherwise>
+        </choose>
+    </select>
+
+
+    <!-- 查询详情 -->
+    <select id="selectDetail" parameterType="java.lang.Long" resultType="map">
+        SELECT T.*
+          FROM T_EMC_PROJ_ORDER T
+         WHERE T.ID = #{id}
+    </select>
+
+
+    <select id="selectByProjId" parameterType="java.lang.Long" resultType="map">
+        SELECT A.ITEMGROUP AS ITEMGROUPS,
+               B.MONITORPOINTCATEGORYNAME,
+               B.MONITORPOINTNO,
+               B.MONITORPOINTNAME,
+               B.CYCLE,
+               B.FREQUENCY,
+               C.ORGNAME
+          FROM T_EMC_PROJ_ORDER A
+          LEFT JOIN T_EMC_PROJ_SCHEME B
+            ON A.PROJSCHEMEID = B.ID
+          LEFT JOIN T_CORE_ORG C
+            ON B.SAMPLEORGID = C.ID
+        WHERE B.PROJID=#{projId}
+    </select>
+</mapper>

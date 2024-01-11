@@ -1,0 +1,8 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/emc/module/item/leave-replenishs/emc-leave-replenish.js',
+                      '/static/emc/module/item/leave-replenishs/emc-leave-replenish-audit-list.js'
+                    ]);
+    emcLeaveReplenish.auditPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>

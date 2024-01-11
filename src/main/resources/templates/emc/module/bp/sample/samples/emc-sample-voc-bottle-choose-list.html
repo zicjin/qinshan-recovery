@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/emc/module/bp/sample/samples/emc-sample.js',
+                      '/static/emc/module/bp/sample/samples/emc-sample-voc-bottle-choose-list.js'
+                    ]);
+    emcSample.vocBottleChoosePage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>
+

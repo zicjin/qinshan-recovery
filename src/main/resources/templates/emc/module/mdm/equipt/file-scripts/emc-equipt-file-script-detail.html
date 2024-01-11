@@ -1,0 +1,6 @@
+<script th:inline="javascript">
+    Gikam.requirejs([ '/static/emc/module/mdm/equipt/file-scripts/emc-equipt-file-script.js',
+                      '/static/emc/module/mdm/equipt/file-scripts/emc-equipt-file-script-detail.js'
+                    ]);
+    emcEquiptFileScript.detailPage.init(Gikam.getElParam([[${param}]]));
+</script>

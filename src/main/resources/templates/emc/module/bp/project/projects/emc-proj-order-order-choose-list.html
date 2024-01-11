@@ -1,0 +1,8 @@
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    Gikam.requirejs([ '/static/emc/module/bp/project/projects/emc-project.js',
+        '/static/emc/module/bp/project/projects/emc-proj-order-order-choose-list.js'
+    ]);
+    emcProject.projOrderOrderChoosePage.init(Gikam.getElParam([[${param}]]));
+    /*]]>*/
+</script>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.emc.module.mdm.crm.mapper.CrmOpportunityContractMapper">
+
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.* FROM
+            (SELECT C.*,
+                    (SELECT ORG.ORGNAME FROM T_CORE_ORG ORG WHERE ORG.ID = O.CORPID) AS CORPNAME,
+                    (SELECT U.USERNAME FROM T_CORE_USER U WHERE U.ID = C.CONTRACTORDERER) AS CONTRACTORDERERNAME,
+                    O.DOMAINID,
+                    O.REQCYCLE,
+                    O.AUTHORIZATIONUNIT,
+                    O.PROJECTNAME,
+                    O.SAMPLESOURCE,
+                    O.CREATEDBYNAME,
+                    O.BIDDER,
+                    O.BIDDERNAME,
+                    O.CUSTOMERID,
+                    O.OPPORTUNITYNO,
+                    O.IMPLEMENTATIONTIMES,
+                    O.REMAININGFREQUENCY,
+                    O.SCANNEDCOPYOFCONTRACT,
+                    O.ORIGINALCONTRACT,
+                    O.CUSTOMERNAME,
+                    O.CORPID,
+                    O.REQSUBTYP
+              FROM T_CRM_OPPORTUNITY_CONTRACT C
+            LEFT JOIN T_CRM_OPPORTUNITY_MAIN O
+              ON O.ID = C.OPPORTUNITYID) T
+        <where>
+            AND exists(select 1 from t_crm_opportunity_main o where o.id = t.opportunityid and o.contractflag = '1'  )
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ID DESC
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="selectFileByCondition" resultType="map">
+        SELECT T.*
+        FROM LIMS_CRM_YMJC.T_CORE_FILE T
+        <where>
+            <if test="targetId != null">
+                TARGETID = #{targetId}
+            </if>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ID
+            </otherwise>
+        </choose>
+    </select>
+</mapper>

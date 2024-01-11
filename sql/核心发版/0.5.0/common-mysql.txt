@@ -1,0 +1,179 @@
+-- ----------------------------- 2020-04-03 add by shixw--------------begin
+
+alter table T_CORE_REPORT_CONFIG add column ORDERNO BIGINT null comment '排序码';
+
+alter table T_CORE_REPORT_CONFIG_LINE add column ORDERNO BIGINT null comment '排序码';
+
+
+UPDATE T_CORE_REPORT_CONFIG A,
+( SELECT ( @RN := @RN + 1 ) RN, ID FROM T_CORE_REPORT_CONFIG WHERE ORDERNO IS NULL ORDER BY ID ) B,
+( SELECT @RN := 0 ) RN 
+SET A.ORDERNO = B.RN 
+WHERE A.ID = B.ID;
+
+UPDATE T_CORE_REPORT_CONFIG_LINE A,
+( SELECT ( @RN := @RN + 1 ) RN, ID FROM T_CORE_REPORT_CONFIG_LINE WHERE ORDERNO IS NULL ORDER BY REPORTCONFIGID,ID ) B,
+( SELECT @RN := 0 ) RN 
+SET A.ORDERNO = B.RN 
+WHERE A.ID = B.ID;
+
+commit;
+
+-- ----------------------------- 2020-04-03 add by shixw--------------end
+
+-- ----------------------------- 2020-04-13 add by zhanghang--------------begin
+
+CREATE TABLE `t_core_les_ds`  (
+  `ID` bigint(20) NOT NULL COMMENT '主键',
+  `SCOPE` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '作用域',
+  `LESDSNAME` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '数据源名称',
+  `SQLCONTENT` text CHARACTER SET utf8 COLLATE utf8_general_ci COMMENT 'sql内容',
+  `SQLCLAUSE` varchar(512) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT 'sql条件',
+  `DISPLAYCATEGORY` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '展示类型',
+  `CREATEDBYID` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '制单人编码',
+  `CREATEDBYNAME` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '制单人名称',
+  `CREATEDTIME` datetime(0) DEFAULT NULL COMMENT '制单日期',
+  `CREATEDBYORGID` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '单据单位编码',
+  `CREATEDBYORGNAME` varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '单据单位名称',
+  `ACTIVATEDFLAG` varchar(1) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '启用标志（0-否 1-是）',
+  `ACTIVATEDBYID` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '启用人编码',
+  `ACTIVATEDBYNAME` varchar(36) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '启用人名称',
+  `ACTIVATEDTIME` datetime(0) DEFAULT NULL COMMENT '启用时间',
+  PRIMARY KEY (`ID`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = 'LES数据源表' ROW_FORMAT = Dynamic;
+
+CREATE TABLE `t_core_les_ds_field`  (
+  `ID` bigint(20) NOT NULL COMMENT '主键',
+  `LESDSID` bigint(20) DEFAULT NULL COMMENT 'les数据源表ID',
+  `TABLENAME` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '表名字',
+  `COLUMNNAME` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '字段名字',
+  `LESCOLUMNNAME` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT 'LES表格显示字段名字',
+  `WRITEBACK` varchar(1) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '是否反写',
+  `CREATEDBYID` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '制单人编码',
+  `CREATEDBYNAME` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '制单人名称',
+  `CREATEDTIME` datetime(0) DEFAULT NULL COMMENT '制单日期',
+  `CREATEDBYORGID` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '单据单位编码',
+  `CREATEDBYORGNAME` varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '单据单位名称',
+  PRIMARY KEY (`ID`) USING BTREE,
+  INDEX `IDX_CORE_LES_DS_FIELD_DSID`(`LESDSID`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = 'LES数据源字段表' ROW_FORMAT = Dynamic;
+
+
+INSERT INTO T_CORE_CODE_CATEGORY ( ID, CODECATEGORYNAME, CODECLASSID, ORDERNO ) VALUES ( 'coreLesDsScope', '作用域', 'sys', '6' );
+INSERT INTO T_CORE_CODE ( ID, CODENAME, CODECATEGORYID, ORDERNO, CREATEDBYID, CREATEDBYNAME, LASTSUSPENDEDFLAG, CODE ) VALUES
+    ( F_GET_SEQ_CORE(), '公有', 'coreLesDsScope', 1, 'admin', '系统管理员', '0', 'public' );
+INSERT INTO T_CORE_CODE ( ID, CODENAME, CODECATEGORYID, ORDERNO, CREATEDBYID, CREATEDBYNAME, LASTSUSPENDEDFLAG, CODE ) VALUES
+    ( F_GET_SEQ_CORE(), '私有', 'coreLesDsScope', 2, 'admin', '系统管理员', '0', 'protect' );
+
+
+INSERT INTO T_CORE_CODE_CATEGORY ( ID, CODECATEGORYNAME, CODECLASSID, ORDERNO ) VALUES ( 'coreLesDisplayCategory', 'LES数据源显示类型', 'sys', '6' );
+INSERT INTO T_CORE_CODE ( ID, CODENAME, CODECATEGORYID, ORDERNO, CREATEDBYID, CREATEDBYNAME, LASTSUSPENDEDFLAG, CODE ) VALUES
+    ( F_GET_SEQ_CORE(), '表格', 'coreLesDisplayCategory', 1, 'admin', '系统管理员', '0', 'table' );
+INSERT INTO T_CORE_CODE ( ID, CODENAME, CODECATEGORYID, ORDERNO, CREATEDBYID, CREATEDBYNAME, LASTSUSPENDEDFLAG, CODE ) VALUES
+    ( F_GET_SEQ_CORE(), '详细', 'coreLesDisplayCategory', 2, 'admin', '系统管理员', '0', 'detail' );
+INSERT INTO t_core_admin_choose_config(ID, NAME, TITLE, CATEGORY, URL, WIDTH) VALUES (F_GET_SEQ_CORE(), 'LES数据源', 'LES数据源', 'core-les-ds', '/secure/core/module/item/les-dses/page/choose-list', '');
+INSERT INTO T_CORE_TABLE (ID,AUDITABLE,ATTACHMENT) VALUES ('T_CORE_LES_DS', '0', '0');
+INSERT INTO T_CORE_TABLE (ID,AUDITABLE,ATTACHMENT) VALUES ('T_CORE_LES_DS_FIELD', '0', '0');
+INSERT INTO t_core_table_hierarchy(ID, TABLENAME, MASTERTABLENAME, REFERCOLUMN) VALUES (F_GET_SEQ_CORE(), 'T_CORE_LES_DS_FIELD', 'T_CORE_LES_DS', 'LESDSID');
+COMMIT;
+
+-- ----------------------------- 2020-04-13 add by zhanghang--------------end
+
+-- ----------------------------- 2020-04-13 add by shixw------------begin
+
+delete from T_CORE_CODE_CATEGORY where id = 'messagestatus';
+
+delete from T_CORE_CODE where CODECATEGORYID = 'messagestatus';
+
+INSERT INTO T_CORE_CODE_CATEGORY(ID, CODECATEGORYNAME, CODECLASSID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME)
+    VALUES ('messagestatus', '站内消息状态', 'sys', NULL, 1, NULL, NULL, NULL, NULL);
+INSERT INTO T_CORE_CODE(ID, CODE, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME)
+    VALUES (F_GET_SEQ_CORE(), '0', '新建', 'messagestatus', NULL, 1, 0, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL);
+INSERT INTO T_CORE_CODE(ID, CODE, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME)
+    VALUES (F_GET_SEQ_CORE(), '1', '已发送', 'messagestatus', NULL, 2, 0, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL);
+
+delete from T_CORE_CODE_CATEGORY where id = 'messagereceiveflag';
+
+delete from T_CORE_CODE where CODECATEGORYID = 'messagereceiveflag';
+
+INSERT INTO T_CORE_CODE_CATEGORY(ID, CODECATEGORYNAME, CODECLASSID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME)
+    VALUES ('messagereceiveflag', '站内消息签收标志', 'sys', NULL, 1, NULL, NULL, NULL, NULL);
+INSERT INTO T_CORE_CODE(ID, CODE, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME)
+    VALUES (F_GET_SEQ_CORE(), '0', '未签收', 'messagereceiveflag', NULL, 1, 0, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL);
+INSERT INTO T_CORE_CODE(ID, CODE, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME)
+    VALUES (F_GET_SEQ_CORE(), '1', '已签收', 'messagereceiveflag', NULL, 2, 0, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL);
+
+
+delete from T_CORE_CODE where CODECATEGORYID = 'remoteCallRequestStatus';
+
+INSERT INTO T_CORE_CODE (ID, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME, CODE, CREATEDBYID, CREATEDBYNAME, CREATEDTIME) VALUES (F_GET_SEQ_CORE(), '成功', 'remoteCallRequestStatus', NULL, 0, NULL, '0', NULL, NULL, NULL, '1', 'admin', '系统管理员', NULL);
+INSERT INTO T_CORE_CODE (ID, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME, CODE, CREATEDBYID, CREATEDBYNAME, CREATEDTIME) VALUES (F_GET_SEQ_CORE(), '失败', 'remoteCallRequestStatus', NULL, 0, NULL, '0', NULL, NULL, NULL, '-1', 'admin', '系统管理员', NULL);
+INSERT INTO T_CORE_CODE (ID, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME, CODE, CREATEDBYID, CREATEDBYNAME, CREATEDTIME) VALUES (F_GET_SEQ_CORE(), '待处理', 'remoteCallRequestStatus', NULL, 0, NULL, '0', NULL, NULL, NULL, '0', 'admin', '系统管理员', NULL);
+
+delete from T_CORE_CODE where CODECATEGORYID = 'reportCategory';
+
+
+INSERT INTO T_CORE_CODE (ID, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME, CODE, CREATEDBYID, CREATEDBYNAME, CREATEDTIME) VALUES (F_GET_SEQ_CORE(), '常规报表', 'reportCategory', NULL, 1, 0, '0', NULL, NULL, NULL, 'common', NULL, NULL, NULL);
+INSERT INTO T_CORE_CODE (ID, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME, CODE, CREATEDBYID, CREATEDBYNAME, CREATEDTIME) VALUES (F_GET_SEQ_CORE(), '查询报表', 'reportCategory', NULL, 1, 0, '0', NULL, NULL, NULL, 'select', NULL, NULL, NULL);
+
+delete from T_CORE_CODE where CODECATEGORYID = 'remoteCallResponseStatus';
+
+INSERT INTO T_CORE_CODE (ID, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME, CODE, CREATEDBYID, CREATEDBYNAME, CREATEDTIME) VALUES (F_GET_SEQ_CORE(), '成功', 'remoteCallResponseStatus', NULL, 0, NULL, '0', NULL, NULL, NULL, '1', 'admin', '系统管理员', NULL);
+INSERT INTO T_CORE_CODE (ID, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME, CODE, CREATEDBYID, CREATEDBYNAME, CREATEDTIME) VALUES (F_GET_SEQ_CORE(), '失败', 'remoteCallResponseStatus', NULL, 0, NULL, '0', NULL, NULL, NULL, '0', 'admin', '系统管理员', NULL);
+
+
+commit;
+
+
+-- ----------------------------- 2020-04-13 add by shixw------------end
+
+-- ----------------------------- 2020-04-17 add by shixw------------begin
+
+-- 该表为首页用户配置表，核心0.4.0版本已经更改为用户方案配置，所以删除掉，请一定执行完核心0.4.0版本sql后再删除
+drop table T_CORE_WKUP_CONF;
+
+-- ----------------------------- 2020-04-17 add by shixw------------end
+
+-- ----------------------------- 2020-04-18 add by zhangpf--------------begin
+INSERT INTO T_CORE_ADMIN_CHOOSE_CONFIG(ID, NAME, TITLE, CATEGORY, URL, WIDTH) 
+VALUES (F_GET_SEQ_CORE(), '流程配置', '流程配置', 'bpmn-proc', '/secure/core/module/sys/bpmn-procs/page/choose-list', NULL);
+
+INSERT INTO T_CORE_ADMIN_CHOOSE_CONFIG(ID, NAME, TITLE, CATEGORY, URL, WIDTH)
+VALUES (F_GET_SEQ_CORE(), '报表组配置', '报表组配置', 'report-group-config', '/secure/core/module/sys/report-configs/page/choose-list', NULL);
+commit;
+-- ----------------------------- 2020-04-18 add by zhangpf--------------end
+
+-- ----------------------------- 2020-04-20 add by liyang--------------begin
+INSERT INTO `t_core_constant`(`ID`, `CONSTANTVALUE`, `CONSTANTDESC`, `CLASSFICATION`, `SHOW`, `CREATEDTIME`, `CREATEDBYID`, `CREATEDBYNAME`, `VERSION`) 
+VALUES ('INIT-PASSWORD-MODIFY', 'false', '登陆系统时是否修改默认密码', '系统', '1', NULL, NULL, NULL, 0);
+commit;
+-- ----------------------------- 2020-04-20 add by liyang--------------end
+
+-- ----------------------------- 2020-04-20 add by liyang--------------begin
+update t_core_constant set CONSTANTVALUE = '0' where ID =  'INIT-PASSWORD-MODIFY';
+commit;
+-- ----------------------------- 2020-04-20 add by liyang--------------end
+
+-- ----------------------------- 2020-04-21 add by zhangjingri--------------begin
+ALTER TABLE `t_core_admin_page_config` 
+ADD COLUMN `VERSION` int(0) NULL COMMENT '版本' AFTER `CONTENT`,
+ADD COLUMN `ACTIVATEDFLAG` varchar(2) NULL COMMENT '启用标志' AFTER `VERSION`,
+ADD COLUMN `ACTIVATEDBYID` varchar(32) NULL COMMENT '启用人编码' AFTER `ACTIVATEDFLAG`,
+ADD COLUMN `ACTIVATEDBYNAME` varchar(96) NULL COMMENT '启用人名称' AFTER `ACTIVATEDBYID`,
+ADD COLUMN `ACTIVATEDTIME` datetime(0) NULL COMMENT '启用时间' AFTER `ACTIVATEDBYNAME`;
+-- ----------------------------- 2020-04-21 add by zhangjingri--------------end
+
+-- ----------------------------- 2020-04-23 add by shixw------------begin
+
+ALTER TABLE `t_core_page_field_comp_field` 
+CHANGE COLUMN `PAGEFIELD` `FIELD` varchar(120) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '页面配置中的field' AFTER `FIELDNAME`,
+CHANGE COLUMN `PAGETITLE` `TITLE` varchar(120) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '页面配置中的title' AFTER `FIELD`;
+
+-- ----------------------------- 2020-04-23 add by shixw------------end
+
+-- ----------------------------- 2020-04-24 add by shixw------------begin
+
+ALTER TABLE `t_core_page_field_comp_field` 
+MODIFY COLUMN `VALUE` varchar(540) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '表单用-默认值';
+
+-- ----------------------------- 2020-04-24 add by shixw------------end

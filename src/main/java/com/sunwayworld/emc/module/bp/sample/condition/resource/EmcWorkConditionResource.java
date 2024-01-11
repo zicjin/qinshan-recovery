@@ -1,0 +1,20 @@
+package com.sunwayworld.emc.module.bp.sample.condition.resource;
+
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.sunwayworld.emc.module.bp.sample.condition.bean.EmcWorkConditionBean;
+import com.sunwayworld.emc.module.bp.sample.condition.bean.EmcWorkConditionLineBean;
+import com.sunwayworld.emc.module.bp.sample.condition.service.EmcWorkConditionService;
+import com.sunwayworld.framework.data.page.Page;
+import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;
+import com.sunwayworld.framework.support.base.resource.GenericResource;
+
+@RequestMapping("/secure/emc/module/bp/sample/conditions")
+public interface EmcWorkConditionResource extends GenericResource<EmcWorkConditionService, EmcWorkConditionBean, Long> {
+
+    Page<EmcWorkConditionLineBean> queryLineByPagination(RestJsonWrapperBean wrapper);
+
+    void insertLine(RestJsonWrapperBean wrapper);
+
+    void deleteLine(RestJsonWrapperBean wrapper);
+}

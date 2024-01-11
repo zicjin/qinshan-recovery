@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/emc/module/bp/project/projects/emc-project.js',
+                      '/static/emc/module/bp/project/plans/emc-project-plan.js',
+                      '/static/emc/module/bp/project/plans/emc-project-plan-schedule.js'
+                   ]);
+    emcProjectPlan.schedulePage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>

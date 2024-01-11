@@ -1,0 +1,28 @@
+-- ----------------------------- 2020-04-15 add by zhanghang------------begin
+
+CREATE TABLE `t_core_mytask` (
+  `ID` bigint(20) NOT NULL COMMENT '主键',
+  `TASKDESC` varchar(600) DEFAULT NULL COMMENT '日程描述',
+  `TASKSTARTTIME` datetime DEFAULT NULL COMMENT '日程开始时间',
+  `TASKENDTIME` datetime DEFAULT NULL COMMENT '日程结束时间',
+  `CREATEDBYID` varchar(32) DEFAULT NULL COMMENT '制单人编码',
+  `CREATEDBYNAME` varchar(64) DEFAULT NULL COMMENT '制单人名称',
+  `CREATEDTIME` datetime DEFAULT NULL COMMENT '制单日期',
+  `CREATEDBYORGID` varchar(32) DEFAULT NULL COMMENT '单据单位编码',
+  `CREATEDBYORGNAME` varchar(256) DEFAULT NULL COMMENT '单据单位名称',
+  PRIMARY KEY (`ID`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='日常管理表';
+
+INSERT INTO T_CORE_TABLE (ID,AUDITABLE,ATTACHMENT) VALUES ('T_CORE_MYTASK', '0', '0');
+commit;
+
+-- ----------------------------- 2020-04-15 add by zhanghang------------end
+
+-- ----------------------------- 2020-04-18 add by liyang--------------begin
+INSERT INTO `t_core_menu`(`ID`, `MENUNAME`, `HREF`, `PARENTID`, `ORDERNO`, `MENUINITNAME`, `ICON`, `TODOICON`) 
+VALUES ('88', '日常管理', NULL, NULL, 9, '日常管理', '076.svg', '');
+
+INSERT INTO `t_core_menu`(`ID`, `MENUNAME`, `HREF`, `PARENTID`, `ORDERNO`, `MENUINITNAME`, `ICON`, `TODOICON`) 
+VALUES ('8801', '日程', '/secure/core/module/my-tasks/page/edit-list', '88', 8801, '日程', '076.svg', '');
+commit;
+-- ----------------------------- 2020-04-18 add by liyang--------------end

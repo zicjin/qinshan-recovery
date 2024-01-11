@@ -1,0 +1,163 @@
+<th:block th:replace="module/gikam/workspace" />
+
+<script>
+    // 报表打印
+    Gikam.extend(Gikam, {
+        // 获取报表地址，用于直接使用iframe加载
+        getReportUrl : function(reportConfigLineId, paramValueJson) {
+            var _this = this
+            var reportLineQueryUrl = Gikam.printf('/secure/core/module/sys/report-configs/lines/{lineId}', {
+                lineId : reportConfigLineId
+            });
+            var reportUrl = '';
+            Gikam.getTextSync(IFM_CONTEXT + reportLineQueryUrl).done(function(data) {
+                if (Gikam.isEmpty(data)) {
+                    return;
+                }
+                var reportLine = JSON.parse(data);
+                if (reportLine.reportCategory === 'reportingService') {
+                    reportUrl = _this.getReportingServiceReportUrl(reportLine, paramValueJson);
+                } else if (reportLine.reportCategory === 'fanruan') {
+                    reportUrl = _this.getFanruanReportUrl(reportLine, paramValueJson);
+                }
+            });
+            return reportUrl;
+        },
+
+        // 获取帆软报表地址
+        getFanruanReportUrl : function(reportLine, paramValueJson) {
+            var frViewUrl = IFM_CONTEXT + '/ReportServer?reportlet=';
+            var fileName = reportLine.ext$.filename;
+            var param = reportLine.param;
+            if (param === '' || param === null || param === undefined) {
+                frViewUrl = frViewUrl + fileName;
+            } else {
+                var reportParam = this.parseReportParam(param, paramValueJson);
+                if (!reportParam) {
+                    frViewUrl = '';
+                } else {
+                    frViewUrl = frViewUrl + fileName + '&' + reportParam;
+                }
+            }
+
+            return frViewUrl;
+        },
+
+        // 获取Reporting Service 报表地址
+        getReportingServiceReportUrl : function(reportLine, paramValueJson) {
+            var reportingServiceServerQueryUrl = Gikam.printf(IFM_CONTEXT + '/secure/core/module/sys/constants/{id}', {
+                id : 'REPORTING_SERVICE_SERVER_URL'
+            });
+            var rsViewUrl = '';
+            var _this = this;
+            Gikam.getTextSync(reportingServiceServerQueryUrl).done(function(data) {
+                if (Gikam.isEmpty(data) || Gikam.isEmpty(JSON.parse(data).constantValue)) {
+                    return;
+                }
+                rsViewUrl = JSON.parse(data).constantValue;
+                var reportPath = reportLine.ext$.reportpath
+                if (Gikam.isEmpty(reportPath)) {
+                    return;
+                }
+                rsViewUrl = rsViewUrl + "?" + reportPath;
+                var param = reportLine.param;
+                if (param !== '' && param !== null && param !== undefined) {
+                    var reportParam = _this.parseReportParam(param, paramValueJson);
+                    if (!reportParam) {
+                        rsViewUrl = '';
+                    } else {
+                        rsViewUrl = rsViewUrl + '&' + reportParam;
+                    }
+                }
+            });
+            return rsViewUrl;
+        },
+
+        // 解析报表的参数
+        parseReportParam : function(param, paramValueJson) {
+            var paramArray = param.split('&')
+            // 将参数值的属性名全部转为小写，不区分大小写
+            var lowerCaseParamValueJson = {};
+            for ( var key in paramValueJson) {
+                // 忽略继承的属性
+                if (paramValueJson.hasOwnProperty(key)) {
+                    lowerCaseParamValueJson[key.toLowerCase()] = paramValueJson[key]
+                }
+            }
+            var reportParam = '';
+            var paramValueMissed = false;
+            for (var i = 0; i < paramArray.length; i++) {
+                var paramStr = paramArray[i];
+                var array = paramStr.split('=');
+                if (array.length > 1) {
+                    // 将参数列名转为小写
+                    var paramName = array[1].toLowerCase();
+                    var paramValue = lowerCaseParamValueJson[paramName];
+                    if (!paramValue && (lowerCaseParamValueJson['ext$'] && !lowerCaseParamValueJson['ext$'][paramName])) {
+                        paramValueMissed = true;
+                    }
+                    reportParam += array[0] + '=' + paramValue + '&'
+                }
+            }
+            if (reportParam.endsWith('&')) {
+                reportParam = reportParam.substring(0, reportParam.length - 1)
+            }
+            if (paramValueMissed) {
+                return;
+            }
+            return reportParam;
+        }
+    });
+</script>
+
+<script>
+    function init() {
+        Gikam.getText(Gikam.IFM_CONTEXT + '/core/module/sys/logins/account').done(function(user){
+            Gikam.create('layout', {
+                id : 'emc-report-layout',
+                renderTo : document.body,
+                center : {
+                    items : [ {
+                        id : 'emc-report-grid',
+                        type : 'grid',
+                        columns : [ {
+                            field : 'reportName',
+                            title : '报表名称',
+                            type : 'link',
+                        } ],
+                        filter : false,
+                        page : false,
+                        fill : true,
+                        url : IFM_CONTEXT + '/secure/core/module/sys/report-configs/homePageReport/lines/queries',
+                        requestData : {
+                            filter_userId : JSON.parse(user).id,
+                            activatedFlag_SEQ : '1',
+                        },
+                        onCellClick : function(field, row) {
+                            var reportUrl = Gikam.getReportUrl(row.id);
+                            if (Gikam.isEmpty(reportUrl)) {
+                                Gikam.alert('EMC.MODULE.SYS.REPORTS.TIP.PARAMTER_VALUE_MISSING');
+                                return;
+                            }
+                            window.open(reportUrl);
+                        },
+                    } ]
+                }
+            });
+
+        })
+    }
+
+    init();
+</script>
+
+<style>
+@media screen and (max-width: 760px) {
+    .layout>.center-container>.center {
+        height:100% !important;
+    }
+    .grid>div.grid-body , .scroll-wrapper.adaptive {
+        max-height: none !important;
+    }
+}
+</style>

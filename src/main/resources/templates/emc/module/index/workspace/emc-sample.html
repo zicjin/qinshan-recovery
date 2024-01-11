@@ -1,0 +1,42 @@
+<th:block th:replace="module/gikam/workspace" />
+<script>
+    var userId = parent.Gikam.loginUser.id;
+    Gikam.create('layout', {
+        id : 'emc-sample-layout',
+        renderTo : document.body,
+        center : {
+            items : [ {
+                id : 'emc-sample-grid',
+                type : 'grid',
+                columns : [ {
+                    field : 'ext$.testorgname',
+                    title : parent.Gikam.propI18N('T_EMC_FOLDER.TESTORGNAME')
+                }, {
+                    field : 'orderCategory',
+                    title : parent.Gikam.propI18N('T_EMC_FOLDER.ORDERCATEGORY'),
+                    width : 140
+                }, {
+                    field : 'folderNo',
+                    title : parent.Gikam.propI18N('T_EMC_FOLDER.FOLDERNO'),
+                    width : 110
+                }, {
+                    field : 'planSampleDate',
+                    title : parent.Gikam.propI18N('T_EMC_FOLDER.PLANSAMPLEDATE'),
+                    width : 110
+                } ],
+                filter : false,
+                page : false,
+                fill : true,
+                columnsFill : true,
+                url : '/secure/emc/module/bp/bp/folders/queries/undoable',
+                requestData : {
+                    targetType : 'sampleprepare',
+                    sceneUserId : userId,
+                    sampleUserId : userId,
+                    projectstatus_DIFFER : 'cancel',
+                    status_SEQ : 'tosample',
+                }
+            } ]
+        }
+    });
+</script>

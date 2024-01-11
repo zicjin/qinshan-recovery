@@ -1,0 +1,8 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/emc/module/bp/sample/samples/emc-sample.js',
+                      '/static/emc/module/bp/sample/samples/emc-sample-soli-order-desc-detail.js'
+                    ]);
+    emcSample.soliOrderDescDetailPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>

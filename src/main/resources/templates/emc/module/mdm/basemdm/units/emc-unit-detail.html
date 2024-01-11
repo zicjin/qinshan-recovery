@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/emc/module/mdm/basemdm/units/emc-unit.js',
+                      '/static/emc/module/mdm/basemdm/units/emc-unit-detail.js'
+                    ]);
+    emcUnit.detailPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>
+

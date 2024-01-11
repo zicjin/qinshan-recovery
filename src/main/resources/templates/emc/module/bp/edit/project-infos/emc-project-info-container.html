@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/emc/module/bp/sample/samples/emc-sample.js',
+                      '/static/emc/module/bp/edit/project-infos/emc-project-info-container.js'
+                    ]);
+    emcProjectInfo.orderPrepareContainerPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>
+

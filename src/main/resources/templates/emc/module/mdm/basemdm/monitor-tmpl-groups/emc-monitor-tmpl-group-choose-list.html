@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ 
+                      '/static/emc/module/mdm/basemdm/monitor-tmpl-groups/emc-monitor-tmpl-group.js',
+                      '/static/emc/module/mdm/basemdm/monitor-tmpl-groups/emc-monitor-tmpl-group-choose-list.js'
+                    ]);
+    emcMonitorTmplGroup.choosePage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>

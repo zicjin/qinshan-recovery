@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.emc.module.bp.bp.mapper.PfOrderMapper">
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM (SELECT O.*,
+                       F.PROCESSSTATUS FOLDERSTATUS,
+                       F.MONITORPOINTNAME,
+                       F.MONITORPOINTNO,
+                       P.PROJNO,
+                       P.PROJNAME,
+                       P.SAMPLE,
+                       F.FOLDERNO,
+                       F.SAMPLEUSERID,
+                       F.SAMPLEUSERNAME,
+                       S.ACCEPTEDTIME
+                    <if test="relatedRunId != null">
+                        ,K.TESTNAME,
+                        K.EQUIPTID,
+                       K.EQUIPTNAME,
+                       K.RUNID
+                    </if>
+                  FROM T_EMC_ORDER O
+                  LEFT JOIN T_EMC_FOLDER F
+                    ON F.ID = O.FOLDERID
+                  LEFT JOIN T_EMC_PROJECT P
+                    ON P.ID = O.PROJID
+                  LEFT JOIN T_EMC_SAMPLE S
+                    ON O.SAMPLEID = S.ID
+                <if test="relatedRunId != null">
+                  LEFT JOIN (SELECT B.ORDERID,
+                                    B.RUNID,
+                                    WM_CONCAT(DISTINCT B.TESTNAME)  AS TESTNAME,
+                                    WM_CONCAT(DISTINCT C.EQUIPTID)  AS EQUIPTID,
+                                    WM_CONCAT(DISTINCT C.EQUIPTNAME)  AS EQUIPTNAME
+                               FROM T_EMC_ORDER_TASK B
+                               LEFT JOIN T_EMC_EQUIPT C
+                                 ON B.EQUIPTID = C.ID
+                               WHERE B.RUNID IN
+                                (SELECT REGEXP_SUBSTR(#{relatedRunId}, '[^,]+', 1, LEVEL, 'i') AS STR
+                                   FROM DUAL CONNECT BY REGEXP_SUBSTR(#{relatedRunId}, '[^,]+', 1, LEVEL, 'i') IS NOT NULL)
+                              GROUP BY B.ORDERID,B.RUNID) K
+                     ON O.ID = K.ORDERID
+                </if>
+                ) T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+            <include refid="com.sunwayworld.emc.module.bp.project.project.mapper.EmcProjectMapper.projectStatusWhereClause">
+                <property name="tableAlias" value="T"/>
+                <property name="projectIdColumnName" value="PROJID"/>
+            </include>
+            <if test="target_unassigned != null">
+                AND EXISTS (SELECT 1
+                                  FROM ${targetSampleTable} TAR_
+                                 WHERE TAR_.${targetSampleIdColumn} = T.${targetSampleIdColumn}
+                                 <if test="targetSampleCategoryFilterColumn != null">
+                                     AND TAR_.${targetSampleCategoryFilterColumn} = #{targetSampleCategoryFilterValue}
+                                 </if>
+                                 <if test="targetFilterColumn1 != null">
+                                     AND TAR_.${targetFilterColumn1} = #{targetFilterValue1}
+                                 </if>
+                                )
+            </if>
+            <if test="target_assigned != null">
+                AND EXISTS (SELECT 1
+                              FROM ${targetTable} TAR_
+                              WHERE TAR_.${targetColumn} = T.ID
+                                <if test="targetFilterColumn1 != null">
+                                    AND TAR_.${targetFilterColumn1} = #{targetFilterValue1}
+                                </if>
+                                <if test="targetFilterColumn2 != null">
+                                    AND TAR_.${targetFilterColumn2} = #{targetFilterValue2}
+                                </if>
+                                )
+            </if>
+            <if test="targetOrder_unassigned != null">
+                AND NOT EXISTS (SELECT 1
+                                  FROM ${targetOrderTable} TAR_
+                                 WHERE TAR_.${targetOrderColumn} = T.ID
+                                 <if test="targetOrderIdFilterColumn != null">
+                                     AND TAR_.${targetOrderIdFilterColumn} = #{targetOrderIdFilterValue}
+                                 </if>
+                                 <if test="targetFilterColumn1 != null">
+                                     AND TAR_.${targetFilterColumn1} = #{targetFilterValue1}
+                                 </if>
+                                )
+            </if>
+            <if test="targetOrderSample_unassigned != null">
+                AND NOT EXISTS (SELECT 1 FROM T_EMC_ORDER TAR_ WHERE TAR_.ID = T.ID AND TAR_.SAMPLEID IS NOT NULL)
+            </if>
+            <if test="sampleId == 'empty'">
+                AND ( T.SAMPLEID IS NULL OR T.SAMPLEID = '')
+            </if>
+            <if test="sampleUserId != null">
+                AND EXISTS (SELECT 1 FROM T_EMC_FOLDER F WHERE T.FOLDERID = F.ID AND F.PROCESSSTATUS = 'done'
+                            AND (INSTR( ',' || SAMPLEUSERID || ',',',' || #{sampleUserId} || ',' ) > 0
+                            OR INSTR(',' || SCENEUSERID || ',',',' || #{sceneUserId} || ',' ) > 0)
+                            OR INSTR( ',' || PLANSAMPLEUSERID || ',',',' || #{sampleUserId} || ',' ) > 0)
+            </if>
+            <if test="relatedRunId != null">
+                <!-- 此SQL待优化 -->
+                AND EXISTS (SELECT 1 FROM T_EMC_ORDER_TASK K WHERE K.ORDERID = T.ID AND K.RUNID IN
+                    (SELECT REGEXP_SUBSTR(#{relatedRunId}, '[^,]+', 1, LEVEL, 'i') AS STR
+                       FROM DUAL CONNECT BY REGEXP_SUBSTR(#{relatedRunId}, '[^,]+', 1, LEVEL, 'i') IS NOT NULL)
+                )
+                AND ID NOT IN (SELECT RELATEDORDERID FROM T_EMC_QC_RELATED_ORDER R WHERE R.QCORDERID = #{id} AND R.TASKRUNID = T.RUNID)
+            </if>
+            <if test="targetType == 'selectRunOrder' and testMethodId != null">
+                AND EXISTS (SELECT 1 FROM T_EMC_ORDER_TASK K WHERE K.ORDERID = T.ID AND K.STATUS = 'logged' AND K.ANALYSISTYPE = 'analysis' AND K.RUNID IS NULL AND K.TESTMETHODID IN (#{testMethodId}))
+            </if>
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.FOLDERID ASC, T.ORDERNO ASC, T.ID DESC
+            </otherwise>
+        </choose>
+    </select>
+
+
+    <!-- 查询详情 -->
+    <select id="selectDetail" parameterType="java.lang.Long" resultType="map">
+        SELECT T.*
+          FROM T_EMC_ORDER T
+         WHERE T.ID = #{id}
+    </select>
+
+    <!-- 样品数据查询 -->
+    <select id="selectOrderList" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM (SELECT O.*,
+                       F.PROCESSSTATUS FOLDERSTATUS,
+                       F.MONITORPOINTNAME,
+                       F.MONITORPOINTNO,
+                       F.SAMPLEUSERNAME,
+                       P.PROJNO,
+                       P.PROJNAME,
+                       P.TESTORGNAME,
+                       P.ENTRUSTORGNAME,
+                       P.BIZCATEGORYCODE,
+                       F.FOLDERNO,
+                       C.ORDERSTATUS
+                  FROM T_EMC_ORDER O
+                  LEFT JOIN T_EMC_FOLDER F
+                    ON F.ID = O.FOLDERID
+                  LEFT JOIN T_EMC_PROJECT P
+                    ON P.ID = O.PROJID
+                  LEFT JOIN (SELECT A.ID AS ORDERID,
+                                    CASE WHEN INSTR( WM_CONCAT ( CASE B.RESULTSTATUS WHEN 'Done' THEN '1' ELSE '0' END ), '0' ) > 0 THEN '0' ELSE '1' END AS ORDERSTATUS
+                                FROM T_EMC_ORDER A
+                                LEFT JOIN T_EMC_ORDER_TASK_RESULT B
+                                  ON A.ID = B.ORDERID
+                                GROUP BY A.ID) C
+                    ON O.ID = C.ORDERID) T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+            <include refid="com.sunwayworld.emc.module.bp.project.project.mapper.EmcProjectMapper.projectStatusWhereClause">
+                <property name="tableAlias" value="T"/>
+                <property name="projectIdColumnName" value="PROJID"/>
+            </include>
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.SAMPLEBEGINDATE DESC, T.ORDERNO DESC, T.ID DESC
+            </otherwise>
+        </choose>
+    </select>
+
+</mapper>

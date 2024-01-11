@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.emc.module.mdm.file.file.mapper.EmcFileMapper">
+
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM (SELECT E.*,
+                       F.ID AS CATERGORTID,
+                       F.FILECATEGORYNAME,
+                       F.FILECATEGORYNO,
+                       C.ORGNAME AS ARCHIVEORGNAME,
+                       O.USERNAME AS REGISTERUSERNAME,
+                       U.USERNAME AS DEPARTMENTUSERNAME,
+                       S.USERNAME AS AUDITUSERNAME,
+                       M.USERNAME AS APPROVEUSERNAME
+                  FROM T_EMC_FILE E
+                  LEFT JOIN T_EMC_FILE_CATEGORY F
+                    ON E.FILECATEGORYID = F.ID
+                  LEFT JOIN T_CORE_ORG C
+                    ON E.ARCHIVEORGID = C.ID
+                  LEFT JOIN T_CORE_USER O
+                    ON E.REGISTERUSERID = O.ID
+                  LEFT JOIN T_CORE_USER U
+                    ON E.DEPARTMENTUSERID = U.ID
+                  LEFT JOIN T_CORE_USER S
+                    ON E.AUDITUSERID = S.ID
+                  LEFT JOIN T_CORE_USER M
+                    ON E.APPROVEUSERID = M.ID) T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+            <if test='authority== "1"'>
+                AND EXISTS (SELECT 1 
+                              FROM T_EMC_ORG_PERMISSION P 
+                              WHERE P.TARGETID=T.CATERGORTID 
+                              AND P.PERMISSIONTYPEID = 'T_EMC_FILE_CATEGORY' 
+                              AND  ORGNAME IN (SELECT O.ORGNAME 
+                                               FROM T_CORE_USER_PERMISSION P, T_CORE_ORG O 
+                                               WHERE P.TARGETID = O.ID 
+                                               AND P.PERMISSIONTYPEID = 'T_CORE_ORG' 
+                                               AND P.USERID = #{usercode}))
+            </if>
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ID DESC
+            </otherwise>
+        </choose>
+    </select>
+
+    <!-- 查询详情 -->
+    <select id="selectDetail" parameterType="java.lang.Long" resultType="map">
+        SELECT T.*,
+               C.ORGNAME AS ARCHIVEORGNAME,
+               O.USERNAME AS REGISTERUSERNAME,
+               U.USERNAME AS DEPARTMENTUSERNAME,
+               S.USERNAME AS AUDITUSERNAME,
+               M.USERNAME AS APPROVEUSERNAME
+          FROM T_EMC_FILE T
+          LEFT JOIN T_CORE_ORG C
+            ON T.ARCHIVEORGID = C.ID
+          LEFT JOIN T_CORE_USER O
+            ON T.REGISTERUSERID = O.ID
+          LEFT JOIN T_CORE_USER U
+            ON T.DEPARTMENTUSERID = U.ID
+          LEFT JOIN T_CORE_USER S
+            ON T.AUDITUSERID = S.ID
+          LEFT JOIN T_CORE_USER M
+            ON T.APPROVEUSERID = M.ID
+         WHERE T.ID  = #{id}
+    </select>
+    
+</mapper>

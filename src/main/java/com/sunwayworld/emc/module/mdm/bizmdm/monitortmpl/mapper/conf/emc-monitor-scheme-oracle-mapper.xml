@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.emc.module.mdm.bizmdm.monitortmpl.mapper.EmcMonitorSchemeMapper">
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM (SELECT A.*,
+                       F.TESTNAME,
+                       B.METHODID,
+                       B.ANALYSISORGID,
+                       B.DEFAULTFLAG,
+                       B.INPUTUSERID,
+                       B.INPUTUSERNAME,
+                       C.METHODNAME,
+                       C.MAXVERSIONID AS METHODVERSIONID,
+                       C.TESTMETHODBASIS,
+                       M.MONITORTMPLNAME,
+                       M.MONITORTMPLGROUPID,
+                       G.MONITORTMPLGROUP,
+                       D.ORGNAME AS ANALYSISORGNAME,
+                       E.ACTIVATEDFLAG
+                  FROM T_EMC_MONITOR_SCHEME A
+                 INNER JOIN T_EMC_MONITOR_TMPL M
+                    ON A.MONITORTMPLID = M.ID
+                  LEFT JOIN T_EMC_TEST_METHOD B
+                    ON A.TESTMETHODID = B.ID
+                  LEFT JOIN T_EMC_METHOD C
+                    ON B.METHODID = C.ID
+                  LEFT JOIN T_EMC_MONITOR_TMPL_GROUP G
+                    ON M.MONITORTMPLGROUPID = G.ID
+                  LEFT JOIN T_EMC_TEST F
+                    ON A.TESTID = F.ID
+                  LEFT JOIN T_CORE_ORG D
+                    ON B.ANALYSISORGID = D.ID
+                  LEFT JOIN T_EMC_ITEM_GROUP E
+                    ON A.ITEMGROUPID = E.ID) T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+            <if test='order_assigned != null'> <!-- 查询样品已选择的方案分析项组 -->
+               AND EXISTS (SELECT 1
+                             FROM T_EMC_ORDER_ITEM_GROUP G
+                            WHERE G.TESTID = T.TESTID
+                              AND G.SCHEMENAME = T.SCHEMENAME
+                              AND G.ITEMGROUPID = T.ITEMGROUPID
+                              AND G.ORDERID = #{orderId})
+            </if>
+            <if test='order_unassigned != null'> <!-- 查询样品未选择的方案分析项组 -->
+               AND NOT EXISTS (SELECT 1
+                                 FROM T_EMC_ORDER_ITEM_GROUP G
+                                WHERE G.TESTID = T.TESTID
+                                  AND G.SCHEMENAME = T.SCHEMENAME
+                                  AND G.ITEMGROUP = T.ITEMGROUP
+                                  AND G.ORDERID = #{orderId})
+            </if>
+            <if test="target_unassigned != null">
+                AND NOT EXISTS (SELECT 1
+                                  FROM ${targetTable1} TAR_
+                                 WHERE TAR_.${targetSchemeIdColumn} = T.ID
+                                 <if test="targetFilterColumn1 != null">
+                                     AND TAR_.${targetFilterColumn1} = #{targetFilterValue1}
+                                 </if>
+                                )
+            </if>
+            <if test="target_assigned != null"> <!-- 查询两个监测模版下方法的交集 -->
+                AND EXISTS (SELECT 1
+                                  FROM ${targetTable2} TAR_
+                                 WHERE TAR_.${targetMatchColumn} = T.${thisMatchColumn}
+                                 <if test="targetFilterColumn2 != null">
+                                     AND TAR_.${targetFilterColumn2} = #{targetFilterValue2}
+                                 </if>
+                                 <if test="targetFilterColumn3 != null">
+                                     AND TAR_.${targetFilterColumn3} = #{targetFilterValue3}
+                                 </if>
+                                )
+            </if>
+            <if test='proj_order_unassigned != null'> <!-- 查询监测方案样品未选择的方案分析项组 -->
+               AND NOT EXISTS (SELECT 1
+                                 FROM T_EMC_PROJ_ORDER G
+                                WHERE G.TESTID = T.TESTID
+                                  AND G.SCHEMENAME = T.SCHEMENAME
+                                  AND G.ITEMGROUP = T.ITEMGROUP
+                                  AND G.PROJSCHEMEID = #{projSchemeId})
+            </if>
+            <if test='order_task_assigned != null'> <!-- 查询样品测试已选择的方案分析项组 -->
+               AND EXISTS (SELECT 1
+                             FROM T_EMC_ORDER_TASK O
+                            WHERE O.TESTID = T.TESTID
+                              AND O.SCHEMENAME = T.SCHEMENAME
+                              AND O.METHODID = T.METHODID
+                              AND O.ORDERID = #{orderId})
+               AND EXISTS (SELECT 1
+                             FROM T_EMC_ORDER_ITEM_GROUP P
+                           WHERE P.ITEMGROUPID = T.ITEMGROUPID
+                             AND P.ORDERID = #{orderId})
+            </if>
+            <if test='order_task_unassigned != null'> <!-- 查询样品测试未选择的方案分析项组 -->
+               AND NOT EXISTS (SELECT 1
+                                 FROM T_EMC_ORDER_TASK O
+                                WHERE O.TESTID = T.TESTID
+                                  AND O.METHODID = T.METHODID
+                                  AND O.ORDERID = #{orderId})
+            </if>
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.SCHEMENAME DESC, T.SORTNUM DESC, T.ID DESC
+            </otherwise>
+        </choose>
+    </select>
+
+
+    <!-- 查询详情 -->
+    <select id="selectDetail" parameterType="java.lang.Long" resultType="map">
+        SELECT T.*
+          FROM T_EMC_MONITOR_SCHEME T
+         WHERE T.ID = #{id}
+    </select>
+
+</mapper>

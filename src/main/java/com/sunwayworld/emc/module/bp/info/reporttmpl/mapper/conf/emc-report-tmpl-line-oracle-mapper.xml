@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.emc.module.bp.info.reporttmpl.mapper.EmcReportTmplLineMapper">
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM (SELECT A.*, C.ITEMNAME, D.TESTNAME, E.MONITORTMPLNAME
+                  FROM T_EMC_REPORT_TMPL_LINE A
+                  LEFT JOIN T_EMC_TEST_METHOD B
+                    ON A.TESTID = B.ID
+                  LEFT JOIN T_EMC_ITEM C
+                    ON A.ITEMID = C.ID
+                  LEFT JOIN T_EMC_TEST D
+                    ON B.TESTID = D.ID
+                  LEFT JOIN T_EMC_MONITOR_TMPL E
+                    ON A.MONITORTMPLID = E.ID) T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ORDERNO ASC
+            </otherwise>
+        </choose>
+    </select>
+
+</mapper>

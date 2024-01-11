@@ -1,0 +1,8 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/emc/module/bp/info/report-tmpls/emc-report-tmpl.js',
+                      '/static/emc/module/bp/info/report-tmpls/emc-report-tmpl-line-edit-list.js',
+                    ]);
+    emcReportTmpl.lineEditPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>

@@ -1,0 +1,8 @@
+-- ----------------------------- 2020-11-24 add by shixw------------begin
+
+alter table T_CORE_SYSTEM_CONFIG add IEACCESSTIP VARCHAR2(36);
+comment on column T_CORE_SYSTEM_CONFIG.IEACCESSTIP is 'IE访问提示';
+
+CALL INSERTI18N('T_CORE_SYSTEM_CONFIG.IEACCESSTIP', '系统配置的IE访问提示', 'IE访问提示', 'zh-CN', 'IE访问提示');
+
+-- ----------------------------- 2020-11-24 add by shixw------------end

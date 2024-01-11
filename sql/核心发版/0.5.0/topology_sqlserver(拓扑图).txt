@@ -1,0 +1,29 @@
+﻿-- --------------------------------------- 2020-04-04 zhangjr begin -----------------
+CREATE TABlE T_CORE_TOPOLOGY (
+     ID BIGINT NOT NULL,
+     CODE VARCHAR(64) NOT NULL ,
+     USAGE VARCHAR(192) NOT NULL ,
+     JSON TEXT NULL ,
+     SVG  TEXT NULL ,
+     CREATEDBYID VARCHAR(32)  NULL ,
+     CREATEDBYNAME VARCHAR(64)  NULL ,
+     CREATEDTIME DATETIME NULL ,
+     CREATEDBYORGID VARCHAR(32)  NULL ,
+     CREATEDBYORGNAME VARCHAR(64)  NULL ,
+ CONSTRAINT PK_CORE_TOPOLOGY PRIMARY KEY(ID));
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'拓扑结构图' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_TOPOLOGY';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'主键' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_TOPOLOGY', @level2type=N'COLUMN',@level2name=N'ID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'编号（唯一值）' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_TOPOLOGY', @level2type=N'COLUMN',@level2name=N'CODE';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'用途' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_TOPOLOGY', @level2type=N'COLUMN',@level2name=N'USAGE'; 
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'JSON格式的图表' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_TOPOLOGY', @level2type=N'COLUMN',@level2name=N'JSON';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'SVG格式的图表' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_TOPOLOGY', @level2type=N'COLUMN',@level2name=N'SVG';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_TOPOLOGY', @level2type=N'COLUMN',@level2name=N'CREATEDBYID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_TOPOLOGY', @level2type=N'COLUMN',@level2name=N'CREATEDBYNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_TOPOLOGY', @level2type=N'COLUMN',@level2name=N'CREATEDTIME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_TOPOLOGY', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_TOPOLOGY', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGNAME';
+
+INSERT INTO T_CORE_MENU(ID, MENUNAME, HREF, PARENTID, ORDERNO, MENUINITNAME, ICON, TODOICON)
+VALUES ('9331', '拓扑结构图', '/secure/core/module/topologies/page/edit-list', '93', 9331, '拓扑结构图', '036.svg', NULL);
+-- --------------------------------------- 2020-04-04 zhangjr end -----------------

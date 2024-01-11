@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    Gikam.requirejs([
+        '/static/emc/module/mdm/bizmdm/comparisons/emc-comparison.js',
+        '/static/emc/module/mdm/bizmdm/comparisons/emc-comparison-result-edit-list.js'
+    ]);
+    emcComparison.resultPage.init(Gikam.getElParam([[${param}]]));
+    /*]]>*/
+</script>

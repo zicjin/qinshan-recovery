@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    Gikam.requirejs([
+        '/static/emc/module/bp/result/runs/emc-run-weighing.js',
+        '/static/emc/module/bp/result/runs/emc-run-weighting-detail.js'
+    ]);
+    emcRunWeighing.detailPage.init(Gikam.getElParam([[${param}]]));
+    /*]]>*/
+</script>

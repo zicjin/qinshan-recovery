@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    Gikam.requirejs([
+        '/static/emc/module/bp/sample/samples/emc-sample.js',
+        '/static/emc/module/bp/sample/samples/emc-sample-folder-pic.js'
+    ]);
+    emcSample.folderPicPage.init(Gikam.getElParam([[${param}]]));
+    /*]]>*/
+</script>

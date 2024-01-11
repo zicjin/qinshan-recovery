@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.emc.module.bp.result.equiptcurve.mapper.EmcEquiptCurveMapper">
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+        FROM (SELECT A.*,
+        B.EQUIPTID AS EQUIPTNO,
+        B.EQUIPTNAME
+        FROM T_EMC_EQUIPT_CURVE A
+        LEFT JOIN T_EMC_EQUIPT B
+        ON A.EQUIPTID = B.ID) T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+            <if test='targetType == "EXPIREDATE_OUT"'>
+                AND ( T.EXPIREDATE IS NULL OR T.EXPIREDATE <![CDATA[>=]]> DATE_SUB(NOW(), INTERVAL 14 DAY)
+                )
+            </if>
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ID DESC
+            </otherwise>
+        </choose>
+    </select>
+
+</mapper>

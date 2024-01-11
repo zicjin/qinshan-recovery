@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([
+                      '/static/emc/module/mdm/basemdm/mtls/emc-mtl.js',
+                      '/static/emc/module/mdm/basemdm/mtls/emc-new-mtl-stock-choose-list.js'
+                    ]);
+    emcMtl.newStockChoosePage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>

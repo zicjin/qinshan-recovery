@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/emc/module/item/precautions/emc-precaution.js',
+                      '/static/emc/module/item/precautions/emc-precaution-detail.js'
+                    ]);
+    emcPrecaution.detailPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>
+

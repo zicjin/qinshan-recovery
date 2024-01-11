@@ -1,0 +1,8 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/emc/module/bp/result/runs/emc-run.js',
+                      '/static/emc/module/bp/result/runs/emc-run-batch-edit-item-list.js'
+                    ]);
+    emcRun.batchEditItemPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>

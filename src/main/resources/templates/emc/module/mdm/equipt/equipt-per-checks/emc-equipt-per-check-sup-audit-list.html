@@ -1,0 +1,8 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/emc/module/mdm/equipt/equipt-per-checks/emc-equipt-per-check.js',
+                      '/static/emc/module/mdm/equipt/equipt-per-checks/emc-equipt-per-check-sup-audit-list.js'
+                    ]);
+    emcEquiptPerCheck.supAuditPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>

@@ -1,0 +1,258 @@
+-- ----------------------------- 2020-06-12 add by zhangpf------------begin
+DROP TABLE T_CORE_LES_UNIT;
+CREATE TABLE T_CORE_LES_UNIT( 
+    ID NUMBER NOT NULL,
+    UNITNAME VARCHAR2(60)  NULL,
+    UNITCATEGORY VARCHAR2(36)  NULL,
+    BINDDS VARCHAR2(1)  NULL,
+    ICON VARCHAR2(270)  NULL,
+    ORDERNO NUMBER NULL,
+    AUDITTRAIL VARCHAR2(1)  NULL,
+    CONFIG CLOB NULL,
+    CREATEDBYID VARCHAR2(36)  NULL,
+    CREATEDBYNAME VARCHAR2(60)  NULL,
+    CREATEDTIME DATE NULL,
+    CREATEDBYORGID VARCHAR2(36)  NULL,
+    CREATEDBYORGNAME VARCHAR2(270)  NULL,
+    ACTIVATEDFLAG VARCHAR2(1)  NULL,
+    ACTIVATEDBYID VARCHAR2(36)  NULL,
+    ACTIVATEDBYNAME VARCHAR2(60)  NULL,
+    ACTIVATEDTIME DATE NULL
+ );
+COMMENT ON TABLE T_CORE_LES_UNIT IS 'LES组件';
+COMMENT ON COLUMN T_CORE_LES_UNIT.ID IS '主键';
+COMMENT ON COLUMN T_CORE_LES_UNIT.UNITNAME IS '组件名称';
+COMMENT ON COLUMN T_CORE_LES_UNIT.UNITCATEGORY IS '组件类型';
+COMMENT ON COLUMN T_CORE_LES_UNIT.BINDDS IS '是否绑定数据源（0-不绑定，1-绑定）';
+COMMENT ON COLUMN T_CORE_LES_UNIT.ICON IS '图标';
+COMMENT ON COLUMN T_CORE_LES_UNIT.ORDERNO IS '排序码';
+COMMENT ON COLUMN T_CORE_LES_UNIT.AUDITTRAIL IS '是否启用审计';
+COMMENT ON COLUMN T_CORE_LES_UNIT.CONFIG IS '配置';
+COMMENT ON COLUMN T_CORE_LES_UNIT.CREATEDBYID IS '制单人编码';
+COMMENT ON COLUMN T_CORE_LES_UNIT.CREATEDBYNAME IS '制单人名称';
+COMMENT ON COLUMN T_CORE_LES_UNIT.CREATEDTIME IS '制单时间';
+COMMENT ON COLUMN T_CORE_LES_UNIT.CREATEDBYORGID IS '制单人单位编码';
+COMMENT ON COLUMN T_CORE_LES_UNIT.CREATEDBYORGNAME IS '制单人单位名称';
+COMMENT ON COLUMN T_CORE_LES_UNIT.ACTIVATEDFLAG IS '启用标志';
+COMMENT ON COLUMN T_CORE_LES_UNIT.ACTIVATEDBYID IS '启用人编码';
+COMMENT ON COLUMN T_CORE_LES_UNIT.ACTIVATEDBYNAME IS '启用人名称';
+COMMENT ON COLUMN T_CORE_LES_UNIT.ACTIVATEDTIME IS '启用时间';
+
+ALTER TABLE T_CORE_LES_UNIT ADD CONSTRAINT PK_CORE_LES_UNIT PRIMARY KEY (ID);
+
+ALTER TABLE T_CORE_LES_DS_FIELD add ORDERNO NUMBER;
+COMMENT ON COLUMN T_CORE_LES_DS_FIELD.ORDERNO is '排序号';
+
+ALTER TABLE "T_CORE_LES_TEMPLATE_UNIT" RENAME COLUMN "TYPE" TO "UNITCATEGORY";
+ALTER TABLE "T_CORE_LES_TEMPLATE_UNIT" ADD ("CONFIG" CLOB );
+COMMENT ON COLUMN "T_CORE_LES_TEMPLATE_UNIT"."CONFIG" IS '组件配置';
+
+ALTER TABLE "T_CORE_LES_INSTANCE_UNIT" RENAME COLUMN "TYPE" TO "UNITCATEGORY";
+ALTER TABLE "T_CORE_LES_INSTANCE_UNIT" ADD ("CONFIG" CLOB );
+COMMENT ON COLUMN "T_CORE_LES_INSTANCE_UNIT"."CONFIG" IS '组件配置';
+
+INSERT INTO T_CORE_LES_UNIT("ID", "UNITNAME", "UNITCATEGORY", "BINDDS", "ICON", "ORDERNO", "AUDITTRAIL", "CONFIG", "ACTIVATEDFLAG") 
+VALUES (SEQ_CORE.NEXTVAL, '章节', 'chapter', '0', '/static/gikam/main/img/chapter.svg', '1', '1', '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print", "upgrade", "downgrade" ] }', '1');
+INSERT INTO T_CORE_LES_UNIT("ID", "UNITNAME", "UNITCATEGORY", "BINDDS", "ICON", "ORDERNO", "AUDITTRAIL", "CONFIG", "ACTIVATEDFLAG") 
+VALUES (SEQ_CORE.NEXTVAL, '富文本', 'ckeditor', '1', '/static/gikam/main/img/ckeditor.svg', '2', '1', '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print", "audit" ] }', '1');
+INSERT INTO T_CORE_LES_UNIT("ID", "UNITNAME", "UNITCATEGORY", "BINDDS", "ICON", "ORDERNO", "AUDITTRAIL", "CONFIG", "ACTIVATEDFLAG") 
+VALUES (SEQ_CORE.NEXTVAL, '分子式', 'chemDoodle', '0', '/static/gikam/main/img/chemDoodle.svg', '3', '0', '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print" ] }', '1');
+INSERT INTO T_CORE_LES_UNIT("ID", "UNITNAME", "UNITCATEGORY", "BINDDS", "ICON", "ORDERNO", "AUDITTRAIL", "CONFIG", "ACTIVATEDFLAG") 
+VALUES (SEQ_CORE.NEXTVAL, '图片绘制', 'imgDraw', '0', '/static/gikam/main/img/imgDraw.svg', '4', '0', '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print" ] }', '1');
+INSERT INTO T_CORE_LES_UNIT("ID", "UNITNAME", "UNITCATEGORY", "BINDDS", "ICON", "ORDERNO", "AUDITTRAIL", "CONFIG", "ACTIVATEDFLAG") 
+VALUES (SEQ_CORE.NEXTVAL, '表格', 'spread', '0', '/static/gikam/main/img/spread.svg', '5', '0', '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print" ] }', '1');
+INSERT INTO T_CORE_LES_UNIT("ID", "UNITNAME", "UNITCATEGORY", "BINDDS", "ICON", "ORDERNO", "AUDITTRAIL", "CONFIG", "ACTIVATEDFLAG") 
+VALUES (SEQ_CORE.NEXTVAL, '图片编辑器', 'imgEdit', '0', '/static/gikam/main/img/imgEdit.svg', '6', '0', '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print" ] }', '1');
+INSERT INTO T_CORE_LES_UNIT("ID", "UNITNAME", "UNITCATEGORY", "BINDDS", "ICON", "ORDERNO", "AUDITTRAIL", "CONFIG", "ACTIVATEDFLAG") 
+VALUES (SEQ_CORE.NEXTVAL, '图片上传', 'imgUpload', '0', '/static/gikam/main/img/imgUpload.svg', '7', '0', '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print" ] }', '1');
+INSERT INTO T_CORE_LES_UNIT("ID", "UNITNAME", "UNITCATEGORY", "BINDDS", "ICON", "ORDERNO", "AUDITTRAIL", "CONFIG", "ACTIVATEDFLAG") 
+VALUES (SEQ_CORE.NEXTVAL, '流程绘制', 'diagramDraw', '0', '/static/gikam/main/img/diagramDraw.svg', '8', '0', '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print" ] }', '1');
+INSERT INTO T_CORE_LES_UNIT("ID", "UNITNAME", "UNITCATEGORY", "BINDDS", "ICON", "ORDERNO", "AUDITTRAIL", "CONFIG", "ACTIVATEDFLAG") 
+VALUES (SEQ_CORE.NEXTVAL, '基础信息', 'baseInfo', '0', '/static/gikam/main/img/baseInfo.svg', '9', '0', '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print", "audit" ] }', '1');
+INSERT INTO T_CORE_LES_UNIT("ID", "UNITNAME", "UNITCATEGORY", "BINDDS", "ICON", "ORDERNO", "AUDITTRAIL", "CONFIG", "ACTIVATEDFLAG") 
+VALUES (SEQ_CORE.NEXTVAL, '查询列表', 'queryList', '1', '/static/gikam/main/img/queryList.svg', '10', '0', '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print" ] }', '1');
+
+CALL INSERTI18N('T_CORE_LES_DS_FIELD.ORDERNO', 'LES数据源字段的排序码', '排序码', 'zh-CN', '排序码');
+CALL INSERTI18N('T_CORE_LES_TEMPLATE_UNIT.CONFIG', 'LES模板组件配置', '组件配置', 'zh-CN', '组件配置');
+CALL INSERTI18N('T_CORE_LES_INSTANCE_UNIT.CONFIG', 'LES实例组件配置', '组件配置', 'zh-CN', '组件配置');
+UPDATE T_CORE_I18N SET CODE = 'T_CORE_LES_TEMPLATE_UNIT.UNITCATEGORY' WHERE CODE = 'T_CORE_LES_TEMPLATE_UNIT.TYPE';
+UPDATE T_CORE_I18N SET CODE = 'T_CORE_LES_INSTANCE_UNIT.UNITCATEGORY' WHERE CODE = 'T_CORE_LES_INSTANCE_UNIT.TYPE';
+COMMIT;
+-- ----------------------------- 2020-06-12 add by zhangpf------------end
+
+-- ----------------------------- 2020-06-13 add by zhangpf------------begin
+CALL INSERTI18N('CORE.MODULE.LES.LES_TEMPLATES.TIP.EXISTS_LOWER_VERSION_TEMPLATE_PROCESSSATUS_UNDONE', '存在较低版本未审核通过！', '存在较低版本未审核通过！', 'zh-CN', '存在较低版本未审核通过！');
+
+UPDATE T_CORE_LES_UNIT 
+  SET BINDDS = '1' 
+WHERE UNITCATEGORY = 'chapter';
+
+UPDATE T_CORE_LES_UNIT 
+  SET UNITNAME = '表格/表单'
+WHERE UNITCATEGORY = 'queryList';
+
+COMMIT;
+-- ----------------------------- 2020-06-13 add by zhangpf------------end
+
+-- ----------------------------- 2020-06-13 add by zhangpf------------begin
+ALTER TABLE "T_CORE_LES_TEMPLATE_UT" 
+MODIFY ("TYPE" VARCHAR2(36 BYTE) );
+
+ALTER TABLE "T_CORE_LES_TEMPLATE_UT" RENAME COLUMN "TYPE" TO "UNITCATEGORY";
+
+ALTER TABLE "T_CORE_LES_TEMPLATE_UT" 
+ADD ("CONFIG" CLOB );
+COMMENT ON COLUMN "T_CORE_LES_TEMPLATE_UT"."CONFIG" IS '组件配置';
+
+UPDATE T_CORE_I18N SET CODE = 'T_CORE_LES_TEMPLATE_UT.UNITCATEGORY' WHERE CODE = 'T_CORE_LES_TEMPLATE_UT.TYPE';
+CALL INSERTI18N('T_CORE_LES_TEMPLATE_UT.CONFIG', '组件配置', '组件配置', 'zh-CN', '组件配置');
+COMMIT;
+-- ----------------------------- 2020-06-13 add by zhangpf------------end
+
+-- ----------------------------- 2020-06-15 add by zhangpf------------begin
+DROP TABLE T_CORE_LES_UNIT;
+CREATE TABLE T_CORE_LES_UNIT( 
+    ID VARCHAR2(36) NOT NULL,
+    UNITNAME VARCHAR2(60)  NULL,
+    BINDDS VARCHAR2(1)  NULL,
+    ICON VARCHAR2(270)  NULL,
+    ORDERNO NUMBER NULL,
+    AUDITTRAIL VARCHAR2(1)  NULL,
+    CONFIG CLOB NULL,
+    CREATEDBYID VARCHAR2(36)  NULL,
+    CREATEDBYNAME VARCHAR2(60)  NULL,
+    CREATEDTIME DATE NULL,
+    CREATEDBYORGID VARCHAR2(36)  NULL,
+    CREATEDBYORGNAME VARCHAR2(270)  NULL,
+    ACTIVATEDFLAG VARCHAR2(1)  NULL,
+    ACTIVATEDBYID VARCHAR2(36)  NULL,
+    ACTIVATEDBYNAME VARCHAR2(60)  NULL,
+    ACTIVATEDTIME DATE NULL
+ );
+COMMENT ON TABLE T_CORE_LES_UNIT IS 'LES组件';
+COMMENT ON COLUMN T_CORE_LES_UNIT.ID IS '主键';
+COMMENT ON COLUMN T_CORE_LES_UNIT.UNITNAME IS '组件名称';
+COMMENT ON COLUMN T_CORE_LES_UNIT.BINDDS IS '是否绑定数据源（0-不绑定，1-绑定）';
+COMMENT ON COLUMN T_CORE_LES_UNIT.ICON IS '图标';
+COMMENT ON COLUMN T_CORE_LES_UNIT.ORDERNO IS '排序码';
+COMMENT ON COLUMN T_CORE_LES_UNIT.AUDITTRAIL IS '是否启用审计';
+COMMENT ON COLUMN T_CORE_LES_UNIT.CONFIG IS '配置';
+COMMENT ON COLUMN T_CORE_LES_UNIT.CREATEDBYID IS '制单人编码';
+COMMENT ON COLUMN T_CORE_LES_UNIT.CREATEDBYNAME IS '制单人名称';
+COMMENT ON COLUMN T_CORE_LES_UNIT.CREATEDTIME IS '制单时间';
+COMMENT ON COLUMN T_CORE_LES_UNIT.CREATEDBYORGID IS '制单人单位编码';
+COMMENT ON COLUMN T_CORE_LES_UNIT.CREATEDBYORGNAME IS '制单人单位名称';
+COMMENT ON COLUMN T_CORE_LES_UNIT.ACTIVATEDFLAG IS '启用标志';
+COMMENT ON COLUMN T_CORE_LES_UNIT.ACTIVATEDBYID IS '启用人编码';
+COMMENT ON COLUMN T_CORE_LES_UNIT.ACTIVATEDBYNAME IS '启用人名称';
+COMMENT ON COLUMN T_CORE_LES_UNIT.ACTIVATEDTIME IS '启用时间';
+
+INSERT INTO T_CORE_LES_UNIT("ID", "UNITNAME", "BINDDS", "ICON", "ORDERNO", "AUDITTRAIL", "CONFIG", "ACTIVATEDFLAG") 
+VALUES ('chapter', '章节', '1', '/static/gikam/main/img/chapter.svg', '1', '1', '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print", "upgrade", "downgrade" ] }', '1');
+INSERT INTO T_CORE_LES_UNIT("ID", "UNITNAME", "BINDDS", "ICON", "ORDERNO", "AUDITTRAIL", "CONFIG", "ACTIVATEDFLAG") 
+VALUES ('ckeditor', '富文本', '1', '/static/gikam/main/img/ckeditor.svg', '2', '1', '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print", "audit" ] }', '1');
+INSERT INTO T_CORE_LES_UNIT("ID", "UNITNAME", "BINDDS", "ICON", "ORDERNO", "AUDITTRAIL", "CONFIG", "ACTIVATEDFLAG") 
+VALUES ('chemDoodle', '分子式', '0', '/static/gikam/main/img/chemDoodle.svg', '3', '0', '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print" ] }', '1');
+INSERT INTO T_CORE_LES_UNIT("ID", "UNITNAME", "BINDDS", "ICON", "ORDERNO", "AUDITTRAIL", "CONFIG", "ACTIVATEDFLAG") 
+VALUES ('imgDraw', '图片绘制', '0', '/static/gikam/main/img/imgDraw.svg', '4', '0', '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print" ] }', '1');
+INSERT INTO T_CORE_LES_UNIT("ID", "UNITNAME", "BINDDS", "ICON", "ORDERNO", "AUDITTRAIL", "CONFIG", "ACTIVATEDFLAG") 
+VALUES ('spread', '表格', '0', '/static/gikam/main/img/spread.svg', '5', '0', '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print" ] }', '1');
+INSERT INTO T_CORE_LES_UNIT("ID", "UNITNAME", "BINDDS", "ICON", "ORDERNO", "AUDITTRAIL", "CONFIG", "ACTIVATEDFLAG") 
+VALUES ('imgEdit', '图片编辑器', '0', '/static/gikam/main/img/imgEdit.svg', '6', '0', '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print" ] }', '1');
+INSERT INTO T_CORE_LES_UNIT("ID", "UNITNAME", "BINDDS", "ICON", "ORDERNO", "AUDITTRAIL", "CONFIG", "ACTIVATEDFLAG") 
+VALUES ('imgUpload', '图片上传', '0', '/static/gikam/main/img/imgUpload.svg', '7', '0', '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print" ] }', '1');
+INSERT INTO T_CORE_LES_UNIT("ID", "UNITNAME", "BINDDS", "ICON", "ORDERNO", "AUDITTRAIL", "CONFIG", "ACTIVATEDFLAG") 
+VALUES ('diagramDraw', '流程绘制', '0', '/static/gikam/main/img/diagramDraw.svg', '8', '0', '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print" ] }', '1');
+INSERT INTO T_CORE_LES_UNIT("ID", "UNITNAME", "BINDDS", "ICON", "ORDERNO", "AUDITTRAIL", "CONFIG", "ACTIVATEDFLAG") 
+VALUES ('baseInfo', '基础信息', '0', '/static/gikam/main/img/baseInfo.svg', '9', '0', '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print", "audit" ] }', '1');
+INSERT INTO T_CORE_LES_UNIT("ID", "UNITNAME", "BINDDS", "ICON", "ORDERNO", "AUDITTRAIL", "CONFIG", "ACTIVATEDFLAG") 
+VALUES ('formOrQueryList', '表格/表单', '1', '/static/gikam/main/img/formOrQueryList.svg', '10', '0', '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print" ] }', '1');
+
+DELETE FROM T_CORE_I18N_MESSAGE 
+ WHERE I18NID = (SELECT N.ID FROM T_CORE_I18N N WHERE N.CODE = 'T_CORE_LES_UNIT.TYPE');
+DELETE FROM T_CORE_I18N WHERE CODE = 'T_CORE_LES_UNIT.TYPE';
+
+DELETE FROM T_CORE_I18N_MESSAGE 
+ WHERE I18NID = (SELECT N.ID FROM T_CORE_I18N N WHERE N.CODE = 'T_CORE_LES_UNIT.SVG');
+DELETE FROM T_CORE_I18N WHERE CODE = 'T_CORE_LES_UNIT.SVG'; 
+
+DELETE FROM T_CORE_I18N_MESSAGE 
+ WHERE I18NID = (SELECT N.ID FROM T_CORE_I18N N WHERE N.CODE = 'T_CORE_LES_UNIT.ENABLE');
+DELETE FROM T_CORE_I18N WHERE CODE = 'T_CORE_LES_UNIT.ENABLE'; 
+
+CALL INSERTI18N('T_CORE_LES_UNIT.ICON', 'LES组件图标', '组件图标', 'zh-CN', '组件图标');
+CALL INSERTI18N('T_CORE_LES_UNIT.AUDITTRAIL', 'LES组件是否开启审计跟踪', '是否开启审计跟踪', 'zh-CN', '是否开启审计跟踪');
+CALL INSERTI18N('T_CORE_LES_UNIT.CONFIG', 'LES组件配置', '组件配置', 'zh-CN', '组件配置');
+CALL INSERTI18N('T_CORE_LES_UNIT.ACTIVATEDFLAG', 'LES组件启用标志', '启用标志', 'zh-CN', '启用标志');
+CALL INSERTI18N('T_CORE_LES_UNIT.ACTIVATEDBYID', 'LES组件启用人编码', '启用人编码', 'zh-CN', '启用人编码');
+CALL INSERTI18N('T_CORE_LES_UNIT.ACTIVATEDBYNAME', 'LES组件启用人名称', '启用人名称', 'zh-CN', '启用人名称');
+CALL INSERTI18N('T_CORE_LES_UNIT.ACTIVATEDTIME', 'LES组件启用时间', '启用时间', 'zh-CN', '启用时间');
+
+UPDATE T_CORE_MENU SET HREF = '/secure/core/les/les-dses/page/edit-list' WHERE ID = '9602';
+UPDATE T_CORE_MENU SET HREF = '/secure/core/les/les-templates/page/edit-list' WHERE ID = '9604';
+UPDATE T_CORE_MENU SET HREF = '/secure/core/les/les-templates/page/audit-list' WHERE ID = '9605';
+
+COMMIT;
+-- ----------------------------- 2020-06-15 add by zhangpf------------end
+-- ----------------------------- 2020-06-16 add by zhangpf------------begin
+UPDATE T_CORE_ADMIN_CHOOSE_CONFIG 
+   SET URL = '/secure/core/les/les-templates/page/choose-list'
+ WHERE CATEGORY = 'les-template';
+ 
+ UPDATE T_CORE_ADMIN_CHOOSE_CONFIG 
+    SET URL = '/secure/core/les/les-dses/page/choose-list'
+  WHERE CATEGORY = 'core-les-ds';
+ 
+ COMMIT;
+-- ----------------------------- 2020-06-16 add by zhangpf------------end
+
+-- ----------------------------- 2020-06-18 add by zhangpf------------begin
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_LES_INSTANCE', '0', '1');
+
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_LES_INSTANCE_UNIT', '0', '1');
+
+INSERT INTO T_CORE_TABLE_HIERARCHY (ID, TABLENAME, MASTERTABLENAME, REFERCOLUMN)
+VALUES ('9604', 'T_CORE_LES_INSTANCE_UNIT', 'T_CORE_LES_INSTANCE', 'INSTANCEID');
+
+ COMMIT;
+-- ----------------------------- 2020-06-18 add by zhangpf------------end
+-- ----------------------------- 2020-07-02 add by zhangpf------------begin
+CALL INSERTI18N('CORE.MODULE.LES.LES_TEMPLATES.BUTTON.COPY','复制','复制','zh-CN','复制');
+CALL INSERTI18N('CORE.MODULE.LES.LES_TEMPLATES.MODEL.COPY','复制','复制','zh-CN','复制');
+
+UPDATE T_CORE_LES_UNIT 
+   SET CONFIG = '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print", "audit", "upgrade", "downgrade" ] }'
+ WHERE ID = 'chapter';
+ 
+UPDATE T_CORE_LES_UNIT 
+   SET CONFIG = '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print", "audit" ] }'
+ WHERE ID = 'chemDoodle';
+ 
+ UPDATE T_CORE_LES_UNIT 
+   SET CONFIG = '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print", "audit" ] }'
+ WHERE ID = 'imgDraw';
+ 
+UPDATE T_CORE_LES_UNIT 
+   SET CONFIG = '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print", "audit" ] }'
+ WHERE ID = 'spread';
+
+UPDATE T_CORE_LES_UNIT 
+   SET CONFIG = '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print", "audit" ] }'
+ WHERE ID = 'imgEdit';
+ 
+UPDATE T_CORE_LES_UNIT 
+   SET CONFIG = '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print", "audit" ] }'
+ WHERE ID = 'imgUpload';
+ 
+UPDATE T_CORE_LES_UNIT 
+   SET CONFIG = '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print", "audit" ] }'
+ WHERE ID = 'diagramDraw';
+
+UPDATE T_CORE_LES_UNIT 
+   SET CONFIG = '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print", "audit" ] }'
+ WHERE ID = 'formOrQueryList';
+
+COMMIT;
+-- ----------------------------- 2020-07-02 add by zhangpf------------end

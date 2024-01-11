@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<style type="text/css">
+body {
+    padding: 0;
+    margin: 0;
+}
+</style>
+
+</head>
+<body class="file-body"></body>
+<script th:inline="javascript">
+/*<![CDATA[*/
+    var IFM_CONTEXT = [[${#httpServletRequest.getScheme() + '://' + #httpServletRequest.getServerName() + ':' + #httpServletRequest.getServerPort()}]];
+    /*]]>*/
+</script>
+<script th:src="@{/static/plugin/jquery/jquery.min.js}"></script>
+<script>
+    var Gikam = {
+
+        getElParam : function(p) {
+            var param = {};
+            for ( var key in p) {
+                if (key === '_') {
+                    continue;
+                }
+                param[key] = p[key][0];
+            }
+            return param;
+        },
+
+        param : function(o, questionMark) {
+            var prev = questionMark === false ? '' : '?';
+            var serialize = '';
+            var _this = this;
+            $.each(o, function(p, v) {
+                if (v) {
+                    serialize += '&' + (p + '=' + v);
+                }
+            });
+            return prev + serialize.replace('&', '');
+        },
+
+        getText : function(url) {
+            return $.ajax({
+                url : url,
+                dataType : 'text',
+                type : 'get'
+            });
+        },
+
+        getJson : function(url) {
+            return $.ajax({
+                url : url,
+                dataType : 'json',
+                type : 'get'
+            });
+        },
+
+        printf : function(s, o) {
+            var _this = this;
+            return s.replace(/{[\w]+}/g, function(match) {
+                var value = o[match.replace(/[{}]/g, '')];
+                return _this.isEmpty(value) ? '' : value;
+            });
+        },
+
+        isEmpty : function(value, allowEmptyString) {
+            if (typeof value === 'string') {
+                value = value.trim();
+            }
+            return (value == null) || (!allowEmptyString ? value === '' : false) || (Array.isArray(value) && value.length === 0);
+        }
+    };
+</script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    WebJspSave =  function() {
+        webOffice = $('#web-office')[0];
+        webOffice.HttpInit();
+        webOffice.HttpAddPostString('id',this.param.fileId);
+        webOffice.HttpAddPostCurrFile("file","");//此句为固定语句，不管是保存word还是excel,ppt等都这样写
+        //strResults用于获得网页提交后的返回数据，可用以调试服务器端代码。
+        webOffice.HttpPost(IFM_CONTEXT + '/core/module/item/files/weboffices/'+ this.param.fileId +'/action/invoke'); 
+    };
+    
+     var WebOffice = function() {
+        
+        this.create = function() {
+            var tpl = (!!window.ActiveXObject || 'ActiveXObject' in window) ? '<object id="web-office" classid="clsid:FF09E4FA-BFAA-486E-ACB4-86EB0AE875D5" codebase="WebOffice.ocx#Version=2019,1,7,3"></object>' : '<object id="web-office" class="web-office" clsid="{FF09E4FA-BFAA-486E-ACB4-86EB0AE875D5}" type="application/x-itst-activex"></object>';
+            $('body').html(tpl), this.webOffice = $('#web-office')[0];
+            this.webOffice.width = $(window).width(), this.webOffice.height = $(window).height() - 50;
+        };
+
+        this.loadFile = function(url) {
+            this.webOffice.Open(encodeURI(url), false, url.substr(url.lastIndexOf('.') + 1).toLowerCase());
+            if (this.param.readonly === 'true') {
+                this.webOffice.Toolbars = false;
+                this.webOffice.ProtectDoc(1, 1, 'sunway');//保护文档模式
+            } else {
+              //  this.webOffice.Toolbars = false;
+                var $div = $('<div><input type="button" value="保存"  onclick="WebJspSave();"/></div>');
+                $div.insertBefore('#web-office');
+                if(this.param.printFlag !== 'false') {
+                   this.webOffice.Menubar = true;//文件按钮，可以选择打印功能
+                }
+                this.webOffice.ProtectDoc(0, 0, 'sunway');//保护文档模式
+                if(!this.param.waterText) { //没有水印就不走下面的程序了
+                    var waterText = this.param.waterText;
+                
+                    var obj = this.webOffice.ActiveDocument;//获取文档对象
+
+                    obj.Sections(1).Range.Select();// 选中某块区域
+                    obj.Application.ActiveWindow.ActivePane.View.SeekView = 9;
+                    //预置文字效果，文本，艺术字中所用字体的名称，字体大小，是否加粗，是否斜体，
+                    //艺术字边框左上角相对于文档左上角的位置（以磅为单位），
+                    //艺术字边框左上角相对于文档顶部的位置（以磅为单位）。
+                    obj.Application.Selection.HeaderFooter.Shapes.AddTextEffect(0,
+                            waterText, "宋体", 20, false, false, 0, 0).Select();// 设置水印文本
+                    obj.Application.Selection.ShapeRange.TextEffect.NormalizedHeight = 0;
+                    obj.Application.Selection.ShapeRange.Line.Visible = 0;
+                    obj.Application.Selection.ShapeRange.Fill.Visible = -1;
+                    obj.Application.Selection.ShapeRange.Fill.Solid();
+
+                    obj.Application.Selection.ShapeRange.Fill.ForeColor.RGB = 11053224;// 填充色，为十进制颜色
+                    obj.Application.Selection.ShapeRange.Fill.Transparency = 0;
+
+                    obj.Application.Selection.ShapeRange.Rotation = 315;// 0表示水平 315倾斜45度
+                    obj.Application.Selection.ShapeRange.LockAspectRatio = -1;// 调整尺寸时保持其原始比例
+                    obj.Application.Selection.ShapeRange.Height = obj.Application.CentimetersToPoints(4.92);//
+                    obj.Application.Selection.ShapeRange.Width = obj.Application.CentimetersToPoints(19.69);
+
+                    obj.Application.Selection.ShapeRange.WrapFormat.AllowOverlap = true;// 是否可重叠
+                    obj.Application.Selection.ShapeRange.WrapFormat.Side = 3;
+                    obj.Application.Selection.ShapeRange.WrapFormat.Type = 3;
+
+                    obj.Application.Selection.ShapeRange.RelativeHorizontalPosition = 0;// 指定形状范围的相对水平位置
+                    obj.Application.Selection.ShapeRange.RelativeVerticalPosition = 0;// 指定形状范围的相对垂直位置
+                    obj.Application.Selection.ShapeRange.Left = -999995;
+                    obj.Application.Selection.ShapeRange.Top = -999995;
+                    obj.Application.ActiveWindow.ActivePane.View.SeekView = 0;
+                    obj.Application.ActiveWindow.ActivePane.VerticalPercentScrolled = 2
+                }
+            }
+        };
+        
+        this.getFileUrl = function() {
+            return Gikam.getJson(IFM_CONTEXT + '/core/module/item/files/' + this.param.fileId);
+        };
+
+        this.getFileExt = function(fileExt){
+            var officeFile = ['doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx'];
+            
+            if (this.getType(officeFile, fileExt) > -1) {
+                return 'officeFile';
+            }
+        };
+        
+        this.getType = function(array, fileExt) {
+            var num = -1;
+            for (var i = 0; i < array.length; i++) {
+                if(array[i] == (fileExt)) {
+                    num = 0
+                    break;
+                }
+            }
+            return num;
+        };
+        
+        this.init = function(param) {
+            var _this = this;
+            this.param = param;
+            this.getFileUrl().done(function(file) {
+                    _this.create(), _this.loadFile(IFM_CONTEXT + decodeURIComponent(file.downloadUrl));
+            });
+        }
+    };
+    
+    window.onload = function() {
+        this.param = Gikam.getElParam([[${param}]]);
+        new WebOffice().init(Gikam.getElParam([[${param}]]));
+    }; 
+    
+    /*]]>*/
+</script>
+</html>

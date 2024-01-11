@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([
+        '/static/emc/module/bp/reagents/emc-reagent.js',
+        '/static/emc/module/bp/reagents/emc-mtl-stock-choose-list.js'
+    ]);
+    emcReagent.stockChoosePage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>

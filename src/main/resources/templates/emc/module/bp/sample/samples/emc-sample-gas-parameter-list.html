@@ -1,0 +1,8 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/emc/module/bp/sample/samples/emc-sample-gas-parameter.js',
+                      '/static/emc/module/bp/sample/samples/emc-sample-gas-parameter-list.js'
+                    ]);
+    emcSampleGasParameter.editPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>

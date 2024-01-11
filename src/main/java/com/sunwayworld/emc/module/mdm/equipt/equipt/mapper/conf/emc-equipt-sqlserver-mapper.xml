@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.emc.module.mdm.equipt.equipt.mapper.EmcEquiptMapper">
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM (SELECT E.*,
+                       C.ORGNAME  AS USEDDEPARTMENTNAME,
+                       O.ORGNAME  AS USEDDEPOSTNAME,
+                       U.USERNAME AS MAINTAINUSERNAME,
+                       S.USERNAME AS KEEPUSERNAME
+                  FROM T_EMC_EQUIPT E
+                  LEFT JOIN T_CORE_ORG C
+                    ON E.USEDDEPARTMENTID = C.ID
+                  LEFT JOIN T_CORE_ORG O
+                    ON E.USEDDEPOSTID = C.ID
+                  LEFT JOIN T_CORE_USER U
+                    ON E.MAINTAINUSERID = U.ID
+                  LEFT JOIN T_CORE_USER S
+                    ON E.KEEPUSERID = S.ID) T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+            <if test="target_unassigned != null">
+                AND NOT EXISTS (SELECT 1
+                                  FROM ${targetTable} TAR_
+                                 WHERE TAR_.${targetEquiptColumn} = T.ID
+                                 <if test="targetFilterColumn != null">
+                                     AND TAR_.${targetFilterColumn} = #{targetFilterValue}
+                                 </if>
+                                 <if test="targetFilterColumn1 != null">
+                                     AND TAR_.${targetFilterColumn1} = #{targetFilterValue1}
+                                 </if>
+                                ) 
+            </if>
+            <if test="target_equiptassigned != null">
+                <foreach collection="testMethodIdList" index="name" item="item">
+                    AND EXISTS ( SELECT 1
+                                   FROM T_EMC_EQUIPT_TEST_METHOD F 
+                                  WHERE F.EQUIPTID = T.ID
+                                  AND F.ANALYSISCATEGORY = 'sampling'
+                                  AND F.TESTMETHODID = #{item} )
+                </foreach> 
+            </if>
+            <if test='remind == "overdue"'>
+                    AND EXISTS( SELECT 1
+                                   FROM T_EMC_EQUIPT_PLAN TAR_
+                                  WHERE TAR_.EQUIPTID = T.ID
+                                  AND TAR_.MAINTENDDATE <![CDATA[<=]]> GETDATE() + TAR_.WARNINGDAYS
+                    )
+            </if>
+            
+             <if test='folderid != "" and folderid != null'>
+                    AND EXISTS ( SELECT 1
+                                FROM T_EMC_EQUIPT_TEST_METHOD E,
+                                    t_emc_order_task OT,
+                                    t_emc_order O,
+                                    T_EMC_EQUIPT_CATEGORY C
+                                WHERE
+                                    O.ID = OT.ORDERID
+                                AND OT.TESTMETHODID = E.TESTMETHODID
+                                AND E.EQUIPTID = T.ID
+                                AND C.ID = T.EQUIPTCATEGORYID
+                                AND C.EQUIPTCATEGORY = '现场'
+                                AND O.FOLDERID = #{folderid}
+                            )
+            </if>
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ID DESC
+            </otherwise>
+        </choose>
+    </select>
+    
+    
+    <!-- 查询详情 -->
+    <select id="selectDetail" parameterType="java.lang.Long" resultType="map">
+        SELECT E.*,
+               C.ORGNAME  AS USEDDEPARTMENTNAME,
+               O.ORGNAME  AS USEDDEPOSTNAME,
+               U.USERNAME AS MAINTAINUSERNAME,
+               S.USERNAME AS KEEPUSERNAME
+          FROM T_EMC_EQUIPT E
+          LEFT JOIN T_CORE_ORG C
+            ON E.USEDDEPARTMENTID = C.ID
+          LEFT JOIN T_CORE_ORG O
+            ON E.USEDDEPOSTID = C.ID
+          LEFT JOIN T_CORE_USER U
+            ON E.MAINTAINUSERID = U.ID
+          LEFT JOIN T_CORE_USER S
+            ON E.KEEPUSERID = S.ID
+         WHERE E.ID = #{id}
+
+    </select>
+    
+</mapper>

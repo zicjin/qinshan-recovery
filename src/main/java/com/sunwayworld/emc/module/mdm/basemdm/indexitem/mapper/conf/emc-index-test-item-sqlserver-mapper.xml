@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.emc.module.mdm.basemdm.indexitem.mapper.EmcIndexTestItemMapper">
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM (SELECT A.*,
+                       F.TESTCATEGORYDESC,
+                       B.TESTID AS TESTMETHODID,
+                       G.TESTNAME,
+                       C.METHODNAME,
+                       C.TESTMETHODBASIS,
+                       E.ITEMNAME,
+                       E.ITEMALIASNAME
+                  FROM T_EMC_INDEX_TEST_ITEM A
+                  LEFT JOIN T_EMC_TEST_METHOD B
+                    ON A.TESTID = B.ID
+                  LEFT JOIN T_EMC_TEST G
+                    ON B.TESTID = G.ID
+                  LEFT JOIN T_EMC_METHOD C
+                    ON A.METHODID = C.ID
+                  LEFT JOIN T_EMC_ITEM E
+                    ON A.ITEMID = E.ID
+                  LEFT JOIN T_EMC_TEST_CATEGORY F
+                    ON B.TESTCATEGORYID = F.ID) T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ID DESC
+            </otherwise>
+        </choose>
+    </select>
+    
+    <!-- 查询分析项的指标高低限  -->
+    <select id="selectIndexTestItemLimit" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM (SELECT A.*,
+                       B.INDEXLOWLIMIT,
+                       B.INDEXHIGHLIMIT
+                  FROM T_EMC_INDEX_TEST_ITEM A
+                  LEFT JOIN T_EMC_INDEX_SET B
+                    ON A.INDEXITEMID = B.INDEXITEMID) T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ID DESC
+            </otherwise>
+        </choose>
+    </select>
+    
+    <!-- 查询详情 -->
+    <select id="selectDetail" parameterType="java.lang.Long" resultType="map">
+        SELECT T.*
+          FROM T_EMC_INDEX_TEST_ITEM T
+         WHERE T.ID = #{id}
+    </select>
+    
+</mapper>

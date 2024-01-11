@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ 
+                      '/static/emc/module/mdm/purch-applies/emc-purch-apply.js',
+                      '/static/emc/module/mdm/purch-applies/emc-purch-apply-audit-list.js'
+                    ]);
+    emcPurchApply.auditPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>

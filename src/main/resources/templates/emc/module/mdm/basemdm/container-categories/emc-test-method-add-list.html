@@ -1,0 +1,10 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ 
+                      '/static/emc/module/mdm/basemdm/container-categories/emc-container-category.js',
+                      '/static/emc/module/mdm/basemdm/container-categories/emc-test-method-add-list.js'
+                    ]);
+    emcContainerCategory.chooseTMPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>
+

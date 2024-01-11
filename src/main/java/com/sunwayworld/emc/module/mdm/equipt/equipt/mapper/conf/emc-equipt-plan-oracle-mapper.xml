@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper	namespace="com.sunwayworld.emc.module.mdm.equipt.equipt.mapper.EmcEquiptPlanMapper">
+	<select id="selectByCondition" parameterType="map" resultType="map">
+		SELECT T.*
+		  FROM (SELECT A.*, B.MAINTEVENT, C.ORGNAME , D.CODENAME
+		          FROM T_EMC_EQUIPT_PLAN A
+		          LEFT JOIN T_EMC_EQUIPT_MAINT B
+		            ON A.MAINTID = B.ID
+		          LEFT JOIN T_CORE_ORG C
+		            ON A.ORGID = C.ID
+				  LEFT JOIN T_CORE_CODE D
+					ON B.MAINTEVENT = D.CODE
+					AND D.CODECATEGORYID = 'maintainEvent'
+		) T
+
+		<where>
+			<include
+				refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+		</where>
+		ORDER BY
+		<choose>
+			<when test="orderParams != null and orderParams.size > 0">
+				<include
+					refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+			</when>
+			<otherwise>
+				T.ID DESC
+			</otherwise>
+		</choose>
+	</select>
+
+
+	<!-- 查询详情 -->
+	<select id="selectDetail" parameterType="java.lang.Long"	resultType="map">
+        SELECT T.* FROM T_EMC_EQUIPT_PLAN T WHERE T.ID = #{id}
+	</select>
+
+
+        <!-- 维护计划提醒 -->
+    <select id="selectEquiptMaintPlanOverdue" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM T_EMC_EQUIPT_PLAN T
+         WHERE T.MAINTENDDATE <![CDATA[<=]]> sysdate() + T.WARNINGDAYS
+    </select>
+
+	<update id="updatePlan" parameterType="com.sunwayworld.emc.module.mdm.equipt.equipt.bean.EmcEquiptPlanBean">
+		UPDATE T_EMC_EQUIPT_PLAN
+			<set>
+				<if test=" maintDate != null ">
+					`MAINTDATE` = #{maintDate},
+				</if>
+				<if test="maintEndDate != null ">
+					`MAINTENDDATE` = #{maintEndDate} ,
+				</if>
+				<if test="cycle != null ">
+					`CYCLE` = #{cycle} ,
+				</if>
+				<if test=" verifyOrg != null ">
+					`VERIFYORG` = #{verifyOrg} ,
+				</if>
+				<if test=" gist != null ">
+					`GIST` = #{gist} ,
+				</if>
+				<if test="certCategory != null">
+					`CERTCATEGORY` = #{certCategory}
+				</if>
+				<if test=" remark != null">
+					`REMARK` = #{remark}
+				</if>
+
+			</set>
+			WHERE ID = #{id}
+	</update>
+    
+</mapper>

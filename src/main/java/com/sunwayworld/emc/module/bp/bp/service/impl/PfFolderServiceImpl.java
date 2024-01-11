@@ -1,0 +1,313 @@
+package com.sunwayworld.emc.module.bp.bp.service.impl;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.sunwayworld.emc.framework.constant.EmcBizConstant;
+import com.sunwayworld.emc.framework.constant.EmcConstant;
+import com.sunwayworld.emc.framework.constant.PfConstant;
+import com.sunwayworld.emc.framework.projectnode.ProjectNodeUtils;
+import com.sunwayworld.emc.module.bp.bp.bean.EmcFolderBean;
+import com.sunwayworld.emc.module.bp.bp.bean.EmcOrderBean;
+import com.sunwayworld.emc.module.bp.bp.bean.EmcOrderTaskBean;
+import com.sunwayworld.emc.module.bp.bp.bean.EmcOrderTaskResultBean;
+import com.sunwayworld.emc.module.bp.bp.service.PfFolderService;
+import com.sunwayworld.emc.module.bp.bp.service.PfOrderService;
+import com.sunwayworld.emc.module.bp.bp.service.PfOrderTaskResultService;
+import com.sunwayworld.emc.module.bp.bp.service.PfOrderTaskService;
+import com.sunwayworld.emc.module.bp.project.project.bean.EmcOrderItemGroupBean;
+import com.sunwayworld.emc.module.bp.project.project.bean.EmcProjectBean;
+import com.sunwayworld.emc.module.bp.project.project.service.EmcProjectService;
+import com.sunwayworld.emc.module.bp.project.project.service.PfOrderItemGroupService;
+import com.sunwayworld.emc.module.bp.project.projscheme.service.PfProjSchemeService;
+import com.sunwayworld.emc.module.mdm.bizmdm.monitortmpl.bean.EmcMonitorTmplBean;
+import com.sunwayworld.emc.module.mdm.bizmdm.monitortmpl.service.EmcMonitorTmplService;
+import com.sunwayworld.framework.at.annotation.AuditTrailEntry;
+import com.sunwayworld.framework.at.annotation.AuditTrailType;
+import com.sunwayworld.framework.constant.Constant;
+import com.sunwayworld.framework.context.ApplicationContextHelper;
+import com.sunwayworld.framework.i18n.I18nHelper;
+import com.sunwayworld.framework.mybatis.mapper.MatchPattern;
+import com.sunwayworld.framework.mybatis.mapper.SearchFilter;
+import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;
+import com.sunwayworld.framework.spring.annotation.GikamBean;
+import com.sunwayworld.framework.support.PersistableHelper;
+import com.sunwayworld.framework.support.auditable.bean.CoreBpmnParameterDTO;
+import com.sunwayworld.framework.utils.BeanUtils;
+import com.sunwayworld.framework.utils.ObjectUtils;
+import com.sunwayworld.framework.utils.StringUtils;
+import com.sunwayworld.module.sys.bpmn.bean.CoreBpmnInstanceStatusDTO;
+
+
+/**
+ * @author zhengxy@sunwayworld.com 2021年07月19日
+ */
+@Repository
+@GikamBean
+public class PfFolderServiceImpl extends EmcFolderServiceImpl implements PfFolderService {
+
+    @Autowired
+    @Lazy
+    private EmcProjectService projectService;
+
+    @Autowired
+    @Lazy
+    private PfProjSchemeService projSchemeService;
+
+    @Autowired
+    private EmcMonitorTmplService monitorTmplService;
+
+    @Autowired
+    private PfOrderService pfOrderService;
+
+    @Autowired
+    private PfOrderTaskService pfOrderTaskService;
+
+    @Autowired
+    private PfOrderTaskResultService pfOrderTaskResultService;
+
+    @Autowired
+    private PfOrderItemGroupService pfOrderItemGroupService;
+
+    @Override
+    public EmcFolderBean insertByOrder(EmcOrderBean order) {
+        EmcFolderBean folder = new EmcFolderBean();
+        folder.setId(ApplicationContextHelper.getNextIdentity());
+        Long projId = order.getProjId();
+
+        EmcProjectBean project = projectService.selectById(projId);
+        EmcMonitorTmplBean monitorTmpl = monitorTmplService.selectById(order.getMonitorTmplId());
+
+        String newFolderNo = generateFolderNo(project);
+
+        folder.setFolderNo(newFolderNo);
+        folder.setProjId(order.getProjId());
+        folder.setOrderCategory(order.getOrderCategory());
+        folder.setMonitorTmplId(monitorTmpl.getId());
+        folder.setSource(EmcBizConstant.BP_SOURCE_ORDERREGISTRATION);
+        folder.setTermination(Constant.NO);
+
+        getDao().insert(folder);
+        return folder;
+    }
+
+    @Override
+    @Transactional
+    public void copyFolders(String folderNo, RestJsonWrapperBean wrapper) {
+        EmcFolderBean folder = wrapper.parseUnique(EmcFolderBean.class);
+
+        // 查询点位信息
+        EmcFolderBean selectedFolder = getDao().selectById(folder.getId());
+
+        EmcFolderBean newFolder = new EmcFolderBean();
+        BeanUtils.copyProperties(selectedFolder, newFolder);
+        PersistableHelper.resetBasicProperties(newFolder);
+
+        // 查询样品类型代码
+        EmcMonitorTmplBean monitorTmpl = monitorTmplService.selectById(selectedFolder.getMonitorTmplId());
+
+        Long newFolderId = ApplicationContextHelper.getNextIdentity();
+        newFolder.setId(newFolderId);
+        newFolder.setSource("COPY");
+        Long projId = folder.getProjId();
+
+        EmcProjectBean project = projectService.selectById(projId);
+        String newFolderNo = generateFolderNo(project);
+        newFolder.setFolderNo(newFolderNo);
+        getDao().insert(newFolder);
+
+        // 查询对应点位下的样品信息
+        List<EmcOrderBean> folderOrderList = pfOrderService.getDao().selectListByOneColumnValue(folder.getId(), "FOLDERID");
+        List<EmcOrderBean> copiedOrderList = folderOrderList.stream().filter(order -> ObjectUtils.isEmpty(order.getSampleId())).collect(Collectors.toList());
+        List<Long> orderIdList = copiedOrderList.stream().map(EmcOrderBean::getId).collect(Collectors.toList());
+
+        // 查询样品下的对应测试信息
+        List<EmcOrderTaskBean> orderTaskList = pfOrderTaskService.getDao().selectListByOneColumnValues(orderIdList, "ORDERID");
+
+        // 查询样品下对应的结果信息
+        List<EmcOrderTaskResultBean> orderTaskResultList = pfOrderTaskResultService.getDao().selectListByOneColumnValues(orderIdList, "ORDERID");
+
+        // 查询样品对应的分析项组
+        List<EmcOrderItemGroupBean> orderItemGroupList = pfOrderItemGroupService.getDao().selectListByOneColumnValues(orderIdList, "ORDERID");
+
+        List<EmcOrderBean> newOrderList = new ArrayList<>();
+        List<EmcOrderTaskBean> newOrderTaskList = new ArrayList<>();
+        List<EmcOrderTaskResultBean> newOrderTaskResultList = new ArrayList<>();
+        List<EmcOrderItemGroupBean> newOrderItemGroupList = new ArrayList<>();
+
+        for (int i = 0; i < copiedOrderList.size(); i++) {
+            EmcOrderBean oldOrder = copiedOrderList.get(i);
+            EmcOrderBean newOrder = new EmcOrderBean();
+
+            BeanUtils.copyProperties(oldOrder, newOrder, PfConstant.CREATED_COLUMNS);
+            PersistableHelper.resetBasicProperties(newOrder);
+
+            newOrder.setId(ApplicationContextHelper.getNextIdentity());
+            newOrder.setFolderId(newFolder.getId());
+
+            newOrder.setOrderNo(newFolderNo + EmcBizConstant.NUMFORENG[Integer.parseInt(newOrder.getCycle().toString())-1] +StringUtils.leftPad((i + 1) + "", 3));
+            newOrder.setLabelNo(newOrder.getOrderNo());
+            newOrderList.add(newOrder);
+
+            for (EmcOrderTaskBean orderTask : orderTaskList) {
+                if (oldOrder.getId().equals(orderTask.getOrderId())) {
+                    EmcOrderTaskBean newOrderTask = new EmcOrderTaskBean();
+                    BeanUtils.copyProperties(orderTask, newOrderTask);
+                    PersistableHelper.resetBasicProperties(newOrderTask);
+
+                    newOrderTask.setId(ApplicationContextHelper.getNextIdentity());
+                    newOrderTask.setOrderId(newOrder.getId());
+                    newOrderTask.setFolderId(newFolder.getId());
+                    newOrderTask.setEquiptAcquNo(newOrder.getOrderNo());
+                    newOrderTaskList.add(newOrderTask);
+
+                    for (EmcOrderTaskResultBean orderTaskResult : orderTaskResultList) {
+                        if (orderTask.getId().equals(orderTaskResult.getOrderTaskId())) {
+                            EmcOrderTaskResultBean newOrderTaskResult = new EmcOrderTaskResultBean();
+                            BeanUtils.copyProperties(orderTaskResult, newOrderTaskResult);
+
+                            newOrderTaskResult.setId(ApplicationContextHelper.getNextIdentity());
+                            newOrderTaskResult.setFolderId(newFolderId);
+                            newOrderTaskResult.setOrderId(newOrder.getId());
+                            newOrderTaskResult.setOrderTaskId(newOrderTask.getId());
+                            newOrderTaskResult.setOrderNo(newOrder.getOrderNo());
+                            newOrderTaskResultList.add(newOrderTaskResult);
+                        }
+                    }
+                }
+            }
+
+            List<EmcOrderItemGroupBean> oldItemGroupList = orderItemGroupList.stream().filter(group -> ObjectUtils.equals(oldOrder.getId(), group.getOrderId())).collect(Collectors.toList());
+            oldItemGroupList.forEach(group -> {
+                EmcOrderItemGroupBean newItemGroup = new EmcOrderItemGroupBean();
+                BeanUtils.copyProperties(group, newItemGroup, EmcConstant.CREATED_COLUMNS);
+                newItemGroup.setId(ApplicationContextHelper.getNextIdentity());
+                newItemGroup.setOrderId(newOrder.getId());
+                newOrderItemGroupList.add(newItemGroup);
+            });
+        }
+
+        pfOrderService.getDao().insert(newOrderList);
+        pfOrderTaskService.getDao().insert(newOrderTaskList);
+        pfOrderTaskResultService.getDao().insert(newOrderTaskResultList);
+        pfOrderItemGroupService.getDao().insert(newOrderItemGroupList);
+    }
+
+    @Override
+    public List<String> generateFolderNosByProjId(Long projId, String projectNo, int num) {
+        List<EmcFolderBean> schemeOfProjectList = getDao().selectListByOneColumnValue(projId, "PROJID");
+        List<String> newFolderNoList = new ArrayList<>();
+        String firstFolderNo = "";
+        if (schemeOfProjectList.isEmpty()) {
+            firstFolderNo = projectNo + "001";
+            newFolderNoList.add(firstFolderNo);
+
+        } else {
+
+            String maxFolderNo = schemeOfProjectList.stream().max(Comparator.comparing(EmcFolderBean::getFolderNo)).get().getFolderNo();
+            firstFolderNo = maxFolderNo.substring(0, maxFolderNo.length() - 3) + String.format("%03d", Long.parseLong(maxFolderNo.substring(maxFolderNo.length() - 3)) + 1);
+            newFolderNoList.add(firstFolderNo);
+        }
+
+        if (num > 1) {
+            for (int i = 0; i < num - 1; i++) {
+                String beforeFolderNo = newFolderNoList.get(i);
+                String nextFolderNo = beforeFolderNo.substring(0, beforeFolderNo.length() - 3) + String.format("%03d", Long.parseLong(beforeFolderNo.substring(beforeFolderNo.length() - 3)) + 1);
+                newFolderNoList.add(nextFolderNo);
+            }
+        }
+
+        return newFolderNoList;
+    }
+
+    @Override
+    public String generateFolderNo(EmcProjectBean project) {
+        List<String> seqNoList = generateFolderNosByProjId(project.getId(), project.getProjNo(), 1);
+        if (!seqNoList.isEmpty()) {
+            return seqNoList.get(0);
+        }
+
+        return ApplicationContextHelper.getNextSequence(getDao().getTable());
+    }
+
+    @Override
+    @Transactional
+    @AuditTrailEntry(AuditTrailType.PROCESS_START)
+    public List<CoreBpmnInstanceStatusDTO<Long>> startProcess(RestJsonWrapperBean wrapper) {
+        List<CoreBpmnInstanceStatusDTO<Long>> coreBpmnInstanceStatusDTOList = super.startProcessBasic(wrapper);
+        List<Long> idList = coreBpmnInstanceStatusDTOList.stream().map(CoreBpmnInstanceStatusDTO::getId).collect(Collectors.toList());
+        if (idList.isEmpty()) {
+            return coreBpmnInstanceStatusDTOList;
+        }
+
+        List<EmcFolderBean> folderList = selectListByFilter(SearchFilter.instance().match("ID", idList).filter(MatchPattern.OR));
+        // 采样安排提交插入审核记录
+        this.insertAuditRecordByFolder(folderList, "PROCESS_START", wrapper.getParamValue("bpmn_comment"), null);
+
+        folderList.forEach(e -> e.setStatus(EmcBizConstant.FOLDER_STATUS_DRAW));
+        getDao().update(folderList, "STATUS");
+
+        List<Long> projectIdList = folderList.stream().map(EmcFolderBean::getProjId).distinct().collect(Collectors.toList());
+        ProjectNodeUtils.updateNodes(projectIdList);
+        return coreBpmnInstanceStatusDTOList;
+    }
+
+    @Override
+    @Transactional
+    @AuditTrailEntry(AuditTrailType.PROCESS_START)
+    public List<CoreBpmnInstanceStatusDTO<Long>> startProcess(List<Long> itemIdList, CoreBpmnParameterDTO parameter) {
+        List<CoreBpmnInstanceStatusDTO<Long>> coreBpmnInstanceStatusList = super.startProcess(itemIdList, parameter);
+        List<Long> idList = coreBpmnInstanceStatusList.stream().map(CoreBpmnInstanceStatusDTO::getId).collect(Collectors.toList());
+        if (idList.isEmpty()) {
+            return coreBpmnInstanceStatusList;
+        }
+
+        List<EmcFolderBean> folderList = selectListByFilter(SearchFilter.instance().match("ID", idList).filter(MatchPattern.OR));
+        // 采样安排提交插入审核记录
+        this.insertAuditRecordByFolder(folderList, "PROCESS_START", parameter.getComment(), null);
+
+        folderList.forEach(e -> e.setStatus(EmcBizConstant.FOLDER_STATUS_DRAW));
+        getDao().update(folderList, "STATUS");
+
+        List<Long> projectIdList = folderList.stream().map(EmcFolderBean::getProjId).distinct().collect(Collectors.toList());
+        ProjectNodeUtils.updateNodes(projectIdList);
+
+        return coreBpmnInstanceStatusList;
+    }
+
+    @Override
+    @Transactional
+    public String  submitRemind(RestJsonWrapperBean wrapper){
+    	//分析类型是分析的类型（外面）为空
+        List<EmcFolderBean> folderList = wrapper.parse(EmcFolderBean.class);
+ 	    List<Long> folderIdList = folderList.stream().map(EmcFolderBean::getId).collect(Collectors.toList());
+ 	   	List<EmcOrderTaskBean> orderTaskList = pfOrderTaskService.selectListByFilter(SearchFilter.instance()
+ 	   		.match("FOLDERID", folderIdList).filter(MatchPattern.OR)
+ 	   		.match("ANALYSISTYPE", "analysis").filter(MatchPattern.SEQ));
+
+        List<EmcOrderTaskBean> containerEmptyTaskList = orderTaskList.stream().filter(task -> ObjectUtils.isEmpty(task.getContainerCategoryId())).collect(Collectors.toList());
+        if(containerEmptyTaskList.isEmpty()){
+        	return null;
+        }
+
+        // 按样品编号进行分组
+        List<String> messageList = new ArrayList<>();
+        Map<String, List<EmcOrderTaskBean>> orderTaskMap = containerEmptyTaskList.stream().collect(Collectors.groupingBy(task -> task.getExt$Item("orderNo")));
+        orderTaskMap.forEach((orderNo, taskList) -> {
+            String testNames = taskList.stream().map(EmcOrderTaskBean::getTestName).distinct().collect(Collectors.joining("、"));
+            String message = I18nHelper.getMessage("EMC.MODULE.BP.FOLDER.FOLDERS.TIP.SUBMITREMIND", orderNo, testNames);
+            messageList.add(message);
+        });
+
+        return String.join(",", messageList);
+    }
+
+}

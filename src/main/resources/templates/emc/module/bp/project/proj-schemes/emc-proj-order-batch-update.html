@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/emc/module/bp/project/proj-schemes/emc-proj-scheme.js',
+                      '/static/emc/module/bp/project/proj-schemes/emc-proj-order-batch-update.js'
+                    ]);
+    emcProjScheme.batchUpdatePage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>
+

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.emc.module.mdm.bizmdm.indexcategory.mapper.EmcOrderIndexMapper">
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM (SELECT A.*, 
+                       B.STDNAME,
+                       B.MONITORTMPLGROUPID
+                  FROM T_EMC_ORDER_INDEX A
+                  LEFT JOIN T_EMC_INDEX_CATEGORY B
+                    ON A.INDEXCATEGORYID = B.ID) T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+            <if test='proj_order_assigned != null'> <!-- 查询监测方案样品下分析项所属样品指标 -->
+                 AND EXISTS
+                 (SELECT 1
+                          FROM (SELECT A.*
+                                  FROM T_EMC_INDEX_SET A
+                                 WHERE EXISTS (SELECT 1
+                                          FROM (SELECT A.*
+                                                  FROM T_EMC_INDEX_TEST_ITEM A
+                                                 WHERE EXISTS
+                                                 (SELECT 1
+                                                          FROM (SELECT A.*, B.ITEMID
+                                                                  FROM T_EMC_PROJ_ORDER A
+                                                                  LEFT JOIN T_EMC_GROUP_ITEM B
+                                                                    ON A.ITEMGROUPID =
+                                                                       B.ITEMGROUPID) C
+                                                         WHERE C.ITEMID = A.ITEMID)) C
+                                         WHERE C.INDEXITEMID = A.INDEXITEMID)) C
+                         WHERE C.INDEXID = T.ID)
+            </if>
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ID DESC
+            </otherwise>
+        </choose>
+    </select>
+    
+    
+    <!-- 查询详情 -->
+    <select id="selectDetail" parameterType="java.lang.String" resultType="map">
+        SELECT T.*
+          FROM T_EMC_ORDER_INDEX T
+         WHERE T.ID = #{id}
+    </select>
+    
+</mapper>

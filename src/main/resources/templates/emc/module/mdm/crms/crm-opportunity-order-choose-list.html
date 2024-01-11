@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    Gikam.requirejs([ '/static/emc/module/mdm/crms/crm-opportunity-contract.js',
+        '/static/emc/module/mdm/crms/crm-opportunity-order-choose-list.js'
+    ]);
+    crmOpportunityContract.orderChoosePage.init(Gikam.getElParam([[${param}]]));
+    /*]]>*/
+</script>
+

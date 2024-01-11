@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.emc.module.mdm.bizmdm.test.mapper.PfTestMethodMapper">
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM (SELECT W.*,
+                       C.METHODNAME,
+                       C.TESTMETHODBASIS,
+                       C.TESTMETHODALIASBASIS,
+                       C.METHODNO,
+                       C.SOURCE,
+                       C.MAXVERSIONID AS METHODVERSIONID,
+                       D.TESTCATEGORYDESC AS TESTCATEGORY,
+                       E.ORGNAME,
+                       F.TESTNAME,
+                       G.BEFOREHANDLENAME
+                  FROM T_EMC_TEST_METHOD W
+                  LEFT JOIN T_EMC_METHOD C
+                    ON W.METHODID = C.ID
+                  LEFT JOIN T_EMC_TEST_CATEGORY D
+                    ON W.TESTCATEGORYID = D.ID
+                  LEFT JOIN T_CORE_ORG E
+                    ON W.ANALYSISORGID = E.ID
+                  LEFT JOIN T_EMC_TEST F
+                    ON W.TESTID = F.ID
+                   LEFT JOIN T_EMC_TESTMETHOD_BEFOREHANDLE G
+                    ON W.BEFOREHANDLEID = G.ID) T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+            <if test="target_unassigned != null">
+                AND NOT EXISTS (SELECT 1
+                                  FROM ${targetTable} TAR_
+                                 WHERE TAR_.${targetTestMethodIdColumn} = T.ID
+                                 <if test="targetFilterColumn != null">
+                                     AND TAR_.${targetFilterColumn} = #{targetFilterValue}
+                                 </if>
+                                 <if test="targetFilterColumn1 != null">
+                                     AND TAR_.${targetFilterColumn1} = #{targetFilterValue1}
+                                 </if>
+                                )
+            </if>
+             <if test="cert_target_unassigned != null">
+                AND NOT EXISTS (SELECT
+                                    1
+                                FROM
+                                    T_EMC_CERT_TEST_METHOD TAR_
+                                WHERE
+                                    TAR_.TESTID = T.TESTID
+                                AND TAR_.METHODID = T.METHODID
+                                AND TAR_.CERTID = #{targetFilterValue1}
+                                )
+            </if>
+            <if test="tmids != null">
+                AND ID IN(${tmids})
+            </if>
+             <if test="tmidsnotin != null">
+                AND ID NOT IN(${tmidsnotin})
+            </if>
+            <if test="monitorTmplId != null">
+                AND EXISTS(
+                    SELECT 1
+                      FROM T_EMC_MONITOR_SCHEME MS
+                      WHERE MS.MONITORTMPLID = #{monitorTmplId}
+                      AND MS.TESTMETHODID = T.ID
+                )
+            </if>
+            <if test="target_assigned != null">
+                AND EXISTS (SELECT 1
+                FROM ${targetAssignedTable} TAR_
+                WHERE TAR_.${targetTestMethodIdColumn} = T.ID
+                <if test="targetAssignedFilterColumn != null">
+                    AND TAR_.${targetAssignedFilterColumn} = #{targetAssignedFilterValue}
+                </if>
+                <if test="targetAssignedFilterColumn1 != null">
+                    AND TAR_.${targetAssignedFilterColumn1} = #{targetAssignedFilterValue1}
+                </if>
+                )
+            </if>
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ID DESC
+            </otherwise>
+        </choose>
+    </select>
+
+
+    <!-- 查询详情 -->
+    <select id="selectDetail" parameterType="java.lang.Long" resultType="map">
+        SELECT T.*,
+               C.METHODNAME,
+               C.TESTMETHODBASIS,
+               D.TESTCATEGORYDESC AS TESTCATEGORY,
+               E.ORGNAME,
+               F.TESTNAME
+          FROM T_EMC_TEST_METHOD T
+          LEFT JOIN T_EMC_METHOD C
+             ON T.METHODID = C.ID
+           LEFT JOIN T_EMC_TEST_CATEGORY D
+             ON T.TESTCATEGORYID = D.ID
+           LEFT JOIN T_CORE_ORG E
+             ON T.ANALYSISORGID = E.ID
+           LEFT JOIN T_EMC_TEST F
+             ON T.TESTID = F.ID
+          WHERE T.ID = #{id}
+    </select>
+
+    <select id="selectMaintenanceTMByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM (SELECT W.*,
+                       C.METHODNAME,
+                       C.TESTMETHODBASIS,
+                       D.TESTCATEGORYDESC AS TESTCATEGORY,
+                       E.ORGNAME,
+                       F.TESTNAME
+                  FROM T_EMC_TEST_METHOD W
+                  LEFT JOIN T_EMC_METHOD C
+                    ON W.METHODID = C.ID
+                  LEFT JOIN T_EMC_TEST_CATEGORY D
+                    ON W.TESTCATEGORYID = D.ID
+                  LEFT JOIN T_CORE_ORG E
+                    ON W.ANALYSISORGID = E.ID
+                  LEFT JOIN T_EMC_TEST F
+                    ON W.TESTID = F.ID) T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+            <if test="target_unassigned != null">
+                AND NOT EXISTS (SELECT 1
+                                  FROM ${targetTable} TAR_
+                                 WHERE TAR_.${targetTestMethodIdColumn} = T.ID
+                                 <if test="targetFilterColumn != null">
+                                     AND TAR_.${targetFilterColumn} = #{targetFilterValue}
+                                 </if>
+                                 <if test="targetFilterColumn1 != null">
+                                     AND TAR_.${targetFilterColumn1} = #{targetFilterValue1}
+                                 </if>
+                                )
+            </if>
+            <if test="tmids != null">
+                AND ID IN(${tmids})
+            </if>
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ID DESC
+            </otherwise>
+        </choose>
+    </select>
+</mapper>

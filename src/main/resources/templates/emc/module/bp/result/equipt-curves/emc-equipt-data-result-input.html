@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/emc/module/bp/result/equipt-curves/emc-equipt-curve.js',
+                      '/static/emc/module/bp/result/equipt-curves/emc-equipt-data-result-input.js'
+                    ]);
+    emcEquiptCurve.resultInputPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>
+

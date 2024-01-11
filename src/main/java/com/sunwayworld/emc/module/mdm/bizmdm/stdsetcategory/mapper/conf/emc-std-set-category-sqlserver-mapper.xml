@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.emc.module.mdm.bizmdm.stdsetcategory.mapper.EmcStdSetCategoryMapper">
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM T_EMC_STD_SET_CATEGORY T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+        </where>
+         ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ID DESC
+            </otherwise>
+        </choose>
+    </select>
+
+    <!-- 查询详情 -->
+    <select id="selectDetail" parameterType="java.lang.Long" resultType="map">
+        SELECT T.*
+          FROM T_EMC_STD_SET_CATEGORY T
+         WHERE T.ID = #{id}
+    </select>
+    
+    <select id="selectFieldInfoPagination" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM (SELECT A.NAME AS TABLENAME,
+                       B.NAME AS FIELDNAME,
+                       CAST(C.VALUE AS VARCHAR(300)) AS FIELDTITLE,
+                       B.COLUMN_ID AS ORDER_ID
+                  FROM SYS.TABLES A
+                 INNER JOIN SYS.COLUMNS B
+                    ON B.OBJECT_ID = A.OBJECT_ID
+                  LEFT JOIN SYS.EXTENDED_PROPERTIES C
+                    ON C.MAJOR_ID = B.OBJECT_ID
+                   AND C.MINOR_ID = B.COLUMN_ID
+                 WHERE NOT EXISTS (SELECT 1
+                          FROM T_EMC_FIELD_SET D
+                         WHERE STANDARDSETID = #{standardSetId}
+                           AND B.NAME = D.FIELDNAME)) T
+             <where>
+                 <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+             </where>
+               ORDER BY
+             <choose>
+               <when test="orderParams != null and orderParams.size > 0">
+                    <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+               </when>
+               <otherwise>
+                    T.ORDER_ID
+               </otherwise>
+            </choose>
+    </select>
+</mapper>

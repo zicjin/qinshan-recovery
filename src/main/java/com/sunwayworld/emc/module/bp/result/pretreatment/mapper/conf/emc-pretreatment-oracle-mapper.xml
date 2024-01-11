@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.emc.module.bp.result.pretreatment.mapper.EmcPretreatmentMapper">
+    <select id="selectByCondition" parameterType="map" resultType="map">
+         SELECT T.*
+          FROM (SELECT A.*,
+                       B.PROJNO,
+                       C.ORDERNO,
+                       C.LABELNO,
+                       C.ORDERCATEGORY,
+                       C.ACCEPTEDDATE,
+                       D.TESTNAME,
+                       D.SAMPLERECEIVERFLAG,
+                       D.TESTMETHODID,
+                       D.MONITORTMPLID,
+                       E.EXTRACTMETHOD,
+                       G.ORDERCONTAINERNO
+                  FROM T_EMC_PRETREATMENT A
+                LEFT JOIN T_EMC_PROJECT B
+                  ON A.PROJID = B.ID
+                LEFT JOIN T_EMC_ORDER C
+                  ON A.ORDERID = C.ID
+                LEFT JOIN T_EMC_ORDER_TASK D
+                  ON A.ORDERTASKID = D.ID
+                LEFT JOIN T_EMC_EXTRACT_METHOD E
+                  ON A.EXTRACTMETHODID = E.ID
+                LEFT JOIN T_EMC_PURIFY_METHOD F
+                  ON A.PURIFYMETHODID = F.ID
+                LEFT JOIN T_EMC_ORDER_CONTAINER G
+                  ON D.ORDERCONTAINERID = G.ID) T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+            <if test="orderTaskIdList != null">
+              AND EXISTS(SELECT 1 FROM T_EMC_ORDER_TASK OT
+              WHERE
+              OT.TESTMETHODID = T.TESTMETHODID
+              AND OT.MONITORTMPLID = T.MONITORTMPLID
+              AND OT.ID IN
+              <foreach collection="orderTaskIdList" index="index" item="item" open="(" separator="," close=")">
+                  #{item}
+              </foreach>
+              )
+            </if>
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ID DESC
+            </otherwise>
+        </choose>
+    </select>
+
+</mapper>

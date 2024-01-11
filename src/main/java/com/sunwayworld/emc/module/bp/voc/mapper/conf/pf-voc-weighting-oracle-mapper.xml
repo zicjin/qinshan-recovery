@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.emc.module.bp.voc.mapper.PfVocWeightingMapper">
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM T_EMC_VOC_WEIGHTING T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+            <if test='orderId != null'>
+                AND T.VOCNUMBER IN
+                (SELECT REGEXP_SUBSTR(TP.VOCBOTTLE, '[^,]+', 1, ROWNUM)
+                FROM (SELECT O. VOCBOTTLE
+                FROM T_EMC_ORDER O
+                WHERE O.ID = #{orderId}) TP
+                CONNECT BY LEVEL <![CDATA[<=]]> 1 + LENGTH(REGEXP_REPLACE(TP.VOCBOTTLE, '[^,]+', '')))
+            </if>
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ID DESC
+            </otherwise>
+        </choose>
+    </select>
+
+</mapper>

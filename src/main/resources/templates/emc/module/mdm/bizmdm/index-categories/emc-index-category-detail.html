@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ 
+                      '/static/emc/module/mdm/bizmdm/index-categories/emc-index-category.js',
+                      '/static/emc/module/mdm/bizmdm/index-categories/emc-index-category-detail.js'
+                    ]);
+    emcIndexCategory.detailPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>

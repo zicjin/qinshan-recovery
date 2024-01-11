@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    Gikam.requirejs([
+        '/static/emc/module/bp/report/advisorys/emc-advisory-report.js',
+        '/static/emc/module/bp/report/advisorys/emc-advisory-report-audit-list.js'
+    ]);
+    emcAdvisoryReport.auditPage.init(Gikam.getElParam([[${param}]]));
+    /*]]>*/
+</script>

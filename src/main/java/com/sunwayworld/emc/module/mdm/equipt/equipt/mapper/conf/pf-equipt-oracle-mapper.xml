@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.emc.module.mdm.equipt.equipt.mapper.PfEquiptMapper">
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM (SELECT E.*,
+                       C.ORGNAME  AS USEDDEPARTMENTNAME,
+                       O.ORGNAME  AS USEDDEPOSTNAME,
+                       U.USERNAME AS MAINTAINUSERNAME,
+                       S.USERNAME AS KEEPUSERNAME,
+                       M.EQUIPTCATEGORY AS EQUIPTCATEGORYNAME
+                  FROM T_EMC_EQUIPT E
+                  LEFT JOIN T_CORE_ORG C
+                    ON E.USEDDEPARTMENTID = C.ID
+                  LEFT JOIN T_CORE_ORG O
+                    ON E.USEDDEPOSTID = C.ID
+                  LEFT JOIN T_CORE_USER U
+                    ON E.MAINTAINUSERID = U.ID
+                  LEFT JOIN T_CORE_USER S
+                    ON E.KEEPUSERID = S.ID
+                  LEFT JOIN T_EMC_EQUIPT_CATEGORY M
+                    ON E.EQUIPTCATEGORYID = M.ID) T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+            <if test="target_type == 'equipList'">
+                AND EXISTS (SELECT 1
+                              FROM T_EMC_ORG_PERMISSION OP_
+                            WHERE OP_.PERMISSIONTYPEID = 'T_EMC_EQUIPT_CATEGORY'
+                              AND OP_.TARGETID = T.EQUIPTCATEGORYID
+                              AND EXISTS (SELECT 1
+                                            FROM T_CORE_USER_PERMISSION UP_
+                                          WHERE UP_.USERID = #{loginUser.id}
+                                            AND UP_.PERMISSIONTYPEID = 'T_CORE_ORG'
+                                            AND UP_.TARGETID = OP_.ORGID))
+            </if>
+            <!--<if test="target_unassigned != null">
+                AND NOT EXISTS (SELECT 1
+                                  FROM ${targetTable} TAR_
+                                 WHERE TAR_.${targetEquiptColumn} = T.ID
+                                 <if test="targetFilterColumn != null">
+                                     AND TAR_.${targetFilterColumn} IN
+                                     (SELECT REGEXP_SUBSTR(#{targetFilterValue}, '[^,]+', 1, LEVEL, 'c') AS STR FROM DUAL
+                                     CONNECT BY LEVEL &lt;= LENGTH(#{targetFilterValue}) - LENGTH(REGEXP_REPLACE(#{targetFilterValue}, ',', '')) + 1)
+                                 </if>
+                                 <if test="targetFilterColumn1 != null">
+                                     AND TAR_.${targetFilterColumn1} = #{targetFilterValue1}
+                                 </if>
+                                )
+            </if>-->
+            <if test="target_equiptassigned != null">
+                <foreach collection="testMethodIdList" index="name" item="item">
+                    AND EXISTS ( SELECT 1
+                                   FROM T_EMC_EQUIPT_TEST_METHOD F
+                                  WHERE F.EQUIPTID = T.ID
+                                  AND F.ANALYSISCATEGORY = 'sampling'
+                                  AND F.TESTMETHODID = #{item} )
+                </foreach>
+            </if>
+            <if test="maintenanceUser_assigned != null">
+                    AND (MAINTAINUSERID IS NULL OR MAINTAINUSERID = '' OR
+                    MAINTAINUSERID LIKE '%'||#{maintenanceUserId}||'%' )
+            </if>
+            <if test='remind == "overdue"'>
+                    AND EXISTS( SELECT 1
+                                   FROM T_EMC_EQUIPT_PLAN TAR_
+                                  WHERE TAR_.EQUIPTID = T.ID
+                                  AND TAR_.MAINTENDDATE <![CDATA[<=]]> sysdate() + TAR_.WARNINGDAYS
+                    )
+            </if>
+            <if test="targetType == 'calibration'">
+                AND INSTR( ',' || CALIBRATIONTYPE || ',',',' || #{calibrationType} || ',' ) > 0
+            </if>
+            <if test="targetType == 'auxiliaryEquipt'">
+                AND EXISTS (SELECT 1 FROM T_EMC_EQUIPT_TEST_METHOD F WHERE F.EQUIPTID = T.ID AND F.ANALYSISCATEGORY='auxiliary' AND FIND_IN_SET(F.TESTMETHODID,#{testMethodIds}) > 0)
+            </if>
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ID DESC
+            </otherwise>
+        </choose>
+    </select>
+
+
+    <!-- 查询详情 -->
+    <select id="selectDetail" parameterType="java.lang.Long" resultType="map">
+        SELECT E.*,
+               C.ORGNAME  AS USEDDEPARTMENTNAME,
+               O.ORGNAME  AS USEDDEPOSTNAME,
+               U.USERNAME AS MAINTAINUSERNAME,
+               S.USERNAME AS KEEPUSERNAME
+          FROM T_EMC_EQUIPT E
+          LEFT JOIN T_CORE_ORG C
+            ON E.USEDDEPARTMENTID = C.ID
+          LEFT JOIN T_CORE_ORG O
+            ON E.USEDDEPOSTID = C.ID
+          LEFT JOIN T_CORE_USER U
+            ON E.MAINTAINUSERID = U.ID
+          LEFT JOIN T_CORE_USER S
+            ON E.KEEPUSERID = S.ID
+         WHERE E.ID = #{id}
+
+    </select>
+
+    <select id="selectVerifyChoose" resultType="map">
+        SELECT T.* FROM
+        (
+            SELECT B.*,A.CYCLE,A.WARNINGDAYS,A.MAINTENDDATE,A.GIST,A.VERIFYORG,C.CODENAME
+            FROM T_EMC_EQUIPT B
+            LEFT JOIN
+            (SELECT P.*,M.MAINTEVENT FROM T_EMC_EQUIPT_PLAN P,T_EMC_EQUIPT_MAINT M WHERE P.MAINTID = M.ID AND M.MAINTEVENT =
+            'equiptVerification' ) A
+            ON B.ID = A.EQUIPTID
+            LEFT JOIN T_CORE_CODE C
+                ON A.MAINTEVENT = C.CODE
+                AND C.CODECATEGORYID = 'maintainEvent'
+            WHERE A.MAINTEVENT = 'equiptVerification'
+        ) T
+    </select>
+
+    <select id="selectCaliChoose" resultType="map">
+        SELECT T.* FROM
+        (
+            SELECT B.*,A.CYCLE,A.WARNINGDAYS,A.MAINTENDDATE,A.GIST,A.VERIFYORG,C.CODENAME
+            FROM T_EMC_EQUIPT B
+            LEFT JOIN
+            (SELECT P.*,M.MAINTEVENT FROM T_EMC_EQUIPT_PLAN P,T_EMC_EQUIPT_MAINT M WHERE P.MAINTID = M.ID AND M.MAINTEVENT =
+            'equiptCalibration') A
+            ON B.ID = A.EQUIPTID
+            LEFT JOIN T_CORE_CODE C
+                ON A.MAINTEVENT = C.CODE
+                AND C.CODECATEGORYID = 'maintainEvent'
+            WHERE A.MAINTEVENT = 'equiptCalibration'
+        ) T
+    </select>
+
+    <select id="selectPerCheckChoose" resultType="map">
+        SELECT T.* FROM
+        (
+            SELECT B.*,A.CYCLE,A.WARNINGDAYS,A.MAINTENDDATE,A.CHECKREASON,C.CODENAME
+            FROM T_EMC_EQUIPT B
+            LEFT JOIN
+            (SELECT P.*,M.MAINTEVENT FROM T_EMC_EQUIPT_PER_CHECK_PLAN P,T_EMC_EQUIPT_MAINT M WHERE P.MAINTID = M.ID AND M.MAINTEVENT =
+            'duringCheck') A
+            ON B.ID = A.EQUIPTID
+            LEFT JOIN T_CORE_CODE C
+                ON A.MAINTEVENT = C.CODE
+                AND C.CODECATEGORYID = 'maintainEvent'
+            WHERE A.MAINTEVENT = 'duringCheck'
+        ) T
+    </select>
+
+    <!-- 获取按照设备类型ID的最大设备ID -->
+    <select id="selectMaxEquiptIdByEquiptCategoryId" parameterType="java.lang.Long" resultType="com.sunwayworld.emc.module.mdm.equipt.equipt.bean.EmcEquiptBean">
+        SELECT E.*
+        FROM (
+            SELECT
+	          T.EQUIPTCATEGORYID,
+	          MAX( T.EQUIPTID ) AS EQUIPTID
+            FROM T_EMC_EQUIPT T
+            WHERE T.EQUIPTCATEGORYID = #{equiptCategoryId}
+            ) E
+    </select>
+</mapper>

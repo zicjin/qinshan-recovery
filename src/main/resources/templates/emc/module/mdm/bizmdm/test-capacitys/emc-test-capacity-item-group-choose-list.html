@@ -1,0 +1,8 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/emc/module/mdm/bizmdm/test-capacitys/emc-test-capacity.js',
+                      '/static/emc/module/mdm/bizmdm/test-capacitys/emc-test-capacity-item-group-choose-list.js'
+                    ]);
+    emcTestCapacity.itemGroupChoosePage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>

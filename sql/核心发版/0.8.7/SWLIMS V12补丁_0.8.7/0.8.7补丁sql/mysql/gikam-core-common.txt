@@ -1,0 +1,27 @@
+-- ----------------------------- 2020-09-10 add by zhangjr------------begin  0.8.7补丁已发布
+CALL INSERTI18N('GIKAM.BPMN.TASK.START', '工作流开始节点', '开始节点', 'zh-CN', '开始节点');
+CALL INSERTI18N('GIKAM.BPMN.TASK.END', '工作流结束节点', '结束节点', 'zh-CN', '结束节点');
+CALL INSERTI18N('GIKAM.BPMN.TASK.GATEWAY', '工作流的网关', '网关', 'zh-CN', '网关');
+
+DELETE M 
+FROM
+	T_CORE_I18N_MESSAGE M,
+	T_CORE_I18N I
+WHERE
+	I.ID = M.I18NID 
+	AND I.CODE = 'GIKAM.BPMN.COMMENT.START_NODE';
+	
+DELETE M 
+FROM
+	T_CORE_I18N_MESSAGE M,
+	T_CORE_I18N I
+WHERE
+	I.ID = M.I18NID 
+	AND I.CODE = 'GIKAM.BPMN.COMMENT.END_NODE';
+	
+DELETE FROM T_CORE_I18N WHERE CODE = 'GIKAM.BPMN.COMMENT.START_NODE';
+DELETE FROM T_CORE_I18N WHERE CODE = 'GIKAM.BPMN.COMMENT.END_NODE';
+COMMIT;
+
+alter table T_CORE_BPMN_COMMENT add column route varchar(96) null comment '审核路径';
+-- ----------------------------- 2020-09-10 add by zhangjr------------end  0.8.7补丁已发布

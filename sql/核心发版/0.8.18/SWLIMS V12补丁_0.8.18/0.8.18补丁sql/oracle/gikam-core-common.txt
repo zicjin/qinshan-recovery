@@ -1,0 +1,6 @@
+-- ----------------------------- 2020-11-16 add by zhangjr------------begin
+
+CALL INSERTI18N('CORE.MODULE.SYS.T_CORE_BPMN_DRAFT.LABEL.FILTER_PREVIOUS_CANDIDATORS', '过滤之前节点的已审人员', '过滤之前节点的已审人员', 'zh-CN', '过滤之前节点的已审人员');
+CALL INSERTI18N('CORE.MODULE.SYS.T_CORE_BPMN_PROC.ENGINE.FILTER_PREVIOUS_CANDIDATORS', '您在前一个节点审核通过，当前节点您不能参与审核', '您在前一个节点审核通过，当前节点您不能参与审核', 'zh-CN', '您在前一个节点审核通过，当前节点您不能参与审核');
+
+-- ----------------------------- 2020-11-16 add by zhangjr------------begin

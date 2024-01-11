@@ -1,0 +1,47 @@
+﻿-- --------------------------------------- 2020-04-04 zhangjr begin -----------------
+-- Create table
+create table T_CORE_TOPOLOGY
+(
+  id          NUMBER not null,
+  code        VARCHAR2(64) not null,
+  usage       VARCHAR2(192) not null,
+  json        CLOB,
+  svg         CLOB,
+  createdtime         DATE,
+  createdbyid         VARCHAR2(32),
+  createdbyname       VARCHAR2(64),
+  createdbyorgid      VARCHAR2(32),
+  createdbyorgname    VARCHAR2(256)
+);
+-- Add comments to the table 
+comment on table T_CORE_TOPOLOGY
+  is '拓扑结构图';
+-- Add comments to the columns 
+comment on column T_CORE_TOPOLOGY.id
+  is '主键';
+comment on column T_CORE_TOPOLOGY.code
+  is '编号（唯一值）';
+comment on column T_CORE_TOPOLOGY.usage
+  is '用途';
+comment on column T_CORE_TOPOLOGY.json
+  is 'JSON格式的图表';
+comment on column T_CORE_TOPOLOGY.svg
+  is 'SVG格式的图表';
+comment on column T_CORE_TOPOLOGY.createdtime
+  is '制单时间';
+comment on column T_CORE_TOPOLOGY.createdbyid
+  is '制单人编码';
+comment on column T_CORE_TOPOLOGY.createdbyname
+  is '制单人名称';
+comment on column T_CORE_TOPOLOGY.createdbyorgid
+  is '制单人单位编码';
+comment on column T_CORE_TOPOLOGY.createdbyorgname
+  is '制单人单位名称';
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table T_CORE_TOPOLOGY
+  add constraint PK_CORE_TOPOLOGY primary key (ID);
+
+INSERT INTO T_CORE_MENU(ID, MENUNAME, HREF, PARENTID, ORDERNO, MENUINITNAME, ICON, TODOICON)
+VALUES ('9331', '拓扑结构图', '/secure/core/module/topologies/page/edit-list', '93', 9331, '拓扑结构图', '036.svg', NULL);
+COMMIT;
+-- --------------------------------------- 2020-04-04 zhangjr end -----------------

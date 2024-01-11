@@ -1,0 +1,44 @@
+-- ----------------------------- 2020-11-19 add by shixw------------begin
+
+alter table dbo.T_CORE_LOGIN_CONFIG ADD MOBILECLIENT VARCHAR(36) NULL
+
+
+EXEC sp_addextendedproperty
+'MS_Description', N'是否显示移动客户端',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_LOGIN_CONFIG',
+'COLUMN', N'MOBILECLIENT'
+
+alter table dbo.T_CORE_LOGIN_CONFIG ADD IPHONEQCCODE VARCHAR(120) NULL
+
+
+EXEC sp_addextendedproperty
+'MS_Description', N'iPhone二维码',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_LOGIN_CONFIG',
+'COLUMN', N'IPHONEQCCODE'
+
+alter table dbo.T_CORE_LOGIN_CONFIG ADD ANDROIDMOBILEQCCODE VARCHAR(120) NULL
+
+
+EXEC sp_addextendedproperty
+'MS_Description', N'安卓Mobile二维码',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_LOGIN_CONFIG',
+'COLUMN', N'ANDROIDMOBILEQCCODE'
+
+alter table dbo.T_CORE_LOGIN_CONFIG ADD ANDROIDPADQCCODE VARCHAR(120) NULL
+
+
+EXEC sp_addextendedproperty
+'MS_Description', N'安卓Pad二维码',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_LOGIN_CONFIG',
+'COLUMN', N'ANDROIDPADQCCODE'
+
+EXEC DBO.INSERTI18N N'T_CORE_LOGIN_CONFIG.MOBILECLIENT', N'登录配置的是否显示移动客户端', N'是否显示移动客户端', N'zh-CN', N'是否显示移动客户端';
+EXEC DBO.INSERTI18N N'T_CORE_LOGIN_CONFIG.IPHONEQCCODE', N'登录配置的iPhone二维码', N'iPhone二维码', N'zh-CN', N'iPhone二维码';
+EXEC DBO.INSERTI18N N'T_CORE_LOGIN_CONFIG.ANDROIDMOBILEQCCODE', N'登录配置的安卓Mobile二维码', N'安卓Mobile二维码', N'zh-CN', N'安卓Mobile二维码';
+EXEC DBO.INSERTI18N N'T_CORE_LOGIN_CONFIG.ANDROIDPADQCCODE', N'登录配置的安卓Pad二维码', N'安卓Pad二维码', N'zh-CN', N'安卓Pad二维码';
+
+-- ----------------------------- 2020-11-19 add by shixw------------end

@@ -1,0 +1,16 @@
+-- ----------------------------- 2020-11-25 add by shixw------------begin
+
+alter table dbo.T_CORE_ADMIN_SELECT_CONFIG ADD CACHEABLE VARCHAR(36) NULL
+
+
+EXEC sp_addextendedproperty
+'MS_Description', N'是否缓存',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_ADMIN_SELECT_CONFIG',
+'COLUMN', N'CACHEABLE'
+
+EXEC DBO.INSERTI18N N'T_CORE_ADMIN_SELECT_CONFIG.CACHEABLE', N'下拉框配置的是否缓存', N'是否缓存', N'zh-CN', N'是否缓存';
+
+update T_CORE_ADMIN_SELECT_CONFIG set cacheable = '1';
+
+-- ----------------------------- 2020-11-25 add by shixw------------end

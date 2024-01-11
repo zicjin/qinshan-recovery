@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.emc.module.bp.info.infoindex.mapper.EmcCategorySectionMapper">
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM (SELECT CS.*,
+                       IIC.INDEXID,
+                       IIC.CATEGORY,
+                       C.CODENAME,
+                       IIC.REMARK,
+                       II.INDEXNAME,
+                       II.INDEXVALUE,
+                       CI.LOWLIMIT,
+                       CI.HIGHLIMIT,
+                       CI.ITEMNAME
+                  FROM T_EMC_CATEGORY_SECTION CS
+                  LEFT JOIN T_EMC_INFO_INDEX_CATEGORY IIC
+                    ON IIC.ID = CS.INDEXCATEGORYID
+                  LEFT JOIN T_EMC_INFO_INDEX II
+                    ON II.ID = IIC.INDEXID
+                  LEFT JOIN T_CORE_CODE C
+                    ON C.CODECATEGORYID = 'infoIndexCategory'
+                   AND C.CODE = IIC.CATEGORY
+                  LEFT JOIN T_EMC_CATEGORY_INDEX CI
+                     ON CI.INDEXCATEGORYID = CS.INDEXCATEGORYID) T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ID DESC
+            </otherwise>
+        </choose>
+    </select>
+
+    <!-- 查询详情 -->
+    <select id="selectDetail" parameterType="java.lang.Long" resultType="map">
+        SELECT T.*
+          FROM T_EMC_CATEGORY_SECTION T
+         WHERE T.ID = #{id}
+    </select>
+
+</mapper>

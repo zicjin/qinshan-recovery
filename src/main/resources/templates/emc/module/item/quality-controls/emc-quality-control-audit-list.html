@@ -1,0 +1,8 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/emc/module/item/quality-controls/emc-quality-control.js',
+                      '/static/emc/module/item/quality-controls/emc-quality-control-audit-list.js'
+                    ]);
+    emcQualityControl.auditPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>

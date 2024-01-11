@@ -1,0 +1,11 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/emc/module/item/scm/equipt-purchs/emc-equipt-purch.js',
+                      '/static/emc/module/item/scm/conven-mtls/emc-conven-mtl.js',
+                      '/static/emc/module/item/scm/office-mtls/emc-office-mtl.js',
+                      '/static/emc/module/item/scm/standard-mtls/emc-standard-mtl.js',
+                      '/static/emc/module/item/scm/purch-manages/emc-purch-manage-search-list.js'
+                    ]);
+    emcPurchManage.searchPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>

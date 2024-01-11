@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    Gikam.requirejs([
+        '/static/emc/module/bp/order/order-handovers/emc-order-handover.js',
+        '/static/emc/module/bp/order/order-handovers/emc-order-handover-annex.js'
+    ]);
+    emcOrderHandover.annexPage.init(Gikam.getElParam([[${param}]]));
+    /*]]>*/
+</script>

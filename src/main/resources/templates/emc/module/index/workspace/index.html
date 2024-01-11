@@ -1,0 +1,12 @@
+<!-- 引入核心页面 -->
+<th:block th:replace="emc/module/index/workspace/index-config" />
+
+<!-- 页面初始化 -->
+<script th:inline="javascript">
+    window.workspace = new IndexPage({
+        xIconUrl : IFM_CONTEXT + '/static/emc/icon/favicon.ico',
+        logo : IFM_CONTEXT + '/static/emc/icon/logo.png',
+        compactStyle : true,
+        title : '检测信息管理系统'
+    });
+</script>

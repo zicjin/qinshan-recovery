@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.emc.module.mdm.bizmdm.method.mapper.EmcMethodMapper">
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM (SELECT A.*, 
+                       E.METHODNAME REPLACEMETHOD,
+                       F.METHODNAME REPLACEDMETHOD
+                  FROM T_EMC_METHOD A
+                  LEFT JOIN T_EMC_METHOD E
+                    ON E.ID = A.REPLACEMETHODID
+                  LEFT JOIN T_EMC_METHOD F
+                    ON F.ID = A.REPLACEDMETHODID) TD T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+        </where>
+        ORDER BY 
+         <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ID DESC
+            </otherwise>
+         </choose>
+    </select>
+    
+    <select id="selectDetail" parameterType="java.lang.Long" resultType="map">
+        SELECT T.*
+          FROM T_EMC_METHOD T
+         WHERE T.ID = #{id}
+    </select>
+
+    <!-- 根据方法ID查询默认的报表配置ID -->
+    <select id="selectReportConfigLineIdById" parameterType="java.lang.Long" resultType="java.lang.Long">
+        SELECT
+          B.REPORTCONFIGLINEID
+        FROM T_EMC_METHOD A
+          LEFT JOIN T_EMC_METHOD_VERSION B
+            ON A.MAXVERSIONID = B.ID
+        WHERE A.ID = #{id}
+    </select>
+    
+</mapper>

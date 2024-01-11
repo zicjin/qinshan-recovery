@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.emc.module.mdm.equipt.equiptacqresult.mapper.EmcEquiptAcqResultMapper">
+    
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM T_EMC_EQUIPT_ACQ_RESULT T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+            <if test='orderTaskId != null'>
+	            AND EXISTS (SELECT 1
+	                          FROM T_PH_SP_RESULT A
+	                         WHERE A.ORDERTASKID = #{orderTaskId}
+	                           AND T.FIELDNAME = A.TESTITEMNAME
+	                           AND A.RESULTINPUTMETHODCATEGORY = 'fileAcquisition')
+        </if>
+        </where>
+        ORDER BY 
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.EQUIPTACQFILEID, T.ROWNO ASC
+            </otherwise>
+        </choose>
+    </select>
+    
+    <select id="selectByConditionByBizNoList" resultType="map">
+        SELECT T.*,
+               E.ID FILEID
+          FROM T_PH_EQUIPTACQ_RESULT T,
+               T_CORE_FILE           E
+         WHERE 'T_PH_EQUIPTACQ_FILE$' + CAST(T.EQUIPTACQFILEID AS VARCHAR) = E.TARGETID
+           AND T.BIZNO IN 
+        <foreach collection="bizNoList" index="index" item="item" open="(" separator="," close=")">
+           #{item}
+        </foreach>
+        <if test='testId != null'>
+           AND EXISTS (SELECT 1
+                         FROM T_PH_DEPT_TEST_ITEM A
+                        WHERE A.TESTID = #{testId}
+                          AND T.FIELDNAME = A.ITEMNAME
+                          AND A.RESULTINPUTMETHODCATEGORY = 'fileAcquisition')
+        </if>
+        ORDER BY 
+                T.EQUIPTACQFILEID, T.ROWNO ASC
+    </select>
+    
+    <select id="selectByConditionForAcqAutoUpdate" resultType="map">
+        SELECT D.ID,
+               D.RESULT,
+               A.ID AS SPRESULTID
+          FROM T_PH_SP_RESULT A,
+               T_PH_SP_ORDER_TASK B,
+               T_PH_SP_ORDER C,
+               T_PH_EQUIPTACQ_RESULT D
+         WHERE A.ORDERTASKID = B.ID
+           AND B.ORDERID =C.ID
+           AND C.ORDERNUMBER = D.BIZNO
+           AND A.TESTITEMNAME = D.FIELDNAME
+           AND D.ID IN
+        <foreach collection="idList" index="index" item="item" open="(" separator="," close=")">
+           #{item}
+        </foreach>
+    </select>
+    
+    <select id="selectDetail" parameterType="java.lang.Long" resultType="map">
+        SELECT T.*
+          FROM T_EMC_EQUIPT_ACQ_RESULT T
+         WHERE T.ID = #{id}
+    </select>
+    
+</mapper>

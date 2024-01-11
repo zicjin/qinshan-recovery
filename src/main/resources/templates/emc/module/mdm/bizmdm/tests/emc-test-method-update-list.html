@@ -1,0 +1,10 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/emc/module/mdm/bizmdm/tests/emc-test-method.js',
+                      '/static/emc/module/mdm/bizmdm/tests/emc-test-method-edit-list.js',
+                      '/static/emc/module/mdm/bizmdm/tests/emc-test-method-update-list.js'
+                    ]);
+    emcTestMethod.updatePage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>
+

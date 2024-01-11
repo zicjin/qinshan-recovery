@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/emc/module/item/leave-applies/emc-leave-apply.js',
+                      '/static/emc/module/item/leave-applies/emc-leave-apply-detail.js'
+                    ]);
+    emcLeaveApply.detailPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>
+

@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/emc/module/bp/result/curves/emc-curve.js',
+                      '/static/emc/module/bp/result/curves/emc-curve-choose-list.js'
+                    ]);
+    emcCurve.choosePage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>
+

@@ -1,0 +1,10 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([
+                      '/static/emc/module/mdm/equipt/equipts/emc-equipt.js',
+                      '/static/emc/module/mdm/equipt/equipts/emc-equipt-use-record.js',
+                      '/static/emc/module/mdm/equipt/equipts/emc-equipt-use-record-edit-list.js'
+                    ]);
+    emcEquiptUseRecord.editPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>

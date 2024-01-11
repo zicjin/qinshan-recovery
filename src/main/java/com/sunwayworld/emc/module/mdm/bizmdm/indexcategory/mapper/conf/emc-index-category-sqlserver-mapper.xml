@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.emc.module.mdm.bizmdm.indexcategory.mapper.EmcIndexCategoryMapper">
+    
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM (SELECT A.*,
+                       D.NAME             AS FILENAME,
+                       D.ID               AS FILEID,
+                       P.MONITORTMPLGROUP,
+                       E.TEMPLATENAME
+                  FROM T_EMC_INDEX_CATEGORY A
+                  LEFT JOIN T_CORE_FILE D
+                    ON D.TARGETID = CONCAT('T_EMC_INDEX_CATEGORY$', A.ID)
+                  LEFT JOIN T_EMC_MONITOR_TMPL_GROUP P
+                    ON A.MONITORTMPLGROUPID = P.ID
+                  LEFT JOIN T_EMC_PROPERTY_TMPL E
+                    ON E.ID = A.PROPERTYTMPLID) T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+        </where>
+        ORDER BY 
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ID DESC
+            </otherwise>
+        </choose>
+    </select>
+    
+    <select id="selectDetail" parameterType="java.lang.Long" resultType="map">
+        SELECT T.*, P.MONITORTMPLGROUP, E.TEMPLATENAME
+          FROM T_EMC_INDEX_CATEGORY T
+          LEFT JOIN T_EMC_MONITOR_TMPL_GROUP P
+            ON T.MONITORTMPLGROUPID = P.ID
+          LEFT JOIN T_EMC_PROPERTY_TMPL E
+            ON E.ID = T.PROPERTYTMPLID
+         WHERE T.ID = #{id}
+    </select>
+    
+</mapper>

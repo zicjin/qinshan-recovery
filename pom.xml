@@ -1,0 +1,222 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.sunwayworld.cloud</groupId>
+        <artifactId>gikam-core-parent</artifactId>
+        <version>0.9.0</version>
+    </parent>
+    <artifactId>gikam-third-czjky</artifactId>
+    <name>Gikam THIRD CZJKY</name>
+
+    <properties>
+        <gikam.core.cloud.version>0.9.0</gikam.core.cloud.version>
+        <log4j2.version>2.16.0</log4j2.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>net.sourceforge.jexcelapi</groupId>
+            <artifactId>jxl</artifactId>
+            <version>2.5.7</version>
+        </dependency>
+        <!-- 基础微服务，必须引入 -->
+        <dependency>
+            <groupId>com.sunwayworld.cloud</groupId>
+            <artifactId>gikam-core-common</artifactId>
+            <version>0.9.6</version>
+        </dependency>
+        <!-- 辅助功能微服务，必须引入 -->
+        <dependency>
+            <groupId>com.sunwayworld.cloud</groupId>
+            <artifactId>gikam-core-item-service</artifactId>
+            <version>0.9.6</version>
+        </dependency>
+        <!-- 系统运行相关微服务，必须引入 -->
+        <dependency>
+            <groupId>com.sunwayworld.cloud</groupId>
+            <artifactId>gikam-core-system-service</artifactId>
+            <version>${gikam.core.cloud.version}</version>
+        </dependency>
+        <!-- 用户登录和密码相关微服务，必须引入 -->
+        <dependency>
+            <groupId>com.sunwayworld.cloud</groupId>
+            <artifactId>gikam-core-user-service</artifactId>
+            <version>${gikam.core.cloud.version}</version>
+        </dependency>
+        <!-- 定时任务管理微服务，选择引入 -->
+        <dependency>
+            <groupId>com.sunwayworld.cloud</groupId>
+            <artifactId>gikam-core-schedule-service</artifactId>
+            <version>${gikam.core.cloud.version}</version>
+        </dependency>
+        <!-- 邮件微服务，选择引入 -->
+        <dependency>
+            <groupId>com.sunwayworld.cloud</groupId>
+            <artifactId>gikam-core-email-service</artifactId>
+            <version>${gikam.core.cloud.version}</version>
+        </dependency>
+        <!-- 帆软报表微服务，选择引入 -->
+        <dependency>
+            <groupId>com.sunwayworld.cloud</groupId>
+            <artifactId>gikam-core-fr-service9.0</artifactId>
+            <version>${gikam.core.cloud.version}</version>
+        </dependency>
+        <!-- 消息通知微服务，选择引入 -->
+        <dependency>
+            <groupId>com.sunwayworld.cloud</groupId>
+            <artifactId>gikam-core-notification-service</artifactId>
+            <version>${gikam.core.cloud.version}</version>
+        </dependency>
+        <!-- 拓扑图微服务，选择引入 -->
+        <dependency>
+            <groupId>com.sunwayworld.cloud</groupId>
+            <artifactId>gikam-core-topology-service</artifactId>
+            <version>${gikam.core.cloud.version}</version>
+        </dependency>
+        <!-- ELN微服务，选择引入 -->
+        <dependency>
+            <groupId>com.sunwayworld.cloud</groupId>
+            <artifactId>gikam-core-eln-service</artifactId>
+            <version>${gikam.core.cloud.version}</version>
+        </dependency>
+        <!-- LES微服务，选择引入 -->
+        <dependency>
+            <groupId>com.sunwayworld.cloud</groupId>
+            <artifactId>gikam-core-les-service</artifactId>
+            <version>${gikam.core.cloud.version}</version>
+        </dependency>
+        <!-- 日程微服务，选择引入 -->
+        <dependency>
+            <groupId>com.sunwayworld.cloud</groupId>
+            <artifactId>gikam-core-mytask-service</artifactId>
+            <version>${gikam.core.cloud.version}</version>
+        </dependency>
+        <!-- 培训考核微服务，选择引入 -->
+        <dependency>
+            <groupId>com.sunwayworld.cloud</groupId>
+            <artifactId>gikam-core-train-service</artifactId>
+            <version>${gikam.core.cloud.version}</version>
+        </dependency>
+        <!-- 移动端微服务，选择引入 -->
+        <dependency>
+            <groupId>com.sunwayworld.cloud</groupId>
+            <artifactId>gikam-core-mobile-service</artifactId>
+            <version>${gikam.core.cloud.version}</version>
+        </dependency>
+        <!-- OnlyOffice相关微服务，必须引入 -->
+        <dependency>
+            <groupId>com.sunwayworld.cloud</groupId>
+            <artifactId>gikam-core-office-service</artifactId>
+            <version>0.9.2</version>
+        </dependency>
+        <dependency>
+            <groupId>net.unicon.cas</groupId>
+            <artifactId>cas-client-autoconfig-support</artifactId>
+            <version>2.2.0-GA</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.logging.log4j</groupId>
+                    <artifactId>log4j-to-slf4j</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+    </dependencies>
+
+    <repositories>
+        <repository>
+            <id>nexus</id>
+            <name>remote private nexus</name>
+            <url>https://nexus.sunwayworld.net/repository/maven-public/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>nexus</id>
+            <name>remote private nexus</name>
+            <url>https://nexus.sunwayworld.net/repository/maven-public/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
+
+    <distributionManagement>
+        <repository>
+            <id>nexus-releases</id>
+            <name>release</name>
+            <url>https://nexus.sunwayworld.net/repository/maven-public/</url>
+        </repository>
+        <snapshotRepository>
+            <uniqueVersion>true</uniqueVersion>
+            <id>nexus-snapshot</id>
+            <name>snapshot</name>
+            <url>https://nexus.sunwayworld.net/repository/maven-public/</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+    <build>
+        <plugins>
+            <plugin>
+                <!--
+                    SpringBoot重新打包成可执行jar
+                    原jar文件会添加后缀为.jar.original
+                 -->
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>com.sunwayworld.emc.projectfunction.GikamWpjcApplication</mainClass>
+                    <fork>false</fork>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <!--
+                 Maven install前把重新打包的可执行文件的后缀改  -run.jar
+                 原来的.jar.original文件去掉.original
+                 -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>pre-install</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <move
+                                    file="${basedir}/target/${project.artifactId}-${project.version}.${project.packaging}"
+                                    tofile="${basedir}/target/${project.artifactId}-${project.version}-run.${project.packaging}" />
+                                <move
+                                    file="${basedir}/target/${project.artifactId}-${project.version}.${project.packaging}.original"
+                                    tofile="${basedir}/target/${project.artifactId}-${project.version}.${project.packaging}" />
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

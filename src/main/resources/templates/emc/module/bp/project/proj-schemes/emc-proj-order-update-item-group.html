@@ -1,0 +1,8 @@
+
+<script th:inline="javascript">
+    Gikam.requirejs([ '/static/emc/module/bp/project/proj-schemes/emc-proj-scheme.js',
+                      '/static/emc/module/bp/project/proj-schemes/emc-proj-order-update-item-group.js'
+                    ]);
+    emcProjScheme.updateItemGroupPage.init(Gikam.getElParam([[${param}]]));
+</script>
+

@@ -1,0 +1,10 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/emc/module/mdm/bizmdm/clients/emc-client.js',
+                      '/static/emc/module/bp/project/proj-schemes/emc-proj-scheme.js',
+                      '/static/emc/module/bp/project/proj-schemes/emc-proj-init-scheme.js'
+                    ]);
+    emcProjScheme.initSchemePage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>
+

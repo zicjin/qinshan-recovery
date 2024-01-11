@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/emc/module/mdm/basemdm/biz-categories/emc-biz-category.js',
+                      '/static/emc/module/mdm/basemdm/biz-categories/emc-biz-category-project-choose-list.js'
+                    ]);
+    emcBizCategory.simpleChoosePage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>
+

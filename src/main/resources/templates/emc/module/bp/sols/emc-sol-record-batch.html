@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/emc/module/bp/sols/emc-sol.js',
+                      '/static/emc/module/bp/sols/emc-sol-record-batch.js'
+                    ]);
+emcSol.solRecordBatchPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>
+

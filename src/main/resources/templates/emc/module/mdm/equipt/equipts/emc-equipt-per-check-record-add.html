@@ -1,0 +1,10 @@
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    Gikam.requirejs([
+        '/static/emc/module/mdm/equipt/equipts/emc-equipt.js',
+        '/static/emc/module/mdm/equipt/equipts/emc-equipt-per-check-record.js',
+        '/static/emc/module/mdm/equipt/equipts/emc-equipt-per-check-record-add.js'
+    ]);
+    emcEquiptPerCheckRecord.addPage.init(Gikam.getElParam([[${param}]]));
+    /*]]>*/
+</script>

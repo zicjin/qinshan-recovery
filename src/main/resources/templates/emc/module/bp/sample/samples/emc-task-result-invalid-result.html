@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/emc/module/bp/sample/samples/emc-sample.js',
+                      '/static/emc/module/bp/sample/samples/emc-task-result-invalid-result.js'
+                    ]);
+    emcSample.taskResultInvalidResultPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>
+

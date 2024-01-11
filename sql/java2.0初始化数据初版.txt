@@ -1,0 +1,149 @@
+-- 业务流程数据清理
+delete from t_emc_project; -- 任务表
+delete from t_emc_project_director; -- 项目负责人表
+delete from t_emc_proj_scheme; -- 方案 点位信息
+delete from t_emc_proj_order; -- 方案 样品信息
+DELETE from t_emc_analysis_project; --分析项目表
+delete from t_emc_folder; -- 点位信息
+delete from t_emc_order; -- 样品信息
+delete from t_emc_order_item_group; -- 分析项组表
+delete from t_emc_order_item; -- 分析项表
+delete from t_emc_order_task; -- 测试表
+delete from t_emc_order_task_result; -- 结果表
+delete from t_emc_report; -- 报告阶段生成的报告表
+delete from t_emc_report_result; -- 报告数据表
+delete from t_emc_sample; -- 采样单表
+delete from t_emc_run; -- 批表
+delete from T_EMC_RESULT_LOG; -- 日志
+delete from T_EMC_ORDER_TASK_LOG; -- 日志
+delete from T_EMC_ORDER_RETAIN;  -- 留样表
+delete from T_EMC_ORDER_LABEL; -- 扫码接样表
+delete from T_CORE_BPMN_COMMENT; --工作流操作记录
+delete from T_CORE_FILE where TARGETID not like 'T_EMC_METHOD_VERSION%'; -- 系统附件表
+delete from T_EMC_REAGENT; -- 一般溶液配制记录
+delete from T_EMC_SOL; -- 标准溶液配制表
+delete from t_emc_sol_record;  -- 标准溶液配制数据记录表
+delete from t_emc_curve; -- 曲线记录/仪器曲线记录表
+delete from t_emc_property_data; -- 方法参数表
+delete from t_emc_audit_record; -- 审核记录
+
+commit;
+
+-- 合同评审相关数据表
+delete from T_EMC_EXPENSE_CATEGORY; -- 费用预算表
+delete from T_EMC_CONTRACT; -- 合同主表
+delete from T_EMC_REVIEW_CONTENT; -- 评审内容提要表
+delete from T_EMC_MONITOR_ITEM; -- 费用预算测试表
+
+-- 文件管理
+select * from T_EMC_FILE_CATEGORY; -- 文件类型表（可以不删）
+delete from T_EMC_FILE; -- 文件管理表格
+delete from t_emc_file_version; -- 文件版本
+delete from t_emc_file_version_dist; -- 发放回收表
+
+-- 仪器管理
+delete from T_EMC_EQUIPT; -- 仪器表
+delete from T_EMC_EQUIPT_TEST_METHOD; -- 仪器关联测试表
+delete from T_EMC_EQUIPT_PLAN; -- 仪器维护计划表
+delete from T_EMC_EQUIPT_RECORD; -- 仪器维护记录表
+delete from T_EMC_EQUIPT_USE_RECORD; -- 仪器使用记录表
+delete from T_EMC_EQUIPT_DCU_CONF; -- 设备-DCU配置表
+delete from T_EMC_EQUIPT_ACQ_FILE; -- 仪器采集文件表
+delete from T_EMC_EQUIPT_ACQ_RESULT; -- 仪器采集结果表
+delete from T_EMC_EQUIPT_TEST_ITEM; -- 设备台账DCU测试项目表
+delete from T_EMC_EQUIPT_REQUISITION; -- 仪器领用表格
+delete from T_EMC_EQUIPT_PURCH; -- 仪器采购表格
+
+-- 材料管理
+delete from T_EMC_MTL; -- 材料主表
+delete from T_EMC_STOCK; --材料库存表
+delete from T_EMC_STOCK_LOG; -- 材料历史记录表
+delete from T_EMC_STOCK_CONCENT; -- 库存浓度表
+delete from T_EMC_MTL_MAINTAIN; -- 材料物质维护表
+delete from T_EMC_MTL_MAINTAIN_ITEM; -- 材料物质分析项表
+delete from T_EMC_MTL_APPLY; 材料领用
+
+-- 方法管理、测试管理、监测模板暂不清理
+
+-- 点位管理
+delete from T_EMC_MONITOR_POINT; -- 监测点管理表
+delete from T_EMC_MONITOR_POINT_SCHEME; -- 监测点方案表
+delete from T_EMC_CLIENT; -- 客户表
+delete from T_EMC_CLIENT_CONTACT; -- 客户联系人表
+delete from T_EMC_CLIENT_CONTACT; -- 客户联系人表
+
+-- 业务类型（根据各个项目需求，可以前期不删除）
+delete from T_EMC_BIZ_CATEGORY; -- 业务类型表
+delete from T_EMC_BIZ_CATEGORY_PROJECT; -- 项目名称
+
+-- 监测能力管理
+delete from T_EMC_MONITOR_ABILITY; -- 监测能力表
+delete from T_EMC_MONITOR_ABILITY_TEST;  -- 监测能力测试表
+delete from T_EMC_MONITOR_ABILITY_EQUIPT;  -- 监测能力仪器表
+delete from T_EMC_MONITOR_ABILITY_EMP;  -- 监测能力人员表
+
+-- 证书认证
+delete from T_EMC_CERT; -- 人员证书表
+delete from T_EMC_CERT_TEST_METHOD; -- 方法内容表
+delete from T_EMC_CERT_MONITOR_ABILITY; -- 检测能力表
+delete from T_EMC_CERT_LOG; -- 审核历史表
+
+-- 区域管理
+delete from T_EMC_AREA; -- 区域表
+
+-- 供应商/生产商管理
+delete from T_EMC_VENDOR; -- 生厂商供应商表
+delete from T_EMC_VENDOR_MTL; -- 供应物品记录表
+
+-- 培训管理
+delete from T_EMC_TRAIN_COURSE; -- 培训课程表
+delete from T_EMC_TC_TEST_METHOD; -- 涉及标准表
+delete from T_CORE_TRAIN_PLAN; -- 培训计划
+delete from t_core_train_user; -- 参与人员
+
+-- 环境管理
+delete from T_EMC_ENV_RECORD; -- 环境管理
+
+-- 固定资产管理 
+delete from T_EMC_FIXEDASSET; -- 固定资产管理
+
+-- 人员管理
+delete from t_core_org; -- 组织结构
+-- 角色管理暂时不进行删除
+delete from T_CORE_USER_PERMISSION; -- 科室权限
+delete from T_CORE_ROLE_USER where USERID <> 'admin'  ; -- 用户角色
+delete from T_CORE_USER where id <> 'admin'   ; -- 用户表
+delete from T_EMC_EMP ; -- 人员表
+delete from T_EMC_EMP_TEST ; -- 可见测试表
+delete from T_EMC_EMP_QUAL ; -- 人员资质表
+
+
+-- 质量管理（认证认可模块）
+delete from T_EMC_QUALITY_CONTROL ; -- 质量控制计划表
+delete from T_EMC_MANAGE_REVIEW ; -- 质量评审计划表
+delete from T_EMC_PRECAUTION ; -- 预防措施计划表
+delete from T_EMC_CORRECTION ; -- 纠正措施计划表
+delete from T_EMC_IMPROVEMENT ; -- 改进措施计划表
+delete from T_EMC_QUALITY_SUPERVISION ; -- 质量监督表
+delete from T_EMC_QUALITY_SUPERVISION_PLAN ; -- 质量监督计划表
+delete from T_EMC_QUALITY_SUPERVISION_CONT ; -- 质量监督内容表
+delete from T_EMC_COMPLAINT ; -- 申投诉申请
+delete from T_EMC_INTERNAL_AUDIT ; -- 内审计划
+delete from T_EMC_INCONFORMITY ; -- 不符合项申请
+
+--定时器
+delete from t_core_schedule_task ; -- 定时器
+delete from t_core_schedule_task_config ; -- 定时器参数配置
+delete from t_core_schedule_task_log ; -- 定时器日志
+
+
+-- 初始化工作流相关数据
+DELETE FROM T_CORE_BPMN_COMMENT;
+DELETE FROM T_CORE_BPMN_INST;
+DELETE FROM T_CORE_BPMN_INST_TASK;
+DELETE FROM T_CORE_BPMN_INST_TASK_USER;
+DELETE FROM T_CORE_BPMN_INST_TASK_ROLE;
+
+DELETE FROM T_CORE_BPMN_PROC WHERE SERVICEID NOT IN (SELECT ID FROM T_CORE_MENU_EXT);
+DELETE FROM T_CORE_BPMN_PROC_ORG WHERE PROCID NOT IN (SELECT ID FROM T_CORE_BPMN_PROC);
+DELETE FROM T_CORE_BPMN_DIAGRAM  WHERE ID NOT IN (SELECT DIAGRAMID FROM T_CORE_BPMN_PROC);

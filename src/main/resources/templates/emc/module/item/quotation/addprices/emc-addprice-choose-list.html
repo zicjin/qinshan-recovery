@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/emc/module/item/quotation/addprices/emc-addprice.js',
+                      '/static/emc/module/item/quotation/addprices/emc-addprice-choose-list.js'
+                    ]);
+    emcAddprice.choosePage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>
+

@@ -1,0 +1,163 @@
+<th:block th:replace="module/gikam/workspace" />
+<script th:src="@{/static/emc/config/emc-select-config.js}"></script>
+
+<script>
+    var echart;
+    var option = {
+        xAxis : {
+            type : 'category',
+            axisLine : {
+                show : false
+            },
+            axisTick : {
+                show : false
+            },
+            boundaryGap : true,
+            nameLocation : 'start',
+            data : [],
+            axisLabel : {
+                formatter : function(r) {
+                    return r + '月';
+                }
+            }
+        },
+        yAxis : {
+            type : 'value',
+            axisLine : {
+                show : false,
+            },
+            axisTick : {
+                show : false
+            },
+            splitLine : {
+                lineStyle : {
+                    color : '#eee',
+                    type : 'dashed'
+                }
+            },
+            minInterval : 1
+        },
+        series : [ {
+            data : [],
+            type : 'line',
+            areaStyle : {
+                color : 'rgba(81, 207, 160, 0.5)'
+            }
+        } ],
+        color : [ '#51CFA0' ],
+        tooltip : {
+            show : true,
+            trigger : 'axis',
+            formatter : function(data) {
+                return (parseInt(data[0]['name']) + '月' + '</br>报告数量: ' + data[0]['value'])
+            }
+        },
+        grid : {
+            left : 50,
+            right : 50,
+            top : 18,
+            bottom : 40
+        }
+    };
+
+    function query(bizCategoryId) {
+        Gikam.postSync(IFM_CONTEXT + '/secure/emc/module/bp/project/projects/annual-project-statistics/queries', Gikam.getJsonWrapper({
+            f : bizCategoryId ? {
+                bizCategoryId_SEQ : bizCategoryId
+            } : {}
+        }, [ '', [] ])).done(function(data) {
+            if (data) {
+                var rows = data.rows;
+                var months = [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ];
+                var projectCounts = new Array(12).fill(0);
+                rows.map(function(r) {
+                    var index = months.indexOf(parseInt(r.ext$.monthvalue));
+                    if (index !== -1) {
+                        projectCounts[index] = (r.ext$.projectcount);
+                    }
+                })
+                option.xAxis.data = months
+                option.series[0].data = projectCounts
+                if (echart) {
+                    echart.setOption({
+                        xAxis : [ {
+                            data : months,
+                        } ],
+                        series : [ {
+                            data : projectCounts,
+                        } ],
+                    })
+                }
+            }
+        });
+    }
+
+    function init() {
+        query();
+        Gikam.create('echarts', {
+            id : 'emc-annual-project-statistics-line-chart',
+            renderTo : document.body,
+            config : {
+                search : {
+                    type : 'form',
+                    id : 'emc-task-chart-form',
+                    titleWidth : 75,
+                    fields : [ {
+                        field : 'bizCategoryId',
+                        title : '业务类型',
+                        type : 'select',
+                        search : true,
+                        width : 230,
+                        category : 'bizCategory',
+                        onChange : function(i, bizCategoryId) {
+                            query(bizCategoryId);
+                        }
+                    } ],
+                    autoSave : false,
+                    onRendered : function() {
+                        echart = Gikam.getComp('emc-annual-project-statistics-line-chart');
+                    },
+                }
+            },
+            option : option,
+        });
+    }
+
+    init();
+</script>
+
+<style>
+@media screen and (max-width: 760px) {
+    .main-container {
+        width: 100%;
+    }
+    .layout>.center-container>.west>.body .tab {
+        padding-right: 0;
+    }
+    .layout>.center-container>.east>.body .tab {
+        padding-left: 0;
+    }
+    .layout>div.center-container {
+        display: flex;
+    }
+    .layout>.center-container>.center, .layout>.center-container>.east, .layout>.center-container>.north, .layout>.center-container>.south, .layout>.center-container>.west {
+        width: auto !important;
+    }
+    .layout .split {
+        display: block;
+    }
+    .layout .region>.body, .layout .tab .panel-body {
+        position: absolute;
+    }
+    .grid>div.grid-body {
+        height: 0;
+    }
+    .form .form-group {
+        width: 230px !important;
+    }
+    
+    .north.region {
+        height: 60px!important;
+    }
+}
+</style>

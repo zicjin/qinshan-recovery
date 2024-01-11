@@ -1,0 +1,8 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/emc/module/mdm/bizmdm/tests/emc-test-method.js',
+                      '/static/emc/module/mdm/bizmdm/tests/emc-tc-test-method-choose-list.js'
+                    ]);
+    emcTestMethod.tcTestMethodChoosePage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>

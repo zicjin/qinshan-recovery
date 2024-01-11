@@ -1,0 +1,741 @@
+-- ----------------------------- 2020-02-27 add by zhangpf--------------begin
+-- ----------------------------
+-- Table structure for T_CORE_DIAGRAM
+-- ----------------------------
+IF EXISTS (SELECT * FROM sys.all_objects WHERE object_id = OBJECT_ID(N'[dbo].[T_CORE_DIAGRAM]') AND type IN ('U'))
+    DROP TABLE [dbo].[T_CORE_DIAGRAM]
+GO
+
+CREATE TABLE [dbo].[T_CORE_DIAGRAM] (
+  [ID] bigint  NOT NULL,
+  [TARGETID] varchar(60) COLLATE Chinese_PRC_CI_AS  NULL,
+  [DIAGRAM] text COLLATE Chinese_PRC_CI_AS  NULL,
+  [CREATEDBYID] varchar(36) COLLATE Chinese_PRC_CI_AS  NULL,
+  [CREATEDBYNAME] varchar(60) COLLATE Chinese_PRC_CI_AS  NULL,
+  [CREATEDTIME] datetime  NULL,
+  [CREATEDBYORGID] varchar(36) COLLATE Chinese_PRC_CI_AS  NULL,
+  [CREATEDBYORGNAME] varchar(270) COLLATE Chinese_PRC_CI_AS  NULL,
+  CONSTRAINT PK_CORE_DIAGRAM PRIMARY KEY(ID)
+)
+GO
+
+ALTER TABLE [dbo].[T_CORE_DIAGRAM] SET (LOCK_ESCALATION = TABLE)
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'主键',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_DIAGRAM',
+'COLUMN', N'ID'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'对应业务主键',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_DIAGRAM',
+'COLUMN', N'TARGETID'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'图表',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_DIAGRAM',
+'COLUMN', N'DIAGRAM'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'制单人编码',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_DIAGRAM',
+'COLUMN', N'CREATEDBYID'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'制单人名称',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_DIAGRAM',
+'COLUMN', N'CREATEDBYNAME'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'制单时间',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_DIAGRAM',
+'COLUMN', N'CREATEDTIME'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'制单单位编码',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_DIAGRAM',
+'COLUMN', N'CREATEDBYORGID'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'制单单位名称',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_DIAGRAM',
+'COLUMN', N'CREATEDBYORGNAME'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'图表',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_DIAGRAM'
+GO
+
+insert into T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+values ('T_CORE_DIAGRAM', '0', '0');
+-- ----------------------------- 2020-02-27 add by zhangpf--------------end
+
+-- ----------------------------- 2020-03-03 add by liyang--------------begin
+update T_core_table set attachment = '1' where id = 'T_CORE_LES_TEMPLATE_UNIT';
+-- ----------------------------- 2020-03-03 add by liyang--------------end
+
+-- ----------------------------- 2020-03-07 add by zhangjr--------------begin
+/*
+ Navicat Premium Data Transfer
+
+ Source Server         : SqlServer-环保
+ Source Server Type    : SQL Server
+ Source Server Version : 12005000
+ Source Host           : 58.56.21.146:1142
+ Source Catalog        : emc_dev
+ Source Schema         : dbo
+
+ Target Server Type    : SQL Server
+ Target Server Version : 12005000
+ File Encoding         : 65001
+
+ Date: 04/03/2020 23:23:09
+*/
+
+
+-- ----------------------------
+-- Table structure for T_CORE_FORMULA_RERUIRED
+-- ----------------------------
+IF EXISTS (SELECT * FROM sys.all_objects WHERE object_id = OBJECT_ID(N'[dbo].[T_CORE_FORMULA_RERUIRED]') AND type IN ('U'))
+	DROP TABLE [dbo].[T_CORE_FORMULA_RERUIRED]
+GO
+
+CREATE TABLE [dbo].[T_CORE_FORMULA_RERUIRED] (
+  [ID] int  NOT NULL,
+  [ITEMID] varchar(32) COLLATE Chinese_PRC_CI_AS  NOT NULL,
+  [REQUIREDITEMID] varchar(32) COLLATE Chinese_PRC_CI_AS  NULL,
+  [REQUIREDTESTID] varchar(32) COLLATE Chinese_PRC_CI_AS  NULL,
+  [REQUIREDORDERID] varchar(32) COLLATE Chinese_PRC_CI_AS  NULL,
+  [REQUIREDREPEATNO] varchar(5) COLLATE Chinese_PRC_CI_AS  NULL,
+  [REQUIREDFOLDER] varchar(1) COLLATE Chinese_PRC_CI_AS  NULL
+)
+GO
+
+ALTER TABLE [dbo].[T_CORE_FORMULA_RERUIRED] SET (LOCK_ESCALATION = TABLE)
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'主键',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_FORMULA_RERUIRED',
+'COLUMN', N'ID'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'分析项ID',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_FORMULA_RERUIRED',
+'COLUMN', N'ITEMID'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'计算所需的分析项ID',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_FORMULA_RERUIRED',
+'COLUMN', N'REQUIREDITEMID'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'计算所需的测试编码',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_FORMULA_RERUIRED',
+'COLUMN', N'REQUIREDTESTID'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'计算所需的样品编码',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_FORMULA_RERUIRED',
+'COLUMN', N'REQUIREDORDERID'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'计算所需的重复数',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_FORMULA_RERUIRED',
+'COLUMN', N'REQUIREDREPEATNO'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'计算是否查询点位下的数据',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_FORMULA_RERUIRED',
+'COLUMN', N'REQUIREDFOLDER'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'分析项中计算公式所需的关系表',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_FORMULA_RERUIRED'
+GO
+
+
+-- ----------------------------
+-- Primary Key structure for table T_CORE_FORMULA_RERUIRED
+-- ----------------------------
+ALTER TABLE [dbo].[T_CORE_FORMULA_RERUIRED] ADD CONSTRAINT [PK__T_CORE_FORMULA_RERUIRED] PRIMARY KEY CLUSTERED ([ID])
+WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)  
+ON [PRIMARY]
+GO
+-- ----------------------------- 2020-03-07 add by zhangjr--------------end
+
+
+-- ----------------------------- 2020-03-10 add by liyang--------------begin
+CREATE TABLE [dbo].[T_CORE_LES_IUP] (
+[ID] BIGINT NOT NULL ,
+[INSTANCEUNITID] BIGINT NULL,
+[POSTIL] TEXT NULL ,
+[RESOLVE] TEXT  NULL ,
+[VERSION] int NULL ,
+[CREATEDBYID] varchar(32)  NULL ,
+[CREATEDBYNAME] varchar(64)  NULL ,
+[CREATEDTIME] datetime NULL ,
+[CREATEDBYORGID] varchar(32)  NULL ,
+[CREATEDBYORGNAME] varchar(64)  NULL ,
+[LASTUPDATEDBYID] varchar(32)  NULL ,
+[LASTUPDATEDBYNAME] varchar(64)  NULL ,
+[LASTUPDATEDTIME] datetime NULL ,
+[SOURCEID] bigint NULL,
+CONSTRAINT [PK_CORE_LES_IUP] PRIMARY KEY ([ID])
+)
+
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'ELN实例组件批注表'
+, @level0type = 'SCHEMA', @level0name = N'dbo'
+, @level1type = 'TABLE', @level1name = N'T_CORE_LES_IUP'
+GO
+
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'批注ID'
+, @level0type = 'SCHEMA', @level0name = N'dbo'
+, @level1type = 'TABLE', @level1name = N'T_CORE_LES_IUP'
+, @level2type = 'COLUMN', @level2name = N'ID'
+GO
+
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'ELN实例组件ID'
+, @level0type = 'SCHEMA', @level0name = N'dbo'
+, @level1type = 'TABLE', @level1name = N'T_CORE_LES_IUP'
+, @level2type = 'COLUMN', @level2name = N'INSTANCEUNITID'
+GO
+
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'批注'
+, @level0type = 'SCHEMA', @level0name = N'dbo'
+, @level1type = 'TABLE', @level1name = N'T_CORE_LES_IUP'
+, @level2type = 'COLUMN', @level2name = N'POSTIL'
+GO
+
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'回复'
+, @level0type = 'SCHEMA', @level0name = N'dbo'
+, @level1type = 'TABLE', @level1name = N'T_CORE_LES_IUP'
+, @level2type = 'COLUMN', @level2name = N'RESOLVE'
+GO
+
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'版本'
+, @level0type = 'SCHEMA', @level0name = N'dbo'
+, @level1type = 'TABLE', @level1name = N'T_CORE_LES_IUP'
+, @level2type = 'COLUMN', @level2name = N'VERSION'
+GO
+
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'制单人编码'
+, @level0type = 'SCHEMA', @level0name = N'dbo'
+, @level1type = 'TABLE', @level1name = N'T_CORE_LES_IUP'
+, @level2type = 'COLUMN', @level2name = N'CREATEDBYID'
+GO
+
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'制单人名称'
+, @level0type = 'SCHEMA', @level0name = N'dbo'
+, @level1type = 'TABLE', @level1name = N'T_CORE_LES_IUP'
+, @level2type = 'COLUMN', @level2name = N'CREATEDBYNAME'
+GO
+
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'制单时间'
+, @level0type = 'SCHEMA', @level0name = N'dbo'
+, @level1type = 'TABLE', @level1name = N'T_CORE_LES_IUP'
+, @level2type = 'COLUMN', @level2name = N'CREATEDTIME'
+GO
+
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'制单人单位编码'
+, @level0type = 'SCHEMA', @level0name = N'dbo'
+, @level1type = 'TABLE', @level1name = N'T_CORE_LES_IUP'
+, @level2type = 'COLUMN', @level2name = N'CREATEDBYORGID'
+GO
+
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'制单人单位名称'
+, @level0type = 'SCHEMA', @level0name = N'dbo'
+, @level1type = 'TABLE', @level1name = N'T_CORE_LES_IUP'
+, @level2type = 'COLUMN', @level2name = N'CREATEDBYORGNAME'
+GO
+
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'最后修改人编码'
+, @level0type = 'SCHEMA', @level0name = N'dbo'
+, @level1type = 'TABLE', @level1name = N'T_CORE_LES_IUP'
+, @level2type = 'COLUMN', @level2name = N'LASTUPDATEDBYID'
+GO
+
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'最后修改人名称'
+, @level0type = 'SCHEMA', @level0name = N'dbo'
+, @level1type = 'TABLE', @level1name = N'T_CORE_LES_IUP'
+, @level2type = 'COLUMN', @level2name = N'LASTUPDATEDBYNAME'
+GO
+
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'最后修改时间'
+, @level0type = 'SCHEMA', @level0name = N'dbo'
+, @level1type = 'TABLE', @level1name = N'T_CORE_LES_IUP'
+, @level2type = 'COLUMN', @level2name = N'LASTUPDATEDTIME'
+GO
+
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'来源ID(同ELN实例的来源ID)'
+, @level0type = 'SCHEMA', @level0name = N'dbo'
+, @level1type = 'TABLE', @level1name = N'T_CORE_LES_IUP'
+, @level2type = 'COLUMN', @level2name = N'SOURCEID'
+GO
+
+INSERT INTO T_CORE_TABLE (ID,AUDITABLE,ATTACHMENT)
+VALUES ('T_CORE_LES_IUP', '0', '0');
+
+INSERT INTO T_CORE_TABLE_HIERARCHY (ID, TABLENAME, MASTERTABLENAME, REFERCOLUMN)
+VALUES ('2020031001','T_CORE_LES_IUP', 'T_CORE_LES_INSTANCE_UNIT', 'INSTANCEUNITID');
+
+CREATE NONCLUSTERED INDEX [IDX_CORE_LES_IUP_UNITID]
+ON [dbo].[T_CORE_LES_IUP] (
+  [INSTANCEUNITID] ASC
+)
+GO
+-- ----------------------------- 2020-03-10 add by liyang--------------end
+
+-- ----------------------------- 2020-03-14 add by shixw--------------begin
+
+-- 建表语句
+CREATE TABlE DBO.T_CORE_WK_SCHEME(
+    ID BIGINT NOT NULL,
+    SCHEMENAME VARCHAR(120)  NULL ,
+    ORDERNO BIGINT NULL ,
+    CREATEDBYID VARCHAR(36)  NULL ,
+    CREATEDBYNAME VARCHAR(60)  NULL ,
+    CREATEDTIME DATETIME NULL ,
+    CREATEDBYORGID VARCHAR(36)  NULL ,
+    CREATEDBYORGNAME VARCHAR(270)  NULL ,
+    CONSTRAINT PK_CORE_WK_SCHEME PRIMARY KEY(ID));
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'首页方案配置' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_WK_SCHEME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'主键' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_WK_SCHEME', @level2type=N'COLUMN',@level2name=N'ID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'方案名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_WK_SCHEME', @level2type=N'COLUMN',@level2name=N'SCHEMENAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'排序码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_WK_SCHEME', @level2type=N'COLUMN',@level2name=N'ORDERNO';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_WK_SCHEME', @level2type=N'COLUMN',@level2name=N'CREATEDBYID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_WK_SCHEME', @level2type=N'COLUMN',@level2name=N'CREATEDBYNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_WK_SCHEME', @level2type=N'COLUMN',@level2name=N'CREATEDTIME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_WK_SCHEME', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_WK_SCHEME', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGNAME';
+
+CREATE TABlE DBO.T_CORE_WKSP_CONF(
+    ID BIGINT NOT NULL,
+    SCHEMEID BIGINT NULL ,
+    PANELID VARCHAR(36)  NULL ,
+    CONFIG VARCHAR(600)  NULL ,
+    CREATEDBYID VARCHAR(36)  NULL ,
+    CREATEDBYNAME VARCHAR(60)  NULL ,
+    CREATEDTIME DATETIME NULL ,
+    CREATEDBYORGID VARCHAR(36)  NULL ,
+    CREATEDBYORGNAME VARCHAR(270)  NULL ,
+    CONSTRAINT PK_CORE_WKSP_CONF PRIMARY KEY(ID));
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'首页方案配置配置' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_WKSP_CONF';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'主键' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_WKSP_CONF', @level2type=N'COLUMN',@level2name=N'ID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'方案编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_WKSP_CONF', @level2type=N'COLUMN',@level2name=N'SCHEMEID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'工作区面板ID' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_WKSP_CONF', @level2type=N'COLUMN',@level2name=N'PANELID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'界面配置json' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_WKSP_CONF', @level2type=N'COLUMN',@level2name=N'CONFIG';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_WKSP_CONF', @level2type=N'COLUMN',@level2name=N'CREATEDBYID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_WKSP_CONF', @level2type=N'COLUMN',@level2name=N'CREATEDBYNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_WKSP_CONF', @level2type=N'COLUMN',@level2name=N'CREATEDTIME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_WKSP_CONF', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_WKSP_CONF', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGNAME';
+CREATE NONCLUSTERED INDEX [IDX_CORE_WKSP_CONF_SCHEMEID] ON [dbo].[T_CORE_WKSP_CONF] ([SCHEMEID]);
+
+CREATE TABlE DBO.T_CORE_WKU_SCHEME(
+    ID BIGINT NOT NULL,
+    USERID VARCHAR(36)  NULL ,
+    ROLEID BIGINT NULL ,
+    SCHEMEID BIGINT NULL ,
+    CREATEDBYID VARCHAR(36)  NULL ,
+    CREATEDBYNAME VARCHAR(60)  NULL ,
+    CREATEDTIME DATETIME NULL ,
+    CREATEDBYORGID VARCHAR(36)  NULL ,
+    CREATEDBYORGNAME VARCHAR(270)  NULL ,
+    CONSTRAINT PK_CORE_WKU_SCHEME PRIMARY KEY(ID));
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'用户首页方案' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_WKU_SCHEME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'主键' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_WKU_SCHEME', @level2type=N'COLUMN',@level2name=N'ID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'用户编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_WKU_SCHEME', @level2type=N'COLUMN',@level2name=N'USERID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'角色编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_WKU_SCHEME', @level2type=N'COLUMN',@level2name=N'ROLEID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'方案编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_WKU_SCHEME', @level2type=N'COLUMN',@level2name=N'SCHEMEID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_WKU_SCHEME', @level2type=N'COLUMN',@level2name=N'CREATEDBYID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_WKU_SCHEME', @level2type=N'COLUMN',@level2name=N'CREATEDBYNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_WKU_SCHEME', @level2type=N'COLUMN',@level2name=N'CREATEDTIME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_WKU_SCHEME', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_WKU_SCHEME', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGNAME';
+
+CREATE TABlE DBO.T_CORE_WKUSP_CONF(
+    ID BIGINT NOT NULL,
+    USERSCHEMEID BIGINT NULL ,
+    PANELID VARCHAR(36)  NULL ,
+    CONFIG VARCHAR(1200)  NULL ,
+    CREATEDBYID VARCHAR(36)  NULL ,
+    CREATEDBYNAME VARCHAR(60)  NULL ,
+    CREATEDTIME DATETIME NULL ,
+    CREATEDBYORGID VARCHAR(36)  NULL ,
+    CREATEDBYORGNAME VARCHAR(270)  NULL ,
+    CONSTRAINT PK_CORE_WKUSP_CONF PRIMARY KEY(ID));
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'用户首页方案面板配置' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_WKUSP_CONF';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'主键' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_WKUSP_CONF', @level2type=N'COLUMN',@level2name=N'ID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'用户方案编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_WKUSP_CONF', @level2type=N'COLUMN',@level2name=N'USERSCHEMEID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'工作区面板ID' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_WKUSP_CONF', @level2type=N'COLUMN',@level2name=N'PANELID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'界面配置json' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_WKUSP_CONF', @level2type=N'COLUMN',@level2name=N'CONFIG';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_WKUSP_CONF', @level2type=N'COLUMN',@level2name=N'CREATEDBYID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_WKUSP_CONF', @level2type=N'COLUMN',@level2name=N'CREATEDBYNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_WKUSP_CONF', @level2type=N'COLUMN',@level2name=N'CREATEDTIME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_WKUSP_CONF', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_WKUSP_CONF', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGNAME';
+CREATE NONCLUSTERED INDEX [IDX_CORE_WKUSPC_USERSCHEMEID] ON [dbo].[T_CORE_WKUSP_CONF] ([USERSCHEMEID]);
+
+
+
+
+-- 创建菜单语句
+INSERT INTO T_CORE_MENU (ID, MENUNAME, HREF, PARENTID, ORDERNO, ICON, MENUINITNAME)
+VALUES ('9326', '首页方案配置', '/secure/core/module/item/workspace-schemes/page/edit-list', '93', '9326', '063.svg', '首页方案配置');
+
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_WK_SCHEME', '0', '0');
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_WKSP_CONF', '0', '0');
+
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_WKU_SCHEME', '0', '0');
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_WKUSP_CONF', '0', '0');
+
+INSERT INTO T_CORE_TABLE_HIERARCHY (ID, TABLENAME, MASTERTABLENAME, REFERCOLUMN)
+VALUES ('932601','T_CORE_WKSP_CONF', 'T_CORE_WK_SCHEME', 'SCHEMEID');
+
+
+INSERT INTO T_CORE_TABLE_HIERARCHY (ID, TABLENAME, MASTERTABLENAME, REFERCOLUMN)
+VALUES ('932602','T_CORE_WKUSP_CONF', 'T_CORE_WKU_SCHEME', 'USERSCHEMEID');
+
+DELETE FROM t_core_role_permission_type WHERE ID ='T_CORE_WK_PANEL';
+
+insert into t_core_role_permission_type (ID, TYPENAME, PERMISSIONTYPE, ORDERNO, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDTIME, GRIDPRIMARYURL, GRIDCOLUMNSETTINGS, LASTSUSPENDEDBYNAME)
+values ('T_CORE_WK_SCHEME', '首页方案权限', 'data', 23, '0', null, null, '/secure/core/module/item/workspace-schemes', '{title:''方案名称'',field:''schemeName''}', null);
+
+-- ----------------------------- 2020-03-14 add by shixw------------end
+
+-- ----------------------------- 2020-03-16 add by shixw--------------begin
+
+UPDATE T_CORE_MENU
+   SET ICON = '018.svg'
+ WHERE ID = '80'
+   AND ICON IS NULL;
+UPDATE T_CORE_MENU
+   SET ICON = '048.svg'
+ WHERE ID = '8001'
+   AND ICON IS NULL;
+UPDATE T_CORE_MENU
+   SET ICON = '002.svg'
+ WHERE ID = '8002'
+   AND ICON IS NULL;
+UPDATE T_CORE_MENU
+   SET ICON = '035.svg'
+ WHERE ID = '8003'
+   AND ICON IS NULL;
+UPDATE T_CORE_MENU
+   SET ICON = '011.svg'
+ WHERE ID = '90'
+   AND ICON IS NULL;
+UPDATE T_CORE_MENU
+   SET ICON = '008.svg'
+ WHERE ID = '9001'
+   AND ICON IS NULL;
+UPDATE T_CORE_MENU
+   SET ICON = '076.svg'
+ WHERE ID = '9002'
+   AND ICON IS NULL;
+UPDATE T_CORE_MENU
+   SET ICON = '022.svg'
+ WHERE ID = '9003'
+   AND ICON IS NULL;
+UPDATE T_CORE_MENU
+   SET ICON = '003.svg'
+ WHERE ID = '9004'
+   AND ICON IS NULL;
+UPDATE T_CORE_MENU
+   SET ICON = '017.svg'
+ WHERE ID = '9010'
+   AND ICON IS NULL;
+UPDATE T_CORE_MENU
+   SET ICON = '007.svg'
+ WHERE ID = '92'
+   AND ICON IS NULL;
+UPDATE T_CORE_MENU
+   SET ICON = '063.svg'
+ WHERE ID = '9201'
+   AND ICON IS NULL;
+UPDATE T_CORE_MENU
+   SET ICON = '002.svg'
+ WHERE ID = '9202'
+   AND ICON IS NULL;
+UPDATE T_CORE_MENU
+   SET ICON = '068.svg'
+ WHERE ID = '9233'
+   AND ICON IS NULL;
+UPDATE T_CORE_MENU
+   SET ICON = '011.svg'
+ WHERE ID = '93'
+   AND ICON IS NULL;
+UPDATE T_CORE_MENU
+   SET ICON = '063.svg'
+ WHERE ID = '9301'
+   AND ICON IS NULL;
+UPDATE T_CORE_MENU
+   SET ICON = '029.svg'
+ WHERE ID = '9302'
+   AND ICON IS NULL;
+UPDATE T_CORE_MENU
+   SET ICON = '064.svg'
+ WHERE ID = '9303'
+   AND ICON IS NULL;
+UPDATE T_CORE_MENU
+   SET ICON = '027.svg'
+ WHERE ID = '9304'
+   AND ICON IS NULL;
+UPDATE T_CORE_MENU
+   SET ICON = '024.svg'
+ WHERE ID = '9305'
+   AND ICON IS NULL;
+UPDATE T_CORE_MENU
+   SET ICON = '044.svg'
+ WHERE ID = '9306'
+   AND ICON IS NULL;
+UPDATE T_CORE_MENU
+   SET ICON = '068.svg'
+ WHERE ID = '9307'
+   AND ICON IS NULL;
+UPDATE T_CORE_MENU
+   SET ICON = '001.svg'
+ WHERE ID = '9308'
+   AND ICON IS NULL;
+UPDATE T_CORE_MENU
+   SET ICON = '052.svg'
+ WHERE ID = '9309'
+   AND ICON IS NULL;
+UPDATE T_CORE_MENU
+   SET ICON = '043.svg'
+ WHERE ID = '9310'
+   AND ICON IS NULL;
+UPDATE T_CORE_MENU
+   SET ICON = '001.svg'
+ WHERE ID = '9311'
+   AND ICON IS NULL;
+UPDATE T_CORE_MENU
+   SET ICON = '067.svg'
+ WHERE ID = '9312'
+   AND ICON IS NULL;
+UPDATE T_CORE_MENU
+   SET ICON = '067.svg'
+ WHERE ID = '9313'
+   AND ICON IS NULL;
+UPDATE T_CORE_MENU
+   SET ICON = '063.svg'
+ WHERE ID = '9314'
+   AND ICON IS NULL;
+UPDATE T_CORE_MENU
+   SET ICON = '072.svg'
+ WHERE ID = '9315'
+   AND ICON IS NULL;
+UPDATE T_CORE_MENU
+   SET ICON = '005.svg'
+ WHERE ID = '9316'
+   AND ICON IS NULL;
+UPDATE T_CORE_MENU
+   SET ICON = '076.svg'
+ WHERE ID = '9317'
+   AND ICON IS NULL;
+UPDATE T_CORE_MENU
+   SET ICON = '028.svg'
+ WHERE ID = '9318'
+   AND ICON IS NULL;
+UPDATE T_CORE_MENU
+   SET ICON = '027.svg'
+ WHERE ID = '9319'
+   AND ICON IS NULL;
+UPDATE T_CORE_MENU
+   SET ICON = '076.svg'
+ WHERE ID = '9320'
+   AND ICON IS NULL;
+UPDATE T_CORE_MENU
+   SET ICON = '011.svg'
+ WHERE ID = '9321'
+   AND ICON IS NULL;
+UPDATE T_CORE_MENU
+   SET ICON = '052.svg'
+ WHERE ID = '9322'
+   AND ICON IS NULL;
+UPDATE T_CORE_MENU
+   SET ICON = '026.svg'
+ WHERE ID = '94'
+   AND ICON IS NULL;
+UPDATE T_CORE_MENU
+   SET ICON = '069.svg'
+ WHERE ID = '9401'
+   AND ICON IS NULL;
+UPDATE T_CORE_MENU
+   SET ICON = '044.svg'
+ WHERE ID = '9402'
+   AND ICON IS NULL;
+UPDATE T_CORE_MENU
+   SET ICON = '037.svg'
+ WHERE ID = '9403'
+   AND ICON IS NULL;
+UPDATE T_CORE_MENU
+   SET ICON = '076.svg'
+ WHERE ID = '96'
+   AND ICON IS NULL;
+UPDATE T_CORE_MENU
+   SET ICON = '076.svg'
+ WHERE ID = '9601'
+   AND ICON IS NULL;
+UPDATE T_CORE_MENU
+   SET ICON = '076.svg'
+ WHERE ID = '9323'
+   AND ICON IS NULL;
+UPDATE T_CORE_MENU
+   SET ICON = '063.svg'
+ WHERE ID = '9326'
+   AND ICON IS NULL;
+UPDATE T_CORE_MENU
+   SET ICON = '046.svg'
+ WHERE ID = '9324'
+   AND ICON IS NULL;
+UPDATE T_CORE_MENU
+   SET ICON = '022.svg'
+ WHERE ID = '95'
+   AND ICON IS NULL;
+UPDATE T_CORE_MENU
+   SET ICON = '022.svg'
+ WHERE ID = '9501'
+   AND ICON IS NULL;
+UPDATE T_CORE_MENU
+   SET ICON = '005.svg'
+ WHERE ID = '950101'
+   AND ICON IS NULL;
+UPDATE T_CORE_MENU
+   SET ICON = '058.svg'
+ WHERE ID = '950102'
+   AND ICON IS NULL;
+UPDATE T_CORE_MENU
+   SET ICON = '015.svg'
+ WHERE ID = '950103'
+   AND ICON IS NULL;
+UPDATE T_CORE_MENU
+   SET ICON = '077.svg'
+ WHERE ID = '950104'
+   AND ICON IS NULL;
+   
+
+-- ----------------------------- 2020-03-16 add by shixw--------------end
+
+-- ----------------------------- 2020-03-16 add by shixw--------------begin
+
+INSERT INTO T_CORE_WK_SCHEME (ID, SCHEMENAME, ORDERNO)
+VALUES (9999, '默认方案', 1);
+
+INSERT INTO T_CORE_WKSP_CONF (ID, SCHEMEID, PANELID, CONFIG)
+SELECT NEXT VALUE FOR SEQ_CORE,9999,PANELID,CONFIG FROM T_CORE_WKUP_CONF WHERE USERID='default';
+
+INSERT INTO T_CORE_ROLE_PERMISSION (ID, ROLEID, PERMISSIONTYPEID, TARGETID)
+SELECT NEXT VALUE FOR SEQ_CORE,ID,'T_CORE_WK_SCHEME','9999' FROM T_CORE_ROLE;
+
+
+INSERT INTO T_CORE_WKU_SCHEME (ID, USERID, ROLEID, SCHEMEID)
+SELECT NEXT VALUE FOR SEQ_CORE,USERID,NULL,1 FROM (SELECT  DISTINCT USERID FROM  T_CORE_WKUP_CONF WHERE USERID !='default') T;
+
+
+INSERT INTO T_CORE_WKUSP_CONF (ID, USERSCHEMEID, PANELID, CONFIG)
+SELECT NEXT VALUE FOR SEQ_CORE,WS.ID USERSCHEMEID,WC.PANELID,WC.CONFIG FROM T_CORE_WKUP_CONF WC,T_CORE_WKU_SCHEME WS WHERE WC.USERID=WS.USERID;
+
+
+-- ----------------------------- 2020-03-16 add by shixw--------------end
+
+-- ----------------------------- 2020-03-17 add by zhanghang--------------begin
+
+ALTER TABLE [dbo].[T_CORE_ELN_DS] ADD [PIVOTCATEGORY] varchar(1) NULL
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'是否行转列',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_ELN_DS',
+'COLUMN', N'PIVOTCATEGORY'
+GO
+
+ALTER TABLE [dbo].[T_CORE_ELN_DS_FIELD] ADD [PIVOTCOLUMNCATEGORY] varchar(32) NULL
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'行转列设置字段类型 空值：没有设置、group：分组字段、value：显示值字段、column：扩展列字段',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_ELN_DS_FIELD',
+'COLUMN', N'PIVOTCOLUMNCATEGORY'
+GO
+
+INSERT INTO T_CORE_CODE_CATEGORY(ID, CODECATEGORYNAME, CODECLASSID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME) VALUES
+  ('pivotColumnCategory', '行专列设置字段类型', 'sys', NULL, 75, NULL, NULL, NULL, NULL);
+
+INSERT INTO T_CORE_CODE(ID, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME, CODE) VALUES
+  (NEXT VALUE FOR SEQ_CORE, '分组字段', 'pivotColumnCategory', NULL, 1, NULL, NULL, NULL, NULL, '0', NULL, NULL, NULL, 'group');
+INSERT INTO T_CORE_CODE(ID, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME, CODE) VALUES
+  (NEXT VALUE FOR SEQ_CORE, '显示值字段', 'pivotColumnCategory', NULL, 2, NULL, NULL, NULL, NULL, '0', NULL, NULL, NULL, 'value');
+INSERT INTO T_CORE_CODE(ID, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME, CODE) VALUES
+  (NEXT VALUE FOR SEQ_CORE, '扩展列字段', 'pivotColumnCategory', NULL, 3, NULL, NULL, NULL, NULL, '0', NULL, NULL, NULL, 'column');
+
+-- ----------------------------- 2020-03-17 add by zhanghang--------------end
+
+-- ----------------------------- 2020-03-17 add by zhanghang--------------begin
+
+UPDATE t_core_code_category SET CODECATEGORYNAME='行转列字段属性' WHERE ID = 'pivotColumnCategory';
+
+-- ----------------------------- 2020-03-17 add by zhanghang--------------end
+
+-- ----------------------------- 2020-03-17 add by zhangxt--------------begin
+
+ALTER TABLE [dbo].[T_CORE_SCHEDULE_TASK_CONFIG] ADD [STARTTIME] datetime NULL
+GO
+
+ALTER TABLE [dbo].[T_CORE_SCHEDULE_TASK_CONFIG] ADD [ENDTIME] datetime NULL
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'开始时间',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_SCHEDULE_TASK_CONFIG',
+'COLUMN', N'STARTTIME'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'结束时间',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_SCHEDULE_TASK_CONFIG',
+'COLUMN', N'ENDTIME'
+GO
+-- ----------------------------- 2020-03-17 add by zhangxt--------------end

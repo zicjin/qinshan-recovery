@@ -1,0 +1,8 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/emc/module/item/scm/standard-mtls/emc-standard-mtl.js',
+                      '/static/emc/module/item/scm/standard-mtls/emc-standard-mtl-check-list.js'
+                    ]);
+    emcStandardMtl.checkPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>

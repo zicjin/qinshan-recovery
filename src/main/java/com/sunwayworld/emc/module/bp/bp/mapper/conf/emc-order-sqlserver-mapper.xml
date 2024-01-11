@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.emc.module.bp.bp.mapper.EmcOrderMapper">
+    <select id="selectByCondition" parameterType="map" resultType="map">
+         SELECT T.*
+           FROM (SELECT O.*,
+                        F.PROCESSSTATUS AS FOLDERSTATUS,
+                        F.MONITORPOINTNAME,
+                        F.MONITORPOINTNO,
+                        P.PROJNO,
+                        P.PROJNAME,
+                        F.FOLDERNO,
+                        F.SAMPLEUSERID,
+                        F.SAMPLEUSERNAME,
+                        K.TESTNAME
+                   FROM T_EMC_ORDER O
+                   LEFT JOIN T_EMC_FOLDER F
+                     ON F.ID = O.FOLDERID
+                   LEFT JOIN T_EMC_PROJECT P
+                     ON P.ID = O.PROJID
+                   LEFT JOIN (SELECT ORDERID,
+                                     STUFF((SELECT ',' + A.TESTNAME
+                                            FROM T_EMC_ORDER_TASK A
+                                           WHERE A.ORDERID = B.ORDERID
+                                             FOR XML PATH('')),
+                                          1,
+                                          1,
+                                          '') AS TESTNAME
+                               FROM T_EMC_ORDER_TASK B
+                              GROUP BY ORDERID) K
+                     ON O.ID = K.ORDERID) T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+            <include refid="com.sunwayworld.emc.module.bp.project.project.mapper.EmcProjectMapper.projectStatusWhereClause">
+                <property name="tableAlias" value="T"/>
+                <property name="projectIdColumnName" value="PROJID"/>
+            </include>
+            <if test="target_unassigned != null">
+                AND EXISTS (SELECT 1
+                                  FROM ${targetSampleTable} TAR_
+                                 WHERE TAR_.${targetSampleIdColumn} = T.${targetSampleIdColumn}
+                                 <if test="targetSampleCategoryFilterColumn != null">
+                                     AND TAR_.${targetSampleCategoryFilterColumn} = #{targetSampleCategoryFilterValue}
+                                 </if>
+                                 <if test="targetFilterColumn1 != null">
+                                     AND TAR_.${targetFilterColumn1} = #{targetFilterValue1}
+                                 </if>
+                                )
+            </if>
+            <if test="targetOrder_unassigned != null">
+                AND NOT EXISTS (SELECT 1
+                                  FROM ${targetOrderTable} TAR_
+                                 WHERE TAR_.${targetOrderColumn} = T.ID
+                                 <if test="targetOrderIdFilterColumn != null">
+                                     AND TAR_.${targetOrderIdFilterColumn} = #{targetOrderIdFilterValue}
+                                 </if>
+                                 <if test="targetFilterColumn1 != null">
+                                     AND TAR_.${targetFilterColumn1} = #{targetFilterValue1}
+                                 </if>
+                                )
+            </if>
+            <if test="targetOrderSample_unassigned != null">
+                AND NOT EXISTS (SELECT 1 FROM T_EMC_ORDER TAR_ WHERE TAR_.ID = T.ID AND TAR_.SAMPLEID IS NOT NULL)
+            </if>
+            <if test="sampleId == 'empty'">
+                AND ( T.SAMPLEID IS NULL OR T.SAMPLEID = '')
+            </if>
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.FOLDERID ASC, T.ORDERNO ASC, T.ID DESC
+            </otherwise>
+        </choose>
+    </select>
+
+
+    <!-- 查询详情 -->
+    <select id="selectDetail" parameterType="java.lang.Long" resultType="map">
+        SELECT T.*
+          FROM T_EMC_ORDER T
+         WHERE T.ID = #{id}
+    </select>
+
+    <!-- 样品数据查询 -->
+    <select id="selectOrderList" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM (SELECT O.*,
+                       F.PROCESSSTATUS FOLDERSTATUS,
+                       F.MONITORPOINTNAME,
+                       F.MONITORPOINTNO,
+                       F.SAMPLEUSERNAME,
+                       P.PROJNO,
+                       P.PROJNAME,
+                       P.TESTORGNAME,
+                       P.ENTRUSTORGNAME,
+                       P.BIZCATEGORYCODE,
+                       F.FOLDERNO,
+                       C.ORDERSTATUS
+                  FROM T_EMC_ORDER O
+                  LEFT JOIN T_EMC_FOLDER F
+                    ON F.ID = O.FOLDERID
+                  LEFT JOIN T_EMC_PROJECT P
+                    ON P.ID = O.PROJID
+                  LEFT JOIN (SELECT B.ORDERID,
+                                    CASE WHEN CHARINDEX('0', STUFF((
+                                        SELECT
+                                        ',' + CASE A.RESULTSTATUS	WHEN 'Done' THEN '1' ELSE '0' END
+                                        FROM
+                                        T_EMC_ORDER_TASK_RESULT A
+                                        WHERE
+                                        A.ORDERID = B.ORDERID FOR XML PATH ( '' )),
+                                    1,
+                                    1,
+                                    ''
+                                    )) > 0 THEN '0' ELSE '1' END AS ORDERSTATUS
+                                FROM T_EMC_ORDER_TASK_RESULT B
+                                GROUP BY B.ORDERID) C
+                    ON O.ID = C.ORDERID) T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+            <include refid="com.sunwayworld.emc.module.bp.project.project.mapper.EmcProjectMapper.projectStatusWhereClause">
+                <property name="tableAlias" value="T"/>
+                <property name="projectIdColumnName" value="PROJID"/>
+            </include>
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.SAMPLEBEGINDATE DESC, T.ORDERNO DESC, T.ID DESC
+            </otherwise>
+        </choose>
+    </select>
+
+</mapper>

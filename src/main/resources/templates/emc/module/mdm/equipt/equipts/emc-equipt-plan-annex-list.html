@@ -1,0 +1,11 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ 
+                      '/static/emc/module/mdm/equipt/equipts/emc-equipt.js',
+                      '/static/emc/module/mdm/equipt/equipts/emc-equipt-plan-annex-list.js'
+                    ]);
+    emcEquipt.annexPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>
+
+

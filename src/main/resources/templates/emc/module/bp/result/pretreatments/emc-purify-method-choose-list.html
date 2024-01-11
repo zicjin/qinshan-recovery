@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/emc/module/bp/result/pretreatments/emc-pretreatment.js',
+                      '/static/emc/module/bp/result/pretreatments/emc-purify-method-choose-list.js'
+                    ]);
+    emcPretreatment.purifyMethodPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>
+

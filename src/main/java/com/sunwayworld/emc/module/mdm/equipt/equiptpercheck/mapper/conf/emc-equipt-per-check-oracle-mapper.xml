@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.emc.module.mdm.equipt.equiptpercheck.mapper.EmcEquiptPerCheckMapper">
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+        FROM (SELECT E.*,
+                     U.USERNAME AS RECORDERNAME,
+                     S.USERNAME AS DIRECTORNAME,
+                     R.USERNAME AS PRINCIPALNAME
+                FROM T_EMC_EQUIPT_PER_CHECK E
+                LEFT JOIN T_CORE_USER U
+                  ON E.RECORDER = U.ID
+                LEFT JOIN T_CORE_USER S
+                  ON E.DIRECTOR = S.ID
+                LEFT JOIN T_CORE_USER R
+                  ON E.PRINCIPAL = R.ID) T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+            <if test='authority_audit == "1"'>
+                AND <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.auditAuthorityWhereClause" />
+            </if>
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ID DESC
+            </otherwise>
+        </choose>
+    </select>
+
+</mapper>

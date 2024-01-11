@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.emc.module.bp.report.report.mapper.PfReportResultMapper">
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM (SELECT A.*,
+                       B.HORIZONTALCODE,
+                       C.INDEXNAME,
+                       D.ANALYSISUSERNAME,
+                       E.EQUIPTID AS ANALYSISEQUIPTNO,
+                       E.EQUIPTNAME AS ANALYSISEQUIPTNAME,
+                       F.ANALYSISORGID,
+                       F.ANALYSISORGNAME,
+                       H.SAMPLEUSERNAME,
+                       H.MONITORPOINTCATEGORYID,
+                       H.MONITORPOINTCATEGORY,
+                       H.MONITORPOINTNAME AS FOLDERMONITORPOINTNAME,
+                       H.PROCESSSTATUS,
+                       H.LONGITUDE,
+                       H.LATITUDE,
+                       G.EQUIPTID AS SAMPLEEQUIPTNO,
+                       G.EQUIPTNAME AS SAMPLEEQUIPTNAME,
+                       I.REGISTDATE,
+                       I.PROJNO,
+                       M.TESTMETHODBASIS,
+                       P.ITEMGROUP,
+                       P.SCHEMENAME AS TESTSCHEMENAME,
+                       N.COEFFICIENT,
+                       N.LIMITUNITNAME,
+                       N.DETECTEDQUANTITY,
+                       N.DETECTEDQUANTITYUNIT
+                  FROM T_EMC_REPORT_RESULT A
+                  LEFT JOIN T_EMC_ORDER B
+                    ON A.ORDERID = B.ID
+                  LEFT JOIN T_EMC_ORDER_INDEX C
+                    ON A.INDEXID = C.ID
+                  LEFT JOIN T_EMC_RUN D
+                    ON D.ID = A.RUNID
+                  LEFT JOIN T_EMC_EQUIPT E
+                    ON E.ID = D.EQUIPTID
+                  LEFT JOIN T_EMC_ORDER_TASK F
+                    ON F.ID = A.ORDERTASKID
+                  LEFT JOIN T_EMC_EQUIPT G
+                    ON G.ID = F.EQUIPTID
+                  LEFT JOIN T_EMC_FOLDER H
+                    ON H.ID = A.FOLDERID
+                  LEFT JOIN T_EMC_PROJECT I
+                    ON I.ID = A.PROJID
+                  LEFT JOIN T_EMC_METHOD M
+                    ON M.ID = A.METHODID
+                  LEFT JOIN T_EMC_ITEM N
+                    ON A.ITEMID = N.ID
+                  LEFT JOIN T_EMC_ORDER_ITEM_GROUP P
+                    ON A.ORDERID = P.ORDERID AND A.TESTMETHODID = P.TESTMETHODID) T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ID DESC
+            </otherwise>
+        </choose>
+    </select>
+
+
+    <!-- 查询详情 -->
+    <select id="selectDetail" parameterType="java.lang.Long" resultType="map">
+        SELECT T.*
+          FROM T_EMC_REPORT_RESULT T
+         WHERE T.ID = #{id}
+    </select>
+
+</mapper>

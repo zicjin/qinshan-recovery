@@ -1,0 +1,47 @@
+-- ----------------------------- 2020-10-19 add by shixw------------begin
+
+alter table dbo.T_CORE_LES_INSTANCE ADD READONLYFLAG VARCHAR(1) NULL
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'只读标志',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_LES_INSTANCE',
+'COLUMN', N'READONLYFLAG'
+GO
+
+
+EXEC DBO.INSERTI18N  N'T_CORE_LES_INSTANCE.READONLYFLAG', N'LES实例的只读标志', N'只读标志', N'zh-CN',N'只读标志';
+
+
+-- ----------------------------- 2020-10-19 add by shixw------------end
+
+-- ----------------------------- 2020-10-19 add by shixw------------begin
+
+alter table dbo.T_CORE_LES_TEMPLATE_UNIT ADD EDITFLAG VARCHAR(36) NULL
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'编辑标志',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_LES_TEMPLATE_UNIT',
+'COLUMN', N'EDITFLAG'
+GO
+
+
+EXEC DBO.INSERTI18N  N'T_CORE_LES_TEMPLATE_UNIT.EDITFLAG', N'LES模板组件的编辑标志', N'编辑标志', N'zh-CN',N'编辑标志';
+
+alter table dbo.T_CORE_LES_INSTANCE_UNIT ADD EDITFLAG VARCHAR(36) NULL
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'编辑标志',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_LES_INSTANCE_UNIT',
+'COLUMN', N'EDITFLAG'
+GO
+
+
+EXEC DBO.INSERTI18N  N'T_CORE_LES_INSTANCE_UNIT.EDITFLAG', N'LES实例组件的编辑标志', N'编辑标志', N'zh-CN',N'编辑标志';
+
+-- ----------------------------- 2020-10-19 add by shixw------------end

@@ -1,0 +1,8 @@
+-- ----------------------------- 2021-1-28 add by zhangpf------------begin
+CALL INSERTI18N('CORE.MODULE.MENU.MENU_ROLE_MATRIX', '角色菜单矩阵', '角色菜单矩阵', 'zh-CN', '角色菜单矩阵');
+
+INSERT INTO T_CORE_MENU (ID, MENUNAME, HREF, PARENTID, ORDERNO, MENUINITNAME, LASTUPDATEDBYID, LASTUPDATEDBYNAME, LASTUPDATEDTIME, ICON, TODOICON, "TYPE", AUDITDEF, TODOSERVICEMETHOD, I18NCODE)
+VALUES('9005', '角色菜单矩阵', '/secure/core/module/sys/menu-roles/page/matrix', '90', 9005, '角色菜单矩阵', NULL, NULL, NULL, '039.svg', NULL, NULL, NULL, NULL, 'CORE.MODULE.MENU.MENU_ROLE_MATRIX');
+
+COMMIT;
+-- ----------------------------- 2021-1-28 add by zhangpf------------end

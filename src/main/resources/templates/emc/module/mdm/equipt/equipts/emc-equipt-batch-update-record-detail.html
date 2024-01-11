@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/emc/module/mdm/equipt/equipts/emc-equipt-use-record.js',
+                      '/static/emc/module/mdm/equipt/equipts/emc-equipt-batch-update-record-detail.js'
+                    ]);
+    emcEquipt.barchUpdateRecordPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>
+

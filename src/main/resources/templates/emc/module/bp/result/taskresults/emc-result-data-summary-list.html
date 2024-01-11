@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/emc/module/bp/result/taskresults/emc-result.js',
+                      '/static/emc/module/bp/result/taskresults/emc-result-data-summary-list.js'
+                    ]);
+    emcResult.dataSummaryPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>
+

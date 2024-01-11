@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/emc/module/mdm/basemdm/data-correlations/emc-data-correlation.js',
+                      '/static/emc/module/mdm/basemdm/data-correlations/emc-data-correlation-item-choose-mult-list.js'
+                    ]);
+    emcDataCorrelation.itemChooseMultChoosePage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>
+

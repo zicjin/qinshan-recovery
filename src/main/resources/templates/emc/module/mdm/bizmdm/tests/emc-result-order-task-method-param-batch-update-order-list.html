@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/emc/module/mdm/bizmdm/tests/emc-test-method.js',
+                      '/static/emc/module/mdm/bizmdm/tests/emc-result-order-task-method-param-batch-update-order-list.js'
+                    ]);
+    emcTestMethod.resultOrderTaskMethodParamBatchOrderPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>
+

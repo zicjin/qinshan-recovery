@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.emc.module.mdm.crm.mapper.CrmOpportunityOrdtaskMapper">
+
+    <!--<select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+        FROM T_CRM_OPPORTUNITY_ORDTASK T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ID DESC
+            </otherwise>
+        </choose>
+    </select>-->
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.*,
+        CASE WHEN T.SCHEMENAME = 'default' THEN
+        T.TESTNO
+        ELSE
+        T.SCHEMENAME
+        END AS GROUPFIELDS,
+        T.TESTNO AS TESTNAME,
+        T.TESTMETHODS AS METHODNAME,
+        T.TESTCODE AS TESTID
+        FROM T_CRM_OPPORTUNITY_ORDTASK T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+            <if test="ordersId != null and ordersId != ''">
+                AND T.ORDERSID = #{ordersId}
+            </if>
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ID DESC
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="selectDetail" parameterType="java.lang.String" resultType="map">
+        SELECT T.*
+        FROM T_CRM_OPPORTUNITY_ORDTASK T
+        WHERE T.ID = #{id}
+    </select>
+</mapper>

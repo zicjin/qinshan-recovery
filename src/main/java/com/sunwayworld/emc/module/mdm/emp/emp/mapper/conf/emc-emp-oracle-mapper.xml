@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.emc.module.mdm.emp.emp.mapper.EmcEmpMapper">
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM (SELECT A.*,
+                       B.ORGID AS DEPARTMENTID,
+                       B.ORGNAME AS DEPARTMENTNAME,
+                       B.STATUS,
+                       C.ID  USERORGID, 
+                       C.ORGNAME,
+                       D.SAMPLEDEPARTMENT
+                  FROM T_EMC_EMP A
+                  LEFT JOIN T_CORE_USER B
+                    ON A.ID = B.ID
+                  LEFT JOIN T_CORE_ORG C
+                    ON B.PARENTORGID = C.ID
+                  LEFT JOIN T_CORE_ORG D
+                    ON B.ORGID = D.ID) T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+            <if test='remind == "overdue"'>
+                AND EXISTS (SELECT 1
+                                  FROM T_EMC_CERT TAR_
+                                 WHERE TAR_.EMPID = T.ID
+                                   AND TAR_.EXPIREDATE <![CDATA[<=]]> sysdate() + TAR_.WARNINGDAYS
+                                )
+            </if>
+            <!-- 任务指派分析人员，根据上岗证进行过滤 -->
+            <if test='batchinputusername == 1'>
+            	AND EXISTS (SELECT 1
+						FROM T_EMC_CERT B
+						LEFT JOIN T_EMC_CERT_TEST_METHOD C
+						ON B.ID = C.CERTID
+						WHERE  T.ID = B.EMPID
+							AND (T.FILTERTEST = '1'
+							AND C.TESTID  IN (${testids})
+							AND C.METHODID  IN (${methodids})
+							AND (B.EXPIREDATE IS NULL OR B.EXPIREDATE > sysdate())
+							OR T.FILTERTEST = '0'
+							OR T.FILTERTEST IS NULL))
+            </if>
+            <!-- 采样安排过滤人员，按照配制的科室权限 -->
+            <if test="targetType == 'samplePlan' and sampleOrgId != null">
+                AND EXISTS (SELECT 1 FROM T_CORE_USER_PERMISSION F WHERE T.ID = F.USERID AND F.TARGETID = #{sampleOrgId})
+            </if>
+            <!-- 分析录入选择校核人时过滤分析员 -->
+            <if test="targetType == 'analysisCheck' and analysisUserId != null">
+                AND T.ID != #{analysisUserId}
+                AND EXISTS (SELECT 1 FROM T_CORE_ORG F WHERE T.DEPARTMENTID = F.ID AND F.ORGNAME LIKE '分析%')
+            </if>
+            <!-- 分析录入选择分析员和共同完成人过滤其他科室 -->
+            <if test="targetType == 'analysisUser'">
+                AND EXISTS (SELECT 1 FROM T_CORE_ORG F WHERE T.DEPARTMENTID = F.ID AND F.ORGNAME LIKE '分析%')
+            </if>
+        </where>
+        ORDER BY
+         <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <when test="targetType == 'samplePlan'">
+                T.ID ASC
+            </when>
+            <otherwise>
+                T.CREATEDTIME DESC, T.ID DESC
+            </otherwise>
+         </choose>
+    </select>
+
+    <select id="selectDetail" resultType="map">
+        SELECT A.*,
+               B.ORGNAME AS DEPARTMENTNAME,
+               C.ORGNAME
+          FROM T_EMC_EMP A
+          LEFT JOIN T_CORE_USER B
+            ON A.ID = B.ID
+          LEFT JOIN T_CORE_ORG C
+            ON B.PARENTORGID = C.ID
+         WHERE A.ID = #{id}
+    </select>
+</mapper>

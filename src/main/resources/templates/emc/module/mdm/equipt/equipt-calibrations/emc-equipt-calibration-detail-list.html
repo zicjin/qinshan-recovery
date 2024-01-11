@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    Gikam.requirejs([
+        '/static/emc/module/mdm/equipt/equipt-calibrations/emc-equipt-calibration.js',
+        '/static/emc/module/mdm/equipt/equipt-calibrations/emc-equipt-calibration-detail-list.js'
+    ]);
+    emcEquiptCalibration.detailPage.init(Gikam.getElParam([[${param}]]));
+    /*]]>*/
+</script>

@@ -1,0 +1,10 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([
+        '/static/emc/module/bp/order/order-receipts/emc-order-receipt.js',
+        '/static/emc/module/bp/order/order-receipts/emc-order-receipt-qc-choose-list.js'
+    ]);
+    emcOrderReceipt.qcChoosePage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>
+

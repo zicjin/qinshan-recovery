@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.emc.module.bp.subpackage.mapper.EmcSubpackageMapper">
+
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM (SELECT A.*,
+                       B.PROJNAME,
+                       B.BIZCATEGORYID,
+                       B.TESTORGNAME
+                  FROM T_EMC_SUBPACKAGE A
+                  LEFT JOIN T_EMC_PROJECT B
+                    ON A.PROJID = B.ID) T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ID DESC
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="selectDetail" parameterType="java.lang.String" resultType="map">
+        SELECT T.*
+        FROM T_EMC_SUBPACKAGE T
+        WHERE T.ID = #{id}
+    </select>
+</mapper>

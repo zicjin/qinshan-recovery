@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/emc/module/bp/info/info-indexs/emc-info-index.js',
+                      '/static/emc/module/bp/info/info-indexs/emc-info-index-choose-list.js'
+                    ]);
+    emcInfoIndex.choosePage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>
+

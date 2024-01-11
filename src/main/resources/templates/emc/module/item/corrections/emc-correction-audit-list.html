@@ -1,0 +1,8 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/emc/module/item/corrections/emc-correction.js',
+                      '/static/emc/module/item/corrections/emc-correction-audit-list.js'
+                    ]);
+    emcCorrection.auditPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>

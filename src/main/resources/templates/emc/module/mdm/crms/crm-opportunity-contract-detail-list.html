@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    Gikam.requirejs([ '/static/emc/module/mdm/crms/crm-opportunity-contract.js',
+        '/static/emc/module/mdm/crms/crm-opportunity-contract-detail-list.js'
+    ]);
+    crmOpportunityContract.detailPage.init(Gikam.getElParam([[${param}]]));
+    /*]]>*/
+</script>
+

@@ -1,0 +1,6 @@
+<script th:inline="javascript">
+    Gikam.requirejs([ '/static/emc/module/mdm/equipt/equipt-acq-params/emc-equipt-acq-param.js',
+                      '/static/emc/module/mdm/equipt/equipt-acq-params/emc-equipt-acq-param-choose-list.js',
+                    ]);
+    emcEquiptAcqParam.choosePage.init(Gikam.getElParam([[${param}]]));
+</script>

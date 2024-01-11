@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.emc.module.mdm.bizmdm.client.mapper.EmcMonitorPointSchemeMapper">
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM (SELECT A.*,
+                       B.MONITORTMPLNAME,
+                       C.MONITORTMPLGROUP,
+                       D.TESTID,
+                       ES.TESTNAME,
+                       E.METHODNAME,
+                       F.MONITORPOINTCATEGORYID,
+                       G.MONITORPOINTTYPE AS TEMPLATEID,
+                       H.TEMPLATENAME
+                  FROM T_EMC_MONITOR_POINT_SCHEME A
+                  LEFT JOIN T_EMC_MONITOR_TMPL B
+                    ON A.MONITORTMPLID = B.ID
+                  LEFT JOIN T_EMC_MONITOR_TMPL_GROUP C
+                    ON C.ID = A.MONITORTMPLGROUPID
+                  LEFT JOIN T_EMC_TEST_METHOD D
+                    ON D.ID = A.TESTMETHODID
+                  LEFT JOIN T_EMC_TEST ES
+                    ON D.TESTID = ES.ID
+                  LEFT JOIN T_EMC_METHOD E
+                    ON E.ID = A.METHODID
+                  LEFT JOIN T_EMC_MONITOR_POINT F
+                    ON F.ID = A.MONITORPOINTID
+                  LEFT JOIN T_EMC_MONITOR_POINT_CATEGORY G
+                    ON G.ID = F.MONITORPOINTCATEGORYID
+                  LEFT JOIN T_EMC_PROPERTY_TMPL H
+                    ON H.ID = G.MONITORPOINTTYPE) T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ID DESC
+            </otherwise>
+        </choose>
+    </select>
+    
+    
+    <!-- 查询详情 -->
+    <select id="selectDetail" parameterType="java.lang.Long" resultType="map">
+        SELECT T.*
+          FROM T_EMC_MONITOR_POINT_SCHEME T
+         WHERE T.ID = #{id}
+    </select>
+    
+</mapper>

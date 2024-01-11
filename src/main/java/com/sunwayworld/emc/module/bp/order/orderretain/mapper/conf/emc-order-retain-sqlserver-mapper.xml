@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.emc.module.bp.order.orderretain.mapper.EmcOrderRetainMapper">
+
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+         FROM (SELECT E.*,
+                      F.PROJNO, F.PROJNAME,
+                      C.FOLDERNO,
+                      O.ORDERNO, O.SAMPLECOMPLETEDATE,
+                      U.USERNAME AS RETAINUSERNAME,
+                      S.USERNAME AS HANDLEUSERNAME
+                 FROM T_EMC_ORDER_RETAIN E
+                 LEFT JOIN T_EMC_PROJECT F
+                        ON E.PROJID = F.ID
+                 LEFT JOIN T_EMC_FOLDER C
+                        ON E.FOLDERID = C.ID
+                 LEFT JOIN T_EMC_ORDER O
+                        ON E.ORDERID = O.ID
+                 LEFT JOIN T_CORE_USER U
+                        ON E.RETAINUSERID = U.ID
+                 LEFT JOIN T_CORE_USER S
+                        ON E.HANDLEUSERID = S.ID) T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+            <include refid="com.sunwayworld.emc.module.bp.project.project.mapper.EmcProjectMapper.projectStatusWhereClause">
+                <property name="tableAlias" value="T"/>
+                <property name="projectIdColumnName" value="PROJID"/>
+            </include>
+            <if test='authority_audit == "1"'>
+                AND <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.auditAuthorityWhereClause" />
+            </if>
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ID DESC
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="selectDetail" parameterType="java.lang.String" resultType="map">
+        SELECT T.*
+          FROM T_EMC_ORDER_RETAIN T
+         WHERE T.ID = #{id}
+    </select>
+</mapper>

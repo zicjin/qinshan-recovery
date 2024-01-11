@@ -1,0 +1,11 @@
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    Gikam.requirejs([
+        '/static/emc/module/bp/result/runs/emc-analysis-pretrial.js',
+        '/static/emc/module/bp/result/runs/emc-analysis-audit.js',
+        '/static/emc/module/bp/result/runs/emc-analysis-audit-correlation-validation-list.js'
+    ]);
+    emcAnalysisAudit.dataCorrelationPage.init(Gikam.getElParam([[${param}]]));
+    /*]]>*/
+</script>
+

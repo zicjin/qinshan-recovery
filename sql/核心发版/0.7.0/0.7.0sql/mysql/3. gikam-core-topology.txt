@@ -1,0 +1,8 @@
+-- ----------------------------- 2020-08-01 add by shixw------------begin
+
+insert into t_core_table (ID, AUDITABLE, ATTACHMENT)
+values ('T_CORE_TOPOLOGY', '0', '0');
+
+commit;
+
+-- ----------------------------- 2020-08-01 add by shixw------------end

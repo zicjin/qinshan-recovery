@@ -1,0 +1,8 @@
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    Gikam.requirejs([ '/static/emc/module/item/corrections/emc-correction.js', 
+                      '/static/emc/module/item/corrections/emc-correction-edit-list.js' ]);
+    emcCorrection.editPage.init(Gikam.getElParam([[${param}]]));
+    /*]]>*/
+</script>
+

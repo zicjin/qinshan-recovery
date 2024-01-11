@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/emc/module/item/scm/conven-mtls/emc-conven-mtl.js',
+                      '/static/emc/module/item/scm/conven-mtls/emc-conven-mtl-detail.js'
+                    ]);
+    emcConvenMtl.detailPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>
+

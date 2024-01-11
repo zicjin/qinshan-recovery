@@ -1,0 +1,123 @@
+Gikam.select.addConfigParam([ {
+    // 监测模版组
+    category : 'monitorTmplGroup',
+    url : '/secure/emc/module/mdm/basemdm/monitor-tmpl-groups/queries/selectable',
+    valueField : 'id',
+    textField : 'monitorTmplGroup'
+}, {
+    // 监测点类型过滤监测模版组
+    category : 'filterMonitorTmplGroup',
+    url : '/secure/emc/module/mdm/basemdm/monitor-point-categories/filter/queries/selectable',
+    valueField : 'monitorTmplGroupId',
+    textField : 'ext$.monitortmplgroup'
+}, { // 属性设置
+    category : 'propertyTmpl',
+    url : '/secure/emc/module/mdm/basemdm/property-tmpls/queries/selectable',
+    valueField : 'id',
+    textField : 'templateName'
+}, { // 材料类型
+    category : 'mtlCategory',
+    url : '/secure/emc/module/mdm/basemdm/mtl-categories/queries/selectable',
+    valueField : 'id',
+    textField : 'mtlCategoryName'
+}, {
+    category : 'unit',
+    url : '/secure/emc/module/mdm/basemdm/units/queries/selectable',
+    valueField : 'id',
+    textField : 'unitName'
+}, { // 仪器类型
+    category : 'equiptCategory',
+    url : '/secure/emc/module/mdm/basemdm/equipt-categories/queries/selectable',
+    valueField : 'id',
+    textField : 'equiptCategory'
+}, { // 指标名称
+    category : 'indexCategory',
+    url : '/secure/emc/module/mdm/bizmdm/index-categories/queries/selectable',
+    valueField : 'id',
+    textField : 'stdName'
+}, {// 业务类型
+    category : 'bizCategory',
+    url : '/secure/emc/module/mdm/basemdm/biz-categories/queries/selectable',
+    valueField : 'id',
+    textField : 'bizCategoryName'
+}, {// 业务类型
+    category : 'bizCategoryCode',
+    url : '/secure/emc/module/mdm/basemdm/biz-categories/queries/selectable',
+    valueField : 'bizCategoryId',
+    textField : 'bizCategoryName'
+}, { // 文件类型
+    category : 'fileCategoryName',
+    url : '/secure/emc/module/mdm/basemdm/file-categories/queries/selectable',
+    valueField : 'id',
+    textField : 'fileCategoryName'
+}, {// 监测模板
+    category : 'monitorTmpl',
+    url : '/secure/emc/module/mdm/bizmdm/monitor-tmpls/queries/selectable',
+    valueField : 'id',
+    textField : 'monitorTmplName'
+}, {// 监测方案
+    category : 'monitorScheme',
+    url : '/secure/emc/module/mdm/bizmdm/monitor-tmpls/schemes/queries/selectable',
+    valueField : 'schemeName',
+    textField : 'schemeName'
+}, {// 测试类型
+    category : 'testCategory',
+    url : '/secure/emc/module/mdm/basemdm/test-categories/queries/selectable',
+    valueField : 'id',
+    textField : 'testCategoryDesc'
+}, {// 测试类型
+    category : 'filterPointCategory',
+    url : '/secure/emc/module/mdm/bizmdm/clients/monitor-points/queries/selectable',
+    valueField : 'monitorPointCategoryId',
+    textField : 'ext$.templatename'
+}, {// 标准设置
+    category : 'standardSetCategory',
+    url : '/secure/emc/module/mdm/bizmdm/std-set-categorys/standard-sets/queries/selectable',
+    valueField : 'id',
+    textField : 'setDesc'
+}, {// 分包商
+    category : 'subcontractor',
+    url : '/secure/emc/module/mdm/basemdm/subcontractors/queries/selectable',
+    valueField : 'id',
+    textField : 'subcontractorName'
+}, {// 方法表
+    category : 'emcMethod',
+    url : '/secure/emc/module/mdm/bizmdm/methods/queries/selectable',
+    valueField : 'id',
+    textField : 'methodName'
+}, {// 测试表
+    category : 'testMethod',
+    url : '/secure/emc/module/mdm/bizmdm/tests/queries/selectable',
+    valueField : 'id',
+    textField : 'testName'
+}, {// 测试方法分析项
+    category : 'testItem',
+    url : '/secure/emc/module/mdm/bizmdm/tests/tests/items/queries/selectable',
+    valueField : 'id',
+    textField : 'itemName'
+}, {// 测试库
+    category : 'test',
+    url : '/secure/emc/module/mdm/bizmdm/tests/tests/queries/selectable',
+    valueField : 'id',
+    textField : 'testName'
+}, {// 综合信息上传模板
+    category : 'infoTmpl',
+    url : '/secure/emc/module/bp/info/info-tmpls/queries/selectable',
+    valueField : 'id',
+    textField : 'tmplName'
+}, {// 综合信息上传模板字段
+    category : 'infoTmplField',
+    url : '/secure/emc/module/bp/info/info-tmpls/fields/queries/selectable',
+    valueField : 'id',
+    textField : 'fieldTitle'
+}, {// 人员管理
+    category : 'emp',
+    url : '/secure/emc/module/mdm/emp/emps/queries/selectable',
+    valueField : 'id',
+    textField : 'userName'
+}, {// 业务类型常用项目
+    category : 'bizCategoryProject',
+    url : '/secure/emc/module/mdm/basemdm/biz-categories/projects/queries/selectable',
+    valueField : 'id',
+    textField : 'projName'
+}]);

@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ 
+                      '/static/emc/module/mdm/equipt/equipts/emc-equipt.js',
+                      '/static/emc/module/mdm/equipt/equipts/emc-equipt-pre-check-plan-search-list.js'
+                    ]);
+    emcEquipt.equiptPreCheckPlanSearchPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>

@@ -1,0 +1,8 @@
+
+<script th:inline="javascript">
+    Gikam.requirejs([ '/static/emc/module/bp/project/projects/emc-project.js',
+                      '/static/emc/module/bp/project/projects/emc-project-order-addition.js',
+                    ]);
+    emcProject.orderAdditionPage.init(Gikam.getElParam([[${param}]]));
+</script>
+

@@ -1,0 +1,10 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ 
+                      '/static/emc/module/mdm/basemdm/biz-categories/emc-biz-category.js',
+                      '/static/emc/module/mdm/basemdm/biz-categories/emc-biz-category-org-permission-edit-list.js'
+                    ]);
+    emcBizCategory.orgPermissionEditPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>
+

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.emc.module.mdm.bizmdm.client.mapper.EmcMonitorPointMapper">
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM (SELECT A.*,
+                       B.INDEXNAME,
+                       B.INDEXCATEGORYID,
+                       C.MONITORPOINTTYPE AS MONITORPOINTCATEGORY,
+                       D.TEMPLATENAME
+                  FROM T_EMC_MONITOR_POINT A
+                  LEFT JOIN T_EMC_ORDER_INDEX B
+                    ON B.ID = A.INDEXID
+                  LEFT JOIN T_EMC_MONITOR_POINT_CATEGORY C
+                    ON C.ID = A.MONITORPOINTCATEGORYID
+                  LEFT JOIN T_EMC_PROPERTY_TMPL D
+                    ON D.ID = C.MONITORPOINTTYPE) T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+            <if test="filter_projectId != null">
+                AND EXISTS (SELECT 1 
+                               FROM T_EMC_PROJECT B 
+                              WHERE B.TESTORGID = T.CLIENTID 
+                                AND B.ID = #{filter_projectId})
+             </if>
+             
+             <if test='targetType == "initScheme" '>
+                AND EXISTS (SELECT 1
+                               FROM T_EMC_MONITOR_POINT_SCHEME O
+                             WHERE O.MONITORPOINTID = T.ID)
+             </if>
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ORDERNO
+            </otherwise>
+        </choose>
+    </select>
+    
+    
+    <!-- 查询详情 -->
+    <select id="selectDetail" parameterType="java.lang.Long" resultType="map">
+        SELECT T.*
+          FROM T_EMC_MONITOR_POINT T
+         WHERE T.ID = #{id}
+    </select>
+    
+</mapper>

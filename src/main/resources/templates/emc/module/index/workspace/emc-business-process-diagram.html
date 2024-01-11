@@ -1,0 +1,140 @@
+<th:block th:replace="module/gikam/workspace" />
+
+<script th:inline="javascript">
+/*<![CDATA[*/
+    var param = Gikam.getElParam([[${param}]]);
+    
+    Gikam.create('layout', {
+        id : 'emc-business-process-diagram-layout',
+        renderTo : document.body,
+        center : {
+            items : [ {
+                type : 'layout',
+                north : {
+                    height : '60',
+                    items : [ {
+                        type : 'layout',
+                        west : {
+                            width : '10%',
+                            items : [ {
+                                type : 'button',
+                                text : '审核记录',
+                                icon : 'browse',
+                                margin : '14px 0 0 55px',
+                                onClick : function() {
+                                    loadAuditRecordPage();
+                                }
+                            } ]
+                        },
+                        east : {
+                            width : '90%',
+                            items : [ {
+                                type : 'form',
+                                id : 'emc-business-process-diagram-project-form',
+                                fields : [ {
+                                    field : 'projNo',
+                                    title : '项目编号/名称',
+                                    onChange : function(field, value) {
+                                        if (Gikam.isEmpty(value)) {
+                                            Gikam.alert('请输入项目编号或名称');
+                                            return false;
+                                        }
+                                        var url = '/secure/emc/module/bp/project/projects/' + value + '/queries';
+
+                                        Gikam.getText(url).done(function(projId) {
+                                            if (Gikam.isEmpty(projId)) {
+                                                Gikam.alert(parent.Gikam.propI18N('EMC.MODULE.BP.PROJECT.PROJECTS.TIP.RIGHT_KEYWORD'));
+                                                return;
+                                            }
+
+                                            Gikam.getComp('emc-business-process-diagram-business-process-diagram').refresh({
+                                                url : '/secure/core/module/item/process-view-confs/process-view',
+                                                bizId : projId
+                                            });
+                                        });
+                                    }
+                                } ],
+                            } ]
+                        },
+                    } ]
+                },
+                center : {
+                    items : [ {
+                        type : 'businessProcessDiagram',
+                        id : 'emc-business-process-diagram-business-process-diagram'
+                    } ]
+                }
+            } ]
+        }
+    });
+    
+    function loadAuditRecordPage() {
+        var formData = Gikam.getComp('emc-business-process-diagram-project-form').getData();
+        if (Gikam.isEmpty(formData.projNo)) {
+            Gikam.alert('请输入项目编号或名称');
+            return false;
+        }
+        
+        var url = '/secure/emc/module/bp/project/projects/' + formData.projNo + '/queries';
+        Gikam.getText(url).done(function(projId) {
+            if (Gikam.isEmpty(projId)) {
+                Gikam.alert(parent.Gikam.propI18N('EMC.MODULE.BP.PROJECT.PROJECTS.TIP.RIGHT_KEYWORD'));
+                return;
+            }
+
+            var modal = Gikam.create('modal', {
+                title: "查看审核记录",
+                width : 1200,
+                height : 500,
+            });
+            var layout = Gikam.create('layout', {
+                renderTo: modal.window.$dom,
+                center: {
+                    items: [ ]
+                }
+            });
+
+            var grid = Gikam.create('grid', {
+                renderTo: layout.options.center.$dom,
+                columns : [ {
+                    field : 'logDesc',
+                    title : parent.Gikam.propI18N('T_EMC_AUDIT_RECORD.LOGDESC')
+                }, {
+                    field : 'taskName',
+                    title : parent.Gikam.propI18N('T_EMC_AUDIT_RECORD.TASKNAME')
+                }, {
+                    field : 'nextTaskName',
+                    title : parent.Gikam.propI18N('T_EMC_AUDIT_RECORD.NEXTTASKNAME')
+                }, {
+                    field : 'operateCategory',
+                    title : parent.Gikam.propI18N('T_EMC_AUDIT_RECORD.OPERATECATEGORY')
+                }, {
+                    field : 'comments',
+                    title : parent.Gikam.propI18N('T_EMC_AUDIT_RECORD.COMMENT')
+                }, {
+                    field : 'createdByName',
+                    title : parent.Gikam.propI18N('T_EMC_AUDIT_RECORD.CREATEDBYNAME')
+                }, {
+                    field : 'createdTime',
+                    title : parent.Gikam.propI18N('T_EMC_AUDIT_RECORD.CREATEDTIME')
+                }, {
+                    field : 'auditCategory',
+                    title : parent.Gikam.propI18N('T_EMC_AUDIT_RECORD.AUDITCATEGORY')
+                } ],
+                url : '/secure/emc/module/bp/audit-records/queries',
+                requestData : {
+                    projId_SEQ : projId
+                },
+                page : false,
+                group : {
+                    groupCheckbox : false,
+                    fields : [ 'auditCategory' ],
+                    formatter : function(row) {
+                        return row.stepCode + '、' + row.auditCategory;
+                    }
+                }
+            });
+        });
+    };
+/*]]>*/
+</script>

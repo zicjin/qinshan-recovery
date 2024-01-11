@@ -1,0 +1,22 @@
+-- ----------------------------- 2020-09-09 add by shixw------------begin
+
+alter table dbo.T_CORE_PASSWORD_POLICY ADD EXPIRYWARNINGINTERVAL BIGINT NULL
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'密码过期提前提醒天数',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_PASSWORD_POLICY',
+'COLUMN', N'EXPIRYWARNINGINTERVAL'
+GO
+
+EXEC DBO.INSERTI18N  N'T_CORE_PASSWORD_POLICY.EXPIRYWARNINGINTERVAL', N'密码策略的密码过期提前提醒天数', N'密码过期提前提醒天数', N'zh-CN',N'密码过期提前提醒天数';
+
+-- ----------------------------- 2020-09-09 add by shixw------------end
+
+-- ----------------------------- 2020-09-10 add by shixw------------begin
+
+EXEC DBO.INSERTI18N N'GIKAM.USER.PASSWORD.NEW_OLD_PASSWORD_SAME', N'新密码不能与旧密码相同', N'新密码不能与旧密码相同', N'zh-CN', N'新密码不能与旧密码相同';
+EXEC DBO.INSERTI18N N'CORE.MODULE.SYS.PASSWORDPOLICIES.TIP.EXPIRYWARNINGINTERVAL_NOT_MORE_EXPIRYINTERVAL', N'密码过期提前提醒天数不能大于密码过期天数', N'密码过期提前提醒天数不能大于密码过期天数', N'zh-CN', N'密码过期提前提醒天数不能大于密码过期天数';
+
+-- ----------------------------- 2020-09-10 add by shixw------------end

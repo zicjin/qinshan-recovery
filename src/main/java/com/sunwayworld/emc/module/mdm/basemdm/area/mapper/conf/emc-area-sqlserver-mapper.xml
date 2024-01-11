@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.emc.module.mdm.basemdm.area.mapper.EmcAreaMapper">
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.* 
+          FROM T_EMC_AREA T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+            <if test='parentId != null'>
+                <choose>
+                    <when test='parentId == -1'>
+                        AND T.PARENTID IS NULL
+                    </when>
+                    <otherwise>
+                        AND T.PARENTID = #{parentId}
+                    </otherwise>
+                </choose>
+            </if>
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.AREALEVEL,T.ORDERNO DESC,T.ID DESC
+            </otherwise>
+        </choose>
+    </select>
+    
+    <!-- 查询详情 -->
+    <select id="selectDetail" parameterType="java.lang.Long" resultType="map">
+        SELECT T.*
+          FROM T_EMC_AREA T
+         WHERE T.ID = #{id}
+    </select>
+    
+    <select id="selectTreeNodeList" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM (SELECT A.*,
+                       ISNULL(C.CHILDQTY, 0) CHILDQTY
+                  FROM T_EMC_AREA A
+                  LEFT JOIN (SELECT PARENTID,
+                                    COUNT(1) CHILDQTY
+                               FROM T_EMC_AREA
+                              GROUP BY PARENTID) C
+                         ON A.ID = C.PARENTID) T
+        <where>
+            <if test='parentId != null'>
+                <choose>
+                    <when test='parentId == "root"'>
+                        AND T.PARENTID IS NULL
+                    </when>
+                    <otherwise>
+                        AND T.PARENTID = #{parentId}
+                    </otherwise>
+                </choose>
+            </if>
+        </where>
+         ORDER BY T.ORDERNO
+    </select>
+</mapper>

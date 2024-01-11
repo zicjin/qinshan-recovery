@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ 
+                      '/static/emc/module/mdm/equipt/equipts/emc-equipt.js',
+                      '/static/emc/module/mdm/equipt/equipts/emc-equipt-maintain-repair-search-list.js'
+                    ]);
+    emcEquipt.searchEquiptMaintainPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>

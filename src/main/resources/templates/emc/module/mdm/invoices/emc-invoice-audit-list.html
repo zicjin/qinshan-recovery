@@ -1,0 +1,8 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/emc/module/mdm/invoices/emc-invoice.js',
+                      '/static/emc/module/mdm/invoices/emc-invoice-audit-list.js'
+                    ]);
+    emcInvoice.auditPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>

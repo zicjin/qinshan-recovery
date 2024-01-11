@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/emc/module/mdm/invoices/emc-invoice.js',
+                      '/static/emc/module/mdm/invoices/emc-invoice-search-list.js'
+                    ]);
+    emcInvoice.searchPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>
+

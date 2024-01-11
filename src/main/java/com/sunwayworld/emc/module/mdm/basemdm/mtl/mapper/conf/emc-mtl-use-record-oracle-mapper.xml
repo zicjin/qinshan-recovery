@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.emc.module.mdm.basemdm.mtl.mapper.EmcMtlUseRecordMapper">
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM T_EMC_MTL_USE_RECORD T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ID DESC
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="selectStockLogInApply" parameterType="map" resultType="map">
+       SELECT S.BATCHNO,
+			  S.MTLID,
+			  S.EXPIREDATE,
+			  S.STANDARDLEVEL,
+			  S.STOCKSPECIFICATION,
+			  M.MTLNAME,
+			  A.USERNAME,
+			  B.ORGNAME,
+			  L.*,
+			  (L.PREVIOUSQTY - L.QTY) AS NUM
+		FROM T_EMC_STOCK_LOG L
+		LEFT JOIN T_EMC_STOCK S
+		  ON L.STOCKID = S.ID
+		LEFT JOIN T_EMC_MTL M
+		  ON M.ID = S.MTLID
+		LEFT JOIN T_CORE_USER A
+		  ON L.RECEIVEDBYID = A.ID
+		LEFT JOIN T_CORE_ORG B
+		  ON L.RECEIVEDBYORGID = B.ID
+	   WHERE L.LOGTYPE = '领取'
+	   <if test="MTLID != null and MTLID !=''">
+              AND S.MTLID like #{mtlid}
+       </if>
+    </select>
+
+</mapper>

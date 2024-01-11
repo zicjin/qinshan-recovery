@@ -1,0 +1,12 @@
+<th:block th:replace="module/gikam/workspace" />
+
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([
+                      '/static/emc/module/bp/result/runs/emc-run.js',
+                      '/static/emc/module/bp/result/runs/emc-run-analysis.js'
+                    ]);
+    emcRun.runAnalysisPage.init();
+/*]]>*/
+</script>
+

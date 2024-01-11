@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/emc/module/bp/result/curves/emc-curve.js',
+                      '/static/emc/module/bp/result/curves/emc-view-curve-history.js'
+                    ]);
+    emcCurve.viewCurvePage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>
+

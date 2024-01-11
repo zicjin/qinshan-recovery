@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/emc/module/mdm/basemdm/mtl-use-records/emc-mtl-use-record.js',
+                      '/static/emc/module/mdm/basemdm/mtl-use-records/emc-mtl-use-record-choose-list.js'
+                    ]);
+    emcMtlUseRecord.choosePage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>
+

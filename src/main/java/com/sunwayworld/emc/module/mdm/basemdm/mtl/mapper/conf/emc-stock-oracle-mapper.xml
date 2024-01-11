@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.emc.module.mdm.basemdm.mtl.mapper.EmcStockMapper">
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM (SELECT A.*,
+                       B.STDVALUE,
+                       B.CONCENTUNITNAME,
+                       B.UNCERTAINTY,
+                       B.UNCERTAINTYPERCENT,
+                       E.LOGTYPE,
+                       E.VENDORID,
+                       E.PRICE,
+                       F.MTLNAME,
+                       F.SPECIFICATION,
+                       F.MTLCATEGORYID,
+                       G.MTLCATEGORYNAME
+                  FROM T_EMC_STOCK A
+                  LEFT JOIN (
+                    SELECT STOCKID,
+                           STDVALUE,
+                           CONCENTUNITNAME,
+                           UNCERTAINTY,
+                           UNCERTAINTYPERCENT
+                      FROM T_EMC_STOCK_CONCENT M
+                      WHERE NOT EXISTS
+                        (SELECT 1 FROM T_EMC_STOCK_CONCENT N WHERE M.STOCKID = N.STOCKID AND N.ID <![CDATA[<]]> M.ID)
+                  ) B
+                    ON A.ID = B.STOCKID
+                  LEFT JOIN (
+                    SELECT VENDORID,
+                           PRICE,
+                           STOCKID,
+                           LOGTYPE
+                      FROM T_EMC_STOCK_LOG C
+                      WHERE NOT EXISTS
+                        (SELECT 1 FROM T_EMC_STOCK_LOG D WHERE C.STOCKID = D.STOCKID AND D.ID <![CDATA[<]]> C.ID)
+                  ) E
+                    ON A.ID = E.STOCKID
+                  LEFT JOIN T_EMC_MTL F
+                    ON A.MTLID = F.ID
+                  LEFT JOIN T_EMC_MTL_CATEGORY G
+                    ON F.MTLCATEGORYID = G.ID) T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+            <if test='folderid != "" and folderid != null'>
+            	 AND T.MTLCATEGORYNAME in ('标准样品','一般试剂')
+            </if>
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ID DESC
+            </otherwise>
+        </choose>
+    </select>
+
+
+<!--     查询详情 -->
+    <select id="selectDetail" parameterType="java.lang.Long" resultType="map">
+        SELECT T.*
+          FROM T_EMC_STOCK T
+         WHERE T.ID = #{id}
+    </select>
+
+    <select id="selectStockOverdue" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM T_EMC_STOCK T
+         WHERE T.EXPIREDATE <![CDATA[<=]]> sysdate()
+    </select>
+
+     <select id="selectStockLowLine" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM T_EMC_STOCK T
+         WHERE T.STOCKQTY <![CDATA[<=]]> T.LOWLIMIT
+
+    </select>
+
+    <select id="selectQcStdStockPagination" parameterType="map" resultType="map">
+        SELECT
+        T.*
+        FROM
+        (
+        SELECT
+        A.*,
+        B.ORGID,
+        B.MTLNAME,
+        C.MANAGEMENTTYPE,
+        D.CATEGORY,
+        D.STDVALUE,
+        D.UNCERTAINTY,
+        D.UNCERTAINTYPERCENT,
+        D.CONCENTUNITNAME,
+        E.CREATEDBYNAME AS APPLYNAME,
+        E.CREATEDTIME AS APPLYTIME,
+        E.CREATEDBYORGNAME as APPLYORGNAME,
+        E.PROCESSSTATUS AS APPLYSTATUS,
+        E.ID AS APPLYID
+        FROM
+        T_EMC_STOCK A
+        LEFT JOIN T_EMC_MTL B ON
+        A.MTLID = B.ID
+        LEFT JOIN T_EMC_MTL_CATEGORY C ON
+        B.MTLCATEGORYID = C.ID
+        LEFT JOIN T_EMC_STOCK_CONCENT D ON
+        D.STOCKID = A.ID
+        LEFT JOIN T_EMC_MTL_APPLY E ON
+        A.ID = E.STOCKID
+        ) AS T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+            /*查询关联该批下测试的标样*/
+            <if test='runId != "" and runId != null'>
+                AND EXISTS (
+                SELECT 1 FROM T_EMC_RUN R
+                INNER JOIN T_EMC_ORDER_TASK OT ON R.ID = OT.RUNID
+                INNER JOIN T_EMC_ORDER_TASK_RESULT OTR ON OT.ID = OTR.ORDERTASKID
+                INNER JOIN T_EMC_MTL_MAINTAIN_ITEM MMI ON OTR.TESTMETHODID= MMI.TESTMETHODID AND OTR.ITEMID= MMI.ITEMID
+                INNER JOIN T_EMC_MTL_MAINTAIN MM ON MMI.MTLMAITAINID  = MM.ID
+                WHERE R.ID = #{runId} AND MM.MTLID = T.MTLID
+                )
+            </if>
+            /*查询已经领取的标样*/
+            <if test='isReceive == "1"'>
+                AND T.APPLYID IS NOT NULL AND T.APPLYSTATUS = 'done'
+            </if>
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.MTLID,T.STANDARDLEVEL,T.BATCHNO,T.CATEGORY DESC
+            </otherwise>
+        </choose>
+    </select>
+</mapper>

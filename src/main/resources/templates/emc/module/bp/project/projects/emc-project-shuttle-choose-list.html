@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/emc/module/bp/project/projects/emc-project.js',
+                      '/static/emc/module/bp/project/projects/emc-project-shuttle-choose-list.js'
+                    ]);
+    emcProject.shuttleChoosePage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>
+

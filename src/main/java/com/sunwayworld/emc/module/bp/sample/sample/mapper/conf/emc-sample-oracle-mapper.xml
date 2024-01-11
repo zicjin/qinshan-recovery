@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.emc.module.bp.sample.sample.mapper.EmcSampleMapper">
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM (SELECT A.*,
+                       P.PROJNO,
+                       P.PROJNAME,
+                       P.TESTORGNAME,
+                       P.BIZCATEGORYID,
+                       B.PROPERTYTMPLID AS TMPLID,
+                       P.BIZCATEGORYCODE,
+                       C.REPORTNAME
+                  FROM T_EMC_SAMPLE A
+                  LEFT JOIN T_EMC_PROJECT P
+                    ON P.ID = A.PROJID
+                  LEFT JOIN T_EMC_BIZ_CATEGORY E
+                    ON P.BIZCATEGORYCODE = E.BIZCATEGORYID
+                  LEFT JOIN T_EMC_MONITOR_TMPL B
+                    ON B.ID = A.MONITORTMPLID
+                  LEFT JOIN T_CORE_REPORT_CONFIG_LINE C
+                    ON C.ID = A.REPORTCONFIGLINEID) T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+            <include refid="com.sunwayworld.emc.module.bp.project.project.mapper.EmcProjectMapper.projectStatusWhereClause">
+                <property name="tableAlias" value="T"/>
+                <property name="projectIdColumnName" value="PROJID"/>
+            </include>
+            <if test='authority_audit == "1"'>
+                AND <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.auditAuthorityWhereClause" />
+            </if>
+            <if test='targetType == "editSample"'>
+                AND EXISTS (SELECT 1
+                              FROM T_EMC_ORDER A
+                              LEFT JOIN T_EMC_FOLDER B
+                                ON A.FOLDERID = B.ID
+                              WHERE A.SAMPLEID = T.ID
+                              <if test="sceneUserId != null">
+                                AND B.SCENEUSERID = #{sceneUserId}
+                              </if>
+                              <if test="sceneUserName != null">
+                                AND B.SCENEUSERNAME = #{sceneUserName}
+                              </if>
+                              <if test="sampleUserName != null">
+                                AND INSTR( ',' || B.SAMPLEUSERNAME || ',',',' || #{sampleUserName} || ',' ) > 0
+                              </if>
+                              <if test="sampleBeginDate != null">
+                                AND A.SAMPLEBEGINDATE &gt;= #{sampleBeginDate}
+                              </if>
+                              <if test="sampleCompleteDate != null">
+                                AND A.SAMPLECOMPLETEDATE &lt;= #{sampleCompleteDate}
+                              </if>)
+            </if>
+            <if test='targetType == "auditedData"'>
+                AND EXISTS (SELECT 1
+                              FROM T_EMC_REPORT A
+                                WHERE A.MONITORTMPLID = T.MONITORTMPLID
+                              AND A.PROJID = T.PROJID
+                              AND A.STATUS = 'draft')
+            </if>
+            <if test='targetType == "orderReceipt"'>
+                AND EXISTS (SELECT 1
+                              FROM T_EMC_ORDER R
+                            LEFT JOIN T_EMC_ORDER_TASK O
+                              ON O.ORDERID = R.ID
+                            WHERE R.SAMPLEID = T.ID
+                              AND O.STATUS = 'preLogged'
+                              AND O.ANALYSISTYPE = 'analysis'
+                              AND R.TERMINATION != '1')
+            </if>
+            <!-- 样品接收退回 -->
+            <if test='targetType == "sampleUndo"'>
+                AND EXISTS (SELECT 1
+                                  FROM T_EMC_ORDER A
+                                LEFT JOIN T_EMC_ORDER_TASK B
+                                  ON A.ID = B.ORDERID
+                                WHERE A.SAMPLEID = T.ID
+                                  AND B.ANALYSISTYPE = 'analysis'
+                                  AND B.STATUS NOT IN ('draft', 'preLogged', 'done', 'approve', 'audit'))
+            </if>
+            <!-- 样品交接单 -->
+            <if test='targetType == "sampleHandover"'>
+                AND EXISTS (SELECT 1
+                                FROM T_EMC_ORDER A
+                              LEFT JOIN T_EMC_ORDER_TASK B
+                                ON A.ID = B.ORDERID
+                              WHERE A.SAMPLEID = T.ID
+                                AND B.ANALYSISTYPE = 'analysis'
+                                AND B.STATUS NOT IN ('draft', 'preLogged', 'done'))
+            </if>
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ID DESC
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="selectSamplePagination" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM (SELECT A.*,
+                       P.PROJNO,
+                       P.PROJNAME,
+                       P.STATUS AS PROJSTATUS,
+                       P.TESTORGNAME,
+                       P.BIZCATEGORYID,
+                       B.PROPERTYTMPLID AS TMPLID
+                  FROM T_EMC_SAMPLE A
+                  LEFT JOIN T_EMC_PROJECT P
+                    ON P.ID = A.PROJID
+                  LEFT JOIN T_EMC_MONITOR_TMPL B
+                    ON B.ID = A.MONITORTMPLID) T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+            <include refid="com.sunwayworld.emc.module.bp.project.project.mapper.EmcProjectMapper.projectStatusWhereClause">
+                <property name="tableAlias" value="T"/>
+                <property name="projectIdColumnName" value="PROJID"/>
+            </include>
+            <if test='authority_audit == "1"'>
+                AND <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.auditAuthorityWhereClause" />
+            </if>
+                AND STATUS = 'draft'
+                AND PROCESSSTATUS LIKE CONCAT('draft', '%')
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ID DESC
+            </otherwise>
+        </choose>
+    </select>
+
+    <!-- 查询详情 -->
+    <select id="selectDetail" parameterType="java.lang.Long" resultType="map">
+        SELECT T.*
+          FROM T_EMC_SAMPLE T
+         WHERE T.ID = #{id}
+    </select>
+
+    <!-- 平板扫描查询 -->
+    <select id="selectMobileScanner" parameterType="map" resultType="map">
+        SELECT T.*, CONCAT(SUMNUMBER, '/', TOTAL) AS NUM
+          FROM (SELECT S.*, COUNT(1) AS TOTAL, IFNULL(SUM(SCANNED), 0) AS SUMNUMBER
+                  FROM (SELECT U.*
+                          FROM (SELECT A.ID,
+                                       A.STATUS,
+                                       A.PROCESSSTATUS,
+                                       A.SAMPLENO,
+                                       A.ORDERCATEGORY,
+                                       B.PROJNO,
+                                       B.PROJNAME,
+                                       B.TESTORGNAME,
+                                       B.BIZCATEGORYID,
+                                       B. STATUS AS PROJECTSTATUS,
+                                       (CONCAT(IFNULL(D.CONTAINERCATEGORYCODE, ''),
+                                                  IFNULL(C.ORDERNO, ''),
+                                                  IFNULL(D.CONTAINERGROUP, ''))) AS NUMBER,
+                                       D.SCANNED
+
+                                  FROM T_EMC_SAMPLE A
+                                  LEFT JOIN T_EMC_PROJECT B
+                                    ON B.ID = A.PROJID
+                                  LEFT JOIN T_EMC_ORDER C
+                                    ON A.ID = C.SAMPLEID
+                                  LEFT JOIN T_EMC_ORDER_TASK D
+                                    ON C.ID = D.ORDERID
+                                  WHERE D.CONTAINERCATEGORYCODE IS NOT NULL ) U
+                         WHERE U.STATUS = 'preLogged'
+                           AND U.PROCESSSTATUS = 'done'
+                           AND U.PROJECTSTATUS <![CDATA[<>]]> 'cancel'
+                         GROUP BY NUMBER) S GROUP BY S.ID) T
+    </select>
+
+    <!-- 平板详细标签信息 -->
+    <select id="selectDetailLabel" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM (SELECT A.ID,
+                       A.SAMPLENO,
+                       A.CREATEDBYNAME,
+                       A.REMARK,
+                       C.ORDERNO,
+                       C.SAMPLEBEGINDATE,
+                       C.ORDERDESC,
+                       WM_CONCAT(DISTINCT D.TESTNAME) AS TESTNAME,
+                       CONCAT(IFNULL(C.ORDERNO, ''),
+                              IFNULL(D.CONTAINERCATEGORYCODE, ''),
+                              IFNULL(D.CONTAINERGROUP, '')) AS LABELID,
+                       CASE D.SCANNED WHEN '1' THEN '已扫描' ELSE '未扫描' END STATUS
+                  FROM T_EMC_SAMPLE A
+                  LEFT JOIN T_EMC_PROJECT B
+                    ON B.ID = A.PROJID
+                  LEFT JOIN T_EMC_ORDER C
+                    ON A.ID = C.SAMPLEID
+                  LEFT JOIN T_EMC_ORDER_TASK D
+                    ON C.ID = D.ORDERID
+                  LEFT JOIN T_EMC_FOLDER E
+                    ON C.FOLDERID = E.ID
+                 WHERE A.ID = #{id}
+                   AND D.CONTAINERCATEGORYCODE IS NOT NULL
+                 GROUP BY LABELID) T
+
+    </select>
+
+    <!-- 平板标签详细信息 -->
+    <select id="selectLabelDetail" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM (SELECT A.ID,
+                       B.PROJNO,
+                       B.PROJNAME,
+                       C.ORDERNO,
+                       C.SAMPLEBEGINDATE,
+                       C.ORDERDESC,
+                       E.MONITORPOINTNAME,
+                       WM_CONCAT(DISTINCT D.TESTNAME) AS TESTNAME,
+                       CONCAT(IFNULL(C.ORDERNO, ''),
+                              IFNULL(D.CONTAINERCATEGORYCODE, ''),
+                              IFNULL(D.CONTAINERGROUP, '')) AS LABELID
+                  FROM T_EMC_SAMPLE A
+                  LEFT JOIN T_EMC_PROJECT B
+                    ON B.ID = A.PROJID
+                  LEFT JOIN T_EMC_ORDER C
+                    ON A.ID = C.SAMPLEID
+                  LEFT JOIN T_EMC_ORDER_TASK D
+                    ON C.ID = D.ORDERID
+                  LEFT JOIN T_EMC_FOLDER E
+                    ON C.FOLDERID = E.ID
+                 WHERE C.ORDERNO = SUBSTR(#{labelId},1, 13)
+                   AND D.CONTAINERCATEGORYCODE IS NOT NULL
+                   AND CONCAT(IFNULL(C.ORDERNO, ''),
+                              IFNULL(D.CONTAINERCATEGORYCODE, ''),
+                              IFNULL(D.CONTAINERGROUP, '')) = #{labelId}
+                 GROUP BY LABELID) T
+    </select>
+
+</mapper>

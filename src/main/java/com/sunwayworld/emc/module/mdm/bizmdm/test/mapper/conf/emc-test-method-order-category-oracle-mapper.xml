@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.emc.module.mdm.bizmdm.test.mapper.EmcTestMethodOrderCategoryMapper">
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM (SELECT A.*,
+                       B.MONITORTMPLNAME,
+                       C.CONTAINERCATEGORYID CONTAINERCATEGORYCODE,
+                       C.CONTAINERCATEGORYNAME,
+                       D.ISLOCKED
+                  FROM T_EMC_TEST_ORDER_CATEGORY A
+                  LEFT JOIN T_EMC_MONITOR_TMPL B
+                    ON A.MONITORTMPLID = B.ID
+                  LEFT JOIN T_EMC_CONTAINER_CATEGORY C
+                    ON A.CONTAINERCATEGORYID = C.ID
+                  LEFT JOIN T_EMC_TEST_METHOD D
+                    ON A.TESTMETHODID = D.ID) T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ID DESC
+            </otherwise>
+        </choose>
+    </select>
+
+
+    <!-- 查询详情 -->
+    <select id="selectDetail" parameterType="java.lang.Long" resultType="map">
+        SELECT T.*
+          FROM T_EMC_TEST_ORDER_CATEGORY T
+         WHERE T.ID = #{id}
+    </select>
+
+    <select id="selectMaintenancePage" parameterType="map" resultType="map">
+        SELECT T.* 
+               FROM(SELECT DISTINCT
+                            MONITORTMPLID,
+                            O.CONTAINERCATEGORYID,
+                            C.CONTAINERCATEGORYID CONTAINERCATEGORYCODE,
+                            CONTAINERGROUP,
+                            SAMPLEQTY,
+                            FIXATIVE,
+                            COUNT( TESTMETHODID ) AS TESTMETHODQTY,
+                            B.MONITORTMPLNAME,
+                            C.CONTAINERCATEGORYNAME,
+                            WM_CONCAT(O.ID) AS IDS,
+                            WM_CONCAT(O.TESTMETHODID) AS TMIDS,
+                            O.STORECONDITION
+                       FROM T_EMC_TEST_ORDER_CATEGORY O
+                       LEFT JOIN T_EMC_MONITOR_TMPL B ON O.MONITORTMPLID = B.ID
+                       LEFT JOIN T_EMC_CONTAINER_CATEGORY C ON O.CONTAINERCATEGORYID = C.ID
+                      WHERE MONITORTMPLID IS NOT NULL
+                        AND O.CONTAINERCATEGORYID IS NOT NULL
+                        AND CONTAINERGROUP IS NOT NULL
+                        AND SAMPLEQTY IS NOT NULL
+                      GROUP BY MONITORTMPLID,MONITORTMPLNAME,CONTAINERCATEGORYNAME,CONTAINERGROUP,SAMPLEQTY,FIXATIVE,O.CONTAINERCATEGORYID,C.CONTAINERCATEGORYID,O.STORECONDITION )T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.MONITORTMPLID, T.CONTAINERGROUP, T.CONTAINERCATEGORYID
+            </otherwise>
+        </choose>
+    </select>
+
+</mapper>

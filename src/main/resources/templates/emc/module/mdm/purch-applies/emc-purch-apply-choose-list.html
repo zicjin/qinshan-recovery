@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ 
+                      '/static/emc/module/mdm/purch-applies/emc-purch-apply.js',
+                      '/static/emc/module/mdm/purch-applies/emc-purch-apply-choose-list.js'
+                    ]);
+    emcPurchApply.choosePage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>

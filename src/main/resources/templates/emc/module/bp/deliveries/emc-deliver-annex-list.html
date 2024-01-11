@@ -1,0 +1,8 @@
+<script th:inline="javascript">
+/*<![CDATA[*/                
+Gikam.requirejs([ '/static/emc/module/bp/deliveries/emc-delivery.js',
+    			  '/static/emc/module/bp/deliveries/emc-deliver-annex-list.js'
+  ]);
+emcDelivery.annexPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>

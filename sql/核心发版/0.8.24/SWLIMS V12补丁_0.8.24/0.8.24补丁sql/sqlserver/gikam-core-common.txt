@@ -1,0 +1,39 @@
+-- ----------------------------- 2020-11-24 add by shixw------------begin       0.8.24补丁已发布
+
+EXEC sys.sp_rename 'dbo.T_CORE_LOGIN_CONFIG.QCCODE' , 'QRCODE', 'COLUMN'
+EXEC sys.sp_rename 'dbo.T_CORE_LOGIN_CONFIG.IPHONEQCCODE' , 'IPHONEQRCODE', 'COLUMN'
+EXEC sys.sp_rename 'dbo.T_CORE_LOGIN_CONFIG.ANDROIDMOBILEQCCODE' , 'ANDROIDMOBILEQRCODE', 'COLUMN'
+EXEC sys.sp_rename 'dbo.T_CORE_LOGIN_CONFIG.ANDROIDPADQCCODE' , 'ANDROIDPADQRCODE', 'COLUMN'
+
+-- ----------------------------- 2020-11-24 add by shixw------------end       0.8.24补丁已发布
+
+-- ----------------------------- 2020-12-01 add by zhangjr------------begin      0.8.24补丁已发布
+EXEC DBO.INSERTI18N N'CORE.MODULE.SYS.T_CORE_BPMN_DRAFT.LABEL.TRANSFER', N'流程配置中是否转办', N'转办', N'zh-CN', N'转办';
+EXEC DBO.INSERTI18N N'GIKAM.AT.PROCESS_TRANSFER', '流程转办业务', N'转办', N'zh-CN', N'转办';
+EXEC DBO.INSERTI18N N'AUDIT.PROCESS_TRANSFER', '流程转办业务', N'转办', N'zh-CN', N'转办';
+EXEC DBO.INSERTI18N N'GIKAM.BPMN.COMMENT.TRANSFER', N'审核人转办时的审核意见', N'{0}转办给{1}', N'zh-CN', N'{0}转办给{1}';
+-- ----------------------------- 2020-12-01 add by zhangjr------------end      0.8.24补丁已发布
+
+-- ----------------------------- 2020-12-05 add by zhangpf------------begin      0.8.24补丁已发布
+alter table dbo.T_CORE_LOGIN_CONFIG ADD RETRIEVEPASSWORD VARCHAR(36) NULL
+
+EXEC sp_addextendedproperty
+'MS_Description', N'是否找回密码',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_LOGIN_CONFIG',
+'COLUMN', N'RETRIEVEPASSWORD'
+
+UPDATE T_CORE_LOGIN_CONFIG 
+   SET RETRIEVEPASSWORD = '0'
+ WHERE ID = 'login-config';
+
+EXEC DBO.INSERTI18N N'T_CORE_LOGIN_CONFIG.RETRIEVEPASSWORD', N'登录配置的是否开启找回密码', N'是否找回密码', N'zh-CN', N'是否找回密码';
+-- ----------------------------- 2020-12-05 add by zhangpf------------end      0.8.24补丁已发布
+
+-- ----------------------------- 2020-12-05 add by zhangpf------------begin      0.8.24补丁已发布
+EXEC DBO.INSERTI18N N'RETRIEVE_PASSWORD_EMAIL.SUBJECT', N'找回密码邮件的主题', N'密码找回', N'zh-CN', N'密码找回';
+EXEC DBO.INSERTI18N N'RETRIEVE_PASSWORD_EMAIL.CONTENT', N'找回密码邮件的内容', N'您好,本邮件无需回复。点击下方链接，重设密码。收到此邮件10分钟后，链接将会失效，需要重新申请找回密码。<br><a href="{0}">{1}</a>', N'zh-CN', N'您好,本邮件无需回复。点击下方链接，重设密码。收到此邮件10分钟后，链接将会失效，需要重新申请找回密码。<br><a href="{0}">{1}</a>';
+EXEC DBO.INSERTI18N N'RETRIEVE_PASSWORD.TIP.USERID_EMAIL_DOESNOT_MATACH', N'找回密码时用户名和邮箱不匹配提示', N'用户名和邮箱不匹配，请检查输入是否正确', N'zh-CN', N'用户名和邮箱不匹配，请检查输入是否正确';
+EXEC DBO.INSERTI18N N'RETRIEVE_PASSWORD.TIP.SEND_EMAIL_FAILED', N'找回密码时发送邮件失败提示', N'邮件发送失败，请检查邮箱是否正确', N'zh-CN', N'邮件发送失败，请检查邮箱是否正确';
+EXEC DBO.INSERTI18N N'RETRIEVE_PASSWORD.TIP.SECRETKEY_EXPIRED', N'找回密码时打开邮件链接失败提示', N'该链接已失效，需要重新申请找回密码。', N'zh-CN', N'该链接已失效，需要重新申请找回密码。';
+-- ----------------------------- 2020-12-05 add by zhangpf------------end      0.8.24补丁已发布

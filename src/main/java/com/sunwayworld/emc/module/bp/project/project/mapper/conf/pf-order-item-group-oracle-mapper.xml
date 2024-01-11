@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.emc.module.bp.project.project.mapper.PfOrderItemGroupMapper">
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM
+            (SELECT A.* ,
+                    B.ORDERNO,
+                    C.ID AS PROJID,
+                    D.TESTMETHODTYPE,
+                    E.STDNAME,
+                    F.INDEXNAME,
+                    F.INDEX1,
+                    F.INDEX2,
+                    <if test='showOrderContainer == "1"'>
+                        OC.ORDERCONTAINERNO,
+                    </if>
+                    F.INDEX3
+        FROM T_EMC_ORDER_ITEM_GROUP A
+             LEFT JOIN T_EMC_ORDER B
+               ON A.ORDERID = B.ID
+             LEFT JOIN T_EMC_PROJECT C
+               ON B.PROJID = C.ID
+             LEFT JOIN T_EMC_TEST_METHOD D
+               ON A.TESTMETHODID = D.ID
+             LEFT JOIN T_EMC_INDEX_CATEGORY E
+               ON A.INDEXCATEGORYID = E.ID
+             LEFT JOIN T_EMC_ORDER_INDEX F
+               ON A.INDEXID = F.ID
+            <if test='showOrderContainer == "1"'>
+                LEFT JOIN T_EMC_ORDER_TASK OT ON
+                A.ORDERID = OT.ORDERID
+                AND A.TESTMETHODID = OT.TESTMETHODID
+                LEFT JOIN T_EMC_ORDER_CONTAINER OC ON
+                OT.ORDERCONTAINERID = OC.ID
+            </if>
+        ) T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+        </where>
+            <if test='showOrderContainer == "1"'>
+                GROUP BY T.ID
+            </if>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ID DESC
+            </otherwise>
+        </choose>
+    </select>
+
+
+    <!-- 查询详情 -->
+    <select id="selectDetail" parameterType="java.lang.Long" resultType="map">
+        SELECT T.*
+          FROM T_EMC_ORDER_ITEM_GROUP T
+         WHERE T.ID = #{id}
+    </select>
+
+</mapper>

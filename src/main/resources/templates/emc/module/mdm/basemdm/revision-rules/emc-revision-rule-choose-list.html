@@ -1,0 +1,6 @@
+<script th:inline="javascript">
+    Gikam.requirejs([ '/static/emc/module/mdm/basemdm/revision-rules/emc-revision-rule.js',
+                      '/static/emc/module/mdm/basemdm/revision-rules/emc-revision-rule-choose-list.js' 
+                    ]);
+    emcRevisionRule.choosePage.init(Gikam.getElParam([[${param}]]));
+</script>

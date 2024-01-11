@@ -1,0 +1,13 @@
+-- ----------------------------- 2020-11-25 add by shixw------------begin      0.8.22补丁已发布
+
+
+alter table T_CORE_ADMIN_SELECT_CONFIG add CACHEABLE VARCHAR2(36);
+comment on column T_CORE_ADMIN_SELECT_CONFIG.CACHEABLE is '是否缓存';
+
+CALL INSERTI18N('T_CORE_ADMIN_SELECT_CONFIG.CACHEABLE', '下拉框配置的是否缓存', '是否缓存', 'zh-CN', '是否缓存');
+
+update T_CORE_ADMIN_SELECT_CONFIG set cacheable = '1';
+
+commit;
+
+-- ----------------------------- 2020-11-25 add by shixw------------end       0.8.22补丁已发布

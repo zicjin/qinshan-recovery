@@ -1,0 +1,6 @@
+-- ----------------------------- 2021-3-2 add by zhangpf------------begin
+ALTER TABLE dbo.T_CORE_LOGIN_CONFIG ADD ADUSERIDIGNORECASE varchar(36) NULL GO
+EXEC sys.sp_addextendedproperty 'MS_Description', N'AD域用户编码忽略大小写（0-否 1-是）', 'schema', N'dbo', 'table', N'T_CORE_LOGIN_CONFIG', 'column', N'ADUSERIDIGNORECASE' GO
+
+EXEC  DBO.INSERTI18N  N'T_CORE_LOGIN_CONFIG.ADUSERIDIGNORECASE', N'AD域用户编码忽略大小写（0-否 1-是）', N'AD域用户编码忽略大小写', N'zh-CN',N'AD域用户编码忽略大小写';
+-- ----------------------------- 2021-3-2 add by zhangpf------------end

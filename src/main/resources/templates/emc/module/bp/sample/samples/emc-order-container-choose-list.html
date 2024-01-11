@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([
+                      '/static/emc/module/bp/sample/samples/emc-sample.js',
+                      '/static/emc/module/bp/sample/samples/emc-order-container-choose-list.js'
+                    ]);
+    emcSample.orderContainerChoosePage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>

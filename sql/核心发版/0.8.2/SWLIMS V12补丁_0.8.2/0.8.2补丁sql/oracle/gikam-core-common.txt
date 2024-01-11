@@ -1,0 +1,17 @@
+-- ----------------------------- 2020-09-09 add by shixw------------begin
+
+alter table T_CORE_PASSWORD_POLICY add EXPIRYWARNINGINTERVAL NUMBER;
+comment on column T_CORE_PASSWORD_POLICY.EXPIRYWARNINGINTERVAL is '密码过期提前提醒天数';
+
+
+CALL INSERTI18N('T_CORE_PASSWORD_POLICY.EXPIRYWARNINGINTERVAL', '密码策略的密码过期提前提醒天数', '密码过期提前提醒天数', 'zh-CN', '密码过期提前提醒天数');
+
+-- ----------------------------- 2020-09-09 add by shixw------------end
+
+-- ----------------------------- 2020-09-10 add by shixw------------begin
+
+
+CALL INSERTI18N('GIKAM.USER.PASSWORD.NEW_OLD_PASSWORD_SAME', '新密码不能与旧密码相同', '新密码不能与旧密码相同', 'zh-CN', '新密码不能与旧密码相同');
+CALL INSERTI18N('CORE.MODULE.SYS.PASSWORDPOLICIES.TIP.EXPIRYWARNINGINTERVAL_NOT_MORE_EXPIRYINTERVAL', '密码过期提前提醒天数不能大于密码过期天数', '密码过期提前提醒天数不能大于密码过期天数', 'zh-CN', '密码过期提前提醒天数不能大于密码过期天数');
+
+-- ----------------------------- 2020-09-10 add by shixw------------end

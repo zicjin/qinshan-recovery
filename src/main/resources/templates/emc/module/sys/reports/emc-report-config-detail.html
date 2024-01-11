@@ -1,0 +1,10 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/module/sys/reports/core-report-config.js',
+                      '/static/emc/module/sys/reports/emc-report-config.js',
+                      '/static/module/sys/reports/core-report-config-detail.js',
+                      '/static/emc/module/sys/reports/emc-report-config-detail.js'
+                    ]);
+    coreReportConfig.detailPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>

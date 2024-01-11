@@ -1,0 +1,42 @@
+-- ----------------------------- 2020-11-24 add by shixw------------begin      0.8.24补丁已发布
+
+ALTER TABLE T_CORE_LOGIN_CONFIG RENAME COLUMN QCCODE TO QRCODE;
+ALTER TABLE T_CORE_LOGIN_CONFIG RENAME COLUMN IPHONEQCCODE TO IPHONEQRCODE;
+ALTER TABLE T_CORE_LOGIN_CONFIG RENAME COLUMN ANDROIDMOBILEQCCODE TO ANDROIDMOBILEQRCODE;
+ALTER TABLE T_CORE_LOGIN_CONFIG RENAME COLUMN ANDROIDPADQCCODE TO ANDROIDPADQRCODE;
+
+-- ----------------------------- 2020-11-24 add by shixw------------end      0.8.24补丁已发布
+
+-- ----------------------------- 2020-12-01 add by zhangjr------------begin      0.8.24补丁已发布
+call INSERTI18N('CORE.MODULE.SYS.T_CORE_BPMN_DRAFT.LABEL.TRANSFER', '流程配置中是否转办', '转办', 'zh-CN', '转办');
+call INSERTI18N('GIKAM.AT.PROCESS_TRANSFER', '流程转办业务', '转办', 'zh-CN', '转办');
+call INSERTI18N('AUDIT.PROCESS_TRANSFER', '流程转办业务', '转办', 'zh-CN', '转办');
+call INSERTI18N('GIKAM.BPMN.COMMENT.TRANSFER', '审核人转办时的审核意见', '{0}转办给{1}', 'zh-CN', '{0}转办给{1}');
+-- ----------------------------- 2020-12-01 add by zhangjr------------end      0.8.24补丁已发布
+
+-- ----------------------------- 2020-12-05 add by zhangpf------------begin      0.8.24补丁已发布
+ALTER TABLE T_CORE_LOGIN_CONFIG ADD RETRIEVEPASSWORD VARCHAR2(36);
+COMMENT ON COLUMN T_CORE_LOGIN_CONFIG.RETRIEVEPASSWORD IS '是否开启找回密码';
+
+CALL INSERTI18N('T_CORE_LOGIN_CONFIG.RETRIEVEPASSWORD', '登录配置的是否开启找回密码', '是否找回密码', 'zh-CN', '是否找回密码');
+
+UPDATE T_CORE_LOGIN_CONFIG 
+   SET RETRIEVEPASSWORD = '0'
+ WHERE ID = 'login-config';
+ 
+ commit;
+-- ----------------------------- 2020-12-05 add by zhangpf------------end      0.8.24补丁已发布
+
+-- ----------------------------- 2020-12-05 add by zhangpf------------begin      0.8.24补丁已发布
+CALL INSERTI18N('RETRIEVE_PASSWORD_EMAIL.SUBJECT', '找回密码邮件的主题', '密码找回', 'zh-CN', '密码找回');
+
+CALL INSERTI18N('RETRIEVE_PASSWORD_EMAIL.CONTENT', 
+                '找回密码邮件的内容', 
+                '您好,本邮件无需回复。点击下方链接，重设密码。收到此邮件10分钟后，链接将会失效，需要重新申请找回密码。<br><a href="{0}">{1}</a>',
+                'zh-CN', 
+                '您好,本邮件无需回复。点击下方链接，重设密码。收到此邮件10分钟后，链接将会失效，需要重新申请找回密码。<br><a href="{0}">{1}</a>');
+
+CALL INSERTI18N('RETRIEVE_PASSWORD.TIP.USERID_EMAIL_DOESNOT_MATACH', '找回密码时用户名和邮箱不匹配提示', '用户名和邮箱不匹配，请检查输入是否正确', 'zh-CN', '用户名和邮箱不匹配，请检查输入是否正确');
+CALL INSERTI18N('RETRIEVE_PASSWORD.TIP.SEND_EMAIL_FAILED', '找回密码时发送邮件失败提示', '邮件发送失败，请检查邮箱是否正确', 'zh-CN', '邮件发送失败，请检查邮箱是否正确');
+CALL INSERTI18N('RETRIEVE_PASSWORD.TIP.SECRETKEY_EXPIRED', '找回密码时打开邮件链接失败提示', '该链接已失效，需要重新申请找回密码。', 'zh-CN', '该链接已失效，需要重新申请找回密码');
+-- ----------------------------- 2020-12-05 add by zhangpf------------end      0.8.24补丁已发布

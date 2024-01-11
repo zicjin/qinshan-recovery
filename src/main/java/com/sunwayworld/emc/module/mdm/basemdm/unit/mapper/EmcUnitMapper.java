@@ -1,0 +1,10 @@
+package com.sunwayworld.emc.module.mdm.basemdm.unit.mapper;
+
+import com.sunwayworld.framework.support.base.mapper.GenericMapper;
+
+/**
+ * @author yuanhh@sunwayworld.com 2019年9月9日
+ */
+
+public interface EmcUnitMapper extends GenericMapper<String> {
+}

@@ -1,0 +1,5 @@
+-- ----------------------------- 2020-11-16 add by zhangjr------------begin
+
+EXEC DBO.INSERTI18N N'CORE.MODULE.SYS.T_CORE_BPMN_DRAFT.LABEL.FILTER_PREVIOUS_CANDIDATORS', N'过滤之前节点的已审人员', N'过滤之前节点的已审人员', N'zh-CN', N'过滤之前节点的已审人员';
+EXEC DBO.INSERTI18N N'CORE.MODULE.SYS.T_CORE_BPMN_PROC.ENGINE.FILTER_PREVIOUS_CANDIDATORS', N'您在前一个节点审核通过，当前节点您不能参与审核', N'您在前一个节点审核通过，当前节点您不能参与审核', N'zh-CN', N'您在前一个节点审核通过，当前节点您不能参与审核';
+-- ----------------------------- 2020-11-16 add by zhangjr------------begin

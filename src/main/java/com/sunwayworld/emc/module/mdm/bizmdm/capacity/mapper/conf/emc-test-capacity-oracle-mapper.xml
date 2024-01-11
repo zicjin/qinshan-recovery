@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.emc.module.mdm.bizmdm.capacity.mapper.EmcTestCapacityMapper">
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM (SELECT A.*,
+                       B.ACTIVATEDFLAG,
+                       B.TESTCATEGORYID,
+                       B.TESTID,
+                       B.METHODID,
+                       F.TESTNAME,
+                       C.METHODNAME,
+                       C.TESTMETHODBASIS,
+                       C.METHODNO,
+                       C.SOURCE,
+                       E.ORGNAME,
+                       B.METHODPARAM,
+                       B.CONROLLEDNO,
+                       B.DISPLAYMONITORBASIS,
+                       B.AUTHENTICATION,
+                       B.APPROVAL,
+                       B.ANALYSISRECORDNAME,
+                       B.ANALYSISFEE,
+                       B.SAMPLEFEE,
+                       B.HOURS,
+                       B.DEFAULTFLAG,
+                       B.TESTENGLISHNAME,
+                       B.INPUTUSERNAME,
+                       B.RECOVERYRATE,
+                       B.BEFOREHANDLE,
+                       B.REMARK
+                FROM T_EMC_TEST_CAPACITY A
+                LEFT JOIN T_EMC_TEST_METHOD B
+                  ON A.TESTMETHODID=B.ID
+                LEFT JOIN T_EMC_METHOD C
+                  ON B.METHODID = C.ID
+                LEFT JOIN T_CORE_ORG E
+                  ON B.ANALYSISORGID = E.ID
+                LEFT JOIN T_EMC_TEST F
+                  ON B.TESTID = F.ID) T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ID DESC
+            </otherwise>
+        </choose>
+    </select>
+
+</mapper>

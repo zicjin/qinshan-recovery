@@ -1,0 +1,10 @@
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    Gikam.requirejs([ 
+        '/static/emc/module/bp/order/order-handovers/emc-order-handover.js',
+        '/static/emc/module/bp/order/order-handovers/emc-order-handover-search-all-list.js'
+    ]);
+    emcOrderHandover.searchAllPage.init(Gikam.getElParam([[${param}]]));
+
+    /*]]>*/
+</script>

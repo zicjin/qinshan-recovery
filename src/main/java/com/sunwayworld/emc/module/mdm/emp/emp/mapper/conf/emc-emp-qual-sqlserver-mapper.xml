@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.emc.module.mdm.emp.emp.mapper.EmcEmpQualMapper">
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM (SELECT A.*, 
+                       D.NAME FILENAME,
+                       D.ID FILEID
+                  FROM T_EMC_EMP_QUAL A
+                  LEFT JOIN T_CORE_FILE D
+                    ON D.TARGETID = CONCAT('T_EMC_EMP_QUAL$', A.ID)) T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+        </where>
+        ORDER BY 
+         <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ID DESC
+            </otherwise>
+         </choose>
+    </select>
+
+    <select id="selectDetail" resultType="map">
+        SELECT T.*
+          FROM T_EMC_EMP_QUAL T
+         WHERE T.ID = #{id}
+    </select>
+</mapper>

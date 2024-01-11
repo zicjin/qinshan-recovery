@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/emc/module/item/quotation/quotationregisters/emc-quotationregister.js',
+                      '/static/emc/module/item/quotation/quotationregisters/emc-quotationregister-detail.js'
+                    ]);
+    emcQuotationregister.detailPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>
+

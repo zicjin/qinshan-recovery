@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/emc/module/mdm/bizmdm/methods/emc-method.js',
+                      '/static/emc/module/mdm/bizmdm/methods/emc-method-detail.js'
+                    ]);
+    emcMethod.detailPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>
+

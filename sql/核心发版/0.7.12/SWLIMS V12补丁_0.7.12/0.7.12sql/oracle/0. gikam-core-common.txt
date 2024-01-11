@@ -1,0 +1,158 @@
+-- ----------------------------- 2020-08-24 add by zhangpf------------begin
+CREATE TABLE T_CORE_AD_DMOAIN_USER( 
+    ID VARCHAR2(36)  NOT NULL,
+    ADUSERID VARCHAR2(60)  NULL,
+    CREATEDBYID VARCHAR2(36)  NULL,
+    CREATEDBYNAME VARCHAR2(60)  NULL,
+    CREATEDTIME DATE NULL,
+    CREATEDBYORGID VARCHAR2(36)  NULL,
+    CREATEDBYORGNAME VARCHAR2(270)  NULL
+ );
+COMMENT ON TABLE T_CORE_AD_DMOAIN_USER IS 'AD域用户';
+COMMENT ON COLUMN T_CORE_AD_DMOAIN_USER.ID IS '主键';
+COMMENT ON COLUMN T_CORE_AD_DMOAIN_USER.ADUSERID IS 'AD域登录名';
+COMMENT ON COLUMN T_CORE_AD_DMOAIN_USER.CREATEDBYID IS '制单人编码';
+COMMENT ON COLUMN T_CORE_AD_DMOAIN_USER.CREATEDBYNAME IS '制单人名称';
+COMMENT ON COLUMN T_CORE_AD_DMOAIN_USER.CREATEDTIME IS '制单时间';
+COMMENT ON COLUMN T_CORE_AD_DMOAIN_USER.CREATEDBYORGID IS '制单人单位编码';
+COMMENT ON COLUMN T_CORE_AD_DMOAIN_USER.CREATEDBYORGNAME IS '制单人单位名称';
+
+ALTER TABLE T_CORE_AD_DMOAIN_USER ADD CONSTRAINT PK_CORE_AD_DMOAIN_USER PRIMARY KEY (ID);
+
+alter table T_CORE_SYSTEM_CONFIG add ADDOMAINSUPPORT VARCHAR2(36);
+comment on column T_CORE_SYSTEM_CONFIG.ADDOMAINSUPPORT is '支持AD域认证';
+alter table T_CORE_SYSTEM_CONFIG add SHOWLOGINAUTHOPTION VARCHAR2(36);
+comment on column T_CORE_SYSTEM_CONFIG.SHOWLOGINAUTHOPTION is '是否显示认证选项';
+alter table T_CORE_SYSTEM_CONFIG add ADDOMAINSERVER VARCHAR2(36);
+comment on column T_CORE_SYSTEM_CONFIG.ADDOMAINSERVER is 'AD域主机';
+alter table T_CORE_SYSTEM_CONFIG add ADDOMAINPORT NUMBER;
+comment on column T_CORE_SYSTEM_CONFIG.ADDOMAINPORT is 'AD域端口';
+alter table T_CORE_SYSTEM_CONFIG add ADDOMAINUPNSUFFIX VARCHAR2(60);
+comment on column T_CORE_SYSTEM_CONFIG.ADDOMAINUPNSUFFIX is 'UPN后缀';
+
+CALL INSERTI18N('T_CORE_AD_DMOAIN_USER.SERVICE_NAME', 'AD域用户', 'AD域用户', 'zh-CN', 'AD域用户');
+CALL INSERTI18N('T_CORE_AD_DMOAIN_USER.ID', 'AD域用户的主键', '主键', 'zh-CN', '主键');
+CALL INSERTI18N('T_CORE_AD_DMOAIN_USER.ADUSERID', 'AD域用户的AD域登录名', 'AD域登录名', 'zh-CN', 'AD域登录名');
+CALL INSERTI18N('T_CORE_AD_DMOAIN_USER.CREATEDBYID', 'AD域用户的制单人编码', '制单人编码', 'zh-CN', '制单人编码');
+CALL INSERTI18N('T_CORE_AD_DMOAIN_USER.CREATEDBYNAME', 'AD域用户的制单人名称', '制单人名称', 'zh-CN', '制单人名称');
+CALL INSERTI18N('T_CORE_AD_DMOAIN_USER.CREATEDTIME', 'AD域用户的制单时间', '制单时间', 'zh-CN', '制单时间');
+CALL INSERTI18N('T_CORE_AD_DMOAIN_USER.CREATEDBYORGID', 'AD域用户的制单人单位编码', '制单人单位编码', 'zh-CN', '制单人单位编码');
+CALL INSERTI18N('T_CORE_AD_DMOAIN_USER.CREATEDBYORGNAME', 'AD域用户的制单人单位名称', '制单人单位名称', 'zh-CN', '制单人单位名称');
+
+CALL INSERTI18N('T_CORE_SYSTEM_CONFIG.ADDOMAINSUPPORT', '支持AD域认证', '支持AD域认证', 'zh-CN', '支持AD域认证');
+CALL INSERTI18N('T_CORE_SYSTEM_CONFIG.SHOWLOGINAUTHOPTION', '是否显示认证选项', '显示认证选项', 'zh-CN', '显示认证选项');
+CALL INSERTI18N('T_CORE_SYSTEM_CONFIG.ADDOMAINSERVER', 'AD域主机', 'AD域主机', 'zh-CN', 'AD域主机');
+CALL INSERTI18N('T_CORE_SYSTEM_CONFIG.ADDOMAINPORT', 'AD域端口', 'AD域端口', 'zh-CN', 'AD域端口');
+CALL INSERTI18N('T_CORE_SYSTEM_CONFIG.ADDOMAINUPNSUFFIX', 'UPN后缀', 'UPN后缀', 'zh-CN', 'UPN后缀');
+
+CALL INSERTI18N('core.sys.system-config.ad-domain-server-not-null', '系统配置参数AD域主机', 'AD域主机未配置，请联系管理员', 'zh-CN', '系统配置参数AD域主机未配置，请联系管理员');
+CALL INSERTI18N('core.sys.system-config.ad-domain-port-not-null', '系统配置参数AD域端口号', 'AD域端口号未配置，请联系管理员', 'zh-CN', '系统配置参数AD域端口号，请联系管理员');
+CALL INSERTI18N('core.sys.ad-domain-auth.no-user-exists', 'AD域认证，系统不存在用户', '系统不存在该用户，请联系管理员创建账号', 'zh-CN', '系统不存在该用户，请联系管理员创建账号');
+
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_AD_DMOAIN_USER', '0', '0');
+COMMIT;
+-- ----------------------------- 2020-08-24 add by zhangpf------------end
+
+-- ----------------------------- 2020-08-28 add by zhangpf--------------begin
+DELETE FROM T_CORE_I18N_MESSAGE WHERE I18NID = (SELECT ID FROM T_CORE_I18N WHERE CODE = 'core.sys.system-config.ad-domain-server-not-null');
+DELETE FROM T_CORE_I18N WHERE CODE = 'core.sys.system-config.ad-domain-server-not-null';
+
+DELETE FROM T_CORE_I18N_MESSAGE WHERE I18NID = (SELECT ID FROM T_CORE_I18N WHERE CODE = 'core.sys.system-config.ad-domain-port-not-null');
+DELETE FROM T_CORE_I18N WHERE CODE = 'core.sys.system-config.ad-domain-port-not-null';
+
+DELETE FROM T_CORE_I18N_MESSAGE WHERE I18NID = (SELECT ID FROM T_CORE_I18N WHERE CODE = 'core.sys.ad-domain-auth.no-user-exists');
+DELETE FROM T_CORE_I18N WHERE CODE = 'core.sys.ad-domain-auth.no-user-exists';
+
+CALL INSERTI18N('CORE.MODULE.SYS.LOGIN_CONFIGS.AD_DOMAIN_SERVER_NOT_NULL', '登录参数AD域主机', 'AD域主机未配置，请联系管理员', 'zh-CN', 'AD域主机未配置，请联系管理员');
+CALL INSERTI18N('CORE.MODULE.SYS.LOGIN_CONFIGS.AD_DOMAIN_PORT_NOT_NULL', '登录参数AD域端口号', 'AD域端口号未配置，请联系管理员', 'zh-CN', 'AD域端口号未配置，请联系管理员');
+CALL INSERTI18N('CORE.SECURITY.AD_LOGIN.NO_USER_EXISTS', 'AD域认证，系统不存在用户', '系统不存在该用户，请联系管理员创建账号', 'zh-CN', '系统不存在该用户，请联系管理员创建账号');
+
+COMMIT;
+-- ----------------------------- 2020-08-28 add by zhangpf--------------end
+-- ----------------------------- 2020-08-27 add by liujianfeng--------------begin
+
+-- 建表语句
+CREATE TABLE T_CORE_LOGIN_CONFIG( 
+    ID NUMBER NOT NULL,
+    PAGESTYLE VARCHAR2(36)  NULL,
+    PAGESKIN VARCHAR2(36)  NULL,
+    LOGINORG VARCHAR2(36)  NULL,
+    LOGINROLE VARCHAR2(36)  NULL,
+    QCCODE VARCHAR2(36)  NULL,
+    ADDOMAINSUPPORT VARCHAR2(36)  NULL,
+    SHOWLOGINAUTHOPTION VARCHAR2(36)  NULL,
+    ADDOMAINSERVER NUMBER(36)  NULL,
+    ADDOMAINPORT NUMBER NULL,
+    ADDOMAINUPNSUFFIX VARCHAR2(60)  NULL
+ );
+COMMENT ON TABLE T_CORE_LOGIN_CONFIG IS '登录配置';
+COMMENT ON COLUMN T_CORE_LOGIN_CONFIG.ID IS '主键';
+COMMENT ON COLUMN T_CORE_LOGIN_CONFIG.PAGESTYLE IS '皮肤';
+COMMENT ON COLUMN T_CORE_LOGIN_CONFIG.PAGESKIN IS '颜色';
+COMMENT ON COLUMN T_CORE_LOGIN_CONFIG.LOGINORG IS '是否选择部门';
+COMMENT ON COLUMN T_CORE_LOGIN_CONFIG.LOGINROLE IS '是否选择角色';
+COMMENT ON COLUMN T_CORE_LOGIN_CONFIG.QCCODE IS '二维码登录';
+COMMENT ON COLUMN T_CORE_LOGIN_CONFIG.ADDOMAINSUPPORT IS '是否支持AD域认证';
+COMMENT ON COLUMN T_CORE_LOGIN_CONFIG.SHOWLOGINAUTHOPTION IS '是否显示认证选项';
+COMMENT ON COLUMN T_CORE_LOGIN_CONFIG.ADDOMAINSERVER IS 'AD域主机';
+COMMENT ON COLUMN T_CORE_LOGIN_CONFIG.ADDOMAINPORT IS 'AD域端口';
+COMMENT ON COLUMN T_CORE_LOGIN_CONFIG.ADDOMAINUPNSUFFIX IS 'UPN后缀';
+
+ALTER TABLE T_CORE_LOGIN_CONFIG ADD CONSTRAINT PK_CORE_LOGIN_CONFIG PRIMARY KEY (ID);
+
+CALL INSERTI18N('T_CORE_LOGIN_CONFIG.SERVICE_NAME', '登录配置', '登录配置', 'zh-CN', '登录配置');
+CALL INSERTI18N('T_CORE_LOGIN_CONFIG.ID', '登录配置的主键', '主键', 'zh-CN', '主键');
+CALL INSERTI18N('T_CORE_LOGIN_CONFIG.PAGESTYLE', '登录配置的皮肤', '皮肤', 'zh-CN', '皮肤');
+CALL INSERTI18N('T_CORE_LOGIN_CONFIG.PAGESKIN', '登录配置的颜色', '颜色', 'zh-CN', '颜色');
+CALL INSERTI18N('T_CORE_LOGIN_CONFIG.LOGINORG', '登录配置的是否选择部门', '是否选择部门', 'zh-CN', '是否选择部门');
+CALL INSERTI18N('T_CORE_LOGIN_CONFIG.LOGINROLE', '登录配置的是否选择角色', '是否选择角色', 'zh-CN', '是否选择角色');
+CALL INSERTI18N('T_CORE_LOGIN_CONFIG.QCCODE', '登录配置的二维码登录', '二维码登录', 'zh-CN', '二维码登录');
+CALL INSERTI18N('T_CORE_LOGIN_CONFIG.ADDOMAINSUPPORT', '登录配置的是否支持AD域认证', '是否支持AD域认证', 'zh-CN', '是否支持AD域认证');
+CALL INSERTI18N('T_CORE_LOGIN_CONFIG.SHOWLOGINAUTHOPTION', '登录配置的是否显示认证选项', '是否显示认证选项', 'zh-CN', '是否显示认证选项');
+CALL INSERTI18N('T_CORE_LOGIN_CONFIG.ADDOMAINSERVER', '登录配置的AD域主机', 'AD域主机', 'zh-CN', 'AD域主机');
+CALL INSERTI18N('T_CORE_LOGIN_CONFIG.ADDOMAINPORT', '登录配置的AD域端口', 'AD域端口', 'zh-CN', 'AD域端口');
+CALL INSERTI18N('T_CORE_LOGIN_CONFIG.ADDOMAINUPNSUFFIX', '登录配置的UPN后缀', 'UPN后缀', 'zh-CN', 'UPN后缀');
+CALL INSERTI18N('MODULE.SYS.LOGINCONFIGS.MODAL.ADD', '新增', '新增', 'zh-CN', '新增');
+CALL INSERTI18N('MODULE.SYS.LOGINCONFIGS.TAB.BASE_INFO', '基本信息', '基本信息', 'zh-CN', '基本信息');
+CALL INSERTI18N('MODULE.SYS.LOGINCONFIGS.BUTTON.BUTTON', '按钮', '按钮', 'zh-CN', '按钮');
+CALL INSERTI18N('MODULE.SYS.LOGINCONFIGS.TIP.TIP', '提示框', '提示框', 'zh-CN', '提示框');
+CALL INSERTI18N('MODULE.SYS.LOGINCONFIGS.MODAL.MODAL', '对话框', '对话框', 'zh-CN', '对话框');
+
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_LOGIN_CONFIG', '0', '0');
+
+
+COMMIT;
+
+-- ----------------------------- 2020-08-27 add by liujianfeng------------end
+-- ----------------------------- 2020-08-27 add by liujianfeng--------------begin
+alter table T_CORE_SYSTEM_CONFIG drop column adDomainSupport;
+alter table T_CORE_SYSTEM_CONFIG drop column showLoginAuthOption;
+alter table T_CORE_SYSTEM_CONFIG drop column adDomainServer;
+alter table T_CORE_SYSTEM_CONFIG drop column adDomainPort;
+alter table T_CORE_SYSTEM_CONFIG drop column adDomainUpnSuffix;
+-- ----------------------------- 2020-08-27 add by liujianfeng--------------end
+-- ----------------------------- 2020-08-28 add by liujianfeng--------------begin
+-- Add/modify columns 
+alter table T_CORE_LOGIN_CONFIG modify id varchar2(36);
+
+-- Add/modify columns 
+alter table T_CORE_LOGIN_CONFIG modify addomainserver VARCHAR2(36);
+
+INSERT INTO T_CORE_LOGIN_CONFIG(ID, ADDOMAINSUPPORT, SHOWLOGINAUTHOPTION) VALUES ('login-config', '0', '0');
+
+COMMIT;
+-- ----------------------------- 2020-08-28 add by liujianfeng--------------end
+
+-- ----------------------------- 2020-08-28 add by liujianfeng--------------begin
+update T_CORE_LOGIN_CONFIG set PAGESTYLE = 'camellia', PAGESKIN = 'blue', LOGINORG = '0', LOGINROLE = '0', QCCODE = '0' where id = 'login-config';
+
+commit;
+-- ----------------------------- 2020-08-28 add by liujianfeng--------------end
+
+-- ----------------------------- 2020-08-28 add by zhangpf--------------begin
+UPDATE T_CORE_LOGIN_CONFIG SET ADDOMAINSUPPORT = '0', SHOWLOGINAUTHOPTION = '0' WHERE ID = 'login-config';
+
+commit;
+-- ----------------------------- 2020-08-28 add by zhangpf--------------end

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.emc.module.mdm.bizmdm.test.mapper.EmcItemGroupMapper">
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM (SELECT A.*,
+                       D.TESTNAME,
+                       C.METHODNAME,
+                       C.TESTMETHODBASIS,
+                       B.METHODID,
+                       c.methodno,
+                       B.TESTCATEGORYID,
+                       B.ACTIVATEDFLAG AS SHOWFLAG,
+                       B.ISLOCKED,
+                       B.DEFAULTFLAG
+                  FROM T_EMC_ITEM_GROUP A
+                  LEFT JOIN T_EMC_TEST_METHOD B
+                    ON A.TESTMETHODID = B.ID
+                  LEFT JOIN T_EMC_METHOD C
+                    ON B.METHODID = C.ID
+                  LEFT JOIN T_EMC_TEST D
+                    ON B.TESTID = D.ID
+                  WHERE B.ACTIVATEDFLAG = '1'
+                    ) T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+            <if test="target_unassigned != null">
+                AND NOT EXISTS (SELECT 1
+                                  FROM ${targetTable} TAR_
+                                 WHERE TAR_.${targetItemGroupIdColumn} = T.ID
+                                 <if test="targetFilterColumn != null">
+                                     AND TAR_.${targetFilterColumn} = #{targetFilterValue}
+                                 </if>
+                                 <if test="targetFilterColumn1 != null">
+                                     AND TAR_.${targetFilterColumn1} = #{targetFilterValue1}
+                                 </if>
+                                )
+            </if>
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ID DESC
+            </otherwise>
+        </choose>
+    </select>
+
+
+    <!-- 查询详情 -->
+    <select id="selectDetail" parameterType="java.lang.Long" resultType="map">
+        SELECT T.*
+          FROM T_EMC_ITEM_GROUP T
+         WHERE T.ID = #{id}
+    </select>
+
+</mapper>

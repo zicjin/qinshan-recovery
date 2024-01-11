@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.emc.module.mdm.basemdm.mtl.mapper.EmcMtlMapper">
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.* 
+          FROM T_EMC_MTL T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+            <if test='remind == "overdue"'>
+                AND EXISTS (SELECT 1
+                                  FROM T_EMC_STOCK TAR_
+                                 WHERE TAR_.MTLID = T.ID
+                                   AND TAR_.EXPIREDATE <![CDATA[<=]]> GETDATE()
+                                ) 
+            </if>
+            <if test='remind == "lowlimit"'>
+                AND EXISTS (SELECT 1
+                                  FROM T_EMC_STOCK TAR_
+                                 WHERE TAR_.MTLID = T.ID
+                                   AND TAR_.STOCKQTY <![CDATA[<=]]> TAR_.LOWLIMIT
+                                ) 
+            </if>
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ID DESC
+            </otherwise>
+        </choose>
+    </select>
+    
+    
+    <!-- 查询详情 -->
+    <select id="selectDetail" parameterType="java.lang.String" resultType="map">
+        SELECT T.*
+          FROM T_EMC_MTL T
+         WHERE T.ID = #{id}
+    </select>
+    
+    <!-- 更新库存数量 -->
+    <select id="updateStockQty" parameterType="java.lang.String">
+        UPDATE T_EMC_MTL
+          SET STOCKQTY =
+            (SELECT SUM(STOCKQTY)
+               FROM T_EMC_STOCK
+              WHERE MTLID = #{id}
+                AND STATUS = '0')
+          WHERE ID = #{id}
+    </select>
+</mapper>

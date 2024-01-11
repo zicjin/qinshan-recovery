@@ -1,0 +1,12 @@
+-- ----------------------------- 2020-11-25 add by shixw------------begin
+
+
+alter table T_CORE_ADMIN_SELECT_CONFIG add column CACHEABLE VARCHAR(36) null comment '是否缓存';
+
+CALL INSERTI18N('T_CORE_ADMIN_SELECT_CONFIG.CACHEABLE', '下拉框配置的是否缓存', '是否缓存', 'zh-CN', '是否缓存');
+
+update T_CORE_ADMIN_SELECT_CONFIG set cacheable = '1';
+
+commit;
+
+-- ----------------------------- 2020-11-25 add by shixw------------end

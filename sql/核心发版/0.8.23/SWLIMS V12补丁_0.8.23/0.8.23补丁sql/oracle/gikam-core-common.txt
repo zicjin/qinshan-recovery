@@ -1,0 +1,11 @@
+-- ----------------------------- 2020-12-01 add by zhangpf------------begin
+CALL INSERTI18N('CORE.MODULE.SYS.REPORTS.TAB.ROLE_PERMISSION', '报表配置中报表明细的访问角色', '访问角色', 'zh-CN', '访问角色');
+CALL INSERTI18N('T_CORE_REPORT_CONFIG.ROLENAME', '报表配置中报表明细的访问角色名称', '角色名称', 'zh-CN', '角色名称');
+
+commit;
+-- ----------------------------- 2020-12-01 add by zhangpf------------end
+
+-- ----------------------------- 2020-12-01 add by zhangjr------------begin
+call INSERTI18N('GIKAM.FILE.PACK.DEFAULT_FILE_NAME', '附件打包时的默认文件名称', '文件打包', 'zh-CN', '文件打包');
+commit;
+-- ----------------------------- 2020-12-01 add by zhangjr------------end

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.emc.module.mdm.basemdm.bizcategory.mapper.EmcBizCategoryMapper">
+    
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM (SELECT C.*,
+                       O.ORGNAME AS SAMPLEORGNAME,
+                       L.ORGNAME AS REPORTEDITORGNAME,
+                       P.ORGNAME AS REPORTSENDORGNAME,
+                        (
+                        select
+                        WM_CONCAT(distinct  A.ORGNAME)
+                        from
+                        T_EMC_ORG_PERMISSION A
+                        where
+                        A.TARGETID = C.ID
+                        and A.PERMISSIONTYPEID = 'T_EMC_BIZ_CATEGORY' group by C.ID) as ORGNAMES
+                  FROM T_EMC_BIZ_CATEGORY C
+                  LEFT JOIN T_CORE_ORG O
+                    ON C.SAMPLEORGID = O.ID
+                  LEFT JOIN T_CORE_ORG L
+                    ON C.REPORTEDITORGID = L.ID
+                  LEFT JOIN T_CORE_ORG P
+                    ON C.REPORTSENDORGID = P.ID) T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+            <if test='queries_selectable == "1"'> <!-- 选择框单位权限 -->
+                <choose>
+                    <when test='loginUser != null and loginUser.userType == "sysAdmin"'>
+                        1 = 1 /* 系统管理员:单位权限 */
+                    </when>
+                    <otherwise>
+                       AND EXISTS (SELECT 1
+                                  FROM T_EMC_ORG_PERMISSION OP_
+                                WHERE OP_.PERMISSIONTYPEID = 'T_EMC_BIZ_CATEGORY'
+                                  AND OP_.TARGETID = T.ID
+                                  AND EXISTS (SELECT 1
+                                                FROM T_CORE_USER_PERMISSION UP_
+                                              WHERE UP_.USERID = #{loginUser.id}
+                                                AND UP_.PERMISSIONTYPEID = 'T_CORE_ORG'
+                                                AND UP_.TARGETID = OP_.ORGID))
+                    </otherwise>
+                </choose>
+            </if>
+        </where>
+        ORDER BY 
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ORDERNO ASC, T.ID DESC
+            </otherwise>
+        </choose>
+    </select>
+    
+    <select id="selectDetail" parameterType="java.lang.Long" resultType="map">
+        SELECT T.*,
+               O.ORGNAME AS SAMPLEORGNAME,
+               L.ORGNAME AS REPORTEDITORGNAME,
+               P.ORGNAME AS REPORTSENDORGNAME
+          FROM T_EMC_BIZ_CATEGORY T
+          LEFT JOIN T_CORE_ORG O
+            ON T.SAMPLEORGID = O.ID
+          LEFT JOIN T_CORE_ORG L
+            ON T.REPORTEDITORGID = L.ID
+          LEFT JOIN T_CORE_ORG P
+            ON T.REPORTSENDORGID = P.ID
+         WHERE T.ID = #{id}
+    </select>
+    
+</mapper>

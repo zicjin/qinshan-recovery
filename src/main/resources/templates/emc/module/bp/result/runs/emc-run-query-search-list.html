@@ -1,0 +1,8 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+Gikam.requirejs([ '/static/emc/module/bp/result/runs/emc-run.js',
+                  '/static/emc/module/bp/result/runs/emc-run-query-search-list.js'
+                ]);
+    emcRun.runQuerySearchPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>

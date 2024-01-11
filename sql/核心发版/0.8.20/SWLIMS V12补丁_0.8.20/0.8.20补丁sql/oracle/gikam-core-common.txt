@@ -1,0 +1,20 @@
+-- ----------------------------- 2020-11-19 add by shixw------------begin
+
+alter table T_CORE_LOGIN_CONFIG add MOBILECLIENT VARCHAR2(36);
+comment on column T_CORE_LOGIN_CONFIG.MOBILECLIENT is '是否显示移动客户端';
+alter table T_CORE_LOGIN_CONFIG add IPHONEQCCODE VARCHAR2(120);
+comment on column T_CORE_LOGIN_CONFIG.IPHONEQCCODE is 'iPhone二维码';
+alter table T_CORE_LOGIN_CONFIG add ANDROIDMOBILEQCCODE VARCHAR2(120);
+comment on column T_CORE_LOGIN_CONFIG.ANDROIDMOBILEQCCODE is '安卓Mobile二维码';
+alter table T_CORE_LOGIN_CONFIG add ANDROIDPADQCCODE VARCHAR2(120);
+comment on column T_CORE_LOGIN_CONFIG.ANDROIDPADQCCODE is '安卓Pad二维码';
+
+CALL INSERTI18N('T_CORE_LOGIN_CONFIG.MOBILECLIENT', '登录配置的是否显示移动客户端', '是否显示移动客户端', 'zh-CN', '是否显示移动客户端');
+CALL INSERTI18N('T_CORE_LOGIN_CONFIG.IPHONEQCCODE', '登录配置的iPhone二维码', 'iPhone二维码', 'zh-CN', 'iPhone二维码');
+CALL INSERTI18N('T_CORE_LOGIN_CONFIG.ANDROIDMOBILEQCCODE', '登录配置的安卓Mobile二维码', '安卓Mobile二维码', 'zh-CN', '安卓Mobile二维码');
+CALL INSERTI18N('T_CORE_LOGIN_CONFIG.ANDROIDPADQCCODE', '登录配置的安卓Pad二维码', '安卓Pad二维码', 'zh-CN', '安卓Pad二维码');
+
+
+commit;
+
+-- ----------------------------- 2020-11-19 add by shixw------------end

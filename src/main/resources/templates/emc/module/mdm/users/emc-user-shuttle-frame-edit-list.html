@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/emc/module/mdm/users/emc-user-shuttle-frame.js',
+                      '/static/emc/module/mdm/users/emc-user-shuttle-frame-edit-list.js'
+                    ]);
+    emcUser.shuttleFrameEditPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>
+

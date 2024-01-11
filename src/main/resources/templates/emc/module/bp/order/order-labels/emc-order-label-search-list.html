@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    Gikam.requirejs([
+        '/static/emc/module/bp/order/order-labels/emc-order-label.js',
+        '/static/emc/module/bp/order/order-labels/emc-order-label-search-list.js'
+    ]);
+    emcOrderLabel.searchPage.init(Gikam.getElParam([[${param}]]));
+    /*]]>*/
+</script>

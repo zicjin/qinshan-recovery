@@ -12,6 +12,7 @@ import java.util.regex.Pattern;
 
 import com.alibaba.fastjson.JSONObject;
 import com.gexin.fastjson.JSON;
+import com.sunwayworld.framework.io.file.FilePathManager;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.Request;
@@ -31,7 +32,6 @@ import org.springframework.util.StringUtils;
 import com.sunwayworld.framework.context.ApplicationContextHelper;
 import com.sunwayworld.framework.exception.UnexpectedException;
 import com.sunwayworld.framework.exception.checked.CheckedException;
-import com.sunwayworld.framework.io.file.FileHelper;
 import com.sunwayworld.framework.mybatis.mapper.GlobalMapper;
 import com.sunwayworld.framework.utils.FileUtils;
 import com.sunwayworld.framework.utils.OkHttpClientUtils;
@@ -427,7 +427,7 @@ public class JSTIeSealHelper {
 			HttpEntity entity = response.getEntity();
 			ins = entity.getContent();
 			// 临时存储文件
-			file = FileHelper.createTempFile(fileName, 5000L);
+			file = FileUtils.createTempFile();
 			out = new FileOutputStream(file);
 			byte[] b = new byte[1024];
 			int len = ins.read(b);

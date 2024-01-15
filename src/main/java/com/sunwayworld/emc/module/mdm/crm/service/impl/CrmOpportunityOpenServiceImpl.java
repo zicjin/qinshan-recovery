@@ -17,6 +17,9 @@ import com.alibaba.fastjson.TypeReference;
 import com.sunwayworld.emc.module.mdm.crm.service.*;
 import com.sunwayworld.framework.mybatis.mapper.MatchPattern;
 import com.sunwayworld.framework.mybatis.mapper.SearchFilter;
+import com.sunwayworld.framework.utils.*;
+import com.sunwayworld.module.item.file.manager.CoreFileManager;
+import com.sunwayworld.module.item.file.utils.CoreFileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,17 +43,8 @@ import com.sunwayworld.emc.module.mdm.crm.bean.CrmOpportunityResponseDTO;
 import com.sunwayworld.framework.constant.Constant;
 import com.sunwayworld.framework.context.ApplicationContextHelper;
 import com.sunwayworld.framework.http.HttpClientManager;
-import com.sunwayworld.framework.io.file.FileHelper;
-import com.sunwayworld.framework.io.file.FileRepresentation;
 import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;
-import com.sunwayworld.framework.utils.BeanUtils;
-import com.sunwayworld.framework.utils.ClassUtils;
-import com.sunwayworld.framework.utils.DateTimeUtils;
-import com.sunwayworld.framework.utils.NumberUtils;
-import com.sunwayworld.framework.utils.ObjectUtils;
-import com.sunwayworld.framework.utils.StringUtils;
 import com.sunwayworld.module.item.file.bean.CoreFileBean;
-import com.sunwayworld.module.item.file.cloud.CoreFileCloudService;
 import com.sunwayworld.module.item.file.service.CoreFileService;
 
 /**
@@ -92,7 +86,7 @@ public class CrmOpportunityOpenServiceImpl implements CrmOpportunityOpenService 
     private CoreFileService coreFileService;
 
     @Autowired
-    private CoreFileCloudService fileCloudService;
+    private CoreFileManager fileManager;
 
     @Autowired
     private EmcProjectService projectService;
@@ -450,7 +444,7 @@ public class CrmOpportunityOpenServiceImpl implements CrmOpportunityOpenService 
             file.setId(ApplicationContextHelper.getNextIdentity());
             if (!StringUtils.isEmpty(crmServerUrl)) {
                 File downloadFile = downloadFile(file, crmServerUrl);
-                fileCloudService.archive(FileRepresentation.of(file), downloadFile);
+                fileManager.upload(CoreFileUtils.toFilePath(file), downloadFile);
             }
         });
 
@@ -483,8 +477,8 @@ public class CrmOpportunityOpenServiceImpl implements CrmOpportunityOpenService 
      * @return File
      */
     private File downloadFile(CoreFileBean file, String crmServerUrl) {
-        String downloadUrl = coreFileService.getSysFileDownloadUrl(file);
-        File downloadFile = FileHelper.createTempFile(file.getName(), 0L);
+        String downloadUrl = fileManager.getDownloadUrl(file);
+        File downloadFile = FileUtils.createTempFile();
 
         HttpClientManager.getInstance().download(crmServerUrl + downloadUrl, downloadFile);
 

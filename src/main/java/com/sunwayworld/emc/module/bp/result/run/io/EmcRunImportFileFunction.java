@@ -13,7 +13,10 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import com.sunwayworld.framework.io.file.FilePathDTO;
+import com.sunwayworld.framework.io.file.FilePathManager;
 import com.sunwayworld.framework.spring.annotation.GikamBean;
+import com.sunwayworld.module.item.file.utils.CoreFileUtils;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -26,20 +29,18 @@ import com.sunwayworld.emc.module.bp.bp.computing.EmcOrderTaskResultComputingEng
 import com.sunwayworld.emc.module.bp.bp.service.EmcOrderTaskResultService;
 import com.sunwayworld.framework.exception.FileException;
 import com.sunwayworld.framework.io.excel.ExcelHelper;
-import com.sunwayworld.framework.io.file.FileHelper;
-import com.sunwayworld.framework.io.file.FileRepresentation;
 import com.sunwayworld.framework.utils.NumberUtils;
 import com.sunwayworld.framework.utils.StringUtils;
 import com.sunwayworld.module.item.file.bean.CoreFileBean;
-import com.sunwayworld.module.item.file.bean.ImportResultRepresentation;
-import com.sunwayworld.module.item.file.function.ImportFileFunction;
+import com.sunwayworld.module.item.file.bean.CoreFileImportResultDTO;
+import com.sunwayworld.module.item.file.function.CoreFileImportFunction;
 
 /**
  * @author zhengxy@sunwayworld.com
  */
-@Component(value = "emcRunImportFileFunction")
+@Component(value = "emcRunCoreFileImportFunction")
 @GikamBean
-public class EmcRunImportFileFunction implements ImportFileFunction {
+public class EmcRunImportFileFunction implements CoreFileImportFunction {
 
     protected static final int MIN_ROW_SIZE = 2;
 
@@ -47,12 +48,12 @@ public class EmcRunImportFileFunction implements ImportFileFunction {
     private EmcOrderTaskResultService orderTaskResultService;
 
     @Override
-    public ImportResultRepresentation apply(CoreFileBean file) {
-        ImportResultRepresentation importResultRepresentation = new ImportResultRepresentation();
+    public CoreFileImportResultDTO apply(CoreFileBean file) {
+        CoreFileImportResultDTO CoreFileImportResultDTO = new CoreFileImportResultDTO();
 
-        FileRepresentation fr = FileRepresentation.of(file);
-        importOrderTaskResult(FileHelper.getAbsolutePath(fr).toFile());
-        return importResultRepresentation;
+        FilePathDTO fr = CoreFileUtils.toFilePath(file);
+        importOrderTaskResult(FilePathManager.getLocalPath(fr).toFile());
+        return CoreFileImportResultDTO;
     }
 
     protected void importOrderTaskResult(File file) {

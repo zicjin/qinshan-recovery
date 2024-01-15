@@ -1,0 +1,511 @@
+-- ----------------------------- 2020-12-21 add by zhangjr------------begin      0.9.2补丁已发布
+call INSERTI18N('GIKAM.PERMISSION.UNAUTHORIZED', '您无权进行该操作', '您无权进行该操作', 'zh-CN', '您无权进行该操作');
+-- ----------------------------- 2020-12-21 add by zhangjr------------end      0.9.2补丁已发布
+
+-- ----------------------------- 2020-12-22 add by zhangjr@sunwayworld.com--------------begin      0.9.2补丁已发布
+
+-- 建表语句
+CREATE TABLE T_CORE_REQUEST_URL( 
+    ID NUMBER NOT NULL,
+    MENUID VARCHAR2(32)  NOT NULL,
+    NOTE VARCHAR2(192)  NOT NULL,
+    URL VARCHAR2(768)  NOT NULL,
+    METHOD VARCHAR2(24)  NULL,
+    CREATEDBYID VARCHAR2(36)  NULL,
+    CREATEDBYNAME VARCHAR2(60)  NULL,
+    CREATEDTIME DATE NULL,
+    CREATEDBYORGID VARCHAR2(36)  NULL,
+    CREATEDBYORGNAME VARCHAR2(270)  NULL
+ );
+COMMENT ON TABLE T_CORE_REQUEST_URL IS '路径配置';
+COMMENT ON COLUMN T_CORE_REQUEST_URL.ID IS '主键';
+COMMENT ON COLUMN T_CORE_REQUEST_URL.MENUID IS '菜单ID';
+COMMENT ON COLUMN T_CORE_REQUEST_URL.NOTE IS '功能说明';
+COMMENT ON COLUMN T_CORE_REQUEST_URL.URL IS '请求路径';
+COMMENT ON COLUMN T_CORE_REQUEST_URL.METHOD IS '请求方法';
+COMMENT ON COLUMN T_CORE_REQUEST_URL.CREATEDBYID IS '制单人编码';
+COMMENT ON COLUMN T_CORE_REQUEST_URL.CREATEDBYNAME IS '制单人名称';
+COMMENT ON COLUMN T_CORE_REQUEST_URL.CREATEDTIME IS '制单时间';
+COMMENT ON COLUMN T_CORE_REQUEST_URL.CREATEDBYORGID IS '制单人单位编码';
+COMMENT ON COLUMN T_CORE_REQUEST_URL.CREATEDBYORGNAME IS '制单人单位名称';
+
+ALTER TABLE T_CORE_REQUEST_URL ADD CONSTRAINT PK_CORE_REQUEST_URL PRIMARY KEY (ID);
+
+CALL INSERTI18N('T_CORE_REQUEST_URL.SERVICE_NAME', '路径配置', '路径配置', 'zh-CN', '路径配置');
+CALL INSERTI18N('T_CORE_REQUEST_URL.ID', '路径配置的主键', '主键', 'zh-CN', '主键');
+CALL INSERTI18N('T_CORE_REQUEST_URL.MENUID', '路径配置的菜单ID', '菜单ID', 'zh-CN', '菜单ID');
+CALL INSERTI18N('T_CORE_REQUEST_URL.NOTE', '路径配置的功能说明', '功能说明', 'zh-CN', '功能说明');
+CALL INSERTI18N('T_CORE_REQUEST_URL.URL', '路径配置的请求地址', '请求路径', 'zh-CN', '请求路径');
+CALL INSERTI18N('T_CORE_REQUEST_URL.METHOD', '路径配置的请求方法', '请求方法', 'zh-CN', '请求方法');
+CALL INSERTI18N('T_CORE_REQUEST_URL.CREATEDBYID', '路径配置的制单人编码', '制单人编码', 'zh-CN', '制单人编码');
+CALL INSERTI18N('T_CORE_REQUEST_URL.CREATEDBYNAME', '路径配置的制单人名称', '制单人名称', 'zh-CN', '制单人名称');
+CALL INSERTI18N('T_CORE_REQUEST_URL.CREATEDTIME', '路径配置的制单时间', '制单时间', 'zh-CN', '制单时间');
+CALL INSERTI18N('T_CORE_REQUEST_URL.CREATEDBYORGID', '路径配置的制单人单位编码', '制单人单位编码', 'zh-CN', '制单人单位编码');
+CALL INSERTI18N('T_CORE_REQUEST_URL.CREATEDBYORGNAME', '路径配置的制单人单位名称', '制单人单位名称', 'zh-CN', '制单人单位名称');
+CALL INSERTI18N('MODULE.ADMIN.REQUEST-URLS.MODAL.ADD', '新增', '新增', 'zh-CN', '新增');
+CALL INSERTI18N('MODULE.ADMIN.REQUEST-URLS.TAB.BASE_INFO', '基本信息', '基本信息', 'zh-CN', '基本信息');
+CALL INSERTI18N('CORE.MODULE.ADMIN.REQUEST-URL.TREE.MENU', '菜单', '菜单', 'zh-CN', '菜单');
+
+-- 创建菜单语句
+INSERT INTO T_CORE_ADMIN_MENU(ID, MENUNAME, MENUICON, HREF, PARENTID, ORDERNO)
+VALUES ('101050', '路径配置', '', '/secure/module/admin/request-urls/page/edit-list', '1010', '101050');
+
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_REQUEST_URL', '0', '0');
+
+INSERT INTO T_CORE_CODE_CATEGORY (ID,CODECATEGORYNAME,CODECLASSID,REMARK,ORDERNO,VERSION,CREATEDBYID,CREATEDBYNAME,CREATEDTIME)
+VALUES ('requestUrlMethod','请求方法','sys',NULL,'1',NULL,NULL,NULL,NULL);
+INSERT INTO T_CORE_CODE (ID, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME, CODE)
+VALUES (SEQ_CORE.NEXTVAL, 'POST', 'requestUrlMethod', null, 1, 0, 'admin', '系统管理员', null, '0', null, null, null, 'POST');
+INSERT INTO T_CORE_CODE (ID, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME, CODE)
+VALUES (SEQ_CORE.NEXTVAL, 'PUT', 'requestUrlMethod', null, 2, 0, 'admin', '系统管理员', null, '0', null, null, null, 'PUT');
+INSERT INTO T_CORE_CODE (ID, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME, CODE)
+VALUES (SEQ_CORE.NEXTVAL, 'DELETE', 'requestUrlMethod', null, 3, 0, 'admin', '系统管理员', null, '0', null, null, null, 'DELETE');
+INSERT INTO T_CORE_CODE (ID, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME, CODE)
+VALUES (SEQ_CORE.NEXTVAL, 'GET', 'requestUrlMethod', null, 4, 0, 'admin', '系统管理员', null, '0', null, null, null, 'GET');
+
+COMMIT;
+
+-- ----------------------------- 2020-12-22 add by zhangjr@sunwayworld.com------------end      0.9.2补丁已发布
+
+-- ----------------------------- 2020-12-28 add by zhangxt@sunwayworld.com------------begin
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9002', '编制列表', '/secure/core/module/mdm/orgs/queries/raw', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9002', '系统单位详情页面', '/secure/core/module/mdm/orgs/page/detail', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9002', '详情', '/secure/core/module/mdm/orgs/{id}', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9003', '编制列表', '/secure/core/module/sys/roles/queries/raw', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9001', '附件', '/core/module/item/files/queries', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9004', '矩阵的动态行数据查询', '/core/module/sys/role-users/queries/matrix-rows', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9004', '矩阵的动态表头查询', '/core/module/sys/role-users/queries/matrix-headers', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9010', '在线用户查询', '/secure/core/module/sys/login-logs/queries/online', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9202', '获取流程图导入文件的地址', '/secure/core/module/sys/bpmn-procs/{id}/bpmn-input-url', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9201', '编制列表', '/secure/core/module/sys/bpmn-drafts/queries/raw', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9201', '详情页', '/secure/core/module/sys/bpmn-drafts/page/detail', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9201', '变更-工作流选择页', '/secure/core/module/sys/bpmn-procs/page/choose-list', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9201', '工作流选择页查询', '/secure/core/module/sys/bpmn-procs/queries/choosable', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9201', '系统组织-查询树', '/secure/core/module/mdm/orgs/tree/{parentId}', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9201', '系统组织-选择页查询', '/secure/core/module/mdm/orgs/queries/choosable', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9233', '查询页查询', '/secure/core/module/sys/bpmn-targets/queries/searchable', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9233', '更新流程图-工作流程实例查询', '/secure/core/module/sys/bpmn-insts/queries', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9233', '更新审核人员-添加审核角色页面', '/secure/core/module/sys/roles/page/choose-list', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9233', '角色选择页查询', '/secure/core/module/sys/roles/queries/choosable', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9302', '菜单单选页面', '/secure/core/module/sys/menus/page/choose-list', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9302', '菜单选择页面查询树', '/secure/core/module/sys/menus/tree-grid', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9302', '删除菜单', '/secure/core/module/sys/menu-groups/{id}/menu-group-lines', 'DELETE');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9303', '详情', '/secure/core/module/sys/schedule-tasks/{id}', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9304', '定时器任务配置详细页面', '/secure/core/module/sys/schedule-task-configs/page/detail', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9304', '定时任务配置详情', '/secure/core/module/sys/schedule-task-configs/{id}', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9305', '查询页查询', '/secure/core/module/sys/schedule-tasks/queries/searchable', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9305', '详情页', '/secure/core/module/sys/schedule-tasks/page/detail', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9305', '定时器任务配置详细页面', '/secure/core/module/sys/schedule-task-configs/page/detail', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9305', '获取定时任务配置状态信息', '/secure/core/module/sys/schedule-task-configs/{id}/info/status', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9305', '定时任务配置详情', '/secure/core/module/sys/schedule-task-configs/{id}', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9001', '详情', '/secure/core/module/mdm/users/{id}', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9001', '添加访问角色权限选择页面', '/secure/core/module/sys/roles/page/choose-list', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9001', '查询文件', '/core/module/item/files/{id}', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9003', '单位权限查询', '/secure/core/module/mdm/orgs/queries', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9003', '首页方案权限查询', '/secure/core/module/item/workspace-schemes/queries', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9003', '添加所属用户弹出选择框', '/secure/core/module/mdm/users/page/choose-mult-list', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9003', '权限tab页查询', '/core/module/sys/role-permission-types/queries/selectable', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9314', '附件查询', '/core/module/item/files/queries', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9315', '编制页列表', '/secure/core/module/sys/password-policies/queries/raw', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9001', '用户权限类型-下拉框数据查询', '/secure/core/module/mdm/user-permission-types/queries/selectable', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9202', '查询页查询', '/secure/core/module/sys/bpmn-procs/queries/searchable', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9201', '详情页-通过流程草稿编码查询使用部门', '/secure/core/module/sys/bpmn-drafts/{id}/bpmn-draft-orgs/queries', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9201', '详情页-工作流草稿详细信息查询', '/secure/core/module/sys/bpmn-drafts/{id}', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9201', '详情页-获取流程图表中所有节点审核人员信息', '/secure/core/module/sys/bpmn-diagrams/{id}/queries/task-candidators', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9233', '更新审核人员-添加审核人页面', '/secure/core/module/mdm/users/page/choose-mult-list', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9233', '系统用户选择页查询', '/secure/core/module/mdm/users/queries/choosable', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9328', '编辑页查询', '/secure/core/module/equipt/acq-scripts/queries/raw', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9328', '详情', '/secure/core/module/equipt/acq-scripts/{id}', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9301', '菜单配置-编辑页面查询树', '/secure/core/module/sys/menus/edit-tree/{parentId}', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9301', '详细信息查询', '/secure/core/module/sys/menus/{id}', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9301', '查询待办图标', '/secure/core/module/sys/menus/todo-icons/queries', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9302', '详情', '/secure/core/module/sys/menu-groups/{id}', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9303', '查询页查询', '/secure/core/module/sys/schedule-tasks/queries/searchable', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9303', '详情页', '/secure/core/module/sys/schedule-tasks/page/detail', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9304', '查询页查询', '/secure/core/module/sys/schedule-tasks/queries/searchable', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9304', '详情页', '/secure/core/module/sys/schedule-tasks/page/detail', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9304', '通过定时任务查询任务配置信息', '/secure/core/module/sys/schedule-tasks/{id}/schedule-task-configs/queries', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9304', '获取定时任务配置状态信息', '/secure/core/module/sys/schedule-task-configs/{id}/info/status', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9305', '通过定时任务查询任务配置信息', '/secure/core/module/sys/schedule-tasks/{id}/schedule-task-configs/queries', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9306', '查询页查询', '/secure/core/module/sys/schedule-task-configs/queries/searchable', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9306', '通过定时任务查询执行日志', '/secure/core/module/sys/schedule-task-configs/{id}/schedule-task-logs/queries', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9001', '编制列表', '/secure/core/module/mdm/users/queries/raw', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9001', '查询指定类型下的权限', '/secure/core/module/mdm/user-permissions/permission-types/{permissionTypeId}/queries', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9001', '访问角色-角色用户查询', '/core/module/sys/role-users/queries', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9001', '添加访问部门权限选择页面', '/secure/core/module/mdm/orgs/page/choose-list', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9002', '查询部门树结构', '/secure/core/module/mdm/orgs/tree/{parentId}', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9003', '菜单权限-选择页面查询树', '/secure/core/module/sys/menus/tree-grid', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9202', '详情页', '/secure/core/module/sys/bpmn-procs/page/detail', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9201', '详情页-系统单位选择页面（精简页面）跳转', '/secure/core/module/mdm/orgs/page/simple-choose-list', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9201', '详情页-获取流程图的SVG', '/secure/core/module/sys/bpmn-exts/bpmn-diagrams/{id}/svg', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9233', '更新流程图-BPMN变价页面', '/core/module/item/files/page/bpmn-diagram-designer', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9233', '流程执行实例的任务编辑页', '/secure/core/module/sys/bpmn-inst-tasks/page/edit-list', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9306', '定时器任务详细页面', '/secure/core/module/sys/schedule-task-logs/page/detail', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9310', '系统参数编制页查询', '/secure/core/module/sys/constants/queries/raw', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9311', '可审计跟踪的配置查询', '/secure/core/module/sys/at-configs/audit-trailable/tree-grid', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9311', '审计跟踪配置详情', '/secure/core/module/sys/at-configs/{id}', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9311', '审计跟踪配置明细查询', '/secure/core/module/sys/at-configs/{id}/at-config-lines', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9314', '报表配置编制页查询', '/secure/core/module/sys/report-configs/queries/raw', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9314', '详情页', '/secure/core/module/sys/report-configs/page/detail', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9314', '详情', '/secure/core/module/sys/report-configs/{id}', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9314', '根据主表查询报表配置明细', '/secure/core/module/sys/report-configs/{id}/lines/queries', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9314', '用户权限查询', '/secure/core/module/mdm/user-permissions/queries', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9314', '角色权限查询', '/core/module/sys/role-permissions/queries', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9314', '系统用户多选页面跳转', '/secure/core/module/mdm/users/page/choose-mult-list', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9314', '系统用户选择页查询', '/secure/core/module/mdm/users/queries/choosable', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9314', '角色选择页跳转', '/secure/core/module/sys/roles/page/choose-list', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9314', '角色选择页查询', '/secure/core/module/sys/roles/queries/choosable', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9401', '操作日志查询', '/core/module/sys/logs/queries/searchable', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9003', '详情', '/secure/core/module/sys/roles/{id}', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9003', '通过角色来查询所属用户', '/secure/core/module/sys/roles/{id}/role-users/queries', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9003', '菜单组权限查询', '/secure/core/module/sys/menu-groups/queries', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9003', '添加菜单权限弹出选择框', '/secure/core/module/sys/menus/page/choose-list', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9003', '添加单位权限弹出选择框', '/secure/core/module/mdm/orgs/page/choose-list', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9003', '添加菜单组权限弹出选择框', '/secure/core/module/sys/menu-groups/page/choose-list', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9003', '添加首页方案权限弹出选择框', '/secure/core/module/item/workspace-schemes/page/choose-list', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9202', '详情页-查看流程图', '/core/module/item/files/page/bpmn-diagram-designer', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9202', '详情页-BPMN预览页面', '/core/module/item/files/page/bpmn-diagram-viewer', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9202', '详情页-获取流程图表中所有节点审核人员信息', '/secure/core/module/sys/bpmn-diagrams/{id}/queries/task-candidators', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9202', '详情页-获取流程图表中所有线中的条件信息', '/secure/core/module/sys/bpmn-diagrams/{id}/queries/sequence-flow-conditions', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9202', '详情页-过流程定义编码查询使用部门', '/secure/core/module/sys/bpmn-procs/{id}/bpmn-proc-orgs/queries', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9202', '详情', '/secure/core/module/sys/bpmn-procs/{id}', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9201', '详情页-获取流程图表中所有线中的条件信息', '/secure/core/module/sys/bpmn-diagrams/{id}/queries/sequence-flow-conditions', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9201', '详情页-BPMN预览页面', '/core/module/item/files/page/bpmn-diagram-viewer', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9201', '详情页-BPMN变价页面', '/core/module/item/files/page/bpmn-diagram-designer', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9233', '流程执行实例查询', '/secure/core/module/sys/bpmn-inst-tasks/queries', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9233', '查询流程执行实例的任务下的审核人员', '/secure/core/module/sys/bpmn-inst-tasks/{id}/bpmn-inst-task-users/queries', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9233', '查询流程执行实例的任务下的审核角色', '/secure/core/module/sys/bpmn-inst-tasks/{id}/bpmn-inst-task-roles/queries', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9328', '详情页', '/secure/core/module/equipt/acq-scripts/page/detail', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9301', '查询菜单图标', '/secure/core/module/sys/menus/icons/queries', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9302', '编辑页查询', '/secure/core/module/sys/menu-groups/queries/raw', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9302', '详情页', '/secure/core/module/sys/menu-groups/page/detail', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9302', '查询菜单', '/secure/core/module/sys/menu-groups/{id}/menu-group-lines/tree-grid', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9335', '查询登录配置', '/secure/module/sys/login-configs/{id}', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9335', '查询系统配置', '/secure/module/sys/system-configs/{id}', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9402', '系统登录日志查询', '/secure/core/module/sys/login-logs/queries/searchable', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9403', '导出日志查询', '/secure/core/module/sys/export-logs/queries', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '950101', '系统用户选择页面（精简页面）跳转', '/secure/core/module/mdm/users/page/simple-choose-list', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '950101', '系统用户选择页查询', '/secure/core/module/mdm/users/queries/choosable', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '950102', '业务流程状态详情页', '/secure/core/module/sys/bpmn-exts/page/process-status-detail', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '950102', '获取工作流运行中的信息', '/secure/core/module/sys/bpmn-exts/runtime-info', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '950102', '审核意见查询', '/secure/core/module/sys/bpmn-comments/queries', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '950102', '获取流程图表中所有节点审核人员信息', '/secure/core/module/sys/bpmn-diagrams/{id}/queries/task-candidators', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '950102', '查询附件详情', '/core/module/item/files/{id}', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '950104', '详情', '/secure/core/module/item/notices/{id}', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '950104', '权限查询', '/secure/core/module/item/notices/{id}/permission-types/{permissionType}/permissions/queries', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9003', '密码策略下拉框数据查询', '/secure/core/module/sys/password-policies/queries/selectable', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '950101', '编制页查询', '/secure/core/module/item/notices/queries/raw', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '950101', '详情', '/secure/core/module/item/notices/{id}', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '950101', '系统单位选择页面（精简页面）跳转', '/secure/core/module/mdm/orgs/page/simple-choose-list', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '950101', '系统单位选择页查询', '/secure/core/module/mdm/orgs/queries/choosable', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '950101', '审核意见查询', '/secure/core/module/sys/bpmn-comments/queries', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '950102', '审核页查询', '/secure/core/module/item/notices/queries/tasks', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '950104', '跳转至BPMN预览页面', '/core/module/item/files/page/bpmn-diagram-viewer', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '950104', '获取流程图表中所有线中的条件信息', '/secure/core/module/sys/bpmn-diagrams/{id}/queries/sequence-flow-conditions', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9321', '编制页列表', '/secure/core/module/sys/rounding-rules/queries/raw', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9322', '系统菜单选择页面查询树', '/secure/core/module/sys/menus/tree-grid', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9330', '导出', '/secure/core/module/sys/i18ns/excelDownload-url', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '950101', '附件查询', '/core/module/item/files/queries', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '950101', '查询权限', '/secure/core/module/item/notices/{id}/permission-types/{permissionType}/permissions/queries', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '950101', '系统单位查询树', '/secure/core/module/mdm/orgs/tree/{parentId}', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '950101', '业务流程状态详情页', '/secure/core/module/sys/bpmn-exts/page/process-status-detail', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '950101', '获取工作流运行中的信息', '/secure/core/module/sys/bpmn-exts/runtime-info', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '950101', '跳转至BPMN预览页面', '/core/module/item/files/page/bpmn-diagram-viewer', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '950101', '获取流程图表中所有节点审核人员信息', '/secure/core/module/sys/bpmn-diagrams/{id}/queries/task-candidators', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '950101', '获取流程图表中所有线中的条件信息', '/secure/core/module/sys/bpmn-diagrams/{id}/queries/sequence-flow-conditions', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '950102', '获取流程图表中所有线中的条件信息', '/secure/core/module/sys/bpmn-diagrams/{id}/queries/sequence-flow-conditions', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '950102', '获取工作流运行中可回退节点的信息', '/secure/core/module/sys/bpmn-exts/options/rejectable-tasks', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '950102', '获取工作流任务节点的状态', '/secure/core/module/item/notices/bpmn-task-status', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9322', '编制列表', '/secure/core/module/sys/todo-configs/queries/raw', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9322', '详情', '/secure/core/module/sys/todo-configs/{id}', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '950101', '查询附件详情', '/core/module/item/files/{id}', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9315', '详情页', '/secure/core/module/sys/password-policies/page/detail', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9315', '详情', '/secure/core/module/sys/password-policies/{id}', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9318', '系统编码类型下拉框数据查询', '/secure/core/module/sys/code-categories/queries/selectable', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9318', '编制页列表', '/secure/core/module/sys/codes/queries/raw', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9318', '详情页', '/secure/core/module/sys/codes/page/detail', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9318', '详情', '/secure/core/module/sys/codes/{id}', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9321', '详情页', '/secure/core/module/sys/rounding-rules/page/detail', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9321', '详情', '/secure/core/module/sys/rounding-rules/{id}', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9404', '可审计跟踪的配置查询', '/secure/core/module/sys/at-configs/audit-trailable/tree-grid', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '950103', '详情', '/secure/core/module/item/notices/{id}', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '950103', '附件查询', '/core/module/item/files/queries', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9404', '审计跟踪记录查询', '/secure/core/module/sys/at-records/queries/atrecord/{tableName}/{id}', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '950103', '回退页查询', '/secure/core/module/item/notices/queries/undoable', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '950103', '权限查询', '/secure/core/module/item/notices/{id}/permission-types/{permissionType}/permissions/queries', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '950103', '查看附件详情', '/core/module/item/files/{id}', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '950104', '业务流程状态详情页', '/secure/core/module/sys/bpmn-exts/page/process-status-detail', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '950104', '获取工作流运行中的信息', '/secure/core/module/sys/bpmn-exts/runtime-info', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9322', '系统菜单选择页', '/secure/core/module/sys/menus/page/choose-list', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9322', '查询图标', '/secure/core/module/sys/todo-configs/icons/queries', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9326', '编制页列表', '/secure/core/module/item/workspace-schemes/queries/raw', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9326', '获取方案面板配置信息', '/secure/core/module/item/workspace-schemes/{id}/panel-configs', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '950101', '角色选择页（可嵌入）', '/secure/core/module/sys/roles/page/choose-list', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '950101', '获取工作流任务节点的状态', '/secure/core/module/item/notices/bpmn-task-status', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '950102', '详情', '/secure/core/module/item/notices/{id}', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '950101', '角色选择页查询', '/secure/core/module/sys/roles/queries/choosable', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '950102', '附件查询', '/core/module/item/files/queries', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '950102', '查询权限', '/secure/core/module/item/notices/{id}/permission-types/{permissionType}/permissions/queries', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '950102', '跳转至BPMN预览页面', '/core/module/item/files/page/bpmn-diagram-viewer', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '950104', '审核意见查询', '/secure/core/module/sys/bpmn-comments/queries', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9330', '系统国际化查询', '/secure/core/module/sys/i18ns/queries', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9330', '详情', '/secure/core/module/sys/i18ns/{id}', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '9330', '通过国际化的ID查询国际化信息', '/secure/core/module/sys/i18ns/{id}/i18n-messages/queries', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '950102', '获取状态信息', '/secure/core/module/item/notices/{id}/info/status', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '950104', '通知公告查询页查询', '/secure/core/module/item/notices/queries/searchable', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '950104', '附件查询', '/core/module/item/files/queries', 'POST');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '950104', '查询附件详情', '/core/module/item/files/{id}', 'GET');
+INSERT INTO T_CORE_REQUEST_URL(ID, MENUID, NOTE, URL, "METHOD") VALUES (SEQ_CORE.NEXTVAL, '950104', '获取流程图表中所有节点审核人员信息', '/secure/core/module/sys/bpmn-diagrams/{id}/queries/task-candidators', 'POST');
+commit;
+-- ----------------------------- 2020-12-28 add by zhangxt@sunwayworld.com------------end
+
+-- ----------------------------- 2020-12-29 add by liyang------------begin
+CALL DELETEI18N('T_CORE_BPMN_DRAFT.UPLOAD_FILE_BY_JSON');
+CALL INSERTI18N('GIKAM.BPMN.TIP.UPLOAD_FILE_BY_JSON', '请上传 .json类型文件', '请上传 .json类型文件', 'zh-CN', '请上传 .json类型文件');
+-- ----------------------------- 2020-12-29 add by liyang------------end
+
+-- ----------------------------- 2020-12-31 add by zhangjr------------begin
+UPDATE T_CORE_I18N SET CODE = 'GIKAM.FILE.ZIP.DEST-MUST-BE-A-FILE' WHERE CODE = 'core.zip.dest-not-be-directory';
+UPDATE T_CORE_I18N SET CODE = 'GIKAM.FILE.IMPORT.TEMPLATE-MISMATCH' WHERE CODE = 'core.import.templateMisatch';
+UPDATE T_CORE_I18N SET CODE = 'GIKAM.FILE.TIP.NO_FILE' WHERE CODE = 'file.notFileUpload';
+UPDATE T_CORE_I18N SET CODE = 'GIKAM.FILE.TIP.NO_EXTENSION' WHERE CODE = 'file.notFileExtension';
+UPDATE T_CORE_I18N SET CODE = 'GIKAM.FILE.TIP.UNSUPPORTED_EXTENSION' WHERE CODE = 'file.unsupportedExtension';
+UPDATE T_CORE_I18N SET CODE = 'GIKAM.FILE.TIP.SIZE_LIMIT_EXCEEDED' WHERE CODE = 'file.fileLimitExceeded';
+COMMIT;
+
+CALL INSERTI18N('GIKAM.EXCEPTION.FTP.CHANGEDIRECTORY', 'FTP切换目录失败', 'FTP切换目录失败', 'zh-CN', 'FTP切换目录失败');
+-- ----------------------------- 2020-12-31 add by zhangjr------------end
+
+-- ----------------------------- 2021-1-13 add by liujianfeng------------begin
+ALTER TABLE T_CORE_SYSTEM_CONFIG ADD VERSION VARCHAR2(36);
+COMMENT ON COLUMN T_CORE_SYSTEM_CONFIG.VERSION IS '版本号';
+UPDATE T_CORE_SYSTEM_CONFIG SET VERSION = '0.9.0' WHERE ID = 'system-config';
+COMMIT;
+-- ----------------------------- 2021-1-13 add by liujianfeng------------end
+
+-- ----------------------------- 2021-1-15 add by zhangpf------------begin
+UPDATE T_CORE_CODE 
+   SET CODECATEGORYID = 'blockCategory' 
+ WHERE CODECATEGORYID = 'orgProperty' AND CODE = 'grid';
+
+COMMIT;
+-- ----------------------------- 2021-1-15 add by zhangpf------------end
+
+-- ----------------------------- 2021-1-28 add by zhangpf------------begin      0.9.4补丁已发布
+CALL INSERTI18N('CORE.MODULE.MENU.MENU_ROLE_MATRIX', '角色菜单矩阵', '角色菜单矩阵', 'zh-CN', '角色菜单矩阵');
+
+INSERT INTO T_CORE_MENU (ID, MENUNAME, HREF, PARENTID, ORDERNO, MENUINITNAME, ICON, TODOICON, I18NCODE)
+VALUES('9005', '角色菜单矩阵', '/secure/core/module/sys/menu-roles/page/matrix', '90', 9005, '角色菜单矩阵', '039.svg', NULL, 'CORE.MODULE.MENU.MENU_ROLE_MATRIX');
+
+COMMIT;
+-- ----------------------------- 2021-1-28 add by zhangpf------------end      0.9.4补丁已发布
+
+-- ----------------------------- 2021-2-7 add by shixw------------begin
+
+CALL INSERTI18N('CORE.MODULE.SYS.DPCONFIGS.TIP.ONLY_TXT', '只能上传txt格式文件', '只能上传txt格式文件', 'zh-CN', '只能上传txt格式文件');
+
+-- ----------------------------- 2021-2-7 add by shixw------------end
+
+-- ----------------------------- 2021-2-7 add by shixw------------begin
+
+ALTER TABLE T_CORE_BPMN_TARGET MODIFY TARGETDESC VARCHAR2(540);
+
+-- ----------------------------- 2021-2-7 add by shixw------------end
+
+-- ----------------------------- 2021-3-2 add by zhangpf------------begin        0.9.6补丁已发布
+ALTER TABLE T_CORE_LOGIN_CONFIG ADD ADUSERIDIGNORECASE VARCHAR2(36);
+COMMENT ON COLUMN T_CORE_LOGIN_CONFIG.ADUSERIDIGNORECASE IS 'AD域用户编码忽略大小写（0-否 1-是）';
+
+CALL INSERTI18N('T_CORE_LOGIN_CONFIG.ADUSERIDIGNORECASE', 'AD域用户编码忽略大小写', 'AD域用户编码忽略大小写', 'zh-CN', 'AD域用户编码忽略大小写');
+
+COMMIT;
+-- ----------------------------- 2021-3-2 add by zhangpf------------end        0.9.6补丁已发布
+
+-- ----------------------------- 2021-3-2 add by zhangpf------------begin
+ALTER TABLE T_CORE_SYSTEM_CONFIG RENAME COLUMN SPEEDTESTPERIOD TO SPEEDTESTPERIODTEMP;
+
+ALTER TABLE T_CORE_SYSTEM_CONFIG ADD SPEEDTESTPERIOD NUMBER(6,0);
+COMMENT ON COLUMN T_CORE_SYSTEM_CONFIG.SPEEDTESTPERIOD IS '网速测试间隔(秒)';
+
+UPDATE T_CORE_SYSTEM_CONFIG SET SPEEDTESTPERIOD = SPEEDTESTPERIODTEMP WHERE ID = 'system-config';
+
+ALTER TABLE T_CORE_SYSTEM_CONFIG DROP COLUMN SPEEDTESTPERIODTEMP;
+
+COMMIT;
+
+-- ----------------------------- 2021-3-2 add by zhangpf------------end
+
+-- ----------------------------- 2021-3-10 add by zhangpf------------begin
+alter table T_CORE_STUDIO_BLOCK add FORMCOLUMNQTY NUMBER(4);
+comment on column T_CORE_STUDIO_BLOCK.FORMCOLUMNQTY is '表单列数';
+
+CALL INSERTI18N('T_CORE_STUDIO_BLOCK.FORMCOLUMNQTY', '页面配置的表单列数', '表单列数', 'zh-CN', '表单列数');
+commit;
+-- ----------------------------- 2021-3-10 add by zhangpf------------end
+
+-- ----------------------------- 2021-3-13 add by shixw------------begin
+
+UPDATE T_CORE_SYSTEM_CONFIG SET VERSION = '0.10.0' WHERE ID = 'system-config';
+COMMIT;
+
+-- ----------------------------- 2021-3-13 add by shixw------------end
+
+-- ----------------------------- 2021-3-13 add by shixw------------begin
+
+CALL INSERTI18N('GIKAM.SECURITY.LOGIN.TIMEOUT', '登录超时', '登录超时', 'zh-CN', '登录超时');
+
+-- ----------------------------- 2021-3-13 add by shixw------------end
+
+-- ----------------------------- 2021-3-15 add by shixw------------begin
+
+UPDATE T_CORE_ADMIN_CHOOSE_CONFIG  SET WIDTH ='80%' WHERE WIDTH IS NULL;
+
+commit;
+
+-- ----------------------------- 2021-3-15 add by shixw------------end
+
+-- ----------------------------- 2021-3-24 add by liyang------------begin
+
+CALL INSERTI18N('CORE.MODULE.EMAIL.EMAILCONFIGS.MODAL.ADD', '添加邮件配置', '添加邮件配置', 'zh-CN', '添加邮件配置');
+
+commit;
+
+-- ----------------------------- 2021-3-24 add by liyang------------end
+
+-- ----------------------------- 2021-3-26 add by zhangpf------------begin
+
+alter table T_CORE_SYSTEM_CONFIG add DEFAULTPASSWORD VARCHAR2(120);
+comment on column T_CORE_SYSTEM_CONFIG.DEFAULTPASSWORD is '默认密码';
+alter table T_CORE_SYSTEM_CONFIG add INITPASSWORDPOLICY VARCHAR2(36);
+comment on column T_CORE_SYSTEM_CONFIG.INITPASSWORDPOLICY is '初始密码策略';
+
+CALL INSERTI18N('T_CORE_SYSTEM_CONFIG.DEFAULTPASSWORD', '系统配置的默认密码', '默认密码', 'zh-CN', '默认密码');
+CALL INSERTI18N('T_CORE_SYSTEM_CONFIG.INITPASSWORDPOLICY', '系统配置的初始密码策略', '初始密码策略', 'zh-CN', '初始密码策略');
+
+INSERT INTO T_CORE_CODE_CATEGORY(ID, CODECATEGORYNAME, CODECLASSID, REMARK, ORDERNO, CREATEDBYID, CREATEDBYNAME, CREATEDTIME)
+VALUES ('initPasswordPolicy', '初始密码策略', 'sys', NULL, 156, NULL, NULL, NULL);
+
+INSERT INTO T_CORE_CODE(ID, CODE, CODENAME, CODECATEGORYID, REMARK, ORDERNO, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME)
+VALUES (SEQ_CORE.NEXTVAL, 'sameWithUserId', '同用户编码', 'initPasswordPolicy', NULL, 1, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL);
+INSERT INTO T_CORE_CODE(ID, CODE, CODENAME, CODECATEGORYID, REMARK, ORDERNO, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME)
+VALUES (SEQ_CORE.NEXTVAL, 'customPassword', '自定义密码', 'initPasswordPolicy', NULL, 2, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL);
+
+INSERT INTO T_CORE_ADMIN_SELECT_CONFIG(ID, NAME, CATEGORY, URL, VALUEFIELD, TEXTFIELD)
+VALUES(SEQ_CORE.NEXTVAL, '初始密码策略', 'init-password-policy', '/secure/core/module/sys/codes/queries/selectable?codeCategoryId=initPasswordPolicy', 'code', 'codeName');
+
+COMMIT;
+-- ----------------------------- 2021-3-26 add by zhangpf------------end
+
+-- ----------------------------- 2021-3-31 add by shixw------------begin
+
+CALL INSERTI18N('T_CORE_SYSTEM_CONFIG.TODOVOICEPROMPT', '系统配置的待办是否语音提醒', '待办语音提醒', 'zh-CN', '待办语音提醒');
+CALL INSERTI18N('T_CORE_SYSTEM_CONFIG.HELPMANUALOPERATION', '系统配置的手册打开方式', '手册打开方式', 'zh-CN', '手册打开方式');
+CALL INSERTI18N('T_CORE_SYSTEM_CONFIG.ROLLINGNOTICE', '系统配置的是否显示滚动信息', '是否显示滚动信息', 'zh-CN', '是否显示滚动信息');
+CALL INSERTI18N('T_CORE_SYSTEM_CONFIG.VERSION', '系统配置的版本号', '版本号', 'zh-CN', '版本号');
+
+-- ----------------------------- 2021-3-31 add by shixw------------end
+
+-- ----------------------------- 2021-04-07 add by shixw--------------begin
+
+-- 建表语句
+CREATE TABLE T_CORE_ADMIN_CHECK_CONFIG( 
+    ID VARCHAR2(36)  NOT NULL,
+    NAME VARCHAR2(192)  NULL,
+    URL VARCHAR2(270)  NULL,
+    GROUPDISPLAY VARCHAR2(36)  NULL,
+    CACHEABLE VARCHAR2(36)  NULL,
+    DISPLAYOTHER VARCHAR2(36)  NULL
+ );
+COMMENT ON TABLE T_CORE_ADMIN_CHECK_CONFIG IS '复选框配置';
+COMMENT ON COLUMN T_CORE_ADMIN_CHECK_CONFIG.ID IS '主键';
+COMMENT ON COLUMN T_CORE_ADMIN_CHECK_CONFIG.NAME IS '复选框名称';
+COMMENT ON COLUMN T_CORE_ADMIN_CHECK_CONFIG.URL IS '请求地址';
+COMMENT ON COLUMN T_CORE_ADMIN_CHECK_CONFIG.GROUPDISPLAY IS '是否分组展示';
+COMMENT ON COLUMN T_CORE_ADMIN_CHECK_CONFIG.CACHEABLE IS '是否缓存';
+COMMENT ON COLUMN T_CORE_ADMIN_CHECK_CONFIG.DISPLAYOTHER IS '是否显示其他';
+
+ALTER TABLE T_CORE_ADMIN_CHECK_CONFIG ADD CONSTRAINT PK_CORE_ADMIN_CHECK_CONFIG PRIMARY KEY (ID);
+
+CALL INSERTI18N('T_CORE_ADMIN_CHECK_CONFIG.SERVICE_NAME', '复选框配置', '复选框配置', 'zh-CN', '复选框配置');
+CALL INSERTI18N('T_CORE_ADMIN_CHECK_CONFIG.ID', '复选框配置的编码', '配置编码', 'zh-CN', '配置编码');
+CALL INSERTI18N('T_CORE_ADMIN_CHECK_CONFIG.NAME', '复选框配置的复选框名称', '复选框名称', 'zh-CN', '复选框名称');
+CALL INSERTI18N('T_CORE_ADMIN_CHECK_CONFIG.URL', '复选框配置的请求地址', '请求地址', 'zh-CN', '请求地址');
+CALL INSERTI18N('T_CORE_ADMIN_CHECK_CONFIG.GROUPDISPLAY', '复选框配置的是否分组展示', '是否分组展示', 'zh-CN', '是否分组展示');
+CALL INSERTI18N('T_CORE_ADMIN_CHECK_CONFIG.CACHEABLE', '复选框配置的是否缓存', '是否缓存', 'zh-CN', '是否缓存');
+CALL INSERTI18N('T_CORE_ADMIN_CHECK_CONFIG.DISPLAYOTHER', '复选框配置的是否显示其他', '是否显示其他', 'zh-CN', '是否显示其他');
+CALL INSERTI18N('CORE.MODULE.ADMIN.CHECKCONFIGS.MODAL.ADD', '新增', '新增', 'zh-CN', '新增');
+CALL INSERTI18N('CORE.MODULE.ADMIN.CHECKCONFIGS.TAB.BASE_INFO', '基本信息', '基本信息', 'zh-CN', '基本信息');
+
+-- 创建菜单语句
+INSERT INTO T_CORE_ADMIN_MENU(ID, MENUNAME, MENUICON, HREF, PARENTID, ORDERNO)
+VALUES('101030', '复选框配置', NULL, '/secure/core/module/admin/check-configs/page/edit-list', '1010', 101030);
+
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_ADMIN_CHECK_CONFIG', '0', '0');
+
+
+COMMIT;
+
+-- 建表语句
+CREATE TABLE T_CORE_CHECK_CODE( 
+    ID NUMBER NOT NULL,
+    CODE VARCHAR2(36)  NULL,
+    CODENAME VARCHAR2(270)  NULL,
+    CODECATEGORY VARCHAR2(60)  NULL,
+    GROUPNAME VARCHAR2(120)  NULL,
+    ORDERNO NUMBER NULL,
+    CREATEDBYID VARCHAR2(36)  NULL,
+    CREATEDBYNAME VARCHAR2(60)  NULL,
+    CREATEDTIME DATE NULL,
+    CREATEDBYORGID VARCHAR2(36)  NULL,
+    CREATEDBYORGNAME VARCHAR2(270)  NULL
+ );
+COMMENT ON TABLE T_CORE_CHECK_CODE IS '复选框编码';
+COMMENT ON COLUMN T_CORE_CHECK_CODE.ID IS '主键';
+COMMENT ON COLUMN T_CORE_CHECK_CODE.CODE IS '编码';
+COMMENT ON COLUMN T_CORE_CHECK_CODE.CODENAME IS '编码名称';
+COMMENT ON COLUMN T_CORE_CHECK_CODE.CODECATEGORY IS '编码分类';
+COMMENT ON COLUMN T_CORE_CHECK_CODE.GROUPNAME IS '分组名称';
+COMMENT ON COLUMN T_CORE_CHECK_CODE.ORDERNO IS '排序码';
+COMMENT ON COLUMN T_CORE_CHECK_CODE.CREATEDBYID IS '制单人编码';
+COMMENT ON COLUMN T_CORE_CHECK_CODE.CREATEDBYNAME IS '制单人名称';
+COMMENT ON COLUMN T_CORE_CHECK_CODE.CREATEDTIME IS '制单时间';
+COMMENT ON COLUMN T_CORE_CHECK_CODE.CREATEDBYORGID IS '制单人单位编码';
+COMMENT ON COLUMN T_CORE_CHECK_CODE.CREATEDBYORGNAME IS '制单人单位名称';
+
+ALTER TABLE T_CORE_CHECK_CODE ADD CONSTRAINT PK_CORE_CHECK_CODE PRIMARY KEY (ID);
+
+CALL INSERTI18N('T_CORE_CHECK_CODE.SERVICE_NAME', '复选框编码', '复选框编码', 'zh-CN', '复选框编码');
+CALL INSERTI18N('T_CORE_CHECK_CODE.ID', '复选框编码的主键', '主键', 'zh-CN', '主键');
+CALL INSERTI18N('T_CORE_CHECK_CODE.CODE', '复选框编码的编码', '编码', 'zh-CN', '编码');
+CALL INSERTI18N('T_CORE_CHECK_CODE.CODENAME', '复选框编码的编码名称', '编码名称', 'zh-CN', '编码名称');
+CALL INSERTI18N('T_CORE_CHECK_CODE.CODECATEGORY', '复选框编码的编码分类', '编码分类', 'zh-CN', '编码分类');
+CALL INSERTI18N('T_CORE_CHECK_CODE.GROUPNAME', '复选框编码的分组名称', '分组名称', 'zh-CN', '分组名称');
+CALL INSERTI18N('T_CORE_CHECK_CODE.ORDERNO', '复选框编码的排序码', '排序码', 'zh-CN', '排序码');
+CALL INSERTI18N('T_CORE_CHECK_CODE.CREATEDBYID', '复选框编码的制单人编码', '制单人编码', 'zh-CN', '制单人编码');
+CALL INSERTI18N('T_CORE_CHECK_CODE.CREATEDBYNAME', '复选框编码的制单人名称', '制单人名称', 'zh-CN', '制单人名称');
+CALL INSERTI18N('T_CORE_CHECK_CODE.CREATEDTIME', '复选框编码的制单时间', '制单时间', 'zh-CN', '制单时间');
+CALL INSERTI18N('T_CORE_CHECK_CODE.CREATEDBYORGID', '复选框编码的制单人单位编码', '制单人单位编码', 'zh-CN', '制单人单位编码');
+CALL INSERTI18N('T_CORE_CHECK_CODE.CREATEDBYORGNAME', '复选框编码的制单人单位名称', '制单人单位名称', 'zh-CN', '制单人单位名称');
+CALL INSERTI18N('CORE.MODULE.SYS.CHECKCODES.MODAL.ADD', '新增', '新增', 'zh-CN', '新增');
+CALL INSERTI18N('CORE.MODULE.SYS.CHECKCODES.TAB.BASE_INFO', '基本信息', '基本信息', 'zh-CN', '基本信息');
+
+-- 创建菜单语句
+INSERT INTO T_CORE_MENU (ID, MENUNAME, HREF, PARENTID, ORDERNO, ICON, MENUINITNAME)
+VALUES ('9350', '复选框编码', '/secure/core/module/sys/check-codes/page/edit-list', '93', '9350', '018.svg', '复选框编码');
+
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_CHECK_CODE', '0', '0');
+
+
+COMMIT;
+
+-- ----------------------------- 2021-04-07 add by shixw------------end
+
+-- ----------------------------- 2021-4-9 add by shixw------------begin
+
+CALL INSERTI18N('CORE.MODULE.SYS.CHECKCODES.TIP.CODEDUPLICATED', '编码重复', '编码重复', 'zh-CN', '编码重复');
+CALL INSERTI18N('CORE.MODULE.SYS.CHECKCODES.TIP.CODENAMEDUPLICATED', '编码名称重复', '编码名称重复', 'zh-CN', '编码名称重复');
+
+-- ----------------------------- 2021-4-9 add by shixw------------end

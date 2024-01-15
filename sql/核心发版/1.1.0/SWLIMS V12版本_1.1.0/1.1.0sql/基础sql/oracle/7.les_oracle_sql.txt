@@ -1,0 +1,502 @@
+-- ----------------------------- 2020-06-05 add by shixw------------begin
+
+CALL INSERTI18N('T_CORE_LES_TEMPLATE.SERVICE_NAME', 'LES模板', 'LES模板', 'zh-CN', 'LES模板');
+CALL INSERTI18N('T_CORE_LES_TEMPLATE.ID', 'LES模板的主键', '主键', 'zh-CN', '主键');
+CALL INSERTI18N('T_CORE_LES_TEMPLATE.BASEID', 'LES模板的初始版本ID', '初始版本ID', 'zh-CN', '初始版本ID');
+CALL INSERTI18N('T_CORE_LES_TEMPLATE.TEMPLATENO', 'LES模板的电子记录模板编号', '电子记录模板编号', 'zh-CN', '电子记录模板编号');
+CALL INSERTI18N('T_CORE_LES_TEMPLATE.TEMPLATENAME', 'LES模板的电子记录模板名称', '电子记录模板名称', 'zh-CN', '电子记录模板名称');
+CALL INSERTI18N('T_CORE_LES_TEMPLATE.LESCATEGORY', 'LES模板的模板类型', '模板类型', 'zh-CN', '模板类型');
+CALL INSERTI18N('T_CORE_LES_TEMPLATE.TEMPLATEVERSION', 'LES模板的版本', '版本', 'zh-CN', '版本');
+CALL INSERTI18N('T_CORE_LES_TEMPLATE.LOCKED', 'LES模板的是否锁定（0-否1-是）', '是否锁定（0-否1-是）', 'zh-CN', '是否锁定（0-否1-是）');
+CALL INSERTI18N('T_CORE_LES_TEMPLATE.REMARK', 'LES模板的备注', '备注', 'zh-CN', '备注');
+CALL INSERTI18N('T_CORE_LES_TEMPLATE.TEMPLATESTATUS', 'LES模板的状态', '状态', 'zh-CN', '状态');
+CALL INSERTI18N('T_CORE_LES_TEMPLATE.PROCESSSTATUS', 'LES模板的流程状态', '流程状态', 'zh-CN', '流程状态');
+CALL INSERTI18N('T_CORE_LES_TEMPLATE.APPROVEDBYID', 'LES模板的批准人编码', '批准人编码', 'zh-CN', '批准人编码');
+CALL INSERTI18N('T_CORE_LES_TEMPLATE.APPROVEDBYNAME', 'LES模板的批准人名称', '批准人名称', 'zh-CN', '批准人名称');
+CALL INSERTI18N('T_CORE_LES_TEMPLATE.APPROVEDATE', 'LES模板的批准日期', '批准日期', 'zh-CN', '批准日期');
+CALL INSERTI18N('T_CORE_LES_TEMPLATE.CREATEDBYID', 'LES模板的制单人编码', '制单人编码', 'zh-CN', '制单人编码');
+CALL INSERTI18N('T_CORE_LES_TEMPLATE.CREATEDBYNAME', 'LES模板的创建人', '创建人', 'zh-CN', '创建人');
+CALL INSERTI18N('T_CORE_LES_TEMPLATE.CREATEDTIME', 'LES模板的创建日期', '创建日期', 'zh-CN', '创建日期');
+CALL INSERTI18N('T_CORE_LES_TEMPLATE.CREATEDBYORGID', 'LES模板的制单人单位编码', '制单人单位编码', 'zh-CN', '制单人单位编码');
+CALL INSERTI18N('T_CORE_LES_TEMPLATE.CREATEDBYORGNAME', 'LES模板的制单人单位名称', '制单人单位名称', 'zh-CN', '制单人单位名称');
+CALL INSERTI18N('T_CORE_LES_TEMPLATE_ORG.SERVICE_NAME', 'LES模板使用部门', 'LES模板使用部门', 'zh-CN', 'LES模板使用部门');
+CALL INSERTI18N('T_CORE_LES_TEMPLATE_ORG.ID', 'LES模板使用部门的主键', '主键', 'zh-CN', '主键');
+CALL INSERTI18N('T_CORE_LES_TEMPLATE_ORG.TEMPLATEID', 'LES模板使用部门的模板ID', '模板ID', 'zh-CN', '模板ID');
+CALL INSERTI18N('T_CORE_LES_TEMPLATE_ORG.USEDORGID', 'LES模板使用部门的使用部门编码', '使用部门编码', 'zh-CN', '使用部门编码');
+CALL INSERTI18N('T_CORE_LES_TEMPLATE_ORG.CREATEDBYID', 'LES模板使用部门的制单人编码', '制单人编码', 'zh-CN', '制单人编码');
+CALL INSERTI18N('T_CORE_LES_TEMPLATE_ORG.CREATEDBYNAME', 'LES模板使用部门的制单人名称', '制单人名称', 'zh-CN', '制单人名称');
+CALL INSERTI18N('T_CORE_LES_TEMPLATE_ORG.CREATEDTIME', 'LES模板使用部门的制单时间', '制单时间', 'zh-CN', '制单时间');
+CALL INSERTI18N('T_CORE_LES_TEMPLATE_ORG.CREATEDBYORGID', 'LES模板使用部门的制单人单位编码', '制单人单位编码', 'zh-CN', '制单人单位编码');
+CALL INSERTI18N('T_CORE_LES_TEMPLATE_ORG.CREATEDBYORGNAME', 'LES模板使用部门的制单人单位名称', '制单人单位名称', 'zh-CN', '制单人单位名称');
+CALL INSERTI18N('T_CORE_LES_TEMPLATE_UT.SERVICE_NAME', 'LES模板的主体', 'LES模板的主体', 'zh-CN', 'LES模板的主体');
+CALL INSERTI18N('T_CORE_LES_TEMPLATE_UT.ID', 'LES模板的主体的主键', '主键', 'zh-CN', '主键');
+CALL INSERTI18N('T_CORE_LES_TEMPLATE_UT.TYPE', 'LES模板的主体的类型', '类型', 'zh-CN', '类型');
+CALL INSERTI18N('T_CORE_LES_TEMPLATE_UT.UNITTITLE', 'LES模板的主体的组件标题', '组件标题', 'zh-CN', '组件标题');
+CALL INSERTI18N('T_CORE_LES_TEMPLATE_UT.UNITBODY', 'LES模板的主体的组件主体', '组件主体', 'zh-CN', '组件主体');
+CALL INSERTI18N('T_CORE_LES_TEMPLATE_UT.VERSION', 'LES模板的主体的版本', '版本', 'zh-CN', '版本');
+CALL INSERTI18N('T_CORE_LES_TEMPLATE_UT.CREATEDBYID', 'LES模板的主体的制单人编码', '制单人编码', 'zh-CN', '制单人编码');
+CALL INSERTI18N('T_CORE_LES_TEMPLATE_UT.CREATEDBYNAME', 'LES模板的主体的制单人名称', '制单人名称', 'zh-CN', '制单人名称');
+CALL INSERTI18N('T_CORE_LES_TEMPLATE_UT.CREATEDTIME', 'LES模板的主体的制单时间', '制单时间', 'zh-CN', '制单时间');
+CALL INSERTI18N('T_CORE_LES_TEMPLATE_UT.CREATEDBYORGID', 'LES模板的主体的单据单位编码', '单据单位编码', 'zh-CN', '单据单位编码');
+CALL INSERTI18N('T_CORE_LES_TEMPLATE_UT.CREATEDBYORGNAME', 'LES模板的主体的单据单位名称', '单据单位名称', 'zh-CN', '单据单位名称');
+CALL INSERTI18N('T_CORE_LES_TEMPLATE_UT.LASTUPDATEDBYID', 'LES模板的主体的最后更新人编码', '最后更新人编码', 'zh-CN', '最后更新人编码');
+CALL INSERTI18N('T_CORE_LES_TEMPLATE_UT.LASTUPDATEDBYNAME', 'LES模板的主体的最后更新人名称', '最后更新人名称', 'zh-CN', '最后更新人名称');
+CALL INSERTI18N('T_CORE_LES_TEMPLATE_UT.LASTUPDATEDTIME', 'LES模板的主体的最后更新时间', '最后更新时间', 'zh-CN', '最后更新时间');
+CALL INSERTI18N('CORE.MODULE.ITEM.LES_TEMPLATES.MODAL.NEW_TMPL', '新建模板', '新建模板', 'zh-CN', '新建模板');
+CALL INSERTI18N('CORE.MODULE.ITEM.LES_TEMPLATES.MODAL.CONNECT', '连接仪器', '连接仪器', 'zh-CN', '连接仪器');
+CALL INSERTI18N('CORE.MODULE.ITEM.LES_TEMPLATES.BUTTON.CONNECT', '连接仪器', '连接仪器', 'zh-CN', '连接仪器');
+CALL INSERTI18N('CORE.MODULE.ITEM.LES_TEMPLATES.BUTTON.DISCONNECT', '断开连接', '断开连接', 'zh-CN', '断开连接');
+CALL INSERTI18N('T_CORE_LES_DS.SCOPE', 'LES数据源的作用域', '作用域', 'zh-CN', '作用域');
+CALL INSERTI18N('T_CORE_LES_DS.LESDSNAME', 'LES数据源的数据源名称', '数据源名称', 'zh-CN', '数据源名称');
+CALL INSERTI18N('T_CORE_LES_DS.SQLCONTENT', 'LES数据源的SQL内容', 'SQL内容', 'zh-CN', 'SQL内容');
+CALL INSERTI18N('T_CORE_LES_DS.SQLCLAUSE', 'LES数据源的SQL条件', 'SQL条件', 'zh-CN', 'SQL条件');
+CALL INSERTI18N('T_CORE_LES_DS.DISPLAYCATEGORY', 'LES数据源的展示类型', '展示类型', 'zh-CN', '展示类型');
+CALL INSERTI18N('T_CORE_LES_DS.ID', 'LES数据源的主键', '主键', 'zh-CN', '主键');
+CALL INSERTI18N('T_CORE_LES_DS.CREATEDBYID', 'LES数据源的制单人编码', '制单人编码', 'zh-CN', '制单人编码');
+CALL INSERTI18N('T_CORE_LES_DS.CREATEDBYNAME', 'LES数据源的制单人名称', '制单人名称', 'zh-CN', '制单人名称');
+CALL INSERTI18N('T_CORE_LES_DS.CREATEDTIME', 'LES数据源的制单时间', '制单时间', 'zh-CN', '制单时间');
+CALL INSERTI18N('T_CORE_LES_DS.CREATEDBYORGID', 'LES数据源的制单人单位编码', '制单人单位编码', 'zh-CN', '制单人单位编码');
+CALL INSERTI18N('T_CORE_LES_DS.CREATEDBYORGNAME', 'LES数据源的制单人单位名称', '制单人单位名称', 'zh-CN', '制单人单位名称');
+CALL INSERTI18N('T_CORE_LES_DS.ACTIVATEDFLAG', 'LES数据源的状态0：停用 /1：启用', '状态0：停用 /1：启用', 'zh-CN', '状态0：停用 /1：启用');
+CALL INSERTI18N('T_CORE_LES_DS.ACTIVATEDBYID', 'LES数据源的启用人编码', '启用人编码', 'zh-CN', '启用人编码');
+CALL INSERTI18N('T_CORE_LES_DS.ACTIVATEDBYNAME', 'LES数据源的启用人名称', '启用人名称', 'zh-CN', '启用人名称');
+CALL INSERTI18N('T_CORE_LES_DS.ACTIVATEDTIME', 'LES数据源的启用时间', '启用时间', 'zh-CN', '启用时间');
+CALL INSERTI18N('T_CORE_LES_DS.SERVICE_NAME', 'LES数据源', 'LES数据源', 'zh-CN', 'LES数据源');
+CALL INSERTI18N('T_CORE_LES_DS_FIELD.TABLENAME', 'LES数据源字段的表名称', '表名称', 'zh-CN', '表名称');
+CALL INSERTI18N('T_CORE_LES_DS_FIELD.COLUMNNAME', 'LES数据源字段的字段名称', '字段名称', 'zh-CN', '字段名称');
+CALL INSERTI18N('T_CORE_LES_DS_FIELD.LESCOLUMNNAME', 'LES数据源字段的显示名称', '显示名称', 'zh-CN', '显示名称');
+CALL INSERTI18N('T_CORE_LES_DS_FIELD.WRITEBACK', 'LES数据源字段的是否反写', '是否反写', 'zh-CN', '是否反写');
+CALL INSERTI18N('T_CORE_LES_DS_FIELD.ID', 'LES数据源字段的主键', '主键', 'zh-CN', '主键');
+CALL INSERTI18N('T_CORE_LES_DS_FIELD.CREATEDBYID', 'LES数据源字段的制单人编码', '制单人编码', 'zh-CN', '制单人编码');
+CALL INSERTI18N('T_CORE_LES_DS_FIELD.CREATEDBYNAME', 'LES数据源字段的制单人名称', '制单人名称', 'zh-CN', '制单人名称');
+CALL INSERTI18N('T_CORE_LES_DS_FIELD.CREATEDTIME', 'LES数据源字段的制单时间', '制单时间', 'zh-CN', '制单时间');
+CALL INSERTI18N('T_CORE_LES_DS_FIELD.CREATEDBYORGID', 'LES数据源字段的制单人单位编码', '制单人单位编码', 'zh-CN', '制单人单位编码');
+CALL INSERTI18N('T_CORE_LES_DS_FIELD.CREATEDBYORGNAME', 'LES数据源字段的制单人单位名称', '制单人单位名称', 'zh-CN', '制单人单位名称');
+CALL INSERTI18N('T_CORE_LES_DS_FIELD.LESDSID', 'LES数据源字段的LES数据源表ID', 'LES数据源表ID', 'zh-CN', 'LES数据源表ID');
+CALL INSERTI18N('T_CORE_LES_DS_FIELD.SERVICE_NAME', 'LES数据源字段', 'LES数据源字段', 'zh-CN', 'LES数据源字段');
+CALL INSERTI18N('CORE.MODULE.ITEM.LES_DSES.TAB.DS_INFO', 'LES数据源信息', 'LES数据源信息', 'zh-CN', 'LES数据源信息');
+CALL INSERTI18N('CORE.MODULE.ITEM.LES_DSES.TAB.DS_INSERT', 'LES数据源新增', 'LES数据源新增', 'zh-CN', 'LES数据源新增');
+CALL INSERTI18N('CORE.MODULE.ITEM.LES_DSES.TAB.DS_FIELD_INFO', '字段信息', '字段信息', 'zh-CN', '字段信息');
+CALL INSERTI18N('CORE.MODULE.ITEM.LES.INSTANCES.TIP.SQL_ERROR', '数据源查询报错，请根据数据源名称检查：', '数据源查询报错，请根据数据源名称检查：', 'zh-CN', '数据源查询报错，请根据数据源名称检查：');
+CALL INSERTI18N('CORE.MODULE.ITEM.LES.INSTANCES.TIP.FORM_RESULT_COUNT_ERROR', '表单绑定数据源查询结果数量大于1，请根据数据源名称检查：', '表单绑定数据源查询结果数量大于1，请根据数据源名称检查：', 'zh-CN', '表单绑定数据源查询结果数量大于1，请根据数据源名称检查：');
+CALL INSERTI18N('CORE.MODULE.LES.LES_TEMPLATES.TIP.CAN_NOT_DELETE_SUBMIITED_DATA', '已提交数据不可删除！', '已提交数据不可删除！', 'zh-CN', '已提交数据不可删除！');
+CALL INSERTI18N('CORE.MODULE.LES.LES_TEMPLATES.TIP.CAN_NOT_SUBMIT_EXPIRED_DATA', '已设置过期数据不可提交！', '已设置过期数据不可提交！', 'zh-CN', '已设置过期数据不可提交！');
+CALL INSERTI18N('CORE.MODULE.LES.LES_TEMPLATES.TIP.CAN_NOT_SUBMIT_SUBMIITED_DATA', '已提交数据不可提交！', '已提交数据不可提交！', 'zh-CN', '已提交数据不可提交！');
+CALL INSERTI18N('CORE.MODULE.LES.LES_TEMPLATES.TIP.TEMPLATE_ACTIVED_CANNOT_EMPTY', '必须选中一条模板', '必须选中一条模板', 'zh-CN', '必须选中一条模板');
+CALL INSERTI18N('CORE.MODULE.LES.LES_TEMPLATES.TIP.DRAFT', '当前已存在草稿版本，是否继续添加新的数据', '当前已存在草稿版本，是否继续添加新的数据', 'zh-CN', '当前已存在草稿版本，是否继续添加新的数据');
+CALL INSERTI18N('CORE.MODULE.LES.LES_TEMPLATES.MODEL.NEWVERSION', '新版本', '新版本', 'zh-CN', '新版本');
+CALL INSERTI18N('CORE.MODULE.LES.LES_TEMPLATES.MODEL.CONFIRM_EXPIRE', '确认设置过期？', '确认设置过期？', 'zh-CN', '确认设置过期？');
+CALL INSERTI18N('CORE.MODULE.LES.LES_TEMPLATES.MODEL.EXPIRE', '设置过期', '设置过期', 'zh-CN', '设置过期');
+CALL INSERTI18N('CORE.MODULE.LES.LES_TEMPLATES.MODAL.TITLE_USED_ORG_CHOOSE', '选择使用部门', '选择使用部门', 'zh-CN', '选择使用部门');
+CALL INSERTI18N('CORE.MODULE.LES.LES_TEMPLATES.BUTTON.EXPIRE', '设置过期', '设置过期', 'zh-CN', '设置过期');
+CALL INSERTI18N('CORE.MODULE.LES.LES_TEMPLATES.SELECT_CURRENT', '确认(当前)', '确认(当前)', 'zh-CN', '确认(当前)');
+CALL INSERTI18N('CORE.MODULE.LES.LES_TEMPLATES.BUTTON.NEWVERSION', '新版本', '新版本', 'zh-CN', '新版本');
+CALL INSERTI18N('CORE.MODULE.LES.LES_TEMPLATES.TAB.USEDDEPT', '使用部门', '使用部门', 'zh-CN', '使用部门');
+CALL INSERTI18N('CORE.MODULE.LES.LES_TEMPLATES.TAB.FILE', '参考文件', '参考文件', 'zh-CN', '参考文件');
+CALL INSERTI18N('CORE.MODULE.LES.LES_TEMPLATES.TITLE.USEDORGNAME', '部门', '部门', 'zh-CN', '部门');
+CALL INSERTI18N('CORE.MODULE.LES.LES_TEMPLATES.TIP.PER_TEMPLATE_CAN_ONLY_CHOOSE_ONE_VERSION', '每个LES模板只可以选择一个版本', '每个LES模板只可以选择一个版本', 'zh-CN', '每个LES模板只可以选择一个版本');
+CALL INSERTI18N('T_CORE_LES_INSTANCE.SERVICE_NAME', 'LES的实例', 'LES的实例', 'zh-CN', 'LES的实例');
+CALL INSERTI18N('T_CORE_LES_INSTANCE.ID', 'LES的实例的主键', '主键', 'zh-CN', '主键');
+CALL INSERTI18N('T_CORE_LES_INSTANCE.TEMPLATEID', 'LES的实例的模板ID', '模板ID', 'zh-CN', '模板ID');
+CALL INSERTI18N('T_CORE_LES_INSTANCE.VERSION', 'LES的实例的版本', '版本', 'zh-CN', '版本');
+CALL INSERTI18N('T_CORE_LES_INSTANCE.CREATEDBYID', 'LES的实例的制单人编码', '制单人编码', 'zh-CN', '制单人编码');
+CALL INSERTI18N('T_CORE_LES_INSTANCE.CREATEDBYNAME', 'LES的实例的制单人名称', '制单人名称', 'zh-CN', '制单人名称');
+CALL INSERTI18N('T_CORE_LES_INSTANCE.CREATEDTIME', 'LES的实例的制单时间', '制单时间', 'zh-CN', '制单时间');
+CALL INSERTI18N('T_CORE_LES_INSTANCE.CREATEDBYORGID', 'LES的实例的制单人单位编码', '制单人单位编码', 'zh-CN', '制单人单位编码');
+CALL INSERTI18N('T_CORE_LES_INSTANCE.CREATEDBYORGNAME', 'LES的实例的制单人单位名称', '制单人单位名称', 'zh-CN', '制单人单位名称');
+CALL INSERTI18N('T_CORE_LES_INSTANCE.PROCESSINSTANCEID', 'LES的实例的工作流Id', '工作流Id', 'zh-CN', '工作流Id');
+CALL INSERTI18N('T_CORE_LES_INSTANCE.LASTAUDITEDFLAG', 'LES的实例的审核标志', '审核标志', 'zh-CN', '审核标志');
+CALL INSERTI18N('T_CORE_LES_INSTANCE.LASTAUDITEDBYID', 'LES的实例的审核人编码', '审核人编码', 'zh-CN', '审核人编码');
+CALL INSERTI18N('T_CORE_LES_INSTANCE.LASTAUDITEDBYNAME', 'LES的实例的审核人名称', '审核人名称', 'zh-CN', '审核人名称');
+CALL INSERTI18N('T_CORE_LES_INSTANCE.LASTAUDITEDTIME', 'LES的实例的审核时间', '审核时间', 'zh-CN', '审核时间');
+CALL INSERTI18N('T_CORE_LES_INSTANCE.SUBMITTEDBYID', 'LES的实例的提交人id', '提交人id', 'zh-CN', '提交人id');
+CALL INSERTI18N('T_CORE_LES_INSTANCE.SUBMITTEDBYNAME', 'LES的实例的提交人姓名', '提交人姓名', 'zh-CN', '提交人姓名');
+CALL INSERTI18N('T_CORE_LES_INSTANCE.SUBMITTEDTIME', 'LES的实例的提交时间', '提交时间', 'zh-CN', '提交时间');
+CALL INSERTI18N('T_CORE_LES_INSTANCE.APPROVEDBYID', 'LES的实例的审批人ID（最后审核人）', '审批人ID（最后审核人）', 'zh-CN', '审批人ID（最后审核人）');
+CALL INSERTI18N('T_CORE_LES_INSTANCE.APPROVEDBYNAME', 'LES的实例的审批人名称（最后审核人）', '审批人名称（最后审核人）', 'zh-CN', '审批人名称（最后审核人）');
+CALL INSERTI18N('T_CORE_LES_INSTANCE.APPROVEDTIME', 'LES的实例的审批时间', '审批时间', 'zh-CN', '审批时间');
+CALL INSERTI18N('T_CORE_LES_INSTANCE.LASTREJECTEDFLAG', 'LES的实例的回退标志/审核拒绝标志', '回退标志/审核拒绝标志', 'zh-CN', '回退标志/审核拒绝标志');
+CALL INSERTI18N('T_CORE_LES_INSTANCE.LASTREJECTEDBYID', 'LES的实例的回退人/审核拒绝人编码', '回退人/审核拒绝人编码', 'zh-CN', '回退人/审核拒绝人编码');
+CALL INSERTI18N('T_CORE_LES_INSTANCE.LASTREJECTEDBYNAME', 'LES的实例的回退人名称', '回退人名称', 'zh-CN', '回退人名称');
+CALL INSERTI18N('T_CORE_LES_INSTANCE.LASTREJECTEDTIME', 'LES的实例的回退时间/审核拒绝时间', '回退时间/审核拒绝时间', 'zh-CN', '回退时间/审核拒绝时间');
+CALL INSERTI18N('T_CORE_LES_INSTANCE_UNIT.SERVICE_NAME', 'LES实例的组件', 'LES实例的组件', 'zh-CN', 'LES实例的组件');
+CALL INSERTI18N('T_CORE_LES_INSTANCE_UNIT.ID', 'LES实例的组件的主键', '主键', 'zh-CN', '主键');
+CALL INSERTI18N('T_CORE_LES_INSTANCE_UNIT.INSTANCEID', 'LES实例的组件的实例编码', '实例编码', 'zh-CN', '实例编码');
+CALL INSERTI18N('T_CORE_LES_INSTANCE_UNIT.TEMPLATEUNITID', 'LES实例的组件的模板组件的ID', '模板组件的ID', 'zh-CN', '模板组件的ID');
+CALL INSERTI18N('T_CORE_LES_INSTANCE_UNIT.TYPE', 'LES实例的组件的组件类型', '组件类型', 'zh-CN', '组件类型');
+CALL INSERTI18N('T_CORE_LES_INSTANCE_UNIT.UNITTITLE', 'LES实例的组件的组件标题（可以为空）', '组件标题（可以为空）', 'zh-CN', '组件标题（可以为空）');
+CALL INSERTI18N('T_CORE_LES_INSTANCE_UNIT.PARENTID', 'LES实例的组件的父组件编码', '父组件编码', 'zh-CN', '父组件编码');
+CALL INSERTI18N('T_CORE_LES_INSTANCE_UNIT.UNITBODY', 'LES实例的组件的组件主体', '组件主体', 'zh-CN', '组件主体');
+CALL INSERTI18N('T_CORE_LES_INSTANCE_UNIT.ORDERNO', 'LES实例的组件的排序码', '排序码', 'zh-CN', '排序码');
+CALL INSERTI18N('T_CORE_LES_INSTANCE_UNIT.VERSION', 'LES实例的组件的版本', '版本', 'zh-CN', '版本');
+CALL INSERTI18N('T_CORE_LES_INSTANCE_UNIT.CREATEDBYID', 'LES实例的组件的制单人编码', '制单人编码', 'zh-CN', '制单人编码');
+CALL INSERTI18N('T_CORE_LES_INSTANCE_UNIT.CREATEDBYNAME', 'LES实例的组件的制单人名称', '制单人名称', 'zh-CN', '制单人名称');
+CALL INSERTI18N('T_CORE_LES_INSTANCE_UNIT.CREATEDTIME', 'LES实例的组件的制单时间', '制单时间', 'zh-CN', '制单时间');
+CALL INSERTI18N('T_CORE_LES_INSTANCE_UNIT.CREATEDBYORGID', 'LES实例的组件的单据单位编码', '单据单位编码', 'zh-CN', '单据单位编码');
+CALL INSERTI18N('T_CORE_LES_INSTANCE_UNIT.CREATEDBYORGNAME', 'LES实例的组件的单据单位名称', '单据单位名称', 'zh-CN', '单据单位名称');
+CALL INSERTI18N('T_CORE_LES_IUP.SERVICE_NAME', 'ELN实例组件批注', 'ELN实例组件批注', 'zh-CN', 'ELN实例组件批注');
+CALL INSERTI18N('T_CORE_LES_IUP.ID', 'ELN实例组件批注的主键', '主键', 'zh-CN', '主键');
+CALL INSERTI18N('T_CORE_LES_IUP.INSTANCEUNITID', 'ELN实例组件批注的ELN实例组件ID', 'ELN实例组件ID', 'zh-CN', 'ELN实例组件ID');
+CALL INSERTI18N('T_CORE_LES_IUP.POSTIL', 'ELN实例组件批注的批注', '批注', 'zh-CN', '批注');
+CALL INSERTI18N('T_CORE_LES_IUP.RESOLVE', 'ELN实例组件批注的回复', '回复', 'zh-CN', '回复');
+CALL INSERTI18N('T_CORE_LES_IUP.VERSION', 'ELN实例组件批注的版本', '版本', 'zh-CN', '版本');
+CALL INSERTI18N('T_CORE_LES_IUP.CREATEDBYID', 'ELN实例组件批注的制单人编码', '制单人编码', 'zh-CN', '制单人编码');
+CALL INSERTI18N('T_CORE_LES_IUP.CREATEDBYNAME', 'ELN实例组件批注的制单人名称', '制单人名称', 'zh-CN', '制单人名称');
+CALL INSERTI18N('T_CORE_LES_IUP.CREATEDTIME', 'ELN实例组件批注的制单时间', '制单时间', 'zh-CN', '制单时间');
+CALL INSERTI18N('T_CORE_LES_IUP.CREATEDBYORGID', 'ELN实例组件批注的单据单位编码', '单据单位编码', 'zh-CN', '单据单位编码');
+CALL INSERTI18N('T_CORE_LES_IUP.CREATEDBYORGNAME', 'ELN实例组件批注的单据单位名称', '单据单位名称', 'zh-CN', '单据单位名称');
+CALL INSERTI18N('T_CORE_LES_IUP.LASTUPDATEDBYID', 'ELN实例组件批注的最后更新人编码', '最后更新人编码', 'zh-CN', '最后更新人编码');
+CALL INSERTI18N('T_CORE_LES_IUP.LASTUPDATEDBYNAME', 'ELN实例组件批注的最后更新人名称', '最后更新人名称', 'zh-CN', '最后更新人名称');
+CALL INSERTI18N('T_CORE_LES_IUP.LASTUPDATEDTIME', 'ELN实例组件批注的最后更新时间', '最后更新时间', 'zh-CN', '最后更新时间');
+CALL INSERTI18N('T_CORE_LES_IUP.SOURCEID', 'ELN实例组件批注的来源ID', '来源ID', 'zh-CN', '来源ID');
+CALL INSERTI18N('T_CORE_LES_TEMPLATE_UNIT.SERVICE_NAME', 'LES模板的组件', 'LES模板的组件', 'zh-CN', 'LES模板的组件');
+CALL INSERTI18N('T_CORE_LES_TEMPLATE_UNIT.ID', 'LES模板的组件的主键', '主键', 'zh-CN', '主键');
+CALL INSERTI18N('T_CORE_LES_TEMPLATE_UNIT.TEMPLATEID', 'LES模板的组件的模板编码', '模板编码', 'zh-CN', '模板编码');
+CALL INSERTI18N('T_CORE_LES_TEMPLATE_UNIT.TYPE', 'LES模板的组件的组件类型', '组件类型', 'zh-CN', '组件类型');
+CALL INSERTI18N('T_CORE_LES_TEMPLATE_UNIT.PARENTID', 'LES模板的组件的父组件编码', '父组件编码', 'zh-CN', '父组件编码');
+CALL INSERTI18N('T_CORE_LES_TEMPLATE_UNIT.UNITTITLE', 'LES模板的组件的组件标题（可以为空）', '组件标题（可以为空）', 'zh-CN', '组件标题（可以为空）');
+CALL INSERTI18N('T_CORE_LES_TEMPLATE_UNIT.UNITBODY', 'LES模板的组件的组件主体', '组件主体', 'zh-CN', '组件主体');
+CALL INSERTI18N('T_CORE_LES_TEMPLATE_UNIT.ORDERNO', 'LES模板的组件的排序码', '排序码', 'zh-CN', '排序码');
+CALL INSERTI18N('T_CORE_LES_TEMPLATE_UNIT.VERSION', 'LES模板的组件的版本', '版本', 'zh-CN', '版本');
+CALL INSERTI18N('T_CORE_LES_TEMPLATE_UNIT.CREATEDBYID', 'LES模板的组件的制单人编码', '制单人编码', 'zh-CN', '制单人编码');
+CALL INSERTI18N('T_CORE_LES_TEMPLATE_UNIT.CREATEDBYNAME', 'LES模板的组件的制单人名称', '制单人名称', 'zh-CN', '制单人名称');
+CALL INSERTI18N('T_CORE_LES_TEMPLATE_UNIT.CREATEDTIME', 'LES模板的组件的制单时间', '制单时间', 'zh-CN', '制单时间');
+CALL INSERTI18N('T_CORE_LES_TEMPLATE_UNIT.CREATEDBYORGID', 'LES模板的组件的单据单位编码', '单据单位编码', 'zh-CN', '单据单位编码');
+CALL INSERTI18N('T_CORE_LES_TEMPLATE_UNIT.CREATEDBYORGNAME', 'LES模板的组件的单据单位名称', '单据单位名称', 'zh-CN', '单据单位名称');
+CALL INSERTI18N('T_CORE_LES_UNIT.SERVICE_NAME', 'LES组件', 'LES组件', 'zh-CN', 'LES组件');
+CALL INSERTI18N('T_CORE_LES_UNIT.ID', 'LES组件的主键', '主键', 'zh-CN', '主键');
+CALL INSERTI18N('T_CORE_LES_UNIT.UNITNAME', 'LES组件的组件名称', '组件名称', 'zh-CN', '组件名称');
+CALL INSERTI18N('T_CORE_LES_UNIT.TYPE', 'LES组件的组件类型', '组件类型', 'zh-CN', '组件类型');
+CALL INSERTI18N('T_CORE_LES_UNIT.BINDDS', 'LES组件的是否绑定数据源（0-不绑定，1-绑定）', '是否绑定数据源（0-不绑定，1-绑定）', 'zh-CN', '是否绑定数据源（0-不绑定，1-绑定）');
+CALL INSERTI18N('T_CORE_LES_UNIT.SVG', 'LES组件的svg图标', 'svg图标', 'zh-CN', 'svg图标');
+CALL INSERTI18N('T_CORE_LES_UNIT.ENABLE', 'LES组件的是否启用（0-不启用，1-启用）', '是否启用（0-不启用，1-启用）', 'zh-CN', '是否启用（0-不启用，1-启用）');
+CALL INSERTI18N('T_CORE_LES_UNIT.ORDERNO', 'LES组件的排序码', '排序码', 'zh-CN', '排序码');
+
+-- ----------------------------- 2020-06-05 add by shixw------------end
+
+-- ----------------------------- 2020-06-08 add by shixw------------begin
+
+CALL INSERTI18N('T_CORE_LES_INSTANCE.PROCESSSTATUS', 'LES的实例的流程状态', '流程状态', 'zh-CN', '流程状态');
+CALL INSERTI18N('T_CORE_LES_INSTANCE.LESCATEGORY', 'LES的实例的LES实例类型(LES/ELN)', 'LES实例类型(LES/ELN)', 'zh-CN', 'LES实例类型(LES/ELN)');
+CALL INSERTI18N('T_CORE_LES_INSTANCE.INSTANCENAME', 'LES的实例的实例名称', '实例名称', 'zh-CN', '实例名称');
+CALL INSERTI18N('T_CORE_LES_INSTANCE.AUDIT', 'LES的实例的是否启用审计', '是否启用审计', 'zh-CN', '是否启用审计');
+CALL INSERTI18N('T_CORE_LES_INSTANCE_UNIT.UNITPARAM', 'LES实例组件的参数', '参数', 'zh-CN', '参数');
+CALL INSERTI18N('T_CORE_LES_INSTANCE.BIZCATEGORY', 'LES实例的业务类型', '业务类型', 'zh-CN', '业务类型');
+
+-- ----------------------------- 2020-06-08 add by shixw------------end
+
+-- ----------------------------- 2020-06-12 add by zhangpf------------begin
+DROP TABLE T_CORE_LES_UNIT;
+CREATE TABLE T_CORE_LES_UNIT( 
+    ID NUMBER NOT NULL,
+    UNITNAME VARCHAR2(60)  NULL,
+    UNITCATEGORY VARCHAR2(36)  NULL,
+    BINDDS VARCHAR2(1)  NULL,
+    ICON VARCHAR2(270)  NULL,
+    ORDERNO NUMBER NULL,
+    AUDITTRAIL VARCHAR2(1)  NULL,
+    CONFIG CLOB NULL,
+    CREATEDBYID VARCHAR2(36)  NULL,
+    CREATEDBYNAME VARCHAR2(60)  NULL,
+    CREATEDTIME DATE NULL,
+    CREATEDBYORGID VARCHAR2(36)  NULL,
+    CREATEDBYORGNAME VARCHAR2(270)  NULL,
+    ACTIVATEDFLAG VARCHAR2(1)  NULL,
+    ACTIVATEDBYID VARCHAR2(36)  NULL,
+    ACTIVATEDBYNAME VARCHAR2(60)  NULL,
+    ACTIVATEDTIME DATE NULL
+ );
+COMMENT ON TABLE T_CORE_LES_UNIT IS 'LES组件';
+COMMENT ON COLUMN T_CORE_LES_UNIT.ID IS '主键';
+COMMENT ON COLUMN T_CORE_LES_UNIT.UNITNAME IS '组件名称';
+COMMENT ON COLUMN T_CORE_LES_UNIT.UNITCATEGORY IS '组件类型';
+COMMENT ON COLUMN T_CORE_LES_UNIT.BINDDS IS '是否绑定数据源（0-不绑定，1-绑定）';
+COMMENT ON COLUMN T_CORE_LES_UNIT.ICON IS '图标';
+COMMENT ON COLUMN T_CORE_LES_UNIT.ORDERNO IS '排序码';
+COMMENT ON COLUMN T_CORE_LES_UNIT.AUDITTRAIL IS '是否启用审计';
+COMMENT ON COLUMN T_CORE_LES_UNIT.CONFIG IS '配置';
+COMMENT ON COLUMN T_CORE_LES_UNIT.CREATEDBYID IS '制单人编码';
+COMMENT ON COLUMN T_CORE_LES_UNIT.CREATEDBYNAME IS '制单人名称';
+COMMENT ON COLUMN T_CORE_LES_UNIT.CREATEDTIME IS '制单时间';
+COMMENT ON COLUMN T_CORE_LES_UNIT.CREATEDBYORGID IS '制单人单位编码';
+COMMENT ON COLUMN T_CORE_LES_UNIT.CREATEDBYORGNAME IS '制单人单位名称';
+COMMENT ON COLUMN T_CORE_LES_UNIT.ACTIVATEDFLAG IS '启用标志';
+COMMENT ON COLUMN T_CORE_LES_UNIT.ACTIVATEDBYID IS '启用人编码';
+COMMENT ON COLUMN T_CORE_LES_UNIT.ACTIVATEDBYNAME IS '启用人名称';
+COMMENT ON COLUMN T_CORE_LES_UNIT.ACTIVATEDTIME IS '启用时间';
+
+ALTER TABLE T_CORE_LES_UNIT ADD CONSTRAINT PK_CORE_LES_UNIT PRIMARY KEY (ID);
+
+ALTER TABLE T_CORE_LES_DS_FIELD add ORDERNO NUMBER;
+COMMENT ON COLUMN T_CORE_LES_DS_FIELD.ORDERNO is '排序号';
+
+ALTER TABLE "T_CORE_LES_TEMPLATE_UNIT" RENAME COLUMN "TYPE" TO "UNITCATEGORY";
+ALTER TABLE "T_CORE_LES_TEMPLATE_UNIT" ADD ("CONFIG" CLOB );
+COMMENT ON COLUMN "T_CORE_LES_TEMPLATE_UNIT"."CONFIG" IS '组件配置';
+
+ALTER TABLE "T_CORE_LES_INSTANCE_UNIT" RENAME COLUMN "TYPE" TO "UNITCATEGORY";
+ALTER TABLE "T_CORE_LES_INSTANCE_UNIT" ADD ("CONFIG" CLOB );
+COMMENT ON COLUMN "T_CORE_LES_INSTANCE_UNIT"."CONFIG" IS '组件配置';
+
+INSERT INTO T_CORE_LES_UNIT("ID", "UNITNAME", "UNITCATEGORY", "BINDDS", "ICON", "ORDERNO", "AUDITTRAIL", "CONFIG", "ACTIVATEDFLAG") 
+VALUES (SEQ_CORE.NEXTVAL, '章节', 'chapter', '0', '/static/gikam/main/img/chapter.svg', '1', '1', '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print", "upgrade", "downgrade" ] }', '1');
+INSERT INTO T_CORE_LES_UNIT("ID", "UNITNAME", "UNITCATEGORY", "BINDDS", "ICON", "ORDERNO", "AUDITTRAIL", "CONFIG", "ACTIVATEDFLAG") 
+VALUES (SEQ_CORE.NEXTVAL, '富文本', 'ckeditor', '1', '/static/gikam/main/img/ckeditor.svg', '2', '1', '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print", "audit" ] }', '1');
+INSERT INTO T_CORE_LES_UNIT("ID", "UNITNAME", "UNITCATEGORY", "BINDDS", "ICON", "ORDERNO", "AUDITTRAIL", "CONFIG", "ACTIVATEDFLAG") 
+VALUES (SEQ_CORE.NEXTVAL, '分子式', 'chemDoodle', '0', '/static/gikam/main/img/chemDoodle.svg', '3', '0', '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print" ] }', '1');
+INSERT INTO T_CORE_LES_UNIT("ID", "UNITNAME", "UNITCATEGORY", "BINDDS", "ICON", "ORDERNO", "AUDITTRAIL", "CONFIG", "ACTIVATEDFLAG") 
+VALUES (SEQ_CORE.NEXTVAL, '图片绘制', 'imgDraw', '0', '/static/gikam/main/img/imgDraw.svg', '4', '0', '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print" ] }', '1');
+INSERT INTO T_CORE_LES_UNIT("ID", "UNITNAME", "UNITCATEGORY", "BINDDS", "ICON", "ORDERNO", "AUDITTRAIL", "CONFIG", "ACTIVATEDFLAG") 
+VALUES (SEQ_CORE.NEXTVAL, '表格', 'spread', '0', '/static/gikam/main/img/spread.svg', '5', '0', '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print" ] }', '1');
+INSERT INTO T_CORE_LES_UNIT("ID", "UNITNAME", "UNITCATEGORY", "BINDDS", "ICON", "ORDERNO", "AUDITTRAIL", "CONFIG", "ACTIVATEDFLAG") 
+VALUES (SEQ_CORE.NEXTVAL, '图片编辑器', 'imgEdit', '0', '/static/gikam/main/img/imgEdit.svg', '6', '0', '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print" ] }', '1');
+INSERT INTO T_CORE_LES_UNIT("ID", "UNITNAME", "UNITCATEGORY", "BINDDS", "ICON", "ORDERNO", "AUDITTRAIL", "CONFIG", "ACTIVATEDFLAG") 
+VALUES (SEQ_CORE.NEXTVAL, '图片上传', 'imgUpload', '0', '/static/gikam/main/img/imgUpload.svg', '7', '0', '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print" ] }', '1');
+INSERT INTO T_CORE_LES_UNIT("ID", "UNITNAME", "UNITCATEGORY", "BINDDS", "ICON", "ORDERNO", "AUDITTRAIL", "CONFIG", "ACTIVATEDFLAG") 
+VALUES (SEQ_CORE.NEXTVAL, '流程绘制', 'diagramDraw', '0', '/static/gikam/main/img/diagramDraw.svg', '8', '0', '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print" ] }', '1');
+INSERT INTO T_CORE_LES_UNIT("ID", "UNITNAME", "UNITCATEGORY", "BINDDS", "ICON", "ORDERNO", "AUDITTRAIL", "CONFIG", "ACTIVATEDFLAG") 
+VALUES (SEQ_CORE.NEXTVAL, '基础信息', 'baseInfo', '0', '/static/gikam/main/img/baseInfo.svg', '9', '0', '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print", "audit" ] }', '1');
+INSERT INTO T_CORE_LES_UNIT("ID", "UNITNAME", "UNITCATEGORY", "BINDDS", "ICON", "ORDERNO", "AUDITTRAIL", "CONFIG", "ACTIVATEDFLAG") 
+VALUES (SEQ_CORE.NEXTVAL, '查询列表', 'queryList', '1', '/static/gikam/main/img/queryList.svg', '10', '0', '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print" ] }', '1');
+
+CALL INSERTI18N('T_CORE_LES_DS_FIELD.ORDERNO', 'LES数据源字段的排序码', '排序码', 'zh-CN', '排序码');
+CALL INSERTI18N('T_CORE_LES_TEMPLATE_UNIT.CONFIG', 'LES模板组件配置', '组件配置', 'zh-CN', '组件配置');
+CALL INSERTI18N('T_CORE_LES_INSTANCE_UNIT.CONFIG', 'LES实例组件配置', '组件配置', 'zh-CN', '组件配置');
+UPDATE T_CORE_I18N SET CODE = 'T_CORE_LES_TEMPLATE_UNIT.UNITCATEGORY' WHERE CODE = 'T_CORE_LES_TEMPLATE_UNIT.TYPE';
+UPDATE T_CORE_I18N SET CODE = 'T_CORE_LES_INSTANCE_UNIT.UNITCATEGORY' WHERE CODE = 'T_CORE_LES_INSTANCE_UNIT.TYPE';
+COMMIT;
+-- ----------------------------- 2020-06-12 add by zhangpf------------end
+
+-- ----------------------------- 2020-06-13 add by zhangpf------------begin
+CALL INSERTI18N('CORE.MODULE.LES.LES_TEMPLATES.TIP.EXISTS_LOWER_VERSION_TEMPLATE_PROCESSSATUS_UNDONE', '存在较低版本未审核通过！', '存在较低版本未审核通过！', 'zh-CN', '存在较低版本未审核通过！');
+
+UPDATE T_CORE_LES_UNIT 
+  SET BINDDS = '1' 
+WHERE UNITCATEGORY = 'chapter';
+
+UPDATE T_CORE_LES_UNIT 
+  SET UNITNAME = '表格/表单'
+WHERE UNITCATEGORY = 'queryList';
+
+COMMIT;
+-- ----------------------------- 2020-06-13 add by zhangpf------------end
+
+-- ----------------------------- 2020-06-13 add by zhangpf------------begin
+ALTER TABLE "T_CORE_LES_TEMPLATE_UT" 
+MODIFY ("TYPE" VARCHAR2(36 BYTE) );
+
+ALTER TABLE "T_CORE_LES_TEMPLATE_UT" RENAME COLUMN "TYPE" TO "UNITCATEGORY";
+
+ALTER TABLE "T_CORE_LES_TEMPLATE_UT" 
+ADD ("CONFIG" CLOB );
+COMMENT ON COLUMN "T_CORE_LES_TEMPLATE_UT"."CONFIG" IS '组件配置';
+
+UPDATE T_CORE_I18N SET CODE = 'T_CORE_LES_TEMPLATE_UT.UNITCATEGORY' WHERE CODE = 'T_CORE_LES_TEMPLATE_UT.TYPE';
+CALL INSERTI18N('T_CORE_LES_TEMPLATE_UT.CONFIG', '组件配置', '组件配置', 'zh-CN', '组件配置');
+COMMIT;
+-- ----------------------------- 2020-06-13 add by zhangpf------------end
+
+-- ----------------------------- 2020-06-15 add by zhangpf------------begin
+DROP TABLE T_CORE_LES_UNIT;
+CREATE TABLE T_CORE_LES_UNIT( 
+    ID VARCHAR2(36) NOT NULL,
+    UNITNAME VARCHAR2(60)  NULL,
+    BINDDS VARCHAR2(1)  NULL,
+    ICON VARCHAR2(270)  NULL,
+    ORDERNO NUMBER NULL,
+    AUDITTRAIL VARCHAR2(1)  NULL,
+    CONFIG CLOB NULL,
+    CREATEDBYID VARCHAR2(36)  NULL,
+    CREATEDBYNAME VARCHAR2(60)  NULL,
+    CREATEDTIME DATE NULL,
+    CREATEDBYORGID VARCHAR2(36)  NULL,
+    CREATEDBYORGNAME VARCHAR2(270)  NULL,
+    ACTIVATEDFLAG VARCHAR2(1)  NULL,
+    ACTIVATEDBYID VARCHAR2(36)  NULL,
+    ACTIVATEDBYNAME VARCHAR2(60)  NULL,
+    ACTIVATEDTIME DATE NULL
+ );
+COMMENT ON TABLE T_CORE_LES_UNIT IS 'LES组件';
+COMMENT ON COLUMN T_CORE_LES_UNIT.ID IS '主键';
+COMMENT ON COLUMN T_CORE_LES_UNIT.UNITNAME IS '组件名称';
+COMMENT ON COLUMN T_CORE_LES_UNIT.BINDDS IS '是否绑定数据源（0-不绑定，1-绑定）';
+COMMENT ON COLUMN T_CORE_LES_UNIT.ICON IS '图标';
+COMMENT ON COLUMN T_CORE_LES_UNIT.ORDERNO IS '排序码';
+COMMENT ON COLUMN T_CORE_LES_UNIT.AUDITTRAIL IS '是否启用审计';
+COMMENT ON COLUMN T_CORE_LES_UNIT.CONFIG IS '配置';
+COMMENT ON COLUMN T_CORE_LES_UNIT.CREATEDBYID IS '制单人编码';
+COMMENT ON COLUMN T_CORE_LES_UNIT.CREATEDBYNAME IS '制单人名称';
+COMMENT ON COLUMN T_CORE_LES_UNIT.CREATEDTIME IS '制单时间';
+COMMENT ON COLUMN T_CORE_LES_UNIT.CREATEDBYORGID IS '制单人单位编码';
+COMMENT ON COLUMN T_CORE_LES_UNIT.CREATEDBYORGNAME IS '制单人单位名称';
+COMMENT ON COLUMN T_CORE_LES_UNIT.ACTIVATEDFLAG IS '启用标志';
+COMMENT ON COLUMN T_CORE_LES_UNIT.ACTIVATEDBYID IS '启用人编码';
+COMMENT ON COLUMN T_CORE_LES_UNIT.ACTIVATEDBYNAME IS '启用人名称';
+COMMENT ON COLUMN T_CORE_LES_UNIT.ACTIVATEDTIME IS '启用时间';
+
+INSERT INTO T_CORE_LES_UNIT("ID", "UNITNAME", "BINDDS", "ICON", "ORDERNO", "AUDITTRAIL", "CONFIG", "ACTIVATEDFLAG") 
+VALUES ('chapter', '章节', '1', '/static/gikam/main/img/chapter.svg', '1', '1', '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print", "upgrade", "downgrade" ] }', '1');
+INSERT INTO T_CORE_LES_UNIT("ID", "UNITNAME", "BINDDS", "ICON", "ORDERNO", "AUDITTRAIL", "CONFIG", "ACTIVATEDFLAG") 
+VALUES ('ckeditor', '富文本', '1', '/static/gikam/main/img/ckeditor.svg', '2', '1', '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print", "audit" ] }', '1');
+INSERT INTO T_CORE_LES_UNIT("ID", "UNITNAME", "BINDDS", "ICON", "ORDERNO", "AUDITTRAIL", "CONFIG", "ACTIVATEDFLAG") 
+VALUES ('chemDoodle', '分子式', '0', '/static/gikam/main/img/chemDoodle.svg', '3', '0', '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print" ] }', '1');
+INSERT INTO T_CORE_LES_UNIT("ID", "UNITNAME", "BINDDS", "ICON", "ORDERNO", "AUDITTRAIL", "CONFIG", "ACTIVATEDFLAG") 
+VALUES ('imgDraw', '图片绘制', '0', '/static/gikam/main/img/imgDraw.svg', '4', '0', '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print" ] }', '1');
+INSERT INTO T_CORE_LES_UNIT("ID", "UNITNAME", "BINDDS", "ICON", "ORDERNO", "AUDITTRAIL", "CONFIG", "ACTIVATEDFLAG") 
+VALUES ('spread', '表格', '0', '/static/gikam/main/img/spread.svg', '5', '0', '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print" ] }', '1');
+INSERT INTO T_CORE_LES_UNIT("ID", "UNITNAME", "BINDDS", "ICON", "ORDERNO", "AUDITTRAIL", "CONFIG", "ACTIVATEDFLAG") 
+VALUES ('imgEdit', '图片编辑器', '0', '/static/gikam/main/img/imgEdit.svg', '6', '0', '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print" ] }', '1');
+INSERT INTO T_CORE_LES_UNIT("ID", "UNITNAME", "BINDDS", "ICON", "ORDERNO", "AUDITTRAIL", "CONFIG", "ACTIVATEDFLAG") 
+VALUES ('imgUpload', '图片上传', '0', '/static/gikam/main/img/imgUpload.svg', '7', '0', '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print" ] }', '1');
+INSERT INTO T_CORE_LES_UNIT("ID", "UNITNAME", "BINDDS", "ICON", "ORDERNO", "AUDITTRAIL", "CONFIG", "ACTIVATEDFLAG") 
+VALUES ('diagramDraw', '流程绘制', '0', '/static/gikam/main/img/diagramDraw.svg', '8', '0', '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print" ] }', '1');
+INSERT INTO T_CORE_LES_UNIT("ID", "UNITNAME", "BINDDS", "ICON", "ORDERNO", "AUDITTRAIL", "CONFIG", "ACTIVATEDFLAG") 
+VALUES ('baseInfo', '基础信息', '0', '/static/gikam/main/img/baseInfo.svg', '9', '0', '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print", "audit" ] }', '1');
+INSERT INTO T_CORE_LES_UNIT("ID", "UNITNAME", "BINDDS", "ICON", "ORDERNO", "AUDITTRAIL", "CONFIG", "ACTIVATEDFLAG") 
+VALUES ('formOrQueryList', '表格/表单', '1', '/static/gikam/main/img/formOrQueryList.svg', '10', '0', '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print" ] }', '1');
+
+DELETE FROM T_CORE_I18N_MESSAGE 
+ WHERE I18NID = (SELECT N.ID FROM T_CORE_I18N N WHERE N.CODE = 'T_CORE_LES_UNIT.TYPE');
+DELETE FROM T_CORE_I18N WHERE CODE = 'T_CORE_LES_UNIT.TYPE';
+
+DELETE FROM T_CORE_I18N_MESSAGE 
+ WHERE I18NID = (SELECT N.ID FROM T_CORE_I18N N WHERE N.CODE = 'T_CORE_LES_UNIT.SVG');
+DELETE FROM T_CORE_I18N WHERE CODE = 'T_CORE_LES_UNIT.SVG'; 
+
+DELETE FROM T_CORE_I18N_MESSAGE 
+ WHERE I18NID = (SELECT N.ID FROM T_CORE_I18N N WHERE N.CODE = 'T_CORE_LES_UNIT.ENABLE');
+DELETE FROM T_CORE_I18N WHERE CODE = 'T_CORE_LES_UNIT.ENABLE'; 
+
+CALL INSERTI18N('T_CORE_LES_UNIT.ICON', 'LES组件图标', '组件图标', 'zh-CN', '组件图标');
+CALL INSERTI18N('T_CORE_LES_UNIT.AUDITTRAIL', 'LES组件是否开启审计跟踪', '是否开启审计跟踪', 'zh-CN', '是否开启审计跟踪');
+CALL INSERTI18N('T_CORE_LES_UNIT.CONFIG', 'LES组件配置', '组件配置', 'zh-CN', '组件配置');
+CALL INSERTI18N('T_CORE_LES_UNIT.ACTIVATEDFLAG', 'LES组件启用标志', '启用标志', 'zh-CN', '启用标志');
+CALL INSERTI18N('T_CORE_LES_UNIT.ACTIVATEDBYID', 'LES组件启用人编码', '启用人编码', 'zh-CN', '启用人编码');
+CALL INSERTI18N('T_CORE_LES_UNIT.ACTIVATEDBYNAME', 'LES组件启用人名称', '启用人名称', 'zh-CN', '启用人名称');
+CALL INSERTI18N('T_CORE_LES_UNIT.ACTIVATEDTIME', 'LES组件启用时间', '启用时间', 'zh-CN', '启用时间');
+
+UPDATE T_CORE_MENU SET HREF = '/secure/core/les/les-dses/page/edit-list' WHERE ID = '9602';
+UPDATE T_CORE_MENU SET HREF = '/secure/core/les/les-templates/page/edit-list' WHERE ID = '9604';
+UPDATE T_CORE_MENU SET HREF = '/secure/core/les/les-templates/page/audit-list' WHERE ID = '9605';
+
+COMMIT;
+-- ----------------------------- 2020-06-15 add by zhangpf------------end
+-- ----------------------------- 2020-06-16 add by zhangpf------------begin
+UPDATE T_CORE_ADMIN_CHOOSE_CONFIG 
+   SET URL = '/secure/core/les/les-templates/page/choose-list'
+ WHERE CATEGORY = 'les-template';
+ 
+ UPDATE T_CORE_ADMIN_CHOOSE_CONFIG 
+    SET URL = '/secure/core/les/les-dses/page/choose-list'
+  WHERE CATEGORY = 'core-les-ds';
+ 
+ COMMIT;
+-- ----------------------------- 2020-06-16 add by zhangpf------------end
+
+-- ----------------------------- 2020-06-18 add by zhangpf------------begin
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_LES_INSTANCE', '0', '1');
+
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_LES_INSTANCE_UNIT', '0', '1');
+
+INSERT INTO T_CORE_TABLE_HIERARCHY (ID, TABLENAME, MASTERTABLENAME, REFERCOLUMN)
+VALUES ('9604', 'T_CORE_LES_INSTANCE_UNIT', 'T_CORE_LES_INSTANCE', 'INSTANCEID');
+
+ COMMIT;
+-- ----------------------------- 2020-06-18 add by zhangpf------------end
+-- ----------------------------- 2020-07-02 add by zhangpf------------begin
+CALL INSERTI18N('CORE.MODULE.LES.LES_TEMPLATES.BUTTON.COPY','复制','复制','zh-CN','复制');
+CALL INSERTI18N('CORE.MODULE.LES.LES_TEMPLATES.MODEL.COPY','复制','复制','zh-CN','复制');
+
+UPDATE T_CORE_LES_UNIT 
+   SET CONFIG = '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print", "audit", "upgrade", "downgrade" ] }'
+ WHERE ID = 'chapter';
+ 
+UPDATE T_CORE_LES_UNIT 
+   SET CONFIG = '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print", "audit" ] }'
+ WHERE ID = 'chemDoodle';
+ 
+ UPDATE T_CORE_LES_UNIT 
+   SET CONFIG = '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print", "audit" ] }'
+ WHERE ID = 'imgDraw';
+ 
+UPDATE T_CORE_LES_UNIT 
+   SET CONFIG = '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print", "audit" ] }'
+ WHERE ID = 'spread';
+
+UPDATE T_CORE_LES_UNIT 
+   SET CONFIG = '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print", "audit" ] }'
+ WHERE ID = 'imgEdit';
+ 
+UPDATE T_CORE_LES_UNIT 
+   SET CONFIG = '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print", "audit" ] }'
+ WHERE ID = 'imgUpload';
+ 
+UPDATE T_CORE_LES_UNIT 
+   SET CONFIG = '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print", "audit" ] }'
+ WHERE ID = 'diagramDraw';
+
+UPDATE T_CORE_LES_UNIT 
+   SET CONFIG = '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print", "audit" ] }'
+ WHERE ID = 'formOrQueryList';
+
+COMMIT;
+-- ----------------------------- 2020-07-02 add by zhangpf------------end
+
+-- ----------------------------- 2020-09-02 add by shixw------------begin
+
+alter table T_CORE_LES_TEMPLATE add LESTEMPLATECATEGORY VARCHAR2(36);
+comment on column T_CORE_LES_TEMPLATE.LESTEMPLATECATEGORY is 'LES模板类型';
+
+CALL INSERTI18N('T_CORE_LES_TEMPLATE.LESTEMPLATECATEGORY', 'LES模板的模板类型', '类型', 'zh-CN', '类型');
+
+
+INSERT INTO T_CORE_CODE_CATEGORY(ID, CODECATEGORYNAME, CODECLASSID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME)
+    VALUES ('lesTemplateCategory', 'LES模板类型', 'biz', NULL, 1, NULL, NULL, NULL, NULL);
+
+INSERT INTO T_CORE_ADMIN_SELECT_CONFIG(ID, NAME, CATEGORY, URL, VALUEFIELD, TEXTFIELD)
+  VALUES(SEQ_CORE.NEXTVAL, 'LES模板类型', 'les-template-category', '/secure/core/module/sys/codes/queries/selectable?codeCategoryId=lesTemplateCategory', 'code', 'codeName');
+ 
+commit;
+
+-- ----------------------------- 2020-09-02 add by shixw------------end
+
+
+-- ----------------------------- 2020-10-19 add by shixw------------begin
+
+alter table T_CORE_LES_INSTANCE add READONLYFLAG VARCHAR2(1);
+comment on column T_CORE_LES_INSTANCE.READONLYFLAG is '只读标志';
+
+CALL INSERTI18N('T_CORE_LES_INSTANCE.READONLYFLAG', 'LES实例的只读标志', '只读标志', 'zh-CN', '只读标志');
+
+
+commit;
+
+-- ----------------------------- 2020-10-19 add by shixw------------end
+
+-- ----------------------------- 2020-10-19 add by shixw------------begin
+
+alter table T_CORE_LES_TEMPLATE_UNIT add EDITFLAG VARCHAR2(36);
+comment on column T_CORE_LES_TEMPLATE_UNIT.EDITFLAG is '编辑标志';
+
+CALL INSERTI18N('T_CORE_LES_TEMPLATE_UNIT.EDITFLAG', 'LES模板组件的编辑标志', '编辑标志', 'zh-CN', '编辑标志');
+
+
+alter table T_CORE_LES_INSTANCE_UNIT add EDITFLAG VARCHAR2(36);
+comment on column T_CORE_LES_INSTANCE_UNIT.EDITFLAG is '编辑标志';
+
+CALL INSERTI18N('T_CORE_LES_INSTANCE_UNIT.EDITFLAG', 'LES实例组件的编辑标志', '编辑标志', 'zh-CN', '编辑标志');
+
+commit;
+-- ----------------------------- 2020-10-19 add by shixw------------end
+
+-- ----------------------------- 2021-3-5 add by shixw------------begin
+
+alter table T_CORE_LES_INSTANCE add HTML CLOB;
+comment on column T_CORE_LES_INSTANCE.HTML is 'LES实例html内容';
+
+CALL INSERTI18N('T_CORE_LES_INSTANCE.HTML', 'LES的实例的html内容', 'LES实例html内容', 'zh-CN', 'LES实例html内容');
+
+
+-- ----------------------------- 2021-3-5 add by shixw------------end

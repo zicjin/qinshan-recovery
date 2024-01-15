@@ -2,6 +2,9 @@ package com.sunwayworld.emc.module.bp.io;
 
 import java.util.List;
 
+import com.sunwayworld.framework.io.file.FilePathDTO;
+import com.sunwayworld.framework.io.file.FilePathManager;
+import com.sunwayworld.module.item.file.utils.CoreFileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,28 +13,26 @@ import com.sunwayworld.emc.module.bp.bp.bean.EmcOrderTaskResultBean;
 import com.sunwayworld.emc.module.bp.bp.service.EmcOrderTaskResultService;
 import com.sunwayworld.framework.context.ApplicationContextHelper;
 import com.sunwayworld.framework.io.excel.ExcelHelper;
-import com.sunwayworld.framework.io.file.FileHelper;
-import com.sunwayworld.framework.io.file.FileRepresentation;
 import com.sunwayworld.module.item.file.bean.CoreFileBean;
-import com.sunwayworld.module.item.file.bean.ImportResultRepresentation;
-import com.sunwayworld.module.item.file.function.ImportFileFunction;
+import com.sunwayworld.module.item.file.bean.CoreFileImportResultDTO;
+import com.sunwayworld.module.item.file.function.CoreFileImportFunction;
 
 @Component(value = "emcOrderTaskResultImportFileFunction")
-public class EmcOrderTaskResultImportFileFunction implements ImportFileFunction {
+public class EmcOrderTaskResultImportFileFunction implements CoreFileImportFunction {
 
     @Autowired
     private EmcOrderTaskResultService orderTaskResultService;
 
     @Override
     @Transactional
-    public ImportResultRepresentation apply(CoreFileBean file) {
-        ImportResultRepresentation importResultRepresentation = new ImportResultRepresentation();
+    public CoreFileImportResultDTO apply(CoreFileBean file) {
+        CoreFileImportResultDTO fileImportResultDTO = new CoreFileImportResultDTO();
 
         try {
-            FileRepresentation fr = FileRepresentation.of(file);
+            FilePathDTO fr = CoreFileUtils.toFilePath(file);
 
             // 导入数据录入结果明细
-            List<EmcOrderTaskResultBean> EmcOrderTaskResultBeanList = ExcelHelper.readDataFromExcel(FileHelper.getAbsolutePath(fr).toString(), 1, 2, EmcOrderTaskResultBean.class);
+            List<EmcOrderTaskResultBean> EmcOrderTaskResultBeanList = ExcelHelper.readDataFromExcel(FilePathManager.getLocalPath(fr).toString(), 1, 2, EmcOrderTaskResultBean.class);
 
             // 获取主表id
             // String trainPlanId = file.getTargetId().split("\\$")[1];
@@ -50,14 +51,14 @@ public class EmcOrderTaskResultImportFileFunction implements ImportFileFunction 
             } else {
                 // 存在错误信息
                 String errorFileName = "数据录入结果明细导入错误信息.xls";
-                String url = ExcelHelper.writeImportFailureListAsExcel(FileHelper.getAbsolutePath(fr).toString(), EmcOrderTaskResultBeanList, 1, 2, errorFileName);
-                importResultRepresentation.setUrl(url);
+                FilePathDTO pathDTO = ExcelHelper.writeImportFailureListAsExcel(FilePathManager.getLocalPath(fr).toString(), EmcOrderTaskResultBeanList, 1, 2, errorFileName);
+                fileImportResultDTO.setUrl(FilePathManager.getUrl(pathDTO));
             }
-            return importResultRepresentation;
+            return fileImportResultDTO;
         } catch (Exception e) {
             e.printStackTrace();
-            importResultRepresentation.setMessage(e.getCause().getMessage());
-            return importResultRepresentation;
+            fileImportResultDTO.setMessage(e.getCause().getMessage());
+            return fileImportResultDTO;
         }
 
     }

@@ -1,0 +1,155 @@
+-- ----------------------------- 2020-12-14 add by yangxing--------------begin
+
+-- 建表语句
+CREATE TABlE DBO.T_CORE_AI_TEMPLATE(
+    ID BIGINT NOT NULL,
+    NAME VARCHAR(36)  NULL ,
+    PUBLISHTIME DATETIME NULL ,
+    MODIFYTIME DATETIME NULL ,
+    CATEGORY BIGINT NULL ,
+    PUBLISHEDFLAG BIGINT NULL ,
+    INFO TEXT NULL ,
+    PIC IMAGE NULL ,
+    PICNAME VARCHAR(36)  NULL ,
+    WIDTH BIGINT NULL ,
+    HEIGHT BIGINT NULL ,
+    CREATEDBYID VARCHAR(36)  NULL ,
+    CREATEDBYNAME VARCHAR(60)  NULL ,
+    CREATEDTIME DATETIME NULL ,
+    CREATEDBYORGID VARCHAR(36)  NULL ,
+    CREATEDBYORGNAME VARCHAR(270)  NULL ,
+    CONSTRAINT PK_CORE_AI_TEMPLATE PRIMARY KEY(ID));
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'模板表' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_AI_TEMPLATE';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'主键' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_AI_TEMPLATE', @level2type=N'COLUMN',@level2name=N'ID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'模板名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_AI_TEMPLATE', @level2type=N'COLUMN',@level2name=N'NAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'发布时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_AI_TEMPLATE', @level2type=N'COLUMN',@level2name=N'PUBLISHTIME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'修改时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_AI_TEMPLATE', @level2type=N'COLUMN',@level2name=N'MODIFYTIME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'模板类别' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_AI_TEMPLATE', @level2type=N'COLUMN',@level2name=N'CATEGORY';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'发布状态' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_AI_TEMPLATE', @level2type=N'COLUMN',@level2name=N'PUBLISHEDFLAG';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'模板信息' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_AI_TEMPLATE', @level2type=N'COLUMN',@level2name=N'INFO';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'模板图片' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_AI_TEMPLATE', @level2type=N'COLUMN',@level2name=N'PIC';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'图片名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_AI_TEMPLATE', @level2type=N'COLUMN',@level2name=N'PICNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'模板宽度' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_AI_TEMPLATE', @level2type=N'COLUMN',@level2name=N'WIDTH';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'模板高度' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_AI_TEMPLATE', @level2type=N'COLUMN',@level2name=N'HEIGHT';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_AI_TEMPLATE', @level2type=N'COLUMN',@level2name=N'CREATEDBYID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_AI_TEMPLATE', @level2type=N'COLUMN',@level2name=N'CREATEDBYNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_AI_TEMPLATE', @level2type=N'COLUMN',@level2name=N'CREATEDTIME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_AI_TEMPLATE', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_AI_TEMPLATE', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGNAME';
+
+EXEC  DBO.INSERTI18N  N'T_CORE_AI_TEMPLATE.SERVICE_NAME', N'模板表', N'模板', N'zh-CN',N'模板';
+EXEC  DBO.INSERTI18N  N'T_CORE_AI_TEMPLATE.ID', N'模板表的主键', N'模板ID', N'zh-CN',N'模板ID';
+EXEC  DBO.INSERTI18N  N'T_CORE_AI_TEMPLATE.NAME', N'模板表的模板名称', N'模板名称', N'zh-CN',N'模板名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_AI_TEMPLATE.PUBLISHTIME', N'模板表的发布时间', N'发布时间', N'zh-CN',N'发布时间';
+EXEC  DBO.INSERTI18N  N'T_CORE_AI_TEMPLATE.MODIFYTIME', N'模板表的修改时间', N'修改时间', N'zh-CN',N'修改时间';
+EXEC  DBO.INSERTI18N  N'T_CORE_AI_TEMPLATE.CATEGORY', N'模板表的模板类别', N'模板类别', N'zh-CN',N'模板类别';
+EXEC  DBO.INSERTI18N  N'T_CORE_AI_TEMPLATE.PUBLISHEDFLAG', N'模板表的发布状态', N'发布状态', N'zh-CN',N'发布状态';
+EXEC  DBO.INSERTI18N  N'T_CORE_AI_TEMPLATE.INFO', N'模板表的模板信息', N'模板信息', N'zh-CN',N'模板信息';
+EXEC  DBO.INSERTI18N  N'T_CORE_AI_TEMPLATE.PIC', N'模板表的模板图片', N'模板图片', N'zh-CN',N'模板图片';
+EXEC  DBO.INSERTI18N  N'T_CORE_AI_TEMPLATE.WIDTH', N'模板表的图片宽度', N'图片宽度', N'zh-CN', N'图片宽度';
+EXEC  DBO.INSERTI18N  N'T_CORE_AI_TEMPLATE.HEIGHT', N'模板表的图片高度', N'图片高度', N'zh-CN', N'图片高度';
+EXEC  DBO.INSERTI18N  N'T_CORE_AI_TEMPLATE.CREATEDBYID', N'模板表的制单人编码', N'制单人编码', N'zh-CN',N'制单人编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_AI_TEMPLATE.CREATEDBYNAME', N'模板表的制单人名称', N'制单人名称', N'zh-CN',N'制单人名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_AI_TEMPLATE.CREATEDTIME', N'模板表的制单时间', N'制单时间', N'zh-CN',N'制单时间';
+EXEC  DBO.INSERTI18N  N'T_CORE_AI_TEMPLATE.CREATEDBYORGID', N'模板表的制单人单位编码', N'制单人单位编码', N'zh-CN',N'制单人单位编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_AI_TEMPLATE.CREATEDBYORGNAME', N'模板表的制单人单位名称', N'制单人单位名称', N'zh-CN',N'制单人单位名称';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.AI.TEMPLATES.BUTTON.ADD_TEMPLATE', '创建模板', '创建模板', 'zh-CN', '创建模板';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.AI.TEMPLATES.TAB.PRESET_TEMPLATE', N'预置模板', N'预置模板', N'zh-CN', N'预置模板';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.AI.TEMPLATES.TAB.USER_DEFINED_TEMPLATE', N'自定义模板', N'自定义模板', N'zh-CN', N'自定义模板';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.AI.TEMPLATES.TIP.ACTION', N'操作', N'操作', N'zh-CN', N'操作';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.AI.TEMPLATES.BUTTON.SHOW_JSON', N'查看json', N'查看json', N'zh-CN', N'查看json';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.AI.TEMPLATES.BUTTON.TRY', N'试一试', N'试一试', N'zh-CN', N'试一试';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.AI.TEMPLATES.BUTTON.MODIFY', N'编辑', N'编辑', N'zh-CN', N'编辑';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.AI.TEMPLATES.BUTTON.DELETE', N'删除', N'删除', N'zh-CN', N'删除';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.AI.TEMPLATES.MODAL.TITLE.SHOW_PIC', N'预览图片', N'预览图片', N'zh-CN', N'预览图片';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.AI.TEMPLATES.MODAL.TITLE.SHOW_JSON', N'查看JSON', N'查看JSON', N'zh-CN', N'查看JSON';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.AI.TEMPLATES.TIP.PIC_NAME', N'图片名称', N'图片名称', N'zh-CN', N'图片名称';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.AI.TEMPLATES.BUTTON.UPLOAD_PIC', N'上传图片', N'上传图片', N'zh-CN', N'上传图片';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.AI.TEMPLATES.TIP.CAN_NOT_IDENTIFY_SELECT_AREA', N'框选区内未识别到内容，请修改或重新选区', N'框选区内未识别到内容，请修改或重新选区', N'zh-CN', N'框选区内未识别到内容，请修改或重新选区';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.AI.TEMPLATES.TIP.DO_NOT_SELECT_IN_MORE_THAN_ONE_ROW', N'请勿跨行选取参照字段（否则会导致模板匹配失败）', N'请勿跨行选取参照字段（否则会导致模板匹配失败）', N'zh-CN', N'请勿跨行选取参照字段（否则会导致模板匹配失败）';
+
+-- 创建菜单语句
+INSERT INTO T_CORE_MENU (ID, MENUNAME, HREF, PARENTID, ORDERNO, ICON, MENUINITNAME)
+VALUES ('83', 'OCR管理', NULL, NULL, '83', '035.svg', 'OCR管理');
+INSERT INTO T_CORE_MENU (ID, MENUNAME, HREF, PARENTID, ORDERNO, ICON, MENUINITNAME)
+VALUES ('8301', '模板管理', '/secure/core/module/ai/templates/page/edit-list', '83', '8301', '034.svg', '模板管理');
+
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_AI_TEMPLATE', '0', '0');
+
+
+-- ----------------------------- 2020-12-14 add by yangxing------------end
+
+-- ----------------------------- 2021-01-28 add by yangxing------------begin
+
+alter table dbo.T_CORE_AI_TEMPLATE drop column PUBLISHTIME
+GO
+alter table dbo.T_CORE_AI_TEMPLATE drop column PUBLISHEDFLAG
+GO
+alter table dbo.T_CORE_AI_TEMPLATE drop column CATEGORY
+GO
+alter table dbo.T_CORE_AI_TEMPLATE ADD ACTIVATEDFLAG VARCHAR(1) NULL
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'启用标志(0-未启用,1-启用)',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_AI_TEMPLATE',
+'COLUMN', N'ACTIVATEDFLAG'
+GO
+alter table dbo.T_CORE_AI_TEMPLATE ADD ACTIVATEDBYID VARCHAR(36) NULL
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'启用人ID',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_AI_TEMPLATE',
+'COLUMN', N'ACTIVATEDBYID'
+GO
+alter table dbo.T_CORE_AI_TEMPLATE ADD ACTIVATEDBYNAME VARCHAR(60) NULL
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'启用人名称',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_AI_TEMPLATE',
+'COLUMN', N'ACTIVATEDBYNAME'
+GO
+alter table dbo.T_CORE_AI_TEMPLATE ADD ACTIVATEDTIME DATETIME NULL
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'启用时间',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_AI_TEMPLATE',
+'COLUMN', N'ACTIVATEDTIME'
+GO
+
+
+-- ----------------------------- 2021-01-28 add by yangxing------------end
+
+-- ----------------------------- 2021-03-15 add by yangxing------------begin
+ALTER TABLE T_CORE_AI_TEMPLATE DROP COLUMN PIC;
+GO
+ALTER TABLE T_CORE_AI_TEMPLATE ADD PIC TEXT NULL;
+GO
+-- ----------------------------- 2021-03-15 add by yangxing------------end
+
+-- ----------------------------- 2021-03-17 add by yangxing------------begin
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.AI.TEMPLATES.TIP.FAIL_TO_SCAN_PLEASE_USE_SAMPLE_PIC_WITH_TEMPLATE', N'识别失败，请使用与模板相同参照区的图片', N'识别失败，请使用与模板相同参照区的图片', N'zh-CN', N'识别失败，请使用与模板相同参照区的图片';
+-- ----------------------------- 2021-03-17 add by yangxing------------end
+
+-- ----------------------------- 2021-3-31 add by shixw------------begin
+
+EXEC DBO.INSERTI18N N'T_CORE_AI_TEMPLATE.PICNAME', '模板表的图片名称', '图片名称', 'zh-CN', '图片名称';
+EXEC DBO.INSERTI18N N'T_CORE_AI_TEMPLATE.ACTIVATEDFLAG', '模板表的发布状态', '发布状态', 'zh-CN', '发布状态';
+EXEC DBO.INSERTI18N N'T_CORE_AI_TEMPLATE.ACTIVATEDBYID', '模板表的发布人编码', '发布人编码', 'zh-CN', '发布人编码';
+EXEC DBO.INSERTI18N N'T_CORE_AI_TEMPLATE.ACTIVATEDBYNAME', '模板表的发布人姓名', '发布人姓名', 'zh-CN', '发布人姓名';
+EXEC DBO.INSERTI18N N'T_CORE_AI_TEMPLATE.ACTIVATEDTIME', '模板表的发布时间', '发布时间', 'zh-CN', '发布时间';
+
+-- ----------------------------- 2021-3-31 add by shixw------------end
+
+-- ----------------------------- 2021-04-09 add by yangxing------------begin
+ALTER TABLE [dbo].[T_CORE_AI_TEMPLATE] ALTER COLUMN [PICNAME] VARCHAR(256) COLLATE Chinese_PRC_CI_AS NULL;
+GO
+-- ----------------------------- 2021-04-09 add by yangxing------------end

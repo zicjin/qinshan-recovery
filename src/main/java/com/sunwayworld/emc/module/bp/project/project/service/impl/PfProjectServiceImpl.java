@@ -21,6 +21,11 @@ import java.util.OptionalInt;
 import java.util.stream.Collectors;
 
 import com.alibaba.fastjson.JSON;
+import com.sunwayworld.cloud.module.fr.report.bean.CoreReportConfigLineBean;
+import com.sunwayworld.cloud.module.fr.report.service.CoreReportConfigLineService;
+import com.sunwayworld.framework.io.file.FilePathManager;
+import com.sunwayworld.framework.utils.*;
+import com.sunwayworld.module.item.file.utils.CoreFileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
@@ -29,8 +34,6 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.sunwayworld.cloud.gikam.fr.bean.report.CoreReportConfigLineBean;
-import com.sunwayworld.cloud.gikam.fr.service.report.CoreReportConfigLineService;
 import com.sunwayworld.emc.framework.constant.EmcBizConstant;
 import com.sunwayworld.emc.framework.constant.PfConstant;
 import com.sunwayworld.emc.framework.projectnode.ProjectNodeUtils;
@@ -109,8 +112,6 @@ import com.sunwayworld.framework.exception.FileException;
 import com.sunwayworld.framework.exception.UnsupportedException;
 import com.sunwayworld.framework.executor.ExecutorHelper;
 import com.sunwayworld.framework.http.HttpClientManager;
-import com.sunwayworld.framework.io.file.FileHelper;
-import com.sunwayworld.framework.io.file.FileRepresentation;
 import com.sunwayworld.framework.io.file.FileScope;
 import com.sunwayworld.framework.mail.MailHelper;
 import com.sunwayworld.framework.mybatis.mapper.MatchPattern;
@@ -119,12 +120,6 @@ import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;
 import com.sunwayworld.framework.security.bean.LoginUser;
 import com.sunwayworld.framework.spring.annotation.GikamBean;
 import com.sunwayworld.framework.support.auditable.bean.CoreBpmnParameterDTO;
-import com.sunwayworld.framework.utils.ArrayUtils;
-import com.sunwayworld.framework.utils.BeanUtils;
-import com.sunwayworld.framework.utils.CollectionUtils;
-import com.sunwayworld.framework.utils.NumberUtils;
-import com.sunwayworld.framework.utils.ObjectUtils;
-import com.sunwayworld.framework.utils.StringUtils;
 import com.sunwayworld.framework.validator.data.annotation.ValidateDataWith;
 import com.sunwayworld.module.item.file.bean.CoreFileBean;
 import com.sunwayworld.module.item.file.service.CoreFileService;
@@ -261,6 +256,7 @@ public class PfProjectServiceImpl extends EmcProjectServiceImpl implements PfPro
     private ErpOrderService erpOrderService;
 
     @Autowired
+    @Lazy
     private ErpContractOrderService erpContractOrderService;
 
     @Autowired
@@ -2756,7 +2752,7 @@ public class PfProjectServiceImpl extends EmcProjectServiceImpl implements PfPro
         EmcProjectBean project = wrapper.parseUnique(EmcProjectBean.class);
 
         String subject = String.join("", project.getProjNo(), project.getProjName(), "电子版报告已发，请查收!");
-        File[] files = coreFileList.stream().map(coreFile -> FileHelper.getAbsolutePath(FileRepresentation.of(coreFile)).toFile()).toArray(File[]::new);
+        File[] files = coreFileList.stream().map(coreFile -> FilePathManager.getLocalPath(CoreFileUtils.toFilePath(coreFile)).toFile()).toArray(File[]::new);
 
         // 是否为测试模式，测试模式下，不发送电子版报告到客户邮箱
         String enableCustomerMail = ApplicationContextHelper.getConstantValue("ENABLE_SEND_REPORT_CUSTOMER_MAIL");
@@ -3329,7 +3325,7 @@ public class PfProjectServiceImpl extends EmcProjectServiceImpl implements PfPro
      * 下载文件，并保存到指定目录下
      */
     protected File downloadFile(String url, String fileName) {
-        File tempFile = FileHelper.createTempFile(fileName, 0L);
+        File tempFile = FileUtils.createTempFile();
         if (StringUtils.startsWithIgnoreCase(url, "https://")) {
         	HttpClientManager.getInstance().download(url, tempFile);
         } else {

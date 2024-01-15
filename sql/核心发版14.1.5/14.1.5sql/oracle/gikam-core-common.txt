@@ -1,0 +1,318 @@
+-- ----------------------------- 2023-06-13 add by liuxia------------begin
+alter table T_CORE_MENU add PUBLISHUSERNAME VARCHAR2(60);
+comment on column T_CORE_MENU.PUBLISHUSERNAME is '发布用户姓名';
+alter table T_CORE_MENU add PUBLISHUSERID VARCHAR2(36);
+comment on column T_CORE_MENU.PUBLISHUSERID is '发布用户ID';
+alter table T_CORE_MENU add PUBLISHTIME DATE;
+comment on column T_CORE_MENU.PUBLISHTIME is '发布时间';
+-- ----------------------------- 2023-06-13 add by liuxia------------end
+-- ----------------------------- 2023-07-11 add by shixw------------begin
+
+ALTER TABLE T_CORE_LOG MODIFY LOGINIP VARCHAR2(60);
+ALTER TABLE T_CORE_LOGIN_LOG MODIFY LOGINIP VARCHAR2(60);
+
+-- ----------------------------- 2023-07-11 add by shixw------------end
+
+-- ----------------------------- 2023-07-13 add by zhanghang------------begin
+alter table T_CORE_SYSTEM_CONFIG add LICENSEINFO VARCHAR2(1);
+comment on column T_CORE_SYSTEM_CONFIG.LICENSEINFO is '关于系统显示License信息';
+
+CALL INSERTI18N('T_CORE_SYSTEM_CONFIG.LICENSEINFO','关于系统显示License信息','关于系统显示License信息','zh-CN','关于系统显示License信息');
+
+COMMIT;
+-- ----------------------------- 2023-07-13 add by zhanghang------------end
+
+-- ----------------------------- 2023-07-20 add by yangsz------------begin
+alter table T_CORE_TODO_CONFIG add LCDPSERVICEMETHOD VARCHAR2(512);
+comment on column T_CORE_TODO_CONFIG.LCDPSERVICEMETHOD is '调用待办数据的低代码方法（参数必需是RestJsonWrapperBean，可以为空）';
+
+CALL INSERTI18N('T_CORE_TODO_CONFIG.LCDPSERVICEMETHOD','查询待办的低代码方法','查询待办的低代码方法','zh-CN','查询待办的低代码方法');
+
+COMMIT;
+-- ----------------------------- 2023-07-20 add by yangsz------------end
+
+
+-- ----------------------------- 2023-08-02 add by zhanghang--------------begin
+CALL INSERTI18N('GIKAM.BPMN.TIP.SELECT_BY_SQL_MISSING_PARAMETER', '工作流的通过SQL选取中缺失参数', '选取SQL({0})中参数({1})未提供', 'zh-CN', '选取SQL({0})中参数({1})未提供');
+CALL INSERTI18N('GIKAM.BPMN.TIP.FILTER_BY_SQL_MISSING_PARAMETER', '工作流的通过SQL过滤中缺失参数', '过滤SQL({0})中参数({1})未提供', 'zh-CN', '过滤SQL({0})中参数({1})未提供');
+COMMIT;
+-- ----------------------------- 2023-08-02 add by zhanghang--------------end
+
+-- ----------------------------- 2023-08-04 add by shixw--------------begin
+
+-- 建表语句
+CREATE TABLE T_CORE_IMPORT_TMPL(
+    ID NUMBER NOT NULL,
+    TMPLCODE VARCHAR2(36)  NULL,
+    TMPLNAME VARCHAR2(60)  NULL,
+    TABLENAME VARCHAR2(60)  NULL,
+    STARTROWINDEX NUMBER NULL,
+    CREATEDBYID VARCHAR2(36)  NULL,
+    CREATEDBYNAME VARCHAR2(60)  NULL,
+    CREATEDTIME DATE NULL,
+    CREATEDBYORGID VARCHAR2(36)  NULL,
+    CREATEDBYORGNAME VARCHAR2(270)  NULL
+ );
+COMMENT ON TABLE T_CORE_IMPORT_TMPL IS '导入模版';
+COMMENT ON COLUMN T_CORE_IMPORT_TMPL.ID IS '主键';
+COMMENT ON COLUMN T_CORE_IMPORT_TMPL.TMPLCODE IS '模版编码';
+COMMENT ON COLUMN T_CORE_IMPORT_TMPL.TMPLNAME IS '模版名称';
+COMMENT ON COLUMN T_CORE_IMPORT_TMPL.TABLENAME IS '关联表';
+COMMENT ON COLUMN T_CORE_IMPORT_TMPL.STARTROWINDEX IS '开始导入行序号';
+COMMENT ON COLUMN T_CORE_IMPORT_TMPL.CREATEDBYID IS '制单人编码';
+COMMENT ON COLUMN T_CORE_IMPORT_TMPL.CREATEDBYNAME IS '制单人名称';
+COMMENT ON COLUMN T_CORE_IMPORT_TMPL.CREATEDTIME IS '制单时间';
+COMMENT ON COLUMN T_CORE_IMPORT_TMPL.CREATEDBYORGID IS '制单人单位编码';
+COMMENT ON COLUMN T_CORE_IMPORT_TMPL.CREATEDBYORGNAME IS '制单人单位名称';
+
+ALTER TABLE T_CORE_IMPORT_TMPL ADD CONSTRAINT PK_CORE_IMPORT_TMPL PRIMARY KEY (ID);
+
+CREATE TABLE T_CORE_IMPORT_TMPL_CONFIG(
+    ID NUMBER NOT NULL,
+    IMPORTTMPLID NUMBER NULL,
+    EXCELCOLUMNNO NUMBER NULL,
+    EXCELCOLUMN VARCHAR2(36)  NULL,
+    DBFIELD VARCHAR2(60)  NULL,
+    FIELDTYPE VARCHAR2(36)  NULL,
+    DATASOURCE VARCHAR2(36)  NULL,
+    DEFAULTVALUE VARCHAR2(60)  NULL,
+    REMARK VARCHAR2(60)  NULL,
+    CREATEDBYID VARCHAR2(36)  NULL,
+    CREATEDBYNAME VARCHAR2(60)  NULL,
+    CREATEDTIME DATE NULL,
+    CREATEDBYORGID VARCHAR2(36)  NULL,
+    CREATEDBYORGNAME VARCHAR2(270)  NULL
+ );
+COMMENT ON TABLE T_CORE_IMPORT_TMPL_CONFIG IS '导入模板配置';
+COMMENT ON COLUMN T_CORE_IMPORT_TMPL_CONFIG.ID IS '主键';
+COMMENT ON COLUMN T_CORE_IMPORT_TMPL_CONFIG.IMPORTTMPLID IS '导入模版ID';
+COMMENT ON COLUMN T_CORE_IMPORT_TMPL_CONFIG.EXCELCOLUMNNO IS 'EXCEL列序号';
+COMMENT ON COLUMN T_CORE_IMPORT_TMPL_CONFIG.EXCELCOLUMN IS 'EXCEL列名称';
+COMMENT ON COLUMN T_CORE_IMPORT_TMPL_CONFIG.DBFIELD IS '数据库字段';
+COMMENT ON COLUMN T_CORE_IMPORT_TMPL_CONFIG.FIELDTYPE IS '字段类型';
+COMMENT ON COLUMN T_CORE_IMPORT_TMPL_CONFIG.DATASOURCE IS '数据源';
+COMMENT ON COLUMN T_CORE_IMPORT_TMPL_CONFIG.DEFAULTVALUE IS '默认值';
+COMMENT ON COLUMN T_CORE_IMPORT_TMPL_CONFIG.REMARK IS '备注';
+COMMENT ON COLUMN T_CORE_IMPORT_TMPL_CONFIG.CREATEDBYID IS '制单人编码';
+COMMENT ON COLUMN T_CORE_IMPORT_TMPL_CONFIG.CREATEDBYNAME IS '制单人名称';
+COMMENT ON COLUMN T_CORE_IMPORT_TMPL_CONFIG.CREATEDTIME IS '制单时间';
+COMMENT ON COLUMN T_CORE_IMPORT_TMPL_CONFIG.CREATEDBYORGID IS '制单人单位编码';
+COMMENT ON COLUMN T_CORE_IMPORT_TMPL_CONFIG.CREATEDBYORGNAME IS '制单人单位名称';
+
+ALTER TABLE T_CORE_IMPORT_TMPL_CONFIG ADD CONSTRAINT PK_CORE_IMPORT_TMPL_CONFIG PRIMARY KEY (ID);
+
+CREATE INDEX IDX_CIT_CONFIG_IMPORTTMPLID ON T_CORE_IMPORT_TMPL_CONFIG (IMPORTTMPLID);
+
+CALL INSERTI18N('T_CORE_IMPORT_TMPL.SERVICE_NAME', '导入模版', '导入模版', 'zh-CN', '导入模版');
+CALL INSERTI18N('T_CORE_IMPORT_TMPL.ID', '导入模版的主键', '主键', 'zh-CN', '主键');
+CALL INSERTI18N('T_CORE_IMPORT_TMPL.TMPLCODE', '导入模版的模版编码', '模版编码', 'zh-CN', '模版编码');
+CALL INSERTI18N('T_CORE_IMPORT_TMPL.TMPLNAME', '导入模版的模版名称', '模版名称', 'zh-CN', '模版名称');
+CALL INSERTI18N('T_CORE_IMPORT_TMPL.TABLENAME', '导入模版的关联表', '关联表', 'zh-CN', '关联表');
+CALL INSERTI18N('T_CORE_IMPORT_TMPL.STARTROWINDEX', '导入模版的开始导入行序号', '开始导入行序号', 'zh-CN', '开始导入行序号');
+CALL INSERTI18N('T_CORE_IMPORT_TMPL.CREATEDBYID', '导入模版的制单人编码', '制单人编码', 'zh-CN', '制单人编码');
+CALL INSERTI18N('T_CORE_IMPORT_TMPL.CREATEDBYNAME', '导入模版的制单人名称', '制单人名称', 'zh-CN', '制单人名称');
+CALL INSERTI18N('T_CORE_IMPORT_TMPL.CREATEDTIME', '导入模版的制单时间', '制单时间', 'zh-CN', '制单时间');
+CALL INSERTI18N('T_CORE_IMPORT_TMPL.CREATEDBYORGID', '导入模版的制单人单位编码', '制单人单位编码', 'zh-CN', '制单人单位编码');
+CALL INSERTI18N('T_CORE_IMPORT_TMPL.CREATEDBYORGNAME', '导入模版的制单人单位名称', '制单人单位名称', 'zh-CN', '制单人单位名称');
+CALL INSERTI18N('T_CORE_IMPORT_TMPL_CONFIG.SERVICE_NAME', '导入模板配置', '导入模板配置', 'zh-CN', '导入模板配置');
+CALL INSERTI18N('T_CORE_IMPORT_TMPL_CONFIG.ID', '导入模板配置的主键', '主键', 'zh-CN', '主键');
+CALL INSERTI18N('T_CORE_IMPORT_TMPL_CONFIG.IMPORTTMPLID', '导入模板配置的导入模版ID', '导入模版ID', 'zh-CN', '导入模版ID');
+CALL INSERTI18N('T_CORE_IMPORT_TMPL_CONFIG.EXCELCOLUMNNO', '导入模板配置的EXCEL列序号', 'EXCEL列序号', 'zh-CN', 'EXCEL列序号');
+CALL INSERTI18N('T_CORE_IMPORT_TMPL_CONFIG.EXCELCOLUMN', '导入模板配置的EXCEL列名称', 'EXCEL列名称', 'zh-CN', 'EXCEL列名称');
+CALL INSERTI18N('T_CORE_IMPORT_TMPL_CONFIG.DBFIELD', '导入模板配置的数据库字段', '数据库字段', 'zh-CN', '数据库字段');
+CALL INSERTI18N('T_CORE_IMPORT_TMPL_CONFIG.FIELDTYPE', '导入模板配置的字段类型', '字段类型', 'zh-CN', '字段类型');
+CALL INSERTI18N('T_CORE_IMPORT_TMPL_CONFIG.DATASOURCE', '导入模板配置的数据源', '数据源', 'zh-CN', '数据源');
+CALL INSERTI18N('T_CORE_IMPORT_TMPL_CONFIG.DEFAULTVALUE', '导入模板配置的默认值', '默认值', 'zh-CN', '默认值');
+CALL INSERTI18N('T_CORE_IMPORT_TMPL_CONFIG.REMARK', '导入模板配置的备注', '备注', 'zh-CN', '备注');
+CALL INSERTI18N('T_CORE_IMPORT_TMPL_CONFIG.CREATEDBYID', '导入模板配置的制单人编码', '制单人编码', 'zh-CN', '制单人编码');
+CALL INSERTI18N('T_CORE_IMPORT_TMPL_CONFIG.CREATEDBYNAME', '导入模板配置的制单人名称', '制单人名称', 'zh-CN', '制单人名称');
+CALL INSERTI18N('T_CORE_IMPORT_TMPL_CONFIG.CREATEDTIME', '导入模板配置的制单时间', '制单时间', 'zh-CN', '制单时间');
+CALL INSERTI18N('T_CORE_IMPORT_TMPL_CONFIG.CREATEDBYORGID', '导入模板配置的制单人单位编码', '制单人单位编码', 'zh-CN', '制单人单位编码');
+CALL INSERTI18N('T_CORE_IMPORT_TMPL_CONFIG.CREATEDBYORGNAME', '导入模板配置的制单人单位名称', '制单人单位名称', 'zh-CN', '制单人单位名称');
+CALL INSERTI18N('CORE.MODULE.ITEM.IMPORTTMPLS.MODAL.ADD', '新增', '新增', 'zh-CN', '新增');
+CALL INSERTI18N('CORE.MODULE.ITEM.IMPORTTMPLS.TAB.TMPL_CONFIG', '导入模板配置', '导入模板配置', 'zh-CN', '导入模板配置');
+CALL INSERTI18N('CORE.MODULE.ITEM.IMPORTTMPLS.BUTTON.TMPL_OPERATE', '模板操作', '模板操作', 'zh-CN', '模板操作');
+CALL INSERTI18N('CORE.MODULE.ITEM.IMPORTTMPLS.BUTTON.UPLOAD_TMPL', '上传模板', '上传模板', 'zh-CN', '上传模板');
+CALL INSERTI18N('CORE.MODULE.ITEM.IMPORTTMPLS.BUTTON.DOWNLOAD_TMPL', '下载模板', '下载模板', 'zh-CN', '下载模板');
+CALL INSERTI18N('CORE.MODULE.ITEM.IMPORTTMPLS.BUTTON.INIT', '初始化', '初始化', 'zh-CN', '初始化');
+CALL INSERTI18N('CORE.MODULE.ITEM.IMPORTTMPLS.TIP.IMPORT_SUCCSS', '导入成功', '导入成功', 'zh-CN', '导入成功');
+CALL INSERTI18N('CORE.MODULE.ITEM.IMPORTTMPLS.TIP.ATTACHMENT_EXISTS', '存在模版文件，是否覆盖', '存在模版文件，是否覆盖', 'zh-CN', '存在模版文件，是否覆盖');
+CALL INSERTI18N('CORE.MODULE.ITEM.IMPORTTMPLS.TIP.CHOOSE_TABLE', '请先选择关联表', '请先选择关联表', 'zh-CN', '请先选择关联表');
+CALL INSERTI18N('CORE.MODULE.ITEM.IMPORTTMPLS.TIP.NO_FILE', '当前选择数据未上传模版文件', '当前选择数据未上传模版文件', 'zh-CN', '当前选择数据未上传模版文件');
+
+-- 创建菜单语句
+INSERT INTO T_CORE_MENU (ID, MENUNAME, HREF, PARENTID, ORDERNO, ICON, MENUINITNAME)
+VALUES ('9375', '导入模版维护', '/secure/core/module/item/import-tmpls/page/edit-list', '93', '9375', '041.svg', '导入模版维护');
+
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_IMPORT_TMPL', '0', '1');
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_IMPORT_TMPL_CONFIG', '0', '0');
+
+INSERT INTO T_CORE_TABLE_HIERARCHY (ID, TABLENAME, MASTERTABLENAME, REFERCOLUMN)
+VALUES ('937501','T_CORE_IMPORT_TMPL_CONFIG', 'T_CORE_IMPORT_TMPL', 'IMPORTTMPLID');
+
+INSERT INTO T_CORE_CODE_CATEGORY(ID, CODECATEGORYNAME, CODECLASSID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME)
+    VALUES ('importTmplFieldType', '导入模版字段类型', 'biz', NULL, 1, NULL, NULL, NULL, NULL);
+
+INSERT INTO T_CORE_CODE(ID, CODE, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME)
+    VALUES (SEQ_CORE.NEXTVAL, 'string', '字符串', 'importTmplFieldType', NULL, 1, 0, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL);
+INSERT INTO T_CORE_CODE(ID, CODE, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME)
+    VALUES (SEQ_CORE.NEXTVAL, 'select', '下拉框', 'importTmplFieldType', NULL, 2, 0, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL);
+INSERT INTO T_CORE_CODE(ID, CODE, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME)
+    VALUES (SEQ_CORE.NEXTVAL, 'date', '日期', 'importTmplFieldType', NULL, 3, 0, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL);
+
+
+
+INSERT INTO T_CORE_ADMIN_SELECT_CONFIG(ID, NAME, CATEGORY, URL, VALUEFIELD, TEXTFIELD)
+  VALUES(SEQ_CORE.NEXTVAL, '导入模版字段类型', 'importTmplFieldType', '/secure/core/module/sys/codes/queries/selectable?codeCategoryId=importTmplFieldType', 'code', 'codeName');
+
+INSERT INTO T_CORE_ADMIN_SELECT_CONFIG(ID, NAME, CATEGORY, URL, VALUEFIELD, TEXTFIELD)
+  VALUES(SEQ_CORE.NEXTVAL, '表字段', 'table-field', '/secure/core/module/lcdp/tables/fields/queries/selectable', 'fieldName', 'fieldName');
+
+
+COMMIT;
+
+-- ----------------------------- 2023-08-04 add by shixw------------end
+
+-- ----------------------------- 2023-08-04 add by zhangjr------------begin
+create table T_CORE_ADMIN_TENANT
+(
+  id                  VARCHAR2(32) not null,
+  tenantname          VARCHAR2(128),
+  url                 VARCHAR2(512),
+  username            VARCHAR2(64),
+  password            VARCHAR2(96),
+  activatedflag       VARCHAR2(1),
+  activatedbyid       VARCHAR2(32),
+  activatedbyname     VARCHAR2(64),
+  activatedtime       DATE
+);
+-- Add comments to the table
+comment on table T_CORE_ADMIN_TENANT
+  is '租户配置表';
+-- Add comments to the columns
+comment on column T_CORE_ADMIN_TENANT.id
+  is '主键';
+comment on column T_CORE_ADMIN_TENANT.tenantname
+  is '租户名称';
+comment on column T_CORE_ADMIN_TENANT.url
+  is '数据库地址';
+comment on column T_CORE_ADMIN_TENANT.username
+  is '数据库用户名';
+comment on column T_CORE_ADMIN_TENANT.password
+  is '数据库密码';
+comment on column T_CORE_ADMIN_TENANT.activatedflag
+  is '启用标志';
+comment on column T_CORE_ADMIN_TENANT.activatedbyid
+  is '启用人ID';
+comment on column T_CORE_ADMIN_TENANT.activatedbyname
+  is '启用人名称';
+comment on column T_CORE_ADMIN_TENANT.activatedtime
+  is '启用时间';
+-- Create/Recreate primary, unique and foreign key constraints
+alter table T_CORE_ADMIN_TENANT
+  add constraint PK_TCAT_ID primary key (ID);
+
+create table T_CORE_ADMIN_TENANT_USER
+(
+  id                  NUMBER not null,
+  tenantid            VARCHAR2(32),
+  userid              VARCHAR2(32)
+);
+-- Add comments to the table
+comment on table T_CORE_ADMIN_TENANT_USER
+  is '租户分配用户表';
+-- Add comments to the columns
+comment on column T_CORE_ADMIN_TENANT_USER.id
+  is '主键';
+comment on column T_CORE_ADMIN_TENANT_USER.tenantid
+  is '租户主键';
+comment on column T_CORE_ADMIN_TENANT_USER.userid
+  is '用户编码';
+
+-- Create/Recreate primary, unique and foreign key constraints
+alter table T_CORE_ADMIN_TENANT_USER
+  add constraint PK_TCATU_ID primary key (ID);
+
+CREATE INDEX IDX_TCATU_USERID ON T_CORE_ADMIN_TENANT_USER (USERID);
+
+INSERT INTO T_CORE_ADMIN_MENU(ID, MENUNAME, MENUICON, HREF, PARENTID, ORDERNO)
+VALUES ('101080', '租户配置', '049.svg', '/secure/core/module/admin/tenants/page/edit-list', '1010', '101080');
+COMMIT;
+
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_ADMIN_TENANT', '0', '0');
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_ADMIN_TENANT_USER', '0', '0');
+INSERT INTO t_core_table_hierarchy (ID, TABLENAME, MASTERTABLENAME, REFERCOLUMN)
+VALUES (SEQ_CORE.NEXTVAL, 'T_CORE_ADMIN_TENANT_USER', 'T_CORE_ADMIN_TENANT', 'TENANTID');
+COMMIT;
+
+CALL INSERTI18N('CORE.MODULE.ADMIN.TENANTS.MODAL.ADD', '租户配置新增租户', '新增租户', 'zh-CN', '新增租户');
+CALL INSERTI18N('CORE.MODULE.ADMIN.TENANTS.TAB.BASE_INFO', '租户配置租户详情', '租户详情', 'zh-CN', '租户详情');
+CALL INSERTI18N('CORE.MODULE.ADMIN.TENANTS.TAB.USER', '租户配置的分配用户', '分配用户', 'zh-CN', '分配用户');
+
+-- ----------------------------- 2023-08-04 add by zhangjr------------end
+
+-- ----------------------------- 2023-08-08 add by zhanghang------------begin
+alter table T_CORE_NOTIFICATION_INST add PARAM CLOB;
+comment on column T_CORE_NOTIFICATION_INST.PARAM is '消息参数';
+
+CALL INSERTI18N('T_CORE_NOTIFICATION_INST.PARAM','消息参数','消息参数','zh-CN','消息参数');
+
+COMMIT;
+-- ----------------------------- 2023-08-08 add by zhanghang------------end
+
+-- ----------------------------- 2023-08-08 add by shixw------------begin
+
+
+alter table T_CORE_TODO_CONFIG add MOBILESELECTSQL CLOB;
+comment on column T_CORE_TODO_CONFIG.MOBILESELECTSQL is '移动端待办SQL';
+
+CALL INSERTI18N('T_CORE_TODO_CONFIG.MOBILESELECTSQL','移动端待办SQL','移动端待办SQL','zh-CN','移动端待办SQL');
+
+
+COMMIT;
+
+-- ----------------------------- 2023-08-08 add by shixw------------end
+
+-- ----------------------------- 2023-08-09 add by shixw------------begin
+
+CALL INSERTI18N('T_CORE_IMPORT_TMPL.FILENAME','模版文件','模版文件','zh-CN','模版文件');
+
+UPDATE T_CORE_ADMIN_CHOOSE_CONFIG SET TITLE = '数据库表',NAME= '数据库表', WIDTH = '30%' WHERE CATEGORY  = 'lcdp-table';
+
+
+COMMIT;
+
+-- ----------------------------- 2023-08-09 add by shixw------------end
+
+-- ----------------------------- 2023-08-09 add by zhanghang--------------begin
+CALL INSERTI18N('T_CORE_ADMIN_TENANT.SERVICE_NAME', '租户配置表', '租户配置表', 'zh-CN', '租户配置表');
+CALL INSERTI18N('T_CORE_ADMIN_TENANT.ID', '租户配置表的主键', '主键', 'zh-CN', '主键');
+CALL INSERTI18N('T_CORE_ADMIN_TENANT.TENANTNAME', '租户配置表的租户名称', '租户名称', 'zh-CN', '租户名称');
+CALL INSERTI18N('T_CORE_ADMIN_TENANT.URL', '租户配置表的数据库地址', '数据库地址', 'zh-CN', '数据库地址');
+CALL INSERTI18N('T_CORE_ADMIN_TENANT.USERNAME', '租户配置表的数据库用户名', '数据库用户名', 'zh-CN', '数据库用户名');
+CALL INSERTI18N('T_CORE_ADMIN_TENANT.PASSWORD', '租户配置表的数据库密码', '数据库密码', 'zh-CN', '数据库密码');
+CALL INSERTI18N('T_CORE_ADMIN_TENANT.ACTIVATEDFLAG', '租户配置表的启用标志', '启用标志', 'zh-CN', '启用标志');
+CALL INSERTI18N('T_CORE_ADMIN_TENANT.ACTIVATEDBYID', '租户配置表的启用人编码', '启用人编码', 'zh-CN', '启用人编码');
+CALL INSERTI18N('T_CORE_ADMIN_TENANT.ACTIVATEDBYNAME', '租户配置表的制单启用人名称', '制单启用人名称', 'zh-CN', '制单启用人名称');
+CALL INSERTI18N('T_CORE_ADMIN_TENANT.ACTIVATEDTIME', '租户配置表的启用时间', '启用时间', 'zh-CN', '启用时间');
+
+COMMIT;
+-- ----------------------------- 2023-08-09 add by zhanghang------------end
+
+-- ----------------------------- 2023-08-23 add by yiy------------begin
+CALL INSERTI18N('CORE.MODULE.ITEM.IMPORTTMPLS.TIP.INVALID_DATA', '数据格式错误', '数据格式错误', 'zh-CN', '数据格式错误');
+
+COMMIT;
+-- ----------------------------- 2023-08-23 add by yiy------------end
+
+-- ----------------------------- 2023-08-29 add by yiy------------begin
+CALL INSERTI18N('CORE.MODULE.ITEM.IMPORTTMPLS.TIP.CODE_REQUIRED', '导入模板维护的模版编码不能为空', '模版编码不能为空', 'zh-CN', '模版编码不能为空');
+CALL INSERTI18N('CORE.MODULE.ITEM.IMPORTTMPLS.TIP.CODE_NOT_EXISTED', '导入模板维护的模版编码不存在', '模版编码不存在', 'zh-CN', '模版编码不存在');
+UPDATE T_CORE_ADMIN_CHOOSE_CONFIG SET TITLE = '选择表',NAME= '选择表', WIDTH = '50%' WHERE CATEGORY  = 'lcdp-table';
+
+COMMIT;
+-- ----------------------------- 2023-08-29 add by yiy------------end

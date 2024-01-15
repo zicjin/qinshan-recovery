@@ -1,0 +1,15 @@
+-- ----------------------------- 2021-3-5 add by shixw------------begin
+
+alter table dbo.T_CORE_LES_INSTANCE ADD HTML TEXT NULL
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'LES实例html内容',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_LES_INSTANCE',
+'COLUMN', N'HTML'
+GO
+
+EXEC DBO.INSERTI18N  N'T_CORE_LES_INSTANCE.HTML', N'LES的实例的html内容', N'LES实例html内容', N'zh-CN',N'LES实例html内容';
+
+-- ----------------------------- 2021-3-5 add by shixw------------end

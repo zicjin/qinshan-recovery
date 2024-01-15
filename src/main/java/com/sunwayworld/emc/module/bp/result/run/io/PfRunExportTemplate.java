@@ -15,6 +15,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import com.sunwayworld.framework.support.base.service.GenericTemplateService;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFClientAnchor;
@@ -45,14 +46,13 @@ import com.sunwayworld.framework.mybatis.mapper.SearchFilter;
 import com.sunwayworld.framework.spring.annotation.GikamBean;
 import com.sunwayworld.framework.utils.NumberUtils;
 import com.sunwayworld.framework.utils.ObjectUtils;
-import com.sunwayworld.module.item.file.export.GenericExportTemplate;
 
 /**
  * @author zhengxy@sunwayworld.com
  */
 @Component(value = "pfRunExportTemplate")
 @GikamBean
-public class PfRunExportTemplate extends EmcRunExportTemplate implements GenericExportTemplate<String> {
+public class PfRunExportTemplate extends EmcRunExportTemplate implements GenericTemplateService<String> {
 
     /** 唯一性标识，重复数+分析项+测试名 */
     private static final String UNIQUE_KEYWORD = "%d$%s$%s";

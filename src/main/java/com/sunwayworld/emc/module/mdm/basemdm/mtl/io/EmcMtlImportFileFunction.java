@@ -8,6 +8,9 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import com.sunwayworld.framework.io.file.FilePathDTO;
+import com.sunwayworld.framework.io.file.FilePathManager;
+import com.sunwayworld.module.item.file.utils.CoreFileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,18 +24,16 @@ import com.sunwayworld.emc.module.mdm.basemdm.mtlcategory.bean.EmcMtlCategoryBea
 import com.sunwayworld.emc.module.mdm.basemdm.mtlcategory.service.EmcMtlCategoryService;
 import com.sunwayworld.framework.context.ApplicationContextHelper;
 import com.sunwayworld.framework.io.excel.ExcelHelper;
-import com.sunwayworld.framework.io.file.FileHelper;
-import com.sunwayworld.framework.io.file.FileRepresentation;
 import com.sunwayworld.framework.spring.annotation.GikamBean;
 import com.sunwayworld.framework.utils.BeanUtils;
 import com.sunwayworld.framework.utils.StringUtils;
 import com.sunwayworld.module.item.file.bean.CoreFileBean;
-import com.sunwayworld.module.item.file.bean.ImportResultRepresentation;
-import com.sunwayworld.module.item.file.function.ImportFileFunction;
+import com.sunwayworld.module.item.file.bean.CoreFileImportResultDTO;
+import com.sunwayworld.module.item.file.function.CoreFileImportFunction;
 
 @GikamBean
 @Component(value = "emcMtlImportFileFunction")
-public class EmcMtlImportFileFunction implements ImportFileFunction {
+public class EmcMtlImportFileFunction implements CoreFileImportFunction {
 
     @Autowired
     private EmcMtlCategoryService emcMtlCategoryService;
@@ -45,19 +46,19 @@ public class EmcMtlImportFileFunction implements ImportFileFunction {
 
     @Override
     @Transactional
-    public ImportResultRepresentation apply(CoreFileBean excelFile) {
-        ImportResultRepresentation importResultRepresentation = new ImportResultRepresentation();
-        FileRepresentation fr = FileRepresentation.of(excelFile);
+    public CoreFileImportResultDTO apply(CoreFileBean excelFile) {
+        CoreFileImportResultDTO CoreFileImportResultDTO = new CoreFileImportResultDTO();
+        FilePathDTO fr = CoreFileUtils.toFilePath(excelFile);
 
-        List<EmcMtlDTO> mtlDTOList = ExcelHelper.readDataFromExcel(FileHelper.getAbsolutePath(fr).toString(), 2, 3, EmcMtlDTO.class);
+        List<EmcMtlDTO> mtlDTOList = ExcelHelper.readDataFromExcel(FilePathManager.getLocalPath(fr).toString(), 2, 3, EmcMtlDTO.class);
         if (mtlDTOList.isEmpty()) {
-            return importResultRepresentation;
+            return CoreFileImportResultDTO;
         }
 
         // 过滤掉没有填写材料名称的数据
         List<EmcMtlDTO> notEmptyMtlList = mtlDTOList.stream().filter(mtl -> !StringUtils.isEmpty(mtl.getMtlName())).collect(Collectors.toList());
         if (notEmptyMtlList.isEmpty()) {
-            return importResultRepresentation;
+            return CoreFileImportResultDTO;
         }
 
         // 过滤掉材料类型不是系统中已经维护的
@@ -65,7 +66,7 @@ public class EmcMtlImportFileFunction implements ImportFileFunction {
         List<String> mtlCategoryNameList = mtlCategoryList.stream().map(EmcMtlCategoryBean::getMtlCategoryName).collect(Collectors.toList());
         List<EmcMtlDTO> validMtlList = notEmptyMtlList.stream().filter(mtl -> mtlCategoryNameList.contains(mtl.getMtlCategoryName())).collect(Collectors.toList());
         if (validMtlList.isEmpty()) {
-            return importResultRepresentation;
+            return CoreFileImportResultDTO;
         }
 
         List<String> validMtlNameList = validMtlList.stream().map(EmcMtlDTO::getMtlName).collect(Collectors.toList());
@@ -124,6 +125,6 @@ public class EmcMtlImportFileFunction implements ImportFileFunction {
             emcMtlService.getDao().update(updateMtlList);
         }
 
-        return importResultRepresentation;
+        return CoreFileImportResultDTO;
     }
 }

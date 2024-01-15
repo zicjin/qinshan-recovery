@@ -1,0 +1,7 @@
+﻿-- ----------------------------- 2020-08-14 add by zhangxt------------begin
+alter table T_CORE_SCHEDULE_TASK_LOG add EXECUTEDRESULT VARCHAR2(300);
+comment on column T_CORE_SCHEDULE_TASK_LOG.EXECUTEDRESULT is '任务执行的业务结果';
+
+CALL INSERTI18N('T_CORE_SCHEDULE_TASK_LOG.EXECUTEDRESULT','任务执行的业务结果','执行结果','zh-CN','执行结果');
+
+-- ----------------------------- 2020-08-14 add by zhangxt------------end

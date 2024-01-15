@@ -1,0 +1,83 @@
+
+-- ----------------------------- 2023-01-17 add by zhanghang------------begin
+
+alter table T_CORE_LES_TEMPLATE_UT add CREATEDBYID VARCHAR(36);
+comment on column T_CORE_LES_TEMPLATE_UT.CREATEDBYID is '制单人编码';
+alter table T_CORE_LES_TEMPLATE_UT add CREATEDBYNAME VARCHAR(60);
+comment on column T_CORE_LES_TEMPLATE_UT.CREATEDBYNAME is '制单人名称';
+alter table T_CORE_LES_TEMPLATE_UT add CREATEDTIME DATE;
+comment on column T_CORE_LES_TEMPLATE_UT.CREATEDTIME is '制单时间';
+alter table T_CORE_LES_TEMPLATE_UT add CREATEDBYORGID VARCHAR(36);
+comment on column T_CORE_LES_TEMPLATE_UT.CREATEDBYORGID is '制单人单位编码';
+alter table T_CORE_LES_TEMPLATE_UT add CREATEDBYORGNAME VARCHAR(270);
+comment on column T_CORE_LES_TEMPLATE_UT.CREATEDBYORGNAME is '制单人单位名称';
+
+CALL INSERTI18N('T_CORE_LES_TEMPLATE_UT.CREATEDBYID','制单人编码','制单人编码','zh-CN','制单人编码');
+CALL INSERTI18N('T_CORE_LES_TEMPLATE_UT.CREATEDBYNAME','制单人名称','制单人名称','zh-CN','制单人名称');
+CALL INSERTI18N('T_CORE_LES_TEMPLATE_UT.CREATEDTIME','制单时间','制单时间','zh-CN','制单时间');
+CALL INSERTI18N('T_CORE_LES_TEMPLATE_UT.CREATEDBYORGID','制单人单位编码','制单人单位编码','zh-CN','制单人单位编码');
+CALL INSERTI18N('T_CORE_LES_TEMPLATE_UT.CREATEDBYORGNAME','制单人单位名称','制单人单位名称','zh-CN','制单人单位名称');
+
+commit;
+-- ----------------------------- 2023-01-17 add by zhanghang------------end
+-- ----------------------------- 2023-02-02 add by wangbo0905------------start
+-- ------- T_CORE_LES_UNIT 国际化 -----------
+alter table T_CORE_LES_UNIT add I18NCODE VARCHAR(128);
+comment on column T_CORE_LES_UNIT.I18NCODE is '国际化编码';
+
+CALL INSERTI18N('T_CORE_LES_UNIT.I18NCODE','国际化编码','国际化编码','zh-CN','国际化编码');
+
+UPDATE T_CORE_LES_UNIT SET I18NCODE='GIKAM.LES.WIDGET.FILEVIEWER' WHERE id='imgUpload';
+UPDATE T_CORE_LES_UNIT SET I18NCODE='GIKAM.LES.WIDGET.IMAGE_EDITOR' WHERE id='imgEdit';
+UPDATE T_CORE_LES_UNIT SET I18NCODE='GIKAM.LES.WIDGET.IMAGE_PAINT_EDITOR' WHERE id='imgDraw';
+UPDATE T_CORE_LES_UNIT SET I18NCODE='GIKAM.LES.WIDGET.MOLECULARFORMULA' WHERE id='chemDoodle';
+UPDATE T_CORE_LES_UNIT SET I18NCODE='GIKAM.LES.WIDGET.SECTION' WHERE id='chapter';
+UPDATE T_CORE_LES_UNIT SET I18NCODE='GIKAM.LES.WIDGET.SPREADSHEET' WHERE id='spread';
+UPDATE T_CORE_LES_UNIT SET I18NCODE='GIKAM.LES.WIDGET.DIAGRAM_DRAW' WHERE id='diagramDraw';
+UPDATE T_CORE_LES_UNIT SET I18NCODE='GIKAM.LES.WIDGET.BASE_INFO' WHERE id='baseInfo';
+UPDATE T_CORE_LES_UNIT SET I18NCODE='GIKAM.LES.WIDGET.CKEDITOR' WHERE id='ckeditor';
+UPDATE T_CORE_LES_UNIT SET I18NCODE='GIKAM.LES.WIDGET.FORM_OR_QUERY_LIST' WHERE id='formOrQueryList';
+
+CALL INSERTI18N('GIKAM.LES.WIDGET.DIAGRAM_DRAW', '流程绘制', '流程绘制', 'zh-CN', '流程绘制');
+CALL INSERTI18N('GIKAM.LES.WIDGET.BASE_INFO', '基本信息', '基本信息', 'zh-CN', '基本信息');
+CALL INSERTI18N('GIKAM.LES.WIDGET.CKEDITOR', '富文本', '富文本', 'zh-CN', '富文本');
+CALL INSERTI18N('GIKAM.LES.WIDGET.FORM_OR_QUERY_LIST', '表单/表格', '表单/表格', 'zh-CN', '表单/表格');
+
+CALL INSERTI18N('CORE.MODULE.SYS.T_CORE_BPMN_DIAGRAM.COMMENT.TASKNAME', '审核意见中节点名称', '节点名称', 'en-US', 'Node Name');
+CALL INSERTI18N('CORE.MODULE.SYS.T_CORE_BPMN_DIAGRAM.COMMENT.AUDITEDBYNAME', '审核意见中审核人', '审核人', 'en-US', 'Reviewer');
+CALL INSERTI18N('CORE.MODULE.SYS.T_CORE_BPMN_DIAGRAM.COMMENT.AUDITEDTIME', '审核意见中审核时间', '审核时间', 'en-US', 'Audit Time');
+CALL INSERTI18N('CORE.MODULE.SYS.T_CORE_BPMN_DIAGRAM.COMMENT.COMMENT', '审核意见中审核意见', '审核意见', 'en-US', 'Audit Opinion');
+CALL INSERTI18N('CORE.MODULE.SYS.T_CORE_BPMN_DIAGRAM.COMMENT.ROUTE', '审核意见中审核路径', '审核路径', 'en-US', 'Audit Path');
+CALL INSERTI18N('CORE.MODULE.SYS.T_CORE_BPMN_DIAGRAM.COMMENT.ATTACHMENT', '审核意见中附件', '附件', 'en-US', 'Attachment');
+CALL INSERTI18N('GIKAM.LES.WIDGET.FILEVIEWER', '图片上传', '图片上传', 'en-US', 'Picture Upload');
+CALL INSERTI18N('GIKAM.LES.WIDGET.IMAGE_EDITOR', '图片编辑器', '图片编辑器', 'en-US', 'Picture Editor');
+CALL INSERTI18N('GIKAM.LES.WIDGET.IMAGE_PAINT_EDITOR', '图片绘制', '图片绘制', 'en-US', 'Picture Drawing');
+CALL INSERTI18N('GIKAM.LES.WIDGET.MOLECULARFORMULA', '分子式', '分子式', 'en-US', 'Molecular Formula');
+CALL INSERTI18N('GIKAM.LES.WIDGET.SECTION', '章节', '章节', 'en-US', 'Chapter');
+CALL INSERTI18N('GIKAM.LES.WIDGET.SPREADSHEET', '表格', '表格', 'en-US', 'Table');
+CALL INSERTI18N('GIKAM.LES.WIDGET.DIAGRAM_DRAW', '流程绘制', '流程绘制', 'en-US', 'Process Drawing');
+CALL INSERTI18N('GIKAM.LES.WIDGET.BASE_INFO', '基本信息', '基本信息', 'en-US', 'Basic Information');
+CALL INSERTI18N('GIKAM.LES.WIDGET.CKEDITOR', '富文本', '富文本', 'en-US', 'Rich Text');
+CALL INSERTI18N('GIKAM.LES.WIDGET.FORM_OR_QUERY_LIST', '表单/表格', '表单/表格', 'en-US', 'Forms/Forms');
+
+commit;
+-- ----------------------------- 2023-02-02 add by wangbo0905------------end
+
+-- ----------------------------- 2023-03-16 add by zhanghang------------begin
+CALL INSERTI18N('CORE.MODULE.LES.TEMPLATES.TIP.NOT_ALLOW_DELETE_EXIST_INSTANCE_DATA', '存在被生成LES实例的模板，不允许删除', '存在被生成LES实例的模板，不允许删除', 'zh-CN', '存在被生成LES实例的模板，不允许删除');
+COMMIT;
+-- ----------------------------- 2023-03-16 add by zhanghang------------end
+-- 14.1.3版本sql
+-- ----------------------------- 2023-04-19 add by zhangwf------------begin
+ALTER TABLE T_CORE_ELN ADD ELNCONTENTFILEID int8;
+COMMENT ON COLUMN T_CORE_ELN.ELNCONTENTFILEID IS 'ELN实例文件ID';
+CALL INSERTI18N('T_CORE_ELN.ELNCONTENTFILEID','ELN实例文件ID','ELN实例文件ID','zh-CN','ELN实例文件ID');
+
+
+ALTER TABLE T_CORE_ELN_TMPL_VERSION ADD ELNTMPLFILEID int8;
+COMMENT ON COLUMN T_CORE_ELN_TMPL_VERSION.ELNTMPLFILEID IS 'ELN模板文件ID';
+CALL INSERTI18N('T_CORE_ELN_TMPL_VERSION.ELNTMPLFILEID','ELN模板文件ID','ELN模板文件ID','zh-CN','ELN模板文件ID');
+
+CALL INSERTI18N('CORE.MODULE.ITEM.ELN.TIP.ELN_INSTANCE_FILE_NOT_EXIST', 'ELN实例文件不存在，请联系管理员', 'ELN实例文件不存在，请联系管理员', 'zh-CN', 'ELN实例文件不存在，请联系管理员');
+CALL INSERTI18N('CORE.MODULE.ITEM.ELN.TMPLS.TIP.ELN_TEMP_FILE_NOT_EXIST', 'ELN模板文件不存在，请联系管理员', 'ELN模板文件不存在，请联系管理员', 'zh-CN', 'ELN模板文件不存在，请联系管理员');
+-- ----------------------------- 2023-04-19 add by zhangwf------------end

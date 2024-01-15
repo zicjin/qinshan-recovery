@@ -1,0 +1,192 @@
+﻿-- ----------------------------- 2022-05-20 add by shuaih--------------begin
+
+-- 建表语句
+CREATE TABlE DBO.T_CORE_SYSTEM_MONITOR_SQL(
+    ID BIGINT NOT NULL,
+    SQL TEXT NULL ,
+    SQLSOURCE VARCHAR(512)  NULL ,
+    EXECUTETIME DATETIME NULL ,
+    REVISIONFLAG VARCHAR(1)  NULL ,
+    TIMECONSUMING FLOAT NULL ,
+    TRIGGERCATEGORY VARCHAR(36)  NULL ,
+    SQLTIMES INT NULL,
+    CONSTRAINT PK_CORE_SYSTEM_MONITOR_SQL PRIMARY KEY(ID));
+
+CREATE INDEX [IDX_SYS_MONITOR_SQL_SQLSOURCE] ON [T_CORE_SYSTEM_MONITOR_SQL]
+([SQLSOURCE])
+WITH (STATISTICS_NORECOMPUTE = ON, MAXDOP = 1)
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'SQL性能监控记录表' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_SYSTEM_MONITOR_SQL';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'主键' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_SYSTEM_MONITOR_SQL', @level2type=N'COLUMN',@level2name=N'ID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'SQL' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_SYSTEM_MONITOR_SQL', @level2type=N'COLUMN',@level2name=N'SQL';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'SQL来源' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_SYSTEM_MONITOR_SQL', @level2type=N'COLUMN',@level2name=N'SQLSOURCE';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'执行时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_SYSTEM_MONITOR_SQL', @level2type=N'COLUMN',@level2name=N'EXECUTETIME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'是否已修订（0：未修订 1：已修订）' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_SYSTEM_MONITOR_SQL', @level2type=N'COLUMN',@level2name=N'REVISIONFLAG';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'耗时（秒）' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_SYSTEM_MONITOR_SQL', @level2type=N'COLUMN',@level2name=N'TIMECONSUMING';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'触发类型（user：用户，system：系统）' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_SYSTEM_MONITOR_SQL', @level2type=N'COLUMN',@level2name=N'TRIGGERCATEGORY';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'次数' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_SYSTEM_MONITOR_SQL', @level2type=N'COLUMN',@level2name=N'SQLTIMES';
+
+EXEC  DBO.INSERTI18N  N'T_CORE_SYSTEM_MONITOR_SQL.SERVICE_NAME', N'SQL性能监控记录表', N'SQL性能监控记录表', N'zh-CN',N'SQL性能监控记录表';
+EXEC  DBO.INSERTI18N  N'T_CORE_SYSTEM_MONITOR_SQL.ID', N'SQL性能监控记录表的主键', N'主键', N'zh-CN',N'主键';
+EXEC  DBO.INSERTI18N  N'T_CORE_SYSTEM_MONITOR_SQL.SQL', N'SQL性能监控记录表的SQL描述', N'SQL描述', N'zh-CN',N'SQL描述';
+EXEC  DBO.INSERTI18N  N'T_CORE_SYSTEM_MONITOR_SQL.SQLSOURCE', N'SQL性能监控记录表的相关接口', N'相关接口', N'zh-CN',N'相关接口';
+EXEC  DBO.INSERTI18N  N'T_CORE_SYSTEM_MONITOR_SQL.EXECUTETIME', N'SQL性能监控记录表的执行时间', N'执行时间', N'zh-CN',N'执行时间';
+EXEC  DBO.INSERTI18N  N'T_CORE_SYSTEM_MONITOR_SQL.REVISIONFLAG', N'SQL性能监控记录表的是否已修订（0：未修订 1：已修订）', N'是否已修订', N'zh-CN',N'是否已修订';
+EXEC  DBO.INSERTI18N  N'T_CORE_SYSTEM_MONITOR_SQL.TIMECONSUMING', N'SQL性能监控记录表的耗时（秒）', N'耗时（秒）', N'zh-CN',N'耗时（秒）';
+EXEC  DBO.INSERTI18N  N'T_CORE_SYSTEM_MONITOR_SQL.TRIGGERCATEGORY', N'SQL性能监控记录表的触发类型（user：用户，system：系统）', N'触发类型', N'zh-CN',N'触发类型';
+EXEC  DBO.INSERTI18N  N'T_CORE_SYSTEM_MONITOR_SQL.SQLTIMES', N'SQL性能监控记录表的次数', N'次数', N'zh-CN',N'次数';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.SYS.MONITOR.PMS.SQL.BUTTON.REVISEDSQL', N'显示已修订SQL', N'显示已修订SQL', N'zh-CN', N'显示已修订SQL';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.SYS.MONITOR.PMS.SQL.BUTTON.REVISE', N'修订', N'修订', N'zh-CN', N'修订';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.SYS.MONITOR.PMS.SQL.TITLE.REVISED', N'已修订SQL', N'已修订SQL', N'zh-CN', N'已修订SQL';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.SYS.MONITOR.PMS.SQL.TAB.BASE_INFO', N'SQL性能监控', N'SQL性能监控', N'zh-CN', N'SQL性能监控';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.SYS.MONITOR.PMS.SQL.TIPS.CONFIRM_REVISE', N'您确定修订选中项？', N'您确定修订选中项？', N'zh-CN', N'您确定修订选中项？';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.SYS.MONITOR.PMS.SQL.TIPS.CANCEL_REVISE', N'您确定取消修订选中项？', N'您确定取消修订选中项？', N'zh-CN', N'您确定取消修订选中项？';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.SYS.MONITOR.PMS.SQL.BUTTON.CANCEL_REVISE', N'取消修订', N'取消修订', N'zh-CN', N'取消修订';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.SYS.MONITOR.PMS.SQL.TIPS.CLEAN_SQL', N'您确定清空所有SQL性能监控记录？', N'您确定清空所有SQL性能监控记录？', N'zh-CN', N'您确定清空所有SQL性能监控记录？';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.SYS.MONITOR.PMS.SQL.BUTTON.COPYSQL', N'复制SQL', N'复制SQL', N'zh-CN', N'复制SQL';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.SYS.MONITOR.PMS.SQL.BUTTON.VIEWSQL', N'查看SQL', N'查看SQL', N'zh-CN', N'查看SQL';
+
+-- 创建菜单语句
+INSERT INTO T_CORE_MENU (ID, MENUNAME, HREF, PARENTID, ORDERNO, ICON, MENUINITNAME)
+VALUES ('8503', '性能监控', '/secure/module/sys/monitor/system-monitor-pms/page/edit-list', '85', '8503', '076.svg', '性能监控');
+
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_SYSTEM_MONITOR_SQL', '0', '0');
+
+-- ----------------------------- 2022-05-20 add by shuaih------------end
+
+-- ----------------------------- 2022-06-06 add by zhulw------------begin
+CREATE TABlE DBO.T_CORE_SYSTEM_MONITOR_ERRORLOG(
+     ID BIGINT NOT NULL,
+     LOGTIME DATETIME NULL ,
+     LOGCATEGORY VARCHAR(16)  NULL ,
+     LOGDESC TEXT NULL ,
+     LOGDETAIL TEXT NULL ,
+     LOGTIMES BIGINT NULL ,
+     REVISIONFLAG VARCHAR(1)  NULL ,
+     CONSTRAINT PK_CORE_SYSTEM_MONITOR_ERRORLOG PRIMARY KEY(ID));
+
+ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'错误日志' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_SYSTEM_MONITOR_ERRORLOG';
+ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'ID' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_SYSTEM_MONITOR_ERRORLOG', @level2type=N'COLUMN',@level2name=N'ID';
+ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_SYSTEM_MONITOR_ERRORLOG', @level2type=N'COLUMN',@level2name=N'LOGTIME';
+ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'事件类型(exception:异常)' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_SYSTEM_MONITOR_ERRORLOG', @level2type=N'COLUMN',@level2name=N'LOGCATEGORY';
+ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'描述' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_SYSTEM_MONITOR_ERRORLOG', @level2type=N'COLUMN',@level2name=N'LOGDESC';
+ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'完整信息' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_SYSTEM_MONITOR_ERRORLOG', @level2type=N'COLUMN',@level2name=N'LOGDETAIL';
+ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'日志次数' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_SYSTEM_MONITOR_ERRORLOG', @level2type=N'COLUMN',@level2name=N'LOGTIMES';
+ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'修订标志（0：未修订 1：已修订）' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_SYSTEM_MONITOR_ERRORLOG', @level2type=N'COLUMN',@level2name=N'REVISIONFLAG';
+
+ ALTER TABLE [dbo].[T_CORE_SYSTEM_MONITOR_ERRORLOG] ADD [LOGINTERFACENAME] varchar(512) NULL
+ GO
+ EXEC sp_addextendedproperty
+ 'MS_Description', N'相关接口',
+ 'SCHEMA', N'dbo',
+ 'TABLE', N'T_CORE_SYSTEM_MONITOR_ERRORLOG',
+ 'COLUMN', N'LOGINTERFACENAME'
+
+ CREATE INDEX [IDX_CORE_SYSTEM_MONITOR_ERRORLOG_LOGINTERFACENAME] ON [T_CORE_SYSTEM_MONITOR_ERRORLOG]
+ ([LOGINTERFACENAME])
+ WITH (STATISTICS_NORECOMPUTE = ON, MAXDOP = 1)
+ GO
+
+ ALTER TABLE [dbo].[T_CORE_SYSTEM_MONITOR_ERRORLOG] ADD [LOGMODULE] varchar(60) NULL
+ GO
+ EXEC sp_addextendedproperty
+ 'MS_Description', N'业务来源',
+ 'SCHEMA', N'dbo',
+ 'TABLE', N'T_CORE_SYSTEM_MONITOR_ERRORLOG',
+ 'COLUMN', N'LOGMODULE'
+
+ ALTER TABLE [dbo].[T_CORE_SYSTEM_MONITOR_ERRORLOG] ADD [TRIGGERCATEGORY] varchar(36) NULL
+ GO
+ EXEC sp_addextendedproperty
+ 'MS_Description', N'触发类型（user：用户，system：系统）',
+ 'SCHEMA', N'dbo',
+ 'TABLE', N'T_CORE_SYSTEM_MONITOR_ERRORLOG',
+ 'COLUMN', N'TRIGGERCATEGORY'
+
+ EXEC  DBO.INSERTI18N  N'T_CORE_SYSTEM_MONITOR_ERRORLOG.SERVICE_NAME', N'错误日志', N'错误日志', N'zh-CN',N'错误日志';
+ EXEC  DBO.INSERTI18N  N'T_CORE_SYSTEM_MONITOR_ERRORLOG.ID', N'错误日志的ID', N'ID', N'zh-CN',N'ID';
+ EXEC  DBO.INSERTI18N  N'T_CORE_SYSTEM_MONITOR_ERRORLOG.LOGTIME', N'错误日志的时间', N'时间', N'zh-CN',N'时间';
+ EXEC  DBO.INSERTI18N  N'T_CORE_SYSTEM_MONITOR_ERRORLOG.LOGCATEGORY', N'错误日志的事件类型', N'事件类型', N'zh-CN',N'事件类型';
+ EXEC  DBO.INSERTI18N  N'T_CORE_SYSTEM_MONITOR_ERRORLOG.LOGDESC', N'错误日志的描述', N'描述', N'zh-CN',N'描述';
+ EXEC  DBO.INSERTI18N  N'T_CORE_SYSTEM_MONITOR_ERRORLOG.LOGDETAIL', N'错误日志的完整信息', N'完整信息', N'zh-CN',N'完整信息';
+ EXEC  DBO.INSERTI18N  N'T_CORE_SYSTEM_MONITOR_ERRORLOG.LOGTIMES', N'错误日志的日志次数', N'次数', N'zh-CN',N'次数';
+ EXEC  DBO.INSERTI18N  N'T_CORE_SYSTEM_MONITOR_ERRORLOG.REVISIONFLAG', N'错误日志的修订标志', N'是否已修订', N'zh-CN',N'是否已修订';
+ EXEC  DBO.INSERTI18N  N'T_CORE_SYSTEM_MONITOR_ERRORLOG.LOGINTERFACENAME', N'错误日志的相关接口', N'相关接口', N'zh-CN',N'相关接口';
+ EXEC  DBO.INSERTI18N  N'T_CORE_SYSTEM_MONITOR_ERRORLOG.LOGMODULE', N'错误日志的业务来源', N'业务来源', N'zh-CN',N'业务来源';
+ EXEC  DBO.INSERTI18N  N'T_CORE_SYSTEM_MONITOR_ERRORLOG.TRIGGERCATEGORY', N'错误日志的触发类型（user：用户，system：系统）', N'触发类型',
+  N'zh-CN',N'触发类型';
+ EXEC  DBO.INSERTI18N  N'MODULE.SYS.MONITOR.ERRORLOGS.TIP.NOT_REVISION', N'错误日志的提示框请选择未修订的数据', N'请选择未修订的数据!', N'zh-CN',N'请选择未修订的数据!';
+ EXEC  DBO.INSERTI18N  N'MODULE.SYS.MONITOR.ERRORLOGS.TIP.CLEAR_NOT_REVISION', N'错误日志的提示框您确定清空所有未修订错误日志记录', N'您确定清空所有未修订错误日志记录?', N'zh-CN',N'您确定清空所有未修订错误日志记录?';
+ EXEC  DBO.INSERTI18N  N'MODULE.SYS.MONITOR.ERRORLOGS.TIP.REVISIONED_ERROR_LOG', N'错误日志的标题', N'已修订错误日志', N'zh-CN',N'已修订错误日志';
+ EXEC  DBO.INSERTI18N  N'MODULE.SYS.MONITOR.ERRORLOGS.TIP.DELETE_NOT_REVISION', N'错误日志的提示框您确定删除选中项?', N'您确定删除选中项?', N'zh-CN',N'您确定删除选中项?';
+ EXEC  DBO.INSERTI18N  N'MODULE.SYS.MONITOR.ABNORMALEVENTS.MODAL.DISPLAY_REVISED_ABNORMAL', N'错误日志的按钮显示已修订错误日志', N'显示已修订错误日志', N'zh-CN',N'显示已修订错误日志';
+ EXEC  DBO.INSERTI18N  N'MODULE.SYS.MONITOR.ERRORLOGS.BUTTON.VIEW_FULL_INFORMATION', N'错误日志的按钮显示已修订异常', N'查看完整信息', N'zh-CN',N'查看完整信息';
+ EXEC  DBO.INSERTI18N  N'MODULE.SYS.MONITOR.ERRORLOGS.BUTTON.DOWNLOAD', N'错误日志的下载按钮', N'下载', N'zh-CN',N'下载';
+ EXEC  DBO.INSERTI18N  N'CORE.MODULE.SYS.MONITOR.ERRORLOGS.BUTTON.REVISE', N'错误日志的修订按钮', N'修订', N'zh-CN',N'修订';
+ EXEC  DBO.INSERTI18N  N'CORE.MODULE.SYS.MONITOR.ERRORLOGS.BUTTON.CANCEL_REVISE', N'错误日志的取消修订按钮', N'取消修订', N'zh-CN',N'取消修订';
+ EXEC  DBO.INSERTI18N  N'CORE.MODULE.SYS.MONITOR.ERRORLOGS.TIPS.CONFIRM_REVISE_THEM', N'错误日志的您确定修订选中项?', N'您确定修订选中项?', N'zh-CN',N'您确定修订选中项?';
+ EXEC  DBO.INSERTI18N  N'T_CORE_SYSTEM_MONITOR_ERRORLOG.OPERATION', N'错误日志的操作列', N'操作列', N'zh-CN',N'操作列';
+ INSERT INTO T_CORE_MENU (ID, MENUNAME, HREF, PARENTID, ORDERNO, ICON, MENUINITNAME)
+ VALUES ('8506', '错误日志', '/secure/module/sys/monitor/system-monitor-errorlogs/page/edit-list', '85', '8506', '029.svg', '错误日志');
+ INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+ VALUES ('T_CORE_SYSTEM_MONITOR_ERRORLOG', '0', '0');
+
+CREATE TABlE DBO.T_CORE_SYSTEM_MONITOR_CONFIG(
+     ID VARCHAR(36)  NOT NULL,
+     CONFIGNAME VARCHAR(60)  NULL ,
+     CONFIGVALUE TEXT NULL ,
+     CONFIGCATEGORY VARCHAR(60)  NULL ,
+     REMARK VARCHAR(540)  NULL ,
+     CONSTRAINT PK_CORE_SYSTEM_MONITOR_CONFIG PRIMARY KEY(ID));
+ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'系统监控配置' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_SYSTEM_MONITOR_CONFIG';
+ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'配置编码（主键唯一）' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_SYSTEM_MONITOR_CONFIG', @level2type=N'COLUMN',@level2name=N'ID';
+ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'配置名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_SYSTEM_MONITOR_CONFIG', @level2type=N'COLUMN',@level2name=N'CONFIGNAME';
+ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'配置值' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_SYSTEM_MONITOR_CONFIG', @level2type=N'COLUMN',@level2name=N'CONFIGVALUE';
+ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'配置类型（autoClean：自动清理、warn：告警数据）' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_SYSTEM_MONITOR_CONFIG', @level2type=N'COLUMN',@level2name=N'CONFIGCATEGORY';
+ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'备注' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_SYSTEM_MONITOR_CONFIG', @level2type=N'COLUMN',@level2name=N'REMARK';
+ EXEC  DBO.INSERTI18N  N'T_CORE_SYSTEM_MONITOR_CONFIG.SERVICE_NAME', N'系统监控配置', N'系统监控配置', N'zh-CN',N'系统监控配置';
+ EXEC  DBO.INSERTI18N  N'T_CORE_SYSTEM_MONITOR_CONFIG.ID', N'系统监控配置的配置编码（主键唯一）', N'配置编码（主键唯一）', N'zh-CN',N'配置编码（主键唯一）';
+ EXEC  DBO.INSERTI18N  N'T_CORE_SYSTEM_MONITOR_CONFIG.CONFIGNAME', N'系统监控配置的配置名称', N'配置名称', N'zh-CN',N'配置名称';
+ EXEC  DBO.INSERTI18N  N'T_CORE_SYSTEM_MONITOR_CONFIG.CONFIGVALUE', N'系统监控配置的配置值', N'配置值', N'zh-CN',N'配置值';
+ EXEC  DBO.INSERTI18N  N'T_CORE_SYSTEM_MONITOR_CONFIG.CONFIGCATEGORY', N'系统监控配置的配置类型（autoClean：自动清理、warn：告警数据）', N'配置类型（autoClean：自动清理、warn：告警数据）', N'zh-CN',N'配置类型（autoClean：自动清理、warn：告警数据）';
+ EXEC  DBO.INSERTI18N  N'T_CORE_SYSTEM_MONITOR_CONFIG.REMARK', N'系统监控配置的备注', N'备注', N'zh-CN',N'备注';
+ EXEC  DBO.INSERTI18N  N'T_CORE_SYSTEM_MONITOR_CONFIG.CLEANCATEGORY', N'系统监控配置的清理类型', N'清理类型', N'zh-CN',N'清理类型';
+ EXEC  DBO.INSERTI18N  N'T_CORE_SYSTEM_MONITOR_CONFIG.RESERVETIME', N'系统监控配置的保留时间(单位：天)', N'保留时间(单位：天)', N'zh-CN',N'保留时间(单位：天)';
+ EXEC  DBO.INSERTI18N  N'T_CORE_SYSTEM_MONITOR_CONFIG.ALARM.SMS_CONTENT', N'系统监控配置的手机短信提醒报警内容', N'{0}告警：系统：{1} 告警阈值：{2}%, 当前使用：{3}%',
+  N'zh-CN',N'{0}告警：系统：{1} 告警阈值：{2}%, 当前使用：{3}%';
+ EXEC  DBO.INSERTI18N  N'T_CORE_SYSTEM_MONITOR_CONFIG.THRESHOLD_CHECKING', N'系统监控配置的阀值输入校验', N'请输入1-100的有效数字', N'zh-CN',N'请输入1-100的有效数字';
+ EXEC  DBO.INSERTI18N  N'T_CORE_SYSTEM_MONITOR_CONFIG.RETENTION_ TIME_CHECK', N'系统监控配置的保留时间输入校验', N'请输入1-365的整数', N'zh-CN',N'请输入1-365的整数';
+
+ INSERT INTO T_CORE_CONSTANT (ID, CONSTANTVALUE, CONSTANTDESC, CLASSFICATION, SHOW)
+ VALUES ('AUTO_CLEAN', '0', '自动清理(0关闭，1开启)', '系统', '1');
+ INSERT INTO T_CORE_MENU (ID, MENUNAME, HREF, PARENTID, ORDERNO, ICON, MENUINITNAME)
+ VALUES ('8507', '自动清理', '/secure/module/sys/monitor/system-monitor-configs/page/edit-list', '85', '8507', '075.svg', '自动清理');
+ INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+ VALUES ('T_CORE_SYSTEM_MONITOR_CONFIG', '0', '0');
+  INSERT INTO T_CORE_SYSTEM_MONITOR_CONFIG (ID, CONFIGNAME, CONFIGVALUE, CONFIGCATEGORY, REMARK) VALUES ('cpuThreshold', 'CPU告警阈值', '90', 'warn', NULL);
+  INSERT INTO T_CORE_SYSTEM_MONITOR_CONFIG (ID, CONFIGNAME, CONFIGVALUE, CONFIGCATEGORY, REMARK) VALUES ('dbConnectionPoolThreshold', '数据库连接池告警阈值', '90', 'warn', NULL);
+  INSERT INTO T_CORE_SYSTEM_MONITOR_CONFIG (ID, CONFIGNAME, CONFIGVALUE, CONFIGCATEGORY, REMARK) VALUES ('threadPoolThreshold', '线程池告警阈值', '90', 'warn', NULL);
+  INSERT INTO T_CORE_SYSTEM_MONITOR_CONFIG (ID, CONFIGNAME, CONFIGVALUE, CONFIGCATEGORY, REMARK) VALUES ('hardDiskThreshold', '硬盘告警阈值', '90', 'warn', NULL);
+  INSERT INTO T_CORE_SYSTEM_MONITOR_CONFIG (ID, CONFIGNAME, CONFIGVALUE, CONFIGCATEGORY, REMARK) VALUES ('memoryThreshold', '内存告警阈值', '90', 'warn', NULL);
+  INSERT INTO T_CORE_SYSTEM_MONITOR_CONFIG (ID, CONFIGNAME, CONFIGVALUE, CONFIGCATEGORY, REMARK) VALUES ('notifierEmail', '告警通知人邮箱', NULL, 'warn', NULL);
+  INSERT INTO T_CORE_SYSTEM_MONITOR_CONFIG (ID, CONFIGNAME, CONFIGVALUE, CONFIGCATEGORY, REMARK) VALUES ('notifierMobile', '告警通知人手机', NULL, 'warn', NULL);
+  INSERT INTO T_CORE_SYSTEM_MONITOR_CONFIG (ID, CONFIGNAME, CONFIGVALUE, CONFIGCATEGORY, REMARK) VALUES ('onlineUserThreshold', '用户并发数告警阈值', '90', 'warn', NULL);
+  INSERT INTO T_CORE_SYSTEM_MONITOR_CONFIG (ID, CONFIGNAME, CONFIGVALUE, CONFIGCATEGORY, REMARK) VALUES ('sqlMonitor', 'SQL性能监控自动清理', '30', 'autoClean', NULL);
+  INSERT INTO T_CORE_SYSTEM_MONITOR_CONFIG (ID, CONFIGNAME, CONFIGVALUE, CONFIGCATEGORY, REMARK) VALUES ('errorLog', '错误日志自动清理', '30', 'autoClean', NULL);
+-- ----------------------------- 2022-06-06 add by zhulw------------end
+-- ----------------------------- 2022-06-10 add by zhulw------------begin
+ INSERT INTO T_CORE_SYSTEM_MONITOR_CONFIG (ID, CONFIGNAME, CONFIGVALUE, CONFIGCATEGORY, REMARK) VALUES ('serverMonitor', '服务监控自动清理', '365', 'autoClean', NULL);
+-- ----------------------------- 2022-06-10 add by zhulw------------end
+
+-- ----------------------------- 2022-06-14 add by zhulw------------begin
+ UPDATE T_CORE_MENU set ORDERNO =8501 WHERE ID = '8503';
+ UPDATE T_CORE_MENU set ORDERNO =8502 WHERE ID = '8506';
+ UPDATE T_CORE_MENU set ORDERNO =8503 WHERE ID = '8501';
+ UPDATE T_CORE_MENU set ORDERNO =8504 WHERE ID = '8507';
+-- ----------------------------- 2022-06-14 add by zhulw------------end
+-- ----------------------------- 2022-06-17 add by zhulw------------begin
+DELETE FROM T_CORE_MENU WHERE MENUNAME = '服务监控配置';
+-- ----------------------------- 2022-06-17 add by zhulw------------end
+

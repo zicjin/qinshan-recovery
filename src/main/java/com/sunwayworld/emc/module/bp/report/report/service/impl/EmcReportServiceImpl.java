@@ -13,6 +13,12 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import com.sunwayworld.cloud.module.fr.report.bean.CoreReportConfigLineBean;
+import com.sunwayworld.cloud.module.fr.report.service.CoreReportConfigLineService;
+import com.sunwayworld.framework.io.file.FilePathDTO;
+import com.sunwayworld.framework.io.file.FilePathManager;
+import com.sunwayworld.module.item.file.manager.CoreFileManager;
+import com.sunwayworld.module.item.file.utils.CoreFileUtils;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFTable;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +26,6 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.sunwayworld.cloud.gikam.fr.bean.report.CoreReportConfigLineBean;
-import com.sunwayworld.cloud.gikam.fr.service.report.CoreReportConfigLineService;
 import com.sunwayworld.emc.framework.constant.EmcBizConstant;
 import com.sunwayworld.emc.framework.constant.EmcConstant;
 import com.sunwayworld.emc.framework.word.NumberFormatUtils;
@@ -44,16 +48,9 @@ import com.sunwayworld.emc.module.bp.project.project.bean.EmcProjectBean;
 import com.sunwayworld.emc.module.bp.project.project.service.EmcProjectService;
 import com.sunwayworld.emc.module.bp.report.report.bean.EmcReportBean;
 import com.sunwayworld.emc.module.bp.report.report.bean.EmcReportResultBean;
-import com.sunwayworld.emc.module.bp.report.report.bean.WordTemplateSourceDTO;
 import com.sunwayworld.emc.module.bp.report.report.dao.EmcReportDao;
 import com.sunwayworld.emc.module.bp.report.report.service.EmcReportResultService;
 import com.sunwayworld.emc.module.bp.report.report.service.EmcReportService;
-import com.sunwayworld.emc.module.bp.report.report.template.impl.ComplexWordTemplate;
-import com.sunwayworld.emc.module.bp.report.report.template.impl.FactoryGroundwaterWordTemplate;
-import com.sunwayworld.emc.module.bp.report.report.template.impl.FactorySoilWordTemplate;
-import com.sunwayworld.emc.module.bp.report.report.template.impl.LampblackWordTemplate;
-import com.sunwayworld.emc.module.bp.report.report.template.impl.OilGasRecoveryWordTemplate;
-import com.sunwayworld.emc.module.bp.report.report.template.impl.VibrationWordTemplate;
 import com.sunwayworld.emc.module.bp.report.report.validator.EmcReportStartProcessValidator;
 import com.sunwayworld.emc.module.bp.report.report.validator.EmcViewDocumentValidator;
 import com.sunwayworld.emc.module.bp.result.run.bean.EmcRunBean;
@@ -78,11 +75,8 @@ import com.sunwayworld.emc.module.mdm.bizmdm.indexcategory.service.EmcIndexCateg
 import com.sunwayworld.emc.module.mdm.bizmdm.indexcategory.service.EmcIndexSetService;
 import com.sunwayworld.emc.module.mdm.bizmdm.method.bean.EmcMethodVersionBean;
 import com.sunwayworld.emc.module.mdm.bizmdm.method.service.EmcMethodVersionService;
-import com.sunwayworld.emc.module.mdm.bizmdm.monitortmpl.bean.EmcMonitorTmplBean;
 import com.sunwayworld.emc.module.mdm.bizmdm.monitortmpl.service.EmcMonitorTmplService;
-import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcGroupItemBean;
 import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcItemBean;
-import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcItemGroupBean;
 import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcItemRevisionBean;
 import com.sunwayworld.emc.module.mdm.bizmdm.test.service.EmcGroupItemService;
 import com.sunwayworld.emc.module.mdm.bizmdm.test.service.EmcItemGroupService;
@@ -101,8 +95,6 @@ import com.sunwayworld.framework.context.ApplicationContextHelper;
 import com.sunwayworld.framework.data.page.Page;
 import com.sunwayworld.framework.data.page.Pagination;
 import com.sunwayworld.framework.exception.FileException;
-import com.sunwayworld.framework.io.file.FileHelper;
-import com.sunwayworld.framework.io.file.FileRepresentation;
 import com.sunwayworld.framework.io.file.FileScope;
 import com.sunwayworld.framework.mybatis.mapper.MapperParameter;
 import com.sunwayworld.framework.mybatis.mapper.MatchPattern;
@@ -123,7 +115,6 @@ import com.sunwayworld.framework.utils.ObjectUtils;
 import com.sunwayworld.framework.utils.StringUtils;
 import com.sunwayworld.framework.validator.data.annotation.ValidateDataWith;
 import com.sunwayworld.module.item.file.bean.CoreFileBean;
-import com.sunwayworld.module.item.file.cloud.CoreFileCloudService;
 import com.sunwayworld.module.item.file.service.CoreFileService;
 import com.sunwayworld.module.sys.bpmn.bean.CoreBpmnCommentBean;
 import com.sunwayworld.module.sys.bpmn.bean.CoreBpmnInstanceStatusDTO;
@@ -189,7 +180,7 @@ public class EmcReportServiceImpl implements EmcReportService {
     private CoreFileService coreFileService;
 
     @Autowired
-    private CoreFileCloudService fileCloudService;
+    private CoreFileManager fileManager;
 
     @Autowired
     private EmcPropertyFieldService propertyFieldService;
@@ -243,6 +234,7 @@ public class EmcReportServiceImpl implements EmcReportService {
     private EmcArchiveCategoryService archiveCategoryService;
 
     @Autowired
+    @Lazy
     private EmcArchiveFileService archiveFileService;
 
     @Autowired
@@ -980,7 +972,7 @@ public class EmcReportServiceImpl implements EmcReportService {
             coreFileService.getDao().update(updateCoreFileList, "TARGETID");
 
             CoreFileBean wordTemplateConfigFile = wordReportFileList.get(0);
-            File templateFile = FileHelper.getAbsolutePath(FileRepresentation.of(wordTemplateConfigFile.getScope(), DateTimeUtils.getDateSerialNumber(wordTemplateConfigFile.getCreatedTime()),
+            File templateFile = FilePathManager.getLocalPath(FilePathDTO.of(wordTemplateConfigFile.getScope(), DateTimeUtils.getDateSerialNumber(wordTemplateConfigFile.getCreatedTime()),
                     wordTemplateConfigFile.getMd5Name(), wordTemplateConfigFile.getName())).toFile();
             generateWordReport(templateFile, templateFile, report, reportList, project, true);
             List<CoreFileBean> newCoreFileList = saveWordReportCoreFile(wordTemplateConfigFile.getName(), templateFile, reportList);
@@ -994,9 +986,9 @@ public class EmcReportServiceImpl implements EmcReportService {
             CoreFileBean wordTemplateConfigFile = wordTemplateConfigFileList.get(0);
 
             String wordReportFileName = FileUtils.getFileBaseName(wordTemplateConfigFile.getName()) + "-" + System.currentTimeMillis() + "." + FileUtils.getFileExtension(wordTemplateConfigFile.getName());
-            File templateFile = FileHelper.getAbsolutePath(FileRepresentation.of(wordTemplateConfigFile.getScope(), "",
+            File templateFile = FilePathManager.getLocalPath(FilePathDTO.of(wordTemplateConfigFile.getScope(), "",
                     wordTemplateConfigFile.getExt(), wordTemplateConfigFile.getName())).toFile();
-            File wordReportFile = FileHelper.getAbsolutePath(FileRepresentation.of(wordTemplateConfigFile.getScope(), "",
+            File wordReportFile = FilePathManager.getLocalPath(FilePathDTO.of(wordTemplateConfigFile.getScope(), "",
                     wordTemplateConfigFile.getExt(), wordReportFileName)).toFile();
 
             generateWordReport(templateFile, wordReportFile, report, reportList, project, false);
@@ -1486,8 +1478,7 @@ public class EmcReportServiceImpl implements EmcReportService {
         if (!pointDiagramFileList.isEmpty()) {
             CoreFileBean pointDiagramFile = pointDiagramFileList.get(0);// 一个报告只有一个点位示意图
 
-            String pointDiagramUrl = FileHelper.getAbsolutePath(
-                    FileRepresentation.of(pointDiagramFile.getScope(), DateTimeUtils.getDateSerialNumber(pointDiagramFile.getCreatedTime()), pointDiagramFile.getMd5Name(), pointDiagramFile.getName()))
+            String pointDiagramUrl = FilePathManager.getLocalPath(FilePathDTO.of(pointDiagramFile.getScope(), DateTimeUtils.getDateSerialNumber(pointDiagramFile.getCreatedTime()), pointDiagramFile.getMd5Name(), pointDiagramFile.getName()))
                     .toString();
 
             Word2007Utils.insertImageAfterParagraphOfKey("监测布点及示意图：", document, pointDiagramUrl);
@@ -3262,8 +3253,7 @@ public class EmcReportServiceImpl implements EmcReportService {
         if (!userFileList.isEmpty()) {
             CoreFileBean userFile = userFileList.get(0);// 一个用户只有一个附件（电子签名）
 
-            String userSignatureUrl = FileHelper
-                    .getAbsolutePath(FileRepresentation.of(userFile.getScope(), DateTimeUtils.getDateSerialNumber(userFile.getCreatedTime()), userFile.getMd5Name(), userFile.getName())).toString();
+            String userSignatureUrl = FilePathManager.getLocalPath(FilePathDTO.of(userFile.getScope(), DateTimeUtils.getDateSerialNumber(userFile.getCreatedTime()), userFile.getMd5Name(), userFile.getName())).toString();
 
             Word2007Utils.insertContentAndImage(insertPlace, document, null, userSignatureUrl);
         }
@@ -3559,7 +3549,7 @@ public class EmcReportServiceImpl implements EmcReportService {
         copyFile.setName(fileName);
         copyFile.setFileExt(FileUtils.getFileExtension(fileName));
         copyFile.setScope(FileScope.export.name());
-        copyFile.setTimes(0);
+        copyFile.setTimes(0L);
         copyFile.setDownloadable(Constant.YES);
         copyFile.setCreatedTime(LocalDateTime.now());
         copyFile.setBizCategory(bizCategory);
@@ -3575,7 +3565,7 @@ public class EmcReportServiceImpl implements EmcReportService {
             insertCoreFile.setTargetId(getDao().getTable() + "$" + oldReport.getId());
             insertCoreFile.setMd5Name(EncryptUtils.MD5Encrypt(fileId + "$" + fileName));
             // 将文件复制一份到export目录下，并与报告ID绑定
-            fileCloudService.archive(FileRepresentation.of(insertCoreFile), file);
+            fileManager.upload(CoreFileUtils.toFilePath(insertCoreFile), file);
             insertCoreFileList.add(insertCoreFile);
         });
 
@@ -3661,7 +3651,7 @@ public class EmcReportServiceImpl implements EmcReportService {
         copyFile.setName(wordReportFileName);
         copyFile.setFileExt(FileUtils.getFileExtension(wordReportFileName));
         copyFile.setScope(FileScope.export.name());
-        copyFile.setTimes(0);
+        copyFile.setTimes(0L);
         copyFile.setDownloadable(Constant.YES);
         copyFile.setCreatedTime(LocalDateTime.now());
         copyFile.setBizCategory(EmcConstant.WORD_REPORT_ATTACHMENT_TYPE);
@@ -3677,7 +3667,7 @@ public class EmcReportServiceImpl implements EmcReportService {
             insertCoreFile.setTargetId(getDao().getTable() + "$" + oldReport.getId());
             insertCoreFile.setMd5Name(EncryptUtils.MD5Encrypt(fileId + "$" + wordReportFileName));
             // 将文件复制一份到export目录下，并与报告ID绑定
-            fileCloudService.archive(FileRepresentation.of(insertCoreFile), wordReportFile);
+            fileManager.upload(CoreFileUtils.toFilePath(insertCoreFile), wordReportFile);
             insertCoreFileList.add(insertCoreFile);
         });
 
@@ -3735,7 +3725,7 @@ public class EmcReportServiceImpl implements EmcReportService {
             // 一个用户只有一个点子签名文件
             CoreFileBean userSignatureFile = userSignatureFileList.get(0);
 
-            String userSignatureFileUrl = FileHelper.getAbsolutePath(FileRepresentation.of(userSignatureFile.getScope(),
+            String userSignatureFileUrl = FilePathManager.getLocalPath(FilePathDTO.of(userSignatureFile.getScope(),
                     DateTimeUtils.getDateSerialNumber(userSignatureFile.getCreatedTime()), userSignatureFile.getMd5Name(),
                     userSignatureFile.getName())).toString();
 

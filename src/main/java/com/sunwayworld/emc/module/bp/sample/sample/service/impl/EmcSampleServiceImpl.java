@@ -872,7 +872,7 @@ public class EmcSampleServiceImpl implements EmcSampleService {
             CoreBpmnRuntimeSource<EmcSampleBean, Long> source = CoreBpmnRuntimeSource.of(getDao().getTable(), item, wrapper.getParamValue("bpmn_comment"), map.get(item.getId()));
 
             source.setDescSupplier(getDescSupplier(source));
-            source.setRuntimeTaskName("样品接收");
+            // source.setRuntimeTaskName("样品接收");
 
             sourceList.add(source);
         }

@@ -3,13 +3,13 @@ package com.sunwayworld.emc.module.bp.bp.io;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.sunwayworld.framework.support.base.service.GenericTemplateService;
 import org.springframework.stereotype.Component;
 
 import com.sunwayworld.framework.data.Pair;
-import com.sunwayworld.module.item.file.export.GenericExportTemplate;
 
 @Component(value = "emcSolRecordExportTemplate")
-public class EmcSolRecordExportTemplate implements GenericExportTemplate<String> {
+public class EmcSolRecordExportTemplate implements GenericTemplateService<String> {
 
     public static final String EMC_EXPORT_TEST = "标定原始记录导入模版";
     @Override

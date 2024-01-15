@@ -3,13 +3,13 @@ package com.sunwayworld.emc.module.mdm.equipt.equipt.io;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.sunwayworld.framework.support.base.service.GenericTemplateService;
 import org.springframework.stereotype.Component;
 
 import com.sunwayworld.framework.data.Pair;
-import com.sunwayworld.module.item.file.export.GenericExportTemplate;
 
 @Component(value = "emcEquipExportTemplate")
-public class EmcEquipExportTemplate implements GenericExportTemplate<String> {
+public class EmcEquipExportTemplate implements GenericTemplateService<String> {
 
     @Override
     public List<Pair<String, String>> getTemplatePairList() {

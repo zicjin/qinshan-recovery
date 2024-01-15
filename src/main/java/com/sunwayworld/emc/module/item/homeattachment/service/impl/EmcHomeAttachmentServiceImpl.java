@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import com.sunwayworld.framework.io.file.FilePathManager;
+import com.sunwayworld.module.item.file.utils.CoreFileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,8 +21,6 @@ import com.sunwayworld.framework.at.annotation.AuditTrailEntry;
 import com.sunwayworld.framework.at.annotation.AuditTrailType;
 import com.sunwayworld.framework.context.ApplicationContextHelper;
 import com.sunwayworld.framework.data.page.Page;
-import com.sunwayworld.framework.io.file.FileHelper;
-import com.sunwayworld.framework.io.file.FileRepresentation;
 import com.sunwayworld.framework.mybatis.mapper.MatchPattern;
 import com.sunwayworld.framework.mybatis.mapper.SearchFilter;
 import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;
@@ -102,7 +102,7 @@ public class EmcHomeAttachmentServiceImpl implements EmcHomeAttachmentService {
     public String getDownloadUrl(Long id, RestJsonWrapperBean wrapper) {
         String targetId = EmcConstant.ATTACHMENT_TARGETID + String.valueOf(id);
         CoreFileBean coreFile = coreFileService.selectFirstByFilter(SearchFilter.instance().match("TARGETID", targetId).filter(MatchPattern.SEQ));
-        String url = FileHelper.getUrl(FileRepresentation.of(coreFile));
+        String url = FilePathManager.getUrl(CoreFileUtils.toFilePath(coreFile));
         return url;
     }
 

@@ -17,6 +17,9 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import com.sunwayworld.framework.io.file.FilePathDTO;
+import com.sunwayworld.framework.io.file.FilePathManager;
+import com.sunwayworld.framework.support.base.service.GenericTemplateService;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFDataFormat;
 import org.apache.poi.hssf.usermodel.HSSFRow;
@@ -39,8 +42,6 @@ import com.sunwayworld.emc.module.bp.bp.service.EmcOrderTaskService;
 import com.sunwayworld.framework.constant.Constant;
 import com.sunwayworld.framework.data.Pair;
 import com.sunwayworld.framework.exception.FileException;
-import com.sunwayworld.framework.io.file.FileHelper;
-import com.sunwayworld.framework.io.file.FileRepresentation;
 import com.sunwayworld.framework.io.file.FileScope;
 import com.sunwayworld.framework.mybatis.mapper.MatchPattern;
 import com.sunwayworld.framework.mybatis.mapper.SearchFilter;
@@ -49,10 +50,9 @@ import com.sunwayworld.framework.utils.FileUtils;
 import com.sunwayworld.framework.utils.NumberUtils;
 import com.sunwayworld.framework.utils.ObjectUtils;
 import com.sunwayworld.framework.utils.StringUtils;
-import com.sunwayworld.module.item.file.export.GenericExportTemplate;
 
 @Component(value = "emcCurveExportTemplate")
-public class EmcCurveExportTemplate implements GenericExportTemplate<String> {
+public class EmcCurveExportTemplate implements GenericTemplateService<String> {
 
     /** 表头动态列开始下标（模板中已有固定的3列） */
     private static final int DYNAMIC_COLUMN_START_INDEX = 3;
@@ -79,31 +79,31 @@ public class EmcCurveExportTemplate implements GenericExportTemplate<String> {
     }
 
     @Override
-    public String getDownLoadTemplateUrl(String templateCode, String id) {
+    public String getDownloadUrl(String templateCode, String id) {
         // 导出的Excel模板名称格式：点位编号 + 当前时间
         EmcFolderBean folder = folderService.selectById(NumberUtils.parseLong(id));
         String dateStr = DateTimeUtils.formatLocalDate(LocalDate.now());
         String fileName = Optional.ofNullable(folder).map(f -> f.getFolderNo() + "_" + dateStr).orElse(dateStr);
 
-        FileRepresentation fr = FileRepresentation.of(FileScope.temp.name(), "" + System.currentTimeMillis(), UUID.randomUUID().toString(), fileName + ".xls");
+        FilePathDTO fr = FilePathDTO.of(FileScope.temp.name(), "" + System.currentTimeMillis(), UUID.randomUUID().toString(), fileName + ".xls");
         try {
-            Files.createDirectories(FileHelper.getAbsoluteDirPath(fr));
+            Files.createDirectories(FilePathManager.getLocalDirPath(fr));
 
             URL resource = this.getClass().getResource("");
             if (FileUtils.isInJarURL(resource)) {
                 InputStream is = this.getClass().getResourceAsStream("templates/" + templateCode + ".xls");
-                Files.copy(is, FileHelper.getAbsolutePath(fr), StandardCopyOption.REPLACE_EXISTING);
+                Files.copy(is, FilePathManager.getLocalPath(fr), StandardCopyOption.REPLACE_EXISTING);
             } else {
                 Path templatePath = new File(resource.getPath()).toPath().resolve("templates").resolve(templateCode + ".xls");
-                Files.copy(templatePath, FileHelper.getAbsolutePath(fr), StandardCopyOption.REPLACE_EXISTING);
+                Files.copy(templatePath, FilePathManager.getLocalPath(fr), StandardCopyOption.REPLACE_EXISTING);
             }
 
-            initTemplateData(FileHelper.getAbsolutePath(fr), id);
+            initTemplateData(FilePathManager.getLocalPath(fr), id);
         } catch (IOException ioe) {
             throw new FileException(ioe);
         }
 
-        return FileHelper.getUrl(fr);
+        return FilePathManager.getUrl(fr);
     }
 
     @Override

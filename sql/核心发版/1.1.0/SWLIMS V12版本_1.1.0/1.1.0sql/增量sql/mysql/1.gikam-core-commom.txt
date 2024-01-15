@@ -1,0 +1,398 @@
+-- ----------------------------- 2021-4-12 add by zhangjr------------begin
+CREATE TABLE IF NOT EXISTS `T_CORE_STUDIO_PAGE_DRAFT`(
+     `ID` BIGINT NOT NULL COMMENT '主键',
+     `URL` VARCHAR(256)  DEFAULT NULL COMMENT '访问页面的路径',
+     `JSON` LONGTEXT  DEFAULT NULL COMMENT '访问页面的json数据',
+      PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='页面配置草稿表';
+CREATE INDEX IDX_TCSPD_URL ON T_CORE_STUDIO_PAGE_DRAFT (URL);
+
+CREATE TABLE IF NOT EXISTS `T_CORE_STUDIO_PAGE`(
+     `ID` BIGINT NOT NULL COMMENT '主键',
+     `URL` VARCHAR(256)  DEFAULT NULL COMMENT '访问页面的路径',
+     `JSON` LONGTEXT  DEFAULT NULL COMMENT '访问页面的json数据',
+     `VERSION` BIGINT DEFAULT NULL COMMENT '版本',
+     `CREATEDBYID` VARCHAR(36)  DEFAULT NULL COMMENT '制单人编码',
+     `CREATEDBYNAME` VARCHAR(60)  DEFAULT NULL COMMENT '制单人名称',
+     `CREATEDTIME` DATETIME DEFAULT NULL COMMENT '制单时间',
+     `CREATEDBYORGID` VARCHAR(36)  DEFAULT NULL COMMENT '制单人单位编码',
+     `CREATEDBYORGNAME` VARCHAR(270)  DEFAULT NULL COMMENT '制单人单位名称',
+      PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='页面配置表';
+CREATE INDEX IDX_TCSP_URL ON T_CORE_STUDIO_PAGE (URL);
+
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_STUDIO_PAGE_DRAFT', '0', '0');
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_STUDIO_PAGE', '0', '0');
+COMMIT;
+-- ----------------------------- 2021-4-12 add by zhangjr------------end
+
+-- ----------------------------- 2021-04-13 add by zhanghang------------begin
+ALTER TABLE T_CORE_SYSTEM_CONFIG CHANGE COLUMN `ONLYOFFICEPRELOAD` `SUNWAYOFFICEPRELOAD` VARCHAR(36) COMMENT 'SUNWAYOFFICE预加载';
+CALL DELETEI18N('T_CORE_SYSTEM_CONFIG.ONLYOFFICEPRELOAD');
+CALL INSERTI18N('T_CORE_SYSTEM_CONFIG.SUNWAYOFFICEPRELOAD', '系统配置Office预加载', 'Office预加载', 'zh-CN', 'Office预加载');
+COMMIT;
+-- ----------------------------- 2021-04-13 add by zhanghang------------end
+-- ----------------------------- 2021-04-15 add by zhangxt------------begin
+DELETE FROM T_CORE_CONSTANT WHERE ID = 'LOGIN_TIMEOUT';
+COMMIT;
+-- ----------------------------- 2021-04-15 add by zhangxt------------end
+
+-- ----------------------------- 2021-05-10 add by zhangjr--------------begin
+-- 建表语句
+
+CREATE TABLE IF NOT EXISTS `T_CORE_STUDIO_ADVSEARCH_CONFIG`(
+     `ID` BIGINT NOT NULL COMMENT '主键',
+     `URL` VARCHAR(256)  DEFAULT NULL COMMENT '访问页面的路径',
+     `BLOCKID` VARCHAR(128)  DEFAULT NULL COMMENT '表格的ID',
+     `JSON` LONGTEXT DEFAULT NULL COMMENT '查询条件的json数据',
+     `CREATEDBYID` VARCHAR(36)  DEFAULT NULL COMMENT '制单人编码',
+     `CREATEDBYNAME` VARCHAR(60)  DEFAULT NULL COMMENT '制单人名称',
+     `CREATEDTIME` DATETIME DEFAULT NULL COMMENT '制单时间',
+     `CREATEDBYORGID` VARCHAR(36)  DEFAULT NULL COMMENT '制单人单位编码',
+     `CREATEDBYORGNAME` VARCHAR(270)  DEFAULT NULL COMMENT '制单人单位名称',
+      PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='高级查询的配置表';
+
+CREATE INDEX IDX_CSASC_URL ON T_CORE_STUDIO_ADVSEARCH_CONFIG (URL);
+-- ----------------------------- 2021-05-10 add by zhangjr--------------end
+
+-- ----------------------------- 2021-05-17 add by shixw------------begin
+CALL INSERTI18N('CORE.MODULE.SYS.CODES.TIP.CANNOT_DELETE_SYS_CODE', '不能删除系统级编码', '不能删除系统级编码', 'zh-CN', '不能删除系统级编码');
+CALL INSERTI18N('CORE.MODULE.ADMIN.REQUESTURLS.TIP.SELECT_MENU', '请先选择菜单', '请先选择菜单', 'zh-CN', '请先选择菜单');
+
+UPDATE T_CORE_ADMIN_MENU SET MENUICON = '011.svg' where id = '10';
+UPDATE T_CORE_ADMIN_MENU SET MENUICON = '027.svg' where id = '1010';
+UPDATE T_CORE_ADMIN_MENU SET MENUICON = '037.svg' where id = '101010';
+UPDATE T_CORE_ADMIN_MENU SET MENUICON = '071.svg' where id = '101020';
+UPDATE T_CORE_ADMIN_MENU SET MENUICON = '049.svg' where id = '1020';
+UPDATE T_CORE_ADMIN_MENU SET MENUICON = '036.svg' where id = '102010';
+UPDATE T_CORE_ADMIN_MENU SET MENUICON = '018.svg' where id = '101050';
+UPDATE T_CORE_ADMIN_MENU SET MENUICON = '077.svg' where id = '20';
+UPDATE T_CORE_ADMIN_MENU SET MENUICON = '077.svg' where id = '2010';
+UPDATE T_CORE_ADMIN_MENU SET MENUICON = '041.svg' where id = '101030';
+
+DELETE FROM T_CORE_CONSTANT WHERE ID='FILE-VIEW-EXTENSIONS';
+
+commit;
+-- ----------------------------- 2021-05-17 add by shixw------------end
+-- ----------------------------- 2021-05-25 add by zhangxt------------begin
+UPDATE t_core_menu SET href = '/secure/core/module/sys/audit/audit-configs/page/edit-list' WHERE id = '9341';
+UPDATE t_core_menu SET href = '/secure/core/module/sys/audit/audit-logs/page/search-list' WHERE id = '9343';
+commit;
+UPDATE T_CORE_SYSTEM_CONFIG SET VERSION = '1.1.0' WHERE ID = 'system-config';
+COMMIT;
+-- ----------------------------- 2021-05-25 add by zhangxt------------end
+
+-- ----------------------------- 2021-05-27 add by zhangpf--------------begin
+CALL INSERTI18N('GIKAM.BPMN.STATUS.REJECT', '审批拒绝', '审批拒绝', 'zh-CN', '审批拒绝');
+CALL INSERTI18N('GIKAM.BPMN.STATUS.UNDO', '回退', '回退', 'zh-CN', '回退');
+CALL INSERTI18N('GIKAM.BPMN.STATUS.APPROVE', '审核中', '审核中', 'zh-CN', '审核中');
+COMMIT;
+-- ----------------------------- 2021-05-27 add by zhangpf--------------end
+
+-- ----------------------------- 2021-05-31 add by shixw------------begin
+
+UPDATE T_CORE_SCHEDULE_TASK SET SERVICENAME = 'com.sunwayworld.cloud.gikam.email.service.CoreEmailService' WHERE ID = 'EMAIL';
+
+commit;
+-- ----------------------------- 2021-05-31 add by shixw------------end
+
+
+-- ----------------------------- 2021-06-17 add by zhangjr--------------begin
+-- 建表语句
+CREATE TABLE IF NOT EXISTS `T_CORE_STUDIO_TABLE_FIELD`(
+     `ID` BIGINT NOT NULL COMMENT '主键',
+     `TABLENAME` VARCHAR(32)  NOT NULL COMMENT '表名',
+     `FIELD` VARCHAR(32)  NOT NULL COMMENT '列名',
+     `CONFIG` VARCHAR(512) NOT NULL COMMENT '配置',
+      PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='表中列信息';
+
+CREATE INDEX IDX_CSTF_TABLENAME ON T_CORE_STUDIO_TABLE_FIELD (TABLENAME);
+-- ----------------------------- 2021-06-17 add by zhangjr--------------end
+
+
+-- 原notification微服务
+-- ----------------------------- 2021-06-18 add by zhangxt--------------begin
+
+ALTER TABLE T_CORE_NOTIFICATION_TMPL  change column NAME  `TITLE` varchar(96) NOT NULL COMMENT '通知名称';
+ALTER TABLE T_CORE_NOTIFICATION_TMPL DROP COLUMN DESCTEMPLATE;
+ALTER TABLE T_CORE_NOTIFICATION_TMPL  change column CONTENTTEMPLATE  `CONTENT` text COMMENT '通知内容模板';
+ALTER TABLE T_CORE_NOTIFICATION_TMPL  change column FORWARDCATEGORY  `VIEWMETHOD` varchar(36) DEFAULT NULL COMMENT '详情页面查看方式(menu:菜单功能; page: 系统页面; no: 无详情)';
+
+ALTER TABLE T_CORE_NOTIFICATION_TMPL DROP COLUMN DOWNLOADCATEGORY;
+ALTER TABLE T_CORE_NOTIFICATION_TMPL DROP COLUMN TIMEWARNING;
+
+ALTER TABLE T_CORE_NOTIFICATION_TMPL add column PAGEURL VARCHAR(300) COMMENT '系统页面地址';
+
+UPDATE T_CORE_NOTIFICATION_TMPL SET VIEWMETHOD = 'menu' WHERE VIEWMETHOD = 'grid';
+UPDATE T_CORE_NOTIFICATION_TMPL SET VIEWMETHOD = 'no' WHERE VIEWMETHOD = 'notForward';
+
+DELETE FROM T_CORE_CODE  WHERE CODECATEGORYID = 'forwardCategory';
+DELETE FROM T_CORE_ADMIN_SELECT_CONFIG   WHERE  CATEGORY = 'forward-category';
+
+INSERT INTO T_CORE_CODE_CATEGORY(ID, CODECATEGORYNAME, CODECLASSID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME)
+    VALUES ('notificationViewMethod', '消息通知详情页面查看方式', 'sys', NULL, 1, NULL, NULL, NULL, NULL);
+
+INSERT INTO T_CORE_CODE(ID, CODECATEGORYID, CODE, CODENAME, ORDERNO, VERSION, LASTSUSPENDEDFLAG) VALUES(F_GET_SEQ_CORE(), 'notificationViewMethod', 'menu', '菜单功能页面', 1, 1, '0');
+INSERT INTO T_CORE_CODE(ID, CODECATEGORYID, CODE, CODENAME, ORDERNO, VERSION, LASTSUSPENDEDFLAG) VALUES(F_GET_SEQ_CORE(), 'notificationViewMethod', 'page', '普通功能页面', 2, 1, '0');
+INSERT INTO T_CORE_CODE(ID, CODECATEGORYID, CODE, CODENAME, ORDERNO, VERSION, LASTSUSPENDEDFLAG) VALUES(F_GET_SEQ_CORE(), 'notificationViewMethod', 'no', '无详情', 3, 1, '0');
+
+INSERT INTO T_CORE_ADMIN_SELECT_CONFIG(ID, NAME, CATEGORY, URL, VALUEFIELD, TEXTFIELD)
+  VALUES(F_GET_SEQ_CORE(), '消息通知详情页面查看方式', 'notification-view-method', '/secure/core/module/sys/codes/queries/selectable?codeCategoryId=notificationViewMethod', 'code', 'codeName');
+
+CALL DELETEI18N('T_CORE_NOTIFICATION_TMPL.NAME');
+CALL DELETEI18N('T_CORE_NOTIFICATION_TMPL.ATTACHMENTURL');
+CALL DELETEI18N('T_CORE_NOTIFICATION_TMPL.FORWARDCATEGORY');
+CALL DELETEI18N('T_CORE_NOTIFICATION_TMPL.CONTENTTEMPLATE');
+
+CALL INSERTI18N('T_CORE_NOTIFICATION_TMPL.TITLE', '消息通知的标题', '标题', 'zh-CN', '标题');
+CALL INSERTI18N('T_CORE_NOTIFICATION_TMPL.VIEWMETHOD', '消息通知的详情查看方式', '详情查看方式', 'zh-CN', '详情查看方式');
+CALL INSERTI18N('T_CORE_NOTIFICATION_TMPL.CONTENT', '消息通知的通知内容', '通知内容', 'zh-CN', '通知内容');
+CALL INSERTI18N('T_CORE_NOTIFICATION_TMPL.PAGEURL', '消息通知的系统页面地址', '页面URL', 'zh-CN', '页面URL');
+
+ALTER TABLE T_CORE_NOTIFICATION_INST  change column `DESC`  `TITLE` varchar(192) NOT NULL COMMENT '通知标题';
+ALTER TABLE T_CORE_NOTIFICATION_INST DROP COLUMN ATTACHMENTURL;
+ALTER TABLE T_CORE_NOTIFICATION_INST DROP COLUMN CREATEDBYID;
+ALTER TABLE T_CORE_NOTIFICATION_INST DROP COLUMN CREATEDBYNAME;
+ALTER TABLE T_CORE_NOTIFICATION_INST DROP COLUMN CREATEDBYORGID;
+ALTER TABLE T_CORE_NOTIFICATION_INST DROP COLUMN CREATEDBYORGNAME;
+
+ALTER TABLE T_CORE_NOTIFICATION_INST  change column `FORWARDCATEGORY`  `VIEWMETHOD` varchar(36) DEFAULT NULL COMMENT '详情页面查看方式(menu:菜单功能; page: 系统页面; no: 无详情)';
+
+ALTER TABLE T_CORE_NOTIFICATION_INST DROP COLUMN DOWNLOADCATEGORY;
+ALTER TABLE T_CORE_NOTIFICATION_INST DROP COLUMN TIMEWARNING;
+ALTER TABLE T_CORE_NOTIFICATION_INST ADD column PAGEURL VARCHAR(300) comment '系统页面地址';
+
+CALL DELETEI18N('T_CORE_NOTIFICATION_INST.DESC');
+CALL DELETEI18N('T_CORE_NOTIFICATION_INST.ATTACHMENTURL');
+CALL DELETEI18N('T_CORE_NOTIFICATION_INST.CREATEDBYID');
+CALL DELETEI18N('T_CORE_NOTIFICATION_INST.CREATEDBYNAME');
+CALL DELETEI18N('T_CORE_NOTIFICATION_INST.CREATEDBYORGID');
+CALL DELETEI18N('T_CORE_NOTIFICATION_INST.CREATEDBYORGNAME');
+CALL DELETEI18N('T_CORE_NOTIFICATION_INST.FORWARDCATEGORY');
+
+CALL INSERTI18N('T_CORE_NOTIFICATION_INST.TITLE', '消息通知的标题', '标题', 'zh-CN', '标题');
+CALL INSERTI18N('T_CORE_NOTIFICATION_INST.VIEWMETHOD', '消息通知的详情查看方式', '详情查看方式', 'zh-CN', '详情查看方式');
+CALL INSERTI18N('T_CORE_NOTIFICATION_INST.PAGEURL', '消息通知的系统页面地址', '页面URL', 'zh-CN', '页面URL');
+
+CREATE TABLE T_CORE_NOTIFICATION_INST_FILE (
+    ID  bigint(20) COMMENT '主键',
+    INSTID  bigint(20) COMMENT '通知实例主键',
+    FILENAME VARCHAR(300) COMMENT '附件名称', 
+    FILEDOWNLOADURL VARCHAR(600) COMMENT '附件下载地址', 
+    PRIMARY KEY (ID)
+)ENGINE = INNODB DEFAULT CHARSET = UTF8  COMMENT='通知实例中的附件列表';
+
+
+UPDATE T_CORE_MENU SET HREF = '/secure/core/module/item/notification/notification-instances/page/edit-list' WHERE id = '950502';
+UPDATE T_CORE_MENU SET HREF = '/secure/core/module/item/notification/notification-templates/page/edit-list' WHERE id = '950501';
+DELETE FROM t_core_menu WHERE id = '9403';
+
+INSERT INTO T_CORE_NOTIFICATION_TMPL (ID, TITLE, VIEWMETHOD, CONTENT, MENUID, MENUNAME, PAGEURL) values('EXPORT_EXCEL', '数据导出', 'no', 'Excel已导出', NULL, NULL, null);
+INSERT INTO T_CORE_NOTIFICATION_TMPL (ID, TITLE, VIEWMETHOD, CONTENT, MENUID, MENUNAME, PAGEURL) values('MESSAGE', '站内信息', 'page', '[${messageSender}]给您发送的站内消息：${messageSubject}。', NULL, NULL, '/secure/core/module/item/messages/page/detail?source=query&id=${id}&activatedFlag=1&receipentId=${receipentId}');
+commit;
+
+-- ----------------------------- 2021-06-18 add by zhangxt--------------end
+-- 原notification微服务
+
+-- ----------------------------- 2021-06-19 add by zhangxt--------------begin
+CALL INSERTI18N('CORE.MODULE.ITEM.INSTANCE.TAB.ATTACHMENT', '消息通知的附件', '附件', 'zh-CN', '附件');
+CALL INSERTI18N('T_CORE_NOTIFICATION_INST_FILE.FILENAME', '消息通知的附件名称', '附件名称', 'zh-CN', '附件名称');
+-- ----------------------------- 2021-06-19 add by zhangxt--------------end
+
+-- ----------------------------- 2021-06-25 add by zhangpf--------------begin
+ALTER TABLE t_core_log ADD USERORGID varchar(36) NULL COMMENT '操作人单位编码';
+ALTER TABLE t_core_log ADD USERORGNAME varchar(270) NULL COMMENT '操作人单位名称';
+
+CALL INSERTI18N('T_CORE_LOG.USERORGID', '系统日志的操作人单位编码', '操作人单位编码', 'zh-CN', '操作人单位编码');
+CALL INSERTI18N('T_CORE_LOG.USERORGNAME', '系统日志的操作人单位名称', '操作人单位名称', 'zh-CN', '操作人单位名称');
+
+UPDATE T_CORE_LOG SET USERORGID = (SELECT U.ORGID FROM T_CORE_USER U WHERE U.ID = USERID)
+ WHERE USERID != 'NIL';
+ 
+UPDATE T_CORE_LOG SET USERORGNAME = (SELECT U.ORGNAME FROM T_CORE_USER U WHERE U.ID = USERID)
+ WHERE USERID != 'NIL';
+
+ COMMIT;
+-- ----------------------------- 2021-06-25 add by zhangpf--------------end
+
+-- ----------------------------- 2021-07-05 add by zhangpf--------------begin
+CALL INSERTI18N('T_CORE_ROLE_PERMISSION_TYPE.COMPCATEGORY','系统角色权限类型的组件类型','组件类型','zh-CN','组件类型');
+
+CALL INSERTI18N('T_CORE_STUDIO_PAGE_DRAFT.SERVICE_NAME','页面配置草稿','页面配置草稿','zh-CN','页面配置草稿');
+CALL INSERTI18N('T_CORE_STUDIO_PAGE_DRAFT.ID','主键','主键','zh-CN','主键');
+CALL INSERTI18N('T_CORE_STUDIO_PAGE_DRAFT.URL','访问页面的路径','访问页面的路径','zh-CN','访问页面的路径');
+CALL INSERTI18N('T_CORE_STUDIO_PAGE_DRAFT.JSON','访问页面的json数据','访问页面的json数据','zh-CN','访问页面的json数据');
+
+CALL INSERTI18N('T_CORE_STUDIO_PAGE.SERVICE_NAME','页面配置','页面配置','zh-CN','页面配置');
+CALL INSERTI18N('T_CORE_STUDIO_PAGE.ID','主键','主键','zh-CN','主键');
+CALL INSERTI18N('T_CORE_STUDIO_PAGE.URL','访问页面的路径','访问页面的路径','zh-CN','访问页面的路径');
+CALL INSERTI18N('T_CORE_STUDIO_PAGE.JSON','访问页面的json数据','访问页面的json数据','zh-CN','访问页面的json数据');
+CALL INSERTI18N('T_CORE_STUDIO_PAGE.VERSION','版本','版本','zh-CN','版本');
+CALL INSERTI18N('T_CORE_STUDIO_PAGE.CREATEDBYID','制单人编码','制单人编码','zh-CN','制单人编码');
+CALL INSERTI18N('T_CORE_STUDIO_PAGE.CREATEDBYNAME','制单人名称','制单人名称','zh-CN','制单人名称');
+CALL INSERTI18N('T_CORE_STUDIO_PAGE.CREATEDTIME','制单时间','制单时间','zh-CN','制单时间');
+CALL INSERTI18N('T_CORE_STUDIO_PAGE.CREATEDBYORGID','制单人单位编码','制单人单位编码','zh-CN','制单人单位编码');
+CALL INSERTI18N('T_CORE_STUDIO_PAGE.CREATEDBYORGNAME','制单人单位名称','制单人单位名称','zh-CN','制单人单位名称');
+
+CALL INSERTI18N('T_CORE_ROLE_PERMISSION.PERMISSIONTYPEID','系统角色权限类型ID','系统角色权限类型ID','zh-CN','系统角色权限类型ID');
+CALL INSERTI18N('T_CORE_ROLE_PERMISSION.CREATEDTIME','制单时间','制单时间','zh-CN','制单时间');
+CALL INSERTI18N('T_CORE_ROLE_PERMISSION.CREATEDBYID','制单人ID','制单人ID','zh-CN','制单人ID');
+CALL INSERTI18N('T_CORE_ROLE_PERMISSION.TARGETID','目标id','目标id','zh-CN','目标id');
+CALL INSERTI18N('T_CORE_ROLE_PERMISSION.CREATEDBYNAME','制单人名称','制单人名称','zh-CN','制单人名称');
+CALL INSERTI18N('T_CORE_ROLE_PERMISSION.ROLEID','角色ID','角色ID','zh-CN','角色ID');
+CALL INSERTI18N('T_CORE_ROLE_PERMISSION.ID','主键','主键','zh-CN','主键');
+
+CALL INSERTI18N('T_CORE_ROLE.ID','主键','主键','zh-CN','主键');
+CALL INSERTI18N('T_CORE_ROLE.ROLENAME','角色名称','角色名称','zh-CN','角色名称');
+CALL INSERTI18N('T_CORE_ROLE.ROLEDESC','角色说明','角色说明','zh-CN','角色说明');
+CALL INSERTI18N('T_CORE_ROLE.USEDBYORGID','使用单位编码','使用单位编码','zh-CN','使用单位编码');
+CALL INSERTI18N('T_CORE_ROLE.USEDBYORGNAME','使用单位名称','使用单位名称','zh-CN','使用单位名称');
+CALL INSERTI18N('T_CORE_ROLE.ORDERNO','排序码','排序码','zh-CN','排序码');
+CALL INSERTI18N('T_CORE_ROLE.CREATEDBYID','制单人ID','制单人ID','zh-CN','制单人ID');
+CALL INSERTI18N('T_CORE_ROLE.CREATEDBYNAME','制单人名称','制单人名称','zh-CN','制单人名称');
+CALL INSERTI18N('T_CORE_ROLE.CREATEDTIME','制单日期','制单日期','zh-CN','制单日期');
+CALL INSERTI18N('T_CORE_ROLE.PASSWORDPOLICYID','密码策略ID','密码策略ID','zh-CN','密码策略ID');
+CALL INSERTI18N('T_CORE_ROLE.LASTSUSPENDEDFLAG','停用标志','停用标志','zh-CN','停用标志');
+CALL INSERTI18N('T_CORE_ROLE.LASTSUSPENDEDTIME','停用时间','停用时间','zh-CN','停用时间');
+CALL INSERTI18N('T_CORE_ROLE.LASTSUSPENDEDBYNAME','停用人名称','停用人名称','zh-CN','停用人名称');
+CALL INSERTI18N('T_CORE_ROLE.LASTSUSPENDEDBYID','停用人ID','停用人ID','zh-CN','停用人ID');
+
+CALL DELETEI18N('T_CORE_LOGIN_CONFIG.QCCODE');
+CALL DELETEI18N('T_CORE_LOGIN_CONFIG.IPHONEQCCODE');
+CALL DELETEI18N('T_CORE_LOGIN_CONFIG.ANDROIDMOBILEQCCODE');
+CALL DELETEI18N('T_CORE_LOGIN_CONFIG.ANDROIDPADQCCODE');
+CALL INSERTI18N('T_CORE_LOGIN_CONFIG.QRCODE', '登录配置的二维码登录', '二维码登录', 'zh-CN', '二维码登录');
+CALL INSERTI18N('T_CORE_LOGIN_CONFIG.IPHONEQRCODE', '登录配置的iPhone二维码', 'iPhone二维码', 'zh-CN', 'iPhone二维码');
+CALL INSERTI18N('T_CORE_LOGIN_CONFIG.ANDROIDMOBILEQRCODE', '登录配置的安卓Mobile二维码', '安卓Mobile二维码', 'zh-CN', '安卓Mobile二维码');
+CALL INSERTI18N('T_CORE_LOGIN_CONFIG.ANDROIDPADQRCODE', '登录配置的安卓Pad二维码', '安卓Pad二维码', 'zh-CN', '安卓Pad二维码');
+-- ----------------------------- 2021-07-05 add by zhangpf--------------end
+
+-- ----------------------------- 2021-07-06 add by zhangpf--------------begin
+CALL INSERTI18N('CORE.MODULE.SYS.REPORTS.TIP.ERROR_DEFAULT_PARAM', '错误的报表默认参数', '错误的报表默认参数', 'zh-CN', '错误的报表默认参数');
+
+-- ----------------------------- 2021-07-06 add by zhangpf--------------end
+
+-- ----------------------------- 2021-07-06 add by shixw------------begin
+
+INSERT INTO T_CORE_CODE(ID, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME, CODE)
+VALUES (F_GET_SEQ_CORE(), '新增', 'dp-config-import-operation', NULL, '3', '0', 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL, 'insert');
+
+commit;
+-- ----------------------------- 2021-07-06 add by shixw------------end
+
+-- ----------------------------- 2021-07-08 add by zhangjr--------------begin
+CREATE TABLE `T_CORE_M_USER` (
+  `ID` BIGINT NOT NULL COMMENT '主键',
+  `USERID` varchar(36) NOT NULL COMMENT '用户账号',
+  `USERNO` varchar(36) DEFAULT NULL COMMENT '用户编码',
+  `USERNAME` varchar(66) DEFAULT NULL COMMENT '用户名称',
+  `EMAIL` varchar(36) DEFAULT NULL COMMENT '邮箱',
+  `MOBILE` varchar(36) DEFAULT NULL COMMENT '手机号',
+  `IDCARD` varchar(24) DEFAULT NULL COMMENT '身份证号',
+  `ORGID` varchar(36) DEFAULT NULL COMMENT '单位编码',
+  `ORGNAME` varchar(192) COMMENT '单位名称',
+  `STATUS` varchar(36) DEFAULT NULL COMMENT '用户状态',
+  `USERTYPE` varchar(16) DEFAULT NULL COMMENT '用户类型，根据实际业务进行设置',
+  `EXPIRYDATE` datetime(6) DEFAULT NULL COMMENT '用户到期日',
+  `MULTILOGIN` varchar(1) DEFAULT NULL COMMENT '允许重复登录',
+  `SCHEDULEDTIME` datetime DEFAULT NULL COMMENT '预约执行时间',
+  `EXECUTED` varchar(1) DEFAULT NULL COMMENT '是否已执行（0-否 1-是）',
+  `CREATEDBYID` varchar(36) DEFAULT NULL COMMENT '制单人编码',
+  `CREATEDBYNAME` varchar(60) DEFAULT NULL COMMENT '制单人名称',
+  `CREATEDTIME` datetime DEFAULT NULL COMMENT '制单时间',
+  `CREATEDBYORGID` varchar(36) DEFAULT NULL COMMENT '制单人单位编码',
+  `CREATEDBYORGNAME` text COMMENT '制单人单位名称',
+  `ACTIVATEDFLAG` varchar(1) DEFAULT NULL COMMENT '是否启用（0-否 1-是）',
+  `ACTIVATEDBYID` varchar(36) DEFAULT NULL COMMENT '启用/停用人编码',
+  `ACTIVATEDBYNAME` varchar(60) DEFAULT NULL COMMENT '启用/停用人名称',
+  `ACTIVATEDTIME` datetime DEFAULT NULL COMMENT '启用/停用时间',
+  PRIMARY KEY (`ID`),
+  INDEX `IDX_CMU_USERID` (`USERID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='预约变更的用户表';
+
+CREATE TABLE `T_CORE_M_USER_PERMISSION` (
+  `ID` BIGINT NOT NULL COMMENT '主键',
+  `MODIFIEDUSERID` BIGINT NOT NULL COMMENT '预约变更的用户表ID',
+  `PERMISSIONTYPEID` varchar(36) DEFAULT NULL COMMENT '权限类型ID',
+  `TARGETID` varchar(36) DEFAULT NULL COMMENT '目标权限ID',
+  `DEFAULTFLAG` varchar(1) DEFAULT NULL COMMENT '是否默认值',
+  `CREATEDBYID` varchar(36) DEFAULT NULL COMMENT '制单人编码',
+  `CREATEDBYNAME` varchar(60) DEFAULT NULL COMMENT '制单人名称',
+  `CREATEDTIME` datetime DEFAULT NULL COMMENT '制单时间',
+  `CREATEDBYORGID` varchar(36) DEFAULT NULL COMMENT '制单人单位编码',
+  `CREATEDBYORGNAME` text COMMENT '制单人单位名称',
+  PRIMARY KEY (`ID`),
+  INDEX `IDX_CMUP_MODIFIEDUSERID` (`MODIFIEDUSERID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='预约变更的用户权限表';
+
+CREATE TABLE `T_CORE_M_USER_ROLE` (
+  `ID` BIGINT NOT NULL COMMENT '主键',
+  `MODIFIEDUSERID` BIGINT NOT NULL COMMENT '预约变更的用户表ID',
+  `ROLEID` BIGINT DEFAULT NULL COMMENT '角色ID',
+  `DEFAULTFLAG` varchar(1) DEFAULT NULL COMMENT '是否默认值',
+  `CREATEDBYID` varchar(36) DEFAULT NULL COMMENT '制单人编码',
+  `CREATEDBYNAME` varchar(60) DEFAULT NULL COMMENT '制单人名称',
+  `CREATEDTIME` datetime DEFAULT NULL COMMENT '制单时间',
+  `CREATEDBYORGID` varchar(36) DEFAULT NULL COMMENT '制单人单位编码',
+  `CREATEDBYORGNAME` text COMMENT '制单人单位名称',
+  PRIMARY KEY (`ID`),
+  INDEX `IDX_CMUR_MODIFIEDUSERID` (`MODIFIEDUSERID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='预约变更的用户角色表';
+
+ALTER TABLE t_core_user_permission_type ADD GRIDMODIFIEDQUERYURL varchar(129) NULL COMMENT '变更中的权限Grid查询URL';
+
+
+
+CALL INSERTI18N('CORE.MODIFIED_USER.WARNING.USERID_IN_MODIFICATION', '当用户在变更时，不允许重复变更。', '该用户在变更中，不允许重复变更', 'zh-CN', '该用户在变更中，不允许重复变更');
+
+INSERT INTO T_CORE_TABLE (ID,AUDITABLE,ATTACHMENT)
+VALUES ('T_CORE_M_USER','0','1');
+INSERT INTO T_CORE_TABLE (ID,AUDITABLE,ATTACHMENT)
+VALUES ('T_CORE_M_USER_PERMISSION','0','0');
+INSERT INTO T_CORE_TABLE (ID,AUDITABLE,ATTACHMENT)
+VALUES ('T_CORE_M_USER_ROLE','0','0');
+
+INSERT INTO t_core_table_hierarchy (ID, TABLENAME, MASTERTABLENAME, REFERCOLUMN)
+VALUES (F_GET_SEQ_CORE(), 'T_CORE_M_USER_PERMISSION', 'T_CORE_M_USER', 'MODIFIEDUSERID');
+INSERT INTO t_core_table_hierarchy (ID, TABLENAME, MASTERTABLENAME, REFERCOLUMN)
+VALUES (F_GET_SEQ_CORE(), 'T_CORE_M_USER_ROLE', 'T_CORE_M_USER', 'MODIFIEDUSERID');
+COMMIT;
+
+INSERT INTO T_CORE_MENU(ID, MENUNAME, HREF, PARENTID, ORDERNO, MENUINITNAME, ICON, I18NCODE)
+VALUES('9011', '用户预约变更', '/secure/core/module/mdm/m-users/page/edit-list', '90', '9011', '用户预约变更', '008.svg', 'CORE.MENU.MENUNAME.USER_ORG.MODIFICATION_USER');
+COMMIT;
+
+UPDATE T_CORE_USER_PERMISSION_TYPE SET GRIDMODIFIEDQUERYURL  = '/secure/core/module/mdm/m-users/{id}/user-roles/queries' WHERE ID = 'T_CORE_ROLE';
+UPDATE T_CORE_USER_PERMISSION_TYPE SET GRIDMODIFIEDQUERYURL  = '/secure/core/module/mdm/m-users/{id}/user-permissions/queries?permissionType=T_CORE_ORG' WHERE ID = 'T_CORE_ORG';
+COMMIT;
+
+CALL INSERTI18N('CORE.MENU.MENUNAME.USER_ORG.MODIFICATION_USER', '用户变更管理。', '用户变更管理', 'zh-CN', '用户变更管理');
+CALL INSERTI18N('T_CORE_M_USER.ID', '用户变更的主键。', '主键', 'zh-CN', '主键');
+CALL INSERTI18N('T_CORE_M_USER.SCHEDULEDTIME', '用户变更后，预约执行时间。', '预约时间', 'zh-CN', '预约时间');
+CALL INSERTI18N('T_CORE_M_USER.ACTIVATEDTIME', '用户变更时启用时间。', '启用时间', 'zh-CN', '启用时间');
+
+CALL INSERTI18N('CORE.MODULE.MDM.MODIFICATION_USER.TIP.CONFIRM_TO_ACTIVATE_FOLLOWING_USERS',
+    '是否启用已选择的变更用户。', '是否启用', 'zh-CN', '是否启用');
+CALL INSERTI18N('CORE.MODULE.MDM.MODIFICATION_USER.TIP.CONFIRM_TO_ACTIVATE',
+    '是否启用已选择的变更用户。', '是否启用', 'zh-CN', '是否启用');
+    
+CALL INSERTI18N('CORE.MODULE.MODIFICATION_USER.TAB.EDIT_LIST', '用户变更管理中的编辑页面。', '编辑列表', 'zh-CN', '编辑列表');
+CALL INSERTI18N('CORE.MODULE.MODIFICATION_USER.TAB.ACTIVATED_LIST', '用户变更管理中的已启用页面。', '已启用列表', 'zh-CN', '已启用列表');
+CALL INSERTI18N('CORE.MODULE.MODIFICATION_USER.TAB.EXECUTED_LIST', '用户变更管理中的已执行页面。', '已执行列表', 'zh-CN', '已执行列表');
+CALL INSERTI18N('CORE.MODULE.MODIFICATION_USER.TITLE.USER_CHOOSE', '用户变更时选择用户', '选择用户', 'zh-CN', '选择用户');
+CALL INSERTI18N('CORE.MODULE.MODIFICATION_USER.TITLE.DETAIL', '变更用户详情', '变更用户详情', 'zh-CN', '变更用户详情');
+CALL INSERTI18N('CORE.MODULE.MODIFICATION_USER.TIP.SCHEDULEDTIME_INVALID', '变更预约时间无效', '预约时间无效', 'zh-CN', '预约时间无效');
+CALL INSERTI18N('CORE.MODULE.MODIFICATION_USER.TIP.UNABLE_DEACTIVATE_EXECUTED', '已执行的用户变更信息，不能失效', '不能失效已执行的用户变更信息', 'zh-CN', '不能失效已执行的用户变更信息');
+
+CALL INSERTI18N('CORE.MODULE.MDM.MODIFICATION_USERS.TAB.BASE_INFO', '变更中的用户详情', '变更中的用户详情', 'zh-CN', '变更中的用户详情');
+COMMIT;
+-- ----------------------------- 2021-07-08 add by zhangjr--------------end
+
+-- ----------------------------- 2021-07-15 add by zhangxt--------------begin
+CALL INSERTI18N('CORE.MODULE.SYS.T_CORE_BPMN_DIAGRAM.CANDIDATOR.ALLUSER', '所有审核人员', '所有审核人员', 'zh-CN', '所有审核人员');
+commit;
+-- ----------------------------- 2021-07-15 add by zhangxt--------------end

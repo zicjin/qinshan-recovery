@@ -1,0 +1,5 @@
+﻿-- ----------------------------- 2021-08-02 add by shixw------------begin
+
+ALTER TABLE T_CORE_ROLE MODIFY COLUMN USEDBYORGID varchar(270) CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '使用单位编码';
+
+-- ----------------------------- 2021-08-02 add by shixw------------end

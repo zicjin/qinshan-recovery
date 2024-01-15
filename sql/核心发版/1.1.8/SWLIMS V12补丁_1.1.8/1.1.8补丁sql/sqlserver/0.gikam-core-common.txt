@@ -1,0 +1,32 @@
+﻿-- ----------------------------- 2021-11-03 add by zhanghang------------begin
+
+INSERT INTO T_CORE_MENU(ID, MENUNAME, HREF, PARENTID, ORDERNO, MENUINITNAME, I18NCODE) VALUES ('9403', '导出日志', '/secure/core/module/sys/export-logs/page/edit-list', '94', '9403','导出日志', 'CORE.MENU.MENUNAME.SYS.LOG.EXPORT');
+
+alter table dbo.T_CORE_EXPORT_LOG ADD MENUNAME VARCHAR(64) NULL
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'菜单名称',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_EXPORT_LOG',
+'COLUMN', N'MENUNAME'
+GO
+alter table dbo.T_CORE_EXPORT_LOG ADD SUCCESS VARCHAR(1) NULL
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'导出结果（1-成功/0-失败）',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_EXPORT_LOG',
+'COLUMN', N'SUCCESS'
+GO
+
+EXEC  DBO.INSERTI18N N'T_CORE_EXPORT_LOG.MENUNAME',N'菜单名称',N'菜单名称',N'zh-CN',N'菜单名称'
+GO
+EXEC  DBO.INSERTI18N N'T_CORE_EXPORT_LOG.SUCCESS',N'导出结果',N'导出结果',N'zh-CN',N'导出结果'
+GO
+EXEC  DBO.INSERTI18N N'T_CORE_EXPORT_LOG.OPERATION',N'文件操作',N'文件操作',N'zh-CN',N'文件操作'
+GO
+
+
+-- ----------------------------- 2021-11-03 add by zhanghang------------end

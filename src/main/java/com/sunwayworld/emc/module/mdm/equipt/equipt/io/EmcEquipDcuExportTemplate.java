@@ -13,6 +13,7 @@ import java.util.TreeSet;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import com.sunwayworld.framework.support.base.service.GenericTemplateService;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
@@ -26,14 +27,13 @@ import com.sunwayworld.emc.module.mdm.equipt.equipt.service.EmcEquiptTestItemSer
 import com.sunwayworld.framework.data.Pair;
 import com.sunwayworld.framework.exception.FileException;
 import com.sunwayworld.framework.utils.StringUtils;
-import com.sunwayworld.module.item.file.export.GenericExportTemplate;
 
 /**
  * 将DCU配置导出为采集结果
  * @author zhengxy@sunwayworld.com 2020年09月17日
  */
 @Component(value = "emcEquipDcuExportTemplate")
-public class EmcEquipDcuExportTemplate implements GenericExportTemplate<String> {
+public class EmcEquipDcuExportTemplate implements GenericTemplateService<String> {
 
     @Autowired
     private EmcEquiptTestItemService testItemService;

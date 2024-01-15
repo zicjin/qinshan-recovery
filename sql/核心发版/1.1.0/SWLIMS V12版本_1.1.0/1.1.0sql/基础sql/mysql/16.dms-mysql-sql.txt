@@ -1,0 +1,33 @@
+-- ----------------------------- 2020-11-27 add by shixw--------------begin
+
+-- 建表语句
+
+CREATE TABLE IF NOT EXISTS `T_CORE_DMS_CATEGORY`(
+     `ID` VARCHAR(60)  NOT NULL COMMENT '全文检索类型编码',
+     `DMSCATEGORYNAME` VARCHAR(60)  DEFAULT NULL COMMENT '全文检索类型名称',
+     `PARENTID` VARCHAR(60)  DEFAULT NULL COMMENT '父类型编码',
+     `ORDERNO` BIGINT DEFAULT NULL COMMENT '排序码',
+      PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='全文检索类型';
+
+CALL INSERTI18N('T_CORE_DMS_CATEGORY.SERVICE_NAME', '全文检索类型', '全文检索类型', 'zh-CN', '全文检索类型');
+CALL INSERTI18N('T_CORE_DMS_CATEGORY.ID', '全文检索类型的全文检索类型编码', '全文检索类型编码', 'zh-CN', '全文检索类型编码');
+CALL INSERTI18N('T_CORE_DMS_CATEGORY.DMSCATEGORYNAME', '全文检索类型的全文检索类型名称', '全文检索类型名称', 'zh-CN', '全文检索类型名称');
+CALL INSERTI18N('T_CORE_DMS_CATEGORY.PARENTID', '全文检索类型的父类型编码', '父类型编码', 'zh-CN', '父类型编码');
+CALL INSERTI18N('T_CORE_DMS_CATEGORY.ORDERNO', '全文检索类型的排序码', '排序码', 'zh-CN', '排序码');
+
+
+-- 创建菜单语句
+INSERT INTO T_CORE_MENU (ID, MENUNAME, HREF, PARENTID, ORDERNO, ICON, MENUINITNAME)
+VALUES ('99', '综合查询', NULL, NULL, '99', '016.svg', '综合查询');
+INSERT INTO T_CORE_MENU (ID, MENUNAME, HREF, PARENTID, ORDERNO, ICON, MENUINITNAME)
+VALUES ('9901', '文档查询', '/secure/core/module/dms/documents/page/search-list', '99', '9901', '018.svg', '文档查询');
+
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_DMS_CATEGORY', '0', '0');
+
+INSERT INTO T_CORE_DMS_CATEGORY (ID,DMSCATEGORYNAME,PARENTID,ORDERNO) VALUES ('root','全部',NULL,1);
+
+COMMIT;
+
+-- ----------------------------- 2020-11-27 add by shixw------------end

@@ -11,6 +11,9 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import com.sunwayworld.framework.io.file.FilePathDTO;
+import com.sunwayworld.framework.io.file.FilePathManager;
+import com.sunwayworld.module.item.file.utils.CoreFileUtils;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Row;
@@ -23,30 +26,28 @@ import com.sunwayworld.emc.module.mdm.purchapply.service.EmcPurchDetailService;
 import com.sunwayworld.framework.context.ApplicationContextHelper;
 import com.sunwayworld.framework.exception.FileException;
 import com.sunwayworld.framework.io.excel.ExcelHelper;
-import com.sunwayworld.framework.io.file.FileHelper;
-import com.sunwayworld.framework.io.file.FileRepresentation;
 import com.sunwayworld.framework.support.PersistableHelper;
 import com.sunwayworld.module.item.file.bean.CoreFileBean;
-import com.sunwayworld.module.item.file.bean.ImportResultRepresentation;
-import com.sunwayworld.module.item.file.function.ImportFileFunction;
+import com.sunwayworld.module.item.file.bean.CoreFileImportResultDTO;
+import com.sunwayworld.module.item.file.function.CoreFileImportFunction;
 
 /**
  * @author luoc@sunwayworld.com 2020/11/19
  */
 @Component(value = "emcPurchapplyImportFileFunction")
-public class EmcPurchapplyImportFileFunction implements ImportFileFunction {
+public class EmcPurchapplyImportFileFunction implements CoreFileImportFunction {
 
     @Autowired
     private EmcPurchDetailService emcPurchDetailService;
 
     @Override
     @Transactional
-    public ImportResultRepresentation apply(CoreFileBean file) {
-        ImportResultRepresentation importResultRepresentation = new ImportResultRepresentation();
+    public CoreFileImportResultDTO apply(CoreFileBean file) {
+        CoreFileImportResultDTO fileImportResultDTO = new CoreFileImportResultDTO();
         String purchId = file.getTargetId().split("\\$")[1];
-        FileRepresentation fr = FileRepresentation.of(file);
-        importPurchDetail(FileHelper.getAbsolutePath(fr).toFile().getAbsolutePath(),purchId);
-        return importResultRepresentation;
+        FilePathDTO fr = CoreFileUtils.toFilePath(file);
+        importPurchDetail(FilePathManager.getLocalPath(fr).toFile().getAbsolutePath(),purchId);
+        return fileImportResultDTO;
     }
 
     private void importPurchDetail(String filePath, String purchId) {

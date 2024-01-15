@@ -21,6 +21,10 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import com.sunwayworld.framework.io.file.FilePathDTO;
+import com.sunwayworld.framework.io.file.FilePathManager;
+import com.sunwayworld.module.item.file.manager.CoreFileManager;
+import com.sunwayworld.module.item.file.utils.CoreFileUtils;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFTable;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -125,8 +129,6 @@ import com.sunwayworld.framework.data.page.Pagination;
 import com.sunwayworld.framework.exception.FileException;
 import com.sunwayworld.framework.executor.ExecutorHelper;
 import com.sunwayworld.framework.i18n.I18nHelper;
-import com.sunwayworld.framework.io.file.FileHelper;
-import com.sunwayworld.framework.io.file.FileRepresentation;
 import com.sunwayworld.framework.io.file.FileScope;
 import com.sunwayworld.framework.mybatis.mapper.MatchPattern;
 import com.sunwayworld.framework.mybatis.mapper.SearchFilter;
@@ -146,7 +148,6 @@ import com.sunwayworld.framework.utils.ObjectUtils;
 import com.sunwayworld.framework.utils.StringUtils;
 import com.sunwayworld.framework.validator.data.annotation.ValidateDataWith;
 import com.sunwayworld.module.item.file.bean.CoreFileBean;
-import com.sunwayworld.module.item.file.cloud.CoreFileCloudService;
 import com.sunwayworld.module.item.file.service.CoreFileService;
 import com.sunwayworld.module.mdm.org.bean.CoreOrgBean;
 import com.sunwayworld.module.mdm.org.service.CoreOrgService;
@@ -207,7 +208,7 @@ public class PfReportServiceImpl extends EmcReportServiceImpl implements PfRepor
     private CoreFileService coreFileService;
 
     @Autowired
-    private CoreFileCloudService fileCloudService;
+    private CoreFileManager fileManager;
 
     @Autowired
     private EmcPropertyDataService propertyDataService;
@@ -851,7 +852,7 @@ public class PfReportServiceImpl extends EmcReportServiceImpl implements PfRepor
             coreFileService.getDao().update(updateCoreFileList, "TARGETID");
 
             CoreFileBean wordTemplateConfigFile = wordReportFileList.get(0);
-            File templateFile = FileHelper.getAbsolutePath(FileRepresentation.of(wordTemplateConfigFile.getScope(), DateTimeUtils.getDateSerialNumber(wordTemplateConfigFile.getCreatedTime()),
+            File templateFile = FilePathManager.getLocalPath(FilePathDTO.of(wordTemplateConfigFile.getScope(), DateTimeUtils.getDateSerialNumber(wordTemplateConfigFile.getCreatedTime()),
                     wordTemplateConfigFile.getMd5Name(), wordTemplateConfigFile.getName())).toFile();
             generateWordReport(templateFile, templateFile, report, reportList, project, true);
             List<CoreFileBean> newCoreFileList = saveWordReportCoreFile(wordTemplateConfigFile.getName(), templateFile, reportList, EmcConstant.WORD_REPORT_ATTACHMENT_TYPE);
@@ -869,9 +870,9 @@ public class PfReportServiceImpl extends EmcReportServiceImpl implements PfRepor
             CoreFileBean wordTemplateConfigFile = wordTemplateConfigFileList.get(0);
 
             String wordReportFileName = FileUtils.getFileBaseName(wordTemplateConfigFile.getName()) + "-" + System.currentTimeMillis() + "." + FileUtils.getFileExtension(wordTemplateConfigFile.getName());
-            File templateFile = FileHelper.getAbsolutePath(FileRepresentation.of(wordTemplateConfigFile.getScope(), "",
+            File templateFile = FilePathManager.getLocalPath(FilePathDTO.of(wordTemplateConfigFile.getScope(), "",
                     wordTemplateConfigFile.getExt(), wordTemplateConfigFile.getName())).toFile();
-            File wordReportFile = FileHelper.getAbsolutePath(FileRepresentation.of(wordTemplateConfigFile.getScope(), "",
+            File wordReportFile = FilePathManager.getLocalPath(FilePathDTO.of(wordTemplateConfigFile.getScope(), "",
                     wordTemplateConfigFile.getExt(), wordReportFileName)).toFile();
 
             generateWordReport(templateFile, wordReportFile, report, reportList, project, false);
@@ -1101,7 +1102,7 @@ public class PfReportServiceImpl extends EmcReportServiceImpl implements PfRepor
         copyFile.setName(wordReportFileName);
         copyFile.setFileExt(FileUtils.getFileExtension(wordReportFileName));
         copyFile.setScope(FileScope.export.name());
-        copyFile.setTimes(0);
+        copyFile.setTimes(0L);
         copyFile.setDownloadable(Constant.YES);
         copyFile.setCreatedTime(LocalDateTime.now());
         copyFile.setBizCategory(bizCategory);
@@ -1117,7 +1118,7 @@ public class PfReportServiceImpl extends EmcReportServiceImpl implements PfRepor
             insertCoreFile.setTargetId(getDao().getTable() + "$" + oldReport.getId());
             insertCoreFile.setMd5Name(EncryptUtils.MD5Encrypt(fileId + "$" + wordReportFileName));
             // 将文件复制一份到export目录下，并与报告ID绑定
-            fileCloudService.archive(FileRepresentation.of(insertCoreFile), wordReportFile);
+            fileManager.upload(CoreFileUtils.toFilePath(insertCoreFile), wordReportFile);
             insertCoreFileList.add(insertCoreFile);
         });
 
@@ -1288,7 +1289,7 @@ public class PfReportServiceImpl extends EmcReportServiceImpl implements PfRepor
             // 一个用户只有一个点子签名文件
             CoreFileBean userSignatureFile = userSignatureFileList.get(0);
 
-            String userSignatureFileUrl = FileHelper.getAbsolutePath(FileRepresentation.of(userSignatureFile.getScope(),
+            String userSignatureFileUrl = FilePathManager.getLocalPath(FilePathDTO.of(userSignatureFile.getScope(),
                     DateTimeUtils.getDateSerialNumber(userSignatureFile.getCreatedTime()), userSignatureFile.getMd5Name(),
                     userSignatureFile.getName())).toString();
 
@@ -1329,7 +1330,7 @@ public class PfReportServiceImpl extends EmcReportServiceImpl implements PfRepor
 
         projectReportMap.forEach((projectId, curReportList) -> {
             wordFileList.stream().filter(file -> StringUtils.equals(file.getTargetId(), "T_EMC_REPORT$" + curReportList.get(0).getId())).findFirst().ifPresent(file -> {
-                File wordFile = new File(FileHelper.getAbsolutePath(FileRepresentation.of(file)).toString());
+                File wordFile = new File(FilePathManager.getLocalPath(CoreFileUtils.toFilePath(file)).toString());
                 String fileName = file.getName().substring(0, file.getName().indexOf("-") + 1) + System.currentTimeMillis() + ".pdf";
                 File watermarkFile = JSTIeSealHelper.addWatermark(wordFile, projectId, projectIdNoMap.get(projectId), fileName, parentOrg.getOrgName());
                 saveWordReportCoreFile(watermarkFile.getName(), watermarkFile, curReportList, PfConstant.WATERMARK_WORD_REPORT_ATTACHMENT_TYPE);
@@ -1364,7 +1365,7 @@ public class PfReportServiceImpl extends EmcReportServiceImpl implements PfRepor
 
         projectReportMap.forEach((projectId, curReportList) -> {
             wordFileList.stream().filter(file -> StringUtils.equals(file.getTargetId(), "T_EMC_REPORT$" + curReportList.get(0).getId())).findFirst().ifPresent(file -> {
-                File wordFile = new File(FileHelper.getAbsolutePath(FileRepresentation.of(file)).toString());
+                File wordFile = new File(FilePathManager.getLocalPath(CoreFileUtils.toFilePath(file)).toString());
                 String fileName = file.getName().substring(0, file.getName().indexOf("-") + 1) + System.currentTimeMillis() + ".pdf";
                 File stampedFile = JSTIeSealHelper.sealFile(wordFile, projectId + "", projectIdNoMap.get(projectId), fileName);
                 saveWordReportCoreFile(stampedFile.getName(), stampedFile, curReportList, PfConstant.STAMPED_WORD_REPORT_ATTACHMENT_TYPE);
@@ -2098,7 +2099,7 @@ public class PfReportServiceImpl extends EmcReportServiceImpl implements PfRepor
             coreFileService.getDao().update(updateCoreFileList, "TARGETID");
 
             CoreFileBean wordTemplateConfigFile = wordReportFileList.get(0);
-            File templateFile = FileHelper.getAbsolutePath(FileRepresentation.of(wordTemplateConfigFile.getScope(), DateTimeUtils.getDateSerialNumber(wordTemplateConfigFile.getCreatedTime()),
+            File templateFile = FilePathManager.getLocalPath(FilePathDTO.of(wordTemplateConfigFile.getScope(), DateTimeUtils.getDateSerialNumber(wordTemplateConfigFile.getCreatedTime()),
                     wordTemplateConfigFile.getMd5Name(), wordTemplateConfigFile.getName())).toFile();
             generateWordReport(templateFile, templateFile, report, project, true, EmcConstant.WORD_REPORT_ATTACHMENT_TYPE);
             List<CoreFileBean> newCoreFileList = saveWordReportCoreFile(wordTemplateConfigFile.getName(), templateFile, reportList, EmcConstant.WORD_REPORT_ATTACHMENT_TYPE);
@@ -2116,9 +2117,9 @@ public class PfReportServiceImpl extends EmcReportServiceImpl implements PfRepor
             report.setReportNo(reportNo);
             String wordReportFileName = FileUtils.getFileBaseName(wordTemplateConfigFile.getName()) + "-" + reportNo + "." +FileUtils.getFileExtension(wordTemplateConfigFile.getName());
 
-            File templateFile = FileHelper.getAbsolutePath(FileRepresentation.of(wordTemplateConfigFile.getScope(), "",
+            File templateFile = FilePathManager.getLocalPath(FilePathDTO.of(wordTemplateConfigFile.getScope(), "",
                     wordTemplateConfigFile.getExt(), wordTemplateConfigFile.getName())).toFile();
-            File wordReportFile = FileHelper.getAbsolutePath(FileRepresentation.of(wordTemplateConfigFile.getScope(), "",
+            File wordReportFile = FilePathManager.getLocalPath(FilePathDTO.of(wordTemplateConfigFile.getScope(), "",
                     wordTemplateConfigFile.getExt(), wordReportFileName)).toFile();
 
             generateWordReport(templateFile, wordReportFile, report, project, false, EmcConstant.WORD_REPORT_ATTACHMENT_TYPE);
@@ -2181,16 +2182,16 @@ public class PfReportServiceImpl extends EmcReportServiceImpl implements PfRepor
                 return;
             }
 
-            List<FileRepresentation> fileRepresentations = curReportFileList.stream().map(FileRepresentation::of).collect(Collectors.toList());
-            List<FileRepresentation> validFileRepresentations = fileRepresentations.stream().filter(fr -> FileHelper.getAbsoluteDirPath(fr).toFile().exists()).collect(Collectors.toList());
+            List<FilePathDTO> fileRepresentations = curReportFileList.stream().map(CoreFileUtils::toFilePath).collect(Collectors.toList());
+            List<FilePathDTO> validFileRepresentations = fileRepresentations.stream().filter(fr -> FilePathManager.getLocalDirPath(fr).toFile().exists()).collect(Collectors.toList());
             if (validFileRepresentations.isEmpty()) {
                 return;
             }
 
-            String projectReportPdfName = "采样记录-"+report.getReportNo()+ ".pdf";
-            FileRepresentation composedPdfFile = FileRepresentation.of(FileScope.temp.name(), "" + System.currentTimeMillis(), StringUtils.randomUUID(8), projectReportPdfName);
-            String tempFilePath = fileCloudService.mergePdfFile(validFileRepresentations, composedPdfFile);
-
+            String projectReportPdfName = "采样记录-" + report.getReportNo() + ".pdf";
+            FilePathDTO composedPdfFile = FilePathDTO.of(FileScope.temp.name(), "" + System.currentTimeMillis(), StringUtils.randomUUID(8), projectReportPdfName);
+            coreFileService.mergePdfList(validFileRepresentations, composedPdfFile);
+            String tempFilePath = FilePathManager.getLocalPath(composedPdfFile).toString();
             // 保存文件信息到 t_core_file 表
             if (!StringUtils.isEmpty(tempFilePath)) {
                 CoreFileBean coreFileBean = new CoreFileBean();
@@ -2250,16 +2251,16 @@ public class PfReportServiceImpl extends EmcReportServiceImpl implements PfRepor
                 return;
             }
 
-            List<FileRepresentation> fileRepresentations = curReportFileList.stream().map(FileRepresentation::of).collect(Collectors.toList());
-            List<FileRepresentation> validFileRepresentations = fileRepresentations.stream().filter(fr -> FileHelper.getAbsoluteDirPath(fr).toFile().exists()).collect(Collectors.toList());
+            List<FilePathDTO> fileRepresentations = curReportFileList.stream().map(CoreFileUtils::toFilePath).collect(Collectors.toList());
+            List<FilePathDTO> validFileRepresentations = fileRepresentations.stream().filter(fr -> FilePathManager.getLocalDirPath(fr).toFile().exists()).collect(Collectors.toList());
             if (validFileRepresentations.isEmpty()) {
                 return;
             }
 
             String projectReportPdfName = "分析记录-"+report.getReportNo()+ ".pdf";
-            FileRepresentation composedPdfFile = FileRepresentation.of(FileScope.temp.name(), "" + System.currentTimeMillis(), StringUtils.randomUUID(8), projectReportPdfName);
-            String tempFilePath = fileCloudService.mergePdfFile(validFileRepresentations, composedPdfFile);
-
+            FilePathDTO composedPdfFile = FilePathDTO.of(FileScope.temp.name(), "" + System.currentTimeMillis(), StringUtils.randomUUID(8), projectReportPdfName);
+            coreFileService.mergePdfList(validFileRepresentations, composedPdfFile);
+            String tempFilePath = FilePathManager.getLocalPath(composedPdfFile).toString();
             // 保存文件信息到 t_core_file 表
             if (!StringUtils.isEmpty(tempFilePath)) {
                 CoreFileBean coreFileBean = new CoreFileBean();
@@ -2298,7 +2299,7 @@ public class PfReportServiceImpl extends EmcReportServiceImpl implements PfRepor
             coreFileService.getDao().update(updateCoreFileList, "TARGETID");
 
             CoreFileBean wordTemplateConfigFile = wordReportFileList.get(0);
-            File templateFile = FileHelper.getAbsolutePath(FileRepresentation.of(wordTemplateConfigFile.getScope(), DateTimeUtils.getDateSerialNumber(wordTemplateConfigFile.getCreatedTime()),
+            File templateFile = FilePathManager.getLocalPath(FilePathDTO.of(wordTemplateConfigFile.getScope(), DateTimeUtils.getDateSerialNumber(wordTemplateConfigFile.getCreatedTime()),
                     wordTemplateConfigFile.getMd5Name(), wordTemplateConfigFile.getName())).toFile();
             generateWordReport(templateFile, templateFile, report, project, true, PfConstant.QC_WORD_REPORT_ATTACHMENT_TYPE);
             List<CoreFileBean> newCoreFileList = saveWordReportCoreFile(wordTemplateConfigFile.getName(), templateFile, reportList, PfConstant.QC_WORD_REPORT_ATTACHMENT_TYPE);
@@ -2312,12 +2313,11 @@ public class PfReportServiceImpl extends EmcReportServiceImpl implements PfRepor
         if (!wordTemplateConfigFileList.isEmpty()) {
             CoreFileBean wordTemplateConfigFile = wordTemplateConfigFileList.get(0);
 
-            //String wordReportFileName = FileUtils.getFileBaseName(wordTemplateConfigFile.getName()) + "-" + System.currentTimeMillis() + "." + FileUtils.getFileExtension(wordTemplateConfigFile.getName());
             String wordReportFileName = FileUtils.getFileBaseName(wordTemplateConfigFile.getName()) + "-" +report.getReportNo()+ "." +FileUtils.getFileExtension(wordTemplateConfigFile.getName());
 
-            File templateFile = FileHelper.getAbsolutePath(FileRepresentation.of(wordTemplateConfigFile.getScope(), "",
+            File templateFile = FilePathManager.getLocalPath(FilePathDTO.of(wordTemplateConfigFile.getScope(), "",
                     wordTemplateConfigFile.getExt(), wordTemplateConfigFile.getName())).toFile();
-            File wordReportFile = FileHelper.getAbsolutePath(FileRepresentation.of(wordTemplateConfigFile.getScope(), "",
+            File wordReportFile = FilePathManager.getLocalPath(FilePathDTO.of(wordTemplateConfigFile.getScope(), "",
                     wordTemplateConfigFile.getExt(), wordReportFileName)).toFile();
 
             generateWordReport(templateFile, wordReportFile, report, project, false, PfConstant.QC_WORD_REPORT_ATTACHMENT_TYPE);
@@ -3175,16 +3175,16 @@ public class PfReportServiceImpl extends EmcReportServiceImpl implements PfRepor
             return null;
         }
 
-        List<FileRepresentation> fileRepresentations = allRunFileList.stream().map(FileRepresentation::of).collect(Collectors.toList());
-        List<FileRepresentation> validFileRepresentations = fileRepresentations.stream().filter(fr -> FileHelper.getAbsoluteDirPath(fr).toFile().exists()).collect(Collectors.toList());
+        List<FilePathDTO> fileRepresentations = allRunFileList.stream().map(CoreFileUtils::toFilePath).collect(Collectors.toList());
+        List<FilePathDTO> validFileRepresentations = fileRepresentations.stream().filter(fr -> FilePathManager.getLocalDirPath(fr).toFile().exists()).collect(Collectors.toList());
         if (validFileRepresentations.isEmpty()) {
             return null;
         }
 
         String projectReportPdfName = "分析记录-" + project.getProjNo() + ".pdf";
-        FileRepresentation composedPdfFile = FileRepresentation.of(FileScope.temp.name(), "" + System.currentTimeMillis(), StringUtils.randomUUID(8), projectReportPdfName);
-        String tempFilePath = fileCloudService.mergePdfFile(validFileRepresentations, composedPdfFile);
-
+        FilePathDTO composedPdfFile = FilePathDTO.of(FileScope.temp.name(), "" + System.currentTimeMillis(), StringUtils.randomUUID(8), projectReportPdfName);
+        coreFileService.mergePdfList(validFileRepresentations, composedPdfFile);
+        String tempFilePath = FilePathManager.getLocalPath(composedPdfFile).toString();
         // 保存文件信息到 t_core_file 表
         if (!StringUtils.isEmpty(tempFilePath)) {
             CoreFileBean coreFileBean = new CoreFileBean();

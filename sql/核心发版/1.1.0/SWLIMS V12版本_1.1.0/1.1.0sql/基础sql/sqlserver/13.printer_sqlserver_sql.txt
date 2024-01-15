@@ -1,0 +1,58 @@
+-- ----------------------------- 2021-1-4 add by lvqiang --------------begin
+CREATE TABLE T_CORE_PRINT_LOG  (
+  ID                  BIGINT NOT NULL,
+  FILEID              BIGINT,
+  FILENAME            VARCHAR(258),
+  COPIES              INT,
+  PRINTERNAME         VARCHAR(258),
+  CREATEDBYID         VARCHAR(36),
+  CREATEDBYNAME       VARCHAR(60),
+  CREATEDTIME         DATETIME,
+  CREATEDBYORGID      VARCHAR(36),
+  CREATEDBYORGNAME    VARCHAR(270)
+);
+
+ALTER TABLE T_CORE_PRINT_LOG ADD CONSTRAINT PK_CORE_PRINT_LOG PRIMARY KEY (ID);
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'打印记录表', @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PRINT_LOG';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'主键', @level2type=N'COLUMN',@level2name=N'ID', @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PRINT_LOG';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'文件ID', @level2type=N'COLUMN',@level2name=N'FILEID', @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PRINT_LOG';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'文件名称', @level2type=N'COLUMN',@level2name=N'FILENAME', @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PRINT_LOG';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'打印份数', @level2type=N'COLUMN',@level2name=N'COPIES', @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PRINT_LOG';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'打印机名称', @level2type=N'COLUMN',@level2name=N'PRINTERNAME', @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PRINT_LOG';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人编码', @level2type=N'COLUMN',@level2name=N'CREATEDBYID', @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PRINT_LOG';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人名称', @level2type=N'COLUMN',@level2name=N'CREATEDBYNAME', @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PRINT_LOG';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单时间', @level2type=N'COLUMN',@level2name=N'CREATEDTIME', @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PRINT_LOG';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位编码', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGID', @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PRINT_LOG';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位名称', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGNAME', @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PRINT_LOG';
+
+CREATE NONCLUSTERED INDEX [IDX_CORE_PRINT_LOG_FILEID] ON [dbo].[T_CORE_PRINT_LOG] ([FILEID]);
+
+EXEC  DBO.INSERTI18N  N'T_CORE_PRINT_LOG.SERVICE_NAME', N'打印记录表', N'打印记录表', N'zh-CN',N'打印记录表';
+EXEC  DBO.INSERTI18N  N'T_CORE_PRINT_LOG.ID', N'打印记录表的主键', N'主键', N'zh-CN',N'主键';
+EXEC  DBO.INSERTI18N  N'T_CORE_PRINT_LOG.FILEID', N'打印记录表的文件ID', N'文件ID', N'zh-CN',N'文件ID';
+EXEC  DBO.INSERTI18N  N'T_CORE_PRINT_LOG.FILENAME', N'打印记录表的文件名称', N'文件名称', N'zh-CN',N'文件名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_PRINT_LOG.COPIES', N'打印记录表的打印份数', N'打印份数', N'zh-CN',N'打印份数';
+EXEC  DBO.INSERTI18N  N'T_CORE_PRINT_LOG.PRINTERNAME', N'打印记录表的打印机名称', N'打印机名称', N'zh-CN',N'打印机名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_PRINT_LOG.CREATEDBYID', N'打印记录表的制单人编码', N'制单人编码', N'zh-CN',N'制单人编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_PRINT_LOG.CREATEDBYNAME', N'打印记录表的制单人名称', N'制单人名称', N'zh-CN',N'制单人名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_PRINT_LOG.CREATEDTIME', N'打印记录表的制单时间', N'制单时间', N'zh-CN',N'制单时间';
+EXEC  DBO.INSERTI18N  N'T_CORE_PRINT_LOG.CREATEDBYORGID', N'打印记录表的制单人单位编码', N'制单人单位编码', N'zh-CN',N'制单人单位编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_PRINT_LOG.CREATEDBYORGNAME', N'打印记录表的制单人单位名称', N'制单人单位名称', N'zh-CN',N'制单人单位名称';
+
+EXEC DBO.INSERTI18N N'CORE.PRINTER.TIP.SUPPORT_PDF_ONLY', N'仅支持PDF格式的文件', N'仅支持PDF格式的文件', N'zh-CN', N'仅支持PDF格式的文件';
+EXEC DBO.INSERTI18N N'CORE.PRINTER.TIP.FILE_NOT_FOUND', N'文件未找到', N'文件未找到', N'zh-CN', N'文件未找到';
+EXEC DBO.INSERTI18N N'CORE.PRINTER.TIP.PRINTER_NOT_FOUND', N'打印机未找到', N'打印机未找到', N'zh-CN', N'打印机未找到';
+EXEC DBO.INSERTI18N N'CORE.PRINTER.TIP.PRINT_FAILED', N'打印失败', N'打印失败', N'zh-CN', N'打印失败';
+
+-- ----------------------------- 2021-1-4 add by lvqiang --------------end
+
+-- ----------------------------- 2021-3-25 add by shixw------------begin
+
+EXEC DBO.UPDATEI18N N'T_CORE_PRINT_LOG.CREATEDBYNAME', N'zh-CN', N'打印人';
+EXEC DBO.UPDATEI18N N'T_CORE_PRINT_LOG.CREATEDTIME', N'zh-CN', N'打印时间';
+
+INSERT INTO T_CORE_MENU (ID, MENUNAME, HREF, PARENTID, ORDERNO, ICON, MENUINITNAME)
+VALUES ('9406', 'PDF服务器打印记录', '/secure/core/module/printer/print-logs/page/search-list', '94', '9406', '016.svg', 'PDF服务器打印记录');
+
+-- ----------------------------- 2021-3-25 add by shixw------------end

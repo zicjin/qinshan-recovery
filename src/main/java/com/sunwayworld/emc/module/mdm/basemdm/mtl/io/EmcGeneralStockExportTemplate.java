@@ -12,6 +12,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import com.sunwayworld.framework.support.base.service.GenericTemplateService;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
@@ -25,14 +26,13 @@ import com.sunwayworld.emc.module.mdm.basemdm.mtl.service.EmcMtlService;
 import com.sunwayworld.framework.data.Pair;
 import com.sunwayworld.framework.exception.FileException;
 import com.sunwayworld.framework.utils.StringUtils;
-import com.sunwayworld.module.item.file.export.GenericExportTemplate;
 
 /**
  * 一般试剂库存导出模板
  * @author zhengxy@sunwayworld.com 2020年07月31日
  */
 @Component(value = "emcGeneralStockExportTemplate")
-public class EmcGeneralStockExportTemplate implements GenericExportTemplate<String> {
+public class EmcGeneralStockExportTemplate implements GenericTemplateService<String> {
 
     private static final int START_ROW_INDEX = 3;
 

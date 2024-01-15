@@ -1,0 +1,1409 @@
+-- ----------------------------- 2021-07-14 add by zhangjr--------------begin     1.1.4补丁已发布
+CALL INSERTI18N('CORE.MODULE.SYS.T_CORE_BPMN_DRAFT.LABEL.NOTIFICATION', '工作流草稿中的通知TAB页', '通知', 'zh-CN', '通知');
+CALL INSERTI18N('CORE.MODULE.SYS.T_CORE_BPMN_DRAFT.LABEL.PASS_NOTIFICATION', '工作流草稿中的审核通过时发送通知', '审核通过时通知', 'zh-CN', '审核通过时通知');
+CALL INSERTI18N('CORE.MODULE.SYS.T_CORE_BPMN_DRAFT.LABEL.REJECT_NOTIFICATION', '工作流草稿中的审核拒绝时发送通知', '审核拒绝时通知', 'zh-CN', '审核拒绝时通知');
+
+INSERT INTO T_CORE_NOTIFICATION_TMPL(ID, TITLE, CONTENT, VIEWMETHOD)
+VALUES ('BPMN_PASS', '工作流审核通过时提醒', CONCAT('【', '$', '{name}】业务单据【', '$', '{desc}】在【', '$', '{fromTaskName}】节点被【', '$', '{lastAuditorName}】审核通过。'), 'no');
+
+INSERT INTO T_CORE_NOTIFICATION_TMPL(ID, TITLE, CONTENT, VIEWMETHOD)
+VALUES ('BPMN_REJECT', '工作流拒绝时提醒',  CONCAT('【', '$', '{name}】业务单据【', '$', '{desc}】被【', '$', '{lastAuditorName}】审核拒绝到【', '$', '{toTaskName}】节点。'), 'no');
+commit;
+-- ----------------------------- 2021-07-14 add by zhangjr--------------end     1.1.4补丁已发布
+-- ----------------------------- 2021-07-15 add by zhangxt--------------begin     1.1.4补丁已发布
+CALL INSERTI18N('CORE.MODULE.SYS.T_CORE_BPMN_DIAGRAM.CANDIDATOR.ALLUSER', '所有审核人员', '所有审核人员', 'zh-CN', '所有审核人员');
+commit;
+-- ----------------------------- 2021-07-15 add by zhangxt--------------end     1.1.4补丁已发布
+
+-- ----------------------------- 2021-07-15 add by shixw--------------begin    1.1.1补丁已发布
+
+-- 建表语句
+
+CREATE TABLE IF NOT EXISTS `T_CORE_DATA_CENTER`(
+     `ID` BIGINT NOT NULL COMMENT '主键',
+     `NODENAME` VARCHAR(120)  DEFAULT NULL COMMENT '节点名称',
+     `NODETYPE` VARCHAR(36)  DEFAULT NULL COMMENT '节点类型',
+     `PARENTID` BIGINT DEFAULT NULL COMMENT '父节点id',
+     `AUTHCODE` BIGINT DEFAULT NULL COMMENT '授权码',
+     `URL` VARCHAR(120)  DEFAULT NULL COMMENT 'url',
+     `ORDERNO` BIGINT DEFAULT NULL COMMENT '排序码',
+     `CREATEDBYID` VARCHAR(36)  DEFAULT NULL COMMENT '制单人编码',
+     `CREATEDBYNAME` VARCHAR(60)  DEFAULT NULL COMMENT '制单人名称',
+     `CREATEDTIME` DATETIME DEFAULT NULL COMMENT '制单时间',
+     `CREATEDBYORGID` VARCHAR(36)  DEFAULT NULL COMMENT '制单人单位编码',
+     `CREATEDBYORGNAME` VARCHAR(270)  DEFAULT NULL COMMENT '制单人单位名称',
+      PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='数据中心表';
+
+
+CREATE TABLE IF NOT EXISTS `T_CORE_DATA_CENTER_ROLE`(
+     `ID` BIGINT NOT NULL COMMENT '主键',
+     `DATACENTERID` BIGINT DEFAULT NULL COMMENT '数据中心id',
+     `ROLEID` BIGINT DEFAULT NULL COMMENT '角色id',
+     `CREATEDBYID` VARCHAR(36)  DEFAULT NULL COMMENT '制单人编码',
+     `CREATEDBYNAME` VARCHAR(60)  DEFAULT NULL COMMENT '制单人名称',
+     `CREATEDTIME` DATETIME DEFAULT NULL COMMENT '制单时间',
+     `CREATEDBYORGID` VARCHAR(36)  DEFAULT NULL COMMENT '制单人单位编码',
+     `CREATEDBYORGNAME` VARCHAR(270)  DEFAULT NULL COMMENT '制单人单位名称',
+      PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='数据中心访问角色表';
+CREATE INDEX IDX_CDCR_DATACENTERID ON T_CORE_DATA_CENTER_ROLE (DATACENTERID);
+
+CALL INSERTI18N('T_CORE_DATA_CENTER.SERVICE_NAME', '数据中心表', '数据中心表', 'zh-CN', '数据中心表');
+CALL INSERTI18N('T_CORE_DATA_CENTER.ID', '数据中心表的主键', '主键', 'zh-CN', '主键');
+CALL INSERTI18N('T_CORE_DATA_CENTER.NODENAME', '数据中心表的节点名称', '节点名称', 'zh-CN', '节点名称');
+CALL INSERTI18N('T_CORE_DATA_CENTER.NODETYPE', '数据中心表的节点类型', '节点类型', 'zh-CN', '节点类型');
+CALL INSERTI18N('T_CORE_DATA_CENTER.PARENTID', '数据中心表的父节点id', '父节点id', 'zh-CN', '父节点id');
+CALL INSERTI18N('T_CORE_DATA_CENTER.AUTHCODE', '数据中心表的授权码', '授权码', 'zh-CN', '授权码');
+CALL INSERTI18N('T_CORE_DATA_CENTER.ORDERNO', '数据中心表的排序码', '排序码', 'zh-CN', '排序码');
+CALL INSERTI18N('T_CORE_DATA_CENTER.URL', '数据中心表的url', 'url', 'zh-CN', 'url');
+CALL INSERTI18N('T_CORE_DATA_CENTER.CREATEDBYID', '数据中心表的制单人编码', '制单人编码', 'zh-CN', '制单人编码');
+CALL INSERTI18N('T_CORE_DATA_CENTER.CREATEDBYNAME', '数据中心表的制单人名称', '制单人名称', 'zh-CN', '制单人名称');
+CALL INSERTI18N('T_CORE_DATA_CENTER.CREATEDTIME', '数据中心表的制单时间', '制单时间', 'zh-CN', '制单时间');
+CALL INSERTI18N('T_CORE_DATA_CENTER.CREATEDBYORGID', '数据中心表的制单人单位编码', '制单人单位编码', 'zh-CN', '制单人单位编码');
+CALL INSERTI18N('T_CORE_DATA_CENTER.CREATEDBYORGNAME', '数据中心表的制单人单位名称', '制单人单位名称', 'zh-CN', '制单人单位名称');
+CALL INSERTI18N('T_CORE_DATA_CENTER_ROLE.SERVICE_NAME', '数据中心访问角色表', '数据中心访问角色表', 'zh-CN', '数据中心访问角色表');
+CALL INSERTI18N('T_CORE_DATA_CENTER_ROLE.ID', '数据中心访问角色表的主键', '主键', 'zh-CN', '主键');
+CALL INSERTI18N('T_CORE_DATA_CENTER_ROLE.DATACENTERID', '数据中心访问角色表的数据中心id', '数据中心id', 'zh-CN', '数据中心id');
+CALL INSERTI18N('T_CORE_DATA_CENTER_ROLE.ROLEID', '数据中心访问角色表的角色id', '角色id', 'zh-CN', '角色id');
+CALL INSERTI18N('T_CORE_DATA_CENTER_ROLE.ROLENAME', '数据中心访问角色表的角色名称', '角色名称', 'zh-CN', '角色名称');
+CALL INSERTI18N('T_CORE_DATA_CENTER_ROLE.CREATEDBYID', '数据中心访问角色表的制单人编码', '制单人编码', 'zh-CN', '制单人编码');
+CALL INSERTI18N('T_CORE_DATA_CENTER_ROLE.CREATEDBYNAME', '数据中心访问角色表的制单人名称', '制单人名称', 'zh-CN', '制单人名称');
+CALL INSERTI18N('T_CORE_DATA_CENTER_ROLE.CREATEDTIME', '数据中心访问角色表的制单时间', '制单时间', 'zh-CN', '制单时间');
+CALL INSERTI18N('T_CORE_DATA_CENTER_ROLE.CREATEDBYORGID', '数据中心访问角色表的制单人单位编码', '制单人单位编码', 'zh-CN', '制单人单位编码');
+CALL INSERTI18N('T_CORE_DATA_CENTER_ROLE.CREATEDBYORGNAME', '数据中心访问角色表的制单人单位名称', '制单人单位名称', 'zh-CN', '制单人单位名称');
+CALL INSERTI18N('CORE.MODULE.ITEM.DATACENTERS.TREE.DATACENTER', '数据中心', '数据中心', 'zh-CN', '数据中心');
+CALL INSERTI18N('CORE.MODULE.ITEM.DATACENTERS.TAB.PREVIEW', '大屏预览', '大屏预览', 'zh-CN', '大屏预览');
+CALL INSERTI18N('CORE.MODULE.ITEM.DATACENTERS.TAB.ROLE', '访问角色', '访问角色', 'zh-CN', '访问角色');
+CALL INSERTI18N('CORE.MODULE.ITEM.DATACENTERS.TIP.CHOOSE_ONE_DATACENTER', '请先选择一个大屏预览', '请先选择一个大屏预览', 'zh-CN', '请先选择一个大屏预览');
+CALL INSERTI18N('CORE.MODULE.ITEM.DATACENTERS.BUTTON.SYNC', '同步', '同步', 'zh-CN', '同步');
+
+-- 创建菜单语句
+INSERT INTO T_CORE_MENU (ID, MENUNAME, HREF, PARENTID, ORDERNO, ICON, MENUINITNAME)
+VALUES ('9360', '数据中心配置', '/secure/core/module/item/data-centers/page/edit-list', '93', '9360', '016.svg', '数据中心配置');
+
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_DATA_CENTER', '0', '0');
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_DATA_CENTER_ROLE', '0', '0');
+
+INSERT INTO T_CORE_TABLE_HIERARCHY (ID, TABLENAME, MASTERTABLENAME, REFERCOLUMN)
+VALUES ('936001','T_CORE_DATA_CENTER_ROLE', 'T_CORE_DATA_CENTER', 'DATACENTERID');
+  
+INSERT INTO T_CORE_REMOTE_CALL_CONF(ID, NAME, SYNCH, DATAFLOW, CALLCLASS,CALLMETHOD,LASTSUSPENDEDFLAG,LASTSUSPENDEDBYID,LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME) 
+VALUES ('DATA_CENTER_REPORT', '数据中心报告请求', '1', 'DATACENTER->LIMS', 'com.sunwayworld.module.item.datacenter.service.CoreDataCenterService', 'syncDataCenterData', '0', NULL, NULL, NULL);
+
+
+COMMIT;
+
+-- ----------------------------- 2021-07-15 add by shixw------------end    1.1.1补丁已发布
+
+-- ----------------------------- 2021-07-27 add by zhangjr--------------begin
+CALL INSERTI18N('CORE.MODULE.SYS.T_CORE_BPMN_DRAFT.LABEL.ADD_NOTIFIED_USERS', '工作流节点中新增通知人', '新增通知人', 'zh-CN', '新增通知人');
+CALL INSERTI18N('CORE.MODULE.SYS.T_CORE_BPMN_DRAFT.LABEL.ADD_NOTIFIED_ROLES', '工作流节点中新增通知角色', '新增通知角色', 'zh-CN', '新增通知角色');
+CALL INSERTI18N('CORE.MODULE.SYS.T_CORE_BPMN_PROC.MODAL.TITLE_NOTIFIEDGROUP', '工作流节点中选择通知角色', '选择通知角色', 'zh-CN', '选择通知角色');
+CALL INSERTI18N('CORE.MODULE.SYS.T_CORE_BPMN_PROC.MODAL.TITLE_NOTIFIED', '工作流节点中选择通知人员', '选择通知人员', 'zh-CN', '选择通知人员');
+commit;
+-- ----------------------------- 2021-07-27 add by zhangjr--------------end
+
+-- ----------------------------- 2021-08-02 add by shixw------------begin
+
+ALTER TABLE T_CORE_ROLE MODIFY COLUMN USEDBYORGID varchar(270) CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '使用单位编码';
+
+-- ----------------------------- 2021-08-02 add by shixw------------end
+
+-- ----------------------------- 2021-08-02 add by shixw------------begin    1.1.7补丁已发布
+
+alter table T_CORE_TODO_CONFIG add column VOICEWARNING VARCHAR(36) null comment '开启语音提醒';
+
+CALL INSERTI18N('T_CORE_TODO_CONFIG.VOICEWARNING','开启语音提醒','开启语音提醒','zh-CN','开启语音提醒');
+
+UPDATE T_CORE_TODO_CONFIG SET VOICEWARNING = '1';
+
+commit;
+-- ----------------------------- 2021-08-02 add by shixw------------end    1.1.7补丁已发布
+
+-- ----------------------------- 2020-08-07 add by zhangjr------------begin
+call INSERTI18N('CORE.MODULE.SYS.T_CORE_BPMN_DRAFT.LABEL.AUTO_PASS', '下一个节点审核人也是当前节点审核人时自动审核通过', '自动审核通过', 'zh-CN', '自动审核通过');
+call INSERTI18N('GIKAM.BPMN.COMMENT.AUTO_PASS', '自动审核通过时审核意见', '(自动审核通过)', 'zh-CN', '(自动审核通过)');
+commit;
+-- ----------------------------- 2020-08-07 add by zhangjr------------end
+
+-- ----------------------------- 2020-08-14 add by zhangxt------------begin
+alter table T_CORE_SCHEDULE_TASK_LOG add column EXECUTEDRESULT VARCHAR(300) null comment '任务执行的业务结果';
+
+CALL INSERTI18N('T_CORE_SCHEDULE_TASK_LOG.EXECUTEDRESULT','任务执行的业务结果','执行结果','zh-CN','执行结果');
+-- ----------------------------- 2020-08-14 add by zhangxt------------end
+
+-- ----------------------------- 2020-08-20 add by zhangjr------------begin
+CREATE TABLE `T_CORE_ATTORNEY` (
+    `ID` BIGINT NOT NULL COMMENT '主键',
+    `TRUSTOR` VARCHAR(32) NULL DEFAULT NULL COMMENT '委托人编码',
+    `TRUSTEE` VARCHAR(32) NULL DEFAULT NULL COMMENT '受托人编码',
+    `STARTDATE` DATETIME NULL DEFAULT NULL COMMENT '委托开始时间',
+    `ENDDATE` DATETIME NULL DEFAULT NULL COMMENT '委托结束 时间',
+    `CREATEDBYID` VARCHAR(32) NULL DEFAULT NULL COMMENT '制单人ID',
+    `CREATEDBYNAME` VARCHAR(64) NULL DEFAULT NULL COMMENT '制单人名称',
+    `CREATEDBYORGID` VARCHAR(36)  DEFAULT NULL COMMENT '制单人单位编码',
+    `CREATEDBYORGNAME` VARCHAR(270)  DEFAULT NULL COMMENT '制单人单位名称',
+    `CREATEDTIME` DATETIME NULL DEFAULT NULL COMMENT '制单日期',
+    `ACTIVATEDFLAG` VARCHAR (1) NULL COMMENT '启用标志',
+    `ACTIVATEDBYID` VARCHAR (32) NULL COMMENT '启用人ID',
+    `ACTIVATEDBYNAME` VARCHAR (64) NULL COMMENT '启用人名称',
+    `ACTIVATEDTIME` DATETIME NULL COMMENT '启用时间',
+    `LASTSUSPENDEDFLAG` VARCHAR(1) NULL DEFAULT NULL COMMENT '挂起标志（0-正常，1-挂起）',
+    `LASTSUSPENDEDBYID` VARCHAR(32) NULL DEFAULT NULL COMMENT '挂起人ID',
+    `LASTSUSPENDEDBYNAME` VARCHAR(64) NULL DEFAULT NULL COMMENT '最后注销人名称',
+    `LASTSUSPENDEDTIME` DATETIME NULL DEFAULT NULL COMMENT '挂起时间',
+    PRIMARY KEY (`ID`)
+)
+COMMENT='委托代理主表'
+COLLATE='utf8_general_ci'
+ENGINE=InnoDB
+;
+
+CREATE TABLE `T_CORE_ATTORNEY_MENU` (
+    `ID` BIGINT NOT NULL COMMENT '主键',
+    `ATTORNEYID` INT(11) NOT NULL COMMENT '委托主表编码',
+    `MENUID` VARCHAR(36) NOT NULL COMMENT '菜单编码',
+    `CREATEDBYID` VARCHAR(32) NULL DEFAULT NULL COMMENT '制单人ID',
+    `CREATEDBYNAME` VARCHAR(64) NULL DEFAULT NULL COMMENT '制单人名称',
+    `CREATEDBYORGID` VARCHAR(36)  DEFAULT NULL COMMENT '制单人单位编码',
+    `CREATEDBYORGNAME` VARCHAR(270)  DEFAULT NULL COMMENT '制单人单位名称',
+    `CREATEDTIME` DATETIME NULL DEFAULT NULL COMMENT '制单日期',
+    PRIMARY KEY (`ID`),
+    INDEX `IDX_TCAM_ATTORNEYID` (`ATTORNEYID`)
+)
+COMMENT='委托代理菜单表'
+COLLATE='utf8_general_ci'
+ENGINE=InnoDB
+;
+
+INSERT INTO T_CORE_MENU (ID, MENUNAME, HREF, PARENTID, ORDERNO, ICON, MENUINITNAME)
+VALUES ('9015', '委托代理设置', '/secure/core/module/sys/attorneys/page/edit-list', '90', '9015', '008.svg', '委托代理设置');
+INSERT INTO T_CORE_MENU (ID, MENUNAME, HREF, PARENTID, ORDERNO, ICON, MENUINITNAME)
+VALUES ('9016', '委托代理查询', '/secure/core/module/sys/attorneys/page/search-list', '90', '9016', '008.svg', '委托代理查询');
+COMMIT;
+
+CALL INSERTI18N('CORE.MODULE.SYS.T_CORE_ATTORNEY.CANNOT_CHANGE_TRUSTOR', '委派时非管理员只能委派自己的业务', '非管理员只能委派自己的业务', 'zh-CN', '非管理员只能委派自己的业务');
+COMMIT;
+
+
+CALL INSERTI18N('CORE.MODULE.SYS.ATTORNEYS.TAB.BASE_INFO', '委托代理信息', '委托代理信息', 'zh-CN', '委托代理信息');
+CALL INSERTI18N('CORE.MODULE.SYS.ATTORNEYS.TAB.MENU', '委托业务', '委托业务', 'zh-CN', '委托业务');
+
+CALL INSERTI18N('T_CORE_ATTORNEY.ID', '委托代理主键', '主键', 'zh-CN', '主键');
+CALL INSERTI18N('T_CORE_ATTORNEY.TRUSTOR', '委托代理表的委托人编码', '委托人编码', 'zh-CN', '委托人编码');
+CALL INSERTI18N('T_CORE_ATTORNEY.TRUSTORNAME', '委托代理表的委托人名称', '委托人名称', 'zh-CN', '委托人名称');
+CALL INSERTI18N('T_CORE_ATTORNEY.TRUSTEE', '委托代理表的受托人编码', '受托人编码', 'zh-CN', '受托人编码');
+CALL INSERTI18N('T_CORE_ATTORNEY.TRUSTEENAME', '委托代理表的受托人名称', '受托人名称', 'zh-CN', '受托人名称');
+CALL INSERTI18N('T_CORE_ATTORNEY.STARTDATE', '委托代理表的委托开始日期', '委托开始日期', 'zh-CN', '委托开始日期');
+CALL INSERTI18N('T_CORE_ATTORNEY.ENDDATE', '委托代理表的委托结束日期', '委托结束日期', 'zh-CN', '委托结束日期');
+CALL INSERTI18N('T_CORE_ATTORNEY.LASTSUSPENDEDFLAG', '委托代理表的是否注销', '是否注销', 'zh-CN', '是否注销');
+CALL INSERTI18N('T_CORE_ATTORNEY.ACTIVATEDFLAG', '委托代理表的是否启用', '是否启用', 'zh-CN', '是否启用');
+
+CALL INSERTI18N('T_CORE_ATTORNEY_MENU.ID', '委托代理菜单表主键', '主键', 'zh-CN', '主键');
+CALL INSERTI18N('T_CORE_ATTORNEY_MENU.MENUID', '委托代理菜单表菜单编码', '菜单编码', 'zh-CN', '菜单编码');
+CALL INSERTI18N('T_CORE_ATTORNEY_MENU.MENUNAME', '委托代理菜单表菜单名称', '菜单名称', 'zh-CN', '菜单名称');
+
+CALL INSERTI18N('CORE.MODULE.SYS.ATTORNEYS.MODAL.CHOOSE_MENU', '委托代理中选择委托菜单', '委托菜单', 'zh-CN', '委托菜单');
+CALL INSERTI18N('CORE.MODULE.SYS.ATTORNEYS.TIP.ENDDATE_BEFORE_STARTDATE', '委托代理中委托开始日期不能晚于结束时间', '委托开始日期不能晚于结束时间', 'zh-CN', '委托开始日期不能晚于结束时间');
+CALL INSERTI18N('CORE.MODULE.SYS.ATTORNEYS.TIP.ENDDATE_BEFORE_TODAY', '委托代理中委托结束日期不能早于今天', '委托结束日期不能早于今天', 'zh-CN', '委托结束日期不能早于今天');
+CALL INSERTI18N('CORE.MODULE.SYS.ATTORNEYS.TIP.MENU_REQUIRED', '委托代理中需要配置被代理的菜单', '需要配置被代理的菜单', 'zh-CN', '需要配置被代理的菜单');
+
+
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_ATTORNEY', '0', '0');
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_ATTORNEY_MENU', '0', '0');
+
+INSERT INTO T_CORE_TABLE_HIERARCHY (ID, TABLENAME, MASTERTABLENAME, REFERCOLUMN)
+VALUES (F_GET_SEQ_CORE(),'T_CORE_ATTORNEY_MENU', 'T_CORE_ATTORNEY', 'ATTORNEYID');
+COMMIT;
+-- ----------------------------- 2020-08-20 add by zhangjr------------end
+
+-- ----------------------------- 2020-08-22 add by zhangjr------------begin
+CALL INSERTI18N('CORE.MODULE.SYS.ATTORNEYS.TIP.UNABLE_SWITCH_IF_SWITCHED', '受托人切换成委托人时，不能再切换', '受托人切换成委托人时，不能再切换', 'zh-CN', '受托人切换成委托人时，不能再切换');
+CALL INSERTI18N('CORE.MODULE.SYS.ATTORNEYS.TIP.UNABLE_SWITCH_IF_NOT_TRUSTOR', '无法切换委托人，待切换用户为非委托人', '无法切换委托人，待切换用户为非委托人', 'zh-CN', '无法切换委托人，待切换用户为非委托人');
+
+CALL INSERTI18N('GIKAM.ABBR.TRUSTEENAME', '委托人切换为受托人时，用户名那边显示的委托人名称前缀', '代', 'zh-CN', '代');
+
+CALL INSERTI18N('CORE.MODULE.SYS.ATTORNEYS.TIP.UNABLE_SWITCH_IF_NOT_TRUSTEE', '当前用户为非切换用户，无法切换回受托人', '当前用户为非切换用户，无法切换回受托人', 'zh-CN', '当前用户为非切换用户，无法切换回受托人');
+
+CALL INSERTI18N('CORE.MODULE.SYS.ATTORNEYS.TIP.UNABLE_GET_ENTRUST_MENU_IF_NOT_SWITCHED_TRUSTEE', '只有受托人切换成委托人时，才能查询受托的菜单列表', '只有受托人切换成委托人时，才能查询受托的菜单列表', 'zh-CN', '只有受托人切换成委托人时，才能查询受托的菜单列表');
+
+CALL INSERTI18N('CORE.MODULE.SYS.ATTORNEYS.TIP.UNABLE_GET_TRUSTOR_TODOLIST_IF_NOT_TRUSTEE', '只有受托人才能查询委托人的待办信息', '只有受托人才能查询委托人的待办信息', 'zh-CN', '只有受托人才能查询委托人的待办信息');
+-- ----------------------------- 2020-08-22 add by zhangjr------------end
+
+-- ----------------------------- 2020-08-23 add by zhangjr------------begin
+CALL INSERTI18N('T_CORE_ATTORNEY.SERVICE_NAME', '委托代理', '委托代理', 'zh-CN', '委托代理');
+CALL INSERTI18N('T_CORE_ATTORNEY_MENU.SERVICE_NAME', '委托代理业务', '委托代理业务', 'zh-CN', '委托代理业务');
+
+CALL INSERTI18N('T_CORE_ATTORNEY.CREATEDBYID', '委托代理制单人编码', '制单人编码', 'zh-CN', '制单人编码');
+CALL INSERTI18N('T_CORE_ATTORNEY.CREATEDBYNAME', '委托代理制单人名称', '制单人名称', 'zh-CN', '制单人名称');
+CALL INSERTI18N('T_CORE_ATTORNEY.CREATEDTIME', '委托代理制单时间', '制单时间', 'zh-CN', '制单时间');
+CALL INSERTI18N('T_CORE_ATTORNEY.CREATEDBYORGID', '委托代理制单人单位编码', '制单人单位编码', 'zh-CN', '制单人单位编码');
+CALL INSERTI18N('T_CORE_ATTORNEY.CREATEDBYORGNAME', '委托代理制单人单位名称', '制单人单位名称', 'zh-CN', '制单人单位名称');
+
+CALL INSERTI18N('T_CORE_ATTORNEY.LASTSUSPENDEDBYID', '委托代理注销人编码', '注销人编码', 'zh-CN', '注销人编码');
+CALL INSERTI18N('T_CORE_ATTORNEY.LASTSUSPENDEDBYNAME', '委托代理注销人名称', '注销人名称', 'zh-CN', '注销人名称');
+CALL INSERTI18N('T_CORE_ATTORNEY.LASTSUSPENDEDTIME', '委托代理注销时间', '注销时间', 'zh-CN', '注销时间');
+
+CALL INSERTI18N('T_CORE_ATTORNEY.ACTIVATEDBYID', '委托代理启用人编码', '启用人编码', 'zh-CN', '启用人编码');
+CALL INSERTI18N('T_CORE_ATTORNEY.ACTIVATEDBYNAME', '委托代理启用人名称', '启用人名称', 'zh-CN', '启用人名称');
+CALL INSERTI18N('T_CORE_ATTORNEY.ACTIVATEDTIME', '委托代理启用时间', '启用时间', 'zh-CN', '启用时间');
+
+CALL INSERTI18N('T_CORE_ATTORNEY_MENU.ATTORNEYID', '委托代理主键', '委托代理主键', 'zh-CN', '委托代理主键');
+CALL INSERTI18N('T_CORE_ATTORNEY_MENU.CREATEDBYID', '委托代理业务制单人编码', '制单人编码', 'zh-CN', '制单人编码');
+CALL INSERTI18N('T_CORE_ATTORNEY_MENU.CREATEDBYNAME', '委托代理业务制单人名称', '制单人名称', 'zh-CN', '制单人名称');
+CALL INSERTI18N('T_CORE_ATTORNEY_MENU.CREATEDTIME', '委托代理业务制单时间', '制单时间', 'zh-CN', '制单时间');
+CALL INSERTI18N('T_CORE_ATTORNEY_MENU.CREATEDBYORGID', '委托代理业务制单人单位编码', '制单人单位编码', 'zh-CN', '制单人单位编码');
+CALL INSERTI18N('T_CORE_ATTORNEY_MENU.CREATEDBYORGNAME', '委托代理业务制单人单位名称', '制单人单位名称', 'zh-CN', '制单人单位名称');
+COMMIT;
+-- ----------------------------- 2020-08-23 add by zhangjr------------end
+
+-- ----------------------------- 2020-08-23 add by zhangjr------------begin
+CALL INSERTI18N('T_CORE_M_USER.SERVICE_NAME', '预约变更用户', '预约变更用户', 'zh-CN', '预约变更用户');
+CALL INSERTI18N('T_CORE_M_USER.ID', '预约变更用户表主键', '主键', 'zh-CN', '主键');
+CALL INSERTI18N('T_CORE_M_USER.USERID', '预约变更用户表用户编码', '用户编码', 'zh-CN', '用户编码');
+CALL INSERTI18N('T_CORE_M_USER.USERNO', '预约变更用户表用户编号', '用户编号', 'zh-CN', '用户编号');
+CALL INSERTI18N('T_CORE_M_USER.USERNAME', '预约变更用户表用户名称', '用户名称', 'zh-CN', '用户名称');
+CALL INSERTI18N('T_CORE_M_USER.MOBILE', '预约变更用户表手机号', '手机号', 'zh-CN', '手机号');
+CALL INSERTI18N('T_CORE_M_USER.EMAIL', '预约变更用户表电子邮箱', '电子邮箱', 'zh-CN', '电子邮箱');
+CALL INSERTI18N('T_CORE_M_USER.IDCARD', '预约变更用户表身份证', '身份证', 'zh-CN', '身份证');
+CALL INSERTI18N('T_CORE_M_USER.STATUS', '预约变更用户表用户状态', '用户状态', 'zh-CN', '用户状态');
+CALL INSERTI18N('T_CORE_M_USER.ORGID', '预约变更用户表用户所属单位编码', '用户所属单位编码', 'zh-CN', '用户所属单位编码');
+CALL INSERTI18N('T_CORE_M_USER.ORGNAME', '预约变更用户表用户所属单位名称', '用户所属单位名称', 'zh-CN', '用户所属单位名称');
+CALL INSERTI18N('T_CORE_M_USER.USERTYPE', '预约变更用户表用户类型', '用户类型', 'zh-CN', '用户类型');
+CALL INSERTI18N('T_CORE_M_USER.EXPIRYDATE', '预约变更用户表用户到期日', '用户到期日', 'zh-CN', '用户到期日');
+CALL INSERTI18N('T_CORE_M_USER.MULTILOGIN', '预约变更用户表允许重复登录', '允许重复登录', 'zh-CN', '允许重复登录');
+CALL INSERTI18N('T_CORE_M_USER.SCHEDULEDTIME', '预约变更用户表预约执行时间', '预约执行时间', 'zh-CN', '预约执行时间');
+CALL INSERTI18N('T_CORE_M_USER.EXECUTED', '预约变更用户表是否已执行', '是否已执行', 'zh-CN', '是否已执行');
+CALL INSERTI18N('T_CORE_M_USER.CREATEDBYID', '预约变更用户表制单人编码', '制单人编码', 'zh-CN', '制单人编码');
+CALL INSERTI18N('T_CORE_M_USER.CREATEDBYNAME', '预约变更用户表制单人名称', '制单人名称', 'zh-CN', '制单人名称');
+CALL INSERTI18N('T_CORE_M_USER.CREATEDTIME', '预约变更用户表制单时间', '制单时间', 'zh-CN', '制单时间');
+CALL INSERTI18N('T_CORE_M_USER.CREATEDBYORGID', '预约变更用户表制单人单位编码', '制单人单位编码', 'zh-CN', '制单人单位编码');
+CALL INSERTI18N('T_CORE_M_USER.CREATEDBYORGNAME', '预约变更用户表制单人单位名称', '制单人单位名称', 'zh-CN', '制单人单位名称');
+CALL INSERTI18N('T_CORE_M_USER.ACTIVATEDFLAG', '预约变更用户表是否启用', '是否启用', 'zh-CN', '是否启用');
+CALL INSERTI18N('T_CORE_M_USER.ACTIVATEDBYID', '委托代理启用人编码', '启用人编码', 'zh-CN', '启用人编码');
+CALL INSERTI18N('T_CORE_M_USER.ACTIVATEDBYNAME', '委托代理启用人名称', '启用人名称', 'zh-CN', '启用人名称');
+CALL INSERTI18N('T_CORE_M_USER.ACTIVATEDTIME', '委托代理启用时间', '启用时间', 'zh-CN', '启用时间');
+COMMIT;
+
+CALL INSERTI18N('T_CORE_M_USER_PERMISSION.SERVICE_NAME', '预约变更用户权限', '预约变更用户权限', 'zh-CN', '预约变更用户权限');
+CALL INSERTI18N('T_CORE_M_USER_PERMISSION.ID', '预约变更用户权限表主键', '主键', 'zh-CN', '主键');
+CALL INSERTI18N('T_CORE_M_USER_PERMISSION.MODIFIEDUSERID', '预约变更用户权限表的预约变更用户表主键', '预约变更用户表主键', 'zh-CN', '预约变更用户表主键');
+CALL INSERTI18N('T_CORE_M_USER_PERMISSION.TARGETID', '预约变更用户权限表业务权限编码', '业务权限编码', 'zh-CN', '业务权限编码');
+CALL INSERTI18N('T_CORE_M_USER_PERMISSION.PERMISSIONTYPEID', '预约变更用户权限表权限类型编码', '权限类型编码', 'zh-CN', '权限类型编码');
+CALL INSERTI18N('T_CORE_M_USER_PERMISSION.DEFAULTFLAG', '预约变更用户权限表是否默认值', '是否默认值', 'zh-CN', '是否默认值');
+CALL INSERTI18N('T_CORE_M_USER_PERMISSION.CREATEDBYID', '预约变更用户权限表制单人编码', '制单人编码', 'zh-CN', '制单人编码');
+CALL INSERTI18N('T_CORE_M_USER_PERMISSION.CREATEDBYNAME', '预约变更用户权限表制单人名称', '制单人名称', 'zh-CN', '制单人名称');
+CALL INSERTI18N('T_CORE_M_USER_PERMISSION.CREATEDTIME', '预约变更用户权限表制单时间', '制单时间', 'zh-CN', '制单时间');
+CALL INSERTI18N('T_CORE_M_USER_PERMISSION.CREATEDBYORGID', '预约变更用户权限表制单人单位编码', '制单人单位编码', 'zh-CN', '制单人单位编码');
+CALL INSERTI18N('T_CORE_M_USER_PERMISSION.CREATEDBYORGNAME', '预约变更用户权限表制单人单位名称', '制单人单位名称', 'zh-CN', '制单人单位名称');
+COMMIT;
+
+CALL INSERTI18N('T_CORE_M_USER_ROLE.SERVICE_NAME', '预约变更用户角色', '预约变更用户角色', 'zh-CN', '预约变更用户角色');
+CALL INSERTI18N('T_CORE_M_USER_ROLE.ID', '预约变更用户角色表主键', '主键', 'zh-CN', '主键');
+CALL INSERTI18N('T_CORE_M_USER_ROLE.MODIFIEDUSERID', '预约变更用户角色表的预约变更用户表主键', '预约变更用户表主键', 'zh-CN', '预约变更用户表主键');
+CALL INSERTI18N('T_CORE_M_USER_ROLE.ROLEID', '预约变更用户角色表角色编码', '角色编码', 'zh-CN', '角色编码');
+CALL INSERTI18N('T_CORE_M_USER_ROLE.DEFAULTFLAG', '预约变更用户角色表是否默认值', '是否默认值', 'zh-CN', '是否默认值');
+CALL INSERTI18N('T_CORE_M_USER_ROLE.CREATEDBYID', '预约变更用户角色表制单人编码', '制单人编码', 'zh-CN', '制单人编码');
+CALL INSERTI18N('T_CORE_M_USER_ROLE.CREATEDBYNAME', '预约变更用户角色表制单人名称', '制单人名称', 'zh-CN', '制单人名称');
+CALL INSERTI18N('T_CORE_M_USER_ROLE.CREATEDTIME', '预约变更用户角色表制单时间', '制单时间', 'zh-CN', '制单时间');
+CALL INSERTI18N('T_CORE_M_USER_ROLE.CREATEDBYORGID', '预约变更用户角色表制单人单位编码', '制单人单位编码', 'zh-CN', '制单人单位编码');
+CALL INSERTI18N('T_CORE_M_USER_ROLE.CREATEDBYORGNAME', '预约变更用户角色表制单人单位名称', '制单人单位名称', 'zh-CN', '制单人单位名称');
+COMMIT;
+-- ----------------------------- 2020-08-23 add by zhangjr------------end
+
+-- ----------------------------- 2020-09-09 add by zhangjr------------begin
+call INSERTI18N('CORE.MODULE.SYS.T_CORE_BPMN_DRAFT.OPTIONS.ASSIGNEE.SELECT_BY_SQL', '待审人是只通过SQL来查询', '通过SQL选取', 'zh-CN', '通过SQL选取');
+call INSERTI18N('CORE.MODULE.SYS.T_CORE_BPMN_DRAFT.OPTIONS.ASSIGNEE.FILTER_BY_SQL', '待审人是通过SQL来过滤', '通过SQL过滤', 'zh-CN', '通过SQL过滤');
+
+call INSERTI18N('CORE.MODULE.SYS.T_CORE_BPMN_DRAFT.LABEL.SELECT_BY_SQL', '待审人是通过SQL来选取', '选取待审人的SQL', 'zh-CN', '选取待审人的SQL');
+call INSERTI18N('CORE.MODULE.SYS.T_CORE_BPMN_DRAFT.LABEL.FILTER_BY_SQL', '待审人是通过SQL来过滤', '过滤待审人的SQL', 'zh-CN', '过滤待审人的SQL');
+
+call INSERTI18N('CORE.MODULE.SYS.T_CORE_BPMN_DRAFT.TIP.SELECT_BY_SQL', '特殊分配中提醒输入SQL来选取待审人', '请输入选取待审人的SQL', 'zh-CN', '请输入选取待审人的SQL');
+call INSERTI18N('CORE.MODULE.SYS.T_CORE_BPMN_DRAFT.TIP.FILTER_BY_SQL', '特殊分配中提醒输入SQL来过滤待审人', '请输入过滤待审人的SQL', 'zh-CN', '请输入过滤待审人的SQL');
+
+call INSERTI18N('CORE.MODULE.SYS.T_CORE_BPMN_PROC.ENGINE.NOCANDIDATOR_BY_SELECT', '通过SQL选取,没有匹配的待审人', '通过SQL({0})选取,没有匹配的待审人', 'zh-CN', '通过SQL({0})选取,没有匹配的待审人');
+
+call INSERTI18N('CORE.MODULE.SYS.T_CORE_BPMN_PROC.ENGINE.NOCANDIDATOR_BY_FILTER', '通过SQL来过滤后，没有匹配的待审人', '通过SQL({0})过滤后，没有匹配的待审人', 'zh-CN', '通过SQL({0})过滤后，没有匹配的待审人');
+COMMIT;
+-- ----------------------------- 2020-09-09 add by zhangjr------------end
+
+-- ----------------------------- 2020-09-14 add by zhangjr------------begin
+ALTER TABLE `T_CORE_BPMN_COMMENT` ADD COLUMN `USERNAME` VARCHAR(96) NULL COMMENT '审核人名称';
+
+UPDATE T_CORE_BPMN_COMMENT C SET C.USERNAME = (SELECT USERNAME FROM T_CORE_USER U WHERE U.ID = C.USERID);
+COMMIT;
+-- ----------------------------- 2020-09-14 add by zhangjr------------end
+
+-- ----------------------------- 2020-09-22 add by zhangjr------------begin 1.1.14 补丁已发布
+CREATE TABLE `T_CORE_SMS` (
+    `ID` BIGINT NOT NULL COMMENT '主键',
+    `TYPE` VARCHAR(36) COMMENT '短信的类型（比方：ResetPassword、Todo等）',
+    `USER` VARCHAR(24) NOT NULL COMMENT '收信人',
+    `MOBILE` VARCHAR(24) NOT NULL COMMENT '手机号',
+    `MESSAGE` TEXT COMMENT '信息',
+    `RETRYQTY` INT(2) NOT NULL COMMENT '重试次数',
+    `STATUS` VARCHAR(2) NOT NULL COMMENT '是否发送成功（0-待发送 1-已发送 2-发送失败  3-已关闭）',
+    `SENDTIME` DATETIME NULL DEFAULT NULL COMMENT '发送成功时间',
+    `CREATEDBYID` VARCHAR(32) NULL DEFAULT NULL COMMENT '制单人ID',
+    `CREATEDBYNAME` VARCHAR(64) NULL DEFAULT NULL COMMENT '制单人名称',
+    `CREATEDBYORGID` VARCHAR(36)  DEFAULT NULL COMMENT '制单人单位编码',
+    `CREATEDBYORGNAME` VARCHAR(270)  DEFAULT NULL COMMENT '制单人单位名称',
+    `CREATEDTIME` DATETIME NULL DEFAULT NULL COMMENT '制单日期',
+    PRIMARY KEY (`ID`),
+    INDEX `IDX_TCS_MOBILE` (`MOBILE`)
+)
+COMMENT='短信表'
+CHARSET='utf8mb4'
+COLLATE='utf8mb4_general_ci'
+ENGINE=InnoDB;
+
+CREATE TABLE `T_CORE_SMS_ERROR_LOG` (
+    `ID` BIGINT NOT NULL COMMENT '主键',
+    `SMSID` BIGINT NOT NULL COMMENT '短信主键',
+    `ERRORLOG` TEXT COMMENT '错误日志',
+    `CREATEDBYID` VARCHAR(32) NULL DEFAULT NULL COMMENT '制单人ID',
+    `CREATEDBYNAME` VARCHAR(64) NULL DEFAULT NULL COMMENT '制单人名称',
+    `CREATEDBYORGID` VARCHAR(36)  DEFAULT NULL COMMENT '制单人单位编码',
+    `CREATEDBYORGNAME` VARCHAR(270)  DEFAULT NULL COMMENT '制单人单位名称',
+    `CREATEDTIME` DATETIME NULL DEFAULT NULL COMMENT '制单日期',
+    PRIMARY KEY (`ID`),
+    INDEX `IDX_TCSEL_SMSID` (`SMSID`)
+)
+COMMENT='短信错误日志表'
+CHARSET='utf8mb4'
+COLLATE='utf8mb4_general_ci'
+ENGINE=InnoDB;
+
+CALL INSERTI18N('T_CORE_SMS.SERVICE_NAME','短信表','短信表','zh-CN','短信表');
+CALL INSERTI18N('T_CORE_SMS.ID','主键','主键','zh-CN','主键');
+CALL INSERTI18N('T_CORE_SMS.TYPE','短信的类型（比方：ResetPassword、Todo等）','类型','zh-CN','类型');
+CALL INSERTI18N('T_CORE_SMS.USER','接收短信的收信人','收信人','zh-CN','收信人');
+CALL INSERTI18N('T_CORE_SMS.MOBILE','接收短信的手机号','手机号','zh-CN','手机号');
+CALL INSERTI18N('T_CORE_SMS.MESSAGE','短信的信息','信息','zh-CN','信息');
+CALL INSERTI18N('T_CORE_SMS.RETRYQTY','短信的重试次数','重试次数','zh-CN','重试次数');
+CALL INSERTI18N('T_CORE_SMS.STATUS','短信发送状态（0-待发送 1-已发送 2-发送失败 3-已关闭）','发送状态','zh-CN','发送状态');
+CALL INSERTI18N('T_CORE_SMS.SUCCESSTIME','短信发送时间','发送时间','zh-CN','发送时间');
+
+CALL INSERTI18N('T_CORE_SMS_ERROR_LOG.SERVICE_NAME','短信错误日志表','短信错误日志表','zh-CN','短信错误日志表');
+CALL INSERTI18N('T_CORE_SMS_ERROR_LOG.ID','主键','主键','zh-CN','主键');
+CALL INSERTI18N('T_CORE_SMS_ERROR_LOG.SMSID','短信主键','短信主键','zh-CN','短信主键');
+CALL INSERTI18N('T_CORE_SMS_ERROR_LOG.ERRORLOG','错误日志','错误日志','zh-CN','错误日志');
+CALL INSERTI18N('T_CORE_SMS_ERROR_LOG.CREATEDBYID','制单人编码','制单人编码','zh-CN','制单人编码');
+CALL INSERTI18N('T_CORE_SMS_ERROR_LOG.CREATEDBYNAME','制单人名称','制单人名称','zh-CN','制单人名称');
+CALL INSERTI18N('T_CORE_SMS_ERROR_LOG.CREATEDBYORGID','制单人单位编码','制单人单位编码','zh-CN','制单人单位编码');
+CALL INSERTI18N('T_CORE_SMS_ERROR_LOG.CREATEDBYORGNAME','制单人单位名称','制单人单位名称','zh-CN','制单人单位名称');
+CALL INSERTI18N('T_CORE_SMS_ERROR_LOG.CREATEDTIME','制单日期','制单日期','zh-CN','制单日期');
+
+
+call INSERTI18N('GIKAM.BUTTON.RESET', '重置', '重置', 'zh-CN', '重置');
+call INSERTI18N('CORE.MODULE.SYS.SMS.TIP.NO_SMSMANAGER', '发送短信没有配置SmsManager实现类', '请配置SmsManager', 'zh-CN', '请配置SmsManager');
+call INSERTI18N('CORE.MODULE.SYS.SMS.TAB.BASE_INFO', '短信详情', '短信详情', 'zh-CN', '短信详情');
+call INSERTI18N('CORE.MODULE.SYS.SMS.TAB.ERROR_LOG', '错误日志', '错误日志', 'zh-CN', '错误日志');
+
+
+INSERT INTO T_CORE_CODE_CATEGORY(ID, CODECATEGORYNAME, CODECLASSID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME)
+VALUES ('smsStatus', '短信状态', 'sys', NULL, 1, NULL, NULL, NULL, NULL);
+INSERT INTO T_CORE_CODE(ID, CODE, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG)
+VALUES (F_GET_SEQ_CORE(), '0', '待发送', 'smsStatus', NULL, 1, 0, 'admin', '系统管理员', NULL, '0');
+INSERT INTO T_CORE_CODE(ID, CODE, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG)
+VALUES (F_GET_SEQ_CORE(), '1', '已发送', 'smsStatus', NULL, 2, 0, 'admin', '系统管理员', NULL, '0');
+INSERT INTO T_CORE_CODE(ID, CODE, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG)
+VALUES (F_GET_SEQ_CORE(), '2', '发送失败', 'smsStatus', NULL, 3, 0, 'admin', '系统管理员', NULL, '0');
+INSERT INTO T_CORE_CODE(ID, CODE, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG)
+VALUES (F_GET_SEQ_CORE(), '3', '已关闭', 'smsStatus', NULL, 4, 0, 'admin', '系统管理员', NULL, '0');
+
+INSERT INTO T_CORE_MENU (ID, MENUNAME, HREF, PARENTID, ORDERNO, ICON, MENUINITNAME)
+VALUES ('9408', '短信发送日志', '/secure/core/module/sys/sms/page/search-list', '94', '9408', '044.svg', '短信发送日志');
+COMMIT;
+-- ----------------------------- 2020-09-22 add by zhangjr------------end 1.1.14 补丁已发布
+
+-- ----------------------------- 2020-09-23 add by zhangjr------------begin 1.1.14 补丁已发布
+call INSERTI18N('RESET_PASSWORD.WARNING.TIP.INVALID_USERID_OR_MOBILE', '重置密码，用户名和手机号错误', '用户名或手机号错误', 'zh-CN', '用户名或手机号错误');
+call INSERTI18N('RESET_PASSWORD.WARNING.TIP.UNABLE_SEND_SMS', '重置密码，验证码发送失败', '验证码发送失败，请联系管理员', 'zh-CN', '验证码发送失败，请联系管理员');
+call INSERTI18N('RESET_PASSWORD.WARNING.TIP.INVALID_VERIFICATION_CODE', '重置密码，验证码错误', '验证码错误', 'zh-CN', '验证码错误');
+call INSERTI18N('RESET_PASSWORD.WARNING.TIP.VERIFICATION_CODE_EXPIRED', '重置密码，验证码过期', '验证码过期', 'zh-CN', '验证码过期');
+call INSERTI18N('RESET_PASSWORD.SMS.MESSAGE_TEMPLATE', '重置密码，发送验证码的短信模板', '{0}（验证码），10分钟内有效。', 'zh-CN', '{0}（验证码），10分钟内有效。');
+COMMIT;
+-- ----------------------------- 2020-09-23 add by zhangjr------------end 1.1.14 补丁已发布
+
+-- ----------------------------- 2021-09-26 add by shixw------------begin
+
+alter table T_CORE_LOGIN_CONFIG add column RETRIEVEPASSWORDWAY VARCHAR(36) null comment '找回密码方式';
+
+CALL INSERTI18N('T_CORE_LOGIN_CONFIG.RETRIEVEPASSWORDWAY','找回密码方式','找回密码方式','zh-CN','找回密码方式');
+
+-- ----------------------------- 2021-09-26 add by shixw------------end
+
+-- ----------------------------- 2020-09-27 add by zhangjr------------begin
+call INSERTI18N('TRANSACTION.ERROR.TRANSACTION_REQUIRED', '当前方法必需在事务内执行', '当前方法必需在事务内执行', 'zh-CN', '当前方法必需在事务内执行');
+call INSERTI18N('LEVELCODE.ERROR.INVALID_LEVELCODE_AND_LEVELSIZE', '层次码和每层长度不匹配', '层次码和每层长度不匹配', 'zh-CN', '层次码和每层长度不匹配');
+call INSERTI18N('LEVELCODE.ERROR.REACH_MAX_LEVELCODE', '层次码达到最大值', '层次码达到最大值', 'zh-CN', '层次码达到最大值');
+-- ----------------------------- 2020-09-27 add by zhangjr------------end
+
+-- ----------------------------- 2021-10-08 add by zhangxt--------------begin
+UPDATE T_CORE_CONSTANT SET CONSTANTVALUE = 'txt,doc,jpg,jpeg,gif,tif,tiff,png,bmp,zip,rar,xls,ppt,ini,pdf,docx,xlsx,swf,dwg,wps,pptx,ppt,cpt,json' WHERE ID = 'FILE-EXTENSIONS';
+commit;
+-- ----------------------------- 2021-10-08 add by zhangxt--------------end
+
+-- ----------------------------- 2021-11-02 add by zhangjr--------------begin
+call INSERTI18N('GIKAM.BPMN.TASK.SUBMIT_NAME', '进度监控，任务提交时的名称', '{0}提交', 'zh-CN', '{0}提交');
+call INSERTI18N('GIKAM.BPMN.TASK.COMPLETE_NAME', '进度监控，任务审核时的名称', '{0}审核', 'zh-CN', '{0}审核');
+call INSERTI18N('GIKAM.BPMN.TASK.WITHDRAW_NAME', '进度监控，任务撤回时的名称', '{0}撤回', 'zh-CN', '{0}撤回');
+call INSERTI18N('GIKAM.BPMN.TASK.TRANSFER_NAME', '进度监控，任务转办时的名称', '{0}转办', 'zh-CN', '{0}转办');
+call INSERTI18N('GIKAM.BPMN.TASK.END_NAME', '进度监控，任务结束时的名称', '{0}结束', 'zh-CN', '{0}结束');
+call INSERTI18N('GIKAM.BPMN.TASK.REJECT_NAME', '进度监控，任务拒绝时的名称', '{0}拒绝', 'zh-CN', '{0}拒绝');
+call INSERTI18N('GIKAM.BPMN.TASK.ODD_REJECT_NAME', '进度监控，任务异常拒绝时的名称', '{0}异常拒绝', 'zh-CN', '{0}异常拒绝');
+call INSERTI18N('GIKAM.BPMN.TASK.UNDO_NAME', '进度监控，任务回退时的名称', '{0}回退', 'zh-CN', '{0}回退');
+commit;
+-- ----------------------------- 2021-11-02 add by zhangjr--------------end
+
+-- ----------------------------- 2021-11-03 add by zhanghang------------begin
+
+CALL INSERTI18N('T_CORE_DATA_CENTER.REPORTNAME', '报表名称', '报表名称', 'zh-CN', '报表名称');
+CALL INSERTI18N('T_CORE_REPORT_CONFIG_LINE.DATACENTERREPORT', '数据中心报表', '数据中心报表', 'zh-CN', '数据中心报表');
+
+CALL INSERTI18N('CORE.MODULE.SYS.REPORTS.TIP.VIEW_REPORT_MUST_CHOOSE_DATA_CENTER_REPORT_ID', '请选择关联数据中心报表后再预览', '请选择关联数据中心报表后再预览', 'zh-CN', '请选择关联数据中心报表后再预览');
+CALL INSERTI18N('CORE.MODULE.SYS.REPORTS.TIP.LINE_VALID_DATA_CENTER_FAILURE', '数据中心配置明细未关联数据中心报表不允许发布,请重新选择', '数据中心配置明细未关联数据中心报表不允许发布,请重新选择', 'zh-CN', '数据中心配置明细未关联数据中心报表不允许发布,请重新选择');
+CALL INSERTI18N('CORE.MODULE.SYS.REPORTS.TIP.VIEW_REPORT_CAN_NOT_CHOOSE_FOLDER_CENTER_REPORT_DATA', '关联数据中心报表不能选择菜单文件夹节点', '关联数据中心报表不能选择菜单文件夹节点', 'zh-CN', '关联数据中心报表不能选择菜单文件夹节点');
+
+alter table T_CORE_REPORT_CONFIG_LINE add column DATACENTERREPORTNAME VARCHAR(120) null comment '数据中心报表名称';
+alter table T_CORE_REPORT_CONFIG_LINE add column DATACENTERREPORTURL VARCHAR(514) null comment '数据中心报表查询URL';
+alter table T_CORE_REPORT_CONFIG_LINE add column DATACENTERREPORTID BIGINT null comment '数据中心报表ID';
+
+CALL INSERTI18N('T_CORE_REPORT_CONFIG_LINE.DATACENTERREPORTNAME','数据中心报表名称','数据中心报表名称','zh-CN','数据中心报表名称');
+CALL INSERTI18N('T_CORE_REPORT_CONFIG_LINE.DATACENTERREPORTURL','数据中心报表查询URL','数据中心报表查询URL','zh-CN','数据中心报表查询URL');
+CALL INSERTI18N('T_CORE_REPORT_CONFIG_LINE.DATACENTERREPORTID','数据中心报表ID','数据中心报表ID','zh-CN','数据中心报表ID');
+
+INSERT INTO T_CORE_CODE(ID, CODE, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME)
+VALUES (F_GET_SEQ_CORE(), 'dataCenter', '数据中心', 'reportConfigCategory', NULL, 3, 0, 'admin', '系统管理员', NULL,  '0', NULL, NULL, NULL);
+
+INSERT INTO T_CORE_ADMIN_CHOOSE_CONFIG(ID, NAME, TITLE, CATEGORY, URL, WIDTH)
+  VALUES(F_GET_SEQ_CORE(), '数据中心报表', '数据中心报表', 'data-center-report', '/secure/core/module/item/data-centers/page/report-choose-list', '40%');
+
+-- --    1.1.8补丁已发布
+INSERT INTO T_CORE_MENU(ID, MENUNAME, HREF, PARENTID, ORDERNO, MENUINITNAME, I18NCODE) VALUES ('9403', '导出日志', '/secure/core/module/sys/export-logs/page/edit-list', '94', '9403','导出日志', 'CORE.MENU.MENUNAME.SYS.LOG.EXPORT');
+
+alter table T_CORE_EXPORT_LOG add column MENUNAME VARCHAR(64) null comment '菜单名称';
+alter table T_CORE_EXPORT_LOG add column SUCCESS VARCHAR(1) null comment '导出结果（1-成功/0-失败）';
+
+CALL INSERTI18N('T_CORE_EXPORT_LOG.MENUNAME','菜单名称','菜单名称','zh-CN','菜单名称');
+CALL INSERTI18N('T_CORE_EXPORT_LOG.SUCCESS','导出结果','导出结果','zh-CN','导出结果');
+CALL INSERTI18N('T_CORE_EXPORT_LOG.OPERATION','文件操作','文件操作','zh-CN','文件操作');
+
+-- --    1.1.8补丁已发布
+
+INSERT INTO T_CORE_CONSTANT(ID, CONSTANTVALUE, CONSTANTDESC, CLASSFICATION, `SHOW`, CREATEDTIME, CREATEDBYID, CREATEDBYNAME, VERSION) 
+VALUES ('GRID-RECORD-EXPORT-LOG', '1', '表格是否记录导出日志', '系统', '1', NULL, NULL, NULL, 0);
+
+commit;
+-- ----------------------------- 2021-11-03 add by zhanghang------------end
+
+-- ----------------------------- 2021-11-08 add by zhanghang------------begin
+DELETE FROM T_CORE_CONSTANT WHERE ID = 'GRID-RECORD-EXPORT-LOG';
+commit;
+-- ----------------------------- 2021-11-08 add by zhanghang------------end
+-- ----------------------------- 2021-11-09 add by zhangxt------------begin
+CREATE INDEX IDX_CORE_ATRECORDLINE_TARGETID ON t_core_at_record_line (TARGETID);
+-- ----------------------------- 2021-11-09 add by zhangxt------------end
+
+-- ----------------------------- 2021-11-23 add by shixw------------begin
+
+INSERT INTO T_CORE_ADMIN_SELECT_CONFIG(ID, NAME, CATEGORY, URL, VALUEFIELD, TEXTFIELD)
+VALUES (F_GET_SEQ_CORE(), '复选框配置', 'checkbox-config', '/secure/core/module/admin/check-configs/queries/selectable', 'id', 'name');
+
+commit;
+-- ----------------------------- 2021-11-23 add by shixw------------end
+
+-- ----------------------------- 2021-11-24 add by zhangjr------------begin
+call DELETEI18N('CORE.MODULE.SYS.T_CORE_BPMN_PROC.ENGINE.PROCESS_NOT_EXISTS');
+CALL INSERTI18N('CORE.MODULE.SYS.T_CORE_BPMN_PROC.ENGINE.PROCESS_NOT_EXISTS', '当前登录部门流程未定义', '当前登录部门在{0}中未定义流程', 'zh-CN', '当前登录部门在{0}中未定义流程');
+commit;
+-- ----------------------------- 2021-11-24 add by zhangjr------------end
+
+-- ----------------------------- 2021-11-24 add by zhangpf--------------begin    1.1.9补丁已发布
+alter table T_CORE_SYSTEM_CONFIG add column HELPCENTER VARCHAR(36) null comment '是否开启帮助中心（是/否 默认为否）';
+
+CALL INSERTI18N('T_CORE_SYSTEM_CONFIG.HELPCENTER','开启帮助中心','开启帮助中心','zh-CN','开启帮助中心');
+
+UPDATE T_CORE_SYSTEM_CONFIG SET HELPCENTER = '0'
+WHERE ID = 'system-config';
+
+-- 建表语句
+
+CREATE TABLE IF NOT EXISTS `T_CORE_HELP_CENTER`(
+     `ID` VARCHAR(30)  NOT NULL COMMENT '主键',
+     `MANUALVIDEOFILEID` BIGINT DEFAULT NULL COMMENT '手册视频文件id',
+     `MANUALEDITINGMETHOD` VARCHAR(30)  DEFAULT NULL COMMENT '手册编辑方式(online-在线编辑/file-上传文档)',
+     `MANUALDOCFILEID` BIGINT DEFAULT NULL COMMENT '手册文档文件id',
+     `MANUALCONTENT` LONGTEXT DEFAULT NULL COMMENT '手册内容',
+     `CREATEDBYID` VARCHAR(36)  DEFAULT NULL COMMENT '制单人编码',
+     `CREATEDBYNAME` VARCHAR(60)  DEFAULT NULL COMMENT '制单人名称',
+     `CREATEDTIME` DATETIME DEFAULT NULL COMMENT '制单时间',
+     `CREATEDBYORGID` VARCHAR(36)  DEFAULT NULL COMMENT '制单人单位编码',
+     `CREATEDBYORGNAME` VARCHAR(270)  DEFAULT NULL COMMENT '制单人单位名称',
+      PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='帮助中心';
+
+CALL INSERTI18N('T_CORE_HELP_CENTER.SERVICE_NAME', '帮助中心', '帮助中心', 'zh-CN', '帮助中心');
+CALL INSERTI18N('T_CORE_HELP_CENTER.ID', '帮助中心的主键', '主键', 'zh-CN', '主键');
+CALL INSERTI18N('T_CORE_HELP_CENTER.MANUALVIDEOFILEID', '帮助中心的手册视频文件id', '手册视频文件id', 'zh-CN', '手册视频文件id');
+CALL INSERTI18N('T_CORE_HELP_CENTER.MANUALEDITINGMETHOD', '帮助中心的手册编辑方式', '手册编辑方式', 'zh-CN', '手册编辑方式');
+CALL INSERTI18N('T_CORE_HELP_CENTER.MANUALDOCFILEID', '帮助中心的手册文档文件id', '手册文档文件id', 'zh-CN', '手册文档文件id');
+CALL INSERTI18N('T_CORE_HELP_CENTER.MANUALCONTENT', '帮助中心的手册内容', '手册内容', 'zh-CN', '手册内容');
+CALL INSERTI18N('T_CORE_HELP_CENTER.CREATEDBYID', '帮助中心的制单人编码', '制单人编码', 'zh-CN', '制单人编码');
+CALL INSERTI18N('T_CORE_HELP_CENTER.CREATEDBYNAME', '帮助中心的制单人名称', '制单人名称', 'zh-CN', '制单人名称');
+CALL INSERTI18N('T_CORE_HELP_CENTER.CREATEDTIME', '帮助中心的制单时间', '制单时间', 'zh-CN', '制单时间');
+CALL INSERTI18N('T_CORE_HELP_CENTER.CREATEDBYORGID', '帮助中心的制单人单位编码', '制单人单位编码', 'zh-CN', '制单人单位编码');
+CALL INSERTI18N('T_CORE_HELP_CENTER.CREATEDBYORGNAME', '帮助中心的制单人单位名称', '制单人单位名称', 'zh-CN', '制单人单位名称');
+
+CALL INSERTI18N('MODULE.ADMIN.HELPCENTERS.TREE.MENU', '帮助中心的菜单树', '菜单', 'zh-CN', '菜单');
+CALL INSERTI18N('MODULE.ADMIN.HELPCENTERS.TAB.BASE_INFO', '基本信息', '基本信息', 'zh-CN', '基本信息');
+CALL INSERTI18N('MODULE.ADMIN.HELPCENTERS.FIELD.VIDEO', '帮助中心的上传视频', '上传视频', 'zh-CN', '上传视频');
+CALL INSERTI18N('MODULE.ADMIN.HELPCENTERS.FIELD.MANUAL_DOC', '帮助中心的上传操作手册', '上传操作手册', 'zh-CN', '上传操作手册');
+CALL INSERTI18N('MODULE.ADMIN.HELPCENTERS.FIELD.MANUAL', '帮助中心的操作手册', '操作手册', 'zh-CN', '操作手册');
+
+CALL INSERTI18N('MODULE.ADMIN.HELPCENTERS.TIP.CURRENT_MENU_HAS_NO_RELATED_PAGE', '当前菜单未配置相关页面，请重新选择', '当前菜单未配置相关页面，请重新选择', 'zh-CN', '当前菜单未配置相关页面，请重新选择');
+CALL INSERTI18N('MODULE.ADMIN.HELPCENTERS.TIP.CURRENT_MENU_HAS_NO_MANUAL_CONFIG', '当前菜单未配置帮助项，请联系管理员添加', '当前菜单未配置帮助项，请联系管理员添加', 'zh-CN', '当前菜单未配置帮助项，请联系管理员添加');
+
+-- 创建菜单语句
+INSERT INTO T_CORE_ADMIN_MENU (ID, MENUNAME, HREF, PARENTID, ORDERNO, MENUICON)
+VALUES ('101060', '帮助中心', '/secure/module/admin/help-centers/page/edit-list', '1010', '101060', '019.svg');
+
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_HELP_CENTER', '0', '1');
+
+INSERT INTO T_CORE_ADMIN_SELECT_CONFIG(ID, NAME, CATEGORY, URL, VALUEFIELD, TEXTFIELD)
+VALUES(F_GET_SEQ_CORE(), '帮助中心手册编辑方式', 'manual-editing-method', '/secure/core/module/sys/codes/queries/selectable?codeCategoryId=manualEditingMethod', 'code', 'codeName');
+
+INSERT INTO T_CORE_CODE_CATEGORY(ID, CODECATEGORYNAME, CODECLASSID, REMARK, ORDERNO, CREATEDBYID, CREATEDBYNAME, CREATEDTIME)
+VALUES ('manualEditingMethod', '帮助中心手册编辑方式', 'sys', NULL, 1, NULL, NULL, NULL);
+
+INSERT INTO T_CORE_CODE(ID, CODECATEGORYID, CODE, CODENAME, ORDERNO,  LASTSUSPENDEDFLAG) 
+VALUES(F_GET_SEQ_CORE(), 'manualEditingMethod', 'file', '上传文档', 1, '0');
+INSERT INTO T_CORE_CODE(ID, CODECATEGORYID, CODE, CODENAME, ORDERNO, LASTSUSPENDEDFLAG) 
+VALUES(F_GET_SEQ_CORE(), 'manualEditingMethod', 'online', '在线编辑', 2, '0');
+
+COMMIT;
+-- ----------------------------- 2021-11-24 add by zhangpf------------end    1.1.9补丁已发布
+
+-- ----------------------------- 2021-11-28 add by zhangjr------------begin
+call INSERTI18N('CORE.MODULE.SYS.T_CORE_BPMN_PROC.DIAGRAM.TASK_NAME_NOT_ASSIGNED', '工作流定义提交时，任务节点名称不能为空', '任务节点名称不能为空', 'zh-CN', '任务节点名称不能为空');
+commit;
+-- ----------------------------- 2021-11-28 add by zhangjr------------end
+
+-- ----------------------------- 2021-12-01 add by zhangpf------------begin    1.1.10补丁已发布
+ALTER TABLE T_CORE_PASSWORD_POLICY ADD COLUMN FAILEDATTEMPTPOLICY VARCHAR(36) NULL COMMENT '错误密码次数策略（总数、当日累计）';
+ALTER TABLE T_CORE_PASSWORD_POLICY ADD COLUMN EXPIREDPOLICY VARCHAR(36) NULL COMMENT '过期密码策略（强制、可选）';
+
+UPDATE T_CORE_PASSWORD_POLICY SET FAILEDATTEMPTPOLICY = 'total';
+UPDATE T_CORE_PASSWORD_POLICY SET EXPIREDPOLICY = 'optional';
+
+CALL INSERTI18N('T_CORE_PASSWORD_POLICY.FAILEDATTEMPTPOLICY','错误密码次数策略（总数、当日累计）','错误密码次数策略','zh-CN','错误密码次数策略');
+CALL INSERTI18N('T_CORE_PASSWORD_POLICY.EXPIREDPOLICY','过期密码策略（强制、可选）','过期密码策略','zh-CN','过期密码策略');
+CALL INSERTI18N('GIKAM.SECURITY.LOGIN.INCORRECT_PASSWORD_REMAIN_TIMES', '登录时密码错误还剩几次重试机会', '密码错误，今日还剩余{0}次重试机会，用户将被锁定', 'zh-CN', '密码错误，今日还剩余{0}次重试机会，用户将被锁定');
+
+INSERT INTO T_CORE_ADMIN_SELECT_CONFIG(ID, NAME, CATEGORY, URL, VALUEFIELD, TEXTFIELD)
+VALUES(F_GET_SEQ_CORE(), '错误密码次数策略', 'failed-attempt-policy', '/secure/core/module/sys/codes/queries/selectable?codeCategoryId=failedAttemptPolicy', 'code', 'codeName');
+
+INSERT INTO T_CORE_CODE_CATEGORY(ID, CODECATEGORYNAME, CODECLASSID, REMARK, ORDERNO, CREATEDBYID, CREATEDBYNAME, CREATEDTIME)
+VALUES ('failedAttemptPolicy', '错误密码次数策略', 'sys', NULL, 1, NULL, NULL, NULL);
+
+INSERT INTO T_CORE_CODE(ID, CODECATEGORYID, CODE, CODENAME, ORDERNO,  LASTSUSPENDEDFLAG) 
+VALUES(F_GET_SEQ_CORE(), 'failedAttemptPolicy', 'total', '总数', 1, '0');
+INSERT INTO T_CORE_CODE(ID, CODECATEGORYID, CODE, CODENAME, ORDERNO, LASTSUSPENDEDFLAG) 
+VALUES(F_GET_SEQ_CORE(), 'failedAttemptPolicy', 'byday', '当日累计', 2, '0');
+
+
+INSERT INTO T_CORE_ADMIN_SELECT_CONFIG(ID, NAME, CATEGORY, URL, VALUEFIELD, TEXTFIELD)
+VALUES(F_GET_SEQ_CORE(), '过期密码策略', 'expired-policy', '/secure/core/module/sys/codes/queries/selectable?codeCategoryId=expiredPolicy', 'code', 'codeName');
+
+INSERT INTO T_CORE_CODE_CATEGORY(ID, CODECATEGORYNAME, CODECLASSID, REMARK, ORDERNO, CREATEDBYID, CREATEDBYNAME, CREATEDTIME)
+VALUES ('expiredPolicy', '过期密码策略', 'sys', NULL, 1, NULL, NULL, NULL);
+
+INSERT INTO T_CORE_CODE(ID, CODECATEGORYID, CODE, CODENAME, ORDERNO, LASTSUSPENDEDFLAG) 
+VALUES(F_GET_SEQ_CORE(), 'expiredPolicy', 'optional', '可选修改', 1, '0');
+INSERT INTO T_CORE_CODE(ID, CODECATEGORYID, CODE, CODENAME, ORDERNO,  LASTSUSPENDEDFLAG) 
+VALUES(F_GET_SEQ_CORE(), 'expiredPolicy', 'mandatory', '强制修改', 2, '0');
+
+COMMIT;
+-- ----------------------------- 2021-12-01 add by zhangpf------------end    1.1.10补丁已发布
+
+-- ----------------------------- 2021-12-12 add by zhangjr------------begin    1.1.11补丁已发布
+INSERT INTO T_CORE_CONSTANT(ID, CONSTANTVALUE, CONSTANTDESC, CLASSFICATION, `SHOW`, CREATEDTIME, CREATEDBYID, CREATEDBYNAME, VERSION) 
+VALUES ('UPDATE_BAD_PASSWORD_AFTER_LOGIN', '0', '登录后是否强制更新非法的密码', '系统', '1', NULL, NULL, NULL, 0);
+commit;
+-- ----------------------------- 2021-12-12 add by zhangjr------------end    1.1.11补丁已发布
+
+-- ----------------------------- 2021-12-13 add by zhangxt------------begin
+call INSERTI18N('GIKAM.WORKFLOW.ODD.TIP.NOMATCH_BIZ_WORKFLOW', '异常单据回退时，数据未正确匹配到业务流程', '异常单据回退时，数据未正确匹配到业务流程', 'zh-CN', '异常单据回退时，数据未正确匹配到业务流程');
+commit;
+-- ----------------------------- 2021-12-13 add by zhangxt------------end
+
+-- ----------------------------- 2021-12-15 add by zhangpf------------begin
+RENAME TABLE T_CORE_AD_DMOAIN_USER TO T_CORE_AD_DOMAIN_USER;
+
+CALL DELETEI18N('T_CORE_AD_DMOAIN_USER.SERVICE_NAME');
+CALL DELETEI18N('T_CORE_AD_DMOAIN_USER.ID');
+CALL DELETEI18N('T_CORE_AD_DMOAIN_USER.ADUSERID');
+CALL DELETEI18N('T_CORE_AD_DMOAIN_USER.CREATEDBYID');
+CALL DELETEI18N('T_CORE_AD_DMOAIN_USER.CREATEDBYNAME');
+CALL DELETEI18N('T_CORE_AD_DMOAIN_USER.CREATEDTIME');
+CALL DELETEI18N('T_CORE_AD_DMOAIN_USER.CREATEDBYORGID');
+CALL DELETEI18N('T_CORE_AD_DMOAIN_USER.CREATEDBYORGNAME');
+
+
+CALL INSERTI18N('T_CORE_AD_DOMAIN_USER.SERVICE_NAME', 'AD域用户', 'AD域用户', 'zh-CN', 'AD域用户');
+CALL INSERTI18N('T_CORE_AD_DOMAIN_USER.ID', 'AD域用户的主键', '主键', 'zh-CN', '主键');
+CALL INSERTI18N('T_CORE_AD_DOMAIN_USER.ADUSERID', 'AD域用户的AD域登录名', 'AD域登录名', 'zh-CN', 'AD域登录名');
+CALL INSERTI18N('T_CORE_AD_DOMAIN_USER.CREATEDBYID', 'AD域用户的制单人编码', '制单人编码', 'zh-CN', '制单人编码');
+CALL INSERTI18N('T_CORE_AD_DOMAIN_USER.CREATEDBYNAME', 'AD域用户的制单人名称', '制单人名称', 'zh-CN', '制单人名称');
+CALL INSERTI18N('T_CORE_AD_DOMAIN_USER.CREATEDTIME', 'AD域用户的制单时间', '制单时间', 'zh-CN', '制单时间');
+CALL INSERTI18N('T_CORE_AD_DOMAIN_USER.CREATEDBYORGID', 'AD域用户的制单人单位编码', '制单人单位编码', 'zh-CN', '制单人单位编码');
+CALL INSERTI18N('T_CORE_AD_DOMAIN_USER.CREATEDBYORGNAME', 'AD域用户的制单人单位名称', '制单人单位名称', 'zh-CN', '制单人单位名称');
+
+UPDATE T_CORE_TABLE 
+   SET ID = 'T_CORE_AD_DOMAIN_USER'
+ WHERE ID = 'T_CORE_AD_DMOAIN_USER';
+COMMIT;
+-- ----------------------------- 2021-12-15 add by zhangpf------------end
+
+-- ----------------------------- 2021-12-16 add by ZHANGJR------------begin
+ALTER TABLE t_core_user ADD READONLY varchar(2) NULL COMMENT '是否是只读用户（0-否 1-是）';
+ALTER TABLE t_core_m_user ADD READONLY varchar(2) NULL COMMENT '是否是只读用户（0-否 1-是）';
+
+
+call INSERTI18N('T_CORE_USER.READONLY', '系统用户表的是否只读账号', '是否只读账号', 'zh-CN', '是否只读账号');
+call INSERTI18N('GIKAM.TIP.NOT_PERMITTED', '无权进行该操作', '无权进行该操作', 'zh-CN', '无权进行该操作');
+COMMIT;
+
+INSERT INTO T_CORE_CONSTANT(ID, CONSTANTVALUE, CONSTANTDESC, CLASSFICATION, `SHOW`, CREATEDTIME, CREATEDBYID, CREATEDBYNAME, VERSION) 
+VALUES ('REDIS_MAX_EXPIRED_SEC', '0', 'REDIS缓存过期的时间，0是不限制', '系统', '1', NULL, NULL, NULL, 0);
+commit;
+-- ----------------------------- 2021-12-16 add by ZHANGJR------------END
+
+-- ----------------------------- 2021-12-17 add by ZHANGJR------------begin
+call INSERTI18N('CORE.MODULE.SYS.T_CORE_BPMN_DIAGRAM.CANDIDATOR.SPECIAL', '审核人信息中特殊分配', '特殊分配', 'zh-CN', '特殊分配');
+call INSERTI18N('CORE.MODULE.SYS.T_CORE_BPMN_DIAGRAM.COMMENT.TASKNAME', '审核意见中节点名称', '节点名称', 'zh-CN', '节点名称');
+call INSERTI18N('CORE.MODULE.SYS.T_CORE_BPMN_DIAGRAM.COMMENT.AUDITEDBYNAME', '审核意见中审核人', '审核人', 'zh-CN', '审核人');
+call INSERTI18N('CORE.MODULE.SYS.T_CORE_BPMN_DIAGRAM.COMMENT.AUDITEDTIME', '审核意见中审核时间', '审核时间', 'zh-CN', '审核时间');
+call INSERTI18N('CORE.MODULE.SYS.T_CORE_BPMN_DIAGRAM.COMMENT.COMMENT', '审核意见中审核意见', '审核意见', 'zh-CN', '审核意见');
+call INSERTI18N('CORE.MODULE.SYS.T_CORE_BPMN_DIAGRAM.COMMENT.ROUTE', '审核意见中审核路径', '审核路径', 'zh-CN', '审核路径');
+call INSERTI18N('CORE.MODULE.SYS.T_CORE_BPMN_DIAGRAM.COMMENT.ATTACHMENT', '审核意见中附件', '附件', 'zh-CN', '附件');
+
+CALL UPDATEI18N('CORE.MODULE.SYS.T_CORE_BPMN_DIAGRAM.CANDIDATOR.TASKSTATUSCODE','zh-CN','状态码');
+CALL UPDATEI18N('CORE.MODULE.SYS.T_CORE_BPMN_DIAGRAM.CANDIDATOR.TASKNAME','zh-CN','节点名称');
+
+CALL DELETEI18N('CORE.MODULE.SYS.T_CORE_BPMN_DIAGRAM.CANDIDATOR.DYNAMIC');
+CALL DELETEI18N('CORE.MODULE.SYS.T_CORE_BPMN_DIAGRAM.CANDIDATOR.INITIATOR');
+COMMIT;
+-- ----------------------------- 2021-12-17 add by ZHANGJR------------end
+
+-- ----------------------------- 2021-12-17 add by zhangpf------------begin
+CALL INSERTI18N('GIKAM.SECURITY.LOGIN.FAILEDATTEMPTPOLICY_TOTAL_INCORRECT_PASSWORD_REMAIN_TIMES', '登录时密码错误还剩几次重试机会', '密码错误，还剩余{0}次重试机会，用户将被锁定', 'zh-CN', '密码错误，还剩余{0}次重试机会，用户将被锁定');
+COMMIT;
+-- ----------------------------- 2021-12-17 add by zhangpf------------end
+
+-- ----------------------------- 2021-12-22 add by ZHANGJR------------begin
+call INSERTI18N('EXECUTOR.RESOURCE_MONITORING.UNABLE_RUN_MULTIPLE_TASK', '每个线程只能运行一条资源监控的任务', '每个线程只能运行一条资源监控的任务', 'zh-CN', '每个线程只能运行一条资源监控的任务');
+call INSERTI18N('EXECUTOR.RESOURCE_MONITORING.CPU_USAGE_OVERLOAD', '当前CPU使用率过高，请稍后再尝试该操作', '当前CPU使用率过高，请稍后再尝试该操作', 'zh-CN', '当前CPU使用率过高，请稍后再尝试该操作');
+call INSERTI18N('EXECUTOR.RESOURCE_MONITORING.MEMORY_USAGE_OVERLOAD', '当前内存使用率过高，请稍后再尝试该操作', '当前内存使用率过高，请稍后再尝试该操作', 'zh-CN', '当前内存使用率过高，请稍后再尝试该操作');
+call INSERTI18N('EXECUTOR.RESOURCE_MONITORING.RUNNING_TIMEOUT', '当前任务运行超时，请稍后执行或联系管理员', '当前任务运行超时，请稍后执行或联系管理员', 'zh-CN', '当前任务运行超时，请稍后执行或联系管理员');
+call INSERTI18N('EXECUTOR.RESOURCE_MONITORING.TASK_OVERLOAD', '当前运行的任务过多，请稍后再试', '当前运行的任务过多，请稍后再试', 'zh-CN', '当前运行的任务过多，请稍后再试');
+commit;
+-- ----------------------------- 2021-12-22 add by ZHANGJR------------end
+
+-- ----------------------------- 2021-12-30 add by ZHANGJR------------begin
+
+call DELETEI18N('GIKAM.BPMN.TASK.START');
+call DELETEI18N('GIKAM.BPMN.TASK.END');
+
+COMMIT;
+-- ----------------------------- 2021-12-30 add by ZHANGJR------------end
+
+-- ----------------------------- 2022-1-5 add by ZHANGJR------------begin
+INSERT INTO T_CORE_ADMIN_MENU (ID, MENUNAME, HREF, PARENTID, ORDERNO, MENUICON)
+VALUES ('101070', '执行脚本', '/secure/core/module/admin/scripts/page/detail', '1010', '101070', '019.svg');
+
+CALL INSERTI18N('CORE.MODULE.ADMIN.SCRIPT.TITLE.SCRIPT', '执行的脚本信息', '执行脚本', 'zh-CN', '执行脚本');
+CALL INSERTI18N('CORE.MODULE.ADMIN.SCRIPT.TITLE.RESULT', '脚本执行后的结果', '执行结果', 'zh-CN', '执行结果');
+
+CALL INSERTI18N('CORE.MODULE.ADMIN.SCRIPT.RESULT.CODE', '脚本执行后的返回状态码', '返回状态', 'zh-CN', '返回状态');
+CALL INSERTI18N('CORE.MODULE.ADMIN.SCRIPT.RESULT.CONTENT', '脚本执行后的返回结果', '返回结果', 'zh-CN', '返回结果');
+
+CALL INSERTI18N('GIKAM.BUTTON.EXECUTE', '执行', '执行', 'zh-CN', '执行');
+COMMIT;
+-- ----------------------------- 2022-1-5 add by ZHANGJR------------end
+
+-- ----------------------------- 2022-1-11 add by ZHANGJR------------begin
+CALL INSERTI18N('GIKAM.SECURITY.LOGIN.ALREADY_LOGIN', '已有用户登录，不允许多账号登录', '已有用户登录，不允许多账号登录', 'zh-CN', '已有用户登录，不允许多账号登录');
+COMMIT;
+-- ----------------------------- 2022-1-11 add by ZHANGJR------------end
+
+-- ----------------------------- 2022-01-16 add by shixw------------begin
+
+INSERT INTO T_CORE_MENU (ID, MENUNAME, HREF, PARENTID, ORDERNO, ICON, MENUINITNAME)
+VALUES ('9361', '数据中心查询', '/secure/core/module/item/data-centers/page/search-list', '93', '9361', '016.svg', '数据中心查询');
+
+INSERT INTO T_CORE_ADMIN_SELECT_CONFIG(ID, NAME, CATEGORY, URL, VALUEFIELD, TEXTFIELD)
+VALUES (F_GET_SEQ_CORE(), '数据中心报表', 'data-center-report', '/secure/core/module/item/data-centers/queries/selectable', 'url', 'nodeName');
+
+commit;
+-- ----------------------------- 2022-01-16 add by shixw------------end
+
+-- ----------------------------- 2022-01-17 add by dingjj------------begin
+
+-- 建表语句
+
+CREATE TABLE IF NOT EXISTS `T_CORE_NOTIFICATION_AUDIO`(
+     `ID` BIGINT NOT NULL COMMENT '主键',
+     `AUDIONAME` VARCHAR(120)  DEFAULT NULL COMMENT '语音名称',
+     `AUDIOTYPE` VARCHAR(36)  DEFAULT NULL COMMENT '语音类型',
+     `URL` VARCHAR(270)  DEFAULT NULL COMMENT '路径',
+     `CREATEDBYID` VARCHAR(36)  DEFAULT NULL COMMENT '制单人编码',
+     `CREATEDBYNAME` VARCHAR(60)  DEFAULT NULL COMMENT '制单人名称',
+     `CREATEDTIME` DATETIME DEFAULT NULL COMMENT '制单时间',
+     `CREATEDBYORGID` VARCHAR(36)  DEFAULT NULL COMMENT '制单人单位编码',
+     `CREATEDBYORGNAME` VARCHAR(270)  DEFAULT NULL COMMENT '制单人单位名称',
+      PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='通知语音库';
+
+CALL INSERTI18N('T_CORE_NOTIFICATION_AUDIO.SERVICE_NAME', '通知语音库', '通知语音库', 'zh-CN', '通知语音库');
+CALL INSERTI18N('T_CORE_NOTIFICATION_AUDIO.ID', '通知语音库的主键', '主键', 'zh-CN', '主键');
+CALL INSERTI18N('T_CORE_NOTIFICATION_AUDIO.AUDIONAME', '通知语音库的语音名称', '语音名称', 'zh-CN', '语音名称');
+CALL INSERTI18N('T_CORE_NOTIFICATION_AUDIO.AUDIOTYPE', '通知语音库的语音类型', '语音类型', 'zh-CN', '语音类型');
+CALL INSERTI18N('T_CORE_NOTIFICATION_AUDIO.URL', '通知语音库的路径', '路径', 'zh-CN', '路径');
+CALL INSERTI18N('T_CORE_NOTIFICATION_AUDIO.CREATEDBYID', '通知语音库的制单人编码', '制单人编码', 'zh-CN', '制单人编码');
+CALL INSERTI18N('T_CORE_NOTIFICATION_AUDIO.CREATEDBYNAME', '通知语音库的制单人名称', '制单人名称', 'zh-CN', '制单人名称');
+CALL INSERTI18N('T_CORE_NOTIFICATION_AUDIO.CREATEDTIME', '通知语音库的制单时间', '制单时间', 'zh-CN', '制单时间');
+CALL INSERTI18N('T_CORE_NOTIFICATION_AUDIO.CREATEDBYORGID', '通知语音库的制单人单位编码', '制单人单位编码', 'zh-CN', '制单人单位编码');
+CALL INSERTI18N('T_CORE_NOTIFICATION_AUDIO.CREATEDBYORGNAME', '通知语音库的制单人单位名称', '制单人单位名称', 'zh-CN', '制单人单位名称');
+CALL INSERTI18N('CORE.MODULE.ITEM.NOTIFICATION.AUDIOS.MODAL.ADD', '新增', '新增', 'zh-CN', '新增');
+
+-- 创建菜单语句
+INSERT INTO T_CORE_MENU (ID, MENUNAME, HREF, PARENTID, ORDERNO, ICON, MENUINITNAME)
+VALUES ('950503', '通知语音库', '/secure/core/module/item/notification/audios/page/edit-list', '9505', '950503', '033.svg', '通知语音库');
+
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_NOTIFICATION_AUDIO', '0', '1');
+
+alter table T_CORE_SYSTEM_CONFIG add column NOTIFICATIONAUDIO BIGINT null comment '通知语音';
+CALL INSERTI18N('T_CORE_SYSTEM_CONFIG.NOTIFICATIONAUDIO', '系统配置的消息通知语音', '消息通知语音', 'zh-CN', '消息通知语音');
+
+CALL INSERTI18N('CORE.MODULE.ITEM.NOTIFICATION.AUDIOS.TIP.ATTACHMENT_EXISTS', '存在语音文件，请确认是否覆盖', '存在语音文件，请确认是否覆盖', 'zh-CN', '存在语音文件，请确认是否覆盖');
+
+INSERT INTO T_CORE_CODE_CATEGORY(ID, CODECATEGORYNAME, CODECLASSID, REMARK, ORDERNO, CREATEDBYID, CREATEDBYNAME, CREATEDTIME)
+VALUES ('audioType', '语音类型', 'sys', NULL, 1, NULL, NULL, NULL);
+
+INSERT INTO T_CORE_CODE(ID, CODECATEGORYID, CODE, CODENAME, ORDERNO, LASTSUSPENDEDFLAG)
+VALUES(F_GET_SEQ_CORE(), 'audioType', '0', '内置', 1, '0');
+INSERT INTO T_CORE_CODE(ID, CODECATEGORYID, CODE, CODENAME, ORDERNO, LASTSUSPENDEDFLAG)
+VALUES(F_GET_SEQ_CORE(), 'audioType', '1', '自定义', 2, '0');
+
+INSERT INTO T_CORE_ADMIN_SELECT_CONFIG(ID, NAME, CATEGORY, URL, VALUEFIELD, TEXTFIELD)
+VALUES(F_GET_SEQ_CORE(), '语音状态', 'audio-type', '/secure/core/module/sys/codes/queries/selectable?codeCategoryId=audio-type', 'code', 'codeName');
+
+CALL INSERTI18N('CORE.MODULE.ITEM.NOTIFICATION.AUDIOS.TIP.UNABLE_DELETE_SYSTEM_AUDIO', '内置语音不允许删除', '内置语音不允许删除', 'zh-CN', '内置语音不允许删除');
+CALL INSERTI18N('CORE.MODULE.ITEM.NOTIFICATION.AUDIOS.TIP.UNABLE_COVER_SYSTEM_AUDIO', '内置语音不允许覆盖', '内置语音不允许覆盖', 'zh-CN', '内置语音不允许覆盖');
+CALL INSERTI18N('GIKAM.FILE.MODAL.UPLOAD_FILE', '上传附件', '上传附件', 'zh-CN', '上传附件');
+CALL INSERTI18N('GIKAM.FILE.MODAL.DELETE_FILE', '删除附件', '删除附件', 'zh-CN', '删除附件');
+
+INSERT INTO T_CORE_NOTIFICATION_AUDIO (ID, AUDIONAME, AUDIOTYPE, URL, CREATEDBYID, CREATEDBYNAME)
+values(1, '内置语音4','0', '/static/gikam/extend/media/danger.mp3', 'admin', '系统管理员');
+INSERT INTO T_CORE_NOTIFICATION_AUDIO (ID, AUDIONAME, AUDIOTYPE, URL, CREATEDBYID, CREATEDBYNAME)
+values(2, '内置语音3','0', '/static/gikam/extend/media/normal.mp3', 'admin', '系统管理员');
+INSERT INTO T_CORE_NOTIFICATION_AUDIO (ID, AUDIONAME, AUDIOTYPE, URL, CREATEDBYID, CREATEDBYNAME)
+values(3, '内置语音2','0', '/static/gikam/extend/media/success.mp3', 'admin', '系统管理员');
+INSERT INTO T_CORE_NOTIFICATION_AUDIO (ID, AUDIONAME, AUDIOTYPE, URL, CREATEDBYID, CREATEDBYNAME)
+values(4, '内置语音1','0', '/static/gikam/extend/media/warning.mp3', 'admin', '系统管理员');
+COMMIT;
+-- ----------------------------- 2022-01-17 add by dingjj------------end
+
+-- ----------------------------- 2022-01-24 add by zhanghang------------begin
+alter table T_CORE_LOGIN_CONFIG add column SMSLOGIN VARCHAR(32) null comment '验证码登录';
+
+CALL INSERTI18N('T_CORE_LOGIN_CONFIG.SMSLOGIN','验证码登录','验证码登录','zh-CN','验证码登录');
+CALL INSERTI18N('SMS_LOGIN.TIP.SEND_SMS_FAILED', '短信发送失败', '短信发送失败', 'zh-CN', '短信发送失败');	
+CALL INSERTI18N('SMS_LOGIN.TIP.MOBILE_DOESNOT_EXIST', '手机号不存在', '手机号不存在', 'zh-CN', '手机号不存在');
+CALL INSERTI18N('SMS_LOGING.SMS_CONTENT', '手机验证码登录短信内容', '{0} 短信登录验证码，10分钟有效，请勿泄露。', 'zh-CN', '{0} 短信登录验证码，10分钟有效，请勿泄露。');
+CALL INSERTI18N('SMS_LOGIN.TIP.SMSCODE_MOBILE_DOESNOT_MATACH', '验证码无效', '验证码无效', 'zh-CN', '验证码无效');
+COMMIT;
+-- ----------------------------- 2022-01-24 add by zhanghang------------end
+
+-- ----------------------------- 2022-01-26 add by shixw------------begin
+
+DELETE FROM T_CORE_NOTIFICATION_AUDIO WHERE id IN (1,2,3,4);
+
+INSERT INTO T_CORE_NOTIFICATION_AUDIO (ID, AUDIONAME, AUDIOTYPE, URL, CREATEDBYID, CREATEDBYNAME)
+values(1, '内置语音4','system', '/static/gikam/extend/media/danger.mp3', 'admin', '系统管理员');
+INSERT INTO T_CORE_NOTIFICATION_AUDIO (ID, AUDIONAME, AUDIOTYPE, URL, CREATEDBYID, CREATEDBYNAME)
+values(2, '内置语音3','system', '/static/gikam/extend/media/normal.mp3', 'admin', '系统管理员');
+INSERT INTO T_CORE_NOTIFICATION_AUDIO (ID, AUDIONAME, AUDIOTYPE, URL, CREATEDBYID, CREATEDBYNAME)
+values(3, '内置语音2','system', '/static/gikam/extend/media/success.mp3', 'admin', '系统管理员');
+INSERT INTO T_CORE_NOTIFICATION_AUDIO (ID, AUDIONAME, AUDIOTYPE, URL, CREATEDBYID, CREATEDBYNAME)
+values(4, '内置语音1','system', '/static/gikam/extend/media/warning.mp3', 'admin', '系统管理员');
+
+commit;
+-- ----------------------------- 2022-01-26 add by shixw------------end
+
+-- ----------------------------- 2022-02-10 add by zhanghang------------begin
+INSERT INTO T_CORE_CODE_CATEGORY(ID, CODECATEGORYNAME, CODECLASSID, REMARK, ORDERNO, CREATEDBYID, CREATEDBYNAME, CREATEDTIME)
+VALUES ('mobilePrefix', '手机号前缀', 'sys', NULL, 1, NULL, NULL, NULL);
+
+INSERT INTO T_CORE_CODE(ID, CODECATEGORYID, CODE, CODENAME, ORDERNO, LASTSUSPENDEDFLAG)
+VALUES(F_GET_SEQ_CORE(), 'mobilePrefix', '86', '86', 1, '0');
+COMMIT;
+-- ----------------------------- 2022-02-10 add by zhanghang------------end
+
+-- ----------------------------- 2022-02-24 add by shixw------------begin
+
+alter table T_CORE_CODE add column I18NCODE VARCHAR(240) null comment '国际化编码';
+
+CALL INSERTI18N('T_CORE_CODE.I18NCODE','国际化编码','国际化编码','zh-CN','国际化编码');
+
+commit;
+-- ----------------------------- 2022-02-24 add by shixw------------end
+
+-- ----------------------------- 2022-03-03 add by zhanghang------------begin
+DELETE FROM T_CORE_CODE_CATEGORY WHERE ID = 'mobilePrefix';
+DELETE FROM T_CORE_CODE WHERE CODECATEGORYID = 'mobilePrefix';
+
+INSERT INTO T_CORE_CODE_CATEGORY(ID, CODECATEGORYNAME, CODECLASSID, REMARK, ORDERNO, CREATEDBYID, CREATEDBYNAME, CREATEDTIME)
+VALUES ('countryCode', '国号', 'sys', NULL, 1, NULL, NULL, NULL);
+
+INSERT INTO T_CORE_CODE(ID, CODECATEGORYID, CODE, CODENAME, ORDERNO, LASTSUSPENDEDFLAG)
+VALUES(F_GET_SEQ_CORE(), 'countryCode', '86', '86', 1, '0');
+COMMIT;
+-- ----------------------------- 2022-03-03 add by zhanghang------------end
+
+-- ----------------------------- 2022-03-07 add by guozj--------------begin
+
+-- 建表语句
+
+CREATE TABLE IF NOT EXISTS `T_CORE_DATA_CENTER_PARAM`(
+     `ID` BIGINT NOT NULL COMMENT '主键',
+     `DATACENTERID` BIGINT DEFAULT NULL COMMENT '数据中心id',
+     `PARAMETERNAME` VARCHAR(360)  DEFAULT NULL COMMENT '参数名称',
+     `PARAMETERVALUE` VARCHAR(360)  DEFAULT NULL COMMENT '参数值',
+     `DEFAULTVALUE` VARCHAR(360)  DEFAULT NULL COMMENT '默认值',
+     `CREATEDBYID` VARCHAR(36)  DEFAULT NULL COMMENT '制单人编码',
+     `CREATEDBYNAME` VARCHAR(60)  DEFAULT NULL COMMENT '制单人名称',
+     `CREATEDTIME` DATETIME DEFAULT NULL COMMENT '制单时间',
+     `CREATEDBYORGID` VARCHAR(36)  DEFAULT NULL COMMENT '制单人单位编码',
+     `CREATEDBYORGNAME` VARCHAR(270)  DEFAULT NULL COMMENT '制单人单位名称',
+      PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='数据中心参数配置表';
+
+CREATE INDEX IDX_CORE_DATACENTERPARAM_DATACENTERID ON T_CORE_DATA_CENTER_PARAM (DATACENTERID);
+
+CALL INSERTI18N('T_CORE_DATA_CENTER_PARAM.SERVICE_NAME', '数据中心参数配置表', '数据中心参数配置表', 'zh-CN', '数据中心参数配置表');
+CALL INSERTI18N('T_CORE_DATA_CENTER_PARAM.ID', '数据中心参数配置表的主键', '主键', 'zh-CN', '主键');
+CALL INSERTI18N('T_CORE_DATA_CENTER_PARAM.DATACENTERID', '数据中心参数配置表的数据中心id', '数据中心id', 'zh-CN', '数据中心id');
+CALL INSERTI18N('T_CORE_DATA_CENTER_PARAM.PARAMETERNAME', '数据中心参数配置表的参数名称', '参数名称', 'zh-CN', '参数名称');
+CALL INSERTI18N('T_CORE_DATA_CENTER_PARAM.PARAMETERVALUE', '数据中心参数配置表的参数值', '参数值', 'zh-CN', '参数值');
+CALL INSERTI18N('T_CORE_DATA_CENTER_PARAM.DEFAULTVALUE', '数据中心参数配置表的默认值', '默认值', 'zh-CN', '默认值');
+CALL INSERTI18N('T_CORE_DATA_CENTER_PARAM.CREATEDBYID', '数据中心参数配置表的制单人编码', '制单人编码', 'zh-CN', '制单人编码');
+CALL INSERTI18N('T_CORE_DATA_CENTER_PARAM.CREATEDBYNAME', '数据中心参数配置表的制单人名称', '制单人名称', 'zh-CN', '制单人名称');
+CALL INSERTI18N('T_CORE_DATA_CENTER_PARAM.CREATEDTIME', '数据中心参数配置表的制单时间', '制单时间', 'zh-CN', '制单时间');
+CALL INSERTI18N('T_CORE_DATA_CENTER_PARAM.CREATEDBYORGID', '数据中心参数配置表的制单人单位编码', '制单人单位编码', 'zh-CN', '制单人单位编码');
+CALL INSERTI18N('T_CORE_DATA_CENTER_PARAM.CREATEDBYORGNAME', '数据中心参数配置表的制单人单位名称', '制单人单位名称', 'zh-CN', '制单人单位名称');
+CALL INSERTI18N('CORE.MODULE.ITEM.DATACENTERS.MODAL.ADD', '新增', '新增', 'zh-CN', '新增');
+CALL INSERTI18N('CORE.MODULE.ITEM.DATACENTERS.TAB.PARAM', '参数配置', '参数配置', 'zh-CN', '参数配置');
+
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_DATA_CENTER_PARAM', '0', '0');
+
+INSERT INTO T_CORE_TABLE_HIERARCHY (ID, TABLENAME, MASTERTABLENAME, REFERCOLUMN)
+VALUES (F_GET_SEQ_CORE(),'T_CORE_DATA_CENTER_PARAM', 'T_CORE_DATA_CENTER', 'DATACENTERID');
+
+COMMIT;
+
+-- ----------------------------- 2022-03-07 add by guozj------------end
+
+-- ----------------------------- 2022-04-18 add by guozj--------------begin
+ALTER TABLE T_CORE_TODO_CONFIG ADD SELECTSQL TEXT DEFAULT NULL COMMENT '待办查询SQL';
+
+CALL INSERTI18N('T_CORE_TODO_CONFIG.SELECTSQL', '待办查询SQL', '待办配置', 'zh-CN', '待办查询SQL');
+
+COMMIT;
+
+-- ----------------------------- 2022-04-18 add by guozj------------end
+
+-- ----------------------------- 2022-04-20 add by guozj--------------begin
+
+INSERT INTO T_CORE_MENU (ID, MENUNAME, HREF, PARENTID, ORDERNO, ICON, MENUINITNAME)
+VALUES ('9325', '首页面板配置', '/secure/core/module/item/workspace-panels/page/edit-list', '93', '9325', '001.svg', '首页面板配置');
+
+CALL INSERTI18N('CORE.MODULE.ITEM.WORKSPACEPANELS.MODAL.ADD', '新增', '新增', 'zh-CN', '新增');
+
+ALTER TABLE T_CORE_WK_PANEL ADD CODE VARCHAR(36) NULL COMMENT '编码';
+
+CALL INSERTI18N('T_CORE_WK_PANEL.CODE', '首页面板配置的编码', '编码', 'zh-CN', '编码');
+CALL INSERTI18N('CORE.MODULE.ITEM.WORKSPACEPANELS.TIP.CHOOSE_URL_PANEL', '请选择配置URL的数据', '请选择配置URL的数据', 'zh-CN', '请选择配置URL的数据');
+CALL INSERTI18N('CORE.MODULE.ITEM.WORKSPACEPANELS.MODAL.VIEW', '首页面板配置预览', '预览', 'zh-CN', '预览');
+
+ALTER TABLE T_CORE_WK_PANEL ADD REFRESHFLAG VARCHAR(1) NULL COMMENT '刷新标志';
+
+CALL INSERTI18N('T_CORE_WK_PANEL.REFRESHFLAG', '首页面板配置的刷新标志', '刷新', 'zh-CN', '刷新');
+
+COMMIT;
+
+-- ----------------------------- 2022-04-20 add by guozj------------end
+
+-- ----------------------------- 2022-04-30 add by guodz--------------begin
+
+-- 建表语句
+
+CREATE TABLE IF NOT EXISTS `T_CORE_BPMN_PRESET_COMMENT`(
+     `ID` BIGINT NOT NULL COMMENT '主键',
+     `COMMENTCATEGORY` VARCHAR(36)  DEFAULT NULL COMMENT '意见类型',
+     `PRESETCOMMENT` VARCHAR(120)  DEFAULT NULL COMMENT '预置意见',
+     `DEFAULTFLAG` VARCHAR(1)  DEFAULT NULL COMMENT '是否默认',
+     `ORDERNO` BIGINT DEFAULT NULL COMMENT '排序码',
+     `CREATEDBYID` VARCHAR(36)  DEFAULT NULL COMMENT '制单人编码',
+     `CREATEDBYNAME` VARCHAR(60)  DEFAULT NULL COMMENT '制单人名称',
+     `CREATEDTIME` DATETIME DEFAULT NULL COMMENT '制单时间',
+     `CREATEDBYORGID` VARCHAR(36)  DEFAULT NULL COMMENT '制单人单位编码',
+     `CREATEDBYORGNAME` VARCHAR(270)  DEFAULT NULL COMMENT '制单人单位名称',
+      PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='流程预置意见';
+
+CALL INSERTI18N('T_CORE_BPMN_PRESET_COMMENT.SERVICE_NAME', '流程预置意见', '流程预置意见', 'zh-CN', '流程预置意见');
+CALL INSERTI18N('T_CORE_BPMN_PRESET_COMMENT.ID', '流程预置意见的主键', '主键', 'zh-CN', '主键');
+CALL INSERTI18N('T_CORE_BPMN_PRESET_COMMENT.COMMENTCATEGORY', '流程预置意见的意见类型', '意见类型', 'zh-CN', '意见类型');
+CALL INSERTI18N('T_CORE_BPMN_PRESET_COMMENT.PRESETCOMMENT', '流程预置意见的预置意见', '预置意见', 'zh-CN', '预置意见');
+CALL INSERTI18N('T_CORE_BPMN_PRESET_COMMENT.DEFAULTFLAG', '流程预置意见的是否默认', '是否默认', 'zh-CN', '是否默认');
+CALL INSERTI18N('T_CORE_BPMN_PRESET_COMMENT.ORDERNO', '流程预置意见的排序码', '排序码', 'zh-CN', '排序码');
+CALL INSERTI18N('T_CORE_BPMN_PRESET_COMMENT.CREATEDBYID', '流程预置意见的制单人编码', '制单人编码', 'zh-CN', '制单人编码');
+CALL INSERTI18N('T_CORE_BPMN_PRESET_COMMENT.CREATEDBYNAME', '流程预置意见的制单人名称', '制单人名称', 'zh-CN', '制单人名称');
+CALL INSERTI18N('T_CORE_BPMN_PRESET_COMMENT.CREATEDTIME', '流程预置意见的制单时间', '制单时间', 'zh-CN', '制单时间');
+CALL INSERTI18N('T_CORE_BPMN_PRESET_COMMENT.CREATEDBYORGID', '流程预置意见的制单人单位编码', '制单人单位编码', 'zh-CN', '制单人单位编码');
+CALL INSERTI18N('T_CORE_BPMN_PRESET_COMMENT.CREATEDBYORGNAME', '流程预置意见的制单人单位名称', '制单人单位名称', 'zh-CN', '制单人单位名称');
+CALL INSERTI18N('CORE.MODULE.SYS.BPMNPRESETCOMMENTS.MODAL.ADD', '新增', '新增', 'zh-CN', '新增');
+
+
+-- 创建菜单语句
+INSERT INTO T_CORE_MENU (ID, MENUNAME, HREF, PARENTID, ORDERNO, ICON, MENUINITNAME)
+VALUES ('9234', '流程预置意见', '/secure/core/module/sys/bpmn/preset-comments/page/edit-list', '92', '9234', '014.svg', '流程预置意见');
+
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_BPMN_PRESET_COMMENT', '0', '0');
+
+INSERT INTO T_CORE_ADMIN_SELECT_CONFIG (ID, NAME, CATEGORY, URL, VALUEFIELD, TEXTFIELD)
+ VALUES (F_GET_SEQ_CORE(), '流程预置意见',  'bpmn-preset-comment', '/secure/core/module/sys/bpmn/preset-comments/queries/selectable', 'id', 'presetComment');
+
+INSERT INTO T_CORE_CODE_CATEGORY(ID, CODECATEGORYNAME, CODECLASSID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME)
+ VALUES ('bpmnPresetCommentCategory', '流程预置意见类型', 'sys', NULL, 1, NULL, NULL, NULL, NULL);
+
+INSERT INTO T_CORE_CODE(ID, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME, CODE)
+ VALUES (F_GET_SEQ_CORE(),  '审核通过', 'bpmnPresetCommentCategory', NULL, 1, 0, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL, 'pass');
+INSERT INTO T_CORE_CODE(ID, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME, CODE)
+ VALUES (F_GET_SEQ_CORE(),  '撤回', 'bpmnPresetCommentCategory', NULL, 5, 0, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL, 'withdraw');
+INSERT INTO T_CORE_CODE(ID, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME, CODE)
+ VALUES (F_GET_SEQ_CORE(),  '审核拒绝', 'bpmnPresetCommentCategory', NULL, 2, 0, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL, 'reject');
+INSERT INTO T_CORE_CODE(ID, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME, CODE)
+ VALUES (F_GET_SEQ_CORE(),  '回退', 'bpmnPresetCommentCategory', NULL, 4, 0, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL, 'undo');
+INSERT INTO T_CORE_CODE(ID, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME, CODE)
+ VALUES (F_GET_SEQ_CORE(),  '提交', 'bpmnPresetCommentCategory', NULL, 3, 0, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL, 'submit');
+
+INSERT INTO T_CORE_ADMIN_SELECT_CONFIG(ID, NAME, CATEGORY, URL, VALUEFIELD, TEXTFIELD)
+  VALUES(F_GET_SEQ_CORE(), '流程预置意见类型', 'bpmn-preset-comment-category', '/secure/core/module/sys/codes/queries/selectable?codeCategoryId=bpmnPresetCommentCategory', 'code', 'codeName');
+
+COMMIT;
+
+-- ----------------------------- 2022-04-30 add by guodz------------end
+
+-- ----------------------------- 2022-05-04 add by shixw------------begin
+
+update  T_CORE_CODE set i18ncode='SPECIAL.CHARACTER.CATEGORIES.SUPERSCRIPT' where codecategoryid='specialCharacterCategory' and code ='superscript';
+update  T_CORE_CODE set i18ncode='SPECIAL.CHARACTER.CATEGORIES.SUBSCRIPT' where codecategoryid='specialCharacterCategory' and code ='subscript';
+update  T_CORE_CODE set i18ncode='SPECIAL.CHARACTER.CATEGORIES.SERIALNUMBER' where codecategoryid='specialCharacterCategory' and code ='serialNumber';
+update  T_CORE_CODE set i18ncode='SPECIAL.CHARACTER.CATEGORIES.UNIT' where codecategoryid='specialCharacterCategory' and code ='unit';
+update  T_CORE_CODE set i18ncode='SPECIAL.CHARACTER.CATEGORIES.ROMANSYMBOLS' where codecategoryid='specialCharacterCategory' and code ='romanSymbols';
+update  T_CORE_CODE set i18ncode='SPECIAL.CHARACTER.CATEGORIES.MATHEMATICALSYMBOLS' where codecategoryid='specialCharacterCategory' and code ='mathematicalSymbols';
+update  T_CORE_CODE set i18ncode='SPECIAL.CHARACTER.CATEGORIES.SPECIALSYMBOLS' where codecategoryid='specialCharacterCategory' and code ='specialSymbols';
+update  T_CORE_CODE set i18ncode='SPECIAL.CHARACTER.CATEGORIES.CHINESECHARACTERS' where codecategoryid='specialCharacterCategory' and code ='chineseCharacters';
+update  T_CORE_CODE set i18ncode='SPECIAL.CHARACTER.CATEGORIES.GREEKALPHABET' where codecategoryid='specialCharacterCategory' and code ='greekAlphabet';
+
+
+CALL INSERTI18N('SPECIAL.CHARACTER.CATEGORIES.SUPERSCRIPT', '上标', '上标', 'zh-CN', '上标');
+CALL INSERTI18N('SPECIAL.CHARACTER.CATEGORIES.SUBSCRIPT', '下标', '下标', 'zh-CN','下标');
+CALL INSERTI18N('SPECIAL.CHARACTER.CATEGORIES.SERIALNUMBER', '序号', '序号', 'zh-CN','序号');
+CALL INSERTI18N('SPECIAL.CHARACTER.CATEGORIES.UNIT', '单位', '单位', 'zh-CN','单位');
+CALL INSERTI18N('SPECIAL.CHARACTER.CATEGORIES.RROMANSYMBOLS', '罗马符号', '罗马符号', 'zh-CN','罗马符号');
+CALL INSERTI18N('SPECIAL.CHARACTER.CATEGORIES.MATHEMATICALSYMBOLS', '数学符号', '数学符号', 'zh-CN','数学符号');
+CALL INSERTI18N('SPECIAL.CHARACTER.CATEGORIES.SPECIALSYMBOLS', '特殊符号', '特殊符号', 'zh-CN','特殊符号');
+CALL INSERTI18N('SPECIAL.CHARACTER.CATEGORIES.CHINESECHARACTERS', '汉字', '汉字', 'zh-CN','汉字');
+CALL INSERTI18N('SPECIAL.CHARACTER.CATEGORIES.GREEKALPHABET', '希腊字母', '希腊字母', 'zh-CN','希腊字母');
+
+
+CALL INSERTI18N('SPECIAL.CHARACTER.CATEGORIES.SUPERSCRIPT', 'superscript', 'superscript', 'en-US', 'superscript');
+CALL INSERTI18N('SPECIAL.CHARACTER.CATEGORIES.SUBSCRIPT', 'subscript', 'subscript', 'en-US','subscript') ;
+CALL INSERTI18N('SPECIAL.CHARACTER.CATEGORIES.SERIALNUMBER', 'serialNumber', 'serialNumber', 'en-US','serialNumber') ;
+CALL INSERTI18N('SPECIAL.CHARACTER.CATEGORIES.UNIT', 'unit', 'unit', 'en-US','unit') ;
+CALL INSERTI18N('SPECIAL.CHARACTER.CATEGORIES.RROMANSYMBOLS', 'romanSymbols', 'romanSymbols', 'en-US','romanSymbols') ;
+CALL INSERTI18N('SPECIAL.CHARACTER.CATEGORIES.MATHEMATICALSYMBOLS', 'mathematicalSymbols', 'mathematicalSymbols', 'en-US','mathematicalSymbols') ;
+CALL INSERTI18N('SPECIAL.CHARACTER.CATEGORIES.SPECIALSYMBOLS', 'specialSymbols', 'specialSymbols', 'en-US','specialSymbols') ;
+CALL INSERTI18N('SPECIAL.CHARACTER.CATEGORIES.CHINESECHARACTERS', 'chineseCharacters', 'chineseCharacters', 'en-US','chineseCharacters') ;
+CALL INSERTI18N('SPECIAL.CHARACTER.CATEGORIES.GREEKALPHABET', 'greekAlphabet', 'greekAlphabet', 'en-US','greekAlphabet') ;
+
+commit;
+
+-- ----------------------------- 2022-05-04 add by shixw------------end
+
+-- ----------------------------- 2022-05-04 add by guozj--------------begin
+
+-- 建表语句
+
+CREATE TABLE IF NOT EXISTS `T_CORE_TENANT`(
+     `ID` BIGINT NOT NULL COMMENT '主键',
+     `TENANTNAME` VARCHAR(120)  DEFAULT NULL COMMENT '租户名称',
+     `TENANTURL` VARCHAR(270)  DEFAULT NULL COMMENT '租户访问地址',
+     `CREATEDBYID` VARCHAR(36)  DEFAULT NULL COMMENT '制单人编码',
+     `CREATEDBYNAME` VARCHAR(60)  DEFAULT NULL COMMENT '制单人名称',
+     `CREATEDTIME` DATETIME DEFAULT NULL COMMENT '制单时间',
+     `CREATEDBYORGID` VARCHAR(36)  DEFAULT NULL COMMENT '制单人单位编码',
+     `CREATEDBYORGNAME` VARCHAR(270)  DEFAULT NULL COMMENT '制单人单位名称',
+      PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='租户';
+
+
+CREATE TABLE IF NOT EXISTS `T_CORE_TENANT_PERMISSION`(
+     `ID` BIGINT NOT NULL COMMENT '主键',
+     `TENANTID` BIGINT DEFAULT NULL COMMENT '租户ID',
+     `USERID` VARCHAR(36)  DEFAULT NULL COMMENT '用户ID',
+     `CREATEDBYID` VARCHAR(36)  DEFAULT NULL COMMENT '制单人编码',
+     `CREATEDBYNAME` VARCHAR(60)  DEFAULT NULL COMMENT '制单人名称',
+     `CREATEDTIME` DATETIME DEFAULT NULL COMMENT '制单时间',
+     `CREATEDBYORGID` VARCHAR(36)  DEFAULT NULL COMMENT '制单人单位编码',
+     `CREATEDBYORGNAME` VARCHAR(270)  DEFAULT NULL COMMENT '制单人单位名称',
+      PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='租户权限';
+CREATE INDEX IDX_CORE_TENANT_PERMISSION_TENANTID ON T_CORE_TENANT_PERMISSION (TENANTID);
+
+CALL INSERTI18N('T_CORE_TENANT.SERVICE_NAME', '租户', '租户', 'zh-CN', '租户');
+CALL INSERTI18N('T_CORE_TENANT.ID', '租户的主键', '主键', 'zh-CN', '主键');
+CALL INSERTI18N('T_CORE_TENANT.TENANTNAME', '租户的租户名称', '租户名称', 'zh-CN', '租户名称');
+CALL INSERTI18N('T_CORE_TENANT.TENANTURL', '租户的租户访问地址', '租户访问地址', 'zh-CN', '租户访问地址');
+CALL INSERTI18N('T_CORE_TENANT.CREATEDBYID', '租户的制单人编码', '制单人编码', 'zh-CN', '制单人编码');
+CALL INSERTI18N('T_CORE_TENANT.CREATEDBYNAME', '租户的制单人名称', '制单人名称', 'zh-CN', '制单人名称');
+CALL INSERTI18N('T_CORE_TENANT.CREATEDTIME', '租户的制单时间', '制单时间', 'zh-CN', '制单时间');
+CALL INSERTI18N('T_CORE_TENANT.CREATEDBYORGID', '租户的制单人单位编码', '制单人单位编码', 'zh-CN', '制单人单位编码');
+CALL INSERTI18N('T_CORE_TENANT.CREATEDBYORGNAME', '租户的制单人单位名称', '制单人单位名称', 'zh-CN', '制单人单位名称');
+CALL INSERTI18N('T_CORE_TENANT_PERMISSION.SERVICE_NAME', '租户权限', '租户权限', 'zh-CN', '租户权限');
+CALL INSERTI18N('T_CORE_TENANT_PERMISSION.ID', '租户权限的主键', '主键', 'zh-CN', '主键');
+CALL INSERTI18N('T_CORE_TENANT_PERMISSION.TENANTID', '租户权限的租户ID', '租户ID', 'zh-CN', '租户ID');
+CALL INSERTI18N('T_CORE_TENANT_PERMISSION.USERID', '租户权限的用户ID', '用户ID', 'zh-CN', '用户ID');
+CALL INSERTI18N('T_CORE_TENANT_PERMISSION.CREATEDBYID', '租户权限的制单人编码', '制单人编码', 'zh-CN', '制单人编码');
+CALL INSERTI18N('T_CORE_TENANT_PERMISSION.CREATEDBYNAME', '租户权限的制单人名称', '制单人名称', 'zh-CN', '制单人名称');
+CALL INSERTI18N('T_CORE_TENANT_PERMISSION.CREATEDTIME', '租户权限的制单时间', '制单时间', 'zh-CN', '制单时间');
+CALL INSERTI18N('T_CORE_TENANT_PERMISSION.CREATEDBYORGID', '租户权限的制单人单位编码', '制单人单位编码', 'zh-CN', '制单人单位编码');
+CALL INSERTI18N('T_CORE_TENANT_PERMISSION.CREATEDBYORGNAME', '租户权限的制单人单位名称', '制单人单位名称', 'zh-CN', '制单人单位名称');
+CALL INSERTI18N('CORE.MODULE.ITEM.TENANTS.MODAL.ADD', '新增', '新增', 'zh-CN', '新增');
+CALL INSERTI18N('CORE.MODULE.ITEM.TENANTS.TAB.BASE_INFO', '基本信息', '基本信息', 'zh-CN', '基本信息');
+CALL INSERTI18N('CORE.MODULE.ITEM.TENANTS.TAB.PERMISSION', '租户权限', '租户权限', 'zh-CN', '租户权限');
+
+-- 创建菜单语句
+INSERT INTO T_CORE_MENU (ID, MENUNAME, HREF, PARENTID, ORDERNO, ICON, MENUINITNAME)
+VALUES ('9336', '租户管理', '/secure/core/module/item/tenants/page/edit-list', '93', '9336', '010.svg', '租户管理');
+
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_TENANT', '0', '0');
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_TENANT_PERMISSION', '0', '0');
+
+INSERT INTO T_CORE_TABLE_HIERARCHY (ID, TABLENAME, MASTERTABLENAME, REFERCOLUMN)
+VALUES ('933601','T_CORE_TENANT_PERMISSION', 'T_CORE_TENANT', 'TENANTID');
+
+ALTER TABLE T_CORE_LOGIN_CONFIG ADD LOGINTENANT VARCHAR(1) DEFAULT NULL COMMENT '是否选择租户（0-否 1-是）';
+
+COMMIT;
+
+-- ----------------------------- 2022-05-04 add by guozj------------end
+
+-- ----------------------------- 2022-05-04 add by shixw------------begin
+
+CALL INSERTI18N('CORE.MODULE.SYS.T_CORE_BPMN_PROC.ENGINE.PROCESS_AUDITED', '当前流程已审核，不允许撤回', '当前流程已审核，不允许撤回', 'zh-CN', '当前流程已审核，不允许撤回');
+
+commit;
+
+-- ----------------------------- 2022-05-04 add by shixw------------end
+-- ----------------------------- 2022-05-05 add by zbx------------begin
+alter table T_CORE_ROLE_PERMISSION_TYPE modify TYPENAME varchar(120);
+UPDATE T_CORE_ROLE_PERMISSION_TYPE t SET t.TYPENAME = 'CORE.MODULE.SYS.ROLES.PERMISSION_TYPE_MEMU'  WHERE t.id = 'T_CORE_MENU';
+UPDATE T_CORE_ROLE_PERMISSION_TYPE t SET t.TYPENAME = 'CORE.MODULE.SYS.ROLES.PERMISSION_TYPE_ORG'  WHERE t.id = 'T_CORE_ORG';
+UPDATE T_CORE_ROLE_PERMISSION_TYPE t SET t.TYPENAME = 'CORE.MODULE.SYS.ROLES.PERMISSION_TYPE_WK_SCHEME'  WHERE t.id = 'T_CORE_WK_SCHEME';
+UPDATE T_CORE_ROLE_PERMISSION_TYPE t SET t.TYPENAME = 'CORE.MODULE.SYS.ROLES.PERMISSION_TYPE_MOBILE_MENU'  WHERE t.id = 'T_CORE_MOBILE_MENU';
+UPDATE T_CORE_ROLE_PERMISSION_TYPE t SET t.TYPENAME = 'CORE.MODULE.SYS.ROLES.PERMISSION_TYPE_MENU_GROUP'  WHERE t.id = 'T_CORE_MENU_GROUP';
+
+CALL INSERTI18N('CORE.MODULE.SYS.ROLES.PERMISSION_TYPE_MEMU', '菜单权限', '菜单权限', 'zh-CN', '菜单权限');
+CALL INSERTI18N('CORE.MODULE.SYS.ROLES.PERMISSION_TYPE_ORG', '单位权限', '单位权限', 'zh-CN', '单位权限');
+CALL INSERTI18N('CORE.MODULE.SYS.ROLES.PERMISSION_TYPE_WK_SCHEME', '首页方案权限', '首页方案权限', 'zh-CN', '首页方案权限');
+CALL INSERTI18N('CORE.MODULE.SYS.ROLES.PERMISSION_TYPE_MOBILE_MENU', '移动菜单权限', '移动菜单权限', 'zh-CN', '移动菜单权限');
+CALL INSERTI18N('CORE.MODULE.SYS.ROLES.PERMISSION_TYPE_MENU_GROUP', '菜单组权限', '菜单组权限', 'zh-CN', '菜单组权限');
+
+alter table T_CORE_USER_PERMISSION_TYPE modify TYPENAME varchar(120);
+UPDATE T_CORE_USER_PERMISSION_TYPE t SET t.TYPENAME = 'CORE.MODULE.SYS.USERS.PERMISSION_TYPE_ORG'  WHERE t.id = 'T_CORE_ORG';
+UPDATE T_CORE_USER_PERMISSION_TYPE t SET t.TYPENAME = 'CORE.MODULE.SYS.USERS.PERMISSION_TYPE_ROLE'  WHERE t.id = 'T_CORE_ROLE';
+
+CALL INSERTI18N('CORE.MODULE.SYS.USERS.PERMISSION_TYPE_ORG', '访问部门', '访问部门', 'zh-CN', '访问部门');
+CALL INSERTI18N('CORE.MODULE.SYS.USERS.PERMISSION_TYPE_ROLE', '访问角色', '访问角色', 'zh-CN', '访问角色');
+
+COMMIT;
+-- ----------------------------- 2022-05-05 add by zbx------------end
+
+-- ----------------------------- 2022-05-06 add by zbx------------begin
+UPDATE T_CORE_ADMIN_SELECT_CONFIG t SET t.CACHEABLE = null WHERE t.CATEGORY = 'codeCategory';
+COMMIT;
+-- ----------------------------- 2022-05-06 add by zbx------------end
+
+-- ----------------------------- 2022-05-09 add by zhangjr------------begin
+UPDATE T_CORE_I18N_MESSAGE M
+   SET M.MESSAGE = '只读账号'
+ WHERE EXISTS (SELECT 1 FROM T_CORE_I18N I WHERE M.I18NID = I.ID AND I.CODE = 'T_CORE_USER.READONLY');
+COMMIT;
+-- ----------------------------- 2022-05-09 add by zhangjr------------end
+
+-- ----------------------------- 2022-05-09 add by zhangjr------------begin
+INSERT INTO T_CORE_NOTIFICATION_TMPL (ID, TITLE, VIEWMETHOD, CONTENT, MENUID, MENUNAME, PAGEURL)
+values('EXPORT_EXCEL_ERROR', '导出失败', 'no', 'Excel导出失败，详情请查看附件', NULL, NULL, null);
+
+UPDATE T_CORE_I18N_MESSAGE M
+   SET M.MESSAGE = '当前CPU使用率过高，请稍后再尝试执行任务【{0}】'
+ WHERE EXISTS (SELECT 1 FROM T_CORE_I18N I WHERE M.I18NID = I.ID AND I.CODE = 'EXECUTOR.RESOURCE_MONITORING.CPU_USAGE_OVERLOAD');
+
+UPDATE T_CORE_I18N_MESSAGE M
+   SET M.MESSAGE = '当前内存使用率过高，请稍后再尝试执行任务【{0}】'
+ WHERE EXISTS (SELECT 1 FROM T_CORE_I18N I WHERE M.I18NID = I.ID AND I.CODE = 'EXECUTOR.RESOURCE_MONITORING.MEMORY_USAGE_OVERLOAD');
+
+UPDATE T_CORE_I18N_MESSAGE M
+   SET M.MESSAGE = '当前任务【{0}】运行超时，请稍后执行或联系管理员'
+ WHERE EXISTS (SELECT 1 FROM T_CORE_I18N I WHERE M.I18NID = I.ID AND I.CODE = 'EXECUTOR.RESOURCE_MONITORING.RUNNING_TIMEOUT');
+COMMIT;
+-- ----------------------------- 2022-05-09 add by zhangjr------------end
+
+-- ----------------------------- 2022-05-10 add by shixw------------begin
+
+
+CALL INSERTI18N('CORE.MODULE.SYS.ROLES.TITLE.ADMIN', '管理员', '管理员', 'zh-CN', '管理员');
+
+commit;
+
+-- ----------------------------- 2022-05-10 add by shixw------------end
+
+-- ----------------------------- 2022-05-16 add by shuaih--------------begin
+
+alter table T_CORE_ADMIN_CHECK_CONFIG add OTHERREQUIRED VARCHAR(1) COMMENT '其他是否必填(默认否:0,是:1)';
+
+CALL INSERTI18N('T_CORE_ADMIN_CHECK_CONFIG.OTHERREQUIRED', '复选框配置的其他是否必填', '其他是否必填', 'zh-CN', '其他是否必填');
+
+-- ----------------------------- 2022-05-16 add by shuaih------------end
+
+-- ----------------------------- 2022-05-26 add by shuaih--------------begin
+
+alter table T_CORE_AUDIT_LOG add column ITEMDESC VARCHAR(180) null comment '业务描述';
+
+CALL INSERTI18N('T_CORE_AUDIT_LOG.ITEMDESC','业务描述','业务描述','zh-CN','业务描述');
+
+-- ----------------------------- 2022-05-26 add by shuaih------------end
+
+-- ----------------------------- 2022-06-06 add by guozj------------begin    1.1.14补丁已发布
+
+ALTER TABLE T_CORE_SPECIAL_CHARACTER ADD CHARACTERCODE VARCHAR(60) DEFAULT NULL COMMENT '字符编码';
+ALTER TABLE T_CORE_SPECIAL_CHARACTER ADD PRONUNCIATION VARCHAR(60) DEFAULT NULL COMMENT '字符简拼定义';
+ALTER TABLE T_CORE_SPECIAL_CHARACTER ADD REMARK VARCHAR(540) DEFAULT NULL COMMENT '备注';
+
+CALL INSERTI18N('T_CORE_SPECIAL_CHARACTER.CHARACTERCODE', '特殊字符表的字符编码', '字符编码', 'zh-CN', '字符编码');
+CALL INSERTI18N('T_CORE_SPECIAL_CHARACTER.PRONUNCIATION', '特殊字符表的字符简拼定义', '字符简拼定义', 'zh-CN', '字符简拼定义');
+CALL INSERTI18N('T_CORE_SPECIAL_CHARACTER.REMARK', '特殊字符表的备注', '备注', 'zh-CN', '备注');
+
+INSERT INTO T_CORE_CODE(ID, CODENAME, CODECATEGORYID, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME,LASTSUSPENDEDFLAG,CODE,I18NCODE)
+VALUES (F_GET_SEQ_CORE(), '自定义', 'specialCharacterCategory', '10', '0', 'admin', '系统管理员', '0', 'custom', 'SPECIAL.CHARACTER.CATEGORIES.CUSTOM');
+
+CALL INSERTI18N('SPECIAL.CHARACTER.CATEGORIES.CUSTOM', '特殊字符的分类编码', '自定义', 'zh-CN', '自定义');
+
+CREATE TABLE IF NOT EXISTS `T_CORE_COMMON_CHARACTER`(
+     `ID` BIGINT NOT NULL COMMENT '主键',
+     `SPECIALID` BIGINT NOT NULL COMMENT '特殊字符ID',
+     `CHOOSEQTY` BIGINT DEFAULT NULL COMMENT '选择次数',
+     `CREATEDBYID` VARCHAR(36)  DEFAULT NULL COMMENT '制单人编码',
+     `CREATEDBYNAME` VARCHAR(60)  DEFAULT NULL COMMENT '制单人名称',
+     `CREATEDTIME` DATETIME DEFAULT NULL COMMENT '制单时间',
+     `CREATEDBYORGID` VARCHAR(36)  DEFAULT NULL COMMENT '制单人单位编码',
+     `CREATEDBYORGNAME` VARCHAR(270)  DEFAULT NULL COMMENT '制单人单位名称',
+      PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='常用字符表';
+CREATE INDEX IDX_CORE_COMMON_CHARACTER_SPECIALID ON T_CORE_COMMON_CHARACTER (SPECIALID);
+
+CALL INSERTI18N('T_CORE_COMMON_CHARACTER.SERVICE_NAME', '常用字符表', '常用字符表', 'zh-CN', '常用字符表');
+CALL INSERTI18N('T_CORE_COMMON_CHARACTER.ID', '常用字符表的主键', '主键', 'zh-CN', '主键');
+CALL INSERTI18N('T_CORE_COMMON_CHARACTER.SPECIALID', '常用字符表的特殊字符ID', '特殊字符ID', 'zh-CN', '特殊字符ID');
+CALL INSERTI18N('T_CORE_COMMON_CHARACTER.CHOOSEQTY', '常用字符表的选择次数', '选择次数', 'zh-CN', '选择次数');
+CALL INSERTI18N('T_CORE_COMMON_CHARACTER.CREATEDBYID', '常用字符表的制单人编码', '制单人编码', 'zh-CN', '制单人编码');
+CALL INSERTI18N('T_CORE_COMMON_CHARACTER.CREATEDBYNAME', '常用字符表的制单人名称', '制单人名称', 'zh-CN', '制单人名称');
+CALL INSERTI18N('T_CORE_COMMON_CHARACTER.CREATEDTIME', '常用字符表的制单时间', '制单时间', 'zh-CN', '制单时间');
+CALL INSERTI18N('T_CORE_COMMON_CHARACTER.CREATEDBYORGID', '常用字符表的制单人单位编码', '制单人单位编码', 'zh-CN', '制单人单位编码');
+CALL INSERTI18N('T_CORE_COMMON_CHARACTER.CREATEDBYORGNAME', '常用字符表的制单人单位名称', '制单人单位名称', 'zh-CN', '制单人单位名称');
+
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_COMMON_CHARACTER', '0', '0');
+
+INSERT INTO T_CORE_TABLE_HIERARCHY (ID, TABLENAME, MASTERTABLENAME, REFERCOLUMN)
+VALUES ('933201','T_CORE_COMMON_CHARACTER', 'T_CORE_SPECIAL_CHARACTER', 'SPECIALID');
+
+COMMIT;
+-- ----------------------------- 2022-06-06 add by guozj------------end    1.1.14补丁已发布
+
+-- ----------------------------- 2022-06-15 add by zhangjr------------begin
+CALL UPDATEI18N('GIKAM.PERMISSION.UNAUTHORIZED','zh-CN','您无权访问进行该操作，请求路径：{0}，请求方法：{1}。');
+-- ----------------------------- 2022-06-15 add by zhangjr------------end
+
+-- ----------------------------- 2022-07-11 add by shixw------------begin
+
+CREATE TABLE IF NOT EXISTS `T_CORE_DATA_CENTER_USER`(
+     `ID` BIGINT NOT NULL COMMENT '主键',
+     `DATACENTERID` BIGINT DEFAULT NULL COMMENT '数据中心ID',
+     `USERID` VARCHAR(36)  DEFAULT NULL COMMENT '用户ID',
+     `ACTIVATEDFLAG` VARCHAR(1)  DEFAULT NULL COMMENT '是否启用',
+     `ORDERNO` BIGINT DEFAULT NULL COMMENT '排序码',
+     `CREATEDBYID` VARCHAR(36)  DEFAULT NULL COMMENT '制单人编码',
+     `CREATEDBYNAME` VARCHAR(60)  DEFAULT NULL COMMENT '制单人名称',
+     `CREATEDTIME` DATETIME DEFAULT NULL COMMENT '制单时间',
+     `CREATEDBYORGID` VARCHAR(36)  DEFAULT NULL COMMENT '制单人单位编码',
+     `CREATEDBYORGNAME` VARCHAR(270)  DEFAULT NULL COMMENT '制单人单位名称',
+      PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='个人数据中心配置';
+
+CALL INSERTI18N('T_CORE_DATA_CENTER_USER.SERVICE_NAME', '个人数据中心配置', '个人数据中心配置', 'zh-CN', '个人数据中心配置');
+CALL INSERTI18N('T_CORE_DATA_CENTER_USER.ID', '个人数据中心配置的主键', '主键', 'zh-CN', '主键');
+CALL INSERTI18N('T_CORE_DATA_CENTER_USER.DATACENTERID', '个人数据中心配置的数据中心ID', '数据中心ID', 'zh-CN', '数据中心ID');
+CALL INSERTI18N('T_CORE_DATA_CENTER_USER.DATACENTERNODENAME', '个人数据中心配置的展示内容', '展示内容', 'zh-CN', '展示内容');
+CALL INSERTI18N('T_CORE_DATA_CENTER_USER.USERID', '个人数据中心配置的用户ID', '用户ID', 'zh-CN', '用户ID');
+CALL INSERTI18N('T_CORE_DATA_CENTER_USER.ACTIVATEDFLAG', '个人数据中心配置的是否启用', '是否启用', 'zh-CN', '是否启用');
+CALL INSERTI18N('T_CORE_DATA_CENTER_USER.ORDERNO', '个人数据中心配置的排序码', '排序码', 'zh-CN', '排序码');
+CALL INSERTI18N('T_CORE_DATA_CENTER_USER.CREATEDBYID', '个人数据中心配置的制单人编码', '制单人编码', 'zh-CN', '制单人编码');
+CALL INSERTI18N('T_CORE_DATA_CENTER_USER.CREATEDBYNAME', '个人数据中心配置的制单人名称', '制单人名称', 'zh-CN', '制单人名称');
+CALL INSERTI18N('T_CORE_DATA_CENTER_USER.CREATEDTIME', '个人数据中心配置的制单时间', '制单时间', 'zh-CN', '制单时间');
+CALL INSERTI18N('T_CORE_DATA_CENTER_USER.CREATEDBYORGID', '个人数据中心配置的制单人单位编码', '制单人单位编码', 'zh-CN', '制单人单位编码');
+CALL INSERTI18N('T_CORE_DATA_CENTER_USER.CREATEDBYORGNAME', '个人数据中心配置的制单人单位名称', '制单人单位名称', 'zh-CN', '制单人单位名称');
+
+
+CALL INSERTI18N('CORE.MODULE.ITEM.DATACENTERS.BUTTON.SYNC', '同步个人数据中心', '同步个人数据中心', 'zh-CN', '同步个人数据中心');
+CALL INSERTI18N('CORE.MODULE.ITEM.DATACENTERS.TIP.CONFIRM', '确认同步', '确认同步', 'zh-CN', '确认同步');
+CALL INSERTI18N('CORE.MODULE.ITEM.DATACENTERS.TIP.SYNC_DATA_CENTER_USER', '确认同步所有用户个人数据中心配置数据', '确认同步所有用户个人数据中心配置数据', 'zh-CN', '确认同步所有用户个人数据中心配置数据');
+CALL INSERTI18N('CORE.MODULE.ITEM.DATACENTERS.TIP.SYNC_SUCCESS', '同步成功', '同步成功', 'zh-CN', '同步成功');
+
+INSERT INTO T_CORE_MENU (ID, MENUNAME, HREF, PARENTID, ORDERNO, ICON, MENUINITNAME)
+VALUES ('9362', '个人数据中心配置', '/secure/core/module/item/data-centers/page/user-edit-list', '93', '9362', '012.svg', '个人数据中心配置');
+
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_DATA_CENTER_USER', '0', '0');
+
+INSERT INTO T_CORE_TABLE_HIERARCHY (ID, TABLENAME, MASTERTABLENAME, REFERCOLUMN)
+VALUES ('936201','T_CORE_DATA_CENTER_USER', 'T_CORE_DATA_CENTER', 'DATACENTERID');
+
+COMMIT;
+
+-- ----------------------------- 2022-07-11 add by shixw------------end
+
+-- ----------------------------- 2022-07-11 add by shixw------------begin
+
+
+CALL INSERTI18N('GIKAM.SECURITY.LOGIN.USER_INVALID', '请求用户已失效', '请求用户已失效', 'zh-CN', '请求用户已失效');
+
+COMMIT;
+
+-- ----------------------------- 2022-07-11 add by shixw------------end
+
+-- ----------------------------- 2022-07-15 add by shixw------------begin
+
+
+alter table T_CORE_AUDIT_LOG_ACTIVITY add column WITNESSNAME VARCHAR(360) null comment '见证人名称';
+alter table T_CORE_AUDIT_LOG_ACTIVITY add column WITNESSID VARCHAR(120) null comment '见证人ID';
+
+CALL INSERTI18N('T_CORE_AUDIT_LOG_ACTIVITY.WITNESSNAME','见证人名称','见证人名称','zh-CN','见证人名称');
+CALL INSERTI18N('T_CORE_AUDIT_LOG_ACTIVITY.WITNESSID','见证人ID','见证人ID','zh-CN','见证人ID');
+
+COMMIT;
+
+-- ----------------------------- 2022-07-15 add by shixw------------end
+
+-- ----------------------------- 2022-09-19 add by zhengbx------------begin
+-- 将系统配置的系统版本号修改为1.2.0
+UPDATE T_CORE_SYSTEM_CONFIG SET VERSION = '1.2.0' WHERE id = 'system-config';
+UPDATE T_CORE_ADMIN_SELECT_CONFIG SET URL= '/secure/core/module/sys/codes/queries/selectable?codeCategoryId=audioType' WHERE CATEGORY = 'audio-type';
+UPDATE T_CORE_CODE SET CODE = 'system' WHERE CODECATEGORYID = 'audioType' AND CODENAME ='内置';
+UPDATE T_CORE_CODE SET CODE = 'custom' WHERE CODECATEGORYID = 'audioType' AND CODENAME ='自定义';
+COMMIT;
+-- ----------------------------- 2022-09-19 add by zhengbx------------end
+
+-- ----------------------------- 2022-09-19 add by shixw------------begin
+
+delete from t_core_admin_menu where id='102010';
+
+DELETE FROM T_CORE_MENU WHERE ID = '9341';
+
+INSERT INTO T_CORE_MENU
+(ID, MENUNAME, HREF, PARENTID, ORDERNO, MENUINITNAME, ICON, TODOICON, I18NCODE)
+VALUES('9341', '审计跟踪配置', '/secure/core/module/sys/audit/audit-configs/page/edit-list', '93', 9341, '审计跟踪配置', '001.svg', NULL, 'CORE.MENU.MENUNAME.SYSTEM.AT');
+
+COMMIT;
+
+-- ----------------------------- 2022-09-19 add by shixw------------end
+
+-- ----------------------------- 2022-09-20 add by zhuyq------------begin
+-- 系统配置内置语音下拉选项查询
+insert into T_CORE_ADMIN_SELECT_CONFIG (ID, NAME, CATEGORY, URL, VALUEFIELD, TEXTFIELD, CACHEABLE)
+values (F_GET_SEQ_CORE(), '消息通知语音', 'notificationAudio', '/secure/core/module/item/notification/audios/queries/selectable', 'id', 'audioName', '1') ;
+COMMIT;
+-- ----------------------------- 2022-09-19 add by zhengbx------------end
+
+-- ----------------------------- 2022-09-20 add by zhengrl------------begin
+
+CALL INSERTI18N('CORE.MODULE.SYS.ATTORNEY.TITLE.ADD_I18N', '添加委托代理', '添加委托代理', 'zh-CN', '添加委托代理');
+UPDATE T_CORE_WK_PANEL SET CODE ='NOTICE',REFRESHFLAG ='0' WHERE ID='NOTICE';
+UPDATE T_CORE_WK_PANEL SET CODE ='TODO', REFRESHFLAG ='0' WHERE URL='/module/index/workspaces/todo-panel';
+COMMIT;
+
+-- ----------------------------- 2022-09-20 add by zhengrl------------end
+
+-- ----------------------------- 2022-09-21 add by shixw------------begin
+
+CALL INSERTI18N('SPECIAL.CHARACTER.CATEGORIES.ROMANSYMBOLS', '罗马符号', '罗马符号', 'zh-CN','罗马符号');
+
+CALL INSERTI18N('T_CORE_AD_DMOAIN_USER.ADUSERID', 'AD域用户的AD域登录名', 'AD域登录名', 'zh-CN', 'AD域登录名');
+
+COMMIT;
+
+-- ----------------------------- 2022-09-21 add by shixw------------end
+
+-- ----------------------------- 2022-09-21 add by shixw------------begin
+
+CALL INSERTI18N('SPECIAL.CHARACTER.CATEGORIES.ROMANSYMBOLS', 'romanSymbols', 'romanSymbols', 'en-US','romanSymbols') ;
+CALL INSERTI18N('SPECIAL.CHARACTER.CATEGORIES.CUSTOM', 'custom', 'custom', 'en-US','custom') ;
+
+COMMIT;
+
+-- ----------------------------- 2022-09-21 add by shixw------------end
+
+-- ----------------------------- 2022-09-22 add by zhengbx------------begin
+CALL INSERTI18N('CORE.MODULE.SYS.REPORTS.TIP.LINE_MULTI_CHOOSE_VIEW', '每次只能选择一条数据预览', '每次只能选择一条数据预览', 'zh-CN', '每次只能选择一条数据预览');
+COMMIT;
+-- ----------------------------- 2022-09-22 add by zhengbx------------end
+
+-- ----------------------------- 2022-09-23 add by zhengbx------------begin
+CALL INSERTI18N('CORE.MODULE.SYS.ROLES.MODAL.DEPT', '选择单位', '选择单位', 'zh-CN', '选择单位');
+CALL INSERTI18N('CORE.MODULE.SYS.ROLES.MODAL.PLAN', '选择方案', '选择方案', 'zh-CN', '选择方案');
+CALL INSERTI18N('CORE.MODULE.SYS.ROLES.MODAL.MENU', '选择菜单', '选择菜单', 'zh-CN', '选择菜单');
+COMMIT;
+-- ----------------------------- 2022-09-23 add by zhengbx------------end
+
+-- ----------------------------- 2022-09-24 add by shixw------------begin
+
+CALL INSERTI18N('T_CORE_SMS.SENDTIME','短信发送时间','发送时间','zh-CN','发送时间');
+
+-- ----------------------------- 2022-09-24 add by shixw------------end

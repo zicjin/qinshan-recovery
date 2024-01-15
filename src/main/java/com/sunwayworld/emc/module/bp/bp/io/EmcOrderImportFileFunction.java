@@ -7,6 +7,12 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.sunwayworld.framework.io.file.FilePathDTO;
+import com.sunwayworld.framework.io.file.FilePathManager;
+import com.sunwayworld.module.item.file.bean.CoreFileImportResultDTO;
+import com.sunwayworld.module.item.file.function.CoreFileImportFunction;
+import com.sunwayworld.module.item.file.manager.CoreFileManager;
+import com.sunwayworld.module.item.file.utils.CoreFileUtils;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
@@ -18,15 +24,11 @@ import com.sunwayworld.emc.module.bp.bp.bean.EmcOrderBean;
 import com.sunwayworld.emc.module.bp.bp.service.EmcOrderService;
 import com.sunwayworld.framework.exception.FileException;
 import com.sunwayworld.framework.io.excel.ExcelHelper;
-import com.sunwayworld.framework.io.file.FileHelper;
-import com.sunwayworld.framework.io.file.FileRepresentation;
 import com.sunwayworld.framework.utils.ObjectUtils;
 import com.sunwayworld.module.item.file.bean.CoreFileBean;
-import com.sunwayworld.module.item.file.bean.ImportResultRepresentation;
-import com.sunwayworld.module.item.file.function.ImportFileFunction;
 
 @Component(value = "emcOrderImportFileFunction")
-public class EmcOrderImportFileFunction implements ImportFileFunction {
+public class EmcOrderImportFileFunction implements CoreFileImportFunction {
 
     @Autowired
     private EmcOrderService orderService;
@@ -37,12 +39,12 @@ public class EmcOrderImportFileFunction implements ImportFileFunction {
     }
 
     @Override
-    public ImportResultRepresentation apply(CoreFileBean file) {
-        ImportResultRepresentation importResultRepresentation = new ImportResultRepresentation();
+    public CoreFileImportResultDTO apply(CoreFileBean file) {
+        CoreFileImportResultDTO importResultDto = new CoreFileImportResultDTO();
 
-        FileRepresentation fr = FileRepresentation.of(file);
-        importOrderInfoByPOI(FileHelper.getAbsolutePath(fr).toFile().getAbsolutePath());
-        return importResultRepresentation;
+        FilePathDTO fr = CoreFileUtils.toFilePath(file);
+        importOrderInfoByPOI(FilePathManager.getLocalPath(fr).toFile().getAbsolutePath());
+        return importResultDto;
     }
 
     public void importOrderInfoByPOI(String filePath) {

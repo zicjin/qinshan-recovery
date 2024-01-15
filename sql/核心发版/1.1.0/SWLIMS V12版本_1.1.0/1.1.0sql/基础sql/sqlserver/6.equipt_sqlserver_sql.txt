@@ -1,0 +1,917 @@
+-- ----------------------------- 2020-05-18 add by shixw--------------begin
+
+-- 建表语句
+CREATE TABlE DBO.T_CORE_EQUIPT_ACQ_CONFIG(
+    ID VARCHAR(36)  NOT NULL,
+    ACQCATEGORY VARCHAR(36)  NULL ,
+    BAUDRATE VARCHAR(36)  NULL ,
+    TERMINATOR VARCHAR(36)  NULL ,
+    DATABIT VARCHAR(36)  NULL ,
+    PARITYCHECK VARCHAR(36)  NULL ,
+    COM VARCHAR(36)  NULL ,
+    STOPBIT VARCHAR(36)  NULL ,
+    BEGINSYMBOL VARCHAR(60)  NULL ,
+    ENDSYMBOL VARCHAR(60)  NULL ,
+    ANALYSISFORMULA VARCHAR(540)  NULL ,
+    ENDFLAG VARCHAR(60)  NULL ,
+    IP VARCHAR(60)  NULL ,
+    PORT VARCHAR(18)  NULL ,
+    CREATEDBYID VARCHAR(36)  NULL ,
+    CREATEDBYNAME VARCHAR(60)  NULL ,
+    CREATEDTIME DATETIME NULL ,
+    CREATEDBYORGID VARCHAR(36)  NULL ,
+    CREATEDBYORGNAME VARCHAR(270)  NULL ,
+    CONSTRAINT PK_CORE_EQUIPT_ACQ_CONFIG PRIMARY KEY(ID));
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'仪器采集配置' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_ACQ_CONFIG';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'仪器编号' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_ACQ_CONFIG', @level2type=N'COLUMN',@level2name=N'ID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'采集方式' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_ACQ_CONFIG', @level2type=N'COLUMN',@level2name=N'ACQCATEGORY';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'波特率' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_ACQ_CONFIG', @level2type=N'COLUMN',@level2name=N'BAUDRATE';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'终止字符串' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_ACQ_CONFIG', @level2type=N'COLUMN',@level2name=N'TERMINATOR';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'数据位' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_ACQ_CONFIG', @level2type=N'COLUMN',@level2name=N'DATABIT';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'奇偶校验' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_ACQ_CONFIG', @level2type=N'COLUMN',@level2name=N'PARITYCHECK';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'COM口' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_ACQ_CONFIG', @level2type=N'COLUMN',@level2name=N'COM';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'停止位' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_ACQ_CONFIG', @level2type=N'COLUMN',@level2name=N'STOPBIT';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'开始标记' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_ACQ_CONFIG', @level2type=N'COLUMN',@level2name=N'BEGINSYMBOL';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'结束标记' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_ACQ_CONFIG', @level2type=N'COLUMN',@level2name=N'ENDSYMBOL';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'数据解析公式' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_ACQ_CONFIG', @level2type=N'COLUMN',@level2name=N'ANALYSISFORMULA';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'串口数据结束标志' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_ACQ_CONFIG', @level2type=N'COLUMN',@level2name=N'ENDFLAG';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'主机地址' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_ACQ_CONFIG', @level2type=N'COLUMN',@level2name=N'IP';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'端口号' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_ACQ_CONFIG', @level2type=N'COLUMN',@level2name=N'PORT';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_ACQ_CONFIG', @level2type=N'COLUMN',@level2name=N'CREATEDBYID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_ACQ_CONFIG', @level2type=N'COLUMN',@level2name=N'CREATEDBYNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_ACQ_CONFIG', @level2type=N'COLUMN',@level2name=N'CREATEDTIME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_ACQ_CONFIG', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_ACQ_CONFIG', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGNAME';
+
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_EQUIPT_ACQ_CONFIG', '0', '0');
+
+-- 建表语句
+CREATE TABlE DBO.T_CORE_EQUIPT_ACQ_SCRIPT(
+    ID VARCHAR(18)  NOT NULL,
+    DESCRIPTION VARCHAR(270)  NULL ,
+    SCRIPT TEXT NULL ,
+    CREATEDBYID VARCHAR(36)  NULL ,
+    CREATEDBYNAME VARCHAR(60)  NULL ,
+    CREATEDTIME DATETIME NULL ,
+    CREATEDBYORGID VARCHAR(36)  NULL ,
+    CREATEDBYORGNAME VARCHAR(270)  NULL ,
+    CONSTRAINT PK_CORE_EQUIPT_ACQ_SCRIPT PRIMARY KEY(ID));
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'仪器采集脚本' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_ACQ_SCRIPT';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_ACQ_SCRIPT', @level2type=N'COLUMN',@level2name=N'ID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'脚本描述' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_ACQ_SCRIPT', @level2type=N'COLUMN',@level2name=N'DESCRIPTION';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'脚本内容' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_ACQ_SCRIPT', @level2type=N'COLUMN',@level2name=N'SCRIPT';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_ACQ_SCRIPT', @level2type=N'COLUMN',@level2name=N'CREATEDBYID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_ACQ_SCRIPT', @level2type=N'COLUMN',@level2name=N'CREATEDBYNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_ACQ_SCRIPT', @level2type=N'COLUMN',@level2name=N'CREATEDTIME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_ACQ_SCRIPT', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_ACQ_SCRIPT', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGNAME';
+
+
+-- 创建菜单语句
+INSERT INTO T_CORE_MENU (ID, MENUNAME, HREF, PARENTID, ORDERNO, ICON, MENUINITNAME)
+VALUES ('9328', '仪器采集脚本', '/secure/core/module/equipt/acq-scripts/page/edit-list', '93', '9328', '053.svg', '仪器采集脚本');
+
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_EQUIPT_ACQ_SCRIPT', '0', '0');
+
+
+INSERT INTO T_CORE_CODE_CATEGORY(ID, CODECATEGORYNAME, CODECLASSID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME)
+    VALUES ('equipt-acq-category', '仪器采集方式', 'biz', NULL, 1, NULL, NULL, NULL, NULL);
+
+INSERT INTO T_CORE_CODE(ID, CODE, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME)
+    VALUES (NEXT VALUE FOR SEQ_CORE, 'tcp', '网口采集', 'equipt-acq-category', NULL, 1, 0, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL);
+INSERT INTO T_CORE_CODE(ID, CODE, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME)
+    VALUES (NEXT VALUE FOR SEQ_CORE, 'file', '文件采集', 'equipt-acq-category', NULL, 2, 0, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL);
+
+INSERT INTO T_CORE_ADMIN_SELECT_CONFIG(ID, NAME, CATEGORY, URL, VALUEFIELD, TEXTFIELD)
+  VALUES(NEXT VALUE FOR SEQ_CORE, '仪器采集方式', 'equipt-acq-category', '/secure/core/module/sys/codes/queries/selectable?codeCategoryId=equipt-acq-category', 'code', 'codeName');
+
+INSERT INTO T_CORE_ADMIN_CHOOSE_CONFIG (ID, NAME, TITLE,CATEGORY,URL,WIDTH) 
+   VALUES (NEXT VALUE FOR SEQ_CORE, '采集脚本', '采集脚本', 'equipt-acq-script', '/secure/core/module/equipt/acq-scripts/page/choose-list', '50%');
+
+
+INSERT INTO T_CORE_CODE_CATEGORY(ID, CODECATEGORYNAME, CODECLASSID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME)
+    VALUES ('equipt-connect-status', '仪器连接状态', 'biz', NULL, 1, NULL, NULL, NULL, NULL);
+
+INSERT INTO T_CORE_CODE(ID, CODE, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME)
+    VALUES (NEXT VALUE FOR SEQ_CORE, 'disconnected', '未连接', 'equipt-connect-status', NULL, 1, 0, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL);
+INSERT INTO T_CORE_CODE(ID, CODE, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME)
+    VALUES (NEXT VALUE FOR SEQ_CORE, 'connected', '已连接', 'equipt-connect-status', NULL, 2, 0, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL);
+
+INSERT INTO T_CORE_ADMIN_SELECT_CONFIG(ID, NAME, CATEGORY, URL, VALUEFIELD, TEXTFIELD)
+  VALUES(NEXT VALUE FOR SEQ_CORE, '仪器连接状态', 'equipt-connect-status', '/secure/core/module/sys/codes/queries/selectable?codeCategoryId=equipt-connect-status', 'code', 'codeName');
+
+-- ----------------------------- 2020-05-18 add by shixw------------end
+
+-- ----------------------------- 2020-05-23 add by shixw------------begin
+
+CREATE TABlE DBO.T_CORE_EQUIPT_ACQ_AFFAIR(
+    ID VARCHAR(36)  NOT NULL,
+    EQUIPTID VARCHAR(36)  NULL ,
+    EQUIPTNAME VARCHAR(120)  NULL ,
+    SOURCECATEGORY VARCHAR(36)  NULL ,
+    SOURCEID VARCHAR(36)  NULL ,
+    SOURCENAME VARCHAR(120)  NULL ,
+    ACQAFFAIRSTATUS VARCHAR(36)  NULL ,
+    ACQSCRIPTID BIGINT NULL ,
+    ACQSCRIPTDESC VARCHAR(120)  NULL ,
+    RAWDATA TEXT NULL ,
+    SOURCEFILENAME VARCHAR(270)  NULL ,
+    TARGETFILENAME VARCHAR(270)  NULL ,
+    CREATEDBYID VARCHAR(36)  NULL ,
+    CREATEDBYNAME VARCHAR(60)  NULL ,
+    CREATEDTIME DATETIME NULL ,
+    CREATEDBYORGID VARCHAR(36)  NULL ,
+    CREATEDBYORGNAME VARCHAR(270)  NULL ,
+    CONSTRAINT PK_CORE_EQUIPT_ACQ_AFFAIR PRIMARY KEY(ID));
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'仪器采集事务' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_ACQ_AFFAIR';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'事务编号(主键)' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_ACQ_AFFAIR', @level2type=N'COLUMN',@level2name=N'ID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'仪器编号' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_ACQ_AFFAIR', @level2type=N'COLUMN',@level2name=N'EQUIPTID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'仪器名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_ACQ_AFFAIR', @level2type=N'COLUMN',@level2name=N'EQUIPTNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'来源类型' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_ACQ_AFFAIR', @level2type=N'COLUMN',@level2name=N'SOURCECATEGORY';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'来源ID(使用的采集模板ID)' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_ACQ_AFFAIR', @level2type=N'COLUMN',@level2name=N'SOURCEID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'来源名称(使用的采集模板名称)' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_ACQ_AFFAIR', @level2type=N'COLUMN',@level2name=N'SOURCENAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'采集事务状态' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_ACQ_AFFAIR', @level2type=N'COLUMN',@level2name=N'ACQAFFAIRSTATUS';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'采集脚本Id' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_ACQ_AFFAIR', @level2type=N'COLUMN',@level2name=N'ACQSCRIPTID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'采集脚本描述' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_ACQ_AFFAIR', @level2type=N'COLUMN',@level2name=N'ACQSCRIPTDESC';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'源数据、采集文件内容' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_ACQ_AFFAIR', @level2type=N'COLUMN',@level2name=N'RAWDATA';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'源文件名称(客户提供）' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_ACQ_AFFAIR', @level2type=N'COLUMN',@level2name=N'SOURCEFILENAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'目录文件名称(程序处理）' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_ACQ_AFFAIR', @level2type=N'COLUMN',@level2name=N'TARGETFILENAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_ACQ_AFFAIR', @level2type=N'COLUMN',@level2name=N'CREATEDBYID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_ACQ_AFFAIR', @level2type=N'COLUMN',@level2name=N'CREATEDBYNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_ACQ_AFFAIR', @level2type=N'COLUMN',@level2name=N'CREATEDTIME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_ACQ_AFFAIR', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_ACQ_AFFAIR', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGNAME';
+
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_EQUIPT_ACQ_AFFAIR', '0', '1');
+
+INSERT INTO T_CORE_CODE_CATEGORY(ID, CODECATEGORYNAME, CODECLASSID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME)
+    VALUES ('equipt-acq-affair-status', '仪器采集事务状态', 'biz', NULL, 1, NULL, NULL, NULL, NULL);
+
+INSERT INTO T_CORE_CODE(ID, CODE, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME)
+    VALUES (NEXT VALUE FOR SEQ_CORE, 'Completed', '完成', 'equipt-acq-affair-status', NULL, 1, 0, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL);
+INSERT INTO T_CORE_CODE(ID, CODE, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME)
+    VALUES (NEXT VALUE FOR SEQ_CORE, 'Failed', '失败', 'equipt-acq-affair-status', NULL, 2, 0, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL);
+
+INSERT INTO T_CORE_ADMIN_SELECT_CONFIG(ID, NAME, CATEGORY, URL, VALUEFIELD, TEXTFIELD)
+  VALUES(NEXT VALUE FOR SEQ_CORE, '仪器采集事务状态', 'equipt-acq-affair-status', '/secure/core/module/sys/codes/queries/selectable?codeCategoryId=equipt-acq-affair-status', 'code', 'codeName');
+  
+INSERT INTO T_CORE_CODE_CATEGORY(ID, CODECATEGORYNAME, CODECLASSID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME)
+    VALUES ('equipt-acq-affair-source-category', '仪器采集事务来源', 'biz', NULL, 1, NULL, NULL, NULL, NULL);
+
+INSERT INTO T_CORE_CODE(ID, CODE, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME)
+    VALUES (NEXT VALUE FOR SEQ_CORE, 'file', '文件', 'equipt-acq-affair-source-category', NULL, 1, 0, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL);
+INSERT INTO T_CORE_CODE(ID, CODE, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME)
+    VALUES (NEXT VALUE FOR SEQ_CORE, 'network', '网口', 'equipt-acq-affair-source-category', NULL, 2, 0, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL);
+INSERT INTO T_CORE_CODE(ID, CODE, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME)
+    VALUES (NEXT VALUE FOR SEQ_CORE, 'serialPort', '串口', 'equipt-acq-affair-source-category', NULL, 2, 0, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL);
+INSERT INTO T_CORE_CODE(ID, CODE, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME)
+    VALUES (NEXT VALUE FOR SEQ_CORE, 'interface', '接口', 'equipt-acq-affair-source-category', NULL, 2, 0, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL);
+
+INSERT INTO T_CORE_ADMIN_SELECT_CONFIG(ID, NAME, CATEGORY, URL, VALUEFIELD, TEXTFIELD)
+  VALUES(NEXT VALUE FOR SEQ_CORE, '仪器采集事务来源', 'equipt-acq-affair-source-category', '/secure/core/module/sys/codes/queries/selectable?codeCategoryId=equipt-acq-affair-source-category', 'code', 'codeName');
+
+insert into T_CORE_SEQUENCE (ID, PATTERN, JSONPARAM)
+values ('T_CORE_EQUIPT_ACQ_CONFIG', '[key][yyyy][mm][nnnnn]', NULL);
+
+-- ----------------------------- 2020-05-23 add by shixw------------end
+
+-- ----------------------------- 2020-06-05 add by shixw------------begin
+
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_ACQ_CONFIG.SERVICE_NAME', N'仪器采集配置', N'仪器采集配置', N'zh-CN',N'仪器采集配置';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_ACQ_CONFIG.ID', N'仪器采集配置的仪器编号', N'仪器编号', N'zh-CN',N'仪器编号';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_ACQ_CONFIG.ACQCATEGORY', N'仪器采集配置的采集方式', N'采集方式', N'zh-CN',N'采集方式';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_ACQ_CONFIG.BAUDRATE', N'仪器采集配置的波特率', N'波特率', N'zh-CN',N'波特率';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_ACQ_CONFIG.TERMINATOR', N'仪器采集配置的终止字符串', N'终止字符串', N'zh-CN',N'终止字符串';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_ACQ_CONFIG.DATABIT', N'仪器采集配置的数据位', N'数据位', N'zh-CN',N'数据位';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_ACQ_CONFIG.PARITYCHECK', N'仪器采集配置的奇偶校验', N'奇偶校验', N'zh-CN',N'奇偶校验';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_ACQ_CONFIG.COM', N'仪器采集配置的COM口', N'COM口', N'zh-CN',N'COM口';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_ACQ_CONFIG.STOPBIT', N'仪器采集配置的停止位', N'停止位', N'zh-CN',N'停止位';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_ACQ_CONFIG.BEGINSYMBOL', N'仪器采集配置的开始标记', N'开始标记', N'zh-CN',N'开始标记';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_ACQ_CONFIG.ENDSYMBOL', N'仪器采集配置的结束标记', N'结束标记', N'zh-CN',N'结束标记';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_ACQ_CONFIG.ANALYSISFORMULA', N'仪器采集配置的数据解析公式', N'数据解析公式', N'zh-CN',N'数据解析公式';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_ACQ_CONFIG.ENDFLAG', N'仪器采集配置的串口数据结束标志', N'串口数据结束标志', N'zh-CN',N'串口数据结束标志';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_ACQ_CONFIG.IP', N'仪器采集配置的主机地址', N'主机地址', N'zh-CN',N'主机地址';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_ACQ_CONFIG.PORT', N'仪器采集配置的端口号', N'端口号', N'zh-CN',N'端口号';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_ACQ_CONFIG.CONNECTSTATUS', N'仪器采集配置的连接状态', N'连接状态', N'zh-CN',N'连接状态';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_ACQ_CONFIG.DISCONNECTED', N'仪器采集配置的未连接', N'未连接', N'zh-CN',N'未连接';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_ACQ_CONFIG.CONNECTED', N'仪器采集配置的已连接', N'已连接', N'zh-CN',N'已连接';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_ACQ_CONFIG.EQUIPTNAME', N'仪器采集配置的仪器名称', N'仪器名称', N'zh-CN',N'仪器名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_ACQ_CONFIG.CREATEDBYID', N'仪器采集配置的制单人编码', N'制单人编码', N'zh-CN',N'制单人编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_ACQ_CONFIG.CREATEDBYNAME', N'仪器采集配置的制单人名称', N'制单人名称', N'zh-CN',N'制单人名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_ACQ_CONFIG.CREATEDTIME', N'仪器采集配置的制单时间', N'制单时间', N'zh-CN',N'制单时间';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_ACQ_CONFIG.CREATEDBYORGID', N'仪器采集配置的制单人单位编码', N'制单人单位编码', N'zh-CN',N'制单人单位编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_ACQ_CONFIG.CREATEDBYORGNAME', N'仪器采集配置的制单人单位名称', N'制单人单位名称', N'zh-CN',N'制单人单位名称';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.EQUIPT.ACQCONFIGS.BUTTON.CONNECT', N'连接仪器', N'连接仪器', N'zh-CN',N'连接仪器';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.EQUIPT.ACQCONFIGS.BUTTON.DISCONNECT', N'断开仪器', N'断开仪器', N'zh-CN',N'断开仪器';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.EQUIPT.ACQCONFIGS.TIP.CONNECT_SUCCESS', N'连接成功', N'连接成功', N'zh-CN',N'连接成功';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.EQUIPT.ACQCONFIGS.TIP.CONNECT_FAILURE', N'网络不稳定，连接失败', N'网络不稳定，连接失败', N'zh-CN',N'网络不稳定，连接失败';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.EQUIPT.ACQCONFIGS.TIP.NO_IP_PORT', N'当前仪器没有配置ip和端口，不能连接', N'当前仪器没有配置ip和端口，不能连接', N'zh-CN',N'当前仪器没有配置ip和端口，不能连接';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_ACQ_SCRIPT.SERVICE_NAME', N'仪器采集脚本', N'仪器采集脚本', N'zh-CN',N'仪器采集脚本';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_ACQ_SCRIPT.ID', N'仪器采集脚本的编码', N'编码', N'zh-CN',N'编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_ACQ_SCRIPT.DESCRIPTION', N'仪器采集脚本的脚本描述', N'脚本描述', N'zh-CN',N'脚本描述';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_ACQ_SCRIPT.SCRIPT', N'仪器采集脚本的脚本内容', N'脚本内容', N'zh-CN',N'脚本内容';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_ACQ_SCRIPT.CREATEDBYID', N'仪器采集脚本的制单人编码', N'制单人编码', N'zh-CN',N'制单人编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_ACQ_SCRIPT.CREATEDBYNAME', N'仪器采集脚本的制单人名称', N'制单人名称', N'zh-CN',N'制单人名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_ACQ_SCRIPT.CREATEDTIME', N'仪器采集脚本的制单时间', N'制单时间', N'zh-CN',N'制单时间';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_ACQ_SCRIPT.CREATEDBYORGID', N'仪器采集脚本的制单人单位编码', N'制单人单位编码', N'zh-CN',N'制单人单位编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_ACQ_SCRIPT.CREATEDBYORGNAME', N'仪器采集脚本的制单人单位名称', N'制单人单位名称', N'zh-CN',N'制单人单位名称';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.EQUIPT.ACQSCRIPTS.MODAL.ADD', N'添加采集脚本', N'添加采集脚本', N'zh-CN',N'添加采集脚本';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.EQUIPT.ACQSCRIPTS.TAB.BASE_INFO', N'基本信息', N'基本信息', N'zh-CN',N'基本信息';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_ACQ_AFFAIR.SERVICE_NAME', N'仪器采集事务', N'仪器采集事务', N'zh-CN',N'仪器采集事务';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_ACQ_AFFAIR.ID', N'仪器采集事务的采集事务编号', N'采集事务编号', N'zh-CN',N'采集事务编号';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_ACQ_AFFAIR.EQUIPTID', N'仪器采集事务的仪器编号', N'仪器编号', N'zh-CN',N'仪器编号';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_ACQ_AFFAIR.EQUIPTNAME', N'仪器采集事务的仪器名称', N'仪器名称', N'zh-CN',N'仪器名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_ACQ_AFFAIR.SOURCECATEGORY', N'仪器采集事务的来源', N'来源', N'zh-CN',N'来源';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_ACQ_AFFAIR.SOURCEID', N'仪器采集事务的来源ID(使用的采集模板ID)', N'来源ID(使用的采集模板ID)', N'zh-CN',N'来源ID(使用的采集模板ID)';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_ACQ_AFFAIR.SOURCENAME', N'仪器采集事务的来源名称(使用的采集模板名称)', N'来源名称(使用的采集模板名称)', N'zh-CN',N'来源名称(使用的采集模板名称)';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_ACQ_AFFAIR.ACQAFFAIRSTATUS', N'仪器采集事务的状态', N'状态', N'zh-CN',N'状态';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_ACQ_AFFAIR.ACQSCRIPTID', N'仪器采集事务的采集脚本Id', N'采集脚本Id', N'zh-CN',N'采集脚本Id';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_ACQ_AFFAIR.ACQSCRIPTDESC', N'仪器采集事务的采集脚本', N'采集脚本', N'zh-CN',N'采集脚本';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_ACQ_AFFAIR.RAWDATA', N'仪器采集事务的源数据', N'源数据', N'zh-CN',N'源数据';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_ACQ_AFFAIR.SOURCEFILENAME', N'仪器采集事务的源文件名称(客户提供）', N'源文件名称(客户提供）', N'zh-CN',N'源文件名称(客户提供）';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_ACQ_AFFAIR.TARGETFILENAME', N'仪器采集事务的目录文件名称(程序处理）', N'目录文件名称(程序处理）', N'zh-CN',N'目录文件名称(程序处理）';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_ACQ_AFFAIR.CREATEDBYID', N'仪器采集事务的制单人编码', N'制单人编码', N'zh-CN',N'制单人编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_ACQ_AFFAIR.CREATEDBYNAME', N'仪器采集事务的操作用户', N'操作用户', N'zh-CN',N'操作用户';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_ACQ_AFFAIR.CREATEDTIME', N'仪器采集事务的操作时间', N'操作时间', N'zh-CN',N'操作时间';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_ACQ_AFFAIR.CREATEDBYORGID', N'仪器采集事务的制单人单位编码', N'制单人单位编码', N'zh-CN',N'制单人单位编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_ACQ_AFFAIR.CREATEDBYORGNAME', N'仪器采集事务的制单人单位名称', N'制单人单位名称', N'zh-CN',N'制单人单位名称';
+
+-- ----------------------------- 2020-06-05 add by shixw------------end
+
+-- ----------------------------- 2020-06-22 add by zhangxt--------------begin
+
+CREATE TABlE DBO.T_CORE_EQUIPT_ACQ_RECORD(
+    ID BIGINT NOT NULL ,
+    ACQCATEGORY VARCHAR(30)  NULL ,
+    ACQRAWDATA TEXT NULL ,
+    ACQRESULT VARCHAR(10)  NULL ,
+    FILEPATH VARCHAR(300)  NULL ,
+    FILENAME VARCHAR(120)  NULL ,
+    EQUIPTID VARCHAR(60)  NULL ,
+    EQUIPTNO VARCHAR(120)  NULL ,
+    EQUIPTNAME VARCHAR(240)  NULL ,
+    REMARK VARCHAR(120)  NULL ,
+    CREATEDBYID VARCHAR(36)  NULL ,
+    CREATEDBYNAME VARCHAR(60)  NULL ,
+    CREATEDTIME DATETIME NULL ,
+    CREATEDBYORGID VARCHAR(36)  NULL ,
+    CREATEDBYORGNAME VARCHAR(270)  NULL ,
+    CONSTRAINT PK_CORE_EQUIPT_ACQ_RECORD PRIMARY KEY(ID));
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'仪器采集记录' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_ACQ_RECORD';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'主键' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_ACQ_RECORD', @level2type=N'COLUMN',@level2name=N'ID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'采集类型(文件/串口/网口)' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_ACQ_RECORD', @level2type=N'COLUMN',@level2name=N'ACQCATEGORY';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'源数据、采集文件内容' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_ACQ_RECORD', @level2type=N'COLUMN',@level2name=N'ACQRAWDATA';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'采集结果(0-未采集，1采集成功，-1采集失败)' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_ACQ_RECORD', @level2type=N'COLUMN',@level2name=N'ACQRESULT';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'文件采集时的文件路径' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_ACQ_RECORD', @level2type=N'COLUMN',@level2name=N'FILEPATH';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'文件采集时的文件名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_ACQ_RECORD', @level2type=N'COLUMN',@level2name=N'FILENAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'仪器ID (行业上根据实际情况反写，或者可能不需要)' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_ACQ_RECORD', @level2type=N'COLUMN',@level2name=N'EQUIPTID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'仪器编号(行业上根据实际情况反写，或者可能不需要)' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_ACQ_RECORD', @level2type=N'COLUMN',@level2name=N'EQUIPTNO';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'仪器名称(行业上根据实际情况反写，或者可能不需要)' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_ACQ_RECORD', @level2type=N'COLUMN',@level2name=N'EQUIPTNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'备注(采集说明)' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_ACQ_RECORD', @level2type=N'COLUMN',@level2name=N'REMARK';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_ACQ_RECORD', @level2type=N'COLUMN',@level2name=N'CREATEDBYID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_ACQ_RECORD', @level2type=N'COLUMN',@level2name=N'CREATEDBYNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_ACQ_RECORD', @level2type=N'COLUMN',@level2name=N'CREATEDTIME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_ACQ_RECORD', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_ACQ_RECORD', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGNAME';
+
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_EQUIPT_ACQ_RECORD', '0', '0');
+
+EXEC DBO.INSERTI18N  N'CORE.MODULE.EQUIPT.FILE.ACQ.EXCEPTION.ARCHIVE', N'仪器采集-文件采集归档', N'文件归档失败', N'zh-CN',N'文件归档失败';
+EXEC DBO.INSERTI18N  N'CORE.MODULE.EQUIPT.FILE.ACQ.EXCEPTION.ACQ', N'仪器采集-文件信息采集', N'文件信息采集失败', N'zh-CN',N'文件信息采集失败';
+
+
+-- ----------------------------- 2020-06-22 add by zhangxt------------end
+
+-- ----------------------------- 2020-07-17 add by shixw------------begin
+
+EXEC DBO.INSERTI18N  N'CORE.MODULE.EQUIPT.ACQCONFIGS.TIP.NO_COM', N'当前仪器没有配置COM口，不能连接', N'当前仪器没有配置COM口，不能连接', N'zh-CN', N'当前仪器没有配置COM口，不能连接';
+EXEC DBO.INSERTI18N  N'CORE.MODULE.EQUIPT.ACQCONFIGS.TIP.NO_BAUDRATE', N'当前仪器没有配置波特率，不能连接', N'当前仪器没有配置波特率，不能连接', N'zh-CN', N'当前仪器没有配置波特率，不能连接';
+EXEC DBO.INSERTI18N  N'CORE.MODULE.EQUIPT.ACQCONFIGS.TIP.NO_DATABIT', N'当前仪器没有配置数据位，不能连接', N'当前仪器没有配置数据位，不能连接', N'zh-CN', N'当前仪器没有配置数据位，不能连接';
+EXEC DBO.INSERTI18N  N'CORE.MODULE.EQUIPT.ACQCONFIGS.TIP.NO_STOPBIT', N'当前仪器没有配置停止位，不能连接', N'当前仪器没有配置停止位，不能连接', N'zh-CN', N'当前仪器没有配置停止位，不能连接';
+EXEC DBO.INSERTI18N  N'CORE.MODULE.EQUIPT.ACQCONFIGS.TIP.NO_PARITYCHECK', N'当前仪器没有配置奇偶校验，不能连接', N'当前仪器没有配置奇偶校验，不能连接', N'zh-CN', N'当前仪器没有配置奇偶校验，不能连接';
+EXEC DBO.INSERTI18N  N'CORE.MODULE.EQUIPT.ACQCONFIGS.TIP.NO_ENDFLAG', N'当前仪器没有配置串口数据结束标志，不能连接', N'当前仪器没有配置串口数据结束标志，不能连接', N'zh-CN', N'当前仪器没有配置串口数据结束标志，不能连接';
+
+
+INSERT INTO T_CORE_CODE(ID, CODE, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME)
+    VALUES (NEXT VALUE FOR SEQ_CORE, 'serial', '串口采集', 'equipt-acq-category', NULL, 3, 0, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL);
+
+
+INSERT INTO T_CORE_CODE_CATEGORY(ID, CODECATEGORYNAME, CODECLASSID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME) VALUES ('baudRate', '波特率', 'sys', NULL, 21.0000, NULL, NULL, NULL, NULL); 
+INSERT INTO T_CORE_CODE(ID, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME, CODE) VALUES (NEXT VALUE FOR SEQ_CORE, '300', 'baudRate', NULL, .0000, .0000, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL, '300'); 
+INSERT INTO T_CORE_CODE(ID, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME, CODE) VALUES (NEXT VALUE FOR SEQ_CORE, '1200', 'baudRate', NULL, .0000, .0000, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL, '1200');
+INSERT INTO T_CORE_CODE(ID, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME, CODE) VALUES (NEXT VALUE FOR SEQ_CORE, '2400', 'baudRate', NULL, .0000, .0000, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL, '2400');
+INSERT INTO T_CORE_CODE(ID, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME, CODE) VALUES (NEXT VALUE FOR SEQ_CORE, '4800', 'baudRate', NULL, .0000, .0000, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL, '4800');
+INSERT INTO T_CORE_CODE(ID, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME, CODE) VALUES (NEXT VALUE FOR SEQ_CORE, '9600', 'baudRate', NULL, .0000, .0000, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL, '9600');
+INSERT INTO T_CORE_CODE(ID, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME, CODE) VALUES (NEXT VALUE FOR SEQ_CORE, '19200', 'baudRate', NULL, .0000, .0000, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL, '19200');
+INSERT INTO T_CORE_CODE(ID, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME, CODE) VALUES (NEXT VALUE FOR SEQ_CORE, '38400', 'baudRate', NULL, .0000, .0000, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL, '38400');
+INSERT INTO T_CORE_CODE(ID, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME, CODE) VALUES (NEXT VALUE FOR SEQ_CORE, '57600', 'baudRate', NULL, .0000, .0000, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL, '57600');
+INSERT INTO T_CORE_CODE(ID, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME, CODE) VALUES (NEXT VALUE FOR SEQ_CORE, '115200', 'baudRate', NULL, .0000, .0000, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL, '115200');
+INSERT INTO T_CORE_CODE(ID, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME, CODE) VALUES (NEXT VALUE FOR SEQ_CORE, '230400', 'baudRate', NULL, .0000, .0000, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL, '230400');
+INSERT INTO T_CORE_CODE(ID, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME, CODE) VALUES (NEXT VALUE FOR SEQ_CORE, '460800', 'baudRate', NULL, .0000, .0000, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL, '460800');
+INSERT INTO T_CORE_CODE(ID, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME, CODE) VALUES (NEXT VALUE FOR SEQ_CORE, '921600', 'baudRate', NULL, .0000, .0000, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL, '921600');
+
+INSERT INTO T_CORE_ADMIN_SELECT_CONFIG(ID, NAME, CATEGORY, URL, VALUEFIELD, TEXTFIELD)
+  VALUES(NEXT VALUE FOR SEQ_CORE, '波特率', 'baudrate', '/secure/core/module/sys/codes/queries/selectable?codeCategoryId=baudRate', 'code', 'codeName');
+
+
+INSERT INTO T_CORE_CODE_CATEGORY(ID, CODECATEGORYNAME, CODECLASSID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME) VALUES ('dataBit', '数据位', 'sys', NULL, 21.0000, NULL, NULL, NULL, NULL); 
+INSERT INTO T_CORE_CODE(ID, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME, CODE) VALUES (NEXT VALUE FOR SEQ_CORE, '7', 'dataBit', NULL, .0000, .0000, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL, '7'); 
+INSERT INTO T_CORE_CODE(ID, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME, CODE) VALUES (NEXT VALUE FOR SEQ_CORE, '8', 'dataBit', NULL, .0000, .0000, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL, '8'); 
+
+INSERT INTO T_CORE_ADMIN_SELECT_CONFIG(ID, NAME, CATEGORY, URL, VALUEFIELD, TEXTFIELD)
+  VALUES(NEXT VALUE FOR SEQ_CORE, '数据位', 'databit', '/secure/core/module/sys/codes/queries/selectable?codeCategoryId=dataBit', 'code', 'codeName');
+
+
+
+INSERT INTO T_CORE_CODE_CATEGORY(ID, CODECATEGORYNAME, CODECLASSID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME) VALUES ('parityCheck', '奇偶校验', 'sys', NULL, 21.0000, NULL, NULL, NULL, NULL); 
+INSERT INTO T_CORE_CODE(ID, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME, CODE) VALUES (NEXT VALUE FOR SEQ_CORE, 'None', 'parityCheck', NULL, .0000, .0000, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL, '0'); 
+INSERT INTO T_CORE_CODE(ID, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME, CODE) VALUES (NEXT VALUE FOR SEQ_CORE, 'Odd', 'parityCheck', NULL, .0000, .0000, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL, '1'); 
+INSERT INTO T_CORE_CODE(ID, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME, CODE) VALUES (NEXT VALUE FOR SEQ_CORE, 'Even', 'parityCheck', NULL, .0000, .0000, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL, '2'); 
+
+INSERT INTO T_CORE_ADMIN_SELECT_CONFIG(ID, NAME, CATEGORY, URL, VALUEFIELD, TEXTFIELD)
+  VALUES(NEXT VALUE FOR SEQ_CORE, '奇偶校验', 'paritycheck', '/secure/core/module/sys/codes/queries/selectable?codeCategoryId=parityCheck', 'code', 'codeName');
+
+INSERT INTO T_CORE_CODE_CATEGORY(ID, CODECATEGORYNAME, CODECLASSID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME) VALUES ('comPort', 'COM口', 'sys', NULL, 21.0000, NULL, NULL, NULL, NULL); 
+INSERT INTO T_CORE_CODE(ID, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME, CODE) VALUES (NEXT VALUE FOR SEQ_CORE, 'COM1', 'comPort', NULL, .0000, .0000, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL, 'COM1'); 
+INSERT INTO T_CORE_CODE(ID, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME, CODE) VALUES (NEXT VALUE FOR SEQ_CORE, 'COM2', 'comPort', NULL, .0000, .0000, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL, 'COM2'); 
+INSERT INTO T_CORE_CODE(ID, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME, CODE) VALUES (NEXT VALUE FOR SEQ_CORE, 'COM3', 'comPort', NULL, .0000, .0000, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL, 'COM3'); 
+INSERT INTO T_CORE_CODE(ID, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME, CODE) VALUES (NEXT VALUE FOR SEQ_CORE, 'COM4', 'comPort', NULL, .0000, .0000, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL, 'COM4'); 
+INSERT INTO T_CORE_CODE(ID, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME, CODE) VALUES (NEXT VALUE FOR SEQ_CORE, 'COM5', 'comPort', NULL, .0000, .0000, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL, 'COM5'); 
+INSERT INTO T_CORE_CODE(ID, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME, CODE) VALUES (NEXT VALUE FOR SEQ_CORE, 'COM6', 'comPort', NULL, .0000, .0000, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL, 'COM6'); 
+INSERT INTO T_CORE_CODE(ID, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME, CODE) VALUES (NEXT VALUE FOR SEQ_CORE, 'COM7', 'comPort', NULL, .0000, .0000, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL, 'COM7'); 
+INSERT INTO T_CORE_CODE(ID, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME, CODE) VALUES (NEXT VALUE FOR SEQ_CORE, 'COM8', 'comPort', NULL, .0000, .0000, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL, 'COM8'); 
+INSERT INTO T_CORE_CODE(ID, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME, CODE) VALUES (NEXT VALUE FOR SEQ_CORE, 'COM9', 'comPort', NULL, .0000, .0000, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL, 'COM9'); 
+
+INSERT INTO T_CORE_ADMIN_SELECT_CONFIG(ID, NAME, CATEGORY, URL, VALUEFIELD, TEXTFIELD)
+  VALUES(NEXT VALUE FOR SEQ_CORE, 'com口', 'comport', '/secure/core/module/sys/codes/queries/selectable?codeCategoryId=comPort', 'code', 'codeName');
+
+INSERT INTO T_CORE_CODE_CATEGORY(ID, CODECATEGORYNAME, CODECLASSID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME) VALUES ('stopBit', '停止位', 'sys', NULL, 21.0000, NULL, NULL, NULL, NULL); 
+INSERT INTO T_CORE_CODE(ID, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME, CODE) VALUES (NEXT VALUE FOR SEQ_CORE, '1', 'stopBit', NULL, .0000, .0000, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL, '1'); 
+INSERT INTO T_CORE_CODE(ID, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME, CODE) VALUES (NEXT VALUE FOR SEQ_CORE, '2', 'stopBit', NULL, .0000, .0000, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL, '2'); 
+
+INSERT INTO T_CORE_ADMIN_SELECT_CONFIG(ID, NAME, CATEGORY, URL, VALUEFIELD, TEXTFIELD)
+  VALUES(NEXT VALUE FOR SEQ_CORE, '停止位', 'stopbit', '/secure/core/module/sys/codes/queries/selectable?codeCategoryId=stopBit', 'code', 'codeName');
+
+
+-- ----------------------------- 2020-07-17 add by shixw------------end
+
+-- ----------------------------- 2020-07-21 add by shixw------------begin
+
+EXEC DBO.INSERTI18N N'CORE.MODULE.EQUIPT.FILE.ACQ.EXCEPTION.FILE_READ_FAIL', N'仪器采集-文件读取失败', N'仪器采集-文件读取失败', N'zh-CN', N'仪器采集-文件读取失败';
+
+-- ----------------------------- 2020-07-21 add by shixw------------end
+
+-- ----------------------------- 2020-07-23 add by shixw--------------begin
+
+-- 建表语句
+CREATE TABlE DBO.T_CORE_FILE_ACQ_CONFIG(
+    ID BIGINT NOT NULL,
+    CONFIGDESC VARCHAR(120)  NULL ,
+    DATAFORMAT VARCHAR(36)  NULL ,
+    SAMPLENOFORMAT VARCHAR(36)  NULL ,
+    ROWSEPARATOR VARCHAR(60)  NULL ,
+    PARAGRAPHSEPARATOR VARCHAR(60)  NULL ,
+    ITEMNAMESOURCE VARCHAR(36)  NULL ,
+    CREATEDBYID VARCHAR(36)  NULL ,
+    CREATEDBYNAME VARCHAR(60)  NULL ,
+    CREATEDTIME DATETIME NULL ,
+    CREATEDBYORGID VARCHAR(36)  NULL ,
+    CREATEDBYORGNAME VARCHAR(270)  NULL ,
+    CONSTRAINT PK_CORE_FILE_ACQ_CONFIG PRIMARY KEY(ID));
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'文件采集配置' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_FILE_ACQ_CONFIG';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'主键' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_FILE_ACQ_CONFIG', @level2type=N'COLUMN',@level2name=N'ID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'配置描述' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_FILE_ACQ_CONFIG', @level2type=N'COLUMN',@level2name=N'CONFIGDESC';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'数据格式' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_FILE_ACQ_CONFIG', @level2type=N'COLUMN',@level2name=N'DATAFORMAT';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'样品编号格式' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_FILE_ACQ_CONFIG', @level2type=N'COLUMN',@level2name=N'SAMPLENOFORMAT';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'行数据分割符' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_FILE_ACQ_CONFIG', @level2type=N'COLUMN',@level2name=N'ROWSEPARATOR';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'段数据分割符' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_FILE_ACQ_CONFIG', @level2type=N'COLUMN',@level2name=N'PARAGRAPHSEPARATOR';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'分析项名称来源(手工输入、文件)' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_FILE_ACQ_CONFIG', @level2type=N'COLUMN',@level2name=N'ITEMNAMESOURCE';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_FILE_ACQ_CONFIG', @level2type=N'COLUMN',@level2name=N'CREATEDBYID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_FILE_ACQ_CONFIG', @level2type=N'COLUMN',@level2name=N'CREATEDBYNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_FILE_ACQ_CONFIG', @level2type=N'COLUMN',@level2name=N'CREATEDTIME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_FILE_ACQ_CONFIG', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_FILE_ACQ_CONFIG', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGNAME';
+
+CREATE TABlE DBO.T_CORE_FILE_ACQ_PARAM(
+    ID BIGINT NOT NULL,
+    FILEACQCONFIGID BIGINT NULL ,
+    FIELD VARCHAR(36)  NULL ,
+    BEGINSYMBOL VARCHAR(60)  NULL ,
+    ENDSYMBOL VARCHAR(60)  NULL ,
+    CREATEDBYID VARCHAR(36)  NULL ,
+    CREATEDBYNAME VARCHAR(60)  NULL ,
+    CREATEDTIME DATETIME NULL ,
+    CREATEDBYORGID VARCHAR(36)  NULL ,
+    CREATEDBYORGNAME VARCHAR(270)  NULL ,
+    CONSTRAINT PK_CORE_FILE_ACQ_PARAM PRIMARY KEY(ID));
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'文件采集参数' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_FILE_ACQ_PARAM';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'主键' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_FILE_ACQ_PARAM', @level2type=N'COLUMN',@level2name=N'ID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'文件采集配置ID' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_FILE_ACQ_PARAM', @level2type=N'COLUMN',@level2name=N'FILEACQCONFIGID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'字段名' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_FILE_ACQ_PARAM', @level2type=N'COLUMN',@level2name=N'FIELD';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'开始标记' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_FILE_ACQ_PARAM', @level2type=N'COLUMN',@level2name=N'BEGINSYMBOL';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'结束标记' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_FILE_ACQ_PARAM', @level2type=N'COLUMN',@level2name=N'ENDSYMBOL';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_FILE_ACQ_PARAM', @level2type=N'COLUMN',@level2name=N'CREATEDBYID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_FILE_ACQ_PARAM', @level2type=N'COLUMN',@level2name=N'CREATEDBYNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_FILE_ACQ_PARAM', @level2type=N'COLUMN',@level2name=N'CREATEDTIME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_FILE_ACQ_PARAM', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_FILE_ACQ_PARAM', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGNAME';
+CREATE NONCLUSTERED INDEX [IDX_CFAR_FILEACQCONFIGID] ON [dbo].[T_CORE_FILE_ACQ_PARAM] ([FILEACQCONFIGID]);
+
+CREATE TABlE DBO.T_CORE_FILE_ACQ_PREPROCESS(
+    ID BIGINT NOT NULL,
+    FILEACQCONFIGID BIGINT NULL ,
+    KEYWORD VARCHAR(60)  NULL ,
+    OPERATION VARCHAR(36)  NULL ,
+    REPLACESTR VARCHAR(60)  NULL ,
+    CONSTRAINT PK_CORE_FILE_ACQ_PREPROCESS PRIMARY KEY(ID));
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'文件采集预处理' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_FILE_ACQ_PREPROCESS';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'主键' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_FILE_ACQ_PREPROCESS', @level2type=N'COLUMN',@level2name=N'ID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'文件采集配置ID' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_FILE_ACQ_PREPROCESS', @level2type=N'COLUMN',@level2name=N'FILEACQCONFIGID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'关键字' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_FILE_ACQ_PREPROCESS', @level2type=N'COLUMN',@level2name=N'KEYWORD';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'操作' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_FILE_ACQ_PREPROCESS', @level2type=N'COLUMN',@level2name=N'OPERATION';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'替换字符' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_FILE_ACQ_PREPROCESS', @level2type=N'COLUMN',@level2name=N'REPLACESTR';
+CREATE NONCLUSTERED INDEX [IDX_CFAP_FILEACQCONFIGID] ON [dbo].[T_CORE_FILE_ACQ_PREPROCESS] ([FILEACQCONFIGID]);
+
+CREATE TABlE DBO.T_CORE_FILE_ACQ_RESULT_PARAM(
+    ID BIGINT NOT NULL,
+    FILEACQCONFIGID BIGINT NULL ,
+    ITEMNAME VARCHAR(120)  NULL ,
+    RESULTCOLNO BIGINT NULL ,
+    SAMPLENOCOLNO BIGINT NULL ,
+    ITEMCOLNO BIGINT NULL ,
+    CREATEDBYID VARCHAR(36)  NULL ,
+    CREATEDBYNAME VARCHAR(60)  NULL ,
+    CREATEDTIME DATETIME NULL ,
+    CREATEDBYORGID VARCHAR(36)  NULL ,
+    CREATEDBYORGNAME VARCHAR(270)  NULL ,
+    CONSTRAINT PK_CORE_FILE_ACQ_RESULT_PARAM PRIMARY KEY(ID));
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'文件采集结果参数' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_FILE_ACQ_RESULT_PARAM';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'主键' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_FILE_ACQ_RESULT_PARAM', @level2type=N'COLUMN',@level2name=N'ID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'文件采集配置ID' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_FILE_ACQ_RESULT_PARAM', @level2type=N'COLUMN',@level2name=N'FILEACQCONFIGID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'分析项名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_FILE_ACQ_RESULT_PARAM', @level2type=N'COLUMN',@level2name=N'ITEMNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'结果列号' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_FILE_ACQ_RESULT_PARAM', @level2type=N'COLUMN',@level2name=N'RESULTCOLNO';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'样品编号列号' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_FILE_ACQ_RESULT_PARAM', @level2type=N'COLUMN',@level2name=N'SAMPLENOCOLNO';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'分析项列号' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_FILE_ACQ_RESULT_PARAM', @level2type=N'COLUMN',@level2name=N'ITEMCOLNO';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_FILE_ACQ_RESULT_PARAM', @level2type=N'COLUMN',@level2name=N'CREATEDBYID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_FILE_ACQ_RESULT_PARAM', @level2type=N'COLUMN',@level2name=N'CREATEDBYNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_FILE_ACQ_RESULT_PARAM', @level2type=N'COLUMN',@level2name=N'CREATEDTIME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_FILE_ACQ_RESULT_PARAM', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_FILE_ACQ_RESULT_PARAM', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGNAME';
+CREATE NONCLUSTERED INDEX [IDX_CFARP_FILEACQCONFIGID] ON [dbo].[T_CORE_FILE_ACQ_RESULT_PARAM] ([FILEACQCONFIGID]);
+
+CREATE TABlE DBO.T_CORE_FILE_ACQ_RESULT(
+    ID BIGINT NOT NULL,
+    FILEACQCONFIGID BIGINT NULL ,
+    ACQRECORDID VARCHAR(36)  NULL ,
+    SAMPLENO VARCHAR(36)  NULL ,
+    ITEMNAME VARCHAR(120)  NULL ,
+    ACQRESULT VARCHAR(60)  NULL ,
+    CREATEDBYID VARCHAR(36)  NULL ,
+    CREATEDBYNAME VARCHAR(60)  NULL ,
+    CREATEDTIME DATETIME NULL ,
+    CREATEDBYORGID VARCHAR(36)  NULL ,
+    CREATEDBYORGNAME VARCHAR(270)  NULL ,
+    CONSTRAINT PK_CORE_FILE_ACQ_RESULT PRIMARY KEY(ID));
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'文件采集结果' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_FILE_ACQ_RESULT';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'主键' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_FILE_ACQ_RESULT', @level2type=N'COLUMN',@level2name=N'ID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'文件采集配置ID' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_FILE_ACQ_RESULT', @level2type=N'COLUMN',@level2name=N'FILEACQCONFIGID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'采集记录ID' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_FILE_ACQ_RESULT', @level2type=N'COLUMN',@level2name=N'ACQRECORDID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'样品编号' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_FILE_ACQ_RESULT', @level2type=N'COLUMN',@level2name=N'SAMPLENO';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'分析项名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_FILE_ACQ_RESULT', @level2type=N'COLUMN',@level2name=N'ITEMNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'结果' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_FILE_ACQ_RESULT', @level2type=N'COLUMN',@level2name=N'ACQRESULT';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_FILE_ACQ_RESULT', @level2type=N'COLUMN',@level2name=N'CREATEDBYID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_FILE_ACQ_RESULT', @level2type=N'COLUMN',@level2name=N'CREATEDBYNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_FILE_ACQ_RESULT', @level2type=N'COLUMN',@level2name=N'CREATEDTIME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_FILE_ACQ_RESULT', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_FILE_ACQ_RESULT', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGNAME';
+CREATE NONCLUSTERED INDEX [IDX_CFARE_FILEACQCONFIGID] ON [dbo].[T_CORE_FILE_ACQ_RESULT] ([FILEACQCONFIGID]);
+
+EXEC DBO.INSERTI18N  N'T_CORE_FILE_ACQ_CONFIG.SERVICE_NAME', N'文件采集配置', N'文件采集配置', N'zh-CN', N'文件采集配置';
+EXEC DBO.INSERTI18N  N'T_CORE_FILE_ACQ_CONFIG.ID', N'文件采集配置的主键', N'主键', N'zh-CN', N'主键';
+EXEC DBO.INSERTI18N  N'T_CORE_FILE_ACQ_CONFIG.CONFIGDESC', N'文件采集配置的配置描述', N'配置描述', N'zh-CN', N'配置描述';
+EXEC DBO.INSERTI18N  N'T_CORE_FILE_ACQ_CONFIG.DATAFORMAT', N'文件采集配置的数据格式', N'数据格式', N'zh-CN', N'数据格式';
+EXEC DBO.INSERTI18N  N'T_CORE_FILE_ACQ_CONFIG.SAMPLENOFORMAT', N'文件采集配置的样品编号格式', N'样品编号格式', N'zh-CN', N'样品编号格式';
+EXEC DBO.INSERTI18N  N'T_CORE_FILE_ACQ_CONFIG.ROWSEPARATOR', N'文件采集配置的行数据分割符', N'行数据分割符', N'zh-CN', N'行数据分割符';
+EXEC DBO.INSERTI18N  N'T_CORE_FILE_ACQ_CONFIG.PARAGRAPHSEPARATOR', N'文件采集配置的段数据分割符', N'段数据分割符', N'zh-CN', N'段数据分割符';
+EXEC DBO.INSERTI18N  N'T_CORE_FILE_ACQ_CONFIG.ITEMNAMESOURCE', N'文件采集配置的分析项名称来源(手工输入、文件)', N'分析项名称来源', N'zh-CN', N'分析项名称来源';
+EXEC DBO.INSERTI18N  N'T_CORE_FILE_ACQ_CONFIG.CREATEDBYID', N'文件采集配置的制单人编码', N'制单人编码', N'zh-CN', N'制单人编码';
+EXEC DBO.INSERTI18N  N'T_CORE_FILE_ACQ_CONFIG.CREATEDBYNAME', N'文件采集配置的制单人名称', N'制单人名称', N'zh-CN', N'制单人名称';
+EXEC DBO.INSERTI18N  N'T_CORE_FILE_ACQ_CONFIG.CREATEDTIME', N'文件采集配置的制单时间', N'制单时间', N'zh-CN', N'制单时间';
+EXEC DBO.INSERTI18N  N'T_CORE_FILE_ACQ_CONFIG.CREATEDBYORGID', N'文件采集配置的制单人单位编码', N'制单人单位编码', N'zh-CN', N'制单人单位编码';
+EXEC DBO.INSERTI18N  N'T_CORE_FILE_ACQ_CONFIG.CREATEDBYORGNAME', N'文件采集配置的制单人单位名称', N'制单人单位名称', N'zh-CN', N'制单人单位名称';
+EXEC DBO.INSERTI18N  N'T_CORE_FILE_ACQ_PARAM.SERVICE_NAME', N'文件采集参数', N'文件采集参数', N'zh-CN', N'文件采集参数';
+EXEC DBO.INSERTI18N  N'T_CORE_FILE_ACQ_PARAM.ID', N'文件采集参数的主键', N'主键', N'zh-CN', N'主键';
+EXEC DBO.INSERTI18N  N'T_CORE_FILE_ACQ_PARAM.FILEACQCONFIGID', N'文件采集参数的文件采集配置ID', N'文件采集配置ID', N'zh-CN', N'文件采集配置ID';
+EXEC DBO.INSERTI18N  N'T_CORE_FILE_ACQ_PARAM.FIELD', N'文件采集参数的字段名', N'字段名', N'zh-CN', N'字段名';
+EXEC DBO.INSERTI18N  N'T_CORE_FILE_ACQ_PARAM.BEGINSYMBOL', N'文件采集参数的开始标记', N'开始标记', N'zh-CN', N'开始标记';
+EXEC DBO.INSERTI18N  N'T_CORE_FILE_ACQ_PARAM.ENDSYMBOL', N'文件采集参数的结束标记', N'结束标记', N'zh-CN', N'结束标记';
+EXEC DBO.INSERTI18N  N'T_CORE_FILE_ACQ_PARAM.CREATEDBYID', N'文件采集参数的制单人编码', N'制单人编码', N'zh-CN', N'制单人编码';
+EXEC DBO.INSERTI18N  N'T_CORE_FILE_ACQ_PARAM.CREATEDBYNAME', N'文件采集参数的制单人名称', N'制单人名称', N'zh-CN', N'制单人名称';
+EXEC DBO.INSERTI18N  N'T_CORE_FILE_ACQ_PARAM.CREATEDTIME', N'文件采集参数的制单时间', N'制单时间', N'zh-CN', N'制单时间';
+EXEC DBO.INSERTI18N  N'T_CORE_FILE_ACQ_PARAM.CREATEDBYORGID', N'文件采集参数的制单人单位编码', N'制单人单位编码', N'zh-CN', N'制单人单位编码';
+EXEC DBO.INSERTI18N  N'T_CORE_FILE_ACQ_PARAM.CREATEDBYORGNAME', N'文件采集参数的制单人单位名称', N'制单人单位名称', N'zh-CN', N'制单人单位名称';
+EXEC DBO.INSERTI18N  N'T_CORE_FILE_ACQ_PREPROCESS.SERVICE_NAME', N'文件采集预处理', N'文件采集预处理', N'zh-CN', N'文件采集预处理';
+EXEC DBO.INSERTI18N  N'T_CORE_FILE_ACQ_PREPROCESS.ID', N'文件采集预处理的主键', N'主键', N'zh-CN', N'主键';
+EXEC DBO.INSERTI18N  N'T_CORE_FILE_ACQ_PREPROCESS.FILEACQCONFIGID', N'文件采集预处理的文件采集配置ID', N'文件采集配置ID', N'zh-CN', N'文件采集配置ID';
+EXEC DBO.INSERTI18N  N'T_CORE_FILE_ACQ_PREPROCESS.KEYWORD', N'文件采集预处理的关键字', N'关键字', N'zh-CN', N'关键字';
+EXEC DBO.INSERTI18N  N'T_CORE_FILE_ACQ_PREPROCESS.OPERATION', N'文件采集预处理的操作', N'操作', N'zh-CN', N'操作';
+EXEC DBO.INSERTI18N  N'T_CORE_FILE_ACQ_PREPROCESS.REPLACESTR', N'文件采集预处理的替换字符', N'替换字符', N'zh-CN', N'替换字符';
+EXEC DBO.INSERTI18N  N'T_CORE_FILE_ACQ_RESULT_PARAM.SERVICE_NAME', N'文件采集结果参数', N'文件采集结果参数', N'zh-CN', N'文件采集结果参数';
+EXEC DBO.INSERTI18N  N'T_CORE_FILE_ACQ_RESULT_PARAM.ID', N'文件采集结果参数的主键', N'主键', N'zh-CN', N'主键';
+EXEC DBO.INSERTI18N  N'T_CORE_FILE_ACQ_RESULT_PARAM.FILEACQCONFIGID', N'文件采集结果参数的文件采集配置ID', N'文件采集配置ID', N'zh-CN', N'文件采集配置ID';
+EXEC DBO.INSERTI18N  N'T_CORE_FILE_ACQ_RESULT_PARAM.ITEMNAME', N'文件采集结果参数的分析项名称', N'分析项名称', N'zh-CN', N'分析项名称';
+EXEC DBO.INSERTI18N  N'T_CORE_FILE_ACQ_RESULT_PARAM.RESULTCOLNO', N'文件采集结果参数的结果列号', N'结果列号', N'zh-CN', N'结果列号';
+EXEC DBO.INSERTI18N  N'T_CORE_FILE_ACQ_RESULT_PARAM.SAMPLENOCOLNO', N'文件采集结果参数的样品编号列号', N'样品编号列号', N'zh-CN', N'样品编号列号';
+EXEC DBO.INSERTI18N  N'T_CORE_FILE_ACQ_RESULT_PARAM.ITEMCOLNO', N'文件采集结果参数的分析项列号', N'分析项列号', N'zh-CN', N'分析项列号';
+EXEC DBO.INSERTI18N  N'T_CORE_FILE_ACQ_RESULT_PARAM.CREATEDBYID', N'文件采集结果参数的制单人编码', N'制单人编码', N'zh-CN', N'制单人编码';
+EXEC DBO.INSERTI18N  N'T_CORE_FILE_ACQ_RESULT_PARAM.CREATEDBYNAME', N'文件采集结果参数的制单人名称', N'制单人名称', N'zh-CN', N'制单人名称';
+EXEC DBO.INSERTI18N  N'T_CORE_FILE_ACQ_RESULT_PARAM.CREATEDTIME', N'文件采集结果参数的制单时间', N'制单时间', N'zh-CN', N'制单时间';
+EXEC DBO.INSERTI18N  N'T_CORE_FILE_ACQ_RESULT_PARAM.CREATEDBYORGID', N'文件采集结果参数的制单人单位编码', N'制单人单位编码', N'zh-CN', N'制单人单位编码';
+EXEC DBO.INSERTI18N  N'T_CORE_FILE_ACQ_RESULT_PARAM.CREATEDBYORGNAME', N'文件采集结果参数的制单人单位名称', N'制单人单位名称', N'zh-CN', N'制单人单位名称';
+EXEC DBO.INSERTI18N  N'T_CORE_FILE_ACQ_RESULT.SERVICE_NAME', N'文件采集结果', N'文件采集结果', N'zh-CN', N'文件采集结果';
+EXEC DBO.INSERTI18N  N'T_CORE_FILE_ACQ_RESULT.ID', N'文件采集结果的主键', N'主键', N'zh-CN', N'主键';
+EXEC DBO.INSERTI18N  N'T_CORE_FILE_ACQ_RESULT.FILEACQCONFIGID', N'文件采集结果的文件采集配置ID', N'文件采集配置ID', N'zh-CN', N'文件采集配置ID';
+EXEC DBO.INSERTI18N  N'T_CORE_FILE_ACQ_RESULT.ACQRECORDID', N'文件采集结果的采集记录ID', N'采集记录ID', N'zh-CN', N'采集记录ID';
+EXEC DBO.INSERTI18N  N'T_CORE_FILE_ACQ_RESULT.SAMPLENO', N'文件采集结果的样品编号', N'样品编号', N'zh-CN', N'样品编号';
+EXEC DBO.INSERTI18N  N'T_CORE_FILE_ACQ_RESULT.ITEMNAME', N'文件采集结果的分析项名称', N'分析项名称', N'zh-CN', N'分析项名称';
+EXEC DBO.INSERTI18N  N'T_CORE_FILE_ACQ_RESULT.ACQRESULT', N'文件采集结果的结果', N'结果', N'zh-CN', N'结果';
+EXEC DBO.INSERTI18N  N'T_CORE_FILE_ACQ_RESULT.CREATEDBYID', N'文件采集结果的制单人编码', N'制单人编码', N'zh-CN', N'制单人编码';
+EXEC DBO.INSERTI18N  N'T_CORE_FILE_ACQ_RESULT.CREATEDBYNAME', N'文件采集结果的制单人名称', N'制单人名称', N'zh-CN', N'制单人名称';
+EXEC DBO.INSERTI18N  N'T_CORE_FILE_ACQ_RESULT.CREATEDTIME', N'文件采集结果的制单时间', N'制单时间', N'zh-CN', N'制单时间';
+EXEC DBO.INSERTI18N  N'T_CORE_FILE_ACQ_RESULT.CREATEDBYORGID', N'文件采集结果的制单人单位编码', N'制单人单位编码', N'zh-CN', N'制单人单位编码';
+EXEC DBO.INSERTI18N  N'T_CORE_FILE_ACQ_RESULT.CREATEDBYORGNAME', N'文件采集结果的制单人单位名称', N'制单人单位名称', N'zh-CN', N'制单人单位名称';
+EXEC DBO.INSERTI18N  N'CORE.MODULE.EQUIPT.FILEACQCONFIGS.MODAL.ADD', N'添加采集配置', N'添加采集配置', N'zh-CN', N'添加采集配置';
+EXEC DBO.INSERTI18N  N'CORE.MODULE.EQUIPT.FILEACQCONFIGS.TAB.ACQ_CONFIG', N'仪器采集配置', N'仪器采集配置', N'zh-CN', N'仪器采集配置';
+EXEC DBO.INSERTI18N  N'CORE.MODULE.EQUIPT.FILEACQCONFIGS.TAB.ACQ_PARAM', N'采集参数', N'采集参数', N'zh-CN', N'采集参数';
+EXEC DBO.INSERTI18N  N'CORE.MODULE.EQUIPT.FILEACQCONFIGS.TAB.ACQ_PREPROCESS', N'预处理', N'预处理', N'zh-CN', N'预处理';
+EXEC DBO.INSERTI18N  N'CORE.MODULE.EQUIPT.FILEACQCONFIGS.TAB.ACQ_RESULT_PARAM', N'结果参数', N'结果参数', N'zh-CN', N'结果参数';
+EXEC DBO.INSERTI18N  N'CORE.MODULE.EQUIPT.FILEACQCONFIGS.TAB.FILE', N'文件预览', N'文件预览', N'zh-CN', N'文件预览';
+EXEC DBO.INSERTI18N  N'CORE.MODULE.EQUIPT.FILEACQCONFIGS.BUTTON.UPLOAD', N'上传文件', N'上传文件', N'zh-CN', N'上传文件';
+EXEC DBO.INSERTI18N  N'CORE.MODULE.EQUIPT.FILEACQCONFIGS.BUTTON.PREPROCESS', N'预处理', N'预处理', N'zh-CN', N'预处理';
+EXEC DBO.INSERTI18N  N'CORE.MODULE.EQUIPT.FILEACQCONFIGS.BUTTON.TEST', N'测试解析', N'测试解析', N'zh-CN', N'测试解析';
+EXEC DBO.INSERTI18N  N'CORE.MODULE.EQUIPT.FILEACQCONFIGS.TIP.UPLOAD_FILE', N'请先上传文件', N'请先上传文件', N'zh-CN', N'请先上传文件';
+EXEC DBO.INSERTI18N  N'CORE.MODULE.EQUIPT.FILEACQCONFIGS.MODAL.TEST_ANALYSIS', N'测试解析', N'测试解析', N'zh-CN', N'测试解析';
+
+
+-- 创建菜单语句
+INSERT INTO T_CORE_MENU (ID, MENUNAME, HREF, PARENTID, ORDERNO, ICON, MENUINITNAME)
+VALUES ('9329', '仪器采集配置', '/secure/core/module/equipt/file-acq-configs/page/edit-list', '93', '9329', '016.svg', '仪器采集配置');
+
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_FILE_ACQ_CONFIG', '0', '1');
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_FILE_ACQ_PARAM', '0', '0');
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_FILE_ACQ_PREPROCESS', '0', '0');
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_FILE_ACQ_RESULT_PARAM', '0', '0');
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_FILE_ACQ_RESULT', '0', '0');
+
+INSERT INTO T_CORE_TABLE_HIERARCHY (ID, TABLENAME, MASTERTABLENAME, REFERCOLUMN)
+VALUES ('932901','T_CORE_FILE_ACQ_PARAM', 'T_CORE_FILE_ACQ_CONFIG', 'FILEACQCONFIGID');
+INSERT INTO T_CORE_TABLE_HIERARCHY (ID, TABLENAME, MASTERTABLENAME, REFERCOLUMN)
+VALUES ('932902','T_CORE_FILE_ACQ_PREPROCESS', 'T_CORE_FILE_ACQ_CONFIG', 'FILEACQCONFIGID');
+INSERT INTO T_CORE_TABLE_HIERARCHY (ID, TABLENAME, MASTERTABLENAME, REFERCOLUMN)
+VALUES ('932903','T_CORE_FILE_ACQ_RESULT_PARAM', 'T_CORE_FILE_ACQ_CONFIG', 'FILEACQCONFIGID');
+
+INSERT INTO T_CORE_ADMIN_CHOOSE_CONFIG (ID, NAME, TITLE,CATEGORY,URL,WIDTH)
+   VALUES (NEXT VALUE FOR SEQ_CORE, '文件采集配置', '采集配置', 'file-acq-config', '/secure/core/module/equipt/file-acq-configs/page/choose-list', '');
+
+INSERT INTO T_CORE_CODE_CATEGORY(ID, CODECATEGORYNAME, CODECLASSID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME)
+    VALUES ('fileAcqConfigDataFormat', '文件采集配置数据格式', 'biz', NULL, 1, NULL, NULL, NULL, NULL);
+INSERT INTO T_CORE_CODE(ID, CODE, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME)
+    VALUES (NEXT VALUE FOR SEQ_CORE, 'single', '单段', 'fileAcqConfigDataFormat', NULL, 1, 0, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL);
+INSERT INTO T_CORE_CODE(ID, CODE, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME)
+    VALUES (NEXT VALUE FOR SEQ_CORE, 'multiple', '多段', 'fileAcqConfigDataFormat', NULL, 2, 0, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL);
+
+INSERT INTO T_CORE_ADMIN_SELECT_CONFIG(ID, NAME, CATEGORY, URL, VALUEFIELD, TEXTFIELD)
+  VALUES(NEXT VALUE FOR SEQ_CORE, '文件采集配置数据格式', 'file-acq-config-data-format', '/secure/core/module/sys/codes/queries/selectable?codeCategoryId=fileAcqConfigDataFormat', 'code', 'codeName');
+
+INSERT INTO T_CORE_CODE_CATEGORY(ID, CODECATEGORYNAME, CODECLASSID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME)
+    VALUES ('fileAcqConfigSampleNoFormat', '文件采集配置样品编号格式', 'biz', NULL, 1, NULL, NULL, NULL, NULL);
+INSERT INTO T_CORE_CODE(ID, CODE, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME)
+    VALUES (NEXT VALUE FOR SEQ_CORE, 'form', '表单', 'fileAcqConfigSampleNoFormat', NULL, 1, 0, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL);
+INSERT INTO T_CORE_CODE(ID, CODE, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME)
+    VALUES (NEXT VALUE FOR SEQ_CORE, 'grid', '列表', 'fileAcqConfigSampleNoFormat', NULL, 2, 0, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL);
+
+INSERT INTO T_CORE_ADMIN_SELECT_CONFIG(ID, NAME, CATEGORY, URL, VALUEFIELD, TEXTFIELD)
+  VALUES(NEXT VALUE FOR SEQ_CORE, '文件采集配置样品编号格式', 'file-acq-config-sampleno-format', '/secure/core/module/sys/codes/queries/selectable?codeCategoryId=fileAcqConfigSampleNoFormat', 'code', 'codeName');
+
+INSERT INTO T_CORE_CODE_CATEGORY(ID, CODECATEGORYNAME, CODECLASSID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME)
+    VALUES ('fileAcqParamField', '文件采集参数字段', 'biz', NULL, 1, NULL, NULL, NULL, NULL);
+INSERT INTO T_CORE_CODE(ID, CODE, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME)
+    VALUES (NEXT VALUE FOR SEQ_CORE, 'sampleNo', '样品编号', 'fileAcqParamField', NULL, 1, 0, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL);
+INSERT INTO T_CORE_CODE(ID, CODE, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME)
+    VALUES (NEXT VALUE FOR SEQ_CORE, 'result', '结果', 'fileAcqParamField', NULL, 2, 0, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL);
+
+INSERT INTO T_CORE_ADMIN_SELECT_CONFIG(ID, NAME, CATEGORY, URL, VALUEFIELD, TEXTFIELD)
+  VALUES(NEXT VALUE FOR SEQ_CORE, '文件采集参数字段', 'file-acq-param-field', '/secure/core/module/sys/codes/queries/selectable?codeCategoryId=fileAcqParamField', 'code', 'codeName');
+
+
+INSERT INTO T_CORE_CODE_CATEGORY(ID, CODECATEGORYNAME, CODECLASSID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME)
+    VALUES ('fileAcqPreprocessOperation', '文件采集预处理操作', 'biz', NULL, 1, NULL, NULL, NULL, NULL);
+INSERT INTO T_CORE_CODE(ID, CODE, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME)
+    VALUES (NEXT VALUE FOR SEQ_CORE, 'remove', '删除', 'fileAcqPreprocessOperation', NULL, 1, 0, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL);
+INSERT INTO T_CORE_CODE(ID, CODE, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME)
+    VALUES (NEXT VALUE FOR SEQ_CORE, 'removeRow', '删除行', 'fileAcqPreprocessOperation', NULL, 2, 0, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL);
+INSERT INTO T_CORE_CODE(ID, CODE, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME)
+    VALUES (NEXT VALUE FOR SEQ_CORE, 'replace', '替换', 'fileAcqPreprocessOperation', NULL, 3, 0, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL);
+
+INSERT INTO T_CORE_ADMIN_SELECT_CONFIG(ID, NAME, CATEGORY, URL, VALUEFIELD, TEXTFIELD)
+  VALUES(NEXT VALUE FOR SEQ_CORE, '文件采集预处理操作', 'file-acq-preprocess-operation', '/secure/core/module/sys/codes/queries/selectable?codeCategoryId=fileAcqPreprocessOperation', 'code', 'codeName');
+
+  INSERT INTO T_CORE_CODE_CATEGORY(ID, CODECATEGORYNAME, CODECLASSID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME)
+    VALUES ('fileAcqItemNameSource', '文件采集分析项名称来源', 'biz', NULL, 1, NULL, NULL, NULL, NULL);
+INSERT INTO T_CORE_CODE(ID, CODE, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME)
+    VALUES (NEXT VALUE FOR SEQ_CORE, 'input', '录入', 'fileAcqItemNameSource', NULL, 1, 0, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL);
+INSERT INTO T_CORE_CODE(ID, CODE, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME)
+    VALUES (NEXT VALUE FOR SEQ_CORE, 'file', '文件', 'fileAcqItemNameSource', NULL, 2, 0, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL);
+
+INSERT INTO T_CORE_ADMIN_SELECT_CONFIG(ID, NAME, CATEGORY, URL, VALUEFIELD, TEXTFIELD)
+  VALUES(NEXT VALUE FOR SEQ_CORE, '文件采集分析项名称来源', 'file-acq-itemname-source', '/secure/core/module/sys/codes/queries/selectable?codeCategoryId=fileAcqItemNameSource', 'code', 'codeName');
+
+
+INSERT INTO T_CORE_CODE_CATEGORY(ID, CODECATEGORYNAME, CODECLASSID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME)
+    VALUES ('fileAcqAnalyseWay', '文件采集解析方式', 'biz', NULL, 1, NULL, NULL, NULL, NULL);
+INSERT INTO T_CORE_CODE(ID, CODE, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME)
+    VALUES (NEXT VALUE FOR SEQ_CORE, 'config', '配置', 'fileAcqAnalyseWay', NULL, 1, 0, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL);
+INSERT INTO T_CORE_CODE(ID, CODE, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME)
+    VALUES (NEXT VALUE FOR SEQ_CORE, 'script', '脚本', 'fileAcqAnalyseWay', NULL, 2, 0, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL);
+
+INSERT INTO T_CORE_ADMIN_SELECT_CONFIG(ID, NAME, CATEGORY, URL, VALUEFIELD, TEXTFIELD)
+  VALUES(NEXT VALUE FOR SEQ_CORE, '文件采集解析方式', 'file-acq-analyse-way', '/secure/core/module/sys/codes/queries/selectable?codeCategoryId=fileAcqAnalyseWay', 'code', 'codeName');
+
+-- ----------------------------- 2020-07-23 add by shixw------------end
+
+-- ----------------------------- 2020-07-24 add by shixw------------begin
+
+alter table dbo.T_CORE_EQUIPT_ACQ_RECORD drop column REMARK
+GO
+alter table dbo.T_CORE_EQUIPT_ACQ_RECORD ADD MESSAGE TEXT NULL
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'采集信息',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_EQUIPT_ACQ_RECORD',
+'COLUMN', N'MESSAGE'
+GO
+
+
+-- ----------------------------- 2020-07-24 add by shixw------------end
+
+-- ----------------------------- 2020-08-11 add by shixw------------begin
+
+INSERT INTO T_CORE_CODE(ID, CODE, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME)
+    VALUES (NEXT VALUE FOR SEQ_CORE, 'intercept', '截取', 'fileAcqItemNameSource', NULL, 3, 0, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL);
+
+INSERT INTO T_CORE_CODE(ID, CODE, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME)
+    VALUES (NEXT VALUE FOR SEQ_CORE, 'itemName', '分析项目', 'fileAcqParamField', NULL, 3, 0, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL);
+
+-- ----------------------------- 2020-08-11 add by shixw------------end
+
+-- ----------------------------- 2020-09-23 add by shixw------------begin
+
+ALTER TABLE "dbo"."T_CORE_FILE_ACQ_PREPROCESS" ALTER COLUMN KEYWORD VARCHAR(180);
+ALTER TABLE "dbo"."T_CORE_FILE_ACQ_PREPROCESS" ALTER COLUMN REPLACESTR VARCHAR(180);
+
+-- ----------------------------- 2020-09-23 add by shixw------------begin
+
+-- ----------------------------- 2020-11-30 add by liujianfeng--------------begin
+
+-- 建表语句
+CREATE TABlE DBO.T_CORE_EQUIPT_MONITOR_CONFIG(
+    ID BIGINT NOT NULL,
+    CODE VARCHAR(36)  NULL ,
+    IP VARCHAR(36)  NULL ,
+    PORT BIGINT NULL ,
+    CREATEDBYNAME VARCHAR(60)  NULL ,
+    CREATEDTIME DATETIME NULL ,
+    CREATEDBYORGID VARCHAR(36)  NULL ,
+    CREATEDBYORGNAME VARCHAR(270)  NULL ,
+    THRESHOLD BIGINT NULL ,
+    EQUIPTID VARCHAR(36)  NULL ,
+    CONSTRAINT PK_CORE_EQUIPT_MONITOR_CONFIG PRIMARY KEY(ID));
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'仪器监测配置表' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_MONITOR_CONFIG';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'主键' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_MONITOR_CONFIG', @level2type=N'COLUMN',@level2name=N'ID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'数据请求CODE' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_MONITOR_CONFIG', @level2type=N'COLUMN',@level2name=N'CODE';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'ip' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_MONITOR_CONFIG', @level2type=N'COLUMN',@level2name=N'IP';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'端口号' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_MONITOR_CONFIG', @level2type=N'COLUMN',@level2name=N'PORT';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_MONITOR_CONFIG', @level2type=N'COLUMN',@level2name=N'CREATEDBYNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_MONITOR_CONFIG', @level2type=N'COLUMN',@level2name=N'CREATEDTIME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_MONITOR_CONFIG', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_MONITOR_CONFIG', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'阀值' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_MONITOR_CONFIG', @level2type=N'COLUMN',@level2name=N'THRESHOLD';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'仪器ID' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_MONITOR_CONFIG', @level2type=N'COLUMN',@level2name=N'EQUIPTID';
+
+CREATE TABlE DBO.T_CORE_EQUIPT_MONITOR_LOG(
+    ID BIGINT NOT NULL,
+    CONFIGID BIGINT NULL ,
+    ONTIME DATETIME NULL ,
+    DOWNTIME DATETIME NULL ,
+    CREATEDBYID VARCHAR(36)  NULL ,
+    CREATEDBYNAME VARCHAR(60)  NULL ,
+    CREATEDTIME DATETIME NULL ,
+    CREATEDBYORGID VARCHAR(36)  NULL ,
+    CREATEDBYORGNAME VARCHAR(270)  NULL ,
+    CONSTRAINT PK_CORE_EQUIPT_MONITOR_LOG PRIMARY KEY(ID));
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'仪器监测数据LOG表' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_MONITOR_LOG';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'主键' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_MONITOR_LOG', @level2type=N'COLUMN',@level2name=N'ID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'配置表ID' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_MONITOR_LOG', @level2type=N'COLUMN',@level2name=N'CONFIGID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'开机时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_MONITOR_LOG', @level2type=N'COLUMN',@level2name=N'ONTIME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'关机时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_MONITOR_LOG', @level2type=N'COLUMN',@level2name=N'DOWNTIME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_MONITOR_LOG', @level2type=N'COLUMN',@level2name=N'CREATEDBYID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_MONITOR_LOG', @level2type=N'COLUMN',@level2name=N'CREATEDBYNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_MONITOR_LOG', @level2type=N'COLUMN',@level2name=N'CREATEDTIME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_MONITOR_LOG', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_MONITOR_LOG', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGNAME';
+CREATE NONCLUSTERED INDEX [IDX_CEML_CONFIGID] ON [dbo].[T_CORE_EQUIPT_MONITOR_LOG] ([CONFIGID]);
+
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_MONITOR_CONFIG.SERVICE_NAME', N'仪器监测配置表', N'仪器监测配置表', N'zh-CN',N'仪器监测配置表';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_MONITOR_CONFIG.ID', N'仪器监测配置表的主键', N'主键', N'zh-CN',N'主键';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_MONITOR_CONFIG.CODE', N'仪器监测配置表的数据请求CODE', N'数据请求CODE', N'zh-CN',N'数据请求CODE';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_MONITOR_CONFIG.IP', N'仪器监测配置表的ip', N'ip', N'zh-CN',N'ip';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_MONITOR_CONFIG.PORT', N'仪器监测配置表的端口号', N'端口号', N'zh-CN',N'端口号';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_MONITOR_CONFIG.CREATEDBYNAME', N'仪器监测配置表的制单人名称', N'制单人名称', N'zh-CN',N'制单人名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_MONITOR_CONFIG.CREATEDTIME', N'仪器监测配置表的制单时间', N'制单时间', N'zh-CN',N'制单时间';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_MONITOR_CONFIG.CREATEDBYORGID', N'仪器监测配置表的制单人单位编码', N'制单人单位编码', N'zh-CN',N'制单人单位编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_MONITOR_CONFIG.CREATEDBYORGNAME', N'仪器监测配置表的制单人单位名称', N'制单人单位名称', N'zh-CN',N'制单人单位名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_MONITOR_CONFIG.THRESHOLD', N'仪器监测配置表的阀值', N'阀值', N'zh-CN',N'阀值';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_MONITOR_CONFIG.EQUIPTID', N'仪器监测配置表的仪器ID', N'仪器ID', N'zh-CN',N'仪器ID';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_MONITOR_LOG.SERVICE_NAME', N'仪器监测数据LOG表', N'仪器监测数据LOG表', N'zh-CN',N'仪器监测数据LOG表';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_MONITOR_LOG.ID', N'仪器监测数据LOG表的主键', N'主键', N'zh-CN',N'主键';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_MONITOR_LOG.CONFIGID', N'仪器监测数据LOG表的配置表ID', N'配置表ID', N'zh-CN',N'配置表ID';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_MONITOR_LOG.ONTIME', N'仪器监测数据LOG表的开机时间', N'开机时间', N'zh-CN',N'开机时间';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_MONITOR_LOG.DOWNTIME', N'仪器监测数据LOG表的关机时间', N'关机时间', N'zh-CN',N'关机时间';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_MONITOR_LOG.CREATEDBYID', N'仪器监测数据LOG表的制单人编码', N'制单人编码', N'zh-CN',N'制单人编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_MONITOR_LOG.CREATEDBYNAME', N'仪器监测数据LOG表的制单人名称', N'制单人名称', N'zh-CN',N'制单人名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_MONITOR_LOG.CREATEDTIME', N'仪器监测数据LOG表的制单时间', N'制单时间', N'zh-CN',N'制单时间';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_MONITOR_LOG.CREATEDBYORGID', N'仪器监测数据LOG表的制单人单位编码', N'制单人单位编码', N'zh-CN',N'制单人单位编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_MONITOR_LOG.CREATEDBYORGNAME', N'仪器监测数据LOG表的制单人单位名称', N'制单人单位名称', N'zh-CN',N'制单人单位名称';
+EXEC  DBO.INSERTI18N  N'CLOUD.GIKAM.EQUIPTS.MODAL.ADD', N'新增', N'新增', N'zh-CN',N'新增';
+EXEC  DBO.INSERTI18N  N'CLOUD.GIKAM.EQUIPTS.TAB.BASE_INFO', N'基本信息', N'基本信息', N'zh-CN',N'基本信息';
+EXEC  DBO.INSERTI18N  N'CLOUD.GIKAM.EQUIPTS.TAB.MONITOR_LOG', N'仪器监测数据LOG表', N'仪器监测数据LOG表', N'zh-CN',N'仪器监测数据LOG表';
+EXEC  DBO.INSERTI18N  N'CLOUD.GIKAM.EQUIPTS.BUTTON.BUTTON', N'按钮', N'按钮', N'zh-CN',N'按钮';
+EXEC  DBO.INSERTI18N  N'CLOUD.GIKAM.EQUIPTS.TIP.TIP', N'提示框', N'提示框', N'zh-CN',N'提示框';
+EXEC  DBO.INSERTI18N  N'CLOUD.GIKAM.EQUIPTS.MODAL.MODAL', N'对话框', N'对话框', N'zh-CN',N'对话框';
+
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_EQUIPT_MONITOR_CONFIG', '0', '0');
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_EQUIPT_MONITOR_LOG', '0', '0');
+
+INSERT INTO T_CORE_TABLE_HIERARCHY (ID, TABLENAME, MASTERTABLENAME, REFERCOLUMN)
+VALUES (NEXT VALUE FOR SEQ_CORE,'T_CORE_EQUIPT_MONITOR_LOG', 'T_CORE_EQUIPT_MONITOR_CONFIG', 'CONFIGID');
+
+ALTER TABLE T_CORE_EQUIPT_ACQ_CONFIG ADD ISWORK VARCHAR(36);
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'是否开机' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_ACQ_CONFIG', @level2type=N'COLUMN',@level2name=N'ISWORK';
+EXEC INSERTI18N N'T_CORE_EQUIPT_ACQ_CONFIG.ISWORK', N'是否开机', N'是否开机', N'zh-CN', N'是否开机';
+
+-- ----------------------------- 2020-11-30 add by liujianfeng------------end
+
+-- ----------------------------- 2020-12-18 add by zhangpf------------begin
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_ACQ_RECORD.SERVICE_NAME', N'仪器采集记录', N'仪器采集记录', N'zh-CN',N'仪器采集记录';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_ACQ_RECORD.ID', N'仪器采集记录的主键', N'主键', N'zh-CN',N'主键';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_ACQ_RECORD.ACQCATEGORY', N'仪器采集记录的采集类型', N'采集类型', N'zh-CN',N'采集类型';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_ACQ_RECORD.ACQRAWDATA', N'仪器采集记录的源数据、采集文件内容', N'源数据、采集文件内容', N'zh-CN',N'源数据、采集文件内容';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_ACQ_RECORD.ACQRESULT', N'仪器采集记录的采集结果', N'采集结果', N'zh-CN',N'采集结果';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_ACQ_RECORD.FILEPATH', N'仪器采集记录的文件采集时的文件路径', N'文件采集时的文件路径', N'zh-CN',N'文件采集时的文件路径';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_ACQ_RECORD.FILENAME', N'仪器采集记录的文件采集时的文件名称', N'文件采集时的文件名称', N'zh-CN',N'文件采集时的文件名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_ACQ_RECORD.EQUIPTID', N'仪器采集记录的仪器ID', N'仪器ID', N'zh-CN',N'仪器ID';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_ACQ_RECORD.EQUIPTNO', N'仪器采集记录的仪器编号', N'仪器编号', N'zh-CN',N'仪器编号';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_ACQ_RECORD.MESSAGE', N'仪器采集记录的采集信息', N'采集信息', N'zh-CN',N'采集信息';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_ACQ_RECORD.CREATEDBYID', N'仪器采集记录的制单人编码', N'制单人编码', N'zh-CN',N'制单人编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_ACQ_RECORD.CREATEDBYNAME', N'仪器采集记录的制单人名称', N'制单人名称', N'zh-CN',N'制单人名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_ACQ_RECORD.CREATEDTIME', N'仪器采集记录的制单时间', N'制单时间', N'zh-CN',N'制单时间';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_ACQ_RECORD.CREATEDBYORGID', N'仪器采集记录的制单人单位编码', N'制单人单位编码', N'zh-CN',N'制单人单位编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_EQUIPT_ACQ_RECORD.CREATEDBYORGNAME', N'仪器采集记录的制单人单位名称', N'制单人单位名称', N'zh-CN',N'制单人单位名称';
+-- ----------------------------- 2020-12-18 add by zhangpf------------end
+
+-- ----------------------------- 2020-12-29 add by liyang------------begin
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.EQUIPT.FILEACQPARAM.MODAL.ADD', N'添加采集参数', N'添加采集参数', N'zh-CN',N'添加采集参数';
+-- ----------------------------- 2020-12-29 add by liyang------------end
+
+-- ----------------------------- 2021-1-5 add by shixw------------begin
+
+alter table dbo.T_CORE_EQUIPT_ACQ_CONFIG drop column ISWORK
+
+
+EXEC DBO.DELETEI18N  N'T_CORE_EQUIPT_ACQ_CONFIG.ISWORK';
+
+-- ----------------------------- 2021-1-5 add by shixw------------end
+
+-- ----------------------------- 2021-03-12 add by shixw--------------begin
+
+-- 建表语句
+CREATE TABlE DBO.T_CORE_PDF_ACQ_CONFIG(
+    ID BIGINT NOT NULL,
+    CONFIGNAME VARCHAR(270)  NULL ,
+    CREATEDBYID VARCHAR(36)  NULL ,
+    CREATEDBYNAME VARCHAR(60)  NULL ,
+    CREATEDTIME DATETIME NULL ,
+    CREATEDBYORGID VARCHAR(36)  NULL ,
+    CREATEDBYORGNAME VARCHAR(270)  NULL ,
+    CONSTRAINT PK_CORE_PDF_ACQ_CONFIG PRIMARY KEY(ID));
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'PDF采集配置' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PDF_ACQ_CONFIG';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'主键' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PDF_ACQ_CONFIG', @level2type=N'COLUMN',@level2name=N'ID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'配置名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PDF_ACQ_CONFIG', @level2type=N'COLUMN',@level2name=N'CONFIGNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PDF_ACQ_CONFIG', @level2type=N'COLUMN',@level2name=N'CREATEDBYID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PDF_ACQ_CONFIG', @level2type=N'COLUMN',@level2name=N'CREATEDBYNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PDF_ACQ_CONFIG', @level2type=N'COLUMN',@level2name=N'CREATEDTIME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PDF_ACQ_CONFIG', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PDF_ACQ_CONFIG', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGNAME';
+
+CREATE TABlE DBO.T_CORE_PDF_ACQ_CONFIG_LINE(
+    ID BIGINT NOT NULL,
+    PDFACQCONFIGID BIGINT NULL ,
+    WIDTH DECIMAL(20,15)  NULL ,
+    HEIGHT DECIMAL(20,15)  NULL ,
+    PAGENUMBER BIGINT NULL ,
+    ROTATION BIGINT NULL ,
+    IMAGEURL VARCHAR(270)  NULL ,
+    AREA TEXT NULL ,
+    CREATEDBYID VARCHAR(36)  NULL ,
+    CREATEDBYNAME VARCHAR(60)  NULL ,
+    CREATEDTIME DATETIME NULL ,
+    CREATEDBYORGID VARCHAR(36)  NULL ,
+    CREATEDBYORGNAME VARCHAR(270)  NULL ,
+    CONSTRAINT PK_CORE_PDF_ACQ_CONFIG_LINE PRIMARY KEY(ID));
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'PDF采集配置明细' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PDF_ACQ_CONFIG_LINE';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'主键' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PDF_ACQ_CONFIG_LINE', @level2type=N'COLUMN',@level2name=N'ID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'PDF采集配置Id' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PDF_ACQ_CONFIG_LINE', @level2type=N'COLUMN',@level2name=N'PDFACQCONFIGID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'宽度' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PDF_ACQ_CONFIG_LINE', @level2type=N'COLUMN',@level2name=N'WIDTH';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'高度' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PDF_ACQ_CONFIG_LINE', @level2type=N'COLUMN',@level2name=N'HEIGHT';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'页码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PDF_ACQ_CONFIG_LINE', @level2type=N'COLUMN',@level2name=N'PAGENUMBER';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'旋转数' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PDF_ACQ_CONFIG_LINE', @level2type=N'COLUMN',@level2name=N'ROTATION';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'预览图片地址' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PDF_ACQ_CONFIG_LINE', @level2type=N'COLUMN',@level2name=N'IMAGEURL';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'采集区域信息' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PDF_ACQ_CONFIG_LINE', @level2type=N'COLUMN',@level2name=N'AREA';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PDF_ACQ_CONFIG_LINE', @level2type=N'COLUMN',@level2name=N'CREATEDBYID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PDF_ACQ_CONFIG_LINE', @level2type=N'COLUMN',@level2name=N'CREATEDBYNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PDF_ACQ_CONFIG_LINE', @level2type=N'COLUMN',@level2name=N'CREATEDTIME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PDF_ACQ_CONFIG_LINE', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_PDF_ACQ_CONFIG_LINE', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGNAME';
+CREATE NONCLUSTERED INDEX [IDX_CPACL_PDFACQCONFIGID] ON [dbo].[T_CORE_PDF_ACQ_CONFIG_LINE] ([PDFACQCONFIGID]);
+
+EXEC DBO.INSERTI18N  N'T_CORE_PDF_ACQ_CONFIG.SERVICE_NAME', N'PDF采集配置', N'PDF采集配置', N'zh-CN',N'PDF采集配置';
+EXEC DBO.INSERTI18N  N'T_CORE_PDF_ACQ_CONFIG.ID', N'PDF采集配置的主键', N'主键', N'zh-CN',N'主键';
+EXEC DBO.INSERTI18N  N'T_CORE_PDF_ACQ_CONFIG.CONFIGNAME', N'PDF采集配置的配置名称', N'配置名称', N'zh-CN',N'配置名称';
+EXEC DBO.INSERTI18N  N'T_CORE_PDF_ACQ_CONFIG.FILENAME', N'PDF采集配置的附件名称', N'附件名称', N'zh-CN',N'附件名称';
+EXEC DBO.INSERTI18N  N'T_CORE_PDF_ACQ_CONFIG.CREATEDBYID', N'PDF采集配置的制单人编码', N'制单人编码', N'zh-CN',N'制单人编码';
+EXEC DBO.INSERTI18N  N'T_CORE_PDF_ACQ_CONFIG.CREATEDBYNAME', N'PDF采集配置的制单人名称', N'制单人名称', N'zh-CN',N'制单人名称';
+EXEC DBO.INSERTI18N  N'T_CORE_PDF_ACQ_CONFIG.CREATEDTIME', N'PDF采集配置的制单时间', N'制单时间', N'zh-CN',N'制单时间';
+EXEC DBO.INSERTI18N  N'T_CORE_PDF_ACQ_CONFIG.CREATEDBYORGID', N'PDF采集配置的制单人单位编码', N'制单人单位编码', N'zh-CN',N'制单人单位编码';
+EXEC DBO.INSERTI18N  N'T_CORE_PDF_ACQ_CONFIG.CREATEDBYORGNAME', N'PDF采集配置的制单人单位名称', N'制单人单位名称', N'zh-CN',N'制单人单位名称';
+EXEC DBO.INSERTI18N  N'T_CORE_PDF_ACQ_CONFIG_LINE.SERVICE_NAME', N'PDF采集配置明细', N'PDF采集配置明细', N'zh-CN',N'PDF采集配置明细';
+EXEC DBO.INSERTI18N  N'T_CORE_PDF_ACQ_CONFIG_LINE.ID', N'PDF采集配置明细的主键', N'主键', N'zh-CN',N'主键';
+EXEC DBO.INSERTI18N  N'T_CORE_PDF_ACQ_CONFIG_LINE.PDFACQCONFIGID', N'PDF采集配置明细的PDF采集配置Id', N'PDF采集配置Id', N'zh-CN',N'PDF采集配置Id';
+EXEC DBO.INSERTI18N  N'T_CORE_PDF_ACQ_CONFIG_LINE.WIDTH', N'PDF采集配置明细的宽度', N'宽度', N'zh-CN',N'宽度';
+EXEC DBO.INSERTI18N  N'T_CORE_PDF_ACQ_CONFIG_LINE.HEIGHT', N'PDF采集配置明细的高度', N'高度', N'zh-CN',N'高度';
+EXEC DBO.INSERTI18N  N'T_CORE_PDF_ACQ_CONFIG_LINE.PAGENUMBER', N'PDF采集配置明细的页码', N'页码', N'zh-CN',N'页码';
+EXEC DBO.INSERTI18N  N'T_CORE_PDF_ACQ_CONFIG_LINE.ROTATION', N'PDF采集配置明细的旋转数', N'旋转数', N'zh-CN',N'旋转数';
+EXEC DBO.INSERTI18N  N'T_CORE_PDF_ACQ_CONFIG_LINE.IMAGEURL', N'PDF采集配置明细的预览图片地址', N'预览图片地址', N'zh-CN',N'预览图片地址';
+EXEC DBO.INSERTI18N  N'T_CORE_PDF_ACQ_CONFIG_LINE.AREA', N'PDF采集配置明细的采集区域信息', N'采集区域信息', N'zh-CN',N'采集区域信息';
+EXEC DBO.INSERTI18N  N'T_CORE_PDF_ACQ_CONFIG_LINE.CREATEDBYID', N'PDF采集配置明细的制单人编码', N'制单人编码', N'zh-CN',N'制单人编码';
+EXEC DBO.INSERTI18N  N'T_CORE_PDF_ACQ_CONFIG_LINE.CREATEDBYNAME', N'PDF采集配置明细的制单人名称', N'制单人名称', N'zh-CN',N'制单人名称';
+EXEC DBO.INSERTI18N  N'T_CORE_PDF_ACQ_CONFIG_LINE.CREATEDTIME', N'PDF采集配置明细的制单时间', N'制单时间', N'zh-CN',N'制单时间';
+EXEC DBO.INSERTI18N  N'T_CORE_PDF_ACQ_CONFIG_LINE.CREATEDBYORGID', N'PDF采集配置明细的制单人单位编码', N'制单人单位编码', N'zh-CN',N'制单人单位编码';
+EXEC DBO.INSERTI18N  N'T_CORE_PDF_ACQ_CONFIG_LINE.CREATEDBYORGNAME', N'PDF采集配置明细的制单人单位名称', N'制单人单位名称', N'zh-CN',N'制单人单位名称';
+EXEC DBO.INSERTI18N  N'T_CORE_PDF_ACQ_RESULT.SAMPLEID', N'采集结果的样品编号', N'样品编号', N'zh-CN', N'样品编号';
+EXEC DBO.INSERTI18N  N'T_CORE_PDF_ACQ_RESULT.ITEMNAME', N'采集结果的分析项名称', N'分析项名称', N'zh-CN', N'分析项名称';
+EXEC DBO.INSERTI18N  N'T_CORE_PDF_ACQ_RESULT.RESULT', N'采集结果的结果', N'结果', N'zh-CN', N'结果';
+EXEC DBO.INSERTI18N  N'CORE.MODULE.EQUIPT.PDFACQCONFIGS.MODAL.ADD', N'新增', N'新增', N'zh-CN',N'新增';
+EXEC DBO.INSERTI18N  N'CORE.MODULE.EQUIPT.PDFACQCONFIGS.MODAL.TEST_RESULT', N'测试结果', N'测试结果', N'zh-CN', N'测试结果';
+EXEC DBO.INSERTI18N  N'CORE.MODULE.EQUIPT.PDFACQCONFIGS.TIP.UPLOAD_FILE', N'请先上传附件', N'请先上传附件', N'zh-CN',N'请先上传附件';
+EXEC DBO.INSERTI18N  N'CORE.MODULE.EQUIPT.PDFACQCONFIGS.TIP.DELETE_FILE', N'删除附件', N'删除附件', N'zh-CN',N'删除附件';
+EXEC DBO.INSERTI18N  N'CORE.MODULE.EQUIPT.PDFACQCONFIGS.TIP.CONFIRM_DELETE_FILE', N'确认删除附件', N'确认删除附件', N'zh-CN',N'确认删除附件';
+
+INSERT INTO T_CORE_MENU (ID, MENUNAME, HREF, PARENTID, ORDERNO, ICON, MENUINITNAME)
+VALUES ('9339', 'PDF采集配置', '/secure/core/module/equipt/pdf-acq-configs/page/edit-list', '93', '9339', '016.svg', 'PDF采集配置');
+
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_PDF_ACQ_CONFIG', '0', '1');
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_PDF_ACQ_CONFIG_LINE', '0', '0');
+
+INSERT INTO T_CORE_TABLE_HIERARCHY (ID, TABLENAME, MASTERTABLENAME, REFERCOLUMN)
+VALUES ('933901','T_CORE_PDF_ACQ_CONFIG_LINE', 'T_CORE_PDF_ACQ_CONFIG', 'PDFACQCONFIGID');
+
+INSERT INTO T_CORE_ADMIN_CHOOSE_CONFIG(ID, NAME, TITLE, CATEGORY, URL)
+  VALUES(NEXT VALUE FOR SEQ_CORE, 'PDF采集配置', 'PDF采集配置', 'pdf-acq-config', '/secure/core/module/equipt/pdf-acq-configs/page/choose-list');
+
+INSERT INTO T_CORE_ADMIN_SELECT_CONFIG(ID, NAME, CATEGORY, URL, VALUEFIELD, TEXTFIELD)
+  VALUES(NEXT VALUE FOR SEQ_CORE, 'PDF采集配置', 'pdf-acq-config', '/secure/core/module/equipt/pdf-acq-configs/queries/selectable', 'id', 'configName');
+ 
+
+-- ----------------------------- 2021-03-12 add by shixw------------end
+
+-- ----------------------------- 2021-4-1 add by shixw------------begin
+
+EXEC DBO.INSERTI18N N'CORE.MODULE.EQUIPT.PDFACQCONFIGS.TIP.PLEASE_DELETE_FILE', '请先删除附件', '请先删除附件', 'zh-CN', '请先删除附件';
+EXEC DBO.INSERTI18N N'CORE.MODULE.EQUIPT.PDFACQCONFIGS.BUTTON.TEST', '测试', '测试', 'zh-CN', '测试';
+
+-- ----------------------------- 2021-4-1 add by shixw------------end

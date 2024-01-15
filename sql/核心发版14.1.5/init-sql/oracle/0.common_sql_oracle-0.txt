@@ -1,0 +1,101 @@
+-- ----------------------------- 2020-06-05 add by shixw------------begin
+-- Automation Deployment Single SQL ---begin
+CREATE OR REPLACE PROCEDURE INSERTI18N(CODEPARAM      VARCHAR,
+                                       DESCRIPTION    VARCHAR,
+                                       DEFAULTMESSAGE VARCHAR,
+                                       LANG           VARCHAR,
+                                       PMESSAGE        VARCHAR) AS
+  V_ID     NUMBER;
+  V_COUNT  NUMBER;
+  V_MCOUNT NUMBER;
+BEGIN
+
+  V_COUNT  := 0;
+  V_MCOUNT := 0;
+
+  SELECT COUNT(*) INTO V_COUNT FROM T_CORE_I18N WHERE CODE = CODEPARAM;
+
+  IF V_COUNT > 0 THEN
+    SELECT ID
+      INTO V_ID
+      FROM T_CORE_I18N
+     WHERE CODE = CODEPARAM
+       AND ROWNUM = 1;
+
+    SELECT COUNT(*)
+      INTO V_MCOUNT
+      FROM T_CORE_I18N_MESSAGE
+     WHERE I18NID = V_ID
+       AND I18NCONFIGID = LANG;
+
+    IF V_MCOUNT > 0 THEN
+      UPDATE T_CORE_I18N_MESSAGE
+         SET MESSAGE = PMESSAGE
+       WHERE I18NID = V_ID
+         AND I18NCONFIGID = LANG;
+    END IF;
+
+  ELSE
+    SELECT SEQ_CORE.NEXTVAL INTO V_ID FROM DUAL;
+    INSERT INTO T_CORE_I18N
+      (ID, CODE, DESCRIPTION, DEFAULTMESSAGE)
+    VALUES
+      (V_ID, CODEPARAM, DESCRIPTION, DEFAULTMESSAGE);
+  END IF;
+
+  IF V_MCOUNT = 0 THEN
+    INSERT INTO T_CORE_I18N_MESSAGE
+      (ID, I18NID, I18NCONFIGID, MESSAGE)
+    VALUES
+      (SEQ_CORE.NEXTVAL, V_ID, LANG, PMESSAGE);
+  END IF;
+  COMMIT;
+END;
+/
+-- Automation Deployment Single SQL ---end
+-- ----------------------------- 2020-06-05 add by shixw------------end
+
+-- ----------------------------- 2020-06-05 add by shixw------------begin
+-- Automation Deployment Single SQL ---begin
+CREATE OR REPLACE PROCEDURE UPDATEI18N(CODEPARAM   VARCHAR,
+                                       LANG        VARCHAR,
+                                       MESSAGEINFO VARCHAR) AS
+BEGIN
+  UPDATE T_CORE_I18N_MESSAGE IM
+     SET IM.MESSAGE = MESSAGEINFO
+   WHERE EXISTS (SELECT 1
+            FROM T_CORE_I18N I
+           WHERE I.ID = IM.I18NID
+             AND I.CODE = CODEPARAM
+             AND IM.I18NCONFIGID = LANG);
+
+  COMMIT;
+END;
+/
+-- Automation Deployment Single SQL ---end
+-- ----------------------------- 2020-06-05 add by shixw------------end
+
+-- ----------------------------- 2020-10-20 add by shixw------------begin
+-- Automation Deployment Single SQL ---begin
+CREATE OR REPLACE PROCEDURE DELETEI18N(CODEPARAM   VARCHAR) AS
+  V_ID    NUMBER;
+  V_COUNT NUMBER;
+BEGIN
+
+  SELECT COUNT(*) INTO V_COUNT FROM T_CORE_I18N WHERE CODE = CODEPARAM;
+
+  IF V_COUNT > 0 THEN
+    SELECT ID
+      INTO V_ID
+      FROM T_CORE_I18N
+     WHERE CODE = CODEPARAM
+       AND ROWNUM = 1;
+    DELETE FROM T_CORE_I18N_MESSAGE WHERE I18NID = V_ID;
+    DELETE FROM T_CORE_I18N WHERE CODE = CODEPARAM;
+
+    COMMIT;
+  END IF;
+END;
+/
+-- Automation Deployment Single SQL ---end
+-- ----------------------------- 2020-10-20 add by shixw------------end

@@ -3,24 +3,17 @@ package com.sunwayworld.emc.module.bp.archive.service.impl;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
+import com.sunwayworld.cloud.module.fr.report.bean.CoreReportConfigLineBean;
+import com.sunwayworld.cloud.module.fr.report.service.CoreReportConfigLineService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 
-import com.sunwayworld.cloud.gikam.fr.bean.report.CoreReportConfigLineBean;
-import com.sunwayworld.cloud.gikam.fr.service.report.CoreReportConfigLineService;
-import com.sunwayworld.emc.framework.constant.PfConstant;
+
 import com.sunwayworld.emc.module.bp.archive.bean.EmcArchiveCategoryBean;
 import com.sunwayworld.emc.module.bp.archive.service.PfArchiveFileService;
 import com.sunwayworld.emc.module.bp.bp.bean.EmcOrderTaskBean;
@@ -35,17 +28,13 @@ import com.sunwayworld.emc.module.bp.sample.sample.service.EmcSampleService;
 import com.sunwayworld.framework.context.ApplicationContextHelper;
 import com.sunwayworld.framework.data.Pair;
 import com.sunwayworld.framework.exception.UnsupportedException;
-import com.sunwayworld.framework.io.file.FileRepresentation;
 import com.sunwayworld.framework.io.file.FileScope;
-import com.sunwayworld.framework.mybatis.mapper.MatchPattern;
-import com.sunwayworld.framework.mybatis.mapper.SearchFilter;
 import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;
 import com.sunwayworld.framework.spring.annotation.GikamBean;
 import com.sunwayworld.framework.utils.NumberUtils;
 import com.sunwayworld.framework.utils.ObjectUtils;
 import com.sunwayworld.framework.utils.StringUtils;
 import com.sunwayworld.module.item.file.bean.CoreFileBean;
-import com.sunwayworld.module.item.file.cloud.CoreFileCloudService;
 import com.sunwayworld.module.item.file.service.CoreFileService;
 import com.sunwayworld.module.sys.constant.bean.CoreConstantBean;
 import com.sunwayworld.module.sys.constant.service.CoreConstantService;
@@ -107,10 +96,6 @@ public class PfArchiveFileServiceImpl extends EmcArchiveFileServiceImpl implemen
 
     @Autowired
     private CoreFileService coreFileService;
-    
-    @Autowired
-    @Lazy
-    private CoreFileCloudService fileCloudService;
 
     @Autowired
     private CoreConstantService coreConstantService;

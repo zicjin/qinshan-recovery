@@ -1,0 +1,113 @@
+﻿-- ----------------------------- 2021-06-18 add by zhangxt--------------begin
+
+exec sp_rename 'T_CORE_NOTIFICATION_TMPL.NAME','TITLE' 
+
+ALTER TABLE T_CORE_NOTIFICATION_TMPL DROP COLUMN DESCTEMPLATE;
+exec sp_rename 'T_CORE_NOTIFICATION_TMPL.CONTENTTEMPLATE','CONTENT' 
+exec sp_rename 'T_CORE_NOTIFICATION_TMPL.FORWARDCATEGORY','VIEWMETHOD' 
+execute sp_updateextendedproperty 'MS_Description', '详情页面查看方式(menu:菜单功能; page: 系统页面; no: 无详情)','user','dbo','table','T_CORE_NOTIFICATION_TMPL','column','VIEWMETHOD';
+
+ALTER TABLE T_CORE_NOTIFICATION_TMPL DROP COLUMN DOWNLOADCATEGORY;
+ALTER TABLE T_CORE_NOTIFICATION_TMPL DROP COLUMN TIMEWARNING;
+
+alter table T_CORE_NOTIFICATION_TMPL add PAGEURL VARCHAR(300);
+EXEC sp_addextendedproperty 'MS_Description', '系统页面地址', 'SCHEMA', dbo, 'table', T_CORE_NOTIFICATION_TMPL, 'column', PAGEURL;
+
+UPDATE T_CORE_NOTIFICATION_TMPL SET VIEWMETHOD = 'menu' WHERE VIEWMETHOD = 'grid';
+UPDATE T_CORE_NOTIFICATION_TMPL SET VIEWMETHOD = 'no' WHERE VIEWMETHOD = 'notForward';
+
+DELETE FROM T_CORE_CODE  WHERE CODECATEGORYID = 'forwardCategory';
+DELETE FROM T_CORE_ADMIN_SELECT_CONFIG  WHERE CATEGORY = 'forward-category';
+
+INSERT INTO T_CORE_CODE_CATEGORY(ID, CODECATEGORYNAME, CODECLASSID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME)
+    VALUES ('notificationViewMethod', '消息通知详情页面查看方式', 'sys', NULL, 1, NULL, NULL, NULL, NULL);
+
+INSERT INTO T_CORE_CODE(ID, CODECATEGORYID, CODE, CODENAME, ORDERNO, VERSION, LASTSUSPENDEDFLAG) VALUES(NEXT VALUE FOR SEQ_CORE, 'notificationViewMethod', 'menu', '菜单功能页面', 1, 1, '0');
+INSERT INTO T_CORE_CODE(ID, CODECATEGORYID, CODE, CODENAME, ORDERNO, VERSION, LASTSUSPENDEDFLAG) VALUES(NEXT VALUE FOR SEQ_CORE, 'notificationViewMethod', 'page', '普通功能页面', 2, 1, '0');
+INSERT INTO T_CORE_CODE(ID, CODECATEGORYID, CODE, CODENAME, ORDERNO, VERSION, LASTSUSPENDEDFLAG) VALUES(NEXT VALUE FOR SEQ_CORE, 'notificationViewMethod', 'no', '无详情', 3, 1, '0');
+
+INSERT INTO T_CORE_ADMIN_SELECT_CONFIG(ID, NAME, CATEGORY, URL, VALUEFIELD, TEXTFIELD)
+  VALUES(NEXT VALUE FOR SEQ_CORE, '消息通知详情页面查看方式', 'notification-view-method', '/secure/core/module/sys/codes/queries/selectable?codeCategoryId=notificationViewMethod', 'code', 'codeName');
+
+EXEC DBO.DELETEI18N  N'T_CORE_NOTIFICATION_TMPL.NAME';
+EXEC DBO.DELETEI18N  N'T_CORE_NOTIFICATION_TMPL.ATTACHMENTURL';
+EXEC DBO.DELETEI18N  N'T_CORE_NOTIFICATION_TMPL.FORWARDCATEGORY';
+EXEC DBO.DELETEI18N  N'T_CORE_NOTIFICATION_TMPL.CONTENTTEMPLATE';
+
+EXEC DBO.INSERTI18N N'T_CORE_NOTIFICATION_TMPL.TITLE', N'消息通知的标题', N'标题', N'zh-CN', N'标题';
+EXEC DBO.INSERTI18N N'T_CORE_NOTIFICATION_TMPL.VIEWMETHOD', N'消息通知的详情查看方式', N'详情查看方式', N'zh-CN', N'详情查看方式';
+EXEC DBO.INSERTI18N N'T_CORE_NOTIFICATION_TMPL.CONTENT', N'消息通知的通知内容', N'通知内容', N'zh-CN', N'通知内容';
+EXEC DBO.INSERTI18N N'T_CORE_NOTIFICATION_TMPL.PAGEURL', N'消息通知的系统页面地址', N'页面URL', N'zh-CN', N'页面URL';
+
+exec sp_rename 'T_CORE_NOTIFICATION_INST.DESC','TITLE' 
+execute sp_updateextendedproperty 'MS_Description', '通知标题','user','dbo','table','T_CORE_NOTIFICATION_INST','column','TITLE';
+
+ALTER TABLE T_CORE_NOTIFICATION_INST DROP COLUMN ATTACHMENTURL;
+ALTER TABLE T_CORE_NOTIFICATION_INST DROP COLUMN CREATEDBYID;
+ALTER TABLE T_CORE_NOTIFICATION_INST DROP COLUMN CREATEDBYNAME;
+ALTER TABLE T_CORE_NOTIFICATION_INST DROP COLUMN CREATEDBYORGID;
+ALTER TABLE T_CORE_NOTIFICATION_INST DROP COLUMN CREATEDBYORGNAME;
+
+exec sp_rename 'T_CORE_NOTIFICATION_INST.FORWARDCATEGORY','VIEWMETHOD' 
+execute sp_updateextendedproperty 'MS_Description', '详情页面查看方式(menu:菜单功能; page: 系统页面; no: 无详情)','user','dbo','table','T_CORE_NOTIFICATION_INST','column','VIEWMETHOD';
+
+ALTER TABLE T_CORE_NOTIFICATION_INST DROP COLUMN DOWNLOADCATEGORY;
+ALTER TABLE T_CORE_NOTIFICATION_INST DROP COLUMN TIMEWARNING;
+
+
+ALTER TABLE T_CORE_NOTIFICATION_INST ADD PAGEURL VARCHAR(300);
+EXEC sp_addextendedproperty 'MS_Description', '系统页面地址', 'SCHEMA', dbo, 'table', T_CORE_NOTIFICATION_INST, 'column', PAGEURL;
+
+
+EXEC DBO.DELETEI18N  N'T_CORE_NOTIFICATION_INST.DESC';
+EXEC DBO.DELETEI18N  N'T_CORE_NOTIFICATION_INST.ATTACHMENTURL';
+EXEC DBO.DELETEI18N  N'T_CORE_NOTIFICATION_INST.CREATEDBYID';
+EXEC DBO.DELETEI18N  N'T_CORE_NOTIFICATION_INST.CREATEDBYNAME';
+EXEC DBO.DELETEI18N  N'T_CORE_NOTIFICATION_INST.CREATEDBYORGID';
+EXEC DBO.DELETEI18N  N'T_CORE_NOTIFICATION_INST.CREATEDBYORGNAME';
+EXEC DBO.DELETEI18N  N'T_CORE_NOTIFICATION_INST.FORWARDCATEGORY';
+
+EXEC DBO.INSERTI18N N'T_CORE_NOTIFICATION_INST.TITLE', N'消息通知的标题', N'标题', N'zh-CN', N'标题';
+EXEC DBO.INSERTI18N N'T_CORE_NOTIFICATION_INST.VIEWMETHOD', N'消息通知的详情查看方式', N'详情查看方式', N'zh-CN', N'详情查看方式';
+EXEC DBO.INSERTI18N N'T_CORE_NOTIFICATION_INST.PAGEURL', N'消息通知的系统页面地址', N'页面URL', N'zh-CN', N'页面URL';
+
+CREATE TABLE T_CORE_NOTIFICATION_INST_FILE (
+    ID  bigint,
+    INSTID  bigint,
+    FILENAME VARCHAR(300), 
+    FILEDOWNLOADURL VARCHAR(600), 
+    CONSTRAINT PK_CORE_NOTIFICATION_INST_FILE PRIMARY KEY (ID)
+);
+EXEC sp_addextendedproperty 'MS_Description', '通知实例中的附件列表', 'SCHEMA', dbo, 'table', T_CORE_NOTIFICATION_INST_FILE, null, null;
+EXEC sp_addextendedproperty 'MS_Description', '主键', 'SCHEMA', dbo, 'table', T_CORE_NOTIFICATION_INST_FILE, 'column', ID;
+EXEC sp_addextendedproperty 'MS_Description', '通知实例主键', 'SCHEMA', dbo, 'table', T_CORE_NOTIFICATION_INST_FILE, 'column', INSTID;
+EXEC sp_addextendedproperty 'MS_Description', '附件名称', 'SCHEMA', dbo, 'table', T_CORE_NOTIFICATION_INST_FILE, 'column', FILENAME;
+EXEC sp_addextendedproperty 'MS_Description', '附件下载地址', 'SCHEMA', dbo, 'table', T_CORE_NOTIFICATION_INST_FILE, 'column',FILEDOWNLOADURL;
+
+
+UPDATE T_CORE_MENU SET HREF = '/secure/core/module/item/notification/notification-instances/page/edit-list' WHERE id = '950502';
+UPDATE T_CORE_MENU SET HREF = '/secure/core/module/item/notification/notification-templates/page/edit-list' WHERE id = '950501';
+DELETE FROM t_core_menu WHERE id = '9403';
+
+INSERT INTO T_CORE_NOTIFICATION_TMPL (ID, TITLE, VIEWMETHOD, CONTENT, MENUID, MENUNAME, PAGEURL) values('EXPORT_EXCEL', '数据导出', 'no', 'Excel已导出', NULL, NULL, null);
+INSERT INTO T_CORE_NOTIFICATION_TMPL (ID, TITLE, VIEWMETHOD, CONTENT, MENUID, MENUNAME, PAGEURL) values('MESSAGE', '站内信息', 'page', '[${messageSender}]给您发送的站内消息：${messageSubject}。', NULL, NULL, '/secure/core/module/item/messages/page/detail?source=query&id=${id}&activatedFlag=1&receipentId=${receipentId}');
+
+-- ----------------------------- 2021-06-18 add by zhangxt--------------end
+
+-- ----------------------------- 2021-06-19 add by zhangxt--------------begin
+EXEC DBO.INSERTI18N N'CORE.MODULE.ITEM.INSTANCE.TAB.ATTACHMENT', N'消息通知的附件', N'附件', N'zh-CN', N'附件';
+EXEC DBO.INSERTI18N N'T_CORE_NOTIFICATION_INST_FILE.FILENAME', N'消息通知的附件名称', N'附件名称', N'zh-CN', N'附件名称';
+
+-- ----------------------------- 2021-06-19 add by zhangxt--------------end
+
+-- ----------------------------- 2021-07-14 add by zhangjr--------------begin
+EXEC dbo.INSERTI18N @CODEPARAM = N'CORE.MODULE.SYS.T_CORE_BPMN_DRAFT.LABEL.NOTIFICATION', @DESCRIPTION = N'工作流草稿中的通知TAB页', @DEFAULTMESSAGE = N'通知', @LANG = N'zh-CN', @MESSAGE = N'通知';
+EXEC dbo.INSERTI18N @CODEPARAM = N'CORE.MODULE.SYS.T_CORE_BPMN_DRAFT.LABEL.PASS_NOTIFICATION', @DESCRIPTION = N'工作流草稿中的审核通过时发送通知', @DEFAULTMESSAGE = N'审核通过时通知', @LANG = N'zh-CN', @MESSAGE = N'审核通过时通知';
+EXEC dbo.INSERTI18N @CODEPARAM = N'CORE.MODULE.SYS.T_CORE_BPMN_DRAFT.LABEL.REJECT_NOTIFICATION', @DESCRIPTION = N'工作流草稿中的审核拒绝时发送通知', @DEFAULTMESSAGE = N'审核拒绝时通知', @LANG = N'zh-CN', @MESSAGE = N'审核拒绝时通知';
+
+INSERT INTO T_CORE_NOTIFICATION_TMPL(ID, TITLE, CONTENT, VIEWMETHOD)
+VALUES ('BPMN_PASS', '工作流审核通过时提醒', ('【' + '$' + '{name}】业务单据【' + '$' + '{desc}】在【' + '$' + '{fromTaskName}】节点被【' + '$' + '{lastAuditorName}】审核通过。'), 'no');
+
+INSERT INTO T_CORE_NOTIFICATION_TMPL(ID, TITLE, CONTENT, VIEWMETHOD)
+VALUES ('BPMN_REJECT', '工作流拒绝时提醒', ('【' + '$' + '{name}】业务单据【' + '$' + '{desc}】被【' + '$' + '{lastAuditorName}】审核拒绝到【' + '$' + '{toTaskName}】节点。'), 'no');
+-- ----------------------------- 2021-07-14 add by zhangjr--------------end

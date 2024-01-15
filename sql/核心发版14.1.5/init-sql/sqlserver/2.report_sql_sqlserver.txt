@@ -1,0 +1,1735 @@
+-- 原LES 微服务
+-- ----------------------------- 2020-06-05 add by shixw------------begin
+
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_TEMPLATE.SERVICE_NAME', N'LES模板', N'LES模板', N'zh-CN',N'LES模板';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_TEMPLATE.ID', N'LES模板的主键', N'主键', N'zh-CN',N'主键';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_TEMPLATE.BASEID', N'LES模板的初始版本ID', N'初始版本ID', N'zh-CN',N'初始版本ID';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_TEMPLATE.TEMPLATENO', N'LES模板的电子记录模板编号', N'电子记录模板编号', N'zh-CN',N'电子记录模板编号';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_TEMPLATE.TEMPLATENAME', N'LES模板的电子记录模板名称', N'电子记录模板名称', N'zh-CN',N'电子记录模板名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_TEMPLATE.LESCATEGORY', N'LES模板的模板类型', N'模板类型', N'zh-CN',N'模板类型';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_TEMPLATE.TEMPLATEVERSION', N'LES模板的版本', N'版本', N'zh-CN',N'版本';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_TEMPLATE.LOCKED', N'LES模板的是否锁定（0-否1-是）', N'是否锁定（0-否1-是）', N'zh-CN',N'是否锁定（0-否1-是）';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_TEMPLATE.REMARK', N'LES模板的备注', N'备注', N'zh-CN',N'备注';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_TEMPLATE.TEMPLATESTATUS', N'LES模板的状态', N'状态', N'zh-CN',N'状态';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_TEMPLATE.PROCESSSTATUS', N'LES模板的流程状态', N'流程状态', N'zh-CN',N'流程状态';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_TEMPLATE.APPROVEDBYID', N'LES模板的批准人编码', N'批准人编码', N'zh-CN',N'批准人编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_TEMPLATE.APPROVEDBYNAME', N'LES模板的批准人名称', N'批准人名称', N'zh-CN',N'批准人名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_TEMPLATE.APPROVEDATE', N'LES模板的批准日期', N'批准日期', N'zh-CN',N'批准日期';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_TEMPLATE.CREATEDBYID', N'LES模板的制单人编码', N'制单人编码', N'zh-CN',N'制单人编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_TEMPLATE.CREATEDBYNAME', N'LES模板的创建人', N'创建人', N'zh-CN',N'创建人';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_TEMPLATE.CREATEDTIME', N'LES模板的创建日期', N'创建日期', N'zh-CN',N'创建日期';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_TEMPLATE.CREATEDBYORGID', N'LES模板的制单人单位编码', N'制单人单位编码', N'zh-CN',N'制单人单位编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_TEMPLATE.CREATEDBYORGNAME', N'LES模板的制单人单位名称', N'制单人单位名称', N'zh-CN',N'制单人单位名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_TEMPLATE_ORG.SERVICE_NAME', N'LES模板使用部门', N'LES模板使用部门', N'zh-CN',N'LES模板使用部门';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_TEMPLATE_ORG.ID', N'LES模板使用部门的主键', N'主键', N'zh-CN',N'主键';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_TEMPLATE_ORG.TEMPLATEID', N'LES模板使用部门的模板ID', N'模板ID', N'zh-CN',N'模板ID';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_TEMPLATE_ORG.USEDORGID', N'LES模板使用部门的使用部门编码', N'使用部门编码', N'zh-CN',N'使用部门编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_TEMPLATE_ORG.CREATEDBYID', N'LES模板使用部门的制单人编码', N'制单人编码', N'zh-CN',N'制单人编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_TEMPLATE_ORG.CREATEDBYNAME', N'LES模板使用部门的制单人名称', N'制单人名称', N'zh-CN',N'制单人名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_TEMPLATE_ORG.CREATEDTIME', N'LES模板使用部门的制单时间', N'制单时间', N'zh-CN',N'制单时间';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_TEMPLATE_ORG.CREATEDBYORGID', N'LES模板使用部门的制单人单位编码', N'制单人单位编码', N'zh-CN',N'制单人单位编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_TEMPLATE_ORG.CREATEDBYORGNAME', N'LES模板使用部门的制单人单位名称', N'制单人单位名称', N'zh-CN',N'制单人单位名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_TEMPLATE_UT.SERVICE_NAME', N'LES模板的主体', N'LES模板的主体', N'zh-CN',N'LES模板的主体';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_TEMPLATE_UT.ID', N'LES模板的主体的主键', N'主键', N'zh-CN',N'主键';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_TEMPLATE_UT.TYPE', N'LES模板的主体的类型', N'类型', N'zh-CN',N'类型';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_TEMPLATE_UT.UNITTITLE', N'LES模板的主体的组件标题', N'组件标题', N'zh-CN',N'组件标题';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_TEMPLATE_UT.UNITBODY', N'LES模板的主体的组件主体', N'组件主体', N'zh-CN',N'组件主体';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_TEMPLATE_UT.VERSION', N'LES模板的主体的版本', N'版本', N'zh-CN',N'版本';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_TEMPLATE_UT.CREATEDBYID', N'LES模板的主体的制单人编码', N'制单人编码', N'zh-CN',N'制单人编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_TEMPLATE_UT.CREATEDBYNAME', N'LES模板的主体的制单人名称', N'制单人名称', N'zh-CN',N'制单人名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_TEMPLATE_UT.CREATEDTIME', N'LES模板的主体的制单时间', N'制单时间', N'zh-CN',N'制单时间';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_TEMPLATE_UT.CREATEDBYORGID', N'LES模板的主体的单据单位编码', N'单据单位编码', N'zh-CN',N'单据单位编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_TEMPLATE_UT.CREATEDBYORGNAME', N'LES模板的主体的单据单位名称', N'单据单位名称', N'zh-CN',N'单据单位名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_TEMPLATE_UT.LASTUPDATEDBYID', N'LES模板的主体的最后更新人编码', N'最后更新人编码', N'zh-CN',N'最后更新人编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_TEMPLATE_UT.LASTUPDATEDBYNAME', N'LES模板的主体的最后更新人名称', N'最后更新人名称', N'zh-CN',N'最后更新人名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_TEMPLATE_UT.LASTUPDATEDTIME', N'LES模板的主体的最后更新时间', N'最后更新时间', N'zh-CN',N'最后更新时间';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.ITEM.LES_TEMPLATES.MODAL.NEW_TMPL', N'新建模板', N'新建模板', N'zh-CN',N'新建模板';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.ITEM.LES_TEMPLATES.MODAL.CONNECT', N'连接仪器', N'连接仪器', N'zh-CN',N'连接仪器';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.ITEM.LES_TEMPLATES.BUTTON.CONNECT', N'连接仪器', N'连接仪器', N'zh-CN',N'连接仪器';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.ITEM.LES_TEMPLATES.BUTTON.DISCONNECT', N'断开连接', N'断开连接', N'zh-CN',N'断开连接';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_DS.SCOPE', N'LES数据源的作用域', N'作用域', N'zh-CN',N'作用域';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_DS.LESDSNAME', N'LES数据源的数据源名称', N'数据源名称', N'zh-CN',N'数据源名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_DS.SQLCONTENT', N'LES数据源的SQL内容', N'SQL内容', N'zh-CN',N'SQL内容';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_DS.SQLCLAUSE', N'LES数据源的SQL条件', N'SQL条件', N'zh-CN',N'SQL条件';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_DS.DISPLAYCATEGORY', N'LES数据源的展示类型', N'展示类型', N'zh-CN',N'展示类型';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_DS.ID', N'LES数据源的主键', N'主键', N'zh-CN',N'主键';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_DS.CREATEDBYID', N'LES数据源的制单人编码', N'制单人编码', N'zh-CN',N'制单人编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_DS.CREATEDBYNAME', N'LES数据源的制单人名称', N'制单人名称', N'zh-CN',N'制单人名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_DS.CREATEDTIME', N'LES数据源的制单时间', N'制单时间', N'zh-CN',N'制单时间';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_DS.CREATEDBYORGID', N'LES数据源的制单人单位编码', N'制单人单位编码', N'zh-CN',N'制单人单位编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_DS.CREATEDBYORGNAME', N'LES数据源的制单人单位名称', N'制单人单位名称', N'zh-CN',N'制单人单位名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_DS.ACTIVATEDFLAG', N'LES数据源的状态0：停用 /1：启用', N'状态0：停用 /1：启用', N'zh-CN',N'状态0：停用 /1：启用';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_DS.ACTIVATEDBYID', N'LES数据源的启用人编码', N'启用人编码', N'zh-CN',N'启用人编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_DS.ACTIVATEDBYNAME', N'LES数据源的启用人名称', N'启用人名称', N'zh-CN',N'启用人名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_DS.ACTIVATEDTIME', N'LES数据源的启用时间', N'启用时间', N'zh-CN',N'启用时间';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_DS.SERVICE_NAME', N'LES数据源', N'LES数据源', N'zh-CN',N'LES数据源';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_DS_FIELD.TABLENAME', N'LES数据源字段的表名称', N'表名称', N'zh-CN',N'表名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_DS_FIELD.COLUMNNAME', N'LES数据源字段的字段名称', N'字段名称', N'zh-CN',N'字段名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_DS_FIELD.LESCOLUMNNAME', N'LES数据源字段的显示名称', N'显示名称', N'zh-CN',N'显示名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_DS_FIELD.WRITEBACK', N'LES数据源字段的是否反写', N'是否反写', N'zh-CN',N'是否反写';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_DS_FIELD.ID', N'LES数据源字段的主键', N'主键', N'zh-CN',N'主键';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_DS_FIELD.CREATEDBYID', N'LES数据源字段的制单人编码', N'制单人编码', N'zh-CN',N'制单人编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_DS_FIELD.CREATEDBYNAME', N'LES数据源字段的制单人名称', N'制单人名称', N'zh-CN',N'制单人名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_DS_FIELD.CREATEDTIME', N'LES数据源字段的制单时间', N'制单时间', N'zh-CN',N'制单时间';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_DS_FIELD.CREATEDBYORGID', N'LES数据源字段的制单人单位编码', N'制单人单位编码', N'zh-CN',N'制单人单位编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_DS_FIELD.CREATEDBYORGNAME', N'LES数据源字段的制单人单位名称', N'制单人单位名称', N'zh-CN',N'制单人单位名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_DS_FIELD.LESDSID', N'LES数据源字段的LES数据源表ID', N'LES数据源表ID', N'zh-CN',N'LES数据源表ID';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_DS_FIELD.SERVICE_NAME', N'LES数据源字段', N'LES数据源字段', N'zh-CN',N'LES数据源字段';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.ITEM.LES_DSES.TAB.DS_INFO', N'LES数据源信息', N'LES数据源信息', N'zh-CN',N'LES数据源信息';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.ITEM.LES_DSES.TAB.DS_INSERT', N'LES数据源新增', N'LES数据源新增', N'zh-CN',N'LES数据源新增';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.ITEM.LES_DSES.TAB.DS_FIELD_INFO', N'字段信息', N'字段信息', N'zh-CN',N'字段信息';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.ITEM.LES.INSTANCES.TIP.SQL_ERROR', N'数据源查询报错，请根据数据源名称检查：', N'数据源查询报错，请根据数据源名称检查：', N'zh-CN',N'数据源查询报错，请根据数据源名称检查：';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.ITEM.LES.INSTANCES.TIP.FORM_RESULT_COUNT_ERROR', N'表单绑定数据源查询结果数量大于1，请根据数据源名称检查：', N'表单绑定数据源查询结果数量大于1，请根据数据源名称检查：', N'zh-CN',N'表单绑定数据源查询结果数量大于1，请根据数据源名称检查：';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.LES.LES_TEMPLATES.TIP.CAN_NOT_DELETE_SUBMIITED_DATA', N'已提交数据不可删除！', N'已提交数据不可删除！', N'zh-CN',N'已提交数据不可删除！';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.LES.LES_TEMPLATES.TIP.CAN_NOT_SUBMIT_EXPIRED_DATA', N'已设置过期数据不可提交！', N'已设置过期数据不可提交！', N'zh-CN',N'已设置过期数据不可提交！';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.LES.LES_TEMPLATES.TIP.CAN_NOT_SUBMIT_SUBMIITED_DATA', N'已提交数据不可提交！', N'已提交数据不可提交！', N'zh-CN',N'已提交数据不可提交！';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.LES.LES_TEMPLATES.TIP.TEMPLATE_ACTIVED_CANNOT_EMPTY', N'必须选中一条模板', N'必须选中一条模板', N'zh-CN',N'必须选中一条模板';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.LES.LES_TEMPLATES.TIP.DRAFT', N'当前已存在草稿版本，是否继续添加新的数据', N'当前已存在草稿版本，是否继续添加新的数据', N'zh-CN',N'当前已存在草稿版本，是否继续添加新的数据';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.LES.LES_TEMPLATES.MODEL.NEWVERSION', N'新版本', N'新版本', N'zh-CN',N'新版本';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.LES.LES_TEMPLATES.MODEL.CONFIRM_EXPIRE', N'确认设置过期？', N'确认设置过期？', N'zh-CN',N'确认设置过期？';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.LES.LES_TEMPLATES.MODEL.EXPIRE', N'设置过期', N'设置过期', N'zh-CN',N'设置过期';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.LES.LES_TEMPLATES.MODAL.TITLE_USED_ORG_CHOOSE', N'选择使用部门', N'选择使用部门', N'zh-CN',N'选择使用部门';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.LES.LES_TEMPLATES.BUTTON.EXPIRE', N'设置过期', N'设置过期', N'zh-CN',N'设置过期';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.LES.LES_TEMPLATES.SELECT_CURRENT', N'确认(当前)', N'确认(当前)', N'zh-CN',N'确认(当前)';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.LES.LES_TEMPLATES.BUTTON.NEWVERSION', N'新版本', N'新版本', N'zh-CN',N'新版本';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.LES.LES_TEMPLATES.TAB.USEDDEPT', N'使用部门', N'使用部门', N'zh-CN',N'使用部门';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.LES.LES_TEMPLATES.TAB.FILE', N'参考文件', N'参考文件', N'zh-CN',N'参考文件';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.LES.LES_TEMPLATES.TITLE.USEDORGNAME', N'部门', N'部门', N'zh-CN',N'部门';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.LES.LES_TEMPLATES.TIP.PER_TEMPLATE_CAN_ONLY_CHOOSE_ONE_VERSION', N'每个LES模板只可以选择一个版本', N'每个LES模板只可以选择一个版本', N'zh-CN',N'每个LES模板只可以选择一个版本';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_INSTANCE.SERVICE_NAME', N'LES的实例', N'LES的实例', N'zh-CN',N'LES的实例';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_INSTANCE.ID', N'LES的实例的主键', N'主键', N'zh-CN',N'主键';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_INSTANCE.TEMPLATEID', N'LES的实例的模板ID', N'模板ID', N'zh-CN',N'模板ID';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_INSTANCE.VERSION', N'LES的实例的版本', N'版本', N'zh-CN',N'版本';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_INSTANCE.CREATEDBYID', N'LES的实例的制单人编码', N'制单人编码', N'zh-CN',N'制单人编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_INSTANCE.CREATEDBYNAME', N'LES的实例的制单人名称', N'制单人名称', N'zh-CN',N'制单人名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_INSTANCE.CREATEDTIME', N'LES的实例的制单时间', N'制单时间', N'zh-CN',N'制单时间';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_INSTANCE.CREATEDBYORGID', N'LES的实例的制单人单位编码', N'制单人单位编码', N'zh-CN',N'制单人单位编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_INSTANCE.CREATEDBYORGNAME', N'LES的实例的制单人单位名称', N'制单人单位名称', N'zh-CN',N'制单人单位名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_INSTANCE.PROCESSINSTANCEID', N'LES的实例的工作流Id', N'工作流Id', N'zh-CN',N'工作流Id';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_INSTANCE.LASTAUDITEDFLAG', N'LES的实例的审核标志', N'审核标志', N'zh-CN',N'审核标志';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_INSTANCE.LASTAUDITEDBYID', N'LES的实例的审核人编码', N'审核人编码', N'zh-CN',N'审核人编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_INSTANCE.LASTAUDITEDBYNAME', N'LES的实例的审核人名称', N'审核人名称', N'zh-CN',N'审核人名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_INSTANCE.LASTAUDITEDTIME', N'LES的实例的审核时间', N'审核时间', N'zh-CN',N'审核时间';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_INSTANCE.SUBMITTEDBYID', N'LES的实例的提交人id', N'提交人id', N'zh-CN',N'提交人id';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_INSTANCE.SUBMITTEDBYNAME', N'LES的实例的提交人姓名', N'提交人姓名', N'zh-CN',N'提交人姓名';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_INSTANCE.SUBMITTEDTIME', N'LES的实例的提交时间', N'提交时间', N'zh-CN',N'提交时间';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_INSTANCE.APPROVEDBYID', N'LES的实例的审批人ID（最后审核人）', N'审批人ID（最后审核人）', N'zh-CN',N'审批人ID（最后审核人）';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_INSTANCE.APPROVEDBYNAME', N'LES的实例的审批人名称（最后审核人）', N'审批人名称（最后审核人）', N'zh-CN',N'审批人名称（最后审核人）';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_INSTANCE.APPROVEDTIME', N'LES的实例的审批时间', N'审批时间', N'zh-CN',N'审批时间';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_INSTANCE.LASTREJECTEDFLAG', N'LES的实例的回退标志/审核拒绝标志', N'回退标志/审核拒绝标志', N'zh-CN',N'回退标志/审核拒绝标志';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_INSTANCE.LASTREJECTEDBYID', N'LES的实例的回退人/审核拒绝人编码', N'回退人/审核拒绝人编码', N'zh-CN',N'回退人/审核拒绝人编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_INSTANCE.LASTREJECTEDBYNAME', N'LES的实例的回退人名称', N'回退人名称', N'zh-CN',N'回退人名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_INSTANCE.LASTREJECTEDTIME', N'LES的实例的回退时间/审核拒绝时间', N'回退时间/审核拒绝时间', N'zh-CN',N'回退时间/审核拒绝时间';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_INSTANCE_UNIT.SERVICE_NAME', N'LES实例的组件', N'LES实例的组件', N'zh-CN',N'LES实例的组件';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_INSTANCE_UNIT.ID', N'LES实例的组件的主键', N'主键', N'zh-CN',N'主键';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_INSTANCE_UNIT.INSTANCEID', N'LES实例的组件的实例编码', N'实例编码', N'zh-CN',N'实例编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_INSTANCE_UNIT.TEMPLATEUNITID', N'LES实例的组件的模板组件的ID', N'模板组件的ID', N'zh-CN',N'模板组件的ID';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_INSTANCE_UNIT.TYPE', N'LES实例的组件的组件类型', N'组件类型', N'zh-CN',N'组件类型';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_INSTANCE_UNIT.UNITTITLE', N'LES实例的组件的组件标题（可以为空）', N'组件标题（可以为空）', N'zh-CN',N'组件标题（可以为空）';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_INSTANCE_UNIT.PARENTID', N'LES实例的组件的父组件编码', N'父组件编码', N'zh-CN',N'父组件编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_INSTANCE_UNIT.UNITBODY', N'LES实例的组件的组件主体', N'组件主体', N'zh-CN',N'组件主体';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_INSTANCE_UNIT.ORDERNO', N'LES实例的组件的排序码', N'排序码', N'zh-CN',N'排序码';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_INSTANCE_UNIT.VERSION', N'LES实例的组件的版本', N'版本', N'zh-CN',N'版本';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_INSTANCE_UNIT.CREATEDBYID', N'LES实例的组件的制单人编码', N'制单人编码', N'zh-CN',N'制单人编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_INSTANCE_UNIT.CREATEDBYNAME', N'LES实例的组件的制单人名称', N'制单人名称', N'zh-CN',N'制单人名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_INSTANCE_UNIT.CREATEDTIME', N'LES实例的组件的制单时间', N'制单时间', N'zh-CN',N'制单时间';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_INSTANCE_UNIT.CREATEDBYORGID', N'LES实例的组件的单据单位编码', N'单据单位编码', N'zh-CN',N'单据单位编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_INSTANCE_UNIT.CREATEDBYORGNAME', N'LES实例的组件的单据单位名称', N'单据单位名称', N'zh-CN',N'单据单位名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_IUP.SERVICE_NAME', N'ELN实例组件批注', N'ELN实例组件批注', N'zh-CN',N'ELN实例组件批注';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_IUP.ID', N'ELN实例组件批注的主键', N'主键', N'zh-CN',N'主键';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_IUP.INSTANCEUNITID', N'ELN实例组件批注的ELN实例组件ID', N'ELN实例组件ID', N'zh-CN',N'ELN实例组件ID';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_IUP.POSTIL', N'ELN实例组件批注的批注', N'批注', N'zh-CN',N'批注';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_IUP.RESOLVE', N'ELN实例组件批注的回复', N'回复', N'zh-CN',N'回复';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_IUP.VERSION', N'ELN实例组件批注的版本', N'版本', N'zh-CN',N'版本';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_IUP.CREATEDBYID', N'ELN实例组件批注的制单人编码', N'制单人编码', N'zh-CN',N'制单人编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_IUP.CREATEDBYNAME', N'ELN实例组件批注的制单人名称', N'制单人名称', N'zh-CN',N'制单人名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_IUP.CREATEDTIME', N'ELN实例组件批注的制单时间', N'制单时间', N'zh-CN',N'制单时间';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_IUP.CREATEDBYORGID', N'ELN实例组件批注的单据单位编码', N'单据单位编码', N'zh-CN',N'单据单位编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_IUP.CREATEDBYORGNAME', N'ELN实例组件批注的单据单位名称', N'单据单位名称', N'zh-CN',N'单据单位名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_IUP.LASTUPDATEDBYID', N'ELN实例组件批注的最后更新人编码', N'最后更新人编码', N'zh-CN',N'最后更新人编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_IUP.LASTUPDATEDBYNAME', N'ELN实例组件批注的最后更新人名称', N'最后更新人名称', N'zh-CN',N'最后更新人名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_IUP.LASTUPDATEDTIME', N'ELN实例组件批注的最后更新时间', N'最后更新时间', N'zh-CN',N'最后更新时间';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_IUP.SOURCEID', N'ELN实例组件批注的来源ID', N'来源ID', N'zh-CN',N'来源ID';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_TEMPLATE_UNIT.SERVICE_NAME', N'LES模板的组件', N'LES模板的组件', N'zh-CN',N'LES模板的组件';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_TEMPLATE_UNIT.ID', N'LES模板的组件的主键', N'主键', N'zh-CN',N'主键';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_TEMPLATE_UNIT.TEMPLATEID', N'LES模板的组件的模板编码', N'模板编码', N'zh-CN',N'模板编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_TEMPLATE_UNIT.TYPE', N'LES模板的组件的组件类型', N'组件类型', N'zh-CN',N'组件类型';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_TEMPLATE_UNIT.PARENTID', N'LES模板的组件的父组件编码', N'父组件编码', N'zh-CN',N'父组件编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_TEMPLATE_UNIT.UNITTITLE', N'LES模板的组件的组件标题（可以为空）', N'组件标题（可以为空）', N'zh-CN',N'组件标题（可以为空）';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_TEMPLATE_UNIT.UNITBODY', N'LES模板的组件的组件主体', N'组件主体', N'zh-CN',N'组件主体';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_TEMPLATE_UNIT.ORDERNO', N'LES模板的组件的排序码', N'排序码', N'zh-CN',N'排序码';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_TEMPLATE_UNIT.VERSION', N'LES模板的组件的版本', N'版本', N'zh-CN',N'版本';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_TEMPLATE_UNIT.CREATEDBYID', N'LES模板的组件的制单人编码', N'制单人编码', N'zh-CN',N'制单人编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_TEMPLATE_UNIT.CREATEDBYNAME', N'LES模板的组件的制单人名称', N'制单人名称', N'zh-CN',N'制单人名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_TEMPLATE_UNIT.CREATEDTIME', N'LES模板的组件的制单时间', N'制单时间', N'zh-CN',N'制单时间';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_TEMPLATE_UNIT.CREATEDBYORGID', N'LES模板的组件的单据单位编码', N'单据单位编码', N'zh-CN',N'单据单位编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_TEMPLATE_UNIT.CREATEDBYORGNAME', N'LES模板的组件的单据单位名称', N'单据单位名称', N'zh-CN',N'单据单位名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_UNIT.SERVICE_NAME', N'LES组件', N'LES组件', N'zh-CN',N'LES组件';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_UNIT.ID', N'LES组件的主键', N'主键', N'zh-CN',N'主键';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_UNIT.UNITNAME', N'LES组件的组件名称', N'组件名称', N'zh-CN',N'组件名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_UNIT.TYPE', N'LES组件的组件类型', N'组件类型', N'zh-CN',N'组件类型';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_UNIT.BINDDS', N'LES组件的是否绑定数据源（0-不绑定，1-绑定）', N'是否绑定数据源（0-不绑定，1-绑定）', N'zh-CN',N'是否绑定数据源（0-不绑定，1-绑定）';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_UNIT.SVG', N'LES组件的svg图标', N'svg图标', N'zh-CN',N'svg图标';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_UNIT.ENABLE', N'LES组件的是否启用（0-不启用，1-启用）', N'是否启用（0-不启用，1-启用）', N'zh-CN',N'是否启用（0-不启用，1-启用）';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_UNIT.ORDERNO', N'LES组件的排序码', N'排序码', N'zh-CN',N'排序码';
+
+-- ----------------------------- 2020-06-05 add by shixw------------end
+
+-- ----------------------------- 2020-06-08 add by shixw------------begin
+
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_INSTANCE.PROCESSSTATUS', N'LES的实例的流程状态', N'流程状态', N'zh-CN',N'流程状态';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_INSTANCE.LESCATEGORY', N'LES的实例的LES实例类型(LES/ELN)', N'LES实例类型(LES/ELN)', N'zh-CN',N'LES实例类型(LES/ELN)';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_INSTANCE.INSTANCENAME', N'LES的实例的实例名称', N'实例名称', N'zh-CN',N'实例名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_INSTANCE.AUDIT', N'LES的实例的是否启用审计', N'是否启用审计', N'zh-CN',N'是否启用审计';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_INSTANCE_UNIT.UNITPARAM', N'LES实例组件的参数', N'参数', N'zh-CN',N'参数';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_INSTANCE.BIZCATEGORY', N'LES实例的业务类型', N'业务类型', N'zh-CN',N'业务类型';
+
+-- ----------------------------- 2020-06-08 add by shixw------------end
+-- ----------------------------- 2020-06-12 add by zhangpf------------begin
+DROP TABlE T_CORE_LES_UNIT;
+CREATE TABlE DBO.T_CORE_LES_UNIT(
+    ID BIGINT NOT NULL,
+    UNITNAME VARCHAR(60)  NULL ,
+    UNITCATEGORY VARCHAR(36)  NULL ,
+    BINDDS VARCHAR(1)  NULL ,
+    ICON VARCHAR(270)  NULL ,
+    ORDERNO BIGINT NULL ,
+    AUDITTRAIL VARCHAR(1)  NULL ,
+    CONFIG TEXT NULL ,
+    CREATEDBYID VARCHAR(36)  NULL ,
+    CREATEDBYNAME VARCHAR(60)  NULL ,
+    CREATEDTIME DATETIME NULL ,
+    CREATEDBYORGID VARCHAR(36)  NULL ,
+    CREATEDBYORGNAME VARCHAR(270)  NULL ,
+    ACTIVATEDFLAG VARCHAR(1)  NULL ,
+    ACTIVATEDBYID VARCHAR(36)  NULL ,
+    ACTIVATEDBYNAME VARCHAR(60)  NULL ,
+    ACTIVATEDTIME DATETIME NULL ,
+    CONSTRAINT PK_CORE_LES_UNIT PRIMARY KEY(ID));
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'LES组件' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_LES_UNIT';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'主键' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_LES_UNIT', @level2type=N'COLUMN',@level2name=N'ID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'组件名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_LES_UNIT', @level2type=N'COLUMN',@level2name=N'UNITNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'组件类型' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_LES_UNIT', @level2type=N'COLUMN',@level2name=N'UNITCATEGORY';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'是否绑定数据源（0-不绑定，1-绑定）' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_LES_UNIT', @level2type=N'COLUMN',@level2name=N'BINDDS';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'图标' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_LES_UNIT', @level2type=N'COLUMN',@level2name=N'ICON';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'排序码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_LES_UNIT', @level2type=N'COLUMN',@level2name=N'ORDERNO';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'是否启用审计' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_LES_UNIT', @level2type=N'COLUMN',@level2name=N'AUDITTRAIL';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'配置' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_LES_UNIT', @level2type=N'COLUMN',@level2name=N'CONFIG';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_LES_UNIT', @level2type=N'COLUMN',@level2name=N'CREATEDBYID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_LES_UNIT', @level2type=N'COLUMN',@level2name=N'CREATEDBYNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_LES_UNIT', @level2type=N'COLUMN',@level2name=N'CREATEDTIME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_LES_UNIT', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_LES_UNIT', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'启用标志' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_LES_UNIT', @level2type=N'COLUMN',@level2name=N'ACTIVATEDFLAG';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'启用人编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_LES_UNIT', @level2type=N'COLUMN',@level2name=N'ACTIVATEDBYID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'启用人名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_LES_UNIT', @level2type=N'COLUMN',@level2name=N'ACTIVATEDBYNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'启用时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_LES_UNIT', @level2type=N'COLUMN',@level2name=N'ACTIVATEDTIME';
+
+alter table dbo.T_CORE_LES_DS_FIELD ADD ORDERNO BIGINT NULL
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'排序码',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_LES_DS_FIELD',
+'COLUMN', N'ORDERNO'
+GO
+
+alter table dbo.T_CORE_LES_TEMPLATE_UNIT ADD CONFIG text NULL
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'组件配置',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_LES_TEMPLATE_UNIT',
+'COLUMN', N'CONFIG'
+GO
+
+EXEC sp_rename '[dbo].[T_CORE_LES_TEMPLATE_UNIT].[TYPE]', 'UNITCATEGORY', 'COLUMN';
+
+alter table dbo.T_CORE_LES_INSTANCE_UNIT ADD CONFIG text NULL
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'组件配置',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_LES_INSTANCE_UNIT',
+'COLUMN', N'CONFIG'
+GO
+
+EXEC sp_rename '[dbo].[T_CORE_LES_INSTANCE_UNIT].[TYPE]', 'UNITCATEGORY', 'COLUMN';
+
+
+INSERT INTO T_CORE_LES_UNIT("ID", "UNITNAME", "UNITCATEGORY", "BINDDS", "ICON", "ORDERNO", "AUDITTRAIL", "CONFIG", "ACTIVATEDFLAG") 
+VALUES (NEXT VALUE FOR SEQ_CORE, '章节', 'chapter', '0', '/static/gikam/main/img/chapter.svg', '1', '1', '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print", "upgrade", "downgrade" ] }', '1');
+INSERT INTO T_CORE_LES_UNIT("ID", "UNITNAME", "UNITCATEGORY", "BINDDS", "ICON", "ORDERNO", "AUDITTRAIL", "CONFIG", "ACTIVATEDFLAG") 
+VALUES (NEXT VALUE FOR SEQ_CORE, '富文本', 'ckeditor', '1', '/static/gikam/main/img/ckeditor.svg', '2', '1', '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print", "audit" ] }', '1');
+INSERT INTO T_CORE_LES_UNIT("ID", "UNITNAME", "UNITCATEGORY", "BINDDS", "ICON", "ORDERNO", "AUDITTRAIL", "CONFIG", "ACTIVATEDFLAG") 
+VALUES (NEXT VALUE FOR SEQ_CORE, '分子式', 'chemDoodle', '0', '/static/gikam/main/img/chemDoodle.svg', '3', '0', '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print" ] }', '1');
+INSERT INTO T_CORE_LES_UNIT("ID", "UNITNAME", "UNITCATEGORY", "BINDDS", "ICON", "ORDERNO", "AUDITTRAIL", "CONFIG", "ACTIVATEDFLAG") 
+VALUES (NEXT VALUE FOR SEQ_CORE, '图片绘制', 'imgDraw', '0', '/static/gikam/main/img/imgDraw.svg', '4', '0', '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print" ] }', '1');
+INSERT INTO T_CORE_LES_UNIT("ID", "UNITNAME", "UNITCATEGORY", "BINDDS", "ICON", "ORDERNO", "AUDITTRAIL", "CONFIG", "ACTIVATEDFLAG") 
+VALUES (NEXT VALUE FOR SEQ_CORE, '表格', 'spread', '0', '/static/gikam/main/img/spread.svg', '5', '0', '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print" ] }', '1');
+INSERT INTO T_CORE_LES_UNIT("ID", "UNITNAME", "UNITCATEGORY", "BINDDS", "ICON", "ORDERNO", "AUDITTRAIL", "CONFIG", "ACTIVATEDFLAG") 
+VALUES (NEXT VALUE FOR SEQ_CORE, '图片编辑器', 'imgEdit', '0', '/static/gikam/main/img/imgEdit.svg', '6', '0', '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print" ] }', '1');
+INSERT INTO T_CORE_LES_UNIT("ID", "UNITNAME", "UNITCATEGORY", "BINDDS", "ICON", "ORDERNO", "AUDITTRAIL", "CONFIG", "ACTIVATEDFLAG") 
+VALUES (NEXT VALUE FOR SEQ_CORE, '图片上传', 'imgUpload', '0', '/static/gikam/main/img/imgUpload.svg', '7', '0', '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print" ] }', '1');
+INSERT INTO T_CORE_LES_UNIT("ID", "UNITNAME", "UNITCATEGORY", "BINDDS", "ICON", "ORDERNO", "AUDITTRAIL", "CONFIG", "ACTIVATEDFLAG") 
+VALUES (NEXT VALUE FOR SEQ_CORE, '流程绘制', 'diagramDraw', '0', '/static/gikam/main/img/diagramDraw.svg', '8', '0', '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print" ] }', '1');
+INSERT INTO T_CORE_LES_UNIT("ID", "UNITNAME", "UNITCATEGORY", "BINDDS", "ICON", "ORDERNO", "AUDITTRAIL", "CONFIG", "ACTIVATEDFLAG") 
+VALUES (NEXT VALUE FOR SEQ_CORE, '基础信息', 'baseInfo', '0', '/static/gikam/main/img/baseInfo.svg', '9', '0', '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print", "audit" ] }', '1');
+INSERT INTO T_CORE_LES_UNIT("ID", "UNITNAME", "UNITCATEGORY", "BINDDS", "ICON", "ORDERNO", "AUDITTRAIL", "CONFIG", "ACTIVATEDFLAG") 
+VALUES (NEXT VALUE FOR SEQ_CORE, '查询列表', 'queryList', '1', '/static/gikam/main/img/queryList.svg', '10', '0', '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print" ] }', '1');
+
+EXEC dbo.INSERTI18N @CODEPARAM = N'T_CORE_LES_DS_FIELD.ORDERNO', @DESCRIPTION = N'LES数据源字段的排序码', @DEFAULTMESSAGE = N'排序码', @LANG = N'zh-CN', @MESSAGE = N'排序码';
+EXEC dbo.INSERTI18N @CODEPARAM = N'T_CORE_LES_TEMPLATE_UNIT.CONFIG', @DESCRIPTION = N'LES模板组件配置', @DEFAULTMESSAGE = N'组件配置', @LANG = N'zh-CN', @MESSAGE = N'组件配置';
+EXEC dbo.INSERTI18N @CODEPARAM = N'T_CORE_LES_INSTANCE_UNIT.CONFIG', @DESCRIPTION = N'LES实例组件配置', @DEFAULTMESSAGE = N'组件配置', @LANG = N'zh-CN', @MESSAGE = N'组件配置';
+UPDATE T_CORE_I18N SET CODE = 'T_CORE_LES_TEMPLATE_UNIT.UNITCATEGORY' WHERE CODE = 'T_CORE_LES_TEMPLATE_UNIT.TYPE';
+UPDATE T_CORE_I18N SET CODE = 'T_CORE_LES_INSTANCE_UNIT.UNITCATEGORY' WHERE CODE = 'T_CORE_LES_INSTANCE_UNIT.TYPE';
+-- ----------------------------- 2020-06-12 add by zhangpf------------end
+
+-- ----------------------------- 2020-06-13 add by zhangpf------------begin
+EXEC dbo.INSERTI18N @CODEPARAM = N'CORE.MODULE.LES.LES_TEMPLATES.TIP.EXISTS_LOWER_VERSION_TEMPLATE_PROCESSSATUS_UNDONE', @DESCRIPTION = N'存在较低版本未审核通过！', @DEFAULTMESSAGE = N'存在较低版本未审核通过！', @LANG = N'zh-CN', @MESSAGE = N'存在较低版本未审核通过！';
+
+UPDATE T_CORE_LES_UNIT 
+  SET BINDDS = '1' 
+WHERE UNITCATEGORY = 'chapter';
+
+UPDATE T_CORE_LES_UNIT 
+  SET UNITNAME = '表格/表单'
+WHERE UNITCATEGORY = 'queryList';
+-- ----------------------------- 2020-06-13 add by zhangpf------------end
+
+-- ----------------------------- 2020-06-13 add by zhangpf------------begin
+EXEC sp_rename '[dbo].[T_CORE_LES_TEMPLATE_UT].[TYPE]', 'UNITCATEGORY', 'COLUMN';
+
+alter table dbo.T_CORE_LES_TEMPLATE_UT ADD CONFIG text NULL
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'组件配置',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_LES_TEMPLATE_UT',
+'COLUMN', N'CONFIG'
+GO
+
+UPDATE T_CORE_I18N SET CODE = 'T_CORE_LES_TEMPLATE_UT.UNITCATEGORY' WHERE CODE = 'T_CORE_LES_TEMPLATE_UT.TYPE';
+EXEC dbo.INSERTI18N @CODEPARAM = N'T_CORE_LES_TEMPLATE_UT.CONFIG', @DESCRIPTION = N'组件配置', @DEFAULTMESSAGE = N'组件配置', @LANG = N'zh-CN', @MESSAGE = N'组件配置';
+-- ----------------------------- 2020-06-13 add by zhangpf------------end
+
+-- ----------------------------- 2020-06-15 add by zhangpf------------begin
+DROP TABlE T_CORE_LES_UNIT;
+CREATE TABlE DBO.T_CORE_LES_UNIT(
+    ID VARCHAR(36) NOT NULL,
+    UNITNAME VARCHAR(60)  NULL ,
+    BINDDS VARCHAR(1)  NULL ,
+    ICON VARCHAR(270)  NULL ,
+    ORDERNO BIGINT NULL ,
+    AUDITTRAIL VARCHAR(1)  NULL ,
+    CONFIG TEXT NULL ,
+    CREATEDBYID VARCHAR(36)  NULL ,
+    CREATEDBYNAME VARCHAR(60)  NULL ,
+    CREATEDTIME DATETIME NULL ,
+    CREATEDBYORGID VARCHAR(36)  NULL ,
+    CREATEDBYORGNAME VARCHAR(270)  NULL ,
+    ACTIVATEDFLAG VARCHAR(1)  NULL ,
+    ACTIVATEDBYID VARCHAR(36)  NULL ,
+    ACTIVATEDBYNAME VARCHAR(60)  NULL ,
+    ACTIVATEDTIME DATETIME NULL ,
+    CONSTRAINT PK_CORE_LES_UNIT PRIMARY KEY(ID));
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'LES组件' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_LES_UNIT';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'主键' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_LES_UNIT', @level2type=N'COLUMN',@level2name=N'ID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'组件名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_LES_UNIT', @level2type=N'COLUMN',@level2name=N'UNITNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'是否绑定数据源（0-不绑定，1-绑定）' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_LES_UNIT', @level2type=N'COLUMN',@level2name=N'BINDDS';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'图标' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_LES_UNIT', @level2type=N'COLUMN',@level2name=N'ICON';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'排序码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_LES_UNIT', @level2type=N'COLUMN',@level2name=N'ORDERNO';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'是否启用审计' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_LES_UNIT', @level2type=N'COLUMN',@level2name=N'AUDITTRAIL';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'配置' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_LES_UNIT', @level2type=N'COLUMN',@level2name=N'CONFIG';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_LES_UNIT', @level2type=N'COLUMN',@level2name=N'CREATEDBYID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_LES_UNIT', @level2type=N'COLUMN',@level2name=N'CREATEDBYNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_LES_UNIT', @level2type=N'COLUMN',@level2name=N'CREATEDTIME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_LES_UNIT', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_LES_UNIT', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'启用标志' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_LES_UNIT', @level2type=N'COLUMN',@level2name=N'ACTIVATEDFLAG';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'启用人编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_LES_UNIT', @level2type=N'COLUMN',@level2name=N'ACTIVATEDBYID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'启用人名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_LES_UNIT', @level2type=N'COLUMN',@level2name=N'ACTIVATEDBYNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'启用时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_LES_UNIT', @level2type=N'COLUMN',@level2name=N'ACTIVATEDTIME';
+
+INSERT INTO T_CORE_LES_UNIT(ID, UNITNAME, BINDDS, ICON, ORDERNO, AUDITTRAIL, CONFIG, ACTIVATEDFLAG) 
+VALUES ('chapter', '章节', '1', '/static/gikam/main/img/chapter.svg', '1', '1', '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print", "upgrade", "downgrade" ] }', '1');
+INSERT INTO T_CORE_LES_UNIT(ID, UNITNAME, BINDDS, ICON, ORDERNO, AUDITTRAIL, CONFIG, ACTIVATEDFLAG) 
+VALUES ('ckeditor', '富文本', '1', '/static/gikam/main/img/ckeditor.svg', '2', '1', '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print", "audit" ] }', '1');
+INSERT INTO T_CORE_LES_UNIT(ID, UNITNAME, BINDDS, ICON, ORDERNO, AUDITTRAIL, CONFIG, ACTIVATEDFLAG) 
+VALUES ('chemDoodle', '分子式', '0', '/static/gikam/main/img/chemDoodle.svg', '3', '0', '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print" ] }', '1');
+INSERT INTO T_CORE_LES_UNIT(ID, UNITNAME, BINDDS, ICON, ORDERNO, AUDITTRAIL, CONFIG, ACTIVATEDFLAG) 
+VALUES ('imgDraw', '图片绘制', '0', '/static/gikam/main/img/imgDraw.svg', '4', '0', '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print" ] }', '1');
+INSERT INTO T_CORE_LES_UNIT(ID, UNITNAME, BINDDS, ICON, ORDERNO, AUDITTRAIL, CONFIG, ACTIVATEDFLAG) 
+VALUES ('spread', '表格', '0', '/static/gikam/main/img/spread.svg', '5', '0', '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print" ] }', '1');
+INSERT INTO T_CORE_LES_UNIT(ID, UNITNAME, BINDDS, ICON, ORDERNO, AUDITTRAIL, CONFIG, ACTIVATEDFLAG) 
+VALUES ('imgEdit', '图片编辑器', '0', '/static/gikam/main/img/imgEdit.svg', '6', '0', '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print" ] }', '1');
+INSERT INTO T_CORE_LES_UNIT(ID, UNITNAME, BINDDS, ICON, ORDERNO, AUDITTRAIL, CONFIG, ACTIVATEDFLAG) 
+VALUES ('imgUpload', '图片上传', '0', '/static/gikam/main/img/imgUpload.svg', '7', '0', '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print" ] }', '1');
+INSERT INTO T_CORE_LES_UNIT(ID, UNITNAME, BINDDS, ICON, ORDERNO, AUDITTRAIL, CONFIG, ACTIVATEDFLAG) 
+VALUES ('diagramDraw', '流程绘制', '0', '/static/gikam/main/img/diagramDraw.svg', '8', '0', '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print" ] }', '1');
+INSERT INTO T_CORE_LES_UNIT(ID, UNITNAME, BINDDS, ICON, ORDERNO, AUDITTRAIL, CONFIG, ACTIVATEDFLAG) 
+VALUES ('baseInfo', '基础信息', '0', '/static/gikam/main/img/baseInfo.svg', '9', '0', '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print", "audit" ] }', '1');
+INSERT INTO T_CORE_LES_UNIT(ID, UNITNAME, BINDDS, ICON, ORDERNO, AUDITTRAIL, CONFIG, ACTIVATEDFLAG) 
+VALUES ('formOrQueryList', '表格/表单', '1', '/static/gikam/main/img/formOrQueryList.svg', '10', '0', '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print" ] }', '1');
+
+DELETE FROM T_CORE_I18N_MESSAGE 
+ WHERE I18NID = (SELECT N.ID FROM T_CORE_I18N N WHERE N.CODE = 'T_CORE_LES_UNIT.TYPE');
+DELETE FROM T_CORE_I18N WHERE CODE = 'T_CORE_LES_UNIT.TYPE';
+
+DELETE FROM T_CORE_I18N_MESSAGE 
+ WHERE I18NID = (SELECT N.ID FROM T_CORE_I18N N WHERE N.CODE = 'T_CORE_LES_UNIT.SVG');
+DELETE FROM T_CORE_I18N WHERE CODE = 'T_CORE_LES_UNIT.SVG'; 
+
+DELETE FROM T_CORE_I18N_MESSAGE 
+ WHERE I18NID = (SELECT N.ID FROM T_CORE_I18N N WHERE N.CODE = 'T_CORE_LES_UNIT.ENABLE');
+DELETE FROM T_CORE_I18N WHERE CODE = 'T_CORE_LES_UNIT.ENABLE'; 
+
+EXEC dbo.INSERTI18N @CODEPARAM = N'T_CORE_LES_UNIT.ICON', @DESCRIPTION = N'LES组件图标', @DEFAULTMESSAGE = N'组件图标', @LANG = N'zh-CN', @MESSAGE = N'组件图标';
+EXEC dbo.INSERTI18N @CODEPARAM = N'T_CORE_LES_UNIT.AUDITTRAIL', @DESCRIPTION = N'LES组件是否开启审计跟踪', @DEFAULTMESSAGE = N'是否开启审计跟踪', @LANG = N'zh-CN', @MESSAGE = N'是否开启审计跟踪';
+EXEC dbo.INSERTI18N @CODEPARAM = N'T_CORE_LES_UNIT.CONFIG', @DESCRIPTION = N'LES组件配置', @DEFAULTMESSAGE = N'组件配置', @LANG = N'zh-CN', @MESSAGE = N'组件配置';
+EXEC dbo.INSERTI18N @CODEPARAM = N'T_CORE_LES_UNIT.ACTIVATEDFLAG', @DESCRIPTION = N'LES组件启用标志', @DEFAULTMESSAGE = N'启用标志', @LANG = N'zh-CN', @MESSAGE = N'启用标志';
+EXEC dbo.INSERTI18N @CODEPARAM = N'T_CORE_LES_UNIT.ACTIVATEDBYID', @DESCRIPTION = N'LES组件启用人编码', @DEFAULTMESSAGE = N'启用人编码', @LANG = N'zh-CN', @MESSAGE = N'启用人编码';
+EXEC dbo.INSERTI18N @CODEPARAM = N'T_CORE_LES_UNIT.ACTIVATEDBYNAME', @DESCRIPTION = N'LES组件启用人名称', @DEFAULTMESSAGE = N'启用人名称', @LANG = N'zh-CN', @MESSAGE = N'启用人名称';
+EXEC dbo.INSERTI18N @CODEPARAM = N'T_CORE_LES_UNIT.ACTIVATEDTIME', @DESCRIPTION = N'LES组件启用时间', @DEFAULTMESSAGE = N'启用时间', @LANG = N'zh-CN', @MESSAGE = N'启用时间';
+
+UPDATE T_CORE_MENU SET HREF = '/secure/core/les/les-dses/page/edit-list' WHERE ID = '9602';
+UPDATE T_CORE_MENU SET HREF = '/secure/core/les/les-templates/page/edit-list' WHERE ID = '9604';
+UPDATE T_CORE_MENU SET HREF = '/secure/core/les/les-templates/page/audit-list' WHERE ID = '9605';
+-- ----------------------------- 2020-06-15 add by zhangpf------------end
+-- ----------------------------- 2020-06-16 add by zhangpf------------begin
+UPDATE T_CORE_ADMIN_CHOOSE_CONFIG 
+   SET URL = '/secure/core/les/les-templates/page/choose-list'
+ WHERE CATEGORY = 'les-template';
+ 
+ UPDATE T_CORE_ADMIN_CHOOSE_CONFIG 
+    SET URL = '/secure/core/les/les-dses/page/choose-list'
+  WHERE CATEGORY = 'core-les-ds';
+-- ----------------------------- 2020-06-16 add by zhangpf------------end
+
+-- ----------------------------- 2020-06-18 add by zhangpf------------begin
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_LES_INSTANCE', '0', '1');
+
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_LES_INSTANCE_UNIT', '0', '1');
+
+INSERT INTO T_CORE_TABLE_HIERARCHY (ID, TABLENAME, MASTERTABLENAME, REFERCOLUMN)
+VALUES ('9604', 'T_CORE_LES_INSTANCE_UNIT', 'T_CORE_LES_INSTANCE', 'INSTANCEID');
+-- ----------------------------- 2020-06-18 add by zhangpf------------end
+
+-- ----------------------------- 2020-07-02 add by zhangpf------------begin
+EXEC dbo.INSERTI18N @CODEPARAM = N'CORE.MODULE.LES.LES_TEMPLATES.BUTTON.COPY', @DESCRIPTION = N'复制', @DEFAULTMESSAGE = N'复制', @LANG = N'zh-CN', @MESSAGE = N'复制';
+EXEC dbo.INSERTI18N @CODEPARAM = N'CORE.MODULE.LES.LES_TEMPLATES.MODEL.COPY', @DESCRIPTION = N'复制', @DEFAULTMESSAGE = N'复制', @LANG = N'zh-CN', @MESSAGE = N'复制';
+
+UPDATE T_CORE_LES_UNIT 
+   SET CONFIG = '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print", "audit", "upgrade", "downgrade" ] }'
+ WHERE ID = 'chapter';
+ 
+UPDATE T_CORE_LES_UNIT 
+   SET CONFIG = '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print", "audit" ] }'
+ WHERE ID = 'chemDoodle';
+ 
+ UPDATE T_CORE_LES_UNIT 
+   SET CONFIG = '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print", "audit" ] }'
+ WHERE ID = 'imgDraw';
+ 
+UPDATE T_CORE_LES_UNIT 
+   SET CONFIG = '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print", "audit" ] }'
+ WHERE ID = 'spread';
+
+UPDATE T_CORE_LES_UNIT 
+   SET CONFIG = '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print", "audit" ] }'
+ WHERE ID = 'imgEdit';
+ 
+UPDATE T_CORE_LES_UNIT 
+   SET CONFIG = '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print", "audit" ] }'
+ WHERE ID = 'imgUpload';
+ 
+UPDATE T_CORE_LES_UNIT 
+   SET CONFIG = '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print", "audit" ] }'
+ WHERE ID = 'diagramDraw';
+
+UPDATE T_CORE_LES_UNIT 
+   SET CONFIG = '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print", "audit" ] }'
+ WHERE ID = 'formOrQueryList';
+-- ----------------------------- 2020-07-02 add by zhangpf------------end
+
+-- ----------------------------- 2020-09-02 add by shixw------------begin
+
+alter table dbo.T_CORE_LES_TEMPLATE ADD LESTEMPLATECATEGORY VARCHAR(36) NULL
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'LES模板类型',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_LES_TEMPLATE',
+'COLUMN', N'LESTEMPLATECATEGORY'
+GO
+
+EXEC DBO.INSERTI18N  N'T_CORE_LES_TEMPLATE.LESTEMPLATECATEGORY', N'LES模板的模板类型', N'类型', N'zh-CN',N'类型';
+
+INSERT INTO T_CORE_CODE_CATEGORY(ID, CODECATEGORYNAME, CODECLASSID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME)
+    VALUES ('lesTemplateCategory', 'LES模板类型', 'biz', NULL, 1, NULL, NULL, NULL, NULL);
+
+INSERT INTO T_CORE_ADMIN_SELECT_CONFIG(ID, NAME, CATEGORY, URL, VALUEFIELD, TEXTFIELD)
+  VALUES(NEXT VALUE FOR SEQ_CORE, 'LES模板类型', 'les-template-category', '/secure/core/module/sys/codes/queries/selectable?codeCategoryId=lesTemplateCategory', 'code', 'codeName');
+
+-- ----------------------------- 2020-09-02 add by shixw------------end
+
+-- ----------------------------- 2020-10-19 add by shixw------------begin
+
+alter table dbo.T_CORE_LES_INSTANCE ADD READONLYFLAG VARCHAR(1) NULL
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'只读标志',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_LES_INSTANCE',
+'COLUMN', N'READONLYFLAG'
+GO
+
+
+EXEC DBO.INSERTI18N  N'T_CORE_LES_INSTANCE.READONLYFLAG', N'LES实例的只读标志', N'只读标志', N'zh-CN',N'只读标志';
+
+
+-- ----------------------------- 2020-10-19 add by shixw------------end
+
+-- ----------------------------- 2020-10-19 add by shixw------------begin
+
+alter table dbo.T_CORE_LES_TEMPLATE_UNIT ADD EDITFLAG VARCHAR(36) NULL
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'编辑标志',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_LES_TEMPLATE_UNIT',
+'COLUMN', N'EDITFLAG'
+GO
+
+
+EXEC DBO.INSERTI18N  N'T_CORE_LES_TEMPLATE_UNIT.EDITFLAG', N'LES模板组件的编辑标志', N'编辑标志', N'zh-CN',N'编辑标志';
+
+alter table dbo.T_CORE_LES_INSTANCE_UNIT ADD EDITFLAG VARCHAR(36) NULL
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'编辑标志',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_LES_INSTANCE_UNIT',
+'COLUMN', N'EDITFLAG'
+GO
+
+
+EXEC DBO.INSERTI18N  N'T_CORE_LES_INSTANCE_UNIT.EDITFLAG', N'LES实例组件的编辑标志', N'编辑标志', N'zh-CN',N'编辑标志';
+
+
+
+-- ----------------------------- 2020-10-19 add by shixw------------end
+
+-- ----------------------------- 2021-3-5 add by shixw------------begin
+
+alter table dbo.T_CORE_LES_INSTANCE ADD HTML TEXT NULL
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'LES实例html内容',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_LES_INSTANCE',
+'COLUMN', N'HTML'
+GO
+
+EXEC DBO.INSERTI18N  N'T_CORE_LES_INSTANCE.HTML', N'LES的实例的html内容', N'LES实例html内容', N'zh-CN',N'LES实例html内容';
+
+-- ----------------------------- 2021-3-5 add by shixw------------end
+
+-- ----------------------------- 2021-5-6 add by shixw------------begin
+
+alter table dbo.T_CORE_LES_UNIT ADD THUMBNAIL VARCHAR(270) NULL
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'缩略图',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_LES_UNIT',
+'COLUMN', N'THUMBNAIL'
+GO
+
+EXEC DBO.INSERTI18N N'T_CORE_LES_UNIT.THUMBNAIL', N'LES组件的缩略图', N'缩略图', N'zh-CN',N'缩略图';
+
+UPDATE T_CORE_LES_UNIT SET THUMBNAIL =REPLACE (ICON,'.','-thumbnail.');
+
+-- ----------------------------- 2021-5-6 add by shixw------------end
+
+-- 原LES 微服务
+
+
+-- 原Office 微服务
+-- ----------------------------- 2020-12-17 add by zhanghang--------------begin
+
+CREATE TABlE DBO.T_CORE_OFFICE_TOOLBAR(
+    ID BIGINT NOT NULL,
+    OFFICECATEGORY VARCHAR(60)  NULL ,
+    MENUCATEGORYNAME VARCHAR(60)  NULL ,
+    MENUCATEGORYCODE VARCHAR(30)  NULL ,
+    CREATEDBYID VARCHAR(36)  NULL ,
+    CREATEDBYNAME VARCHAR(60)  NULL ,
+    CREATEDTIME DATETIME NULL ,
+    CREATEDBYORGID VARCHAR(36)  NULL ,
+    CREATEDBYORGNAME VARCHAR(270)  NULL ,
+	LASTSUSPENDEDFLAG VARCHAR(1) NOT NULL  ,
+	LASTSUSPENDEDBYID VARCHAR(36)  NULL ,
+	LASTSUSPENDEDBYNAME VARCHAR(60)  NULL  ,
+	LASTSUSPENDEDTIME DATE  NULL ,
+    CONSTRAINT PK_CORE_OFFICE_TOOLBAR PRIMARY KEY(ID)
+	);
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Office工具栏表' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_TOOLBAR';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'主键' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_TOOLBAR', @level2type=N'COLUMN',@level2name=N'ID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'文档类型（WORD/EXCEL）' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_TOOLBAR', @level2type=N'COLUMN',@level2name=N'OFFICECATEGORY';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'菜单分类名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_TOOLBAR', @level2type=N'COLUMN',@level2name=N'MENUCATEGORYNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'菜单分类编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_TOOLBAR', @level2type=N'COLUMN',@level2name=N'MENUCATEGORYCODE';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_TOOLBAR', @level2type=N'COLUMN',@level2name=N'CREATEDBYID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_TOOLBAR', @level2type=N'COLUMN',@level2name=N'CREATEDBYNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_TOOLBAR', @level2type=N'COLUMN',@level2name=N'CREATEDTIME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_TOOLBAR', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_TOOLBAR', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGNAME';
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'停用标志(0：正常,1:停用)' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_TOOLBAR', @level2type=N'COLUMN',@level2name=N'LASTSUSPENDEDFLAG';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'启用/停用人编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_TOOLBAR', @level2type=N'COLUMN',@level2name=N'LASTSUSPENDEDBYID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'启用/停用人名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_TOOLBAR', @level2type=N'COLUMN',@level2name=N'LASTSUSPENDEDBYNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'启用/停用时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_TOOLBAR', @level2type=N'COLUMN',@level2name=N'LASTSUSPENDEDTIME';
+
+CREATE TABlE DBO.T_CORE_OFFICE_TOOLBAR_LINE(
+    ID BIGINT NOT NULL,
+    TOOLBARID BIGINT NULL ,
+    MENUNAME VARCHAR(60)  NULL ,
+    MENUCODE VARCHAR(30)  NULL ,
+    MENUDESC VARCHAR(120)  NULL ,
+    CREATEDBYID VARCHAR(36)  NULL ,
+    CREATEDBYNAME VARCHAR(60)  NULL ,
+    CREATEDTIME DATETIME NULL ,
+    CREATEDBYORGID VARCHAR(36)  NULL ,
+    CREATEDBYORGNAME VARCHAR(270)  NULL ,
+    LASTSUSPENDEDFLAG VARCHAR(1) NOT NULL  ,
+    LASTSUSPENDEDBYID VARCHAR(36)  NULL   ,
+    LASTSUSPENDEDBYNAME VARCHAR(60)  NULL  ,
+    LASTSUSPENDEDTIME DATE  NULL   ,
+    CONSTRAINT PK_CORE_OFFICE_TOOLBAR_LINE PRIMARY KEY(ID));
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Office工具栏明细表' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_TOOLBAR_LINE';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'主键' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_TOOLBAR_LINE', @level2type=N'COLUMN',@level2name=N'ID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'工具栏表ID' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_TOOLBAR_LINE', @level2type=N'COLUMN',@level2name=N'TOOLBARID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'菜单名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_TOOLBAR_LINE', @level2type=N'COLUMN',@level2name=N'MENUNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'菜单编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_TOOLBAR_LINE', @level2type=N'COLUMN',@level2name=N'MENUCODE';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'菜单描述' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_TOOLBAR_LINE', @level2type=N'COLUMN',@level2name=N'MENUDESC';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_TOOLBAR_LINE', @level2type=N'COLUMN',@level2name=N'CREATEDBYID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_TOOLBAR_LINE', @level2type=N'COLUMN',@level2name=N'CREATEDBYNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_TOOLBAR_LINE', @level2type=N'COLUMN',@level2name=N'CREATEDTIME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_TOOLBAR_LINE', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_TOOLBAR_LINE', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'停用标志(0：正常,1:停用)' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_TOOLBAR_LINE', @level2type=N'COLUMN',@level2name=N'LASTSUSPENDEDFLAG';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'启用/停用人编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_TOOLBAR_LINE', @level2type=N'COLUMN',@level2name=N'LASTSUSPENDEDBYID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'启用/停用人名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_TOOLBAR_LINE', @level2type=N'COLUMN',@level2name=N'LASTSUSPENDEDBYNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'启用/停用时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_TOOLBAR_LINE', @level2type=N'COLUMN',@level2name=N'LASTSUSPENDEDTIME';
+
+CREATE NONCLUSTERED INDEX [IDX_CORE_OFFICE_TOOLBARID] ON [dbo].[T_CORE_OFFICE_TOOLBAR_LINE] ([TOOLBARID]);
+
+CREATE TABlE DBO.T_CORE_OFFICE_CUSTOMIZATION(
+    ID VARCHAR(30)  NOT NULL,
+    ADDRESS VARCHAR(510)  NULL ,
+    INFO VARCHAR(60)  NULL ,
+    MAIL VARCHAR(60)  NULL ,
+    NAME VARCHAR(60)  NULL ,
+    WWW VARCHAR(120)  NULL ,
+    LOGO VARCHAR(510)  NULL ,
+    ABOUTLOGO VARCHAR(510)  NULL ,
+	DOWNLOADAS VARCHAR(255)  NULL ,
+    CONSTRAINT PK_CORE_OFFICE_CUSTOMIZATION PRIMARY KEY(ID));
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Office定制化配置表' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_CUSTOMIZATION';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'主键' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_CUSTOMIZATION', @level2type=N'COLUMN',@level2name=N'ID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'关于-地址' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_CUSTOMIZATION', @level2type=N'COLUMN',@level2name=N'ADDRESS';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'关于-简介' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_CUSTOMIZATION', @level2type=N'COLUMN',@level2name=N'INFO';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'关于-邮箱' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_CUSTOMIZATION', @level2type=N'COLUMN',@level2name=N'MAIL';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'关于-名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_CUSTOMIZATION', @level2type=N'COLUMN',@level2name=N'NAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'关于-网址' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_CUSTOMIZATION', @level2type=N'COLUMN',@level2name=N'WWW';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'界面左上角-LOGO图片地址' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_CUSTOMIZATION', @level2type=N'COLUMN',@level2name=N'LOGO';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'关于-LOGO图片地址' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_CUSTOMIZATION', @level2type=N'COLUMN',@level2name=N'ABOUTLOGO';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'文件-下载格式选项' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_CUSTOMIZATION', @level2type=N'COLUMN',@level2name=N'DOWNLOADAS';
+
+
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_TOOLBAR.SERVICE_NAME', N'Office工具栏表', N'Office工具栏表', N'zh-CN',N'Office工具栏表';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_TOOLBAR.ID', N'Office工具栏表的主键', N'主键', N'zh-CN',N'主键';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_TOOLBAR.OFFICECATEGORY', N'Office工具栏表的文档类型（WORD/EXCEL）', N'文档类型（WORD/EXCEL）', N'zh-CN',N'文档类型（WORD/EXCEL）';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_TOOLBAR.MENUCATEGORYNAME', N'Office工具栏表的菜单分类名称', N'菜单分类名称', N'zh-CN',N'菜单分类名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_TOOLBAR.MENUCATEGORYCODE', N'Office工具栏表的菜单分类编码', N'菜单分类编码', N'zh-CN',N'菜单分类编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_TOOLBAR.CREATEDBYID', N'Office工具栏表的制单人编码', N'制单人编码', N'zh-CN',N'制单人编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_TOOLBAR.CREATEDBYNAME', N'Office工具栏表的制单人名称', N'制单人名称', N'zh-CN',N'制单人名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_TOOLBAR.CREATEDTIME', N'Office工具栏表的制单时间', N'制单时间', N'zh-CN',N'制单时间';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_TOOLBAR.CREATEDBYORGID', N'Office工具栏表的制单人单位编码', N'制单人单位编码', N'zh-CN',N'制单人单位编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_TOOLBAR.CREATEDBYORGNAME', N'Office工具栏表的制单人单位名称', N'制单人单位名称', N'zh-CN',N'制单人单位名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_TOOLBAR_LINE.SERVICE_NAME', N'Office工具栏明细表', N'Office工具栏明细表', N'zh-CN',N'Office工具栏明细表';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_TOOLBAR_LINE.ID', N'Office工具栏明细表的主键', N'主键', N'zh-CN',N'主键';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_TOOLBAR_LINE.TOOLBARID', N'Office工具栏明细表的工具栏表ID', N'工具栏表ID', N'zh-CN',N'工具栏表ID';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_TOOLBAR_LINE.MENUNAME', N'Office工具栏明细表的菜单名称', N'菜单名称', N'zh-CN',N'菜单名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_TOOLBAR_LINE.MENUCODE', N'Office工具栏明细表的菜单编码', N'菜单编码', N'zh-CN',N'菜单编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_TOOLBAR_LINE.MENUDESC', N'Office工具栏明细表的菜单描述', N'菜单描述', N'zh-CN',N'菜单描述';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_TOOLBAR_LINE.CREATEDBYID', N'Office工具栏明细表的制单人编码', N'制单人编码', N'zh-CN',N'制单人编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_TOOLBAR_LINE.CREATEDBYNAME', N'Office工具栏明细表的制单人名称', N'制单人名称', N'zh-CN',N'制单人名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_TOOLBAR_LINE.CREATEDTIME', N'Office工具栏明细表的制单时间', N'制单时间', N'zh-CN',N'制单时间';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_TOOLBAR_LINE.CREATEDBYORGID', N'Office工具栏明细表的制单人单位编码', N'制单人单位编码', N'zh-CN',N'制单人单位编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_TOOLBAR_LINE.CREATEDBYORGNAME', N'Office工具栏明细表的制单人单位名称', N'制单人单位名称', N'zh-CN',N'制单人单位名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_CUSTOMIZATION.SERVICE_NAME', N'Office定制化配置表', N'Office定制化配置表', N'zh-CN',N'Office定制化配置表';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_CUSTOMIZATION.ID', N'Office定制化配置表的主键', N'主键', N'zh-CN',N'主键';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_CUSTOMIZATION.ADDRESS', N'Office定制化配置表的关于-地址', N'关于-地址', N'zh-CN',N'关于-地址';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_CUSTOMIZATION.INFO', N'Office定制化配置表的关于-简介', N'关于-简介', N'zh-CN',N'关于-简介';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_CUSTOMIZATION.MAIL', N'Office定制化配置表的关于-邮箱', N'关于-邮箱', N'zh-CN',N'关于-邮箱';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_CUSTOMIZATION.NAME', N'Office定制化配置表的关于-名称', N'关于-名称', N'zh-CN',N'关于-名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_CUSTOMIZATION.WWW', N'Office定制化配置表的关于-网址', N'关于-网址', N'zh-CN',N'关于-网址';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_CUSTOMIZATION.LOGO', N'Office定制化配置表的界面左上角-LOGO图片地址', N'界面左上角-LOGO图片地址', N'zh-CN',N'关于-网址';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_CUSTOMIZATION.ABOUTLOGO', N'Office定制化配置表的关于-LOGO图片地址', N'关于-LOGO图片地址', N'zh-CN',N'关于-网址';
+EXEC DBO.INSERTI18N  N'T_CORE_OFFICE_CUSTOMIZATION.DOWNLOADAS', N'Office定制化配置表的文件-下载格式选项', N'文件-下载格式选项', N'zh-CN',N'文件-下载格式选项';
+EXEC  DBO.INSERTI18N  N'CLOUD.GIKAM.OFFICES.MODAL.ADD', N'新增', N'新增', N'zh-CN',N'新增';
+EXEC  DBO.INSERTI18N  N'CLOUD.GIKAM.OFFICES.TAB.BASE_INFO', N'基本信息', N'基本信息', N'zh-CN',N'基本信息';
+EXEC  DBO.INSERTI18N  N'CLOUD.GIKAM.OFFICES.TAB.TOOLBAR_LINE', N'Office工具栏明细表', N'Office工具栏明细表', N'zh-CN',N'Office工具栏明细表';
+EXEC  DBO.INSERTI18N  N'CLOUD.GIKAM.OFFICES.BUTTON.BUTTON', N'按钮', N'按钮', N'zh-CN',N'按钮';
+EXEC  DBO.INSERTI18N  N'CLOUD.GIKAM.OFFICES.TIP.TIP', N'提示框', N'提示框', N'zh-CN',N'提示框';
+EXEC  DBO.INSERTI18N  N'CLOUD.GIKAM.OFFICES.MODAL.MODAL', N'对话框', N'对话框', N'zh-CN',N'对话框';
+
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_TOOLBAR.LASTSUSPENDEDFLAG', N'停用标志(0：正常,1:停用)', N'停用标志', N'zh-CN',N'停用标志';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_TOOLBAR.LASTSUSPENDEDBYID', N'启用/停用人编码', N'启用/停用人编码', N'zh-CN',N'启用/停用人编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_TOOLBAR.LASTSUSPENDEDBYNAME', N'启用/停用人名称', N'启用/停用人名称', N'zh-CN',N'启用/停用人名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_TOOLBAR.LASTSUSPENDEDTIME', N'启用/停用时间', N'启用/停用时间', N'zh-CN',N'启用/停用时间';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_TOOLBAR_LINE.LASTSUSPENDEDFLAG', N'停用标志(0：正常,1:停用)', N'停用标志', N'zh-CN',N'停用标志';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_TOOLBAR_LINE.LASTSUSPENDEDBYID', N'启用/停用人编码', N'启用/停用人编码', N'zh-CN',N'启用/停用人编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_TOOLBAR_LINE.LASTSUSPENDEDBYNAME', N'启用/停用人名称', N'启用/停用人名称', N'zh-CN',N'启用/停用人名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_TOOLBAR_LINE.LASTSUSPENDEDTIME', N'启用/停用时间', N'启用/停用时间', N'zh-CN',N'启用/停用时间';
+
+
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_OFFICE_TOOLBAR', '0', '0');
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_OFFICE_TOOLBAR_LINE', '0', '0');
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_OFFICE_CUSTOMIZATION', '0', '0');
+
+
+INSERT INTO T_CORE_TABLE_HIERARCHY (ID, TABLENAME, MASTERTABLENAME, REFERCOLUMN)
+VALUES ('8901','T_CORE_OFFICE_TOOLBAR_LINE', 'T_CORE_OFFICE_TOOLBAR', 'TOOLBARID');
+
+INSERT INTO T_CORE_OFFICE_CUSTOMIZATION (ID, ADDRESS,MAIL, NAME, WWW,DOWNLOADAS) VALUES ('officeCustomization', '20A-12 Ernesta Birznieka-Upisha street, Riga, Latvia, EU, LV-1050', 'support@onlyoffice.com', 'Ascensio System SIA', 'www.onlyoffice.com','{"word":"DOCX,PDF,ODT,TXT,DOTX,PDFA,OTT,RTF,HTML","excel":"XLSX,PDF,ODS,CSV,XLTX,PDFA,OTS"}');
+
+INSERT INTO T_CORE_OFFICE_TOOLBAR (ID, OFFICECATEGORY, MENUCATEGORYNAME, MENUCATEGORYCODE, LASTSUSPENDEDFLAG) VALUES ( 20201215001, 'word', '文件', 'file', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR (ID, OFFICECATEGORY, MENUCATEGORYNAME, MENUCATEGORYCODE, LASTSUSPENDEDFLAG) VALUES ( 20201215002, 'word', '主页', 'home', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR (ID, OFFICECATEGORY, MENUCATEGORYNAME, MENUCATEGORYCODE, LASTSUSPENDEDFLAG) VALUES ( 20201215003, 'word', '插入', 'ins', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR (ID, OFFICECATEGORY, MENUCATEGORYNAME, MENUCATEGORYCODE, LASTSUSPENDEDFLAG) VALUES ( 20201215004, 'word', '布局', 'layout', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR (ID, OFFICECATEGORY, MENUCATEGORYNAME, MENUCATEGORYCODE, LASTSUSPENDEDFLAG) VALUES ( 20201215005, 'word', '参考', 'links', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR (ID, OFFICECATEGORY, MENUCATEGORYNAME, MENUCATEGORYCODE, LASTSUSPENDEDFLAG) VALUES ( 20201215006, 'word', '协作', 'collaboration', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR (ID, OFFICECATEGORY, MENUCATEGORYNAME, MENUCATEGORYCODE, LASTSUSPENDEDFLAG) VALUES ( 20201215007, 'word', '左侧菜单', 'leftMenu', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR (ID, OFFICECATEGORY, MENUCATEGORYNAME, MENUCATEGORYCODE, LASTSUSPENDEDFLAG) VALUES ( 20201215008, 'word', '右侧菜单', 'rightMenu', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR (ID, OFFICECATEGORY, MENUCATEGORYNAME, MENUCATEGORYCODE, LASTSUSPENDEDFLAG) VALUES ( 20201215009, 'word', '底部状态栏', 'statusBar', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR (ID, OFFICECATEGORY, MENUCATEGORYNAME, MENUCATEGORYCODE, LASTSUSPENDEDFLAG) VALUES ( 20201215010, 'word', '其他', 'other', '0');
+
+INSERT INTO T_CORE_OFFICE_TOOLBAR (ID, OFFICECATEGORY, MENUCATEGORYNAME, MENUCATEGORYCODE, LASTSUSPENDEDFLAG) VALUES ( 20201215011, 'excel', '文件', 'file', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR (ID, OFFICECATEGORY, MENUCATEGORYNAME, MENUCATEGORYCODE, LASTSUSPENDEDFLAG) VALUES ( 20201215012, 'excel', '主页', 'home', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR (ID, OFFICECATEGORY, MENUCATEGORYNAME, MENUCATEGORYCODE, LASTSUSPENDEDFLAG) VALUES ( 20201215013, 'excel', '插入', 'ins', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR (ID, OFFICECATEGORY, MENUCATEGORYNAME, MENUCATEGORYCODE, LASTSUSPENDEDFLAG) VALUES ( 20201215014, 'excel', '布局', 'layout', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR (ID, OFFICECATEGORY, MENUCATEGORYNAME, MENUCATEGORYCODE, LASTSUSPENDEDFLAG) VALUES ( 20201215015, 'excel', '公式', 'formula', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR (ID, OFFICECATEGORY, MENUCATEGORYNAME, MENUCATEGORYCODE, LASTSUSPENDEDFLAG) VALUES ( 20201215016, 'excel', '数据', 'data', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR (ID, OFFICECATEGORY, MENUCATEGORYNAME, MENUCATEGORYCODE, LASTSUSPENDEDFLAG) VALUES ( 20201215017, 'excel', '数据透视表', 'pivot', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR (ID, OFFICECATEGORY, MENUCATEGORYNAME, MENUCATEGORYCODE, LASTSUSPENDEDFLAG) VALUES ( 20201215018, 'excel', '协作', 'collaboration', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR (ID, OFFICECATEGORY, MENUCATEGORYNAME, MENUCATEGORYCODE, LASTSUSPENDEDFLAG) VALUES ( 20201215019, 'excel', '左侧菜单', 'leftMenu', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR (ID, OFFICECATEGORY, MENUCATEGORYNAME, MENUCATEGORYCODE, LASTSUSPENDEDFLAG) VALUES ( 20201215020, 'excel', '右侧菜单', 'rightMenu', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR (ID, OFFICECATEGORY, MENUCATEGORYNAME, MENUCATEGORYCODE, LASTSUSPENDEDFLAG) VALUES ( 20201215021, 'excel', '底部状态栏', 'statusBar', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR (ID, OFFICECATEGORY, MENUCATEGORYNAME, MENUCATEGORYCODE, LASTSUSPENDEDFLAG) VALUES ( 20201215022, 'excel', '其他', 'other', '0');
+
+
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215001, '下载为', 'downloadAs', '文件-下载', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215001, '保存', 'save', '文件-保存', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215001, '打印', 'print', '文件-打印', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215001, '文件信息', 'fileInfo', '文件-文件信息', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215001, '高级设置', 'advancedSetting', '文件-高级设置', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215001, '帮助', 'help', '文件-帮助', '0');
+
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215002, '字体', 'fontFamlily', '主页-字体', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215002, '字体大小', 'fontSize', '主页-字体大小', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215002, '增加字体大小', 'incFontSize', '主页-增加字体大小', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215002, '减小字体大小', 'decFontSize', '主页-减小字体大小', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215002, '加粗', 'bold', '主页-加粗', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215002, '斜体', 'italic', '主页-斜体', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215002, '下划线', 'underline', '主页-下划线', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215002, '删除线', 'deleteline', '主页-删除线', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215002, '上标', 'sup', '主页-上标', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215002, '下标', 'sub', '主页-下标', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215002, '颜色高亮', 'highLightColor', '主页-颜色高亮', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215002, '字体颜色', 'fontColor', '主页-字体颜色', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215002, '段落背景色', 'paragraphBgColor', '主页-段落背景色', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215002, '着重号', 'marker', '主页-着重号', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215002, '编号', 'numbering', '主页-编号', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215002, '多级列表', 'multiLevel', '主页-多级列表', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215002, '减少缩进', 'decoffset', '主页-减少缩进', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215002, '增加缩进', 'inoffset', '主页-增加缩进', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215002, '段线间距', 'linespace', '主页-段线间距', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215002, '左对齐', 'alignLeft', '主页-左对齐', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215002, '居中对齐', 'alignCenter', '主页-居中对齐', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215002, '右对齐', 'alignRight', '主页-右对齐', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215002, '两端对齐', 'alignJust', '主页-两端对齐', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215002, '不打印字符', 'hiddenChars', '主页-不打印字符', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215002, '清除样式', 'clearstyle', '主页-清除样式', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215002, '更改配色方案', 'colorschemas', '主页-更改配色方案', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215002, '复制样式', 'copystyle', '主页-复制样式', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215002, '组合样式', 'combostyles', '主页-组合样式', '0');
+
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215003, '空白页', 'whitePage', '插入-空白页', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215003, '分隔符', 'separator', '插入-分隔符', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215003, '页眉页', 'headerAndFooter', '插入-页眉页', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215003, '表格', 'table', '插入-表格', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215003, '图片', 'image', '插入-图片', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215003, '图表', 'chart', '插入-图表', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215003, '形状', 'shape', '插入-形状', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215003, '超链接', 'hyperlink', '插入-超链接', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215003, '批注', 'comment', '插入-批注', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215003, '文本框', 'textBox', '插入-文本框', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215003, '艺术字', 'artFont', '插入-艺术字', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215003, '方程式', 'equation', '插入-方程式', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215003, '字符', 'symbol', '插入-字符', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215003, '下沉', 'DROPcap', '插入-下沉', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215003, '内容控件', 'contentControl', '插入-内容控件', '0');
+
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215004, '边距', 'borderDistance', '布局-边距', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215004, '选项', 'option', '布局-选项', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215004, '大小', 'pagesize', '布局-大小', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215004, '列', 'column', '布局-列', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215004, '分隔符', 'separator', '布局-分隔符', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215004, '对齐', 'align', '布局-对齐', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215004, '分组', 'group', '布局-分组', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215004, '向前移动', 'forward', '布局-向前移动', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215004, '向后移动', 'backward', '布局-向后移动', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215004, '环绕', 'surround', '布局-环绕', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215004, '水印', 'watermark', '布局-水印', '0');
+
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215005, '目录', 'content', '链接-目录', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215005, '刷新', 'refresh', '链接-刷新', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215005, '脚注', 'footnote', '链接-脚注', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215005, '超链接', 'hyperlink', '链接-超链接', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215005, '书签', 'bookmark', '链接-书签', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215005, '标题', 'caption', '链接-标题', '0');
+
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215006, '共同编辑模式', 'commonEditMode', '协作-共同编辑模式', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215006, '添加评论', 'addComment', '协作-添加评论', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215006, '删除评论', 'removeComment', '协作-删除评论', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215006, '跟踪变化', 'traceChange', '协作-跟踪变化', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215006, '显示模式', 'viewMode', '协作-显示模式', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215006, '以前的变化', 'lastChange', '协作-以前的变化', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215006, '下次变更', 'nextChange', '协作-下次变更', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215006, '接受', 'accept', '协作-接受', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215006, '拒绝', 'reject', '协作-拒绝', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215006, '比较', 'comparison', '协作-比较', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215006, '聊天', 'chat', '协作-聊天', '0');
+
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215007, '搜索', 'search', '左侧菜单-搜索', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215007, '评论', 'comment', '左侧菜单-评论', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215007, '聊天', 'chat', '左侧菜单-聊天', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215007, '导航', 'navigation', '左侧菜单-导航', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215007, '关于', 'about', '左侧菜单-关于', '0');
+
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215008, '段落设置', 'text', '右侧菜单-段落设置', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215008, '表设置', 'table', '右侧菜单-表设置', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215008, '图像设置', 'image', '右侧菜单-图像设置', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215008, '页眉页脚设置', 'headerAndFooter', '右侧菜单-页眉页脚设置', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215008, '形状设置', 'shape', '右侧菜单-形状设置', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215008, '图表设置', 'chart', '右侧菜单-图表设置', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215008, '艺术字设置', 'textart', '右侧菜单-艺术字设置', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215008, '合并邮件设置', 'mailMerge', '右侧菜单-合并邮件设置', '0');
+
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215009, '跟踪变化', 'traceChange', '底部状态栏-跟踪变化', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215009, '适合页面', 'pageFit', '底部状态栏-适合页面', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215009, '适合宽度', 'widthFit', '底部状态栏-适合宽度', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215009, '缩小', 'zoomDown', '底部状态栏-缩小', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215009, '放大', 'zoomUp', '底部状态栏-放大', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215009, '缩放', 'zoomMenu', '底部状态栏-缩放', '0');
+
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215010, '保存', 'forcesave', '其它-保存', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215010, '打印', 'print', '其它-打印', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215010, '撤销', 'undo', '其它-撤销', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215010, '重做', 'redo', '其它-重做', '0');
+
+
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215011, '下载为', 'downloadAs', '文件-下载', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215011, '保存', 'save', '文件-保存', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215011, '打印', 'print', '文件-打印', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215011, '文件信息', 'fileInfo', '文件-文件信息', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215011, '高级设置', 'advancedSetting', '文件-高级设置', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215011, '帮助', 'help', '文件-帮助', '0');
+
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215012, '字体', 'fontFamlily', '主页-字体', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215012, '字体大小', 'fontSize', '主页-字体大小', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215012, '增加字体大小', 'decFontSize', '主页-增加字体大小', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215012, '减小字体大小', 'incFontSize', '主页-减小字体大小', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215012, '加粗', 'bold', '主页-加粗', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215012, '斜体', 'italic', '主页-斜体', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215012, '下划线', 'underline', '主页-下划线', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215012, '删除线', 'deleteLine', '主页-删除线', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215012, '上标', 'sub', '主页-上标', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215012, '字体颜色', 'textColor', '主页-字体颜色', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215012, '背景颜色', 'backColor', '主页-背景颜色', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215012, '边框', 'border', '主页-边框', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215012, '顶端对齐', 'alignTop', '主页-顶端对齐', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215012, '对齐中间', 'alignMiddle', '主页-对齐中间', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215012, '底部对齐', 'alignBottom', '主页-底部对齐', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215012, '文字换行', 'wrap', '主页-文字换行', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215012, '选项', 'textOrient', '主页-选项', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215012, '左对齐', 'alignLeft', '主页-左对齐', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215012, '居中对齐', 'alignCenter', '主页-居中对齐', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215012, '右对齐', 'alignRight', '主页-右对齐', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215012, '两端对齐', 'alignJust', '主页-两端对齐', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215012, '合并', 'merge', '主页-合并', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215012, '求和', 'sum', '主页-求和', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215012, '命名范围', 'namedRange', '主页-命名范围', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215012, '升序排序', 'sortUp', '主页-升序排序', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215012, '降序排序', 'sortDown', '主页-降序排序', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215012, '过滤', 'setFilter', '主页-过滤', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215012, '清除过滤', 'clearFilter', '主页-清除过滤', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215012, '数字格式', 'format', '主页-数字格式', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215012, '统计风格', 'currency', '主页-统计风格', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215012, '百分比风格', 'percent', '主页-百分比风格', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215012, '减少十进制', 'decDecimal', '主页-减少十进制', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215012, '增加十进制', 'incDecimal', '主页-增加十进制', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215012, '插入单元格', 'addCell', '主页-插入单元格', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215012, '删除单元格', 'delCell', '主页-删除单元格', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215012, '清除', 'clearStyle', '主页-清除', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215012, '更改配色方案', 'colorSchemas', '主页-更改配色方案', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215012, '复制样式', 'copyStyle', '主页-复制样式', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215012, '设置单元格为模板', 'ttempl', '主页-设置单元格为模板', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215012, '标题级别', 'fieldStyle', '主页-标题级别', '0');
+
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215013, '表格', 'table', '插入-表格', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215013, '图片', 'image', '插入-图片', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215013, '形状', 'shape', '插入-形状', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215013, '文本框', 'textBox', '插入-文本框', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215013, '艺术字', 'textArt', '插入-艺术字', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215013, '图表', 'chart', '插入-图表', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215013, '批注', 'comment', '插入-批注', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215013, '超链接', 'hyperlink', '插入-超链接', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215013, '页眉页脚', 'headerAndFooter', '插入-页眉页脚', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215013, '方程', 'equation', '插入-方程', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215013, '符号', 'symbol', '插入-符号', '0');
+
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215014, '边距', 'pagemargins', '布局-边距', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215014, '选项', 'pageorient', '布局-选项', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215014, '大小', 'pagesize', '布局-大小', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215014, '打印区域', 'printarea', '布局-打印区域', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215014, '页眉页脚', 'headerAndFooter', '布局-页眉页脚', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215014, '按比例调整', 'scale', '布局-按比例调整', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215014, '对齐', 'align', '布局-对齐', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215014, '分组', 'group', '布局-分组', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215014, '向前移动', 'forward', '布局-向前移动', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215014, '向后移动', 'backward', '布局-向后移动', '0');
+
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215015, '功能', 'additionalFormula', '公式-功能', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215015, '自动求和', 'sutosum', '公式-自动求和', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215015, '最近使用', 'recent', '公式-最近使用', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215015, '金融', 'financial', '公式-金融', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215015, '合乎逻辑', 'logical', '公式-合乎逻辑', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215015, '文字和数据', 'text', '公式-文字和数据', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215015, '日期和时间', 'datetime', '公式-日期和时间', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215015, '查找和参考', 'lookup', '公式-查找和参考', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215015, '数学和三角学', 'math', '公式-数学和三角学', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215015, '更多功能', 'more', '公式-更多功能', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215015, '计算', 'calculate', '公式-计算', '0');
+
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215016, '升序排序', 'sortUp', '数据-升序排序', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215016, '降序排序', 'sortDown', '数据-降序排序', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215016, '过滤', 'setFilter', '数据-过滤', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215016, '清除过滤', 'clearFilter', '数据-清除过滤', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215016, '自定义排序', 'customSort', '数据-自定义排序', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215016, '文本分列向导', 'textColumn', '数据-文本分列向导', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215016, '分组', 'group', '数据-分组', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215016, '取消组合', 'ungroup', '数据-取消组合', '0');
+
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215017, '选择', 'selectPivot', '数据透视表-选择', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215017, '行标题', 'rowHeader', '数据透视表-行标题', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215017, '镶边行', 'bandedRow', '数据透视表-镶边行', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215017, '列标题', 'columnHeader', '数据透视表-列标题', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215017, '镶边列', 'bandedColumn', '数据透视表-镶边列', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215017, '模板', 'pivotStyles', '数据透视表-模板', '0');
+
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215018, '共同编辑模式', 'commonEditMode', '协作-共同编辑模式', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215018, '添加评论', 'addComment', '协作-添加评论', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215018, '删除评论', 'removeComment', '协作-删除评论', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215018, '聊天', 'chat', '协作-聊天', '0');
+
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215019, '搜索', 'search', '左侧菜单-搜索', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215019, '评论', 'comment', '左侧菜单-评论', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215019, '聊天', 'chat', '左侧菜单-聊天', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215019, '关于', 'about', '左侧菜单-关于', '0');
+
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215020, '单元格设置', 'cellSetting', '右侧菜单-单元格设置', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215020, '表设置', 'table', '右侧菜单-表设置', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215020, '形状设置', 'shape', '右侧菜单-形状设置', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215020, '图像设置', 'image', '右侧菜单-图像设置', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215020, '段落设置', 'paragraphSettings', '右侧菜单-段落设置', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215020, '艺术字', 'textArt', '右侧菜单-艺术字', '0');
+
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215021, '缩小', 'zoomDown', '底部状态栏-缩小', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215021, '缩放', 'zoomMenu', '底部状态栏-缩放', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215021, '放大', 'zoomUp', '底部状态栏-放大', '0');
+
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215022, '保存', 'forcesave', '其它-保存', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215022, '打印', 'print', '其它-打印', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215022, '撤销', 'undo', '其它-撤销', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215022, '重做', 'redo', '其它-重做', '0');
+
+EXEC  DBO.INSERTI18N  N'GIKAM.OFFICE.TIP.DO_NOT_USE_LOCALHOST', N'请勿使用本地IP(localhost)', N'请勿使用本地IP(localhost)', N'zh-CN',N'请勿使用本地IP(localhost)';
+-- ----------------------------- 2020-12-17 add by zhanghang------------end
+
+-- ----------------------------- 2020-01-15 add by zhanghang--------------begin      0.9.2补丁已发布
+-- 建表语句
+CREATE TABlE DBO.T_CORE_OFFICE_DS(
+    ID BIGINT NOT NULL,
+    DSNAME VARCHAR(128)  NULL ,
+    SQLCONTENT TEXT NULL ,
+    SQLCLAUSE VARCHAR(512)  NULL ,
+    DISPLAYCATEGORY VARCHAR(32)  NULL ,
+    CREATEDBYID VARCHAR(36)  NULL ,
+    CREATEDBYNAME VARCHAR(60)  NULL ,
+    CREATEDTIME DATETIME NULL ,
+    CREATEDBYORGID VARCHAR(36)  NULL ,
+    CREATEDBYORGNAME VARCHAR(270)  NULL ,
+    ACTIVATEDFLAG VARCHAR(1)  NULL ,
+    ACTIVATEDBYID VARCHAR(36)  NULL ,
+    ACTIVATEDBYNAME VARCHAR(60)  NULL ,
+    ACTIVATEDTIME DATETIME NULL ,
+    CONSTRAINT PK_CORE_OFFICE_DS PRIMARY KEY(ID));
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'报告数据源表' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_DS';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'主键' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_DS', @level2type=N'COLUMN',@level2name=N'ID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'数据源名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_DS', @level2type=N'COLUMN',@level2name=N'DSNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'SQL内容' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_DS', @level2type=N'COLUMN',@level2name=N'SQLCONTENT';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'SQL条件' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_DS', @level2type=N'COLUMN',@level2name=N'SQLCLAUSE';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'展示类型' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_DS', @level2type=N'COLUMN',@level2name=N'DISPLAYCATEGORY';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_DS', @level2type=N'COLUMN',@level2name=N'CREATEDBYID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_DS', @level2type=N'COLUMN',@level2name=N'CREATEDBYNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_DS', @level2type=N'COLUMN',@level2name=N'CREATEDTIME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_DS', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_DS', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'启用标志（0-否 1-是）' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_DS', @level2type=N'COLUMN',@level2name=N'ACTIVATEDFLAG';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'启用人编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_DS', @level2type=N'COLUMN',@level2name=N'ACTIVATEDBYID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'启动人名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_DS', @level2type=N'COLUMN',@level2name=N'ACTIVATEDBYNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'启用时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_DS', @level2type=N'COLUMN',@level2name=N'ACTIVATEDTIME';
+
+CREATE TABlE DBO.T_CORE_OFFICE_DS_FIELD(
+    ID BIGINT NOT NULL,
+    DSID BIGINT NULL ,
+    SQLCOLUMNNAME VARCHAR(128)  NULL ,
+    SHOWCOLUMNNAME VARCHAR(128)  NULL ,
+    ISPICTURE VARCHAR(1)  NULL ,
+    PICTUREWIDTH BIGINT NULL ,
+    PICTUREHEIGHT BIGINT NULL ,
+    ORDERNO BIGINT NULL ,
+    CREATEDBYID VARCHAR(36)  NULL ,
+    CREATEDBYNAME VARCHAR(60)  NULL ,
+    CREATEDTIME DATETIME NULL ,
+    CREATEDBYORGID VARCHAR(36)  NULL ,
+    CREATEDBYORGNAME VARCHAR(270)  NULL ,
+    CONSTRAINT PK_CORE_OFFICE_DS_FIELD PRIMARY KEY(ID));
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'报告数据源字段表' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_DS_FIELD';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'主键' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_DS_FIELD', @level2type=N'COLUMN',@level2name=N'ID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'数据源ID' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_DS_FIELD', @level2type=N'COLUMN',@level2name=N'DSID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'字段名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_DS_FIELD', @level2type=N'COLUMN',@level2name=N'SQLCOLUMNNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'显示名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_DS_FIELD', @level2type=N'COLUMN',@level2name=N'SHOWCOLUMNNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'图片标志（0-否 1-是）' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_DS_FIELD', @level2type=N'COLUMN',@level2name=N'ISPICTURE';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'图片宽度' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_DS_FIELD', @level2type=N'COLUMN',@level2name=N'PICTUREWIDTH';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'图片高度' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_DS_FIELD', @level2type=N'COLUMN',@level2name=N'PICTUREHEIGHT';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'排序码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_DS_FIELD', @level2type=N'COLUMN',@level2name=N'ORDERNO';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_DS_FIELD', @level2type=N'COLUMN',@level2name=N'CREATEDBYID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_DS_FIELD', @level2type=N'COLUMN',@level2name=N'CREATEDBYNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_DS_FIELD', @level2type=N'COLUMN',@level2name=N'CREATEDTIME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_DS_FIELD', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_DS_FIELD', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGNAME';
+CREATE NONCLUSTERED INDEX [IDX_CORE_OFFICE_DS_FIELD_DSID] ON [dbo].[T_CORE_OFFICE_DS_FIELD] ([DSID]);
+
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_DS.SERVICE_NAME', N'报告数据源表', N'报告数据源表', N'zh-CN',N'报告数据源表';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_DS.ID', N'报告数据源表的主键', N'主键', N'zh-CN',N'主键';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_DS.DSNAME', N'报告数据源表的数据源名称', N'数据源名称', N'zh-CN',N'数据源名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_DS.SQLCONTENT', N'报告数据源表的SQL内容', N'SQL内容', N'zh-CN',N'SQL内容';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_DS.SQLCLAUSE', N'报告数据源表的SQL条件', N'SQL条件', N'zh-CN',N'SQL条件';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_DS.DISPLAYCATEGORY', N'报告数据源表的展示类型', N'展示类型', N'zh-CN',N'展示类型';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_DS.CREATEDBYID', N'报告数据源表的制单人编码', N'制单人编码', N'zh-CN',N'制单人编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_DS.CREATEDBYNAME', N'报告数据源表的制单人名称', N'制单人名称', N'zh-CN',N'制单人名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_DS.CREATEDTIME', N'报告数据源表的制单时间', N'制单时间', N'zh-CN',N'制单时间';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_DS.CREATEDBYORGID', N'报告数据源表的制单人单位编码', N'制单人单位编码', N'zh-CN',N'制单人单位编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_DS.CREATEDBYORGNAME', N'报告数据源表的制单人单位名称', N'制单人单位名称', N'zh-CN',N'制单人单位名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_DS.ACTIVATEDFLAG', N'报告数据源表的启用标志（0-否 1-是）', N'启用标志（0-否 1-是）', N'zh-CN',N'启用标志（0-否 1-是）';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_DS.ACTIVATEDBYID', N'报告数据源表的启用人编码', N'启用人编码', N'zh-CN',N'启用人编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_DS.ACTIVATEDBYNAME', N'报告数据源表的启动人名称', N'启动人名称', N'zh-CN',N'启动人名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_DS.ACTIVATEDTIME', N'报告数据源表的启用时间', N'启用时间', N'zh-CN',N'启用时间';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_DS_FIELD.SERVICE_NAME', N'报告数据源字段表', N'报告数据源字段表', N'zh-CN',N'报告数据源字段表';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_DS_FIELD.ID', N'报告数据源字段表的主键', N'主键', N'zh-CN',N'主键';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_DS_FIELD.DSID', N'报告数据源字段表的数据源ID', N'数据源ID', N'zh-CN',N'数据源ID';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_DS_FIELD.SQLCOLUMNNAME', N'报告数据源字段表的字段名称', N'字段名称', N'zh-CN',N'字段名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_DS_FIELD.SHOWCOLUMNNAME', N'报告数据源字段表的显示名称', N'显示名称', N'zh-CN',N'显示名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_DS_FIELD.ISPICTURE', N'报告数据源字段表的图片标志', N'图片标志', N'zh-CN', N'图片标志';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_DS_FIELD.PICTUREWIDTH', N'报告数据源字段表的图片宽度', N'图片宽度', N'zh-CN', N'图片宽度';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_DS_FIELD.PICTUREHEIGHT', N'报告数据源字段表的图片高度', N'图片高度', N'zh-CN', N'图片高度';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_DS_FIELD.ORDERNO', N'报告数据源字段表的排序码', N'排序码', N'zh-CN',N'排序码';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_DS_FIELD.CREATEDBYID', N'报告数据源字段表的制单人编码', N'制单人编码', N'zh-CN',N'制单人编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_DS_FIELD.CREATEDBYNAME', N'报告数据源字段表的制单人名称', N'制单人名称', N'zh-CN',N'制单人名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_DS_FIELD.CREATEDTIME', N'报告数据源字段表的制单时间', N'制单时间', N'zh-CN',N'制单时间';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_DS_FIELD.CREATEDBYORGID', N'报告数据源字段表的制单人单位编码', N'制单人单位编码', N'zh-CN',N'制单人单位编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_DS_FIELD.CREATEDBYORGNAME', N'报告数据源字段表的制单人单位名称', N'制单人单位名称', N'zh-CN',N'制单人单位名称';
+EXEC  DBO.INSERTI18N  N'CLOUD.GIKAM.OFFICES.MODAL.ADD', N'新增', N'新增', N'zh-CN',N'新增';
+EXEC  DBO.INSERTI18N  N'CLOUD.GIKAM.OFFICES.TAB.BASE_INFO', N'基本信息', N'基本信息', N'zh-CN',N'基本信息';
+EXEC  DBO.INSERTI18N  N'CLOUD.GIKAM.OFFICES.BUTTON.BUTTON', N'按钮', N'按钮', N'zh-CN',N'按钮';
+EXEC  DBO.INSERTI18N  N'CLOUD.GIKAM.OFFICES.TIP.TIP', N'提示框', N'提示框', N'zh-CN',N'提示框';
+EXEC  DBO.INSERTI18N  N'CLOUD.GIKAM.OFFICES.MODAL.MODAL', N'对话框', N'对话框', N'zh-CN',N'对话框';
+
+-- 创建菜单语句
+INSERT INTO T_CORE_MENU (ID, MENUNAME, HREF, PARENTID, ORDERNO, ICON, MENUINITNAME)
+VALUES ('9346', '报告数据源', '/secure/core/module/office/dses/page/edit-list', '93', '9346', '018.svg', '报告数据源');
+
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_OFFICE_DS', '0', '0');
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_OFFICE_DS_FIELD', '0', '0');
+INSERT INTO T_CORE_TABLE_HIERARCHY (ID, TABLENAME, MASTERTABLENAME, REFERCOLUMN)
+VALUES ('934601', 'T_CORE_OFFICE_DS_FIELD', 'T_CORE_OFFICE_DS', 'DSID');
+
+-- ds displayCategory code
+INSERT INTO T_CORE_CODE_CATEGORY ( ID, CODECATEGORYNAME, CODECLASSID, ORDERNO ) VALUES ( 'coreOfficeDisplayCategory', 'office数据源显示类型', 'sys', '6' );
+INSERT INTO T_CORE_CODE ( ID, CODENAME, CODECATEGORYID, ORDERNO, LASTSUSPENDEDFLAG, CODE ) VALUES
+    (NEXT VALUE FOR SEQ_CORE, '表格', 'coreOfficeDisplayCategory', 1, '0', 'list' );
+INSERT INTO T_CORE_CODE ( ID, CODENAME, CODECATEGORYID, ORDERNO, LASTSUSPENDEDFLAG, CODE ) VALUES
+    (NEXT VALUE FOR SEQ_CORE, '详细', 'coreOfficeDisplayCategory', 2, '0', 'detail' );
+
+--  页面及提示国际化
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.OFFICE.DSES.TAB.DS_INFO', N'报告数据源信息', N'报告数据源信息', N'zh-CN', N'报告数据源信息';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.OFFICE.DSES.TAB.DS_FIELD_INFO', N'字段信息', N'字段信息', N'zh-CN', N'字段信息';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.OFFICE.DSES.TIP.SQL_ERROR', N'数据源查询报错，请根据数据源名称检查：', N'数据源查询报错，请根据数据源名称检查：', N'zh-CN', N'数据源查询报错，请根据数据源名称检查：';
+
+
+-- 建表语句
+CREATE TABlE DBO.T_CORE_OFFICE_TMPL(
+    ID BIGINT NOT NULL,
+    TMPLNAME VARCHAR(128)  NULL ,
+    BIZCATEGORY VARCHAR(36)  NULL ,
+    DOCUMENTTYPE VARCHAR(36)  NULL ,
+    REMARK VARCHAR(512)  NULL ,
+    CREATEDBYID VARCHAR(36)  NULL ,
+    CREATEDBYNAME VARCHAR(60)  NULL ,
+    CREATEDTIME DATETIME NULL ,
+    CREATEDBYORGID VARCHAR(36)  NULL ,
+    CREATEDBYORGNAME VARCHAR(270)  NULL ,
+    ACTIVATEDFLAG VARCHAR(1)  NULL ,
+    ACTIVATEDBYID VARCHAR(36)  NULL ,
+    ACTIVATEDBYNAME VARCHAR(60)  NULL ,
+    ACTIVATEDTIME DATETIME NULL ,
+    CONSTRAINT PK_CORE_OFFICE_TMPL PRIMARY KEY(ID));
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'报告模板表' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_TMPL';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'主键' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_TMPL', @level2type=N'COLUMN',@level2name=N'ID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'模板名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_TMPL', @level2type=N'COLUMN',@level2name=N'TMPLNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'业务类型' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_TMPL', @level2type=N'COLUMN',@level2name=N'BIZCATEGORY';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'模板类型' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_TMPL', @level2type=N'COLUMN',@level2name=N'DOCUMENTTYPE';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'备注' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_TMPL', @level2type=N'COLUMN',@level2name=N'REMARK';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_TMPL', @level2type=N'COLUMN',@level2name=N'CREATEDBYID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_TMPL', @level2type=N'COLUMN',@level2name=N'CREATEDBYNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_TMPL', @level2type=N'COLUMN',@level2name=N'CREATEDTIME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_TMPL', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_TMPL', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'启用标志（0-否 1-是）' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_TMPL', @level2type=N'COLUMN',@level2name=N'ACTIVATEDFLAG';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'启用人编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_TMPL', @level2type=N'COLUMN',@level2name=N'ACTIVATEDBYID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'启动人名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_TMPL', @level2type=N'COLUMN',@level2name=N'ACTIVATEDBYNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'启用时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_TMPL', @level2type=N'COLUMN',@level2name=N'ACTIVATEDTIME';
+
+
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_TMPL.SERVICE_NAME', N'报告模板表', N'报告模板表', N'zh-CN',N'报告模板表';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_TMPL.ID', N'报告模板表的主键', N'主键', N'zh-CN',N'主键';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_TMPL.TMPLNAME', N'报告模板表的模板名称', N'模板名称', N'zh-CN',N'模板名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_TMPL.BIZCATEGORY', N'报告模板表的业务类型', N'业务类型', N'zh-CN',N'业务类型';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_TMPL.DOCUMENTTYPE', N'报告模板表的模板类型', N'模板类型', N'zh-CN',N'模板类型';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_TMPL.REMARK', N'报告模板表的备注', N'备注', N'zh-CN',N'备注';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_TMPL.CREATEDBYID', N'报告模板表的制单人编码', N'制单人编码', N'zh-CN',N'制单人编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_TMPL.CREATEDBYNAME', N'报告模板表的制单人名称', N'制单人名称', N'zh-CN',N'制单人名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_TMPL.CREATEDTIME', N'报告模板表的制单时间', N'制单时间', N'zh-CN',N'制单时间';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_TMPL.CREATEDBYORGID', N'报告模板表的制单人单位编码', N'制单人单位编码', N'zh-CN',N'制单人单位编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_TMPL.CREATEDBYORGNAME', N'报告模板表的制单人单位名称', N'制单人单位名称', N'zh-CN',N'制单人单位名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_TMPL.ACTIVATEDFLAG', N'报告模板表的启用标志（0-否 1-是）', N'启用标志（0-否 1-是）', N'zh-CN',N'启用标志（0-否 1-是）';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_TMPL.ACTIVATEDBYID', N'报告模板表的启用人编码', N'启用人编码', N'zh-CN',N'启用人编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_TMPL.ACTIVATEDBYNAME', N'报告模板表的启动人名称', N'启动人名称', N'zh-CN',N'启动人名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_TMPL.ACTIVATEDTIME', N'报告模板表的启用时间', N'启用时间', N'zh-CN',N'启用时间';
+EXEC  DBO.INSERTI18N  N'CLOUD.GIKAM.OFFICES.MODAL.ADD', N'新增', N'新增', N'zh-CN',N'新增';
+EXEC  DBO.INSERTI18N  N'CLOUD.GIKAM.OFFICES.TAB.BASE_INFO', N'基本信息', N'基本信息', N'zh-CN',N'基本信息';
+EXEC  DBO.INSERTI18N  N'CLOUD.GIKAM.OFFICES.TAB.TMPL_DS', N'报告模板数据源表', N'报告模板数据源表', N'zh-CN',N'报告模板数据源表';
+EXEC  DBO.INSERTI18N  N'CLOUD.GIKAM.OFFICES.BUTTON.BUTTON', N'按钮', N'按钮', N'zh-CN',N'按钮';
+EXEC  DBO.INSERTI18N  N'CLOUD.GIKAM.OFFICES.TIP.TIP', N'提示框', N'提示框', N'zh-CN',N'提示框';
+EXEC  DBO.INSERTI18N  N'CLOUD.GIKAM.OFFICES.MODAL.MODAL', N'对话框', N'对话框', N'zh-CN',N'对话框';
+
+-- 创建菜单语句
+INSERT INTO T_CORE_MENU (ID, MENUNAME, HREF, PARENTID, ORDERNO, ICON, MENUINITNAME)
+VALUES ('9347', '报告模板维护', '/secure/core/module/office/tmpls/page/edit-list', '93', '9347', '041.svg', '报告模板维护');
+
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_OFFICE_TMPL', '0', '1');
+
+-- 选择页
+INSERT INTO T_CORE_ADMIN_CHOOSE_CONFIG(ID, NAME, TITLE, CATEGORY, URL, WIDTH)
+VALUES (NEXT VALUE FOR SEQ_CORE, '报告模板', '报告模板', 'core-office-tmpl', '/secure/core/module/office/tmpls/page/choose-list', '');
+
+-- 页面及提示国际化
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.OFFICE.TMPLS.TAB.TMPL_INSERT', N'报告模板维护新增', N'报告模板维护新增', N'zh-CN', N'报告模板维护新增';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.OFFICE.TMPLS.TAB.DS_INFO', N'报告数据源', N'报告数据源', N'zh-CN', N'报告数据源';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.OFFICE.TMPLS.TAB.FILE', N'模板文件', N'模板文件', N'zh-CN', N'模板文件';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.OFFICE.TMPLS.TIP.SQL_ERROR', N'数据源查询报错，请检查：', N'数据源查询报错，请检查：', N'zh-CN', N'数据源查询报错，请检查：';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.OFFICE.TMPLS.TIP.SQL_CLAUSE_MISSING', N'数据源SQL存在没替换的条件：', N'数据源SQL存在没替换的条件：', N'zh-CN', N'数据源SQL存在没替换的条件：';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.OFFICE.TMPLS.BUTTON.TEST_TMPL', N'测试模板', N'测试模板', N'zh-CN', N'测试模板';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_TMPL.TESTPARAM', N'测试参数', N'测试参数', N'zh-CN', N'测试参数';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.OFFICE.TMPLS.TIP.INPUT_JSON_STRING', N'请输入JSON格式参数', N'请输入JSON格式参数', N'zh-CN', N'请输入JSON格式参数';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.OFFICE.TMPLS.TAB.TEST_TMPL_INFO', N'测试报告', N'测试报告', N'zh-CN', N'测试报告';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.OFFICE.TMPLS.TIP.IMAGE_URL_ERROR', N'报告数据源：{0} 字段：{1} 图片地址错误', N'报告数据源：{0} 字段：{1} 图片地址错误', N'zh-CN', N'报告数据源：{0} 字段：{1} 图片地址错误';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.OFFICE.TMPLS.TIP.IMAGE_WIDTH_OR_HEIGHT_MISSING', N'报告数据源：{0} 字段：{1} 图片字段宽度或高度未定义', N'报告数据源：{0} 字段：{1} 图片字段宽度或高度未定义', N'zh-CN', N'报告数据源：{0} 字段：{1} 图片字段宽度或高度未定义';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.OFFICE.TMPLS.TIP.TMPL_FILE_MISSING', N'尚未关联模板文件，请上传或添加模板文件后再试', N'尚未关联模板文件，请上传或添加模板文件后再试', N'zh-CN', N'尚未关联模板文件，请上传或添加模板文件后再试';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.OFFICE.TMPLS.BUTTON.INSERT_BLANK_DOCUMENT', N'添加空白模板', N'添加空白模板', N'zh-CN', N'添加空白模板';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.OFFICE.TMPLS.EXCEPTION.GENERATE-INSTANCE', N'生成实例异常', N'生成实例异常', N'zh-CN', N'生成实例异常';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.OFFICE.DSES.TIP.EXIST_EMPTY_FIELD_NAME', N'勾选记录存在显示名称为空的字段信息，请检查！', N'勾选记录存在显示名称为空的字段信息，请检查！', N'zh-CN', N'勾选记录存在显示名称为空的字段信息，请检查！';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.OFFICE.TMPLS.BUTTON.UPLOAD_TEMPLATE_FILE', N'上传模板', N'上传模板', N'zh-CN', N'上传模板';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.OFFICE.TMPLS.BUTTON.EDIT_TEMPLATE_FILE', N'编辑模板', N'编辑模板', N'zh-CN', N'编辑模板';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.OFFICE.TMPLS.BUTTON.DELETE_TEMPLATE_FILE', N'删除模板', N'删除模板', N'zh-CN', N'删除模板';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.OFFICE.TMPLS.TIP.OVERRIDE', N'存在模板文件，是否覆盖？', N'存在模板文件，是否覆盖？', N'zh-CN', N'存在模板文件，是否覆盖？';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.OFFICE.TMPLS.TIP.DELETE_TEMPLATE_FILE', N'是否删除该模板文件？', N'是否删除该模板文件？', N'zh-CN', N'是否删除该模板文件？';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.OFFICE.TMPLS.TIP.UPLOAD_FILE_TYPE_LIMIT', N'请上传WORD或EXCEL类型文件作为模板', N'请上传WORD或EXCEL类型文件作为模板', N'zh-CN', N'请上传WORD或EXCEL类型文件作为模板';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.OFFICE.DSES.TIP.EXIST_SPECIAL_CHARACTER_FIELD_NAME', N'勾选记录存在显示名称包含特殊字符的字段信息，请更改！', N'勾选记录存在显示名称包含特殊字符的字段信息，请更改！', N'zh-CN', N'勾选记录存在显示名称包含特殊字符的字段信息，请更改！';
+
+UPDATE T_CORE_OFFICE_TOOLBAR_LINE SET LASTSUSPENDEDFLAG = '1' WHERE MENUCODE = 'advancedSetting';
+
+INSERT INTO T_CORE_CODE_CATEGORY ( ID, CODECATEGORYNAME, CODECLASSID, ORDERNO ) VALUES ( 'coreOfficeDocumentType', '报告模板类型', 'sys', '6' );
+INSERT INTO T_CORE_CODE ( ID, CODENAME, CODECATEGORYID, ORDERNO, LASTSUSPENDEDFLAG, CODE ) VALUES
+    (NEXT VALUE FOR SEQ_CORE, 'WORD', 'coreOfficeDocumentType', 1, '0', 'word' );
+INSERT INTO T_CORE_CODE ( ID, CODENAME, CODECATEGORYID, ORDERNO, LASTSUSPENDEDFLAG, CODE ) VALUES
+    (NEXT VALUE FOR SEQ_CORE, 'EXCEL', 'coreOfficeDocumentType', 2, '0', 'excel' );
+
+INSERT INTO T_CORE_CODE_CATEGORY ( ID, CODECATEGORYNAME, CODECLASSID, ORDERNO ) VALUES ( 'coreOfficeBizCategorye', '报告模板业务类型', 'sys', '6' );
+
+-- ----------------------------- 2020-01-15 add by zhanghang--------------end      0.9.2补丁已发布
+
+-- ----------------------------- 2020-01-21 add by zhanghang--------------begin
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_TMPL.FILENAME', N'模板文件名称', N'模板文件名称', N'zh-CN', N'模板文件名称';
+-- ----------------------------- 2020-01-21 add by zhanghang--------------end
+
+-- ----------------------------- 2021-03-01 add by zhanghang--------------begin
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.OFFICE.DSES.TIP.EXIST_REPEAT_FIELD_NAME', N'勾选记录存在显示名称重复的字段信息，请检查！', N'勾选记录存在显示名称重复的字段信息，请检查！', N'zh-CN', N'勾选记录存在显示名称重复的字段信息，请检查！';
+-- ----------------------------- 2021-03-01 add by zhanghang--------------end
+
+-- ----------------------------- 2021-04-07 add by zhanghang--------------begin
+DELETE FROM T_CORE_OFFICE_CUSTOMIZATION WHERE ID = 'officeCustomization';
+INSERT INTO T_CORE_OFFICE_CUSTOMIZATION (ID, ADDRESS,MAIL, NAME, WWW,DOWNLOADAS) VALUES ('officeCustomization', '北京市丰台区海鹰路6号院12号楼', 'marketing@sunwayworld.com', '北京三维天地科技股份有限公司', 'www.sunwayworld.com','{"word":"DOCX,PDF,ODT,TXT,DOTX,PDFA,OTT,RTF,HTML","excel":"XLSX,PDF,ODS,CSV,XLTX,PDFA,OTS"}');
+-- ----------------------------- 2021-04-07 add by zhanghang--------------end
+
+-- 原Office 微服务
+
+-- ----------------------------- 2021-04-15 add by zhanghang--------------begin
+ALTER TABLE [dbo].[T_CORE_OFFICE_DS_FIELD] ADD [WRITEBACK] varchar(1) NULL
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'是否反写(默认0-不反写，1-反写)',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_OFFICE_DS_FIELD',
+'COLUMN', N'WRITEBACK'
+GO
+
+ALTER TABLE [dbo].[T_CORE_OFFICE_DS_FIELD] ADD [UPDATETABLENAME] varchar(60) NULL
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'反写表名称',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_OFFICE_DS_FIELD',
+'COLUMN', N'UPDATETABLENAME'
+GO
+
+ALTER TABLE [dbo].[T_CORE_OFFICE_DS_FIELD] ADD [UPDATECOLUMNNAME] varchar(36) NULL
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'反写字段名称',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_OFFICE_DS_FIELD',
+'COLUMN', N'UPDATECOLUMNNAME'
+GO
+
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_DS_FIELD.WRITEBACK', N'是否反写', N'是否反写', N'zh-CN', N'是否反写';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_DS_FIELD.UPDATETABLENAME', N'反写表名称', N'反写表名称', N'zh-CN', N'反写表名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_DS_FIELD.UPDATECOLUMNNAME', N'反写字段名称', N'反写字段名称', N'zh-CN', N'反写字段名称';
+
+
+INSERT INTO T_CORE_CODE ( ID, CODENAME, CODECATEGORYID, ORDERNO, LASTSUSPENDEDFLAG, CODE ) VALUES
+    (NEXT VALUE FOR SEQ_CORE, 'ELN', 'coreOfficeDocumentType', 3, '0', 'eln' );
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.OFFICE.TMPLS.TIP.TABLE_DS_INSERT_DATA_ERROR', N'列表数据源插入数据异常', N'列表数据源插入数据异常', N'zh-CN', N'列表数据源插入数据异常';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.OFFICE.TMPLS.TIP.WRITE_BACK_ID_VALUE_MISSING', N'报告数据源：{0} 字段：{1} 反写ID未定义', N'报告数据源：{0} 字段：{1} 反写ID未定义', N'zh-CN', N'报告数据源：{0} 字段：{1} 反写ID未定义';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.OFFICE.TMPLS.TIP.WRITE_BACK_TABLE_NAME_MISSING', N'报告数据源：{0} 字段：{1} 反写表名称未维护', N'报告数据源：{0} 字段：{1} 反写表名称未维护', N'zh-CN', N'报告数据源：{0} 字段：{1} 反写表名称未维护';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.OFFICE.TMPLS.TIP.WRITE_BACK_COLUMN_NAME_MISSING', N'报告数据源：{0} 字段：{1} 反写字段名称未维护', N'报告数据源：{0} 字段：{1} 反写字段名称未维护', N'zh-CN', N'报告数据源：{0} 字段：{1} 反写字段名称未维护';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.OFFICE.TMPLS.TIP.EXIST_REPEAT_WRITE_BACK_DATA', N'该模板中存在与报告数据源：{0} 字段：{1} 重复反写的数据', N'该模板中存在与报告数据源：{0} 字段：{1} 重复反写的数据', N'zh-CN', N'该模板中存在与报告数据源：{0} 字段：{1} 重复反写的数据';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.OFFICE.TMPLS.TIP.TABLE_DS_REPEAT_BIND', N'该列表数据源在同Sheet页重复绑定，请检查：', N'该列表数据源在同Sheet页重复绑定，请检查：', N'zh-CN', N'该列表数据源在同Sheet页重复绑定，请检查：';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.OFFICE.TMPLS.EXCEPTION.BIZID_IS_EMPTY', N'业务单据ID为空（BIZID），请检查！', N'业务单据ID为空（BIZID），请检查！', N'zh-CN', N'业务单据ID为空（BIZID），请检查！';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.OFFICE.TMPLS.EXCEPTION.REPEAT-GENERATE-INSTANCE', N'重复生成报告或实例，请检查！', N'重复生成报告或实例，请检查！', N'zh-CN', N'重复生成报告或实例，请检查！';
+
+CREATE TABlE DBO.T_CORE_OFFICE_INSTANCE(
+    ID BIGINT NOT NULL,
+    TMPLID BIGINT NULL ,
+    INSTANCENAME VARCHAR(120)  NULL ,
+    DOCUMENTTYPE VARCHAR(36)  NULL ,
+    BIZCATEGORY VARCHAR(36)  NULL ,
+    BIZID VARCHAR(32)  NULL ,
+    BIZPARAM VARCHAR(512)  NULL ,
+    CREATEDBYID VARCHAR(36)  NULL ,
+    CREATEDBYNAME VARCHAR(60)  NULL ,
+    CREATEDTIME DATETIME NULL ,
+    CREATEDBYORGID VARCHAR(36)  NULL ,
+    CREATEDBYORGNAME VARCHAR(270)  NULL ,
+    CONSTRAINT PK_CORE_OFFICE_INSTANCE PRIMARY KEY(ID));
+CREATE NONCLUSTERED INDEX [IDX_CORE_OFFICE_INSTANCE_TMPLID] ON [dbo].[T_CORE_OFFICE_INSTANCE] ([TMPLID]);
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'报告实例表' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_INSTANCE';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'主键' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_INSTANCE', @level2type=N'COLUMN',@level2name=N'ID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'模板ID' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_INSTANCE', @level2type=N'COLUMN',@level2name=N'TMPLID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'实例名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_INSTANCE', @level2type=N'COLUMN',@level2name=N'INSTANCENAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'模板类型' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_INSTANCE', @level2type=N'COLUMN',@level2name=N'DOCUMENTTYPE';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'业务类型' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_INSTANCE', @level2type=N'COLUMN',@level2name=N'BIZCATEGORY';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'业务ID' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_INSTANCE', @level2type=N'COLUMN',@level2name=N'BIZID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'报告参数' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_INSTANCE', @level2type=N'COLUMN',@level2name=N'BIZPARAM';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_INSTANCE', @level2type=N'COLUMN',@level2name=N'CREATEDBYID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_INSTANCE', @level2type=N'COLUMN',@level2name=N'CREATEDBYNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_INSTANCE', @level2type=N'COLUMN',@level2name=N'CREATEDTIME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_INSTANCE', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_INSTANCE', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGNAME';
+
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_INSTANCE.SERVICE_NAME', N'报告实例表', N'报告实例表', N'zh-CN',N'报告实例表';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_INSTANCE.ID', N'报告实例表的主键', N'主键', N'zh-CN',N'主键';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_INSTANCE.TMPLID', N'报告实例表的模板ID', N'模板ID', N'zh-CN',N'模板ID';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_INSTANCE.INSTANCENAME', N'报告实例表的实例名称', N'实例名称', N'zh-CN',N'实例名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_INSTANCE.DOCUMENTTYPE', N'报告模板表的模板类型', N'模板类型', N'zh-CN',N'模板类型';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_INSTANCE.BIZCATEGORY', N'报告模板表的业务类型', N'业务类型', N'zh-CN',N'业务类型';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_INSTANCE.BIZID', N'报告实例表的业务ID', N'业务ID', N'zh-CN',N'业务ID';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_INSTANCE.BIZPARAM', N'报告实例表的报告参数', N'报告参数', N'zh-CN',N'报告参数';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_INSTANCE.CREATEDBYID', N'报告实例表的制单人编码', N'制单人编码', N'zh-CN',N'制单人编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_INSTANCE.CREATEDBYNAME', N'报告实例表的制单人名称', N'制单人名称', N'zh-CN',N'制单人名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_INSTANCE.CREATEDTIME', N'报告实例表的制单时间', N'制单时间', N'zh-CN',N'制单时间';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_INSTANCE.CREATEDBYORGID', N'报告实例表的制单人单位编码', N'制单人单位编码', N'zh-CN',N'制单人单位编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_INSTANCE.CREATEDBYORGNAME', N'报告实例表的制单人单位名称', N'制单人单位名称', N'zh-CN',N'制单人单位名称';
+EXEC  DBO.INSERTI18N  N'CLOUD.GIKAM.OFFICES.MODAL.ADD', N'新增', N'新增', N'zh-CN',N'新增';
+EXEC  DBO.INSERTI18N  N'CLOUD.GIKAM.OFFICES.TAB.BASE_INFO', N'基本信息', N'基本信息', N'zh-CN',N'基本信息';
+EXEC  DBO.INSERTI18N  N'CLOUD.GIKAM.OFFICES.BUTTON.BUTTON', N'按钮', N'按钮', N'zh-CN',N'按钮';
+EXEC  DBO.INSERTI18N  N'CLOUD.GIKAM.OFFICES.TIP.TIP', N'提示框', N'提示框', N'zh-CN',N'提示框';
+EXEC  DBO.INSERTI18N  N'CLOUD.GIKAM.OFFICES.MODAL.MODAL', N'对话框', N'对话框', N'zh-CN',N'对话框';
+
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_OFFICE_INSTANCE', '0', '1');
+-- ----------------------------- 2021-04-15 add by zhanghang--------------end
+
+-- ----------------------------- 2021-06-16 add by zhanghang--------------begin
+INSERT INTO T_CORE_DP_CONFIG (ID,DPCONFIGNAME,TABLENAME,PARENTID,UNIQUEFIELDS) VALUES (1000,'ELN数据源','T_CORE_ELN_DS',NULL,'elnDsName');
+INSERT INTO T_CORE_DP_CONFIG (ID,DPCONFIGNAME,TABLENAME,PARENTID,UNIQUEFIELDS) VALUES (1001,'ELN数据源字段信息','T_CORE_ELN_DS_FIELD',1000,'elnDsId');
+INSERT INTO T_CORE_DP_CONFIG (ID,DPCONFIGNAME,TABLENAME,PARENTID,UNIQUEFIELDS) VALUES (1002,'ELN模板','T_CORE_ELN_TMPL',NULL,'elnTmplName');
+INSERT INTO T_CORE_DP_CONFIG (ID,DPCONFIGNAME,TABLENAME,PARENTID,UNIQUEFIELDS) VALUES (1003,'ELN模板数据源','T_CORE_ELN_TMPL_DS',1002,'elnTmplId');
+INSERT INTO T_CORE_DP_CONFIG (ID,DPCONFIGNAME,TABLENAME,PARENTID,UNIQUEFIELDS) VALUES (1004,'ELN模板版本','T_CORE_ELN_TMPL_VERSION',1002,'elnTmplId');
+
+INSERT INTO T_CORE_DP_CONFIG_LINE (ID,DPCONFIGID,RELATETABLENAME,RELATEFIELDNAME,FIELDNAME,RELATECONFIGID) VALUES (1000,1001,'T_CORE_ELN_DS','id','elnDsId',NULL);
+INSERT INTO T_CORE_DP_CONFIG_LINE (ID,DPCONFIGID,RELATETABLENAME,RELATEFIELDNAME,FIELDNAME,RELATECONFIGID) VALUES (1001,1003,'T_CORE_ELN_TMPL','id','elnTmplId',NULL);
+INSERT INTO T_CORE_DP_CONFIG_LINE (ID,DPCONFIGID,RELATETABLENAME,RELATEFIELDNAME,FIELDNAME,RELATECONFIGID) VALUES (1002,1004,'T_CORE_ELN_TMPL','id','elnTmplId',NULL);
+-- ----------------------------- 2021-06-16 add by zhanghang--------------end
+
+-- ----------------------------- 2021-06-25 add by shixw--------------begin
+
+-- 建表语句
+CREATE TABlE DBO.T_CORE_LES_UNIT_COMMENT(
+    ID BIGINT NOT NULL,
+    LESINSTANCEUNITID BIGINT NULL ,
+    COMMENTDESC TEXT NULL ,
+    COMMENTUSERID VARCHAR(36)  NULL ,
+    COMMENTUSERNAME VARCHAR(60)  NULL ,
+    COMMENTTIME DATETIME NULL ,
+    REPLY TEXT NULL ,
+    REPLIEDUSERID VARCHAR(36)  NULL ,
+    REPLIEDUSERNAME VARCHAR(60)  NULL ,
+    REPLIEDTIME DATETIME NULL ,
+    STATUS VARCHAR(36)  NULL ,
+    CREATEDBYID VARCHAR(36)  NULL ,
+    CREATEDBYNAME VARCHAR(60)  NULL ,
+    CREATEDTIME DATETIME NULL ,
+    CREATEDBYORGID VARCHAR(36)  NULL ,
+    CREATEDBYORGNAME VARCHAR(270)  NULL ,
+    CONSTRAINT PK_CORE_LES_UNIT_COMMENT PRIMARY KEY(ID));
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'LES组件批注表' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_LES_UNIT_COMMENT';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'主键' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_LES_UNIT_COMMENT', @level2type=N'COLUMN',@level2name=N'ID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'LES实例组件ID' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_LES_UNIT_COMMENT', @level2type=N'COLUMN',@level2name=N'LESINSTANCEUNITID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'批注' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_LES_UNIT_COMMENT', @level2type=N'COLUMN',@level2name=N'COMMENTDESC';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'批注人编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_LES_UNIT_COMMENT', @level2type=N'COLUMN',@level2name=N'COMMENTUSERID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'批注人' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_LES_UNIT_COMMENT', @level2type=N'COLUMN',@level2name=N'COMMENTUSERNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'批注时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_LES_UNIT_COMMENT', @level2type=N'COLUMN',@level2name=N'COMMENTTIME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'回复' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_LES_UNIT_COMMENT', @level2type=N'COLUMN',@level2name=N'REPLY';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'回复人编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_LES_UNIT_COMMENT', @level2type=N'COLUMN',@level2name=N'REPLIEDUSERID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'回复人' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_LES_UNIT_COMMENT', @level2type=N'COLUMN',@level2name=N'REPLIEDUSERNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'回复时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_LES_UNIT_COMMENT', @level2type=N'COLUMN',@level2name=N'REPLIEDTIME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'批注状态' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_LES_UNIT_COMMENT', @level2type=N'COLUMN',@level2name=N'STATUS';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_LES_UNIT_COMMENT', @level2type=N'COLUMN',@level2name=N'CREATEDBYID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_LES_UNIT_COMMENT', @level2type=N'COLUMN',@level2name=N'CREATEDBYNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_LES_UNIT_COMMENT', @level2type=N'COLUMN',@level2name=N'CREATEDTIME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_LES_UNIT_COMMENT', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_LES_UNIT_COMMENT', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGNAME';
+
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_UNIT_COMMENT.SERVICE_NAME', N'LES组件批注表', N'LES组件批注表', N'zh-CN',N'LES组件批注表';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_UNIT_COMMENT.ID', N'LES组件批注表的主键', N'主键', N'zh-CN',N'主键';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_UNIT_COMMENT.LESINSTANCEUNITID', N'LES组件批注表的LES实例组件ID', N'LES实例组件ID', N'zh-CN',N'LES实例组件ID';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_UNIT_COMMENT.COMMENTDESC', N'LES组件批注表的批注', N'批注', N'zh-CN',N'批注';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_UNIT_COMMENT.COMMENTUSERID', N'LES组件批注表的批注人编码', N'批注人编码', N'zh-CN',N'批注人编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_UNIT_COMMENT.COMMENTUSERNAME', N'LES组件批注表的批注人', N'批注人', N'zh-CN',N'批注人';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_UNIT_COMMENT.COMMENTTIME', N'LES组件批注表的批注时间', N'批注时间', N'zh-CN',N'批注时间';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_UNIT_COMMENT.REPLY', N'LES组件批注表的回复', N'回复', N'zh-CN',N'回复';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_UNIT_COMMENT.REPLIEDUSERID', N'LES组件批注表的回复人编码', N'回复人编码', N'zh-CN',N'回复人编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_UNIT_COMMENT.REPLIEDUSERNAME', N'LES组件批注表的回复人', N'回复人', N'zh-CN',N'回复人';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_UNIT_COMMENT.REPLIEDTIME', N'LES组件批注表的回复时间', N'回复时间', N'zh-CN',N'回复时间';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_UNIT_COMMENT.STATUS', N'LES组件批注表的批注状态', N'批注状态', N'zh-CN',N'批注状态';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_UNIT_COMMENT.CREATEDBYID', N'LES组件批注表的制单人编码', N'制单人编码', N'zh-CN',N'制单人编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_UNIT_COMMENT.CREATEDBYNAME', N'LES组件批注表的制单人名称', N'制单人名称', N'zh-CN',N'制单人名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_UNIT_COMMENT.CREATEDTIME', N'LES组件批注表的制单时间', N'制单时间', N'zh-CN',N'制单时间';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_UNIT_COMMENT.CREATEDBYORGID', N'LES组件批注表的制单人单位编码', N'制单人单位编码', N'zh-CN',N'制单人单位编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_UNIT_COMMENT.CREATEDBYORGNAME', N'LES组件批注表的制单人单位名称', N'制单人单位名称', N'zh-CN',N'制单人单位名称';
+
+ALTER TABLE dbo.T_CORE_LES_INSTANCE_UNIT ADD COMMENTSTATUS VARCHAR(36) NULL;
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'批注是否已全部回复',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_LES_INSTANCE_UNIT',
+'COLUMN', N'COMMENTSTATUS'
+GO
+
+EXEC  DBO.INSERTI18N N'T_CORE_LES_INSTANCE_UNIT.COMMENTSTATUS',N'批注是否已全部回复',N'批注是否已全部回复',N'zh-CN',N'批注是否已全部回复';
+GO
+
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_LES_UNIT_COMMENT', '0', '0');
+
+
+-- ----------------------------- 2021-06-25 add by shixw------------end
+
+-- ----------------------------- 2021-07-06 add by shixw------------begin
+
+-- LES实例组件增加是否已标记完成字段
+alter table dbo.T_CORE_LES_INSTANCE_UNIT ADD DONEFLAG VARCHAR(1) NULL
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'是否已标记完成',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_LES_INSTANCE_UNIT',
+'COLUMN', N'DONEFLAG'
+GO
+
+EXEC  DBO.INSERTI18N N'T_CORE_LES_INSTANCE_UNIT.DONEFLAG',N'LES实例组件的是否已标记完成',N'是否已标记完成',N'zh-CN',N'是否已标记完成'
+GO
+
+UPDATE T_CORE_LES_INSTANCE_UNIT SET DONEFLAG = '0' WHERE DONEFLAG IS NULL;
+
+UPDATE T_CORE_LES_UNIT SET ICON =REPLACE (ICON,'gikam/main','report'), THUMBNAIL =REPLACE (THUMBNAIL,'gikam/main','report')  WHERE ICON LIKE '/static/gikam/main%';
+
+-- ----------------------------- 2021-07-06 add by shixw------------end
+
+-- ----------------------------- 2021-07-09 add by shixw------------begin
+
+DELETE FROM T_CORE_LES_UNIT WHERE ID = 'ketcher';
+
+INSERT INTO T_CORE_LES_UNIT
+(ID, UNITNAME, BINDDS, ICON, ORDERNO, AUDITTRAIL, CONFIG, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, CREATEDBYORGID, CREATEDBYORGNAME, ACTIVATEDFLAG, ACTIVATEDBYID, ACTIVATEDBYNAME, ACTIVATEDTIME, THUMBNAIL)
+VALUES('ketcher', 'ketcher分子式', '0', '/static/report/img/ketcher.svg', 3, '0', '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print", "audit" ] }', NULL, NULL, NULL, NULL, NULL, '1', NULL, NULL, NULL, '/static/report/img/ketcher-thumbnail.svg');
+
+-- ----------------------------- 2021-07-09 add by shixw------------end
+-- ----------------------------- 2021-08-26 add by zhanghang--------------begin
+ALTER TABLE [dbo].[T_CORE_OFFICE_DS] ADD [REPEATHEADER] varchar(1) NULL
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'换页重复表头',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_OFFICE_DS',
+'COLUMN', N'REPEATHEADER'
+GO
+
+EXEC  DBO.INSERTI18N N'T_CORE_OFFICE_DS.REPEATHEADER',N'换页重复表头',N'换页重复表头',N'zh-CN',N'换页重复表头';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.OFFICE.TMPLS.TIP.TABLE_DS_COLUMN_COUNT_ERROR', N'表格数据源：{0}  在模板中绑定时表格列数与数据源定义列数不一致', N'表格数据源：{0}  在模板中绑定时表格列数与数据源定义列数不一致', N'zh-CN', N'表格数据源：{0}  在模板中绑定时表格列数与数据源定义列数不一致';
+-- ----------------------------- 2021-08-26 add by zhanghang--------------end
+
+-- ----------------------------- 2021-10-13 add by zhanghang--------------begin
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.OFFICE.CONVERTS.ERROR.REQUEST_PARAM_ERROR', N'请求参数错误，请输入系统附件ID或非系统的IO流', N'请求参数错误，请输入系统附件ID或非系统的IO流', N'zh-CN', N'请求参数错误，请输入系统附件ID或非系统的IO流';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.OFFICE.CONVERTS.ERROR.CONVERT_PDF_ERROR', N'转换PDF异常，请联系系统管理员', N'转换PDF异常，请联系系统管理员', N'zh-CN', N'转换PDF异常，请联系系统管理员';
+-- ----------------------------- 2021-10-13 add by zhanghang--------------end
+
+-- ----------------------------- 2021-11-15 add by zhanghang--------------begin
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215006, '批注处理', 'resolveComment', '协作-批注处理', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215001, '保护', 'protect', '文件-保护', '0');
+
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215018, '批注处理', 'resolveComment', '协作-批注处理', '0');
+
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215016, '数据来源', 'dataFrom', '数据-数据来源', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215016, '移除多次出现的数据', 'removeDuplicates', '数据-移除多次出现的数据', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215016, '数据校验', 'dataValidation', '数据-数据校验', '0');
+
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215017, '插入表', 'addPivot', '数据透视表-插入表', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215017, '报告板式', 'reportLayout', '数据透视表-报告板式', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215017, '空白行', 'blankRows', '数据透视表-空白行', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215017, '分类汇总', 'subTotals', '数据透视表-分类汇总', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215017, '总计', 'grandTotals', '数据透视表-总计', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215017, '刷新', 'refreshPivot', '数据透视表-刷新', '0');
+
+INSERT INTO T_CORE_OFFICE_TOOLBAR (ID, OFFICECATEGORY, MENUCATEGORYNAME, MENUCATEGORYCODE, LASTSUSPENDEDFLAG) VALUES ( 20211115001, 'excel', '视图', 'view', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20211115001, '放大', 'zoom', '视图-放大', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20211115001, '冻结窗格', 'freeze', '视图-冻结窗格', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20211115001, '显示行号列标', 'heading', '视图-显示行号列标', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20211115001, '编辑栏', 'formula', '视图-编辑栏', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20211115001, '网格线', 'gridLine', '视图-网格线', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20211115001, '显示零', 'showZeros', '视图-显示零', '0');
+
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215013, '数据透视表', 'addPivot', '插入-数据透视表', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215013, '迷你图', 'sparkLine', '插入-迷你图', '0');
+
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215014, '打印标题', 'printTitle', '布局-打印标题', '0');
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215014, '配色方案', 'colorSchemas', '布局-配色方案', '0');
+
+INSERT INTO T_CORE_OFFICE_TOOLBAR_LINE (ID, TOOLBARID, MENUNAME, MENUCODE, MENUDESC, LASTSUSPENDEDFLAG) VALUES (NEXT VALUE FOR SEQ_CORE, 20201215011, '保护', 'protect', '文件-保护', '0');
+-- ----------------------------- 2021-11-15 add by zhanghang--------------end
+
+-- ----------------------------- 2021-12-04 add by shixw------------begin
+
+alter table dbo.T_CORE_LES_INSTANCE_UNIT ADD REVIEWEDBYID VARCHAR(36) NULL
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'组件复核人编码',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_LES_INSTANCE_UNIT',
+'COLUMN', N'REVIEWEDBYID'
+GO
+alter table dbo.T_CORE_LES_INSTANCE_UNIT ADD REVIEWEDBYNAME VARCHAR(60) NULL
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'组件复核人名称',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_LES_INSTANCE_UNIT',
+'COLUMN', N'REVIEWEDBYNAME'
+GO
+alter table dbo.T_CORE_LES_INSTANCE_UNIT ADD REVIEWEDTIME DATETIME NULL
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'组件复核时间',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_LES_INSTANCE_UNIT',
+'COLUMN', N'REVIEWEDTIME'
+GO
+
+EXEC  DBO.INSERTI18N N'T_CORE_LES_INSTANCE_UNIT.REVIEWEDBYID',N'LES实例的组件复核人编码',N'组件复核人编码',N'zh-CN',N'组件复核人编码'
+GO
+EXEC  DBO.INSERTI18N N'T_CORE_LES_INSTANCE_UNIT.REVIEWEDBYNAME',N'LES实例的组件复核人名称',N'组件复核人名称',N'zh-CN',N'组件复核人名称'
+GO
+EXEC  DBO.INSERTI18N N'T_CORE_LES_INSTANCE_UNIT.REVIEWEDTIME',N'LES实例的组件复核时间',N'组件复核时间',N'zh-CN',N'组件复核时间'
+GO
+
+-- ----------------------------- 2021-12-04 add by shixw------------end
+
+-- ----------------------------- 2022-01-06 add by shixw------------begin
+
+alter table dbo.T_CORE_LES_UNIT_COMMENT ADD LESINSTANCEID BIGINT NULL
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'LES实例ID',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_LES_UNIT_COMMENT',
+'COLUMN', N'LESINSTANCEID'
+GO
+
+EXEC  DBO.INSERTI18N N'T_CORE_LES_UNIT_COMMENT.LESINSTANCEID',N'LES实例ID',N'LES实例ID',N'zh-CN',N'LES实例ID'
+GO
+
+
+-- ----------------------------- 2022-01-06 add by shixw------------end
+
+-- ----------------------------- 2022-03-04 add by shixw------------begin
+
+alter table dbo.T_CORE_LES_TEMPLATE_UNIT ADD EXPORTREPORT VARCHAR(36) NULL
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'是否导出报告',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_LES_TEMPLATE_UNIT',
+'COLUMN', N'EXPORTREPORT'
+GO
+alter table dbo.T_CORE_LES_INSTANCE_UNIT ADD EXPORTREPORT VARCHAR(36) NULL
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'是否导出报告',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_LES_INSTANCE_UNIT',
+'COLUMN', N'EXPORTREPORT'
+GO
+
+EXEC  DBO.INSERTI18N N'T_CORE_LES_TEMPLATE_UNIT.EXPORTREPORT',N'是否导出报告',N'是否导出报告',N'zh-CN',N'是否导出报告'
+GO
+EXEC  DBO.INSERTI18N N'T_CORE_LES_INSTANCE_UNIT.EXPORTREPORT',N'是否导出报告',N'是否导出报告',N'zh-CN',N'是否导出报告'
+GO
+
+-- ----------------------------- 2022-03-04 add by shixw------------end
+
+-- ----------------------------- 2022-04-28 add by shixw------------begin
+
+INSERT INTO T_CORE_TABLE_HIERARCHY (ID, TABLENAME, MASTERTABLENAME, REFERCOLUMN)
+VALUES ('960401', 'T_CORE_LES_UNIT_COMMENT', 'T_CORE_LES_INSTANCE_UNIT', 'LESINSTANCEUNITID');
+
+-- ----------------------------- 2022-04-28 add by shixw------------end
+
+-- ----------------------------- 2023-01-17 add by zhanghang------------begin
+
+alter table dbo.T_CORE_LES_TEMPLATE_UT ADD CREATEDBYID VARCHAR(36) NULL
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'制单人编码',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_LES_TEMPLATE_UT',
+'COLUMN', N'CREATEDBYID'
+GO
+alter table dbo.T_CORE_LES_TEMPLATE_UT ADD CREATEDBYNAME VARCHAR(60) NULL
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'制单人名称',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_LES_TEMPLATE_UT',
+'COLUMN', N'CREATEDBYNAME'
+GO
+alter table dbo.T_CORE_LES_TEMPLATE_UT ADD CREATEDTIME DATETIME NULL
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'制单时间',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_LES_TEMPLATE_UT',
+'COLUMN', N'CREATEDTIME'
+GO
+alter table dbo.T_CORE_LES_TEMPLATE_UT ADD CREATEDBYORGID VARCHAR(36) NULL
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'制单人单位编码',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_LES_TEMPLATE_UT',
+'COLUMN', N'CREATEDBYORGID'
+GO
+alter table dbo.T_CORE_LES_TEMPLATE_UT ADD CREATEDBYORGNAME VARCHAR(270) NULL
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'制单人单位名称',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_LES_TEMPLATE_UT',
+'COLUMN', N'CREATEDBYORGNAME'
+GO
+
+EXEC  DBO.INSERTI18N N'T_CORE_LES_TEMPLATE_UT.CREATEDBYID',N'制单人编码',N'制单人编码',N'zh-CN',N'制单人编码'
+GO
+EXEC  DBO.INSERTI18N N'T_CORE_LES_TEMPLATE_UT.CREATEDBYNAME',N'制单人名称',N'制单人名称',N'zh-CN',N'制单人名称'
+GO
+EXEC  DBO.INSERTI18N N'T_CORE_LES_TEMPLATE_UT.CREATEDTIME',N'制单时间',N'制单时间',N'zh-CN',N'制单时间'
+GO
+EXEC  DBO.INSERTI18N N'T_CORE_LES_TEMPLATE_UT.CREATEDBYORGID',N'制单人单位编码',N'制单人单位编码',N'zh-CN',N'制单人单位编码'
+GO
+EXEC  DBO.INSERTI18N N'T_CORE_LES_TEMPLATE_UT.CREATEDBYORGNAME',N'制单人单位名称',N'制单人单位名称',N'zh-CN',N'制单人单位名称'
+GO
+
+-- ----------------------------- 2023-01-17 add by zhanghang------------end
+
+-- ----------------------------- 2023-02-02 add by wangbo0905------------start
+alter table dbo.T_CORE_LES_UNIT ADD I18NCODE VARCHAR(128) NULL
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'国际化编码',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_LES_UNIT',
+'COLUMN', N'I18NCODE'
+GO
+
+EXEC  DBO.INSERTI18N N'T_CORE_LES_UNIT.I18NCODE',N'国际化编码',N'国际化编码',N'zh-CN',N'国际化编码'
+GO
+
+UPDATE T_CORE_LES_UNIT SET I18NCODE='GIKAM.LES.WIDGET.FILEVIEWER' WHERE id='imgUpload';
+UPDATE T_CORE_LES_UNIT SET I18NCODE='GIKAM.LES.WIDGET.IMAGE_EDITOR' WHERE id='imgEdit';
+UPDATE T_CORE_LES_UNIT SET I18NCODE='GIKAM.LES.WIDGET.IMAGE_PAINT_EDITOR' WHERE id='imgDraw';
+UPDATE T_CORE_LES_UNIT SET I18NCODE='GIKAM.LES.WIDGET.MOLECULARFORMULA' WHERE id='chemDoodle';
+UPDATE T_CORE_LES_UNIT SET I18NCODE='GIKAM.LES.WIDGET.SECTION' WHERE id='chapter';
+UPDATE T_CORE_LES_UNIT SET I18NCODE='GIKAM.LES.WIDGET.SPREADSHEET' WHERE id='spread';
+UPDATE T_CORE_LES_UNIT SET I18NCODE='GIKAM.LES.WIDGET.DIAGRAM_DRAW' WHERE id='diagramDraw';
+UPDATE T_CORE_LES_UNIT SET I18NCODE='GIKAM.LES.WIDGET.BASE_INFO' WHERE id='baseInfo';
+UPDATE T_CORE_LES_UNIT SET I18NCODE='GIKAM.LES.WIDGET.CKEDITOR' WHERE id='ckeditor';
+UPDATE T_CORE_LES_UNIT SET I18NCODE='GIKAM.LES.WIDGET.FORM_OR_QUERY_LIST' WHERE id='formOrQueryList';
+
+EXEC  DBO.INSERTI18N N'GIKAM.LES.WIDGET.DIAGRAM_DRAW',N'流程绘制',N'流程绘制',N'zh-CN',N'流程绘制'
+GO
+EXEC  DBO.INSERTI18N N'GIKAM.LES.WIDGET.BASE_INFO',N'基本信息',N'基本信息',N'zh-CN',N'基本信息'
+GO
+EXEC  DBO.INSERTI18N N'GIKAM.LES.WIDGET.CKEDITOR',N'富文本',N'富文本',N'zh-CN',N'富文本'
+GO
+EXEC  DBO.INSERTI18N N'GIKAM.LES.WIDGET.FORM_OR_QUERY_LIST',N'表单/表格',N'表单/表格',N'zh-CN',N'表单/表格'
+GO
+
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.SYS.T_CORE_BPMN_DIAGRAM.COMMENT.TASKNAME', N'审核意见中节点名称', N'节点名称', N'en-US',N'Node Name';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.SYS.T_CORE_BPMN_DIAGRAM.COMMENT.AUDITEDBYNAME', N'审核意见中审核人', N'审核人', N'en-US',N'Reviewer';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.SYS.T_CORE_BPMN_DIAGRAM.COMMENT.AUDITEDTIME', N'审核意见中审核时间', N'审核时间', N'en-US',N'Audit Time';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.SYS.T_CORE_BPMN_DIAGRAM.COMMENT.COMMENT', N'审核意见中审核意见', N'审核意见', N'en-US',N'Audit Opinion';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.SYS.T_CORE_BPMN_DIAGRAM.COMMENT.ROUTE', N'审核意见中审核路径', N'审核路径', N'en-US',N'Audit Path';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.SYS.T_CORE_BPMN_DIAGRAM.COMMENT.ATTACHMENT', N'审核意见中附件', N'附件', N'en-US',N'Attachment';
+EXEC  DBO.INSERTI18N  N'GIKAM.LES.WIDGET.FILEVIEWER', N'图片上传', N'图片上传', N'en-US',N'Picture Upload';
+EXEC  DBO.INSERTI18N  N'GIKAM.LES.WIDGET.IMAGE_EDITOR', N'图片编辑器', N'图片编辑器', N'en-US',N'Picture Editor';
+EXEC  DBO.INSERTI18N  N'GIKAM.LES.WIDGET.IMAGE_PAINT_EDITOR', N'图片绘制', N'图片绘制', N'en-US',N'Picture Drawing';
+EXEC  DBO.INSERTI18N  N'GIKAM.LES.WIDGET.MOLECULARFORMULA', N'分子式', N'分子式', N'en-US',N'Molecular Formula';
+EXEC  DBO.INSERTI18N  N'GIKAM.LES.WIDGET.SECTION', N'章节', N'章节', N'en-US',N'Chapter';
+EXEC  DBO.INSERTI18N  N'GIKAM.LES.WIDGET.SPREADSHEET', N'表格', N'表格', N'en-US',N'Table';
+EXEC  DBO.INSERTI18N  N'GIKAM.LES.WIDGET.DIAGRAM_DRAW', N'流程绘制', N'流程绘制', N'en-US',N'Process Drawing';
+EXEC  DBO.INSERTI18N  N'GIKAM.LES.WIDGET.BASE_INFO', N'基本信息', N'基本信息', N'en-US',N'Basic Information';
+EXEC  DBO.INSERTI18N  N'GIKAM.LES.WIDGET.CKEDITOR', N'富文本', N'富文本', N'en-US',N'Rich Text';
+EXEC  DBO.INSERTI18N  N'GIKAM.LES.WIDGET.FORM_OR_QUERY_LIST', N'表单/表格', N'表单/表格', N'en-US',N'Forms/Forms';
+
+-- ----------------------------- 2023-02-02 add by wangbo0905------------end
+
+-- ----------------------------- 2023-03-16 add by zhanghang------------begin
+EXEC  DBO.INSERTI18N N'CORE.MODULE.LES.TEMPLATES.TIP.NOT_ALLOW_DELETE_EXIST_INSTANCE_DATA', N'存在被生成LES实例的模板，不允许删除', N'存在被生成LES实例的模板，不允许删除', N'zh-CN', N'存在被生成LES实例的模板，不允许删除';
+-- ----------------------------- 2023-03-16 add by zhanghang------------end
+-- 14.1.3版本sql
+-- ----------------------------- 2023-04-19 add by zhangwf------------begin
+ALTER TABLE DBO.T_CORE_ELN ADD ELNCONTENTFILEID BIGINT NULL
+GO
+
+EXEC SP_ADDEXTENDEDPROPERTY 'MS_DESCRIPTION', N'ELN实例文件ID', 'SCHEMA', N'DBO', 'TABLE', N'T_CORE_ELN', 'COLUMN', N'ELNCONTENTFILEID'
+GO
+
+EXEC  DBO.INSERTI18N N'T_CORE_ELN.ELNCONTENTFILEID',N'ELN实例文件ID',N'ELN实例文件ID',N'ZH-CN',N'ELN实例文件ID'
+GO
+
+
+ALTER TABLE DBO.T_CORE_ELN_TMPL_VERSION ADD ELNTMPLFILEID BIGINT NULL
+GO
+
+EXEC SP_ADDEXTENDEDPROPERTY 'MS_DESCRIPTION', N'ELN模板文件ID','SCHEMA', N'DBO','TABLE', N'T_CORE_ELN_TMPL_VERSION','COLUMN', N'ELNTMPLFILEID'
+GO
+
+EXEC  DBO.INSERTI18N N'T_CORE_ELN_TMPL_VERSION.ELNTMPLFILEID',N'ELN实例文件ID',N'ELN实例文件ID',N'ZH-CN',N'ELN实例文件ID'
+GO
+
+EXEC  DBO.INSERTI18N N'CORE.MODULE.ITEM.ELN.TIP.ELN_INSTANCE_FILE_NOT_EXIST',N'ELN实例文件不存在，请联系管理员',N'ELN实例文件不存在，请联系管理员',N'ZH-CN',N'ELN实例文件不存在，请联系管理员'
+GO
+EXEC  DBO.INSERTI18N N'CORE.MODULE.ITEM.ELN.TMPLS.TIP.ELN_TEMP_FILE_NOT_EXIST',N'ELN模板文件不存在，请联系管理员',N'ELN模板文件不存在，请联系管理员',N'ZH-CN',N'ELN模板文件不存在，请联系管理员'
+GO
+-- ----------------------------- 2023-04-19 add by zhangwf------------end

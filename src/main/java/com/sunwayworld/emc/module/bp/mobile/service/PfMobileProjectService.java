@@ -6,10 +6,14 @@ import java.util.Map;
 
 import com.sunwayworld.emc.module.bp.mobile.bean.EmcMobileDTO;
 import com.sunwayworld.emc.module.bp.mobile.bean.EmcMobilePaginationDTO;
+import com.sunwayworld.framework.database.context.EntityColumnContext;
+import com.sunwayworld.framework.database.context.EntityContext;
 import com.sunwayworld.framework.database.context.instance.EntityContextInstance;
 import com.sunwayworld.framework.database.context.instance.EntityHelper;
+import com.sunwayworld.framework.database.core.DatabaseManager;
 import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;
 import com.sunwayworld.framework.support.domain.Persistable;
+import com.sunwayworld.framework.utils.ClassUtils;
 import com.sunwayworld.framework.utils.JsonUtils;
 
 /**
@@ -49,7 +53,7 @@ public interface PfMobileProjectService extends EmcMobileProjectService {
      */
     default List<String> getUpdateColNames(Persistable<?> item) {
         List<String> updateColNameList = new ArrayList<>();
-        EntityContextInstance contextInstance = EntityContextInstance.updatable(item);
+        EntityContextInstance contextInstance = EntityContextInstance.updatable(new EntityContext(), item);
 
         contextInstance.getColumnContextInstanceList().stream().filter(i -> i.isActive() && !EntityHelper.isIdInstance(i))
                 .forEach(i -> updateColNameList.add(i.getColumnContext().getColumnName()));

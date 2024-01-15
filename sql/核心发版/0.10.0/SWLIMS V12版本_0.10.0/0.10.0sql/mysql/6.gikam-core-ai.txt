@@ -1,0 +1,107 @@
+-- ----------------------------- 2020-12-14 add by yangxing--------------begin
+
+-- 建表语句
+
+CREATE TABLE IF NOT EXISTS `T_CORE_AI_TEMPLATE`(
+     `ID` BIGINT NOT NULL COMMENT '主键',
+     `NAME` VARCHAR(36)  DEFAULT NULL COMMENT '模板名称',
+     `PUBLISHTIME` DATETIME DEFAULT NULL COMMENT '发布时间',
+     `MODIFYTIME` DATETIME DEFAULT NULL COMMENT '修改时间',
+     `CATEGORY` BIGINT(1)  DEFAULT NULL COMMENT '模板类别',
+     `PUBLISHEDFLAG` BIGINT(1)  DEFAULT NULL COMMENT '发布状态',
+     `INFO` LONGTEXT DEFAULT NULL COMMENT '模板信息',
+     `PIC` BLOB DEFAULT NULL COMMENT '模板图片',
+     `PICNAME` VARCHAR(36)  DEFAULT NULL COMMENT '图片名称',
+     `WIDTH` BIGINT  DEFAULT NULL COMMENT '图片宽度',
+     `HEIGHT` BIGINT  DEFAULT NULL COMMENT '图片高度',
+     `CREATEDBYID` VARCHAR(36)  DEFAULT NULL COMMENT '制单人编码',
+     `CREATEDBYNAME` VARCHAR(60)  DEFAULT NULL COMMENT '制单人名称',
+     `CREATEDTIME` DATETIME DEFAULT NULL COMMENT '制单时间',
+     `CREATEDBYORGID` VARCHAR(36)  DEFAULT NULL COMMENT '制单人单位编码',
+     `CREATEDBYORGNAME` VARCHAR(270)  DEFAULT NULL COMMENT '制单人单位名称',
+      PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='模板表';
+
+CALL INSERTI18N('T_CORE_AI_TEMPLATE.SERVICE_NAME', '模板表', '模板', 'zh-CN', '模板');
+CALL INSERTI18N('T_CORE_AI_TEMPLATE.ID', '模板表的主键', '模板ID', 'zh-CN', '模板ID');
+CALL INSERTI18N('T_CORE_AI_TEMPLATE.NAME', '模板表的模板名称', '模板名称', 'zh-CN', '模板名称');
+CALL INSERTI18N('T_CORE_AI_TEMPLATE.PUBLISHTIME', '模板表的发布时间', '发布时间', 'zh-CN', '发布时间');
+CALL INSERTI18N('T_CORE_AI_TEMPLATE.MODIFYTIME', '模板表的修改时间', '修改时间', 'zh-CN', '修改时间');
+CALL INSERTI18N('T_CORE_AI_TEMPLATE.CATEGORY', '模板表的模板类别', '模板类别', 'zh-CN', '模板类别');
+CALL INSERTI18N('T_CORE_AI_TEMPLATE.PUBLISHEDFLAG', '模板表的发布状态', '发布状态', 'zh-CN', '发布状态');
+CALL INSERTI18N('T_CORE_AI_TEMPLATE.INFO', '模板表的模板信息', '模板信息', 'zh-CN', '模板信息');
+CALL INSERTI18N('T_CORE_AI_TEMPLATE.PIC', '模板表的模板图片', '模板图片', 'zh-CN', '模板图片');
+CALL INSERTI18N('T_CORE_AI_TEMPLATE.WIDTH', '模板表的图片宽度', '图片宽度', 'zh-CN', '图片宽度');
+CALL INSERTI18N('T_CORE_AI_TEMPLATE.HEIGHT', '模板表的图片高度', '图片高度', 'zh-CN', '图片高度');
+CALL INSERTI18N('T_CORE_AI_TEMPLATE.CREATEDBYID', '模板表的制单人编码', '制单人编码', 'zh-CN', '制单人编码');
+CALL INSERTI18N('T_CORE_AI_TEMPLATE.CREATEDBYNAME', '模板表的制单人名称', '制单人名称', 'zh-CN', '制单人名称');
+CALL INSERTI18N('T_CORE_AI_TEMPLATE.CREATEDTIME', '模板表的制单时间', '制单时间', 'zh-CN', '制单时间');
+CALL INSERTI18N('T_CORE_AI_TEMPLATE.CREATEDBYORGID', '模板表的制单人单位编码', '制单人单位编码', 'zh-CN', '制单人单位编码');
+CALL INSERTI18N('T_CORE_AI_TEMPLATE.CREATEDBYORGNAME', '模板表的制单人单位名称', '制单人单位名称', 'zh-CN', '制单人单位名称');
+CALL INSERTI18N('CORE.MODULE.AI.TEMPLATES.BUTTON.ADD_TEMPLATE', '创建模板', '创建模板', 'zh-CN', '创建模板');
+CALL INSERTI18N('CORE.MODULE.AI.TEMPLATES.TAB.PRESET_TEMPLATE', '预置模板', '预置模板', 'zh-CN', '预置模板');
+CALL INSERTI18N('CORE.MODULE.AI.TEMPLATES.TAB.USER_DEFINED_TEMPLATE', '自定义模板', '自定义模板', 'zh-CN', '自定义模板');
+CALL INSERTI18N('CORE.MODULE.AI.TEMPLATES.TIP.ACTION', '操作', '操作', 'zh-CN', '操作');
+CALL INSERTI18N('CORE.MODULE.AI.TEMPLATES.BUTTON.SHOW_JSON', '查看json', '查看json', 'zh-CN', '查看json');
+CALL INSERTI18N('CORE.MODULE.AI.TEMPLATES.BUTTON.TRY', '试一试', '试一试', 'zh-CN', '试一试');
+CALL INSERTI18N('CORE.MODULE.AI.TEMPLATES.BUTTON.MODIFY', '编辑', '编辑', 'zh-CN', '编辑');
+CALL INSERTI18N('CORE.MODULE.AI.TEMPLATES.BUTTON.DELETE', '删除', '删除', 'zh-CN', '删除');
+CALL INSERTI18N('CORE.MODULE.AI.TEMPLATES.MODAL.TITLE.SHOW_PIC', '预览图片', '预览图片', 'zh-CN', '预览图片');
+CALL INSERTI18N('CORE.MODULE.AI.TEMPLATES.MODAL.TITLE.SHOW_JSON', '查看JSON', '查看JSON', 'zh-CN', '查看JSON');
+CALL INSERTI18N('CORE.MODULE.AI.TEMPLATES.TIP.PIC_NAME', '图片名称', '图片名称', 'zh-CN', '图片名称');
+CALL INSERTI18N('CORE.MODULE.AI.TEMPLATES.BUTTON.UPLOAD_PIC', '上传图片', '上传图片', 'zh-CN', '上传图片');
+CALL INSERTI18N('CORE.MODULE.AI.TEMPLATES.TIP.CAN_NOT_IDENTIFY_SELECT_AREA', '框选区内未识别到内容，请修改或重新选区', '框选区内未识别到内容，请修改或重新选区', 'zh-CN', '框选区内未识别到内容，请修改或重新选区');
+CALL INSERTI18N('CORE.MODULE.AI.TEMPLATES.TIP.DO_NOT_SELECT_IN_MORE_THAN_ONE_ROW', '请勿跨行选取参照字段（否则会导致模板匹配失败）', '请勿跨行选取参照字段（否则会导致模板匹配失败）', 'zh-CN', '请勿跨行选取参照字段（否则会导致模板匹配失败）');
+
+-- 创建菜单语句
+INSERT INTO T_CORE_MENU (ID, MENUNAME, HREF, PARENTID, ORDERNO, ICON, MENUINITNAME)
+VALUES ('83', 'OCR管理', NULL, NULL, '83', '035.svg', 'OCR管理');
+INSERT INTO T_CORE_MENU (ID, MENUNAME, HREF, PARENTID, ORDERNO, ICON, MENUINITNAME)
+VALUES ('8301', '模板管理', '/secure/core/module/ai/templates/page/edit-list', '83', '8301', '034.svg', '模板管理');
+
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_AI_TEMPLATE', '0', '0');
+
+
+COMMIT;
+
+-- ----------------------------- 2020-12-14 add by yangxing------------end
+
+-- ----------------------------- 2021-01-28 add by yangxing------------begin
+ALTER TABLE T_CORE_AI_TEMPLATE DROP COLUMN CATEGORY;
+ALTER TABLE T_CORE_AI_TEMPLATE DROP COLUMN PUBLISHEDFLAG;
+ALTER TABLE T_CORE_AI_TEMPLATE DROP COLUMN PUBLISHTIME;
+ALTER TABLE T_CORE_AI_TEMPLATE ADD COLUMN ACTIVATEDFLAG VARCHAR(1);
+ALTER TABLE T_CORE_AI_TEMPLATE ADD COLUMN ACTIVATEDBYID VARCHAR(36);
+ALTER TABLE T_CORE_AI_TEMPLATE ADD COLUMN ACTIVATEDBYNAME VARCHAR(60);
+ALTER TABLE T_CORE_AI_TEMPLATE ADD COLUMN ACTIVATEDTIME DATETIME;
+-- ----------------------------- 2021-01-28 add by yangxing------------end
+
+-- ----------------------------- 2021-03-15 add by yangxing------------begin
+ALTER TABLE T_CORE_AI_TEMPLATE MODIFY COLUMN PIC LONGTEXT NULL COMMENT '模板图片';
+-- ----------------------------- 2021-03-15 add by yangxing------------end
+
+-- ----------------------------- 2021-03-17 add by yangxing------------begin
+CALL INSERTI18N('CORE.MODULE.AI.TEMPLATES.TIP.FAIL_TO_SCAN_PLEASE_USE_SAMPLE_PIC_WITH_TEMPLATE', '识别失败，请使用与模板相同参照区的图片', '识别失败，请使用与模板相同参照区的图片', 'zh-CN', '识别失败，请使用与模板相同参照区的图片');
+-- ----------------------------- 2021-03-17 add by yangxing------------end
+
+-- ----------------------------- 2021-3-31 add by shixw------------begin
+
+CALL INSERTI18N('T_CORE_AI_TEMPLATE.PICNAME', '模板表的图片名称', '图片名称', 'zh-CN', '图片名称');
+CALL INSERTI18N('T_CORE_AI_TEMPLATE.ACTIVATEDFLAG', '模板表的发布状态', '发布状态', 'zh-CN', '发布状态');
+CALL INSERTI18N('T_CORE_AI_TEMPLATE.ACTIVATEDBYID', '模板表的发布人编码', '发布人编码', 'zh-CN', '发布人编码');
+CALL INSERTI18N('T_CORE_AI_TEMPLATE.ACTIVATEDBYNAME', '模板表的发布人姓名', '发布人姓名', 'zh-CN', '发布人姓名');
+CALL INSERTI18N('T_CORE_AI_TEMPLATE.ACTIVATEDTIME', '模板表的发布时间', '发布时间', 'zh-CN', '发布时间');
+
+-- ----------------------------- 2021-3-31 add by shixw------------end
+
+-- ----------------------------- 2021-04-08 add by yangxing------------begin
+ALTER TABLE T_CORE_AI_TEMPLATE MODIFY COLUMN ACTIVATEDFLAG VARCHAR(1) COMMENT '启用标志';
+ALTER TABLE T_CORE_AI_TEMPLATE MODIFY COLUMN ACTIVATEDBYID VARCHAR(36) COMMENT '启用人ID';
+ALTER TABLE T_CORE_AI_TEMPLATE MODIFY COLUMN ACTIVATEDBYNAME VARCHAR(60) COMMENT '启用人名称';
+ALTER TABLE T_CORE_AI_TEMPLATE MODIFY COLUMN ACTIVATEDTIME DATETIME COMMENT '启用时间';
+-- ----------------------------- 2021-04-08 add by yangxing------------end
+
+-- ----------------------------- 2021-04-09 add by yangxing------------begin
+ALTER TABLE T_CORE_AI_TEMPLATE MODIFY COLUMN PICNAME VARCHAR(256) COMMENT '图片名称';
+-- ----------------------------- 2021-04-09 add by yangxing------------end

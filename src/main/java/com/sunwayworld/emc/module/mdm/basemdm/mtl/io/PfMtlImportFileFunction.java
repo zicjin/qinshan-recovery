@@ -9,6 +9,9 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import com.sunwayworld.framework.io.file.FilePathDTO;
+import com.sunwayworld.framework.io.file.FilePathManager;
+import com.sunwayworld.module.item.file.utils.CoreFileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,13 +26,11 @@ import com.sunwayworld.emc.module.mdm.basemdm.mtlcategory.service.EmcMtlCategory
 import com.sunwayworld.framework.context.ApplicationContextHelper;
 import com.sunwayworld.framework.context.LocalContextHelper;
 import com.sunwayworld.framework.io.excel.ExcelHelper;
-import com.sunwayworld.framework.io.file.FileHelper;
-import com.sunwayworld.framework.io.file.FileRepresentation;
 import com.sunwayworld.framework.spring.annotation.GikamBean;
 import com.sunwayworld.framework.utils.BeanUtils;
 import com.sunwayworld.framework.utils.StringUtils;
 import com.sunwayworld.module.item.file.bean.CoreFileBean;
-import com.sunwayworld.module.item.file.bean.ImportResultRepresentation;
+import com.sunwayworld.module.item.file.bean.CoreFileImportResultDTO;
 import com.sunwayworld.module.mdm.user.bean.CoreUserBean;
 
 @GikamBean
@@ -47,19 +48,19 @@ public class PfMtlImportFileFunction extends EmcMtlImportFileFunction {
 
     @Override
     @Transactional
-    public ImportResultRepresentation apply(CoreFileBean excelFile) {
-        ImportResultRepresentation importResultRepresentation = new ImportResultRepresentation();
-        FileRepresentation fr = FileRepresentation.of(excelFile);
+    public CoreFileImportResultDTO apply(CoreFileBean excelFile) {
+        CoreFileImportResultDTO CoreFileImportResultDTO = new CoreFileImportResultDTO();
+        FilePathDTO fr = CoreFileUtils.toFilePath(excelFile);
 
-        List<EmcMtlDTO> mtlDTOList = ExcelHelper.readDataFromExcel(FileHelper.getAbsolutePath(fr).toString(), 2, 3, EmcMtlDTO.class);
+        List<EmcMtlDTO> mtlDTOList = ExcelHelper.readDataFromExcel(FilePathManager.getLocalPath(fr).toString(), 2, 3, EmcMtlDTO.class);
         if (mtlDTOList.isEmpty()) {
-            return importResultRepresentation;
+            return CoreFileImportResultDTO;
         }
 
         // 过滤掉没有填写材料名称的数据
         List<EmcMtlDTO> notEmptyMtlList = mtlDTOList.stream().filter(mtl -> !StringUtils.isEmpty(mtl.getMtlName())).collect(Collectors.toList());
         if (notEmptyMtlList.isEmpty()) {
-            return importResultRepresentation;
+            return CoreFileImportResultDTO;
         }
         CoreUserBean user = LocalContextHelper.getLoginUser();
         //赋值所属单位和流程类型
@@ -71,7 +72,7 @@ public class PfMtlImportFileFunction extends EmcMtlImportFileFunction {
         List<EmcMtlDTO> validMtlList = notEmptyMtlList.stream().filter(mtl -> mtlCategoryNameList.contains(mtl.getMtlCategoryName())).collect(Collectors.toList());
         
         if (validMtlList.isEmpty()) {
-            return importResultRepresentation;
+            return CoreFileImportResultDTO;
         }
 
         List<String> validMtlNameList = validMtlList.stream().map(EmcMtlDTO::getMtlName).collect(Collectors.toList());
@@ -135,6 +136,6 @@ public class PfMtlImportFileFunction extends EmcMtlImportFileFunction {
             emcMtlService.getDao().update(updateMtlList);
         }
 
-        return importResultRepresentation;
+        return CoreFileImportResultDTO;
     }
 }

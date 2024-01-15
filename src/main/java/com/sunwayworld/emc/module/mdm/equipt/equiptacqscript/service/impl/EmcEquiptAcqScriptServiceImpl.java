@@ -11,6 +11,8 @@ import java.util.regex.Pattern;
 
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
+import com.sunwayworld.framework.io.file.FilePathDTO;
+import com.sunwayworld.framework.io.file.FilePathManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,8 +39,6 @@ import com.sunwayworld.framework.context.ApplicationContextHelper;
 import com.sunwayworld.framework.data.CaseInsensitiveLinkedMap;
 import com.sunwayworld.framework.data.page.Page;
 import com.sunwayworld.framework.data.page.Pagination;
-import com.sunwayworld.framework.io.file.FileHelper;
-import com.sunwayworld.framework.io.file.FileRepresentation;
 import com.sunwayworld.framework.mybatis.mapper.MatchPattern;
 import com.sunwayworld.framework.mybatis.mapper.SearchFilter;
 import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;
@@ -222,7 +222,7 @@ public class EmcEquiptAcqScriptServiceImpl implements EmcEquiptAcqScriptService 
     // 将文件的文本内容解析出来
     private String extractTextByFileId(Long fileId, String analysisWay) {
         CoreFileBean coreFile = coreFileService.selectDetail(fileId);
-        File file = FileHelper.getAbsolutePath(FileRepresentation.of(coreFile.getScope(), DateTimeUtils.getDateSerialNumber(coreFile.getCreatedTime()), coreFile.getMd5Name(),
+        File file = FilePathManager.getLocalPath(FilePathDTO.of(coreFile.getScope(), DateTimeUtils.getDateSerialNumber(coreFile.getCreatedTime()), coreFile.getMd5Name(),
                 coreFile.getName().substring(0, coreFile.getName().lastIndexOf(coreFile.getFileExt()) - 1) + "." + coreFile.getFileExt())).toFile();
 
         String result = null;

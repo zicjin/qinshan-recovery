@@ -13,6 +13,8 @@ import java.util.stream.Collectors;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
+import com.sunwayworld.module.item.file.manager.CoreFileManager;
+import com.sunwayworld.module.item.file.utils.CoreFileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,8 +53,6 @@ import com.sunwayworld.framework.context.ApplicationContextHelper;
 import com.sunwayworld.framework.context.LocalContextHelper;
 import com.sunwayworld.framework.executor.ExecutorHelper;
 import com.sunwayworld.framework.http.HttpClientManager;
-import com.sunwayworld.framework.io.file.FileHelper;
-import com.sunwayworld.framework.io.file.FileRepresentation;
 import com.sunwayworld.framework.io.file.FileScope;
 import com.sunwayworld.framework.mybatis.mapper.MatchPattern;
 import com.sunwayworld.framework.mybatis.mapper.SearchFilter;
@@ -63,7 +63,6 @@ import com.sunwayworld.framework.utils.FileUtils;
 import com.sunwayworld.framework.utils.ObjectUtils;
 import com.sunwayworld.framework.utils.StringUtils;
 import com.sunwayworld.module.item.file.bean.CoreFileBean;
-import com.sunwayworld.module.item.file.cloud.CoreFileCloudService;
 import com.sunwayworld.module.item.file.service.CoreFileService;
 import com.sunwayworld.module.mdm.org.bean.CoreOrgBean;
 import com.sunwayworld.module.mdm.org.service.CoreOrgService;
@@ -86,7 +85,7 @@ public class ErpContractServiceImpl implements ErpContractService {
     private EmcContractService contractService;
 
     @Autowired
-    private CoreFileCloudService fileCloudService;
+    private CoreFileManager fileManager;
 
     @Autowired
     private CoreFileService coreFileService;
@@ -510,7 +509,7 @@ public class ErpContractServiceImpl implements ErpContractService {
     public void downloadAttach(List<AttachVO> attachList, Long contractId) {
         List<CoreFileBean> insertFileList = new ArrayList<>(attachList.size());
         attachList.forEach(attach -> {
-            File tempFile = FileHelper.createTempFile(attach.getName(), 5000L);
+            File tempFile = FileUtils.createTempFile();
             // 使用POST请求下载文件
             erpFileService.downloadFile(attach.getUrl(), tempFile);
 
@@ -520,14 +519,14 @@ public class ErpContractServiceImpl implements ErpContractService {
             coreFile.setName(attach.getName());
             coreFile.setFileExt(FileUtils.getFileExtension(attach.getName()));
             coreFile.setScope(FileScope.export.name());
-            coreFile.setTimes(0);
+            coreFile.setTimes(0L);
             coreFile.setDownloadable(Constant.YES);
             coreFile.setCreatedTime(LocalDateTime.now());
             coreFile.setBizCategory("");
             coreFile.setSize(tempFile.length());
             coreFile.setMd5Name(EncryptUtils.MD5Encrypt(coreFile.getId() + "$" + attach.getName()));
 
-            fileCloudService.archive(FileRepresentation.of(coreFile), tempFile);
+            fileManager.upload(CoreFileUtils.toFilePath(coreFile), tempFile);
             insertFileList.add(coreFile);
         });
 

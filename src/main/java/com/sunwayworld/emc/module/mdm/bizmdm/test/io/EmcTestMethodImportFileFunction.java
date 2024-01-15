@@ -3,6 +3,9 @@ package com.sunwayworld.emc.module.mdm.bizmdm.test.io;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.sunwayworld.framework.io.file.FilePathDTO;
+import com.sunwayworld.framework.io.file.FilePathManager;
+import com.sunwayworld.module.item.file.utils.CoreFileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,15 +21,13 @@ import com.sunwayworld.emc.module.mdm.bizmdm.test.service.EmcTestMethodService;
 import com.sunwayworld.emc.module.mdm.bizmdm.test.service.EmcTestService;
 import com.sunwayworld.framework.context.ApplicationContextHelper;
 import com.sunwayworld.framework.io.excel.ExcelHelper;
-import com.sunwayworld.framework.io.file.FileHelper;
-import com.sunwayworld.framework.io.file.FileRepresentation;
 import com.sunwayworld.framework.mybatis.mapper.MatchPattern;
 import com.sunwayworld.framework.mybatis.mapper.SearchFilter;
 import com.sunwayworld.framework.utils.BeanUtils;
 import com.sunwayworld.framework.utils.ObjectUtils;
 import com.sunwayworld.module.item.file.bean.CoreFileBean;
-import com.sunwayworld.module.item.file.bean.ImportResultRepresentation;
-import com.sunwayworld.module.item.file.function.ImportFileFunction;
+import com.sunwayworld.module.item.file.bean.CoreFileImportResultDTO;
+import com.sunwayworld.module.item.file.function.CoreFileImportFunction;
 import com.sunwayworld.module.mdm.org.bean.CoreOrgBean;
 import com.sunwayworld.module.mdm.org.service.CoreOrgService;
 import com.sunwayworld.module.mdm.user.bean.CoreUserBean;
@@ -35,7 +36,7 @@ import com.sunwayworld.module.sys.code.bean.CoreCodeBean;
 import com.sunwayworld.module.sys.code.service.CoreCodeService;
 
 @Component(value = "emcTestMethodImportFileFunction")
-public class EmcTestMethodImportFileFunction implements ImportFileFunction {
+public class EmcTestMethodImportFileFunction implements CoreFileImportFunction {
 
     @Autowired
     private EmcMethodService emcMethodService;
@@ -60,12 +61,12 @@ public class EmcTestMethodImportFileFunction implements ImportFileFunction {
 
     @Override
     @Transactional
-    public ImportResultRepresentation apply(CoreFileBean file) {
-        ImportResultRepresentation importResultRepresentation = new ImportResultRepresentation();
+    public CoreFileImportResultDTO apply(CoreFileBean file) {
+        CoreFileImportResultDTO coreFileImportResultDTO = new CoreFileImportResultDTO();
 
-        FileRepresentation fr = FileRepresentation.of(file);
+        FilePathDTO fr = CoreFileUtils.toFilePath(file);
 
-        List<EmcTestMethodDTO> testMethodDTOList = ExcelHelper.readDataFromExcel(FileHelper.getAbsolutePath(fr).toString(), 1, 2, EmcTestMethodDTO.class);
+        List<EmcTestMethodDTO> testMethodDTOList = ExcelHelper.readDataFromExcel(FilePathManager.getLocalPath(fr).toString(), 1, 2, EmcTestMethodDTO.class);
 
         if (testMethodDTOList.size() > 0) {
             List<EmcTestCategoryBean> testCategoryList = emcTestCategoryService.selectSelectableList();
@@ -155,6 +156,6 @@ public class EmcTestMethodImportFileFunction implements ImportFileFunction {
 
             emcTestMethodService.getDao().insert(testMethodList);
         }
-        return importResultRepresentation;
+        return coreFileImportResultDTO;
     }
 }

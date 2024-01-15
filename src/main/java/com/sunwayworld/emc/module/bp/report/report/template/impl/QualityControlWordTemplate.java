@@ -11,6 +11,8 @@ import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
+import com.sunwayworld.framework.io.file.FilePathDTO;
+import com.sunwayworld.framework.io.file.FilePathManager;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 
 import com.sunwayworld.emc.framework.constant.EmcConstant;
@@ -40,8 +42,6 @@ import com.sunwayworld.emc.module.mdm.bizmdm.indexcategory.bean.EmcIndexSetBean;
 import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcItemQcIndexBean;
 import com.sunwayworld.emc.module.mdm.crm.bean.CrmOpportunityMainBean;
 import com.sunwayworld.framework.constant.Constant;
-import com.sunwayworld.framework.io.file.FileHelper;
-import com.sunwayworld.framework.io.file.FileRepresentation;
 import com.sunwayworld.framework.utils.DateTimeUtils;
 import com.sunwayworld.framework.utils.ObjectUtils;
 import com.sunwayworld.framework.utils.StringUtils;
@@ -351,7 +351,7 @@ public class QualityControlWordTemplate extends BaseWordTemplate {
             return;
         }
 
-        String logoFileUrl = FileHelper.getAbsolutePath(FileRepresentation.of(logoFile.getScope(), DateTimeUtils.getDateSerialNumber(logoFile.getCreatedTime()), logoFile.getMd5Name(), logoFile.getName())).toString();
+        String logoFileUrl = FilePathManager.getLocalDirPath(FilePathDTO.of(logoFile.getScope(), DateTimeUtils.getDateSerialNumber(logoFile.getCreatedTime()), logoFile.getMd5Name(), logoFile.getName())).toString();
         File imageFile = new File(logoFileUrl);
         if (imageFile.exists()) {
             PfWord2007Utils.insertImageOfKey("LOGO", document, logoFileUrl, 100, 50);

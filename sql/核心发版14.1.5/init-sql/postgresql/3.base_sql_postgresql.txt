@@ -1,0 +1,79 @@
+-- ----------------------------- 2022-11-07 add by zhengrl------------begin
+ALTER TABLE T_CORE_IM_CONTACTS add TOP VARCHAR(1) default '0';
+ALTER TABLE T_CORE_IM_CONTACTS add DELETED VARCHAR(1) default '0';
+COMMENT ON COLUMN T_CORE_IM_CONTACTS.TOP IS '即时聊天是否置顶,0是未置顶,1是已经置顶';
+COMMENT ON COLUMN T_CORE_IM_CONTACTS.DELETED IS '是否删除该聊天,0是未删除,1是已经删除';
+
+COMMIT;
+-- ----------------------------- 2022-11-07 add by zhengrl------------end
+
+-- ----------------------------- 2022-11-16 add by zhengbx------------begin
+ALTER TABLE T_CORE_SYSTEM_MONITOR_ERRORLOG ADD REMARK varchar(600) null;
+COMMENT ON COLUMN T_CORE_SYSTEM_MONITOR_ERRORLOG.REMARK is '备注';
+CALL INSERTI18N('T_CORE_SYSTEM_MONITOR_ERRORLOG.REMARK', '备注', '备注', 'zh-CN', '备注');
+CALL INSERTI18N('CORE.MODULE.ITEM.ERROR_LOGS.TIP.NO_EMPTY', '备注不能为空！', '备注不能为空！', 'zh-CN', '备注不能为空！');
+COMMIT;
+-- ----------------------------- 2022-11-16 add by zhengbx------------end
+
+-- ----------------------------- 2023-01-06 add by zhangwf------------begin
+CALL DELETEI18N('T_CORE_CUSTOM_CHART.MENUNAME') ;
+CALL INSERTI18N('T_CORE_CUSTOM_CHART.MENUNAME', '发布至菜单名称', '发布至菜单名称', 'zh-CN', '发布至菜单名称');
+-- ----------------------------- 2023-01-06 add by zhangwf------------end
+
+-- ----------------------------- 2023-02-21 add by zhangwf------------begin
+ALTER TABLE T_CORE_CUSTOM_QUERY_CONDITION ALTER COLUMN FIELDNAME TYPE VARCHAR(256) ;
+ALTER TABLE T_CORE_CUSTOM_QUERY_CONDITION ALTER COLUMN TITLE TYPE VARCHAR(256) ;
+-- ----------------------------- 2023-02-21 add by zhangwf------------end
+
+-- ----------------------------- 2023-3-14 add by zhangwf------------begin
+CALL INSERTI18N('T_CORE_CUSTOM_CHART.SERVICE_NAME', '自定义图表', '自定义图表', 'zh-CN', '自定义图表');
+-- ----------------------------- 2023-3-14 add by zhangwf------------end
+
+-- ----------------------------- 2023-3-14 add by zhangwf------------begin
+ALTER TABLE t_core_custom_chart ALTER COLUMN "content" TYPE text USING "content"::text;
+-- ----------------------------- 2023-3-14 add by zhangwf------------end
+
+-- ----------------------------- 2023-03-20 add by zhanghang------------begin
+DELETE FROM T_CORE_ROLE_PERMISSION_TYPE WHERE ID IN('T_CORE_MENU_GROUP', 'T_CORE_MOBILE_MENU');
+COMMIT;
+-- ----------------------------- 2023-03-20 add by zhanghang------------end
+-- 14.1.3版本sql
+-- ----------------------------- 2023-05-05 add by zhangwf------------begin
+ALTER TABLE T_CORE_IM_MESSAGE ADD SENDTIME TIMESTAMP(6);
+COMMENT ON COLUMN T_CORE_IM_MESSAGE.SENDTIME IS '发送时间';
+CALL INSERTI18N('T_CORE_IM_MESSAGE.SENDTIME', '发送时间', '发送时间', 'zh-CN', '发送时间');
+-- ----------------------------- 2023-05-05 add by zhangwf------------end
+-- 14.1.5版本sql
+-- ----------------------------- 2022-10-19 add by zhuyq------------begin ---2023-07-12 迁移---
+
+CREATE TABLE T_CORE_PDF_ACQ_PREPROCESS(
+    ID INT8 NOT NULL,
+    PDFACQCONFIGID INT8 NULL,
+    KEYWORD VARCHAR(180)  NULL,
+    OPERATION VARCHAR(36)  NULL,
+    REPLACESTR VARCHAR(180)  NULL
+ );
+COMMENT ON TABLE T_CORE_PDF_ACQ_PREPROCESS IS 'PDF采集预处理';
+COMMENT ON COLUMN T_CORE_PDF_ACQ_PREPROCESS.ID IS '主键';
+COMMENT ON COLUMN T_CORE_PDF_ACQ_PREPROCESS.PDFACQCONFIGID IS 'PDF采集配置ID';
+COMMENT ON COLUMN T_CORE_PDF_ACQ_PREPROCESS.KEYWORD IS '关键字';
+COMMENT ON COLUMN T_CORE_PDF_ACQ_PREPROCESS.OPERATION IS '操作';
+COMMENT ON COLUMN T_CORE_PDF_ACQ_PREPROCESS.REPLACESTR IS '替换字符';
+
+CALL INSERTI18N('T_CORE_PDF_ACQ_PREPROCESS.SERVICE_NAME', 'PDF采集预处理', 'PDF采集预处理', 'zh-CN', 'PDF采集预处理');
+CALL INSERTI18N('T_CORE_PDF_ACQ_PREPROCESS.ID', 'PDF采集预处理的主键', '主键', 'zh-CN', '主键');
+CALL INSERTI18N('T_CORE_PDF_ACQ_PREPROCESS.PDFACQCONFIGID', 'PDF采集预处理的PDF采集配置ID', 'PDF采集配置ID', 'zh-CN', 'PDF采集配置ID');
+CALL INSERTI18N('T_CORE_PDF_ACQ_PREPROCESS.KEYWORD', 'PDF采集预处理的关键字', '关键字', 'zh-CN', '关键字');
+CALL INSERTI18N('T_CORE_PDF_ACQ_PREPROCESS.OPERATION', 'PDF采集预处理的操作', '操作', 'zh-CN', '操作');
+CALL INSERTI18N('T_CORE_PDF_ACQ_PREPROCESS.REPLACESTR', 'PDF采集预处理的替换字符', '替换字符', 'zh-CN', '替换字符');
+
+ALTER TABLE T_CORE_PDF_ACQ_PREPROCESS ADD CONSTRAINT PK_CORE_PDF_ACQ_PREPROCESS PRIMARY KEY (ID);
+CREATE INDEX IDX_CFAP_PDFACQCONFIGID ON T_CORE_PDF_ACQ_PREPROCESS (PDFACQCONFIGID);
+
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_PDF_ACQ_PREPROCESS', '0', '0');
+
+INSERT INTO T_CORE_TABLE_HIERARCHY (ID, TABLENAME, MASTERTABLENAME, REFERCOLUMN)
+VALUES ('932904','T_CORE_PDF_ACQ_PREPROCESS', 'T_CORE_PDF_ACQ_CONFIG', 'PDFACQCONFIGID');
+
+-- ----------------------------- 2022-10-19 add by zhuyq------------end ---2023-07-12 迁移--

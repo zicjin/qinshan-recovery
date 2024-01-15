@@ -20,6 +20,8 @@ import java.util.stream.LongStream;
 
 import com.google.common.util.concurrent.AtomicDouble;
 import com.sunwayworld.emc.framework.constant.PfConstant;
+import com.sunwayworld.framework.io.file.FilePathManager;
+import com.sunwayworld.module.item.file.utils.CoreFileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
@@ -77,8 +79,6 @@ import com.sunwayworld.framework.context.ApplicationContextHelper;
 import com.sunwayworld.framework.context.LocalContextHelper;
 import com.sunwayworld.framework.data.page.Page;
 import com.sunwayworld.framework.data.page.Pagination;
-import com.sunwayworld.framework.io.file.FileHelper;
-import com.sunwayworld.framework.io.file.FileRepresentation;
 import com.sunwayworld.framework.mybatis.mapper.MapperParameter;
 import com.sunwayworld.framework.mybatis.mapper.MatchPattern;
 import com.sunwayworld.framework.mybatis.mapper.SearchFilter;
@@ -114,9 +114,11 @@ public class CrmOpportunityContractServiceImpl implements CrmOpportunityContract
     private EmcMonitorTmplService monitorTmplService;
 
     @Autowired
+    @Lazy
     private EmcProjectService projectService;
 
     @Autowired
+    @Lazy
     private PfProjSchemeService projSchemeService;
 
     @Autowired
@@ -129,6 +131,7 @@ public class CrmOpportunityContractServiceImpl implements CrmOpportunityContract
     private PfOrderService orderService;
 
     @Autowired
+    @Lazy
     private PfFolderService folderService;
 
     @Autowired
@@ -694,7 +697,7 @@ public class CrmOpportunityContractServiceImpl implements CrmOpportunityContract
 
         String crmServerUrl = ApplicationContextHelper.getConstantValue("CRM_SERVER_URL");
         fileList.forEach(file -> {
-            String fileUrl = FileHelper.getUrl(FileRepresentation.of(file));
+            String fileUrl = FilePathManager.getUrl(CoreFileUtils.toFilePath(file));
             file.setDownloadUrl(crmServerUrl + fileUrl);
         });
 

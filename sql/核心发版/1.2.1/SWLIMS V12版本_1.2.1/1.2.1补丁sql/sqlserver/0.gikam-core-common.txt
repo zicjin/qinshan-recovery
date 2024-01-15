@@ -1,0 +1,17 @@
+-- ----------------------------- 2022-09-28 add by shuaih------------begin
+
+DELETE FROM T_CORE_ROLE_PERMISSION_TYPE WHERE ID IN('T_CORE_MENU_GROUP','T_CORE_MOBILE_MENU');
+
+-- ----------------------------- 2022-09-28 add by shuaih------------end
+
+-- ----------------------------- 2022-09-28 add by shuaih------------begin
+
+EXEC DBO.DELETEI18N N'T_CORE_REPORT_CONFIG_LINE.DATACENTERREPORT';
+EXEC DBO.INSERTI18N  N'T_CORE_REPORT_CONFIG_LINE.DATACENTERREPORT', N'数据中心报表', N'数据中心报表', N'zh-CN',N'数据中心报表';
+EXEC DBO.INSERTI18N  N'T_CORE_DATA_CENTER.REPORTNAME', N'报表名称', N'报表名称', N'zh-CN',N'报表名称';
+
+-- ----------------------------- 2022-09-28 add by shuaih------------end
+
+-- ----------------------------- 2022-09-29 add by zhengbx------------begin
+ ALTER TABLE T_CORE_LOG ALTER COLUMN SIGNATURE VARCHAR(1024);
+-- ----------------------------- 2022-09-29 add by zhengbx------------end

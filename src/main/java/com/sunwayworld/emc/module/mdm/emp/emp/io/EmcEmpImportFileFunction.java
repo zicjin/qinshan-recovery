@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.sunwayworld.framework.io.file.FilePathDTO;
+import com.sunwayworld.framework.io.file.FilePathManager;
+import com.sunwayworld.module.item.file.utils.CoreFileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,26 +14,24 @@ import org.springframework.transaction.annotation.Transactional;
 import com.sunwayworld.emc.module.mdm.emp.emp.bean.EmcEmpBean;
 import com.sunwayworld.emc.module.mdm.emp.emp.service.EmcEmpService;
 import com.sunwayworld.framework.io.excel.ExcelHelper;
-import com.sunwayworld.framework.io.file.FileHelper;
-import com.sunwayworld.framework.io.file.FileRepresentation;
 import com.sunwayworld.module.item.file.bean.CoreFileBean;
-import com.sunwayworld.module.item.file.bean.ImportResultRepresentation;
-import com.sunwayworld.module.item.file.function.ImportFileFunction;
+import com.sunwayworld.module.item.file.bean.CoreFileImportResultDTO;
+import com.sunwayworld.module.item.file.function.CoreFileImportFunction;
 
 @Component(value = "emcEmpImportFileFunction")
-public class EmcEmpImportFileFunction implements ImportFileFunction {
+public class EmcEmpImportFileFunction implements CoreFileImportFunction {
 
     @Autowired
     private EmcEmpService emcEmpService;
 
     @Override
     @Transactional
-    public ImportResultRepresentation apply(CoreFileBean file) {
-        ImportResultRepresentation importResultRepresentation = new ImportResultRepresentation();
+    public CoreFileImportResultDTO apply(CoreFileBean file) {
+        CoreFileImportResultDTO fileImportResultDTO = new CoreFileImportResultDTO();
 
-        FileRepresentation fr = FileRepresentation.of(file);
+        FilePathDTO fr = CoreFileUtils.toFilePath(file);
 
-        List<EmcEmpBean> empList = ExcelHelper.readDataFromExcel(FileHelper.getAbsolutePath(fr).toString(), 1, 2, EmcEmpBean.class);
+        List<EmcEmpBean> empList = ExcelHelper.readDataFromExcel(FilePathManager.getLocalPath(fr).toString(), 1, 2, EmcEmpBean.class);
 
         if (empList.size() > 0) {
 
@@ -53,6 +54,6 @@ public class EmcEmpImportFileFunction implements ImportFileFunction {
                 emcEmpService.getDao().update(updateEmpList);
             }
         }
-        return importResultRepresentation;
+        return fileImportResultDTO;
     }
 }

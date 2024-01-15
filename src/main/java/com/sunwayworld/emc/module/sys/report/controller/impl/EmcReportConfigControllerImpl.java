@@ -1,8 +1,8 @@
 package com.sunwayworld.emc.module.sys.report.controller.impl;
 
+import com.sunwayworld.cloud.module.fr.report.controller.impl.CoreReportConfigControllerImpl;
 import org.springframework.stereotype.Controller;
 
-import com.sunwayworld.cloud.gikam.fr.controller.report.impl.CoreReportConfigControllerImpl;
 import com.sunwayworld.emc.module.sys.report.controller.EmcReportConfigController;
 
 /**

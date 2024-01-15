@@ -1,0 +1,332 @@
+-- ----------------------------- 2023-06-13 add by liuxia------------begin
+alter table dbo.T_CORE_MENU ADD PUBLISHUSERNAME VARCHAR(60) NULL
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'发布用户姓名',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_MENU',
+'COLUMN', N'PUBLISHUSERNAME'
+GO
+alter table dbo.T_CORE_MENU ADD PUBLISHUSERID VARCHAR(36) NULL
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'发布用户ID',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_MENU',
+'COLUMN', N'PUBLISHUSERID'
+GO
+alter table dbo.T_CORE_MENU ADD PUBLISHTIME DATETIME NULL
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'发布时间',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_MENU',
+'COLUMN', N'PUBLISHTIME'
+GO
+
+EXEC  DBO.INSERTI18N N'T_CORE_MENU.PUBLISHUSERNAME',N'发布用户姓名',N'发布用户姓名',N'zh-CN',N'发布用户姓名'
+GO
+EXEC  DBO.INSERTI18N N'T_CORE_MENU.PUBLISHUSERID',N'发布用户ID',N'发布用户ID',N'zh-CN',N'发布用户ID'
+GO
+EXEC  DBO.INSERTI18N N'T_CORE_MENU.PUBLISHTIME',N'发布时间',N'发布时间',N'zh-CN',N'发布时间'
+GO
+-- ----------------------------- 2023-06-13 add by liuxia------------end
+
+-- ----------------------------- 2023-07-11 add by shixw------------begin
+
+ALTER TABLE dbo.T_CORE_LOG ALTER COLUMN LOGINIP varchar(60) COLLATE Chinese_PRC_CI_AS NULL;
+ALTER TABLE dbo.T_CORE_LOGIN_LOG ALTER COLUMN LOGINIP varchar(60) COLLATE Chinese_PRC_CI_AS NULL;
+
+-- ----------------------------- 2023-07-11 add by shixw------------end
+
+-- ----------------------------- 2023-07-13 add by zhanghang------------begin
+alter table dbo.T_CORE_SYSTEM_CONFIG ADD LICENSEINFO VARCHAR(1) NULL
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'关于系统显示License信息',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_SYSTEM_CONFIG',
+'COLUMN', N'LICENSEINFO'
+GO
+
+EXEC  DBO.INSERTI18N N'T_CORE_SYSTEM_CONFIG.LICENSEINFO',N'关于系统显示License信息',N'关于系统显示License信息',N'zh-CN',N'关于系统显示License信息'
+GO
+
+-- ----------------------------- 2023-07-13 add by zhanghang------------end
+
+-- ----------------------------- 2023-07-20 add by yangsz------------begin
+alter table dbo.T_CORE_TODO_CONFIG ADD LCDPSERVICEMETHOD VARCHAR(512) NULL
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'调用待办数据的低代码方法（参数必需是RestJsonWrapperBean，可以为空）',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_TODO_CONFIG',
+'COLUMN', N'LCDPSERVICEMETHOD'
+GO
+
+EXEC  DBO.INSERTI18N N'T_CORE_TODO_CONFIG.LCDPSERVICEMETHOD',N'查询待办的低代码方法',N'查询待办的低代码方法',N'zh-CN',N'查询待办的低代码方法'
+GO
+-- ----------------------------- 2023-07-20 add by yangsz------------end
+
+-- ----------------------------- 2023-08-02 add by zhanghang--------------begin
+EXEC  DBO.INSERTI18N N'GIKAM.BPMN.TIP.SELECT_BY_SQL_MISSING_PARAMETER',N'工作流的通过SQL选取中缺失参数',N'选取SQL({0})中参数({1})未提供',N'zh-CN',N'选取SQL({0})中参数({1})未提供';
+EXEC  DBO.INSERTI18N N'GIKAM.BPMN.TIP.FILTER_BY_SQL_MISSING_PARAMETER',N'工作流的通过SQL过滤中缺失参数',N'过滤SQL({0})中参数({1})未提供',N'zh-CN',N'过滤SQL({0})中参数({1})未提供';
+GO
+-- ----------------------------- 2023-08-02 add by zhanghang--------------end
+
+-- ----------------------------- 2023-08-04 add by shixw--------------begin
+
+-- 建表语句
+CREATE TABlE DBO.T_CORE_IMPORT_TMPL(
+    ID BIGINT NOT NULL,
+    TMPLCODE VARCHAR(36)  NULL ,
+    TMPLNAME VARCHAR(60)  NULL ,
+    TABLENAME VARCHAR(60)  NULL ,
+    STARTROWINDEX BIGINT NULL ,
+    CREATEDBYID VARCHAR(36)  NULL ,
+    CREATEDBYNAME VARCHAR(60)  NULL ,
+    CREATEDTIME DATETIME NULL ,
+    CREATEDBYORGID VARCHAR(36)  NULL ,
+    CREATEDBYORGNAME VARCHAR(270)  NULL ,
+    CONSTRAINT PK_CORE_IMPORT_TMPL PRIMARY KEY(ID));
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'导入模版' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_IMPORT_TMPL';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'主键' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_IMPORT_TMPL', @level2type=N'COLUMN',@level2name=N'ID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'模版编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_IMPORT_TMPL', @level2type=N'COLUMN',@level2name=N'TMPLCODE';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'模版名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_IMPORT_TMPL', @level2type=N'COLUMN',@level2name=N'TMPLNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'关联表' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_IMPORT_TMPL', @level2type=N'COLUMN',@level2name=N'TABLENAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'开始导入行序号' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_IMPORT_TMPL', @level2type=N'COLUMN',@level2name=N'STARTROWINDEX';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_IMPORT_TMPL', @level2type=N'COLUMN',@level2name=N'CREATEDBYID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_IMPORT_TMPL', @level2type=N'COLUMN',@level2name=N'CREATEDBYNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_IMPORT_TMPL', @level2type=N'COLUMN',@level2name=N'CREATEDTIME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_IMPORT_TMPL', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_IMPORT_TMPL', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGNAME';
+
+CREATE TABlE DBO.T_CORE_IMPORT_TMPL_CONFIG(
+    ID BIGINT NOT NULL,
+    IMPORTTMPLID BIGINT NULL ,
+    EXCELCOLUMNNO BIGINT NULL ,
+    EXCELCOLUMN VARCHAR(36)  NULL ,
+    DBFIELD VARCHAR(60)  NULL ,
+    FIELDTYPE VARCHAR(36)  NULL ,
+    DATASOURCE VARCHAR(36)  NULL ,
+    DEFAULTVALUE VARCHAR(60)  NULL ,
+    REMARK VARCHAR(60)  NULL ,
+    CREATEDBYID VARCHAR(36)  NULL ,
+    CREATEDBYNAME VARCHAR(60)  NULL ,
+    CREATEDTIME DATETIME NULL ,
+    CREATEDBYORGID VARCHAR(36)  NULL ,
+    CREATEDBYORGNAME VARCHAR(270)  NULL ,
+    CONSTRAINT PK_CORE_IMPORT_TMPL_CONFIG PRIMARY KEY(ID));
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'导入模板配置' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_IMPORT_TMPL_CONFIG';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'主键' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_IMPORT_TMPL_CONFIG', @level2type=N'COLUMN',@level2name=N'ID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'导入模版ID' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_IMPORT_TMPL_CONFIG', @level2type=N'COLUMN',@level2name=N'IMPORTTMPLID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'EXCEL列序号' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_IMPORT_TMPL_CONFIG', @level2type=N'COLUMN',@level2name=N'EXCELCOLUMNNO';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'EXCEL列名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_IMPORT_TMPL_CONFIG', @level2type=N'COLUMN',@level2name=N'EXCELCOLUMN';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'数据库字段' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_IMPORT_TMPL_CONFIG', @level2type=N'COLUMN',@level2name=N'DBFIELD';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'字段类型' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_IMPORT_TMPL_CONFIG', @level2type=N'COLUMN',@level2name=N'FIELDTYPE';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'数据源' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_IMPORT_TMPL_CONFIG', @level2type=N'COLUMN',@level2name=N'DATASOURCE';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'默认值' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_IMPORT_TMPL_CONFIG', @level2type=N'COLUMN',@level2name=N'DEFAULTVALUE';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'备注' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_IMPORT_TMPL_CONFIG', @level2type=N'COLUMN',@level2name=N'REMARK';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_IMPORT_TMPL_CONFIG', @level2type=N'COLUMN',@level2name=N'CREATEDBYID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_IMPORT_TMPL_CONFIG', @level2type=N'COLUMN',@level2name=N'CREATEDBYNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_IMPORT_TMPL_CONFIG', @level2type=N'COLUMN',@level2name=N'CREATEDTIME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_IMPORT_TMPL_CONFIG', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_IMPORT_TMPL_CONFIG', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGNAME';
+CREATE NONCLUSTERED INDEX [IDX_CIT_CONFIG_IMPORTTMPLID] ON [dbo].[T_CORE_IMPORT_TMPL_CONFIG] ([IMPORTTMPLID]);
+
+EXEC  DBO.INSERTI18N  N'T_CORE_IMPORT_TMPL.SERVICE_NAME', N'导入模版', N'导入模版', N'zh-CN', N'导入模版';
+EXEC  DBO.INSERTI18N  N'T_CORE_IMPORT_TMPL.ID', N'导入模版的主键', N'主键', N'zh-CN', N'主键';
+EXEC  DBO.INSERTI18N  N'T_CORE_IMPORT_TMPL.TMPLCODE', N'导入模版的模版编码', N'模版编码', N'zh-CN', N'模版编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_IMPORT_TMPL.TMPLNAME', N'导入模版的模版名称', N'模版名称', N'zh-CN', N'模版名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_IMPORT_TMPL.TABLENAME', N'导入模版的关联表', N'关联表', N'zh-CN', N'关联表';
+EXEC  DBO.INSERTI18N  N'T_CORE_IMPORT_TMPL.STARTROWINDEX', N'导入模版的开始导入行序号', N'开始导入行序号', N'zh-CN', N'开始导入行序号';
+EXEC  DBO.INSERTI18N  N'T_CORE_IMPORT_TMPL.CREATEDBYID', N'导入模版的制单人编码', N'制单人编码', N'zh-CN', N'制单人编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_IMPORT_TMPL.CREATEDBYNAME', N'导入模版的制单人名称', N'制单人名称', N'zh-CN', N'制单人名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_IMPORT_TMPL.CREATEDTIME', N'导入模版的制单时间', N'制单时间', N'zh-CN', N'制单时间';
+EXEC  DBO.INSERTI18N  N'T_CORE_IMPORT_TMPL.CREATEDBYORGID', N'导入模版的制单人单位编码', N'制单人单位编码', N'zh-CN', N'制单人单位编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_IMPORT_TMPL.CREATEDBYORGNAME', N'导入模版的制单人单位名称', N'制单人单位名称', N'zh-CN', N'制单人单位名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_IMPORT_TMPL_CONFIG.SERVICE_NAME', N'导入模板配置', N'导入模板配置', N'zh-CN', N'导入模板配置';
+EXEC  DBO.INSERTI18N  N'T_CORE_IMPORT_TMPL_CONFIG.ID', N'导入模板配置的主键', N'主键', N'zh-CN', N'主键';
+EXEC  DBO.INSERTI18N  N'T_CORE_IMPORT_TMPL_CONFIG.IMPORTTMPLID', N'导入模板配置的导入模版ID', N'导入模版ID', N'zh-CN', N'导入模版ID';
+EXEC  DBO.INSERTI18N  N'T_CORE_IMPORT_TMPL_CONFIG.EXCELCOLUMNNO', N'导入模板配置的EXCEL列序号', N'EXCEL列序号', N'zh-CN', N'EXCEL列序号';
+EXEC  DBO.INSERTI18N  N'T_CORE_IMPORT_TMPL_CONFIG.EXCELCOLUMN', N'导入模板配置的EXCEL列名称', N'EXCEL列名称', N'zh-CN', N'EXCEL列名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_IMPORT_TMPL_CONFIG.DBFIELD', N'导入模板配置的数据库字段', N'数据库字段', N'zh-CN', N'数据库字段';
+EXEC  DBO.INSERTI18N  N'T_CORE_IMPORT_TMPL_CONFIG.FIELDTYPE', N'导入模板配置的字段类型', N'字段类型', N'zh-CN', N'字段类型';
+EXEC  DBO.INSERTI18N  N'T_CORE_IMPORT_TMPL_CONFIG.DATASOURCE', N'导入模板配置的数据源', N'数据源', N'zh-CN', N'数据源';
+EXEC  DBO.INSERTI18N  N'T_CORE_IMPORT_TMPL_CONFIG.DEFAULTVALUE', N'导入模板配置的默认值', N'默认值', N'zh-CN', N'默认值';
+EXEC  DBO.INSERTI18N  N'T_CORE_IMPORT_TMPL_CONFIG.REMARK', N'导入模板配置的备注', N'备注', N'zh-CN', N'备注';
+EXEC  DBO.INSERTI18N  N'T_CORE_IMPORT_TMPL_CONFIG.CREATEDBYID', N'导入模板配置的制单人编码', N'制单人编码', N'zh-CN', N'制单人编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_IMPORT_TMPL_CONFIG.CREATEDBYNAME', N'导入模板配置的制单人名称', N'制单人名称', N'zh-CN', N'制单人名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_IMPORT_TMPL_CONFIG.CREATEDTIME', N'导入模板配置的制单时间', N'制单时间', N'zh-CN', N'制单时间';
+EXEC  DBO.INSERTI18N  N'T_CORE_IMPORT_TMPL_CONFIG.CREATEDBYORGID', N'导入模板配置的制单人单位编码', N'制单人单位编码', N'zh-CN', N'制单人单位编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_IMPORT_TMPL_CONFIG.CREATEDBYORGNAME', N'导入模板配置的制单人单位名称', N'制单人单位名称', N'zh-CN', N'制单人单位名称';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.ITEM.IMPORTTMPLS.MODAL.ADD', N'新增', N'新增', N'zh-CN', N'新增';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.ITEM.IMPORTTMPLS.TAB.TMPL_CONFIG', N'导入模板配置', N'导入模板配置', N'zh-CN', N'导入模板配置';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.ITEM.IMPORTTMPLS.BUTTON.TMPL_OPERATE', N'模板操作', N'模板操作', N'zh-CN', N'模板操作';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.ITEM.IMPORTTMPLS.BUTTON.UPLOAD_TMPL', N'上传模板', N'上传模板', N'zh-CN', N'上传模板';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.ITEM.IMPORTTMPLS.BUTTON.DOWNLOAD_TMPL', N'下载模板', N'下载模板', N'zh-CN', N'下载模板';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.ITEM.IMPORTTMPLS.BUTTON.INIT', N'初始化', N'初始化', N'zh-CN', N'初始化';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.ITEM.IMPORTTMPLS.TIP.IMPORT_SUCCSS', N'导入成功', N'导入成功', N'zh-CN', N'导入成功';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.ITEM.IMPORTTMPLS.TIP.ATTACHMENT_EXISTS', N'存在模版文件，是否覆盖', N'存在模版文件，是否覆盖', N'zh-CN', N'存在模版文件，是否覆盖';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.ITEM.IMPORTTMPLS.TIP.CHOOSE_TABLE', N'请先选择关联表', N'请先选择关联表', N'zh-CN', N'请先选择关联表';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.ITEM.IMPORTTMPLS.TIP.NO_FILE', N'当前选择数据未上传模版文件', N'当前选择数据未上传模版文件', N'zh-CN', N'当前选择数据未上传模版文件';
+
+-- 创建菜单语句
+INSERT INTO T_CORE_MENU (ID, MENUNAME, HREF, PARENTID, ORDERNO, ICON, MENUINITNAME)
+VALUES ('9375', '导入模版维护', '/secure/core/module/item/import-tmpls/page/edit-list', '93', '9375', '041.svg', '导入模版维护');
+
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_IMPORT_TMPL', '0', '1');
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_IMPORT_TMPL_CONFIG', '0', '0');
+
+INSERT INTO T_CORE_TABLE_HIERARCHY (ID, TABLENAME, MASTERTABLENAME, REFERCOLUMN)
+VALUES ('937501','T_CORE_IMPORT_TMPL_CONFIG', 'T_CORE_IMPORT_TMPL', 'IMPORTTMPLID');
+
+INSERT INTO T_CORE_CODE_CATEGORY(ID, CODECATEGORYNAME, CODECLASSID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME)
+    VALUES ('importTmplFieldType', '导入模版字段类型', 'biz', NULL, 1, NULL, NULL, NULL, NULL);
+
+INSERT INTO T_CORE_CODE(ID, CODE, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME)
+    VALUES (NEXT VALUE FOR SEQ_CORE, 'string', '字符串', 'importTmplFieldType', NULL, 1, 0, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL);
+INSERT INTO T_CORE_CODE(ID, CODE, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME)
+    VALUES (NEXT VALUE FOR SEQ_CORE, 'select', '下拉框', 'importTmplFieldType', NULL, 2, 0, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL);
+INSERT INTO T_CORE_CODE(ID, CODE, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME)
+    VALUES (NEXT VALUE FOR SEQ_CORE, 'date', '日期', 'importTmplFieldType', NULL, 3, 0, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL);
+
+
+
+INSERT INTO T_CORE_ADMIN_SELECT_CONFIG(ID, NAME, CATEGORY, URL, VALUEFIELD, TEXTFIELD)
+  VALUES(NEXT VALUE FOR SEQ_CORE, '导入模版字段类型', 'importTmplFieldType', '/secure/core/module/sys/codes/queries/selectable?codeCategoryId=importTmplFieldType', 'code', 'codeName');
+
+INSERT INTO T_CORE_ADMIN_SELECT_CONFIG(ID, NAME, CATEGORY, URL, VALUEFIELD, TEXTFIELD)
+  VALUES(NEXT VALUE FOR SEQ_CORE, '表字段', 'table-field', '/secure/core/module/lcdp/tables/fields/queries/selectable', 'fieldName', 'fieldName');
+
+
+-- ----------------------------- 2023-08-04 add by shixw------------end
+
+-- ----------------------------- 2023-08-04 add by zhangjr------------begin
+create table T_CORE_ADMIN_TENANT
+(
+  id                  VARCHAR(32) not null,
+  tenantname          VARCHAR(128),
+  url                 VARCHAR(512),
+  username            VARCHAR(64),
+  password            VARCHAR(96),
+  activatedflag       VARCHAR(1),
+  activatedbyid       VARCHAR(32),
+  activatedbyname     VARCHAR(64),
+  activatedtime       DATE,
+  CONSTRAINT PK_TCAT PRIMARY KEY(ID)
+);
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'租户配置表' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_ADMIN_TENANT';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'主键' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_ADMIN_TENANT', @level2type=N'COLUMN',@level2name=N'id';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'租户名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_ADMIN_TENANT', @level2type=N'COLUMN',@level2name=N'tenantname';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'数据库地址' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_ADMIN_TENANT', @level2type=N'COLUMN',@level2name=N'url';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'数据库用户名' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_ADMIN_TENANT', @level2type=N'COLUMN',@level2name=N'username';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'数据库密码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_ADMIN_TENANT', @level2type=N'COLUMN',@level2name=N'password';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'启用标志' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_ADMIN_TENANT', @level2type=N'COLUMN',@level2name=N'activatedFlag';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'启用人编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_ADMIN_TENANT', @level2type=N'COLUMN',@level2name=N'activatedById';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'启用人名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_ADMIN_TENANT', @level2type=N'COLUMN',@level2name=N'activatedByName';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'启用时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_ADMIN_TENANT', @level2type=N'COLUMN',@level2name=N'activatedTime';
+
+
+create table T_CORE_ADMIN_TENANT_USER
+(
+  id                  BIGINT not null,
+  tenantid            VARCHAR(32),
+  userid              VARCHAR(32),
+  CONSTRAINT PK_TCATU PRIMARY KEY(ID)
+);
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'租户分配用户表' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_ADMIN_TENANT_USER';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'主键' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_ADMIN_TENANT_USER', @level2type=N'COLUMN',@level2name=N'id';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'租户主键' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_ADMIN_TENANT_USER', @level2type=N'COLUMN',@level2name=N'tenantid';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'用户编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_ADMIN_TENANT_USER', @level2type=N'COLUMN',@level2name=N'userid';
+
+CREATE NONCLUSTERED INDEX [IDX_TCATU_USERID] ON [dbo].[T_CORE_ADMIN_TENANT_USER] ([USERID]);
+
+INSERT INTO T_CORE_ADMIN_MENU(ID, MENUNAME, MENUICON, HREF, PARENTID, ORDERNO)
+VALUES ('101080', '租户配置', '049.svg', '/secure/core/module/admin/tenants/page/edit-list', '1010', '101080');
+
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_ADMIN_TENANT', '0', '0');
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_ADMIN_TENANT_USER', '0', '0');
+INSERT INTO t_core_table_hierarchy (ID, TABLENAME, MASTERTABLENAME, REFERCOLUMN)
+VALUES (NEXT VALUE FOR SEQ_CORE, 'T_CORE_ADMIN_TENANT_USER', 'T_CORE_ADMIN_TENANT', 'TENANTID');
+
+EXEC  DBO.INSERTI18N N'CORE.MODULE.ADMIN.TENANTS.MODAL.ADD', N'租户配置新增租户', N'新增租户', N'zh-CN', N'新增租户';
+EXEC  DBO.INSERTI18N N'CORE.MODULE.ADMIN.TENANTS.TAB.BASE_INFO', N'租户配置租户详情', N'租户详情', N'zh-CN', N'租户详情';
+EXEC  DBO.INSERTI18N N'CORE.MODULE.ADMIN.TENANTS.TAB.USER', N'租户配置的分配用户', N'分配用户', N'zh-CN', N'分配用户';
+-- ----------------------------- 2023-08-04 add by zhangjr------------end
+
+-- ----------------------------- 2023-08-08 add by zhanghang------------begin
+alter table dbo.T_CORE_NOTIFICATION_INST ADD PARAM TEXT NULL
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'消息参数',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_NOTIFICATION_INST',
+'COLUMN', N'PARAM'
+GO
+
+EXEC  DBO.INSERTI18N N'T_CORE_NOTIFICATION_INST.PARAM',N'消息参数',N'消息参数',N'zh-CN',N'消息参数'
+GO
+-- ----------------------------- 2023-08-08 add by zhanghang------------end
+
+-- ----------------------------- 2023-08-08 add by shixw------------begin
+
+alter table dbo.T_CORE_TODO_CONFIG ADD MOBILESELECTSQL TEXT NULL
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'移动端待办SQL',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_TODO_CONFIG',
+'COLUMN', N'MOBILESELECTSQL'
+GO
+
+EXEC  DBO.INSERTI18N N'T_CORE_TODO_CONFIG.MOBILESELECTSQL',N'移动端待办SQL',N'移动端待办SQL',N'zh-CN',N'移动端待办SQL'
+GO
+
+-- ----------------------------- 2023-08-08 add by shixw------------end
+
+-- ----------------------------- 2023-08-09 add by shixw------------begin
+
+
+EXEC  DBO.INSERTI18N N'T_CORE_IMPORT_TMPL.FILENAME',N'模版文件',N'模版文件',N'zh-CN',N'模版文件'
+GO
+
+UPDATE T_CORE_ADMIN_CHOOSE_CONFIG SET TITLE = '数据库表',NAME= '数据库表', WIDTH = '30%' WHERE CATEGORY  = 'lcdp-table';
+
+
+-- ----------------------------- 2023-08-09 add by shixw------------end
+
+-- ----------------------------- 2023-08-09 add by zhanghang--------------begin
+EXEC  DBO.INSERTI18N  N'T_CORE_ADMIN_TENANT.SERVICE_NAME', N'租户配置表', N'租户配置表', N'zh-CN',N'租户配置表';
+EXEC  DBO.INSERTI18N  N'T_CORE_ADMIN_TENANT.ID', N'租户配置表的主键', N'主键', N'zh-CN',N'主键';
+EXEC  DBO.INSERTI18N  N'T_CORE_ADMIN_TENANT.TENANTNAME', N'租户配置表的租户名称', N'租户名称', N'zh-CN',N'租户名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_ADMIN_TENANT.URL', N'租户配置表的数据库地址', N'数据库地址', N'zh-CN',N'数据库地址';
+EXEC  DBO.INSERTI18N  N'T_CORE_ADMIN_TENANT.USERNAME', N'租户配置表的数据库用户名', N'数据库用户名', N'zh-CN',N'数据库用户名';
+EXEC  DBO.INSERTI18N  N'T_CORE_ADMIN_TENANT.PASSWORD', N'租户配置表的数据库密码', N'数据库密码', N'zh-CN',N'数据库密码';
+EXEC  DBO.INSERTI18N  N'T_CORE_ADMIN_TENANT.ACTIVATEDFLAG', N'租户配置表的启用标志', N'启用标志', N'zh-CN',N'启用标志';
+EXEC  DBO.INSERTI18N  N'T_CORE_ADMIN_TENANT.ACTIVATEDBYID', N'租户配置表的启用人编码', N'启用人编码', N'zh-CN',N'启用人编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_ADMIN_TENANT.ACTIVATEDBYNAME', N'租户配置表的制单启用人名称', N'制单启用人名称', N'zh-CN',N'制单启用人名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_ADMIN_TENANT.ACTIVATEDTIME', N'租户配置表的启用时间', N'启用时间', N'zh-CN',N'启用时间';
+-- ----------------------------- 2023-08-09 add by zhanghang------------end
+
+-- ----------------------------- 2023-08-23 add by yiy------------begin
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.ITEM.IMPORTTMPLS.TIP.INVALID_DATA', N'数据格式错误', N'数据格式错误', N'zh-CN', N'数据格式错误';
+-- ----------------------------- 2023-08-23 add by yiy------------end
+
+-- ----------------------------- 2023-08-29 add by yiy------------begin
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.ITEM.IMPORTTMPLS.TIP.CODE_REQUIRED', N'导入模板维护的模版编码不能为空', N'模版编码不能为空', N'zh-CN', N'模版编码不能为空';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.ITEM.IMPORTTMPLS.TIP.CODE_NOT_EXISTED', N'导入模板维护的模版编码不存在', N'模版编码不存在', N'zh-CN', N'模版编码不存在';
+UPDATE T_CORE_ADMIN_CHOOSE_CONFIG SET TITLE = '选择表',NAME= '选择表', WIDTH = '50%' WHERE CATEGORY  = 'lcdp-table';
+-- ----------------------------- 2023-08-29 add by yiy------------end

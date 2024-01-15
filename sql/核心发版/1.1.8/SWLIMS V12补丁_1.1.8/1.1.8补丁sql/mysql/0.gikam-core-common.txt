@@ -1,0 +1,13 @@
+﻿-- ----------------------------- 2021-11-03 add by zhanghang------------begin
+
+INSERT INTO T_CORE_MENU(ID, MENUNAME, HREF, PARENTID, ORDERNO, MENUINITNAME, I18NCODE) VALUES ('9403', '导出日志', '/secure/core/module/sys/export-logs/page/edit-list', '94', '9403','导出日志', 'CORE.MENU.MENUNAME.SYS.LOG.EXPORT');
+
+alter table T_CORE_EXPORT_LOG add column MENUNAME VARCHAR(64) null comment '菜单名称';
+alter table T_CORE_EXPORT_LOG add column SUCCESS VARCHAR(1) null comment '导出结果（1-成功/0-失败）';
+
+CALL INSERTI18N('T_CORE_EXPORT_LOG.MENUNAME','菜单名称','菜单名称','zh-CN','菜单名称');
+CALL INSERTI18N('T_CORE_EXPORT_LOG.SUCCESS','导出结果','导出结果','zh-CN','导出结果');
+CALL INSERTI18N('T_CORE_EXPORT_LOG.OPERATION','文件操作','文件操作','zh-CN','文件操作');
+
+commit;
+-- ----------------------------- 2021-11-03 add by zhanghang------------end

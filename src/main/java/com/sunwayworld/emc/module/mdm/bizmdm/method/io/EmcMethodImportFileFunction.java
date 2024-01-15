@@ -10,7 +10,10 @@ import java.util.List;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
+import com.sunwayworld.framework.io.file.FilePathDTO;
+import com.sunwayworld.framework.io.file.FilePathManager;
 import com.sunwayworld.framework.spring.annotation.GikamBean;
+import com.sunwayworld.module.item.file.utils.CoreFileUtils;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Row;
@@ -25,19 +28,17 @@ import com.sunwayworld.emc.module.mdm.bizmdm.method.service.EmcMethodService;
 import com.sunwayworld.framework.context.ApplicationContextHelper;
 import com.sunwayworld.framework.exception.FileException;
 import com.sunwayworld.framework.io.excel.ExcelHelper;
-import com.sunwayworld.framework.io.file.FileHelper;
-import com.sunwayworld.framework.io.file.FileRepresentation;
 import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;
 import com.sunwayworld.framework.utils.DateTimeUtils;
 import com.sunwayworld.framework.utils.ObjectUtils;
 import com.sunwayworld.module.item.file.bean.CoreFileBean;
-import com.sunwayworld.module.item.file.bean.ImportResultRepresentation;
-import com.sunwayworld.module.item.file.function.ImportFileFunction;
+import com.sunwayworld.module.item.file.bean.CoreFileImportResultDTO;
+import com.sunwayworld.module.item.file.function.CoreFileImportFunction;
 import com.sunwayworld.module.sys.code.bean.CoreCodeBean;
 
 @GikamBean
 @Component(value = "emcMethodImportFileFunction")
-public class EmcMethodImportFileFunction implements ImportFileFunction {
+public class EmcMethodImportFileFunction implements CoreFileImportFunction {
 
     @Autowired
     private EmcMethodService methodService;
@@ -51,11 +52,11 @@ public class EmcMethodImportFileFunction implements ImportFileFunction {
     }
 
     @Override
-    public ImportResultRepresentation apply(CoreFileBean file) {
-        ImportResultRepresentation importResultRepresentation = new ImportResultRepresentation();
-        FileRepresentation fr = FileRepresentation.of(file);
-        importMethodByPOI(FileHelper.getAbsolutePath(fr).toFile().getAbsolutePath());
-        return importResultRepresentation;
+    public CoreFileImportResultDTO apply(CoreFileBean file) {
+        CoreFileImportResultDTO CoreFileImportResultDTO = new CoreFileImportResultDTO();
+        FilePathDTO fr = CoreFileUtils.toFilePath(file);
+        importMethodByPOI(FilePathManager.getLocalPath(fr).toFile().getAbsolutePath());
+        return CoreFileImportResultDTO;
     }
 
     public void importMethodByPOI(String filePath) {

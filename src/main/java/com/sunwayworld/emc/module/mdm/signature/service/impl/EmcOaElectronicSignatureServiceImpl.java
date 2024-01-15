@@ -9,6 +9,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.sunwayworld.framework.io.file.FilePathDTO;
+import com.sunwayworld.framework.io.file.FilePathManager;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -22,8 +24,6 @@ import com.sunwayworld.framework.at.annotation.AuditTrailEntry;
 import com.sunwayworld.framework.at.annotation.AuditTrailType;
 import com.sunwayworld.framework.context.ApplicationContextHelper;
 import com.sunwayworld.framework.exception.FileException;
-import com.sunwayworld.framework.io.file.FileHelper;
-import com.sunwayworld.framework.io.file.FileRepresentation;
 import com.sunwayworld.framework.mybatis.mapper.MatchPattern;
 import com.sunwayworld.framework.mybatis.mapper.SearchFilter;
 import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;
@@ -86,7 +86,7 @@ public class EmcOaElectronicSignatureServiceImpl implements EmcOaElectronicSigna
         List<CoreFileBean> userSignatureFileList = coreFileService.getDao().selectListByOneColumnValues(userTargetIdList, "targetId");
 
         fileList.forEach(file -> {
-            File templateFile = FileHelper.getAbsolutePath(FileRepresentation.of(file.getScope(), DateTimeUtils.getDateSerialNumber(file.getCreatedTime()),
+            File templateFile = FilePathManager.getLocalPath(FilePathDTO.of(file.getScope(), DateTimeUtils.getDateSerialNumber(file.getCreatedTime()),
                     file.getMd5Name(), file.getName())).toFile();
             try (FileInputStream inputStream = new FileInputStream(templateFile);
                  XWPFDocument document = new XWPFDocument(inputStream);
@@ -94,7 +94,7 @@ public class EmcOaElectronicSignatureServiceImpl implements EmcOaElectronicSigna
 
                 // 编制人
                 userSignatureFileList.stream().filter(signFile -> StringUtils.equals(signFile.getTargetId(), "T_CORE_USER$" + submitComment.getUserId())).findFirst().ifPresent(signFile -> {
-                    String userSignatureFileUrl = FileHelper.getAbsolutePath(FileRepresentation.of(signFile.getScope(), DateTimeUtils.getDateSerialNumber(signFile.getCreatedTime()), signFile.getMd5Name(), signFile.getName())).toString();
+                    String userSignatureFileUrl = FilePathManager.getLocalPath(FilePathDTO.of(signFile.getScope(), DateTimeUtils.getDateSerialNumber(signFile.getCreatedTime()), signFile.getMd5Name(), signFile.getName())).toString();
                     if (!new File(userSignatureFileUrl).exists()) {
                         return;
                     }
@@ -132,7 +132,7 @@ public class EmcOaElectronicSignatureServiceImpl implements EmcOaElectronicSigna
         List<CoreFileBean> userSignatureFileList = coreFileService.getDao().selectListByOneColumnValues(userTargetIdList, "targetId");
 
         fileList.forEach(file -> {
-            File templateFile = FileHelper.getAbsolutePath(FileRepresentation.of(file.getScope(), DateTimeUtils.getDateSerialNumber(file.getCreatedTime()),
+            File templateFile = FilePathManager.getLocalPath(FilePathDTO.of(file.getScope(), DateTimeUtils.getDateSerialNumber(file.getCreatedTime()),
                     file.getMd5Name(), file.getName())).toFile();
             try (FileInputStream inputStream = new FileInputStream(templateFile);
                  XWPFDocument document = new XWPFDocument(inputStream);
@@ -140,7 +140,7 @@ public class EmcOaElectronicSignatureServiceImpl implements EmcOaElectronicSigna
 
                 // 审核人
                 userSignatureFileList.stream().filter(signFile -> StringUtils.equals(signFile.getTargetId(), "T_CORE_USER$" + auditComment.getUserId())).findFirst().ifPresent(signFile -> {
-                    String userSignatureFileUrl = FileHelper.getAbsolutePath(FileRepresentation.of(signFile.getScope(), DateTimeUtils.getDateSerialNumber(signFile.getCreatedTime()), signFile.getMd5Name(), signFile.getName())).toString();
+                    String userSignatureFileUrl = FilePathManager.getLocalPath(FilePathDTO.of(signFile.getScope(), DateTimeUtils.getDateSerialNumber(signFile.getCreatedTime()), signFile.getMd5Name(), signFile.getName())).toString();
                     if (!new File(userSignatureFileUrl).exists()) {
                         return;
                     }
@@ -150,7 +150,7 @@ public class EmcOaElectronicSignatureServiceImpl implements EmcOaElectronicSigna
 
                 // 批准人
                 userSignatureFileList.stream().filter(signFile -> StringUtils.equals(signFile.getTargetId(), "T_CORE_USER$" + approveComment.getUserId())).findFirst().ifPresent(signFile -> {
-                    String userSignatureFileUrl = FileHelper.getAbsolutePath(FileRepresentation.of(signFile.getScope(), DateTimeUtils.getDateSerialNumber(signFile.getCreatedTime()), signFile.getMd5Name(), signFile.getName())).toString();
+                    String userSignatureFileUrl = FilePathManager.getLocalPath(FilePathDTO.of(signFile.getScope(), DateTimeUtils.getDateSerialNumber(signFile.getCreatedTime()), signFile.getMd5Name(), signFile.getName())).toString();
                     if (!new File(userSignatureFileUrl).exists()) {
                         return;
                     }

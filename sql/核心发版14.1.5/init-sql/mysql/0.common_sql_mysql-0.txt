@@ -1,0 +1,146 @@
+-- ----------------------------- 2020-06-05 add by shixw------------begin
+
+DROP PROCEDURE IF EXISTS `INSERTI18N`;
+DELIMITER $$
+-- Automation Deployment Single SQL ---begin
+CREATE PROCEDURE `INSERTI18N` (
+    CODEPARAM VARCHAR ( 128 ),
+    DESCRIPTION VARCHAR ( 192 ),
+    DEFAULTMESSAGE VARCHAR ( 192 ),
+    LANG VARCHAR ( 32 ),
+    MESSAGE VARCHAR ( 192 ) 
+    ) BEGIN
+    
+    SET @V_ID = NULL;
+    SELECT
+        ID INTO @V_ID 
+    FROM
+        T_CORE_I18N 
+    WHERE
+        CODE = CODEPARAM;
+    IF
+        ( @V_ID IS NULL ) THEN
+        SELECT
+            F_GET_SEQ_CORE ( ) INTO @V_ID;
+        INSERT INTO T_CORE_I18N ( ID, CODE, DESCRIPTION, DEFAULTMESSAGE )
+        VALUES
+            ( @V_ID, CODEPARAM, DESCRIPTION, DEFAULTMESSAGE );
+        
+    END IF;
+    INSERT INTO T_CORE_I18N_MESSAGE ( ID, I18NID, I18NCONFIGID, MESSAGE )
+    VALUES
+        ( F_GET_SEQ_CORE ( ), @V_ID, LANG, MESSAGE );
+    COMMIT;
+END$$
+-- Automation Deployment Single SQL ---end
+DELIMITER ;
+-- ----------------------------- 2020-06-05 add by shixw------------end
+
+-- ----------------------------- 2020-06-05 add by shixw------------begin
+DROP PROCEDURE
+IF
+    EXISTS `UPDATEI18N`;
+    
+DELIMITER $$
+-- Automation Deployment Single SQL ---begin
+CREATE PROCEDURE `UPDATEI18N` ( CODEPARAM VARCHAR ( 128 ), LANG VARCHAR ( 32 ), MESSAGEINFO VARCHAR ( 192 ) ) BEGIN
+    UPDATE T_CORE_I18N_MESSAGE IM,
+    T_CORE_I18N I 
+    SET IM.MESSAGE = MESSAGEINFO 
+    WHERE
+        I.ID = IM.I18NID 
+        AND I.CODE = CODEPARAM 
+        AND IM.I18NCONFIGID = LANG;
+    COMMIT;
+
+END$$
+-- Automation Deployment Single SQL ---end
+DELIMITER ;
+-- ----------------------------- 2020-06-05 add by shixw------------end
+
+-- ----------------------------- 2020-10-20 add by shixw------------begin
+
+DROP PROCEDURE IF EXISTS `DELETEI18N`;
+DELIMITER $$
+-- Automation Deployment Single SQL ---begin
+CREATE PROCEDURE `DELETEI18N` (
+    CODEPARAM VARCHAR ( 128 )
+    ) 
+BEGIN
+    
+    SET @V_ID = NULL;
+    SELECT
+        ID INTO @V_ID 
+    FROM
+        T_CORE_I18N 
+    WHERE
+        CODE = CODEPARAM;
+    IF
+        ( @V_ID IS NOT NULL ) THEN
+        DELETE FROM T_CORE_I18N_MESSAGE WHERE I18NID = @V_ID;
+        DELETE FROM T_CORE_I18N WHERE CODE = CODEPARAM;
+        COMMIT;
+        
+    END IF;
+END$$
+-- Automation Deployment Single SQL ---end
+DELIMITER ;
+
+-- ----------------------------- 2020-10-20 add by shixw------------end
+
+-- ----------------------------- 2021-1-8 add by shixw------------begin
+
+DROP PROCEDURE IF EXISTS `INSERTI18N`;
+
+DELIMITER $$
+-- Automation Deployment Single SQL ---begin
+CREATE PROCEDURE `INSERTI18N` ( CODEPARAM VARCHAR ( 128 ), DESCRIPTION VARCHAR ( 192 ), DEFAULTMESSAGE VARCHAR ( 192 ), LANG VARCHAR ( 32 ), MESSAGE VARCHAR ( 192 ) ) 
+BEGIN
+    
+    SET @V_ID = NULL;
+    SET @V_MID = NULL;
+
+    SELECT
+        ID INTO @V_ID 
+    FROM
+        T_CORE_I18N 
+    WHERE
+        CODE = CODEPARAM;
+    IF
+        ( @V_ID IS NULL ) THEN
+        SELECT
+            F_GET_SEQ_CORE ( ) INTO @V_ID;
+        INSERT INTO T_CORE_I18N ( ID, CODE, DESCRIPTION, DEFAULTMESSAGE )
+        VALUES
+            ( @V_ID, CODEPARAM, DESCRIPTION, DEFAULTMESSAGE );
+        ELSE SELECT
+            ID INTO @V_MID 
+        FROM
+            T_CORE_I18N_MESSAGE 
+        WHERE
+            I18NID = @V_ID 
+            AND I18NCONFIGID = LANG;
+        IF
+            @V_MID IS NOT NULL THEN
+                UPDATE T_CORE_I18N_MESSAGE 
+                SET MESSAGE = MESSAGE 
+            WHERE
+                I18NID = @V_ID 
+                AND I18NCONFIGID = LANG;
+            
+        END IF;
+        
+    END IF;
+    IF
+        @V_MID IS NULL THEN
+            INSERT INTO T_CORE_I18N_MESSAGE ( ID, I18NID, I18NCONFIGID, MESSAGE )
+        VALUES
+            ( F_GET_SEQ_CORE ( ), @V_ID, LANG, MESSAGE );
+        
+    END IF;
+    COMMIT;
+END $$
+-- Automation Deployment Single SQL ---end
+DELIMITER ;
+
+-- ----------------------------- 2021-1-8 add by shixw------------end

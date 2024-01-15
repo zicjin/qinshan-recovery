@@ -10,6 +10,7 @@ import com.sunwayworld.framework.mybatis.mapper.SearchFilter;
 import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;
 import com.sunwayworld.framework.utils.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 
 import com.sunwayworld.emc.module.bp.sol.dao.EmcSolRecordDao;
@@ -30,6 +31,7 @@ public class EmcSolRecordServiceImpl implements EmcSolRecordService {
     private EmcSolLineService solLineService;
 
     @Autowired
+    @Lazy
     private EmcSolService solService;
 
     @Override

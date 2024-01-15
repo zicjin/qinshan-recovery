@@ -1,0 +1,43 @@
+-- ----------------------------- 2021-09-14 add by zhangpf------------begin
+INSERT INTO T_CORE_CODE(ID, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME, CODE)
+VALUES (NEXT VALUE FOR SEQ_CORE, '填空题', 'coreQuestionType', NULL, NULL, NULL, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL, 'completion');
+
+EXEC DBO.INSERTI18N  N'CORE.MODULE.TRAIN.QUESTION.TAB.COMPLETION', N'填空题', N'填空题', N'zh-CN', N'填空题';
+
+ALTER TABLE dbo.T_CORE_EXAM_TMPL ADD COMPLETIONQTY int NULL GO
+EXEC sys.sp_addextendedproperty 'MS_Description', N'填空题个数', 'schema', N'dbo', 'table', N'T_CORE_EXAM_TMPL', 'column', N'COMPLETIONQTY' GO
+
+ALTER TABLE dbo.T_CORE_EXAM_TMPL ADD COMPLETIONSCORE int NULL GO
+EXEC sys.sp_addextendedproperty 'MS_Description', N'填空题分值(/个)', 'schema', N'dbo', 'table', N'T_CORE_EXAM_TMPL', 'column', N'COMPLETIONSCORE' GO
+
+EXEC  DBO.INSERTI18N  N'T_CORE_EXAM_TMPL.COMPLETIONQTY', N'试卷模板的填空题个数', N'填空题个数', N'zh-CN',N'填空题个数';
+EXEC  DBO.INSERTI18N  N'T_CORE_EXAM_TMPL.COMPLETIONSCORE', N'试卷模板的填空题分值(/个)', N'填空题分值(/个)', N'zh-CN',N'填空题分值(/个)';
+
+ALTER TABLE dbo.T_CORE_EXAM ADD COMPLETIONQTY int NULL GO
+EXEC sys.sp_addextendedproperty 'MS_Description', N'填空题个数', 'schema', N'dbo', 'table', N'T_CORE_EXAM', 'column', N'COMPLETIONQTY' GO
+
+ALTER TABLE dbo.T_CORE_EXAM ADD TMPLCOMPLETIONQTY int NULL GO
+EXEC sys.sp_addextendedproperty 'MS_Description', N'模板填空题个数', 'schema', N'dbo', 'table', N'T_CORE_EXAM', 'column', N'TMPLCOMPLETIONQTY' GO
+
+EXEC  DBO.INSERTI18N  N'T_CORE_EXAM.COMPLETIONQTY', N'试卷的填空题个数', N'填空题个数', N'zh-CN',N'填空题个数';
+EXEC  DBO.INSERTI18N  N'T_CORE_EXAM.TMPLCOMPLETIONQTY', N'试卷的模板填空题个数', N'模板填空题个数', N'zh-CN',N'模板填空题个数';
+
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.TRAIN.EXAM_PAPER.TIP.COMPLETION_QUESTION_QTY_LESS_THAN_EXAM_COMPLETION_QUESTION_QTY', N'题库已启用填空题数量不满足试卷填空题数量', N'题库已启用填空题数量不满足试卷填空题数量', N'zh-CN', N'题库已启用填空题数量不满足试卷填空题数量';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.TRAIN.EXAM_QUESTION.FIELD.TITLE.COMPLETIONQTY', N'填空题个数', N'填空题个数', N'zh-CN',N'填空题个数';
+
+UPDATE T_CORE_EXAM_TMPL 
+   SET COMPLETIONQTY = 0
+ WHERE COMPLETIONQTY IS NULL;
+ 
+UPDATE T_CORE_EXAM_TMPL 
+   SET COMPLETIONSCORE = 0
+ WHERE COMPLETIONSCORE IS NULL;
+
+UPDATE T_CORE_EXAM 
+   SET COMPLETIONQTY = 0
+ WHERE COMPLETIONQTY IS NULL;
+ 
+UPDATE T_CORE_EXAM 
+   SET TMPLCOMPLETIONQTY = 0
+ WHERE TMPLCOMPLETIONQTY IS NULL;
+-- ----------------------------- 2021-09-14 add by zhangpf------------end

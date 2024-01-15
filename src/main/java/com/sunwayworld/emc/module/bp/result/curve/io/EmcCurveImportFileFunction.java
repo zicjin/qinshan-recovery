@@ -10,6 +10,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import com.sunwayworld.framework.io.file.FilePathDTO;
+import com.sunwayworld.framework.io.file.FilePathManager;
+import com.sunwayworld.module.item.file.utils.CoreFileUtils;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -28,19 +31,17 @@ import com.sunwayworld.emc.module.mdm.bizmdm.test.service.EmcItemService;
 import com.sunwayworld.framework.constant.Constant;
 import com.sunwayworld.framework.exception.FileException;
 import com.sunwayworld.framework.io.excel.ExcelHelper;
-import com.sunwayworld.framework.io.file.FileHelper;
-import com.sunwayworld.framework.io.file.FileRepresentation;
 import com.sunwayworld.framework.mybatis.mapper.MatchPattern;
 import com.sunwayworld.framework.mybatis.mapper.SearchFilter;
 import com.sunwayworld.framework.utils.NumberUtils;
 import com.sunwayworld.framework.utils.ObjectUtils;
 import com.sunwayworld.framework.utils.StringUtils;
 import com.sunwayworld.module.item.file.bean.CoreFileBean;
-import com.sunwayworld.module.item.file.bean.ImportResultRepresentation;
-import com.sunwayworld.module.item.file.function.ImportFileFunction;
+import com.sunwayworld.module.item.file.bean.CoreFileImportResultDTO;
+import com.sunwayworld.module.item.file.function.CoreFileImportFunction;
 
 @Component(value = "emcCurveImportFileFunction")
-public class EmcCurveImportFileFunction implements ImportFileFunction {
+public class EmcCurveImportFileFunction implements CoreFileImportFunction {
 
     private static final String STAND_QTY = "标准物量";
     private static final String RN6 = "标液加入量";
@@ -61,15 +62,15 @@ public class EmcCurveImportFileFunction implements ImportFileFunction {
     }
 
     @Override
-    public ImportResultRepresentation apply(CoreFileBean file) {
-        ImportResultRepresentation importResultRepresentation = new ImportResultRepresentation();
+    public CoreFileImportResultDTO apply(CoreFileBean file) {
+        CoreFileImportResultDTO CoreFileImportResultDTO = new CoreFileImportResultDTO();
 
-        FileRepresentation fr = FileRepresentation.of(file);
+        FilePathDTO fr = CoreFileUtils.toFilePath(file);
         String[] idArray = StringUtils.split(file.getTargetId(), "$");
         long curveId = NumberUtils.parseLong(idArray[0]);
         long folderId = NumberUtils.parseLong(idArray[1]);
-        importOrderTaskResultFromExcel(FileHelper.getAbsolutePath(fr).toFile().getAbsolutePath(), folderId, curveId);
-        return importResultRepresentation;
+        importOrderTaskResultFromExcel(FilePathManager.getLocalPath(fr).toFile().getAbsolutePath(), folderId, curveId);
+        return CoreFileImportResultDTO;
     }
 
     private void importOrderTaskResultFromExcel(String filePath, Long folderId, Long curveId) {

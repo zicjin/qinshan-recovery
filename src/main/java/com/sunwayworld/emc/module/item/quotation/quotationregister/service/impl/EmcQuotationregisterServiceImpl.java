@@ -8,12 +8,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.alibaba.fastjson.JSON;
+import com.sunwayworld.cloud.module.fr.report.bean.CoreReportConfigLineBean;
+import com.sunwayworld.cloud.module.fr.report.service.CoreReportConfigLineService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.sunwayworld.cloud.gikam.fr.bean.report.CoreReportConfigLineBean;
-import com.sunwayworld.cloud.gikam.fr.service.report.CoreReportConfigLineService;
 import com.sunwayworld.emc.module.item.quotation.quotationinformation.bean.EmcQuotationinformationBean;
 import com.sunwayworld.emc.module.item.quotation.quotationinformation.service.EmcQuotationinformationService;
 import com.sunwayworld.emc.module.item.quotation.quotationregister.bean.EmcQuotationregisterBean;

@@ -1,0 +1,6 @@
+﻿-- ----------------------------- 2021-08-02 add by shixw------------begin
+
+ALTER TABLE dbo.T_CORE_ROLE ALTER COLUMN USEDBYORGID varchar(270) COLLATE Chinese_PRC_CI_AS NULL 
+ALTER TABLE dbo.T_CORE_ROLE ALTER COLUMN USEDBYORGNAME varchar(540) COLLATE Chinese_PRC_CI_AS NULL
+
+-- ----------------------------- 2021-08-02 add by shixw------------end

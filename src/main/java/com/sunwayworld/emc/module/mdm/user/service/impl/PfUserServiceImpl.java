@@ -7,13 +7,13 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.sunwayworld.cloud.module.fr.report.bean.CoreReportConfigLineBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
-import com.sunwayworld.cloud.gikam.fr.bean.report.CoreReportConfigLineBean;
 import com.sunwayworld.emc.module.mdm.user.service.PfUserService;
 import com.sunwayworld.framework.context.ApplicationContextHelper;
 import com.sunwayworld.framework.context.LocalContextHelper;
@@ -96,7 +96,7 @@ public class PfUserServiceImpl extends CoreUserServiceImpl implements PfUserServ
     }
     
     @SuppressWarnings("deprecation")
-    protected RestHttpTextEntity changePassword(String userId, String newRawPassword) {
+    public RestHttpTextEntity changePassword(String userId, String newRawPassword) {
 
         CoreUserBean user = BeanUtils.getPropertyListenerProxy(selectById(userId));
 
@@ -118,8 +118,8 @@ public class PfUserServiceImpl extends CoreUserServiceImpl implements PfUserServ
 
         // 更新密码
         user.setPassword(encoedNewPassword);
-        user.setFailedLoginAttempts(0); // 修改密码时重置输入密码错误次数
-        user.setExpiredPasswordUses(0); // 过期密码使用次数
+        user.setFailedLoginAttempts(0L); // 修改密码时重置输入密码错误次数
+        user.setExpiredPasswordUses(0L); // 过期密码使用次数
         user.setPasswordUpdatedTime(LocalDateTime.now()); // 密码更新时间
         proxyInstance.update(user);
 

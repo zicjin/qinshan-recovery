@@ -7,6 +7,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.sunwayworld.framework.support.base.service.GenericTemplateService;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -22,10 +23,9 @@ import com.sunwayworld.framework.data.Pair;
 import com.sunwayworld.framework.exception.FileException;
 import com.sunwayworld.framework.mybatis.mapper.MatchPattern;
 import com.sunwayworld.framework.mybatis.mapper.SearchFilter;
-import com.sunwayworld.module.item.file.export.GenericExportTemplate;
 
 @Component(value = "emcOrderExportTemplate")
-public class EmcOrderExportTemplate implements GenericExportTemplate<String> {
+public class EmcOrderExportTemplate implements GenericTemplateService<String> {
 
     @Autowired
     private EmcOrderService orderService;

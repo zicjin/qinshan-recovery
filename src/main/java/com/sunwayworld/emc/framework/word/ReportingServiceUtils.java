@@ -5,10 +5,10 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Arrays;
 
-import com.sunwayworld.cloud.gikam.fr.bean.report.CoreReportConfigLineBean;
+import com.sunwayworld.cloud.module.fr.report.bean.CoreReportConfigLineBean;
 import com.sunwayworld.framework.http.HttpClientManager;
-import com.sunwayworld.framework.io.file.FileHelper;
 import com.sunwayworld.framework.utils.BeanUtils;
+import com.sunwayworld.framework.utils.FileUtils;
 import com.sunwayworld.framework.utils.ObjectUtils;
 import com.sunwayworld.framework.utils.StringUtils;
 
@@ -89,7 +89,7 @@ public class ReportingServiceUtils {
      * @return
      */
     public static File downloadFile(String url, String fileName) {
-        File tempFile = FileHelper.createTempFile(fileName, 0L);
+        File tempFile = FileUtils.createTempFile();
         if (StringUtils.startsWithIgnoreCase(url, HTTPS_PREFIX)) {
             HttpClientManager.getInstance().download(url, tempFile);
         } else {

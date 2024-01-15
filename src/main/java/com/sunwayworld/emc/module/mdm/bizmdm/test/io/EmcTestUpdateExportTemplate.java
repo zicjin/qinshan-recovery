@@ -5,7 +5,7 @@ import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcTestBean;
 import com.sunwayworld.emc.module.mdm.bizmdm.test.service.EmcTestService;
 import com.sunwayworld.framework.data.Pair;
 import com.sunwayworld.framework.exception.FileException;
-import com.sunwayworld.module.item.file.export.GenericExportTemplate;
+import com.sunwayworld.framework.support.base.service.GenericTemplateService;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -24,7 +24,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 @Component(value = "emcTestUpdateExportTemplate")
-public class EmcTestUpdateExportTemplate implements GenericExportTemplate<String> {
+public class EmcTestUpdateExportTemplate implements GenericTemplateService<String> {
 
     @Autowired
     private EmcTestService emcTestService;

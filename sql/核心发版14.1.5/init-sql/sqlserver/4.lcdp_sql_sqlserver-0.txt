@@ -1,0 +1,14 @@
+-- ----------------------------- 2022-10-31 add by yangshuzhi------------begin
+-- 删除默认值约束存储过程
+CREATE PROCEDURE dbo.p_dropcolumnconstraint
+
+@tableName nvarchar(100),--表名
+@columnName nvarchar(100)--列名
+as
+declare @cnt nvarchar(100)
+declare @sqlcmd nvarchar(1024)
+select @cnt= b.name from sysobjects b join syscolumns a on b.id = a.cdefault where a.id = object_id(@tableName) and a.name = @columnName
+set @sqlcmd = 'ALTER TABLE '+ @tableName +' DROP constraint ' + @cnt;
+exec sp_executesql @sqlcmd;
+
+-- ----------------------------- 2022-10-31 add by yangshuzhi------------end

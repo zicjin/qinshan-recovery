@@ -10,20 +10,12 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import com.sunwayworld.framework.context.ApplicationContextHelper;
-import com.sunwayworld.framework.io.file.FileHelper;
-import com.sunwayworld.framework.io.file.FileRepresentation;
+import com.sunwayworld.framework.io.file.FilePathDTO;
+import com.sunwayworld.framework.io.file.FilePathManager;
 import com.sunwayworld.framework.io.file.FileScope;
+import com.sunwayworld.framework.support.base.service.GenericTemplateService;
 import com.sunwayworld.framework.utils.FileUtils;
-import com.sunwayworld.module.item.file.cloud.CoreFileCloudService;
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
-import org.apache.poi.hssf.usermodel.HSSFClientAnchor;
-import org.apache.poi.hssf.usermodel.HSSFComment;
-import org.apache.poi.hssf.usermodel.HSSFPatriarch;
-import org.apache.poi.hssf.usermodel.HSSFRichTextString;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import com.sunwayworld.module.item.file.manager.CoreFileManager;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,10 +32,9 @@ import com.sunwayworld.framework.mybatis.mapper.SearchFilter;
 import com.sunwayworld.framework.utils.DateTimeUtils;
 import com.sunwayworld.framework.utils.NumberUtils;
 import com.sunwayworld.framework.utils.StringUtils;
-import com.sunwayworld.module.item.file.export.GenericExportTemplate;
 
 @Component(value = "emcSampleExportTemplate")
-public class EmcSampleExportTemplate implements GenericExportTemplate<String> {
+public class EmcSampleExportTemplate implements GenericTemplateService<String> {
 
     /** 唯一性标识，重复数+分析项+测试名 */
     private static final String UNIQUE_KEYWORD = "%d$%s$%s";
@@ -67,34 +58,34 @@ public class EmcSampleExportTemplate implements GenericExportTemplate<String> {
     //对于现场采样，导出excel存在超过256列的情况，因此由xls改为xlsx：
     //由于当前项目核心的版本为9版本，没有getTemplateExtension可以继承来修改文件类型，则只能继承getDownLoadTemplateUrl方法，只对现场采样做单独处理
     @Override
-    public String getDownLoadTemplateUrl(String templateCode, String id) {
+    public String getDownloadUrl(String templateCode, String id) {
         List<Pair<String, String>> templatePairList = this.getTemplatePairList();
 
         Pair<String, String> templatePair = (Pair)Objects.requireNonNull(templatePairList.stream().filter((t) -> {
             return ((String)t.getFirst()).equals(templateCode);
         }).findFirst().orElse(null));
-        FileRepresentation fr = FileRepresentation.of(FileScope.temp.name(), "" + System.currentTimeMillis(), UUID.randomUUID().toString(), (String)templatePair.getSecond() + ".xlsx");
+        FilePathDTO fr = FilePathDTO.of(FileScope.temp.name(), "" + System.currentTimeMillis(), UUID.randomUUID().toString(), (String)templatePair.getSecond() + ".xlsx");
 
         try {
-            Files.createDirectories(FileHelper.getAbsoluteDirPath(fr));
+            Files.createDirectories(FilePathManager.getLocalDirPath(fr));
             URL resource = this.getClass().getResource("");
             if (FileUtils.isInJarURL(resource)) {
                 InputStream is = this.getClass().getResourceAsStream("templates/" + templateCode + ".xlsx");
-                Files.copy(is, FileHelper.getAbsolutePath(fr), new CopyOption[]{StandardCopyOption.REPLACE_EXISTING});
+                Files.copy(is, FilePathManager.getLocalPath(fr), new CopyOption[]{StandardCopyOption.REPLACE_EXISTING});
             } else {
                 Path templatePath = (new File(resource.getPath())).toPath().resolve("templates").resolve(templateCode + ".xlsx");
-                Files.copy(templatePath, FileHelper.getAbsolutePath(fr), StandardCopyOption.REPLACE_EXISTING);
+                Files.copy(templatePath, FilePathManager.getLocalPath(fr), StandardCopyOption.REPLACE_EXISTING);
             }
 
-            this.initTemplateData(FileHelper.getAbsolutePath(fr), id);
-            File exportTemplateFile = FileHelper.getAbsolutePath(fr).toFile();
-            CoreFileCloudService cloudService = (CoreFileCloudService)ApplicationContextHelper.getBean(CoreFileCloudService.class);
-            cloudService.archive(fr, exportTemplateFile);
+            this.initTemplateData(FilePathManager.getLocalPath(fr), id);
+            File exportTemplateFile = FilePathManager.getLocalPath(fr).toFile();
+            CoreFileManager fileManager = (CoreFileManager)ApplicationContextHelper.getBean(CoreFileManager.class);
+            fileManager.upload(fr, exportTemplateFile);
         } catch (IOException var9) {
             throw new FileException(var9);
         }
 
-        return FileHelper.getUrl(fr);
+        return FilePathManager.getUrl(fr);
     }
 
     @Override

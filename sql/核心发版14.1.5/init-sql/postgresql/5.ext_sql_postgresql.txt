@@ -1,0 +1,32 @@
+-- ----------------------------- 2022-10-25 add by wangbo0905------------begin
+
+CALL INSERTI18N('T_CORE_SQL_GEN_TABLE.PGSQL', '生成SQL表的PGSQL', 'PGSQL', 'zh-CN', 'PGSQL');
+
+COMMIT;
+
+-- ----------------------------- 2022-10-25 add by wangbo0905------------end
+-- ----------------------------- 2022-12-06 add by wangbo0905------------begin
+
+CALL INSERTI18N('CORE.MODULE.CODEGENERATOR.CODEGENERATECONFIGS.BUTTON.COPY', '复制', '复制', 'zh-CN', '复制');
+
+COMMIT;
+
+-- ----------------------------- 2022-12-06 add by wangbo0905------------end
+
+-- ----------------------------- 2023-02-09 add by wangbo0905------------begin
+UPDATE T_CORE_TODO_CONFIG SET SERVICEMETHOD = 'com.sunwayworld.cloud.module.qms.customsurvey.service.impl.CoreCustomSurveySumServiceImpl.selectAuditablePagination' WHERE SERVICEMETHOD = 'com.sunwayworld.cloud.gikam.qms.service.customsurvey.impl.CoreCustomSurveySumServiceImpl.selectAuditablePagination';
+UPDATE T_CORE_TODO_CONFIG SET SERVICEMETHOD = 'com.sunwayworld.cloud.module.qms.customsurvey.service.impl.CoreCustomSurveySumServiceImpl.selectAuditablePagination' WHERE SERVICEMETHOD = 'com.sunwayworld.cloud.gikam.qms.service.customsurvey.impl.CoreCustomSurveySumServiceImpl.selectAuditablePagination';
+UPDATE T_CORE_TODO_CONFIG SET SERVICEMETHOD = 'com.sunwayworld.cloud.module.qms.customsurvey.service.impl.CoreCustomSurveySumServiceImpl.selectAuditablePagination' WHERE SERVICEMETHOD = 'com.sunwayworld.cloud.gikam.qms.service.customsurvey.impl.CoreCustomSurveySumServiceImpl.selectAuditablePagination';
+UPDATE T_CORE_TODO_CONFIG SET SERVICEMETHOD = 'com.sunwayworld.cloud.module.qms.filemanage.service.impl.CoreFileManageServiceImpl.selectAuditablePagination' WHERE SERVICEMETHOD = 'com.sunwayworld.cloud.gikam.qms.service.filemanage.impl.CoreFileManageServiceImpl.selectAuditablePagination';
+UPDATE T_CORE_TODO_CONFIG SET SERVICEMETHOD = 'com.sunwayworld.cloud.module.qms.filemanage.service.impl.CoreFileManageServiceImpl.selectAuditablePagination' WHERE SERVICEMETHOD = 'com.sunwayworld.cloud.gikam.qms.service.filemanage.impl.CoreFileManageServiceImpl.selectAuditablePagination';
+UPDATE T_CORE_TODO_CONFIG SET SERVICEMETHOD = 'com.sunwayworld.cloud.module.qms.filemanage.service.impl.CoreFileManageServiceImpl.selectAuditablePagination' WHERE SERVICEMETHOD = 'com.sunwayworld.cloud.gikam.qms.service.filemanage.impl.CoreFileManageServiceImpl.selectAuditablePagination';
+UPDATE T_CORE_TODO_CONFIG SET SERVICEMETHOD = 'com.sunwayworld.cloud.module.qms.filemanage.service.impl.CoreFileManageServiceImpl.selectAuditablePagination' WHERE SERVICEMETHOD = 'com.sunwayworld.cloud.gikam.qms.service.filemanage.impl.CoreFileManageServiceImpl.selectAuditablePagination';
+UPDATE T_CORE_TODO_CONFIG SET SERVICEMETHOD = 'com.sunwayworld.cloud.module.qms.filemanage.service.impl.CoreFileManageServiceImpl.selectAuditablePagination' WHERE SERVICEMETHOD = 'com.sunwayworld.cloud.gikam.qms.service.filemanage.impl.CoreFileManageServiceImpl.selectAuditablePagination';
+UPDATE T_CORE_TODO_CONFIG SET SERVICEMETHOD = 'com.sunwayworld.cloud.module.qms.filemanage.service.impl.CoreFileManageServiceImpl.selectAuditablePagination' WHERE SERVICEMETHOD = 'com.sunwayworld.cloud.gikam.qms.service.filemanage.impl.CoreFileManageServiceImpl.selectAuditablePagination';
+UPDATE T_CORE_TODO_CONFIG SET SERVICEMETHOD = 'com.sunwayworld.cloud.module.qms.filemanage.service.impl.CoreFileManageServiceImpl.selectAuditablePagination' WHERE SERVICEMETHOD = 'com.sunwayworld.cloud.gikam.qms.service.filemanage.impl.CoreFileManageServiceImpl.selectAuditablePagination';
+UPDATE T_CORE_TODO_CONFIG SET SERVICEMETHOD = 'com.sunwayworld.cloud.module.qms.riskidentificaregist.service.impl.CoreRiskIdentificaRegistServiceImpl.selectAuditablePagination' WHERE SERVICEMETHOD = 'com.sunwayworld.cloud.gikam.qms.service.riskidentificaregist.impl.CoreRiskIdentificaRegistServiceImpl.selectAuditablePagination';
+UPDATE T_CORE_TODO_CONFIG SET SERVICEMETHOD = 'com.sunwayworld.cloud.module.qms.riskidentificaregist.service.impl.CoreRiskIdentificaRegistServiceImpl.selectAuditablePagination' WHERE SERVICEMETHOD = 'com.sunwayworld.cloud.gikam.qms.service.riskidentificaregist.impl.CoreRiskIdentificaRegistServiceImpl.selectAuditablePagination';
+UPDATE T_CORE_TODO_CONFIG SET SERVICEMETHOD = 'com.sunwayworld.cloud.module.qms.riskidentificaregist.service.impl.CoreRiskIdentificaRegistServiceImpl.selectAuditablePagination' WHERE SERVICEMETHOD = 'com.sunwayworld.cloud.gikam.qms.service.riskidentificaregist.impl.CoreRiskIdentificaRegistServiceImpl.selectAuditablePagination';
+UPDATE T_CORE_TODO_CONFIG SET SERVICEMETHOD = 'com.sunwayworld.cloud.module.qms.riskidentificaregist.service.impl.CoreRiskIdentificaRegistServiceImpl.selectAuditablePagination' WHERE SERVICEMETHOD = 'com.sunwayworld.cloud.gikam.qms.service.riskidentificaregist.impl.CoreRiskIdentificaRegistServiceImpl.selectAuditablePagination';
+UPDATE T_CORE_TODO_CONFIG SET SERVICEMETHOD = 'com.sunwayworld.cloud.module.qms.riskidentificaregist.service.impl.CoreRiskIdentificaRegistServiceImpl.selectAuditablePagination' WHERE SERVICEMETHOD = 'com.sunwayworld.cloud.gikam.qms.service.riskidentificaregist.impl.CoreRiskIdentificaRegistServiceImpl.selectAuditablePagination';
+-- ----------------------------- 2023-02-09 add by wangbo0905------------begin

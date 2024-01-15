@@ -14,6 +14,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import com.sunwayworld.framework.io.file.FilePathManager;
+import com.sunwayworld.module.item.file.utils.CoreFileUtils;
 import org.apache.commons.collections4.ListUtils;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 
@@ -38,8 +40,6 @@ import com.sunwayworld.emc.module.bp.report.report.template.table.UnorganizedGas
 import com.sunwayworld.emc.module.bp.report.report.template.table.WaterDynamicTable;
 import com.sunwayworld.emc.module.mdm.bizmdm.monitortmpl.bean.EmcMonitorTmplBean;
 import com.sunwayworld.framework.constant.Constant;
-import com.sunwayworld.framework.io.file.FileHelper;
-import com.sunwayworld.framework.io.file.FileRepresentation;
 import com.sunwayworld.framework.utils.DateTimeUtils;
 import com.sunwayworld.framework.utils.NumberUtils;
 import com.sunwayworld.framework.utils.ObjectUtils;
@@ -102,7 +102,7 @@ public class ComplexWordTemplate extends BaseWordTemplate {
         if (showPhoto) {
             List<CoreFileBean> photoList = templateSourceDTO.getCoreFileList().stream().filter(file -> StringUtils.equals(file.getBizCategory(), "photo")
                     && (StringUtils.startsWith(file.getTargetId(), "T_EMC_SAMPLE") || StringUtils.startsWith(file.getTargetId(), "T_EMC_PROJECT"))).collect(Collectors.toList());
-            List<CoreFileBean> validPhotoList = photoList.stream().filter(file -> FileHelper.getAbsoluteDirPath(FileRepresentation.of(file)).toFile().exists()).collect(Collectors.toList());
+            List<CoreFileBean> validPhotoList = photoList.stream().filter(file -> FilePathManager.getLocalDirPath(CoreFileUtils.toFilePath(file)).toFile().exists()).collect(Collectors.toList());
 
             OrderScenePhotoTable photoTable = new OrderScenePhotoTable(getDocument(), templateSourceDTO.getProject(), templateSourceDTO.getFolderList(), templateSourceDTO.getOrderList(), validPhotoList, monitorTmplList.size() + 1);
             photoTable.create();
@@ -130,7 +130,7 @@ public class ComplexWordTemplate extends BaseWordTemplate {
     private boolean isShowPhoto() {
         List<CoreFileBean> photoList = templateSourceDTO.getCoreFileList().stream().filter(file -> StringUtils.equals(file.getBizCategory(), "photo")
                 && (StringUtils.startsWith(file.getTargetId(), "T_EMC_SAMPLE") || StringUtils.startsWith(file.getTargetId(), "T_EMC_PROJECT"))).collect(Collectors.toList());
-        List<CoreFileBean> validPhotoList = photoList.stream().filter(file -> FileHelper.getAbsoluteDirPath(FileRepresentation.of(file)).toFile().exists()).collect(Collectors.toList());
+        List<CoreFileBean> validPhotoList = photoList.stream().filter(file -> FilePathManager.getLocalDirPath(CoreFileUtils.toFilePath(file)).toFile().exists()).collect(Collectors.toList());
 
         return !validPhotoList.isEmpty();
     }

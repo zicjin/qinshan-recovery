@@ -160,7 +160,7 @@ public class EmcEquiptAcqFileServiceImpl implements EmcEquiptAcqFileService {
         insertCoreFile.setMd5Name(EncryptUtils.MD5Encrypt(insertCoreFile.getTargetId() + "$" + insertCoreFile.getName()));
         insertCoreFile.setScope(FileScope.equipt.name());
         insertCoreFile.setSize(file.length());
-        insertCoreFile.setTimes(0);
+        insertCoreFile.setTimes(0L);
         insertCoreFile.setDownloadable(Constant.YES);
         insertCoreFile.setCreatedTime(now);
 

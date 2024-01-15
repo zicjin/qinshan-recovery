@@ -14,6 +14,10 @@ import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import com.alibaba.fastjson.JSON;
+import com.sunwayworld.framework.io.file.FilePathDTO;
+import com.sunwayworld.framework.io.file.FilePathManager;
+import com.sunwayworld.module.item.file.manager.CoreFileManager;
+import com.sunwayworld.module.item.file.utils.CoreFileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
@@ -67,7 +71,6 @@ import com.sunwayworld.framework.context.ApplicationContextHelper;
 import com.sunwayworld.framework.data.page.Page;
 import com.sunwayworld.framework.data.page.Pagination;
 import com.sunwayworld.framework.i18n.I18nHelper;
-import com.sunwayworld.framework.io.file.FileRepresentation;
 import com.sunwayworld.framework.io.file.FileScope;
 import com.sunwayworld.framework.mybatis.mapper.MapperParameter;
 import com.sunwayworld.framework.mybatis.mapper.MatchPattern;
@@ -82,7 +85,6 @@ import com.sunwayworld.framework.utils.NumberUtils;
 import com.sunwayworld.framework.utils.ObjectUtils;
 import com.sunwayworld.framework.utils.StringUtils;
 import com.sunwayworld.module.item.file.bean.CoreFileBean;
-import com.sunwayworld.module.item.file.cloud.CoreFileCloudService;
 import com.sunwayworld.module.item.file.service.CoreFileService;
 import com.sunwayworld.module.sys.constant.bean.CoreConstantBean;
 import com.sunwayworld.module.sys.constant.service.CoreConstantService;
@@ -146,9 +148,6 @@ public class EmcOrderTaskServiceImpl implements EmcOrderTaskService {
 
     @Autowired
     private EmcPropertyDataService propertyDataService;
-
-    @Autowired
-    private CoreFileCloudService fileCloudService;
 
     @Autowired
     private CoreConstantService coreConstantService;
@@ -887,14 +886,14 @@ public class EmcOrderTaskServiceImpl implements EmcOrderTaskService {
         List<String> targetIdList = runIdList.stream().map(runId -> getDao().getTable() + "$" + runId).collect(Collectors.toList());
         List<CoreFileBean> coreFileBeanList = coreFileService.selectListByFilter(SearchFilter.instance().match("TARGETID", targetIdList).filter(MatchPattern.OR).match("EXT", "composePdf").filter(MatchPattern.EQ));
 
-        Map<Long, List<FileRepresentation>> projectPdfMap = new HashMap<>(orderTaskList.size());
+        Map<Long, List<FilePathDTO>> projectPdfMap = new HashMap<>(orderTaskList.size());
         Map<Long, List<EmcOrderTaskBean>> projectOrderTaskMap = validOrderTaskList.stream().filter(task -> !ObjectUtils.isEmpty(task.getProjId())).collect(Collectors.groupingBy(EmcOrderTaskBean::getProjId));
         projectOrderTaskMap.forEach((projectId, projectOrderTaskList) -> {
-            List<FileRepresentation> pdfFileList = new ArrayList<>();
+            List<FilePathDTO> pdfFileList = new ArrayList<>();
             List<String> projectRunIdList = projectOrderTaskList.stream().map(EmcOrderTaskBean::getRunId).distinct().collect(Collectors.toList());
 
             List<String> projectFileTargetIdList = projectRunIdList.stream().map(s -> getDao().getTable() + "$" + s).collect(Collectors.toList());
-            coreFileBeanList.stream().filter(file -> projectFileTargetIdList.contains(file.getTargetId())).forEach(file -> pdfFileList.add(FileRepresentation.of(file)));
+            coreFileBeanList.stream().filter(file -> projectFileTargetIdList.contains(file.getTargetId())).forEach(file -> pdfFileList.add(CoreFileUtils.toFilePath(file)));
 
             if (!pdfFileList.isEmpty()) {
                 projectPdfMap.put(projectId, pdfFileList);
@@ -903,9 +902,10 @@ public class EmcOrderTaskServiceImpl implements EmcOrderTaskService {
 
         if (!projectPdfMap.isEmpty()) {
             String projectReportPdfName = I18nHelper.getMessage("T_EMC_RUN.DOWNLOAD.PROJECT_REPORT_PDF_NAME");
-            projectPdfMap.entrySet().stream().forEach(r -> {
-                String tempFilePath = fileCloudService.mergePdfFile(r.getValue(),
-                        FileRepresentation.of(FileScope.temp.name(), "" + System.currentTimeMillis(), StringUtils.randomUUID(8), projectReportPdfName));
+            projectPdfMap.entrySet().forEach(r -> {
+                FilePathDTO composedPdfFile = FilePathDTO.of(FileScope.temp.name(), "" + System.currentTimeMillis(), StringUtils.randomUUID(8), projectReportPdfName);
+                coreFileService.mergePdfList(r.getValue(), composedPdfFile);
+                String tempFilePath = FilePathManager.getLocalPath(composedPdfFile).toString();
                 if (!StringUtils.isEmpty(tempFilePath)) {
                     CoreFileBean coreFileBean = new CoreFileBean();
                     coreFileBean.setTargetId("T_EMC_PROJECT" + "$" + r.getKey());

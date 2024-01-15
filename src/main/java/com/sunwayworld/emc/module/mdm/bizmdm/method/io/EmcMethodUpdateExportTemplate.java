@@ -11,6 +11,7 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
+import com.sunwayworld.framework.support.base.service.GenericTemplateService;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -22,10 +23,9 @@ import com.sunwayworld.emc.module.mdm.bizmdm.method.bean.EmcMethodBean;
 import com.sunwayworld.emc.module.mdm.bizmdm.method.service.EmcMethodService;
 import com.sunwayworld.framework.data.Pair;
 import com.sunwayworld.framework.exception.FileException;
-import com.sunwayworld.module.item.file.export.GenericExportTemplate;
 
 @Component(value = "emcMethodUpdateExportTemplate")
-public class EmcMethodUpdateExportTemplate implements GenericExportTemplate<String> {
+public class EmcMethodUpdateExportTemplate implements GenericTemplateService<String> {
 
     @Autowired
     private EmcMethodService emcMethodService;

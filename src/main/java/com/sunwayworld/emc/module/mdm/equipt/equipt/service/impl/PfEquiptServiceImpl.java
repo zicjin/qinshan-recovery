@@ -35,6 +35,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 import com.sunwayworld.framework.utils.StringUtils;;
 
@@ -45,10 +46,8 @@ import com.sunwayworld.framework.utils.StringUtils;;
 public class PfEquiptServiceImpl extends EmcEquiptServiceImpl implements PfEquiptService {
 	
     @Autowired
+	@Lazy
     private EmcEquiptPlanService equiptPlanService;
-    
-    @Autowired
-    private EmcEquiptService equiptService;
     
     @Autowired
     private EmcEquiptPerCheckPlanService equiptPerCheckPlanService;
@@ -64,7 +63,7 @@ public class PfEquiptServiceImpl extends EmcEquiptServiceImpl implements PfEquip
     public Page<PfEquiptPlanDTO> selectEquiptPlan(RestJsonWrapperBean wrapper) {
     	//根据仪器表和仪器校准计划表组合台账
         List<PfEquiptPlanDTO> list = new ArrayList<>();
-        List<EmcEquiptBean> equptOrgList =  equiptService.selectListByFilter(SearchFilter.instance().match("orgId", LocalContextHelper.getLoginUser().getExt$Item("parentOrgId")).filter(MatchPattern.SEQ));
+        List<EmcEquiptBean> equptOrgList =  selectListByFilter(SearchFilter.instance().match("orgId", LocalContextHelper.getLoginUser().getExt$Item("parentOrgId")).filter(MatchPattern.SEQ));
         List<Long> equptOrgIdList = equptOrgList.stream().map(EmcEquiptBean :: getId).distinct().collect(Collectors.toList());;
         //List<EmcEquiptPlanBean> equplanList =  equiptPlanService.selectListByFilter(SearchFilter.instance().match("equiptId",equptOrgIdList).filter(MatchPattern.OR));
         
@@ -73,7 +72,7 @@ public class PfEquiptServiceImpl extends EmcEquiptServiceImpl implements PfEquip
         List<EmcEquiptPlanBean> equplanList = equiptPlanPage.getRows();
         
         List<Long> equiptIdList = equplanList.stream().map(EmcEquiptPlanBean :: getEquiptId).distinct().collect(Collectors.toList());
-        List<EmcEquiptBean> equiptList = equiptService.getDao().selectListByIds(equiptIdList);
+        List<EmcEquiptBean> equiptList = getDao().selectListByIds(equiptIdList);
     	List<String> keepUserIdBeforeList = equiptList.stream().map(EmcEquiptBean :: getKeepUserId).distinct().collect(Collectors.toList());
     	List<String> keepUserIdList = keepUserIdBeforeList.stream().filter(t ->!StringUtils.isEmpty(t)).collect(Collectors.toList());
 
@@ -113,7 +112,7 @@ public class PfEquiptServiceImpl extends EmcEquiptServiceImpl implements PfEquip
     public Page<PfEquiptPerCheckDTO> selectEquiptPerCheck(RestJsonWrapperBean wrapper) {
     	
         List<PfEquiptPerCheckDTO> list = new ArrayList<>();
-        List<EmcEquiptBean> equptOrgList =  equiptService.selectListByFilter(SearchFilter.instance().match("orgId", LocalContextHelper.getLoginUser().getExt$Item("parentOrgId")).filter(MatchPattern.SEQ));
+        List<EmcEquiptBean> equptOrgList =  selectListByFilter(SearchFilter.instance().match("orgId", LocalContextHelper.getLoginUser().getExt$Item("parentOrgId")).filter(MatchPattern.SEQ));
         List<Long> equptOrgIdList = equptOrgList.stream().map(EmcEquiptBean :: getId).distinct().collect(Collectors.toList());;
         
         //List<EmcEquiptPerCheckPlanBean> equiptPerCheckList =  equiptPerCheckPlanService.selectListByFilter(SearchFilter.instance().match("equiptId",equptOrgIdList).filter(MatchPattern.OR));
@@ -123,7 +122,7 @@ public class PfEquiptServiceImpl extends EmcEquiptServiceImpl implements PfEquip
         
         
         List<Long> equiptIdList = equiptPerCheckList.stream().map(EmcEquiptPerCheckPlanBean :: getEquiptId).distinct().collect(Collectors.toList());
-        List<EmcEquiptBean> equiptList = equiptService.getDao().selectListByIds(equiptIdList);
+        List<EmcEquiptBean> equiptList = getDao().selectListByIds(equiptIdList);
     	
 
         equiptPerCheckList.forEach(epc ->{
@@ -156,8 +155,8 @@ public class PfEquiptServiceImpl extends EmcEquiptServiceImpl implements PfEquip
     
     @Override
     public Page<PfEquiptMaintainRepairDTO> selectEquiptMaintainRepair(RestJsonWrapperBean wrapper) {
-    	
-    	 List<EmcEquiptBean> equptOrgList =  equiptService.selectListByFilter(SearchFilter.instance().match("orgId", LocalContextHelper.getLoginUser().getExt$Item("parentOrgId")).filter(MatchPattern.SEQ));
+
+    	 List<EmcEquiptBean> equptOrgList =  selectListByFilter(SearchFilter.instance().match("orgId", LocalContextHelper.getLoginUser().getExt$Item("parentOrgId")).filter(MatchPattern.SEQ));
          List<Long> equptOrgIdList = equptOrgList.stream().map(EmcEquiptBean :: getId).distinct().collect(Collectors.toList());;
                   
         List<PfEquiptMaintainRepairDTO> list = new ArrayList<>();
@@ -171,7 +170,7 @@ public class PfEquiptServiceImpl extends EmcEquiptServiceImpl implements PfEquip
         }
         List<Long> equiptIdList = equiptMaintainRepairList.stream().map(EmcEquiptMaintainRepairBean :: getEquiptId).distinct().collect(Collectors.toList());
 
-        List<EmcEquiptBean> equiptList = equiptService.getDao().selectListByIds(equiptIdList);
+        List<EmcEquiptBean> equiptList = getDao().selectListByIds(equiptIdList);
     	
 
         equiptMaintainRepairList.forEach(epc ->{
@@ -202,7 +201,7 @@ public class PfEquiptServiceImpl extends EmcEquiptServiceImpl implements PfEquip
     	//根据仪器表和仪器校准计划表组合台账
         List<PfEquiptUserDTO> list = new ArrayList<>();
         //List<EmcEquiptBean> equList =  equiptService.selectListByFilter(SearchFilter.instance().match("orgId", LocalContextHelper.getLoginUser().getExt$Item("parentOrgId")).filter(MatchPattern.SEQ));
-        Page<EmcEquiptBean> equiptPage  =  equiptService.selectPaginationByFilter(SearchFilter.instance().match("orgId", LocalContextHelper.getLoginUser().getExt$Item("parentOrgId")).filter(MatchPattern.SEQ),wrapper);
+        Page<EmcEquiptBean> equiptPage  =  selectPaginationByFilter(SearchFilter.instance().match("orgId", LocalContextHelper.getLoginUser().getExt$Item("parentOrgId")).filter(MatchPattern.SEQ),wrapper);
 
         List<EmcEquiptBean> equList  = equiptPage.getRows();
         

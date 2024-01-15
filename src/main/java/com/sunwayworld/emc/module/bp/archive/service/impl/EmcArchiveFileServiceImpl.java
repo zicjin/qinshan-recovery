@@ -9,15 +9,16 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
+import com.sunwayworld.cloud.module.fr.report.bean.CoreReportConfigLineBean;
+import com.sunwayworld.cloud.module.fr.report.service.CoreReportConfigLineService;
 import com.sunwayworld.framework.spring.annotation.GikamBean;
+import com.sunwayworld.framework.utils.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 
-import com.sunwayworld.cloud.gikam.fr.bean.report.CoreReportConfigLineBean;
-import com.sunwayworld.cloud.gikam.fr.service.report.CoreReportConfigLineService;
 import com.sunwayworld.emc.module.bp.archive.bean.EmcArchiveCategoryBean;
 import com.sunwayworld.emc.module.bp.archive.service.EmcArchiveFileService;
 import com.sunwayworld.emc.module.bp.project.project.bean.EmcProjectBean;
@@ -30,13 +31,8 @@ import com.sunwayworld.emc.module.mdm.contract.service.EmcContractService;
 import com.sunwayworld.framework.context.ApplicationContextHelper;
 import com.sunwayworld.framework.data.Pair;
 import com.sunwayworld.framework.http.HttpClientManager;
-import com.sunwayworld.framework.io.file.FileHelper;
 import com.sunwayworld.framework.io.file.FileScope;
 import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;
-import com.sunwayworld.framework.utils.BeanUtils;
-import com.sunwayworld.framework.utils.NumberUtils;
-import com.sunwayworld.framework.utils.ObjectUtils;
-import com.sunwayworld.framework.utils.StringUtils;
 import com.sunwayworld.module.item.file.bean.CoreFileBean;
 import com.sunwayworld.module.item.file.service.CoreFileService;
 
@@ -522,7 +518,7 @@ public class EmcArchiveFileServiceImpl implements EmcArchiveFileService {
      * 下载文件，并保存到指定目录下
      */
     protected File downloadFile(String url, String fileName) {
-        File tempFile = FileHelper.createTempFile(fileName, 0L);
+        File tempFile = FileUtils.createTempFile();
         if (StringUtils.startsWithIgnoreCase(url, "https://")) {
         	HttpClientManager.getInstance().download(url, tempFile);
         } else {

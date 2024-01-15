@@ -11,7 +11,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
-import com.sunwayworld.cloud.gikam.notification.event.CoreNotificationEvent;
 import com.sunwayworld.emc.module.bp.bp.computing.EmcOrderTaskResultComputingEngine;
 import com.sunwayworld.emc.module.bp.bp.computing.async.AsyncFormulaComputingService;
 import com.sunwayworld.emc.module.bp.result.run.bean.EmcRunBean;
@@ -56,9 +55,9 @@ public class AsyncFormulaComputingServiceImpl implements AsyncFormulaComputingSe
             paramMap.put("duration", duration);
 
             // 发送通知
-            CoreNotificationEvent completeEvent = new CoreNotificationEvent(success ? RUN_FORMULA_COMPUTING_SUCCESS : RUN_FORMULA_COMPUTING_FAILURE,
-                    Collections.singletonList(userId), null, LocalDateTime.now(), paramMap);
-            ApplicationContextHelper.getApplicationContext().publishEvent(completeEvent);
+            // CoreNotificationEvent completeEvent = new CoreNotificationEvent(success ? RUN_FORMULA_COMPUTING_SUCCESS : RUN_FORMULA_COMPUTING_FAILURE,
+            //         Collections.singletonList(userId), null, LocalDateTime.now(), paramMap);
+            // ApplicationContextHelper.getApplicationContext().publishEvent(completeEvent);
         });
     }
 
@@ -90,9 +89,9 @@ public class AsyncFormulaComputingServiceImpl implements AsyncFormulaComputingSe
                 String joinedRunId = entry.getValue().stream().map(EmcRunBean::getId).collect(Collectors.joining(","));
                 paramMap.put("runId", joinedRunId);
 
-                CoreNotificationEvent completeEvent = new CoreNotificationEvent(success ? ACQ_FORMULA_COMPUTING_SUCCESS : ACQ_FORMULA_COMPUTING_FAILURE,
-                        Collections.singletonList(userId), null, LocalDateTime.now(), paramMap);
-                ApplicationContextHelper.getApplicationContext().publishEvent(completeEvent);
+                // CoreNotificationEvent completeEvent = new CoreNotificationEvent(success ? ACQ_FORMULA_COMPUTING_SUCCESS : ACQ_FORMULA_COMPUTING_FAILURE,
+                //         Collections.singletonList(userId), null, LocalDateTime.now(), paramMap);
+                // ApplicationContextHelper.getApplicationContext().publishEvent(completeEvent);
             }
         });
     }

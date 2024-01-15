@@ -1,0 +1,725 @@
+-- ----------------------------- 2020-10-22 add by yangxing--------------begin
+-- 建表语句
+CREATE TABlE DBO.T_CORE_NFSSI_ORDER(
+    ID VARCHAR(60)  NOT NULL,
+    BACK VARCHAR(1)  NULL ,
+    SAMPLINGPLACEORGNAME VARCHAR(128)  NULL ,
+    SAMPLINGPLACE VARCHAR(255)  NULL ,
+    PROVINCE VARCHAR(255)  NULL ,
+    CITY VARCHAR(60)  NULL ,
+    COUNTY VARCHAR(60)  NULL ,
+    SAMPLINGUNIT VARCHAR(60)  NULL ,
+    ADDRESS VARCHAR(512)  NULL ,
+    LEGALPERSON VARCHAR(60)  NULL ,
+    POSTCODE VARCHAR(60)  NULL ,
+    CONTACT VARCHAR(60)  NULL ,
+    CONTACTMOBILE VARCHAR(60)  NULL ,
+    PRODUCTIONLICENSENO VARCHAR(60)  NULL ,
+    SAMPLENAME VARCHAR(255)  NULL ,
+    SAMPLINGQTY BIGINT NULL ,
+    FIRSTCATEGORY VARCHAR(255)  NULL ,
+    SECONDCATEGORY VARCHAR(60)  NULL ,
+    THIRDCATEGORY VARCHAR(60)  NULL ,
+    FOURTHCATEGORY VARCHAR(255)  NULL ,
+    SAMPLESOURCE VARCHAR(60)  NULL ,
+    ANNUALSALES VARCHAR(255)  NULL ,
+    SAMPLINGMETHOD VARCHAR(60)  NULL ,
+    SAMPLINGINSTRUMENT VARCHAR(60)  NULL ,
+    SPECIFICATION VARCHAR(60)  NULL ,
+    SAMPLEBATCHNO VARCHAR(60)  NULL ,
+    PRODUCTDATE DATETIME NULL ,
+    QUALITYGUARANTEEPERIOD VARCHAR(255)  NULL ,
+    SAMPLINGKEEPCONDITION VARCHAR(60)  NULL ,
+    SAMPLEPACK VARCHAR(60)  NULL ,
+    REMARK VARCHAR(288)  NULL ,
+    SAMPLINGORGNAME VARCHAR(255)  NULL ,
+    SAMPLINGDATE DATETIME NULL ,
+    SAMPLINGMOBILE VARCHAR(60)  NULL ,
+    SAMPLINGORGCONTACT VARCHAR(60)  NULL ,
+    TESTPURPOSE VARCHAR(60)  NULL ,
+    SAMPLESHAP VARCHAR(60)  NULL ,
+    SAMPLECATEGORY VARCHAR(60)  NULL ,
+    PACKAGECATEGORY VARCHAR(60)  NULL ,
+    MANUFACTURER VARCHAR(255)  NULL ,
+    MANUFACTURERADRESS VARCHAR(255)  NULL ,
+    SAMPLINGTACHE VARCHAR(60)  NULL ,
+    EXECUTIVESTANDARD VARCHAR(255)  NULL ,
+    QUALITYLEVEL VARCHAR(60)  NULL ,
+    SAMPLELOGO VARCHAR(60)  NULL ,
+    MANUFACTURERCONTACT VARCHAR(60)  NULL ,
+    MANUFACTURERMOBILE VARCHAR(60)  NULL ,
+    RECEIVEDDATE DATETIME NULL ,
+    AREACATEGORY VARCHAR(255)  NULL ,
+    MANUFACTURERPROVINCE VARCHAR(255)  NULL ,
+    SAMPLEPROPERTY VARCHAR(255)  NULL ,
+    PRICE VARCHAR(255)  NULL ,
+    SAMPLINGBASENUM VARCHAR(255)  NULL ,
+    SPARENUM VARCHAR(255)  NULL ,
+    SAMPLINGORGADRESS VARCHAR(255)  NULL ,
+    SAMPLINGORGPOSTCODE VARCHAR(255)  NULL ,
+    SAMPLINGORGFAX VARCHAR(255)  NULL ,
+    TESTPLACECREDITCODE VARCHAR(255)  NULL ,
+    MANUFACTURERCITY VARCHAR(20)  NULL ,
+    MANUFACTURERCOUNTY VARCHAR(60)  NULL ,
+    SAMPLEBARCODE VARCHAR(20)  NULL ,
+    TASKSOURCE VARCHAR(255)  NULL ,
+    TESTPLACEFAX VARCHAR(255)  NULL ,
+    ENTRUSTCONTACT VARCHAR(32)  NULL ,
+    ENTRUSTPRODUCTIONLICENSENO VARCHAR(32)  NULL ,
+    ENTRUSTENTERPRISEADRESS VARCHAR(255)  NULL ,
+    ENTRUSTENTERPRISE VARCHAR(255)  NULL ,
+    IMPORTATION VARCHAR(32)  NULL ,
+    HASENTRUSTENTERPRISEINFO VARCHAR(32)  NULL ,
+    ENTRUSTPHONE VARCHAR(32)  NULL ,
+    ENTRUSTPROVINCE VARCHAR(32)  NULL ,
+    ENTRUSTCITY VARCHAR(32)  NULL ,
+    ENTRUSTCOUNTRY VARCHAR(32)  NULL ,
+    ORIGINPLACE VARCHAR(32)  NULL ,
+    LICENSETYPE VARCHAR(255)  NULL ,
+    LICENSENO VARCHAR(255)  NULL ,
+    BARCODE VARCHAR(13)  NULL ,
+    RAINBOWCODE VARCHAR(12)  NULL ,
+    RAINBOWCODEPATH VARCHAR(255)  NULL ,
+    APPROVALNO VARCHAR(128)  NULL ,
+    FUNCCATEGORYCOLLECTION TEXT NULL ,
+    INSPECTORGNAME VARCHAR(255)  NULL ,
+    INSPECTIONDATE DATETIME NULL ,
+    INSPECTIONORGCONTACT VARCHAR(60)  NULL ,
+    INSPECTORGCONTACTMOBILE VARCHAR(60)  NULL ,
+    INSPECTORGCONTACTEMAIL VARCHAR(60)  NULL ,
+    INSPECTSEALPERSON VARCHAR(60)  NULL ,
+    INSPECTSEALPERSONMOBILE VARCHAR(60)  NULL ,
+    INSPECTSEALPERSONEMAIL VARCHAR(60)  NULL ,
+    SAMPLER VARCHAR(60)  NULL ,
+    SAMPLERMOBILE VARCHAR(60)  NULL ,
+    SAMPLEREMAIL VARCHAR(60)  NULL ,
+    SAMPLINGORGLEVEL VARCHAR(60)  NULL ,
+    SAMPLINGORGPROVINCE TEXT NULL ,
+    SAMPLEURL VARCHAR(2000)  NULL ,
+    SAMPLINGPICPATH VARCHAR(255)  NULL ,
+    NETWORKLICENSENO VARCHAR(255)  NULL ,
+    ICPNO VARCHAR(255)  NULL ,
+    NETWORKPLATFORMPROVINCE VARCHAR(255)  NULL ,
+    NETWORKPLATFORMCITY VARCHAR(255)  NULL ,
+    NETWORKPLATFORMCOUNTY VARCHAR(255)  NULL ,
+    NETWORKPLATFORMADRESS VARCHAR(255)  NULL ,
+    NOTIFICATIONPICPATH VARCHAR(255)  NULL ,
+    NETWORKPLATFORMCONTACT VARCHAR(255)  NULL ,
+    NETWORKPLATFORMCONTACTMOBILE VARCHAR(255)  NULL ,
+    NETWORKORDERNO VARCHAR(255)  NULL ,
+    SUBMIT VARCHAR(1)  NULL ,
+    ONLINESHOPNAME VARCHAR(64)  NULL ,
+    DATECATEGORY VARCHAR(8)  NULL ,
+    SAMPLINGCATEGORY VARCHAR(16)  NULL ,
+    ENTRUSTPROPERTY VARCHAR(16)  NULL ,
+    REPORTTASKB VARCHAR(60)  NULL ,
+    REPORTTASKA VARCHAR(60)  NULL ,
+    TESTSTATE VARCHAR(1)  NULL ,
+    SAMPLETYPE VARCHAR(60)  NULL ,
+    NFFSIUPDATEDTIME DATETIME NULL ,
+    LASTUPDATEDTIME DATETIME NULL ,
+    CREATEDBYID VARCHAR(36)  NULL ,
+    CREATEDBYNAME VARCHAR(60)  NULL ,
+    CREATEDTIME DATETIME NULL ,
+    CREATEDBYORGID VARCHAR(36)  NULL ,
+    CREATEDBYORGNAME VARCHAR(270)  NULL ,
+    CONSTRAINT PK_CORE_NFSSI_ORDER PRIMARY KEY(ID));
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'抽样单表' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_16-抽样单编号' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'ID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_1-抽检场所单位名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'SAMPLINGPLACEORGNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_i_jgback-是否退休' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'BACK';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_2抽样地点' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'SAMPLINGPLACE';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_3-抽检场所所在地省' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'PROVINCE';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_4-抽检场所所在地市' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'CITY';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_5-抽检场所所在地县' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'COUNTY';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_6-抽样单位数量' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'SAMPLINGUNIT';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_7-抽检场所单位地址' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'ADDRESS';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_8-抽检场所单位法人' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'LEGALPERSON';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_10-抽检场所邮编' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'POSTCODE';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_11-抽检场所联系人' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'CONTACT';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_12-抽检场所联系人电话' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'CONTACTMOBILE';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_13-生产许可证编号' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'PRODUCTIONLICENSENO';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_14-样品名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'SAMPLENAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_n_15-抽样数量' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'SAMPLINGQTY';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_17-食品大类' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'FIRSTCATEGORY';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_18-食品亚类' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'SECONDCATEGORY';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_19-食品次亚类' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'THIRDCATEGORY';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_20-食品细类' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'FOURTHCATEGORY';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_21-样品来源' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'SAMPLESOURCE';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_23-年销售额' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'ANNUALSALES';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_24-抽样方式' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'SAMPLINGMETHOD';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_25-抽样工具' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'SAMPLINGINSTRUMENT';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_26-规格型号' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'SPECIFICATION';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_27-样品批号' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'SAMPLEBATCHNO';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_d_28-生产（加工、购进）日期' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'PRODUCTDATE';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_n_29-保质期' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'QUALITYGUARANTEEPERIOD';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_30-抽样时样品储存条件' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'SAMPLINGKEEPCONDITION';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_33-样品包装' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'SAMPLEPACK';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_34-备注' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'REMARK';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_35-抽样单位名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'SAMPLINGORGNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_d_38-抽样日期' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'SAMPLINGDATE';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_39-抽样人员电话' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'SAMPLINGMOBILE';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_40-抽样单位联系人' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'SAMPLINGORGCONTACT';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_44-检验目的/任务类别' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'TESTPURPOSE';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_61-样品形态' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'SAMPLESHAP';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_62-样品类型' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'SAMPLECATEGORY';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_63-包装分类' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'PACKAGECATEGORY';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_64-生产企业名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'MANUFACTURER';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_65-生产企业地址' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'MANUFACTURERADRESS';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_68-抽样环节' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'SAMPLINGTACHE';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_72-执行标准/技术文件' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'EXECUTIVESTANDARD';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_73-质量等级' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'QUALITYLEVEL';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_74-样品商标' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'SAMPLELOGO';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_75-生产企业联系人' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'MANUFACTURERCONTACT';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_76-生产企业电话' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'MANUFACTURERMOBILE';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_d_86-接样日期' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'RECEIVEDDATE';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_201-区域类型' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'AREACATEGORY';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_202-生产企业所在地省' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'MANUFACTURERPROVINCE';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_203-样品属性' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'SAMPLEPROPERTY';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_204-单价' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'PRICE';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_206-抽样基数' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'SAMPLINGBASENUM';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_208-备样数量' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'SPARENUM';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_211-抽样单位地址' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'SAMPLINGORGADRESS';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_212-抽样单位邮编' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'SAMPLINGORGPOSTCODE';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_213-抽样单位传真' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'SAMPLINGORGFAX';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_215-抽检场所营业执照/社会信用代码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'TESTPLACECREDITCODE';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_220-生产企业所在地市' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'MANUFACTURERCITY';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_221-生产企业所在地县' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'MANUFACTURERCOUNTY';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_222-样品条码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'SAMPLEBARCODE';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_2_1-任务来源' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'TASKSOURCE';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_bsfl-抽检场所传真' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'TESTPLACEFAX';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_lxr-第三方（委托）联系人' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'ENTRUSTCONTACT';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_qs-第三方（委托）生产许可证编号' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'ENTRUSTPRODUCTIONLICENSENO';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_qydz-第三方（委托）企业地址' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'ENTRUSTENTERPRISEADRESS';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_qymc-第三方（委托）企业名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'ENTRUSTENTERPRISE';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_sfjk-是否进口' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'IMPORTATION';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_sfwtsc-是否存在第三方（委托）企业信息' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'HASENTRUSTENTERPRISEINFO';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_tel-第三方（委托）电话' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'ENTRUSTPHONE';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_wtsheng-第三方（委托）省' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'ENTRUSTPROVINCE';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_wtshi-第三方（委托）市' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'ENTRUSTCITY';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_wtxian-第三方（委托）县' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'ENTRUSTCOUNTRY';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_ycg-原产地' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'ORIGINPLACE';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_xkz-许可证类型' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'LICENSETYPE';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_xkz_id-许可证号' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'LICENSENO';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'barcode-条码号' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'BARCODE';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'rainbowcode-彩虹码号' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'RAINBOWCODE';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'rainbowcode_url-彩虹码路径' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'RAINBOWCODEPATH';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'health_code-批准文号' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'APPROVALNO';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'health_func_cat-功能类别集合' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'FUNCCATEGORYCOLLECTION';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_43-检验机构' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'INSPECTORGNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_d_46-收检时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'INSPECTIONDATE';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_49-检验机构联系人' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'INSPECTIONORGCONTACT';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_50-检验机构联系人电话' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'INSPECTORGCONTACTMOBILE';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_51-检验机构联系人邮箱' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'INSPECTORGCONTACTEMAIL';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_85-检查封样人员' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'INSPECTSEALPERSON';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_87-检查封样人电话' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'INSPECTSEALPERSONMOBILE';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_88-检查封样人邮箱' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'INSPECTSEALPERSONEMAIL';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_37-抽样人员' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'SAMPLER';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_41-联系人电话' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'SAMPLERMOBILE';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_42-抽样人邮箱' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'SAMPLEREMAIL';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_36-抽样单位等级' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'SAMPLINGORGLEVEL';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_52-抽样单位所在省份' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'SAMPLINGORGPROVINCE';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_dwwz-样品网址' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'SAMPLEURL';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_wcmc-抽样单图片路径' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'SAMPLINGPICPATH';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_wcyyzzh-网络平台营业执照号' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'NETWORKLICENSENO';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_wcicp-入网许可证号或ICP经营许可证' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'ICPNO';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_wcsheng-网抽平台所在地省' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'NETWORKPLATFORMPROVINCE';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_wcshi-网抽平台所在地市' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'NETWORKPLATFORMCITY';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_wcxian-网抽平台所在地县' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'NETWORKPLATFORMCOUNTY';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_wcdz-网抽平台地址' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'NETWORKPLATFORMADRESS';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_wcwz-告知书图片路径' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'NOTIFICATIONPICPATH';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_wclxr-网抽平台联系人' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'NETWORKPLATFORMCONTACT';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_wctel-网抽平台联系电话' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'NETWORKPLATFORMCONTACTMOBILE';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_wcbh-网抽平台订单编号' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'NETWORKORDERNO';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'is_submit-是否提交' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'SUBMIT';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_wcdpmc     -网店店铺名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'ONLINESHOPNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_d_28_name-生产、加工、购进 日期的标识表明具体是哪个类型的日期' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'DATECATEGORY';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_cycj-抽样类型' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'SAMPLINGCATEGORY';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_wtxz-第三方性质' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'ENTRUSTPROPERTY';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'scbname-报送任务b' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'REPORTTASKB';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'scaname-报送任务a' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'REPORTTASKA';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_i_state-检验状态' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'TESTSTATE';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sample_type-样品类型' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'SAMPLETYPE';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'gc_updated_at-国抽更新时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'NFFSIUPDATEDTIME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'更新时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'LASTUPDATEDTIME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'CREATEDBYID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'CREATEDBYNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'CREATEDTIME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGNAME';
+
+CREATE TABlE DBO.T_CORE_NFSSI_REPORT_ITEM(
+    ID BIGINT NOT NULL,
+    REPORTID VARCHAR(60)  NOT NULL,
+    ORDERID VARCHAR(60)  NOT NULL,
+    TESTITEM VARCHAR(255)  NOT NULL,
+    TESTRESULT VARCHAR(255)  NOT NULL,
+    RESULTJUDGMENT TEXT NOT NULL,
+    INSPECTSTANDARD VARCHAR(255)  NOT NULL,
+    JUDGESTANDARD VARCHAR(255)  NOT NULL,
+    METHODLIMIT VARCHAR(255)  NOT NULL,
+    DETECTIONLIMITORG VARCHAR(255)  NOT NULL,
+    MINLIMIT VARCHAR(255)  NOT NULL,
+    MINLIMITUNIT VARCHAR(255)  NOT NULL,
+    MAXLIMIT VARCHAR(255)  NOT NULL,
+    MAXLIMITUNIT VARCHAR(255)  NOT NULL,
+    EXPLAIN VARCHAR(255)  NOT NULL,
+    RESULTUNIT VARCHAR(255)  NOT NULL,
+    SHORTINSPECTSTANDARD VARCHAR(60)  NULL ,
+    REMARK TEXT NOT NULL,
+    OLDITEMNAME VARCHAR(255)  NOT NULL,
+    ITEMCATEGORY VARCHAR(255)  NOT NULL,
+    NECESSARY VARCHAR(30)  NULL ,
+    FUNCCATEGORY VARCHAR(255)  NULL ,
+    STATUS BIGINT NULL ,
+    CREATEDBYID VARCHAR(36)  NULL ,
+    CREATEDBYNAME VARCHAR(60)  NULL ,
+    CREATEDTIME DATETIME NULL ,
+    CREATEDBYORGID VARCHAR(36)  NULL ,
+    CREATEDBYORGNAME VARCHAR(270)  NULL ,
+    CONSTRAINT PK_CORE_NFSSI_REPORT_ITEM PRIMARY KEY(ID));
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'抽样单报告结果表' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_REPORT_ITEM';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_REPORT_ITEM', @level2type=N'COLUMN',@level2name=N'ID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'报告书编号' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_REPORT_ITEM', @level2type=N'COLUMN',@level2name=N'REPORTID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'抽样单号' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_REPORT_ITEM', @level2type=N'COLUMN',@level2name=N'ORDERID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'spdata_0-检验项目' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_REPORT_ITEM', @level2type=N'COLUMN',@level2name=N'TESTITEM';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'spdata_1-检验结果' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_REPORT_ITEM', @level2type=N'COLUMN',@level2name=N'TESTRESULT';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'spdata_2-结果判定' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_REPORT_ITEM', @level2type=N'COLUMN',@level2name=N'RESULTJUDGMENT';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'spdata_3-检验依据' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_REPORT_ITEM', @level2type=N'COLUMN',@level2name=N'INSPECTSTANDARD';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'spdata_4-判定依据' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_REPORT_ITEM', @level2type=N'COLUMN',@level2name=N'JUDGESTANDARD';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'spdata_7-方法检出限' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_REPORT_ITEM', @level2type=N'COLUMN',@level2name=N'METHODLIMIT';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'spdata_8-检出限单位' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_REPORT_ITEM', @level2type=N'COLUMN',@level2name=N'DETECTIONLIMITORG';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'spdata_11-最小允许限' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_REPORT_ITEM', @level2type=N'COLUMN',@level2name=N'MINLIMIT';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'spdata_12-最小允许限单位' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_REPORT_ITEM', @level2type=N'COLUMN',@level2name=N'MINLIMITUNIT';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'spdata_15-最大允许限' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_REPORT_ITEM', @level2type=N'COLUMN',@level2name=N'MAXLIMIT';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'spdata_16-最大允许限单位' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_REPORT_ITEM', @level2type=N'COLUMN',@level2name=N'MAXLIMITUNIT';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'spdata_17-说明' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_REPORT_ITEM', @level2type=N'COLUMN',@level2name=N'EXPLAIN';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'spdata_18-结果单位' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_REPORT_ITEM', @level2type=N'COLUMN',@level2name=N'RESULTUNIT';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'spdata_19-检验依据简称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_REPORT_ITEM', @level2type=N'COLUMN',@level2name=N'SHORTINSPECTSTANDARD';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'spdata_20-备注' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_REPORT_ITEM', @level2type=N'COLUMN',@level2name=N'REMARK';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'spdata_0_old-用户修改前的项目名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_REPORT_ITEM', @level2type=N'COLUMN',@level2name=N'OLDITEMNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'jylx-项目类型' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_REPORT_ITEM', @level2type=N'COLUMN',@level2name=N'ITEMCATEGORY';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'inReserve-是否必填字段' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_REPORT_ITEM', @level2type=N'COLUMN',@level2name=N'NECESSARY';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'gnlb-功能类别' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_REPORT_ITEM', @level2type=N'COLUMN',@level2name=N'FUNCCATEGORY';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'status-1代表新增0代表非新增' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_REPORT_ITEM', @level2type=N'COLUMN',@level2name=N'STATUS';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_REPORT_ITEM', @level2type=N'COLUMN',@level2name=N'CREATEDBYID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_REPORT_ITEM', @level2type=N'COLUMN',@level2name=N'CREATEDBYNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_REPORT_ITEM', @level2type=N'COLUMN',@level2name=N'CREATEDTIME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_REPORT_ITEM', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_REPORT_ITEM', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGNAME';
+CREATE NONCLUSTERED INDEX [IDX_REPORT_ITEM_ORDERID] ON [dbo].[T_CORE_NFSSI_REPORT_ITEM] ([ORDERID]);
+
+CREATE TABlE DBO.T_CORE_NFSSI_REPORT(
+    ID VARCHAR(60)  NOT NULL,
+    ORDERID VARCHAR(60)  NOT NULL,
+    SUPERVISEREPORTREMARK TEXT NULL ,
+    RISKREPORTREMARK TEXT NULL ,
+    INSPECTORGCONTACTMOBILE VARCHAR(60)  NULL ,
+    INSPECTORGCONTACT VARCHAR(60)  NULL ,
+    INSPECTORGCONTACTEMAIL VARCHAR(60)  NULL ,
+    SEALSAMPLER VARCHAR(60)  NULL ,
+    SEALSAMPLEREMAIL VARCHAR(60)  NULL ,
+    SEALSAMPLERMOBILE VARCHAR(60)  NULL ,
+    STATE VARCHAR(1)  NULL ,
+    ERRORINFO TEXT NULL ,
+    CREATEDBYID VARCHAR(36)  NULL ,
+    CREATEDBYNAME VARCHAR(60)  NULL ,
+    CREATEDTIME DATETIME NULL ,
+    CREATEDBYORGID VARCHAR(36)  NULL ,
+    CREATEDBYORGNAME VARCHAR(270)  NULL ,
+    CONSTRAINT PK_CORE_NFSSI_REPORT PRIMARY KEY(ID));
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'抽样单报告表' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_REPORT';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'reportNo-报告书编号' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_REPORT', @level2type=N'COLUMN',@level2name=N'ID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sampleNo-抽样单号' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_REPORT', @level2type=N'COLUMN',@level2name=N'ORDERID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'jdBz-监督备注' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_REPORT', @level2type=N'COLUMN',@level2name=N'SUPERVISEREPORTREMARK';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'fxBz-风险备注' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_REPORT', @level2type=N'COLUMN',@level2name=N'RISKREPORTREMARK';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'contactTel-联系人电话' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_REPORT', @level2type=N'COLUMN',@level2name=N'INSPECTORGCONTACTMOBILE';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'contact-检验联系人' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_REPORT', @level2type=N'COLUMN',@level2name=N'INSPECTORGCONTACT';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'contactEmail-联系人邮箱' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_REPORT', @level2type=N'COLUMN',@level2name=N'INSPECTORGCONTACTEMAIL';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'fyPerson-封样人' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_REPORT', @level2type=N'COLUMN',@level2name=N'SEALSAMPLER';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'fyEmail-封样人邮箱' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_REPORT', @level2type=N'COLUMN',@level2name=N'SEALSAMPLEREMAIL';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'fyTel-封样人电话' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_REPORT', @level2type=N'COLUMN',@level2name=N'SEALSAMPLERMOBILE';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'发送状态' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_REPORT', @level2type=N'COLUMN',@level2name=N'STATE';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'错误信息' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_REPORT', @level2type=N'COLUMN',@level2name=N'ERRORINFO';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_REPORT', @level2type=N'COLUMN',@level2name=N'CREATEDBYID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_REPORT', @level2type=N'COLUMN',@level2name=N'CREATEDBYNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_REPORT', @level2type=N'COLUMN',@level2name=N'CREATEDTIME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_REPORT', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_REPORT', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGNAME';
+CREATE NONCLUSTERED INDEX [IDX_REPORT_ORDERID] ON [dbo].[T_CORE_NFSSI_REPORT] ([ORDERID]);
+
+CREATE TABlE DBO.T_CORE_NFSSI_ORDER_TEST_ITEM(
+    ID BIGINT NOT NULL,
+    ORDERID VARCHAR(60)  NULL ,
+    ITEMNAME VARCHAR(255)  NULL ,
+    ITEMTYPE VARCHAR(255)  NULL ,
+    FUNCCATEGORY VARCHAR(255)  NULL ,
+    CREATEDBYID VARCHAR(36)  NULL ,
+    CREATEDBYNAME VARCHAR(60)  NULL ,
+    CREATEDTIME DATETIME NULL ,
+    CREATEDBYORGID VARCHAR(36)  NULL ,
+    CREATEDBYORGNAME VARCHAR(270)  NULL ,
+    CONSTRAINT PK_CORE_NFSSI_ORDER_TEST_ITEM PRIMARY KEY(ID));
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'抽样单检测项目表' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER_TEST_ITEM';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'主键' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER_TEST_ITEM', @level2type=N'COLUMN',@level2name=N'ID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_16-抽样单号' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER_TEST_ITEM', @level2type=N'COLUMN',@level2name=N'ORDERID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'item-项目名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER_TEST_ITEM', @level2type=N'COLUMN',@level2name=N'ITEMNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'itemType-项目类型' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER_TEST_ITEM', @level2type=N'COLUMN',@level2name=N'ITEMTYPE';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'gnlb-(保健食品功效)' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER_TEST_ITEM', @level2type=N'COLUMN',@level2name=N'FUNCCATEGORY';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER_TEST_ITEM', @level2type=N'COLUMN',@level2name=N'CREATEDBYID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER_TEST_ITEM', @level2type=N'COLUMN',@level2name=N'CREATEDBYNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER_TEST_ITEM', @level2type=N'COLUMN',@level2name=N'CREATEDTIME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER_TEST_ITEM', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_ORDER_TEST_ITEM', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGNAME';
+CREATE NONCLUSTERED INDEX [IDX_ORDER_TEST_ITEM_ORDERID] ON [dbo].[T_CORE_NFSSI_ORDER_TEST_ITEM] ([ORDERID]);
+
+CREATE TABlE DBO.T_CORE_NFSSI_VERIFY_REASON(
+    ID BIGINT NOT NULL,
+    TESTITEMID BIGINT NULL ,
+    STDMINLIMITUNIT VARCHAR(255)  NULL ,
+    STDMINLIMIT VARCHAR(255)  NULL ,
+    MAXLIMIT VARCHAR(255)  NULL ,
+    STDMAXLIMIT VARCHAR(255)  NULL ,
+    STDMAXLIMITUNIT VARCHAR(255)  NULL ,
+    JUDGESTANDARD VARCHAR(255)  NULL ,
+    MINLIMITUNIT VARCHAR(255)  NULL ,
+    CREATEDBYID VARCHAR(36)  NULL ,
+    CREATEDBYNAME VARCHAR(60)  NULL ,
+    CREATEDTIME DATETIME NULL ,
+    CREATEDBYORGID VARCHAR(36)  NULL ,
+    CREATEDBYORGNAME VARCHAR(270)  NULL ,
+    CONSTRAINT PK_CORE_NFSSI_VERIFY_REASON PRIMARY KEY(ID));
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'抽样单检测项目判定依据' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_VERIFY_REASON';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'主键' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_VERIFY_REASON', @level2type=N'COLUMN',@level2name=N'ID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'检验项目ID' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_VERIFY_REASON', @level2type=N'COLUMN',@level2name=N'TESTITEMID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'spdata_10-标准最小允许限单位' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_VERIFY_REASON', @level2type=N'COLUMN',@level2name=N'STDMINLIMITUNIT';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'spdata_9-标准最小允许限' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_VERIFY_REASON', @level2type=N'COLUMN',@level2name=N'STDMINLIMIT';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'spdata_15-最大允许限' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_VERIFY_REASON', @level2type=N'COLUMN',@level2name=N'MAXLIMIT';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'spdata_13-标准最大允许限' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_VERIFY_REASON', @level2type=N'COLUMN',@level2name=N'STDMAXLIMIT';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'spdata_14-标准最大允许限单位' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_VERIFY_REASON', @level2type=N'COLUMN',@level2name=N'STDMAXLIMITUNIT';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'spdata_4-判定依据' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_VERIFY_REASON', @level2type=N'COLUMN',@level2name=N'JUDGESTANDARD';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'spdata_11-最小允许限' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_VERIFY_REASON', @level2type=N'COLUMN',@level2name=N'MINLIMITUNIT';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_VERIFY_REASON', @level2type=N'COLUMN',@level2name=N'CREATEDBYID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_VERIFY_REASON', @level2type=N'COLUMN',@level2name=N'CREATEDBYNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_VERIFY_REASON', @level2type=N'COLUMN',@level2name=N'CREATEDTIME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_VERIFY_REASON', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_VERIFY_REASON', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGNAME';
+CREATE NONCLUSTERED INDEX [IDX_VERIFY_REASON_TESTITEMID] ON [dbo].[T_CORE_NFSSI_VERIFY_REASON] ([TESTITEMID]);
+
+CREATE TABlE DBO.T_CORE_NFSSI_TEST_REASON(
+    ID BIGINT NOT NULL,
+    TESTITEMID BIGINT NULL ,
+    REMARK VARCHAR(255)  NULL ,
+    INSPECTSTANDARD VARCHAR(255)  NULL ,
+    RESULTUNIT VARCHAR(255)  NULL ,
+    SHORTINSPECTSTANDARD TEXT NULL ,
+    STDCHECKLIMITUNIT VARCHAR(255)  NULL ,
+    STDCHECKLIMIT VARCHAR(255)  NULL ,
+    REPORTTASKA VARCHAR(60)  NULL ,
+    REPORTTASKB VARCHAR(60)  NULL ,
+    NECESSARY VARCHAR(255)  NULL ,
+    CREATEDBYID VARCHAR(36)  NULL ,
+    CREATEDBYNAME VARCHAR(60)  NULL ,
+    CREATEDTIME DATETIME NULL ,
+    CREATEDBYORGID VARCHAR(36)  NULL ,
+    CREATEDBYORGNAME VARCHAR(270)  NULL ,
+    CONSTRAINT PK_CORE_NFSSI_TEST_REASON PRIMARY KEY(ID));
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'抽样单检测项目检验依据' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_TEST_REASON';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'主键' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_TEST_REASON', @level2type=N'COLUMN',@level2name=N'ID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'检验项目ID' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_TEST_REASON', @level2type=N'COLUMN',@level2name=N'TESTITEMID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'bz-备注' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_TEST_REASON', @level2type=N'COLUMN',@level2name=N'REMARK';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'spdata_3-检验依据' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_TEST_REASON', @level2type=N'COLUMN',@level2name=N'INSPECTSTANDARD';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'spdata_18-结果单位' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_TEST_REASON', @level2type=N'COLUMN',@level2name=N'RESULTUNIT';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sm-检验依据简称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_TEST_REASON', @level2type=N'COLUMN',@level2name=N'SHORTINSPECTSTANDARD';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'spdata_6-标准检出限单位' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_TEST_REASON', @level2type=N'COLUMN',@level2name=N'STDCHECKLIMITUNIT';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'spdata_5-标准检出限' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_TEST_REASON', @level2type=N'COLUMN',@level2name=N'STDCHECKLIMIT';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_70-报送分类a' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_TEST_REASON', @level2type=N'COLUMN',@level2name=N'REPORTTASKA';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sp_s_67-报送分类b' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_TEST_REASON', @level2type=N'COLUMN',@level2name=N'REPORTTASKB';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'inReserve-必填项目' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_TEST_REASON', @level2type=N'COLUMN',@level2name=N'NECESSARY';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_TEST_REASON', @level2type=N'COLUMN',@level2name=N'CREATEDBYID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_TEST_REASON', @level2type=N'COLUMN',@level2name=N'CREATEDBYNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_TEST_REASON', @level2type=N'COLUMN',@level2name=N'CREATEDTIME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_TEST_REASON', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NFSSI_TEST_REASON', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGNAME';
+CREATE NONCLUSTERED INDEX [IDX_TEST_REASON_TESTITEMID] ON [dbo].[T_CORE_NFSSI_TEST_REASON] ([TESTITEMID]);
+
+
+-- 创建菜单语句
+INSERT INTO T_CORE_MENU (ID, MENUNAME, HREF, PARENTID, ORDERNO, ICON, TODOICON) 
+VALUES ('82', '国抽数据管理', NULL, NULL, '81', '076.svg', NULL);
+INSERT INTO T_CORE_MENU (ID, MENUNAME, HREF, PARENTID, ORDERNO, ICON, MENUINITNAME)
+VALUES ('8201', '抽样单管理', '/secure/core/module/nfssi/orders/page/edit-list', '81', '8101', '021.svg', '抽样单管理');
+
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_NFSSI_ORDER', '0', '0');
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_NFSSI_REPORT_ITEM', '0', '0');
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_NFSSI_REPORT', '0', '0');
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_NFSSI_ORDER_TEST_ITEM', '0', '0');
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_NFSSI_VERIFY_REASON', '0', '0');
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_NFSSI_TEST_REASON', '0', '0');
+
+
+INSERT INTO T_CORE_TABLE_HIERARCHY (ID, TABLENAME, MASTERTABLENAME, REFERCOLUMN)
+VALUES ('820102','T_CORE_NFSSI_REPORT_ITEM', 'T_CORE_NFSSI_REPORT', 'REPORTID');
+INSERT INTO T_CORE_TABLE_HIERARCHY (ID, TABLENAME, MASTERTABLENAME, REFERCOLUMN)
+VALUES ('820103','T_CORE_NFSSI_REPORT', 'T_CORE_NFSSI_ORDER', 'ORDERID');
+INSERT INTO T_CORE_TABLE_HIERARCHY (ID, TABLENAME, MASTERTABLENAME, REFERCOLUMN)
+VALUES ('820104','T_CORE_NFSSI_ORDER_TEST_ITEM', 'T_CORE_NFSSI_ORDER', 'ORDERID');
+INSERT INTO T_CORE_TABLE_HIERARCHY (ID, TABLENAME, MASTERTABLENAME, REFERCOLUMN)
+VALUES ('820105','T_CORE_NFSSI_VERIFY_REASON', 'T_CORE_NFSSI_ORDER_TEST_ITEM', 'TESTITEMID');
+INSERT INTO T_CORE_TABLE_HIERARCHY (ID, TABLENAME, MASTERTABLENAME, REFERCOLUMN)
+VALUES ('820106','T_CORE_NFSSI_TEST_REASON', 'T_CORE_NFSSI_ORDER_TEST_ITEM', 'TESTITEMID');
+
+
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.SERVICE_NAME', N'抽样单', N'抽样单', N'zh-CN',N'抽样单';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.ID', N'抽样单号', N'抽样单号', N'zh-CN',N'抽样单号';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.BACK', N'是否退休', N'是否退休', N'zh-CN', N'是否退休';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.TESTSTATE', N'检验状态', N'检验状态', N'zh-CN',N'检验状态';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.SAMPLETYPE', N'样品类型', N'样品类型', N'zh-CN',N'样品类型';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.NFFSIUPDATEDTIME', N'国抽更新时间', N'国抽更新时间', N'zh-CN',N'国抽更新时间';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.LASTUPDATEDTIME', N'更新时间', N'更新时间', N'zh-CN',N'更新时间';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.CREATEDBYID', N'制单人编码', N'制单人编码', N'zh-CN',N'制单人编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.CREATEDBYNAME', N'制单人名称', N'制单人名称', N'zh-CN',N'制单人名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.CREATEDTIME', N'制单时间', N'制单时间', N'zh-CN',N'制单时间';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.CREATEDBYORGID', N'制单人单位编码', N'制单人单位编码', N'zh-CN',N'制单人单位编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.CREATEDBYORGNAME', N'制单人单位名称', N'制单人单位名称', N'zh-CN',N'制单人单位名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.SERVICE_NAME', N'抽样单样品', N'抽样单样品', N'zh-CN',N'抽样单样品';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.SAMPLINGPLACEORGNAME', N'抽检场所单位名称', N'抽检场所单位名称', N'zh-CN',N'抽检场所单位名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.SAMPLINGPLACE', N'抽样地点', N'抽样地点', N'zh-CN',N'抽样地点';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.PROVINCE', N'抽检场所所在地省', N'抽检场所所在地省', N'zh-CN',N'抽检场所所在地省';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.CITY', N'抽检场所所在地市', N'抽检场所所在地市', N'zh-CN',N'抽检场所所在地市';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.COUNTY', N'抽检场所所在地县', N'抽检场所所在地县', N'zh-CN',N'抽检场所所在地县';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.SAMPLINGUNIT', N'抽样单位数量', N'抽样单位数量', N'zh-CN',N'抽样单位数量';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.ADDRESS', N'抽检场所单位地址', N'抽检场所单位地址', N'zh-CN',N'抽检场所单位地址';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.LEGALPERSON', N'抽检场所单位法人', N'抽检场所单位法人', N'zh-CN',N'抽检场所单位法人';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.POSTCODE', N'抽检场所邮编', N'抽检场所邮编', N'zh-CN',N'抽检场所邮编';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.CONTACT', N'抽检场所联系人', N'抽检场所联系人', N'zh-CN',N'抽检场所联系人';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.CONTACTMOBILE', N'抽检场所联系人电话', N'抽检场所联系人电话', N'zh-CN',N'抽检场所联系人电话';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.PRODUCTIONLICENSENO', N'生产许可证编号', N'生产许可证编号', N'zh-CN',N'生产许可证编号';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.SAMPLENAME', N'样品名称', N'样品名称', N'zh-CN',N'样品名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.SAMPLINGQTY', N'抽样数量', N'抽样数量', N'zh-CN',N'抽样数量';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.FIRSTCATEGORY', N'食品大类', N'食品大类', N'zh-CN',N'食品大类';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.SECONDCATEGORY', N'食品亚类', N'食品亚类', N'zh-CN',N'食品亚类';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.THIRDCATEGORY', N'食品次亚类', N'食品次亚类', N'zh-CN',N'食品次亚类';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.FOURTHCATEGORY', N'食品细类', N'食品细类', N'zh-CN',N'食品细类';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.SAMPLESOURCE', N'样品来源', N'样品来源', N'zh-CN',N'样品来源';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.ANNUALSALES', N'年销售额', N'年销售额', N'zh-CN',N'年销售额';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.SAMPLINGMETHOD', N'抽样方式', N'抽样方式', N'zh-CN',N'抽样方式';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.SAMPLINGINSTRUMENT', N'抽样工具', N'抽样工具', N'zh-CN',N'抽样工具';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.SPECIFICATION', N'规格型号', N'规格型号', N'zh-CN',N'规格型号';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.SAMPLEBATCHNO', N'样品批号', N'样品批号', N'zh-CN',N'样品批号';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.PRODUCTDATE', N'生产（加工、购进）日期', N'生产（加工、购进）日期', N'zh-CN',N'生产（加工、购进）日期';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.QUALITYGUARANTEEPERIOD', N'保质期', N'保质期', N'zh-CN',N'保质期';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.SAMPLINGKEEPCONDITION', N'抽样时样品储存条件', N'抽样时样品储存条件', N'zh-CN',N'抽样时样品储存条件';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.SAMPLEPACK', N'样品包装', N'样品包装', N'zh-CN',N'样品包装';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.REMARK', N'备注', N'备注', N'zh-CN',N'备注';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.SAMPLINGORGNAME', N'抽样单位名称', N'抽样单位名称', N'zh-CN',N'抽样单位名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.SAMPLINGDATE', N'抽样日期', N'抽样日期', N'zh-CN',N'抽样日期';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.SAMPLINGMOBILE', N'抽样人员电话', N'抽样人员电话', N'zh-CN',N'抽样人员电话';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.SAMPLINGORGCONTACT', N'抽样单位联系人', N'抽样单位联系人', N'zh-CN',N'抽样单位联系人';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.TESTPURPOSE', N'检验目的/任务类别', N'检验目的/任务类别', N'zh-CN',N'检验目的/任务类别';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.SAMPLESHAP', N'样品形态', N'样品形态', N'zh-CN',N'样品形态';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.SAMPLECATEGORY', N'样品类型', N'样品类型', N'zh-CN',N'样品类型';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.PACKAGECATEGORY', N'包装分类', N'包装分类', N'zh-CN',N'包装分类';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.MANUFACTURER', N'生产企业名称', N'生产企业名称', N'zh-CN',N'生产企业名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.MANUFACTURERADRESS', N'生产企业地址', N'生产企业地址', N'zh-CN',N'生产企业地址';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.SAMPLINGTACHE', N'抽样环节', N'抽样环节', N'zh-CN',N'抽样环节';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.EXECUTIVESTANDARD', N'执行标准/技术文件', N'执行标准/技术文件', N'zh-CN',N'执行标准/技术文件';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.QUALITYLEVEL', N'质量等级', N'质量等级', N'zh-CN',N'质量等级';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.SAMPLELOGO', N'样品商标', N'样品商标', N'zh-CN',N'样品商标';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.MANUFACTURERCONTACT', N'生产企业联系人', N'生产企业联系人', N'zh-CN',N'生产企业联系人';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.MANUFACTURERMOBILE', N'生产企业电话', N'生产企业电话', N'zh-CN',N'生产企业电话';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.RECEIVEDDATE', N'接样日期', N'接样日期', N'zh-CN',N'接样日期';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.AREACATEGORY', N'区域类型', N'区域类型', N'zh-CN',N'区域类型';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.MANUFACTURERPROVINCE', N'生产企业所在地省', N'生产企业所在地省', N'zh-CN',N'生产企业所在地省';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.SAMPLEPROPERTY', N'样品属性', N'样品属性', N'zh-CN',N'样品属性';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.PRICE', N'单价', N'单价', N'zh-CN',N'单价';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.SAMPLINGBASENUM', N'抽样基数', N'抽样基数', N'zh-CN',N'抽样基数';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.SPARENUM', N'备样数量', N'备样数量', N'zh-CN',N'备样数量';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.SAMPLINGORGADRESS', N'抽样单位地址', N'抽样单位地址', N'zh-CN',N'抽样单位地址';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.SAMPLINGORGPOSTCODE', N'抽样单位邮编', N'抽样单位邮编', N'zh-CN',N'抽样单位邮编';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.SAMPLINGORGFAX', N'抽样单位传真', N'抽样单位传真', N'zh-CN',N'抽样单位传真';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.TESTPLACECREDITCODE', N'抽检场所营业执照/社会信用代码', N'抽检场所营业执照/社会信用代码', N'zh-CN',N'抽检场所营业执照/社会信用代码';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.MANUFACTURERCITY', N'生产企业所在地市', N'生产企业所在地市', N'zh-CN',N'生产企业所在地市';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.MANUFACTURERCOUNTY', N'生产企业所在地县', N'生产企业所在地县', N'zh-CN',N'生产企业所在地县';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.SAMPLEBARCODE', N'样品条码', N'样品条码', N'zh-CN',N'样品条码';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.TASKSOURCE', N'任务来源', N'任务来源', N'zh-CN',N'任务来源';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.TESTPLACEFAX', N'抽检场所传真', N'抽检场所传真', N'zh-CN',N'抽检场所传真';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.ENTRUSTCONTACT', N'第三方（委托）联系人', N'第三方（委托）联系人', N'zh-CN',N'第三方（委托）联系人';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.ENTRUSTPRODUCTIONLICENSENO', N'第三方（委托）生产许可证编号', N'第三方（委托）生产许可证编号', N'zh-CN',N'第三方（委托）生产许可证编号';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.ENTRUSTENTERPRISEADRESS', N'第三方（委托）企业地址', N'第三方（委托）企业地址', N'zh-CN',N'第三方（委托）企业地址';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.ENTRUSTENTERPRISE', N'第三方（委托）企业名称', N'第三方（委托）企业名称', N'zh-CN',N'第三方（委托）企业名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.IMPORTATION', N'是否进口', N'是否进口', N'zh-CN',N'是否进口';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.HASENTRUSTENTERPRISEINFO', N'是否存在第三方（委托）企业信息', N'是否存在第三方（委托）企业信息', N'zh-CN',N'是否存在第三方（委托）企业信息';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.ENTRUSTPHONE', N'第三方（委托）电话', N'第三方（委托）电话', N'zh-CN',N'第三方（委托）电话';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.ENTRUSTPROVINCE', N'第三方（委托）省', N'第三方（委托）省', N'zh-CN',N'第三方（委托）省';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.ENTRUSTCITY', N'第三方（委托）市', N'第三方（委托）市', N'zh-CN',N'第三方（委托）市';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.ENTRUSTCOUNTRY', N'第三方（委托）县', N'第三方（委托）县', N'zh-CN',N'第三方（委托）县';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.ORIGINPLACE', N'原产地', N'原产地', N'zh-CN',N'原产地';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.LICENSETYPE', N'许可证类型', N'许可证类型', N'zh-CN',N'许可证类型';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.LICENSENO', N'许可证号', N'许可证号', N'zh-CN',N'许可证号';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.BARCODE', N'条码号', N'条码号', N'zh-CN',N'条码号';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.RAINBOWCODE', N'彩虹码号', N'彩虹码号', N'zh-CN',N'彩虹码号';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.RAINBOWCODEPATH', N'彩虹码路径', N'彩虹码路径', N'zh-CN',N'彩虹码路径';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.APPROVALNO', N'批准文号', N'批准文号', N'zh-CN',N'批准文号';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.FUNCCATEGORYCOLLECTION', N'功能类别集合', N'功能类别集合', N'zh-CN',N'功能类别集合';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.INSPECTORGNAME', N'检验机构', N'检验机构', N'zh-CN',N'检验机构';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.INSPECTIONDATE', N'收检时间', N'收检时间', N'zh-CN',N'收检时间';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.INSPECTIONORGCONTACT', N'检验机构联系人', N'检验机构联系人', N'zh-CN',N'检验机构联系人';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.INSPECTORGCONTACTMOBILE', N'检验机构联系人电话', N'检验机构联系人电话', N'zh-CN',N'检验机构联系人电话';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.INSPECTORGCONTACTEMAIL', N'检验机构联系人邮箱', N'检验机构联系人邮箱', N'zh-CN',N'检验机构联系人邮箱';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.INSPECTSEALPERSON', N'检查封样人员', N'检查封样人员', N'zh-CN',N'检查封样人员';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.INSPECTSEALPERSONMOBILE', N'检查封样人电话', N'检查封样人电话', N'zh-CN',N'检查封样人电话';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.INSPECTSEALPERSONEMAIL', N'检查封样人邮箱', N'检查封样人邮箱', N'zh-CN',N'检查封样人邮箱';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.SAMPLER', N'抽样人员', N'抽样人员', N'zh-CN',N'抽样人员';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.SAMPLERMOBILE', N'联系人电话', N'联系人电话', N'zh-CN',N'联系人电话';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.SAMPLEREMAIL', N'抽样人邮箱', N'抽样人邮箱', N'zh-CN',N'抽样人邮箱';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.SAMPLINGORGLEVEL', N'抽样单位等级', N'抽样单位等级', N'zh-CN',N'抽样单位等级';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.SAMPLINGORGPROVINCE', N'抽样单位所在省份', N'抽样单位所在省份', N'zh-CN',N'抽样单位所在省份';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.SAMPLEURL', N'样品网址', N'样品网址', N'zh-CN',N'样品网址';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.SAMPLINGPICPATH', N'抽样单图片路径', N'抽样单图片路径', N'zh-CN',N'抽样单图片路径';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.NETWORKLICENSENO', N'网络平台营业执照号', N'网络平台营业执照号', N'zh-CN',N'网络平台营业执照号';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.ICPNO', N'入网许可证号或ICP经营许可证', N'入网许可证号或ICP经营许可证', N'zh-CN',N'入网许可证号或ICP经营许可证';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.NETWORKPLATFORMPROVINCE', N'网抽平台所在地省', N'网抽平台所在地省', N'zh-CN',N'网抽平台所在地省';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.NETWORKPLATFORMCITY', N'网抽平台所在地市', N'网抽平台所在地市', N'zh-CN',N'网抽平台所在地市';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.NETWORKPLATFORMCOUNTY', N'网抽平台所在地县', N'网抽平台所在地县', N'zh-CN',N'网抽平台所在地县';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.NETWORKPLATFORMADRESS', N'网抽平台地址', N'网抽平台地址', N'zh-CN',N'网抽平台地址';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.NOTIFICATIONPICPATH', N'告知书图片路径', N'告知书图片路径', N'zh-CN',N'告知书图片路径';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.NETWORKPLATFORMCONTACT', N'网抽平台联系人', N'网抽平台联系人', N'zh-CN',N'网抽平台联系人';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.NETWORKPLATFORMCONTACTMOBILE', N'网抽平台联系电话', N'网抽平台联系电话', N'zh-CN',N'网抽平台联系电话';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.NETWORKORDERNO', N'网抽平台订单编号', N'网抽平台订单编号', N'zh-CN',N'网抽平台订单编号';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.SUBMIT', N'是否提交', N'是否提交', N'zh-CN',N'是否提交';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.ONLINESHOPNAME', N'网店店铺名称', N'网店店铺名称', N'zh-CN',N'网店店铺名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.DATECATEGORY', N'日期类型', N'日期类型', N'zh-CN',N'日期类型';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.SAMPLINGCATEGORY', N'抽样类型', N'抽样类型', N'zh-CN',N'抽样类型';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.ENTRUSTPROPERTY', N'第三方性质', N'第三方性质', N'zh-CN',N'第三方性质';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.REPORTTASKB', N'报送任务B', N'报送任务B', N'zh-CN',N'报送任务B';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.REPORTTASKA', N'报送任务A', N'报送任务A', N'zh-CN',N'报送任务A';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.CREATEDBYID', N'制单人编码', N'制单人编码', N'zh-CN',N'制单人编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.CREATEDBYNAME', N'制单人名称', N'制单人名称', N'zh-CN',N'制单人名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.CREATEDTIME', N'制单时间', N'制单时间', N'zh-CN',N'制单时间';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.CREATEDBYORGID', N'制单人单位编码', N'制单人单位编码', N'zh-CN',N'制单人单位编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER.CREATEDBYORGNAME', N'制单人单位名称', N'制单人单位名称', N'zh-CN',N'制单人单位名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_REPORT_ITEM.SERVICE_NAME', N'抽样单报告结果', N'抽样单报告结果', N'zh-CN',N'抽样单报告结果';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_REPORT_ITEM.ID', N'编码', N'编码', N'zh-CN',N'编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_REPORT_ITEM.REPORTID', N'报告书编号', N'报告书编号', N'zh-CN',N'报告书编号';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_REPORT_ITEM.ORDERID', N'抽样单号', N'抽样单号', N'zh-CN',N'抽样单号';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_REPORT_ITEM.TESTITEM', N'检验项目', N'检验项目', N'zh-CN',N'检验项目';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_REPORT_ITEM.TESTRESULT', N'检验结果', N'检验结果', N'zh-CN',N'检验结果';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_REPORT_ITEM.RESULTJUDGMENT', N'结果判定', N'结果判定', N'zh-CN',N'结果判定';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_REPORT_ITEM.INSPECTSTANDARD', N'检验依据', N'检验依据', N'zh-CN',N'检验依据';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_REPORT_ITEM.JUDGESTANDARD', N'判定依据', N'判定依据', N'zh-CN',N'判定依据';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_REPORT_ITEM.METHODLIMIT', N'方法检出限', N'方法检出限', N'zh-CN',N'方法检出限';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_REPORT_ITEM.DETECTIONLIMITORG', N'检出限单位', N'检出限单位', N'zh-CN',N'检出限单位';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_REPORT_ITEM.MINLIMIT', N'最小允许限', N'最小允许限', N'zh-CN',N'最小允许限';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_REPORT_ITEM.MINLIMITUNIT', N'最小允许限单位', N'最小允许限单位', N'zh-CN',N'最小允许限单位';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_REPORT_ITEM.MAXLIMIT', N'最大允许限', N'最大允许限', N'zh-CN',N'最大允许限';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_REPORT_ITEM.MAXLIMITUNIT', N'最大允许限单位', N'最大允许限单位', N'zh-CN',N'最大允许限单位';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_REPORT_ITEM.EXPLAIN', N'说明', N'说明', N'zh-CN',N'说明';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_REPORT_ITEM.RESULTUNIT', N'结果单位', N'结果单位', N'zh-CN',N'结果单位';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_REPORT_ITEM.SHORTINSPECTSTANDARD', N'检验依据简称', N'检验依据简称', N'zh-CN',N'检验依据简称';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_REPORT_ITEM.REMARK', N'备注', N'备注', N'zh-CN',N'备注';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_REPORT_ITEM.OLDITEMNAME', N'用户修改前的项目名称', N'用户修改前的项目名称', N'zh-CN',N'用户修改前的项目名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_REPORT_ITEM.ITEMCATEGORY', N'项目类型', N'项目类型', N'zh-CN',N'项目类型';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_REPORT_ITEM.NECESSARY', N'是否必填字段', N'是否必填字段', N'zh-CN',N'是否必填字段';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_REPORT_ITEM.FUNCCATEGORY', N'功能类别', N'功能类别', N'zh-CN',N'功能类别';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_REPORT_ITEM.STATUS', N'状态', N'状态', N'zh-CN',N'状态';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_REPORT_ITEM.CREATEDBYID', N'制单人编码', N'制单人编码', N'zh-CN',N'制单人编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_REPORT_ITEM.CREATEDBYNAME', N'制单人名称', N'制单人名称', N'zh-CN',N'制单人名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_REPORT_ITEM.CREATEDTIME', N'制单时间', N'制单时间', N'zh-CN',N'制单时间';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_REPORT_ITEM.CREATEDBYORGID', N'制单人单位编码', N'制单人单位编码', N'zh-CN',N'制单人单位编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_REPORT_ITEM.CREATEDBYORGNAME', N'制单人单位名称', N'制单人单位名称', N'zh-CN',N'制单人单位名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_REPORT.SERVICE_NAME', N'检测报告', N'检测报告', N'zh-CN',N'检测报告';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_REPORT.ID', N'报告书编号', N'报告书编号', N'zh-CN',N'报告书编号';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_REPORT.ORDERID', N'抽样单号', N'抽样单号', N'zh-CN',N'抽样单号';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_REPORT.SUPERVISEREPORTREMARK', N'监督备注', N'监督备注', N'zh-CN',N'监督备注';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_REPORT.RISKREPORTREMARK', N'风险备注', N'风险备注', N'zh-CN',N'风险备注';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_REPORT.INSPECTORGCONTACTMOBILE', N'联系人电话', N'联系人电话', N'zh-CN',N'联系人电话';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_REPORT.INSPECTORGCONTACT', N'检验联系人', N'检验联系人', N'zh-CN',N'检验联系人';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_REPORT.INSPECTORGCONTACTEMAIL', N'联系人邮箱', N'联系人邮箱', N'zh-CN',N'联系人邮箱';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_REPORT.SEALSAMPLER', N'封样人', N'封样人', N'zh-CN',N'封样人';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_REPORT.SEALSAMPLEREMAIL', N'封样人邮箱', N'封样人邮箱', N'zh-CN',N'封样人邮箱';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_REPORT.SEALSAMPLERMOBILE', N'封样人电话', N'封样人电话', N'zh-CN',N'封样人电话';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_REPORT.CREATEDBYID', N'制单人编码', N'制单人编码', N'zh-CN',N'制单人编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_REPORT.CREATEDBYNAME', N'制单人名称', N'制单人名称', N'zh-CN',N'制单人名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_REPORT.CREATEDTIME', N'制单时间', N'制单时间', N'zh-CN',N'制单时间';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_REPORT.CREATEDBYORGID', N'制单人单位编码', N'制单人单位编码', N'zh-CN',N'制单人单位编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_REPORT.CREATEDBYORGNAME', N'制单人单位名称', N'制单人单位名称', N'zh-CN',N'制单人单位名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_REPORT.STATE', N'发送状态', N'发送状态', N'zh-CN',N'发送状态';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_REPORT.ERRORINFO', N'错误信息', N'错误信息', N'zh-CN',N'错误信息';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER_TEST_ITEM.SERVICE_NAME', N'检测项目', N'检测项目', N'zh-CN',N'检测项目';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER_TEST_ITEM.ID', N'主键', N'主键', N'zh-CN',N'主键';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER_TEST_ITEM.ORDERID', N'抽样单号', N'抽样单号', N'zh-CN',N'抽样单号';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER_TEST_ITEM.ITEMNAME', N'项目名称', N'项目名称', N'zh-CN',N'项目名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER_TEST_ITEM.ITEMTYPE', N'项目类型', N'项目类型', N'zh-CN',N'项目类型';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER_TEST_ITEM.FUNCCATEGORY', N'功能类别', N'功能类别', N'zh-CN',N'功能类别';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER_TEST_ITEM.CREATEDBYID', N'制单人编码', N'制单人编码', N'zh-CN',N'制单人编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER_TEST_ITEM.CREATEDBYNAME', N'制单人名称', N'制单人名称', N'zh-CN',N'制单人名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER_TEST_ITEM.CREATEDTIME', N'制单时间', N'制单时间', N'zh-CN',N'制单时间';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER_TEST_ITEM.CREATEDBYORGID', N'制单人单位编码', N'制单人单位编码', N'zh-CN',N'制单人单位编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_ORDER_TEST_ITEM.CREATEDBYORGNAME', N'制单人单位名称', N'制单人单位名称', N'zh-CN',N'制单人单位名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_VERIFY_REASON.STDMINLIMITUNIT', N'标准最小允许限单位', N'标准最小允许限单位', N'zh-CN',N'标准最小允许限单位';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_VERIFY_REASON.STDMINLIMIT', N'标准最小允许限', N'标准最小允许限', N'zh-CN',N'标准最小允许限';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_VERIFY_REASON.MAXLIMIT', N'最大允许限', N'最大允许限', N'zh-CN',N'最大允许限';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_VERIFY_REASON.STDMAXLIMIT', N'标准最大允许限', N'标准最大允许限', N'zh-CN',N'标准最大允许限';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_VERIFY_REASON.STDMAXLIMITUNIT', N'标准最大允许限单位', N'标准最大允许限单位', N'zh-CN',N'标准最大允许限单位';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_VERIFY_REASON.JUDGESTANDARD', N'判定依据', N'判定依据', N'zh-CN',N'判定依据';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_VERIFY_REASON.MINLIMITUNIT', N'最小允许限', N'最小允许限', N'zh-CN',N'最小允许限';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_TEST_REASON.REMARK', N'备注', N'备注', N'zh-CN',N'备注';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_TEST_REASON.INSPECTSTANDARD', N'检验依据', N'检验依据', N'zh-CN',N'检验依据';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_TEST_REASON.RESULTUNIT', N'结果单位', N'结果单位', N'zh-CN',N'结果单位';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_TEST_REASON.SHORTINSPECTSTANDARD', N'检验依据简称', N'检验依据简称', N'zh-CN',N'检验依据简称';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_TEST_REASON.STDCHECKLIMITUNIT', N'标准检出限单位', N'标准检出限单位', N'zh-CN',N'标准检出限单位';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_TEST_REASON.STDCHECKLIMIT', N'标准检出限', N'标准检出限', N'zh-CN',N'标准检出限';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_TEST_REASON.REPORTTASKA', N'报送分类a', N'报送分类a', N'zh-CN',N'报送分类a';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_TEST_REASON.REPORTTASKB', N'报送分类b', N'报送分类b', N'zh-CN',N'报送分类b';
+EXEC  DBO.INSERTI18N  N'T_CORE_NFSSI_TEST_REASON.NECESSARY', N'必填项目', N'必填项目', N'zh-CN',N'必填项目';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.NFSSI.NFSSI_ORDER_INFO', N'抽样单信息', N'抽样单信息', N'zh-CN',N'抽样单信息';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.NFSSI.NFSSI_SAMPLE_INFO', N'样品信息', N'样品信息', N'zh-CN',N'样品信息';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.NFSSI.NFSSI_REPORT_INFO', N'报告书信息', N'报告书信息', N'zh-CN',N'报告书信息';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.NFSSI.NFSSI_RESULT_INFO', N'检测结果信息', N'检测结果信息', N'zh-CN',N'检测结果信息';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.NFSSI.MODEL_ADD_REQUEST', N'添加请求', N'添加请求', N'zh-CN',N'添加请求';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.NFSSI.RECEIVE_START_TIME', N'收检开始日期', N'收检开始日期', N'zh-CN',N'收检开始日期';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.NFSSI.RECEIVE_END_TIME', N'收检结束日期', N'收检结束日期', N'zh-CN',N'收检结束日期';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.NFSSI.TEST_REASON_INFO', N'检验依据', N'检验依据', N'zh-CN',N'检验依据';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.NFSSI.VERIFY_REASON_INFO', N'判定依据', N'判定依据', N'zh-CN',N'判定依据';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.NFSSI.REQUEST_AGAIN', N'重新请求', N'重新请求', N'zh-CN',N'重新请求';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.NFSSI.RESEND_AGAIN', N'重新发送', N'重新发送', N'zh-CN',N'重新发送';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.NFSSI.CAN_ONLY_SELECT_ONE_ROW', N'只能选择一行进行操作', N'只能选择一行进行操作', N'zh-CN',N'只能选择一行进行操作';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.NFSSI.FAILED_CONNECT_WITH_NFSSI_SYSTEM', N'连接国抽系统失败', N'连接国抽系统失败', N'zh-CN',N'连接国抽系统失败';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.NFSSI.STARTTIME_CAN_NOT_AFTER_ENDTIME', N'收检开始日期不能晚于收检结束日期', N'收检开始日期不能晚于收检结束日期', N'zh-CN',N'收检开始日期不能晚于收检结束日期';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.NFSSI.NFSSI_SYSTEM_INTERNAL_ERROR', N'国抽系统内部出错', N'国抽系统内部出错', N'zh-CN',N'国抽系统内部出错';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.NFSSI.URL_ENCODE_ERROR', N'url编码出错', N'url编码出错', N'zh-CN',N'url编码出错';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.NFSSI.COLUMN_REPORTID_CAN_NOT_BE_EMPTY', N'报告编号不能为空', N'报告编号不能为空', N'zh-CN',N'报告编号不能为空';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.NFSSI.COLUMN_ORDERID_CAN_NOT_BE_EMPTY', N'抽样单号不能为空', N'抽样单号不能为空', N'zh-CN',N'抽样单号不能为空';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.NFSSI.RESULT_JUDGMENT_CAN_ONLY_INPUT_EXPECTED_VALUE', N'结果判定只能输入：未检验/合格项/不合格项/问题项/不判定项', N'结果判定只能输入：未检验/合格项/不合格项/问题项/不判定项', N'zh-CN',N'结果判定只能输入：未检验/合格项/不合格项/问题项/不判定项';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.NFSSI.HEALTH_PRODUCTS_MUST_INPUT_FUNC_CATEGORY', N'保健品必须填写功能类别', N'保健品必须填写功能类别', N'zh-CN', N'保健品必须填写功能类别';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.NFSSI.HEALTH_PRODUCTS_MUST_INPUT_STATE', N'保健品必须填写状态', N'保健品必须填写状态', N'zh-CN', N'保健品必须填写状态';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.NFSSI.FARM_PRODUCE_MUST_INPUT_NECESSARY', N'市县级农产品必须填写是否必填', N'市县级农产品必须填写是否必填', N'zh-CN', N'市县级农产品必须填写是否必填';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.NFSSI.COLUMN_MUST_INPUT', N'列必须填写', N'列必须填写', N'zh-CN', N'列必须填写';
+
+-- 样品类型
+INSERT INTO T_CORE_CODE_CATEGORY(ID, CODECATEGORYNAME, CODECLASSID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME)
+VALUES ('nfssiSampleCategory', '样品类型', 'biz', NULL, 1, NULL, NULL, NULL, NULL);
+INSERT INTO T_CORE_CODE(ID, CODE, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME)
+VALUES (NEXT VALUE FOR SEQ_CORE, '1', '普通食品', 'nfssiSampleCategory', NULL, 1, 0, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL);
+INSERT INTO T_CORE_CODE(ID, CODE, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME)
+VALUES (NEXT VALUE FOR SEQ_CORE, '2', '保健品', 'nfssiSampleCategory', NULL, 2, 0, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL);
+INSERT INTO T_CORE_CODE(ID, CODE, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME)
+VALUES (NEXT VALUE FOR SEQ_CORE, '3', '市县级农产品', 'nfssiSampleCategory', NULL, 3, 0, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL);
+INSERT INTO T_CORE_ADMIN_SELECT_CONFIG(ID, NAME, CATEGORY, URL, VALUEFIELD, TEXTFIELD)
+VALUES (NEXT VALUE FOR SEQ_CORE, '样品类型', 'nfssi-sample-category', '/secure/core/module/sys/codes/queries/selectable?codeCategoryId=nfssiSampleCategory', 'code', 'codeName');
+-- 抽样单状态
+INSERT INTO T_CORE_CODE_CATEGORY(ID, CODECATEGORYNAME, CODECLASSID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME)
+VALUES ('nfssiOrderState', '检验状态', 'biz', NULL, 1, NULL, NULL, NULL, NULL);
+INSERT INTO T_CORE_CODE(ID, CODE, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME)
+VALUES (NEXT VALUE FOR SEQ_CORE, '2', '待填报', 'nfssiOrderState', NULL, 1, 0, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL);
+INSERT INTO T_CORE_ADMIN_SELECT_CONFIG(ID, NAME, CATEGORY, URL, VALUEFIELD, TEXTFIELD)
+VALUES (NEXT VALUE FOR SEQ_CORE, '检验状态', 'nfssi-order-state', '/secure/core/module/sys/codes/queries/selectable?codeCategoryId=nfssiOrderState', 'code', 'codeName');
+
+-- ----------------------------- 2020-10-22 add by yangxing------------end

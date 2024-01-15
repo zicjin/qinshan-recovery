@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import com.sunwayworld.emc.module.bp.project.project.service.PfProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
@@ -25,7 +26,6 @@ import com.sunwayworld.emc.module.bp.bp.service.PfOrderTaskResultService;
 import com.sunwayworld.emc.module.bp.bp.service.PfOrderTaskService;
 import com.sunwayworld.emc.module.bp.project.project.bean.EmcOrderItemGroupBean;
 import com.sunwayworld.emc.module.bp.project.project.bean.EmcProjectBean;
-import com.sunwayworld.emc.module.bp.project.project.service.EmcProjectService;
 import com.sunwayworld.emc.module.bp.project.project.service.PfOrderItemGroupService;
 import com.sunwayworld.emc.module.bp.project.projscheme.service.PfProjSchemeService;
 import com.sunwayworld.emc.module.mdm.bizmdm.monitortmpl.bean.EmcMonitorTmplBean;
@@ -55,23 +55,22 @@ import com.sunwayworld.module.sys.bpmn.bean.CoreBpmnInstanceStatusDTO;
 public class PfFolderServiceImpl extends EmcFolderServiceImpl implements PfFolderService {
 
     @Autowired
-    @Lazy
-    private EmcProjectService projectService;
-
-    @Autowired
-    @Lazy
-    private PfProjSchemeService projSchemeService;
+    // @Lazy
+    private PfProjectService projectService;
 
     @Autowired
     private EmcMonitorTmplService monitorTmplService;
 
     @Autowired
+    @Lazy
     private PfOrderService pfOrderService;
 
     @Autowired
+    @Lazy
     private PfOrderTaskService pfOrderTaskService;
 
     @Autowired
+    @Lazy
     private PfOrderTaskResultService pfOrderTaskResultService;
 
     @Autowired

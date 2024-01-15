@@ -13,6 +13,9 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import com.sunwayworld.framework.io.file.FilePathDTO;
+import com.sunwayworld.framework.io.file.FilePathManager;
+import com.sunwayworld.module.item.file.utils.CoreFileUtils;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -37,8 +40,6 @@ import com.sunwayworld.framework.database.sql.Order;
 import com.sunwayworld.framework.exception.FileException;
 import com.sunwayworld.framework.exception.checked.CheckedException;
 import com.sunwayworld.framework.io.excel.ExcelHelper;
-import com.sunwayworld.framework.io.file.FileHelper;
-import com.sunwayworld.framework.io.file.FileRepresentation;
 import com.sunwayworld.framework.mybatis.mapper.MatchPattern;
 import com.sunwayworld.framework.mybatis.mapper.SearchFilter;
 import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;
@@ -50,11 +51,11 @@ import com.sunwayworld.framework.utils.ObjectUtils;
 import com.sunwayworld.framework.utils.ReflectionUtils;
 import com.sunwayworld.framework.utils.StringUtils;
 import com.sunwayworld.module.item.file.bean.CoreFileBean;
-import com.sunwayworld.module.item.file.bean.ImportResultRepresentation;
-import com.sunwayworld.module.item.file.function.ImportFileFunction;
+import com.sunwayworld.module.item.file.bean.CoreFileImportResultDTO;
+import com.sunwayworld.module.item.file.function.CoreFileImportFunction;
 
 @Component
-public class EmcInfoDataImportFileFunction implements ImportFileFunction {
+public class EmcInfoDataImportFileFunction implements CoreFileImportFunction {
 
     @Autowired
     private EmcInfoDataService infoDataService;
@@ -74,14 +75,14 @@ public class EmcInfoDataImportFileFunction implements ImportFileFunction {
     }
 
     @Override
-    public ImportResultRepresentation apply(CoreFileBean file) {
-        ImportResultRepresentation importResultRepresentation = new ImportResultRepresentation();
-        FileRepresentation fr = FileRepresentation.of(file);
+    public CoreFileImportResultDTO apply(CoreFileBean file) {
+        CoreFileImportResultDTO importResultDto = new CoreFileImportResultDTO();
+        FilePathDTO fr = CoreFileUtils.toFilePath(file);
 
         // 获取主表id
         Long infoConfigId = NumberUtils.parseLong(file.getTargetId().split("\\$")[1]);
         // 导入综合信息数据
-        List<List<Map<String, Object>>> emcInfoList = extractInfoDataFromExcel(FileHelper.getAbsolutePath(fr).toString(), infoConfigId, 0, 0, 1, EmcInfoDataBean.class);
+        List<List<Map<String, Object>>> emcInfoList = extractInfoDataFromExcel(FilePathManager.getLocalPath(fr).toString(), infoConfigId, 0, 0, 1, EmcInfoDataBean.class);
         List<EmcInfoDataBean> emcInfoDataList = emcInfoList.get(0).stream().map(m -> PersistableHelper.mapToPersistable(m, EmcInfoDataBean.class)).collect(Collectors.toList());
         List<EmcInfoDataItemBean> emcInfoDataItemList = emcInfoList.get(1).stream().map(m -> PersistableHelper.mapToPersistable(m, EmcInfoDataItemBean.class)).collect(Collectors.toList());
         if (!emcInfoDataList.isEmpty() && !emcInfoDataItemList.isEmpty()) {
@@ -90,10 +91,10 @@ public class EmcInfoDataImportFileFunction implements ImportFileFunction {
         } else {
             // 存在错误信息
             String errorFileName = "综合信息数据导入错误信息.xls";
-            String url = ExcelHelper.writeImportFailureListAsExcel(FileHelper.getAbsolutePath(fr).toString(), emcInfoDataList, 0, 1, errorFileName);
-            importResultRepresentation.setUrl(url);
+            FilePathDTO pathDTO = ExcelHelper.writeImportFailureListAsExcel(FilePathManager.getLocalPath(fr).toString(), emcInfoDataList, 0, 1, errorFileName);
+            importResultDto.setUrl(FilePathManager.getUrl(pathDTO));
         }
-        return importResultRepresentation;
+        return importResultDto;
     }
 
     // 私有方法

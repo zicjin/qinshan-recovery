@@ -1,0 +1,1153 @@
+-- ----------------------------- 2021-03-03 add by shixw--------------begin       0.9.6补丁已发布
+
+-- 建表语句
+CREATE TABLE T_CORE_SAMPLE_QTY_CODE( 
+    ID NUMBER NOT NULL,
+    BATCHQTYUPPERLIMIT NUMBER NULL,
+    BATCHQTYLOWERLIMIT NUMBER NULL,
+    INSPECTION VARCHAR2(6)  NULL,
+    SAMPLEQTYCODE VARCHAR2(1)  NULL
+ );
+COMMENT ON TABLE T_CORE_SAMPLE_QTY_CODE IS '样本量字码';
+COMMENT ON COLUMN T_CORE_SAMPLE_QTY_CODE.ID IS '主键';
+COMMENT ON COLUMN T_CORE_SAMPLE_QTY_CODE.BATCHQTYUPPERLIMIT IS '批量上限';
+COMMENT ON COLUMN T_CORE_SAMPLE_QTY_CODE.BATCHQTYLOWERLIMIT IS '批量下限';
+COMMENT ON COLUMN T_CORE_SAMPLE_QTY_CODE.INSPECTION IS '检验水平';
+COMMENT ON COLUMN T_CORE_SAMPLE_QTY_CODE.SAMPLEQTYCODE IS '样本量字码';
+
+ALTER TABLE T_CORE_SAMPLE_QTY_CODE ADD CONSTRAINT PK_CORE_SAMPLE_QTY_CODE PRIMARY KEY (ID);
+
+CREATE TABLE T_CORE_SAMPLE_QTY( 
+    ID VARCHAR2(1)  NOT NULL,
+    SAMPLEQTY NUMBER NULL
+ );
+COMMENT ON TABLE T_CORE_SAMPLE_QTY IS '样本量';
+COMMENT ON COLUMN T_CORE_SAMPLE_QTY.ID IS '样本量字码';
+COMMENT ON COLUMN T_CORE_SAMPLE_QTY.SAMPLEQTY IS '样本量';
+
+ALTER TABLE T_CORE_SAMPLE_QTY ADD CONSTRAINT PK_CORE_SAMPLE_QTY PRIMARY KEY (ID);
+
+CREATE TABLE T_CORE_SAMPLE_SCHEME( 
+    ID NUMBER NOT NULL,
+    SAMPLEQTYCODE VARCHAR2(1)  NULL,
+    AQL NUMBER(16,3)  NULL,
+    ACCEPTQTY NUMBER NULL,
+    REFUSEQTY NUMBER NULL
+ );
+COMMENT ON TABLE T_CORE_SAMPLE_SCHEME IS '抽样方案';
+COMMENT ON COLUMN T_CORE_SAMPLE_SCHEME.ID IS '主键';
+COMMENT ON COLUMN T_CORE_SAMPLE_SCHEME.SAMPLEQTYCODE IS '样本量字码';
+COMMENT ON COLUMN T_CORE_SAMPLE_SCHEME.AQL IS '接收质量限';
+COMMENT ON COLUMN T_CORE_SAMPLE_SCHEME.ACCEPTQTY IS '接收数';
+COMMENT ON COLUMN T_CORE_SAMPLE_SCHEME.REFUSEQTY IS '拒收数';
+
+ALTER TABLE T_CORE_SAMPLE_SCHEME ADD CONSTRAINT PK_CORE_SAMPLE_SCHEME PRIMARY KEY (ID);
+
+CALL INSERTI18N('T_CORE_SAMPLE_QTY_CODE.SERVICE_NAME', '样本量字码', '样本量字码', 'zh-CN', '样本量字码');
+CALL INSERTI18N('T_CORE_SAMPLE_QTY_CODE.ID', '样本量字码的主键', '主键', 'zh-CN', '主键');
+CALL INSERTI18N('T_CORE_SAMPLE_QTY_CODE.BATCHQTYUPPERLIMIT', '样本量字码的批量上限', '批量上限', 'zh-CN', '批量上限');
+CALL INSERTI18N('T_CORE_SAMPLE_QTY_CODE.BATCHQTYLOWERLIMIT', '样本量字码的批量下限', '批量下限', 'zh-CN', '批量下限');
+CALL INSERTI18N('T_CORE_SAMPLE_QTY_CODE.INSPECTION', '样本量字码的检验水平', '检验水平', 'zh-CN', '检验水平');
+CALL INSERTI18N('T_CORE_SAMPLE_QTY_CODE.SAMPLEQTYCODE', '样本量字码的样本量字码', '样本量字码', 'zh-CN', '样本量字码');
+CALL INSERTI18N('T_CORE_SAMPLE_QTY.SERVICE_NAME', '样本量', '样本量', 'zh-CN', '样本量');
+CALL INSERTI18N('T_CORE_SAMPLE_QTY.ID', '样本量的样本量字码', '样本量字码', 'zh-CN', '样本量字码');
+CALL INSERTI18N('T_CORE_SAMPLE_QTY.SAMPLEQTY', '样本量的样本量', '样本量', 'zh-CN', '样本量');
+CALL INSERTI18N('T_CORE_SAMPLE_SCHEME.SERVICE_NAME', '抽样方案', '抽样方案', 'zh-CN', '抽样方案');
+CALL INSERTI18N('T_CORE_SAMPLE_SCHEME.ID', '抽样方案的主键', '主键', 'zh-CN', '主键');
+CALL INSERTI18N('T_CORE_SAMPLE_SCHEME.SAMPLEQTYCODE', '抽样方案的样本量字码', '样本量字码', 'zh-CN', '样本量字码');
+CALL INSERTI18N('T_CORE_SAMPLE_SCHEME.AQL', '抽样方案的接收质量限', '接收质量限', 'zh-CN', '接收质量限');
+CALL INSERTI18N('T_CORE_SAMPLE_SCHEME.ACCEPTQTY', '抽样方案的接收数', '接收数', 'zh-CN', '接收数');
+CALL INSERTI18N('T_CORE_SAMPLE_SCHEME.REFUSEQTY', '抽样方案的拒收数', '拒收数', 'zh-CN', '拒收数');
+
+-- 创建菜单语句
+INSERT INTO T_CORE_MENU (ID, MENUNAME, HREF, PARENTID, ORDERNO, ICON, MENUINITNAME)
+VALUES ('9355', '抽样方案', '/secure/core/module/item/sample-schemes/page/edit-list', '93', '9355', '077.svg', '抽样方案');
+
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_SAMPLE_QTY_CODE', '0', '0');
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_SAMPLE_QTY', '0', '0');
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_SAMPLE_SCHEME', '0', '0');
+
+
+insert into T_CORE_SAMPLE_QTY (id, sampleqty)
+values ('A', 2);
+insert into T_CORE_SAMPLE_QTY (id, sampleqty)
+values ('B', 3);
+insert into T_CORE_SAMPLE_QTY (id, sampleqty)
+values ('C', 5);
+insert into T_CORE_SAMPLE_QTY (id, sampleqty)
+values ('D', 8);
+insert into T_CORE_SAMPLE_QTY (id, sampleqty)
+values ('E', 13);
+insert into T_CORE_SAMPLE_QTY (id, sampleqty)
+values ('F', 20);
+insert into T_CORE_SAMPLE_QTY (id, sampleqty)
+values ('G', 32);
+insert into T_CORE_SAMPLE_QTY (id, sampleqty)
+values ('H', 50);
+insert into T_CORE_SAMPLE_QTY (id, sampleqty)
+values ('J', 80);
+insert into T_CORE_SAMPLE_QTY (id, sampleqty)
+values ('K', 125);
+insert into T_CORE_SAMPLE_QTY (id, sampleqty)
+values ('L', 200);
+insert into T_CORE_SAMPLE_QTY (id, sampleqty)
+values ('M', 315);
+insert into T_CORE_SAMPLE_QTY (id, sampleqty)
+values ('N', 500);
+insert into T_CORE_SAMPLE_QTY (id, sampleqty)
+values ('P', 800);
+insert into T_CORE_SAMPLE_QTY (id, sampleqty)
+values ('Q', 1250);
+insert into T_CORE_SAMPLE_QTY (id, sampleqty)
+values ('R', 2000);
+
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (1, 8, 2, 'S-1', 'A');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (2, 15, 9, 'S-1', 'A');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (3, 25, 16, 'S-1', 'A');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (4, 50, 26, 'S-1', 'A');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (5, 90, 51, 'S-1', 'B');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (6, 150, 91, 'S-1', 'B');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (7, 280, 151, 'S-1', 'B');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (8, 500, 281, 'S-1', 'B');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (9, 1200, 501, 'S-1', 'C');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (10, 3200, 1201, 'S-1', 'C');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (11, 10000, 3201, 'S-1', 'C');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (12, 35000, 10001, 'S-1', 'C');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (13, 150000, 35001, 'S-1', 'D');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (14, 500000, 150001, 'S-1', 'D');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (15, null, 500001, 'S-1', 'D');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (17, 8, 2, 'S-2', 'A');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (18, 15, 9, 'S-2', 'A');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (19, 25, 16, 'S-2', 'A');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (20, 50, 26, 'S-2', 'B');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (21, 90, 51, 'S-2', 'B');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (22, 150, 91, 'S-2', 'B');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (23, 280, 151, 'S-2', 'C');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (24, 500, 281, 'S-2', 'C');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (25, 1200, 501, 'S-2', 'C');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (26, 3200, 1201, 'S-2', 'D');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (27, 10000, 3201, 'S-2', 'D');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (28, 35000, 10001, 'S-2', 'D');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (29, 150000, 35001, 'S-2', 'E');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (30, 500000, 150001, 'S-2', 'E');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (31, null, 500001, 'S-2', 'E');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (32, 8, 2, 'S-3', 'A');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (33, 15, 9, 'S-3', 'A');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (34, 25, 16, 'S-3', 'B');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (35, 50, 26, 'S-3', 'B');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (36, 90, 51, 'S-3', 'C');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (37, 150, 91, 'S-3', 'C');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (38, 280, 151, 'S-3', 'D');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (39, 500, 281, 'S-3', 'D');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (40, 1200, 501, 'S-3', 'E');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (41, 3200, 1201, 'S-3', 'E');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (42, 10000, 3201, 'S-3', 'F');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (43, 35000, 10001, 'S-3', 'F');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (44, 150000, 35001, 'S-3', 'G');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (45, 500000, 150001, 'S-3', 'G');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (46, null, 500001, 'S-3', 'H');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (47, 8, 2, 'S-4', 'A');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (48, 15, 9, 'S-4', 'A');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (49, 25, 16, 'S-4', 'B');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (50, 50, 26, 'S-4', 'C');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (51, 90, 51, 'S-4', 'C');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (52, 150, 91, 'S-4', 'D');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (53, 280, 151, 'S-4', 'E');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (54, 500, 281, 'S-4', 'E');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (55, 1200, 501, 'S-4', 'F');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (56, 3200, 1201, 'S-4', 'G');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (57, 10000, 3201, 'S-4', 'G');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (58, 35000, 10001, 'S-4', 'H');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (59, 150000, 35001, 'S-4', 'J');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (60, 500000, 150001, 'S-4', 'J');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (61, null, 500001, 'S-4', 'K');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (62, 8, 2, 'I', 'A');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (63, 15, 9, 'I', 'A');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (64, 25, 16, 'I', 'B');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (65, 50, 26, 'I', 'C');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (66, 90, 51, 'I', 'C');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (67, 150, 91, 'I', 'D');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (68, 280, 151, 'I', 'E');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (69, 500, 281, 'I', 'F');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (70, 1200, 501, 'I', 'G');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (71, 3200, 1201, 'I', 'H');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (72, 10000, 3201, 'I', 'J');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (73, 35000, 10001, 'I', 'K');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (74, 150000, 35001, 'I', 'L');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (75, 500000, 150001, 'I', 'M');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (76, null, 500001, 'I', 'N');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (77, 8, 2, 'Ⅱ', 'A');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (78, 15, 9, 'Ⅱ', 'B');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (79, 25, 16, 'Ⅱ', 'C');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (80, 50, 26, 'Ⅱ', 'D');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (81, 90, 51, 'Ⅱ', 'E');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (82, 150, 91, 'Ⅱ', 'F');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (83, 280, 151, 'Ⅱ', 'G');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (84, 500, 281, 'Ⅱ', 'H');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (85, 1200, 501, 'Ⅱ', 'J');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (86, 3200, 1201, 'Ⅱ', 'K');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (87, 10000, 3201, 'Ⅱ', 'L');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (88, 35000, 10001, 'Ⅱ', 'M');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (89, 150000, 35001, 'Ⅱ', 'N');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (90, 500000, 150001, 'Ⅱ', 'P');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (91, null, 500001, 'Ⅱ', 'Q');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (92, 8, 2, 'Ⅲ', 'B');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (93, 15, 9, 'Ⅲ', 'C');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (94, 25, 16, 'Ⅲ', 'D');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (95, 50, 26, 'Ⅲ', 'E');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (96, 90, 51, 'Ⅲ', 'F');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (97, 150, 91, 'Ⅲ', 'G');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (98, 280, 151, 'Ⅲ', 'H');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (99, 500, 281, 'Ⅲ', 'J');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (100, 1200, 501, 'Ⅲ', 'K');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (101, 3200, 1201, 'Ⅲ', 'L');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (102, 10000, 3201, 'Ⅲ', 'M');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (103, 35000, 10001, 'Ⅲ', 'N');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (104, 150000, 35001, 'Ⅲ', 'P');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (105, 500000, 150001, 'Ⅲ', 'Q');
+insert into T_CORE_SAMPLE_QTY_CODE (id, batchqtyupperlimit, batchqtylowerlimit, inspection, sampleqtycode)
+values (106, null, 500001, 'Ⅲ', 'R');
+
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (1, 'A', .01, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (2, 'B', .01, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (3, 'C', .01, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (4, 'D', .01, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (5, 'E', .01, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (6, 'F', .01, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (7, 'G', .01, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (8, 'H', .01, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (9, 'J', .01, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (10, 'K', .01, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (11, 'L', .01, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (12, 'M', .01, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (13, 'N', .01, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (14, 'P', .01, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (15, 'Q', .01, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (17, 'R', .01, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (18, 'A', .015, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (19, 'B', .015, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (20, 'C', .015, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (21, 'D', .015, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (22, 'E', .015, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (23, 'F', .015, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (24, 'G', .015, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (25, 'H', .015, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (26, 'J', .015, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (27, 'K', .015, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (28, 'L', .015, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (29, 'M', .015, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (30, 'N', .015, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (31, 'P', .015, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (32, 'Q', .015, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (33, 'R', .015, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (34, 'A', .025, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (35, 'B', .025, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (36, 'C', .025, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (37, 'D', .025, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (38, 'E', .025, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (39, 'F', .025, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (40, 'G', .025, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (41, 'H', .025, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (42, 'J', .025, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (43, 'K', .025, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (44, 'L', .025, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (45, 'M', .025, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (46, 'N', .025, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (47, 'P', .025, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (48, 'Q', .025, 1, 2);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (49, 'R', .025, 1, 2);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (50, 'A', .04, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (51, 'B', .04, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (52, 'C', .04, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (53, 'D', .04, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (54, 'E', .04, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (55, 'F', .04, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (56, 'G', .04, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (57, 'H', .04, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (58, 'J', .04, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (59, 'K', .04, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (60, 'L', .04, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (61, 'M', .04, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (62, 'N', .04, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (63, 'P', .04, 1, 2);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (64, 'Q', .04, 1, 2);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (65, 'R', .04, 2, 3);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (66, 'A', .065, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (67, 'B', .065, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (68, 'C', .065, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (69, 'D', .065, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (70, 'E', .065, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (71, 'F', .065, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (72, 'G', .065, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (73, 'H', .065, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (74, 'J', .065, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (75, 'K', .065, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (76, 'L', .065, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (77, 'M', .065, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (78, 'N', .065, 1, 2);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (79, 'P', .065, 1, 2);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (80, 'Q', .065, 2, 3);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (81, 'R', .065, 3, 4);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (82, 'A', .1, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (83, 'B', .1, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (84, 'C', .1, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (85, 'D', .1, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (86, 'E', .1, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (87, 'F', .1, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (88, 'G', .1, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (89, 'H', .1, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (90, 'J', .1, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (91, 'K', .1, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (92, 'L', .1, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (93, 'M', .1, 1, 2);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (94, 'N', .1, 1, 2);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (95, 'P', .1, 2, 3);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (96, 'Q', .1, 3, 4);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (97, 'R', .1, 5, 6);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (98, 'A', .15, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (99, 'B', .15, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (100, 'C', .15, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (101, 'D', .15, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (102, 'E', .15, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (103, 'F', .15, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (104, 'G', .15, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (105, 'H', .15, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (106, 'J', .15, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (107, 'K', .15, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (108, 'L', .15, 1, 2);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (109, 'M', .15, 1, 2);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (110, 'N', .15, 2, 3);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (111, 'P', .15, 3, 4);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (112, 'Q', .15, 5, 6);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (113, 'R', .15, 7, 8);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (114, 'A', .25, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (115, 'B', .25, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (116, 'C', .25, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (117, 'D', .25, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (118, 'E', .25, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (119, 'F', .25, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (120, 'G', .25, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (121, 'H', .25, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (122, 'J', .25, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (123, 'K', .25, 1, 2);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (124, 'L', .25, 1, 2);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (125, 'M', .25, 2, 3);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (126, 'N', .25, 3, 4);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (127, 'P', .25, 5, 6);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (128, 'Q', .25, 7, 8);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (129, 'R', .25, 10, 11);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (130, 'A', .4, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (131, 'B', .4, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (132, 'C', .4, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (133, 'D', .4, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (134, 'E', .4, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (135, 'F', .4, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (136, 'G', .4, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (137, 'H', .4, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (138, 'J', .4, 1, 2);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (139, 'K', .4, 1, 2);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (140, 'L', .4, 2, 3);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (141, 'M', .4, 3, 4);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (142, 'N', .4, 5, 6);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (143, 'P', .4, 7, 8);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (144, 'Q', .4, 10, 11);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (145, 'R', .4, 14, 15);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (146, 'A', .65, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (147, 'B', .65, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (148, 'C', .65, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (149, 'D', .65, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (150, 'E', .65, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (151, 'F', .65, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (152, 'G', .65, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (153, 'H', .65, 1, 2);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (154, 'J', .65, 1, 2);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (155, 'K', .65, 2, 3);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (156, 'L', .65, 3, 4);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (157, 'M', .65, 5, 6);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (158, 'N', .65, 7, 8);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (159, 'P', .65, 10, 11);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (160, 'Q', .65, 14, 15);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (161, 'R', .65, 21, 22);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (162, 'A', 1, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (163, 'B', 1, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (164, 'C', 1, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (165, 'D', 1, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (166, 'E', 1, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (167, 'F', 1, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (168, 'G', 1, 1, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (169, 'H', 1, 2, 2);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (170, 'J', 1, 2, 3);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (171, 'K', 1, 3, 4);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (172, 'L', 1, 5, 6);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (173, 'M', 1, 7, 8);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (174, 'N', 1, 10, 11);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (175, 'P', 1, 14, 15);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (176, 'Q', 1, 21, 22);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (177, 'R', 1, 21, 22);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (178, 'A', 1.5, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (179, 'B', 1.5, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (180, 'C', 1.5, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (181, 'D', 1.5, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (182, 'E', 1.5, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (183, 'F', 1.5, 1, 2);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (184, 'G', 1.5, 1, 2);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (185, 'H', 1.5, 2, 3);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (186, 'J', 1.5, 3, 4);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (187, 'K', 1.5, 5, 6);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (188, 'L', 1.5, 7, 8);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (189, 'M', 1.5, 10, 11);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (190, 'N', 1.5, 14, 15);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (191, 'P', 1.5, 21, 22);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (192, 'Q', 1.5, 21, 22);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (193, 'R', 1.5, 21, 22);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (194, 'A', 2.5, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (195, 'B', 2.5, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (196, 'C', 2.5, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (197, 'D', 2.5, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (198, 'E', 2.5, 1, 2);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (199, 'F', 2.5, 1, 2);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (200, 'G', 2.5, 2, 3);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (201, 'H', 2.5, 3, 4);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (202, 'J', 2.5, 5, 6);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (203, 'K', 2.5, 7, 8);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (204, 'L', 2.5, 10, 11);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (205, 'M', 2.5, 14, 15);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (206, 'N', 2.5, 21, 22);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (207, 'P', 2.5, 21, 22);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (208, 'Q', 2.5, 21, 22);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (209, 'R', 2.5, 21, 22);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (210, 'A', 4, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (211, 'B', 4, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (212, 'C', 4, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (213, 'D', 4, 1, 2);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (214, 'E', 4, 1, 2);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (215, 'F', 4, 2, 3);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (216, 'G', 4, 3, 4);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (217, 'H', 4, 5, 6);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (218, 'J', 4, 7, 8);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (219, 'K', 4, 10, 11);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (220, 'L', 4, 14, 15);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (221, 'M', 4, 21, 22);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (222, 'N', 4, 21, 22);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (223, 'P', 4, 21, 22);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (224, 'Q', 4, 21, 22);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (225, 'R', 4, 21, 22);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (226, 'A', 6.5, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (227, 'B', 6.5, 0, 1);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (228, 'C', 6.5, 1, 2);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (229, 'D', 6.5, 1, 2);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (230, 'E', 6.5, 2, 3);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (231, 'F', 6.5, 3, 4);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (232, 'G', 6.5, 5, 6);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (233, 'H', 6.5, 7, 8);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (234, 'J', 6.5, 10, 11);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (235, 'K', 6.5, 14, 15);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (236, 'L', 6.5, 21, 22);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (237, 'M', 6.5, 21, 22);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (238, 'N', 6.5, 21, 22);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (239, 'P', 6.5, 21, 22);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (240, 'Q', 6.5, 21, 22);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (241, 'R', 6.5, 21, 22);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (242, 'A', 10, 1, 2);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (243, 'B', 10, 1, 2);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (244, 'C', 10, 1, 2);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (245, 'D', 10, 2, 3);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (246, 'E', 10, 3, 4);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (247, 'F', 10, 5, 6);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (248, 'G', 10, 7, 8);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (249, 'H', 10, 10, 11);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (250, 'J', 10, 14, 15);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (251, 'K', 10, 21, 22);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (252, 'L', 10, 21, 22);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (253, 'M', 10, 21, 22);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (254, 'N', 10, 21, 22);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (255, 'P', 10, 21, 22);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (256, 'Q', 10, 21, 22);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (257, 'R', 10, 21, 22);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (258, 'A', 15, 1, 2);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (259, 'B', 15, 1, 2);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (260, 'C', 15, 2, 3);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (261, 'D', 15, 3, 4);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (262, 'E', 15, 5, 6);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (263, 'F', 15, 7, 8);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (264, 'G', 15, 10, 11);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (265, 'H', 15, 14, 15);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (266, 'J', 15, 21, 22);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (267, 'K', 15, 21, 22);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (268, 'L', 15, 21, 22);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (269, 'M', 15, 21, 22);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (270, 'N', 15, 21, 22);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (271, 'P', 15, 21, 22);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (272, 'Q', 15, 21, 22);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (273, 'R', 15, 21, 22);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (274, 'A', 25, 1, 2);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (275, 'B', 25, 2, 3);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (276, 'C', 25, 3, 4);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (277, 'D', 25, 5, 6);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (278, 'E', 25, 7, 8);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (279, 'F', 25, 10, 11);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (280, 'G', 25, 14, 15);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (281, 'H', 25, 21, 22);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (282, 'J', 25, 21, 22);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (283, 'K', 25, 21, 22);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (284, 'L', 25, 21, 22);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (285, 'M', 25, 21, 22);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (286, 'N', 25, 21, 22);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (287, 'P', 25, 21, 22);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (288, 'Q', 25, 21, 22);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (289, 'R', 25, 21, 22);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (290, 'A', 40, 2, 3);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (291, 'B', 40, 3, 4);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (292, 'C', 40, 5, 6);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (293, 'D', 40, 7, 8);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (294, 'E', 40, 10, 11);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (295, 'F', 40, 14, 15);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (296, 'G', 40, 21, 22);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (297, 'H', 40, 21, 22);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (298, 'J', 40, 21, 22);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (299, 'K', 40, 21, 22);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (300, 'L', 40, 21, 22);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (301, 'M', 40, 21, 22);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (302, 'N', 40, 21, 22);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (303, 'P', 40, 21, 22);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (304, 'Q', 40, 21, 22);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (305, 'R', 40, 21, 22);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (306, 'A', 65, 3, 4);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (307, 'B', 65, 5, 6);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (308, 'C', 65, 7, 8);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (309, 'D', 65, 10, 11);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (310, 'E', 65, 14, 15);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (311, 'F', 65, 21, 22);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (312, 'G', 65, 21, 22);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (313, 'H', 65, 21, 22);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (314, 'J', 65, 21, 22);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (315, 'K', 65, 21, 22);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (316, 'L', 65, 21, 22);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (317, 'M', 65, 21, 22);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (318, 'N', 65, 21, 22);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (319, 'P', 65, 21, 22);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (320, 'Q', 65, 21, 22);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (321, 'R', 65, 21, 22);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (322, 'A', 100, 5, 6);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (323, 'B', 100, 7, 8);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (324, 'C', 100, 10, 11);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (325, 'D', 100, 14, 15);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (326, 'E', 100, 21, 22);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (327, 'F', 100, 21, 22);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (328, 'G', 100, 21, 22);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (329, 'H', 100, 21, 22);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (330, 'J', 100, 21, 22);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (331, 'K', 100, 21, 22);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (332, 'L', 100, 21, 22);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (333, 'M', 100, 21, 22);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (334, 'N', 100, 21, 22);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (335, 'P', 100, 21, 22);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (336, 'Q', 100, 21, 22);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (337, 'R', 100, 21, 22);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (338, 'A', 150, 7, 8);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (339, 'B', 150, 10, 11);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (340, 'C', 150, 14, 15);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (341, 'D', 150, 21, 22);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (342, 'E', 150, 30, 31);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (343, 'F', 150, 30, 31);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (344, 'G', 150, 30, 31);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (345, 'H', 150, 30, 31);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (346, 'J', 150, 30, 31);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (347, 'K', 150, 30, 31);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (348, 'L', 150, 30, 31);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (349, 'M', 150, 30, 31);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (350, 'N', 150, 30, 31);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (351, 'P', 150, 30, 31);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (352, 'Q', 150, 30, 31);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (353, 'R', 150, 30, 31);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (354, 'A', 250, 10, 11);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (355, 'B', 250, 14, 15);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (356, 'C', 250, 21, 22);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (357, 'D', 250, 30, 31);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (358, 'E', 250, 44, 45);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (359, 'F', 250, 44, 45);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (360, 'G', 250, 44, 45);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (361, 'H', 250, 44, 45);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (362, 'J', 250, 44, 45);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (363, 'K', 250, 44, 45);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (364, 'L', 250, 44, 45);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (365, 'M', 250, 44, 45);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (366, 'N', 250, 44, 45);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (367, 'P', 250, 44, 45);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (368, 'Q', 250, 44, 45);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (369, 'R', 250, 44, 45);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (370, 'A', 400, 14, 15);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (371, 'B', 400, 21, 22);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (372, 'C', 400, 30, 31);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (373, 'D', 400, 44, 45);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (374, 'E', 400, 44, 45);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (375, 'F', 400, 44, 45);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (376, 'G', 400, 44, 45);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (377, 'H', 400, 44, 45);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (378, 'J', 400, 44, 45);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (379, 'K', 400, 44, 45);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (380, 'L', 400, 44, 45);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (381, 'M', 400, 44, 45);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (382, 'N', 400, 44, 45);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (383, 'P', 400, 44, 45);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (384, 'Q', 400, 44, 45);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (385, 'R', 400, 44, 45);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (386, 'A', 650, 21, 22);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (387, 'B', 650, 30, 31);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (388, 'C', 650, 44, 45);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (389, 'D', 650, 44, 45);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (390, 'E', 650, 44, 45);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (391, 'F', 650, 44, 45);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (392, 'G', 650, 44, 45);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (393, 'H', 650, 44, 45);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (394, 'J', 650, 44, 45);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (395, 'K', 650, 44, 45);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (396, 'L', 650, 44, 45);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (397, 'M', 650, 44, 45);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (398, 'N', 650, 44, 45);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (399, 'P', 650, 44, 45);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (400, 'Q', 650, 44, 45);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (401, 'R', 650, 44, 45);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (402, 'A', 1000, 30, 31);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (403, 'B', 1000, 44, 45);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (404, 'C', 1000, 44, 45);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (405, 'D', 1000, 44, 45);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (406, 'E', 1000, 44, 45);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (407, 'F', 1000, 44, 45);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (408, 'G', 1000, 44, 45);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (409, 'H', 1000, 44, 45);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (410, 'J', 1000, 44, 45);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (411, 'K', 1000, 44, 45);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (412, 'L', 1000, 44, 45);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (413, 'M', 1000, 44, 45);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (414, 'N', 1000, 44, 45);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (415, 'P', 1000, 44, 45);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (416, 'Q', 1000, 44, 45);
+insert into T_CORE_SAMPLE_SCHEME (id, sampleqtycode, aql, acceptqty, refuseqty)
+values (417, 'R', 1000, 44, 45);
+
+commit;
+
+-- ----------------------------- 2021-03-03 add by shixw------------end       0.9.6补丁已发布

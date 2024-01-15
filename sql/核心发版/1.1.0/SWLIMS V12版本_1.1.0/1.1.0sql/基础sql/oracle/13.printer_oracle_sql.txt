@@ -1,0 +1,58 @@
+-- ----------------------------- 2021-1-4 add by lvqiang --------------begin
+CREATE TABLE T_CORE_PRINT_LOG (
+    ID NUMBER NOT NULL,
+    FILEID NUMBER,
+    FILENAME VARCHAR2(258),
+    COPIES NUMBER,
+    PRINTERNAME VARCHAR2(258),
+    CREATEDBYID VARCHAR2(36),
+    CREATEDBYNAME VARCHAR2(60),
+    CREATEDTIME DATE,
+    CREATEDBYORGID VARCHAR2(36),
+    CREATEDBYORGNAME VARCHAR2(270)
+);
+COMMENT ON TABLE T_CORE_PRINT_LOG IS '打印记录表';
+COMMENT ON COLUMN T_CORE_PRINT_LOG.ID IS '主键';
+COMMENT ON COLUMN T_CORE_PRINT_LOG.FILEID IS '文件id';
+COMMENT ON COLUMN T_CORE_PRINT_LOG.FILENAME IS '文件名称';
+COMMENT ON COLUMN T_CORE_PRINT_LOG.COPIES IS '打印份数';
+COMMENT ON COLUMN T_CORE_PRINT_LOG.PRINTERNAME IS '打印机名称';
+COMMENT ON COLUMN T_CORE_PRINT_LOG.CREATEDBYID IS '制单人编码';
+COMMENT ON COLUMN T_CORE_PRINT_LOG.CREATEDBYNAME IS '制单人名称';
+COMMENT ON COLUMN T_CORE_PRINT_LOG.CREATEDTIME IS '制单时间';
+COMMENT ON COLUMN T_CORE_PRINT_LOG.CREATEDBYORGID IS '制单人单位编码';
+COMMENT ON COLUMN T_CORE_PRINT_LOG.CREATEDBYORGNAME IS '制单人单位名称';
+
+ALTER TABLE T_CORE_PRINT_LOG ADD CONSTRAINT PK_CORE_PRINT_LOG PRIMARY KEY ( ID );
+
+CREATE INDEX IDX_CORE_PRINT_LOG_FILEID ON T_CORE_PRINT_LOG (FILEID);
+
+CALL INSERTI18N('T_CORE_PRINT_LOG.SERVICE_NAME', '打印记录表', '打印记录表', 'zh-CN', '打印记录表');
+CALL INSERTI18N('T_CORE_PRINT_LOG.ID', '打印记录表的主键', '主键', 'zh-CN', '主键');
+CALL INSERTI18N('T_CORE_PRINT_LOG.FILEID', '打印记录表的文件id', '文件id', 'zh-CN', '文件id');
+CALL INSERTI18N('T_CORE_PRINT_LOG.FILENAME', '打印记录表的文件名称', '文件名称', 'zh-CN', '文件名称');
+CALL INSERTI18N('T_CORE_PRINT_LOG.COPIES', '打印记录表的打印份数', '打印份数', 'zh-CN', '打印份数');
+CALL INSERTI18N('T_CORE_PRINT_LOG.PRINTERNAME', '打印记录表的打印机名称', '打印机名称', 'zh-CN', '打印机名称');
+CALL INSERTI18N('T_CORE_PRINT_LOG.CREATEDBYID', '打印记录表的制单人编码', '制单人编码', 'zh-CN', '制单人编码');
+CALL INSERTI18N('T_CORE_PRINT_LOG.CREATEDBYNAME', '打印记录表的制单人名称', '制单人名称', 'zh-CN', '制单人名称');
+CALL INSERTI18N('T_CORE_PRINT_LOG.CREATEDTIME', '打印记录表的制单时间', '制单时间', 'zh-CN', '制单时间');
+CALL INSERTI18N('T_CORE_PRINT_LOG.CREATEDBYORGID', '打印记录表的制单人单位编码', '制单人单位编码', 'zh-CN', '制单人单位编码');
+CALL INSERTI18N('T_CORE_PRINT_LOG.CREATEDBYORGNAME', '打印记录表的制单人单位名称', '制单人单位名称', 'zh-CN', '制单人单位名称');
+
+CALL INSERTI18N('CORE.PRINTER.TIP.SUPPORT_PDF_ONLY', '仅支持PDF格式的文件', '仅支持PDF格式的文件', 'zh-CN', '仅支持PDF格式的文件');
+CALL INSERTI18N('CORE.PRINTER.TIP.FILE_NOT_FOUND', '文件未找到', '文件未找到', 'zh-CN', '文件未找到');
+CALL INSERTI18N('CORE.PRINTER.TIP.PRINTER_NOT_FOUND', '打印机未找到', '打印机未找到', 'zh-CN', '打印机未找到');
+CALL INSERTI18N('CORE.PRINTER.TIP.PRINT_FAILED', '打印失败', '打印失败', 'zh-CN', '打印失败');
+-- ----------------------------- 2021-1-4 add by lvqiang --------------end
+
+-- ----------------------------- 2021-3-25 add by shixw------------begin
+
+CALL UPDATEI18N('T_CORE_PRINT_LOG.CREATEDBYNAME','zh-CN','打印人');
+CALL UPDATEI18N('T_CORE_PRINT_LOG.CREATEDTIME','zh-CN','打印时间');
+
+INSERT INTO T_CORE_MENU (ID, MENUNAME, HREF, PARENTID, ORDERNO, ICON, MENUINITNAME)
+VALUES ('9406', 'PDF服务器打印记录', '/secure/core/module/printer/print-logs/page/search-list', '94', '9406', '016.svg', 'PDF服务器打印记录');
+
+commit;
+
+-- ----------------------------- 2021-3-25 add by shixw------------end

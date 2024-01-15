@@ -1,0 +1,134 @@
+﻿-- --------------------------------------- 2020-01-18 zhangjr begin -----------------
+CREATE TABLE `T_CORE_NOTIFICATION_TMPL`  (
+  `ID` varchar(32) NOT NULL COMMENT '主键',
+  `NAME` varchar(96) NOT NULL COMMENT '通知名称',
+  `DESCTEMPLATE` varchar(192) DEFAULT NULL COMMENT '通知描述模板',
+  `CONTENTTEMPLATE` TEXT DEFAULT NULL COMMENT '通知内容模板',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = '通知中心模板' 
+;
+
+CREATE TABLE `T_CORE_NOTIFICATION_INST`  (
+  `ID` bigint(20) NOT NULL COMMENT '主键',
+  `TEMPLATEID` varchar(32) NOT NULL COMMENT '模板编码',
+  `DESC` varchar(192) NOT NULL COMMENT '通知描述',
+  `CONTENT` TEXT DEFAULT NULL COMMENT '通知内容',
+  `EXPIREDTIME` DATETIME DEFAULT NULL COMMENT '通知截止日期',
+  `ATTACHMENTURL` varchar(384) DEFAULT NULL COMMENT '附件的下载地址（可以为空）',
+  `CREATEDBYID` varchar(32) DEFAULT NULL COMMENT '制单人编码',
+  `CREATEDBYNAME` varchar(64) DEFAULT NULL COMMENT '制单人名称',
+  `CREATEDTIME` datetime DEFAULT NULL COMMENT '制单时间',
+  `CREATEDBYORGID` varchar(32) DEFAULT NULL COMMENT '制单人单位编码',
+  `CREATEDBYORGNAME` varchar(256) DEFAULT NULL COMMENT '制单人单位名称',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = '通知实例' 
+;
+
+CREATE TABLE `T_CORE_NOTIFICATION_INST_TO`  (
+  `ID` bigint(20) NOT NULL COMMENT '主键',
+  `INSTID` bigint(20) NOT NULL COMMENT '通知实例主键',
+  `NOTIFIEDID` varchar(32) NOT NULL COMMENT '被通知人编码',
+  `READ` varchar(1) NOT NULL COMMENT '是否已读（0-否 1-是）',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = '通知实例中的被通知人' 
+;
+
+INSERT INTO T_CORE_MENU(ID, MENUNAME, HREF, PARENTID, ORDERNO, MENUINITNAME, ICON, TODOICON)
+VALUES ('9505', '通知中心', '', '95', 9505, '通知中心', '022.svg', NULL);
+INSERT INTO T_CORE_MENU(ID, MENUNAME, HREF, PARENTID, ORDERNO, MENUINITNAME, ICON, TODOICON)
+VALUES ('950501', '通知模板', '/secure/core/module/notification/notification-templates/page/edit-list', '9505', 950501, '通知模板', '046.svg', NULL);
+INSERT INTO T_CORE_MENU(ID, MENUNAME, HREF, PARENTID, ORDERNO, MENUINITNAME, ICON, TODOICON)
+VALUES ('950502', '通知查询', '/secure/core/module/notification/notification-instances/page/edit-list', '9505', 950502, '通知中心', '077.svg', NULL);
+COMMIT;
+
+
+INSERT INTO T_CORE_NOTIFICATION_TMPL(ID, NAME, DESCTEMPLATE, CONTENTTEMPLATE)
+VALUES ('output', '数据导出', '', '');
+COMMIT;
+
+-- --------------------------------------- 2020-01-18 zhangjr end -----------------
+-- --------------------------------------- 2020-02-11 zhangxt begin -----------------
+INSERT INTO `T_CORE_CONSTANT` (`ID`, `CONSTANTVALUE`, `CONSTANTDESC`, `CLASSFICATION`, `SHOW`, `VERSION`, `CREATEDBYID`, `CREATEDBYNAME`, `CREATEDTIME`) VALUES ('NOTIFICATION-REFRESH-FREQUENCY', '5', '首页消息中心刷新频率（分钟）', '系统', '1', 0, NULL, NULL, NULL);
+commit;
+ALTER TABLE `t_core_notification_inst_to` 
+ADD COLUMN `READTIME` datetime NULL COMMENT '读取时间';
+-- --------------------------------------- 2020-02-11 zhangxt end -----------------
+
+
+-- --------------------------------------- 2020-08-12 liujianfeng -----------------begin
+ALTER TABLE `T_CORE_NOTIFICATION_TMPL` 
+ADD COLUMN `menuid` varchar(36) NULL COMMENT '菜单ID';
+ALTER TABLE `T_CORE_NOTIFICATION_TMPL` 
+ADD COLUMN `menuname` varchar(60) NULL COMMENT '菜单名称(业务名称)';
+ALTER TABLE `T_CORE_NOTIFICATION_TMPL` 
+ADD COLUMN `forwardcategory` varchar(36) NULL COMMENT '跳转类型';
+ALTER TABLE `T_CORE_NOTIFICATION_TMPL` 
+ADD COLUMN `downloadcategory` varchar(36) NULL COMMENT '是否下载附件';
+ALTER TABLE `T_CORE_NOTIFICATION_TMPL` 
+ADD COLUMN `timewarning` varchar(36) NULL COMMENT '是否实时提醒';
+  
+ALTER TABLE `T_CORE_NOTIFICATION_INST` 
+ADD COLUMN `menuid` varchar(36) NULL COMMENT '菜单ID';
+ALTER TABLE `T_CORE_NOTIFICATION_INST` 
+ADD COLUMN `menuname` varchar(60) NULL COMMENT '菜单名称(业务名称)';
+ALTER TABLE `T_CORE_NOTIFICATION_INST` 
+ADD COLUMN `forwardcategory` varchar(36) NULL COMMENT '跳转类型';
+ALTER TABLE `T_CORE_NOTIFICATION_INST` 
+ADD COLUMN `downloadcategory` varchar(36) NULL COMMENT '是否下载附件';
+ALTER TABLE `T_CORE_NOTIFICATION_INST` 
+ADD COLUMN `timewarning` varchar(36) NULL COMMENT '是否实时提醒';
+
+ALTER TABLE `T_CORE_NOTIFICATION_INST_TO` 
+ADD COLUMN `ignore` varchar(36) NULL COMMENT '是否忽略';
+  
+CALL INSERTI18N('T_CORE_NOTIFICATION_INST_TO.IGNORE', '是否忽略', '是否忽略', 'zh-CN', '是否忽略');
+CALL INSERTI18N('T_CORE_NOTIFICATION_TMPL.MENUNAME', '业务名称', '业务名称', 'zh-CN', '业务名称');
+CALL INSERTI18N('T_CORE_NOTIFICATION_TMPL.FORWARDCATEGORY', '跳转类型', '跳转类型', 'zh-CN', '跳转类型');
+CALL INSERTI18N('T_CORE_NOTIFICATION_TMPL.DOWNLOADCATEGORY', '是否下载附件', '是否下载附件', 'zh-CN', '是否下载附件');
+CALL INSERTI18N('T_CORE_NOTIFICATION_TMPL.TIMEWARNING', '是否实时提醒', '是否实时提醒', 'zh-CN', '是否实时提醒');
+CALL INSERTI18N('T_CORE_NOTIFICATION_INST.MENUNAME', '业务名称', '业务名称', 'zh-CN', '业务名称');
+CALL INSERTI18N('T_CORE_NOTIFICATION_INST.FORWARDCATEGORY', '跳转类型', '跳转类型', 'zh-CN', '跳转类型');
+CALL INSERTI18N('T_CORE_NOTIFICATION_INST.DOWNLOADCATEGORY', '是否下载附件', '是否下载附件', 'zh-CN', '是否下载附件');
+CALL INSERTI18N('T_CORE_NOTIFICATION_INST.TIMEWARNING', '是否实时提醒', '是否实时提醒', 'zh-CN', '是否实时提醒');
+CALL INSERTI18N('T_CORE_NOTIFICATION_TMPL.TMPL_INFO', '模板信息', '模板信息', 'zh-CN', '模板信息');
+CALL INSERTI18N('T_CORE_NOTIFICATION_TMPL.PREPARE_INFO', '配置信息', '配置信息', 'zh-CN', '配置信息');
+
+INSERT INTO T_CORE_CODE_CATEGORY (ID,CODECATEGORYNAME,CODECLASSID,REMARK,ORDERNO)
+VALUES ('forwardCategory','跳转类型','sys','应用动作','1');
+INSERT INTO T_CORE_CODE (ID, CODE, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME)
+VALUES (F_GET_SEQ_CORE(), 'grid', '列表', 'forwardCategory', null, 1, 0, 'admin', '系统管理员', null, '0', null, null, null);
+INSERT INTO T_CORE_CODE (ID, CODE, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME)
+VALUES (F_GET_SEQ_CORE(), 'form', '详情', 'forwardCategory', null, 2, 0, 'admin', '系统管理员', null, '0', null, null, null);
+INSERT INTO T_CORE_CODE (ID, CODE, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME)
+VALUES (F_GET_SEQ_CORE(), 'notForward', '不跳转', 'forwardCategory', null, 2, 0, 'admin', '系统管理员', null, '0', null, null, null);
+
+INSERT INTO T_CORE_ADMIN_SELECT_CONFIG(ID, NAME, CATEGORY, URL, VALUEFIELD, TEXTFIELD)
+    VALUES (F_GET_SEQ_CORE(), '跳转类型',  'forward-category', '/secure/core/module/sys/codes/queries/selectable?codeCategoryId=forwardCategory', 'code', 'codeName');
+    
+COMMIT;
+-- --------------------------------------- 2020-08-12 liujianfeng -----------------end
+
+-- --------------------------------------- 2020-08-24 liujianfneg -----------------begin
+INSERT INTO T_CORE_CODE_CATEGORY (ID,CODECATEGORYNAME,CODECLASSID,REMARK,ORDERNO)
+VALUES ('readCategory','阅读类型','sys','阅读类型','1');
+INSERT INTO T_CORE_CODE (ID, CODE, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME)
+VALUES (F_GET_SEQ_CORE(), '0', '未读', 'readCategory', null, 1, 0, 'admin', '系统管理员', null, '0', null, null, null);
+INSERT INTO T_CORE_CODE (ID, CODE, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME)
+VALUES (F_GET_SEQ_CORE(), '1', '已读', 'readCategory', null, 2, 0, 'admin', '系统管理员', null, '0', null, null, null);
+INSERT INTO T_CORE_CODE (ID, CODE, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME)
+VALUES (F_GET_SEQ_CORE(), '2', '忽略', 'readCategory', null, 3, 0, 'admin', '系统管理员', null, '0', null, null, null);
+
+INSERT INTO T_CORE_ADMIN_SELECT_CONFIG(ID, NAME, CATEGORY, URL, VALUEFIELD, TEXTFIELD)
+    VALUES (F_GET_SEQ_CORE(), '阅读类型',  'read-category', '/secure/core/module/sys/codes/queries/selectable?codeCategoryId=readCategory', 'code', 'codeName');
+    
+COMMIT;
+
+-- --------------------------------------- 2020-08-24 liujianfneg -----------------end
+
+-- --------------------------------------- 2020-09-04 zhangpf -----------------begin
+DELETE FROM T_CORE_CODE 
+ WHERE CODECATEGORYID = 'forwardCategory'
+   AND CODE = 'form';
+
+COMMIT;
+-- --------------------------------------- 2020-09-04 zhangpf -----------------end

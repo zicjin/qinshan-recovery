@@ -1,0 +1,1665 @@
+-- ----------------------------- 2021-07-14 add by zhangjr--------------begin
+EXEC dbo.INSERTI18N @CODEPARAM = N'CORE.MODULE.SYS.T_CORE_BPMN_DRAFT.LABEL.NOTIFICATION', @DESCRIPTION = N'工作流草稿中的通知TAB页', @DEFAULTMESSAGE = N'通知', @LANG = N'zh-CN', @MESSAGE = N'通知';
+EXEC dbo.INSERTI18N @CODEPARAM = N'CORE.MODULE.SYS.T_CORE_BPMN_DRAFT.LABEL.PASS_NOTIFICATION', @DESCRIPTION = N'工作流草稿中的审核通过时发送通知', @DEFAULTMESSAGE = N'审核通过时通知', @LANG = N'zh-CN', @MESSAGE = N'审核通过时通知';
+EXEC dbo.INSERTI18N @CODEPARAM = N'CORE.MODULE.SYS.T_CORE_BPMN_DRAFT.LABEL.REJECT_NOTIFICATION', @DESCRIPTION = N'工作流草稿中的审核拒绝时发送通知', @DEFAULTMESSAGE = N'审核拒绝时通知', @LANG = N'zh-CN', @MESSAGE = N'审核拒绝时通知';
+
+INSERT INTO T_CORE_NOTIFICATION_TMPL(ID, TITLE, CONTENT, VIEWMETHOD)
+VALUES ('BPMN_PASS', '工作流审核通过时提醒', ('【' + '$' + '{name}】业务单据【' + '$' + '{desc}】在【' + '$' + '{fromTaskName}】节点被【' + '$' + '{lastAuditorName}】审核通过。'), 'no');
+
+INSERT INTO T_CORE_NOTIFICATION_TMPL(ID, TITLE, CONTENT, VIEWMETHOD)
+VALUES ('BPMN_REJECT', '工作流拒绝时提醒', ('【' + '$' + '{name}】业务单据【' + '$' + '{desc}】被【' + '$' + '{lastAuditorName}】审核拒绝到【' + '$' + '{toTaskName}】节点。'), 'no');
+-- ----------------------------- 2021-07-14 add by zhangjr--------------end
+-- ----------------------------- 2021-07-15 add by zhangxt--------------begin
+EXEC dbo.INSERTI18N @CODEPARAM = N'CORE.MODULE.SYS.T_CORE_BPMN_DIAGRAM.CANDIDATOR.ALLUSER', @DESCRIPTION = N'所有审核人员', @DEFAULTMESSAGE = N'所有审核人员', @LANG = N'zh-CN', @MESSAGE = N'所有审核人员';
+-- ----------------------------- 2021-07-15 add by zhangxt--------------end
+
+-- ----------------------------- 2021-07-15 add by shixw--------------begin    1.1.1补丁已发布
+
+-- 建表语句
+CREATE TABlE DBO.T_CORE_DATA_CENTER(
+    ID BIGINT NOT NULL,
+    NODENAME VARCHAR(120)  NULL ,
+    NODETYPE VARCHAR(36)  NULL ,
+    PARENTID BIGINT NULL ,
+    AUTHCODE BIGINT NULL ,
+    URL VARCHAR(120)  NULL ,
+    ORDERNO BIGINT NULL ,
+    CREATEDBYID VARCHAR(36)  NULL ,
+    CREATEDBYNAME VARCHAR(60)  NULL ,
+    CREATEDTIME DATETIME NULL ,
+    CREATEDBYORGID VARCHAR(36)  NULL ,
+    CREATEDBYORGNAME VARCHAR(270)  NULL ,
+    CONSTRAINT PK_CORE_DATA_CENTER PRIMARY KEY(ID));
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'数据中心表' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_DATA_CENTER';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'主键' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_DATA_CENTER', @level2type=N'COLUMN',@level2name=N'ID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'节点名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_DATA_CENTER', @level2type=N'COLUMN',@level2name=N'NODENAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'节点类型' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_DATA_CENTER', @level2type=N'COLUMN',@level2name=N'NODETYPE';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'父节点id' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_DATA_CENTER', @level2type=N'COLUMN',@level2name=N'PARENTID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'授权码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_DATA_CENTER', @level2type=N'COLUMN',@level2name=N'AUTHCODE';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'url' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_DATA_CENTER', @level2type=N'COLUMN',@level2name=N'URL';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'排序码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_DATA_CENTER', @level2type=N'COLUMN',@level2name=N'ORDERNO';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_DATA_CENTER', @level2type=N'COLUMN',@level2name=N'CREATEDBYID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_DATA_CENTER', @level2type=N'COLUMN',@level2name=N'CREATEDBYNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_DATA_CENTER', @level2type=N'COLUMN',@level2name=N'CREATEDTIME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_DATA_CENTER', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_DATA_CENTER', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGNAME';
+
+CREATE TABlE DBO.T_CORE_DATA_CENTER_ROLE(
+    ID BIGINT NOT NULL,
+    DATACENTERID BIGINT NULL ,
+    ROLEID BIGINT NULL ,
+    CREATEDBYID VARCHAR(36)  NULL ,
+    CREATEDBYNAME VARCHAR(60)  NULL ,
+    CREATEDTIME DATETIME NULL ,
+    CREATEDBYORGID VARCHAR(36)  NULL ,
+    CREATEDBYORGNAME VARCHAR(270)  NULL ,
+    CONSTRAINT PK_CORE_DATA_CENTER_ROLE PRIMARY KEY(ID));
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'数据中心访问角色表' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_DATA_CENTER_ROLE';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'主键' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_DATA_CENTER_ROLE', @level2type=N'COLUMN',@level2name=N'ID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'数据中心id' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_DATA_CENTER_ROLE', @level2type=N'COLUMN',@level2name=N'DATACENTERID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'角色id' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_DATA_CENTER_ROLE', @level2type=N'COLUMN',@level2name=N'ROLEID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_DATA_CENTER_ROLE', @level2type=N'COLUMN',@level2name=N'CREATEDBYID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_DATA_CENTER_ROLE', @level2type=N'COLUMN',@level2name=N'CREATEDBYNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_DATA_CENTER_ROLE', @level2type=N'COLUMN',@level2name=N'CREATEDTIME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_DATA_CENTER_ROLE', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_DATA_CENTER_ROLE', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGNAME';
+CREATE NONCLUSTERED INDEX [IDX_CDCR_DATACENTERID] ON [dbo].[T_CORE_DATA_CENTER_ROLE] ([DATACENTERID]);
+
+EXEC  DBO.INSERTI18N  N'T_CORE_DATA_CENTER.SERVICE_NAME', N'数据中心表', N'数据中心表', N'zh-CN',N'数据中心表';
+EXEC  DBO.INSERTI18N  N'T_CORE_DATA_CENTER.ID', N'数据中心表的主键', N'主键', N'zh-CN',N'主键';
+EXEC  DBO.INSERTI18N  N'T_CORE_DATA_CENTER.NODENAME', N'数据中心表的节点名称', N'节点名称', N'zh-CN',N'节点名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_DATA_CENTER.NODETYPE', N'数据中心表的节点类型', N'节点类型', N'zh-CN',N'节点类型';
+EXEC  DBO.INSERTI18N  N'T_CORE_DATA_CENTER.PARENTID', N'数据中心表的父节点id', N'父节点id', N'zh-CN',N'父节点id';
+EXEC  DBO.INSERTI18N  N'T_CORE_DATA_CENTER.AUTHCODE', N'数据中心表的授权码', N'授权码', N'zh-CN',N'授权码';
+EXEC  DBO.INSERTI18N  N'T_CORE_DATA_CENTER.ORDERNO', N'数据中心表的排序码', N'排序码', N'zh-CN',N'排序码';
+EXEC  DBO.INSERTI18N  N'T_CORE_DATA_CENTER.URL', N'数据中心表的url', N'url', N'zh-CN',N'url';
+EXEC  DBO.INSERTI18N  N'T_CORE_DATA_CENTER.CREATEDBYID', N'数据中心表的制单人编码', N'制单人编码', N'zh-CN',N'制单人编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_DATA_CENTER.CREATEDBYNAME', N'数据中心表的制单人名称', N'制单人名称', N'zh-CN',N'制单人名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_DATA_CENTER.CREATEDTIME', N'数据中心表的制单时间', N'制单时间', N'zh-CN',N'制单时间';
+EXEC  DBO.INSERTI18N  N'T_CORE_DATA_CENTER.CREATEDBYORGID', N'数据中心表的制单人单位编码', N'制单人单位编码', N'zh-CN',N'制单人单位编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_DATA_CENTER.CREATEDBYORGNAME', N'数据中心表的制单人单位名称', N'制单人单位名称', N'zh-CN',N'制单人单位名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_DATA_CENTER_ROLE.SERVICE_NAME', N'数据中心访问角色表', N'数据中心访问角色表', N'zh-CN',N'数据中心访问角色表';
+EXEC  DBO.INSERTI18N  N'T_CORE_DATA_CENTER_ROLE.ID', N'数据中心访问角色表的主键', N'主键', N'zh-CN',N'主键';
+EXEC  DBO.INSERTI18N  N'T_CORE_DATA_CENTER_ROLE.DATACENTERID', N'数据中心访问角色表的数据中心id', N'数据中心id', N'zh-CN',N'数据中心id';
+EXEC  DBO.INSERTI18N  N'T_CORE_DATA_CENTER_ROLE.ROLEID', N'数据中心访问角色表的角色id', N'角色id', N'zh-CN',N'角色id';
+EXEC  DBO.INSERTI18N  N'T_CORE_DATA_CENTER_ROLE.ROLENAME', N'数据中心访问角色表的角色名称', N'角色名称', N'zh-CN', N'角色名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_DATA_CENTER_ROLE.CREATEDBYID', N'数据中心访问角色表的制单人编码', N'制单人编码', N'zh-CN',N'制单人编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_DATA_CENTER_ROLE.CREATEDBYNAME', N'数据中心访问角色表的制单人名称', N'制单人名称', N'zh-CN',N'制单人名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_DATA_CENTER_ROLE.CREATEDTIME', N'数据中心访问角色表的制单时间', N'制单时间', N'zh-CN',N'制单时间';
+EXEC  DBO.INSERTI18N  N'T_CORE_DATA_CENTER_ROLE.CREATEDBYORGID', N'数据中心访问角色表的制单人单位编码', N'制单人单位编码', N'zh-CN',N'制单人单位编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_DATA_CENTER_ROLE.CREATEDBYORGNAME', N'数据中心访问角色表的制单人单位名称', N'制单人单位名称', N'zh-CN',N'制单人单位名称';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.ITEM.DATACENTERS.TREE.DATACENTER', N'数据中心', N'数据中心', N'zh-CN', N'数据中心';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.ITEM.DATACENTERS.TAB.PREVIEW', N'大屏预览', N'大屏预览', N'zh-CN', N'大屏预览';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.ITEM.DATACENTERS.TAB.ROLE', N'访问角色', N'访问角色', N'zh-CN', N'访问角色';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.ITEM.DATACENTERS.TIP.CHOOSE_ONE_DATACENTER', N'请先选择一个大屏预览', N'请先选择一个大屏预览', N'zh-CN', N'请先选择一个大屏预览';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.ITEM.DATACENTERS.BUTTON.SYNC', N'同步', N'同步', N'zh-CN', N'同步';
+
+-- 创建菜单语句
+INSERT INTO T_CORE_MENU (ID, MENUNAME, HREF, PARENTID, ORDERNO, ICON, MENUINITNAME)
+VALUES ('9360', '数据中心配置', '/secure/core/module/item/data-centers/page/edit-list', '93', '9360', '016.svg', '数据中心配置');
+
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_DATA_CENTER', '0', '0');
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_DATA_CENTER_ROLE', '0', '0');
+
+INSERT INTO T_CORE_TABLE_HIERARCHY (ID, TABLENAME, MASTERTABLENAME, REFERCOLUMN)
+VALUES ('936001','T_CORE_DATA_CENTER_ROLE', 'T_CORE_DATA_CENTER', 'DATACENTERID');
+  
+INSERT INTO T_CORE_REMOTE_CALL_CONF(ID, NAME, SYNCH, DATAFLOW, CALLCLASS,CALLMETHOD,LASTSUSPENDEDFLAG,LASTSUSPENDEDBYID,LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME) 
+VALUES ('DATA_CENTER_REPORT', '数据中心报告请求', '1', 'DATACENTER->LIMS', 'com.sunwayworld.module.item.datacenter.service.CoreDataCenterService', 'syncDataCenterData', '0', NULL, NULL, NULL);
+
+
+-- ----------------------------- 2021-07-15 add by shixw------------end    1.1.1补丁已发布
+
+-- ----------------------------- 2021-07-27 add by zhangjr--------------begin
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.SYS.T_CORE_BPMN_DRAFT.LABEL.ADD_NOTIFIED_USERS', N'工作流节点中新增通知人', N'新增通知人', N'zh-CN', N'新增通知人';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.SYS.T_CORE_BPMN_DRAFT.LABEL.ADD_NOTIFIED_ROLES', N'工作流节点中新增通知角色', N'新增通知角色', N'zh-CN', N'新增通知角色';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.SYS.T_CORE_BPMN_PROC.MODAL.TITLE_NOTIFIEDGROUP', N'工作流节点中选择通知角色', N'选择通知角色', N'zh-CN', N'选择通知角色';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.SYS.T_CORE_BPMN_PROC.MODAL.TITLE_NOTIFIED', N'工作流节点中选择通知人员', N'选择通知人员', N'zh-CN', N'选择通知人员';
+-- ----------------------------- 2021-07-27 add by zhangjr--------------end
+
+-- ----------------------------- 2021-08-02 add by shixw------------begin
+
+ALTER TABLE dbo.T_CORE_ROLE ALTER COLUMN USEDBYORGID varchar(270) COLLATE Chinese_PRC_CI_AS NULL 
+ALTER TABLE dbo.T_CORE_ROLE ALTER COLUMN USEDBYORGNAME varchar(540) COLLATE Chinese_PRC_CI_AS NULL
+
+-- ----------------------------- 2021-08-02 add by shixw------------end
+
+-- ----------------------------- 2021-08-02 add by shixw------------begin    1.1.7补丁已发布
+
+alter table dbo.T_CORE_TODO_CONFIG ADD VOICEWARNING VARCHAR(36) NULL
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'开启语音提醒',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_TODO_CONFIG',
+'COLUMN', N'VOICEWARNING'
+GO
+
+EXEC  DBO.INSERTI18N N'T_CORE_TODO_CONFIG.VOICEWARNING',N'开启语音提醒',N'开启语音提醒',N'zh-CN',N'开启语音提醒'
+GO
+
+UPDATE T_CORE_TODO_CONFIG SET VOICEWARNING = '1';
+
+-- ----------------------------- 2021-08-02 add by shixw------------end    1.1.7补丁已发布
+
+-- ----------------------------- 2020-08-07 add by zhangjr------------begin
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.SYS.T_CORE_BPMN_DRAFT.LABEL.AUTO_PASS', N'下一个节点审核人也是当前节点审核人时自动审核通过', N'自动审核通过', N'zh-CN', N'自动审核通过';
+EXEC  DBO.INSERTI18N  N'GIKAM.BPMN.COMMENT.AUTO_PASS', N'自动审核通过时审核意见', N'(自动审核通过)', N'zh-CN', N'(自动审核通过)';
+-- ----------------------------- 2020-08-07 add by zhangjr------------end
+-- ----------------------------- 2020-08-14 add by zhangxt------------begin
+alter table dbo.T_CORE_SCHEDULE_TASK_LOG ADD EXECUTEDRESULT VARCHAR(300) NULL
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'任务执行的业务结果',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_SCHEDULE_TASK_LOG',
+'COLUMN', N'EXECUTEDRESULT'
+GO
+
+EXEC  DBO.INSERTI18N N'T_CORE_SCHEDULE_TASK_LOG.EXECUTEDRESULT',N'任务执行的业务结果',N'执行结果',N'zh-CN',N'执行结果'
+GO
+-- ----------------------------- 2020-08-14 add by zhangxt------------end
+
+-- ----------------------------- 2020-08-20 add by zhangjr------------begin
+-- 建表语句
+CREATE TABlE T_CORE_ATTORNEY (
+     ID BIGINT  NOT NULL,
+     TRUSTOR VARCHAR(32)  NULL ,
+     TRUSTEE VARCHAR(32)  NULL ,
+     STARTDATE DATETIME NULL ,
+     ENDDATE DATETIME NULL ,
+     CREATEDBYID VARCHAR(32)  NULL ,
+     CREATEDBYNAME VARCHAR(64)  NULL ,
+     CREATEDTIME DATETIME NULL ,
+     CREATEDBYORGID VARCHAR(32)  NULL ,
+     CREATEDBYORGNAME VARCHAR(64)  NULL ,
+     LASTSUSPENDEDFLAG VARCHAR(1)  NULL ,
+     LASTSUSPENDEDBYID VARCHAR(32)  NULL ,
+     LASTSUSPENDEDBYNAME VARCHAR(64)  NULL ,
+     LASTSUSPENDEDTIME DATETIME NULL ,
+     ACTIVATEDFLAG varchar(1) NULL ,
+     ACTIVATEDBYID varchar(32) NULL ,
+     ACTIVATEDBYNAME varchar(64) NULL ,
+     ACTIVATEDTIME datetime NULL ,
+ CONSTRAINT PK_CORE_ATTORNEY PRIMARY KEY(ID));
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'委托代理主表' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_ATTORNEY';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'主键' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_ATTORNEY', @level2type=N'COLUMN',@level2name=N'id';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'委托人编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_ATTORNEY', @level2type=N'COLUMN',@level2name=N'TRUSTOR';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'受托人编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_ATTORNEY', @level2type=N'COLUMN',@level2name=N'TRUSTEE';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'委托开始时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_ATTORNEY', @level2type=N'COLUMN',@level2name=N'STARTDATE';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'委托结束 时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_ATTORNEY', @level2type=N'COLUMN',@level2name=N'ENDDATE';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_ATTORNEY', @level2type=N'COLUMN',@level2name=N'createdById';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_ATTORNEY', @level2type=N'COLUMN',@level2name=N'createdByName';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_ATTORNEY', @level2type=N'COLUMN',@level2name=N'createdTime';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_ATTORNEY', @level2type=N'COLUMN',@level2name=N'createdByOrgId';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_ATTORNEY', @level2type=N'COLUMN',@level2name=N'createdByOrgName';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'注销标志' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_ATTORNEY', @level2type=N'COLUMN',@level2name=N'lastSuspendedFlag';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'注销人编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_ATTORNEY', @level2type=N'COLUMN',@level2name=N'lastSuspendedById';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'注销人名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_ATTORNEY', @level2type=N'COLUMN',@level2name=N'lastSuspendedByName';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'注销时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_ATTORNEY', @level2type=N'COLUMN',@level2name=N'lastSuspendedTime';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'启用标志' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_ATTORNEY', @level2type=N'COLUMN',@level2name=N'activatedFlag';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'启用人编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_ATTORNEY', @level2type=N'COLUMN',@level2name=N'activatedById';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'启用人名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_ATTORNEY', @level2type=N'COLUMN',@level2name=N'activatedByName';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'启用时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_ATTORNEY', @level2type=N'COLUMN',@level2name=N'activatedTime';
+
+CREATE TABlE T_CORE_ATTORNEY_MENU (
+     ID BIGINT  NOT NULL,
+     ATTORNEYID BIGINT  NULL ,
+     MENUID VARCHAR(64)  NULL ,
+     CREATEDBYID VARCHAR(32)  NULL ,
+     CREATEDBYNAME VARCHAR(64)  NULL ,
+     CREATEDTIME DATETIME NULL ,
+     CREATEDBYORGID VARCHAR(32)  NULL ,
+     CREATEDBYORGNAME VARCHAR(64)  NULL ,
+ CONSTRAINT PK_CORE_ATTORNEY_MENU PRIMARY KEY(ID));
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'委托代理菜单表' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_ATTORNEY_MENU';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'主键' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_ATTORNEY_MENU', @level2type=N'COLUMN',@level2name=N'id';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'委托主表编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_ATTORNEY_MENU', @level2type=N'COLUMN',@level2name=N'ATTORNEYID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'菜单编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_ATTORNEY_MENU', @level2type=N'COLUMN',@level2name=N'MENUID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_ATTORNEY_MENU', @level2type=N'COLUMN',@level2name=N'createdById';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_ATTORNEY_MENU', @level2type=N'COLUMN',@level2name=N'createdByName';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_ATTORNEY_MENU', @level2type=N'COLUMN',@level2name=N'createdTime';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_ATTORNEY_MENU', @level2type=N'COLUMN',@level2name=N'createdByOrgId';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_ATTORNEY_MENU', @level2type=N'COLUMN',@level2name=N'createdByOrgName';
+
+
+CREATE NONCLUSTERED INDEX [IDX_TCAM_MENUID]
+ON [dbo].[T_CORE_ATTORNEY_MENU] (
+  [MENUID] ASC
+)
+GO
+
+INSERT INTO T_CORE_MENU (ID, MENUNAME, HREF, PARENTID, ORDERNO, ICON, MENUINITNAME)
+VALUES ('9015', '委托代理设置', '/secure/core/module/sys/attorneys/page/edit-list', '90', '9015', '008.svg', '委托代理设置');
+INSERT INTO T_CORE_MENU (ID, MENUNAME, HREF, PARENTID, ORDERNO, ICON, MENUINITNAME)
+VALUES ('9016', '委托代理查询', '/secure/core/module/sys/attorneys/page/search-list', '90', '9016', '008.svg', '委托代理查询');
+
+EXEC  DBO.INSERTI18N N'CORE.MODULE.SYS.T_CORE_ATTORNEY.CANNOT_CHANGE_TRUSTOR', N'委派时非管理员只能委派自己的业务', N'非管理员只能委派自己的业务', N'zh-CN', N'非管理员只能委派自己的业务';
+
+
+
+EXEC  DBO.INSERTI18N N'CORE.MODULE.SYS.ATTORNEYS.TAB.BASE_INFO', N'委托代理信息', N'委托代理信息', N'zh-CN', N'委托代理信息';
+EXEC  DBO.INSERTI18N N'CORE.MODULE.SYS.ATTORNEYS.TAB.MENU', N'委托业务', N'委托业务', N'zh-CN', N'委托业务';
+
+EXEC  DBO.INSERTI18N N'T_CORE_ATTORNEY.ID', N'委托代理主键', N'主键', N'zh-CN', N'主键';
+EXEC  DBO.INSERTI18N N'T_CORE_ATTORNEY.TRUSTOR', N'委托代理表的委托人编码', N'委托人编码', N'zh-CN', N'委托人编码';
+EXEC  DBO.INSERTI18N N'T_CORE_ATTORNEY.TRUSTORNAME', N'委托代理表的委托人名称', N'委托人名称', N'zh-CN', N'委托人名称';
+EXEC  DBO.INSERTI18N N'T_CORE_ATTORNEY.TRUSTEE', N'委托代理表的受托人编码', N'受托人编码', N'zh-CN', N'受托人编码';
+EXEC  DBO.INSERTI18N N'T_CORE_ATTORNEY.TRUSTEENAME', N'委托代理表的受托人名称', N'受托人名称', N'zh-CN', N'受托人名称';
+EXEC  DBO.INSERTI18N N'T_CORE_ATTORNEY.STARTDATE', N'委托代理表的委托开始日期', N'委托开始日期', N'zh-CN', N'委托开始日期';
+EXEC  DBO.INSERTI18N N'T_CORE_ATTORNEY.ENDDATE', N'委托代理表的委托结束日期', N'委托结束日期', N'zh-CN', N'委托结束日期';
+EXEC  DBO.INSERTI18N N'T_CORE_ATTORNEY.LASTSUSPENDEDFLAG', N'委托代理表的是否注销', N'是否注销', N'zh-CN', N'是否注销';
+EXEC  DBO.INSERTI18N N'T_CORE_ATTORNEY.ACTIVATEDFLAG', N'委托代理表的是否启用', N'是否启用', N'zh-CN', N'是否启用';
+
+EXEC  DBO.INSERTI18N N'T_CORE_ATTORNEY_MENU.ID', N'委托代理菜单表主键', N'主键', N'zh-CN', N'主键';
+EXEC  DBO.INSERTI18N N'T_CORE_ATTORNEY_MENU.MENUID', N'委托代理菜单表菜单编码', N'菜单编码', N'zh-CN', N'菜单编码';
+EXEC  DBO.INSERTI18N N'T_CORE_ATTORNEY_MENU.MENUNAME', N'委托代理菜单表菜单名称', N'菜单名称', N'zh-CN', N'菜单名称';
+
+EXEC  DBO.INSERTI18N N'CORE.MODULE.SYS.ATTORNEYS.MODAL.CHOOSE_MENU', N'委托代理中选择委托菜单', N'委托菜单', N'zh-CN', N'委托菜单';
+EXEC  DBO.INSERTI18N N'CORE.MODULE.SYS.ATTORNEYS.TIP.ENDDATE_BEFORE_STARTDATE', N'委托代理中委托开始日期不能晚于结束时间', N'委托开始日期不能晚于结束时间', N'zh-CN', N'委托开始日期不能晚于结束时间';
+EXEC  DBO.INSERTI18N N'CORE.MODULE.SYS.ATTORNEYS.TIP.ENDDATE_BEFORE_TODAY', N'委托代理中委托结束日期不能早于今天', N'委托结束日期不能早于今天', N'zh-CN', N'委托结束日期不能早于今天';
+EXEC  DBO.INSERTI18N N'CORE.MODULE.SYS.ATTORNEYS.TIP.MENU_REQUIRED', N'委托代理中需要配置被代理的菜单', N'需要配置被代理的菜单', N'zh-CN', N'需要配置被代理的菜单';
+
+
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_ATTORNEY', '0', '0');
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_ATTORNEY_MENU', '0', '0');
+
+INSERT INTO T_CORE_TABLE_HIERARCHY (ID, TABLENAME, MASTERTABLENAME, REFERCOLUMN)
+VALUES (NEXT VALUE FOR SEQ_CORE,'T_CORE_ATTORNEY_MENU', 'T_CORE_ATTORNEY', 'ATTORNEYID');
+-- ----------------------------- 2020-08-20 add by zhangjr------------end
+
+-- ----------------------------- 2020-08-22 add by zhangjr------------begin
+EXEC  DBO.INSERTI18N N'CORE.MODULE.SYS.ATTORNEYS.TIP.UNABLE_SWITCH_IF_SWITCHED', N'受托人切换成委托人时，不能再切换', N'受托人切换成委托人时，不能再切换', N'zh-CN', N'受托人切换成委托人时，不能再切换';
+EXEC  DBO.INSERTI18N N'CORE.MODULE.SYS.ATTORNEYS.TIP.UNABLE_SWITCH_IF_NOT_TRUSTOR', N'无法切换委托人，待切换用户为非委托人', N'无法切换委托人，待切换用户为非委托人', N'zh-CN', N'无法切换委托人，待切换用户为非委托人';
+
+EXEC  DBO.INSERTI18N N'GIKAM.ABBR.TRUSTEENAME', N'委托人切换为受托人时，用户名那边显示的委托人名称前缀', N'代', N'zh-CN', N'代';
+
+EXEC  DBO.INSERTI18N N'CORE.MODULE.SYS.ATTORNEYS.TIP.UNABLE_SWITCH_IF_NOT_TRUSTEE', N'当前用户为非切换用户，无法切换回受托人', '当前用户为非切换用户，无法切换回受托人', N'zh-CN', N'当前用户为非切换用户，无法切换回受托人';
+
+EXEC  DBO.INSERTI18N N'CORE.MODULE.SYS.ATTORNEYS.TIP.UNABLE_GET_ENTRUST_MENU_IF_NOT_SWITCHED_TRUSTEE', N'只有受托人切换成委托人时，才能查询受托的菜单列表', '只有受托人切换成委托人时，才能查询受托的菜单列表', N'zh-CN', N'只有受托人切换成委托人时，才能查询受托的菜单列表';
+
+EXEC  DBO.INSERTI18N N'CORE.MODULE.SYS.ATTORNEYS.TIP.UNABLE_GET_TRUSTOR_TODOLIST_IF_NOT_TRUSTEE', N'只有受托人才能查询委托人的待办信息', '只有受托人才能查询委托人的待办信息', N'zh-CN', N'只有受托人才能查询委托人的待办信息';
+-- ----------------------------- 2020-08-22 add by zhangjr------------end
+
+-- ----------------------------- 2020-08-23 add by zhangjr------------begin
+EXEC  DBO.INSERTI18N N'T_CORE_ATTORNEY.SERVICE_NAME', N'委托代理', N'委托代理', N'zh-CN', N'委托代理';
+EXEC  DBO.INSERTI18N N'T_CORE_ATTORNEY_MENU.SERVICE_NAME', N'委托代理业务', N'委托代理业务', N'zh-CN', N'委托代理业务';
+
+EXEC  DBO.INSERTI18N N'T_CORE_ATTORNEY.CREATEDBYID', N'委托代理制单人编码', N'制单人编码', N'zh-CN', N'制单人编码';
+EXEC  DBO.INSERTI18N N'T_CORE_ATTORNEY.CREATEDBYNAME', N'委托代理制单人名称', N'制单人名称', N'zh-CN', N'制单人名称';
+EXEC  DBO.INSERTI18N N'T_CORE_ATTORNEY.CREATEDTIME', N'委托代理制单时间', N'制单时间', N'zh-CN', N'制单时间';
+EXEC  DBO.INSERTI18N N'T_CORE_ATTORNEY.CREATEDBYORGID', N'委托代理制单人单位编码', N'制单人单位编码', N'zh-CN', N'制单人单位编码';
+EXEC  DBO.INSERTI18N N'T_CORE_ATTORNEY.CREATEDBYORGNAME', N'委托代理制单人单位名称', N'制单人单位名称', N'zh-CN', N'制单人单位名称';
+
+EXEC  DBO.INSERTI18N N'T_CORE_ATTORNEY.LASTSUSPENDEDBYID', N'委托代理注销人编码', N'注销人编码', N'zh-CN', N'注销人编码';
+EXEC  DBO.INSERTI18N N'T_CORE_ATTORNEY.LASTSUSPENDEDBYNAME', N'委托代理注销人名称', N'注销人名称', N'zh-CN', N'注销人名称';
+EXEC  DBO.INSERTI18N N'T_CORE_ATTORNEY.LASTSUSPENDEDTIME', N'委托代理注销时间', N'注销时间', N'zh-CN', N'注销时间';
+
+EXEC  DBO.INSERTI18N N'T_CORE_ATTORNEY.ACTIVATEDBYID', N'委托代理启用人编码', N'启用人编码', N'zh-CN', N'启用人编码';
+EXEC  DBO.INSERTI18N N'T_CORE_ATTORNEY.ACTIVATEDBYNAME', N'委托代理启用人名称', N'启用人名称', N'zh-CN', N'启用人名称';
+EXEC  DBO.INSERTI18N N'T_CORE_ATTORNEY.ACTIVATEDTIME', N'委托代理启用时间', N'启用时间', N'zh-CN', N'启用时间';
+
+EXEC  DBO.INSERTI18N N'T_CORE_ATTORNEY_MENU.ATTORNEYID', N'委托代理主键', N'委托代理主键', N'zh-CN', N'委托代理主键';
+EXEC  DBO.INSERTI18N N'T_CORE_ATTORNEY_MENU.CREATEDBYID', N'委托代理业务制单人编码', N'制单人编码', N'zh-CN', N'制单人编码';
+EXEC  DBO.INSERTI18N N'T_CORE_ATTORNEY_MENU.CREATEDBYNAME', N'委托代理业务制单人名称', N'制单人名称', N'zh-CN', N'制单人名称';
+EXEC  DBO.INSERTI18N N'T_CORE_ATTORNEY_MENU.CREATEDTIME', N'委托代理业务制单时间', N'制单时间', N'zh-CN', N'制单时间';
+EXEC  DBO.INSERTI18N N'T_CORE_ATTORNEY_MENU.CREATEDBYORGID', N'委托代理业务制单人单位编码', N'制单人单位编码', N'zh-CN', N'制单人单位编码';
+EXEC  DBO.INSERTI18N N'T_CORE_ATTORNEY_MENU.CREATEDBYORGNAME', N'委托代理业务制单人单位名称', N'制单人单位名称', N'zh-CN', N'制单人单位名称';
+-- ----------------------------- 2020-08-23 add by zhangjr------------end
+
+
+-- ----------------------------- 2020-08-23 add by zhangjr------------begin
+EXEC  DBO.INSERTI18N N'T_CORE_M_USER.SERVICE_NAME', N'预约变更用户', N'预约变更用户', N'zh-CN', N'预约变更用户';
+EXEC  DBO.INSERTI18N N'T_CORE_M_USER.ID', N'预约变更用户表主键', N'主键', N'zh-CN', N'主键';
+EXEC  DBO.INSERTI18N N'T_CORE_M_USER.USERID', N'预约变更用户表用户编码', N'用户编码', N'zh-CN', N'用户编码';
+EXEC  DBO.INSERTI18N N'T_CORE_M_USER.USERNO', N'预约变更用户表用户编号', N'用户编号', N'zh-CN', N'用户编号';
+EXEC  DBO.INSERTI18N N'T_CORE_M_USER.USERNAME', N'预约变更用户表用户名称', N'用户名称', N'zh-CN', N'用户名称';
+EXEC  DBO.INSERTI18N N'T_CORE_M_USER.MOBILE', N'预约变更用户表手机号', N'手机号', N'zh-CN', N'手机号';
+EXEC  DBO.INSERTI18N N'T_CORE_M_USER.EMAIL', N'预约变更用户表电子邮箱', N'电子邮箱', N'zh-CN', N'电子邮箱';
+EXEC  DBO.INSERTI18N N'T_CORE_M_USER.IDCARD', N'预约变更用户表身份证', N'身份证', N'zh-CN', N'身份证';
+EXEC  DBO.INSERTI18N N'T_CORE_M_USER.STATUS', N'预约变更用户表用户状态', N'用户状态', N'zh-CN', N'用户状态';
+EXEC  DBO.INSERTI18N N'T_CORE_M_USER.ORGID', N'预约变更用户表用户所属单位编码', N'用户所属单位编码', N'zh-CN', N'用户所属单位编码';
+EXEC  DBO.INSERTI18N N'T_CORE_M_USER.ORGNAME', N'预约变更用户表用户所属单位名称', N'用户所属单位名称', N'zh-CN', N'用户所属单位名称';
+EXEC  DBO.INSERTI18N N'T_CORE_M_USER.USERTYPE', N'预约变更用户表用户类型', N'用户类型', N'zh-CN', N'用户类型';
+EXEC  DBO.INSERTI18N N'T_CORE_M_USER.EXPIRYDATE', N'预约变更用户表用户到期日', N'用户到期日', N'zh-CN', N'用户到期日';
+EXEC  DBO.INSERTI18N N'T_CORE_M_USER.MULTILOGIN', N'预约变更用户表允许重复登录', N'允许重复登录', N'zh-CN', N'允许重复登录';
+EXEC  DBO.INSERTI18N N'T_CORE_M_USER.SCHEDULEDTIME', N'预约变更用户表预约执行时间', N'预约执行时间', N'zh-CN', N'预约执行时间';
+EXEC  DBO.INSERTI18N N'T_CORE_M_USER.EXECUTED', N'预约变更用户表是否已执行', N'是否已执行', N'zh-CN', N'是否已执行';
+EXEC  DBO.INSERTI18N N'T_CORE_M_USER.CREATEDBYID', N'预约变更用户表制单人编码', N'制单人编码', N'zh-CN', N'制单人编码';
+EXEC  DBO.INSERTI18N N'T_CORE_M_USER.CREATEDBYNAME', N'预约变更用户表制单人名称', N'制单人名称', N'zh-CN', N'制单人名称';
+EXEC  DBO.INSERTI18N N'T_CORE_M_USER.CREATEDTIME', N'预约变更用户表制单时间', N'制单时间', N'zh-CN', N'制单时间';
+EXEC  DBO.INSERTI18N N'T_CORE_M_USER.CREATEDBYORGID', N'预约变更用户表制单人单位编码', N'制单人单位编码', N'zh-CN', N'制单人单位编码';
+EXEC  DBO.INSERTI18N N'T_CORE_M_USER.CREATEDBYORGNAME', N'预约变更用户表制单人单位名称', N'制单人单位名称', N'zh-CN', N'制单人单位名称';
+EXEC  DBO.INSERTI18N N'T_CORE_M_USER.ACTIVATEDFLAG', N'预约变更用户表是否启用', N'是否启用', N'zh-CN', N'是否启用';
+EXEC  DBO.INSERTI18N N'T_CORE_M_USER.ACTIVATEDBYID', N'委托代理启用人编码', N'启用人编码', N'zh-CN', N'启用人编码';
+EXEC  DBO.INSERTI18N N'T_CORE_M_USER.ACTIVATEDBYNAME', N'委托代理启用人名称', N'启用人名称', N'zh-CN', N'启用人名称';
+EXEC  DBO.INSERTI18N N'T_CORE_M_USER.ACTIVATEDTIME', N'委托代理启用时间', N'启用时间', N'zh-CN', N'启用时间';
+
+EXEC  DBO.INSERTI18N N'T_CORE_M_USER_PERMISSION.SERVICE_NAME', N'预约变更用户权限', N'预约变更用户权限', N'zh-CN', N'预约变更用户权限';
+EXEC  DBO.INSERTI18N N'T_CORE_M_USER_PERMISSION.ID', N'预约变更用户权限表主键', N'主键', N'zh-CN', N'主键';
+EXEC  DBO.INSERTI18N N'T_CORE_M_USER_PERMISSION.MODIFIEDUSERID', N'预约变更用户权限表的预约变更用户表主键', N'预约变更用户表主键', N'zh-CN', N'预约变更用户表主键';
+EXEC  DBO.INSERTI18N N'T_CORE_M_USER_PERMISSION.TARGETID', N'预约变更用户权限表业务权限编码', N'业务权限编码', N'zh-CN', N'业务权限编码';
+EXEC  DBO.INSERTI18N N'T_CORE_M_USER_PERMISSION.PERMISSIONTYPEID', N'预约变更用户权限表权限类型编码', N'权限类型编码', N'zh-CN', N'权限类型编码';
+EXEC  DBO.INSERTI18N N'T_CORE_M_USER_PERMISSION.DEFAULTFLAG', N'预约变更用户权限表是否默认值', N'是否默认值', N'zh-CN', N'是否默认值';
+EXEC  DBO.INSERTI18N N'T_CORE_M_USER_PERMISSION.CREATEDBYID', N'预约变更用户权限表制单人编码', N'制单人编码', N'zh-CN', N'制单人编码';
+EXEC  DBO.INSERTI18N N'T_CORE_M_USER_PERMISSION.CREATEDBYNAME', N'预约变更用户权限表制单人名称', N'制单人名称', N'zh-CN', N'制单人名称';
+EXEC  DBO.INSERTI18N N'T_CORE_M_USER_PERMISSION.CREATEDTIME', N'预约变更用户权限表制单时间', N'制单时间', N'zh-CN', N'制单时间';
+EXEC  DBO.INSERTI18N N'T_CORE_M_USER_PERMISSION.CREATEDBYORGID', N'预约变更用户权限表制单人单位编码', N'制单人单位编码', N'zh-CN', N'制单人单位编码';
+EXEC  DBO.INSERTI18N N'T_CORE_M_USER_PERMISSION.CREATEDBYORGNAME', N'预约变更用户权限表制单人单位名称', N'制单人单位名称', N'zh-CN', N'制单人单位名称';
+
+
+EXEC  DBO.INSERTI18N N'T_CORE_M_USER_ROLE.SERVICE_NAME', N'预约变更用户角色', N'预约变更用户角色', N'zh-CN', N'预约变更用户角色';
+EXEC  DBO.INSERTI18N N'T_CORE_M_USER_ROLE.ID', N'预约变更用户角色表主键', N'主键', N'zh-CN', N'主键';
+EXEC  DBO.INSERTI18N N'T_CORE_M_USER_ROLE.MODIFIEDUSERID', N'预约变更用户角色表的预约变更用户表主键', N'预约变更用户表主键', N'zh-CN', N'预约变更用户表主键';
+EXEC  DBO.INSERTI18N N'T_CORE_M_USER_ROLE.ROLEID', N'预约变更用户角色表角色编码', N'角色编码', N'zh-CN', N'角色编码';
+EXEC  DBO.INSERTI18N N'T_CORE_M_USER_ROLE.DEFAULTFLAG', N'预约变更用户角色表是否默认值', N'是否默认值', N'zh-CN', N'是否默认值';
+EXEC  DBO.INSERTI18N N'T_CORE_M_USER_ROLE.CREATEDBYID', N'预约变更用户角色表制单人编码', N'制单人编码', N'zh-CN', N'制单人编码';
+EXEC  DBO.INSERTI18N N'T_CORE_M_USER_ROLE.CREATEDBYNAME', N'预约变更用户角色表制单人名称', N'制单人名称', N'zh-CN', N'制单人名称';
+EXEC  DBO.INSERTI18N N'T_CORE_M_USER_ROLE.CREATEDTIME', N'预约变更用户角色表制单时间', N'制单时间', N'zh-CN', N'制单时间';
+EXEC  DBO.INSERTI18N N'T_CORE_M_USER_ROLE.CREATEDBYORGID', N'预约变更用户角色表制单人单位编码', N'制单人单位编码', N'zh-CN', N'制单人单位编码';
+EXEC  DBO.INSERTI18N N'T_CORE_M_USER_ROLE.CREATEDBYORGNAME', N'预约变更用户角色表制单人单位名称', N'制单人单位名称', N'zh-CN', N'制单人单位名称';
+-- ----------------------------- 2020-08-23 add by zhangjr------------end
+
+-- ----------------------------- 2020-09-09 add by zhangjr------------begin
+EXEC  DBO.INSERTI18N N'CORE.MODULE.SYS.T_CORE_BPMN_DRAFT.OPTIONS.ASSIGNEE.SELECT_BY_SQL', N'待审人是只通过SQL来查询', N'通过SQL选取', N'zh-CN', N'通过SQL选取';
+EXEC  DBO.INSERTI18N N'CORE.MODULE.SYS.T_CORE_BPMN_DRAFT.OPTIONS.ASSIGNEE.FILTER_BY_SQL', N'待审人是通过SQL来过滤', N'通过SQL过滤', N'zh-CN', N'通过SQL过滤';
+
+EXEC  DBO.INSERTI18N N'CORE.MODULE.SYS.T_CORE_BPMN_DRAFT.LABEL.SELECT_BY_SQL', N'待审人是通过SQL来选取', N'选取待审人的SQL', N'zh-CN', N'选取待审人的SQL';
+EXEC  DBO.INSERTI18N N'CORE.MODULE.SYS.T_CORE_BPMN_DRAFT.LABEL.FILTER_BY_SQL', N'待审人是通过SQL来过滤', N'过滤待审人的SQL', N'zh-CN', N'过滤待审人的SQL';
+
+EXEC  DBO.INSERTI18N N'CORE.MODULE.SYS.T_CORE_BPMN_DRAFT.TIP.SELECT_BY_SQL', N'特殊分配中提醒输入SQL来选取待审人', N'请输入选取待审人的SQL', N'zh-CN', N'请输入选取待审人的SQL';
+EXEC  DBO.INSERTI18N N'CORE.MODULE.SYS.T_CORE_BPMN_DRAFT.TIP.FILTER_BY_SQL', N'特殊分配中提醒输入SQL来过滤待审人', N'请输入过滤待审人的SQL', N'zh-CN', N'请输入过滤待审人的SQL';
+
+EXEC  DBO.INSERTI18N N'CORE.MODULE.SYS.T_CORE_BPMN_PROC.ENGINE.NOCANDIDATOR_BY_SELECT', N'通过SQL选取,没有匹配的待审人', N'通过SQL({0})选取,没有匹配的待审人', N'zh-CN', N'通过SQL({0})选取,没有匹配的待审人';
+
+EXEC  DBO.INSERTI18N N'CORE.MODULE.SYS.T_CORE_BPMN_PROC.ENGINE.NOCANDIDATOR_BY_FILTER', N'通过SQL来过滤后，没有匹配的待审人', N'通过SQL({0})过滤后，没有匹配的待审人', N'zh-CN', N'通过SQL({0})过滤后，没有匹配的待审人';
+-- ----------------------------- 2020-09-09 add by zhangjr------------end
+
+-- ----------------------------- 2020-09-14 add by zhangjr------------begin
+ALTER TABLE T_CORE_BPMN_COMMENT ADD USERNAME VARCHAR(96) ;
+
+EXEC sp_addextendedproperty  'MS_Description', N'审核人名称',  'SCHEMA', N'dbo',  
+'TABLE', N'T_CORE_BPMN_COMMENT',  'COLUMN', N'USERNAME' 
+GO
+
+-- ----------------------------- 2020-09-14 add by zhangjr------------end
+
+-- ----------------------------- 2020-09-22 add by zhangjr------------begin 1.1.14 补丁已发布
+CREATE TABlE DBO.T_CORE_SMS(
+    ID BIGINT NOT NULL,
+    [TYPE] VARCHAR(36)  NULL ,
+    [USER] VARCHAR(24)  NULL ,
+    MOBILE VARCHAR(24)  NULL ,
+    MESSAGE TEXT  NULL ,
+    RETRYQTY BIGINT  NULL ,
+    STATUS VARCHAR(2)  NULL ,
+    SENDTIME DATETIME  NULL ,
+    CREATEDBYID VARCHAR(36)  NULL ,
+    CREATEDBYNAME VARCHAR(60)  NULL ,
+    CREATEDTIME DATETIME NULL ,
+    CREATEDBYORGID VARCHAR(36)  NULL ,
+    CREATEDBYORGNAME VARCHAR(270)  NULL ,
+    CONSTRAINT PK_CORE_SMS PRIMARY KEY(ID)
+);
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'短信表' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_SMS';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'主键' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_SMS', @level2type=N'COLUMN',@level2name=N'ID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'短信的类型（比方：ResetPassword、Todo等）' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_SMS', @level2type=N'COLUMN',@level2name=N'TYPE';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'收信人' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_SMS', @level2type=N'COLUMN',@level2name=N'USER';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'手机号' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_SMS', @level2type=N'COLUMN',@level2name=N'MOBILE';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'信息' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_SMS', @level2type=N'COLUMN',@level2name=N'MESSAGE';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'重试次数' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_SMS', @level2type=N'COLUMN',@level2name=N'RETRYQTY';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'是否发送成功（0-待发送 1-已发送 2-发送失败 3-已关闭）' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_SMS', @level2type=N'COLUMN',@level2name=N'STATUS';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'发送成功时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_SMS', @level2type=N'COLUMN',@level2name=N'SENDTIME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_SMS', @level2type=N'COLUMN',@level2name=N'CREATEDBYID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_SMS', @level2type=N'COLUMN',@level2name=N'CREATEDBYNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_SMS', @level2type=N'COLUMN',@level2name=N'CREATEDTIME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_SMS', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_SMS', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGNAME';
+
+CREATE TABlE DBO.T_CORE_SMS_ERROR_LOG(
+    ID BIGINT NOT NULL,
+    SMSID BIGINT NOT NULL,
+    ERRORLOG TEXT  NULL ,
+    CREATEDBYID VARCHAR(36)  NULL ,
+    CREATEDBYNAME VARCHAR(60)  NULL ,
+    CREATEDTIME DATETIME NULL ,
+    CREATEDBYORGID VARCHAR(36)  NULL ,
+    CREATEDBYORGNAME VARCHAR(270)  NULL ,
+    CONSTRAINT PK_CORE_SMS_ERROR_LOG PRIMARY KEY(ID)
+);
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'短信错误日志表' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_SMS_ERROR_LOG';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'主键' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_SMS_ERROR_LOG', @level2type=N'COLUMN',@level2name=N'ID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'短信主键' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_SMS_ERROR_LOG', @level2type=N'COLUMN',@level2name=N'SMSID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'错误日志' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_SMS_ERROR_LOG', @level2type=N'COLUMN',@level2name=N'ERRORLOG';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_SMS_ERROR_LOG', @level2type=N'COLUMN',@level2name=N'CREATEDBYID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_SMS_ERROR_LOG', @level2type=N'COLUMN',@level2name=N'CREATEDBYNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_SMS_ERROR_LOG', @level2type=N'COLUMN',@level2name=N'CREATEDTIME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_SMS_ERROR_LOG', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_SMS_ERROR_LOG', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGNAME';
+
+EXEC  DBO.INSERTI18N N'T_CORE_SMS.SERVICE_NAME', N'短信表', N'短信表', N'zh-CN', N'短信表';
+EXEC  DBO.INSERTI18N N'T_CORE_SMS.ID', N'主键', N'主键', N'zh-CN', N'主键';
+EXEC  DBO.INSERTI18N N'T_CORE_SMS.TYPE', N'短信的类型（比方：ResetPassword、Todo等）', N'类型', N'zh-CN', N'类型';
+EXEC  DBO.INSERTI18N N'T_CORE_SMS.USER', N'接收短信的收信人', N'收信人', N'zh-CN', N'收信人';
+EXEC  DBO.INSERTI18N N'T_CORE_SMS.MOBILE', N'接收短信的手机号', N'手机号', N'zh-CN', N'手机号';
+EXEC  DBO.INSERTI18N N'T_CORE_SMS.MESSAGE', N'短信的信息', N'信息', N'zh-CN', N'信息';
+EXEC  DBO.INSERTI18N N'T_CORE_SMS.RETRYQTY', N'短信的重试次数', N'重试次数', N'zh-CN', N'重试次数';
+EXEC  DBO.INSERTI18N N'T_CORE_SMS.STATUS', N'短信发送状态（0-待发送 1-已发送 2-发送失败 3-已关闭）', N'发送状态', N'zh-CN', N'发送状态';
+EXEC  DBO.INSERTI18N N'T_CORE_SMS.SUCCESSTIME', N'短信发送时间', N'发送时间', N'zh-CN', N'发送时间';
+
+EXEC  DBO.INSERTI18N N'T_CORE_SMS_ERROR_LOG.SERVICE_NAME', N'短信错误日志表', N'短信错误日志表', N'zh-CN', N'短信错误日志表';
+EXEC  DBO.INSERTI18N N'T_CORE_SMS_ERROR_LOG.ID', N'主键', N'主键', N'zh-CN', N'主键';
+EXEC  DBO.INSERTI18N N'T_CORE_SMS_ERROR_LOG.SMSID', N'短信主键', N'短信主键', N'zh-CN', N'短信主键';
+EXEC  DBO.INSERTI18N N'T_CORE_SMS_ERROR_LOG.ERRORLOG', N'错误日志', N'错误日志', N'zh-CN', N'错误日志';
+EXEC  DBO.INSERTI18N N'T_CORE_SMS_ERROR_LOG.CREATEDBYID', N'制单人编码', N'制单人编码', N'zh-CN', N'制单人编码';
+EXEC  DBO.INSERTI18N N'T_CORE_SMS_ERROR_LOG.CREATEDBYNAME', N'制单人名称', N'制单人名称', N'zh-CN', N'制单人名称';
+EXEC  DBO.INSERTI18N N'T_CORE_SMS_ERROR_LOG.CREATEDBYORGID', N'制单人单位编码', N'制单人单位编码', N'zh-CN', N'制单人单位编码';
+EXEC  DBO.INSERTI18N N'T_CORE_SMS_ERROR_LOG.CREATEDBYORGNAME', N'制单人单位名称', N'制单人单位名称', N'zh-CN', N'制单人单位名称';
+EXEC  DBO.INSERTI18N N'T_CORE_SMS_ERROR_LOG.CREATEDTIME', N'制单日期', N'制单日期', N'zh-CN', N'制单日期';
+
+
+EXEC  DBO.INSERTI18N N'GIKAM.BUTTON.RESET', N'重置', N'重置', N'zh-CN', N'重置';
+EXEC  DBO.INSERTI18N N'CORE.MODULE.SYS.SMS.TIP.NO_SMSMANAGER', N'发送短信没有配置SmsManager实现类', N'请配置SmsManager', N'zh-CN', N'请配置SmsManager';
+EXEC  DBO.INSERTI18N N'CORE.MODULE.SYS.SMS.TAB.BASE_INFO', N'短信详情', N'短信详情', N'zh-CN', N'短信详情';
+EXEC  DBO.INSERTI18N N'CORE.MODULE.SYS.SMS.TAB.ERROR_LOG', N'错误日志', N'错误日志', N'zh-CN', N'错误日志';
+
+
+INSERT INTO T_CORE_CODE_CATEGORY(ID, CODECATEGORYNAME, CODECLASSID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME)
+VALUES ('smsStatus', '短信状态', 'sys', NULL, 1, NULL, NULL, NULL, NULL);
+INSERT INTO T_CORE_CODE(ID, CODE, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG)
+VALUES (NEXT VALUE FOR SEQ_CORE, '0', '待发送', 'smsStatus', NULL, 1, 0, 'admin', '系统管理员', NULL, '0');
+INSERT INTO T_CORE_CODE(ID, CODE, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG)
+VALUES (NEXT VALUE FOR SEQ_CORE, '1', '已发送', 'smsStatus', NULL, 2, 0, 'admin', '系统管理员', NULL, '0');
+INSERT INTO T_CORE_CODE(ID, CODE, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG)
+VALUES (NEXT VALUE FOR SEQ_CORE, '2', '发送失败', 'smsStatus', NULL, 3, 0, 'admin', '系统管理员', NULL, '0');
+INSERT INTO T_CORE_CODE(ID, CODE, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG)
+VALUES (NEXT VALUE FOR SEQ_CORE, '3', '已关闭', 'smsStatus', NULL, 4, 0, 'admin', '系统管理员', NULL, '0');
+
+INSERT INTO T_CORE_MENU (ID, MENUNAME, HREF, PARENTID, ORDERNO, ICON, MENUINITNAME)
+VALUES ('9408', '短信发送日志', '/secure/core/module/sys/sms/page/search-list', '94', '9408', '044.svg', '短信发送日志');
+-- ----------------------------- 2020-09-22 add by zhangjr------------end 1.1.14 补丁已发布
+
+
+-- ----------------------------- 2020-09-23 add by zhangjr------------begin 1.1.14 补丁已发布
+EXEC  DBO.INSERTI18N N'RESET_PASSWORD.WARNING.TIP.INVALID_USERID_OR_MOBILE', N'重置密码，用户名和手机号错误', N'用户名或手机号错误', N'zh-CN', N'用户名或手机号错误';
+EXEC  DBO.INSERTI18N N'RESET_PASSWORD.WARNING.TIP.UNABLE_SEND_SMS', N'重置密码，验证码发送失败', N'验证码发送失败，请联系管理员', N'zh-CN', N'验证码发送失败，请联系管理员';
+EXEC  DBO.INSERTI18N N'RESET_PASSWORD.WARNING.TIP.INVALID_VERIFICATION_CODE', N'重置密码，验证码错误', N'验证码错误', N'zh-CN', N'验证码错误';
+EXEC  DBO.INSERTI18N N'RESET_PASSWORD.WARNING.TIP.VERIFICATION_CODE_EXPIRED', N'重置密码，验证码过期', N'验证码过期', N'zh-CN', N'验证码过期';
+EXEC  DBO.INSERTI18N N'RESET_PASSWORD.SMS.MESSAGE_TEMPLATE', N'重置密码，发送验证码的短信模板', N'{0}（验证码），10分钟内有效。', N'zh-CN', N'{0}（验证码），10分钟内有效。';
+-- ----------------------------- 2020-09-23 add by zhangjr------------end 1.1.14 补丁已发布
+
+-- ----------------------------- 2021-09-26 add by shixw------------begin
+
+alter table dbo.T_CORE_LOGIN_CONFIG ADD RETRIEVEPASSWORDWAY VARCHAR(36) NULL
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'找回密码方式',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_LOGIN_CONFIG',
+'COLUMN', N'RETRIEVEPASSWORDWAY'
+GO
+
+EXEC DBO.INSERTI18N N'T_CORE_LOGIN_CONFIG.RETRIEVEPASSWORDWAY',N'找回密码方式',N'找回密码方式',N'zh-CN',N'找回密码方式'
+GO
+
+-- ----------------------------- 2021-09-26 add by shixw------------end
+
+
+-- ----------------------------- 2020-09-27 add by zhangjr------------begin
+EXEC  DBO.INSERTI18N N'TRANSACTION.ERROR.TRANSACTION_REQUIRED', N'当前方法必需在事务内执行', N'当前方法必需在事务内执行', N'zh-CN', N'当前方法必需在事务内执行';
+EXEC  DBO.INSERTI18N N'LEVELCODE.ERROR.INVALID_LEVELCODE_AND_LEVELSIZE', N'层次码和每层长度不匹配', N'层次码和每层长度不匹配', N'zh-CN', N'层次码和每层长度不匹配';
+EXEC  DBO.INSERTI18N N'LEVELCODE.ERROR.REACH_MAX_LEVELCODE', N'层次码达到最大值', N'层次码达到最大值', N'zh-CN', N'层次码达到最大值';
+-- ----------------------------- 2020-09-27 add by zhangjr------------end
+
+-- ----------------------------- 2021-10-08 add by zhangxt--------------begin
+UPDATE T_CORE_CONSTANT SET CONSTANTVALUE = 'txt,doc,jpg,jpeg,gif,tif,tiff,png,bmp,zip,rar,xls,ppt,ini,pdf,docx,xlsx,swf,dwg,wps,pptx,ppt,cpt,json' WHERE ID = 'FILE-EXTENSIONS';
+-- ----------------------------- 2021-10-08 add by zhangxt--------------end
+
+-- ----------------------------- 2021-11-02 add by zhangjr--------------begin
+EXEC  DBO.INSERTI18N N'GIKAM.BPMN.TASK.SUBMIT_NAME', N'进度监控，任务提交时的名称', N'{0}提交', N'zh-CN', N'{0}提交';
+EXEC  DBO.INSERTI18N N'GIKAM.BPMN.TASK.COMPLETE_NAME', N'进度监控，任务审核时的名称', N'{0}审核', N'zh-CN', N'{0}审核';
+EXEC  DBO.INSERTI18N N'GIKAM.BPMN.TASK.WITHDRAW_NAME', N'进度监控，任务撤回时的名称', N'{0}撤回', N'zh-CN', N'{0}撤回';
+EXEC  DBO.INSERTI18N N'GIKAM.BPMN.TASK.TRANSFER_NAME', N'进度监控，任务转办时的名称', N'{0}转办', N'zh-CN', N'{0}转办';
+EXEC  DBO.INSERTI18N N'GIKAM.BPMN.TASK.END_NAME', N'进度监控，任务结束时的名称', N'{0}结束', N'zh-CN', N'{0}结束';
+EXEC  DBO.INSERTI18N N'GIKAM.BPMN.TASK.REJECT_NAME', N'进度监控，任务拒绝时的名称', N'{0}拒绝', N'zh-CN', N'{0}拒绝';
+EXEC  DBO.INSERTI18N N'GIKAM.BPMN.TASK.ODD_REJECT_NAME', N'进度监控，任务异常拒绝时的名称', N'{0}异常拒绝', N'zh-CN', N'{0}异常拒绝';
+EXEC  DBO.INSERTI18N N'GIKAM.BPMN.TASK.UNDO_NAME', N'进度监控，任务回退时的名称', N'{0}回退', N'zh-CN', N'{0}回退';
+-- ----------------------------- 2021-11-02 add by zhangjr--------------end
+
+-- ----------------------------- 2021-11-03 add by zhanghang------------begin
+
+EXEC DBO.INSERTI18N  N'T_CORE_DATA_CENTER.REPORTNAME', N'报表名称', N'报表名称', N'zh-CN',N'报表名称';
+EXEC DBO.INSERTI18N  N'T_CORE_DATA_CENTER.REPORTNAME', N'数据中心报表', N'数据中心报表', N'zh-CN',N'数据中心报表';
+
+EXEC DBO.INSERTI18N  N'CORE.MODULE.SYS.REPORTS.TIP.VIEW_REPORT_MUST_CHOOSE_DATA_CENTER_REPORT_ID', N'请选择关联数据中心报表后再预览', N'请选择关联数据中心报表后再预览', N'zh-CN', N'请选择关联数据中心报表后再预览';
+EXEC DBO.INSERTI18N  N'CORE.MODULE.SYS.REPORTS.TIP.LINE_VALID_DATA_CENTER_FAILURE', N'数据中心配置明细未关联数据中心报表不允许发布,请重新选择', N'数据中心配置明细未关联数据中心报表不允许发布,请重新选择', N'zh-CN', N'数据中心配置明细未关联数据中心报表不允许发布,请重新选择';
+EXEC DBO.INSERTI18N  N'CORE.MODULE.SYS.REPORTS.TIP.VIEW_REPORT_CAN_NOT_CHOOSE_FOLDER_CENTER_REPORT_DATA', N'关联数据中心报表不能选择菜单文件夹节点', N'关联数据中心报表不能选择菜单文件夹节点', N'zh-CN', N'关联数据中心报表不能选择菜单文件夹节点';
+
+alter table dbo.T_CORE_REPORT_CONFIG_LINE ADD DATACENTERREPORTNAME VARCHAR(120) NULL
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'数据中心报表名称',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_REPORT_CONFIG_LINE',
+'COLUMN', N'DATACENTERREPORTNAME'
+GO
+alter table dbo.T_CORE_REPORT_CONFIG_LINE ADD DATACENTERREPORTURL VARCHAR(514) NULL
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'数据中心报表查询URL',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_REPORT_CONFIG_LINE',
+'COLUMN', N'DATACENTERREPORTURL'
+GO
+alter table dbo.T_CORE_REPORT_CONFIG_LINE ADD DATACENTERREPORTID BIGINT NULL
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'数据中心报表ID',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_REPORT_CONFIG_LINE',
+'COLUMN', N'DATACENTERREPORTID'
+GO
+
+EXEC  DBO.INSERTI18N N'T_CORE_REPORT_CONFIG_LINE.DATACENTERREPORTNAME',N'数据中心报表名称',N'数据中心报表名称',N'zh-CN',N'数据中心报表名称'
+GO
+EXEC  DBO.INSERTI18N N'T_CORE_REPORT_CONFIG_LINE.DATACENTERREPORTURL',N'数据中心报表查询URL',N'数据中心报表查询URL',N'zh-CN',N'数据中心报表查询URL'
+GO
+EXEC  DBO.INSERTI18N N'T_CORE_REPORT_CONFIG_LINE.DATACENTERREPORTID',N'数据中心报表ID',N'数据中心报表ID',N'zh-CN',N'数据中心报表ID'
+GO
+
+INSERT INTO T_CORE_CODE(ID, CODE, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME)
+VALUES (NEXT VALUE FOR SEQ_CORE, 'dataCenter', '数据中心', 'reportConfigCategory', NULL, 3, 0, 'admin', '系统管理员', NULL,  '0', NULL, NULL, NULL);
+
+INSERT INTO T_CORE_ADMIN_CHOOSE_CONFIG(ID, NAME, TITLE, CATEGORY, URL, WIDTH)
+  VALUES(NEXT VALUE FOR SEQ_CORE, '数据中心报表', '数据中心报表', 'data-center-report', '/secure/core/module/item/data-centers/page/report-choose-list', '40%');
+
+-- --    1.1.8补丁已发布
+INSERT INTO T_CORE_MENU(ID, MENUNAME, HREF, PARENTID, ORDERNO, MENUINITNAME, I18NCODE) VALUES ('9403', '导出日志', '/secure/core/module/sys/export-logs/page/edit-list', '94', '9403','导出日志', 'CORE.MENU.MENUNAME.SYS.LOG.EXPORT');
+
+alter table dbo.T_CORE_EXPORT_LOG ADD MENUNAME VARCHAR(64) NULL
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'菜单名称',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_EXPORT_LOG',
+'COLUMN', N'MENUNAME'
+GO
+alter table dbo.T_CORE_EXPORT_LOG ADD SUCCESS VARCHAR(1) NULL
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'导出结果（1-成功/0-失败）',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_EXPORT_LOG',
+'COLUMN', N'SUCCESS'
+GO
+
+EXEC  DBO.INSERTI18N N'T_CORE_EXPORT_LOG.MENUNAME',N'菜单名称',N'菜单名称',N'zh-CN',N'菜单名称'
+GO
+EXEC  DBO.INSERTI18N N'T_CORE_EXPORT_LOG.SUCCESS',N'导出结果',N'导出结果',N'zh-CN',N'导出结果'
+GO
+EXEC  DBO.INSERTI18N N'T_CORE_EXPORT_LOG.OPERATION',N'文件操作',N'文件操作',N'zh-CN',N'文件操作'
+GO
+
+-- --    1.1.8补丁已发布
+
+INSERT INTO T_CORE_CONSTANT(ID, CONSTANTVALUE, CONSTANTDESC, CLASSFICATION, SHOW, CREATEDTIME, CREATEDBYID, CREATEDBYNAME, VERSION) 
+VALUES ('GRID-RECORD-EXPORT-LOG', '1', '表格是否记录导出日志', '系统', '1', NULL, NULL, NULL, 0);
+
+-- ----------------------------- 2021-11-03 add by zhanghang------------end
+
+-- ----------------------------- 2021-11-08 add by zhanghang------------begin
+DELETE FROM T_CORE_CONSTANT WHERE ID = 'GRID-RECORD-EXPORT-LOG';
+-- ----------------------------- 2021-11-08 add by zhanghang------------end
+-- ----------------------------- 2021-11-09 add by zhangxt------------begin
+CREATE INDEX IDX_CORE_ATRECORDLINE_TARGETID ON dbo.T_CORE_AT_RECORD_LINE (TARGETID)
+GO
+-- ----------------------------- 2021-11-09 add by zhangxt------------end
+
+-- ----------------------------- 2021-11-23 add by shixw------------begin
+
+INSERT INTO T_CORE_ADMIN_SELECT_CONFIG(ID, NAME, CATEGORY, URL, VALUEFIELD, TEXTFIELD)
+VALUES (NEXT VALUE FOR SEQ_CORE, '复选框配置', 'checkbox-config', '/secure/core/module/admin/check-configs/queries/selectable', 'id', 'name');
+
+-- ----------------------------- 2021-11-23 add by shixw------------end
+
+-- ----------------------------- 2021-11-24 add by zhangjr------------begin
+EXEC  DBO.DELETEI18N N'CORE.MODULE.SYS.T_CORE_BPMN_PROC.ENGINE.PROCESS_NOT_EXISTS';
+EXEC  DBO.INSERTI18N N'CORE.MODULE.SYS.T_CORE_BPMN_PROC.ENGINE.PROCESS_NOT_EXISTS', N'当前登录部门流程未定义', N'当前登录部门在{0}中未定义流程', N'zh-CN', N'当前登录部门在{0}中未定义流程';
+-- ----------------------------- 2021-11-24 add by zhangjr------------end
+
+-- ----------------------------- 2021-11-24 add by zhangpf--------------begin    1.1.9补丁已发布
+alter table dbo.T_CORE_SYSTEM_CONFIG ADD HELPCENTER VARCHAR(36) NULL
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'是否开启帮助中心',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_SYSTEM_CONFIG',
+'COLUMN', N'HELPCENTER'
+GO
+
+EXEC  DBO.INSERTI18N N'T_CORE_SYSTEM_CONFIG.HELPCENTER',N'是否开启帮助中心',N'是否开启帮助中心',N'zh-CN',N'是否开启帮助中心'
+GO
+
+UPDATE T_CORE_SYSTEM_CONFIG SET HELPCENTER = '0'
+WHERE ID = 'system-config';
+
+-- 建表语句
+CREATE TABlE DBO.T_CORE_HELP_CENTER(
+    ID VARCHAR(30)  NOT NULL,
+    MANUALVIDEDFILEID BIGINT NULL ,
+    MANUALEDITINGMETHOD VARCHAR(30)  NULL ,
+    MANUALDOCFILEID BIGINT NULL ,
+    MANUALCONTENT TEXT NULL ,
+    CREATEDBYID VARCHAR(36)  NULL ,
+    CREATEDBYNAME VARCHAR(60)  NULL ,
+    CREATEDTIME DATETIME NULL ,
+    CREATEDBYORGID VARCHAR(36)  NULL ,
+    CREATEDBYORGNAME VARCHAR(270)  NULL ,
+    CONSTRAINT PK_CORE_HELP_CENTER PRIMARY KEY(ID));
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'帮助中心' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_HELP_CENTER';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'主键' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_HELP_CENTER', @level2type=N'COLUMN',@level2name=N'ID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'手册视频文件id' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_HELP_CENTER', @level2type=N'COLUMN',@level2name=N'MANUALVIDEDFILEID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'手册编辑方式(online-在线编辑/file-上传文档)' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_HELP_CENTER', @level2type=N'COLUMN',@level2name=N'MANUALEDITINGMETHOD';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'手册文档文件id' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_HELP_CENTER', @level2type=N'COLUMN',@level2name=N'MANUALDOCFILEID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'手册内容' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_HELP_CENTER', @level2type=N'COLUMN',@level2name=N'MANUALCONTENT';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_HELP_CENTER', @level2type=N'COLUMN',@level2name=N'CREATEDBYID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_HELP_CENTER', @level2type=N'COLUMN',@level2name=N'CREATEDBYNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_HELP_CENTER', @level2type=N'COLUMN',@level2name=N'CREATEDTIME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_HELP_CENTER', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_HELP_CENTER', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGNAME';
+
+EXEC  DBO.INSERTI18N  N'T_CORE_HELP_CENTER.SERVICE_NAME', N'帮助中心', N'帮助中心', N'zh-CN',N'帮助中心';
+EXEC  DBO.INSERTI18N  N'T_CORE_HELP_CENTER.ID', N'帮助中心的主键', N'主键', N'zh-CN',N'主键';
+EXEC  DBO.INSERTI18N  N'T_CORE_HELP_CENTER.MANUALVIDEDFILEID', N'帮助中心的手册视频文件id', N'手册视频文件id', N'zh-CN',N'手册视频文件id';
+EXEC  DBO.INSERTI18N  N'T_CORE_HELP_CENTER.MANUALEDITINGMETHOD', N'帮助中心的手册编辑方式', N'手册编辑方式', N'zh-CN',N'手册编辑方式';
+EXEC  DBO.INSERTI18N  N'T_CORE_HELP_CENTER.MANUALDOCFILEID', N'帮助中心的手册文档文件id', N'手册文档文件id', N'zh-CN',N'手册文档文件id';
+EXEC  DBO.INSERTI18N  N'T_CORE_HELP_CENTER.MANUALCONTENT', N'帮助中心的手册内容', N'手册内容', N'zh-CN',N'手册内容';
+EXEC  DBO.INSERTI18N  N'T_CORE_HELP_CENTER.CREATEDBYID', N'帮助中心的制单人编码', N'制单人编码', N'zh-CN',N'制单人编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_HELP_CENTER.CREATEDBYNAME', N'帮助中心的制单人名称', N'制单人名称', N'zh-CN',N'制单人名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_HELP_CENTER.CREATEDTIME', N'帮助中心的制单时间', N'制单时间', N'zh-CN',N'制单时间';
+EXEC  DBO.INSERTI18N  N'T_CORE_HELP_CENTER.CREATEDBYORGID', N'帮助中心的制单人单位编码', N'制单人单位编码', N'zh-CN',N'制单人单位编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_HELP_CENTER.CREATEDBYORGNAME', N'帮助中心的制单人单位名称', N'制单人单位名称', N'zh-CN',N'制单人单位名称';
+
+EXEC  DBO.INSERTI18N  N'MODULE.ADMIN.HELPCENTERS.TREE.MENU', N'帮助中心的菜单树', N'菜单', N'zh-CN',N'菜单';
+EXEC  DBO.INSERTI18N  N'MODULE.ADMIN.HELPCENTERS.TAB.BASE_INFO', N'基本信息', N'基本信息', N'zh-CN',N'基本信息';
+EXEC  DBO.INSERTI18N  N'MODULE.ADMIN.HELPCENTERS.FIELD.VIDEO', N'帮助中心的上传视频', N'上传视频', N'zh-CN',N'上传视频';
+EXEC  DBO.INSERTI18N  N'MODULE.ADMIN.HELPCENTERS.FIELD.MANUAL_DOC', N'帮助中心的上传操作手册', N'上传操作手册', N'zh-CN',N'上传操作手册';
+EXEC  DBO.INSERTI18N  N'MODULE.ADMIN.HELPCENTERS.FIELD.MANUAL', N'帮助中心的操作手册', N'操作手册', N'zh-CN',N'操作手册';
+
+EXEC  DBO.INSERTI18N  N'MODULE.ADMIN.HELPCENTERS.TIP.CURRENT_MENU_HAS_NO_RELATED_PAGE', N'当前菜单未配置相关页面，请重新选择', N'当前菜单未配置相关页面，请重新选择', N'zh-CN',N'当前菜单未配置相关页面，请重新选择';
+EXEC  DBO.INSERTI18N  N'MODULE.ADMIN.HELPCENTERS.TIP.CURRENT_MENU_HAS_NO_MANUAL_CONFIG', N'当前菜单未配置帮助项，请联系管理员添加', N'当前菜单未配置帮助项，请联系管理员添加', N'zh-CN',N'当前菜单未配置帮助项，请联系管理员添加';
+
+-- 创建菜单语句
+INSERT INTO T_CORE_ADMIN_MENU (ID, MENUNAME, HREF, PARENTID, ORDERNO, MENUICON)
+VALUES ('101060', '帮助中心', '/secure/module/admin/help-centers/page/edit-list', '1010', '101060', '019.svg');
+
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_HELP_CENTER', '0', '1');
+
+INSERT INTO T_CORE_ADMIN_SELECT_CONFIG(ID, NAME, CATEGORY, URL, VALUEFIELD, TEXTFIELD)
+VALUES(NEXT VALUE FOR SEQ_CORE, '帮助中心手册编辑方式', 'manual-editing-method', '/secure/core/module/sys/codes/queries/selectable?codeCategoryId=manualEditingMethod', 'code', 'codeName');
+
+INSERT INTO T_CORE_CODE_CATEGORY(ID, CODECATEGORYNAME, CODECLASSID, REMARK, ORDERNO, CREATEDBYID, CREATEDBYNAME, CREATEDTIME)
+VALUES ('manualEditingMethod', '帮助中心手册编辑方式', 'sys', NULL, 1, NULL, NULL, NULL);
+
+INSERT INTO T_CORE_CODE(ID, CODECATEGORYID, CODE, CODENAME, ORDERNO,  LASTSUSPENDEDFLAG) 
+VALUES(NEXT VALUE FOR SEQ_CORE, 'manualEditingMethod', 'file', '上传文档', 1, '0');
+INSERT INTO T_CORE_CODE(ID, CODECATEGORYID, CODE, CODENAME, ORDERNO, LASTSUSPENDEDFLAG) 
+VALUES(NEXT VALUE FOR SEQ_CORE, 'manualEditingMethod', 'online', '在线编辑', 2, '0');
+-- ----------------------------- 2021-11-24 add by zhangpf------------end    1.1.9补丁已发布
+
+
+-- ----------------------------- 2021-11-28 add by zhangjr------------begin
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.SYS.T_CORE_BPMN_PROC.DIAGRAM.TASK_NAME_NOT_ASSIGNED', N'工作流定义提交时，任务节点名称不能为空', N'任务节点名称不能为空', N'zh-CN', N'任务节点名称不能为空';
+-- ----------------------------- 2021-11-28 add by zhangjr------------end
+
+-- ----------------------------- 2021-12-01 add by zhangpf------------begin    1.1.10补丁已发布
+ALTER TABLE dbo.T_CORE_PASSWORD_POLICY ADD FAILEDATTEMPTPOLICY VARCHAR(36) NULL
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'错误密码次数策略（总数、当日累计）',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_PASSWORD_POLICY',
+'COLUMN', N'FAILEDATTEMPTPOLICY'
+GO
+
+ALTER TABLE dbo.T_CORE_PASSWORD_POLICY ADD EXPIREDPOLICY VARCHAR(36) NULL
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'过期密码策略（强制、可选）',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_PASSWORD_POLICY',
+'COLUMN', N'EXPIREDPOLICY'
+GO
+
+UPDATE T_CORE_PASSWORD_POLICY SET FAILEDATTEMPTPOLICY = 'total';
+UPDATE T_CORE_PASSWORD_POLICY SET EXPIREDPOLICY = 'optional';
+
+EXEC  DBO.INSERTI18N N'T_CORE_PASSWORD_POLICY.EXPIREDPOLICY',N'过期密码策略（强制、可选）',N'过期密码策略',N'zh-CN',N'过期密码策略'
+GO
+EXEC  DBO.INSERTI18N N'T_CORE_PASSWORD_POLICY.FAILEDATTEMPTPOLICY',N'错误密码次数策略（总数、当日累计）',N'错误密码次数策略',N'zh-CN',N'错误密码次数策略'
+GO
+EXEC  DBO.INSERTI18N N'GIKAM.SECURITY.LOGIN.INCORRECT_PASSWORD_REMAIN_TIMES', N'登录时密码错误还剩几次重试机会', N'密码错误，今日还剩余{0}次重试机会，用户将被锁定', N'zh-CN', N'密码错误，今日还剩余{0}次重试机会，用户将被锁定'
+GO
+
+INSERT INTO T_CORE_ADMIN_SELECT_CONFIG(ID, NAME, CATEGORY, URL, VALUEFIELD, TEXTFIELD)
+VALUES(NEXT VALUE FOR SEQ_CORE, '错误密码次数策略', 'failed-attempt-policy', '/secure/core/module/sys/codes/queries/selectable?codeCategoryId=failedAttemptPolicy', 'code', 'codeName');
+
+INSERT INTO T_CORE_CODE_CATEGORY(ID, CODECATEGORYNAME, CODECLASSID, REMARK, ORDERNO, CREATEDBYID, CREATEDBYNAME, CREATEDTIME)
+VALUES ('failedAttemptPolicy', '错误密码次数策略', 'sys', NULL, 1, NULL, NULL, NULL);
+
+INSERT INTO T_CORE_CODE(ID, CODECATEGORYID, CODE, CODENAME, ORDERNO,  LASTSUSPENDEDFLAG) 
+VALUES(NEXT VALUE FOR SEQ_CORE, 'failedAttemptPolicy', 'total', '总数', 1, '0');
+INSERT INTO T_CORE_CODE(ID, CODECATEGORYID, CODE, CODENAME, ORDERNO, LASTSUSPENDEDFLAG) 
+VALUES(NEXT VALUE FOR SEQ_CORE, 'failedAttemptPolicy', 'byday', '当日累计', 2, '0');
+
+INSERT INTO T_CORE_ADMIN_SELECT_CONFIG(ID, NAME, CATEGORY, URL, VALUEFIELD, TEXTFIELD)
+VALUES(NEXT VALUE FOR SEQ_CORE, '过期密码策略', 'expired-policy', '/secure/core/module/sys/codes/queries/selectable?codeCategoryId=expiredPolicy', 'code', 'codeName');
+
+INSERT INTO T_CORE_CODE_CATEGORY(ID, CODECATEGORYNAME, CODECLASSID, REMARK, ORDERNO, CREATEDBYID, CREATEDBYNAME, CREATEDTIME)
+VALUES ('expiredPolicy', '过期密码策略', 'sys', NULL, 1, NULL, NULL, NULL);
+
+INSERT INTO T_CORE_CODE(ID, CODECATEGORYID, CODE, CODENAME, ORDERNO, LASTSUSPENDEDFLAG) 
+VALUES(NEXT VALUE FOR SEQ_CORE, 'expiredPolicy', 'optional', '可选修改', 1, '0');
+INSERT INTO T_CORE_CODE(ID, CODECATEGORYID, CODE, CODENAME, ORDERNO,  LASTSUSPENDEDFLAG) 
+VALUES(NEXT VALUE FOR SEQ_CORE, 'expiredPolicy', 'mandatory', '强制修改', 2, '0');
+-- ----------------------------- 2021-12-01 add by zhangpf------------end    1.1.10补丁已发布
+
+-- ----------------------------- 2021-12-12 add by zhangjr------------begin    1.1.11补丁已发布
+INSERT INTO T_CORE_CONSTANT(ID, CONSTANTVALUE, CONSTANTDESC, CLASSFICATION, SHOW, CREATEDTIME, CREATEDBYID, CREATEDBYNAME, VERSION) 
+VALUES ('UPDATE_BAD_PASSWORD_AFTER_LOGIN', '0', '登录后是否强制更新非法的密码', '系统', '1', NULL, NULL, NULL, 0);
+-- ----------------------------- 2021-12-12 add by zhangjr------------end    1.1.11补丁已发布
+
+-- ----------------------------- 2021-12-13 add by zhangxt------------begin
+EXEC  DBO.INSERTI18N  N'GIKAM.WORKFLOW.ODD.TIP.NOMATCH_BIZ_WORKFLOW', N'异常单据回退时，数据未正确匹配到业务流程', N'异常单据回退时，数据未正确匹配到业务流程', N'zh-CN', N'异常单据回退时，数据未正确匹配到业务流程';
+-- ----------------------------- 2021-12-13 add by zhangxt------------end
+
+-- ----------------------------- 2021-12-15 add by zhangpf------------begin
+EXEC sys.sp_rename N'dbo.T_CORE_AD_DMOAIN_USER' , N'T_CORE_AD_DOMAIN_USER', 'OBJECT' GO
+
+EXEC DBO.DELETEI18N  N'T_CORE_AD_DMOAIN_USER.SERVICE_NAME';
+EXEC DBO.DELETEI18N  N'T_CORE_AD_DMOAIN_USER.ID';
+EXEC DBO.DELETEI18N  N'T_CORE_AD_DMOAIN_USER.ADUSERID';
+EXEC DBO.DELETEI18N  N'T_CORE_AD_DMOAIN_USER.CREATEDBYID';
+EXEC DBO.DELETEI18N  N'T_CORE_AD_DMOAIN_USER.CREATEDBYNAME';
+EXEC DBO.DELETEI18N  N'T_CORE_AD_DMOAIN_USER.CREATEDTIME';
+EXEC DBO.DELETEI18N  N'T_CORE_AD_DMOAIN_USER.CREATEDBYORGID';
+EXEC DBO.DELETEI18N  N'T_CORE_AD_DMOAIN_USER.CREATEDBYORGNAME';
+
+EXEC  DBO.INSERTI18N  N'T_CORE_AD_DOMAIN_USER.SERVICE_NAME', N'AD域用户', N'AD域用户', N'zh-CN',N'AD域用户';
+EXEC  DBO.INSERTI18N  N'T_CORE_AD_DOMAIN_USER.ID', N'AD域用户的主键', N'主键', N'zh-CN',N'主键';
+EXEC  DBO.INSERTI18N  N'T_CORE_AD_DOMAIN_USER.ADUSERID', N'AD域用户的AD域登录名', N'AD域登录名', N'zh-CN',N'AD域登录名';
+EXEC  DBO.INSERTI18N  N'T_CORE_AD_DOMAIN_USER.CREATEDBYID', N'AD域用户的制单人编码', N'制单人编码', N'zh-CN',N'制单人编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_AD_DOMAIN_USER.CREATEDBYNAME', N'AD域用户的制单人名称', N'制单人名称', N'zh-CN',N'制单人名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_AD_DOMAIN_USER.CREATEDTIME', N'AD域用户的制单时间', N'制单时间', N'zh-CN',N'制单时间';
+EXEC  DBO.INSERTI18N  N'T_CORE_AD_DOMAIN_USER.CREATEDBYORGID', N'AD域用户的制单人单位编码', N'制单人单位编码', N'zh-CN',N'制单人单位编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_AD_DOMAIN_USER.CREATEDBYORGNAME', N'AD域用户的制单人单位名称', N'制单人单位名称', N'zh-CN',N'制单人单位名称';
+
+UPDATE T_CORE_TABLE 
+   SET ID = 'T_CORE_AD_DOMAIN_USER'
+ WHERE ID = 'T_CORE_AD_DMOAIN_USER';
+-- ----------------------------- 2021-12-15 add by zhangpf------------end
+
+-- ----------------------------- 2021-12-16 add by ZHANGJR------------begin
+ALTER TABLE T_CORE_USER ADD READONLY VARCHAR(2) ;
+EXEC sp_addextendedproperty
+'MS_Description', N'是否是只读用户（0-否 1-是）',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_USER',
+'COLUMN', N'READONLY'
+GO
+
+ALTER TABLE T_CORE_M_USER ADD READONLY VARCHAR(2) ;
+EXEC sp_addextendedproperty
+'MS_Description', N'是否是只读用户（0-否 1-是）',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_M_USER',
+'COLUMN', N'READONLY'
+GO
+
+EXEC  DBO.INSERTI18N  N'T_CORE_USER.READONLY', N'系统用户表的是否只读账号', N'是否只读账号', N'zh-CN', N'是否只读账号';
+EXEC  DBO.INSERTI18N  N'GIKAM.TIP.NOT_PERMITTED', N'无权进行该操作', N'无权进行该操作', N'zh-CN', N'无权进行该操作'; 
+
+INSERT INTO T_CORE_CONSTANT(ID, CONSTANTVALUE, CONSTANTDESC, CLASSFICATION, SHOW, CREATEDTIME, CREATEDBYID, CREATEDBYNAME, VERSION) 
+VALUES ('REDIS_MAX_EXPIRED_SEC', '0', 'REDIS缓存过期的时间，0是不限制', '系统', '1', NULL, NULL, NULL, 0);
+-- ----------------------------- 2021-12-16 add by ZHANGJR------------END
+
+-- ----------------------------- 2021-12-17 add by ZHANGJR------------begin
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.SYS.T_CORE_BPMN_DIAGRAM.CANDIDATOR.SPECIAL', N'审核人信息中特殊分配', N'特殊分配', N'zh-CN', N'特殊分配';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.SYS.T_CORE_BPMN_DIAGRAM.COMMENT.TASKNAME', N'审核意见中节点名称', N'节点名称', N'zh-CN', N'节点名称';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.SYS.T_CORE_BPMN_DIAGRAM.COMMENT.AUDITEDBYNAME', N'审核意见中审核人', N'审核人', N'zh-CN', N'审核人';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.SYS.T_CORE_BPMN_DIAGRAM.COMMENT.AUDITEDTIME', N'审核意见中审核时间', N'审核时间', N'zh-CN', N'审核时间';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.SYS.T_CORE_BPMN_DIAGRAM.COMMENT.COMMENT', N'审核意见中审核意见', N'审核意见', N'zh-CN', N'审核意见';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.SYS.T_CORE_BPMN_DIAGRAM.COMMENT.ROUTE', N'审核意见中审核路径', N'审核路径', N'zh-CN', N'审核路径';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.SYS.T_CORE_BPMN_DIAGRAM.COMMENT.ATTACHMENT', N'审核意见中附件', N'附件', N'zh-CN', N'附件';
+
+EXEC  DBO.UPDATEI18N  N'CORE.MODULE.SYS.T_CORE_BPMN_DIAGRAM.CANDIDATOR.TASKSTATUSCODE', N'zh-CN', N'状态码';
+EXEC  DBO.UPDATEI18N  N'CORE.MODULE.SYS.T_CORE_BPMN_DIAGRAM.CANDIDATOR.TASKNAME', N'zh-CN', N'节点名称';
+
+EXEC  DBO.DELETEI18N  N'CORE.MODULE.SYS.T_CORE_BPMN_DIAGRAM.CANDIDATOR.DYNAMIC';
+EXEC  DBO.DELETEI18N  N'CORE.MODULE.SYS.T_CORE_BPMN_DIAGRAM.CANDIDATOR.INITIATOR';
+-- ----------------------------- 2021-12-17 add by ZHANGJR------------end
+
+-- ----------------------------- 2021-12-17 add by zhangpf------------begin
+EXEC  DBO.INSERTI18N N'GIKAM.SECURITY.LOGIN.FAILEDATTEMPTPOLICY_TOTAL_INCORRECT_PASSWORD_REMAIN_TIMES', N'登录时密码错误还剩几次重试机会', N'密码错误，还剩余{0}次重试机会，用户将被锁定', N'zh-CN', N'密码错误，还剩余{0}次重试机会，用户将被锁定'
+GO
+-- ----------------------------- 2021-12-17 add by zhangpf------------end
+
+-- ----------------------------- 2021-12-22 add by ZHANGJR------------begin
+EXEC  DBO.INSERTI18N  N'EXECUTOR.RESOURCE_MONITORING.UNABLE_RUN_MULTIPLE_TASK', N'每个线程只能运行一条资源监控的任务', N'每个线程只能运行一条资源监控的任务', N'zh-CN', N'每个线程只能运行一条资源监控的任务';
+EXEC  DBO.INSERTI18N  N'EXECUTOR.RESOURCE_MONITORING.CPU_USAGE_OVERLOAD', N'当前CPU使用率过高，请稍后再尝试该操作', N'当前CPU使用率过高，请稍后再尝试该操作', N'zh-CN', N'当前CPU使用率过高，请稍后再尝试该操作';
+EXEC  DBO.INSERTI18N  N'EXECUTOR.RESOURCE_MONITORING.MEMORY_USAGE_OVERLOAD', N'当前内存使用率过高，请稍后再尝试该操作', N'当前内存使用率过高，请稍后再尝试该操作', N'zh-CN', N'当前内存使用率过高，请稍后再尝试该操作';
+EXEC  DBO.INSERTI18N  N'EXECUTOR.RESOURCE_MONITORING.RUNNING_TIMEOUT', N'当前任务运行超时，请稍后执行或联系管理员', N'当前任务运行超时，请稍后执行或联系管理员', N'zh-CN', N'当前任务运行超时，请稍后执行或联系管理员';
+EXEC  DBO.INSERTI18N  N'EXECUTOR.RESOURCE_MONITORING.TASK_OVERLOAD', N'当前运行的任务过多，请稍后再试', N'当前运行的任务过多，请稍后再试', N'zh-CN', N'当前运行的任务过多，请稍后再试';
+-- ----------------------------- 2021-12-22 add by ZHANGJR------------end
+
+-- ----------------------------- 2021-12-30 add by ZHANGJR------------begin
+EXEC  DBO.DELETEI18N  N'GIKAM.BPMN.TASK.START';
+EXEC  DBO.DELETEI18N  N'GIKAM.BPMN.TASK.END';
+-- ----------------------------- 2021-12-30 add by ZHANGJR------------end
+
+-- ----------------------------- 2022-1-5 add by ZHANGJR------------begin
+INSERT INTO T_CORE_ADMIN_MENU (ID, MENUNAME, HREF, PARENTID, ORDERNO, MENUICON)
+VALUES ('101070', '执行脚本', '/secure/core/module/admin/scripts/page/detail', '1010', '101070', '019.svg');
+
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.ADMIN.SCRIPT.TITLE.SCRIPT', N'执行的脚本信息', N'执行脚本', N'zh-CN', N'执行脚本';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.ADMIN.SCRIPT.TITLE.RESULT', N'脚本执行后的结果', N'执行结果', N'zh-CN', N'执行结果';
+
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.ADMIN.SCRIPT.RESULT.CODE', N'脚本执行后的返回状态码', N'返回状态', N'zh-CN', N'返回状态';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.ADMIN.SCRIPT.RESULT.CONTENT', N'脚本执行后的返回结果', N'返回结果', N'zh-CN', N'返回结果';
+
+EXEC  DBO.INSERTI18N  N'GIKAM.BUTTON.EXECUTE', N'执行', N'执行', N'zh-CN', N'执行';
+-- ----------------------------- 2022-1-5 add by ZHANGJR------------end
+
+-- ----------------------------- 2022-1-11 add by ZHANGJR------------begin
+EXEC  DBO.INSERTI18N  N'GIKAM.SECURITY.LOGIN.ALREADY_LOGIN', N'已有用户登录，不允许多账号登录', N'已有用户登录，不允许多账号登录', N'zh-CN', N'已有用户登录，不允许多账号登录';
+-- ----------------------------- 2022-1-11 add by ZHANGJR------------end
+
+-- ----------------------------- 2022-01-16 add by shixw------------begin
+
+INSERT INTO T_CORE_MENU (ID, MENUNAME, HREF, PARENTID, ORDERNO, ICON, MENUINITNAME)
+VALUES ('9361', '数据中心查询', '/secure/core/module/item/data-centers/page/search-list', '93', '9361', '016.svg', '数据中心查询');
+
+INSERT INTO T_CORE_ADMIN_SELECT_CONFIG(ID, NAME, CATEGORY, URL, VALUEFIELD, TEXTFIELD)
+VALUES (NEXT VALUE FOR SEQ_CORE, '数据中心报表', 'data-center-report', '/secure/core/module/item/data-centers/queries/selectable', 'url', 'nodeName');
+
+-- ----------------------------- 2022-01-16 add by shixw------------end
+
+-- ----------------------------- 2022-01-17 add by dingjj------------begin
+
+-- 建表语句
+CREATE TABlE DBO.T_CORE_NOTIFICATION_AUDIO(
+    ID BIGINT NOT NULL,
+    AUDIONAME VARCHAR(120)  NULL ,
+    AUDIOTYPE VARCHAR(36)  NULL ,
+    URL VARCHAR(270)  NULL ,
+    CREATEDBYID VARCHAR(36)  NULL ,
+    CREATEDBYNAME VARCHAR(60)  NULL ,
+    CREATEDTIME DATETIME NULL ,
+    CREATEDBYORGID VARCHAR(36)  NULL ,
+    CREATEDBYORGNAME VARCHAR(270)  NULL ,
+    CONSTRAINT PK_CORE_NOTIFICATION_AUDIO PRIMARY KEY(ID));
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'通知语音库' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NOTIFICATION_AUDIO';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'主键' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NOTIFICATION_AUDIO', @level2type=N'COLUMN',@level2name=N'ID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'语音名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NOTIFICATION_AUDIO', @level2type=N'COLUMN',@level2name=N'AUDIONAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'语音类型' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NOTIFICATION_AUDIO', @level2type=N'COLUMN',@level2name=N'AUDIOTYPE';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'路径' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NOTIFICATION_AUDIO', @level2type=N'COLUMN',@level2name=N'URL';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NOTIFICATION_AUDIO', @level2type=N'COLUMN',@level2name=N'CREATEDBYID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NOTIFICATION_AUDIO', @level2type=N'COLUMN',@level2name=N'CREATEDBYNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NOTIFICATION_AUDIO', @level2type=N'COLUMN',@level2name=N'CREATEDTIME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NOTIFICATION_AUDIO', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_NOTIFICATION_AUDIO', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGNAME';
+
+EXEC  DBO.INSERTI18N  N'T_CORE_NOTIFICATION_AUDIO.SERVICE_NAME', N'通知语音库', N'通知语音库', N'zh-CN',N'通知语音库';
+EXEC  DBO.INSERTI18N  N'T_CORE_NOTIFICATION_AUDIO.ID', N'通知语音库的主键', N'主键', N'zh-CN',N'主键';
+EXEC  DBO.INSERTI18N  N'T_CORE_NOTIFICATION_AUDIO.AUDIONAME', N'通知语音库的语音名称', N'语音名称', N'zh-CN',N'语音名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_NOTIFICATION_AUDIO.AUDIOTYPE', N'通知语音库的语音类型', N'语音类型', N'zh-CN',N'语音类型';
+EXEC  DBO.INSERTI18N  N'T_CORE_NOTIFICATION_AUDIO.URL', N'通知语音库的路径', N'路径', N'zh-CN',N'路径';
+EXEC  DBO.INSERTI18N  N'T_CORE_NOTIFICATION_AUDIO.CREATEDBYID', N'通知语音库的制单人编码', N'制单人编码', N'zh-CN',N'制单人编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_NOTIFICATION_AUDIO.CREATEDBYNAME', N'通知语音库的制单人名称', N'制单人名称', N'zh-CN',N'制单人名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_NOTIFICATION_AUDIO.CREATEDTIME', N'通知语音库的制单时间', N'制单时间', N'zh-CN',N'制单时间';
+EXEC  DBO.INSERTI18N  N'T_CORE_NOTIFICATION_AUDIO.CREATEDBYORGID', N'通知语音库的制单人单位编码', N'制单人单位编码', N'zh-CN',N'制单人单位编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_NOTIFICATION_AUDIO.CREATEDBYORGNAME', N'通知语音库的制单人单位名称', N'制单人单位名称', N'zh-CN',N'制单人单位名称';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.ITEM.NOTIFICATION.AUDIOS.MODAL.ADD', N'新增', N'新增', N'zh-CN',N'新增';
+
+-- 创建菜单语句
+INSERT INTO T_CORE_MENU (ID, MENUNAME, HREF, PARENTID, ORDERNO, ICON, MENUINITNAME)
+VALUES ('950503', '通知语音库', '/secure/core/module/item/notification/audios/page/edit-list', '9505', '950503', '033.svg', '通知语音库');
+
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_NOTIFICATION_AUDIO', '0', '1');
+
+alter table dbo.T_CORE_SYSTEM_CONFIG ADD NOTIFICATIONAUDIO BIGINT NULL
+
+EXEC sp_addextendedproperty
+'MS_Description', N'消息通知语音',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_SYSTEM_CONFIG',
+'COLUMN', N'NOTIFICATIONAUDIO'
+
+EXEC  DBO.INSERTI18N  N'T_CORE_SYSTEM_CONFIG.NOTIFICATIONAUDIO', N'系统配置的消息通知语音', N'消息通知语音', N'zh-CN',N'消息通知语音';
+
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.ITEM.NOTIFICATION.AUDIOS.TIP.ATTACHMENT_EXISTS', N'存在语音文件，请确认是否覆盖', N'存在语音文件，请确认是否覆盖', N'zh-CN',N'存在语音文件，请确认是否覆盖';
+
+INSERT INTO T_CORE_CODE_CATEGORY(ID, CODECATEGORYNAME, CODECLASSID, REMARK, ORDERNO, CREATEDBYID, CREATEDBYNAME, CREATEDTIME)
+VALUES ('audioType', '语音类型', 'sys', NULL, 1, NULL, NULL, NULL);
+
+INSERT INTO T_CORE_CODE(ID, CODECATEGORYID, CODE, CODENAME, ORDERNO, LASTSUSPENDEDFLAG)
+VALUES(NEXT VALUE FOR SEQ_CORE, 'audioType', '0', '内置', 1, '0');
+INSERT INTO T_CORE_CODE(ID, CODECATEGORYID, CODE, CODENAME, ORDERNO, LASTSUSPENDEDFLAG)
+VALUES(NEXT VALUE FOR SEQ_CORE, 'audioType', '1', '自定义', 2, '0');
+
+INSERT INTO T_CORE_ADMIN_SELECT_CONFIG(ID, NAME, CATEGORY, URL, VALUEFIELD, TEXTFIELD)
+VALUES(NEXT VALUE FOR SEQ_CORE, '语音状态', 'audio-type', '/secure/core/module/sys/codes/queries/selectable?codeCategoryId=audio-type', 'code', 'codeName');
+
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.ITEM.NOTIFICATION.AUDIOS.TIP.UNABLE_DELETE_SYSTEM_AUDIO', N'内置语音不允许删除', N'内置语音不允许删除', N'zh-CN',N'内置语音不允许删除';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.ITEM.NOTIFICATION.AUDIOS.TIP.UNABLE_COVER_SYSTEM_AUDIO', N'内置语音不允许覆盖', N'内置语音不允许覆盖', N'zh-CN',N'内置语音不允许覆盖';
+EXEC  DBO.INSERTI18N  N'GIKAM.FILE.MODAL.UPLOAD_FILE', N'上传附件', N'上传附件', N'zh-CN',N'上传附件';
+EXEC  DBO.INSERTI18N  N'GIKAM.FILE.MODAL.DELETE_FILE', N'删除附件', N'删除附件', N'zh-CN',N'删除附件';
+
+INSERT INTO T_CORE_NOTIFICATION_AUDIO (ID, AUDIONAME, AUDIOTYPE, URL, CREATEDBYID, CREATEDBYNAME)
+values(1, '内置语音4','0', '/static/gikam/extend/media/danger.mp3', 'admin', '系统管理员');
+INSERT INTO T_CORE_NOTIFICATION_AUDIO (ID, AUDIONAME, AUDIOTYPE, URL, CREATEDBYID, CREATEDBYNAME)
+values(2, '内置语音3','0', '/static/gikam/extend/media/normal.mp3', 'admin', '系统管理员');
+INSERT INTO T_CORE_NOTIFICATION_AUDIO (ID, AUDIONAME, AUDIOTYPE, URL, CREATEDBYID, CREATEDBYNAME)
+values(3, '内置语音2','0', '/static/gikam/extend/media/success.mp3', 'admin', '系统管理员');
+INSERT INTO T_CORE_NOTIFICATION_AUDIO (ID, AUDIONAME, AUDIOTYPE, URL, CREATEDBYID, CREATEDBYNAME)
+values(4, '内置语音1','0', '/static/gikam/extend/media/warning.mp3', 'admin', '系统管理员');
+
+GO
+-- ----------------------------- 2022-01-17 add by dingjj------------end
+
+-- ----------------------------- 2022-01-24 add by zhanghang------------begin
+alter table dbo.T_CORE_LOGIN_CONFIG ADD SMSLOGIN VARCHAR(32) NULL
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'验证码登录',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_LOGIN_CONFIG',
+'COLUMN', N'SMSLOGIN'
+GO
+
+EXEC  DBO.INSERTI18N N'T_CORE_LOGIN_CONFIG.SMSLOGIN',N'验证码登录',N'验证码登录',N'zh-CN',N'验证码登录'
+GO
+
+EXEC DBO.INSERTI18N N'SMS_LOGIN.TIP.SEND_SMS_FAILED', N'短信发送失败', N'短信发送失败', N'zh-CN', N'短信发送失败';
+EXEC DBO.INSERTI18N N'SMS_LOGIN.TIP.MOBILE_DOESNOT_EXIST', N'手机号不存在', N'手机号不存在', N'zh-CN', N'手机号不存在';
+EXEC DBO.INSERTI18N N'SMS_LOGING.SMS_CONTENT', N'手机验证码登录短信内容', N'{0} 短信登录验证码，10分钟有效，请勿泄露。', N'zh-CN', N'{0} 短信登录验证码，10分钟有效，请勿泄露。';
+EXEC DBO.INSERTI18N N'SMS_LOGIN.TIP.SMSCODE_MOBILE_DOESNOT_MATACH', N'验证码无效', N'验证码无效', N'zh-CN', N'验证码无效';
+GO
+-- ----------------------------- 2022-01-24 add by zhanghang------------end
+
+-- ----------------------------- 2022-01-26 add by shixw------------begin
+
+DELETE FROM T_CORE_NOTIFICATION_AUDIO WHERE id IN (1,2,3,4);
+
+INSERT INTO T_CORE_NOTIFICATION_AUDIO (ID, AUDIONAME, AUDIOTYPE, URL, CREATEDBYID, CREATEDBYNAME)
+values(1, '内置语音4','system', '/static/gikam/extend/media/danger.mp3', 'admin', '系统管理员');
+INSERT INTO T_CORE_NOTIFICATION_AUDIO (ID, AUDIONAME, AUDIOTYPE, URL, CREATEDBYID, CREATEDBYNAME)
+values(2, '内置语音3','system', '/static/gikam/extend/media/normal.mp3', 'admin', '系统管理员');
+INSERT INTO T_CORE_NOTIFICATION_AUDIO (ID, AUDIONAME, AUDIOTYPE, URL, CREATEDBYID, CREATEDBYNAME)
+values(3, '内置语音2','system', '/static/gikam/extend/media/success.mp3', 'admin', '系统管理员');
+INSERT INTO T_CORE_NOTIFICATION_AUDIO (ID, AUDIONAME, AUDIOTYPE, URL, CREATEDBYID, CREATEDBYNAME)
+values(4, '内置语音1','system', '/static/gikam/extend/media/warning.mp3', 'admin', '系统管理员');
+
+-- ----------------------------- 2022-01-26 add by shixw------------end
+
+-- ----------------------------- 2022-02-10 add by zhanghang------------begin
+INSERT INTO T_CORE_CODE_CATEGORY(ID, CODECATEGORYNAME, CODECLASSID, REMARK, ORDERNO, CREATEDBYID, CREATEDBYNAME, CREATEDTIME)
+VALUES ('mobilePrefix', '手机号前缀', 'sys', NULL, 1, NULL, NULL, NULL);
+
+INSERT INTO T_CORE_CODE(ID, CODECATEGORYID, CODE, CODENAME, ORDERNO, LASTSUSPENDEDFLAG)
+VALUES(NEXT VALUE FOR SEQ_CORE, 'mobilePrefix', '86', '86', 1, '0');
+-- ----------------------------- 2022-02-10 add by zhanghang------------end
+
+-- ----------------------------- 2022-02-24 add by shixw------------begin
+
+alter table dbo.T_CORE_CODE ADD I18NCODE VARCHAR(240) NULL
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'国际化编码',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_CODE',
+'COLUMN', N'I18NCODE'
+GO
+
+EXEC  DBO.INSERTI18N N'T_CORE_CODE.I18NCODE',N'国际化编码',N'国际化编码',N'zh-CN',N'国际化编码'
+GO
+
+-- ----------------------------- 2022-02-24 add by shixw------------end
+
+-- ----------------------------- 2022-03-03 add by zhanghang------------begin
+DELETE FROM T_CORE_CODE_CATEGORY WHERE ID = 'mobilePrefix';
+DELETE FROM T_CORE_CODE WHERE CODECATEGORYID = 'mobilePrefix';
+
+INSERT INTO T_CORE_CODE_CATEGORY(ID, CODECATEGORYNAME, CODECLASSID, REMARK, ORDERNO, CREATEDBYID, CREATEDBYNAME, CREATEDTIME)
+VALUES ('countryCode', '国号', 'sys', NULL, 1, NULL, NULL, NULL);
+
+INSERT INTO T_CORE_CODE(ID, CODECATEGORYID, CODE, CODENAME, ORDERNO, LASTSUSPENDEDFLAG)
+VALUES(NEXT VALUE FOR SEQ_CORE, 'countryCode', '86', '86', 1, '0');
+-- ----------------------------- 2022-03-03 add by zhanghang------------end
+
+-- ----------------------------- 2022-03-07 add by guozj--------------begin
+
+-- 建表语句
+CREATE TABlE DBO.T_CORE_DATA_CENTER_PARAM(
+    ID BIGINT NOT NULL,
+    DATACENTERID BIGINT NULL ,
+    PARAMETERNAME VARCHAR(360)  NULL ,
+    PARAMETERVALUE VARCHAR(360)  NULL ,
+    DEFAULTVALUE VARCHAR(360)  NULL ,
+    CREATEDBYID VARCHAR(36)  NULL ,
+    CREATEDBYNAME VARCHAR(60)  NULL ,
+    CREATEDTIME DATETIME NULL ,
+    CREATEDBYORGID VARCHAR(36)  NULL ,
+    CREATEDBYORGNAME VARCHAR(270)  NULL ,
+    CONSTRAINT PK_CORE_DATA_CENTER_PARAM PRIMARY KEY(ID));
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'数据中心参数配置表' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_DATA_CENTER_PARAM';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'主键' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_DATA_CENTER_PARAM', @level2type=N'COLUMN',@level2name=N'ID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'数据中心id' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_DATA_CENTER_PARAM', @level2type=N'COLUMN',@level2name=N'DATACENTERID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'参数名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_DATA_CENTER_PARAM', @level2type=N'COLUMN',@level2name=N'PARAMETERNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'参数值' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_DATA_CENTER_PARAM', @level2type=N'COLUMN',@level2name=N'PARAMETERVALUE';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'默认值' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_DATA_CENTER_PARAM', @level2type=N'COLUMN',@level2name=N'DEFAULTVALUE';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_DATA_CENTER_PARAM', @level2type=N'COLUMN',@level2name=N'CREATEDBYID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_DATA_CENTER_PARAM', @level2type=N'COLUMN',@level2name=N'CREATEDBYNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_DATA_CENTER_PARAM', @level2type=N'COLUMN',@level2name=N'CREATEDTIME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_DATA_CENTER_PARAM', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_DATA_CENTER_PARAM', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGNAME';
+
+CREATE NONCLUSTERED INDEX [IDX_CORE_DATACENTERPARAM_DATACENTERID] ON [dbo].[T_CORE_DATA_CENTER_PARAM] ([DATACENTERID]);
+
+EXEC  DBO.INSERTI18N  N'T_CORE_DATA_CENTER_PARAM.SERVICE_NAME', N'数据中心参数配置表', N'数据中心参数配置表', N'zh-CN',N'数据中心参数配置表';
+EXEC  DBO.INSERTI18N  N'T_CORE_DATA_CENTER_PARAM.ID', N'数据中心参数配置表的主键', N'主键', N'zh-CN',N'主键';
+EXEC  DBO.INSERTI18N  N'T_CORE_DATA_CENTER_PARAM.DATACENTERID', N'数据中心参数配置表的数据中心id', N'数据中心id', N'zh-CN',N'数据中心id';
+EXEC  DBO.INSERTI18N  N'T_CORE_DATA_CENTER_PARAM.PARAMETERNAME', N'数据中心参数配置表的参数名称', N'参数名称', N'zh-CN',N'参数名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_DATA_CENTER_PARAM.PARAMETERVALUE', N'数据中心参数配置表的参数值', N'参数值', N'zh-CN',N'参数值';
+EXEC  DBO.INSERTI18N  N'T_CORE_DATA_CENTER_PARAM.DEFAULTVALUE', N'数据中心参数配置表的默认值', N'默认值', N'zh-CN',N'默认值';
+EXEC  DBO.INSERTI18N  N'T_CORE_DATA_CENTER_PARAM.CREATEDBYID', N'数据中心参数配置表的制单人编码', N'制单人编码', N'zh-CN',N'制单人编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_DATA_CENTER_PARAM.CREATEDBYNAME', N'数据中心参数配置表的制单人名称', N'制单人名称', N'zh-CN',N'制单人名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_DATA_CENTER_PARAM.CREATEDTIME', N'数据中心参数配置表的制单时间', N'制单时间', N'zh-CN',N'制单时间';
+EXEC  DBO.INSERTI18N  N'T_CORE_DATA_CENTER_PARAM.CREATEDBYORGID', N'数据中心参数配置表的制单人单位编码', N'制单人单位编码', N'zh-CN',N'制单人单位编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_DATA_CENTER_PARAM.CREATEDBYORGNAME', N'数据中心参数配置表的制单人单位名称', N'制单人单位名称', N'zh-CN',N'制单人单位名称';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.ITEM.DATACENTERS.MODAL.ADD', N'新增', N'新增', N'zh-CN',N'新增';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.ITEM.DATACENTERS.TAB.PARAM', N'参数配置', N'参数配置', N'zh-CN',N'参数配置';
+
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_DATA_CENTER_PARAM', '0', '0');
+
+INSERT INTO T_CORE_TABLE_HIERARCHY (ID, TABLENAME, MASTERTABLENAME, REFERCOLUMN)
+VALUES (NEXT VALUE FOR SEQ_CORE,'T_CORE_DATA_CENTER_PARAM', 'T_CORE_DATA_CENTER', 'DATACENTERID');
+
+-- ----------------------------- 2022-03-07 add by guozj------------end
+
+-- ----------------------------- 2022-04-18 add by guozj--------------begin
+ALTER TABLE DBO.T_CORE_TODO_CONFIG ADD SELECTSQL TEXT NULL
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'待办查询SQL',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_TODO_CONFIG',
+'COLUMN', N'SELECTSQL'
+GO
+
+EXEC  DBO.INSERTI18N  N'T_CORE_TODO_CONFIG.SELECTSQL', N'待办查询SQL', N'待办配置', N'zh-CN',N'待办查询SQL';
+
+-- ----------------------------- 2022-04-18 add by guozj------------end
+
+-- ----------------------------- 2022-04-20 add by guozj--------------begin
+
+INSERT INTO T_CORE_MENU (ID, MENUNAME, HREF, PARENTID, ORDERNO, ICON, MENUINITNAME)
+VALUES ('9325', '首页面板配置', '/secure/core/module/item/workspace-panels/page/edit-list', '93', '9325', '001.svg', '首页面板配置');
+
+ALTER TABLE DBO.T_CORE_WK_PANEL ADD CODE VARCHAR(36) NULL
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'编码',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_WK_PANEL',
+'COLUMN', N'CODE'
+GO
+
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.ITEM.WORKSPACEPANELS.MODAL.ADD', N'新增', N'新增', N'zh-CN',N'新增';
+EXEC  DBO.INSERTI18N  N'T_CORE_WK_PANEL.CODE', N'首页面板配置的编码', N'编码', N'zh-CN',N'编码';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.ITEM.WORKSPACEPANELS.TIP.CHOOSE_URL_PANEL', N'请选择配置URL的数据', N'请选择配置URL的数据', N'zh-CN',N'请选择配置URL的数据';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.ITEM.WORKSPACEPANELS.MODAL.VIEW', N'首页面板配置预览', N'预览', N'zh-CN',N'预览';
+
+ALTER TABLE DBO.T_CORE_WK_PANEL ADD REFRESHFLAG VARCHAR(1) NULL
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'刷新标志',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_WK_PANEL',
+'COLUMN', 'REFRESHFLAG'
+GO
+
+EXEC  DBO.INSERTI18N  N'T_CORE_WK_PANEL.REFRESHFLAG', N'首页面板配置的刷新标志', N'刷新', N'zh-CN',N'刷新';
+
+-- ----------------------------- 2022-04-20 add by guozj------------end
+
+-- ----------------------------- 2022-04-30 add by guodz--------------begin
+
+-- 建表语句
+CREATE TABlE DBO.T_CORE_BPMN_PRESET_COMMENT(
+    ID BIGINT NOT NULL,
+    COMMENTCATEGORY VARCHAR(36)  NULL ,
+    PRESETCOMMENT VARCHAR(120)  NULL ,
+    DEFAULTFLAG VARCHAR(1)  NULL ,
+    ORDERNO BIGINT NULL ,
+    CREATEDBYID VARCHAR(36)  NULL ,
+    CREATEDBYNAME VARCHAR(60)  NULL ,
+    CREATEDTIME DATETIME NULL ,
+    CREATEDBYORGID VARCHAR(36)  NULL ,
+    CREATEDBYORGNAME VARCHAR(270)  NULL ,
+    CONSTRAINT PK_CORE_BPMN_PRESET_COMMENT PRIMARY KEY(ID));
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'流程预置意见' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_BPMN_PRESET_COMMENT';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'主键' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_BPMN_PRESET_COMMENT', @level2type=N'COLUMN',@level2name=N'ID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'意见类型' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_BPMN_PRESET_COMMENT', @level2type=N'COLUMN',@level2name=N'COMMENTCATEGORY';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'预置意见' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_BPMN_PRESET_COMMENT', @level2type=N'COLUMN',@level2name=N'PRESETCOMMENT';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'是否默认' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_BPMN_PRESET_COMMENT', @level2type=N'COLUMN',@level2name=N'DEFAULTFLAG';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'排序码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_BPMN_PRESET_COMMENT', @level2type=N'COLUMN',@level2name=N'ORDERNO';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_BPMN_PRESET_COMMENT', @level2type=N'COLUMN',@level2name=N'CREATEDBYID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_BPMN_PRESET_COMMENT', @level2type=N'COLUMN',@level2name=N'CREATEDBYNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_BPMN_PRESET_COMMENT', @level2type=N'COLUMN',@level2name=N'CREATEDTIME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_BPMN_PRESET_COMMENT', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_BPMN_PRESET_COMMENT', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGNAME';
+
+EXEC  DBO.INSERTI18N  N'T_CORE_BPMN_PRESET_COMMENT.SERVICE_NAME', N'流程预置意见', N'流程预置意见', N'zh-CN',N'流程预置意见';
+EXEC  DBO.INSERTI18N  N'T_CORE_BPMN_PRESET_COMMENT.ID', N'流程预置意见的主键', N'主键', N'zh-CN',N'主键';
+EXEC  DBO.INSERTI18N  N'T_CORE_BPMN_PRESET_COMMENT.COMMENTCATEGORY', N'流程预置意见的意见类型', N'意见类型', N'zh-CN',N'意见类型';
+EXEC  DBO.INSERTI18N  N'T_CORE_BPMN_PRESET_COMMENT.PRESETCOMMENT', N'流程预置意见的预置意见', N'预置意见', N'zh-CN',N'预置意见';
+EXEC  DBO.INSERTI18N  N'T_CORE_BPMN_PRESET_COMMENT.DEFAULTFLAG', N'流程预置意见的是否默认', N'是否默认', N'zh-CN',N'是否默认';
+EXEC  DBO.INSERTI18N  N'T_CORE_BPMN_PRESET_COMMENT.ORDERNO', N'流程预置意见的排序码', N'排序码', N'zh-CN',N'排序码';
+EXEC  DBO.INSERTI18N  N'T_CORE_BPMN_PRESET_COMMENT.CREATEDBYID', N'流程预置意见的制单人编码', N'制单人编码', N'zh-CN',N'制单人编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_BPMN_PRESET_COMMENT.CREATEDBYNAME', N'流程预置意见的制单人名称', N'制单人名称', N'zh-CN',N'制单人名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_BPMN_PRESET_COMMENT.CREATEDTIME', N'流程预置意见的制单时间', N'制单时间', N'zh-CN',N'制单时间';
+EXEC  DBO.INSERTI18N  N'T_CORE_BPMN_PRESET_COMMENT.CREATEDBYORGID', N'流程预置意见的制单人单位编码', N'制单人单位编码', N'zh-CN',N'制单人单位编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_BPMN_PRESET_COMMENT.CREATEDBYORGNAME', N'流程预置意见的制单人单位名称', N'制单人单位名称', N'zh-CN',N'制单人单位名称';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.SYS.BPMNPRESETCOMMENTS.MODAL.ADD', N'新增', N'新增', N'zh-CN',N'新增';
+
+
+-- 创建菜单语句
+INSERT INTO T_CORE_MENU (ID, MENUNAME, HREF, PARENTID, ORDERNO, ICON, MENUINITNAME)
+VALUES ('9234', '流程预置意见', '/secure/core/module/sys/bpmn/preset-comments/page/edit-list', '92', '9234', '014.svg', '流程预置意见');
+
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_BPMN_PRESET_COMMENT', '0', '0');
+
+INSERT INTO T_CORE_ADMIN_SELECT_CONFIG (ID, NAME, CATEGORY, URL, VALUEFIELD, TEXTFIELD)
+ VALUES (NEXT VALUE FOR SEQ_CORE, '流程预置意见',  'bpmn-preset-comment', '/secure/core/module/sys/bpmn/preset-comments/queries/selectable', 'id', 'presetComment');
+
+INSERT INTO T_CORE_CODE_CATEGORY(ID, CODECATEGORYNAME, CODECLASSID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME)
+ VALUES ('bpmnPresetCommentCategory', '流程预置意见类型', 'sys', NULL, 1, NULL, NULL, NULL, NULL);
+
+INSERT INTO T_CORE_CODE(ID, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME, CODE)
+ VALUES (NEXT VALUE FOR SEQ_CORE,  '审核通过', 'bpmnPresetCommentCategory', NULL, 1, 0, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL, 'pass');
+INSERT INTO T_CORE_CODE(ID, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME, CODE)
+ VALUES (NEXT VALUE FOR SEQ_CORE,  '撤回', 'bpmnPresetCommentCategory', NULL, 5, 0, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL, 'withdraw');
+INSERT INTO T_CORE_CODE(ID, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME, CODE)
+ VALUES (NEXT VALUE FOR SEQ_CORE,  '审核拒绝', 'bpmnPresetCommentCategory', NULL, 2, 0, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL, 'reject');
+INSERT INTO T_CORE_CODE(ID, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME, CODE)
+ VALUES (NEXT VALUE FOR SEQ_CORE,  '回退', 'bpmnPresetCommentCategory', NULL, 4, 0, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL, 'undo');
+INSERT INTO T_CORE_CODE(ID, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME, CODE)
+ VALUES (NEXT VALUE FOR SEQ_CORE,  '提交', 'bpmnPresetCommentCategory', NULL, 3, 0, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL, 'submit');
+
+INSERT INTO T_CORE_ADMIN_SELECT_CONFIG(ID, NAME, CATEGORY, URL, VALUEFIELD, TEXTFIELD)
+  VALUES(NEXT VALUE FOR SEQ_CORE, '流程预置意见类型', 'bpmn-preset-comment-category', '/secure/core/module/sys/codes/queries/selectable?codeCategoryId=bpmnPresetCommentCategory', 'code', 'codeName');
+
+
+
+-- ----------------------------- 2022-04-30 add by guodz------------end
+
+-- ----------------------------- 2022-05-04 add by shixw------------begin
+
+update  T_CORE_CODE set i18ncode='SPECIAL.CHARACTER.CATEGORIES.SUPERSCRIPT' where codecategoryid='specialCharacterCategory' and code ='superscript';
+update  T_CORE_CODE set i18ncode='SPECIAL.CHARACTER.CATEGORIES.SUBSCRIPT' where codecategoryid='specialCharacterCategory' and code ='subscript';
+update  T_CORE_CODE set i18ncode='SPECIAL.CHARACTER.CATEGORIES.SERIALNUMBER' where codecategoryid='specialCharacterCategory' and code ='serialNumber';
+update  T_CORE_CODE set i18ncode='SPECIAL.CHARACTER.CATEGORIES.UNIT' where codecategoryid='specialCharacterCategory' and code ='unit';
+update  T_CORE_CODE set i18ncode='SPECIAL.CHARACTER.CATEGORIES.ROMANSYMBOLS' where codecategoryid='specialCharacterCategory' and code ='romanSymbols';
+update  T_CORE_CODE set i18ncode='SPECIAL.CHARACTER.CATEGORIES.MATHEMATICALSYMBOLS' where codecategoryid='specialCharacterCategory' and code ='mathematicalSymbols';
+update  T_CORE_CODE set i18ncode='SPECIAL.CHARACTER.CATEGORIES.SPECIALSYMBOLS' where codecategoryid='specialCharacterCategory' and code ='specialSymbols';
+update  T_CORE_CODE set i18ncode='SPECIAL.CHARACTER.CATEGORIES.CHINESECHARACTERS' where codecategoryid='specialCharacterCategory' and code ='chineseCharacters';
+update  T_CORE_CODE set i18ncode='SPECIAL.CHARACTER.CATEGORIES.GREEKALPHABET' where codecategoryid='specialCharacterCategory' and code ='greekAlphabet';
+
+
+EXEC DBO.INSERTI18N  N'SPECIAL.CHARACTER.CATEGORIES.SUPERSCRIPT', N'上标', N'上标', N'zh-CN', N'上标';
+EXEC DBO.INSERTI18N  N'SPECIAL.CHARACTER.CATEGORIES.SUBSCRIPT', N'下标', N'下标', N'zh-CN','下标';
+EXEC DBO.INSERTI18N  N'SPECIAL.CHARACTER.CATEGORIES.SERIALNUMBER', N'序号', N'序号', N'zh-CN','序号';
+EXEC DBO.INSERTI18N  N'SPECIAL.CHARACTER.CATEGORIES.UNIT', N'单位', N'单位', N'zh-CN','单位';
+EXEC DBO.INSERTI18N  N'SPECIAL.CHARACTER.CATEGORIES.RROMANSYMBOLS', N'罗马符号', N'罗马符号', N'zh-CN','罗马符号';
+EXEC DBO.INSERTI18N  N'SPECIAL.CHARACTER.CATEGORIES.MATHEMATICALSYMBOLS', N'数学符号', N'数学符号', N'zh-CN','数学符号';
+EXEC DBO.INSERTI18N  N'SPECIAL.CHARACTER.CATEGORIES.SPECIALSYMBOLS', N'特殊符号', N'特殊符号', N'zh-CN','特殊符号';
+EXEC DBO.INSERTI18N  N'SPECIAL.CHARACTER.CATEGORIES.CHINESECHARACTERS', N'汉字', N'汉字', N'zh-CN','汉字';
+EXEC DBO.INSERTI18N  N'SPECIAL.CHARACTER.CATEGORIES.GREEKALPHABET', N'希腊字母', N'希腊字母', N'zh-CN','希腊字母';
+
+
+EXEC DBO.INSERTI18N  N'SPECIAL.CHARACTER.CATEGORIES.SUPERSCRIPT', N'superscript', N'superscript', N'en-US', N'superscript';
+EXEC DBO.INSERTI18N  N'SPECIAL.CHARACTER.CATEGORIES.SUBSCRIPT', N'subscript', N'subscript', N'en-US','subscript';
+EXEC DBO.INSERTI18N  N'SPECIAL.CHARACTER.CATEGORIES.SERIALNUMBER', N'serialNumber', N'serialNumber', N'en-US','serialNumber';
+EXEC DBO.INSERTI18N  N'SPECIAL.CHARACTER.CATEGORIES.UNIT', N'unit', N'unit', N'en-US','unit';
+EXEC DBO.INSERTI18N  N'SPECIAL.CHARACTER.CATEGORIES.RROMANSYMBOLS', N'romanSymbols', N'romanSymbols', N'en-US','romanSymbols';
+EXEC DBO.INSERTI18N  N'SPECIAL.CHARACTER.CATEGORIES.MATHEMATICALSYMBOLS', N'mathematicalSymbols', N'mathematicalSymbols', N'en-US','mathematicalSymbols';
+EXEC DBO.INSERTI18N  N'SPECIAL.CHARACTER.CATEGORIES.SPECIALSYMBOLS', N'specialSymbols', N'specialSymbols', N'en-US','specialSymbols';
+EXEC DBO.INSERTI18N  N'SPECIAL.CHARACTER.CATEGORIES.CHINESECHARACTERS', N'chineseCharacters', N'chineseCharacters', N'en-US','chineseCharacters';
+EXEC DBO.INSERTI18N  N'SPECIAL.CHARACTER.CATEGORIES.GREEKALPHABET', N'greekAlphabet', N'greekAlphabet', N'en-US','greekAlphabet';
+
+-- ----------------------------- 2022-05-04 add by shixw------------end
+
+-- ----------------------------- 2022-05-04 add by guozj--------------begin
+
+-- 建表语句
+CREATE TABlE DBO.T_CORE_TENANT(
+    ID BIGINT NOT NULL,
+    TENANTNAME VARCHAR(120)  NULL ,
+    TENANTURL VARCHAR(270)  NULL ,
+    CREATEDBYID VARCHAR(36)  NULL ,
+    CREATEDBYNAME VARCHAR(60)  NULL ,
+    CREATEDTIME DATETIME NULL ,
+    CREATEDBYORGID VARCHAR(36)  NULL ,
+    CREATEDBYORGNAME VARCHAR(270)  NULL ,
+    CONSTRAINT PK_CORE_TENANT PRIMARY KEY(ID));
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'租户' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_TENANT';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'主键' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_TENANT', @level2type=N'COLUMN',@level2name=N'ID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'租户名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_TENANT', @level2type=N'COLUMN',@level2name=N'TENANTNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'租户访问地址' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_TENANT', @level2type=N'COLUMN',@level2name=N'TENANTURL';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_TENANT', @level2type=N'COLUMN',@level2name=N'CREATEDBYID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_TENANT', @level2type=N'COLUMN',@level2name=N'CREATEDBYNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_TENANT', @level2type=N'COLUMN',@level2name=N'CREATEDTIME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_TENANT', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_TENANT', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGNAME';
+
+CREATE TABlE DBO.T_CORE_TENANT_PERMISSION(
+    ID BIGINT NOT NULL,
+    TENANTID BIGINT NULL ,
+    USERID VARCHAR(36)  NULL ,
+    CREATEDBYID VARCHAR(36)  NULL ,
+    CREATEDBYNAME VARCHAR(60)  NULL ,
+    CREATEDTIME DATETIME NULL ,
+    CREATEDBYORGID VARCHAR(36)  NULL ,
+    CREATEDBYORGNAME VARCHAR(270)  NULL ,
+    CONSTRAINT PK_CORE_TENANT_PERMISSION PRIMARY KEY(ID));
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'租户权限' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_TENANT_PERMISSION';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'主键' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_TENANT_PERMISSION', @level2type=N'COLUMN',@level2name=N'ID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'租户ID' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_TENANT_PERMISSION', @level2type=N'COLUMN',@level2name=N'TENANTID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'用户ID' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_TENANT_PERMISSION', @level2type=N'COLUMN',@level2name=N'USERID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_TENANT_PERMISSION', @level2type=N'COLUMN',@level2name=N'CREATEDBYID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_TENANT_PERMISSION', @level2type=N'COLUMN',@level2name=N'CREATEDBYNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_TENANT_PERMISSION', @level2type=N'COLUMN',@level2name=N'CREATEDTIME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_TENANT_PERMISSION', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_TENANT_PERMISSION', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGNAME';
+CREATE NONCLUSTERED INDEX [IDX_CORE_TENANT_PERMISSION_TENANTID] ON [dbo].[T_CORE_TENANT_PERMISSION] ([TENANTID]);
+
+EXEC  DBO.INSERTI18N  N'T_CORE_TENANT.SERVICE_NAME', N'租户', N'租户', N'zh-CN',N'租户';
+EXEC  DBO.INSERTI18N  N'T_CORE_TENANT.ID', N'租户的主键', N'主键', N'zh-CN',N'主键';
+EXEC  DBO.INSERTI18N  N'T_CORE_TENANT.TENANTNAME', N'租户的租户名称', N'租户名称', N'zh-CN',N'租户名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_TENANT.TENANTURL', N'租户的租户访问地址', N'租户访问地址', N'zh-CN',N'租户访问地址';
+EXEC  DBO.INSERTI18N  N'T_CORE_TENANT.CREATEDBYID', N'租户的制单人编码', N'制单人编码', N'zh-CN',N'制单人编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_TENANT.CREATEDBYNAME', N'租户的制单人名称', N'制单人名称', N'zh-CN',N'制单人名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_TENANT.CREATEDTIME', N'租户的制单时间', N'制单时间', N'zh-CN',N'制单时间';
+EXEC  DBO.INSERTI18N  N'T_CORE_TENANT.CREATEDBYORGID', N'租户的制单人单位编码', N'制单人单位编码', N'zh-CN',N'制单人单位编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_TENANT.CREATEDBYORGNAME', N'租户的制单人单位名称', N'制单人单位名称', N'zh-CN',N'制单人单位名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_TENANT_PERMISSION.SERVICE_NAME', N'租户权限', N'租户权限', N'zh-CN',N'租户权限';
+EXEC  DBO.INSERTI18N  N'T_CORE_TENANT_PERMISSION.ID', N'租户权限的主键', N'主键', N'zh-CN',N'主键';
+EXEC  DBO.INSERTI18N  N'T_CORE_TENANT_PERMISSION.TENANTID', N'租户权限的租户ID', N'租户ID', N'zh-CN',N'租户ID';
+EXEC  DBO.INSERTI18N  N'T_CORE_TENANT_PERMISSION.USERID', N'租户权限的用户ID', N'用户ID', N'zh-CN',N'用户ID';
+EXEC  DBO.INSERTI18N  N'T_CORE_TENANT_PERMISSION.CREATEDBYID', N'租户权限的制单人编码', N'制单人编码', N'zh-CN',N'制单人编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_TENANT_PERMISSION.CREATEDBYNAME', N'租户权限的制单人名称', N'制单人名称', N'zh-CN',N'制单人名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_TENANT_PERMISSION.CREATEDTIME', N'租户权限的制单时间', N'制单时间', N'zh-CN',N'制单时间';
+EXEC  DBO.INSERTI18N  N'T_CORE_TENANT_PERMISSION.CREATEDBYORGID', N'租户权限的制单人单位编码', N'制单人单位编码', N'zh-CN',N'制单人单位编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_TENANT_PERMISSION.CREATEDBYORGNAME', N'租户权限的制单人单位名称', N'制单人单位名称', N'zh-CN',N'制单人单位名称';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.ITEM.TENANTS.MODAL.ADD', N'新增', N'新增', N'zh-CN',N'新增';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.ITEM.TENANTS.TAB.BASE_INFO', N'基本信息', N'基本信息', N'zh-CN',N'基本信息';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.ITEM.TENANTS.TAB.PERMISSION', N'租户权限', N'租户权限', N'zh-CN',N'租户权限';
+
+-- 创建菜单语句
+INSERT INTO T_CORE_MENU (ID, MENUNAME, HREF, PARENTID, ORDERNO, ICON, MENUINITNAME)
+VALUES ('9336', '租户管理', '/secure/core/module/item/tenants/page/edit-list', '93', '9336', '010.svg', '租户管理');
+
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_TENANT', '0', '0');
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_TENANT_PERMISSION', '0', '0');
+
+INSERT INTO T_CORE_TABLE_HIERARCHY (ID, TABLENAME, MASTERTABLENAME, REFERCOLUMN)
+VALUES ('933601','T_CORE_TENANT_PERMISSION', 'T_CORE_TENANT', 'TENANTID');
+
+ALTER TABLE DBO.T_CORE_LOGIN_CONFIG ADD LOGINTENANT VARCHAR(1) NULL
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'是否选择租户（0-否 1-是）',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_LOGIN_CONFIG',
+'COLUMN', 'LOGINTENANT'
+GO
+
+-- ----------------------------- 2022-05-04 add by guozj------------end
+
+-- ----------------------------- 2022-05-04 add by shixw------------begin
+
+EXEC DBO.INSERTI18N  N'CORE.MODULE.SYS.T_CORE_BPMN_PROC.ENGINE.PROCESS_AUDITED', N'当前流程已审核，不允许撤回', N'当前流程已审核，不允许撤回', N'zh-CN', N'当前流程已审核，不允许撤回';
+
+-- ----------------------------- 2022-05-04 add by shixw------------end
+-- ----------------------------- 2022-05-05 add by zbx------------begin
+ALTER TABLE T_CORE_ROLE_PERMISSION_TYPE ALTER COLUMN TYPENAME varchar(120);
+UPDATE [dbo].[T_CORE_ROLE_PERMISSION_TYPE] SET [TYPENAME] = 'CORE.MODULE.SYS.ROLES.PERMISSION_TYPE_MEMU' WHERE [ID] = 'T_CORE_MENU';
+UPDATE [dbo].[T_CORE_ROLE_PERMISSION_TYPE] SET [TYPENAME] = 'CORE.MODULE.SYS.ROLES.PERMISSION_TYPE_MENU_GROUP' WHERE [ID] = 'T_CORE_MENU_GROUP';
+UPDATE [dbo].[T_CORE_ROLE_PERMISSION_TYPE] SET [TYPENAME] = 'CORE.MODULE.SYS.ROLES.PERMISSION_TYPE_MOBILE_MENU' WHERE [ID] = 'T_CORE_MOBILE_MENU';
+UPDATE [dbo].[T_CORE_ROLE_PERMISSION_TYPE] SET [TYPENAME] = 'CORE.MODULE.SYS.ROLES.PERMISSION_TYPE_ORG' WHERE [ID] = 'T_CORE_ORG';
+UPDATE [dbo].[T_CORE_ROLE_PERMISSION_TYPE] SET [TYPENAME] = 'CORE.MODULE.SYS.ROLES.PERMISSION_TYPE_WK_SCHEME' WHERE [ID] = 'T_CORE_WK_SCHEME';
+
+ALTER TABLE T_CORE_USER_PERMISSION_TYPE ALTER COLUMN TYPENAME varchar(120);
+UPDATE [dbo].[T_CORE_USER_PERMISSION_TYPE] SET [TYPENAME] = 'CORE.MODULE.SYS.USERS.PERMISSION_TYPE_ORG' WHERE [ID] = 'T_CORE_ORG';
+UPDATE [dbo].[T_CORE_USER_PERMISSION_TYPE] SET [TYPENAME] = 'CORE.MODULE.SYS.USERS.PERMISSION_TYPE_ROLE' WHERE [ID] = 'T_CORE_ROLE';
+
+EXEC dbo.INSERTI18N N'CORE.MODULE.SYS.ROLES.PERMISSION_TYPE_MEMU', N'菜单权限', N'菜单权限', N'zh-CN', N'菜单权限';
+EXEC dbo.INSERTI18N N'CORE.MODULE.SYS.ROLES.PERMISSION_TYPE_MENU_GROUP', N'菜单组权限', N'菜单组权限', N'zh-CN', N'菜单组权限';
+EXEC dbo.INSERTI18N N'CORE.MODULE.SYS.ROLES.PERMISSION_TYPE_MOBILE_MENU', N'移动菜单权限', N'移动菜单权限', N'zh-CN', N'移动菜单权限';
+EXEC dbo.INSERTI18N N'CORE.MODULE.SYS.ROLES.PERMISSION_TYPE_ORG', N'单位权限', N'单位权限', N'zh-CN', N'单位权限';
+EXEC dbo.INSERTI18N N'CORE.MODULE.SYS.ROLES.PERMISSION_TYPE_WK_SCHEME', N'首页方案权限', N'首页方案权限', N'zh-CN', N'首页方案权限';
+
+EXEC dbo.INSERTI18N N'CORE.MODULE.SYS.USERS.PERMISSION_TYPE_ORG', N'访问部门', N'访问部门', N'zh-CN', N'访问部门';
+EXEC dbo.INSERTI18N N'CORE.MODULE.SYS.USERS.PERMISSION_TYPE_ROLE', N'访问角色', N'访问角色', N'zh-CN', N'访问角色';
+
+-- ----------------------------- 2022-05-05 add by zbx------------end
+
+-- ----------------------------- 2022-05-06 add by zbx------------begin
+UPDATE [dbo].[T_CORE_ADMIN_SELECT_CONFIG] SET [CACHEABLE] = null WHERE [CATEGORY] = 'codeCategory';
+-- ----------------------------- 2022-05-06 add by zbx------------end
+
+-- ----------------------------- 2022-05-09 add by zhangjr------------begin
+
+EXEC dbo.UPDATEI18N N'T_CORE_USER.READONLY', N'zh-CN', N'只读账号';
+
+-- ----------------------------- 2022-05-09 add by zhangjr------------end
+
+-- ----------------------------- 2022-05-09 add by zhangjr------------begin
+INSERT INTO T_CORE_NOTIFICATION_TMPL (ID, TITLE, VIEWMETHOD, CONTENT, MENUID, MENUNAME, PAGEURL)
+values('EXPORT_EXCEL_ERROR', '导出失败', 'no', 'Excel导出失败，详情请查看附件', NULL, NULL, null);
+
+EXEC dbo.UPDATEI18N N'EXECUTOR.RESOURCE_MONITORING.CPU_USAGE_OVERLOAD', N'zh-CN', N'当前CPU使用率过高，请稍后再尝试执行任务【{0}】';
+EXEC dbo.UPDATEI18N N'EXECUTOR.RESOURCE_MONITORING.MEMORY_USAGE_OVERLOAD', N'zh-CN', N'当前内存使用率过高，请稍后再尝试执行任务【{0}】';
+EXEC dbo.UPDATEI18N N'EXECUTOR.RESOURCE_MONITORING.RUNNING_TIMEOUT', N'zh-CN', N'当前任务【{0}】运行超时，请稍后执行或联系管理员';
+
+-- ----------------------------- 2022-05-09 add by zhangjr------------end
+
+-- ----------------------------- 2022-05-10 add by shixw------------begin
+
+EXEC DBO.INSERTI18N  N'CORE.MODULE.SYS.ROLES.TITLE.ADMIN', N'管理员', N'管理员', N'zh-CN', N'管理员';
+
+-- ----------------------------- 2022-05-10 add by shixw------------end
+
+-- ----------------------------- 2022-05-16 add by shuaih--------------begin
+
+alter table dbo.T_CORE_ADMIN_CHECK_CONFIG ADD OTHERREQUIRED VARCHAR(1) NULL;
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'其他是否必填(默认否:0,是:1)' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_ADMIN_CHECK_CONFIG', @level2type=N'COLUMN',@level2name=N'otherRequired';
+
+EXEC  DBO.INSERTI18N  N'T_CORE_ADMIN_CHECK_CONFIG.OTHERREQUIRED', N'复选框配置的其他是否必填', N'其他是否必填', N'zh-CN', N'其他是否必填';
+
+-- ----------------------------- 2022-05-16 add by shuaih------------end
+
+-- ----------------------------- 2022-05-26 add by shuaih--------------begin
+
+alter table dbo.T_CORE_AUDIT_LOG ADD ITEMDESC VARCHAR(180) NULL
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'业务描述',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_AUDIT_LOG',
+'COLUMN', N'ITEMDESC'
+GO
+
+EXEC  DBO.INSERTI18N N'T_CORE_AUDIT_LOG.ITEMDESC',N'业务描述',N'业务描述',N'zh-CN',N'业务描述'
+GO
+
+-- ----------------------------- 2022-05-26 add by shuaih------------end
+
+-- ----------------------------- 2022-06-06 add by guozj------------begin    1.1.14补丁已发布
+
+ALTER TABLE DBO.T_CORE_SPECIAL_CHARACTER ADD CHARACTERCODE VARCHAR(60) NULL
+GO
+EXEC sp_addextendedproperty 'MS_Description', N'字符编码', 'SCHEMA', N'dbo', 'TABLE', N'T_CORE_SPECIAL_CHARACTER', 'COLUMN', 'CHARACTERCODE'
+GO
+
+ALTER TABLE DBO.T_CORE_SPECIAL_CHARACTER ADD PRONUNCIATION VARCHAR(60) NULL
+GO
+EXEC sp_addextendedproperty 'MS_Description', N'字符简拼定义', 'SCHEMA', N'dbo', 'TABLE', N'T_CORE_SPECIAL_CHARACTER', 'COLUMN', 'PRONUNCIATION'
+GO
+
+ALTER TABLE DBO.T_CORE_SPECIAL_CHARACTER ADD REMARK VARCHAR(540) NULL
+GO
+EXEC sp_addextendedproperty 'MS_Description', N'备注', 'SCHEMA', N'dbo', 'TABLE', N'T_CORE_SPECIAL_CHARACTER', 'COLUMN', 'REMARK'
+GO
+
+EXEC DBO.INSERTI18N  N'T_CORE_SPECIAL_CHARACTER.CHARACTERCODE', N'特殊字符表的字符编码', N'字符编码', N'zh-CN',N'字符编码';
+EXEC DBO.INSERTI18N  N'T_CORE_SPECIAL_CHARACTER.PRONUNCIATION', N'特殊字符表的字符简拼定义', N'字符简拼定义', N'zh-CN',N'字符简拼定义';
+EXEC DBO.INSERTI18N  N'T_CORE_SPECIAL_CHARACTER.REMARK', N'特殊字符表的备注', N'备注', N'zh-CN',N'备注';
+
+
+INSERT INTO T_CORE_CODE(ID, CODENAME, CODECATEGORYID, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME,LASTSUSPENDEDFLAG,CODE,I18NCODE)
+VALUES (NEXT VALUE FOR SEQ_CORE, '自定义', 'specialCharacterCategory', '10', '0', 'admin', '系统管理员', '0', 'custom', 'SPECIAL.CHARACTER.CATEGORIES.CUSTOM');
+
+EXEC DBO.INSERTI18N  N'SPECIAL.CHARACTER.CATEGORIES.CUSTOM', N'特殊字符的分类编码', N'自定义', N'zh-CN',N'自定义';
+
+
+CREATE TABlE DBO.T_CORE_COMMON_CHARACTER(
+    ID BIGINT NOT NULL,
+    SPECIALID BIGINT NOT NULL,
+    CHOOSEQTY BIGINT NULL ,
+    CREATEDBYID VARCHAR(36)  NULL ,
+    CREATEDBYNAME VARCHAR(60)  NULL ,
+    CREATEDTIME DATETIME NULL ,
+    CREATEDBYORGID VARCHAR(36)  NULL ,
+    CREATEDBYORGNAME VARCHAR(270)  NULL ,
+    CONSTRAINT PK_CORE_COMMON_CHARACTER PRIMARY KEY(ID));
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'常用字符表' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_COMMON_CHARACTER';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'主键' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_COMMON_CHARACTER', @level2type=N'COLUMN',@level2name=N'ID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'特殊字符ID' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_COMMON_CHARACTER', @level2type=N'COLUMN',@level2name=N'SPECIALID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'选择次数' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_COMMON_CHARACTER', @level2type=N'COLUMN',@level2name=N'CHOOSEQTY';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_COMMON_CHARACTER', @level2type=N'COLUMN',@level2name=N'CREATEDBYID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_COMMON_CHARACTER', @level2type=N'COLUMN',@level2name=N'CREATEDBYNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_COMMON_CHARACTER', @level2type=N'COLUMN',@level2name=N'CREATEDTIME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_COMMON_CHARACTER', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_COMMON_CHARACTER', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGNAME';
+
+EXEC DBO.INSERTI18N  N'T_CORE_COMMON_CHARACTER.SERVICE_NAME', N'常用字符表', N'常用字符表', N'zh-CN',N'常用字符表';
+EXEC DBO.INSERTI18N  N'T_CORE_COMMON_CHARACTER.ID', N'常用字符表的主键', N'主键', N'zh-CN',N'主键';
+EXEC DBO.INSERTI18N  N'T_CORE_COMMON_CHARACTER.SPECIALID', N'常用字符表的特殊字符ID', N'特殊字符ID', N'zh-CN',N'特殊字符ID';
+EXEC DBO.INSERTI18N  N'T_CORE_COMMON_CHARACTER.CHOOSEQTY', N'常用字符表的选择次数', N'选择次数', N'zh-CN',N'选择次数';
+EXEC DBO.INSERTI18N  N'T_CORE_COMMON_CHARACTER.CREATEDBYID', N'常用字符表的制单人编码', N'制单人编码', N'zh-CN',N'制单人编码';
+EXEC DBO.INSERTI18N  N'T_CORE_COMMON_CHARACTER.CREATEDBYNAME', N'常用字符表的制单人名称', N'制单人名称', N'zh-CN',N'制单人名称';
+EXEC DBO.INSERTI18N  N'T_CORE_COMMON_CHARACTER.CREATEDTIME', N'常用字符表的制单时间', N'制单时间', N'zh-CN',N'制单时间';
+EXEC DBO.INSERTI18N  N'T_CORE_COMMON_CHARACTER.CREATEDBYORGID', N'常用字符表的制单人单位编码', N'制单人单位编码', N'zh-CN',N'制单人单位编码';
+EXEC DBO.INSERTI18N  N'T_CORE_COMMON_CHARACTER.CREATEDBYORGNAME', N'常用字符表的制单人单位名称', N'制单人单位名称', N'zh-CN',N'制单人单位名称';
+
+CREATE NONCLUSTERED INDEX [IDX_CORE_COMMON_CHARACTER_SPECIALID] ON [dbo].[T_CORE_COMMON_CHARACTER] ([SPECIALID]);
+
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_COMMON_CHARACTER', '0', '0');
+
+INSERT INTO T_CORE_TABLE_HIERARCHY (ID, TABLENAME, MASTERTABLENAME, REFERCOLUMN)
+VALUES ('933201','T_CORE_COMMON_CHARACTER', 'T_CORE_SPECIAL_CHARACTER', 'SPECIALID');
+
+-- ----------------------------- 2022-06-06 add by guozj------------end    1.1.14补丁已发布
+
+-- ----------------------------- 2022-06-15 add by zhangjr------------begin
+EXEC DBO.UPDATEI18N N'GIKAM.PERMISSION.UNAUTHORIZED', N'zh-CN', N'您无权访问进行该操作，请求路径：{0}，请求方法：{1}。';
+-- ----------------------------- 2022-06-15 add by zhangjr------------end
+
+-- ----------------------------- 2022-07-11 add by shixw------------begin
+
+CREATE TABlE DBO.T_CORE_DATA_CENTER_USER(
+    ID BIGINT NOT NULL,
+    DATACENTERID BIGINT NULL ,
+    USERID VARCHAR(36)  NULL ,
+    ACTIVATEDFLAG VARCHAR(1)  NULL ,
+    ORDERNO BIGINT NULL ,
+    CREATEDBYID VARCHAR(36)  NULL ,
+    CREATEDBYNAME VARCHAR(60)  NULL ,
+    CREATEDTIME DATETIME NULL ,
+    CREATEDBYORGID VARCHAR(36)  NULL ,
+    CREATEDBYORGNAME VARCHAR(270)  NULL ,
+    CONSTRAINT PK_CORE_DATA_CENTER_USER PRIMARY KEY(ID));
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'个人数据中心配置' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_DATA_CENTER_USER';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'主键' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_DATA_CENTER_USER', @level2type=N'COLUMN',@level2name=N'ID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'数据中心ID' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_DATA_CENTER_USER', @level2type=N'COLUMN',@level2name=N'DATACENTERID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'用户ID' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_DATA_CENTER_USER', @level2type=N'COLUMN',@level2name=N'USERID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'是否启用' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_DATA_CENTER_USER', @level2type=N'COLUMN',@level2name=N'ACTIVATEDFLAG';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'排序码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_DATA_CENTER_USER', @level2type=N'COLUMN',@level2name=N'ORDERNO';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_DATA_CENTER_USER', @level2type=N'COLUMN',@level2name=N'CREATEDBYID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_DATA_CENTER_USER', @level2type=N'COLUMN',@level2name=N'CREATEDBYNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_DATA_CENTER_USER', @level2type=N'COLUMN',@level2name=N'CREATEDTIME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_DATA_CENTER_USER', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_DATA_CENTER_USER', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGNAME';
+
+EXEC DBO.INSERTI18N  N'T_CORE_DATA_CENTER_USER.SERVICE_NAME', N'个人数据中心配置', N'个人数据中心配置', N'zh-CN',N'个人数据中心配置';
+EXEC DBO.INSERTI18N  N'T_CORE_DATA_CENTER_USER.ID', N'个人数据中心配置的主键', N'主键', N'zh-CN',N'主键';
+EXEC DBO.INSERTI18N  N'T_CORE_DATA_CENTER_USER.DATACENTERID', N'个人数据中心配置的数据中心ID', N'数据中心ID', N'zh-CN',N'数据中心ID';
+EXEC DBO.INSERTI18N  N'T_CORE_DATA_CENTER_USER.DATACENTERNODENAME', N'个人数据中心配置的展示内容', N'展示内容', N'zh-CN',N'展示内容';
+EXEC DBO.INSERTI18N  N'T_CORE_DATA_CENTER_USER.USERID', N'个人数据中心配置的用户ID', N'用户ID', N'zh-CN',N'用户ID';
+EXEC DBO.INSERTI18N  N'T_CORE_DATA_CENTER_USER.ACTIVATEDFLAG', N'个人数据中心配置的是否启用', N'是否启用', N'zh-CN',N'是否启用';
+EXEC DBO.INSERTI18N  N'T_CORE_DATA_CENTER_USER.ORDERNO', N'个人数据中心配置的排序码', N'排序码', N'zh-CN',N'排序码';
+EXEC DBO.INSERTI18N  N'T_CORE_DATA_CENTER_USER.CREATEDBYID', N'个人数据中心配置的制单人编码', N'制单人编码', N'zh-CN',N'制单人编码';
+EXEC DBO.INSERTI18N  N'T_CORE_DATA_CENTER_USER.CREATEDBYNAME', N'个人数据中心配置的制单人名称', N'制单人名称', N'zh-CN',N'制单人名称';
+EXEC DBO.INSERTI18N  N'T_CORE_DATA_CENTER_USER.CREATEDTIME', N'个人数据中心配置的制单时间', N'制单时间', N'zh-CN',N'制单时间';
+EXEC DBO.INSERTI18N  N'T_CORE_DATA_CENTER_USER.CREATEDBYORGID', N'个人数据中心配置的制单人单位编码', N'制单人单位编码', N'zh-CN',N'制单人单位编码';
+EXEC DBO.INSERTI18N  N'T_CORE_DATA_CENTER_USER.CREATEDBYORGNAME', N'个人数据中心配置的制单人单位名称', N'制单人单位名称', N'zh-CN',N'制单人单位名称';
+
+EXEC DBO.INSERTI18N  N'CORE.MODULE.ITEM.DATACENTERS.BUTTON.SYNC', N'同步个人数据中心', N'同步个人数据中心', N'zh-CN', N'同步个人数据中心';
+EXEC DBO.INSERTI18N  N'CORE.MODULE.ITEM.DATACENTERS.TIP.CONFIRM', N'确认同步', N'确认同步', N'zh-CN', N'确认同步';
+EXEC DBO.INSERTI18N  N'CORE.MODULE.ITEM.DATACENTERS.TIP.SYNC_DATA_CENTER_USER', N'确认同步所有用户个人数据中心配置数据', N'确认同步所有用户个人数据中心配置数据', N'zh-CN', N'确认同步所有用户个人数据中心配置数据';
+EXEC DBO.INSERTI18N  N'CORE.MODULE.ITEM.DATACENTERS.TIP.SYNC_SUCCESS', N'同步成功', N'同步成功', N'zh-CN', N'同步成功';
+
+
+INSERT INTO T_CORE_MENU (ID, MENUNAME, HREF, PARENTID, ORDERNO, ICON, MENUINITNAME)
+VALUES ('9362', '个人数据中心配置', '/secure/core/module/item/data-centers/page/user-edit-list', '93', '9362', '012.svg', '个人数据中心配置');
+
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_DATA_CENTER_USER', '0', '0');
+
+INSERT INTO T_CORE_TABLE_HIERARCHY (ID, TABLENAME, MASTERTABLENAME, REFERCOLUMN)
+VALUES ('936201','T_CORE_DATA_CENTER_USER', 'T_CORE_DATA_CENTER', 'DATACENTERID');
+
+-- ----------------------------- 2022-07-11 add by shixw------------end
+
+-- ----------------------------- 2022-07-11 add by shixw------------begin
+
+EXEC DBO.INSERTI18N  N'GIKAM.SECURITY.LOGIN.USER_INVALID', N'请求用户已失效', N'请求用户已失效', N'zh-CN', N'请求用户已失效';
+
+-- ----------------------------- 2022-07-11 add by shixw------------end
+
+-- ----------------------------- 2022-07-15 add by shixw------------begin
+
+alter table dbo.T_CORE_AUDIT_LOG_ACTIVITY ADD WITNESSNAME VARCHAR(360) NULL
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'见证人名称',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_AUDIT_LOG_ACTIVITY',
+'COLUMN', N'WITNESSNAME'
+GO
+alter table dbo.T_CORE_AUDIT_LOG_ACTIVITY ADD WITNESSID VARCHAR(120) NULL
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'见证人ID',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_AUDIT_LOG_ACTIVITY',
+'COLUMN', N'WITNESSID'
+GO
+
+EXEC  DBO.INSERTI18N N'T_CORE_AUDIT_LOG_ACTIVITY.WITNESSNAME',N'见证人名称',N'见证人名称',N'zh-CN',N'见证人名称'
+GO
+EXEC  DBO.INSERTI18N N'T_CORE_AUDIT_LOG_ACTIVITY.WITNESSID',N'见证人ID',N'见证人ID',N'zh-CN',N'见证人ID'
+GO
+
+-- ----------------------------- 2022-07-15 add by shixw------------end
+
+-- ----------------------------- 2022-09-19 add by zhengbx------------begin
+-- 将系统配置的系统版本号修改为1.2.0
+UPDATE T_CORE_SYSTEM_CONFIG SET VERSION = '1.2.0' WHERE id = 'system-config';
+UPDATE T_CORE_ADMIN_SELECT_CONFIG SET URL= '/secure/core/module/sys/codes/queries/selectable?codeCategoryId=audioType' WHERE CATEGORY = 'audio-type';
+UPDATE T_CORE_CODE SET CODE = 'system' WHERE CODECATEGORYID = 'audioType' AND CODENAME ='内置';
+UPDATE T_CORE_CODE SET CODE = 'custom' WHERE CODECATEGORYID = 'audioType' AND CODENAME ='自定义';
+-- ----------------------------- 2022-09-19 add by zhengbx------------end
+
+-- ----------------------------- 2022-09-19 add by shixw------------begin
+
+delete from t_core_admin_menu where id='102010';
+
+DELETE FROM T_CORE_MENU WHERE ID = '9341';
+
+INSERT INTO T_CORE_MENU
+(ID, MENUNAME, HREF, PARENTID, ORDERNO, MENUINITNAME, ICON, TODOICON, I18NCODE)
+VALUES('9341', '审计跟踪配置', '/secure/core/module/sys/audit/audit-configs/page/edit-list', '93', 9341, '审计跟踪配置', '001.svg', NULL, 'CORE.MENU.MENUNAME.SYSTEM.AT');
+
+
+-- ----------------------------- 2022-09-19 add by shixw------------end
+
+-- ----------------------------- 2022-09-20 add by zhengrl------------begin
+
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.SYS.ATTORNEY.TITLE.ADD_I18N', N'添加委托代理', N'添加委托代理', N'zh-CN',N'添加委托代理';
+UPDATE T_CORE_WK_PANEL SET CODE ='NOTICE',REFRESHFLAG ='0' WHERE ID='NOTICE';
+UPDATE T_CORE_WK_PANEL SET CODE ='TODO',REFRESHFLAG ='0' WHERE URL='/module/index/workspaces/todo-panel';
+
+-- ----------------------------- 2022-09-20 add by zhengrl------------end
+
+-- ----------------------------- 2022-09-21 add by zhuyq------------begin
+-- 系统配置内置语音下拉选项查询
+INSERT INTO T_CORE_ADMIN_SELECT_CONFIG(ID, NAME, CATEGORY, URL, VALUEFIELD, TEXTFIELD, CACHEABLE)
+VALUES(NEXT VALUE FOR SEQ_CORE, '消息通知语音', 'notificationAudio', '/secure/core/module/item/notification/audios/queries/selectable', 'id', 'audioName','1');
+
+-- ----------------------------- 2022-09-21 add by zhuyq------------end
+
+-- ----------------------------- 2022-09-21 add by shixw------------begin
+
+EXEC DBO.INSERTI18N N'SPECIAL.CHARACTER.CATEGORIES.ROMANSYMBOLS', N'罗马符号', N'罗马符号', N'zh-CN','罗马符号';
+
+EXEC DBO.INSERTI18N N'T_CORE_AD_DMOAIN_USER.ADUSERID', N'AD域用户的AD域登录名', N'AD域登录名', N'zh-CN', N'AD域登录名';
+
+-- ----------------------------- 2022-09-21 add by shixw------------end
+
+-- ----------------------------- 2022-09-21 add by shixw------------begin
+
+EXEC DBO.INSERTI18N  N'SPECIAL.CHARACTER.CATEGORIES.ROMANSYMBOLS', N'romanSymbols', N'romanSymbols', N'en-US','romanSymbols';
+EXEC DBO.INSERTI18N  N'SPECIAL.CHARACTER.CATEGORIES.CUSTOM', N'custom', N'custom', N'en-US','custom';
+
+
+-- ----------------------------- 2022-09-21 add by shixw------------end
+-- ----------------------------- 2022-09-22 add by zhengbx------------begin
+EXEC DBO.INSERTI18N  N'CORE.MODULE.SYS.REPORTS.TIP.LINE_MULTI_CHOOSE_VIEW', N'每次只能选择一条数据预览', N'每次只能选择一条数据预览', N'zh-CN', N'每次只能选择一条数据预览';
+-- ----------------------------- 2022-09-22 add by zhengbx------------end
+
+-- ----------------------------- 2022-09-23 add by zhengbx------------begin
+EXEC DBO.INSERTI18N  N'CORE.MODULE.SYS.ROLES.MODAL.DEPT', N'选择单位', N'选择单位', N'zh-CN', N'选择单位';
+EXEC DBO.INSERTI18N  N'CORE.MODULE.SYS.ROLES.MODAL.PLAN', N'选择方案', N'选择方案', N'zh-CN', N'选择方案';
+EXEC DBO.INSERTI18N  N'CORE.MODULE.SYS.ROLES.MODAL.MENU', N'选择菜单', N'选择菜单', N'zh-CN', N'选择菜单';
+-- ----------------------------- 2022-09-23 add by zhengbx------------end
+
+-- ----------------------------- 2022-09-24 add by shixw------------begin
+
+EXEC DBO.INSERTI18N N'T_CORE_SMS.SENDTIME', N'短信发送时间', N'发送时间', N'zh-CN',N'发送时间';
+
+-- ----------------------------- 2022-09-24 add by shixw------------end

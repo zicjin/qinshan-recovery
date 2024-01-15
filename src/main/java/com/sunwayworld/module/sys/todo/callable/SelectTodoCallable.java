@@ -102,7 +102,7 @@ public class SelectTodoCallable implements Callable<CoreTodoDTO> {
             LocalContextHelper.setUserLogin(loginUser); // 模拟用户登录
 
             if (isCountOnly()) { // 只查询总项数
-            	LocalContextHelper.setSelectCountOnly();
+            	// LocalContextHelper.setSelectCountOnly();
             }
 
             CoreTodoDTO todo = new CoreTodoDTO();
@@ -171,7 +171,7 @@ public class SelectTodoCallable implements Callable<CoreTodoDTO> {
             }
             
             LocalContextHelper.removeUserLogin(); // 清除用户模拟登录信息
-            LocalContextHelper.removeSelectCountOnly(); // 清除只查询项数的标记
+            // LocalContextHelper.removeSelectCountOnly(); // 清除只查询项数的标记
         }
     }
 

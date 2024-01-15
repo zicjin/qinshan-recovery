@@ -1,0 +1,6 @@
+﻿-- ----------------------------- 2021-08-02 add by shixw------------begin
+
+ALTER TABLE T_CORE_ROLE MODIFY USEDBYORGID VARCHAR2(270);
+ALTER TABLE T_CORE_ROLE MODIFY USEDBYORGNAME VARCHAR2(540);
+
+-- ----------------------------- 2021-08-02 add by shixw------------end

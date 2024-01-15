@@ -6,12 +6,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import com.sunwayworld.cloud.module.fr.report.bean.CoreReportConfigLineBean;
+import com.sunwayworld.cloud.module.fr.report.service.CoreReportConfigLineService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.sunwayworld.cloud.gikam.fr.bean.report.CoreReportConfigLineBean;
-import com.sunwayworld.cloud.gikam.fr.service.report.CoreReportConfigLineService;
 import com.sunwayworld.emc.module.mdm.bizmdm.client.bean.EmcClientBean;
 import com.sunwayworld.emc.module.mdm.bizmdm.client.service.EmcClientService;
 import com.sunwayworld.emc.module.mdm.contract.bean.EmcContractBean;

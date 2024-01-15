@@ -16,6 +16,7 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+import com.sunwayworld.emc.framework.utils.EmcPdfUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -229,7 +230,7 @@ public class PfEquiptAcqFileServiceImpl extends EmcEquiptAcqFileServiceImpl impl
                 List<String> mergedPathList = (members == null) ? Collections.emptyList() : members.stream().map(String::valueOf).collect(Collectors.toList());
                 List<String> validUnmergedFilePathList = unmergedFilePathList.stream().filter(path -> !mergedPathList.contains(path)).collect(Collectors.toList());
 
-                PdfUtils.mergePdfFile(validUnmergedFilePathList, mergedPdfPath);
+                EmcPdfUtils.mergePdfFile(validUnmergedFilePathList, mergedPdfPath);
                 logger.info("本次【" + Thread.currentThread() + "】线程合并了【{}】文件", String.join(",", validUnmergedFilePathList));
                 BoundSetOperations<String, Object> setOperations = RedisHelper.getRedisTemplate().boundSetOps(mergedRedisKey);
                 validUnmergedFilePathList.forEach(path -> setOperations.add(path));
@@ -243,7 +244,7 @@ public class PfEquiptAcqFileServiceImpl extends EmcEquiptAcqFileServiceImpl impl
 
             String finalMergedPdfPath = String.join(File.separator, parentPath, runId + ".pdf");
             List<String> mergedFilePathList = mergedFileList.stream().map(File::getAbsolutePath).collect(Collectors.toList());
-            PdfUtils.mergePdfFile(mergedFilePathList, finalMergedPdfPath);
+            EmcPdfUtils.mergePdfFile(mergedFilePathList, finalMergedPdfPath);
             logger.info("最终【" + Thread.currentThread() + "】线程合并了【{}】文件", String.join(",", mergedFilePathList));
             mergedFileList.forEach(File::delete);
             logger.info("最终【" + Thread.currentThread() + "】线程合并完成后，删除了【{}】文件", String.join(",", mergedFilePathList));
@@ -332,7 +333,7 @@ public class PfEquiptAcqFileServiceImpl extends EmcEquiptAcqFileServiceImpl impl
         insertCoreFile.setMd5Name(EncryptUtils.MD5Encrypt(insertCoreFile.getTargetId() + "$" + insertCoreFile.getName()));
         insertCoreFile.setScope(FileScope.equipt.name());
         insertCoreFile.setSize(file.length());
-        insertCoreFile.setTimes(0);
+        insertCoreFile.setTimes(0L);
         insertCoreFile.setDownloadable(Constant.YES);
         insertCoreFile.setCreatedTime(now);
 

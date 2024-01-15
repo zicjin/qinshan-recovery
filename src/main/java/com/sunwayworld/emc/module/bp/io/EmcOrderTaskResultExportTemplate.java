@@ -3,12 +3,12 @@ package com.sunwayworld.emc.module.bp.io;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.sunwayworld.framework.support.base.service.GenericTemplateService;
 import org.springframework.stereotype.Component;
 
 import com.sunwayworld.framework.data.Pair;
-import com.sunwayworld.module.item.file.export.GenericExportTemplate;
 @Component(value = "emcOrderTaskResultExportTemplate")
-public class EmcOrderTaskResultExportTemplate implements GenericExportTemplate<String> {
+public class EmcOrderTaskResultExportTemplate implements GenericTemplateService<String> {
     
     @Override
     public List<Pair<String, String>> getTemplatePairList() {

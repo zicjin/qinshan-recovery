@@ -1,0 +1,5 @@
+-- ----------------------------- 2022-09-27 add by shuaih------------begin
+
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.ITEM.CUSTOM_QUERIES.TAB.BASE_INFO', N'基本信息', N'基本信息', N'zh-CN', N'基本信息';
+
+-- ----------------------------- 2022-09-27 add by shuaih------------end

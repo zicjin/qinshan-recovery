@@ -1,0 +1,18 @@
+﻿-- ----------------------------- 2021-08-02 add by shixw------------begin
+
+alter table dbo.T_CORE_TODO_CONFIG ADD VOICEWARNING VARCHAR(36) NULL
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'开启语音提醒',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_TODO_CONFIG',
+'COLUMN', N'VOICEWARNING'
+GO
+
+EXEC  DBO.INSERTI18N N'T_CORE_TODO_CONFIG.VOICEWARNING',N'开启语音提醒',N'开启语音提醒',N'zh-CN',N'开启语音提醒'
+GO
+
+UPDATE T_CORE_TODO_CONFIG SET VOICEWARNING = '1';
+
+-- ----------------------------- 2021-08-02 add by shixw------------end

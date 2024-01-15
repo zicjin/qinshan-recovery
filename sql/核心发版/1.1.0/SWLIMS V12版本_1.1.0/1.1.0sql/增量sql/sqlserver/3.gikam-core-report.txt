@@ -1,0 +1,244 @@
+-- 原LES微服务
+-- ----------------------------- 2021-5-6 add by shixw------------begin
+
+alter table dbo.T_CORE_LES_UNIT ADD THUMBNAIL VARCHAR(270) NULL
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'缩略图',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_LES_UNIT',
+'COLUMN', N'THUMBNAIL'
+GO
+
+EXEC DBO.INSERTI18N N'T_CORE_LES_UNIT.THUMBNAIL', N'LES组件的缩略图', N'缩略图', N'zh-CN',N'缩略图';
+
+UPDATE T_CORE_LES_UNIT SET THUMBNAIL =REPLACE (ICON,'.','-thumbnail.');
+
+-- ----------------------------- 2021-5-6 add by shixw------------end
+
+-- ----------------------------- 2021-06-25 add by shixw--------------begin
+
+-- 建表语句
+CREATE TABlE DBO.T_CORE_LES_UNIT_COMMENT(
+    ID BIGINT NOT NULL,
+    LESINSTANCEUNITID BIGINT NULL ,
+    COMMENTDESC TEXT NULL ,
+    COMMENTUSERID VARCHAR(36)  NULL ,
+    COMMENTUSERNAME VARCHAR(60)  NULL ,
+    COMMENTTIME DATETIME NULL ,
+    REPLY TEXT NULL ,
+    REPLIEDUSERID VARCHAR(36)  NULL ,
+    REPLIEDUSERNAME VARCHAR(60)  NULL ,
+    REPLIEDTIME DATETIME NULL ,
+    STATUS VARCHAR(36)  NULL ,
+    CREATEDBYID VARCHAR(36)  NULL ,
+    CREATEDBYNAME VARCHAR(60)  NULL ,
+    CREATEDTIME DATETIME NULL ,
+    CREATEDBYORGID VARCHAR(36)  NULL ,
+    CREATEDBYORGNAME VARCHAR(270)  NULL ,
+    CONSTRAINT PK_CORE_LES_UNIT_COMMENT PRIMARY KEY(ID));
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'LES组件批注表' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_LES_UNIT_COMMENT';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'主键' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_LES_UNIT_COMMENT', @level2type=N'COLUMN',@level2name=N'ID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'LES实例组件ID' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_LES_UNIT_COMMENT', @level2type=N'COLUMN',@level2name=N'LESINSTANCEUNITID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'批注' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_LES_UNIT_COMMENT', @level2type=N'COLUMN',@level2name=N'COMMENTDESC';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'批注人编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_LES_UNIT_COMMENT', @level2type=N'COLUMN',@level2name=N'COMMENTUSERID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'批注人' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_LES_UNIT_COMMENT', @level2type=N'COLUMN',@level2name=N'COMMENTUSERNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'批注时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_LES_UNIT_COMMENT', @level2type=N'COLUMN',@level2name=N'COMMENTTIME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'回复' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_LES_UNIT_COMMENT', @level2type=N'COLUMN',@level2name=N'REPLY';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'回复人编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_LES_UNIT_COMMENT', @level2type=N'COLUMN',@level2name=N'REPLIEDUSERID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'回复人' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_LES_UNIT_COMMENT', @level2type=N'COLUMN',@level2name=N'REPLIEDUSERNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'回复时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_LES_UNIT_COMMENT', @level2type=N'COLUMN',@level2name=N'REPLIEDTIME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'批注状态' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_LES_UNIT_COMMENT', @level2type=N'COLUMN',@level2name=N'STATUS';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_LES_UNIT_COMMENT', @level2type=N'COLUMN',@level2name=N'CREATEDBYID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_LES_UNIT_COMMENT', @level2type=N'COLUMN',@level2name=N'CREATEDBYNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_LES_UNIT_COMMENT', @level2type=N'COLUMN',@level2name=N'CREATEDTIME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_LES_UNIT_COMMENT', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_LES_UNIT_COMMENT', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGNAME';
+
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_UNIT_COMMENT.SERVICE_NAME', N'LES组件批注表', N'LES组件批注表', N'zh-CN',N'LES组件批注表';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_UNIT_COMMENT.ID', N'LES组件批注表的主键', N'主键', N'zh-CN',N'主键';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_UNIT_COMMENT.LESINSTANCEUNITID', N'LES组件批注表的LES实例组件ID', N'LES实例组件ID', N'zh-CN',N'LES实例组件ID';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_UNIT_COMMENT.COMMENTDESC', N'LES组件批注表的批注', N'批注', N'zh-CN',N'批注';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_UNIT_COMMENT.COMMENTUSERID', N'LES组件批注表的批注人编码', N'批注人编码', N'zh-CN',N'批注人编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_UNIT_COMMENT.COMMENTUSERNAME', N'LES组件批注表的批注人', N'批注人', N'zh-CN',N'批注人';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_UNIT_COMMENT.COMMENTTIME', N'LES组件批注表的批注时间', N'批注时间', N'zh-CN',N'批注时间';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_UNIT_COMMENT.REPLY', N'LES组件批注表的回复', N'回复', N'zh-CN',N'回复';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_UNIT_COMMENT.REPLIEDUSERID', N'LES组件批注表的回复人编码', N'回复人编码', N'zh-CN',N'回复人编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_UNIT_COMMENT.REPLIEDUSERNAME', N'LES组件批注表的回复人', N'回复人', N'zh-CN',N'回复人';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_UNIT_COMMENT.REPLIEDTIME', N'LES组件批注表的回复时间', N'回复时间', N'zh-CN',N'回复时间';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_UNIT_COMMENT.STATUS', N'LES组件批注表的批注状态', N'批注状态', N'zh-CN',N'批注状态';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_UNIT_COMMENT.CREATEDBYID', N'LES组件批注表的制单人编码', N'制单人编码', N'zh-CN',N'制单人编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_UNIT_COMMENT.CREATEDBYNAME', N'LES组件批注表的制单人名称', N'制单人名称', N'zh-CN',N'制单人名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_UNIT_COMMENT.CREATEDTIME', N'LES组件批注表的制单时间', N'制单时间', N'zh-CN',N'制单时间';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_UNIT_COMMENT.CREATEDBYORGID', N'LES组件批注表的制单人单位编码', N'制单人单位编码', N'zh-CN',N'制单人单位编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_LES_UNIT_COMMENT.CREATEDBYORGNAME', N'LES组件批注表的制单人单位名称', N'制单人单位名称', N'zh-CN',N'制单人单位名称';
+
+ALTER TABLE dbo.T_CORE_LES_INSTANCE_UNIT ADD COMMENTSTATUS VARCHAR(36) NULL;
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'批注是否已全部回复',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_LES_INSTANCE_UNIT',
+'COLUMN', N'COMMENTSTATUS'
+GO
+
+EXEC  DBO.INSERTI18N N'T_CORE_LES_INSTANCE_UNIT.COMMENTSTATUS',N'批注是否已全部回复',N'批注是否已全部回复',N'zh-CN',N'批注是否已全部回复';
+GO
+
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_LES_UNIT_COMMENT', '0', '0');
+
+
+-- ----------------------------- 2021-06-25 add by shixw------------end
+
+-- ----------------------------- 2021-07-06 add by shixw------------begin
+
+-- LES实例组件增加是否已标记完成字段
+alter table dbo.T_CORE_LES_INSTANCE_UNIT ADD DONEFLAG VARCHAR(1) NULL
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'是否已标记完成',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_LES_INSTANCE_UNIT',
+'COLUMN', N'DONEFLAG'
+GO
+
+EXEC  DBO.INSERTI18N N'T_CORE_LES_INSTANCE_UNIT.DONEFLAG',N'LES实例组件的是否已标记完成',N'是否已标记完成',N'zh-CN',N'是否已标记完成'
+GO
+
+UPDATE T_CORE_LES_INSTANCE_UNIT SET DONEFLAG = '0' WHERE DONEFLAG IS NULL;
+
+UPDATE T_CORE_LES_UNIT SET ICON =REPLACE (ICON,'gikam/main','report'), THUMBNAIL =REPLACE (THUMBNAIL,'gikam/main','report')  WHERE ICON LIKE '/static/gikam/main%';
+
+-- ----------------------------- 2021-07-06 add by shixw------------end
+
+-- ----------------------------- 2021-07-09 add by shixw------------begin
+
+DELETE FROM T_CORE_LES_UNIT WHERE ID = 'ketcher';
+
+INSERT INTO T_CORE_LES_UNIT
+(ID, UNITNAME, BINDDS, ICON, ORDERNO, AUDITTRAIL, CONFIG, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, CREATEDBYORGID, CREATEDBYORGNAME, ACTIVATEDFLAG, ACTIVATEDBYID, ACTIVATEDBYNAME, ACTIVATEDTIME, THUMBNAIL)
+VALUES('ketcher', 'ketcher分子式', '0', '/static/report/img/ketcher.svg', 3, '0', '{ "toolButtons":[ "edit", "remove", "moveUp", "moveDown", "print", "audit" ] }', NULL, NULL, NULL, NULL, NULL, '1', NULL, NULL, NULL, '/static/report/img/ketcher-thumbnail.svg');
+
+-- ----------------------------- 2021-07-09 add by shixw------------end
+
+-- 原LES微服务
+
+
+-- 原OFFICE微服务
+-- ----------------------------- 2021-04-15 add by zhanghang--------------begin
+ALTER TABLE [dbo].[T_CORE_OFFICE_DS_FIELD] ADD [WRITEBACK] varchar(1) NULL
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'是否反写(默认0-不反写，1-反写)',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_OFFICE_DS_FIELD',
+'COLUMN', N'WRITEBACK'
+GO
+
+ALTER TABLE [dbo].[T_CORE_OFFICE_DS_FIELD] ADD [UPDATETABLENAME] varchar(60) NULL
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'反写表名称',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_OFFICE_DS_FIELD',
+'COLUMN', N'UPDATETABLENAME'
+GO
+
+ALTER TABLE [dbo].[T_CORE_OFFICE_DS_FIELD] ADD [UPDATECOLUMNNAME] varchar(36) NULL
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'反写字段名称',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_OFFICE_DS_FIELD',
+'COLUMN', N'UPDATECOLUMNNAME'
+GO
+
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_DS_FIELD.WRITEBACK', N'是否反写', N'是否反写', N'zh-CN', N'是否反写';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_DS_FIELD.UPDATETABLENAME', N'反写表名称', N'反写表名称', N'zh-CN', N'反写表名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_DS_FIELD.UPDATECOLUMNNAME', N'反写字段名称', N'反写字段名称', N'zh-CN', N'反写字段名称';
+
+
+INSERT INTO T_CORE_CODE ( ID, CODENAME, CODECATEGORYID, ORDERNO, LASTSUSPENDEDFLAG, CODE ) VALUES
+    (NEXT VALUE FOR SEQ_CORE, 'ELN', 'coreOfficeDocumentType', 3, '0', 'eln' );
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.OFFICE.TMPLS.TIP.TABLE_DS_INSERT_DATA_ERROR', N'列表数据源插入数据异常', N'列表数据源插入数据异常', N'zh-CN', N'列表数据源插入数据异常';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.OFFICE.TMPLS.TIP.WRITE_BACK_ID_VALUE_MISSING', N'报告数据源：{0} 字段：{1} 反写ID未定义', N'报告数据源：{0} 字段：{1} 反写ID未定义', N'zh-CN', N'报告数据源：{0} 字段：{1} 反写ID未定义';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.OFFICE.TMPLS.TIP.WRITE_BACK_TABLE_NAME_MISSING', N'报告数据源：{0} 字段：{1} 反写表名称未维护', N'报告数据源：{0} 字段：{1} 反写表名称未维护', N'zh-CN', N'报告数据源：{0} 字段：{1} 反写表名称未维护';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.OFFICE.TMPLS.TIP.WRITE_BACK_COLUMN_NAME_MISSING', N'报告数据源：{0} 字段：{1} 反写字段名称未维护', N'报告数据源：{0} 字段：{1} 反写字段名称未维护', N'zh-CN', N'报告数据源：{0} 字段：{1} 反写字段名称未维护';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.OFFICE.TMPLS.TIP.EXIST_REPEAT_WRITE_BACK_DATA', N'该模板中存在与报告数据源：{0} 字段：{1} 重复反写的数据', N'该模板中存在与报告数据源：{0} 字段：{1} 重复反写的数据', N'zh-CN', N'该模板中存在与报告数据源：{0} 字段：{1} 重复反写的数据';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.OFFICE.TMPLS.TIP.TABLE_DS_REPEAT_BIND', N'该列表数据源在同Sheet页重复绑定，请检查：', N'该列表数据源在同Sheet页重复绑定，请检查：', N'zh-CN', N'该列表数据源在同Sheet页重复绑定，请检查：';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.OFFICE.TMPLS.EXCEPTION.BIZID_IS_EMPTY', N'业务单据ID为空（BIZID），请检查！', N'业务单据ID为空（BIZID），请检查！', N'zh-CN', N'业务单据ID为空（BIZID），请检查！';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.OFFICE.TMPLS.EXCEPTION.REPEAT-GENERATE-INSTANCE', N'重复生成报告或实例，请检查！', N'重复生成报告或实例，请检查！', N'zh-CN', N'重复生成报告或实例，请检查！';
+
+CREATE TABlE DBO.T_CORE_OFFICE_INSTANCE(
+    ID BIGINT NOT NULL,
+    TMPLID BIGINT NULL ,
+    INSTANCENAME VARCHAR(120)  NULL ,
+    DOCUMENTTYPE VARCHAR(36)  NULL ,
+    BIZCATEGORY VARCHAR(36)  NULL ,
+    BIZID VARCHAR(32)  NULL ,
+    BIZPARAM VARCHAR(512)  NULL ,
+    CREATEDBYID VARCHAR(36)  NULL ,
+    CREATEDBYNAME VARCHAR(60)  NULL ,
+    CREATEDTIME DATETIME NULL ,
+    CREATEDBYORGID VARCHAR(36)  NULL ,
+    CREATEDBYORGNAME VARCHAR(270)  NULL ,
+    CONSTRAINT PK_CORE_OFFICE_INSTANCE PRIMARY KEY(ID));
+CREATE NONCLUSTERED INDEX [IDX_CORE_OFFICE_INSTANCE_TMPLID] ON [dbo].[T_CORE_OFFICE_INSTANCE] ([TMPLID]);
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'报告实例表' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_INSTANCE';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'主键' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_INSTANCE', @level2type=N'COLUMN',@level2name=N'ID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'模板ID' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_INSTANCE', @level2type=N'COLUMN',@level2name=N'TMPLID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'实例名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_INSTANCE', @level2type=N'COLUMN',@level2name=N'INSTANCENAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'模板类型' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_INSTANCE', @level2type=N'COLUMN',@level2name=N'DOCUMENTTYPE';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'业务类型' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_INSTANCE', @level2type=N'COLUMN',@level2name=N'BIZCATEGORY';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'业务ID' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_INSTANCE', @level2type=N'COLUMN',@level2name=N'BIZID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'报告参数' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_INSTANCE', @level2type=N'COLUMN',@level2name=N'BIZPARAM';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_INSTANCE', @level2type=N'COLUMN',@level2name=N'CREATEDBYID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_INSTANCE', @level2type=N'COLUMN',@level2name=N'CREATEDBYNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_INSTANCE', @level2type=N'COLUMN',@level2name=N'CREATEDTIME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_INSTANCE', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_OFFICE_INSTANCE', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGNAME';
+
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_INSTANCE.SERVICE_NAME', N'报告实例表', N'报告实例表', N'zh-CN',N'报告实例表';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_INSTANCE.ID', N'报告实例表的主键', N'主键', N'zh-CN',N'主键';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_INSTANCE.TMPLID', N'报告实例表的模板ID', N'模板ID', N'zh-CN',N'模板ID';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_INSTANCE.INSTANCENAME', N'报告实例表的实例名称', N'实例名称', N'zh-CN',N'实例名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_INSTANCE.DOCUMENTTYPE', N'报告模板表的模板类型', N'模板类型', N'zh-CN',N'模板类型';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_INSTANCE.BIZCATEGORY', N'报告模板表的业务类型', N'业务类型', N'zh-CN',N'业务类型';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_INSTANCE.BIZID', N'报告实例表的业务ID', N'业务ID', N'zh-CN',N'业务ID';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_INSTANCE.BIZPARAM', N'报告实例表的报告参数', N'报告参数', N'zh-CN',N'报告参数';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_INSTANCE.CREATEDBYID', N'报告实例表的制单人编码', N'制单人编码', N'zh-CN',N'制单人编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_INSTANCE.CREATEDBYNAME', N'报告实例表的制单人名称', N'制单人名称', N'zh-CN',N'制单人名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_INSTANCE.CREATEDTIME', N'报告实例表的制单时间', N'制单时间', N'zh-CN',N'制单时间';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_INSTANCE.CREATEDBYORGID', N'报告实例表的制单人单位编码', N'制单人单位编码', N'zh-CN',N'制单人单位编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_OFFICE_INSTANCE.CREATEDBYORGNAME', N'报告实例表的制单人单位名称', N'制单人单位名称', N'zh-CN',N'制单人单位名称';
+EXEC  DBO.INSERTI18N  N'CLOUD.GIKAM.OFFICES.MODAL.ADD', N'新增', N'新增', N'zh-CN',N'新增';
+EXEC  DBO.INSERTI18N  N'CLOUD.GIKAM.OFFICES.TAB.BASE_INFO', N'基本信息', N'基本信息', N'zh-CN',N'基本信息';
+EXEC  DBO.INSERTI18N  N'CLOUD.GIKAM.OFFICES.BUTTON.BUTTON', N'按钮', N'按钮', N'zh-CN',N'按钮';
+EXEC  DBO.INSERTI18N  N'CLOUD.GIKAM.OFFICES.TIP.TIP', N'提示框', N'提示框', N'zh-CN',N'提示框';
+EXEC  DBO.INSERTI18N  N'CLOUD.GIKAM.OFFICES.MODAL.MODAL', N'对话框', N'对话框', N'zh-CN',N'对话框';
+
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_OFFICE_INSTANCE', '0', '1');
+-- ----------------------------- 2021-04-15 add by zhanghang--------------end
+-- 原OFFICE微服务
+
+-- 原ELN微服务
+-- ----------------------------- 2021-06-16 add by zhanghang--------------begin
+INSERT INTO T_CORE_DP_CONFIG (ID,DPCONFIGNAME,TABLENAME,PARENTID,UNIQUEFIELDS) VALUES (1000,'ELN数据源','T_CORE_ELN_DS',NULL,'elnDsName');
+INSERT INTO T_CORE_DP_CONFIG (ID,DPCONFIGNAME,TABLENAME,PARENTID,UNIQUEFIELDS) VALUES (1001,'ELN数据源字段信息','T_CORE_ELN_DS_FIELD',1000,'elnDsId');
+INSERT INTO T_CORE_DP_CONFIG (ID,DPCONFIGNAME,TABLENAME,PARENTID,UNIQUEFIELDS) VALUES (1002,'ELN模板','T_CORE_ELN_TMPL',NULL,'elnTmplName');
+INSERT INTO T_CORE_DP_CONFIG (ID,DPCONFIGNAME,TABLENAME,PARENTID,UNIQUEFIELDS) VALUES (1003,'ELN模板数据源','T_CORE_ELN_TMPL_DS',1002,'elnTmplId');
+INSERT INTO T_CORE_DP_CONFIG (ID,DPCONFIGNAME,TABLENAME,PARENTID,UNIQUEFIELDS) VALUES (1004,'ELN模板版本','T_CORE_ELN_TMPL_VERSION',1002,'elnTmplId');
+
+INSERT INTO T_CORE_DP_CONFIG_LINE (ID,DPCONFIGID,RELATETABLENAME,RELATEFIELDNAME,FIELDNAME,RELATECONFIGID) VALUES (1000,1001,'T_CORE_ELN_DS','id','elnDsId',NULL);
+INSERT INTO T_CORE_DP_CONFIG_LINE (ID,DPCONFIGID,RELATETABLENAME,RELATEFIELDNAME,FIELDNAME,RELATECONFIGID) VALUES (1001,1003,'T_CORE_ELN_TMPL','id','elnTmplId',NULL);
+INSERT INTO T_CORE_DP_CONFIG_LINE (ID,DPCONFIGID,RELATETABLENAME,RELATEFIELDNAME,FIELDNAME,RELATECONFIGID) VALUES (1002,1004,'T_CORE_ELN_TMPL','id','elnTmplId',NULL);
+-- ----------------------------- 2021-06-16 add by zhanghang--------------end
+-- 原ELN微服务

@@ -6,7 +6,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import com.sunwayworld.framework.io.file.FilePathDTO;
+import com.sunwayworld.framework.io.file.FilePathManager;
 import com.sunwayworld.framework.spring.annotation.GikamBean;
+import com.sunwayworld.module.item.file.utils.CoreFileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -17,16 +20,14 @@ import com.sunwayworld.emc.module.mdm.equipt.equipt.service.EmcEquiptService;
 import com.sunwayworld.framework.context.ApplicationContextHelper;
 import com.sunwayworld.framework.context.LocalContextHelper;
 import com.sunwayworld.framework.io.excel.ExcelHelper;
-import com.sunwayworld.framework.io.file.FileHelper;
-import com.sunwayworld.framework.io.file.FileRepresentation;
 import com.sunwayworld.framework.utils.StringUtils;
 import com.sunwayworld.module.item.file.bean.CoreFileBean;
-import com.sunwayworld.module.item.file.bean.ImportResultRepresentation;
-import com.sunwayworld.module.item.file.function.ImportFileFunction;
+import com.sunwayworld.module.item.file.bean.CoreFileImportResultDTO;
+import com.sunwayworld.module.item.file.function.CoreFileImportFunction;
 
 @Component(value = "emcEquipImportFileFunction")
 @GikamBean
-public class EmcEquipImportFileFunction implements ImportFileFunction {
+public class EmcEquipImportFileFunction implements CoreFileImportFunction {
 
     @Autowired
     private EmcEquiptService emcEquiptService;
@@ -40,24 +41,24 @@ public class EmcEquipImportFileFunction implements ImportFileFunction {
     }
 
     @Override
-    public ImportResultRepresentation apply(CoreFileBean file) {
-        ImportResultRepresentation importResultRepresentation = new ImportResultRepresentation();
-        FileRepresentation fr = FileRepresentation.of(file);
+    public CoreFileImportResultDTO apply(CoreFileBean file) {
+        CoreFileImportResultDTO fileImportResultDTO = new CoreFileImportResultDTO();
+        FilePathDTO fr = CoreFileUtils.toFilePath(file);
 
-        List<EmcEquiptBean> equiptList = ExcelHelper.readDataFromExcel(FileHelper.getAbsolutePath(fr).toString(), 2, 3, EmcEquiptBean.class);
+        List<EmcEquiptBean> equiptList = ExcelHelper.readDataFromExcel(FilePathManager.getLocalPath(fr).toString(), 2, 3, EmcEquiptBean.class);
         if (equiptList.isEmpty()) {
-            return importResultRepresentation;
+            return fileImportResultDTO;
         }
 
         List<String> validateImpMsgList = equiptList.stream().filter(stock -> !StringUtils.isEmpty(stock.getExt$Item("validateimpmsg"))).map(stock -> stock.getExt$Item("validateimpmsg")).collect(Collectors.toList());
         if (!validateImpMsgList.isEmpty()) {
-            importResultRepresentation.setMessage(validateImpMsgList.get(0));
-            return importResultRepresentation;
+            fileImportResultDTO.setMessage(validateImpMsgList.get(0));
+            return fileImportResultDTO;
         }
 
         List<EmcEquiptBean> validEquiptList = equiptList.stream().filter(e -> !StringUtils.isEmpty(e.getEquiptId()) && !StringUtils.isEmpty(e.getEquiptName()) && !StringUtils.isEmpty(e.getExt$Item("equiptCategory"))).collect(Collectors.toList());
         if (validEquiptList.isEmpty()) {
-            return importResultRepresentation;
+            return fileImportResultDTO;
         }
 
         String parentOrgId = LocalContextHelper.getLoginUser().getExt$Item("parentOrgId");
@@ -105,7 +106,7 @@ public class EmcEquipImportFileFunction implements ImportFileFunction {
             emcEquiptService.getDao().insert(insertEquiptList);
         }
 
-        return importResultRepresentation;
+        return fileImportResultDTO;
     }
 
 }

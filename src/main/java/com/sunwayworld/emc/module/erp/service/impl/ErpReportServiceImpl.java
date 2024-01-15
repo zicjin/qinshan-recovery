@@ -18,6 +18,8 @@ import java.util.stream.Collectors;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
+import com.sunwayworld.framework.io.file.FilePathManager;
+import com.sunwayworld.module.item.file.utils.CoreFileUtils;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.Request;
@@ -27,6 +29,7 @@ import org.apache.commons.collections4.MapUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 
 import com.sunwayworld.emc.module.bp.project.project.bean.EmcProjectBean;
@@ -52,8 +55,6 @@ import com.sunwayworld.framework.constant.Constant;
 import com.sunwayworld.framework.context.ApplicationContextHelper;
 import com.sunwayworld.framework.context.LocalContextHelper;
 import com.sunwayworld.framework.http.HttpClientManager;
-import com.sunwayworld.framework.io.file.FileHelper;
-import com.sunwayworld.framework.io.file.FileRepresentation;
 import com.sunwayworld.framework.mybatis.mapper.MatchPattern;
 import com.sunwayworld.framework.mybatis.mapper.SearchFilter;
 import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;
@@ -79,6 +80,7 @@ public class ErpReportServiceImpl implements ErpReportService {
     private static final Logger logger = LoggerFactory.getLogger(ErpReportServiceImpl.class);
 
     @Autowired
+    @Lazy
     private EmcProjectService projectService;
 
     @Autowired
@@ -183,7 +185,7 @@ public class ErpReportServiceImpl implements ErpReportService {
             Map<String,String> paramMap = new HashMap<>(1);
             paramMap.put("gbId", project.getErpGbId().toString());
 
-            File wordFile = new File(FileHelper.getAbsolutePath(FileRepresentation.of(reportFile)).toString());
+            File wordFile = new File(FilePathManager.getLocalPath(CoreFileUtils.toFilePath(reportFile)).toString());
             // 文件参数
             Map<String, File> fileParamMap = new HashMap<>(1);
             fileParamMap.put("file", wordFile);

@@ -24,12 +24,18 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import com.sunwayworld.framework.io.file.FilePathDTO;
+import com.sunwayworld.framework.io.file.FilePathManager;
+import com.sunwayworld.framework.support.base.service.GenericTemplateService;
 import com.sunwayworld.framework.utils.ObjectUtils;
+import com.sunwayworld.module.item.file.manager.CoreFileManager;
+import com.sunwayworld.module.item.file.utils.CoreFileUtils;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import com.sunwayworld.emc.module.bp.bp.bean.EmcOrderBean;
@@ -43,26 +49,23 @@ import com.sunwayworld.framework.beans.BeanPropertyHelper;
 import com.sunwayworld.framework.context.ApplicationContextHelper;
 import com.sunwayworld.framework.data.Pair;
 import com.sunwayworld.framework.exception.FileException;
-import com.sunwayworld.framework.io.file.FileHelper;
-import com.sunwayworld.framework.io.file.FileRepresentation;
 import com.sunwayworld.framework.io.file.FileScope;
 import com.sunwayworld.framework.mybatis.mapper.MatchPattern;
 import com.sunwayworld.framework.mybatis.mapper.SearchFilter;
 import com.sunwayworld.framework.utils.FileUtils;
 import com.sunwayworld.framework.utils.StringUtils;
-import com.sunwayworld.module.item.file.cloud.CoreFileCloudService;
-import com.sunwayworld.module.item.file.export.GenericExportTemplate;
 
 /**
  * @author zhengxy@sunwayworld.com 2021年10月22日
  */
 @Component(value = "pfOrderExportTemplate")
-public class PfOrderExportTemplate implements GenericExportTemplate<String> {
+public class PfOrderExportTemplate implements GenericTemplateService<String> {
 
     @Autowired
     private EmcOrderService orderService;
     
     @Autowired
+    @Lazy
     private EmcProjectService projectService;
 
     @Autowired
@@ -77,7 +80,7 @@ public class PfOrderExportTemplate implements GenericExportTemplate<String> {
     }
 
     @Override
-    public String getDownLoadTemplateUrl(String templateCode, String id) {
+    public String getDownloadUrl(String templateCode, String id) {
         // 首先根据id查询项目，然后得到文件名称
         String fileName = "项目编号+受检单位";
         EmcProjectBean projectBean = projectService.selectById(Long.parseLong(id));
@@ -88,32 +91,33 @@ public class PfOrderExportTemplate implements GenericExportTemplate<String> {
         }else{
             fileName = projNo +"-" + entrustOrgName;
         }
-        FileRepresentation fr = FileRepresentation.of(FileScope.temp.name(), "" + System.currentTimeMillis(), UUID.randomUUID().toString(), fileName + ".xls");
+
+        FilePathDTO fr = CoreFileUtils.toFilePath(FileScope.temp, fileName + ".xls");
         try {
-            Files.createDirectories(FileHelper.getAbsoluteDirPath(fr));
+            Files.createDirectories(FilePathManager.getLocalPath(fr));
 
             URL resource = this.getClass().getResource("");
             if (FileUtils.isInJarURL(resource)) {
                 InputStream is = this.getClass().getResourceAsStream("templates/" + templateCode + ".xls");
-                Files.copy(is, FileHelper.getAbsolutePath(fr), StandardCopyOption.REPLACE_EXISTING);
+                Files.copy(is, FilePathManager.getLocalPath(fr), StandardCopyOption.REPLACE_EXISTING);
             } else {
                 Path templatePath = new File(resource.getPath()).toPath().resolve("templates").resolve(templateCode + ".xls");
-                Files.copy(templatePath, FileHelper.getAbsolutePath(fr), StandardCopyOption.REPLACE_EXISTING);
+                Files.copy(templatePath, FilePathManager.getLocalPath(fr), StandardCopyOption.REPLACE_EXISTING);
             }
 
-            initTemplateData(FileHelper.getAbsolutePath(fr), id);
+            initTemplateData(FilePathManager.getLocalPath(fr), id);
 
-            File exportTemplateFile = FileHelper.getAbsolutePath(fr).toFile();
+            File exportTemplateFile = FilePathManager.getLocalPath(fr).toFile();
 
-            CoreFileCloudService cloudService = ApplicationContextHelper.getBean(CoreFileCloudService.class);
+            CoreFileManager coreFileManager = ApplicationContextHelper.getBean(CoreFileManager.class);
 
-            cloudService.archive(fr, exportTemplateFile);
+            coreFileManager.upload(fr, exportTemplateFile);
 
         } catch (IOException ioe) {
             throw new FileException(ioe);
         }
 
-        return FileHelper.getUrl(fr);
+        return FilePathManager.getUrl(fr);
     }
     
     @Override

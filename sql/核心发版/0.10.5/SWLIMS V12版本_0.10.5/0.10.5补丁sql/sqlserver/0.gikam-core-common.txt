@@ -1,0 +1,14 @@
+﻿-- ----------------------------- 2020-08-14 add by zhangxt------------begin
+alter table dbo.T_CORE_SCHEDULE_TASK_LOG ADD EXECUTEDRESULT VARCHAR(300) NULL
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'任务执行的业务结果',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_SCHEDULE_TASK_LOG',
+'COLUMN', N'EXECUTEDRESULT'
+GO
+
+EXEC  DBO.INSERTI18N N'T_CORE_SCHEDULE_TASK_LOG.EXECUTEDRESULT',N'任务执行的业务结果',N'执行结果',N'zh-CN',N'执行结果'
+GO
+-- ----------------------------- 2020-08-14 add by zhangxt------------end

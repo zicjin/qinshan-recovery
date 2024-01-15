@@ -9,16 +9,16 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import com.sunwayworld.cloud.gikam.fr.bean.report.CoreReportConfigLineBean;
-import com.sunwayworld.cloud.gikam.fr.service.report.CoreReportConfigLineService;
+import com.sunwayworld.cloud.module.fr.report.bean.CoreReportConfigLineBean;
+import com.sunwayworld.cloud.module.fr.report.service.CoreReportConfigLineService;
 import com.sunwayworld.emc.framework.constant.EmcConstant;
 import com.sunwayworld.emc.module.mdm.basemdm.qccategory.bean.EmcQcCategoryBean;
 import com.sunwayworld.emc.module.mdm.basemdm.qccategory.service.EmcQcCategoryService;
 import com.sunwayworld.framework.exception.UnsupportedException;
 import com.sunwayworld.framework.executor.ExecutorHelper;
 import com.sunwayworld.framework.http.HttpClientManager;
-import com.sunwayworld.framework.io.file.FileHelper;
 import com.sunwayworld.framework.io.file.FileScope;
+import com.sunwayworld.framework.utils.*;
 import com.sunwayworld.module.item.file.bean.CoreFileBean;
 import com.sunwayworld.module.item.file.service.CoreFileService;
 import com.sunwayworld.module.sys.code.bean.CoreCodeBean;
@@ -90,12 +90,6 @@ import com.sunwayworld.framework.mybatis.mapper.SearchFilter;
 import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;
 import com.sunwayworld.framework.spring.annotation.GikamBean;
 import com.sunwayworld.framework.support.auditable.bean.CoreBpmnParameterDTO;
-import com.sunwayworld.framework.utils.BeanUtils;
-import com.sunwayworld.framework.utils.CollectionUtils;
-import com.sunwayworld.framework.utils.DateTimeUtils;
-import com.sunwayworld.framework.utils.NumberUtils;
-import com.sunwayworld.framework.utils.ObjectUtils;
-import com.sunwayworld.framework.utils.StringUtils;
 import com.sunwayworld.framework.validator.data.annotation.ValidateDataWith;
 import com.sunwayworld.module.sys.bpmn.bean.CoreBpmnInstanceStatusDTO;
 import com.sunwayworld.module.sys.bpmn.diagram.ProcessStatus;
@@ -529,7 +523,7 @@ public class PfSampleServiceImpl extends EmcSampleServiceImpl implements PfSampl
      * 下载文件，并保存到指定目录下
      */
     private File downloadFile(String url, String fileName) {
-        File tempFile = FileHelper.createTempFile(fileName, 0L);
+        File tempFile = FileUtils.createTempFile();
         if (StringUtils.startsWithIgnoreCase(url, "https://")) {
             HttpClientManager.getInstance().download(url, tempFile);
         } else {

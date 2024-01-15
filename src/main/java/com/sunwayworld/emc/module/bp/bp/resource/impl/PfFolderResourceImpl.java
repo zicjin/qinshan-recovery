@@ -3,6 +3,7 @@ package com.sunwayworld.emc.module.bp.bp.resource.impl;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,6 +24,7 @@ import com.sunwayworld.framework.spring.annotation.GikamBean;
 public class PfFolderResourceImpl extends EmcFolderResourceImpl implements PfFolderResource {
 
     @Autowired
+    @Lazy
     private PfFolderService pfFolderService;
 
     @Override

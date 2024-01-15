@@ -1,0 +1,208 @@
+﻿-- --------------------------------------- 2020-01-18 zhangjr begin -----------------
+-- Create table
+create table T_CORE_NOTIFICATION_TMPL
+(
+  id          VARCHAR2(32) not null,
+  name        VARCHAR2(96) not null,
+  desctemplate     VARCHAR2(192),
+  contenttemplate  CLOB
+);
+-- Add comments to the table 
+comment on table T_CORE_NOTIFICATION_TMPL
+  is '通知中心模板';
+-- Add comments to the columns 
+comment on column T_CORE_NOTIFICATION_TMPL.id
+  is '主键';
+comment on column T_CORE_NOTIFICATION_TMPL.name
+  is '通知名称';
+comment on column T_CORE_NOTIFICATION_TMPL.desctemplate
+  is '通知描述模板';
+comment on column T_CORE_NOTIFICATION_TMPL.contenttemplate
+  is '通知内容模板';
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table T_CORE_NOTIFICATION_TMPL
+  add constraint PK_CORE_NOTIFICATION_TMPL primary key (ID);
+
+-- Create table
+create table T_CORE_NOTIFICATION_INST
+(
+  id          NUMBER not null,
+  templateid  VARCHAR2(32) not null,
+  "DESC"      VARCHAR2(192),
+  content     clob,
+  expiredTime TIMESTAMP,
+  attachmenturl varchar(384) ,
+  createdbyid      VARCHAR2(32),
+  createdbyname    VARCHAR2(64),
+  createdtime      TIMESTAMP(6),
+  createdbyorgid   VARCHAR2(32),
+  createdbyorgname VARCHAR2(192)
+);
+-- Add comments to the table 
+comment on table T_CORE_NOTIFICATION_INST
+  is '通知实例';
+-- Add comments to the columns 
+comment on column T_CORE_NOTIFICATION_INST.id
+  is '主键';
+comment on column T_CORE_NOTIFICATION_INST.templateid
+  is '模板编码';
+comment on column T_CORE_NOTIFICATION_INST."DESC"
+  is '通知描述';
+comment on column T_CORE_NOTIFICATION_INST.content
+  is '通知内容';
+comment on column T_CORE_NOTIFICATION_INST.expiredTime
+  is '通知截止日期';
+comment on column T_CORE_NOTIFICATION_INST.attachmenturl
+  is '附件的下载地址（可以为空）';
+comment on column T_CORE_NOTIFICATION_INST.createdbyid
+  is '制单人编码';
+comment on column T_CORE_NOTIFICATION_INST.createdbyname
+  is '制单人名称';
+comment on column T_CORE_NOTIFICATION_INST.createdtime
+  is '制单时间';
+comment on column T_CORE_NOTIFICATION_INST.createdbyorgid
+  is '单据单位编码';
+comment on column T_CORE_NOTIFICATION_INST.createdbyorgname
+  is '单据单位名称';
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table T_CORE_NOTIFICATION_INST
+  add constraint PK_CORE_NOTIFICATION_INST primary key (ID);
+
+-- Create table
+create table T_CORE_NOTIFICATION_INST_TO
+(
+  id          NUMBER not null,
+  instid      NUMBER not null,
+  notifiedid  VARCHAR2(32),
+  read        varchar2(1) not null
+);
+-- Add comments to the table 
+comment on table T_CORE_NOTIFICATION_INST_TO
+  is '通知实例中的被通知人';
+-- Add comments to the columns 
+comment on column T_CORE_NOTIFICATION_INST_TO.id
+  is '主键';
+comment on column T_CORE_NOTIFICATION_INST_TO.instid
+  is '通知实例主键';
+comment on column T_CORE_NOTIFICATION_INST_TO.notifiedid
+  is '被通知人编码';
+comment on column T_CORE_NOTIFICATION_INST_TO.read
+  is '是否已读（0-否 1-是）';
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table T_CORE_NOTIFICATION_INST_TO
+  add constraint PK_CORE_NOTIFICATION_INST_TO primary key (ID);
+
+INSERT INTO T_CORE_MENU(ID, MENUNAME, HREF, PARENTID, ORDERNO, MENUINITNAME, ICON, TODOICON)
+VALUES ('9505', '通知中心', '', '95', 9505, '通知中心', '022.svg', NULL);
+INSERT INTO T_CORE_MENU(ID, MENUNAME, HREF, PARENTID, ORDERNO, MENUINITNAME, ICON, TODOICON)
+VALUES ('950501', '通知模板', '/secure/core/module/notification/notification-templates/page/edit-list', '9505', 950501, '通知模板', '046.svg', NULL);
+INSERT INTO T_CORE_MENU(ID, MENUNAME, HREF, PARENTID, ORDERNO, MENUINITNAME, ICON, TODOICON)
+VALUES ('950502', '通知查询', '/secure/core/module/notification/notification-instances/page/edit-list', '9505', 950502, '通知中心', '077.svg', NULL);
+COMMIT;
+
+INSERT INTO T_CORE_NOTIFICATION_TMPL(ID, NAME, DESCTEMPLATE, CONTENTTEMPLATE)
+VALUES ('output', '数据导出', '', '');
+COMMIT;
+-- --------------------------------------- 2020-01-18 zhangjr end -----------------
+-- --------------------------------------- 2020-02-11 zhangxt begin -----------------
+INSERT INTO T_CORE_CONSTANT (ID, CONSTANTVALUE, CONSTANTDESC, CLASSFICATION, SHOW, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME) VALUES ('NOTIFICATION-REFRESH-FREQUENCY', '5', '首页消息中心刷新频率（分钟）', '系统', '1', 0, NULL, NULL, NULL);
+commit;
+
+-- Add/modify columns 
+alter table T_CORE_NOTIFICATION_INST_TO add READTIME date;
+-- Add comments to the columns 
+comment on column T_CORE_NOTIFICATION_INST_TO.READTIME
+  is '读取时间';
+-- --------------------------------------- 2020-02-11 zhangxt end -----------------
+-- --------------------------------------- 2020-08-12 zhangxt -----------------begin
+-- Add/modify columns 
+alter table T_CORE_NOTIFICATION_TMPL add menuid varchar2(36);
+alter table T_CORE_NOTIFICATION_TMPL add menuname varchar2(60);
+alter table T_CORE_NOTIFICATION_TMPL add forwardcategory varchar2(36);
+alter table T_CORE_NOTIFICATION_TMPL add downloadcategory varchar2(36);
+alter table T_CORE_NOTIFICATION_TMPL add timewarning varchar2(36);
+-- Add comments to the columns 
+comment on column T_CORE_NOTIFICATION_TMPL.menuid
+  is '菜单ID';
+comment on column T_CORE_NOTIFICATION_TMPL.menuname
+  is '菜单名称(业务名称)';
+comment on column T_CORE_NOTIFICATION_TMPL.forwardcategory
+  is '跳转类型';
+comment on column T_CORE_NOTIFICATION_TMPL.downloadcategory
+  is '是否下载附件';
+comment on column T_CORE_NOTIFICATION_TMPL.timewarning
+  is '是否实时提醒';
+  
+-- Add/modify columns 
+alter table T_CORE_NOTIFICATION_INST add menuid varchar2(36);
+alter table T_CORE_NOTIFICATION_INST add menuname varchar2(60);
+alter table T_CORE_NOTIFICATION_INST add forwardcategory varchar2(36);
+alter table T_CORE_NOTIFICATION_INST add downloadcategory varchar2(36);
+alter table T_CORE_NOTIFICATION_INST add timewarning varchar2(36);
+-- Add comments to the columns 
+comment on column T_CORE_NOTIFICATION_INST.menuid
+  is '菜单ID';
+comment on column T_CORE_NOTIFICATION_INST.menuname
+  is '菜单名称(业务名称)';
+comment on column T_CORE_NOTIFICATION_INST.forwardcategory
+  is '跳转类型';
+comment on column T_CORE_NOTIFICATION_INST.downloadcategory
+  is '是否下载附件';
+comment on column T_CORE_NOTIFICATION_INST.timewarning
+  is '是否实时提醒';
+  
+-- Add/modify columns 
+alter table T_CORE_NOTIFICATION_INST_TO add ignore varchar2(36);
+comment on column T_CORE_NOTIFICATION_INST_TO.ignore
+  is '是否忽略';
+ 
+CALL INSERTI18N('T_CORE_NOTIFICATION_INST_TO.IGNORE', '是否忽略', '是否忽略', 'zh-CN', '是否忽略');
+CALL INSERTI18N('T_CORE_NOTIFICATION_TMPL.MENUNAME', '业务名称', '业务名称', 'zh-CN', '业务名称');
+CALL INSERTI18N('T_CORE_NOTIFICATION_TMPL.FORWARDCATEGORY', '跳转类型', '跳转类型', 'zh-CN', '跳转类型');
+CALL INSERTI18N('T_CORE_NOTIFICATION_TMPL.DOWNLOADCATEGORY', '是否下载附件', '是否下载附件', 'zh-CN', '是否下载附件');
+CALL INSERTI18N('T_CORE_NOTIFICATION_TMPL.TIMEWARNING', '是否实时提醒', '是否实时提醒', 'zh-CN', '是否实时提醒');
+CALL INSERTI18N('T_CORE_NOTIFICATION_INST.MENUNAME', '业务名称', '业务名称', 'zh-CN', '业务名称');
+CALL INSERTI18N('T_CORE_NOTIFICATION_INST.FORWARDCATEGORY', '跳转类型', '跳转类型', 'zh-CN', '跳转类型');
+CALL INSERTI18N('T_CORE_NOTIFICATION_INST.DOWNLOADCATEGORY', '是否下载附件', '是否下载附件', 'zh-CN', '是否下载附件');
+CALL INSERTI18N('T_CORE_NOTIFICATION_INST.TIMEWARNING', '是否实时提醒', '是否实时提醒', 'zh-CN', '是否实时提醒');
+CALL INSERTI18N('T_CORE_NOTIFICATION_TMPL.TMPL_INFO', '模板信息', '模板信息', 'zh-CN', '模板信息');
+CALL INSERTI18N('T_CORE_NOTIFICATION_TMPL.PREPARE_INFO', '配置信息', '配置信息', 'zh-CN', '配置信息');
+
+INSERT INTO T_CORE_CODE_CATEGORY (ID,CODECATEGORYNAME,CODECLASSID,REMARK,ORDERNO)
+VALUES ('forwardCategory','跳转类型','sys','应用动作','1');
+INSERT INTO T_CORE_CODE (ID, CODE, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME)
+VALUES (SEQ_CORE.NEXTVAL, 'grid', '列表', 'forwardCategory', null, 1, 0, 'admin', '系统管理员', null, '0', null, null, null);
+INSERT INTO T_CORE_CODE (ID, CODE, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME)
+VALUES (SEQ_CORE.NEXTVAL, 'form', '详情', 'forwardCategory', null, 2, 0, 'admin', '系统管理员', null, '0', null, null, null);
+INSERT INTO T_CORE_CODE (ID, CODE, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME)
+VALUES (SEQ_CORE.NEXTVAL, 'notForward', '不跳转', 'forwardCategory', null, 2, 0, 'admin', '系统管理员', null, '0', null, null, null);
+
+INSERT INTO T_CORE_ADMIN_SELECT_CONFIG(ID, NAME, CATEGORY, URL, VALUEFIELD, TEXTFIELD)
+    VALUES (SEQ_CORE.NEXTVAL, '跳转类型',  'forward-category', '/secure/core/module/sys/codes/queries/selectable?codeCategoryId=forwardCategory', 'code', 'codeName');
+    
+COMMIT;
+-- --------------------------------------- 2020-08-12 zhangxt -----------------end
+-- --------------------------------------- 2020-08-24 liujianfneg -----------------begin
+INSERT INTO T_CORE_CODE_CATEGORY (ID,CODECATEGORYNAME,CODECLASSID,REMARK,ORDERNO)
+VALUES ('readCategory','阅读类型','sys','阅读类型','1');
+INSERT INTO T_CORE_CODE (ID, CODE, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME)
+VALUES (SEQ_CORE.NEXTVAL, '0', '未读', 'readCategory', null, 1, 0, 'admin', '系统管理员', null, '0', null, null, null);
+INSERT INTO T_CORE_CODE (ID, CODE, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME)
+VALUES (SEQ_CORE.NEXTVAL, '1', '已读', 'readCategory', null, 2, 0, 'admin', '系统管理员', null, '0', null, null, null);
+INSERT INTO T_CORE_CODE (ID, CODE, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME)
+VALUES (SEQ_CORE.NEXTVAL, '2', '忽略', 'readCategory', null, 3, 0, 'admin', '系统管理员', null, '0', null, null, null);
+
+INSERT INTO T_CORE_ADMIN_SELECT_CONFIG(ID, NAME, CATEGORY, URL, VALUEFIELD, TEXTFIELD)
+    VALUES (SEQ_CORE.NEXTVAL, '阅读类型',  'read-category', '/secure/core/module/sys/codes/queries/selectable?codeCategoryId=readCategory', 'code', 'codeName');
+    
+COMMIT;
+
+-- --------------------------------------- 2020-08-24 liujianfneg -----------------end
+
+-- --------------------------------------- 2020-09-04 zhangpf -----------------begin
+DELETE FROM T_CORE_CODE 
+ WHERE CODECATEGORYID = 'forwardCategory'
+   AND CODE = 'form';
+
+COMMIT;
+-- --------------------------------------- 2020-09-04 zhangpf -----------------end

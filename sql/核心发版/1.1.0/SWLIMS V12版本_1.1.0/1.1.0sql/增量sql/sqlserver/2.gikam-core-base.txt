@@ -1,0 +1,564 @@
+-- 原ai微服务
+-- ----------------------------- 2021-06-04 add by yangxing------------begin
+ALTER TABLE dbo.T_CORE_AI_TEMPLATE DROP COLUMN PIC;
+GO
+
+alter table dbo.T_CORE_AI_TEMPLATE ADD PICPATH VARCHAR(3000) NULL
+GO
+EXEC sp_addextendedproperty
+'MS_Description', N'图片路径',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_AI_TEMPLATE',
+'COLUMN', 'PICPATH'
+GO
+
+alter table dbo.T_CORE_AI_TEMPLATE ADD FILEID BIGINT NULL
+GO
+EXEC sp_addextendedproperty
+'MS_Description', N'文件编码',
+'SCHEMA', N'dbo',
+'TABLE', N'T_CORE_AI_TEMPLATE',
+'COLUMN', 'FILEID'
+GO
+-- ----------------------------- 2021-06-04 add by yangxing------------end
+
+-- ----------------------------- 2021-07-05 add by yangxing------------begin
+EXEC DBO.INSERTI18N N'CORE.MODULE.AI.TEMPLATES.TIP.FAIL_TO_SCAN_PLEASE_CALL_ADMINISTRATOR', '识别失败，请联系管理员', '识别失败，请联系管理员', 'zh-CN', '识别失败，请联系管理员';
+-- ----------------------------- 2021-07-05 add by yangxing------------end
+
+-- ----------------------------- 2021-07-07 add by yangxing------------begin
+EXEC DBO.INSERTI18N N'CORE.MODULE.AI.TEMPLATES.TIP.ONLY_SUPPORT_TEMPFILE_BY_XLSX', '仅支持上传xlsx后缀的模板文件', '仅支持上传xlsx后缀的模板文件', 'zh-CN', '仅支持上传xlsx后缀的模板文件';
+EXEC DBO.INSERTI18N N'CORE.MODULE.AI.TEMPLATES.TIP.PLEASE_IMPORT_VALID_TEMPFILE', '请导入符合格式的文件', '请导入符合格式的文件', 'zh-CN', '请导入符合格式的文件';
+-- ----------------------------- 2021-07-07 add by yangxing------------end
+
+
+-- 原ai微服务
+
+
+-- 原equipt微服务
+-- ----------------------------- 2021-4-26 add by shixw------------begin
+
+CREATE TABLE T_CORE_EQUIPT(
+    ID                  BIGINT NOT NULL,
+    EQUIPTNO             VARCHAR(36) NULL,
+    EQUIPTNAME             VARCHAR(36) NULL,
+    EQUIPTCATEGORY        VARCHAR(36) NULL,
+    EQUIPTICON            VARCHAR(270) NULL,
+    KEYEQUIPT             VARCHAR(36) NULL,
+    LOCATION            VARCHAR(270)  NULL,
+    EQUIPTMANAGERID        VARCHAR(36) NULL,
+    EQUIPTMANAGERNAME    VARCHAR(60) NULL,
+    MONITORCODE            VARCHAR(36) NULL,
+    IP                    VARCHAR(36) NULL,
+    PORT                 BIGINT NULL,
+    THRESHOLD            DECIMAL(12,4) NULL,
+    SWITCHSTATUS        VARCHAR(36) NULL,
+    PLANUSETIME         DECIMAL(12,4) NULL,
+    COST                DECIMAL(12,4) NULL,
+    CREATEDBYID         VARCHAR(36)  NULL,
+    CREATEDBYNAME         VARCHAR(60)  NULL,
+    CREATEDTIME         DATETIME NULL,
+    CREATEDBYORGID         VARCHAR(36)  NULL,
+    CREATEDBYORGNAME     VARCHAR(270)  NULL,
+    CONSTRAINT PK_CORE_EQUIPT PRIMARY KEY(ID)
+ );
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'关键设备表' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'主键' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT', @level2type=N'COLUMN',@level2name=N'ID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'仪器编号' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT', @level2type=N'COLUMN',@level2name=N'EQUIPTNO';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'仪器名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT', @level2type=N'COLUMN',@level2name=N'EQUIPTNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'仪器类型' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT', @level2type=N'COLUMN',@level2name=N'EQUIPTCATEGORY';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'仪器图标' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT', @level2type=N'COLUMN',@level2name=N'EQUIPTICON';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'是否关键设备' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT', @level2type=N'COLUMN',@level2name=N'KEYEQUIPT';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'仪器位置' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT', @level2type=N'COLUMN',@level2name=N'LOCATION';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'设备管理员ID' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT', @level2type=N'COLUMN',@level2name=N'EQUIPTMANAGERID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'设备管理员' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT', @level2type=N'COLUMN',@level2name=N'EQUIPTMANAGERNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'监测器编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT', @level2type=N'COLUMN',@level2name=N'MONITORCODE';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'IP地址' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT', @level2type=N'COLUMN',@level2name=N'IP';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'端口号' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT', @level2type=N'COLUMN',@level2name=N'PORT';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'电流监测下限(A)' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT', @level2type=N'COLUMN',@level2name=N'THRESHOLD';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'每天计划使用时间(小时)' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT', @level2type=N'COLUMN',@level2name=N'PLANUSETIME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'开关状态' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT', @level2type=N'COLUMN',@level2name=N'SWITCHSTATUS';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'资产' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT', @level2type=N'COLUMN',@level2name=N'COST';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT', @level2type=N'COLUMN',@level2name=N'CREATEDBYID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT', @level2type=N'COLUMN',@level2name=N'CREATEDBYNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT', @level2type=N'COLUMN',@level2name=N'CREATEDTIME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGNAME';
+
+
+CREATE TABLE T_CORE_EQUIPT_USAGE_RECORD(
+    ID              BIGINT NOT NULL,
+    EQUIPTID         BIGINT NULL,
+    EQUIPTNO         VARCHAR(36) NULL,
+    EQUIPTNAME        VARCHAR(36) NULL,
+    EQUIPTCATEGORY    VARCHAR(36) NULL,
+    UPTIME            DATETIME NULL,
+    DOWNTIME        DATETIME NULL,
+    USAGETIME        BIGINT NULL,
+    USERNAME         VARCHAR(60)  NULL,
+    TESTSAMPLE        VARCHAR(540) NULL,
+    TESTITEM        VARCHAR(540) NULL,
+    SAMPLEQTY        BIGINT NULL,
+    ORDERTASKQTY     BIGINT NULL,
+    AMOUNT            DECIMAL(12,4) NULL,
+    CREATEDBYID     VARCHAR(36)  NULL,
+    CREATEDBYNAME     VARCHAR(60)  NULL,
+    CREATEDTIME     DATETIME NULL,
+    CREATEDBYORGID     VARCHAR(36)  NULL,
+    CREATEDBYORGNAME VARCHAR(270)  NULL,
+    CONSTRAINT PK_CORE_EQUIPT_USAGE_RECORD PRIMARY KEY(ID)
+ );
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'设备使用记录表' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_USAGE_RECORD';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'主键' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_USAGE_RECORD', @level2type=N'COLUMN',@level2name=N'ID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'设备ID' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_USAGE_RECORD', @level2type=N'COLUMN',@level2name=N'EQUIPTID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'仪器编号' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_USAGE_RECORD', @level2type=N'COLUMN',@level2name=N'EQUIPTNO';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'仪器名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_USAGE_RECORD', @level2type=N'COLUMN',@level2name=N'EQUIPTNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'仪器类型' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_USAGE_RECORD', @level2type=N'COLUMN',@level2name=N'EQUIPTCATEGORY';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'开机时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_USAGE_RECORD', @level2type=N'COLUMN',@level2name=N'UPTIME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'关机时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_USAGE_RECORD', @level2type=N'COLUMN',@level2name=N'DOWNTIME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'用时(分钟)' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_USAGE_RECORD', @level2type=N'COLUMN',@level2name=N'USAGETIME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'使用人' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_USAGE_RECORD', @level2type=N'COLUMN',@level2name=N'USERNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'检测样品(汇总)' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_USAGE_RECORD', @level2type=N'COLUMN',@level2name=N'TESTSAMPLE';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'检测项目(汇总)' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_USAGE_RECORD', @level2type=N'COLUMN',@level2name=N'TESTITEM';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'样品量' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_USAGE_RECORD', @level2type=N'COLUMN',@level2name=N'SAMPLEQTY';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'项次数' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_USAGE_RECORD', @level2type=N'COLUMN',@level2name=N'ORDERTASKQTY';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'金额(元)' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_USAGE_RECORD', @level2type=N'COLUMN',@level2name=N'AMOUNT';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_USAGE_RECORD', @level2type=N'COLUMN',@level2name=N'CREATEDBYID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_USAGE_RECORD', @level2type=N'COLUMN',@level2name=N'CREATEDBYNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_USAGE_RECORD', @level2type=N'COLUMN',@level2name=N'CREATEDTIME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_USAGE_RECORD', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_EQUIPT_USAGE_RECORD', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGNAME';
+
+
+EXEC DBO.INSERTI18N N'T_CORE_EQUIPT.SERVICE_NAME', N'关键设备表', N'关键设备表', N'zh-CN', N'关键设备表';
+EXEC DBO.INSERTI18N N'T_CORE_EQUIPT.ID', N'主键', N'主键', N'zh-CN', N'主键';
+EXEC DBO.INSERTI18N N'T_CORE_EQUIPT.EQUIPTNO', N'仪器编号', N'仪器编号', N'zh-CN', N'仪器编号';
+EXEC DBO.INSERTI18N N'T_CORE_EQUIPT.EQUIPTNAME', N'仪器名称', N'仪器名称', N'zh-CN', N'仪器名称';
+EXEC DBO.INSERTI18N N'T_CORE_EQUIPT.EQUIPTCATEGORY', N'仪器类型', N'仪器类型', N'zh-CN', N'仪器类型';
+EXEC DBO.INSERTI18N N'T_CORE_EQUIPT.EQUIPTICON', N'仪器图标', N'仪器图标', N'zh-CN', N'仪器图标';
+EXEC DBO.INSERTI18N N'T_CORE_EQUIPT.KEYEQUIPT', N'是否关键设备', N'是否关键设备', N'zh-CN', N'是否关键设备';
+EXEC DBO.INSERTI18N N'T_CORE_EQUIPT.LOCATION', N'仪器位置', N'仪器位置', N'zh-CN', N'仪器位置';
+EXEC DBO.INSERTI18N N'T_CORE_EQUIPT.EQUIPTMANAGERID', N'仪器设备管理员ID', N'仪器设备管理员ID', N'zh-CN', N'仪器设备管理员ID';
+EXEC DBO.INSERTI18N N'T_CORE_EQUIPT.EQUIPTMANAGERNAME', N'仪器设备管理员', N'仪器设备管理员', N'zh-CN', N'仪器设备管理员';
+EXEC DBO.INSERTI18N N'T_CORE_EQUIPT.MONITORCODE', N'监测器编码', N'监测器编码', N'zh-CN', N'监测器编码';
+EXEC DBO.INSERTI18N N'T_CORE_EQUIPT.IP', N'IP地址', N'IP地址', N'zh-CN', N'IP地址';
+EXEC DBO.INSERTI18N N'T_CORE_EQUIPT.PORT', N'端口号', N'端口号', N'zh-CN', N'端口号';
+EXEC DBO.INSERTI18N N'T_CORE_EQUIPT.THRESHOLD', N'电流监测下限(A)', N'电流监测下限(A)', N'zh-CN', N'电流监测下限(A)';
+EXEC DBO.INSERTI18N N'T_CORE_EQUIPT.PLANUSETIME', N'计划使用时间(h)', N'计划使用时间(h)', N'zh-CN', N'计划使用时间(h)';
+EXEC DBO.INSERTI18N N'T_CORE_EQUIPT.SWITCHSTATUS', N'开关状态', N'开关状态', N'zh-CN', N'开关状态';
+EXEC DBO.INSERTI18N N'T_CORE_EQUIPT.COST', N'资产(元)', N'资产(元)', N'zh-CN', N'资产(元)';
+EXEC DBO.INSERTI18N N'T_CORE_EQUIPT.CREATEDBYID', N'制单人编码', N'制单人编码', N'zh-CN', N'制单人编码';
+EXEC DBO.INSERTI18N N'T_CORE_EQUIPT.CREATEDBYNAME', N'制单人名称', N'制单人名称', N'zh-CN', N'制单人名称';
+EXEC DBO.INSERTI18N N'T_CORE_EQUIPT.CREATEDTIME', N'制单时间', N'制单时间', N'zh-CN', N'制单时间';
+EXEC DBO.INSERTI18N N'T_CORE_EQUIPT.CREATEDBYORGID', N'制单人单位编码', N'制单人单位编码', N'zh-CN', N'制单人单位编码';
+EXEC DBO.INSERTI18N N'T_CORE_EQUIPT.CREATEDBYORGNAME', N'制单人单位名称', N'制单人单位名称', N'zh-CN', N'制单人单位名称';
+EXEC DBO.INSERTI18N N'CORE.MODULE.EQUIPT.EQUIPTS.MODAL.ADD', N'添加仪器', N'添加仪器', N'zh-CN', N'添加仪器';
+EXEC DBO.INSERTI18N N'CORE.MODULE.EQUIPT.EQUIPTS.TAB.BASE_INFO', N'基本信息', N'基本信息', N'zh-CN', N'基本信息';
+EXEC DBO.INSERTI18N N'CORE.MODULE.EQUIPT.EQUIPTS.TITLE.ICON', N'仪器图标配置', N'仪器图标配置', N'zh-CN', N'仪器图标配置';
+EXEC DBO.INSERTI18N N'CORE.MODULE.EQUIPT.EQUIPTS.TIP.ADD_EQUIPT_ICON', N'请先添加仪器图标', N'请先添加仪器图标', N'zh-CN', N'请先添加仪器图标';
+
+EXEC DBO.INSERTI18N N'T_CORE_EQUIPT_USAGE_RECORD.SERVICE_NAME', N'设备使用记录表', N'设备使用记录表', N'zh-CN', N'设备使用记录表';
+EXEC DBO.INSERTI18N N'T_CORE_EQUIPT_USAGE_RECORD.ID', N'主键', N'主键', N'zh-CN', N'主键';
+EXEC DBO.INSERTI18N N'T_CORE_EQUIPT_USAGE_RECORD.EQUIPTID', N'设备ID', N'设备ID', N'zh-CN', N'设备ID';
+EXEC DBO.INSERTI18N N'T_CORE_EQUIPT_USAGE_RECORD.EQUIPTNO', N'仪器编号', N'仪器编号', N'zh-CN', N'仪器编号';
+EXEC DBO.INSERTI18N N'T_CORE_EQUIPT_USAGE_RECORD.EQUIPTNAME', N'仪器名称', N'仪器名称', N'zh-CN', N'仪器名称';
+EXEC DBO.INSERTI18N N'T_CORE_EQUIPT_USAGE_RECORD.EQUIPTCATEGORY', N'仪器类型', N'仪器类型', N'zh-CN', N'仪器类型';
+EXEC DBO.INSERTI18N N'T_CORE_EQUIPT_USAGE_RECORD.UPTIME', N'开机时间', N'开机时间', N'zh-CN', N'开机时间';
+EXEC DBO.INSERTI18N N'T_CORE_EQUIPT_USAGE_RECORD.DOWNTIME', N'关机时间', N'关机时间', N'zh-CN', N'关机时间';
+EXEC DBO.INSERTI18N N'T_CORE_EQUIPT_USAGE_RECORD.USAGETIME', N'用时(分钟)', N'用时(分钟)', N'zh-CN', N'用时(分钟)';
+EXEC DBO.INSERTI18N N'T_CORE_EQUIPT_USAGE_RECORD.USERNAME', N'使用人', N'使用人', N'zh-CN', N'使用人';
+EXEC DBO.INSERTI18N N'T_CORE_EQUIPT_USAGE_RECORD.TESTSAMPLE', N'检测样品(汇总)', N'检测样品(汇总)', N'zh-CN', N'检测样品(汇总)';
+EXEC DBO.INSERTI18N N'T_CORE_EQUIPT_USAGE_RECORD.TESTITEM', N'检测项目(汇总)', N'检测项目(汇总)', N'zh-CN', N'检测项目(汇总)';
+EXEC DBO.INSERTI18N N'T_CORE_EQUIPT_USAGE_RECORD.SAMPLEQTY', N'样品量', N'样品量', N'zh-CN', N'样品量';
+EXEC DBO.INSERTI18N N'T_CORE_EQUIPT_USAGE_RECORD.ORDERTASKQTY', N'项次数', N'项次数', N'zh-CN', N'项次数';
+EXEC DBO.INSERTI18N N'T_CORE_EQUIPT_USAGE_RECORD.AMOUNT', N'金额(元)', N'金额(元)', N'zh-CN', N'金额(元)';
+EXEC DBO.INSERTI18N N'T_CORE_EQUIPT_USAGE_RECORD.CREATEDBYID', N'制单人编码', N'制单人编码', N'zh-CN', N'制单人编码';
+EXEC DBO.INSERTI18N N'T_CORE_EQUIPT_USAGE_RECORD.CREATEDBYNAME', N'制单人名称', N'制单人名称', N'zh-CN', N'制单人名称';
+EXEC DBO.INSERTI18N N'T_CORE_EQUIPT_USAGE_RECORD.CREATEDTIME', N'制单时间', N'制单时间', N'zh-CN', N'制单时间';
+EXEC DBO.INSERTI18N N'T_CORE_EQUIPT_USAGE_RECORD.CREATEDBYORGID', N'制单人单位编码', N'制单人单位编码', N'zh-CN', N'制单人单位编码';
+EXEC DBO.INSERTI18N N'T_CORE_EQUIPT_USAGE_RECORD.CREATEDBYORGNAME', N'制单人单位名称', N'制单人单位名称', N'zh-CN', N'制单人单位名称';
+EXEC DBO.INSERTI18N N'T_CORE_EQUIPT_USAGE_RECORD.YEARMONTH', N'年/月', N'年/月', N'zh-CN', N'年/月';
+EXEC DBO.INSERTI18N N'T_CORE_EQUIPT_USAGE_RECORD.RATE', N'使用率', N'使用率', N'zh-CN', N'使用率';
+EXEC DBO.INSERTI18N N'T_CORE_EQUIPT_USAGE_RECORD.STARTYEAR', N'起始年份', N'起始年份', N'zh-CN', N'起始年份';
+EXEC DBO.INSERTI18N N'T_CORE_EQUIPT_USAGE_RECORD.ANALYSISDIMENSION', N'分析维度', N'分析维度', N'zh-CN', N'分析维度';
+EXEC DBO.INSERTI18N N'T_CORE_EQUIPT_USAGE_RECORD.DEVICECATEGORY', N'设备类型', N'设备类型', N'zh-CN', N'设备类型';
+EXEC DBO.INSERTI18N N'CORE.MODULE.EQUIPT.USAGERECORDS.TITLE.EQUIPT_CATEGORY', N'设备类型', N'设备类型', N'zh-CN', N'设备类型';
+EXEC DBO.INSERTI18N N'CORE.MODULE.EQUIPT.USAGERECORDS.TITLE.EQUIPT_CATEGORY_USAGE_RATE', N'设备类型使用率', N'设备类型使用率', N'zh-CN', N'设备类型使用率';
+EXEC DBO.INSERTI18N N'CORE.MODULE.EQUIPT.USAGERECORDS.TITLE.TOTAL_USAGE_RATE', N'总体使用率', N'总体使用率', N'zh-CN', N'总体使用率';
+EXEC DBO.INSERTI18N N'CORE.MODULE.EQUIPT.USAGERECORDS.TITLE.FIXED_ASSET', N'固定资产占比', N'固定资产占比', N'zh-CN', N'固定资产占比';
+EXEC DBO.INSERTI18N N'CORE.MODULE.EQUIPT.USAGERECORDS.MODAL.EQUIPT_USAGE_RATE', N'仪器设备使用率', N'仪器设备使用率', N'zh-CN', N'仪器设备使用率';
+EXEC DBO.INSERTI18N N'CORE.MODULE.EQUIPT.USAGERECORDS.MODAL.EQUIPT_CATEGORY_USAGE_RECORD', N'仪器类型使用记录', N'仪器类型使用记录', N'zh-CN', N'仪器类型使用记录';
+EXEC DBO.INSERTI18N N'CORE.MODULE.EQUIPT.USAGERECORDS.TITLE.TOTAL_CONTRIBUTION', N'总体贡献值', N'总体贡献值', N'zh-CN', N'总体贡献值';
+EXEC DBO.INSERTI18N N'CORE.MODULE.EQUIPT.USAGERECORDS.MODAL.EQUIPT_CATEGORY_CONTRIBUTION', N'设备类型贡献值', N'设备类型贡献值', N'zh-CN', N'设备类型贡献值';
+EXEC DBO.INSERTI18N N'CORE.MODULE.EQUIPT.USAGERECORDS.MODAL.EQUIPT_USE_LINE', N'仪器使用明细', N'仪器使用明细', N'zh-CN', N'仪器使用明细';
+EXEC DBO.INSERTI18N N'CORE.MODULE.EQUIPT.USAGERECORDS.MODAL.EQUIPT_USAGE_RECORD', N'仪器使用记录', N'仪器使用记录', N'zh-CN', N'仪器使用记录';
+
+
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT) VALUES ('T_CORE_EQUIPT', '0', '0');
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT) VALUES ('T_CORE_EQUIPT_USAGE_RECORD', '0', '0');
+
+INSERT INTO T_CORE_CONSTANT (ID, CONSTANTVALUE, CONSTANTDESC, CLASSFICATION, SHOW)
+VALUES ('EQUIPT-REFRESH-FREQUENCY', '5', '仪器监控页面刷新频率（单位：分钟）', '系统', '1');
+
+
+INSERT INTO T_CORE_MENU (ID, MENUNAME, HREF, PARENTID, ORDERNO, ICON, MENUINITNAME)
+VALUES ('86', '仪器监控', NULL, null, '86', '076.svg', '仪器监控');
+
+INSERT INTO T_CORE_MENU (ID, MENUNAME, HREF, PARENTID, ORDERNO, ICON, MENUINITNAME)
+VALUES ('8601', '仪器管理', '/secure/core/module/equipt/equipts/page/edit-list', '86', '8601', '011.svg', '仪器管理');
+
+INSERT INTO T_CORE_MENU (ID, MENUNAME, HREF, PARENTID, ORDERNO, ICON, MENUINITNAME)
+VALUES ('8602', '关键仪器监控', '/secure/core/module/equipt/equipts/page/monitor', '86', '8602', '011.svg', '关键仪器监控');
+
+INSERT INTO T_CORE_MENU (ID, MENUNAME, HREF, PARENTID, ORDERNO, ICON, MENUINITNAME)
+VALUES ('8603', '仪器使用记录', '/secure/core/module/equipt/usage-records/page/search-list', '86', '8603', '069.svg', '仪器使用记录');
+
+INSERT INTO T_CORE_MENU (ID, MENUNAME, HREF, PARENTID, ORDERNO, ICON, MENUINITNAME)
+VALUES ('8604', '仪器使用率', '/secure/core/module/equipt/usage-records/page/usage-rate', '86', '8604', '069.svg', '仪器使用率');
+
+INSERT INTO T_CORE_MENU (ID, MENUNAME, HREF, PARENTID, ORDERNO, ICON, MENUINITNAME)
+VALUES ('8605', '仪器贡献值分析', '/secure/core/module/equipt/usage-records/page/contribution-analysis', '86', '8605', '069.svg', '仪器贡献值分析');
+
+INSERT INTO T_CORE_MENU (ID, MENUNAME, HREF, PARENTID, ORDERNO, ICON, MENUINITNAME)
+VALUES ('8606', '仪器图标管理', '/secure/core/module/equipt/icons/page/edit-list', '86', '8606', '011.svg', '仪器图标管理');
+
+INSERT INTO T_CORE_CODE_CATEGORY(ID, CODECATEGORYNAME, CODECLASSID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME)
+    VALUES ('equipt-analysis-dimension', '设备分析维度', 'sys', NULL, 1, NULL, NULL, NULL, NULL);
+
+INSERT INTO T_CORE_CODE(ID, CODE, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME)
+    VALUES (NEXT VALUE FOR SEQ_CORE, '1', '近一年', 'equipt-analysis-dimension', NULL, 1, 0, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL);
+
+INSERT INTO T_CORE_CODE(ID, CODE, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME)
+    VALUES (NEXT VALUE FOR SEQ_CORE, '2', '近两年', 'equipt-analysis-dimension', NULL, 2, 0, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL);
+
+INSERT INTO T_CORE_CODE(ID, CODE, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME)
+    VALUES (NEXT VALUE FOR SEQ_CORE, '3', '近三年', 'equipt-analysis-dimension', NULL, 3, 0, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL);
+
+INSERT INTO T_CORE_CODE(ID, CODE, CODENAME, CODECATEGORYID, REMARK, ORDERNO, VERSION, CREATEDBYID, CREATEDBYNAME, CREATEDTIME, LASTSUSPENDEDFLAG, LASTSUSPENDEDBYID, LASTSUSPENDEDBYNAME, LASTSUSPENDEDTIME)
+    VALUES (NEXT VALUE FOR SEQ_CORE, '5', '近五年', 'equipt-analysis-dimension', NULL, 4, 0, 'admin', '系统管理员', NULL, '0', NULL, NULL, NULL);
+
+
+INSERT INTO T_CORE_ADMIN_SELECT_CONFIG(ID, NAME, CATEGORY, URL, VALUEFIELD, TEXTFIELD)
+  VALUES(NEXT VALUE FOR SEQ_CORE, '设备分析维度', 'equipt-analysis-dimension', '/secure/core/module/sys/codes/queries/selectable?codeCategoryId=equipt-analysis-dimension', 'code', 'codeName');
+
+INSERT INTO T_CORE_ADMIN_SELECT_CONFIG(ID, NAME, CATEGORY, URL, VALUEFIELD, TEXTFIELD)
+  VALUES(NEXT VALUE FOR SEQ_CORE, '设备类型', 'equipt-category', '/secure/core/module/equipt/equipts/categories/queries/selectable', 'equiptCategory', 'equiptCategory');
+
+-- ----------------------------- 2021-4-26 add by shixw------------end
+-- 原equipt微服务
+
+
+-- 新增监控功能
+
+-- ----------------------------- 2021-06-28 add by zhangpf------------begin
+CREATE TABLE T_CORE_MONITOR_SERVER( 
+    ID VARCHAR(18)  NOT NULL,
+    OSNAME VARCHAR(300)  NULL,
+    CPU VARCHAR(300)  NULL,
+    CPUCOREQTY BIGINT  NULL,
+    MEMORY VARCHAR(36)  NULL,
+    DISK VARCHAR(36)  NULL,
+    REMARK VARCHAR(600)  NULL
+ );
+
+EXEC sp_addextendedproperty 'MS_Description', '系统监控服务器信息', 'SCHEMA', dbo, 'table', T_CORE_MONITOR_SERVER, null, null;
+EXEC sp_addextendedproperty 'MS_Description', '主键', 'SCHEMA', dbo, 'table', T_CORE_MONITOR_SERVER, 'column', ID;
+EXEC sp_addextendedproperty 'MS_Description', '操作系统名称', 'SCHEMA', dbo, 'table', T_CORE_MONITOR_SERVER, 'column', OSNAME;
+EXEC sp_addextendedproperty 'MS_Description', 'CPU信息', 'SCHEMA', dbo, 'table', T_CORE_MONITOR_SERVER, 'column', CPU;
+EXEC sp_addextendedproperty 'MS_Description', 'CPU内核数', 'SCHEMA', dbo, 'table', T_CORE_MONITOR_SERVER, 'column', CPUCOREQTY;
+EXEC sp_addextendedproperty 'MS_Description', '内存信息', 'SCHEMA', dbo, 'table', T_CORE_MONITOR_SERVER, 'column', MEMORY;
+EXEC sp_addextendedproperty 'MS_Description', '磁盘信息', 'SCHEMA', dbo, 'table', T_CORE_MONITOR_SERVER, 'column', DISK;
+EXEC sp_addextendedproperty 'MS_Description', '备注', 'SCHEMA', dbo, 'table', T_CORE_MONITOR_SERVER, 'column', REMARK;
+
+
+ALTER TABLE T_CORE_MONITOR_SERVER ADD CONSTRAINT PK_CORE_MONITOR_SERVER PRIMARY KEY (ID);
+
+EXEC DBO.INSERTI18N N'T_CORE_MONITOR_SERVER.SERVICE_NAME', N'系统监控服务器信息', N'服务器信息', N'zh-CN', N'服务器信息';
+EXEC DBO.INSERTI18N N'T_CORE_MONITOR_SERVER.ID', N'系统监控服务器信息的主键', N'主键', N'zh-CN', N'主键';
+EXEC DBO.INSERTI18N N'T_CORE_MONITOR_SERVER.OSNAME', N'系统监控服务器信息的操作系统名称', N'操作系统名称', N'zh-CN', N'操作系统名称';
+EXEC DBO.INSERTI18N N'T_CORE_MONITOR_SERVER.CPU', N'系统监控服务器信息的CPU信息', N'CPU信息', N'zh-CN', N'CPU信息';
+EXEC DBO.INSERTI18N N'T_CORE_MONITOR_SERVER.CPUCOREQTY', N'系统监控服务器信息的CPU内核数', N'CPU内核数', N'zh-CN', N'CPU内核数';
+EXEC DBO.INSERTI18N N'T_CORE_MONITOR_SERVER.MEMORY', N'系统监控服务器信息的内存信息', N'内存信息', N'zh-CN', N'内存信息';
+EXEC DBO.INSERTI18N N'T_CORE_MONITOR_SERVER.DISK', N'系统监控服务器信息的磁盘信息', N'磁盘信息', N'zh-CN', N'磁盘信息';
+EXEC DBO.INSERTI18N N'T_CORE_MONITOR_SERVER.REMARK', N'系统监控服务器信息的备注', N'备注', N'zh-CN', N'备注';
+
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_MONITOR_SERVER', '0', '0');
+
+CREATE TABLE T_CORE_MONITOR_APP(
+    ID VARCHAR(18)  NOT NULL,
+    SERVERID VARCHAR(18)  NULL,
+    PORT BIGINT NULL,
+    REMARK VARCHAR(600)  NULL
+ );
+ 
+EXEC sp_addextendedproperty 'MS_Description', '系统监控应用信息', 'SCHEMA', dbo, 'table', T_CORE_MONITOR_APP, null, null;
+EXEC sp_addextendedproperty 'MS_Description', '主键', 'SCHEMA', dbo, 'table', T_CORE_MONITOR_APP, 'column', ID;
+EXEC sp_addextendedproperty 'MS_Description', '服务器编码', 'SCHEMA', dbo, 'table', T_CORE_MONITOR_APP, 'column', SERVERID;
+EXEC sp_addextendedproperty 'MS_Description', '端口号', 'SCHEMA', dbo, 'table', T_CORE_MONITOR_APP, 'column', PORT;
+EXEC sp_addextendedproperty 'MS_Description', '备注', 'SCHEMA', dbo, 'table', T_CORE_MONITOR_APP, 'column', REMARK;
+
+ALTER TABLE T_CORE_MONITOR_APP ADD CONSTRAINT PK_CORE_MONITOR_APP PRIMARY KEY (ID);
+CREATE INDEX IDX_CORE_MONITOR_APP_SERVERID ON T_CORE_MONITOR_APP (SERVERID);
+
+EXEC DBO.INSERTI18N N'T_CORE_MONITOR_APP.SERVICE_NAME', N'系统监控应用信息', N'应用信息', N'zh-CN', N'应用信息';
+EXEC DBO.INSERTI18N N'T_CORE_MONITOR_APP.ID', N'系统监控应用信息的主键', N'主键', N'zh-CN', N'主键';
+EXEC DBO.INSERTI18N N'T_CORE_MONITOR_APP.SERVERID', N'系统监控应用信息的服务器编码', N'服务器编码', N'zh-CN', N'服务器编码';
+EXEC DBO.INSERTI18N N'T_CORE_MONITOR_APP.PORT', N'系统监控应用信息的端口号', N'端口号', N'zh-CN', N'端口号';
+EXEC DBO.INSERTI18N N'T_CORE_MONITOR_APP.REMARK', N'系统监控应用信息的备注', N'备注', N'zh-CN', N'备注';
+
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_MONITOR_APP', '0', '0');
+
+INSERT INTO T_CORE_TABLE_HIERARCHY (ID, TABLENAME, MASTERTABLENAME, REFERCOLUMN)
+VALUES ('9901','T_CORE_MONITOR_APP', 'T_CORE_MONITOR_SERVER', 'SERVERID');
+
+
+CREATE TABLE T_CORE_MONITOR_SERVER_RUNTIME(
+    ID BIGINT NOT NULL,
+    SERVERID VARCHAR(18)  NULL,
+    SERVERCPUUTILIZATION BIGINT NULL,
+    SERVERRAMUTILIZATION BIGINT NULL,
+    SERVERDISKUTILIZATION BIGINT NULL,
+    SERVERCPUSTATUS VARCHAR(36)  NULL,
+    SERVERRAMSTATUS VARCHAR(36)  NULL,
+    CREATEDTIME DATE NULL
+ );
+ 
+EXEC sp_addextendedproperty 'MS_Description', '系统监控服务器运行信息', 'SCHEMA', dbo, 'table', T_CORE_MONITOR_SERVER_RUNTIME, null, null;
+EXEC sp_addextendedproperty 'MS_Description', '主键', 'SCHEMA', dbo, 'table', T_CORE_MONITOR_SERVER_RUNTIME, 'column', ID;
+EXEC sp_addextendedproperty 'MS_Description', '服务器编码', 'SCHEMA', dbo, 'table', T_CORE_MONITOR_SERVER_RUNTIME, 'column', SERVERID;
+EXEC sp_addextendedproperty 'MS_Description', 'CPU利用率', 'SCHEMA', dbo, 'table', T_CORE_MONITOR_SERVER_RUNTIME, 'column', SERVERCPUUTILIZATION;
+EXEC sp_addextendedproperty 'MS_Description', '内存利用率', 'SCHEMA', dbo, 'table', T_CORE_MONITOR_SERVER_RUNTIME, 'column', SERVERRAMUTILIZATION;
+EXEC sp_addextendedproperty 'MS_Description', '磁盘利用率', 'SCHEMA', dbo, 'table', T_CORE_MONITOR_SERVER_RUNTIME, 'column', SERVERDISKUTILIZATION;
+EXEC sp_addextendedproperty 'MS_Description', 'CPU使用状态', 'SCHEMA', dbo, 'table', T_CORE_MONITOR_SERVER_RUNTIME, 'column', SERVERCPUSTATUS;
+EXEC sp_addextendedproperty 'MS_Description', '内存使用状态', 'SCHEMA', dbo, 'table', T_CORE_MONITOR_SERVER_RUNTIME, 'column', SERVERRAMSTATUS;
+EXEC sp_addextendedproperty 'MS_Description', '时间', 'SCHEMA', dbo, 'table', T_CORE_MONITOR_SERVER_RUNTIME, 'column', CREATEDTIME;
+ 
+
+ALTER TABLE T_CORE_MONITOR_SERVER_RUNTIME ADD CONSTRAINT PK_MONITOR_SERVER_RUNTIME PRIMARY KEY (ID);
+CREATE INDEX IDX_SERVER_RUNTIME_SERVERID ON T_CORE_MONITOR_SERVER_RUNTIME (SERVERID);
+
+EXEC DBO.INSERTI18N N'T_CORE_MONITOR_SERVER_RUNTIME.SERVICE_NAME', N'系统监控服务器运行信息', N'服务器运行信息', N'zh-CN', N'服务器运行信息';
+EXEC DBO.INSERTI18N N'T_CORE_MONITOR_SERVER_RUNTIME.ID', N'系统监控服务器运行信息的主键', N'主键', N'zh-CN', N'主键';
+EXEC DBO.INSERTI18N N'T_CORE_MONITOR_SERVER_RUNTIME.SERVERID', N'系统监控服务器运行信息的服务器编码', N'服务器编码', N'zh-CN', N'服务器编码';
+EXEC DBO.INSERTI18N N'T_CORE_MONITOR_SERVER_RUNTIME.SERVERCPUUTILIZATION', N'系统监控服务器运行信息的CPU利用率', N'CPU利用率', N'zh-CN', N'CPU利用率';
+EXEC DBO.INSERTI18N N'T_CORE_MONITOR_SERVER_RUNTIME.SERVERRAMUTILIZATION', N'系统监控服务器运行信息的内存利用率', N'内存利用率', N'zh-CN', N'内存利用率';
+EXEC DBO.INSERTI18N N'T_CORE_MONITOR_SERVER_RUNTIME.SERVERDISKUTILIZATION', N'系统监控服务器运行信息的磁盘利用率', N'磁盘利用率', N'zh-CN', N'磁盘利用率';
+EXEC DBO.INSERTI18N N'T_CORE_MONITOR_SERVER_RUNTIME.SERVERCPUSTATUS', N'系统监控服务器运行信息的CPU使用状态', N'CPU使用状态', N'zh-CN', N'CPU使用状态';
+EXEC DBO.INSERTI18N N'T_CORE_MONITOR_SERVER_RUNTIME.SERVERRAMSTATUS', N'系统监控服务器运行信息的内存使用状态', N'内存使用状态', N'zh-CN', N'内存使用状态';
+EXEC DBO.INSERTI18N N'T_CORE_MONITOR_SERVER_RUNTIME.CREATEDTIME', N'系统监控服务器运行信息的时间', N'时间', N'zh-CN', N'时间';
+
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_MONITOR_SERVER_RUNTIME', '0', '0');
+INSERT INTO T_CORE_TABLE_HIERARCHY (ID, TABLENAME, MASTERTABLENAME, REFERCOLUMN)
+VALUES ('9902','T_CORE_MONITOR_SERVER_RUNTIME', 'T_CORE_MONITOR_SERVER', 'SERVERID');
+
+CREATE TABLE T_CORE_MONITOR_APP_RUNTIME(
+    ID BIGINT NOT NULL,
+    APPID VARCHAR(18)  NULL,
+    SERVERID VARCHAR(18)  NULL,
+    SERVERRUNTIMEID BIGINT NULL,
+    APPCPUUTILIZATION BIGINT NULL,
+    APPRAMUTILIZATION BIGINT NULL,
+    APPCPUSTATUS VARCHAR(36)  NULL,
+    APPRAMSTATUS VARCHAR(36)  NULL,
+    STATUS VARCHAR(36)  NULL,
+    CREATEDTIME DATE NULL
+ );
+ 
+EXEC sp_addextendedproperty 'MS_Description', '系统监控应用运行信息', 'SCHEMA', dbo, 'table', T_CORE_MONITOR_APP_RUNTIME, null, null;
+EXEC sp_addextendedproperty 'MS_Description', '主键', 'SCHEMA', dbo, 'table', T_CORE_MONITOR_APP_RUNTIME, 'column', ID;
+EXEC sp_addextendedproperty 'MS_Description', '应用ID', 'SCHEMA', dbo, 'table', T_CORE_MONITOR_APP_RUNTIME, 'column', APPID;
+EXEC sp_addextendedproperty 'MS_Description', '服务器编码', 'SCHEMA', dbo, 'table', T_CORE_MONITOR_APP_RUNTIME, 'column', SERVERID;
+EXEC sp_addextendedproperty 'MS_Description', '服务器运行信息主键', 'SCHEMA', dbo, 'table', T_CORE_MONITOR_APP_RUNTIME, 'column', SERVERRUNTIMEID;
+EXEC sp_addextendedproperty 'MS_Description', 'CPU利用率', 'SCHEMA', dbo, 'table', T_CORE_MONITOR_APP_RUNTIME, 'column', APPCPUUTILIZATION;
+EXEC sp_addextendedproperty 'MS_Description', '内存利用率', 'SCHEMA', dbo, 'table', T_CORE_MONITOR_APP_RUNTIME, 'column', APPRAMUTILIZATION;
+EXEC sp_addextendedproperty 'MS_Description', 'CPU使用状态', 'SCHEMA', dbo, 'table', T_CORE_MONITOR_APP_RUNTIME, 'column', APPCPUSTATUS;
+EXEC sp_addextendedproperty 'MS_Description', '内存使用状态', 'SCHEMA', dbo, 'table', T_CORE_MONITOR_APP_RUNTIME, 'column', APPRAMSTATUS;
+EXEC sp_addextendedproperty 'MS_Description', '状态', 'SCHEMA', dbo, 'table', T_CORE_MONITOR_APP_RUNTIME, 'column', STATUS;
+ 
+EXEC DBO.INSERTI18N N'T_CORE_MONITOR_APP_RUNTIME.SERVICE_NAME', N'系统监控应用运行信息', N'应用运行信息', N'zh-CN', N'应用运行信息';
+EXEC DBO.INSERTI18N N'T_CORE_MONITOR_APP_RUNTIME.ID', N'系统监控应用运行信息的主键', N'主键', N'zh-CN', N'主键';
+EXEC DBO.INSERTI18N N'T_CORE_MONITOR_APP_RUNTIME.SERVERID', N'系统监控应用运行信息的服务器编码', N'服务器编码', N'zh-CN', N'服务器编码';
+EXEC DBO.INSERTI18N N'T_CORE_MONITOR_APP_RUNTIME.APPCPUUTILIZATION', N'系统监控应用运行信息的CPU利用率', N'CPU利用率', N'zh-CN', N'CPU利用率';
+EXEC DBO.INSERTI18N N'T_CORE_MONITOR_APP_RUNTIME.APPRAMUTILIZATION', N'系统监控应用运行信息的内存利用率', N'内存利用率', N'zh-CN', N'内存利用率';
+EXEC DBO.INSERTI18N N'T_CORE_MONITOR_APP_RUNTIME.APPCPUSTATUS', N'系统监控应用运行信息的CPU使用状态', N'CPU使用状态', N'zh-CN', N'CPU使用状态';
+EXEC DBO.INSERTI18N N'T_CORE_MONITOR_APP_RUNTIME.APPRAMSTATUS', N'系统监控应用运行信息的内存使用状态', N'内存使用状态', N'zh-CN', N'内存使用状态';
+EXEC DBO.INSERTI18N N'T_CORE_MONITOR_APP_RUNTIME.STATUS', N'系统监控应用运行信息的状态', N'状态', N'zh-CN', N'状态';
+EXEC DBO.INSERTI18N N'T_CORE_MONITOR_APP_RUNTIME.CREATEDTIME', N'系统监控应用运行信息的时间', N'时间', N'zh-CN', N'时间';
+
+ALTER TABLE T_CORE_MONITOR_APP_RUNTIME ADD CONSTRAINT PK_CORE_MONITOR_APP_RUNTIME PRIMARY KEY (ID);
+CREATE INDEX IDX_MAR_APPID ON T_CORE_MONITOR_APP_RUNTIME (APPID);
+CREATE INDEX IDX_MAR_SERVERID ON T_CORE_MONITOR_APP_RUNTIME (SERVERID);
+
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_MONITOR_APP_RUNTIME', '0', '0');
+
+INSERT INTO T_CORE_TABLE_HIERARCHY (ID, TABLENAME, MASTERTABLENAME, REFERCOLUMN)
+VALUES ('9903','T_CORE_MONITOR_APP_RUNTIME', 'T_CORE_MONITOR_SERVER', 'APPID');
+
+
+CREATE TABLE T_CORE_MONITOR_REQ(
+    ID BIGINT NOT NULL,
+    QPS BIGINT NULL,
+    TPS BIGINT NULL,
+    CREATEDTIME DATE NULL
+ );
+ 
+EXEC sp_addextendedproperty 'MS_Description', '系统监控系统请求信息', 'SCHEMA', dbo, 'table', T_CORE_MONITOR_REQ, null, null;
+EXEC sp_addextendedproperty 'MS_Description', '主键', 'SCHEMA', dbo, 'table', T_CORE_MONITOR_REQ, 'column', ID;
+EXEC sp_addextendedproperty 'MS_Description', '每秒请求数', 'SCHEMA', dbo, 'table', T_CORE_MONITOR_REQ, 'column', QPS;
+EXEC sp_addextendedproperty 'MS_Description', '每秒请求量', 'SCHEMA', dbo, 'table', T_CORE_MONITOR_REQ, 'column', TPS;
+EXEC sp_addextendedproperty 'MS_Description', '时间', 'SCHEMA', dbo, 'table', T_CORE_MONITOR_REQ, 'column', CREATEDTIME;
+
+ALTER TABLE T_CORE_MONITOR_REQ ADD CONSTRAINT PK_CORE_MONITOR_REQ PRIMARY KEY (ID);
+
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_MONITOR_REQ', '0', '0');
+
+EXEC DBO.INSERTI18N N'T_CORE_MONITOR_REQ.SERVICE_NAME', N'系统监控系统请求信息', N'系统请求信息', N'zh-CN', N'系统请求信息';
+EXEC DBO.INSERTI18N N'T_CORE_MONITOR_REQ.ID', N'系统监控系统请求信息的主键', N'主键', N'zh-CN', N'主键';
+EXEC DBO.INSERTI18N N'T_CORE_MONITOR_REQ.QPS', N'系统监控系统请求信息的每秒请求数', N'每秒请求数', N'zh-CN', N'每秒请求数';
+EXEC DBO.INSERTI18N N'T_CORE_MONITOR_REQ.TPS', N'系统监控应用运行信息的每秒请求量', N'每秒请求量', N'zh-CN', N'每秒请求量';
+EXEC DBO.INSERTI18N N'T_CORE_MONITOR_REQ.CREATEDTIME', N'系统监控应用运行信息的时间', N'时间', N'zh-CN', N'时间';
+
+CREATE TABLE T_CORE_MONITOR_USER(
+    ID BIGINT NOT NULL,
+    ONLINEUSERQTY BIGINT NULL,
+    CONCURRENTUSERQTY BIGINT NULL,
+    CREATEDTIME DATE NULL
+ );
+ 
+ EXEC sp_addextendedproperty 'MS_Description', '系统监控用户信息', 'SCHEMA', dbo, 'table', T_CORE_MONITOR_USER, null, null;
+ EXEC sp_addextendedproperty 'MS_Description', '主键', 'SCHEMA', dbo, 'table', T_CORE_MONITOR_USER, 'column', ID;
+ EXEC sp_addextendedproperty 'MS_Description', '在线用户数', 'SCHEMA', dbo, 'table', T_CORE_MONITOR_USER, 'column', ONLINEUSERQTY;
+ EXEC sp_addextendedproperty 'MS_Description', '并发用户数', 'SCHEMA', dbo, 'table', T_CORE_MONITOR_USER, 'column', CONCURRENTUSERQTY;
+ EXEC sp_addextendedproperty 'MS_Description', '时间', 'SCHEMA', dbo, 'table', T_CORE_MONITOR_USER, 'column', CREATEDTIME;
+ 
+ALTER TABLE T_CORE_MONITOR_USER ADD CONSTRAINT PK_CORE_MONITOR_USER PRIMARY KEY (ID);
+
+EXEC DBO.INSERTI18N N'T_CORE_MONITOR_USER.SERVICE_NAME', N'系统监控用户信息', N'系统监控用户信息', N'zh-CN', N'系统监控用户信息';
+EXEC DBO.INSERTI18N N'T_CORE_MONITOR_USER.ID', N'系统监控用户信息的主键', N'主键', N'zh-CN', N'主键';
+EXEC DBO.INSERTI18N N'T_CORE_MONITOR_USER.QPS', N'系统监控用户信息的在线用户数', N'在线用户数', N'zh-CN', N'在线用户数';
+EXEC DBO.INSERTI18N N'T_CORE_MONITOR_USER.TPS', N'系统监控用户信息的并发用户数', N'并发用户数', N'zh-CN', N'并发用户数';
+EXEC DBO.INSERTI18N N'T_CORE_MONITOR_USER.CREATEDTIME', N'系统监控用户信息的时间', N'时间', N'zh-CN', N'时间';
+
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_MONITOR_USER', '0', '0');
+
+
+CREATE TABLE T_CORE_MONITOR_MESSAGE(
+    ID BIGINT NOT NULL,
+    SERVERID VARCHAR(18)  NULL,
+    APPID VARCHAR(18)  NULL,
+    INFO NTEXT NULL,
+    CATEGORY VARCHAR(36)  NULL,
+    CPUUTILIZATION BIGINT NULL,
+    RAMUTILIZATION BIGINT NULL,
+    DISKUTILIZATION BIGINT NULL,
+    TYPE VARCHAR(36)  NULL,
+    TITLE VARCHAR(300) NULL,
+    CREATEDTIME DATE NULL
+ );
+
+EXEC sp_addextendedproperty 'MS_Description', '系统监控消息', 'SCHEMA', dbo, 'table', T_CORE_MONITOR_MESSAGE, null, null;
+EXEC sp_addextendedproperty 'MS_Description', '主键', 'SCHEMA', dbo, 'table', T_CORE_MONITOR_MESSAGE, 'column', ID;
+EXEC sp_addextendedproperty 'MS_Description', '服务器编码', 'SCHEMA', dbo, 'table', T_CORE_MONITOR_MESSAGE, 'column', SERVERID;
+EXEC sp_addextendedproperty 'MS_Description', '应用编码', 'SCHEMA', dbo, 'table', T_CORE_MONITOR_MESSAGE, 'column', APPID;
+EXEC sp_addextendedproperty 'MS_Description', '信息', 'SCHEMA', dbo, 'table', T_CORE_MONITOR_MESSAGE, 'column', INFO;
+EXEC sp_addextendedproperty 'MS_Description', '类别', 'SCHEMA', dbo, 'table', T_CORE_MONITOR_MESSAGE, 'column', CATEGORY;
+EXEC sp_addextendedproperty 'MS_Description', 'CPU利用率', 'SCHEMA', dbo, 'table', T_CORE_MONITOR_MESSAGE, 'column', CPUUTILIZATION;
+EXEC sp_addextendedproperty 'MS_Description', '内存利用率', 'SCHEMA', dbo, 'table', T_CORE_MONITOR_MESSAGE, 'column', RAMUTILIZATION;
+EXEC sp_addextendedproperty 'MS_Description', '磁盘利用率', 'SCHEMA', dbo, 'table', T_CORE_MONITOR_MESSAGE, 'column', DISKUTILIZATION;
+EXEC sp_addextendedproperty 'MS_Description', '类型', 'SCHEMA', dbo, 'table', T_CORE_MONITOR_MESSAGE, 'column', TYPE;
+EXEC sp_addextendedproperty 'MS_Description', '标题', 'SCHEMA', dbo, 'table', T_CORE_MONITOR_MESSAGE, 'column', TITLE;
+EXEC sp_addextendedproperty 'MS_Description', '时间', 'SCHEMA', dbo, 'table', T_CORE_MONITOR_MESSAGE, 'column', CREATEDTIME;
+
+ALTER TABLE T_CORE_MONITOR_MESSAGE ADD CONSTRAINT PK_CORE_MONITOR_MESSAGE PRIMARY KEY (ID);
+CREATE INDEX IDX_MONITOR_MESSAGE_SERVERID ON T_CORE_MONITOR_MESSAGE (SERVERID);
+
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_MONITOR_MESSAGE', '0', '0');
+
+INSERT INTO T_CORE_TABLE_HIERARCHY (ID, TABLENAME, MASTERTABLENAME, REFERCOLUMN)
+VALUES ('9904','T_CORE_MONITOR_MESSAGE', 'T_CORE_SYSTEM_REQ', 'SERVERID');
+
+EXEC DBO.INSERTI18N N'CORE.MODULE.MONITOR.MONITOR_CONFIG.TAB.BASE_INFO', '服务监控配置的基本信息', '基本信息', 'zh-CN', '基本信息';
+EXEC DBO.INSERTI18N N'CORE.MODULE.MONITOR.MONITOR_CONFIG.PANEL.SERVER', '服务监控配置的服务器', '服务器', 'zh-CN', '服务器';
+EXEC DBO.INSERTI18N N'ORE.MODULE.MONITOR.MONITOR_CONFIG.PANEL.APP', '服务监控配置的应用', '应用', 'zh-CN', '应用';
+
+CREATE TABlE DBO.T_CORE_MONITOR_CONFIG(
+    ID VARCHAR(18)  NOT NULL,
+    SERVERCPUALARM BIGINT NULL ,
+    SERVERCPUABNORMAL BIGINT NULL ,
+    SERVERRAMALARM BIGINT NULL ,
+    SERVERRAMABNORMAL BIGINT NULL ,
+    APPCPUALARM BIGINT NULL ,
+    APPCPUABNORMAL BIGINT NULL ,
+    APPRAMALARM BIGINT NULL ,
+    APPRAMABNORMAL BIGINT NULL ,
+    CONSTRAINT PK_CORE_MONITOR_CONFIG PRIMARY KEY(ID));
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'系统监控配置' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_MONITOR_CONFIG';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'主键' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_MONITOR_CONFIG', @level2type=N'COLUMN',@level2name=N'ID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'服务器CPU占用预警值' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_MONITOR_CONFIG', @level2type=N'COLUMN',@level2name=N'SERVERCPUALARM';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'服务器CPU占用异常值' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_MONITOR_CONFIG', @level2type=N'COLUMN',@level2name=N'SERVERCPUABNORMAL';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'服务器内存占用预警值' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_MONITOR_CONFIG', @level2type=N'COLUMN',@level2name=N'SERVERRAMALARM';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'服务器内存占用异常值' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_MONITOR_CONFIG', @level2type=N'COLUMN',@level2name=N'SERVERRAMABNORMAL';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'应用CPU占用预警值' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_MONITOR_CONFIG', @level2type=N'COLUMN',@level2name=N'APPCPUALARM';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'应用CPU占用异常值' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_MONITOR_CONFIG', @level2type=N'COLUMN',@level2name=N'APPCPUABNORMAL';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'应用内存占用预警值' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_MONITOR_CONFIG', @level2type=N'COLUMN',@level2name=N'APPRAMALARM';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'应用内存占用异常值' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_MONITOR_CONFIG', @level2type=N'COLUMN',@level2name=N'APPRAMABNORMAL';
+
+EXEC  DBO.INSERTI18N  N'T_CORE_MONITOR_CONFIG.SERVICE_NAME', N'系统监控配置', N'系统监控配置', N'zh-CN',N'系统监控配置';
+EXEC  DBO.INSERTI18N  N'T_CORE_MONITOR_CONFIG.ID', N'系统监控配置的主键', N'主键', N'zh-CN',N'主键';
+EXEC  DBO.INSERTI18N  N'T_CORE_MONITOR_CONFIG.SERVERCPUALARM', N'系统监控配置的服务器CPU占用预警值', N'服务器CPU占用预警值', N'zh-CN',N'服务器CPU占用预警值';
+EXEC  DBO.INSERTI18N  N'T_CORE_MONITOR_CONFIG.SERVERCPUABNORMAL', N'系统监控配置的服务器CPU占用异常值', N'服务器CPU占用异常值', N'zh-CN',N'服务器CPU占用异常值';
+EXEC  DBO.INSERTI18N  N'T_CORE_MONITOR_CONFIG.SERVERRAMALARM', N'系统监控配置的服务器内存占用预警值', N'服务器内存占用预警值', N'zh-CN',N'服务器内存占用预警值';
+EXEC  DBO.INSERTI18N  N'T_CORE_MONITOR_CONFIG.SERVERRAMABNORMAL', N'系统监控配置的服务器内存占用异常值', N'服务器内存占用异常值', N'zh-CN',N'服务器内存占用异常值';
+EXEC  DBO.INSERTI18N  N'T_CORE_MONITOR_CONFIG.APPCPUALARM', N'系统监控配置的应用CPU占用预警值', N'应用CPU占用预警值', N'zh-CN',N'应用CPU占用预警值';
+EXEC  DBO.INSERTI18N  N'T_CORE_MONITOR_CONFIG.APPCPUABNORMAL', N'系统监控配置的应用CPU占用异常值', N'应用CPU占用异常值', N'zh-CN',N'应用CPU占用异常值';
+EXEC  DBO.INSERTI18N  N'T_CORE_MONITOR_CONFIG.APPRAMALARM', N'系统监控配置的应用内存占用预警值', N'应用内存占用预警值', N'zh-CN',N'应用内存占用预警值';
+EXEC  DBO.INSERTI18N  N'T_CORE_MONITOR_CONFIG.APPRAMABNORMAL', N'系统监控配置的应用内存占用异常值', N'应用内存占用异常值', N'zh-CN',N'应用内存占用异常值';
+
+EXEC  DBO.INSERTI18N  N'GIKAM.CORE.MONITOR.TIP.SERVER_TITLE', N'服务器', N'服务器', N'zh-CN', N'服务器';
+EXEC  DBO.INSERTI18N  N'GIKAM.CORE.MONITOR.TIP.APP_TITLE', N'应用', N'应用', N'zh-CN', N'应用';
+EXEC  DBO.INSERTI18N  N'GIKAM.CORE.MONITOR.TIP.CPU_LOAD', N'的CPU占用', N'的CPU占用', N'zh-CN', N'的CPU占用';
+EXEC  DBO.INSERTI18N  N'GIKAM.CORE.MONITOR.TIP.RAM_LOAD', N'的内存占用', N'的内存占用', N'zh-CN', N'的内存占用';
+EXEC  DBO.INSERTI18N  N'GIKAM.CORE.MONITOR.TIP.ALARM', N'预警', N'预警', N'zh-CN', N'预警';
+EXEC  DBO.INSERTI18N  N'GIKAM.CORE.MONITOR.TIP.ABNORMAL', N'异常', N'异常', N'zh-CN', N'异常';
+EXEC  DBO.UPDATEI18N  N'T_CORE_MONITOR_CONFIG.SERVERCPUALARM', N'zh-CN', N'CPU预警值(%)';
+EXEC  DBO.UPDATEI18N  N'T_CORE_MONITOR_CONFIG.SERVERCPUABNORMAL', N'zh-CN', N'CPU异常值(%)';
+EXEC  DBO.UPDATEI18N  N'T_CORE_MONITOR_CONFIG.SERVERRAMALARM', N'zh-CN', N'内存预警值(%)';
+EXEC  DBO.UPDATEI18N  N'T_CORE_MONITOR_CONFIG.SERVERRAMABNORMAL', N'zh-CN', N'内存异常值(%)';
+EXEC  DBO.UPDATEI18N  N'T_CORE_MONITOR_CONFIG.APPCPUALARM', N'zh-CN', N'CPU预警值(%)';
+EXEC  DBO.UPDATEI18N  N'T_CORE_MONITOR_CONFIG.APPCPUABNORMAL', N'zh-CN', N'CPU异常值(%)';
+EXEC  DBO.UPDATEI18N  N'T_CORE_MONITOR_CONFIG.APPRAMALARM', N'zh-CN', N'内存预警值(%)';
+EXEC  DBO.UPDATEI18N  N'T_CORE_MONITOR_CONFIG.APPRAMABNORMAL', N'zh-CN', N'内存异常值(%)';
+
+INSERT INTO T_CORE_MENU (ID, MENUNAME, HREF, PARENTID, ORDERNO, ICON, MENUINITNAME)
+VALUES ('85', '系统监控', '', '', '85', '077.svg', '系统监控');
+INSERT INTO T_CORE_MENU (ID, MENUNAME, HREF, PARENTID, ORDERNO, ICON, MENUINITNAME)
+VALUES ('8501', '服务监控', '/secure/core/module/monitor/monitors/page/edit-list', '85', '8501', '049.svg', '服务监控');
+INSERT INTO T_CORE_MENU (ID, MENUNAME, HREF, PARENTID, ORDERNO, ICON, MENUINITNAME)
+VALUES ('8502', '服务监控配置', '/secure/core/module/monitor/configs/page/detail', '85', '8502', '063.svg', '服务监控配置');
+-- ----------------------------- 2021-06-28 add by zhangpf------------end
+
+-- ----------------------------- 2021-07-08 add by zhangpf------------begin
+EXEC DBO.INSERTI18N N'T_CORE_MONITOR_MESSAGE.SERVICE_NAME', '服务监控的消息', '服务监控消息', 'zh-CN', '服务监控消息';
+EXEC DBO.INSERTI18N N'T_CORE_MONITOR_MESSAGE.ID', '服务监控消息的主键', '主键', 'zh-CN', '主键';
+EXEC DBO.INSERTI18N N'T_CORE_MONITOR_MESSAGE.SERVERID', '服务监控消息的服务器编码', '服务器编码', 'zh-CN', '服务器编码';
+EXEC DBO.INSERTI18N N'T_CORE_MONITOR_MESSAGE.APPID', '服务监控消息的应用编码', '应用编码', 'zh-CN', '应用编码';
+EXEC DBO.INSERTI18N N'T_CORE_MONITOR_MESSAGE.TITLE', '服务监控消息的标题', '标题', 'zh-CN', '标题';
+EXEC DBO.INSERTI18N N'T_CORE_MONITOR_MESSAGE.INFO', '服务监控消息的信息', '信息', 'zh-CN', '信息';
+EXEC DBO.INSERTI18N N'T_CORE_MONITOR_MESSAGE.CATEGORY', '服务监控消息的主键', '类别', 'zh-CN', '类别';
+EXEC DBO.INSERTI18N N'T_CORE_MONITOR_MESSAGE.TYPE', '服务监控消息的类型', '类型', 'zh-CN', '类型';
+EXEC DBO.INSERTI18N N'T_CORE_MONITOR_MESSAGE.CREATEDTIME', '服务监控消息的时间', '时间', 'zh-CN', '时间';
+EXEC DBO.INSERTI18N N'T_CORE_MONITOR_MESSAGE.CPUUTILIZATION', '服务监控消息的CPU利用率', 'CPU利用率', 'zh-CN', 'CPU利用率';
+EXEC DBO.INSERTI18N N'T_CORE_MONITOR_MESSAGE.RAMUTILIZATION', '服务监控消息的内存利用率', '内存利用率', 'zh-CN', '内存利用率';
+EXEC DBO.INSERTI18N N'T_CORE_MONITOR_MESSAGE.DISKUTILIZATION', '服务监控消息的磁盘利用率', '磁盘利用率', 'zh-CN', '磁盘利用率';
+-- ----------------------------- 2021-07-08 add by zhangpf------------end
+
+-- 新增监控功能

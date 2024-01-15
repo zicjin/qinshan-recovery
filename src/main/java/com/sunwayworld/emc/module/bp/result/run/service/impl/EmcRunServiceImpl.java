@@ -10,9 +10,15 @@ import java.util.Map.Entry;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import com.sunwayworld.cloud.module.fr.report.bean.CoreReportConfigLineBean;
+import com.sunwayworld.cloud.module.fr.report.service.CoreReportConfigLineService;
 import com.sunwayworld.emc.module.bp.result.run.validator.EmcRunSubmitValidator;
 import com.sunwayworld.framework.executor.ExecutorHelper;
+import com.sunwayworld.framework.io.file.FilePathDTO;
+import com.sunwayworld.framework.io.file.FilePathManager;
 import com.sunwayworld.framework.utils.*;
+import com.sunwayworld.module.item.file.manager.CoreFileManager;
+import com.sunwayworld.module.item.file.utils.CoreFileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +26,6 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.sunwayworld.cloud.gikam.fr.bean.report.CoreReportConfigLineBean;
-import com.sunwayworld.cloud.gikam.fr.service.report.CoreReportConfigLineService;
 import com.sunwayworld.emc.framework.constant.EmcBizConstant;
 import com.sunwayworld.emc.framework.constant.EmcConstant;
 import com.sunwayworld.emc.framework.projectnode.ProjectNodeUtils;
@@ -97,8 +101,6 @@ import com.sunwayworld.framework.exception.FileException;
 import com.sunwayworld.framework.exception.UnsupportedException;
 import com.sunwayworld.framework.http.HttpClientManager;
 import com.sunwayworld.framework.i18n.I18nHelper;
-import com.sunwayworld.framework.io.file.FileHelper;
-import com.sunwayworld.framework.io.file.FileRepresentation;
 import com.sunwayworld.framework.io.file.FileScope;
 import com.sunwayworld.framework.log.annotation.Log;
 import com.sunwayworld.framework.log.annotation.LogType;
@@ -112,7 +114,6 @@ import com.sunwayworld.framework.support.PersistableHelper;
 import com.sunwayworld.framework.support.PersistableMetadataHelper;
 import com.sunwayworld.framework.validator.data.annotation.ValidateDataWith;
 import com.sunwayworld.module.item.file.bean.CoreFileBean;
-import com.sunwayworld.module.item.file.cloud.CoreFileCloudService;
 import com.sunwayworld.module.item.file.service.CoreFileService;
 import com.sunwayworld.module.mdm.user.bean.CoreUserBean;
 import com.sunwayworld.module.mdm.user.bean.CoreUserPermissionBean;
@@ -226,10 +227,6 @@ public class EmcRunServiceImpl implements EmcRunService {
     @Autowired
     @Lazy
     private EmcReportService reportService;
-
-    @Autowired
-    @Lazy
-    private CoreFileCloudService fileCloudService;
 
     @Autowired
     @Lazy
@@ -2148,7 +2145,7 @@ public class EmcRunServiceImpl implements EmcRunService {
 
         fileList.forEach(file -> {
 
-            File inputFile = FileHelper.getAbsolutePath(FileRepresentation.of(file.getScope(), DateTimeUtils.getDateSerialNumber(file.getCreatedTime()), file.getMd5Name(), file.getName())).toFile();
+            File inputFile = FilePathManager.getLocalPath(FilePathDTO.of(file.getScope(), DateTimeUtils.getDateSerialNumber(file.getCreatedTime()), file.getMd5Name(), file.getName())).toFile();
 
             try {
 
@@ -2872,14 +2869,14 @@ public class EmcRunServiceImpl implements EmcRunService {
         List<CoreFileBean> coreFileBeanList = coreFileService
                 .selectListByFilter(SearchFilter.instance().match("TARGETID", targetIdList).filter(MatchPattern.OR).match("EXT", "composePdf").filter(MatchPattern.EQ));
 
-        Map<Long, List<FileRepresentation>> projectPdfMap = new HashMap<>(orderTaskList.size());
+        Map<Long, List<FilePathDTO>> projectPdfMap = new HashMap<>(orderTaskList.size());
         Map<Long, List<EmcOrderTaskBean>> projectOrderTaskMap = validOrderTaskList.stream().filter(task -> !ObjectUtils.isEmpty(task.getProjId())).collect(Collectors.groupingBy(EmcOrderTaskBean::getProjId));
         projectOrderTaskMap.forEach((projectId, projectOrderTaskList) -> {
-            List<FileRepresentation> pdfFileList = new ArrayList<>();
+            List<FilePathDTO> pdfFileList = new ArrayList<>();
             List<String> projectRunIdList = projectOrderTaskList.stream().map(EmcOrderTaskBean::getRunId).distinct().collect(Collectors.toList());
 
             List<String> projectFileTargetIdList = projectRunIdList.stream().map(s -> getDao().getTable() + "$" + s).collect(Collectors.toList());
-            coreFileBeanList.stream().filter(file -> projectFileTargetIdList.contains(file.getTargetId())).forEach(file -> pdfFileList.add(FileRepresentation.of(file)));
+            coreFileBeanList.stream().filter(file -> projectFileTargetIdList.contains(file.getTargetId())).forEach(file -> pdfFileList.add(CoreFileUtils.toFilePath(file)));
 
             if (!pdfFileList.isEmpty()) {
                 projectPdfMap.put(projectId, pdfFileList);
@@ -2900,8 +2897,9 @@ public class EmcRunServiceImpl implements EmcRunService {
 
             String projectReportPdfName = I18nHelper.getMessage("T_EMC_RUN.DOWNLOAD.PROJECT_REPORT_PDF_NAME");
             projectPdfMap.forEach((projectId, fileList) -> {
-                String tempFilePath = fileCloudService.mergePdfFile(fileList,
-                        FileRepresentation.of(FileScope.temp.name(), "" + System.currentTimeMillis(), StringUtils.randomUUID(8), projectReportPdfName));
+                FilePathDTO composedPdfFile = FilePathDTO.of(FileScope.temp.name(), "" + System.currentTimeMillis(), StringUtils.randomUUID(8), projectReportPdfName);
+                coreFileService.mergePdfList(fileList, composedPdfFile);
+                String tempFilePath = FilePathManager.getLocalPath(composedPdfFile).toString();
                 if (!StringUtils.isEmpty(tempFilePath) && tempFilePath.contains(projectReportPdfName)) {
                     CoreFileBean coreFileBean = new CoreFileBean();
                     coreFileBean.setTargetId("T_EMC_PROJECT" + "$" + projectId);
@@ -3116,7 +3114,7 @@ public class EmcRunServiceImpl implements EmcRunService {
      * 下载文件，并保存到指定目录下
      */
     private File downloadFile(String url, String fileName) {
-        File tempFile = FileHelper.createTempFile(fileName, 0L);
+        File tempFile = FileUtils.createTempFile();
         if (StringUtils.startsWithIgnoreCase(url, "https://")) {
         	HttpClientManager.getInstance().download(url, tempFile);
         } else {

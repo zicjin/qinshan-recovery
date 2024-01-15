@@ -2,7 +2,6 @@ package com.sunwayworld.emc.module.bp.result.run.io;
 
 
 import com.sunwayworld.emc.module.bp.bp.bean.EmcOrderTaskResultBean;
-import com.sunwayworld.emc.module.bp.result.run.io.EmcRunImportFileFunction;
 import com.sunwayworld.framework.exception.FileException;
 import com.sunwayworld.framework.io.excel.ExcelHelper;
 import com.sunwayworld.framework.spring.annotation.GikamBean;
@@ -21,7 +20,7 @@ import java.util.stream.IntStream;
 /**
  * @author licm@sunwayworld.com
  */
-@Component(value = "pfRunImportFileFunction")
+@Component(value = "pfRunCoreFileImportFunction")
 @GikamBean
 public class PfRunImportFileFunction extends EmcRunImportFileFunction {
 

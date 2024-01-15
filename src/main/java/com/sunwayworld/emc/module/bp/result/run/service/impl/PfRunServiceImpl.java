@@ -19,7 +19,16 @@ import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 import java.util.stream.Stream;
 
+import com.sunwayworld.cloud.module.fr.report.bean.CoreReportConfigLineBean;
+import com.sunwayworld.cloud.module.fr.report.service.CoreReportConfigLineService;
 import com.sunwayworld.emc.module.bp.result.run.bean.EmcAnalysisRecordDTO;
+import com.sunwayworld.framework.io.file.FilePathDTO;
+import com.sunwayworld.framework.io.file.FilePathManager;
+import com.sunwayworld.module.item.file.utils.CoreFileUtils;
+import com.sunwayworld.module.item.notification.bean.CoreNotificationInstanceBean;
+import com.sunwayworld.module.item.notification.bean.CoreNotificationInstanceToBean;
+import com.sunwayworld.module.item.notification.service.CoreNotificationInstanceService;
+import com.sunwayworld.module.item.notification.service.CoreNotificationInstanceToService;
 import org.apache.commons.collections4.ListUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -28,13 +37,6 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.sunwayworld.cloud.gikam.fr.bean.report.CoreReportConfigLineBean;
-import com.sunwayworld.cloud.gikam.fr.service.report.CoreReportConfigLineService;
-import com.sunwayworld.cloud.gikam.notification.bean.CoreNotificationInstanceBean;
-import com.sunwayworld.cloud.gikam.notification.bean.CoreNotificationInstanceToBean;
-import com.sunwayworld.cloud.gikam.notification.event.CoreNotificationEvent;
-import com.sunwayworld.cloud.gikam.notification.service.CoreNotificationInstanceService;
-import com.sunwayworld.cloud.gikam.notification.service.CoreNotificationInstanceToService;
 import com.sunwayworld.emc.framework.constant.EmcBizConstant;
 import com.sunwayworld.emc.framework.constant.EmcConstant;
 import com.sunwayworld.emc.framework.constant.PfBizConstant;
@@ -126,8 +128,6 @@ import com.sunwayworld.framework.exception.UnsupportedException;
 import com.sunwayworld.framework.executor.ExecutorHelper;
 import com.sunwayworld.framework.http.HttpClientManager;
 import com.sunwayworld.framework.i18n.I18nHelper;
-import com.sunwayworld.framework.io.file.FileHelper;
-import com.sunwayworld.framework.io.file.FileRepresentation;
 import com.sunwayworld.framework.io.file.FileScope;
 import com.sunwayworld.framework.mybatis.mapper.MatchPattern;
 import com.sunwayworld.framework.mybatis.mapper.SearchFilter;
@@ -146,7 +146,6 @@ import com.sunwayworld.framework.utils.ObjectUtils;
 import com.sunwayworld.framework.utils.StringUtils;
 import com.sunwayworld.framework.validator.data.annotation.ValidateDataWith;
 import com.sunwayworld.module.item.file.bean.CoreFileBean;
-import com.sunwayworld.module.item.file.cloud.CoreFileCloudService;
 import com.sunwayworld.module.item.file.service.CoreFileService;
 import com.sunwayworld.module.mdm.org.bean.CoreOrgBean;
 import com.sunwayworld.module.mdm.org.service.CoreOrgService;
@@ -266,10 +265,6 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
 
     @Autowired
     private CoreConstantService coreConstantService;
-
-    @Autowired
-    @Lazy
-    private CoreFileCloudService fileCloudService;
 
     @Autowired
     private CoreReportConfigLineService coreReportConfigLineService;
@@ -2994,7 +2989,7 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
 
         fileList.forEach(file -> {
 
-            File inputFile = FileHelper.getAbsolutePath(FileRepresentation.of(file.getScope(), DateTimeUtils.getDateSerialNumber(file.getCreatedTime()), file.getMd5Name(), file.getName())).toFile();
+            File inputFile = FilePathManager.getLocalPath(FilePathDTO.of(file.getScope(), DateTimeUtils.getDateSerialNumber(file.getCreatedTime()), file.getMd5Name(), file.getName())).toFile();
 
             try {
 
@@ -3259,11 +3254,11 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
             return;
         }
 
-        List<FileRepresentation> fileRepresentations = runPdfFileList.stream().map(FileRepresentation::of).collect(Collectors.toList());
+        List<FilePathDTO> fileRepresentations = runPdfFileList.stream().map(CoreFileUtils::toFilePath).collect(Collectors.toList());
         String projectReportPdfName = targetRun.getId() + ".pdf";
-        FileRepresentation composedPdfFile = FileRepresentation.of(FileScope.temp.name(), "" + System.currentTimeMillis(), StringUtils.randomUUID(8), projectReportPdfName);
-        String tempFilePath = fileCloudService.mergePdfFile(fileRepresentations, composedPdfFile);
-
+        FilePathDTO composedPdfFile = FilePathDTO.of(FileScope.temp.name(), "" + System.currentTimeMillis(), StringUtils.randomUUID(8), projectReportPdfName);
+        coreFileService.mergePdfList(fileRepresentations, composedPdfFile);
+        String tempFilePath = FilePathManager.getLocalPath(composedPdfFile).toString();
         List<CoreFileBean> deleteFileList = new ArrayList<>();
         CoreFileBean deleteFile = new CoreFileBean();
         deleteFile.setTargetId("T_EMC_RUN" + "$" + targetRun.getId());
@@ -3440,7 +3435,7 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
      * 下载文件，并保存到指定目录下
      */
     private File downloadFile(String url, String fileName) {
-        File tempFile = FileHelper.createTempFile(fileName, 0L);
+        File tempFile = FileUtils.createTempFile();
         if (StringUtils.startsWithIgnoreCase(url, "https://")) {
             HttpClientManager.getInstance().download(url, tempFile);
         } else {
@@ -4169,7 +4164,7 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
         List<Long> instIdList = instanceToList.stream().map(CoreNotificationInstanceToBean::getInstId).distinct().collect(Collectors.toList());
 
         List<CoreNotificationInstanceBean> instanceList = notificationInstanceService.getDao().selectListByOneColumnValues(instIdList, "id", Arrays.asList("id", "desc"));
-        List<Long> updateInstIdList = instanceList.stream().filter(inst -> idList.stream().anyMatch(runId -> StringUtils.contains(inst.getDesc(), runId))).map(CoreNotificationInstanceBean::getId).collect(Collectors.toList());
+        List<Long> updateInstIdList = instanceList.stream().filter(inst -> idList.stream().anyMatch(runId -> StringUtils.contains(inst.getContent(), runId))).map(CoreNotificationInstanceBean::getId).collect(Collectors.toList());
         List<CoreNotificationInstanceToBean> updateInstToList = instanceToList.stream().filter(instTo -> updateInstIdList.contains(instTo.getInstId())).collect(Collectors.toList());
         updateInstToList.forEach(instTo -> instTo.setRead("2"));
         notificationInstanceToService.getDao().update(updateInstToList, "read");
@@ -4286,11 +4281,11 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
             //    return;
             //}
 
-            List<FileRepresentation> fileRepresentations = runPdfFileList.stream().map(FileRepresentation::of).collect(Collectors.toList());
+            List<FilePathDTO> fileRepresentations = runPdfFileList.stream().map(CoreFileUtils::toFilePath).collect(Collectors.toList());
             String projectReportPdfName = targetRun.getId() + ".pdf";
-            FileRepresentation composedPdfFile = FileRepresentation.of(FileScope.temp.name(), "" + System.currentTimeMillis(), StringUtils.randomUUID(8), projectReportPdfName);
-            String tempFilePath = fileCloudService.mergePdfFile(fileRepresentations, composedPdfFile);
-
+            FilePathDTO composedPdfFile = FilePathDTO.of(FileScope.temp.name(), "" + System.currentTimeMillis(), StringUtils.randomUUID(8), projectReportPdfName);
+            coreFileService.mergePdfList(fileRepresentations, composedPdfFile);
+            String tempFilePath = FilePathManager.getLocalPath(composedPdfFile).toString();
             CoreFileBean deleteFile = new CoreFileBean();
             deleteFile.setTargetId("T_EMC_RUN" + "$" + targetRun.getId());
             deleteFile.setExt("composeAllPdf");
@@ -4312,9 +4307,10 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
             long endTime = System.currentTimeMillis();
             double duration = (endTime - startTime) / 1_000.0;
             paramMap.put("duration", duration);
-            CoreNotificationEvent completeEvent = new CoreNotificationEvent(success ? COMPOSE_ALL_RUNLIST_REPORT_SUCCESS : COMPOSE_ALL_RUNLIST_REPORT_FAILURE,
-                    Collections.singletonList(noticeUserId), null, LocalDateTime.now(), paramMap);
-            ApplicationContextHelper.getApplicationContext().publishEvent(completeEvent);
+
+            // CoreNotificationEvent completeEvent = new CoreNotificationEvent(success ? COMPOSE_ALL_RUNLIST_REPORT_SUCCESS : COMPOSE_ALL_RUNLIST_REPORT_FAILURE,
+            //         Collections.singletonList(noticeUserId), null, LocalDateTime.now(), paramMap);
+            // ApplicationContextHelper.getApplicationContext().publishEvent(completeEvent);
         });
 
         // 给pdf谱图增加分析员签名

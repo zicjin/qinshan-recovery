@@ -1,0 +1,21 @@
+-- ----------------------------- 2021-07-14 add by zhangjr--------------begin
+CALL INSERTI18N('CORE.MODULE.SYS.T_CORE_BPMN_DRAFT.LABEL.NOTIFICATION', '工作流草稿中的通知TAB页', '通知', 'zh-CN', '通知');
+CALL INSERTI18N('CORE.MODULE.SYS.T_CORE_BPMN_DRAFT.LABEL.PASS_NOTIFICATION', '工作流草稿中的审核通过时发送通知', '审核通过时通知', 'zh-CN', '审核通过时通知');
+CALL INSERTI18N('CORE.MODULE.SYS.T_CORE_BPMN_DRAFT.LABEL.REJECT_NOTIFICATION', '工作流草稿中的审核拒绝时发送通知', '审核拒绝时通知', 'zh-CN', '审核拒绝时通知');
+
+INSERT INTO T_CORE_NOTIFICATION_TMPL(ID, TITLE, CONTENT, VIEWMETHOD)
+VALUES ('BPMN_PASS', '工作流审核通过时提醒', '【' || '$' || '{name}】业务单据【' || '$' || '{desc}】在【' || '$' || '{fromTaskName}】节点被【' || '$' || '{lastAuditorName}】审核通过。', 'no');
+
+INSERT INTO T_CORE_NOTIFICATION_TMPL(ID, TITLE, CONTENT, VIEWMETHOD)
+VALUES ('BPMN_REJECT', '工作流拒绝时提醒', '【' || '$' || '{name}】业务单据【' || '$' || '{desc}】被【' || '$' || '{lastAuditorName}】审核拒绝到【' || '$' || '{toTaskName}】节点。', 'no');
+
+INSERT INTO T_CORE_NOTIFICATION_TMPL(ID, TITLE, CONTENT, VIEWMETHOD)
+VALUES ('BPMN_SUBMIT', '工作流提交时提醒', '【' || '$' || '{name}】业务单据【' || '$' || '{desc}】在【' || '$' || '{fromTaskName}】节点被【' || '$' || '{lastAuditorName}】提交。', 'no');
+
+commit;
+-- ----------------------------- 2021-07-14 add by zhangjr--------------end
+
+-- ----------------------------- 2021-07-15 add by zhangxt--------------begin
+CALL INSERTI18N('CORE.MODULE.SYS.T_CORE_BPMN_DIAGRAM.CANDIDATOR.ALLUSER', '所有审核人员', '所有审核人员', 'zh-CN', '所有审核人员');
+commit;
+-- ----------------------------- 2021-07-15 add by zhangxt--------------end

@@ -1,7 +1,5 @@
 package com.sunwayworld.emc.module.mdm.basemdm.mtl.io;
 
-
-
 import java.util.ArrayList;
 
 import java.util.Arrays;
@@ -11,6 +9,9 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.sunwayworld.framework.io.file.FilePathDTO;
+import com.sunwayworld.framework.io.file.FilePathManager;
+import com.sunwayworld.module.item.file.utils.CoreFileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,13 +29,11 @@ import com.sunwayworld.emc.module.mdm.basemdm.mtl.service.EmcStockService;
 import com.sunwayworld.framework.constant.Constant;
 import com.sunwayworld.framework.context.ApplicationContextHelper;
 import com.sunwayworld.framework.io.excel.ExcelHelper;
-import com.sunwayworld.framework.io.file.FileHelper;
-import com.sunwayworld.framework.io.file.FileRepresentation;
 import com.sunwayworld.framework.spring.annotation.GikamBean;
 import com.sunwayworld.framework.utils.ObjectUtils;
 import com.sunwayworld.framework.utils.StringUtils;
 import com.sunwayworld.module.item.file.bean.CoreFileBean;
-import com.sunwayworld.module.item.file.bean.ImportResultRepresentation;
+import com.sunwayworld.module.item.file.bean.CoreFileImportResultDTO;
 
 /**
  * @author licm@sunwayworld.com 2021年03月13日
@@ -60,16 +59,16 @@ public class PfStockImportFileFunction extends EmcStockImportFileFunction {
 
     private static final String LOG_TYPE_ADD = "添加";
 
-/*    *//** 浓度分隔符 *//*
-    private static final String DELIMITER = "±";*/
+
+    // private static final String DELIMITER = "±"; // 浓度分隔符
 
     @Override
     @Transactional
-    public ImportResultRepresentation apply(CoreFileBean excelFile) {
-        ImportResultRepresentation importResultRepresentation = new ImportResultRepresentation();
-        FileRepresentation fr = FileRepresentation.of(excelFile);
+    public CoreFileImportResultDTO apply(CoreFileBean excelFile) {
+        CoreFileImportResultDTO CoreFileImportResultDTO = new CoreFileImportResultDTO();
+        FilePathDTO fr = CoreFileUtils.toFilePath(excelFile);
 
-        List<EmcStockBean> stockList = ExcelHelper.readDataFromExcel(FileHelper.getAbsolutePath(fr).toString(), 2, 3, EmcStockBean.class);
+        List<EmcStockBean> stockList = ExcelHelper.readDataFromExcel(FilePathManager.getLocalPath(fr).toString(), 2, 3, EmcStockBean.class);
         //模板只有材料名称
         stockList.forEach(e ->{
         	String mtlId =e.getMtlId();
@@ -77,28 +76,28 @@ public class PfStockImportFileFunction extends EmcStockImportFileFunction {
             e.setMtlId(mtlSelectIdList.get(0).getId());
         });
         if (stockList.isEmpty()) {
-            return importResultRepresentation;
+            return CoreFileImportResultDTO;
         }
 
         List<String> validateImpMsgList = stockList.stream().filter(stock -> !StringUtils.isEmpty(stock.getExt$Item("validateimpmsg"))).map(stock -> stock.getExt$Item("validateimpmsg")).collect(Collectors.toList());
         if (!validateImpMsgList.isEmpty()) {
-            return importResultRepresentation;
+            return CoreFileImportResultDTO;
         }
 
         List<String> batchNoList = stockList.stream().map(EmcStockBean::getBatchNo).collect(Collectors.toList());
         // 判断导入的唯一性编号是否重复
         boolean isRepeat = batchNoList.size() > batchNoList.stream().distinct().count();
         if (isRepeat) {
-            importResultRepresentation.setMessage("EMC.MODULE.MDM.BASEMDM.MTLS.STOCK.TIP.EXIST_REPEATABLE_BATCH_NO");
-            return importResultRepresentation;
+            CoreFileImportResultDTO.setMessage("EMC.MODULE.MDM.BASEMDM.MTLS.STOCK.TIP.EXIST_REPEATABLE_BATCH_NO");
+            return CoreFileImportResultDTO;
         }
 
         // 判断导入的唯一性编号与数据库中是否重复
         List<EmcStockBean> originalStockList = stockService.getDao().selectListByOneColumnValues(batchNoList, "BATCHNO", Collections.singletonList("ID"));
         if (!originalStockList.isEmpty()) {
             String repeatMtlIdList = " "+originalStockList.stream().map(EmcStockBean :: getMtlId).distinct().collect(Collectors.joining());
-            importResultRepresentation.setMessage(repeatMtlIdList+"EMC.MODULE.MDM.BASEMDM.MTLS.STOCK.TIP.BATCH_NO_EXIST");
-            return importResultRepresentation;
+            CoreFileImportResultDTO.setMessage(repeatMtlIdList+"EMC.MODULE.MDM.BASEMDM.MTLS.STOCK.TIP.BATCH_NO_EXIST");
+            return CoreFileImportResultDTO;
         }
 
         // 过滤掉数据库中不存在的材料数据
@@ -107,7 +106,7 @@ public class PfStockImportFileFunction extends EmcStockImportFileFunction {
         List<String> validMtlIdList = mtlList.stream().map(EmcMtlBean::getId).collect(Collectors.toList());
         List<EmcStockBean> validStockList = stockList.stream().filter(s -> validMtlIdList.contains(s.getMtlId())).collect(Collectors.toList());
         if (validStockList.isEmpty()) {
-            return importResultRepresentation;
+            return CoreFileImportResultDTO;
         }
 
         List<EmcMtlMaintainBean> mtlMaintainList = mtlMaintainService.getDao().selectListByOneColumnValues(validMtlIdList, "MTLID");
@@ -184,7 +183,7 @@ public class PfStockImportFileFunction extends EmcStockImportFileFunction {
         stockConcentService.getDao().insert(newStockConcentList);
         mtlService.getDao().update(mtlList, "STOCKQTY");
 
-        return importResultRepresentation;
+        return CoreFileImportResultDTO;
     }
 
 }

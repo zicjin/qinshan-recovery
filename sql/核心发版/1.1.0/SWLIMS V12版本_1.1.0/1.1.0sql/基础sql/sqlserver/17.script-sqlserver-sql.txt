@@ -1,0 +1,168 @@
+-- ----------------------------- 2020-07-15 add by shixw--------------begin
+
+-- 建表语句
+CREATE TABlE DBO.T_CORE_TEST(
+    ID BIGINT NOT NULL,
+    TESTNAME VARCHAR(120)  NULL ,
+    CREATEDBYID VARCHAR(36)  NULL ,
+    CREATEDBYNAME VARCHAR(60)  NULL ,
+    CREATEDTIME DATETIME NULL ,
+    CREATEDBYORGID VARCHAR(36)  NULL ,
+    CREATEDBYORGNAME VARCHAR(270)  NULL ,
+    CONSTRAINT PK_CORE_TEST PRIMARY KEY(ID));
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'测试' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_TEST';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'主键' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_TEST', @level2type=N'COLUMN',@level2name=N'ID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'测试名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_TEST', @level2type=N'COLUMN',@level2name=N'TESTNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_TEST', @level2type=N'COLUMN',@level2name=N'CREATEDBYID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_TEST', @level2type=N'COLUMN',@level2name=N'CREATEDBYNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_TEST', @level2type=N'COLUMN',@level2name=N'CREATEDTIME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_TEST', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_TEST', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGNAME';
+
+CREATE TABlE DBO.T_CORE_ITEM(
+    ID BIGINT NOT NULL,
+    TESTID BIGINT NULL ,
+    ITEMNAME VARCHAR(120)  NULL ,
+    REPEATQTY BIGINT NULL ,
+    SCRIPT TEXT NULL ,
+    CREATEDBYID VARCHAR(36)  NULL ,
+    CREATEDBYNAME VARCHAR(60)  NULL ,
+    CREATEDTIME DATETIME NULL ,
+    CREATEDBYORGID VARCHAR(36)  NULL ,
+    CREATEDBYORGNAME VARCHAR(270)  NULL ,
+    CONSTRAINT PK_CORE_ITEM PRIMARY KEY(ID));
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'分析项' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_ITEM';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'主键' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_ITEM', @level2type=N'COLUMN',@level2name=N'ID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'测试编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_ITEM', @level2type=N'COLUMN',@level2name=N'TESTID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'分析项名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_ITEM', @level2type=N'COLUMN',@level2name=N'ITEMNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'重复次数' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_ITEM', @level2type=N'COLUMN',@level2name=N'REPEATQTY';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'计算公式' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_ITEM', @level2type=N'COLUMN',@level2name=N'SCRIPT';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_ITEM', @level2type=N'COLUMN',@level2name=N'CREATEDBYID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_ITEM', @level2type=N'COLUMN',@level2name=N'CREATEDBYNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_ITEM', @level2type=N'COLUMN',@level2name=N'CREATEDTIME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_ITEM', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_ITEM', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGNAME';
+CREATE NONCLUSTERED INDEX [IDX_CORE_ITEM_TESTID] ON [dbo].[T_CORE_ITEM] ([TESTID]);
+
+EXEC  DBO.INSERTI18N  N'T_CORE_TEST.SERVICE_NAME', N'测试', N'测试', N'zh-CN',N'测试';
+EXEC  DBO.INSERTI18N  N'T_CORE_TEST.ID', N'测试的编码', N'测试编码', N'zh-CN',N'测试编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_TEST.TESTNAME', N'测试的测试名称', N'测试名称', N'zh-CN',N'测试名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_TEST.CREATEDBYID', N'测试的制单人编码', N'制单人编码', N'zh-CN',N'制单人编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_TEST.CREATEDBYNAME', N'测试的制单人名称', N'制单人名称', N'zh-CN',N'制单人名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_TEST.CREATEDTIME', N'测试的制单时间', N'制单时间', N'zh-CN',N'制单时间';
+EXEC  DBO.INSERTI18N  N'T_CORE_TEST.CREATEDBYORGID', N'测试的制单人单位编码', N'制单人单位编码', N'zh-CN',N'制单人单位编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_TEST.CREATEDBYORGNAME', N'测试的制单人单位名称', N'制单人单位名称', N'zh-CN',N'制单人单位名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_ITEM.SERVICE_NAME', N'分析项', N'分析项', N'zh-CN',N'分析项';
+EXEC  DBO.INSERTI18N  N'T_CORE_ITEM.ID', N'分析项的主键', N'主键', N'zh-CN',N'主键';
+EXEC  DBO.INSERTI18N  N'T_CORE_ITEM.TESTID', N'分析项的测试编码', N'测试编码', N'zh-CN',N'测试编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_ITEM.ITEMNAME', N'分析项的分析项名称', N'分析项名称', N'zh-CN',N'分析项名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_ITEM.REPEATQTY', N'分析项的重复次数', N'重复次数', N'zh-CN',N'重复次数';
+EXEC  DBO.INSERTI18N  N'T_CORE_ITEM.SCRIPT', N'分析项的计算公式', N'计算公式', N'zh-CN',N'计算公式';
+EXEC  DBO.INSERTI18N  N'T_CORE_ITEM.CREATEDBYID', N'分析项的制单人编码', N'制单人编码', N'zh-CN',N'制单人编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_ITEM.CREATEDBYNAME', N'分析项的制单人名称', N'制单人名称', N'zh-CN',N'制单人名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_ITEM.CREATEDTIME', N'分析项的制单时间', N'制单时间', N'zh-CN',N'制单时间';
+EXEC  DBO.INSERTI18N  N'T_CORE_ITEM.CREATEDBYORGID', N'分析项的制单人单位编码', N'制单人单位编码', N'zh-CN',N'制单人单位编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_ITEM.CREATEDBYORGNAME', N'分析项的制单人单位名称', N'制单人单位名称', N'zh-CN',N'制单人单位名称';
+
+-- 创建菜单语句
+INSERT INTO T_CORE_MENU (ID, MENUNAME, HREF, PARENTID, ORDERNO, ICON, MENUINITNAME)
+VALUES ('87', '计算公式', null, null, '87', '008.svg', '计算公式');
+
+INSERT INTO T_CORE_MENU (ID, MENUNAME, HREF, PARENTID, ORDERNO, ICON, MENUINITNAME)
+VALUES ('8701', '测试管理', '/secure/core/module/script/tests/page/edit-list', '87', '8701', '008.svg', '测试管理');
+
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_TEST', '0', '0');
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_ITEM', '0', '0');
+
+INSERT INTO T_CORE_TABLE_HIERARCHY (ID, TABLENAME, MASTERTABLENAME, REFERCOLUMN)
+VALUES ('870101','T_CORE_ITEM', 'T_CORE_TEST', 'TESTID');
+
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.SCRIPT.TESTS.MODAL.ADD', N'新增', N'新增', N'zh-CN', N'新增';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.SCRIPT.TESTS.TAB.ITEM', N'分析项', N'分析项', N'zh-CN', N'分析项';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.SCRIPT.TESTS.MODAL.ADD_ITEM', N'添加分析项', N'添加分析项', N'zh-CN', N'添加分析项';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.SCRIPT.TESTS.MODAL.SCRIPT', N'计算公式', N'计算公式', N'zh-CN', N'计算公式';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.SCRIPT.TESTS.TAB.FUNC', N'函数库', N'函数库', N'zh-CN', N'函数库';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.SCRIPT.TESTS.TAB.SELECTOR', N'选择器', N'选择器', N'zh-CN', N'选择器';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.SCRIPT.TESTS.TAB.SCRIPT', N'计算公式', N'计算公式', N'zh-CN', N'计算公式';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.SCRIPT.TESTS.TAB.TEST', N'测试', N'测试', N'zh-CN', N'测试';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.SCRIPT.TESTS.BUTTON.TEST', N'测试', N'测试', N'zh-CN', N'测试';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.SCRIPT.TESTS.BUTTON.GENERATE_RESULT', N'生成结果', N'生成结果', N'zh-CN', N'生成结果';
+EXEC  DBO.INSERTI18N  N'T_CORE_ITEM.ITEM', N'分析项目', N'分析项目', N'zh-CN', N'分析项目';
+EXEC  DBO.INSERTI18N  N'T_CORE_ITEM.VALUE', N'值', N'值', N'zh-CN', N'值';
+EXEC  DBO.INSERTI18N  N'T_CORE_ITEM.FUNC', N'函数', N'函数', N'zh-CN', N'函数';
+EXEC  DBO.INSERTI18N  N'T_CORE_ITEM.SELECTOR', N'选择器', N'选择器', N'zh-CN', N'选择器';
+EXEC  DBO.INSERTI18N  N'T_CORE_ITEM.EXPRESSION', N'表达式', N'表达式', N'zh-CN', N'表达式';
+EXEC  DBO.INSERTI18N  N'T_CORE_ITEM.CONCRETE', N'自定义', N'自定义', N'zh-CN', N'自定义';
+EXEC  DBO.INSERTI18N  N'T_CORE_ITEM.REPEATNO', N'重复数', N'重复数', N'zh-CN', N'重复数';
+EXEC  DBO.INSERTI18N  N'T_CORE_ITEM.ITEM_SELECTOR', N'分析项选择器', N'分析项选择器', N'zh-CN', N'分析项选择器';
+EXEC  DBO.INSERTI18N  N'T_CORE_ITEM.TEST_ITEM_SELECTOR', N'测试选择器', N'测试选择器', N'zh-CN', N'测试选择器';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.SCRIPT.TESTS.MODAL.ITEM_SELECTOR', N'分析项选择器', N'分析项选择器', N'zh-CN', N'分析项选择器';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.SCRIPT.TESTS.MODAL.TESTITEM_SELECTOR', N'测试选择器', N'测试选择器', N'zh-CN', N'测试选择器';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.SCRIPT.TESTS.TIP.VALUE_EMPTY', N'值不可为空', N'值不可为空', N'zh-CN', N'值不可为空';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.SCRIPT.TESTS.TIP.SCRIPT_ERROR', N'计算公式有误', N'计算公式有误', N'zh-CN', N'计算公式有误';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.SCRIPT.TESTS.TIP.GENERATE_RESULT_SUCCESS', N'生成结果成功', N'生成结果成功', N'zh-CN', N'生成结果成功';
+
+INSERT INTO T_CORE_ADMIN_SELECT_CONFIG(ID, NAME, CATEGORY, URL, VALUEFIELD, TEXTFIELD)
+  VALUES(NEXT VALUE FOR SEQ_CORE, '测试', 'test', '/secure/core/module/script/tests/queries/selectable', 'id', 'testName');
+
+-- ----------------------------- 2020-07-15 add by shixw------------end
+
+-- ----------------------------- 2020-07-15 add by shixw--------------begin
+
+-- 建表语句
+CREATE TABlE DBO.T_CORE_RESULT(
+    ID BIGINT NOT NULL,
+    TESTID BIGINT NULL ,
+    TESTNAME VARCHAR(120)  NULL ,
+    ITEMID BIGINT NULL ,
+    ITEMNAME VARCHAR(120)  NULL ,
+    REPEATNO BIGINT NULL ,
+    ORIGINALRESULT VARCHAR(60)  NULL ,
+    CREATEDBYID VARCHAR(36)  NULL ,
+    CREATEDBYNAME VARCHAR(60)  NULL ,
+    CREATEDTIME DATETIME NULL ,
+    CREATEDBYORGID VARCHAR(36)  NULL ,
+    CREATEDBYORGNAME VARCHAR(270)  NULL ,
+    CONSTRAINT PK_CORE_RESULT PRIMARY KEY(ID));
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'结果' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_RESULT';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'主键' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_RESULT', @level2type=N'COLUMN',@level2name=N'ID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'测试编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_RESULT', @level2type=N'COLUMN',@level2name=N'TESTID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'测试名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_RESULT', @level2type=N'COLUMN',@level2name=N'TESTNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'分析项编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_RESULT', @level2type=N'COLUMN',@level2name=N'ITEMID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'分析项名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_RESULT', @level2type=N'COLUMN',@level2name=N'ITEMNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'重复数' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_RESULT', @level2type=N'COLUMN',@level2name=N'REPEATNO';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'原始结果' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_RESULT', @level2type=N'COLUMN',@level2name=N'ORIGINALRESULT';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_RESULT', @level2type=N'COLUMN',@level2name=N'CREATEDBYID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_RESULT', @level2type=N'COLUMN',@level2name=N'CREATEDBYNAME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单时间' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_RESULT', @level2type=N'COLUMN',@level2name=N'CREATEDTIME';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位编码' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_RESULT', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGID';
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'制单人单位名称' , @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE',@level1name=N'T_CORE_RESULT', @level2type=N'COLUMN',@level2name=N'CREATEDBYORGNAME';
+
+EXEC  DBO.INSERTI18N  N'T_CORE_RESULT.SERVICE_NAME', N'结果', N'结果', N'zh-CN',N'结果';
+EXEC  DBO.INSERTI18N  N'T_CORE_RESULT.ID', N'结果的主键', N'主键', N'zh-CN',N'主键';
+EXEC  DBO.INSERTI18N  N'T_CORE_RESULT.TESTID', N'结果的测试编码', N'测试编码', N'zh-CN',N'测试编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_RESULT.TESTNAME', N'结果的测试名称', N'测试名称', N'zh-CN',N'测试名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_RESULT.ITEMID', N'结果的分析项编码', N'分析项编码', N'zh-CN',N'分析项编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_RESULT.ITEMNAME', N'结果的分析项名称', N'分析项名称', N'zh-CN',N'分析项名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_RESULT.REPEATNO', N'结果的重复数', N'重复数', N'zh-CN',N'重复数';
+EXEC  DBO.INSERTI18N  N'T_CORE_RESULT.ORIGINALRESULT', N'结果的原始结果', N'原始结果', N'zh-CN',N'原始结果';
+EXEC  DBO.INSERTI18N  N'T_CORE_RESULT.CREATEDBYID', N'结果的制单人编码', N'制单人编码', N'zh-CN',N'制单人编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_RESULT.CREATEDBYNAME', N'结果的制单人名称', N'制单人名称', N'zh-CN',N'制单人名称';
+EXEC  DBO.INSERTI18N  N'T_CORE_RESULT.CREATEDTIME', N'结果的制单时间', N'制单时间', N'zh-CN',N'制单时间';
+EXEC  DBO.INSERTI18N  N'T_CORE_RESULT.CREATEDBYORGID', N'结果的制单人单位编码', N'制单人单位编码', N'zh-CN',N'制单人单位编码';
+EXEC  DBO.INSERTI18N  N'T_CORE_RESULT.CREATEDBYORGNAME', N'结果的制单人单位名称', N'制单人单位名称', N'zh-CN',N'制单人单位名称';
+
+-- 创建菜单语句
+INSERT INTO T_CORE_MENU (ID, MENUNAME, HREF, PARENTID, ORDERNO, ICON, MENUINITNAME)
+VALUES ('8702', '结果录入', '/secure/core/module/script/results/page/edit-list', '87', '8702', '042.svg', '结果录入');
+
+INSERT INTO T_CORE_TABLE (ID, AUDITABLE, ATTACHMENT)
+VALUES ('T_CORE_RESULT', '0', '0');
+
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.SCRIPT.RESULTS.EXCEPTION.REQUIRE_ARG', N'需要参数', N'需要参数', N'zh-CN',N'需要参数';
+EXEC  DBO.INSERTI18N  N'CORE.MODULE.SCRIPT.RESULTS.TIP.BAD_TEST_SCRIPT', N'测试名称【{0}】分析项【{1}】对应的计算公式有误', N'测试名称【{0}】分析项【{1}】对应的计算公式有误', N'zh-CN',N'测试名称【{0}】分析项【{1}】对应的计算公式有误';
+
+
+-- ----------------------------- 2020-07-15 add by shixw------------end

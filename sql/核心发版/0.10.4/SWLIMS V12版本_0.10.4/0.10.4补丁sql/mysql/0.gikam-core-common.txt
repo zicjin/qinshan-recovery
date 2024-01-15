@@ -1,0 +1,10 @@
+﻿-- ----------------------------- 2021-08-02 add by shixw------------begin
+
+alter table T_CORE_TODO_CONFIG add column VOICEWARNING VARCHAR(36) null comment '开启语音提醒';
+
+CALL INSERTI18N('T_CORE_TODO_CONFIG.VOICEWARNING','开启语音提醒','开启语音提醒','zh-CN','开启语音提醒');
+
+UPDATE T_CORE_TODO_CONFIG SET VOICEWARNING = '1';
+
+commit;
+-- ----------------------------- 2021-08-02 add by shixw------------end

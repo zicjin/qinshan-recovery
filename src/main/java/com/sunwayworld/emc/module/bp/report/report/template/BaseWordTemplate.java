@@ -15,6 +15,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import com.sunwayworld.framework.io.file.FilePathManager;
+import com.sunwayworld.module.item.file.utils.CoreFileUtils;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFTable;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.STBorder;
@@ -37,7 +39,6 @@ import com.sunwayworld.emc.module.mdm.bizmdm.monitortmpl.bean.EmcMonitorTmplBean
 import com.sunwayworld.emc.module.mdm.crm.bean.CrmOpportunityMainBean;
 import com.sunwayworld.framework.constant.Constant;
 import com.sunwayworld.framework.exception.NotImplementedException;
-import com.sunwayworld.framework.io.file.FileHelper;
 import com.sunwayworld.framework.utils.CollectionUtils;
 import com.sunwayworld.framework.utils.DateTimeUtils;
 import com.sunwayworld.framework.utils.ObjectUtils;
@@ -495,7 +496,7 @@ public class BaseWordTemplate implements WordTemplate {
         }
 
         CoreFileBean qrCodeFile = qrCodeFileList.get(0);
-        String imageUrl = FileHelper.getAbsolutePath(FileHelper.toFilePath(qrCodeFile)).toString();
+        String imageUrl = FilePathManager.getLocalPath(CoreFileUtils.toFilePath(qrCodeFile)).toString();
         File imageFile = new File(imageUrl);
         if (!imageFile.exists()) {
             PfWord2007Utils.removeKey(document, "qrCode");

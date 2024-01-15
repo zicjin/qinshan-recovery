@@ -1,0 +1,9 @@
+-- ----------------------------- 2021-3-5 add by shixw------------begin
+
+alter table T_CORE_LES_INSTANCE add HTML CLOB;
+comment on column T_CORE_LES_INSTANCE.HTML is 'LES实例html内容';
+
+CALL INSERTI18N('T_CORE_LES_INSTANCE.HTML', 'LES的实例的html内容', 'LES实例html内容', 'zh-CN', 'LES实例html内容');
+
+
+-- ----------------------------- 2021-3-5 add by shixw------------end

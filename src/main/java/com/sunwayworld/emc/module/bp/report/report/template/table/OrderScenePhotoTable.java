@@ -6,6 +6,9 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import com.sunwayworld.framework.io.file.FilePathDTO;
+import com.sunwayworld.framework.io.file.FilePathManager;
+import com.sunwayworld.module.item.file.utils.CoreFileUtils;
 import org.apache.commons.collections4.ListUtils;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 
@@ -16,7 +19,6 @@ import com.sunwayworld.emc.module.bp.report.report.bean.WordTemplateDynamicTable
 import com.sunwayworld.emc.module.bp.report.report.constant.EmcReportConstant;
 import com.sunwayworld.emc.module.bp.report.report.template.DynamicTable;
 import com.sunwayworld.framework.constant.Constant;
-import com.sunwayworld.framework.io.file.FileHelper;
 import com.sunwayworld.framework.utils.NumberUtils;
 import com.sunwayworld.framework.utils.ObjectUtils;
 import com.sunwayworld.framework.utils.StringUtils;
@@ -126,7 +128,7 @@ public class OrderScenePhotoTable implements DynamicTable {
             // 照片所在的行，采样的需要展示点位名称
             int curImageRowIndex = sampling ? index * 2 : index;
             IntStream.range(0, curFileList.size()).forEach(fileIndex -> {
-                String imageUrl = FileHelper.getAbsolutePath(FileHelper.toFilePath(curFileList.get(fileIndex))).toString();
+                String imageUrl = FilePathManager.getLocalPath(CoreFileUtils.toFilePath(curFileList.get(fileIndex))).toString();
                 WordTemplateDynamicTableDTO.TableImage tableImage = new WordTemplateDynamicTableDTO.TableImage(curImageRowIndex, fileIndex, imageUrl);
                 tableImageList.add(tableImage);
             });

@@ -4,23 +4,24 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.sunwayworld.framework.io.file.FilePathDTO;
+import com.sunwayworld.framework.io.file.FilePathManager;
+import com.sunwayworld.module.item.file.utils.CoreFileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sunwayworld.framework.io.excel.ExcelHelper;
-import com.sunwayworld.framework.io.file.FileHelper;
-import com.sunwayworld.framework.io.file.FileRepresentation;
 import com.sunwayworld.module.item.file.bean.CoreFileBean;
-import com.sunwayworld.module.item.file.bean.ImportResultRepresentation;
-import com.sunwayworld.module.item.file.function.ImportFileFunction;
+import com.sunwayworld.module.item.file.bean.CoreFileImportResultDTO;
+import com.sunwayworld.module.item.file.function.CoreFileImportFunction;
 import com.sunwayworld.module.mdm.org.bean.CoreOrgBean;
 import com.sunwayworld.module.mdm.org.service.CoreOrgService;
 import com.sunwayworld.module.mdm.user.bean.CoreUserBean;
 import com.sunwayworld.module.mdm.user.service.CoreUserService;
 
 @Component(value = "emcUserImportFileFunction")
-public class EmcUserImportFileFunction implements ImportFileFunction {
+public class EmcUserImportFileFunction implements CoreFileImportFunction {
 
     @Autowired
     private CoreUserService coreUserService;
@@ -30,12 +31,12 @@ public class EmcUserImportFileFunction implements ImportFileFunction {
 
     @Override
     @Transactional
-    public ImportResultRepresentation apply(CoreFileBean file) {
-        ImportResultRepresentation importResultRepresentation = new ImportResultRepresentation();
+    public CoreFileImportResultDTO apply(CoreFileBean file) {
+        CoreFileImportResultDTO fileImportResultDTO = new CoreFileImportResultDTO();
 
-        FileRepresentation fr = FileRepresentation.of(file);
+        FilePathDTO fr = CoreFileUtils.toFilePath(file);
 
-        List<CoreUserBean> userList = ExcelHelper.readDataFromExcel(FileHelper.getAbsolutePath(fr).toString(), 1, 2, CoreUserBean.class);
+        List<CoreUserBean> userList = ExcelHelper.readDataFromExcel(FilePathManager.getLocalPath(fr).toString(), 1, 2, CoreUserBean.class);
 
         if (userList.size() > 0) {
 
@@ -69,6 +70,6 @@ public class EmcUserImportFileFunction implements ImportFileFunction {
                 coreUserService.getDao().update(updateUserList);
             }
         }
-        return importResultRepresentation;
+        return fileImportResultDTO;
     }
 }

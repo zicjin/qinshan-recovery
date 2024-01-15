@@ -8,6 +8,8 @@ import java.util.OptionalDouble;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import com.sunwayworld.framework.io.file.FilePathDTO;
+import com.sunwayworld.framework.io.file.FilePathManager;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 
 import com.sunwayworld.emc.framework.constant.EmcConstant;
@@ -17,8 +19,6 @@ import com.sunwayworld.emc.module.bp.report.report.bean.EmcReportBean;
 import com.sunwayworld.emc.module.bp.report.report.bean.EmcReportResultBean;
 import com.sunwayworld.emc.module.bp.report.report.bean.WordTemplateDynamicTableDTO;
 import com.sunwayworld.emc.module.bp.report.report.template.DynamicTable;
-import com.sunwayworld.framework.io.file.FileHelper;
-import com.sunwayworld.framework.io.file.FileRepresentation;
 import com.sunwayworld.framework.utils.DateTimeUtils;
 import com.sunwayworld.framework.utils.NumberUtils;
 import com.sunwayworld.framework.utils.ObjectUtils;
@@ -125,7 +125,7 @@ public class VibrationDynamicTable implements DynamicTable {
         // 点位示意图
         List<WordTemplateDynamicTableDTO.TableImage> tableImageList = Optional.ofNullable(dynamicTableDTO.getTableImageList()).orElseGet(ArrayList::new);
         coreFileList.stream().filter(f -> ObjectUtils.equals(f.getTargetId(), "T_EMC_SAMPLE$" + reportResultList.get(0).getSampleId())).findFirst().ifPresent(f -> {
-            String pointImageUrl = FileHelper.getAbsolutePath(FileRepresentation.of(f.getScope(), DateTimeUtils.getDateSerialNumber(f.getCreatedTime()), f.getMd5Name(), f.getName())).toString();
+            String pointImageUrl = FilePathManager.getLocalPath(FilePathDTO.of(f.getScope(), DateTimeUtils.getDateSerialNumber(f.getCreatedTime()), f.getMd5Name(), f.getName())).toString();
             tableImageList.add(new WordTemplateDynamicTableDTO.TableImage(tableBodyDataList.size() + 1, 1, pointImageUrl));
         });
         dynamicTableDTO.setTableImageList(tableImageList);

@@ -29,10 +29,10 @@ import com.sunwayworld.framework.validator.data.DataValidator;
 public class EmcRunSubmitValidator implements DataValidator {
 
     @Autowired
-    private EmcOrderTaskService orderTaskService;
+    private EmcOrderService orderService;
 
     @Autowired
-    private EmcOrderService orderService;
+    private EmcOrderTaskService orderTaskService;
 
     @Autowired
     private EmcRunService emcRunService;
@@ -58,7 +58,9 @@ public class EmcRunSubmitValidator implements DataValidator {
         List<EmcOrderBean> orderList = orderService.selectListByIds(orderIdList);
         for (EmcRunBean run : runList) {
             List<Long> curOrderIdList = orderTaskList.stream().filter(e -> ObjectUtils.equals(run.getId(), e.getRunId())).map(EmcOrderTaskBean::getOrderId).distinct().collect(Collectors.toList());
-            LocalDate minSampleBeginDate = orderList.stream().filter(e -> curOrderIdList.contains(e.getId())).map(EmcOrderBean::getSampleBeginDate).min(Comparator.nullsLast(LocalDate::compareTo)).orElse(null);
+            List<EmcOrderBean> curOrderList = orderList.stream().filter(e -> curOrderIdList.contains(e.getId())).collect(Collectors.toList());
+            EmcOrderBean minSampleBeginDateOrder = curOrderList.stream().min(Comparator.comparing(EmcOrderBean::getSampleBeginDate, Comparator.nullsLast(LocalDate::compareTo))).orElse(new EmcOrderBean());
+            LocalDate minSampleBeginDate = minSampleBeginDateOrder.getSampleBeginDate();
             if (minSampleBeginDate != null && DateTimeUtils.isBefore(run.getAnalysisBeginDate(), minSampleBeginDate)) {
                 this.addConstraintViolation("分析日期小于采样日期，不允许提交");
                 return false;

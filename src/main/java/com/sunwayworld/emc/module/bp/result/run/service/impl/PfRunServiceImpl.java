@@ -124,6 +124,7 @@ import com.sunwayworld.framework.data.page.Page;
 import com.sunwayworld.framework.data.page.Pagination;
 import com.sunwayworld.framework.database.sql.Order;
 import com.sunwayworld.framework.exception.FileException;
+import com.sunwayworld.framework.exception.InvalidDataException;
 import com.sunwayworld.framework.exception.UnsupportedException;
 import com.sunwayworld.framework.executor.ExecutorHelper;
 import com.sunwayworld.framework.http.HttpClientManager;
@@ -315,14 +316,20 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
     @ValidateDataWith(PfAddRunValidator.class)
     public String insert(RestJsonWrapperBean wrapper) {
         // 1、取RestJsonWrapperBean数据。
+        EmcEquiptBean equipt = wrapper.parseUnique(EmcEquiptBean.class);
+        if ("1".equals(equipt.getEquiptRecord()) && (equipt.getExt$Item("equiptrecorddate") == null
+                || DateTimeUtils.isBefore(DateTimeUtils.parseLocalDate(equipt.getExt$Item("equiptrecorddate")), LocalDate.now()))) {
+            throw new InvalidDataException("仪器未检定");
+        }
         List<EmcOrderTaskBean> selectOrderTaskList = wrapper.parse(EmcOrderTaskBean.class);
         List<Long> selectOrderIdList = selectOrderTaskList.stream().map(EmcOrderTaskBean::getOrderId).distinct().collect(Collectors.toList());
         List<Long> testMethodIdList = Arrays.stream(StringUtils.split(selectOrderTaskList.get(0).getExt$Item("testMethodIds"), ",")).filter(NumberUtils::isNumber).mapToLong(NumberUtils::parseLong).boxed().distinct().collect(Collectors.toList());
-        List<EmcOrderTaskBean> allTaskList = orderTaskService.selectListByFilter(SearchFilter.instance().match("orderId", selectOrderIdList).filter(MatchPattern.OR).match("testMethodId", testMethodIdList).filter(MatchPattern.OR).match("analysisType", EmcBizConstant.ANALYSISCATEGORY_ANALYSIS).filter(MatchPattern.SEQ));
+        List<EmcOrderTaskBean> allTaskList = orderTaskService.selectListByFilter(SearchFilter.instance()
+                .match("orderId", selectOrderIdList).filter(MatchPattern.OR)
+                .match("testMethodId", testMethodIdList).filter(MatchPattern.OR)
+                .match("analysisType", Arrays.asList(EmcBizConstant.ANALYSISCATEGORY_ANALYSIS, "Preprocessing")).filter(MatchPattern.OR));
         // 过滤掉样品中已经建批的测试
         List<EmcOrderTaskBean> orderTaskList = allTaskList.stream().filter(task -> StringUtils.isEmpty(task.getRunId())).collect(Collectors.toList());
-
-        EmcEquiptBean equipt = wrapper.parseUnique(EmcEquiptBean.class);
 
         // 2、装配run表数据
         EmcOrderTaskBean orderTask = orderTaskList.get(0);

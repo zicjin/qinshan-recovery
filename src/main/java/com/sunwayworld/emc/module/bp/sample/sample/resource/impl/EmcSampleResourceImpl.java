@@ -128,7 +128,7 @@ public class EmcSampleResourceImpl implements EmcSampleResource {
     }
 
     @Log(value = "批量更新文件业务分类", type = LogType.UPDATE)
-    @RequestMapping(value = "/action/batch-update-file-biz-category", method = RequestMethod.POST)
+    @RequestMapping(value = "/update-file", method = RequestMethod.POST)
     public void batchUpdateFileBizCategory(RestJsonWrapperBean wrapper) { getService().batchUpdateFileBizCategory(wrapper); }
 
     @Override

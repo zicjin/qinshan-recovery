@@ -84,6 +84,7 @@ import com.sunwayworld.framework.at.annotation.AuditTrailEntry;
 import com.sunwayworld.framework.at.annotation.AuditTrailType;
 import com.sunwayworld.framework.constant.Constant;
 import com.sunwayworld.framework.context.ApplicationContextHelper;
+import com.sunwayworld.framework.database.sql.Order;
 import com.sunwayworld.framework.context.LocalContextHelper;
 import com.sunwayworld.framework.data.page.Page;
 import com.sunwayworld.framework.exception.UnsupportedException;
@@ -203,6 +204,8 @@ public class PfOrderServiceImpl extends EmcOrderServiceImpl implements PfOrderSe
         }
         order.setSendDate(LocalDate.now());
         order.setSendTime(DateTimeUtils.formatLocalDateTime(LocalDateTime.now(), "HH:mm"));
+        order.setSenderId(LocalContextHelper.getLoginUserId());
+        order.setExt$Item("sender", LocalContextHelper.getLoginUserName());
         order.setCycle(EmcConstant.ONE);
         order.setFrequency(EmcConstant.ONE);
         order.setOrderNum(Long.parseLong(folder.getFolderNo().substring(folder.getFolderNo().length()-3)));
@@ -222,7 +225,9 @@ public class PfOrderServiceImpl extends EmcOrderServiceImpl implements PfOrderSe
         // 增加关联测试，如果新增的测试有关联测试，则自动增加
         List<Long> orderItemGroupIdList = orderItemGroupList.stream().map(EmcOrderItemGroupBean::getId).collect(Collectors.toList());
         List<Long> testMethodIdList = orderItemGroupList.stream().map(EmcOrderItemGroupBean::getTestMethodId).distinct().collect(Collectors.toList());
-        List<EmcRelatedTestMethodBean> relatedTestMethodList = relatedTestMethodService.getDao().selectListByOneColumnValues(testMethodIdList, "testMethodId");
+        List<EmcRelatedTestMethodBean> relatedTestMethodList = relatedTestMethodService.selectListByFilter(
+                SearchFilter.instance().match("testMethodId", testMethodIdList).filter(MatchPattern.OR)
+                        .match("replaceFlag2", "1").filter(MatchPattern.DIFFER), new Order[0]);
         List<Long> relatedTestMethodIdList = relatedTestMethodList.stream().map(EmcRelatedTestMethodBean::getRelatedTestMethodId).distinct().collect(Collectors.toList());
         if (!relatedTestMethodIdList.isEmpty()) {
             List<EmcTestMethodBean> testMethodList = testMethodService.selectListByFilter(SearchFilter.instance().match("id", relatedTestMethodIdList).filter(MatchPattern.OR));
@@ -271,6 +276,8 @@ public class PfOrderServiceImpl extends EmcOrderServiceImpl implements PfOrderSe
                 Optional.ofNullable(relatedCapacityMap.get(related.getTestCapacityId())).ifPresent(capacity -> {
                     relatedOrderItemGroup.setAnalysisOrgId(capacity.getExt$Item("analysisOrgId"));
                     relatedOrderItemGroup.setAnalysisOrgName(capacity.getExt$Item("analysisOrgName"));
+                    relatedOrderItemGroup.setInputUserId(capacity.getExt$Item("inputUserId"));
+                    relatedOrderItemGroup.setInputUserName(capacity.getExt$Item("inputUserName"));
                 });
                 relatedOrderItemGroup.setExt$Item("relatedTest", Constant.YES);
 
@@ -614,7 +621,9 @@ public class PfOrderServiceImpl extends EmcOrderServiceImpl implements PfOrderSe
         // 增加关联测试，如果新增的测试有关联测试，则自动增加
         if (!newOrderItemGroupList.isEmpty()) {
             List<Long> testMethodIdList = newOrderItemGroupList.stream().map(EmcOrderItemGroupBean::getTestMethodId).distinct().collect(Collectors.toList());
-            List<EmcRelatedTestMethodBean> relatedTestMethodList = relatedTestMethodService.getDao().selectListByOneColumnValues(testMethodIdList, "testMethodId");
+            List<EmcRelatedTestMethodBean> relatedTestMethodList = relatedTestMethodService.selectListByFilter(
+                SearchFilter.instance().match("testMethodId", testMethodIdList).filter(MatchPattern.OR)
+                        .match("replaceFlag2", "1").filter(MatchPattern.DIFFER), new Order[0]);
             List<Long> relatedTestMethodIdList = relatedTestMethodList.stream().map(EmcRelatedTestMethodBean::getRelatedTestMethodId).distinct().collect(Collectors.toList());
             if (!relatedTestMethodIdList.isEmpty()) {
                 List<EmcTestMethodBean> testMethodList = testMethodService.selectListByFilter(SearchFilter.instance().match("id", relatedTestMethodIdList).filter(MatchPattern.OR));

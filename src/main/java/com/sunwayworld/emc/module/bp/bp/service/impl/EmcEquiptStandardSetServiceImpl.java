@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.sunwayworld.emc.module.bp.bp.service.impl;
 
 import com.sunwayworld.emc.module.bp.bp.bean.EmcEquiptStandardSetBean;
@@ -22,17 +19,15 @@ implements EmcEquiptStandardSetService {
     @Autowired
     private EmcEquiptStandardSetDao emcEquiptStandardSetDao;
 
-    @Override
     public EmcEquiptStandardSetDao getDao() {
         return this.emcEquiptStandardSetDao;
     }
 
-    @Override
     @Transactional
     @Audit(value="AUDIT.INSERT")
     public Long insert(RestJsonWrapperBean jsonWrapper) {
         String[] gasNames;
-        EmcEquiptStandardSetBean emcEquiptStandardSet = jsonWrapper.parseUnique(EmcEquiptStandardSetBean.class);
+        EmcEquiptStandardSetBean emcEquiptStandardSet = (EmcEquiptStandardSetBean)jsonWrapper.parseUnique(EmcEquiptStandardSetBean.class);
         ArrayList<EmcEquiptStandardSetBean> insertList = new ArrayList<EmcEquiptStandardSetBean>();
         for (String gasName : gasNames = emcEquiptStandardSet.getGasName().split(",")) {
             EmcEquiptStandardSetBean standardSet = new EmcEquiptStandardSetBean();

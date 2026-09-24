@@ -127,6 +127,10 @@ public class EmcSampleResourceImpl implements EmcSampleResource {
         getService().batchInputOrderTaskResult(wrapper);
     }
 
+    @Log(value = "批量更新文件业务分类", type = LogType.UPDATE)
+    @RequestMapping(value = "/action/batch-update-file-biz-category", method = RequestMethod.POST)
+    public void batchUpdateFileBizCategory(RestJsonWrapperBean wrapper) { getService().batchUpdateFileBizCategory(wrapper); }
+
     @Override
     @Log(value = "通过采样单查询样品测试", type = LogType.SELECT)
     @RequestMapping(value = "/order-tasks/queries", method = RequestMethod.POST)
@@ -155,9 +159,7 @@ public class EmcSampleResourceImpl implements EmcSampleResource {
         getService().acceptedUndo(wrapper);
     }
 
-    @Override
-    public void batchUpdateFileBizCategory(RestJsonWrapperBean wrapper) { getService().batchUpdateFileBizCategory(wrapper); }
-
-    @Override
+    @Log(value = "查询分配样品", type = LogType.SELECT)
+    @RequestMapping(value = "/assign-samples/queries", method = RequestMethod.POST)
     public Page<EmcSampleBean> selectAssignSamplePagination(RestJsonWrapperBean wrapper) { return getService().selectAssignSamplePagination(wrapper); }
 }

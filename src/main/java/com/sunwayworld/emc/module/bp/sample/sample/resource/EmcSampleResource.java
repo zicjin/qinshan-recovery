@@ -36,10 +36,6 @@ public interface EmcSampleResource extends GenericResource<EmcSampleService, Emc
 
     void batchInputOrderTaskResult(RestJsonWrapperBean wrapper);
 
-    void batchUpdateFileBizCategory(RestJsonWrapperBean wrapper);
-
-    Page<EmcSampleBean> selectAssignSamplePagination(RestJsonWrapperBean wrapper);
-
     Page<EmcOrderTaskBean> selectOrderTaskBySample(RestJsonWrapperBean wrapper);
     
     void bizUndo(RestJsonWrapperBean wrapper);

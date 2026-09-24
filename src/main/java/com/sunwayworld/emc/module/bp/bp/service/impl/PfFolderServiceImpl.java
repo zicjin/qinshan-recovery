@@ -33,6 +33,7 @@ import com.sunwayworld.emc.module.mdm.bizmdm.monitortmpl.service.EmcMonitorTmplS
 import com.sunwayworld.framework.at.annotation.AuditTrailEntry;
 import com.sunwayworld.framework.at.annotation.AuditTrailType;
 import com.sunwayworld.framework.constant.Constant;
+import com.sunwayworld.framework.database.sql.Order;
 import com.sunwayworld.framework.context.ApplicationContextHelper;
 import com.sunwayworld.framework.i18n.I18nHelper;
 import com.sunwayworld.framework.mybatis.mapper.MatchPattern;
@@ -365,12 +366,54 @@ public class PfFolderServiceImpl extends EmcFolderServiceImpl implements PfFolde
 
     @Override
     public RestValidationResultBean customizeValidate(Long id, String columnName, String columnValue) {
+        if (!StringUtils.equalsIgnoreCase("monitorPointNo", columnName) || columnValue == null) {
+            return new RestValidationResultBean(true);
+        }
+        List<EmcOrderBean> orderList = this.pfOrderService.getDao().selectListByOneColumnValue(id, "folderid", new Order[0]);
+        if (orderList.stream().anyMatch(order -> order.getQcCategoryId() != null)) {
+            return new RestValidationResultBean(true);
+        }
+        if (!validateString(columnValue)) {
+            return new RestValidationResultBean(false, "必须包含大写字母和数字");
+        }
         return new RestValidationResultBean(true);
     }
 
+    public boolean validateString(String input) {
+        return input != null && !input.isEmpty() && input.matches("^(?=.*[A-Z])(?=.*\\d).+$");
+    }
+
     @Override
+    @Transactional
     public void sortFolderNo(RestJsonWrapperBean wrapper) {
-        // Production endpoint renumbers folders; leave unchanged until task-specific recovery.
+        List<EmcOrderBean> orderList = wrapper.parse(EmcOrderBean.class);
+        if (orderList.isEmpty()) {
+            return;
+        }
+        List<Long> folderIdList = orderList.stream().map(EmcOrderBean::getFolderId).distinct().collect(Collectors.toList());
+        List<EmcFolderBean> folderList = this.selectListByIds(folderIdList);
+        String monitorTmplId = orderList.get(0).getMonitorTmplId();
+        EmcMonitorTmplBean monitorTmpl = this.monitorTmplService.selectById(monitorTmplId);
+        String orderCategoryCode = monitorTmpl == null ? "" : monitorTmpl.getExt$Item("ordercategorycode");
+        if (StringUtils.isEmpty(orderCategoryCode)) {
+            orderCategoryCode = "";
+        }
+        EmcProjectBean project = this.projectService.selectById(orderList.get(0).getProjId());
+        String prefix = project.getProjNo() + orderCategoryCode;
+        folderList.sort(Comparator.comparing(EmcFolderBean::getId, Comparator.nullsLast(Long::compareTo)));
+        List<EmcOrderBean> updateOrderList = new ArrayList<>();
+        for (int i = 0; i < folderList.size(); i++) {
+            EmcFolderBean folder = folderList.get(i);
+            folder.setFolderNo(prefix + String.format("%03d", i + 1));
+            EmcOrderBean order = orderList.stream().filter(o -> ObjectUtils.equals(folder.getId(), o.getFolderId())).findFirst().orElse(null);
+            if (order != null) {
+                order.setOrderNo(folder.getFolderNo() + "001");
+                order.setLabelNo(order.getOrderNo());
+                updateOrderList.add(order);
+            }
+        }
+        this.getDao().update(folderList, "FOLDERNO");
+        this.pfOrderService.getDao().update(updateOrderList, "ORDERNO", "LABELNO");
     }
 
 }

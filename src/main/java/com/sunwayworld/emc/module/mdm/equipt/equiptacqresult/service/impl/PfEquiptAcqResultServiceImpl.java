@@ -68,6 +68,7 @@ import com.sunwayworld.module.item.file.service.CoreFileService;
 public class PfEquiptAcqResultServiceImpl extends EmcEquiptAcqResultServiceImpl {
 
     private static final String DILUTION_ITEM_NAME = "稀释倍数";
+    private static final String[] SERIAL_ACQ_SUFFIXS = {"前", "后"};
     private static final Pattern DILUTION_ORDER_NO_PATTERN = Pattern.compile("\\S+-\\d+");
 
     @Autowired
@@ -162,6 +163,9 @@ public class PfEquiptAcqResultServiceImpl extends EmcEquiptAcqResultServiceImpl 
             boolean diluteAcq = Constant.YES.equals(curScript.getExt$Item("diluteAcq"));
             // 判定后采集
             boolean judgedAcq = Constant.YES.equals(curScript.getExt$Item("judgedAcq"));
+            boolean serialAcq = "1".equals(curScript.getSerialAcq()) && allResultList.stream()
+                    .map(EmcEquiptAcqResultBean::getBizNo)
+                    .anyMatch(bizNo -> Arrays.stream(SERIAL_ACQ_SUFFIXS).anyMatch(suffix -> StringUtils.contains(bizNo, suffix)));
 
             getDao().insert(allResultList);
 
@@ -186,6 +190,9 @@ public class PfEquiptAcqResultServiceImpl extends EmcEquiptAcqResultServiceImpl 
             Set<String> actualOrderNoList = new HashSet<>(orderNoList);
             if (diluteAcq) {
                 orderNoList.stream().filter(orderNo -> DILUTION_ORDER_NO_PATTERN.matcher(orderNo).matches()).forEach(orderNo -> actualOrderNoList.add(orderNo.substring(0, orderNo.lastIndexOf("-"))));
+            }
+            if (serialAcq) {
+                Arrays.stream(SERIAL_ACQ_SUFFIXS).forEach(suffix -> orderNoList.forEach(orderNo -> actualOrderNoList.add(StringUtils.replace(orderNo, suffix, ""))));
             }
 
             List<EmcOrderTaskResultBean> allOrderTaskResultList = orderTaskResultService.selectListByFilter(SearchFilter.instance()
@@ -254,7 +261,9 @@ public class PfEquiptAcqResultServiceImpl extends EmcEquiptAcqResultServiceImpl 
                                 // 匹配到结果表的分析项
                                 List<EmcOrderTaskResultBean> updateOrderTaskResultList = allOrderTaskResultList.stream()
                                         .filter(o -> ObjectUtils.equals(o.getItemId(), e.getItemId()) && ObjectUtils.equals(o.getTestMethodId(), e.getTestMethodId())
-                                                && (ObjectUtils.equals(o.getExt$Item("equiptacquno"), a.getBizNo()) || (StringUtils.isEmpty(o.getExt$Item("equiptacquno")) && ObjectUtils.equals(o.getOrderNo(), a.getBizNo()))))
+                                                && (ObjectUtils.equals(o.getExt$Item("equiptacquno"), a.getBizNo())
+                                                    || (StringUtils.isEmpty(o.getExt$Item("equiptacquno")) && ObjectUtils.equals(o.getOrderNo(), a.getBizNo()))
+                                                    || (serialAcq && Arrays.stream(SERIAL_ACQ_SUFFIXS).anyMatch(suffix -> ObjectUtils.equals(o.getExt$Item("equiptacquno") + suffix, a.getBizNo()) || (StringUtils.isEmpty(o.getExt$Item("equiptacquno")) && ObjectUtils.equals(o.getOrderNo() + suffix, a.getBizNo()))))))
                                         .collect(Collectors.toList());
 
                                 if (!updateOrderTaskResultList.isEmpty()) {

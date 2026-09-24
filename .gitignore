@@ -1,2 +1,34 @@
-# Maven 构建产物（scripts/build.sh 可重建，约数百 MB，不入库）
+# Maven 构建输出（scripts/build.sh 可重建，不入库）
 target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+
+# 编译产物
+*.class
+
+# 说明：不全局忽略 *.jar —— src/main/resources/lib/private-sdk.jar
+# 是随包发布的资源，需进版本控制；构建产物 jar 已在 target/ 下被忽略。
+
+# 日志与 JVM 崩溃转储
+*.log
+hs_err_pid_*
+replay_pid*
+
+# IDE / 编辑器
+.idea/
+*.iml
+.vscode/
+.settings/
+.project
+.classpath
+*.swp
+*~
+
+# 操作系统
+.DS_Store
+Thumbs.db

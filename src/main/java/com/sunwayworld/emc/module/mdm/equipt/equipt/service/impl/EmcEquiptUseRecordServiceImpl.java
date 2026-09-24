@@ -59,8 +59,8 @@ public class EmcEquiptUseRecordServiceImpl implements EmcEquiptUseRecordService 
         List<EmcEquiptUseRecordBean> useRecordList = jsonWrapper.parse(EmcEquiptUseRecordBean.class);
         useRecordList.forEach(record -> {
             record.setId(ApplicationContextHelper.getNextIdentity());
-            record.setBeforeUseStatus("R");
-            record.setAfterUseStatus("R");
+            record.setBeforeUseStatus("正常");
+            record.setAfterUseStatus("正常");
         });
         getDao().insert(useRecordList);
         return 0L;

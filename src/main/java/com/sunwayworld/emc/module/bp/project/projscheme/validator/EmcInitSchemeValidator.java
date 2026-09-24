@@ -36,7 +36,7 @@ public class EmcInitSchemeValidator implements DataValidator {
         List<Integer> repeatedList = new ArrayList<>();
         Map<Long, List<EmcMonitorPointSchemeBean>> schemeMap = monitorPointSchemeList.stream().collect(Collectors.groupingBy(EmcMonitorPointSchemeBean::getMonitorPointId));
         schemeMap.forEach((monitorPointId, pointSchemeList) -> {
-            List<String> testIdList = pointSchemeList.stream().map(scheme -> scheme.getExt$Item("testId")).collect(Collectors.toList());
+            List<String> testIdList = pointSchemeList.stream().map(scheme -> scheme.getExt$Item("testId") + '$' + scheme.getItemGroupId()).collect(Collectors.toList());
             long uniqueCount = testIdList.stream().distinct().count();
             if (uniqueCount < testIdList.size()) {
                 repeatedList.add(0);

@@ -1,70 +1,61 @@
 package com.sunwayworld.emc.module.mdm.equipt.equipt.bean;
 
-import java.time.LocalDateTime;
-
 import com.alibaba.fastjson.annotation.JSONField;
-import org.springframework.format.annotation.DateTimeFormat;
-
 import com.sunwayworld.framework.data.annotation.Id;
 import com.sunwayworld.framework.data.annotation.Table;
 import com.sunwayworld.framework.data.annotation.Transient;
 import com.sunwayworld.framework.support.domain.AbstractPersistable;
 import com.sunwayworld.framework.support.domain.Insertable;
+import java.time.LocalDateTime;
+import org.springframework.format.annotation.DateTimeFormat;
 
-/**
- * @author qianc@sunwayworld.com
- * @date 2019-12-18
- */
-@Table("T_EMC_EQUIPT_USE_RECORD")
-    public class EmcEquiptUseRecordBean extends AbstractPersistable<Long>implements Insertable<Long> {
-
+@Table(value="T_EMC_EQUIPT_USE_RECORD")
+public class EmcEquiptUseRecordBean
+extends AbstractPersistable<Long>
+implements Insertable<Long> {
     @Transient
     private static final long serialVersionUID = -2915409537745707942L;
     @Id
-    private Long id;// 主键
-    private Long projId;// 项目编码
-    private String projNo;// 项目编号
-    private Long sampleId;// 采样单编码
-    private String sampleNo;// 采样单编号
-    private Long testId;// 测试编号
-    private String testName;// 测试名称
-    private Long equiptId;// 仪器编码
-    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime usedTime;// 仪器使用时间
-    private String beforeUseStatus;// 使用前状态
-    private String afterUseStatus;// 使用后状态
-    private String userId;// 使用人
-    private String userName;// 使用人名称
+    private Long id;
+    private Long projId;
+    private String projNo;
+    private Long sampleId;
+    private String sampleNo;
+    private String testId;
+    private String testName;
+    private Long equiptId;
+    @JSONField(format="yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime usedTime;
+    private String beforeUseStatus;
+    private String afterUseStatus;
+    private String userId;
+    private String userName;
+    private String runId;
+    private String equiptCondition;
+    private String orderQty;
+    private String startDate;
+    private String startTime;
+    private String endDate;
+    private String endTime;
+    private String createdById;
+    private String createdByName;
+    @JSONField(format="yyyy-MM-dd")
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime createdTime;
+    private String createdByOrgId;
+    private String createdByOrgName;
 
-    private String runId; // 批号
-    private String equiptCondition; // 仪器条件
-    private String orderQty; // 样品数量
-    private String startDate; // 开始日期
-    private String startTime; // 开始时间
-    private String endDate; // 结束日期
-    private String endTime; // 结束时间
-
-    private String createdById;// 制单人编码
-    private String createdByName;// 制单人名称
-    @JSONField(format = "yyyy-MM-dd")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime createdTime;// 制单时间
-    private String createdByOrgId;// 制单人单位编码
-    private String createdByOrgName;// 制单人单位名称
-
-    @Override
     public Long getId() {
-        return id;
+        return this.id;
     }
 
-    @Override
     public void setId(Long id) {
         this.id = id;
     }
 
     public Long getProjId() {
-        return projId;
+        return this.projId;
     }
 
     public void setProjId(Long projId) {
@@ -72,7 +63,7 @@ import com.sunwayworld.framework.support.domain.Insertable;
     }
 
     public String getProjNo() {
-        return projNo;
+        return this.projNo;
     }
 
     public void setProjNo(String projNo) {
@@ -80,7 +71,7 @@ import com.sunwayworld.framework.support.domain.Insertable;
     }
 
     public Long getSampleId() {
-        return sampleId;
+        return this.sampleId;
     }
 
     public void setSampleId(Long sampleId) {
@@ -88,23 +79,23 @@ import com.sunwayworld.framework.support.domain.Insertable;
     }
 
     public String getSampleNo() {
-        return sampleNo;
+        return this.sampleNo;
     }
 
     public void setSampleNo(String sampleNo) {
         this.sampleNo = sampleNo;
     }
 
-    public Long getTestId() {
-        return testId;
+    public String getTestId() {
+        return this.testId;
     }
 
-    public void setTestId(Long testId) {
+    public void setTestId(String testId) {
         this.testId = testId;
     }
 
     public String getTestName() {
-        return testName;
+        return this.testName;
     }
 
     public void setTestName(String testName) {
@@ -112,7 +103,7 @@ import com.sunwayworld.framework.support.domain.Insertable;
     }
 
     public Long getEquiptId() {
-        return equiptId;
+        return this.equiptId;
     }
 
     public void setEquiptId(Long equiptId) {
@@ -120,7 +111,7 @@ import com.sunwayworld.framework.support.domain.Insertable;
     }
 
     public LocalDateTime getUsedTime() {
-        return usedTime;
+        return this.usedTime;
     }
 
     public void setUsedTime(LocalDateTime usedTime) {
@@ -128,7 +119,7 @@ import com.sunwayworld.framework.support.domain.Insertable;
     }
 
     public String getBeforeUseStatus() {
-        return beforeUseStatus;
+        return this.beforeUseStatus;
     }
 
     public void setBeforeUseStatus(String beforeUseStatus) {
@@ -136,7 +127,7 @@ import com.sunwayworld.framework.support.domain.Insertable;
     }
 
     public String getAfterUseStatus() {
-        return afterUseStatus;
+        return this.afterUseStatus;
     }
 
     public void setAfterUseStatus(String afterUseStatus) {
@@ -144,7 +135,7 @@ import com.sunwayworld.framework.support.domain.Insertable;
     }
 
     public String getUserId() {
-        return userId;
+        return this.userId;
     }
 
     public void setUserId(String userId) {
@@ -152,7 +143,7 @@ import com.sunwayworld.framework.support.domain.Insertable;
     }
 
     public String getUserName() {
-        return userName;
+        return this.userName;
     }
 
     public void setUserName(String userName) {
@@ -160,7 +151,7 @@ import com.sunwayworld.framework.support.domain.Insertable;
     }
 
     public String getRunId() {
-        return runId;
+        return this.runId;
     }
 
     public void setRunId(String runId) {
@@ -168,7 +159,7 @@ import com.sunwayworld.framework.support.domain.Insertable;
     }
 
     public String getEquiptCondition() {
-        return equiptCondition;
+        return this.equiptCondition;
     }
 
     public void setEquiptCondition(String equiptCondition) {
@@ -176,7 +167,7 @@ import com.sunwayworld.framework.support.domain.Insertable;
     }
 
     public String getOrderQty() {
-        return orderQty;
+        return this.orderQty;
     }
 
     public void setOrderQty(String orderQty) {
@@ -184,7 +175,7 @@ import com.sunwayworld.framework.support.domain.Insertable;
     }
 
     public String getStartDate() {
-        return startDate;
+        return this.startDate;
     }
 
     public void setStartDate(String startDate) {
@@ -192,7 +183,7 @@ import com.sunwayworld.framework.support.domain.Insertable;
     }
 
     public String getStartTime() {
-        return startTime;
+        return this.startTime;
     }
 
     public void setStartTime(String startTime) {
@@ -200,7 +191,7 @@ import com.sunwayworld.framework.support.domain.Insertable;
     }
 
     public String getEndDate() {
-        return endDate;
+        return this.endDate;
     }
 
     public void setEndDate(String endDate) {
@@ -208,62 +199,50 @@ import com.sunwayworld.framework.support.domain.Insertable;
     }
 
     public String getEndTime() {
-        return endTime;
+        return this.endTime;
     }
 
     public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
 
-    @Override
     public String getCreatedById() {
-        return createdById;
+        return this.createdById;
     }
 
-    @Override
     public void setCreatedById(String createdById) {
         this.createdById = createdById;
     }
 
-    @Override
     public String getCreatedByName() {
-        return createdByName;
+        return this.createdByName;
     }
 
-    @Override
     public void setCreatedByName(String createdByName) {
         this.createdByName = createdByName;
     }
 
-    @Override
     public LocalDateTime getCreatedTime() {
-        return createdTime;
+        return this.createdTime;
     }
 
-    @Override
     public void setCreatedTime(LocalDateTime createdTime) {
         this.createdTime = createdTime;
     }
 
-    @Override
     public String getCreatedByOrgId() {
-        return createdByOrgId;
+        return this.createdByOrgId;
     }
 
-    @Override
     public void setCreatedByOrgId(String createdByOrgId) {
         this.createdByOrgId = createdByOrgId;
     }
 
-    @Override
     public String getCreatedByOrgName() {
-        return createdByOrgName;
+        return this.createdByOrgName;
     }
 
-    @Override
     public void setCreatedByOrgName(String createdByOrgName) {
         this.createdByOrgName = createdByOrgName;
     }
-
-
 }

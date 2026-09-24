@@ -1,130 +1,84 @@
 package com.sunwayworld.emc.module.bp.project.project.bean;
 
-import java.time.LocalDateTime;
-
 import com.alibaba.fastjson.annotation.JSONField;
-import org.springframework.format.annotation.DateTimeFormat;
-
-import com.sunwayworld.framework.constant.Constant;
 import com.sunwayworld.framework.data.annotation.Id;
 import com.sunwayworld.framework.data.annotation.NotNull;
 import com.sunwayworld.framework.data.annotation.Table;
 import com.sunwayworld.framework.data.annotation.Transient;
 import com.sunwayworld.framework.support.domain.AbstractPersistable;
 import com.sunwayworld.framework.support.domain.Insertable;
+import java.time.LocalDateTime;
+import org.springframework.format.annotation.DateTimeFormat;
 
-@Table("T_EMC_ORDER_ITEM_GROUP")
-    public class EmcOrderItemGroupBean extends AbstractPersistable<Long> implements Insertable<Long> {
-
+@Table(value="T_EMC_ORDER_ITEM_GROUP")
+public class EmcOrderItemGroupBean
+extends AbstractPersistable<Long>
+implements Insertable<Long> {
     @Transient
     private static final long serialVersionUID = 6073654199714691276L;
-
     @Id
-    private Long id;// 主键
+    private Long id;
+    private Long orderId;
+    private String schemeName;
+    private Long testId;
+    private String testName;
+    private Long testMethodId;
+    private Long methodId;
+    private String methodName;
+    private Long methodVersionId;
+    private String testMethodBasis;
+    private Long itemGroupId;
+    private String itemGroup;
+    private String analysisOrgId;
+    private String analysisOrgName;
+    private Long qcCategoryId;
+    private String qcCategoryCode;
+    private String qcName;
+    private String subPackageNo;
+    private Long subcontractorId;
+    @NotNull(defaultValue="0")
+    private String dataSharing;
+    private String inputUserId;
+    private String inputUserName;
+    private String monitorTmplId;
+    private String orderCategory;
+    private Long containerCategoryId;
+    private String containerCategoryCode;
+    private String containerCategoryName;
+    private String containerGroup;
+    private String fixative;
+    private String originalOrderNo;
+    private String storeCondition;
+    private String abnormal;
+    private String createdById;
+    private String createdByName;
+    @JSONField(format="yyyy-MM-dd")
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime createdTime;
+    private String createdByOrgId;
+    private String createdByOrgName;
+    @NotNull(defaultValue="0")
+    private String customerSpecified;
+    private String batchNo;
+    private String mobileId;
+    private Long sortNum;
+    private String qualification;
+    private Long indexCategoryId;
+    private String indexId;
+    private String specifyMethod;
+    private String taskLowLimit;
+    private String taskHighLimit;
 
-    private Long orderId;// 样品编码
-
-    private String schemeName;// 方案名称
-
-    private Long testId;// 测试编码
-
-    private String testName;// 测试名称
-
-    private Long testMethodId;// 测试方法编码
-
-    private Long methodId;// 方法编码
-
-    private String methodName;// 方法名称
-
-    private Long methodVersionId;// 方法版本编码
-
-    private String testMethodBasis;// 检测方法及依据
-
-    private Long itemGroupId;// 分析项组编码
-
-    private String itemGroup;// 分析项组
-
-    private String analysisOrgId;// 分析科室编码
-
-    private String analysisOrgName;// 分析科室名称
-
-    private Long qcCategoryId;// QC类型主键
-
-    private String qcCategoryCode; // QC类型编码
-
-    private String qcName; // QC类型中文
-
-    private String subPackageNo;// 分包单号
-
-    private Long subcontractorId;// 分包商ID
-
-    @NotNull(defaultValue = Constant.NO)
-    private String dataSharing;// 是否数据共享
-
-    private String inputUserId; // 录入人编码
-
-    private String inputUserName; // 录入人名称
-
-    private String monitorTmplId; // 监测模板ID
-
-    private String orderCategory; // 样品类型
-
-    private Long containerCategoryId;// 容器类型主键
-
-    private String containerCategoryCode; // 容器类型编码
-
-    private String containerCategoryName;// 容器类型名称
-
-    private String containerGroup;// 容器组
-
-    private String fixative;// 固定剂
-
-    private String originalOrderNo; // 原样品编号
-
-    private String storeCondition; // 保存条件
-
-    private String createdById;// 制单人编码
-
-    private String createdByName;// 制单人名称
-
-    @JSONField(format = "yyyy-MM-dd")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime createdTime;// 制单时间
-
-    private String createdByOrgId;// 制单人单位编码
-
-    private String createdByOrgName;// 制单人单位名称
-
-    /**
-     * 广州分析测试中心项目
-     */
-    @NotNull(defaultValue = Constant.NO)
-    private String customerSpecified;// 是否客户指定
-
-    private String batchNo;//批号
-
-    private String mobileId; // 移动端样品分析项组ID
-
-    private Long sortNum; // 排序码
-
-    private String qualification; // 是否有资质
-
-    private Long indexCategoryId;// 指标分类id
-
-    private String indexId;// 样品指标id
-
-    @Override
     public Long getId() {
-        return id;
+        return this.id;
     }
 
-    @Override
     public void setId(Long id) {
         this.id = id;
     }
 
     public String getMobileId() {
-        return mobileId;
+        return this.mobileId;
     }
 
     public void setMobileId(String mobileId) {
@@ -132,7 +86,7 @@ import com.sunwayworld.framework.support.domain.Insertable;
     }
 
     public Long getOrderId() {
-        return orderId;
+        return this.orderId;
     }
 
     public void setOrderId(Long orderId) {
@@ -140,7 +94,7 @@ import com.sunwayworld.framework.support.domain.Insertable;
     }
 
     public Long getTestMethodId() {
-        return testMethodId;
+        return this.testMethodId;
     }
 
     public void setTestMethodId(Long testMethodId) {
@@ -148,11 +102,11 @@ import com.sunwayworld.framework.support.domain.Insertable;
     }
 
     public Long getItemGroupId() {
-        return itemGroupId;
+        return this.itemGroupId;
     }
 
     public String getTestName() {
-        return testName;
+        return this.testName;
     }
 
     public void setTestName(String testName) {
@@ -160,7 +114,7 @@ import com.sunwayworld.framework.support.domain.Insertable;
     }
 
     public String getQcCategoryCode() {
-        return qcCategoryCode;
+        return this.qcCategoryCode;
     }
 
     public void setQcCategoryCode(String qcCategoryCode) {
@@ -168,7 +122,7 @@ import com.sunwayworld.framework.support.domain.Insertable;
     }
 
     public String getQcName() {
-        return qcName;
+        return this.qcName;
     }
 
     public void setQcName(String qcName) {
@@ -176,7 +130,7 @@ import com.sunwayworld.framework.support.domain.Insertable;
     }
 
     public String getContainerCategoryCode() {
-        return containerCategoryCode;
+        return this.containerCategoryCode;
     }
 
     public void setContainerCategoryCode(String containerCategoryCode) {
@@ -188,7 +142,7 @@ import com.sunwayworld.framework.support.domain.Insertable;
     }
 
     public String getSchemeName() {
-        return schemeName;
+        return this.schemeName;
     }
 
     public void setSchemeName(String schemeName) {
@@ -196,7 +150,7 @@ import com.sunwayworld.framework.support.domain.Insertable;
     }
 
     public String getContainerCategoryName() {
-        return containerCategoryName;
+        return this.containerCategoryName;
     }
 
     public void setContainerCategoryName(String containerCategoryName) {
@@ -204,7 +158,7 @@ import com.sunwayworld.framework.support.domain.Insertable;
     }
 
     public Long getContainerCategoryId() {
-        return containerCategoryId;
+        return this.containerCategoryId;
     }
 
     public void setContainerCategoryId(Long containerCategoryId) {
@@ -212,7 +166,7 @@ import com.sunwayworld.framework.support.domain.Insertable;
     }
 
     public String getContainerGroup() {
-        return containerGroup;
+        return this.containerGroup;
     }
 
     public void setContainerGroup(String containerGroup) {
@@ -220,7 +174,7 @@ import com.sunwayworld.framework.support.domain.Insertable;
     }
 
     public String getFixative() {
-        return fixative;
+        return this.fixative;
     }
 
     public void setFixative(String fixative) {
@@ -228,7 +182,7 @@ import com.sunwayworld.framework.support.domain.Insertable;
     }
 
     public Long getTestId() {
-        return testId;
+        return this.testId;
     }
 
     public void setTestId(Long testId) {
@@ -236,7 +190,7 @@ import com.sunwayworld.framework.support.domain.Insertable;
     }
 
     public String getItemGroup() {
-        return itemGroup;
+        return this.itemGroup;
     }
 
     public void setItemGroup(String itemGroup) {
@@ -244,7 +198,7 @@ import com.sunwayworld.framework.support.domain.Insertable;
     }
 
     public Long getSubcontractorId() {
-        return subcontractorId;
+        return this.subcontractorId;
     }
 
     public void setSubcontractorId(Long subcontractorId) {
@@ -252,7 +206,7 @@ import com.sunwayworld.framework.support.domain.Insertable;
     }
 
     public String getDataSharing() {
-        return dataSharing;
+        return this.dataSharing;
     }
 
     public void setDataSharing(String dataSharing) {
@@ -260,7 +214,7 @@ import com.sunwayworld.framework.support.domain.Insertable;
     }
 
     public String getInputUserId() {
-        return inputUserId;
+        return this.inputUserId;
     }
 
     public void setInputUserId(String inputUserId) {
@@ -268,7 +222,7 @@ import com.sunwayworld.framework.support.domain.Insertable;
     }
 
     public String getInputUserName() {
-        return inputUserName;
+        return this.inputUserName;
     }
 
     public void setInputUserName(String inputUserName) {
@@ -276,7 +230,7 @@ import com.sunwayworld.framework.support.domain.Insertable;
     }
 
     public String getMonitorTmplId() {
-        return monitorTmplId;
+        return this.monitorTmplId;
     }
 
     public void setMonitorTmplId(String monitorTmplId) {
@@ -284,7 +238,7 @@ import com.sunwayworld.framework.support.domain.Insertable;
     }
 
     public String getOrderCategory() {
-        return orderCategory;
+        return this.orderCategory;
     }
 
     public void setOrderCategory(String orderCategory) {
@@ -292,7 +246,7 @@ import com.sunwayworld.framework.support.domain.Insertable;
     }
 
     public Long getMethodId() {
-        return methodId;
+        return this.methodId;
     }
 
     public void setMethodId(Long methodId) {
@@ -300,7 +254,7 @@ import com.sunwayworld.framework.support.domain.Insertable;
     }
 
     public String getMethodName() {
-        return methodName;
+        return this.methodName;
     }
 
     public void setMethodName(String methodName) {
@@ -308,7 +262,7 @@ import com.sunwayworld.framework.support.domain.Insertable;
     }
 
     public String getTestMethodBasis() {
-        return testMethodBasis;
+        return this.testMethodBasis;
     }
 
     public void setTestMethodBasis(String testMethodBasis) {
@@ -316,7 +270,7 @@ import com.sunwayworld.framework.support.domain.Insertable;
     }
 
     public Long getMethodVersionId() {
-        return methodVersionId;
+        return this.methodVersionId;
     }
 
     public void setMethodVersionId(Long methodVersionId) {
@@ -324,7 +278,7 @@ import com.sunwayworld.framework.support.domain.Insertable;
     }
 
     public String getAnalysisOrgId() {
-        return analysisOrgId;
+        return this.analysisOrgId;
     }
 
     public void setAnalysisOrgId(String analysisOrgId) {
@@ -332,7 +286,7 @@ import com.sunwayworld.framework.support.domain.Insertable;
     }
 
     public String getAnalysisOrgName() {
-        return analysisOrgName;
+        return this.analysisOrgName;
     }
 
     public void setAnalysisOrgName(String analysisOrgName) {
@@ -340,7 +294,7 @@ import com.sunwayworld.framework.support.domain.Insertable;
     }
 
     public Long getQcCategoryId() {
-        return qcCategoryId;
+        return this.qcCategoryId;
     }
 
     public void setQcCategoryId(Long qcCategoryId) {
@@ -348,7 +302,7 @@ import com.sunwayworld.framework.support.domain.Insertable;
     }
 
     public String getSubPackageNo() {
-        return subPackageNo;
+        return this.subPackageNo;
     }
 
     public void setSubPackageNo(String subPackageNo) {
@@ -356,7 +310,7 @@ import com.sunwayworld.framework.support.domain.Insertable;
     }
 
     public String getOriginalOrderNo() {
-        return originalOrderNo;
+        return this.originalOrderNo;
     }
 
     public void setOriginalOrderNo(String originalOrderNo) {
@@ -364,65 +318,55 @@ import com.sunwayworld.framework.support.domain.Insertable;
     }
 
     public String getStoreCondition() {
-        return storeCondition;
+        return this.storeCondition;
     }
 
     public void setStoreCondition(String storeCondition) {
         this.storeCondition = storeCondition;
     }
 
-    @Override
     public String getCreatedById() {
-        return createdById;
+        return this.createdById;
     }
 
-    @Override
     public void setCreatedById(String createdById) {
         this.createdById = createdById;
     }
 
-    @Override
     public String getCreatedByName() {
-        return createdByName;
+        return this.createdByName;
     }
 
-    @Override
     public void setCreatedByName(String createdByName) {
         this.createdByName = createdByName;
     }
 
-    @Override
     public LocalDateTime getCreatedTime() {
-        return createdTime;
+        return this.createdTime;
     }
 
-    @Override
     public void setCreatedTime(LocalDateTime createdTime) {
         this.createdTime = createdTime;
     }
 
-    @Override
     public String getCreatedByOrgId() {
-        return createdByOrgId;
+        return this.createdByOrgId;
     }
 
-    @Override
     public void setCreatedByOrgId(String createdByOrgId) {
         this.createdByOrgId = createdByOrgId;
     }
 
-    @Override
     public String getCreatedByOrgName() {
-        return createdByOrgName;
+        return this.createdByOrgName;
     }
 
-    @Override
     public void setCreatedByOrgName(String createdByOrgName) {
         this.createdByOrgName = createdByOrgName;
     }
 
     public String getCustomerSpecified() {
-        return customerSpecified;
+        return this.customerSpecified;
     }
 
     public void setCustomerSpecified(String customerSpecified) {
@@ -430,7 +374,7 @@ import com.sunwayworld.framework.support.domain.Insertable;
     }
 
     public String getBatchNo() {
-        return batchNo;
+        return this.batchNo;
     }
 
     public void setBatchNo(String batchNo) {
@@ -438,7 +382,7 @@ import com.sunwayworld.framework.support.domain.Insertable;
     }
 
     public Long getSortNum() {
-        return sortNum;
+        return this.sortNum;
     }
 
     public void setSortNum(Long sortNum) {
@@ -446,7 +390,7 @@ import com.sunwayworld.framework.support.domain.Insertable;
     }
 
     public String getQualification() {
-        return qualification;
+        return this.qualification;
     }
 
     public void setQualification(String qualification) {
@@ -454,7 +398,7 @@ import com.sunwayworld.framework.support.domain.Insertable;
     }
 
     public Long getIndexCategoryId() {
-        return indexCategoryId;
+        return this.indexCategoryId;
     }
 
     public void setIndexCategoryId(Long indexCategoryId) {
@@ -462,39 +406,41 @@ import com.sunwayworld.framework.support.domain.Insertable;
     }
 
     public String getIndexId() {
-        return indexId;
+        return this.indexId;
     }
 
     public void setIndexId(String indexId) {
         this.indexId = indexId;
     }
 
-    private String abnormal;
-    private String specifyMethod;
-    private String taskLowLimit;
-    private String taskHighLimit;
-
     public String getSpecifyMethod() {
         return this.specifyMethod;
     }
+
     public void setSpecifyMethod(String specifyMethod) {
         this.specifyMethod = specifyMethod;
     }
+
     public String getAbnormal() {
         return this.abnormal;
     }
+
     public void setAbnormal(String abnormal) {
         this.abnormal = abnormal;
     }
+
     public String getTaskLowLimit() {
         return this.taskLowLimit;
     }
+
     public void setTaskLowLimit(String taskLowLimit) {
         this.taskLowLimit = taskLowLimit;
     }
+
     public String getTaskHighLimit() {
         return this.taskHighLimit;
     }
+
     public void setTaskHighLimit(String taskHighLimit) {
         this.taskHighLimit = taskHighLimit;
     }

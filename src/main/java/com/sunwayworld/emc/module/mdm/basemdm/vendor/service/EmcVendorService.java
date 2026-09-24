@@ -6,13 +6,17 @@ import com.sunwayworld.framework.data.page.Page;
 import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;
 import com.sunwayworld.framework.support.base.service.GenericService;
 import com.sunwayworld.framework.support.choosable.service.GenericChoosableService;
+import com.sunwayworld.framework.support.selectable.service.GenericSelectableService;
 
-public interface EmcVendorService extends GenericService<EmcVendorBean, Long>, GenericChoosableService<EmcVendorBean, Long> {
-    Long insert(RestJsonWrapperBean wrapper);
+public interface EmcVendorService
+extends GenericService<EmcVendorBean, Long>,
+GenericChoosableService<EmcVendorBean, Long>,
+GenericSelectableService<EmcVendorBean, Long> {
+    public Long insert(RestJsonWrapperBean var1);
 
-    Long insertMtl(Long id, RestJsonWrapperBean wrapper);
+    public Long insertMtl(Long var1, RestJsonWrapperBean var2);
 
-    Page<EmcVendorMtlBean> selectMtlPaginationById(Long id, RestJsonWrapperBean wrapper);
+    public Page<EmcVendorMtlBean> selectMtlPaginationById(Long var1, RestJsonWrapperBean var2);
 
-    void deleteMtl(RestJsonWrapperBean wrapper);
+    public void deleteMtl(RestJsonWrapperBean var1);
 }

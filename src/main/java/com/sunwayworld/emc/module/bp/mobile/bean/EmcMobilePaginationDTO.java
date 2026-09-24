@@ -1,12 +1,11 @@
 package com.sunwayworld.emc.module.bp.mobile.bean;
 
-import java.util.List;
-
 import com.sunwayworld.emc.module.bp.bp.bean.EmcFolderBean;
 import com.sunwayworld.emc.module.bp.bp.bean.EmcOrderBean;
 import com.sunwayworld.emc.module.bp.bp.bean.EmcOrderContainerBean;
 import com.sunwayworld.emc.module.bp.bp.bean.EmcOrderTaskBean;
 import com.sunwayworld.emc.module.bp.bp.bean.EmcOrderTaskResultBean;
+import com.sunwayworld.emc.module.bp.project.project.bean.EmcOrderItemBean;
 import com.sunwayworld.emc.module.bp.project.project.bean.EmcOrderItemGroupBean;
 import com.sunwayworld.emc.module.bp.project.project.bean.EmcProjectBean;
 import com.sunwayworld.emc.module.bp.sample.sample.bean.EmcSampleBean;
@@ -19,6 +18,8 @@ import com.sunwayworld.emc.module.mdm.basemdm.propertytmpl.bean.EmcPropertyField
 import com.sunwayworld.emc.module.mdm.basemdm.qccategory.bean.EmcQcCategoryBean;
 import com.sunwayworld.emc.module.mdm.basemdm.testcategory.bean.EmcTestCategoryBean;
 import com.sunwayworld.emc.module.mdm.basemdm.unit.bean.EmcUnitBean;
+import com.sunwayworld.emc.module.mdm.bizmdm.capacity.bean.EmcCapacityItemBean;
+import com.sunwayworld.emc.module.mdm.bizmdm.capacity.bean.EmcCapacityItemGroupBean;
 import com.sunwayworld.emc.module.mdm.bizmdm.capacity.bean.EmcTestCapacityBean;
 import com.sunwayworld.emc.module.mdm.bizmdm.client.bean.EmcClientBean;
 import com.sunwayworld.emc.module.mdm.bizmdm.client.bean.EmcMonitorPointBean;
@@ -29,6 +30,7 @@ import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcGroupItemBean;
 import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcItemBean;
 import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcItemGroupBean;
 import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcItemResultBean;
+import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcRelatedTestMethodBean;
 import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcTestBean;
 import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcTestMethodBean;
 import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcTestMethodEquiptBean;
@@ -46,77 +48,65 @@ import com.sunwayworld.emc.module.mdm.equipt.equiptcalibration.bean.EmcEquiptCal
 import com.sunwayworld.framework.data.page.Page;
 import com.sunwayworld.module.item.file.bean.CoreFileBean;
 import com.sunwayworld.module.sys.code.bean.CoreCodeBean;
-import com.sunwayworld.emc.module.bp.project.project.bean.EmcOrderItemBean;
-import com.sunwayworld.emc.module.mdm.bizmdm.capacity.bean.EmcCapacityItemBean;
-import com.sunwayworld.emc.module.mdm.bizmdm.capacity.bean.EmcCapacityItemGroupBean;
-import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcRelatedTestMethodBean;
 
-/**
- * @author zhengxy@sunwayworld.com 2021年11月09日
- */
-    public class EmcMobilePaginationDTO {
-
+public class EmcMobilePaginationDTO {
     private String message;
-    /** 业务数据 */
-    private Page<EmcProjectBean> projectPage; // 项目列表
-    private Page<EmcFolderBean> folderPage; // 点位列表
-    private Page<EmcSampleBean> samplePage; // 采样单列表
-    private Page<EmcOrderBean> orderPage; // 样品列表
-    private Page<EmcOrderContainerBean> orderContainerPage; // 样品容器列表
-    private Page<EmcOrderTaskBean> orderTaskPage; // 样品测试列表
-    private Page<EmcOrderTaskResultBean> orderTaskResultPage; // 样品测试结果列表
-    private Page<EmcPropertyDataBean> propertyDataPage; // 属性值列表
-    private Page<CoreFileBean> projectFilePage; // 项目附件
-    private Page<EmcEquiptCalibrationBean> calibrationPage; // 仪器校准
-    private Page<EmcEquiptCalibrationLineBean> calibrationLinePage; // 仪器校准记录
-    private Page<EmcOrderItemGroupBean> orderItemGroupPage; // 样品分析项组
-    /** 静态数据 */
-    private Page<String> operateTypePage; // 操作类型
-    private Page<EmcEquiptBean> equiptPage; // 仪器列表
-    private Page<EmcEmpBean> empPage; // 人员列表
-    private Page<EmcTestMethodEquiptBean> testMethodEquiptPage; // 测试关联仪器列表
+    private Page<EmcProjectBean> projectPage;
+    private Page<EmcFolderBean> folderPage;
+    private Page<EmcSampleBean> samplePage;
+    private Page<EmcOrderBean> orderPage;
+    private Page<EmcOrderContainerBean> orderContainerPage;
+    private Page<EmcOrderTaskBean> orderTaskPage;
+    private Page<EmcOrderTaskResultBean> orderTaskResultPage;
+    private Page<EmcPropertyDataBean> propertyDataPage;
+    private Page<CoreFileBean> projectFilePage;
+    private Page<EmcEquiptCalibrationBean> calibrationPage;
+    private Page<EmcEquiptCalibrationLineBean> calibrationLinePage;
+    private Page<EmcOrderItemGroupBean> orderItemGroupPage;
+    private Page<EmcOrderItemBean> orderItemPage;
+    private Page<String> operateTypePage;
+    private Page<EmcEquiptBean> equiptPage;
+    private Page<EmcEmpBean> empPage;
+    private Page<EmcTestMethodEquiptBean> testMethodEquiptPage;
     private Page<EmcEquiptTestMethodBean> equiptTestMethodPage;
-    private Page<EmcPropertyFieldBean> propertyFieldPage; // 属性字段列表
-    private Page<EmcMonitorTmplBean> monitorTmplPage; // 监测模板列表
-    private Page<EmcItemResultBean> itemResultPage; // 测试分析项列表
-    private Page<CoreCodeBean> coreCodePage; // 系统编码列表
-    private Page<EmcMonitorPointBean> monitorPointPage; // 监测点列表
-    private Page<EmcClientBean> clientPage; // 客户列表
-    private Page<EmcMonitorTmplGroupBean> monitorTmplGroupPage; // 监测模板分组
-    private Page<EmcMonitorSchemeBean> monitorSchemePage; // 监测方案
-    private Page<EmcTestCategoryBean> testCategoryPage; // 测试分类
-    private Page<EmcTestBean> testPage; // 测试库
-    private Page<EmcTestMethodBean> testMethodPage; // 测试方法
-    private Page<EmcMethodBean> methodPage; // 方法库
-    private Page<EmcItemBean> itemPage; // 分析项
-    private Page<EmcItemGroupBean> itemGroupPage; // 分析项组
-    private Page<EmcGroupItemBean> groupItemPage; // 分析项组分析项
-    private Page<EmcContainerCategoryBean> containerPage; // 容器组
-    private Page<EmcEquiptCategoryBean> equiptCategoryPage; // 仪器类型
-    private Page<EmcUnitBean> unitPage; // 单位
-    private Page<EmcQcCategoryBean> qcCategoryPage; // QC类型
-    private Page<EmcMonitorPointCategoryBean> monitorPointCategoryPage; // 监测点类型
-    private Page<EmcTestMethodOrderCategoryBean> testOrderCategoryPage; // 测试样品类型
-    private Page<EmcTestCapacityBean> testCapacityPage; // 监测能力库
-    /** 仪器采集 */
-    private Page<EmcEquiptAcqScriptBean> acqScriptPage; // 仪器采集脚本
-    private Page<EmcEasParamBean> easParamPage; // 采集参数
-    private Page<EmcEasPreAnalyBean> easPreAnalyPage; // 预处理
-    private Page<EmcEasResultBean> easResultPage; // 结果参数
-    private Page<EmcEquiptTestItemBean> equiptTestItemPage; // 采集分析项对照表
-
-    private Page<EmcFolderBean> sampleParamFolderPage; // 气的采样参数点位列表
-
-    private Page<EmcOrderBean> sampleParamOrderPage; // 气的采样参数样品列表
-
-    private Page<EmcOrderTaskBean> sampleParamOrderTaskPage; // 气的采样参数样品测试列表
-
-    private Page<EmcOrderTaskResultBean> sampleParamOrderTaskResultPage; // 气的采样参数样品测试结果列表
-
-    private Page<EmcOrderItemGroupBean> sampleParamOrderItemGroupPage; // 气的采样参数样品分析项组
+    private Page<EmcPropertyFieldBean> propertyFieldPage;
+    private Page<EmcMonitorTmplBean> monitorTmplPage;
+    private Page<EmcItemResultBean> itemResultPage;
+    private Page<CoreCodeBean> coreCodePage;
+    private Page<EmcMonitorPointBean> monitorPointPage;
+    private Page<EmcClientBean> clientPage;
+    private Page<EmcMonitorTmplGroupBean> monitorTmplGroupPage;
+    private Page<EmcMonitorSchemeBean> monitorSchemePage;
+    private Page<EmcTestCategoryBean> testCategoryPage;
+    private Page<EmcTestBean> testPage;
+    private Page<EmcTestMethodBean> testMethodPage;
+    private Page<EmcMethodBean> methodPage;
+    private Page<EmcItemBean> itemPage;
+    private Page<EmcItemGroupBean> itemGroupPage;
+    private Page<EmcGroupItemBean> groupItemPage;
+    private Page<EmcContainerCategoryBean> containerPage;
+    private Page<EmcEquiptCategoryBean> equiptCategoryPage;
+    private Page<EmcUnitBean> unitPage;
+    private Page<EmcQcCategoryBean> qcCategoryPage;
+    private Page<EmcMonitorPointCategoryBean> monitorPointCategoryPage;
+    private Page<EmcTestMethodOrderCategoryBean> testOrderCategoryPage;
+    private Page<EmcTestCapacityBean> testCapacityPage;
+    private Page<EmcEquiptAcqScriptBean> acqScriptPage;
+    private Page<EmcEasParamBean> easParamPage;
+    private Page<EmcEasPreAnalyBean> easPreAnalyPage;
+    private Page<EmcEasResultBean> easResultPage;
+    private Page<EmcEquiptTestItemBean> equiptTestItemPage;
+    private Page<EmcFolderBean> sampleParamFolderPage;
+    private Page<EmcOrderBean> sampleParamOrderPage;
+    private Page<EmcOrderTaskBean> sampleParamOrderTaskPage;
+    private Page<EmcOrderTaskResultBean> sampleParamOrderTaskResultPage;
+    private Page<EmcOrderItemGroupBean> sampleParamOrderItemGroupPage;
+    private Page<EmcCapacityItemGroupBean> capacityItemGroupPage;
+    private Page<EmcCapacityItemBean> capacityItemPage;
+    private Page<EmcRelatedTestMethodBean> relatedTestMethodPage;
 
     public String getMessage() {
-        return message;
+        return this.message;
     }
 
     public void setMessage(String message) {
@@ -124,7 +114,7 @@ import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcRelatedTestMethodBean;
     }
 
     public Page<EmcProjectBean> getProjectPage() {
-        return projectPage;
+        return this.projectPage;
     }
 
     public void setProjectPage(Page<EmcProjectBean> projectPage) {
@@ -132,7 +122,7 @@ import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcRelatedTestMethodBean;
     }
 
     public Page<EmcFolderBean> getFolderPage() {
-        return folderPage;
+        return this.folderPage;
     }
 
     public void setFolderPage(Page<EmcFolderBean> folderPage) {
@@ -140,7 +130,7 @@ import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcRelatedTestMethodBean;
     }
 
     public Page<EmcSampleBean> getSamplePage() {
-        return samplePage;
+        return this.samplePage;
     }
 
     public void setSamplePage(Page<EmcSampleBean> samplePage) {
@@ -148,7 +138,7 @@ import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcRelatedTestMethodBean;
     }
 
     public Page<EmcOrderBean> getOrderPage() {
-        return orderPage;
+        return this.orderPage;
     }
 
     public void setOrderPage(Page<EmcOrderBean> orderPage) {
@@ -156,7 +146,7 @@ import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcRelatedTestMethodBean;
     }
 
     public Page<EmcOrderContainerBean> getOrderContainerPage() {
-        return orderContainerPage;
+        return this.orderContainerPage;
     }
 
     public void setOrderContainerPage(Page<EmcOrderContainerBean> orderContainerPage) {
@@ -164,7 +154,7 @@ import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcRelatedTestMethodBean;
     }
 
     public Page<EmcOrderTaskBean> getOrderTaskPage() {
-        return orderTaskPage;
+        return this.orderTaskPage;
     }
 
     public void setOrderTaskPage(Page<EmcOrderTaskBean> orderTaskPage) {
@@ -172,7 +162,7 @@ import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcRelatedTestMethodBean;
     }
 
     public Page<EmcOrderTaskResultBean> getOrderTaskResultPage() {
-        return orderTaskResultPage;
+        return this.orderTaskResultPage;
     }
 
     public void setOrderTaskResultPage(Page<EmcOrderTaskResultBean> orderTaskResultPage) {
@@ -180,7 +170,7 @@ import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcRelatedTestMethodBean;
     }
 
     public Page<EmcPropertyDataBean> getPropertyDataPage() {
-        return propertyDataPage;
+        return this.propertyDataPage;
     }
 
     public void setPropertyDataPage(Page<EmcPropertyDataBean> propertyDataPage) {
@@ -188,7 +178,7 @@ import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcRelatedTestMethodBean;
     }
 
     public Page<CoreFileBean> getProjectFilePage() {
-        return projectFilePage;
+        return this.projectFilePage;
     }
 
     public void setProjectFilePage(Page<CoreFileBean> projectFilePage) {
@@ -196,7 +186,7 @@ import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcRelatedTestMethodBean;
     }
 
     public Page<EmcEquiptCalibrationBean> getCalibrationPage() {
-        return calibrationPage;
+        return this.calibrationPage;
     }
 
     public void setCalibrationPage(Page<EmcEquiptCalibrationBean> calibrationPage) {
@@ -204,7 +194,7 @@ import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcRelatedTestMethodBean;
     }
 
     public Page<EmcEquiptCalibrationLineBean> getCalibrationLinePage() {
-        return calibrationLinePage;
+        return this.calibrationLinePage;
     }
 
     public void setCalibrationLinePage(Page<EmcEquiptCalibrationLineBean> calibrationLinePage) {
@@ -212,15 +202,23 @@ import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcRelatedTestMethodBean;
     }
 
     public Page<EmcOrderItemGroupBean> getOrderItemGroupPage() {
-        return orderItemGroupPage;
+        return this.orderItemGroupPage;
     }
 
     public void setOrderItemGroupPage(Page<EmcOrderItemGroupBean> orderItemGroupPage) {
         this.orderItemGroupPage = orderItemGroupPage;
     }
 
+    public Page<EmcOrderItemBean> getOrderItemPage() {
+        return this.orderItemPage;
+    }
+
+    public void setOrderItemPage(Page<EmcOrderItemBean> orderItemPage) {
+        this.orderItemPage = orderItemPage;
+    }
+
     public Page<String> getOperateTypePage() {
-        return operateTypePage;
+        return this.operateTypePage;
     }
 
     public void setOperateTypePage(Page<String> operateTypePage) {
@@ -228,7 +226,7 @@ import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcRelatedTestMethodBean;
     }
 
     public Page<EmcEquiptBean> getEquiptPage() {
-        return equiptPage;
+        return this.equiptPage;
     }
 
     public void setEquiptPage(Page<EmcEquiptBean> equiptPage) {
@@ -236,7 +234,7 @@ import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcRelatedTestMethodBean;
     }
 
     public Page<EmcEmpBean> getEmpPage() {
-        return empPage;
+        return this.empPage;
     }
 
     public void setEmpPage(Page<EmcEmpBean> empPage) {
@@ -244,7 +242,7 @@ import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcRelatedTestMethodBean;
     }
 
     public Page<EmcTestMethodEquiptBean> getTestMethodEquiptPage() {
-        return testMethodEquiptPage;
+        return this.testMethodEquiptPage;
     }
 
     public void setTestMethodEquiptPage(Page<EmcTestMethodEquiptBean> testMethodEquiptPage) {
@@ -252,7 +250,7 @@ import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcRelatedTestMethodBean;
     }
 
     public Page<EmcEquiptTestMethodBean> getEquiptTestMethodPage() {
-        return equiptTestMethodPage;
+        return this.equiptTestMethodPage;
     }
 
     public void setEquiptTestMethodPage(Page<EmcEquiptTestMethodBean> equiptTestMethodPage) {
@@ -260,7 +258,7 @@ import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcRelatedTestMethodBean;
     }
 
     public Page<EmcPropertyFieldBean> getPropertyFieldPage() {
-        return propertyFieldPage;
+        return this.propertyFieldPage;
     }
 
     public void setPropertyFieldPage(Page<EmcPropertyFieldBean> propertyFieldPage) {
@@ -268,7 +266,7 @@ import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcRelatedTestMethodBean;
     }
 
     public Page<EmcMonitorTmplBean> getMonitorTmplPage() {
-        return monitorTmplPage;
+        return this.monitorTmplPage;
     }
 
     public void setMonitorTmplPage(Page<EmcMonitorTmplBean> monitorTmplPage) {
@@ -276,7 +274,7 @@ import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcRelatedTestMethodBean;
     }
 
     public Page<EmcItemResultBean> getItemResultPage() {
-        return itemResultPage;
+        return this.itemResultPage;
     }
 
     public void setItemResultPage(Page<EmcItemResultBean> itemResultPage) {
@@ -284,7 +282,7 @@ import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcRelatedTestMethodBean;
     }
 
     public Page<CoreCodeBean> getCoreCodePage() {
-        return coreCodePage;
+        return this.coreCodePage;
     }
 
     public void setCoreCodePage(Page<CoreCodeBean> coreCodePage) {
@@ -292,7 +290,7 @@ import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcRelatedTestMethodBean;
     }
 
     public Page<EmcMonitorPointBean> getMonitorPointPage() {
-        return monitorPointPage;
+        return this.monitorPointPage;
     }
 
     public void setMonitorPointPage(Page<EmcMonitorPointBean> monitorPointPage) {
@@ -300,7 +298,7 @@ import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcRelatedTestMethodBean;
     }
 
     public Page<EmcClientBean> getClientPage() {
-        return clientPage;
+        return this.clientPage;
     }
 
     public void setClientPage(Page<EmcClientBean> clientPage) {
@@ -308,7 +306,7 @@ import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcRelatedTestMethodBean;
     }
 
     public Page<EmcMonitorTmplGroupBean> getMonitorTmplGroupPage() {
-        return monitorTmplGroupPage;
+        return this.monitorTmplGroupPage;
     }
 
     public void setMonitorTmplGroupPage(Page<EmcMonitorTmplGroupBean> monitorTmplGroupPage) {
@@ -316,7 +314,7 @@ import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcRelatedTestMethodBean;
     }
 
     public Page<EmcMonitorSchemeBean> getMonitorSchemePage() {
-        return monitorSchemePage;
+        return this.monitorSchemePage;
     }
 
     public void setMonitorSchemePage(Page<EmcMonitorSchemeBean> monitorSchemePage) {
@@ -324,7 +322,7 @@ import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcRelatedTestMethodBean;
     }
 
     public Page<EmcTestCategoryBean> getTestCategoryPage() {
-        return testCategoryPage;
+        return this.testCategoryPage;
     }
 
     public void setTestCategoryPage(Page<EmcTestCategoryBean> testCategoryPage) {
@@ -332,7 +330,7 @@ import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcRelatedTestMethodBean;
     }
 
     public Page<EmcTestBean> getTestPage() {
-        return testPage;
+        return this.testPage;
     }
 
     public void setTestPage(Page<EmcTestBean> testPage) {
@@ -340,7 +338,7 @@ import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcRelatedTestMethodBean;
     }
 
     public Page<EmcTestMethodBean> getTestMethodPage() {
-        return testMethodPage;
+        return this.testMethodPage;
     }
 
     public void setTestMethodPage(Page<EmcTestMethodBean> testMethodPage) {
@@ -348,7 +346,7 @@ import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcRelatedTestMethodBean;
     }
 
     public Page<EmcMethodBean> getMethodPage() {
-        return methodPage;
+        return this.methodPage;
     }
 
     public void setMethodPage(Page<EmcMethodBean> methodPage) {
@@ -356,7 +354,7 @@ import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcRelatedTestMethodBean;
     }
 
     public Page<EmcItemBean> getItemPage() {
-        return itemPage;
+        return this.itemPage;
     }
 
     public void setItemPage(Page<EmcItemBean> itemPage) {
@@ -364,7 +362,7 @@ import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcRelatedTestMethodBean;
     }
 
     public Page<EmcItemGroupBean> getItemGroupPage() {
-        return itemGroupPage;
+        return this.itemGroupPage;
     }
 
     public void setItemGroupPage(Page<EmcItemGroupBean> itemGroupPage) {
@@ -372,7 +370,7 @@ import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcRelatedTestMethodBean;
     }
 
     public Page<EmcGroupItemBean> getGroupItemPage() {
-        return groupItemPage;
+        return this.groupItemPage;
     }
 
     public void setGroupItemPage(Page<EmcGroupItemBean> groupItemPage) {
@@ -380,7 +378,7 @@ import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcRelatedTestMethodBean;
     }
 
     public Page<EmcContainerCategoryBean> getContainerPage() {
-        return containerPage;
+        return this.containerPage;
     }
 
     public void setContainerPage(Page<EmcContainerCategoryBean> containerPage) {
@@ -388,7 +386,7 @@ import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcRelatedTestMethodBean;
     }
 
     public Page<EmcEquiptCategoryBean> getEquiptCategoryPage() {
-        return equiptCategoryPage;
+        return this.equiptCategoryPage;
     }
 
     public void setEquiptCategoryPage(Page<EmcEquiptCategoryBean> equiptCategoryPage) {
@@ -396,7 +394,7 @@ import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcRelatedTestMethodBean;
     }
 
     public Page<EmcUnitBean> getUnitPage() {
-        return unitPage;
+        return this.unitPage;
     }
 
     public void setUnitPage(Page<EmcUnitBean> unitPage) {
@@ -404,7 +402,7 @@ import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcRelatedTestMethodBean;
     }
 
     public Page<EmcQcCategoryBean> getQcCategoryPage() {
-        return qcCategoryPage;
+        return this.qcCategoryPage;
     }
 
     public void setQcCategoryPage(Page<EmcQcCategoryBean> qcCategoryPage) {
@@ -412,7 +410,7 @@ import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcRelatedTestMethodBean;
     }
 
     public Page<EmcMonitorPointCategoryBean> getMonitorPointCategoryPage() {
-        return monitorPointCategoryPage;
+        return this.monitorPointCategoryPage;
     }
 
     public void setMonitorPointCategoryPage(Page<EmcMonitorPointCategoryBean> monitorPointCategoryPage) {
@@ -420,7 +418,7 @@ import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcRelatedTestMethodBean;
     }
 
     public Page<EmcTestMethodOrderCategoryBean> getTestOrderCategoryPage() {
-        return testOrderCategoryPage;
+        return this.testOrderCategoryPage;
     }
 
     public void setTestOrderCategoryPage(Page<EmcTestMethodOrderCategoryBean> testOrderCategoryPage) {
@@ -428,7 +426,7 @@ import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcRelatedTestMethodBean;
     }
 
     public Page<EmcTestCapacityBean> getTestCapacityPage() {
-        return testCapacityPage;
+        return this.testCapacityPage;
     }
 
     public void setTestCapacityPage(Page<EmcTestCapacityBean> testCapacityPage) {
@@ -436,7 +434,7 @@ import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcRelatedTestMethodBean;
     }
 
     public Page<EmcEquiptAcqScriptBean> getAcqScriptPage() {
-        return acqScriptPage;
+        return this.acqScriptPage;
     }
 
     public void setAcqScriptPage(Page<EmcEquiptAcqScriptBean> acqScriptPage) {
@@ -444,7 +442,7 @@ import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcRelatedTestMethodBean;
     }
 
     public Page<EmcEasParamBean> getEasParamPage() {
-        return easParamPage;
+        return this.easParamPage;
     }
 
     public void setEasParamPage(Page<EmcEasParamBean> easParamPage) {
@@ -452,7 +450,7 @@ import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcRelatedTestMethodBean;
     }
 
     public Page<EmcEasPreAnalyBean> getEasPreAnalyPage() {
-        return easPreAnalyPage;
+        return this.easPreAnalyPage;
     }
 
     public void setEasPreAnalyPage(Page<EmcEasPreAnalyBean> easPreAnalyPage) {
@@ -460,7 +458,7 @@ import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcRelatedTestMethodBean;
     }
 
     public Page<EmcEasResultBean> getEasResultPage() {
-        return easResultPage;
+        return this.easResultPage;
     }
 
     public void setEasResultPage(Page<EmcEasResultBean> easResultPage) {
@@ -468,7 +466,7 @@ import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcRelatedTestMethodBean;
     }
 
     public Page<EmcEquiptTestItemBean> getEquiptTestItemPage() {
-        return equiptTestItemPage;
+        return this.equiptTestItemPage;
     }
 
     public void setEquiptTestItemPage(Page<EmcEquiptTestItemBean> equiptTestItemPage) {
@@ -476,7 +474,7 @@ import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcRelatedTestMethodBean;
     }
 
     public Page<EmcFolderBean> getSampleParamFolderPage() {
-        return sampleParamFolderPage;
+        return this.sampleParamFolderPage;
     }
 
     public void setSampleParamFolderPage(Page<EmcFolderBean> sampleParamFolderPage) {
@@ -484,7 +482,7 @@ import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcRelatedTestMethodBean;
     }
 
     public Page<EmcOrderBean> getSampleParamOrderPage() {
-        return sampleParamOrderPage;
+        return this.sampleParamOrderPage;
     }
 
     public void setSampleParamOrderPage(Page<EmcOrderBean> sampleParamOrderPage) {
@@ -492,7 +490,7 @@ import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcRelatedTestMethodBean;
     }
 
     public Page<EmcOrderTaskBean> getSampleParamOrderTaskPage() {
-        return sampleParamOrderTaskPage;
+        return this.sampleParamOrderTaskPage;
     }
 
     public void setSampleParamOrderTaskPage(Page<EmcOrderTaskBean> sampleParamOrderTaskPage) {
@@ -500,7 +498,7 @@ import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcRelatedTestMethodBean;
     }
 
     public Page<EmcOrderTaskResultBean> getSampleParamOrderTaskResultPage() {
-        return sampleParamOrderTaskResultPage;
+        return this.sampleParamOrderTaskResultPage;
     }
 
     public void setSampleParamOrderTaskResultPage(Page<EmcOrderTaskResultBean> sampleParamOrderTaskResultPage) {
@@ -508,39 +506,33 @@ import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcRelatedTestMethodBean;
     }
 
     public Page<EmcOrderItemGroupBean> getSampleParamOrderItemGroupPage() {
-        return sampleParamOrderItemGroupPage;
+        return this.sampleParamOrderItemGroupPage;
     }
 
     public void setSampleParamOrderItemGroupPage(Page<EmcOrderItemGroupBean> sampleParamOrderItemGroupPage) {
         this.sampleParamOrderItemGroupPage = sampleParamOrderItemGroupPage;
     }
 
-    private Page<EmcOrderItemBean> orderItemPage;
-    private Page<EmcCapacityItemGroupBean> capacityItemGroupPage;
-    private Page<EmcCapacityItemBean> capacityItemPage;
-    private Page<EmcRelatedTestMethodBean> relatedTestMethodPage;
-
-    public Page<EmcOrderItemBean> getOrderItemPage() {
-        return this.orderItemPage;
-    }
-    public void setOrderItemPage(Page<EmcOrderItemBean> orderItemPage) {
-        this.orderItemPage = orderItemPage;
-    }
     public Page<EmcCapacityItemGroupBean> getCapacityItemGroupPage() {
         return this.capacityItemGroupPage;
     }
+
     public void setCapacityItemGroupPage(Page<EmcCapacityItemGroupBean> capacityItemGroupPage) {
         this.capacityItemGroupPage = capacityItemGroupPage;
     }
+
     public Page<EmcCapacityItemBean> getCapacityItemPage() {
         return this.capacityItemPage;
     }
+
     public void setCapacityItemPage(Page<EmcCapacityItemBean> capacityItemPage) {
         this.capacityItemPage = capacityItemPage;
     }
+
     public Page<EmcRelatedTestMethodBean> getRelatedTestMethodPage() {
         return this.relatedTestMethodPage;
     }
+
     public void setRelatedTestMethodPage(Page<EmcRelatedTestMethodBean> relatedTestMethodPage) {
         this.relatedTestMethodPage = relatedTestMethodPage;
     }

@@ -1,12 +1,6 @@
 package com.sunwayworld.emc.module.bp.project.project.bean;
 
-import java.time.LocalDateTime;
-
-import org.springframework.format.annotation.DateTimeFormat;
-
 import com.alibaba.fastjson.annotation.JSONField;
-import com.sunwayworld.emc.framework.constant.EmcBizConstant;
-import com.sunwayworld.framework.constant.Constant;
 import com.sunwayworld.framework.data.annotation.Clob;
 import com.sunwayworld.framework.data.annotation.Id;
 import com.sunwayworld.framework.data.annotation.NotNull;
@@ -15,279 +9,235 @@ import com.sunwayworld.framework.data.annotation.Transient;
 import com.sunwayworld.framework.support.domain.AbstractAuditable;
 import com.sunwayworld.framework.support.domain.Auditable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import org.springframework.format.annotation.DateTimeFormat;
 
-/**
- * 项目
- *
- * @author magh@sunwayworld.com
- * @date 2019-09-27
- */
-
-@Table("T_EMC_PROJECT")
-    public class EmcProjectBean extends AbstractAuditable<Long> implements Auditable<Long> {
-
+@Table(value="T_EMC_PROJECT")
+public class EmcProjectBean
+extends AbstractAuditable<Long>
+implements Auditable<Long> {
     @Transient
     private static final long serialVersionUID = -8279392325526171185L;
-
     @Id
-    private Long id;// 主键
-
-    private String projNo;// 项目编号
-
-    private String projName;// 项目名称
-
-    private String testOrgId;// 受检单位编码
-
-    private String testOrgName;// 受检单位名称
-
-    private String projAddress;// 项目地址
-
-    private String entrustOrgId;// 委托单位编码
-
-    private String entrustOrgName;// 委托单位名称
-
-    private String entrustOrgAddress;// 委托单位地址
-
-    private Long bizCategoryId;// 业务类型编码
-
-    private String bizCategoryCode;// 业务类型编号
-
-    private String taskNo;// 任务编号
-
-    private String description;//项目描述
-
-    @JSONField(format = "yyyy-MM-dd")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime registDate;// 登记日期
-
-    private String reportOrgId;// 报告科室编码
-
-    @JSONField(format = "yyyy-MM-dd")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime acceptDate;// 受理日期
-
-    @JSONField(format = "yyyy-MM-dd")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime compleDate;// 项目完成期限
-
+    private Long id;
+    private String projNo;
+    private String projName;
+    private String testOrgId;
+    private String testOrgName;
+    private String projAddress;
+    private String entrustOrgId;
+    private String entrustOrgName;
+    private String entrustOrgAddress;
+    private Long bizCategoryId;
+    private String bizCategoryCode;
+    private String taskNo;
+    private String description;
+    @JSONField(format="yyyy-MM-dd")
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime registDate;
+    private String reportOrgId;
+    @JSONField(format="yyyy-MM-dd")
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime acceptDate;
+    @JSONField(format="yyyy-MM-dd")
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime compleDate;
+    private String projAmount;
     private String monitorCategory;
-
-    @JSONField(format = "yyyy-MM-dd")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime entrustDate;// 委托日期
-
-    @JSONField(format = "yyyy-MM-dd")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime sendDate;// 送样日期
-
-    private String sendType;// 送样方式
-
-    private String entrustMethod;// 委托方式
-
-    private String subPackageDesc;// 分包说明
-
-    private String ndCal;// nd计算方式
-
-    @NotNull(defaultValue = EmcBizConstant.PROJECT_STATUS_CREATE)
-    private String status;// 状态 正常/取消
-
-    private String cancleReason;// 取消原因
-
-    private String sendUsername;// 送样人
-
-    @JSONField(format = "yyyy-MM-dd")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime taskDate;// 任务日期
-
-    private String testContent;// 检测内容及要求
-
-    private String qcReq;// 质控要求
-
-    private String remark;// 备注
-
-    private String entrustOrgContact; // 委托单位联系人
-
-    private String entrustOrgPhone; // 委托单位联系电话
-
-    private String testOrgAddress; // 受检单位地址
-
-    private String testOrgContact; // 受检单位联系人
-
-    private String testOrgPhone; // 受检单位联系电话
-
-    private String monitorOrgName; // 检测单位名称
-
-    private String source; // 来源
-
-    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime nextTaskDate;// 下次任务日期
-
-    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime startTime; // 开始时间
-
-    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime endTime; // 结束时间
-
-    private String cron;// CRON表达式
-
-    private String mobileId; // 移动端项目ID
-
-    @NotNull(defaultValue = EmcBizConstant.PROJECT_CN_NODE_XMDJ)
-    private String projNode; // 项目节点
-
-    private String sample; // 是否采样
-
-    private String urgent; // 是否加急
-
-    private String beforeStatus; // 项目终止前状态
-
-    private String reportEditUserId; // 报告编制人编码
-
-    private String reportEditUserName; // 报告编制人
-
-    @NotNull(defaultValue = Constant.NO)
-    private String qcCheck; // 是否质控考核
-
-    private String cancelReason; // 终止原因
-
-    private String schemeReportLineId; // 监测方案报表模板ID
-
-    private String testOrgEmail; // 受检单位邮箱
-
-    private String testOrgFixedPhone; // 受检单位固定电话
-
-    private String projectQcUserId; // 项目质控人ID
-
-    private String projectQcUserName; // 项目质控人
-
-    private String projectSampleOrgId; // 采样科室id
-
-    private String sampleOrgName; // 采样科室名称
-
-    private String projectSampleById;//采样员编码
-
-    private String projectSampleByName;// 采样员
-
-    @JSONField(format = "yyyy-MM-dd")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime projectSampleBeginDate;//采样开始日期
-    @JSONField(format = "yyyy-MM-dd")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime projectSampleEndDate;//采样结束日期
-
-    private String createdById;// 制单人编码
-
-    private String createdByName;// 制单人名称
-
-    @JSONField(format = "yyyy-MM-dd")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime createdTime;// 制单时间
-
-    private String createdByOrgId;// 制单人单位编码
-
-    private String createdByOrgName;// 制单人单位名称
-
-    private String orgId;// 所属单位编码
-
-    private String orgName;// 所属单位名称
-
-    /**
-     * 广州分析测试中心
-     */
-    private String keepDescription;// 样品性质与保存描述
-    private String remainSampleDeal;// 余样处理
-    private String testsMethod;// 测试方法
-    private String servicePay;// 服务费用
-    private String invoiceTitle;// 发票抬头及类别
-    private String taxNo;// 税号
-    private String payType;// 付费方式
-    private String reportFormat;// 报告格式
-    private String reportNum;// 报告数量
-    private String reportGrantTime;// 监测报告发放时间
-    private String reportSendType;// 监测报告发送
-    /**
-     * 现场踏勘功能
-     */
-    @NotNull(defaultValue = Constant.NO)
-    private String prospect; // 是否踏勘
-    @JSONField(format = "yyyy-MM-dd")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime prospectDate; // 勘察日期
+    @JSONField(format="yyyy-MM-dd")
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime entrustDate;
+    @JSONField(format="yyyy-MM-dd")
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime sendDate;
+    private String sendType;
+    private String entrustMethod;
+    private String subPackageDesc;
+    private String ndCal;
+    @NotNull(defaultValue="create")
+    private String status;
+    private String cancleReason;
+    private String sendUsername;
+    @JSONField(format="yyyy-MM-dd")
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime taskDate;
+    private String testContent;
+    private String qcReq;
+    private String remark;
+    private String entrustOrgContact;
+    private String entrustOrgPhone;
+    private String testOrgAddress;
+    private String testOrgContact;
+    private String testOrgPhone;
+    private String monitorOrgName;
+    private String source;
+    @JSONField(format="yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime nextTaskDate;
+    @JSONField(format="yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime startTime;
+    @JSONField(format="yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime endTime;
+    private String cron;
+    private String mobileId;
+    @NotNull(defaultValue="\u767b\u8bb0")
+    private String projNode;
+    private String sample;
+    private String urgent;
+    private String beforeStatus;
+    private String reportEditUserId;
+    private String reportEditUserName;
+    @NotNull(defaultValue="0")
+    private String qcCheck;
+    private String cancelReason;
+    private String schemeReportLineId;
+    private String testOrgEmail;
+    private String testOrgFixedPhone;
+    private String projectQcUserId;
+    private String projectQcUserName;
+    private String projectSampleOrgId;
+    private String sampleOrgName;
+    private String projectSampleById;
+    private String projectSampleByName;
+    @JSONField(format="yyyy-MM-dd")
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime projectSampleBeginDate;
+    @JSONField(format="yyyy-MM-dd")
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime projectSampleEndDate;
+    private String createdById;
+    private String createdByName;
+    @JSONField(format="yyyy-MM-dd")
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime createdTime;
+    private String createdByOrgId;
+    private String createdByOrgName;
+    private String orgId;
+    private String orgName;
+    private String keepDescription;
+    private String remainSampleDeal;
+    private String testsMethod;
+    private String servicePay;
+    private String invoiceTitle;
+    private String taxNo;
+    private String payType;
+    private String reportFormat;
+    private String reportNum;
+    private String reportGrantTime;
+    private String reportSendType;
+    @NotNull(defaultValue="0")
+    private String prospect;
+    @JSONField(format="yyyy-MM-dd")
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime prospectDate;
     @Clob
-    private String opinion; // 现场意见
+    private String opinion;
     @Clob
-    private String safetyMeasures; // 安全措施
+    private String safetyMeasures;
     @Clob
-    private String monitorCondition; // 监测条件
+    private String monitorCondition;
     @Clob
-    private String prospecRemark;// 踏勘备注
+    private String prospecRemark;
+    private String testCycle;
+    private String reportDeliveryWay;
+    private String packMethod;
+    private String requiredSamptime;
+    private String orderNum;
+    private Long sampleOrderCount;
+    private Long erpGbId;
+    private Long erpReviewId;
+    private String reportAptitude;
+    private String reportUse;
+    private String pretreatment;
+    private String needQcReport;
+    private String qcReportType;
+    private String needSplitReport;
+    private String subcontractSupplier;
+    private String reportEnName;
+    private String reportCnName;
+    private String reportEnAddress;
+    private String reportCnAddress;
+    private String testingLab;
+    @NotNull(defaultValue="1")
+    private String testMethodAssigner;
+    private String mergeReport;
+    private String reportPostAddress;
+    private String addressee;
+    private String recipientPhone;
+    private String detectPurpose;
+    private String erpOrderNumber;
+    private String reportTitle;
+    private Long splitContractId;
+    private String securityLevel;
+    private String reportFee;
+    private String needReport;
+    private String periodType;
+    @NotNull(defaultValue="7~15")
+    private String period;
+    private String otherReportUse;
+    private String erpContactGbId;
+    private String entrustOrgEmail;
+    @JSONField(format="yyyy-MM-dd")
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime projCreatedTime;
+    private String labInnerNo;
+    private Long subcontractorId;
+    private String projType;
+    private LocalDate requiredCompleteDate;
+    @JSONField(format="yyyy-MM-dd")
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime reportIssueTime;
+    private String testProjectName;
+    private String businessUserId;
+    private String businessUserName;
+    private String minSampleDuration;
+    private Long year;
+    @JSONField(format="yyyy-MM-dd")
+    @DateTimeFormat(pattern="yyyy-MM-dd")
+    private LocalDate toReportEditDate;
+    private String reportAssignStatus;
+    private String projectType;
+    @JSONField(format="yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime firstIssueDateTime;
+    @NotNull(defaultValue="0")
+    private String projectPrice;
+    private String folderRemark;
+    private String projSection;
+    private String customerSource;
+    private String remarkOne;
+    private String remarkTwo;
+    @NotNull(defaultValue="0")
+    private String amountDeterm;
 
-    private String testCycle;//测试周期(江苏新锐)
-
-    private String reportDeliveryWay;//报告交付方式(江苏新锐)
-
-    private String packMethod;//包装方式(江苏新锐)
-
-    private String requiredSamptime;//要求采样时间(广分所)
-
-    private String orderNum;//样品数量(江苏新锐)
-
-    private Long erpGbId; // ERP订单ID
-    private Long erpReviewId; // ERP评审ID
-
-    private String reportAptitude; // 报告资质;
-    private String reportUse; // 报告用途;
-    private String pretreatment; // 前处理方式备注;
-    private String needQcReport; // 是否需要提供质控报告;
-    private String qcReportType; // 质控报告类型
-    private String needSplitReport; // 是否拆分报告;
-    private String subcontractSupplier; // 分包供应商名称;
-    private String reportEnName; // 报告抬头公司名称(英文);
-    private String reportCnName; // 报告抬头公司名称(中文);
-    private String reportEnAddress; // 报告抬头公司地址(英文);
-    private String reportCnAddress; // 报告抬头公司地址(中文);
-    private String testingLab; // 做单实验室;
-    private String testMethodAssigner; // 检测方法指定方;
-    private String mergeReport; // 分包项目是否合并至微谱报告;
-    private String reportPostAddress; // 报告寄送地址;
-    private String addressee; // 收件人;
-    private String recipientPhone; // 收件人联系电话
-
-    private String detectPurpose; // 检测目的
-    private String erpOrderNumber; // ERP订单编号
-    private String reportTitle; // 报告抬头
-    private Long splitContractId; // 拆分子合同ID
-
-    private String securityLevel; // 保密度
-    private String reportFee; // 报告费
-    private String needReport; // 是否需要报告
-    private String periodType; // 服务周期类型
-    private String period; // 服务周期（工作日，服务周期类型为加急或特急时需要填写）
-    private String otherReportUse; // 其他报告用途
-    private String erpContactGbId; // ERP委托联系人ID
-    private String entrustOrgEmail; // 委托邮箱
-
-    @JSONField(format = "yyyy-MM-dd")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime projCreatedTime; // 用于修改
-
-    private String labInnerNo; // 实验室内部编号
-
-    @Override
-    public Long getId() {
-        return id;
+    public String getReportAssignStatus() {
+        return this.reportAssignStatus;
     }
 
-    @Override
+    public void setReportAssignStatus(String reportAssignStatus) {
+        this.reportAssignStatus = reportAssignStatus;
+    }
+
+    public LocalDateTime getReportIssueTime() {
+        return this.reportIssueTime;
+    }
+
+    public void setReportIssueTime(LocalDateTime reportIssueTime) {
+        this.reportIssueTime = reportIssueTime;
+    }
+
+    public Long getId() {
+        return this.id;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
 
     public String getProjNo() {
-        return projNo;
+        return this.projNo;
     }
 
     public void setProjNo(String projNo) {
@@ -295,7 +245,7 @@ import java.time.LocalDate;
     }
 
     public String getProjName() {
-        return projName;
+        return this.projName;
     }
 
     public void setProjName(String projName) {
@@ -303,7 +253,7 @@ import java.time.LocalDate;
     }
 
     public String getTestOrgId() {
-        return testOrgId;
+        return this.testOrgId;
     }
 
     public void setTestOrgId(String testOrgId) {
@@ -311,7 +261,7 @@ import java.time.LocalDate;
     }
 
     public String getTestOrgName() {
-        return testOrgName;
+        return this.testOrgName;
     }
 
     public void setTestOrgName(String testOrgName) {
@@ -319,7 +269,7 @@ import java.time.LocalDate;
     }
 
     public String getProjAddress() {
-        return projAddress;
+        return this.projAddress;
     }
 
     public void setProjAddress(String projAddress) {
@@ -327,7 +277,7 @@ import java.time.LocalDate;
     }
 
     public String getEntrustOrgId() {
-        return entrustOrgId;
+        return this.entrustOrgId;
     }
 
     public void setEntrustOrgId(String entrustOrgId) {
@@ -335,7 +285,7 @@ import java.time.LocalDate;
     }
 
     public String getEntrustOrgName() {
-        return entrustOrgName;
+        return this.entrustOrgName;
     }
 
     public void setEntrustOrgName(String entrustOrgName) {
@@ -343,7 +293,7 @@ import java.time.LocalDate;
     }
 
     public String getEntrustOrgAddress() {
-        return entrustOrgAddress;
+        return this.entrustOrgAddress;
     }
 
     public void setEntrustOrgAddress(String entrustOrgAddress) {
@@ -351,7 +301,7 @@ import java.time.LocalDate;
     }
 
     public Long getBizCategoryId() {
-        return bizCategoryId;
+        return this.bizCategoryId;
     }
 
     public void setBizCategoryId(Long bizCategoryId) {
@@ -359,7 +309,7 @@ import java.time.LocalDate;
     }
 
     public String getBizCategoryCode() {
-        return bizCategoryCode;
+        return this.bizCategoryCode;
     }
 
     public void setBizCategoryCode(String bizCategoryCode) {
@@ -367,7 +317,7 @@ import java.time.LocalDate;
     }
 
     public String getTaskNo() {
-        return taskNo;
+        return this.taskNo;
     }
 
     public void setTaskNo(String taskNo) {
@@ -375,7 +325,7 @@ import java.time.LocalDate;
     }
 
     public LocalDateTime getRegistDate() {
-        return registDate;
+        return this.registDate;
     }
 
     public void setRegistDate(LocalDateTime registDate) {
@@ -383,7 +333,7 @@ import java.time.LocalDate;
     }
 
     public String getReportOrgId() {
-        return reportOrgId;
+        return this.reportOrgId;
     }
 
     public void setReportOrgId(String reportOrgId) {
@@ -391,7 +341,7 @@ import java.time.LocalDate;
     }
 
     public LocalDateTime getAcceptDate() {
-        return acceptDate;
+        return this.acceptDate;
     }
 
     public void setAcceptDate(LocalDateTime acceptDate) {
@@ -399,7 +349,7 @@ import java.time.LocalDate;
     }
 
     public LocalDateTime getCompleDate() {
-        return compleDate;
+        return this.compleDate;
     }
 
     public void setCompleDate(LocalDateTime compleDate) {
@@ -407,7 +357,7 @@ import java.time.LocalDate;
     }
 
     public String getMonitorCategory() {
-        return monitorCategory;
+        return this.monitorCategory;
     }
 
     public void setMonitorCategory(String monitorCategory) {
@@ -415,7 +365,7 @@ import java.time.LocalDate;
     }
 
     public LocalDateTime getEntrustDate() {
-        return entrustDate;
+        return this.entrustDate;
     }
 
     public void setEntrustDate(LocalDateTime entrustDate) {
@@ -423,7 +373,7 @@ import java.time.LocalDate;
     }
 
     public LocalDateTime getSendDate() {
-        return sendDate;
+        return this.sendDate;
     }
 
     public void setSendDate(LocalDateTime sendDate) {
@@ -431,7 +381,7 @@ import java.time.LocalDate;
     }
 
     public String getSendType() {
-        return sendType;
+        return this.sendType;
     }
 
     public void setSendType(String sendType) {
@@ -439,7 +389,7 @@ import java.time.LocalDate;
     }
 
     public String getEntrustMethod() {
-        return entrustMethod;
+        return this.entrustMethod;
     }
 
     public void setEntrustMethod(String entrustMethod) {
@@ -447,7 +397,7 @@ import java.time.LocalDate;
     }
 
     public String getSubPackageDesc() {
-        return subPackageDesc;
+        return this.subPackageDesc;
     }
 
     public void setSubPackageDesc(String subPackageDesc) {
@@ -455,7 +405,7 @@ import java.time.LocalDate;
     }
 
     public String getNdCal() {
-        return ndCal;
+        return this.ndCal;
     }
 
     public void setNdCal(String ndCal) {
@@ -463,7 +413,7 @@ import java.time.LocalDate;
     }
 
     public String getStatus() {
-        return status;
+        return this.status;
     }
 
     public void setStatus(String status) {
@@ -471,7 +421,7 @@ import java.time.LocalDate;
     }
 
     public String getCancleReason() {
-        return cancleReason;
+        return this.cancleReason;
     }
 
     public void setCancleReason(String cancleReason) {
@@ -479,7 +429,7 @@ import java.time.LocalDate;
     }
 
     public String getSendUsername() {
-        return sendUsername;
+        return this.sendUsername;
     }
 
     public void setSendUsername(String sendUsername) {
@@ -487,7 +437,7 @@ import java.time.LocalDate;
     }
 
     public LocalDateTime getTaskDate() {
-        return taskDate;
+        return this.taskDate;
     }
 
     public void setTaskDate(LocalDateTime taskDate) {
@@ -495,7 +445,7 @@ import java.time.LocalDate;
     }
 
     public String getTestContent() {
-        return testContent;
+        return this.testContent;
     }
 
     public void setTestContent(String testContent) {
@@ -503,7 +453,7 @@ import java.time.LocalDate;
     }
 
     public String getQcReq() {
-        return qcReq;
+        return this.qcReq;
     }
 
     public void setQcReq(String qcReq) {
@@ -511,7 +461,7 @@ import java.time.LocalDate;
     }
 
     public String getRemark() {
-        return remark;
+        return this.remark;
     }
 
     public void setRemark(String remark) {
@@ -519,7 +469,7 @@ import java.time.LocalDate;
     }
 
     public String getEntrustOrgContact() {
-        return entrustOrgContact;
+        return this.entrustOrgContact;
     }
 
     public void setEntrustOrgContact(String entrustOrgContact) {
@@ -527,7 +477,7 @@ import java.time.LocalDate;
     }
 
     public String getEntrustOrgPhone() {
-        return entrustOrgPhone;
+        return this.entrustOrgPhone;
     }
 
     public void setEntrustOrgPhone(String entrustOrgPhone) {
@@ -535,7 +485,7 @@ import java.time.LocalDate;
     }
 
     public String getTestOrgAddress() {
-        return testOrgAddress;
+        return this.testOrgAddress;
     }
 
     public void setTestOrgAddress(String testOrgAddress) {
@@ -543,7 +493,7 @@ import java.time.LocalDate;
     }
 
     public String getTestOrgContact() {
-        return testOrgContact;
+        return this.testOrgContact;
     }
 
     public void setTestOrgContact(String testOrgContact) {
@@ -551,7 +501,7 @@ import java.time.LocalDate;
     }
 
     public String getTestOrgPhone() {
-        return testOrgPhone;
+        return this.testOrgPhone;
     }
 
     public void setTestOrgPhone(String testOrgPhone) {
@@ -559,7 +509,7 @@ import java.time.LocalDate;
     }
 
     public String getMonitorOrgName() {
-        return monitorOrgName;
+        return this.monitorOrgName;
     }
 
     public void setMonitorOrgName(String monitorOrgName) {
@@ -567,7 +517,7 @@ import java.time.LocalDate;
     }
 
     public String getSource() {
-        return source;
+        return this.source;
     }
 
     public void setSource(String source) {
@@ -575,7 +525,7 @@ import java.time.LocalDate;
     }
 
     public LocalDateTime getNextTaskDate() {
-        return nextTaskDate;
+        return this.nextTaskDate;
     }
 
     public void setNextTaskDate(LocalDateTime nextTaskDate) {
@@ -583,7 +533,7 @@ import java.time.LocalDate;
     }
 
     public LocalDateTime getStartTime() {
-        return startTime;
+        return this.startTime;
     }
 
     public void setStartTime(LocalDateTime startTime) {
@@ -591,7 +541,7 @@ import java.time.LocalDate;
     }
 
     public LocalDateTime getEndTime() {
-        return endTime;
+        return this.endTime;
     }
 
     public void setEndTime(LocalDateTime endTime) {
@@ -599,7 +549,7 @@ import java.time.LocalDate;
     }
 
     public String getCron() {
-        return cron;
+        return this.cron;
     }
 
     public void setCron(String cron) {
@@ -607,7 +557,7 @@ import java.time.LocalDate;
     }
 
     public String getMobileId() {
-        return mobileId;
+        return this.mobileId;
     }
 
     public void setMobileId(String mobileId) {
@@ -615,7 +565,7 @@ import java.time.LocalDate;
     }
 
     public String getProjNode() {
-        return projNode;
+        return this.projNode;
     }
 
     public void setProjNode(String projNode) {
@@ -623,7 +573,7 @@ import java.time.LocalDate;
     }
 
     public String getSample() {
-        return sample;
+        return this.sample;
     }
 
     public void setSample(String sample) {
@@ -631,7 +581,7 @@ import java.time.LocalDate;
     }
 
     public String getUrgent() {
-        return urgent;
+        return this.urgent;
     }
 
     public void setUrgent(String urgent) {
@@ -639,7 +589,7 @@ import java.time.LocalDate;
     }
 
     public String getBeforeStatus() {
-        return beforeStatus;
+        return this.beforeStatus;
     }
 
     public void setBeforeStatus(String beforeStatus) {
@@ -647,7 +597,7 @@ import java.time.LocalDate;
     }
 
     public String getReportEditUserId() {
-        return reportEditUserId;
+        return this.reportEditUserId;
     }
 
     public void setReportEditUserId(String reportEditUserId) {
@@ -655,7 +605,7 @@ import java.time.LocalDate;
     }
 
     public String getReportEditUserName() {
-        return reportEditUserName;
+        return this.reportEditUserName;
     }
 
     public void setReportEditUserName(String reportEditUserName) {
@@ -663,7 +613,7 @@ import java.time.LocalDate;
     }
 
     public String getQcCheck() {
-        return qcCheck;
+        return this.qcCheck;
     }
 
     public void setQcCheck(String qcCheck) {
@@ -671,7 +621,7 @@ import java.time.LocalDate;
     }
 
     public String getCancelReason() {
-        return cancelReason;
+        return this.cancelReason;
     }
 
     public void setCancelReason(String cancelReason) {
@@ -679,7 +629,7 @@ import java.time.LocalDate;
     }
 
     public String getSchemeReportLineId() {
-        return schemeReportLineId;
+        return this.schemeReportLineId;
     }
 
     public void setSchemeReportLineId(String schemeReportLineId) {
@@ -687,7 +637,7 @@ import java.time.LocalDate;
     }
 
     public String getTestOrgEmail() {
-        return testOrgEmail;
+        return this.testOrgEmail;
     }
 
     public void setTestOrgEmail(String testOrgEmail) {
@@ -695,7 +645,7 @@ import java.time.LocalDate;
     }
 
     public String getTestOrgFixedPhone() {
-        return testOrgFixedPhone;
+        return this.testOrgFixedPhone;
     }
 
     public void setTestOrgFixedPhone(String testOrgFixedPhone) {
@@ -703,7 +653,7 @@ import java.time.LocalDate;
     }
 
     public String getProjectQcUserId() {
-        return projectQcUserId;
+        return this.projectQcUserId;
     }
 
     public void setProjectQcUserId(String projectQcUserId) {
@@ -711,7 +661,7 @@ import java.time.LocalDate;
     }
 
     public String getProjectQcUserName() {
-        return projectQcUserName;
+        return this.projectQcUserName;
     }
 
     public void setProjectQcUserName(String projectQcUserName) {
@@ -719,7 +669,7 @@ import java.time.LocalDate;
     }
 
     public String getProjectSampleOrgId() {
-        return projectSampleOrgId;
+        return this.projectSampleOrgId;
     }
 
     public void setProjectSampleOrgId(String projectSampleOrgId) {
@@ -727,7 +677,7 @@ import java.time.LocalDate;
     }
 
     public String getSampleOrgName() {
-        return sampleOrgName;
+        return this.sampleOrgName;
     }
 
     public void setSampleOrgName(String sampleOrgName) {
@@ -735,7 +685,7 @@ import java.time.LocalDate;
     }
 
     public String getProjectSampleById() {
-        return projectSampleById;
+        return this.projectSampleById;
     }
 
     public void setProjectSampleById(String projectSampleById) {
@@ -743,7 +693,7 @@ import java.time.LocalDate;
     }
 
     public String getProjectSampleByName() {
-        return projectSampleByName;
+        return this.projectSampleByName;
     }
 
     public void setProjectSampleByName(String projectSampleByName) {
@@ -751,7 +701,7 @@ import java.time.LocalDate;
     }
 
     public LocalDateTime getProjectSampleBeginDate() {
-        return projectSampleBeginDate;
+        return this.projectSampleBeginDate;
     }
 
     public void setProjectSampleBeginDate(LocalDateTime projectSampleBeginDate) {
@@ -759,7 +709,7 @@ import java.time.LocalDate;
     }
 
     public LocalDateTime getProjectSampleEndDate() {
-        return projectSampleEndDate;
+        return this.projectSampleEndDate;
     }
 
     public void setProjectSampleEndDate(LocalDateTime projectSampleEndDate) {
@@ -767,7 +717,7 @@ import java.time.LocalDate;
     }
 
     public String getCreatedById() {
-        return createdById;
+        return this.createdById;
     }
 
     public void setCreatedById(String createdById) {
@@ -775,7 +725,7 @@ import java.time.LocalDate;
     }
 
     public String getCreatedByName() {
-        return createdByName;
+        return this.createdByName;
     }
 
     public void setCreatedByName(String createdByName) {
@@ -783,7 +733,7 @@ import java.time.LocalDate;
     }
 
     public LocalDateTime getCreatedTime() {
-        return createdTime;
+        return this.createdTime;
     }
 
     public void setCreatedTime(LocalDateTime createdTime) {
@@ -791,7 +741,7 @@ import java.time.LocalDate;
     }
 
     public String getCreatedByOrgId() {
-        return createdByOrgId;
+        return this.createdByOrgId;
     }
 
     public void setCreatedByOrgId(String createdByOrgId) {
@@ -799,7 +749,7 @@ import java.time.LocalDate;
     }
 
     public String getCreatedByOrgName() {
-        return createdByOrgName;
+        return this.createdByOrgName;
     }
 
     public void setCreatedByOrgName(String createdByOrgName) {
@@ -807,71 +757,71 @@ import java.time.LocalDate;
     }
 
     public String getDescription() {
-        return description;
+        return this.description;
     }
 
     public void setDescription(String description) {
         this.description = description;
     }
 
-	public String getOrgId() {
-		return orgId;
-	}
+    public String getOrgId() {
+        return this.orgId;
+    }
 
-	public void setOrgId(String orgId) {
-		this.orgId = orgId;
-	}
+    public void setOrgId(String orgId) {
+        this.orgId = orgId;
+    }
 
-	public String getOrgName() {
-		return orgName;
-	}
+    public String getOrgName() {
+        return this.orgName;
+    }
 
-	public void setOrgName(String orgName) {
-		this.orgName = orgName;
-	}
+    public void setOrgName(String orgName) {
+        this.orgName = orgName;
+    }
 
     public String getKeepDescription() {
-        return keepDescription;
+        return this.keepDescription;
     }
 
     public String getRemainSampleDeal() {
-        return remainSampleDeal;
+        return this.remainSampleDeal;
     }
 
     public String getTestsMethod() {
-        return testsMethod;
+        return this.testsMethod;
     }
 
     public String getServicePay() {
-        return servicePay;
+        return this.servicePay;
     }
 
     public String getInvoiceTitle() {
-        return invoiceTitle;
+        return this.invoiceTitle;
     }
 
     public String getTaxNo() {
-        return taxNo;
+        return this.taxNo;
     }
 
     public String getPayType() {
-        return payType;
+        return this.payType;
     }
 
     public String getReportFormat() {
-        return reportFormat;
+        return this.reportFormat;
     }
 
     public String getReportNum() {
-        return reportNum;
+        return this.reportNum;
     }
 
     public String getReportGrantTime() {
-        return reportGrantTime;
+        return this.reportGrantTime;
     }
 
     public String getReportSendType() {
-        return reportSendType;
+        return this.reportSendType;
     }
 
     public void setKeepDescription(String keepDescription) {
@@ -919,7 +869,7 @@ import java.time.LocalDate;
     }
 
     public LocalDateTime getProspectDate() {
-        return prospectDate;
+        return this.prospectDate;
     }
 
     public void setProspectDate(LocalDateTime prospectDate) {
@@ -927,7 +877,7 @@ import java.time.LocalDate;
     }
 
     public String getOpinion() {
-        return opinion;
+        return this.opinion;
     }
 
     public void setOpinion(String opinion) {
@@ -935,7 +885,7 @@ import java.time.LocalDate;
     }
 
     public String getSafetyMeasures() {
-        return safetyMeasures;
+        return this.safetyMeasures;
     }
 
     public void setSafetyMeasures(String safetyMeasures) {
@@ -943,7 +893,7 @@ import java.time.LocalDate;
     }
 
     public String getMonitorCondition() {
-        return monitorCondition;
+        return this.monitorCondition;
     }
 
     public void setMonitorCondition(String monitorCondition) {
@@ -951,7 +901,7 @@ import java.time.LocalDate;
     }
 
     public String getProspecRemark() {
-        return prospecRemark;
+        return this.prospecRemark;
     }
 
     public void setProspecRemark(String prospecRemark) {
@@ -959,7 +909,7 @@ import java.time.LocalDate;
     }
 
     public String getProspect() {
-        return prospect;
+        return this.prospect;
     }
 
     public void setProspect(String prospect) {
@@ -967,7 +917,7 @@ import java.time.LocalDate;
     }
 
     public String getTestCycle() {
-        return testCycle;
+        return this.testCycle;
     }
 
     public void setTestCycle(String testCycle) {
@@ -975,7 +925,7 @@ import java.time.LocalDate;
     }
 
     public String getReportDeliveryWay() {
-        return reportDeliveryWay;
+        return this.reportDeliveryWay;
     }
 
     public void setReportDeliveryWay(String reportDeliveryWay) {
@@ -983,7 +933,7 @@ import java.time.LocalDate;
     }
 
     public String getPackMethod() {
-        return packMethod;
+        return this.packMethod;
     }
 
     public void setPackMethod(String packMethod) {
@@ -991,7 +941,7 @@ import java.time.LocalDate;
     }
 
     public String getRequiredSamptime() {
-        return requiredSamptime;
+        return this.requiredSamptime;
     }
 
     public void setRequiredSamptime(String requiredSamptime) {
@@ -999,15 +949,23 @@ import java.time.LocalDate;
     }
 
     public String getOrderNum() {
-        return orderNum;
+        return this.orderNum;
     }
 
     public void setOrderNum(String orderNum) {
         this.orderNum = orderNum;
     }
 
+    public Long getSampleOrderCount() {
+        return this.sampleOrderCount;
+    }
+
+    public void setSampleOrderCount(Long sampleOrderCount) {
+        this.sampleOrderCount = sampleOrderCount;
+    }
+
     public Long getErpGbId() {
-        return erpGbId;
+        return this.erpGbId;
     }
 
     public void setErpGbId(Long erpGbId) {
@@ -1015,7 +973,7 @@ import java.time.LocalDate;
     }
 
     public Long getErpReviewId() {
-        return erpReviewId;
+        return this.erpReviewId;
     }
 
     public void setErpReviewId(Long erpReviewId) {
@@ -1023,7 +981,7 @@ import java.time.LocalDate;
     }
 
     public String getReportAptitude() {
-        return reportAptitude;
+        return this.reportAptitude;
     }
 
     public void setReportAptitude(String reportAptitude) {
@@ -1031,7 +989,7 @@ import java.time.LocalDate;
     }
 
     public String getReportUse() {
-        return reportUse;
+        return this.reportUse;
     }
 
     public void setReportUse(String reportUse) {
@@ -1039,7 +997,7 @@ import java.time.LocalDate;
     }
 
     public String getPretreatment() {
-        return pretreatment;
+        return this.pretreatment;
     }
 
     public void setPretreatment(String pretreatment) {
@@ -1047,7 +1005,7 @@ import java.time.LocalDate;
     }
 
     public String getNeedQcReport() {
-        return needQcReport;
+        return this.needQcReport;
     }
 
     public void setNeedQcReport(String needQcReport) {
@@ -1055,7 +1013,7 @@ import java.time.LocalDate;
     }
 
     public String getQcReportType() {
-        return qcReportType;
+        return this.qcReportType;
     }
 
     public void setQcReportType(String qcReportType) {
@@ -1063,7 +1021,7 @@ import java.time.LocalDate;
     }
 
     public String getNeedSplitReport() {
-        return needSplitReport;
+        return this.needSplitReport;
     }
 
     public void setNeedSplitReport(String needSplitReport) {
@@ -1071,7 +1029,7 @@ import java.time.LocalDate;
     }
 
     public String getSubcontractSupplier() {
-        return subcontractSupplier;
+        return this.subcontractSupplier;
     }
 
     public void setSubcontractSupplier(String subcontractSupplier) {
@@ -1079,7 +1037,7 @@ import java.time.LocalDate;
     }
 
     public String getReportEnName() {
-        return reportEnName;
+        return this.reportEnName;
     }
 
     public void setReportEnName(String reportEnName) {
@@ -1087,7 +1045,7 @@ import java.time.LocalDate;
     }
 
     public String getReportCnName() {
-        return reportCnName;
+        return this.reportCnName;
     }
 
     public void setReportCnName(String reportCnName) {
@@ -1095,7 +1053,7 @@ import java.time.LocalDate;
     }
 
     public String getReportEnAddress() {
-        return reportEnAddress;
+        return this.reportEnAddress;
     }
 
     public void setReportEnAddress(String reportEnAddress) {
@@ -1103,7 +1061,7 @@ import java.time.LocalDate;
     }
 
     public String getReportCnAddress() {
-        return reportCnAddress;
+        return this.reportCnAddress;
     }
 
     public void setReportCnAddress(String reportCnAddress) {
@@ -1111,7 +1069,7 @@ import java.time.LocalDate;
     }
 
     public String getTestingLab() {
-        return testingLab;
+        return this.testingLab;
     }
 
     public void setTestingLab(String testingLab) {
@@ -1119,7 +1077,7 @@ import java.time.LocalDate;
     }
 
     public String getTestMethodAssigner() {
-        return testMethodAssigner;
+        return this.testMethodAssigner;
     }
 
     public void setTestMethodAssigner(String testMethodAssigner) {
@@ -1127,7 +1085,7 @@ import java.time.LocalDate;
     }
 
     public String getMergeReport() {
-        return mergeReport;
+        return this.mergeReport;
     }
 
     public void setMergeReport(String mergeReport) {
@@ -1135,7 +1093,7 @@ import java.time.LocalDate;
     }
 
     public String getReportPostAddress() {
-        return reportPostAddress;
+        return this.reportPostAddress;
     }
 
     public void setReportPostAddress(String reportPostAddress) {
@@ -1143,7 +1101,7 @@ import java.time.LocalDate;
     }
 
     public String getAddressee() {
-        return addressee;
+        return this.addressee;
     }
 
     public void setAddressee(String addressee) {
@@ -1151,7 +1109,7 @@ import java.time.LocalDate;
     }
 
     public String getDetectPurpose() {
-        return detectPurpose;
+        return this.detectPurpose;
     }
 
     public void setDetectPurpose(String detectPurpose) {
@@ -1159,7 +1117,7 @@ import java.time.LocalDate;
     }
 
     public String getRecipientPhone() {
-        return recipientPhone;
+        return this.recipientPhone;
     }
 
     public void setRecipientPhone(String recipientPhone) {
@@ -1167,7 +1125,7 @@ import java.time.LocalDate;
     }
 
     public String getErpOrderNumber() {
-        return erpOrderNumber;
+        return this.erpOrderNumber;
     }
 
     public void setErpOrderNumber(String erpOrderNumber) {
@@ -1175,7 +1133,7 @@ import java.time.LocalDate;
     }
 
     public String getReportTitle() {
-        return reportTitle;
+        return this.reportTitle;
     }
 
     public void setReportTitle(String reportTitle) {
@@ -1183,7 +1141,7 @@ import java.time.LocalDate;
     }
 
     public Long getSplitContractId() {
-        return splitContractId;
+        return this.splitContractId;
     }
 
     public void setSplitContractId(Long splitContractId) {
@@ -1191,7 +1149,7 @@ import java.time.LocalDate;
     }
 
     public String getSecurityLevel() {
-        return securityLevel;
+        return this.securityLevel;
     }
 
     public void setSecurityLevel(String securityLevel) {
@@ -1199,7 +1157,7 @@ import java.time.LocalDate;
     }
 
     public String getReportFee() {
-        return reportFee;
+        return this.reportFee;
     }
 
     public void setReportFee(String reportFee) {
@@ -1207,7 +1165,7 @@ import java.time.LocalDate;
     }
 
     public String getNeedReport() {
-        return needReport;
+        return this.needReport;
     }
 
     public void setNeedReport(String needReport) {
@@ -1215,7 +1173,7 @@ import java.time.LocalDate;
     }
 
     public String getPeriodType() {
-        return periodType;
+        return this.periodType;
     }
 
     public void setPeriodType(String periodType) {
@@ -1223,7 +1181,7 @@ import java.time.LocalDate;
     }
 
     public String getPeriod() {
-        return period;
+        return this.period;
     }
 
     public void setPeriod(String period) {
@@ -1231,7 +1189,7 @@ import java.time.LocalDate;
     }
 
     public String getOtherReportUse() {
-        return otherReportUse;
+        return this.otherReportUse;
     }
 
     public void setOtherReportUse(String otherReportUse) {
@@ -1239,7 +1197,7 @@ import java.time.LocalDate;
     }
 
     public String getErpContactGbId() {
-        return erpContactGbId;
+        return this.erpContactGbId;
     }
 
     public void setErpContactGbId(String erpContactGbId) {
@@ -1247,7 +1205,7 @@ import java.time.LocalDate;
     }
 
     public String getEntrustOrgEmail() {
-        return entrustOrgEmail;
+        return this.entrustOrgEmail;
     }
 
     public void setEntrustOrgEmail(String entrustOrgEmail) {
@@ -1255,7 +1213,7 @@ import java.time.LocalDate;
     }
 
     public LocalDateTime getProjCreatedTime() {
-        return projCreatedTime;
+        return this.projCreatedTime;
     }
 
     public void setProjCreatedTime(LocalDateTime projCreatedTime) {
@@ -1263,173 +1221,161 @@ import java.time.LocalDate;
     }
 
     public String getLabInnerNo() {
-        return labInnerNo;
+        return this.labInnerNo;
     }
 
     public void setLabInnerNo(String labInnerNo) {
         this.labInnerNo = labInnerNo;
     }
 
-    private String projAmount;
-    private Long sampleOrderCount;
-    private Long subcontractorId;
-    private String projType;
-    private LocalDate requiredCompleteDate;
-    @JSONField(format = "yyyy-MM-dd")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime reportIssueTime;
-    private String testProjectName;
-    private String businessUserId;
-    private String businessUserName;
-    private String minSampleDuration;
-    private Long year;
-    @JSONField(format = "yyyy-MM-dd")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate toReportEditDate;
-    private String reportAssignStatus;
-    private String projectType;
-    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime firstIssueDateTime;
-    @NotNull(defaultValue="0")
-    private String projectPrice;
-    private String folderRemark;
-    private String projSection;
-    private String customerSource;
-    private String remarkOne;
-    private String remarkTwo;
-    @NotNull(defaultValue="0")
-    private String amountDeterm;
-
-    public String getReportAssignStatus() {
-        return this.reportAssignStatus;
-    }
-    public void setReportAssignStatus(String reportAssignStatus) {
-        this.reportAssignStatus = reportAssignStatus;
-    }
-    public LocalDateTime getReportIssueTime() {
-        return this.reportIssueTime;
-    }
-    public void setReportIssueTime(LocalDateTime reportIssueTime) {
-        this.reportIssueTime = reportIssueTime;
-    }
-    public Long getSampleOrderCount() {
-        return this.sampleOrderCount;
-    }
-    public void setSampleOrderCount(Long sampleOrderCount) {
-        this.sampleOrderCount = sampleOrderCount;
-    }
     public Long getSubcontractorId() {
         return this.subcontractorId;
     }
+
     public void setSubcontractorId(Long subcontractorId) {
         this.subcontractorId = subcontractorId;
     }
+
     public String getProjType() {
         return this.projType;
     }
+
     public void setProjType(String projType) {
         this.projType = projType;
     }
+
     public String getProjAmount() {
         return this.projAmount;
     }
+
     public void setProjAmount(String projAmount) {
         this.projAmount = projAmount;
     }
+
     public LocalDate getRequiredCompleteDate() {
         return this.requiredCompleteDate;
     }
+
     public void setRequiredCompleteDate(LocalDate requiredCompleteDate) {
         this.requiredCompleteDate = requiredCompleteDate;
     }
+
     public String getTestProjectName() {
         return this.testProjectName;
     }
+
     public void setTestProjectName(String testProjectName) {
         this.testProjectName = testProjectName;
     }
+
     public String getBusinessUserId() {
         return this.businessUserId;
     }
+
     public void setBusinessUserId(String businessUserId) {
         this.businessUserId = businessUserId;
     }
+
     public String getBusinessUserName() {
         return this.businessUserName;
     }
+
     public void setBusinessUserName(String businessUserName) {
         this.businessUserName = businessUserName;
     }
+
     public String getMinSampleDuration() {
         return this.minSampleDuration;
     }
+
     public void setMinSampleDuration(String minSampleDuration) {
         this.minSampleDuration = minSampleDuration;
     }
+
     public Long getYear() {
         return this.year;
     }
+
     public void setYear(Long year) {
         this.year = year;
     }
+
     public LocalDate getToReportEditDate() {
         return this.toReportEditDate;
     }
+
     public void setToReportEditDate(LocalDate toReportEditDate) {
         this.toReportEditDate = toReportEditDate;
     }
+
     public String getProjectType() {
         return this.projectType;
     }
+
     public void setProjectType(String projectType) {
         this.projectType = projectType;
     }
+
     public LocalDateTime getFirstIssueDateTime() {
         return this.firstIssueDateTime;
     }
+
     public void setFirstIssueDateTime(LocalDateTime firstIssueDateTime) {
         this.firstIssueDateTime = firstIssueDateTime;
     }
+
     public String getProjectPrice() {
         return this.projectPrice;
     }
+
     public void setProjectPrice(String projectPrice) {
         this.projectPrice = projectPrice;
     }
+
     public String getFolderRemark() {
         return this.folderRemark;
     }
+
     public void setFolderRemark(String folderRemark) {
         this.folderRemark = folderRemark;
     }
+
     public String getProjSection() {
         return this.projSection;
     }
+
     public void setProjSection(String projSection) {
         this.projSection = projSection;
     }
+
     public String getCustomerSource() {
         return this.customerSource;
     }
+
     public void setCustomerSource(String customerSource) {
         this.customerSource = customerSource;
     }
+
     public String getRemarkOne() {
         return this.remarkOne;
     }
+
     public void setRemarkOne(String remarkOne) {
         this.remarkOne = remarkOne;
     }
+
     public String getRemarkTwo() {
         return this.remarkTwo;
     }
+
     public void setRemarkTwo(String remarkTwo) {
         this.remarkTwo = remarkTwo;
     }
+
     public String getAmountDeterm() {
         return this.amountDeterm;
     }
+
     public void setAmountDeterm(String amountDeterm) {
         this.amountDeterm = amountDeterm;
     }

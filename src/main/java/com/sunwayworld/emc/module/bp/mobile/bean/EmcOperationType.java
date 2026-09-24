@@ -5,7 +5,7 @@ import java.util.Arrays;
 /**
  * @author zhengxy@sunwayworld.com 2019年11月19日
  */
-    public enum EmcOperationType {
+public enum EmcOperationType {
     /** 操作类型 */
     EQUIPT("equipt", "仪器设备"),
     EQUIPT_TEST_METHOD("equiptTestMethod", "测试关联仪器"),
@@ -25,7 +25,7 @@ import java.util.Arrays;
     ITEM("item", "分析项"),
     ITEMGROUP("itemGroup", "分析项组"),
     GROUPITEM("groupItem", "分析项组分析项"),
-    CONTAINER("container","容器组"),
+    CONTAINER("container", "容器组"),
     CALIBRATION("calibration", "仪器校准"),
     EQUIPTCATEGORY("equiptCategory", "仪器类型"),
     UNIT("unit", "单位"),
@@ -40,7 +40,7 @@ import java.util.Arrays;
     EQUIPT_TEST_ITEM("equiptTestItem", "仪器采集分析项对照表"),
     CAPACITY_ITEM_GROUP("capacityItemGroup", "单位能力库分析项组"),
     CAPACITY_ITEM("capacityItem", "单位能力库分析项"),
-    RELATED_TEST_METHOD("relatedTestMethod", "关联测试方法");
+    RELATED_TEST_METHOD("relatedTestMethod", "关联测试");
 
     private String type;
     private String desc;
@@ -61,5 +61,4 @@ import java.util.Arrays;
     public static EmcOperationType getOperationType(String type) {
         return Arrays.stream(values()).filter(p -> p.getType().equals(type)).findAny().orElse(null);
     }
-
 }

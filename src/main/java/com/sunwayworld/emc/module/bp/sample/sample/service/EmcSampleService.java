@@ -54,6 +54,10 @@ public interface EmcSampleService extends GenericService<EmcSampleBean, Long>, G
 
     void batchInputOrderTaskResult(RestJsonWrapperBean wrapper);
 
+    void batchUpdateFileBizCategory(RestJsonWrapperBean wrapper);
+
+    Page<EmcSampleBean> selectAssignSamplePagination(RestJsonWrapperBean wrapper);
+
     Page<EmcOrderTaskBean> selectOrderTaskBySample(RestJsonWrapperBean wrapper);
     
     void bizUndo(RestJsonWrapperBean wrapper);

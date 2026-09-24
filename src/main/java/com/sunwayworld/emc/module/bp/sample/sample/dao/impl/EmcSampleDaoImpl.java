@@ -57,5 +57,8 @@ public class EmcSampleDaoImpl extends MybatisDaoSupport<EmcSampleBean, Long>impl
     public List<Map<String, Object>> selectTodoSampleOrderReceiptList(MapperParameter parameter) {
         return getMapper().selectTodoSampleOrderReceiptList(parameter);
     }
+
+    @Override
+    public List<Map<String, Object>> selectAssignSampleList(MapperParameter parameter) { return getMapper().selectAssignSampleList(parameter); }
     
 }

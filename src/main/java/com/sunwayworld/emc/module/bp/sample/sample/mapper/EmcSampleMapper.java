@@ -25,4 +25,6 @@ public interface EmcSampleMapper extends GenericMapper<Long> {
     List<Map<String, Object>> selectTodoSampleList(MapperParameter parameter);
 
     List<Map<String, Object>> selectTodoSampleOrderReceiptList(MapperParameter parameter);
+
+    List<Map<String, Object>> selectAssignSampleList(MapperParameter parameter);
 }

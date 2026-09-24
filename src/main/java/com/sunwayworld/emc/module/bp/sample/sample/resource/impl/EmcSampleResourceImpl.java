@@ -154,4 +154,10 @@ public class EmcSampleResourceImpl implements EmcSampleResource {
     public void acceptedUndo(RestJsonWrapperBean wrapper) {
         getService().acceptedUndo(wrapper);
     }
+
+    @Override
+    public void batchUpdateFileBizCategory(RestJsonWrapperBean wrapper) { getService().batchUpdateFileBizCategory(wrapper); }
+
+    @Override
+    public Page<EmcSampleBean> selectAssignSamplePagination(RestJsonWrapperBean wrapper) { return getService().selectAssignSamplePagination(wrapper); }
 }

@@ -25,4 +25,6 @@ public interface EmcSampleDao extends GenericDao<EmcSampleBean, Long> {
     List<Map<String, Object>> selectTodoSampleList(MapperParameter parameter);
 
     List<Map<String, Object>> selectTodoSampleOrderReceiptList(MapperParameter parameter);
+
+    List<Map<String, Object>> selectAssignSampleList(MapperParameter parameter);
 }

@@ -86,6 +86,8 @@ import com.sunwayworld.framework.utils.ObjectUtils;
 import com.sunwayworld.framework.utils.StringUtils;
 import com.sunwayworld.framework.validator.data.annotation.ValidateDataWith;
 import com.sunwayworld.module.mdm.user.bean.CoreUserBean;
+import com.sunwayworld.module.item.file.bean.CoreFileBean;
+import com.sunwayworld.module.item.file.service.CoreFileService;
 import com.sunwayworld.module.sys.bpmn.bean.CoreBpmnCommentBean;
 import com.sunwayworld.module.sys.bpmn.bean.CoreBpmnInstanceStatusDTO;
 import com.sunwayworld.module.sys.bpmn.diagram.ProcessStatus;
@@ -140,6 +142,10 @@ public class EmcSampleServiceImpl implements EmcSampleService {
 
     @Autowired
     private EmcRunService runService;
+
+    @Autowired
+    @Lazy
+    private CoreFileService coreFileService;
 
     @Autowired
     @Lazy
@@ -1665,5 +1671,18 @@ public class EmcSampleServiceImpl implements EmcSampleService {
         MapperParameter parameter = wrapper.extractMapFilter();
         PageRowBounds rowBounds = wrapper.extractPageRowBounds();
         return selectPagination(() -> getDao().selectTodoSampleOrderReceiptList(parameter), rowBounds);
+    }
+
+    @Override
+    public Page<EmcSampleBean> selectAssignSamplePagination(RestJsonWrapperBean wrapper) {
+        MapperParameter parameter = wrapper.extractMapFilter();
+        PageRowBounds rowBounds = wrapper.extractPageRowBounds();
+        return selectPagination(() -> getDao().selectAssignSampleList(parameter), rowBounds);
+    }
+
+    @Override
+    public void batchUpdateFileBizCategory(RestJsonWrapperBean wrapper) {
+        List<CoreFileBean> files = wrapper.parse(CoreFileBean.class, 0);
+        coreFileService.getDao().update(files, "bizCategory");
     }
 }

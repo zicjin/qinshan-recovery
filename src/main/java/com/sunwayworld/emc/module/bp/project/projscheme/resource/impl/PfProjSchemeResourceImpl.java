@@ -197,4 +197,11 @@ public class PfProjSchemeResourceImpl extends EmcProjSchemeResourceImpl implemen
         return 1L;
     }
 
+    @Override
+    @Log(value = "同步评价标准", type = LogType.UPDATE)
+    @RequestMapping(value = "/action/sync-eval-std", method = RequestMethod.POST)
+    public void syncEvalStd(RestJsonWrapperBean wrapper) {
+        getService().syncEvalStd(wrapper);
+    }
+
 }

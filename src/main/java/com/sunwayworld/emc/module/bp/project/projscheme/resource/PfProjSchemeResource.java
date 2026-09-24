@@ -57,4 +57,6 @@ public interface PfProjSchemeResource extends EmcProjSchemeResource {
 
     Long batchDelProjOrder(RestJsonWrapperBean wrapper);
 
+    void syncEvalStd(RestJsonWrapperBean wrapper);
+
 }

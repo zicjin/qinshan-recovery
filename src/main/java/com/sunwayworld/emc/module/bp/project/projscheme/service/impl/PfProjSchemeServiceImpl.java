@@ -8,6 +8,7 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
@@ -2585,4 +2586,60 @@ public class PfProjSchemeServiceImpl extends EmcProjSchemeServiceImpl implements
         this.projOrderService.getDao().deleteBy(deleteList, new String[0]);
     }
 
+
+    public void syncEvalStd(RestJsonWrapperBean wrapper) {
+        List<EmcProjSchemeBean> selectedSchemeList = wrapper.parse(EmcProjSchemeBean.class);
+        List<Long> selectedSchemeIdList = selectedSchemeList.stream().map(EmcProjSchemeBean::getId).collect(Collectors.toList());
+        List<EmcProjOrderBean> projOrderList = this.projOrderService.getDao().selectListByOneColumnValues(selectedSchemeIdList, "projSchemeId", new Order[0]);
+        List<EmcProjOrderBean> targetProjOrderList = projOrderList.stream().filter(po -> !ObjectUtils.isEmpty((Object)po.getIndexId())).collect(Collectors.toList());
+        if (targetProjOrderList.isEmpty()) {
+            return;
+        }
+        List<Long> capacityItemGroupIdList = targetProjOrderList.stream().map(EmcProjOrderBean::getItemGroupId).distinct().collect(Collectors.toList());
+        List<EmcCapacityItemGroupBean> capacityItemGroupList = this.capacityItemGroupService.getDao().selectListByOneColumnValues(capacityItemGroupIdList, "id", new Order[0]);
+        List<Long> targetTestMethodIdList = capacityItemGroupList.stream().map(EmcCapacityItemGroupBean::getTestMethodId).distinct().collect(Collectors.toList());
+        List<String> indexIdList = targetProjOrderList.stream().filter(order -> !ObjectUtils.isEmpty((Object)order.getIndexId())).map(EmcProjOrderBean::getIndexId).distinct().collect(Collectors.toList());
+        List<EmcIndexSetBean> indexSetList = indexIdList.isEmpty() ? Collections.<EmcIndexSetBean>emptyList() : this.indexSetService.selectListByFilter(SearchFilter.instance().match("INDEXID", indexIdList).filter(MatchPattern.OR), new Order[0]);
+        List<Long> indexItemIdList = indexSetList.stream().map(EmcIndexSetBean::getIndexItemId).distinct().collect(Collectors.toList());
+        List<EmcIndexTestItemBean> indexTestItemList = indexItemIdList.isEmpty() ? Collections.<EmcIndexTestItemBean>emptyList() : this.indexTestItemService.selectListByFilter(SearchFilter.instance().match("INDEXITEMID", indexItemIdList).filter(MatchPattern.OR), new Order[0]);
+        List<Long> schemeIdList = targetProjOrderList.stream().map(EmcProjOrderBean::getProjSchemeId).distinct().collect(Collectors.toList());
+        List<EmcProjSchemeBean> targetSchemeList = selectedSchemeList.stream().filter(scheme -> schemeIdList.contains(scheme.getId())).collect(Collectors.toList());
+        List<String> folderNoList = targetSchemeList.stream().map(EmcProjSchemeBean::getFolderNo).collect(Collectors.toList());
+        List<EmcFolderBean> folderList = this.folderService.getDao().selectListByOneColumnValues(folderNoList, "folderNo", Arrays.asList("id", "folderNo"), new Order[0]);
+        List<Long> folderIdList = folderList.stream().map(EmcFolderBean::getId).collect(Collectors.toList());
+        List<EmcOrderTaskBean> orderTaskList = this.orderTaskService.selectListByFilter(SearchFilter.instance().match("folderId", folderIdList).filter(MatchPattern.OR).match("testMethodId", targetTestMethodIdList).filter(MatchPattern.OR), new Order[0]);
+        List<EmcOrderTaskBean> targetTaskList = orderTaskList.stream().collect(Collectors.collectingAndThen(Collectors.toCollection(() -> new TreeSet<EmcOrderTaskBean>(Comparator.comparing(EmcOrderTaskBean::getId))), ArrayList::new));
+        List<Long> targetTaskIdList = targetTaskList.stream().map(EmcOrderTaskBean::getId).distinct().collect(Collectors.toList());
+        List<EmcOrderTaskResultBean> taskResultList = this.orderTaskResultService.getDao().selectListByOneColumnValues(targetTaskIdList, "orderTaskId", Arrays.asList("id", "folderId", "orderTaskId", "itemId"), new Order[0]);
+        ArrayList<EmcOrderTaskBean> updateTaskList = new ArrayList();
+        ArrayList<EmcOrderTaskResultBean> updateResultList = new ArrayList();
+        targetSchemeList.forEach(scheme -> {
+            EmcFolderBean curFolder = folderList.stream().filter(folder -> StringUtils.equals((String)folder.getFolderNo(), (String)scheme.getFolderNo())).findFirst().orElse(null);
+            if (Objects.isNull((Object)curFolder)) {
+                return;
+            }
+            List<EmcProjOrderBean> curProjOrderList = targetProjOrderList.stream().filter(po -> ObjectUtils.equals((Object)scheme.getId(), (Object)po.getProjSchemeId())).collect(Collectors.toList());
+            curProjOrderList.forEach(projOrder -> {
+                Long testMethodId = capacityItemGroupList.stream().filter(cig -> ObjectUtils.equals((Object)projOrder.getItemGroupId(), (Object)cig.getId())).map(EmcCapacityItemGroupBean::getTestMethodId).findFirst().orElse(null);
+                List<EmcIndexSetBean> curIndexSetList = indexSetList.stream().filter(e -> ObjectUtils.equals((Object)e.getIndexId(), (Object)projOrder.getIndexId())).collect(Collectors.toList());
+                List<Long> curIndexItemIdList = curIndexSetList.stream().map(EmcIndexSetBean::getIndexItemId).distinct().collect(Collectors.toList());
+                List<EmcIndexTestItemBean> curIndexTestItemList = indexTestItemList.stream().filter(e -> curIndexItemIdList.contains(e.getIndexItemId())).collect(Collectors.toList());
+                List<Long> curItemIdList = curIndexTestItemList.stream().map(EmcIndexTestItemBean::getItemId).distinct().collect(Collectors.toList());
+                targetTaskList.stream().filter(task -> ObjectUtils.equals((Object)task.getFolderId(), (Object)curFolder.getId()) && ObjectUtils.equals((Object)testMethodId, (Object)task.getTestMethodId())).forEach(task -> {
+                    task.setIndexCategoryId(projOrder.getIndexCategoryId());
+                    task.setIndexId(projOrder.getIndexId());
+                    updateTaskList.add(task);
+                    List<EmcOrderTaskResultBean> curResultList = taskResultList.stream().filter(r -> ObjectUtils.equals((Object)r.getOrderTaskId(), (Object)task.getId()) && curItemIdList.contains(r.getItemId())).collect(Collectors.toList());
+                    curResultList.forEach(r -> curIndexTestItemList.stream().filter(ti -> ObjectUtils.equals((Object)r.getItemId(), (Object)ti.getItemId())).findFirst().ifPresent(ti -> curIndexSetList.stream().filter(is -> ObjectUtils.equals((Object)is.getIndexItemId(), (Object)ti.getIndexItemId())).findFirst().ifPresent(is -> {
+                        r.setIndexLowLimit(is.getIndexLowLimit());
+                        r.setIndexHighLimit(is.getIndexHighLimit());
+                        r.setIndexLimitUnit(is.getUnit());
+                        updateResultList.add(r);
+                    })));
+                });
+            });
+        });
+        this.orderTaskService.getDao().fastUpdate(updateTaskList, new String[]{"indexCategoryId", "indexId"});
+        this.orderTaskResultService.getDao().fastUpdate(updateResultList, new String[]{"IndexLowLimit", "IndexHighLimit", "IndexLimitUnit"});
+    }
 }

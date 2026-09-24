@@ -132,4 +132,22 @@ public class PfSampleResourceImpl extends EmcSampleResourceImpl implements PfSam
         return getService().exportOriginalRecordExcelZip(wrapper);
     }
 
+    @Log(value = "现场仪器采集", type = LogType.INSERT)
+    @RequestMapping(value = "/equipt-collect", method = RequestMethod.POST)
+    public void equiptCollect(RestJsonWrapperBean wrapper) {
+        getService().equiptCollect(wrapper);
+    }
+
+    @Log(value = "取消样品交接", type = LogType.UPDATE)
+    @RequestMapping(value = "/action/undo-handsample", method = RequestMethod.POST)
+    public void undoHandSample(RestJsonWrapperBean wrapper) {
+        getService().undoHandSample(wrapper);
+    }
+
+    @Log(value = "采样审核撤回", type = LogType.UPDATE)
+    @RequestMapping(value = "/action/with-draw", method = RequestMethod.POST)
+    public void withDraw(RestJsonWrapperBean wrapper) {
+        getService().withDraw(wrapper);
+    }
+
 }

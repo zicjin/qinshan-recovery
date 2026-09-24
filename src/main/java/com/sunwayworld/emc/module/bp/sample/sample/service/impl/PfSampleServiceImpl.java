@@ -27,9 +27,11 @@ import com.sunwayworld.framework.io.file.FilePathManager;
 import com.sunwayworld.framework.utils.*;
 import com.sunwayworld.framework.database.sql.Order;
 import com.sunwayworld.framework.exception.FileException;
+import com.sunwayworld.framework.exception.InvalidDataException;
 import com.sunwayworld.module.item.file.bean.CoreFileBean;
 import com.sunwayworld.module.item.file.service.CoreFileService;
 import com.sunwayworld.module.item.file.manager.CoreFileManager;
+import com.sunwayworld.module.item.file.utils.CoreFileUtils;
 import com.sunwayworld.module.sys.code.bean.CoreCodeBean;
 import com.sunwayworld.module.sys.code.service.CoreCodeService;
 import com.sunwayworld.module.sys.constant.bean.CoreConstantBean;
@@ -56,6 +58,8 @@ import com.sunwayworld.emc.module.bp.bp.service.EmcOrderTaskLogService;
 import com.sunwayworld.emc.module.bp.bp.service.EmcOrderTaskResultService;
 import com.sunwayworld.emc.module.bp.bp.service.EmcOrderTaskService;
 import com.sunwayworld.emc.module.bp.delivery.bean.EmcDeliveryBean;
+import com.sunwayworld.emc.module.bp.auditrecord.bean.EmcAuditRecordBean;
+import com.sunwayworld.emc.module.bp.auditrecord.service.EmcAuditRecordService;
 import com.sunwayworld.emc.module.bp.delivery.service.EmcDeliveryService;
 import com.sunwayworld.emc.module.bp.order.orderretain.bean.EmcOrderRetainBean;
 import com.sunwayworld.emc.module.bp.order.orderretain.service.EmcOrderRetainService;
@@ -129,6 +133,9 @@ public class PfSampleServiceImpl extends EmcSampleServiceImpl implements PfSampl
     @Autowired
     @Lazy
     private EmcReportService reportService;
+
+    @Autowired
+    private EmcAuditRecordService sampleAuditRecordService;
 
     @Autowired
     @Lazy
@@ -1803,4 +1810,118 @@ public class PfSampleServiceImpl extends EmcSampleServiceImpl implements PfSampl
             throw new FileException((Throwable)e);
         }
     }
+    @Override
+    public void equiptCollect(RestJsonWrapperBean wrapper) {
+        List<Long> fileIdList = wrapper.parse(CoreFileBean.class).stream().map(CoreFileBean::getId).collect(Collectors.toList());
+        List<CoreFileBean> fileList = this.coreFileService.getDao().selectListByIds(fileIdList, new Order[0]);
+        String equiptDirString = ApplicationContextHelper.getEnvironment().getProperty("sunway.equipt.acq.scene.file.local.path");
+        if (StringUtils.isEmpty(equiptDirString)) {
+            return;
+        }
+        fileList.forEach(file -> {
+            File inputFile = CoreFileUtils.getLocalPath(file).toFile();
+            File newFile = new File(equiptDirString, file.getName());
+            try (java.io.FileInputStream fis = new java.io.FileInputStream(inputFile)) {
+                File parent = newFile.getParentFile();
+                if (parent != null && !parent.exists()) {
+                    parent.mkdirs();
+                }
+                if (newFile.exists()) {
+                    newFile.delete();
+                }
+                FileUtils.write(newFile, fis);
+            } catch (Exception e) {
+                throw new com.sunwayworld.framework.exception.FileException(e);
+            }
+        });
+    }
+
+    @Override
+    @Transactional
+    public void undoHandSample(RestJsonWrapperBean wrapper) {
+        List<EmcSampleBean> sampleList = wrapper.parse(EmcSampleBean.class);
+        if (sampleList.stream().anyMatch(e -> "2".equals(e.getAcceptStatus()))) {
+            throw new InvalidDataException("采样单已接收，无法撤回");
+        }
+        sampleList.forEach(sample -> {
+            sample.setHandStatus("draft");
+            sample.setExt$Item("RECEIVEDATE", null);
+            sample.setAcceptedDate(null);
+            sample.setAcceptedTime(null);
+        });
+        this.getDao().update(sampleList, "HANDSTATUS", "RECEIVEDATE", "ACCEPTEDDATE", "ACCEPTEDTIME");
+        List<Long> sampleIdList = sampleList.stream().map(EmcSampleBean::getId).collect(Collectors.toList());
+        List<EmcOrderBean> orderList = this.orderService.getDao().selectListByOneColumnValues(sampleIdList, "SAMPLEID", new Order[0]);
+        List<EmcOrderTaskBean> allOrderTaskList = this.orderTaskService.getDao().selectListByOneColumnValues(
+                orderList.stream().map(EmcOrderBean::getId).collect(Collectors.toList()), "ORDERID", new Order[0]);
+        List<EmcOrderTaskBean> analysisTasks = allOrderTaskList.stream()
+                .filter(task -> "analysis".equals(task.getAnalysisType())).collect(Collectors.toList());
+        if (!analysisTasks.isEmpty()) {
+            EmcOrderTaskBean updateTask = new EmcOrderTaskBean();
+            updateTask.setStatus("draft");
+            this.orderTaskService.getDao().updateByIds(updateTask,
+                    analysisTasks.stream().map(EmcOrderTaskBean::getId).collect(Collectors.toList()), "STATUS");
+        }
+        List<Long> containerIdList = allOrderTaskList.stream().map(EmcOrderTaskBean::getOrderContainerId)
+                .filter(id -> !ObjectUtils.isEmpty(id)).distinct().collect(Collectors.toList());
+        List<EmcOrderContainerBean> updateContainerList = new ArrayList<>();
+        containerIdList.forEach(id -> {
+            EmcOrderContainerBean container = new EmcOrderContainerBean();
+            container.setId(id);
+            container.setDeliveryId(null);
+            updateContainerList.add(container);
+        });
+        this.orderContainerService.getDao().update(updateContainerList, "deliveryId");
+    }
+
+    @Override
+    @Transactional
+    public void withDraw(RestJsonWrapperBean wrapper) {
+        List<EmcSampleBean> sampleList = wrapper.parse(EmcSampleBean.class);
+        sampleList.forEach(this::withDraw);
+    }
+
+    @Transactional
+    public void withDraw(EmcSampleBean sample) {
+        Long projId = sample.getProjId();
+        List<?> reportList = this.reportService.getDao().selectListByOneColumnValue(projId, "projId", new Order[0]);
+        if (reportList.stream().anyMatch(report -> !"draft".equals(((com.sunwayworld.emc.module.bp.report.report.bean.EmcReportBean) report).getStatus()))) {
+            throw new InvalidDataException("已出报告，无法撤回！");
+        }
+        List<Long> sampleIdList = Collections.singletonList(sample.getId());
+        String comment = "撤回";
+        this.undo(sampleIdList, comment);
+        this.startProcess(sampleIdList, comment);
+        this.completeTask(sampleIdList, comment);
+        EmcProjectBean project = new EmcProjectBean();
+        project.setId(projId);
+        project.setStatus("auditFinished");
+        this.projectService.getDao().update(project, "status");
+        EmcSampleBean updateSample = new EmcSampleBean();
+        updateSample.setId(sample.getId());
+        updateSample.setStatus("audit");
+        this.getDao().update(updateSample, "status");
+        List<EmcOrderTaskBean> taskList = this.orderTaskService.selectListByFilter(
+                SearchFilter.instance().match("sampleid", sample.getId()).filter(MatchPattern.SEQ)
+                        .match("AnalysisType", "sampling").filter(MatchPattern.SEQ), new Order[0]);
+        taskList.forEach(task -> task.setStatus("audit"));
+        this.orderTaskService.getDao().update(taskList, "status");
+        ProjectNodeUtils.updateNodes(Collections.singletonList(projId));
+        EmcAuditRecordBean audit = new EmcAuditRecordBean();
+        audit.setId(ApplicationContextHelper.getNextIdentity());
+        audit.setProjId(sample.getProjId());
+        audit.setProjNo(sample.getProjNo());
+        audit.setSampleId(sample.getId());
+        audit.setSampleNo(sample.getSampleNo());
+        audit.setComments(comment);
+        audit.setLogDesc("采样单:" + sample.getSampleNo());
+        audit.setBizCategory("sample");
+        audit.setStepCode("3");
+        audit.setAuditCategory("采样管理");
+        audit.setTaskName("报告编制");
+        audit.setOperateCategory(comment);
+        audit.setNextTaskName("采样审核");
+        this.sampleAuditRecordService.getDao().insert(audit);
+    }
+
 }

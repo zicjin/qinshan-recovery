@@ -35,4 +35,10 @@ public interface PfSampleService extends EmcSampleService {
     EmcSampleBean selectSampleRecordDetail(RestJsonWrapperBean wrapper);
 
     String exportOriginalRecordExcelZip(RestJsonWrapperBean wrapper);
+
+    void equiptCollect(RestJsonWrapperBean wrapper);
+
+    void undoHandSample(RestJsonWrapperBean wrapper);
+
+    void withDraw(RestJsonWrapperBean wrapper);
 }

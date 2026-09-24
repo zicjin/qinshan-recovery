@@ -190,7 +190,7 @@ public class EmcFileUtils {
         }
     }
 
-    private static String extractTextFromTextFile(File file) {
+    public static String extractTextFromTextFile(File file) {
         FileInputStream ins = null;
         BufferedInputStream bi = null;
         StringBuilder sb = new StringBuilder();

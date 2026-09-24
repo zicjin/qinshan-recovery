@@ -233,6 +233,8 @@ public class EmcEquiptAcqScriptServiceImpl implements EmcEquiptAcqScriptService 
             result = EmcFileUtils.extractTextFromPDF(file);
         } else if (EmcConstant.FILECATAEGORY_XLSX.equals(fileExtension) || EmcConstant.FILECATAEGORY_XLS.equals(fileExtension)) {
             result = EmcFileUtils.extractTextFromXlsx(file);
+        } else if ("lyd".equalsIgnoreCase(fileExtension)) {
+            result = EmcFileUtils.extractTextFromTextFile(file);
         } else {
             result = FileUtils.extractTextFromFile(file);
         }

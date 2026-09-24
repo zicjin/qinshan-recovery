@@ -75,7 +75,7 @@ public class PfSampleSubmitValidator implements DataValidator {
             List<EmcOrderTaskBean> orderTaskList = orderTaskService.selectListByFilter(SearchFilter.instance().match("ORDERID", orderIdList).filter(MatchPattern.OR)
                     .match("ANALYSISTYPE", "sampling").filter(MatchPattern.SEQ)
                     .match("SUBCONTRACTORID", null).filter(MatchPattern.SEQ)
-                    .match("QCCATEGORYCODE", "P-BLANK").filter(MatchPattern.DIFFER), wrapper);
+                    .match("QCCATEGORYCODE", Arrays.asList("P-BLANK", "P-YSKB")).filter(MatchPattern.DIFFER), wrapper);
 
             // ---------------------------------指标仪器前台提示数据 --------------------------start
             String equiptId = "";

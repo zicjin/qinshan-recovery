@@ -247,6 +247,10 @@ public class EmcEquiptAcqScriptServiceImpl implements EmcEquiptAcqScriptService 
         // 原始文本
         EmcEquiptAcqScriptBean script = selectDetail(id);
         String result = extractTextByFileId(fileId, script.getAnalysisWay());
+        if (ObjectUtils.equals(id, EmcConstant.EQUIPT_ACQ_SCRIPT_ID)) {
+            List<EmcEquiptAcqResultBean> sceneResultList = equiptAcqResultService.getSceneResultList(Collections.singletonList(result), id);
+            return new Pagination<>(sceneResultList);
+        }
 
         // 预处理结果
         List<EmcEasPreAnalyBean> scriptPreAnalyList = easPreAnalyService.selectListByFilter(SearchFilter.instance().match("SCRIPTID", id).filter(MatchPattern.EQ));

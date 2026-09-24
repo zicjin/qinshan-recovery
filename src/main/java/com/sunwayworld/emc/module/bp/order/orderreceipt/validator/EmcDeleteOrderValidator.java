@@ -15,6 +15,7 @@ import com.sunwayworld.framework.mybatis.mapper.MatchPattern;
 import com.sunwayworld.framework.mybatis.mapper.SearchFilter;
 import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;
 import com.sunwayworld.framework.utils.ArrayUtils;
+import com.sunwayworld.framework.utils.ObjectUtils;
 import com.sunwayworld.framework.validator.data.DataValidator;
 
 /**
@@ -45,6 +46,16 @@ public class EmcDeleteOrderValidator implements DataValidator {
         if (deleteOrderNoList.contains(minOrderNo)) {
             this.addConstraintViolation("EMC.MODULE.BP.SAMPLE.SAMPLES.TIP.CANNOT_DELETE_MIN_ORDER");
             return false;
+        }
+
+        List<EmcOrderBean> allOrderBeanList = orderService.getDao().selectListByOneColumnValues(folderIdList, "folderId");
+        for (Long folderId : folderIdList) {
+            List<EmcOrderBean> curOrderBeanList = allOrderBeanList.stream().filter(e -> ObjectUtils.equals(folderId, e.getFolderId())).collect(Collectors.toList());
+            List<EmcOrderBean> otherOrderBeanList = curOrderBeanList.stream().filter(e -> !deleteOrderNoList.contains(e.getOrderNo())).collect(Collectors.toList());
+            if (otherOrderBeanList.isEmpty()) {
+                addConstraintViolation("不能删除点位下所有样品");
+                return false;
+            }
         }
 
         return true;

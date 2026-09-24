@@ -51,4 +51,10 @@ public interface PfProjSchemeResource extends EmcProjSchemeResource {
 
     void moveProjOrder(RestJsonWrapperBean wrapper);
 
+    void delProjOrder(RestJsonWrapperBean wrapper);
+
+    void sortFolderNo(RestJsonWrapperBean wrapper);
+
+    Long batchDelProjOrder(RestJsonWrapperBean wrapper);
+
 }

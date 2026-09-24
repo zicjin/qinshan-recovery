@@ -175,4 +175,26 @@ public class PfProjSchemeResourceImpl extends EmcProjSchemeResourceImpl implemen
     public void moveProjOrder(RestJsonWrapperBean wrapper) {
         pfprojSchemeService.moveProjOrder(wrapper);
     }
+    @Override
+    @Log(value = "删除方案样品", type = LogType.UPDATE)
+    @RequestMapping(value = "/action/del-proj-order", method = RequestMethod.POST)
+    public void delProjOrder(RestJsonWrapperBean wrapper) {
+        getService().delProjOrder(wrapper);
+    }
+
+    @Override
+    @Log(value = "方案点位编号排序", type = LogType.UPDATE)
+    @RequestMapping(value = "/action/sort-folder-no", method = RequestMethod.POST)
+    public void sortFolderNo(RestJsonWrapperBean wrapper) {
+        getService().sortFolderNo(wrapper);
+    }
+
+    @Override
+    @Log(value = "批量删除方案样品", type = LogType.UPDATE)
+    @RequestMapping(value = "/action/batch-del-proj-order", method = RequestMethod.POST)
+    public Long batchDelProjOrder(RestJsonWrapperBean wrapper) {
+        getService().batchDelProjOrder(wrapper);
+        return 1L;
+    }
+
 }

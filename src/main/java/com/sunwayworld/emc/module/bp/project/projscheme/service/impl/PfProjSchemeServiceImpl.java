@@ -2543,4 +2543,46 @@ public class PfProjSchemeServiceImpl extends EmcProjSchemeServiceImpl implements
 
         return list;
     }
+    @Override
+    @Transactional
+    public void delProjOrder(RestJsonWrapperBean wrapper) {
+        this.projOrderService.delete(wrapper);
+    }
+
+    @Override
+    @Transactional
+    public void sortFolderNo(RestJsonWrapperBean wrapper) {
+        List<EmcProjSchemeBean> schemes = wrapper.parse(EmcProjSchemeBean.class);
+        if (schemes.isEmpty()) {
+            return;
+        }
+        String monitorTmplId = schemes.get(0).getMonitorTmplId();
+        EmcMonitorTmplBean monitorTmpl = this.monitorTmplService.selectById(monitorTmplId);
+        String orderCategoryCode = monitorTmpl == null ? "" : monitorTmpl.getExt$Item("ordercategorycode");
+        if (StringUtils.isEmpty(orderCategoryCode)) {
+            orderCategoryCode = "";
+        }
+        Long projId = schemes.get(0).getProjId();
+        EmcProjectBean project = this.projectService.selectById(projId);
+        String prefix = project.getProjNo() + orderCategoryCode;
+        schemes.sort(Comparator.comparing(EmcProjSchemeBean::getSortNum, Comparator.nullsLast(Long::compareTo)));
+        for (int i = 0; i < schemes.size(); i++) {
+            schemes.get(i).setFolderNo(prefix + String.format("%03d", i + 1));
+        }
+        this.getDao().update(schemes, "FOLDERNO");
+    }
+
+    @Override
+    @Transactional
+    public void batchDelProjOrder(RestJsonWrapperBean wrapper) {
+        List<EmcProjSchemeBean> schemes = wrapper.parse(EmcProjSchemeBean.class);
+        List<EmcProjOrderBean> orders = wrapper.parse(EmcProjOrderBean.class);
+        List<Long> schemeIds = schemes.stream().map(EmcProjSchemeBean::getId).distinct().collect(Collectors.toList());
+        List<Long> itemGroupIds = orders.stream().map(EmcProjOrderBean::getItemGroupId).distinct().collect(Collectors.toList());
+        List<EmcProjOrderBean> deleteList = this.projOrderService.selectListByFilter(
+                SearchFilter.instance().match("PROJSCHEMEID", schemeIds).filter(MatchPattern.OR)
+                        .match("ITEMGROUPID", itemGroupIds).filter(MatchPattern.OR), new Order[0]);
+        this.projOrderService.getDao().deleteBy(deleteList, new String[0]);
+    }
+
 }

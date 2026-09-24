@@ -32,7 +32,7 @@ import com.sunwayworld.emc.module.bp.bp.bean.EmcOrderBean;
 import com.sunwayworld.emc.module.bp.bp.bean.EmcOrderContainerBean;
 import com.sunwayworld.emc.module.bp.bp.bean.EmcOrderTaskBean;
 import com.sunwayworld.emc.module.bp.bp.bean.EmcOrderTaskResultBean;
-import com.sunwayworld.emc.module.bp.bp.service.EmcFolderService;
+import com.sunwayworld.emc.module.bp.bp.service.PfFolderService;
 import com.sunwayworld.emc.module.bp.bp.service.EmcOrderContainerService;
 import com.sunwayworld.emc.module.bp.bp.service.EmcOrderTaskLogService;
 import com.sunwayworld.emc.module.bp.bp.service.EmcOrderTaskResultService;
@@ -121,7 +121,7 @@ public class PfOrderServiceImpl extends EmcOrderServiceImpl implements PfOrderSe
 
     @Autowired
     @Lazy
-    private EmcFolderService folderService;
+    private PfFolderService folderService;
 
     @Autowired
     private EmcOrderItemGroupService orderItemGroupService;

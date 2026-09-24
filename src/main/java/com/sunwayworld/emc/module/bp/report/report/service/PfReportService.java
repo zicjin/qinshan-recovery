@@ -41,4 +41,14 @@ public interface PfReportService extends EmcReportService {
 	Page<EmcReportSendInfoBean> selectSendInfoPagination(RestJsonWrapperBean wrapper);
 
 	CoreFileBean composeProjectRunRecord(RestJsonWrapperBean wrapper);
+
+	Long viewNewReport(RestJsonWrapperBean wrapper);
+
+	Long projectUndo(RestJsonWrapperBean wrapper);
+
+	void seal(RestJsonWrapperBean wrapper);
+
+	void signIssuePdfIfRequired(CoreFileBean coreFile);
+
+	void editItem(RestJsonWrapperBean wrapper);
 }

@@ -33,6 +33,8 @@ public interface EmcMonitorTmplResource extends GenericResource<EmcMonitorTmplSe
 
     Page<EmcMonitorSchemeBean> selectSchemeDetectionChoosablePagination(RestJsonWrapperBean wrapper);
 
+    Page<EmcMonitorSchemeBean> selectPaginationGroupByTestMethod(RestJsonWrapperBean wrapper);
+
     public List<EmcMonitorSchemeBean> selectSchemeSelectableList();
 
     void editScheme(String id, String schemeName, RestJsonWrapperBean wrapper);

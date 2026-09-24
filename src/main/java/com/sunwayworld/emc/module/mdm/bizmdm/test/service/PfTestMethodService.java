@@ -29,4 +29,12 @@ public interface PfTestMethodService extends EmcTestMethodService {
     void copyDefaultQcTo(RestJsonWrapperBean wrapper);
 
     void syncTestId(RestJsonWrapperBean wrapper);
+
+    void beforeHandleCopyTo(RestJsonWrapperBean wrapper);
+
+    void scriptFileCopyTo(RestJsonWrapperBean wrapper);
+
+    void delQcIndex(RestJsonWrapperBean wrapper);
+
+    void delRevision(RestJsonWrapperBean wrapper);
 }

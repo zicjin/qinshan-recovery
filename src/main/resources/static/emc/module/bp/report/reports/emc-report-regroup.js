@@ -129,6 +129,8 @@ emcReport.regroupPage = {
             type : 'shuttleFrame',
             id : 'emc-report-regroup-ordertask-shuttle-frame',
             columns : emcReport.getReportOrderTaskShuttleFrameColumns(),
+            rightPage : false,
+            leftPage : false,
             onRendered : function() {
                 _this.shuttleFrame = this;
             },

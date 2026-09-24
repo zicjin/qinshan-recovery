@@ -509,7 +509,7 @@ emcSol.detailPage = {
             service: 'emcSolRecordExportTemplate'
         })).done(function (fileUri) {
             var fileUrl = IFM_CONTEXT + fileUri;
-            Gikam.download(fileUrl);
+            Gikam.emcDownloadFile(fileUrl);
         }).always(function () {
             Gikam.getLastModal().window.closeMask();
         });
@@ -544,7 +544,7 @@ emcSol.detailPage = {
                     })
                 ).done(function (result) {
                     if (result.url) {
-                        Gikam.download(result.url);
+                        Gikam.emcDownloadFile(result.url);
                     } else if (result.message) {
                         Gikam.alert(result.message);
                     }

@@ -73,6 +73,8 @@ public class EmcMonitorTmplBean extends AbstractInsertable<String> implements Ac
 
     private String monitorPointCategoryId;//监测点类型
 
+    private Long elnTmplId;//ELN模板Id
+
     public String getId() {
         return id;
     }
@@ -239,5 +241,13 @@ public class EmcMonitorTmplBean extends AbstractInsertable<String> implements Ac
 
     public void setMonitorPointCategoryId(String monitorPointCategoryId) {
         this.monitorPointCategoryId = monitorPointCategoryId;
+    }
+
+    public Long getElnTmplId() {
+        return elnTmplId;
+    }
+
+    public void setElnTmplId(Long elnTmplId) {
+        this.elnTmplId = elnTmplId;
     }
 }

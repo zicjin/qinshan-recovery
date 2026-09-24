@@ -2,8 +2,7 @@ emcRun.tempHumidityPage = {
 
     getGridParam : function() {
         var _this = this, 
-        columns = emcRun.getTempHumidityListColumns(), 
-        requestData = this.param;
+        columns = emcRun.getTempHumidityListColumns();
         this.param.single ? columns.unshift({
             radio : true
         }) : columns.unshift({
@@ -17,7 +16,7 @@ emcRun.tempHumidityPage = {
 	        requestData : {
 				id_DIFFER : _this.param.id,
 				runid_SEQ : _this.param.runId,
-	            orgId_SB : workspace.user.ext$.parentorgid,
+                org_filter : '1',
 	        },
             group : {
                 fields : [ "ext$.orderno"],

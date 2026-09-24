@@ -23,6 +23,14 @@
                   ) T
         <where>
             <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+            <!-- 筛选登录人的部门权限 -->
+            <if test="org_filter != null">
+                AND EXISTS (SELECT 1
+                              FROM T_CORE_USER_PERMISSION UP
+                             WHERE UP.PERMISSIONTYPEID = 'T_CORE_ORG'
+                               AND UP.TARGETID = T.ORGID
+                               AND UP.USERID = #{loginUser.id})
+            </if>
         </where>
         ORDER BY
         <choose>

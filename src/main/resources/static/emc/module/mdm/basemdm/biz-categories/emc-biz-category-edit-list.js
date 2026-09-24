@@ -1,11 +1,70 @@
 emcBizCategory.editPage = {
 
+    getBizClassGrid : function () {
+        var _this = this;
+        return {
+            type : 'grid',
+            id : 'emc-biz-class-edit-list-grid',
+            service : 'emcBizClassServiceImpl',
+            url : emcBizCategory.baseUrl + '/biz-class/queries',
+            columns : emcBizCategory.getBizClassEditListColumns(),
+            order : {
+                'sortNo' : 'asc',
+                'id' : 'desc',
+            },
+            onLoadSuccess : function(data) {
+                if (!Gikam.isEmpty(data)) {
+                    this.activeRowByIndex(0);
+                } else {
+                    Gikam.cleanCompData([ 'emc-biz-category-edit-list-grid' ]);
+                }
+            },
+            onRowActive : function(index, row) {
+                if (row) {
+                    Gikam.getAsyncComp('emc-biz-category-edit-list-grid').done(function(grid) {
+                        grid.refresh({
+                            url : emcBizCategory.baseUrl + '/queries',
+                            requestData : {
+                                bizClassId_SEQ : row.id,
+                            }
+                        });
+                    });
+                }
+            },
+            deleteFormatter : function(row) {
+                return row.bizName ||  row.bizCode|| row.id;
+            },
+            toolbar : [ {
+                type : 'button',
+                text : 'GIKAM.BUTTON.INSERT',
+                icon : 'add',
+                onClick : function() {
+                    Gikam.preInsert({
+                        modalTitle : 'EMC.MODULE.MDM.BASEMDM.BIZCATEGORYS.MODAL.ADD',
+                        fields : emcBizCategory.getBizClassFormFields(),
+                        url : emcBizCategory.baseUrl + '/biz-class',
+                        titleWidth : 100,
+                    }).done(function(id) {
+                        Gikam.getComp('emc-biz-class-edit-list-grid').refresh();
+                    });
+                }
+            }, {
+                type : 'button',
+                text : 'GIKAM.BUTTON.DELETE',
+                icon : 'remove',
+                onClick : function() {
+                    Gikam.getComp('emc-biz-class-edit-list-grid').deleteRows(emcBizCategory.baseUrl + '/biz-class',);
+                }
+            } ]
+        }
+    },
+
     getGridParam : function() {
         var _this = this;
         return {
             type : 'grid',
             id : 'emc-biz-category-edit-list-grid',
-            url : emcBizCategory.baseUrl + '/queries',
+            // url : emcBizCategory.baseUrl + '/queries',
             service : 'emcBizCategoryServiceImpl',
             columns : emcBizCategory.getEditListColumns(),
             checkOnActive : true,
@@ -18,20 +77,26 @@ emcBizCategory.editPage = {
                 }
             },
             onRowActive : function(index, row) {
-                _this.onTestActive(row);
+                // _this.onTestActive(row);
             },
             toolbar : [ {
                 type : 'button',
                 text : 'GIKAM.BUTTON.INSERT',
                 icon : 'add',
                 onClick : function() {
+                    var bizClassRow = Gikam.getComp('emc-biz-class-edit-list-grid').getActivedRow();
+                    if (Gikam.isEmpty(bizClassRow.id)) {
+                        Gikam.alert('GIKAM.TIP.CHOOSE_ONE_ITEM');
+                        return;
+                    }
                     Gikam.preInsert({
                         modalTitle : 'EMC.MODULE.MDM.BASEMDM.BIZCATEGORIES.MODAL.ADD',
                         titleWidth : 100,
                         fields : emcBizCategory.getBaseInfoFormFields(),
                         param : {
                             sample : '1',
-                            editMonitorInfo : '0'
+                            editMonitorInfo : '0',
+                            bizClassId : bizClassRow.id,
                         },
                         url : emcBizCategory.baseUrl
                     }).done(function(id) {
@@ -142,6 +207,10 @@ emcBizCategory.editPage = {
             center : {
                 items : [ _this.getBizCategoryProjGrid() ]
             },*/
+            north : {
+                height : '40%',
+                items : [ _this.getBizClassGrid() ]
+            },
             center : {
                 items : [ this.getGridParam() ]
             }

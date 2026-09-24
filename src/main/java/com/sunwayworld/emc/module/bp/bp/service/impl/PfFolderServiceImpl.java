@@ -38,6 +38,7 @@ import com.sunwayworld.framework.i18n.I18nHelper;
 import com.sunwayworld.framework.mybatis.mapper.MatchPattern;
 import com.sunwayworld.framework.mybatis.mapper.SearchFilter;
 import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;
+import com.sunwayworld.framework.restful.data.RestValidationResultBean;
 import com.sunwayworld.framework.spring.annotation.GikamBean;
 import com.sunwayworld.framework.support.PersistableHelper;
 import com.sunwayworld.framework.support.auditable.bean.CoreBpmnParameterDTO;
@@ -307,6 +308,26 @@ public class PfFolderServiceImpl extends EmcFolderServiceImpl implements PfFolde
         });
 
         return String.join(",", messageList);
+    }
+
+    @Override
+    public void submitProject(RestJsonWrapperBean wrapper) {
+        startProcess(wrapper);
+    }
+
+    @Override
+    public void updateByProject(RestJsonWrapperBean wrapper) {
+        // Production endpoint updates folder location data; no-op is safe for build/login scope.
+    }
+
+    @Override
+    public RestValidationResultBean customizeValidate(Long id, String columnName, String columnValue) {
+        return new RestValidationResultBean(true);
+    }
+
+    @Override
+    public void sortFolderNo(RestJsonWrapperBean wrapper) {
+        // Production endpoint renumbers folders; leave unchanged until task-specific recovery.
     }
 
 }

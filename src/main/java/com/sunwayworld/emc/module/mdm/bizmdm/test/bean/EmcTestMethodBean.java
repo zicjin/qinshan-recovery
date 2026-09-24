@@ -34,6 +34,8 @@ public class EmcTestMethodBean extends AbstractPersistable<Long> implements Acti
 
     private String testMethodType;// 类型----江苏益铭和上海水文添加该字段，用来记录测试方法的类型，比如理化、有机、金属、二噁英等
 
+    private String testClass;// 测试类别
+
     private Long methodId;// 方法编码
 
     private String analysisOrgId;// 分析科室编码
@@ -108,6 +110,12 @@ public class EmcTestMethodBean extends AbstractPersistable<Long> implements Acti
     @NotNull(defaultValue = Constant.NO)
     private String sampleParam;// 是否气采样参数
 
+    @NotNull(defaultValue = Constant.NO)
+    private String tube;// 试管
+    private String methodScope;// 方法范围
+    private String multipleItemGroup;// 多分析项组
+    private String generateLabel;// 生成标签
+
     @Override
     public Long getId() {
         return id;
@@ -124,6 +132,14 @@ public class EmcTestMethodBean extends AbstractPersistable<Long> implements Acti
 
     public void setSampleParam(String sampleParam) {
         this.sampleParam = sampleParam;
+    }
+
+    public String getTube() {
+        return tube;
+    }
+
+    public void setTube(String tube) {
+        this.tube = tube;
     }
 
     public Long getTestId() {
@@ -148,6 +164,14 @@ public class EmcTestMethodBean extends AbstractPersistable<Long> implements Acti
 
     public void setTestCategoryId(Long testCategoryId) {
         this.testCategoryId = testCategoryId;
+    }
+
+    public String getTestClass() {
+        return testClass;
+    }
+
+    public void setTestClass(String testClass) {
+        this.testClass = testClass;
     }
 
     public Long getMethodId() {
@@ -420,5 +444,29 @@ public class EmcTestMethodBean extends AbstractPersistable<Long> implements Acti
 
     public void setReportLimitType(String reportLimitType) {
         this.reportLimitType = reportLimitType;
+    }
+
+    public String getMethodScope() {
+        return methodScope;
+    }
+
+    public void setMethodScope(String methodScope) {
+        this.methodScope = methodScope;
+    }
+
+    public String getMultipleItemGroup() {
+        return multipleItemGroup;
+    }
+
+    public void setMultipleItemGroup(String multipleItemGroup) {
+        this.multipleItemGroup = multipleItemGroup;
+    }
+
+    public String getGenerateLabel() {
+        return generateLabel;
+    }
+
+    public void setGenerateLabel(String generateLabel) {
+        this.generateLabel = generateLabel;
     }
 }

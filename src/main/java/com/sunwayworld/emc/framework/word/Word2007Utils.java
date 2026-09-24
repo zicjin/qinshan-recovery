@@ -1,5 +1,6 @@
 package com.sunwayworld.emc.framework.word;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.math.BigInteger;
@@ -12,6 +13,8 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.IntStream;
+
+import javax.imageio.ImageIO;
 
 import org.apache.poi.util.Units;
 import org.apache.poi.xwpf.usermodel.Document;
@@ -53,6 +56,7 @@ import com.sunwayworld.framework.utils.StringUtils;
  * @author magh@sunwayworld.com 2019年12月6日
  *
  */
+@Deprecated
 public class Word2007Utils {
 
     public static final String DEFAULT_FONT_FAMILY = "宋体";
@@ -147,7 +151,10 @@ public class Word2007Utils {
                         }
                         if (picUrl != null) {
                             try {
-                                run.addPicture(new FileInputStream(picUrl), Document.PICTURE_TYPE_PNG, new File(picUrl).getName(), Units.toEMU(60), Units.toEMU(30)); // 100x50pixels
+                                BufferedImage image = ImageIO.read(new FileInputStream(picUrl));
+                                double srcWidth = image.getWidth() * 0.6;
+                                double srcHeight = image.getHeight() * 0.6;
+                                run.addPicture(new FileInputStream(picUrl), Document.PICTURE_TYPE_PNG, new File(picUrl).getName(), Units.toEMU(srcWidth), Units.toEMU(srcHeight)); // 100x50pixels
                             } catch (Exception ioe) {
                                 throw new FileException(ioe);
                             }
@@ -881,7 +888,6 @@ public class Word2007Utils {
                 String text = paragraph.getText();
                 if (text.indexOf(key) >= 0) {
                     document.removeBodyElement(document.getPosOfParagraph(paragraph));
-                    document.removeBodyElement(document.getPosOfParagraph(paragraphList.get(i)));
                 }
             }
         }

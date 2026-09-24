@@ -4,7 +4,19 @@ emcReport.sendInfoPage = {
         var _this = this;
         return {
             type : 'tab',
-            panels : [ {
+            panels : [  {
+                       title : '发送纸质报告',
+                       items : [ {
+                           type : 'form',
+                           url : Gikam.printf(emcReport.baseUrl + '/{projId}/report-send-info', {
+                               projId : _this.param.projId
+                           }),
+                           id : 'emc-report-send-info-paper-form',
+                           columns : 1,
+                           service : 'emcReportSendInfoServiceImpl',
+                           fields : emcReport.getPaperReportFormFields()
+                       } ]
+                   } ,{
                 title : '发送电子报告',
                 items : [ {
                     type : 'form',
@@ -16,19 +28,7 @@ emcReport.sendInfoPage = {
                     service : 'emcReportSendInfoServiceImpl',
                     fields : emcReport.getElectronReportFormFields()
                 } ]
-            }, {
-                title : '发送纸质报告',
-                items : [ {
-                    type : 'form',
-                    url : Gikam.printf(emcReport.baseUrl + '/{projId}/report-send-info', {
-                        projId : _this.param.projId
-                    }),
-                    id : 'emc-report-send-info-paper-form',
-                    columns : 1,
-                    service : 'emcReportSendInfoServiceImpl',
-                    fields : emcReport.getPaperReportFormFields()
-                } ]
-            } ]
+            },]
         }
     },
 
@@ -43,9 +43,31 @@ emcReport.sendInfoPage = {
                 let electForm = Gikam.getComp('emc-report-send-info-elec-form');
                 let paperForm = Gikam.getComp('emc-report-send-info-paper-form');
                 if (electForm.validate() && paperForm.validate()) {
+                    debugger;
                     let electData = electForm.getData();
                     let paperData = paperForm.getData();
-                    Gikam.getLastModal().close(Object.assign({}, electData, paperData));
+                   var grid = Gikam.getComp('emc-report-audit-list-grid');
+                        var selections = grid.getSelections();
+                        var updateData = selections.map(function (item) {
+                            return{
+                                projId: item.projId,
+                                username:paperData.ext$.entrustorgcontact,
+                                address: paperData.ext$.address,
+                                phone: paperData.ext$.phone,
+                                pic: paperData.ext$.pic,
+                                expressType: paperData.expressType,
+                                expressNo: paperData.expressNo,
+                                remark: paperData.remark,
+                            }
+                        });
+                        workspace.window.showMask();
+                        Gikam.put(emcReport.baseUrl + '/updateByProjectId', Gikam.getJsonWrapper({}, ['', updateData])).done(function () {
+                             Gikam.getLastModal().close(Object.assign({}, electData, paperData));
+                        }).always(function () {
+                            workspace.window.closeMask();
+                        });
+
+
                 }
             }
         }

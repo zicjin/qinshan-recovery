@@ -4,7 +4,9 @@ import com.sunwayworld.emc.module.mdm.bizmdm.method.bean.EmcMethodBean;
 import com.sunwayworld.emc.module.mdm.bizmdm.method.bean.EmcMethodVersionBean;
 import com.sunwayworld.emc.module.mdm.bizmdm.method.service.EmcMethodService;
 import com.sunwayworld.emc.module.mdm.bizmdm.method.service.EmcMethodVersionService;
+import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcItemGroupBean;
 import com.sunwayworld.framework.utils.CollectionUtils;
+import com.sunwayworld.framework.utils.NumberUtils;
 import com.sunwayworld.framework.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -18,6 +20,7 @@ import com.sunwayworld.emc.module.item.quotation.detectionfactor.dao.EmcDetectio
 import com.sunwayworld.emc.module.item.quotation.detectionfactor.bean.EmcDetectionfactorBean;
 import com.sunwayworld.emc.module.item.quotation.detectionfactor.service.EmcDetectionfactorService;
 import com.sunwayworld.framework.context.ApplicationContextHelper;
+import com.sunwayworld.framework.context.LocalContextHelper;
 import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;
 
 import java.util.ArrayList;
@@ -47,38 +50,41 @@ public class EmcDetectionfactorServiceImpl implements EmcDetectionfactorService 
     @Transactional
     @AuditTrailEntry(AuditTrailType.INSERT)
     public Long insert(RestJsonWrapperBean jsonWrapper) {
-        List<EmcDetectionfactorBean> emcDetectionfactors = jsonWrapper.parse(EmcDetectionfactorBean.class);
-        List<EmcDetectionfactorBean> allDetectionList = getDao().selectAll();
-        List<EmcDetectionfactorBean> insertDetectionList = new ArrayList<>();
-        List<EmcMethodVersionBean> allMethodVersionList = methodVersionService.selectAll();
-        List<EmcMethodBean> allMethodList = methodService.selectAll();
-        emcDetectionfactors.forEach(e -> {
-            if(allDetectionList.stream().noneMatch(m -> ObjectUtils.equals(m.getMonitorTmplGroupId(),e.getMonitorTmplGroupId())
-                    && ObjectUtils.equals(m.getTestId(),e.getTestId()) && ObjectUtils.equals(m.getMethodId(),e.getMethodId())
-                    && ObjectUtils.equals(m.getItemGroupName(),e.getItemGroupName()))){
-                List<EmcMethodVersionBean> methodVersion = allMethodVersionList.stream().filter(m -> ObjectUtils.equals(m.getMethodId(),e.getMethodId())).collect(Collectors.toList());
-                if(!ObjectUtils.isEmpty(e.getMethodName())){
-                    EmcMethodBean method = allMethodList.stream().filter(m -> ObjectUtils.equals(m.getMethodName(),e.getMethodName())).findFirst().orElse(null);
-                    if(!ObjectUtils.isEmpty(method)){
-                        e.setMethodId(method.getId());
-                    }
-                }
-                if(!CollectionUtils.isEmpty(methodVersion)){
-                    e.setTrialScope(methodVersion.get(0).getTrialScope());
-                }
-                e.setId(ApplicationContextHelper.getNextIdentity());
-                if(ObjectUtils.isEmpty(e.getAnalysisPrice())){
-                    e.setAnalysisPrice("0");
-                }
-                if(ObjectUtils.isEmpty(e.getSamplePrice())){
-                    e.setSamplePrice("0");
-                }
-                insertDetectionList.add(e);
-            }
+        EmcDetectionfactorBean insertBean = jsonWrapper.parseUnique(EmcDetectionfactorBean.class);
+        insertBean.setId(ApplicationContextHelper.getNextIdentity());
+        insertBean.setOrgId(LocalContextHelper.getLoginUser().getExt$Item("parentOrgId"));
+        getDao().insert(insertBean);
+        return insertBean.getId();
+    }
 
-        });
-        getDao().insert(insertDetectionList);
-        return emcDetectionfactors.get(0).getId();
+    @Override
+    @Transactional
+    @AuditTrailEntry(AuditTrailType.INSERT)
+    public Long insertByItemGroup(RestJsonWrapperBean wrapper) {
+        List<EmcItemGroupBean> emcItemGroupBeanList = wrapper.parse(EmcItemGroupBean.class);
+        if (!CollectionUtils.isEmpty(emcItemGroupBeanList)) {
+            List<EmcDetectionfactorBean> insertList = emcItemGroupBeanList.stream().map(e -> {
+                EmcDetectionfactorBean insertBean = new EmcDetectionfactorBean();
+                insertBean.setId(ApplicationContextHelper.getNextIdentity());
+                insertBean.setTestId(e.getTestId());
+                if (NumberUtils.isNumber(e.getExt$Item("methodId"))) {
+                    insertBean.setMethodId(NumberUtils.parseLong(e.getExt$Item("methodId")));
+                }
+                insertBean.setItemGroupId(e.getId());
+                insertBean.setTestName(e.getExt$Item("testname"));
+                insertBean.setMethodName(e.getExt$Item("methodname"));
+                insertBean.setItemGroupName(e.getItemGroup());
+                insertBean.setOrgId(LocalContextHelper.getLoginUser().getExt$Item("parentOrgId"));
+                if (NumberUtils.isNumber(e.getExt$Item("testcategoryid"))) {
+                    insertBean.setTestCategoryId(NumberUtils.parseLong(e.getExt$Item("testcategoryid")));
+                }
+                insertBean.setAnalysisPrice("0");
+                insertBean.setSamplePrice("0");
+                return insertBean;
+            }).collect(Collectors.toList());
+            getDao().insert(insertList);
+        }
+        return 1L;
     }
 
 }

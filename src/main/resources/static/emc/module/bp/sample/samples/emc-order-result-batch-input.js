@@ -12,7 +12,7 @@ emcSample.orderResultBatchInputPage = {
             type : 'grid',
             id : 'emc-sample-order-result-batch-input-list',
             service : 'emcOrderTaskServiceImpl',
-            url : '/secure/emc/module/bp/bp/order-tasks/queries/choosable',
+            url : '/secure/emc/module/bp/bp/order-tasks/queries/order-task',
             requestData : requestData,
             columns : columns,
             page : true,

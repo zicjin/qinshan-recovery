@@ -9,7 +9,7 @@ emcSamplenumber.editPage = {
             dbTable : 'T_EMC_SAMPLENUMBER',
             columns : emcSamplenumber.getEditListColumns(),
 	        requestData : {
-	            orgId_SB : workspace.user.ext$.parentorgid
+	            org_filter : '1',
 	        },
             onLoadSuccess : function(data) {
                 if (!Gikam.isEmpty(data)) {

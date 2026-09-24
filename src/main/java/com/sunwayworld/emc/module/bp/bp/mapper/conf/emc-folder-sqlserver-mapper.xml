@@ -5,7 +5,7 @@
     <select id="selectByCondition" parameterType="map" resultType="map">
         SELECT T.*
           FROM (SELECT A.*,
-                       CONCAT( A.FOLDERNO, '-', A.MONITORPOINTNAME ) AS FOLDERNAME,
+                       CONCAT(CONCAT(A.FOLDERNO , '-'), A.MONITORPOINTNAME) AS FOLDERNAME,
                        B.PROJNO,
                        B.PROJNAME,
                        B.TESTORGNAME,

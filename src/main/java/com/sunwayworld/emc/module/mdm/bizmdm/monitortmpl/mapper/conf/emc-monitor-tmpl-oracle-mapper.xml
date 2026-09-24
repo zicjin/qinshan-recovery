@@ -5,10 +5,13 @@
     <select id="selectByCondition" parameterType="map" resultType="map">
         SELECT T.* 
           FROM (SELECT A.*, 
-                       B.MONITORTMPLGROUP
+                       B.MONITORTMPLGROUP,
+        E.ELNTMPLNAME
                   FROM T_EMC_MONITOR_TMPL A
                   LEFT JOIN T_EMC_MONITOR_TMPL_GROUP B
-                    ON A.MONITORTMPLGROUPID = B.ID) T
+                    ON A.MONITORTMPLGROUPID = B.ID
+        LEFT JOIN T_CORE_ELN_TMPL E
+        ON A.ELNTMPLID = E.ID) T
         <where>
             <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
             <if test="target_unassigned != null">
@@ -22,6 +25,14 @@
                                      AND TAR_.${targetFilterColumn1} = #{targetFilterValue1}
                                  </if>
                                 ) 
+            </if>
+            <!-- 筛选登录人的部门权限 -->
+            <if test="org_filter != null">
+            AND EXISTS (SELECT 1
+                          FROM T_CORE_USER_PERMISSION UP
+                         WHERE UP.PERMISSIONTYPEID = 'T_CORE_ORG'
+                           AND UP.TARGETID = T.ORGID
+                           AND UP.USERID = #{loginUser.id})
             </if>
         </where>
         ORDER BY

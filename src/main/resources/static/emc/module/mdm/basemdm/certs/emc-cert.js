@@ -62,45 +62,67 @@ var emcCert = Gikam.getPageObject({
                     return true;
                 }
             },
-        }, {
-            field : 'expireDate',
-            title : 'T_EMC_CERT.EXPIREDATE',
-            type : 'date',
-            editor : true,
-            onBeforeEditorRender : function(row, field) {
-                if (row.status === 'auth') {
-                    return false;
-                } else {
-                    return true;
-                }
-            }
-        }, {
-            field : 'warningDays',
-            title : 'T_EMC_CERT.WARNINGDAYS',
-            editor : true,
-            validators : [ 'number', 'strLength[0,20]' ],
-            onBeforeEditorRender : function(row, field) {
-                if (row.status === 'auth') {
-                    return false;
-                } else {
-                    return true;
-                }
-            },
+        // }, {
+        //     field : 'expireDate',
+        //     title : 'T_EMC_CERT.EXPIREDATE',
+        //     type : 'date',
+        //     editor : true,
+        //     onBeforeEditorRender : function(row, field) {
+        //         if (row.status === 'auth') {
+        //             return false;
+        //         } else {
+        //             return true;
+        //         }
+        //     }
+        // }, {
+        //     field : 'warningDays',
+        //     title : 'T_EMC_CERT.WARNINGDAYS',
+        //     editor : true,
+        //     validators : [ 'number', 'strLength[0,20]' ],
+        //     onBeforeEditorRender : function(row, field) {
+        //         if (row.status === 'auth') {
+        //             return false;
+        //         } else {
+        //             return true;
+        //         }
+        //     },
         }, {
             field : 'status',
             title : 'T_EMC_CERT.STATUS',
             type : 'select',
-            search : true,
-            category : 'sys',
-            param : {
-                codeCategoryId : 'neworauth'
-            },
+            editor : true,
+            items : [{
+                text : '授权',
+                value : '授权'
+            }, {
+                text : '停用',
+                value : '停用'
+            }, ]
         }, ];
     },
 
     getCertTestMethodColumns : function() {
         return [ {
             checkbox : true
+        }, {
+            field : 'type',
+            title : '类别',
+            editor : true,
+            validators : [ 'strLength[0,22]' ],
+        },{
+            field : 'ext$.testcategoryid',
+            title : 'T_EMC_DATA_CORRELATION_ITEM.TESTCATEGORYID',
+            width : 130,
+            type : 'select',
+            category : 'testCategory'
+        },{
+            field : 'ext$.testclass',
+            title : 'T_EMC_TEST_METHOD.TESTCLASS',
+            type : 'select',
+            category : 'sys',
+            param : {
+                codeCategoryId : 'testClass',
+            },
         }, {
             field : 'ext$.testname',
             title : 'T_EMC_CERT_TEST_METHOD.TESTID'

@@ -59,7 +59,8 @@ public class EmcTestMethodOrderCategoryServiceImpl implements EmcTestMethodOrder
     public Page<EmcTestMethodOrderCategoryBean> selectMaintenancePage(RestJsonWrapperBean wrapper) {
         MapperParameter parameter = wrapper.extractMapFilter();
         PageRowBounds rowBounds = wrapper.extractPageRowBounds();
-        return selectPagination(() -> emcTestMethodOrderCategoryDao.selectMaintenancePage(parameter), rowBounds);
+        Page<EmcTestMethodOrderCategoryBean> orderCategoryPage = selectPagination(() -> emcTestMethodOrderCategoryDao.selectMaintenancePage(parameter), rowBounds);
+        return orderCategoryPage;
     }
 
 }

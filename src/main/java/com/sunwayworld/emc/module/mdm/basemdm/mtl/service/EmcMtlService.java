@@ -1,6 +1,7 @@
 package com.sunwayworld.emc.module.mdm.basemdm.mtl.service;
 
 import com.sunwayworld.emc.module.mdm.basemdm.mtl.bean.EmcMtlBean;
+import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;
 import com.sunwayworld.framework.support.base.service.GenericService;
 import com.sunwayworld.framework.support.choosable.service.GenericChoosableService;
 
@@ -13,4 +14,10 @@ public interface EmcMtlService extends GenericService<EmcMtlBean, String>,
                                        GenericChoosableService<EmcMtlBean, String> {
 
     void updateStockQty(String id);
+
+    void generateMtlNo(EmcMtlBean mtl);
+
+    String exportFile(RestJsonWrapperBean wrapper);
+
+    String exportGeneralFile(RestJsonWrapperBean wrapper);
 }

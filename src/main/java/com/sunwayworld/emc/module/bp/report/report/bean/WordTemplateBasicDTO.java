@@ -231,6 +231,10 @@ public class WordTemplateBasicDTO {
      * 报告名称
      */
     private String reportName;
+    /**
+     * 报告日期
+     */
+    private String reportDate;
 
     public String getReportNo() {
         return reportNo;
@@ -678,6 +682,14 @@ public class WordTemplateBasicDTO {
 
     public void setReportName(String reportName) {
         this.reportName = reportName;
+    }
+
+    public String getReportDate() {
+        return reportDate;
+    }
+
+    public void setReportDate(String reportDate) {
+        this.reportDate = reportDate;
     }
 
     @Override

@@ -52,6 +52,10 @@ public class EmcStockLogBean extends AbstractPersistable<Long> implements Insert
 
     private String createdByOrgName;// 制单人单位名称
 
+    private String returnById; // 退还人ID
+
+    private String returnByOrgId; // 退还人单位编码
+
     public Long getId() {
         return id;
     }
@@ -170,5 +174,21 @@ public class EmcStockLogBean extends AbstractPersistable<Long> implements Insert
 
     public void setCreatedByOrgName(String createdByOrgName) {
         this.createdByOrgName = createdByOrgName;
+    }
+
+    public String getReturnById() {
+        return returnById;
+    }
+
+    public void setReturnById(String returnById) {
+        this.returnById = returnById;
+    }
+
+    public String getReturnByOrgId() {
+        return returnByOrgId;
+    }
+
+    public void setReturnByOrgId(String returnByOrgId) {
+        this.returnByOrgId = returnByOrgId;
     }
 }

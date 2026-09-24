@@ -73,4 +73,10 @@ public class PfTestCapacityResourceImpl extends EmcTestCapacityResourceImpl impl
     public void refetchItem(RestJsonWrapperBean wrapper) {
         testCapacityService.refetchItem(wrapper);
     }
+
+    @Log(value = "重新获取分析项", type = LogType.INSERT)
+    @RequestMapping(value = "/action/refetch-item-by-test", method = RequestMethod.POST)
+    public Long refetchItemByTest(RestJsonWrapperBean wrapper) {
+        return testCapacityService.refetchItemByTest(wrapper);
+    }
 }

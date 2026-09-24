@@ -92,14 +92,14 @@ coreReportConfig.previewPage = {
                         });
                     }
                 },
-                onRendered : function() {
-                	var reportConfigLineId = this.getData().reportName;
-                	var reportUrl = Gikam.getReportUrl(reportConfigLineId);
-                    Gikam.getComp("emc-report-config-line-preview-iframe").refresh({
-                        src : reportUrl
-                    });
-                },
-            } ]
+            } ],
+            onRendered : function() {
+                var reportConfigLineId = this.getData().reportName;
+                var reportUrl = Gikam.getReportUrl(reportConfigLineId);
+                Gikam.getComp("emc-report-config-line-preview-iframe").refresh({
+                    src : reportUrl
+                });
+            },
         }
     },
 

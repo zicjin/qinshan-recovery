@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+
+<body>
+<style type="text/css">
+    .inputStyle {
+        border-style: none;
+        position: center;
+        border-radius: 7px;
+        display: inline-block;
+        width: 200px;
+        height: 60px;
+        background-color: mistyrose;
+    }
+</style>
+<input id="inputButton" value="保存" class="inputStyle" type="button" onclick="saveImage()">
+<input id="inputButton" value="重置" class="inputStyle" type="button" onclick="reset()">
+<br/>
+<canvas id="canvas" width="300" height="300" style="border: 1px solid red; background-color: white ;"></canvas>
+</body>
+
+<script type="text/javascript">
+    var myCanvas = document.getElementById("canvas");
+    var width = document.documentElement.clientWidth * 0.8;
+    var height = document.documentElement.clientHeight * 0.8;
+    myCanvas.width = width;
+    myCanvas.height = height;
+    var ctx = myCanvas.getContext("2d");
+    ctx.strokeStyle = "black";
+    ctx.fillStyle = "palevioletred";
+    //1.先做一个背景  矩形
+    ctx.fillStyle = "white";
+    ctx.fillRect(0, 0, width, height);
+    //变量
+    var oldX = 0;
+    var oldY = 0;
+    var onOff = false;
+    var linecolor = "black";
+    var cccc = 0;
+    var xd = 0;
+    //2响应3个鼠标事件，鼠标按下，鼠标移动鼠标弹起
+    //增加监听事件
+    function reset() {
+        ctx.clearRect(0, 0, width, height);
+    }
+
+    myCanvas.addEventListener("mousedown", down);
+    myCanvas.addEventListener("mousemove", move);
+    myCanvas.addEventListener("mouseup", up);
+
+    myCanvas.addEventListener("touchstart", function (e) {
+        e.stopPropagation();
+        e.preventDefault();
+        down(e.touches[0]);
+    }, false);
+    myCanvas.addEventListener("touchmove", function (e) {
+        e.stopPropagation();
+        e.preventDefault();
+        move(e.touches[0]);
+    }, false);
+    myCanvas.addEventListener("touchend", function (e) {
+        e.stopPropagation();
+        e.preventDefault();
+        up(e.touches[0]);
+    }, false);
+
+    function down(event) {
+        onOff = true;
+        var rect = myCanvas.getBoundingClientRect();
+        // 计算鼠标相对于画布的位置
+        oldX = event.pageX - rect.left;
+        oldY = event.pageY - rect.top;
+    }
+
+    function move(event) {
+        if (onOff == true) {
+            var rect = myCanvas.getBoundingClientRect();
+            // 计算鼠标相对于画布的位置
+            var newX = event.pageX - rect.left;
+            var newY = event.pageY - rect.top;
+            if (xd == 1) {
+                ctx.beginPath();
+                ctx.clearRect(oldX - 4, oldY - 4, newX - oldX + 10, newY - oldY + 10);
+                ctx.strokeRect(oldX, oldY, newX - oldX, newY - oldY);
+                ctx.lineCap = "round";
+                ctx.strokeStyle = linecolor;
+                ctx.lineWidth = 4;
+                ctx.stroke();
+            } else {
+                ctx.beginPath();
+                ctx.moveTo(oldX, oldY);
+                ctx.lineTo(newX, newY);
+                ctx.strokeStyle = linecolor;
+                ctx.lineWidth = 4;
+                ctx.lineCap = "round";
+                ctx.stroke();
+                oldX = newX;
+                oldY = newY;
+            }
+        }
+    }
+
+    function up() {
+        onOff = false;
+    }
+
+    function saveImage() {
+        var base64 = myCanvas.toDataURL("image/png", "1");
+        var Gikam = top.Gikam;
+        Gikam.post('/secure/emc/module/bp/project/projects/create-image', Gikam.getJsonWrapper({
+            base64: base64,
+        }, null)).done(function (data) {
+            Gikam.getJson(Gikam.printf(Gikam.IFM_CONTEXT + '/core/module/item/files/{id}', {
+                id: data
+            })).done(function (r) {
+                Gikam.getLastModal().close({
+                    downloadUrl: r.downloadUrl
+                });
+            });
+        });
+    }
+</script>
+
+</html>

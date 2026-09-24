@@ -14,6 +14,7 @@ emcTestMethod.itemCopyToChoosePage = {
             requestData : requestData,
             columns : columns,
             page : true,
+            filterOpen : true,
             toolbar : [ {
                 type : 'button',
                 text : 'GIKAM.BUTTON.CONFIRM',

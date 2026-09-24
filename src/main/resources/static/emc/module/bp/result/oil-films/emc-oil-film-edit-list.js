@@ -14,7 +14,7 @@ emcOilFilm.editPage = {
                 this.hideColumns([ 'projId']);
             },
 	        requestData : {
-	            orgId_SEQ : workspace.user.ext$.parentorgid,
+	            org_filter : '1',
 	        },
             toolbar : [ {
                 type : 'button',

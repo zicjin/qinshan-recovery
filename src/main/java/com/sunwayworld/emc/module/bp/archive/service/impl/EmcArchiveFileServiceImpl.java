@@ -3,6 +3,7 @@ package com.sunwayworld.emc.module.bp.archive.service.impl;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -19,11 +20,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 
+import com.sunwayworld.emc.framework.constant.EmcConstant;
 import com.sunwayworld.emc.module.bp.archive.bean.EmcArchiveCategoryBean;
 import com.sunwayworld.emc.module.bp.archive.service.EmcArchiveFileService;
 import com.sunwayworld.emc.module.bp.project.project.bean.EmcProjectBean;
 import com.sunwayworld.emc.module.bp.project.project.service.EmcProjectService;
 import com.sunwayworld.emc.module.bp.report.report.bean.EmcReportBean;
+import com.sunwayworld.emc.module.bp.report.report.service.EmcReportService;
 import com.sunwayworld.emc.module.bp.sample.sample.bean.EmcSampleBean;
 import com.sunwayworld.emc.module.bp.sample.sample.service.EmcSampleService;
 import com.sunwayworld.emc.module.mdm.contract.bean.EmcContractBean;
@@ -31,10 +34,14 @@ import com.sunwayworld.emc.module.mdm.contract.service.EmcContractService;
 import com.sunwayworld.framework.context.ApplicationContextHelper;
 import com.sunwayworld.framework.data.Pair;
 import com.sunwayworld.framework.http.HttpClientManager;
+import com.sunwayworld.framework.io.file.FilePathDTO;
+import com.sunwayworld.framework.io.file.FilePathManager;
 import com.sunwayworld.framework.io.file.FileScope;
 import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;
 import com.sunwayworld.module.item.file.bean.CoreFileBean;
+import com.sunwayworld.module.item.file.manager.CoreFileManager;
 import com.sunwayworld.module.item.file.service.CoreFileService;
+import com.sunwayworld.module.item.file.utils.CoreFileUtils;
 
 /**
  * @author zhengxy@sunwayworld.com 2020年10月31日
@@ -65,6 +72,7 @@ public class EmcArchiveFileServiceImpl implements EmcArchiveFileService {
     private final static String SAMPLING_RECORD_FILENAME = "采样记录";
     private final static String RECEIVE_RECORD_FILE = "样品交接记录";
     private final static String PDF_SUFFIX = ".pdf";
+    private final static String ARCHIVE_FILE = "archiveFile";
 
     @Autowired
     @Lazy
@@ -82,6 +90,14 @@ public class EmcArchiveFileServiceImpl implements EmcArchiveFileService {
 
     @Autowired
     private CoreFileService coreFileService;
+
+    @Lazy
+    @Autowired
+    private CoreFileManager fileManager;
+
+    @Autowired
+    @Lazy
+    private EmcReportService reportService;
 
     @Override
     public String archive(RestJsonWrapperBean wrapper) {
@@ -136,7 +152,27 @@ public class EmcArchiveFileServiceImpl implements EmcArchiveFileService {
 
     @Override
     public void archiveWordReportFiles(EmcProjectBean project) {
-        // Word报告在编制环节已生成
+        List<CoreFileBean> fileList = coreFileService.getDao().selectListByOneColumnValue(projectService.getDao().getTable() + "$" + project.getId(), "TARGETID");
+        List<CoreFileBean> deleteFileList = fileList.stream().filter(f -> ObjectUtils.equals(f.getExt(), "wordReportPdf")).collect(Collectors.toList());
+        if (!ObjectUtils.isEmpty(deleteFileList)) {
+            coreFileService.deleteList(deleteFileList);
+        }
+
+        EmcReportBean report = reportService.getDao().selectListByOneColumnValue(project.getId(), "PROJID").stream().filter(s -> !"draft".equals(s.getStatus())).collect(Collectors.toList()).get(0);
+        List<CoreFileBean> insertfileList = coreFileService.getDao().selectListByOneColumnValue(reportService.getDao().getTable() + "$" + report.getId(), "TARGETID");
+        List<CoreFileBean> filterFile = insertfileList.stream().filter(f -> StringUtils.contains(f.getName(), "盖章")).collect(Collectors.toList());
+        filterFile.forEach(f -> {
+            File file = CoreFileUtils.getLocalPath(f).toFile();
+            CoreFileBean newFile = new CoreFileBean();
+            BeanUtils.copyProperties(f, newFile, EmcConstant.CREATED_COLUMNS);
+            newFile.setId(ApplicationContextHelper.getNextIdentity());
+            newFile.setTargetId(projectService.getDao().getTable() + "$" + project.getId());
+            newFile.setDownloadUrl(file.getPath());
+            newFile.setBizCategory("projectFile");
+            newFile.setExt("wordReportPdf");
+            coreFileService.getDao().insert(newFile);
+            fileManager.upload(newFile, file);
+        });
     }
 
     @Override
@@ -147,7 +183,7 @@ public class EmcArchiveFileServiceImpl implements EmcArchiveFileService {
             return;
         }
 
-        String reportingServiceServerUrl = ApplicationContextHelper.getConstantValue("REPORTING_SERVICE_SERVER_URL");
+        String reportingServiceServerUrl = ApplicationContextHelper.getEnvironment().getProperty("sunway.config.fine.independent-deploy-server.url");
         if (StringUtils.isEmpty(reportingServiceServerUrl)) {
             return;
         }
@@ -172,7 +208,7 @@ public class EmcArchiveFileServiceImpl implements EmcArchiveFileService {
             return;
         }
 
-        String reportingServiceServerUrl = ApplicationContextHelper.getConstantValue("REPORTING_SERVICE_SERVER_URL");
+        String reportingServiceServerUrl = ApplicationContextHelper.getEnvironment().getProperty("sunway.config.fine.independent-deploy-server.url");
         if (StringUtils.isEmpty(reportingServiceServerUrl)) {
             return;
         }
@@ -221,7 +257,7 @@ public class EmcArchiveFileServiceImpl implements EmcArchiveFileService {
             return;
         }
 
-        String reportingServiceServerUrl = ApplicationContextHelper.getConstantValue("REPORTING_SERVICE_SERVER_URL");
+        String reportingServiceServerUrl = ApplicationContextHelper.getEnvironment().getProperty("sunway.config.fine.independent-deploy-server.url");
         if (StringUtils.isEmpty(reportingServiceServerUrl)) {
             return;
         }
@@ -270,7 +306,7 @@ public class EmcArchiveFileServiceImpl implements EmcArchiveFileService {
             return;
         }
 
-        String reportingServiceServerUrl = ApplicationContextHelper.getConstantValue("REPORTING_SERVICE_SERVER_URL");
+        String reportingServiceServerUrl = ApplicationContextHelper.getEnvironment().getProperty("sunway.config.fine.independent-deploy-server.url");
         if (StringUtils.isEmpty(reportingServiceServerUrl)) {
             return;
         }
@@ -301,7 +337,7 @@ public class EmcArchiveFileServiceImpl implements EmcArchiveFileService {
             return;
         }
 
-        String reportingServiceServerUrl = ApplicationContextHelper.getConstantValue("REPORTING_SERVICE_SERVER_URL");
+        String reportingServiceServerUrl = ApplicationContextHelper.getEnvironment().getProperty("sunway.config.fine.independent-deploy-server.url");
         if (StringUtils.isEmpty(reportingServiceServerUrl)) {
             return;
         }
@@ -382,12 +418,13 @@ public class EmcArchiveFileServiceImpl implements EmcArchiveFileService {
             return;
         }
 
-        String reportingServiceServerUrl = ApplicationContextHelper.getConstantValue("REPORTING_SERVICE_SERVER_URL");
+        String reportingServiceServerUrl = ApplicationContextHelper.getEnvironment().getProperty("sunway.config.fine.independent-deploy-server.url");
         if (StringUtils.isEmpty(reportingServiceServerUrl)) {
             return;
         }
 
-        List<Long> reportConfigLineIdList = receiveRecordLineIdList.stream().mapToLong(NumberUtils::parseLong).boxed().collect(Collectors.toList());
+        List<Long> reportConfigLineIdList = new ArrayList<>();
+        reportConfigLineIdList.add(2360L);
         List<CoreReportConfigLineBean> lineList = coreReportConfigLineService.selectListByIds(reportConfigLineIdList);
         if (lineList.isEmpty()) {
             return;
@@ -397,6 +434,7 @@ public class EmcArchiveFileServiceImpl implements EmcArchiveFileService {
 
         AtomicInteger fileIndex = new AtomicInteger();
         sampleList.forEach(sample -> {
+            sample.setProjNo(project.getProjNo());
             lineList.stream().filter(line -> ObjectUtils.equals(sample.getReceiveReportLineId(), line.getId() + "")).findFirst().ifPresent(configLine -> {
                 Pair<String, CoreFileBean> resultPair = getDownloadUrl(reportingServiceServerUrl, project.getId(), configLine, sample, RECEIVE_RECORD_FILES, "样品交接记录");
                 if (StringUtils.isEmpty(resultPair.getFirst())) {
@@ -455,13 +493,18 @@ public class EmcArchiveFileServiceImpl implements EmcArchiveFileService {
         coreFileService.getDao().deleteBy(deleteFilterFile, "TARGETID", "EXT", "BIZCATEGORY");
     }
 
-    protected Pair<String, CoreFileBean> getDownloadUrl(String reportingServiceServerUrl, long projectId, CoreReportConfigLineBean configLine, Object object, String bizCategory, String remark) {
-        StringBuilder reportUrl = new StringBuilder();
-        String reportPath = configLine.getExt$Item("reportpath");
+    protected Pair<String, CoreFileBean> getDownloadUrl(String fineBaseUrl, long projectId, CoreReportConfigLineBean configLine, Object object, String bizCategory, String remark) {
+        String configReportLineTargetId = coreReportConfigLineService.getDao().getTable() + "$" + configLine.getId();
+        List<CoreFileBean> configReportLineCoreFileBeanList = coreFileService.getDao().selectListByOneColumnValue(configReportLineTargetId, "TARGETID");
+        if (configReportLineCoreFileBeanList.isEmpty()) {
+            return Pair.of(null, null);
+        }
 
-        String reportFilePath = reportPath.substring(0, reportPath.indexOf("&") > 0 ? reportPath.indexOf("&") : reportPath.length());
+        StringBuilder reportUrl = new StringBuilder();
+        CoreFileBean configReportLineCoreFileBean = configReportLineCoreFileBeanList.get(0);
+        String fileName = configLine.getReportConfigLineNo() + "/" + configReportLineCoreFileBean.getName();
         try {
-            reportUrl.append(reportingServiceServerUrl).append("?").append(URLEncoder.encode(reportFilePath, "UTF-8")).append("&rs:Command=Render&rs:Format=PDF");
+            reportUrl.append(fineBaseUrl).append("/decision/view/report?viewlet=").append(URLEncoder.encode(fileName, "UTF-8")).append("&format=pdf");
             String paramStr = parseReportParam(object, configLine.getParam());
             if (!StringUtils.isEmpty(paramStr)) {
                 reportUrl.append("&").append(paramStr);
@@ -491,22 +534,24 @@ public class EmcArchiveFileServiceImpl implements EmcArchiveFileService {
             return "";
         }
 
-        String[] values = StringUtils.split(param, "&");
+        String[] params = StringUtils.split(param, "&");
 
         StringBuilder sb = new StringBuilder();
 
-        if (values.length > 0) {
-            String[] pair = StringUtils.split(param, "=");
+        if (params.length > 0) {
+            for (String curParam : params) {
+                String[] pair = StringUtils.split(curParam, "=");
 
-            if (pair.length > 1) {
-                Object value = BeanUtils.getPropertyValue(object, pair[1]);
+                if (pair.length > 1) {
+                    Object value = BeanUtils.getPropertyValue(object, pair[1]);
 
-                if (value != null) {
-                    if (sb.length() > 0) {
-                        sb.append("&");
+                    if (value != null) {
+                        if (sb.length() > 0) {
+                            sb.append("&");
+                        }
+
+                        sb.append(pair[0]).append("=").append(ObjectUtils.toString(value));
                     }
-
-                    sb.append(pair[0]).append("=").append(ObjectUtils.toString(value));
                 }
             }
         }
@@ -518,12 +563,11 @@ public class EmcArchiveFileServiceImpl implements EmcArchiveFileService {
      * 下载文件，并保存到指定目录下
      */
     protected File downloadFile(String url, String fileName) {
-        File tempFile = FileUtils.createTempFile();
-        if (StringUtils.startsWithIgnoreCase(url, "https://")) {
-        	HttpClientManager.getInstance().download(url, tempFile);
-        } else {
-        	HttpClientManager.getInstance().download(url, tempFile);
-        }
+        FilePathDTO dest = FilePathDTO.of(FileScope.temp.name(), "", StringUtils.randomUUID(8), fileName);
+        Path destPath = FilePathManager.getLocalPath(dest);
+        File tempFile = new File(destPath.toString());
+        logger.info(url);
+        HttpClientManager.getInstance().download(url, tempFile);
 
         return tempFile;
     }

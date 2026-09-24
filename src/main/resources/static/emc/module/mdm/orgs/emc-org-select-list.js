@@ -29,7 +29,7 @@ coreOrg.selectPage = {
                 category : 'org',
                 param : {
                     sampleDepartment_SEQ : '1',
-                    parentId_SB: workspace.user.ext$.parentorgid
+                     parentId_SB: workspace.user.ext$.parentorgid
                 },
             } ]
         }

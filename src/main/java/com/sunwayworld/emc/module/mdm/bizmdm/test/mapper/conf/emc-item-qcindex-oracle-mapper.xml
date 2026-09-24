@@ -7,14 +7,26 @@
           FROM (SELECT A.*, 
                        B.QCNAME,
                        C.MONITORTMPLNAME,
-                       O.ORGNAME
+                       O.ORGNAME,
+                       D.TESTMETHODID,
+                       D.ITEMNAME,
+        F.TESTNAME,
+        G.METHODNAME
                   FROM T_EMC_ITEM_QCINDEX A
                   LEFT JOIN T_EMC_QC_CATEGORY B
                     ON A.QCCATEGORYID = B.ID
                   LEFT JOIN T_EMC_MONITOR_TMPL C
                     ON A.MONITORTMPLID = C.ID
                   LEFT JOIN T_CORE_ORG O
-                    ON A.ORGID = O.ID) T
+                    ON A.ORGID = O.ID
+        LEFT JOIN T_EMC_ITEM D
+        ON A.ITEMID = D.ID
+        LEFT JOIN T_EMC_TEST_METHOD E
+        ON D.TESTMETHODID = E.ID
+        LEFT JOIN T_EMC_TEST F
+        ON E.TESTID = F.ID
+        LEFT JOIN T_EMC_METHOD G
+        ON E.METHODID = G.ID) T
         <where>
             <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
         </where>

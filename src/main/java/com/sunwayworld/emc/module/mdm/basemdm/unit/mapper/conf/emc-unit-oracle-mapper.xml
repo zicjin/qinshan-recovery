@@ -14,7 +14,7 @@
                 <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
             </when>
             <otherwise>
-                ISNULL(SORTNUM), SORTNUM ASC, T.UNITCATEGORY, T.ID DESC
+                T.SORTNUM ASC, T.UNITCATEGORY, T.ID DESC
             </otherwise>
          </choose>
     </select>

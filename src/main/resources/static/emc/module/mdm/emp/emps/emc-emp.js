@@ -14,8 +14,43 @@ var emcEmp = Gikam.getPageObject({
             title : 'T_EMC_EMP.USERNAME',
             field : 'userName'
         }, {
+            title : '部门',
+            field : 'ext$.departmentname'
+        }, {
+            title : '岗位',
+            field : 'station',
+        },{
+            title : '状态',
+            field : 'ext$.status',
+            type : 'select',
+            category : 'sys',
+            width: 100,
+            param : {
+                codeCategoryId : 'userStatus'
+            }
+        }, {
             title : 'T_EMC_EMP.FILTERTEST',
             field : 'filterTest',
+            type : 'select',
+            search : true,
+            category : 'sys',
+            param : {
+                codeCategoryId : 'yesorno'
+            },
+            editor : true
+        }, {
+            title : '是否报告审核人',
+            field : 'reportAudit',
+            type : 'select',
+            search : true,
+            category : 'sys',
+            param : {
+                codeCategoryId : 'yesorno'
+            },
+            editor : true
+        }, {
+            title : '是否报告签发人',
+            field : 'reportIssue',
             type : 'select',
             search : true,
             category : 'sys',
@@ -110,13 +145,29 @@ var emcEmp = Gikam.getPageObject({
             title : 'T_EMC_EMP.POSITION',
             field : 'position'
         }, {
-            title : 'T_EMC_EMP.EDITREPORT',
+            title : '报告编制人',
             field : 'editReport',
             type : 'select',
             category : 'sys',
             param : {
                 codeCategoryId : 'yesorno'
             }
+        }, {
+            title : '报告审核人',
+            field : 'reportAudit',
+            type : 'select',
+            category : 'sys',
+            param : {
+            codeCategoryId : 'yesorno'
+            },
+        }, {
+            title : '报告签发人',
+            field : 'reportIssue',
+            type : 'select',
+            category : 'sys',
+            param : {
+            codeCategoryId : 'yesorno'
+            },
         }, {
             title : 'T_EMC_EMP.ORDERQCUSER',
             field : 'orderQcUser',
@@ -158,12 +209,15 @@ var emcEmp = Gikam.getPageObject({
                 codeCategoryId : 'yesorno'
             },
         }, {
-            title : 'T_EMC_EMP.ERPGBID',
-            field : 'erpGbId',
+            title : '岗位',
+            field : 'station',
         }, {
-            title : 'T_EMC_EMP.ERPJOBNUMBER',
-            field : 'erpJobNumber',
-        }, {}, {
+        //     title : 'T_EMC_EMP.ERPGBID',
+        //     field : 'erpGbId',
+        // }, {
+        //     title : 'T_EMC_EMP.ERPJOBNUMBER',
+        //     field : 'erpJobNumber',
+        // }, {}, {
             title : 'T_EMC_EMP.REMARK',
             field : 'remark',
             type : 'textarea',
@@ -210,6 +264,10 @@ var emcEmp = Gikam.getPageObject({
         }, {
             index : true
         }, {
+            title : '证件号',
+            field : 'qualNo',
+            editor : true,
+        }, {
             title : 'T_EMC_EMP_QUAL.QUALNAME',
             field : 'qualName',
             editor : true,
@@ -218,11 +276,20 @@ var emcEmp = Gikam.getPageObject({
             field : 'qualOrg',
             editor : true,
         }, {
-            title : 'T_EMC_EMP_QUAL.VALIDDATE',
+            field : 'authDate',
+            title : 'T_EMC_CERT.AUTHDATE',
+            type : 'date',
             editor : true,
-            field : 'validDate',
-            type : 'date'
-
+        }, {
+            field : 'expireDate',
+            title : 'T_EMC_CERT.EXPIREDATE',
+            type : 'date',
+            editor : true,
+        }, {
+            field : 'warningDays',
+            title : 'T_EMC_CERT.WARNINGDAYS',
+            editor : true,
+            validators : [ 'number', 'strLength[0,20]' ],
         }, {
             title : 'T_EMC_EMP_QUAL.FILE',
             field : 'ext$.filename',
@@ -257,7 +324,8 @@ var emcEmp = Gikam.getPageObject({
             field : 'certName'
         }, {
             title : 'T_EMC_EMPCREDENTIALS.CREATEDTIME',
-            field : 'createdTime'
+            field : 'authDate',
+            type : 'date',
         }, {
             title : 'T_EMC_EMPCREDENTIALS.EXPIREDATE',
             field : 'expireDate'
@@ -270,6 +338,25 @@ var emcEmp = Gikam.getPageObject({
         }, {
             index : true
         }, {
+            field : 'type',
+            title : '类别',
+            editor : true,
+            validators : [ 'strLength[0,22]' ],
+        },{
+            field : 'ext$.testcategoryid',
+            title : 'T_EMC_DATA_CORRELATION_ITEM.TESTCATEGORYID',
+            width : 130,
+            type : 'select',
+            category : 'testCategory'
+        },{
+            field : 'ext$.testclass',
+            title : 'T_EMC_TEST_METHOD.TESTCLASS',
+            type : 'select',
+            category : 'sys',
+            param : {
+                codeCategoryId : 'testClass',
+            },
+        },{
             title : 'T_EMC_EMPMETHOD.TESTNAME',
             field : 'ext$.testname',
         }, {
@@ -313,9 +400,13 @@ var emcEmp = Gikam.getPageObject({
         }, {
             index : true
         }, {
-            title : 'T_EMC_EMP_TRAIN.TRAINTIME',
-            validators : [ 'strLength[0,21]' ],
-            field : 'trainTime',
+            title : '培训开始时间',
+            field : 'trainBeginTime',
+            type : 'date',
+            editor : true,
+        }, {
+            title : '培训结束时间',
+            field : 'trainEndTime',
             type : 'date',
             editor : true,
         }, {

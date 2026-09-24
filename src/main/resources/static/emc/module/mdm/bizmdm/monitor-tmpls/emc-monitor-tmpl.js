@@ -78,11 +78,26 @@ var emcMonitorTmpl = Gikam.getPageObject({
         return [ {
             checkbox : true,
         }, {
+            field : 'sortNum',
+            title : 'T_EMC_MONITOR_SCHEME.SORTNUM',
+            editor : true,
+            type : 'number',
+            hasArrow : true,
+        }, {
             field : 'schemeName',
             title : 'T_EMC_MONITOR_SCHEME.SCHEMENAME',
             type : 'link',
             validators : [ 'notEmpty', 'strLength[0,21]' ],
         }, {
+            field : 'ext$.testmethodtype',
+            title : 'T_EMC_TEST_METHOD_TESTMETHODTYPE',
+            type : 'select',
+            search : false,
+            category : 'sys',
+            param : {
+                codeCategoryId : 'testMethodType',
+            },
+        },{
             field : 'testId',
             title : 'T_EMC_MONITOR_SCHEME.TESTID',
             width : 90,
@@ -90,18 +105,25 @@ var emcMonitorTmpl = Gikam.getPageObject({
             field : 'ext$.testname',
             title : 'T_EMC_MONITOR_SCHEME.TESTNAME'
         }, {
+            field : 'ext$.testclass',
+            title : 'T_EMC_TEST_METHOD.TESTCLASS',
+            type : 'select',
+            category : 'sys',
+            param : {
+                codeCategoryId : 'testClass',
+            },
+        },{
             field : 'ext$.methodname',
             title : 'T_EMC_MONITOR_SCHEME.METHODNAME'
+        },{
+            field : 'ext$.methodscope',
+            title : '方法范围',
+        },{
+            field : 'ext$.trialscope',
+            title : '适用范围',
         }, {
             field : 'itemGroup',
             title : 'T_EMC_MONITOR_SCHEME.ITEMGROUP'
-        }, {
-            field : 'sortNum',
-            title : 'T_EMC_MONITOR_SCHEME.SORTNUM',
-            editor : true,
-            type : 'number',
-            hasArrow : true,
-            range : '[1, 1000]'
         }, {
             field : 'ext$.defaultflag',
             title : 'T_EMC_MONITOR_SCHEME.DEFAULTFLAG',
@@ -130,7 +152,25 @@ var emcMonitorTmpl = Gikam.getPageObject({
             onBeforeEditorRender : function(row) {
                 return row.schemeName === 'default';
             },
+        },{
+            field : 'ext$.authentication',
+            title : 'CMA认证',
+            type : 'select',
+            search : false,
+            category : 'sys',
+            param : {
+                codeCategoryId : 'yesorno',
+            },
         }, {
+            field : 'ext$.approval',
+            title : 'CNAS认可',
+            type : 'select',
+            search : false,
+            category : 'sys',
+            param : {
+                codeCategoryId : 'yesorno',
+            },
+        }/*, {
             field : 'techPrice',
             title : 'T_EMC_MONITOR_SCHEME.TECHPRICE',
             editor : true,
@@ -153,7 +193,7 @@ var emcMonitorTmpl = Gikam.getPageObject({
                     name : '采样费用'
                 });
             }
-        }, {
+        }*/, /*{
             field : 'skuGbId',
             title : 'SKU编号',
             formatter : function (index, value, row) {
@@ -162,10 +202,39 @@ var emcMonitorTmpl = Gikam.getPageObject({
                 }
                 return value;
             }
-        } ];
+        }*/ ];
     },
 
-    getSchemeFormFields : function() {
+    getSchemeFormFields: function (schemeType) {
+        return [{
+            field: 'testCategory',
+            title: '测试类型',
+            type: 'select',
+            search: true,
+            category: 'testCategory',
+            onChange: function (name, value) {
+                var leftGridUrl = '/secure/emc/module/mdm/bizmdm/tests/item-groups/queries/choosable';
+                if (!Gikam.isEmpty(schemeType) && 'testCapacity' === schemeType) {
+                    leftGridUrl = '/secure/emc/module/mdm/bizmdm/test/test-capacitys/item-groups/queries/choosable';
+                }
+                var leftGrid = Gikam.getComp('emc-monitor-tmpl-scheme-addition-scheme-choose-mult-list-shuttle-frame').leftGrid;
+                leftGrid.refresh({
+                    url: leftGridUrl,
+                    requestData: {
+                        testCategoryId_SEQ: value,
+                        ORGID_SEQ: workspace.user.ext$.parentorgid
+                    }
+                });
+            }
+        }, {
+            field: 'schemeName',
+            title: 'T_EMC_MONITOR_SCHEME.SCHEMENAME',
+            validators: ['notEmpty', 'strLength[0,40]']
+        }];
+    },
+
+    //修改default位置单独处理
+    getEditSchemeFormFields : function() {
         var _this = this;
 
         return [ {
@@ -177,9 +246,12 @@ var emcMonitorTmpl = Gikam.getPageObject({
             onChange : function(name, value) {
                 var leftGrid = Gikam.getComp('emc-monitor-tmpl-scheme-addition-scheme-choose-mult-list-shuttle-frame').leftGrid;
 
+                var leftGridUrl = '/secure/emc/module/mdm/bizmdm/test/test-capacitys/item-groups/queries/choosable';
                 leftGrid.setOptions({
+                    url :leftGridUrl,
                     requestData : {
-                        testCategoryId_SEQ : value
+                        testCategoryId_SEQ : value,
+                        ORGID_SEQ:  workspace.user.ext$.parentorgid
                     }
                 });
 
@@ -191,6 +263,9 @@ var emcMonitorTmpl = Gikam.getPageObject({
             validators : [ 'notEmpty', 'strLength[0,40]' ]
         } ];
     },
+
+
+
 
     getSchemeFormEditFields : function(param) {
         var _this = this;
@@ -206,7 +281,8 @@ var emcMonitorTmpl = Gikam.getPageObject({
 
                 leftGrid.setOptions({
                     requestData : {
-                        testCategoryId_SEQ : value
+                        testCategoryId_SEQ : value,
+                        ORGID_SEQ:  workspace.user.ext$.parentorgid
                     }
                 });
 
@@ -304,6 +380,14 @@ var emcMonitorTmpl = Gikam.getPageObject({
                 codeCategoryId : 'testMethodType',
             }
         }, {
+            field : 'ext$.testclass',
+            title : 'T_EMC_TEST_METHOD.TESTCLASS',
+            type : 'select',
+            category : 'sys',
+            param : {
+                codeCategoryId : 'testClass',
+            },
+        }, {
             field : 'ext$.testname',
             title : 'T_EMC_PROJ_ORDER.TESTNAME',
             width : 100
@@ -316,6 +400,30 @@ var emcMonitorTmpl = Gikam.getPageObject({
         }, {
             field : 'itemGroup',
             title : 'T_EMC_PROJ_ORDER.ITEMGROUP'
+        },{
+            field : 'ext$.methodscope',
+            title : '方法范围',
+        },{
+            field : 'ext$.trialscope',
+            title : '适用范围',
+        },{
+            field : 'ext$.authentication',
+            title : 'CMA认证',
+            type : 'select',
+            search : false,
+            category : 'sys',
+            param : {
+                codeCategoryId : 'yesorno',
+            },
+        }, {
+            field : 'ext$.approval',
+            title : 'CNAS认可',
+            type : 'select',
+            search : false,
+            category : 'sys',
+            param : {
+                codeCategoryId : 'yesorno',
+            },
         } ];
     },
 
@@ -415,7 +523,7 @@ var emcMonitorTmpl = Gikam.getPageObject({
             param : {
                 codeCategoryId : 'yesorno',
             },
-        }, {
+        }, /*{
             field : 'skuGbId',
             title : 'SKU编号',
             formatter : function (index, value, row) {
@@ -425,7 +533,7 @@ var emcMonitorTmpl = Gikam.getPageObject({
                 }
                 return value;
             }
-        }]
+        }*/]
     },
 
     getBatchInputFields : function() {

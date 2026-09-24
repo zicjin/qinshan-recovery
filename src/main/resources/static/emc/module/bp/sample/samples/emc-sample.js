@@ -1,436 +1,474 @@
 var emcSample = Gikam.getPageObject({
 
-    baseUrl : IFM_CONTEXT + '/secure/emc/module/bp/sample/samples',
+    baseUrl: IFM_CONTEXT + '/secure/emc/module/bp/sample/samples',
 
-    getSamplePrepareListColumns : function() {
-        return [ {
-            checkbox : true
+    getSampleSetSearchListColumns: function () {
+        return [{
+            checkbox: true
         }, {
-            field : 'ext$.testorgname',
-            title : 'T_EMC_FOLDER.TESTORGNAME'
+            field: 'equiptName',
+            title: 'T_EMC_SAMPLE_SET.EQUIPTNAME'
         }, {
-            field : 'orderCategory',
-            title : 'T_EMC_FOLDER.ORDERCATEGORY',
+            field: 'rate',
+            title: 'T_EMC_SAMPLE_SET.RATE'
         }, {
-            field : 'folderNo',
-            title : 'T_EMC_FOLDER.FOLDERNO',
-            width : 90,
+            field: 'equiptType',
+            title: 'T_EMC_SAMPLE_SET.EQUIPTTYPE'
         }, {
-            field : 'monitorPointName',
-            title : 'T_EMC_FOLDER.MONITORPOINTNAME',
-            editor : true,
-            editable : true,
-            type : 'choose',
-            category : 'monitorPoint',
-            single : true,
-            formatter : function(rowIndex, cellValue) {
+            field: 'standardSource',
+            title: 'T_EMC_SAMPLE_SET.STANDARDSOURCE'
+        }, {
+            field: 'describe',
+            title: 'T_EMC_SAMPLE_SET.DESCRIBE'
+        }, {
+            field: 'remark',
+            title: 'T_EMC_SAMPLE_SET.REMARK'
+        }];
+    },
+
+    getSamplePrepareListColumns: function () {
+        return [{
+            checkbox: true
+        }, {
+            field: 'orderCategory',
+            title: 'T_EMC_FOLDER.ORDERCATEGORY',
+        }, {
+            field: 'folderNo',
+            title: 'T_EMC_FOLDER.FOLDERNO',
+            width: 90,
+        }, {
+            field: 'monitorPointName',
+            title: 'T_EMC_FOLDER.MONITORPOINTNAME',
+            editor: true,
+            editable: true,
+            type: 'choose',
+            category: 'monitorPoint',
+            single: true,
+            formatter: function (rowIndex, cellValue) {
                 if (cellValue && cellValue.indexOf('现场空白') >= 0) {
                     return '现场空白';
                 }
                 return cellValue;
             },
-            onBeforeChoose : function() {
+            onBeforeChoose: function () {
                 return {
-                    filter_projectId : this.getActivedRow().projId
+                    filter_projectId: this.getActivedRow().projId
                 }
             },
-            onAfterChoose : function(rows, index) {
+            onAfterChoose: function (rows, index) {
                 if (!Gikam.isEmpty(rows)) {
                     this.setData({
-                        index : index,
-                        monitorPointName : rows[0].monitorPointName,
-                        monitorPointNo : rows[0].monitorPointNo,
+                        index: index,
+                        monitorPointName: rows[0].monitorPointName,
+                        monitorPointNo: rows[0].monitorPointNo,
                     });
                 }
             },
-            onClean : function() {
+            onClean: function () {
                 this.setData({
-                    id : this.getActivedRow().id,
-                    monitorPointName : '',
-                    monitorPointNo : '',
+                    id: this.getActivedRow().id,
+                    monitorPointName: '',
+                    monitorPointNo: '',
                 });
             },
         }, {
-            field : 'monitorPointNo',
-            title : 'T_EMC_FOLDER.MONITORPOINTNO',
-            width : 110,
+            field: 'monitorPointNo',
+            title: 'T_EMC_FOLDER.MONITORPOINTNO',
+            editor: true,
+            width: 110,
         }, {
-            field : 'planSampleDate',
-            title : 'T_EMC_FOLDER.PLANSAMPLEDATE',
-            width : 110,
+            field: 'planSampleDate',
+            title: 'T_EMC_FOLDER.PLANSAMPLEDATE',
+            editor: true,
+            type: 'date',
+            width: 110,
         }, {
-            field : 'sampleOrgName',
-            title : 'T_EMC_FOLDER.SAMPLEORGNAME',
-            width : 110,
+            field: 'sampleOrgName',
+            title: 'T_EMC_FOLDER.SAMPLEORGNAME',
+            width: 110,
         }, {
-            field : 'sceneUserName',
-            title : 'T_EMC_FOLDER.SCENEUSERNAME',
-            editor : true,
-            type : 'choose',
-            category : 'user-simple',
-            width : 100,
-            single : true,
-            onAfterChoose : function(rows, index) {
+            field: 'sceneUserName',
+            title: '安排现场负责人',
+            editor: true,
+            type: 'choose',
+            category: 'shuttle-user',
+            onBeforeChoose: function () {
+                return {
+                    firstInputUserIds: this.getData().usedUserId,
+                    parentorgid_SEQ: workspace.user.ext$.parentorgid
+                }
+            },
+            onAfterChoose: function (rows, index) {
                 if (!Gikam.isEmpty(rows)) {
                     this.setData({
-                        index : index,
-                        sceneUserId : rows[0].id,
-                        sceneUserName : rows[0].userName
+                        index: index,
+                        sceneUserId: rows[0].id,
+                        sceneUserName: rows[0].userName
                     });
                 }
             },
-            onClean : function(field, value, index) {
+            onClean: function (field, value, index) {
                 this.setData({
-                    index : index,
-                    sceneUserId : '',
-                    sceneUserName : '',
+                    index: index,
+                    sceneUserId: '',
+                    sceneUserName: '',
                 });
             },
         }, {
-            field : 'sampleUserName',
-            title : 'T_EMC_FOLDER.SAMPLEUSERNAME',
-            editor : true,
-            type : 'choose',
-            category : 'user-simple',
-            onAfterChoose : function(rows, index) {
+            field: 'sampleUserName',
+            title: '安排采样人',
+            editor: true,
+            type: 'choose',
+            category: 'shuttle-user',
+            onBeforeChoose: function () {
+                return {
+                    firstInputUserIds: this.getData().usedUserId,
+                    parentorgid_SEQ: workspace.user.ext$.parentorgid
+                }
+            },
+            onAfterChoose: function (rows, index) {
                 if (!Gikam.isEmpty(rows)) {
                     var sampleUserIds = [];
                     var sampleUserNames = [];
-                    Gikam.each(rows, function(index, item) {
+                    Gikam.each(rows, function (index, item) {
                         sampleUserIds.push(item.id);
                         sampleUserNames.push(item.userName);
                     });
                     this.setData({
-                        index : index,
-                        sampleUserId : sampleUserIds.join(','),
-                        sampleUserName : sampleUserNames.join(','),
+                        index: index,
+                        sampleUserId: sampleUserIds.join(','),
+                        sampleUserName: sampleUserNames.join(','),
                     });
                 }
             },
-            onClean : function(field, value, index) {
+            onClean: function (field, value, index) {
                 this.setData({
-                    index : index,
-                    sampleUserId : '',
-                    sampleUserName : '',
+                    index: index,
+                    sampleUserId: '',
+                    sampleUserName: '',
                 });
             }
         }, {
-            field : 'monitorPointCategory',
-            title : 'T_EMC_FOLDER.MONITORPOINTCATEGORY'
+            field: 'monitorPointCategory',
+            title: 'T_EMC_FOLDER.MONITORPOINTCATEGORY'
         }, {
-            field : 'longitude',
-            title : 'T_EMC_FOLDER.LONGITUDE',
-            editor : true,
-            width : 90,
+            field: 'longitude',
+            title: 'T_EMC_FOLDER.LONGITUDE',
+            editor: true,
+            width: 90,
         }, {
-            field : 'latitude',
-            title : 'T_EMC_FOLDER.LATITUDE',
-            editor : true,
-            width : 90,
+            field: 'latitude',
+            title: 'T_EMC_FOLDER.LATITUDE',
+            editor: true,
+            width: 90,
         }, {
-            field : 'river',
-            title : 'T_EMC_FOLDER.RIVER',
-            editor : true,
-            width : 90,
+            field: 'river',
+            title: 'T_EMC_FOLDER.RIVER',
+            editor: true,
+            width: 90,
         }, {
-            field : 'tributary',
-            title : 'T_EMC_FOLDER.TRIBUTARY',
-            editor : true,
-            width : 90,
-        },{
-            field : 'ext$.riverwidth',
-            title : 'T_EMC_FOLDER.RIVERWIDTH',
-            editor : true,
+            field: 'tributary',
+            title: 'T_EMC_FOLDER.TRIBUTARY',
+            editor: true,
+            width: 90,
         }, {
-            field : 'ext$.riverdepth',
-            title : 'T_EMC_FOLDER.RIVERDEPTH',
-            editor : true,
+            field: 'ext$.riverwidth',
+            title: 'T_EMC_FOLDER.RIVERWIDTH',
+            editor: true,
         }, {
-            field : 'ext$.currentspeed',
-            title : 'T_EMC_FOLDER.CURRENTSPEED',
-            editor : true,
+            field: 'ext$.riverdepth',
+            title: 'T_EMC_FOLDER.RIVERDEPTH',
+            editor: true,
         }, {
-            field : 'ext$.flow',
-            title : 'T_EMC_FOLDER.FLOW',
-            editor : true,
+            field: 'ext$.currentspeed',
+            title: 'T_EMC_FOLDER.CURRENTSPEED',
+            editor: true,
         }, {
-            field : 'remark',
-            title : 'T_EMC_FOLDER.REMARK',
-            editor : true,
+            field: 'ext$.flow',
+            title: 'T_EMC_FOLDER.FLOW',
+            editor: true,
         }, {
-            field : 'source',
-            title : 'T_EMC_FOLDER.SOURCE'
-        }];
+            field: 'remark',
+            title: 'T_EMC_FOLDER.REMARK',
+            editor: true,
+        }
+//        , {
+//            field : 'source',
+//            title : 'T_EMC_FOLDER.SOURCE'
+//        }
+        ];
     },
 
-    getBaseInfoFormFields : function() {
-        return [ {
-            field : 'folderNo',
-            title : 'T_EMC_FOLDER.FOLDERNO'
+    getBaseInfoFormFields: function () {
+        return [{
+            field: 'folderNo',
+            title: 'T_EMC_FOLDER.FOLDERNO'
         }, {
-            field : 'sampleOrgId',
-            title : 'T_EMC_FOLDER.SAMPLEORGID'
+            field: 'sampleOrgId',
+            title: 'T_EMC_FOLDER.SAMPLEORGID'
         }, {
-            field : 'sampleOrgName',
-            title : 'T_EMC_FOLDER.SAMPLEORGNAME'
+            field: 'sampleOrgName',
+            title: 'T_EMC_FOLDER.SAMPLEORGNAME'
         }, {
-            field : 'orderCategory',
-            title : 'T_EMC_FOLDER.ORDERCATEGORY'
+            field: 'orderCategory',
+            title: 'T_EMC_FOLDER.ORDERCATEGORY'
         }, {
-            field : 'monitorPointNo',
-            title : 'T_EMC_FOLDER.MONITORPOINTNO'
+            field: 'monitorPointNo',
+            title: 'T_EMC_FOLDER.MONITORPOINTNO'
         }, {
-            field : 'monitorPointName',
-            title : 'T_EMC_FOLDER.MONITORPOINTNAME'
+            field: 'monitorPointName',
+            title: 'T_EMC_FOLDER.MONITORPOINTNAME'
         }, {
-            field : 'planSampleDate',
-            title : 'T_EMC_FOLDER.PLANSAMPLEDATE'
+            field: 'planSampleDate',
+            title: 'T_EMC_FOLDER.PLANSAMPLEDATE'
         }, {
-            field : 'sceneUserId',
-            title : 'T_EMC_FOLDER.SCENEUSERID'
+            field: 'sceneUserId',
+            title: 'T_EMC_FOLDER.SCENEUSERID'
         }, {
-            field : 'sceneUserName',
-            title : 'T_EMC_FOLDER.SCENEUSERNAME'
+            field: 'sceneUserName',
+            title: 'T_EMC_FOLDER.SCENEUSERNAME'
         }, {
-            field : 'sampleUserId',
-            title : 'T_EMC_FOLDER.SAMPLEUSERID'
+            field: 'sampleUserId',
+            title: 'T_EMC_FOLDER.SAMPLEUSERID'
         }, {
-            field : 'sampleUserName',
-            title : 'T_EMC_FOLDER.SAMPLEUSERNAME'
+            field: 'sampleUserName',
+            title: 'T_EMC_FOLDER.SAMPLEUSERNAME'
         }, {
-            field : 'monitorPointCategoryId',
-            title : 'T_EMC_FOLDER.MONITORPOINTCATEGORYID'
+            field: 'monitorPointCategoryId',
+            title: 'T_EMC_FOLDER.MONITORPOINTCATEGORYID'
         }, {
-            field : 'monitorPointCategory',
-            title : 'T_EMC_FOLDER.MONITORPOINTCATEGORY'
+            field: 'monitorPointCategory',
+            title: 'T_EMC_FOLDER.MONITORPOINTCATEGORY'
         }, {
-            field : 'remark',
-            title : 'T_EMC_FOLDER.REMARK'
+            field: 'remark',
+            title: 'T_EMC_FOLDER.REMARK'
         }, {
-            field : 'processStatus',
-            title : 'T_EMC_FOLDER.PROCESSSTATUS'
-        }, ];
+            field: 'processStatus',
+            title: 'T_EMC_FOLDER.PROCESSSTATUS'
+        },];
     },
 
-    getDataInputColumns : function() {
-        return [ {
-            checkbox : true
+    getDataInputColumns: function () {
+        return [{
+            checkbox: true
         }, {
-            field : 'orderCategory',
-            title : 'T_EMC_FOLDER.ORDERCATEGORY'
+            field: 'orderCategory',
+            title: 'T_EMC_FOLDER.ORDERCATEGORY'
         }, {
-            field : 'folderNo',
-            title : 'T_EMC_FOLDER.FOLDERNO',
-            width : 100,
+            field: 'folderNo',
+            title: 'T_EMC_FOLDER.FOLDERNO',
+            width: 100,
         }, {
-            field : 'monitorPointName',
-            title : 'T_EMC_FOLDER.MONITORPOINTNAME',
-            width : 100,
+            field: 'monitorPointName',
+            title: 'T_EMC_FOLDER.MONITORPOINTNAME',
+            width: 100,
         }, {
-            field : 'monitorPointNo',
-            title : 'T_EMC_FOLDER.MONITORPOINTNO',
-            width : 100,
+            field: 'monitorPointNo',
+            title: 'T_EMC_FOLDER.MONITORPOINTNO',
+            width: 100,
         }, {
-            field : 'planSampleDate',
-            title : 'T_EMC_FOLDER.PLANSAMPLEDATE',
-            width : 130,
+            field: 'planSampleDate',
+            title: 'T_EMC_FOLDER.PLANSAMPLEDATE',
+            width: 130,
         }, {
-            field : 'sampleOrgName',
-            title : 'T_EMC_FOLDER.SAMPLEORGNAME'
+            field: 'sampleOrgName',
+            title: 'T_EMC_FOLDER.SAMPLEORGNAME'
         }, {
-            field : 'sceneUserName',
-            title : 'T_EMC_FOLDER.SCENEUSERNAME',
-            width : 100,
+            field: 'sceneUserName',
+            title: 'T_EMC_FOLDER.SCENEUSERNAME',
+            width: 100,
         }, {
-            field : 'sampleUserName',
-            title : 'T_EMC_FOLDER.SAMPLEUSERNAME'
+            field: 'sampleUserName',
+            title: 'T_EMC_FOLDER.SAMPLEUSERNAME'
         }, {
-            field : 'longitude',
-            title : 'T_EMC_FOLDER.LONGITUDE',
-            editor : true,
-            width : 90,
+            field: 'longitude',
+            title: 'T_EMC_FOLDER.LONGITUDE',
+            editor: true,
+            width: 90,
         }, {
-            field : 'latitude',
-            title : 'T_EMC_FOLDER.LATITUDE',
-            editor : true,
-            width : 90,
+            field: 'latitude',
+            title: 'T_EMC_FOLDER.LATITUDE',
+            editor: true,
+            width: 90,
         }, {
-            field : 'river',
-            title : 'T_EMC_FOLDER.RIVER',
-            editor : true,
+            field: 'river',
+            title: 'T_EMC_FOLDER.RIVER',
+            editor: true,
         }, {
-            field : 'tributary',
-            title : 'T_EMC_FOLDER.TRIBUTARY',
-            editor : true,
+            field: 'tributary',
+            title: 'T_EMC_FOLDER.TRIBUTARY',
+            editor: true,
         }, {
-            field : 'monitorPointCategory',
-            title : 'T_EMC_FOLDER.MONITORPOINTCATEGORY'
+            field: 'monitorPointCategory',
+            title: 'T_EMC_FOLDER.MONITORPOINTCATEGORY'
         }, {
-            field : 'remark',
-            title : 'T_EMC_ORDER.REMARK'
-        }, ];
+            field: 'remark',
+            title: 'T_EMC_ORDER.REMARK'
+        },];
     },
 
-    getSamplePrepareOrderColumns : function() {
-        return [ {
-            checkbox : true
+    getSamplePrepareOrderColumns: function () {
+        return [{
+            checkbox: true
         }, {
-            field : 'orderNo',
-            title : 'T_EMC_ORDER.ORDERNO',
-            width : 120,
+            field: 'orderNo',
+            title: 'T_EMC_ORDER.ORDERNO',
+            width: 120,
         }, {
-            field : 'cycle',
-            title : 'T_EMC_ORDER.CYCLE',
-            width : 70,
+            field: 'cycle',
+            title: 'T_EMC_ORDER.CYCLE',
+            width: 70,
         }, {
-            field : 'frequency',
-            title : 'T_EMC_ORDER.FREQUENCY',
-            width : 70,
+            field: 'frequency',
+            title: 'T_EMC_ORDER.FREQUENCY',
+            width: 70,
         }, {
-            field : 'sampleNum',
-            title : 'T_EMC_ORDER.SAMPLENUM',
-            width : 90,
+            field: 'sampleNum',
+            title: 'T_EMC_ORDER.SAMPLENUM',
+            width: 90,
         }, {
-            field : 'ext$.sampleweight',
-            title : 'T_EMC_ORDER.SAMPLEWEIGHT',
-            width : 130,
-            editor : true
+            field: 'ext$.sampleweight',
+            title: 'T_EMC_ORDER.SAMPLEWEIGHT',
+            width: 130,
+            editor: true
         }, {
-            field : 'parentOrderNo',
-            title : 'T_EMC_ORDER.PARENTORDERNO',
-            width : 100,
+            field: 'parentOrderNo',
+            title: 'T_EMC_ORDER.PARENTORDERNO',
+            width: 100,
         }, {
-            field : 'qcName',
-            title : 'T_EMC_ORDER.QCCATEGORYNO',
-            width : 80,
+            field: 'qcName',
+            title: 'T_EMC_ORDER.QCCATEGORYNO',
+            width: 80,
         }, {
-            field : 'remark',
-            title : 'T_EMC_ORDER.REMARK'
-        }, ];
+            field: 'remark',
+            title: 'T_EMC_ORDER.REMARK'
+        },];
     },
 
     // 样品测试
-    getOrderTaskListColumns : function() {
-        return [ {
-            index : true
+    getOrderTaskListColumns: function () {
+        return [{
+            index: true
         }, {
-            field : 'ext$.monitorobjid',
-            title : 'T_EMC_ORDER_TASK.CONTAINERCATEGORYNAME'
+            field: 'ext$.monitorobjid',
+            title: 'T_EMC_ORDER_TASK.CONTAINERCATEGORYNAME'
         }, {
-            field : 'ext$.monitorobjname',
-            title : 'T_EMC_ORDER_TASK.CONTAINERGROUP'
+            field: 'ext$.monitorobjname',
+            title: 'T_EMC_ORDER_TASK.CONTAINERGROUP'
         }, {
-            field : 'ext$.monitorobjname',
-            title : 'T_EMC_ORDER_TASK.FIXATIVE'
+            field: 'ext$.monitorobjname',
+            title: 'T_EMC_ORDER_TASK.FIXATIVE'
         }, {
-            field : 'ext$.monitorobjname',
-            title : 'T_EMC_ORDER_TASK.TESTMETHOD'
-        } ];
+            field: 'ext$.monitorobjname',
+            title: 'T_EMC_ORDER_TASK.TESTMETHOD'
+        }];
     },
 
-    getSamplePrepareOrderContainerColumns : function() {
-        return [ {
-            checkbox : true
+    getSamplePrepareOrderContainerColumns: function () {
+        return [{
+            checkbox: true
         }, {
-            field : 'orderContainerNo',
-            title : 'T_EMC_ORDER_CONTAINER.ORDERCONTAINERNO',
-            width : 150
+            field: 'orderContainerNo',
+            title: 'T_EMC_ORDER_CONTAINER.ORDERCONTAINERNO',
+            width: 150
         }, {
-            field : 'testName',
-            title : 'T_EMC_ORDER_TASK.TESTNAME'
+            field: 'testName',
+            title: 'T_EMC_ORDER_TASK.TESTNAME'
         }, {
-            field : 'ext$.itemgroup',
-            title : 'T_EMC_ORDER_TASK.ITEMGROUP'
+            field: 'ext$.itemgroup',
+            title: 'T_EMC_ORDER_TASK.ITEMGROUP'
         }, {
-            field : 'containerCategoryName',
-            title : 'T_EMC_ORDER_TASK.CONTAINERCATEGORYNAME',
-            width : 150,
+            field: 'containerCategoryName',
+            title: 'T_EMC_ORDER_TASK.CONTAINERCATEGORYNAME',
+            width: 150,
         }, {
-            field : 'containerGroup',
-            title : 'T_EMC_ORDER_TASK.CONTAINERGROUP',
-            width : 100,
+            field: 'containerGroup',
+            title: 'T_EMC_ORDER_TASK.CONTAINERGROUP',
+            width: 100,
         }, {
-            field : 'fixative',
-            title : 'T_EMC_ORDER_TASK.FIXATIVE',
-            width : 100,
+            field: 'fixative',
+            title: 'T_EMC_ORDER_TASK.FIXATIVE',
+            width: 100,
         }, {
-            field : 'storeCondition',
-            title : 'T_EMC_ORDER_TASK.STORECONDITION',
-            width : 100,
-        } ];
+            field: 'storeCondition',
+            title: 'T_EMC_ORDER_TASK.STORECONDITION',
+            width: 100,
+        }];
     },
 
-    getProjectListColumns : function() {
-        return [ {
-            checkbox : true
+    getProjectListColumns: function () {
+        return [{
+            checkbox: true
         }, {
-            field : 'projNo',
-            title : 'T_EMC_PROJECT.PROJNO',
-            width : 90,
-            formatter : function(i, v ,r) {
+            field: 'projNo',
+            title: 'T_EMC_PROJECT.PROJNO',
+            width: 90,
+            formatter: function (i, v, r) {
                 var value = '<a href="javascript:;">' + v + '</a>';
-                if(r.urgent==1){
+                if (r.urgent == 1) {
                     var img = "<img src='/static/emc/icon/urgent.png' width='15' height='15'>";
                     return img + value;
-                }else{
+                } else {
                     return value;
                 }
             },
         }, {
-            field : 'projName',
-            title : 'T_EMC_PROJECT.PROJNAME',
-            width : 90,
+            field: 'projName',
+            title: 'T_EMC_PROJECT.PROJNAME',
+            width: 90,
         }, {
-            field : 'testOrgName',
-            title : 'T_EMC_PROJECT.TESTORG'
+            field: 'testOrgName',
+            title: 'T_EMC_PROJECT.TESTORG'
         }, {
-            field : 'entrustOrgName',
-            title : 'T_EMC_PROJECT.ENTRUSTORG'
-        }, {
-            field : 'status',
-            title : 'T_EMC_PROJECT.STATUS',
-            type : 'select',
-            search : true,
-            category : 'sys',
-            param : {
-                codeCategoryId : 'samplingorcancel'
-            },
-            width : 80,
-        }, {
-            field : 'bizCategoryId',
-            title : 'T_EMC_PROJECT.BIZCATEGORY',
-            type : 'select',
-            search : true,
-            category : 'bizCategory',
-            width : 90,
-        }, ];
+            field: 'entrustOrgName',
+            title: 'T_EMC_PROJECT.ENTRUSTORG'
+        },
+//        {
+//            field : 'status',
+//            title : 'T_EMC_PROJECT.STATUS',
+//            type : 'select',
+//            search : true,
+//            category : 'sys',
+//            param : {
+//                codeCategoryId : 'samplingorcancel'
+//            },
+//            width : 80,
+//        },
+            {
+                field: 'bizCategoryId',
+                title: 'T_EMC_PROJECT.BIZCATEGORY',
+                type: 'select',
+                search: true,
+                category: 'bizCategory',
+                width: 90,
+            },];
     },
 
-    getProjectSampleColumns : function() {
-        return [ {
-            checkbox : true
+    getProjectSampleColumns: function () {
+        return [{
+            checkbox: true
         }, Gikam.status.getBpmnColumn(emcSample.workflow.dbTable), {
-            field : 'handStatus',
-            title : '交接情况',
-            width : 110,
-            formatter : function(i, v, r) {
-                if(v == 'preLogged' && r.ext$.analysiscount != '0') {
+            field: 'handStatus',
+            title: '交接情况',
+            width: 110,
+            formatter: function (i, v, r) {
+                if (v == 'preLogged' && r.ext$.analysiscount != '0') {
                     return '已提交到样品接收';
                 }
-                if(r.ext$.analysiscount == '0') {
+                if (r.ext$.analysiscount == '0') {
                     return '不需要样品接收';
                 }
-                if(v != 'preLogged' && r.ext$.analysiscount != '0'){
+                if (v != 'preLogged' && r.ext$.analysiscount != '0') {
                     return '未提交到样品接收';
                 }
             },
         }, {
-            field : 'sampleNo',
-            title : 'T_EMC_SAMPLE.SAMPLENO',
-            width : 110,
+            field: 'sampleNo',
+            title: 'T_EMC_SAMPLE.SAMPLENO',
+            width: 110,
             formatter: function (i, v, row) {
                 if (!Gikam.isEmpty(v)) {
-                    return Gikam.printf('<a href="javascript:;" onclick="emcSample.editPage.loadSampleExpandPage(\'{id}\', \'{propertyTmplId}\', \'{monitorTmplId}\',\'{sampleFlag}\', \'{projId}\', \'{orderCategory}\', \'{sampleUserId}\', \'{sampleDate}\')">{v}</a>', {
+                    return Gikam.printf('<a href="javascript:;" onclick="emcSample.editPage.loadSampleExpandPage(\'{id}\', \'{propertyTmplId}\', \'{monitorTmplId}\',\'{sampleFlag}\', \'{projId}\', \'{orderCategory}\', \'{sampleUserId}\', \'{sampleDate}\', \'{tmplId}\', {readFlag}, \'{elnTmplId}\')">{v}</a>', {
                         v: v,
                         id: row.id,
                         projId: row.projId,
@@ -439,479 +477,585 @@ var emcSample = Gikam.getPageObject({
                         sampleFlag: row.sampleFlag,
                         orderCategory: row.orderCategory,
                         sampleUserId: row.sampleUserId,
-                        sampleDate: row.sampleDate
+                        sampleDate: row.sampleDate,
+                        tmplId: row.ext$.tmplid,
+                        readFlag: false,
+                        elnTmplId: row.ext$.elntmplid,
                     });
                 }
             },
             sort: false,
         }, {
-            field : 'projNo',
-            title : 'T_EMC_SAMPLE.PROJNO',
-            width : 90
+            field: 'projNo',
+            title: 'T_EMC_SAMPLE.PROJNO',
+            width: 90
         }, {
-            field : 'orderCategory',
-            title : 'T_EMC_SAMPLE.ORDERCATEGORY'
+            field: 'orderCategory',
+            title: 'T_EMC_SAMPLE.ORDERCATEGORY'
         }, {
-            field : 'createdByName',
-            title : 'T_EMC_SAMPLE.CREATEDBYNAME',
-            width : 90
+            field: 'createdByName',
+            title: 'T_EMC_SAMPLE.CREATEDBYNAME',
+            width: 90
         }, {
-            field : 'detailInfo',
-            title : 'T_EMC_SAMPLE.DETAILINFO',
-            formatter : function(i, v, row) {
-            	var monitorTmplId = row.monitorTmplId;
-            	if(monitorTmplId != null){
-                    return Gikam.printf('<a href="javascript:;" onclick="emcSample.editPage.loadSamplePropertyPage(\'{id}\', \'{tmplId}\', \'{monitorTmplId}\')">{name}</a>', {
-                        id : row.id,
-                        tmplId : row.ext$.tmplid,
-                        monitorTmplId : row.monitorTmplId,
-                        name : '详情信息'
+            field: 'sampleSceneUserName',
+            title: '实际现场负责人',
+            editor: true,
+            type: 'choose',
+            category: 'user-simple',
+            width: 100,
+            single: true,
+            onAfterChoose: function (rows, index) {
+                if (!Gikam.isEmpty(rows)) {
+                    this.setData({
+                        index: index,
+                        sampleSceneUserId: rows[0].id,
+                        sampleSceneUserName: rows[0].userName,
                     });
-            	}else{
-                    return Gikam.printf('<a href="javascript:;" onclick="emcSample.editPage.loadSamplePropertyPage(\'{id}\', \'{tmplId}\', \'{monitorTmplId}\')">{name}</a>', {
-                        id : row.id,
-                        tmplId : row.ext$.tmplid,
-                        monitorTmplId : "undefined",
-                        name : '详情信息'
-                    });
-            	}
-
-            }
-        }, {
-            field : 'ext$.sampleusername',
-            title : 'T_EMC_SAMPLE.SAMPLEUSERNAME',
-            editor : true,
-            type : 'choose',
-            category : 'emp',
-            onBeforeChoose : function(index) {
-                return {
-                    status_DIFFER : 'deprecated',
-                    targetType : 'samplePlan',
-                    SAMPLEDEPARTMENT_SEQ : '1',
-                    USERORGID_SB : workspace.user.ext$.parentorgid
                 }
             },
-            onAfterChoose : function(rows, index) {
+            onClean: function (field, value, index) {
+                this.setData({
+                    index: index,
+                    sampleSceneUserId: '',
+                    sampleSceneUserName: '',
+                });
+            },
+        }, {
+            field: 'ext$.sampleusername',
+            title: '实际采样人',
+            editor: true,
+            type: 'choose',
+            validators: ['notEmpty'],
+            category: 'shuttle-user',
+            onBeforeChoose: function () {
+                return {
+                    firstInputUserIds: this.getData().usedUserId,
+                    parentorgid_SEQ: workspace.user.ext$.parentorgid
+                }
+            },
+            onAfterChoose: function (rows, index) {
+                debugger
                 if (!Gikam.isEmpty(rows)) {
                     var sampleUserIds = [];
                     var sampleUserNames = [];
-                    Gikam.each(rows, function(index, item) {
+                    Gikam.each(rows, function (index, item) {
                         sampleUserIds.push(item.id);
                         sampleUserNames.push(item.userName);
                     });
                     this.setData({
-                        index : index,
-                        ext$ : {
-                            sampleuserid : sampleUserIds.join(','),
-                            sampleusername : sampleUserNames.join(','),
+                        index: index,
+                        ext$: {
+                            sampleuserid: sampleUserIds.join(','),
+                            sampleusername: sampleUserNames.join(','),
                         }
                     });
                 }
             },
-            onClean : function() {
+            onClean: function () {
                 this.setData({
-                    id : this.getActivedRow().id,
-                    ext$ : {
-                        sampleuserid : '',
-                        sampleusername : '',
+                    id: this.getActivedRow().id,
+                    ext$: {
+                        sampleuserid: '',
+                        sampleusername: '',
                     }
                 });
             },
         }, {
-            field : 'dataInput',
-            title : 'T_EMC_SAMPLE.DATAINPUT',
-            formatter : function(i, v, row) {
+            field: 'dataInput',
+            title: 'T_EMC_SAMPLE.DATAINPUT',
+            formatter: function (i, v, row) {
                 return '<a href="javascript:;" onclick="emcSample.editPage.loadDataInputPage(\'' + row.id + '\')">数据录入</a>';
             },
-            width : 110
+            width: 110
         }, {
-            field : 'reportConfigLineId',
-            title : 'T_EMC_SAMPLE.REPORTCONFIGLINEID',
-            type : 'select',
-            search : true,
-            category : 'reportConfigLine',
-            param : {
-                reportConfigId : 'samplingReport'
+            field: 'ext$.samplingequiptname',
+            title: '共用仪器',
+            type: 'choose',
+            category: 'equipment',
+            category: 'equipt',
+            type: 'choose',
+            editor: true,
+            onBeforeChoose: function () {
+                debugger;
+                var activedRow = Gikam.getComp('emc-sample-edit-list-project-sample-grid').getActivedRow();
+                return {
+                    equiptRequisitionFilterProjId: activedRow.projId
+                }
             },
-            editor : true,
-            validators : [ 'notEmpty' ]
-        }, {
-            field : 'ext$.archivereportlineid',
-            title : 'T_EMC_SAMPLE.ARCHIVEREPORTLINEID',
-            type : 'select',
-            search : true,
-            multiple : true,
-            category : 'reportConfigLine',
-            param : {
-                reportConfigId : 'samplingReport'
+            onAfterChoose: function (rows) {
+                debugger;
+                if (!Gikam.isEmpty(rows)) {
+                    var equiptId = [];
+                    var equiptName = [];
+                    Gikam.each(rows, function (index, item) {
+                        equiptId.push(item.id);
+                        equiptName.push(item.equiptId + '/' + item.equiptName + '/' + item.specification);
+                    });
+                    this.setData({
+                        id: Gikam.getComp('emc-sample-edit-list-project-sample-grid').getActivedRow().id,
+                        ext$: {
+                            samplingequiptid: equiptId.join(','),
+                            samplingequiptname: equiptName.join(',')
+                        }
+                    });
+                }
             },
-            editor : true,
+            onClean: function () {
+                this.setData({
+                    id: Gikam.getComp('emc-sample-edit-list-project-sample-grid').getActivedRow().id,
+                    ext$: {
+                        samplingequiptid: '',
+                        samplingequiptname: ''
+                    }
+                });
+            }
+
         }, {
-            field : 'remark',
-            title : 'T_EMC_SAMPLE.REMARK',
-            editor : true,
-            validators : [ 'strLength[0,170]' ]
-        }, {
-            field : 'calibrationId',
-            title : 'T_EMC_SAMPLE.CALIBRATION',
-            validators : [ 'strLength[0,150]' ],
-            formatter : function(i, v, row) {
-                return '<a href="javascript:;" onclick="emcSample.editPage.loadCalibrationPage(\'' + row.calibrationId + '\')">查看详情</a>';
+            field: 'reportConfigLineId',
+            title: 'T_EMC_SAMPLE.REPORTCONFIGLINEID',
+            type: 'select',
+            search: true,
+            category: 'reportConfigLine',
+            param: {
+                reportConfigId: 'samplingReport'
             },
-        }, {
-            field : 'caliReportLineId',
-            title : 'T_EMC_SAMPLE.CALIREPORTLINEID',
-            type : 'select',
-            search : true,
-            category : 'reportConfigLine',
-            param : {
-                reportConfigId : 'calibrationReport'
+            editor: true,
+            validators: ['notEmpty']
+        },
+//        {
+//            field : 'ext$.archivereportlineid',
+//            title : 'T_EMC_SAMPLE.ARCHIVEREPORTLINEID',
+//            type : 'select',
+//            search : true,
+//            multiple : true,
+//            category : 'reportConfigLine',
+//            param : {
+//                reportConfigId : 'samplingReport'
+//            },
+//            editor : true,
+//        },
+            {
+                field: 'remark',
+                title: 'T_EMC_SAMPLE.REMARK',
+                editor: true,
+                validators: ['strLength[0,170]']
+            }, {
+                field: 'calibrationId',
+                title: 'T_EMC_SAMPLE.CALIBRATION',
+                validators: ['strLength[0,150]'],
+                formatter: function (i, v, row) {
+                    return '<a href="javascript:;" onclick="emcSample.editPage.loadCalibrationPage(\'' + row.calibrationId + '\')">查看详情</a>';
+                },
+            }, {
+                field: 'caliReportLineId',
+                title: 'T_EMC_SAMPLE.CALIREPORTLINEID',
+                type: 'select',
+                search: true,
+                category: 'reportConfigLine',
+                param: {
+                    reportConfigId: 'calibrationReport'
+                },
+                editor: true,
+                // validators : [ 'notEmpty' ]
             },
-            editor : true,
-            validators : [ 'notEmpty' ]
-        } ];
+//        {
+//              field : 'ext$.intotime',
+//              title : '进场时间',
+//              editor : true,
+//              type : 'dateTime',
+//              width : 150,
+//          }, {
+//              field : 'ext$.intolnglat',
+//              title : '进场经纬度',
+//              editor : true,
+//              width : 120,
+//          }, {
+//              field : 'ext$.existtime',
+//              title : '退场时间',
+//              editor : true,
+//              type : 'dateTime',
+//              width : 150,
+//          }, {
+//              field : 'ext$.existlnglat',
+//              title : '退场经纬度',
+//              editor : true,
+//              width : 120,
+//          }
+        ];
     },
 
-    getProjectAuditSampleColumns : function() {
-        return [ {
-            checkbox : true
+    getProjectAuditSampleColumns: function () {
+        return [{
+            checkbox: true
         }, Gikam.status.getBpmnColumn(emcSample.workflow.dbTable), {
-            field : 'projNo',
-            title : 'T_EMC_SAMPLE.PROJNO'
-        }, {
-            field : 'sampleNo',
-            title : 'T_EMC_SAMPLE.SAMPLENO'
-        }, {
-            field : 'ext$.projname',
-            title : 'T_EMC_PROJECT.PROJNAME'
-        }, {
-            field : 'orderCategory',
-            title : 'T_EMC_SAMPLE.ORDERCATEGORY'
-        }, {
-            field : 'createdByName',
-            title : 'T_EMC_SAMPLE.CREATEDBYNAME'
-        }, {
-            field : 'remark',
-            title : 'T_EMC_SAMPLE.REMARK',
-            validators : [ 'strLength[0,170]' ],
-        }, {
-            field : 'dataInput',
-            title : 'T_EMC_SAMPLE.DATAINPUT',
-            formatter : function(i, v, row) {
-                return '<a href="javascript:;" onclick="emcSample.auditPage.loadDataInputPage(\'' + row.id + '\')">数据录入</a>';
-            }
-        }, {
-            field : 'reportConfigLineId',
-            title : 'T_EMC_SAMPLE.REPORTCONFIGLINEID',
-            type : 'select',
-            search : true,
-            category : 'reportConfigLine',
-            param : {
-                reportConfigId : 'samplingReport'
-            },
-            editor : true,
-            validators : [ 'notEmpty' ]
-        }, {
-            field : 'calibrationId',
-            title : 'T_EMC_SAMPLE.CALIBRATION',
-            validators : [ 'strLength[0,150]' ],
-            formatter : function(i, v, row) {
-                return '<a href="javascript:;" onclick="emcSample.auditPage.loadCalibrationPage(\'' + row.id + '\')">查看详情</a>';
+            field: 'handStatus',
+            title: '交接情况',
+            width: 110,
+            formatter: function (i, v, r) {
+                if (v == 'preLogged' && r.ext$.analysiscount != '0') {
+                    return '已提交到样品接收';
+                }
+                if (r.ext$.analysiscount == '0') {
+                    return '不需要样品接收';
+                }
+                if (v != 'preLogged' && r.ext$.analysiscount != '0') {
+                    return '未提交到样品接收';
+                }
             },
         }, {
-            field : 'caliReportLineId',
-            title : 'T_EMC_SAMPLE.CALIREPORTLINEID',
-            type : 'select',
-            search : true,
-            category : 'reportConfigLine',
-            param : {
-                reportConfigId : 'calibrationReport'
-            },
+            field: 'projNo',
+            title: 'T_EMC_SAMPLE.PROJNO'
         }, {
-            field : 'receiveReportLineId',
-            title : 'T_EMC_SAMPLE.RECEIVEREPORTLINEID',
-            type : 'select',
-            search : true,
-            category : 'reportConfigLine',
-            param : {
-                reportConfigId : 'samplingNumber'
-            },
-            editor : true,
-            validators : [ 'notEmpty' ],
+            field: 'sampleNo',
+            title: 'T_EMC_SAMPLE.SAMPLENO',
+            type: 'link',
+//            formatter: function (i, v, row) {
+//                if (!Gikam.isEmpty(v)) {
+//                    return Gikam.printf('<a href="javascript:;" onclick="emcSample.editPage.loadSampleExpandPage(\'{id}\', \'{propertyTmplId}\', \'{monitorTmplId}\',\'{sampleFlag}\', \'{projId}\', \'{orderCategory}\', \'{sampleUserId}\', \'{sampleDate}\', \'{tmplId}\', \'{readFlag}\')">{v}</a>', {
+//                        v: v,
+//                        id: row.id,
+//                        projId: row.projId,
+//                        propertyTmplId: row.propertyTmplId,
+//                        monitorTmplId: row.monitorTmplId,
+//                        sampleFlag: row.sampleFlag,
+//                        orderCategory: row.orderCategory,
+//                        sampleUserId: row.sampleUserId,
+//                        sampleDate: row.sampleDate,
+//                        tmplId : row.ext$.tmplid,
+//                        readFlag :true,
+//                    });
+//                }
+//            },
+            sort: false,
         }, {
-            field : 'ext$.archivereportlineid',
-            title : 'T_EMC_SAMPLE.ARCHIVEREPORTLINEID',
-            type : 'select',
-            search : true,
-            multiple : true,
-            category : 'reportConfigLine',
-            param : {
-                reportConfigId : 'samplingReport'
-            },
-            editor : true,
+            field: 'ext$.projname',
+            title: 'T_EMC_PROJECT.PROJNAME'
         }, {
-            field : 'ext$.reviewdate',
-            title : 'T_EMC_SAMPLE.REVIEWDATE',
-            editor : true,
-            type : 'date',
+            field: 'orderCategory',
+            title: 'T_EMC_SAMPLE.ORDERCATEGORY'
         }, {
-            field : 'ext$.auditdate',
-            title : 'T_EMC_SAMPLE.AUDITDATE',
-            editor : true,
-            type : 'date',
-        } ];
+            field: 'sampleSceneUserName',
+            title: '现场负责人'
+        }, {
+            field: 'ext$.sampleusername',
+            title: '采样人'
+        }, {
+            field: 'createdByName',
+            title: 'T_EMC_SAMPLE.CREATEDBYNAME'
+        }, {
+            field: 'remark',
+            title: 'T_EMC_SAMPLE.REMARK',
+            validators: ['strLength[0,170]'],
+        },
+//        {
+//            field : 'dataInput',
+//            title : 'T_EMC_SAMPLE.DATAINPUT',
+//            formatter : function(i, v, row) {
+//                return '<a href="javascript:;" onclick="emcSample.auditPage.loadDataInputPage(\'' + row.id + '\')">数据录入</a>';
+//            }
+//        },
+            {
+                field: 'reportConfigLineId',
+                title: 'T_EMC_SAMPLE.REPORTCONFIGLINEID',
+                type: 'select',
+                search: true,
+                category: 'reportConfigLine',
+                param: {
+                    reportConfigId: 'samplingReport'
+                },
+                editor: true,
+                validators: ['notEmpty']
+            }, {
+                field: 'calibrationId',
+                title: 'T_EMC_SAMPLE.CALIBRATION',
+                validators: ['strLength[0,150]'],
+                formatter: function (i, v, row) {
+                    return '<a href="javascript:;" onclick="emcSample.auditPage.loadCalibrationPage(\'' + row.id + '\')">查看详情</a>';
+                },
+            }, {
+                field: 'caliReportLineId',
+                title: 'T_EMC_SAMPLE.CALIREPORTLINEID',
+                type: 'select',
+                search: true,
+                category: 'reportConfigLine',
+                param: {
+                    reportConfigId: 'calibrationReport'
+                },
+            }, {
+                field: 'receiveReportLineId',
+                title: 'T_EMC_SAMPLE.RECEIVEREPORTLINEID',
+                type: 'select',
+                search: true,
+                category: 'reportConfigLine',
+                param: {
+                    reportConfigId: 'samplingNumber'
+                },
+                editor: true,
+                validators: ['notEmpty'],
+            }, {
+                field: 'ext$.reviewdate',
+                title: 'T_EMC_SAMPLE.REVIEWDATE',
+                editor: true,
+                type: 'date',
+            }, {
+                field: 'ext$.auditdate',
+                title: 'T_EMC_SAMPLE.AUDITDATE',
+                editor: true,
+                type: 'date',
+            }];
     },
 
-    getAuditedSampleDataColumns : function() {
-        return [ {
-            checkbox : true
+    getAuditedSampleDataColumns: function () {
+        return [{
+            checkbox: true
         }, {
-            field : 'projNo',
-            title : 'T_EMC_SAMPLE.PROJNO'
+            field: 'projNo',
+            title: 'T_EMC_SAMPLE.PROJNO'
         }, {
-            field : 'sampleNo',
-            title : 'T_EMC_SAMPLE.SAMPLENO'
+            field: 'sampleNo',
+            title: 'T_EMC_SAMPLE.SAMPLENO'
         }, {
-            field : 'ext$.projname',
-            title : 'T_EMC_PROJECT.PROJNAME'
+            field: 'ext$.projname',
+            title: 'T_EMC_PROJECT.PROJNAME'
         }, {
-            field : 'orderCategory',
-            title : 'T_EMC_SAMPLE.ORDERCATEGORY'
+            field: 'orderCategory',
+            title: 'T_EMC_SAMPLE.ORDERCATEGORY'
         }, {
-            field : 'createdByName',
-            title : 'T_EMC_SAMPLE.CREATEDBYNAME'
+            field: 'createdByName',
+            title: 'T_EMC_SAMPLE.CREATEDBYNAME'
         }, {
-            field : 'remark',
-            title : 'T_EMC_SAMPLE.REMARK',
-            validators : [ 'strLength[0,170]' ],
+            field: 'remark',
+            title: 'T_EMC_SAMPLE.REMARK',
+            validators: ['strLength[0,170]'],
         }, {
-            field : 'dataInput',
-            title : 'T_EMC_SAMPLE.DATAINPUT',
-            formatter : function(i, v, row) {
+            field: 'dataInput',
+            title: 'T_EMC_SAMPLE.DATAINPUT',
+            formatter: function (i, v, row) {
                 return '<a href="javascript:;" onclick="emcSample.auditPage.loadDataInputPage(\'' + row.id + '\')">数据录入</a>';
             }
-        } ];
+        }];
     },
 
     // 样品和测试
-    getSampleTestColumns : function() {
-        return [ {
-            checkbox : true
+    getSampleTestColumns: function () {
+        return [{
+            checkbox: true
         }, {
-            field : 'ext$.monitorpointname',
-            title : 'T_EMC_FOLDER.MONITORPOINTNAME',
-            width : 100,
+            field: 'ext$.monitorpointname',
+            title: 'T_EMC_FOLDER.MONITORPOINTNAME',
+            width: 100,
         }, {
-            field : 'ext$.monitorpointno',
-            title : 'T_EMC_FOLDER.MONITORPOINTNO',
-            width : 100,
+            field: 'ext$.monitorpointno',
+            title: 'T_EMC_FOLDER.MONITORPOINTNO',
+            width: 100,
         }, {
-            field : 'orderNo',
-            title : 'T_EMC_ORDER.ORDERNO',
-            width : 110,
+            field: 'orderNo',
+            title: 'T_EMC_ORDER.ORDERNO',
+            width: 110,
         }, {
-            field : 'sampleBeginDate',
-            title : 'T_EMC_ORDER.SAMPLEBEGINDATE',
-            type : 'date',
-            validators : [ 'notEmpty'],
-            editor : true,
-            width : 110,
-            onChange : function(field, value, rowIndex, oldValue, text) {
+            field: 'sampleBeginDate',
+            title: 'T_EMC_ORDER.SAMPLEBEGINDATE',
+            type: 'date',
+            validators: ['notEmpty'],
+            editor: true,
+            width: 110,
+            onChange: function (field, value, rowIndex, oldValue, text) {
                 var grid = Gikam.getComp('emc-sample-edit-list-data-input-order-task-grid').getData()[rowIndex];
                 var start = new Date(grid.sampleBeginDate);
                 var end = new Date(grid.sampleCompleteDate);
-                if (start && end && start.getTime() > end.getTime()){
+                if (start && end && start.getTime() > end.getTime()) {
                     Gikam.alert("EMC.MODULE.BP.SAMPLE.SAMPLES.ORDER.TIP.DATE_LESS_THEN");
                     return;
                 }
             }
         }, {
-            field : 'sampleBeginTime',
-            title : 'T_EMC_ORDER.SAMPLEBEGINTIME',
-            type : 'time',
-            editor : true,
-            width : 110,
-            onChange : function(field, value, rowIndex, oldValue, text) {
+            field: 'sampleBeginTime',
+            title: 'T_EMC_ORDER.SAMPLEBEGINTIME',
+            type: 'time',
+            editor: true,
+            validators: ['notEmpty'],
+            width: 110,
+            onChange: function (field, value, rowIndex, oldValue, text) {
                 var grid = Gikam.getComp('emc-sample-edit-list-data-input-order-task-grid').getData()[rowIndex];
                 var startDate = new Date(grid.sampleBeginDate);
                 var endDate = new Date(grid.sampleCompleteDate);
-                if(startDate && endDate && startDate.getTime() === endDate.getTime()){
+                if (startDate && endDate && startDate.getTime() === endDate.getTime()) {
                     var startTime = grid.sampleBeginTime;
                     var endTime = grid.sampleCompleteTime;
-                    if(startTime && endTime && startTime > endTime){
+                    if (startTime && endTime && startTime > endTime) {
                         Gikam.alert("EMC.MODULE.BP.SAMPLE.SAMPLES.ORDER.TIP.TIME_LESS_THEN");
                         return;
                     }
                 }
             }
         }, {
-            field : 'sampleCompleteDate',
-            title : 'T_EMC_ORDER.SAMPLECOMPLETEDATE',
-            type : 'date',
-            editor : true,
-            width : 110,
-            validators : [ 'notEmpty'],
-            onChange : function(field, value, rowIndex, oldValue, text) {
+            field: 'sampleCompleteDate',
+            title: 'T_EMC_ORDER.SAMPLECOMPLETEDATE',
+            type: 'date',
+            editor: true,
+            width: 110,
+            validators: ['notEmpty'],
+            onChange: function (field, value, rowIndex, oldValue, text) {
                 var grid = Gikam.getComp('emc-sample-edit-list-data-input-order-task-grid').getData()[rowIndex];
                 var start = new Date(grid.sampleBeginDate);
                 var end = new Date(grid.sampleCompleteDate);
-                if (start && end && start.getTime() > end.getTime()){
+                if (start && end && start.getTime() > end.getTime()) {
                     Gikam.alert("EMC.MODULE.BP.SAMPLE.SAMPLES.ORDER.TIP.DATE_LESS_THEN");
                     return;
                 }
             }
         }, {
-            field : 'sampleCompleteTime',
-            title : 'T_EMC_ORDER.SAMPLECOMPLETETIME',
-            type : 'time',
-            editor : true,
-            width : 110,
-            onChange : function(field, value, rowIndex, oldValue, text) {
+            field: 'sampleCompleteTime',
+            title: 'T_EMC_ORDER.SAMPLECOMPLETETIME',
+            type: 'time',
+            editor: true,
+            width: 110,
+            onChange: function (field, value, rowIndex, oldValue, text) {
                 var grid = Gikam.getComp('emc-sample-edit-list-data-input-order-task-grid').getData()[rowIndex];
                 var startDate = new Date(grid.sampleBeginDate);
                 var endDate = new Date(grid.sampleCompleteDate);
-                if(startDate && endDate && startDate.getTime() === endDate.getTime()){
+                if (startDate && endDate && startDate.getTime() === endDate.getTime()) {
                     var startTime = grid.sampleBeginTime;
                     var endTime = grid.sampleCompleteTime;
-                    if(startTime && endTime && startTime > endTime){
+                    if (startTime && endTime && startTime > endTime) {
                         Gikam.alert("EMC.MODULE.BP.SAMPLE.SAMPLES.ORDER.TIP.TIME_LESS_THEN");
                         return;
                     }
                 }
             }
         }, {
-            field : 'orderCategory',
-            title : 'T_EMC_ORDER.ORDERCATEGORY',
-            width : 130
+            field: 'orderCategory',
+            title: 'T_EMC_ORDER.ORDERCATEGORY',
+            width: 130
         }, {
-            field : 'qcName',
-            title : 'T_EMC_ORDER.QCCATEGORYNO',
-            width : 75,
+            field: 'qcName',
+            title: 'T_EMC_ORDER.QCCATEGORYNO',
+            width: 75,
         }, {
-            field : 'labelNo',
-            title : 'T_EMC_ORDER.LABELNO',
-            width : 110,
+            field: 'labelNo',
+            title: 'T_EMC_ORDER.LABELNO',
+            width: 110,
         }, {
-            field : 'cycle',
-            title : 'T_EMC_ORDER.CYCLE',
-            width : 60,
+            field: 'cycle',
+            title: 'T_EMC_ORDER.CYCLE',
+            width: 60,
         }, {
-            field : 'frequency',
-            title : 'T_EMC_ORDER.FREQUENCY',
-            width : 60,
+            field: 'frequency',
+            title: 'T_EMC_ORDER.FREQUENCY',
+            width: 60,
         }, {
-            field : 'sampleNum',
-            title : 'T_EMC_ORDER.SAMPLENUM',
-            width : 70,
+            field: 'sampleNum',
+            title: 'T_EMC_ORDER.SAMPLENUM',
+            width: 70,
         }, {
-            field : 'horizontalCode',
-            title : 'T_EMC_ORDER.HORIZONTALCODE',
-            width : 90,
-            type : 'select',
-            search : true,
-            category : 'sys',
-            param : {
-                codeCategoryId : 'horizontalCode',
+            field: 'horizontalCode',
+            title: 'T_EMC_ORDER.HORIZONTALCODE',
+            width: 90,
+            type: 'select',
+            search: true,
+            category: 'sys',
+            param: {
+                codeCategoryId: 'horizontalCode',
             },
-            editor : true
+            editor: true
         }, {
-            field : 'verticalCode',
-            title : 'T_EMC_ORDER.VERTICALCODE',
-            width : 90,
-            type : 'select',
-            search : true,
-            category : 'sys',
-            param : {
-                codeCategoryId : 'verticalCode',
+            field: 'verticalCode',
+            title: 'T_EMC_ORDER.VERTICALCODE',
+            width: 90,
+            type: 'select',
+            search: true,
+            category: 'sys',
+            param: {
+                codeCategoryId: 'verticalCode',
             },
-            editor : true
+            editor: true
         }, {
-            field : 'ext$.vocbottle',
-            title : 'T_EMC_ORDER.VOCBOTTLE',
-            editor : true,
-            editable : true,
-            type : 'choose',
-            category : 'vocBottle',
-            single : false,
-            onBeforeChoose : function(index) {
+            field: 'ext$.vocbottle',
+            title: 'T_EMC_ORDER.VOCBOTTLE',
+            editor: true,
+            editable: true,
+            type: 'choose',
+            category: 'vocBottle',
+            single: false,
+            onBeforeChoose: function (index) {
                 return {
                     orgId_SEQ: workspace.user.ext$.parentorgid
                 }
             },
-            onAfterChoose : function(rows) {
+            onAfterChoose: function (rows) {
                 if (!Gikam.isEmpty(rows)) {
                     var vocNumbers = "";
-                    for ( let index in rows) {
+                    for (let index in rows) {
                         if (index == rows.length - 1) {
-                        	vocNumbers += rows[index].vocNumber;
+                            vocNumbers += rows[index].vocNumber;
                             break;
                         }
                         vocNumbers += rows[index].vocNumber + ",";
                     }
                     this.setData({
-                        id : this.getActivedRow().id,
-                        ext$ : {
-                        	vocbottle : vocNumbers
+                        id: this.getActivedRow().id,
+                        ext$: {
+                            vocbottle: vocNumbers
                         },
                     });
                 }
             },
-            onClean : function() {
+            onClean: function () {
                 this.setData({
-                    id : this.getActivedRow().id,
-                    ext$ : {
-                    	vocbottle : ''
+                    id: this.getActivedRow().id,
+                    ext$: {
+                        vocbottle: ''
                     },
                 });
             }
         }, {
-            field : 'ext$.oilfilmno',
-            title : 'T_EMC_ORDER.OILFILMNO',
-            editor : true,
-            editable : true,
-            type : 'choose',
-            category : 'oilFilm',
-            single : true,
-            onBeforeChoose : function(index) {
+            field: 'ext$.oilfilmno',
+            title: 'T_EMC_ORDER.OILFILMNO',
+            editor: true,
+            editable: true,
+            type: 'choose',
+            category: 'oilFilm',
+            single: true,
+            onBeforeChoose: function (index) {
                 return {
                     orgId_SEQ: workspace.user.ext$.parentorgid
                 }
             },
-            onAfterChoose : function(rows) {
+            onAfterChoose: function (rows) {
                 if (!Gikam.isEmpty(rows)) {
                     this.setData({
-                        id : this.getActivedRow().id,
-                        ext$ : {
-                        	oilfilmno : rows[0].oilFilmNo
+                        id: this.getActivedRow().id,
+                        ext$: {
+                            oilfilmno: rows[0].oilFilmNo
                         },
                     });
                 }
             },
-            onClean : function() {
+            onClean: function () {
                 this.setData({
-                    id : this.getActivedRow().id,
-                    ext$ : {
-                    	oilfilmno : ''
+                    id: this.getActivedRow().id,
+                    ext$: {
+                        oilfilmno: ''
                     },
                 });
             }
         }, {
-            field : 'ext$.samplebottleno',
-            title : 'T_EMC_SAMPLE_BOTTLE.SAMPLEBOTTLENO',
-            editor : true,
-            editable : true,
-            type : 'choose',
-            category : 'sampleBottle',
-            single : false,
-            onBeforeChoose : function(index) {
+            field: 'ext$.samplebottleno',
+            title: 'T_EMC_SAMPLE_BOTTLE.SAMPLEBOTTLENO',
+            editor: true,
+            editable: true,
+            type: 'choose',
+            category: 'sampleBottle',
+            single: false,
+            onBeforeChoose: function (index) {
                 return {
                     orgId_SEQ: workspace.user.ext$.parentorgid
                 }
             },
-            onAfterChoose : function(rows) {
+            onAfterChoose: function (rows) {
                 if (!Gikam.isEmpty(rows)) {
                     var sampleBottleNo = "";
-                    for ( let index in rows) {
+                    for (let index in rows) {
                         if (index == rows.length - 1) {
                             sampleBottleNo += rows[index].sampleBottleNo;
                             break;
@@ -919,305 +1063,317 @@ var emcSample = Gikam.getPageObject({
                         sampleBottleNo += rows[index].sampleBottleNo + ",";
                     }
                     this.setData({
-                        id : this.getActivedRow().id,
-                        ext$ : {
-                            samplebottleno : sampleBottleNo
+                        id: this.getActivedRow().id,
+                        ext$: {
+                            samplebottleno: sampleBottleNo
                         },
                     });
                 }
             },
-            onClean : function() {
+            onClean: function () {
                 this.setData({
-                    id : this.getActivedRow().id,
-                    ext$ : {
-                        samplebottleno : ''
+                    id: this.getActivedRow().id,
+                    ext$: {
+                        samplebottleno: ''
                     },
                 });
             }
         }, {
-            field : 'ext$.samplingdepth',
-            title : 'T_EMC_ORDER.SAMPLINGDEPTH',
-            editor : true
+            field: 'ext$.samplingdepth',
+            title: 'T_EMC_ORDER.SAMPLINGDEPTH',
+            editor: true
         }, {
-            field : 'ext$.color',
-            title : 'T_EMC_ORDER.COLOR',
-            editor : true,
-            type : 'select',
-            search : true,
-            category : 'sys',
-            param : {
-                codeCategoryId : 'orderColor'
+            field: 'ext$.color',
+            title: 'T_EMC_ORDER.COLOR',
+            editor: true,
+            type: 'select',
+            search: true,
+            category: 'sys',
+            param: {
+                codeCategoryId: 'orderColor'
             },
         }, {
-            field : 'ext$.texture',
-            title : 'T_EMC_ORDER.TEXTURE',
-            editor : true
+            field: 'ext$.texture',
+            title: 'T_EMC_ORDER.TEXTURE',
+            editor: true
         }, {
-            field : 'ext$.odor',
-            title : 'T_EMC_ORDER.ODOR',
-            editor : true,
-            type : 'select',
-            search : true,
-            category : 'sys',
-            param : {
-                codeCategoryId : 'orderSmell'
+            field: 'ext$.odor',
+            title: 'T_EMC_ORDER.ODOR',
+            editor: true,
+            type: 'select',
+            search: true,
+            category: 'sys',
+            param: {
+                codeCategoryId: 'orderSmell'
             },
         }, {
-            field : 'ext$.density',
-            title : 'T_EMC_ORDER.DENSITY',
-            editor : true
+            field: 'ext$.density',
+            title: 'T_EMC_ORDER.DENSITY',
+            editor: true
         }, {
-            field : 'ext$.structure',
-            title : 'T_EMC_ORDER.STRUCTURE',
-            editor : true
+            field: 'ext$.structure',
+            title: 'T_EMC_ORDER.STRUCTURE',
+            editor: true
         }, {
-            field : 'ext$.gravel',
-            title : 'T_EMC_ORDER.GRAVEL',
-            editor : true
+            field: 'ext$.gravel',
+            title: 'T_EMC_ORDER.GRAVEL',
+            editor: true
         }, {
-            field : 'ext$.othermatter',
-            title : 'T_EMC_ORDER.OTHERMATTER',
-            editor : true
+            field: 'ext$.othermatter',
+            title: 'T_EMC_ORDER.OTHERMATTER',
+            editor: true
         }, {
-            field : 'ext$.pidvalue',
-            title : 'T_EMC_ORDER.PIDVALUE',
-            editor : true
+            field: 'ext$.pidvalue',
+            title: 'T_EMC_ORDER.PIDVALUE',
+            editor: true
         }, {
-            field : 'ext$.batchsize',
-            title : 'T_EMC_ORDER.BATCHSIZE',
-            editor : true
+            field: 'ext$.river',
+            title: '河流',
+            editor: true
         }, {
-            field : 'orderDesc',
-            title : 'T_EMC_ORDER.ORDERDESC',
-            editor : true,
-            validators : [ 'strLength[0,36]' ],
-            width : 110,
+            field: 'ext$.crosssection',
+            title: '采样断面',
+            editor: true
         }, {
-            field : 'remark',
-            title : 'T_EMC_ORDER.REMARK',
-            editor : true,
-        }  ];
+            field: 'ext$.substratetype',
+            title: '底质类型',
+            editor: true
+        }, {
+            field: 'orderDesc',
+            title: 'T_EMC_ORDER.ORDERDESC',
+            editor: true,
+            validators: ['strLength[0,36]'],
+            width: 110,
+        }, {
+            field: 'ext$.fairtemperature',
+            title: '气温',
+            editor: true
+        }, {
+            field: 'remark',
+            title: 'T_EMC_ORDER.REMARK',
+            editor: true,
+        }];
     },
 
     // 土壤样品和测试
-    getSampleTestColumns1 : function() {
-        return [ {
-            checkbox : true
+    getSampleTestColumns1: function () {
+        return [{
+            checkbox: true
         }, {
-            field : 'ext$.monitorpointname',
-            title : 'T_EMC_FOLDER.MONITORPOINTNAME',
-            width : 100,
+            field: 'ext$.monitorpointname',
+            title: 'T_EMC_FOLDER.MONITORPOINTNAME',
+            width: 100,
         }, {
-            field : 'ext$.monitorpointno',
-            title : 'T_EMC_FOLDER.MONITORPOINTNO',
-            width : 100,
+            field: 'ext$.monitorpointno',
+            title: 'T_EMC_FOLDER.MONITORPOINTNO',
+            width: 100,
         }, {
-            field : 'orderNo',
-            title : 'T_EMC_ORDER.ORDERNO',
-            width : 110,
+            field: 'orderNo',
+            title: 'T_EMC_ORDER.ORDERNO',
+            width: 110,
         }, {
-            field : 'sampleBeginDate',
-            title : 'T_EMC_ORDER.SAMPLEBEGINDATE',
-            type : 'date',
-            editor : true,
-            validators : [ 'notEmpty' ],
-            width : 110,
-            onChange : function(field, value, rowIndex, oldValue, text) {
+            field: 'sampleBeginDate',
+            title: 'T_EMC_ORDER.SAMPLEBEGINDATE',
+            type: 'date',
+            editor: true,
+            validators: ['notEmpty'],
+            width: 110,
+            onChange: function (field, value, rowIndex, oldValue, text) {
                 var grid = Gikam.getComp('emc-sample-edit-list-data-input-order-task-grid').getData()[rowIndex];
                 var start = new Date(grid.sampleBeginDate);
                 var end = new Date(grid.sampleCompleteDate);
-                if (start && end && start.getTime() > end.getTime()){
+                if (start && end && start.getTime() > end.getTime()) {
                     Gikam.alert("EMC.MODULE.BP.SAMPLE.SAMPLES.ORDER.TIP.DATE_LESS_THEN");
                     return;
                 }
             }
         }, {
-            field : 'sampleBeginTime',
-            title : 'T_EMC_ORDER.SAMPLEBEGINTIME',
-            type : 'time',
-            editor : true,
-            width : 110,
-            onChange : function(field, value, rowIndex, oldValue, text) {
+            field: 'sampleBeginTime',
+            title: 'T_EMC_ORDER.SAMPLEBEGINTIME',
+            type: 'time',
+            editor: true,
+            width: 110,
+            onChange: function (field, value, rowIndex, oldValue, text) {
                 var grid = Gikam.getComp('emc-sample-edit-list-data-input-order-task-grid').getData()[rowIndex];
                 var startDate = new Date(grid.sampleBeginDate);
                 var endDate = new Date(grid.sampleCompleteDate);
-                if(startDate && endDate && startDate.getTime() === endDate.getTime()){
+                if (startDate && endDate && startDate.getTime() === endDate.getTime()) {
                     var startTime = grid.sampleBeginTime;
                     var endTime = grid.sampleCompleteTime;
-                    if(startTime && endTime && startTime > endTime){
+                    if (startTime && endTime && startTime > endTime) {
                         Gikam.alert("EMC.MODULE.BP.SAMPLE.SAMPLES.ORDER.TIP.TIME_LESS_THEN");
                         return;
                     }
                 }
             }
         }, {
-            field : 'sampleCompleteDate',
-            title : 'T_EMC_ORDER.SAMPLECOMPLETEDATE',
-            type : 'date',
-            editor : true,
-            validators : [ 'notEmpty' ],
-            width : 110,
-            onChange : function(field, value, rowIndex, oldValue, text) {
+            field: 'sampleCompleteDate',
+            title: 'T_EMC_ORDER.SAMPLECOMPLETEDATE',
+            type: 'date',
+            editor: true,
+            validators: ['notEmpty'],
+            width: 110,
+            onChange: function (field, value, rowIndex, oldValue, text) {
                 var grid = Gikam.getComp('emc-sample-edit-list-data-input-order-task-grid').getData()[rowIndex];
                 var start = new Date(grid.sampleBeginDate);
                 var end = new Date(grid.sampleCompleteDate);
-                if (start && end && start.getTime() > end.getTime()){
+                if (start && end && start.getTime() > end.getTime()) {
                     Gikam.alert("EMC.MODULE.BP.SAMPLE.SAMPLES.ORDER.TIP.DATE_LESS_THEN");
                     return;
                 }
             }
         }, {
-            field : 'sampleCompleteTime',
-            title : 'T_EMC_ORDER.SAMPLECOMPLETETIME',
-            type : 'time',
-            editor : true,
-            width : 110,
-            onChange : function(field, value, rowIndex, oldValue, text) {
+            field: 'sampleCompleteTime',
+            title: 'T_EMC_ORDER.SAMPLECOMPLETETIME',
+            type: 'time',
+            editor: true,
+            width: 110,
+            onChange: function (field, value, rowIndex, oldValue, text) {
                 var grid = Gikam.getComp('emc-sample-edit-list-data-input-order-task-grid').getData()[rowIndex];
                 var startDate = new Date(grid.sampleBeginDate);
                 var endDate = new Date(grid.sampleCompleteDate);
-                if(startDate && endDate && startDate.getTime() === endDate.getTime()){
+                if (startDate && endDate && startDate.getTime() === endDate.getTime()) {
                     var startTime = grid.sampleBeginTime;
                     var endTime = grid.sampleCompleteTime;
-                    if(startTime && endTime && startTime > endTime){
+                    if (startTime && endTime && startTime > endTime) {
                         Gikam.alert("EMC.MODULE.BP.SAMPLE.SAMPLES.ORDER.TIP.TIME_LESS_THEN");
                         return;
                     }
                 }
             }
         }, {
-            field : 'orderCategory',
-            title : 'T_EMC_ORDER.ORDERCATEGORY',
-            width : 130
+            field: 'orderCategory',
+            title: 'T_EMC_ORDER.ORDERCATEGORY',
+            width: 130
         }, {
-            field : 'qcName',
-            title : 'T_EMC_ORDER.QCCATEGORYNO',
-            width : 75,
+            field: 'qcName',
+            title: 'T_EMC_ORDER.QCCATEGORYNO',
+            width: 75,
         }, {
-            field : 'labelNo',
-            title : 'T_EMC_ORDER.LABELNO',
-            width : 110,
+            field: 'labelNo',
+            title: 'T_EMC_ORDER.LABELNO',
+            width: 110,
         }, {
-            field : 'cycle',
-            title : 'T_EMC_ORDER.CYCLE',
-            width : 60,
+            field: 'cycle',
+            title: 'T_EMC_ORDER.CYCLE',
+            width: 60,
         }, {
-            field : 'frequency',
-            title : 'T_EMC_ORDER.FREQUENCY',
-            width : 60,
+            field: 'frequency',
+            title: 'T_EMC_ORDER.FREQUENCY',
+            width: 60,
         }, {
-            field : 'sampleNum',
-            title : 'T_EMC_ORDER.SAMPLENUM',
-            width : 70,
+            field: 'sampleNum',
+            title: 'T_EMC_ORDER.SAMPLENUM',
+            width: 70,
         }, {
-            field : 'horizontalCode',
-            title : 'T_EMC_ORDER.HORIZONTALCODE',
-            width : 90,
-            type : 'select',
-            search : true,
-            category : 'sys',
-            param : {
-                codeCategoryId : 'horizontalCode',
+            field: 'horizontalCode',
+            title: 'T_EMC_ORDER.HORIZONTALCODE',
+            width: 90,
+            type: 'select',
+            search: true,
+            category: 'sys',
+            param: {
+                codeCategoryId: 'horizontalCode',
             },
-            editor : true
+            editor: true
         }, {
-            field : 'verticalCode',
-            title : 'T_EMC_ORDER.VERTICALCODE',
-            width : 90,
-            type : 'select',
-            search : true,
-            category : 'sys',
-            param : {
-                codeCategoryId : 'verticalCode',
+            field: 'verticalCode',
+            title: 'T_EMC_ORDER.VERTICALCODE',
+            width: 90,
+            type: 'select',
+            search: true,
+            category: 'sys',
+            param: {
+                codeCategoryId: 'verticalCode',
             },
-            editor : true
+            editor: true
         }, {
-            field : 'ext$.vocbottle',
-            title : 'T_EMC_ORDER.VOCBOTTLE',
-            editor : true,
-            editable : true,
-            type : 'choose',
-            category : 'vocBottle',
-            single : false,
-            onBeforeChoose : function(index) {
+            field: 'ext$.vocbottle',
+            title: 'T_EMC_ORDER.VOCBOTTLE',
+            editor: true,
+            editable: true,
+            type: 'choose',
+            category: 'vocBottle',
+            single: false,
+            onBeforeChoose: function (index) {
                 return {
                     orgId_SEQ: workspace.user.ext$.parentorgid
                 }
             },
-            onAfterChoose : function(rows) {
+            onAfterChoose: function (rows) {
                 if (!Gikam.isEmpty(rows)) {
                     var vocNumbers = "";
-                    for ( let index in rows) {
+                    for (let index in rows) {
                         if (index == rows.length - 1) {
-                        	vocNumbers += rows[index].vocNumber;
+                            vocNumbers += rows[index].vocNumber;
                             break;
                         }
                         vocNumbers += rows[index].vocNumber + ",";
                     }
                     this.setData({
-                        id : this.getActivedRow().id,
-                        ext$ : {
-                        	vocbottle : vocNumbers
+                        id: this.getActivedRow().id,
+                        ext$: {
+                            vocbottle: vocNumbers
                         },
                     });
                 }
             },
-            onClean : function() {
+            onClean: function () {
                 this.setData({
-                    id : this.getActivedRow().id,
-                    ext$ : {
-                    	vocbottle : ''
+                    id: this.getActivedRow().id,
+                    ext$: {
+                        vocbottle: ''
                     },
                 });
             }
         }, {
-            field : 'ext$.oilfilmno',
-            title : 'T_EMC_ORDER.OILFILMNO',
-            editor : true,
-            editable : true,
-            type : 'choose',
-            category : 'oilFilm',
-            single : true,
-            onBeforeChoose : function(index) {
+            field: 'ext$.oilfilmno',
+            title: 'T_EMC_ORDER.OILFILMNO',
+            editor: true,
+            editable: true,
+            type: 'choose',
+            category: 'oilFilm',
+            single: true,
+            onBeforeChoose: function (index) {
                 return {
                     orgId_SEQ: workspace.user.ext$.parentorgid
                 }
             },
-            onAfterChoose : function(rows) {
+            onAfterChoose: function (rows) {
                 if (!Gikam.isEmpty(rows)) {
                     this.setData({
-                        id : this.getActivedRow().id,
-                        ext$ : {
-                            oilfilmno : rows[0].oilFilmNo
+                        id: this.getActivedRow().id,
+                        ext$: {
+                            oilfilmno: rows[0].oilFilmNo
                         },
                     });
                 }
             },
-            onClean : function() {
+            onClean: function () {
                 this.setData({
-                    id : this.getActivedRow().id,
-                    ext$ : {
-                        oilfilmno : ''
+                    id: this.getActivedRow().id,
+                    ext$: {
+                        oilfilmno: ''
                     },
                 });
             }
         }, {
-            field : 'ext$.samplebottleno',
-            title : 'T_EMC_SAMPLE_BOTTLE.SAMPLEBOTTLENO',
-            editor : true,
-            editable : true,
-            type : 'choose',
-            category : 'sampleBottle',
-            single : false,
-            onBeforeChoose : function(index) {
+            field: 'ext$.samplebottleno',
+            title: 'T_EMC_SAMPLE_BOTTLE.SAMPLEBOTTLENO',
+            editor: true,
+            editable: true,
+            type: 'choose',
+            category: 'sampleBottle',
+            single: false,
+            onBeforeChoose: function (index) {
                 return {
                     orgId_SEQ: workspace.user.ext$.parentorgid
                 }
             },
-            onAfterChoose : function(rows) {
+            onAfterChoose: function (rows) {
                 if (!Gikam.isEmpty(rows)) {
                     var sampleBottleNo = "";
-                    for ( let index in rows) {
+                    for (let index in rows) {
                         if (index == rows.length - 1) {
                             sampleBottleNo += rows[index].sampleBottleNo;
                             break;
@@ -1225,199 +1381,178 @@ var emcSample = Gikam.getPageObject({
                         sampleBottleNo += rows[index].sampleBottleNo + ",";
                     }
                     this.setData({
-                        id : this.getActivedRow().id,
-                        ext$ : {
-                            samplebottleno : sampleBottleNo
+                        id: this.getActivedRow().id,
+                        ext$: {
+                            samplebottleno: sampleBottleNo
                         },
                     });
                 }
             },
-            onClean : function() {
+            onClean: function () {
                 this.setData({
-                    id : this.getActivedRow().id,
-                    ext$ : {
-                        samplebottleno : ''
+                    id: this.getActivedRow().id,
+                    ext$: {
+                        samplebottleno: ''
                     },
                 });
             }
         }, {
-            field : 'ext$.samplingdepth',
-            title : 'T_EMC_ORDER.SAMPLINGDEPTH',
-            editor : true
+            field: 'ext$.samplingdepth',
+            title: 'T_EMC_ORDER.SAMPLINGDEPTH',
+            editor: true
         }, {
-            field : 'ext$.color',
-            title : 'T_EMC_ORDER.COLOR',
-            editable : true,
-            type : 'comboBox',
-            category : 'sys',
-            param : {
-                codeCategoryId : 'orderColorNew',
+            field: 'ext$.color',
+            title: 'T_EMC_ORDER.COLOR',
+            editable: true,
+            type: 'comboBox',
+            category: 'sys',
+            param: {
+                codeCategoryId: 'orderColorNew',
             },
-            editor : true,
+            editor: true,
         }, {
-            field : 'ext$.texture',
-            title : 'T_EMC_ORDER.TEXTURE',
-            type : 'comboBox',
-            category : 'sys',
-            param : {
-                codeCategoryId : 'orderTexture',
+            field: 'ext$.texture',
+            title: 'T_EMC_ORDER.TEXTURE',
+            type: 'comboBox',
+            category: 'sys',
+            param: {
+                codeCategoryId: 'orderTexture',
             },
-            editor : true,
+            editor: true,
         }, {
-            field : 'ext$.odor',
-            title : 'T_EMC_ORDER.ODOR',
-            editor : true,
-            type : 'comboBox',
-            search : true,
-            category : 'sys',
-            param : {
-                codeCategoryId : 'orderSmell'
+            field: 'ext$.odor',
+            title: 'T_EMC_ORDER.ODOR',
+            editor: true,
+            type: 'comboBox',
+            search: true,
+            category: 'sys',
+            param: {
+                codeCategoryId: 'orderSmell'
             },
         }, {
-            field : 'ext$.density',
-            title : 'T_EMC_ORDER.DENSITY',
-            editable :true,
-            type : 'comboBox',
-            category : 'sys',
-            param : {
-                codeCategoryId : 'orderDensity',
+            field: 'ext$.density',
+            title: 'T_EMC_ORDER.DENSITY',
+            editable: true,
+            type: 'comboBox',
+            category: 'sys',
+            param: {
+                codeCategoryId: 'orderDensity',
             },
-            editor : true,
+            editor: true,
         }, {
-            field : 'ext$.structure',
-            title : 'T_EMC_ORDER.STRUCTURE',
-            type : 'comboBox',
-            category : 'sys',
-            param : {
-                codeCategoryId : 'orderStructure',
+            field: 'ext$.structure',
+            title: 'T_EMC_ORDER.STRUCTURE',
+            type: 'comboBox',
+            category: 'sys',
+            param: {
+                codeCategoryId: 'orderStructure',
             },
-            editor : true,
+            editor: true,
         }, {
-            field : 'ext$.gravel',
-            title : 'T_EMC_ORDER.GRAVEL',
+            field: 'ext$.gravel',
+            title: 'T_EMC_ORDER.GRAVEL',
 
-            editor : true
+            editor: true
         }, {
-            field : 'ext$.othermatter',
-            title : 'T_EMC_ORDER.OTHERMATTER',
+            field: 'ext$.othermatter',
+            title: 'T_EMC_ORDER.OTHERMATTER',
 
-            editor : true
+            editor: true
         }, {
-            field : 'ext$.pidvalue',
-            title : 'T_EMC_ORDER.PIDVALUE',
-            editor : true
+            field: 'ext$.pidvalue',
+            title: 'T_EMC_ORDER.PIDVALUE',
+            editor: true
         }, {
-            field : 'ext$.weight',
-            title : 'T_EMC_ORDER.WEIGHT',
-            editor : true
+            field: 'ext$.weight',
+            title: 'T_EMC_ORDER.WEIGHT',
+            editor: true
         }, {
-            field : 'ext$.rootcontent',
-            title : 'T_EMC_ORDER.ROOTCONTENT',
-            type : 'comboBox',
-            validators : [ 'strLength[0,60]' ],
-            category : 'sys',
-            param : {
-                codeCategoryId : 'rootContent',
+            field: 'ext$.rootcontent',
+            title: 'T_EMC_ORDER.ROOTCONTENT',
+            type: 'comboBox',
+            validators: ['strLength[0,60]'],
+            category: 'sys',
+            param: {
+                codeCategoryId: 'rootContent',
             },
-            editor : true,
+            editor: true,
         }, {
-            field : 'ext$.humidity',
-            title : 'T_EMC_ORDER.HUMIDITY',
-            type : 'comboBox',
-            category : 'sys',
-            param : {
-                codeCategoryId : 'humidity',
+            field: 'ext$.humidity',
+            title: 'T_EMC_ORDER.HUMIDITY',
+            type: 'comboBox',
+            category: 'sys',
+            param: {
+                codeCategoryId: 'humidity',
             },
-            editor : true,
+            editor: true,
         }, {
-            field : 'orderDesc',
-            title : 'T_EMC_ORDER.ORDERDESC',
-            editor : true,
-            width : 110,
+            field: 'orderDesc',
+            title: 'T_EMC_ORDER.ORDERDESC',
+            editor: true,
+            width: 110,
         }, {
-            field : 'remark',
-            title : 'T_EMC_ORDER.REMARK',
-            editor : true,
-        }, ];
+            field: 'remark',
+            title: 'T_EMC_ORDER.REMARK',
+            editor: true,
+        },];
     },
 
-    getOrderTaskResultColumns : function(status) {
-        return [ {
-            checkbox : true
+    getQcOrderTaskResultColumns: function (status) {
+        return [{
+            checkbox: true
         }, {
-            field : 'orderNo',
-            title : 'T_EMC_ORDER.ORDERNO'
+            field: 'orderNo',
+            title: 'T_EMC_ORDER.ORDERNO'
         }, {
-            field : 'cycle',
-            title : 'T_EMC_ORDER.CYCLE',
-            width : 60,
+            field: 'ext$.testname',
+            title: 'T_EMC_TEST_METHOD.TESTNAME',
         }, {
-            field : 'frequency',
-            title : 'T_EMC_ORDER.FREQUENCY',
-            width : 60,
+            field: 'itemAliasName',
+            title: 'T_EMC_ORDER_TASK_RESULT.ITEMNAME'
         }, {
-            field : 'ext$.samplenum',
-            title : 'T_EMC_ORDER.SAMPLENUM',
-            width : 80,
-        }, {
-            field : 'ext$.sampleweight',
-            title : 'T_EMC_ORDER_TASK.SAMPLEWEIGHT',
-            width : 100,
-            editor : true
-        }, {
-            field : 'ext$.testname',
-            title : 'T_EMC_TEST_METHOD.TESTNAME',
-        }, {
-            field : 'itemAliasName',
-            title : 'T_EMC_ORDER_TASK_RESULT.ITEMNAME'
-        }, {
-            field : 'repeatNo',
-            title : 'T_EMC_ORDER_TASK_RESULT.REPEATNO',
-            width : 90,
-        }, {
-            field : 'originalResult',
-            title : 'T_EMC_ORDER_TASK_RESULT.ORIGINALRESULT',
-            editor : true,
-            textStyleFormatter : function() {
+            field: 'originalResult',
+            title: 'T_EMC_ORDER_TASK_RESULT.ORIGINALRESULT',
+            editor: true,
+            textStyleFormatter: function () {
                 if (status.pageSource != undefined && status.pageSource == 'report') {
                     return {}
                 }
                 return {
-                    backgroundColor : 'palegreen'
+                    backgroundColor: 'palegreen'
                 }
             },
-            onBeforeEditorRender : function(row) {
+            onBeforeEditorRender: function (row) {
                 if (row.scriptFlag == '1') {
                     return false;
                 }
                 return true;
             },
-            onFocus : function(field, value, index) {
+            onFocus: function (field, value, index) {
                 var _this = this;
                 var data = _this.getData()[index];
                 if ('select' === data.resultCategory) {
                     Gikam.create('modal', {
-                        width : 400,
-                        height : 300,
-                        title : Gikam.choose.getConfig('itemResult').title,
-                        url : Gikam.choose.getConfig('itemResult').url + Gikam.param({
-                            single : true,
-                            itemId_SEQ : data.itemId,
+                        width: 400,
+                        height: 300,
+                        title: Gikam.choose.getConfig('itemResult').title,
+                        url: Gikam.choose.getConfig('itemResult').url + Gikam.param({
+                            single: true,
+                            itemId_SEQ: data.itemId,
                         }),
-                        onAfterClose : function(rows) {
+                        onAfterClose: function (rows) {
                             if (Gikam.isEmpty(rows)) {
                                 return;
                             }
                             Gikam.getComp('emc-order-task-result-edit-list-grid').setData({
-                                index : index,
-                                originalResult : rows[0].result,
-                                reportResult : rows[0].result,
+                                index: index,
+                                originalResult: rows[0].result,
+                                reportResult: rows[0].result,
                             });
                         }
                     });
                 }
             },
-            onChange : function(field, value, index) {
+            onChange: function (field, value, index) {
                 var data = this.getData()[index];
 
                 if ('number' === data.resultCategory) {
@@ -1437,437 +1572,1264 @@ var emcSample = Gikam.getPageObject({
                         if (forbidden) {
                             Gikam.alert(value + '格式错误！请输入正确格式数值！');
                             this.setData({
-                                index : index,
-                                originalResult : ''
+                                index: index,
+                                originalResult: ''
                             });
                         }
                     }
                 }
             }
         }, {
-            field : 'reportResult',
-            title : 'T_EMC_ORDER_TASK_RESULT.REPORTRESULT',
-            formatter : function(i, v ,r) {
+            field: 'reportResult',
+            title: 'T_EMC_ORDER_TASK_RESULT.REPORTRESULT',
+            formatter: function (i, v, r) {
                 return Gikam.scientificNotation(v);
             }
         }, {
-            field : 'unitName',
-            title : 'T_EMC_ORDER_TASK_RESULT.UNITNAME',
-            type : 'choose',
-            category : 'unit',
-            single : true,
-            onAfterChoose : function(rows, index) {
+            field: 'unitName',
+            title: 'T_EMC_ORDER_TASK_RESULT.UNITNAME',
+            type: 'choose',
+            category: 'unit',
+            single: true,
+            onAfterChoose: function (rows, index) {
                 if (!Gikam.isEmpty(rows)) {
                     this.setData({
-                        index : index,
-                        unitName : rows[0].unitName,
+                        index: index,
+                        unitName: rows[0].unitName,
                     });
                 }
             },
-            width : 100,
-            editor : true,
+            width: 100,
+            editor: true,
         }, {
-            field : 'revisionRule',
-            title : 'T_EMC_ORDER_TASK_RESULT.REVISIONRULE',
-            editor : true,
-            type : 'choose',
-            category : 'rounding-rule',
-            width : 120,
-            single : true,
-            validators : [ 'strLength[0,30]' ],
-            onAfterChoose : function(back, index) {
-                if (back) {
+            field: 'lowLimit',
+            title: 'T_EMC_ORDER_TASK_RESULT.LOWLIMIT',
+            editor: true,
+        }, {
+            field: 'ext$.rn4',
+            title: '父样结果',
+        }, {
+            field: 'ext$.rn8',
+            title: '绝对相差',
+        }, {
+            field: 'rn13',
+            title: '标准样品编号',
+            editor: true,
+            textStyleFormatter: function () {
+                if (status.pageSource != undefined && status.pageSource == 'report') {
+                    return {}
+                }
+                return {
+                    backgroundColor: 'palegreen'
+                }
+            },
+            onChange: function (name, value, index) {
+                if (Gikam.isNotEmpty(value)) {
                     this.setData({
-                        index : index,
-                        'revisionRule' : back
+                        index: index,
+                        rn13: value
                     });
+                    return;
+                }
+                this.setData({
+                    index: index,
+                    rn13: value
+
+                });
+            },
+        }, {
+            field: 'standQty',
+            title: '标准值',
+            editor: true,
+            textStyleFormatter: function () {
+                if (status.pageSource != undefined && status.pageSource == 'report') {
+                    return {}
+                }
+                return {
+                    backgroundColor: 'palegreen'
                 }
             },
-        }, {
-            field : 'lowLimit',
-            title : 'T_EMC_ORDER_TASK_RESULT.LOWLIMIT',
-            editor : true,
-        }, {
-            field : 'reportDisplay',
-            title : 'T_EMC_ORDER_TASK_RESULT.SHOWINREPORT',
-            type : 'select',
-            search : true,
-            category : 'sys',
-            param : {
-                codeCategoryId : 'yesorno'
+            onBeforeEditorRender: function (currData) {
+                //计算质控结果
+                if (currData.ext$.calqcresult == '1') {
+                    return true;
+                }
+                return false;
             },
-            editor : true,
-        }, {
-            field : 'ext$.orderdesc',
-            title : 'T_EMC_ORDER.ORDERDESC',
-        }, {
-            field : 'ext$.methodname',
-            title : 'T_EMC_ORDER_TASK_RESULT.METHODNAME'
-        }, {
-            field : 'ext$.testmethodbasis',
-            title : 'T_EMC_ORDER_TASK_RESULT.TESTMETHODBASIS'
-        }, {
-            field : 'resultStatus',
-            title : 'T_EMC_ORDER_TASK_RESULT.RESULTSTATUS',
-            type : 'select',
-            search : true,
-            category : 'sys',
-            param : {
-                codeCategoryId : 'resultinputstatus'
+            onChange: function (name, value, index) {
+                let uncertainty = this.getData()[index].rn16;
+                if (Gikam.isNotEmpty(value) && uncertainty) {
+                    this.setData({
+                        index: index,
+                        indexLowLimit: (Number(value) * 10000 - Number(uncertainty) * 10000) / 10000,
+                        indexHighLimit: (Number(value) * 10000 + Number(uncertainty) * 10000) / 10000,
+                        standQty: value
+                    });
+                    return;
+                }
+                this.setData({
+                    index: index,
+                    indexLowLimit: '',
+                    indexHighLimit: '',
+                    standQty: value
+                });
+                return;
             },
-            width : 100
+            formatter: function (i, v, r) {
+                return Gikam.scientificNotation(v);
+            }
+
         }, {
-            field : 'ext$.remark',
-            title : 'T_EMC_ORDER.REMARK',
-        } ];
+            field: 'rn16',
+            title: '不确定度',
+            editor: true,
+            textStyleFormatter: function () {
+                if (status.pageSource != undefined && status.pageSource == 'report') {
+                    return {}
+                }
+                return {
+                    backgroundColor: 'palegreen'
+                }
+            },
+            onBeforeEditorRender: function (currData) {
+                //计算质控结果
+                if (currData.ext$.calqcresult == '1') {
+                    return true;
+                }
+                return false;
+            },
+            onChange: function (name, value, index) {
+                let stdValue = this.getData()[index].standQty;
+                if (Gikam.isNotEmpty(value) && stdValue) {
+                    this.setData({
+                        index: index,
+                        indexLowLimit: (Number(stdValue) * 10000 - Number(value) * 10000) / 10000,
+                        indexHighLimit: (Number(stdValue) * 10000 + Number(value) * 10000) / 10000,
+                        rn16: value
+                    });
+                    return;
+                }
+                this.setData({
+                    index: index,
+                    indexLowLimit: '',
+                    indexHighLimit: '',
+                    rn16: value
+                });
+            },
+            formatter: function (i, v, r) {
+                return Gikam.scientificNotation(v);
+            }
+        }, {
+            field: 'indexLowLimit',
+            title: '指标低限',
+        }, {
+            field: 'indexHighLimit',
+            title: '指标高限',
+        }, {
+            field: 'resultStatus',
+            title: 'T_EMC_ORDER_TASK_RESULT.RESULTSTATUS',
+            type: 'select',
+            search: true,
+            category: 'sys',
+            param: {
+                codeCategoryId: 'resultinputstatus'
+            },
+            width: 100
+        },
+
+        ];
     },
 
-    getOrderResultBatchInputColumns : function() {
-        return [ {
-            field : 'ext$.orderno',
-            title : 'T_EMC_ORDER.ORDERNO',
-            width : 200
+    getOrderTaskResultColumns: function (status) {
+        return [{
+            checkbox: true
         }, {
-            field : 'testName',
-            title : 'T_EMC_TEST_METHOD.TESTNAME',
+            field: 'orderNo',
+            title: 'T_EMC_ORDER.ORDERNO'
         }, {
-            field : 'orderCategory',
-            title : 'T_EMC_ORDER_TASK.ORDERCATEGORY'
-        } ];
+            field: 'cycle',
+            title: 'T_EMC_ORDER.CYCLE',
+            width: 60,
+        }, {
+            field: 'frequency',
+            title: 'T_EMC_ORDER.FREQUENCY',
+            width: 60,
+        },
+//        {
+//            field : 'ext$.samplenum',
+//            title : 'T_EMC_ORDER.SAMPLENUM',
+//            width : 80,
+//        },
+//         {
+//            field : 'ext$.sampleweight',
+//            title : 'T_EMC_ORDER_TASK.SAMPLEWEIGHT',
+//            width : 100,
+//            editor : true
+//        },
+            {
+                field: 'ext$.testname',
+                title: 'T_EMC_TEST_METHOD.TESTNAME',
+            }, {
+                field: 'itemAliasName',
+                title: 'T_EMC_ORDER_TASK_RESULT.ITEMNAME'
+            }, {
+                field: 'repeatNo',
+                title: 'T_EMC_ORDER_TASK_RESULT.REPEATNO',
+                width: 90,
+            }, {
+                field: 'originalResult',
+                title: 'T_EMC_ORDER_TASK_RESULT.ORIGINALRESULT',
+                editor: true,
+                textStyleFormatter: function () {
+                    if (status.pageSource != undefined && status.pageSource == 'report') {
+                        return {}
+                    }
+                    return {
+                        backgroundColor: 'palegreen'
+                    }
+                },
+                onBeforeEditorRender: function (row) {
+                    if (row.scriptFlag == '1') {
+                        return false;
+                    }
+                    return true;
+                },
+                onFocus: function (field, value, index) {
+                    var _this = this;
+                    var data = _this.getData()[index];
+                    if ('select' === data.resultCategory) {
+                        Gikam.create('modal', {
+                            width: 400,
+                            height: 300,
+                            title: Gikam.choose.getConfig('itemResult').title,
+                            url: Gikam.choose.getConfig('itemResult').url + Gikam.param({
+                                single: true,
+                                itemId_SEQ: data.itemId,
+                            }),
+                            onAfterClose: function (rows) {
+                                if (Gikam.isEmpty(rows)) {
+                                    return;
+                                }
+                                Gikam.getComp('emc-order-task-result-edit-list-grid').setData({
+                                    index: index,
+                                    originalResult: rows[0].result,
+                                    reportResult: rows[0].result,
+                                });
+                            }
+                        });
+                    }
+                },
+                onChange: function (field, value, index) {
+                    var data = this.getData()[index];
+
+                    if ('number' === data.resultCategory) {
+                        var forbidden = false;
+                        if (Gikam.isNotEmpty(value)) {
+                            var regF = /^(-?\d+)(\.\d+)?$/;
+                            if (value.indexOf('0') == 0 && value.length > 1 && value.indexOf('0.') == -1) {
+                                forbidden = true;
+                            }
+                            if ((value.indexOf('-0') == 0 && value.length == 2) || (value.indexOf('-0.') == 0 && value.length == 3)) {
+                                forbidden = true;
+                            }
+                            if (!regF.test(value)) {
+                                forbidden = true;
+                            }
+
+                            if (forbidden) {
+                                Gikam.alert(value + '格式错误！请输入正确格式数值！');
+                                this.setData({
+                                    index: index,
+                                    originalResult: ''
+                                });
+                            }
+                        }
+                    }
+                }
+            }, {
+                field: 'reportResult',
+                title: 'T_EMC_ORDER_TASK_RESULT.REPORTRESULT',
+                formatter: function (i, v, r) {
+                    return Gikam.scientificNotation(v);
+                }
+            }, {
+                field: 'unitName',
+                title: 'T_EMC_ORDER_TASK_RESULT.UNITNAME',
+                type: 'choose',
+                category: 'unit',
+                single: true,
+                onAfterChoose: function (rows, index) {
+                    if (!Gikam.isEmpty(rows)) {
+                        this.setData({
+                            index: index,
+                            unitName: rows[0].unitName,
+                        });
+                    }
+                },
+                width: 100,
+                editor: true,
+            }, {
+                field: 'revisionRule',
+                title: 'T_EMC_ORDER_TASK_RESULT.REVISIONRULE',
+                editor: true,
+                type: 'choose',
+                category: 'rounding-rule',
+                width: 120,
+                single: true,
+                validators: ['strLength[0,30]'],
+                onAfterChoose: function (back, index) {
+                    if (back) {
+                        this.setData({
+                            index: index,
+                            'revisionRule': back
+                        });
+                    }
+                },
+            }, {
+                field: 'lowLimit',
+                title: 'T_EMC_ORDER_TASK_RESULT.LOWLIMIT',
+                editor: true,
+            }, {
+                field: 'reportDisplay',
+                title: 'T_EMC_ORDER_TASK_RESULT.SHOWINREPORT',
+                type: 'select',
+                search: true,
+                category: 'sys',
+                param: {
+                    codeCategoryId: 'yesorno'
+                },
+                editor: true,
+            },
+//         {
+//              field : 'ext$.rn4',
+//              title : '父样结果',
+//          }, {
+//             field : 'ext$.rn8',
+//             title : '绝对相差',
+//         }, {
+//           field : 'ext$.rn13',
+//           title : '标准样品编号',
+//       }, {
+//           field : 'standQty',
+//           title : '标准值',
+//           editor : true,
+//           textStyleFormatter : function() {
+//                  if (status.pageSource != undefined && status.pageSource == 'report') {
+//                      return {}
+//                  }
+//                  return {
+//                      backgroundColor : 'palegreen'
+//                  }
+//              },
+//               onBeforeEditorRender : function(currData) {
+//                  //计算质控结果
+//                  if (currData.ext$.calqcresult == '1') {
+//                      return true;
+//                  }
+//                  return false;
+//              },
+//              onChange : function(name, value, index) {
+//                  let uncertainty = this.getData()[index].rn16;
+//                  if (Gikam.isNotEmpty(value) && uncertainty) {
+//                      this.setData({
+//                          index : index,
+//                          indexLowLimit : (Number(value) * 10000 - Number(uncertainty) * 10000)/10000,
+//                          indexHighLimit : (Number(value) * 10000 + Number(uncertainty) * 10000)/10000,
+//                          standQty : value
+//                      });
+//                      return;
+//                  }
+//                  this.setData({
+//                      index : index,
+//                      indexLowLimit : '',
+//                      indexHighLimit : '',
+//                      standQty : value
+//                  });
+//                  return;
+//              },
+//              formatter : function(i, v ,r) {
+//                  return Gikam.scientificNotation(v);
+//              }
+//
+//       }, {
+//           field : 'rn16',
+//           title : '不确定度',
+//           editor : true,
+//           textStyleFormatter : function() {
+//                  if (status.pageSource != undefined && status.pageSource == 'report') {
+//                      return {}
+//                  }
+//                  return {
+//                      backgroundColor : 'palegreen'
+//                  }
+//              },
+//               onBeforeEditorRender : function(currData) {
+//                                    //计算质控结果
+//                                    if (currData.ext$.calqcresult == '1') {
+//                                        return true;
+//                                    }
+//                                    return false;
+//                                },
+//                onChange : function(name, value, index) {
+//                    let stdValue = this.getData()[index].standQty;
+//                    if (Gikam.isNotEmpty(value) && stdValue){
+//                        this.setData({
+//                            index : index,
+//                            indexLowLimit : (Number(stdValue)*10000 - Number(value)*10000)/10000,
+//                            indexHighLimit : (Number(stdValue)*10000 + Number(value)*10000)/10000,
+//                            rn16 : value
+//                        });
+//                        return;
+//                    }
+//                    this.setData({
+//                        index : index,
+//                        indexLowLimit : '',
+//                        indexHighLimit : '',
+//                        rn16 : value
+//                    });
+//                },
+//                formatter : function(i, v ,r) {
+//                    return Gikam.scientificNotation(v);
+//                }
+//       }, {
+//           field : 'indexLowLimit',
+//           title : '指标低限',
+//       }, {
+//           field : 'indexHighLimit',
+//           title : '指标高限',
+//       },
+////        {
+////            field : 'ext$.orderdesc',
+////            title : 'T_EMC_ORDER.ORDERDESC',
+////        }, {
+////            field : 'ext$.methodname',
+////            title : 'T_EMC_ORDER_TASK_RESULT.METHODNAME'
+////        }, {
+////            field : 'ext$.testmethodbasis',
+////            title : 'T_EMC_ORDER_TASK_RESULT.TESTMETHODBASIS'
+////        },
+//        {
+//            field : 'resultStatus',
+//            title : 'T_EMC_ORDER_TASK_RESULT.RESULTSTATUS',
+//            type : 'select',
+//            search : true,
+//            category : 'sys',
+//            param : {
+//                codeCategoryId : 'resultinputstatus'
+//            },
+//            width : 100
+//        },
+            {
+                field: 'resultStatus',
+                title: 'T_EMC_ORDER_TASK_RESULT.RESULTSTATUS',
+                type: 'select',
+                search: true,
+                category: 'sys',
+                param: {
+                    codeCategoryId: 'resultinputstatus'
+                },
+                width: 100
+            }, {
+                field: 'ext$.sceneequiptcollectno',
+                title: '现场采集仪器编号',
+                // validators : ['strLength[0,22]' ],
+                // editor : true,
+            }, {
+                field: 'sceneFileNo',
+                title: '现场采集文件编号',
+                validators: ['strLength[0,22]'],
+                editor: true,
+            },
+
+
+//        {
+//            field : 'ext$.remark',
+//            title : 'T_EMC_ORDER.REMARK',
+//        }
+        ];
     },
 
-    getOrderOperateInfoFormFields : function() {
-        return [ {
-            field : 'sampleBeginDate',
-            title : 'T_EMC_ORDER.SAMPLEBEGINDATE',
-            type : 'date',
-            editor : true,
+
+    getOrderTaskResultColumns2: function (status) {
+        return [{
+            checkbox: true
         }, {
-            field : 'sampleBeginTime',
-            title : 'T_EMC_ORDER.SAMPLEBEGINTIME',
-            type : 'time',
-            editor : true,
+            field: 'orderNo',
+            title: 'T_EMC_ORDER.ORDERNO'
         }, {
-            field : 'sampleCompleteDate',
-            title : 'T_EMC_ORDER.SAMPLECOMPLETEDATE',
-            type : 'date',
-            editor : true,
+            field: 'cycle',
+            title: 'T_EMC_ORDER.CYCLE',
+            width: 60,
         }, {
-            field : 'sampleCompleteTime',
-            title : 'T_EMC_ORDER.SAMPLECOMPLETETIME',
-            type : 'time',
-            editor : true,
-        } ];
+            field: 'frequency',
+            title: 'T_EMC_ORDER.FREQUENCY',
+            width: 60,
+        },
+            {
+                field: 'ext$.testname',
+                title: 'T_EMC_TEST_METHOD.TESTNAME',
+            }, {
+                field: 'itemAliasName',
+                title: 'T_EMC_ORDER_TASK_RESULT.ITEMNAME'
+            }, {
+                field: 'repeatNo',
+                title: 'T_EMC_ORDER_TASK_RESULT.REPEATNO',
+                width: 90,
+            }, {
+                field: 'originalResult',
+                title: 'T_EMC_ORDER_TASK_RESULT.ORIGINALRESULT',
+                editor: true,
+                textStyleFormatter: function () {
+                    if (status.pageSource != undefined && status.pageSource == 'report') {
+                        return {}
+                    }
+                    return {
+                        backgroundColor: 'palegreen'
+                    }
+                },
+                onBeforeEditorRender: function (row) {
+                    if (row.scriptFlag == '1') {
+                        return false;
+                    }
+                    return true;
+                },
+                onFocus: function (field, value, index) {
+                    var _this = this;
+                    var data = _this.getData()[index];
+                    if ('select' === data.resultCategory) {
+                        Gikam.create('modal', {
+                            width: 400,
+                            height: 300,
+                            title: Gikam.choose.getConfig('itemResult').title,
+                            url: Gikam.choose.getConfig('itemResult').url + Gikam.param({
+                                single: true,
+                                itemId_SEQ: data.itemId,
+                            }),
+                            onAfterClose: function (rows) {
+                                if (Gikam.isEmpty(rows)) {
+                                    return;
+                                }
+                                Gikam.getComp('emc-order-task-result-edit-list-grid').setData({
+                                    index: index,
+                                    originalResult: rows[0].result,
+                                    reportResult: rows[0].result,
+                                });
+                            }
+                        });
+                    }
+                },
+                onChange: function (field, value, index) {
+                    var data = this.getData()[index];
+
+                    if ('number' === data.resultCategory) {
+                        var forbidden = false;
+                        if (Gikam.isNotEmpty(value)) {
+                            var regF = /^(-?\d+)(\.\d+)?$/;
+                            if (value.indexOf('0') == 0 && value.length > 1 && value.indexOf('0.') == -1) {
+                                forbidden = true;
+                            }
+                            if ((value.indexOf('-0') == 0 && value.length == 2) || (value.indexOf('-0.') == 0 && value.length == 3)) {
+                                forbidden = true;
+                            }
+                            if (!regF.test(value)) {
+                                forbidden = true;
+                            }
+
+                            if (forbidden) {
+                                Gikam.alert(value + '格式错误！请输入正确格式数值！');
+                                this.setData({
+                                    index: index,
+                                    originalResult: ''
+                                });
+                            }
+                        }
+                    }
+                }
+            }, {
+                field: 'reportResult',
+                title: 'T_EMC_ORDER_TASK_RESULT.REPORTRESULT',
+                formatter: function (i, v, r) {
+                    return Gikam.scientificNotation(v);
+                }
+            }, {
+                field: 'unitName',
+                title: 'T_EMC_ORDER_TASK_RESULT.UNITNAME',
+                type: 'choose',
+                category: 'unit',
+                single: true,
+                onAfterChoose: function (rows, index) {
+                    if (!Gikam.isEmpty(rows)) {
+                        this.setData({
+                            index: index,
+                            unitName: rows[0].unitName,
+                        });
+                    }
+                },
+                width: 100,
+                editor: true,
+            }, {
+                field: 'revisionRule',
+                title: 'T_EMC_ORDER_TASK_RESULT.REVISIONRULE',
+                editor: true,
+                type: 'choose',
+                category: 'rounding-rule',
+                width: 120,
+                single: true,
+                validators: ['strLength[0,30]'],
+                onAfterChoose: function (back, index) {
+                    if (back) {
+                        this.setData({
+                            index: index,
+                            'revisionRule': back
+                        });
+                    }
+                },
+            }, {
+                field: 'lowLimit',
+                title: 'T_EMC_ORDER_TASK_RESULT.LOWLIMIT',
+                editor: true,
+            },
+        ];
     },
 
-    getOrderBatchInfoFormFields : function() {
-        return [ {
-            field : 'sampleBeginDate',
-            title : 'T_EMC_ORDER.SAMPLEBEGINDATE',
-            type : 'date',
+
+    getOrderResultBatchInputColumns: function () {
+        return [{
+            field: 'ext$.orderno',
+            title: 'T_EMC_ORDER.ORDERNO',
+            width: 200
         }, {
-            field : 'sampleBeginTime',
-            title : 'T_EMC_ORDER.SAMPLEBEGINTIME',
-            type : 'time',
+            field: 'testName',
+            title: 'T_EMC_TEST_METHOD.TESTNAME',
         }, {
-            field : 'sampleCompleteDate',
-            title : 'T_EMC_ORDER.SAMPLECOMPLETEDATE',
-            type : 'date',
+            field: 'orderCategory',
+            title: 'T_EMC_ORDER_TASK.ORDERCATEGORY'
+        }];
+    },
+
+    getOrderOperateInfoFormFields: function () {
+        return [{
+            field: 'sampleBeginDate',
+            title: 'T_EMC_ORDER.SAMPLEBEGINDATE',
+            type: 'date',
+            editor: true,
         }, {
-            field : 'sampleCompleteTime',
-            title : 'T_EMC_ORDER.SAMPLECOMPLETETIME',
-            type : 'time',
+            field: 'sampleBeginTime',
+            title: 'T_EMC_ORDER.SAMPLEBEGINTIME',
+            type: 'time',
+            editor: true,
+        }, {
+            field: 'sampleCompleteDate',
+            title: 'T_EMC_ORDER.SAMPLECOMPLETEDATE',
+            type: 'date',
+            editor: true,
+        }, {
+            field: 'sampleCompleteTime',
+            title: 'T_EMC_ORDER.SAMPLECOMPLETETIME',
+            type: 'time',
+            editor: true,
+        }];
+    },
+
+    getOrderBatchInfoFormFields: function () {
+        return [{
+            field: 'sampleBeginDate',
+            title: 'T_EMC_ORDER.SAMPLEBEGINDATE',
+            type: 'date',
+        }, {
+            field: 'sampleBeginTime',
+            title: 'T_EMC_ORDER.SAMPLEBEGINTIME',
+            type: 'time',
+        }, {
+            field: 'sampleCompleteDate',
+            title: 'T_EMC_ORDER.SAMPLECOMPLETEDATE',
+            type: 'date',
+        }, {
+            field: 'sampleCompleteTime',
+            title: 'T_EMC_ORDER.SAMPLECOMPLETETIME',
+            type: 'time',
+        },];
+    },
+
+    getOrderTaskEquiptSetColumns: function () {
+        return [{
+            checkbox: true
+        }, {
+            field: 'name',
+            title: '名称',
+        }, {
+            field: 'allocationDate',
+            title: 'T_EMC_EQUIPT_SET.ALLOCATIONDATE',
+            type: 'date',
+            width: 210,
+            editor: true
+        }, {
+            field: 'cushionNo',
+            title: '缓冲液编号',
+            width: 170,
+            editor: true
+        }, {
+            field: 'cushionName',
+            title: 'T_EMC_EQUIPT_SET.CUSHIONNAME',
+            width: 170,
+            editor: true
+        }, {
+            field: 'temperature',
+            title: 'T_EMC_EQUIPT_SET.TEMPERATURE',
+            width: 170,
+            editor: true
+        }, {
+            field: 'result',
+            title: 'T_EMC_EQUIPT_SET.RESULT',
+            width: 150,
+            editor: true,
+            onChange: function (field, value, rowIndex, oldValue, text) {
+                var row = Gikam.getComp('emc-sample-expand-detail-list-equipt-set-grid').getData()[rowIndex];
+                var status = '合格';
+                if (row.ext$.equiptvalue === "/") {
+                    status = "/";
+                } else if (parseFloat(row.ext$.equiptvalue) - parseFloat(row.result) > 0.05 || parseFloat(row.result) - parseFloat(row.ext$.equiptvalue) > 0.05) {
+                    status = '不合格';
+                }
+                this.setData({
+                    index: rowIndex,
+                    result: value,
+                    ext$: {
+                        status: status
+                    }
+                });
+            }
+        }, {
+            field: 'ext$.equiptvalue',
+            title: '仪器示值',
+            width: 150,
+            editor: true,
+            onChange: function (field, value, rowIndex, oldValue, text) {
+                var row = Gikam.getComp('emc-sample-expand-detail-list-equipt-set-grid').getData()[rowIndex];
+                var status = '合格';
+                if (parseFloat(row.ext$.equiptvalue) - parseFloat(row.result) > 0.05 || parseFloat(row.result) - parseFloat(row.ext$.equiptvalue) > 0.05) {
+                    status = '不合格';
+                }
+                this.setData({
+                    index: rowIndex,
+                    ext$: {
+                        status: status,
+                        equiptvalue: value
+                    }
+                });
+            }
+        }, {
+            field: 'ext$.status',
+            title: '校准结果',
+            width: 150,
+            editor: true,
+            type: 'select',
+            items: [{
+                'text': '合格',
+                'value': '合格'
+            }, {
+                'text': '不合格',
+                'value': '不合格'
+            }, {
+                'text': '/',
+                'value': '/'
+            },],
+            textStyleFormatter: function (row,value) {
+                if(value == '不合格'){
+                    return {
+                        color: 'red'
+                    }
+                }
+            },
+        },];
+    },
+    getOrderTaskTemperatureEquiptSetColumns: function () {
+        return [{
+            checkbox: true
+        }, {
+            field: 'resistance',
+            title: 'T_EMC_EQUIPT_TEMP_SET.RESISTANCE',
+            editor: true,
+        }, {
+            field: 'temperature',
+            title: 'T_EMC_EQUIPT_TEMP_SET.TEMPERATURE',
+            editor: true,
+        }, {
+            field: 'checkDiff',
+            title: 'T_EMC_EQUIPT_TEMP_SET.CHECKDIFF',
+            editor: true,
+        }, {
+            field: 'checkSafe',
+            title: 'T_EMC_EQUIPT_TEMP_SET.CHECKSAFE',
+            type: 'select',
+            search: true,
+            category: 'sys',
+            param: {
+                codeCategoryId: 'yesorno'
+            },
+            editor: true,
+            textStyleFormatter: function (row,value) {
+                if(value == '0'){
+                    return {
+                        color: 'red'
+                    }
+                }
+            },
+        },{
+            field: 'equiptName',
+            title: 'T_EMC_ORDER_TASK.EQUIPTNAME',
+            width: 110,
         }, ];
     },
-
-    getOrderTaskEquiptColumns : function() {
-        return [ {
-            checkbox : true
+    getOrderTaskSwEquiptSetColumns: function () {
+        return [{
+            checkbox: true
         }, {
-            field : 'ext$.orderno',
-            title : 'T_EMC_ORDER.ORDERNO',
-            width : 110,
+            field: 'orderNo',
+            title: '样品编号',
         }, {
-            field : 'testName',
-            title : 'T_EMC_ORDER_TASK.TESTNAME',
-            width : 110,
+            field: 'temperatureOne',
+            title: 'T_EMC_EQUIPT_SW_SET.TEMPERATUREONE',
+            editor: true,
         }, {
-            field : 'ext$.equiptsid',
-            title : 'T_EMC_ORDER_TASK.EQUIPTID',
-            width : 90,
+            field: 'temperatureTwo',
+            title: 'T_EMC_EQUIPT_SW_SET.TEMPERATURETWO',
+            editor: true,
         }, {
-            field : 'ext$.factoryno',
-            title : 'T_EMC_ORDER_TASK.FACTORYNO',
-            width : 110,
+            field: 'tempDiff',
+            title: 'T_EMC_EQUIPT_SW_SET.TEMPDIFF',
+            editor: true,
         }, {
-            field : 'ext$.equiptname',
-            title : 'T_EMC_ORDER_TASK.EQUIPTNAME',
-            width : 110,
-        }, {
-            field : 'ext$.specification',
-            title : 'T_EMC_ORDER_TASK.SPECIFICATION',
-            width : 110,
-        }, {
-            field : 'analysisUserName',
-            title : 'T_EMC_ORDER_TASK.ANALYSISUSERNAME',
-            width : 110,
-        }, {
-            field : 'methodName',
-            title : 'T_EMC_ORDER_TASK.METHODNAME',
-        }, {
-            field : 'testMethodBasis',
-            title : 'T_EMC_ORDER_TASK.TESTMETHODBASIS',
-        }, {
-            field : 'assistEquiptName',
-            title : 'T_EMC_ORDER_TASK.ASSISTEQUIPTID',
-        }, {
-            field : 'partakeUserName',
-            title : 'T_EMC_ORDER_TASK.PARTAKEUSERNAME',
-        }, {
-            field : 'ext$.remark',
-            title : 'T_EMC_ORDER.REMARK',
-        } ];
+            field: 'measureSafe',
+            title: 'T_EMC_EQUIPT_SW_SET.MEASURESAFE',
+            type: 'select',
+            search: true,
+            category: 'sys',
+            param: {
+                codeCategoryId: 'yesorno'
+            },
+            editor: true,
+            textStyleFormatter: function (row,value) {
+                if(value == '0'){
+                    return {
+                        color: 'red'
+                    }
+                }
+            },
+        },];
     },
 
-    getOrderChooseListColumns : function() {
-        return [ {
-            index : true
+    getOrderTaskEquiptColumns: function () {
+        return [{
+            checkbox: true
         }, {
-            field : 'ext$.projno',
-            title : 'T_EMC_PROJECT.PROJNO'
+            field: 'qcName',
+            title: 'QC类型'
         }, {
-            field : 'orderNo',
-            title : 'T_EMC_ORDER.ORDERNO'
+            field: 'ext$.monitorpointno',
+            title: '监测点编码'
         }, {
-            field : 'sampleBeginDate',
-            title : 'T_EMC_ORDER.SAMPLEBEGINDATE',
+            field: 'ext$.monitorpointname',
+            title: '监测点名称'
         }, {
-            field : 'clientOrderName',
-            title : 'T_EMC_ORDER.CLIENTORDERNAME',
+            field: 'ext$.orderno',
+            title: 'T_EMC_ORDER.ORDERNO',
+            width: 110,
         }, {
-            field : 'labelNo',
-            title : 'T_EMC_ORDER.LABELNO2',
+            field: 'testName',
+            title: 'T_EMC_ORDER_TASK.TESTNAME',
+            width: 110,
         }, {
-            field : 'sampleBeginTime',
-            title : 'T_EMC_ORDER.SAMPLEBEGINTIME',
-            type : 'time',
-        }, {
-            field : 'sampleCompleteDate',
-            title : 'T_EMC_ORDER.SAMPLECOMPLETEDATE',
-        }, {
-            field : 'sampleCompleteTime',
-            title : 'T_EMC_ORDER.SAMPLECOMPLETETIME',
-            type : 'time'
-        }, {
-            field : 'orderCategory',
-            title : 'T_EMC_ORDER.ORDERCATEGORY',
-        }, {
-            field : 'ext$.monitorpointname',
-            title : 'T_EMC_FOLDER.MONITORPOINTNAME'
-        }, {
-            field : 'ext$.monitorpointno',
-            title : 'T_EMC_FOLDER.MONITORPOINTNO'
-        }, {
-            field : 'ext$.testname',
-            title : 'T_EMC_ORDER_TASK.TESTNAME'
-        }, {
-            field : 'ext$.runids',
-            title : 'T_EMC_ORDER_TASK.RUNID'
-        }, {
-            field : 'ext$.equiptid',
-            title : 'T_EMC_ORDER_TASK.EQUIPTID'
-        }, {
-            field : 'ext$.equiptname',
-            title : 'T_EMC_ORDER_TASK.EQUIPTNAME'
-        }, {
-            field : 'orderDesc',
-            title : 'T_EMC_ORDER.ORDERDESC',
-        }, {
-            field : 'ext$.remark',
-            title : 'T_EMC_ORDER.REMARK'
-        }, {
-            field : 'qcName',
-            title : 'T_EMC_ORDER.QCCATEGORYNO'
-        }, {
-            field : 'labelNo',
-            title : 'T_EMC_ORDER.LABELNO'
-        }, {
-            field : 'cycle',
-            title : 'T_EMC_ORDER.CYCLE'
-        }, {
-            field : 'frequency',
-            title : 'T_EMC_ORDER.FREQUENCY'
-        }, {
-            field : 'sampleNum',
-            title : 'T_EMC_ORDER.SAMPLENUM'
-        } ];
-    },
+            field: 'ext$.equiptsid',
+            title: 'T_EMC_ORDER_TASK.EQUIPTID',
+            width: 90,
+            editor: true,
+            category: 'equipt',
+            type: 'choose',
+            single: true,
+            onBeforeChoose: function () {
+                return {
+                    equiptRequisitionFilterProjId: this.getActivedRow().projId
+                }
+            },
 
-    getOrderContainerFormFields : function() {
-        return [ {
-            field : 'containerCategoryName',
-            title : 'T_EMC_ORDER_TASK.CONTAINERCATEGORYNAME',
-            editor : true,
-            validators : [ 'strLength[0,21]' ],
-            type : 'choose',
-            category : 'containerCategory',
-            single : true,
-            onAfterChoose : function(rows, index) {
-                if (rows) {
-                    this.setData({
-                        index : index,
-                        containerCategoryId : rows[0].id,
-                        containerCategoryCode : rows[0].containerCategoryId,
-                        containerCategoryName : rows[0].containerCategoryName,
+            onAfterChoose: function (rows) {
+                if (!Gikam.isEmpty(rows)) {
+
+                    Gikam.getComp('emc-sample-expand-detail-list-equipt-grid').setData({
+                        id: Gikam.getComp('emc-sample-expand-detail-list-equipt-grid').getActivedRow().id,
+                        equiptId: rows[0].id,
+                        ext$: {
+                            equiptsid: rows[0].equiptId,
+                            equiptname: rows[0].equiptName,
+                            specification: rows[0].specification
+                        }
                     });
                 }
             },
+            onClean: function () {
+                Gikam.getComp('emc-sample-expand-detail-list-equipt-grid').setData({
+                    id: Gikam.getComp('emc-sample-expand-detail-list-equipt-grid').getActivedRow().id,
+                    equiptId: '',
+                    ext$: {
+                        equiptsid: '',
+                        equiptname: '',
+                        specification: ''
+                    }
+                });
+            }
         }, {
-            field : 'containerGroup',
-            title : 'T_EMC_ORDER_TASK.CONTAINERGROUP',
-            editor : true,
-            validators : [ 'strLength[0,36]' ],
+            field: 'ext$.factoryno',
+            title: 'T_EMC_ORDER_TASK.FACTORYNO',
+            width: 110,
         }, {
-            field : 'fixative',
-            title : 'T_EMC_ORDER_TASK.FIXATIVE',
-            editor : true,
-            validators : [ 'strLength[0,66]' ],
+            field: 'ext$.equiptname',
+            title: 'T_EMC_ORDER_TASK.EQUIPTNAME',
+            width: 110,
         }, {
-            field : 'storeCondition',
-            title : 'T_EMC_ORDER_TASK.STORECONDITION',
-            editor : true,
-            validators : [ 'strLength[0,120]' ],
-        } ];
+            field: 'ext$.specification',
+            title: 'T_EMC_ORDER_TASK.SPECIFICATION',
+            width: 110,
+        }, {
+            field: 'analysisUserName',
+            title: 'T_EMC_ORDER_TASK.ANALYSISUSERNAME',
+            width: 110,
+        }, {
+            field: 'assistEquiptName',
+            title: 'T_EMC_ORDER_TASK.ASSISTEQUIPTID',
+            width: 90,
+            editor: true,
+            category: 'equipt',
+            type: 'choose',
+            single: true,
+            onBeforeChoose: function () {
+                return {
+                    ID_DIFFER: this.getActivedRow().equiptId,
+                    equiptRequisitionFilterProjId: this.getActivedRow().projId
+                }
+            },
+
+            onAfterChoose: function (rows) {
+                if (!Gikam.isEmpty(rows)) {
+
+                    Gikam.getComp('emc-sample-expand-detail-list-equipt-grid').setData({
+                        id: Gikam.getComp('emc-sample-expand-detail-list-equipt-grid').getActivedRow().id,
+                        assistEquiptId: rows[0].id,
+                        assistEquiptName: rows[0].equiptId + "/" + rows[0].equiptName + "/" + rows[0].specification,
+
+                    });
+                }
+            },
+            onClean: function () {
+                Gikam.getComp('emc-sample-expand-detail-list-equipt-grid').setData({
+                    id: Gikam.getComp('emc-sample-expand-detail-list-equipt-grid').getActivedRow().id,
+                    assistEquiptId: '',
+                    assistEquiptName: ''
+                });
+            }
+        }, {
+            field: 'partakeUserName',
+            title: 'T_EMC_ORDER_TASK.PARTAKEUSERNAME',
+        }, {
+            field: 'ext$.remark',
+            title: 'T_EMC_ORDER.REMARK',
+        }];
+    },
+
+    getOrderChooseListColumns: function () {
+        return [{
+            index: true
+        }, {
+            field: 'ext$.projno',
+            title: 'T_EMC_PROJECT.PROJNO'
+        }, {
+            field: 'orderNo',
+            title: 'T_EMC_ORDER.ORDERNO'
+        }, {
+            field: 'sampleBeginDate',
+            title: 'T_EMC_ORDER.SAMPLEBEGINDATE',
+        }, {
+            field: 'clientOrderName',
+            title: 'T_EMC_ORDER.CLIENTORDERNAME',
+        }, {
+            field: 'labelNo',
+            title: 'T_EMC_ORDER.LABELNO2',
+        }, {
+            field: 'sampleBeginTime',
+            title: 'T_EMC_ORDER.SAMPLEBEGINTIME',
+            type: 'time',
+        }, {
+            field: 'sampleCompleteDate',
+            title: 'T_EMC_ORDER.SAMPLECOMPLETEDATE',
+        }, {
+            field: 'sampleCompleteTime',
+            title: 'T_EMC_ORDER.SAMPLECOMPLETETIME',
+            type: 'time'
+        }, {
+            field: 'orderCategory',
+            title: 'T_EMC_ORDER.ORDERCATEGORY',
+        }, {
+            field: 'ext$.monitorpointname',
+            title: 'T_EMC_FOLDER.MONITORPOINTNAME'
+        }, {
+            field: 'ext$.monitorpointno',
+            title: 'T_EMC_FOLDER.MONITORPOINTNO'
+        }, {
+            field: 'ext$.testname',
+            title: 'T_EMC_ORDER_TASK.TESTNAME'
+        }, {
+            field: 'ext$.runids',
+            title: 'T_EMC_ORDER_TASK.RUNID'
+        }, {
+            field: 'ext$.equiptid',
+            title: 'T_EMC_ORDER_TASK.EQUIPTID'
+        }, {
+            field: 'ext$.equiptname',
+            title: 'T_EMC_ORDER_TASK.EQUIPTNAME'
+        }, {
+            field: 'orderDesc',
+            title: 'T_EMC_ORDER.ORDERDESC',
+        }, {
+            field: 'ext$.remark',
+            title: 'T_EMC_ORDER.REMARK'
+        }, {
+            field: 'qcName',
+            title: 'T_EMC_ORDER.QCCATEGORYNO'
+        }, {
+            field: 'labelNo',
+            title: 'T_EMC_ORDER.LABELNO'
+        }, {
+            field: 'cycle',
+            title: 'T_EMC_ORDER.CYCLE'
+        }, {
+            field: 'frequency',
+            title: 'T_EMC_ORDER.FREQUENCY'
+        }, {
+            field: 'sampleNum',
+            title: 'T_EMC_ORDER.SAMPLENUM'
+        }];
+    },
+
+
+    getOrderChooseListColumns2: function () {
+        return [{
+            index: true
+        }, {
+            field: 'ext$.projno',
+            title: 'T_EMC_PROJECT.PROJNO'
+        }, {
+            field: 'orderNo',
+            title: 'T_EMC_ORDER.ORDERNO'
+        }, {
+            field: 'labelNo',
+            title: 'T_EMC_ORDER.LABELNO2',
+        }, {
+            field: 'orderCategory',
+            title: 'T_EMC_ORDER.ORDERCATEGORY',
+        }, {
+            field: 'ext$.monitorpointname',
+            title: 'T_EMC_FOLDER.MONITORPOINTNAME'
+        }, {
+            field: 'ext$.monitorpointno',
+            title: 'T_EMC_FOLDER.MONITORPOINTNO'
+        }, {
+            field: 'ext$.plansampledate',
+            title: 'T_EMC_FOLDER.PLANSAMPLEDATE',
+            type: 'date'
+        }, {
+            field: 'ext$.remark',
+            title: 'T_EMC_ORDER.REMARK'
+        }, {
+            field: 'qcName',
+            title: 'T_EMC_ORDER.QCCATEGORYNO'
+        }, {
+            field: 'labelNo',
+            title: 'T_EMC_ORDER.LABELNO'
+        }, {
+            field: 'cycle',
+            title: 'T_EMC_ORDER.CYCLE'
+        }, {
+            field: 'frequency',
+            title: 'T_EMC_ORDER.FREQUENCY'
+        }, {
+            field: 'sampleNum',
+            title: 'T_EMC_ORDER.SAMPLENUM'
+        }];
+    },
+
+    getOrderContainerFormFields: function () {
+        return [{
+            field: 'containerCategoryName',
+            title: 'T_EMC_ORDER_TASK.CONTAINERCATEGORYNAME',
+            editor: true,
+            validators: ['strLength[0,21]'],
+            type: 'choose',
+            category: 'containerCategory',
+            single: true,
+            onAfterChoose: function (rows, index) {
+                if (rows) {
+                    this.setData({
+                        index: index,
+                        containerCategoryId: rows[0].id,
+                        containerCategoryCode: rows[0].containerCategoryId,
+                        containerCategoryName: rows[0].containerCategoryName,
+                    });
+                }
+            },
+            onClean: function (field, value, index) {
+                this.setData({
+                    index: index,
+                    containerCategoryId: '',
+                    containerCategoryCode: '',
+                    containerCategoryName: '',
+                });
+            },
+        }, {
+            field: 'containerGroup',
+            title: 'T_EMC_ORDER_TASK.CONTAINERGROUP',
+            editor: true,
+            validators: ['strLength[0,36]'],
+        }, {
+            field: 'fixative',
+            title: 'T_EMC_ORDER_TASK.FIXATIVE',
+            editor: true,
+            validators: ['strLength[0,66]'],
+        }, {
+            field: 'storeCondition',
+            title: 'T_EMC_ORDER_TASK.STORECONDITION',
+            editor: true,
+            validators: ['strLength[0,120]'],
+        }];
     },
 
     // 采样单详情
-    getSampleInfoFields : function() {
-        return [ {
-            field : 'sampleNo',
-            title : 'T_EMC_SAMPLE.SAMPLENO',
+    getSampleInfoFields: function () {
+        return [{
+            field: 'sampleNo',
+            title: 'T_EMC_SAMPLE.SAMPLENO',
         }, {
-            field : 'projNo',
-            title : 'T_EMC_SAMPLE.PROJNO',
+            field: 'projNo',
+            title: 'T_EMC_SAMPLE.PROJNO',
         }, {
-            field : 'orderCategory',
-            title : 'T_EMC_SAMPLE.ORDERCATEGORY',
+            field: 'orderCategory',
+            title: 'T_EMC_SAMPLE.ORDERCATEGORY',
         }, {
-            field : 'remark',
-            title : 'T_EMC_SAMPLE.REMARK',
-        }, ];
+            field: 'remark',
+            title: 'T_EMC_SAMPLE.REMARK',
+        },];
     },
 
-    getEditItemListColumns : function() {
+    getEditItemListColumns: function () {
 
-        return [ {
-            checkbox : true
+        return [{
+            checkbox: true
         }, {
-            field : 'ext$.testname',
-            title : 'T_EMC_ORDER_TASK_RESULT.TESTNAME',
+            field: 'ext$.testname',
+            title: 'T_EMC_ORDER_TASK_RESULT.TESTNAME',
         }, {
-            field : 'itemName',
-            title : 'T_EMC_ORDER_TASK_RESULT.ITEMNAME',
+            field: 'itemName',
+            title: 'T_EMC_ORDER_TASK_RESULT.ITEMNAME',
         }, {
-            field : 'unitName',
-            title : 'T_EMC_ORDER_TASK_RESULT.UNITNAME',
-            type : 'choose',
-            category : 'unit',
+            field: 'unitName',
+            title: 'T_EMC_ORDER_TASK_RESULT.UNITNAME',
+            type: 'choose',
+            category: 'unit',
         }, {
-            field : 'highLimit',
-            title : 'T_EMC_ORDER_TASK_RESULT.HIGHLIMIT',
+            field: 'highLimit',
+            title: 'T_EMC_ORDER_TASK_RESULT.HIGHLIMIT',
         }, {
-            field : 'lowLimit',
-            title : 'T_EMC_ORDER_TASK_RESULT.LOWLIMIT',
-        } ];
+            field: 'lowLimit',
+            title: 'T_EMC_ORDER_TASK_RESULT.LOWLIMIT',
+        }];
 
     },
 
-    getBatchInputContainerColumns : function() {
-        return [ {
-            checkbox : true
+    getBatchInputContainerColumns: function () {
+        return [{
+            checkbox: true
         }, {
-            field : 'testName',
-            title : 'T_EMC_ORDER_TASK.TESTNAME',
-            colspan : 1,
+            field: 'testName',
+            title: 'T_EMC_ORDER_TASK.TESTNAME',
+            colspan: 1,
         }, {
-            field : 'containerCategoryName',
-            title : 'T_EMC_ORDER_TASK.CONTAINERCATEGORYNAME',
-            colspan : 1,
-            type : 'choose',
-            category : 'containerCategory',
-            single : true,
-            onAfterChoose : function(rows, index) {
+            field: 'containerCategoryName',
+            title: 'T_EMC_ORDER_TASK.CONTAINERCATEGORYNAME',
+            colspan: 1,
+            type: 'choose',
+            category: 'containerCategory',
+            single: true,
+            onAfterChoose: function (rows, index) {
                 if (rows) {
                     this.setData({
-                        index : index,
-                        containerCategoryId : rows[0].id,
-                        containerCategoryCode : rows[0].containerCategoryId,
-                        containerCategoryName : rows[0].containerCategoryName,
+                        index: index,
+                        containerCategoryId: rows[0].id,
+                        containerCategoryCode: rows[0].containerCategoryId,
+                        containerCategoryName: rows[0].containerCategoryName,
                     });
                 }
             },
         }, {
-            field : 'containerGroup',
-            title : 'T_EMC_ORDER_TASK.CONTAINERGROUP',
-            colspan : 1,
+            field: 'containerGroup',
+            title: 'T_EMC_ORDER_TASK.CONTAINERGROUP',
+            colspan: 1,
         }, {
-            field : 'fixative',
-            title : 'T_EMC_ORDER_TASK.FIXATIVE',
-            colspan : 1,
+            field: 'fixative',
+            title: 'T_EMC_ORDER_TASK.FIXATIVE',
+            colspan: 1,
         }, {
-            field : 'storeCondition',
-            title : 'T_EMC_ORDER_TASK.STORECONDITION'
-        } ];
+            field: 'storeCondition',
+            title: 'T_EMC_ORDER_TASK.STORECONDITION'
+        }];
     },
 
-    getRepeatNoFields : function() {
-        return [ {
-            field : 'repeatNo',
-            title : 'T_EMC_ORDER_TASK_RESULT.REPEATNUMBER',
-            editor : true,
-            value : 1,
-            validators : [ 'integer' ],
-            type : 'number',
-            hasArrow : true,
-        }, ];
+    getRepeatNoFields: function () {
+        return [{
+            field: 'repeatNo',
+            title: 'T_EMC_ORDER_TASK_RESULT.REPEATNUMBER',
+            editor: true,
+            value: 1,
+            validators: ['integer'],
+            type: 'number',
+            hasArrow: true,
+        },];
     },
 
-    getInvalidResultColumns : function() {
-        return [ {
-            field : 'operatedata',
-            title : 'T_EMC_ORDER_TASK_RESULT.OPERATEDATA',
-            type : 'select',
-            category : 'sys',
-            param : {
-                codeCategoryId : 'operatedata'
+    getInvalidResultColumns: function () {
+        return [{
+            field: 'operatedata',
+            title: 'T_EMC_ORDER_TASK_RESULT.OPERATEDATA',
+            type: 'select',
+            category: 'sys',
+            param: {
+                codeCategoryId: 'operatedata'
             },
-            colspan : 2,
+            colspan: 2,
         }, {
-            field : 'reason',
-            title : 'T_EMC_ORDER_TASK_RESULT.REASON',
-            type : 'comboBox',
-            category : 'sys',
-            param : {
-                codeCategoryId : 'reason'
+            field: 'reason',
+            title: 'T_EMC_ORDER_TASK_RESULT.REASON',
+            type: 'comboBox',
+            category: 'sys',
+            param: {
+                codeCategoryId: 'reason'
             },
-            colspan : 2,
-            validators : [ 'strLength[0,11]' ],
-        }, ];
+            colspan: 2,
+            validators: ['strLength[0,11]'],
+        },];
     },
 
-    getProjectShowAllField : function() {
+    getProjectShowAllField: function () {
         var flag = true;
-        return [ {
-            title : 'EMC.MODULE.MDM.BIZMDM.MONITORTMPLS.SHOW_ALL',
-            field : 'showFlag',
-            refreshGrid : false,
-            type : 'simpleCheckbox',
-            styleFormatter : function() {
+        return [{
+            title: 'EMC.MODULE.MDM.BIZMDM.MONITORTMPLS.SHOW_ALL',
+            field: 'showFlag',
+            refreshGrid: false,
+            type: 'simpleCheckbox',
+            styleFormatter: function () {
                 return {
-                    paddingLeft : '0'
+                    paddingLeft: '0'
                 }
             },
-            onChange : function(field, value, index) {
+            onChange: function (field, value, index) {
                 workspace.window.showMask(true);
                 var projectDataInputAllGrid = Gikam.getComp('emc-sample-edit-list-project-grid');
 
@@ -1875,186 +2837,294 @@ var emcSample = Gikam.getPageObject({
 
                 if (showFlags == '1') {
                     projectDataInputAllGrid.refresh({
-                        requestData : {
-                            sampleUserId : ''
+                        requestData: {
+                            sampleUserId: ''
                         }
-                    }).done(function() {
+                    }).done(function () {
                         workspace.window.closeMask();
                     });
                 } else {
                     projectDataInputAllGrid.refresh({
-                        requestData : {
-                            sampleUserId : workspace.user.id,
+                        requestData: {
+                            sampleUserId: workspace.user.id,
                         }
-                    }).done(function() {
+                    }).done(function () {
                         workspace.window.closeMask();
                     });
                 }
             },
-        } ]
+        }]
     },
 
-    getProjectPrepareShowAllField : function() {
+    getProjectPrepareShowAllField: function () {
         var flag = true;
-        return [ {
-            title : 'EMC.MODULE.MDM.BIZMDM.MONITORTMPLS.SHOW_ALL',
-            field : 'showFlag',
-            refreshGrid : false,
-            type : 'simpleCheckbox',
-            styleFormatter : function() {
+        return [{
+            title: 'EMC.MODULE.MDM.BIZMDM.MONITORTMPLS.SHOW_ALL',
+            field: 'showFlag',
+            refreshGrid: false,
+            type: 'simpleCheckbox',
+            styleFormatter: function () {
                 return {
-                    paddingLeft : '0'
+                    paddingLeft: '0'
                 }
             },
-            onChange : function(field, value, index) {
-                workspace.window.showMask(true);
+            onChange: function (field, value, index) {
+                // workspace.window.showMask(true);
                 var projectDataInputAllGrid = Gikam.getComp('emc-sample-edit-list-project-prepare-grid');
 
                 var showFlags = value;
 
                 if (showFlags == '1') {
                     projectDataInputAllGrid.refresh({
-                        requestData : {
-                            sampleUserId : '',
-                            projectType : 'folderProject',
-                            folderStatus : 'draw'
+                        requestData: {
+                            sampleUserId: '',
+                            projectType: 'folderProject',
+                            folderStatus: 'draw'
                         }
-                    }).done(function() {
-                        workspace.window.closeMask();
+                    }).done(function () {
+                        // workspace.window.closeMask();
                     });
                 } else {
                     projectDataInputAllGrid.refresh({
-                        requestData : {
-                            sampleUserId : workspace.user.id,
-                            projectType : 'folderProject',
-                            folderStatus : 'draw'
+                        requestData: {
+                            sampleUserId: workspace.user.id,
+                            projectType: 'folderProject',
+                            folderStatus: 'draw'
                         }
-                    }).done(function() {
-                        workspace.window.closeMask();
+                    }).done(function () {
+                        // workspace.window.closeMask();
                     });
                 }
             },
-        } ]
+        }]
     },
 
-    getSamplePrepareShowAllField : function() {
+    getSamplePrepareShowAllField: function () {
         var flag = true;
-        return [ {
-            title : 'EMC.MODULE.MDM.BIZMDM.MONITORTMPLS.SHOW_ALL',
-            field : 'showFlag',
-            type : 'simpleCheckbox',
-            refreshGrid : false,
-            styleFormatter : function() {
+        return [{
+            title: 'EMC.MODULE.MDM.BIZMDM.MONITORTMPLS.SHOW_ALL',
+            field: 'showFlag',
+            type: 'simpleCheckbox',
+            refreshGrid: false,
+            styleFormatter: function () {
                 return {
-                    paddingLeft : '0'
+                    paddingLeft: '0'
                 }
             },
-            onChange : function(field, value, index) {
+            onChange: function (field, value, index) {
 
-                workspace.window.showMask(true);
+                // workspace.window.showMask(true);
                 var folderAllGrid = Gikam.getComp('emc-sample-edit-list-grid');
 
                 var showFlags = value;
 
                 if (showFlags == '1') {
                     folderAllGrid.refresh({
-                        requestData : {
-                            sampleUserId : '',
-                            sceneUserId : '',
-                            orgId_SB: workspace.user.ext$.parentorgid
+                        requestData: {
+                            sampleUserId: '',
+                            sceneUserId: '',
+                            org_filter: '1',
                         }
-                    }).done(function() {
-                        workspace.window.closeMask();
+                    }).done(function () {
+                        // workspace.window.closeMask();
                     });
                 } else {
                     folderAllGrid.refresh({
-                        requestData : {
-                            sampleUserId : workspace.user.id,
-                            sceneUserId : workspace.user.id,
-                            orgId_SB: workspace.user.ext$.parentorgid
+                        requestData: {
+                            sampleUserId: workspace.user.id,
+                            sceneUserId: workspace.user.id,
+                            org_filter: '1',
                         }
-                    }).done(function() {
-                        workspace.window.closeMask();
+                    }).done(function () {
+                        // workspace.window.closeMask();
                     });
                 }
             },
-        } ]
+        }]
     },
 
-    getOrderDescFormFields : function() {
-        return [ {
-            field : 'orderColor',
-            title : 'T_EMC_SAMPLE.ORDERCOLOR',
-            type : 'select',
-            search : true,
-            category : 'sys',
-            param : {
-                codeCategoryId : 'orderColor'
+    getFolderFSDescFormFields: function () {
+        return [
+            {
+                field: 'waterTemperature',
+                title: '水温',
+                editor: true,
+            },]
+    },
+    getFolderDXSDescFormFields: function () {
+        return [
+            {
+                field: 'sectionWaterDepth',
+                title: '深度',
+                editor: true,
+            }, {
+                field: 'fairtemperature',
+                title: '气温',
+                editor: true
+            }]
+    },
+    getFolderTRDescFormFields: function () {
+        return [
+            {
+                field: 'longitude',
+                title: 'T_EMC_FOLDER.LONGITUDE',
+                editor: true,
+            }, {
+                field: 'latitude',
+                title: 'T_EMC_FOLDER.LATITUDE',
+                editor: true,
+            },]
+    },
+    getFolderCJWDescFormFields: function () {
+        return [
+            {
+                field: 'river',
+                title: 'T_EMC_FOLDER.RIVER',
+                editor: true,
+            }, {
+                field: 'section',
+                title: '断面',
+                editor: true,
+            }, {
+                field: 'sectionWaterDepth',
+                title: '深度',
+                editor: true,
             },
-        }, {
-            field : 'orderSmell',
-            title : 'T_EMC_SAMPLE.ORDERSMELL',
-            type : 'select',
-            search : true,
-            category : 'sys',
-            param : {
-                codeCategoryId : 'orderSmell'
-            },
-        }, {
-            field : 'orderOilSlick',
-            title : 'T_EMC_SAMPLE.ORDEROILSLICK',
-            type : 'select',
-            search : true,
-            category : 'sys',
-            param : {
-                codeCategoryId : 'orderOilSlick'
+        ]
+
+    },
+    getFolderDbsDescFormFields: function () {
+        return [
+            {
+                field: 'longitude',
+                title: 'T_EMC_FOLDER.LONGITUDE',
+                editor: true,
+            }, {
+                field: 'latitude',
+                title: 'T_EMC_FOLDER.LATITUDE',
+                editor: true,
+            }, {
+                field: 'river',
+                title: 'T_EMC_FOLDER.RIVER',
+                editor: true,
+            }, {
+                field: 'section',
+                title: '断面',
+                editor: true,
+            }, {
+                field: 'sectionConditionDesc',
+                title: '断面周边环境描述',
+                editor: true,
+                type: 'select',
+                multiple: true,
+                category: 'sys',
+                param: {
+                    codeCategoryId: 'sectionConditionDesc',
+                },
+            }, {
+                field: 'sectionWaterWidth',
+                title: '水面宽度',
+                editor: true,
+            }, {
+                field: 'sectionWaterDepth',
+                title: '深度',
+                editor: true,
+            }, {
+                field: 'sectionWaterQuality',
+                title: '断面水质表现',
+                editor: true,
+                type: 'select',
+                multiple: true,
+                category: 'sys',
+                param: {
+                    codeCategoryId: 'sectionWaterQuality',
+                },
+            }, {
+                field: 'waterTemperature',
+                title: '水温',
+                editor: true,
+            }, {
+                field: 'turbidity',
+                title: '浊度',
+                editor: true,
             }
-        }, {
-            field : 'orderFloater',
-            title : 'T_EMC_SAMPLE.ORDERFLOATER',
-            type : 'select',
-            search : true,
-            category : 'sys',
-            param : {
-                codeCategoryId : 'orderFloater'
-            }
-        }, {
-            field : 'samplingDepth',
-            title : 'T_EMC_SAMPLE.SAMPLINGDEPTH',
-        }, {
-            field : 'samplingNum',
-            title : 'T_EMC_SAMPLE.SAMPLINGNUM',
-        } ];
+        ]
+
     },
 
-    getSoliOrderDescFormFields : function() {
-        return [ {
-            field : 'ext$.samplingdepth',
-            title : 'T_EMC_ORDER.SAMPLINGDEPTH',
+    getOrderDescFormFields: function () {
+        return [{
+            field: 'orderColor',
+            title: 'T_EMC_SAMPLE.ORDERCOLOR',
+            // type : 'comboBox',
+            // search : true,
+            // category : 'sys',
+            // param : {
+            //     codeCategoryId : 'orderColor'
+            // },
         }, {
-            field : 'ext$.color',
-            title : 'T_EMC_ORDER.COLOR',
-            /*editable : true,
-            type : 'comboBox',
-            category : 'sys',
-            param : {
-                codeCategoryId : 'orderColorNew',
-            },*/
+            field: 'orderSmell',
+            title: 'T_EMC_SAMPLE.ORDERSMELL',
+            // type : 'comboBox',
+            // search : true,
+            // category : 'sys',
+            // param : {
+            //     codeCategoryId : 'orderSmell'
+            // },
         }, {
-            field : 'ext$.othermatter',
-            title : 'T_EMC_ORDER.OTHERMATTER',
+            field: 'orderOilSlick',
+            title: 'T_EMC_SAMPLE.ORDEROILSLICK',
+            // type : 'comboBox',
+            // search : true,
+            // category : 'sys',
+            // param : {
+            //     codeCategoryId : 'orderOilSlick'
+            // }
+        }, {
+            field: 'orderFloater',
+            title: 'T_EMC_SAMPLE.ORDERFLOATER',
+            // type : 'comboBox',
+            // search : true,
+            // category : 'sys',
+            // param : {
+            //     codeCategoryId : 'orderFloater'
+            // }
+        }, {
+            field: 'ext$.samplingdepth',
+            title: 'T_EMC_ORDER.SAMPLINGDEPTH',
+        }];
+    },
 
-            editor : true
+    getSoliOrderDescFormFields: function () {
+        return [{
+            field: 'ext$.samplingdepth',
+            title: 'T_EMC_ORDER.SAMPLINGDEPTH',
         }, {
-            field : 'ext$.texture',
-            title : 'T_EMC_ORDER.TEXTURE',
-            type : 'comboBox',
-            category : 'sys',
-            param : {
-                codeCategoryId : 'orderTexture',
+            field: 'ext$.color',
+            title: 'T_EMC_ORDER.COLOR',
+            editable: true,
+            type: 'comboBox',
+            category: 'sys',
+            param: {
+                codeCategoryId: 'orderColor',
             },
-            editor : true,
-        }/*, {
+        },
+//        {
+//            field : 'ext$.othermatter',
+//            title : 'T_EMC_ORDER.OTHERMATTER',
+//
+//            editor : true
+//        },
+            {
+                field: 'ext$.texture',
+                title: 'T_EMC_ORDER.TEXTURE',
+                type: 'comboBox',
+                category: 'sys',
+                param: {
+                    codeCategoryId: 'orderTexture',
+                },
+                editor: true,
+            }/*, {
             field : 'ext$.odor',
             title : 'T_EMC_ORDER.ODOR',
             editor : true,
@@ -2097,25 +3167,34 @@ var emcSample = Gikam.getPageObject({
             title : 'T_EMC_ORDER.WEIGHT',
             editor : true
         }*/, {
-            field : 'ext$.rootcontent',
-            title : 'T_EMC_ORDER.ROOTCONTENT',
-            type : 'comboBox',
-            validators : [ 'strLength[0,60]' ],
-            category : 'sys',
-            param : {
-                codeCategoryId : 'rootContent',
-            },
-            editor : true,
-        }, {
-            field : 'ext$.humidity',
-            title : 'T_EMC_ORDER.HUMIDITY',
-            type : 'comboBox',
-            category : 'sys',
-            param : {
-                codeCategoryId : 'humidity',
-            },
-            editor : true,
-        }/*, {
+                field: 'ext$.rootcontent',
+                title: 'T_EMC_ORDER.ROOTCONTENT',
+                type: 'comboBox',
+                validators: ['strLength[0,60]'],
+                category: 'sys',
+                param: {
+                    codeCategoryId: 'rootContent',
+                },
+                editor: true,
+            }, {
+                field: 'ext$.humidity',
+                title: '土壤湿度',
+                type: 'comboBox',
+                category: 'sys',
+                param: {
+                    codeCategoryId: 'humidity',
+                },
+                editor: true,
+            }, {
+                field: 'ext$.ordersmell',
+                title: '气味',
+                type: 'comboBox',
+                search: true,
+                category: 'sys',
+                param: {
+                    codeCategoryId: 'orderSmell'
+                },
+            },/*, {
             field : 'remark',
             title : 'T_EMC_ORDER.REMARK',
             editor : true,
@@ -2123,535 +3202,686 @@ var emcSample = Gikam.getPageObject({
         ];
     },
 
-    getSampleTestListColumns : function() {
-        return [ {
-            checkbox : true
+    getSampleTestListColumns: function () {
+        return [{
+            checkbox: true
         }, {
-            field : 'testName',
-            title : 'T_EMC_ORDER_TASK.TESTNAME'
+            field: 'testName',
+            title: 'T_EMC_ORDER_TASK.TESTNAME'
         }, {
-            field : 'methodName',
-            title : 'T_EMC_ORDER_TASK.METHODNAME'
+            field: 'methodName',
+            title: 'T_EMC_ORDER_TASK.METHODNAME'
         }, {
-            field : 'testMethodBasis',
-            title : 'T_EMC_ORDER_TASK.TESTMETHODBASIS'
+            field: 'testMethodBasis',
+            title: 'T_EMC_ORDER_TASK.TESTMETHODBASIS'
         }, {
-            field : 'subcontractorId',
-            title : 'T_EMC_ORDER_TASK.SUBCONTRACTOR',
-            type : 'select',
-            search : true,
-            category : 'subcontractor',
-            editor : true,
-            onChange : function(field, value, rowIndex, oldValue, text) {
+            field: 'subcontractorId',
+            title: 'T_EMC_ORDER_TASK.SUBCONTRACTOR',
+            type: 'select',
+            search: true,
+            category: 'subcontractor',
+            editor: true,
+            onChange: function (field, value, rowIndex, oldValue, text) {
                 var activedRow = Gikam.getComp('emc-sample-edit-list-data-input-test-grid').getActivedRow();
                 if (Gikam.isEmpty(value)) {
-                    Gikam.postText(IFM_CONTEXT + '/secure/emc/module/bp/bp/order-tasks/action/delete-subcontractor', Gikam.getJsonWrapper({}, [ 'emcOrderTaskServiceImpl', [ activedRow ] ])).done(function() {
+                    Gikam.postText(IFM_CONTEXT + '/secure/emc/module/bp/bp/order-tasks/action/delete-subcontractor', Gikam.getJsonWrapper({}, ['emcOrderTaskServiceImpl', [activedRow]])).done(function () {
                         Gikam.getComp('emc-sample-edit-list-data-input-test-grid').refreshRowByIndex(rowIndex);
                     });
 
                     return false;
                 }
 
-                Gikam.postText(IFM_CONTEXT + '/secure/emc/module/bp/bp/order-tasks/action/edit-subcontractor', Gikam.getJsonWrapper({}, [ 'emcOrderTaskServiceImpl', [ activedRow ] ])).done(function() {
+                Gikam.postText(IFM_CONTEXT + '/secure/emc/module/bp/bp/order-tasks/action/edit-subcontractor', Gikam.getJsonWrapper({}, ['emcOrderTaskServiceImpl', [activedRow]])).done(function () {
                     Gikam.getComp('emc-sample-edit-list-data-input-test-grid').refreshRowByIndex(rowIndex);
                 });
 
                 return false;
             }
         }, {
-            field : 'subPackageNo',
-            title : 'T_EMC_ORDER_TASK.SUBPACKAGENO'
-        } ];
-    },
-
-    getVocBottleColumns : function() {
-        return [ {
-            field : 'vocNumber',
-            title : 'T_EMC_VOC_WEIGHTING.VOCNUMBER'
-        },{
-            field : 'projNo',
-            title : 'T_EMC_VOC_WEIGHTING.PROJNO'
-        }, {
-            field : 'emptyBottleWeight',
-            title : 'T_EMC_VOC_WEIGHTING.EMPTYBOTTLEWEIGHT'
+            field: 'subPackageNo',
+            title: 'T_EMC_ORDER_TASK.SUBPACKAGENO'
         }];
     },
 
-    getOilFilmColumns : function() {
-        return [ {
-            checkbox : true
+    getVocBottleColumns: function () {
+        return [{
+            field: 'vocNumber',
+            title: 'T_EMC_VOC_WEIGHTING.VOCNUMBER'
         }, {
-            field : 'oilFilmNo',
-            title : 'T_EMC_OIL_FILM.OILFILMNO',
+            field: 'projNo',
+            title: 'T_EMC_VOC_WEIGHTING.PROJNO'
         }, {
-            field : 'weighingUserName',
-            title : 'T_EMC_OIL_FILM.WEIGHINGUSERNAME',
+            field: 'emptyBottleWeight',
+            title: 'T_EMC_VOC_WEIGHTING.EMPTYBOTTLEWEIGHT'
+        }];
+    },
+
+    getOilFilmColumns: function () {
+        return [{
+            checkbox: true
         }, {
-            field : 'projId',
-            title : 'T_EMC_OIL_FILM.PROJID',
+            field: 'oilFilmNo',
+            title: 'T_EMC_OIL_FILM.OILFILMNO',
         }, {
-            field : 'projNo',
-            title : 'T_EMC_OIL_FILM.PROJNO',
-            type : 'choose',
-            category : 'project',
-            single : true,
-            onBeforeChoose : function() {
+            field: 'weighingUserName',
+            title: 'T_EMC_OIL_FILM.WEIGHINGUSERNAME',
+        }, {
+            field: 'projId',
+            title: 'T_EMC_OIL_FILM.PROJID',
+        }, {
+            field: 'projNo',
+            title: 'T_EMC_OIL_FILM.PROJNO',
+            type: 'choose',
+            category: 'project',
+            single: true,
+            onBeforeChoose: function () {
                 return {
-        	            orgId_SB : workspace.user.ext$.parentorgid,
+                    org_filter: '1',
                 }
             },
-            onAfterChoose : function(rows, index) {
+            onAfterChoose: function (rows, index) {
                 if (!Gikam.isEmpty(rows)) {
                     this.setData({
-                        index : index,
-                        projId :  rows[0].id,
-                        projNo : rows[0].projNo,
-                        projName : rows[0].projName,
+                        index: index,
+                        projId: rows[0].id,
+                        projNo: rows[0].projNo,
+                        projName: rows[0].projName,
                     });
                 }
             },
-            onClean : function() {
+            onClean: function () {
                 this.setData({
-                    id : this.getActivedRow().id,
-                    projNo : '',
-                    projName : '',
+                    id: this.getActivedRow().id,
+                    projNo: '',
+                    projName: '',
                 });
             },
         }, {
-            field : 'weighingDate',
-            title : 'T_EMC_OIL_FILM.WEIGHINGDATE',
-            type : 'date',
+            field: 'weighingDate',
+            title: 'T_EMC_OIL_FILM.WEIGHINGDATE',
+            type: 'date',
         }, {
-            field : 'emptyFilterBarrelMOneOne',
-            title : 'T_EMC_OIL_FILM.EMPTYFILTERBARRELMONEONE',
+            field: 'emptyFilterBarrelMOneOne',
+            title: 'T_EMC_OIL_FILM.EMPTYFILTERBARRELMONEONE',
         }, {
-            field : 'emptyFilterBarrelMOneTwo',
-            title : 'T_EMC_OIL_FILM.EMPTYFILTERBARRELMONETWO',
+            field: 'emptyFilterBarrelMOneTwo',
+            title: 'T_EMC_OIL_FILM.EMPTYFILTERBARRELMONETWO',
         }, {
-            field : 'emptyFilterBarrelMOneThree',
-            title : 'T_EMC_OIL_FILM.EMPTYFILTERBARRELMONETHREE',
+            field: 'emptyFilterBarrelMOneThree',
+            title: 'T_EMC_OIL_FILM.EMPTYFILTERBARRELMONETHREE',
         }, {
-            field : 'emptyFilterBarrelMOneFour',
-            title : 'T_EMC_OIL_FILM.EMPTYFILTERBARRELMONEFOUR',
+            field: 'emptyFilterBarrelMOneFour',
+            title: 'T_EMC_OIL_FILM.EMPTYFILTERBARRELMONEFOUR',
         }, {
-            field : 'emptyFilterBarrelMOneFive',
-            title : 'T_EMC_OIL_FILM.EMPTYFILTERBARRELMONEFIVE',
+            field: 'emptyFilterBarrelMOneFive',
+            title: 'T_EMC_OIL_FILM.EMPTYFILTERBARRELMONEFIVE',
         }, {
-            field : 'emptyFilterBarrelMOneSix',
-            title : 'T_EMC_OIL_FILM.EMPTYFILTERBARRELMONESIX',
-        } ];
+            field: 'emptyFilterBarrelMOneSix',
+            title: 'T_EMC_OIL_FILM.EMPTYFILTERBARRELMONESIX',
+        }];
+    },
+    getSampleQcNameColumns: function () {
+        return [{
+            field: 'qcname',
+            title: '质控类型',
+            width: 120,
+        },]
+    },
+    getSamplePointColumns: function () {
+        return [{
+            checkbox: true
+        },
+            {
+                field: 'orderCategory',
+                title: 'T_EMC_FOLDER.ORDERCATEGORY',
+            },
+            {
+                field: 'folderNo',
+                title: 'T_EMC_FOLDER.FOLDERNO',
+                width: 120,
+            }, {
+                field: 'monitorPointName',
+                title: 'T_EMC_FOLDER.MONITORPOINTNAME',
+            }, {
+                field: 'monitorPointNo',
+                title: 'T_EMC_FOLDER.MONITORPOINTNO',
+                width: 110,
+            },
+            {
+                field: 'planSampleDate',
+                title: 'T_EMC_FOLDER.PLANSAMPLEDATE',
+                width: 110,
+            }, {
+                field: 'sampleOrgName',
+                title: 'T_EMC_FOLDER.SAMPLEORGNAME',
+                width: 110,
+            }, {
+                field: 'sceneUserName',
+                title: '安排现场负责人',
+                editor: true,
+                type: 'choose',
+                category: 'user-simple',
+                width: 100,
+                single: true,
+                onAfterChoose: function (rows, index) {
+                    if (!Gikam.isEmpty(rows)) {
+                        this.setData({
+                            index: index,
+                            sceneUserId: rows[0].id,
+                            sceneUserName: rows[0].userName
+                        });
+                    }
+                },
+                onClean: function (field, value, index) {
+                    this.setData({
+                        index: index,
+                        sceneUserId: '',
+                        sceneUserName: '',
+                    });
+                },
+            }, {
+                field: 'sampleUserName',
+                title: '安排采样人',
+                editor: true,
+                type: 'choose',
+                category: 'user-simple',
+                onAfterChoose: function (rows, index) {
+                    if (!Gikam.isEmpty(rows)) {
+                        var sampleUserIds = [];
+                        var sampleUserNames = [];
+                        Gikam.each(rows, function (index, item) {
+                            sampleUserIds.push(item.id);
+                            sampleUserNames.push(item.userName);
+                        });
+                        this.setData({
+                            index: index,
+                            sampleUserId: sampleUserIds.join(','),
+                            sampleUserName: sampleUserNames.join(','),
+                        });
+                    }
+                },
+                onClean: function (field, value, index) {
+                    this.setData({
+                        index: index,
+                        sampleUserId: '',
+                        sampleUserName: '',
+                    });
+                }
+            }, {
+                field: 'monitorPointCategory',
+                title: 'T_EMC_FOLDER.MONITORPOINTCATEGORY'
+            }, {
+                field: 'longitude',
+                title: 'T_EMC_FOLDER.LONGITUDE',
+                editor: true,
+                width: 90,
+            }, {
+                field: 'latitude',
+                title: 'T_EMC_FOLDER.LATITUDE',
+                editor: true,
+                width: 90,
+            }, {
+                field: 'river',
+                title: 'T_EMC_FOLDER.RIVER',
+                editor: true,
+                width: 90,
+            }, {
+                field: 'section',
+                title: '断面',
+                editor: true,
+                width: 90,
+            }, {
+                field: 'sectionConditionDesc',
+                title: '断面周边环境描述',
+                editor: true,
+                width: 150,
+                type: 'select',
+                multiple: true,
+                category: 'sys',
+                param: {
+                    codeCategoryId: 'sectionConditionDesc',
+                },
+            }, {
+                field: 'sectionWaterWidth',
+                title: '水面宽度',
+                editor: true,
+                width: 90,
+            }, {
+                field: 'sectionWaterDepth',
+                title: '深度',
+                editor: true,
+                width: 90,
+            }, {
+                field: 'sectionWaterQuality',
+                title: '断面水质表现',
+                editor: true,
+                width: 150,
+                type: 'select',
+                multiple: true,
+                category: 'sys',
+                param: {
+                    codeCategoryId: 'sectionWaterQuality',
+                },
+            }, /*{
+             field : 'waterTemperature',
+             title : '水温',
+             editor : true,
+         }, {
+              field : 'turbidity',
+              title : '浊度',
+              editor : true,
+          },*/ {
+                field: 'ext$.fairtemperature',
+                title: '气温',
+                editor: true
+            }, {
+                field: 'remark',
+                title: 'T_EMC_FOLDER.REMARK',
+                editor: true,
+            }
+        ];
+    },
+
+    getSampleOrignDataOrderColumns: function () {
+        return [{
+            checkbox: true
+        }, {
+            field: 'orderNo',
+            title: '样品编号',
+            width: 120
+        }]
+    },
+
+    getSampleExpandDetailOrderColumns: function () {
+        return [{
+            checkbox: true
+        },
+            {
+                field: 'ext$.folderno',
+                title: 'T_EMC_FOLDER.FOLDERNO',
+                width: 120,
+            }, {
+                field: 'ext$.monitorpointname',
+                title: 'T_EMC_FOLDER.MONITORPOINTNAME',
+            }, {
+                field: 'ext$.monitorpointno',
+                title: 'T_EMC_FOLDER.MONITORPOINTNO',
+                width: 110,
+            }, {
+                field: 'orderNo',
+                title: '样品编号',
+                width: 120
+            }
+        ];
     },
 
     getSamplePrepareFolderColumns: function () {
-        return [ {
-            checkbox : true
-        }, {
-            field : 'orderCategory',
-            title : 'T_EMC_FOLDER.ORDERCATEGORY',
-        }, {
-            field : 'folderNo',
-            title : 'T_EMC_FOLDER.FOLDERNO',
-            width : 90,
-        }, {
-            field : 'monitorPointName',
-            title : 'T_EMC_FOLDER.MONITORPOINTNAME',
-        }, {
-            field : 'monitorPointNo',
-            title : 'T_EMC_FOLDER.MONITORPOINTNO',
-            width : 110,
-        }, {
-            field : 'planSampleDate',
-            title : 'T_EMC_FOLDER.PLANSAMPLEDATE',
-            width : 110,
-        }, {
-            field : 'sampleOrgName',
-            title : 'T_EMC_FOLDER.SAMPLEORGNAME',
-            width : 110,
-        }, {
-            field : 'sceneUserName',
-            title : 'T_EMC_FOLDER.SCENEUSERNAME',
-            editor : true,
-            type : 'choose',
-            category : 'user-simple',
-            width : 100,
-            single : true,
-            onAfterChoose : function(rows, index) {
-                if (!Gikam.isEmpty(rows)) {
-                    this.setData({
-                        index : index,
-                        sceneUserId : rows[0].id,
-                        sceneUserName : rows[0].userName
-                    });
-                }
-            },
-            onClean : function(field, value, index) {
-                this.setData({
-                    index : index,
-                    sceneUserId : '',
-                    sceneUserName : '',
-                });
-            },
-        }, {
-            field : 'sampleUserName',
-            title : 'T_EMC_FOLDER.SAMPLEUSERNAME',
-            editor : true,
-            type : 'choose',
-            category : 'user-simple',
-            onAfterChoose : function(rows, index) {
-                if (!Gikam.isEmpty(rows)) {
-                    var sampleUserIds = [];
-                    var sampleUserNames = [];
-                    Gikam.each(rows, function(index, item) {
-                        sampleUserIds.push(item.id);
-                        sampleUserNames.push(item.userName);
-                    });
-                    this.setData({
-                        index : index,
-                        sampleUserId : sampleUserIds.join(','),
-                        sampleUserName : sampleUserNames.join(','),
-                    });
-                }
-            },
-            onClean : function(field, value, index) {
-                this.setData({
-                    index : index,
-                    sampleUserId : '',
-                    sampleUserName : '',
-                });
+        return [{
+            checkbox: true
+        },
+//        {
+//            field : 'orderCategory',
+//            title : 'T_EMC_FOLDER.ORDERCATEGORY',
+//        },
+            {
+                field: 'folderNo',
+                title: 'T_EMC_FOLDER.FOLDERNO',
+                width: 120,
+            }, {
+                field: 'monitorPointName',
+                title: 'T_EMC_FOLDER.MONITORPOINTNAME',
+            }, {
+                field: 'monitorPointNo',
+                title: 'T_EMC_FOLDER.MONITORPOINTNO',
+                width: 110,
+            }, {
+                field: 'ext$.orderno',
+                title: '样品编号',
+                width: 120
             }
-        }, {
-            field : 'monitorPointCategory',
-            title : 'T_EMC_FOLDER.MONITORPOINTCATEGORY'
-        }, {
-            field : 'longitude',
-            title : 'T_EMC_FOLDER.LONGITUDE',
-            editor : true,
-            width : 90,
-        }, {
-            field : 'latitude',
-            title : 'T_EMC_FOLDER.LATITUDE',
-            editor : true,
-            width : 90,
-        }, {
-            field : 'river',
-            title : 'T_EMC_FOLDER.RIVER',
-            editor : true,
-            width : 90,
-        }, {
-            field : 'tributary',
-            title : 'T_EMC_FOLDER.TRIBUTARY',
-            editor : true,
-            width : 90,
-        }, {
-            field : 'remark',
-            title : 'T_EMC_FOLDER.REMARK',
-            editor : true,
-        } ];
+//        {
+//            field : 'planSampleDate',
+//            title : 'T_EMC_FOLDER.PLANSAMPLEDATE',
+//            width : 110,
+//        }, {
+//            field : 'sampleOrgName',
+//            title : 'T_EMC_FOLDER.SAMPLEORGNAME',
+//            width : 110,
+//        }, {
+//            field : 'sceneUserName',
+//            title : 'T_EMC_FOLDER.SCENEUSERNAME',
+//            editor : true,
+//            type : 'choose',
+//            category : 'user-simple',
+//            width : 100,
+//            single : true,
+//            onAfterChoose : function(rows, index) {
+//                if (!Gikam.isEmpty(rows)) {
+//                    this.setData({
+//                        index : index,
+//                        sceneUserId : rows[0].id,
+//                        sceneUserName : rows[0].userName
+//                    });
+//                }
+//            },
+//            onClean : function(field, value, index) {
+//                this.setData({
+//                    index : index,
+//                    sceneUserId : '',
+//                    sceneUserName : '',
+//                });
+//            },
+//        }, {
+//            field : 'sampleUserName',
+//            title : 'T_EMC_FOLDER.SAMPLEUSERNAME',
+//            editor : true,
+//            type : 'choose',
+//            category : 'user-simple',
+//            onAfterChoose : function(rows, index) {
+//                if (!Gikam.isEmpty(rows)) {
+//                    var sampleUserIds = [];
+//                    var sampleUserNames = [];
+//                    Gikam.each(rows, function(index, item) {
+//                        sampleUserIds.push(item.id);
+//                        sampleUserNames.push(item.userName);
+//                    });
+//                    this.setData({
+//                        index : index,
+//                        sampleUserId : sampleUserIds.join(','),
+//                        sampleUserName : sampleUserNames.join(','),
+//                    });
+//                }
+//            },
+//            onClean : function(field, value, index) {
+//                this.setData({
+//                    index : index,
+//                    sampleUserId : '',
+//                    sampleUserName : '',
+//                });
+//            }
+//        }, {
+//            field : 'monitorPointCategory',
+//            title : 'T_EMC_FOLDER.MONITORPOINTCATEGORY'
+//        }, {
+//            field : 'longitude',
+//            title : 'T_EMC_FOLDER.LONGITUDE',
+//            editor : true,
+//            width : 90,
+//        }, {
+//            field : 'latitude',
+//            title : 'T_EMC_FOLDER.LATITUDE',
+//            editor : true,
+//            width : 90,
+//        }, {
+//            field : 'river',
+//            title : 'T_EMC_FOLDER.RIVER',
+//            editor : true,
+//            width : 90,
+//        },  {
+//            field : 'section',
+//            title : '断面',
+//            editor : true,
+//            width : 90,
+//        }, {
+//            field : 'sectionConditionDesc',
+//            title : '断面周边环境描述',
+//            editor : true,
+//            width : 150,
+//            type: 'select',
+//            multiple: true,
+//            category: 'sys',
+//            param: {
+//                codeCategoryId: 'sectionConditionDesc',
+//            },
+//        }, {
+//            field : 'sectionWaterWidth',
+//            title : '水面宽度',
+//            editor : true,
+//            width : 90,
+//        }, {
+//            field : 'sectionWaterDepth',
+//            title : '深度',
+//            editor : true,
+//            width : 90,
+//        }, {
+//            field : 'sectionWaterQuality',
+//            title : '断面水质表现',
+//            editor : true,
+//            width : 150,
+//            type: 'select',
+//            multiple: true,
+//            category: 'sys',
+//            param: {
+//                codeCategoryId: 'sectionWaterQuality',
+//            },
+//        }, {
+//             field : 'waterTemperature',
+//             title : '水温',
+//             editor : true,
+//         }, {
+//              field : 'turbidity',
+//              title : '浊度',
+//              editor : true,
+//          }, {
+//            field : 'remark',
+//            title : 'T_EMC_FOLDER.REMARK',
+//            editor : true,
+//        }
+        ];
     },
 
     getDataInputOrderColumns: function () {
-        return [ {
-            checkbox : true
+        return [{
+            checkbox: true
         }, {
-            field : 'ext$.monitorpointname',
-            title : 'T_EMC_FOLDER.MONITORPOINTNAME',
-            width : 100,
+            field: 'ext$.monitorpointname',
+            title: 'T_EMC_FOLDER.MONITORPOINTNAME',
+            width: 100,
         }, {
-            field : 'ext$.monitorpointno',
-            title : 'T_EMC_FOLDER.MONITORPOINTNO',
-            width : 100,
+            field: 'ext$.monitorpointno',
+            title: 'T_EMC_FOLDER.MONITORPOINTNO',
+            width: 100,
         }, {
-            field : 'orderNo',
-            title : 'T_EMC_ORDER.ORDERNO',
-            width : 110,
+            field: 'orderNo',
+            title: 'T_EMC_ORDER.ORDERNO',
+            width: 110,
         }, {
-            field : 'sampleBeginDate',
-            title : 'T_EMC_ORDER.SAMPLEBEGINDATE',
-            type : 'date',
-            validators : [ 'notEmpty'],
-            editor : true,
-            width : 110,
-            onChange : function(field, value, rowIndex, oldValue, text) {
+            field: 'sampleBeginDate',
+            title: 'T_EMC_ORDER.SAMPLEBEGINDATE',
+            type: 'date',
+            validators: ['notEmpty'],
+            editor: true,
+            width: 110,
+            onChange: function (field, value, rowIndex, oldValue, text) {
                 var grid = Gikam.getComp('emc-sample-edit-list-data-input-order-task-grid').getData()[rowIndex];
                 var start = new Date(grid.sampleBeginDate);
                 var end = new Date(grid.sampleCompleteDate);
-                if (start && end && start.getTime() > end.getTime()){
+                if (start && end && start.getTime() > end.getTime()) {
                     Gikam.alert("EMC.MODULE.BP.SAMPLE.SAMPLES.ORDER.TIP.DATE_LESS_THEN");
                     return;
                 }
             }
         }, {
-            field : 'sampleBeginTime',
-            title : 'T_EMC_ORDER.SAMPLEBEGINTIME',
-            type : 'time',
-            editor : true,
-            width : 110,
-            onChange : function(field, value, rowIndex, oldValue, text) {
+            field: 'sampleBeginTime',
+            title: 'T_EMC_ORDER.SAMPLEBEGINTIME',
+            // type: 'time',
+            editor: true,
+            width: 110,
+            validators: ['emcTime'],
+            onChange: function (field, value, rowIndex, oldValue, text) {
                 var grid = Gikam.getComp('emc-sample-edit-list-data-input-order-task-grid').getData()[rowIndex];
                 var startDate = new Date(grid.sampleBeginDate);
                 var endDate = new Date(grid.sampleCompleteDate);
-                if(startDate && endDate && startDate.getTime() === endDate.getTime()){
+                if (startDate && endDate && startDate.getTime() === endDate.getTime()) {
                     var startTime = grid.sampleBeginTime;
                     var endTime = grid.sampleCompleteTime;
-                    if(startTime && endTime && startTime > endTime){
+                    if (startTime && endTime && startTime > endTime) {
                         Gikam.alert("EMC.MODULE.BP.SAMPLE.SAMPLES.ORDER.TIP.TIME_LESS_THEN");
                         return;
                     }
                 }
             }
         }, {
-            field : 'sampleCompleteDate',
-            title : 'T_EMC_ORDER.SAMPLECOMPLETEDATE',
-            type : 'date',
-            editor : true,
-            width : 110,
-            validators : [ 'notEmpty'],
-            onChange : function(field, value, rowIndex, oldValue, text) {
+            field: 'sampleCompleteDate',
+            title: 'T_EMC_ORDER.SAMPLECOMPLETEDATE',
+            type: 'date',
+            editor: true,
+            width: 110,
+            validators: ['notEmpty'],
+            onChange: function (field, value, rowIndex, oldValue, text) {
                 var grid = Gikam.getComp('emc-sample-edit-list-data-input-order-task-grid').getData()[rowIndex];
                 var start = new Date(grid.sampleBeginDate);
                 var end = new Date(grid.sampleCompleteDate);
-                if (start && end && start.getTime() > end.getTime()){
+                if (start && end && start.getTime() > end.getTime()) {
                     Gikam.alert("EMC.MODULE.BP.SAMPLE.SAMPLES.ORDER.TIP.DATE_LESS_THEN");
                     return;
                 }
             }
         }, {
-            field : 'sampleCompleteTime',
-            title : 'T_EMC_ORDER.SAMPLECOMPLETETIME',
-            type : 'time',
-            editor : true,
-            width : 110,
-            onChange : function(field, value, rowIndex, oldValue, text) {
+            field: 'sampleCompleteTime',
+            title: 'T_EMC_ORDER.SAMPLECOMPLETETIME',
+            // type: 'time',
+            editor: true,
+            width: 110,
+            validators: ['emcTime'],
+            onChange: function (field, value, rowIndex, oldValue, text) {
                 var grid = Gikam.getComp('emc-sample-edit-list-data-input-order-task-grid').getData()[rowIndex];
                 var startDate = new Date(grid.sampleBeginDate);
                 var endDate = new Date(grid.sampleCompleteDate);
-                if(startDate && endDate && startDate.getTime() === endDate.getTime()){
+                if (startDate && endDate && startDate.getTime() === endDate.getTime()) {
                     var startTime = grid.sampleBeginTime;
                     var endTime = grid.sampleCompleteTime;
-                    if(startTime && endTime && startTime > endTime){
+                    if (startTime && endTime && startTime > endTime) {
                         Gikam.alert("EMC.MODULE.BP.SAMPLE.SAMPLES.ORDER.TIP.TIME_LESS_THEN");
                         return;
                     }
                 }
             }
         }, {
-            field : 'orderCategory',
-            title : 'T_EMC_ORDER.ORDERCATEGORY',
-            width : 130
+            field: 'orderCategory',
+            title: 'T_EMC_ORDER.ORDERCATEGORY',
+            width: 130
         }, {
-            field : 'qcName',
-            title : 'T_EMC_ORDER.QCCATEGORYNO',
-            width : 75,
+            field: 'qcName',
+            title: 'T_EMC_ORDER.QCCATEGORYNO',
+            width: 75,
         }, {
-            field : 'labelNo',
-            title : 'T_EMC_ORDER.LABELNO',
-            width : 110,
+            field: 'labelNo',
+            title: 'T_EMC_ORDER.LABELNO',
+            width: 110,
         }, {
-            field : 'cycle',
-            title : 'T_EMC_ORDER.CYCLE',
-            width : 60,
+            field: 'cycle',
+            title: 'T_EMC_ORDER.CYCLE',
+            width: 60,
         }, {
-            field : 'frequency',
-            title : 'T_EMC_ORDER.FREQUENCY',
-            width : 60,
+            field: 'frequency',
+            title: 'T_EMC_ORDER.FREQUENCY',
+            width: 60,
         }, {
-            field : 'sampleNum',
-            title : 'T_EMC_ORDER.SAMPLENUM',
-            width : 70,
+            field: 'sampleNum',
+            title: 'T_EMC_ORDER.SAMPLENUM',
+            width: 70,
         }, {
-            field : 'horizontalCode',
-            title : 'T_EMC_ORDER.HORIZONTALCODE',
-            width : 90,
-            type : 'select',
-            search : true,
-            category : 'sys',
-            param : {
-                codeCategoryId : 'horizontalCode',
-            },
-            editor : true
+            field: 'ext$.watertemperature',
+            title: '水温',
+            editor: true,
         }, {
-            field : 'verticalCode',
-            title : 'T_EMC_ORDER.VERTICALCODE',
-            width : 90,
-            type : 'select',
-            search : true,
-            category : 'sys',
-            param : {
-                codeCategoryId : 'verticalCode',
-            },
-            editor : true
+            field: 'ext$.turbidity',
+            title: '浊度',
+            editor: true,
         }, {
-            field : 'ext$.vocbottle',
-            title : 'T_EMC_ORDER.VOCBOTTLE',
-            editor : true,
-            editable : true,
-            type : 'choose',
-            category : 'vocBottle',
-            single : false,
-            onBeforeChoose : function(index) {
-                return {
-                    orgId_SEQ: workspace.user.ext$.parentorgid
-                }
-            },
-            onAfterChoose : function(rows) {
-                if (!Gikam.isEmpty(rows)) {
-                    var vocNumbers = "";
-                    for ( let index in rows) {
-                        if (index == rows.length - 1) {
-                            vocNumbers += rows[index].vocNumber;
-                            break;
-                        }
-                        vocNumbers += rows[index].vocNumber + ",";
-                    }
-                    this.setData({
-                        id : this.getActivedRow().id,
-                        ext$ : {
-                            vocbottle : vocNumbers
-                        },
-                    });
-                }
-            },
-            onClean : function() {
-                this.setData({
-                    id : this.getActivedRow().id,
-                    ext$ : {
-                        vocbottle : ''
+            field: 'ext$.airtemperature',
+            title: '气温',
+            editor: true
+        }, {
+            field: 'verticalLine',
+            title: '垂线',
+            editor: true
+        }, {
+            field: 'ext$.samplingdepth',
+            title: 'T_EMC_ORDER.SAMPLINGDEPTH',
+            editor: true
+        }, {
+            field: 'ext$.color',
+            title: 'T_EMC_ORDER.COLOR',
+            editor: true,
+//            type : 'select',
+            search: true,
+            category: 'sys',
+            onChange: function (field, value, rowIndex, oldValue, text) {
+                var row = Gikam.getComp('emc-sample-expand-detail-list-order-grid').getData()[rowIndex];
+                Gikam.getComp('emc-sample-expand-detail-list-order-grid').setData({
+                    index: rowIndex,
+                    ext$: {
+                        color: value,
                     },
+                    orderDesc: Gikam.isEmpty(row.orderDesc) ? '' : row.orderDesc.replace(oldValue, value)
+                });
+            }
+//            param : {
+//                codeCategoryId : 'orderColor'
+//            },
+        }, {
+            field: 'ext$.texture',
+            title: 'T_EMC_ORDER.TEXTURE',
+            editor: true,
+            onChange: function (field, value, rowIndex, oldValue, text) {
+                var row = Gikam.getComp('emc-sample-expand-detail-list-order-grid').getData()[rowIndex];
+                Gikam.getComp('emc-sample-expand-detail-list-order-grid').setData({
+                    index: rowIndex,
+                    ext$: {
+                        texture: value,
+                    },
+                    orderDesc: Gikam.isEmpty(row.orderDesc) ? '' : row.orderDesc.replace(oldValue, value)
                 });
             }
         }, {
-            field : 'ext$.oilfilmno',
-            title : 'T_EMC_ORDER.OILFILMNO',
-            editor : true,
-            editable : true,
-            type : 'choose',
-            category : 'oilFilm',
-            single : true,
-            onBeforeChoose : function(index) {
-                return {
-                    orgId_SEQ: workspace.user.ext$.parentorgid
-                }
-            },
-            onAfterChoose : function(rows) {
-                if (!Gikam.isEmpty(rows)) {
-                    this.setData({
-                        id : this.getActivedRow().id,
-                        ext$ : {
-                            oilfilmno : rows[0].oilFilmNo
-                        },
-                    });
-                }
-            },
-            onClean : function() {
-                this.setData({
-                    id : this.getActivedRow().id,
-                    ext$ : {
-                        oilfilmno : ''
+            field: 'struct',
+            title: '结构',
+            editor: true,
+        }, {
+            field: 'otherOb',
+            title: '其他异物',
+            editor: true,
+        }, {
+            field: 'ext$.humidity',
+            title: '土壤湿度',
+            editor: true,
+        }, {
+            field: 'ext$.odor',
+            title: 'T_EMC_ORDER.ODOR',
+            editor: true,
+            search: true,
+            onChange: function (field, value, rowIndex, oldValue, text) {
+                var row = Gikam.getComp('emc-sample-expand-detail-list-order-grid').getData()[rowIndex];
+                Gikam.getComp('emc-sample-expand-detail-list-order-grid').setData({
+                    index: rowIndex,
+                    ext$: {
+                        odor: value,
                     },
+                    orderDesc: Gikam.isEmpty(row.orderDesc) ? '' : row.orderDesc.replace(oldValue, value)
                 });
             }
-        }, {
-            field : 'ext$.samplebottleno',
-            title : 'T_EMC_SAMPLE_BOTTLE.SAMPLEBOTTLENO',
-            editor : true,
-            editable : true,
-            type : 'choose',
-            category : 'sampleBottle',
-            single : false,
-            onBeforeChoose : function(index) {
-                return {
-                    orgId_SEQ: workspace.user.ext$.parentorgid
-                }
+        },
+
+            {
+                field: 'ext$.rootcontent',
+                title: 'T_EMC_ORDER.ROOTCONTENT',
+                validators: ['strLength[0,60]'],
+                editor: true,
+
             },
-            onAfterChoose : function(rows) {
-                if (!Gikam.isEmpty(rows)) {
-                    var sampleBottleNo = "";
-                    for ( let index in rows) {
-                        if (index == rows.length - 1) {
-                            sampleBottleNo += rows[index].sampleBottleNo;
-                            break;
-                        }
-                        sampleBottleNo += rows[index].sampleBottleNo + ",";
-                    }
-                    this.setData({
-                        id : this.getActivedRow().id,
-                        ext$ : {
-                            samplebottleno : sampleBottleNo
-                        },
-                    });
-                }
-            },
-            onClean : function() {
-                this.setData({
-                    id : this.getActivedRow().id,
-                    ext$ : {
-                        samplebottleno : ''
-                    },
-                });
-            }
-        }, {
-            field : 'ext$.samplingdepth',
-            title : 'T_EMC_ORDER.SAMPLINGDEPTH',
-            editor : true
-        }, {
-            field : 'ext$.color',
-            title : 'T_EMC_ORDER.COLOR',
-            editor : true,
-            type : 'select',
-            search : true,
-            category : 'sys',
-            param : {
-                codeCategoryId : 'orderColor'
-            },
-        }, {
-            field : 'ext$.texture',
-            title : 'T_EMC_ORDER.TEXTURE',
-            editor : true
-        }, {
-            field : 'ext$.odor',
-            title : 'T_EMC_ORDER.ODOR',
-            editor : true,
-            type : 'select',
-            search : true,
-            category : 'sys',
-            param : {
-                codeCategoryId : 'orderSmell'
-            },
-        }, {
-            field : 'ext$.density',
-            title : 'T_EMC_ORDER.DENSITY',
-            editor : true
-        }, {
-            field : 'ext$.structure',
-            title : 'T_EMC_ORDER.STRUCTURE',
-            editor : true
-        }, {
-            field : 'ext$.gravel',
-            title : 'T_EMC_ORDER.GRAVEL',
-            editor : true
-        }, {
-            field : 'ext$.othermatter',
-            title : 'T_EMC_ORDER.OTHERMATTER',
-            editor : true
-        }, {
-            field : 'ext$.pidvalue',
-            title : 'T_EMC_ORDER.PIDVALUE',
-            editor : true
-        }, {
-            field : 'ext$.batchsize',
-            title : 'T_EMC_ORDER.BATCHSIZE',
-            editor : true
-        }, {
-            field : 'orderDesc',
-            title : 'T_EMC_ORDER.ORDERDESC',
-            editor : true,
-            validators : [ 'strLength[0,36]' ],
-            width : 110,
-        }, {
-            field : 'remark',
-            title : 'T_EMC_ORDER.REMARK',
-            editor : true,
-        }  ];
+            {
+                field: 'orderDesc',
+                title: '样品感官',
+                editor: true,
+                validators: ['strLength[0,36]'],
+                width: 110,
+            }, {
+                field: 'remark',
+                title: 'T_EMC_ORDER.REMARK',
+                editor: true,
+            }];
     },
 
     getContainerColumns: function () {
@@ -2666,24 +3896,54 @@ var emcSample = Gikam.getPageObject({
             title: 'T_EMC_ORDER_TASK.LABELNUMBER',
             width: 140
         }, {
-            field: 'ext$.material',
-            title: 'T_EMC_CONTAINER_CATEGORY.MATERIAL'
+            field: 'analysisOrgName',
+            title: 'T_EMC_ORDER_TASK.ANALYSISORGNAME'
         }, {
-            field: 'ext$.color',
-            title: 'T_EMC_CONTAINER_CATEGORY.COLOR'
-        }, {
-            field: 'ext$.capacity',
-            title: 'T_EMC_CONTAINER_CATEGORY.CAPACITY'
+            field: 'containerCategoryName',
+            title: '容器名称'
         }, {
             field: 'fixative',
             title: 'T_EMC_ORDER_TASK.FIXATIVE',
             width: 300,
         }, {
+            field: 'storeCondition',
+            title: 'T_EMC_ORDER_TASK.STORAGECONDITION',
+            editor: true,
+            validators: ['strLength[0,120]'],
+            onChange: function (field, value, index) {
+                var ids = this.getData()[index].ext$.ids.split(',');
+                var updateData = ids.map(function (id) {
+                    return {
+                        id: id,
+                        storeCondition: value
+                    }
+                });
+                Gikam.put('/secure/gikam/actions/instant', Gikam.getJsonWrapper({}, ['emcOrderTaskServiceImpl', updateData]));
+            }
+        }, {
+            field: 'pretreatWay',
+            title: '前处理方式',
+            width: 100,
+            editor: true,
+            type: 'select',
+            multiple: true,
+            category: 'sys',
+            param: {
+                codeCategoryId: 'pretreatWay',
+            },
+            onChange: function (field, value, index) {
+                var ids = this.getData()[index].ext$.ids.split(',');
+                var updateData = ids.map(function (id) {
+                    return {
+                        id: id,
+                        pretreatWay: value
+                    }
+                });
+                Gikam.put('/secure/gikam/actions/instant', Gikam.getJsonWrapper({}, ['emcOrderTaskServiceImpl', updateData]));
+            }
+        }, {
             field: 'samplingVolume',
             title: 'T_EMC_ORDER_TASK.SAMPLINGVOLUME'
-        }, {
-            field: 'storageCondition',
-            title: 'T_EMC_ORDER_TASK.STORAGECONDITION'
         }, {
             field: 'containerOrderNo',
             title: 'T_EMC_TEST_ORDER_CATEGORY.CONTAINERORDERNO'
@@ -2715,7 +3975,7 @@ var emcSample = Gikam.getPageObject({
         }, {
             field: 'orderNo',
             title: 'T_EMC_ORDER.ORDERNO',
-            width: 140,
+            width: 170,
             fixed: true
         }, {
             field: 'qcName',
@@ -2881,57 +4141,57 @@ var emcSample = Gikam.getPageObject({
         }];
     },
 
-    getOrderContainerChooseListColumns : function() {
-        return [ {
-            field : 'orderContainerNo',
-            title : 'T_EMC_ORDER_CONTAINER.ORDERCONTAINERNO',
-            width : 150
+    getOrderContainerChooseListColumns: function () {
+        return [{
+            field: 'orderContainerNo',
+            title: 'T_EMC_ORDER_CONTAINER.ORDERCONTAINERNO',
+            width: 150
         }, {
-            field : 'testName',
-            title : 'T_EMC_ORDER_TASK.TESTNAME'
+            field: 'testName',
+            title: 'T_EMC_ORDER_TASK.TESTNAME'
         }, {
-            field : 'ext$.itemgroup',
-            title : 'T_EMC_ORDER_TASK.ITEMGROUP'
+            field: 'ext$.itemgroup',
+            title: 'T_EMC_ORDER_TASK.ITEMGROUP'
         }, {
-            field : 'containerCategoryName',
-            title : 'T_EMC_ORDER_TASK.CONTAINERCATEGORYNAME',
-            width : 150,
+            field: 'containerCategoryName',
+            title: 'T_EMC_ORDER_TASK.CONTAINERCATEGORYNAME',
+            width: 150,
         }, {
-            field : 'containerGroup',
-            title : 'T_EMC_ORDER_TASK.CONTAINERGROUP',
-            width : 100,
+            field: 'containerGroup',
+            title: 'T_EMC_ORDER_TASK.CONTAINERGROUP',
+            width: 100,
         }, {
-            field : 'fixative',
-            title : 'T_EMC_ORDER_TASK.FIXATIVE',
-            width : 100,
+            field: 'fixative',
+            title: 'T_EMC_ORDER_TASK.FIXATIVE',
+            width: 100,
         }, {
-            field : 'storeCondition',
-            title : 'T_EMC_ORDER_TASK.STORECONDITION',
-            width : 100,
-        }  ];
+            field: 'storeCondition',
+            title: 'T_EMC_ORDER_TASK.STORECONDITION',
+            width: 100,
+        }];
     },
-    getSampleQuerySearchColumns : function() {
-        return [ {
-            checkbox : true
+    getSampleQuerySearchColumns: function () {
+        return [{
+            checkbox: true
         }, Gikam.status.getBpmnColumn(emcSample.workflow.dbTable), {
-            field : 'handStatus',
-            title : '交接情况',
-            width : 110,
-            formatter : function(i, v, r) {
-                if(v == 'preLogged' && r.ext$.analysiscount != '0') {
+            field: 'handStatus',
+            title: '交接情况',
+            width: 110,
+            formatter: function (i, v, r) {
+                if (v == 'preLogged' && r.ext$.analysiscount != '0') {
                     return '已提交到样品接收';
                 }
-                if(r.ext$.analysiscount == '0') {
+                if (r.ext$.analysiscount == '0') {
                     return '不需要样品接收';
                 }
-                if(v != 'preLogged' && r.ext$.analysiscount != '0'){
+                if (v != 'preLogged' && r.ext$.analysiscount != '0') {
                     return '未提交到样品接收';
                 }
             },
         }, {
-            field : 'sampleNo',
-            title : 'T_EMC_SAMPLE.SAMPLENO',
-            width : 110,
+            field: 'sampleNo',
+            title: 'T_EMC_SAMPLE.SAMPLENO',
+            width: 110,
             formatter: function (i, v, row) {
                 if (!Gikam.isEmpty(v)) {
                     return Gikam.printf('<a href="javascript:;" onclick="emcSample.sampleQuerySearchPage.loadSampleExpandPage(\'{id}\', \'{propertyTmplId}\', \'{monitorTmplId}\',\'{sampleFlag}\', \'{projId}\', \'{orderCategory}\', \'{sampleUserId}\', \'{sampleDate}\')">{v}</a>', {
@@ -2943,140 +4203,619 @@ var emcSample = Gikam.getPageObject({
                         sampleFlag: row.sampleFlag,
                         orderCategory: row.orderCategory,
                         sampleUserId: row.sampleUserId,
-                        sampleDate: row.sampleDate
+                        sampleDate: row.sampleDate,
                     });
                 }
             },
             sort: false,
         }, {
-            field : 'projNo',
-            title : 'T_EMC_SAMPLE.PROJNO',
-            width : 90
+            field: 'projNo',
+            title: 'T_EMC_SAMPLE.PROJNO',
+            width: 90
         }, {
-            field : 'orderCategory',
-            title : 'T_EMC_SAMPLE.ORDERCATEGORY'
+            field: 'orderCategory',
+            title: 'T_EMC_SAMPLE.ORDERCATEGORY'
         }, {
-            field : 'createdByName',
-            title : 'T_EMC_SAMPLE.CREATEDBYNAME',
-            width : 90
+            field: 'createdByName',
+            title: 'T_EMC_SAMPLE.CREATEDBYNAME',
+            width: 90
         }, {
-            field : 'detailInfo',
-            title : 'T_EMC_SAMPLE.DETAILINFO',
-            formatter : function(i, v, row) {
+            field: 'detailInfo',
+            title: 'T_EMC_SAMPLE.DETAILINFO',
+            formatter: function (i, v, row) {
                 var monitorTmplId = row.monitorTmplId;
-                if(monitorTmplId != null){
+                if (monitorTmplId != null) {
                     return Gikam.printf('<a href="javascript:;" onclick="emcSample.sampleQuerySearchPage.loadSamplePropertyPage(\'{id}\', \'{tmplId}\', \'{monitorTmplId}\')">{name}</a>', {
-                        id : row.id,
-                        tmplId : row.ext$.tmplid,
-                        monitorTmplId : row.monitorTmplId,
-                        name : '详情信息'
+                        id: row.id,
+                        tmplId: row.ext$.tmplid,
+                        monitorTmplId: row.monitorTmplId,
+                        name: '详情信息'
                     });
-                }else{
+                } else {
                     return Gikam.printf('<a href="javascript:;" onclick="emcSample.sampleQuerySearchPage.loadSamplePropertyPage(\'{id}\', \'{tmplId}\', \'{monitorTmplId}\')">{name}</a>', {
-                        id : row.id,
-                        tmplId : row.ext$.tmplid,
-                        monitorTmplId : "undefined",
-                        name : '详情信息'
+                        id: row.id,
+                        tmplId: row.ext$.tmplid,
+                        monitorTmplId: "undefined",
+                        name: '详情信息'
                     });
                 }
 
             }
         }, {
-            field : 'ext$.sampleusername',
-            title : 'T_EMC_SAMPLE.SAMPLEUSERNAME',
-            type : 'choose',
-            category : 'emp',
-            onBeforeChoose : function(index) {
+            field: 'ext$.sampleusername',
+            title: 'T_EMC_SAMPLE.SAMPLEUSERNAME',
+            type: 'choose',
+            category: 'emp',
+            onBeforeChoose: function (index) {
                 return {
-                    status_DIFFER : 'deprecated',
-                    targetType : 'samplePlan',
-                    SAMPLEDEPARTMENT_SEQ : '1',
-                    USERORGID_SB : workspace.user.ext$.parentorgid
+                    status_DIFFER: 'deprecated',
+                    targetType: 'samplePlan',
+                    SAMPLEDEPARTMENT_SEQ: '1',
+                    userOrg_filter: '1',
                 }
             },
-            onAfterChoose : function(rows, index) {
+            onAfterChoose: function (rows, index) {
                 if (!Gikam.isEmpty(rows)) {
                     var sampleUserIds = [];
                     var sampleUserNames = [];
-                    Gikam.each(rows, function(index, item) {
+                    Gikam.each(rows, function (index, item) {
                         sampleUserIds.push(item.id);
                         sampleUserNames.push(item.userName);
                     });
                     this.setData({
-                        index : index,
-                        ext$ : {
-                            sampleuserid : sampleUserIds.join(','),
-                            sampleusername : sampleUserNames.join(','),
+                        index: index,
+                        ext$: {
+                            sampleuserid: sampleUserIds.join(','),
+                            sampleusername: sampleUserNames.join(','),
                         }
                     });
                 }
             },
-            onClean : function() {
+            onClean: function () {
                 this.setData({
-                    id : this.getActivedRow().id,
-                    ext$ : {
-                        sampleuserid : '',
-                        sampleusername : '',
+                    id: this.getActivedRow().id,
+                    ext$: {
+                        sampleuserid: '',
+                        sampleusername: '',
                     }
                 });
             },
         }, {
-            field : 'dataInput',
-            title : 'T_EMC_SAMPLE.DATAINPUT',
-            formatter : function(i, v, row) {
+            field: 'dataInput',
+            title: 'T_EMC_SAMPLE.DATAINPUT',
+            formatter: function (i, v, row) {
                 return '<a href="javascript:;" onclick="emcSample.sampleQuerySearchPage.loadDataInputPage(\'' + row.id + '\')">数据录入</a>';
             },
-            width : 110
+            width: 110
         }, {
-            field : 'reportConfigLineId',
-            title : 'T_EMC_SAMPLE.REPORTCONFIGLINEID',
-            type : 'select',
-            search : true,
-            category : 'reportConfigLine',
-            param : {
-                reportConfigId : 'samplingReport'
+            field: 'ext$.samplebegindatetime',
+            title: '采样开始日期时间',
+            type : 'dateTime',
+        }, {
+            field: 'ext$.samplecompletedatetime',
+            title: '采样结束日期时间',
+            type : 'dateTime',
+        },{
+            field: 'ext$.reviewdate',
+            title: 'T_EMC_SAMPLE.REVIEWDATE',
+            type: 'date',
+        }, {
+            field: 'ext$.auditdate',
+            title: 'T_EMC_SAMPLE.AUDITDATE',
+            type: 'date',
+        }, {
+            field: 'reportConfigLineId',
+            title: 'T_EMC_SAMPLE.REPORTCONFIGLINEID',
+            type: 'select',
+            search: true,
+            category: 'reportConfigLine',
+            param: {
+                reportConfigId: 'samplingReport'
             },
-            validators : [ 'notEmpty' ]
+            validators: ['notEmpty']
         }, {
-            field : 'ext$.archivereportlineid',
-            title : 'T_EMC_SAMPLE.ARCHIVEREPORTLINEID',
-            type : 'select',
-            search : true,
-            multiple : true,
-            category : 'reportConfigLine',
-            param : {
-                reportConfigId : 'samplingReport'
+            field: 'ext$.archivereportlineid',
+            title: 'T_EMC_SAMPLE.ARCHIVEREPORTLINEID',
+            type: 'select',
+            search: true,
+            multiple: true,
+            category: 'reportConfigLine',
+            param: {
+                reportConfigId: 'samplingReport'
             },
         }, {
-            field : 'remark',
-            title : 'T_EMC_SAMPLE.REMARK',
-            validators : [ 'strLength[0,170]' ]
+            field: 'remark',
+            title: 'T_EMC_SAMPLE.REMARK',
+            validators: ['strLength[0,170]']
         }, {
-            field : 'calibrationId',
-            title : 'T_EMC_SAMPLE.CALIBRATION',
-            validators : [ 'strLength[0,150]' ],
-            formatter : function(i, v, row) {
+            field: 'calibrationId',
+            title: 'T_EMC_SAMPLE.CALIBRATION',
+            validators: ['strLength[0,150]'],
+            formatter: function (i, v, row) {
                 return '<a href="javascript:;" onclick="emcSample.sampleQuerySearchPage.loadCalibrationPage(\'' + row.calibrationId + '\')">查看详情</a>';
             },
         }, {
-            field : 'caliReportLineId',
-            title : 'T_EMC_SAMPLE.CALIREPORTLINEID',
-            type : 'select',
-            search : true,
-            category : 'reportConfigLine',
-            param : {
-                reportConfigId : 'calibrationReport'
+            field: 'caliReportLineId',
+            title: 'T_EMC_SAMPLE.CALIREPORTLINEID',
+            type: 'select',
+            search: true,
+            category: 'reportConfigLine',
+            param: {
+                reportConfigId: 'calibrationReport'
             },
-            validators : [ 'notEmpty' ]
-        } ];
+            validators: ['notEmpty']
+        }, ];
     },
-    workflow : {
-        dbTable : 'T_EMC_SAMPLE',
-        columns : [ {
-            field : 'id',
-            title : 'T_EMC_SAMPLE.ID',
-            width : 20,
-        } ]
-    }
+    getHandsampleColumns: function () {
+        return [{
+            field: 'acceptedDate',
+            title: 'T_EMC_SAMPLE.ACCEPTEDDATE',
+            type: 'date',
+            editor: true,
+            validators: ['notEmpty'],
+        }, {
+            field: 'acceptedTime',
+            title: 'T_EMC_SAMPLE.ACCEPTEDTIME',
+            type: 'time',
+            editor: true,
+            validators: ['notEmpty'],
+        }]
+    },
 
+    getShowAllField: function () {
+        return [{
+            title: '显示全部',
+            field: 'showFlag',
+            type: 'simpleCheckbox',
+            value: '0',
+            onChange: function (field, value, index) {
+                var grid = Gikam.getComp('emc-project-sample-list-grid');
+
+                if (value === '1') {
+                    grid.refresh({
+                        requestData: {
+                            targetType: '',
+                            sceneUserId: ''
+                        }
+                    }).done(function () {
+                    });
+                } else {
+                    grid.refresh({
+                        requestData: {
+                            targetType: 'editSample',
+                            sceneUserId: workspace.user.id
+                        }
+                    }).done(function () {
+                    });
+                }
+            },
+        }]
+    },
+
+    getAuditShowAllField: function (bpmn_statusCode) {
+        return [{
+            title: '显示全部',
+            field: 'showFlag',
+            type: 'simpleCheckbox',
+            value: '0',
+            refreshGrid: false,
+            onChange: function (field, value, index) {
+                var grid = Gikam.getComp('emc-project-sample-list-grid2');
+
+                if (value === '1') {
+                    grid.refresh({
+                        requestData: {
+                            targetId: '',
+                        }
+                    }).done(function () {
+                    });
+                } else {
+                    grid.refresh({
+                        requestData: {
+                            targetId: bpmn_statusCode,
+                        }
+                    }).done(function () {
+                    });
+                }
+            },
+        }]
+    },
+
+    getHandShowAllField: function (gridId) {
+        return [{
+            title: '显示全部',
+            field: 'showFlag',
+            type: 'simpleCheckbox',
+            value: '0',
+            refreshGrid: false,
+            onChange: function (field, value, index) {
+                var grid = Gikam.getComp(gridId || 'emc-project-sample-undo-grid2');
+
+                if (value === '1') {
+                    grid.refresh({
+                        requestData: {
+                            userFilter: '',
+                        }
+                    }).done(function () {
+                    });
+                } else {
+                    grid.refresh({
+                        requestData: {
+                            userFilter: '1',
+                        }
+                    }).done(function () {
+                    });
+                }
+            },
+        }]
+    },
+
+    getFlowSetListColumns: function () {
+        return [{
+            checkbox: true
+        }, {
+            index: true
+        }, {
+            field: 'equiptNo',
+            title: 'T_EMC_EQUIPT_FLOW_SET.EQUIPTNO'
+        }, {
+            field: 'equiptName',
+            title: 'T_EMC_EQUIPT_FLOW_SET.EQUIPTNAME'
+        }, {
+            field: 'specification',
+            title: 'T_EMC_EQUIPT_FLOW_SET.SPECIFICATION'
+        },];
+    },
+
+    getFlowSetMsgListColumns: function () {
+        return [{
+            checkbox: true
+        }, {
+            index: true
+        }, {
+            field: 'equiptNo',
+            title: 'T_EMC_EQUIPT_FLOW_SET.EQUIPTNO'
+        }, {
+            field: 'equiptInterface',
+            title: 'T_EMC_EQUIPT_FLOW_SET.EQUIPTINTERFACE',
+            editor: true,
+        }, {
+            field: 'airtight',
+            title: 'T_EMC_EQUIPT_FLOW_SET.AIRTIGHT',
+            editor: true,
+            type: 'select',
+            category: 'sys',
+            param: {
+                codeCategoryId: 'checkConclusion',
+            }
+        }, {
+            field: 'flowUnit',
+            title: 'T_EMC_EQUIPT_FLOW_SET.FLOWUNIT',
+            editor: true,
+            type: 'choose',
+            category: 'unit',
+            single: true,
+            onAfterChoose: function (rows, index) {
+                if (!Gikam.isEmpty(rows)) {
+                    this.setData({
+                        index: index,
+                        flowUnit: rows[0].unitName,
+                    });
+                }
+            },
+            onClean: function (field, value, index) {
+                this.setData({
+                    index: index,
+                    flowUnit: ''
+                });
+            }
+        }, {
+            field: 'beforeSampleFlow',
+            title: 'T_EMC_EQUIPT_FLOW_SET.BEFORESAMPLEFLOW',
+            editor: true,
+            validators: ['number'],
+        }, {
+            field: 'beforeSetFlow',
+            title: 'T_EMC_EQUIPT_FLOW_SET.BEFORESETFLOW',
+            editor: true,
+            validators: ['number'],
+        }, {
+            field: 'beforeError',
+            title: 'T_EMC_EQUIPT_FLOW_SET.BEFOREERROR',
+            editor: true,
+            validators: ['number']
+        }, {
+            field: 'beforeJudge',
+            title: 'T_EMC_EQUIPT_FLOW_SET.BEFOREJUDGE',
+            editor: true,
+            type: 'select',
+            category: 'sys',
+            param: {
+                codeCategoryId: 'checkConclusion',
+            },
+            textStyleFormatter: function (row,value) {
+                if(value == '不合格'){
+                    return {
+                        color: 'red'
+                    }
+                }
+            },
+        }, {
+            field: 'afterSampleFlow',
+            title: 'T_EMC_EQUIPT_FLOW_SET.AFTERSAMPLEFLOW',
+            editor: true,
+            validators: ['number'],
+        }, {
+            field: 'afterSetFlow',
+            title: 'T_EMC_EQUIPT_FLOW_SET.AFTERSETFLOW',
+            editor: true,
+            validators: ['number'],
+        }, {
+            field: 'afterError',
+            title: 'T_EMC_EQUIPT_FLOW_SET.AFTERERROR',
+            editor: true,
+            validators: ['number']
+        }, {
+            field: 'afterJudge',
+            title: 'T_EMC_EQUIPT_FLOW_SET.AFTERJUDGE',
+            editor: true,
+            type: 'select',
+            category: 'sys',
+            param: {
+                codeCategoryId: 'checkConclusion',
+            },
+            textStyleFormatter: function (row,value) {
+                if(value == '不合格'){
+                    return {
+                        color: 'red'
+                    }
+                }
+            },
+        }, {
+            field: 'errorValue',
+            title: 'T_EMC_EQUIPT_FLOW_SET.ERRORVALUE',
+            editor: true,
+            validators: ['number']
+        }, {
+            field: 'judge',
+            title: 'T_EMC_EQUIPT_FLOW_SET.JUDGE',
+            editor: true,
+            type: 'select',
+            category: 'sys',
+            param: {
+                codeCategoryId: 'checkConclusion',
+            },
+            textStyleFormatter: function (row,value) {
+                if(value == '不合格'){
+                    return {
+                        color: 'red'
+                    }
+                }
+            },
+        },];
+    },
+
+    getStandardSetListColumns: function () {
+        return [{
+            checkbox: true
+        }, {
+            index: true
+        }, {
+            field: 'gasName',
+            title: 'T_EMC_EQUIPT_STANDARD_SET.GASNAME',
+        }, {
+            field: 'gasNo',
+            title: 'T_EMC_EQUIPT_STANDARD_SET.GASNO',
+            editor: true
+        }, {
+            field: 'validDate',
+            title: 'T_EMC_EQUIPT_STANDARD_SET.VALIDDATE',
+            editor: true,
+            type: 'date'
+        },];
+    },
+
+    getStandardSetMsgListColumns: function () {
+        return [{
+            checkbox: true
+        }, {
+            index: true
+        }, {
+            field: 'gasName',
+            title: 'T_EMC_EQUIPT_STANDARD_SET.GASNAME'
+        }, {
+            field: 'gasType',
+            title: 'T_EMC_EQUIPT_STANDARD_SET.GASTYPE',
+            type: 'select',
+            editor: true,
+            items: [{
+                text: '零气',
+                value: '零气'
+            }, {
+                text: '标气',
+                value: '标气'
+            }]
+        }, {
+            field: 'density',
+            title: 'T_EMC_EQUIPT_STANDARD_SET.DENSITY',
+            editor: true,
+            validators: ['number']
+        }, {
+            field: 'beforeTestA',
+            title: 'T_EMC_EQUIPT_STANDARD_SET.BEFORETESTA',
+            editor: true,
+            validators: ['number']
+        }, {
+            field: 'beforeTestB',
+            title: 'T_EMC_EQUIPT_STANDARD_SET.BEFORETESTB',
+            editor: true,
+            validators: ['number']
+        }, {
+            field: 'beforeError',
+            title: 'T_EMC_EQUIPT_STANDARD_SET.BEFOREERROR',
+            editor: true,
+            validators: ['number']
+        }, {
+            field: 'beforeSysError',
+            title: '测试前系统偏差',
+            editor: true,
+            validators: ['number']
+        }, {
+            field: 'afterTestA',
+            title: 'T_EMC_EQUIPT_STANDARD_SET.AFTERTESTA',
+            editor: true,
+            validators: ['number']
+        }, {
+            field: 'afterTestB',
+            title: 'T_EMC_EQUIPT_STANDARD_SET.AFTERTESTB',
+            editor: true,
+            validators: ['number']
+        }, {
+            field: 'afterError',
+            title: 'T_EMC_EQUIPT_STANDARD_SET.AFTERERROR',
+            editor: true,
+            validators: ['number']
+        }, {
+            field: 'afterSysError',
+            title: '测试后系统偏差',
+            editor: true,
+            validators: ['number']
+        }, {
+            field: 'conclusion',
+            title: 'T_EMC_EQUIPT_STANDARD_SET.CONCLUSION',
+            editor: true,
+            type: 'select',
+            category: 'sys',
+            param: {
+                codeCategoryId: 'checkConclusion',
+            },
+            textStyleFormatter: function (row,value) {
+                if(value == '不合格'){
+                    return {
+                        color: 'red'
+                    }
+                }
+            },
+        },];
+    },
+
+    getDioxinSetListColumns: function () {
+        return [{
+            checkbox: true
+        }, {
+            index: true
+        }, {
+            field: 'equiptNo',
+            title: 'T_EMC_EQUIPT_DIOXIN_SET.EQUIPTNO'
+        }, {
+            field: 'equiptName',
+            title: 'T_EMC_EQUIPT_DIOXIN_SET.EQUIPTNAME'
+        }, {
+            field: 'specification',
+            title: 'T_EMC_EQUIPT_DIOXIN_SET.SPECIFICATION'
+        },];
+    },
+
+    getDioxinSetMsgListColumns: function () {
+        return [{
+            checkbox: true
+        }, {
+            index: true
+        }, {
+            field: 'equiptNo',
+            title: 'T_EMC_EQUIPT_DIOXIN_SET.EQUIPTNO'
+        }, {
+            field: 'beforeTen',
+            title: 'T_EMC_EQUIPT_DIOXIN_SET.BEFORETEN',
+            editor: true
+        }, {
+            field: 'beforeTwenty',
+            title: 'T_EMC_EQUIPT_DIOXIN_SET.BEFORETWENTY',
+            editor: true
+        }, {
+            field: 'beforeFifty',
+            title: 'T_EMC_EQUIPT_DIOXIN_SET.BEFOREFIFTY',
+            editor: true
+        }, {
+            field: 'afterTen',
+            title: 'T_EMC_EQUIPT_DIOXIN_SET.AFTERTEN',
+            editor: true
+        }, {
+            field: 'afterTwenty',
+            title: 'T_EMC_EQUIPT_DIOXIN_SET.AFTERTWENTY',
+            editor: true
+        }, {
+            field: 'afterFifty',
+            title: 'T_EMC_EQUIPT_DIOXIN_SET.AFTERFIFTY',
+            editor: true
+        }, {
+            field: 'conclusion',
+            title: 'T_EMC_EQUIPT_DIOXIN_SET.CONCLUSION',
+            editor: true,
+            type: 'select',
+            category: 'sys',
+            param: {
+                codeCategoryId: 'checkConclusion',
+            },
+            textStyleFormatter: function (row,value) {
+                if(value == '不合格'){
+                    return {
+                        color: 'red'
+                    }
+                }
+            },
+        },];
+    },
+
+    getDioxinSetMsgListColumns2: function () {
+        return [{
+            checkbox: true
+        }, {
+            index: true
+        }, {
+            field: 'equiptNo',
+            title: 'T_EMC_EQUIPT_DIOXIN_SET.EQUIPTNO'
+        }, {
+            field: 'beforeTen',
+            title: '采样前300',
+            editor: true
+        }, {
+            field: 'beforeTwenty',
+            title: '采样前700',
+            editor: true
+        }, {
+            field: 'afterTen',
+            title: '采样后300',
+            editor: true
+        }, {
+            field: 'afterTwenty',
+            title: '采样后700',
+            editor: true
+        }, {
+            field: 'conclusion',
+            title: 'T_EMC_EQUIPT_DIOXIN_SET.CONCLUSION',
+            editor: true,
+            type: 'select',
+            category: 'sys',
+            param: {
+                codeCategoryId: 'checkConclusion',
+            },
+            textStyleFormatter: function (row,value) {
+                if(value == '不合格'){
+                    return {
+                        color: 'red'
+                    }
+                }
+            },
+        },];
+    },
+
+    workflow: {
+        dbTable: 'T_EMC_SAMPLE',
+        columns: [{
+            field: 'id',
+            title: 'T_EMC_SAMPLE.ID',
+            width: 20,
+        }]
+    }
 });

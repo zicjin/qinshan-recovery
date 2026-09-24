@@ -9,7 +9,7 @@ emcEquiptTemp.editPage = {
             service : 'PfEquiptTempServiceImpl',
             columns : emcEquiptTemp.getEditListColumns(),
 	        requestData : {
-	            orgId_SB : workspace.user.ext$.parentorgid
+	            org_filter : '1',
 	        },  
             order : {
             	recordDate : 'desc'

@@ -17,13 +17,21 @@
                        B.BIZCATEGORYCODE,
                        B.URGENT,B.ORGID,B.ORGNAME,
                        D.AREANAME
+        <if test=" orderDate_filter !=null   ">
+            ,E.ORDERNO
+        </if>
                   FROM T_EMC_FOLDER A
                   LEFT JOIN T_EMC_PROJECT B
                     ON A.PROJID = B.ID
                   LEFT JOIN T_EMC_CLIENT C
                     ON B.ENTRUSTORGID = C.ID
                   LEFT JOIN T_EMC_AREA D
-                    ON C.AREAID = D.ID) T
+                    ON C.AREAID = D.ID
+        <if test=" orderDate_filter !=null  ">
+            LEFT JOIN T_EMC_ORDER E ON
+            E.FOLDERID =A.ID
+        </if>
+        ) T
         <where>
             <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
 			<if test="targetType != 'queryFolderNo'">
@@ -110,6 +118,20 @@
                         )
                     </when>
                 </choose>
+            </if>
+            <if test='targetType == "emission"'>
+                AND EXISTS (SELECT 1
+                FROM T_EMC_ORDER_TASK O
+                WHERE O.FOLDERID = T.ID
+                AND O.STATUS = 'done'
+                AND O.ANALYSISTYPE = 'analysis')
+            </if>
+            <if test='targetType == "reportFolder"'>
+                AND EXISTS (SELECT 1
+                FROM T_EMC_ORDER O
+                WHERE O.FOLDERID = T.ID
+                AND O.QCCATEGORYCODE = 'N/A')
+                AND NOT EXISTS (SELECT 1 FROM T_EMC_ORDER_TASK OT WHERE OT.FOLDERID = T.ID AND OT.STATUS <![CDATA[<>]]> 'done')
             </if>
         </where>
         ORDER BY

@@ -32,4 +32,9 @@ public class EmcCertDaoImpl extends MybatisDaoSupport<EmcCertBean, Long>implemen
         return getMapper().selectOverdueCert(parameter);
     }
 
+    @Override
+    public List<Map<String, Object>> selectOverdueQual(MapperParameter parameter) {
+        return getMapper().selectOverdueQual(parameter);
+    }
+
 }

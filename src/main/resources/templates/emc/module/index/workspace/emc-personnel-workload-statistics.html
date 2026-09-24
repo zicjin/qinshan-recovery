@@ -35,7 +35,7 @@
         if (!Gikam.isEmpty(startTime) && !Gikam.isEmpty(endTime) && !Gikam.isEmpty(analysisOrg)) {
             Gikam.post(IFM_CONTEXT + '/secure/emc/module/bp/bp/order-tasks/personnel-workload-statistics/queries', Gikam.getJsonWrapper({
                 f : {
-                    ANALYSISORGID_SEQ : analysisOrg,
+                    ANALYSISORGID_SB : analysisOrg,
                     ANALYSISDATE_DGOE : startTime,
                     ANALYSISDATE_DLOE : endTime,
                 }

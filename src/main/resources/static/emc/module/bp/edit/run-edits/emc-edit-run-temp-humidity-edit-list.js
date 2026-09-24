@@ -17,7 +17,7 @@ emcRunEdit.tempHumidityPage = {
 	        requestData : {
 				id_DIFFER : _this.param.id,
 				runid_SEQ : _this.param.runId,
-	            orgId_SB : workspace.user.ext$.parentorgid,
+	            org_filter : '1',
 	        },
             group : {
                 fields : [ "ext$.orderno"],

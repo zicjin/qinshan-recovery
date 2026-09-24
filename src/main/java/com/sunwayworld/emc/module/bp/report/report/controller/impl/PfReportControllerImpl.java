@@ -1,6 +1,7 @@
 package com.sunwayworld.emc.module.bp.report.report.controller.impl;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.sunwayworld.emc.module.bp.report.report.controller.PfReportController;
 import com.sunwayworld.framework.log.annotation.Log;
@@ -13,6 +14,22 @@ import com.sunwayworld.framework.spring.annotation.GikamBean;
 @Controller
 @GikamBean
 public class PfReportControllerImpl extends EmcReportControllerImpl implements PfReportController {
+
+    @Override
+    @Log(value = "报告指派页面", type = LogType.CONTROLLER)
+    public String reportAssignPage() {
+        return "emc/module/bp/report/reports/emc-report-assign-list";
+    }
+
+    @Override
+    public String selectReportTestConclusion() {
+        return "emc/module/bp/report/reports/emc-report-test-conclusion-open";
+    }
+
+    @Override
+    public String selectSecurityReportTestConclusion() {
+        return "emc/module/bp/report/reports/emc-report-test-conclusion-security";
+    }
 
     @Override
     @Log(value = "报告编辑-点位选择页面", type = LogType.CONTROLLER)
@@ -39,6 +56,11 @@ public class PfReportControllerImpl extends EmcReportControllerImpl implements P
     }
 
     @Override
+    public String reportSendSearchInfo() {
+        return "emc/module/bp/report/reports/emc-report-send-search-list";
+    }
+
+    @Override
     @Log(value = "查看报告界面", type = LogType.CONTROLLER)
     public String browseReportRecordPage() {
         return "emc/module/bp/report/reports/emc-browse-report-record-search-list";
@@ -48,5 +70,23 @@ public class PfReportControllerImpl extends EmcReportControllerImpl implements P
     @Log(value = "查看所有报告页面", type = LogType.CONTROLLER)
     public String browseAllReportPage() {
         return "emc/module/bp/report/reports/emc-browse-all-report";
+    }
+
+    @RequestMapping("/emission-calculat-list")
+    @Log(value = "排放计算页面", type = LogType.CONTROLLER)
+    public String emissionCalculatListPage() {
+        return "emc/module/bp/report/reports/emc-report-emission-calculat-list";
+    }
+
+    @RequestMapping("/edit-item")
+    @Log(value = "编辑分析项", type = LogType.CONTROLLER)
+    public String editItemPage() {
+        return "emc/module/bp/report/reports/emc-report-edit-item-list";
+    }
+
+    @RequestMapping("/item-qc-index-list")
+    @Log(value = "查看质控指标", type = LogType.CONTROLLER)
+    public String itemQcIndexPage() {
+        return "emc/module/bp/report/reports/emc-report-item-qc-index-list";
     }
 }

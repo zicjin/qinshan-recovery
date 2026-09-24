@@ -59,6 +59,12 @@ Gikam.extend(coreReportConfig.detailPage, {
                                 'targetId_SEQ' : row.id
                             }
                         });
+                        Gikam.getComp('core-reportline-edit-list-role-grid').refresh({
+                           url : IFM_CONTEXT + '/core/module/sys/role-permissions/queries',
+                            requestData : {
+                                'targetId_SEQ' : row.id
+                            }
+                        });
                     },
                     toolbar : [ {
                         type : 'button',
@@ -165,6 +171,34 @@ Gikam.extend(coreReportConfig.detailPage, {
                             }
                             _this.view();
                         }
+                    }, {
+                        type : 'button',
+                        text : '下载',
+                        icon : 'browse',
+                        onClick : function() {
+                            var selectrows = Gikam.getComp('core-report-config-detail-line-grid').getSelections();
+                            if (selectrows.length != 1) {
+                                Gikam.alert('GIKAM.TIP.CHOOSE_ONE_ITEM');
+                                return;
+                            }
+                            var selectedRow = Gikam.getComp('core-report-config-detail-line-grid').getSelections()[0];
+                            var bizId = selectedRow.id;
+
+                            Gikam.post(IFM_CONTEXT + '/core/module/item/files/queries', Gikam.getJsonWrapper({
+                                f : {
+                                    targetId : 'T_CORE_REPORT_CONFIG_LINE$' + bizId
+                                },
+                                n : -1,
+                                s : 50
+                            })).done(function(r) {
+                                if (r.rows.length > 0) {
+                                    Gikam.emcDownloadFileById(r.rows[0].id);
+                                } else {
+                                    Gikam.alert('未维护附件');
+                                }
+                            });
+
+                        }
                     } ],
                     columns : coreReportConfig.getLineListColumns(),
                 } ]
@@ -180,7 +214,68 @@ Gikam.extend(coreReportConfig.detailPage, {
             panels : [ {
                 title : 'CORE.MODULE.SYS.REPORTS.TAB.USER_PERMISSION',
                 items : [ _this.getUserPermissionGridParam() ]
-            }]
+            }, {
+                   title : 'CORE.MODULE.MDM.USERS.TAB.ROLE', // 访问角色
+                  items : [ {
+                      type : 'grid',
+                      id : 'core-reportline-edit-list-role-grid',
+                      columns : coreReportConfig.getMenuRoleColumns(),
+                      requestData : {
+                          permissionTypeId_SEQ : 'T_CORE_REPORT_CONFIG_LINE',
+                      },
+                      page : true,
+                      deleteFormatter : function(row) {
+                          return row.ext$.rolename
+                      },
+                      toolbar : [ {
+                          type : 'button',
+                          text : 'GIKAM.BUTTON.INSERT',
+                          icon : 'add-row',
+                          onClick : function() {
+                              Gikam.create('modal', {
+                                  title : 'CORE.MODULE.SYS.ROLES.MODAL.CHOOSE', // 选择角色
+                                  url : IFM_CONTEXT + '/secure/core/module/sys/roles/page/choose-list' + Gikam.param({
+                                      target_filter : encodeURI(JSON.stringify({
+                                          type : 'unassigned',
+                                          targetTable : 'T_CORE_ROLE_PERMISSION',
+                                          targetMatchColumn : 'ROLEID',
+                                          thisMatchColumn : 'ID',
+                                          filter : [ {
+                                              targetFilterColumn : 'TARGETID',
+                                              targetFilterValue : Gikam.getComp('core-report-config-detail-line-grid').getActivedRow().id
+                                          }, {
+                                              targetFilterColumn : 'PERMISSIONTYPEID',
+                                              targetFilterValue : 'T_CORE_MENU'
+                                          } ]
+                                      }))
+                                  }),
+                                  onAfterClose : function(callbackObj) {
+                                      if (Gikam.isEmpty(callbackObj)) {
+                                          return;
+                                      }
+                                      var menuId = Gikam.getComp('core-report-config-detail-line-grid').getActivedRow().id;
+                                      var rolePermissions = callbackObj.map(function(item) {
+                                          return {
+                                              roleId : item.id,
+                                              targetId : menuId,
+                                              permissionTypeId : 'T_CORE_REPORT_CONFIG_LINE'
+                                          }
+                                      })
+
+                                      Gikam.getComp('core-reportline-edit-list-role-grid').insert(IFM_CONTEXT + '/core/module/sys/role-permissions', rolePermissions);
+                                  }
+                              })
+                          }
+                      }, {
+                          type : 'button',
+                          text : 'GIKAM.BUTTON.DELETE',
+                          icon : 'remove-row',
+                          onClick : function() {
+                              Gikam.getComp('core-reportline-edit-list-role-grid').deleteRows(IFM_CONTEXT + '/core/module/sys/role-permissions');
+                          }
+                      } ]
+                  } ]
+              }]
         }
     },
     
@@ -254,7 +349,7 @@ Gikam.extend(coreReportConfig.detailPage, {
                 targetFilterValue : reportLineId,
                 targetFilterColumn1 : 'PERMISSIONTYPEID',
                 targetFilterValue1 : 'T_CORE_REPORT_CONFIG_LINE',
-                orgId_SB : workspace.user.ext$.parentorgid
+                org_filter : '1',
             }),
             onAfterClose : function(rows) {
                 if (Gikam.isEmpty(rows)) {
@@ -290,7 +385,7 @@ Gikam.extend(coreReportConfig.detailPage, {
             title : Gikam.choose.getConfig('org-simple').title,
             url : IFM_CONTEXT + Gikam.choose.getConfig('org-simple').url + Gikam.param({
                 orgCategory_SEQ : 'department',
-                parentId_SB : workspace.user.ext$.parentorgid
+                // parentId_SB : workspace.user.ext$.parentorgid
             }),
             onAfterClose : function(rows) {
             	console.log(rows);
@@ -319,7 +414,7 @@ Gikam.extend(coreReportConfig.detailPage, {
             title : Gikam.choose.getConfig('org-simple').title,
             url : IFM_CONTEXT + Gikam.choose.getConfig('org-simple').url + Gikam.param({
                 orgCategory_SEQ : 'department',
-                parentId_SB : workspace.user.ext$.parentorgid,
+                // parentId_SB : workspace.user.ext$.parentorgid,
                 
             }),
             onAfterClose : function(rows) {

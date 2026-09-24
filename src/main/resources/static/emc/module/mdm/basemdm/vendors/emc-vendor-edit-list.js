@@ -9,7 +9,7 @@ emcVendor.editPage = {
             url : emcVendor.baseUrl + '/queries/raw',
             requestData : {
                 vendorCategory_SEQ : _this.param.category,
-	            orgId_SB : workspace.user.ext$.parentorgid
+	            org_filter : '1',
             },
             columns : emcVendor.getEditListColumns(),
             checkOnActive : true,

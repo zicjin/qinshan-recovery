@@ -7,7 +7,8 @@
           FROM (SELECT A.*,
                        B.MONITORTMPLNAME,
                        C.MONITORTMPLGROUPID,
-                       B.ACTIVATEDFLAG
+                       B.ACTIVATEDFLAG,
+                       B.ORGID
                   FROM T_EMC_MPC_TMPL A
                   LEFT JOIN T_EMC_MONITOR_TMPL B
                     ON A.MONITORTMPLID = B.ID

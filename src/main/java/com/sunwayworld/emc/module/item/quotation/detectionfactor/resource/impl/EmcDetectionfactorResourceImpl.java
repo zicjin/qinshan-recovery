@@ -33,4 +33,10 @@ public class EmcDetectionfactorResourceImpl implements EmcDetectionfactorResourc
         return getService().insert(wrapper);
     }
 
+    @Override
+    @RequestMapping(value = "/action/insert-by-item-group", method = RequestMethod.POST)
+    public Long insertByItemGroup(RestJsonWrapperBean wrapper) {
+        return getService().insertByItemGroup(wrapper);
+    }
+
 }

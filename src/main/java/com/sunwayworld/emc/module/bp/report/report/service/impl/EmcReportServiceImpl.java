@@ -3966,4 +3966,19 @@ public class EmcReportServiceImpl implements EmcReportService {
         reportResult.setIndexId(NumberUtils.isNumber(indexId) ? NumberUtils.parseLong(indexId) : null);
     }
 
+    @Override
+    public void insertByProjectDone(List<Long> projectIdList, boolean viewFlag) {
+        insertByProject(projectIdList, viewFlag);
+    }
+
+    @Override
+    public String pack(RestJsonWrapperBean wrapper) {
+        return null;
+    }
+
+    @Override
+    public String packReportFile(RestJsonWrapperBean wrapper) {
+        return pack(wrapper);
+    }
+
 }

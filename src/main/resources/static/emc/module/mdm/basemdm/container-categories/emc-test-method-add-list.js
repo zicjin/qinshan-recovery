@@ -13,11 +13,12 @@ emcContainerCategory.chooseTMPage = {
             fixed : true,
             page : true,
             requestData : {
-                target_assigned : '1',
-                targetAssignedTable : 'T_EMC_TEST_CAPACITY',
-                targetTestMethodIdColumn : "TESTMETHODID",
-                targetAssignedFilterColumn : "ORGID",
-                targetAssignedFilterValue : workspace.user.ext$.parentorgid,
+                // target_assigned : '1',
+                // targetAssignedTable : 'T_EMC_TEST_CAPACITY',
+                // targetTestMethodIdColumn : "TESTMETHODID",
+                // targetAssignedFilterColumn : "ORGID",
+                // targetAssignedFilterValue : workspace.user.ext$.parentorgid,
+                org_filter : '1',
             },
             toolbar : [ {
                 type : 'button',
@@ -48,7 +49,7 @@ emcContainerCategory.chooseTMPage = {
                         monitorTmplId : data.monitortmplid,
                         monitorTmplName : data.monitortmplname,
                         containerCategoryId : data.containercategoryid,
-                        storeCondition : data.storeConditionText,
+                        storeCondition : data.storeCondition,
                         sampleWeight : data.sampleWeight
                     };
 
@@ -116,19 +117,18 @@ emcContainerCategory.chooseTMPage = {
             }, {
                 field: 'storeCondition',
                 title: 'T_EMC_TEST_ORDER_CATEGORY.STORECONDITION',
-                type : 'select',
+                type : 'comboBox',
                 search : false,
                 category : 'sys',
                 param : {
                     codeCategoryId : 'storeCondition',
                 },
                 editor : true,
-                multiple : true,
+                // multiple : true,
                 onChange : function(field, value, index, oldValue, text) {
                     this.setData({
                         index : index,
                         storeCondition : value,
-                        storeConditionText : text.join(';')
                     });
                 }
             } ]

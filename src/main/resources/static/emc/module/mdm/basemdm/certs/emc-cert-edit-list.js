@@ -26,7 +26,7 @@ emcCert.editPage = {
                 _this.onEmpActive(row);
             },
 	        requestData : {
-	            orgId_SB : workspace.user.ext$.parentorgid
+	            org_filter : '1',
 	        },            
         };
     },
@@ -89,30 +89,30 @@ emcCert.editPage = {
                             var url = Gikam.printf(emcCert.baseUrl + '/certs');
                             Gikam.getComp('emc-cert-edit-list-grid').deleteRows(url);
                         }
-                    }, {
-                        type : 'button',
-                        text : 'GIKAM.BUTTON.AUTH',
-                        icon : 'add',
-                        onClick : function() {
-                            var selections = Gikam.getComp('emc-cert-edit-list-grid').getSelections();
-                            if (Gikam.isEmpty(selections) || selections.length > 1) {
-                                Gikam.alert('EMC.MODULE.MDM.BASEMDM.CERTS.AUTH_CHOOSE_ONLY_ONE');
-                                return;
-                            }
-                            var status = selections[0].status;
-                            if (status === 'auth') {
-                                Gikam.alert('EMC.MODULE.MDM.BASEMDM.CERTS.AUTH_ONLY_ONE');
-                                return;
-                            }
-                            if (Gikam.isEmpty(selections[0].certNo) || Gikam.isEmpty(selections[0].certName) || Gikam.isEmpty(selections[0].authDate) || Gikam.isEmpty(selections[0].expireDate) || Gikam.isEmpty(selections[0].warningDays)) {
-                                Gikam.alert('EMC.MODULE.MDM.BASEMDM.CERTS.AUTH_NOT_EMPTY');
-                                return;
-                            }
-                            var url = Gikam.printf(emcCert.baseUrl + '/{id}/cert-method-auth', {
-                                id : selections[0].id
-                            });
-                            Gikam.getComp('emc-cert-edit-list-grid').insert(url, [ {} ]);
-                        },
+                    // }, {
+                    //     type : 'button',
+                    //     text : 'GIKAM.BUTTON.AUTH',
+                    //     icon : 'add',
+                    //     onClick : function() {
+                    //         var selections = Gikam.getComp('emc-cert-edit-list-grid').getSelections();
+                    //         if (Gikam.isEmpty(selections) || selections.length > 1) {
+                    //             Gikam.alert('EMC.MODULE.MDM.BASEMDM.CERTS.AUTH_CHOOSE_ONLY_ONE');
+                    //             return;
+                    //         }
+                    //         var status = selections[0].status;
+                    //         if (status === 'auth') {
+                    //             Gikam.alert('EMC.MODULE.MDM.BASEMDM.CERTS.AUTH_ONLY_ONE');
+                    //             return;
+                    //         }
+                    //         if (Gikam.isEmpty(selections[0].certNo) || Gikam.isEmpty(selections[0].certName) || Gikam.isEmpty(selections[0].authDate) || Gikam.isEmpty(selections[0].expireDate) || Gikam.isEmpty(selections[0].warningDays)) {
+                    //             Gikam.alert('EMC.MODULE.MDM.BASEMDM.CERTS.AUTH_NOT_EMPTY');
+                    //             return;
+                    //         }
+                    //         var url = Gikam.printf(emcCert.baseUrl + '/{id}/cert-method-auth', {
+                    //             id : selections[0].id
+                    //         });
+                    //         Gikam.getComp('emc-cert-edit-list-grid').insert(url, [ {} ]);
+                    //     },
                     } ]
                 } ]
             } ]
@@ -166,48 +166,48 @@ emcCert.editPage = {
                     } ]
                 }, ]
             }, {
-                title : 'EMC.MODULE.MDM.BASEMDM.CERTMONITORABILITIES.TAB.BASE_INFO',
-                items : [ {
-                    type : 'grid',
-                    id : 'emc-cert-monitor-ability-edit-list-grid',
-                    url : _this.getCertMonitorAbilityUrl(),
-                    columns : emcCert.getCertMonitorAbilityColumns(),
-                    service : 'emcCertMonitorAbilityServiceImpl',
-                    deleteFormatter : function(row) {
-                        return row.ext$.monitorobjname || row.id;
-                    },
-                    onLoadSuccess : function(data) {
-                        if (!Gikam.isEmpty(data)) {
-                            this.activeRowByIndex(0);
-                        }
-                    },
-                    toolbar : [ {
-                        type : 'button',
-                        text : 'GIKAM.BUTTON.INSERT',
-                        icon : 'add',
-                        onClick : function() {
-                            _this.insertCertMonitorAbility();
-                        }
-                    }, {
-                        type : 'button',
-                        text : 'GIKAM.BUTTON.DELETE',
-                        icon : 'remove-row',
-                        onClick : function() {
-                            var url = Gikam.printf(emcCert.baseUrl + '/cert-monitor-abilities');
-                            Gikam.getComp('emc-cert-monitor-ability-edit-list-grid').deleteRows(url);
-                        }
-                    } ]
-                }, ]
-            }, {
-                title : 'EMC.MODULE.MDM.BASEMDM.CERTLOGS.TAB.BASE_INFO',
-                items : [ {
-                    type : 'grid',
-                    id : 'emc-cert-log-list-grid',
-                    service : 'emcCertLogServiceImpl',
-                    url : _this.getCertLogUrl(),
-                    columns : emcCert.getCertLogColumns(),
-                } ]
-            }, {
+            //     title : 'EMC.MODULE.MDM.BASEMDM.CERTMONITORABILITIES.TAB.BASE_INFO',
+            //     items : [ {
+            //         type : 'grid',
+            //         id : 'emc-cert-monitor-ability-edit-list-grid',
+            //         url : _this.getCertMonitorAbilityUrl(),
+            //         columns : emcCert.getCertMonitorAbilityColumns(),
+            //         service : 'emcCertMonitorAbilityServiceImpl',
+            //         deleteFormatter : function(row) {
+            //             return row.ext$.monitorobjname || row.id;
+            //         },
+            //         onLoadSuccess : function(data) {
+            //             if (!Gikam.isEmpty(data)) {
+            //                 this.activeRowByIndex(0);
+            //             }
+            //         },
+            //         toolbar : [ {
+            //             type : 'button',
+            //             text : 'GIKAM.BUTTON.INSERT',
+            //             icon : 'add',
+            //             onClick : function() {
+            //                 _this.insertCertMonitorAbility();
+            //             }
+            //         }, {
+            //             type : 'button',
+            //             text : 'GIKAM.BUTTON.DELETE',
+            //             icon : 'remove-row',
+            //             onClick : function() {
+            //                 var url = Gikam.printf(emcCert.baseUrl + '/cert-monitor-abilities');
+            //                 Gikam.getComp('emc-cert-monitor-ability-edit-list-grid').deleteRows(url);
+            //             }
+            //         } ]
+            //     }, ]
+            // }, {
+            //     title : 'EMC.MODULE.MDM.BASEMDM.CERTLOGS.TAB.BASE_INFO',
+            //     items : [ {
+            //         type : 'grid',
+            //         id : 'emc-cert-log-list-grid',
+            //         service : 'emcCertLogServiceImpl',
+            //         url : _this.getCertLogUrl(),
+            //         columns : emcCert.getCertLogColumns(),
+            //     } ]
+            // }, {
                 title : 'EMC.MODULE.MDM.BASEMDM.CERTFILE.TAB.FILE',
                 items : [ {
                     type : 'uploader',
@@ -301,10 +301,10 @@ emcCert.editPage = {
         Gikam.create('modal', {
             title : 'EMC.MODULE.MDM.BASEMDM.CRETTESTMETHODS.TAB.BASE_INFO',
             width : 550,
-            url : Gikam.choose.getConfig('testMethod').url + Gikam.param({
+            url : Gikam.choose.getConfig('testCapacity').url + Gikam.param({
                 target_unassigned : '1',
                 targetTable : 'T_EMC_CERT_TEST_METHOD',
-                targetTestMethodIdColumn : 'TESTID',
+                targetTestMethodIdColumn : 'TESTMETHODID',
                 targetFilterColumn1 : 'CERTID',
                 targetFilterValue1 : activedRow.id,
             }),

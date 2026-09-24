@@ -8,6 +8,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/secure/emc/module/bp/report/reports/page")
 public interface PfReportController extends EmcReportController {
 
+    @RequestMapping("/select-report-test-conclusion")
+    String selectReportTestConclusion();
+
+    @RequestMapping("/report-test-conclusion")
+    String selectSecurityReportTestConclusion();
+
     @RequestMapping("/folder-choose-list")
     String folderChoosePage();
 
@@ -20,9 +26,15 @@ public interface PfReportController extends EmcReportController {
     @RequestMapping("/report-send-info")
     String reportSendPage();
 
+    @RequestMapping("/report-send-search")
+    String reportSendSearchInfo();
+
     @RequestMapping("/browse-record")
     String browseReportRecordPage();
 
     @RequestMapping("/browse-all-report")
     String browseAllReportPage();
+
+    @RequestMapping("/assign-list")
+    String reportAssignPage();
 }

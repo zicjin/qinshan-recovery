@@ -1216,39 +1216,39 @@ var emcResultInputSample = Gikam.getPageObject({
         return [ {
             field : 'orderColor',
             title : 'T_EMC_SAMPLE.ORDERCOLOR',
-            type : 'select',
-            search : true,
-            category : 'sys',
-            param : {
-                codeCategoryId : 'orderColor'
-            },
+            // type : 'select',
+            // search : true,
+            // category : 'sys',
+            // param : {
+            //     codeCategoryId : 'orderColor'
+            // },
         }, {
             field : 'orderSmell',
             title : 'T_EMC_SAMPLE.ORDERSMELL',
-            type : 'select',
-            search : true,
-            category : 'sys',
-            param : {
-                codeCategoryId : 'orderSmell'
-            },
+            // type : 'select',
+            // search : true,
+            // category : 'sys',
+            // param : {
+            //     codeCategoryId : 'orderSmell'
+            // },
         }, {
             field : 'orderOilSlick',
             title : 'T_EMC_SAMPLE.ORDEROILSLICK',
-            type : 'select',
-            search : true,
-            category : 'sys',
-            param : {
-                codeCategoryId : 'orderOilSlick'
-            }
+            // type : 'select',
+            // search : true,
+            // category : 'sys',
+            // param : {
+            //     codeCategoryId : 'orderOilSlick'
+            // }
         }, {
             field : 'orderFloater',
             title : 'T_EMC_SAMPLE.ORDERFLOATER',
-            type : 'select',
-            search : true,
-            category : 'sys',
-            param : {
-                codeCategoryId : 'orderFloater'
-            }
+            // type : 'select',
+            // search : true,
+            // category : 'sys',
+            // param : {
+            //     codeCategoryId : 'orderFloater'
+            // }
         } ];
     },
 

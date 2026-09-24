@@ -15,7 +15,7 @@ emcEquiptAcqScript.editPage = {
                     service : 'emcEquiptAcqScriptServiceImpl',
                     url : emcEquiptAcqScript.baseUrl + '/queries/raw',
 	                requestData : {
-	                    orgId_SB : workspace.user.ext$.parentorgid
+	                    org_filter : '1',
 	                },
 	                
                     onRendered : function() {

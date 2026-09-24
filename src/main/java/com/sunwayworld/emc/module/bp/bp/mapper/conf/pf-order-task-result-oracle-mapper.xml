@@ -9,11 +9,13 @@
                        O.ORDERDESC,
                        O.REMARK,
                        O.SAMPLEID,
+                        O.SAMPLINGDEPTH,
                        O.SAMPLEBEGINDATE,
                        O.SAMPLEBEGINTIME,
                        O.SAMPLECOMPLETEDATE,
                        O.SAMPLECOMPLETETIME,
                        O.LABELNO,
+                        O.CLIENTORDERNAME,
                        M.STATUS AS ORDERTASKSTATUS,
                        M.MONITORTMPLID,
                        M.ORDERCATEGORY,
@@ -25,8 +27,11 @@
                        M.CUPNO,
                        M.EQUIPTACQUNO,
                        N.INDEXNAME,
+                         M.STOCKBATCHNO,
                        F.PLANSAMPLEDATE,
                        F.FOLDERNO,
+                        F.LONGITUDE,
+                        F.LATITUDE,
                        F.MONITORPOINTID,
                        F.MONITORPOINTNO,
                        F.MONITORPOINTNAME,
@@ -48,7 +53,16 @@
                        B.THEORYCONTENT,
                        B.JUDGEBASIS,
                        B.CALQCRESULT,
-                       C.SETNAME
+                       B.ALLOWABLEERROR,
+                       C.SETNAME,
+                       TM.MULTIPLEITEMGROUP,
+                       TE.TESTFLAG,
+        OTE.SCENEEQUIPTNO AS SCENEEQUIPTCOLLECTNO,
+        CASE
+        WHEN NVL(F.MONITORPOINTNO, ' ') = NVL(F.MONITORPOINTNAME, ' ')
+        THEN F.MONITORPOINTNAME
+        ELSE F.MONITORPOINTNO || F.MONITORPOINTNAME
+        END AS REPORTMONITORPOINTNAME
                   FROM T_EMC_ORDER_TASK_RESULT A
                   LEFT JOIN T_EMC_ORDER O
                     ON O.ID = A.ORDERID
@@ -67,7 +81,14 @@
                   LEFT JOIN T_EMC_ITEM B
                     ON B.ID = A.ITEMID
                   LEFT JOIN T_EMC_STANDARD_SET C
-                    ON C.ID = B.STANDSETID) T
+                    ON C.ID = B.STANDSETID
+                    LEFT JOIN T_EMC_TEST_METHOD TM
+                    ON B.TESTMETHODID = TM.ID
+                  LEFT JOIN T_EMC_TEST TE
+                    ON A.TESTID = TE.ID
+        LEFT JOIN T_EMC_EQUIPT OTE
+        ON OTE.ID = M.EQUIPTID
+        ) T
         <where>
             <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
             <!-- 此SQL片段加上后，数据查询总数会不一致 -->
@@ -282,7 +303,9 @@
         F.SAMPLEORGID,
         F.SAMPLEORGNAME,
         F.TERMINATION,
+        F.MONITORPOINTNAME,
         O.SAMPLEBEGINDATE,
+        O.SAMPLEBEGINTIME,
         O.ORDERCATEGORY,
         S.REPORTCONFIGLINEID AS SAMPLEREPORTCONFIGLINEID,
         S.SAMPLENO,
@@ -290,7 +313,7 @@
         OT.CUPNO,
         OT.ANALYSISORGID,
         OT.ANALYSISORGNAME,
-        OT.ANALYSISTYPE,
+        A.ANALYSISTYPE,
         OT.METHODNAME,
         OT.TESTMETHODBASIS,
         OT.STATUS AS ORDERTASKSTATUS,
@@ -369,7 +392,7 @@
                 AND T.ANALYSISTYPE = 'analysis'
                 AND T.RETESTORIGINALORDERTASKRESULTID IS NULL
                 <if test="schemeName != null and schemeName != ''">
-                    AND T.SCHEMENAME LIKE CONCAT('%', #{schemeName}, '%')
+                    AND T.SCHEMENAME LIKE CONCAT(CONCAT('%', #{schemeName}), '%')
                 </if>
                 <if test="analysisOrgId != null and analysisOrgId != ''">
                     AND T.ANALYSISORGID = #{analysisOrgId}
@@ -390,7 +413,7 @@
                 <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
             </when>
             <otherwise>
-                T.ANALYSISORGID ASC, T.FOLDERNO ASC
+                T.orderno ASC
             </otherwise>
         </choose>
     </select>
@@ -447,7 +470,7 @@
         when O.PARENTORDERNO is not null then O.PARENTORDERNO
         else O.SAMPLEPARAMORDERNO
         end as ORDERNUMBER,
-        O.PARENTORDERNO, C.PARAMPROJID, O.FREQUENCY ,O.`CYCLE` ,O.SAMPLEPARAMORDERNO ,C.FOLDERNO
+        O.PARENTORDERNO, C.PARAMPROJID, O.FREQUENCY ,O.CYCLE ,O.SAMPLEPARAMORDERNO ,C.FOLDERNO
         FROM T_EMC_ORDER_TASK_RESULT A
         LEFT JOIN T_EMC_ORDER_TASK B ON B.ID = A.ORDERTASKID
         LEFT JOIN T_EMC_ORDER O ON O.ID = A.ORDERID
@@ -458,17 +481,6 @@
             <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
             <if test='sampleId != null and paramProjId != null'>
                 AND T.PARAMPROJID = #{paramProjId}
-                and left(T.FOLDERNO,
-                length(T.FOLDERNO)-5) in (
-                select
-                F.FOLDERNO
-                from
-                t_emc_folder F
-                left join T_EMC_ORDER O on
-                F.ID = O.FOLDERID
-                where
-                F.PROJID =  #{paramProjId}
-                and O.SAMPLEID =  #{sampleId})
             </if>
         </where>
         ORDER BY
@@ -514,7 +526,7 @@
         when O.PARENTORDERNO is not null then O.PARENTORDERNO
         else O.ORDERNO
         end as ORDERNUMBER,
-        O.PARENTORDERNO, C.PARAMPROJID ,O.FREQUENCY ,O.`CYCLE` ,O.SAMPLEPARAMORDERNO ,C.FOLDERNO,I.SAMPLEPARAM
+        O.PARENTORDERNO, C.PARAMPROJID ,O.FREQUENCY ,O.CYCLE ,O.SAMPLEPARAMORDERNO ,C.FOLDERNO,I.SAMPLEPARAM
         FROM T_EMC_ORDER_TASK_RESULT A
         LEFT JOIN T_EMC_ORDER_TASK B ON B.ID = A.ORDERTASKID
         LEFT JOIN T_EMC_ORDER O ON O.ID = A.ORDERID
@@ -537,7 +549,7 @@
             <otherwise>
                 T.orderno asc,
                 t.TESTID asc,
-                T.PARENTORDERNO asc
+                T.ITEMORDERNO asc
             </otherwise>
         </choose>
     </select>

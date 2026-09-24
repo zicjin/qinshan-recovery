@@ -20,6 +20,13 @@ public class GikamWpjcApplication extends GikamCoreApplication {
 
     @Override
     public Function<HttpSecurity, HttpSecurity> securityConfigureCustomizer() {
-        return r -> r;
+        return r -> {
+            try {
+                r.authorizeRequests().antMatchers("/static/plugin/ueeditor/index.html", "/static/lims4/plugin/spread-sheets/src/index/index.html").denyAll();
+                return r;
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        };
     }
 }

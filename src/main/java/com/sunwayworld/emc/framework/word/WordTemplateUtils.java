@@ -53,9 +53,9 @@ public class WordTemplateUtils {
     public static String getDate(List<LocalDate> dateList) {
         List<LocalDate> notEmptyDateList = dateList.stream().filter(d -> !ObjectUtils.isEmpty(d)).collect(Collectors.toList());
         return notEmptyDateList.stream().min(Comparator.comparing(Function.identity())).map(date -> {
-            String minSampleDateStr = DateTimeUtils.formatLocalDate(date, EmcConstant.TABLE_DATE_PATTERN);
+            String minSampleDateStr = DateTimeUtils.formatLocalDate(date, EmcConstant.DEFAULT_DATE_FORMAT);
             LocalDate maxSampleDate = notEmptyDateList.stream().max(Comparator.comparing(Function.identity())).get();
-            String maxSampleDateStr = DateTimeUtils.formatLocalDate(maxSampleDate, EmcConstant.TABLE_DATE_PATTERN);
+            String maxSampleDateStr = DateTimeUtils.formatLocalDate(maxSampleDate, EmcConstant.DEFAULT_DATE_FORMAT);
             if (StringUtils.equals(minSampleDateStr, maxSampleDateStr)) {
                 return minSampleDateStr;
             }
@@ -82,7 +82,7 @@ public class WordTemplateUtils {
         int days = Period.between(minDate, maxDate).getDays();
 
         if (days == 0) {
-            return DateTimeUtils.formatLocalDate(minDate, EmcConstant.TABLE_DATE_PATTERN);
+            return DateTimeUtils.formatLocalDate(minDate, EmcConstant.DEFAULT_DATE_FORMAT);
         }
 
         // 如果是严格模式，并且日期不是连续的，则先将日期分割为区间段，再以顿号隔开
@@ -90,7 +90,7 @@ public class WordTemplateUtils {
             return getDateRange(splitDateRange(notEmptyDateList));
         }
 
-        return String.join(DEFAULT_DATE_RANGE_DELIMITER, DateTimeUtils.formatLocalDate(minDate, EmcConstant.TABLE_DATE_PATTERN), DateTimeUtils.formatLocalDate(maxDate, EmcConstant.TABLE_DATE_PATTERN));
+        return String.join(DEFAULT_DATE_RANGE_DELIMITER, DateTimeUtils.formatLocalDate(minDate, EmcConstant.DEFAULT_DATE_FORMAT), DateTimeUtils.formatLocalDate(maxDate, EmcConstant.DEFAULT_DATE_FORMAT));
     }
 
     /**

@@ -6,6 +6,7 @@
     <select id="selectByCondition" parameterType="map" resultType="map">
         SELECT T.*
           FROM (SELECT A.*,
+                        nvl(A.replaceFlag,'0') AS replaceFlag2,
                        B.TESTCATEGORYID,
                        B.TESTID,
                        C.METHODNAME,

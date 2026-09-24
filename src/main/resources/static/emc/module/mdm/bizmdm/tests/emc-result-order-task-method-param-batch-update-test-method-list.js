@@ -46,7 +46,7 @@ emcTestMethod.resultOrderTaskMethodParamBatchPage = {
             type : 'form',
             titleWidthAuto : true,
             id : 'emc-method-param-edit-test-method-select-form',
-            fields : emcTestMethod.getRunTestMethodParamSelectColumns(_this.param.id),
+            fields : emcTestMethod.getOrderTaskTestMethodParamSelectColumns(_this.param.id),
             autoSave : false,
             onRendered : function(data) {
                 // 获取数据

@@ -17,26 +17,11 @@ emcRun.qcChoosePage = {
             onRowActive  : function(index) {
                 this.selectRowByIndex(index);
             },
-            onCheckboxClick : function(field, row) {
-                var qcSelections = Gikam.getComp('emc-run-qc-category-choose-list-grid').getSelections();
-                var saveData = [];
-                Gikam.each(qcSelections, function(index, item) {
-                    saveData.push({
-                        qcCategoryId : item.qcCategoryId,
-                    });
-                });
-                var arrvalue = "";
-                for (var i = 0; i < saveData.length; i++) {
-                    arrvalue += saveData[i].qcCategoryId + ",";
-                }
-                if (arrvalue.length > 0) {
-                    arrvalue = arrvalue.substr(0, arrvalue.length - 1);
-                }
-                if (arrvalue.indexOf('QC-STD') != -1) {
-                    Gikam.getComp('emc-run-qc-category-choose-form').showFields([ 'stockBatchNo' ]);
-                } else {
-                    Gikam.getComp('emc-run-qc-category-choose-form').hideFields([ 'stockBatchNo' ]);
-                }
+            onSelect: function (row) {
+                _this.loadStockBatchNo();
+            },
+            onUnSelect : function(row) {
+                _this.loadStockBatchNo();
             },
             toolbar : [ {
                 type : 'button',
@@ -74,6 +59,28 @@ emcRun.qcChoosePage = {
                     Gikam.getComp('emc-run-qc-category-choose-form').hideFields([ 'stockBatchNo' ]);
                 }
             } ]
+        }
+    },
+
+    loadStockBatchNo: function () {
+        var qcSelections = Gikam.getComp('emc-run-qc-category-choose-list-grid').getSelections();
+        var saveData = [];
+        Gikam.each(qcSelections, function(index, item) {
+            saveData.push({
+                qcCategoryId : item.qcCategoryId,
+            });
+        });
+        var arrvalue = "";
+        for (var i = 0; i < saveData.length; i++) {
+            arrvalue += saveData[i].qcCategoryId + ",";
+        }
+        if (arrvalue.length > 0) {
+            arrvalue = arrvalue.substr(0, arrvalue.length - 1);
+        }
+        if (arrvalue.indexOf('QC-STD') != -1) {
+            Gikam.getComp('emc-run-qc-category-choose-form').showFields([ 'stockBatchNo' ]);
+        } else {
+            Gikam.getComp('emc-run-qc-category-choose-form').hideFields([ 'stockBatchNo' ]);
         }
     },
 

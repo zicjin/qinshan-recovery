@@ -240,7 +240,7 @@ emcHomeAttachment.editPage = {
             id : id
         });
         Gikam.postText(url).done(function(data) {
-            Gikam.download(data);
+            Gikam.emcDownloadFile(data);
         });
     },
 

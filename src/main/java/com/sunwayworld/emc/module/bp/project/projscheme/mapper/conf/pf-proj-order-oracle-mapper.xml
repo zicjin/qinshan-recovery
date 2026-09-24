@@ -18,7 +18,8 @@
                        S.FOLDERNO,
                        S.PROJID,
                        M.TESTMETHODTYPE,
-                       M.SAMPLEPARAM
+                       M.SAMPLEPARAM,
+                       M.TESTCLASS
                 FROM T_EMC_PROJ_ORDER A
                   LEFT JOIN T_EMC_METHOD B
                     ON A.METHODID = B.ID

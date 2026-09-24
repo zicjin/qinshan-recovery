@@ -8,12 +8,21 @@ var emcAnalysisAudit = Gikam.getPageObject({
         }, {
             field : 'projNo',
             title : 'T_EMC_PROJECT.PROJNO',
+            formatter: function (i, v, r) {
+                var value = '<a href="javascript:;">' + v + '</a>';
+                if (r.urgent === '1') {
+                    var img = "<img src='/static/emc/icon/urgent.png' width='15' height='15'>";
+                    return img + value;
+                } else {
+                    return value;
+                }
+            },
         }, {
             field : 'projName',
             title : 'T_EMC_PROJECT.PROJNAME',
-        }, {
-            field : 'ext$.ordercategory',
-            title : 'T_EMC_REPORT.ORDERCATEGORY'
+        // }, {
+            // field : 'ext$.ordercategory',
+            // title : 'T_EMC_REPORT.ORDERCATEGORY'
         }, {
             field : 'createdByName',
             title : 'T_EMC_PROJECT.CREATEDBYNAME'
@@ -34,7 +43,7 @@ var emcAnalysisAudit = Gikam.getPageObject({
             title : 'T_EMC_PROJECT.PROJCREATEDTIME',
             type : 'date',
         }, {
-            field : 'ext$.lastestaccepteddate',
+            field : 'ext$.maxaccepteddate',
             title : 'T_EMC_PROJECT.LASTESTACCEPTEDDATE',
             type : 'date',
             formatter : function(i, v, r) {
@@ -63,7 +72,8 @@ var emcAnalysisAudit = Gikam.getPageObject({
             },
         }, {
             field : 'undoReason',
-            title : 'T_EMC_RUN.UNDOREASON',
+            title : '意见',
+            editor :true
         }, {
             field : 'checkStatus',
             title : 'T_EMC_RUN.CHECKSTATUS',
@@ -98,6 +108,22 @@ var emcAnalysisAudit = Gikam.getPageObject({
                     });
             }
         }, {
+            field : 'analysisBeginDate',
+            title : 'T_EMC_RUN.ANALYSISBEGINDATE',
+            type : 'date'
+        }, {
+            field : 'analysisBeginTime',
+            title : 'T_EMC_RUN.ANALYSISBEGINTIME',
+            type : 'time',
+        }, {
+            field : 'analysisEndDate',
+            title : 'T_EMC_RUN.ANALYSISENDDATE',
+            type : 'date'
+        }, {
+            field : 'analysisEndTime',
+            title : 'T_EMC_RUN.ANALYSISENDTIME',
+            type : 'time'
+        },{
             field : 'partakeUserName',
             title : 'T_EMC_RUN.PARTAKEUSERNAME',
             category : 'emp',
@@ -152,22 +178,6 @@ var emcAnalysisAudit = Gikam.getPageObject({
         }, {
             field : 'calibrationCurve',
             title : 'T_EMC_RUN.CALIBRATIONCURVE',
-        }, {
-            field : 'analysisBeginDate',
-            title : 'T_EMC_RUN.ANALYSISBEGINDATE',
-            type : 'date'
-        }, {
-            field : 'analysisBeginTime',
-            title : 'T_EMC_RUN.ANALYSISBEGINTIME',
-            type : 'dateTime',
-        }, {
-            field : 'analysisEndDate',
-            title : 'T_EMC_RUN.ANALYSISENDDATE',
-            type : 'date'
-        }, {
-            field : 'analysisEndTime',
-            title : 'T_EMC_RUN.ANALYSISENDTIME',
-            type : 'dateTime'
         }, {
             field : 'ext$.assistequiptname',
             title : 'T_EMC_RUN.ASSISTEQUIPTID',

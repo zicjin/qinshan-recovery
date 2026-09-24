@@ -6,6 +6,7 @@
         SELECT T.*
           FROM (SELECT A.*,
                        B.MONITORTMPLNAME,
+                       B.ORDERCATEGORYCODE,
                        C.MONITORTMPLGROUP,
                        D.TESTID,
                        ES.TESTNAME,

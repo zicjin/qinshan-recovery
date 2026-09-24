@@ -16,8 +16,8 @@ var emcEquiptTemp = Gikam.getPageObject({
             onBeforeChoose : function() {
                 return {
                     equiptcategoryname_SEQ : '辅助',
-                    orgId_SB : workspace.user.ext$.parentorgid         
-                    }
+                    org_filter : '1',
+                }
             },
             onAfterChoose : function(rows) {
                 if (!Gikam.isEmpty(rows)) {
@@ -91,8 +91,8 @@ var emcEquiptTemp = Gikam.getPageObject({
             onBeforeChoose : function() {
                 return {
                     equiptcategoryname_SEQ : '辅助',
-                    orgId_SB : workspace.user.ext$.parentorgid         
-                    }
+                    org_filter : '1',
+                }
             },
             onAfterChoose : function(rows) {
                 if (!Gikam.isEmpty(rows)) {
@@ -179,8 +179,8 @@ var emcEquiptTemp = Gikam.getPageObject({
             onBeforeChoose : function() {
                 return {
                     equiptcategoryname_SEQ : '辅助',
-                    orgId_SB : workspace.user.ext$.parentorgid         
-                    }
+                    org_filter : '1',
+                }
             },
             onAfterChoose : function(rows) {
                 if (!Gikam.isEmpty(rows)) {
@@ -257,8 +257,8 @@ var emcEquiptTemp = Gikam.getPageObject({
             onBeforeChoose : function() {
                 return {
                     equiptcategoryname_SEQ : '辅助',
-                    orgId_SB : workspace.user.ext$.parentorgid         
-                    }
+                    org_filter : '1',
+                }
             },
             onAfterChoose : function(rows) {
                 if (!Gikam.isEmpty(rows)) {

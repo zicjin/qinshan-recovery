@@ -42,6 +42,8 @@ import com.sunwayworld.framework.mybatis.mapper.MapperParameter;
 import com.sunwayworld.framework.mybatis.mapper.MatchPattern;
 import com.sunwayworld.framework.mybatis.mapper.SearchFilter;
 import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;
+import com.sunwayworld.framework.support.table.bean.TableHeadBean;
+import com.sunwayworld.framework.support.table.bean.TableRowBean;
 import com.sunwayworld.framework.spring.annotation.GikamBean;
 import com.sunwayworld.framework.support.table.TableCellDescriptor;
 import com.sunwayworld.framework.support.table.TableHelper;
@@ -731,4 +733,23 @@ public class PfOrderTaskResultServiceImpl extends EmcOrderTaskResultServiceImpl 
 
         return tableRowList;
     }
+    @Override
+    public List<String> selectQcNames(RestJsonWrapperBean wrapper) {
+        return new ArrayList<String>();
+    }
+
+    @Override
+    public void batchInputGasParameter(RestJsonWrapperBean wrapper) {
+    }
+
+    @Override
+    public List<TableHeadBean> selectPreprocessingQuickInputResultTitleListByProjIds(RestJsonWrapperBean wrapper) {
+        return selectQuickInputResultTitleList(wrapper);
+    }
+
+    @Override
+    public List<TableRowBean> selectPreprocessingQuickInputResultRowListByProjIds(RestJsonWrapperBean wrapper) {
+        return selectQuickInputResultRowList(wrapper);
+    }
+
 }

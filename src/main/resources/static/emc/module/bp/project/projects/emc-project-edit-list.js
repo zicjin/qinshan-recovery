@@ -1,30 +1,30 @@
 emcProject.editPage = {
 
-    getGridParam : function() {
+    getGridParam: function () {
         var _this = this;
         return {
-            type : 'grid',
-            id : 'emc-project-edit-list-grid',
-            url : emcProject.baseUrl + '/queries/raw',
-            columns : emcProject.getEditListColumns(),
-            service : 'emcProjectServiceImpl',
-            page : true,
-            deleteFormatter : function(row) {
+            type: 'grid',
+            id: 'emc-project-edit-list-grid',
+            url: emcProject.baseUrl + '/queries/raw',
+            columns: emcProject.getEditListColumns(),
+            service: 'emcProjectServiceImpl',
+            page: true,
+            deleteFormatter: function (row) {
                 return row.projName || row.id;
             },
-            requestData : {
-                targetType : 'projEdit',
-                orgId_SB: workspace.user.ext$.parentorgid
+            requestData: {
+                targetType: 'projEdit',
+                org_filter: '1',
             },
-            onBeforeRefresh : function (requestData) {
-                var orgName = workspace.user.orgName;
-                if(orgName.indexOf("质量部") >-1){
-                    requestData['projNo_SE'] = 'Z';
-                }else{
-                    requestData['projNo_DIFFER'] = 'Z';
-                }
-            },
-            onLoadSuccess : function(data) {
+            // onBeforeRefresh : function (requestData) {
+            //     var orgName = workspace.user.orgName;
+            //     if(orgName.indexOf("质量部") >-1){
+            //         requestData['projNo_SE'] = 'Z';
+            //     }else{
+            //         requestData['projNo_DIFFER'] = 'Z';
+            //     }
+            // },
+            onLoadSuccess: function (data) {
                 if (!Gikam.isEmpty(data)) {
                     this.activeRowByIndex(0);
                 } else {
@@ -39,84 +39,121 @@ emcProject.editPage = {
                     Gikam.getComp('emc-project-edit-list-base-info-tab').removePanel('emc-project-edit-list-order-panel');
                 }
             },
-            onRowActive : function(index, row) {
+            onRowActive: function (index, row) {
                 _this.onProjectActive(row);
             },
-            toolbar : [ {
-                type : 'button',
-                text : 'GIKAM.BUTTON.INSERT',
-                icon : 'add',
+            onUpdated: function (data, fields, index) {
+                // _this.addOrRemoveValidator(data)
+            },
+            toolbar: [{
+                type: 'button',
+                text: 'GIKAM.BUTTON.INSERT',
+                icon: 'add',
                 //hidden : true,
-                onClick : function() {
+                onClick: function () {
                     Gikam.preInsert({
-                        modalTitle : 'EMC.MODULE.BP.PROJECT.PROJECTS.MODAL.PROJECT_ADD',
-                        height : 320,
-                        fields : emcProject.getPreInsertFields(),
-                        url : emcProject.baseUrl,
-                        onFormRendered : function(form) {
+                        modalTitle: 'EMC.MODULE.BP.PROJECT.PROJECTS.MODAL.PROJECT_ADD',
+                        height: 400,
+                        fields: emcProject.getPreInsertFields(),
+                        url: emcProject.baseUrl,
+                        onFormRendered: function (form) {
+                            this.removeFieldValidator('projectType', ['notEmpty']);
+
                             setTimeout(() => {
                                 this.options.id = 'emc-project-edit-list-preinsert-form';
-                                this.hideFields([ 'sample' ]);
                                 var date = new Date();
-                                var time=date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate();//表示当前日期
-                                this.setData({taskDate : time},false);
+                                var time = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();//表示当前日期
+                                this.setData({taskDate: time}, false);
                             }, 10)
                         }
-                    }).done(function(id) {
+                    }).done(function (id) {
                         Gikam.getComp('emc-project-edit-list-grid').refresh();
                     });
                 }
             }, {
-                type : 'button',
-                text : 'GIKAM.WORKFLOW.BUTTON.SUBMIT',
-                icon : 'submit',
-                onClick : function() {
+                type: 'button',
+                text: 'GIKAM.WORKFLOW.BUTTON.SUBMIT',
+                icon: 'submit',
+                onClick: function () {
                     _this.submit();
                 }
             }, {
-                type : 'button',
-                text : 'GIKAM.BUTTON.PREVIEW',
-                icon : 'print',
-                onClick : function() {
-                    Gikam.viewReport('rasproject', Gikam.getComp('emc-project-edit-list-grid').getSelections());
+                type: 'button',
+                text: '查看任务流转单',
+                icon: 'print',
+                onClick: function () {
+                    let selections = Gikam.getComp('emc-project-edit-list-grid').getSelections();
+                    if (selections.length !== 1) {
+                        Gikam.alert('GIKAM.TIP.CHOOSE_ONE_ITEM');
+                        return;
+                    }
+                    if (selections[0].sample == '0') {
+                        Gikam.viewReport("1453125616129984", selections[0]);
+                    } else {
+                        Gikam.viewReport("1344186996217184", selections[0]);
+                    }
                 }
             }, {
-                type : 'dropDownMenu',
-                text : 'GIKAM.BUTTON.MORE',
-                items : [ {
-                    type : 'button',
-                    text : 'EMC.MODULE.BP.PROJECT.PROJECTS.BUTTON.SUBMITTOREPORT',
-                    icon : 'submit',
-                    hidden : true,
-                    onClick : function() {
+                type: 'dropDownMenu',
+                text: 'GIKAM.BUTTON.MORE',
+                items: [ {
+                    type: 'button',
+                    text: '提交至报告编制',
+                    icon: 'submit',
+                    onClick: function () {
                         _this.submitToReport();
                     }
-                }, {
-                    type : 'button',
-                    text : 'EMC.MODULE.BP.PROJECT.PROJECTS.TITLE.MODIFY_PROJECT_NO',
-                    icon : 'edit',
-                    hidden : true,
-                    onClick : function() {
+                },{
+                    type: 'button',
+                    text: 'EMC.MODULE.BP.PROJECT.PROJECTS.TITLE.MODIFY_PROJECT_NO',
+                    icon: 'edit',
+                    hidden: true,
+                    onClick: function () {
                         _this.modifyProjectNo();
                     }
                 }, {
-                    type : 'button',
-                    text : 'EMC.MODULE.BP.PROJECT.PROJECTS.BUTTON.COPY',
-                    icon : 'copy',
-                    onClick : function() {
+                    type: 'button',
+                    text: 'EMC.MODULE.BP.PROJECT.PROJECTS.BUTTON.COPY',
+                    icon: 'copy',
+                    onClick: function () {
                         Gikam.create('modal', {
-                            title : 'EMC.MODULE.BP.PROJECT.PROJECTS.MODAL.COPY_PROJECT',
-                            url : emcProject.baseUrl + '/page/copy-project',
-                            onAfterClose : function(script) {
+                            title: 'EMC.MODULE.BP.PROJECT.PROJECTS.MODAL.COPY_PROJECT',
+                            url: emcProject.baseUrl + '/page/copy-project',
+                            width: '100%',
+                            height: '100%',
+                            onAfterClose: function (script) {
                                 Gikam.getComp('emc-project-edit-list-grid').refresh();
                             }
                         });
                     }
                 }, {
-                    type : 'button',
-                    text : 'GIKAM.BUTTON.DELETE',
-                    icon : 'remove-row',
-                    onClick : function() {
+                    type: 'button',
+                    text: '复制到',
+                    icon: 'copy',
+                    onClick: function () {
+                        var selections = Gikam.getComp('emc-project-edit-list-grid').getSelections();
+                        if (selections.length !== 1) {
+                            Gikam.alert('GIKAM.TIP.CHOOSE_ONE_ITEM');
+                            return;
+                        }
+                        Gikam.create('modal', {
+                            title: '复制到',
+                            url: emcProject.baseUrl + '/page/copy-to' + Gikam.param({
+                                id: selections[0].id,
+                                bizClassId: selections[0].bizClassId,
+                                bizCategoryId: selections[0].bizCategoryId,
+                                sample: selections[0].sample,
+                            }),
+                            onAfterClose: function (script) {
+                                Gikam.getComp('emc-project-edit-list-grid').refresh();
+                            }
+                        });
+                    }
+                }, {
+                    type: 'button',
+                    text: 'GIKAM.BUTTON.DELETE',
+                    icon: 'remove-row',
+                    onClick: function () {
                         Gikam.getComp('emc-project-edit-list-grid').deleteRows(IFM_CONTEXT + '/secure/emc/module/bp/project/projects');
                         /*var selections =  Gikam.getComp('emc-project-edit-list-grid').getSelections();
                         if (Gikam.isEmpty(selections)) {
@@ -134,12 +171,35 @@ emcProject.editPage = {
                             Gikam.getComp('emc-project-edit-list-grid').refresh();
                         });*/
                     }
-                } ]
-            } ]
+                }]
+            }, {
+                type: 'button',
+                text: '导出',
+                icon: 'export',
+                onClick: function () {
+                    var selections = Gikam.getComp('emc-project-edit-list-grid').getSelections();
+                    if (selections.length == 0) {
+                        Gikam.alert('GIKAM.TIP.CHOOSE_ONE_ITEM');
+                        return;
+                    }
+                    workspace.window.showMask();
+                    Gikam.post(emcProject.baseUrl + '/export-project-to-excel', Gikam.getJsonWrapper({}, ['emcProjectServiceImpl', selections])).done(function (result) {
+                        if (!Gikam.isEmpty(result.url)) {
+                            var urlList = result.url;
+                            for (var url of urlList) {
+                                var fileUrl = IFM_CONTEXT + url;
+                                Gikam.emcDownloadFile(fileUrl);
+                            }
+                        }
+                    }).always(function () {
+                        workspace.window.closeMask();
+                    })
+                }
+            }]
         }
     },
 
-    modifyProjectNo : function() {
+    modifyProjectNo: function () {
         let selections = Gikam.getComp('emc-project-edit-list-grid').getSelections();
         if (selections.length !== 1) {
             Gikam.alert('GIKAM.TIP.CHOOSE_ONE_ITEM');
@@ -148,40 +208,40 @@ emcProject.editPage = {
 
         let modal = Gikam.create('modal', {
             title: "EMC.MODULE.BP.PROJECT.PROJECTS.TITLE.MODIFY_PROJECT_NO",
-            width : 400,
-            height : 180,
+            width: 400,
+            height: 180,
         });
         var layout = Gikam.create('layout', {
             renderTo: modal.window.$dom,
             center: {
-                items: [ {
+                items: [{
                     type: 'btnToolbar',
-                    items: [ {
-                        type : 'button',
-                        text : 'GIKAM.BUTTON.CONFIRM',
-                        class : 'blue',
-                        onClick : function() {
+                    items: [{
+                        type: 'button',
+                        text: 'GIKAM.BUTTON.CONFIRM',
+                        class: 'blue',
+                        onClick: function () {
                             if (form.validate()) {
                                 let data = {
-                                    id : selections[0].id,
-                                    projNo : form.getData().projNo
+                                    id: selections[0].id,
+                                    projNo: form.getData().projNo
                                 }
                                 Gikam.getLastModal().window.showMask(true);
-                                Gikam.put(emcProject.baseUrl + '/instant', Gikam.getJsonWrapper({}, [ 'emcProjectServiceImpl', [ data ] ])).done(function() {
+                                Gikam.put(emcProject.baseUrl + '/instant', Gikam.getJsonWrapper({}, ['emcProjectServiceImpl', [data]])).done(function () {
                                     Gikam.getComp('emc-project-edit-list-grid').refresh();
-                                }).always(function() {
+                                }).always(function () {
                                     Gikam.getLastModal().window.closeMask();
                                     modal.close();
                                 });
                             }
                         }
                     }, {
-                        type : 'button',
-                        text : 'GIKAM.BUTTON.CANCEL',
-                        onClick : function () {
+                        type: 'button',
+                        text: 'GIKAM.BUTTON.CANCEL',
+                        onClick: function () {
                             modal.close();
                         }
-                    } ]
+                    }]
                 }]
             }
         });
@@ -192,25 +252,25 @@ emcProject.editPage = {
             titleWidth: 80,
             fields: [
                 {
-                    field : 'projNo',
-                    title : 'T_EMC_PROJECT.PROJNO',
-                    validators : [ 'unique[' + emcProject.baseUrl + '/action/validate-unique]', 'notEmpty', 'strLength[0,120]' ],
-                    preInsert : true,
+                    field: 'projNo',
+                    title: 'T_EMC_PROJECT.PROJNO',
+                    validators: ['unique[' + emcProject.baseUrl + '/action/validate-unique]', 'notEmpty', 'strLength[0,120]'],
+                    preInsert: true,
                 }
             ],
             autoSave: false
         });
 
         form.setData({
-            projNo : selections[0].projNo
+            projNo: selections[0].projNo
         })
     },
 
-    copyProject : function() {
+    copyProject: function () {
         var selections = Gikam.getComp('emc-project-edit-list-grid').getSelections();
         if (selections.length === 1) {
             var url = Gikam.printf(emcProject.baseUrl + '/{id}/action/copy', {
-                id : selections[0].id
+                id: selections[0].id
             });
             Gikam.getComp('emc-project-edit-list-grid').insert(url, selections);
         } else {
@@ -219,21 +279,21 @@ emcProject.editPage = {
         }
     },
 
-    copeOrder : function() {
+    copeOrder: function () {
         var selections = Gikam.getComp('emc-project-edit-list-order-grid').getSelections();
         if (selections.length > 0) {
             Gikam.create('modal', {
-                title : 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.MODAL.COPY_SHARE',
-                width : 300,
-                height : 200,
-                url : IFM_CONTEXT + '/secure/emc/module/bp/project/proj-schemes/page/copy-share',
-                onAfterClose : function(data) {
+                title: 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.MODAL.COPY_SHARE',
+                width: 300,
+                height: 200,
+                url: IFM_CONTEXT + '/secure/emc/module/bp/project/proj-schemes/page/copy-share',
+                onAfterClose: function (data) {
                     if (!Gikam.isEmpty(data)) {
                         workspace.window.showMask(true);
                         var url = emcProject.baseUrl + '/orders/actions/copy';
                         Gikam.post(url, Gikam.getJsonWrapper({
-                            copies : data.copyShare
-                        }, [ '', selections ])).always(function() {
+                            copies: data.copyShare
+                        }, ['', selections])).always(function () {
                             workspace.window.closeMask();
                             Gikam.getComp('emc-project-edit-list-order-grid').refresh();
                         });
@@ -245,11 +305,11 @@ emcProject.editPage = {
         }
     },
 
-    copeQcOrder : function() {
+    copeQcOrder: function () {
         var selections = Gikam.getComp('emc-project-edit-list-order-grid').getSelections();
         if (selections.length > 0) {
             var copyEnabled = true;
-            selections.some(function(item) {
+            selections.some(function (item) {
                 if (item.qcCategoryId) {
                     copyEnabled = false;
                     return true;
@@ -260,19 +320,19 @@ emcProject.editPage = {
                 return;
             }
             Gikam.create('modal', {
-                title : Gikam.choose.getConfig('qcCategory').title,
-                width : '20%',
-                height : '50%',
-                url : Gikam.choose.getConfig('qcCategory').url + Gikam.param({
-                    single : true,
-                    useCategory_SEQ : 'scene'
+                title: Gikam.choose.getConfig('qcCategory').title,
+                width: '20%',
+                height: '50%',
+                url: Gikam.choose.getConfig('qcCategory').url + Gikam.param({
+                    single: true,
+                    useCategory_SEQ: 'scene'
                 }),
-                onAfterClose : function(rows) {
+                onAfterClose: function (rows) {
                     if (Gikam.isEmpty(rows)) {
                         return;
                     }
                     workspace.window.showMask(true);
-                    selections.map(function(item) {
+                    selections.map(function (item) {
                         item.qcCategoryId = rows[0].id;
                         item.qcCategoryCode = rows[0].qcCategoryId;
                         item.qcName = rows[0].qcName;
@@ -288,7 +348,7 @@ emcProject.editPage = {
     },
 
 
-    updateQcCategory : function() {
+    updateQcCategory: function () {
         var selections = Gikam.getComp('emc-project-edit-list-order-grid').getSelections();
         if (Gikam.isEmpty(selections)) {
             Gikam.alert('GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM');
@@ -296,25 +356,281 @@ emcProject.editPage = {
         }
 
         Gikam.create('modal', {
-            title : Gikam.choose.getConfig('qcCategory').title,
-            width : '20%',
-            height : '50%',
-            url : Gikam.choose.getConfig('qcCategory').url + Gikam.param({
-                single : true,
-                useCategory_SEQ : 'scene'
+            title: Gikam.choose.getConfig('qcCategory').title,
+            width: '20%',
+            height: '50%',
+            url: Gikam.choose.getConfig('qcCategory').url + Gikam.param({
+                single: true,
+                useCategory_SEQ: 'scene'
+            }),
+            onAfterClose: function (rows) {
+                if (Gikam.isEmpty(rows)) {
+                    return;
+                }
+                workspace.window.showMask(true);
+                selections.forEach(function (item) {
+                    item.qcCategoryId = rows[0].id;
+                    item.qcCategoryCode = rows[0].qcCategoryId;
+                    item.qcName = rows[0].qcName;
+                });
+                Gikam.postText(IFM_CONTEXT + '/secure/emc/module/bp/bp/orders/action/edit-qc', Gikam.getJsonWrapper({}, ['emcOrderServiceImpl', selections])).done(function () {
+                    Gikam.getComp('emc-project-edit-list-order-grid').refresh();
+                }).always(function () {
+                    workspace.window.closeMask();
+                });
+            }
+        });
+    },
+
+    emptyQcCategory: function () {
+        var selections = Gikam.getComp('emc-project-edit-list-order-grid').getSelections();
+        if (Gikam.isEmpty(selections)) {
+            Gikam.alert('GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM');
+            return;
+        }
+        selections.forEach(function (item) {
+            item.qcCategoryId = "";
+            item.qcCategoryCode = "N/A";
+            item.qcName = "N/A";
+        });
+
+        Gikam.postText(IFM_CONTEXT + '/secure/emc/module/bp/bp/orders/action/edit-qc', Gikam.getJsonWrapper({}, ['emcOrderServiceImpl', selections])).done(function () {
+            Gikam.getComp('emc-project-edit-list-order-grid').refresh();
+        }).always(function () {
+            workspace.window.closeMask();
+        });
+    },
+
+    // 监测方案上移
+    projSchemeMoveUp: function () {
+        var _this = this;
+        var grid = Gikam.getComp('emc-schemeedit-audit-list-grid');
+        var rows = grid.getSelections();
+        if (rows.length !== 1) {
+            Gikam.alert('GIKAM.TIP.CHOOSE_ONE_OPERATE_DATA');
+            return;
+        }
+        var index = grid.getCheckedRowIndex()[0];
+        if (index === 0) {
+            return;
+        }
+        // 要上移的数据
+        var upData = rows[0];
+        // 要下移的数据
+        var downData = grid.getData()[index - 1];
+        var tempNo = upData.sortNum;
+        upData.sortNum = downData.sortNum;
+        downData.sortNum = tempNo;
+        var url = emcProject.schemeUrl + '/move';
+        workspace.window.showMask(true);
+        _this.param.index = index - 1;
+        Gikam.put(url, Gikam.getJsonWrapper(null, ['emcProjSchemeServiceImpl', [upData, downData]])).done(function () {
+            grid.refresh();
+        }).always(function () {
+            workspace.window.closeMask();
+        });
+    },
+
+    // 监测方案下移
+    projSchemeMoveDown: function () {
+        var _this = this;
+        var grid = Gikam.getComp('emc-schemeedit-audit-list-grid');
+        var rows = grid.getSelections();
+        if (rows.length !== 1) {
+            Gikam.alert('GIKAM.TIP.CHOOSE_ONE_OPERATE_DATA');
+            return;
+        }
+        var index = grid.getCheckedRowIndex()[0];
+        if (index === grid.getData().length - 1) {
+            return;
+        }
+        // 要下移的数据
+        var downData = rows[0];
+        // 要上移的数据
+        var upData = grid.getData()[index + 1];
+        var tempNo = upData.sortNum;
+        upData.sortNum = downData.sortNum;
+        downData.sortNum = tempNo;
+        var url = emcProject.schemeUrl + '/move';
+        workspace.window.showMask(true);
+        _this.param.index = index + 1;
+        Gikam.put(url, Gikam.getJsonWrapper(null, ['emcProjSchemeServiceImpl', [upData, downData]])).done(function () {
+            grid.refresh();
+        }).always(function () {
+            workspace.window.closeMask();
+        });
+    },
+
+    batchDelProjOrder: function () {
+        var _this = this;
+        var schemeGrid = Gikam.getComp('emc-schemeedit-audit-list-grid');
+        var schemeSelections = schemeGrid.getSelections();
+        if (Gikam.isEmpty(schemeSelections)) {
+            Gikam.alert('至少选择一个方案');
+            return;
+        }
+        var orderGrid = Gikam.getComp('emc-proj-order-edit-list-grid');
+        var orderSelections = orderGrid.getSelections();
+        if (Gikam.isEmpty(orderSelections)) {
+            Gikam.alert('至少选择一个测试');
+            return;
+        }
+
+        var url = emcProject.schemeUrl + '/batch-del-proj-order';
+        workspace.window.showMask(true);
+        Gikam.post(url, Gikam.getJsonWrapper(null, ['emcProjSchemeServiceImpl', schemeSelections], ['emcProjOrderServiceImpl', orderSelections])).done(function () {
+            schemeGrid.refresh();
+        }).always(function () {
+            workspace.window.closeMask();
+        });
+    },
+
+    // 监测方案样品上移
+    projOrderMoveUp: function () {
+        var _this = this;
+        var grid = Gikam.getComp('emc-proj-order-edit-list-grid');
+        var rows = grid.getSelections();
+        if (rows.length !== 1) {
+            Gikam.alert('GIKAM.TIP.CHOOSE_ONE_OPERATE_DATA');
+            return;
+        }
+        var index = grid.getCheckedRowIndex()[0];
+        if (index === 0) {
+            return;
+        }
+        // 要上移的数据
+        var upData = rows[0];
+        // 要下移的数据
+        var downData = grid.getData()[index - 1];
+        var tempNo = upData.sortNum;
+        upData.sortNum = downData.sortNum;
+        downData.sortNum = tempNo;
+        var url = emcProject.schemeUrl + '/move-proj-order';
+        workspace.window.showMask(true);
+        _this.param.index = index - 1;
+        Gikam.put(url, Gikam.getJsonWrapper(null, ['emcProjOrderServiceImpl', [upData, downData]])).done(function () {
+            grid.refresh();
+        }).always(function () {
+            workspace.window.closeMask();
+        });
+    },
+
+    // 监测方案样品下移
+    projOrderMoveDown: function () {
+        var _this = this;
+        var grid = Gikam.getComp('emc-proj-order-edit-list-grid');
+        var rows = grid.getSelections();
+        if (rows.length !== 1) {
+            Gikam.alert('GIKAM.TIP.CHOOSE_ONE_OPERATE_DATA');
+            return;
+        }
+        var index = grid.getCheckedRowIndex()[0];
+        if (index === grid.getData().length - 1) {
+            return;
+        }
+        // 要下移的数据
+        var downData = rows[0];
+        // 要上移的数据
+        var upData = grid.getData()[index + 1];
+        var tempNo = upData.sortNum;
+        upData.sortNum = downData.sortNum;
+        downData.sortNum = tempNo;
+        var url = emcProject.schemeUrl + '/move-proj-order';
+        workspace.window.showMask(true);
+        _this.param.index = index + 1;
+        Gikam.put(url, Gikam.getJsonWrapper(null, ['emcProjOrderServiceImpl', [upData, downData]])).done(function () {
+            grid.refresh();
+        }).always(function () {
+            workspace.window.closeMask();
+        });
+    },
+
+    // 样品列表上移
+    orderMoveUp: function () {
+        var _this = this;
+        var grid = Gikam.getComp('emc-project-edit-list-order-grid');
+        var rows = grid.getSelections();
+        if (rows.length !== 1) {
+            Gikam.alert('GIKAM.TIP.CHOOSE_ONE_OPERATE_DATA');
+            return;
+        }
+        var index = grid.getCheckedRowIndex()[0];
+        if (index === 0) {
+            return;
+        }
+        // 要上移的数据
+        var upData = rows[0];
+        // 要下移的数据
+        var downData = grid.getData()[index - 1];
+        var tempNo = upData.orderNum;
+        upData.orderNum = downData.orderNum;
+        downData.orderNum = tempNo;
+        var url = emcProject.baseUrl + '/move-order';
+        workspace.window.showMask(true);
+        _this.param.index = index - 1;
+        Gikam.put(url, Gikam.getJsonWrapper(null, ['emcOrderServiceImpl', [upData, downData]])).done(function () {
+            grid.refresh();
+        }).always(function () {
+            workspace.window.closeMask();
+        });
+    },
+
+    // 样品列表下移
+    orderMoveDown: function () {
+        var _this = this;
+        var grid = Gikam.getComp('emc-project-edit-list-order-grid');
+        var rows = grid.getSelections();
+        if (rows.length !== 1) {
+            Gikam.alert('GIKAM.TIP.CHOOSE_ONE_OPERATE_DATA');
+            return;
+        }
+        var index = grid.getCheckedRowIndex()[0];
+        if (index === grid.getData().length - 1) {
+            return;
+        }
+        // 要下移的数据
+        var downData = rows[0];
+        // 要上移的数据
+        var upData = grid.getData()[index + 1];
+        var tempNo = upData.orderNum;
+        upData.orderNum = downData.orderNum;
+        downData.orderNum = tempNo;
+        var url = emcProject.baseUrl + '/move-order';
+        workspace.window.showMask(true);
+        _this.param.index = index + 1;
+        Gikam.put(url, Gikam.getJsonWrapper(null, ['emcOrderServiceImpl', [upData, downData]])).done(function () {
+            grid.refresh();
+        }).always(function () {
+            workspace.window.closeMask();
+        });
+    },
+
+    copyOrderTo: function () {
+        var _this = this;
+        var grid = Gikam.getComp('emc-project-edit-list-order-grid');
+        var selections = grid.getSelections();
+        if (selections.length !== 1) {
+            Gikam.alert('GIKAM.TIP.CHOOSE_ONE_ITEM');
+            return;
+        }
+
+        var data = Gikam.getComp('emc-project-edit-list-base-info-form').getData();
+
+        Gikam.create('modal', {
+            title : '选择项目',
+            url : Gikam.choose.getConfig('project').url + Gikam.param({
+                org_filter : '1',
+                status_IN: 'create',
+                sample_seq: '0',
+                single :true,
+                targetType: 'projEdit',
             }),
             onAfterClose : function(rows) {
                 if (Gikam.isEmpty(rows)) {
                     return;
                 }
                 workspace.window.showMask(true);
-                selections.forEach(function(item) {
-                    item.qcCategoryId = rows[0].id;
-                    item.qcCategoryCode = rows[0].qcCategoryId;
-                    item.qcName = rows[0].qcName;
-                });
-                Gikam.postText(IFM_CONTEXT + '/secure/emc/module/bp/bp/orders/action/edit-qc', Gikam.getJsonWrapper({}, [ 'emcOrderServiceImpl', selections])).done(function() {
-                    Gikam.getComp('emc-project-edit-list-order-grid').refresh();
+                Gikam.post(emcProject.baseUrl + '/copy-order-to', Gikam.getJsonWrapper(null, [ 'emcOrderServiceImpl', selections ], [ 'emcProjectServiceImpl', rows ])).done(function() {
                 }).always(function() {
                     workspace.window.closeMask();
                 });
@@ -322,208 +638,9 @@ emcProject.editPage = {
         });
     },
 
-    emptyQcCategory : function() {
-        var selections = Gikam.getComp('emc-project-edit-list-order-grid').getSelections();
-        if (Gikam.isEmpty(selections)) {
-            Gikam.alert('GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM');
-            return;
-        }
-        selections.forEach(function(item) {
-            item.qcCategoryId = "";
-            item.qcCategoryCode = "N/A";
-            item.qcName = "N/A";
-        });
-
-        Gikam.postText(IFM_CONTEXT + '/secure/emc/module/bp/bp/orders/action/edit-qc', Gikam.getJsonWrapper({}, [ 'emcOrderServiceImpl', selections])).done(function() {
-            Gikam.getComp('emc-project-edit-list-order-grid').refresh();
-        }).always(function() {
-            workspace.window.closeMask();
-        });
-    },
-
-    // 监测方案上移
-    projSchemeMoveUp : function() {
-        var _this = this;
-        var grid = Gikam.getComp('emc-schemeedit-audit-list-grid');
-        var rows = grid.getSelections();
-        if (rows.length !== 1) {
-            Gikam.alert('GIKAM.TIP.CHOOSE_ONE_OPERATE_DATA');
-            return;
-        }
-        var index = grid.getCheckedRowIndex()[0];
-        if (index === 0) {
-            return;
-        }
-        // 要上移的数据
-        var upData = rows[0];
-        // 要下移的数据
-        var downData = grid.getData()[index - 1];
-        var tempNo = upData.sortNum;
-        upData.sortNum = downData.sortNum;
-        downData.sortNum = tempNo;
-        var url = emcProject.schemeUrl + '/move';
-        workspace.window.showMask(true);
-        _this.param.index = index - 1;
-        Gikam.put(url, Gikam.getJsonWrapper(null, [ 'emcProjSchemeServiceImpl', [ upData, downData] ])).done(function(){
-            grid.refresh();
-        }).always(function() {
-            workspace.window.closeMask();
-        });
-    },
-
-    // 监测方案下移
-    projSchemeMoveDown : function() {
-        var _this = this;
-        var grid = Gikam.getComp('emc-schemeedit-audit-list-grid');
-        var rows = grid.getSelections();
-        if (rows.length !== 1) {
-            Gikam.alert('GIKAM.TIP.CHOOSE_ONE_OPERATE_DATA');
-            return;
-        }
-        var index = grid.getCheckedRowIndex()[0];
-        if (index === grid.getData().length - 1) {
-            return;
-        }
-        // 要下移的数据
-        var downData = rows[0];
-        // 要上移的数据
-        var upData = grid.getData()[index + 1];
-        var tempNo = upData.sortNum;
-        upData.sortNum = downData.sortNum;
-        downData.sortNum = tempNo;
-        var url = emcProject.schemeUrl + '/move';
-        workspace.window.showMask(true);
-        _this.param.index = index + 1;
-        Gikam.put(url, Gikam.getJsonWrapper(null, [ 'emcProjSchemeServiceImpl', [ upData, downData] ])).done(function(){
-            grid.refresh();
-        }).always(function() {
-            workspace.window.closeMask();
-        });
-    },
-
-    // 监测方案样品上移
-    projOrderMoveUp : function() {
-        var _this = this;
-        var grid = Gikam.getComp('emc-proj-order-edit-list-grid');
-        var rows = grid.getSelections();
-        if (rows.length !== 1) {
-            Gikam.alert('GIKAM.TIP.CHOOSE_ONE_OPERATE_DATA');
-            return;
-        }
-        var index = grid.getCheckedRowIndex()[0];
-        if (index === 0) {
-            return;
-        }
-        // 要上移的数据
-        var upData = rows[0];
-        // 要下移的数据
-        var downData = grid.getData()[index - 1];
-        var tempNo = upData.sortNum;
-        upData.sortNum = downData.sortNum;
-        downData.sortNum = tempNo;
-        var url = emcProject.schemeUrl + '/move-proj-order';
-        workspace.window.showMask(true);
-        _this.param.index = index - 1;
-        Gikam.put(url, Gikam.getJsonWrapper(null, [ 'emcProjOrderServiceImpl', [ upData, downData] ])).done(function(){
-            grid.refresh();
-        }).always(function() {
-            workspace.window.closeMask();
-        });
-    },
-
-    // 监测方案样品下移
-    projOrderMoveDown : function() {
-        var _this = this;
-        var grid = Gikam.getComp('emc-proj-order-edit-list-grid');
-        var rows = grid.getSelections();
-        if (rows.length !== 1) {
-            Gikam.alert('GIKAM.TIP.CHOOSE_ONE_OPERATE_DATA');
-            return;
-        }
-        var index = grid.getCheckedRowIndex()[0];
-        if (index === grid.getData().length - 1) {
-            return;
-        }
-        // 要下移的数据
-        var downData = rows[0];
-        // 要上移的数据
-        var upData = grid.getData()[index + 1];
-        var tempNo = upData.sortNum;
-        upData.sortNum = downData.sortNum;
-        downData.sortNum = tempNo;
-        var url = emcProject.schemeUrl + '/move-proj-order';
-        workspace.window.showMask(true);
-        _this.param.index = index + 1;
-        Gikam.put(url, Gikam.getJsonWrapper(null, [ 'emcProjOrderServiceImpl', [ upData, downData] ])).done(function(){
-            grid.refresh();
-        }).always(function() {
-            workspace.window.closeMask();
-        });
-    },
-
-    // 样品列表上移
-    orderMoveUp : function() {
-        var _this = this;
-        var grid = Gikam.getComp('emc-project-edit-list-order-grid');
-        var rows = grid.getSelections();
-        if (rows.length !== 1) {
-            Gikam.alert('GIKAM.TIP.CHOOSE_ONE_OPERATE_DATA');
-            return;
-        }
-        var index = grid.getCheckedRowIndex()[0];
-        if (index === 0) {
-            return;
-        }
-        // 要上移的数据
-        var upData = rows[0];
-        // 要下移的数据
-        var downData = grid.getData()[index - 1];
-        var tempNo = upData.orderNum;
-        upData.orderNum = downData.orderNum;
-        downData.orderNum = tempNo;
-        var url = emcProject.baseUrl + '/move-order';
-        workspace.window.showMask(true);
-        _this.param.index = index - 1;
-        Gikam.put(url, Gikam.getJsonWrapper(null, [ 'emcOrderServiceImpl', [ upData, downData] ])).done(function(){
-            grid.refresh();
-        }).always(function() {
-            workspace.window.closeMask();
-        });
-    },
-
-    // 样品列表下移
-    orderMoveDown : function() {
-        var _this = this;
-        var grid = Gikam.getComp('emc-project-edit-list-order-grid');
-        var rows = grid.getSelections();
-        if (rows.length !== 1) {
-            Gikam.alert('GIKAM.TIP.CHOOSE_ONE_OPERATE_DATA');
-            return;
-        }
-        var index = grid.getCheckedRowIndex()[0];
-        if (index === grid.getData().length - 1) {
-            return;
-        }
-        // 要下移的数据
-        var downData = rows[0];
-        // 要上移的数据
-        var upData = grid.getData()[index + 1];
-        var tempNo = upData.orderNum;
-        upData.orderNum = downData.orderNum;
-        downData.orderNum = tempNo;
-        var url = emcProject.baseUrl + '/move-order';
-        workspace.window.showMask(true);
-        _this.param.index = index + 1;
-        Gikam.put(url, Gikam.getJsonWrapper(null, [ 'emcOrderServiceImpl', [ upData, downData] ])).done(function(){
-            grid.refresh();
-        }).always(function() {
-            workspace.window.closeMask();
-        });
-    },
-
 
     // 样品分析项组上移
-    orderItemGroupMoveUp : function() {
+    orderItemGroupMoveUp: function () {
         var _this = this;
         var grid = Gikam.getComp('emc-project-edit-list-order-item-group-grid');
         var rows = grid.getSelections();
@@ -545,15 +662,15 @@ emcProject.editPage = {
         var url = emcProject.baseUrl + '/move-order-item-group';
         workspace.window.showMask(true);
         _this.param.index = index - 1;
-        Gikam.put(url, Gikam.getJsonWrapper(null, [ 'emcOrderItemGroupServiceImpl', [ upData, downData] ])).done(function(){
+        Gikam.put(url, Gikam.getJsonWrapper(null, ['emcOrderItemGroupServiceImpl', [upData, downData]])).done(function () {
             grid.refresh();
-        }).always(function() {
+        }).always(function () {
             workspace.window.closeMask();
         });
     },
 
     // 样品分析项组下移
-    orderItemGroupMoveDown : function() {
+    orderItemGroupMoveDown: function () {
         var _this = this;
         var grid = Gikam.getComp('emc-project-edit-list-order-item-group-grid');
         var rows = grid.getSelections();
@@ -575,14 +692,14 @@ emcProject.editPage = {
         var url = emcProject.baseUrl + '/move-order-item-group';
         workspace.window.showMask(true);
         _this.param.index = index + 1;
-        Gikam.put(url, Gikam.getJsonWrapper(null, [ 'emcOrderItemGroupServiceImpl', [ upData, downData] ])).done(function(){
+        Gikam.put(url, Gikam.getJsonWrapper(null, ['emcOrderItemGroupServiceImpl', [upData, downData]])).done(function () {
             grid.refresh();
-        }).always(function() {
+        }).always(function () {
             workspace.window.closeMask();
         });
     },
 
-    updateOrderIndex : function() {
+    updateOrderIndex: function () {
         let selections = Gikam.getComp('emc-project-edit-list-order-grid').getSelections();
         if (Gikam.isEmpty(selections)) {
             Gikam.alert('GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM');
@@ -592,32 +709,32 @@ emcProject.editPage = {
         let ids = selections.map(item => item.id).join();
 
         Gikam.create('modal', {
-            title : 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.MODAL.UPDATE_INDEX',
-            width : '90%',
-            height : '90%',
-            url : emcProject.baseUrl + '/page/update-order-index' + Gikam.param({
-                ids : ids,
-                projId : selections[0].projId
+            title: 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.MODAL.UPDATE_INDEX',
+            width: '90%',
+            height: '90%',
+            url: emcProject.baseUrl + '/page/update-order-index' + Gikam.param({
+                ids: ids,
+                projId: selections[0].projId
             }),
-            onAfterClose : function() {
+            onAfterClose: function () {
                 Gikam.getComp('emc-project-edit-list-order-grid').refresh();
             }
         });
     },
 
-    editItem : function() {
+    editItem: function () {
         var activedRow = Gikam.getComp('emc-project-edit-list-order-grid').getActivedRow();
         var selections = Gikam.getComp('emc-project-edit-list-order-item-group-grid').getSelections();
         if (selections.length === 1) {
 
             var orderItemGroupId = selections[0].id;
             Gikam.create('modal', {
-                title : 'EMC.MODULE.BP.PROJECT.PROJECTS.MODAL.EDIT_ITEM',
-                url : '/secure/emc/module/bp/bp/folders/page/order-item-edit-list' + Gikam.param({
-                    itemGroupId : selections[0].itemGroupId,
-                    orderItemGroupId : orderItemGroupId
+                title: 'EMC.MODULE.BP.PROJECT.PROJECTS.MODAL.EDIT_ITEM',
+                url: '/secure/emc/module/bp/bp/folders/page/order-item-edit-list' + Gikam.param({
+                    itemGroupId: selections[0].itemGroupId,
+                    orderItemGroupId: orderItemGroupId
                 }),
-                width : '53%',
+                width: '53%',
             });
         } else {
             Gikam.alert('GIKAM.TIP.CHOOSE_ONE_ITEM');
@@ -625,28 +742,42 @@ emcProject.editPage = {
         }
     },
 
-    editTest : function() {
+    syncItem: function () {
+        var selections = Gikam.getComp('emc-project-edit-list-order-item-group-grid').getSelections();
+        if (Gikam.isEmpty(selections)) {
+            Gikam.alert('GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM');
+            return;
+        }
+        workspace.window.showMask(true);
+        Gikam.post('/secure/emc/module/bp/bp/orders/item-groups/sync-item', Gikam.getJsonWrapper({}, ['emcOrderItemGroupServiceImpl', selections])).always(function () {
+            Gikam.getComp('emc-project-edit-list-order-item-group-grid').refresh();
+        }).always(function () {
+            workspace.window.closeMask();
+        });
+    },
+
+    editTest: function () {
         var selections = Gikam.getComp('emc-project-edit-list-order-grid').getSelections();
         var orderIds = "";
-        selections.forEach(function(item) {
+        selections.forEach(function (item) {
             orderIds += item.id + ',';
         });
         orderIds = orderIds.substring(0, orderIds.length - 1);
         if (selections.length > 0) {
             Gikam.create('modal', {
-                title : 'EMC.MODULE.BP.PROJECT.PROJECTS.MODAL.TEST_EDIT',
-                width : '70%',
-                url : IFM_CONTEXT + '/secure/emc/module/bp/bp/folders/page/order-item-group-edit-list' + Gikam.param({
-                    monitorTmplId : selections[0].monitorTmplId,
-                    orderCategory : selections[0].orderCategory,
-                    orderIds : orderIds
+                title: 'EMC.MODULE.BP.PROJECT.PROJECTS.MODAL.TEST_EDIT',
+                width: '70%',
+                url: IFM_CONTEXT + '/secure/emc/module/bp/bp/folders/page/order-item-group-edit-list' + Gikam.param({
+                    monitorTmplId: selections[0].monitorTmplId,
+                    orderCategory: selections[0].orderCategory,
+                    orderIds: orderIds
                 }),
-                onAfterClose : function(chooseData) {
+                onAfterClose: function (chooseData) {
                     if (!Gikam.isEmpty(chooseData)) {
                         workspace.window.showMask(true);
-                        Gikam.put('/secure/emc/module/bp/bp/orders/action/edit', Gikam.getJsonWrapper(null, [ 'emcOrderServiceImpl', selections ], [ 'emcOrderItemGroupServiceImpl', chooseData ])).done(function() {
+                        Gikam.put('/secure/emc/module/bp/bp/orders/action/edit', Gikam.getJsonWrapper(null, ['emcOrderServiceImpl', selections], ['emcOrderItemGroupServiceImpl', chooseData])).done(function () {
                             Gikam.getComp('emc-project-edit-list-order-item-group-grid').refresh();
-                        }).always(function() {
+                        }).always(function () {
                             workspace.window.closeMask();
                         });
                     }
@@ -657,43 +788,69 @@ emcProject.editPage = {
         }
     },
 
-    submit : function() {
+    submit: function () {
         var grid = Gikam.getComp('emc-project-edit-list-grid');
         //这里写校验方法，返回错误信息，不同的返回值，处理成不同的报错信息
         var selections = grid.getSelections();
 
         workspace.window.showMask(true);
-        Gikam.postText(emcProject.baseUrl + '/action/submit-before-check', Gikam.getJsonWrapper({}, [ '', selections ])).done(function(data) {
-        	if(data != null && data !== ""){
-            	Gikam.alert(data);
-            	return;
-        	}
+        Gikam.postText(emcProject.baseUrl + '/action/submit-before-check', Gikam.getJsonWrapper({}, ['', selections])).done(function (data) {
+            if (data != null && data !== "") {
+                Gikam.alert(data);
+                return;
+            }
             var baseForm = Gikam.getComp('emc-project-edit-list-base-info-form');
             if (!baseForm.validate()) {
                 return;
             }
-            Gikam.create('workflow').submit({
-                data : grid.getSelections(),
-                pageObject : emcProject
-            }).done(function() {
-                grid.refresh();
-                //let projNos = selections.map(item => item.projNo).join();
-                //Gikam.alert(projNos + ' 项目已提交，正在生成业务数据...');
+            // 校验测试是否维护容器
+            var url = Gikam.printf(emcProject.baseUrl + '/action/submit-remind');
+
+            Gikam.postText(url, Gikam.getJsonWrapper({}, ['', selections])).done(function (message) {
+                if (Gikam.isEmpty(message)) {
+                    Gikam.create('workflow').submit({
+                        data: grid.getSelections(),
+                        pageObject: emcProject
+                    }).done(function () {
+                        grid.refresh();
+                    });
+                } else {
+                    Gikam.confirm('EMC.MODULE.BP.FOLDER.FOLDERS.TIP.CONTINUESUBMITTING', message, function () {
+                        Gikam.create('workflow').submit({
+                            data: grid.getSelections(),
+                            pageObject: emcProject
+                        }).done(function () {
+                            grid.refresh();
+                        });
+                    })
+
+                }
             });
-        }).always(function() {
+
+        }).always(function () {
             workspace.window.closeMask();
         });
 
     },
 
-    submitToReport : function() {
+    submitToReport: function () {
         var selections = Gikam.getComp('emc-project-edit-list-grid').getSelections();
         if (selections.length > 0) {
-            Gikam.confirm('GIKAM.MODAL.SUBMIT', 'GIKAM.TIP.SUBMIT', function() {
+            var flag = false;
+            selections.forEach(function (row) {
+                if (Gikam.isEmpty(row.ext$.contractid)) {
+                    flag = true;
+                }
+            });
+            if (flag) {
+                Gikam.alert("先选择合同再提交！");
+                return;
+            }
+            Gikam.confirm('GIKAM.MODAL.SUBMIT', 'GIKAM.TIP.SUBMIT', function () {
                 workspace.window.showMask(true);
-                Gikam.post(emcProject.baseUrl + '/action/submit-to-report', Gikam.getJsonWrapper({}, [ '', selections ])).always(function() {
+                Gikam.post(emcProject.baseUrl + '/action/submit-to-report', Gikam.getJsonWrapper({}, ['', selections])).always(function () {
                     Gikam.getComp('emc-project-edit-list-grid').refresh();
-                }).always(function() {
+                }).always(function () {
                     workspace.window.closeMask();
                 });
             });
@@ -702,19 +859,19 @@ emcProject.editPage = {
         }
     },
 
-    onProjectActive : function(row) {
+    onProjectActive: function (row) {
         var _this = this;
         var tab = Gikam.getComp('emc-project-edit-list-base-info-tab');
         tab.show();
         if (row) {
-            if(_this.param === undefined) {
+            if (_this.param === undefined) {
                 _this.param = {};
             }
             _this.param.editMonitorInfo = row.ext$.editmonitorinfo;
             _this.param.sampleOrgId = row.ext$.sampleorgid;
             _this.param.projId = row.id;
-            // 这里使用委托单位来过滤数据，之前是受检单位
-            _this.param.testOrgId = row.entrustOrgId;
+            // 使用受检单位来过滤数据
+            _this.param.testOrgId = row.testOrgId;
 
             if (row.sample === "1") {
                 tab.removePanel('emc-project-subpackage-info-panel');
@@ -730,115 +887,122 @@ emcProject.editPage = {
             }
 
             Gikam.getAsyncComp('emc-project-edit-list-base-info-form').done(function (form) {
-                _this.addOrRemoveValidator(row);
 
                 var url = IFM_CONTEXT + '/secure/emc/module/mdm/basemdm/biz-categories/projects/queries/selectable';
                 url += Gikam.param({
-                    bizCategoryId : row.bizCategoryId,
-                    activatedFlag : '1',
+                    bizCategoryId: row.bizCategoryId,
+                    activatedFlag: '1',
                 });
-                Gikam.getJson(url).done(function(items) {
-                    form.setSelectOptions('projName', items.map(function(item) {
+                Gikam.getJson(url).done(function (items) {
+                    form.setSelectOptions('projName', items.map(function (item) {
                         return {
-                            text : item.projName,
-                            value : item.projName
+                            text: item.projName,
+                            value: item.projName
                         };
                     }), true);
                 });
 
                 form.refresh({
-                    url : Gikam.printf(emcProject.baseUrl + '/{id}', {
-                        id : row.id
+                    url: Gikam.printf(emcProject.baseUrl + '/{id}', {
+                        id: row.id
                     }),
                 }, true);
             });
+            _this.addOrRemoveValidator(row);
 
             if (row.sample === "1") {
-                Gikam.getAsyncComp('emc-schemeedit-audit-list-grid').done(function(grid) {
+                Gikam.getAsyncComp('emc-schemeedit-audit-list-grid').done(function (grid) {
                     grid.setOptions({
-                        requestData : {
-                            projId_SEQ : row.id
+                        requestData: {
+                            projId_SEQ: row.id
                         }
                     });
                     grid.refreshColumns(_this.param.editMonitorInfo === '1' ? emcProject.getSchemeEditListColumns1() : emcProject.getSchemeEditListColumns());
                     grid.refresh({
-                        url : emcProject.schemeUrl + '/queries/raw',
-                        order : {
-                            'MONITORTMPLID' : 'asc',
-                            'FOLDERNO' : 'asc'
+                        url: emcProject.schemeUrl + '/queries/raw',
+                        order: {
+                            'MONITORTMPLID': 'asc',
+                            'FOLDERNO': 'asc'
                         }
                     });
                 });
-                Gikam.getAsyncComp('emc-project-edit-list-sample-subpackage-info-grid').done(function(grid) {
+                Gikam.getAsyncComp('emc-project-edit-list-sample-subpackage-info-grid').done(function (grid) {
                     grid.setOptions({
-                        requestData : {
-                            projId_SEQ : row.id,
-                            subpackageType_SEQ : 'create',
-                            orgId_SB: workspace.user.ext$.parentorgid
+                        requestData: {
+                            projId_SEQ: row.id,
+                            subpackageType_SEQ: 'create',
+                            org_filter: '1',
                         }
                     });
                     grid.refreshColumns(emcProject.getProjectSubpackageListColumns());
                     grid.refresh({
-                        url : IFM_CONTEXT + "/secure/emc/module/bp/subpackages/queries",
+                        url: IFM_CONTEXT + "/secure/emc/module/bp/subpackages/queries",
                     });
                 });
             } else {
                 Gikam.getComp('emc-project-edit-list-order-grid').refresh({
-                    url : Gikam.printf(emcProject.baseUrl + '/{id}/orders/queries', {
-                        id : row.id
+                    url: Gikam.printf(emcProject.baseUrl + '/{id}/orders/queries', {
+                        id: row.id
                     })
                 });
-                Gikam.getAsyncComp('emc-project-edit-list-subpackage-info-grid').done(function(grid) {
+                Gikam.getAsyncComp('emc-project-edit-list-subpackage-info-grid').done(function (grid) {
                     grid.setOptions({
-                        requestData : {
-                            projId_SEQ : row.id,
-                            subpackageType_SEQ : 'create',
-                            orgId_SB: workspace.user.ext$.parentorgid
+                        requestData: {
+                            projId_SEQ: row.id,
+                            subpackageType_SEQ: 'create',
+                            org_filter: '1',
                         }
                     });
                     grid.refreshColumns(emcProject.getProjectSubpackageListColumns());
                     grid.refresh({
-                        url : IFM_CONTEXT + "/secure/emc/module/bp/subpackages/queries",
+                        url: IFM_CONTEXT + "/secure/emc/module/bp/subpackages/queries",
                     });
                 });
             }
 
 
             Gikam.getComp('emc-project-edit-list-uploader').setOptions({
-                bizId : row.id,
+                bizId: row.id,
             });
 
             // 查询合同附件
             Gikam.getAsyncComp('emc-project-edit-list-contract-uploader').done(function (uploader) {
                 uploader.grid.refresh({
-                    requestData : {
-                        targetId : '',
-                        targetId_SEQ : 'T_EMC_CONTRACT$' + row.ext$.contractid
+                    requestData: {
+                        targetId: '',
+                        targetId_SEQ: 'T_EMC_CONTRACT$' + row.ext$.contractid
                     },
-                    url : uploader.options.searchUrl
+                    url: uploader.options.searchUrl
                 })
             });
 
             // 查询报告发送信息
-            Gikam.getAsyncComp('emc-project-report-send-info-grid').done(function (grid) {
-                grid.refresh({
-                    url : IFM_CONTEXT + '/secure/emc/module/bp/report/reports/report-send-info/queries',
-                    requestData : {
-                        projId_SEQ : row.id
-                    }
-                })
-            });
+            // Gikam.getAsyncComp('emc-project-report-send-info-grid').done(function (grid) {
+            //     grid.refresh({
+            //         url : IFM_CONTEXT + '/secure/emc/module/bp/report/reports/report-send-info/queries',
+            //         requestData : {
+            //             projId_SEQ : row.id
+            //         }
+            //     })
+            // });
 
             // 查询其他费用信息
             Gikam.getAsyncComp('emc-project-other-fee-grid').done(function (grid) {
                 grid.refresh({
-                    url : IFM_CONTEXT + '/secure/emc/module/bp/project/other-fees/queries',
-                    requestData : {
-                        projId_SEQ : row.id
+                    url: IFM_CONTEXT + '/secure/emc/module/bp/project/other-fees/queries',
+                    requestData: {
+                        projId_SEQ: row.id
                     }
                 })
             });
-
+            Gikam.getAsyncComp('emc-project-edit-list-contract-grid').done(function(grid) {
+                grid.refresh({
+                    url : emcProject.baseUrl + '/all-proj/queries',
+                    requestData : {
+                        CONTRACTNO_SEQ : Gikam.isEmpty(row.ext$.contractno) ? '1' : row.ext$.contractno
+                    }
+                });
+            });
             _this._monitorPointType = '';
             _this._sampleOrgId = '';
             _this._sampleOrgName = '';
@@ -847,48 +1011,55 @@ emcProject.editPage = {
         }
     },
 
-    addOrRemoveValidator : function(project) {
+    addOrRemoveValidator: function (project) {
         Gikam.getAsyncComp('emc-project-edit-list-base-info-form').done(function (form) {
-            /*if (project.sample === '1') {
-                form.addFieldValidator('ext$.samplinglocation', ['notEmpty']);
-                form.addFieldValidator('ext$.inspectedcontact', ['notEmpty']);
-                form.addFieldValidator('ext$.inspectedphone', ['notEmpty']);
+//            if (project.hasOwnProperty('urgent')) {
+//                if (project.urgent === '1') {
+//                    form.addFieldValidator('requiredCompleteDate', ['notEmpty'])
+//                } else {
+////                    form.removeFieldValidator('requiredCompleteDate', ['notEmpty'])
+//                }
+//            }
+            if (project.sample === '1') {
+                form.addFieldValidator('projType', ['notEmpty']);
+                form.addFieldValidator('requiredCompleteDate', ['notEmpty']);
+                form.addFieldValidator('ext$.belongarea', ['notEmpty']);
             } else {
-                form.removeFieldValidator('ext$.samplinglocation', ['notEmpty']);
-                form.removeFieldValidator('ext$.inspectedcontact', ['notEmpty']);
-                form.removeFieldValidator('ext$.inspectedphone', ['notEmpty']);
-            }*/
+                form.removeFieldValidator('projType', ['notEmpty']);
+                form.removeFieldValidator('requiredCompleteDate', ['notEmpty']);
+                form.removeFieldValidator('ext$.belongarea', ['notEmpty']);
+            }
         })
     },
 
-    onOrderActive : function(row) {
+    onOrderActive: function (row) {
         var _this = this;
         if (row) {
             Gikam.getComp('emc-project-edit-list-order-item-group-grid').refresh({
-                url : Gikam.printf('/secure/emc/module/bp/bp/orders/{id}/item-groups/queries', {
-                    id : row.id
+                url: Gikam.printf('/secure/emc/module/bp/bp/orders/{id}/item-groups/queries', {
+                    id: row.id
                 })
             });
         }
     },
 
-    loadSchemeItemGroupPage : function(schemeName) {
+    loadSchemeItemGroupPage: function (schemeName) {
         var activeRow = Gikam.getComp('emc-project-edit-list-grid').getActivedRow();
         Gikam.create('modal', {
-            title : 'EMC.MODULE.BP.PROJECT.PROJECTS.MODAL.ORDER_ADD',
-            width : '70%',
-            url : IFM_CONTEXT + '/secure/emc/module/mdm/bizmdm/monitor-tmpls/page/scheme-item-group-choose-list',
-            onAfterClose : function(rows) {
+            title: 'EMC.MODULE.BP.PROJECT.PROJECTS.MODAL.ORDER_ADD',
+            width: '70%',
+            url: IFM_CONTEXT + '/secure/emc/module/mdm/bizmdm/monitor-tmpls/page/scheme-item-group-choose-list',
+            onAfterClose: function (rows) {
                 if (rows && rows.length > 0) {
                     workspace.window.showMask(true);
                     Gikam.postText(Gikam.printf(emcProject.baseUrl + '/{id}/orders', {
-                        id : activeRow.id
-                    }), Gikam.getJsonWrapper(null, [ 'emcOrderServiceImpl', [ {
-                        monitorTmplId : rows[0].monitorTmplId,
-                        orderCategory : rows[0].monitorTmplName
-                    } ] ], [ 'emcOrderItemGroupService', rows ])).done(function(id) {
+                        id: activeRow.id
+                    }), Gikam.getJsonWrapper(null, ['emcOrderServiceImpl', [{
+                        monitorTmplId: rows[0].monitorTmplId,
+                        orderCategory: rows[0].monitorTmplName
+                    }]], ['emcOrderItemGroupService', rows])).done(function (id) {
                         Gikam.getComp('emc-project-edit-list-order-grid').refresh();
-                    }).always(function() {
+                    }).always(function () {
                         workspace.window.closeMask();
                     });
 
@@ -898,25 +1069,26 @@ emcProject.editPage = {
         });
     },
 
-    batchUpdateOrder : function() {
+    batchUpdateOrder: function () {
         var selections = Gikam.getComp('emc-project-edit-list-order-grid').getSelections();
         if (selections.length > 0) {
             var activedRow = Gikam.getComp('emc-project-edit-list-grid').getActivedRow();
             Gikam.create('modal', {
-                width : 400,
-                height : '70%',
-                title : 'EMC.MODULE.BP.PROJECT.PROJECTS.MODAL.BATCH_UPDATE_ORDER',
-                url : emcProject.baseUrl + '/page/batch-update-order',
-                onAfterClose : function(data) {
+                width: 400,
+                height: '70%',
+                title: 'EMC.MODULE.BP.PROJECT.PROJECTS.MODAL.BATCH_UPDATE_ORDER',
+                url: emcProject.baseUrl + '/page/batch-update-order',
+                onAfterClose: function (data) {
                     if (!Gikam.isEmpty(data)) {
                         workspace.window.showMask(true);
-                        selections.map(function(item) {
+                        selections.map(function (item) {
                             item.sendDate = data.sendDate;
                             item.sendTime = data.sendTime;
                             item.orderDesc = data.orderDesc;
                             item.remark = data.remark;
                             item.volume = data.ext$.volume;
                             item.packing = data.ext$.packing;
+                            item.senderId = data.senderId;
                             item.ext$.sender = data.ext$.sender;
                             item.ext$.checker = data.ext$.checker;
                             item.labelNo = data.labelNo;
@@ -926,18 +1098,24 @@ emcProject.editPage = {
                         });
 
                         Gikam.getComp('emc-project-edit-list-base-info-form').setData({
-                            sendUsername : data.ext$.sender,
-                            sendDate : data.sendDate,
-                            ext$ : {
-                                senduserid : data.senderId
+                            sendUsername: data.ext$.sender,
+                            sendDate: data.sendDate,
+                            ext$: {
+                                senduserid: data.senderId
                             }
                         });
 
-                        Gikam.put(emcProject.baseUrl + '/' + activedRow.id, Gikam.getJsonWrapper({}, [ 'emcOrderServiceImpl', selections ])).done(function() {
+                        // Gikam.put(emcProject.baseUrl + '/' + activedRow.id, Gikam.getJsonWrapper({}, [ 'emcOrderServiceImpl', selections ])).done(function() {
+                        //     Gikam.getComp('emc-project-edit-list-order-grid').refresh();
+                        // }).always(function() {
+                        //     workspace.window.closeMask();
+                        // });
+                        Gikam.put(emcProject.orderUrl + '/instant', Gikam.getJsonWrapper({}, ['emcOrderServiceImpl', selections])).done(function () {
                             Gikam.getComp('emc-project-edit-list-order-grid').refresh();
-                        }).always(function() {
+                        }).always(function () {
                             workspace.window.closeMask();
                         });
+
                     }
                 }
             });
@@ -946,25 +1124,25 @@ emcProject.editPage = {
         }
     },
 
-    updateMethod : function() {
+    updateMethod: function () {
         var selections = Gikam.getComp('emc-project-edit-list-order-item-group-grid').getSelections();
 
         if (selections.length === 1) {
             var activedRow = Gikam.getComp('emc-project-edit-list-order-grid').getActivedRow();
             Gikam.create('modal', {
-                title : Gikam.choose.getConfig('testMethod').title,
-                url : Gikam.choose.getConfig('monitorSchemeMethod').url + Gikam.param({
-                    single : true,
-                    monitorTmplId_SEQ : activedRow.monitorTmplId,
-                    schemeName_SEQ : selections[0].schemeName,
-                    itemGroup_SEQ : selections[0].itemGroup,
-                    methodId_DIFFER : selections[0].methodId
+                title: Gikam.choose.getConfig('testMethod').title,
+                url: Gikam.choose.getConfig('monitorSchemeMethod').url + Gikam.param({
+                    single: true,
+                    monitorTmplId_SEQ: activedRow.monitorTmplId,
+                    schemeName_SEQ: selections[0].schemeName,
+                    itemGroup_SEQ: selections[0].itemGroup,
+                    methodId_DIFFER: selections[0].methodId
                 }),
-                width : '30%',
-                onAfterClose : function(rows) {
+                width: '30%',
+                onAfterClose: function (rows) {
                     if (!Gikam.isEmpty(rows)) {
                         workspace.window.showMask(true);
-                        selections.map(function(item) {
+                        selections.map(function (item) {
                             item.schemeName = rows[0].schemeName;
                             item.testName = rows[0].ext$.testname;
                             item.testId = rows[0].testId;
@@ -978,9 +1156,9 @@ emcProject.editPage = {
                             item.inputUserId = rows[0].ext$.inputuserid;
                             item.inputUserName = rows[0].ext$.inputusername;
                         });
-                        Gikam.put('/secure/emc/module/bp/bp/orders/item-groups/' + selections[0].id + '/action/edit-method', Gikam.getJsonWrapper({}, [ 'emcOrderItemGroupServiceImpl', selections ])).done(function() {
+                        Gikam.put('/secure/emc/module/bp/bp/orders/item-groups/' + selections[0].id + '/action/edit-method', Gikam.getJsonWrapper({}, ['emcOrderItemGroupServiceImpl', selections])).done(function () {
                             Gikam.getComp('emc-project-edit-list-order-item-group-grid').refresh();
-                        }).always(function() {
+                        }).always(function () {
                             workspace.window.closeMask();
                         });
                     }
@@ -992,27 +1170,27 @@ emcProject.editPage = {
         }
     },
 
-    updateContainer : function() {
+    updateContainer: function () {
         var selections = Gikam.getComp('emc-project-edit-list-order-item-group-grid').getSelections();
         if (selections.length > 0) {
             var activedRow = Gikam.getComp('emc-project-edit-list-grid').getActivedRow();
             Gikam.create('modal', {
-                title : Gikam.choose.getConfig('containerCategory').title,
-                url : Gikam.choose.getConfig('containerCategory').url + Gikam.param({
-                    single : true,
+                title: Gikam.choose.getConfig('containerCategory').title,
+                url: Gikam.choose.getConfig('containerCategory').url + Gikam.param({
+                    single: true,
                 }),
-                width : '55%',
-                onAfterClose : function(rows) {
+                width: '55%',
+                onAfterClose: function (rows) {
                     if (!Gikam.isEmpty(rows)) {
                         workspace.window.showMask(true);
-                        selections.map(function(item) {
+                        selections.map(function (item) {
                             item.containerCategoryId = rows[0].id;
                             item.containerCategoryCode = rows[0].containerCategoryId;
                             item.containerCategoryName = rows[0].containerCategoryName;
                         });
-                        Gikam.put(emcProject.baseUrl + '/' + activedRow.id, Gikam.getJsonWrapper({}, [ 'emcOrderItemGroupServiceImpl', selections ])).done(function() {
+                        Gikam.put(emcProject.baseUrl + '/' + activedRow.id, Gikam.getJsonWrapper({}, ['emcOrderItemGroupServiceImpl', selections])).done(function () {
                             Gikam.getComp('emc-project-edit-list-order-item-group-grid').refresh();
-                        }).always(function() {
+                        }).always(function () {
                             workspace.window.closeMask();
                         });
                     }
@@ -1023,26 +1201,26 @@ emcProject.editPage = {
         }
     },
 
-    updateContainerGroup : function() {
+    updateContainerGroup: function () {
         var selections = Gikam.getComp('emc-project-edit-list-order-item-group-grid').getSelections();
         if (selections.length > 0) {
             var activedRow = Gikam.getComp('emc-project-edit-list-grid').getActivedRow();
             Gikam.create('modal', {
-                width : 400,
-                height : 250,
-                title : 'EMC.MODULE.BP.PROJECT.PROJECTS.MODAL.UPDATE_CONTAINER_GROUP',
-                url : emcProject.baseUrl + '/page/update-order-container-group',
-                onAfterClose : function(data) {
+                width: 400,
+                height: 250,
+                title: 'EMC.MODULE.BP.PROJECT.PROJECTS.MODAL.UPDATE_CONTAINER_GROUP',
+                url: emcProject.baseUrl + '/page/update-order-container-group',
+                onAfterClose: function (data) {
                     if (!Gikam.isEmpty(data)) {
                         workspace.window.showMask(true);
-                        selections.map(function(item) {
+                        selections.map(function (item) {
                             item.containerGroup = data.containerGroup;
                             item.fixative = data.fixative;
                             item.storeCondition = data.storeCondition;
                         });
-                        Gikam.put(emcProject.baseUrl + '/' + activedRow.id, Gikam.getJsonWrapper({}, [ 'emcOrderItemGroupServiceImpl', selections ])).done(function() {
+                        Gikam.put(emcProject.baseUrl + '/' + activedRow.id, Gikam.getJsonWrapper({}, ['emcOrderItemGroupServiceImpl', selections])).done(function () {
                             Gikam.getComp('emc-project-edit-list-order-item-group-grid').refresh();
-                        }).always(function() {
+                        }).always(function () {
                             workspace.window.closeMask();
                         });
                     }
@@ -1053,117 +1231,150 @@ emcProject.editPage = {
         }
     },
 
-    getBaseInfoTab : function() {
+    refreshContractForm: function () {
+        var _this = this;
+        var grid = Gikam.getComp('emc-project-edit-list-contract-grid');
+        var form = Gikam.getComp('emc-project-edit-list-contract-form');
+        var selections = grid.getData();
+        var totalPrice = 0;
+        if (Gikam.isEmpty(selections)) {
+            form.setData({
+                contractPrice: '0',
+                totalPrice: totalPrice,
+            });
+            return;
+        }
+        selections.forEach(function (item) {
+            if (isNaN(item.ext$.price)) {
+                item.ext$.price = 0;
+            }
+            totalPrice = totalPrice + parseFloat(item.ext$.price);
+        });
+        totalPrice = totalPrice.toFixed(2);
+        form.setData({
+            totalPrice: totalPrice,
+            contractPrice: selections[0].ext$.contractprice,
+        });
+    },
+
+    getBaseInfoTab: function () {
         var _this = this;
         return {
-            type : 'tab',
-            fill : true,
-            id : 'emc-project-edit-list-base-info-tab',
-            panels : [ {
-                title : 'EMC.MODULE.BP.PROJECT.PROJECTS.TAB.BASE_INFO',
-                id : 'emc-project-edit-list-base-info-panel',
-                items : [ {
-                    type : 'layout',
-                    north : {
-                        height : '60%',
-                        items : [ {
-                            type : 'form',
-                            columns : 3,
-                            service : 'emcProjectServiceImpl',
-                            id : 'emc-project-edit-list-base-info-form',
-                            fields : emcProject.getBaseInfoFormFields1(),
-                            onUpdated : function() {
+            type: 'tab',
+            fill: true,
+            id: 'emc-project-edit-list-base-info-tab',
+            panels: [{
+                title: 'EMC.MODULE.BP.PROJECT.PROJECTS.TAB.BASE_INFO',
+                id: 'emc-project-edit-list-base-info-panel',
+                items: [{
+                    type: 'layout',
+                    north: {
+                        height: '50%',
+                        items: [{
+                            type: 'form',
+                            columns: 3,
+                            service: 'emcProjectServiceImpl',
+                            id: 'emc-project-edit-list-base-info-form',
+                            panels: [
+                                {title: '合同信息', fields: emcProject.getBaseInfoFormFields11()},
+                                {title: '委托单位信息', fields: emcProject.getBaseInfoFormFields12()},
+                                {title: '受检单位', fields: emcProject.getBaseInfoFormFields13()},
+                                {title: '项目信息', fields: emcProject.getBaseInfoFormFields14()},
+                            ],
+                            titleWidth: 160,
+                            onUpdated: function (data) {
                                 var grid = Gikam.getComp('emc-project-edit-list-grid');
                                 grid.refreshRowById(grid.getActivedRow().id);
+                                // _this.addOrRemoveValidator(data);
                             },
-                            onLoadSuccess : function(data) {
+                            onLoadSuccess: function (data) {
                                 Gikam.refreshGrids({
-                                    'emc-project-edit-list-director-grid' : emcProject.baseUrl + '/{id}/directors/queries',
+                                    'emc-project-edit-list-director-grid': emcProject.baseUrl + '/{id}/directors/queries',
                                 }, {
-                                    id : data.id
+                                    id: data.id
                                 });
                             }
-                        } ]
+                        }]
                     },
-                    center : {
-                        items : [ {
-                            type : 'tab',
-                            id : 'emc-project-edit-list-director-tab',
-                            fill : true,
-                            width : Gikam.width.XL,
-                            panels : [ {
-                                id : 'emc-project-edit-list-director-panel',
-                                title : 'EMC.MODULE.BP.PROJECT.PROJECTS.TITLE.PROJECT_DIRECTOR',
-                                items : [ {
-                                    type : 'grid',
-                                    id : 'emc-project-edit-list-director-grid',
-                                    filterOpen : false,
-                                    service : 'emcProjectDirectorServiceImpl',
-                                    page : false,
-                                    deleteFormatter : function(row) {
+                    center: {
+                        items: [{
+                            type: 'tab',
+                            id: 'emc-project-edit-list-director-tab',
+                            fill: true,
+                            width: Gikam.width.XL,
+                            panels: [{
+                                id: 'emc-project-edit-list-director-panel',
+                                title: 'EMC.MODULE.BP.PROJECT.PROJECTS.TITLE.PROJECT_DIRECTOR',
+                                items: [{
+                                    type: 'grid',
+                                    id: 'emc-project-edit-list-director-grid',
+                                    filterOpen: false,
+                                    service: 'emcProjectDirectorServiceImpl',
+                                    page: false,
+                                    deleteFormatter: function (row) {
                                         return row.ext$.username || row.empId || row.id;
                                     },
-                                    toolbar : [ {
-                                        type : 'button',
-                                        text : 'GIKAM.BUTTON.INSERT',
-                                        icon : 'add-row',
-                                        onClick : function() {
+                                    toolbar: [{
+                                        type: 'button',
+                                        text: 'GIKAM.BUTTON.INSERT',
+                                        icon: 'add-row',
+                                        onClick: function () {
                                             _this.insertDirectorRow();
                                         }
                                     }, {
-                                        type : 'button',
-                                        text : 'GIKAM.BUTTON.DELETE',
-                                        icon : 'remove-row',
-                                        onClick : function() {
+                                        type: 'button',
+                                        text: 'GIKAM.BUTTON.DELETE',
+                                        icon: 'remove-row',
+                                        onClick: function () {
                                             _this.deleteDirectorRow();
                                         }
-                                    } ],
-                                    columns : emcProject.getProjectDirectorListColumns()
-                                } ]
+                                    }],
+                                    columns: emcProject.getProjectDirectorListColumns()
+                                }]
+                                // }, {
+                                //     id : 'emc-project-report-send-info-panel',
+                                //     title : '报告发送信息',
+                                //     items : [ {
+                                //         type : 'grid',
+                                //         id : 'emc-project-report-send-info-grid',
+                                //         filterOpen : false,
+                                //         service : 'emcReportSendInfoServiceImpl',
+                                //         page : false,
+                                //         deleteFormatter : function(row) {
+                                //             return row.ext$.username || row.empId || row.id;
+                                //         },
+                                //         toolbar : [],
+                                //         columns : emcProject.getReportSendInfoListColumns()
+                                //     } ]
                             }, {
-                                id : 'emc-project-report-send-info-panel',
-                                title : '报告发送信息',
-                                items : [ {
-                                    type : 'grid',
-                                    id : 'emc-project-report-send-info-grid',
-                                    filterOpen : false,
-                                    service : 'emcReportSendInfoServiceImpl',
-                                    page : false,
-                                    deleteFormatter : function(row) {
-                                        return row.ext$.username || row.empId || row.id;
-                                    },
-                                    toolbar : [],
-                                    columns : emcProject.getReportSendInfoListColumns()
-                                } ]
-                            }, {
-                                id : 'emc-project-other-fee-panel',
-                                title : '其他费用信息',
-                                items : [ {
-                                    type : 'grid',
-                                    id : 'emc-project-other-fee-grid',
-                                    filterOpen : false,
-                                    service : 'emcProjectOtherFeeServiceImpl',
-                                    page : false,
-                                    deleteFormatter : function(row) {
+                                id: 'emc-project-other-fee-panel',
+                                title: '其他费用信息',
+                                items: [{
+                                    type: 'grid',
+                                    id: 'emc-project-other-fee-grid',
+                                    filterOpen: false,
+                                    service: 'emcProjectOtherFeeServiceImpl',
+                                    page: false,
+                                    deleteFormatter: function (row) {
                                         return row.feeName || row.id;
                                     },
-                                    toolbar : [ {
-                                        type : 'button',
-                                        text : 'GIKAM.BUTTON.INSERT',
-                                        icon : 'add-row',
-                                        onClick : function() {
+                                    toolbar: [{
+                                        type: 'button',
+                                        text: 'GIKAM.BUTTON.INSERT',
+                                        icon: 'add-row',
+                                        onClick: function () {
                                             let project = Gikam.getComp('emc-project-edit-list-grid').getActivedRow();
                                             if (Gikam.isEmpty(project)) {
                                                 return
                                             }
 
-                                            Gikam.getComp('emc-project-other-fee-grid').insert('/secure/emc/module/bp/project/other-fees', [ {projId : project.id} ]);
+                                            Gikam.getComp('emc-project-other-fee-grid').insert('/secure/emc/module/bp/project/other-fees', [{projId: project.id}]);
                                         }
                                     }, {
-                                        type : 'button',
-                                        text : 'GIKAM.BUTTON.DELETE',
-                                        icon : 'remove-row',
-                                        onClick : function() {
+                                        type: 'button',
+                                        text: 'GIKAM.BUTTON.DELETE',
+                                        icon: 'remove-row',
+                                        onClick: function () {
                                             let selections = Gikam.getComp('emc-project-other-fee-grid').getSelections();
                                             let validStatus = selections.some(item => item.status === '1');
                                             if (validStatus) {
@@ -1173,36 +1384,70 @@ emcProject.editPage = {
 
                                             Gikam.getComp('emc-project-other-fee-grid').deleteRows('/secure/emc/module/bp/project/other-fees');
                                         }
-                                    } ],
-                                    columns : emcProject.getProjectOtherFeeListColumns()
-                                } ]
-                            } ]
+                                    }],
+                                    columns: emcProject.getProjectOtherFeeListColumns()
+                                }]
+                            },{
+                                id: 'emc-project-edit-list-contract-panel',
+                                title: '合同任务',
+                                items: [{
+                                    type: 'layout',
+                                    center: {
+                                        items: [{
+                                            type: 'grid',
+                                            id: 'emc-project-edit-list-contract-grid',
+                                            readonly: true,
+                                            columns: emcProject.getContractColumns(),
+                                            onLoadSuccess: function (data) {
+                                                _this.refreshContractForm();
+                                            },
+                                        }]
+                                    },
+                                    south: {
+                                        height: 55,
+                                        items: [{
+                                            type: 'form',
+                                            id: 'emc-project-edit-list-contract-form',
+                                            columns: 2,
+                                            titleWidthAuto: true,
+                                            readonly: true,
+                                            fields: emcProject.getContractFormFields(),
+                                            autoSave: false,
+                                        }]
+                                    }
+                                }]
+                            }]
 
-                        } ]
+                        }]
                     }
-                } ]
+                }]
 
             }, {
-                title : 'EMC.MODULE.BP.PROJECT.PROJECTS.TAB.ORDER',
-                id : 'emc-project-edit-list-order-panel',
-                items : [ {
-                    type : 'layout',
-                    north : {
-                        height : '50%',
-                        items : [ {
-                            type : 'grid',
-                            id : 'emc-project-edit-list-order-grid',
-                            columns : emcProject.getOrderColumns(),
-                            service : 'emcOrderServiceImpl',
-                            page :true,
-                            deleteFormatter : function(row) {
+                title: 'EMC.MODULE.BP.PROJECT.PROJECTS.TAB.ORDER',
+                id: 'emc-project-edit-list-order-panel',
+                items: [{
+                    type: 'layout',
+                    north: {
+                        height: '50%',
+                        items: [{
+                            type: 'grid',
+                            id: 'emc-project-edit-list-order-grid',
+                            columns: emcProject.getOrderColumns(),
+                            service: 'emcOrderServiceImpl',
+                            instantSavePath: IFM_CONTEXT + '/secure/emc/module/bp/bp/orders/instant',
+                            page: true,
+                            deleteFormatter: function (row) {
                                 return row.orderNo || row.id;
                             },
-                            order : {
-                                'orderNum' : 'asc',
-                                'orderNo' : 'asc',
+                            order: {
+                                'orderNum': 'asc',
+                                'orderNo': 'asc',
                             },
-                            onBeforeUpdate  : function(row, keys) {
+                            group: {
+                                fields: ['orderCategory'],
+
+                            },
+                            onBeforeUpdate: function (row, keys) {
                                 if (row && row.sendDate) {
                                     let sendDate = new Date(row.sendDate);
                                     let now = new Date();
@@ -1212,475 +1457,511 @@ emcProject.editPage = {
                                     }
                                 }
                             },
-                            onLoadSuccess : function(data) {
+                            onLoadSuccess: function (data) {
                                 if (!Gikam.isEmpty(data)) {
                                     this.activeRowByIndex(0);
+                                    this.unSelectRowByIndex(0);
                                 } else {
-                                    Gikam.cleanCompData([ 'emc-project-edit-list-order-item-group-grid' ]);
+                                    Gikam.cleanCompData(['emc-project-edit-list-order-item-group-grid']);
                                 }
                             },
-                            onRendered : function() {
-                                this.hideColumns([ 'qcCategoryCode' ]);
+                            onRendered: function () {
+                                this.hideColumns(['qcCategoryCode']);
                             },
-                            onRowActive : function(index, row) {
+                            onRowActive: function (index, row) {
                                 _this.onOrderActive(row);
                             },
-                            toolbar : [ {
-                                type : 'button',
-                                text : 'GIKAM.BUTTON.INSERT',
-                                icon : 'add',
-                                onClick : function() {
+                            toolbar: [{
+                                type: 'button',
+                                text: 'GIKAM.BUTTON.INSERT',
+                                icon: 'add',
+                                onClick: function () {
                                     _this.loadSchemeItemGroupPage();
                                 }
                             }, {
-                                type : 'button',
-                                text : 'GIKAM.BUTTON.DELETE',
-                                icon : 'remove-row',
-                                onClick : function() {
+                                type: 'button',
+                                text: 'GIKAM.BUTTON.DELETE',
+                                icon: 'remove-row',
+                                onClick: function () {
                                     Gikam.getComp('emc-project-edit-list-order-grid').deleteRows(Gikam.printf(emcProject.baseUrl + '/{id}/orders', {
-                                        id : Gikam.getComp('emc-project-edit-list-grid').getActivedRow().id
+                                        id: Gikam.getComp('emc-project-edit-list-grid').getActivedRow().id
                                     }));
                                 }
                             }, {
-                                type : 'button',
-                                text : 'GIKAM.BUTTON.PREVIEW',
-                                icon : 'print',
-                                onClick : function() {
+                                type: 'button',
+                                text: 'GIKAM.BUTTON.PREVIEW',
+                                icon: 'print',
+                                onClick: function () {
                                     Gikam.viewReport('deliveringLabel', Gikam.getComp('emc-project-edit-list-order-grid').getSelections());
                                 }
                             }, {
-                                type : 'dropDownMenu',
-                                text : 'EMC.MODULE.BP.PROJECT.PROJECTS.BUTTON.ORDER_QUICK_INPUT',
-                                items : [ {
-                                    type : 'button',
-                                    text : 'GIKAM.BUTTON.EXPORT',
-                                    icon : 'move-up',
-                                    onClick : function() {
+                                type: 'dropDownMenu',
+                                text: 'EMC.MODULE.BP.PROJECT.PROJECTS.BUTTON.ORDER_QUICK_INPUT',
+                                items: [{
+                                    type: 'button',
+                                    text: 'GIKAM.BUTTON.EXPORT',
+                                    icon: 'move-up',
+                                    onClick: function () {
                                         _this.orderQuickExport();
                                     }
                                 }, {
-                                    type : 'button',
-                                    text : 'GIKAM.BUTTON.IMPORT',
-                                    icon : 'move-down',
-                                    onClick : function() {
+                                    type: 'button',
+                                    text: 'GIKAM.BUTTON.IMPORT',
+                                    icon: 'move-down',
+                                    onClick: function () {
                                         _this.orderQuickImport();
                                     }
-                                } ]
+                                }]
                             }, {
-                                type : 'dropDownMenu',
-                                text : 'GIKAM.BUTTON.MORE',
-                                items : [ {
-                                    type : 'button',
-                                    text : 'EMC.MODULE.BP.PROJECT.PROJECTS.BUTTON.BATCH_UPDATE',
-                                    icon : 'add',
-                                    onClick : function() {
+                                type: 'button',
+                                text: 'EMC.MODULE.BP.PROJECT.PROJECTS.BUTTON.COPE_NORMAL',
+                                icon: 'copy',
+                                onClick: function () {
+                                    _this.copeOrder();
+                                }
+                            }, {
+                                type: 'button',
+                                text: 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.BUTTON.INDEX',
+                                icon: 'edit',
+                                onClick: function () {
+                                    _this.updateOrderIndex();
+                                }
+                            },{
+                                type: 'button',
+                                text: '点位重新编码',
+                                icon: 'edit',
+                                onClick: function () {
+                                    _this.updateOrderFolderNo();
+                                }
+                            }, {
+                                type: 'dropDownMenu',
+                                text: 'GIKAM.BUTTON.MORE',
+                                items: [{
+                                    type: 'button',
+                                    text: 'EMC.MODULE.BP.PROJECT.PROJECTS.BUTTON.BATCH_UPDATE',
+                                    icon: 'add',
+                                    onClick: function () {
                                         _this.batchUpdateOrder();
                                     }
                                 }, {
-                                    type : 'button',
-                                    text : 'EMC.MODULE.BP.PROJECT.PROJECTS.BUTTON.COPE_NORMAL',
-                                    icon : 'copy',
-                                    onClick : function() {
-                                        _this.copeOrder();
-                                    }
-                                }, {
-                                    type : 'button',
-                                    text : 'EMC.MODULE.BP.PROJECT.PROJECTS.BUTTON.COPE_QC',
-                                    icon : 'copy',
-                                    onClick : function() {
+                                    type: 'button',
+                                    text: 'EMC.MODULE.BP.PROJECT.PROJECTS.BUTTON.COPE_QC',
+                                    icon: 'copy',
+                                    onClick: function () {
                                         _this.copeQcOrder();
                                     }
                                 }, {
-                                    type : 'button',
-                                    text : 'EMC.MODULE.BP.PROJECT.PROJECTS.BUTTON.UPDATE_QC_CATEGORY',
-                                    icon : 'copy',
-                                    onClick : function() {
+                                    type: 'button',
+                                    text: 'EMC.MODULE.BP.PROJECT.PROJECTS.BUTTON.UPDATE_QC_CATEGORY',
+                                    icon: 'copy',
+                                    onClick: function () {
                                         _this.updateQcCategory();
                                     }
                                 }, {
-                                    type : 'button',
-                                    text : 'EMC.MODULE.BP.PROJECT.PROJECTS.BUTTON.EMPTY_QC_CATEGORY',
-                                    icon : 'copy',
-                                    hidden : true,
-                                    onClick : function() {
+                                    type: 'button',
+                                    text: 'EMC.MODULE.BP.PROJECT.PROJECTS.BUTTON.EMPTY_QC_CATEGORY',
+                                    icon: 'copy',
+                                    hidden: true,
+                                    onClick: function () {
                                         _this.emptyQcCategory();
                                     }
-                                }, {
-                                    type : 'button',
-                                    text : 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.BUTTON.INDEX',
-                                    icon : 'edit',
-                                    onClick : function() {
-                                        _this.updateOrderIndex();
-                                    }
-                                } ]
+                                }]
                             }, {
-                                type : 'button',
-                                text : 'GIKAM.BUTTON.MOVE_UP',
-                                icon : 'move-up',
-                                onClick : function() {
+                                type: 'button',
+                                text: 'GIKAM.BUTTON.MOVE_UP',
+                                icon: 'move-up',
+                                onClick: function () {
                                     _this.orderMoveUp();
                                 }
                             }, {
-                                type : 'button',
-                                text : 'GIKAM.BUTTON.MOVE_DOWN',
-                                icon : 'move-down',
-                                onClick : function() {
+                                type: 'button',
+                                text: 'GIKAM.BUTTON.MOVE_DOWN',
+                                icon: 'move-down',
+                                onClick: function () {
                                     _this.orderMoveDown();
                                 }
-                            }, ]
-                        } ]
+                            }, {
+                                type: 'button',
+                                text: '复制到',
+                                icon: 'copy',
+                                onClick: function () {
+                                    _this.copyOrderTo();
+                                }
+                            },]
+                        }]
                     },
-                    center : {
-                        items : [ {
-                            type : 'grid',
-                            id : 'emc-project-edit-list-order-item-group-grid',// 样品分析项组
-                            columns : emcProject.getOrderItemGroupColumns(),
-                            service : 'emcOrderItemGroupServiceImpl',
-                            order : {
-                                'sortNum' : 'asc'
+                    center: {
+                        items: [{
+                            type: 'grid',
+                            id: 'emc-project-edit-list-order-item-group-grid',// 样品分析项组
+                            columns: emcProject.getOrderItemGroupColumns(),
+                            service: 'emcOrderItemGroupServiceImpl',
+                            order: {
+                                'sortNum': 'asc'
                             },
-                            toolbar : [ {
-                                type : 'dropDownMenu',
-                                text : 'EMC.MODULE.BP.PROJECT.PROJECTS.BUTTON.EDIT',
-                                items : [ {
-                                    type : 'button',
-                                    text : 'EMC.MODULE.BP.PROJECT.PROJECTS.BUTTON.EDIT_TEST',
-                                    icon : 'add',
-                                    onClick : function() {
+                            rowStyleFormatter: function (row) {
+                                if (row.abnormal === '1') {
+                                    return {
+                                        backgroundColor: '#fb3a3a'
+                                    }
+                                }
+                            },
+                            toolbar: [{
+                                type: 'dropDownMenu',
+                                text: 'EMC.MODULE.BP.PROJECT.PROJECTS.BUTTON.EDIT',
+                                items: [{
+                                    type: 'button',
+                                    text: 'EMC.MODULE.BP.PROJECT.PROJECTS.BUTTON.EDIT_TEST',
+                                    icon: 'add',
+                                    onClick: function () {
                                         _this.editTest();
                                     }
                                 }, {
-                                    type : 'button',
-                                    text : 'EMC.MODULE.BP.PROJECT.PROJECTS.BUTTON.UPDATE_METHOD',
-                                    icon : 'add',
-                                    onClick : function() {
+                                    type: 'button',
+                                    text: '删除测试',
+                                    icon: 'remove-row',
+                                    onClick: function () {
+                                        Gikam.getComp('emc-project-edit-list-order-item-group-grid').deleteRows(IFM_CONTEXT + '/secure/emc/module/bp/bp/orders/order-item-group');
+                                    }
+                                }, {
+                                    type: 'button',
+                                    text: 'EMC.MODULE.BP.PROJECT.PROJECTS.BUTTON.UPDATE_METHOD',
+                                    icon: 'add',
+                                    onClick: function () {
                                         _this.updateMethod();
                                     }
                                 }, {
-                                    type : 'button',
-                                    text : 'EMC.MODULE.BP.PROJECT.PROJECTS.BUTTON.EDIT_ITEM',
-                                    icon : 'add',
-                                    onClick : function() {
+                                    type: 'button',
+                                    text: 'EMC.MODULE.BP.PROJECT.PROJECTS.BUTTON.EDIT_ITEM',
+                                    icon: 'add',
+                                    onClick: function () {
                                         _this.editItem();
                                     }
-                                } ]
+                                }, {
+                                    type: 'button',
+                                    text: '同步分析项',
+                                    icon: 'refresh',
+                                    onClick: function () {
+                                        _this.syncItem();
+                                    }
+                                }]
                             }, {
-                                type : 'dropDownMenu',
-                                text : 'EMC.MODULE.BP.PROJECT.PROJECTS.BUTTON.CONTAINER',
-                                items : [ {
-                                    type : 'button',
-                                    text : 'EMC.MODULE.BP.PROJECT.PROJECTS.BUTTON.UPDATE_CONTAINER',
-                                    icon : 'add',
-                                    onClick : function() {
+                                type: 'dropDownMenu',
+                                text: 'EMC.MODULE.BP.PROJECT.PROJECTS.BUTTON.CONTAINER',
+                                items: [{
+                                    type: 'button',
+                                    text: 'EMC.MODULE.BP.PROJECT.PROJECTS.BUTTON.UPDATE_CONTAINER',
+                                    icon: 'add',
+                                    onClick: function () {
                                         _this.updateContainer();
                                     }
                                 }, {
-                                    type : 'button',
-                                    text : 'EMC.MODULE.BP.PROJECT.PROJECTS.BUTTON.UPDATE_CONTAINER_GROUP',
-                                    icon : 'add',
-                                    onClick : function() {
+                                    type: 'button',
+                                    text: 'EMC.MODULE.BP.PROJECT.PROJECTS.BUTTON.UPDATE_CONTAINER_GROUP',
+                                    icon: 'add',
+                                    onClick: function () {
                                         _this.updateContainerGroup();
                                     }
-                                } ]
+                                }]
                             }, {
-                                type : 'dropDownMenu',
-                                text : 'EMC.MODULE.BP.PROJECT.PROJECTS.BUTTON.SUBCONTRACTOR',
-                                hidden : true,
-                                items : [ {
-                                    type : 'button',
-                                    text : 'EMC.MODULE.BP.PROJECT.PROJECTS.BUTTON.ADD_SUBCONTRACTOR',
-                                    icon : 'add',
-                                    onClick : function() {
+                                type: 'dropDownMenu',
+                                text: 'EMC.MODULE.BP.PROJECT.PROJECTS.BUTTON.SUBCONTRACTOR',
+                                hidden: true,
+                                items: [{
+                                    type: 'button',
+                                    text: 'EMC.MODULE.BP.PROJECT.PROJECTS.BUTTON.ADD_SUBCONTRACTOR',
+                                    icon: 'add',
+                                    onClick: function () {
                                         _this.addOrderSubcontractor();
                                     }
                                 }, {
-                                    type : 'button',
-                                    text : 'EMC.MODULE.BP.PROJECT.PROJECTS.BUTTON.DEL_SUBCONTRACTOR',
-                                    icon : 'remove-row',
-                                    onClick : function() {
+                                    type: 'button',
+                                    text: 'EMC.MODULE.BP.PROJECT.PROJECTS.BUTTON.DEL_SUBCONTRACTOR',
+                                    icon: 'remove-row',
+                                    onClick: function () {
                                         _this.delOrderSubcontractor();
                                     }
-                                } ]
+                                }]
                             }, {
-                                type : 'dropDownMenu',
-                                text : 'EMC.MODULE.BP.PROJECT.PROJECTS.BUTTON.DATASHARING',
-                                hidden : true,
-                                items : [ {
-                                    type : 'button',
-                                    text : 'EMC.MODULE.BP.PROJECT.PROJECTS.BUTTON.ADD_DATASHARING',
-                                    icon : 'add',
-                                    onClick : function() {
+                                type: 'dropDownMenu',
+                                text: 'EMC.MODULE.BP.PROJECT.PROJECTS.BUTTON.DATASHARING',
+                                hidden: true,
+                                items: [{
+                                    type: 'button',
+                                    text: 'EMC.MODULE.BP.PROJECT.PROJECTS.BUTTON.ADD_DATASHARING',
+                                    icon: 'add',
+                                    onClick: function () {
                                         _this.addDataSharing();
                                     }
                                 }, {
-                                    type : 'button',
-                                    text : 'EMC.MODULE.BP.PROJECT.PROJECTS.BUTTON.DEL_DATASHARING',
-                                    icon : 'remove-row',
-                                    onClick : function() {
+                                    type: 'button',
+                                    text: 'EMC.MODULE.BP.PROJECT.PROJECTS.BUTTON.DEL_DATASHARING',
+                                    icon: 'remove-row',
+                                    onClick: function () {
                                         _this.delDataSharing();
                                     }
-                                } ]
+                                }]
                             }, {
-                                type : 'button',
-                                text : 'EMC.MODULE.BP.PROJECT.PROJECTS.BUTTON.MTLSELECT',
-                                icon : 'submit',
-                                hidden : true,
-                                onClick : function() {
+                                type: 'button',
+                                text: 'EMC.MODULE.BP.PROJECT.PROJECTS.BUTTON.MTLSELECT',
+                                icon: 'submit',
+                                hidden: true,
+                                onClick: function () {
                                     _this.mtlSelect();
                                 }
                             }, {
-                                type : 'dropDownMenu',
-                                text : '分包单',
-                                hidden : true,
-                                items : [ {
-                                    type : 'button',
-                                    text : '创建分包单',
-                                    icon : 'add',
-                                    onClick : function() {
+                                type: 'dropDownMenu',
+                                text: '分包单',
+                                hidden: true,
+                                items: [{
+                                    type: 'button',
+                                    text: '创建分包单',
+                                    icon: 'add',
+                                    onClick: function () {
                                         _this.createSubpackage();
                                     }
                                 }, {
-                                    type : 'button',
-                                    text : '添加至分包单',
-                                    icon : 'edit',
-                                    onClick : function() {
+                                    type: 'button',
+                                    text: '添加至分包单',
+                                    icon: 'edit',
+                                    onClick: function () {
                                         _this.addToSubpackage();
                                     }
-                                } ]
-                            }, {
-                                type : 'button',
-                                text : 'GIKAM.BUTTON.MOVE_UP',
-                                icon : 'move-up',
-                                onClick : function() {
-                                    _this.orderItemGroupMoveUp();
-                                }
-                            }, {
-                                type : 'button',
-                                text : 'GIKAM.BUTTON.MOVE_DOWN',
-                                icon : 'move-down',
-                                onClick : function() {
-                                    _this.orderItemGroupMoveDown();
-                                }
-                            }, ]
-                        } ]
+                                }]
+                            // }, {
+                            //     type: 'button',
+                            //     text: 'GIKAM.BUTTON.MOVE_UP',
+                            //     icon: 'move-up',
+                            //     onClick: function () {
+                            //         _this.orderItemGroupMoveUp();
+                            //     }
+                            // }, {
+                            //     type: 'button',
+                            //     text: 'GIKAM.BUTTON.MOVE_DOWN',
+                            //     icon: 'move-down',
+                            //     onClick: function () {
+                            //         _this.orderItemGroupMoveDown();
+                            //     }
+                            },]
+                        }]
                     }
-                } ]
+                }]
             }, _this.getMonitorSchemePanel(), {
-                title : 'EMC.MODULE.BP.PROJECT.PROJECTS.TAB.FILE',
-                items : [ {
-                    type : 'uploader',
-                    id : 'emc-project-edit-list-uploader',
-                    dbTable : 'T_EMC_PROJECT',
-                } ]
+                title: 'EMC.MODULE.BP.PROJECT.PROJECTS.TAB.FILE',
+                items: [{
+                    type: 'uploader',
+                    id: 'emc-project-edit-list-uploader',
+                    dbTable: 'T_EMC_PROJECT',
+                }]
             }, {
-                title : '合同附件',
-                items : [ {
-                    type : 'uploader',
-                    id : 'emc-project-edit-list-contract-uploader',
-                    dbTable : 'T_CRM_OPPORTUNITY_CONTRACT',
-                    readonly : true,
-                } ]
+                title: '合同附件',
+                items: [{
+                    type: 'uploader',
+                    id: 'emc-project-edit-list-contract-uploader',
+                    dbTable: 'T_CRM_OPPORTUNITY_CONTRACT',
+                    readonly: true,
+                }]
             }, {
-                title : '分包单管理',
-                id : 'emc-project-subpackage-info-panel',
-                items : [ {
-                    type : 'layout',
-                    north : {
-                        height : '50%',
-                        items : [ {
-                            type : 'layout',
-                            west : {
-                                width : '50%',
-                                items : [ {
-                                    type : 'grid',
-                                    id : 'emc-project-edit-list-subpackage-info-grid',
-                                    columns : emcProject.getProjectSubpackageListColumns(),
-                                    requestData : {
-                                        subpackageType_SEQ : 'create',
-                                        orgId_SB: workspace.user.ext$.parentorgid,
+                title: '分包单管理',
+                id: 'emc-project-subpackage-info-panel',
+                items: [{
+                    type: 'layout',
+                    north: {
+                        height: '50%',
+                        items: [{
+                            type: 'layout',
+                            west: {
+                                width: '50%',
+                                items: [{
+                                    type: 'grid',
+                                    id: 'emc-project-edit-list-subpackage-info-grid',
+                                    columns: emcProject.getProjectSubpackageListColumns(),
+                                    requestData: {
+                                        subpackageType_SEQ: 'create',
+                                        org_filter: '1',
                                     },
-                                    service : 'emcSubpackageServiceImpl',
-                                    toolbar : _this.getSubpackageButton(),
-                                    onLoadSuccess : function(data) {
+                                    service: 'emcSubpackageServiceImpl',
+                                    toolbar: _this.getSubpackageButton(),
+                                    onLoadSuccess: function (data) {
                                         if (!Gikam.isEmpty(data)) {
                                             this.activeRowByIndex(0);
                                         } else {
-                                            Gikam.cleanCompData([ 'emc-subpackage-edit-list-base-info-form' ]);
-                                            Gikam.cleanCompData([ 'emc-project-edit-list-subpackage-order-grid' ]);
+                                            Gikam.cleanCompData(['emc-subpackage-edit-list-base-info-form']);
+                                            Gikam.cleanCompData(['emc-project-edit-list-subpackage-order-grid']);
                                         }
                                     },
-                                    onRowActive : function(index, row) {
+                                    onRowActive: function (index, row) {
                                         _this.onSubpackageActive(row);
                                     },
-                                } ]
+                                }]
                             },
-                            center : {
-                                items : [ {
-                                    type : 'layout',
-                                    north : {
-                                        height : '80%',
-                                        items : [ {
-                                            type : 'form',
-                                            columns : 3,
-                                            service : 'emcSubpackageServiceImpl',
-                                            id : 'emc-subpackage-edit-list-base-info-form',
-                                            fields : emcProject.getSubpackageBaseInfoFormFields(),
-                                            onUpdated : function() {
+                            center: {
+                                items: [{
+                                    type: 'layout',
+                                    north: {
+                                        height: '80%',
+                                        items: [{
+                                            type: 'form',
+                                            columns: 3,
+                                            service: 'emcSubpackageServiceImpl',
+                                            id: 'emc-subpackage-edit-list-base-info-form',
+                                            fields: emcProject.getSubpackageBaseInfoFormFields(),
+                                            onUpdated: function () {
                                                 var grid = Gikam.getComp('emc-project-edit-list-subpackage-info-grid');
                                                 grid.refreshRowById(grid.getActivedRow().id);
                                             },
-                                        } ]
+                                        }]
                                     },
-                                } ]
+                                }]
                             }
 
-                        } ]
+                        }]
                     },
-                    center : {
-                        items : [ {
-                            type : 'layout',
-                            west : {
-                                width : '50%',
-                                items : [ {
-                                    type : 'grid',
-                                    readonly : true,
-                                    id : 'emc-project-edit-list-subpackage-order-grid',
-                                    columns : emcProject.getSubpackageOrderColumns(),
-                                    service : 'emcProjectServiceImpl',
+                    center: {
+                        items: [{
+                            type: 'layout',
+                            west: {
+                                width: '50%',
+                                items: [{
+                                    type: 'grid',
+                                    readonly: true,
+                                    id: 'emc-project-edit-list-subpackage-order-grid',
+                                    columns: emcProject.getSubpackageOrderColumns(),
+                                    service: 'emcProjectServiceImpl',
                                     requestData: {
-                                        subpackageflag_SEQ : '1'
+                                        subpackageflag_SEQ: '1'
                                     },
-                                    toolbar : _this.getOrderSubpackageButton(),
-                                    onLoadSuccess : function(data) {
+                                    toolbar: _this.getOrderSubpackageButton(),
+                                    onLoadSuccess: function (data) {
                                         if (!Gikam.isEmpty(data)) {
                                             this.activeRowByIndex(0);
                                         } else {
-                                            Gikam.cleanCompData([ 'emc-project-edit-list-subpackage-order-task-grid' ]);
+                                            Gikam.cleanCompData(['emc-project-edit-list-subpackage-order-task-grid']);
                                         }
                                     },
-                                    onRowActive : function(index, row) {
+                                    onRowActive: function (index, row) {
                                         _this.onSubpackageOrderInfoActive(row);
                                     },
-                                } ]
+                                }]
                             },
-                            center : {
-                                items : [ {
-                                    type : 'grid',
-                                    readonly : true,
-                                    id : 'emc-project-edit-list-subpackage-order-task-grid',
-                                    columns : emcProject.getSubpackageOrderTaskColumns(),
-                                    service : 'emcSubpackageTaskServiceImpl',
-                                    toolbar : [{
-                                            type : 'button',
-                                            text : '删除',
-                                            icon : 'remove',
-                                            onClick : function() {
-                                                var selections = Gikam.getComp('emc-project-edit-list-subpackage-order-task-grid').getSelections();
-                                                Gikam.postText(IFM_CONTEXT + '/secure/emc/module/bp/subpackages/action/delete-package-task', Gikam.getJsonWrapper({}, [ 'emcSubpackageTaskServiceImpl', selections ])).done(function() {
-                                                    Gikam.alert('删除成功');
-                                                    Gikam.getComp('emc-project-edit-list-subpackage-order-task-grid').refresh();
-                                                });
-                                            }
+                            center: {
+                                items: [{
+                                    type: 'grid',
+                                    readonly: true,
+                                    id: 'emc-project-edit-list-subpackage-order-task-grid',
+                                    columns: emcProject.getSubpackageOrderTaskColumns(),
+                                    service: 'emcSubpackageTaskServiceImpl',
+                                    toolbar: [{
+                                        type: 'button',
+                                        text: '删除',
+                                        icon: 'remove',
+                                        onClick: function () {
+                                            var selections = Gikam.getComp('emc-project-edit-list-subpackage-order-task-grid').getSelections();
+                                            Gikam.postText(IFM_CONTEXT + '/secure/emc/module/bp/subpackages/action/delete-package-task', Gikam.getJsonWrapper({}, ['emcSubpackageTaskServiceImpl', selections])).done(function () {
+                                                Gikam.alert('删除成功');
+                                                Gikam.getComp('emc-project-edit-list-subpackage-order-task-grid').refresh();
+                                            });
                                         }
+                                    }
                                     ]
-                                } ]
+                                }]
                             }
-                        } ]
+                        }]
                     }
-                } ]
+                }]
             }, {
-                title : '分包单管理',
-                id : 'emc-project-sample-subpackage-info-panel',
-                items : [ {
-                    type : 'layout',
-                    north : {
-                        height : '50%',
-                        items : [ {
-                            type : 'layout',
-                            west : {
-                                width : '50%',
-                                items : [ {
-                                    type : 'grid',
-                                    id : 'emc-project-edit-list-sample-subpackage-info-grid',
-                                    columns : emcProject.getProjectSubpackageListColumns(),
-                                    requestData : {
-                                        subpackageType_SEQ : 'create',
-                                        orgId_SB: workspace.user.ext$.parentorgid,
+                title: '分包单管理',
+                id: 'emc-project-sample-subpackage-info-panel',
+                items: [{
+                    type: 'layout',
+                    north: {
+                        height: '50%',
+                        items: [{
+                            type: 'layout',
+                            west: {
+                                width: '50%',
+                                items: [{
+                                    type: 'grid',
+                                    id: 'emc-project-edit-list-sample-subpackage-info-grid',
+                                    columns: emcProject.getProjectSubpackageListColumns(),
+                                    requestData: {
+                                        subpackageType_SEQ: 'create',
+                                        org_filter: '1',
                                     },
-                                    service : 'emcSubpackageServiceImpl',
-                                    toolbar : _this.getSampleSubpackageButton(),
-                                    onLoadSuccess : function(data) {
+                                    service: 'emcSubpackageServiceImpl',
+                                    toolbar: _this.getSampleSubpackageButton(),
+                                    onLoadSuccess: function (data) {
                                         if (!Gikam.isEmpty(data)) {
                                             this.activeRowByIndex(0);
                                         } else {
-                                            Gikam.cleanCompData([ 'emc-project-edit-list-subpackage-folder-grid' ]);
-                                            Gikam.cleanCompData([ 'emc-subpackage-sample-edit-list-base-info-form' ]);
+                                            Gikam.cleanCompData(['emc-project-edit-list-subpackage-folder-grid']);
+                                            Gikam.cleanCompData(['emc-subpackage-sample-edit-list-base-info-form']);
                                         }
                                     },
-                                    onRowActive : function(index, row) {
+                                    onRowActive: function (index, row) {
                                         _this.onSampleSubpackageActive(row);
                                     },
-                                } ]
+                                }]
                             },
-                            center : {
-                                items : [ {
-                                    type : 'layout',
-                                    north : {
-                                        height : '80%',
-                                        items : [ {
-                                            type : 'form',
-                                            columns : 3,
-                                            service : 'emcSubpackageServiceImpl',
-                                            id : 'emc-subpackage-sample-edit-list-base-info-form',
-                                            fields : emcProject.getSubpackageBaseInfoFormFields(),
-                                            onUpdated : function() {
+                            center: {
+                                items: [{
+                                    type: 'layout',
+                                    north: {
+                                        height: '80%',
+                                        items: [{
+                                            type: 'form',
+                                            columns: 3,
+                                            service: 'emcSubpackageServiceImpl',
+                                            id: 'emc-subpackage-sample-edit-list-base-info-form',
+                                            fields: emcProject.getSubpackageBaseInfoFormFields(),
+                                            onUpdated: function () {
                                                 var grid = Gikam.getComp('emc-project-edit-list-sample-subpackage-info-grid');
                                                 grid.refreshRowById(grid.getActivedRow().id);
                                             },
-                                        } ]
+                                        }]
                                     },
-                                } ]
+                                }]
                             },
-                        } ]
+                        }]
                     },
-                    center : {
-                        items : [ {
-                            type : 'layout',
-                            west : {
-                                width : '50%',
-                                items : [ {
-                                    type : 'grid',
-                                    readonly : true,
-                                    id : 'emc-project-edit-list-subpackage-folder-grid',
-                                    columns : emcProject.getSubpackageFolderColumns(),
-                                    service : 'emcProjSchemeServiceImpl',
-                                    toolbar : _this.getProjSchemeSubpackageButton(),
-                                    onLoadSuccess : function(data) {
+                    center: {
+                        items: [{
+                            type: 'layout',
+                            west: {
+                                width: '50%',
+                                items: [{
+                                    type: 'grid',
+                                    readonly: true,
+                                    id: 'emc-project-edit-list-subpackage-folder-grid',
+                                    columns: emcProject.getSubpackageFolderColumns(),
+                                    service: 'emcProjSchemeServiceImpl',
+                                    toolbar: _this.getProjSchemeSubpackageButton(),
+                                    onLoadSuccess: function (data) {
                                         if (!Gikam.isEmpty(data)) {
                                             this.activeRowByIndex(0);
                                         } else {
-                                            Gikam.cleanCompData([ 'emc-project-edit-list-subpackage-sample-order-task-grid' ]);
+                                            Gikam.cleanCompData(['emc-project-edit-list-subpackage-sample-order-task-grid']);
                                         }
                                     },
-                                    onRowActive : function(index, row) {
+                                    onRowActive: function (index, row) {
                                         _this.onSampleSubpackageFolderInfoActive(row);
                                     },
-                                } ]
+                                }]
                             },
-                            center : {
-                                items : [ {
-                                    type : 'grid',
-                                    readonly : true,
-                                    id : 'emc-project-edit-list-subpackage-sample-order-task-grid',
-                                    columns : emcProject.getSubpackageSampleOrderTaskColumns(),
-                                    service : 'emcSubpackageTaskServiceImpl',
-                                    toolbar : [{
-                                        type : 'button',
-                                        text : '删除',
-                                        icon : 'remove',
-                                        onClick : function() {
+                            center: {
+                                items: [{
+                                    type: 'grid',
+                                    readonly: true,
+                                    id: 'emc-project-edit-list-subpackage-sample-order-task-grid',
+                                    columns: emcProject.getSubpackageSampleOrderTaskColumns(),
+                                    service: 'emcSubpackageTaskServiceImpl',
+                                    toolbar: [{
+                                        type: 'button',
+                                        text: '删除',
+                                        icon: 'remove',
+                                        onClick: function () {
                                             var selections = Gikam.getComp('emc-project-edit-list-subpackage-sample-order-task-grid').getSelections();
-                                            Gikam.postText(IFM_CONTEXT + '/secure/emc/module/bp/subpackages/action/delete-package-task', Gikam.getJsonWrapper({}, [ 'emcSubpackageTaskServiceImpl', selections ])).done(function() {
+                                            Gikam.postText(IFM_CONTEXT + '/secure/emc/module/bp/subpackages/action/delete-package-task', Gikam.getJsonWrapper({}, ['emcSubpackageTaskServiceImpl', selections])).done(function () {
                                                 Gikam.alert('删除成功');
                                                 Gikam.getComp('emc-project-edit-list-subpackage-sample-order-task-grid').refresh();
 
@@ -1688,16 +1969,16 @@ emcProject.editPage = {
                                         }
                                     }
                                     ]
-                                } ]
+                                }]
                             }
-                        } ]
+                        }]
                     }
-                } ]
-            }  ]
+                }]
+            }]
         }
     },
 
-    createSubpackage : function() {
+    createSubpackage: function () {
         var orders = Gikam.getComp('emc-project-edit-list-order-grid').getSelections();
         var selections = Gikam.getComp('emc-project-edit-list-order-item-group-grid').getSelections();
         if (Gikam.isEmpty(selections) || Gikam.isEmpty(orders)) {
@@ -1706,17 +1987,17 @@ emcProject.editPage = {
         }
 
         var project = Gikam.getComp('emc-project-edit-list-grid').getActivedRow();
-        Gikam.confirm('操作提示', '是否确定创建分包单？', function() {
+        Gikam.confirm('操作提示', '是否确定创建分包单？', function () {
             workspace.window.showMask(true);
-            Gikam.postText(emcSubpackage.baseUrl + '/action/create', Gikam.getJsonWrapper({}, [ '', [ project ] ], [ '', orders ], [ '', selections ])).done(function() {
+            Gikam.postText(emcSubpackage.baseUrl + '/action/create', Gikam.getJsonWrapper({}, ['', [project]], ['', orders], ['', selections])).done(function () {
                 Gikam.getComp('emc-project-edit-list-order-item-group-grid').refresh();
-            }).always(function() {
+            }).always(function () {
                 workspace.window.closeMask();
             });
         });
     },
 
-    addToSubpackage : function() {
+    addToSubpackage: function () {
         var selections = Gikam.getComp('emc-project-edit-list-order-grid').getSelections();
         if (Gikam.isEmpty(selections)) {
             Gikam.alert('GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM');
@@ -1726,7 +2007,7 @@ emcProject.editPage = {
 
     },
 
-    createSamplingSubpackage : function() {
+    createSamplingSubpackage: function () {
         var schemes = Gikam.getComp('emc-schemeedit-audit-list-grid').getSelections();
         var selections = Gikam.getComp('emc-proj-order-edit-list-grid').getSelections();
         if (Gikam.isEmpty(selections) || Gikam.isEmpty(schemes)) {
@@ -1735,17 +2016,17 @@ emcProject.editPage = {
         }
 
         var project = Gikam.getComp('emc-project-edit-list-grid').getActivedRow();
-        Gikam.confirm('操作提示', '是否确定创建分包单？', function() {
+        Gikam.confirm('操作提示', '是否确定创建分包单？', function () {
             workspace.window.showMask(true);
-            Gikam.postText(IFM_CONTEXT + '/secure/emc/module/bp/subpackages/action/create', Gikam.getJsonWrapper({}, [ '', [ project ] ], [ '', schemes ], [ '', selections ])).done(function() {
+            Gikam.postText(IFM_CONTEXT + '/secure/emc/module/bp/subpackages/action/create', Gikam.getJsonWrapper({}, ['', [project]], ['', schemes], ['', selections])).done(function () {
                 Gikam.getComp('emc-proj-order-edit-list-grid').refresh();
-            }).always(function() {
+            }).always(function () {
                 workspace.window.closeMask();
             });
         });
     },
 
-    addToSamplingSubpackage : function() {
+    addToSamplingSubpackage: function () {
         var selections = Gikam.getComp('emc-proj-order-edit-list-grid').getSelections();
         if (Gikam.isEmpty(selections)) {
             Gikam.alert('GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM');
@@ -1756,26 +2037,26 @@ emcProject.editPage = {
     },
 
     /*质控标样选择*/
-    mtlSelect : function () {
+    mtlSelect: function () {
         var selections = Gikam.getComp('emc-project-edit-list-order-item-group-grid').getSelections();
         if (selections.length > 0) {
             Gikam.create('modal', {
-                width : '60%',
-                height : '50%',
-                title : Gikam.choose.getConfig('mtlStock').title,
-                url : Gikam.choose.getConfig('mtlStock').url + Gikam.param({
-                    single : true,
-                    projectFlag : '1',
+                width: '60%',
+                height: '50%',
+                title: Gikam.choose.getConfig('mtlStock').title,
+                url: Gikam.choose.getConfig('mtlStock').url + Gikam.param({
+                    single: true,
+                    projectFlag: '1',
                 }),
-                onAfterClose : function(data) {
+                onAfterClose: function (data) {
                     if (!Gikam.isEmpty(data)) {
                         workspace.window.showMask(true);
-                        selections.map(function(item) {
+                        selections.map(function (item) {
                             item.batchNo = data[0].batchNo;
                         });
-                        Gikam.put('/secure/emc/module/bp/project/projects/qcMtlSelect', Gikam.getJsonWrapper({}, [ 'pfOrderItemGroupServiceImpl', selections ])).done(function() {
+                        Gikam.put('/secure/emc/module/bp/project/projects/qcMtlSelect', Gikam.getJsonWrapper({}, ['pfOrderItemGroupServiceImpl', selections])).done(function () {
                             Gikam.getComp('emc-project-edit-list-order-item-group-grid').refresh();
-                        }).always(function() {
+                        }).always(function () {
                             workspace.window.closeMask();
                         });
                     }
@@ -1787,25 +2068,25 @@ emcProject.editPage = {
     },
 
     /** 样品登记设置分包商 */
-    addOrderSubcontractor : function() {
+    addOrderSubcontractor: function () {
         var selections = Gikam.getComp('emc-project-edit-list-order-item-group-grid').getSelections();
         if (selections.length > 0) {
             Gikam.create('modal', {
-                width : '20%',
-                height : '50%',
-                title : Gikam.choose.getConfig('subcontractor').title,
-                url : Gikam.choose.getConfig('subcontractor').url + Gikam.param({
-                    single : true,
+                width: '20%',
+                height: '50%',
+                title: Gikam.choose.getConfig('subcontractor').title,
+                url: Gikam.choose.getConfig('subcontractor').url + Gikam.param({
+                    single: true,
                 }),
-                onAfterClose : function(data) {
+                onAfterClose: function (data) {
                     if (!Gikam.isEmpty(data)) {
                         workspace.window.showMask(true);
-                        selections.map(function(item) {
+                        selections.map(function (item) {
                             item.subcontractorId = data[0].id;
                         });
-                        Gikam.put('/secure/emc/module/bp/bp/orders/item-groups/action/subcontractor-edit', Gikam.getJsonWrapper({}, [ 'emcOrderItemGroupServiceImpl', selections ])).done(function() {
+                        Gikam.put('/secure/emc/module/bp/bp/orders/item-groups/action/subcontractor-edit', Gikam.getJsonWrapper({}, ['emcOrderItemGroupServiceImpl', selections])).done(function () {
                             Gikam.getComp('emc-project-edit-list-order-item-group-grid').refresh();
-                        }).always(function() {
+                        }).always(function () {
                             workspace.window.closeMask();
                         });
                     }
@@ -1817,18 +2098,18 @@ emcProject.editPage = {
     },
 
     /** 样品登记删除分包商 */
-    delOrderSubcontractor : function() {
+    delOrderSubcontractor: function () {
         var selections = Gikam.getComp('emc-project-edit-list-order-item-group-grid').getSelections();
         if (selections.length > 0) {
             var activedRow = Gikam.getComp('emc-project-edit-list-grid').getActivedRow();
-            selections.map(function(item) {
+            selections.map(function (item) {
                 item.subcontractorId = '';
                 item.subPackageNo = '';
             });
             workspace.window.showMask(true);
-            Gikam.put(emcProject.baseUrl + '/' + activedRow.id, Gikam.getJsonWrapper({}, [ 'emcOrderItemGroupServiceImpl', selections ])).done(function() {
+            Gikam.put(emcProject.baseUrl + '/' + activedRow.id, Gikam.getJsonWrapper({}, ['emcOrderItemGroupServiceImpl', selections])).done(function () {
                 Gikam.getComp('emc-project-edit-list-order-item-group-grid').refresh();
-            }).always(function() {
+            }).always(function () {
                 workspace.window.closeMask();
             });
         } else {
@@ -1837,52 +2118,52 @@ emcProject.editPage = {
     },
 
     /** 监测方案 */
-    getMonitorSchemePanel : function () {
+    getMonitorSchemePanel: function () {
         var _this = this;
         return {
-            title : 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.TAB.PROJ_SCHEME',
-            id : 'emc-project-scheme-edit-panel',
-            items : [ {
-                type : 'layout',
-                north : {
-                    height : '50%',
-                    items : [ {
-                        type : 'grid',
-                        id : 'emc-schemeedit-audit-list-grid',
-                        url : '',
-                        columns : emcProject.getSchemeEditListColumns(),
-                        service : 'emcProjSchemeServiceImpl',
-                        checkOnActive : false,
-                        order : {
-                            'sortNum' : 'asc',
+            title: 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.TAB.PROJ_SCHEME',
+            id: 'emc-project-scheme-edit-panel',
+            items: [{
+                type: 'layout',
+                north: {
+                    height: '50%',
+                    items: [{
+                        type: 'grid',
+                        id: 'emc-schemeedit-audit-list-grid',
+                        url: '',
+                        columns: emcProject.getSchemeEditListColumns(),
+                        service: 'emcProjSchemeServiceImpl',
+//                        checkOnActive : false,
+                        order: {
+                            'sortNum': 'asc',
                         },
-                        deleteFormatter : function(row) {
+                        deleteFormatter: function (row) {
                             return row.folderNo || row.id;
                         },
-                        onLoadSuccess : function(data) {
+                        onLoadSuccess: function (data) {
                             if (!Gikam.isEmpty(data)) {
-                                this.activeRowByIndex(1);
+                                // this.activeRowByIndex(0);
                             } else {
-                                Gikam.cleanCompData([ 'emc-proj-order-edit-list-grid' ]);
+                                Gikam.cleanCompData(['emc-proj-order-edit-list-grid']);
                             }
                         },
-                        onRowActive : function(index, row) {
+                        onRowActive: function (index, row) {
                             _this.onSchemeActive(row);
                         },
-                        onRendered : function() {
-                            this.hideColumns([ 'ext$.monitortmplname' ]);
+                        onRendered: function () {
+                            this.hideColumns(['ext$.monitortmplname']);
                         },
-                        group : {
-                            fields : [ 'ext$.monitortmplname' ],
-                            formatter : function(row) {
+                        group: {
+                            fields: ['ext$.monitortmplname'],
+                            formatter: function (row) {
                                 return Gikam.propI18N('T_EMC_PROJ_SCHEME.ORDERCATEGORY') + ':' + row.ext$.monitortmplname;
                             }
                         },
-                        toolbar : [ {
-                            type : 'button',
-                            text : 'GIKAM.BUTTON.INSERT',
-                            icon : 'add',
-                            onClick : function() {
+                        toolbar: [{
+                            type: 'button',
+                            text: 'GIKAM.BUTTON.INSERT',
+                            icon: 'add',
+                            onClick: function () {
                                 var projId = _this.param.projId;
                                 var activeRow = Gikam.getComp('emc-project-edit-list-grid').getActivedRow();
                                 if (Gikam.isEmpty(activeRow)) {
@@ -1892,267 +2173,289 @@ emcProject.editPage = {
 
                                 var data = Gikam.getComp('emc-project-edit-list-base-info-form').getData();
                                 var editMonitorInfo = _this.param.editMonitorInfo;
-                                // 这里使用委托单位来过滤数据，之前是受检单位
-                                var testOrgId = data.entrustOrgId ? data.entrustOrgId : '-';
+                                // 使用受检单位来过滤数据
+                                var testOrgId = data.testOrgId ? data.testOrgId : '-';
                                 var sampleOrgId = _this.param.sampleOrgId;
                                 _this.addProj(projId, editMonitorInfo, testOrgId, sampleOrgId);
                             }
                         }, {
-                            type : 'button',
-                            text : 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.BUTTON.INITIALIZ',
-                            icon : 'add',
-                            onClick : function() {
+                            type: 'button',
+                            text: 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.BUTTON.INITIALIZ',
+                            icon: 'add',
+                            onClick: function () {
                                 var projId = _this.param.projId;
                                 if (Gikam.isEmpty(projId)) {
                                     Gikam.alert("EMC.MODULE.BP.PROJECT.PROJSCHEMES.TIP.PROJECT_REQUIRED");
                                     return;
                                 }
 
-                                // 这里使用委托单位来过滤数据，之前是受检单位
+                                // 使用受检单位来过滤数据
                                 var data = Gikam.getComp('emc-project-edit-list-base-info-form').getData();
-                                var testOrgId = data.entrustOrgId;
+                                var testOrgId = data.testOrgId;
                                 _this.initAddProj(projId, testOrgId);
                             }
                         }, {
-                            type : 'button',
-                            text : 'GIKAM.BUTTON.DELETE',
-                            icon : 'remove-row',
-                            onClick : function() {
+                            type: 'button',
+                            text: 'GIKAM.BUTTON.DELETE',
+                            icon: 'remove-row',
+                            onClick: function () {
                                 Gikam.getComp('emc-schemeedit-audit-list-grid').deleteRows(emcProject.schemeUrl);
                             }
                         }, {
-                            type : 'dropDownMenu',
-                            text : 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.BUTTON.COPY_SHARE_OR_POINT',
-                            items : [ {
-                                type : 'button',
-                                text : 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.BUTTON.COPY_SHARE',
-                                icon : 'copy',
-                                onClick : function() {
-                                    _this.copyShare();
-                                }
-                            }, {
-                                type : 'button',
-                                text : 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.BUTTON.COPY_POINT',
-                                icon : 'copy',
-                                hidden:true,
-                                onClick : function() {
-                                    var data = Gikam.getComp('emc-project-edit-list-base-info-form').getData();
-                                    var testOrgId = data.entrustOrgId;
-                                    _this.copyPoint(testOrgId);
-                                }
-                            }, ]
+                            type: 'button',
+                            text: '复制点位',
+                            icon: 'copy',
+                            onClick: function () {
+                                _this.copyShare();
+                            }
                         }, {
-                            type : 'dropDownMenu',
-                            text : 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.BUTTON.EDIT',
-                            items : [ {
-                                type : 'button',
-                                text : 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.BUTTON.UPDATE_CYCLEFREQUENCY',
-                                icon : 'edit',
-                                onClick : function() {
-                                    _this.updateCycleAndFrequency();
-                                }
-                            }, {
-                                type : 'button',
-                                text : 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.BUTTON.INDEX',
-                                icon : 'edit',
-                                onClick : function() {
-                                    _this.updateIndex();
-                                }
-                            }, {
-                                type : 'button',
-                                text : 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.BUTTON.UPDATE_ORG',
-                                icon : 'edit',
-                                onClick : function() {
-                                    _this.updateOrg();
-                                }
-                            } ]
+                            type: 'button',
+                            text: 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.BUTTON.COPY_POINT',
+                            icon: 'copy',
+                            hidden: true,
+                            onClick: function () {
+                                var data = Gikam.getComp('emc-project-edit-list-base-info-form').getData();
+                                var testOrgId = data.entrustOrgId;
+                                _this.copyPoint(testOrgId);
+                            }
+
                         }, {
-                            type : 'dropDownMenu',
-                            text : 'EMC.MODULE.BP.PROJECT.PROJECTS.BUTTON.ORDER_QUICK_INPUT',
-                            items : [ {
-                                type : 'button',
-                                text : 'GIKAM.BUTTON.EXPORT',
-                                icon : 'move-up',
-                                onClick : function() {
+                            type: 'button',
+                            text: 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.BUTTON.UPDATE_CYCLEFREQUENCY',
+                            icon: 'edit',
+                            onClick: function () {
+                                _this.updateCycleAndFrequency();
+                            }
+                        }, {
+                            type: 'button',
+                            text: 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.BUTTON.INDEX',
+                            icon: 'edit',
+                            onClick: function () {
+                                _this.updateIndex();
+                            }
+
+                        }, {
+                            type: 'button',
+                            text: '点位重新编码',
+                            icon: 'edit',
+                            onClick: function () {
+                                _this.updateFolderNo();
+                            }
+                        }, {
+                            type: 'button',
+                            text: 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.BUTTON.UPDATE_ORG',
+                            icon: 'edit',
+                            onClick: function () {
+                                _this.updateOrg();
+                            }
+                        }, {
+                            type: 'dropDownMenu',
+                            text: 'EMC.MODULE.BP.PROJECT.PROJECTS.BUTTON.ORDER_QUICK_INPUT',
+                            items: [{
+                                type: 'button',
+                                text: 'GIKAM.BUTTON.EXPORT',
+                                icon: 'move-up',
+                                onClick: function () {
                                     _this.schemeQuickExport();
                                 }
                             }, {
-                                type : 'button',
-                                text : 'GIKAM.BUTTON.IMPORT',
-                                icon : 'move-down',
-                                onClick : function() {
+                                type: 'button',
+                                text: 'GIKAM.BUTTON.IMPORT',
+                                icon: 'move-down',
+                                onClick: function () {
                                     _this.schemeQuickImport();
                                 }
-                            } ]
+                            }]
                         }, {
-                            type : 'button',
-                            text : 'GIKAM.BUTTON.MOVE_UP',
-                            icon : 'move-up',
-                            onClick : function() {
+                            type: 'button',
+                            text: 'GIKAM.BUTTON.MOVE_UP',
+                            icon: 'move-up',
+                            onClick: function () {
                                 _this.projSchemeMoveUp();
                             }
                         }, {
-                            type : 'button',
-                            text : 'GIKAM.BUTTON.MOVE_DOWN',
-                            icon : 'move-down',
-                            onClick : function() {
+                            type: 'button',
+                            text: 'GIKAM.BUTTON.MOVE_DOWN',
+                            icon: 'move-down',
+                            onClick: function () {
                                 _this.projSchemeMoveDown();
                             }
-                        }, ]
-                    } ]
+                        }, {
+                            type: 'button',
+                            text: '批删因子',
+                            icon: 'remove-row',
+                            onClick: function () {
+                                _this.batchDelProjOrder();
+                            }
+                        },]
+                    }]
                 },
-                center : {
-                    items : [ {
-                        type : 'grid',
-                        id : 'emc-proj-order-edit-list-grid',
-                        url : _this.getOrderUrl(),
-                        columns : emcProject.getOrderEditListColumns(),
-                        service : 'emcProjOrderServiceImpl',
-                        order : {
-                            'sortNum' : 'asc'
+                center: {
+                    items: [{
+                        type: 'grid',
+                        id: 'emc-proj-order-edit-list-grid',
+                        url: _this.getOrderUrl(),
+                        columns: emcProject.getOrderEditListColumns(),
+                        service: 'emcProjOrderServiceImpl',
+                        order: {
+                            'sortNum': 'asc'
                         },
-                        group : {
-                            fields : [ "schemeName"],
-                            formatter : function(row) {
+                        rowStyleFormatter: function (row) {
+                            if (row.abnormal === '1') {
+                                return {
+                                    backgroundColor: '#fb3a3a'
+                                }
+                            }
+                        },
+                        group: {
+                            fields: ["schemeName"],
+                            formatter: function (row) {
                                 return row.schemeName;
                             }
                         },
-                        toolbar : [ {
-                            type : 'button',
-                            text : 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.BUTTON.UPDATE_TEST',
-                            icon : 'edit',
-                            onClick : function() {
+                        toolbar: [{
+                            type: 'button',
+                            text: 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.BUTTON.UPDATE_TEST',
+                            icon: 'edit',
+                            onClick: function () {
                                 _this.updateItemGroup();
                             }
                         }, {
-                            type : 'button',
-                            text : 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.BUTTON.BATCH_UPDATE_NUM',
-                            icon : 'edit',
-                            onClick : function() {
+                            type: 'button',
+                            text: '删除测试',
+                            icon: 'remove-row',
+                            onClick: function () {
+                                Gikam.getComp('emc-proj-order-edit-list-grid').deleteRows(IFM_CONTEXT + '/secure/emc/module/bp/project/proj-schemes/proj-order');
+                            }
+                        }, {
+                            type: 'button',
+                            text: 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.BUTTON.BATCH_UPDATE_NUM',
+                            icon: 'edit',
+                            onClick: function () {
                                 _this.batchUpdateSampleNum();
                             }
                         }, {
-                            type : 'dropDownMenu',
-                            text : 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.BUTTON.SUBCONTRACTOR',
-                            hidden : true,
-                            items : [ {
-                                type : 'button',
-                                text : 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.BUTTON.ADD_SUBCONTRACTOR',
-                                icon : 'add',
-                                onClick : function() {
+                            type: 'dropDownMenu',
+                            text: 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.BUTTON.SUBCONTRACTOR',
+                            hidden: true,
+                            items: [{
+                                type: 'button',
+                                text: 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.BUTTON.ADD_SUBCONTRACTOR',
+                                icon: 'add',
+                                onClick: function () {
                                     _this.addSubcontractor();
                                 }
                             }, {
-                                type : 'button',
-                                text : 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.BUTTON.DEL_SUBCONTRACTOR',
-                                icon : 'remove-row',
-                                onClick : function() {
+                                type: 'button',
+                                text: 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.BUTTON.DEL_SUBCONTRACTOR',
+                                icon: 'remove-row',
+                                onClick: function () {
                                     _this.delSubcontractor();
                                 }
-                            } ]
+                            }]
                         }, {
-                            type : 'dropDownMenu',
-                            text : 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.BUTTON.DATASHARING',
-                            hidden : true,
-                            items : [ {
-                                type : 'button',
-                                text : 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.BUTTON.ADD_DATASHARING',
-                                icon : 'add',
-                                onClick : function() {
+                            type: 'dropDownMenu',
+                            text: 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.BUTTON.DATASHARING',
+                            hidden: true,
+                            items: [{
+                                type: 'button',
+                                text: 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.BUTTON.ADD_DATASHARING',
+                                icon: 'add',
+                                onClick: function () {
                                     _this.addDataSharing();
                                 }
                             }, {
-                                type : 'button',
-                                text : 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.BUTTON.DEL_DATASHARING',
-                                icon : 'remove-row',
-                                onClick : function() {
+                                type: 'button',
+                                text: 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.BUTTON.DEL_DATASHARING',
+                                icon: 'remove-row',
+                                onClick: function () {
                                     _this.delDataSharing();
                                 }
-                            } ]
+                            }]
                         }, {
-                            type : 'dropDownMenu',
-                            text : '分包单',
-                            hidden : true,
-                            items : [ {
-                                type : 'button',
-                                text : '创建分包单',
-                                icon : 'add',
-                                onClick : function() {
+                            type: 'dropDownMenu',
+                            text: '分包单',
+                            hidden: true,
+                            items: [{
+                                type: 'button',
+                                text: '创建分包单',
+                                icon: 'add',
+                                onClick: function () {
                                     _this.createSamplingSubpackage();
                                 }
                             }, {
-                                type : 'button',
-                                text : '添加至分包单',
-                                icon : 'edit',
-                                onClick : function() {
+                                type: 'button',
+                                text: '添加至分包单',
+                                icon: 'edit',
+                                onClick: function () {
                                     _this.addToSamplingSubpackage();
                                 }
-                            } ]
+                            }]
                         }, {
-                            type : 'button',
-                            text : 'GIKAM.BUTTON.MOVE_UP',
-                            icon : 'move-up',
-                            onClick : function() {
+                            type: 'button',
+                            text: 'GIKAM.BUTTON.MOVE_UP',
+                            icon: 'move-up',
+                            onClick: function () {
                                 _this.projOrderMoveUp();
                             }
                         }, {
-                            type : 'button',
-                            text : 'GIKAM.BUTTON.MOVE_DOWN',
-                            icon : 'move-down',
-                            onClick : function() {
+                            type: 'button',
+                            text: 'GIKAM.BUTTON.MOVE_DOWN',
+                            icon: 'move-down',
+                            onClick: function () {
                                 _this.projOrderMoveDown();
                             }
-                        }, ]
-                    } ]
+                        },]
+                    }]
                 }
-            } ]
+            }]
         }
     },
 
-    onSchemeActive : function(row) {
+    onSchemeActive: function (row) {
         var _this = this;
         if (Gikam.isNumber(row.id)) {
-            Gikam.getAsyncComp('emc-proj-order-edit-list-grid').done(function(grid) {
+            Gikam.getAsyncComp('emc-proj-order-edit-list-grid').done(function (grid) {
                 grid.refresh({
-                    url : _this.getOrderUrl(row.id),
-                    order : {
-                        schemeName : 'asc'
+                    url: _this.getOrderUrl(row.id),
+                    order: {
+                        schemeName: 'asc'
                     }
                 });
             });
         }
     },
 
-    getOrderUrl : function(projSchemeId) {
+    getOrderUrl: function (projSchemeId) {
         if (projSchemeId) {
             return Gikam.printf(emcProject.schemeUrl + '/{id}/proj-orders/queries', {
-                id : projSchemeId
+                id: projSchemeId
             })
         }
     },
 
-    updateCycleAndFrequency : function() {
+    updateCycleAndFrequency: function () {
         var gridData = Gikam.getComp('emc-schemeedit-audit-list-grid').getSelections();
         if (gridData.length > 0) {
             Gikam.create('modal', {
-                title : 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.MODAL.UPDATE_CYCLE_FREQUENCY',
-                width : 400,
-                height : 200,
-                url : emcProject.schemeUrl + '/page/update-cycle-and-frequency',
-                onAfterClose : function(data) {
+                title: 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.MODAL.UPDATE_CYCLE_FREQUENCY',
+                width: 400,
+                height: 200,
+                url: emcProject.schemeUrl + '/page/update-cycle-and-frequency',
+                onAfterClose: function (data) {
                     if (!Gikam.isEmpty(data)) {
                         workspace.window.showMask(true);
-                        var selectedIds = gridData.map(function(item) {
+                        var selectedIds = gridData.map(function (item) {
                             return {
-                                id : item.id
+                                id: item.id
                             }
                         });
                         Gikam.put(emcProject.schemeUrl + '/action/update-frequency', Gikam.getJsonWrapper({
-                            cycle : data.cycle,
-                            frequency : data.frequency
-                        }, [ 'emcProjSchemeServiceImpl', gridData ])).done(function() {
+                            cycle: data.cycle,
+                            frequency: data.frequency
+                        }, ['emcProjSchemeServiceImpl', gridData])).done(function () {
                             Gikam.getComp('emc-schemeedit-audit-list-grid').refresh();
-                        }).always(function() {
+                        }).always(function () {
                             workspace.window.closeMask();
                         });
                     }
@@ -2163,24 +2466,24 @@ emcProject.editPage = {
         }
     },
 
-    batchUpdateSampleNum : function() {
+    batchUpdateSampleNum: function () {
         var gridData = Gikam.getComp('emc-proj-order-edit-list-grid').getSelections();
         var activeRow = Gikam.getComp('emc-schemeedit-audit-list-grid').getActivedRow();
         if (gridData.length > 0) {
             Gikam.create('modal', {
-                title : 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.MODAL.UPDATE_SAMPLENUM',
-                width : 400,
-                height : 200,
-                url : emcProject.schemeUrl + '/page/proj-order-batch-update',
-                onAfterClose : function(data) {
+                title: 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.MODAL.UPDATE_SAMPLENUM',
+                width: 400,
+                height: 200,
+                url: emcProject.schemeUrl + '/page/proj-order-batch-update',
+                onAfterClose: function (data) {
                     if (!Gikam.isEmpty(data)) {
                         workspace.window.showMask(true);
-                        gridData.map(function(item) {
+                        gridData.map(function (item) {
                             item.sampleNum = data.sampleNum;
                         });
-                        Gikam.put(emcProject.schemeUrl + '/' + activeRow.id, Gikam.getJsonWrapper({}, [ 'emcProjOrderServiceImpl', gridData ])).done(function() {
+                        Gikam.put(emcProject.schemeUrl + '/' + activeRow.id, Gikam.getJsonWrapper({}, ['emcProjOrderServiceImpl', gridData])).done(function () {
                             Gikam.getComp('emc-proj-order-edit-list-grid').refresh();
-                        }).always(function() {
+                        }).always(function () {
                             workspace.window.closeMask();
                         });
                     }
@@ -2191,52 +2494,52 @@ emcProject.editPage = {
         }
     },
 
-    updateItemGroup : function() {
+    updateItemGroup: function () {
         var gridData = Gikam.getComp('emc-schemeedit-audit-list-grid').getSelections();
         if (gridData.length > 0) {
-        	var array = new Array();
-            for(j = 0,len = gridData.length; j < len; j++) {
-            	var ext1 = gridData[j].ext$;
-            	var monitortmplname = ext1.monitortmplname;
-            	var object1 =new Object();
-            	object1.monitortmplname = monitortmplname;
+            var array = new Array();
+            for (j = 0, len = gridData.length; j < len; j++) {
+                var ext1 = gridData[j].ext$;
+                var monitortmplname = ext1.monitortmplname;
+                var object1 = new Object();
+                object1.monitortmplname = monitortmplname;
                 array.push(object1);
             }
-    		var mnamesame;
-            for(i = 0,len=array.length; i < len; i++){
-            	if(array[0].monitortmplname != array[i].monitortmplname){
-            		mnamesame = false;
-            		break;
-            	}
+            var mnamesame;
+            for (i = 0, len = array.length; i < len; i++) {
+                if (array[0].monitortmplname != array[i].monitortmplname) {
+                    mnamesame = false;
+                    break;
+                }
             }
-            if(mnamesame  == false){
+            if (mnamesame == false) {
                 Gikam.alert('GIKAM.TIP.MISMATCH_MONITOR_TMPLNAME');
-            	return;
+                return;
             }
             Gikam.create('modal', {
-                title : 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.MODAL.UPDATE_TEST',
-                width : 1000,
-                height : 580,
-                url : emcProject.schemeUrl + '/page/proj-order-update-item-group' + Gikam.param({
-                    monitorTmplId : gridData[0].monitorTmplId,
-                    projSchemeId : gridData[0].id,
-                    testmethodflag :'1',
+                title: 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.MODAL.UPDATE_TEST',
+                width: 1000,
+                height: 580,
+                url: emcProject.schemeUrl + '/page/proj-order-update-item-group' + Gikam.param({
+                    monitorTmplId: gridData[0].monitorTmplId,
+                    projSchemeId: gridData[0].id,
+                    testmethodflag: '1',
                 }),
-                onAfterClose : function(data) {
+                onAfterClose: function (data) {
                     if (!Gikam.isEmpty(data)) {
                         workspace.window.showMask(true);
-                        var orderData = data.map(function(item) {
+                        var orderData = data.map(function (item) {
                             return {
-                                testId : item.testId,
-                                methodId : item.methodId,
-                                itemGroupId : item.itemGroupId,
-                                itemGroup : item.itemGroup,
-                                schemeName : item.schemeName,
-                                sortNum : item.sortNum
+                                testId: item.testId,
+                                methodId: item.methodId,
+                                itemGroupId: item.itemGroupId,
+                                itemGroup: item.itemGroup,
+                                schemeName: item.schemeName,
+                                sortNum: item.sortNum
                             }
                         });
                         var url = emcProject.schemeUrl + '/action/proj-orders/update-item-group';
-                        Gikam.post(url, Gikam.getJsonWrapper({}, [ 'emcProjSchemeServiceImpl', gridData ], [ 'emcProjOrderServiceImpl', orderData ])).always(function() {
+                        Gikam.post(url, Gikam.getJsonWrapper({}, ['emcProjSchemeServiceImpl', gridData], ['emcProjOrderServiceImpl', orderData])).always(function () {
                             Gikam.getComp('emc-proj-order-edit-list-grid').refresh();
                             workspace.window.closeMask();
                         });
@@ -2248,23 +2551,23 @@ emcProject.editPage = {
         }
     },
 
-    updateIndex : function() {
+    updateIndex: function () {
         var gridData = Gikam.getComp('emc-schemeedit-audit-list-grid').getSelections();
         if (gridData.length > 0) {
             var ids = "";
-            gridData.map(function(item, i) {
+            gridData.map(function (item, i) {
                 ids += gridData[i].id + ',';
             });
             ids = ids.substring(0, ids.length - 1);
             Gikam.create('modal', {
-                title : 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.MODAL.UPDATE_INDEX',
-                width : '90%',
-                height : '90%',
-                url : emcProject.schemeUrl + '/page/update-index' + Gikam.param({
-                    ids : ids,
-                    monitorTmplGroupId : gridData[0].ext$.monitortmplgroupid
+                title: 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.MODAL.UPDATE_INDEX',
+                width: '90%',
+                height: '90%',
+                url: emcProject.schemeUrl + '/page/update-index' + Gikam.param({
+                    ids: ids,
+                    monitorTmplGroupId: gridData[0].ext$.monitortmplgroupid
                 }),
-                onAfterClose : function() {
+                onAfterClose: function () {
                     Gikam.getComp('emc-proj-order-edit-list-grid').refresh();
                 }
             });
@@ -2273,23 +2576,67 @@ emcProject.editPage = {
         }
     },
 
-    updateOrg : function() {
+    updateFolderNo: function () {
+        var _this = this;
+        var gridData = Gikam.getComp('emc-schemeedit-audit-list-grid').getSelections();
+        if (gridData.length > 0) {
+            if(_this.isAllSame(gridData, 'monitorTmplId')){
+                workspace.window.showMask(true);
+                Gikam.put(emcProject.schemeUrl + '/sort-folderno', Gikam.getJsonWrapper({}, ['emcProjSchemeServiceImpl', gridData])).done(function () {
+                    Gikam.getComp('emc-schemeedit-audit-list-grid').refresh();
+                }).always(function () {
+                    workspace.window.closeMask();
+                });
+            }else {
+                Gikam.alert('请选择同一样品类型的数据');
+            }
+        } else {
+            Gikam.alert('GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM');
+        }
+    },
+
+    updateOrderFolderNo: function () {
+        var _this = this;
+        var gridData = Gikam.getComp('emc-project-edit-list-order-grid').getSelections();
+        if (gridData.length > 0) {
+            if(_this.isAllSame(gridData, 'monitorTmplId')){
+                workspace.window.showMask(true);
+                Gikam.put(IFM_CONTEXT + '/secure/emc/module/bp/bp/folders/sort-folderno', Gikam.getJsonWrapper({}, ['emcOrderServiceImpl', gridData])).done(function () {
+                    Gikam.getComp('emc-project-edit-list-order-grid').refresh();
+                }).always(function () {
+                    workspace.window.closeMask();
+                });
+            }else {
+                Gikam.alert('请选择同一样品类型的数据');
+            }
+        } else {
+            Gikam.alert('GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM');
+        }
+    },
+
+    isAllSame: function (arr, key) {
+        if (arr.length === 0) return true;
+        const firstValue = arr[0][key];
+        return arr.every(item => item[key] === firstValue);
+    },
+
+    updateOrg: function () {
         var gridData = Gikam.getComp('emc-schemeedit-audit-list-grid').getSelections();
         if (gridData.length > 0) {
             Gikam.create('modal', {
-                title : Gikam.choose.getConfig('org-simple').title,
-                width : 480,
-                height : 150,
-                url : '/secure/core/module/mdm/orgs/page/select-list',
-                onAfterClose : function(data) {
+                title: Gikam.choose.getConfig('org-simple').title,
+                width: 480,
+                height: 150,
+                url: '/secure/core/module/mdm/orgs/page/select-list',
+                onAfterClose: function (data) {
                     if (!Gikam.isEmpty(data)) {
                         workspace.window.showMask(true);
-                        gridData.map(function(item) {
+                        gridData.map(function (item) {
                             item.sampleOrgId = data.sampleOrgId;
                         });
-                        Gikam.put(emcProject.schemeUrl + '/' + gridData[0].id, Gikam.getJsonWrapper({}, [ 'emcProjSchemeServiceImpl', gridData ])).done(function() {
+                        Gikam.put(emcProject.schemeUrl + '/' + gridData[0].id, Gikam.getJsonWrapper({}, ['emcProjSchemeServiceImpl', gridData])).done(function () {
                             Gikam.getComp('emc-schemeedit-audit-list-grid').refresh();
-                        }).always(function() {
+                        }).always(function () {
                             workspace.window.closeMask();
                         });
                     }
@@ -2300,21 +2647,21 @@ emcProject.editPage = {
         }
     },
 
-    copyShare : function() {
+    copyShare: function () {
         var gridData = Gikam.getComp('emc-schemeedit-audit-list-grid').getSelections();
         if (gridData.length > 0) {
             Gikam.create('modal', {
-                title : 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.MODAL.COPY_SHARE',
-                width : 300,
-                height : 200,
-                url : emcProject.schemeUrl + '/page/copy-share',
-                onAfterClose : function(data) {
+                title: 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.MODAL.COPY_SHARE',
+                width: 300,
+                height: 200,
+                url: emcProject.schemeUrl + '/page/copy-share',
+                onAfterClose: function (data) {
                     if (!Gikam.isEmpty(data)) {
                         workspace.window.showMask(true);
                         var url = emcProject.schemeUrl + '/action/copy';
                         Gikam.post(url, Gikam.getJsonWrapper({
-                            copies : data.copyShare
-                        }, [ '', gridData ])).always(function() {
+                            copies: data.copyShare
+                        }, ['', gridData])).always(function () {
                             workspace.window.closeMask();
                             Gikam.getComp('emc-schemeedit-audit-list-grid').refresh();
                         });
@@ -2326,7 +2673,7 @@ emcProject.editPage = {
         }
     },
 
-    copyPoint : function(testOrgId) {
+    copyPoint: function (testOrgId) {
         var gridData = Gikam.getComp('emc-schemeedit-audit-list-grid').getSelections();
         if (gridData.length != 1) {
             Gikam.alert('GIKAM.TIP.CHOOSE_ONE_ITEM');
@@ -2334,28 +2681,28 @@ emcProject.editPage = {
         }
 
         Gikam.create('modal', {
-            title : 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.MODAL.COPY_POINT',
-            width : 800,
-            height : 600,
-            url : emcProject.schemeUrl + '/page/select-monitoring-point' + Gikam.param({
-                testOrgId : testOrgId,
-                monitorPointCategoryId : gridData[0].monitorPointCategoryId
+            title: 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.MODAL.COPY_POINT',
+            width: 800,
+            height: 600,
+            url: emcProject.schemeUrl + '/page/select-monitoring-point' + Gikam.param({
+                testOrgId: testOrgId,
+                monitorPointCategoryId: gridData[0].monitorPointCategoryId
             }),
-            onAfterClose : function(pointData) {
+            onAfterClose: function (pointData) {
                 if (!Gikam.isEmpty(pointData)) {
                     workspace.window.showMask(true);
-                    var chooseSchemeData = pointData.map(function(item) {
+                    var chooseSchemeData = pointData.map(function (item) {
                         return {
-                            monitorPointCategoryId : item.monitorPointCategoryId,
-                            monitorPointCategoryName : item.ext$.templatename,
-                            monitorPointId : item.id,
-                            monitorPointNo : item.monitorPointNo,
-                            monitorPointName : item.monitorPointName
+                            monitorPointCategoryId: item.monitorPointCategoryId,
+                            monitorPointCategoryName: item.ext$.templatename,
+                            monitorPointId: item.id,
+                            monitorPointNo: item.monitorPointNo,
+                            monitorPointName: item.monitorPointName
                         }
                     });
 
                     var url = emcProject.schemeUrl + '/action/copy-point'
-                    Gikam.post(url, Gikam.getJsonWrapper({}, [ '', gridData ], [ '', chooseSchemeData ])).always(function() {
+                    Gikam.post(url, Gikam.getJsonWrapper({}, ['', gridData], ['', chooseSchemeData])).always(function () {
                         Gikam.getComp('emc-schemeedit-audit-list-grid').refresh();
                         workspace.window.closeMask();
                     });
@@ -2365,33 +2712,33 @@ emcProject.editPage = {
     },
 
 
-    _monitorPointType : '',
-    _sampleOrgId : '',
-    _sampleOrgName : '',
-    _selectId : [],
-    addProj : function(projId, editMonitorInfo, testOrgId, sampleOrgId) {
+    _monitorPointType: '',
+    _sampleOrgId: '',
+    _sampleOrgName: '',
+    _selectId: [],
+    addProj: function (projId, editMonitorInfo, testOrgId, sampleOrgId) {
         var _this = this;
         var url = emcProject.schemeUrl;
         if (editMonitorInfo === '1') {// 不选择监测点
             Gikam.create('modal', {
-                title : 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.MODAL.SELECT_MONITOR_TMPL',
-                width : '80%',
-                height : '80%',
-                url : emcProject.schemeUrl + '/page/select-monitor-tmpl' + Gikam.param({
-                    editMonitorInfo : editMonitorInfo
+                title: 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.MODAL.SELECT_MONITOR_TMPL',
+                width: '80%',
+                height: '80%',
+                url: emcProject.schemeUrl + '/page/select-monitor-tmpl' + Gikam.param({
+                    editMonitorInfo: editMonitorInfo
                 }),
-                onAfterClose : function(tmlData) {
+                onAfterClose: function (tmlData) {
                     if (!Gikam.isEmpty(tmlData)) {
                         var chooseSchemeData = {
-                            projId : projId,
-                            monitorTmplId : tmlData[0].monitorTmplId,
-                            sampleOrgId : sampleOrgId
+                            projId: projId,
+                            monitorTmplId: tmlData[0].monitorTmplId,
+                            sampleOrgId: sampleOrgId
                         }
 
                         workspace.window.showMask(true);
-                        Gikam.post(url, Gikam.getJsonWrapper({}, [ 'emcProjSchemeServiceImpl', [ chooseSchemeData ] ], [ 'emcProjOrderServiceImpl', tmlData ])).done(function() {
+                        Gikam.post(url, Gikam.getJsonWrapper({}, ['emcProjSchemeServiceImpl', [chooseSchemeData]], ['emcProjOrderServiceImpl', tmlData])).done(function () {
                             Gikam.getComp('emc-schemeedit-audit-list-grid').refresh();
-                        }).always(function() {
+                        }).always(function () {
                             workspace.window.closeMask();
                         });
                     }
@@ -2399,69 +2746,69 @@ emcProject.editPage = {
             });
         } else {
             Gikam.create('modal', {
-                title : 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.MODAL.SELECT_MONITORING_POINT',
-                width : '60%',
-                height : '70%',
-                url : emcProject.schemeUrl + '/page/select-monitoring-point' + Gikam.param({
-                    testOrgId : testOrgId,
-                    monitorPointType : _this._monitorPointType,
-                    sampleOrgId : _this._sampleOrgId,
-                    sampleOrgName : _this._sampleOrgName,
-                    selectIds : _this._selectId,
-                    defaultOrgId : sampleOrgId
+                title: 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.MODAL.SELECT_MONITORING_POINT',
+                width: '60%',
+                height: '70%',
+                url: emcProject.schemeUrl + '/page/select-monitoring-point' + Gikam.param({
+                    testOrgId: testOrgId,
+                    monitorPointType: _this._monitorPointType,
+                    sampleOrgId: _this._sampleOrgId,
+                    sampleOrgName: _this._sampleOrgName,
+                    selectIds: _this._selectId,
+                    defaultOrgId: sampleOrgId
                 }),
-                onAfterClose : function(pointData) {
+                onAfterClose: function (pointData) {
                     if (!Gikam.isEmpty(pointData)) {
                         _this._selectId.splice(0, _this._selectId.length);
-                        pointData.map(function(item) {
+                        pointData.map(function (item) {
                             _this._selectId.push(item.id);
                         });
                         _this._monitorPointType = pointData[0].monitorPointType;
                         _this._sampleOrgId = pointData[0].sampleDepartmentId;
                         _this._sampleOrgName = pointData[0].sampleDepartment;
                         Gikam.create('modal', {
-                            title : 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.MODAL.SELECT_MONITOR_TMPL',
-                            width : '80%',
-                            height : '80%',
-                            url : emcProject.schemeUrl + '/page/select-monitor-tmpl' + Gikam.param({
-                                editMonitorInfo : editMonitorInfo,
-                                monitorPointCategoryId : pointData[0].monitorPointCategoryId
+                            title: 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.MODAL.SELECT_MONITOR_TMPL',
+                            width: '80%',
+                            height: '80%',
+                            url: emcProject.schemeUrl + '/page/select-monitor-tmpl' + Gikam.param({
+                                editMonitorInfo: editMonitorInfo,
+                                monitorPointCategoryId: pointData[0].monitorPointCategoryId
                             }),
-                            onAfterClose : function(tmlData) {
+                            onAfterClose: function (tmlData) {
                                 if (!Gikam.isEmpty(tmlData)) {
                                     if (tmlData == 'PREVIOUS') {
                                         emcProject.editPage.addProj(projId, editMonitorInfo, testOrgId);
                                     } else {
-                                        var chooseSchemeData = pointData.map(function(item) {
+                                        var chooseSchemeData = pointData.map(function (item) {
                                             return {
-                                                projId : projId,
-                                                monitorPointCategoryId : item.monitorPointCategoryId,
-                                                monitorPointCategoryName : item.ext$.templatename,
-                                                monitorPointId : item.id,
-                                                monitorPointNo : item.monitorPointNo,
-                                                monitorPointName : item.monitorPointName,
-                                                monitorTmplId : tmlData[0].monitorTmplId,
-                                                sampleOrgId : item.sampleDepartmentId
+                                                projId: projId,
+                                                monitorPointCategoryId: item.monitorPointCategoryId,
+                                                monitorPointCategoryName: item.ext$.templatename,
+                                                monitorPointId: item.id,
+                                                monitorPointNo: item.monitorPointNo,
+                                                monitorPointName: item.monitorPointName,
+                                                monitorTmplId: tmlData[0].monitorTmplId,
+                                                sampleOrgId: item.sampleDepartmentId
                                             }
                                         });
 
-                                        var chooseOrderData = tmlData.map(function(item) {
+                                        var chooseOrderData = tmlData.map(function (item) {
                                             return {
-                                                testId : item.testId,
-                                                methodId : item.methodId,
-                                                itemGroupId : item.itemGroupId,
-                                                itemGroup : item.itemGroup,
-                                                schemeName : item.schemeName
+                                                testId: item.testId,
+                                                methodId: item.methodId,
+                                                itemGroupId: item.itemGroupId,
+                                                itemGroup: item.itemGroup,
+                                                schemeName: item.schemeName
                                             }
                                         });
                                         workspace.window.showMask(true);
-                                        Gikam.post(url, Gikam.getJsonWrapper({}, [ 'emcProjSchemeServiceImpl', chooseSchemeData ], [ 'emcProjOrderServiceImpl', chooseOrderData ])).done(function() {
+                                        Gikam.post(url, Gikam.getJsonWrapper({}, ['emcProjSchemeServiceImpl', chooseSchemeData], ['emcProjOrderServiceImpl', chooseOrderData])).done(function () {
                                             Gikam.getComp('emc-schemeedit-audit-list-grid').refresh();
                                             _this._monitorPointType = '';
                                             _this._sampleOrgId = '';
                                             _this._sampleOrgName = '';
                                             _this._selectId.splice(0, _this._selectId.length);
-                                        }).always(function() {
+                                        }).always(function () {
                                             workspace.window.closeMask();
                                         });
                                     }
@@ -2479,27 +2826,27 @@ emcProject.editPage = {
         }
     },
 
-    initAddProj : function(projId, testOrgId) {
+    initAddProj: function (projId, testOrgId) {
         if (Gikam.isEmpty(testOrgId)) {
             Gikam.alert("EMC.MODULE.BP.PROJECT.PROJSCHEMES.TIP.PROJECT_TESTORGID");
             return;
         }
 
         Gikam.create('modal', {
-            title : 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.MODAL.INITIALIZ_SCHEME',
-            width : 1500,
-            height : 600,
-            url : emcProject.schemeUrl + '/page/init-scheme' + Gikam.param({
-                projId : projId,
-                testOrgId : testOrgId
+            title: 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.MODAL.INITIALIZ_SCHEME',
+            width: 1500,
+            height: 600,
+            url: emcProject.schemeUrl + '/page/init-scheme' + Gikam.param({
+                projId: projId,
+                testOrgId: testOrgId
             }),
-            onAfterClose : function(data) {
+            onAfterClose: function (data) {
                 Gikam.getComp('emc-schemeedit-audit-list-grid').refresh();
             }
         });
     },
 
-    orderQuickExport : function() {
+    orderQuickExport: function () {
         var orderData = Gikam.getComp('emc-project-edit-list-order-grid').getData();
         if (Gikam.isEmpty(orderData)) {
             Gikam.alert('EMC.MODULE.BP.PROJECT.PROJECTS.ORDER_CAN_NOT_EXPORT');
@@ -2507,17 +2854,17 @@ emcProject.editPage = {
         }
         var projectId = orderData[0].projId;
         Gikam.getText(Gikam.printf('/core/module/item/files/{templateCode}/action/download-template/{service}/{id}', {
-            templateCode : 'pfOrderExportTemplate',
-            service : 'pfOrderExportTemplate',
-            id : projectId
-        })).done(function(fileUri) {
+            templateCode: 'pfOrderExportTemplate',
+            service: 'pfOrderExportTemplate',
+            id: projectId
+        })).done(function (fileUri) {
             var fileUrl = IFM_CONTEXT + fileUri;
-            Gikam.download(fileUrl);
+            Gikam.emcDownloadFile(fileUrl);
         });
 
     },
 
-    orderQuickImport : function() {
+    orderQuickImport: function () {
         var orderData = Gikam.getComp('emc-project-edit-list-order-grid').getData();
         if (Gikam.isEmpty(orderData)) {
             Gikam.alert('EMC.MODULE.BP.PROJECT.PROJECTS.TIP.ORDER_CAN_NOT_IMPORT');
@@ -2526,10 +2873,10 @@ emcProject.editPage = {
         var id = orderData[0].projId;
 
         Gikam.create('simpleUploader', {
-            dbTable : 'T_EMC_ORDER',
-            bizId : id,
-            multiple : false,
-            onAfterClose : function(files) {
+            dbTable: 'T_EMC_ORDER',
+            bizId: id,
+            multiple: false,
+            onAfterClose: function (files) {
                 if (Gikam.isEmpty(files)) {
                     return;
                 }
@@ -2539,21 +2886,21 @@ emcProject.editPage = {
                     Gikam.printf(IFM_CONTEXT + '/core/module/item/files/{id}/action/import/' + 'pfOrderImportFileFunction', {
                         id: files[0].id
                     })
-                ).done(function(result) {
-                        if (result.url) {
-                            Gikam.download(result.url);
-                        } else if (result.message) {
-                            Gikam.alert(result.message);
-                        }
-                        Gikam.getComp('emc-project-edit-list-order-grid').refresh();
-                    }).always(function() {
-                        Gikam.window.closeMask();
-                    });
+                ).done(function (result) {
+                    if (result.url) {
+                        Gikam.emcDownloadFile(result.url);
+                    } else if (result.message) {
+                        Gikam.alert(result.message);
+                    }
+                    Gikam.getComp('emc-project-edit-list-order-grid').refresh();
+                }).always(function () {
+                    Gikam.window.closeMask();
+                });
             }
         });
     },
 
-    schemeQuickExport : function() {
+    schemeQuickExport: function () {
         var orderData = Gikam.getComp('emc-schemeedit-audit-list-grid').getData();
         if (Gikam.isEmpty(orderData)) {
             Gikam.alert('监测方案无数据，无法导出');
@@ -2561,17 +2908,17 @@ emcProject.editPage = {
         }
         var projectId = orderData[0].projId;
         Gikam.getText(Gikam.printf('/core/module/item/files/{templateCode}/action/download-template/{service}/{id}', {
-            templateCode : 'pfProjSchemeExportTemplate',
-            service : 'pfProjSchemeExportTemplate',
-            id : projectId
-        })).done(function(fileUri) {
+            templateCode: 'pfProjSchemeExportTemplate',
+            service: 'pfProjSchemeExportTemplate',
+            id: projectId
+        })).done(function (fileUri) {
             var fileUrl = IFM_CONTEXT + fileUri;
-            Gikam.download(fileUrl);
+            Gikam.emcDownloadFile(fileUrl);
         });
 
     },
 
-    schemeQuickImport : function() {
+    schemeQuickImport: function () {
         var orderData = Gikam.getComp('emc-schemeedit-audit-list-grid').getData();
         if (Gikam.isEmpty(orderData)) {
             Gikam.alert('EMC.MODULE.BP.PROJECT.PROJECTS.TIP.ORDER_CAN_NOT_IMPORT');
@@ -2580,10 +2927,10 @@ emcProject.editPage = {
         var id = orderData[0].projId;
 
         Gikam.create('simpleUploader', {
-            dbTable : 'T_EMC_PROJ_SCHEME',
-            bizId : id,
-            multiple : false,
-            onAfterClose : function(files) {
+            dbTable: 'T_EMC_PROJ_SCHEME',
+            bizId: id,
+            multiple: false,
+            onAfterClose: function (files) {
                 if (Gikam.isEmpty(files)) {
                     return;
                 }
@@ -2593,9 +2940,9 @@ emcProject.editPage = {
                     Gikam.printf(IFM_CONTEXT + '/core/module/item/files/{id}/action/import/' + 'pfProjSchemeImportFileFunction', {
                         id: files[0].id
                     })
-                ).done(function() {
+                ).done(function () {
                     Gikam.getComp('emc-schemeedit-audit-list-grid').refresh();
-                }).always(function() {
+                }).always(function () {
                     Gikam.window.closeMask();
                 });
             }
@@ -2603,7 +2950,7 @@ emcProject.editPage = {
     },
 
     /** 监测方案设置分包商 */
-    addSubcontractor : function() {
+    addSubcontractor: function () {
         var schemeSelections = Gikam.getComp('emc-schemeedit-audit-list-grid').getSelections();
         var orderSelections = Gikam.getComp('emc-proj-order-edit-list-grid').getSelections();
         if (schemeSelections.length <= 0) {
@@ -2615,20 +2962,20 @@ emcProject.editPage = {
             return;
         }
         Gikam.create('modal', {
-            width : 300,
-            height : 300,
-            title : Gikam.choose.getConfig('subcontractor').title,
-            url : Gikam.choose.getConfig('subcontractor').url + Gikam.param({
-                single : true,
+            width: 300,
+            height: 300,
+            title: Gikam.choose.getConfig('subcontractor').title,
+            url: Gikam.choose.getConfig('subcontractor').url + Gikam.param({
+                single: true,
             }),
-            onAfterClose : function(data) {
+            onAfterClose: function (data) {
                 if (!Gikam.isEmpty(data)) {
                     workspace.window.showMask(true);
-                    orderSelections.map(function(item) {
+                    orderSelections.map(function (item) {
                         item.subcontractorId = data[0].id;
                     });
-                    Gikam.post('/secure/emc/module/bp/project/proj-schemes/proj-orders/action/relevance-subcontractor-update', Gikam.getJsonWrapper({},[ 'emcProjSchemeServiceImpl', schemeSelections ], [ 'emcProjOrderServiceImpl', orderSelections ])).done(function() {
-                    }).always(function() {
+                    Gikam.post('/secure/emc/module/bp/project/proj-schemes/proj-orders/action/relevance-subcontractor-update', Gikam.getJsonWrapper({}, ['emcProjSchemeServiceImpl', schemeSelections], ['emcProjOrderServiceImpl', orderSelections])).done(function () {
+                    }).always(function () {
                         Gikam.getComp('emc-proj-order-edit-list-grid').refresh();
                         workspace.window.closeMask();
                     });
@@ -2638,7 +2985,7 @@ emcProject.editPage = {
     },
 
     /** 监测方案删除分包商 */
-    delSubcontractor : function() {
+    delSubcontractor: function () {
         var _this = this;
         var schemeSelections = Gikam.getComp('emc-schemeedit-audit-list-grid').getSelections();
         var orderSelections = Gikam.getComp('emc-proj-order-edit-list-grid').getSelections();
@@ -2651,24 +2998,24 @@ emcProject.editPage = {
             return;
         }
         workspace.window.showMask(true);
-        Gikam.post('/secure/emc/module/bp/project/proj-schemes/proj-orders/action/relevance-subcontractor-delete', Gikam.getJsonWrapper({},[ 'emcProjSchemeServiceImpl', schemeSelections ], [ 'emcProjOrderServiceImpl', orderSelections ])).done(function() {
-        }).always(function() {
+        Gikam.post('/secure/emc/module/bp/project/proj-schemes/proj-orders/action/relevance-subcontractor-delete', Gikam.getJsonWrapper({}, ['emcProjSchemeServiceImpl', schemeSelections], ['emcProjOrderServiceImpl', orderSelections])).done(function () {
+        }).always(function () {
             Gikam.getComp('emc-proj-order-edit-list-grid').refresh();
             workspace.window.closeMask();
         });
     },
 
-    addDataSharing : function() {
+    addDataSharing: function () {
         var selections = Gikam.getComp('emc-project-edit-list-order-item-group-grid').getSelections();
         if (selections.length > 0) {
             var activedRow = Gikam.getComp('emc-project-edit-list-grid').getActivedRow();
-            selections.map(function(item) {
+            selections.map(function (item) {
                 item.dataSharing = 1;
             });
             workspace.window.showMask(true);
-            Gikam.put(emcProject.baseUrl + '/' + activedRow.id, Gikam.getJsonWrapper({}, [ 'emcOrderItemGroupServiceImpl', selections ])).done(function() {
+            Gikam.put(emcProject.baseUrl + '/' + activedRow.id, Gikam.getJsonWrapper({}, ['emcOrderItemGroupServiceImpl', selections])).done(function () {
                 Gikam.getComp('emc-project-edit-list-order-item-group-grid').refresh();
-            }).always(function() {
+            }).always(function () {
                 workspace.window.closeMask();
             });
         } else {
@@ -2676,17 +3023,17 @@ emcProject.editPage = {
         }
     },
 
-    delDataSharing : function() {
+    delDataSharing: function () {
         var selections = Gikam.getComp('emc-project-edit-list-order-item-group-grid').getSelections();
         if (selections.length > 0) {
             var activedRow = Gikam.getComp('emc-project-edit-list-grid').getActivedRow();
-            selections.map(function(item) {
+            selections.map(function (item) {
                 item.dataSharing = 0;
             });
             workspace.window.showMask(true);
-            Gikam.put(emcProject.baseUrl + '/' + activedRow.id, Gikam.getJsonWrapper({}, [ 'emcOrderItemGroupServiceImpl', selections ])).done(function() {
+            Gikam.put(emcProject.baseUrl + '/' + activedRow.id, Gikam.getJsonWrapper({}, ['emcOrderItemGroupServiceImpl', selections])).done(function () {
                 Gikam.getComp('emc-project-edit-list-order-item-group-grid').refresh();
-            }).always(function() {
+            }).always(function () {
                 workspace.window.closeMask();
             });
         } else {
@@ -2694,24 +3041,24 @@ emcProject.editPage = {
         }
     },
 
-    insertDirectorRow : function() {
+    insertDirectorRow: function () {
         var formData = Gikam.getComp('emc-project-edit-list-base-info-form').getData();
         Gikam.create('modal', {
-            title : Gikam.choose.getConfig('emp').title,
-            url : Gikam.choose.getConfig('emp').url + Gikam.param({
-                targetType : 'insertDirector',
-                projectId : formData.id,
-                orgId_SB: workspace.user.ext$.parentorgid
+            title: Gikam.choose.getConfig('emp').title,
+            url: Gikam.choose.getConfig('emp').url + Gikam.param({
+                targetType: 'insertDirector',
+                projectId: formData.id,
+                org_filter: '1',
             }),
-            width : 310,
-            onAfterClose : function(rows) {
+            width: 310,
+            onAfterClose: function (rows) {
                 if (Gikam.isEmpty(rows)) {
                     return;
                 }
-                var chooseData = rows.map(function(item) {
+                var chooseData = rows.map(function (item) {
                     return {
-                        empId : item.id,
-                        projectId : formData.id
+                        empId: item.id,
+                        projectId: formData.id
                     }
                 });
                 Gikam.getComp('emc-project-edit-list-director-grid').insert(emcProject.baseUrl + '/directors', chooseData);
@@ -2719,26 +3066,26 @@ emcProject.editPage = {
         });
     },
 
-    deleteDirectorRow : function() {
+    deleteDirectorRow: function () {
         var url = emcProject.baseUrl + '/directors';
-        Gikam.getComp('emc-project-edit-list-director-grid').deleteRows(url).done(function() {
+        Gikam.getComp('emc-project-edit-list-director-grid').deleteRows(url).done(function () {
         });
     },
 
-    onSubpackageActive : function(row) {
+    onSubpackageActive: function (row) {
         //展示分包单下面的样品信息
         var _this = this;
         if (row) {
             Gikam.getAsyncComp('emc-subpackage-edit-list-base-info-form').done(function (form) {
                 form.refresh({
-                    url : Gikam.printf(IFM_CONTEXT + '/secure/emc/module/bp/subpackages/{id}', {
-                        id : row.id
+                    url: Gikam.printf(IFM_CONTEXT + '/secure/emc/module/bp/subpackages/{id}', {
+                        id: row.id
                     }),
                 });
             });
             Gikam.getComp('emc-project-edit-list-subpackage-order-grid').refresh({
-                url : Gikam.printf(emcProject.baseUrl + '/{id}/orders/queries', {
-                    id : row.projId
+                url: Gikam.printf(emcProject.baseUrl + '/{id}/orders/queries', {
+                    id: row.projId
                 })
             });
 
@@ -2746,21 +3093,21 @@ emcProject.editPage = {
 
     },
 
-    onSampleSubpackageActive : function(row) {
+    onSampleSubpackageActive: function (row) {
         var _this = this;
         if (row) {
             Gikam.getAsyncComp('emc-subpackage-sample-edit-list-base-info-form').done(function (form) {
                 form.refresh({
-                    url : Gikam.printf(IFM_CONTEXT + '/secure/emc/module/bp/subpackages/{id}', {
-                        id : row.id
+                    url: Gikam.printf(IFM_CONTEXT + '/secure/emc/module/bp/subpackages/{id}', {
+                        id: row.id
                     }),
                 });
             });
             Gikam.getComp('emc-project-edit-list-subpackage-folder-grid').refresh({
-                url : emcProject.schemeUrl + '/queries/raw',
+                url: emcProject.schemeUrl + '/queries/raw',
                 requestData: {
-                    projId_SEQ : row.projId,
-                    subpackageflag_SEQ : '1'
+                    projId_SEQ: row.projId,
+                    subpackageflag_SEQ: '1'
                 }
             });
         }
@@ -2768,33 +3115,33 @@ emcProject.editPage = {
     },
 
 
-    onSubpackageOrderInfoActive : function(row) {
+    onSubpackageOrderInfoActive: function (row) {
         //展示分包单样品下的测试信息
         var _this = this;
         var selections = Gikam.getComp('emc-project-edit-list-subpackage-info-grid').getSelections();
         console.log(selections);
         if (row) {
             Gikam.getComp('emc-project-edit-list-subpackage-order-task-grid').refresh({
-                url : IFM_CONTEXT + "/secure/emc/module/bp/subpackages/tasks/queries",
+                url: IFM_CONTEXT + "/secure/emc/module/bp/subpackages/tasks/queries",
                 requestData: {
-                    orderId_SEQ : row.id,
-                    subpackageId_SEQ : selections[0].id,
+                    orderId_SEQ: row.id,
+                    subpackageId_SEQ: selections[0].id,
                 }
             });
         }
 
     },
 
-    onSampleSubpackageInfoActive : function(row) {
+    onSampleSubpackageInfoActive: function (row) {
         //展示分包单下面的点位信息
         var _this = this;
         console.log(row);
         if (row) {
             Gikam.getComp('emc-project-edit-list-subpackage-folder-grid').refresh({
-                url : emcProject.schemeUrl + '/queries/raw',
+                url: emcProject.schemeUrl + '/queries/raw',
                 requestData: {
-                    projId_SEQ : row.projId,
-                    subpackageflag_SEQ : '1'
+                    projId_SEQ: row.projId,
+                    subpackageflag_SEQ: '1'
                 }
             });
         }
@@ -2802,225 +3149,223 @@ emcProject.editPage = {
     },
 
 
-    onSubpackageFolderInfoActive : function(row) {
+    onSubpackageFolderInfoActive: function (row) {
         //展示分包单样品下的测试信息
         var _this = this;
         var selections = Gikam.getComp('emc-project-edit-list-subpackage-info-grid').getSelections();
         console.log(selections);
         if (row) {
             Gikam.getComp('emc-project-edit-list-subpackage-sample-order-task-grid').refresh({
-                url : IFM_CONTEXT + "/secure/emc/module/bp/subpackages/tasks/queries",
+                url: IFM_CONTEXT + "/secure/emc/module/bp/subpackages/tasks/queries",
                 requestData: {
-                    projSchemeId_SEQ : row.id,
-                    subpackageId_SEQ : selections[0].id,
+                    projSchemeId_SEQ: row.id,
+                    subpackageId_SEQ: selections[0].id,
                 }
             });
         }
 
     },
 
-    onSampleSubpackageFolderInfoActive : function(row) {
+    onSampleSubpackageFolderInfoActive: function (row) {
         //展示分包单样品下的测试信息
         var _this = this;
         var selections = Gikam.getComp('emc-project-edit-list-sample-subpackage-info-grid').getSelections();
         console.log(selections);
         if (row) {
             Gikam.getComp('emc-project-edit-list-subpackage-sample-order-task-grid').refresh({
-                url : IFM_CONTEXT + "/secure/emc/module/bp/subpackages/tasks/queries",
+                url: IFM_CONTEXT + "/secure/emc/module/bp/subpackages/tasks/queries",
                 requestData: {
-                    projSchemeId_SEQ : row.id,
-                    subpackageId_SEQ : selections[0].id,
+                    projSchemeId_SEQ: row.id,
+                    subpackageId_SEQ: selections[0].id,
                 }
             });
         }
 
     },
 
-    getSubpackageButton : function() {
+    getSubpackageButton: function () {
         var _this = this;
-            return  [ {
-                type : 'button',
-                text : '添加',
-                icon : 'add',
-                onClick : function() {
-                    //区分采样和送样的
-                    var proj = Gikam.getComp('emc-project-edit-list-grid').getActivedRow();
-                    if(proj.sample == 1){
-                        //采样进入点位测试选择页面
-                        Gikam.create('modal', {
-                            title : '选择分包测试',
-                            url : emcProject.baseUrl + '/page/proj-order-choose-list' + Gikam.param({
-                                    projId : proj.id,
-                                    subcontractorid_IN: ',',
-                            }),
-                            onAfterClose : function(projOrder) {
-                                console.log(projOrder);
-                                let projOrders = Object.values(projOrder);
-                                let projOrderArr = Object.values(projOrders[0]);
-                                console.log(projOrderArr);
-                                Gikam.confirm('操作提示', '是否确定创建分包单？', function() {
-                                    workspace.window.showMask(true);
-                                    if (Gikam.isEmpty(proj) || Gikam.isEmpty(projOrder)) {
-                                        Gikam.alert('GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM');
-                                        return;
-                                    }
-                                    Gikam.postText(IFM_CONTEXT + '/secure/emc/module/bp/subpackages/action/create-proj-package',
-                                        Gikam.getJsonWrapper({}, [ 'emcProjectServiceImpl', [ proj ] ], [ 'emcProjOrderServiceImpl', projOrderArr ])).done(function() {
-                                        Gikam.getComp('emc-project-edit-list-subpackage-info-grid').refresh();
-                                    }).always(function() {
-                                        workspace.window.closeMask();
-                                        Gikam.getComp('emc-project-edit-list-subpackage-info-grid').refresh();
-                                    });
-                                });
-
-                            }
-                        });
-                    }else {
-                        //送样进入样品分析项组选择页面
-                        Gikam.create('modal', {
-                            title : '选择分包测试',
-                            url : emcProject.baseUrl + '/page/order-itemgroup-choose-list'+ Gikam.param({
-                                projId : proj.id,
-                                subcontractorid_IN: ',',
-                            }),
-                            onAfterClose : function(orderItemGroup) {
-                                console.log(orderItemGroup);
-                                let orderItemGroups = Object.values(orderItemGroup);
-                                let orderItemGroupArr = Object.values(orderItemGroups[0]);
-                                console.log(orderItemGroupArr);
-                                Gikam.confirm('操作提示', '是否确定创建分包单？', function() {
-                                    workspace.window.showMask(true);
-                                    if (Gikam.isEmpty(proj) || Gikam.isEmpty(orderItemGroup)) {
-                                        Gikam.alert('GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM');
-                                        return;
-                                    }
-                                    Gikam.postText(IFM_CONTEXT + '/secure/emc/module/bp/subpackages/action/create-proj-package', Gikam.getJsonWrapper({}, [ 'emcProjectServiceImpl', [ proj ] ], [ 'emcOrderItemGroupServiceImpl', orderItemGroupArr ])).done(function() {
-                                        Gikam.getComp('emc-project-edit-list-sample-subpackage-info-grid').refresh();
-                                    }).always(function() {
-                                        workspace.window.closeMask();
-                                        Gikam.getComp('emc-project-edit-list-subpackage-info-grid').refresh();
-                                    });
-                                });
-
-                            }
-                        });
-                    }
-
-
-                }
-            },{
-                type : 'button',
-                text : '提交',
-                icon : 'submit',
-                onClick : function() {
-                    var selections = Gikam.getComp('emc-project-edit-list-subpackage-info-grid').getSelections();
-                    console.log(selections);
-                    if (Gikam.isEmpty(selections)) {
-                        Gikam.alert('GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM');
-                        return;
-                    }
-                    Gikam.postText(IFM_CONTEXT + '/secure/emc/module/bp/subpackages/action/submit-to-subpackage', Gikam.getJsonWrapper({
-                    }, [ 'emcSubpackageServiceImpl', selections ])).done(function() {
-                        Gikam.getComp('emc-project-edit-list-subpackage-info-grid').refresh();
-                    });
-
-                }
-            },{
-                type : 'button',
-                text : '完成',
-                icon : 'edit',
-                onClick : function() {
-                    var selections = Gikam.getComp('emc-project-edit-list-subpackage-info-grid').getSelections();
-                    let hasNoAssigned = selections.some(item => item.status !='1');
-                    console.log(hasNoAssigned);
-                    if (hasNoAssigned) {
-                        Gikam.alert('所选分包单不是委托状态，不能完成！');
-                        return;
-                    }else{
-                        Gikam.postText(IFM_CONTEXT + '/secure/emc/module/bp/subpackages/action/complete-package',
-                            Gikam.getJsonWrapper({}, [ 'emcSubpackageServiceImpl', selections ],)).done(function() {
-                            Gikam.getComp('emc-project-edit-list-subpackage-info-grid').refresh();
-                        })
-                    }
-
-                }
-            },{
-                type : 'button',
-                text : '删除',
-                icon : 'remove',
-                onClick : function() {
-                    //删除未委托的分包单
-                    var selections = Gikam.getComp('emc-project-edit-list-subpackage-info-grid').getSelections();
-                    if (Gikam.isEmpty(selections)) {
-                        Gikam.alert('GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM');
-                        return;
-                    }
-                    let hasAssigned = selections.some(item => item.status === '1');
-                    if (hasAssigned) {
-                        Gikam.alert('所选分包单已经被委托，请先撤销再删除!');
-                        return;
-                    }
-                    console.log(selections);
-                    Gikam.getComp('emc-project-edit-list-subpackage-info-grid').deleteRows(IFM_CONTEXT + '/secure/emc/module/bp/subpackages');
-                }
-            },{
-                type : 'button',
-                text : '撤回',
-                icon : 'cancel',
-                onClick : function() {
-                    var selections = Gikam.getComp('emc-project-edit-list-subpackage-info-grid').getSelections();
-                    if (Gikam.isEmpty(selections)) {
-                        Gikam.alert('GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM');
-                        return;
-                    }
-                    Gikam.postText(IFM_CONTEXT + '/secure/emc/module/bp/subpackages/action/undo-subpackage', Gikam.getJsonWrapper({
-                    }, [ 'emcSubpackageServiceImpl', selections ])).done(function() {
-                        Gikam.getComp('emc-project-edit-list-subpackage-info-grid').refresh();
-                    });
-
-                }
-            },{
-                type : 'button',
-                text : '查看分包单',
-                icon : 'select',
-                onClick : function() {
-                    Gikam.viewReport('subpackageProject', Gikam.getComp('emc-project-edit-list-subpackage-info-grid').getSelections());
-                }
-            } ]
-    },
-
-    getSampleSubpackageButton : function() {
-        var _this = this;
-        return  [ {
-            type : 'button',
-            text : '添加',
-            icon : 'add',
-            onClick : function() {
+        return [{
+            type: 'button',
+            text: '添加',
+            icon: 'add',
+            onClick: function () {
                 //区分采样和送样的
                 var proj = Gikam.getComp('emc-project-edit-list-grid').getActivedRow();
-                if(proj.sample == 1){
+                if (proj.sample == 1) {
                     //采样进入点位测试选择页面
                     Gikam.create('modal', {
-                        title : '选择分包测试',
-                        url : emcProject.baseUrl + '/page/proj-order-choose-list' + Gikam.param({
-                            projId : proj.id,
+                        title: '选择分包测试',
+                        url: emcProject.baseUrl + '/page/proj-order-choose-list' + Gikam.param({
+                            projId: proj.id,
                             subcontractorid_IN: ',',
                         }),
-                        onAfterClose : function(projOrder) {
+                        onAfterClose: function (projOrder) {
                             console.log(projOrder);
                             let projOrders = Object.values(projOrder);
                             let projOrderArr = Object.values(projOrders[0]);
                             console.log(projOrderArr);
-                            Gikam.confirm('操作提示', '是否确定创建分包单？', function() {
+                            Gikam.confirm('操作提示', '是否确定创建分包单？', function () {
                                 workspace.window.showMask(true);
                                 if (Gikam.isEmpty(proj) || Gikam.isEmpty(projOrder)) {
                                     Gikam.alert('GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM');
                                     return;
                                 }
                                 Gikam.postText(IFM_CONTEXT + '/secure/emc/module/bp/subpackages/action/create-proj-package',
-                                    Gikam.getJsonWrapper({}, [ 'emcProjectServiceImpl', [ proj ] ], [ 'emcProjOrderServiceImpl', projOrderArr ])).done(function() {
+                                    Gikam.getJsonWrapper({}, ['emcProjectServiceImpl', [proj]], ['emcProjOrderServiceImpl', projOrderArr])).done(function () {
+                                    Gikam.getComp('emc-project-edit-list-subpackage-info-grid').refresh();
+                                }).always(function () {
+                                    workspace.window.closeMask();
+                                    Gikam.getComp('emc-project-edit-list-subpackage-info-grid').refresh();
+                                });
+                            });
+
+                        }
+                    });
+                } else {
+                    //送样进入样品分析项组选择页面
+                    Gikam.create('modal', {
+                        title: '选择分包测试',
+                        url: emcProject.baseUrl + '/page/order-itemgroup-choose-list' + Gikam.param({
+                            projId: proj.id,
+                            subcontractorid_IN: ',',
+                        }),
+                        onAfterClose: function (orderItemGroup) {
+                            console.log(orderItemGroup);
+                            let orderItemGroups = Object.values(orderItemGroup);
+                            let orderItemGroupArr = Object.values(orderItemGroups[0]);
+                            console.log(orderItemGroupArr);
+                            Gikam.confirm('操作提示', '是否确定创建分包单？', function () {
+                                workspace.window.showMask(true);
+                                if (Gikam.isEmpty(proj) || Gikam.isEmpty(orderItemGroup)) {
+                                    Gikam.alert('GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM');
+                                    return;
+                                }
+                                Gikam.postText(IFM_CONTEXT + '/secure/emc/module/bp/subpackages/action/create-proj-package', Gikam.getJsonWrapper({}, ['emcProjectServiceImpl', [proj]], ['emcOrderItemGroupServiceImpl', orderItemGroupArr])).done(function () {
                                     Gikam.getComp('emc-project-edit-list-sample-subpackage-info-grid').refresh();
-                                }).always(function() {
+                                }).always(function () {
+                                    workspace.window.closeMask();
+                                    Gikam.getComp('emc-project-edit-list-subpackage-info-grid').refresh();
+                                });
+                            });
+
+                        }
+                    });
+                }
+
+
+            }
+        }, {
+            type: 'button',
+            text: '提交',
+            icon: 'submit',
+            onClick: function () {
+                var selections = Gikam.getComp('emc-project-edit-list-subpackage-info-grid').getSelections();
+                console.log(selections);
+                if (Gikam.isEmpty(selections)) {
+                    Gikam.alert('GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM');
+                    return;
+                }
+                Gikam.postText(IFM_CONTEXT + '/secure/emc/module/bp/subpackages/action/submit-to-subpackage', Gikam.getJsonWrapper({}, ['emcSubpackageServiceImpl', selections])).done(function () {
+                    Gikam.getComp('emc-project-edit-list-subpackage-info-grid').refresh();
+                });
+
+            }
+        }, {
+            type: 'button',
+            text: '完成',
+            icon: 'edit',
+            onClick: function () {
+                var selections = Gikam.getComp('emc-project-edit-list-subpackage-info-grid').getSelections();
+                let hasNoAssigned = selections.some(item => item.status != '1');
+                console.log(hasNoAssigned);
+                if (hasNoAssigned) {
+                    Gikam.alert('所选分包单不是委托状态，不能完成！');
+                    return;
+                } else {
+                    Gikam.postText(IFM_CONTEXT + '/secure/emc/module/bp/subpackages/action/complete-package',
+                        Gikam.getJsonWrapper({}, ['emcSubpackageServiceImpl', selections],)).done(function () {
+                        Gikam.getComp('emc-project-edit-list-subpackage-info-grid').refresh();
+                    })
+                }
+
+            }
+        }, {
+            type: 'button',
+            text: '删除',
+            icon: 'remove',
+            onClick: function () {
+                //删除未委托的分包单
+                var selections = Gikam.getComp('emc-project-edit-list-subpackage-info-grid').getSelections();
+                if (Gikam.isEmpty(selections)) {
+                    Gikam.alert('GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM');
+                    return;
+                }
+                let hasAssigned = selections.some(item => item.status === '1');
+                if (hasAssigned) {
+                    Gikam.alert('所选分包单已经被委托，请先撤销再删除!');
+                    return;
+                }
+                console.log(selections);
+                Gikam.getComp('emc-project-edit-list-subpackage-info-grid').deleteRows(IFM_CONTEXT + '/secure/emc/module/bp/subpackages');
+            }
+        }, {
+            type: 'button',
+            text: '撤回',
+            icon: 'cancel',
+            onClick: function () {
+                var selections = Gikam.getComp('emc-project-edit-list-subpackage-info-grid').getSelections();
+                if (Gikam.isEmpty(selections)) {
+                    Gikam.alert('GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM');
+                    return;
+                }
+                Gikam.postText(IFM_CONTEXT + '/secure/emc/module/bp/subpackages/action/undo-subpackage', Gikam.getJsonWrapper({}, ['emcSubpackageServiceImpl', selections])).done(function () {
+                    Gikam.getComp('emc-project-edit-list-subpackage-info-grid').refresh();
+                });
+
+            }
+        }, {
+            type: 'button',
+            text: '查看分包单',
+            icon: 'select',
+            onClick: function () {
+                Gikam.viewReport('subpackageProject', Gikam.getComp('emc-project-edit-list-subpackage-info-grid').getSelections());
+            }
+        }]
+    },
+
+    getSampleSubpackageButton: function () {
+        var _this = this;
+        return [{
+            type: 'button',
+            text: '添加',
+            icon: 'add',
+            onClick: function () {
+                //区分采样和送样的
+                var proj = Gikam.getComp('emc-project-edit-list-grid').getActivedRow();
+                if (proj.sample == 1) {
+                    //采样进入点位测试选择页面
+                    Gikam.create('modal', {
+                        title: '选择分包测试',
+                        url: emcProject.baseUrl + '/page/proj-order-choose-list' + Gikam.param({
+                            projId: proj.id,
+                            subcontractorid_IN: ',',
+                        }),
+                        onAfterClose: function (projOrder) {
+                            console.log(projOrder);
+                            let projOrders = Object.values(projOrder);
+                            let projOrderArr = Object.values(projOrders[0]);
+                            console.log(projOrderArr);
+                            Gikam.confirm('操作提示', '是否确定创建分包单？', function () {
+                                workspace.window.showMask(true);
+                                if (Gikam.isEmpty(proj) || Gikam.isEmpty(projOrder)) {
+                                    Gikam.alert('GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM');
+                                    return;
+                                }
+                                Gikam.postText(IFM_CONTEXT + '/secure/emc/module/bp/subpackages/action/create-proj-package',
+                                    Gikam.getJsonWrapper({}, ['emcProjectServiceImpl', [proj]], ['emcProjOrderServiceImpl', projOrderArr])).done(function () {
+                                    Gikam.getComp('emc-project-edit-list-sample-subpackage-info-grid').refresh();
+                                }).always(function () {
                                     workspace.window.closeMask();
                                     Gikam.getComp('emc-project-edit-list-sample-subpackage-info-grid').refresh();
                                 });
@@ -3028,28 +3373,28 @@ emcProject.editPage = {
 
                         }
                     });
-                }else {
+                } else {
                     //送样进入样品分析项组选择页面
                     Gikam.create('modal', {
-                        title : '选择分包测试',
-                        url : emcProject.baseUrl + '/page/order-itemgroup-choose-list'+ Gikam.param({
-                            projId : proj.id,
+                        title: '选择分包测试',
+                        url: emcProject.baseUrl + '/page/order-itemgroup-choose-list' + Gikam.param({
+                            projId: proj.id,
                             subcontractorid_IN: ',',
                         }),
-                        onAfterClose : function(orderItemGroup) {
+                        onAfterClose: function (orderItemGroup) {
                             console.log(orderItemGroup);
                             let orderItemGroups = Object.values(orderItemGroup);
                             let orderItemGroupArr = Object.values(orderItemGroups[0]);
                             console.log(orderItemGroupArr);
-                            Gikam.confirm('操作提示', '是否确定创建分包单？', function() {
+                            Gikam.confirm('操作提示', '是否确定创建分包单？', function () {
                                 workspace.window.showMask(true);
                                 if (Gikam.isEmpty(proj) || Gikam.isEmpty(orderItemGroup)) {
                                     Gikam.alert('GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM');
                                     return;
                                 }
-                                Gikam.postText(IFM_CONTEXT + '/secure/emc/module/bp/subpackages/action/create-proj-package', Gikam.getJsonWrapper({}, [ 'emcProjectServiceImpl', [ proj ] ], [ 'emcOrderItemGroupServiceImpl', orderItemGroupArr ])).done(function() {
+                                Gikam.postText(IFM_CONTEXT + '/secure/emc/module/bp/subpackages/action/create-proj-package', Gikam.getJsonWrapper({}, ['emcProjectServiceImpl', [proj]], ['emcOrderItemGroupServiceImpl', orderItemGroupArr])).done(function () {
                                     Gikam.getComp('emc-project-edit-list-sample-subpackage-info-grid').refresh();
-                                }).always(function() {
+                                }).always(function () {
                                     workspace.window.closeMask();
                                     Gikam.getComp('emc-project-edit-list-sample-subpackage-info-grid').refresh();
                                 });
@@ -3061,11 +3406,11 @@ emcProject.editPage = {
 
 
             }
-        },{
-            type : 'button',
-            text : '提交',
-            icon : 'submit',
-            onClick : function() {
+        }, {
+            type: 'button',
+            text: '提交',
+            icon: 'submit',
+            onClick: function () {
 
                 var selections = Gikam.getComp('emc-project-edit-list-sample-subpackage-info-grid').getSelections();
                 if (Gikam.isEmpty(selections)) {
@@ -3073,36 +3418,35 @@ emcProject.editPage = {
                     return;
                 }
 
-                Gikam.postText(IFM_CONTEXT + '/secure/emc/module/bp/subpackages/action/submit-to-subpackage', Gikam.getJsonWrapper({
-                }, [ 'emcSubpackageServiceImpl', selections ])).done(function() {
+                Gikam.postText(IFM_CONTEXT + '/secure/emc/module/bp/subpackages/action/submit-to-subpackage', Gikam.getJsonWrapper({}, ['emcSubpackageServiceImpl', selections])).done(function () {
                     Gikam.getComp('emc-project-edit-list-sample-subpackage-info-grid').refresh();
                 });
 
 
             }
-        },{
-            type : 'button',
-            text : '完成',
-            icon : 'edit',
-            onClick : function() {
+        }, {
+            type: 'button',
+            text: '完成',
+            icon: 'edit',
+            onClick: function () {
                 var selections = Gikam.getComp('emc-project-edit-list-sample-subpackage-info-grid').getSelections();
-                let hasNoAssigned = selections.some(item => item.status !='1');
+                let hasNoAssigned = selections.some(item => item.status != '1');
                 console.log(hasNoAssigned);
                 if (hasNoAssigned) {
                     Gikam.alert('所选分包单不是委托状态，不能完成！');
                     return;
-                }else{
+                } else {
                     Gikam.postText(IFM_CONTEXT + '/secure/emc/module/bp/subpackages/action/complete-package',
-                        Gikam.getJsonWrapper({}, [ 'emcSubpackageServiceImpl', selections ],)).done(function() {
+                        Gikam.getJsonWrapper({}, ['emcSubpackageServiceImpl', selections],)).done(function () {
                         Gikam.getComp('emc-project-edit-list-sample-subpackage-info-grid').refresh();
                     })
                 }
             }
-        },{
-            type : 'button',
-            text : '删除',
-            icon : 'remove',
-            onClick : function() {
+        }, {
+            type: 'button',
+            text: '删除',
+            icon: 'remove',
+            onClick: function () {
                 //删除未委托的分包单
                 var selections = Gikam.getComp('emc-project-edit-list-sample-subpackage-info-grid').getSelections();
                 if (Gikam.isEmpty(selections)) {
@@ -3117,91 +3461,90 @@ emcProject.editPage = {
                 console.log(selections);
                 Gikam.getComp('emc-project-edit-list-sample-subpackage-info-grid').deleteRows(IFM_CONTEXT + '/secure/emc/module/bp/subpackages');
             }
-        },{
-            type : 'button',
-            text : '撤回',
-            icon : 'cancel',
-            onClick : function() {
+        }, {
+            type: 'button',
+            text: '撤回',
+            icon: 'cancel',
+            onClick: function () {
                 //撤回发个其他公司的分包单
                 var selections = Gikam.getComp('emc-project-edit-list-sample-subpackage-info-grid').getSelections();
                 if (Gikam.isEmpty(selections)) {
                     Gikam.alert('GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM');
                     return;
                 }
-                Gikam.postText(IFM_CONTEXT + '/secure/emc/module/bp/subpackages/action/undo-subpackage', Gikam.getJsonWrapper({
-                }, [ 'emcSubpackageServiceImpl', selections ])).done(function() {
+                Gikam.postText(IFM_CONTEXT + '/secure/emc/module/bp/subpackages/action/undo-subpackage', Gikam.getJsonWrapper({}, ['emcSubpackageServiceImpl', selections])).done(function () {
                     Gikam.getComp('emc-project-edit-list-sample-subpackage-info-grid').refresh();
                 });
 
             }
-        },{
-            type : 'button',
-            text : '查看分包单',
-            icon : 'select',
-            onClick : function() {
+        }, {
+            type: 'button',
+            text: '查看分包单',
+            icon: 'select',
+            onClick: function () {
                 Gikam.viewReport('subpackageProject', Gikam.getComp('emc-project-edit-list-sample-subpackage-info-grid').getSelections());
             }
-        } ]
+        }]
     },
 
 
-    getProjSchemeSubpackageButton : function() {
+    getProjSchemeSubpackageButton: function () {
         var _this = this;
-        return  [{
-            type : 'button',
-            text : '编辑测试',
-            icon : 'edit',
-            onClick : function() {
+        return [{
+            type: 'button',
+            text: '编辑测试',
+            icon: 'edit',
+            onClick: function () {
                 //区分采样和送样的
                 var subpackage = Gikam.getComp('emc-project-edit-list-sample-subpackage-info-grid').getSelections();
                 var selections = Gikam.getComp('emc-project-edit-list-subpackage-folder-grid').getSelections();
                 console.log(subpackage);
 
                 //采样进入点位测试选择页面
-                    Gikam.create('modal', {
-                        title : '选择分包测试',
-                        url : emcProject.baseUrl + '/page/proj-order-order-choose-list' + Gikam.param({
-                            projSchemeId : selections[0].id,
-                            subcontractorid_IN: ',',
-                        }),
-                        onAfterClose : function(projOrder) {
-                            let projOrders = Object.values(projOrder);
-                            let projOrderArr = Object.values(projOrders[0]);
-                            console.log(projOrderArr);
-                            Gikam.postText(IFM_CONTEXT + '/secure/emc/module/bp/subpackages/action/add-to', Gikam.getJsonWrapper({}, [ '', subpackage ], [ '', selections ], [ '', projOrderArr ])).done(function() {
-                                Gikam.getComp('emc-project-edit-list-subpackage-folder-grid').refresh();
-                            })
+                Gikam.create('modal', {
+                    title: '选择分包测试',
+                    url: emcProject.baseUrl + '/page/proj-order-order-choose-list' + Gikam.param({
+                        projSchemeId: selections[0].id,
+                        subcontractorid_IN: ',',
+                    }),
+                    onAfterClose: function (projOrder) {
+                        let projOrders = Object.values(projOrder);
+                        let projOrderArr = Object.values(projOrders[0]);
+                        console.log(projOrderArr);
+                        Gikam.postText(IFM_CONTEXT + '/secure/emc/module/bp/subpackages/action/add-to', Gikam.getJsonWrapper({}, ['', subpackage], ['', selections], ['', projOrderArr])).done(function () {
+                            Gikam.getComp('emc-project-edit-list-subpackage-folder-grid').refresh();
+                        })
 
-                        }
-                    });
+                    }
+                });
 
 
             }
         }]
     },
 
-    getOrderSubpackageButton : function() {
+    getOrderSubpackageButton: function () {
         var _this = this;
-        return  [{
-            type : 'button',
-            text : '编辑测试',
-            icon : 'edit',
-            onClick : function() {
+        return [{
+            type: 'button',
+            text: '编辑测试',
+            icon: 'edit',
+            onClick: function () {
                 var subpackage = Gikam.getComp('emc-project-edit-list-subpackage-info-grid').getSelections();
                 console.log(subpackage);
                 var selections = Gikam.getComp('emc-project-edit-list-subpackage-order-grid').getSelections();
                 //送样进入样品分析项组选择页面
                 Gikam.create('modal', {
-                    title : '选择分包测试',
-                    url : emcProject.baseUrl + '/page/order-itemgroup-order-choose-list'+ Gikam.param({
-                        orderId : selections[0].id,
+                    title: '选择分包测试',
+                    url: emcProject.baseUrl + '/page/order-itemgroup-order-choose-list' + Gikam.param({
+                        orderId: selections[0].id,
                         subcontractorid_IN: ',',
                     }),
-                    onAfterClose : function(orderItemGroup) {
+                    onAfterClose: function (orderItemGroup) {
                         let orderItemGroups = Object.values(orderItemGroup);
                         let orderItemGroupArr = Object.values(orderItemGroups[0]);
                         console.log(orderItemGroup);
-                        Gikam.postText(IFM_CONTEXT + '/secure/emc/module/bp/subpackages/action/add-to', Gikam.getJsonWrapper({}, [ '', subpackage ], [ '', selections ], [ '', orderItemGroupArr ])).done(function() {
+                        Gikam.postText(IFM_CONTEXT + '/secure/emc/module/bp/subpackages/action/add-to', Gikam.getJsonWrapper({}, ['', subpackage], ['', selections], ['', orderItemGroupArr])).done(function () {
                             Gikam.getComp('emc-project-edit-list-subpackage-order-grid').refresh();
                         })
                     }
@@ -3211,22 +3554,22 @@ emcProject.editPage = {
         }]
     },
 
-    create : function() {
+    create: function () {
         var _this = this;
         Gikam.create('layout', {
-            id : 'emc-project-edit-list-layout',
-            renderTo : workspace.window.$dom,
-            west : {
-                width : '23%',
-                items : [ _this.getGridParam() ]
+            id: 'emc-project-edit-list-layout',
+            renderTo: workspace.window.$dom,
+            west: {
+                width: '40%',
+                items: [_this.getGridParam()]
             },
-            center : {
-                items : [ _this.getBaseInfoTab() ]
+            center: {
+                items: [_this.getBaseInfoTab()]
             },
         });
     },
 
-    init : function(param) {
+    init: function (param) {
         this.param = param;
         this.create();
     }

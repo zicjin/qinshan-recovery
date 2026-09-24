@@ -10,13 +10,13 @@
                        L.ORGNAME AS REPORTEDITORGNAME,
                        P.ORGNAME AS REPORTSENDORGNAME,
                         (
-                        select
-                        WM_CONCAT(distinct  A.ORGNAME)
-                        from
+                        SELECT
+                        LISTAGG(DISTINCT A.ORGNAME, ',') WITHIN GROUP (ORDER BY A.ORGNAME)
+                        FROM
                         T_EMC_ORG_PERMISSION A
-                        where
+                        WHERE
                         A.TARGETID = C.ID
-                        and A.PERMISSIONTYPEID = 'T_EMC_BIZ_CATEGORY' group by C.ID) as ORGNAMES
+                        AND A.PERMISSIONTYPEID = 'T_EMC_BIZ_CATEGORY' GROUP BY C.ID) AS ORGNAMES
                   FROM T_EMC_BIZ_CATEGORY C
                   LEFT JOIN T_CORE_ORG O
                     ON C.SAMPLEORGID = O.ID
@@ -29,7 +29,7 @@
             <if test='queries_selectable == "1"'> <!-- 选择框单位权限 -->
                 <choose>
                     <when test='loginUser != null and loginUser.userType == "sysAdmin"'>
-                        1 = 1 /* 系统管理员:单位权限 */
+                        AND 1 = 1 /* 系统管理员:单位权限 */
                     </when>
                     <otherwise>
                        AND EXISTS (SELECT 1
@@ -40,7 +40,7 @@
                                                 FROM T_CORE_USER_PERMISSION UP_
                                               WHERE UP_.USERID = #{loginUser.id}
                                                 AND UP_.PERMISSIONTYPEID = 'T_CORE_ORG'
-                                                AND UP_.TARGETID = OP_.ORGID))
+                                                AND OP_.ORGID LIKE CONCAT(UP_.TARGETID, '%')))
                     </otherwise>
                 </choose>
             </if>

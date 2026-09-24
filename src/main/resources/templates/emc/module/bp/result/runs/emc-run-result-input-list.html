@@ -2,7 +2,12 @@
 /*<![CDATA[*/
     Gikam.requirejs([ 
                       '/static/emc/module/bp/result/runs/emc-run.js',
-                      '/static/emc/module/bp/result/runs/emc-run-result-input-list.js'
+                      '/static/emc/module/bp/result/runs/emc-run-result-input-list.js',
+        '/static/plugin/spread-sheets-11.2.6/scripts/gc.spread.sheets.all.11.2.6.min.js',
+        '/static/plugin/spread-sheets-11.2.6/designer/lib/FileSaver.min.js',
+        '/static/plugin/spread-sheets-11.2.6/scripts/plugins/gc.spread.sheets.print.11.2.6.min.js',
+        '/static/plugin/spread-sheets-11.2.6/scripts/plugins/gc.spread.sheets.pdf.11.2.6.min.js',
+        '/static/plugin/spread-sheets-11.2.6/designer/lib/spread/gc.spread.excelio.11.1.4.min.js'
                     ]);
     emcRun.resultInputPage.init(Gikam.getElParam([[${param}]]));
 /*]]>*/

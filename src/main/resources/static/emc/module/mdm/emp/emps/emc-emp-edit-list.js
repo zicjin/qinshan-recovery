@@ -13,8 +13,8 @@ emcEmp.editPage = {
             service : 'emcEmpServiceImpl',
             url : emcEmp.baseUrl + '/queries/raw',
             requestData : {
-            	USERORGID_SB : workspace.user.ext$.parentorgid,
-            	orgId_SB : workspace.user.ext$.parentorgid
+            	userOrg_filter : '1',
+                orgid_SEQ : workspace.user.ext$.parentorgid
             },
             page : true,
             columns : emcEmp.getEditListColumns(),
@@ -81,7 +81,7 @@ emcEmp.editPage = {
                     service : 'emcEmpExportTemplate'
                 })).done(function(fileUri) {
                     var fileUrl = IFM_CONTEXT + fileUri;
-                    Gikam.download(fileUrl);
+                    Gikam.emcDownloadFile(fileUrl);
                 });
             }
         }, {
@@ -97,6 +97,44 @@ emcEmp.editPage = {
                     }
                 });
             }
+        },{
+            type : 'form',
+            autoSave : false,
+            fields : _this.getShowAllField()
+        } ]
+    },
+
+    getShowAllField : function() {
+        return [ {
+            title : '证书超期',
+            field : 'showFlag',
+            type : 'simpleCheckbox',
+            refreshGrid : false,
+            styleFormatter : function() {
+                return {
+                    paddingLeft : '0'
+                }
+            },
+            onChange : function(field, value, index) {
+                var grid = Gikam.getComp('emc-emp-edit-list-grid');
+
+                var showFlags = value;
+                if (showFlags == '1') {
+                    grid.refresh({
+                        requestData : {
+                            overdueFilter : '1',
+                        }
+                    }).done(function() {
+                    });
+                } else {
+                    grid.refresh({
+                        requestData : {
+                            overdueFilter : '',
+                        }
+                    }).done(function() {
+                    });
+                }
+            },
         } ]
     },
 
@@ -188,6 +226,13 @@ emcEmp.editPage = {
                             });
                             Gikam.getComp('emc-emp-detail-train-list-grid').deleteRows(url);
                         }
+                    },{
+                        type : 'button',
+                        text : 'EMC.MODULE.MDM.EMP.EMPS.BUTTON.COPY',
+                        icon : 'copy',
+                        onClick : function() {
+                            _this.copeTrain();
+                        }
                     } ]
                 } ]
             }, {
@@ -232,7 +277,7 @@ emcEmp.editPage = {
                 } ]
             }, {
                 // 分析员上岗证
-                title : 'EMC.MODULE.MDM.EMP.EMPS.TAB.WORKLICENSE',
+                title : '上岗证',
                 items : [ {
                     type : 'grid',
                     id : 'emc-emp-detail-credentials-list-grid',
@@ -418,6 +463,30 @@ emcEmp.editPage = {
         Gikam.getComp('emc-emp-detail-test-list-grid').deleteRows(Gikam.printf(emcEmp.baseUrl + '/{id}/tests', {
             id : _this.getGridActiveRow().id
         }));
+    },
+
+    copeTrain : function() {
+        var _this = this;
+        var selections = Gikam.getComp('emc-emp-detail-train-list-grid').getSelections();
+        if (Gikam.isEmpty(selections)) {
+            Gikam.alert('GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM');
+        } else {
+            Gikam.create('modal', {
+                title : Gikam.choose.getConfig('emp').title,
+                url : Gikam.choose.getConfig('emp').url,
+                onAfterClose : function(choices) {
+                    if (Gikam.isEmpty(choices)) {
+                        return;
+                    }
+                    choices.forEach(function(r){
+                        Gikam.getComp('emc-emp-detail-train-list-grid').insert(Gikam.printf(emcEmp.baseUrl + '/{id}/trains', {
+                            id : r.id
+                        }), selections);
+                    });
+                    Gikam.alert("复制成功")
+                },
+            });
+        }
     },
 
     copeTest : function() {

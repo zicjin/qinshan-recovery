@@ -26,30 +26,54 @@ public class PfConstant extends EmcConstant {
     public static final String QC_L_QXCHD = "L-QXCHD"; // 最低点曲线校核/零点校核
     public static final String QC_L_SPKCK = "L-SPKCK"; // 空白加标
 
+    public static final String QC_YZSY = "L-YZSY";
+    public static final String QC_SJKB = "L-SJKB";
+    public static final String QC_CZKB = "L-CZKB";
+    public static final String QC_P_VOCS = "P-VOCS";
+
+    /** 样品编号后缀 */
+    public static final String QC_ORDER_NO_SUFFIX_XP = "XP";
+    public static final String QC_ORDER_NO_SUFFIX_QK = "QK";
+    public static final String QC_ORDER_NO_SUFFIX_YK = "YK";
+    public static final String QC_ORDER_NO_SUFFIX_BK = "BK";
+    public static final String QC_ORDER_NO_SUFFIX_MP = "MP";
+    public static final String QC_ORDER_NO_SUFFIX_Q = "Q";
+    public static final String QC_ORDER_NO_SUFFIX_H = "H";
+    public static final String QC_ORDER_NO_SUFFIX_CT = "CT";
+    public static final String QC_ORDER_NO_SUFFIX_SP = "SP";
+    public static final String QC_ORDER_NO_SUFFIX_SK = "SK";
+    public static final String QC_ORDER_NO_SUFFIX_ZK = "ZK";
+    public static final String QC_ORDER_NO_SUFFIX_JH = "JH";
+    public static final String QC_ORDER_NO_SUFFIX_JB = "JB";
+    public static final String QC_ORDER_NO_SUFFIX_KJ = "KJ";
+
     /** 前管、后管样品编号后缀 */
     public static final String QC_L_ALAB_ORDER_NO_SUFFIX = "Q";
     public static final String QC_L_BLAB_ORDER_NO_SUFFIX = "H";
     public static final String QC_P_CF_ORDER_NO_SUFFIX = "C";
 
     /** 实验室平行样品编号后缀 */
-    public static final String QC_LDUP_ORDER_NO_SUFFIX = "-DUP";
+    public static final String QC_LDUP_ORDER_NO_SUFFIX = "SP";
     /** 实验室样品加标样品编号后缀 */
-    public static final String QC_SPKC_ORDER_NO_SUFFIX = "-MS";
+    public static final String QC_SPKC_ORDER_NO_SUFFIX = "JB";
     /** 实验室样品加标平行样品编号后缀 */
     public static final String QC_SPKC_P_ORDER_NO_SUFFIX = "-DUP";
 
     /** 实验室空白样品编号前缀 */
-    public static final String QC_LBLANK_ORDER_NO_PREFIX = "MB";
+    public static final String QC_LBLANK_ORDER_NO_PREFIX = "SK";
     /** 实验室空白加标样品编号前缀 */
-    public static final String QC_SPKCK_ORDER_NO_PREFIX = "LCS";
+    public static final String QC_SPKCK_ORDER_NO_PREFIX = "SK-JB";
     /** 实验室标准样品编号前缀 */
-    public static final String QC_STD_ORDER_NO_PREFIX = "CRM";
+    public static final String QC_STD_ORDER_NO_PREFIX = "ZK";
     /** 实验室空白加标平行样品编号前缀 */
     public static final String QC_SPKCK_P_ORDER_NO_PREFIX = "DCS";
     /** 最低点曲线校核样品编号前缀 */
     public static final String QC_QXCHD_ORDER_NO_PREFIX = "STD";
     /** 曲线校核样品编号前缀 */
-    public static final String QC_QXCH_ORDER_NO_PREFIX = "STD";
+    public static final String QC_QXCH_ORDER_NO_PREFIX = "JH";
+    public static final String QC_YZSY_ORDER_NO_PREFIX = "YZ";
+    public static final String QC_SJKB_ORDER_NO_PREFIX = "SJK";
+    public static final String QC_CZKB_ORDER_NO_PREFIX = "CK";
 
     /****************************************************
      * Word报告
@@ -64,6 +88,9 @@ public class PfConstant extends EmcConstant {
 
     /** 综合Word报告模板 */
     public static final String COMPLEX_WORD_REPORT_TEMPLATE = "综合报告.docx";
+
+    /** 送样综合Word报告模板 */
+    public static final String SEND_WORD_REPORT_TEMPLATE = "综合报告（送样）.docx";
 
     /** 质控Word报告模板 */
     public static final String QC_WORD_REPORT_TEMPLATE = "质控报告.docx";
@@ -169,10 +196,10 @@ public class PfConstant extends EmcConstant {
     public static final String[] EXCLUDE_DEVICE_KEYWORDS = {"天平"};
 
     /** 检测项目表标题，如：附表12 检测依据、仪器一览表 */
-    public static final String MONITOR_ITEM_TABLE_TITLE = "附表%d 检测依据、仪器一览表";
+    public static final String MONITOR_ITEM_TABLE_TITLE = "表%d 检测依据、仪器一览表";
     /** 检测项目表格标题, "" 代表会被合并单元格的 */
     public static final String[] MONITOR_ITEM_TABLE_HEADER_TITLES = {
-            "检测类别", "分析项目", "检测依据", "检测仪器"
+            "分析项目", "分析方法", "主要仪器", "检出限"
     };
     /** 检测项目结果表头列数 */
     public static final int MONITOR_ITEM_TABLE_HEADER_COLUMN_QTY = 4;
@@ -192,7 +219,7 @@ public class PfConstant extends EmcConstant {
     public static final String LOW_LIMIT_TABLE_REAMRK = "“检出限+L”表示未检出";
 
     /** 水检测结果表标题，如：水质检测结果(1) */
-    public static final String WATER_RESULT_TABLE_TITLE = "附表%d %s检测结果";
+    public static final String WATER_RESULT_TABLE_TITLE = "表%d %s检测结果";
     /** 水检测结果表头标题, 固定为3行5列表，其中 %s 代表需要动态赋值的, "" 代表会被合并单元格的 */
 
     public static final String[] WATER_RESULT_TABLE_HEADER_TITLES = {
@@ -232,7 +259,7 @@ public class PfConstant extends EmcConstant {
     public static final String WATER_EXCLUDE_ORDER_DESC_KEYWORD = "浊度";
 
     /** 土检测结果表标题，如：土壤检测结果(1) */
-    public static final String SOIL_RESULT_TABLE_TITLE = "附表%d %s检测结果";
+    public static final String SOIL_RESULT_TABLE_TITLE = "表%d %s检测结果";
     /** 土检测结果表头标题, 固定为3行5列表，其中 %s 代表需要动态赋值的, "" 代表会被合并单元格的 */
     public static final String[] SOIL_RESULT_TABLE_HEADER_TITLES = {
             "采样日期", "%s0", "%s1", "%s2", "%s3", "%s4", "方法检出限", "执行标准限值",
@@ -383,7 +410,7 @@ public class PfConstant extends EmcConstant {
     public static final String DIOXIN_RESULT_ITEM_KEYWORD = "二噁英测定浓度";
     public static final String DIOXIN_CONVERTED_RESULT_ITEM_KEYWORD = "换算后二噁英浓度";
     public static final String DIOXIN_ORGANIZED_GAS_KEYWORD = "有组织";
-    public static final String DIOXIN_RESULT_TABLE_TITLE = "附表%d %s检测结果表";
+    public static final String DIOXIN_RESULT_TABLE_TITLE = "表%d %s检测结果表";
     public static final String[] DIOXIN_GAS_RESULT_TABLE_HEADER_TITLES = {
             "采样日期", "点位名称", "样品编号", "样品状态", "检测项目", "检测结果(ngTEQ/Nm<sup>3</sup>)", "平均值(ngTEQ/Nm<sup>3</sup>)"
     };

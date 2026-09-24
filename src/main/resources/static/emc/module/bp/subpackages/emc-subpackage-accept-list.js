@@ -10,7 +10,7 @@ emcSubpackage.acceptPage = {
             columns : emcSubpackage.getAcceptListColumns(),
             requestData : {
                 subpackageType_SEQ : 'accepted',
-                orgId_SB: workspace.user.ext$.parentorgid,
+                org_filter : '1',
             },
             onRowActive : function(index, row) {
                 Gikam.getAsyncComp('emc-subpackage-accept-list-base-info-form').done(function (form) {

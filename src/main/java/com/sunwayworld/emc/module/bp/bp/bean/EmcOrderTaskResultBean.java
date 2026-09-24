@@ -183,6 +183,20 @@ public class EmcOrderTaskResultBean extends AbstractPersistable<Long>implements 
 
     private String createdByOrgName;// 制单人单位名称
 
+    private String sceneEquiptNo;// 现场仪器编号
+
+    private String sceneFileNo;// 现场文件编号
+
+    private String qcDecisionCategory;// 质控判定类别
+
+    public String getQcDecisionCategory() {
+        return qcDecisionCategory;
+    }
+
+    public void setQcDecisionCategory(String qcDecisionCategory) {
+        this.qcDecisionCategory = qcDecisionCategory;
+    }
+
     @Override
     public Long getId() {
         return id;
@@ -775,5 +789,21 @@ public class EmcOrderTaskResultBean extends AbstractPersistable<Long>implements 
 
     public void setRn21(String rn21) {
         this.rn21 = rn21;
+    }
+
+    public String getSceneEquiptNo() {
+        return sceneEquiptNo;
+    }
+
+    public void setSceneEquiptNo(String sceneEquiptNo) {
+        this.sceneEquiptNo = sceneEquiptNo;
+    }
+
+    public String getSceneFileNo() {
+        return sceneFileNo;
+    }
+
+    public void setSceneFileNo(String sceneFileNo) {
+        this.sceneFileNo = sceneFileNo;
     }
 }

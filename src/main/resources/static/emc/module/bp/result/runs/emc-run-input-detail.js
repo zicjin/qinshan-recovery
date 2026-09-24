@@ -457,11 +457,12 @@ emcRun.runInputDetailPage = {
         return {
             type: 'form',
             id: 'emc-run-input-detail-form',
-            url: emcRun.baseUrl + Gikam.printf('/{id}', {
+            url : Gikam.printf(emcRun.baseUrl + '/{id}', {
                 id: _this.param.runId
             }),
             service: 'emcRunServiceImpl',
             fields: emcRun.getTestRunFields(),
+            dbTable : 'T_EMC_RUN',
             columns: 3,
             onRendered: function () {
                 if (_this.param.runId) {
@@ -539,6 +540,7 @@ emcRun.runInputDetailPage = {
                 type: 'button',
                 text: 'GIKAM.WORKFLOW.BUTTON.SUBMIT',
                 icon: 'submit',
+                hidden: _this.param.runEdit == '1',
                 onClick: function () {
                     _this.submit();
                 }
@@ -601,7 +603,7 @@ emcRun.runInputDetailPage = {
             id: 'emc-run-detail-next',
             // 展示的节点集合，节点格式为
             items: [{text: '记录首页', value: 'run', status: "next"},
-                {text: '方法参数', value: 'methodparam', status: "wait"},
+                // {text: '方法参数', value: 'methodparam', status: "wait"},
                 {text: '添加质控', value: 'qc', status: "wait"},
                 {text: '选择曲线', value: 'curve', status: "wait"},
                 {text: '记录数据', value: 'record', status: "wait"},
@@ -700,6 +702,7 @@ emcRun.runInputDetailPage = {
 
                     Gikam.getLastModal().window.showMask(true);
                     Gikam.put('/secure/emc/module/mdm/basemdm/property-tmpls/result-runs/property-datas/action/save/' + run.id, Gikam.getJsonWrapper({}, ['', [formData]])).done(function (id) {
+
 
                     }).always(function () {
                         Gikam.getLastModal().window.closeMask();
@@ -1369,7 +1372,7 @@ emcRun.runInputDetailPage = {
                 onRendered : function () {
                     _this.refreshRecordColumnAndResultData();
                 },
-                beforeUpdate: function (data, keys) {
+                onBeforeUpdate: function (data, keys) {
                     if (keys.indexOf('equiptAcquNo') !== -1) {
                         let url = IFM_CONTEXT + '/secure/emc/module/bp/bp/order-tasks/action/update-equiptacquno';
                         data.row.runId = _this.param.runId;
@@ -1812,6 +1815,7 @@ emcRun.runInputDetailPage = {
                 field : 'realTimeCalc',
                 type : 'simpleCheckbox',
                 refreshGrid : false,
+                value : '1',
                 styleFormatter : function() {
                     return {
                         paddingLeft : '0'
@@ -1969,7 +1973,7 @@ emcRun.runInputDetailPage = {
                     })
                 ).done(function (result) {
                     if (result.url) {
-                        Gikam.download(result.url);
+                        Gikam.emcDownloadFile(result.url);
                     } else if (result.message) {
                         Gikam.alert(result.message);
                     }
@@ -2002,7 +2006,7 @@ emcRun.runInputDetailPage = {
             id: runId
         })).done(function (fileUri) {
             var fileUrl = IFM_CONTEXT + fileUri;
-            Gikam.download(fileUrl);
+            Gikam.emcDownloadFile(fileUrl);
         });
 
     },
@@ -2345,7 +2349,7 @@ emcRun.runInputDetailPage = {
             fill: true,
             panels: [
                 _this.getRunDetailInfoPanel(),//记录首页
-                _this.getRunMethodParamPanel(),//方法参数
+                // _this.getRunMethodParamPanel(),//方法参数（外层使用选模板后保存方法，不是这种首先固定模板的）
                 _this.getRunQcPanel(),//添加质控
                 _this.getCurveInfoPanel(),//选择曲线-选择校准曲线
                 _this.getEquiptCurveInfoPanel(),//选择曲线-选择仪器曲线
@@ -2358,9 +2362,9 @@ emcRun.runInputDetailPage = {
                 _this.getAttachPanel()//附件
             ],
             onActived: function (data) {
-                if (data.title === '方法参数') {
-                    _this.loadRunParamPropertyField();
-                }
+                // if (data.title === '方法参数') {
+                //     _this.loadRunParamPropertyField();
+                // }
                 if (data.title === '记录数据') {
                     _this.refreshRecordResultData();
                 }

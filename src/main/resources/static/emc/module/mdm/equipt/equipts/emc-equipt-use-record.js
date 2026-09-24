@@ -133,7 +133,7 @@ var emcEquiptUseRecord = Gikam.getPageObject({
             title : 'T_EMC_EQUIPT_USE_RECORD.STARTTIME',
             type : 'dateTime',
             editor : true,
-            onChange : function(field, value, rowIndex, oldValue) {
+            /*onChange : function(field, value, rowIndex, oldValue) {
                 var data = Gikam.getComp('emc-equipt-use-record-edit-list-grid').getData();
                 if (!Gikam.isEmpty(data)) {
                     Gikam.post(emcEquipt.baseUrl + "/use-records/queries", Gikam.getJsonWrapper({
@@ -149,7 +149,7 @@ var emcEquiptUseRecord = Gikam.getPageObject({
                             }
                     });
                 }
-            }
+            }*/
         }, {
             field : 'beforeUseStatus',
             title : 'T_EMC_EQUIPT_USE_RECORD.BEFOREUSESTATUS',
@@ -160,7 +160,7 @@ var emcEquiptUseRecord = Gikam.getPageObject({
             title : 'T_EMC_EQUIPT_USE_RECORD.ENDTIME',
             type : 'dateTime',
             editor : true,
-            onChange: function (field, value, rowIndex, oldValue) {
+            /*onChange: function (field, value, rowIndex, oldValue) {
                 var data = Gikam.getComp('emc-equipt-use-record-edit-list-grid').getData();
                 if (!Gikam.isEmpty(data)) {
                     Gikam.post(emcEquipt.baseUrl + "/use-records/queries", Gikam.getJsonWrapper({
@@ -176,7 +176,7 @@ var emcEquiptUseRecord = Gikam.getPageObject({
                         }
                     });
                 }
-            }
+            }*/
         }, {
             field : 'afterUseStatus',
             title : 'T_EMC_EQUIPT_USE_RECORD.AFTERUSESTATUS',

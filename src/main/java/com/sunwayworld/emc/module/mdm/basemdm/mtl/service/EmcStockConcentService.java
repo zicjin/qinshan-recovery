@@ -15,5 +15,5 @@ public interface EmcStockConcentService extends GenericService<EmcStockConcentBe
 
     List<EmcStockConcentBean> selectLimitList(List<EmcStockConcentBean> filter);
 
-    void changeResult(RestJsonWrapperBean wrapper);
+    void stockConcentCalculate(RestJsonWrapperBean wrapper);
 }

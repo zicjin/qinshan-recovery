@@ -161,6 +161,8 @@ emcOrder.testSampleEditPage = {
             type : 'shuttleFrame',
             id : 'emc-order-item-group-edit-list-shuttle-frame',
             columns : emcOrder.getItemGroupShuttleFrameColumns(),
+            rightPage : false,
+            leftPage : false,
             leftGridUrl : leftGridUrl,
             leftRequestData : leftRequestData,
             onRendered : function() {

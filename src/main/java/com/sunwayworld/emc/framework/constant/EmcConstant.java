@@ -106,6 +106,10 @@ public class EmcConstant {
     public static final String EQUIPT_ACQ_PARAM_PARAGRAPH = "paragraph";
     /** 测试名称 **/
     public static final String EQUIPT_ACQ_PARAM_TEST_NAME = "testName";
+    /** 仪器编号 **/
+    public static final String EQUIPT_ACQ_PARAM_EQUIPT_NO = "equiptNo";
+    /** 文件编号 **/
+    public static final String EQUIPT_ACQ_PARAM_FILE_NO = "fileNo";
 
     /****************************************************
      * 仪器采集-数据格式
@@ -164,6 +168,8 @@ public class EmcConstant {
     public static final String EQUIPT_ACQ_FILE_STATUS_NONE = "0";
     /** 解析出数据了 **/
     public static final String EQUIPT_ACQ_FILE_STATUS_DONE = "1";
+    /** 仪器采集脚本ID **/
+    public static final Long EQUIPT_ACQ_SCRIPT_ID = 1531337609609632L;
 
     /****************************************************
      * 校准曲线-操作类型
@@ -207,8 +213,12 @@ public class EmcConstant {
 
     /** 现场空白 **/
     public static final String QCCATEGORY_QCCATEGORYID_P_BLANK = "P-BLANK";
+    /** 现场标准样品 **/
+    public static final String QCCATEGORY_QCCATEGORYID_PQC_STD = "PQC-STD";
     /** 现场平行 **/
     public static final String QCCATEGORY_QCCATEGORYID_P_DUP = "P-DUP";
+    /** 密码平行 **/
+    public static final String QCCATEGORY_QCCATEGORYID_Q_DUP = "Q-DUP";
 
 
     /****************************************************
@@ -300,9 +310,11 @@ public class EmcConstant {
     public static final String EMC_EXPORT_USER = "用户管理导入模板";
     public static final String EMC_EXPORT_EMP = "人员管理导入模板";
     public static final String EMC_EXPORT_MTL = "材料管理导入模板";
+    public static final String EMC_EXPORT_MTL_INIT = "材料管理初始化导入模板";
     public static final String EMC_EXPORT_MTL_STOCK = "库存导入模板";
     public static final String EMC_EXPORT_DCU_EAS_RESULT = "仪器采集结果模板";
     public static final String EMC_EXPORT_PURCHAPPLY = "采购明细导入模板";
+    public static final String EMC_EXPORT_EMCCONSUME = "耗材导入模板";
 
     /****************************************************
      * 合同管理
@@ -830,4 +842,9 @@ public class EmcConstant {
     public static final String METHODCATEGORY = "methodCategory";// 方法类型
     public static final String METHODVERSION = "methodVersion";// 版本
     public static final String METHOD_CATEGORIES = "monitorCategory,methodCategory,methodVersion,runStatus";// 方法类别
+
+    /****************************************************
+     * 材料管理
+     ****************************************************/
+    public static final String MTL_DEFAULT_REMIND_DAY = "30";// 默认提醒天数
 }

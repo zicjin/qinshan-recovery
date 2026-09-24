@@ -17,7 +17,8 @@ emcProject.shuttleChoosePage = {
             rightRequestData : {
                 id_IN : _this.param.id
             },
-            page : true,
+            rightPage : false,
+            leftPage : false,
         }
     },
 

@@ -26,4 +26,6 @@ public interface EmcIndexCategoryService extends GenericService<EmcIndexCategory
     void estandSync(RestJsonWrapperBean wrapper);
 
     Page<EmcIndexCategoryBean> selectByOrder(RestJsonWrapperBean wrapper);
+
+    void copy(RestJsonWrapperBean wrapper);
 }

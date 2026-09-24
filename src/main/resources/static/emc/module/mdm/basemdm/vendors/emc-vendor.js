@@ -47,7 +47,6 @@ var emcVendor = Gikam.getPageObject({
         }, {
             field : 'address',
             title : 'T_EMC_VENDOR.ADDRESS',
-            validators : [ 'strLength[0,20]' ],
             editor : true
         }, {
             field : 'evaluationLevel',

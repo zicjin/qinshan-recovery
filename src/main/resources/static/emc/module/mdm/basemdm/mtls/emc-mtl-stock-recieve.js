@@ -29,9 +29,10 @@ emcMtl.recievePage = {
         var _this = this;
         var form = Gikam.getComp('emc-mtl-recieve-base-info-form');
         if(form.validate()) {
-            data = form.getData();
+            let data = form.getData();
             var selections = Gikam.getComp('emc-mtl-detail-stock-list-grid').getSelections();
-            if (selections[0].stockQty < data.qty) {
+            let outStockList = selections.filter(r=>r.stockQty < data.qty);
+            if (Gikam.isNotEmpty(outStockList)) {
                 Gikam.alert('EMC.MODULE.MDM.BASEMDM.MTLS.STOCK.TIP.OUT_OF_STOCK');
                 return;
             }

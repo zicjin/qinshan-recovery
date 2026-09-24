@@ -3,12 +3,15 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sunwayworld.emc.module.mdm.basemdm.cert.mapper.EmcCertTestMethodMapper">
     <select id="selectByCondition" parameterType="map" resultType="map">
-        SELECT T.*, M.METHODNAME,M.TESTMETHODBASIS, D.TESTNAME
-          FROM T_EMC_CERT_TEST_METHOD T
-          LEFT JOIN T_EMC_METHOD M
-            ON T.METHODID = M.ID          
-          LEFT JOIN T_EMC_TEST D
-            ON T.TESTID = D.ID
+        SELECT T.*, M.METHODNAME,M.TESTMETHODBASIS, D.TESTNAME,B.TESTCATEGORYID,B.TESTCLASS
+        FROM T_EMC_CERT_TEST_METHOD T
+        LEFT JOIN T_EMC_METHOD M
+        ON T.METHODID = M.ID
+        LEFT JOIN T_EMC_TEST D
+        ON T.TESTID = D.ID
+        LEFT JOIN
+        T_EMC_TEST_METHOD B
+        ON T.TESTMETHODID=B.ID
         <where>
             <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
             <if test="target_unassigned != null">

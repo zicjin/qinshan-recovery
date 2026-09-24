@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.sunwayworld.framework.io.file.FilePathDTO;
-import com.sunwayworld.framework.io.file.FilePathManager;
 import com.sunwayworld.module.item.file.utils.CoreFileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -56,9 +54,7 @@ public class EmcClientImportFileFunction implements CoreFileImportFunction {
     public CoreFileImportResultDTO apply(CoreFileBean file) {
         CoreFileImportResultDTO CoreFileImportResultDTO = new CoreFileImportResultDTO();
 
-        FilePathDTO fr = CoreFileUtils.toFilePath(file);
-
-        List<EmcClientDTO> clientDTOList = ExcelHelper.readDataFromExcel(FilePathManager.getLocalPath(fr).toString(), 1, 2, EmcClientDTO.class);
+        List<EmcClientDTO> clientDTOList = ExcelHelper.readDataFromExcel(CoreFileUtils.getLocalPath(file).toString(), 1, 2, EmcClientDTO.class);
 
         if (clientDTOList.size() > 0) {
 

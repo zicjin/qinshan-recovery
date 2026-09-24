@@ -6,12 +6,13 @@ var emcSampleEdit = Gikam.getPageObject({
     getProjectSampleColumns : function() {
         return [ {
             checkbox : true
-        }, {
+        }, Gikam.status.getBpmnColumn(emcSampleEdit.workflow.dbTable),{
             field : 'projNo',
             title : 'T_EMC_SAMPLE.PROJNO'
         }, {
             field : 'sampleNo',
-            title : 'T_EMC_SAMPLE.SAMPLENO'
+            title : 'T_EMC_SAMPLE.SAMPLENO',
+            type:'link'
         }, {
             field : 'orderCategory',
             title : 'T_EMC_SAMPLE.ORDERCATEGORY'
@@ -41,17 +42,41 @@ var emcSampleEdit = Gikam.getPageObject({
 
             }
         }, {
+            field: 'sampleSceneUserName',
+            title: '实际现场负责人',
+            editor: true,
+            type: 'choose',
+            category: 'user-simple',
+            width: 100,
+            single: true,
+            onAfterChoose: function (rows, index) {
+                if (!Gikam.isEmpty(rows)) {
+                    this.setData({
+                        index: index,
+                        sampleSceneUserId: rows[0].id,
+                        sampleSceneUserName: rows[0].userName,
+                    });
+                }
+            },
+            onClean : function(field, value, index) {
+                this.setData({
+                    index : index,
+                    sampleSceneUserId: '',
+                    sampleSceneUserName: '',
+                });
+            },
+        },{
             field : 'ext$.sampleusername',
             title : 'T_EMC_SAMPLE.SAMPLEUSERNAME',
             editor : true,
             type : 'choose',
-            category : 'emp',
+            category: 'shuttle-user',
             onBeforeChoose : function(index) {
                 return {
-                    status_DIFFER : 'deprecated',
-                    targetType : 'samplePlan',
-                    SAMPLEDEPARTMENT_SEQ : '1',
-                    USERORGID_SB : workspace.user.ext$.parentorgid
+                    // status_DIFFER : 'deprecated',
+                    // targetType : 'samplePlan',
+                    // SAMPLEDEPARTMENT_SEQ : '1',
+                    parentorgid_SEQ: workspace.user.ext$.parentorgid
                 }
             },
             onAfterChoose : function(rows, index) {
@@ -204,7 +229,7 @@ var emcSampleEdit = Gikam.getPageObject({
             single : true,
             onBeforeChoose : function(index) {
                 return {
-                    orgId_SEQ: workspace.user.ext$.parentorgid
+                    orgId_filter : '1',
                 }
             },
             onAfterChoose : function(rows) {
@@ -235,7 +260,7 @@ var emcSampleEdit = Gikam.getPageObject({
             single : false,
             onBeforeChoose : function(index) {
                 return {
-                    orgId_SEQ: workspace.user.ext$.parentorgid
+                    orgId_filter : '1',
                 }
             },
             onAfterChoose : function(rows) {
@@ -409,7 +434,7 @@ var emcSampleEdit = Gikam.getPageObject({
             single : false,
             onBeforeChoose : function(index) {
                 return {
-                    orgId_SEQ: workspace.user.ext$.parentorgid
+                    orgId_filter : '1',
                 }
             },
             onAfterChoose : function(rows) {
@@ -448,7 +473,7 @@ var emcSampleEdit = Gikam.getPageObject({
             single : false,
             onBeforeChoose : function(index) {
                 return {
-                    orgId_SEQ: workspace.user.ext$.parentorgid
+                    orgId_filter : '1',
                 }
             },
             onAfterChoose : function(rows) {
@@ -576,7 +601,7 @@ var emcSampleEdit = Gikam.getPageObject({
             single : true,
             onBeforeChoose : function(index) {
                 return {
-                    orgId_SEQ: workspace.user.ext$.parentorgid
+                    orgId_filter : '1',
                 }
             },
             onAfterChoose : function(rows) {

@@ -10,6 +10,7 @@ import com.sunwayworld.emc.module.mdm.basemdm.fixedasset.service.EmcFixedassetSe
 import com.sunwayworld.framework.at.annotation.AuditTrailEntry;
 import com.sunwayworld.framework.at.annotation.AuditTrailType;
 import com.sunwayworld.framework.context.ApplicationContextHelper;
+import com.sunwayworld.framework.context.LocalContextHelper;
 import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;
 
 /**
@@ -34,6 +35,8 @@ public class EmcFixedassetServiceImpl implements EmcFixedassetService {
     public Long insert(RestJsonWrapperBean jsonWrapper) {
         EmcFixedassetBean emcFixedasset = jsonWrapper.parseUnique(EmcFixedassetBean.class);
         emcFixedasset.setId(ApplicationContextHelper.getNextIdentity());
+        emcFixedasset.setUseOrgId(LocalContextHelper.getLoginOrgId());
+        emcFixedasset.setUseOrgName(LocalContextHelper.getLoginOrgName());
         getDao().insert(emcFixedasset);
         return emcFixedasset.getId();
     }

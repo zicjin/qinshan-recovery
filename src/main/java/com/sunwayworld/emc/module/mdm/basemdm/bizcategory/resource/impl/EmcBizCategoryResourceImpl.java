@@ -9,8 +9,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sunwayworld.emc.module.mdm.basemdm.bizcategory.bean.EmcBizCategoryProjectBean;
+import com.sunwayworld.emc.module.mdm.basemdm.bizcategory.bean.EmcBizClassBean;
 import com.sunwayworld.emc.module.mdm.basemdm.bizcategory.resource.EmcBizCategoryResource;
 import com.sunwayworld.emc.module.mdm.basemdm.bizcategory.service.EmcBizCategoryService;
+import com.sunwayworld.emc.module.mdm.basemdm.bizcategory.service.EmcBizClassService;
 import com.sunwayworld.framework.data.page.Page;
 import com.sunwayworld.framework.log.annotation.Log;
 import com.sunwayworld.framework.log.annotation.LogModule;
@@ -25,6 +27,9 @@ public class EmcBizCategoryResourceImpl implements EmcBizCategoryResource{
 
     @Autowired
     private EmcBizCategoryService bizCategoryService;
+
+    @Autowired
+    private EmcBizClassService bizClassService;
     
     @Override
     public EmcBizCategoryService getService() {
@@ -64,6 +69,34 @@ public class EmcBizCategoryResourceImpl implements EmcBizCategoryResource{
     @RequestMapping(value = "/projects/queries/selectable", method = RequestMethod.GET)
     public List<EmcBizCategoryProjectBean> selectProjectSelectableList() {
         return getService().selectProjectSelectableList();
+    }
+
+    @Override
+    @Log(value = "新增业务类别", type = LogType.INSERT)
+    @RequestMapping(value = "/biz-class", method = RequestMethod.POST)
+    public void insertBizClass(RestJsonWrapperBean wrapper) {
+        bizClassService.insert(wrapper);
+    }
+
+    @Override
+    @Log(value = "删除业务类别", type = LogType.DELETE)
+    @RequestMapping(value = "/biz-class", method = RequestMethod.DELETE)
+    public void deleteBizClass(RestJsonWrapperBean wrapper) {
+        bizClassService.delete(wrapper);
+    }
+
+    @Override
+    @Log(value = "业务类别查询", type = LogType.SELECT)
+    @RequestMapping(value = "/biz-class/queries", method = RequestMethod.POST)
+    public Page<EmcBizClassBean> selectBizClass(RestJsonWrapperBean wrapper) {
+        return bizClassService.selectPagination(wrapper);
+    }
+
+    @Override
+    @Log(value = "业务类别下拉框数据查询", type = LogType.SELECT)
+    @RequestMapping(value = "/biz-class/queries/selectable", method = RequestMethod.GET)
+    public List<EmcBizClassBean> selectBizClassSelectableList() {
+        return bizClassService.selectSelectableList();
     }
 
 }

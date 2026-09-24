@@ -8,6 +8,7 @@
                        B.ORGID AS DEPARTMENTID,
                        B.ORGNAME AS DEPARTMENTNAME,
                        B.STATUS,
+        B.PARENTORGID,
                        C.ID  USERORGID, 
                        C.ORGNAME,
                        D.SAMPLEDEPARTMENT
@@ -24,8 +25,11 @@
                 AND EXISTS (SELECT 1
                                   FROM T_EMC_CERT TAR_
                                  WHERE TAR_.EMPID = T.ID
-                                   AND TAR_.EXPIREDATE <![CDATA[<=]]> sysdate() + TAR_.WARNINGDAYS
+                                   AND TAR_.EXPIREDATE <![CDATA[<=]]> SYSDATE + TAR_.WARNINGDAYS
                                 )
+            </if>
+            <if test='departmentId_filter !=null '>
+                AND ( "DEPARTMENTID" = #{departmentId_filter}  OR DEPARTMENTID IN (SELECT id FROM T_CORE_ORG WHERE PARENTID =#{departmentId_filter}) )
             </if>
             <!-- 任务指派分析人员，根据上岗证进行过滤 -->
             <if test='batchinputusername == 1'>
@@ -37,7 +41,7 @@
 							AND (T.FILTERTEST = '1'
 							AND C.TESTID  IN (${testids})
 							AND C.METHODID  IN (${methodids})
-							AND (B.EXPIREDATE IS NULL OR B.EXPIREDATE > sysdate())
+							AND (B.EXPIREDATE IS NULL OR B.EXPIREDATE > SYSDATE)
 							OR T.FILTERTEST = '0'
 							OR T.FILTERTEST IS NULL))
             </if>
@@ -52,7 +56,34 @@
             </if>
             <!-- 分析录入选择分析员和共同完成人过滤其他科室 -->
             <if test="targetType == 'analysisUser'">
-                AND EXISTS (SELECT 1 FROM T_CORE_ORG F WHERE T.DEPARTMENTID = F.ID AND F.ORGNAME LIKE '分析%')
+                AND EXISTS (SELECT 1
+                              FROM T_CORE_ORG F
+                             WHERE T.DEPARTMENTID = F.ID
+                               AND (F.ORGNAME = '检测部'
+                                OR EXISTS (SELECT 1
+                                             FROM T_CORE_ORG P
+                                            WHERE F.PARENTID = P.ID
+                                              AND P.ORGNAME = '检测部')))
+            </if>
+            <!-- 筛选登录人的部门权限 -->
+            <if test="org_filter != null">
+                AND EXISTS (SELECT 1
+                              FROM T_CORE_USER_PERMISSION UP
+                             WHERE UP.PERMISSIONTYPEID = 'T_CORE_ORG'
+                               AND UP.TARGETID = T.ORGID
+                               AND UP.USERID = #{loginUser.id})
+            </if>
+            <if test="emc_role_assigned != null"> <!-- 筛选具有某角色的用户 （根据角色id） -->
+                AND EXISTS (SELECT 1
+                FROM T_CORE_ROLE_USER R
+                WHERE R.ROLEID = #{emc_role_assigned}
+                AND R.USERID = T.ID)
+            </if>
+            <if test="overdueFilter != null">
+                AND EXISTS (SELECT 1
+                FROM T_EMC_EMP_QUAL R
+                WHERE R.EXPIREDATE <![CDATA[<=]]> SYSDATE + R.WARNINGDAYS
+                AND R.EMPID = T.ID)
             </if>
         </where>
         ORDER BY

@@ -27,7 +27,7 @@ var emcIndexItem = Gikam.getPageObject({
             field : 'ext$.testcategorydesc',
             title : 'T_EMC_INDEX_TEST_ITEM.TESTCATEGORY'
         }, {
-            field : 'ext$.testmethodid',
+            field : 'testId',
             title : 'T_EMC_INDEX_TEST_ITEM.TESTMETHODID',
             width : 90,
         }, {

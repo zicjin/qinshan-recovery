@@ -38,6 +38,8 @@ public class EmcCertTestMethodBean extends AbstractPersistable<Long> implements 
 
     private String itemGroup;//分析项组（江苏新锐）
 
+    private String type;
+
     private String createdById;// 制单人编码
 
     private String createdByName;// 制单人名称
@@ -96,6 +98,14 @@ public class EmcCertTestMethodBean extends AbstractPersistable<Long> implements 
 
     public void setItemGroup(String itemGroup) {
         this.itemGroup = itemGroup;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getCreatedById() {

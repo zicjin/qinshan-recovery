@@ -91,7 +91,7 @@
           LEFT JOIN T_EMC_PROJECT B
             ON A.PROJID = B.ID
          WHERE A.PROCESSSTATUS = 'draft'
-           AND B.COMPLEDATE <![CDATA[<=]]> sysdate()
+           AND B.COMPLEDATE <![CDATA[<=]]> SYSDATE
     </select>
 
 </mapper>

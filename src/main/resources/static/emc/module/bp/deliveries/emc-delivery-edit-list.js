@@ -23,7 +23,7 @@ emcDelivery.editPage = {
             page : true,
             checkOnActive : true,
             requestData : {
-                orgId_SB : workspace.user.ext$.parentorgid,
+                org_filter : '1',
                 status_SEQ : 'draft'
             },
             onRowActive : function(index, row) {

@@ -9,6 +9,7 @@
                        B.ITEMALIASNAME,
                        B.UNITNAME,
                        C.TESTID,
+                       C.TESTCLASS,
                        D.TESTNAME,
                        E.METHODNAME
                   FROM T_EMC_EQUIPT_TEST_ITEM A

@@ -11,7 +11,7 @@ emcTestCapacity.editPage = {
             service : 'emcTestCapacityServiceImpl',
             columns : emcTestCapacity.getEditListColumns(),
             requestData : {
-              orgId_SB :  workspace.user.ext$.parentorgid,
+              org_filter : '1',
             },
             checkOnActive : true,
             filterOpen : true,
@@ -289,35 +289,35 @@ emcTestCapacity.editPage = {
                     });
                 }
             },{
-                type : 'button',
-                text : '批量设置方法参数2',
-                icon : 'edit',
-                onClick : function() {
-                    var grid = Gikam.getComp('emc-test-capacity-edit-list-grid');
-                    var gridSelections = grid.getSelections();
-                    if (gridSelections.length < 1) {
-                        Gikam.alert('GIKAM.TIP.CHOOSE_AT_LEAST_ONE_DATA');
-                        return;
-                    }
-                   /* var filterData = gridSelections.filter(item => item.methodId != gridSelections[0].methodId);
-                    if (filterData.length != 0) {
-                        Gikam.alert('批量修改方法参数信息时，清选择相同的方法进行修改');
-                        return;
-                    }*/
-
-                    var _this = this;
-                    Gikam.create('modal', {
-                        height : 430,
-                        title: '批量设置测试方法参数属性',
-                        url : emcTestCapacity.baseUrl + '/page/test-capacity-method-update-param-batch-detail' + Gikam.param({
-                            flag : 0,
-                        }),
-                        onAfterClose : function() {
-                            Gikam.getComp('emc-test-capacity-edit-list-grid').refresh();
-                        }
-                    });
-                }
-            }, {
+            //     type : 'button',
+            //     text : '批量设置方法参数2',
+            //     icon : 'edit',
+            //     onClick : function() {
+            //         var grid = Gikam.getComp('emc-test-capacity-edit-list-grid');
+            //         var gridSelections = grid.getSelections();
+            //         if (gridSelections.length < 1) {
+            //             Gikam.alert('GIKAM.TIP.CHOOSE_AT_LEAST_ONE_DATA');
+            //             return;
+            //         }
+            //        /* var filterData = gridSelections.filter(item => item.methodId != gridSelections[0].methodId);
+            //         if (filterData.length != 0) {
+            //             Gikam.alert('批量修改方法参数信息时，清选择相同的方法进行修改');
+            //             return;
+            //         }*/
+            //
+            //         var _this = this;
+            //         Gikam.create('modal', {
+            //             height : 430,
+            //             title: '批量设置测试方法参数属性',
+            //             url : emcTestCapacity.baseUrl + '/page/test-capacity-method-update-param-batch-detail' + Gikam.param({
+            //                 flag : 0,
+            //             }),
+            //             onAfterClose : function() {
+            //                 Gikam.getComp('emc-test-capacity-edit-list-grid').refresh();
+            //             }
+            //         });
+            //     }
+            // }, {
                 type : 'button',
                 text : '管理员复制测试管理对应测试方法方法参数',
                 id : 'emc-test-capacity-copy-method-param',
@@ -356,6 +356,13 @@ emcTestCapacity.editPage = {
                         }
                     });
                 }
+            // }, {
+            //     type : 'button',
+            //     text : '重新获取分析项',
+            //     icon : 'refresh',
+            //     onClick : function() {
+            //         _this.refetchItemByTest();
+            //     }
             } ]
         }
     },
@@ -408,6 +415,7 @@ emcTestCapacity.editPage = {
                                         isdefault  :  formData.ext$.isdefault,
                                         qcrecordcontrolno  :  formData.ext$.qcrecordcontrolno,
                                         calicurvecontrolno  :  formData.ext$.calicurvecontrolno,
+                                        methodscope  :  formData.ext$.methodscope,
 
 
                                     }
@@ -498,13 +506,13 @@ emcTestCapacity.editPage = {
                                 onClick : function() {
                                     _this.deleteItemGroupRow();
                                 }
-                            }, {
-                                type : 'button',
-                                text : '同步分析项',
-                                icon : 'refresh',
-                                onClick : function() {
-                                    _this.syncItem();
-                                }
+                            // }, {
+                            //     type : 'button',
+                            //     text : '同步分析项',
+                            //     icon : 'refresh',
+                            //     onClick : function() {
+                            //         _this.syncItem();
+                            //     }
                             }, {
                                 type : 'button',
                                 text : '重新获取分析项',
@@ -524,6 +532,14 @@ emcTestCapacity.editPage = {
                     service : 'emcCapacityItemServiceImpl',
                     url : '',
                     columns : emcTestCapacity.getItemListColumns(),
+                    toolbar : [ {
+                        type : 'button',
+                        text : 'EMC.MODULE.MDM.BIZMDM.TESTS.BUTTON.EDITBATCH',
+                        icon : 'add',
+                        onClick : function() {
+                            _this.editBatchItem();
+                        }
+                    }]
                 } ]
             }, {
                 title : 'EMC.MODULE.MDM.BIZMDM.TESTS.TAB.TEST_EQUIPT',
@@ -538,7 +554,7 @@ emcTestCapacity.editPage = {
                         return row.ext$.equiptname || row.id;
                     },
                     requestData : {
-                        orgId_SB :  workspace.user.ext$.parentorgid,
+                        orgId_filter : '1',
                     },
                     toolbar : [ {
                         type : 'button',
@@ -640,6 +656,94 @@ emcTestCapacity.editPage = {
         }
     },
 
+    editBatchItem : function() {
+        var selections = Gikam.getComp('emc-capacity-item-list-grid').getSelections();
+        if (selections.length > 0) {
+            var capacityData = Gikam.getComp('emc-test-capacity-edit-list-grid').getActivedRow();
+            var modal = Gikam.create('modal', {
+                title: "批录入",
+                width : 600,
+                height : 600,
+            });
+            var layout = Gikam.create('layout', {
+                renderTo: modal.window.$dom,
+                center: {
+                    items: [ {
+                        type: 'btnToolbar',
+                        items: [ {
+                            type : 'button',
+                            text : 'GIKAM.BUTTON.CONFIRM',
+                            class : 'blue',
+                            onClick : function() {
+                                if (form.validate()) {
+                                    var data = form.getData();
+                                    if (!Gikam.isEmpty(data)) {
+                                        Gikam.getLastModal().window.showMask(true);
+                                        selections.map(function(item) {
+                                            item.orderNo = data.orderNo;
+                                            item.lowLimit = data.lowLimit;
+                                            item.ext$.limitunitname = data.ext$.limitunitname;
+                                            item.unitName = data.unitName;
+                                            item.revisionRule = data.revisionRule;
+                                            item.analysisCategory = data.analysisCategory;
+                                            item.resultCategory = data.resultCategory;
+                                            item.defaultResult = data.defaultResult;
+                                            item.qcCategoryId = data.qcCategoryId;
+                                            item.qcCategoryName = data.qcCategoryName;
+                                            item.originalRecordDisplay = data.originalRecordDisplay;
+                                            item.reportDisplay = data.reportDisplay;
+                                            item.standSetId = data.standSetId;
+                                            item.interceptRevision = data.interceptRevision;
+                                            item.slopeRevision = data.slopeRevision;
+                                            item.ext$.detectedquantity= data.ext$.detectedquantity;
+                                            item.ext$.detectedquantityunit= data.ext$.detectedquantityunit;
+                                            item.ext$.usetype= data.ext$.usetype
+                                            item.param = data.param;
+                                            item.ignorezero = data.ignorezero;
+                                            item.originalRecordName= data.originalRecordName;
+                                            item.highLimit= data.highLimit;
+                                            item.pnFunc= data.pnFunc;
+                                            item.limitRevision = data.limitRevision;
+                                            item.calQcResult = data.calQcResult;
+                                            item.scientificNotation = data.scientificNotation;
+                                            item.negativeToZero = data.negativeToZero;
+                                            item.allowableError = data.allowableError;
+                                            item.ext$.theorycontent= data.ext$.theorycontent;
+                                            item.sampleParam = data.sampleParam;
+
+                                        });
+                                        Gikam.put(emcTestCapacity.baseUrl + '/' + capacityData.id, Gikam.getJsonWrapper({}, [ 'emcCapacityItemServiceImpl', selections ])).done(function() {
+                                            Gikam.getComp('emc-capacity-item-list-grid').refresh();
+                                        }).always(function() {
+                                            Gikam.getLastModal().window.closeMask();
+                                            modal.close();
+                                        });
+                                    }
+                                }
+                            }
+                        }, {
+                            type : 'button',
+                            text : 'GIKAM.BUTTON.CANCEL',
+                            onClick : function () {
+                                modal.close();
+                            }
+                        } ]
+                    }]
+                }
+            });
+
+            var form = Gikam.create('form', {
+                renderTo: layout.options.center.$dom,
+                columns: 1,
+                titleWidth: 80,
+                fields: emcTestCapacity.getBatchItemFormFields(),
+                autoSave: false
+            });
+        } else {
+            Gikam.alert('GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM');
+        }
+    },
+
     insertItemGroupRow : function() {
         var formData = Gikam.getComp('emc-test-capacity-edit-list-grid').getActivedRow();
         if (Gikam.isEmpty(formData.id)) {
@@ -716,6 +820,21 @@ emcTestCapacity.editPage = {
         });
     },
 
+    refetchItemByTest : function() {
+        var selections = Gikam.getComp('emc-test-capacity-edit-list-grid').getSelections();
+        if (Gikam.isEmpty(selections)) {
+            Gikam.alert('GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM');
+            return;
+        }
+
+        workspace.window.showMask(true);
+        Gikam.postText(emcTestCapacity.baseUrl + '/action/refetch-item-by-test', Gikam.getJsonWrapper({}, [ '', selections ] )).done(function() {
+            Gikam.getComp('emc-test-capacity-edit-list-grid').refresh();
+        }).always(function() {
+            workspace.window.closeMask();
+        });
+    },
+
     insertEquiptRow : function() {
         var formData = Gikam.getComp('emc-test-capacity-edit-list-grid').getActivedRow();
         if (Gikam.isEmpty(formData.id)) {
@@ -735,7 +854,8 @@ emcTestCapacity.editPage = {
                 targetFilterColumn : 'TESTMETHODID',
                 targetFilterValue : formData.id,
                 status_SEQ : 'inUse',
-                orgId_SB : workspace.user.ext$.parentorgid
+                orgId_filter : '1',
+                orgid_seq : workspace.user.ext$.parentorgid
             }),
             onAfterClose : function(rows) {
                 if (Gikam.isEmpty(rows)) {

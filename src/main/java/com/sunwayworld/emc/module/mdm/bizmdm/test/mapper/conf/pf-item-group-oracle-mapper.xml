@@ -9,10 +9,12 @@
                        C.METHODNAME,
                        C.TESTMETHODBASIS,
                        B.METHODID,
-                       B.TESTCATEGORYID,
+        B.TESTID AS TESTMETHODTESTID,
+        B.TESTCATEGORYID,
                        B.ACTIVATEDFLAG AS SHOWFLAG,
                        B.ISLOCKED,
-                       B.DEFAULTFLAG
+                       B.DEFAULTFLAG,
+                       B.TESTMETHODTYPE
                   FROM T_EMC_ITEM_GROUP A
                   LEFT JOIN T_EMC_TEST_METHOD B
                     ON A.TESTMETHODID = B.ID
@@ -41,6 +43,11 @@
                                   FROM T_EMC_TEST_CAPACITY TC LEFT JOIN T_EMC_CAPACITY_ITEM_GROUP M ON TC.ID = M.TESTCAPACITYID
                                 WHERE M.ITEMGROUPID = T.ID AND TC.ORGID = #{loginUser.ext$.parentorgid}
                                   )
+            </if>
+            <if test="target == 'detectionFactor'">
+                AND NOT EXISTS (
+                SELECT 1 FROM T_EMC_QUOTATION_DETECTIONFACTOR QD_ WHERE QD_.ITEMGROUPID = T.ID  AND QD_.ORGID = #{loginUser.ext$.parentorgid}
+                )
             </if>
         </where>
         ORDER BY

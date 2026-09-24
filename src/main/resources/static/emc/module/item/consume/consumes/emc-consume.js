@@ -37,10 +37,19 @@ var emcConsume = Gikam.getPageObject({
             param : {},
             editor : true,
         }, {
-            field : 'harmfulness',
-            title : 'T_EMC_CONSUME.HARMFULNESS',
+            field : 'ext$.location',
+            title : '存放位置',
             editor : true,
-        } ];
+        }, {
+            field : 'productNo',
+            title : 'T_EMC_CONSUME.PRODUCTNO',
+            validators : [ 'remote[' + emcConsume.baseUrl + '/action/validate-unique]',],
+            editor : true
+        },{
+            field : 'ext$.vendorid',
+            title : 'T_EMC_CSM_STOCK_LOG.VENDORID',
+            editor : true
+        }, ];
     },
 
     getBaseInfoFormFields : function() {
@@ -70,9 +79,14 @@ var emcConsume = Gikam.getPageObject({
             param : {},
             preInsert : true
         }, {
-            field : 'harmfulness',
-            title : 'T_EMC_CONSUME.HARMFULNESS',
+            field : 'ext$.location',
+            title : '存放位置',
             validators : [ 'strLength[0,10]' ]
+        }, {
+            field : 'productNo',
+            title : 'T_EMC_CONSUME.PRODUCTNO',
+            validators : [ 'remote[' + emcConsume.baseUrl + '/action/validate-unique]',],
+            preInsert : true
         } ];
     },
 
@@ -118,6 +132,10 @@ var emcConsume = Gikam.getPageObject({
 
     getStockBaseInfoFormFields : function() {
         return [ {
+            field : 'batchNo',
+            title : 'T_EMC_CSM_STOCK.BATCHNO',
+            preInsert : true
+        },{
             field : 'qty',
             title : 'T_EMC_CSM_STOCK_LOG.ADDQTY',
             validators : [ 'number' ],
@@ -163,14 +181,32 @@ var emcConsume = Gikam.getPageObject({
             field : 'qty',
             title : 'T_EMC_CSM_STOCK_LOG.RECIEVEQTY',
             validators : [ 'number' ],
-            preInsert : true
+            preInsert : true,
+            value: 1
+        }, {
+            field : 'userName',
+            title : 'T_EMC_CSM_STOCK_LOG.RECEIVEDBYID',
+            type : 'choose',
+            validators : [ 'notEmpty' ],
+            preInsert : true,
+            category : 'user-simple',
+            single : true,
+            onAfterChoose : function(rows) {
+                if (!Gikam.isEmpty(rows)) {
+                    this.setData({
+                        receivedById : rows[0].id,
+                        userName : rows[0].userName,
+                        receivedByOrgId : rows[0].orgId,
+                        orgName : rows[0].orgName,
+                    });
+                }
+            },
         }, {
             field : 'orgName',
             title : 'T_EMC_CSM_STOCK_LOG.RECEIVEDBYORGID',
             type : 'choose',
             category : 'org',
             single : true,
-            validators : [ 'notEmpty' ],
             preInsert : true,
             onBeforeChoose : function() {
                 return {
@@ -186,22 +222,6 @@ var emcConsume = Gikam.getPageObject({
                 }
             },
         }, {
-            field : 'userName',
-            title : 'T_EMC_CSM_STOCK_LOG.RECEIVEDBYID',
-            type : 'choose',
-            validators : [ 'notEmpty' ],
-            preInsert : true,
-            category : 'user-simple',
-            single : true,
-            onAfterChoose : function(rows) {
-                if (!Gikam.isEmpty(rows)) {
-                    this.setData({
-                        receivedById : rows[0].id,
-                        userName : rows[0].userName
-                    });
-                }
-            },
-        }, {
             field : 'logContent',
             title : 'T_EMC_CSM_STOCK_LOG.LOGCONTENT',
             validators : [ 'strLength[0,20]' ],
@@ -213,6 +233,9 @@ var emcConsume = Gikam.getPageObject({
         return [ {
             field : 'logType',
             title : 'T_EMC_CSM_STOCK_LOG.LOGTYPE',
+        }, {
+            field : 'ext$.operateqty',
+            title : '操作数量',
         }, {
             field : 'previousQty',
             title : 'T_EMC_CSM_STOCK_LOG.PREVIOUSQTY',

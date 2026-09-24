@@ -204,4 +204,30 @@ public class PfOrderResourceImpl extends EmcOrderResourceImpl implements PfOrder
     public void updateOrderIndex(RestJsonWrapperBean wrapper) {
         getService().updateOrderIndex(wrapper);
     }
+
+    @Log(value = "客户样品接收-更新容器组", type = LogType.UPDATE)
+    @RequestMapping(value = "item-groups/action/update-order-container", method = RequestMethod.POST)
+    public Long updateItemGroupOrderContainer(RestJsonWrapperBean wrapper) {
+        return getService().updateItemGroupOrderContainer(wrapper);
+    }
+
+    @Log(value = "同步分析项", type = LogType.UPDATE)
+    @RequestMapping(value = "/item-groups/sync-item", method = RequestMethod.POST)
+    public Long syncOrderItemGroupItem(RestJsonWrapperBean wrapper) {
+        return getService().syncOrderItemGroupItem(wrapper);
+    }
+
+    @Log(value = "检测项目修改页面删除分析项组", type = LogType.DELETE)
+    @RequestMapping(value = "/check-projects/action/order-item-group", method = RequestMethod.DELETE)
+    public Long delCheckProjectOrderItemGroup(RestJsonWrapperBean wrapper) {
+        getService().delCheckProjectOrderItemGroup(wrapper);
+        return 1L;
+    }
+
+    @Log(value = "删除分析项组", type = LogType.DELETE)
+    @RequestMapping(value = "/order-item-group", method = RequestMethod.DELETE)
+    public Long delOrderItemGroup(RestJsonWrapperBean wrapper) {
+        getService().delOrderItemGroup(wrapper);
+        return 1L;
+    }
 }

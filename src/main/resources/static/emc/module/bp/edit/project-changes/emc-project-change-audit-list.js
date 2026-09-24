@@ -14,7 +14,7 @@ emcProjectChange.auditPage = {
             },
             requestData : {
                 targetType : 'projEdit',
-                orgId_SB: workspace.user.ext$.parentorgid
+                org_filter : '1',
             },
             onLoadSuccess : function(data) {
                 if (!Gikam.isEmpty(data)) {
@@ -249,8 +249,8 @@ emcProjectChange.auditPage = {
             _this.param.editMonitorInfo = row.ext$.editmonitorinfo;
             _this.param.sampleOrgId = row.ext$.sampleorgid;
             _this.param.projId = row.id;
-            // 这里使用委托单位来过滤数据，之前是受检单位
-            _this.param.testOrgId = row.entrustOrgId;
+            // 使用受检单位来过滤数据
+            _this.param.testOrgId = row.testOrgId;
 
             if (row.sample === "1") {
                 tab.removePanel('emc-project-change-audit-list-order-panel');
@@ -304,7 +304,7 @@ emcProjectChange.auditPage = {
                         requestData : {
                             projId_SEQ : row.id,
                             subpackageType_SEQ : 'create',
-                            orgId_SB: workspace.user.ext$.parentorgid
+                            org_filter : '1',
                         }
                     });
                     grid.refreshColumns(emcProjectChange.getProjectSubpackageListColumns());
@@ -323,7 +323,7 @@ emcProjectChange.auditPage = {
                         requestData : {
                             projId_SEQ : row.id,
                             subpackageType_SEQ : 'create',
-                            orgId_SB: workspace.user.ext$.parentorgid
+                            org_filter : '1',
                         }
                     });
                     grid.refreshColumns(emcProjectChange.getProjectSubpackageListColumns());
@@ -576,7 +576,12 @@ emcProjectChange.auditPage = {
                             columns : 3,
                             service : 'emcProjectChangeServiceImpl',
                             id : 'emc-project-change-audit-list-base-info-form',
-                            fields : emcProjectChange.getBaseInfoFormFields1(),
+                            panels : [
+                                {title : '合同信息',fields : emcProjectChange.getBaseInfoFormFields11()},
+                                {title : '委托单位信息',fields : emcProjectChange.getBaseInfoFormFields12()},
+                                {title : '受检单位',fields : emcProjectChange.getBaseInfoFormFields13()},
+                                {title : '项目信息',fields : emcProjectChange.getBaseInfoFormFields14()},
+                            ],
                             readonly : true,
                             onUpdated : function() {
                                 var grid = Gikam.getComp('emc-project-change-audit-list-grid');
@@ -879,8 +884,8 @@ emcProjectChange.auditPage = {
 
                                 var data = Gikam.getComp('emc-project-change-audit-list-base-info-form').getData();
                                 var editMonitorInfo = _this.param.editMonitorInfo || '1';
-                                // 这里使用委托单位来过滤数据，之前是受检单位
-                                var testOrgId = data.entrustOrgId ? data.entrustOrgId : '-';
+                                // 使用受检单位来过滤数据
+                                var testOrgId = data.testOrgId ? data.testOrgId : '-';
                                 var sampleOrgId = _this.param.sampleOrgId;
                                 _this.addProj(projId, editMonitorInfo, testOrgId, sampleOrgId);
                             }
@@ -896,9 +901,9 @@ emcProjectChange.auditPage = {
                                     return;
                                 }
 
-                                // 这里使用委托单位来过滤数据，之前是受检单位
+                                // 使用受检单位来过滤数据
                                 var data = Gikam.getComp('emc-project-change-audit-list-base-info-form').getData();
-                                var testOrgId = data.entrustOrgId;
+                                var testOrgId = data.testOrgId;
                                 _this.initAddProj(projId, testOrgId);
                             }
                         }, {
@@ -1412,7 +1417,7 @@ emcProjectChange.auditPage = {
             id : projectId
         })).done(function(fileUri) {
             var fileUrl = IFM_CONTEXT + fileUri;
-            Gikam.download(fileUrl);
+            Gikam.emcDownloadFile(fileUrl);
         });
 
     },
@@ -1441,7 +1446,7 @@ emcProjectChange.auditPage = {
                     })
                 ).done(function(result) {
                     if (result.url) {
-                        Gikam.download(result.url);
+                        Gikam.emcDownloadFile(result.url);
                     } else if (result.message) {
                         Gikam.alert(result.message);
                     }
@@ -1466,7 +1471,7 @@ emcProjectChange.auditPage = {
             id : projectId
         })).done(function(fileUri) {
             var fileUrl = IFM_CONTEXT + fileUri;
-            Gikam.download(fileUrl);
+            Gikam.emcDownloadFile(fileUrl);
         });
 
     },
@@ -1509,7 +1514,7 @@ emcProjectChange.auditPage = {
             url : Gikam.choose.getConfig('emp').url + Gikam.param({
                 targetType : 'insertDirector',
                 projectId : formData.id,
-                orgId_SB: workspace.user.ext$.parentorgid
+                org_filter : '1',
             }),
             width : 310,
             onAfterClose : function(rows) {

@@ -35,6 +35,8 @@ public class EmcConsumeBean extends AbstractPersistable<String> implements Inser
 
     private String harmfulness; // 危害性
 
+    private String productNo; // 产品编号
+
     private String createdById; // 制单人编码
 
     private String createdByName; // 制单人名称
@@ -133,5 +135,13 @@ public class EmcConsumeBean extends AbstractPersistable<String> implements Inser
 
     public void setCreatedByOrgName(String createdByOrgName) {
         this.createdByOrgName = createdByOrgName;
+    }
+
+    public String getProductNo() {
+        return productNo;
+    }
+
+    public void setProductNo(String productNo) {
+        this.productNo = productNo;
     }
 }

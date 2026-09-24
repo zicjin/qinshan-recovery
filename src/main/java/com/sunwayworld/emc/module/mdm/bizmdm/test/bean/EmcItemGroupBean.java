@@ -58,6 +58,16 @@ public class EmcItemGroupBean extends AbstractPersistable<Long>implements Activa
 
     private String createdByOrgName;// 制单人单位名称
 
+    private Integer sortNo;// 排序码
+
+    public Integer getSortNo() {
+        return sortNo;
+    }
+
+    public void setSortNo(Integer sortNo) {
+        this.sortNo = sortNo;
+    }
+
     public Long getId() {
         return id;
     }

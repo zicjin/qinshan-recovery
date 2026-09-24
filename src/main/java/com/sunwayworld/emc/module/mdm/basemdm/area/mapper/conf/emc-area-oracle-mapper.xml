@@ -39,7 +39,7 @@
     <select id="selectTreeNodeList" parameterType="map" resultType="map">
         SELECT T.*
           FROM (SELECT A.*,
-                    ISNULL(C.CHILDQTY) CHILDQTY
+                       C.CHILDQTY CHILDQTY
                   FROM T_EMC_AREA A
                   LEFT JOIN (SELECT PARENTID,
                                     COUNT(1) CHILDQTY

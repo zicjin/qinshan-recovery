@@ -295,7 +295,11 @@ public class ResultFormulaRepository {
 
         Double sum = 0d;
         for (EmcOrderTaskResultBean taskResult : taskResultList) {
-            sum = ArithUtils.add(sum.toString(), taskResult.getOriginalResult());
+            String originalResult = taskResult.getOriginalResult();
+            if (NumberUtils.parseDouble(originalResult) < 0d) {
+                originalResult = "0";
+            }
+            sum = ArithUtils.add(sum.toString(), originalResult);
         }
 
         return ArithUtils.div(sum, taskResultList.size());
@@ -390,7 +394,8 @@ public class ResultFormulaRepository {
                     .ifPresent(r -> {
                         // 父样结果以原始结果为准，当原始结果小于0时，直接设为0（于2020-10-17沟通后修改）
                         // 当QC类型为样品加标时，父样结果取原始结果，其他类型取报出结果（于2020-11-13沟通后修改）
-                        if (EmcConstant.QCCATEGORY_QCCATGORYID_L_SPKC.equals(currentTaskResult.getQcCategoryCode())) {
+                        if (EmcConstant.QCCATEGORY_QCCATGORYID_L_SPKC.equals(currentTaskResult.getQcCategoryCode())
+                                || EmcConstant.QCCATEGORY_QCCATEGORYID_L_SPKCK.equals(currentTaskResult.getQcCategoryCode())) {
                             currentTaskResult.setRn4(NumberUtils.isNumber(r.getOriginalResult()) && NumberUtils.parseDouble(r.getOriginalResult()) < 0d ? "0" : r.getOriginalResult());
                             // 把父样均值设置到rn5字段
                             currentTaskResult.setRn5(r.getAvgResult());
@@ -424,23 +429,45 @@ public class ResultFormulaRepository {
         // 先判断父样结果是不是已更新到RN4字段,如果RN4字段有值，直接取RN4字段为父样结果,否则的话先执行updateParentOrderInfo方法，更新父样结果到RN4字段
         updateParentOrderInfo();
 
+        String qcIndexDecisionCategorys = getQcIndexDecisionCategorys();
+        List<EmcItemQcIndexBean> itemQcIndexList = EmcOrderTaskResultComputingEngine.getItemQcIndexList();
+
         //特殊处理：针对PH值、方法：HJ 962-2018。质控分析项为字符型，偏差和误差都赋值0,均值也为字符
         if(ObjectUtils.equals(currentTaskResult.getExt$Item("itemresultcategory"),"char") &&
                 !NumberUtils.isNumber(currentTaskResult.getRn4()) &&
                 ObjectUtils.equals(currentTaskResult.getExt$Item("methodname"),"HJ 962-2018")){
-            currentTaskResult.setRn2("0");
-            currentTaskResult.setRn7("0");
-            currentTaskResult.setRn8("0");
-            currentTaskResult.setRn9("0");
+            if (qcIndexDecisionCategorys.contains("RN2")) {
+                currentTaskResult.setRn2("0");
+            }
+            if (qcIndexDecisionCategorys.contains("RN7")) {
+                currentTaskResult.setRn7("0");
+            }
+            if (qcIndexDecisionCategorys.contains("RN8")) {
+                currentTaskResult.setRn8("0");
+            }
+            if (qcIndexDecisionCategorys.contains("RN9")) {
+                currentTaskResult.setRn9("0");
+            }
         }
 
         if (!ObjectUtils.isEmpty(currentTaskResult.getRn4()) && (NumberUtils.isNumber(currentTaskResult.getRn4()) || "ND".equals(currentTaskResult.getRn4()))
                 && !ObjectUtils.isEmpty(currentTaskResult.getReportResult()) && (NumberUtils.isNumber(currentTaskResult.getReportResult()) || "ND".equals(currentTaskResult.getReportResult()))) {
 
-            // 当结果值为ND时不做处理，直接赋值为0
-            if ("ND".equals(currentTaskResult.getReportResult()) && "ND".equals(currentTaskResult.getRn4())) {
-                currentTaskResult.setRn7("0");
-                currentTaskResult.setRn8("0");
+            // 当结果值为ND或0时不做处理，直接赋值
+            if ("ND".equals(currentTaskResult.getReportResult()) && "ND".equals(currentTaskResult.getRn4())
+                    || 0d == NumberUtils.parseDouble(currentTaskResult.getReportResult(), 0d) && 0d == NumberUtils.parseDouble(currentTaskResult.getRn4())) {
+                if (qcIndexDecisionCategorys.contains("RN7")) {
+                    EmcItemQcIndexBean qcIndexBean = itemQcIndexList.stream().filter(i -> ObjectUtils.equals(i.getDecisionCategory(), "RN7") && ObjectUtils.equals(i.getItemId(), currentTaskResult.getItemId())).findFirst().orElseGet(EmcItemQcIndexBean::new);
+                    currentTaskResult.setRn7("/");
+                    currentTaskResult.setIndexHighLimit(qcIndexBean.getStdHighLimit());
+                    currentTaskResult.setIndexLowLimit(qcIndexBean.getStdLowLimit());
+                }
+                if (qcIndexDecisionCategorys.contains("RN8")) {
+                    currentTaskResult.setRn8("/");
+                    EmcItemQcIndexBean qcIndexBean = itemQcIndexList.stream().filter(i -> ObjectUtils.equals(i.getDecisionCategory(), "RN7") && ObjectUtils.equals(i.getItemId(), currentTaskResult.getItemId())).findFirst().orElseGet(EmcItemQcIndexBean::new);
+                    currentTaskResult.setIndexHighLimit(qcIndexBean.getStdHighLimit());
+                    currentTaskResult.setIndexLowLimit(qcIndexBean.getStdLowLimit());
+                }
             } else {
                 // 当前分析项的报出结果，当值为ND时作为0处理
                 String currentResult = getNdNumber(currentTaskResult.getReportResult());
@@ -453,10 +480,12 @@ public class ResultFormulaRepository {
                     double rn7 = ArithUtils.mul(ArithUtils.div(Math.abs(ArithUtils.sub(currentResult, parentResult)), reportSum), 100d);
                     // 获取相对偏差修约规则
                     String rn11 = currentTaskResult.getRn11();
-                    if (!StringUtils.isEmpty(rn11) && StringUtils.contains(rn11, ",")) {
-                        currentTaskResult.setRn7(NumberUtils.rounding(rn7 + "", rn11));
-                    } else {
-                        currentTaskResult.setRn7(NumberUtils.rounding(rn7 + "", "FDA,1"));
+                    if (qcIndexDecisionCategorys.contains("RN7")) {
+                        if (!StringUtils.isEmpty(rn11) && StringUtils.contains(rn11, ",")) {
+                            currentTaskResult.setRn7(NumberUtils.rounding(rn7 + "", rn11));
+                        } else {
+                            currentTaskResult.setRn7(NumberUtils.rounding(rn7 + "", "FDA,1"));
+                        }
                     }
                 }
 
@@ -467,7 +496,9 @@ public class ResultFormulaRepository {
                 int parRadix = getRadix(parentResult);
                 boolean integer = (curRadix == 0) && (parRadix == 0);
                 String rn8Value = integer ? NumberUtils.rounding(rn8 + "", "FDA,0") : rn8 + "";
-                currentTaskResult.setRn8(rn8Value);
+                if (qcIndexDecisionCategorys.contains("RN8")) {
+                    currentTaskResult.setRn8(rn8Value);
+                }
 
                 // abs(实验室平板当前分析项的值-均值)作为绝对偏差更新到RN2字段上
                 if (NumberUtils.isNumber(avgResult)) {
@@ -476,11 +507,15 @@ public class ResultFormulaRepository {
                     int avgRadix = getRadix(avgResult);
                     boolean rn2Integer = (curRadix == 0) && (avgRadix == 0);
                     String rn2Value = rn2Integer ? NumberUtils.rounding(rn2 + "", "FDA,0") : rn2 + "";
-                    currentTaskResult.setRn2(rn2Value);
+                    if (qcIndexDecisionCategorys.contains("RN2")) {
+                        currentTaskResult.setRn2(rn2Value);
+                    }
                 }
 
                 // 更新绝对误差到RN1字段
-                currentTaskResult.setRn1(rn8Value);
+                if (qcIndexDecisionCategorys.contains("RN1")) {
+                    currentTaskResult.setRn1(rn8Value);
+                }
 
                 // 把(样品浓度-平行样浓度)/浓度平均值（样品和平行样的浓度平均值）*100作为相对相差，更新到RN9字段上
                 double avg = NumberUtils.toDouble(avgResult);
@@ -489,7 +524,9 @@ public class ResultFormulaRepository {
                 	 rn9 = ArithUtils.mul(ArithUtils.div(Math.abs(ArithUtils.sub(parentResult,currentResult)), avg), 100d);
                 }
 
-                currentTaskResult.setRn9(NumberUtils.rounding(rn9 + "", "FDA,1"));
+                if (qcIndexDecisionCategorys.contains("RN9")) {
+                    currentTaskResult.setRn9(NumberUtils.rounding(rn9 + "", "FDA,1"));
+                }
             }
         }
     }
@@ -525,7 +562,7 @@ public class ResultFormulaRepository {
             boolean allNd = calTaskResultList.stream().anyMatch(r -> "ND".equals(r.getReportResult()));
             String avgResult = calTaskResultList.get(0).getAvgResult();
             if (allNd || !NumberUtils.isNumber(avgResult)) {
-                childResultList.forEach(r -> r.setRn14("0"));
+                childResultList.forEach(r -> r.setRn14("/"));
             } else {
                 List<String> validResultList = calTaskResultList.stream().filter(r -> NumberUtils.isNumber(r.getReportResult())).map(EmcOrderTaskResultBean::getReportResult).collect(Collectors.toList());
                 if (validResultList.isEmpty()) {
@@ -721,6 +758,11 @@ public class ResultFormulaRepository {
 
                     }
 
+                    String stdHighLimit = itemQcIndex.getStdHighLimit();
+                    String stdLowLimit = itemQcIndex.getStdLowLimit();
+                    currentTaskResult.setIndexLowLimit(stdLowLimit);
+                    currentTaskResult.setIndexHighLimit(stdHighLimit);
+
                     // 判断对应的判断类别值是否在范围内，在范围内，状态正常，不在范围内把结果状态改成OOS
 
                     String propertyValue = BeanUtils.getPropertyValue(currentTaskResult, itemQcIndex.getDecisionCategory());
@@ -729,10 +771,7 @@ public class ResultFormulaRepository {
 
                         double propertyValueNum = NumberUtils.parseDouble(propertyValue);
 
-                        String stdHighLimit = itemQcIndex.getStdHighLimit();
-                        String stdLowLimit = itemQcIndex.getStdLowLimit();
-                        currentTaskResult.setIndexLowLimit(stdLowLimit);
-                        currentTaskResult.setIndexHighLimit(stdHighLimit);
+                        currentTaskResult.setQcDecisionCategory(itemQcIndex.getDecisionCategory());
 
                         if (!StringUtils.isEmpty(stdLowLimit) && NumberUtils.isNumber(stdLowLimit)) {
 
@@ -1211,7 +1250,8 @@ public class ResultFormulaRepository {
         String revisionRule = resultBean.getRevisionRule();
 
         //如果是实验室标准样品且标准值单位和分析项单位一致，或标准值单位未维护时，按照标准值修约，否则按照分析项修约规则修约，标准值单位维护在rn12字段上
-        boolean reviseWithStandQty = PfConstant.QCCATEGORY_QCCATEGORYID_QC_STD.equals(resultBean.getQcCategoryCode())
+        boolean reviseWithStandQty = (PfConstant.QCCATEGORY_QCCATEGORYID_QC_STD.equals(resultBean.getQcCategoryCode())
+                || EmcConstant.QCCATEGORY_QCCATEGORYID_PQC_STD.equals(resultBean.getQcCategoryCode()))
                 && NumberUtils.isNumber(resultBean.getStandQty())
                 && (StringUtils.equals(resultBean.getRn12(), resultBean.getUnitName()) || StringUtils.isEmpty(resultBean.getRn12()));
         if (reviseWithStandQty) {
@@ -1395,7 +1435,32 @@ public class ResultFormulaRepository {
     }
 
     public static double toNum(String text) {
+        if ("ND".equals(text)) {
+            text = "0";
+        }
         return NumberUtils.parseDouble(text);
+    }
+
+    /**
+     * 获取当前结果QC指标的判定类别集合
+     */
+    public static String getQcIndexDecisionCategorys() {
+        EmcOrderTaskResultBean currentTaskResult = GikamComputingDataHolder.getCurrentData();
+
+        List<EmcItemQcIndexBean> itemQcIndexList = EmcOrderTaskResultComputingEngine.getItemQcIndexList();
+
+        List<EmcItemQcIndexBean> filterItemQcIndexList = itemQcIndexList.stream().filter(e -> e.getItemId().equals(currentTaskResult.getItemId()) && !StringUtils.isEmpty(e.getDecisionCategory()))
+                .collect(Collectors.toList());
+
+        if (ObjectUtils.isEmpty(currentTaskResult.getQcCategoryId()) || filterItemQcIndexList.size() == 0) {
+            return "";
+        }
+
+        List<EmcItemQcIndexBean> allQcIndexList = filterItemQcIndexList.stream().filter(e -> currentTaskResult.getQcCategoryId().equals(e.getQcCategoryId())).collect(Collectors.toList());
+
+        List<String> decisionCategoryList = allQcIndexList.stream().map(e -> e.getDecisionCategory()).distinct().collect(Collectors.toList());
+
+        return StringUtils.join(decisionCategoryList, ",");
     }
 
     // -----------------------------------------------------------------------

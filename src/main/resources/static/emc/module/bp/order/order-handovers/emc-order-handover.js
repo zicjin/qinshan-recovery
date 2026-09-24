@@ -1,151 +1,155 @@
 var emcOrderHandover = Gikam.getPageObject({
-    
-    baseUrl : IFM_CONTEXT +'/secure/emc/module/bp/order/order-handovers',
-    
-    getSampleListColumns : function() {
-        return [ {
-            checkbox : true
+
+    baseUrl: IFM_CONTEXT + '/secure/emc/module/bp/order/order-handovers',
+
+    getSampleListColumns: function () {
+        return [{
+            checkbox: true
         }, {
-            field : 'projNo',
-            title : 'T_EMC_PROJECT.PROJNO',
-            formatter : function(i, v ,r) {
-                if(r.urgent==1){
+            field: 'projNo',
+            title: 'T_EMC_PROJECT.PROJNO',
+            formatter: function (i, v, r) {
+                if (r.urgent == 1) {
                     var img = "<img src='/static/emc/icon/urgent.png' width='15' height='15'>";
                     return img + v;
-                }else{
+                } else {
                     return v;
                 }
             },
         }, {
-            field : 'ext$.projname',
-            title : 'T_EMC_PROJECT.PROJNAME'
+            field: 'ext$.projname',
+            title: 'T_EMC_PROJECT.PROJNAME'
         }, {
-            field : 'ext$.testorgname',
-            title : 'T_EMC_PROJECT.TESTORG'
+            field: 'ext$.testorgname',
+            title: 'T_EMC_PROJECT.TESTORG'
         }, {
-            field : 'sampleNo',
-            title : 'T_EMC_SAMPLE.SAMPLENO'
+            field: 'sampleNo',
+            title: 'T_EMC_SAMPLE.SAMPLENO'
         }, {
-            field : 'orderCategory',
-            title : 'T_EMC_SAMPLE.ORDERCATEGORY'
+            field: 'orderCategory',
+            title: 'T_EMC_SAMPLE.ORDERCATEGORY'
         }, {
-            field : 'createdByName',
-            title : 'T_EMC_SAMPLE.CREATEDBYNAME'
+            field: 'createdByName',
+            title: 'T_EMC_SAMPLE.CREATEDBYNAME'
         }, {
-            field : 'reportConfigLineId',
-            title : 'T_EMC_SAMPLE.REPORTCONFIGLINEID',
-            type : 'select',
-            search : true,
-            category : 'reportConfigLine',
-            param : {
-                reportConfigId : 'samplingReport'
+            field: 'reportConfigLineId',
+            title: 'T_EMC_SAMPLE.REPORTCONFIGLINEID',
+            type: 'select',
+            search: true,
+            category: 'reportConfigLine',
+            param: {
+                reportConfigId: 'samplingReport'
             },
-            editor : true,
+            editor: true,
         }, {
-            field : 'remark',
-            title : 'T_EMC_SAMPLE.REMARK'
+            field: 'remark',
+            title: 'T_EMC_SAMPLE.REMARK'
         }, {
-            field : 'ext$.archivereportlineid',
-            title : 'T_EMC_SAMPLE.ARCHIVEREPORTLINEID',
-            type : 'select',
-            search : true,
-            multiple : true,
-            category : 'reportConfigLine',
-            param : {
-                reportConfigId : 'samplingReport'
+            field: 'ext$.archivereportlineid',
+            title: 'T_EMC_SAMPLE.ARCHIVEREPORTLINEID',
+            type: 'select',
+            search: true,
+            multiple: true,
+            category: 'reportConfigLine',
+            param: {
+                reportConfigId: 'samplingReport'
             },
-            editor : true,
+            editor: true,
         }, {
-            field : 'id',
-            title : 'GIKAM.BUTTON.APPENDIX_INFO',
-            formatter : function (i, v) {
+            field: 'id',
+            title: 'GIKAM.BUTTON.APPENDIX_INFO',
+            formatter: function (i, v) {
                 return '<a href="javascript:;" onclick="emcOrderHandover.searchAllPage.viewSampleFile(\'' + v + '\')">附件信息</a>';
             }
-        } ];
+        }];
     },
 
-    getOrderListColumns : function() {
-        return [ {
-            checkbox : true
+    getOrderListColumns: function () {
+        return [{
+            checkbox: true
         }, {
-            field : 'orderNo',
-            title : 'T_EMC_ORDER.ORDERNO'
+            field: 'orderNo',
+            title: 'T_EMC_ORDER.ORDERNO'
         }, {
-            field : 'ext$.monitorpointname',
-            title : 'T_EMC_ORDER_RECEIPT.MONITORPOINTNAME'
+            field: 'ext$.monitorpointname',
+            title: 'T_EMC_ORDER_RECEIPT.MONITORPOINTNAME'
         }, {
-            field : 'ext$.monitorpointno',
-            title : 'T_EMC_ORDER_RECEIPT.MONITORPOINTNO'
+            field: 'ext$.monitorpointno',
+            title: 'T_EMC_ORDER_RECEIPT.MONITORPOINTNO'
         }, {
-            field : 'clientOrderName',
-            title : 'T_EMC_ORDER.CLIENTORDERNAME'
+            field: 'clientOrderName',
+            title: 'T_EMC_ORDER.CLIENTORDERNAME'
         }, {
-            field : 'qcName',
-            title : 'T_EMC_ORDER.QCCATEGORYNO',
-            formatter : function(i, v, row) {
+            field: 'qcName',
+            title: 'T_EMC_ORDER.QCCATEGORYNO',
+            formatter: function (i, v, row) {
                 if (!v) {
                     return 'N/A'
                 }
                 return v;
             }
         }, {
-            field : 'sampleBeginDate',
-            title : 'T_EMC_ORDER.SAMPLEBEGINDATE'
+            field: 'sampleBeginDate',
+            title: 'T_EMC_ORDER.SAMPLEBEGINDATE'
         }, {
-            field : 'sampleBeginTime',
-            title : 'T_EMC_ORDER.SAMPLEBEGINTIME'
+            field: 'sampleBeginTime',
+            title: 'T_EMC_ORDER.SAMPLEBEGINTIME'
         }, {
-            field : 'sampleCompleteDate',
-            title : 'T_EMC_ORDER.SAMPLECOMPLETEDATE'
+            field: 'sampleCompleteDate',
+            title: 'T_EMC_ORDER.SAMPLECOMPLETEDATE'
         }, {
-            field : 'sampleCompleteTime',
-            title : 'T_EMC_ORDER.SAMPLECOMPLETETIME'
+            field: 'sampleCompleteTime',
+            title: 'T_EMC_ORDER.SAMPLECOMPLETETIME'
         }, {
-            field : 'orderCategory',
-            title : 'T_EMC_ORDER.ORDERCATEGORY',
+            field: 'orderCategory',
+            title: 'T_EMC_ORDER.ORDERCATEGORY',
         }, {
-            field : 'parentOrderNo',
-            title : 'T_EMC_ORDER.PARENTORDERNO',
+            field: 'parentOrderNo',
+            title: 'T_EMC_ORDER.PARENTORDERNO',
         }, {
-            field : 'orderDesc',
-            title : 'T_EMC_ORDER.ORDERDESC'
+            field: 'orderDesc',
+            title: 'T_EMC_ORDER.ORDERDESC'
         }, {
-            field : 'remark',
-            title : 'T_EMC_ORDER.REMARK',
+            field: 'remark',
+            title: 'T_EMC_ORDER.REMARK',
         }, {
-            field : 'labelNo',
-            title : 'T_EMC_ORDER.LABELNO'
+            field: 'labelNo',
+            title: 'T_EMC_ORDER.LABELNO'
         }, {
-            field : 'cycle',
-            title : 'T_EMC_ORDER.CYCLE',
+            field: 'cycle',
+            title: 'T_EMC_ORDER.CYCLE',
         }, {
-            field : 'frequency',
-            title : 'T_EMC_ORDER.FREQUENCY'
+            field: 'frequency',
+            title: 'T_EMC_ORDER.FREQUENCY'
         }, {
-            field : 'sampleNum',
-            title : 'T_EMC_ORDER.SAMPLENUM'
-        } ];
+            field: 'sampleNum',
+            title: 'T_EMC_ORDER.SAMPLENUM'
+        }];
     },
 
-    getContainerListColumns : function() {
-        return [ {
-            checkbox : true
+    getContainerListColumns: function () {
+        return [{
+            checkbox: true
         }, {
-            field : 'containerCategoryName',
-            title : 'T_EMC_ORDER_TASK.CONTAINERCATEGORYNAME',
+            field: 'ext$.ordercontainerno',
+            title: 'T_EMC_ORDER_CONTAINER.ORDERCONTAINERNO',
+            width : 120,
         }, {
-            field : 'containerGroup',
-            title : 'T_EMC_ORDER_TASK.CONTAINERGROUP'
+            field: 'containerCategoryName',
+            title: 'T_EMC_ORDER_TASK.CONTAINERCATEGORYNAME',
         }, {
-            field : 'fixative',
-            title : 'T_EMC_ORDER_TASK.FIXATIVE'
+            field: 'containerGroup',
+            title: 'T_EMC_ORDER_TASK.CONTAINERGROUP'
         }, {
-            field : 'testName',
-            title : 'T_EMC_ORDER_TASK.TESTNAME'
+            field: 'fixative',
+            title: 'T_EMC_ORDER_TASK.FIXATIVE'
         }, {
-            field : 'storeCondition',
-            title : 'T_EMC_ORDER_TASK.STORECONDITION'
-        } ];
+            field: 'testName',
+            title: 'T_EMC_ORDER_TASK.TESTNAME'
+        }, {
+            field: 'storeCondition',
+            title: 'T_EMC_ORDER_TASK.STORECONDITION'
+        }];
     }
 
 });

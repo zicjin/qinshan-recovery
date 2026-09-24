@@ -14,7 +14,9 @@ import com.sunwayworld.emc.module.mdm.basemdm.mtl.service.EmcStockConcentService
 import com.sunwayworld.framework.mybatis.mapper.MapperParameter;
 import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;
 import com.sunwayworld.framework.support.PersistableHelper;
+import com.sunwayworld.framework.utils.ArithUtils;
 import com.sunwayworld.framework.utils.NumberUtils;
+import com.sunwayworld.framework.utils.StringUtils;
 
 /**
  * @author baogx@sunwayworld.com
@@ -50,12 +52,27 @@ public class EmcStockConcentServiceImpl implements EmcStockConcentService {
     }
 
     @Override
-    public void changeResult(RestJsonWrapperBean wrapper) {
+    public void stockConcentCalculate(RestJsonWrapperBean wrapper) {
         List<EmcStockConcentBean> stockConcentList = wrapper.parse(EmcStockConcentBean.class);
-        stockConcentList.forEach(e->{
-            e.setLowLimit(NumberUtils.rounding(e.getLowLimit(),e.getRevisionRule()));
-            e.setHighLimit(NumberUtils.rounding(e.getHighLimit(),e.getRevisionRule()));
-        });
-        getDao().update(stockConcentList);
+        for (EmcStockConcentBean stockConcent : stockConcentList) {
+            String stdValue = stockConcent.getStdValue();
+            String uncertainty = stockConcent.getUncertainty();
+            String uncertaintyPercent = stockConcent.getUncertaintyPercent();
+            String revisionRule = stockConcent.getRevisionRule();
+            if (!StringUtils.isEmpty(stdValue) && StringUtils.isEmpty(uncertainty) && !StringUtils.isEmpty(uncertaintyPercent)) {
+                uncertainty = ArithUtils.div(ArithUtils.mul(stdValue, uncertaintyPercent), 100.0) + "";
+            }
+            String lowLimit = stdValue;
+            String highLimit = stdValue;
+            if (!StringUtils.isEmpty(stdValue) && !StringUtils.isEmpty(uncertainty)) {
+                lowLimit = ArithUtils.sub(stdValue, uncertainty) + "";
+                highLimit = ArithUtils.add(stdValue, uncertainty) + "";
+            }
+            lowLimit = NumberUtils.rounding(lowLimit, revisionRule);
+            highLimit = NumberUtils.rounding(highLimit, revisionRule);
+            stockConcent.setLowLimit(lowLimit);
+            stockConcent.setHighLimit(highLimit);
+        }
+        getDao().update(stockConcentList, "lowLimit", "highLimit");
     }
 }

@@ -63,7 +63,7 @@
                     AND EXISTS( SELECT 1
                                    FROM T_EMC_EQUIPT_PLAN TAR_
                                   WHERE TAR_.EQUIPTID = T.ID
-                                  AND TAR_.MAINTENDDATE <![CDATA[<=]]> sysdate() + TAR_.WARNINGDAYS
+                                  AND TAR_.MAINTENDDATE <![CDATA[<=]]> SYSDATE + TAR_.WARNINGDAYS
                     )
             </if>
         </where>

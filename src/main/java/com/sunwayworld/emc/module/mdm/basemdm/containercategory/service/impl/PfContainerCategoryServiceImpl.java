@@ -204,6 +204,10 @@ public class PfContainerCategoryServiceImpl extends EmcContainerCategoryServiceI
             //待新增的数据
 
             for (EmcTestMethodOrderCategoryBean oc : ocList) {
+                if (!StringUtils.isEmpty(type) && "containerGroup".equals(type)) {
+                    //容器组
+                    oc.setContainerGroup(tmoc2List.get(0).getContainerGroup());
+                }
                 if (!StringUtils.isEmpty(type) && "rqlx".equals(type)) {
                     //容器类型
                     oc.setContainerCategoryId(tmoc2List.get(0).getContainerCategoryId());

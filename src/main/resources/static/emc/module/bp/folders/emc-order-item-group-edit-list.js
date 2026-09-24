@@ -37,17 +37,19 @@ emcOrder.testEditPage = {
                 },
                 onChange : function(field, value) {
                     _this.showFlag = value;
-                    Gikam.post(IFM_CONTEXT + '/secure/emc/module/mdm/bizmdm/monitor-tmpls/schemes/queries/choosable', Gikam.getJsonWrapper({
-                        f : {
+                    var leftGrid = _this.shuttleFrame.leftGrid;
+                    leftGrid.setOptions({
+                        url : IFM_CONTEXT + '/secure/emc/module/mdm/bizmdm/monitor-tmpls/schemes/queries/choosable',
+                        requestData : {
+                            order_unassigned : '1',
+                            orderId : _this.param.orderIds.split(',')[0],
                             monitorTmplId_SEQ : _this.param.monitorTmplId,
                             schemeName_SEQ : _this.schemeName,
                             defaultFlag_SEQ : value === '1' ? null : '1',
                             activatedFlag_SEQ : '1',
-                        },
-                        n : -1,
-                    })).done(function(row) {
-                        _this.setShuttleFrameData(row.rows);
+                        }
                     });
+                    leftGrid.refresh();
                 },
             } ]
         };
@@ -72,18 +74,20 @@ emcOrder.testEditPage = {
                 type : 'select',
                 onChange : function(field, value) {
                     _this.schemeName = value;
-                    Gikam.post(IFM_CONTEXT + '/secure/emc/module/mdm/bizmdm/monitor-tmpls/schemes/queries/choosable', Gikam.getJsonWrapper({
-                        f : {
+                    var leftGrid = _this.shuttleFrame.leftGrid;
+                    leftGrid.setOptions({
+                        url : IFM_CONTEXT + '/secure/emc/module/mdm/bizmdm/monitor-tmpls/schemes/queries/choosable',
+                        requestData : {
+                            order_unassigned : '1',
+                            orderId : _this.param.orderIds.split(',')[0],
                             monitorTmplId_SEQ : _this.param.monitorTmplId,
                             schemeName_SEQ : value,
                             defaultFlag_SEQ : _this.showFlag === '1' ? null : '1',
                             activatedFlag_SEQ : '1',
                             testmethodflag_SEQ :'1'
-                        },
-                        n : -1
-                    })).done(function(row) {
-                        _this.setShuttleFrameData(row.rows);
+                        }
                     });
+                    leftGrid.refresh();
                 }
             } ],
             onRendered : function() {
@@ -91,6 +95,20 @@ emcOrder.testEditPage = {
                 _this.form.setData({
                     schemeName : _this.schemeName,
                 });
+                var leftGrid = _this.shuttleFrame.leftGrid;
+                leftGrid.setOptions({
+                    url : IFM_CONTEXT + '/secure/emc/module/mdm/bizmdm/monitor-tmpls/schemes/queries/choosable',
+                    requestData : {
+                        order_unassigned : '1',
+                        orderId : _this.param.orderIds.split(',')[0],
+                        monitorTmplId_SEQ : _this.param.monitorTmplId,
+                        schemeName_SEQ : _this.schemeName,
+                        defaultFlag_SEQ :  '1' ,
+                        activatedFlag_SEQ : '1',
+                        testmethodflag_SEQ :'1'
+                    }
+                });
+                leftGrid.refresh();
             }
 
         };
@@ -103,44 +121,56 @@ emcOrder.testEditPage = {
             id : 'emc-order-item-group-edit-list-shuttle-frame',
             columns : emcOrder.getItemGroupShuttleFrameColumns(),
             // delRepeatField : 'itemGroupId',
-            // page : true,
+            rightPage : false,
+            leftPage : false,
             onRendered : function() {
                 _this.shuttleFrame = this;
             },
-            onLeftLoadSuccess : function() {
-                // 当左侧数据加载完成后，再去初始化右侧的数据，通过rightInited标志位避免右侧数据重复加载
-                if (!_this.rightInited) {
-                    Gikam.post('/secure/emc/module/mdm/bizmdm/monitor-tmpls/schemes/queries/choosable', Gikam.getJsonWrapper({
-                        f :  {
-                            order_assigned : '1',
-                            orderId : _this.param.orderIds.split(',')[0],
-                            monitorTmplId_SEQ : _this.param.monitorTmplId,
-                            activatedFlag_SEQ : '1',
-                            testmethodflag_SEQ :'1',
-                        },
-                        n : -1,
-                    })).done(function (rightData) {
-                        _this.shuttleFrame.setRightData(rightData.rows);
-                        _this.rightSelectedData = rightData.rows;
-                        _this.rightInited = true;
-                    })
-                }
+            rightGridUrl:'/secure/emc/module/mdm/bizmdm/monitor-tmpls/schemes/queries/choosable',
+            rightRequestData:{
+                order_assigned : '1',
+                orderId : _this.param.orderIds.split(',')[0],
+                monitorTmplId_SEQ : _this.param.monitorTmplId,
+                activatedFlag_SEQ : '1',
+                testmethodflag_SEQ :'1',
             },
             onAddClick : function(data, left, right) {
-                let sortNum = new Date().getTime();
-                data.forEach(item => item.sortNum = sortNum);
-                _this.rightSelectedData = _this.rightSelectedData.concat(data);
-                // _this.filterSameAdd(data, left, right);
+                _this.filterSameAdd(data, left, right);
             },
-            onDelClick : function(data, left, right) {
-                // _this.filterSameDel(data, left, right);
-                _this.rightSelectedData = _this.rightSelectedData.filter(function(item) {
-                    //去掉删除的数据
-                    return !data.some(function(rightItem) {
-                        return rightItem.id === item.id;
-                    });
-                });
-            }
+            // onLeftLoadSuccess : function() {
+            //     // 当左侧数据加载完成后，再去初始化右侧的数据，通过rightInited标志位避免右侧数据重复加载
+            //     if (!_this.rightInited) {
+            //         Gikam.post('/secure/emc/module/mdm/bizmdm/monitor-tmpls/schemes/queries/choosable', Gikam.getJsonWrapper({
+            //             f :  {
+            //                 order_assigned : '1',
+            //                 orderId : _this.param.orderIds.split(',')[0],
+            //                 monitorTmplId_SEQ : _this.param.monitorTmplId,
+            //                 activatedFlag_SEQ : '1',
+            //                 testmethodflag_SEQ :'1',
+            //             },
+            //             n : -1,
+            //         })).done(function (rightData) {
+            //             _this.shuttleFrame.setRightData(rightData.rows);
+            //             _this.rightSelectedData = rightData.rows;
+            //             _this.rightInited = true;
+            //         })
+            //     }
+            // },
+            // onAddClick : function(data, left, right) {
+            //     let sortNum = new Date().getTime();
+            //     data.forEach(item => item.sortNum = sortNum);
+            //     _this.rightSelectedData = _this.rightSelectedData.concat(data);
+            //     // _this.filterSameAdd(data, left, right);
+            // },
+            // onDelClick : function(data, left, right) {
+            //     // _this.filterSameDel(data, left, right);
+            //     _this.rightSelectedData = _this.rightSelectedData.filter(function(item) {
+            //         //去掉删除的数据
+            //         return !data.some(function(rightItem) {
+            //             return rightItem.id === item.id;
+            //         });
+            //     });
+            // }
         }
     },
 
@@ -197,25 +227,12 @@ emcOrder.testEditPage = {
     // 左侧数据，如果与右侧数据同测试名、不同方法，则不显示；
     filterSameAdd : function(data, left, right) {
         var _this = this;
-
-        // 获取当前测试方案下的
-        var allData = _this.getCurAllData(_this.shuttleFrameLeftData, _this.shuttleFrameRightData);
-
-        // 与右边已选数比较去重，测试名相同、方法不同的过滤掉
-        var filterLeftData = allData;
-        if (!Gikam.isEmpty(allData)) {
-            filterLeftData = allData.filter(function(item) {
-                return !right.some(function(rightItem) {
-                    return rightItem.testId === item.testId && rightItem.ext$.methodid !== item.ext$.methodid;
-                });
-            });
+        let originRightData = right.filter(item => data.every(d => d.id !== item.id));
+        let repeatItemGroupNames = data.filter(item => originRightData.some(rightItem => item.itemGroup === rightItem.itemGroup)).map(item => item.itemGroup);
+        if (repeatItemGroupNames.length > 0) {
+            Gikam.alert(Gikam.propI18N('不能选择重复分析项组') + ': ' + repeatItemGroupNames.join());
         }
 
-        _this.shuttleFrame = Gikam.getComp('emc-order-item-group-edit-list-shuttle-frame');
-        // 这里必须先设置右侧数据再设置左侧数据
-        _this.shuttleFrame.rightGrid.loadData(right);
-        _this.shuttleFrame.options.rightOriginalData = Gikam.deepExtend(right);
-        _this.shuttleFrame.setLeftData(filterLeftData);
     },
 
     // 取消选择
@@ -282,18 +299,28 @@ emcOrder.testEditPage = {
 
         var returnFlag = true;
 
-        var newTestNameAndItemGroupNames = [];
+        // var newTestNameAndItemGroupNames = [];
+        // rows.some(function(item) {
+        //     var newTestNameAndItemGroupName = item.ext$.testname + '&' + item.itemGroup;
+        //     if (newTestNameAndItemGroupNames.indexOf(newTestNameAndItemGroupName) == -1) {
+        //         newTestNameAndItemGroupNames.push(newTestNameAndItemGroupName);
+        //     } else {
+        //         returnFlag = false;
+        //         Gikam.alert('EMC.MODULE.MDM.BIZMDM.MONITORTMPLS.TIP.CANNOT_CHOOSE_REITERATED_TEST');
+        //         return true;
+        //     }
+        // });
+        var newItemGroupNames = [];
         rows.some(function(item) {
-            var newTestNameAndItemGroupName = item.ext$.testname + '&' + item.itemGroup;
-            if (newTestNameAndItemGroupNames.indexOf(newTestNameAndItemGroupName) == -1) {
-                newTestNameAndItemGroupNames.push(newTestNameAndItemGroupName);
+            var newItemGroupName = item.itemGroup;
+            if (newItemGroupNames.indexOf(newItemGroupName) === -1) {
+                newItemGroupNames.push(newItemGroupName);
             } else {
                 returnFlag = false;
-                Gikam.alert('EMC.MODULE.MDM.BIZMDM.MONITORTMPLS.TIP.CANNOT_CHOOSE_REITERATED_TEST');
+                Gikam.alert(Gikam.propI18N('不能选择重复分析项组') + ': 分析项组名称('+item.itemGroup+')');
                 return true;
             }
         });
-
         if (returnFlag) {
             var chooseData = rows.map(function(item) {
                 return {
@@ -352,7 +379,7 @@ emcOrder.testEditPage = {
 
     init : function(param) {
         var _this = this;
-        _this.showFlag = '1';
+        _this.showFlag = '0';
         _this.schemeName = 'default';
         // 右侧初始数据是否已被记录
         _this.rightDataHaveRecorded = false;

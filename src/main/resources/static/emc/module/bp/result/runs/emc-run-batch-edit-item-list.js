@@ -8,6 +8,9 @@ emcRun.batchEditItemPage = {
             url : emcRun.baseUrl + '/edited-items/queries',
             requestData : _this.param,
             columns : emcRun.getEditItemListColumns(),
+            filterOpen : false,
+            filter :false,
+            sort : false,
             group : {
                 fields : [ 'ext$.testname' ],
                 formatter : function(row) {

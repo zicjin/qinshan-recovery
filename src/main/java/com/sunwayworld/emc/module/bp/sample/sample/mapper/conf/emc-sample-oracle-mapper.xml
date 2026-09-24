@@ -147,8 +147,8 @@
 
     <!-- 平板扫描查询 -->
     <select id="selectMobileScanner" parameterType="map" resultType="map">
-        SELECT T.*, CONCAT(SUMNUMBER, '/', TOTAL) AS NUM
-          FROM (SELECT S.*, COUNT(1) AS TOTAL, IFNULL(SUM(SCANNED), 0) AS SUMNUMBER
+        SELECT T.*, CONCAT(CONCAT(SUMNUMBER, '/'), TOTAL) AS NUM
+          FROM (SELECT S.*, COUNT(1) AS TOTAL, NVL(SUM(SCANNED), 0) AS SUMNUMBER
                   FROM (SELECT U.*
                           FROM (SELECT A.ID,
                                        A.STATUS,
@@ -160,9 +160,9 @@
                                        B.TESTORGNAME,
                                        B.BIZCATEGORYID,
                                        B. STATUS AS PROJECTSTATUS,
-                                       (CONCAT(IFNULL(D.CONTAINERCATEGORYCODE, ''),
-                                                  IFNULL(C.ORDERNO, ''),
-                                                  IFNULL(D.CONTAINERGROUP, ''))) AS NUMBER,
+                                       (CONCAT(CONCAT(NVL(D.CONTAINERCATEGORYCODE, ''),
+                                                      NVL(C.ORDERNO, '')),
+                                               NVL(D.CONTAINERGROUP, ''))) AS NUMBER,
                                        D.SCANNED
 
                                   FROM T_EMC_SAMPLE A
@@ -189,10 +189,10 @@
                        C.ORDERNO,
                        C.SAMPLEBEGINDATE,
                        C.ORDERDESC,
-                       WM_CONCAT(DISTINCT D.TESTNAME) AS TESTNAME,
-                       CONCAT(IFNULL(C.ORDERNO, ''),
-                              IFNULL(D.CONTAINERCATEGORYCODE, ''),
-                              IFNULL(D.CONTAINERGROUP, '')) AS LABELID,
+                       LISTAGG(DISTINCT D.TESTNAME, ',') AS TESTNAME,
+                       CONCAT(CONCAT(NVL(C.ORDERNO, ''),
+                                     NVL(D.CONTAINERCATEGORYCODE, '')),
+                              NVL(D.CONTAINERGROUP, '')) AS LABELID,
                        CASE D.SCANNED WHEN '1' THEN '已扫描' ELSE '未扫描' END STATUS
                   FROM T_EMC_SAMPLE A
                   LEFT JOIN T_EMC_PROJECT B
@@ -219,10 +219,10 @@
                        C.SAMPLEBEGINDATE,
                        C.ORDERDESC,
                        E.MONITORPOINTNAME,
-                       WM_CONCAT(DISTINCT D.TESTNAME) AS TESTNAME,
-                       CONCAT(IFNULL(C.ORDERNO, ''),
-                              IFNULL(D.CONTAINERCATEGORYCODE, ''),
-                              IFNULL(D.CONTAINERGROUP, '')) AS LABELID
+                       LISTAGG(DISTINCT D.TESTNAME, ',') AS TESTNAME,
+                       CONCAT(CONCAT(NVL(C.ORDERNO, ''),
+                                     NVL(D.CONTAINERCATEGORYCODE, '')),
+                              NVL(D.CONTAINERGROUP, '')) AS LABELID
                   FROM T_EMC_SAMPLE A
                   LEFT JOIN T_EMC_PROJECT B
                     ON B.ID = A.PROJID
@@ -234,9 +234,9 @@
                     ON C.FOLDERID = E.ID
                  WHERE C.ORDERNO = SUBSTR(#{labelId},1, 13)
                    AND D.CONTAINERCATEGORYCODE IS NOT NULL
-                   AND CONCAT(IFNULL(C.ORDERNO, ''),
-                              IFNULL(D.CONTAINERCATEGORYCODE, ''),
-                              IFNULL(D.CONTAINERGROUP, '')) = #{labelId}
+                   AND CONCAT(CONCAT(NVL(C.ORDERNO, ''),
+                                     NVL(D.CONTAINERCATEGORYCODE, '')),
+                              NVL(D.CONTAINERGROUP, '')) = #{labelId}
                  GROUP BY LABELID) T
     </select>
 

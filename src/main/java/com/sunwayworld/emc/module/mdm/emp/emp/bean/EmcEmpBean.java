@@ -34,6 +34,8 @@ public class EmcEmpBean extends AbstractInsertable<String> implements Insertable
     private String mobile; // 手机
     private String sex; // 性别
     private String filterTest; // 是否过滤测试
+    private String reportAudit; // 报告审核
+    private String reportIssue; // 报告签发
     private String phone; // 联系电话
     private String nation; // 民族
     @JSONField(format = "yyyy-MM-dd")
@@ -67,6 +69,7 @@ public class EmcEmpBean extends AbstractInsertable<String> implements Insertable
     private LocalDateTime createdTime; // 制单时间
     private String createdByOrgId; // 制单人单位编码
     private String createdByOrgName; // 制单人单位名称
+    private String station; // 岗位
 
     public String getId() {
         return id;
@@ -109,6 +112,22 @@ public class EmcEmpBean extends AbstractInsertable<String> implements Insertable
     }
     public void setFilterTest(String filterTest) {
         this.filterTest = filterTest;
+    }
+
+    public String getReportAudit() {
+        return reportAudit;
+    }
+
+    public void setReportAudit(String reportAudit) {
+        this.reportAudit = reportAudit;
+    }
+
+    public String getReportIssue() {
+        return reportIssue;
+    }
+
+    public void setReportIssue(String reportIssue) {
+        this.reportIssue = reportIssue;
     }
     public String getPhone() {
         return phone;
@@ -275,5 +294,13 @@ public class EmcEmpBean extends AbstractInsertable<String> implements Insertable
     @Override
     public void setCreatedByOrgName(String createdByOrgName) {
         this.createdByOrgName = createdByOrgName;
+    }
+
+    public String getStation() {
+        return station;
+    }
+
+    public void setStation(String station) {
+        this.station = station;
     }
 }

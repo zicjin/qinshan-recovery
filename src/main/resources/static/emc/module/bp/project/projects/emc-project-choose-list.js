@@ -7,10 +7,14 @@ emcProject.choosePage = {
             }) : columns.unshift({
                 checkbox : true
             });
+            var url = emcProject.baseUrl + '/queries/choosable';
+            if(_this.param.targetType == 'projEdit'){
+                url = emcProject.baseUrl + '/queries/raw';
+            }
             return {
                 type : 'grid',
                 id : 'emc-project-choose-list-grid',
-                url : emcProject.baseUrl + '/queries/choosable',
+                url : url,
                 requestData : requestData,
                 columns : columns,
                 page : true,

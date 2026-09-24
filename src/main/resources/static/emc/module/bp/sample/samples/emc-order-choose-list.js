@@ -1,7 +1,12 @@
 emcSample.chooseOrderPage = {
 
     getGridParam : function() {
-        var _this = this, columns = emcSample.getOrderChooseListColumns(), requestData = this.param;
+        var _this = this,  requestData = this.param;
+        var columns = emcSample.getOrderChooseListColumns();
+        if(!Gikam.isEmpty(_this.param.columnsType)&& _this.param.columnsType == '2'){
+            //现场采样，添加样品单独展示，防止修改到其他地方
+            columns = emcSample.getOrderChooseListColumns2();
+        }
         _this.param.single ? columns.unshift({
             radio : true
         }) : columns.unshift({
@@ -20,7 +25,12 @@ emcSample.chooseOrderPage = {
                 text : 'GIKAM.BUTTON.CONFIRM',
                 icon : 'select',
                 onClick : function() {
-                    Gikam.getLastModal().close(Gikam.getComp('emc-order-choose-list-grid').getSelections());
+                    var selections = Gikam.getComp('emc-order-choose-list-grid').getSelections();
+                    if (_this.param.columnsType === '2' && selections.find(f => !f.ext$.monitorpointno)) {
+                        Gikam.alert('监测点编码为空的样品，不允许添加');
+                        return;
+                    }
+                    Gikam.getLastModal().close(selections);
                 }
             }, {
                 type : 'button',
@@ -29,31 +39,6 @@ emcSample.chooseOrderPage = {
                 onClick : function() {
                     Gikam.getLastModal().close();
                 }
-            } ]
-        }
-    },
-
-    getBtnToolbarParam : function() {
-        var _this = this;
-        return {
-            type : 'btnToolbar',
-            items : [ {
-                type : 'btnGroup',
-                items : [ {
-                    type : 'button',
-                    text : 'GIKAM.BUTTON.CONFIRM',
-                    icon : 'select',
-                    onClick : function() {
-                        Gikam.getLastModal().close(Gikam.getComp('emc-order-choose-list-grid').getSelections());
-                    }
-                }, {
-                    type : 'button',
-                    text : 'GIKAM.BUTTON.CANCEL',
-                    icon : 'cancel',
-                    onClick : function() {
-                        Gikam.getLastModal().close();
-                    }
-                } ]
             } ]
         }
     },

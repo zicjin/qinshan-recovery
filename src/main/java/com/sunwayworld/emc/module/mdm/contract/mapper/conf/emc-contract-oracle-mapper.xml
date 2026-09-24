@@ -2,17 +2,32 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sunwayworld.emc.module.mdm.contract.mapper.EmcContractMapper">
     <select id="selectByCondition" parameterType="map" resultType="map">
+        WITH TEMP2 AS (SELECT CONTRACTNO,sum(CASE
+        WHEN REGEXP_LIKE(price, '^-?\d+(.\d+)?$') THEN TO_NUMBER(price)
+        ELSE 0
+        END) AS PROJALLPRICE FROM
+        (SELECT
+        a.projectprice AS price,a.contractno
+        FROM t_emc_project a
+        UNION ALL
+        SELECT
+        c.testfee AS price,c.contractno
+        FROM T_XFP_PROJECT@LIMS_CZJKY_XFP c) AP WHERE contractno IS NOT null GROUP BY AP.contractno )
+
         SELECT T.*
-          FROM (SELECT A.*,
-                       C.USERNAME AS REVIEWERNAME
-                  FROM T_EMC_CONTRACT A
-                  LEFT JOIN T_EMC_EMP C
-                    ON C.ID = A.REVIEWER) T
+        FROM (SELECT A.*,
+        TEMP2.PROJALLPRICE
+        FROM T_CRM_CONTRACT@LIMS_CZJKY_HT A
+        LEFT JOIN TEMP2 ON A.CONTRACTNO = TEMP2.CONTRACTNO
+        where
+        a.contractorgname =(
+        SELECT A1.SSGFGSMC FROM T_EMC_OA_ORG A1
+        LEFT JOIN T_EMC_OA_USER A2 ON A1.ZZBH=A2.SSBM
+        LEFT JOIN T_CORE_USER A3 ON A2.YGGH =A3.ID
+        WHERE A3.ID=#{loginUser.id})) T
         <where>
             <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
-            <if test='authority_audit == "1"'>
-                AND <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.auditAuthorityWhereClause" />
-            </if>
+
         </where>
         ORDER BY
         <choose>

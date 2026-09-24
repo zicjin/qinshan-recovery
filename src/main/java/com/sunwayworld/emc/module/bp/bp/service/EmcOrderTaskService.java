@@ -105,4 +105,6 @@ public interface EmcOrderTaskService extends GenericService<EmcOrderTaskBean, Lo
     void updateAnaUser(String ids, RestJsonWrapperBean wrapper);
 
     Page<EmcOrderTaskBean> selectRunnableAnalAssignList(RestJsonWrapperBean wrapper);
+
+    Page<EmcOrderTaskBean> selectOrderTaskPagationByOrderAndTask(RestJsonWrapperBean wrapper);
 }

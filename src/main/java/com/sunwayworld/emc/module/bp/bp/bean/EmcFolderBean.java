@@ -94,6 +94,16 @@ public class EmcFolderBean extends AbstractAuditable<Long> {
 
     private String tributary; // 支流
 
+    private String section; // 断面
+
+    private String sectionConditionDesc; // 断面情况描述
+
+    private String sectionWaterWidth; // 断面水面宽度
+
+    private String sectionWaterDepth; // 断面水深
+
+    private String sectionWaterQuality; // 断面水质
+
     private String createdById;// 制单人编码
 
     private String createdByName;// 制单人名称
@@ -122,6 +132,29 @@ public class EmcFolderBean extends AbstractAuditable<Long> {
     private String samplingRange;////采样范围
 
     private String samplingDepth;//采样深度(江苏新锐)
+
+    @NotNull(defaultValue = Constant.NO)
+    private String emissionStatus;// 排放状态
+
+    private String waterTemperature;// 水温
+
+    private String turbidity;// 浊度
+
+    public String getWaterTemperature() {
+        return waterTemperature;
+    }
+
+    public void setWaterTemperature(String waterTemperature) {
+        this.waterTemperature = waterTemperature;
+    }
+
+    public String getTurbidity() {
+        return turbidity;
+    }
+
+    public void setTurbidity(String turbidity) {
+        this.turbidity = turbidity;
+    }
 
     @Override
     public Long getId() {
@@ -467,5 +500,53 @@ public class EmcFolderBean extends AbstractAuditable<Long> {
 
     public void setSamplingDepth(String samplingDepth) {
         this.samplingDepth = samplingDepth;
+    }
+
+    public String getEmissionStatus() {
+        return emissionStatus;
+    }
+
+    public void setEmissionStatus(String emissionStatus) {
+        this.emissionStatus = emissionStatus;
+    }
+
+    public String getSection() {
+        return section;
+    }
+
+    public void setSection(String section) {
+        this.section = section;
+    }
+
+    public String getSectionConditionDesc() {
+        return sectionConditionDesc;
+    }
+
+    public void setSectionConditionDesc(String sectionConditionDesc) {
+        this.sectionConditionDesc = sectionConditionDesc;
+    }
+
+    public String getSectionWaterWidth() {
+        return sectionWaterWidth;
+    }
+
+    public void setSectionWaterWidth(String sectionWaterWidth) {
+        this.sectionWaterWidth = sectionWaterWidth;
+    }
+
+    public String getSectionWaterDepth() {
+        return sectionWaterDepth;
+    }
+
+    public void setSectionWaterDepth(String sectionWaterDepth) {
+        this.sectionWaterDepth = sectionWaterDepth;
+    }
+
+    public String getSectionWaterQuality() {
+        return sectionWaterQuality;
+    }
+
+    public void setSectionWaterQuality(String sectionWaterQuality) {
+        this.sectionWaterQuality = sectionWaterQuality;
     }
 }

@@ -9,26 +9,30 @@ emcRunEdit.editPage = {
                 title : 'EMC.MODULE.BP.RESULT.RUNS.TAB.TEST_RUN',
                 items : [ {
                     type : 'grid',
-                    id : 'emc-run-edit-edit-list-test-run-grid',
+                    id : 'emc-run-edit-edit-list-test-run-grid-upd',
                     service : 'emcRunServiceImpl',
                     columns : emcRunEdit.getTestRunColumns(),
                     page : true,
                     url : emcRunEdit.runUrl + '/queries/all',
-
+                    onCellClick : function(field, row) {
+                        if(field === 'id'){
+                            _this.loadRunDetail(row);
+                        }
+                    },
                     initRequest : true,
                     refreshFromSearch : false,
                     filterOpen : true,
                     onRendered : function() {
                         this.hideColumns([ 'temperature' ]);
                         this.hideColumns([ 'humidity' ]);
-                        this.hideColumns([ 'analysisBeginDate' ]);
-                        this.hideColumns([ 'analysisBeginTime' ]);
-                        this.hideColumns([ 'analysisEndDate' ]);
-                        this.hideColumns([ 'analysisEndTime' ]);
+                        // this.hideColumns([ 'analysisBeginDate' ]);
+                        // this.hideColumns([ 'analysisBeginTime' ]);
+                        // this.hideColumns([ 'analysisEndDate' ]);
+                        // this.hideColumns([ 'analysisEndTime' ]);
                     },
                     requestData : {
                         analysisUserId_SC : workspace.user.id,
-        	            orgId_SB : workspace.user.ext$.parentorgid
+        	            org_filter : '1',
                     },
                     deleteFormatter : function(row) {
                         return row.id;
@@ -60,7 +64,7 @@ emcRunEdit.editPage = {
                         text : 'EMC.MODULE.BP.RESULT.RUNS.BUTTON.INITIALIZEC',
                         icon : 'refresh',
                         onClick : function() {
-                            Gikam.getComp('emc-run-edit-edit-list-test-run-grid').processRows({
+                            Gikam.getComp('emc-run-edit-edit-list-test-run-grid-upd').processRows({
                                 url : emcRunEdit.runUrl + '/action/init',
                                 confirm : {
                                     msg : 'EMC.MODULE.BP.RESULT.RUNS.TIP.INITIALIZEC',
@@ -87,7 +91,7 @@ emcRunEdit.editPage = {
                         text : 'GIKAM.FILE.ATTACHMENT',
                         icon : 'default',
                         onClick : function() {
-                            var selections = Gikam.getComp('emc-run-edit-edit-list-test-run-grid').getSelections();
+                            var selections = Gikam.getComp('emc-run-edit-edit-list-test-run-grid-upd').getSelections();
 
                             if (selections.length !== 1) {
                                 Gikam.alert('GIKAM.TIP.CHOOSE_ONE_ITEM');
@@ -101,7 +105,7 @@ emcRunEdit.editPage = {
                                     table : 'T_EMC_RUN',
                                 }),
                                 onAfterClose : function(rows) {
-                                    Gikam.getComp('emc-run-edit-edit-list-test-run-grid').refresh();
+                                    Gikam.getComp('emc-run-edit-edit-list-test-run-grid-upd').refresh();
                                 }
                             });
                         }
@@ -127,7 +131,7 @@ emcRunEdit.editPage = {
                             text : '查看称重记录',
                             icon : 'print',
                             onClick : function() {
-                                Gikam.viewReport('analReport', Gikam.getComp('emc-run-edit-edit-list-test-run-grid').getSelections());
+                                Gikam.viewReport('analReport', Gikam.getComp('emc-run-edit-edit-list-test-run-grid-upd').getSelections());
                             }
                         },{
                             type : 'button',
@@ -159,12 +163,32 @@ emcRunEdit.editPage = {
                             }
                         }]
                     }, {
-                        type : 'button',
-                        text : 'EMC.MODULE.BP.RESULT.RUNS.BUTTON.ATLAS_LOOK',
-                        icon : 'preview',
-                        onClick : function() {
-                            _this.loadAtlasByRun();
-                        }
+                        type: 'dropDownMenu',
+                        text: '文件采集',
+                        items: [{
+                            type: 'button',
+                            text: 'EMC.MODULE.BP.RESULT.RUNS.BUTTON.EQUIPT_COLLECT',
+                            icon: 'edit',
+                            onClick: function () {
+                                _this.runEquiptCollect();
+                            }
+                        }, {
+                            type: 'button',
+                            text: 'EMC.MODULE.BP.RESULT.RUNS.BUTTON.ATLAS_LOOK',
+                            icon: 'preview',
+                            onClick: function () {
+                                _this.loadAtlasByRun();
+                            }
+                        }, {
+                            type: 'button',
+                            text: '重新采集',
+                            icon: 'edit',
+                            onClick: function () {
+                                _this.runEquiptRepeateCollect();
+                            }
+                        },
+
+                        ]
                     },{
                         type : 'button',
                         text : '项目温湿度采集',
@@ -180,6 +204,85 @@ emcRunEdit.editPage = {
                 } ]
             } ]
         }
+    },
+
+    runEquiptRepeateCollect: function () {
+        var rows = Gikam.getComp('emc-run-edit-edit-list-test-run-grid-upd').getSelections();
+        if (rows && rows.length == 1) {
+            var bizId = rows[0].id;
+            var equiptId = rows[0].equiptId;
+            if (Gikam.isEmpty(equiptId)) {
+                Gikam.alert('未维护试验设备');
+                return;
+            }
+
+            workspace.window.showMask(true);
+            var url = Gikam.printf(emcRunEdit.runUrl + '/{runId}/equipt-collects', {
+                runId: bizId,
+            });
+
+            Gikam.put(url, Gikam.getJsonWrapper({'type': 'repeate'}, ['', rows])).done(function () {
+                Gikam.getComp('emc-run-edit-edit-list-test-run-grid-upd').refresh();
+            }).always(function () {
+                workspace.window.closeMask();
+            });
+        } else {
+            Gikam.alert('GIKAM.TIP.CHOOSE_ONE_ITEM');
+        }
+    },
+
+    runEquiptCollect: function () {
+        var rows = Gikam.getComp('emc-run-edit-edit-list-test-run-grid-upd').getSelections();
+        if (rows && rows.length == 1) {
+            var bizId = rows[0].id;
+
+            var equiptId = rows[0].equiptId;
+            if (Gikam.isEmpty(equiptId)) {
+                Gikam.alert('未维护试验设备');
+                return;
+            }
+            Gikam.create('simpleUploader', {
+                id: 'emc-run-edit-list-test-run-uploader',
+                dbTable: 'T_EMC_EQUIPT',
+                bizId: bizId,
+                multiple: true,
+
+                onAfterClose: function (fileList) {
+                    if (!Gikam.isEmpty(fileList)) {
+                        workspace.window.showMask(true);
+                        var url = Gikam.printf(emcRunEdit.runUrl + '/{runId}/equipt-collects', {
+                            runId: bizId,
+                        });
+                        fileList.map(function (file) {
+                            file.size = 0;
+                        });
+                        Gikam.put(url, Gikam.getJsonWrapper({}, ['coreFileServiceImpl', fileList])).done(function () {
+                            Gikam.getComp('emc-run-edit-edit-list-test-run-grid-upd').refresh();
+                        }).always(function () {
+                            workspace.window.closeMask();
+                        });
+                    }
+                }
+            })
+        } else {
+            Gikam.alert('GIKAM.TIP.CHOOSE_ONE_ITEM');
+        }
+    },
+
+    loadRunDetail : function(row) {
+        Gikam.create('modal', {
+            height: '95%',
+            width: '95%',
+            title: '测试批详情',
+            url : IFM_CONTEXT + '/secure/emc/module/bp/result/runs/page/run-input-detail' + Gikam.param({
+                runId : row.id,
+                analysisDate : row.analysisBeginDate,
+                runEdit : '1'
+            }),
+            onAfterClose : function() {
+                Gikam.getComp('emc-run-edit-edit-list-test-run-grid-upd').refreshRowById(row.id);
+            }
+        });
     },
 
     onTestRunActive : function(row) {
@@ -256,7 +359,7 @@ emcRunEdit.editPage = {
                             icon : 'add',
                             onClick : function() {
                                 var data = Gikam.getComp('emc-run-edit-edit-list-sample-test-grid').getSelections();
-                                var runRow = Gikam.getComp('emc-run-edit-edit-list-test-run-grid').getActivedRow();
+                                var runRow = Gikam.getComp('emc-run-edit-edit-list-test-run-grid-upd').getActivedRow();
                                 if (Gikam.isEmpty(data)) {
                                     Gikam.alert('GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM');
                                     return;
@@ -283,7 +386,7 @@ emcRunEdit.editPage = {
                                             Gikam.getComp('emc-run-edit-edit-list-sample-test-grid').refresh({
                                                 url : IFM_CONTEXT + '/secure/emc/module/bp/bp/order-tasks/queries/order-group-runs',
                                                 requestData : {
-                                                    runId_SEQ : Gikam.getComp('emc-run-edit-edit-list-test-run-grid').getActivedRow().id
+                                                    runId_SEQ : Gikam.getComp('emc-run-edit-edit-list-test-run-grid-upd').getActivedRow().id
                                                 }
                                             });
                                         }).always(function() {
@@ -322,7 +425,7 @@ emcRunEdit.editPage = {
                                     Gikam.getComp('emc-run-edit-edit-list-sample-test-grid').refresh({
                                         url : IFM_CONTEXT + '/secure/emc/module/bp/bp/order-tasks/queries/order-group-runs',
                                         requestData : {
-                                            runId_SEQ : Gikam.getComp('emc-run-edit-edit-list-test-run-grid').getActivedRow().id
+                                            runId_SEQ : Gikam.getComp('emc-run-edit-edit-list-test-run-grid-upd').getActivedRow().id
                                         }
                                     });
                                 });
@@ -336,7 +439,7 @@ emcRunEdit.editPage = {
                             text : 'EMC.MODULE.BP.RESULT.RUNS.BUTTON.ADD_SAMPLE',
                             icon : 'add',
                             onClick : function() {
-                                var grid = Gikam.getComp('emc-run-edit-edit-list-test-run-grid');
+                                var grid = Gikam.getComp('emc-run-edit-edit-list-test-run-grid-upd');
                                 var runId = grid.getActivedRow().id;
                                 var testId = grid.getActivedRow().testId;
                                 if (Gikam.isEmpty(runId)) {
@@ -379,7 +482,7 @@ emcRunEdit.editPage = {
                             icon : 'remove',
                             onClick : function() {
                                 var rows = Gikam.getComp('emc-run-edit-edit-list-sample-test-grid').getSelections();
-                                var runId = Gikam.getComp('emc-run-edit-edit-list-test-run-grid').getActivedRow().id;
+                                var runId = Gikam.getComp('emc-run-edit-edit-list-test-run-grid-upd').getActivedRow().id;
                                 if (Gikam.isEmpty(rows)) {
                                     Gikam.alert('GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM');
                                     return;
@@ -1028,7 +1131,7 @@ emcRunEdit.editPage = {
     },
 
     runViewRun : function() {
-        var selections = Gikam.getComp('emc-run-edit-edit-list-test-run-grid').getSelections();
+        var selections = Gikam.getComp('emc-run-edit-edit-list-test-run-grid-upd').getSelections();
         if (selections.length !== 1) {
             Gikam.alert('GIKAM.TIP.CHOOSE_ONE_ITEM');
             return;
@@ -1043,7 +1146,7 @@ emcRunEdit.editPage = {
     },
 
     composePdf : function() {
-        var selections = Gikam.getComp('emc-run-edit-edit-list-test-run-grid').getSelections();
+        var selections = Gikam.getComp('emc-run-edit-edit-list-test-run-grid-upd').getSelections();
         var projId = selections[0].projId;
         var reportConfigLineId = selections[0].reportConfigLineId;
     	if (selections.length > 0) {
@@ -1077,7 +1180,7 @@ emcRunEdit.editPage = {
 
     uploadRunReportFile : function() {
         var _this = this
-        var rows = Gikam.getComp('emc-run-edit-edit-list-test-run-grid').getSelections();
+        var rows = Gikam.getComp('emc-run-edit-edit-list-test-run-grid-upd').getSelections();
         if (rows && rows.length === 1) {
             Gikam.create('modal', {
                 width : 800,
@@ -1092,7 +1195,7 @@ emcRunEdit.editPage = {
 
     /** 重新合成原始记录PDF */
     recomposeRunPdf : function() {
-        var selections = Gikam.getComp('emc-run-edit-edit-list-test-run-grid').getSelections();
+        var selections = Gikam.getComp('emc-run-edit-edit-list-test-run-grid-upd').getSelections();
         if (selections.length !== 1) {
             Gikam.alert('GIKAM.TIP.CHOOSE_ONE_ITEM');
             return;
@@ -1109,7 +1212,7 @@ emcRunEdit.editPage = {
     },
 
     loadAtlasByRun : function() {
-        let runSelections = Gikam.getComp('emc-run-edit-edit-list-test-run-grid').getSelections();
+        let runSelections = Gikam.getComp('emc-run-edit-edit-list-test-run-grid-upd').getSelections();
         if (runSelections.length !== 1) {
             Gikam.alert('GIKAM.TIP.CHOOSE_ONE_ITEM');
             return;
@@ -1130,7 +1233,7 @@ emcRunEdit.editPage = {
 
     runTempHumidity : function() {
         var _this = this
-        var rows = Gikam.getComp('emc-run-edit-edit-list-test-run-grid').getSelections();
+        var rows = Gikam.getComp('emc-run-edit-edit-list-test-run-grid-upd').getSelections();
         if (rows && rows.length === 1) {
         	//生成温湿度表的数据
             Gikam.create('modal', {
@@ -1139,7 +1242,7 @@ emcRunEdit.editPage = {
                 title : '项目温湿度采集',
                 url : emcRunEdit.runUrl + '/page/edit-run-temp-humidity' +  Gikam.param({
                     runId : rows[0].id,
-                    orgId_SB: workspace.user.ext$.parentorgid
+                    orgId_filter : '1',
                 }),
             });
         } else {
@@ -1148,7 +1251,7 @@ emcRunEdit.editPage = {
     },
 
     runViewRunSol : function() {
-        var selections = Gikam.getComp('emc-run-edit-edit-list-test-run-grid').getSelections();
+        var selections = Gikam.getComp('emc-run-edit-edit-list-test-run-grid-upd').getSelections();
         if (selections.length !== 1) {
             Gikam.alert('GIKAM.TIP.CHOOSE_ONE_ITEM');
             return;
@@ -1157,10 +1260,10 @@ emcRunEdit.editPage = {
     },
 
     resetCompose : function() {
-        var selections = Gikam.getComp('emc-run-edit-edit-list-test-run-grid').getSelections();
+        var selections = Gikam.getComp('emc-run-edit-edit-list-test-run-grid-upd').getSelections();
         Gikam.postText(emcRunEdit.runUrl + '/action/reset-compose', Gikam.getJsonWrapper(null, [ 'emcRunServiceImpl', selections ])).done(function () {
             Gikam.alert('重置成功');
-        	Gikam.getComp('emc-run-edit-edit-list-test-run-grid').refresh();
+        	Gikam.getComp('emc-run-edit-edit-list-test-run-grid-upd').refresh();
         });
     },
 
@@ -1173,6 +1276,17 @@ emcRunEdit.editPage = {
                 Gikam.getComp('emc-run-edit-edit-list-sample-test-grid').refresh();
         });
 
+    },
+
+    loadResultRunMethodParamPage : function(id) {
+        var _this = this;
+        Gikam.create('modal', {
+            width : '60%',
+            title : 'EMC.MODULE.BP.RESULT.RUNS.MODAL.METHOD_PARAM_PROPERTY_SET',
+            url : '/secure/emc/module/mdm/bizmdm/tests/page/result-run/method-param-detail' + Gikam.param({
+                id : id,
+            }),
+        });
     },
 
     create : function() {

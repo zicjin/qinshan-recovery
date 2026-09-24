@@ -14,7 +14,7 @@ emcOrderHandover.searchAllPage = {
                     page : true,
                     service : 'emcSampleServiceImpl',
                     requestData : {
-                        orgId_SB: workspace.user.ext$.parentorgid
+                        org_filter : '1',
                     },
                     columns : emcOrderHandover.getSampleListColumns(),
                     checkOnActive : true,

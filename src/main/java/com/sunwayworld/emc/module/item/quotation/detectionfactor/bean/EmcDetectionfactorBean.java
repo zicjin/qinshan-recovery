@@ -43,6 +43,8 @@ public class EmcDetectionfactorBean extends AbstractInsertable<Long> implements 
     private LocalDateTime createdTime;// 制单时间
     private String createdByOrgId;// 制单人单位编码
     private String createdByOrgName;// 制单人单位名称
+    private String orgId;// 制单人单位编码
+    private Long testCategoryId;// 测试类别ID
 
     @Override
     public Long getId() {
@@ -206,5 +208,21 @@ public class EmcDetectionfactorBean extends AbstractInsertable<Long> implements 
 
     public void setMonitorTmplGroupName(String monitorTmplGroupName) {
         this.monitorTmplGroupName = monitorTmplGroupName;
+    }
+
+    public String getOrgId() {
+        return orgId;
+    }
+
+    public void setOrgId(String orgId) {
+        this.orgId = orgId;
+    }
+
+    public Long getTestCategoryId() {
+        return testCategoryId;
+    }
+
+    public void setTestCategoryId(Long testCategoryId) {
+        this.testCategoryId = testCategoryId;
     }
 }

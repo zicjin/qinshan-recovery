@@ -45,7 +45,7 @@
 	  <select id="selectTreeNodeList" resultType="map">
         SELECT T.* 
           FROM (SELECT O.*,
-                       IFNULL(P.CHILDQTY, 0) CHILDQTY
+                       NVL(P.CHILDQTY, 0) CHILDQTY
                   FROM T_EMC_BIOLOGY O
                   LEFT JOIN (SELECT C.PARENTID,
                                     COUNT(1) CHILDQTY

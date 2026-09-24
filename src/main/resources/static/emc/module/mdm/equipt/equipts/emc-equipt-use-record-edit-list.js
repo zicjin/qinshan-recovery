@@ -76,8 +76,43 @@ emcEquiptUseRecord.editPage = {
                 onClick : function() {
                     _this.deleteRecoud();
                 }
-            }]
+            },{
+                type : 'button',
+                text : '获取批录入时间',
+                icon : 'edit',
+                onClick : function() {
+                    _this.batchUpdateStartTime();
+                }
+            },]
         }
+    },
+
+    batchUpdateStartTime : function() {
+        var date = Gikam.getComp('emc-equipt-use-record-edit-list-grid').getData();
+        if (Gikam.isEmpty(date)) {
+            Gikam.alert('没有数据');
+            return;
+        }
+
+        var selections = Gikam.getComp('emc-run-edit-list-test-run-grid').getSelections();
+        if(Gikam.isEmpty(selections[0].analysisBeginDate) || Gikam.isEmpty(selections[0].analysisBeginTime)){
+            Gikam.alert('未维护批开始日期时间');
+            return;
+        }
+        if(Gikam.isEmpty(selections[0].analysisEndDate) || Gikam.isEmpty(selections[0].analysisEndTime)){
+            Gikam.alert('未维护批结束日期时间');
+            return;
+        }
+        // var analysisBeginDate = selections[0].analysisBeginDate;
+        // var analysisBeginTime = selections[0].analysisBeginTime;
+
+        date.map(function(item) {
+            Gikam.getComp('emc-equipt-use-record-edit-list-grid').setData({
+                id : item.id,
+                startTime : selections[0].analysisBeginDate + ' ' + selections[0].analysisBeginTime,
+                endTime : selections[0].analysisEndDate + ' ' + selections[0].analysisEndTime,
+            });
+        });
     },
 
     batchUpdateRecord : function() {

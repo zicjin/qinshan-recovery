@@ -49,6 +49,8 @@ emcCurve.selectItemQcPage = {
             type : 'shuttleFrame',
             id : 'emc-select-qc-list-shuttle-frame',
             columns : emcCurve.getQcCategoryListColumns(),
+            rightPage : false,
+            leftPage : false,
             leftGridUrl : IFM_CONTEXT + '/secure/emc/module/mdm/basemdm/qc-categories/queries/choosable',
             leftRequestData : {
                 setName_SEQ : 'QC_CAL'

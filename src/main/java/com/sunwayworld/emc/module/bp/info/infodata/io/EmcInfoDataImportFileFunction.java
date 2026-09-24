@@ -77,12 +77,11 @@ public class EmcInfoDataImportFileFunction implements CoreFileImportFunction {
     @Override
     public CoreFileImportResultDTO apply(CoreFileBean file) {
         CoreFileImportResultDTO importResultDto = new CoreFileImportResultDTO();
-        FilePathDTO fr = CoreFileUtils.toFilePath(file);
 
         // 获取主表id
         Long infoConfigId = NumberUtils.parseLong(file.getTargetId().split("\\$")[1]);
         // 导入综合信息数据
-        List<List<Map<String, Object>>> emcInfoList = extractInfoDataFromExcel(FilePathManager.getLocalPath(fr).toString(), infoConfigId, 0, 0, 1, EmcInfoDataBean.class);
+        List<List<Map<String, Object>>> emcInfoList = extractInfoDataFromExcel(CoreFileUtils.getLocalPath(file).toString(), infoConfigId, 0, 0, 1, EmcInfoDataBean.class);
         List<EmcInfoDataBean> emcInfoDataList = emcInfoList.get(0).stream().map(m -> PersistableHelper.mapToPersistable(m, EmcInfoDataBean.class)).collect(Collectors.toList());
         List<EmcInfoDataItemBean> emcInfoDataItemList = emcInfoList.get(1).stream().map(m -> PersistableHelper.mapToPersistable(m, EmcInfoDataItemBean.class)).collect(Collectors.toList());
         if (!emcInfoDataList.isEmpty() && !emcInfoDataItemList.isEmpty()) {
@@ -91,7 +90,7 @@ public class EmcInfoDataImportFileFunction implements CoreFileImportFunction {
         } else {
             // 存在错误信息
             String errorFileName = "综合信息数据导入错误信息.xls";
-            FilePathDTO pathDTO = ExcelHelper.writeImportFailureListAsExcel(FilePathManager.getLocalPath(fr).toString(), emcInfoDataList, 0, 1, errorFileName);
+            FilePathDTO pathDTO = ExcelHelper.writeImportFailureListAsExcel(CoreFileUtils.getLocalPath(file).toString(), emcInfoDataList, 0, 1, errorFileName);
             importResultDto.setUrl(FilePathManager.getUrl(pathDTO));
         }
         return importResultDto;

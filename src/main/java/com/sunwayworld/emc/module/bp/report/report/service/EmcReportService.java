@@ -22,6 +22,8 @@ public interface EmcReportService extends GenericService<EmcReportBean, Long>, G
 
     void insertByProject(List<Long> projectIdList, boolean viewFlag);
 
+    void insertByProjectDone(List<Long> projectIdList, boolean viewFlag);
+
     void bizUndo(RestJsonWrapperBean jsonWrapper);
 
     Page<EmcOrderTaskBean> selectUndoableAnalysisOrgDataTypePagination(RestJsonWrapperBean wrapper);
@@ -59,4 +61,8 @@ public interface EmcReportService extends GenericService<EmcReportBean, Long>, G
     void undoRun(Long projId, RestJsonWrapperBean wrapper);
 
     void submitUndid(RestJsonWrapperBean wrapper);
+
+    String pack(RestJsonWrapperBean wrapper);
+
+    String packReportFile(RestJsonWrapperBean wrapper);
 }

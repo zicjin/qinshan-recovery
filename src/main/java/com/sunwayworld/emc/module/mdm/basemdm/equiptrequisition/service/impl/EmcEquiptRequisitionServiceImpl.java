@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.sunwayworld.emc.module.mdm.basemdm.equiptrequisition.bean.EmcEquiptRequisitionBean;
 import com.sunwayworld.emc.module.mdm.basemdm.equiptrequisition.dao.EmcEquiptRequisitionDao;
 import com.sunwayworld.emc.module.mdm.basemdm.equiptrequisition.service.EmcEquiptRequisitionService;
-import com.sunwayworld.emc.module.mdm.equipt.equipt.bean.EmcEquiptBean;
 import com.sunwayworld.emc.module.mdm.equipt.equipt.service.EmcEquiptService;
 import com.sunwayworld.framework.at.annotation.AuditTrailEntry;
 import com.sunwayworld.framework.at.annotation.AuditTrailType;
@@ -63,10 +62,6 @@ public class EmcEquiptRequisitionServiceImpl implements EmcEquiptRequisitionServ
 
         getDao().insert(requisitionList);
 
-        List<EmcEquiptBean> equiptList = emcEquiptService.getDao().selectListByIds(validEquiptIds);
-        equiptList.forEach(equipt -> equipt.setIsOnStock(Constant.NO));
-        emcEquiptService.getDao().update(equiptList, "isOnStock");
-
         return 0L;
     }
 
@@ -89,11 +84,6 @@ public class EmcEquiptRequisitionServiceImpl implements EmcEquiptRequisitionServ
                     emcEquiptRequisition.setIsBack("1");
                     emcEquiptRequisition.setBackStatus(newEquiptRequisition.getBackStatus());
                     getDao().update(emcEquiptRequisition);
-
-                    //更新在库
-                    EmcEquiptBean equiptBean = emcEquiptService.getDao().selectById(emcEquiptRequisition.getEquiptId());
-                    equiptBean.setIsOnStock("1");
-                    emcEquiptService.getDao().updateIfChanged(equiptBean);
                 }
             }
         }
@@ -144,9 +134,6 @@ public class EmcEquiptRequisitionServiceImpl implements EmcEquiptRequisitionServ
             return;
         }
         for (EmcEquiptRequisitionBean t : deleteList) {
-            EmcEquiptBean equiptBean = emcEquiptService.getDao().selectById(getDao().selectById(t.getId()).getEquiptId());
-            equiptBean.setIsOnStock("1");
-            emcEquiptService.getDao().update(equiptBean);
             getDao().delete(t.getId());
         }
     }

@@ -8,6 +8,7 @@ emcConsume.editPage = {
             url : emcConsume.baseUrl + '/queries/raw',
             service : 'emcConsumeServiceImpl',
             columns : emcConsume.getEditListColumns(),
+            readonly : !Gikam.isEmpty(_this.param.readonly),
             checkOnActive : true,
             filterOpen : true,
             deleteFormatter : function(row) {
@@ -23,7 +24,7 @@ emcConsume.editPage = {
             onRowActive : function(index, row) {
                 _this.onCsmActive(row);
             },
-            toolbar : [ {
+            toolbar : !Gikam.isEmpty(_this.param.readonly) ? [] : [ {
                 type : 'button',
                 text : 'GIKAM.BUTTON.INSERT',
                 icon : 'add',
@@ -31,7 +32,10 @@ emcConsume.editPage = {
                     Gikam.preInsert({
                         modalTitle : 'EMC.MODULE.ITEM.CONSUME.CONSUMES.MODAL.CONSUME_ADD',
                         fields : emcConsume.getBaseInfoFormFields(),
-                        url : emcConsume.baseUrl
+                        url : emcConsume.baseUrl,
+                        onFormRendered : function() {
+                            this.removeFieldValidator( 'productNo' , ['notEmpty'] )
+                        }
                     }).done(function(id) {
                         Gikam.getComp('emc-consume-edit-list-grid').refresh();
                         _this.onCsmActive({
@@ -50,10 +54,24 @@ emcConsume.editPage = {
                 }
             }, {
                 type : 'button',
+                text : '批录入',
+                icon : 'add',
+                onClick : function() {
+                    _this.batchInput('emc-consume-edit-list-grid','emcConsumeServiceImpl',emcConsume.getEditListColumns().filter(r=>r.editor));
+                }
+            }, {
+                type : 'button',
                 text : 'EMC.MODULE.ITEM.CONSUME.CONSUMES.BUTTON.PRINT',
                 icon : 'print',
                 onClick : function() {
                     _this.viewReport();
+                }
+            }, {
+                type : 'button',
+                text : '标签',
+                icon : 'print',
+                onClick : function() {
+                    Gikam.viewReport('consumeTag', Gikam.getComp('emc-consume-edit-list-grid').getSelections());
                 }
             }, {
                 type : 'button',
@@ -63,7 +81,25 @@ emcConsume.editPage = {
                     var grid = Gikam.getComp('emc-consume-edit-list-grid');
                     Gikam.viewAudit('T_EMC_CONSUME', grid.getSelections());
                 }
-            } ]
+            },{
+                type : 'dropDownMenu',
+                text : 'EMC.MODULE.BP.RESULT.CURVES.BUTTON.QUICK_INPUT',
+                items : [ {
+                    type : 'button',
+                    text : 'GIKAM.BUTTON.EXPORT',
+                    icon : 'move-up',
+                    onClick : function() {
+                        _this.exportFile();
+                    }
+                }, {
+                    type : 'button',
+                    text : 'GIKAM.BUTTON.IMPORT',
+                    icon : 'move-down',
+                    onClick : function() {
+                        _this.importFile();
+                    }
+                } ]
+            },]
         }
     },
 
@@ -82,6 +118,7 @@ emcConsume.editPage = {
                     id : 'emc-consume-detail-stock-list-grid',
                     url : _this.getCompUrl('stockGrid'),
                     columns : emcConsume.getStockListColumns(),
+                    readonly : !Gikam.isEmpty(_this.param.readonly),
                     checkOnActive : true,
                     service : 'emcCsmStockServiceImpl',
                     deleteFormatter : function(row) {
@@ -118,7 +155,7 @@ emcConsume.editPage = {
                             uploader.grid.refresh();
                         }
                     },
-                    toolbar : [ {
+                    toolbar : !Gikam.isEmpty(_this.param.readonly) ? [_this.showAllBtn()] : [ {
                         type : 'button',
                         text : 'GIKAM.BUTTON.INSERT',
                         icon : 'add',
@@ -128,7 +165,15 @@ emcConsume.editPage = {
                             Gikam.preInsert({
                                 modalTitle : 'EMC.MODULE.ITEM.CONSUME.CONSUMES.MODAL.STOCK_ADD',
                                 fields : emcConsume.getStockBaseInfoFormFields(),
-                                url : _this.getCompUrl('stockBaseInfo', activeRow.id)
+                                url : _this.getCompUrl('stockBaseInfo', activeRow.id),
+                                onFormRendered: function(){
+                                    this.removeFieldValidator('batchNo', ['notEmpty']);
+                                    this.removeFieldValidator('price', ['notEmpty']);
+                                    this.removeFieldValidator('vendorId', ['notEmpty']);
+                                    this.setData({
+                                        vendorId: activeRow.ext$.vendorid
+                                    });
+                                }
                             }).done(function(id) {
                                 Gikam.getComp('emc-consume-detail-stock-list-grid').refresh({
                                     url : _this.getCompUrl('stockGrid', activeRow.id),
@@ -286,24 +331,43 @@ emcConsume.editPage = {
                                 Gikam.alert('EMC.MODULE.ITEM.CONSUME.CONSUMES.STOCK.TIP.CHOOSE_ONE');
                             }
                         }
-                    }, {
+                    },{
                         type : 'button',
-                        text : 'EMC.MODULE.ITEM.CONSUME.CONSUMES.STOCK.BUTTON.SHOWALL',
-                        icon : 'select',
+                        text : '批录入',
+                        icon : 'add',
                         onClick : function() {
-                            var activedRow = Gikam.getComp('emc-consume-edit-list-grid').getActivedRow();
-                            Gikam.getComp('emc-consume-detail-stock-list-grid').refresh({
-                                url : _this.getCompUrl('stockGrid', activedRow.id),
-                                requestData : {
-                                    status_SEQ : null,
-                                    stockQty_NG : null,
-                                },
-                            });
+                            _this.batchInput('emc-consume-detail-stock-list-grid','emcCsmStockServiceImpl',emcConsume.getStockListColumns().filter(r=>r.editor));
                         }
-                    } ]
+                    }, _this.showAllBtn()]
                 } ]
             } ]
         }
+    },
+    showAllBtn  : function() {
+        var _this = this;
+        return {
+            type : 'form',
+            autoSave : false,
+            fields : [ {
+                title : '显示全部',
+                field : 'showAll',
+                type : 'simpleCheckbox',
+                refreshGrid : false,
+                styleFormatter : function() {
+                    return {
+                        paddingLeft : '0'
+                    }
+                },
+                onChange : function(field, value, index) {
+                    Gikam.getComp('emc-consume-detail-stock-list-grid').refresh({
+                        requestData : {
+                            status_SEQ :  value === '1' ? null : '0',
+                            stockQty_NG :  value === '1' ? null : 0,
+                        },
+                    });
+                },
+            } ]
+        };
     },
 
     getStockLogGridParam : function() {
@@ -320,6 +384,7 @@ emcConsume.editPage = {
                     id : 'emc-consume-detail-stock-log-list-grid',
                     url : _this.getCompUrl('stockLogGrid'),
                     columns : emcConsume.getStockLogListColumns(),
+                    readonly : !Gikam.isEmpty(_this.param.readonly),
                     service : 'emcCsmStockLogServiceImpl',
                     deleteFormatter : function(row) {
                         return row.logType || row.id;
@@ -333,6 +398,7 @@ emcConsume.editPage = {
                 items : [ {
                     type : 'uploader',
                     id : 'emc-consume-detail-stock-uploader',
+                    readonly : !Gikam.isEmpty(_this.param.readonly),
                     dbTable : 'T_EMC_CSM_STOCK',
                     bizId : '',
                     onBeforeUpload : function() {
@@ -342,20 +408,127 @@ emcConsume.editPage = {
             } ]
         }
     },
+    getQrCodeParam: function(){
+        let _this = this;
+        return {
+            type: 'grid',
+            id: 'emc-consume-qrcode-grid',
+            generalButtonGroupShow: false,
+            page: false,
+            onRendered: function(){
+                this.hideBody();
+                this.appendContent(`
+                    <div id="qrcode_print" style="text-align: center;"><div id="qrcode" style="width:128px; height:128px; margin-top:20px;margin-left: auto;margin-right: auto;"></div><div id="mtlInfo" style="margin-top:10px;"></div></div>`);
+                Gikam.jQuery('#emc-consume-qrcode-grid .grid-toolbar-total-record').hide();
+            },
+            toolbar: [{
+                type: 'button',
+                text: 'GIKAM.BUTTON.PRINT',
+                icon: 'print',
+                onClick: function () {
+                    _this.printQrcode();
+                }
+            }]
 
+        }
+    },
     onCsmActive : function(row) {
         var _this = this;
         if (row) {
-            Gikam.getComp('emc-consume-detail-stock-list-grid').refresh({
-                url : _this.getCompUrl('stockGrid', row.id),
-                requestData : {
+            Gikam.getAsyncComp('emc-consume-detail-stock-list-grid').done(function(grid){
+                grid.refresh({
+                    url : _this.getCompUrl('stockGrid', row.id),
+                    requestData : {
                     status_SEQ : '0',
-                    stockQty_NG : 0,
-                },
+                        stockQty_NG : 0,
+                    },
+                });
+            });
+            Gikam.getAsyncComp('emc-consume-qrcode-grid').done(function(){
+                let qrcodeText = JSON.stringify({
+                    "名称": row.mtlName,
+                    "规格": row.specification,
+                    "编码": row.id
+                });
+                if(_this.qrcode == undefined){
+                    _this.qrcode = new QRCode(document.getElementById("qrcode"),{
+                        text: qrcodeText,
+                        width: 128,
+                        height: 128,
+                        colorDark : "#000000",
+                        colorLight : "#ffffff",
+                        correctLevel : QRCode.CorrectLevel.H
+                    });
+                }else{
+                    _this.qrcode.makeCode(qrcodeText);
+                }
+                Gikam.jQuery('#mtlInfo').html(`<p>${row.mtlName}</p><p>${row.id}</p>`);
             });
         }
     },
 
+    printQrcode: function(){
+        var modal = Gikam.create('modal', {
+            title: "二维码打印",
+            width: 400,
+            height: 200,
+        });
+        var layout = Gikam.create('layout', {
+            renderTo: modal.window.$dom,
+            center: {
+                items: [{
+                    type: 'btnToolbar',
+                    items: [{
+                        type: 'button',
+                        text: 'GIKAM.BUTTON.CONFIRM',
+                        icon: 'select',
+                        onClick: function () {
+                            if (form.validate()) {
+                                let num = form.getData().num;
+                                const qrcodeDiv = Gikam.jQuery('#qrcode_print').html();
+                                const printWindow = window.open('', '_blank');
+
+                                printWindow.document.write('<html><head><title>打印二维码</title></head><body><div style="text-align: center;">');
+                                for(let i=0;i<num;i++){
+                                    printWindow.document.write(qrcodeDiv);
+                                }
+
+                                printWindow.document.write('</div></body></html>');
+
+                                printWindow.document.close();
+                                setTimeout(function(){
+                                    printWindow.print();
+                                    printWindow.close();
+                                },500);
+                            }
+                        }
+                    }, {
+                        type: 'button',
+                        text: 'GIKAM.BUTTON.CANCEL',
+                        icon: 'cancel',
+                        onClick: function () {
+                            modal.close();
+                        }
+                    }]
+                }]
+            }
+        });
+
+        var form = Gikam.create('form', {
+            renderTo: layout.options.center.$dom,
+            columns: 1,
+            titleWidth: 80,
+            fields: [{
+                field: 'num',
+                title: '打印数量',
+                type : 'number',
+                editor: true,
+                value: 1,
+                validators: ['notEmpty', 'integer'],
+            }],
+            autoSave: false
+        });
+    },
     viewReport : function() {
         var gridData = Gikam.getComp('emc-consume-edit-list-grid').getSelections();
         if (gridData.length !== 1) {
@@ -365,6 +538,69 @@ emcConsume.editPage = {
         Gikam.viewReport('MTL_REPORT', {
             id : gridData[0].id
         });
+    },
+
+    batchInput : function(gridId,service,columns) {
+        var _this = this;
+        var selections = Gikam.getComp(gridId).getSelections();
+        if (Gikam.isEmpty(selections)) {
+            Gikam.alert('GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM');
+            return;
+        }
+
+        var activeRow = selections[0];
+        var modal = Gikam.create('modal', {
+            title: "GIKAM.BUTTON.BATCH_INPUT",
+            width : 500,
+            height : 350,
+        });
+        var layout = Gikam.create('layout', {
+            renderTo: modal.window.$dom,
+            center: {
+                items: [ {
+                    type: 'btnToolbar',
+                    items: [ {
+                        type : 'button',
+                        text : 'GIKAM.BUTTON.CONFIRM',
+                        icon : 'select',
+                        onClick : function() {
+                            if (form.validate()) {
+                                var formData = form.getData();
+                                var chooseData = selections.map(function (item) {
+                                    let newJson = JSON.parse(JSON.stringify(formData));
+                                    newJson.id = item.id;
+                                    return newJson;
+                                });
+                                Gikam.getLastModal().window.showMask(true);
+                                Gikam.put(IFM_CONTEXT + '/secure/gikam/actions/instant', Gikam.getJsonWrapper({}, [ service, chooseData ])).done(function (data) {
+                                    Gikam.getComp(gridId).refresh();
+                                }).always(function () {
+                                    Gikam.getLastModal().window.closeMask();
+                                    modal.close();
+                                });
+                            }
+                        }
+                    }, {
+                        type : 'button',
+                        text : 'GIKAM.BUTTON.CANCEL',
+                        icon : 'cancel',
+                        onClick : function () {
+                            modal.close();
+                        }
+                    }  ]
+                }]
+            }
+        });
+
+        var form = Gikam.create('form', {
+            renderTo: layout.options.center.$dom,
+            columns: 1,
+            titleWidth: 100,
+            fields: columns,
+            autoSave: false,
+
+        });
+
     },
 
     urlManager : {
@@ -387,6 +623,26 @@ emcConsume.editPage = {
         });
     },
 
+    exportFile : function() {
+        Gikam.getText(Gikam.printf('/core/module/item/files/{templateCode}/action/download-template/{service}', {
+            templateCode : 'emcConsumeExportTemplate',
+            service : 'emcConsumeExportTemplate'
+        })).done(function(fileUri) {
+            var fileUrl = IFM_CONTEXT + fileUri;
+            Gikam.emcDownloadFile(fileUrl);
+        });
+    },
+
+    importFile : function() {
+        Gikam.importExcel({
+            url : IFM_CONTEXT + '/core/module/item/files/{id}/action/import/' + 'emcConsumeImportFileFunction',
+            dbTable : 'T_EMC_CONSUME',
+            onImportSuccess : function(files) {
+                Gikam.getComp('emc-consume-edit-list-grid').refresh();
+            }
+        });
+    },
+
     create : function() {
         var _this = this;
         Gikam.create('layout', {
@@ -398,11 +654,17 @@ emcConsume.editPage = {
             center : {
                 items : [ {
                     type : 'layout',
-                    north : {
+                    west : {
                         height : '50%',
+                        width: '80%',
                         items : [ _this.getStockGridParam() ]
                     },
                     center : {
+                        height : '50%',
+                        items : [ _this.getQrCodeParam() ]
+                    },
+                    south : {
+                        height : '50%',
                         items : [ _this.getStockLogGridParam() ]
                     }
                 } ]
@@ -410,7 +672,8 @@ emcConsume.editPage = {
         });
     },
 
-    init : function() {
+    init : function(param) {
+        this.param = param;
         this.create();
     }
 };

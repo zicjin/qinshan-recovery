@@ -6,11 +6,11 @@
     <select id="selectByCondition" parameterType="map" resultType="map">
         SELECT T.*
           FROM (SELECT A.*,
-                       B.PROJNO,
                        B.PROJNAME,
                        B.CREATEDBYNAME AS PROJUSERNAME,
                        B.ORGNAME,
                        B.TESTORGNAME,
+                       B.ACCOUNTINGFLAG,
                        B.ENTRUSTORGNAME,
                        C.BIZCATEGORYNAME
                   FROM T_EMC_ADVISORY_REPORT A

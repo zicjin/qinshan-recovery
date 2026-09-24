@@ -47,6 +47,9 @@
             <if test='folderid != "" and folderid != null'>
             	 AND T.MTLCATEGORYNAME in ('标准样品','一般试剂')
             </if>
+            <if test='remind == "lowlimit"'>
+                AND T.STOCKQTY <![CDATA[<=]]> T.LOWLIMIT
+            </if>
         </where>
         ORDER BY
         <choose>
@@ -70,14 +73,21 @@
     <select id="selectStockOverdue" parameterType="map" resultType="map">
         SELECT T.*
           FROM T_EMC_STOCK T
-         WHERE T.EXPIREDATE <![CDATA[<=]]> sysdate()
+         WHERE T.EXPIREDATE <![CDATA[<=]]> SYSDATE
     </select>
 
      <select id="selectStockLowLine" parameterType="map" resultType="map">
-        SELECT T.*
-          FROM T_EMC_STOCK T
-         WHERE T.STOCKQTY <![CDATA[<=]]> T.LOWLIMIT
-
+         SELECT T.MTLID
+            FROM(
+                SELECT T.*,B.MANAGEMENTTYPE
+                  FROM T_EMC_STOCK T
+                   LEFT JOIN T_EMC_MTL A ON T.MTLID = A.ID
+                   LEFT JOIN T_EMC_MTL_CATEGORY B ON A.MTLCATEGORYID = B.ID
+                 WHERE T.STOCKQTY <![CDATA[<=]]> T.LOWLIMIT)T
+         <where>
+             <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+         </where>
+         GROUP BY T.MTLID
     </select>
 
     <select id="selectQcStdStockPagination" parameterType="map" resultType="map">
@@ -110,7 +120,7 @@
         D.STOCKID = A.ID
         LEFT JOIN T_EMC_MTL_APPLY E ON
         A.ID = E.STOCKID
-        ) AS T
+        ) T
         <where>
             <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
             /*查询关联该批下测试的标样*/
@@ -126,7 +136,7 @@
             </if>
             /*查询已经领取的标样*/
             <if test='isReceive == "1"'>
-                AND T.APPLYID IS NOT NULL AND T.APPLYSTATUS = 'done'
+                AND EXISTS(SELECT 1 FROM T_EMC_STOCK_LOG F WHERE F.STOCKID = T.ID AND F.LOGTYPE = '领取' AND F.RECEIVEDBYID = #{loginUser.id})
             </if>
         </where>
         ORDER BY

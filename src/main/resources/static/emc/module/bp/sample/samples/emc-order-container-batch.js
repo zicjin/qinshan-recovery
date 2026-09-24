@@ -22,6 +22,17 @@ emcSample.orderContainerBatchPage = {
             id : 'emc-folder-order-container-batch-form',
             fields : emcSample.getOrderContainerFormFields(),
             columns : 1,
+            onRendered : function(){
+                Gikam.getComp('emc-folder-order-container-batch-form').setData({
+                    containerGroup : _this.param.containerGroup,
+                    containerCategoryId : _this.param.containerCategoryId,
+                    containerCategoryCode : _this.param.containerCategoryCode,
+                    containerCategoryName : _this.param.containerCategoryName,
+                    fixative : _this.param.fixative,
+                    storeCondition : _this.param.storeCondition,
+                });
+
+            },
         };
     },
 

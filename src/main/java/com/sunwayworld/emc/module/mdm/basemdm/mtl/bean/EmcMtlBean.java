@@ -25,6 +25,8 @@ public class EmcMtlBean extends AbstractPersistable<String> implements Insertabl
 
     private String mtlLabNo; // 实验室编号
 
+    private String mtlNo; // 材料编号
+
     private String mtlName; // 材料名称
 
     private String specification; // 规格型号
@@ -57,6 +59,14 @@ public class EmcMtlBean extends AbstractPersistable<String> implements Insertabl
     @Override
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getMtlNo() {
+        return mtlNo;
+    }
+
+    public void setMtlNo(String mtlNo) {
+        this.mtlNo = mtlNo;
     }
 
     public String getMtlLabNo() {

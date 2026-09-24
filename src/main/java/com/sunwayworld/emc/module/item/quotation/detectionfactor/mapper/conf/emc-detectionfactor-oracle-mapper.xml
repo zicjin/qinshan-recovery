@@ -2,8 +2,28 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sunwayworld.emc.module.item.quotation.detectionfactor.mapper.EmcDetectionfactorMapper">
     <select id="selectByCondition" parameterType="map" resultType="map">
-        SELECT T.*
-          FROM T_EMC_QUOTATION_DETECTIONFACTOR T
+        SELECT
+            T.*
+        FROM
+            (
+                SELECT
+                    A.*,
+                    B.METHODNAME AS METHODNAMEE,
+                    B.METHODNO,
+                    B.TESTMETHODBASIS,
+                    C.ORGNAME AS PARENTORGNAME,
+                    E.TESTMETHODTYPE
+                FROM
+                    T_EMC_QUOTATION_DETECTIONFACTOR A
+                LEFT JOIN T_EMC_METHOD B ON
+                    A.METHODID = B.ID
+                LEFT JOIN T_CORE_ORG C ON
+                    A.ORGID = C.ID
+        LEFT JOIN T_EMC_ITEM_GROUP D ON
+        A.ITEMGROUPID = D.ID
+        LEFT JOIN T_EMC_TEST_METHOD E ON
+        D.TESTMETHODID = E.ID
+            ) T
         <where>
             <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
         </where>

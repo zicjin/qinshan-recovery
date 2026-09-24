@@ -153,7 +153,7 @@ var emcEquiptRecord = Gikam.getPageObject({
                }
                return true;
            },
-           validators : [ 'notEmpty' ],
+           // validators : [ 'notEmpty' ],
         },{
            field : 'certCategory',
            title : 'T_EMC_EQUIPT_RECORD.CERTCATEGORY',
@@ -192,7 +192,7 @@ var emcEquiptRecord = Gikam.getPageObject({
                 }
                 return true;
             },
-            validators : [ 'notEmpty', 'strLength[0, 36]' ],
+            validators : ['strLength[0, 36]' ],
         }, {
             field : 'createdByName',
             title : 'T_EMC_EQUIPT_RECORD.CREATEDBYNAME',

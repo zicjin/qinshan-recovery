@@ -129,7 +129,7 @@ emcSample.dataInputDetailPage = {
                             id : id.join() + '-' + resultData[0].ext$.sampleid
                         })).done(function(fileUri) {
                             var fileUrl = IFM_CONTEXT + fileUri;
-                            Gikam.download(fileUrl);
+                            Gikam.emcDownloadFile(fileUrl);
                         });
                     }
                 } ]
@@ -198,7 +198,7 @@ emcSample.dataInputDetailPage = {
             }).join(",");
             Gikam.getAsyncComp('emc-order-task-equipt-edit-list-grid').done(function(grid) {
                 grid.refresh({
-                    url : '/secure/emc/module/bp/bp/order-tasks/queries',
+                    url : '/secure/emc/module/bp/bp/order-tasks/queries/order-task',
                     requestData : {
                         folderId_IN : folderIdString === '' ? '0' : folderIdString,
                         analysisType_SEQ : 'sampling',
@@ -252,7 +252,7 @@ emcSample.dataInputDetailPage = {
                             readonly : _this.getHidden(),
                             onLoadSuccess : function(data) {
                                 if (!Gikam.isEmpty(data)) {
-                                    this.activeRowByIndex(1);
+                                    this.activeRowByIndex(0);
                                 }
                             },
                             onRendered : function() {
@@ -325,8 +325,9 @@ emcSample.dataInputDetailPage = {
                                                 })
                                             }
                                         })).done(function(data) {
-
-                                            grid.refreshByData(data, true);
+                                            Gikam.each(data.rows, function(index, row) {
+                                                grid.setData(row, false, true);
+                                            });
 
                                         }).always(function() {
                                             Gikam.getLastModal().window.closeMask();
@@ -346,6 +347,7 @@ emcSample.dataInputDetailPage = {
                                     var grid = Gikam.getComp(_this.idGrid.resultGridId);
                                     grid.refreshGroup({
                                         fields : [ 'orderNo' ],
+                                        expand : true,
                                         formatter : function(row) {
                                             return row.orderNo;
                                         }
@@ -362,6 +364,7 @@ emcSample.dataInputDetailPage = {
                                     var grid = Gikam.getComp(_this.idGrid.resultGridId);
                                     grid.refreshGroup({
                                         fields : [ 'ext$.testname' ],
+                                        expand : true,
                                         formatter : function(row) {
                                             return row.ext$.testname;
                                         }
@@ -512,7 +515,7 @@ emcSample.dataInputDetailPage = {
             Gikam.getAsyncComp(_this.idGrid.resultGridId).done(function(grid) {
                 grid.options.checkOneOnActive = true;
                 grid.setOptions({
-                    url : _this.getOrderTaskResultUrl(sampleId),
+                    url : IFM_CONTEXT + '/secure/emc/module/bp/bp/order-task-results/queries',
                     requestData : {
                         folderId_SEQ : row.id,
                         analysisType_SEQ : 'sampling',
@@ -648,9 +651,11 @@ emcSample.dataInputDetailPage = {
             title : 'EMC.MODULE.BP.SAMPLE.SAMPLES.MODAL.EDIT_ITEM',
             url : emcSample.baseUrl + '/page/edit-item' + Gikam.param({
                 id : data.orderTaskId,
+
             }),
             onAfterClose : function(afterData) {
-                if (Gikam.isEmpty(afterData[0]) || Gikam.isEmpty(afterData[1])) {
+               var folderData =  Gikam.getComp('emc-sample-data-input-detail-list-grid').getSelections();
+                if (Gikam.isEmpty(afterData) || Gikam.isEmpty(folderData)) {
                     return;
                 }
                 workspace.window.showMask(true);
@@ -658,7 +663,7 @@ emcSample.dataInputDetailPage = {
                     f : {
                         sampleId : _this.param.id
                     }
-                }, [ 'emcOrderTaskResultServiceImpl', [ data ] ], [ 'emcItemServiceImpl', afterData[0] ], [ 'emcFolderServiceImpl', afterData[1] ])).done(function() {
+                }, [ 'emcOrderTaskResultServiceImpl', [ data ] ], [ 'emcItemServiceImpl', afterData ], [ 'emcFolderServiceImpl', folderData ])).done(function() {
                     Gikam.getComp(_this.idGrid.resultGridId).refresh();
                 }).always(function() {
                     workspace.window.closeMask();
@@ -809,8 +814,7 @@ emcSample.dataInputDetailPage = {
             title : Gikam.choose.getConfig('equipt').title,
             url : Gikam.choose.getConfig('equipt').url + Gikam.param({
                 single : true,
-                biz : 'orderTask',
-                testMethodId : selections[0].testMethodId
+                equiptRequisitionFilterProjId : selections[0].projId
             }),
             onAfterClose : function(rows) {
                 if (Gikam.isEmpty(rows)) {
@@ -858,8 +862,10 @@ emcSample.dataInputDetailPage = {
         Gikam.create('modal', {
             title : Gikam.choose.getConfig('equipt').title,
             url : Gikam.choose.getConfig('equipt').url + Gikam.param({
-                orgId_SB: workspace.user.ext$.parentorgid,
-                equiptCategoryId_EQ : 615348928847936
+                // org_filter : '1',
+                // equiptCategoryId_EQ : 615348928847936,
+                ID_DIFFER : selections[0].equiptId,
+                equiptRequisitionFilterProjId : selections[0].projId
             }),
             onAfterClose : function(rows, index) {
                 if (Gikam.isEmpty(rows)) {
@@ -868,14 +874,16 @@ emcSample.dataInputDetailPage = {
 
                 var assistEquiptId = "";
                 var assistEquiptName = "";
+                var names=[];
 
                 Gikam.each(rows, function(index, equipt) {
+                    debugger;
                     if (Gikam.isEmpty(assistEquiptId)) {
                         assistEquiptId += equipt.id;
                     } else {
                         assistEquiptId += ',' + equipt.id;
                     }
-
+                    names.push(equipt.equiptId+"/"+equipt.equiptName+"/"+equipt.specification);
                     if (Gikam.isEmpty(assistEquiptName)) {
                         assistEquiptName += equipt.equiptName;
                     } else {
@@ -887,7 +895,7 @@ emcSample.dataInputDetailPage = {
                     return {
                         id : task.id,
                         assistEquiptId : assistEquiptId,
-                        assistEquiptName : assistEquiptName,
+                        assistEquiptName : names.join(','),
                     };
                 });
                 workspace.window.showMask(true);
@@ -897,7 +905,7 @@ emcSample.dataInputDetailPage = {
                         equiptGrid.setData({
                             id : item.id,
                             assistEquiptId : assistEquiptId,
-                            assistEquiptName : assistEquiptName,
+                            assistEquiptName : names.join(','),
                         }, false);
                     });
                     equiptGrid.disableAutoSave();

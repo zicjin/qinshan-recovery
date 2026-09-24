@@ -2,7 +2,7 @@ emcProject.schemeQueryPage = {
 
     getGridParam : function() {
         var _this = this;
-        _this.param.orgId_SB = workspace.user.ext$.parentorgid;
+        _this.param.orgId_filter = '1';
         return {
             type : 'grid',
             id : 'emc-project-query-list-grid',
@@ -12,7 +12,7 @@ emcProject.schemeQueryPage = {
             checkOnActive : true,
             filterOpen : true,
             requestData : {
-                orgId_SB : workspace.user.ext$.parentorgid,
+                org_filter : '1',
                 targetType : 'schemeQuery'
             },
             onLoadSuccess : function(data) {

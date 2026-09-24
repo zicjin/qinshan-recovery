@@ -10,7 +10,7 @@ emcQcAudit.editPage = {
             requestData : {
                 targetType : 'analysisAudit',
                 reportEditUserId : workspace.user.id,
-                orgId_SB : workspace.user.ext$.parentorgid,
+                org_filter : '1',
                 orderTaskStatus : 'qcAudit'
             },
             toolbar : [ {

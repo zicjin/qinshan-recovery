@@ -35,12 +35,11 @@ public class EmcSolRecordImportFileFunction implements CoreFileImportFunction {
     public CoreFileImportResultDTO apply(CoreFileBean file) {
         CoreFileImportResultDTO importResultDto = new CoreFileImportResultDTO();
 
-        FilePathDTO fr = CoreFileUtils.toFilePath(file);
         // 获取主表id
         Long solId = NumberUtils.parseLong(file.getTargetId().split("\\$")[1]);
         List<EmcSolRecordBean> solRecordBeanList = solRecordService.selectListByFilter(SearchFilter.instance().match("SOLID", solId).filter(MatchPattern.OR));
         int len = solRecordBeanList.size();
-        List<EmcSolRecordBean> importSolRecord = ExcelHelper.readDataFromExcel(FilePathManager.getLocalPath(fr).toString(), 1, 2, EmcSolRecordBean.class);
+        List<EmcSolRecordBean> importSolRecord = ExcelHelper.readDataFromExcel(CoreFileUtils.getLocalPath(file).toString(), 1, 2, EmcSolRecordBean.class);
         for (int index = 0; index < importSolRecord.size(); index++) {
             EmcSolRecordBean item = importSolRecord.get(index);
             item.setId(ApplicationContextHelper.getNextIdentity());

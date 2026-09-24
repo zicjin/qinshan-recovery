@@ -191,6 +191,8 @@ public class BaseWordTemplate implements WordTemplate {
 
         templateBasicDTO.setReportName(report.getReportName());
 
+        templateBasicDTO.setReportDate(DateTimeUtils.formatLocalDateTime(LocalDateTime.now(), "yyyy年MM月dd日"));
+
         return templateBasicDTO;
     }
 
@@ -375,7 +377,13 @@ public class BaseWordTemplate implements WordTemplate {
     private String getSampleDate(EmcProjectBean project, List<EmcOrderBean> orderList) {
         // 采样任务直接取采样日期
         if (Constant.YES.equals(project.getSample())) {
-            return WordTemplateUtils.getDate(orderList.stream().map(EmcOrderBean::getSampleBeginDate).distinct().collect(Collectors.toList()),true);
+            List<LocalDate> sampleBeginDateList = orderList.stream().map(EmcOrderBean::getSampleBeginDate).distinct().collect(Collectors.toList());
+            // 含噪声的样品类型，取采样开始-采样完成日期
+            if (orderList.stream().anyMatch(order -> StringUtils.contains(order.getOrderCategory(), "噪声"))) {
+                List<LocalDate> sampleCompleteDateList = orderList.stream().map(EmcOrderBean::getSampleCompleteDate).distinct().collect(Collectors.toList());
+                return WordTemplateUtils.getDate(sampleBeginDateList, sampleCompleteDateList);
+            }
+            return WordTemplateUtils.getDate(sampleBeginDateList, true);
         }
 
         // 送样任务取接样日期

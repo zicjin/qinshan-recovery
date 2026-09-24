@@ -5,7 +5,7 @@ var emcQualitySupervision = Gikam.getPageObject({
     getEditListColumns : function() {
         return [ {
             checkbox : true
-        }, Gikam.status.getBpmnColumn(emcQualitySupervision.workflow.dbTable), {
+        }, Gikam.status.getBpmnColumn(emcQualitySupervision.workflow.dbTable), /*{
             field : 'supervisionCode',
             title : 'T_EMC_QUALITY_SUPERVISION.SUPERVISIONCODE',
             width : 120
@@ -13,13 +13,72 @@ var emcQualitySupervision = Gikam.getPageObject({
             field : 'createdByName',
             title : 'T_EMC_CORRECTION.CREATEDBYNAME',
             width : 100
-        } ];
+        } */
+            // 监督内容、监督对象、计划时间（比如每周一次的，一个月就是四次，计划分四行）、监督员（（人员可以选择并提前一周提醒））和备注
+        {
+            field : 'ext$.content',
+            title : '监督内容',
+            type: 'richText',
+            editor: true,
+        },{
+            field : 'ext$.targetobj',
+            title : '监督对象',
+            editor: true,
+        },{
+            field : 'ext$.plantime',
+            title : '计划时间',
+            editor: true,
+        },{
+            field : 'ext$.supervisorname',
+            title : '监督员',
+            editor: true,
+            type : 'choose',
+            category : 'user-simple',
+            editable : true,
+            single : false,
+            onAfterChoose : function(rows,index) {
+                if (!Gikam.isEmpty(rows)) {
+                    var ids = "";
+                    var names = "";
+                    for ( let index in rows) {
+                        if (index == rows.length - 1) {
+                            ids += rows[index].id;
+                            names += rows[index].userName;
+                            break;
+                        }
+                        ids += rows[index].id + ",";
+                        names += rows[index].userName + ",";
+                    }
+                    this.setData({
+                        index : index,
+                        ext$:{
+                            supervisorid: ids,
+                            supervisorname: names
+                        }
+                    });
+                }
+            },
+            onClean : function() {
+                this.setData({
+                    id : this.getActivedRow().id,
+                    ext$:{
+                        supervisorid: '',
+                        supervisorname: ''
+                    }
+                });
+            }
+        },{
+            field : 'ext$.remark',
+            title : '备注',
+            type: 'richText',
+            editor: true,
+        }];
     },
 
     getAuditListColumns : function() {
         return [ {
             checkbox : true
-        }, Gikam.status.getBpmnColumn(emcQualitySupervision.workflow.dbTable), {
+        }, Gikam.status.getBpmnColumn(emcQualitySupervision.workflow.dbTable), /*{
             field : 'supervisionCode',
             title : 'T_EMC_QUALITY_SUPERVISION.SUPERVISIONCODE',
             width : 120
@@ -27,13 +86,65 @@ var emcQualitySupervision = Gikam.getPageObject({
             field : 'createdByName',
             title : 'T_EMC_CORRECTION.CREATEDBYNAME',
             width : 100
-        } ];
+        } */ {
+            field : 'ext$.content',
+            title : '监督内容',
+            type: 'richText',
+        },{
+            field : 'ext$.targetobj',
+            title : '监督对象',
+        },{
+            field : 'ext$.plantime',
+            title : '计划时间',
+        },{
+            field : 'ext$.supervisorname',
+            title : '监督员',
+            type : 'choose',
+            category : 'user-simple',
+            editable : true,
+            single : false,
+            onAfterChoose : function(rows,index) {
+                if (!Gikam.isEmpty(rows)) {
+                    var ids = "";
+                    var names = "";
+                    for ( let index in rows) {
+                        if (index == rows.length - 1) {
+                            ids += rows[index].id;
+                            names += rows[index].userName;
+                            break;
+                        }
+                        ids += rows[index].id + ",";
+                        names += rows[index].userName + ",";
+                    }
+                    this.setData({
+                        index : index,
+                        ext$:{
+                            supervisorid: ids,
+                            supervisorname: names
+                        }
+                    });
+                }
+            },
+            onClean : function() {
+                this.setData({
+                    id : this.getActivedRow().id,
+                    ext$:{
+                        supervisorid: '',
+                        supervisorname: ''
+                    }
+                });
+            }
+        },{
+            field : 'ext$.remark',
+            title : '备注',
+            type: 'richText',
+        }];
     },
 
     getSearchListColumns : function() {
         return [ {
             checkbox : true
-        }, Gikam.status.getBpmnColumn(emcQualitySupervision.workflow.dbTable), {
+        }, Gikam.status.getBpmnColumn(emcQualitySupervision.workflow.dbTable), /*{
             field : 'supervisionCode',
             title : 'T_EMC_QUALITY_SUPERVISION.SUPERVISIONCODE',
             width : 120
@@ -41,7 +152,59 @@ var emcQualitySupervision = Gikam.getPageObject({
             field : 'createdByName',
             title : 'T_EMC_CORRECTION.CREATEDBYNAME',
             width : 100
-        } ];
+        } */ {
+            field : 'ext$.content',
+            title : '监督内容',
+            type: 'richText',
+        },{
+            field : 'ext$.targetobj',
+            title : '监督对象',
+        },{
+            field : 'ext$.plantime',
+            title : '计划时间',
+        },{
+            field : 'ext$.supervisorname',
+            title : '监督员',
+            type : 'choose',
+            category : 'user-simple',
+            editable : true,
+            single : false,
+            onAfterChoose : function(rows,index) {
+                if (!Gikam.isEmpty(rows)) {
+                    var ids = "";
+                    var names = "";
+                    for ( let index in rows) {
+                        if (index == rows.length - 1) {
+                            ids += rows[index].id;
+                            names += rows[index].userName;
+                            break;
+                        }
+                        ids += rows[index].id + ",";
+                        names += rows[index].userName + ",";
+                    }
+                    this.setData({
+                        index : index,
+                        ext$:{
+                            supervisorid: ids,
+                            supervisorname: names
+                        }
+                    });
+                }
+            },
+            onClean : function() {
+                this.setData({
+                    id : this.getActivedRow().id,
+                    ext$:{
+                        supervisorid: '',
+                        supervisorname: ''
+                    }
+                });
+            }
+        },{
+            field : 'ext$.remark',
+            title : '备注',
+            type: 'richText',
+        }];
     },
 
     getPlanBaseInfoFormFields : function() {

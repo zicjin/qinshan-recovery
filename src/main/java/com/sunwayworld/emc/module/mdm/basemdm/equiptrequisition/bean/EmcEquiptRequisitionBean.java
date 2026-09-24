@@ -56,6 +56,11 @@ public class EmcEquiptRequisitionBean extends AbstractInsertable<Long> implement
 
     private Long sampleId; // 采样单ID
     private String calibrationId; // 仪器校准ID
+    private String confirmUserId; // 确认人id
+    private String confirmUserName; // 确认人名称
+    private String accessory; // 附件
+    private String humidity; // 湿度
+    private String temperature; // 温度
 
     @Override
     public Long getId() {
@@ -283,5 +288,45 @@ public class EmcEquiptRequisitionBean extends AbstractInsertable<Long> implement
 
     public void setCalibrationId(String calibrationId) {
         this.calibrationId = calibrationId;
+    }
+
+    public String getConfirmUserId() {
+        return confirmUserId;
+    }
+
+    public void setConfirmUserId(String confirmUserId) {
+        this.confirmUserId = confirmUserId;
+    }
+
+    public String getConfirmUserName() {
+        return confirmUserName;
+    }
+
+    public void setConfirmUserName(String confirmUserName) {
+        this.confirmUserName = confirmUserName;
+    }
+
+    public String getAccessory() {
+        return accessory;
+    }
+
+    public void setAccessory(String accessory) {
+        this.accessory = accessory;
+    }
+
+    public String getHumidity() {
+        return humidity;
+    }
+
+    public void setHumidity(String humidity) {
+        this.humidity = humidity;
+    }
+
+    public String getTemperature() {
+        return temperature;
+    }
+
+    public void setTemperature(String temperature) {
+        this.temperature = temperature;
     }
 }

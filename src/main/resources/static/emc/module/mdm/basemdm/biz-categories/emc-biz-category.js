@@ -2,6 +2,43 @@ var emcBizCategory = Gikam.getPageObject({
 
     baseUrl : IFM_CONTEXT + '/secure/emc/module/mdm/basemdm/biz-categories',
 
+    getBizClassEditListColumns : function () {
+        return [ {
+            checkbox : true
+        }, {
+            field : 'sortNo',
+            title : 'T_EMC_BIZ_CLASS.SORTNO',
+            editor : true,
+            hasArrow : true,
+            isInteger : true,
+        }, {
+            field : 'bizCode',
+            title : 'T_EMC_BIZ_CLASS.BIZCODE'
+        }, {
+            field : 'bizName',
+            title : 'T_EMC_BIZ_CLASS.BIZNAME',
+            editor : true,
+            width : '300',
+        } ];
+    },
+
+    getBizClassFormFields : function() {
+        return [ {
+            field : 'sortNo',
+            title : 'T_EMC_BIZ_CLASS.SORTNO'
+        }, {
+            field : 'bizCode',
+            title : 'T_EMC_BIZ_CLASS.BIZCODE',
+            validators : [ 'strLength[0,12]' ],
+            preInsert : true,
+        }, {
+            field : 'bizName',
+            title : 'T_EMC_BIZ_CLASS.BIZNAME',
+            validators : [ 'strLength[0,40]' ],
+            preInsert : true,
+        }, ];
+    },
+
     getEditListColumns : function() {
         return [ {
             checkbox : true
@@ -24,6 +61,10 @@ var emcBizCategory = Gikam.getPageObject({
             title : 'T_EMC_BIZ_CATEGORY.REPORTNAME',
             editor : true
         }, {
+            field : 'ncCode',
+            title : '检测类型代码(NC)',
+            editor : true
+        }, {
             field : 'type',
             title : 'T_EMC_BIZ_CATEGORY.TYPE',
             editor : true,
@@ -37,6 +78,17 @@ var emcBizCategory = Gikam.getPageObject({
         }, {
             field : 'sample',
             title : 'T_EMC_BIZ_CATEGORY.SAMPLE',
+            editor : true,
+            type : 'select',
+            search : true,
+            category : 'sys',
+            param : {
+                codeCategoryId : 'yesorno',
+            },
+            width : 100
+        },{
+            field : 'cycleTaskNo',
+            title : '是否生成周期任务流水号',
             editor : true,
             type : 'select',
             search : true,
@@ -494,7 +546,10 @@ var emcBizCategory = Gikam.getPageObject({
         }, {
             field : 'orgName',
             title : 'T_EMC_ORG_PERMISSION.ORGNAME',
-        } ];
+        }, {
+             field : 'ext$.comp',
+             title : '公司',
+         } ];
     },
 
     getFormStyleListColumns : function() {

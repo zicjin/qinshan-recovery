@@ -69,20 +69,20 @@ public class PfStockImportFileFunction extends EmcStockImportFileFunction {
         FilePathDTO fr = CoreFileUtils.toFilePath(excelFile);
 
         List<EmcStockBean> stockList = ExcelHelper.readDataFromExcel(FilePathManager.getLocalPath(fr).toString(), 2, 3, EmcStockBean.class);
-        //模板只有材料名称
-        stockList.forEach(e ->{
-        	String mtlId =e.getMtlId();
-            List<EmcMtlBean> mtlSelectIdList = mtlService.getDao().selectListByOneColumnValue(mtlId, "ID", Arrays.asList("ID", "MTLNAME"));
-            e.setMtlId(mtlSelectIdList.get(0).getId());
-        });
         if (stockList.isEmpty()) {
             return CoreFileImportResultDTO;
         }
 
-        List<String> validateImpMsgList = stockList.stream().filter(stock -> !StringUtils.isEmpty(stock.getExt$Item("validateimpmsg"))).map(stock -> stock.getExt$Item("validateimpmsg")).collect(Collectors.toList());
-        if (!validateImpMsgList.isEmpty()) {
-            return CoreFileImportResultDTO;
-        }
+        //模板只有材料名称
+        List<String> mtlNoList = stockList.stream().filter(e -> e.getMtlId() != null).map(e -> e.getMtlId()).distinct().collect(Collectors.toList());
+        List<EmcMtlBean> emcMtlList = mtlService.getDao().selectListByOneColumnValues(mtlNoList, "MTLNO", Arrays.asList("ID", "MTLNO", "MTLNAME"));
+        stockList.forEach(e -> {
+            String mtlNO = e.getMtlId();
+            List<EmcMtlBean> mtlSelectIdList = emcMtlList.stream().filter(m -> StringUtils.equals(m.getMtlNo(), mtlNO)).collect(Collectors.toList());
+            if (!mtlSelectIdList.isEmpty()) {
+                e.setMtlId(mtlSelectIdList.get(0).getId());
+            }
+        });
 
         List<String> batchNoList = stockList.stream().map(EmcStockBean::getBatchNo).collect(Collectors.toList());
         // 判断导入的唯一性编号是否重复

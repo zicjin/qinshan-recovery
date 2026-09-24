@@ -43,6 +43,8 @@ emcTestMethod.copyPage = {
                     this.setData({
                         id : _this.param.id,
                         testCategoryId : _this.param.testCategoryId,
+                        testClass : _this.param.testClass,
+                        testMethodType : _this.param.testMethodType,
                         testId : _this.param.testId,
                         methodId : _this.param.methodId,
                         ext$ : {

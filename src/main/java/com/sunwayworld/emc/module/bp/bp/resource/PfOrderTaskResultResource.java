@@ -38,4 +38,6 @@ public interface PfOrderTaskResultResource extends EmcOrderTaskResultResource {
     List<TableHeadBean> selectQuickInputResultTitleListBySampleId(RestJsonWrapperBean wrapper);
 
     List<TableRowBean> selectQuickInputResultRowListBySampleId(RestJsonWrapperBean wrapper);
+
+    void batchInputGasParameter(RestJsonWrapperBean wrapper);
 }

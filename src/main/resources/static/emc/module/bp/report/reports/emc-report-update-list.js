@@ -8,6 +8,7 @@ emcReport.updatePage = {
             url : emcReport.baseUrl + '/queries/tasks',
             service : 'emcReportServiceImpl',
             columns : emcReport.getUpdateListColumns(),
+            page : true,
             onLoadSuccess : function(data) {
                 if (!Gikam.isEmpty(data)) {
                     this.activeRowByIndex(0);
@@ -22,8 +23,8 @@ emcReport.updatePage = {
                 }
             },
             requestData : {
-                status_SEQ : 'preLogged',
-	            orgId_SB : workspace.user.ext$.parentorgid
+                // status_SEQ : 'preLogged',
+	            org_filter : '1',
             },
             onRowActive : function(index, row) {
                 _this.onReportActive(row);
@@ -49,8 +50,32 @@ emcReport.updatePage = {
                 onClick : function() {
                     _this.loadReportFilePage();
                 }
+            }, {
+                type : 'button',
+                text : '重新盖CA章',
+                icon : 'edit',
+                onClick : function() {
+                    _this.seal();
+                }
             } ]
         }
+    },
+
+    seal : function (){
+        var selections = Gikam.getComp('emc-report-update-list-uploader').grid.getSelections();
+        if (Gikam.isEmpty(selections)) {
+            Gikam.alert('GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM');
+            return;
+        }
+        workspace.window.showMask(true);
+        Gikam.post(emcReport.baseUrl + '/seal', Gikam.getJsonWrapper({
+
+        }, [ 'coreFileServiceImpl', selections ])).done(function() {
+            Gikam.getComp('emc-report-update-list-uploader').refresh();
+            Gikam.alert('盖章完成');
+        }).always(function() {
+            workspace.window.closeMask();
+        });
     },
 
     getOtherGridParam : function() {
@@ -64,8 +89,7 @@ emcReport.updatePage = {
                 items : [ {
                     type : 'uploader',
                     id : 'emc-report-update-list-uploader',
-                    readonly : true,
-                    dbTable : 'T_EMC_REPORT'
+                    dbTable : 'T_EMC_REPORT',
                 } ]
             }, {
                 title : 'EMC.MODULE.BP.REPORT.REPORTS.TAB.PROJECT_FILE',

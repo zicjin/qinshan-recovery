@@ -78,6 +78,14 @@ var emcCheckProject = Gikam.getPageObject({
             title : 'T_EMC_ORDER_TASK.STATUS',
             width : 100,
         }, {
+            field : 'ext$.testclass',
+            title : 'T_EMC_TEST_METHOD.TESTCLASS',
+            type : 'select',
+            category : 'sys',
+            param : {
+                codeCategoryId : 'testClass',
+            },
+        },{
             field : 'testName',
             title : 'T_EMC_ORDER_TASK.TESTNAME'
         }, {

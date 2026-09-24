@@ -3,6 +3,25 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sunwayworld.emc.module.bp.sample.sample.mapper.PfSampleMapper">
     <select id="selectByCondition" parameterType="map" resultType="map">
+        <if test="SAMPLEBEGINDATETIMEFILTER != null">
+        WITH temp AS
+        (SELECT
+        sampleid,
+        MIN(SAMPLEBEGINDATETIME) AS SAMPLEBEGINDATETIME,
+        MAX(SAMPLECOMPLETEDATETIME) AS SAMPLECOMPLETEDATETIME
+        FROM (
+        SELECT
+        o.sampleid,
+        TO_DATE(TO_CHAR(SAMPLEBEGINDATE,'yyyy-mm-dd')||' '||
+        NVL(SAMPLEBEGINTIME,'00:00'),'yyyy-mm-dd hh24:mi') AS SAMPLEBEGINDATETIME,
+        TO_DATE(TO_CHAR(SAMPLECOMPLETEDATE,'yyyy-mm-dd')||' '||
+        NVL(SAMPLECOMPLETETIME,'00:00'),'yyyy-mm-dd hh24:mi') AS SAMPLECOMPLETEDATETIME
+        FROM T_EMC_ORDER o
+        WHERE o.SAMPLEBEGINDATE IS NOT NULL
+        AND o.SAMPLECOMPLETEDATE IS NOT NULL
+        )
+        GROUP BY sampleid)
+        </if>
         SELECT T.*
           FROM (SELECT A.*,
                        P.PROJNO,
@@ -11,14 +30,32 @@
                        P.ENTRUSTORGNAME,
                        P.BIZCATEGORYID,
                        B.PROPERTYTMPLID AS TMPLID,
+                       B.ELNTMPLID,
                        P.BIZCATEGORYCODE,
                        P.SAMPLE,                       
-                       C.REPORTNAME,
-                       <if test='targetType == "orderReceipt"'>
-                           SD.SAMPLESENDDATE,
-                           SD.SAMPLESENDUSERNAME,
-                       </if>
-                       case when OT.analysisCount IS NULL then '0' else OT.analysisCount end as analysisCount
+                       P.URGENT,
+        <if test="targetId == null">
+            CASE WHEN OT.ANALYSISCOUNT IS NULL THEN 0 ELSE OT.ANALYSISCOUNT END AS ANALYSISCOUNT,
+        </if>
+        <if test='targetType == "sampleUndo"'>
+            OT2.SAMPLEID AS LOGGEDTASKSAMPLEID,
+        </if>
+        <if test="SCENEUSERNAMEFILTER != null">
+        (SELECT
+        LISTAGG(DISTINCT SCENEUSERNAME, ',') WITHIN GROUP (ORDER BY SCENEUSERNAME) AS SCENEUSERNAME
+        FROM
+        T_EMC_FOLDER AF
+        LEFT JOIN
+        T_EMC_ORDER AO
+        ON AF.ID = AO.FOLDERID
+        WHERE
+        AO.SAMPLEID = A.ID) AS SCENEUSERNAME,
+        </if>
+        <if test="SAMPLEBEGINDATETIMEFILTER != null">
+        TEMP.SAMPLEBEGINDATETIME,
+        TEMP.SAMPLECOMPLETEDATETIME,
+        </if>
+        C.REPORTNAME
                   FROM T_EMC_SAMPLE A
                   LEFT JOIN T_EMC_PROJECT P
                     ON P.ID = A.PROJID
@@ -28,40 +65,43 @@
                     ON B.ID = A.MONITORTMPLID
                   LEFT JOIN T_CORE_REPORT_CONFIG_LINE C
                     ON C.ID = A.REPORTCONFIGLINEID
-                  <if test='targetType == "orderReceipt"'>
-                      LEFT JOIN (
-                      SELECT
-                      S.ID,
-                      P.SAMPLE,
-                      (CASE
-                      WHEN P.SAMPLE = '1'
-                      AND DATE_FORMAT(MAX(O.SAMPLEBEGINDATE), '%Y-%m-%d') = DATE_FORMAT(MIN(O.SAMPLEBEGINDATE), '%Y-%m-%d') THEN DATE_FORMAT(MAX(O.SAMPLEBEGINDATE), '%Y-%m-%d')
-                      WHEN P.SAMPLE = '1'
-                      AND DATE_FORMAT(MAX(O.SAMPLEBEGINDATE), '%Y-%m-%d') != DATE_FORMAT(MIN(O.SAMPLEBEGINDATE), '%Y-%m-%d') THEN CONCAT(DATE_FORMAT(MIN(O.SAMPLEBEGINDATE), '%Y-%m-%d'), " ~ ", DATE_FORMAT(MAX(O.SAMPLEBEGINDATE), '%Y-%m-%d'))
-                      WHEN P.SAMPLE = '0'
-                      AND DATE_FORMAT(MAX(O.SENDDATE), '%Y-%m-%d') = DATE_FORMAT(MIN(O.SENDDATE), '%Y-%m-%d') THEN DATE_FORMAT(MAX(O.SENDDATE), '%Y-%m-%d')
-                      WHEN P.SAMPLE = '0'
-                      AND DATE_FORMAT(MAX(O.SENDDATE), '%Y-%m-%d') != DATE_FORMAT(MIN(O.SENDDATE), '%Y-%m-%d') THEN CONCAT(DATE_FORMAT(MIN(O.SENDDATE), '%Y-%m-%d'), " ~ ", DATE_FORMAT(MAX(O.SENDDATE), '%Y-%m-%d'))
-                      ELSE O.SENDDATE
-                      END) AS SAMPLESENDDATE,
-                      (CASE
-                      WHEN P.SAMPLE = '1' THEN S.SAMPLEUSERNAME
-                      ELSE WM_CONCAT(DISTINCT O.SENDER)
-                      END ) AS SAMPLESENDUSERNAME
-                      FROM
-                      T_EMC_SAMPLE S
-                      LEFT JOIN T_EMC_PROJECT P ON
-                      S.PROJID = P.ID
-                      LEFT JOIN T_EMC_ORDER O ON
-                      S.ID = O.SAMPLEID
-                      WHERE
-                      S.HANDSTATUS = 'preLogged'
-                      AND S.ORGID = #{loginUser.ext$.parentorgid}
-                      GROUP BY S.ID) AS SD ON A.ID = SD.ID
-                  </if>
-                LEFT JOIN (SELECT COUNT(OT.ID) AS analysisCount, S.ID FROM t_emc_sample S,t_emc_order O,t_emc_order_task OT
-                    WHERE O.ID=OT.ORDERID AND O.SAMPLEID = S.ID AND OT.ANALYSISTYPE='analysis' GROUP BY S.ID) OT
-                ON A.ID = OT.ID) T
+        <if test="SAMPLEBEGINDATETIMEFILTER != null">
+        LEFT JOIN temp ON temp.SAMPLEID = A.ID
+        </if>
+        <if test="targetId == null">
+            LEFT JOIN (
+                SELECT
+                    COUNT(OT.ID) AS ANALYSISCOUNT,
+                    SUM(CASE WHEN OT.RUNID IS NULL THEN 1 ELSE 0 END) AS RUNCOUNT,
+                    O.SAMPLEID
+                FROM
+                    T_EMC_ORDER O,
+                    T_EMC_ORDER_TASK OT
+                WHERE
+                    O.ID = OT.ORDERID
+                    AND OT.ANALYSISTYPE = 'analysis'
+                GROUP BY
+                    O.SAMPLEID
+            ) OT ON A.ID = OT.SAMPLEID
+        </if>
+        <if test='targetType == "sampleUndo"'>
+            LEFT JOIN
+            (
+            SELECT
+            O.SAMPLEID
+            FROM
+            T_EMC_ORDER O,
+            T_EMC_ORDER_TASK OT
+            WHERE
+            O.ID = OT.ORDERID
+            AND OT.ANALYSISTYPE = 'analysis'
+            AND OT.STATUS = 'logged'
+            GROUP BY
+            O.SAMPLEID
+            ) OT2
+            ON A.ID = OT2.SAMPLEID
+        </if>
+                  ) T
         <where>
             <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
             <include refid="com.sunwayworld.emc.module.bp.project.project.mapper.EmcProjectMapper.projectStatusWhereClause">
@@ -71,6 +111,33 @@
             <if test='authority_audit == "1"'>
                 AND <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.auditAuthorityWhereClause" />
             </if>
+            <if test='target == "rwzp"'>
+                AND T.RUNCOUNT > 0
+            </if>
+            <if test='userFilter == "1"'>
+                AND EXISTS(
+                    select 1 from T_EMC_FOLDER F
+                    WHERE F.PROJID=T.PROJID
+                    AND (F.SCENEUSERID=#{loginUser.id} OR F.SAMPLEUSERID LIKE '%' || #{loginUser.id} || '%' )
+                )
+            </if>
+            <if test="targetId == 'mutual' ">
+                AND EXISTS (
+                SELECT 1 FROM T_CORE_BPMN_COMMENT a
+                WHERE a.TARGETID = ('T_EMC_SAMPLE' || '$' || T.ID)
+                AND  a.STATUSCODE ='mutual' AND a.status='APPROVE'
+                AND USERID =#{loginUser.id}
+                )
+            </if>
+            <if test="targetId == 'audit' ">
+                AND EXISTS (
+                SELECT 1 FROM T_CORE_BPMN_COMMENT a
+                WHERE a.TARGETID = ('T_EMC_SAMPLE' || '$' || T.ID)
+                AND  a.STATUSCODE ='audit' AND a.status='APPROVED'
+                AND USERID =#{loginUser.id}
+                )
+            </if>
+
             <if test='targetType == "editSample"'>
                 AND EXISTS (SELECT 1
                               FROM T_EMC_ORDER A
@@ -101,16 +168,13 @@
                               AND A.STATUS = 'draft')
             </if>
             <if test='targetType == "orderReceipt"'>
-                and exists   (
-                    select
-                    1
-                    from
-                    T_EMC_ORDER R,T_EMC_ORDER_TASK O
-                    where O.ORDERID = R.ID
-                    and O.STATUS = 'preLogged'
-                    and O.ANALYSISTYPE = 'analysis'
-                    AND R.TERMINATION != '1'
-                    and R.SAMPLEID  = T.ID)
+                AND EXISTS (SELECT 1 FROM(
+                                SELECT R.SAMPLEID
+                                FROM T_EMC_ORDER_TASK O LEFT JOIN T_EMC_ORDER R ON O.ORDERID = R.ID
+                                WHERE O.STATUS = 'preLogged' AND O.ANALYSISTYPE = 'analysis' AND R.TERMINATION = '0'
+                                GROUP BY R.SAMPLEID) TS
+                            WHERE
+                                TS.SAMPLEID = T.ID)
             </if>
             <!-- 样品领用 -->
             <if test='targetType == "orderReceive"'>
@@ -128,13 +192,7 @@
             </if>
             <!-- 样品接收退回 -->
             <if test='targetType == "sampleUndo"'>
-                AND EXISTS (SELECT 1
-                                  FROM T_EMC_ORDER A
-                                LEFT JOIN T_EMC_ORDER_TASK B
-                                  ON A.ID = B.ORDERID
-                                WHERE A.SAMPLEID = T.ID
-                                  AND B.ANALYSISTYPE = 'analysis'
-                                  AND B.STATUS NOT IN ('draft', 'preLogged', 'done', 'approve', 'audit'))
+                AND T.LOGGEDTASKSAMPLEID IS NOT NULL
             </if>
             <!-- 样品交接单 -->
             <if test='targetType == "sampleHandover"'>
@@ -143,8 +201,7 @@
                               LEFT JOIN T_EMC_ORDER_TASK B
                                 ON A.ID = B.ORDERID
                               WHERE A.SAMPLEID = T.ID
-                                AND B.ANALYSISTYPE = 'analysis'
-                                AND B.STATUS NOT IN ('draft', 'preLogged', 'done'))
+                                AND B.ANALYSISTYPE = 'analysis')
             </if>
             <!-- 样品加测 -->
             <if test='targetType == "sampleAddTest"'>
@@ -189,6 +246,14 @@
                 AND CBC.STATUSCODE = 'mutual'
                 AND CBC.USERID = #{approveUserId}
                 )
+            </if>
+            <!-- 筛选登录人的部门权限 -->
+            <if test="org_filter != null">
+                AND EXISTS (SELECT 1
+                              FROM T_CORE_USER_PERMISSION UP
+                             WHERE UP.PERMISSIONTYPEID = 'T_CORE_ORG'
+                               AND UP.TARGETID = T.ORGID
+                               AND UP.USERID = #{loginUser.id})
             </if>
         </where>
         ORDER BY
@@ -248,8 +313,8 @@
 
     <!-- 平板扫描查询 -->
     <select id="selectMobileScanner" parameterType="map" resultType="map">
-        SELECT T.*, CONCAT(SUMNUMBER, '/', TOTAL) AS NUM
-          FROM (SELECT S.*, COUNT(1) AS TOTAL, IFNULL(SUM(SCANNED), 0) AS SUMNUMBER
+        SELECT T.*, CONCAT(CONCAT(SUMNUMBER, '/'), TOTAL) AS NUM
+          FROM (SELECT S.*, COUNT(1) AS TOTAL, NVL(SUM(SCANNED), 0) AS SUMNUMBER
                   FROM (SELECT U.*
                           FROM (SELECT A.ID,
                                        A.STATUS,
@@ -261,9 +326,9 @@
                                        B.TESTORGNAME,
                                        B.BIZCATEGORYID,
                                        B. STATUS AS PROJECTSTATUS,
-                                       (CONCAT(IFNULL(D.CONTAINERCATEGORYCODE, ''),
-                                                  IFNULL(C.ORDERNO, ''),
-                                                  IFNULL(D.CONTAINERGROUP, ''))) AS NUMBER,
+                                       (CONCAT(CONCAT(NVL(D.CONTAINERCATEGORYCODE, ''),
+                                                      NVL(C.ORDERNO, '')),
+                                               NVL(D.CONTAINERGROUP, ''))) AS NUMBER,
                                        D.SCANNED
 
                                   FROM T_EMC_SAMPLE A
@@ -290,10 +355,10 @@
                        C.ORDERNO,
                        C.SAMPLEBEGINDATE,
                        C.ORDERDESC,
-                       WM_CONCAT(DISTINCT D.TESTNAME) AS TESTNAME,
-                       CONCAT(IFNULL(C.ORDERNO, ''),
-                              IFNULL(D.CONTAINERCATEGORYCODE, ''),
-                              IFNULL(D.CONTAINERGROUP, '')) AS LABELID,
+                       LISTAGG(DISTINCT D.TESTNAME, ',') WITHIN GROUP (ORDER BY D.TESTNAME) AS TESTNAME,
+                       CONCAT(CONCAT(NVL(C.ORDERNO, ''),
+                              NVL(D.CONTAINERCATEGORYCODE, '')),
+                              NVL(D.CONTAINERGROUP, '')) AS LABELID,
                        CASE D.SCANNED WHEN '1' THEN '已扫描' ELSE '未扫描' END STATUS
                   FROM T_EMC_SAMPLE A
                   LEFT JOIN T_EMC_PROJECT B
@@ -320,10 +385,10 @@
                        C.SAMPLEBEGINDATE,
                        C.ORDERDESC,
                        E.MONITORPOINTNAME,
-                       WM_CONCAT(DISTINCT D.TESTNAME) AS TESTNAME,
-                       CONCAT(IFNULL(C.ORDERNO, ''),
-                              IFNULL(D.CONTAINERCATEGORYCODE, ''),
-                              IFNULL(D.CONTAINERGROUP, '')) AS LABELID
+                       LISTAGG(DISTINCT D.TESTNAME, ',') WITHIN GROUP (ORDER BY D.TESTNAME) AS TESTNAME,
+                       CONCAT(CONCAT(NVL(C.ORDERNO, ''),
+                              NVL(D.CONTAINERCATEGORYCODE, '')),
+                              NVL(D.CONTAINERGROUP, '')) AS LABELID
                   FROM T_EMC_SAMPLE A
                   LEFT JOIN T_EMC_PROJECT B
                     ON B.ID = A.PROJID
@@ -335,10 +400,59 @@
                     ON C.FOLDERID = E.ID
                  WHERE C.ORDERNO = SUBSTR(#{labelId},1, 13)
                    AND D.CONTAINERCATEGORYCODE IS NOT NULL
-                   AND CONCAT(IFNULL(C.ORDERNO, ''),
-                              IFNULL(D.CONTAINERCATEGORYCODE, ''),
-                              IFNULL(D.CONTAINERGROUP, '')) = #{labelId}
+                   AND CONCAT(CONCAT(NVL(C.ORDERNO, ''),
+                              NVL(D.CONTAINERCATEGORYCODE, '')),
+                              NVL(D.CONTAINERGROUP, '')) = #{labelId}
                  GROUP BY LABELID) T
+    </select>
+
+    <select id="selectAssignSampleList" parameterType="map" resultType="map">
+        SELECT T.*
+        FROM (SELECT A.*,
+        P.PROJNO,
+        P.PROJNAME,
+        P.TESTORGNAME,
+        P.ENTRUSTORGNAME,
+        P.BIZCATEGORYID,
+        P.BIZCATEGORYCODE,
+        P.SAMPLE
+        FROM T_EMC_SAMPLE A
+        LEFT JOIN T_EMC_PROJECT P
+        ON P.ID = A.PROJID
+        ) T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+            <include refid="com.sunwayworld.emc.module.bp.project.project.mapper.EmcProjectMapper.projectStatusWhereClause">
+                <property name="tableAlias" value="T"/>
+                <property name="projectIdColumnName" value="PROJID"/>
+            </include>
+            <if test='authority_audit == "1"'>
+                AND <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.auditAuthorityWhereClause" />
+            </if>
+                AND EXISTS (SELECT 1
+                FROM T_EMC_ORDER A
+                LEFT JOIN T_EMC_ORDER_TASK B
+                ON A.ID = B.ORDERID
+                LEFT JOIN T_EMC_TEST_METHOD TM
+                ON TM.ID = B.TESTMETHODID
+                WHERE A.SAMPLEID = T.ID
+                AND B.STATUS = 'logged'
+                AND B.ANALYSISTYPE = 'analysis'
+                AND B.RUNID IS NULL
+            <if test="testMethodType != null">
+                AND TM.TESTMETHODTYPE =#{testMethodType}
+            </if>
+            )
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ID DESC
+            </otherwise>
+        </choose>
     </select>
 
 </mapper>

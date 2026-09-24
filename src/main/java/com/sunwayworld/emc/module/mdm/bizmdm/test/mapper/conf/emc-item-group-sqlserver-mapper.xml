@@ -36,6 +36,11 @@
                                  </if>
                                 )
             </if>
+            <if test="target == 'detectionFactor'">
+                AND NOT EXISTS (
+                    SELECT 1 FROM T_EMC_QUOTATION_DETECTIONFACTOR QD_ WHERE QD_.ITEMGROUPID = T.ID  AND QD_.ORGID = #{loginUser.ext$.parentorgid}
+                )
+            </if>
         </where>
         ORDER BY
         <choose>

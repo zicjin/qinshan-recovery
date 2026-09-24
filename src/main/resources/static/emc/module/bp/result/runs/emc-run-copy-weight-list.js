@@ -13,7 +13,7 @@ emcRunWeighing.choosePage = {
             url : emcRunWeighing.baseUrl + '/queries/raw',
             requestData : {
                 id_DIFFER : _this.param.id,
-                orgId_SB : workspace.user.ext$.parentorgid,
+                org_filter : '1',
                 weighingUserId_SEQ : workspace.user.id,
 			},
             order : {

@@ -33,7 +33,7 @@ emcRun.stdMatchTestPage = {
             	        	orderId_SEQ : orderTaskRow.orderId,
                             runId_SEQ : orderTaskRow.runId,
                             testMethodId_IN :testMethodIds,
-                            TESTCAPCITYORGID_SEQ: workspace.user.ext$.parentorgid
+                            TESTCAPCITYORGID_SB: workspace.user.ext$.parentorgid
                             
             	        },
                     });   

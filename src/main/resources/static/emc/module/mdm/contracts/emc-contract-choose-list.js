@@ -12,8 +12,9 @@ emcContract.choosePage = {
             id : 'emc-contract-choose-list-grid',
             url : emcContract.baseUrl + '/queries/choosable',
             requestData : {
-                orgId_SB: workspace.user.ext$.parentorgid
+                org_filter : '1',
             },
+             page : true,
             columns : columns,
             toolbar : [ {
                 type : 'button',

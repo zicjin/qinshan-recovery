@@ -77,6 +77,16 @@
                 </if>
                 )
             </if>
+            <!-- 筛选登录人的部门权限 -->
+            <if test="org_filter != null">
+                AND EXISTS (SELECT 1
+                              FROM T_EMC_TEST_CAPACITY TAR_,
+                                   T_CORE_USER_PERMISSION UP
+                             WHERE TAR_.TESTMETHODID = T.ID
+                               AND TAR_.ORGID = UP.TARGETID
+                               AND UP.PERMISSIONTYPEID = 'T_CORE_ORG'
+                               AND UP.USERID = #{loginUser.id})
+            </if>
         </where>
         ORDER BY
         <choose>

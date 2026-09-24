@@ -29,9 +29,10 @@ public class EmcTestMethodCopyValidator implements DataValidator {
         EmcTestMethodBean testMethod = wrapper.parseUnique(EmcTestMethodBean.class);
 
         List<EmcTestMethodBean> testMethodList = testMethodService.selectListByFilter(SearchFilter.instance().match("testCategoryId", testMethod.getTestCategoryId()).filter(MatchPattern.EQ)
-                .match("testId", testMethod.getTestId()).filter(MatchPattern.EQ).match("methodId", testMethod.getMethodId()).filter(MatchPattern.EQ));
+                .match("testId", testMethod.getTestId()).filter(MatchPattern.EQ).match("methodId", testMethod.getMethodId()).filter(MatchPattern.EQ)
+                .match("testClass", testMethod.getTestClass()).filter(MatchPattern.SEQ).match("testMethodType", testMethod.getTestMethodType()).filter(MatchPattern.SEQ));
 
-        if (!testMethodList.isEmpty() && testMethodList.size() > 0) {
+        if (!testMethodList.isEmpty()) {
 
             this.addConstraintViolation("EMC.MODULE.MDM.BIZMDM.TESTS.TIP.CANNOT_ADD_REITERATED_METHOD");
             return false;

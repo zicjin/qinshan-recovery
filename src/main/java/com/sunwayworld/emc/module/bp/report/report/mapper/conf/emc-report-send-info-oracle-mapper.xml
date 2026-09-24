@@ -8,7 +8,11 @@
         FROM (SELECT A.*,
                      B.REPORTPOSTADDRESS,
                      B.ADDRESSEE,
-                     B.RECIPIENTPHONE
+                     B.PROJNO,
+                     B.RECIPIENTPHONE,
+                     B.ENTRUSTORGCONTACT,
+                     B.ENTRUSTORGPHONE,
+                     B.ENTRUSTORGADDRESS
                 FROM T_EMC_REPORT_SEND_INFO A
               LEFT JOIN T_EMC_PROJECT B
                 ON A.PROJID = B.ID) T

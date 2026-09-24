@@ -37,10 +37,15 @@ emcSampleGasParameter.editPage = {
                 Gikam.put(orderTaskResultUrl + '/instant', Gikam.getJsonWrapper({}, ['emcOrderTaskResultServiceImpl', [saveData]])).done(function (id) {
                 }).always(function () {
                     Gikam.put(orderTaskResultUrl + '/action/change-result', Gikam.getJsonWrapper({}, ['', [saveData]])).done(function () {
-                        _this.refreshParameterTitleColumns();
+                        Gikam.post(emcSampleGasParameter.baseUrl + '/gas-parameter/table-rows/queries', Gikam.getJsonWrapper({
+
+                        }, ['', [{ id: _this.param.sampleId, projId: _this.param.projId }]])).done(function (data) {
+                            Gikam.getComp('emc-sample-gas-parameter-list-grid').loadData(data);
+                        });
                     }).fail(function () {
                         Gikam.getLastModal().window.closeMask();
                     });
+                    Gikam.getLastModal().window.closeMask();
                 });
             },
             toolbar : [ {
@@ -171,23 +176,42 @@ emcSampleGasParameter.editPage = {
                 Gikam.put(orderTaskResultUrl + '/instant', Gikam.getJsonWrapper({}, ['emcOrderTaskResultServiceImpl', [saveData]])).done(function (id) {
                 }).always(function () {
                     Gikam.put(orderTaskResultUrl + '/action/change-result', Gikam.getJsonWrapper({}, ['', [saveData]])).done(function () {
-                        _this.refreshResultTitleColumns();
+                        Gikam.post(emcSampleGasParameter.baseUrl + '/gas-parameter-result/table-rows/queries', Gikam.getJsonWrapper({
+
+                        }, ['', [{ id: _this.param.sampleId}]])).done(function (data) {
+                            Gikam.getLastModal().window.closeMask();
+                            Gikam.getComp('emc-sample-gas-parameter-result-list-grid').loadData(data);
+                        });
                     }).fail(function () {
                         Gikam.getLastModal().window.closeMask();
                     });
                 });
             },
-            toolbar : []
+            toolbar : [{
+                type : 'button',
+                text : '按测试排序',
+                icon : 'preview',
+                onClick : function() {
+                    _this.refreshResultTitleColumns('test');
+                }
+            },{
+                type : 'button',
+                text : '按分析项排序',
+                icon : 'preview',
+                onClick : function() {
+                    _this.refreshResultTitleColumns();
+                }
+            }  ]
         }
     },
 
-    refreshResultTitleColumns : function() {
+    refreshResultTitleColumns : function(sorttype) {
         let _this = this;
         let columns = emcSampleGasParameter.getResultListColumns();
         var dataArr = [];
         Gikam.getLastModal().window.showMask(true);
         Gikam.post(emcSampleGasParameter.baseUrl + '/gas-parameter-result/table-heads/queries', Gikam.getJsonWrapper({
-
+            sorttype: sorttype,
         }, ['', [{ id: _this.param.sampleId, projId: _this.param.projId }]])).done(function (itemColumns) {
             itemColumns.forEach(function (e) {
                 let itemColumns_ext$ = e.field + '_ext$';
@@ -237,27 +261,62 @@ emcSampleGasParameter.editPage = {
             return;
         }
 
-        Gikam.create('modal', {
-            width : 600,
-            height : 313,
-            title : 'EMC.MODULE.BP.SAMPLE.SAMPLES.MODAL.BATCH_INPUT',
-            url : emcSampleGasParameter.baseUrl + '/page/sample-test-batch',
-            onAfterClose : function(data) {
-                if (!Gikam.isEmpty(data)) {
-                    workspace.window.showMask(true);
-                    selections.map(function(item) {
-                        item.sampleBeginDate = data.sampleBeginDate;
-                        item.sampleBeginTime = data.sampleBeginTime;
-                        item.sampleCompleteDate = data.sampleCompleteDate;
-                        item.sampleCompleteTime = data.sampleCompleteTime;
-                    });
-                    Gikam.put(emcSampleGasParameter.baseUrl + '/' + selections[0].id, Gikam.getJsonWrapper({}, [ 'emcOrderServiceImpl', selections ])).done(function() {
-                        Gikam.getComp('emc-sample-gas-parameter-list-grid').refresh()
-                    }).always(function() {
-                        workspace.window.closeMask();
-                    });
-                }
+        var modal = Gikam.create('modal', {
+            title: "EMC.MODULE.BP.SAMPLE.SAMPLES.MODAL.BATCH_INPUT",
+            width : 400,
+            height : 450,
+        });
+        var layout = Gikam.create('layout', {
+            renderTo: modal.window.$dom,
+            center: {
+                items: [ {
+                    type: 'btnToolbar',
+                    items: [ {
+                        type : 'button',
+                        text : 'GIKAM.BUTTON.CONFIRM',
+                        class : 'blue',
+                        onClick : function() {
+                            if (form.validate()) {
+                                let formData = form.options.data;
+
+                                Gikam.getLastModal().window.showMask(true);
+                                Gikam.postText(IFM_CONTEXT + '/secure/emc/module/bp/bp/order-task-results/action/batch-input-gas-parameter',
+                                    Gikam.getJsonWrapper({}, [ 'emcOrderTaskServiceImpl', selections ], [ 'emcOrderTaskResultServiceImpl', [formData]])).done(function() {
+
+                                    _this.refreshParameterData();
+                                }).always(function() {
+                                    Gikam.getLastModal().window.closeMask();
+                                    modal.close();
+                                });
+                            }
+                        }
+                    }, {
+                        type : 'button',
+                        text : 'GIKAM.BUTTON.CANCEL',
+                        onClick : function () {
+                            modal.close();
+                        }
+                    } ]
+                }]
             }
+        });
+
+        let formFields = [];
+        Gikam.getLastModal().window.showMask(true);
+        Gikam.postSync(emcSampleGasParameter.baseUrl + '/gas-parameter/table-heads/queries',
+            Gikam.getJsonWrapper({}, ['', [{ id: _this.param.sampleId, projId: _this.param.projId }]]))
+            .done(function (itemColumns) {
+                itemColumns.forEach(item => item.title = item.title.replace('<br>', '-'));
+                formFields = itemColumns;
+                Gikam.getLastModal().window.closeMask();
+            });
+
+        var form = Gikam.create('form', {
+            renderTo: layout.options.center.$dom,
+            columns: 1,
+            titleWidth: 120,
+            fields: formFields,
+            autoSave: false
         });
     },
 

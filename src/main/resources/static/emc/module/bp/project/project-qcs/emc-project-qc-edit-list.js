@@ -9,7 +9,7 @@ emcProjectQc.editPage = {
             url : emcProjectQc.projectBaseUrl + '/queries/tasks',
             columns : emcProjectQc.getProjectListColumns(),
             requestData : {                
-                orgId_SB: workspace.user.ext$.parentorgid
+                org_filter : '1',
             },
             onLoadSuccess : function(data) {
                 if (!Gikam.isEmpty(data)) {

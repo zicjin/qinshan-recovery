@@ -87,10 +87,15 @@ public class PfTestCapacityServiceImpl extends EmcTestCapacityServiceImpl implem
         List<EmcTestCapacityBean> testCapacityList = jsonWrapper.parse(EmcTestCapacityBean.class);
         List<Long> testMethodIdList = testCapacityList.stream().map(a -> a.getId()).collect(Collectors.toList());
         List<EmcItemGroupBean> itemGroupList = itemGroupService.getDao().selectListByOneColumnValues(testMethodIdList,"TESTMETHODID");
+        List<Long> itemGroupIdList = itemGroupList.stream().map(EmcItemGroupBean::getId).collect(Collectors.toList());
+        List<EmcGroupItemBean> groupItemList = groupItemService.getDao().selectListByOneColumnValues(itemGroupIdList, "ITEMGROUPID");
+        List<Long> itemIdList = groupItemList.stream().map(EmcGroupItemBean::getItemId).distinct().collect(Collectors.toList());
+        List<EmcItemBean> itemList = itemService.selectListByIds(itemIdList);
         CoreUserBean user = LocalContextHelper.getLoginUser();
         String parentOrgId = user.getExt$Item("parentorgid");
         List<EmcTestCapacityBean> insertList = new ArrayList<>();
         List<EmcCapacityItemGroupBean> insertGroupList = new ArrayList<>();
+        List<EmcCapacityItemBean> insertCapacityItemList = new ArrayList<>();
         testCapacityList.forEach(e->{
             EmcTestCapacityBean insertRow = new EmcTestCapacityBean();
             BeanUtils.copyProperties(e, insertRow, EmcConstant.CREATED_COLUMNS);
@@ -99,21 +104,39 @@ public class PfTestCapacityServiceImpl extends EmcTestCapacityServiceImpl implem
             insertRow.setOrgId(parentOrgId);
             insertRow.setExt$Item("analysisOrgName", e.getExt$Item("orgName"));
             insertRow.setExt$Item("hours", e.getExt$Item("hours"));
+            insertRow.setReportTestName(e.getExt$Item("testname"));
             insertList.add(insertRow);
         });
         Map<Long,Long> insertMap = insertList.stream().collect(Collectors.toMap(EmcTestCapacityBean::getTestMethodId,EmcTestCapacityBean::getId));
         itemGroupList.forEach(e->{
             EmcCapacityItemGroupBean itemGroup = new EmcCapacityItemGroupBean();
-            itemGroup.setId(ApplicationContextHelper.getNextIdentity());
+            Long capacityItemGroupId = ApplicationContextHelper.getNextIdentity();
+            itemGroup.setId(capacityItemGroupId);
             itemGroup.setTestCapacityId(insertMap.get(e.getTestMethodId()));
             itemGroup.setTestId(e.getTestId());
             itemGroup.setItemGroup(e.getItemGroup());
             itemGroup.setItemGroupId(e.getId());
             itemGroup.setTestMethodId(e.getTestMethodId());
             insertGroupList.add(itemGroup);
+            List<EmcGroupItemBean> filterGroupItemList = groupItemList.stream().filter(gi -> ObjectUtils.equals(gi.getItemGroupId(), e.getId())).collect(Collectors.toList());
+            if (!ObjectUtils.isEmpty(filterGroupItemList)) {
+                List<Long> filterItemIdList = filterGroupItemList.stream().map(EmcGroupItemBean::getItemId).collect(Collectors.toList());
+                List<EmcItemBean> filterItemList = itemList.stream().filter(i -> filterItemIdList.contains(i.getId())).collect(Collectors.toList());
+                filterItemList.forEach(item -> {
+                    EmcCapacityItemBean capacityItem = new EmcCapacityItemBean();
+                    BeanUtils.copyProperties(item, capacityItem, EmcConstant.CREATED_COLUMNS);
+                    capacityItem.setCapItemGroupId(capacityItemGroupId);
+                    capacityItem.setTestCapacityId(itemGroup.getTestCapacityId());
+                    capacityItem.setId(ApplicationContextHelper.getNextIdentity());
+                    capacityItem.setItemId(item.getId());
+                    capacityItem.setOrgId(parentOrgId);
+                    insertCapacityItemList.add(capacityItem);
+                });
+            }
         });
         getDao().insert(insertList);
         capacityItemGroupService.getDao().insert(insertGroupList);
+        capacityItemService.getDao().insert(insertCapacityItemList);
         return testCapacityList.get(0).getId();
     }
 
@@ -123,6 +146,7 @@ public class PfTestCapacityServiceImpl extends EmcTestCapacityServiceImpl implem
     }
 
     @Override
+    @Transactional
     public  void copyAllToOtherOrg(RestJsonWrapperBean wrapper) {
     	//选择的要复制到数据的公司
     	String orgId = wrapper.getFilterValue("orgId");
@@ -228,6 +252,7 @@ public class PfTestCapacityServiceImpl extends EmcTestCapacityServiceImpl implem
 	}
 
 	@Override
+	@Transactional
 	public void copyInfoTo(RestJsonWrapperBean wrapper) {
 		List<EmcTestCapacityBean> originalCapacities = wrapper.parse(EmcTestCapacityBean.class, 0);
 		if (originalCapacities.isEmpty()) {
@@ -408,6 +433,68 @@ public class PfTestCapacityServiceImpl extends EmcTestCapacityServiceImpl implem
 		});
 
 		capacityItemService.getDao().insert(newCapacityItemList);
+	}
+
+	@Override
+	@Transactional
+	@AuditTrailEntry(AuditTrailType.INSERT)
+	public Long refetchItemByTest(RestJsonWrapperBean jsonWrapper) {
+		List<EmcTestCapacityBean> testCapacityList = jsonWrapper.parse(EmcTestCapacityBean.class);
+		List<Long> testCapacityIdList = testCapacityList.stream().map(a -> a.getId()).collect(Collectors.toList());
+		List<EmcCapacityItemGroupBean> deleteItemGroupList = new ArrayList<>();
+		List<EmcCapacityItemBean> deleteItemList = new ArrayList<>();
+		testCapacityIdList.forEach(tci -> {
+			EmcCapacityItemGroupBean deleteItemGroup = new EmcCapacityItemGroupBean();
+			deleteItemGroup.setTestCapacityId(tci);
+			deleteItemGroupList.add(deleteItemGroup);
+			EmcCapacityItemBean deleteItem = new EmcCapacityItemBean();
+			deleteItem.setTestCapacityId(tci);
+			deleteItemList.add(deleteItem);
+		});
+		capacityItemGroupService.getDao().deleteBy(deleteItemGroupList, "TESTCAPACITYID");
+		capacityItemService.getDao().deleteBy(deleteItemList, "TESTCAPACITYID");
+
+		List<Long> testMethodIdList = testCapacityList.stream().map(a -> a.getTestMethodId()).collect(Collectors.toList());
+		List<EmcItemGroupBean> itemGroupList = itemGroupService.getDao().selectListByOneColumnValues(testMethodIdList, "TESTMETHODID");
+		List<Long> itemGroupIdList = itemGroupList.stream().map(EmcItemGroupBean::getId).collect(Collectors.toList());
+		List<EmcGroupItemBean> groupItemList = groupItemService.getDao().selectListByOneColumnValues(itemGroupIdList, "ITEMGROUPID");
+		List<Long> itemIdList = groupItemList.stream().map(EmcGroupItemBean::getItemId).distinct().collect(Collectors.toList());
+		List<EmcItemBean> itemList = itemService.selectListByIds(itemIdList);
+
+		CoreUserBean user = LocalContextHelper.getLoginUser();
+		String parentOrgId = user.getExt$Item("parentorgid");
+		List<EmcCapacityItemGroupBean> insertGroupList = new ArrayList<>();
+		List<EmcCapacityItemBean> insertCapacityItemList = new ArrayList<>();
+		Map<Long,Long> insertMap = testCapacityList.stream().collect(Collectors.toMap(EmcTestCapacityBean::getTestMethodId,EmcTestCapacityBean::getId));
+		itemGroupList.forEach(e->{
+			EmcCapacityItemGroupBean itemGroup = new EmcCapacityItemGroupBean();
+			Long capacityItemGroupId = ApplicationContextHelper.getNextIdentity();
+			itemGroup.setId(capacityItemGroupId);
+			itemGroup.setTestCapacityId(insertMap.get(e.getTestMethodId()));
+			itemGroup.setTestId(e.getTestId());
+			itemGroup.setItemGroup(e.getItemGroup());
+			itemGroup.setItemGroupId(e.getId());
+			itemGroup.setTestMethodId(e.getTestMethodId());
+			insertGroupList.add(itemGroup);
+			List<EmcGroupItemBean> filterGroupItemList = groupItemList.stream().filter(gi -> ObjectUtils.equals(gi.getItemGroupId(), e.getId())).collect(Collectors.toList());
+			if (!ObjectUtils.isEmpty(filterGroupItemList)) {
+				List<Long> filterItemIdList = filterGroupItemList.stream().map(EmcGroupItemBean::getItemId).collect(Collectors.toList());
+				List<EmcItemBean> filterItemList = itemList.stream().filter(i -> filterItemIdList.contains(i.getId())).collect(Collectors.toList());
+				filterItemList.forEach(item -> {
+					EmcCapacityItemBean capacityItem = new EmcCapacityItemBean();
+					BeanUtils.copyProperties(item, capacityItem, EmcConstant.CREATED_COLUMNS);
+					capacityItem.setCapItemGroupId(capacityItemGroupId);
+					capacityItem.setTestCapacityId(itemGroup.getTestCapacityId());
+					capacityItem.setId(ApplicationContextHelper.getNextIdentity());
+					capacityItem.setItemId(item.getId());
+					capacityItem.setOrgId(parentOrgId);
+					insertCapacityItemList.add(capacityItem);
+				});
+			}
+		});
+		capacityItemGroupService.getDao().insert(insertGroupList);
+		capacityItemService.getDao().insert(insertCapacityItemList);
+		return testCapacityList.get(0).getId();
 	}
 
 }

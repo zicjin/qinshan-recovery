@@ -61,4 +61,12 @@ public interface PfOrderService extends EmcOrderService {
     void deleteParamOrder(RestJsonWrapperBean wrapper);
 
     void updateOrderIndex(RestJsonWrapperBean wrapper);
+
+    Long updateItemGroupOrderContainer(RestJsonWrapperBean wrapper);
+
+    Long syncOrderItemGroupItem(RestJsonWrapperBean wrapper);
+
+    void delCheckProjectOrderItemGroup(RestJsonWrapperBean wrapper);
+
+    void delOrderItemGroup(RestJsonWrapperBean wrapper);
 }

@@ -8,6 +8,7 @@
                        C.ORGNAME,
                        D.MONITORTMPLNAME,
                        D.MONITORTMPLGROUPID,
+                       D.ORDERCATEGORYCODE,
                        D.MONITORPOINTCATEGORYID AS POINTCATEGORY
                   FROM T_EMC_PROJ_SCHEME A
                   LEFT JOIN T_CORE_ORG C

@@ -19,11 +19,11 @@ var emcDelivery = Gikam.getPageObject({
                     return value;
                 }
             },
-        }, {
+        }, /*{
             field: 'erpOrderNumber',
             width: 180,
             title: 'T_EMC_PROJECT.ERPORDERNUMBER',
-        }, {
+        },*/ {
             field: 'projName',
             title: 'T_EMC_FOLDER.PROJNAME',
         }, {
@@ -82,7 +82,7 @@ var emcDelivery = Gikam.getPageObject({
         }, {
             field: 'orderDesc',
             title: 'T_EMC_ORDER.ORDERDESC',
-            validators: ['strLength[0,21]'],
+            validators: ['strLength[0,21]','notEmpty'],
             editor: true
         }, {
             field: 'sendDate',
@@ -125,101 +125,101 @@ var emcDelivery = Gikam.getPageObject({
                 });
             },
         }, {
-            field: 'ext$.checker',
-            title: 'T_EMC_ORDER.CHECKER',
-            editor: true,
-            editable: true,
-            type: 'choose',
-            category: 'user-simple',
-            single: true,
-            onAfterChoose: function (rows) {
-                if (!Gikam.isEmpty(rows)) {
-                    this.setData({
-                        id: this.getActivedRow().id,
-                        checkerId: rows[0].id,
-                        ext$: {
-                            checker: rows[0].userName,
-                        },
-                    });
-                }
-            },
-            onClean: function () {
-                this.setData({
-                    id: this.getActivedRow().id,
-                    checkerId: '',
-                    ext$: {
-                        checker: '',
-                    },
-                });
-            },
-        }, {
+        //     field: 'ext$.checker',
+        //     title: 'T_EMC_ORDER.CHECKER',
+        //     editor: true,
+        //     editable: true,
+        //     type: 'choose',
+        //     category: 'user-simple',
+        //     single: true,
+        //     onAfterChoose: function (rows) {
+        //         if (!Gikam.isEmpty(rows)) {
+        //             this.setData({
+        //                 id: this.getActivedRow().id,
+        //                 checkerId: rows[0].id,
+        //                 ext$: {
+        //                     checker: rows[0].userName,
+        //                 },
+        //             });
+        //         }
+        //     },
+        //     onClean: function () {
+        //         this.setData({
+        //             id: this.getActivedRow().id,
+        //             checkerId: '',
+        //             ext$: {
+        //                 checker: '',
+        //             },
+        //         });
+        //     },
+        // }, {
             field: 'remark',
             title: 'T_EMC_ORDER.REMARK',
             validators: ['strLength[0,170]'],
             editor: true
-        }, {
-            field: 'parentOrderNo',
-            title: 'T_EMC_ORDER.PARENTORDERNO',
-            width: 120,
-            editor: true,
-            type: 'choose',
-            category: 'order',
-            single: true,
-            onBeforeChoose: function () {
-                let row = this.getActivedRow();
-                if (row.qcCategoryCode === 'N/A') {
-                    Gikam.alert('EMC.MODULE.BP.PROJECT.PROJECTS.TIP.NA_CAT_NOT_SET_PARENTNO');
-                    return false;
-                }
-
-                return {
-                    projId_SEQ: row.projId,
-                    id_DIFFER: row.id
-                }
-            },
-            onAfterChoose: function (rows) {
-                if (!Gikam.isEmpty(rows)) {
-                    this.setData({
-                        id: this.getActivedRow().id,
-                        parentOrderNo: rows[0].orderNo
-                    });
-                }
-            },
-            onClean: function () {
-                this.setData({
-                    id: this.getActivedRow().id,
-                    parentOrderNo: ''
-                });
-            }
-        }, {
-            field: 'orderNum',
-            title: 'T_EMC_ORDER.ORDERNUM',
-            validators: ['integer'],
-            editor: true,
-            width: 80,
-        }, {
-            field: 'ext$.volume',
-            title: 'T_EMC_ORDER.VOLUME',
-            editor: true,
-            width: 160,
-        }, {
-            field: 'ext$.packing',
-            title: 'T_EMC_ORDER.PACKING',
-            editor: true,
-            width: 80,
-        }, {
-            field: 'ext$.isblank',
-            title: 'T_EMC_ORDER.ISBLANK',
-            editor: true,
-            type: 'select',
-            search: true,
-            category: 'sys',
-            param: {
-                codeCategoryId: 'yesorno'
-            },
-        }, {
-            field: 'qcName',
-            title: 'T_EMC_ORDER.QCNAME',
+        // }, {
+        //     field: 'parentOrderNo',
+        //     title: 'T_EMC_ORDER.PARENTORDERNO',
+        //     width: 120,
+        //     editor: true,
+        //     type: 'choose',
+        //     category: 'order',
+        //     single: true,
+        //     onBeforeChoose: function () {
+        //         let row = this.getActivedRow();
+        //         if (row.qcCategoryCode === 'N/A') {
+        //             Gikam.alert('EMC.MODULE.BP.PROJECT.PROJECTS.TIP.NA_CAT_NOT_SET_PARENTNO');
+        //             return false;
+        //         }
+        //
+        //         return {
+        //             projId_SEQ: row.projId,
+        //             id_DIFFER: row.id
+        //         }
+        //     },
+        //     onAfterChoose: function (rows) {
+        //         if (!Gikam.isEmpty(rows)) {
+        //             this.setData({
+        //                 id: this.getActivedRow().id,
+        //                 parentOrderNo: rows[0].orderNo
+        //             });
+        //         }
+        //     },
+        //     onClean: function () {
+        //         this.setData({
+        //             id: this.getActivedRow().id,
+        //             parentOrderNo: ''
+        //         });
+        //     }
+        // }, {
+        //     field: 'orderNum',
+        //     title: 'T_EMC_ORDER.ORDERNUM',
+        //     validators: ['integer'],
+        //     editor: true,
+        //     width: 80,
+        // }, {
+        //     field: 'ext$.volume',
+        //     title: 'T_EMC_ORDER.VOLUME',
+        //     editor: true,
+        //     width: 160,
+        // }, {
+        //     field: 'ext$.packing',
+        //     title: 'T_EMC_ORDER.PACKING',
+        //     editor: true,
+        //     width: 80,
+        // }, {
+        //     field: 'ext$.isblank',
+        //     title: 'T_EMC_ORDER.ISBLANK',
+        //     editor: true,
+        //     type: 'select',
+        //     search: true,
+        //     category: 'sys',
+        //     param: {
+        //         codeCategoryId: 'yesorno'
+        //     },
+        // }, {
+        //     field: 'qcName',
+        //     title: 'T_EMC_ORDER.QCNAME',
         }];
     },
 
@@ -302,101 +302,101 @@ var emcDelivery = Gikam.getPageObject({
                 });
             },
         }, {
-            field: 'ext$.checker',
-            title: 'T_EMC_ORDER.CHECKER',
-            editor: true,
-            editable: true,
-            type: 'choose',
-            category: 'user-simple',
-            single: true,
-            onAfterChoose: function (rows) {
-                if (!Gikam.isEmpty(rows)) {
-                    this.setData({
-                        id: this.getActivedRow().id,
-                        checkerId: rows[0].id,
-                        ext$: {
-                            checker: rows[0].userName,
-                        },
-                    });
-                }
-            },
-            onClean: function () {
-                this.setData({
-                    id: this.getActivedRow().id,
-                    checkerId: '',
-                    ext$: {
-                        checker: '',
-                    },
-                });
-            },
-        }, {
+        //     field: 'ext$.checker',
+        //     title: 'T_EMC_ORDER.CHECKER',
+        //     editor: true,
+        //     editable: true,
+        //     type: 'choose',
+        //     category: 'user-simple',
+        //     single: true,
+        //     onAfterChoose: function (rows) {
+        //         if (!Gikam.isEmpty(rows)) {
+        //             this.setData({
+        //                 id: this.getActivedRow().id,
+        //                 checkerId: rows[0].id,
+        //                 ext$: {
+        //                     checker: rows[0].userName,
+        //                 },
+        //             });
+        //         }
+        //     },
+        //     onClean: function () {
+        //         this.setData({
+        //             id: this.getActivedRow().id,
+        //             checkerId: '',
+        //             ext$: {
+        //                 checker: '',
+        //             },
+        //         });
+        //     },
+        // }, {
             field: 'remark',
             title: 'T_EMC_ORDER.REMARK',
             validators: ['strLength[0,170]'],
             editor: true
-        }, {
-            field: 'parentOrderNo',
-            title: 'T_EMC_ORDER.PARENTORDERNO',
-            width: 120,
-            editor: true,
-            type: 'choose',
-            category: 'order',
-            single: true,
-            onBeforeChoose: function () {
-                let row = this.getActivedRow();
-                if (row.qcCategoryCode === 'N/A') {
-                    Gikam.alert('EMC.MODULE.BP.PROJECT.PROJECTS.TIP.NA_CAT_NOT_SET_PARENTNO');
-                    return false;
-                }
-
-                return {
-                    projId_SEQ: row.projId,
-                    id_DIFFER: row.id
-                }
-            },
-            onAfterChoose: function (rows) {
-                if (!Gikam.isEmpty(rows)) {
-                    this.setData({
-                        id: this.getActivedRow().id,
-                        parentOrderNo: rows[0].orderNo
-                    });
-                }
-            },
-            onClean: function () {
-                this.setData({
-                    id: this.getActivedRow().id,
-                    parentOrderNo: ''
-                });
-            }
-        }, {
-            field: 'orderNum',
-            title: 'T_EMC_ORDER.ORDERNUM',
-            validators: ['integer'],
-            editor: true,
-            width: 80,
-        }, {
-            field: 'ext$.volume',
-            title: 'T_EMC_ORDER.VOLUME',
-            editor: true,
-            width: 160,
-        }, {
-            field: 'ext$.packing',
-            title: 'T_EMC_ORDER.PACKING',
-            editor: true,
-            width: 80,
-        }, {
-            field: 'ext$.isblank',
-            title: 'T_EMC_ORDER.ISBLANK',
-            editor: true,
-            type: 'select',
-            search: true,
-            category: 'sys',
-            param: {
-                codeCategoryId: 'yesorno'
-            },
-        }, {
-            field: 'qcName',
-            title: 'T_EMC_ORDER.QCNAME',
+        // }, {
+        //     field: 'parentOrderNo',
+        //     title: 'T_EMC_ORDER.PARENTORDERNO',
+        //     width: 120,
+        //     editor: true,
+        //     type: 'choose',
+        //     category: 'order',
+        //     single: true,
+        //     onBeforeChoose: function () {
+        //         let row = this.getActivedRow();
+        //         if (row.qcCategoryCode === 'N/A') {
+        //             Gikam.alert('EMC.MODULE.BP.PROJECT.PROJECTS.TIP.NA_CAT_NOT_SET_PARENTNO');
+        //             return false;
+        //         }
+        //
+        //         return {
+        //             projId_SEQ: row.projId,
+        //             id_DIFFER: row.id
+        //         }
+        //     },
+        //     onAfterChoose: function (rows) {
+        //         if (!Gikam.isEmpty(rows)) {
+        //             this.setData({
+        //                 id: this.getActivedRow().id,
+        //                 parentOrderNo: rows[0].orderNo
+        //             });
+        //         }
+        //     },
+        //     onClean: function () {
+        //         this.setData({
+        //             id: this.getActivedRow().id,
+        //             parentOrderNo: ''
+        //         });
+        //     }
+        // }, {
+        //     field: 'orderNum',
+        //     title: 'T_EMC_ORDER.ORDERNUM',
+        //     validators: ['integer'],
+        //     editor: true,
+        //     width: 80,
+        // }, {
+        //     field: 'ext$.volume',
+        //     title: 'T_EMC_ORDER.VOLUME',
+        //     editor: true,
+        //     width: 160,
+        // }, {
+        //     field: 'ext$.packing',
+        //     title: 'T_EMC_ORDER.PACKING',
+        //     editor: true,
+        //     width: 80,
+        // }, {
+        //     field: 'ext$.isblank',
+        //     title: 'T_EMC_ORDER.ISBLANK',
+        //     editor: true,
+        //     type: 'select',
+        //     search: true,
+        //     category: 'sys',
+        //     param: {
+        //         codeCategoryId: 'yesorno'
+        //     },
+        // }, {
+        //     field: 'qcName',
+        //     title: 'T_EMC_ORDER.QCNAME',
         }];
     },
 

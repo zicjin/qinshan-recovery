@@ -10,8 +10,6 @@ import java.util.List;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
-import com.sunwayworld.framework.io.file.FilePathDTO;
-import com.sunwayworld.framework.io.file.FilePathManager;
 import com.sunwayworld.framework.spring.annotation.GikamBean;
 import com.sunwayworld.module.item.file.utils.CoreFileUtils;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -54,8 +52,7 @@ public class EmcMethodImportFileFunction implements CoreFileImportFunction {
     @Override
     public CoreFileImportResultDTO apply(CoreFileBean file) {
         CoreFileImportResultDTO CoreFileImportResultDTO = new CoreFileImportResultDTO();
-        FilePathDTO fr = CoreFileUtils.toFilePath(file);
-        importMethodByPOI(FilePathManager.getLocalPath(fr).toFile().getAbsolutePath());
+        importMethodByPOI(CoreFileUtils.getLocalPath(file).toFile().getAbsolutePath());
         return CoreFileImportResultDTO;
     }
 

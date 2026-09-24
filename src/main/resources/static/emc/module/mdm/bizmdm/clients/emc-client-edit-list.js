@@ -8,6 +8,7 @@ emcClient.editPage = {
             id : 'emc-client-edit-list-grid',
             url : emcClient.baseUrl + '/queries/raw',
             columns : emcClient.getClientListColumns(),
+            page : true,
             deleteFormatter : function(row) {
                 return row.clientName || row.clientNo || row.id;
             },
@@ -27,20 +28,83 @@ emcClient.editPage = {
             onCellClick : function(field, row) {
                 field === 'clientNo' && _this.loadDetailPage(row.id);
             },
-            toolbar : [ {
-                type : 'button',
-                text : 'GIKAM.BUTTON.INSERT',
-                icon : 'add',
-                onClick : function() {
-                    Gikam.preInsert({
-                        modalTitle : 'EMC.MODULE.MDM.BIZMDM.CLIENTS.TAB.CLIENT_ADD',
-                        fields : emcClient.getPreInsertFormFields(),
-                        url : emcClient.baseUrl
-                    }).done(function(id) {
-                        _this.loadDetailPage(id);
+            toolbar : [
+//            {
+//                type : 'button',
+//                text : 'GIKAM.BUTTON.INSERT',
+//                icon : 'add',
+//                onClick : function() {
+//                    Gikam.preInsert({
+//                        modalTitle : 'EMC.MODULE.MDM.BIZMDM.CLIENTS.TAB.CLIENT_ADD',
+//                        fields : emcClient.getPreInsertFormFields(),
+//                        url : emcClient.baseUrl
+//                    }).done(function(id) {
+//                        _this.loadDetailPage(id);
+//                    });
+//                }
+//            },
+            {
+               type: 'button',
+               text: '新增客户(CRM)',
+               icon: 'add',
+               onClick: function () {
+                   // 添加客户
+                   window.open("https://www.fxiaoke.com/XV/UI/Home#paasapp/list/=/appId_CRM/AccountObj");
+               }
+           },{
+              type: 'button',
+              text: '按客户同步',
+              icon: 'add',
+              onClick: function () {
+              var modal = Gikam.create('modal', {
+                     title : "客户名称",
+                     width : 400,
+                     height : 200
+                 });
+                 var layout = Gikam.create('layout', {
+                     renderTo : modal.window.$dom,
+                     center : {
+                         items : [{
+                             type : 'btnToolbar',
+                             items : [{
+                                 type : 'button',
+                                 text : 'GIKAM.BUTTON.CONFIRM',
+                                 icon : 'select',
+                                 onClick : function () {
+                                        debugger;
+                                       var wrapper = Gikam.getJsonWrapper({"contractName":form.getData().contractName }, [ '', [] ]);
+                                         workspace.window.showMask(true);
+                                           Gikam.post(IFM_CONTEXT + '/secure/emc/module/mdm/oa-orgs/sync-byname', wrapper).done(function() {
+
+                                           }).always(function() {
+                                               workspace.window.closeMask();
+                                                modal.close();
+                                           });
+                                 }
+                             }, {
+                                 type : 'button',
+                                 text : 'GIKAM.BUTTON.CANCEL',
+                                 icon : 'cancel',
+                                 onClick : function () {
+                                     modal.close();
+                                 }
+                             }]
+                         }]
+                     }
+                 });
+                   var form = Gikam.create('form', {
+                        renderTo: layout.options.center.$dom,
+                        columns: 1,
+                        titleWidth: 80,
+                        fields: [{
+                            field: 'contractName',
+                            title: '客户名称',
+                        }],
                     });
-                }
-            }, {
+          }
+      },
+
+            {
                 type : 'button',
                 text : 'GIKAM.BUTTON.DELETE',
                 icon : 'remove-row',
@@ -57,7 +121,7 @@ emcClient.editPage = {
                         service : 'emcClientExportTemplate'
                     })).done(function(fileUri) {
                         var fileUrl = IFM_CONTEXT + fileUri;
-                        Gikam.download(fileUrl);
+                        Gikam.emcDownloadFile(fileUrl);
                     });
                 }
             }, {

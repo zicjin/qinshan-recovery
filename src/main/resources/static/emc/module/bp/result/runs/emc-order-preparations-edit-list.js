@@ -8,7 +8,7 @@ emcOrderPreparations.editPage = {
                 url :IFM_CONTEXT + '/secure/emc/module/bp/project/projects/queries/choosable',
             	requestData:{
             		targetType : 'analysis',
-                    orgId_SB: workspace.user.ext$.parentorgid
+                    org_filter : '1',
             	},
 	            columns : emcOrderPreparations.getOrderPreparationsEditListColumns(),
 	            service : 'emcRunServiceImpl',

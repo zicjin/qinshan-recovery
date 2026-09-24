@@ -111,7 +111,7 @@ emcPurchApply.editPage = {
 									service : 'emcPurchapplyExportTemplate'
 								})).done(function(fileUri) {
 									var fileUrl = IFM_CONTEXT + fileUri;
-									Gikam.download(fileUrl);
+									Gikam.emcDownloadFile(fileUrl);
 								});
 							}
 						}, {

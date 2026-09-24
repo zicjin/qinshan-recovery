@@ -60,23 +60,23 @@ emcRun.editTaskEquiptPage = {
                     });
                   }
             }, {
-                type : 'button',
-                text : '方法参数2批录入',
-                icon : 'modify',
-                onClick : function() {
-                    var _this = this;
-                    var selections = Gikam.getComp('emc-run-edit-task-equipt-list-grid').getSelections();
-                    var id = selections[0].id;
-                    Gikam.create('modal', {
-                        width : '60%',
-                        title : 'EMC.MODULE.BP.RESULT.RUNS.MODAL.METHOD_PARAM_PROPERTY_SET',
-                        url : '/secure/emc/module/mdm/bizmdm/tests/page/result-order-task/method-param-batch-detail'  + Gikam.param({
-                            id : id,
-                            flag1 : 0
-                        }),
-                    });
-                  }
-            }, {
+            //     type : 'button',
+            //     text : '方法参数2批录入',
+            //     icon : 'modify',
+            //     onClick : function() {
+            //         var _this = this;
+            //         var selections = Gikam.getComp('emc-run-edit-task-equipt-list-grid').getSelections();
+            //         var id = selections[0].id;
+            //         Gikam.create('modal', {
+            //             width : '60%',
+            //             title : 'EMC.MODULE.BP.RESULT.RUNS.MODAL.METHOD_PARAM_PROPERTY_SET',
+            //             url : '/secure/emc/module/mdm/bizmdm/tests/page/result-order-task/method-param-batch-detail'  + Gikam.param({
+            //                 id : id,
+            //                 flag1 : 0
+            //             }),
+            //         });
+            //       }
+            // }, {
                 type : 'button',
                 text : '有机同步仪器id',
                 icon : 'modify',

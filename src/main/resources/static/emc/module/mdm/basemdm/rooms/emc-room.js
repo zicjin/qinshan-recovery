@@ -32,7 +32,7 @@ var emcRoom = Gikam.getPageObject({
             single : true,
             onBeforeChoose : function() {
                 return {
-    	            orgId_SEQ : workspace.user.orgId,
+    	            orgId_SB : workspace.user.orgId,
                     status_DIFFER : 'locked'
                 }
             },
@@ -93,7 +93,7 @@ var emcRoom = Gikam.getPageObject({
             single : true,
             onBeforeChoose : function() {
                 return {
-    	            orgId_SEQ : workspace.user.orgId,
+    	            orgId_SB : workspace.user.orgId,
                     status_DIFFER : 'locked'
                 }
             },
@@ -145,7 +145,7 @@ var emcRoom = Gikam.getPageObject({
             single : true,
             onBeforeChoose : function() {
                 return {
-    	            orgId_SEQ : workspace.user.orgId,
+    	            orgId_SB : workspace.user.orgId,
                     status_DIFFER : 'locked'
                 }
             },

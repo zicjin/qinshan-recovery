@@ -4,14 +4,86 @@ var emcQualityControl = Gikam.getPageObject({
     getEditListColumns : function() {
         return [ {
             checkbox : true
-        }, Gikam.status.getBpmnColumn(emcQualityControl.workflow.dbTable), {
+        }, Gikam.status.getBpmnColumn(emcQualityControl.workflow.dbTable), /*{
             field : 'qualityControlCode',
             title : 'T_EMC_QUALITY_CONTROL.QUALITYCONTROLCODE',
         }, {
             field : 'createdByName',
             title : 'T_EMC_QUALITY_CONTROL.CREATEDBYNAME'
-        } ];
-    },
+        }*/ {
+            field : 'ext$.bigcategory',
+            title : '大类',
+            editor: true
+        },{
+            field : 'ext$.samllcategory',
+            title : '小类',
+            editor: true
+        },{
+            field : 'ext$.projname',
+            title : '项目名称',
+            editor: true
+        },{
+            field : 'ext$.testmethod',
+            title : '检测方法',
+            editor: true
+        },{
+            field : 'ext$.plandate',
+            title : '计划实施时间',
+            editor: true
+        },{
+            field : 'ext$.qcexamways',
+            title : '考核方式',//可以选择仪器比对、标准样品、加标回收、人员比对、留样复测、方法比对
+            type: 'select',
+            category : 'sys',
+            param : {
+                codeCategoryId : 'qcExamWays',
+            },
+            editor: true
+        },{
+            field : 'ext$.examuser',
+            title : '考核人员',
+            editor: true,
+            type : 'choose',
+            category : 'user-simple',
+            editable : true,
+            single : false,
+            onAfterChoose : function(rows,index) {
+                if (!Gikam.isEmpty(rows)) {
+                    var ids = "";
+                    var names = "";
+                    for ( let index in rows) {
+                        if (index == rows.length - 1) {
+                            ids += rows[index].id;
+                            names += rows[index].userName;
+                            break;
+                        }
+                        ids += rows[index].id + ",";
+                        names += rows[index].userName + ",";
+                    }
+                    this.setData({
+                        index : index,
+                        ext$:{
+                            examuserid: ids,
+                            examuser: names
+                        }
+                    });
+                }
+            },
+            onClean : function() {
+                this.setData({
+                    id : this.getActivedRow().id,
+                    ext$:{
+                        examuserid: '',
+                        examuser: ''
+                    }
+                });
+            }
+        },{
+            field : 'ext$.qxrequire',
+            title : '质量控制要求',
+            editor: true
+        }];
+     },
 
     getQualityControlFormFields : function() {
         return [ {

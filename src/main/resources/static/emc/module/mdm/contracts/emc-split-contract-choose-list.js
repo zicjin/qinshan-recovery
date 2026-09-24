@@ -7,7 +7,7 @@ emcContract.splitChoosePage = {
         }) : columns.unshift({
             checkbox : true
         });
-        requestData['orgId_SB'] = workspace.user.ext$.parentorgid;
+        requestData['org_filter'] = '1';
         requestData['status_SEQ'] = '1';
 
         return {

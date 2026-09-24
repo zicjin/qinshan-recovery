@@ -17,6 +17,7 @@ emcProjScheme.selectTmplPage = {
         }
     },
 
+
     getPreviousBtnItem : function() {
         var _this = this;
         return {
@@ -42,18 +43,28 @@ emcProjScheme.selectTmplPage = {
 
             var returnFlag = true;
 
-            var newTestNameAndItemGroupNames = [];
+            // var newTestNameAndItemGroupNames = [];
+            // gridData.some(function(item) {
+            //     var newTestNameAndItemGroupName = item.ext$.testname + '&' + item.itemGroup;
+            //     if (newTestNameAndItemGroupNames.indexOf(newTestNameAndItemGroupName) === -1) {
+            //         newTestNameAndItemGroupNames.push(newTestNameAndItemGroupName);
+            //     } else {
+            //         returnFlag = false;
+            //         Gikam.alert(Gikam.propI18N('EMC.MODULE.MDM.BIZMDM.MONITORTMPLS.TIP.CANNOT_CHOOSE_REITERATED_TEST') + ':' + '测试名称('+item.ext$.testname+'),'+ '分析项组名称('+item.itemGroup+')');
+            //         return true;
+            //     }
+            // });
+            var newItemGroupNames = [];
             gridData.some(function(item) {
-                var newTestNameAndItemGroupName = item.ext$.testname + '&' + item.itemGroup;
-                if (newTestNameAndItemGroupNames.indexOf(newTestNameAndItemGroupName) === -1) {
-                    newTestNameAndItemGroupNames.push(newTestNameAndItemGroupName);
+                var newItemGroupName = item.itemGroup;
+                if (newItemGroupNames.indexOf(newItemGroupName) === -1) {
+                    newItemGroupNames.push(newItemGroupName);
                 } else {
                     returnFlag = false;
-                    Gikam.alert('EMC.MODULE.MDM.BIZMDM.MONITORTMPLS.TIP.CANNOT_CHOOSE_REITERATED_TEST');
+                    Gikam.alert(Gikam.propI18N('不能选择重复分析项组') + ': 分析项组名称('+item.itemGroup+')');
                     return true;
                 }
             });
-
             if (returnFlag) {
                 var chooseData = gridData.map(function(item) {
                     return {
@@ -101,7 +112,10 @@ emcProjScheme.selectTmplPage = {
             type : 'shuttleFrame',
             id : 'emc-select-monitor-tmpl-list-shuttle-frame',
             columns : emcProjScheme.getMonitorTmplListColumns(),
+            rightPage : false,
+            leftPage : false,
             leftGridUrl : '',
+            initRequest : false,
             onAddClick : function(data, left, right) {
                 _this.setFormEditStatus(right);
                 _this.filterSameAdd(data, left, right);
@@ -109,6 +123,9 @@ emcProjScheme.selectTmplPage = {
             onDelClick : function(data, left, right) {
                 _this.setFormEditStatus(right);
                 _this.filterSameDel(data, left, right);
+            },
+            onRendered : function() {
+                _this.shuttleFrame = this;
             },
         }
     },
@@ -179,7 +196,10 @@ emcProjScheme.selectTmplPage = {
         if (repeatTestNames.length > 0) {
             Gikam.alert(Gikam.propI18N('EMC.MODULE.MDM.BIZMDM.MONITORTMPLS.TIP.CANNOT_CHOOSE_REITERATED_TEST') + ': ' + repeatTestNames.join());
         }
-
+        let repeatItemGroupNames = data.filter(item => originRightData.some(rightItem => item.itemGroup === rightItem.itemGroup)).map(item => item.itemGroup);
+        if (repeatItemGroupNames.length > 0) {
+            Gikam.alert(Gikam.propI18N('不能选择重复分析项组') + ': ' + repeatItemGroupNames.join());
+        }
         var _this = this;
 
         // 获取当前测试方案下的

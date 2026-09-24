@@ -174,6 +174,7 @@ public class EmcOrderTaskResultComputingEngine implements GikamComputingEngine {
 
                 if (!StringUtils.isEmpty(script)) {
                     script = reviseSqlArgument(script);
+                    logger.info("script=====================" + script);
 
                     Object resultValue = bsh.eval(script,
                             I18nHelper.getMessage("T_EMC_ORDER_TASK_RESULT.TIP.COMPUTING.BAD_TEST_SCRIPT", result.getExt$Item("testname"), result.getExt$Item("methodname"), result.getItemName()));
@@ -569,7 +570,7 @@ public class EmcOrderTaskResultComputingEngine implements GikamComputingEngine {
             List<EmcOrderTaskResultBean> folderTaskResultList = getFolderTaskResultList();
 
             // 查询QC指标
-            List<Long> itemIdList = folderTaskResultList.stream().map(EmcOrderTaskResultBean::getItemId).collect(Collectors.toList());
+            List<Long> itemIdList = folderTaskResultList.stream().map(EmcOrderTaskResultBean::getItemId).distinct().collect(Collectors.toList());
 
             itemQcIndexList = itemQcIndexService.getDao().selectListByOneColumnValues(itemIdList, "ITEMID");
 
@@ -592,7 +593,7 @@ public class EmcOrderTaskResultComputingEngine implements GikamComputingEngine {
             List<EmcOrderTaskResultBean> folderTaskResultList = getFolderTaskResultList();
 
             // 查询QC指标及分段修约
-            List<Long> itemIdList = folderTaskResultList.stream().map(EmcOrderTaskResultBean::getItemId).collect(Collectors.toList());
+            List<Long> itemIdList = folderTaskResultList.stream().map(EmcOrderTaskResultBean::getItemId).distinct().collect(Collectors.toList());
 
             itemRevisionList = itemRevisionService.getDao().selectListByOneColumnValues(itemIdList, "ITEMID");
 

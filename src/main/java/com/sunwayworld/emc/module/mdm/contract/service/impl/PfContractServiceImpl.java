@@ -109,11 +109,4 @@ public class PfContractServiceImpl extends EmcContractServiceImpl implements PfC
 
         return emcContract.getId();
     }
-
-    @Override
-    @Transactional
-    @AuditTrailEntry(AuditTrailType.PROCESS_START)
-    public List<CoreBpmnInstanceStatusDTO<Long>> startProcess(RestJsonWrapperBean wrapper) {
-        return super.startProcess(wrapper);
-    }
 }

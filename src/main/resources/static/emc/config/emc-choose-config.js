@@ -375,6 +375,11 @@ Gikam.choose.addConfigParam([ {
     url : '/secure/emc/module/bp/result/runs/page/browse-record',
     width : '90%',
 }, {
+      title : '查看采样单',
+      category : 'browseSampleRecords',
+      url : '/secure/emc/module/bp/result/runs/page/browse-sample-record',
+      width : '90%',
+  }, {
     title : '查看报告',
     category : 'browseReportRecords',
     url : '/secure/emc/module/bp/report/reports/page/browse-record',
@@ -384,4 +389,20 @@ Gikam.choose.addConfigParam([ {
     category : 'splitContract',
     url : '/secure/emc/module/mdm/contracts/page/split-choose-list',
     width : '70%',
-} ]);
+} , {
+      title : '合同',
+      category : 'crmContract',
+      url : '/secure/emc/module/mdm/contracts/page/choose-list',
+      width : '70%',
+  }, {
+    title : '批',
+    category : 'run',
+    url : '/secure/emc/module/bp/result/runs/page/choose-list',
+    width : '70%',
+}, {
+    title : '所属区域',
+    category : 'emc-adm-area',
+    url : '/secure/emc/module/item/adm-areas/page/choose-list',
+    width : '70%',
+    height : '25%',
+}]);

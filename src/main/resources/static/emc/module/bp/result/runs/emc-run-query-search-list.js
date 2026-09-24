@@ -59,28 +59,28 @@ emcRun.runQuerySearchPage = {
                 if (data.index == 0) {
                     gridId = 'emc-run-query-search-myself-grid';
                     requestData = {
-                        orgId_SB : workspace.user.ext$.parentorgid,
+                        org_filter : '1',
                         createdById_SEQ: workspace.user.id,
                     };
                 }
                 if (data.index == 1) {
                     gridId = 'emc-run-query-search-my-approve-grid';
                     requestData = {
-                        orgId_SB : workspace.user.ext$.parentorgid,
+                        org_filter : '1',
                         approveUserId: workspace.user.id,
                     };
                 }
                 if (data.index == 2) {
                     gridId = 'emc-run-query-search-my-audit-grid';
                     requestData = {
-                        orgId_SB : workspace.user.ext$.parentorgid,
+                        org_filter : '1',
                         auditedUserId_SEQ: workspace.user.id,
                     };
                 }
                 if (data.index == 3) {
                     gridId = 'emc-run-query-search-all-grid';
                     requestData = {
-                        orgId_SB : workspace.user.ext$.parentorgid,
+                        org_filter : '1',
                     };
                 }
 
@@ -102,8 +102,105 @@ emcRun.runQuerySearchPage = {
             onClick: function () {
                 _this.runViewRun(gridId);
             }
+        }, {
+            type: 'button',
+            text: '导出原始记录',
+            icon: 'export',
+            onClick: function () {
+                _this.exportOriginalRecordExcel(gridId);
+            }
+        },{
+            type : 'button',
+            text : 'EMC.MODULE.BP.RESULT.RUNS.BUTTON.ATLAS_LOOK',
+            icon : 'preview',
+            onClick : function() {
+                _this.loadAtlasByRun(gridId);
+            }
+        }, {
+            type : 'button',
+            text : 'GIKAM.FILE.ATTACHMENT',
+            icon : 'add',
+            onClick : function() {
+                _this.loadFilePage(gridId);
+            }
+        }, {
+            type : 'button',
+            text : '查看任务单',
+            icon : 'print',
+            onClick : function() {
+                _this.openTaskReport(gridId);
+            }
+        },{
+            type: 'button',
+            text: 'GIKAM.BUTTON.VIEWAUDIT',
+            icon: 'view-audit',
+            onClick: function () {
+                Gikam.viewAudit('T_EMC_RUN', Gikam.getComp(gridId).getSelections());
+            }
         }]
     },
+
+    loadFilePage : function(gridId) {
+
+        var selections = Gikam.getComp(gridId).getSelections();
+
+        if (selections.length !== 1) {
+            Gikam.alert('GIKAM.TIP.CHOOSE_ONE_ITEM');
+            return;
+        }
+
+        Gikam.create('modal', {
+            title : 'GIKAM.FILE.ATTACHMENT',
+            url : '/secure/emc/module/mdm/file/files/page/view' + Gikam.param({
+                id : selections[0].id,
+                table : 'T_EMC_RUN',
+                readonly : true,
+            }),
+            onAfterClose : function(rows) {
+            }
+        });
+    },
+
+    loadAtlasByRun : function(gridId) {
+
+        var runSelections = Gikam.getComp(gridId).getSelections();
+        if (runSelections.length !== 1) {
+            Gikam.alert('GIKAM.TIP.CHOOSE_ONE_ITEM');
+            return;
+        }
+
+        Gikam.create('modal', {
+            title : 'EMC.MODULE.BP.RESULT.RUNS.TAB.LOOK_ATLAS',
+            url : '/secure/emc/module/bp/bp/order-tasks/page/atlas' + Gikam.param({
+                targetIds : [ 'T_EMC_EQUIPT$' + runSelections[0].id ],
+                runId_SEQ : runSelections[0].id
+            })
+        });
+    },
+
+    openTaskReport : function(gridId) {
+        var selections = Gikam.getComp(gridId).getSelections();
+        if (selections.length !== 1) {
+            Gikam.alert('GIKAM.TIP.CHOOSE_ONE_ITEM');
+            return;
+        }
+
+        Gikam.getJson(Gikam.printf('/secure/emc/module/bp/project/projects/{id}', {
+            id : selections[0].projId
+        })).done(function(project) {
+            if (!project) {
+                Gikam.alert('GIKAM.TIP.OPERATE_FAIL');
+                return;
+            }
+
+            if (project.sample == '0') {
+                Gikam.viewReport('1453125616129984', project);
+            } else {
+                Gikam.viewReport('1344186996217184', project);
+            }
+        });
+    },
+
     runViewRun : function(gridId) {
         var selections = Gikam.getComp(gridId).getSelections();
         if (selections.length !== 1) {
@@ -117,6 +214,25 @@ emcRun.runQuerySearchPage = {
         }
 
         Gikam.viewReport(reportConfigLineId, selections[0]);
+    },
+    exportOriginalRecordExcel: function (gridId) {
+        var selections = Gikam.getComp(gridId).getSelections();
+        if (selections.length === 0) {
+            Gikam.alert('GIKAM.TIP.CHOOSE_ITEM');
+            return;
+        }
+        Gikam.toast('正在导出原始记录，请稍候...', 3, 'top');
+        Gikam.postText(IFM_CONTEXT + '/secure/emc/module/bp/result/runs/action/export-original-record-excel-zip',
+            Gikam.getJsonWrapper({}, ['', selections])).done(function (url) {
+            if (Gikam.isEmpty(url)) {
+                Gikam.alert('导出失败！');
+                return;
+            }
+            Gikam.emcDownloadFile(url);
+            Gikam.alert('导出完成！');
+        }).fail(function () {
+            Gikam.alert('导出失败！');
+        });
     },
     loadResultInputPage : function(runId, index) {
         Gikam.create('modal', {

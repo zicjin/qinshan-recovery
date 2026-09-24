@@ -64,6 +64,11 @@ emcProject.updateOrderIndexPage = {
                     }), true);
                 });
             },
+            toolbar : [ {
+                type: 'form',
+                autoSave: false,
+                fields: emcProject.getIndexShowAllField(),
+            } ]
         };
     },
 
@@ -79,6 +84,7 @@ emcProject.updateOrderIndexPage = {
                 title : 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.TITLE.INDEX_CATEGORY',
                 field : 'indexCategoryId',
                 type : 'select',
+                 inputWidth: 300,
                 search : true,
                 onChange : function(field, value) {
                     if (!Gikam.isEmpty(value)) {
@@ -161,9 +167,14 @@ emcProject.updateOrderIndexPage = {
             Gikam.alert('EMC.MODULE.BP.PROJECT.TIP.NO_ORDER_SELECTED');
             return;
         }
-
+        var orderItemGroupSelections = Gikam.getComp('emc-update-index-order-item-group-grid').getSelections();
+        if (Gikam.isEmpty(orderItemGroupSelections)) {
+            Gikam.alert('至少选择一个分析项组');
+            return;
+        }
         workspace.window.showMask(true);
-        Gikam.postText(IFM_CONTEXT + '/secure/emc/module/bp/bp/orders/action/update-order-index', Gikam.getJsonWrapper({}, [ 'emcOrderServiceImpl', orderSelections ], [ 'emcOrderIndexServiceImpl', orderIndexData ])).done(function () {
+        Gikam.postText(IFM_CONTEXT + '/secure/emc/module/bp/bp/orders/action/update-order-index', Gikam.getJsonWrapper({},
+            [ 'emcOrderServiceImpl', orderSelections ],[ 'emcOrderItemGroupServiceImpl', orderItemGroupSelections ], [ 'emcOrderIndexServiceImpl', orderIndexData ])).done(function () {
 
         }).always(function() {
             workspace.window.closeMask();

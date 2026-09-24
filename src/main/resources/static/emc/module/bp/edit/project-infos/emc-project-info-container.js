@@ -20,7 +20,7 @@ emcProjectInfo.orderPrepareContainerPage = {
     },
 
     getOrderTaskUrl : function() {
-        Gikam.post('/secure/emc/module/bp/bp/orders/order-tasks/queries', Gikam.getJsonWrapper({}, [ '', this.order ], [ '', this.orderTask ], [ '', this.orderIds ])).done(function(data) {
+        Gikam.post('/secure/emc/module/bp/bp/orders/order/tasks/queries', Gikam.getJsonWrapper({}, [ 'emcOrderServiceImpl', this.order ], [ 'emcOrderTaskServiceImpl', this.orderTask ], [ '', this.orderIds ])).done(function(data) {
             Gikam.getComp('emc-order-prepare-container-order-task-detail-list-grid').refreshByData(data);
         }).always(function() {
             workspace.window.closeMask();

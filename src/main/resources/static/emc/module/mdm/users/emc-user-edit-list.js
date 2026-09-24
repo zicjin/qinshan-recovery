@@ -8,7 +8,7 @@ Gikam.extend(coreUser.editPage, {
             id : 'core-user-edit-list-grid',
             url : coreUser.baseUrl + '/queries/raw',
             requestData : {
-                orgId_SB : workspace.user.ext$.parentorgid
+                org_filter : '1',
             },
 //            onRendered : function() {
 //                Gikam.getComp('user-insert-button').hide();
@@ -72,7 +72,7 @@ Gikam.extend(coreUser.editPage, {
                         service : 'pfUserExportTemplate'
                     })).done(function(fileUri) {
                         var fileUrl = IFM_CONTEXT + fileUri;
-                        Gikam.download(fileUrl);
+                        Gikam.emcDownloadFile(fileUrl);
                     });
                 }
             }, {

@@ -104,10 +104,32 @@ emcCurve.resultInputPage = {
                         onClick : function() {
                             _this.logCompute();
                         }
+                    }, {
+                        type : 'button',
+                        text : '强制过零点',
+                        icon : 'revert',
+                        hidden : false,
+                        onClick : function() {
+                            _this.zeroCompute();
+                        }
+                    }, {
+                        type : 'button',
+                        text : '删除分析项',
+                        icon : 'remove',
+                        hidden : false,
+                        onClick : function() {
+                            _this.delItem();
+                        }
                     } ]
                 } ]
             } ]
         }
+    },
+
+    delItem : function () {
+        Gikam.getComp('emc-curve-result-edit-list-grid').deleteRows(IFM_CONTEXT + '/secure/emc/module/bp/bp/order-task-results').done(function() {
+            Gikam.getComp('emc-curve-result-edit-list-grid').refresh();
+        });
     },
 
     logCompute : function() {
@@ -140,6 +162,36 @@ emcCurve.resultInputPage = {
         });
 	},
 
+    zeroCompute : function() {
+        var _this = this;
+        var grid = Gikam.getComp('emc-curve-result-edit-list-grid');
+        Gikam.getLastModal().window.showMask(true);
+        Gikam.put(Gikam.printf(emcCurve.baseUrl + '/{id}/action/compute', {
+            id : _this.param.curveId
+        }), Gikam.getJsonWrapper({}, [ '', [ {
+            id : _this.param.curveId,
+            folderId : _this.param.folderId,
+            type : 'zeroCompute'
+        } ] ])).done(function() {
+            Gikam.post(IFM_CONTEXT + '/secure/emc/module/bp/bp/order-task-results/queries', Gikam.getJsonWrapper({
+                n : -1,
+                f : {
+                    folderId_SEQ : _this.param.folderId
+                }
+            })).done(function(data) {
+                Gikam.each(data.rows, function(index, row) {
+                    grid.setData(row, false, true);
+                });
+
+            }).always(function() {
+                Gikam.getLastModal().window.closeMask();
+            });
+
+        }).fail(function() {
+            Gikam.getLastModal().window.closeMask();
+        });
+    },
+
     exportFile : function() {
         var _this = this;
         var rightData = Gikam.getComp('emc-curve-result-edit-list-grid').getData();
@@ -154,7 +206,7 @@ emcCurve.resultInputPage = {
             id : folderId
         })).done(function(fileUri) {
             var fileUrl = IFM_CONTEXT + fileUri;
-            Gikam.download(fileUrl);
+            Gikam.emcDownloadFile(fileUrl);
         });
     },
 

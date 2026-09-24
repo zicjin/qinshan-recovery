@@ -8,7 +8,7 @@ emcContract.auditPage = {
             columns : emcContract.getAuditListColumns(),
             service : 'emcContractServiceImpl',
             requestData : {
-               orgId_SB: workspace.user.ext$.parentorgid,
+               org_filter : '1',
                bpmn_statusCode : _this.param.bpmn_statusCode
             },
             deleteFormatter : function(row) {

@@ -42,6 +42,7 @@ import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcItemBean;
 import com.sunwayworld.emc.module.mdm.bizmdm.test.service.EmcItemService;
 import com.sunwayworld.framework.at.annotation.AuditTrailEntry;
 import com.sunwayworld.framework.at.annotation.AuditTrailType;
+import com.sunwayworld.framework.audit.aunnotation.Audit;
 import com.sunwayworld.framework.constant.Constant;
 import com.sunwayworld.framework.context.ApplicationContextHelper;
 import com.sunwayworld.framework.data.page.Page;
@@ -53,6 +54,7 @@ import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;
 import com.sunwayworld.framework.spring.annotation.GikamBean;
 import com.sunwayworld.framework.utils.ArrayUtils;
 import com.sunwayworld.framework.utils.BeanUtils;
+import com.sunwayworld.framework.utils.CollectionUtils;
 import com.sunwayworld.framework.utils.DateTimeUtils;
 import com.sunwayworld.framework.utils.NumberUtils;
 import com.sunwayworld.framework.utils.ObjectUtils;
@@ -169,172 +171,12 @@ public class EmcOrderServiceImpl implements EmcOrderService {
     @Transactional
     @AuditTrailEntry(AuditTrailType.INSERT)
     public void copy(RestJsonWrapperBean jsonWrapper) {
-        List<EmcOrderBean> oldOrderList = jsonWrapper.parse(EmcOrderBean.class);
-        int copies = NumberUtils.parseInt(jsonWrapper.getParamValue("copies"));// 复制份数
-
-        List<Long> oldOrderIdList = oldOrderList.stream().map(e -> e.getId()).collect(Collectors.toList());
-        List<EmcOrderItemGroupBean> oldOrderItemGroupList = orderItemGroupService.getDao().selectListByOneColumnValues(oldOrderIdList, "orderId");
-        List<EmcOrderItemBean> oldOrderItemList = orderItemService.getDao().selectListByOneColumnValues(oldOrderIdList, "orderId");
-
-        List<EmcOrderBean> newOrderList = new ArrayList<>();
-        List<EmcOrderItemGroupBean> newOrderItemGroupList = new ArrayList<>();
-        List<EmcOrderItemBean> newOrderItemList = new ArrayList<>();
-
-        List<Long> folderIdList = oldOrderList.stream().map(e -> e.getFolderId()).distinct().collect(Collectors.toList());
-        List<EmcFolderBean> oldFolderList = folderService.getDao().selectListByOneColumnValues(folderIdList, "ID");
-
-        Long projId = oldOrderList.get(0).getProjId();
-        EmcProjectBean project = projectService.selectById(projId);
-        int folderCount = oldFolderList.size();
-        List<String> newFolderNoList = folderService.generateFolderNosByProjId(projId, project.getProjNo(), folderCount * copies);
-
-        List<EmcFolderBean> insertFolderList = new ArrayList<>();
-
-        for (int j = 0; j < copies; j++) {
-
-            for (int i = 0; i < folderCount; i++) {
-                // 点位
-                EmcFolderBean oldFolder = oldFolderList.get(i);
-                EmcFolderBean insertFolder = new EmcFolderBean();
-                BeanUtils.copyProperties(oldFolder, insertFolder);
-                Long newFolderId = ApplicationContextHelper.getNextIdentity();
-                String newFolderNo = newFolderNoList.get(j * folderCount + i);
-                insertFolder.setId(newFolderId);
-                insertFolder.setFolderNo(newFolderNo);
-                insertFolderList.add(insertFolder);
-
-                // 样品
-                EmcOrderBean oldOrder = oldOrderList.stream().filter(e -> ObjectUtils.equals(oldFolder.getId(), e.getFolderId())).findFirst().orElse(null);
-                EmcOrderBean newOrder = new EmcOrderBean();
-                BeanUtils.copyProperties(oldOrder, newOrder);
-                Long newOrderId = ApplicationContextHelper.getNextIdentity();
-                newOrder.setId(newOrderId);
-                //String newOrderNo = newFolderNo + "001";
-                //解决编号中间带-，类似HZSJ2100080-001-001这种
-                String newOrderNo = newFolderNo + "001";
-                if(newFolderNo.contains("-")){
-                    newOrderNo = newFolderNo + "-001";
-                }
-                newOrder.setOrderNo(newOrderNo);
-                newOrder.setLabelNo(newOrderNo);
-                newOrder.setOrderNum(1L);
-                newOrder.setFolderId(newFolderId);
-                newOrderList.add(newOrder);
-
-                oldOrderItemGroupList.stream().filter(t -> ObjectUtils.equals(t.getOrderId(), oldOrder.getId())).forEach(t -> {
-                    Long newOrderItemGroupId = ApplicationContextHelper.getNextIdentity();
-                    oldOrderItemList.stream().filter(r -> ObjectUtils.equals(r.getOrderItemGroupId(), t.getId())).forEach(r -> {
-                        EmcOrderItemBean newOrderItem = new EmcOrderItemBean();
-                        BeanUtils.copyProperties(r, newOrderItem);
-                        newOrderItem.setId(ApplicationContextHelper.getNextIdentity());
-                        newOrderItem.setOrderId(newOrderId);
-                        newOrderItem.setOrderItemGroupId(newOrderItemGroupId);
-                        newOrderItemList.add(newOrderItem);
-                    });
-
-                    EmcOrderItemGroupBean newOrderItemGroup = new EmcOrderItemGroupBean();
-                    BeanUtils.copyProperties(t, newOrderItemGroup);
-                    newOrderItemGroup.setId(newOrderItemGroupId);
-                    newOrderItemGroup.setOrderId(newOrderId);
-                    //送样任务复制不要容器相关信息
-                    if(!"1".equals(ObjectUtils.toString(project.getSample()))){
-                        newOrderItemGroup.setContainerCategoryId(null);
-                        newOrderItemGroup.setContainerCategoryCode(null);
-                        newOrderItemGroup.setContainerCategoryName(null);
-                        newOrderItemGroup.setContainerGroup("1");
-                    }
-                    newOrderItemGroupList.add(newOrderItemGroup);
-                });
-            }
-        }
-
-        folderService.getDao().insert(insertFolderList);
-        getDao().insert(newOrderList);
-        orderItemGroupService.getDao().insert(newOrderItemGroupList);
-        orderItemService.getDao().insert(newOrderItemList);
     }
 
     @Override
     @Transactional
     @AuditTrailEntry(AuditTrailType.INSERT)
     public void copyQc(RestJsonWrapperBean jsonWrapper) {
-
-        List<EmcOrderBean> oldOrderList = jsonWrapper.parse(EmcOrderBean.class);
-
-        List<Long> oldOrderIdList = oldOrderList.stream().map(e -> e.getId()).collect(Collectors.toList());
-        List<EmcOrderItemGroupBean> oldOrderItemGroupList = orderItemGroupService.getDao().selectListByOneColumnValues(oldOrderIdList, "orderId");
-        List<EmcOrderItemBean> oldOrderItemList = orderItemService.getDao().selectListByOneColumnValues(oldOrderIdList, "orderId");
-
-        List<EmcItemBean> itemList = itemService.selectListByIds(oldOrderItemList.stream().map(e -> e.getItemId()).distinct().collect(Collectors.toList()));
-
-        List<EmcOrderBean> newOrderList = new ArrayList<>();
-        List<EmcOrderItemGroupBean> newOrderItemGroupList = new ArrayList<>();
-        List<EmcOrderItemBean> newOrderItemList = new ArrayList<>();
-
-        List<Long> folderIdList = oldOrderList.stream().map(e -> e.getFolderId()).distinct().collect(Collectors.toList());
-        List<EmcFolderBean> oldFolderList = folderService.getDao().selectListByOneColumnValues(folderIdList, "ID");
-
-        Long projId = oldOrderList.get(0).getProjId();
-        EmcProjectBean project = projectService.selectById(projId);
-        int folderCount = oldFolderList.size();
-        List<String> newFolderNoList = folderService.generateFolderNosByProjId(projId, project.getProjNo(), folderCount);
-
-        List<EmcFolderBean> insertFolderList = new ArrayList<>();
-
-        for (int i = 0; i < folderCount; i++) {
-            // 点位
-            EmcFolderBean oldFolder = oldFolderList.get(i);
-            EmcFolderBean insertFolder = new EmcFolderBean();
-            BeanUtils.copyProperties(oldFolder, insertFolder);
-            Long newFolderId = ApplicationContextHelper.getNextIdentity();
-            String newFolderNo = newFolderNoList.get(i);
-            insertFolder.setId(newFolderId);
-            insertFolder.setFolderNo(newFolderNo);
-            insertFolderList.add(insertFolder);
-
-            // 样品
-            EmcOrderBean newOrder = new EmcOrderBean();
-            EmcOrderBean oldOrder = oldOrderList.stream().filter(e -> ObjectUtils.equals(oldFolder.getId(), e.getFolderId())).findFirst().orElse(null);
-            String oldOrderNo = oldOrder.getOrderNo();
-            Long newOrderId = ApplicationContextHelper.getNextIdentity();
-
-            oldOrderItemGroupList.stream().filter(t -> ObjectUtils.equals(t.getOrderId(), oldOrder.getId())).forEach(t -> {
-                Long newOrderItemGroupId = ApplicationContextHelper.getNextIdentity();
-
-                oldOrderItemList.stream().filter(r -> ObjectUtils.equals(r.getOrderItemGroupId(), t.getId())).forEach(r -> {
-                    EmcItemBean item = itemList.stream().filter(e -> ObjectUtils.equals(e.getId(), r.getItemId())).findFirst().get();
-
-                    if (!StringUtils.isEmpty(item.getQcCategoryId()) && ArrayUtils.contains(StringUtils.split(item.getQcCategoryId(), ","), "" + oldOrder.getQcCategoryId())) {
-                        r.setId(ApplicationContextHelper.getNextIdentity());
-                        r.setOrderId(newOrderId);
-                        r.setOrderItemGroupId(newOrderItemGroupId);
-                        newOrderItemList.add(r);
-                    }
-                });
-
-                t.setId(newOrderItemGroupId);
-                t.setOrderId(newOrderId);
-                t.setQcCategoryId(oldOrder.getQcCategoryId());
-                t.setQcCategoryCode(oldOrder.getQcCategoryCode());
-                t.setQcName(oldOrder.getQcName());
-                newOrderItemGroupList.add(t);
-            });
-
-            BeanUtils.copyProperties(oldOrder, newOrder);
-            newOrder.setFolderId(newFolderId);
-            newOrder.setId(newOrderId);
-            newOrder.setOrderNo(newFolderNo + "001");
-            if(newFolderNo.contains("-")){
-                newOrder.setOrderNo(newFolderNo + "-001");
-            }
-            newOrder.setParentOrderNo(oldOrderNo);
-            newOrderList.add(newOrder);
-        }
-
-        folderService.getDao().insert(insertFolderList);
-        getDao().insert(newOrderList);
-        orderItemGroupService.getDao().insert(newOrderItemGroupList);
-        orderItemService.getDao().insert(newOrderItemList);
     }
 
     @Override
@@ -457,6 +299,7 @@ public class EmcOrderServiceImpl implements EmcOrderService {
         String remark = Constant.YES.equals(termination) ? "终止样品" : "取消终止样品";
         List<EmcOrderBean> orderList = wrapper.parse(EmcOrderBean.class);
         List<Long> idList = orderList.stream().map(e -> e.getId()).collect(Collectors.toList());
+        String orderTaskStatus = Constant.YES.equals(termination) ? "done" : "draft";
 
         List<EmcOrderBean> updateOrderList = getDao().selectListByIds(idList);
         updateOrderList.stream().forEach(e -> {
@@ -465,6 +308,10 @@ public class EmcOrderServiceImpl implements EmcOrderService {
         });
 
         getDao().update(updateOrderList, "TERMINATION", "REMARK");
+
+        List<EmcOrderTaskBean> taskList = orderTaskService.getDao().selectListByOneColumnValues(idList, "ORDERID");
+        taskList.stream().forEach(e -> e.setStatus(orderTaskStatus));
+        orderTaskService.getDao().update(taskList, "STATUS");
     }
 
     @Override
@@ -583,6 +430,11 @@ public class EmcOrderServiceImpl implements EmcOrderService {
     }
 
     @Override
+    public Page<EmcOrderTaskBean> selectOrderTaskPagationByOrderAndTask(RestJsonWrapperBean wrapper) {
+        return orderTaskService.selectOrderTaskPagationByOrderAndTask(wrapper);
+    }
+
+    @Override
     public void addRepeatNo(Long id, RestJsonWrapperBean wrapper) {
         orderTaskResultService.addRepeatNo(id, wrapper);
     }
@@ -649,6 +501,11 @@ public class EmcOrderServiceImpl implements EmcOrderService {
         List<EmcOrderItemGroupBean> delList = orderItemGroupService.getDao().selectList(filterList, Arrays.asList("ORDERID", "TESTMETHODID"), Collections.emptyList());
         orderItemGroupService.delete(delList);
         orderTaskService.delete(wrapper);
+    }
+
+    @Override
+    @Transactional
+    public void editCheckProjectItemGroup(Long id, RestJsonWrapperBean wrapper) {
     }
 
     @Override
@@ -752,5 +609,27 @@ public class EmcOrderServiceImpl implements EmcOrderService {
             newOrderItemGroup.setOrderId(newOrderId);
             newOrderItemGroupList.add(newOrderItemGroup);
         });
+    }
+
+    @Override
+    @AuditTrailEntry(AuditTrailType.UPDATE)
+    @Audit(value = "AUDIT.INSTANT_SAVE")
+    public void instantSave(RestJsonWrapperBean wrapper) {
+        EmcOrderService.super.instantSave(wrapper);
+
+        List<EmcOrderBean> orderBeanList = wrapper.parse(EmcOrderBean.class).stream().filter(e -> !ObjectUtils.isEmpty(e.getClientOrderName())).collect(Collectors.toList());
+        if (!CollectionUtils.isEmpty(orderBeanList)) {
+            List<Long> idList = orderBeanList.stream().map(EmcOrderBean::getId).distinct().collect(Collectors.toList());
+            List<EmcOrderBean> updateList = selectListByFilter(SearchFilter.instance().match("ID", idList).filter(MatchPattern.OR).match("SAMPLE", "0").filter(MatchPattern.SEQ));
+            if (!CollectionUtils.isEmpty(updateList)) {
+                List<EmcFolderBean> folderList = updateList.stream().map(e -> {
+                    EmcFolderBean folderBean = new EmcFolderBean();
+                    folderBean.setId(e.getFolderId());
+                    folderBean.setMonitorPointName(e.getClientOrderName());
+                    return folderBean;
+                }).collect(Collectors.toList());
+                folderService.getDao().update(folderList, "monitorPointName");
+            }
+        }
     }
 }

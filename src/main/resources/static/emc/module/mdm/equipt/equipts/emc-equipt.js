@@ -9,6 +9,14 @@ var emcEquipt = Gikam.getPageObject({
             field : 'equiptId',
             title : 'T_EMC_EQUIPT.EQUIPTID'
         }, {
+            field : 'ext$.assetno',
+            title : '资产编号',
+            editor : true,
+            validators : [ 'strLength[0,22]' ]
+        },{
+            field : 'ext$.assetid',
+            title : '资产ID',
+        },{
             field : 'equiptName',
             title : 'T_EMC_EQUIPT.EQUIPTNAME'
         }, {
@@ -90,6 +98,15 @@ var emcEquipt = Gikam.getPageObject({
             field : 'sourceDate',
             title : 'T_EMC_EQUIPT.SOURCEDATE',
             width : 100
+        }, {
+            field : 'equiptBelong',
+            title : 'T_EMC_EQUIPT.EQUIPTBELONG',
+            type : 'select',
+            category : 'sys',
+            param : {
+                codeCategoryId : 'equiptBelong',
+            },
+            width : 85
         }];
     },
 
@@ -111,37 +128,37 @@ var emcEquipt = Gikam.getPageObject({
             type : 'select',
             search : true,
             category : 'equiptCategory',
-        }, {
-            field : 'ext$.useddepartmentname',
-            title : 'T_EMC_EQUIPT.USEDDEPARTMENTID',
-            preInsert : true,
-            category : 'org-simple',
-            type : 'choose',
-            single : true,
-            validators : [ 'strLength[0,10]' ],
-            onBeforeChoose : function(rows) {
-                return {
-                    orgCategory_SEQ : 'department'
-                }
-            },
-            onAfterChoose : function(rows) {
-                if (!Gikam.isEmpty(rows)) {
-                    this.setData({
-                        usedDepartmentId : rows[0].id,
-                        ext$ : {
-                            useddepartmentname : rows[0].orgName,
-                        }
-                    });
-                }
-            },
-            onClean : function() {
-                this.setData({
-                    usedDepartmentId : '',
-                    ext$ : {
-                        useddepartmentname : ''
-                    }
-                });
-            },
+        // }, {
+        //     field : 'ext$.useddepartmentname',
+        //     title : 'T_EMC_EQUIPT.USEDDEPARTMENTID',
+        //     preInsert : true,
+        //     category : 'org-simple',
+        //     type : 'choose',
+        //     single : true,
+        //     validators : [ 'strLength[0,10]' ],
+        //     onBeforeChoose : function(rows) {
+        //         return {
+        //             orgCategory_SEQ : 'department'
+        //         }
+        //     },
+        //     onAfterChoose : function(rows) {
+        //         if (!Gikam.isEmpty(rows)) {
+        //             this.setData({
+        //                 usedDepartmentId : rows[0].id,
+        //                 ext$ : {
+        //                     useddepartmentname : rows[0].orgName,
+        //                 }
+        //             });
+        //         }
+        //     },
+        //     onClean : function() {
+        //         this.setData({
+        //             usedDepartmentId : '',
+        //             ext$ : {
+        //                 useddepartmentname : ''
+        //             }
+        //         });
+        //     },
         }, {
             field : 'status',
             title : 'T_EMC_EQUIPT.STATUS',
@@ -487,6 +504,14 @@ var emcEquipt = Gikam.getPageObject({
             title : 'T_EMC_EQUIPT.SOURCEDATE',
             type : 'date'
         }, {
+            field : 'equiptBelong',
+            title : 'T_EMC_EQUIPT.EQUIPTBELONG',
+            type : 'select',
+            category : 'sys',
+            param : {
+                codeCategoryId : 'equiptBelong',
+            }
+        }, {
             field : 'ext$.room',
             title : 'T_EMC_ENV_RECORD.ROOM',
             preInsert : true,
@@ -530,12 +555,24 @@ var emcEquipt = Gikam.getPageObject({
                 codeCategoryId : 'calibrationType',
             },
             multiple : true,
+        },{
+            field : 'equiptRecord',
+            title : '是否需要检定',
+            type : 'select',
+            category : 'sys',
+            param : {
+                codeCategoryId : 'yesorno',
+            },
+        }, {
+            field : 'sceneEquiptNo',
+            title : '现场仪器采集编号',
+            validators : [ 'strLength[0,40]' ]
         }, {
             field : 'remark',
             title : 'T_EMC_EQUIPT.REMARK',
             colspan : 4,
             validators : [ 'strLength[0,85]' ]
-        } ];
+        },  ];
     },
 
     getEuiptCertListColumns : function() {
@@ -577,6 +614,16 @@ var emcEquipt = Gikam.getPageObject({
         }, {
             field : 'ext$.testmethodbasis',
             title : 'T_EMC_EQUIPT_TEST_METHOD.METHODDESC',
+        }, {
+            field : 'analysisCategory',
+            title : 'T_EMC_EQUIPT_TEST_METHOD.ANALYSISCATEGORY',
+            type : 'select',
+            search : true,
+            editor : true,
+            category : 'sys',
+            param : {
+                codeCategoryId : 'analysisCategory',
+            },
         }, {
             field : 'curveNo',
             title : 'T_EMC_RUN.SELECTRUN',
@@ -867,6 +914,14 @@ var emcEquipt = Gikam.getPageObject({
         }, {
             field : 'ext$.testname',
             title : 'T_EMC_EQUIPT_TEST_ITEM.TESTNAME',
+        }, {
+            field : 'ext$.testclass',
+            title : 'T_EMC_TEST_METHOD.TESTCLASS',
+            type : 'select',
+            category : 'sys',
+            param : {
+                codeCategoryId : 'testClass',
+            },
         }, {
             field : 'ext$.methodname',
             title : 'T_EMC_EQUIPT_TEST_ITEM.METHODNAME',

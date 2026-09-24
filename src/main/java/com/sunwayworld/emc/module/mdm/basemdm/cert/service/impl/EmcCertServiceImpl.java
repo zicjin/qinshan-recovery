@@ -5,6 +5,7 @@ import java.util.Date;
 
 import com.sunwayworld.framework.spring.annotation.GikamBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,6 +14,8 @@ import com.sunwayworld.emc.module.mdm.basemdm.cert.bean.EmcCertLogBean;
 import com.sunwayworld.emc.module.mdm.basemdm.cert.dao.EmcCertDao;
 import com.sunwayworld.emc.module.mdm.basemdm.cert.service.EmcCertLogService;
 import com.sunwayworld.emc.module.mdm.basemdm.cert.service.EmcCertService;
+import com.sunwayworld.emc.module.mdm.emp.emp.bean.EmcEmpQualBean;
+import com.sunwayworld.emc.module.mdm.emp.emp.service.EmcEmpQualService;
 import com.sunwayworld.framework.at.annotation.AuditTrailEntry;
 import com.sunwayworld.framework.at.annotation.AuditTrailType;
 import com.sunwayworld.framework.context.ApplicationContextHelper;
@@ -36,6 +39,10 @@ public class EmcCertServiceImpl implements EmcCertService {
 
     @Autowired
     private EmcCertLogService certLogService;
+
+    @Autowired
+    @Lazy
+    private EmcEmpQualService emcEmpQualService;
 
     @Override
     @SuppressWarnings("unchecked")
@@ -92,6 +99,13 @@ public class EmcCertServiceImpl implements EmcCertService {
         PageRowBounds rowBounds = wrapper.extractPageRowBounds();
 
         return selectPagination(() -> getDao().selectOverdueCert(parameter), rowBounds);
+    }
+
+    @Override
+    public Page<EmcEmpQualBean> selectOverdueQual(RestJsonWrapperBean wrapper) {
+        MapperParameter parameter = wrapper.extractMapFilter();
+        PageRowBounds rowBounds = wrapper.extractPageRowBounds();
+        return emcEmpQualService.selectPagination(() -> getDao().selectOverdueQual(parameter), rowBounds);
     }
 
 }

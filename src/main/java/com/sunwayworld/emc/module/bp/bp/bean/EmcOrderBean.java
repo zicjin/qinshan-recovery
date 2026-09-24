@@ -105,6 +105,8 @@ public class EmcOrderBean extends AbstractPersistable<Long> implements Insertabl
 
     private String verticalCode; // 垂直代码
 
+    private String verticalLine; // 垂线
+
     private String mobileId; // 移动端样品ID
 
     private String source; // 来源
@@ -114,6 +116,12 @@ public class EmcOrderBean extends AbstractPersistable<Long> implements Insertabl
     private Long erpGbId; // ERP样品ID
 
     private String orderQty; // 样品个数
+
+    private String senderId; // 送达人
+
+    private String struct; // 结构
+
+    private String otherOb; // 其他观察对象
 
     private String createdById;// 制单人编码
 
@@ -433,6 +441,30 @@ public class EmcOrderBean extends AbstractPersistable<Long> implements Insertabl
         this.orderQty = orderQty;
     }
 
+    public String getSenderId() {
+        return senderId;
+    }
+
+    public void setSenderId(String senderId) {
+        this.senderId = senderId;
+    }
+
+    public String getStruct() {
+        return struct;
+    }
+
+    public void setStruct(String struct) {
+        this.struct = struct;
+    }
+
+    public String getOtherOb() {
+        return otherOb;
+    }
+
+    public void setOtherOb(String otherOb) {
+        this.otherOb = otherOb;
+    }
+
     @Override
     public String getCreatedById() {
         return createdById;
@@ -481,5 +513,13 @@ public class EmcOrderBean extends AbstractPersistable<Long> implements Insertabl
     @Override
     public void setCreatedByOrgName(String createdByOrgName) {
         this.createdByOrgName = createdByOrgName;
+    }
+
+    public String getVerticalLine() {
+        return verticalLine;
+    }
+
+    public void setVerticalLine(String verticalLine) {
+        this.verticalLine = verticalLine;
     }
 }

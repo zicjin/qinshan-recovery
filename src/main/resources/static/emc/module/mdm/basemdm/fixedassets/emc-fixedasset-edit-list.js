@@ -9,7 +9,7 @@ emcFixedasset.editPage = {
             columns : emcFixedasset.getEditListColumns(),
             service : 'emcFixedassetServiceImpl',
 	        requestData : {
-	            orgId_SB : workspace.user.ext$.parentorgid
+                useOrg_filter : '1',
 	        }, 
             toolbar : _this.getToolBar(),
             filterOpen : true,

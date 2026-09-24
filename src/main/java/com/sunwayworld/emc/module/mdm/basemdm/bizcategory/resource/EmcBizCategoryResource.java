@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.sunwayworld.emc.module.mdm.basemdm.bizcategory.bean.EmcBizCategoryBean;
 import com.sunwayworld.emc.module.mdm.basemdm.bizcategory.bean.EmcBizCategoryProjectBean;
+import com.sunwayworld.emc.module.mdm.basemdm.bizcategory.bean.EmcBizClassBean;
 import com.sunwayworld.emc.module.mdm.basemdm.bizcategory.service.EmcBizCategoryService;
 import com.sunwayworld.framework.data.page.Page;
 import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;
@@ -25,5 +26,13 @@ public interface EmcBizCategoryResource extends GenericResource<EmcBizCategorySe
     Page<EmcBizCategoryProjectBean> selectBizCategoryProjectChoosablePagination(RestJsonWrapperBean wrapper);
     
     List<EmcBizCategoryProjectBean> selectProjectSelectableList();
+
+    void insertBizClass(RestJsonWrapperBean wrapper);
+
+    void deleteBizClass(RestJsonWrapperBean wrapper);
+
+    Page<EmcBizClassBean> selectBizClass(RestJsonWrapperBean wrapper);
+
+    List<EmcBizClassBean> selectBizClassSelectableList();
 
 }

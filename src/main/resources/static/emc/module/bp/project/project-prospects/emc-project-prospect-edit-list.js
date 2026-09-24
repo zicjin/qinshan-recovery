@@ -14,7 +14,7 @@ emcProjectProspect.editPage = {
             },
             requestData : {
                 targetType : 'projEdit',
-                orgId_SB: workspace.user.ext$.parentorgid,
+                org_filter : '1',
                 filterOrder : '1',
                 prospect_SEQ : '0'
             },
@@ -276,8 +276,8 @@ emcProjectProspect.editPage = {
             _this.param.editMonitorInfo = row.ext$.editmonitorinfo;
             _this.param.sampleOrgId = row.ext$.sampleorgid;
             _this.param.projId = row.id;
-            // 这里使用委托单位来过滤数据，之前是受检单位
-            _this.param.testOrgId = row.entrustOrgId;
+            // 使用受检单位来过滤数据
+            _this.param.testOrgId = row.testOrgId;
 
             var formStyle = row.ext$.formstyle;
             
@@ -950,8 +950,8 @@ emcProjectProspect.editPage = {
 
                                 var data = Gikam.getComp('emc-project-prospect-edit-list-base-info-form').getData();
                                 var editMonitorInfo = _this.param.editMonitorInfo;
-                                // 这里使用委托单位来过滤数据，之前是受检单位
-                                var testOrgId = data.entrustOrgId ? data.entrustOrgId : '-';
+                                // 使用受检单位来过滤数据
+                                var testOrgId = data.testOrgId ? data.testOrgId : '-';
                                 var sampleOrgId = _this.param.sampleOrgId;
                                 _this.addProj(projId, editMonitorInfo, testOrgId, sampleOrgId);
                             }
@@ -966,9 +966,9 @@ emcProjectProspect.editPage = {
                                     return;
                                 }
 
-                                // 这里使用委托单位来过滤数据，之前是受检单位
+                                // 使用受检单位来过滤数据
                                 var data = Gikam.getComp('emc-project-prospect-edit-list-base-info-form').getData();
-                                var testOrgId = data.entrustOrgId;
+                                var testOrgId = data.testOrgId;
                                 _this.initAddProj(projId, testOrgId);
                             }
                         }, {
@@ -1469,7 +1469,7 @@ emcProjectProspect.editPage = {
             id : projectId
         })).done(function(fileUri) {
             var fileUrl = IFM_CONTEXT + fileUri;
-            Gikam.download(fileUrl);
+            Gikam.emcDownloadFile(fileUrl);
         });
 
     },
@@ -1498,7 +1498,7 @@ emcProjectProspect.editPage = {
                     })
                 ).done(function(result) {
                         if (result.url) {
-                            Gikam.download(result.url);
+                            Gikam.emcDownloadFile(result.url);
                         } else if (result.message) {
                             Gikam.alert(result.message);
                         }

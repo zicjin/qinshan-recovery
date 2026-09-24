@@ -18,6 +18,8 @@ public interface PfOrderTaskResultService extends EmcOrderTaskResultService {
 
     List<TableRowBean> selectResultInputResultRowList(RestJsonWrapperBean wrapper);
 
+    List<String> selectQcNames(RestJsonWrapperBean wrapper);
+
     void updateWeighingItemResult(RestJsonWrapperBean wrapper);
 
     void triggerComputeNoComplete(RestJsonWrapperBean wrapper);
@@ -39,4 +41,10 @@ public interface PfOrderTaskResultService extends EmcOrderTaskResultService {
     List<TableHeadBean> selectQuickInputResultTitleListBySampleId(RestJsonWrapperBean wrapper);
 
     List<TableRowBean> selectQuickInputResultRowListBySampleId(RestJsonWrapperBean wrapper);
+
+    void batchInputGasParameter(RestJsonWrapperBean wrapper);
+
+    List<TableHeadBean> selectPreprocessingQuickInputResultTitleListByProjIds(RestJsonWrapperBean wrapper);
+
+    List<TableRowBean> selectPreprocessingQuickInputResultRowListByProjIds(RestJsonWrapperBean wrapper);
 }

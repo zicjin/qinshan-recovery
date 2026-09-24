@@ -153,7 +153,7 @@ emcEquiptCurve.resultInputPage = {
                                     id : row.id
                                 })).done(function (fileUri) {
                                     var fileUrl = IFM_CONTEXT + fileUri;
-                                    Gikam.download(fileUrl);
+                                    Gikam.emcDownloadFile(fileUrl);
                                 });
                             }
                         }, {

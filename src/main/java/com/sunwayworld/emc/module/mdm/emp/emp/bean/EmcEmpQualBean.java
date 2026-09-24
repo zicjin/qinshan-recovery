@@ -26,11 +26,22 @@ public class EmcEmpQualBean extends AbstractInsertable<Long> implements Insertab
     @Id
     private Long id; // 主键
     private String empId; // 用户名
+    private String qualNo; // 证件编号
     private String qualName; // 证件名称/号
     private String qualOrg; // 发证单位
     @JSONField(format = "yyyy-MM-dd")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate validDate; // 有效期
+
+    @JSONField(format = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate authDate; // 发证日期
+
+    @JSONField(format = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate expireDate; // 到期日期
+
+    private Long warningDays; // 预警天数
 
     private String createdById; // 制单人编码
     private String createdByName; // 制单人名称
@@ -99,5 +110,37 @@ public class EmcEmpQualBean extends AbstractInsertable<Long> implements Insertab
     }
     public void setCreatedByOrgName(String createdByOrgName) {
         this.createdByOrgName = createdByOrgName;
+    }
+
+    public String getQualNo() {
+        return qualNo;
+    }
+
+    public void setQualNo(String qualNo) {
+        this.qualNo = qualNo;
+    }
+
+    public LocalDate getAuthDate() {
+        return authDate;
+    }
+
+    public void setAuthDate(LocalDate authDate) {
+        this.authDate = authDate;
+    }
+
+    public LocalDate getExpireDate() {
+        return expireDate;
+    }
+
+    public void setExpireDate(LocalDate expireDate) {
+        this.expireDate = expireDate;
+    }
+
+    public Long getWarningDays() {
+        return warningDays;
+    }
+
+    public void setWarningDays(Long warningDays) {
+        this.warningDays = warningDays;
     }
 }

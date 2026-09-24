@@ -7,7 +7,7 @@ coreOrg.editPage = {
             url : coreOrg.baseUrl + '/queries/raw',
             columns : coreOrg.getEditListColumns(),
             requestData : {
-                parentId : 'root'
+                parentId : Gikam.emcTopOrgId
             },
 //            onRendered : function() {
 //                Gikam.getComp('dept-insert-button').hide();
@@ -151,11 +151,12 @@ coreOrg.editPage = {
                     id : 'core-org-edit-list-tree',
                     name : 'CORE.MODULE.MDM.ORGS.TREE.ORGANIZATION',
                     url : coreOrg.baseUrl + '/tree/{parentId}',
+                    rootId : Gikam.emcTopOrgId,
                     onNodeSelected : function(nodeId) {
 
                         Gikam.getComp('core-org-edit-list-grid').refresh({
                             requestData : {
-                                parentId : Gikam.isEmpty(nodeId) ? 'root' : nodeId
+                                parentId : Gikam.isEmpty(nodeId) ? Gikam.emcTopOrgId : nodeId
                             }
                         });
                     }

@@ -117,7 +117,7 @@ public class EmcOrderChangeServiceImpl implements EmcOrderChangeService {
 
         order.setId(ApplicationContextHelper.getNextIdentity());
         order.setFolderId(folder.getId());
-        order.setOrderNo(folder.getFolderNo() + "A001");
+        order.setOrderNo(folder.getFolderNo() + "001");
         if (order.getLabelNo() == null) {
             order.setLabelNo(order.getOrderNo());
         }

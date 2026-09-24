@@ -1,119 +1,26 @@
 emcSamplingPlan.sampleInfoPage = {
 
-    getSaveBtn : function() {
+    getSaveBtn: function () {
         var _this = this;
-        return  {
-                type : 'button',
-                text : 'GIKAM.BUTTON.SAVE',
-                icon : 'save',
-                onClick : function() {
-                    var planSampleDate = Gikam.getComp('emc-sampling-plan-sample-info-paln-sample-date-form').getData();
-                    /*var carNum = Gikam.getComp('emc-sampling-plan-sample-info-paln-carnum-form').getData();
-                    var useDeptName = Gikam.getComp('emc-sampling-plan-sample-info-paln-usedeptname-form').getData();*/
-                    var sampleUserNameSelection = Gikam.getComp('emc-sampling-plan-sample-info-sample-user-edit-list-grid').getSelections();
-                    var sceneUserNameSelection = Gikam.getComp('emc-sampling-plan-sample-info-scene-user-edit-list-grid').getSelections();
-                    var selections = Gikam.getComp('emc-sampling-plan-edit-list-grid').getSelections();
-                    var sceneUserName = "";
-                    var sceneUserId = "";
-                    var sampleUserName = "";
-                    var sampleUserId = "";
-                    //只修改计划采样日期和车牌号、站室
-                    if (Gikam.isNotEmpty(planSampleDate)&& Gikam.isEmpty(sceneUserNameSelection) && Gikam.isEmpty(sampleUserNameSelection)) {
-                        var saveData = selections.map(function(task) {
-                            return {
-                                id : task.id,
-                                planSampleDate : planSampleDate.planSampleDate,
-                                /*carNum : carNum.carNum,
-                                useDeptName : useDeptName.useDeptName*/
-                            };
-                        });
-                    }
-                    if(Gikam.isNotEmpty(sceneUserNameSelection) && Gikam.isEmpty(sampleUserNameSelection)) {
-                        //修改现场负责人和采样日期和车牌号、站室
-                        var sceneUserName = sceneUserNameSelection[0].userName;
-                        var sceneUserId = sceneUserNameSelection[0].id;
-                        var saveData = selections.map(function(task) {
-                            return {
-                                id : task.id,
-                                sceneUserName : sceneUserName,
-                                sceneUserId : sceneUserId,
-                                planSampleDate : planSampleDate.planSampleDate,
-                                /*carNum : carNum.carNum,
-                                useDeptName : useDeptName.useDeptName*/
-                            };
-                        });
+        return {
+            type: 'button',
+            text: 'GIKAM.BUTTON.SAVE',
+            icon: 'save',
+            onClick: function () {
+                var planSampleDate = Gikam.getComp('emc-sampling-plan-sample-info-paln-sample-date-form').getData();
+                var sceneUserNameSelection = Gikam.getComp('emc-sampling-plan-sample-info-scene-user-edit-list-grid').getSelections();
+                var sampleUserNameSelection = Gikam.getComp('emc-sampling-plan-sample-info-sample-user-edit-list-grid').getSelections();
 
-                    }else if (Gikam.isNotEmpty(sampleUserNameSelection) && Gikam.isEmpty(sceneUserNameSelection)) {
-                        //修改采样人和采样日期和车牌号、站室
-                        if(Gikam.isNotEmpty(sampleUserNameSelection)){
-                            Gikam.each(sampleUserNameSelection, function(index, emp) {
-                                if (Gikam.isEmpty(sampleUserName)) {
-                                    sampleUserName += emp.userName;
-                                } else {
-                                    sampleUserName += ',' + emp.userName;
-                                }
-
-                                if (Gikam.isEmpty(sampleUserId)) {
-                                    sampleUserId += emp.id;
-                                } else {
-                                  sampleUserId += ',' + emp.id;
-                                }
-                            });
-                        }
-                        var saveData = selections.map(function(task) {
-                            return {
-                                id : task.id,
-                                sampleUserName : sampleUserName,
-                                sampleUserId : sampleUserId,
-                                planSampleDate : planSampleDate.planSampleDate,
-                                /*carNum : carNum.carNum,
-                                useDeptName : useDeptName.useDeptName*/
-                            };
-                         });
-                    }else if (Gikam.isNotEmpty(sampleUserNameSelection) && Gikam.isNotEmpty(sceneUserNameSelection)) {
-                        //现场负责人和采样人和采样日期和车牌号、站室都可修改
-                        var sceneUserName = sceneUserNameSelection[0].userName;
-                        var sceneUserId = sceneUserNameSelection[0].id;
-                        if(Gikam.isNotEmpty(sampleUserNameSelection)){
-                            Gikam.each(sampleUserNameSelection, function(index, emp) {
-                                if (Gikam.isEmpty(sampleUserName)) {
-                                    sampleUserName += emp.userName;
-                                } else {
-                                    sampleUserName += ',' + emp.userName;
-                                }
-                                if (Gikam.isEmpty(sampleUserId)) {
-                                  sampleUserId += emp.id;
-                                } else {
-                                  sampleUserId += ',' + emp.id;
-                                }
-                            });
-                        }
-                        var saveData = selections.map(function(task) {
-                            return {
-                                id : task.id,
-                                sampleUserName : sampleUserName,
-                                sampleUserId : sampleUserId,
-                                sceneUserName : sceneUserName,
-                                sceneUserId : sceneUserId,
-                                planSampleDate : planSampleDate.planSampleDate,
-                                /*carNum : carNum.carNum,
-                                useDeptName : useDeptName.useDeptName*/
-
-                            };
-                        });
-                    }
-
-                    Gikam.getLastModal().window.showMask(true);
-                    Gikam.put('/secure/gikam/actions/instant', Gikam.getJsonWrapper({}, [ 'emcFolderServiceImpl', saveData ])).done(function() {
-                        selections.map(function(row) {
-                            Gikam.getComp('emc-sampling-plan-edit-list-grid').refreshRowById(row.id);
-                        });
-                    }).always(function() {
-                        Gikam.getLastModal().window.closeMask();
-                        Gikam.getLastModal().close();
-                    });
-                }
+                var saveData = {
+                    sceneUserId: sceneUserNameSelection[0].id,
+                    sceneUserName: sceneUserNameSelection[0].userName,
+                    sampleUserId: sampleUserNameSelection.map(e => e.id).join(','),
+                    sampleUserName: sampleUserNameSelection.map(e => e.userName).join(','),
+                    planSampleDate: planSampleDate.planSampleDate,
+                };
+                Gikam.getLastModal().close(saveData);
             }
+        }
     },
 
     getSceneUserNameGridParam : function() {
@@ -137,7 +44,7 @@ emcSamplingPlan.sampleInfoPage = {
                     requestData : {
                         status_DIFFER : 'deprecated',
                         targetType : 'samplePlan',
-                        sampleOrgId : _this.param.ids.split(',')[0]
+                        sampleOrgId : (Gikam.isEmpty(_this.param.ids) ? '' : _this.param.ids.split(',')[0])
                     },
                     order : {
                         'SAMPLEDEPARTMENT' : 'desc',
@@ -156,7 +63,9 @@ emcSamplingPlan.sampleInfoPage = {
                     },
                     onLoadSuccess : function(data) {
                         if (!Gikam.isEmpty(_this.param.firstDate)) {
-                            Gikam.getComp('emc-sampling-plan-sample-info-paln-sample-date-form').setData({planSampleDate : _this.param.firstDate},false);
+                            Gikam.getComp('emc-sampling-plan-sample-info-paln-sample-date-form').setData({
+                                planSampleDate: _this.param.firstDate,
+                            }, false);
                         }
                         if (!Gikam.isEmpty(_this.param.sceneUserName)) {
                             Gikam.getComp('emc-sampling-plan-sample-info-scene-user-edit-list-grid').selectRowById(_this.param.sceneUserName);
@@ -183,7 +92,7 @@ emcSamplingPlan.sampleInfoPage = {
                     requestData : {
                         status_DIFFER : 'deprecated',
                         targetType : 'samplePlan',
-                        sampleOrgId : _this.param.ids.split(',')[0]
+                        sampleOrgId : (Gikam.isEmpty(_this.param.ids) ? '' : _this.param.ids.split(',')[0])
                     },
                     order : {
                         'SAMPLEDEPARTMENT' : 'desc',
@@ -224,26 +133,15 @@ emcSamplingPlan.sampleInfoPage = {
                 items : [ {
                     type : 'layout',
                     west : {
-                        width : '50%',
+                        width : '80%',
                         items : [ {
                             type : 'form',
-                            columns:1,
+                            columns:2,
                             id : 'emc-sampling-plan-sample-info-paln-sample-date-form',
                             fields : emcSamplingPlan.getPlanSampleDateColumns(),
                             autoSave : false,
-                        }/*,  {
-                            type : 'form',
-                            columns:1,
-                            id : 'emc-sampling-plan-sample-info-paln-carnum-form',
-                            fields : emcSamplingPlan.getCarNumColumns(),
-                            autoSave : false,
-                        },  {
-                            type : 'form',
-                            columns:1,
-                            id : 'emc-sampling-plan-sample-info-paln-usedeptname-form',
-                            fields : emcSamplingPlan.getUseDeptNameColumns(),
-                            autoSave : false,
-                        }*/]
+                            titleWidthAuto : true,
+                        }]
                     },
                     center : {
                         padding : '10px',

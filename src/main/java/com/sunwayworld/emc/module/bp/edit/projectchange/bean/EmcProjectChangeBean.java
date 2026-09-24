@@ -71,6 +71,7 @@ public class EmcProjectChangeBean extends AbstractAuditable<Long> implements Aud
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime compleDate;// 项目完成期限
 
+    private String projAmount;
     private String monitorCategory;
 
     @JSONField(format = "yyyy-MM-dd")
@@ -1157,5 +1158,13 @@ public class EmcProjectChangeBean extends AbstractAuditable<Long> implements Aud
 
     public void setErpOrderNumber(String erpOrderNumber) {
         this.erpOrderNumber = erpOrderNumber;
+    }
+
+    public String getProjAmount() {
+        return projAmount;
+    }
+
+    public void setProjAmount(String projAmount) {
+        this.projAmount = projAmount;
     }
 }

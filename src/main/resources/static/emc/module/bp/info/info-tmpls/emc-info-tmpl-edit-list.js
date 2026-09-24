@@ -43,7 +43,7 @@ emcInfoTmpl.editPage = {
                 if (field === 'ext$.excelname') {
                     // 先获取模板文件信息，再下载之
                     Gikam.getJson(IFM_CONTEXT + '/core/module/item/files/' + row.ext$.excelid).done(function(coreFile) {
-                        Gikam.download(IFM_CONTEXT + coreFile.downloadUrl);
+                        Gikam.emcDownloadFile(IFM_CONTEXT + coreFile.downloadUrl);
                     });
                 }
             },

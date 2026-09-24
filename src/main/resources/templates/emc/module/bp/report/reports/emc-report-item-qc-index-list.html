@@ -1,0 +1,8 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/emc/module/bp/report/reports/emc-report.js',
+                      '/static/emc/module/bp/report/reports/emc-report-item-qc-index-list.js'
+                    ]);
+emcReport.itemQcIndexPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>

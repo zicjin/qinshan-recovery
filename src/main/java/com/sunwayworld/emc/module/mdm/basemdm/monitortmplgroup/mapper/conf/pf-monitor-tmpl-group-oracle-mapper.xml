@@ -33,6 +33,7 @@
                 AND EXISTS (SELECT 1
                 FROM T_EMC_MONITOR_TMPL A
                 WHERE A.MONITORTMPLGROUPID = T.ID
+                AND A.ORGID = #{loginUser.ext$.parentorgid}
                 AND A.ACTIVATEDFLAG = '1')
             </if>
         </where>

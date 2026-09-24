@@ -4,6 +4,7 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Service;
 
+import com.sunwayworld.emc.framework.security.sso.impl.ReportSsoAuthenticator;
 import com.sunwayworld.emc.framework.sso.EmcSsoAuthenticator;
 import com.sunwayworld.emc.module.bp.bp.computing.formula.ResultFormulaRepository;
 import com.sunwayworld.emc.module.bp.bp.reading.EmcOrderTaskResultReadingRepository;
@@ -27,6 +28,7 @@ public class EmcApplicationReadyListener implements ApplicationListener<Applicat
     @Override
     public void onApplicationEvent(ApplicationReadyEvent event) {
         SsoAuthenticatorRegistry.INSTANCE.register("wpsso", EmcSsoAuthenticator.class);
+        SsoAuthenticatorRegistry.INSTANCE.register("reportsso", ReportSsoAuthenticator.class);
 
         GikamFormulaRegistry.INSTANCE.register(ResultFormulaRepository.class);
         GikamFormulaRegistry.INSTANCE.register(EmcDataCorrelationResultFormulaRepository.class);

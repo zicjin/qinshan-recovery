@@ -132,6 +132,10 @@ Gikam.extend(coreUser, {
             title : 'T_CORE_USER.EMAIL',
             validators : [ 'email' ]
         }, {
+            field : 'ext$.sealid',
+            title : 'T_CORE_USER.SEALID',
+            validators : [ 'strLength[0,64]' ]
+        }, {
             field : 'expiryDate',
             title : 'T_CORE_USER.EXPIRYDATE',
             type : 'date'

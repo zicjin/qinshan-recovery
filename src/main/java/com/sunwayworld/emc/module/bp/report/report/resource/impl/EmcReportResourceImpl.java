@@ -13,6 +13,7 @@ import com.sunwayworld.emc.module.bp.bp.bean.EmcOrderTaskBean;
 import com.sunwayworld.emc.module.bp.report.report.bean.EmcReportResultBean;
 import com.sunwayworld.emc.module.bp.report.report.resource.EmcReportResource;
 import com.sunwayworld.emc.module.bp.report.report.service.EmcReportResultService;
+import com.sunwayworld.emc.module.bp.report.report.service.EmcReportSendInfoService;
 import com.sunwayworld.emc.module.bp.report.report.service.EmcReportService;
 import com.sunwayworld.framework.data.page.Page;
 import com.sunwayworld.framework.log.annotation.Log;
@@ -35,6 +36,9 @@ public class EmcReportResourceImpl implements EmcReportResource {
 
     @Autowired
     private EmcReportResultService reportResultService;
+
+    @Autowired
+    private EmcReportSendInfoService emcReportSendInfoService;
 
     @Override
     public EmcReportService getService() {
@@ -137,5 +141,12 @@ public class EmcReportResourceImpl implements EmcReportResource {
     @RequestMapping(value = "/submitUndid", method = RequestMethod.PUT)
     public void submitUndid(RestJsonWrapperBean wrapper) {
         getService().submitUndid(wrapper);
+    }
+
+    @Override
+    @Log(value = "重新提交被退回的批", type = LogType.UPDATE)
+    @RequestMapping(value = "/updateByProjectId", method = RequestMethod.PUT)
+    public int updateByProjectId(RestJsonWrapperBean wrapperBean) {
+        return emcReportSendInfoService.updateByProjectId(wrapperBean);
     }
 }

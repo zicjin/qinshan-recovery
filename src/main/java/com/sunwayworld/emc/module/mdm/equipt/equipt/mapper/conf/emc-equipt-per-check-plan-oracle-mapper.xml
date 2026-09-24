@@ -40,7 +40,7 @@
     <select id="selectEquiptMaintPlanOverdue" parameterType="map" resultType="map">
         SELECT T.*
           FROM T_EMC_EQUIPT_PER_CHECK_PLAN T
-         WHERE T.MAINTENDDATE <![CDATA[<=]]> sysdate() + T.WARNINGDAYS
+         WHERE T.MAINTENDDATE <![CDATA[<=]]> SYSDATE + T.WARNINGDAYS
     </select>
 
     <update id="updatePlan" parameterType="com.sunwayworld.emc.module.mdm.equipt.equipt.bean.EmcEquiptPerCheckPlanBean">

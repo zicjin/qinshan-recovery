@@ -35,6 +35,11 @@ Gikam.select.addConfigParam([ {
     url : '/secure/emc/module/mdm/bizmdm/index-categories/queries/selectable',
     valueField : 'id',
     textField : 'stdName'
+}, {// 业务类别
+    category : 'bizClass',
+    url : '/secure/emc/module/mdm/basemdm/biz-categories/biz-class/queries/selectable',
+    valueField : 'id',
+    textField : 'bizName'
 }, {// 业务类型
     category : 'bizCategory',
     url : '/secure/emc/module/mdm/basemdm/biz-categories/queries/selectable',
@@ -120,4 +125,14 @@ Gikam.select.addConfigParam([ {
     url : '/secure/emc/module/mdm/basemdm/biz-categories/projects/queries/selectable',
     valueField : 'id',
     textField : 'projName'
+}, {
+    category : 'vendor',
+    url : '/secure/emc/module/mdm/basemdm/vendors/queries/selectable',
+    valueField : 'vendorName',
+    textField : 'vendorName'
+}, {
+    category : 'emc-adm-area',
+    url : '/secure/emc/module/item/adm-areas/queries/selectable',
+    valueField : 'id',
+    textField : 'admAreaName'
 }]);

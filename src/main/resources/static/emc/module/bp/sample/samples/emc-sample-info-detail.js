@@ -39,7 +39,7 @@ emcSample.sampleInfoDetailPage = {
                     var selectFields = {
                         field : e.internalField,
                         title : e.fieldName,
-                        type : 'comboBox',
+                        type : 'select',
                         multiple : true,
                         category : 'sys',
                         readonly : false,

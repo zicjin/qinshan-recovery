@@ -1,0 +1,8 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/emc/module/bp/result/runs/emc-run.js',
+                      '/static/emc/module/bp/result/runs/emc-run-preprocessing-result-input-list.js',
+                    ]);
+    emcRun.preprocessingResultInputPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>

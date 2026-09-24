@@ -2,9 +2,11 @@ package com.sunwayworld.emc.module.bp.report.report.resource.impl;
 
 import com.sunwayworld.emc.module.bp.report.report.bean.EmcReportRecordDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sunwayworld.emc.module.bp.report.report.bean.EmcReportSendInfoBean;
@@ -134,5 +136,42 @@ public class PfReportResourceImpl extends EmcReportResourceImpl implements PfRep
     @RequestMapping(value = "/action/compose-project-run-record", method = RequestMethod.POST)
     public CoreFileBean composeProjectRunRecord(RestJsonWrapperBean wrapper) {
         return reportService.composeProjectRunRecord(wrapper);
+    }
+
+    @Override
+    public Long viewNewReport(RestJsonWrapperBean wrapper) {
+        return reportService.viewNewReport(wrapper);
+    }
+
+    @Override
+    public Long projectUndo(RestJsonWrapperBean wrapper) {
+        return reportService.projectUndo(wrapper);
+    }
+
+    @Log(value = "盖章", type = LogType.INSERT)
+    @RequestMapping(value = "/seal", method = RequestMethod.POST)
+    public Long seal(RestJsonWrapperBean wrapper) {
+        reportService.seal(wrapper);
+        return 1L;
+    }
+
+    @Override
+    @ResponseStatus(HttpStatus.OK)
+    @Log(value = "打包指定的一个或多个附件，并返回下载的路径", type = LogType.EXPORT)
+    public String pack(RestJsonWrapperBean jsonWrapper) {
+        return getService().pack(jsonWrapper);
+    }
+
+    @RequestMapping(value = "/action/report-pack", method = RequestMethod.POST)
+    @Log(value = "打包盖章报告附件", type = LogType.EXPORT)
+    public String packReportFile(RestJsonWrapperBean jsonWrapper) {
+        return getService().packReportFile(jsonWrapper);
+    }
+
+    @Log(value = "编辑分析项", type = LogType.UPDATE)
+    @RequestMapping(value = "/edit-item", method = RequestMethod.POST)
+    public Long editItem(RestJsonWrapperBean wrapper) {
+        reportService.editItem(wrapper);
+        return 1L;
     }
 }

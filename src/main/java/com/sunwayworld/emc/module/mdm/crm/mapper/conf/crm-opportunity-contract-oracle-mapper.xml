@@ -31,6 +31,15 @@
         <where>
             AND exists(select 1 from t_crm_opportunity_main o where o.id = t.opportunityid and o.contractflag = '1'  )
             <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+            <!-- 筛选登录人的部门权限 -->
+            <if test="corp_filter != null">
+                AND EXISTS (SELECT 1
+                              FROM T_CORE_USER_PERMISSION UP
+                             WHERE UP.PERMISSIONTYPEID = 'T_CORE_ORG'
+                               AND UP.TARGETID = T.CORPID
+                               AND UP.USERID = #{loginUser.id})
+            </if>
+
         </where>
         ORDER BY
         <choose>

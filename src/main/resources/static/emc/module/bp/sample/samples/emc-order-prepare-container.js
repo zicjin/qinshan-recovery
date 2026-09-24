@@ -45,7 +45,14 @@ emcSample.orderPrepareContainerPage = {
             width : 800,
             height : 313,
             title : 'EMC.MODULE.BP.SAMPLE.SAMPLES.MODAL.CONTAINER_INFO',
-            url : emcSample.baseUrl + '/page/order-container-batch',
+            url : emcSample.baseUrl + '/page/order-container-batch'+ Gikam.param({
+                containerGroup : selections[0].containerGroup,
+                containerCategoryId : selections[0].containerCategoryId,
+                containerCategoryCode : selections[0].containerCategoryCode,
+                containerCategoryName : selections[0].containerCategoryName,
+                fixative : encodeURI(selections[0].fixative),
+                storeCondition : selections[0].storeCondition,
+            }),
             onAfterClose : function(data) {
                 if (!Gikam.isEmpty(data)) {
                     workspace.window.showMask(true);

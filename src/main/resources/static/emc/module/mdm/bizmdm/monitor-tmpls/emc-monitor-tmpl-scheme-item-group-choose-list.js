@@ -45,30 +45,31 @@ emcMonitorTmpl.schemeItemGroupChoosePage = {
         var _this = this;
 
         if (_this.showFlag === '1') {
-            Gikam.post(emcMonitorTmpl.baseUrl + '/schemes/queries/choosable', Gikam.getJsonWrapper({
-                f : {
+            var leftGrid = _this.getShuttleFrameLeftGrid();
+            leftGrid.setOptions({
+                url : emcMonitorTmpl.baseUrl + '/schemes/queries/choosable',
+                requestData : {
                     schemeName_SEQ : _this.schemeName,
                     monitorTmplId_SEQ : _this.monitorTmplId,
+                    defaultFlag_SEQ : '',
                     activatedFlag_SEQ : '1',
                     testmethodflag_SEQ :'1'
-                },
-                n : -1,
-            })).done(function(data) {
-                _this.setShuttleFrameData(data.rows);
+                }
             });
+            leftGrid.refresh();
         } else {
-            Gikam.post(emcMonitorTmpl.baseUrl + '/schemes/queries/choosable', Gikam.getJsonWrapper({
-                f : {
+            var leftGrid = _this.getShuttleFrameLeftGrid();
+            leftGrid.setOptions({
+                url : emcMonitorTmpl.baseUrl + '/schemes/queries/choosable',
+                requestData : {
                     schemeName_SEQ : _this.schemeName,
                     monitorTmplId_SEQ : _this.monitorTmplId,
                     defaultFlag_SEQ : '1',
                     activatedFlag_SEQ : '1',
                     testmethodflag_SEQ :'1'
-                },
-                n : -1,
-            })).done(function(data) {
-                _this.setShuttleFrameData(data.rows);
+                }
             });
+            leftGrid.refresh();
         }
     },
 
@@ -89,9 +90,8 @@ emcMonitorTmpl.schemeItemGroupChoosePage = {
                     filter_activatedTmpl : 1
                 },
                 onChange : function(field, value) {
-
-                    _this.shuttleFrame = Gikam.getComp('emc-monitor-tmpl-order-task-addition-item-group-choose-mult-list-shuttle-frame');
-                    _this.setShuttleFrameData([]);
+                    // _this.shuttleFrame = Gikam.getComp('emc-monitor-tmpl-order-task-addition-item-group-choose-mult-list-shuttle-frame');
+                    // _this.setShuttleFrameData([]);
 
                     if (!Gikam.isEmpty(value)) {
                         var url = emcMonitorTmpl.baseUrl + '/queries/selectable' + Gikam.param({
@@ -107,7 +107,6 @@ emcMonitorTmpl.schemeItemGroupChoosePage = {
                                     value : item.id
                                 };
                             }), true);
-
                             if (items.length > 0) {
                                 _this.form.setData({
                                     monitorTmplId : items[0].id
@@ -133,7 +132,8 @@ emcMonitorTmpl.schemeItemGroupChoosePage = {
                 title : 'T_EMC_MPC_TMPL.MONITORTMPLNAME',
                 field : 'monitorTmplId',
                 type : 'select',
-                onChange : function(field, value, index, row, text) {
+                firstBlank: false,
+                onDataChange : function(field, value, index, row, text) {
                     if (!Gikam.isEmpty(value)) {
 
                         _this.monitorTmplId = value;
@@ -153,17 +153,16 @@ emcMonitorTmpl.schemeItemGroupChoosePage = {
                                     value : item.schemeName
                                 };
                             }), true);
-
                             _this.findItemGroup();
-
                             if (items.length > 0) {
                                 _this.form.setData({
-                                    schemeName : "default"
+                                    schemeName : "default",
                                 });
                             } else {
-                                _form.setData({
+                                _this.form.setData({
                                     schemeName : ""
                                 });
+
                             }
                         });
                     }
@@ -172,7 +171,8 @@ emcMonitorTmpl.schemeItemGroupChoosePage = {
                 title : 'T_EMC_MONITOR_SCHEME.SCHEMENAME',
                 field : 'schemeName',
                 type : 'select',
-                onChange : function(field, value) {
+                firstBlank: false,
+                onDataChange : function(field, value) {
                     _this.schemeName = value;
                     _this.findItemGroup();
                 },
@@ -195,14 +195,26 @@ emcMonitorTmpl.schemeItemGroupChoosePage = {
 
         var returnFlag = true;
 
-        var newTestNameAndItemGroupNames = [];
+        // var newTestNameAndItemGroupNames = [];
+        // rows.some(function(item) {
+        //     var newTestNameAndItemGroupName = item.ext$.testname + '&' + item.itemGroup;
+        //     if (newTestNameAndItemGroupNames.indexOf(newTestNameAndItemGroupName) == -1) {
+        //         newTestNameAndItemGroupNames.push(newTestNameAndItemGroupName);
+        //     } else {
+        //         returnFlag = false;
+        //         Gikam.alert('EMC.MODULE.MDM.BIZMDM.MONITORTMPLS.TIP.CANNOT_CHOOSE_REITERATED_TEST');
+        //         return true;
+        //     }
+        // });
+
+        var newItemGroupNames = [];
         rows.some(function(item) {
-            var newTestNameAndItemGroupName = item.ext$.testname + '&' + item.itemGroup;
-            if (newTestNameAndItemGroupNames.indexOf(newTestNameAndItemGroupName) == -1) {
-                newTestNameAndItemGroupNames.push(newTestNameAndItemGroupName);
+            var newItemGroupName = item.itemGroup;
+            if (newItemGroupNames.indexOf(newItemGroupName) === -1) {
+                newItemGroupNames.push(newItemGroupName);
             } else {
                 returnFlag = false;
-                Gikam.alert('EMC.MODULE.MDM.BIZMDM.MONITORTMPLS.TIP.CANNOT_CHOOSE_REITERATED_TEST');
+                Gikam.alert(Gikam.propI18N('不能选择重复分析项组') + ': 分析项组名称('+item.itemGroup+')');
                 return true;
             }
         });
@@ -240,6 +252,8 @@ emcMonitorTmpl.schemeItemGroupChoosePage = {
             type : 'shuttleFrame',
             id : 'emc-monitor-tmpl-order-task-addition-item-group-choose-mult-list-shuttle-frame',
             columns : emcMonitorTmpl.getItemGroupShuttleFrameColumns(),
+            rightPage : false,
+            leftPage : false,
             onAddClick : function(data, left, right) {
                 _this.setFormEditStatus(right);
                 _this.filterSameAdd(data, left, right);
@@ -277,6 +291,11 @@ emcMonitorTmpl.schemeItemGroupChoosePage = {
         _this.filterRepeatData(_this.shuttleFrame.rightGrid.getData());
     },
 
+    getShuttleFrameLeftGrid : function() {
+        var _this = this;
+        return  _this.shuttleFrame.leftGrid;
+    },
+
     // 初始数据去重
     filterRepeatData : function(right) {
         var _this = this;
@@ -312,6 +331,11 @@ emcMonitorTmpl.schemeItemGroupChoosePage = {
     // 左侧数据，如果与右侧数据同测试名、不同方法，则不显示；
     filterSameAdd : function(data, left, right) {
         var _this = this;
+        let originRightData = right.filter(item => data.every(d => d.id !== item.id));
+        let repeatItemGroupNames = data.filter(item => originRightData.some(rightItem => item.itemGroup === rightItem.itemGroup)).map(item => item.itemGroup);
+        if (repeatItemGroupNames.length > 0) {
+            Gikam.alert(Gikam.propI18N('不能选择重复分析项组') + ': ' + repeatItemGroupNames.join());
+        }
 
         // 获取当前测试方案下的
         var allData = _this.getCurAllData(_this.shuttleFrameLeftData, _this.shuttleFrameRightData);
@@ -400,7 +424,7 @@ emcMonitorTmpl.schemeItemGroupChoosePage = {
                 items : [ {
                     type : 'layout',
                     west : {
-                        width : 95,
+                        width : 120,
                         items : [ this.getShowAllForm() ]
                     },
                     east : {

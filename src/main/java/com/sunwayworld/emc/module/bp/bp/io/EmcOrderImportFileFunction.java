@@ -42,8 +42,7 @@ public class EmcOrderImportFileFunction implements CoreFileImportFunction {
     public CoreFileImportResultDTO apply(CoreFileBean file) {
         CoreFileImportResultDTO importResultDto = new CoreFileImportResultDTO();
 
-        FilePathDTO fr = CoreFileUtils.toFilePath(file);
-        importOrderInfoByPOI(FilePathManager.getLocalPath(fr).toFile().getAbsolutePath());
+        importOrderInfoByPOI(CoreFileUtils.getLocalPath(file).toFile().getAbsolutePath());
         return importResultDto;
     }
 

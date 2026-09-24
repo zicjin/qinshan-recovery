@@ -8,10 +8,13 @@
                        D.TESTNAME,
                        C.METHODNAME,
                        C.TESTMETHODBASIS,
+        MV.TRIALSCOPE,
                        B.METHODID,
                        B.TESTCATEGORYID,
                        B.TESTMETHODTYPE,
+                       B.TESTCLASS,
                        B.ACTIVATEDFLAG AS SHOWFLAG,
+                       M.DEFAULTFLAG,
                        M.ORGID
                   FROM T_EMC_CAPACITY_ITEM_GROUP A
                   LEFT JOIN T_EMC_TEST_CAPACITY M
@@ -20,6 +23,8 @@
                     ON M.TESTMETHODID = B.ID
                   LEFT JOIN T_EMC_METHOD C
                     ON B.METHODID = C.ID
+        LEFT JOIN T_EMC_METHOD_VERSION MV
+        ON C.MAXVERSIONID = MV.ID
                   LEFT JOIN T_EMC_TEST D
                     ON B.TESTID = D.ID
                   WHERE B.ACTIVATEDFLAG = '1') T

@@ -31,7 +31,7 @@
     <select id="updateStockQty" parameterType="java.lang.String">
         UPDATE T_EMC_CONSUME
           SET STOCKQTY =
-            (SELECT SUM(STOCKQTY)
+            (SELECT NVL(SUM(STOCKQTY),0)
                FROM T_EMC_CSM_STOCK
               WHERE MTLID = #{id}
                 AND STATUS = '0')

@@ -26,21 +26,23 @@
 
         // 获取帆软报表地址
         getFanruanReportUrl : function(reportLine, paramValueJson) {
-            var frViewUrl = IFM_CONTEXT + '/ReportServer?reportlet=';
-            var fileName = reportLine.ext$.filename;
+            var _this = this;
+            // var reportCategory = reportLine.reportCategory;
+            var reportPath = reportLine.reportConfigLineNo + '/' + encodeURIComponent(reportLine.ext$.filename);
+            // var param = reportLine.param;
+            //var paramValueJson = JSON.parse(reportConfigLine.ext$.defaultparam.replace(/\'/g, '"'));
+            // var reportUrl = IFM_CONTEXT + '/ReportServer?' + reportCategory + '=' + reportPath;
+            var reportUrl = Gikam.getEnvProperty('sunway.config.fine.independent-deploy-server.url') + '/decision/view/report?viewlet=' +reportPath ;
+
             var param = reportLine.param;
-            if (param === '' || param === null || param === undefined) {
-                frViewUrl = frViewUrl + fileName;
-            } else {
-                var reportParam = this.parseReportParam(param, paramValueJson);
-                if (!reportParam) {
-                    frViewUrl = '';
-                } else {
-                    frViewUrl = frViewUrl + fileName + '&' + reportParam;
+            if (param !== '' && param !== null && param !== undefined) {
+                var reportParam = _this.parseReportParam(param, paramValueJson);
+                if (reportParam) {
+                    reportUrl = reportUrl + '&' + reportParam;
                 }
             }
+            return reportUrl;
 
-            return frViewUrl;
         },
 
         // 获取Reporting Service 报表地址
@@ -85,7 +87,6 @@
                 }
             }
             var reportParam = '';
-            var paramValueMissed = false;
             for (var i = 0; i < paramArray.length; i++) {
                 var paramStr = paramArray[i];
                 var array = paramStr.split('=');
@@ -93,17 +94,14 @@
                     // 将参数列名转为小写
                     var paramName = array[1].toLowerCase();
                     var paramValue = lowerCaseParamValueJson[paramName];
-                    if (!paramValue && (lowerCaseParamValueJson['ext$'] && !lowerCaseParamValueJson['ext$'][paramName])) {
-                        paramValueMissed = true;
+                    if (!paramValue && (lowerCaseParamValueJson['ext$'] && lowerCaseParamValueJson['ext$'][paramName])) {
+                        paramValue = lowerCaseParamValueJson['ext$'][paramName];
                     }
                     reportParam += array[0] + '=' + paramValue + '&'
                 }
             }
             if (reportParam.endsWith('&')) {
                 reportParam = reportParam.substring(0, reportParam.length - 1)
-            }
-            if (paramValueMissed) {
-                return;
             }
             return reportParam;
         }
@@ -120,21 +118,31 @@
                     items : [ {
                         id : 'emc-report-grid',
                         type : 'grid',
-                        columns : [ {
+                        columns : [{
+                            field : 'ext$.reportconfiglinecategory',
+                            title : '报表分类',
+                        },{
                             field : 'reportName',
                             title : '报表名称',
                             type : 'link',
                         } ],
+                        columnGroup: [{
+                            field: 'ext$.reportconfiglinecategory',
+                        }],
                         filter : false,
                         page : false,
                         fill : true,
                         url : IFM_CONTEXT + '/secure/core/module/sys/report-configs/homePageReport/lines/queries',
                         requestData : {
-                            filter_userId : JSON.parse(user).id,
+                            filter_userIdSY : JSON.parse(user).id,
                             activatedFlag_SEQ : '1',
+                            roleIds : JSON.parse(JSON.parse(user).ext$.roles).map(item => item.roleId)
+                        },
+                        order : {
+                            reportconfiglinecategory : 'asc',
                         },
                         onCellClick : function(field, row) {
-                            var reportUrl = Gikam.getReportUrl(row.id);
+                            var reportUrl = Gikam.getReportUrl(row.id,JSON.parse(user));
                             if (Gikam.isEmpty(reportUrl)) {
                                 Gikam.alert('EMC.MODULE.SYS.REPORTS.TIP.PARAMTER_VALUE_MISSING');
                                 return;

@@ -26,12 +26,7 @@ var emcMonitorTmplGroup = Gikam.getPageObject({
             validators : [ 'integer' ],
             width : 100,
             editor : true
-        }, {
-            field : 'erpCategoryCode',
-            title : 'T_EMC_MONITOR_TMPL_GROUP.ERPCATEGORYCODE',
-            validators : [ 'integer' ],
-            editor : true
-        } ];
+        },];
     },
 
     getOrderDescColumns : function() {

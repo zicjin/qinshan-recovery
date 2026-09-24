@@ -112,7 +112,7 @@ emcOaElectronicSignature.searchPage = {
             Gikam.alert('GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM');
             return;
         }
-        selections.forEach(item => Gikam.download(item.downloadUrl, item.name));
+        selections.forEach(item => Gikam.emcDownloadFile(item.downloadUrl, item.name));
     },
 
     // 创建页面

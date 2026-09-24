@@ -91,7 +91,7 @@ public class EmcDeliveryServiceImpl implements EmcDeliveryService {
 
             List<Long> curOrderIdList = orderList.stream().filter(order -> ObjectUtils.equals(order.getSampleId(), sample.getId())).map(EmcOrderBean::getId).collect(Collectors.toList());
             List<EmcOrderTaskBean> curTaskList = orderTaskList.stream().filter(task -> curOrderIdList.contains(task.getOrderId())).collect(Collectors.toList());
-            List<Long> orderContainerIdList = curTaskList.stream().map(EmcOrderTaskBean::getOrderContainerId).collect(Collectors.toList());
+            List<Long> orderContainerIdList = curTaskList.stream().filter(task -> !ObjectUtils.isEmpty(task.getOrderContainerId())).map(EmcOrderTaskBean::getOrderContainerId).distinct().collect(Collectors.toList());
             orderContainerIdList.forEach(orderContainerId -> {
                 EmcOrderContainerBean updateContainer = new EmcOrderContainerBean();
                 updateContainer.setId(orderContainerId);

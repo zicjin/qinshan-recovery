@@ -1,6 +1,7 @@
 package com.sunwayworld.emc.module.bp.bp.controller.impl;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.sunwayworld.emc.module.bp.bp.controller.EmcFolderController;
 import com.sunwayworld.framework.log.annotation.Log;
@@ -84,6 +85,12 @@ public class EmcFolderControllerImpl implements EmcFolderController {
     @Override
     public String checkProjectOrderItemGroupAdditionPage() {
         return "emc/module/bp/folders/emc-check-project-order-item-group-addition";
+    }
+
+    @Log(value = "检测项目编辑测试页", type = LogType.CONTROLLER)
+    @RequestMapping(value = {"/check-project-order-item-group-edit"})
+    public String checkProjectOrderItemGroupEditPage() {
+        return "emc/module/bp/folders/emc-check-project-order-item-group-edit";
     }
 
     @Log(value = "检测项目编辑分析项页", type = LogType.CONTROLLER)

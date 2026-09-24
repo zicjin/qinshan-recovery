@@ -17,7 +17,7 @@ emcOrderReceipt.addTestSearchPage = {
                     requestData : {
                         status_SEQ : 'done',
                         targetType : 'sampleAddTestDone',
-                        orgId_SB: workspace.user.ext$.parentorgid
+                        org_filter : '1',
                     },
                     order : {
                         'PROJID' : 'asc',

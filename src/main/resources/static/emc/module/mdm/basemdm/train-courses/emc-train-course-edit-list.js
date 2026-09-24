@@ -8,7 +8,7 @@ emcTrainCourse.editPage = {
             url : emcTrainCourse.baseUrl + '/queries/raw',
             service : 'emcTrainCourseServiceImpl',
 	        requestData : {
-	            orgId_SB : workspace.user.ext$.parentorgid
+	            org_filter : '1',
 	        }, 
             columns : emcTrainCourse.getEditListColumns(),
             checkOnActive : false,

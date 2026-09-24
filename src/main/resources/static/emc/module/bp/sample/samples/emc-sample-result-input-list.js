@@ -26,7 +26,7 @@ emcResultInputSample.editPage = {
                 sampleUserId : workspace.user.id,
                 projectType : 'folderProject',
                 folderStatus : 'draw',
-                orgId_SB : workspace.user.ext$.parentorgid
+                org_filter : '1',
             },
             toolbar : [ {
                 type : 'form',

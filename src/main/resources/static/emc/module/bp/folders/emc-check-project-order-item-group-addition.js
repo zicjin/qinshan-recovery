@@ -115,6 +115,8 @@ emcOrder.checkProjecTestAddPage = {
                 monitorTmplId_SEQ : _this.param.monitorTmplId,
                 activatedflag_SEQ : '1',
             },
+            rightPage : false,
+            leftPage : false,
             onRendered : function() {
                 _this.shuttleFrame = this;
             }

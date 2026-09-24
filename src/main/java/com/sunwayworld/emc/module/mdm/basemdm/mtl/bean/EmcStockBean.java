@@ -6,6 +6,7 @@ import com.alibaba.fastjson.annotation.JSONField;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.sunwayworld.framework.data.annotation.Id;
+import com.sunwayworld.framework.data.annotation.NotNull;
 import com.sunwayworld.framework.data.annotation.Table;
 import com.sunwayworld.framework.support.domain.AbstractPersistable;
 import com.sunwayworld.framework.support.domain.Insertable;
@@ -51,6 +52,11 @@ public class EmcStockBean extends AbstractPersistable<Long> implements Insertabl
     private String createdByOrgId;// 制单人单位编码
 
     private String createdByOrgName;// 制单人单位名称
+
+    private String verdorName; // 供应商名称
+
+    @NotNull(defaultValue = "30")
+    private Long remindDays; // 提醒天数
 
     public Long getId() {
         return id;
@@ -162,5 +168,21 @@ public class EmcStockBean extends AbstractPersistable<Long> implements Insertabl
 
     public void setCreatedByOrgName(String createdByOrgName) {
         this.createdByOrgName = createdByOrgName;
+    }
+
+    public String getVerdorName() {
+        return verdorName;
+    }
+
+    public void setVerdorName(String verdorName) {
+        this.verdorName = verdorName;
+    }
+
+    public Long getRemindDays() {
+        return remindDays;
+    }
+
+    public void setRemindDays(Long remindDays) {
+        this.remindDays = remindDays;
     }
 }

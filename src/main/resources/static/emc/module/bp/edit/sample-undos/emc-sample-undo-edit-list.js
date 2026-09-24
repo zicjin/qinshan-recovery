@@ -14,7 +14,7 @@ emcSampleUndo.editPage = {
                     requestData : {
                         targetType : 'sampleUndo',
                         status_DIFFER : 'draft',
-        	            orgId_SB : workspace.user.ext$.parentorgid
+        	            org_filter : '1',
                     },
                     page : true,
                     pageSize : 50,

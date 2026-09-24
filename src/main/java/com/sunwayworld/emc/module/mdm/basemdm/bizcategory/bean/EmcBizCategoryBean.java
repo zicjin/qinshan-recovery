@@ -48,6 +48,9 @@ public class EmcBizCategoryBean extends AbstractInsertable<Long> {
     private String showSample; // 在添加项目时，弹出框是否显示是否采样（0,1）
     @NotNull(defaultValue = "1")
     private String orderNo; // 排序号
+    @NotNull(defaultValue = "0")
+    private String cycleTaskNo;
+    private String ncCode;
 
     public Long getId() {
         return id;
@@ -239,5 +242,21 @@ public class EmcBizCategoryBean extends AbstractInsertable<Long> {
 
     public void setOrderNo(String orderNo) {
         this.orderNo = orderNo;
+    }
+
+    public String getCycleTaskNo() {
+        return cycleTaskNo;
+    }
+
+    public void setCycleTaskNo(String cycleTaskNo) {
+        this.cycleTaskNo = cycleTaskNo;
+    }
+
+    public String getNcCode() {
+        return ncCode;
+    }
+
+    public void setNcCode(String ncCode) {
+        this.ncCode = ncCode;
     }
 }

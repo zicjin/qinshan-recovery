@@ -24,7 +24,7 @@ emcEquipt.choosePage = {
             filterOpen : true,
             columns : columns,
             page : true,
-            checkContinuous :true,
+            checkContinuous :!_this.param.single,
             onLoadSuccess : function() {
                 if (Gikam.isNotEmpty(_this.param.targetIds)) {
                     var equiptGrid = Gikam.getComp('emc-equipt-choose-list-grid');

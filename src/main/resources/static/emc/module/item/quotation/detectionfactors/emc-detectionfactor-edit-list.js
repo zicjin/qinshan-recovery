@@ -14,33 +14,25 @@ emcDetectionfactor.editPage = {
                     this.activeRowByIndex(0);
                 }
             },
-            onRowActive : function(index, row) {
-
-                Gikam.getAsyncComp('emc-detectionfactor-edit-list-base-info-form').done(function(form) {
-                    form.refresh({
-                        url : Gikam.printf(emcDetectionfactor.baseUrl + '/{id}', {
-                            id : row.id
-                        })
-                    });
-                });
-
-            },
             toolbar : [ {
                 type : 'button',
                 text : 'GIKAM.BUTTON.INSERT',
                 icon : 'add',
                 onClick : function() {
                     Gikam.create('modal', {
-                        title : 'EMC.MODULE.BP.PROJECT.PROJSCHEMES.MODAL.SELECT_MONITOR_TMPL',
+                        title : '选择分析项组',
                         width : 1000,
                         height : 580,
-                        url : emcDetectionfactor.schemeUrl + '/page/select-monitor-tmpl-detection' + Gikam.param({
-                            editMonitorInfo : '1'
+                        // url : emcDetectionfactor.schemeUrl + '/page/select-monitor-tmpl-detection' + Gikam.param({
+                        //     editMonitorInfo : '1'
+                        // }),
+                        url : emcDetectionfactor.testUrl + '/page/item-group-choose-list'+ Gikam.param({
+                            target : 'detectionFactor'
                         }),
-                        onAfterClose : function(tmlData) {
-                            if (!Gikam.isEmpty(tmlData)) {
+                        onAfterClose : function(data) {
+                            if (!Gikam.isEmpty(data)) {
                                 workspace.window.showMask(true);
-                                Gikam.post(emcDetectionfactor.baseUrl, Gikam.getJsonWrapper({},[ 'emcDetectionfactorServiceImpl', tmlData ])).done(function() {
+                                Gikam.post(emcDetectionfactor.baseUrl + '/insertByItemGroup' , Gikam.getJsonWrapper({},[ 'emcItemGroupServiceImpl', data ])).done(function() {
                                     Gikam.getComp('emc-detectionfactor-edit-list-grid').refresh();
                                 }).always(function() {
                                     workspace.window.closeMask();
@@ -100,10 +92,12 @@ emcDetectionfactor.editPage = {
                                         analysisPrice : data.analysisPrice,
                                         methodId : data.methodId,
                                         methodName : data.methodName,
-                                        monitorTmplGroupName : data.monitorTmplGroupName,
+                                        // monitorTmplGroupName : data.monitorTmplGroupName,
+                                        testCategoryId : data.testCategoryId,
                                         samplePrice : data.samplePrice,
                                         itemGroupName : data.itemGroupName,
-                                        trialscope : data.trialscope,
+                                        testName : data.itemGroupName,
+                                        // trialscope : data.trialscope,
                                     };
                                 insertDataList.push(insertData);
                                 Gikam.post(emcDetectionfactor.baseUrl, Gikam.getJsonWrapper({},[ 'emcDetectionfactorServiceImpl', insertDataList ])).done(function() {

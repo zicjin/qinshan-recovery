@@ -3,38 +3,53 @@ emcReport.auditPage = {
     reportArchivingPage : false,
     getGridParam : function() {
         var _this = this;
+        var order = {
+            'ext$.projname' : 'asc',
+            projId : 'asc',
+            urgent: 'desc'
+        };
         _this.param['targetType'] = _this.param.bpmn_statusCode;
         _this.param['currentUserId'] = workspace.user.id;
         var columns = emcReport.getAuditListColumns();
         if (_this.param.bpmn_statusCode === 'reportArchiving') {
+            _this.param.archivedFlag_SEQ = '0';
             columns = emcReport.getArchivingListColumns();
             this.reportArchivingPage = true;
+            order = {
+                'archivedDate' : 'desc',
+            }
         }
-        if (_this.param.bpmn_statusCode !== 'reportAudit') {
-            columns.splice(4, 1);
+        if(_this.param.bpmn_statusCode === 'reportSend'){
+            _this.param.reportSendInfo = '1'
         }
-        _this.param.orgId_SB = workspace.user.ext$.parentorgid;
+//        if (_this.param.bpmn_statusCode !== 'reportAudit') {
+//            columns.splice(4, 1);
+//        }
+        _this.param.org_filter = '1';
+        _this.param.oa_filter = '1';
         return {
             type : 'grid',
             id : 'emc-report-audit-list-grid',
             url : emcReport.baseUrl + '/queries/tasks',
             columns : columns,
-            group : {
-                fields : [ 'ext$.projname' ],
-                formatter : function(row) {
-                    return row.ext$.projname;
-                }
-            },
-            order : {
-                'ext$.projname' : 'asc',
-                projId : 'asc'
-            },
+            // group : {
+            //     fields : [ 'ext$.projname' ],
+            //     formatter : function(row) {
+            //         return row.ext$.projname;
+            //     }
+            // },
+            order : order,
             requestData : _this.param,
             page : true,
             onRendered : function() {
-                // 报告盖章或报告归档显示归档文件
-                if (_this.param.bpmn_statusCode === 'reportSend' || _this.param.bpmn_statusCode === 'reportArchiving') {
-                    Gikam.getComp('emc-report-audit-list-tab').revertPanel('emc-report-audit-archive-file-panel');
+                if (_this.param.bpmn_statusCode !== 'reportAudit') {
+                    this.hideColumns([ 'ext$.reportreviewername' ]);
+                }
+                if (_this.param.bpmn_statusCode !== 'reportSend') {
+                    this.hideColumns([ 'ext$.expressno' ]);
+                }
+                if (_this.param.bpmn_statusCode !== 'reportIssue') {
+                    this.hideColumns([ 'issueSignMode' ]);
                 }
             },
             onLoadSuccess : function(data) {
@@ -54,12 +69,12 @@ emcReport.auditPage = {
                 type : 'button',
                 text : 'GIKAM.WORKFLOW.BUTTON.PASS',
                 icon : 'pass',
-                hidden : _this.getHidden(),
+                hidden : _this.param.bpmn_statusCode === 'reportArchiving',
                 onClick : function() {
-                    if (_this.param.bpmn_statusCode === 'reportSend') {
-                        _this.openSendInfoPage();
-                        return;
-                    }
+                    // if (_this.param.bpmn_statusCode === 'reportSend') {
+                    //     _this.openSendInfoPage();
+                    //     return;
+                    // }
 
                     _this.pass();
                 }
@@ -117,21 +132,250 @@ emcReport.auditPage = {
                         _this.dataSummaryProject();
                     }
                 } ]
-            } ]
+            }, {
+                type: 'button',
+                text: '归档',
+                icon: 'submit',
+                hidden: _this.param.bpmn_statusCode !== 'reportArchiving',
+                onClick: function () {
+                    _this.archive();
+                }
+            }, {
+                type: 'form',
+                autoSave: false,
+                hidden: _this.param.bpmn_statusCode === 'reportArchiving',
+                fields: [{
+                    title: '显示全部',
+                    field: 'showFlag',
+                    type: 'simpleCheckbox',
+                    refreshGrid: false,
+                    value: '0',
+                    onChange: function (field, value, index) {
+                        Gikam.getComp('emc-report-audit-list-grid').refresh({
+                            requestData: {
+                                targetType: value === '1' ? '' : _this.param.bpmn_statusCode
+                            }
+                        });
+                    },
+                },]
+            },{
+                type: 'form',
+                autoSave: false,
+                hidden: _this.param.bpmn_statusCode !== 'reportSend',
+                fields: [{
+                    title: '已发快递',
+                    field: 'showFlag2',
+                    type: 'simpleCheckbox',
+                    refreshGrid: false,
+                    value: '1',
+                    onChange: function (field, value, index) {
+                        Gikam.getComp('emc-report-audit-list-grid').refresh({
+                            requestData: {
+                                reportSendInfo : value === '0' ? '' : '1'
+                            }
+                        });
+                    },
+                }]
+            },{
+                type: 'form',
+                autoSave: false,
+                hidden: _this.param.bpmn_statusCode !== 'reportSend',
+                fields: [{
+                    title: '非退改报告',
+                    field: 'showFlag3',
+                    type: 'simpleCheckbox',
+                    refreshGrid: false,
+                    value: '0',
+                    onChange: function (field, value, index) {
+                        Gikam.getComp('emc-report-audit-list-grid').refresh({
+                            requestData: {
+                                rcReportFilter : value === '0' ? '' : '1'
+                            }
+                        });
+                    },
+                }]
+            }, {
+                type: 'form',
+                autoSave: false,
+                hidden: _this.param.bpmn_statusCode !== 'reportArchiving',
+                fields: [{
+                    field: 'showType',
+                    refreshGrid: false,
+                    type: 'radioGroup',
+                    bordered: true,
+                    items: [{
+                        text: '全部',
+                        value: '2'
+                    }, {
+                        text: '已归档',
+                        value: '1'
+                    }, {
+                        text: '未归档',
+                        value: '0'
+                    }],
+                    value: '0',
+                    onChange: function (field, value, index) {
+                        Gikam.getComp('emc-report-audit-list-grid').refresh({
+                            requestData: {
+                                archivedFlag_SEQ: value === '0' ? '0' : value === '1' ? '1' : ''
+                            }
+                        });
+                    },
+                }]
+            }, {
+                type : 'button',
+                text : '自取报告',
+                icon : 'export',
+                hidden: _this.param.bpmn_statusCode !== 'reportSend',
+                onClick : function() {
+                    _this.selfSendReport();
+                }
+            }, ]
         }
     },
 
+    selfSendReport: function () {
+        var selections = Gikam.getComp('emc-report-audit-list-grid').getSelections();
+        if (Gikam.isEmpty(selections)) {
+            Gikam.alert('GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM');
+            return;
+        }
+
+        var modal = Gikam.create('modal', {
+            title: "自取报告",
+            width : 400,
+            height : 350,
+        });
+        var layout = Gikam.create('layout', {
+            renderTo: modal.window.$dom,
+            center: {
+                items: [ {
+                    type: 'btnToolbar',
+                    items: [ {
+                        type : 'button',
+                        text : 'GIKAM.BUTTON.CONFIRM',
+                        class : 'blue',
+                        onClick : function() {
+                            if (form.validate()) {
+                                let formData = form.options.data;
+
+                                Gikam.getLastModal().window.showMask(true);
+                                Gikam.post(IFM_CONTEXT + '/secure/emc/module/bp/project/projects/report-send-info', Gikam.getJsonWrapper(formData, [ 'emcReportServiceImpl', selections ])).done(function() {
+                                    Gikam.getComp('emc-report-audit-list-grid').refresh();
+                                }).always(function() {
+                                    Gikam.getLastModal().window.closeMask();
+                                    modal.close();
+                                });
+                            }
+                        }
+                    }, {
+                        type : 'button',
+                        text : 'GIKAM.BUTTON.CANCEL',
+                        onClick : function () {
+                            modal.close();
+                        }
+                    } ]
+                }]
+            }
+        });
+
+        var form = Gikam.create('form', {
+            renderTo: layout.options.center.$dom,
+            columns: 1,
+            titleWidth: 80,
+            fields: [ {
+                field : 'issurer',
+                title : '发放人',
+                validators : [ 'notEmpty'],
+                value : workspace.user.userName,
+            // }, {
+            //     field : 'username',
+            //     title : '签收人',
+            //     validators : [ 'notEmpty'],
+            }, {
+                field : 'pic',
+                title : '签收人签名',
+                validators : [ 'notEmpty'],
+                type : 'image',
+                onClick : function(fieldName, value) {
+                    var _this = this;
+                    var modal = Gikam.create('modal', {
+                        title: '签字',
+                        width: '100%',
+                        height: '100%',
+                        onAfterClose : function(data) {
+                            if (!Gikam.isEmpty(data)) {
+                                form.setData({
+                                    pic : data.downloadUrl
+                                });
+                            }
+                        }
+                    });
+                    Gikam.finalDelay("drawBoard", function () {
+                        Gikam.create('layout', {
+                            renderTo: modal.window.$dom,
+                            center: {
+                                items: [{
+                                    type: 'iframe',
+                                    id: 'create-draw-board-ifram2',
+                                    src: '/secure/emc/module/bp/project/projects/page/draw-board'
+                                }]
+                            }
+                        });
+                    })
+                },
+            }, {
+                field : 'remark',
+                title : '备注信息',
+            }, ],
+            autoSave: false
+        });
+    },
+
+    archive: function () {
+        var selections = Gikam.getComp('emc-report-audit-list-grid').getSelections();
+        if (Gikam.isEmpty(selections)) {
+            Gikam.alert('GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM');
+            return;
+        }
+        if (selections.find(f => f.archivedFlag === '1')) {
+            Gikam.alert('请选择未归档的数据！');
+            return;
+        }
+        Gikam.confirm('确认归档', '确认归档？', function () {
+            var updateData = selections.map(function (item) {
+                return {
+                    id: item.id,
+                    archivedFlag: '1',
+                    archivedUserId: workspace.user.id,
+                    archivedUserName: workspace.user.userName,
+                    archivedDate: Gikam.DateUtils.formatter(new Date(), 'yyyy-MM-dd'),
+                }
+            });
+            workspace.window.showMask();
+            Gikam.put(emcReport.baseUrl + '/instant', Gikam.getJsonWrapper({}, ['emcReportServiceImpl', updateData])).done(function () {
+                Gikam.getComp('emc-report-audit-list-grid').refresh();
+            }).always(function () {
+                workspace.window.closeMask();
+            });
+        })
+    },
+
     batchDownloadProjectFiles : function (){
+        var activedRow = Gikam.getComp('emc-report-audit-list-grid').getActivedRow();
+        if (Gikam.isEmpty(activedRow)) {
+            return;
+        }
         var selections = Gikam.getComp('emc-project-audit-list-uploader').grid.getSelections();
         if (selections.length > 0) {
             var fileIds = [];
             selections.forEach(function (item) {
                 fileIds.push({id : item.id})
             })
-            Gikam.postText('/core/module/item/files/action/pack',Gikam.getJsonWrapper({}, [ '', fileIds ])
+            Gikam.postText(emcReport.baseUrl + '/action/pack',Gikam.getJsonWrapper({ fileName : activedRow.ext$.projno}, [ '', fileIds ])
             ).done(function (fileUrl) {
                 if (fileUrl != '' && fileUrl != undefined) {
-                    Gikam.download(IFM_CONTEXT + fileUrl);
+                    Gikam.emcDownloadFile(IFM_CONTEXT + fileUrl);
                 }
             })
         } else {
@@ -150,7 +394,7 @@ emcReport.auditPage = {
             Gikam.postText('/core/module/item/files/action/pack',Gikam.getJsonWrapper({}, [ '', fileIds ])
             ).done(function (fileUrl) {
                 if (fileUrl != '' && fileUrl != undefined) {
-                    Gikam.download(IFM_CONTEXT + fileUrl);
+                    Gikam.emcDownloadFile(IFM_CONTEXT + fileUrl);
                 }
             })
         } else {
@@ -168,7 +412,7 @@ emcReport.auditPage = {
             Gikam.postText('/core/module/item/files/action/pack',Gikam.getJsonWrapper({}, [ '', fileIds ])
             ).done(function (fileUrl) {
                 if (fileUrl != '' && fileUrl != undefined) {
-                    Gikam.download(IFM_CONTEXT + fileUrl);
+                    Gikam.emcDownloadFile(IFM_CONTEXT + fileUrl);
                 }
             })
         } else {
@@ -176,7 +420,22 @@ emcReport.auditPage = {
         }
     },
 
+    seal : function (){
+        var selections = Gikam.getComp('emc-report-audit-list-uploader').grid.getSelections();
+        if (Gikam.isEmpty(selections)) {
+            Gikam.alert('GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM');
+            return;
+        }
+        workspace.window.showMask(true);
+        Gikam.post(emcReport.baseUrl + '/seal', Gikam.getJsonWrapper({
 
+        }, [ 'coreFileServiceImpl', selections ])).done(function() {
+            Gikam.getComp('emc-report-audit-list-uploader').refresh();
+            Gikam.alert('盖章完成');
+        }).always(function() {
+            workspace.window.closeMask();
+        });
+    },
 
     getOtherGridParam : function() {
         var _this = this;
@@ -191,7 +450,7 @@ emcReport.auditPage = {
                     id : 'emc-report-audit-list-uploader',
                     dbTable : 'T_EMC_REPORT',
                     formatterGridColumns : function() {
-                        return emcReport.getReportFileListColumns();
+                        return emcReport.getReportFileListColumns(true);
                     },
                     onBeforeUpload : function() {
                         this.setUploadData({})
@@ -203,6 +462,14 @@ emcReport.auditPage = {
                             icon: 'move-down',
                             onClick: function () {
                                 _this.batchDownloadBeforeReportFiles();
+                            }
+                        },{
+                            type : 'button',
+                            text : '盖检验检测章',
+                            icon : 'edit',
+                            hidden : _this.param.bpmn_statusCode !== 'reportPrint',
+                            onClick : function() {
+                                _this.seal();
                             }
                         } ]
                     }
@@ -484,7 +751,19 @@ emcReport.auditPage = {
                 onClick : function() {
                     _this.viewSampleReport();
                 }
-            } ]
+            },{
+                type : 'button',
+                text : '查看样品交接单',
+                icon : 'print',
+                onClick : function() {
+                    var selections = Gikam.getComp('emc-sample-audit-list-grid').getSelections();
+                    if (Gikam.isEmpty(selections)) {
+                        Gikam.alert('GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM');
+                        return;
+                    }
+                    Gikam.viewReport('samplingNumber', selections);
+                }
+            }, ]
         }
     },
 
@@ -543,6 +822,19 @@ emcReport.auditPage = {
                 icon : 'print',
                 onClick : function() {
                     _this.viewRunReport();
+                }
+            },{
+                type: 'button',
+                text: '分析数据汇总',
+                icon: 'print',
+                hidden : !(_this.param.bpmn_statusCode == 'reportAudit' || _this.param.bpmn_statusCode == 'reportIssue'),
+                onClick: function () {
+                    var selections = Gikam.getComp('emc-run-audit-list-grid').getSelections();
+                    if (selections.length !== 1) {
+                        Gikam.alert('GIKAM.TIP.CHOOSE_ONE_ITEM');
+                        return;
+                    }
+                    Gikam.viewReport('fenxishujuchakan', selections);
                 }
             }, {
                 type : 'dropDownMenu',
@@ -745,26 +1037,54 @@ emcReport.auditPage = {
     },
 
     /** 归档文件 */
-    getArchiveFileGridParam : function() {
-        var _this = this;
-        return {
-            type : 'grid',
-            id : 'emc-audit-list-archive-file-grid',
-            columns : emcReport.getArchiveFileListColumns(),
-            toolbar : [ {
-                type : 'button',
-                text : 'EMC.MODULE.BP.REPORT.REPORTS.BUTTON.GENERATE_ARCHIVE_FILE',
-                icon : 'export',
-                onClick : function() {
-                    _this.archiveFile();
-                }
-            } ]
-        }
-    },
+    // getArchiveFileGridParam : function() {
+    //     var _this = this;
+    //     return {
+    //         type : 'grid',
+    //         id : 'emc-audit-list-archive-file-grid',
+    //         columns : emcReport.getArchiveFileListColumns(),
+    //         toolbar : [ {
+    //             type : 'button',
+    //             text : '生成归档文件(分)',
+    //             icon : 'export',
+    //             onClick : function() {
+    //                 _this.archiveFile();
+    //             }
+    //         },{
+    //             type : 'button',
+    //             text : '生成归档文件(合)',
+    //             icon : 'export',
+    //             onClick : function() {
+    //                 _this.archiveFile(1);
+    //             }
+    //         }  ]
+    //     }
+    // },
 
     /** 归档文件 */
-    archiveFile : function() {
-        var selections = Gikam.getComp('emc-audit-list-archive-file-grid').getSelections();
+    // archiveFile : function(merge) {
+    //     var selections = Gikam.getComp('emc-audit-list-archive-file-grid').getData();
+    //     if (Gikam.isEmpty(selections)) {
+    //         Gikam.alert('GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM');
+    //         return;
+    //     }
+    //
+    //     var activedReport = Gikam.getComp('emc-report-audit-list-grid').getActivedRow();
+    //     Gikam.confirm('EMC.MODULE.BP.REPORT.REPORTS.MODAL.CONFIRM_TO_EDIT', 'EMC.MODULE.BP.REPORT.REPORTS.MODAL.CONFIRM_GENERATE_ARCHIVE_FILE', function() {
+    //         workspace.window.showMask(true);
+    //         Gikam.postText(emcReport.baseUrl + '/action/archive', Gikam.getJsonWrapper({merge:merge}, [ '', [ activedReport ] ], [ '', selections ])).done(function() {
+    //             workspace.window.closeMask();
+    //             Gikam.getComp('emc-audit-list-archive-file-grid').refresh();
+    //         }).fail(function() {
+    //             workspace.window.closeMask();
+    //         });
+    //     });
+    //
+    // },
+
+    /** 归档文件 */
+    archiveFileCopy : function(merge) {
+        var selections = Gikam.getComp('emc-audit-list-archive-file-grid-new').getSelections();
         if (Gikam.isEmpty(selections)) {
             Gikam.alert('GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM');
             return;
@@ -773,9 +1093,51 @@ emcReport.auditPage = {
         var activedReport = Gikam.getComp('emc-report-audit-list-grid').getActivedRow();
         Gikam.confirm('EMC.MODULE.BP.REPORT.REPORTS.MODAL.CONFIRM_TO_EDIT', 'EMC.MODULE.BP.REPORT.REPORTS.MODAL.CONFIRM_GENERATE_ARCHIVE_FILE', function() {
             workspace.window.showMask(true);
-            Gikam.postText(emcReport.baseUrl + '/action/archive', Gikam.getJsonWrapper({}, [ '', [ activedReport ] ], [ '', selections ])).done(function() {
+            Gikam.postText(emcReport.baseUrl + '/action/archive', Gikam.getJsonWrapper({merge:merge}, [ '', [ activedReport ] ], [ '', selections ])).done(function() {
                 workspace.window.closeMask();
-                Gikam.getComp('emc-audit-list-archive-file-grid').refresh();
+                     Gikam.getComp('emc-archive-file-uploader-new').setOptions({
+                             bizId : activedReport.projId,
+
+                     });
+                     Gikam.getComp('emc-sample-file-uploader').setOptions({
+                         bizId : activedReport.projId,
+                     });
+                     Gikam.getComp('emc-run-file-uploader').setOptions({
+                         bizId : activedReport.projId,
+
+                     });
+
+            }).fail(function() {
+                workspace.window.closeMask();
+            });
+        });
+
+    },
+
+    archiveFileWithCoreFile : function() {
+        var selections = Gikam.getComp('emc-audit-list-archive-file-grid-new').getSelections();
+        if (Gikam.isEmpty(selections)) {
+            Gikam.alert('GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM');
+            return;
+        }
+
+        var activedReport = Gikam.getComp('emc-report-audit-list-grid').getActivedRow();
+        Gikam.confirm('EMC.MODULE.BP.REPORT.REPORTS.MODAL.CONFIRM_TO_EDIT', 'EMC.MODULE.BP.REPORT.REPORTS.MODAL.CONFIRM_GENERATE_ARCHIVE_FILE', function() {
+            workspace.window.showMask(true);
+            Gikam.postText(emcReport.baseUrl + '/action/archive', Gikam.getJsonWrapper({withCoreFile : '1'}, [ '', [ activedReport ] ], [ '', selections ])).done(function() {
+                workspace.window.closeMask();
+                Gikam.getComp('emc-archive-file-uploader-new').setOptions({
+                    bizId : activedReport.projId,
+
+                });
+                Gikam.getComp('emc-sample-file-uploader').setOptions({
+                    bizId : activedReport.projId,
+                });
+                Gikam.getComp('emc-run-file-uploader').setOptions({
+                    bizId : activedReport.projId,
+
+                });
+
             }).fail(function() {
                 workspace.window.closeMask();
             });
@@ -815,7 +1177,7 @@ emcReport.auditPage = {
         let _this = this;
         var grid = Gikam.getComp('emc-report-audit-list-grid');
         var selections = grid.getSelections();
-        if (selections.length !== 1) {
+        if (selections.length === 0) {
             Gikam.alert('GIKAM.TIP.CHOOSE_ONE_ITEM');
             return;
         }
@@ -827,6 +1189,7 @@ emcReport.auditPage = {
                 projId : selections[0].projId
             }),
             onAfterClose : function (data) {
+                debugger;
                 _this.pass();
             }
         });
@@ -867,8 +1230,40 @@ emcReport.auditPage = {
             data : toDoSelections,
             pageObject : emcReport
         }).done(function() {
-            grid.refresh();
+            grid.refresh().done(function () {
+                if (_this.param.bpmn_statusCode === 'reportIssue') {
+                    _this.generatePdfByPageoffice(selections);
+                }
+            });
         });
+    },
+
+    generatePdfByPageoffice : function(selections, fileId, grid) {
+        var saveUrl = '/open/cover/page-office/pdf/direct/document';
+        if (fileId) {
+            Gikam.openCoverFileByPageOffice(saveUrl, [fileId], grid);
+        } else {
+            var targetIds = selections.map(e => {
+                return 'T_EMC_REPORT$' + e.id
+            })
+            Gikam.post(IFM_CONTEXT + '/core/module/item/files/queries', Gikam.getJsonWrapper({
+                f : {
+                    targetId_IN : targetIds.join(','),
+                    bizCategory_SEQ : 'wordReport'
+                },
+                n : -1,
+                s : 50
+            })).done(function(r){
+                if (r.total > 0) {
+                    var rows = r.rows;
+                    var arr = [];
+                    rows.forEach(item => {
+                        arr.push(item.id);
+                    });
+                    Gikam.openCoverFileByPageOffice(saveUrl, arr, grid);
+                }
+            })
+        }
     },
 
     reject : function() {
@@ -894,14 +1289,6 @@ emcReport.auditPage = {
         }).done(function() {
             grid.refresh();
         });
-    },
-
-    getHidden : function() {
-        if (this.param.bpmn_statusCode == 'reportArchiving') {
-            return true;
-        } else {
-            return false;
-        }
     },
 
     viewSampleReport : function() {
@@ -939,8 +1326,8 @@ emcReport.auditPage = {
             Gikam.post(emcReport.baseUrl + '/action/view-report', Gikam.getJsonWrapper(null, [ '', rows ])).done(function(fileId) {
                 Gikam.getComp('emc-report-audit-list-grid').refresh();
 
-                _this.openReportBrowseRecord(rows[0].id);
-                // Gikam.openFile(fileId, true);
+                // _this.openReportBrowseRecord(rows[0].id);
+                Gikam.openFile(fileId, true);
             });
         } else {
             Gikam.alert('EMC.MODULE.BP.REPORT.REPORTS.TIP.NO_FILE');
@@ -1153,7 +1540,7 @@ emcReport.auditPage = {
                 grid.refresh({
                     url : emcReport.baseUrl + '/archive-categories/queries',
                     requestData : {
-
+                        sample_SEQ :''
                     },
                     order : {
                         id : 'asc'
@@ -1170,6 +1557,28 @@ emcReport.auditPage = {
                     }
                 });
         	}
+
+        });
+        Gikam.getAsyncComp('emc-audit-list-archive-file-grid-new').done(function(grid) {
+            grid.refresh({
+                url : emcReport.baseUrl + '/archive-categories/queries',
+                requestData : {
+
+                },
+                order : {
+                    id : 'asc'
+                }
+            });
+        });
+         Gikam.getComp('emc-archive-file-uploader-new').setOptions({
+                bizId : row.projId,
+
+        });
+        Gikam.getComp('emc-sample-file-uploader').setOptions({
+            bizId : row.projId,
+        });
+        Gikam.getComp('emc-run-file-uploader').setOptions({
+            bizId : row.projId,
 
         });
 
@@ -1398,6 +1807,14 @@ emcReport.auditPage = {
                     id : 'emc-report-audit-list-tab',
                     type : 'tab',
                     fill : true,
+                    onRendered : function() {
+                        // 报告盖章或报告归档显示归档文件
+                        if (_this.param.bpmn_statusCode === 'reportArchiving' || (_this.param.bpmn_statusCode === 'reportSend')) {
+                            Gikam.getComp('emc-report-audit-list-tab').revertPanel('emc-report-audit-archive-file-panel-new');
+                        }else{
+                            Gikam.getComp('emc-report-audit-list-tab').removePanel('emc-report-audit-archive-file-panel-new');
+                        }
+                    },
                     panels : [ {
                         title : 'EMC.MODULE.BP.REPORT.REPORTS.TAB.REPORT_DATA',
                         items : [ {
@@ -1484,20 +1901,316 @@ emcReport.auditPage = {
                                 items : [ this.getAuditRecordGridParam() ]
                             },
                         } ]
-                    }, {
-                        title : 'EMC.MODULE.BP.REPORT.REPORTS.TAB.ARCHIVE_FILE',
-                        id : 'emc-report-audit-archive-file-panel',
-                        show : false,
-                        items : [ {
-                            type : 'layout',
-                            center : {
-                                items : [ this.getArchiveFileGridParam() ]
-                            },
-                        } ]
-                    } ]
+                    },
+//                     {
+//                        title : 'EMC.MODULE.BP.REPORT.REPORTS.TAB.ARCHIVE_FILE',
+//                        id : 'emc-report-audit-archive-file-panel',
+//                        items : [ {
+//                            type : 'layout',
+//                            center : {
+//                                items : [ this.getArchiveFileGridParam() ]
+//                            },
+//                        } ]
+//                    } ,
+                    {
+                          title : 'EMC.MODULE.BP.REPORT.REPORTS.TAB.ARCHIVE_FILE',
+                          id : 'emc-report-audit-archive-file-panel-new',
+                          items : [ {
+                              type: 'layout',
+                              west: {
+                                  title : '生成归档文件',
+                                  width : '30%',
+                                  items : [ this.getCreateArchiveFileGridParam()]
+                              },
+                              center: {
+                                items : [{
+                                    id : 'emc-report-audit-list-archive-file-tab',
+                                    type : 'tab',
+                                    fill : true,
+                                    panels : [ {
+                                        title : '项目附件',
+                                          items : [ this.getArchiveFileGridParamNew() ]
+                                    }, {
+                                        title : '采样单附件',
+                                          items : [ this.getSampleFileGridParam() ]
+                                    }, {
+                                        title : '分析原始记录附件',
+                                          items : [ this.getRunFileGridParam() ]
+                                    },
+//                                    {
+//                                          title : '报告附件',
+//                                          items : [ this.getReportFileGridParam() ]
+//                                      } , {
+//                                          title : '汇总',
+//                                          items : [ this.getAllInOneFileGridParam() ]
+//                                      }
+                                      ]
+                                }]
+                              }
+                          } ]
+                      }
+                      ]
                 } ]
             },
         });
+    },
+
+     getArchiveFileGridParamNew : function (){
+            var _this = this;
+            return {
+                type : 'uploader',
+                id : 'emc-archive-file-uploader-new',
+                dbTable : 'T_EMC_PROJECT',
+                bizCategory: 'projectFile',
+                formatterGridColumns : function() {
+                	return emcReport.getReportFileListColumns();
+                },
+//                formatterGridToolbar : function (toolbar) {
+//                    console.log(toolbar);
+//                    return [ {
+//                        type: 'button',
+//                        text: 'GIKAM.BUTTON.BATCH_DOWNLOAD',
+//                        icon: 'move-down',
+//                        onClick: function () {
+//                            _this.batchDownloadProjectFiles('emc-archive-file-uploader-new');
+//                        }
+//                    }, {
+//                        type: 'button',
+//                        text: 'GIKAM.BUTTON.DELETE',
+//                        icon: 'remove',
+//                        onClick: function () {
+//                            _this.deleteFile('emc-archive-file-uploader-new');
+//                        }
+//                    } ]
+//                }
+            }
+        },
+
+     getReportFileGridParam : function (){
+            var _this = this;
+            return {
+                type : 'uploader',
+                id : 'emc-report-file-uploader',
+                dbTable : 'T_EMC_PROJECT',
+                 bizCategory: 'wordReportFiles',
+                formatterGridColumns : function() {
+                    return emcReport.getReportFileListColumns();
+                },
+//                formatterGridToolbar : function (toolbar) {
+//                    return [ {
+//                        type: 'button',
+//                        text: 'GIKAM.BUTTON.BATCH_DOWNLOAD',
+//                        icon: 'move-down',
+//                        onClick: function () {
+//                            _this.batchDownloadProjectFiles('emc-report-file-uploader');
+//                        }
+//                    }, {
+//                        type: 'button',
+//                        text: 'GIKAM.BUTTON.DELETE',
+//                        icon: 'remove',
+//                        onClick: function () {
+//                            _this.deleteFile('emc-report-file-uploader');
+//                        }
+//                    } ]
+//                }
+            }
+        },
+
+        getAllInOneFileGridParam : function (){
+            var _this = this;
+            return {
+                type : 'uploader',
+                id : 'emc-all-in-one-file-uploader',
+                dbTable : 'T_EMC_PROJECT',
+                 bizCategory:'mergeComposePdf',
+                formatterGridColumns : function() {
+                    return emcReport.getReportFileListColumns();
+                },
+//                formatterGridToolbar : function (toolbar) {
+//                    return [ {
+//                        type: 'button',
+//                        text: 'GIKAM.BUTTON.BATCH_DOWNLOAD',
+//                        icon: 'move-down',
+//                        onClick: function () {
+//                            _this.batchDownloadProjectFiles('emc-all-in-one-file-uploader');
+//                        }
+//                    }, {
+//                        type: 'button',
+//                        text: 'GIKAM.BUTTON.DELETE',
+//                        icon: 'remove',
+//                        onClick: function () {
+//                            _this.deleteFile('emc-all-in-one-file-uploader');
+//                        }
+//                    } ]
+//                }
+            }
+        },
+
+    getRunFileGridParam : function (){
+    	var _this = this;
+    	return {
+    		type : 'uploader',
+    		id : 'emc-run-file-uploader',
+    		dbTable : 'T_EMC_PROJECT',
+            bizCategory: 'run-zip',
+    		formatterGridColumns : function() {
+    			return emcReport.getReportFileListColumns();
+    		},
+//    		formatterGridToolbar : function (toolbar) {
+//    			return [ {
+//    				type: 'button',
+//    				text: 'GIKAM.BUTTON.BATCH_DOWNLOAD',
+//    				icon: 'move-down',
+//    				onClick: function () {
+//    					_this.batchDownloadProjectFiles('emc-run-file-uploader');
+//    				}
+//    			}, {
+//    				type: 'button',
+//    				text: 'GIKAM.BUTTON.DELETE',
+//    				icon: 'remove',
+//    				onClick: function () {
+//    					_this.deleteFile('emc-run-file-uploader');
+//    				}
+//    			} ]
+//    		}
+    	}
+    },
+    getSampleFileGridParam : function (){
+        var _this = this;
+        return {
+            type : 'uploader',
+            id : 'emc-sample-file-uploader',
+            dbTable : 'T_EMC_PROJECT',
+            bizCategory: 'sample-zip',
+            formatterGridColumns : function() {
+            	return emcReport.getReportFileListColumns();
+            },
+            formatterGridToolbar : function (toolbar) {
+                return [ {
+                    type: 'button',
+                    text: 'GIKAM.BUTTON.BATCH_DOWNLOAD',
+                    icon: 'move-down',
+                    onClick: function () {
+                        _this.batchDownloadProjectFiles('emc-sample-file-uploader');
+                    }
+                }, {
+                    type: 'button',
+                    text: 'GIKAM.BUTTON.DELETE',
+                    icon: 'remove',
+                    onClick: function () {
+                        _this.deleteFile('emc-sample-file-uploader');
+                    }
+                } ]
+            }
+        }
+    },
+
+    /** 归档文件 */
+    getCreateArchiveFileGridParam : function() {
+        var _this = this;
+        return {
+            type : 'grid',
+            id : 'emc-audit-list-archive-file-grid-new',
+            columns : emcReport.getArchiveFileListColumns(),
+            toolbar : [ {
+                type : 'button',
+                text : '记录附件单独归档',
+                icon : 'export',
+                onClick : function() {
+                    _this.archiveFileCopy();
+                }
+            }, {
+                  type : 'button',
+                  text : '附件归档至记录',
+                  icon : 'export',
+                  onClick : function() {
+                      _this.archiveFileWithCoreFile();
+                  }
+              } ]
+        }
+    },
+
+     /** 归档文件 */
+        archiveFileNew : function() {
+            var selections = Gikam.getComp('emc-audit-list-archive-file-grid-new').getSelections();
+            if (Gikam.isEmpty(selections)) {
+                Gikam.alert('GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM');
+                return;
+            }
+
+            var activedReport = Gikam.getComp('emc-report-audit-list-grid').getActivedRow();
+            Gikam.confirm('EMC.MODULE.BP.REPORT.REPORTS.MODAL.CONFIRM_TO_EDIT', 'EMC.MODULE.BP.REPORT.REPORTS.MODAL.CONFIRM_GENERATE_ARCHIVE_FILE', function() {
+                workspace.window.showMask(true);
+                var count = 0;
+                var intervalID = setInterval(function() {
+                    console.log(count);
+                    count++;
+                    if (count >= 5) {
+                        Gikam.alert('报告归档中...请稍后查看')
+                        workspace.window.closeMask();
+                        clearInterval(intervalID);
+                    }
+                }, 1000);
+                Gikam.postText(emcReport.baseUrl + '/action/archive', Gikam.getJsonWrapper({
+                	projId : activedReport.projId
+                }, [ '', selections ])).done(function() {
+                    if (count < 5) {
+                        Gikam.alert('归档成功');
+                    }
+                    Gikam.getComp('emc-audit-list-archive-file-grid-new').refresh();
+                    Gikam.getComp('emc-archive-file-uploader-new').setOptions({
+                    	bizId : activedReport.projId,
+                    });
+                    Gikam.getComp('emc-sample-file-uploader').setOptions({
+                    	bizId : activedReport.projId,
+
+                    });
+                    Gikam.getComp('emc-run-file-uploader').setOptions({
+                    	bizId : activedReport.projId,
+                    });
+
+                }).always(function () {
+                    clearInterval(intervalID);
+                    count = 0;
+                    workspace.window.closeMask();
+                });
+            });
+
+        },
+    deleteFile : function(gridId){
+    	var ss = Gikam.getComp('emc-archive-file-uploader-new');
+    	var selections = Gikam.getComp(gridId).grid.getSelections();
+    	if(Gikam.isEmpty(selections)){
+    		Gikam.alert('请至少选择一条数据');
+    		return;
+    	}
+    	workspace.window.showMask();
+    	var activedReport = Gikam.getComp('emc-report-audit-list-grid').getActivedRow();
+    	Gikam.post(emcReport.baseUrl + '/delete-archive-file',Gikam.getJsonWrapper({},['',selections])).done(function(){
+    	}).always(function(){
+    		workspace.window.closeMask(true);
+            Gikam.getComp('emc-archive-file-uploader').setOptions({
+            	bizId : activedReport.id,
+
+            });
+            Gikam.getComp('emc-archive-file-uploader').grid.refresh();
+            Gikam.getComp('emc-sample-file-uploader').setOptions({
+            	bizId : activedReport.id,
+
+            });
+            Gikam.getComp('emc-sample-file-uploader').grid.refresh();
+            Gikam.getComp('emc-run-file-uploader').setOptions({
+            	bizId : activedReport.id,
+
+            });
+            Gikam.getComp('emc-run-file-uploader').grid.refresh();
+            Gikam.getComp('emc-report-file-uploader').setOptions({
+                bizId : activedReport.id,
+
+            });
+            Gikam.getComp('emc-report-file-uploader').grid.refresh();
+
+    	});
     },
 
     init : function(param) {

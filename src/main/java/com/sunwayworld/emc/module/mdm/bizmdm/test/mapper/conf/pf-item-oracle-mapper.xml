@@ -9,9 +9,12 @@
         B.METHODID,
         B.TESTID,
         B.ISLOCKED,
+        B.TESTCLASS,
         D.METHODNAME,
         E.SETNAME,
-        F.TESTCATEGORYDESC AS ITEMTESTCATEGORY
+        F.TESTCATEGORYDESC AS ITEMTESTCATEGORY,
+        TM.TESTMETHODTYPE,
+        TO_CHAR(CD.CODENAME)  AS ANALYSISCATEGORYNAME
         FROM T_EMC_ITEM A
         LEFT JOIN T_EMC_TEST_METHOD B
         ON A.TESTMETHODID = B.ID
@@ -22,7 +25,12 @@
         LEFT JOIN T_EMC_STANDARD_SET E
         ON A.STANDSETID = E.ID
         LEFT JOIN T_EMC_TEST_CATEGORY F
-        ON B.TESTCATEGORYID = F.ID) T
+        ON B.TESTCATEGORYID = F.ID
+        LEFT JOIN T_EMC_TEST_METHOD TM
+        ON A.TESTMETHODID = TM.ID
+        LEFT JOIN T_CORE_CODE CD
+        ON A.analysisCategory = CD.CODE
+        AND CD.CODECATEGORYID = 'analysisCategory') T
         <where>
             <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
             <if test="target_unassigned != null">
@@ -45,6 +53,12 @@
                 AND SCHEME.MONITORTMPLID = #{targetMonitorTmplId}
                 AND SCHEME.TESTID = #{targetTestId}
                 AND SCHEME.METHODID = #{targetMethodId})
+            </if>
+            <if test='TESTMETHODIDFILTER != null'>
+                AND EXISTS(SELECT 1
+                FROM T_EMC_EQUIPT_TEST_METHOD ETM
+                WHERE ETM.TESTMETHODID  = T.TESTMETHODID
+                AND ETM.EQUIPTID = #{TESTMETHODIDFILTER})
             </if>
             <if test="targetType == 'dcuConfig'">
                 AND EXISTS(SELECT 1 FROM T_EMC_TEST_CAPACITY M WHERE M.TESTMETHODID = T.TESTMETHODID AND M.ORGID = #{loginUser.ext$.parentorgid})

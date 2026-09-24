@@ -13,7 +13,7 @@ emcProjectInfo.editPage = {
             filterOpen : true,
             requestData : {
                 targetType : 'modifyProjectInfo',
-	            orgId_SB : workspace.user.ext$.parentorgid
+                org_filter : '1',
             },
             deleteFormatter : function(row) {
                 return row.projName || row.id;
@@ -106,7 +106,150 @@ emcProjectInfo.editPage = {
                     var grid = Gikam.getComp('emc-project-info-edit-list-grid');
                     Gikam.viewAudit('T_EMC_PROJECT', grid.getSelections());
                 }
-            } ]
+            }, {
+                type : 'button',
+                text : '更新至报告编制',
+                icon : 'submit',
+                onClick : function() {
+                    var selections = Gikam.getComp('emc-project-info-edit-list-grid').getSelections();
+                    if (Gikam.isEmpty(selections)) {
+                        Gikam.alert('GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM');
+                        return;
+                    }
+                    Gikam.confirm('确认更新', '更新至报告编制', function() {
+
+                        workspace.window.showMask(true);
+                        Gikam.put(IFM_CONTEXT +'/secure/emc/module/bp/project/projects/action/to-report', Gikam.getJsonWrapper({}, [ 'emcProjectServiceImpl', selections ])).done(function(id) {
+                            Gikam.getComp('emc-project-info-edit-list-grid').refresh();
+                        }).always(function() {
+                            workspace.window.closeMask();
+                        });
+                    })
+                }
+            },{
+                type: 'button',
+                text: '提交至报告编制',
+                icon: 'submit',
+                onClick: function () {
+                    _this.submitToReport();
+                }
+            }, {
+                type: 'button',
+                text: '提交至报告发送',
+                icon: 'submit',
+                onClick: function () {
+                    _this.submitToReportDone();
+                }
+            },{
+                type : 'button',
+                text : '推送NC',
+                icon : 'edit',
+                onClick : function() {
+                    _this.pushProjectToNc();
+                }
+            }, ]
+        }
+    },
+
+    pushProjectToNc : function() {
+        var selections = Gikam.getComp('emc-project-info-edit-list-grid').getSelections();
+
+        if (Gikam.isEmpty(selections)) {
+            Gikam.alert('GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM');
+            return;
+        }
+
+        var chooseFlag = true;
+        selections.map(function (e) {
+            if ("已推送"==e.ext$.syncncstatus) {
+                chooseFlag = false;
+            }
+        });
+        if (!chooseFlag) {
+            Gikam.alert("已推送的不可再推送");
+            return;
+        }
+
+        var url = IFM_CONTEXT + '/secure/emc/module/bp/project/projects/push-to-nc';
+        workspace.window.showMask();
+        Gikam.post(url, Gikam.getJsonWrapper({
+
+        }, [ 'emcProjectServiceImpl', selections ])).done(function() {
+            Gikam.getComp('emc-project-info-edit-list-grid').refresh();
+        }).always(function () {
+            workspace.window.closeMask();
+        })
+    },
+
+    submitToReport: function () {
+        var selections = Gikam.getComp('emc-project-info-edit-list-grid').getSelections();
+        if (selections.length > 0) {
+            var flag = false;
+            selections.forEach(function (row) {
+                if (Gikam.isEmpty(row.ext$.contractid)) {
+                    flag = true;
+                }
+            });
+            if (flag) {
+                Gikam.alert("先选择合同再提交！");
+                return;
+            }
+            var flag2 = false;
+            selections.forEach(function (row) {
+                if (!Gikam.isEmpty(row.source) || row.status != 'create') {
+                    flag2 = true;
+                }
+            });
+            if (flag2) {
+                Gikam.alert("只能提交项目登记的任务！");
+                return;
+            }
+            Gikam.confirm('GIKAM.MODAL.SUBMIT', 'GIKAM.TIP.SUBMIT', function () {
+                workspace.window.showMask(true);
+                Gikam.post(emcProject.baseUrl + '/action/submit-to-report', Gikam.getJsonWrapper({}, ['', selections])).always(function () {
+                    Gikam.getComp('emc-project-info-edit-list-grid').refresh();
+                }).always(function () {
+                    workspace.window.closeMask();
+                });
+            });
+        } else {
+            Gikam.alert('GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM');
+        }
+    },
+
+    submitToReportDone: function () {
+        var selections = Gikam.getComp('emc-project-info-edit-list-grid').getSelections();
+        if (selections.length > 0) {
+            var flag = false;
+            selections.forEach(function (row) {
+                if (Gikam.isEmpty(row.ext$.contractid)) {
+                    flag = true;
+                }
+            });
+            if (flag) {
+                Gikam.alert("先选择合同再提交！");
+                return;
+            }
+            var flag2 = false;
+            selections.forEach(function (row) {
+                if (!Gikam.isEmpty(row.source) || row.status != 'create') {
+                    flag2 = true;
+                }
+            });
+            if (flag2) {
+                Gikam.alert("只能提交项目登记的任务！");
+                return;
+            }
+            Gikam.confirm('GIKAM.MODAL.SUBMIT', 'GIKAM.TIP.SUBMIT', function () {
+                workspace.window.showMask(true);
+                Gikam.post(emcProject.baseUrl + '/action/submit-to-report', Gikam.getJsonWrapper({"gdflag": "1"}, ['', selections])).always(function () {
+                    Gikam.getComp('emc-project-info-edit-list-grid').refresh();
+                }).always(function () {
+                    workspace.window.closeMask();
+                });
+            });
+        } else {
+            Gikam.alert('GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM');
         }
     },
 
@@ -143,7 +286,13 @@ emcProjectInfo.editPage = {
                                         id : row.id,
                                         beforeStatus : row.status,
                                         status : 'cancel',
-                                        cancelReason : form.options.data.cancelReason
+                                        cancelReason : form.options.data.cancelReason,
+                                        projectPrice: '0',
+                                        ext$ : {
+                                            cancelbyid : workspace.user.id,
+                                            cancelbyname : workspace.user.userName,
+                                            canceltime : Gikam.DateUtils.formatter(new Date(), 'yyyy-MM-dd hh:mm:ss')
+                                        }
                                     };
                                 });
                                 Gikam.getLastModal().window.showMask(true);
@@ -215,7 +364,7 @@ emcProjectInfo.editPage = {
             tab.revertPanel('emc-project-info-edit-list-order-registration-panel');
             tab.removePanel('emc-project-info-edit-list-scheme-panel');
             tab.removePanel('emc-project-info-edit-list-sampling-panel');
-            tab.removePanel('emc-project-info-edit-list-sample-panel');
+            tab.revertPanel('emc-project-info-edit-list-sample-panel');
         }
         _this.addOrRemoveValidator(row);
         _this.onPanelActived(row);
@@ -224,9 +373,9 @@ emcProjectInfo.editPage = {
     addOrRemoveValidator : function(project) {
         Gikam.getAsyncComp('emc-project-info-edit-list-base-info-form').done(function (form) {
             if (project.sample === '1') {
-                form.addFieldValidator('ext$.samplinglocation', ['notEmpty']);
-                form.addFieldValidator('ext$.inspectedcontact', ['notEmpty']);
-                form.addFieldValidator('ext$.inspectedphone', ['notEmpty']);
+//                form.addFieldValidator('samplinglocation', ['notEmpty']);
+//                form.addFieldValidator('ext$.inspectedcontact', ['notEmpty']);
+//                form.addFieldValidator('ext$.inspectedphone', ['notEmpty']);
                 form.hideFields(['sendUsername', 'sendDate']);
             } else {
                 form.removeFieldValidator('ext$.samplinglocation', ['notEmpty']);
@@ -234,9 +383,13 @@ emcProjectInfo.editPage = {
                 form.removeFieldValidator('ext$.inspectedphone', ['notEmpty']);
                 form.showFields(['sendUsername', 'sendDate']);
             }
-        })
+            if (!Gikam.isEmpty(project.ext$.deliverydate)) {
+                form.toFieldsReadonly([ 'projectPrice' ]);
+            } else {
+                form.toFieldsEdit([ 'projectPrice' ]);
+            }
+        });
     },
-
     // 基本信息
     getBaseInfoPanel : function() {
         var _this = this;
@@ -252,46 +405,59 @@ emcProjectInfo.editPage = {
                         columns : 3,
                         service : 'emcProjectServiceImpl',
                         id : 'emc-project-info-edit-list-base-info-form',
-                        fields : emcProjectInfo.getBaseInfoFormFields(),
+                        panels : [
+                            {title : '合同信息',fields : emcProjectInfo.getBaseInfoFormFields11()},
+                            {title : '委托单位信息',fields : emcProjectInfo.getBaseInfoFormFields12()},
+                            {title : '受检单位',fields : emcProjectInfo.getBaseInfoFormFields13()},
+                            {title : '项目信息',fields : emcProjectInfo.getBaseInfoFormFields14()},
+                        ],
                         onBeforeUpdate  : function(row, keys) {
-                            if (row.ext$ && row.ext$.projectamount) {
+                            // debugger;
+                            if ((row.ext$ && row.ext$.contractid) || row.projectPrice) {
+                                var data = Gikam.getComp('emc-project-info-edit-list-base-info-form').getData();
+                                if(data.ext$.syncncstatus == '已推送'){
+                                    Gikam.alert("已经出库的任务不能改合同号和决算金额");
+                                    Gikam.getComp('emc-project-info-edit-list-base-info-form').refresh();
+                                    return false;
+                                }
+
                                 //根据projid获取金额
-                                var arr = [];
-                                arr.push(row);
-                                var editAmount = row.ext$.projectamount;
-                                if( editAmount == null ||  editAmount === ''){
-                                    var formData = Gikam.getComp('emc-project-info-edit-list-base-info-form').getData();
-                                    editAmount = formData.ext$.projectamount;
-                                }
-                                var flag = Gikam.postSync(emcProjectInfo.baseUrl + '/action/check-money', Gikam.getJsonWrapper({
-                                    f : {
-                                        editAmount : editAmount
-                                    }}, [ 'pfProjectServiceImpl', arr ])).responseText;
-                                if (flag === 'more'){
-                                    return true;
-                                } else if (flag.indexOf('less') > -1){
-                                    Gikam.alert("开案金额不能小于发票和收款金额最大值");
-                                    Gikam.getComp('emc-project-info-edit-list-base-info-form').refresh();
-                                    return false;
-                                } else if (flag.indexOf('error') > -1){
-                                    Gikam.alert("开案金额不能大于合同总额");
-                                    Gikam.getComp('emc-project-info-edit-list-base-info-form').refresh();
-                                    return false;
-                                } else if (flag.indexOf('over') > -1){
-                                    Gikam.alert("合同已开案金额不能大于合同总额");
-                                    Gikam.getComp('emc-project-info-edit-list-base-info-form').refresh();
-                                    return false;
-                                } else {
-                                    Gikam.getComp('emc-project-info-edit-list-base-info-form').refresh();
-                                    return false;
-                                }
+                                // var arr = [];
+                                // arr.push(row);
+                                // var editAmount = row.ext$.projectamount;
+                                // if( editAmount == null ||  editAmount === ''){
+                                //     var formData = Gikam.getComp('emc-project-info-edit-list-base-info-form').getData();
+                                //     editAmount = formData.ext$.projectamount;
+                                // }
+                                // var flag = Gikam.postSync(emcProjectInfo.baseUrl + '/action/check-money', Gikam.getJsonWrapper({
+                                //     f : {
+                                //         editAmount : editAmount
+                                //     }}, [ 'pfProjectServiceImpl', arr ])).responseText;
+                                // if (flag === 'more'){
+                                //     return true;
+                                // } else if (flag.indexOf('less') > -1){
+                                //     Gikam.alert("开案金额不能小于发票和收款金额最大值");
+                                //     Gikam.getComp('emc-project-info-edit-list-base-info-form').refresh();
+                                //     return false;
+                                // } else if (flag.indexOf('error') > -1){
+                                //     Gikam.alert("开案金额不能大于合同总额");
+                                //     Gikam.getComp('emc-project-info-edit-list-base-info-form').refresh();
+                                //     return false;
+                                // } else if (flag.indexOf('over') > -1){
+                                //     Gikam.alert("合同已开案金额不能大于合同总额");
+                                //     Gikam.getComp('emc-project-info-edit-list-base-info-form').refresh();
+                                //     return false;
+                                // } else {
+                                //     Gikam.getComp('emc-project-info-edit-list-base-info-form').refresh();
+                                //     return false;
+                                // }
                             }
                         },
                         onUpdated : function(data) {
                             var grid = Gikam.getComp('emc-project-info-edit-list-grid');
                             grid.refreshRowById(grid.getActivedRow().id);
                             Gikam.getComp('emc-project-info-edit-list-base-info-form').refresh();
-                            Gikam.postText(emcProjectInfo.baseUrl + '/action/sync-projinfo-after-edit', Gikam.getJsonWrapper(null, [ 'emcProjectServiceImpl', [data] ]));
+                            // Gikam.postText(emcProjectInfo.baseUrl + '/action/sync-projinfo-after-edit', Gikam.getJsonWrapper(null, [ 'emcProjectServiceImpl', [data] ]));
                         },
 
                         onLoadSuccess : function(data) {
@@ -400,6 +566,7 @@ emcProjectInfo.editPage = {
                         type : 'grid',
                         id : 'emc-project-info-scheme-list-order-grid',// 方法分析项组
                         columns : emcProjectInfo.getOrderEditListColumns(),
+                        service: 'emcProjOrderServiceImpl',
                     } ]
                 }
             } ]
@@ -862,6 +1029,7 @@ emcProjectInfo.editPage = {
                 id : 'emc-project-info-edit-list-audit-record-grid',
                 url : '',
                 columns : emcProjectInfo.getAuditRecordListColumns(),
+                service : 'emcAuditRecordServiceImpl',
                 page : true,
                 group : {
                     groupCheckbox : false,
@@ -1338,7 +1506,7 @@ emcProjectInfo.editPage = {
             id : projectId
         })).done(function(fileUri) {
             var fileUrl = IFM_CONTEXT + fileUri;
-            Gikam.download(fileUrl);
+            Gikam.emcDownloadFile(fileUrl);
         });
 
     },
@@ -1367,7 +1535,7 @@ emcProjectInfo.editPage = {
                     })
                 ).done(function(result) {
                         if (result.url) {
-                            Gikam.download(result.url);
+                            Gikam.emcDownloadFile(result.url);
                         } else if (result.message) {
                             Gikam.alert(result.message);
                         }

@@ -10,12 +10,11 @@ import com.sunwayworld.emc.module.mdm.contract.bean.EmcReviewContentBean;
 import com.sunwayworld.emc.module.mdm.contract.service.EmcContractService;
 import com.sunwayworld.framework.data.page.Page;
 import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;
-import com.sunwayworld.framework.support.auditable.resource.GenericAuditableResource;
 import com.sunwayworld.framework.support.base.resource.GenericResource;
 import com.sunwayworld.framework.support.choosable.resource.GenericChoosableResource;
 
 @RequestMapping("/secure/emc/module/mdm/contracts")
-public interface EmcContractResource extends GenericResource<EmcContractService, EmcContractBean, Long>, GenericAuditableResource<EmcContractService, EmcContractBean, Long>,
+public interface EmcContractResource extends GenericResource<EmcContractService, EmcContractBean, Long>,
         GenericChoosableResource<EmcContractService, EmcContractBean, Long> {
 
     Page<EmcReviewContentBean> selectReviewContentPaginationByContractId(Long contractId, RestJsonWrapperBean wrapper);

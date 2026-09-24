@@ -1,5 +1,6 @@
 package com.sunwayworld.emc.module.bp.report.report.bean;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import com.alibaba.fastjson.annotation.JSONField;
@@ -65,6 +66,32 @@ public class EmcReportBean extends AbstractAuditable<Long> implements Auditable<
     private String createdByOrgName;// 制单人单位名称
 
     private String reportName; // 报告名称
+    @NotNull(defaultValue = Constant.NO)
+    private String toArchivingFlag; // 待归档标志
+    private Long reportTemplateId; // 报告模板ID
+    private String reportTemplateName; // 报告模板名称
+    private String reportAptitude; // 报告资质
+    private String qcReport; // 质控报告
+    @NotNull(defaultValue = Constant.NO)
+    private String archivedFlag; // 归档标志
+    @JSONField(format = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate archivedDate; // 归档日期
+    private String archivedUserId; // 归档人编码
+    private String archivedUserName; // 归档人名称
+    @NotNull(defaultValue = Constant.NO)
+    private String addInfoIndexFlag; // 信息索引标志
+    @NotNull(defaultValue = "qys")
+    private String issueSignMode; // 签发方式
+    private String reportUndoStatus; // 报告撤销状态
+
+    public String getReportUndoStatus() {
+        return reportUndoStatus;
+    }
+
+    public void setReportUndoStatus(String reportUndoStatus) {
+        this.reportUndoStatus = reportUndoStatus;
+    }
 
     public Long getId() {
         return id;
@@ -256,5 +283,93 @@ public class EmcReportBean extends AbstractAuditable<Long> implements Auditable<
 
     public void setReportName(String reportName) {
         this.reportName = reportName;
+    }
+
+    public String getToArchivingFlag() {
+        return toArchivingFlag;
+    }
+
+    public void setToArchivingFlag(String toArchivingFlag) {
+        this.toArchivingFlag = toArchivingFlag;
+    }
+
+    public Long getReportTemplateId() {
+        return reportTemplateId;
+    }
+
+    public void setReportTemplateId(Long reportTemplateId) {
+        this.reportTemplateId = reportTemplateId;
+    }
+
+    public String getReportTemplateName() {
+        return reportTemplateName;
+    }
+
+    public void setReportTemplateName(String reportTemplateName) {
+        this.reportTemplateName = reportTemplateName;
+    }
+
+    public String getReportAptitude() {
+        return reportAptitude;
+    }
+
+    public void setReportAptitude(String reportAptitude) {
+        this.reportAptitude = reportAptitude;
+    }
+
+    public String getQcReport() {
+        return qcReport;
+    }
+
+    public void setQcReport(String qcReport) {
+        this.qcReport = qcReport;
+    }
+
+    public String getArchivedFlag() {
+        return archivedFlag;
+    }
+
+    public void setArchivedFlag(String archivedFlag) {
+        this.archivedFlag = archivedFlag;
+    }
+
+    public String getAddInfoIndexFlag() {
+        return addInfoIndexFlag;
+    }
+
+    public void setAddInfoIndexFlag(String addInfoIndexFlag) {
+        this.addInfoIndexFlag = addInfoIndexFlag;
+    }
+
+    public String getIssueSignMode() {
+        return issueSignMode;
+    }
+
+    public void setIssueSignMode(String issueSignMode) {
+        this.issueSignMode = issueSignMode;
+    }
+
+    public LocalDate getArchivedDate() {
+        return archivedDate;
+    }
+
+    public void setArchivedDate(LocalDate archivedDate) {
+        this.archivedDate = archivedDate;
+    }
+
+    public String getArchivedUserId() {
+        return archivedUserId;
+    }
+
+    public void setArchivedUserId(String archivedUserId) {
+        this.archivedUserId = archivedUserId;
+    }
+
+    public String getArchivedUserName() {
+        return archivedUserName;
+    }
+
+    public void setArchivedUserName(String archivedUserName) {
+        this.archivedUserName = archivedUserName;
     }
 }

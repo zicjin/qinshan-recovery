@@ -10,14 +10,14 @@ emcAnalysisAudit.undoRunAuditedPage = {
             page : true,
             requestData : {
                 targetType : 'projectRunAudited',
-                orgId_SB : workspace.user.ext$.parentorgid,
+                org_filter : '1',
             },
 
             onRowActive : function(index, row) {
                 Gikam.getAsyncComp('emc-run-audited-list-grid').done(function(grid) {
                     grid.setOptions({
                         requestData : {
-                            monitorTmplId : row.ext$.monitortmplid,
+                            // monitorTmplId : row.ext$.monitortmplid,
                             projId : row.id,
                             scheme_only : '',
                             targetType : 'analysisAudited',

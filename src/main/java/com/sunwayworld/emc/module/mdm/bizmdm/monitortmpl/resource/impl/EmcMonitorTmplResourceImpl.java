@@ -118,6 +118,13 @@ public class EmcMonitorTmplResourceImpl implements EmcMonitorTmplResource {
     }
 
     @Override
+    @Log(value = "监测方案选择页查询报价单", type = LogType.SELECT)
+    @RequestMapping(value = "/schemes/queries/group-by-test-method", method = RequestMethod.POST)
+    public Page<EmcMonitorSchemeBean> selectPaginationGroupByTestMethod(RestJsonWrapperBean wrapper) {
+        return getService().selectPaginationGroupByTestMethod(wrapper);
+    }
+
+    @Override
     @Log(value = "监测方案分析项组选择页查询", type = LogType.SELECT)
     @RequestMapping(value = "/scheme-item-groups/queries/choosable", method = RequestMethod.POST)
     public Page<EmcMonitorSchemeBean> selectSchemeItemGroupChoosablePagination(RestJsonWrapperBean wrapper) {

@@ -11,8 +11,15 @@ emcContainerCategory.modifyContainerPage = {
             onRendered : function(){
                 var type = _this.param.type;
                 this.hideFields([ 'containercategoryid' ]);
+                if (!Gikam.isEmpty(type) && "containerGroup" === type) {
+                    this.hideFields(['containercategoryname', 'sampleqty','fixative', 'labelqty', 'sampleWeight', 'storeCondition' ]);
+                    this.showFields([ 'containerGroup' ]);
+                    Gikam.getComp('emc-container-modify-form').setData({
+                        containerGroup : _this.param.containerGroup,
+                    });
+                }
                 if (!Gikam.isEmpty(type) && "rqlx" == type) {
-                    this.hideFields([ 'sampleqty','fixative', 'labelqty', 'sampleWeight', 'storeCondition' ]);
+                    this.hideFields([ 'containerGroup', 'sampleqty','fixative', 'labelqty', 'sampleWeight', 'storeCondition' ]);
                     this.showFields([ 'containercategoryname' ]);
                     Gikam.getComp('emc-container-modify-form').setData({
                         containercategoryid : _this.param.containercategoryid,
@@ -20,35 +27,35 @@ emcContainerCategory.modifyContainerPage = {
                     });
                 }
                 if (!Gikam.isEmpty(type) && "zcfs" == type) {
-                    this.hideFields([ 'sampleqty','containercategoryname', 'labelqty', 'sampleWeight', 'storeCondition' ]);
+                    this.hideFields([ 'containerGroup', 'sampleqty','containercategoryname', 'labelqty', 'sampleWeight', 'storeCondition' ]);
                     this.showFields([ 'fixative' ]);
                     Gikam.getComp('emc-container-modify-form').setData({
                         fixative : _this.param.fixative,
                     });
                 }
                 if (!Gikam.isEmpty(type) && "cygs" == type) {
-                    this.hideFields([ 'fixative','containercategoryname', 'labelqty', 'sampleWeight', 'storeCondition' ]);
+                    this.hideFields([ 'containerGroup', 'fixative','containercategoryname', 'labelqty', 'sampleWeight', 'storeCondition' ]);
                     this.showFields([ 'sampleqty' ]);
                     Gikam.getComp('emc-container-modify-form').setData({
                         sampleqty : _this.param.sampleqty,
                     });
                 }
                 if (!Gikam.isEmpty(type) && "bqgs" == type) {
-                    this.hideFields([ 'fixative','containercategoryname', 'sampleqty', 'sampleWeight', 'storeCondition' ]);
+                    this.hideFields([ 'containerGroup', 'fixative','containercategoryname', 'sampleqty', 'sampleWeight', 'storeCondition' ]);
                     this.showFields([ 'labelqty' ]);
                     Gikam.getComp('emc-container-modify-form').setData({
                         labelqty : _this.param.labelqty,
                     });
                 }
                 if (!Gikam.isEmpty(type) && "storeCondition" === type) {
-                    this.hideFields([ 'fixative','containercategoryname', 'sampleqty', 'sampleWeight', 'labelqty' ]);
+                    this.hideFields([ 'containerGroup', 'fixative','containercategoryname', 'sampleqty', 'sampleWeight', 'labelqty' ]);
                     this.showFields([ 'storeCondition' ]);
                     Gikam.getComp('emc-container-modify-form').setData({
                         storeCondition : _this.param.storeCondition,
                     });
                 }
                 if (!Gikam.isEmpty(type) && "sampleWeight" === type) {
-                    this.hideFields([ 'fixative','containercategoryname', 'sampleqty', 'labelqty' ,'storeCondition']);
+                    this.hideFields([ 'containerGroup', 'fixative','containercategoryname', 'sampleqty', 'labelqty' ,'storeCondition']);
                     this.showFields([ 'sampleWeight' ]);
                     Gikam.getComp('emc-container-modify-form').setData({
                         sampleWeight : _this.param.sampleWeight,
@@ -56,6 +63,10 @@ emcContainerCategory.modifyContainerPage = {
                 }
             },
             fields: [ {
+                field: 'containerGroup',
+                title: 'T_EMC_TEST_ORDER_CATEGORY.CONTAINERGROUP',
+                editor: true
+            }, {
                 field: 'containercategoryid',
                 title: 'T_EMC_TEST_ORDER_CATEGORY.CONTAINERCATEGORYNAME',
             }, {
@@ -89,19 +100,18 @@ emcContainerCategory.modifyContainerPage = {
             }, {
                 field : 'storeCondition',
                 title : 'T_EMC_TEST_ORDER_CATEGORY.STORECONDITION',
-                type : 'select',
+                type : 'comboBox',
                 search : false,
                 category : 'sys',
                 param : {
                     codeCategoryId : 'storeCondition',
                 },
                 editor : true,
-                multiple : true,
+                // multiple : true,
                 onChange : function(field, value, index, oldValue, text) {
                    this.setData({
                        index : index,
                        storeCondition : value,
-                       storeConditionText : text.join(';')
                    });
                }
             }]
@@ -119,7 +129,10 @@ emcContainerCategory.modifyContainerPage = {
                 onClick : function() {
                     var type = _this.param.type;
                     var data = Gikam.getComp('emc-container-modify-form').getData();
-
+                    if (Gikam.isEmpty(data.containerGroup) && "containerGroup" === type) {
+                        Gikam.alert("EMC.MODULE.BP.TIP.PLEASE_COMPLETE_THE_FORM");
+                        return;
+                    }
                     if (Gikam.isEmpty(data.containercategoryname) && "rqlx" == type) {
                         Gikam.alert("EMC.MODULE.BP.TIP.PLEASE_COMPLETE_THE_FORM");
                         return;

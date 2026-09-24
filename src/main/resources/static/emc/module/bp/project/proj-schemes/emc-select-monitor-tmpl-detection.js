@@ -71,7 +71,8 @@ emcProjScheme.selectTmplDetectionPage = {
             type : 'shuttleFrame',
             id : 'emc-select-monitor-tmpl-list-shuttle-frame',
             columns : emcProjScheme.getMonitorTmplDetectionListColumns(),
-            page : true,
+            rightPage : false,
+            leftPage : false,
             leftGridUrl : '',
             onAddClick : function(data, left, right) {
                 _this.setFormEditStatus(right);

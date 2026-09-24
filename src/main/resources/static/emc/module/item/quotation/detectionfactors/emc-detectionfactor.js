@@ -4,12 +4,36 @@ var emcDetectionfactor = Gikam.getPageObject({
         return [ {
             checkbox : true
         }, {
+            field : 'ext$.parentorgname',
+            title : 'T_EMC_QUOTATION_DETECTIONFACTOR.PARENTORGNAME'
+        }
+        /*, {
             field : 'monitorTmplGroupName',
             title : 'T_EMC_QUOTATION_DETECTIONFACTOR.MONITORTMPLNAME'
+        }*/, {
+            field : 'testCategoryId',
+            title : 'T_EMC_DATA_CORRELATION_ITEM.TESTCATEGORYID',
+            width : 130,
+            type : 'select',
+            search : true,
+            category : 'testCategory'
         }, {
-            field : 'itemGroupName',
+            field : 'testName',
             title : 'T_EMC_QUOTATION_DETECTIONFACTOR.TESTNAME',
             width : 170,
+        }, {
+            field : 'itemGroupName',
+            title : 'T_EMC_QUOTATION_DETECTIONFACTOR.ITEMGROUPNAME',
+            width : 170,
+        },{
+            field : 'ext$.testmethodtype',
+            title : 'T_EMC_TEST_METHOD_TESTMETHODTYPE',
+            type : 'select',
+            search : false,
+            category : 'sys',
+            param : {
+                codeCategoryId : 'testMethodType',
+            },
         }, {
             field : 'ext$.methodnamee',
             title : 'T_EMC_QUOTATION_DETECTIONFACTOR.METHODNAME',
@@ -38,7 +62,8 @@ var emcDetectionfactor = Gikam.getPageObject({
             field : 'createdTime',
             title : 'T_EMC_QUOTATION_DETECTIONFACTOR.CREATEDTIME',
             readonly : true
-        }, {
+        }
+        /*, {
             field : 'trialScope',
             title : 'T_EMC_QUOTATION_DETECTIONFACTOR.TRIALSCOPE',
             type : 'select',
@@ -47,8 +72,10 @@ var emcDetectionfactor = Gikam.getPageObject({
             param : {
                 codeCategoryId : 'trialScope'
             },
-        } ];
+        }*/
+        ];
     },
+
     getChooseListColumns  : function() {
         return [ {
             field : 'monitorTmplGroupName',
@@ -120,7 +147,7 @@ var emcDetectionfactor = Gikam.getPageObject({
     },
 
     getAddCustomPriceFields : function(){
-        return [{
+        return [/*{
             title : 'T_EMC_MONITOR_TMPL_GROUP.MONITORTMPLGROUPDETECTION',
             field : 'monitorTmplGroupName',
             type : 'choose',
@@ -132,6 +159,12 @@ var emcDetectionfactor = Gikam.getPageObject({
                     monitorTmplGroupName.value = rows[0].monitorTmplGroup;
                 }
             },
+        },*/{
+            field : 'testCategoryId',
+            title : 'T_EMC_DATA_CORRELATION_ITEM.TESTCATEGORYID',
+            type : 'select',
+            search : true,
+            category : 'testCategory'
         },{
             field : 'itemGroupName',
             title : 'T_EMC_QUOTATION_DETECTIONFACTOR.TESTNAME',
@@ -143,8 +176,12 @@ var emcDetectionfactor = Gikam.getPageObject({
             single : true,
             onAfterChoose : function(rows, index) {
                 if (rows) {
-                    var methodName = Gikam.getComp('emc-emcDetectionfactor-add-custom-price-form').getField('methodName');
-                    methodName.value = rows[0].methodName;
+                    // var methodName = Gikam.getComp('emc-emcDetectionfactor-add-custom-price-form').getField('methodName');
+                    // methodName.value = rows[0].methodName;
+                    this.setData({
+                        methodId : rows[0].id,
+                        methodName : rows[0].methodName,
+                    });
                 }
             },
         },{
@@ -158,4 +195,5 @@ var emcDetectionfactor = Gikam.getPageObject({
 
     baseUrl : IFM_CONTEXT + '/secure/emc/module/item/quotation/detectionfactors',
     schemeUrl : IFM_CONTEXT + '/secure/emc/module/bp/project/proj-schemes',
+    testUrl : IFM_CONTEXT + '/secure/emc/module/mdm/bizmdm/tests',
 });

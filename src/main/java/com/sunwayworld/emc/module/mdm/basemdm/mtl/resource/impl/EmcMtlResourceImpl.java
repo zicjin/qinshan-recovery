@@ -27,6 +27,7 @@ import com.sunwayworld.framework.mybatis.mapper.SearchFilter;
 import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;
 import com.sunwayworld.framework.restful.data.RestValidationResultBean;
 import com.sunwayworld.framework.spring.annotation.GikamBean;
+import com.sunwayworld.framework.utils.StringUtils;
 
 @LogModule("材料管理")
 @RestController
@@ -67,6 +68,9 @@ public class EmcMtlResourceImpl implements EmcMtlResource {
     @Override
     @RequestMapping(value = "/{id}/stocks/queries")
     public Page<EmcStockBean> selectStockPagationByMtl(@PathVariable String id, RestJsonWrapperBean wrapper) {
+        if (StringUtils.equals(id, "0")) {
+            return stockService.selectPagination(wrapper);
+        }
         return stockService.selectPaginationByFilter(SearchFilter.instance().match("MTLID", id).filter(MatchPattern.EQ), wrapper);
     }
 
@@ -164,6 +168,13 @@ public class EmcMtlResourceImpl implements EmcMtlResource {
         return stockConcentService.selectPaginationByFilter(SearchFilter.instance().match("STOCKID", stockId).filter(MatchPattern.EQ), wrapper);
     }
 
+    @Log(value = "查询浓度", type = LogType.SELECT)
+    @Override
+    @RequestMapping(value = "/stocks/concents/queries")
+    public Page<EmcStockConcentBean> selectConcentPagation(RestJsonWrapperBean wrapper) {
+        return stockConcentService.selectPagination(wrapper);
+    }
+
     @Override
     @Log(value = "详情选择页查询", type = LogType.SELECT)
     @RequestMapping(value = "/queries/detail-choosable", method = RequestMethod.POST)
@@ -187,9 +198,9 @@ public class EmcMtlResourceImpl implements EmcMtlResource {
 
     @Log(value = "高低限修约", type = LogType.UPDATE)
     @Override
-    @RequestMapping(value = "/stockConcent/change-result", method = RequestMethod.PUT)
-    public void changeStockConcent(RestJsonWrapperBean wrapper) {
-        stockConcentService.changeResult(wrapper);
+    @RequestMapping(value = "/stockConcent/calculate", method = RequestMethod.PUT)
+    public void stockConcentCalculate(RestJsonWrapperBean wrapper) {
+        stockConcentService.stockConcentCalculate(wrapper);
     }
 
     @Log(value = "实验室标准样品-标样选择页", type = LogType.UPDATE)
@@ -197,5 +208,19 @@ public class EmcMtlResourceImpl implements EmcMtlResource {
     @RequestMapping(value = "/queries/qc-std-stock", method = RequestMethod.POST)
     public Page<EmcStockBean> selectQcStdStockPagination(RestJsonWrapperBean wrapper) {
         return stockService.selectQcStdStockPagination(wrapper);
+    }
+
+    @Log(value = "材料数据导出", type = LogType.UPDATE)
+    @Override
+    @RequestMapping(value = "/export-file", method = RequestMethod.POST)
+    public String exportFile(RestJsonWrapperBean wrapper) {
+        return getService().exportFile(wrapper);
+    }
+
+    @Log(value = "一般试剂数据导出", type = LogType.UPDATE)
+    @Override
+    @RequestMapping(value = "/export-general-file", method = RequestMethod.POST)
+    public String exportGeneralFile(RestJsonWrapperBean wrapper) {
+        return getService().exportGeneralFile(wrapper);
     }
 }

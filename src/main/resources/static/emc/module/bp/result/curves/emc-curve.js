@@ -78,6 +78,10 @@ var emcCurve = Gikam.getPageObject({
             field : 'expireDate',
             title : 'T_EMC_CURVE.EXPIREDATE',
             width : 100
+        }, {
+            field : 'remark',
+            title : 'T_EMC_CURVE.REMARK',
+            editor : true,
         } ];
     },
 

@@ -23,6 +23,25 @@ var emcTestMethod = Gikam.getPageObject({
             editor :true,
             //readonly : true
         }, {
+            field : 'testClass',
+            title : 'T_EMC_TEST_METHOD.TESTCLASS',
+            type : 'select',
+            category : 'sys',
+            param : {
+                codeCategoryId : 'testClass',
+            },
+            editor : true,
+        },{
+            field : 'testMethodType',
+            title : 'T_EMC_TEST_METHOD_TESTMETHODTYPE',
+            type : 'select',
+            search : false,
+            category : 'sys',
+            param : {
+                codeCategoryId : 'testMethodType',
+            },
+            editor : true
+        }, {
             field : 'testId',
             title : 'T_EMC_TEST_METHOD.TESTID',
         }, {
@@ -94,6 +113,11 @@ var emcTestMethod = Gikam.getPageObject({
             title : 'T_EMC_TEST_METHOD.TESTMETHODBASIS',
             readonly : true
         }, {
+            field : 'methodScope',
+            title : '方法范围',
+            validators : [ 'strLength[0,200]' ],
+            editor : true,
+        },{
             field : 'sampleParam',
             title : 'T_EMC_ITEM.SAMPLEPARAM',
             type : 'select',
@@ -103,21 +127,30 @@ var emcTestMethod = Gikam.getPageObject({
                 codeCategoryId : 'yesorno',
             },
             editor : true
-        }, {
-            field : 'ext$.testmethodaliasbasis',
-            title : 'T_EMC_TEST_METHOD.TESTMETHODALIASBASIS',
-            readonly : true
-        }, {
-            field : 'testMethodType',
-            title : 'T_EMC_TEST_METHOD_TESTMETHODTYPE',
+        },{
+            field : 'multipleItemGroup',
+            title : '是否有多因子',
             type : 'select',
             search : false,
             category : 'sys',
             param : {
-                codeCategoryId : 'testMethodType',
+                codeCategoryId : 'yesorno',
             },
             editor : true
-        },/*{
+        }, {
+            field: 'generateLabel',
+            title: '是否生成标签',
+            type: 'select',
+            category: 'sys',
+            param : {
+                codeCategoryId : 'yesorno',
+            },
+            editor : true
+        }, {
+            field : 'ext$.testmethodaliasbasis',
+            title : 'T_EMC_TEST_METHOD.TESTMETHODALIASBASIS',
+            readonly : true
+        }, /*{
             field : 'ext$.orgname',
             title : 'T_EMC_TEST_METHOD.ANALYSISORGID',
             type : 'choose',
@@ -209,7 +242,7 @@ var emcTestMethod = Gikam.getPageObject({
             editor : true
         }, {
             field : 'hours',
-            title : 'T_EMC_TEST_METHOD.HOURS',
+            title : '时效(天)',
             type : 'number',
             hasArrow : true,
             editor : true
@@ -310,6 +343,15 @@ var emcTestMethod = Gikam.getPageObject({
             type : 'richText',
             editor : true
         },*/ {
+            field : 'gsyl',
+            title : '公式',
+            formatter : function(i, v, r) {
+                return Gikam.printf('<a href="javascript:;" onclick="emcTestMethod.editPage.viewScriptFile(\'{index}\')">{name}</a>', {
+                    index : i,
+                    name : '预览'
+                });
+            }
+        },{
             field : 'remark',
             title : 'T_EMC_TEST_METHOD.REMARK',
             validators : [ 'strLength[0, 300]' ],
@@ -330,6 +372,15 @@ var emcTestMethod = Gikam.getPageObject({
             param : {
                 codeCategoryId : 'reportLimitType',
             },
+        }, {
+            field : 'tube',
+            title : '吸收瓶类型',
+            editor : true,
+            type : 'select',
+            category : 'sys',
+            param : {
+                codeCategoryId : 'xishouping',
+            }
         } ];
     },
 
@@ -542,19 +593,26 @@ var emcTestMethod = Gikam.getPageObject({
     getItemGroupListColumns : function() {
         return [ {
             checkbox : true
+        }, {
+            index : true
         }, Gikam.status.getActiveColumn(), {
             field : 'itemGroup',
             title : 'T_EMC_ITEM_GROUP.ITEMGROUP',
             validators : [ 'strLength[0,40]' ],
             editor : true,
             type : 'script',
-            onChange : function (field, value) {
+            onDataChange : function (field, value) {
                 let replacedValue = value.replace(/\s_mst\w*="\d+"/g, '').replace(/<p><br><\/p>/g, '').replace(/<p>/g, '').replace(/<\/p>/g, '');
                 this.setData({
                     id : this.getActivedRow().id,
                     itemGroup : replacedValue
                 })
             }
+        },{
+            field : 'sortNo',
+            title : '排序',
+            type:'number',
+            editor : true,
         } ];
     },
 
@@ -564,7 +622,7 @@ var emcTestMethod = Gikam.getPageObject({
         }, {
             field : 'result',
             title : 'T_EMC_ITEM_RESULT.RESULT',
-            validators : [ 'strLength[0,10]' ],
+            validators : [ 'strLength[0,100]' ],
             editor : true
         } ];
     },
@@ -603,7 +661,6 @@ var emcTestMethod = Gikam.getPageObject({
     getItemListColumns : function() {
         return [ {
             checkbox : true,
-            fixed : true
         },  {
             field : 'orderNo',
             title : 'T_EMC_ITEM.ORDERNO',
@@ -612,23 +669,32 @@ var emcTestMethod = Gikam.getPageObject({
             type : 'number',
             hasArrow : true,
             editor : true,
-            fixed : true
         }, {
             field : 'itemName',
             title : 'T_EMC_ITEM.ITEMNAME',
             type : 'link',
-            fixed : true
         }, {
             field : 'itemAliasName',
             title : 'T_EMC_ITEM.ITEMALIASNAME',
             type : 'script',
             editor : true,
-            fixed : true,
-            onChange : function (field, value) {
+            onDataChange : function (field, value) {
                 let replacedValue = value.replace(/\s_mst\w*="\d+"/g, '').replace(/<p><br><\/p>/g, '').replace(/<p>/g, '').replace(/<\/p>/g, '');
                 this.setData({
                     id : this.getActivedRow().id,
                     itemAliasName : replacedValue
+                })
+            }
+        }, {
+            field : 'originalRecordName',
+            title : 'T_EMC_ITEM.ORIGINALRECORDNAME',
+            editor : true,
+            type : 'script',
+            onDataChange : function (field, value) {
+                let replacedValue = value.replace(/\s_mst\w*="\d+"/g, '').replace(/<p><br><\/p>/g, '').replace(/<p>/g, '').replace(/<\/p>/g, '');
+                this.setData({
+                    id : this.getActivedRow().id,
+                    originalRecordName : replacedValue
                 })
             }
         }, {
@@ -638,7 +704,6 @@ var emcTestMethod = Gikam.getPageObject({
             type : 'number',
             hasArrow : true,
             editor : true,
-            fixed : true
         }, Gikam.status.getActiveColumn(),{
             field : 'unitName',
             title : 'T_EMC_ITEM.UNITNAME',
@@ -737,11 +802,11 @@ var emcTestMethod = Gikam.getPageObject({
             },
             editor : true
         }, {
-            field : 'itemQcIndexAndRevision',
+            field : '',
             title : 'T_EMC_ITEM.ITEMQCINDEXANDREVISION',
             formatter : function(i, v, r) {
-                return Gikam.printf('<a href="javascript:;" onclick="emcTestMethod.editPage.editQcIndexAndRevision(\'{index}\')">{name}</a>', {
-                    index : i,
+                return Gikam.printf('<a href="javascript:;" onclick="emcTestMethod.editPage.editQcIndexAndRevision(\'{id}\')">{name}</a>', {
+                    id : r.id,
                     name : 'QC指标和分段修约'
                 });
             }
@@ -828,7 +893,7 @@ var emcTestMethod = Gikam.getPageObject({
                 standardSet : 'Default'
             },
             editor : true,
-            onChange : function (field, value, rowIndex, oldValue, text) {
+            onDataChange : function (field, value, rowIndex, oldValue, text) {
                 if (text.indexOf('数字') !== -1) {
                     this.setData({
                         index : rowIndex,
@@ -930,18 +995,6 @@ var emcTestMethod = Gikam.getPageObject({
                 codeCategoryId : 'yesorno',
             },
             editor : true
-        },  {
-            field : 'originalRecordName',
-            title : 'T_EMC_ITEM.ORIGINALRECORDNAME',
-            editor : true,
-            type : 'script',
-            onChange : function (field, value) {
-                let replacedValue = value.replace(/\s_mst\w*="\d+"/g, '').replace(/<p><br><\/p>/g, '').replace(/<p>/g, '').replace(/<\/p>/g, '');
-                this.setData({
-                    id : this.getActivedRow().id,
-                    originalRecordName : replacedValue
-                })
-            }
         }, {
             field : 'highLimit',
             title : 'T_EMC_ITEM.HIGHLIMIT',
@@ -961,8 +1014,8 @@ var emcTestMethod = Gikam.getPageObject({
             field : 'itemResult',
             title : 'T_EMC_ITEM.ITEMRESULT',
             formatter : function(i, v, r) {
-                return Gikam.printf('<a href="javascript:;" onclick="emcTestMethod.editPage.editResult(\'{index}\')">{name}</a>', {
-                    index : i,
+                return Gikam.printf('<a href="javascript:;" onclick="emcTestMethod.editPage.editResult(\'{id}\')">{name}</a>', {
+                    id : r.id,
                     name : '配置结果'
                 });
             }
@@ -1007,6 +1060,16 @@ var emcTestMethod = Gikam.getPageObject({
             },
             editor : true
         }, {
+              field : 'ext$.limitscientific',
+              title : '检出项是否科学计数法',
+              type : 'select',
+              search : false,
+              category : 'sys',
+              param : {
+                  codeCategoryId : 'yesorno',
+              },
+              editor : true
+          }, {
             field : 'negativeToZero',
             title : 'T_EMC_ITEM.NEGATIVETOZERO',
             type : 'select',
@@ -1040,7 +1103,7 @@ var emcTestMethod = Gikam.getPageObject({
             editor : true
         }, {
             field : 'ext$.theorycontent',
-            title : 'T_EMC_ITEM.THEORYCONTENT',
+            title : '标点值',
             editor : true
         }, {
             field : 'ext$.judgebasis',
@@ -1088,7 +1151,7 @@ var emcTestMethod = Gikam.getPageObject({
             title : 'T_EMC_ITEM.ITEMALIASNAME',
             validators : [ 'strLength[0,42]' ],
             type : 'script',
-            onChange : function (field, value) {
+            onDataChange : function (field, value) {
                 let replacedValue = value.replace(/\s_mst\w*="\d+"/g, '').replace(/<p><br><\/p>/g, '').replace(/<p>/g, '').replace(/<\/p>/g, '');
                 this.setData({
                     itemAliasName : replacedValue
@@ -1184,7 +1247,7 @@ var emcTestMethod = Gikam.getPageObject({
             param : {
                 standardSet : 'Default'
             },
-            onChange : function(field, value, index, oldValue, text) {
+            onDataChange : function(field, value, index, oldValue, text) {
                 var resultCategory = 'number';
                 if (text.indexOf('字符') > -1) {
                     resultCategory = 'char';
@@ -1653,7 +1716,7 @@ var emcTestMethod = Gikam.getPageObject({
             single : true,
             onBeforeChoose : function(index) {
                 return {
-                    orgId_SEQ : this.getData()[index].orgId,
+                    orgId_SB : this.getData()[index].orgId,
                 }
             },
             onAfterChoose : function(rows,index) {
@@ -1917,7 +1980,14 @@ var emcTestMethod = Gikam.getPageObject({
             field : 'ext$.testmethodbasis',
             title : 'T_EMC_TEST_METHOD.TESTMETHODBASIS',
             readonly : true
-        } ];
+        }, {
+         field : 'ext$.replaceflag',
+         title : '是否淋洗液替换方法',
+         type : 'select',
+         category : 'yesorno',
+         editor : true,
+         width : 150
+     } ];
     },
 
     getOperateInfoFormFields : function() {
@@ -2018,6 +2088,12 @@ var emcTestMethod = Gikam.getPageObject({
 
     getItemOperateInfoFormFields : function() {
         return [ {
+            field : 'orderNo',
+            title : 'T_EMC_ITEM.ORDERNO',
+            validators : [ 'integer' ],
+            type : 'number',
+            editor : true,
+        },{
             field : 'itemName',
             title : 'T_EMC_ITEM.ITEMNAME',
             validators : [ 'strLength[0,42]' ],
@@ -2028,6 +2104,17 @@ var emcTestMethod = Gikam.getPageObject({
             validators : [ 'strLength[0,42]' ],
             preInsert : true
         }, {
+            field : 'originalRecordName',
+            title : 'T_EMC_ITEM.ORIGINALRECORDNAME',
+            editor : true,
+            type : 'script',
+            onChange : function(field, value, index) {
+                let replacedValue = value.replace(/\s_mst\w*="\d+"/g, '').replace(/<p><br><\/p>/g, '').replace(/<p>/g, '').replace(/<\/p>/g, '');
+                this.setData({
+                    originalRecordName : replacedValue
+                })
+            }
+        },{
             field : 'unitName',
             title : 'T_EMC_ITEM.UNITNAME',
             type : 'choose',
@@ -2185,7 +2272,7 @@ var emcTestMethod = Gikam.getPageObject({
             editor : true
         }, {
             field : 'ext$.theorycontent',
-            title : 'T_EMC_ITEM.THEORYCONTENT',
+            title : '标点值',
             editor : true
         }, {
             field : 'ext$.judgebasis',
@@ -2231,6 +2318,14 @@ var emcTestMethod = Gikam.getPageObject({
             field : 'ext$.testcategory',
             title : 'T_EMC_TEST_METHOD.TESTCATEGORY'
         }, {
+            field : 'testClass',
+            title : 'T_EMC_TEST_METHOD.TESTCLASS',
+            type : 'select',
+            category : 'sys',
+            param : {
+                codeCategoryId : 'testClass',
+            },
+        }, {
             field : 'ext$.testname',
             title : 'T_EMC_TEST_METHOD.TESTNAME'
         }, {
@@ -2250,11 +2345,28 @@ var emcTestMethod = Gikam.getPageObject({
             field : 'ext$.itemtestcategory',
             title : 'T_EMC_TEST_METHOD.TESTCATEGORY',
         }, {
+            field : 'ext$.testclass',
+            title : 'T_EMC_TEST_METHOD.TESTCLASS',
+            type : 'select',
+            category : 'sys',
+            param : {
+                codeCategoryId : 'testClass',
+            },
+        },{
             field : 'ext$.testname',
             title : 'T_EMC_ITEM.TESTNAME'
         }, {
             field : 'ext$.methodname',
             title : 'T_EMC_ITEM.METHODNAME'
+        },{
+            field : 'ext$.testmethodtype',
+            title : 'T_EMC_TEST_METHOD_TESTMETHODTYPE',
+            type : 'select',
+            search : false,
+            category : 'sys',
+            param : {
+                codeCategoryId : 'testMethodType',
+            },
         }, {
             field : 'itemName',
             title : 'T_EMC_ITEM.ITEMNAME'
@@ -2275,8 +2387,37 @@ var emcTestMethod = Gikam.getPageObject({
 
     getItemGroupChooseListColumns : function() {
         return [ {
+            field : 'ext$.testcategoryid',
+            title : 'T_EMC_DATA_CORRELATION_ITEM.TESTCATEGORYID',
+            width : 130,
+            type : 'select',
+            search : true,
+            category : 'testCategory'
+        }, {
+            field : 'ext$.testname',
+            title : 'T_EMC_TEST_METHOD.TESTNAME',
+            width : 130,
+        },{
             field : 'itemGroup',
-            title : 'T_EMC_ITEM_GROUP.ITEMGROUP'
+            title : 'T_EMC_ITEM_GROUP.ITEMGROUP',
+            width : 130,
+        },{
+            field : 'ext$.testmethodtype',
+            title : 'T_EMC_TEST_METHOD_TESTMETHODTYPE',
+            type : 'select',
+            search : false,
+            category : 'sys',
+            param : {
+                codeCategoryId : 'testMethodType',
+            },
+        }, {
+            field : 'ext$.methodname',
+            title : 'T_EMC_TEST_METHOD.METHODNAME',
+            width : 130,
+        }, {
+            field : 'ext$.testmethodbasis',
+            title : 'T_EMC_TEST_METHOD.TESTMETHODBASIS',
+            width : 170,
         }, ];
     },
 
@@ -2293,31 +2434,16 @@ var emcTestMethod = Gikam.getPageObject({
             editor : true,
             width : 425,
             preInsert : true,
-            //type : 'script',
-            /*onChange : function (field, value, rowIndex, oldValue) {
-                var grid = this;
-                let replacedValue = value.replace(/\s_mst\w*="\d+"/g, '').replace(/<p><br><\/p>/g, '').replace(/<p>/g, '').replace(/<\/p>/g, '');
-                debugger;
-                Gikam.post('/secure/emc/module/mdm/bizmdm/test/queries', Gikam.getJsonWrapper({
-                    f : {
-                        testName_EQ : replacedValue
-                    },
-                })).done(function (data) {
-                    if(!Gikam.isEmpty(data.rows)){
-                        Gikam.alert("测试名称已存在，不能更改！");
-                        grid.setData({
-                            index : rowIndex,
-                            testName : oldValue
-                        })
-                    }else{
-                        grid.setData({
-                            id : grid.getActivedRow().id,
-                            testName : replacedValue
-                        })
-                    }
-                })
-            }*/
-        }, ];
+        }, {
+            field: 'testFlag',
+            title: '是否报告质控统计',
+            type: 'select',
+            category : 'sys',
+            param : {
+                codeCategoryId : 'yesorno',
+            },
+            editor : true
+        }];
     },
 
     getTestChooseListColumns : function() {
@@ -2334,6 +2460,14 @@ var emcTestMethod = Gikam.getPageObject({
         return [ {
             field : 'ext$.testcategory',
             title : 'T_EMC_TEST_METHOD.TESTCATEGORY'
+        }, {
+            field : 'testClass',
+            title : 'T_EMC_TEST_METHOD.TESTCLASS',
+            type : 'select',
+            category : 'sys',
+            param : {
+                codeCategoryId : 'testClass',
+            },
         }, {
             field : 'testId',
             title : 'T_EMC_TEST_METHOD.TESTID'
@@ -2434,7 +2568,7 @@ var emcTestMethod = Gikam.getPageObject({
             param : {
                 codeCategoryId : 'calfunc'
             },
-            onChange : function() {
+            onDataChange : function() {
                 var formData = Gikam.getComp('emc-item-script-detail-base-info-form').getData();
 
                 var script = formData.func + "(" + (Gikam.isEmpty(formData.scriptItemName) ? "" : formData.scriptItemName) + "); ";
@@ -2454,7 +2588,7 @@ var emcTestMethod = Gikam.getPageObject({
             type : 'textarea',
             rows : 10,
             height : 300,
-            onChange : function(field, value) {
+            onDataChange : function(field, value) {
                 this.setData({
                     'script' : value,
                     'scriptFlag' : Gikam.isEmpty(value) ? '0' : '1',
@@ -2658,7 +2792,7 @@ var emcTestMethod = Gikam.getPageObject({
                 });
             }
         }, {
-            field : 'itemQcIndexAndRevision',
+            field : '',
             title : 'T_EMC_ITEM.ITEMQCINDEXANDREVISION',
             formatter : function(i, v, r) {
                 return Gikam.printf('<a href="javascript:;" onclick="emcTestMethod.updatePage.editQcIndexAndRevision(\'{index}\')">{name}</a>', {
@@ -2801,7 +2935,7 @@ var emcTestMethod = Gikam.getPageObject({
                 templateUse : 'methodParam'
             },
             editor : true,
-            onChange : function(field, value, index, oldValue, text) {
+            onDataChange : function(field, value, index, oldValue, text) {
 
                 var formData = Gikam.getComp('emc-method-param-edit-test-method-list-form');
                 var tmplId = value;
@@ -2903,7 +3037,7 @@ var emcTestMethod = Gikam.getPageObject({
                 templateUse : 'methodParam'
             },
             editor : true,
-            onChange : function(field, value, index, oldValue, text) {
+            onDataChange : function(field, value, index, oldValue, text) {
 
                 var formData = Gikam.getComp('emc-method-param-edit-test-method-list-form');
                 var tmplId = value;
@@ -2985,7 +3119,7 @@ var emcTestMethod = Gikam.getPageObject({
         } ];
     },
 
-    getRunTestMethodParamSelectColumns : function(orderTaskId) {
+    getRunTestMethodParamSelectColumns : function(runId) {
         return [ {
             field : 'templateUse',
             title : 'T_EMC_PROPERTY_TMPL.TEMPLATEUSE',
@@ -2997,7 +3131,7 @@ var emcTestMethod = Gikam.getPageObject({
                 templateUse : 'methodParam'
             },
             editor : true,
-            onChange : function(field, value, index, oldValue, text) {
+            onDataChange : function(field, value, index, oldValue, text) {
 
                 var formData = Gikam.getComp('emc-method-param-edit-test-method-list-form');
                 var tmplId = value;
@@ -3070,18 +3204,25 @@ var emcTestMethod = Gikam.getPageObject({
                             validators.push('strLength[0,' + item.fieldLength + ']');
                         }
 
-                        return Gikam.deepExtend({}, baseFileds, getFiledsFromType, validators)
+                        return Gikam.deepExtend({}, baseFileds, getFiledsFromType, {validators:validators})
                     })
                     formData.options.fields = fileds;
                     formData.registerValidators();
                     formData.refreshFields([ {
                         fields : fileds
                     } ])
-                    Gikam.getJson('/secure/emc/module/mdm/basemdm/property-tmpls/result-order-task/' + tmplId + '/property-datas/' + orderTaskId).done(function(data) {
+                    // Gikam.getJson('/secure/emc/module/mdm/basemdm/property-tmpls/result-order-task/' + tmplId + '/property-datas/' + orderTaskId).done(function(data) {
+                    //     formData.cleanData();
+                    //     formData.setData(data, false);
+                    //
+                    // });
+
+                    Gikam.getJson('/secure/emc/module/mdm/basemdm/property-tmpls/result-runs/property-datas/'  + runId).done(function(data) {
                         formData.cleanData();
                         formData.setData(data, false);
 
                     });
+
                 });
             },
         } ];
@@ -3099,7 +3240,7 @@ var emcTestMethod = Gikam.getPageObject({
                 templateUse : 'methodParam'
             },
             editor : true,
-            onChange : function(field, value, index, oldValue, text) {
+            onDataChange : function(field, value, index, oldValue, text) {
 
                 var formData = Gikam.getComp('emc-method-param-edit-test-method-list-form');
                 var tmplId = value;
@@ -3229,6 +3370,25 @@ var emcTestMethod = Gikam.getPageObject({
                     }
                 });
             },
+        }, {
+            field : 'testClass',
+            title : 'T_EMC_TEST_METHOD.TESTCLASS',
+            type : 'select',
+            category : 'sys',
+            param : {
+                codeCategoryId : 'testClass',
+            },
+            editor : true,
+        },{
+            field : 'testMethodType',
+            title : 'T_EMC_TEST_METHOD_TESTMETHODTYPE',
+            type : 'select',
+            search : false,
+            category : 'sys',
+            param : {
+                codeCategoryId : 'testMethodType',
+            },
+            editor : true
         }, {
             field : 'ext$.testname',
             title : 'T_EMC_TEST_METHOD.TESTNAME',

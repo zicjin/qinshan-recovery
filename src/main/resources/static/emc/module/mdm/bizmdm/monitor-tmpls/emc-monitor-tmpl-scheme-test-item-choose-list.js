@@ -230,6 +230,8 @@ emcMonitorTmpl.schemeTestItemChoosePage = {
             type : 'shuttleFrame',
             id : 'emc-monitor-tmpl-order-task-addition-item-group-choose-mult-list-shuttle-frame',
             columns : emcMonitorTmpl.getItemGroupShuttleFrameColumns(),
+            rightPage : false,
+            leftPage : false,
             onAddClick : function(data, left, right) {
                 _this.setFormEditStatus(right);
                 _this.filterSameAdd(data, left, right);

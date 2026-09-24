@@ -7,12 +7,16 @@ emcSamplingPlan.editPage = {
             id : 'emc-sampling-plan-project-list-grid',
             url : IFM_CONTEXT + '/secure/emc/module/bp/project/projects/queries',
             columns : emcSamplingPlan.getProjectListColumns(),
+            service : 'emcProjectServiceImpl',
             filterOpen : true,
             page : true,
             requestData : {
                 targetType: 'samplePlaning',
-	            orgId_SB : workspace.user.ext$.parentorgid,
+	            org_filter : '1',
                 sample_DIFFER : '0',
+            },
+            order: {
+                urgent: 'desc'
             },
             onCellClick : function(field, row) {
                 if (field === 'projNo') {
@@ -25,7 +29,8 @@ emcSamplingPlan.editPage = {
                         requestData : {
                             source_SEQ : 'monitorscheme',
                             orgId : workspace.user.ext$.parentorgid,
-                            projId_SEQ : row.id
+                            projId_SEQ : row.id,
+                            termination_DIFFER : '1',
                         },
                         url : emcSamplingPlan.baseUrl + '/queries/raw',
                     });
@@ -40,19 +45,77 @@ emcSamplingPlan.editPage = {
             },
             toolbar : [ {
                 type : 'button',
-                text : 'EMC.MODULE.BP.SAMPLE.SAMPLINGPLANS.BUTTON.ADDVOC',
-                icon : 'submit',
-                hidden : true,
+                text : '批量安排采样信息',
+                icon : 'add',
                 onClick : function() {
-                    _this.vocPage();
+                    _this.updateFolderInfo();
                 }
             }, {
                 type : 'button',
-                text : 'GIKAM.BUTTON.PREVIEW',
+                text : '批量提交',
+                icon : 'submit',
+                onClick : function() {
+                    _this.submitFolder();
+                }
+            }, {
+                type : 'button',
+                text : '批量退回',
+                icon : 'reject',
+                onClick : function() {
+                    _this.batchBack();
+                }
+            }, {
+                type : 'button',
+                text : '任务流转单',
                 icon : 'print',
                 onClick : function() {
                     Gikam.viewReport('xianchanglianxi', Gikam.getComp('emc-sampling-plan-project-list-grid').getSelections());
                 }
+            },{
+                type : 'form',
+                autoSave : false,
+                fields : [ {
+                    field : 'dateSelect',
+                    type : 'select',
+                    value : '1',
+                    width : '80',
+                    items: [{"value": '1', "text": "全部"},
+                        {"value": '2', "text": "本月"},
+                        {"value": '3', "text": "本季度"},
+                        {"value": '4', "text": "历史"}],
+                    refreshGrid : false,
+                    onChange : function(field, value, index) {
+                        var requestData;
+                        if(value == '2'){
+                            requestData = {
+                                requiredCompleteDate_DL : '',
+                                requiredCompleteDateFilter : '1',
+                                requiredCompleteDateQuarterFilter : ''
+                            };
+                        }else if(value == '4'){
+                            requestData = {
+                                requiredCompleteDate_DL : Gikam.DateUtils.formatter(new Date(), 'yyyy-MM-dd'),
+                                requiredCompleteDateFilter : '',
+                                requiredCompleteDateQuarterFilter : ''
+                            };
+                        }else if(value == '3'){
+                            requestData = {
+                                requiredCompleteDate_DL : '',
+                                requiredCompleteDateFilter : '',
+                                requiredCompleteDateQuarterFilter : '1'
+                            };
+                        }else {
+                            requestData = {
+                                requiredCompleteDate_DL : '',
+                                requiredCompleteDateFilter : '',
+                                requiredCompleteDateQuarterFilter : ''
+                            };
+                        }
+                        Gikam.getComp('emc-sampling-plan-project-list-grid').refresh({
+                            requestData : requestData
+                        });
+                    },
+                } ]
             }]
         }
     },
@@ -122,6 +185,13 @@ emcSamplingPlan.editPage = {
                 }
             }, {
                 type : 'button',
+                text : 'EMC.MODULE.BP.SAMPLE.SAMPLINGPLANS.BUTTON.SYNC_CONTAINER_INFO',
+                icon : 'refresh',
+                onClick : function() {
+                    _this.syncFolderContainerInfo();
+                },
+            },{
+                type : 'button',
                 text : 'EMC.MODULE.BP.SAMPLE.SAMPLINGPLANS.BUTTON.DEL_FOLDER',
                 icon : 'remove',
                 hidden : true,
@@ -132,6 +202,7 @@ emcSamplingPlan.editPage = {
                 type : 'button',
                 text : 'GIKAM.BUTTON.SEARCH',
                 icon : 'search',
+                hidden : true,
                 onClick : function() {
                     Gikam.create('modal', {
                         title : 'EMC.MODULE.BP.SAMPLE.SAMPLINGPLANS.MODAL.QUERY_SANPLE_PLAN',
@@ -161,28 +232,23 @@ emcSamplingPlan.editPage = {
                 }
             }],
             group : {
-                fields : [ 'ext$.areaname', 'ext$.projname' ],
-                formatter : function(row) {
-                    if (row.ext$.areaname) {
-                        return row.ext$.areaname + '-' + row.ext$.projname;
-                    }
-                    return row.ext$.projname;
-                }
+                fields : [ 'orderCategory' ],
             }
         }
     },
 
     submit : function() {
         var grid = Gikam.getComp('emc-sampling-plan-edit-list-grid');
-    	var url = Gikam.printf(emcSamplingPlan.baseUrl + '/action/submit-remind');
-	 	var that = this;
 	 	var selections =  grid.getSelections();
-	 	//至少选择
         if (Gikam.isEmpty(selections)) {
             Gikam.alert('GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM');
             return;
         }
-	    Gikam.postText(url,Gikam.getJsonWrapper({},[ '', selections ])).done(function(message) {
+        var project = Gikam.getComp('emc-sampling-plan-project-list-grid').getActivedRow();
+        if (!Gikam.getComp('emc-sampling-plan-project-list-grid').validate([project])) {
+            return;
+        }
+	    Gikam.postText(emcSamplingPlan.baseUrl + '/action/submit-remind',Gikam.getJsonWrapper({},[ '', selections ])).done(function(message) {
 	    	if(Gikam.isEmpty(message)){
 		          if (grid.validate(selections)) {
 		              Gikam.create('workflow').submit({
@@ -213,6 +279,113 @@ emcSamplingPlan.editPage = {
 
     },
 
+    submitFolder : function() {
+        var _this = this;
+
+        var selections = Gikam.getComp('emc-sampling-plan-project-list-grid').getSelections();
+
+        if (Gikam.isEmpty(selections)) {
+            Gikam.alert('GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM');
+            return;
+        }
+        if (!Gikam.getComp('emc-sampling-plan-project-list-grid').validate(selections)) {
+            return;
+        }
+
+        let modal = Gikam.create('modal', {
+            title: "意见",
+            width : 400,
+            height : 180,
+        });
+        var layout = Gikam.create('layout', {
+            renderTo: modal.window.$dom,
+            center: {
+                items: [ {
+                    type: 'btnToolbar',
+                    items: [ {
+                        type : 'button',
+                        text : 'GIKAM.BUTTON.CONFIRM',
+                        class : 'blue',
+                        onClick : function() {
+                            if (form.validate()) {
+                                let data = {
+                                    comment : form.getData().comment
+                                }
+                                Gikam.getLastModal().window.showMask(true);
+                                Gikam.post(IFM_CONTEXT + '/secure/emc/module/bp/bp/folders/action/submit-project', Gikam.getJsonWrapper(data, [ 'emcProjectServiceImpl', selections ])).done(function() {
+                                    Gikam.getComp('emc-sampling-plan-project-list-grid').refresh();
+                                }).always(function() {
+                                    Gikam.getLastModal().window.closeMask();
+                                    modal.close();
+                                });
+                            }
+                        }
+                    }, {
+                        type : 'button',
+                        text : 'GIKAM.BUTTON.CANCEL',
+                        onClick : function () {
+                            modal.close();
+                        }
+                    } ]
+                }]
+            }
+        });
+
+        var form = Gikam.create('form', {
+            renderTo: layout.options.center.$dom,
+            columns: 1,
+            titleWidth: 80,
+            fields: [
+                {
+                    field : 'comment',
+                    title : '意见',
+                    type : 'textarea',
+                }
+            ],
+            autoSave: false
+        });
+
+        form.setData({
+            projNo : selections[0].projNo
+        })
+    },
+
+    updateFolderInfo : function() {
+        var _this = this;
+
+        var selections = Gikam.getComp('emc-sampling-plan-project-list-grid').getSelections();
+
+        if (Gikam.isEmpty(selections)) {
+            Gikam.alert('GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM');
+            return;
+        }
+        var sampleData = Gikam.getComp('emc-sampling-plan-edit-list-grid').getData();
+        let sampleOrgIds = sampleData.map(e => e.sampleOrgId).join(',');
+
+        Gikam.create('modal', {
+            title : 'EMC.MODULE.BP.SAMPLE.SAMPLINGPLANS.MODAL.SAMPLEINFO',
+            width : 800,
+            height : 600,
+            url : '/secure/emc/module/bp/sample/sampling-plans/page/sample-info' + Gikam.param({
+                single : true,
+                project : 1,
+                ids: sampleOrgIds
+            }),
+            onAfterClose : function(saveData) {
+                if (Gikam.isEmpty(saveData)) {
+                    return;
+                }
+                workspace.window.showMask(true);
+                Gikam.post(IFM_CONTEXT + '/secure/emc/module/bp/bp/folders/action/update-by-project', Gikam.getJsonWrapper({}
+                    , [ 'emcProjectServiceImpl', selections ], [ 'emcFolderServiceImpl', [saveData] ])).done(function(r) {
+                    Gikam.getComp('emc-sampling-plan-project-list-grid').refresh();
+                }).always(function() {
+                    workspace.window.closeMask();
+                });
+            }
+        });
+    },
+
     updateSampleInfo : function() {
         var _this = this;
 
@@ -237,7 +410,23 @@ emcSamplingPlan.editPage = {
                 firstDate : selections[0].planSampleDate,
                 sceneUserName : selections[0].sceneUserId,
                 sampleUserName : selections[0].sampleUserId,
-            })
+            }),
+            onAfterClose : function(data) {
+                if (Gikam.isEmpty(data)) {
+                    return;
+                }
+                let saveData = selections.map(function (item) {
+                    return Gikam.extend({
+                        id: item.id
+                    }, data);
+                });
+                workspace.window.showMask();
+                Gikam.put(IFM_CONTEXT + '/secure/gikam/actions/instant', Gikam.getJsonWrapper({}, [ 'emcFolderServiceImpl', saveData ])).done(function() {
+                    Gikam.getComp('emc-sampling-plan-edit-list-grid').refresh();
+                }).always(function() {
+                    workspace.window.closeMask();
+                });
+            }
         });
     },
 
@@ -281,6 +470,26 @@ emcSamplingPlan.editPage = {
         }).done(function() {
             //Gikam.getComp('emc-sampling-plan-edit-list-grid').refresh();
             Gikam.getComp('emc-sampling-plan-project-list-grid').refresh();
+        });
+    },
+
+    batchBack : function() {
+        // 允许回退多条
+        var grid = Gikam.getComp('emc-sampling-plan-project-list-grid');
+        Gikam.create('workflow').undo({
+            data : grid.getSelections(),
+            pageObject : {
+                baseUrl : IFM_CONTEXT + '/secure/emc/module/bp/project/projects',
+                workflow : {
+                    dbTable : 'T_EMC_PROJECT',
+                    columns : [ {
+                        field : 'id',
+                        title : 'T_EMC_PROJECT.ID'
+                    } ]
+                }
+            }
+        }).done(function() {
+            grid.refresh();
         });
     },
 
@@ -504,6 +713,23 @@ emcSamplingPlan.editPage = {
             workspace.window.showMask(true);
             Gikam.postText(IFM_CONTEXT + '/secure/emc/module/bp/bp/order-tasks/action/sync-order-container-info', Gikam.getJsonWrapper({}, ['', selections] )).done(function() {
                 Gikam.getComp('emc-sampling-plan-edit-list-order-grid').refresh();
+            }).always(function() {
+                workspace.window.closeMask();
+            });
+        })
+    },
+
+    syncFolderContainerInfo : function() {
+        var selections = Gikam.getComp('emc-sampling-plan-edit-list-grid').getSelections();
+        if (Gikam.isEmpty(selections)) {
+            Gikam.alert('GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM');
+            return;
+        }
+
+        Gikam.confirm('GIKAM.TIP.CONFIRM', 'EMC.MODULE.BP.SAMPLE.SAMPLINGPLANS.TIP.SYNC_OVERRIDE_CONTAINER_INFO', function() {
+            workspace.window.showMask(true);
+            Gikam.postText(IFM_CONTEXT + '/secure/emc/module/bp/bp/order-tasks/action/sync-folder-container-info', Gikam.getJsonWrapper({}, ['', selections] )).done(function() {
+                Gikam.getComp('emc-sampling-plan-edit-list-grid').refresh();
             }).always(function() {
                 workspace.window.closeMask();
             });
@@ -889,7 +1115,7 @@ emcSamplingPlan.editPage = {
             id : 'emc-sampling-plan-edit-list-layout',
             renderTo : workspace.window.$dom,
             west : {
-                width : 300,
+                width : '50%',
                 items : [ _this.getProjectGridParam() ]
             },
             center : {

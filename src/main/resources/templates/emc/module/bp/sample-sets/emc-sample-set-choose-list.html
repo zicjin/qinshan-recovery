@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/emc/module/bp/sample-sets/emc-sample-set.js',
+                      '/static/emc/module/bp/sample-sets/emc-sample-set-choose-list.js'
+                    ]);
+    emcSampleSet.choosePage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>
+

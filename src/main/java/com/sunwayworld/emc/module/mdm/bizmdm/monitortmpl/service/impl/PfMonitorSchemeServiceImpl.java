@@ -51,7 +51,13 @@ public class PfMonitorSchemeServiceImpl extends EmcMonitorSchemeServiceImpl {
 		List<EmcMonitorSchemeBean> deleteSchemeList = originalSchemeList.stream().filter(scheme -> !finalSchemeUniqueIdList.contains(scheme.getTestMethodId() + "$" + scheme.getItemGroupId())).collect(Collectors.toList());
 
 		if (!insertSchemeList.isEmpty()) {
-			insertSchemeList.forEach(scheme -> scheme.setId(ApplicationContextHelper.getNextIdentity()));
+			insertSchemeList.forEach(scheme -> {
+				scheme.setId(ApplicationContextHelper.getNextIdentity());
+				if (ObjectUtils.isEmpty(scheme.getExt$Item("defaultflag"))) {
+					scheme.setExt$Item("defaultflag", "1");
+				}
+				scheme.setExt$Item("enableflag", "1");
+			});
 			getDao().insert(insertSchemeList);
 		}
 

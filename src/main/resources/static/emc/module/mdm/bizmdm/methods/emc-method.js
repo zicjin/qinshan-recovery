@@ -52,8 +52,8 @@ var emcMethod = Gikam.getPageObject({
             editor : true,
             validators : [ 'strLength[0,200]' ],
         }, {
-            field : 'ext$.testmethodaliasbasis',
-            title : 'T_EMC_TEST_METHOD.TESTMETHODALIASBASIS',
+            field : 'trialScope',
+            title : '适用范围',
             editor : true,
         }, {
             field : 'beginDate',

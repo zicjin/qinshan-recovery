@@ -316,6 +316,11 @@ var emcOrderReceipt = Gikam.getPageObject({
             type : 'date',
             editor : true,
         }, {
+            field : 'acceptedTime',
+            title : 'T_EMC_SAMPLE.ACCEPTEDTIME',
+            type : 'time',
+            editor : true,
+        } , {
             field : 'ext$.compeletedate',
             title : 'T_EMC_SAMPLE.COMPELETEDATE',
             type : 'date',

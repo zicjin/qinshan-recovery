@@ -11,7 +11,7 @@ emcSubpackage.editPage = {
             page : true,
             requestData : {
                 subpackageType_SEQ : 'create',
-                orgId_SB: workspace.user.ext$.parentorgid,
+                org_filter : '1',
                 status_IN : '0,1,2'
             },
             rowStyleFormatter : function(row) {

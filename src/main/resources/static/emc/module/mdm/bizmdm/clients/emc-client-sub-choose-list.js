@@ -10,9 +10,10 @@ emcClient.subChoosePage = {
             type : 'grid',
             id : 'emc-client-sub-choose-list-grid',
             url : emcClient.baseUrl + '/sub-clients/queries/choosable',
-            requestData : requestData,
+            // requestData : requestData,
             columns : columns,
             filterOpen : true,
+            page : true,
             onCellClick : function(field, row) {
                 field === 'clientNo' && _this.loadDetailPage(row.id);
             },
@@ -49,6 +50,19 @@ emcClient.subChoosePage = {
                 id : 'emc-client-sub-choose-list-form',
                 fields : emcClient.getClientSubFormFields(requestData),
                 autoSave : false,
+                onRendered : function(){
+                    Gikam.getComp('emc-client-sub-choose-list-form').setData({
+                        showFlag : '1',
+                    });
+                    // workspace.window.showMask(true);
+                    // Gikam.getComp('emc-client-sub-choose-list-grid').refresh({
+                    //     requestData : {
+                    //         id_SEQ : '',
+                    //     }
+                    // }).done(function() {
+                    //     workspace.window.closeMask();
+                    // });
+                }
             }, ]
         }
     },

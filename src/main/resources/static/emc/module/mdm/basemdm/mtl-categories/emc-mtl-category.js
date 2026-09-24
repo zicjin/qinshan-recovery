@@ -52,7 +52,7 @@ var emcMtlCategory = Gikam.getPageObject({
             title : 'T_EMC_MTL_CATEGORY.MANAGEMENTTYPE',
             validators : [ 'notEmpty' ],
             type : 'select',
-            firstBlank : false,
+            // firstBlank : false,
             category : 'sys',
             param : {
                 codeCategoryId : 'managementType',

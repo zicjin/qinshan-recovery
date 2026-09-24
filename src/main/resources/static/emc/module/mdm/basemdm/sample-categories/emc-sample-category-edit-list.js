@@ -7,7 +7,7 @@ emcSampleCategory.editPage = {
             id : 'emc-sample-category-edit-list-grid',
             url : emcSampleCategory.baseUrl + '/queries/raw',
             requestData : {
-                orgId_SB: workspace.user.ext$.parentorgid
+                org_filter : '1',
             },
             service : 'emcMonitorTmplServiceImpl',
             columns : emcSampleCategory.getEditListColumns(),

@@ -3,7 +3,7 @@ package com.sunwayworld.emc.module.mdm.equipt.equipt.service.impl;
 import java.util.Collections;
 import java.util.List;
 
-import edu.emory.mathcs.backport.java.util.Arrays;
+import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;

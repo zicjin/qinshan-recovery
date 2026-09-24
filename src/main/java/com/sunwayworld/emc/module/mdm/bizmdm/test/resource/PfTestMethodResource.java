@@ -37,4 +37,8 @@ public interface PfTestMethodResource extends EmcTestMethodResource {
     void copyDefaultQcTo(RestJsonWrapperBean wrapper);
 
     void syncTestId(RestJsonWrapperBean wrapper);
+
+    void beforeHandleCopyTo(RestJsonWrapperBean wrapper);
+
+    void scriptFileCopyTo(RestJsonWrapperBean wrapper);
 }

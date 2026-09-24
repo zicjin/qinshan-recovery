@@ -41,6 +41,12 @@ public class EmcEmpTrainBean extends AbstractInsertable<Long> implements Inserta
     private LocalDateTime createdTime;// 制单时间
     private String createdByOrgId;// 制单人单位编码
     private String createdByOrgName;// 制单人单位名称
+    @JSONField(format = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate trainBeginTime;// 培训开始时间
+    @JSONField(format = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate trainEndTime;// 培训结束时间
 
     public Long getId() {
         return id;
@@ -152,6 +158,22 @@ public class EmcEmpTrainBean extends AbstractInsertable<Long> implements Inserta
 
     public void setCreatedByOrgName(String createdByOrgName) {
         this.createdByOrgName = createdByOrgName;
+    }
+
+    public LocalDate getTrainBeginTime() {
+        return trainBeginTime;
+    }
+
+    public void setTrainBeginTime(LocalDate trainBeginTime) {
+        this.trainBeginTime = trainBeginTime;
+    }
+
+    public LocalDate getTrainEndTime() {
+        return trainEndTime;
+    }
+
+    public void setTrainEndTime(LocalDate trainEndTime) {
+        this.trainEndTime = trainEndTime;
     }
 
 }

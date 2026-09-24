@@ -13,13 +13,13 @@
                 refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
              <choose>
                <when test="year != null and month != null">
-                AND DATE_FORMAT(MONITORDATE,'%Y%m')=CONCAT(#{year},#{month})
+                AND TO_CHAR(MONITORDATE,'YYYYMM') = CONCAT(#{year},#{month})
                </when>
                <when test="year != null ">
-                AND DATE_FORMAT(MONITORDATE,'%Y')=#{year}
+                AND TO_CHAR(MONITORDATE,'YYYY')=#{year}
                </when>
                <when test="month != null ">
-                AND DATE_FORMAT(MONITORDATE,'%m')=#{month}
+                AND TO_CHAR(MONITORDATE,'MM')=#{month}
                </when>
              </choose>
             

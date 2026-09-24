@@ -8,13 +8,14 @@ emcMonitorTmpl.editPage = {
             url : emcMonitorTmpl.baseUrl + '/queries/raw',
             columns : emcMonitorTmpl.getEditListColumns(),
             service : 'emcMonitorTmplServiceImpl',
+            checkOnActive : true,
+            page : true,
             requestData : {
-                orgId_SB :  workspace.user.ext$.parentorgid,
+                org_filter : '1',
             },
             order : {
                 orderNo : 'asc'
             },
-            checkOnActive : true,
             deleteFormatter : function(row) {
                 return row.monitorTmplName || row.id;
             },
@@ -68,7 +69,6 @@ emcMonitorTmpl.editPage = {
                 type : 'button',
                 text : 'GIKAM.BUTTON.DELETE',
                 icon : 'remove-row',
-                hidden : true,
                 onClick : function() {
                     Gikam.getComp('emc-monitor-tmpl-edit-list-grid').deleteRows(emcMonitorTmpl.baseUrl);
                 }
@@ -190,6 +190,13 @@ emcMonitorTmpl.editPage = {
                         }
                     }, {
                         type : 'button',
+                        text : '复制',
+                        icon : 'copy',
+                        onClick : function() {
+                            _this.copyScheme();
+                        }
+                    },{
+                        type : 'button',
                         text : 'GIKAM.BUTTON.BATCH_INPUT',
                         icon : 'add',
                         onClick : function() {
@@ -209,14 +216,14 @@ emcMonitorTmpl.editPage = {
                         onClick : function() {
                             _this.enableSch();
                         }
-                    }, {
+                    }, /*{
                         type : 'button',
                         text : '同步单项SKU',
                         icon : 'refresh',
                         onClick : function() {
                             _this.syncSingleSku();
                         }
-                    }, {
+                    },*/ {
                         type : 'button',
                         text : '同步费用信息到',
                         icon : 'refresh',
@@ -228,6 +235,7 @@ emcMonitorTmpl.editPage = {
             } ]
         }
     },
+
 
     addScheme : function() {
         var schemeData = Gikam.getComp('emc-monitor-tmpl-edit-list-scheme-grid').getData();
@@ -274,7 +282,7 @@ emcMonitorTmpl.editPage = {
             title : Gikam.choose.getConfig('monitorTmpl').title,
             url : Gikam.choose.getConfig('monitorTmpl').url + Gikam.param({
                 id_DIFFER : activedMonitorTmpl.id,
-                orgId_SB : workspace.user.ext$.parentorgid,
+                org_filter : '1',
                 monitorTmplGroupId_SEQ : activedMonitorTmpl.monitorTmplGroupId
             }),
             width : Gikam.choose.getConfig('monitorTmpl').width,
@@ -322,6 +330,96 @@ emcMonitorTmpl.editPage = {
                 monitorSchemeId_SEQ : monitorSchemeId,
                 monitorTmplId : monitorTmpl.id
             })
+        });
+
+    },
+
+    copyScheme : function() {
+        var selections = Gikam.getComp('emc-monitor-tmpl-edit-list-scheme-grid').getSelections();
+        if (Gikam.isEmpty(selections)) {
+            Gikam.alert('GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM');
+            return;
+        }
+        var schemeName = selections[0].schemeName;
+        var schemeNameNotOnly = false;
+
+        selections.some(function(item) {
+            if (item.schemeName !== schemeName) {
+                schemeNameNotOnly = true;
+                return true;
+            }
+        });
+       if (schemeNameNotOnly ) {
+            Gikam.alert("只能选择同一方案名称");
+            return;
+        };
+        var modal = Gikam.create('modal', {
+            title: "方案名称",
+            width : 300,
+            height : 150,
+        });
+        var layout = Gikam.create('layout', {
+            renderTo: modal.window.$dom,
+            center: {
+                items: [ {
+                    type: 'btnToolbar',
+                    items: [ {
+                        type : 'button',
+                        text : 'GIKAM.BUTTON.CONFIRM',
+                        class : 'blue',
+                        onClick : function() {
+                            if (form.validate()) {
+                                var formData = form.getData();
+
+                                selections.map(function(item) {
+                                    item.schemeName = formData.schemeName
+                                });
+
+                                Gikam.getLastModal().window.showMask(true);
+                                Gikam.postText(Gikam.printf(emcMonitorTmpl.baseUrl + '/{id}/schemes', {
+                                    id : Gikam.getComp('emc-monitor-tmpl-edit-list-grid').getActivedRow().id
+                                }), Gikam.getJsonWrapper({schemeNameUnique : '1'}, [ '', selections ])).done(function(id) {
+                                    Gikam.getComp('emc-monitor-tmpl-edit-list-scheme-grid').refresh();
+
+                                    // 自动生成监测费用记录
+                                    var scheme = {
+                                        schemeId : id,
+                                        monitorTmplId :  Gikam.getComp('emc-monitor-tmpl-edit-list-grid').getActivedRow().id,
+                                        schemeName : formData.schemeName
+                                    }
+                                    Gikam.post(IFM_CONTEXT + '/secure/emc/module/mdm/bizmdm/monitor-tmpls' + '/costs', Gikam.getJsonWrapper({}, ['', [scheme]])).done(function () {
+                                        Gikam.getLastModal().close();
+                                    });
+
+                                }).always(function() {
+                                    Gikam.getLastModal().window.closeMask();
+                                });
+
+                            }
+                        }
+                    }, {
+                        type : 'button',
+                        text : 'GIKAM.BUTTON.CANCEL',
+                        onClick : function () {
+                            modal.close();
+                        }
+                    } ]
+                }]
+            }
+        });
+
+        var form = Gikam.create('form', {
+            renderTo: layout.options.center.$dom,
+            columns: 1,
+            titleWidth: 80,
+            fields: [
+                {
+                    field : 'schemeName',
+                    title : '方案名称',
+                    validators : [ 'notEmpty', 'strLength[0, 40]' ],
+                }
+            ],
+            autoSave: false
         });
 
     },
@@ -660,21 +758,12 @@ emcMonitorTmpl.editPage = {
         Gikam.create('layout', {
             id : 'emc-monitor-tmpl-edit-list-layout',
             renderTo : workspace.window.$dom,
-            north : {
-                height : '240',
+            west : {
+                width : '600',
                 items : [ this.getTmplGridParam() ]
             },
             center : {
-                items : [{
-                    type : 'layout',
-                    west : {
-                        width : '50%',
-                        items : [ this.getSchemeGridParam() ]
-                    },
-                    center : {
-                        items : [ this.getSchemeCostGridParam() ]
-                    }
-                }]
+                items : [ this.getSchemeGridParam() ]
             }
         });
     },

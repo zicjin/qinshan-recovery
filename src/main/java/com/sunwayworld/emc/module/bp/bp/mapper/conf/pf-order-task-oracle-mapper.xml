@@ -16,6 +16,7 @@
                        E.SAMPLEBEGINTIME,
                        E.PARENTORDERNO,
                        E.ACCEPTEDDATE,
+                       H.MONITORPOINTNO,
                        H.MONITORPOINTNAME,
                        H.FOLDERNO,
                        H.SAMPLEORGID,
@@ -33,10 +34,12 @@
                        E.REMARK,
                        E.SAMPLEID,
                        R.ITEMGROUP,
+                       R.ITEMGROUPID,
                        Y.TESTITEMSORT,
                        Y.ORGID AS TESTCAPCITYORGID,
                        M.MONITORTMPLGROUPID,
-                       QC.USECATEGORY
+                       QC.USECATEGORY,
+                       TM.TESTCLASS
                   FROM T_EMC_ORDER_TASK A
                   LEFT JOIN T_EMC_ORDER E
                     ON A.ORDERID = E.ID
@@ -56,13 +59,11 @@
                   LEFT JOIN T_EMC_MONITOR_TMPL M
                     ON A.MONITORTMPLID = M.ID
                   LEFT JOIN T_EMC_QC_CATEGORY QC ON A.QCCATEGORYID = QC.ID
+                  LEFT JOIN T_EMC_TEST_METHOD TM ON A.TESTMETHODID = TM.ID
               ) T
         <where>
             <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
-            <include refid="com.sunwayworld.emc.module.bp.project.project.mapper.EmcProjectMapper.projectStatusWhereClause">
-                <property name="tableAlias" value="T"/>
-                <property name="projectIdColumnName" value="PROJID"/>
-            </include>
+
             <if test='runId == "empty"'>
                 AND T.RUNID IS NULL
             </if>
@@ -105,6 +106,14 @@
             <if test='targetType == "samplingInput"'>
                 AND T.SUBCONTRACTORID IS NULL
             </if>
+            <!-- 筛选登录人的部门权限 -->
+            <if test="org_filter != null">
+                AND EXISTS (SELECT 1
+                              FROM T_CORE_USER_PERMISSION UP
+                             WHERE UP.PERMISSIONTYPEID = 'T_CORE_ORG'
+                               AND UP.TARGETID = T.TESTCAPCITYORGID
+                               AND UP.USERID = #{loginUser.id})
+            </if>
         </where>
         ORDER BY
         <choose>
@@ -130,13 +139,13 @@
                A.FIXATIVE,
                A.CONTAINERCATEGORYNAME,
                A.CONTAINERCATEGORYID,
-                CONCAT(WM_CONCAT(DISTINCT CONCAT(TESTNAME,
+                CONCAT(LISTAGG(DISTINCT CONCAT(TESTNAME,
                 CASE
                 WHEN SUBCONTRACTORID IS NULL THEN
                 ''
                 ELSE
                 '(分包)'
-                END)),
+                END), ','),
                 ",") AS TESTNAME
           FROM T_EMC_ORDER_TASK  A
                  WHERE A.ORDERID = #{orderId}
@@ -161,16 +170,17 @@
                A.CONTAINERCATEGORYID,
                A.STORECONDITION,
                A.SAMPLEWEIGHT,
-                CONCAT(WM_CONCAT(DISTINCT CONCAT(TESTNAME,
+                CONCAT(LISTAGG(DISTINCT CONCAT(TESTNAME,
                 CASE
                 WHEN SUBCONTRACTORID IS NULL THEN
                 ''
                 ELSE
                 '(分包)'
-                END)),
-                ",") AS TESTNAME,
-                CONCAT(WM_CONCAT(ID)) AS MULTITESTID,
-                WM_CONCAT(distinct A.ITEMGROUP) AS ITEMGROUP
+                END), ','),
+                ',') AS TESTNAME,
+                LISTAGG(ID, ',') AS MULTITESTID,
+                        LISTAGG(DISTINCT A.ITEMGROUP, ',') AS ITEMGROUP,
+        A.ORDERCONTAINERNO
           FROM 	(
             SELECT DISTINCT T.ID,
                             T.TESTNAME,
@@ -181,18 +191,26 @@
                             T.CONTAINERCATEGORYID,
                             T.STORECONDITION,
                             C.SAMPLEWEIGHT,
-                            D.ITEMGROUP
+                            D.ITEMGROUP,
+        E.ORDERCONTAINERNO
             FROM T_EMC_ORDER_TASK T
-            LEFT JOIN T_EMC_TEST_ORDER_CATEGORY C ON T.CONTAINERCATEGORYID = C.CONTAINERCATEGORYID AND T.TESTMETHODID = C.TESTMETHODID AND C.ORGID = #{loginUser.ext$.parentorgid}
+            LEFT JOIN T_EMC_TEST_ORDER_CATEGORY C ON T.CONTAINERCATEGORYID = C.CONTAINERCATEGORYID
+                                                        AND T.MONITORTMPLID = C.MONITORTMPLID
+                                                         AND T.TESTMETHODID = C.TESTMETHODID
+                                                         AND C.ORGID = #{loginUser.ext$.parentorgid}
             LEFT JOIN T_EMC_ORDER_ITEM_GROUP D ON T.ORDERID = D.ORDERID AND T.TESTID = D.TESTID
-            WHERE T.ORDERID = #{orderId}
+        LEFT JOIN
+        T_EMC_ORDER_CONTAINER E
+        ON T.ORDERCONTAINERID = E.ID
+        WHERE T.ORDERID = #{orderId}
           ) A
          GROUP BY A.CONTAINERGROUP,
                   A.FIXATIVE,
                   A.CONTAINERCATEGORYNAME,
                   A.CONTAINERCATEGORYID,
                   A.STORECONDITION,
-                  A.SAMPLEWEIGHT) T
+                  A.SAMPLEWEIGHT,
+        A.ORDERCONTAINERNO) T
         <where>
             <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
         </where>
@@ -201,10 +219,11 @@
     <select id="selectOrderContainerInfo" parameterType="map" resultType="map">
         SELECT T.*
         FROM (SELECT
-        WM_CONCAT(A.ID) AS IDS,
-        WM_CONCAT(DISTINCT A.TESTNAME) AS TESTNAME,
+        LISTAGG(A.ID, ',') AS IDS,
+        LISTAGG(DISTINCT A.TESTNAME, ',') AS TESTNAME,
         COUNT(DISTINCT A.ORDERID) AS NUM,
         A.PROJID,
+        A.STORECONDITION,
         A.FOLDERID,
         A.CONTAINERCATEGORYID,
         A.CONTAINERCATEGORYCODE,
@@ -216,6 +235,7 @@
         A.ORDERCATEGORY,
         A.ANALYSISORGID,
         A.ANALYSISORGNAME,
+        A.PRETREATWAY,
         O.ORDERNO,
         O.ORDERDESC,
         O.PARENTORDERNO,
@@ -296,14 +316,31 @@
             AND A.ORDERID = #{orderId}
         </if>
         GROUP BY
+        A.PROJID,
+        A.STORECONDITION,
         A.FOLDERID,
-        A.ORDERID,
-        A.CONTAINERGROUP,
         A.CONTAINERCATEGORYID,
         A.CONTAINERCATEGORYCODE,
         A.CONTAINERCATEGORYNAME,
+        A.CONTAINERGROUP,
         A.FIXATIVE,
-        A.QCNAME
+        A.QCCATEGORYCODE,
+        A.QCNAME,
+        A.ORDERCATEGORY,
+        A.ANALYSISORGID,
+        A.ANALYSISORGNAME,
+        A.PRETREATWAY,
+        O.ORDERNO,
+        O.ORDERDESC,
+        O.PARENTORDERNO,
+        O.SAMPLEBEGINDATE,
+        F.FOLDERNO,
+        F.SAMPLEORGID,
+        F.SAMPLEORGNAME,
+        S.SAMPLENO,
+        CC.MATERIAL,
+        CC.COLOR,
+        CC.CAPACITY
         ) T
         <where>
             <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
@@ -407,19 +444,34 @@
                         T.PROJNO,
                         T.PROJNAME,
                         T.SAMPLEBEGINDATE,
+                        ORDERDATESTR,
                         T.ORDERCATEGORY,
                         T.LABELNO,
                         T.PHFLAG,
                         T.ACCEPTEDDATE,
-                        T.QCCATEGORYCODE
+                        T.ACCEPTEDTIME,
+                        T.QCCATEGORYCODE,
+                        T.PROJECTREMIND,
+                        T.COMPLEDATE,
+                        T.ANALYSISORGID
         FROM (SELECT A.*,
                     B.ORDERNO,
                     B.SAMPLEBEGINDATE,
+        TO_CHAR((CASE
+        WHEN (C.SAMPLE = '1') THEN B.SAMPLEBEGINDATE
+        ELSE B.SENDDATE
+        END), 'YYYY-MM-DD') AS ORDERDATESTR,
                     B.LABELNO,
                     B.PHFLAG,
                     S.ACCEPTEDDATE,
+                    S.ACCEPTEDTIME,
                     C.PROJNO,
-                    C.PROJNAME
+                    C.PROJNAME,
+                    C.COMPLEDATE,
+                    (CASE WHEN C.COMPLEDATE <![CDATA[<=]]> TRUNC(SYSDATE)+3
+                    THEN '1'
+                    ELSE '0'
+                    END) AS PROJECTREMIND
                 FROM T_EMC_ORDER_TASK A
                 LEFT JOIN T_EMC_ORDER B
                   ON A.ORDERID = B.ID
@@ -443,7 +495,11 @@
                 AND T.RUNID IS NULL
             </if>
             <if test='startAcceptedDate != null and startAcceptedDate != ""'>
-                AND T.ACCEPTEDDATE >= DATE_FORMAT(#{startAcceptedDate}, '%Y-%m-%d')
+                AND T.ACCEPTEDDATE >= TO_CHAR(#{startAcceptedDate}, 'YYYY-MM-DD')
+            </if>
+            <!-- 筛选登录人的部门权限 -->
+            <if test="org_filter != null">
+                AND T.ANALYSISORGID = #{loginUser.orgId}
             </if>
         </where>
     </select>
@@ -514,7 +570,9 @@
 						) AS MONITORPOINTNAME,
 						T.PROJNO,
 						T.ORDERCONTAINERNO,
-                        T.USECATEGORY
+                        T.USECATEGORY,
+                     T.CYCLE,
+                     T.FREQUENCY
           FROM (SELECT A.*,
                        B.ORDERNO,
                        B.CLIENTORDERNAME,
@@ -530,6 +588,8 @@
                        B.ACCEPTEDDATE,
                        B.PARENTORDERNO,
                        B.ISCONVERT,
+                     B.CYCLE,
+                     B.FREQUENCY,
                        C.MONITORPOINTNAME,
                        D.EQUIPTNAME,
                        D.EQUIPTID AS ORDERTASKEQUIPTNO,
@@ -572,30 +632,67 @@
     </select>
 
     <select id="selectRunnableList" parameterType="map" resultType="map">
-        SELECT DISTINCT T.TESTMETHODID,
-                        T.TESTID,
-                        T.TESTNAME,
-                        T.METHODID,
-                        T.METHODNAME,
-                        T.METHODVERSIONID,
-                        T.TESTMETHODBASIS,
-                        T.INPUTUSERNAME,
-                        T.ORDERCATEGORY
-          FROM (SELECT A.*
+        SELECT T.*
+        FROM (
+        SELECT
+        T.TESTMETHODID,
+        T.TESTCLASS,
+        T.TESTID,
+        T.TESTNAME,
+        T.METHODID,
+        T.METHODNAME,
+        T.METHODVERSIONID,
+        T.TESTMETHODBASIS,
+        T.ORDERCATEGORY,
+        T.PROJECTREMIND,
+        T.URGENT,
+        T.PROJID,
+        T.PROJNO,
+        T.REQUIREDCOMPLETEDATE,
+        T.ORDERDATE
+          FROM (SELECT A.*,
+                       TM.TESTCLASS,
+        (CASE
+        WHEN (P.SAMPLE = '1')
+        THEN O.SAMPLEBEGINDATE  ELSE O.SENDDATE  END) AS ORDERDATE,
+        (CASE
+        WHEN (B.BIZCATEGORYID = 'HS' AND workdays_between(S.ACCEPTEDDATE,SYSDATE) = 3) OR
+        (B.BIZCATEGORYID = 'TS' AND workdays_between(S.ACCEPTEDDATE,SYSDATE) = 5)
+        THEN 3
+        WHEN (B.BIZCATEGORYID = 'HS' AND workdays_between(S.ACCEPTEDDATE,SYSDATE) > 3) OR
+        (B.BIZCATEGORYID = 'TS' AND workdays_between(S.ACCEPTEDDATE,SYSDATE) > 5)
+        THEN 1
+        WHEN P.URGENT = '1' THEN 2 ELSE 4 END) AS URGENT,
+                        P.PROJNO,
+                        P.REQUIREDCOMPLETEDATE,
+                        (CASE
+                        WHEN (P.COMPLEDATE <![CDATA[<=]]> TRUNC(SYSDATE)+3)
+                        THEN '1' ELSE '0' END) AS PROJECTREMIND
                   FROM T_EMC_ORDER_TASK A
+        LEFT JOIN T_EMC_ORDER O
+        ON A.ORDERID = O.ID
+        LEFT JOIN T_EMC_SAMPLE S
+        ON O.SAMPLEID = S.ID
                   LEFT JOIN T_EMC_PROJECT P
                     ON A.PROJID = P.ID
-                 WHERE (P.STATUS != 'cancel' OR P.STATUS IS NULL)
-                		<if test="orgId != null">
-                         	AND P.ORGID LIKE CONCAT(#{orgId}, '%')
+        LEFT JOIN T_EMC_BIZ_CATEGORY B
+        ON P.BIZCATEGORYID = B.ID
+        LEFT JOIN T_EMC_TEST_METHOD TM
+        ON A.TESTMETHODID = TM.ID
+        WHERE (P.STATUS != 'cancel' OR P.STATUS IS NULL)
+                        AND (O.TERMINATION != '1' OR O.TERMINATION IS NULL)
+                        AND A.PROJID IS NOT NULL
+                        <if test="orgId != null">
+                            AND P.ORGID LIKE CONCAT(#{orgId}, '%')
                         </if>
                         <if test="startAcceptedDate != null and startAcceptedDate != ''">
-                            AND EXISTS (SELECT 1 FROM T_EMC_ORDER C WHERE A.ORDERID = C.ID AND C.ACCEPTEDDATE >= DATE_FORMAT(#{startAcceptedDate}, '%Y-%m-%d'))
+                            AND EXISTS (SELECT 1 FROM T_EMC_ORDER C WHERE A.ORDERID = C.ID AND C.ACCEPTEDDATE >= TO_CHAR(#{startAcceptedDate}, 'YYYY-MM-DD'))
                         </if>
                         <if test="sampleReceiverFlag != null">
                             AND A.SAMPLERECEIVERFLAG = '1'
                         </if>
                  ) T
+
          <where>
             <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
             <if test='authority_org == "1"'>
@@ -621,21 +718,32 @@
                                AND (A.FILTERTEST = '1'
                                AND C.TESTID = T.TESTMETHODID
                                AND C.METHODID = T.METHODID
-                               AND (B.EXPIREDATE IS NULL OR B.EXPIREDATE > sysdate())
+                               AND (B.EXPIREDATE IS NULL OR B.EXPIREDATE > SYSDATE)
                                OR A.FILTERTEST = '0'
                                OR A.FILTERTEST IS NULL)
                 )
             </if>
         </where>
+        GROUP BY
+        T.ORDERCATEGORY,
+        T.URGENT,
+        T.TESTMETHODID,
+        T.TESTCLASS,
+        T.TESTID,
+        T.TESTNAME,
+        T.METHODID,
+        T.METHODNAME,
+        T.METHODVERSIONID,
+        T.TESTMETHODBASIS,
+        T.PROJECTREMIND,
+        T.PROJID,
+        T.PROJNO,
+        T.REQUIREDCOMPLETEDATE,
+        T.ORDERDATE
         ORDER BY
-        <choose>
-            <when test="orderParams != null and orderParams.size > 0">
-                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
-            </when>
-            <otherwise>
-                T.ORDERCATEGORY DESC
-            </otherwise>
-        </choose>
+        T.ORDERCATEGORY,
+        T.URGENT ASC
+        ) T
     </select>
 
     <select id="selectProjOrderCategoryByCondition" parameterType="map" resultType="map">
@@ -865,7 +973,7 @@
 
     <select id="selectTaskGroupByTest" parameterType="map" resultType="map">
         SELECT T.*
-        FROM ( SELECT WM_CONCAT(A.ID) AS IDS,
+        FROM ( SELECT LISTAGG(A.ID, ',') AS IDS,
         A.TESTMETHODID,
         A.TESTID,
         A.TESTNAME,
@@ -879,7 +987,13 @@
         WHERE ( P. STATUS IS NULL OR P. STATUS != 'cancel' )
         AND A.ANALYSISTYPE = 'sampling'
         AND O.SAMPLEID = #{sampleId}
-        GROUP BY A.TESTMETHODID
+        GROUP BY
+            A.TESTMETHODID,
+            A.TESTID,
+            A.TESTNAME,
+            A.METHODID,
+            A.METHODNAME,
+            P.PROJNO
         ) T
         <where>
             <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent"/>
@@ -928,7 +1042,8 @@
         Y.TESTITEMSORT,
         Y.ORGID AS TESTCAPCITYORGID,
         M.MONITORTMPLGROUPID,
-        QC.USECATEGORY
+        QC.USECATEGORY,
+        TM.TESTCLASS
         FROM T_EMC_ORDER_TASK A
         LEFT JOIN T_EMC_ORDER E
         ON A.ORDERID = E.ID
@@ -943,6 +1058,8 @@
         LEFT JOIN T_EMC_TEST_CAPACITY Y
         ON A.TESTMETHODID = Y.TESTMETHODID
         AND Y.ORGID = #{loginUser.ext$.parentorgid}
+        LEFT JOIN T_EMC_TEST_METHOD TM
+        ON A.TESTMETHODID = TM.ID
         LEFT JOIN T_EMC_MONITOR_TMPL M
         ON A.MONITORTMPLID = M.ID
         LEFT JOIN T_EMC_QC_CATEGORY QC ON A.QCCATEGORYID = QC.ID
@@ -994,6 +1111,14 @@
             <!-- 现场采样数据录入 -->
             <if test='targetType == "samplingInput"'>
                 AND T.SUBCONTRACTORID IS NULL
+            </if>
+            <!-- 筛选登录人的部门权限 -->
+            <if test="org_filter != null">
+                AND EXISTS (SELECT 1
+                              FROM T_CORE_USER_PERMISSION UP
+                             WHERE UP.PERMISSIONTYPEID = 'T_CORE_ORG'
+                               AND UP.TARGETID = T.TESTCAPCITYORGID
+                               AND UP.USERID = #{loginUser.id})
             </if>
         </where>
         ORDER BY

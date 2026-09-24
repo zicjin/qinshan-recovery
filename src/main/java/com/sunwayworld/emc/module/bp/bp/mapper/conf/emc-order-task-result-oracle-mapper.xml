@@ -24,6 +24,7 @@
                        M.INDEXID,
                        M.CUPNO,
                        M.EQUIPTACQUNO,
+                        M.STOCKBATCHNO,
                        N.INDEXNAME,
                        F.PLANSAMPLEDATE,
                        F.FOLDERNO,

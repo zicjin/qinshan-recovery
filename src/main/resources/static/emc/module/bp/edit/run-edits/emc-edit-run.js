@@ -6,9 +6,10 @@ var emcRunEdit = Gikam.getPageObject({
     getTestRunColumns : function() {
         return [ {
             checkbox : true,
-        }, {
+        }, Gikam.status.getBpmnColumn(emcRunEdit.workflow.dbTable),{
             field : 'id',
             title : 'T_EMC_RUN.RUNID',
+            type: 'link',
             width : 120,
         }, {
             field : 'orderCategory',
@@ -20,6 +21,9 @@ var emcRunEdit = Gikam.getPageObject({
             field : 'projNo',
             title : 'T_EMC_RUN.PROJNO',
         }, {
+            field : 'ext$.methodname',
+            title : '方法名称',
+        },  {
             field : 'analysisUserName',
             title : 'T_EMC_RUN.ANALYSISUSERNAME',
             width : 100,
@@ -42,7 +46,7 @@ var emcRunEdit = Gikam.getPageObject({
                         partakeUserIds.push(item.id);
                     });
                     this.setData({
-                        id : Gikam.getComp('emc-run-edit-edit-list-test-run-grid').getActivedRow().id,
+                        id : Gikam.getComp('emc-run-edit-edit-list-test-run-grid-upd').getActivedRow().id,
                         partakeUserName : partakeUserNames.join(','),
                         partakeUserId : partakeUserIds.join(',')
                     });
@@ -50,7 +54,7 @@ var emcRunEdit = Gikam.getPageObject({
             },
             onClean : function() {
                 this.setData({
-                    id : Gikam.getComp('emc-run-edit-edit-list-test-run-grid').getActivedRow().id,
+                    id : Gikam.getComp('emc-run-edit-edit-list-test-run-grid-upd').getActivedRow().id,
                     partakeUserName : '',
                     partakeUserId : ''
                 });
@@ -73,7 +77,7 @@ var emcRunEdit = Gikam.getPageObject({
             type : 'choose',
             category : 'curve',
             onBeforeChoose : function(index) {
-                var row = Gikam.getComp('emc-run-edit-edit-list-test-run-grid').getData()[index];
+                var row = Gikam.getComp('emc-run-edit-edit-list-test-run-grid-upd').getData()[index];
                 return {
                     equiptId : row.equiptId,
                     testId : row.testId,
@@ -104,18 +108,18 @@ var emcRunEdit = Gikam.getPageObject({
                 });
             },
             editor : true
-        }, {
-            field : 'ext$.minanalysisbegindate',
-            title : 'T_EMC_RUN.ANALYSISBEGINDATE',
-            editor : true,
-            validators : [ 'notEmpty' ],
-            type : 'date'
-        }, {
-            field : 'ext$.maxnanalysisenddate',
-            title : 'T_EMC_RUN.ANALYSISENDDATE',
-            editor : true,
-            validators : [ 'notEmpty' ],
-            type : 'date'
+            // }, {
+            //     field : 'ext$.minanalysisbegindate',
+            //     title : 'T_EMC_RUN.ANALYSISBEGINDATE',
+            //     editor : true,
+            //     validators : [ 'notEmpty' ],
+            //     type : 'date'
+            // }, {
+            //     field : 'ext$.maxnanalysisenddate',
+            //     title : 'T_EMC_RUN.ANALYSISENDDATE',
+            //     editor : true,
+            //     validators : [ 'notEmpty' ],
+            //     type : 'date'
         }, {
             field : 'analysisBeginDate',
             title : 'T_EMC_RUN.ANALYSISBEGINDATE',
@@ -143,30 +147,39 @@ var emcRunEdit = Gikam.getPageObject({
             validators : [ 'notEmpty' ],
             type : 'time'
         }, {
-            field : 'ext$.assistequiptname',
+            field : 'assistEquiptName',
             title : 'T_EMC_RUN.ASSISTEQUIPTID',
             editor : true,
             category : 'equipt',
             type : 'choose',
-            single : true,
-            onAfterChoose : function(rows) {
+            onAfterChoose : function(rows, index) {
                 if (!Gikam.isEmpty(rows)) {
-                    Gikam.getComp('emc-run-edit-edit-list-test-run-grid').setData({
-                        id : Gikam.getComp('emc-run-edit-edit-list-test-run-grid').getActivedRow().id,
-                        assistEquiptId : rows[0].id,
-                        ext$ : {
-                            assistequiptname : rows[0].equiptName
-                        }
+                    var assistEquiptId = [];
+                    var assistEquiptName = [];
+                    var assistEquiptModel = [];
+                    var assistEquiptNo = [];
+                    Gikam.each(rows, function(index, item) {
+                        assistEquiptId.push(item.id);
+                        assistEquiptName.push(item.equiptName);
+                        assistEquiptModel.push(item.equiptName + " / " + item.specification);
+                        assistEquiptNo.push(item.equiptId);
+                    });
+                    this.setData({
+                        index : index,
+                        assistEquiptId : assistEquiptId.join(','),
+                        assistEquiptName : assistEquiptName.join(','),
+                        assistEquiptModel : assistEquiptModel.join(),
+                        assistEquiptNo : assistEquiptNo.join()
                     });
                 }
             },
-            onClean : function() {
-                Gikam.getComp('emc-run-edit-edit-list-test-run-grid').setData({
-                    id : Gikam.getComp('emc-run-edit-edit-list-test-run-grid').getActivedRow().id,
+            onClean : function(field, value, index) {
+                Gikam.getComp('emc-run-edit-edit-list-test-run-grid-upd').setData({
+                    index : index,
                     assistEquiptId : '',
-                    ext$ : {
-                        assistequiptname : ''
-                    }
+                    assistEquiptName : '',
+                    assistEquiptModel : '',
+                    assistEquiptNo : ''
                 });
             }
         }, {
@@ -213,13 +226,16 @@ var emcRunEdit = Gikam.getPageObject({
             title : 'T_EMC_RUN.BEFOREHANDLE',
             editor : true,
             width : 100,
-            validators : [ 'strLength[0, 22]' ]
+            validators : [ 'strLength[0, 500]' ]
         }, {
             field : 'methodParam',
             title : 'T_EMC_RUN.METHODPARAM',
-            editor : true,
-            width : 100,
-            validators : [ 'strLength[0, 66]' ]
+            formatter: function (i, v, row) {
+                return Gikam.printf('<a href="javascript:;" onclick="emcRunEdit.editPage.loadResultRunMethodParamPage(\'{id}\')">{name}</a>', {
+                    id: row.id,
+                    name: '方法参数'
+                });
+            }
         }, {
             field : 'weighingReportLineId',
             title : 'T_EMC_RUN.WEIGHINGREPORTLINEID',
@@ -246,6 +262,24 @@ var emcRunEdit = Gikam.getPageObject({
             param : {
                 codeCategoryId : 'yesorno',
             },
+        }, {
+            field : 'remark',
+            title : 'T_EMC_RUN.REMARK',
+            editor : true,
+            type : 'richText'
+        }, {
+            field : 'stNo',
+            title : 'T_EMC_RUN.STNO',
+            editor : true,
+        }, {
+            field : 'stConcent',
+            title : 'T_EMC_RUN.STCONCENT',
+            editor : true,
+        }, {
+            field : 'stValiDate',
+            title : 'T_EMC_RUN.STVALIDATE',
+            editor : true,
+            type : 'date'
         } ];
     },
 
@@ -343,6 +377,9 @@ var emcRunEdit = Gikam.getPageObject({
         }, {
             field : 'itemName',
             title : 'T_EMC_ORDER_TASK_RESULT.ITEMNAME',
+        }, {
+            field : 'itemAliasName',
+            title : 'T_EMC_ORDER_TASK_RESULT.ITEMALIASNAME'
         }, {
             field : 'originalResult',
             title : 'T_EMC_ORDER_TASK_RESULT.ORIGINALRESULT',
@@ -494,7 +531,7 @@ var emcRunEdit = Gikam.getPageObject({
             },
             onChange : function(field, value, index) {
                 workspace.window.showMask(true);
-                var grid = Gikam.getComp('emc-run-edit-edit-list-test-run-grid');
+                var grid = Gikam.getComp('emc-run-edit-edit-list-test-run-grid-upd');
 
                 var showFlags = value;
                 if (showFlags == '1') {
@@ -735,4 +772,11 @@ var emcRunEdit = Gikam.getPageObject({
         } ]
     },
 
+    workflow: {
+        dbTable: 'T_EMC_RUN',
+        columns: [{
+            field: 'id',
+            title: 'T_EMC_RUN.ID'
+        }]
+    }
 });

@@ -56,28 +56,32 @@ emcSample.sampleQuerySearchPage = {
                 if (data.index == 0) {
                     gridId = 'emc-sample-query-search-myself-grid';
                     requestData = {
-                        orgId_SB : workspace.user.ext$.parentorgid,
+                        SAMPLEBEGINDATETIMEFILTER : '1',
+                        org_filter : '1',
                         createdById_SEQ: workspace.user.id,
                     };
                 }
                 if (data.index == 1) {
                     gridId = 'emc-sample-query-search-my-approve-grid';
                     requestData = {
-                        orgId_SB : workspace.user.ext$.parentorgid,
+                        SAMPLEBEGINDATETIMEFILTER : '1',
+                        org_filter : '1',
                         approveUserId: workspace.user.id,
                     };
                 }
                 if (data.index == 2) {
                     gridId = 'emc-sample-query-search-my-audit-grid';
                     requestData = {
-                        orgId_SB : workspace.user.ext$.parentorgid,
+                        SAMPLEBEGINDATETIMEFILTER : '1',
+                        org_filter : '1',
                         auditedUserId: workspace.user.id,
                     };
                 }
                 if (data.index == 3) {
                     gridId = 'emc-sample-query-search-all-grid';
                     requestData = {
-                        orgId_SB : workspace.user.ext$.parentorgid,
+                        SAMPLEBEGINDATETIMEFILTER : '1',
+                        org_filter : '1',
                     };
                 }
 
@@ -110,6 +114,13 @@ emcSample.sampleQuerySearchPage = {
                     Gikam.alert('GIKAM.TIP.CHOOSE_ONE_ITEM');
                 }
             }
+        }, {
+            type : 'button',
+            text : '导出原始记录',
+            icon : 'export',
+            onClick : function() {
+                _this.exportOriginalRecordExcel(gridId);
+            }
         },{
             type : 'button',
             text : 'EMC.MODULE.BP.SAMPLE.SAMPLES.BUTTON.VIEW_SAMPLING_REPORT',
@@ -133,6 +144,39 @@ emcSample.sampleQuerySearchPage = {
                     return;
                 }
                 Gikam.viewReport(selections[0].caliReportLineId, selections[0]);
+            }
+        }, {
+            type : 'button',
+            text : '查看任务单',
+            icon : 'print',
+            onClick : function() {
+                var selections = Gikam.getComp(gridId).getSelections();
+                if (selections.length !== 1) {
+                    Gikam.alert('GIKAM.TIP.CHOOSE_ONE_ITEM');
+                    return;
+                }
+
+                Gikam.getJson(Gikam.printf('/secure/emc/module/bp/project/projects/{id}', {
+                    id : selections[0].projId
+                })).done(function(project) {
+                    if (!project) {
+                        Gikam.alert('GIKAM.TIP.OPERATE_FAIL');
+                        return;
+                    }
+
+                    if (project.sample == '0') {
+                        Gikam.viewReport('1453125616129984', project);
+                    } else {
+                        Gikam.viewReport('1344186996217184', project);
+                    }
+                });
+            }
+        },{
+            type: 'button',
+            text: 'GIKAM.BUTTON.VIEWAUDIT',
+            icon: 'view-audit',
+            onClick: function () {
+                Gikam.viewAudit('T_EMC_SAMPLE', Gikam.getComp(gridId).getSelections());
             }
         }]
     },
@@ -200,6 +244,25 @@ emcSample.sampleQuerySearchPage = {
                 id : id,
                 readonly : true
             }),
+        });
+    },
+    exportOriginalRecordExcel: function (gridId) {
+        var selections = Gikam.getComp(gridId).getSelections();
+        if (selections.length === 0) {
+            Gikam.alert('GIKAM.TIP.CHOOSE_ITEM');
+            return;
+        }
+        Gikam.toast('正在导出原始记录，请稍候...', 3, 'top');
+        Gikam.postText(IFM_CONTEXT + '/secure/emc/module/bp/sample/samples/action/export-original-record-excel-zip',
+            Gikam.getJsonWrapper({}, ['', selections])).done(function (url) {
+            if (Gikam.isEmpty(url)) {
+                Gikam.alert('导出失败！');
+                return;
+            }
+            Gikam.emcDownloadFile(url);
+            Gikam.alert('导出完成！');
+        }).fail(function () {
+            Gikam.alert('导出失败！');
         });
     },
     getSampleQuerySearchPanel: function (gridId, order, columns, toolbar) {

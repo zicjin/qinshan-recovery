@@ -6,20 +6,16 @@ var emcProjectPlan = Gikam.getPageObject({
         return [ {
             checkbox : true
         }, {
-            field : 'projNo',
-            title : 'T_EMC_PROJECT.PROJNO',
-            width : 100,
-            formatter : function(i, v ,r) {
-                if(r.urgent==1){
-                    var img = "<img src='/static/emc/icon/urgent.png' width='15' height='15'>";
-                    return img + v;
-                }else{
-                    return v;
-                }
-            },
-        }, {
             field : 'projName',
             title : 'T_EMC_PROJECT.PROJNAME',
+        }, {
+            field: 'ext$.scheduleactivedflag',
+            title: '定时任务状态',
+            type: 'select',
+            category : 'sys',
+            param : {
+                codeCategoryId : 'activatedFlag',
+            }
         }, {
             field : 'createdByName',
             title : 'T_EMC_PROJECT.CREATEDBYNAME',

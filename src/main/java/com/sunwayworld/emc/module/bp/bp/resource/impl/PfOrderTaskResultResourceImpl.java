@@ -111,4 +111,11 @@ public class PfOrderTaskResultResourceImpl extends EmcOrderTaskResultResourceImp
         return orderTaskResultService.selectQuickInputResultRowListBySampleId(wrapper);
     }
 
+    @Override
+    @Log(value = "气参数批量录入", type = LogType.UPDATE)
+    @RequestMapping(value = "/action/batch-input-gas-parameter", method = RequestMethod.POST)
+    public void batchInputGasParameter(RestJsonWrapperBean wrapper) {
+        orderTaskResultService.batchInputGasParameter(wrapper);
+    }
+
 }

@@ -101,6 +101,11 @@ public class EmcMonitorTmplServiceImpl implements EmcMonitorTmplService {
     }
 
     @Override
+    public Page<EmcMonitorSchemeBean> selectPaginationGroupByTestMethod(RestJsonWrapperBean wrapper) {
+        return monitorSchemeService.selectPaginationGroupByTestMethod(wrapper);
+    }
+
+    @Override
     public Page<EmcMonitorSchemeBean> selectSchemeItemGroupChoosablePagination(RestJsonWrapperBean wrapper) {
         MapperParameter parameter = wrapper.extractMapFilter();
 

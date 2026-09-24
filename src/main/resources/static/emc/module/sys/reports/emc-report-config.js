@@ -11,8 +11,22 @@ Gikam.extend(coreReportConfig, {
             title : 'T_CORE_REPORT_CONFIG.NAME',
             field : 'name',
         }, {
+            field : 'ext$.reportconfigcategory',
+            title : '报表分类',
+            editor : true,
+        }, {
             title : 'T_CORE_REPORT_CONFIG.REMARK',
             field : 'remark',
+        } ]
+    },
+
+
+    getMenuRoleColumns : function () {
+        return [ {
+            checkbox : true
+        }, {
+            field : 'ext$.rolename',
+            title : 'T_CORE_ROLE.ROLENAME',
         } ]
     },
 
@@ -37,6 +51,10 @@ Gikam.extend(coreReportConfig, {
         return [ {
             checkbox : true
         }, Gikam.status.getActiveColumn(), {
+            title : 'T_CORE_REPORT_CONFIG_LINE.REPORTCONFIGLINENO',
+            field : 'reportConfigLineNo',
+            readonly : true,
+        }, {
             title : 'T_CORE_REPORT_CONFIG_LINE.REPORTNAME',
             field : 'reportName',
             editor : true,
@@ -50,6 +68,10 @@ Gikam.extend(coreReportConfig, {
             param : {
                 codeCategoryId : 'reportCategory'
             },
+        }, {
+            field : 'ext$.reportconfiglinecategory',
+            title : '报表分类',
+            editor : true,
         }, {
             title : 'T_CORE_REPORT_CONFIG_LINE.FILENAME',
             field : 'ext$.filename'

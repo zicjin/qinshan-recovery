@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.emc.projectfunction.module.mdm.baasemdm.equiptrequisition.mapper.PfEquiptRequisitionMapper">
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM (SELECT X.*,
+                A.EQUIPTID AS EQUIPTCODE,
+                A.EQUIPTNAME AS EQUIPTNAME,
+                A.SPECIFICATION AS SPECIFICATION,
+                A.FACTORYNO AS FACTORYNO,
+                A.STATUS
+                FROM T_EMC_EQUIPT_REQUISITION X
+                LEFT JOIN T_EMC_EQUIPT A
+                ON A.ID = X.EQUIPTID) T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+            <if test='sample != null'>
+            	<!--AND T.PROJIDS LIKE CONCAT('%', #{projIds}, '%')-->
+                AND
+                <foreach item="item" index="index" collection="projIds.split(',')" separator="AND" open="(" close=")">
+                    T.PROJIDS LIKE CONCAT('%', #{item}, '%')
+                </foreach>
+            </if>
+            <if test='projIdList != null'>
+                AND
+                <foreach item="item" index="index" collection="projIdList.split(',')" separator="OR" open="(" close=")">
+                    T.PROJIDS LIKE CONCAT('%', #{item}, '%')
+                </foreach>
+            </if>
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ID DESC
+            </otherwise>
+        </choose>
+    </select>
+
+</mapper>

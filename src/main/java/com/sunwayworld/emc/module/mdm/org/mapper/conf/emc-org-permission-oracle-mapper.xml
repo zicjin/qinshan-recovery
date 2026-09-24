@@ -3,8 +3,30 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sunwayworld.emc.module.mdm.org.mapper.EmcOrgPermissionMapper">
     <select id="selectByCondition" parameterType="map" resultType="map">
-        SELECT T.* 
-          FROM T_EMC_ORG_PERMISSION T
+        SELECT
+        T.*
+        FROM
+        (
+        SELECT
+            a.*, (
+            SELECT
+            orgname AS company_name
+            FROM
+            (
+            SELECT
+            orgname
+            FROM
+            t_core_org
+            WHERE
+            ORGCATEGORY = 'company'
+            START WITH
+            id = a.orgid
+            CONNECT BY
+            PRIOR parentid = id )
+            WHERE
+            ROWNUM = 1) AS comp
+        FROM
+        T_EMC_ORG_PERMISSION a ) T
         <where>
             <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
         </where>

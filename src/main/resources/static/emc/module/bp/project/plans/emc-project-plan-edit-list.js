@@ -9,7 +9,8 @@ emcProjectPlan.editPage = {
             columns : emcProjectPlan.getProjectPlanListColumns(),
             service : 'emcProjectServiceImpl',
             requestData : {
-                source_SEQ : 'plan'
+                source_SEQ : 'plan',
+                org_filter : '1',
             },
             deleteFormatter : function(row) {
                 return row.projName || row.id;
@@ -18,18 +19,8 @@ emcProjectPlan.editPage = {
                 if (!Gikam.isEmpty(data)) {
                     this.activeRowByIndex(0);
                 } else {
-                    var tab = Gikam.getComp('emc-project-plan-edit-list-base-info-tab');
-                    tab.removePanel('emc-project-plan-edit-list-base-info-panel2');
-                    tab.removePanel('emc-project-plan-edit-list-base-info-panel3');
-                    tab.revertPanel('emc-project-plan-edit-list-base-info-panel1');
-
-                    Gikam.getComp('emc-project-plan-edit-list-base-info-form1').cleanData();
-                    Gikam.getComp('emc-schemeedit-audit-list-grid').cleanData();
+                    Gikam.cleanCompData(['emc-project-plan-edit-list-base-info-form', 'emc-schemeedit-audit-list-grid', 'emc-project-plan-edit-list-director-grid'])
                     Gikam.getComp('emc-project-plan-edit-list-uploader').grid.cleanData();
-                    tab.showPanel('emc-schemeedit-audit-list-grid-panel');
-                    Gikam.getComp('emc-project-plan-edit-list-director-grid1').cleanData();
-                    Gikam.getComp('emc-project-plan-edit-list-director-grid2').cleanData();
-                    Gikam.getComp('emc-project-plan-edit-list-director-grid3').cleanData();
                 }
             },
             onRowActive : function(index, row) {
@@ -148,21 +139,19 @@ emcProjectPlan.editPage = {
         }
     },
 
-    submit : function() {
-        var grid = Gikam.getComp('emc-project-plan-edit-list-grid');
-
-        grid.processRows({
-            url : emcProject.baseUrl + '/plans/submit',
-            confirm : {
-                msg : 'EMC.MODULE.BP.PROJECT.PROJECTS.TIP.CONFIRM_SUBMIT',
-                title : 'GIKAM.TIP.CONFIRMSUBMIT',
-            },
-            formatter : function(row) {
-                return row.projName;
-            },
-            method : 'put'
-        }).done(function() {
-            grid.refresh();
+    submit: function () {
+        var selections = Gikam.getComp('emc-project-plan-edit-list-grid').getSelections();
+        if (selections.length !== 1) {
+            Gikam.alert('GIKAM.TIP.CHOOSE_ONE_ITEM');
+            return;
+        }
+        Gikam.confirm('GIKAM.TIP.CONFIRMSUBMIT', '是否提交任务计划？', function () {
+            workspace.window.showMask();
+            Gikam.put(emcProject.baseUrl + '/plans/submit', Gikam.getJsonWrapper(null, ['emcProjectServiceImpl', selections])).done(function () {
+                Gikam.getComp('emc-project-plan-edit-list-grid').refresh();
+            }).always(function () {
+                workspace.window.closeMask();
+            });
         });
     },
 
@@ -178,73 +167,34 @@ emcProjectPlan.editPage = {
 
     onProjectActive : function(row) {
         var _this = this;
-        var tab = Gikam.getComp('emc-project-plan-edit-list-base-info-tab');
-
         _this.param.projId = row.id;
         _this.param.editMonitorInfo = row.ext$.editmonitorinfo;
         _this.param.testOrgId = row.testOrgId;
-
-        tab.show();
-        var _form = Gikam.getComp('emc-project-edit-list-base-info-form1');
         if (row) {
+            Gikam.getAsyncComp('emc-project-plan-edit-list-base-info-form').done(function (form) {
+                Gikam.getJson(IFM_CONTEXT + '/secure/emc/module/mdm/basemdm/biz-categories/projects/queries/selectable' + Gikam.param({
+                    bizCategoryId: row.bizCategoryId,
+                    activatedFlag: '1',
+                })).done(function (items) {
+                    form.setSelectOptions('projName', items.map(function (item) {
+                        return {
+                            text: item.projName,
+                            value: item.projName
+                        };
+                    }), true);
+                });
+
+                form.refresh({
+                    url: Gikam.printf(emcProject.baseUrl + '/{id}', {
+                        id: row.id
+                    })
+                });
+            });
+
             _this.param.editMonitorInfo = row.ext$.editmonitorinfo;
             _this.param.projId = row.id;
             _this.param.testOrgId = row.testOrgId;
-            var formStyle = row.ext$.formstyle;
-            if (formStyle === 'form1') {
-                tab.removePanel('emc-project-plan-edit-list-base-info-panel2');
-                tab.removePanel('emc-project-plan-edit-list-base-info-panel3');
-                tab.revertPanel('emc-project-plan-edit-list-base-info-panel1');
-                tab.showPanel('emc-schemeedit-audit-list-grid-panel');
-                Gikam.getAsyncComp('emc-project-plan-edit-list-base-info-form1').done(function(grid) {
-                    grid.refresh({
-                        url : Gikam.printf(emcProject.baseUrl + '/{id}', {
-                            id : row.id
-                        })
-                    });
-                });
-                _form = Gikam.getComp('emc-project-plan-edit-list-base-info-form1');
-            } else if (formStyle === 'form2') {
-                tab.removePanel('emc-project-plan-edit-list-base-info-panel1');
-                tab.removePanel('emc-project-plan-edit-list-base-info-panel3');
-                tab.revertPanel('emc-project-plan-edit-list-base-info-panel2');
-                tab.showPanel('emc-schemeedit-audit-list-grid-panel');
-                Gikam.getAsyncComp('emc-project-plan-edit-list-base-info-form2').done(function(grid) {
-                    grid.refresh({
-                        url : Gikam.printf(emcProject.baseUrl + '/{id}', {
-                            id : row.id
-                        })
-                    });
-                });
-                _form = Gikam.getComp('emc-project-plan-edit-list-base-info-form2');
-            } else {
-                tab.removePanel('emc-project-plan-edit-list-base-info-panel1');
-                tab.removePanel('emc-project-plan-edit-list-base-info-panel2');
-                tab.revertPanel('emc-project-plan-edit-list-base-info-panel3');
-                tab.showPanel('emc-schemeedit-audit-list-grid-panel');
-                Gikam.getAsyncComp('emc-project-plan-edit-list-base-info-form3').done(function(grid) {
-                    grid.refresh({
-                        url : Gikam.printf(emcProject.baseUrl + '/{id}', {
-                            id : row.id
-                        })
-                    });
-                });
-                _form = Gikam.getComp('emc-project-plan-edit-list-base-info-form3');
-            }
 
-            var url = IFM_CONTEXT + '/secure/emc/module/mdm/basemdm/biz-categories/projects/queries/selectable';
-            url += Gikam.param({
-                bizCategoryId : row.bizCategoryId,
-                activatedFlag : '1',
-            });
-            Gikam.getJson(url).done(function(items) {
-                _form.setSelectOptions('projName', items.map(function(item) {
-                    return {
-                        text : item.projName,
-                        value : item.projName
-                    };
-                }), true);
-            });
 
             Gikam.getComp('emc-project-plan-edit-list-uploader').setOptions({
                 bizId : row.id,
@@ -276,7 +226,7 @@ emcProjectPlan.editPage = {
             fill : true,
             panels : [ {
                 title : 'EMC.MODULE.BP.PROJECT.PROJECTS.TAB.BASE_INFO',
-                id : 'emc-project-plan-edit-list-base-info-panel1',
+                id : 'emc-project-plan-edit-list-base-info-panel',
                 items : [ {
                     type : 'layout',
                     north : {
@@ -285,11 +235,16 @@ emcProjectPlan.editPage = {
                             type : 'form',
                             columns : 3,
                             service : 'emcProjectServiceImpl',
-                            id : 'emc-project-plan-edit-list-base-info-form1',
-                            fields : emcProject.getBaseInfoFormFields1(),
+                            id : 'emc-project-plan-edit-list-base-info-form',
+                            panels : [
+                                {title : '合同信息',fields : emcProject.getBaseInfoFormFields11()},
+                                {title : '委托单位信息',fields : emcProject.getBaseInfoFormFields12()},
+                                {title : '受检单位',fields : emcProject.getBaseInfoFormFields13()},
+                                {title : '项目信息',fields : emcProject.getBaseInfoFormFields14()},
+                            ],
                             onLoadSuccess : function(data) {
                                 Gikam.refreshGrids({
-                                    'emc-project-plan-edit-list-director-grid1' : emcProject.baseUrl + '/{id}/directors/queries',
+                                    'emc-project-plan-edit-list-director-grid' : emcProject.baseUrl + '/{id}/directors/queries',
                                 }, {
                                     id : data.id
                                 });
@@ -299,15 +254,15 @@ emcProjectPlan.editPage = {
                     center : {
                         items : [ {
                             type : 'tab',
-                            id : 'emc-project-plan-edit-list-director-tab1',
+                            id : 'emc-project-plan-edit-list-director-tab',
                             fill : true,
                             width : Gikam.width.XL,
                             panels : [ {
-                                id : 'emc-project-plan-edit-list-director-panel1',
+                                id : 'emc-project-plan-edit-list-director-panel',
                                 title : 'EMC.MODULE.BP.PROJECT.PROJECTS.TITLE.PROJECT_DIRECTOR',
                                 items : [ {
                                     type : 'grid',
-                                    id : 'emc-project-plan-edit-list-director-grid1',
+                                    id : 'emc-project-plan-edit-list-director-grid',
                                     filterOpen : false,
                                     service : 'emcProjectDirectorServiceImpl',
                                     page : false,
@@ -320,136 +275,14 @@ emcProjectPlan.editPage = {
                                         text : 'GIKAM.BUTTON.INSERT',
                                         icon : 'add-row',
                                         onClick : function() {
-                                            _this.insertDirectorRow('emc-project-plan-edit-list-base-info-form1', 'emc-project-plan-edit-list-director-grid1');
+                                            _this.insertDirectorRow('emc-project-plan-edit-list-base-info-form', 'emc-project-plan-edit-list-director-grid');
                                         }
                                     }, {
                                         type : 'button',
                                         text : 'GIKAM.BUTTON.DELETE',
                                         icon : 'remove-row',
                                         onClick : function() {
-                                            _this.deleteDirectorRow('emc-project-plan-edit-list-director-grid1');
-                                        }
-                                    } ],
-                                } ]
-                            } ]
-                        } ]
-                    }
-                } ]
-            }, {
-                title : 'EMC.MODULE.BP.PROJECT.PROJECTS.TAB.BASE_INFO',
-                id : 'emc-project-plan-edit-list-base-info-panel2',
-                items : [ {
-                    type : 'layout',
-                    north : {
-                        height : '60%',
-                        items : [ {
-                            type : 'form',
-                            columns : 3,
-                            service : 'emcProjectServiceImpl',
-                            id : 'emc-project-plan-edit-list-base-info-form2',
-                            fields : emcProject.getBaseInfoFormFields2(),
-                            onLoadSuccess : function(data) {
-                                Gikam.refreshGrids({
-                                    'emc-project-plan-edit-list-director-grid2' : emcProject.baseUrl + '/{id}/directors/queries',
-                                }, {
-                                    id : data.id
-                                });
-                            }
-                        } ]
-                    },
-                    center : {
-                        items : [ {
-                            type : 'tab',
-                            id : 'emc-project-plan-edit-list-director-tab2',
-                            fill : true,
-                            width : Gikam.width.XL,
-                            panels : [ {
-                                id : 'emc-project-plan-edit-list-director-panel2',
-                                title : 'EMC.MODULE.BP.PROJECT.PROJECTS.TITLE.PROJECT_DIRECTOR',
-                                items : [ {
-                                    type : 'grid',
-                                    id : 'emc-project-plan-edit-list-director-grid2',
-                                    filterOpen : false,
-                                    service : 'emcProjectDirectorServiceImpl',
-                                    page : false,
-                                    columns : emcProject.getProjectDirectorListColumns(),
-                                    deleteFormatter : function(row) {
-                                        return row.ext$.username || row.empId || row.id;
-                                    },
-                                    toolbar : [ {
-                                        type : 'button',
-                                        text : 'GIKAM.BUTTON.INSERT',
-                                        icon : 'add-row',
-                                        onClick : function() {
-                                            _this.insertDirectorRow('emc-project-plan-edit-list-base-info-form2', 'emc-project-plan-edit-list-director-grid2');
-                                        }
-                                    }, {
-                                        type : 'button',
-                                        text : 'GIKAM.BUTTON.DELETE',
-                                        icon : 'remove-row',
-                                        onClick : function() {
-                                            _this.deleteDirectorRow('emc-project-plan-edit-list-director-grid2');
-                                        }
-                                    } ],
-                                } ]
-                            } ]
-                        } ]
-                    }
-                } ]
-            }, {
-                title : 'EMC.MODULE.BP.PROJECT.PROJECTS.TAB.BASE_INFO',
-                id : 'emc-project-plan-edit-list-base-info-panel3',
-                items : [ {
-                    type : 'layout',
-                    north : {
-                        height : '60%',
-                        items : [ {
-                            type : 'form',
-                            columns : 3,
-                            service : 'emcProjectServiceImpl',
-                            id : 'emc-project-plan-edit-list-base-info-form3',
-                            fields : emcProject.getBaseInfoFormFields3(),
-                            onLoadSuccess : function(data) {
-                                Gikam.refreshGrids({
-                                    'emc-project-plan-edit-list-director-grid3' : emcProject.baseUrl + '/{id}/directors/queries',
-                                }, {
-                                    id : data.id
-                                });
-                            }
-                        } ]
-                    },
-                    center : {
-                        items : [ {
-                            type : 'tab',
-                            id : 'emc-project-plan-edit-list-director-tab3',
-                            fill : true,
-                            width : Gikam.width.XL,
-                            panels : [ {
-                                id : 'emc-project-plan-edit-list-director-panel3',
-                                title : 'EMC.MODULE.BP.PROJECT.PROJECTS.TITLE.PROJECT_DIRECTOR',
-                                items : [ {
-                                    type : 'grid',
-                                    id : 'emc-project-plan-edit-list-director-grid3',
-                                    filterOpen : false,
-                                    service : 'emcProjectDirectorServiceImpl',
-                                    page : false,
-                                    columns : emcProject.getProjectDirectorListColumns(),
-                                    deleteFormatter : function(row) {
-                                        return row.ext$.username || row.empId || row.id;
-                                    },
-                                    toolbar : [ {
-                                        type : 'button',
-                                        text : 'GIKAM.BUTTON.INSERT',
-                                        icon : 'add-row',
-                                        onClick : function() {
-                                            _this.insertDirectorRow('emc-project-plan-edit-list-base-info-form3', 'emc-project-plan-edit-list-director-grid3');
-                                        }
-                                    }, {
-                                        type : 'button',
-                                        text : 'GIKAM.BUTTON.DELETE',
-                                        icon : 'remove-row',
-                                        onClick : function() {
-                                            _this.deleteDirectorRow('emc-project-plan-edit-list-director-grid3');
+                                            _this.deleteDirectorRow('emc-project-plan-edit-list-director-grid');
                                         }
                                     } ],
                                 } ]

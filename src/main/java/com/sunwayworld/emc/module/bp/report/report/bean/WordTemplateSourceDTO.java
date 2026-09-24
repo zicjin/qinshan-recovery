@@ -12,6 +12,9 @@ import com.sunwayworld.emc.module.bp.result.run.bean.EmcRunBean;
 import com.sunwayworld.emc.module.bp.result.temphum.bean.PfRunTempHumidityBean;
 import com.sunwayworld.emc.module.bp.sample.sample.bean.EmcSampleBean;
 import com.sunwayworld.emc.module.mdm.basemdm.propertytmpl.bean.EmcPropertyDataBean;
+import com.sunwayworld.emc.module.mdm.basemdm.propertytmpl.bean.EmcPropertyFieldBean;
+import com.sunwayworld.emc.module.mdm.basemdm.propertytmpl.bean.EmcPropertyTmplBean;
+import com.sunwayworld.emc.module.mdm.bizmdm.capacity.bean.EmcTestCapacityBean;
 import com.sunwayworld.emc.module.mdm.bizmdm.indexcategory.bean.EmcIndexCategoryBean;
 import com.sunwayworld.emc.module.mdm.bizmdm.monitortmpl.bean.EmcMonitorTmplBean;
 import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcGroupItemBean;
@@ -36,15 +39,19 @@ public class WordTemplateSourceDTO {
     private List<EmcOrderTaskBean> orderTaskList;
     private List<EmcOrderTaskBean> qcOrderTaskList;
     private List<EmcOrderTaskResultBean> orderTaskResultList;
+    private List<EmcOrderTaskResultBean> allOrderTaskResultList;
     private List<EmcOrderTaskResultBean> qcTaskResultList;
     private List<EmcItemGroupBean> itemGroupList;
     private List<EmcGroupItemBean> groupItemList;
+    private List<EmcTestCapacityBean> testCapacityList;
     private List<EmcRunBean> runList;
     private EmcReportBean report;
     private List<EmcReportBean> reportList;
     private List<EmcReportResultBean> reportResultList;
     private List<EmcMonitorTmplBean> monitorTmplList;
     private List<EmcPropertyDataBean> propertyDataList;
+    private List<EmcPropertyTmplBean> propertyTmplList;
+    private List<EmcPropertyFieldBean> propertyFieldList;
     private List<EmcEquiptBean> equiptList;
     private List<CoreFileBean> coreFileList;
     private List<CoreCodeBean> coreCodeList;
@@ -143,6 +150,14 @@ public class WordTemplateSourceDTO {
         this.groupItemList = groupItemList;
     }
 
+    public List<EmcTestCapacityBean> getTestCapacityList() {
+        return testCapacityList;
+    }
+
+    public void setTestCapacityList(List<EmcTestCapacityBean> testCapacityList) {
+        this.testCapacityList = testCapacityList;
+    }
+
     public List<EmcRunBean> getRunList() {
         return runList;
     }
@@ -189,6 +204,22 @@ public class WordTemplateSourceDTO {
 
     public void setPropertyDataList(List<EmcPropertyDataBean> propertyDataList) {
         this.propertyDataList = propertyDataList;
+    }
+
+    public List<EmcPropertyTmplBean> getPropertyTmplList() {
+        return propertyTmplList;
+    }
+
+    public void setPropertyTmplList(List<EmcPropertyTmplBean> propertyTmplList) {
+        this.propertyTmplList = propertyTmplList;
+    }
+
+    public List<EmcPropertyFieldBean> getPropertyFieldList() {
+        return propertyFieldList;
+    }
+
+    public void setPropertyFieldList(List<EmcPropertyFieldBean> propertyFieldList) {
+        this.propertyFieldList = propertyFieldList;
     }
 
     public List<EmcEquiptBean> getEquiptList() {
@@ -261,5 +292,13 @@ public class WordTemplateSourceDTO {
 
     public void setItemQcIndexList(List<EmcItemQcIndexBean> itemQcIndexList) {
         this.itemQcIndexList = itemQcIndexList;
+    }
+
+    public List<EmcOrderTaskResultBean> getAllOrderTaskResultList() {
+        return allOrderTaskResultList;
+    }
+
+    public void setAllOrderTaskResultList(List<EmcOrderTaskResultBean> allOrderTaskResultList) {
+        this.allOrderTaskResultList = allOrderTaskResultList;
     }
 }

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.emc.framework.mybatis.mapper.EmcGlobalMapper">
+
+    <sql id="auditAuthorityWhereClause">
+         EXISTS (
+                SELECT
+                    1
+                FROM(
+                SELECT
+                    I.TARGETID
+                FROM
+                    T_CORE_BPMN_INST I,
+                    T_CORE_BPMN_INST_TASK K,
+                    T_CORE_BPMN_INST_TASK_ROLE R,
+                    T_CORE_ROLE_USER U
+                WHERE
+                    I.ID = K.INSTID
+                    AND K.ID = R.INSTTASKID
+                    AND R.ROLEID = U.ROLEID
+                    AND (
+                        K.COUNTERSIGN = '0' /* 会签时所有人员都要进行审核 */
+                        OR NOT EXISTS (
+                            SELECT
+                                1
+                            FROM
+                                T_CORE_BPMN_COMMENT C
+                            WHERE
+                                C.CREATEDTIME >= K.CREATEDTIME
+                                AND C.TASKID = K.TASKID
+                                AND C.TARGETID = I.TARGETID
+                                AND U.USERID = C.USERID
+                        )
+                    )
+        <if test='bpmn_statusCode != null'>
+            AND K.STATUSCODE = #{bpmn_statusCode}
+        </if>
+        AND U.USERID = #{loginUser.id}
+                UNION
+                ALL SELECT
+                    I.TARGETID
+                FROM
+                    T_CORE_BPMN_INST I,
+                    T_CORE_BPMN_INST_TASK K,
+                    T_CORE_BPMN_INST_TASK_USER U
+                WHERE
+                    I.ID = K.INSTID
+                    AND K.ID = U.INSTTASKID
+        <if test='bpmn_statusCode != null'>
+            AND K.STATUSCODE = #{bpmn_statusCode}
+        </if>
+        AND U.USERID = #{loginUser.id}) Z
+        WHERE Z.TARGETID = ('${service_table}$' || T.ID)
+        )
+    </sql>
+
+</mapper>

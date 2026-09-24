@@ -20,7 +20,7 @@ emcDataSharing.editPage = {
             },
             requestData : {
                 targetType : 'dataSharing',
-                orgId_SB : workspace.user.ext$.parentorgid
+                org_filter : '1',
             },
         }
     },

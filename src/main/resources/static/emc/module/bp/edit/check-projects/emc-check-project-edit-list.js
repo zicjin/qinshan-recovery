@@ -25,7 +25,7 @@ emcCheckProject.editPage = {
                     } ]
                 }),
                 targetType : 'checkProjects',
-                orgId_SB : workspace.user.ext$.parentorgid
+                org_filter : '1',
             },
             onLoadSuccess : function(data) {
                 if (!Gikam.isEmpty(data)) {
@@ -57,7 +57,11 @@ emcCheckProject.editPage = {
                 onClick : function() {
                     _this.undo();
                 }
-            } ]
+            } ,{
+                type: 'caption',
+                text: '修改废气的因子时请特别注意，如果删除因子，采样的已经录数的分析项需要重新录入',
+                color: 'red'
+            }]
         }
     },
 
@@ -131,7 +135,7 @@ emcCheckProject.editPage = {
                         return row.testName || row.id;
                     },
                 	requestData : {
-                        TESTCAPCITYORGID_SEQ: workspace.user.ext$.parentorgid
+                        org_filter : '1',
         	        },
                     toolbar : [ {
                         type : 'button',
@@ -154,10 +158,81 @@ emcCheckProject.editPage = {
                         onClick : function() {
                             _this.editItem();
                         },
-                    } ]
+                    }, {
+                        type : 'button',
+                        text : '客服方案修改',
+                        icon : 'edit',
+                        onClick : function() {
+                            _this.editOrderTask();
+                        },
+                    }, {
+                        type : 'button',
+                        text : '删除分析项组',
+                        icon : 'remove-row',
+                        onClick : function() {
+                            _this.delOrderItemGroup();
+                        },
+                    },  ]
                 } ]
             }, ]
         }
+    },
+
+    delOrderItemGroup : function() {
+        var selections = Gikam.getComp('emc-check-project-edit-list-order-task-grid').getSelections();
+        if (Gikam.isEmpty(selections)) {
+            Gikam.alert('GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM');
+            return;
+        }
+        let itemGroupIdFlag = selections.some(item => Gikam.isEmpty(item.ext$.itemgroupid));
+        if (itemGroupIdFlag) {
+            Gikam.alert('分析项组数据有误');
+            return;
+        }
+
+        let doneFlag = selections.some(item => item.status === 'done');
+        if (doneFlag) {
+            Gikam.alert('EMC.MODULE.BP.EDIT.CHECKPROJECTS.TIP.CAN_NOT_DEL_TEST_WHEN_DONE');
+            return true;
+        }
+
+        Gikam.confirm('GIKAM.TIP.CONFIRM_TO_DELETE', 'GIKAM.TIP.CONFIRM_TO_DELETE_FOLLOWING_ITEMS', function() {
+            workspace.window.showMask(true);
+            Gikam.del('/secure/emc/module/bp/bp/orders/check-projects/action/order-item-group', Gikam.getJsonWrapper({
+            }, [ '', selections ])).done(function() {
+                Gikam.getComp('emc-check-project-edit-list-order-task-grid').refresh();
+            }).always(function() {
+                workspace.window.closeMask();
+            });
+        });
+    },
+
+    editOrderTask : function() {
+        var selections = Gikam.getComp('emc-check-project-edit-list-order-task-grid').getSelections();
+        if (selections.length !== 1) {
+            Gikam.alert('GIKAM.TIP.CHOOSE_ONE_ITEM');
+            return;
+        }
+        var itemGroupId = selections[0].ext$.itemgroupid;
+        if (Gikam.isEmpty(itemGroupId)) {
+            Gikam.alert('分析项组数据有误');
+            return;
+        }
+        Gikam.create('modal', {
+            title : '编辑测试',
+            width : '90%',
+            url : IFM_CONTEXT + '/secure/emc/module/bp/bp/folders/page/check-project-order-item-group-edit' + Gikam.param({
+                monitorTmplId : selections[0].monitorTmplId,
+                orderCategory : selections[0].orderCategory,
+                itemGroupId : selections[0].ext$.itemgroupid,
+                orderId : selections[0].orderId,
+                testMethodId : selections[0].testMethodId,
+            }),
+            onAfterClose : function() {
+                Gikam.getComp('emc-check-project-edit-list-order-task-grid').refresh();
+            }
+        });
+
     },
 
     addOrderTask : function() {

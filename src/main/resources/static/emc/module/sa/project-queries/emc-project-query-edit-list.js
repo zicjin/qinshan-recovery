@@ -13,16 +13,16 @@ emcProjectQuery.editPage = {
             page : true,
             requestData : {
                 targetType : 'modifyProjectInfo',
-                orgId_SB : workspace.user.ext$.parentorgid,
+                org_filter : '1',
             },
-            onBeforeRefresh : function (requestData) {
-                var orgName = workspace.user.orgName;
-                if(orgName.indexOf("质量部") >-1){
-                    requestData['projNo_SE'] = 'Z';
-                }else{
-                    requestData['projNo_DIFFER'] = 'Z';
-                }
-            },
+            // onBeforeRefresh : function (requestData) {
+            //     var orgName = workspace.user.orgName;
+            //     if(orgName.indexOf("质量部") >-1){
+            //         requestData['projNo_SE'] = 'Z';
+            //     }else{
+            //         requestData['projNo_DIFFER'] = 'Z';
+            //     }
+            // },
             onLoadSuccess : function(data) {
                 if (!Gikam.isEmpty(data)) {
                     this.activeRowByIndex(0);
@@ -48,10 +48,19 @@ emcProjectQuery.editPage = {
                 }
             }, {
                 type : 'button',
-                text : 'GIKAM.BUTTON.PREVIEW',
+                text : '查看任务流转单',
                 icon : 'print',
                 onClick : function() {
-                    Gikam.viewReport('xianchanglianxi', Gikam.getComp('emc-project-query-edit-list-grid').getSelections());
+                    let selections = Gikam.getComp('emc-project-query-edit-list-grid').getSelections();
+                    if (selections.length !== 1) {
+                        Gikam.alert('GIKAM.TIP.CHOOSE_ONE_ITEM');
+                        return;
+                    }
+                    if(selections[0].sample == '0'){
+                        Gikam.viewReport("1453165212202944", selections[0]);
+                    }else{
+                        Gikam.viewReport("1373854203127872", selections[0]);
+                    }
                 }
             },{
                 type : 'dropDownMenu',
@@ -72,110 +81,117 @@ emcProjectQuery.editPage = {
                     }
                 }]
             }, {
-                type : 'dropDownMenu',
-                text : '更多操作',
-                items : [ {
-                    type : 'button',
-                    text : 'EMC.MODULE.BP.REPORT.REPORTS.BUTTON.COMPLETERECORD',
-                    icon : 'batch-to-check',
-                    onClick : function() {
-                        _this.completeProject();
-
+                // type : 'dropDownMenu',
+                // text : '更多操作',
+                // items : [ {
+                //     type : 'button',
+                //     text : 'EMC.MODULE.BP.REPORT.REPORTS.BUTTON.COMPLETERECORD',
+                //     icon : 'batch-to-check',
+                //     onClick : function() {
+                //         _this.completeProject();
+                //
+                //     }
+                // }, {
+                //     type : 'button',
+                //     text : 'EMC.MODULE.BP.REPORT.REPORTS.BUTTON.CANCELCOMPLETERECORD',
+                //     icon : 'batch-to-check',
+                //     onClick : function() {
+                //         _this.cancelCompleteProject();
+                //
+                //     }
+                // }, {
+                //     type : 'button',
+                //     text : 'EMC.MODULE.BP.PROJECT.BUTTON.TASK_PROCESS_DISPLAY',
+                //     icon : 'print',
+                //     onClick : function() {
+                //         Gikam.viewReport('taskProcessDisplay',[{}]);
+                //         //Gikam.viewReport('taskProcessDisplay', Gikam.getComp('emc-project-query-edit-list-grid').getSelections());
+                //     }
+                // }, {
+                //     type : 'button',
+                //     text : 'EMC.MODULE.BP.PROJECT.BUTTON.SEND_REPORT',
+                //     icon : 'export',
+                //     onClick : function() {
+                //         var selections = Gikam.getComp('emc-project-query-edit-list-grid').getSelections();
+                //         if (Gikam.isEmpty(selections)) {
+                //             Gikam.alert('GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM');
+                //             return;
+                //         }
+                //
+                //         Gikam.create('modal', {
+                //             title : 'EMC.MODULE.BP.PROJECT.TITLE.ARCHIVED_REPORT',
+                //             width : '50%',
+                //             height : '70%',
+                //             url : IFM_CONTEXT + '/secure/emc/module/bp/project/projects/page/report-choose-list' + Gikam.param({
+                //                 id : selections[0].id
+                //             }),
+                //             onAfterClose : function(rows) {
+                //                 if (Gikam.isEmpty(rows)) {
+                //                     return;
+                //                 }
+                //
+                //                 Gikam.confirm('EMC.MODULE.BP.PROJECT.TITLE.CONFIRM_OPERATE', 'EMC.MODULE.BP.PROJECT.TIP.CONFIRM_SEND_REPORT', function() {
+                //                     workspace.window.showMask(true);
+                //                     Gikam.postText(IFM_CONTEXT + '/secure/emc/module/bp/project/projects/action/send-report', Gikam.getJsonWrapper({
+                //                         projectNo : selections[0].projNo
+                //                     }, [ 'coreFileServiceImpl', rows ], [ 'emcProjectServiceImpl', selections ])).done(function() {
+                //                         Gikam.alert('EMC.MODULE.BP.PROJECT.TIP.SEND_REPORT_SUCCESS');
+                //                     }).always(function() {
+                //                         workspace.window.closeMask();
+                //                     });
+                //                 });
+                //             }
+                //         });
+                //     }
+                // }, {
+                //     type : 'button',
+                //     text : '业务流程图',
+                //     icon : 'browse',
+                //     onClick : function() {
+                //         let selections = Gikam.getComp('emc-project-query-edit-list-grid').getSelections();
+                //         if (selections.length !== 1) {
+                //             Gikam.alert('GIKAM.TIP.CHOOSE_ONE_ITEM');
+                //             return;
+                //         }
+                //
+                //         Gikam.create('modal', {
+                //             title : '业务流程图',
+                //             width : '90%',
+                //             height : '90%',
+                //             url : IFM_CONTEXT + '/secure/emc/module/sa/project-queries/page/business-diagram' + Gikam.param({
+                //                 projId : selections[0].id
+                //             })
+                //         });
+                //     }
+                // }, {
+                //     type : 'button',
+                //     text : '修复送样数据',
+                //     icon : 'browse',
+                //     onClick : function() {
+                //         let selections = Gikam.getComp('emc-project-query-edit-list-grid').getSelections();
+                //         let targetSelections =  selections.filter(item => item.sample !== '1');
+                //         if (Gikam.isEmpty(targetSelections)) {
+                //             Gikam.alert('请选择送样任务');
+                //             return;
+                //         }
+                //
+                //         Gikam.confirm('EMC.MODULE.BP.PROJECT.TITLE.CONFIRM_OPERATE', '是否确定修复数据？', function() {
+                //             workspace.window.showMask(true);
+                //             Gikam.postText(IFM_CONTEXT + '/secure/emc/module/bp/project/projects/action/repair', Gikam.getJsonWrapper(null, [ 'emcProjectServiceImpl', targetSelections ])).done(function() {
+                //                 Gikam.alert('数据修复成功');
+                //             }).always(function() {
+                //                 workspace.window.closeMask();
+                //             });
+                //         });
+                //     }
+                // },{
+                    type: 'button',
+                    text: 'GIKAM.BUTTON.VIEWAUDIT',
+                    icon: 'view-audit',
+                    onClick: function () {
+                        Gikam.viewAudit('T_EMC_PROJECT', Gikam.getComp('emc-project-query-edit-list-grid').getSelections());
                     }
-                }, {
-                    type : 'button',
-                    text : 'EMC.MODULE.BP.REPORT.REPORTS.BUTTON.CANCELCOMPLETERECORD',
-                    icon : 'batch-to-check',
-                    onClick : function() {
-                        _this.cancelCompleteProject();
-
-                    }
-                }, {
-                    type : 'button',
-                    text : 'EMC.MODULE.BP.PROJECT.BUTTON.TASK_PROCESS_DISPLAY',
-                    icon : 'print',
-                    onClick : function() {
-                        Gikam.viewReport('taskProcessDisplay',[{}]);
-                        //Gikam.viewReport('taskProcessDisplay', Gikam.getComp('emc-project-query-edit-list-grid').getSelections());
-                    }
-                }, {
-                    type : 'button',
-                    text : 'EMC.MODULE.BP.PROJECT.BUTTON.SEND_REPORT',
-                    icon : 'export',
-                    onClick : function() {
-                        var selections = Gikam.getComp('emc-project-query-edit-list-grid').getSelections();
-                        if (Gikam.isEmpty(selections)) {
-                            Gikam.alert('GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM');
-                            return;
-                        }
-
-                        Gikam.create('modal', {
-                            title : 'EMC.MODULE.BP.PROJECT.TITLE.ARCHIVED_REPORT',
-                            width : '50%',
-                            height : '70%',
-                            url : IFM_CONTEXT + '/secure/emc/module/bp/project/projects/page/report-choose-list' + Gikam.param({
-                                id : selections[0].id
-                            }),
-                            onAfterClose : function(rows) {
-                                if (Gikam.isEmpty(rows)) {
-                                    return;
-                                }
-
-                                Gikam.confirm('EMC.MODULE.BP.PROJECT.TITLE.CONFIRM_OPERATE', 'EMC.MODULE.BP.PROJECT.TIP.CONFIRM_SEND_REPORT', function() {
-                                    workspace.window.showMask(true);
-                                    Gikam.postText(IFM_CONTEXT + '/secure/emc/module/bp/project/projects/action/send-report', Gikam.getJsonWrapper({
-                                        projectNo : selections[0].projNo
-                                    }, [ 'coreFileServiceImpl', rows ], [ 'emcProjectServiceImpl', selections ])).done(function() {
-                                        Gikam.alert('EMC.MODULE.BP.PROJECT.TIP.SEND_REPORT_SUCCESS');
-                                    }).always(function() {
-                                        workspace.window.closeMask();
-                                    });
-                                });
-                            }
-                        });
-                    }
-                }, {
-                    type : 'button',
-                    text : '业务流程图',
-                    icon : 'browse',
-                    onClick : function() {
-                        let selections = Gikam.getComp('emc-project-query-edit-list-grid').getSelections();
-                        if (selections.length !== 1) {
-                            Gikam.alert('GIKAM.TIP.CHOOSE_ONE_ITEM');
-                            return;
-                        }
-
-                        Gikam.create('modal', {
-                            title : '业务流程图',
-                            width : '90%',
-                            height : '90%',
-                            url : IFM_CONTEXT + '/secure/emc/module/sa/project-queries/page/business-diagram' + Gikam.param({
-                                projId : selections[0].id
-                            })
-                        });
-                    }
-                }, {
-                    type : 'button',
-                    text : '修复送样数据',
-                    icon : 'browse',
-                    onClick : function() {
-                        let selections = Gikam.getComp('emc-project-query-edit-list-grid').getSelections();
-                        let targetSelections =  selections.filter(item => item.sample !== '1');
-                        if (Gikam.isEmpty(targetSelections)) {
-                            Gikam.alert('请选择送样任务');
-                            return;
-                        }
-
-                        Gikam.confirm('EMC.MODULE.BP.PROJECT.TITLE.CONFIRM_OPERATE', '是否确定修复数据？', function() {
-                            workspace.window.showMask(true);
-                            Gikam.postText(IFM_CONTEXT + '/secure/emc/module/bp/project/projects/action/repair', Gikam.getJsonWrapper(null, [ 'emcProjectServiceImpl', targetSelections ])).done(function() {
-                                Gikam.alert('数据修复成功');
-                            }).always(function() {
-                                workspace.window.closeMask();
-                            });
-                        });
-                    }
-                } ]
+                // } ]
             }, ]
         }
     },
@@ -261,7 +277,7 @@ emcProjectQuery.editPage = {
                         requestData : {
                             projId_SEQ : row.id,
                             subpackageType_SEQ : 'create',
-                            orgId_SB: workspace.user.ext$.parentorgid
+                            org_filter : '1',
                         }
                     });
                     grid.refreshColumns(emcProjectQuery.getProjectSubpackageListColumns());
@@ -283,7 +299,7 @@ emcProjectQuery.editPage = {
                         requestData : {
                             projId_SEQ : row.id,
                             subpackageType_SEQ : 'create',
-                            orgId_SB: workspace.user.ext$.parentorgid
+                            org_filter : '1',
                         }
                     });
                     grid.refreshColumns(emcProjectQuery.getProjectSubpackageListColumns());
@@ -335,7 +351,30 @@ emcProjectQuery.editPage = {
                     }
                 });
             });
-
+            Gikam.getAsyncComp('emc-project-query-edit-list-invoice-proj-grid').done(function(grid) {
+                grid.refresh({
+                    url : emcProjectQuery.projectUrl + '/crm/invoice-proj/queries',
+                    requestData : {
+                        PROJPROJID_SEQ : row.id
+                    }
+                });
+            });
+            Gikam.getAsyncComp('emc-project-query-edit-list-payment-proj-grid').done(function(grid) {
+                grid.refresh({
+                    url : emcProjectQuery.projectUrl + '/crm/payment-proj/queries',
+                    requestData : {
+                        PROJPROJID_SEQ : row.id
+                    }
+                });
+            });
+            Gikam.getAsyncComp('emc-project-query-edit-list-contract-grid').done(function(grid) {
+                grid.refresh({
+                    url : emcProjectQuery.projectUrl + '/all-proj/queries',
+                    requestData : {
+                        CONTRACTNO_SEQ : Gikam.isEmpty(row.ext$.contractno) ? '1' : row.ext$.contractno
+                    }
+                });
+            });
             // 查询合同附件
             Gikam.getAsyncComp('emc-project-query-edit-list-contract-uploader').done(function (uploader) {
                 Gikam.post(IFM_CONTEXT + '/secure/emc/module/mdm/crm/contracts/queries', Gikam.getJsonWrapper({
@@ -374,6 +413,32 @@ emcProjectQuery.editPage = {
         })
     },
 
+    refreshContractForm: function () {
+        var _this = this;
+        var grid = Gikam.getComp('emc-project-query-edit-list-contract-grid');
+        var form = Gikam.getComp('emc-project-query-edit-list-contract-form');
+        var selections = grid.getData();
+        var totalPrice = 0;
+        if (Gikam.isEmpty(selections)) {
+            form.setData({
+                contractPrice: '0',
+                totalPrice: totalPrice,
+            });
+            return;
+        }
+        selections.forEach(function (item) {
+            if (isNaN(item.ext$.price)) {
+                item.ext$.price = 0;
+            }
+            totalPrice = totalPrice + parseFloat(item.ext$.price);
+        });
+        totalPrice = totalPrice.toFixed(2);
+        form.setData({
+            totalPrice: totalPrice,
+            contractPrice: selections[0].ext$.contractprice,
+        });
+    },
+
     getBaseInfoTab : function() {
         var _this = this;
         return {
@@ -387,13 +452,18 @@ emcProjectQuery.editPage = {
                         items : [ {
                             type : 'layout',
                             north : {
-                                height : '60%',
+                                height : '50%',
                                 items : [ {
                                     type : 'form',
                                     columns : 3,
                                     readonly : true,
                                     id : 'emc-project-query-edit-list-base-info-form',
-                                    fields : emcProjectQuery.getBaseInfoFormFields(),
+                                    panels : [
+                                        {title : '合同信息',fields : emcProjectQuery.getBaseInfoFormFields11()},
+                                        {title : '委托单位信息',fields : emcProjectQuery.getBaseInfoFormFields12()},
+                                        {title : '受检单位',fields : emcProjectQuery.getBaseInfoFormFields13()},
+                                        {title : '项目信息',fields : emcProjectQuery.getBaseInfoFormFields14()},
+                                    ],
                                     onLoadSuccess : function(data) {
                                         Gikam.refreshGrids({
                                             'emc-project-query-edit-list-director-grid' : '/secure/emc/module/bp/project/projects/{id}/directors/queries',
@@ -403,26 +473,55 @@ emcProjectQuery.editPage = {
                                     }
                                 } ]
                             },
-                            center : {
-                                items : [ {
-                                    type : 'tab',
-                                    id : 'emc-project-query-edit-list-director-tab',
-                                    fill : true,
-                                    width : Gikam.width.XL,
-                                    panels : [ {
-                                        id : 'emc-project-query-edit-list-director-panel',
-                                        title : 'EMC.MODULE.BP.PROJECT.PROJECTS.TITLE.PROJECT_DIRECTOR',
-                                        items : [ {
-                                            type : 'grid',
-                                            id : 'emc-project-query-edit-list-director-grid',
-                                            filterOpen : false,
-                                            service : 'emcProjectDirectorServiceImpl',
-                                            page : false,
-                                            readonly : true,
-                                            columns : emcProjectQuery.getProjectDirectorListColumns()
-                                        } ]
-                                    } ]
-                                } ]
+                            center: {
+                                items: [{
+                                    type: 'tab',
+                                    id: 'emc-project-query-edit-list-director-tab',
+                                    fill: true,
+                                    width: Gikam.width.XL,
+                                    panels: [{
+                                        id: 'emc-project-query-edit-list-director-panel',
+                                        title: 'EMC.MODULE.BP.PROJECT.PROJECTS.TITLE.PROJECT_DIRECTOR',
+                                        items: [{
+                                            type: 'grid',
+                                            id: 'emc-project-query-edit-list-director-grid',
+                                            filterOpen: false,
+                                            service: 'emcProjectDirectorServiceImpl',
+                                            page: false,
+                                            readonly: true,
+                                            columns: emcProjectQuery.getProjectDirectorListColumns()
+                                        }]
+                                    }, {
+                                        id: 'emc-project-query-edit-list-contract-panel',
+                                        title: '合同任务',
+                                        items: [{
+                                            type: 'layout',
+                                            center: {
+                                                items: [{
+                                                    type: 'grid',
+                                                    id: 'emc-project-query-edit-list-contract-grid',
+                                                    readonly: true,
+                                                    columns: emcProjectQuery.getContractColumns(),
+                                                    onLoadSuccess: function (data) {
+                                                        _this.refreshContractForm();
+                                                    },
+                                                }]
+                                            },
+                                            south: {
+                                                height: 55,
+                                                items: [{
+                                                    type: 'form',
+                                                    id: 'emc-project-query-edit-list-contract-form',
+                                                    columns: 2,
+                                                    titleWidthAuto: true,
+                                                    readonly: true,
+                                                    fields: emcProjectQuery.getContractFormFields(),
+                                                    autoSave: false,
+                                                }]
+                                            }
+                                        }]
+                                    }]
+                                }]
                             }
                         }, ]
                     },
@@ -688,13 +787,16 @@ emcProjectQuery.editPage = {
                             id : 'emc-project-query-edit-list-audit-record-grid',
                             columns : emcProjectQuery.getAuditRecordListColumns(),
                             page : true,
-                            group : {
-                                groupCheckbox : false,
-                                fields : [ 'auditCategory' ],
-                                formatter : function(row) {
-                                    return row.stepCode + '、' + row.auditCategory;
-                                }
-                            }
+                            order: {
+                                createdTime: 'asc'
+                            },
+                            // group : {
+                            //     groupCheckbox : false,
+                            //     fields : [ 'auditCategory' ],
+                            //     formatter : function(row) {
+                            //         return row.stepCode + '、' + row.auditCategory;
+                            //     }
+                            // }
                         } ]
                     }, {
                         // 查询结果
@@ -756,7 +858,7 @@ emcProjectQuery.editPage = {
                                             id : 'emc-project-query-edit-list-order-task-info-grid',
                                             columns : emcProjectQuery.getOrderTaskInfoColumns(),
                                             requestData : {
-                                                TESTCAPCITYORGID_SEQ: workspace.user.ext$.parentorgid,
+                                                org_filter : '1',
                                                 virtual_IN: ','
                                             },
                                             onLoadSuccess : function(data) {
@@ -800,7 +902,7 @@ emcProjectQuery.editPage = {
                                         columns : emcProjectQuery.getProjectSubpackageListColumns(),
                                         requestData : {
                                             subpackageType_SEQ : 'create',
-                                            orgId_SB: workspace.user.ext$.parentorgid
+                                            org_filter : '1',
                                         },
                                         service : 'emcSubpackageServiceImpl',
                                         toolbar : _this.getSubpackageButton(),
@@ -896,7 +998,7 @@ emcProjectQuery.editPage = {
                                         columns : emcProjectQuery.getProjectSubpackageListColumns(),
                                         requestData : {
                                             subpackageType_SEQ : 'create',
-                                            orgId_SB: workspace.user.ext$.parentorgid
+                                            org_filter : '1',
                                         },
                                         service : 'emcSubpackageServiceImpl',
                                         toolbar : _this.getSampleSubpackageButton(),
@@ -969,6 +1071,22 @@ emcProjectQuery.editPage = {
                                 }
                             } ]
                         }
+                    } ]
+                }, {
+                    title : '绑定发票',
+                    items : [ {
+                        type : 'grid',
+                        id : 'emc-project-query-edit-list-invoice-proj-grid',
+                        columns : emcProjectQuery.getInvoiceProjListColumns(),
+                        page : true,
+                    } ]
+                }, {
+                    title : '绑定收款',
+                    items : [ {
+                        type : 'grid',
+                        id : 'emc-project-query-edit-list-payment-proj-grid',
+                        columns : emcProjectQuery.getPaymentProjListColumns(),
+                        page : true,
                     } ]
                 } ]
         }
@@ -1073,9 +1191,6 @@ emcProjectQuery.editPage = {
                         id : 'emc-project-query-edit-list-order-item-group-grid',// 样品分析项组
                         columns : emcProjectQuery.getOrderItemGroupColumns(),
                         service : 'emcOrderItemGroupServiceImpl',
-                        /*requestData : {
-                           orgId_SEQ : workspace.user.ext$.parentorgid,
-                        },*/
                     } ]
                 }
             } ]
@@ -1214,7 +1329,7 @@ emcProjectQuery.editPage = {
                 requestData : {
                     projId_SEQ : row.projId,
                     orderId_SEQ : row.id,
-                    TESTCAPCITYORGID_SEQ : workspace.user.ext$.parentorgid,
+                    org_filter : '1',
                     virtual_IN: ','
                 },
                 order : {
@@ -1568,13 +1683,13 @@ emcProjectQuery.editPage = {
                                 Gikam.postText('/core/module/item/files/action/pack',Gikam.getJsonWrapper({}, [ '', fileIds])
                                 ).done(function (fileUrl) {
                                     if (fileUrl !== '' && fileUrl !== undefined) {
-                                        Gikam.download(IFM_CONTEXT + fileUrl);
+                                        Gikam.emcDownloadFile(IFM_CONTEXT + fileUrl);
                                     }
                                 	Gikam.alert('导出完成！');
                                 })
                             }else if (fileIds.length === 1){
                                 Gikam.getJson(IFM_CONTEXT + '/core/module/item/files/' + selections[0]).done(function(coreFile) {
-                                    Gikam.download(IFM_CONTEXT + coreFile.downloadUrl);
+                                    Gikam.emcDownloadFile(IFM_CONTEXT + coreFile.downloadUrl);
                                 });
                             	Gikam.alert('导出完成！');
                             }

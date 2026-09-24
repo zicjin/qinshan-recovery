@@ -21,7 +21,17 @@
                                S1.SOLNO       AS SOL1NO,
                                S2.SOLNO       AS SOL2NO,
                                R.REAGENTNAME,
-                               U.ORGID AS RUNANALYSISORGID
+                               U.ORGID AS RUNANALYSISORGID,
+                               P.URGENT,
+                               P.STATUS AS PROJSTATUS,
+                                TM.TESTCLASS,
+        ( SELECT COUNT(OT.ORDERID) FROM T_EMC_ORDER_TASK OT
+        LEFT JOIN T_EMC_QC_CATEGORY QC
+        ON OT.QCCATEGORYID = QC.ID
+        WHERE
+        (QC.USECATEGORY IS NULL
+        OR QC.USECATEGORY = 'scene')
+        AND A.ID = OT.RUNID) AS SAMPLEORDERNUM
                           FROM T_EMC_RUN A
                           LEFT JOIN T_EMC_EQUIPT D
                             ON A.EQUIPTID = D.ID
@@ -35,6 +45,10 @@
                             ON A.REAGENTID = R.ID
                           LEFT JOIN T_CORE_USER U
                           	ON A.ANALYSISUSERID = U.ID
+                          LEFT JOIN T_EMC_PROJECT P
+                            ON A.PROJID = P.ID
+                    LEFT JOIN T_EMC_TEST_METHOD TM
+                    ON TO_CHAR(A.TESTMETHODID )= TO_CHAR( TM.ID)
                           ) TT) T
         <where>
             <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
@@ -55,13 +69,7 @@
                               FROM T_EMC_ORDER_TASK OT
                              WHERE OT.RUNID = T.ID
                                AND OT.STATUS IN ('audit', 'qcAudit')
-                               AND OT.MONITORTMPLID = #{monitorTmplId}
                                AND OT.PROJID = #{projId}
-                               AND EXISTS (SELECT 1
-                               FROM T_CORE_USER_PERMISSION UP_
-                               WHERE UP_.USERID = #{loginUser.id}
-                               AND UP_.PERMISSIONTYPEID = 'T_CORE_ORG'
-                               AND UP_.TARGETID = OT.ANALYSISORGID)
                                )
             </if>
             <if test='targetType == "projectRunUnAudit"'>
@@ -69,7 +77,6 @@
                 FROM T_EMC_ORDER_TASK OT
                 WHERE OT.RUNID = T.ID
                 AND OT.STATUS NOT IN ('done')
-                AND OT.MONITORTMPLID = #{monitorTmplId}
                 AND OT.PROJID = #{projId}
                 )
             </if>
@@ -79,7 +86,6 @@
                               FROM T_EMC_ORDER_TASK OT
                              WHERE OT.RUNID = T.ID
                                AND OT.STATUS = 'done'
-                               AND OT.MONITORTMPLID = #{monitorTmplId}
                                AND OT.PROJID = #{projId}
                                AND EXISTS (SELECT 1
                                FROM T_CORE_USER_PERMISSION UP_
@@ -115,7 +121,6 @@
                               FROM T_EMC_ORDER_TASK B, T_EMC_FOLDER C
                             WHERE T.ID = B.RUNID
                               AND B.FOLDERID = C.ID
-                              AND C.STATUS = 'draw'
                               AND C.PROJID = #{projId}
                 )
             </if>

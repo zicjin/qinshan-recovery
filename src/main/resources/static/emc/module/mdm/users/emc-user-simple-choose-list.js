@@ -9,7 +9,7 @@ Gikam.extend(coreUser.simpleChoosePage, {
         });
 
         _this.param.status_SEQ = 'activated';
-        _this.param.parentOrgId_SB = workspace.user.ext$.parentorgid;
+        _this.param.org_filter = '1';
 
         return {
             type : 'grid',

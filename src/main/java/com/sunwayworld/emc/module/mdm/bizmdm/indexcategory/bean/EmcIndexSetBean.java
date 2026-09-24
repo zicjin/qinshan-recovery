@@ -42,6 +42,8 @@ public class EmcIndexSetBean extends AbstractInsertable<Long>implements Insertab
 
     private String unit; // 单位
 
+    private String applyScope; // 适用范围
+
     private Long sortNo; // 排序码
 
     private String createdById; // 制单人Id
@@ -126,6 +128,14 @@ public class EmcIndexSetBean extends AbstractInsertable<Long>implements Insertab
 
     public void setUnit(String unit) {
         this.unit = unit;
+    }
+
+    public String getApplyScope() {
+        return applyScope;
+    }
+
+    public void setApplyScope(String applyScope) {
+        this.applyScope = applyScope;
     }
 
     public String getCreatedById() {

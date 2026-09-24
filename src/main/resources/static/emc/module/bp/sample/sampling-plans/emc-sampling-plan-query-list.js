@@ -13,14 +13,14 @@ emcSamplingPlan.queryPage = {
                 targetType : 'sampleprepare',
                 projectstatus_DIFFER : 'cancel',
                 status_SEQ : 'draw',
-	            orgId_SB : workspace.user.ext$.parentorgid,
+	            org_filter : '1',
             },
-            group : {
+            /*group : {
                 fields : [ 'ext$.userid' ],
                 formatter : function(row) {
                     return row.ext$.username + '(' + row.ext$.size + ')';
                 }
-            }
+            }*/
         }
     },
 

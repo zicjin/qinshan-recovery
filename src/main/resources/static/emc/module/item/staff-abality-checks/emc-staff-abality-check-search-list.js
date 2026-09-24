@@ -9,6 +9,7 @@ emcStaffAbalityCheck.searchPage = {
             service : 'emcStaffAbalityCheckServiceImpl',
             dbTable : 'T_EMC_STAFF_ABALITY_CHECK',
             columns : emcStaffAbalityCheck.getEditListColumns(),
+            readonly: true,
             onLoadSuccess : function(data) {
                 if (!Gikam.isEmpty(data)) {
                     this.activeRowByIndex(0);

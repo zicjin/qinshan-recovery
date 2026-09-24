@@ -33,7 +33,7 @@ emcProject.copyPage = {
                         entrustOrgName_CISC : formData.entrustOrgName,
                         createdById_SEQ : formData.createdById,
                         taskDate_CISC : taskDate,
-                        orgId_SB : workspace.user.ext$.parentorgid
+                        org_filter : '1',
                     },
                 })
             }
@@ -89,7 +89,8 @@ emcProject.copyPage = {
     // 选中项目
     onCopyProjectActive : function(row) {
         Gikam.getComp('emc-project-copy-result-form').setData({
-            bizCategoryId : row.bizCategoryId
+            bizCategoryId : row.bizCategoryId,
+            projName : row.projName
         });
 
         var tab = Gikam.getComp('emc-project-copy-monitor-point-order-tab');
@@ -151,10 +152,10 @@ emcProject.copyPage = {
         return {
             type : 'form',
             id : 'emc-project-copy-result-form',
-            columns : 4,
+            columns : 3,
             url : '',
-            titleWidth : 120,
-            service : 'emcFileServiceImpl',
+            titleWidthAuto : true,
+            // titleWidth : 120,
             fields : emcProject.getCopyFormFields(),
             autoSave : false
         }
@@ -181,25 +182,28 @@ emcProject.copyPage = {
                     selections.forEach(function (r) {
                         var row = {};
                         row.id = r.id;
+                        row.year = formData.year;
                         row.bizCategoryId = formData.bizCategoryId;
+                        row.bizCategoryCode = formData.bizCategoryId;
                         row.taskDate = formData.taskDate;
                         row.sample = r.sample;
                         row.copyQty = formData.copyQty;
+                        row.projName = formData.projName;
 
                         row.contractid = formData.ext$.contractid;
                         row.contractno = formData.ext$.contractno;
                         row.biddername = formData.ext$.biddername;
                         row.splitContractId = formData.splitContractId,
-                        row.entrustOrgId = formData.entrustOrgId,
-                        row.entrustOrgName = formData.entrustOrgName,
-                        row.entrustOrgAddress = formData.entrustOrgAddress,
-                        row.entrustOrgContact = formData.entrustOrgContact,
-                        row.entrustOrgPhone = formData.entrustOrgPhone,
-                        row.testOrgId = formData.testOrgId,
-                        row.testOrgName = formData.testOrgName,
-                        row.testOrgAddress = formData.testOrgAddress,
-                        row.testOrgContact = formData.testOrgContact,
-                        row.testOrgPhone = formData.testOrgPhone,
+                        // row.entrustOrgId = formData.entrustOrgId,
+                        // row.entrustOrgName = formData.entrustOrgName,
+                        // row.entrustOrgAddress = formData.entrustOrgAddress,
+                        // row.entrustOrgContact = formData.entrustOrgContact,
+                        // row.entrustOrgPhone = formData.entrustOrgPhone,
+                        // row.testOrgId = formData.testOrgId,
+                        // row.testOrgName = formData.testOrgName,
+                        // row.testOrgAddress = formData.testOrgAddress,
+                        // row.testOrgContact = formData.testOrgContact,
+                        // row.testOrgPhone = formData.testOrgPhone,
                         row.reportPostAddress = formData.reportPostAddress,
                         row.addressee = formData.addressee,
                         row.recipientPhone = formData.recipientPhone,
@@ -248,7 +252,7 @@ emcProject.copyPage = {
                 } ]
             },
             south : {
-                height : 56,
+                height : 112,
                 items : [ {
                     type : 'layout',
                     center : {

@@ -21,7 +21,7 @@ emcOrderStock.editPage = {
             requestData : {
                 status_DIFFER : 'draft',
                 targetType : 'orderReceipt',
-                orgId_SB: workspace.user.ext$.parentorgid
+                org_filter : '1',
             },
             toolbar : [ {
                 type : 'button',

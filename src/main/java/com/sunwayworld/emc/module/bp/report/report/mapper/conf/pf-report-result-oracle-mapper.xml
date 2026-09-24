@@ -6,11 +6,18 @@
         SELECT T.*
           FROM (SELECT A.*,
                        B.HORIZONTALCODE,
+                       B.SAMPLENUM,
+                        B.SENDDATE,
+                        B.SAMPLINGDEPTH,
                        C.INDEXNAME,
                        D.ANALYSISUSERNAME,
+        D.EQUIPTID AS ANALYSISEQUIPTID,
+        D.ASSISTEQUIPTID AS ANALYSISASSISTEQUIPTID,
                        E.EQUIPTID AS ANALYSISEQUIPTNO,
+                       E.SPECIFICATION AS ANALYSISSPECIFICATION,
                        E.EQUIPTNAME AS ANALYSISEQUIPTNAME,
-                       F.ANALYSISORGID,
+        (SELECT max(MAINTENDDATE) FROM T_EMC_EQUIPT_RECORD ER WHERE ER.EQUIPTID = D.EQUIPTID AND ER.COMPLETEFLAG = '2') AS ANALYSISEQUIPTRECORDDATE,
+        F.ANALYSISORGID,
                        F.ANALYSISORGNAME,
                        H.SAMPLEUSERNAME,
                        H.MONITORPOINTCATEGORYID,
@@ -19,17 +26,29 @@
                        H.PROCESSSTATUS,
                        H.LONGITUDE,
                        H.LATITUDE,
-                       G.EQUIPTID AS SAMPLEEQUIPTNO,
+        H.PLANSAMPLEDATE,
+        F.EQUIPTID AS SAMPLEEQUIPTID,
+        F.ASSISTEQUIPTID AS SAMPLEASSISTEEQUIPTID,
+        F.assistEquiptName AS SAMPLEASSISTEQUIPTNAME,
+        G.EQUIPTID AS SAMPLEEQUIPTNO,
+                       G.SPECIFICATION AS SAMPLEESPECIFICATION,
                        G.EQUIPTNAME AS SAMPLEEQUIPTNAME,
-                       I.REGISTDATE,
+        (SELECT max(MAINTENDDATE) FROM T_EMC_EQUIPT_RECORD ER WHERE ER.EQUIPTID = F.EQUIPTID AND ER.COMPLETEFLAG = '2') AS SAMPLEEQUIPTRECORDDATE,
+        I.REGISTDATE,
                        I.PROJNO,
                        M.TESTMETHODBASIS,
-                       P.ITEMGROUP,
-                       P.SCHEMENAME AS TESTSCHEMENAME,
                        N.COEFFICIENT,
                        N.LIMITUNITNAME,
                        N.DETECTEDQUANTITY,
-                       N.DETECTEDQUANTITYUNIT
+                       N.DETECTEDQUANTITYUNIT,
+                       N.ALLOWABLEERROR,
+                       TM.MULTIPLEITEMGROUP,
+                        Q.CONTAINERCATEGORYNAME,
+        CASE
+        WHEN NVL(H.MONITORPOINTNO, ' ') = NVL(H.MONITORPOINTNAME, ' ')
+        THEN H.MONITORPOINTNAME
+        ELSE H.MONITORPOINTNO || H.MONITORPOINTNAME
+        END AS REPORTMONITORPOINTNAME
                   FROM T_EMC_REPORT_RESULT A
                   LEFT JOIN T_EMC_ORDER B
                     ON A.ORDERID = B.ID
@@ -49,10 +68,13 @@
                     ON I.ID = A.PROJID
                   LEFT JOIN T_EMC_METHOD M
                     ON M.ID = A.METHODID
+                    LEFT JOIN T_EMC_TEST_METHOD TM
+                    ON TM.ID = A.TESTMETHODID
                   LEFT JOIN T_EMC_ITEM N
                     ON A.ITEMID = N.ID
-                  LEFT JOIN T_EMC_ORDER_ITEM_GROUP P
-                    ON A.ORDERID = P.ORDERID AND A.TESTMETHODID = P.TESTMETHODID) T
+                  LEFT JOIN T_EMC_ORDER_CONTAINER Q
+                    ON A.ORDERID = Q.ORDERID AND F.ORDERCONTAINERID = Q.ID
+        ) T
         <where>
             <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
         </where>

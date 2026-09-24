@@ -756,27 +756,27 @@ var emcContract = Gikam.getPageObject({
             field : 'contractName',
             title : 'T_EMC_CONTRACT.CONTRACTNAME',
         }, {
-            field : 'ext$.entrustorgname',
-            title : 'T_EMC_CONTRACT.ENTRUSTORG'
+            field : 'ext$.signusername',
+            title : '合同签约人'
         }, {
-            field : 'ext$.contractcategory',
-            title : 'T_EMC_CONTRACT.CONTRACTCATEGORY',
-            type : 'select',
-            category : 'sys',
-            param : {
-                codeCategoryId : 'contractCategory',
-            },
-            width : 100
+          field : 'ext$.clientname',
+          title : '客户名称'
+      }, {
+          field : 'ext$.contractorgname',
+          title : '乙方'
+      },{
+            field: 'ext$.signusername',
+            title: '乙方联系人'
         }, {
-            field : 'ext$.detectcategory',
-            title : 'T_EMC_CONTRACT.DETECTCATEGORY',
-            type : 'select',
-            category : 'sys',
-            param : {
-                codeCategoryId : 'detectCategory',
-            },
-            width : 100
-        } ];
+              field: 'ext$.signdate',
+              title: '签订日期'
+          }, {
+              field: 'ext$.contractprice',
+              title: '合同金额'
+          }, {
+              field: 'ext$.projallprice',
+              title: '合同委托金额'
+          }];
     },
 
     getSplitChooseListColumns : function() {

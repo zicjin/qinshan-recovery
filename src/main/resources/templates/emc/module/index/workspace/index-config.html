@@ -39,6 +39,22 @@
             }
         },
 
+        //通过样品id查询样品交接单
+        viewHandOverRecord: function(orderId) {
+            if(!Gikam.isEmpty(orderId)){
+                workspace.window.showMask(true);
+                Gikam.post('/secure/emc/module/bp/sample/samples/queries/sample-record', Gikam.getJsonWrapper({
+                    orderId : orderId
+                }, [ '', null ])).done(function(sampleData) {
+                    if(!Gikam.isEmpty(sampleData)){
+                        Gikam.viewReport('2360', sampleData);
+                    }
+                }).always(function() {
+                    workspace.window.closeMask();
+                });
+            }
+        },
+
         // 查看报表
         viewReport : function(id, data) {
             if (data instanceof Array) {
@@ -88,6 +104,7 @@
                 if (reportLine.reportCategory === 'reportingService') {
                     _this.viewReportingServiceReport(reportLine, paramValueJson);
                 } else if (reportLine.reportCategory === 'fanruan') {
+                    reportLine.reportCategory = 'reportlet';
                     _this.viewFanruanReport(reportLine, paramValueJson);
                 } else {
                     Gikam.alert('CORE.MODULE.SYS.REPORTS.TIP.VIEW_REPORT_FAILURE');
@@ -96,25 +113,23 @@
         },
 
         // 直接通过弹出框预览帆软报表
-        viewFanruanReport : function(reportLine, paramValueJson) {
-            var frViewUrl = IFM_CONTEXT + '/ReportServer?reportlet=';
-            var fileName = reportLine.ext$.filename;
-            var param = reportLine.param;
-            if (param === '' || param === null || param === undefined) {
-                frViewUrl = frViewUrl + '/' + reportLine.reportConfigLineNo + '/' + fileName;
-            } else {
+        viewFanruanReport : function(reportConfigLine, paramValueJson) {
+            var reportCategory = reportConfigLine.reportCategory;
+            var reportPath = reportConfigLine.reportConfigLineNo + '/' + encodeURIComponent(reportConfigLine.ext$.filename);
+            var param = reportConfigLine.param;
+            var reportUrl = Gikam.getViewReportUrl(reportCategory, reportPath);
+            if (param !== '' && param !== null && param !== undefined) {
                 var reportParam = this.parseReportParam(param, [ paramValueJson ]);
                 if (reportParam.indexOf('undefined') !== -1) {
                     Gikam.alert('EMC.MODULE.SYS.REPORTS.TIP.PARAMTER_VALUE_MISSING');
                     return;
                 }
-                frViewUrl = frViewUrl + '/' + reportLine.reportConfigLineNo + '/' + fileName;
                 if (!Gikam.isEmpty(reportParam)) {
-                    frViewUrl = frViewUrl + '&' + reportParam;
+                    reportUrl = reportUrl + '&' + reportParam;
                 }
             }
             Gikam.create('modal', {
-                src : frViewUrl,
+                src : reportUrl,
                 title : 'CORE.MODULE.SYS.REPORTS.TITLE.REPORTVIEW',
                 iframe : true,
                 width : Gikam.width.L
@@ -175,6 +190,7 @@
                 if (reportLine.reportCategory === 'reportingService') {
                     reportUrl = _this.getReportingServiceReportUrl(reportLine, reportData);
                 } else if (reportLine.reportCategory === 'fanruan') {
+                    reportLine.reportCategory = 'reportlet';
                     reportUrl = _this.getFanruanReportUrl(reportLine, reportData);
                 }
             });
@@ -182,23 +198,24 @@
         },
 
         // 获取帆软报表地址
-        getFanruanReportUrl : function(reportLine, selections) {
-            var frViewUrl = IFM_CONTEXT + '/ReportServer?reportlet=';
-            var fileName = reportLine.ext$.filename;
-            var param = reportLine.param;
-            if (param === '' || param === null || param === undefined) {
-                frViewUrl = frViewUrl + '/' + reportLine.reportConfigLineNo + '/' + fileName;
-            } else {
-                var reportParam = this.parseReportParam(param, selections);
-                frViewUrl = frViewUrl + '/' + reportLine.reportConfigLineNo + '/' + fileName;
+        getFanruanReportUrl : function(reportConfigLine, selections) {
+            var _this = this;
+            var reportCategory = reportConfigLine.reportCategory;
+            var reportPath = reportConfigLine.reportConfigLineNo + '/' + encodeURIComponent(reportConfigLine.ext$.filename);
+            var param = reportConfigLine.param;
+            var reportUrl = Gikam.getViewReportUrl(reportCategory, reportPath);
+            if (param !== '' && param !== null && param !== undefined) {
+                var reportParam = _this.parseReportParam(param, selections);
                 if (reportParam.indexOf('undefined') !== -1) {
-                    frViewUrl = '';
-                } else if (!Gikam.isEmpty(reportParam)) {
-                    frViewUrl = frViewUrl + '&' + reportParam;
+                    Gikam.alert('EMC.MODULE.SYS.REPORTS.TIP.PARAMTER_VALUE_MISSING');
+                    return;
+                }
+                if (!Gikam.isEmpty(reportParam)) {
+                    reportUrl = reportUrl + '&' + reportParam;
                 }
             }
 
-            return frViewUrl;
+            return reportUrl;
         },
 
         // 获取Reporting Service 报表地址
@@ -324,7 +341,12 @@
             checkOneOnActive : true,
             editorInvisible : true,
             columnsFill : false,
-            toolbarAlign : 'left'
+            toolbarAlign : 'left',
+            filterOpen : true,
+        },
+        shuttleFrame : {
+            rightPage : false,
+            leftPage : false,
         },
         window : {
             showTitle : false
@@ -349,10 +371,11 @@
 
     Gikam.status.getBpmnColumn = function(dbTable) {
         return {
-            field : 'processStatus_SB',
+            field : 'processStatus',
             title : 'GIKAM.BPMN.FIELD.TITLE.STATUS',
             sort : false,
             type : 'select',
+            match:'SB',
             search : true,
             items : [ {
                 text : '',
@@ -422,6 +445,136 @@
             this.options.checkOneOnActive = true;
         }
     });
+
+    Gikam.component.Grid.prototype.batchEdit = function (options) {
+        const def = Gikam.jQuery.Deferred();
+        var grid = this;
+        var selections = grid.getSelections();
+        if (Gikam.isEmpty(selections)) {
+            Gikam.alert('GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM');
+            return;
+        }
+        var modal = Gikam.create('modal', {
+            title: options.modalTitle || '批录入',
+            width: options.width || 400,
+            height: options.height || 50 * options.fields.length + 100,
+        });
+        var layout = Gikam.create('layout', {
+            renderTo: modal.window.$dom,
+            center: {
+                items: [{
+                    type: 'btnToolbar',
+                    items: [{
+                        type: 'button',
+                        text: 'GIKAM.BUTTON.CONFIRM',
+                        class: 'blue',
+                        onClick: function () {
+                            if (form.validate()) {
+                                var updateData = selections.map(function (item) {
+                                    return Gikam.deepExtend({id: item.id}, form.getData());
+                                });
+                                Gikam.getLastModal().window.showMask();
+                                Gikam.put(grid.getInstantSavePath(), Gikam.getJsonWrapper({}, [grid.options.service, updateData])).done(function () {
+                                    grid.refresh();
+                                    modal.close();
+                                    def.resolve();
+                                }).always(function () {
+                                    Gikam.getLastModal().window.closeMask();
+                                });
+                            }
+                        }
+                    }, {
+                        type: 'button',
+                        text: 'GIKAM.BUTTON.CANCEL',
+                        onClick: function () {
+                            modal.close();
+                        }
+                    }]
+                }]
+            }
+        });
+        var form = Gikam.create('form', {
+            renderTo: layout.options.center.$dom,
+            columns: options.columns || 1,
+            titleWidth: options.titleWidth || 80,
+            fields: options.fields,
+            autoSave: false
+        });
+        return def;
+    };
+
+    Gikam.emcUrgentColor = '#FF1432';
+    Gikam.getConstantValue("LIMS_EMC_TOP_ORG_ID").done((function(o) {
+        Gikam.emcTopOrgId = o.constantValue;
+    }))
+    // Gikam.emcUrgentColor = '#FF8080';
+
+    // 自定义校验规则
+    Gikam.validator.emcTime = function (value) {
+        if (!value) {
+            return {result: true}
+        }
+        if (!new RegExp('^(0[0-9]|1[0-9]|2[0-3]):([0-5][0-9])$').test(value)) {
+            return {
+                result: false,
+                message: '请输入时间格式'
+            }
+        }
+        return {result: true}
+    };
+
+    Gikam.requirejs(['/static/pageoffice/pageoffice.js']);
+
+    Gikam.openCoverFileByPageOffice = function (url, arr1, grid) {
+        if (arr1.length > 0) {
+            var id = arr1.shift();
+            var saveUrl = url + "?fileId=" + id;
+            filemakerctrl.CallFileMaker({
+                url: saveUrl,
+                success: function (res) {
+                    console.log("completed successfully.");
+                    Gikam.put(IFM_CONTEXT+'/secure/gikam/actions/instant', Gikam.getJsonWrapper({}, [ 'coreFileServiceImpl', [{id: id,remark: 'successfully'}] ])).done(function(data) {
+                    })
+                    if (grid) {
+                        Gikam.getComp(grid).grid.refresh();
+                    }
+                    setTimeout(function(){
+                        Gikam.openCoverFileByPageOffice(url, arr1)
+                    }, 1000);
+                },
+                progress: function (pos) {
+                    console.log("running " + pos + "%");
+                },
+                error: function (msg) {
+                    console.log("error occurred: " + msg);
+                    Gikam.put(IFM_CONTEXT+'/secure/gikam/actions/instant', Gikam.getJsonWrapper({}, [ 'coreFileServiceImpl', [{id: id,remark: msg}] ])).done(function(data) {
+                    })
+                    // setTimeout(function(){
+                    //     Gikam.openCoverFileByPageOffice(url, [id])
+                    // }, 1000);
+                }
+            });
+        }
+    };
+
+    Gikam.emcDownloadFile = function (url, filename) {
+        const a = Object.assign(document.createElement('a'), {
+            href: url,
+            download: filename ?? decodeURIComponent(url.split('/').pop() || 'download')
+        });
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+    }
+    Gikam.emcDownloadFileById = function (fileId) {
+
+        Gikam.getJson(Gikam.printf(IFM_CONTEXT + '/core/module/item/files/{id}', {
+            id : fileId
+        })).done(function(file) {
+            Gikam.emcDownloadFile(IFM_CONTEXT + file.downloadUrl);
+        });
+
+    };
 </script>
 <style>
     .main-container>header>.top-toolbar>.sys-info>.user>.user-photo {

@@ -64,15 +64,6 @@ var emcOrderTask = Gikam.getPageObject({
             field : 'name',
             title : 'T_CORE_FILE.NAME',
             type : 'link'
-        }, {
-            width: 100,
-            title: '操作',
-            formatter: function(i, v, r) {
-                let str = '<div style= "display: flex; justify-content: space-between ">';
-                str += `<a href="javascript:;" onclick="Gikam.download('${Gikam.IFM_CONTEXT}${r.downloadUrl}','${r.name}')" key = "download" style="flex: 1;text-align: center;">下载</a>`;
-                str += '</div>';
-                return str;
-            }
         } ];
     },
 

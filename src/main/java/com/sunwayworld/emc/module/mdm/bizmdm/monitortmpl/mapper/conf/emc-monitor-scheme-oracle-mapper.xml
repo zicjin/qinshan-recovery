@@ -14,6 +14,7 @@
                        C.METHODNAME,
                        C.MAXVERSIONID AS METHODVERSIONID,
                        C.TESTMETHODBASIS,
+                       C.TRIALSCOPE,
                        M.MONITORTMPLNAME,
                        M.MONITORTMPLGROUPID,
                        G.MONITORTMPLGROUP,
@@ -118,6 +119,123 @@
         SELECT T.*
           FROM T_EMC_MONITOR_SCHEME T
          WHERE T.ID = #{id}
+    </select>
+
+    <select id="selectByConditionGroupByTestMethod" parameterType="map" resultType="map">
+        SELECT T.*
+        FROM (SELECT
+        A.SCHEMENAME,
+        A.MONITORTMPLID,
+        A.TESTMETHODID,
+        A.TESTID,
+        A.REPORTNAME,
+        A.CREATEDBYID,
+        A.CREATEDBYNAME,
+        A.CREATEDTIME,
+        A.CREATEDBYORGID,
+        A.SORTNUM,
+        A.DEFAULTFLAG,
+        A.ENABLEFLAG,
+        A.MONITORSCHEMECOSTID,
+        A.PERIOD,
+        A.TECHPRICE,
+        A.SALEPRICE,
+        A.SKUGBID,
+        A.SKUQUOTEGBID,
+        A.CREATEDBYORGNAME,
+        F.TESTNAME,
+        B.METHODID,
+        B.ACTIVATEDFLAG AS TESTMETHODFLAG,
+        B.TESTMETHODTYPE,
+        B.TESTCLASS,
+        D.ANALYSISORGID,
+        D.INPUTUSERID,
+        D.INPUTUSERNAME,
+        D.ANALYSISORGNAME,
+        C.METHODNAME,
+        C.MAXVERSIONID AS METHODVERSIONID,
+        C.TESTMETHODBASIS,
+        M.ORGID,
+        M.MONITORTMPLNAME,
+        M.MONITORTMPLGROUPID,
+        G.MONITORTMPLGROUP,
+        E.ACTIVATEDFLAG,
+        H.SORTNUM AS COSTSORTNUM
+        FROM T_EMC_MONITOR_SCHEME A
+        INNER JOIN T_EMC_MONITOR_TMPL M
+        ON A.MONITORTMPLID = M.ID
+        LEFT JOIN T_EMC_TEST_METHOD B
+        ON A.TESTMETHODID = B.ID
+        LEFT JOIN T_EMC_METHOD C
+        ON B.METHODID = C.ID
+        LEFT JOIN T_EMC_TEST_CAPACITY D
+        ON B.ID = D.TESTMETHODID AND D.ORGID = M.ORGID
+        LEFT JOIN T_EMC_MONITOR_TMPL_GROUP G
+        ON M.MONITORTMPLGROUPID = G.ID
+        LEFT JOIN T_EMC_TEST F
+        ON A.TESTID = F.ID
+        LEFT JOIN T_EMC_CAPACITY_ITEM_GROUP E
+        ON A.ITEMGROUPID = E.ID
+        LEFT JOIN T_EMC_MONITOR_SCHEME_COST H
+        ON A.SCHEMENAME = H.SCHEMENAME AND H.MONITORTMPLID = A.MONITORTMPLID) T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+            <!-- 筛选登录人的部门权限 -->
+            <if test="org_filter != null">
+                AND EXISTS (SELECT 1
+                FROM T_CORE_USER_PERMISSION UP
+                WHERE UP.PERMISSIONTYPEID = 'T_CORE_ORG'
+                AND UP.TARGETID = T.ORGID
+                AND UP.USERID = #{loginUser.id})
+            </if>
+        </where>
+        GROUP BY
+        T.SCHEMENAME,
+        T.MONITORTMPLID,
+        T.TESTMETHODID,
+        T.TESTID,
+        T.REPORTNAME,
+        T.CREATEDBYID,
+        T.CREATEDBYNAME,
+        T.CREATEDTIME,
+        T.CREATEDBYORGID,
+        T.SORTNUM,
+        T.DEFAULTFLAG,
+        T.ENABLEFLAG,
+        T.MONITORSCHEMECOSTID,
+        T.PERIOD,
+        T.TECHPRICE,
+        T.SALEPRICE,
+        T.SKUGBID,
+        T.SKUQUOTEGBID,
+        T.CREATEDBYORGNAME,
+        T.TESTNAME,
+        T.METHODID,
+        T.TESTMETHODFLAG,
+        T.TESTMETHODTYPE,
+        T.TESTCLASS,
+        T.ANALYSISORGID,
+        T.INPUTUSERID,
+        T.INPUTUSERNAME,
+        T.ANALYSISORGNAME,
+        T.METHODNAME,
+        T.METHODVERSIONID,
+        T.TESTMETHODBASIS,
+        T.ORGID,
+        T.MONITORTMPLNAME,
+        T.MONITORTMPLGROUPID,
+        T.MONITORTMPLGROUP,
+        T.ACTIVATEDFLAG,
+        T.COSTSORTNUM
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.COSTSORTNUM ASC, T.SCHEMENAME DESC, T.SORTNUM ASC
+            </otherwise>
+        </choose>
     </select>
 
 </mapper>

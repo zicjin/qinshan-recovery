@@ -80,6 +80,327 @@ var emcProjectChange = Gikam.getPageObject({
         } ];
     },
 
+    getBaseInfoFormFields11 : function() {
+        return [ {
+            field : 'ext$.contractno',
+            title : 'T_EMC_PROJECT.CONTRACTNO',
+            readonly : true
+        },{
+            field : 'ext$.contractname',
+            title : '合同名称',
+            readonly : true
+        },{
+            field : 'ext$.contractno',
+            title : '合同签约人',
+            readonly : true
+        },  ];
+    },
+    getBaseInfoFormFields12 : function() {
+        return [ {
+            field : 'entrustOrgName',
+            title : '单位名称',
+            //colspan : 2,
+            type : 'choose',
+            category : 'client',
+            single : true,
+            validators : [ 'notEmpty', ],
+            onAfterChoose : function(rows) {
+                if (!Gikam.isEmpty(rows)) {
+                    var address = rows[0].address;
+                    var _this = this;
+                    var entrustOrgAddress = Gikam.isEmpty(address) ? '' : address;
+                    this.setData({
+                        entrustOrgId : rows[0].id,
+                        entrustOrgName : rows[0].clientName,
+                        entrustOrgAddress : entrustOrgAddress,
+                    });
+
+                    var addIndex = Gikam.isEmpty(rows[0].addIndex) ? 0 : rows[0].addIndex;
+                    rows[0].addIndex = addIndex + 1;
+                    Gikam.put(Gikam.printf('/secure/emc/module/mdm/bizmdm/clients/{id}', {
+                        id : rows[0].id
+                    }), Gikam.getJsonWrapper({}, [ 'emcClientServiceImpl', rows ]));
+
+                    var url = IFM_CONTEXT + '/secure/emc/module/mdm/bizmdm/clients/'+rows[0].id+'/contacts/queries';
+                    Gikam.post(url).done(function(items) {
+                        if (!Gikam.isEmpty(items.rows)) {
+                            _this.setData({
+                                entrustOrgContact : items.rows[0].lxrName,
+                                entrustOrgPhone : items.rows[0].lxrPhone,
+                            });
+                        }else{
+                            _this.setData({
+                                entrustOrgContact : '',
+                                entrustOrgPhone : '',
+                            });
+                        }
+                    });
+                }
+            },
+            onClean : function() {
+                this.setData({
+                    entrustOrgId : '',
+                    entrustOrgName : '',
+                    entrustOrgAddress : '',
+                    entrustOrgContact : '',
+                    entrustOrgPhone : '',
+                });
+            },
+            editable : true
+        },{
+            field : 'entrustOrgContact',
+            title : '联系人',
+            type : 'choose',
+            category : 'clientContact',
+            validators : [ 'notEmpty' ],
+            onBeforeChoose : function() {
+                return {
+                    clientId_SEQ : this.getData().entrustOrgId,
+                }
+            },
+            single : true,
+            onAfterChoose : function(rows) {
+                if (!Gikam.isEmpty(rows)) {
+                    this.setData({
+                        entrustOrgContact : rows[0].lxrName,
+                        entrustOrgPhone : rows[0].lxrPhone,
+                    });
+                }
+            },
+            onClean : function() {
+                this.setData({
+                    entrustOrgContact : '',
+                    entrustOrgPhone : '',
+                });
+            },
+            editable : true
+        },  {
+            field : 'entrustOrgPhone',
+            title : '联系电话',
+        },{
+            field : 'entrustOrgAddress',
+            title : '单位地址',
+            validators : [ 'notEmpty', ],
+            colspan : 2
+        },];
+    },
+    getBaseInfoFormFields13 : function() {
+        return [ {
+            field : 'testOrgName',
+            title : '单位名称',
+            //colspan : 2,
+            type : 'choose',
+            category : 'client',
+            single : true,
+            validators : [ 'notEmpty' ],
+            // onBeforeChoose : function() {
+            //     return {
+            //         id_SEQ : this.getData().entrustOrgId,
+            //     }
+            // },
+            onAfterChoose : function(rows) {
+                if (!Gikam.isEmpty(rows)) {
+                    var address = rows[0].address;
+                    var _this = this;
+                    var testOrgAddress = Gikam.isEmpty(address) ? '' : address;
+                    this.setData({
+                        testOrgId : rows[0].id,
+                        testOrgName : rows[0].clientName,
+                        testOrgAddress : testOrgAddress,
+                    });
+
+                    var addIndex = Gikam.isEmpty(rows[0].addIndex) ? 0 : rows[0].addIndex;
+                    rows[0].addIndex = addIndex + 1;
+                    Gikam.put(Gikam.printf('/secure/emc/module/mdm/bizmdm/clients/{id}', {
+                        id : rows[0].id
+                    }), Gikam.getJsonWrapper({}, [ 'emcClientServiceImpl', rows ]));
+
+
+                    var url = IFM_CONTEXT + '/secure/emc/module/mdm/bizmdm/clients/'+rows[0].id+'/contacts/queries';
+                    Gikam.post(url).done(function(items) {
+                        if (!Gikam.isEmpty(items.rows)) {
+                            _this.setData({
+                                testOrgContact : items.rows[0].lxrName,
+                                testOrgPhone : items.rows[0].lxrPhone,
+                            });
+                        }else{
+                            _this.setData({
+                                testOrgContact : '',
+                                testOrgPhone : '',
+                            });
+                        }
+                    });
+
+                }
+            },
+            onClean : function() {
+                this.setData({
+                    testOrgId : '',
+                    testOrgName : '',
+                    testOrgAddress : '',
+                    testOrgContact : '',
+                    testOrgPhone : '',
+                });
+            },
+            editable : true
+        },  {
+            field : 'testOrgContact',
+            title : '联系人',
+            type : 'choose',
+            category : 'clientContact',
+            validators : [ 'notEmpty' ],
+            onBeforeChoose : function() {
+                return {
+                    clientId_SEQ : this.getData().testOrgId,
+                }
+            },
+            single : true,
+            onAfterChoose : function(rows) {
+                if (!Gikam.isEmpty(rows)) {
+                    this.setData({
+                        testOrgContact : rows[0].lxrName,
+                        testOrgPhone : rows[0].lxrPhone,
+                    });
+                }
+            },
+            onClean : function() {
+                this.setData({
+                    testOrgContact : '',
+                    testOrgPhone : '',
+                });
+            },
+            editable : true
+        },  {
+            field : 'testOrgPhone',
+            title : '联系电话'
+        },{
+            field : 'testProjectName',
+            title : '项目名称'
+        }, {
+            field : 'testOrgAddress',
+            title : '单位地址',
+            validators : [ 'notEmpty' ],
+            colspan : 2
+        }, ];
+    },
+    getBaseInfoFormFields14 : function() {
+        return [ {
+            field : 'projNo',
+            title : 'T_EMC_PROJECT.PROJNO',
+            readonly : true
+        }, {
+            field : 'projName',
+            title : 'T_EMC_PROJECT.PROJNAME',
+            type : 'comboBox',
+            category : 'bizCategoryProject',
+            validators : [ 'notEmpty', 'strLength[0,500]' ],
+            editable : true,
+            colspan : 2
+        }, {
+            field: 'period',
+            title: 'T_EMC_PROJECT.PERIOD',
+            validators : [ 'notEmpty' ],
+        }, {
+            field : 'urgent',
+            title : 'T_EMC_PROJECT.URGENT',
+            type : 'select',
+            category : 'sys',
+            param : {
+                codeCategoryId : 'yesorno'
+            },
+        }, {
+            field : 'sendType',
+            title : 'T_EMC_PROJECT.SENDTYPE',
+            type : 'select',
+            items : [{
+                text : '邮寄',
+                value : '邮寄'
+            }, {
+                text : '自送样',
+                value : '自送样'
+            }, ]
+        },{
+            field : 'projType',
+            title : '任务类型',
+            type : 'select',
+            items : [{
+                text : '周',
+                value : '周'
+            }, {
+                text : '月',
+                value : '月'
+            },{
+                text : '季度',
+                value : '季度'
+            },{
+                text : '半年',
+                value : '半年'
+            },{
+                text : '年度',
+                value : '年度'
+            }, ]
+        },{
+            field : 'ext$.subpackage',
+            title : 'T_EMC_PROJECT.SUBPACKAGE',
+            type : 'select',
+            category : 'sys',
+            param : {
+                codeCategoryId : 'yesorno'
+            },
+        },{
+            field : 'subcontractorId',
+            title : '分包单位',
+            type : 'select',
+            search : true,
+            category : 'subcontractor',
+            editor : true
+        }, {
+            field : 'subPackageDesc',
+            title : 'T_EMC_PROJECT.SUBPACKAGEDESC',
+            validators : [ 'strLength[0,10]' ],
+        },{
+            field : 'entrustDate',
+            title : 'T_EMC_PROJECT.ENTRUSTDATE',
+            type : 'date',
+            validators : [ 'notEmpty' ],
+        },{
+            field : 'compleDate',
+            title : 'T_EMC_PROJECT.COMPLEDATE',
+            type : 'date',
+        },{
+            field : 'createdByName',
+            title : '登记人',
+            readonly : true
+        }, {
+            field : 'projCreatedTime',
+            title : '登记日期',
+            readonly : true,
+        }, {
+            field: 'reportAptitude',
+            title: 'T_EMC_PROJECT.REPORTAPTITUDE',
+            type : 'select',
+            category : 'sys',
+            param : {
+                codeCategoryId : 'reportAptitude'
+            },
+        }, {
+            field: 'projectPrice',
+            title : '任务金额',
+        },{
+            field : 'remark',
+            title : 'T_EMC_PROJECT.REMARK',
+            validators : [ 'strLength[0,800]' ],
+            type : 'textarea',
+            colspan : 3,
+        },  {
+            field : 'ext$.reportremark',
+            title : '报告备注',
+            validators : [ 'strLength[0,400]' ],
+            type : 'textarea',
+            colspan : 3,
+        } ];
+    },
+
     getBaseInfoFormFields1 : function() {
         return [ {
             field : 'ext$.contractno',
@@ -89,11 +410,11 @@ var emcProjectChange = Gikam.getPageObject({
             field : 'projNo',
             title : 'T_EMC_PROJECT.PROJNO',
             readonly : true
-        }, {
+        }, /*{
             field : 'erpOrderNumber',
             title : 'T_EMC_PROJECT.ERPORDERNUMBER',
             readonly : true
-        }, {
+        },*/ {
             field : 'projName',
             title : '任务名称',
             type : 'comboBox',
@@ -315,6 +636,10 @@ var emcProjectChange = Gikam.getPageObject({
             title : 'T_EMC_PROJECT.COMPLEDATE',
             type : 'date',
         }, {
+            field : 'projAmount',
+            title : 'T_EMC_PROJECT.PROJAMOUNT',
+            type : 'number',
+        }, {
             field: 'reportAptitude',
             type : 'select',
             category : 'sys',
@@ -380,10 +705,10 @@ var emcProjectChange = Gikam.getPageObject({
                 codeCategoryId : 'testMethodAssigner'
             },
             title: 'T_EMC_PROJECT.TESTMETHODASSIGNER'
-        }, {
+        }, /*{
             field: 'mergeReport',
             title: 'T_EMC_PROJECT.MERGEREPORT'
-        }, {
+        },*/ {
             field: 'reportPostAddress',
             title: 'T_EMC_PROJECT.REPORTPOSTADDRESS'
         }, {
@@ -757,6 +1082,10 @@ var emcProjectChange = Gikam.getPageObject({
             title : 'T_EMC_PROJECT.COMPLEDATE',
             type : 'date',
         }, {
+            field : 'projAmount',
+            title : 'T_EMC_PROJECT.PROJAMOUNT',
+            type : 'number',
+        }, {
             field : 'reportDeliveryWay',
             title : 'T_EMC_CONTRACT.RECEIVEREPORTWAY',
             validators : [ 'strLength[0, 30]' ],
@@ -944,6 +1273,10 @@ var emcProjectChange = Gikam.getPageObject({
             field : 'compleDate',
             title : 'T_EMC_PROJECT.COMPLEDATE',
             type : 'date',
+        }, {
+            field : 'projAmount',
+            title : 'T_EMC_PROJECT.PROJAMOUNT',
+            type : 'number',
         }, {
             field : 'ext$.receivereportway',
             title : 'T_EMC_CONTRACT.RECEIVEREPORTWAY',
@@ -1814,7 +2147,7 @@ var emcProjectChange = Gikam.getPageObject({
             category : 'org',
             param : {
                 sampleDepartment_SEQ : '1',
-                parentId_SB : workspace.user.ext$.parentorgid
+                // parentId_SB : workspace.user.ext$.parentorgid
             },
         }, {
             field : 'remark',
@@ -1938,7 +2271,7 @@ var emcProjectChange = Gikam.getPageObject({
             category : 'org',
             param : {
                 sampleDepartment_SEQ : '1',
-                parentId_SB : workspace.user.ext$.parentorgid
+                // parentId_SB : workspace.user.ext$.parentorgid
             },
         }, {
             field : 'remark',

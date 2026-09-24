@@ -14,7 +14,7 @@ emcProjectChange.searchPage = {
             },
             requestData : {
                 targetType : 'projEdit',
-                orgId_SB: workspace.user.ext$.parentorgid,
+                org_filter : '1',
                 processStatus_SEQ : 'done'
             },
             onLoadSuccess : function(data) {
@@ -43,8 +43,8 @@ emcProjectChange.searchPage = {
             _this.param.editMonitorInfo = row.ext$.editmonitorinfo;
             _this.param.sampleOrgId = row.ext$.sampleorgid;
             _this.param.projId = row.id;
-            // 这里使用委托单位来过滤数据，之前是受检单位
-            _this.param.testOrgId = row.entrustOrgId;
+            // 使用受检单位来过滤数据
+            _this.param.testOrgId = row.testOrgId;
 
             if (row.sample === "1") {
                 tab.removePanel('emc-project-change-search-list-order-panel');
@@ -99,7 +99,7 @@ emcProjectChange.searchPage = {
                         requestData : {
                             projId_SEQ : row.id,
                             subpackageType_SEQ : 'create',
-                            orgId_SB: workspace.user.ext$.parentorgid
+                            org_filter : '1',
                         }
                     });
                     grid.refreshColumns(emcProjectChange.getProjectSubpackageListColumns());
@@ -118,7 +118,7 @@ emcProjectChange.searchPage = {
                         requestData : {
                             projId_SEQ : row.id,
                             subpackageType_SEQ : 'create',
-                            orgId_SB: workspace.user.ext$.parentorgid
+                            org_filter : '1',
                         }
                     });
                     grid.refreshColumns(emcProjectChange.getProjectSubpackageListColumns());
@@ -184,7 +184,12 @@ emcProjectChange.searchPage = {
                             columns : 3,
                             service : 'emcProjectChangeServiceImpl',
                             id : 'emc-project-change-search-list-base-info-form',
-                            fields : emcProjectChange.getBaseInfoFormFields1(),
+                            panels : [
+                                {title : '合同信息',fields : emcProjectChange.getBaseInfoFormFields11()},
+                                {title : '委托单位信息',fields : emcProjectChange.getBaseInfoFormFields12()},
+                                {title : '受检单位',fields : emcProjectChange.getBaseInfoFormFields13()},
+                                {title : '项目信息',fields : emcProjectChange.getBaseInfoFormFields14()},
+                            ],
                             readonly : true,
                             onUpdated : function() {
                                 var grid = Gikam.getComp('emc-project-change-search-list-grid');

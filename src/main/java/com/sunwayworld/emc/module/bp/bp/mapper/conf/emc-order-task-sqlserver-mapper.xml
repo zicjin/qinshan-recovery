@@ -335,12 +335,15 @@
                                 T.PROJID
                   FROM (SELECT A.*
                           FROM T_EMC_ORDER_TASK A
+                          LEFT JOIN T_EMC_ORDER O
+                            ON A.ORDERID = O.ID
                           LEFT JOIN T_EMC_PROJECT P
                             ON A.PROJID = P.ID
                          WHERE (P.STATUS != 'cancel' OR P.STATUS IS NULL)
-                                 <if test="orgId != null">
-                                     AND P.ORGID LIKE CONCAT(#{orgId}, '%')
-                                </if>
+                           AND (O.TERMINATION != '1' OR O.TERMINATION IS NULL)
+                                  <if test="orgId != null">
+                                      AND P.ORGID LIKE CONCAT(#{orgId}, '%')
+                                 </if>
                          ) T) T
          <where>
             <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />

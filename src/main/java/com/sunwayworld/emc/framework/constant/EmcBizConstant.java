@@ -15,6 +15,11 @@ public class EmcBizConstant {
     public static final String PROJECT_CN_NODE_YPJS = "样品接收";
     public static final String PROJECT_CN_NODE_FXZ = "分析中";
     public static final String PROJECT_CN_NODE_BGBZ = "报告编制";
+    public static final String PROJECT_CN_NODE_BGSH = "报告审核";
+    public static final String PROJECT_CN_NODE_BGQF = "报告签发";
+    public static final String PROJECT_CN_NODE_BGDY = "报告打印";
+    public static final String PROJECT_CN_NODE_BGFS = "报告发送";
+    public static final String PROJECT_CN_NODE_BGGD = "报告归档";
 
     /****************************************************
      * 项目STATUS状态
@@ -100,6 +105,7 @@ public class EmcBizConstant {
      ****************************************************/
     public static final String ANALYSISCATEGORY_SAMPLING = "sampling";// 采样
     public static final String ANALYSISCATEGORY_ANALYSIS = "analysis";// 分析
+    public static final String ANALYSISCATEGORY_PREPROCESSING = "Preprocessing";// 预处理
 
     /****************************************************
      * 样品测试流程记录表-操作类型
@@ -154,9 +160,16 @@ public class EmcBizConstant {
     public static final String REPORT_STATUS_REPORTAUDIT = "reportAudit";// 报告审核
     public static final String REPORT_STATUS_REPORTISSUE = "reportIssue";// 报告签发
     public static final String REPORT_STATUS_REPORTPRINT = "reportPrint";// 报告打印
+    public static final String REPORT_STATUS_REPORTSEAL = "reportSeal";// 报告盖章
     public static final String REPORT_STATUS_REPORTSEND = "reportSend";// 报告发送
     public static final String REPORT_STATUS_REPORTARCHIVING = "reportArchiving";// 报告归档
     public static final String REPORT_STATUS_DONE = "done";// 结束
+
+    /****************************************************
+     * 报告--签发方式
+     ****************************************************/
+    public static final String REPORT_ISSUE_SIGN_MODE_QYS = "qys";// e签宝
+    public static final String REPORT_ISSUE_SIGN_MODE_PICTURE = "picture";// 图片签章
 
     /****************************************************
      * 项目中文节点状态

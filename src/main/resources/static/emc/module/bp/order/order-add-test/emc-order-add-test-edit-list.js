@@ -17,7 +17,7 @@ emcOrderReceipt.editAddTestPage = {
                     requestData : {
                         status_SEQ : 'done',
                         targetType : 'sampleAddTest',
-                        orgId_SB: workspace.user.ext$.parentorgid
+                        org_filter : '1',
                     },
                     order : {
                         'PROJID' : 'asc',

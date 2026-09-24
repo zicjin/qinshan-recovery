@@ -12,6 +12,8 @@
                         B.ORGNAME,
                         B.TESTORGNAME,
                         B.ENTRUSTORGNAME,
+                        B.ENTRUSTORGADDRESS,
+                        B.ENTRUSTORGPHONE,
                         B.CREATEDBYNAME       AS PROJCREATEDBYNAME,
                         B.REPORTREVIEWERID,
                         B.REPORTREVIEWERNAME,
@@ -19,45 +21,86 @@
                         B.REPORTISSUEUSERNAME,
                         B.REPORTEDITUSERNAME,
                         B.REPORTEDITUSERID,
+                        B.REPORTISSUETIME,
                         B.CONTRACTNO,
                         B.SAMPLE,
+                        B.URGENT,
+                        B.SUBPACKAGE,
+                        B.COMPLEDATE AS PROJCOMPLEDATE,
+                        B.FIRSTISSUEDATETIME AS FIRSTISSUEDATE,
+                        B.DELIVERYDATE AS PROJDELIVERYDATE,
+        B.REPORTREMARK,
                         C.ID                  AS BIZID,
                         C.BIZCATEGORYID,
                         C.BIZCATEGORYNAME,
                         C.FLOWCONTROL,
                         D.REPORTNAME AS TEMPLATENAME,
                         F.MONITORTMPLGROUP,
-                        G.REPORTNAME          AS QCREPORTNAME
+                        G.REPORTNAME          AS QCREPORTNAME,
+                        OA.SSGFGSMC,
+        CASE
+        WHEN A.PROCESSSTATUS LIKE 'approve%' THEN
+        (SELECT LISTAGG(TASKNAME, ',') WITHIN GROUP(ORDER BY TASKNAME)
+        FROM T_CORE_BPMN_INST I,
+        T_CORE_BPMN_INST_TASK K
+        WHERE I.ID = K.INSTID
+        AND I.TARGETID = ('T_EMC_REPORT$' || A.ID)
+        )
+        ELSE '报告编制'
+        END AS TASKNAME_,
+        (SELECT MAX(EXPRESSNO)
+        FROM T_EMC_REPORT_SEND_INFO RSI
+        WHERE A.PROJID = RSI.PROJID) AS EXPRESSNO
+                <if test=" orderDate_filter =='1' " >
+                    ,H.ORDERDATE
+                </if>
+
                 FROM T_EMC_REPORT A
-                LEFT JOIN T_EMC_PROJECT B
-                ON A.PROJID = B.ID
-                LEFT JOIN T_EMC_BIZ_CATEGORY C
-                ON B.BIZCATEGORYID = C.ID
-                LEFT JOIN T_CORE_REPORT_CONFIG_LINE D
-                ON A.REPORTCONFIGLINEID = D.ID
-                LEFT JOIN T_EMC_MONITOR_TMPL E
-                ON A.MONITORTMPLID = E.ID
-                LEFT JOIN T_EMC_MONITOR_TMPL_GROUP F
-                ON E.MONITORTMPLGROUPID = F.ID
-                LEFT JOIN T_CORE_REPORT_CONFIG_LINE G
-                ON A.QCREPORTLINEID = G.ID) T
+                LEFT JOIN T_EMC_PROJECT B ON A.PROJID = B.ID
+                LEFT JOIN T_EMC_BIZ_CATEGORY C ON B.BIZCATEGORYID = C.ID
+                LEFT JOIN T_CORE_REPORT_CONFIG_LINE D ON A.REPORTCONFIGLINEID = D.ID
+                LEFT JOIN T_EMC_MONITOR_TMPL E ON A.MONITORTMPLID = E.ID
+                LEFT JOIN T_EMC_MONITOR_TMPL_GROUP F ON E.MONITORTMPLGROUPID = F.ID
+                LEFT JOIN T_CORE_REPORT_CONFIG_LINE G ON A.QCREPORTLINEID = G.ID
+                LEFT JOIN T_EMC_OA_ORG OA ON OA.ZZBH = A.CREATEDBYORGID
+                <if test=" orderDate_filter =='1' " >
+                    LEFT JOIN (
+                    SELECT
+                    RL.REPORTID,
+                    LISTAGG(DISTINCT TO_CHAR((CASE WHEN (P.SAMPLE = '1') THEN O.SAMPLEBEGINDATE ELSE O.SENDDATE END), 'YYYY-MM-DD'), ',' ) AS ORDERDATE
+                    FROM
+                    T_EMC_ORDER O
+                    LEFT JOIN T_EMC_PROJECT P ON O.PROJID = P.ID
+                    LEFT JOIN T_EMC_REPORT_LINE RL ON RL.ORDERID = O.ID
+                    GROUP BY
+                    RL.REPORTID
+                    ) H ON H.REPORTID = A.ID
+                </if>
+              ) T
         <where>
             <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
             <include refid="com.sunwayworld.emc.module.bp.project.project.mapper.EmcProjectMapper.projectStatusWhereClause">
                 <property name="tableAlias" value="T"/>
                 <property name="projectIdColumnName" value="PROJID"/>
             </include>
+            <if test='oa_filter != null'>
+                AND T.SSGFGSMC =(
+                SELECT A1.SSGFGSMC FROM T_EMC_OA_ORG A1
+                LEFT JOIN T_EMC_OA_USER A2 ON A1.ZZBH=A2.SSBM
+                LEFT JOIN T_CORE_USER A3 ON A2.YGGH =A3.ID
+                WHERE A3.ID=#{loginUser.id})
+            </if>
             <if test='targetType == "reportEdit"'>
                 AND (T.REPORTEDITUSERID = #{currentUserId} OR T.REPORTEDITUSERID IS NULL )
             </if>
             <if test='authority_audit == "1"'>
-                AND <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.auditAuthorityWhereClause" />
+                AND <include refid="com.sunwayworld.emc.framework.mybatis.mapper.EmcGlobalMapper.auditAuthorityWhereClause" />
             </if>
             <!-- 报告审核 -->
             <if test="targetType == 'reportAudit'">
                 AND EXISTS (SELECT 1 FROM T_EMC_PROJECT TAR_
                 WHERE TAR_.ID = T.PROJID
-                AND (IFNULL(TAR_.REPORTREVIEWERID,'') = '' OR  TAR_.REPORTREVIEWERID = #{currentUserId})
+                AND (NVL(TAR_.REPORTREVIEWERID,'') = '' OR  TAR_.REPORTREVIEWERID = #{currentUserId})
                 )
             </if>
             <!-- 报告签发 -->
@@ -66,6 +109,17 @@
                 WHERE TAR_.ID = T.PROJID
                 AND TAR_.REPORTISSUEUSERID = #{currentUserId}
                 )
+            </if>
+            <!-- 报告签发 -->
+            <if test="reportSendInfo != null">
+            AND EXISTS (SELECT 1 FROM T_EMC_REPORT_SEND_INFO TAR_
+                WHERE TAR_.PROJID = T.PROJID
+                AND TAR_.EXPRESSNO IS NOT NULL
+                )
+            </if>
+            <!-- 报告签发 -->
+            <if test="rcReportFilter != null">
+                AND T.REPORTNO NOT LIKE '%G'
             </if>
         </where>
         ORDER BY
@@ -93,7 +147,7 @@
           LEFT JOIN T_EMC_PROJECT B
             ON A.PROJID = B.ID
          WHERE A.PROCESSSTATUS = 'draft'
-           AND B.COMPLEDATE <![CDATA[<=]]> sysdate()
+           AND B.COMPLEDATE <![CDATA[<=]]> SYSDATE
     </select>
 
 </mapper>

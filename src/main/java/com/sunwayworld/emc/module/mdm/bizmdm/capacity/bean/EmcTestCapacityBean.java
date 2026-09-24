@@ -38,6 +38,10 @@ public class EmcTestCapacityBean extends AbstractInsertable<Long> implements Ins
     @NotNull(defaultValue = Constant.NO)
     private String sampleParam;// 是否气采样参数
 
+    @NotNull(defaultValue = Constant.NO)
+    private String tube;// 试管
+    private String reportTestName;// 报告测试名称
+
     public Long getId() {
         return id;
     }
@@ -52,6 +56,14 @@ public class EmcTestCapacityBean extends AbstractInsertable<Long> implements Ins
 
     public void setSampleParam(String sampleParam) {
         this.sampleParam = sampleParam;
+    }
+
+    public String getTube() {
+        return tube;
+    }
+
+    public void setTube(String tube) {
+        this.tube = tube;
     }
 
     public Long getTestMethodId() {
@@ -108,6 +120,14 @@ public class EmcTestCapacityBean extends AbstractInsertable<Long> implements Ins
 
     public void setCreatedByOrgName(String createdByOrgName) {
         this.createdByOrgName = createdByOrgName;
+    }
+
+    public String getReportTestName() {
+        return reportTestName;
+    }
+
+    public void setReportTestName(String reportTestName) {
+        this.reportTestName = reportTestName;
     }
 
 }

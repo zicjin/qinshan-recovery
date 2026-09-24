@@ -9,22 +9,42 @@ emcRun.addRunDetailPage = {
             requestData:{
                 status_SEQ : 'logged',
                 analysisType_SEQ : 'analysis',
-                authority_org : '1',
+                // authority_org : '1',
                 runId:'empty',
                 testMethodId_IN : _this.param.testMethodId,
                 projId_IN : _this.param.projId,
                 orderCategory_IN : _this.param.orderCategory,
+                ORDERDATESTR_IN : _this.param.orderDate,
                 /*startAcceptedDate : '2023-01-31'*/
-                pretreatmentStatus_SEQ : '1',
-                sampleReceiverFlag_SEQ : '1'
+                // pretreatmentStatus_SEQ : '1',
+                // org_filter : '1'
             },
             order : {
                 'ext$.projname' : 'asc',
                 'ext$.orderno' :'asc'
             },
+            headRequestData : ((Gikam.getComp('emc-run-edit-list-grid')
+                && Gikam.getComp('emc-run-edit-list-grid').getOptions().headRequestData
+                && Gikam.getComp('emc-run-edit-list-grid').getOptions().headRequestData['ext$.projno_CISC']
+            ) ? {'ext$.projno_CISC' : Gikam.getComp('emc-run-edit-list-grid').getOptions().headRequestData['ext$.projno_CISC']} : {}),
             columns : emcRun.getAddRunListColumns(),
+            rowStyleFormatter : function(row) {
+                if (row.ext$.projectremind === '1') {
+                    return {
+                        backgroundColor: 'yellow'
+                    }
+                }
+            },
             filterOpen : true,
             page : true,
+            // onRendered : function() {
+            //     var grid = Gikam.getComp('emc-run-edit-list-grid');
+            //     if(grid && grid.getFilterRequestData()){
+            //         Gikam.getComp('emc-run-add-run-detail-run-grid').setOptions({
+            //             headRequestData : grid.getFilterRequestData()
+            //         })
+            //     }
+            // },
             toolbar : [ {
                 type : 'button',
                 text : 'GIKAM.BUTTON.CONFIRM',
@@ -123,12 +143,12 @@ emcRun.addRunDetailPage = {
     createPage : function() {
         Gikam.create('layout', {
             id : 'emc-run-add-run-detail-layout',
-            center : {
-                items : [ this.getEquiptGridParam() ]
-            },
             west : {
                 width : '50%',
                 items : [ this.getRunGridParam() ]
+            },
+            center : {
+                items : [ this.getEquiptGridParam() ]
             },
             renderTo : Gikam.getLastModal().window.$dom
         });

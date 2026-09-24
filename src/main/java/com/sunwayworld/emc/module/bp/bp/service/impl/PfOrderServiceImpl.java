@@ -1814,4 +1814,25 @@ public class PfOrderServiceImpl extends EmcOrderServiceImpl implements PfOrderSe
     private boolean isSolidWaste(EmcOrderBean order) {
         return Arrays.stream(PfConstant.DIOXIN_SOLID_WASTE_ORDER_CATEGORIES).anyMatch(keyword -> StringUtils.contains(order.getOrderCategory(), keyword));
     }
+    @Override
+    @Transactional
+    public Long updateItemGroupOrderContainer(RestJsonWrapperBean wrapper) {
+        return 0L;
+    }
+
+    @Override
+    @Transactional
+    public Long syncOrderItemGroupItem(RestJsonWrapperBean wrapper) {
+        syncNewTest(wrapper);
+        return 0L;
+    }
+
+    @Override
+    public void delOrderItemGroup(RestJsonWrapperBean wrapper) {
+    }
+
+    @Override
+    public void delCheckProjectOrderItemGroup(RestJsonWrapperBean wrapper) {
+    }
+
 }

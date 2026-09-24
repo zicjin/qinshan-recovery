@@ -31,6 +31,33 @@ var emcSampleCategory = Gikam.getPageObject({
                 reportConfigId : 'samplingReport'
             }
         }, {
+            field : 'ext$.elntmplname',
+            title : 'ELN模板',
+            editor : true,
+            type : 'choose',
+            category : 'eln-tmpl',
+            single : true,
+            onAfterChoose : function(rows, index) {
+                if (!Gikam.isEmpty(rows)) {
+                    this.setData({
+                        index : index,
+                        elnTmplId : rows[0].id,
+                        ext$ : {
+                            elntmplname : rows[0].elnTmplName
+                        }
+                    });
+                }
+            },
+            onClean : function() {
+                this.setData({
+                    id : this.getActivedRow().id,
+                    elnTmplId : '',
+                    ext$ : {
+                        elntmplname : ''
+                    }
+                });
+            },
+        },{
             field : 'receiveReportLineId',
             title : 'T_EMC_MONITOR_TMPL.RECEIVEREPORTLINEID',
             type : 'select',

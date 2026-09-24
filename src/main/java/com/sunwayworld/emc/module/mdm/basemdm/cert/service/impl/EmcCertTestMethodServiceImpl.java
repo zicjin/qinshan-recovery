@@ -14,11 +14,12 @@ import com.sunwayworld.emc.module.mdm.basemdm.cert.bean.EmcCertBean;
 import com.sunwayworld.emc.module.mdm.basemdm.cert.bean.EmcCertTestMethodBean;
 import com.sunwayworld.emc.module.mdm.basemdm.cert.dao.EmcCertTestMethodDao;
 import com.sunwayworld.emc.module.mdm.basemdm.cert.service.EmcCertTestMethodService;
-import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcTestMethodBean;
+import com.sunwayworld.emc.module.mdm.bizmdm.capacity.bean.EmcTestCapacityBean;
 import com.sunwayworld.framework.at.annotation.AuditTrailEntry;
 import com.sunwayworld.framework.at.annotation.AuditTrailType;
 import com.sunwayworld.framework.context.ApplicationContextHelper;
 import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;
+import com.sunwayworld.framework.utils.NumberUtils;
 
 /**
  * @author zhangsy@sunwayworld.com
@@ -41,16 +42,16 @@ public class EmcCertTestMethodServiceImpl implements EmcCertTestMethodService {
     @Transactional
     @AuditTrailEntry(AuditTrailType.INSERT)
     public void insert(Long id, RestJsonWrapperBean wrapper) {
-        List<EmcTestMethodBean> testMethodList = wrapper.parse(EmcTestMethodBean.class);
+        List<EmcTestCapacityBean> testMethodList = wrapper.parse(EmcTestCapacityBean.class);
 
         List<EmcCertTestMethodBean> certTestMethodList = new ArrayList<EmcCertTestMethodBean>();
         testMethodList.stream().forEach(e -> {
             EmcCertTestMethodBean emcCertTestMethodBean = new EmcCertTestMethodBean();
             emcCertTestMethodBean.setId(ApplicationContextHelper.getNextIdentity());
             emcCertTestMethodBean.setCertId(id);
-            emcCertTestMethodBean.setTestMethodId(e.getId());
-            emcCertTestMethodBean.setMethodId(e.getMethodId());
-            emcCertTestMethodBean.setTestId(e.getTestId());
+            emcCertTestMethodBean.setTestMethodId(e.getTestMethodId());
+            emcCertTestMethodBean.setMethodId(NumberUtils.parseLong(e.getExt$Item("methodid")));
+            emcCertTestMethodBean.setTestId(NumberUtils.parseLong(e.getExt$Item("testid")));
             certTestMethodList.add(emcCertTestMethodBean);
         });
 

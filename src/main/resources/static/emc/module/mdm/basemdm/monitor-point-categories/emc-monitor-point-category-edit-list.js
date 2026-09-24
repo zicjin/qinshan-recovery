@@ -10,7 +10,7 @@ emcMonitorPointCategory.editPage = {
             service : 'emcMonitorPointCategoryServiceImpl',
             checkOnActive : true,
             requestData : {
-                orgId_SB : workspace.user.ext$.parentorgid
+                orgId_SEQ : workspace.user.ext$.parentorgid,
             },
             deleteFormatter : function(row) {
                 return row.monitorPointType || row.id;

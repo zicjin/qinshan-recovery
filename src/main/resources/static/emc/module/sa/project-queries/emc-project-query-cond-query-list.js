@@ -8,7 +8,7 @@ emcProjectQuery.condQueryPage = {
             fields : emcProjectQuery.getQueryFields(),
             columns : 2,
 	        requestData : {
-	            orgId_SB : workspace.user.ext$.parentorgid
+	            org_filter : '1',
 	        }, 
         }
     },
@@ -41,7 +41,7 @@ emcProjectQuery.condQueryPage = {
 
                             samplingStartDate : data.samplingStartDate || '',
                             samplingEndDate : data.samplingEndDate || '',
-                            orgId_SB : workspace.user.ext$.parentorgid,
+                            org_filter : '1',
                         }
                     });
                     Gikam.getLastModal().close();

@@ -23,6 +23,8 @@ public class EmcMtlDTO extends AbstractTreeNode {
 
     private String harmfulness; // 危害性
 
+    private String reagentCategory; // 试剂类别
+
     public String getMtlName() {
         return mtlName;
     }
@@ -61,5 +63,13 @@ public class EmcMtlDTO extends AbstractTreeNode {
 
     public void setHarmfulness(String harmfulness) {
         this.harmfulness = harmfulness;
+    }
+
+    public String getReagentCategory() {
+        return reagentCategory;
+    }
+
+    public void setReagentCategory(String reagentCategory) {
+        this.reagentCategory = reagentCategory;
     }
 }

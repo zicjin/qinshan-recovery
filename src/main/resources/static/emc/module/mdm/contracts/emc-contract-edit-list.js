@@ -13,7 +13,7 @@ emcContract.editPage = {
                 return row.contractName || row.contractNo || row.id;
             },
             requestData : {
-                orgId_SB: workspace.user.ext$.parentorgid
+                org_filter : '1',
             },
             onLoadSuccess : function(data) {
                 if (!Gikam.isEmpty(data)) {
@@ -33,9 +33,15 @@ emcContract.editPage = {
                 type : 'button',
                 text : 'GIKAM.BUTTON.INSERT',
                 icon : 'add',
-                hidden : true,
                 onClick : function() {
                     _this.addContract();
+                }
+            }, {
+                type : 'button',
+                text : 'GIKAM.BUTTON.DELETE',
+                icon : 'remove-row',
+                onClick : function() {
+                    Gikam.getComp('emc-contract-edit-list-grid').deleteRows(emcContract.baseUrl);
                 }
             }, {
                 type : 'button',
@@ -54,34 +60,13 @@ emcContract.editPage = {
                     _this.viewContract();
                 }
             }, {
-                type : 'dropDownMenu',
-                text : 'GIKAM.BUTTON.MORE',
+                type : 'button',
+                text : 'EMC.MODULE.BP.PROJECT.PROJECTS.BUTTON.COPY',
+                icon : 'copy',
                 hidden : true,
-                items : [ {
-                    type : 'button',
-                    text : 'GIKAM.BUTTON.PREVIEW',
-                    icon : 'print',
-                    hidden : true,
-                    onClick : function() {
-                        _this.viewContract();
-                    }
-                }, {
-                    type : 'button',
-                    text : 'GIKAM.BUTTON.DELETE',
-                    icon : 'remove-row',
-                    hidden : true,
-                    onClick : function() {
-                        Gikam.getComp('emc-contract-edit-list-grid').deleteRows(emcContract.baseUrl);
-                    }
-                }, {
-                    type : 'button',
-                    text : 'EMC.MODULE.BP.PROJECT.PROJECTS.BUTTON.COPY',
-                    icon : 'copy',
-                    hidden : true,
-                    onClick : function() {
-                        _this.copyContract();
-                    }
-                } ]
+                onClick : function() {
+                    _this.copyContract();
+                }
             } ]
         }
     },

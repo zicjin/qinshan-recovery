@@ -9,7 +9,7 @@ emcSubcontractor.editPage = {
             columns : emcSubcontractor.getEditListColumns(),
             service : 'emcSubcontractorServiceImpl',
 	        requestData : {
-	            orgId_SB : workspace.user.ext$.parentorgid
+	            org_filter : '1',
 	        },
             deleteFormatter : function(row) {
                 return row.subcontractorName || row.id;

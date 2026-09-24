@@ -84,7 +84,7 @@ emcOrderReceive.searchPage = {
                     url : '/secure/emc/module/bp/bp/orders/receive/containers/queries',
                     requestData : {
                         targetType : 'orderReceiveSearch',
-                        sampleOrgId_SB: workspace.user.ext$.parentorgid
+                        sampleOrg_filter : '1',
                     },
                     service : 'EmcOrderContainerServiceImpl',
                     checkOnActive : true,

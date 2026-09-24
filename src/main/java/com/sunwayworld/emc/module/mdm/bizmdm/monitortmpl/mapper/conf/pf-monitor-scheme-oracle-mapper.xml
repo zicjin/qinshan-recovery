@@ -9,18 +9,24 @@
                        B.METHODID,
                        B.ACTIVATEDFLAG AS TESTMETHODFLAG,
                        B.TESTMETHODTYPE,
-                       D.ANALYSISORGID,
+                        B.TESTCLASS,
+                        D.ANALYSISORGID,
                        D.INPUTUSERID,
                        D.INPUTUSERNAME,
                        D.ANALYSISORGNAME,
+        D.METHODSCOPE,
+        D.AUTHENTICATION,
+        D.APPROVAL,
                        C.METHODNAME,
                        C.MAXVERSIONID AS METHODVERSIONID,
                        C.TESTMETHODBASIS,
+        MV.TRIALSCOPE,
                        M.ORGID,
                        M.MONITORTMPLNAME,
                        M.MONITORTMPLGROUPID,
                        G.MONITORTMPLGROUP,
                        E.ACTIVATEDFLAG,
+                       E.ITEMGROUPID as TESTITEMGROUPID,
                        H.SORTNUM AS COSTSORTNUM
                   FROM T_EMC_MONITOR_SCHEME A
                  INNER JOIN T_EMC_MONITOR_TMPL M
@@ -29,6 +35,8 @@
                     ON A.TESTMETHODID = B.ID
                   LEFT JOIN T_EMC_METHOD C
                     ON B.METHODID = C.ID
+        LEFT JOIN T_EMC_METHOD_VERSION MV
+        ON C.MAXVERSIONID = MV.ID
                   LEFT JOIN T_EMC_TEST_CAPACITY D
                     ON B.ID = D.TESTMETHODID AND D.ORGID = M.ORGID
                   LEFT JOIN T_EMC_MONITOR_TMPL_GROUP G
@@ -105,9 +113,57 @@
                                   AND O.METHODID = T.METHODID
                                   AND O.ORDERID = #{orderId})
             </if>
+            <!-- 筛选登录人的部门权限 -->
+            <if test="org_filter != null">
+                AND EXISTS (SELECT 1
+                      FROM T_CORE_USER_PERMISSION UP
+                     WHERE UP.PERMISSIONTYPEID = 'T_CORE_ORG'
+                       AND UP.TARGETID = T.ORGID
+                       AND UP.USERID = #{loginUser.id})
+            </if>
         </where>
         <if test='isGroupByTestMethod == "1"'>
-            GROUP BY T.MONITORTMPLID,T.TESTMETHODID
+            GROUP BY
+            T.ID,
+            T.SCHEMENAME,
+            T.MONITORTMPLID,
+            T.TESTMETHODID,
+            T.TESTID,
+            T.REPORTNAME,
+            T.CREATEDBYID,
+            T.CREATEDBYNAME,
+            T.CREATEDTIME,
+            T.CREATEDBYORGID,
+            T.ITEMGROUPID,
+            T.ITEMGROUP,
+            T.SORTNUM,
+            T.DEFAULTFLAG,
+            T.ENABLEFLAG,
+            T.MONITORSCHEMECOSTID,
+            T.PERIOD,
+            T.TECHPRICE,
+            T.SALEPRICE,
+            T.SKUGBID,
+            T.SKUQUOTEGBID,
+            T.CREATEDBYORGNAME,
+            T.TESTNAME,
+            T.METHODID,
+            T.TESTMETHODFLAG,
+            T.TESTMETHODTYPE,
+            T.TESTCLASS,
+            T.ANALYSISORGID,
+            T.INPUTUSERID,
+            T.INPUTUSERNAME,
+            T.ANALYSISORGNAME,
+            T.METHODNAME,
+            T.METHODVERSIONID,
+            T.TESTMETHODBASIS,
+            T.ORGID,
+            T.MONITORTMPLNAME,
+            T.MONITORTMPLGROUPID,
+            T.MONITORTMPLGROUP,
+            T.ACTIVATEDFLAG,
+            T.COSTSORTNUM
         </if>
         ORDER BY
         <choose>

@@ -9,8 +9,10 @@
                        O.ORGNAME  AS USEDDEPOSTNAME,
                        U.USERNAME AS MAINTAINUSERNAME,
                        S.USERNAME AS KEEPUSERNAME,
-                       M.EQUIPTCATEGORY AS EQUIPTCATEGORYNAME
-                  FROM T_EMC_EQUIPT E
+                       M.EQUIPTCATEGORY AS EQUIPTCATEGORYNAME,
+        (SELECT max(MAINTENDDATE) FROM T_EMC_EQUIPT_RECORD ER WHERE ER.EQUIPTID = E.ID AND ER.COMPLETEFLAG = '2') AS EQUIPTRECORDDATE
+
+        FROM T_EMC_EQUIPT E
                   LEFT JOIN T_CORE_ORG C
                     ON E.USEDDEPARTMENTID = C.ID
                   LEFT JOIN T_CORE_ORG O
@@ -33,6 +35,17 @@
                                           WHERE UP_.USERID = #{loginUser.id}
                                             AND UP_.PERMISSIONTYPEID = 'T_CORE_ORG'
                                             AND UP_.TARGETID = OP_.ORGID))
+            </if>
+            <!-- 筛选登录人的部门权限 -->
+            <if test="org_filter != null">
+                AND EXISTS (SELECT 1
+                FROM T_CORE_USER_PERMISSION UP
+                WHERE UP.PERMISSIONTYPEID = 'T_CORE_ORG'
+                AND UP.TARGETID = T.ORGID
+                AND UP.USERID = #{loginUser.id})
+            </if>
+            <if test="parentorg_filter != null">
+                AND T.ORGID = #{loginUser.ext$.parentorgid}
             </if>
             <!--<if test="target_unassigned != null">
                 AND NOT EXISTS (SELECT 1
@@ -57,6 +70,17 @@
                                   AND F.TESTMETHODID = #{item} )
                 </foreach>
             </if>
+            <if test="equiptRequisitionFilterProjId != null">
+                AND EXISTS (
+                SELECT
+                1
+                FROM
+                T_EMC_EQUIPT_REQUISITION F
+                WHERE
+                F.EQUIPTID = T.ID
+                AND instr(F.PROJIDS , #{equiptRequisitionFilterProjId}) > 0
+                )
+            </if>
             <if test="maintenanceUser_assigned != null">
                     AND (MAINTAINUSERID IS NULL OR MAINTAINUSERID = '' OR
                     MAINTAINUSERID LIKE '%'||#{maintenanceUserId}||'%' )
@@ -65,14 +89,15 @@
                     AND EXISTS( SELECT 1
                                    FROM T_EMC_EQUIPT_PLAN TAR_
                                   WHERE TAR_.EQUIPTID = T.ID
-                                  AND TAR_.MAINTENDDATE <![CDATA[<=]]> sysdate() + TAR_.WARNINGDAYS
-                    )
+                                  AND TAR_.MAINTENDDATE <![CDATA[<=]]> SYSDATE + TAR_.WARNINGDAYS
+                    ) AND T.STATUS <![CDATA[<>]]> 'notUse'
             </if>
             <if test="targetType == 'calibration'">
                 AND INSTR( ',' || CALIBRATIONTYPE || ',',',' || #{calibrationType} || ',' ) > 0
             </if>
             <if test="targetType == 'auxiliaryEquipt'">
-                AND EXISTS (SELECT 1 FROM T_EMC_EQUIPT_TEST_METHOD F WHERE F.EQUIPTID = T.ID AND F.ANALYSISCATEGORY='auxiliary' AND FIND_IN_SET(F.TESTMETHODID,#{testMethodIds}) > 0)
+                AND EXISTS (SELECT 1 FROM T_EMC_EQUIPT_TEST_METHOD F WHERE F.EQUIPTID = T.ID AND F.ANALYSISCATEGORY='analysis' AND
+                INSTR( ',' || #{testMethodIds} || ',',',' || F.TESTMETHODID || ',' ) > 0)
             </if>
         </where>
         ORDER BY

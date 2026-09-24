@@ -64,6 +64,8 @@ public interface EmcOrderService extends GenericService<EmcOrderBean, Long>, Gen
 
     Page<EmcOrderTaskBean> selectOrderTaskPagationByOrder(RestJsonWrapperBean wrapper);
 
+    Page<EmcOrderTaskBean> selectOrderTaskPagationByOrderAndTask(RestJsonWrapperBean wrapper);
+
     void addRepeatNo(Long id, RestJsonWrapperBean wrapper);
 
     void deleteRepeatNo(RestJsonWrapperBean wrapper);
@@ -91,4 +93,6 @@ public interface EmcOrderService extends GenericService<EmcOrderBean, Long>, Gen
     void setDoneSampleOrder(RestJsonWrapperBean wrapper);
 
     Page<EmcOrderBean> selectOrderList(RestJsonWrapperBean wrapper);
+
+    void editCheckProjectItemGroup(Long id, RestJsonWrapperBean wrapper);
 }

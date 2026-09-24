@@ -3198,4 +3198,26 @@ public class PfReportServiceImpl extends EmcReportServiceImpl implements PfRepor
 
         return null;
     }
+    @Override
+    public Long viewNewReport(RestJsonWrapperBean wrapper) {
+        return viewReport(wrapper);
+    }
+
+    @Override
+    public Long projectUndo(RestJsonWrapperBean wrapper) {
+        return 0L;
+    }
+
+    @Override
+    public void seal(RestJsonWrapperBean wrapper) {
+    }
+
+    @Override
+    public void signIssuePdfIfRequired(CoreFileBean coreFile) {
+    }
+
+    @Override
+    public void editItem(RestJsonWrapperBean wrapper) {
+    }
+
 }

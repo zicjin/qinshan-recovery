@@ -20,7 +20,12 @@ emcOrderReceipt.orderReceiptContainerPage = {
     },
 
     getOrderTaskUrl : function() {
-        Gikam.post('/secure/emc/module/bp/bp/orders/order-tasks/queries', Gikam.getJsonWrapper({}, [ '', this.order ], [ '', this.orderTask ], [ '', this.orderIds ])).done(function(data) {
+        Gikam.post('/secure/emc/module/bp/bp/orders/order-tasks/queries', Gikam.getJsonWrapper({
+            f : {
+                orderId_IN : this.orderIds.join(','),
+                testName_SEQ : this.orderTask[0].testName,
+            }
+        }, )).done(function(data) {
             Gikam.getComp('emc-order-container-order-receipt-detail-list-grid').refreshByData(data);
         }).always(function() {
             workspace.window.closeMask();
@@ -76,12 +81,10 @@ emcOrderReceipt.orderReceiptContainerPage = {
 
         var orderId = [];
         Gikam.each(this.order, function(index, item) {
-            orderId.push({
-                id : item.id,
-            });
+            orderId.push(item.id);
         });
         this.orderIds = orderId;
-        
+
         this.param = param;
         this.createPage();
     },

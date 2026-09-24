@@ -1,6 +1,7 @@
 package com.sunwayworld.emc.module.mdm.bizmdm.test.service.impl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,11 +11,14 @@ import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.*;
 import com.sunwayworld.emc.module.mdm.bizmdm.test.service.*;
 import com.sunwayworld.emc.module.mdm.bizmdm.test.validator.EmcTestMethodCopyValidator;
 import com.sunwayworld.framework.validator.data.annotation.ValidateDataWith;
+import com.sunwayworld.module.item.file.bean.CoreFileBean;
+import com.sunwayworld.module.item.file.service.CoreFileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.sunwayworld.emc.framework.constant.PfConstant;
 import com.sunwayworld.emc.module.mdm.bizmdm.capacity.bean.EmcCapacityItemGroupBean;
 import com.sunwayworld.emc.module.mdm.bizmdm.capacity.service.EmcCapacityItemGroupService;
 import com.sunwayworld.emc.module.mdm.equipt.equipt.bean.EmcEquiptTestMethodBean;
@@ -79,6 +83,10 @@ public class PfTestMethodServiceImpl extends EmcTestMethodServiceImpl implements
     private EmcTestmethodBeforehandleService testMethodBeforeHandleService;
 
     @Autowired
+    @Lazy
+    private CoreFileService coreFileService;
+
+    @Autowired
     private CoreFormulaRequiredService coreFormulaRequiredService;
 
     @Override
@@ -95,6 +103,8 @@ public class PfTestMethodServiceImpl extends EmcTestMethodServiceImpl implements
         copyTestMethod.setTestId(testMethod.getTestId());
         copyTestMethod.setTestCategoryId(testMethod.getTestCategoryId());
         copyTestMethod.setMethodId(testMethod.getMethodId());
+        copyTestMethod.setTestClass(testMethod.getTestClass());
+        copyTestMethod.setTestMethodType(testMethod.getTestMethodType());
         getDao().insert(copyTestMethod);
 
         // 复制前处理
@@ -223,7 +233,7 @@ public class PfTestMethodServiceImpl extends EmcTestMethodServiceImpl implements
         List<EmcRelatedTestMethodBean> relatedTestMethodList = wrapper.parse(EmcRelatedTestMethodBean.class);
 
         List<Long> testMethodIdList = targetTestMethodList.stream().map(EmcTestMethodBean::getId).collect(Collectors.toList());
-        List<EmcRelatedTestMethodBean> existedRelatedMethodList = relatedTestMethodService.getDao().selectListByOneColumnValues(testMethodIdList, "testMethodId");
+        List<EmcRelatedTestMethodBean> existedRelatedMethodList = relatedTestMethodService.selectListByFilter(SearchFilter.instance().match("testMethodId", testMethodIdList).filter(MatchPattern.OR).match("replaceFlag2", Arrays.asList("1", null)).filter(MatchPattern.DIFFER));
 
         List<EmcRelatedTestMethodBean> insertRelatedTestMethodList = new ArrayList<>();
         targetTestMethodList.forEach(testMethod -> {
@@ -373,6 +383,68 @@ public class PfTestMethodServiceImpl extends EmcTestMethodServiceImpl implements
 
         itemGroupService.getDao().update(itemGroupList, "testId");
         capacityItemGroupService.getDao().update(capacityItemGroupList, "testId");
+    }
+
+    @Override
+    @Transactional
+    public void beforeHandleCopyTo(RestJsonWrapperBean wrapper) {
+        List<EmcTestMethodBean> testMethodRawList = wrapper.parse(EmcTestMethodBean.class, 0);
+        List<EmcTestMethodBean> testMethodCopyList = wrapper.parse(EmcTestMethodBean.class, 1);
+        Long testMethodId = testMethodRawList.get(0).getId();
+        List<EmcTestmethodBeforehandleBean> beforeHandleList = testMethodBeforeHandleService.getDao().selectListByOneColumnValue(testMethodId, "TESTMETHODID");
+        if (ObjectUtils.isEmpty(beforeHandleList)) {
+            return;
+        }
+        List<EmcTestmethodBeforehandleBean> addBeforeHandleList = new ArrayList<>();
+        testMethodCopyList.forEach(tm -> beforeHandleList.forEach(bh -> {
+            EmcTestmethodBeforehandleBean addBeforeHandle = new EmcTestmethodBeforehandleBean();
+            BeanUtils.copyProperties(bh, addBeforeHandle, PfConstant.CREATED_COLUMNS);
+            addBeforeHandle.setId(ApplicationContextHelper.getNextIdentity());
+            addBeforeHandle.setTestMethodId(tm.getId());
+            addBeforeHandleList.add(addBeforeHandle);
+        }));
+        testMethodBeforeHandleService.getDao().insert(addBeforeHandleList);
+    }
+
+    @Override
+    @Transactional
+    public void scriptFileCopyTo(RestJsonWrapperBean wrapper) {
+        List<CoreFileBean> fileBeanList = wrapper.parse(CoreFileBean.class);
+        List<EmcTestMethodBean> testMethodList = wrapper.parse(EmcTestMethodBean.class);
+        CoreFileBean file = fileBeanList.get(0);
+        List<CoreFileBean> addFileList = new ArrayList<>();
+        testMethodList.forEach(tm -> {
+            CoreFileBean addFile = new CoreFileBean();
+            BeanUtils.copyProperties(file, addFile);
+            addFile.setId(ApplicationContextHelper.getNextIdentity());
+            addFile.setTargetId("T_EMC_TEST_METHOD$" + tm.getId());
+            addFile.setBizCategory("script");
+            addFileList.add(addFile);
+        });
+        List<String> targetIdList = testMethodList.stream().map(e -> "T_EMC_TEST_METHOD$" + e.getId()).collect(Collectors.toList());
+        List<CoreFileBean> oldScriptFileList = coreFileService.selectListByFilter(SearchFilter.instance().match("TARGETID", targetIdList).filter(MatchPattern.OR).match("BIZCATEGORY", "script").filter(MatchPattern.SEQ));
+        if (!ObjectUtils.isEmpty(oldScriptFileList)) {
+            coreFileService.getDao().deleteByIdList(oldScriptFileList.stream().map(CoreFileBean::getId).collect(Collectors.toList()));
+        }
+        coreFileService.getDao().insert(addFileList);
+    }
+
+    @Override
+    @Transactional
+    public void delQcIndex(RestJsonWrapperBean wrapper) {
+        List<EmcItemBean> itemList = wrapper.parse(EmcItemBean.class);
+        List<Long> itemIdList = itemList.stream().map(e -> e.getId()).distinct().collect(Collectors.toList());
+        List<EmcItemQcIndexBean> delList = itemQcIndexService.getDao().selectListByOneColumnValues(itemIdList, "ITEMID");
+        itemQcIndexService.getDao().deleteBy(delList);
+    }
+
+    @Override
+    @Transactional
+    public void delRevision(RestJsonWrapperBean wrapper) {
+        List<EmcItemBean> itemList = wrapper.parse(EmcItemBean.class);
+        List<Long> itemIdList = itemList.stream().map(e -> e.getId()).distinct().collect(Collectors.toList());
+        List<EmcItemRevisionBean> delList = itemRevisionService.getDao().selectListByOneColumnValues(itemIdList, "ITEMID");
+        itemRevisionService.getDao().deleteBy(delList);
     }
 
 

@@ -24,7 +24,7 @@ emcSamplingPlan.orderContainerPage = {
 
     queryOrderTask : function() {
         var _this = this;
-        Gikam.post('/secure/emc/module/bp/bp/orders/order-tasks/queries', Gikam.getJsonWrapper({}, [ '', _this.orders ], [ '', _this.orderTasks ], [ '', _this.orderIds ])).done(function(data) {
+        Gikam.post('/secure/emc/module/bp/bp/orders/order/tasks/queries', Gikam.getJsonWrapper({}, [ 'emcOrderServiceImpl', _this.orders ], [ 'emcOrderTaskServiceImpl', _this.orderTasks ], [ '', _this.orderIds ])).done(function(data) {
             Gikam.getComp('emc-sampling-plan-container-detail-list-grid').refreshByData(data);
         });
     },

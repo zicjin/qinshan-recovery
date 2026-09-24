@@ -116,13 +116,13 @@
                A.FIXATIVE,
                A.CONTAINERCATEGORYNAME,
                A.CONTAINERCATEGORYID,
-            CONCAT(WM_CONCAT(DISTINCT CONCAT(TESTNAME,
+            CONCAT(LISTAGG(DISTINCT CONCAT(TESTNAME,
                 CASE
                 WHEN SUBCONTRACTORID IS NULL THEN
                 ''
                 ELSE
                 '(分包)'
-                END)),
+                END), ','),
                 ",") AS TESTNAME
           FROM T_EMC_ORDER_TASK  A
                  WHERE A.ORDERID = #{orderId}
@@ -146,7 +146,7 @@
                A.CONTAINERCATEGORYNAME,
                A.CONTAINERCATEGORYID,
                A.STORECONDITION,
-                CONCAT(WM_CONCAT(DISTINCT CONCAT(TESTNAME,
+                CONCAT(LISTAGG(DISTINCT CONCAT(TESTNAME,
                     CASE
                     WHEN SUBCONTRACTORID IS NULL THEN
                     ''
@@ -154,9 +154,9 @@
                     '(登记分包)'
                     ELSE
                     '(现场分包)'
-                    END)),
+                    END), ','),
                     ",") AS TESTNAME,
-                CONCAT(WM_CONCAT(ID)) AS MULTITESTID
+                CONCAT(LISTAGG(ID, ',')) AS MULTITESTID
           FROM T_EMC_ORDER_TASK A
                  WHERE A.ORDERID = #{orderId}
          GROUP BY A.CONTAINERGROUP,
@@ -350,11 +350,14 @@
                         T.ORDERCATEGORY
           FROM (SELECT A.*
                   FROM T_EMC_ORDER_TASK A
+                  LEFT JOIN T_EMC_ORDER O
+                    ON A.ORDERID = O.ID
                   LEFT JOIN T_EMC_PROJECT P
                     ON A.PROJID = P.ID
                  WHERE (P.STATUS != 'cancel' OR P.STATUS IS NULL)
-                		<if test="orgId != null">
-                         	AND P.ORGID LIKE CONCAT(#{orgId}, '%')
+                   AND (O.TERMINATION != '1' OR O.TERMINATION IS NULL)
+                    <if test="orgId != null">
+                        AND P.ORGID LIKE CONCAT(#{orgId}, '%')
                         </if>
                  ) T
          <where>
@@ -382,7 +385,7 @@
                                AND (A.FILTERTEST = '1'
                                AND C.TESTID = T.TESTMETHODID
                                AND C.METHODID = T.METHODID
-                               AND (B.EXPIREDATE IS NULL OR B.EXPIREDATE > sysdate())
+                               AND (B.EXPIREDATE IS NULL OR B.EXPIREDATE > SYSDATE)
                                OR A.FILTERTEST = '0'
                                OR A.FILTERTEST IS NULL)
                 )
@@ -618,6 +621,76 @@
             </when>
             <otherwise>
                 T.TESTID DESC
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="selectUnRunnableList" parameterType="map" resultType="map">
+        SELECT T.*
+        FROM (SELECT A.*,
+        Q.LABELNO,
+        Q.ORDERNO,
+        Q.SAMPLEID,
+        Q.ACCEPTEDDATE,
+        G.ITEMGROUP,
+        TM.TESTMETHODTYPE,
+        Y.INPUTUSERID AS CAPACITYINPUTUSERID,
+        Y.INPUTUSERNAME AS CAPACITYINPUTUSERNAME
+        FROM T_EMC_ORDER_TASK A
+        LEFT JOIN T_EMC_PROJECT P ON A.PROJID = P.ID
+        LEFT JOIN T_EMC_ORDER Q ON A.ORDERID = Q.ID
+        LEFT JOIN T_EMC_ORDER_ITEM_GROUP G ON G.ORDERID = A.ORDERID AND G.TESTMETHODID = A.TESTMETHODID
+        LEFT JOIN T_EMC_TEST_METHOD TM ON TM.ID = A.TESTMETHODID
+        LEFT JOIN T_EMC_TEST_CAPACITY Y
+        ON A.TESTMETHODID = Y.TESTMETHODID
+        AND Y.ORGID = #{loginUser.ext$.parentorgid}
+        WHERE (P.STATUS != 'cancel' OR P.STATUS IS NULL)
+        AND (RUNID IS NULL OR RUNID = '')
+        ) T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+            <if test='authority_org == "1"'>
+                AND <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.orgAuthorityWhereClause">
+                <property name="tableAlias" value="T"/>
+                <property name="permissionColumnName" value="ANALYSISORGID"/>
+            </include>
+            </if>
+            <if test='inputUserId != null'>
+                AND (INPUTUSERID IS NULL OR CHARINDEX(',' + #{loginUser.id} + ',' , ',' + T.INPUTUSERID + ',') > 0)
+            </if>
+            <if test='limitUser == "1"'>
+                AND (T.INPUTUSERID = #{loginUser.id} OR T.INPUTUSERID IS NULL)
+            </if>
+            <if test='searchType == "assign"'>
+                AND EXISTS (SELECT 1 FROM T_EMC_SAMPLE S WHERE S.ID = T.SAMPLEID AND S.ACCEPTSTATUS = '2' AND S.ASSIGNSTATUS = '0')
+            </if>
+            <if test='searchType == "fxyly"'>
+                AND EXISTS (SELECT 1 FROM T_EMC_SAMPLE S WHERE S.ID = T.SAMPLEID AND S.ACCEPTSTATUS = '2')
+            </if>
+            <if test='userid != null'>
+                AND EXISTS (SELECT 1
+                FROM T_EMC_EMP A
+                LEFT JOIN T_EMC_CERT B
+                ON A.ID = B.EMPID
+                LEFT JOIN T_EMC_CERT_TEST_METHOD C
+                ON B.ID = C.CERTID
+                WHERE A.ID = #{loginUser.id}
+                AND (A.FILTERTEST = '1'
+                AND C.TESTID = T.TESTMETHODID
+                AND C.METHODID = T.METHODID
+                AND (B.EXPIREDATE IS NULL OR B.EXPIREDATE > GETDATE())
+                OR A.FILTERTEST = '0'
+                OR A.FILTERTEST IS NULL)
+                )
+            </if>
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ORDERCATEGORY DESC
             </otherwise>
         </choose>
     </select>

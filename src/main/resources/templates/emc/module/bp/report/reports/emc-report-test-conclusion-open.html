@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>电子报告</title>
+        <script type="text/javascript">
+            function getPath() {
+                var protocol = window.location.protocol;// 获取协议
+                var host = window.location.host;// 获取地址和端口号
+                return protocol+"//"+host;
+            }
+            function pdfJsView(fileId) {
+                window.location.href= getPath() + "/static/plugin/pdfjs-3.5.141-dist/web/viewer.html?file=/open/emc/projectfunction/module/bp/report/reports/display/" + fileId;
+            }
+            function onlyOfficeView(fileId) {
+                // todo
+                window.location.href= getPath() + "";
+            }
+            function download(fileId) {
+                // 直接下载
+                window.location.href= getPath() + "/open/emc/projectfunction/module/bp/report/reports/display/" + fileId;
+            }
+            function batchDownload(fileIds) {
+                // todo
+                // 批量下载
+            }
+            // 判断文件格式，下载或预览
+            function doFile(fileId,fileTxt) {
+                // pdf进行预览 其他类型文件直接下载
+                if (fileTxt == 'pdf') {
+                    pdfJsView(fileId)
+                } else {
+                    download(fileId)
+                }
+            }
+
+
+
+            window.onload = function(){ // dom完成后执行
+                var pageUrl = window.location.href.toString();
+                var reportId = pageUrl.substr(pageUrl.indexOf("=") + 1);
+                // var url = "http://58.215.200.126:8090/open/emc/projectfunction/module/bp/report/reports/select-test-conclusion/" + reportId;
+                var url = getPath() + "/open/emc/module/bp/report/reports/select-test-conclusion/" + reportId;
+                var request = new XMLHttpRequest();
+                request.open("GET",url);
+                request.send(null);
+                request.onload = function() {
+                    console.log(request.response)
+                    if(request.response == ''){
+                        window.alert('未查询到可预览报告');
+                    }else {
+                        if (request.status == 200) {
+                            // 获取响应
+                            var jsonObject = JSON.parse(request.response);
+
+
+                            // 渲染检验结论表格
+                            // var testConclusion = jsonObject['testConclusion'];
+                            var entrustOrgName = jsonObject['ext$']['entrustorgname'];
+                            var reportNo = jsonObject['reportNo'];
+                            var company = jsonObject['ext$']['ssgfgsmc']
+                            var conclusion = {  entrustOrgName, reportNo };
+                            var conclusionTable = document.getElementById("conclusionTable");
+                            var conclusionName = {
+                                reportNo : '报告编号',
+                                entrustOrgName : '委托单位',
+                            }
+                            for (var key in conclusion) {
+                                var tr = document.createElement('tr');
+                                var th = document.createElement('th');
+                                var td = document.createElement('td');
+                                th.innerHTML = conclusionName[key];
+                                td.innerHTML = conclusion[key] ? conclusion[key] : '暂无' ;
+                                tr.appendChild(th);
+                                tr.appendChild(td);
+                                conclusionTable.insertBefore(tr,conclusionTable.children[0]);
+                            }
+
+                            //渲染欢迎语
+                            var reportNoSpan = document.getElementById("reportNoSpan");
+                            reportNoSpan.innerHTML = reportNo == undefined ? '' : reportNo;
+                            //渲染公司
+                            var reportCompany = document.getElementById("reportCompany");
+                            reportCompany.innerHTML = company == undefined ? '青山绿水（江苏）检验检测有限公司' : company;
+                            //渲染解释权
+                            var reportCompany1 = document.getElementById("reportCompany1");
+                            reportCompany1.innerHTML = company == undefined ? '青山绿水（江苏）检验检测有限公司' : company;
+                            // 渲染文件列表
+                            var fileList = jsonObject['fileList'];
+                            var filesDiv = document.getElementById("filesDiv");
+                            if (fileList.length == 0) {
+                                var info = document.createElement("p");
+                                info.innerHTML = '暂无文件';
+                                filesDiv.appendChild(info);
+                            }
+                            for(var i = 0, len = fileList.length; i < len; i++) {
+                                var {fileId, fileName, fileUrl,fileExt } = fileList[i];
+                                var div = document.createElement("div");
+                                div.setAttribute("class", "fileDivStyle");
+                                div.setAttribute("onclick", "doFile('" + fileId + "','"+ fileExt +"')");
+
+                                var leftImg = document.createElement('img');
+                                var extName = fileExt;
+                                if (fileExt == 'docx') {
+                                    extName = 'doc'
+                                }
+                                leftImg.setAttribute("src", getPath() +"/static/emc/icon/file_ext_"+ extName +".png");//根据文件类型设置显示图片
+                                leftImg.setAttribute("onerror","this.src='"+getPath()+"/static/emc/icon/file_ext_unknown.png'");//根据文件类型设置显示图片
+                                leftImg.setAttribute("width","100");
+                                leftImg.setAttribute("height","100");
+                                var p = document.createElement("p");
+                                p.innerHTML = fileName;
+                                var rightImg = document.createElement('img');
+                                rightImg.setAttribute("src", getPath() +"/static/emc/icon/rightArrow.png");
+                                rightImg.setAttribute("width","40");
+                                rightImg.setAttribute("height","40");
+
+                                div.appendChild(leftImg);
+                                div.appendChild(p);
+                                div.appendChild(rightImg);
+                                filesDiv.appendChild(div);
+                            }
+                        }
+                    }
+                }
+            }
+
+        </script>
+
+        <style type="text/css">
+
+                /*底部背景样式*/
+                .bodyStyle{
+                    /*background-color: #F6F3F3;*/
+                    background-color: white;
+                    background-size: 100% 100%;
+                }
+
+
+                /*欢迎语样式*/
+                .welcomeDivStyle {
+                    background-color : white;
+                    background-size: 100% 100px;
+                    padding: 10px 30px;
+                    font-size: 30px;
+                }
+                /*.welcomeDivStyle p:before{*/
+                /*    content:"★"; color:#ff0000;*/
+                /*}*/
+
+                /*统一div样式*/
+                .divStyle{
+                    background-color : white;
+                    padding: 10px 40px;
+                    font-size: 30px;
+
+                    /*margin: 3px 0px;*/
+                }
+                /*页脚div样式*/
+                .footerDivStyle {
+                    background-color : white;
+                    padding: 10px 40px;
+                    font-size: 30px;
+                    text-align : center;
+                }
+
+                /*文件div样式*/
+                .fileDivStyle{
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    background-color: #F6F3F3;
+                    min-height: 180px;
+                    padding: 5px 40px;
+                    margin : 10px;
+                    font-size: 30px;
+                    justify-content: space-between;
+                }
+
+                .fileDivStyle img {
+                }
+                .fileDivStyle p{
+                    width: 70%;
+                    font-size: 35px;
+                    display:-webkit-box;				/*弹性伸缩盒子*/
+                    -webkit-box-orient:vertical;		/*子元素垂直排列*/
+                    line-clamp:2;
+                    -webkit-line-clamp:2;				/*显示的行数*/
+                    overflow:hidden;					/*溢出部分隐藏*/
+                    text-overflow:ellipsis ;            /*末尾溢出显示省略号*/
+                }
+
+
+                /*统一表格样式*/
+                table{
+                    width: 100%;
+                    text-align: center;
+                    font-size: 40px;
+                }
+                th{
+                    border: 1px solid #999;
+                    padding: 20px 20px;
+                    background-color: darkblue;
+                    color: white;
+                    width: 30%;
+                }
+                td{
+                    border: 1px solid #999;
+                    background-color: #F6F3F3;
+                    padding: 20px 20px;
+                    width: 70%;
+                }
+
+
+                /* 大屏幕（大桌面显示器，大于等于 1200px） */
+                @media (min-width: 1200px) {
+                    .bodyStyle{
+                        width: 1000px;
+                    }
+                }
+        </style>
+    </head>
+
+
+    <body class="bodyStyle" >
+        <div class="welcomeDivStyle">
+            <p><span style="background-color: #0a84ff;">&nbsp;</span>&nbsp;尊敬的客户,欢迎您查询检验报告<span id="reportNoSpan" style="color: red" ></span>，结果如下：</p>
+        </div>
+        <div class="divStyle">
+            <table id="conclusionTable">
+                <tr ><th>检测单位</th><td><span id="reportCompany"></span></td></tr>
+                <tr ><th>地址</th><td><span> 常州市天宁区常州检验检测产业园5号楼401室、501室、601室 </span></td></tr>
+                <tr ><th>电话</th><td><span> 0519-88163870    0519-81237870 </span></td></tr>
+            </table>
+        </div>
+
+        <div class="welcomeDivStyle">
+            <p><span style="background-color: #0a84ff;">&nbsp;</span>&nbsp;相关文件如下：</p>
+        </div>
+    	<div id="filesDiv" class="divStyle">
+		</div>
+        <div class="footerDivStyle">
+            <div style="border-top:1px dashed #cccccc;">
+                <p>最终解释权归<span id="reportCompany1"></span>所有</p>
+            </div>
+        </div>
+	</body>
+</html>

@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sunwayworld.emc.module.bp.bp.mapper.EmcOrderContainerMapper">
-    <select id="selectByCondition" parameterType="map" resultType="map">
+    <!-- <select id="selectByCondition" parameterType="map" resultType="map">
         SELECT T.*
         FROM (SELECT O.*,
         TEO.SAMPLENUM AS ORDERSAMPLENUM,
@@ -22,9 +22,9 @@
         TR.STATUS AS TRANSPORTSTATUS,
         SA.BASERECORDVID AS SAMPLEBASERECORDVID,
         TMPL.MONITORCATEGORY,
-        WM_CONCAT(DISTINCT C.PROJECTNAME SEPARATOR ',') AS TESTNAMES,
-        WM_CONCAT(DISTINCT TP.PARAMNAME SEPARATOR ',') AS PARAMNAME,
-        WM_CONCAT(DISTINCT TP.ID SEPARATOR ',') AS PARAMIDS,
+        LISTAGG(DISTINCT C.PROJECTNAME, ',') WITHIN GROUP (ORDER BY C.PROJECTNAME) AS TESTNAMES,
+        LISTAGG(DISTINCT TP.PARAMNAME, ',') WITHIN GROUP (ORDER BY TP.PARAMNAME) AS PARAMNAME,
+        LISTAGG(DISTINCT TP.ID, ',') WITHIN GROUP (ORDER BY TP.ID) AS PARAMIDS,
         CASE WHEN (EXISTS (SELECT 1
         FROM T_EMC_ORDER_COLLECT OC
         WHERE OC.ORDERCONTAINERNO = O.ORDERCONTAINERNO
@@ -160,30 +160,151 @@
                 T.FOLDERID ASC, T.ORDERNO ASC
             </otherwise>
         </choose>
+    </select> -->
+
+     <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT
+                T.*
+            FROM
+                (
+                SELECT
+                    O.*,
+                    TEO.SAMPLENUM AS ORDERSAMPLENUM,
+                    TEO.CYCLE AS ORDERCYCLE ,
+                    TEO.FREQUENCY AS ORDERFREQUENCY,
+                    TEO.SAMPLEID,
+                    A.PROJNO,
+                    A.PROJNAME,
+                    A.PROJNODE,
+                    B.MONITORPOINTNAME,
+                    B.MONITORPOINTNO
+                FROM
+                    T_EMC_ORDER_CONTAINER O
+                LEFT JOIN T_EMC_ORDER TEO
+                    ON TEO.ID = O.ORDERID
+                LEFT JOIN T_EMC_PROJECT A
+                    ON O.PROJID = A.ID
+                LEFT JOIN T_EMC_FOLDER B
+                    ON O.FOLDERID = B.ID
+                LEFT JOIN T_EMC_MONITOR_POINT MP
+                    ON B.MONITORPOINTID = MP.ID
+                LEFT JOIN T_EMC_ORDER_TASK OTK
+                    ON O.ID = OTK.ORDERCONTAINERID
+                LEFT JOIN T_EMC_ORDER_TASK_RESULT RST
+                    ON OTK.ID = RST.ORDERTASKID
+                LEFT JOIN T_EMC_SAMPLE SA
+                    ON SA.ID = TEO.SAMPLEID
+                LEFT JOIN T_EMC_MONITOR_TMPL TMPL
+                    ON TMPL.ID = O.MONITORTMPLID
+                LEFT JOIN T_EMC_CONTAINER_CATEGORY CC
+                    ON CC.ID = O.CONTAINERCATEGORYID
+                ) T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent"/>
+            <if test="searchType == 'sampleIdNull'">
+                AND ( T.SAMPLEID IS NULL OR T.SAMPLEID = '')
+                AND EXISTS (
+                SELECT
+                1
+                FROM
+                T_EMC_ORDER_TASK OT
+                WHERE
+                OT.ORDERCONTAINERID = T.ID
+                AND OT.dataSharing <![CDATA[<>]]> '1'
+                )
+            </if>
+            <if test="searchType == 'sampleIdNotNull'">
+                AND T.SAMPLEID IS NOT NULL
+            </if>
+            <if test="searchType == 'transportIdNull'">
+                AND (T.TRANSPORTID IS NULL OR T.TRANSPORTID = '')
+            </if>
+            <if test="runIdNotNull_filter != null">
+                AND EXISTS ( SELECT 1
+                FROM T_EMC_ORDER_TASK OT
+                WHERE OT.ORDERCONTAINERID = T.ID
+                AND OT.RUNID = #{runIdNotNull_filter})
+            </if>
+            <if test="transportType != null">
+                AND EXISTS ( SELECT 1
+                FROM T_EMC_ORDER_TASK OT
+                WHERE OT.ORDERCONTAINERID = T.ID
+                AND OT.ANALYSISTYPE IN ('analysis', 'pretreatment')
+                )
+            </if>
+            <if test="addRunOrderParamIds != null">
+                AND EXISTS (SELECT 1
+                FROM T_EMC_ORDER_TASK A
+                WHERE A.ORDERCONTAINERID = T.ID
+                AND (A.RUNID IS NULL OR A.RUNID = '')
+                AND A.STATUS = 'logged'
+                AND FIND_IN_SET(#{loginUser.id},A.ANALYSISUSERID) > 0
+                AND FIND_IN_SET(A.PARAMID,#{addRunOrderParamIds})
+                )
+            </if>
+            <if test="addPretreatmentRunOrderParamIds != null">
+                AND EXISTS (SELECT 1
+                FROM T_EMC_ORDER_TASK A
+                WHERE A.ORDERCONTAINERID = T.ID
+                AND (A.PRETREATMENTRUNID IS NULL OR A.PRETREATMENTRUNID = '')
+                AND A.STATUS = 'logged'
+                AND FIND_IN_SET(#{loginUser.id},A.ANALYSISUSERID) > 0
+                AND FIND_IN_SET(A.PARAMID,#{addPretreatmentRunOrderParamIds})
+                )
+            </if>
+            <if test="pretreatmentRunId != null">
+                AND EXISTS (SELECT 1
+                FROM T_EMC_ORDER_TASK A
+                WHERE A.ORDERCONTAINERID = T.ID
+                AND (A.PRETREATMENTRUNID = #{pretreatmentRunId})
+                AND (A.RUNID IS NULL OR A.RUNID = '')
+                AND A.STATUS = 'logged'
+                )
+            </if>
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause"/>
+            </when>
+            <otherwise>
+                T.FOLDERID ASC, T.ORDERNO ASC
+            </otherwise>
+        </choose>
     </select>
 
     <select id="selectOrderContainerList" parameterType="map" resultType="map">
         SELECT T.*
-        FROM (SELECT A.*,
-        (CASE WHEN P.SAMPLE = '0' THEN O.SENDDATE ELSE O.SAMPLEBEGINDATE END) AS SAMPLEDATE,
-        P.PROJNO,
-        P.PROJNAME,
-        S.SAMPLENO,
-        S.ORGID AS SAMPLEORGID,
-        WM_CONCAT(DISTINCT B.TESTNAME) AS TESTNAME,
-        WM_CONCAT(DISTINCT B.TESTMETHODID) AS MULTITESTID,
-        WM_CONCAT(DISTINCT C.ITEMGROUP) AS ITEMGROUP
-        FROM T_EMC_ORDER_CONTAINER A
-        LEFT JOIN T_EMC_ORDER_TASK B
-        ON A.ID = B.ORDERCONTAINERID
-        LEFT JOIN T_EMC_ORDER O
-        ON A.ORDERID = O.ID
-        LEFT JOIN T_EMC_SAMPLE S
-        ON O.SAMPLEID = S.ID
-        LEFT JOIN T_EMC_PROJECT P
-        ON O.PROJID = P.ID
-        LEFT JOIN T_EMC_ORDER_ITEM_GROUP C
-        ON A.ORDERID = C.ORDERID AND B.TESTMETHODID = C.TESTMETHODID
+          FROM (SELECT A.ID,
+                       A.ORDERCONTAINERNO,
+                       A.CONTAINERCATEGORYNAME,
+                       A.CONTAINERGROUP,
+                       A.FIXATIVE,
+                       A.ORDERID,
+                       A.STORECONDITION,
+                       A.DELIVERYID,
+                       (CASE WHEN P.SAMPLE = '0' THEN O.SENDDATE ELSE O.SAMPLEBEGINDATE END) AS SAMPLEDATE,
+                       P.PROJNO,
+                       P.PROJNAME,
+                       S.SAMPLENO,
+                       S.ORGID AS SAMPLEORGID,
+                       S.ACCEPTEDDATE,
+                        LISTAGG(DISTINCT A.ISSCAN, ',') AS ISSCAN,
+                        LISTAGG(DISTINCT S.ORDERCATEGORY, ',') AS ORDERCATEGORY,
+                       LISTAGG(DISTINCT B.TESTNAME, ',') AS TESTNAME,
+                       LISTAGG(DISTINCT B.TESTMETHODID, ',') AS MULTITESTID,
+                       LISTAGG(DISTINCT C.ITEMGROUP, ',') AS ITEMGROUP
+                  FROM T_EMC_ORDER_CONTAINER A
+                  LEFT JOIN T_EMC_ORDER_TASK B
+                    ON A.ID = B.ORDERCONTAINERID
+                  LEFT JOIN T_EMC_ORDER O
+                    ON A.ORDERID = O.ID
+                  LEFT JOIN T_EMC_SAMPLE S
+                    ON O.SAMPLEID = S.ID
+                  LEFT JOIN T_EMC_PROJECT P
+                    ON O.PROJID = P.ID
+                  LEFT JOIN T_EMC_ORDER_ITEM_GROUP C
+                    ON A.ORDERID = C.ORDERID AND B.TESTMETHODID = C.TESTMETHODID
         <where>
             <if test="orderId != null">
                 A.ORDERID = #{orderId}
@@ -192,18 +313,33 @@
                 AND A.CONTAINERCATEGORYNAME IS NOT NULL
             </if>
         </where>
-        GROUP BY A.ID ) T
+        GROUP BY A.ID,
+                 A.ORDERID,
+                 A.ORDERCONTAINERNO,
+                 A.CONTAINERCATEGORYNAME,
+                 A.CONTAINERGROUP,
+                 A.FIXATIVE,
+                 A.STORECONDITION,
+                 A.DELIVERYID,
+                 P.SAMPLE,
+                 O.SENDDATE,
+                 O.SAMPLEBEGINDATE,
+                 P.PROJNO,
+                 P.PROJNAME,
+                 S.SAMPLENO,
+                 S.ORGID,
+                S.ACCEPTEDDATE) T
         <where>
             <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent"/>
             <if test="targetType == 'partHandover' and sampleId != null">
                 AND EXISTS (
-                SELECT 1 FROM T_EMC_ORDER B LEFT JOIN T_EMC_SAMPLE C ON C.ID = B.`SAMPLEID` WHERE T.`ORDERID` = B.ID AND
+                SELECT 1 FROM T_EMC_ORDER B LEFT JOIN T_EMC_SAMPLE C ON C.ID = B.SAMPLEID WHERE T.ORDERID = B.ID AND
                 C.ID = #{sampleId}
                 ) AND T.DELIVERYID IS NULL
             </if>
             <if test="targetType == 'labelScan' and sampleId != null">
                 AND EXISTS (
-                SELECT 1 FROM T_EMC_ORDER B LEFT JOIN T_EMC_SAMPLE C ON C.ID = B.`SAMPLEID` WHERE T.`ORDERID` = B.ID AND
+                SELECT 1 FROM T_EMC_ORDER B LEFT JOIN T_EMC_SAMPLE C ON C.ID = B.SAMPLEID WHERE T.ORDERID = B.ID AND
                 C.ID = #{sampleId}
                 )
             </if>
@@ -261,7 +397,7 @@
            LEFT JOIN T_EMC_SAMPLE S ON O.SAMPLEID = S.ID
            LEFT JOIN T_EMC_PROJECT P ON O.PROJID = P.ID
            LEFT JOIN (SELECT B.ORDERCONTAINERID,
-                             WM_CONCAT(DISTINCT B.TESTNAME) AS TESTNAME
+                             LISTAGG(DISTINCT B.TESTNAME, ',') AS TESTNAME
                       FROM T_EMC_ORDER_TASK B
                       INNER JOIN T_EMC_PROJECT P ON B.PROJID = P.ID
                       WHERE
@@ -274,7 +410,7 @@
                             AND B.SAMPLERECEIVERFLAG = '1'
                             AND P.STATUS <![CDATA[<>]]> 'reportEdit'
                         </if>
-                      GROUP BY B.ORDERCONTAINERID) OT ON A.ID = OT.ORDERCONTAINERID) AS T
+                      GROUP BY B.ORDERCONTAINERID) OT ON A.ID = OT.ORDERCONTAINERID) T
         <where>
             <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent"/>
                 AND T.STATUS <![CDATA[<>]]> 'cancel'

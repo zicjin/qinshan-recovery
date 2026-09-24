@@ -19,7 +19,7 @@
         <where>
             <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
             <if test='authority_audit == "1"'>
-                AND <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.auditAuthorityWhereClause" />
+                AND <include refid="com.sunwayworld.emc.framework.mybatis.mapper.EmcGlobalMapper.auditAuthorityWhereClause" />
             </if>
             <if test='targetType == "sample"'>
                 AND EXISTS (SELECT 1
@@ -190,12 +190,12 @@
 
     <!-- 根据业务类型查询年度项目统计数据 -->
     <select id="selectAnnualProjectStatistics" parameterType="map" resultType="map">
-        SELECT DATE_FORMAT(TASKDATE, '%m') AS monthValue,
+        SELECT TO_CHAR(TASKDATE, 'MM') AS monthValue,
                COUNT(*) AS projectCount
         FROM T_EMC_PROJECT_CHANGE A
         <where>
             <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
-            AND DATE_FORMAT(TASKDATE, '%Y') = DATE_FORMAT(NOW(), '%Y')
+            AND TO_CHAR(TASKDATE, 'YYYY') = TO_CHAR(SYSDATE, 'YYYY')
         </where>
         GROUP BY monthValue
         ORDER BY monthValue

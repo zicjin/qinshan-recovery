@@ -16,7 +16,7 @@ emcRunEquiptCrves.editPage = {
             filter : true,
             requestData : {
                 runId_SEQ : runId,
-                createdByOrgId_SEQ : workspace.user.orgId
+                createdByOrgId_SB : workspace.user.orgId
             },
             onRendered : function() {
                 this.hideColumns([ 'addDate' ]);

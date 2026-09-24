@@ -238,7 +238,6 @@ public class EmcContractServiceImpl implements EmcContractService {
                 Long oldId = e.getId();
                 e.setId(ApplicationContextHelper.getNextIdentity());
                 e.setContractNo(ApplicationContextHelper.getNextSequence(getDao().getTable()));
-                e.setProcessStatus("draft");
                 insertContractList.add(e);
                 allReviewContentList.stream().forEach(m -> {
                     if (oldId.equals(m.getContractId())) {
@@ -312,74 +311,6 @@ public class EmcContractServiceImpl implements EmcContractService {
         }
 
         return basicInfoList.get(0);
-    }
-    
-    @Override
-    @Transactional
-    @AuditTrailEntry(AuditTrailType.PROCESS_UNDO)
-    @Audit(AuditConstant.PROCESS_UNDO)
-    @ValidateDataWith(EmcContractUndoValidator.class)
-    public List<CoreBpmnInstanceStatusDTO<Long>> undo(RestJsonWrapperBean wrapper) {
-        return EmcContractService.super.undo(wrapper);
-    }
-    
-    @Override
-    @Transactional
-    @AuditTrailEntry(AuditTrailType.PROCESS_START)
-    @ValidateDataWith(EmcContractStartProcessValidator.class)
-    public List<CoreBpmnInstanceStatusDTO<Long>> startProcess(RestJsonWrapperBean wrapper) {
-        List<CoreBpmnInstanceStatusDTO<Long>> coreBpmnInstanceStatusDTOList = EmcContractService.super.startProcess(wrapper);
-        List<Long> contractIdList = coreBpmnInstanceStatusDTOList.stream().map(CoreBpmnInstanceStatusDTO::getId).collect(Collectors.toList());
-
-        List<EmcContractBean> contractList = getDao().selectListByIds(contractIdList);
-        List<EmcContractBean> auditContractList = contractList.stream().filter(contract -> Constant.YES.equals(contract.getExt$Item("audit"))).collect(Collectors.toList());
-
-        if (!auditContractList.isEmpty()) {
-            // 默认给合同绑定评审记录报表模板
-            List<CoreReportConfigLineBean> reportConfigLineList = reportConfigLineService.getDao().selectListByOneColumnValue("contractReview", "REPORTCONFIGID", Collections.singletonList("ID"));
-            if (!reportConfigLineList.isEmpty()) {
-                auditContractList.forEach(contract -> contract.setReviewReportLineId(reportConfigLineList.get(0).getId() + ""));
-            }
-
-            // 评审基本信息
-            List<EmcReviewBasicInfoBean> basicInfoList = new ArrayList<>();
-            auditContractList.forEach(contract -> {
-                EmcReviewBasicInfoBean basicInfo = new EmcReviewBasicInfoBean();
-                basicInfo.setId(ApplicationContextHelper.getNextIdentity());
-                basicInfo.setContractId(contract.getId());
-                basicInfoList.add(basicInfo);
-            });
-
-            List<CoreCodeCategoryBean> coreCodeCategoryList = coreCodeCategoryService.selectListByIds(Arrays.asList(CONTRACT_REVIEW_CATEGORIES));
-            Map<String, String> categoryNameMap = coreCodeCategoryList.stream().collect(Collectors.toMap(CoreCodeCategoryBean::getId, CoreCodeCategoryBean::getCodeCategoryName));
-            List<CoreCodeBean> codeList = coreCodeService.getDao().selectListByOneColumnValues(Arrays.asList(CONTRACT_REVIEW_CATEGORIES), "CODECATEGORYID");
-            List<EmcReviewContentBean> reviewContentList = new ArrayList<>();
-            auditContractList.forEach(contract -> codeList.forEach(code -> {
-                EmcReviewContentBean reviewContent = new EmcReviewContentBean();
-                reviewContent.setId(ApplicationContextHelper.getNextIdentity());
-                reviewContent.setContractId(contract.getId());
-                reviewContent.setContentType(categoryNameMap.get(code.getCodeCategoryId()));
-                reviewContent.setContentName(code.getCodeName());
-                reviewContent.setCode(code.getCode());
-                reviewContentList.add(reviewContent);
-            }));
-
-            // 先删除之前的评审基本信息
-            reviewBasicInfoService.getDao().deleteBy(basicInfoList, "CONTRACTID");
-            reviewBasicInfoService.getDao().insert(basicInfoList);
-
-            // 每次提交至合同审核时，先删除之前的评审记录
-            reviewContentService.getDao().deleteBy(reviewContentList, "CONTRACTID");
-            reviewContentService.getDao().insert(reviewContentList);
-            getDao().update(auditContractList, "reviewReportLineId");
-        } else {
-            // 对于不需要审核，且之前有配置评审记录模板的合同，需要去除模板
-            List<EmcContractBean> normalContractList = contractList.stream().filter(contract -> !Constant.YES.equals(contract.getExt$Item("audit")) && !StringUtils.isEmpty(contract.getReviewReportLineId())).collect(Collectors.toList());
-            normalContractList.forEach(contract -> contract.setReviewReportLineId(null));
-            getDao().update(normalContractList, "reviewReportLineId");
-        }
-
-        return coreBpmnInstanceStatusDTOList;
     }
     
     private String getSequenceNo(int year, String key) {

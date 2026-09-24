@@ -191,7 +191,7 @@ var emcRunEquiptCrves = Gikam.getPageObject({
                 category : 'equipt',
                 onBeforeChoose : function() {
                     return {
-                        orgId_SB : workspace.user.ext$.parentorgid,
+                        org_filter : '1',
                     }
                 },
                 onAfterChoose : function(rows) {
@@ -426,7 +426,7 @@ var emcRunEquiptCrves = Gikam.getPageObject({
                 category : 'equipt',
                 onBeforeChoose : function() {
                     return {
-                        orgId_SB : workspace.user.ext$.parentorgid,
+                        org_filter : '1',
                     }
                 },
                 onAfterChoose : function(rows) {
@@ -1070,7 +1070,7 @@ var emcRunEquiptCrves = Gikam.getPageObject({
                 category : 'equipt',
                 onBeforeChoose : function() {
                     return {
-                        orgId_SB : workspace.user.ext$.parentorgid,
+                        org_filter : '1',
                     }
                 },
                 onAfterChoose : function(rows) {
@@ -1295,7 +1295,7 @@ var emcRunEquiptCrves = Gikam.getPageObject({
                 category : 'equipt',
                 onBeforeChoose : function() {
                     return {
-                        orgId_SB : workspace.user.ext$.parentorgid,
+                        org_filter : '1',
                     }
                 },
                 onAfterChoose : function(rows) {

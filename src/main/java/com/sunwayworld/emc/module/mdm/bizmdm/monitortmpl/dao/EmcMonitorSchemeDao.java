@@ -15,4 +15,5 @@ import java.util.Map;
 public interface EmcMonitorSchemeDao extends GenericDao<EmcMonitorSchemeBean, Long> {
     List<Map<String, Object>> selectDetectionChoosablePagination(MapperParameter parameter);
     List<Map<String, Object>> selectDetectionChoosablePaginationDeWeight(MapperParameter parameter);
+    List<Map<String, Object>> selectByConditionGroupByTestMethod(MapperParameter parameter);
 }

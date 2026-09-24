@@ -7,6 +7,7 @@ emcSubResult.editPage = {
             id : 'emc-sub-result-edit-list-project-grid',
             url : '/secure/emc/module/bp/project/projects/queries/undoable',
             columns : emcSubResult.getProjectListColumns(),
+            page:true,
             onLoadSuccess : function(data) {
                 if (!Gikam.isEmpty(data)) {
                     this.activeRowByIndex(0);
@@ -20,7 +21,7 @@ emcSubResult.editPage = {
             },
             requestData : {
                 targetType : 'subcontractor',
-                orgId_SB : workspace.user.ext$.parentorgid
+                org_filter : '1',
             },
             toolbar : [
                 {

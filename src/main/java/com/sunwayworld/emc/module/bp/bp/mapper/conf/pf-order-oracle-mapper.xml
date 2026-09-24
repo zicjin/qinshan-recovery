@@ -14,7 +14,15 @@
                        F.FOLDERNO,
                        F.SAMPLEUSERID,
                        F.SAMPLEUSERNAME,
+                       F.PLANSAMPLEDATE,
+                       MT.ORDERCATEGORYCODE,
                        S.ACCEPTEDTIME
+                    <if test="TEST_NAME_QUERIES != null">
+                        ,(SELECT LISTAGG(DISTINCT B.TESTNAME, ',') WITHIN GROUP (ORDER BY B.TESTNAME) AS TESTNAME
+                        FROM T_EMC_ORDER_TASK B
+                        WHERE B.ORDERID = O.ID
+                        GROUP BY B.ORDERID) TESTNAME
+                    </if>
                     <if test="relatedRunId != null">
                         ,K.TESTNAME,
                         K.EQUIPTID,
@@ -28,12 +36,14 @@
                     ON P.ID = O.PROJID
                   LEFT JOIN T_EMC_SAMPLE S
                     ON O.SAMPLEID = S.ID
+                  LEFT JOIN T_EMC_MONITOR_TMPL MT
+                    ON O.MONITORTMPLID = MT.ID
                 <if test="relatedRunId != null">
                   LEFT JOIN (SELECT B.ORDERID,
                                     B.RUNID,
-                                    WM_CONCAT(DISTINCT B.TESTNAME)  AS TESTNAME,
-                                    WM_CONCAT(DISTINCT C.EQUIPTID)  AS EQUIPTID,
-                                    WM_CONCAT(DISTINCT C.EQUIPTNAME)  AS EQUIPTNAME
+                                    LISTAGG(DISTINCT B.TESTNAME, ',') WITHIN GROUP (ORDER BY B.TESTNAME) AS TESTNAME,
+                                    LISTAGG(DISTINCT C.EQUIPTID, ',') WITHIN GROUP (ORDER BY C.EQUIPTID) AS EQUIPTID,
+                                    LISTAGG(DISTINCT C.EQUIPTNAME, ',') WITHIN GROUP (ORDER BY C.EQUIPTNAME) AS EQUIPTNAME
                                FROM T_EMC_ORDER_TASK B
                                LEFT JOIN T_EMC_EQUIPT C
                                  ON B.EQUIPTID = C.ID
@@ -150,7 +160,7 @@
                   LEFT JOIN T_EMC_PROJECT P
                     ON P.ID = O.PROJID
                   LEFT JOIN (SELECT A.ID AS ORDERID,
-                                    CASE WHEN INSTR( WM_CONCAT ( CASE B.RESULTSTATUS WHEN 'Done' THEN '1' ELSE '0' END ), '0' ) > 0 THEN '0' ELSE '1' END AS ORDERSTATUS
+                                    CASE WHEN INSTR( LISTAGG ( CASE B.RESULTSTATUS WHEN 'Done' THEN '1' ELSE '0' END , ',' ), '0' ) > 0 THEN '0' ELSE '1' END AS ORDERSTATUS
                                 FROM T_EMC_ORDER A
                                 LEFT JOIN T_EMC_ORDER_TASK_RESULT B
                                   ON A.ID = B.ORDERID

@@ -6,6 +6,7 @@
         SELECT T.*
           FROM (SELECT A.*,
                        B.HORIZONTALCODE,
+                       B.ORDERDESC,
                        C.INDEXNAME,
                        D.ANALYSISUSERNAME,
                        E.EQUIPTID AS ANALYSISEQUIPTNO,
@@ -22,7 +23,9 @@
                        I.REGISTDATE,
                        I.PROJNO,
                        M.TESTMETHODBASIS,
-                       A.ITEMALIASNAME AS ITEMGROUP
+                       A.ITEMALIASNAME AS ITEMGROUP,
+                        F.STOCKBATCHNO,
+                        N.LIMITSCIENTIFIC
                   FROM T_EMC_REPORT_RESULT A
                   LEFT JOIN T_EMC_ORDER B
                     ON A.ORDERID = B.ID
@@ -41,7 +44,10 @@
                   LEFT JOIN T_EMC_PROJECT I
                     ON I.ID = A.PROJID
                   LEFT JOIN T_EMC_METHOD M
-                    ON M.ID = A.METHODID) T
+                    ON M.ID = A.METHODID
+                  LEFT JOIN T_EMC_ITEM N
+                    ON N.ID=A.ITEMID
+        ) T
         <where>
             <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
         </where>

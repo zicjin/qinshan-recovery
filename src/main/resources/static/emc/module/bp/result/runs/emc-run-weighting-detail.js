@@ -328,7 +328,7 @@ emcRunWeighing.detailPage = {
             	var row = Gikam.getComp('emc-run-detail-result-input-list-grid').getActivedRow();
                 return {
                     orderId : this.getData()[index].orderId,
-                    orgId_SEQ: workspace.user.ext$.parentorgid
+                    org_filter : '1',
                 }
             },
             onAfterChoose : function(rows) {
@@ -357,7 +357,7 @@ emcRunWeighing.detailPage = {
             	var row = Gikam.getComp('emc-run-detail-result-input-list-grid').getActivedRow();
                 return {
                     orderId : this.getData()[index].orderId,
-                    orgId_SEQ: workspace.user.ext$.parentorgid
+                    org_filter : '1',
                 }
             },
             onAfterChoose : function(rows) {
@@ -388,7 +388,7 @@ emcRunWeighing.detailPage = {
                 var row = Gikam.getComp('emc-run-detail-result-input-list-grid').getActivedRow();
                 return {
                     orderId : this.getData()[index].orderId,
-                    orgId_SEQ: workspace.user.ext$.parentorgid
+                    org_filter : '1',
                 }
             },
             onAfterChoose : function(rows) {

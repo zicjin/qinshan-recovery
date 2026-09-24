@@ -20,7 +20,8 @@ emcEmp.choosePage = {
                         PROJECTID : _this.param.projectId
                     }
                 },
-                orgId_SB: workspace.user.ext$.parentorgid
+                org_filter : '1',
+                emc_role_assigned : '1160933173854272'
             }
             order = {
                 departmentid : 'asc'

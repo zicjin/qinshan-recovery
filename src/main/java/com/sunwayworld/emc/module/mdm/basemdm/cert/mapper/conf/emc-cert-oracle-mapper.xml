@@ -35,9 +35,14 @@
     <select id="selectOverdueCert" parameterType="map" resultType="map">
         SELECT T.*
           FROM T_EMC_CERT T
-         WHERE T.EXPIREDATE <![CDATA[<=]]> sysdate() + T.WARNINGDAYS
+         WHERE T.EXPIREDATE <![CDATA[<=]]> SYSDATE + T.WARNINGDAYS
          ORDER BY T.ID
     </select>
 
-
+    <select id="selectOverdueQual" parameterType="map" resultType="map">
+        SELECT T.*
+        FROM T_EMC_EMP_QUAL T
+        WHERE T.EXPIREDATE <![CDATA[<=]]> SYSDATE + T.WARNINGDAYS
+        ORDER BY T.ID
+    </select>
 </mapper>

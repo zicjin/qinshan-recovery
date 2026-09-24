@@ -101,7 +101,7 @@
                   LEFT JOIN T_EMC_PROJECT P
                     ON P.ID = O.PROJID
                   LEFT JOIN (SELECT A.ID AS ORDERID,
-                                    CASE WHEN INSTR( WM_CONCAT ( CASE B.RESULTSTATUS WHEN 'Done' THEN '1' ELSE '0' END ), '0' ) > 0 THEN '0' ELSE '1' END AS ORDERSTATUS
+                                    CASE WHEN INSTR( LISTAGG ( CASE B.RESULTSTATUS WHEN 'Done' THEN '1' ELSE '0' END ,','), '0' ) > 0 THEN '0' ELSE '1' END AS ORDERSTATUS
                                 FROM T_EMC_ORDER A
                                 LEFT JOIN T_EMC_ORDER_TASK_RESULT B
                                   ON A.ID = B.ORDERID

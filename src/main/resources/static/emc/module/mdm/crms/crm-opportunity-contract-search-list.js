@@ -8,7 +8,7 @@ crmOpportunityContract.searchPage = {
             url : crmOpportunityContract.baseUrl + '/queries',
             columns : crmOpportunityContract.getOpportunityContractGridColumns(),
             requestData : {
-                corpId_SB : workspace.user.ext$.parentorgid
+                corp_filter : '1',
             },
             order : {
                 'contractCommencementDate' :'desc',

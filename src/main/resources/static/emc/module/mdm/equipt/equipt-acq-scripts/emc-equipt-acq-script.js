@@ -87,6 +87,16 @@ var emcEquiptAcqScript = Gikam.getPageObject({
             }
         }, {
             editor : true,
+            field : 'serialAcq',
+            title : 'T_EMC_EQUIPT_ACQ_SCRIPT.SERIALACQ',
+            type : 'select',
+            search : true,
+            category : 'sys',
+            param : {
+                codeCategoryId : 'yesorno',
+            }
+        },{
+            editor : true,
             field : 'source',
             title : 'T_EMC_EQUIPT_ACQ_SCRIPT.SOURCE',
             type : 'select',
@@ -258,6 +268,12 @@ var emcEquiptAcqScript = Gikam.getPageObject({
         }, {
             field : 'result',
             title : 'T_EMC_EQUIPT_ACQ_RESULT.RESULT',
+        }, {
+            field : 'sceneEquiptNo',
+            title : '仪器编号',
+        }, {
+            field : 'sceneFileNo',
+            title : '文件编号',
         } ]
     }
 })

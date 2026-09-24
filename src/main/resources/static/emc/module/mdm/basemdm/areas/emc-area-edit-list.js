@@ -21,6 +21,7 @@ emcArea.editPage = {
             id : 'emc-area-edit-list-grid',
             url : emcArea.baseUrl + '/queries/raw',
             service : 'emcAreaServiceImpl',
+            page : true,
             requestData : {
                 parentId : '-1',
             },

@@ -23,7 +23,7 @@ emcOrderTask.atlasPage = {
                 title : 'EMC.MODULE.BP.BP.FOLDERS.TITLE.ATLAS',
                 items : [ {
                     type : 'grid',
-                    id : 'emc-order-task-atlas-grid',
+                    id : 'emc-order-task-atlas-grid1',
                     url : '/core/module/item/files/queries',
                     requestData : {
                         targetId_IN : this.param.targetIds,
@@ -37,18 +37,25 @@ emcOrderTask.atlasPage = {
                         text : 'GIKAM.BUTTON.DELETE',
                         icon : 'remove-row',
                         onClick : function() {
-                            Gikam.getComp('emc-order-task-atlas-grid').deleteRows(IFM_CONTEXT + '/core/module/item/files');
+                            Gikam.getComp('emc-order-task-atlas-grid1').deleteRows(IFM_CONTEXT + '/core/module/item/files');
                         }
                     }, {
                         type : 'button',
                         text : 'EMC.MODULE.BP.RESULT.RUNS.BUTTON.BATCH_DOWNLOAD',
                         icon : 'batch-download',
                         onClick : function() {
-                            let selections = Gikam.getComp('emc-order-task-atlas-grid').getSelections();
+                            let selections = Gikam.getComp('emc-order-task-atlas-grid1').getSelections();
                             console.log(selections);
-                            let runSelections = Gikam.getComp('emc-run-edit-edit-list-test-run-grid').getSelections();
-                            console.log(runSelections);
-                            var runId = runSelections[0].id;
+                            var runGrid = Gikam.getComp('emc-run-edit-list-test-run-grid');
+                            var runId = 0;
+                            if (!Gikam.isEmpty(runGrid)) {
+                                let runSelections = Gikam.getComp('emc-run-edit-list-test-run-grid').getSelections();
+                                console.log(runSelections);
+                                runId = runSelections[0].id;
+                            }else{
+                                runId = _this.param.runId_SEQ
+                            }
+
                             if (Gikam.isEmpty(selections)) {
                                 Gikam.alert('GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM');
                                 return;
@@ -58,9 +65,23 @@ emcOrderTask.atlasPage = {
                             });
                             Gikam.postText(IFM_CONTEXT + '/core/module/item/files/action/pack',Gikam.getJsonWrapper({}, [ '', fileIds ])).done(function (fileUrl) {
                                 if (!Gikam.isEmpty(fileUrl)) {
-                                    Gikam.download(IFM_CONTEXT + fileUrl,runId);
+                                    Gikam.emcDownloadFile(IFM_CONTEXT + fileUrl,runId);
                                 }
                             })
+                        }
+                    },{
+                        type : 'button',
+                        text : '下载',
+                        icon : 'browse',
+                        onClick : function() {
+                            let selections = Gikam.getComp('emc-order-task-atlas-grid1').getSelections();
+                            if (selections.length != 1) {
+                                Gikam.alert('GIKAM.TIP.CHOOSE_ONE_ITEM');
+                                return;
+                            }
+                            var selectedRow = selections[0];
+                            Gikam.emcDownloadFileById(selectedRow.id);
+
                         }
                     } ]
                 } ]

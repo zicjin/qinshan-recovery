@@ -10,11 +10,14 @@ emcSample.editItemPage = {
             }),
             columns : emcSample.getEditItemListColumns(),
             onLoadSuccess : function() {
-                var resultData =  Gikam.getComp('emc-order-task-result-edit-list-grid').getData();
-                var data = _this.unique(resultData);
-                data.map(function(data) {
-                    Gikam.getComp('emc-sample-edit-item-list-grid').selectRowById(data.itemId);
-                });
+                if(!Gikam.isEmpty(Gikam.getComp('emc-sample-expand-detail-list-origin-data-order-task-result-grid'))) {
+                    var resultData =  Gikam.getComp('emc-sample-expand-detail-list-origin-data-order-task-result-grid').getData();
+                    var data = _this.unique(resultData);
+                    data.map(function(data) {
+                        Gikam.getComp('emc-sample-edit-item-list-grid').selectRowById(data.itemId);
+                    });
+                }
+
             },
             toolbar : [ {
                 type : 'button',
@@ -22,12 +25,12 @@ emcSample.editItemPage = {
                 icon : 'select',
                 onClick : function() {
                     var data = Gikam.getComp('emc-sample-edit-item-list-grid').getSelections();
-                    var folderData = Gikam.getComp('emc-sample-data-input-detail-list-grid').getSelections();
+                    // var folderData = Gikam.getComp('emc-sample-data-input-detail-list-grid').getSelections();
                     if(Gikam.isEmpty(data)) {
                         Gikam.alert('GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM');
                         return;
                     }
-                    Gikam.getLastModal().close([data, folderData]);
+                    Gikam.getLastModal().close(data);
                 }
             } ]
         }

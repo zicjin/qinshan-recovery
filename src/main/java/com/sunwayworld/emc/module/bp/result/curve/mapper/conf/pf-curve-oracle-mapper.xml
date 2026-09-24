@@ -13,9 +13,9 @@
         <where>
             <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
             <if test='targetType == "EXPIREDATE_OUT"'>
-                AND ( T.EXPIREDATE IS NULL OR T.EXPIREDATE <![CDATA[>=]]> sysdate()
+                AND ( T.EXPIREDATE IS NULL OR T.EXPIREDATE <![CDATA[>=]]> SYSDATE
                 <if test='analysisBeginDate != null'>
-                    OR ( T.EXPIREDATE <![CDATA[>=]]> DATE_FORMAT(#{analysisBeginDate}, '%Y-%m-%d'))
+                    OR ( T.EXPIREDATE <![CDATA[>=]]> TO_DATE(#{analysisBeginDate}, 'YYYY-MM-DD'))
                 </if>
                 )
             </if>

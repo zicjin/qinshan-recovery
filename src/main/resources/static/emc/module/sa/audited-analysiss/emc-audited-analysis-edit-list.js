@@ -11,10 +11,10 @@ emcAuditedAnalysis.editPage = {
                 Gikam.getAsyncComp('emc-audited-analysis-list-run-grid').done(function(grid) {
                     grid.setOptions({
                         requestData : {
-                            monitorTmplId : row.monitorTmplId,
+                            // monitorTmplId : row.monitorTmplId,
                             projId : row.projId,
                             scheme_only : '',
-            	            orgId_SB : workspace.user.ext$.parentorgid
+            	            orgId_filter : '1',
 
 
                         },
@@ -27,7 +27,7 @@ emcAuditedAnalysis.editPage = {
             },
             requestData : {
                 status_SEQ : 'auditQuery',
-	            orgId_SB : workspace.user.ext$.parentorgid
+	            org_filter : '1',
             },
             onLoadSuccess : function(data) {
                 if (!Gikam.isEmpty(data)) {

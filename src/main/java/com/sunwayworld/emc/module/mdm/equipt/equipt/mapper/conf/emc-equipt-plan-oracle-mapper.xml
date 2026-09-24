@@ -42,7 +42,9 @@
     <select id="selectEquiptMaintPlanOverdue" parameterType="map" resultType="map">
         SELECT T.*
           FROM T_EMC_EQUIPT_PLAN T
-         WHERE T.MAINTENDDATE <![CDATA[<=]]> sysdate() + T.WARNINGDAYS
+         WHERE
+			NOT EXISTS (SELECT 1 FROM T_EMC_EQUIPT_PLAN A WHERE A.EQUIPTID = T.EQUIPTID AND A.CREATEDTIME <![CDATA[>]]> T.CREATEDTIME)
+            AND T.MAINTENDDATE <![CDATA[<=]]> SYSDATE + T.WARNINGDAYS
     </select>
 
 	<update id="updatePlan" parameterType="com.sunwayworld.emc.module.mdm.equipt.equipt.bean.EmcEquiptPlanBean">

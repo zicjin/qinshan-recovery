@@ -133,7 +133,7 @@ var emcRunWeighing = Gikam.getPageObject({
             single:false,
             onBeforeChoose : function() {
                 return {
-                    orgId_SB : workspace.user.ext$.parentorgid,
+                    org_filter : '1',
                 }
             },
             onAfterChoose : function(rows) {
@@ -1684,7 +1684,7 @@ var emcRunWeighing = Gikam.getPageObject({
             single:false,
             onBeforeChoose : function() {
                 return {
-                    orgId_SB : workspace.user.ext$.parentorgid,
+                    org_filter : '1',
                 }
             },
             onAfterChoose : function(rows) {
@@ -1715,6 +1715,113 @@ var emcRunWeighing = Gikam.getPageObject({
             }
         }
     	];
+    },
+
+    getProjectListColumns : function() {
+        return [ {
+            checkbox : true
+        }, {
+            field : 'projNo',
+            title : 'T_EMC_PROJECT.PROJNO',
+            width : 180,
+        }, {
+            field : 'projName',
+            title : 'T_EMC_PROJECT.PROJNAME',
+            width : 180,
+        },{
+            field : 'resultInput',
+            title : '数据录入',
+            formatter : function(i, v, row) {
+                return Gikam.printf('<a href="javascript:;" onclick="emcRunWeighing.editPage.loadResultInputPage(\'{projIds}\')">{name}</a>', {
+                    projIds : row.id,
+                    name : '数据录入'
+                });
+            },
+            width : 90,
+            sort : false
+        }, {
+            field : 'testOrgName',
+            title : 'T_EMC_PROJECT.TESTORG'
+        }, {
+            field : 'entrustOrgName',
+            title : 'T_EMC_PROJECT.ENTRUSTORG'
+        }, {
+            field : 'bizCategoryId',
+            title : 'T_EMC_PROJECT.BIZCATEGORY',
+            type : 'select',
+            category : 'bizCategory',
+            width : 90,
+        }, ];
+    },
+
+    getOrderListColumns : function() {
+        return [{
+            field : 'orderNo',
+            title : 'T_EMC_ORDER.ORDERNO',
+            width : 180,
+        }, {
+            field : 'ext$.monitorpointname',
+            title : 'T_EMC_ORDER_RECEIPT.MONITORPOINTNAME'
+        }, {
+            field : 'ext$.monitorpointno',
+            title : 'T_EMC_ORDER_RECEIPT.MONITORPOINTNO'
+        }, {
+            field : 'qcName',
+            title : 'T_EMC_ORDER.QCCATEGORYNO',
+            formatter : function(i, v, row) {
+                if (!v) {
+                    return 'N/A'
+                }
+                return v;
+            }
+        },{
+            field : 'ext$.testname',
+            title : '测试',
+        }, {
+            field : 'sampleBeginDate',
+            title : 'T_EMC_ORDER.SAMPLEBEGINDATE',
+            width : 140,
+        }, {
+            field : 'sampleBeginTime',
+            title : 'T_EMC_ORDER.SAMPLEBEGINTIME',
+            width : 140,
+        }, {
+            field : 'sampleCompleteDate',
+            title : 'T_EMC_ORDER.SAMPLECOMPLETEDATE',
+            width : 140,
+        }, {
+            field : 'sampleCompleteTime',
+            title : 'T_EMC_ORDER.SAMPLECOMPLETETIME',
+            width : 140,
+        }, {
+            field : 'orderCategory',
+            title : 'T_EMC_ORDER.ORDERCATEGORY',
+        }, {
+            field : 'parentOrderNo',
+            title : 'T_EMC_ORDER.PARENTORDERNO',
+            width : 120,
+        }, {
+            field : 'orderDesc',
+            title : 'T_EMC_ORDER.ORDERDESC'
+        }, {
+            field : 'remark',
+            title : 'T_EMC_ORDER.REMARK',
+        }, {
+            field : 'labelNo',
+            title : 'T_EMC_ORDER.LABELNO'
+        }, {
+            field : 'cycle',
+            title : 'T_EMC_ORDER.CYCLE',
+            width : 100,
+        }, {
+            field : 'frequency',
+            title : 'T_EMC_ORDER.FREQUENCY',
+            width : 100,
+        }, {
+            field : 'sampleNum',
+            title : 'T_EMC_ORDER.SAMPLENUM',
+            width : 100,
+        } ];
     },
 
     workflow : {

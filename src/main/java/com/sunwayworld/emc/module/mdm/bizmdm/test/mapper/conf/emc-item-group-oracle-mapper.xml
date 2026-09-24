@@ -9,6 +9,7 @@
                        C.METHODNAME,
                        C.TESTMETHODBASIS,
                        B.METHODID,
+                        B.TESTID AS TESTMETHODTESTID,
                        c.methodno,
                        B.TESTCATEGORYID,
                        B.ACTIVATEDFLAG AS SHOWFLAG,

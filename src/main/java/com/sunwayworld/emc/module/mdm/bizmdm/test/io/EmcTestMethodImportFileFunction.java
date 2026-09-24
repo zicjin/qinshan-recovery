@@ -3,8 +3,6 @@ package com.sunwayworld.emc.module.mdm.bizmdm.test.io;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.sunwayworld.framework.io.file.FilePathDTO;
-import com.sunwayworld.framework.io.file.FilePathManager;
 import com.sunwayworld.module.item.file.utils.CoreFileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -64,9 +62,7 @@ public class EmcTestMethodImportFileFunction implements CoreFileImportFunction {
     public CoreFileImportResultDTO apply(CoreFileBean file) {
         CoreFileImportResultDTO coreFileImportResultDTO = new CoreFileImportResultDTO();
 
-        FilePathDTO fr = CoreFileUtils.toFilePath(file);
-
-        List<EmcTestMethodDTO> testMethodDTOList = ExcelHelper.readDataFromExcel(FilePathManager.getLocalPath(fr).toString(), 1, 2, EmcTestMethodDTO.class);
+        List<EmcTestMethodDTO> testMethodDTOList = ExcelHelper.readDataFromExcel(CoreFileUtils.getLocalPath(file).toString(), 1, 2, EmcTestMethodDTO.class);
 
         if (testMethodDTOList.size() > 0) {
             List<EmcTestCategoryBean> testCategoryList = emcTestCategoryService.selectSelectableList();

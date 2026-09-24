@@ -65,7 +65,7 @@ public class PfTestMethodEquiptServiceImpl extends EmcTestMethodEquiptServiceImp
         List<EmcEquiptTestMethodBean> testEquiptList = jsonWrapper.parse(EmcEquiptTestMethodBean.class);
 
         EmcTestMethodBean testMethod = testMethodService.getDao().selectById(testMethodId);
-        testEquiptList.stream().forEach(e -> {
+        testEquiptList.forEach(e -> {
             e.setId(ApplicationContextHelper.getNextIdentity());
             e.setTestMethodId(testMethodId);
             e.setTestCategoryId(testMethod.getTestCategoryId());
@@ -81,6 +81,7 @@ public class PfTestMethodEquiptServiceImpl extends EmcTestMethodEquiptServiceImp
             } else {
                 e.setAnalysisCategory("analysis");
             }*/
+            e.setAnalysisCategory("analysis");
         });
 
         equiptTestMethodService.getDao().insert(testEquiptList);
@@ -117,6 +118,7 @@ public class PfTestMethodEquiptServiceImpl extends EmcTestMethodEquiptServiceImp
                 newEquipt.setTestId(testMethod.getTestId());
                 newEquipt.setTestCategoryId(testMethod.getTestCategoryId());
                 newEquipt.setMethodId(testMethod.getMethodId());
+                newEquipt.setAnalysisCategory(ce.getAnalysisCategory());
                 newEquipt.setOrgId(ce.getOrgId());
                 newEquiptList.add(newEquipt);
             });

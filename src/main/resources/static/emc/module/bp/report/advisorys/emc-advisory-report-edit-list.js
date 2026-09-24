@@ -8,6 +8,9 @@ emcAdvisoryReport.editPage = {
             id : 'emc-advisory-report-edit-list-grid',
             url : emcAdvisoryReport.baseUrl + '/queries/raw',
             columns : emcAdvisoryReport.getEditListColumns(),
+            requestData : {
+                createdbyorgid_seq: workspace.user.orgId
+            },
             onLoadSuccess : function(data) {
                 if (Gikam.isEmpty(data)) {
                     Gikam.getComp('emc-advisory-report-edit-list-uploader').grid.cleanData();
@@ -18,6 +21,11 @@ emcAdvisoryReport.editPage = {
                     bizId : row.id,
                 });
             },
+           onUpdated : function(data) {
+                var grid = Gikam.getComp('emc-advisory-report-edit-list-grid');
+                grid.refreshRowById(grid.getActivedRow().id);
+
+            },
             toolbar : [ {
                 type : 'button',
                 text : 'GIKAM.WORKFLOW.BUTTON.SUBMIT',
@@ -25,7 +33,29 @@ emcAdvisoryReport.editPage = {
                 onClick : function() {
                     _this.submit();
                 }
-            } ]
+            } , {
+                  type : 'button',
+                  text : 'GIKAM.BUTTON.INSERT',
+                  icon : 'add',
+                  onClick : function() {
+                      Gikam.preInsert({
+                          modalTitle : '新增咨询报告',
+                          height : 200,
+                          fields : emcAdvisoryReport.getPreInsertFields(),
+                          url : emcAdvisoryReport.baseUrl,
+
+                      }).done(function(id) {
+                          Gikam.getComp('emc-advisory-report-edit-list-grid').refresh();
+                      });
+                  }
+              },  {
+                     type : 'button',
+                     text : 'GIKAM.BUTTON.DELETE',
+                     icon : 'remove-row',
+                     onClick : function() {
+                         Gikam.getComp('emc-advisory-report-edit-list-grid').deleteRows(emcAdvisoryReport.baseUrl);
+                     }
+                 }]
         }
     },
 

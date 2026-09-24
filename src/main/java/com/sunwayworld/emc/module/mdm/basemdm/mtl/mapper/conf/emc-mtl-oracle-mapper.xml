@@ -14,7 +14,7 @@
                 AND EXISTS (SELECT 1
                                   FROM T_EMC_STOCK TAR_
                                  WHERE TAR_.MTLID = T.ID
-                                   AND TAR_.EXPIREDATE <![CDATA[<=]]> sysdate()
+                                   AND TAR_.EXPIREDATE <![CDATA[<=]]> SYSDATE
                                 )
             </if>
             <if test='remind == "lowlimit"'>
@@ -23,6 +23,17 @@
                                  WHERE TAR_.MTLID = T.ID
                                    AND TAR_.STOCKQTY <![CDATA[<=]]> TAR_.LOWLIMIT
                                 )
+            </if>
+            <if test='remind == "remindDays"'>
+                AND EXISTS ( SELECT 1 FROM
+                                T_EMC_STOCK TES
+                                WHERE TES.MTLID = T.ID
+                                    AND TES.STATUS = '0'
+                                    AND TES.STOCKQTY <![CDATA[>]]>0
+                                    AND TES.REMINDDAYS IS NOT NULL
+                                    AND TES.EXPIREDATE IS NOT NULL
+                                    AND ( TES.EXPIREDATE - SYSDATE) <![CDATA[<=]]> TES.REMINDDAYS
+                            )
             </if>
         </where>
         ORDER BY
@@ -45,7 +56,7 @@
     </select>
 
     <!-- 更新库存数量 -->
-    <select id="updateStockQty" parameterType="java.lang.String">
+    <update id="updateStockQty" parameterType="java.lang.String">
         UPDATE T_EMC_MTL
           SET STOCKQTY =
             (SELECT SUM(STOCKQTY)
@@ -53,5 +64,5 @@
               WHERE MTLID = #{id}
                 AND STATUS = '0')
           WHERE ID = #{id}
-    </select>
+    </update>
 </mapper>

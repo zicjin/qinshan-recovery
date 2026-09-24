@@ -37,4 +37,9 @@ public class EmcMonitorSchemeDaoImpl extends MybatisDaoSupport<EmcMonitorSchemeB
 	public List<Map<String, Object>> selectDetectionChoosablePaginationDeWeight(MapperParameter parameter) {
 		return getMapper().selectDetectionChoosablePaginationDeWeight(parameter);
 	}
+
+	@Override
+	public List<Map<String, Object>> selectByConditionGroupByTestMethod(MapperParameter parameter) {
+		return getMapper().selectByConditionGroupByTestMethod(parameter);
+	}
 }

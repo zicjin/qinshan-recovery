@@ -16,7 +16,7 @@ var emcSampleGasParameter = Gikam.getPageObject({
             field: 'cycle',
             width: 120
         }, {
-            title: '频次',
+            title: '时段',
             field: 'frequency',
             width: 120
         }, {
@@ -40,7 +40,7 @@ var emcSampleGasParameter = Gikam.getPageObject({
             field: 'cycle',
             width: 120
         }, {
-            title: '频次',
+            title: '时段',
             field: 'frequency',
             width: 120
         } ];

@@ -14,4 +14,6 @@ public interface EmcCertMapper extends GenericMapper<Long> {
 
     List<Map<String, Object>> selectOverdueCert(MapperParameter parameter);
 
+    List<Map<String, Object>> selectOverdueQual(MapperParameter parameter);
+
 }

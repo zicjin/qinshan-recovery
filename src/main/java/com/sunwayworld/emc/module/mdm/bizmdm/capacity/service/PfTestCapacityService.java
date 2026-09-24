@@ -22,4 +22,6 @@ public interface PfTestCapacityService extends EmcTestCapacityService {
     void refetchItem(RestJsonWrapperBean wrapper);
 
     void copyQcTo(RestJsonWrapperBean wrapper);
+
+    Long refetchItemByTest(RestJsonWrapperBean wrapper);
 }

@@ -25,4 +25,6 @@ public interface EmcMonitorTmplService extends GenericService<EmcMonitorTmplBean
     Page<EmcMonitorSchemeBean> selectSchemeItemGroupChoosablePagination(RestJsonWrapperBean wrapper);
     
     Page<EmcMonitorSchemeBean> selectDetectionChoosablePaginationDeWeight(RestJsonWrapperBean wrapper);
+
+    Page<EmcMonitorSchemeBean> selectPaginationGroupByTestMethod(RestJsonWrapperBean wrapper);
 }

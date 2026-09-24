@@ -56,7 +56,7 @@ emcTestMethod.testEditPage = {
                         service : 'emcTestExportTemplate'
                     })).done(function(fileUri) {
                         var fileUrl = IFM_CONTEXT + fileUri;
-                        Gikam.download(fileUrl);
+                        Gikam.emcDownloadFile(fileUrl);
                     });
                 }
             }, {

@@ -1,4 +1,5 @@
 emcOrderReceipt.editPage = {
+    //样品接收
     getSampleTab : function() {
         var _this = this;
         return {
@@ -17,7 +18,7 @@ emcOrderReceipt.editPage = {
                         //status_DIFFER : 'draft',
                         handstatus_EQ : 'preLogged',
                         targetType : 'orderReceipt',
-                        orgId_SB: workspace.user.ext$.parentorgid
+                        org_filter : '1',
                     },
                     order : {
                         'PROJID' : 'asc',
@@ -90,13 +91,13 @@ emcOrderReceipt.editPage = {
                         onClick : function() {
                             _this.undo();
                         }
-                    }, {
-                        type : 'button',
-                        text : 'EMC.MODULE.BP.ORDER.ORDERRECEIPTS.BUTTON.MATCHBARCODE',
-                        icon : 'add',
-                        onClick : function() {
-                            _this.matchBarcode();
-                        }
+                    // }, {
+                    //     type : 'button',
+                    //     text : 'EMC.MODULE.BP.ORDER.ORDERRECEIPTS.BUTTON.MATCHBARCODE',
+                    //     icon : 'add',
+                    //     onClick : function() {
+                    //         _this.matchBarcode();
+                    //     }
                     }, {
                         type : 'button',
                         text : 'GIKAM.BUTTON.PRINT',
@@ -126,10 +127,24 @@ emcOrderReceipt.editPage = {
                         }
                     }, {
                         type : 'button',
+                        text : '任务流转单预览',
+                        icon : 'print',
+                        onClick : function() {
+                            Gikam.viewReport('rasproject', Gikam.getComp('emc-order-receipt-edit-list-sample-grid').getSelections());
+                        }
+                    }, {
+                        type : 'button',
                         text : 'GIKAM.BUTTON.BATCH_INPUT',
                         icon : 'add',
                         onClick : function() {
                             _this.batchInput();
+                        }
+                    },{
+                        type : 'button',
+                        text : '样品标签',
+                        icon : 'print',
+                        onClick : function() {
+                            Gikam.viewReport('sampling', Gikam.getComp('emc-order-receipt-edit-list-sample-grid').getSelections());
                         }
                     } ]
                 } ]
@@ -150,7 +165,7 @@ emcOrderReceipt.editPage = {
 */        var modal = Gikam.create('modal', {
             title: "GIKAM.BUTTON.BATCH_INPUT",
             width : 400,
-            height : 270,
+            height : 350,
         });
         var layout = Gikam.create('layout', {
             renderTo: modal.window.$dom,
@@ -164,27 +179,36 @@ emcOrderReceipt.editPage = {
                         onClick : function() {
                             if (form.validate()) {
                                 var formData = form.getData();
-                                selections.forEach(function (item) {
-                                    item.sepSampleTime = formData.sepSampleTime;
-                                    item.qcUserName = formData.qcUserName;
-                                    item.qcUserId = formData.qcUserId;
-                                    item.sampleCheck = formData.sampleCheck;
-                                    item.usedContainer = formData.sampleCheck;
-                                    item.storageValid = formData.sampleCheck;
-                                    item.exchangeValid = formData.sampleCheck;
-                                    item.samplingValid = formData.sampleCheck;
-                                    item.markValid = formData.sampleCheck;
-                                    item.containerValid = formData.sampleCheck;
-                                    item.printFlag = formData.printFlag;
-                                    item.acceptedUserId = formData.acceptedUserId;
-                                    item.accepteUserName = formData.accepteUserName;
-                                    item.acceptedDate = formData.acceptedDate;
-                                    item.ext$.compeletedate = formData.ext$.compeletedate;
+                                var saveData = selections.map(function(row) {
+                                    return {
+                                        id : row.id,
+                                        sepSampleTime : formData.sepSampleTime,
+                                        qcUserName : formData.qcUserName,
+                                        qcUserId : formData.qcUserId,
+                                        sampleCheck : formData.sampleCheck,
+                                        usedContainer : formData.sampleCheck,
+                                        storageValid : formData.sampleCheck,
+                                        exchangeValid : formData.sampleCheck,
+                                        samplingValid : formData.sampleCheck,
+                                        markValid : formData.sampleCheck,
+                                        containerValid : formData.sampleCheck,
+                                        printFlag : formData.printFlag,
+                                        acceptedUserId : formData.acceptedUserId,
+                                        accepteUserName : formData.accepteUserName,
+                                        acceptedDate : formData.acceptedDate,
+                                        acceptedTime : formData.acceptedTime,
+                                        ext$ : {
+                                            compeletedate : formData.ext$.compeletedate,
+                                        }
+                                    };
+                                });
 
-                                })
                                 Gikam.getLastModal().window.showMask(true);
-                                Gikam.put(IFM_CONTEXT + '/secure/emc/module/bp/sample/samples/' + selections[0].id, Gikam.getJsonWrapper({}, [ 'emcSampleServiceImpl', selections ])).done(function (data) {
-                                    Gikam.getComp('emc-order-receipt-edit-list-sample-grid').refresh();
+                                Gikam.put(IFM_CONTEXT + '/secure/emc/module/bp/sample/samples/' + selections[0].id, Gikam.getJsonWrapper({}, [ 'emcSampleServiceImpl', saveData ])).done(function (data) {
+                                    // Gikam.getComp('emc-order-receipt-edit-list-sample-grid').refresh();
+                                    selections.forEach(function(item) {
+                                        Gikam.getComp('emc-order-receipt-edit-list-sample-grid').refreshRowById(item.id);
+                                    });
                                 }).always(function () {
                                     Gikam.getLastModal().window.closeMask();
                                     modal.close();
@@ -567,8 +591,8 @@ emcOrderReceipt.editPage = {
         }
 
         var orderSelections = Gikam.getComp('emc-order-receipt-edit-list-order-grid').getSelections();
-        if (orderSelections.length == 0) {
-            Gikam.alert('GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ORDER_DATA');
+        if (orderSelections.length != 1) {
+            Gikam.alert('请选择一个样品');
             return;
         }
         var originSelections = selections.map(function(item) {

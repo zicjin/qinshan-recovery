@@ -11,7 +11,7 @@ emcAnalysisAudit.unAuditPage = {
             page : true,
             requestData : {
                 targetType : 'projectRunUnAudit',
-                orgId_SB : workspace.user.ext$.parentorgid,
+                org_filter : '1',
                 LASTESTACCEPTEDDATE_DGOE :Gikam.DateUtils.formatter(dateEnd, 'yyyy-MM-dd')
             },
             rowStyleFormatter : function(row) {
@@ -26,7 +26,7 @@ emcAnalysisAudit.unAuditPage = {
                 Gikam.getAsyncComp('emc-project-run-unaudit-list-grid').done(function(grid) {
                     grid.setOptions({
                         requestData : {
-                            monitorTmplId : row.ext$.monitortmplid,
+                            // monitorTmplId : row.ext$.monitortmplid,
                             projId : row.id,
                             scheme_only : '',
                             targetType : 'projectRunUnAudit',

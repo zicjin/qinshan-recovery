@@ -33,6 +33,8 @@ emcProjectPlan.copySchedulePage = {
                         entrustOrgName_CISC : formData.entrustOrgName,
                         createdById_SEQ : formData.createdById,
                         taskDate_CISC : taskDate,
+                        status_differ : 'cancel',
+                        org_filter : '1',
                     },
                 })
             }

@@ -30,10 +30,15 @@
                                AND F.PROJID = T.ID
                                AND F.PROCESSSTATUS = 'done'
                               <if test='sampleUserId != null'>
-                               AND (
-                               INSTR( ',' || SAMPLEUSERID || ',',',' || #{sampleUserId} || ',' ) > 0
-                                 OR F.SCENEUSERID = #{sampleUserId})
-                              </if>)
+                                   AND (INSTR( ',' || SAMPLEUSERID || ',',',' || #{sampleUserId} || ',' ) > 0
+                                     OR F.SCENEUSERID = #{sampleUserId})
+                                  UNION SELECT 1 FROM T_EMC_SAMPLE S
+                                      WHERE S.PROJID = T.ID
+                                      AND S.PROCESSSTATUS LIKE 'draft%'
+                                      AND S.STATUS = 'draft'
+                                      AND S.SAMPLESCENEUSERID = #{sampleUserId}
+                              </if>
+                              )
                 AND (EXISTS (SELECT 1
                               FROM T_EMC_SAMPLE A
                              WHERE A.PROJID = T.ID
@@ -192,12 +197,12 @@
 
     <!-- 根据业务类型查询年度项目统计数据 -->
     <select id="selectAnnualProjectStatistics" parameterType="map" resultType="map">
-        SELECT DATE_FORMAT(TASKDATE, '%m') AS monthValue,
+        SELECT TO_CHAR(TASKDATE, 'MM') AS monthValue,
                COUNT(*) AS projectCount
         FROM T_EMC_PROJECT A
         <where>
             <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
-            AND DATE_FORMAT(TASKDATE, '%Y') = DATE_FORMAT(NOW(), '%Y')
+            AND TO_CHAR(TASKDATE, 'YYYY') = TO_CHAR(SYSDATE, 'YYYY')
         </where>
         GROUP BY monthValue
         ORDER BY monthValue

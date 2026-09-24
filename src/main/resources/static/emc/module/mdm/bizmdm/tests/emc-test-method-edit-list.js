@@ -25,19 +25,6 @@ emcTestMethod.editPage = {
             deactivateFormatter : function(row) {
                 return row.testName || row.id;
             },
-            onBeforeRefresh : function() {
-                var editListGrid = this;
-
-                if (Gikam.isEmpty(editListGrid.getFilterRequestData())) {
-                    editListGrid.setOptions({
-                        requestData : {
-
-                        }
-                    });
-                }
-
-                return true;
-            },
             onLoadSuccess : function(data) {
                 this.setOptions({
                     requestData : {
@@ -82,27 +69,27 @@ emcTestMethod.editPage = {
                     _this.copyTestMethodByCategory();
                 }
             }*/, {
-                type : 'button',
-                text : 'GIKAM.BUTTON.DELETE',
-                icon : 'remove-row',
-                onClick : function() {
-                    var selections = Gikam.getComp('emc-test-method-edit-list-grid').getSelections();
-                    if (selections.length > 0) {
-                        var url = emcTestMethod.baseUrl + '/action/check-used'
-                        Gikam.post(url, Gikam.getJsonWrapper({}, [ '', selections ])).done(function(data) {
-                            if (!Gikam.isEmpty(data)) {
-                                Gikam.confirm('GIKAM.TIP.CONFIRM_TO_DELETE', 'EMC.MODULE.MDM.BIZMDM.TESTS.TIP.TEST_METHOD_CHECK_USED', function() {
-                                    Gikam.getComp('emc-test-method-edit-list-grid').deleteRows(emcTestMethod.baseUrl);
-                                })
-                            } else {
-                                Gikam.getComp('emc-test-method-edit-list-grid').deleteRows(emcTestMethod.baseUrl);
-                            }
-                        });
-                    } else {
-                        Gikam.alert('GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM');
-                    }
-                }
-            }, {
+            //     type : 'button',
+            //     text : 'GIKAM.BUTTON.DELETE',
+            //     icon : 'remove-row',
+            //     onClick : function() {
+            //         var selections = Gikam.getComp('emc-test-method-edit-list-grid').getSelections();
+            //         if (selections.length > 0) {
+            //             var url = emcTestMethod.baseUrl + '/action/check-used'
+            //             Gikam.post(url, Gikam.getJsonWrapper({}, [ '', selections ])).done(function(data) {
+            //                 if (!Gikam.isEmpty(data)) {
+            //                     Gikam.confirm('GIKAM.TIP.CONFIRM_TO_DELETE', 'EMC.MODULE.MDM.BIZMDM.TESTS.TIP.TEST_METHOD_CHECK_USED', function() {
+            //                         Gikam.getComp('emc-test-method-edit-list-grid').deleteRows(emcTestMethod.baseUrl);
+            //                     })
+            //                 } else {
+            //                     Gikam.getComp('emc-test-method-edit-list-grid').deleteRows(emcTestMethod.baseUrl);
+            //                 }
+            //             });
+            //         } else {
+            //             Gikam.alert('GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM');
+            //         }
+            //     }
+            // }, {
                 type : 'button',
                 text : 'GIKAM.BUTTON.ACTIVE',
                 icon : 'enable',
@@ -122,6 +109,13 @@ emcTestMethod.editPage = {
                 icon : 'upload',
                 onClick : function() {
                     _this.uploadScriptFile();
+                }
+            }, {
+                type : 'button',
+                text : 'EMC.MODULE.MDM.BIZMDM.TESTS.BUTTON.SCRIPT_FILE_COPYTO',
+                icon : 'upload',
+                onClick : function () {
+                    _this.scriptFileCopyTo();
                 }
             }, /*{
                 type : 'button',
@@ -148,7 +142,7 @@ emcTestMethod.editPage = {
                         service : 'emcTestMethodExportTemplate'
                     })).done(function(fileUri) {
                         var fileUrl = IFM_CONTEXT + fileUri;
-                        Gikam.download(fileUrl);
+                        Gikam.emcDownloadFile(fileUrl);
                     });
                 }
             }, {
@@ -248,8 +242,37 @@ emcTestMethod.editPage = {
                         }
                     });
                 }
-            } ]
+            }, {
+                type : 'button',
+                text : 'EMC.MODULE.MDM.BIZMDM.TESTS.BUTTON.BEFORE_HANDLE_COPYTO',
+                icon : 'copy',
+                onClick : function() {
+                    _this.beforeHandleCopyTo();
+                }
+            },  ]
         }
+    },
+
+    beforeHandleCopyTo : function () {
+        var testMethodRow = Gikam.getComp('emc-test-method-edit-list-grid').getActivedRow();
+        Gikam.create('modal', {
+            title : 'EMC.MODULE.MDM.BIZMDM.TESTS.BUTTON.BEFORE_HANDLE_COPYTO',
+            url : emcTestMethod.baseUrl + '/page/item-copy-to' + Gikam.param({
+                id_DIFFER : testMethodRow.id,
+            }),
+            width : '60%',
+            onAfterClose : function(rows) {
+                if (Gikam.isEmpty(rows)) {
+                    return;
+                }
+                workspace.window.showMask(true);
+                var url = emcTestMethod.baseUrl + '/before-handle/action/copy-to';
+                Gikam.post(url, Gikam.getJsonWrapper({}, [ 'emcTestMethodServiceImpl', [testMethodRow] ], [ 'emcTestMethodServiceImpl', rows ])).always(function() {
+                    workspace.window.closeMask();
+                });
+            }
+        });
+
     },
 
     deactive : function () {
@@ -337,6 +360,7 @@ emcTestMethod.editPage = {
                                 id : 'emc-test-method-edit-uploader',
                                 dbTable : 'T_EMC_TEST_METHOD',
                                 bizId : bizId,
+                                bizCategory : 'script',
                                 multiple : false,
                                 onAfterClose : function() {
                                     Gikam.getComp('emc-test-method-edit-list-grid').refresh()
@@ -349,6 +373,7 @@ emcTestMethod.editPage = {
                         id : 'emc-test-method-edit-uploader',
                         dbTable : 'T_EMC_TEST_METHOD',
                         bizId : bizId,
+                        bizCategory : 'script',
                         multiple : false,
                         onAfterClose : function() {
                             Gikam.getComp('emc-test-method-edit-list-grid').refresh()
@@ -359,6 +384,50 @@ emcTestMethod.editPage = {
         } else {
             Gikam.alert('GIKAM.TIP.CHOOSE_ONE_ITEM');
         }
+    },
+
+    scriptFileCopyTo : function () {
+        var selections = Gikam.getComp('emc-test-method-edit-list-grid').getSelections();
+        if (Gikam.isEmpty(selections) || selections.length !== 1) {
+            Gikam.alert('GIKAM.TIP.CHOOSE_ONE_ITEM');
+            return;
+        }
+        // 所选测试要有公式附件
+        var bizId = selections[0].id;
+        Gikam.post(IFM_CONTEXT + '/core/module/item/files/queries', Gikam.getJsonWrapper({
+            f : {
+                targetId : 'T_EMC_TEST_METHOD$' + bizId
+            },
+            n : -1,
+            s : 50
+        })).done(function(r) {
+            debugger
+            if (r.total > 0) {
+                var scriptFile = r.rows[0];
+                Gikam.create('modal', {
+                    title : 'EMC.MODULE.MDM.BIZMDM.TESTS.BUTTON.SCRIPT_FILE_COPYTO',
+                    url : emcTestMethod.baseUrl + '/page/item-copy-to' + Gikam.param({
+                        id_DIFFER : bizId,
+                    }),
+                    width : '60%',
+                    onAfterClose : function(rows) {
+                        if (Gikam.isEmpty(rows)) {
+                            return;
+                        }
+                        // 复制公式附件，只复制file表的文件记录，多个测试使用同一个公式附件
+                        workspace.window.showMask(true);
+                        var url = emcTestMethod.baseUrl + '/script-file/action/copy-to';
+                        Gikam.post(url, Gikam.getJsonWrapper({}, [ 'coreFileServiceImpl', [scriptFile] ], [ 'emcTestMethodServiceImpl', rows ])).always(function() {
+                            workspace.window.closeMask();
+                        });
+                    }
+                });
+            } else {
+                Gikam.alert('所选测试没有公式附件，请先上传！');
+                return;
+            }
+        });
+
     },
 
     loadMethodParamPage : function(id) {
@@ -410,10 +479,28 @@ emcTestMethod.editPage = {
         });
     },
 
-    // 配置结果
-    editResult : function(index) {
-        var grid = Gikam.getComp('emc-test-item-list-grid');
+    viewScriptFile: function(index) {
+        var grid = Gikam.getComp('emc-test-method-edit-list-grid');
         var row = grid.getData()[index];
+        Gikam.post(IFM_CONTEXT + '/core/module/item/files/queries', Gikam.getJsonWrapper({
+            f : {
+                targetId : 'T_EMC_TEST_METHOD$' + row.id
+            },
+            n : -1,
+            s : 50
+        })).done(function(r) {
+            if (r.total > 0) {
+                Gikam.openFile(r.rows[0].id, false);
+            } else {
+                Gikam.alert('未维护公式附件');
+            }
+        });
+    },
+
+    // 配置结果
+    editResult : function(id) {
+        var grid = Gikam.getComp('emc-test-item-list-grid');
+        var row = grid.getRowDataById(id);
         if (row.resultCategory != 'select') {
             Gikam.alert('EMC.MODULE.MDM.BIZMDM.TESTS.TIP.RESULTCATEGORY_ERROR');
             return;
@@ -437,9 +524,10 @@ emcTestMethod.editPage = {
     },
 
     // 配置QC指标和分段修约
-    editQcIndexAndRevision : function(index) {
+    editQcIndexAndRevision : function(id) {
         var grid = Gikam.getComp('emc-test-item-list-grid');
-        var row = grid.getData()[index];
+        var row = grid.getRowDataById(id);
+        // var row = grid.getData()[index];
 
         Gikam.create('modal', {
             width : 1200,
@@ -474,6 +562,18 @@ emcTestMethod.editPage = {
                     service : 'emcItemServiceImpl',
                     url : _this.getItemUrl(),
                     columns : emcTestMethod.getItemListColumns(),
+                    page :true,
+                    group : {
+                        fields : [ 'ext$.analysiscategoryname' ],
+                        groupCheckbox : false,
+                        formatter : function(row) {
+                            return row.ext$.analysiscategoryname;
+                        }
+                    },
+                    order : {
+                        'ext$.analysiscategoryname' : 'asc',
+                        'ORDERNO' : 'asc',
+                    },
                     onLoadSuccess : function(data) {
                         Gikam.getComp('emc-test-item-list-grid').setOptions({
                             requestData : {
@@ -570,7 +670,45 @@ emcTestMethod.editPage = {
                         onClick : function() {
                             Gikam.viewAudit('T_EMC_ITEM', Gikam.getComp('emc-test-item-list-grid').getSelections());
                         }
-                    } ]
+                    },{
+                        type : 'button',
+                        text : '批量删除QC指标',
+                        icon : 'edit',
+                        onClick : function() {
+                            var _this = this;
+                            var selections = Gikam.getComp('emc-test-item-list-grid').getSelections();
+                            if (Gikam.isEmpty(selections)) {
+                                Gikam.alert('GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM');
+                                return;
+                            }
+                            workspace.window.showMask(true);
+                            Gikam.del(emcTestMethod.baseUrl + '/items/action/qc-index',
+                                Gikam.getJsonWrapper({}, ['', selections])).done(function (id) {
+                                Gikam.getComp('emc-test-item-list-grid').refresh();
+                            }).always(function () {
+                                workspace.window.closeMask();
+                            });
+                        }
+                    },{
+                        type : 'button',
+                        text : '批量删除分段修约',
+                        icon : 'edit',
+                        onClick : function() {
+                            var _this = this;
+                            var selections = Gikam.getComp('emc-test-item-list-grid').getSelections();
+                            if (Gikam.isEmpty(selections)) {
+                                Gikam.alert('GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM');
+                                return;
+                            }
+                            workspace.window.showMask(true);
+                            Gikam.del(emcTestMethod.baseUrl + '/items/action/revision',
+                                Gikam.getJsonWrapper({}, ['', selections])).done(function (id) {
+                                Gikam.getComp('emc-test-item-list-grid').refresh();
+                            }).always(function () {
+                                workspace.window.closeMask();
+                            });
+                        }
+                    }, ]
                 } ]
             }, {
                 title : 'EMC.MODULE.MDM.BIZMDM.TESTS.TAB.TEST_ITEM_GROUP',
@@ -587,7 +725,7 @@ emcTestMethod.editPage = {
                             deleteFormatter : function(row) {
                                 return row.itemGroup || row.id;
                             },
-                            filter : false,
+                            filter : true,
                             onLoadSuccess : function(data) {
                                 if (!Gikam.isEmpty(data)) {
                                     this.activeRowByIndex(0);
@@ -640,14 +778,13 @@ emcTestMethod.editPage = {
                                         _this.insertItemGroupRow();
                                     });
                                 }
-                            }, {
-                                type : 'button',
-                                text : 'GIKAM.BUTTON.DELETE',
-                                icon : 'remove-row',
-                                hidden : true,
-                                onClick : function() {
-                                    _this.deleteItemGroupRow();
-                                }
+                            // }, {
+                            //     type : 'button',
+                            //     text : 'GIKAM.BUTTON.DELETE',
+                            //     icon : 'remove-row',
+                            //     onClick : function() {
+                            //         _this.deleteItemGroupRow();
+                            //     }
                             }, {
                                 type : 'button',
                                 text : 'GIKAM.BUTTON.COPY',
@@ -907,6 +1044,8 @@ emcTestMethod.editPage = {
                 id : selections[0].id,
                 testCategoryId : selections[0].testCategoryId,
                 testCategory : selections[0].ext$.testcategory,
+                testClass : selections[0].testClass,
+                testMethodType : selections[0].testMethodType,
                 testId : selections[0].testId,
                 methodname : encodeURIComponent(selections[0].ext$.methodname),
                 methodId : selections[0].methodId
@@ -975,6 +1114,7 @@ emcTestMethod.editPage = {
                     if (!Gikam.isEmpty(data)) {
                         workspace.window.showMask(true);
                         selections.map(function(item) {
+                            item.orderNo = data.orderNo;
                             item.unitName = data.unitName;
                             item.revisionRule = data.revisionRule;
                             item.analysisCategory = data.analysisCategory;
@@ -996,6 +1136,7 @@ emcTestMethod.editPage = {
                             item.ext$.sendcoefficient= data.ext$.sendcoefficient;
                             item.ext$.detectedquantity= data.ext$.detectedquantity;
                             item.ext$.detectedquantityunit= data.ext$.detectedquantityunit;
+                            item.originalRecordName= data.originalRecordName;
 
                         });
                         Gikam.put(emcTestMethod.baseUrl + '/' + formData.id, Gikam.getJsonWrapper({}, [ 'emcItemServiceImpl', selections ])).done(function() {
@@ -1118,7 +1259,7 @@ emcTestMethod.editPage = {
             targetFilterColumn : 'TESTMETHODID',
             targetFilterValue : formData.id,*/
             status_SEQ : 'inUse',
-            orgId_EQ :  workspace.user.ext$.parentorgid,
+            org_filter : '1',
         });
 
         /*if (selections.length > 1) {

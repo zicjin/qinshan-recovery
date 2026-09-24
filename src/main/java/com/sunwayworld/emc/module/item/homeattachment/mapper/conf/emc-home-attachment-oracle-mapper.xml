@@ -17,7 +17,7 @@
                               FROM T_EMC_HOME_ATTA_PERMISSION D
                              WHERE D.ATTACHMENTID = T.ID
                                AND D.USERID = #{loginUser.id}
-                               AND T.ENDDATE >= sysdate())
+                               AND T.ENDDATE >= SYSDATE)
             </if>
         </where>
         ORDER BY

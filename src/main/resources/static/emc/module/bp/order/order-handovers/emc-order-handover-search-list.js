@@ -9,13 +9,13 @@ emcOrderHandover.searchPage = {
                 title : 'EMC.MODULE.BP.ORDER.ORDERRECEIPTS.TAB.SAMPLE_NAME',
                 items : [ {
                     type : 'grid',
-                    id : 'emc-sample-edit-list-grid',
+                    id : 'emc-order-handover-search-list-grid',
                     url : _this.urlManager['sampleGrid'],
                     page : true,
                     requestData : {
                         targetType : 'sampleHandover',
                         status_DIFFER : 'draft',
-                        orgId_SB: workspace.user.ext$.parentorgid
+                        org_filter : '1',
                     },
                     columns : emcOrderHandover.getSampleListColumns(),
                     checkOnActive : true,
@@ -65,14 +65,14 @@ emcOrderHandover.searchPage = {
                         text : 'EMC.MODULE.BP.ORDER.ORDERRECEIPTS.BUTTON.HANDOVER_SAMPLE_PRINT',
                         icon : 'print',
                         onClick : function() {
-                            Gikam.viewReport('samplingNumber', Gikam.getComp('emc-sample-edit-list-grid').getSelections());
+                            Gikam.viewReport('samplingNumber', Gikam.getComp('emc-order-handover-search-list-grid').getSelections());
                         }
                     }, {
                         type : 'button',
                         text : 'EMC.MODULE.BP.REPORT.REPORTS.BUTTON.VIEW_SAMPLE',
                         icon : 'print',
                         onClick : function() {
-                            var selections = Gikam.getComp('emc-sample-edit-list-grid').getSelections();
+                            var selections = Gikam.getComp('emc-order-handover-search-list-grid').getSelections();
                             if (selections.length !== 1) {
                                 Gikam.alert('GIKAM.TIP.CHOOSE_ONE_ITEM');
                                 return;
@@ -84,14 +84,18 @@ emcOrderHandover.searchPage = {
                         text : 'EMC.MODULE.BP.ORDER.ORDERRECEIPTS.BUTTON.TASK_LIST_PRINT',
                         icon : 'print',
                         onClick : function() {
-                            Gikam.viewReport('deliveringLabel', Gikam.getComp('emc-sample-edit-list-grid').getSelections());
+                            Gikam.viewReport('deliveringLabel', Gikam.getComp('emc-order-handover-search-list-grid').getSelections());
                         }
-                    }, ]
+                    },{
+                        type : 'button',
+                        text : '样品标签',
+                        icon : 'print',
+                        onClick : function() {
+                            Gikam.viewReport('sampling', Gikam.getComp('emc-order-handover-search-list-grid').getSelections());
+                        }
+                    } ]
                 } ]
             } ],
-            onRendered : function() {
-                Gikam.getComp('emc-sample-edit-list-grid').refresh();
-            }
         }
     },
 
@@ -160,7 +164,7 @@ emcOrderHandover.searchPage = {
     },
 
     viewReport : function() {
-        var selections = Gikam.getComp('emc-sample-edit-list-grid').getSelections();
+        var selections = Gikam.getComp('emc-order-handover-search-list-grid').getSelections();
         if (selections.length !== 1) {
             Gikam.alert('GIKAM.TIP.CHOOSE_ONE_ITEM');
             return;

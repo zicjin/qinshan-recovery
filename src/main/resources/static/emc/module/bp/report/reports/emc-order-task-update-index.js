@@ -9,7 +9,7 @@ emcReport.updateIndexPage = {
             requestData : {
                 FOLDERID_IN : _this.param.ids,
                 TESTCAPCITYORGID_SEQ : workspace.user.ext$.parentorgid,
-                analysisType_SEQ : 'analysis',
+                // analysisType_SEQ : 'analysis',
             },
             columns : emcReport.getUpdateIndexOrderTaskColumns(),
             service : 'emcOrderTaskServiceImpl',
@@ -63,6 +63,7 @@ emcReport.updateIndexPage = {
                 title : 'EMC.MODULE.BP.REPORT.REPORTS.TITLE.INDEX_CATEGORY',
                 field : 'indexCategoryId',
                 type : 'select',
+                 inputWidth: 300,
                 search : true,
                 onChange : function(field, value) {
                     if (Gikam.isEmpty(value)) {

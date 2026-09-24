@@ -27,6 +27,8 @@ emcDataCorrelation.itemChooseMultChoosePage = {
             type : 'shuttleFrame',
             id : 'emc-data-correlation-item-choose-mult-list-shuttle-frame',
             columns : emcDataCorrelation.getItemChooseMultEditListColumns(),
+            rightPage : false,
+            leftPage : false,
             leftGridUrl : Gikam.printf(IFM_CONTEXT + '/secure/emc/module/mdm/basemdm/data-correlations/{id}/items/chooseable', {
                 id : _this.param.id
             }),

@@ -173,6 +173,12 @@ public class EmcOrderResourceImpl implements EmcOrderResource {
         return getService().selectOrderTaskPagationByOrder(wrapper);
     }
 
+    @Log(value = "通过样品查询容器信息", type = LogType.SELECT)
+    @RequestMapping(value = "/order/tasks/queries", method = RequestMethod.POST)
+    public Page<EmcOrderTaskBean> selectOrderTaskPagationByOrderAndTask(RestJsonWrapperBean wrapper) {
+        return getService().selectOrderTaskPagationByOrderAndTask(wrapper);
+    }
+
     @Override
     @Log(value = "数据录入-添加重复数", type = LogType.INSERT)
     @RequestMapping(value = "{id}/action/add-repreat-nos", method = RequestMethod.POST)
@@ -220,6 +226,13 @@ public class EmcOrderResourceImpl implements EmcOrderResource {
     @RequestMapping(value = "/check-projects/action/item-group-del", method = RequestMethod.DELETE)
     public void delCheckProjectItemGroup(RestJsonWrapperBean wrapper) {
         getService().delCheckProjectItemGroup(wrapper);
+    }
+
+    @Log(value = "检测项目修改页面添加样品测试", type = LogType.INSERT)
+    @RequestMapping(value = "/{id}/check-projects/action/item-group-edit", method = RequestMethod.PUT)
+    public Long editCheckProjectItemGroup(@PathVariable Long id, RestJsonWrapperBean wrapper) {
+        getService().editCheckProjectItemGroup(id, wrapper);
+        return 1L;
     }
 
     @Log(value = "检测项目修改页面编辑测试结果", type = LogType.INSERT)

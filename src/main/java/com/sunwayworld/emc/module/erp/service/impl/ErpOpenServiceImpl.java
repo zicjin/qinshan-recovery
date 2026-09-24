@@ -796,97 +796,7 @@ public class ErpOpenServiceImpl implements ErpOpenService {
      * @return
      */
     private void createOrder(EmcProjectBean project, MidOrderDetailVO orderDetail) {
-        List<MidSampleDetailVO> samples = orderDetail.getSamples();
-        if (CollectionUtils.isEmpty(samples)) {
-            return;
-        }
-
-        List<EnvOrderSampleExtraInfoEntity> envOrderSampleExtraInfoList = orderDetail.getOrderExtraInfoModelExt().getEnvOrderSampleExtraInfoEntity();
-        List<String> monitorTmplNameList = envOrderSampleExtraInfoList.stream().map(EnvOrderSampleExtraInfoEntity::getSamplingTypeName).distinct().collect(Collectors.toList());
-        String parentOrgId = LocalContextHelper.getLoginUser().getExt$Item("parentOrgId");
-        List<EmcMonitorTmplBean> monitorTmplList = monitorTmplService.selectListByFilter(SearchFilter.instance().match("orgId", parentOrgId).filter(MatchPattern.SEQ).match("monitorTmplName", monitorTmplNameList).filter(MatchPattern.OR));
-        List<String> monitorTmplIdList = monitorTmplList.stream().map(EmcMonitorTmplBean::getId).collect(Collectors.toList());
-
-        List<EmcMonitorSchemeBean> monitorSchemeList = queryMonitorScheme(orderDetail, monitorTmplIdList);
-        if (monitorSchemeList.isEmpty()) {
-            logger.warn("--> EmcMonitorSchemeBean is empty.");
-            return;
-        }
-
-        // 查询分析项组对应的分析项
-        List<EmcGroupItemBean> groupItemList = queryGroupItemList(monitorSchemeList);
-
-        samples.stream().filter(sample -> ObjectUtils.isEmpty(sample.getCnt())).forEach(sample -> sample.setCnt(1));
-        int totalFolderQty = samples.stream().mapToInt(MidSampleDetailVO::getCnt).sum();
-        List<String> newFolderNoList = folderService.generateFolderNosByProjId(project.getId(), project.getProjNo(), totalFolderQty);
-        AtomicInteger folderIndex = new AtomicInteger();
-
-        List<EnvSampleSkuSamplingTypeEntity> sampleSkuSamplingTypes = orderDetail.getOrderExtraInfoModelExt().getSampleSkuSamplingTypes();
-
-        List<EmcOrderBean> orderList = new ArrayList<>();
-        List<EmcFolderBean> folderList = new ArrayList<>();
-        List<EmcOrderItemGroupBean> orderItemGroupList = new ArrayList<>();
-        List<EmcOrderItemBean> orderItemList = new ArrayList<>();
-
-        samples.forEach(sample -> {
-            // 获取当前样品对应的样品类型，如果找不到样品类型，则跳过
-            EnvOrderSampleExtraInfoEntity sampleExtraInfo = envOrderSampleExtraInfoList.stream().filter(info -> ObjectUtils.equals(info.getSampleGbId(), sample.getGbId())).findFirst().orElseGet(EnvOrderSampleExtraInfoEntity::new);
-            if (StringUtils.isEmpty(sampleExtraInfo.getSamplingTypeName())) {
-                return;
-            }
-
-            EmcMonitorTmplBean monitorTmpl = monitorTmplList.stream().filter(tmpl -> StringUtils.equals(tmpl.getMonitorTmplName(), sampleExtraInfo.getSamplingTypeName())).findFirst().orElseGet(EmcMonitorTmplBean::new);
-            if (StringUtils.isEmpty(monitorTmpl.getMonitorTmplName())) {
-                return;
-            }
-
-            // 当前样品真实需要检测的SKU
-            List<String> validSkuGbIdList = sampleSkuSamplingTypes.stream().filter(type -> ObjectUtils.equals(sample.getGbId(), type.getSampleGbId()) && type.getNeedDetected()).map(EnvSampleSkuSamplingTypeEntity::getSkuGbId).map(skuId -> skuId + "").collect(Collectors.toList());
-
-            // 先获取sku数据，根据sku数据反查监测方案，如果查询不到监测方案，则不创建样品
-            List<MidSkuDetailVo> skus = sample.getSkus();
-            Map<String, String> skuSchemeNameMap = new HashMap<>();
-            skus.forEach(sku -> {
-                if (!CollectionUtils.isEmpty(sku.getSingles())) {
-                    List<String> singleSkuGbIdList = sku.getSingles().stream().map(MidSkuDetailVo::getGbId).map(String::valueOf).collect(Collectors.toList());
-                    singleSkuGbIdList.forEach(gbId -> skuSchemeNameMap.put(gbId, sku.getName()));
-                }
-            });
-
-            List<EmcMonitorSchemeBean> curSchemeList = monitorSchemeList.stream().filter(scheme -> StringUtils.equals(monitorTmpl.getId(), scheme.getMonitorTmplId())
-                    && validSkuGbIdList.contains(scheme.getSkuGbId())).collect(Collectors.toList());
-            if (curSchemeList.isEmpty()) {
-                return;
-            }
-
-            List<String> curCapacityItemGroupIdList = curSchemeList.stream().map(EmcMonitorSchemeBean::getItemGroupId).distinct().map(Objects::toString).collect(Collectors.toList());
-            List<EmcGroupItemBean> curGroupItemList = groupItemList.stream().filter(groupItem -> curCapacityItemGroupIdList.contains(groupItem.getExt$Item("capacityItemGroupId"))).collect(Collectors.toList());
-
-            // 取第一个监测方案，用于获取监测模板信息
-            EmcMonitorSchemeBean basicScheme = curSchemeList.get(0);
-
-            Integer orderNum = Optional.ofNullable(sample.getCnt()).orElse(1);
-            IntStream.range(0, orderNum).forEach(index -> {
-                EmcFolderBean newFolder = createFolder(project, sampleExtraInfo, basicScheme, newFolderNoList.get(folderIndex.getAndIncrement()));
-                EmcOrderBean order = createOrder(project, newFolder, sample);
-                List<EmcOrderItemGroupBean> curOrderItemGroupList = createOrderItemGroup(order, curSchemeList, skuSchemeNameMap, curGroupItemList, orderItemList);
-
-                orderList.add(order);
-                folderList.add(newFolder);
-                orderItemGroupList.addAll(curOrderItemGroupList);
-            });
-        });
-
-        if (orderItemList.size() > 100000) {
-            logger.warn("常规项目下单{}复制出现问题，数据异常 -> {}", project.getProjNo(), orderItemList.size());
-            throw new UnsupportedException("数据异常");
-        }
-
-        folderService.getDao().insert(folderList);
-        orderService.getDao().insert(orderList);
-
-        orderItemGroupService.getDao().insert(orderItemGroupList);
-        orderItemService.getDao().insert(orderItemList);
+        // 2026-09-24 从生产字节码恢复：生产版本此方法为空实现（历史源码中的实现未上线）
     }
 
     /**
@@ -925,7 +835,7 @@ public class ErpOpenServiceImpl implements ErpOpenService {
         newOrder.setFolderId(folder.getId());
         newOrder.setMonitorTmplId(folder.getMonitorTmplId());
         newOrder.setOrderCategory(folder.getOrderCategory());
-        newOrder.setOrderNo(folder.getFolderNo() + "A001");
+        newOrder.setOrderNo(folder.getFolderNo() + "001");
         if (newOrder.getLabelNo() == null) {
             newOrder.setLabelNo(newOrder.getOrderNo());
         }
@@ -1239,7 +1149,7 @@ public class ErpOpenServiceImpl implements ErpOpenService {
         newOrder.setFolderId(folder.getId());
         newOrder.setMonitorTmplId(folder.getMonitorTmplId());
         newOrder.setOrderCategory(folder.getOrderCategory());
-        newOrder.setOrderNo(folder.getFolderNo() + "A001");
+        newOrder.setOrderNo(folder.getFolderNo() + "001");
         if (newOrder.getLabelNo() == null) {
             newOrder.setLabelNo(newOrder.getOrderNo());
         }

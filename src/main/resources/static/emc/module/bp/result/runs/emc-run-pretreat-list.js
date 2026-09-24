@@ -56,7 +56,7 @@ emcRunPretreat.editPage = {
                             testMethodId : testMethodId,
                             orderCategory : orderCategory,
                             projId : _this.projId,
-                            orgId_SB: workspace.user.ext$.parentorgid
+                            org_filter : '1',
                         }),
                         onAfterClose : function(data) {
                             if (Gikam.isEmpty(data[0]) || Gikam.isEmpty(data[1])) {
@@ -83,7 +83,7 @@ emcRunPretreat.editPage = {
                         width : '45%',
                         url : Gikam.choose.getConfig('project').url + Gikam.param({
                             targetType : 'analysis',
-                            orgId_SB: workspace.user.ext$.parentorgid
+                            org_filter : '1',
                         }),
                         onAfterClose : function(data) {
                             if (Gikam.isEmpty(data)) {
@@ -163,7 +163,7 @@ emcRunPretreat.editPage = {
                         }
                     },
                     requestData : {
-                        orgId_SB : workspace.user.ext$.parentorgid,
+                        org_filter : '1',
                         pretreatUserId_SEQ : workspace.user.id,
                     },
                     onRowActive : function(index, row) {

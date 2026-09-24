@@ -212,4 +212,11 @@ public class EmcIndexCategoryResourceImpl implements EmcIndexCategoryResource {
     public Page<EmcIndexCategoryBean> selectByOrder(RestJsonWrapperBean wrapper) {
         return indexCategoryService.selectByOrder(wrapper);
     }
+
+    @Log(value = "复制", type = LogType.SELECT)
+    @RequestMapping(value = "/copy", method = RequestMethod.POST)
+    public Long copy(RestJsonWrapperBean wrapper) {
+        indexCategoryService.copy(wrapper);
+        return 1L;
+    }
 }

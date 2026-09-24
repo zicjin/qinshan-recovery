@@ -86,7 +86,7 @@ emcSampleEdit.dataInputDetailPage = {
                             id : id.join() + '-' + resultData[0].ext$.sampleid
                         })).done(function(fileUri) {
                             var fileUrl = IFM_CONTEXT + fileUri;
-                            Gikam.download(fileUrl);
+                            Gikam.emcDownloadFile(fileUrl);
                         });
                     }
                 } ]

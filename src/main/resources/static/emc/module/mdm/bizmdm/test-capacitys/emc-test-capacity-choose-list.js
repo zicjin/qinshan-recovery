@@ -2,15 +2,13 @@ emcTestCapacity.testCapacityChoosePage = {
 
         getGridParam : function() {
             var _this = this, columns = emcTestCapacity.getChooseListColumns(), requestData = this.param;
-
+            requestData['org_filter'] = '1';
             return {
                 type : 'grid',
                 id : 'emc-test-capacity-choose-list-grid',
                 url : emcTestCapacity.baseUrl + '/queries/raw',
                 service : 'emcTestCapacityServiceImpl',
-                requestData : {
-                    orgId_SB :  workspace.user.ext$.parentorgid,
-                  },
+                requestData : requestData,
                 page :true,
                 columns : columns,
                 toolbar : [ {

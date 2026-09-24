@@ -9,7 +9,7 @@ emcContainerCategory.maintenanceListPage = {
             service : 'emcContainerCategoryServiceImpl',
             url : '/secure/emc/module/mdm/bizmdm/tests/container-maintenance/queries/raw',
 	        requestData : {
-	            orgId_SB : workspace.user.ext$.parentorgid
+	            org_filter : '1',
 	        },
             columns : emcContainerCategory.getMaintenanceEditListColumns(),
             page : true,
@@ -22,12 +22,15 @@ emcContainerCategory.maintenanceListPage = {
                     return '样品类型:' + row.ext$.monitortmplname;
                 }
             },
-            /*onLoadSuccess : function(data) {
+            onLoadSuccess : function(data) {
                 if (!Gikam.isEmpty(data)) {
-                    return this.activeRowByIndex(1);
+                    return this.activeRowByIndex(0);
                 }
                 Gikam.getComp('emc-container-maintenance-testmethod-list-grid').cleanData();
-            },*/
+            },
+            deleteFormatter : function(row) {
+                return row.fixative || row.ext$.containercategoryname;
+            },
             onRowActive : function(index, row) {
                 if (row) {
                     var tmids = row.ext$.tmids;
@@ -63,7 +66,9 @@ emcContainerCategory.maintenanceListPage = {
                     }
                     Gikam.getComp('emc-container-maintenance-edit-list-grid').deleteRows(Gikam.printf(emcContainerCategory.baseUrl + '/{ids}/dele-order-categories', {
                         ids : ids
-                    }));
+                    })).done(function() {
+                        Gikam.getComp('emc-container-maintenance-testmethod-list-grid').refresh();
+                    });
                 }
             } , {
                 type : 'button',
@@ -77,6 +82,13 @@ emcContainerCategory.maintenanceListPage = {
                 text : 'GIKAM.BUTTON.REEDIT',
                 icon : 'edit',
                 items : [ {
+                    type : 'button',
+                    text : 'GIKAM.BUTTON.CONTAINERGROUP',
+                    icon : 'edit',
+                    onClick : function() {
+                        _this.modify("containerGroup");
+                    }
+                }, {
                     type : 'button',
                     text : 'GIKAM.BUTTON.RQLX',
                     icon : 'edit',
@@ -129,6 +141,10 @@ emcContainerCategory.maintenanceListPage = {
             Gikam.alert("GIKAM.TIP.CHOOSE_ONE_ITEM");
             return;
         }
+        if ("containerGroup" === type && selections.length !== 1) {
+            Gikam.alert('GIKAM.TIP.CHOOSE_ONE_ITEM');
+            return;
+        }
 
         var ids = "";
         if (selections.length > 0) {
@@ -142,21 +158,24 @@ emcContainerCategory.maintenanceListPage = {
             height:'160',
             url : '/secure/emc/module/mdm/basemdm/container-categories/page/cm-modify' + Gikam.param({
                 type : type,
+                containerGroup : selections[0].containerGroup,
                 containercategoryid : selections[0].containerCategoryId,
                 containercategoryname : selections[0].ext$.containercategoryname,
                 sampleqty : selections[0].sampleqty,
-                fixative : selections[0].fixative,
-                sampleWeight : selections[0].sampleWeight
+                fixative : encodeURI(selections[0].fixative),
+                sampleWeight : selections[0].sampleWeight,
+                storeCondition : selections[0].storeCondition,
             }),
             onAfterClose : function(items) {
                 if (!Gikam.isEmpty(items)) {
                     var chooseData = [];
                     var data = {};
+                    data.containerGroup = items.containerGroup;
                     data.containerCategoryId = items.containercategoryid;
                     data.sampleqty = items.sampleqty;
                     data.fixative = items.fixative;
-                    data.storeCondition = items.storeConditionText,
-                    data.sampleWeight = items.sampleWeight
+                    data.storeCondition = items.storeCondition;
+                    data.sampleWeight = items.sampleWeight;
                     chooseData.push(data);
                     Gikam.postText(emcContainerCategory.baseUrl +'/modify' + '/'+ type, Gikam.getJsonWrapper({},['EmcTestMethodOrderCategoryServiceImpl', selections], ['emcContainerCategoryServiceImpl', chooseData])).done(function() {
                         Gikam.getComp('emc-container-maintenance-edit-list-grid').refresh();
@@ -212,6 +231,7 @@ emcContainerCategory.maintenanceListPage = {
                     });
 
                     Gikam.postText(emcContainerCategory.baseUrl +'/add' + '/'+ testmethodids , Gikam.getJsonWrapper({}, ['emcContainerCategoryServiceImpl', chooseData])).done(function() {
+                        Gikam.getComp('emc-container-maintenance-edit-list-grid').refresh();
                         Gikam.getAsyncComp('emc-container-maintenance-testmethod-list-grid').done(function(grid) {
                             grid.refresh({
                                 url : IFM_CONTEXT + '/secure/emc/module/mdm/bizmdm/tests/queries',
@@ -279,6 +299,9 @@ emcContainerCategory.maintenanceListPage = {
             id : 'emc-container-maintenance-testmethod-list-grid',
             service : 'emcContainerCategoryServiceImpl',
             columns : emcContainerCategory.getMaintenanceTMListColumns(),
+            deleteFormatter : function(row) {
+                return row.ext$.methodname || row.ext$.testname;
+            },
             readonly : true,
             page : true,
             toolbar : [ {
@@ -305,7 +328,10 @@ emcContainerCategory.maintenanceListPage = {
                     Gikam.getComp('emc-container-maintenance-edit-list-grid').deleteRows(Gikam.printf(emcContainerCategory.baseUrl + '/{ids}/{testmethodids}/dele-order-categories', {
                         ids : ids,
                         testmethodids : testmethodids
-                    }));
+                    })).done(function() {
+                        Gikam.getComp('emc-container-maintenance-edit-list-grid').refresh();
+                        Gikam.getComp('emc-container-maintenance-testmethod-list-grid').refresh();
+                    });
                 }
             } ]
         }

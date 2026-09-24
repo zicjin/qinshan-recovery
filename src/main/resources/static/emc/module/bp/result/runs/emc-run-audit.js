@@ -23,6 +23,22 @@ var emcRunAudit = Gikam.getPageObject({
             title : 'T_EMC_RUN.ANALYSISUSERNAME',
             category : 'emp',
             type : 'choose',
+        },{
+            field : 'analysisBeginDate',
+            title : 'T_EMC_RUN.ANALYSISBEGINDATE',
+            type : 'date'
+        }, {
+            field : 'analysisBeginTime',
+            title : 'T_EMC_RUN.ANALYSISBEGINTIME',
+            type : 'time',
+        }, {
+            field : 'analysisEndDate',
+            title : 'T_EMC_RUN.ANALYSISENDDATE',
+            type : 'date'
+        }, {
+            field : 'analysisEndTime',
+            title : 'T_EMC_RUN.ANALYSISENDTIME',
+            type : 'time'
         }, {
             field : 'partakeUserName',
             title : 'T_EMC_RUN.PARTAKEUSERNAME',
@@ -36,22 +52,6 @@ var emcRunAudit = Gikam.getPageObject({
         }, {
             field : 'ext$.equiptname',
             title : 'T_EMC_RUN.EQUIPTID',
-        }, {
-            field : 'analysisBeginDate',
-            title : 'T_EMC_RUN.ANALYSISBEGINDATE',
-            type : 'date'
-        }, {
-            field : 'analysisBeginTime',
-            title : 'T_EMC_RUN.ANALYSISBEGINTIME',
-            type : 'dateTime',
-        }, {
-            field : 'analysisEndDate',
-            title : 'T_EMC_RUN.ANALYSISENDDATE',
-            type : 'date'
-        }, {
-            field : 'analysisEndTime',
-            title : 'T_EMC_RUN.ANALYSISENDTIME',
-            type : 'dateTime'
         }, {
             field : 'ext$.assistequiptname',
             title : 'T_EMC_RUN.ASSISTEQUIPTID',

@@ -53,13 +53,19 @@ public interface EmcMtlResource extends GenericResource<EmcMtlService, EmcMtlBea
 
     Page<EmcStockConcentBean> selectConcentPagationByStock(Long id, RestJsonWrapperBean wrapper);
 
+    Page<EmcStockConcentBean> selectConcentPagation(RestJsonWrapperBean wrapper);
+
     Page<EmcStockBean> selectDetailChoosablePagination(RestJsonWrapperBean wrapper);
 
     RestValidationResultBean validateStockUnique(Long id, String columnName, String columnValue);
 
     Long insertGeneralStock(String id, RestJsonWrapperBean wrapper);
 
-    void changeStockConcent(RestJsonWrapperBean wrapper);
+    void stockConcentCalculate(RestJsonWrapperBean wrapper);
 
     Page<EmcStockBean> selectQcStdStockPagination(RestJsonWrapperBean wrapper);
+
+    String exportFile(RestJsonWrapperBean wrapper);
+
+    String exportGeneralFile(RestJsonWrapperBean wrapper);
 }

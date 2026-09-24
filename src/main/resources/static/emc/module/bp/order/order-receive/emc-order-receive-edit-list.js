@@ -38,7 +38,7 @@ emcOrderReceive.editPage = {
             page : true,
             requestData : {
                 targetType : 'orderReceive',
-                orgId_SB: workspace.user.ext$.parentorgid
+                org_filter : '1',
             },
 
             onRowActive : function(index, row) {
@@ -159,7 +159,7 @@ emcOrderReceive.editPage = {
                     url : '/secure/emc/module/bp/bp/orders/receive/containers/queries',
                     requestData : {
                         targetType : 'orderReceive',
-                        sampleOrgId_SB: workspace.user.ext$.parentorgid
+                        sampleorgId_filter : '1',
                     },
                     service : 'EmcOrderContainerServiceImpl',
                     checkOnActive : true,

@@ -42,6 +42,51 @@ public class EmcAdvisoryReportBean extends AbstractAuditable<Long> implements Au
     private LocalDateTime createdTime;// 制单时间
     private String createdByOrgId;// 制单人单位编码
     private String createdByOrgName;// 制单人单位名称
+    private String reportNo;// 报告编号
+    private String projType;// 项目类型
+    private String projNo;// 项目编号
+    private Long bizCategoryId;// 业务类别ID
+    private String bizClassId;// 业务分类ID
+
+    public String getBizClassId() {
+        return bizClassId;
+    }
+
+    public void setBizClassId(String bizClassId) {
+        this.bizClassId = bizClassId;
+    }
+
+    public Long getBizCategoryId() {
+        return bizCategoryId;
+    }
+
+    public void setBizCategoryId(Long bizCategoryId) {
+        this.bizCategoryId = bizCategoryId;
+    }
+
+    public String getReportNo() {
+        return reportNo;
+    }
+
+    public void setReportNo(String reportNo) {
+        this.reportNo = reportNo;
+    }
+
+    public String getProjType() {
+        return projType;
+    }
+
+    public void setProjType(String projType) {
+        this.projType = projType;
+    }
+
+    public String getProjNo() {
+        return projNo;
+    }
+
+    public void setProjNo(String projNo) {
+        this.projNo = projNo;
+    }
 
     public Long getId() {
         return id;

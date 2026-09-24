@@ -64,7 +64,7 @@ emcTaskAssign.editPage = {
                             testMethodId : testMethodId,
                             orderCategory : orderCategory,
                             projId : _this.projId,
-                            orgId_SB: workspace.user.ext$.parentorgid
+                            org_filter : '1',
                         }),
                         onAfterClose : function(data) {
                             if (Gikam.isEmpty(data[0]) || Gikam.isEmpty(data[1])) {
@@ -94,7 +94,7 @@ emcTaskAssign.editPage = {
                         width : '85%',
                         url : Gikam.choose.getConfig('shuttle-project').url + Gikam.param({
                             targetType : 'analysis',
-                            orgId_SB: workspace.user.ext$.parentorgid,
+                            org_filter : '1',
                             id : _this.projId,
                             LASTESTACCEPTEDDATE_DGOE :Gikam.DateUtils.formatter(dateEnd, 'yyyy-MM-dd')
                         }),
@@ -178,7 +178,7 @@ emcTaskAssign.editPage = {
                     },
                     requestData : {
                         createdById_SEQ : workspace.user.id,
-                        orgId_SB : workspace.user.ext$.parentorgid
+                        org_filter : '1',
                     },
                     onRendered : function() {
                         this.hideColumns([ 'createdTime','ext$.runanalysisorgid' ]);
@@ -222,7 +222,7 @@ emcTaskAssign.editPage = {
         Gikam.create('modal', {
             height : 400,
             url : emcTaskAssign.baseUrl + '/page/run-input-detail' + Gikam.param({
-                id : itemId
+                runId : itemId
             }),
             onAfterClose : function() {
                 Gikam.getComp('emc-task-assign-list-test-run-grid').refreshRowById(itemId);

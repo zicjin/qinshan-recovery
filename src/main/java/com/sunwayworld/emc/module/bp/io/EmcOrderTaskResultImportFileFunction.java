@@ -29,10 +29,8 @@ public class EmcOrderTaskResultImportFileFunction implements CoreFileImportFunct
         CoreFileImportResultDTO fileImportResultDTO = new CoreFileImportResultDTO();
 
         try {
-            FilePathDTO fr = CoreFileUtils.toFilePath(file);
-
             // 导入数据录入结果明细
-            List<EmcOrderTaskResultBean> EmcOrderTaskResultBeanList = ExcelHelper.readDataFromExcel(FilePathManager.getLocalPath(fr).toString(), 1, 2, EmcOrderTaskResultBean.class);
+            List<EmcOrderTaskResultBean> EmcOrderTaskResultBeanList = ExcelHelper.readDataFromExcel(CoreFileUtils.getLocalPath(file).toString(), 1, 2, EmcOrderTaskResultBean.class);
 
             // 获取主表id
             // String trainPlanId = file.getTargetId().split("\\$")[1];
@@ -51,7 +49,7 @@ public class EmcOrderTaskResultImportFileFunction implements CoreFileImportFunct
             } else {
                 // 存在错误信息
                 String errorFileName = "数据录入结果明细导入错误信息.xls";
-                FilePathDTO pathDTO = ExcelHelper.writeImportFailureListAsExcel(FilePathManager.getLocalPath(fr).toString(), EmcOrderTaskResultBeanList, 1, 2, errorFileName);
+                FilePathDTO pathDTO = ExcelHelper.writeImportFailureListAsExcel(CoreFileUtils.getLocalPath(file).toString(), EmcOrderTaskResultBeanList, 1, 2, errorFileName);
                 fileImportResultDTO.setUrl(FilePathManager.getUrl(pathDTO));
             }
             return fileImportResultDTO;

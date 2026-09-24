@@ -2,7 +2,7 @@ emcEquipt.editPage = {
     getGridParam : function() {
         var _this = this;
         _this.param['target_type'] = 'equipList';
-        _this.param.orgId_SB = workspace.user.ext$.parentorgid;
+        _this.param['orgid_seq'] = workspace.user.ext$.parentorgid;
         return {
             type : 'Grid',
             id : 'emc-equipt-edit-list-grid',
@@ -13,6 +13,12 @@ emcEquipt.editPage = {
             page : true,
             pageSize : 100,
             service : 'emcEquiptServiceImpl',
+            requestData : _this.param,
+            // readonly:!Gikam.isEmpty(_this.param.readonly),
+            onRendered : function() {
+                if(!Gikam.isEmpty(_this.param.readonly)){
+                    this.setReadonly(true);
+                }},
             onLoadSuccess : function(data) {
                 if (!Gikam.isEmpty(data)) {
                     this.activeRowByIndex(1);
@@ -35,13 +41,10 @@ emcEquipt.editPage = {
             deleteFormatter : function(row) {
                 return row.equiptId || row.id;
             },
-            requestData : {
-                orgId_SB : workspace.user.ext$.parentorgid
-            },
             order : {
                 'EQUIPTCATEGORYID' : 'asc',
             },
-            toolbar : [ {
+            toolbar : !Gikam.isEmpty(_this.param.readonly) ? [] :[ {
                 type : 'button',
                 text : 'GIKAM.BUTTON.INSERT',
                 icon : 'add',
@@ -102,7 +105,7 @@ emcEquipt.editPage = {
             id : null
         })).done(function(fileUri) {
             var fileUrl = IFM_CONTEXT + fileUri;
-            Gikam.download(fileUrl);
+            Gikam.emcDownloadFile(fileUrl);
         });
     },
 
@@ -210,6 +213,10 @@ emcEquipt.editPage = {
                         id : row.id
                     }),
                 });
+            });
+
+            Gikam.getComp('emc-equipt-edit-list-uploader').setOptions({
+                bizId : row.id,
             });
         }
     },
@@ -359,7 +366,7 @@ emcEquipt.editPage = {
                     id : 'emc-equipt-edit-list-item-grid',
                     service : 'emcEquiptTestMethodServiceImpl',
                     checkOnActive : true,
-                    page : true,
+                    // page : true,
                     deleteFormatter : function(row) {
                         return row.ext$.testcategorydesc || row.id;
                     },
@@ -494,7 +501,14 @@ emcEquipt.editPage = {
                         }
                     } ]
                 } ]
-            } ]
+            },{
+                    title : '附件',
+                    items : [ {
+                        type : 'uploader',
+                        id : 'emc-equipt-edit-list-uploader',
+                        dbTable : 'T_EMC_EQUIPT',
+                    } ]
+                } ]
         }
     },
 
@@ -507,7 +521,7 @@ emcEquipt.editPage = {
         }
         var modal = Gikam.create('modal', {
             width : '20%',
-            height : '20%',
+            height : '30%',
             title : 'EMC.MODULE.MDM.EQUIPT.EQUIPTS.EQUIPT_EDIT.MODAL.BATCH_UPDATE'
         });
         Gikam.create('layout', {
@@ -527,7 +541,29 @@ emcEquipt.editPage = {
                         field : 'matchResultName',
                         title : 'T_EMC_EQUIPT_TEST_ITEM.MATCHRESULTNAME',
                         editor : true,
-                        validators : [ 'strLength(0,60]' ],
+                        type : 'choose',
+                        category : 'easResult',
+                        single : true,
+                        onBeforeChoose : function() {
+                            let data = Gikam.getComp('emc-equipt-edit-list-dcu-conf-form').getData();
+                            return {
+                                scriptId_SEQ : (data && data.acqScriptId) || 1
+                            }
+                        },
+                        onAfterChoose : function(rows, index) {
+                            if (rows) {
+                                this.setData({
+                                    matchResultName : rows[0].fieldName,
+                                    easResultId : rows[0].id
+                                });
+                            }
+                        },
+                        onClean : function() {
+                            this.setData({
+                                matchResultName : '',
+                                easResultId : ''
+                            });
+                        },
                     } ]
                 }, {
                     type : 'btnToolbar',
@@ -541,7 +577,8 @@ emcEquipt.editPage = {
                                 grid.setData({
                                     id : row.id,
                                     matchItemName : formData.matchItemName,
-                                    matchResultName : formData.matchResultName
+                                    matchResultName : formData.matchResultName,
+                                    easResultId : formData.easResultId
                                 });
                             }
                             modal.close();
@@ -560,7 +597,7 @@ emcEquipt.editPage = {
             service : 'emcEquipDcuExportTemplate',
             id : activedRow.id
         })).done(function(fileUri) {
-            Gikam.download(IFM_CONTEXT + fileUri);
+            Gikam.emcDownloadFile(IFM_CONTEXT + fileUri);
         });
     },
 
@@ -635,7 +672,8 @@ emcEquipt.editPage = {
                         testCategoryId : item.testCategoryId,
                         testMethodId : item.id,
                         testId : item.testId,
-                        methodId : item.methodId
+                        methodId : item.methodId,
+                        orgId : workspace.user.ext$.parentorgid,
                     })
                 })
                 Gikam.getComp('emc-equipt-edit-list-item-grid').insert(url, chooseData);
@@ -695,9 +733,11 @@ emcEquipt.editPage = {
                 targetFilterValue : formData.id,
 
                 'scheme_only' : ids == '' ? 'true' : null,
-                TESTMETHODID_IN : ids,
+                // TESTMETHODID_IN : ids,
+                TESTMETHODIDFILTER : formData.id,
                 SCRIPTFLAG_SEQ : '0',
-                targetType : 'dcuConfig'
+                targetType : 'dcuConfig',
+                activatedflag_SEQ : '1',
             }),
             onAfterClose : function(rows, index) {
                 if (Gikam.isEmpty(rows)) {
@@ -790,6 +830,7 @@ emcEquipt.editPage = {
         Gikam.create('layout', {
             id : 'emc-equipt-edit-list-layout',
             renderTo : workspace.window.$dom,
+            readonly:!Gikam.isEmpty(_this.param.readonly),
             west : {
                 width : '25%',
                 items : [ _this.getGridParam() ]

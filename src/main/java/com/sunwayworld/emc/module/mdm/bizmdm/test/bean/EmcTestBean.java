@@ -43,6 +43,8 @@ public class EmcTestBean extends AbstractPersistable<Long> implements Insertable
 
     private String createdByOrgName;// 制单人单位名称
 
+    private String testFlag;// 测试标志
+
     public Long getId() {
         return id;
     }
@@ -105,5 +107,13 @@ public class EmcTestBean extends AbstractPersistable<Long> implements Insertable
 
     public void setCreatedByOrgName(String createdByOrgName) {
         this.createdByOrgName = createdByOrgName;
+    }
+
+    public String getTestFlag() {
+        return testFlag;
+    }
+
+    public void setTestFlag(String testFlag) {
+        this.testFlag = testFlag;
     }
 }

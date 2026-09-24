@@ -115,7 +115,7 @@ emcMethod.editPage = {
                     service : 'emcMethodExportTemplate'
                 })).done(function(fileUri) {
                     var fileUrl = IFM_CONTEXT + fileUri;
-                    Gikam.download(fileUrl);
+                    Gikam.emcDownloadFile(fileUrl);
                 });
             }
         }, {
@@ -292,7 +292,7 @@ emcMethod.editPage = {
 
     downloadVersionFile : function(fileId) {
         Gikam.getJson(IFM_CONTEXT + '/core/module/item/files/' + fileId).done(function(coreFile) {
-            Gikam.download(IFM_CONTEXT + coreFile.downloadUrl);
+            Gikam.emcDownloadFile(IFM_CONTEXT + coreFile.downloadUrl);
         });
     },
 

@@ -286,6 +286,7 @@ var emcOrderReceive = Gikam.getPageObject({
             category : 'user-simple',
             type : 'choose',
             single : true,
+            value : workspace.user.id,
             onBeforeChoose : function() {
                 return {
                     parentOrgId_SEQ : workspace.user.ext$.parentorgid

@@ -11,7 +11,7 @@ emcContract.searchPage = {
             readonly : true,
             requestData : {
                 processStatus_SEQ : 'done',
-                orgId_SB: workspace.user.ext$.parentorgid
+                org_filter : '1',
             },
             onLoadSuccess : function(data) {
                 if (!Gikam.isEmpty(data)) {

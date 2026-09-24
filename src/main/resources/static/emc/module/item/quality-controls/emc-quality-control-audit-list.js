@@ -8,11 +8,12 @@ emcQualityControl.auditPage = {
             url : emcQualityControl.baseUrl + '/queries/tasks',
             columns : emcQualityControl.getEditListColumns(),
             requestData : _this.param,
+            readonly: true,
             onLoadSuccess : function(data) {
                 if (!Gikam.isEmpty(data)) {
                     this.activeRowByIndex(0);
                 } else {
-                    Gikam.cleanCompData([ 'emc-quality-control-edit-list-quality-control-form', 'emc-quality-control-edit-list-implementation-form', 'emc-quality-control-edit-list-result-form' ]);
+                    // Gikam.cleanCompData([ 'emc-quality-control-edit-list-quality-control-form', 'emc-quality-control-edit-list-implementation-form', 'emc-quality-control-edit-list-result-form' ]);
                     var uploader = Gikam.getComp('emc-quality-control-edit-list-uploader');
                     uploader.setOptions({
                         bizId : ''
@@ -49,7 +50,7 @@ emcQualityControl.auditPage = {
     },
     
     onGridActive : function(row) {
-        var qcForm = Gikam.getComp('emc-quality-control-edit-list-quality-control-form');
+        /*var qcForm = Gikam.getComp('emc-quality-control-edit-list-quality-control-form');
         var implementationForm = Gikam.getComp('emc-quality-control-edit-list-implementation-form');
         var resultForm = Gikam.getComp('emc-quality-control-edit-list-result-form');
         var url = Gikam.printf(emcQualityControl.baseUrl + '/{id}', {
@@ -57,7 +58,7 @@ emcQualityControl.auditPage = {
         });
         qcForm.refresh({url : url}, true);
         implementationForm.refresh({url : url}, true);
-        resultForm.refresh({url : url}, true);
+        resultForm.refresh({url : url}, true);*/
         var uploader = Gikam.getComp('emc-quality-control-edit-list-uploader');
         uploader.setOptions({bizId : row.id})
         uploader.grid.refresh();
@@ -69,7 +70,7 @@ emcQualityControl.auditPage = {
             type : 'tab',
             id : 'emc-quality-control-edit-list-base-info-tab',
             fill : true,
-            panels : [ {
+            panels : [ /*{
                 title : 'EMC.MODULE.ITEM.QUALITYCONTROL.TAB.QC',
                 items : [ {
                     type : 'form',
@@ -100,7 +101,7 @@ emcQualityControl.auditPage = {
                     columns : 1,
                     fields : emcQualityControl.getResultFormFields()
                 } ]
-            }, {
+            },*/ {
                 title : 'GIKAM.FILE.ATTACHMENT',
                 items : [ {
                     type : 'uploader',

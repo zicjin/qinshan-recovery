@@ -11,7 +11,7 @@ emcPretreatment.editPage = {
             page : true,
             filterOpen : true,
 	        requestData : {
-	            orgId_SEQ : workspace.user.ext$.parentorgid,
+                org_filter : '1',
                 status_SEQ : '0',
                 sampleReceiverFlag_SEQ : '1'
 	        },

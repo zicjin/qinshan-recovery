@@ -12,7 +12,7 @@ emcDelivery.orderAcceptPage = {
             requestData : {
                 targetType: 'deliveryAccept',
                 processStatus_SEQ : 'done',
-	            orgId_SB : workspace.user.ext$.parentorgid,
+	            org_filter : '1',
                 sample_DIFFER : '1',
                 dataStatus_IN : ',',
                 status_SEQ : 'auditFinished'
@@ -27,7 +27,7 @@ emcDelivery.orderAcceptPage = {
                     Gikam.getComp('emc-delivery-edit-list-grid').refresh({
                         requestData : {
                             status_SEQ : 'draft',
-                            orgId : workspace.user.ext$.parentorgid,
+                            org_filter : '1',
                             projId_SEQ : row.id
                         },
                         url : emcDelivery.sampleUrl + '/queries/raw',
@@ -141,7 +141,14 @@ emcDelivery.orderAcceptPage = {
                 onClick : function() {
                     _this.uploadSampleFile();
                 }
-            } ],
+            },{
+                type : 'button',
+                text : '样品标签',
+                icon : 'print',
+                onClick : function() {
+                    Gikam.viewReport('sampling', Gikam.getComp('emc-delivery-edit-list-grid').getSelections());
+                }
+            }, ],
         }
     },
     uploadSampleFile : function() {
@@ -268,13 +275,13 @@ emcDelivery.orderAcceptPage = {
                 onClick : function() {
                     Gikam.viewReport('deliveringLabel', Gikam.getComp('emc-delivery-edit-list-order-grid').getSelections());
                 }
-            }, {
-                type : 'button',
-                text : '样品描述',
-                icon : 'edit',
-                onClick : function() {
-                    _this.batchInputOrderDesc();
-                }
+            // }, {
+            //     type : 'button',
+            //     text : '样品描述',
+            //     icon : 'edit',
+            //     onClick : function() {
+            //         _this.batchInputOrderDesc();
+            //     }
             }, {
                 type : 'dropDownMenu',
                 text : 'EMC.MODULE.BP.PROJECT.PROJECTS.BUTTON.ORDER_QUICK_INPUT',
@@ -335,11 +342,51 @@ emcDelivery.orderAcceptPage = {
                             service : 'emcOrderTaskServiceImpl',
                             columns : emcDelivery.getOrderItemGroupColumns(),
                             readonly : true,
+                            toolbar : [ {
+                                type : 'button',
+                                text : 'GIKAM.BUTTON.CONTAINER_UPDATE',
+                                icon : 'add',
+                                onClick : function() {
+                                    _this.updateOrderContainer();
+                                },
+                            }, ]
                         } ]
                     }
                 }]
             } ]
         }
+    },
+
+    /** 修改容器信息 */
+    updateOrderContainer : function() {
+        var _this = this;
+        var orderSelections = Gikam.getComp('emc-delivery-edit-list-order-grid').getSelections();
+        if (Gikam.isEmpty(orderSelections)) {
+            Gikam.alert('至少选择一个样品');
+            return;
+        };
+        var testSelections = Gikam.getComp('emc-delivery-edit-list-test-grid').getSelections();
+        if (Gikam.isEmpty(testSelections)) {
+            Gikam.alert('至少选择一个测试');
+            return;
+        };
+        Gikam.create('modal', {
+            width : 800,
+            height : 313,
+            title : 'EMC.MODULE.BP.SAMPLE.SAMPLES.MODAL.CONTAINER_INFO',
+            url : IFM_CONTEXT + '/secure/emc/module/bp/sample/samples/page/order-container-batch',
+            onAfterClose : function(data) {
+                if (!Gikam.isEmpty(data)) {
+                    workspace.window.showMask(true);
+                    Gikam.post('/secure/emc/module/bp/bp/orders/item-groups/action/update-order-container',
+                        Gikam.getJsonWrapper({}, [ 'emcOrderServiceImpl', orderSelections ], [ 'emcOrderItemGroupServiceImpl', testSelections ], [ 'emcOrderTaskServiceImpl', [ data ] ])).done(function() {
+                        Gikam.getComp('emc-delivery-edit-list-test-grid').refresh();
+                    }).always(function() {
+                        workspace.window.closeMask();
+                    });
+                }
+            }
+        });
     },
 
     addOrder : function() {
@@ -393,6 +440,7 @@ emcDelivery.orderAcceptPage = {
             });
         }, "");
     },
+
 
     batchInputOrderDesc : function() {
         var grid = Gikam.getComp('emc-delivery-edit-list-order-grid');
@@ -490,7 +538,7 @@ emcDelivery.orderAcceptPage = {
             id : projectId
         })).done(function(fileUri) {
             var fileUrl = IFM_CONTEXT + fileUri;
-            Gikam.download(fileUrl);
+            Gikam.emcDownloadFile(fileUrl);
         });
 
     },
@@ -519,7 +567,7 @@ emcDelivery.orderAcceptPage = {
                     })
                 ).done(function(result) {
                         if (result.url) {
-                            Gikam.download(result.url);
+                            Gikam.emcDownloadFile(result.url);
                         } else if (result.message) {
                             Gikam.alert(result.message);
                         }
@@ -687,13 +735,13 @@ emcDelivery.orderAcceptPage = {
                                 Gikam.postText('/core/module/item/files/action/pack',Gikam.getJsonWrapper({}, [ '', fileIds])
                                 ).done(function (fileUrl) {
                                     if (fileUrl != '' && fileUrl != undefined) {
-                                        Gikam.download(IFM_CONTEXT + fileUrl);
+                                        Gikam.emcDownloadFile(IFM_CONTEXT + fileUrl);
                                     }
                                 	Gikam.alert('导出完成！');
                                 })
                             }else if (fileIds.length == 1){
                                 Gikam.getJson(IFM_CONTEXT + '/core/module/item/files/' + selections[0]).done(function(coreFile) {
-                                    Gikam.download(IFM_CONTEXT + coreFile.downloadUrl);
+                                    Gikam.emcDownloadFile(IFM_CONTEXT + coreFile.downloadUrl);
                                 });
                             	Gikam.alert('导出完成！');
                             }

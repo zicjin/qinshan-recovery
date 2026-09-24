@@ -48,4 +48,6 @@ public interface EmcReportResource extends GenericResource<EmcReportService, Emc
     void undoRun(Long projId, RestJsonWrapperBean wrapper);
 
     void submitUndid(RestJsonWrapperBean wrapper);
+
+    int updateByProjectId(RestJsonWrapperBean wrapper);
 }

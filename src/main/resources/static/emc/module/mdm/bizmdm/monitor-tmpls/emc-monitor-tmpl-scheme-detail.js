@@ -13,9 +13,10 @@ emcMonitorTmpl.schemeDetailPage = {
         }
     },
 
+
     getBaseInfoTab : function() {
         var _this = this;
-        var fields = emcMonitorTmpl.getSchemeFormFields();
+        var fields = emcMonitorTmpl.getEditSchemeFormFields();
         if (_this.param.schemeName !== 'default') {
             fields.shift();
         }
@@ -56,7 +57,10 @@ emcMonitorTmpl.schemeDetailPage = {
                     itemGroupId : itemGroup.id,
                     itemGroup : itemGroup.itemGroup,
                     schemeName : formData.schemeName,
-                    monitorTmplId : _this.param.monitorTmplId
+                    monitorTmplId : _this.param.monitorTmplId,
+                    ext$ :{
+                        defaultflag : itemGroup.ext$.defaultflag,
+                    }
                 }
             });
         } else {
@@ -68,7 +72,10 @@ emcMonitorTmpl.schemeDetailPage = {
                     itemGroupId : itemGroup.itemGroupId,
                     itemGroup : itemGroup.itemGroup,
                     schemeName : formData.schemeName,
-                    monitorTmplId : _this.param.monitorTmplId
+                    monitorTmplId : _this.param.monitorTmplId,
+                    ext$ :{
+                        defaultflag : itemGroup.ext$.defaultflag,
+                    }
                 }
             });
         }
@@ -90,7 +97,7 @@ emcMonitorTmpl.schemeDetailPage = {
         var columns = emcMonitorTmpl.getItemGroupShuttleFrameColumns();
 
         var leftRequestData = {
-            orgId_SEQ: workspace.user.ext$.parentorgid,
+            org_filter : '1',
             target_filter : JSON.stringify({
                 type : 'unassigned',
                 targetTable : "T_EMC_MONITOR_SCHEME",
@@ -106,7 +113,7 @@ emcMonitorTmpl.schemeDetailPage = {
         };
 
         var rightRequestData = {
-            orgId_SEQ: workspace.user.ext$.parentorgid,
+            org_filter : '1',
             target_filter : JSON.stringify({
                 type : 'assigned',
                 targetTable : "T_EMC_MONITOR_SCHEME",
@@ -121,7 +128,9 @@ emcMonitorTmpl.schemeDetailPage = {
             })
         };
 
-        var leftGridUrl = '/secure/emc/module/mdm/bizmdm/test/test-capacitys/item-groups/queries/choosable';
+        //default 默认进入左侧不加载数据
+        // var leftGridUrl = '/secure/emc/module/mdm/bizmdm/test/test-capacitys/item-groups/queries/choosable';
+        var leftGridUrl = '';
         var rightGridUrl = '/secure/emc/module/mdm/bizmdm/test/test-capacitys/item-groups/queries/choosable';
         if (_this.param.schemeName !== 'default') {
             leftGridUrl = emcMonitorTmpl.baseUrl + '/schemes/queries/choosable';
@@ -129,7 +138,7 @@ emcMonitorTmpl.schemeDetailPage = {
             leftRequestData = {
                 schemeName_SEQ : 'default',
                 monitorTmplId_SEQ : _this.param.monitorTmplId,
-                orgId_SEQ: workspace.user.ext$.parentorgid,
+                org_filter : '1',
                 target_filter : JSON.stringify({
                     type : 'unassigned',
                     targetTable : "T_EMC_MONITOR_SCHEME",
@@ -149,9 +158,10 @@ emcMonitorTmpl.schemeDetailPage = {
             rightRequestData = {
                 schemeName_SEQ : _this.param.schemeName,
                 monitorTmplId_SEQ : _this.param.monitorTmplId,
-                orgId_SEQ: workspace.user.ext$.parentorgid,
+                org_filter : '1',
             };
         }
+
 
         return {
             type : 'shuttleFrame',
@@ -159,7 +169,9 @@ emcMonitorTmpl.schemeDetailPage = {
             columns : columns,
             leftGridUrl : leftGridUrl,
             leftRequestData : leftRequestData,
-            page : true,
+            rightPage : false,
+            leftPage : false,
+            initRequest : false,
             onLeftLoadSuccess : function() {
                 // 当左侧数据加载完成后，再去初始化右侧的数据，通过rightInited标志位避免右侧数据重复加载
                 if (!_this.rightInited) {

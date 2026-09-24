@@ -1,6 +1,7 @@
 package com.sunwayworld.emc.module.mdm.basemdm.cert.service;
 
 import com.sunwayworld.emc.module.mdm.basemdm.cert.bean.EmcCertBean;
+import com.sunwayworld.emc.module.mdm.emp.emp.bean.EmcEmpQualBean;
 import com.sunwayworld.framework.data.page.Page;
 import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;
 import com.sunwayworld.framework.support.base.service.GenericService;
@@ -17,4 +18,6 @@ public interface EmcCertService extends GenericService<EmcCertBean, Long>, Gener
     Long updateCertMethodAuth(Long id, RestJsonWrapperBean wrapper);
 
     Page<EmcCertBean> selectOverdueCert(RestJsonWrapperBean wrapper);
+
+    Page<EmcEmpQualBean> selectOverdueQual(RestJsonWrapperBean wrapper);
 }

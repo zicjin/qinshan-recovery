@@ -116,8 +116,8 @@ public class EnvContractDiscountInfoEntity {
 	@Override
 	public int hashCode() {
 		int result = 1;
-		final int prime = 31;
-		result = prime * result+ ((id == null) ? 0 : id.hashCode());
+		int prime = 31;
+		result = 31 * result+ ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
 	/**

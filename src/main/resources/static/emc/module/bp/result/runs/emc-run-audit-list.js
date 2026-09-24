@@ -10,7 +10,7 @@ emcRunAudit.editPage = {
                 showTotalFlag : '0',
                 checkUserId : workspace.user.id,
                 analysisUserId_DIFFER : workspace.user.id,
-                orgId_SB : workspace.user.ext$.parentorgid
+                org_filter : '1',
             },
             service : 'emcRunServiceImpl',
             columns : emcRunAudit.getEditListColumns(),
@@ -25,14 +25,24 @@ emcRunAudit.editPage = {
             onCellClick : function(field, row) {
                 field === 'id' && _this.loadRunDetailPage(row.id);
             },
-            onLoadSuccess : function(data) {
-                if (!Gikam.isEmpty(data)) {
-                    //this.activeRowByIndex(0);
-                } else {
-                    Gikam.getComp("emc-run-audit-list-report-iframe").refresh({
-                        src : ' '
-                    })
+            order: {
+                urgent: 'desc'
+            },
+            rowStyleFormatter : function(row) {
+                if (row.ext$.urgent === '1') {
+                    return {
+                        backgroundColor: Gikam.emcUrgentColor
+                    }
                 }
+            },
+            onLoadSuccess : function(data) {
+                // if (!Gikam.isEmpty(data)) {
+                    //this.activeRowByIndex(0);
+                // } else {
+                    // Gikam.getComp("emc-run-audit-list-report-iframe").refresh({
+                    //     src : ' '
+                    // })
+                // }
             },
             toolbar : [ {
                 type : 'button',
@@ -55,7 +65,14 @@ emcRunAudit.editPage = {
                 onClick : function() {
                     _this.openBrowseRecord();
                 }
-            }, {
+            },  {
+                  type : 'button',
+                  text : '分析结果检查',
+                  icon : 'print',
+                  onClick : function() {
+                        Gikam.viewReport('EMC_ANALYSIS_AUDIT', Gikam.getComp('emc-run-audit-list-test-run-grid').getSelections());
+                  }
+              },{
                 type : 'dropDownMenu',
                 text : 'EMC.MODULE.BP.RESULT.RUNS.BUTTON.MORE',
                 items : [ {
@@ -93,38 +110,38 @@ emcRunAudit.editPage = {
                 fields : emcRunAudit.getRunAuditShowAllField(),
                 autoSave : false,
             } ],
-            onRowActive : function(index, row) {
-                var runId = row.id
-                Gikam.post(IFM_CONTEXT + '/core/module/item/files/queries', Gikam.getJsonWrapper({
-                    f : {
-                        targetId_SEQ : 'T_EMC_RUN$' + runId,
-                        ext_SEQ : 'composeAllPdf',
-                    },
-                    n : -1,
-                    s : 50
-                })).done(function(r) {
-                    // 如果有生成原始记录PDF，直接加载PDF文件，否则加载报表
-                    if (r.rows && r.rows.length > 0) {
-                        Gikam.openFileByOffice({
-                            fileId: r.rows[0].id,
-                            mode: 'view',
-                            iframe: Gikam.getComp("emc-run-audit-list-report-iframe").iframe,
-                            viewType: 'iframe'
-                        });
-                    } else {
-                        Gikam.getJson(Gikam.printf(emcRunAudit.baseUrl + "/{id}", {
-                            id : runId
-                        })).done(function(data) {
-                            if (data) {
-                                var reportUrl = Gikam.getReportUrl(data.reportConfigLineId, [row])
-                                Gikam.getComp("emc-run-audit-list-report-iframe").refresh({
-                                    src : reportUrl
-                                })
-                            }
-                        })
-                    }
-                })
-            },
+            // onRowActive : function(index, row) {
+            //     var runId = row.id
+            //     Gikam.post(IFM_CONTEXT + '/core/module/item/files/queries', Gikam.getJsonWrapper({
+            //         f : {
+            //             targetId_SEQ : 'T_EMC_RUN$' + runId,
+            //             ext_SEQ : 'composeAllPdf',
+            //         },
+            //         n : -1,
+            //         s : 50
+            //     })).done(function(r) {
+            //         // 如果有生成原始记录PDF，直接加载PDF文件，否则加载报表
+            //         if (r.rows && r.rows.length > 0) {
+            //             Gikam.openFileByOffice({
+            //                 fileId: r.rows[0].id,
+            //                 mode: 'view',
+            //                 iframe: Gikam.getComp("emc-run-audit-list-report-iframe").iframe,
+            //                 viewType: 'iframe'
+            //             });
+            //         } else {
+            //             Gikam.getJson(Gikam.printf(emcRunAudit.baseUrl + "/{id}", {
+            //                 id : runId
+            //             })).done(function(data) {
+            //                 if (data) {
+            //                     var reportUrl = Gikam.getReportUrl(data.reportConfigLineId, [row])
+            //                     Gikam.getComp("emc-run-audit-list-report-iframe").refresh({
+            //                         src : reportUrl
+            //                     })
+            //                 }
+            //             })
+            //         }
+            //     })
+            // },
         }
     },
 
@@ -228,20 +245,20 @@ emcRunAudit.editPage = {
         });
     },
 
-    getViewReportIframe : function() {
-        var _this = this;
-        return {
-            type : 'tab',
-            panels : [ {
-                title : 'EMC.MODULE.BP.RESULT.RUNS.TAB.ORIGINAL_RECORD',
-                items : [ {
-                    type : 'iframe',
-                    id : 'emc-run-audit-list-report-iframe',
-                    src : ''
-                } ]
-            } ]
-        }
-    },
+    // getViewReportIframe : function() {
+    //     var _this = this;
+    //     return {
+    //         type : 'tab',
+    //         panels : [ {
+    //             title : 'EMC.MODULE.BP.RESULT.RUNS.TAB.ORIGINAL_RECORD',
+    //             items : [ {
+    //                 type : 'iframe',
+    //                 id : 'emc-run-audit-list-report-iframe',
+    //                 src : ''
+    //             } ]
+    //         } ]
+    //     }
+    // },
 
     pass : function() {
         var grid = Gikam.getComp('emc-run-audit-list-test-run-grid');
@@ -250,9 +267,9 @@ emcRunAudit.editPage = {
             pageObject : emcRunAudit
         }).done(function() {
             grid.refresh();
-            Gikam.getComp("emc-run-audit-list-report-iframe").refresh({
-                src : ''
-            })
+            // Gikam.getComp("emc-run-audit-list-report-iframe").refresh({
+            //     src : ''
+            // })
         });
     },
 
@@ -293,13 +310,13 @@ emcRunAudit.editPage = {
             id : 'emc-analysis-check-edit-list-layout',
             renderTo : workspace.window.$dom,
             center : {
-                width : '50%',
+                // width : '50%',
                 items : [ this.getGridParam() ]
             },
-            east : {
-                width : '50%',
-                items : [ this.getViewReportIframe() ]
-            }
+            // east : {
+            //     width : '50%',
+            //     items : [ this.getViewReportIframe() ]
+            // }
         });
     },
 

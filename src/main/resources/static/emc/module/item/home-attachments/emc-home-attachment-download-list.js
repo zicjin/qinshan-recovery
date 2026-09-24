@@ -37,11 +37,22 @@ emcHomeAttachment.downloadListPage = {
     },
 
     downloadFile : function(id) {
+        var _this = this;
         var url = Gikam.printf(emcHomeAttachment.baseUrl + '/{id}/action/get-url', {
             id : id
         });
         Gikam.postText(url).done(function(data) {
-            Gikam.download(data);
+            _this.emcDownloadFile(data);
         });
     },
+
+    emcDownloadFile : function (url, filename) {
+        const a = Object.assign(document.createElement('a'), {
+            href: url,
+            download: filename ?? decodeURIComponent(url.split('/').pop() || 'download')
+        });
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+    }
 };

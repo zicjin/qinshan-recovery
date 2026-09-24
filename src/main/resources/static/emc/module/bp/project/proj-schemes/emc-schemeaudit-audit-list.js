@@ -2,7 +2,8 @@ emcProject.schemeAuditPage = {
 
     getGridParam : function() {
         var _this = this;
-        _this.param.orgId_SB = workspace.user.ext$.parentorgid;
+        _this.param.org_filter = '1';
+        // _this.param.project_director_filter = '1';
         return {
             type : 'grid',
             id : 'emc-project-audit-list-grid',
@@ -75,12 +76,19 @@ emcProject.schemeAuditPage = {
         var grid = Gikam.getComp('emc-project-audit-list-grid');
         var selections = grid.getSelections();
         Gikam.create('workflow').pass({
-            data : grid.getSelections(),
+            data : selections,
             pageObject : emcProject
         }).done(function() {
             grid.refresh();
             let projNos = selections.map(item => item.projNo).join();
             Gikam.alert(projNos + ' 项目已提交，正在生成业务数据...');
+            Gikam.post(emcProject.baseUrl + '/generate-complete-task-data', Gikam.getJsonWrapper({}, [ '', selections ])).fail(function () {
+                Gikam.post(emcProject.baseUrl + '/undo-complete-task-data', Gikam.getJsonWrapper({}, [ '', selections ])).done(function(data) {
+
+                }).always(function() {
+
+                });
+            })
         });
     },
 
@@ -199,14 +207,14 @@ emcProject.schemeAuditPage = {
             }
 
             // 查询报告发送信息
-            Gikam.getAsyncComp('emc-schemeaudit-report-send-info-grid').done(function (grid) {
-                grid.refresh({
-                    url : IFM_CONTEXT + '/secure/emc/module/bp/report/reports/report-send-info/queries',
-                    requestData : {
-                        projId_SEQ : row.id
-                    }
-                })
-            });
+            // Gikam.getAsyncComp('emc-schemeaudit-report-send-info-grid').done(function (grid) {
+            //     grid.refresh({
+            //         url : IFM_CONTEXT + '/secure/emc/module/bp/report/reports/report-send-info/queries',
+            //         requestData : {
+            //             projId_SEQ : row.id
+            //         }
+            //     })
+            // });
 
             // 查询其他费用信息
             Gikam.getAsyncComp('emc-schemeaudit-other-fee-grid').done(function (grid) {
@@ -238,7 +246,12 @@ emcProject.schemeAuditPage = {
                             columns : 3,
                             service : 'emcProjectServiceImpl',
                             id : 'emc-project-audit-list-base-info-form1',
-                            fields : emcProject.getBaseInfoFormFields1(),
+                            panels : [
+                                {title : '合同信息',fields : emcProject.getBaseInfoFormFields11()},
+                                {title : '委托单位信息',fields : emcProject.getBaseInfoFormFields12()},
+                                {title : '受检单位',fields : emcProject.getBaseInfoFormFields13()},
+                                {title : '项目信息',fields : emcProject.getBaseInfoFormFields14()},
+                            ],
                             readonly : true,
                             onLoadSuccess : function(data) {
                                 Gikam.refreshGrids({
@@ -267,19 +280,19 @@ emcProject.schemeAuditPage = {
                                     readonly : true,
                                     columns : emcProject.getProjectDirectorListColumns()
                                 } ]
-                            }, {
-                                id : 'emc-schemeaudit-report-send-info-panel',
-                                title : '报告发送信息',
-                                items : [ {
-                                    type : 'grid',
-                                    id : 'emc-schemeaudit-report-send-info-grid',
-                                    filterOpen : false,
-                                    service : 'emcReportSendInfoServiceImpl',
-                                    page : false,
-                                    readonly : true,
-                                    toolbar : [],
-                                    columns : emcProject.getReportSendInfoListColumns()
-                                } ]
+                            // }, {
+                            //     id : 'emc-schemeaudit-report-send-info-panel',
+                            //     title : '报告发送信息',
+                            //     items : [ {
+                            //         type : 'grid',
+                            //         id : 'emc-schemeaudit-report-send-info-grid',
+                            //         filterOpen : false,
+                            //         service : 'emcReportSendInfoServiceImpl',
+                            //         page : false,
+                            //         readonly : true,
+                            //         toolbar : [],
+                            //         columns : emcProject.getReportSendInfoListColumns()
+                            //     } ]
                             }, {
                                 id : 'emc-schemeaudit-other-fee-panel',
                                 title : '其他费用信息',

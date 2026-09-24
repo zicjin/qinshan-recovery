@@ -13,6 +13,7 @@ emcTestMethod.groupChoosePage = {
             url : emcTestMethod.baseUrl + '/item-groups/queries/choosable',
             requestData : requestData,
             columns : columns,
+            page : true,
             toolbar : [ {
                 type : 'button',
                 text : 'GIKAM.BUTTON.CONFIRM',

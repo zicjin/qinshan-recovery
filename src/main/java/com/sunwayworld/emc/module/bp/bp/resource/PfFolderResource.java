@@ -14,4 +14,5 @@ import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;
 public interface PfFolderResource extends EmcFolderResource {
     String submitRemind (RestJsonWrapperBean wrapper);
 
+    Long submitProject (RestJsonWrapperBean wrapper);
 }

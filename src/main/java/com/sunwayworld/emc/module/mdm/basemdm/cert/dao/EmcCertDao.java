@@ -15,4 +15,6 @@ import com.sunwayworld.framework.support.base.dao.GenericDao;
 public interface EmcCertDao extends GenericDao<EmcCertBean, Long> {
 
     List<Map<String, Object>> selectOverdueCert(MapperParameter parameter);
+
+    List<Map<String, Object>> selectOverdueQual(MapperParameter parameter);
 }

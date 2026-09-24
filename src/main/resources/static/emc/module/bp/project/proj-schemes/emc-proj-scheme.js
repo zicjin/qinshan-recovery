@@ -316,7 +316,7 @@ var emcProjScheme = Gikam.getPageObject({
             category : 'org',
             param : {
                 sampleDepartment_SEQ : '1',
-                parentid_SB : workspace.user.ext$.parentorgid
+                parentid_SEQ : workspace.user.ext$.parentorgid
             },
         } ];
     },
@@ -356,29 +356,33 @@ var emcProjScheme = Gikam.getPageObject({
                 _form.setData({
                     showFlag : value
                 });
+                if (Gikam.isEmpty(schemeName) || Gikam.isEmpty(monitorTmplId)) {
+                    return;
+                }
                 if (value === '1') {
-                    Gikam.post(IFM_CONTEXT + '/secure/emc/module/mdm/bizmdm/monitor-tmpls/schemes/queries/choosable', Gikam.getJsonWrapper({
-                        f : {
+                    var leftGrid = emcProjScheme.getShuttleFrameLeftGrid();
+                    leftGrid.setOptions({
+                        url : '/secure/emc/module/mdm/bizmdm/monitor-tmpls/schemes/queries/choosable',
+                        requestData : {
                             schemeName_SEQ : schemeName,
                             monitorTmplId_SEQ : monitorTmplId,
+                            defaultFlag_SEQ : '',
                             activatedflag_SEQ : '1',
-                        },
-                        n : -1
-                    })).done(function(row) {
-                        emcProjScheme.setShuttleFrameData(row.rows);
+                        }
                     });
+                    leftGrid.refresh();
                 } else {
-                    Gikam.post(IFM_CONTEXT + '/secure/emc/module/mdm/bizmdm/monitor-tmpls/schemes/queries/choosable', Gikam.getJsonWrapper({
-                        f : {
+                    var leftGrid = emcProjScheme.getShuttleFrameLeftGrid();
+                    leftGrid.setOptions({
+                        url : '/secure/emc/module/mdm/bizmdm/monitor-tmpls/schemes/queries/choosable',
+                        requestData : {
                             schemeName_SEQ : schemeName,
                             monitorTmplId_SEQ : monitorTmplId,
                             defaultFlag_SEQ : '1',
                             activatedflag_SEQ : '1',
-                        },
-                        n : -1
-                    })).done(function(row) {
-                        emcProjScheme.setShuttleFrameData(row.rows);
+                        }
                     });
+                    leftGrid.refresh();
                 }
             },
         } ]
@@ -405,11 +409,13 @@ var emcProjScheme = Gikam.getPageObject({
                         url += Gikam.param({
                             monitorPointCategoryId : emcProjScheme.selectTmplPage.param.monitorPointCategoryId,
                             ACTIVATEDFLAG_SEQ : '1',
+                            orgId: workspace.user.ext$.parentorgid
                         });
                     }else{
                         url += Gikam.param({
                             monitorTmplGroupId : value,
                             ACTIVATEDFLAG_SEQ : '1',
+                            orgId: workspace.user.ext$.parentorgid
                         });
                     }
 
@@ -436,115 +442,113 @@ var emcProjScheme = Gikam.getPageObject({
                     _form.setSelectOptions('monitorSchemeId_SEQ', []);
                 }
             },
-            onDataChange : function(field, value, index, row, text) {
-                Gikam.getComp('emc-select-monitor-tmpl-list-shuttle-frame').setLeftData([]);
-                var _form = this;
-                var url = IFM_CONTEXT + '/secure/emc/module/mdm/basemdm/monitor-point-categories/tmpls/queries/selectable';
-                if (!Gikam.isEmpty(value)) {
-
-                    if(Gikam.isEmpty(emcProjScheme.selectTmplPage.param.editMonitorInfo)){
-                        url += Gikam.param({
-                            monitorPointCategoryId : emcProjScheme.selectTmplPage.param.monitorPointCategoryId,
-                            ACTIVATEDFLAG_SEQ : '1',
-                        });
-                    }else{
-                        url += Gikam.param({
-                            monitorTmplGroupId : value,
-                            ACTIVATEDFLAG_SEQ : '1',
-                        });
-                    }
-
-                    Gikam.getJson(url).done(function(items) {
-                        _form.setSelectOptions('monitorTmplId_SEQ', items.map(function(item) {
-                            return {
-                                text : item.ext$.monitortmplname,
-                                value : item.monitorTmplId
-                            };
-                        }), true);
-                        if (items.length > 0) {
-                            _form.setData({
-                                monitorTmplId_SEQ : items[0].monitorTmplId
-                            });
-                        } else {
-                            _form.setData({
-                                monitorTmplId_SEQ : "",
-                                monitorSchemeId_SEQ : ""
-                            });
-                        }
-                    });
-                } else {
-                    _form.setSelectOptions('monitorTmplId_SEQ', []);
-                    _form.setSelectOptions('monitorSchemeId_SEQ', []);
-                }
-            }
+            // onDataChange : function(field, value, index, row, text) {
+            //     Gikam.getComp('emc-select-monitor-tmpl-list-shuttle-frame').setLeftData([]);
+            //     var _form = this;
+            //     var url = IFM_CONTEXT + '/secure/emc/module/mdm/basemdm/monitor-point-categories/tmpls/queries/selectable';
+            //     if (!Gikam.isEmpty(value)) {
+            //
+            //         if(Gikam.isEmpty(emcProjScheme.selectTmplPage.param.editMonitorInfo)){
+            //             url += Gikam.param({
+            //                 monitorPointCategoryId : emcProjScheme.selectTmplPage.param.monitorPointCategoryId,
+            //                 ACTIVATEDFLAG_SEQ : '1',
+            //             });
+            //         }else{
+            //             url += Gikam.param({
+            //                 monitorTmplGroupId : value,
+            //                 ACTIVATEDFLAG_SEQ : '1',
+            //             });
+            //         }
+            //
+            //         Gikam.getJson(url).done(function(items) {
+            //             _form.setSelectOptions('monitorTmplId_SEQ', items.map(function(item) {
+            //                 return {
+            //                     text : item.ext$.monitortmplname,
+            //                     value : item.monitorTmplId
+            //                 };
+            //             }), true);
+            //             if (items.length > 0) {
+            //                 _form.setData({
+            //                     monitorTmplId_SEQ : items[0].monitorTmplId
+            //                 });
+            //             } else {
+            //                 _form.setData({
+            //                     monitorTmplId_SEQ : "",
+            //                     monitorSchemeId_SEQ : ""
+            //                 });
+            //             }
+            //         });
+            //     } else {
+            //         _form.setSelectOptions('monitorTmplId_SEQ', []);
+            //         _form.setSelectOptions('monitorSchemeId_SEQ', []);
+            //     }
+            // }
         }, {
             title : 'T_EMC_MPC_TMPL.MONITORTMPLNAME',
             field : 'monitorTmplId_SEQ',
             type : 'select',
             firstBlank : false,
-            onChange : function() {
-                var _form = this;
-                var monitorTmplId = _form.getData().monitorTmplId_SEQ;
-                var url = IFM_CONTEXT + '/secure/emc/module/mdm/bizmdm/monitor-tmpls/schemes/queries/selectable';
-                if (!Gikam.isEmpty(monitorTmplId, false)) {
-                    url += Gikam.param({
-                        monitorTmplId : monitorTmplId,
-                        enableflag :'1'
-                    });
-                    Gikam.getJson(url).done(function(items) {
-                        _form.setSelectOptions('monitorSchemeId_SEQ', items.map(function(item) {
-                            return {
-                                text : item.schemeName,
-                                value : item.schemeName
-                            };
-                        }), true);
-                        if (_form.getData().showFlag === '1') {
-                            Gikam.post(IFM_CONTEXT + '/secure/emc/module/mdm/bizmdm/monitor-tmpls/schemes/queries/choosable', Gikam.getJsonWrapper({
-                                f : {
-                                    schemeName_SEQ : "default",
-                                    monitorTmplId_SEQ : monitorTmplId,
-                                    activatedflag_SEQ : '1',
-                                    testmethodflag_SEQ :'1'
-
-                                },
-                                n : -1
-                            })).done(function(row) {
-                                emcProjScheme.setShuttleFrameData(row.rows);
-                            });
-                        } else {
-                            Gikam.post(IFM_CONTEXT + '/secure/emc/module/mdm/bizmdm/monitor-tmpls/schemes/queries/choosable', Gikam.getJsonWrapper({
-                                f : {
-                                    schemeName_SEQ : "default",
-                                    monitorTmplId_SEQ : monitorTmplId,
-                                    defaultFlag_SEQ : '1',
-                                    activatedflag_SEQ : '1',
-                                    testmethodflag_SEQ :'1'
-
-                                },
-                                n : -1
-                            })).done(function(row) {
-                                emcProjScheme.setShuttleFrameData(row.rows);
-                            });
-                        }
-                        if (items.length > 0) {
-                            _form.setData({
-                                monitorSchemeId_SEQ : "default"
-                            });
-                        } else {
-                            _form.setData({
-                                monitorSchemeId_SEQ : ""
-                            });
-                        }
-                    });
-                }
-            },
+            // onChange : function(field, value) {
+            //     var _form = this;
+            //     var monitorTmplId = _form.getData().monitorTmplId_SEQ;
+            //     var url = IFM_CONTEXT + '/secure/emc/module/mdm/bizmdm/monitor-tmpls/schemes/queries/selectable';
+            //     if (!Gikam.isEmpty(value)) {
+            //         url += Gikam.param({
+            //             monitorTmplId : value,
+            //             enableflag :'1'
+            //         });
+            //         Gikam.getJson(url).done(function(items) {
+            //             _form.setSelectOptions('monitorSchemeId_SEQ', items.map(function(item) {
+            //                 return {
+            //                     text : item.schemeName,
+            //                     value : item.schemeName
+            //                 };
+            //             }), true);
+            //             if (_form.getData().showFlag === '1') {
+            //                 var leftGrid = emcProjScheme.getShuttleFrameLeftGrid();
+            //                 leftGrid.setOptions({
+            //                     url : '/secure/emc/module/mdm/bizmdm/monitor-tmpls/schemes/queries/choosable',
+            //                     requestData : {
+            //                         schemeName_SEQ : "default",
+            //                         monitorTmplId_SEQ : value,
+            //                         activatedflag_SEQ : '1',
+            //                         testmethodflag_SEQ :'1'
+            //                     }
+            //                 });
+            //                 leftGrid.refresh();
+            //             } else {
+            //                 var leftGrid = emcProjScheme.getShuttleFrameLeftGrid();
+            //                 leftGrid.setOptions({
+            //                     url : '/secure/emc/module/mdm/bizmdm/monitor-tmpls/schemes/queries/choosable',
+            //                     requestData : {
+            //                         schemeName_SEQ : "default",
+            //                         monitorTmplId_SEQ : value,
+            //                         defaultFlag_SEQ : '1',
+            //                         activatedflag_SEQ : '1',
+            //                         testmethodflag_SEQ :'1'
+            //                     }
+            //                 });
+            //                 leftGrid.refresh();
+            //             }
+            //             if (items.length > 0) {
+            //                 _form.setData({
+            //                     monitorSchemeId_SEQ : "default"
+            //                 });
+            //             } else {
+            //                 _form.setData({
+            //                     monitorSchemeId_SEQ : ""
+            //                 });
+            //             }
+            //         });
+            //     }
+            // },
             onDataChange : function(field, value, index, row, text) {
                 var _form = this;
                 var monitorTmplId = _form.getData().monitorTmplId_SEQ;
                 var url = IFM_CONTEXT + '/secure/emc/module/mdm/bizmdm/monitor-tmpls/schemes/queries/selectable';
-                if (!Gikam.isEmpty(monitorTmplId, false)) {
+                if (!Gikam.isEmpty(value)) {
                     url += Gikam.param({
-                        monitorTmplId : monitorTmplId,
+                        monitorTmplId : value,
                         enableflag :'1'
                     });
                     Gikam.getJson(url).done(function(items) {
@@ -555,32 +559,30 @@ var emcProjScheme = Gikam.getPageObject({
                             };
                         }), true);
                         if (_form.getData().showFlag === '1') {
-                            Gikam.post(IFM_CONTEXT + '/secure/emc/module/mdm/bizmdm/monitor-tmpls/schemes/queries/choosable', Gikam.getJsonWrapper({
-                                f : {
+                            var leftGrid = emcProjScheme.getShuttleFrameLeftGrid();
+                            leftGrid.setOptions({
+                                url : '/secure/emc/module/mdm/bizmdm/monitor-tmpls/schemes/queries/choosable',
+                                requestData : {
                                     schemeName_SEQ : "default",
-                                    monitorTmplId_SEQ : monitorTmplId,
+                                    monitorTmplId_SEQ : value,
                                     activatedflag_SEQ : '1',
                                     testmethodflag_SEQ :'1'
-
-                                },
-                                n : -1
-                            })).done(function(row) {
-                                emcProjScheme.setShuttleFrameData(row.rows);
+                                }
                             });
+                            leftGrid.refresh();
                         } else {
-                            Gikam.post(IFM_CONTEXT + '/secure/emc/module/mdm/bizmdm/monitor-tmpls/schemes/queries/choosable', Gikam.getJsonWrapper({
-                                f : {
+                            var leftGrid = emcProjScheme.getShuttleFrameLeftGrid();
+                            leftGrid.setOptions({
+                                url : '/secure/emc/module/mdm/bizmdm/monitor-tmpls/schemes/queries/choosable',
+                                requestData : {
                                     schemeName_SEQ : "default",
-                                    monitorTmplId_SEQ : monitorTmplId,
+                                    monitorTmplId_SEQ : value,
                                     defaultFlag_SEQ : '1',
                                     activatedflag_SEQ : '1',
                                     testmethodflag_SEQ :'1'
-
-                                },
-                                n : -1
-                            })).done(function(row) {
-                                emcProjScheme.setShuttleFrameData(row.rows);
+                                }
                             });
+                            leftGrid.refresh();
                         }
                         if (items.length > 0) {
                             _form.setData({
@@ -604,31 +606,32 @@ var emcProjScheme = Gikam.getPageObject({
                 var schemeName = _form.getData().monitorSchemeId_SEQ;
                 var monitorTmplId = _form.getData().monitorTmplId_SEQ;
                 if (_form.getData().showFlag === '1') {
-                    Gikam.post(IFM_CONTEXT + '/secure/emc/module/mdm/bizmdm/monitor-tmpls/schemes/queries/choosable', Gikam.getJsonWrapper({
-                        f : {
+                    var leftGrid = emcProjScheme.getShuttleFrameLeftGrid();
+                    leftGrid.setOptions({
+                        url : '/secure/emc/module/mdm/bizmdm/monitor-tmpls/schemes/queries/choosable',
+                        requestData : {
                             schemeName_SEQ : schemeName,
                             monitorTmplId_SEQ : monitorTmplId,
+                            defaultFlag_SEQ : '',
                             activatedflag_SEQ : '1',
-                        },
-                        n : -1
-                    })).done(function(row) {
-                        emcProjScheme.setShuttleFrameData(row.rows);
+                        }
                     });
+                    leftGrid.refresh();
                 } else {
-                    Gikam.post(IFM_CONTEXT + '/secure/emc/module/mdm/bizmdm/monitor-tmpls/schemes/queries/choosable', Gikam.getJsonWrapper({
-                        f : {
+                    var leftGrid = emcProjScheme.getShuttleFrameLeftGrid();
+                    leftGrid.setOptions({
+                        url : '/secure/emc/module/mdm/bizmdm/monitor-tmpls/schemes/queries/choosable',
+                        requestData : {
                             schemeName_SEQ : schemeName,
                             monitorTmplId_SEQ : monitorTmplId,
                             defaultFlag_SEQ : '1',
                             activatedflag_SEQ : '1',
-                        },
-                        n : -1
-                    })).done(function(row) {
-                        emcProjScheme.setShuttleFrameData(row.rows);
+                        }
                     });
+                    leftGrid.refresh();
                 }
             },
-            onDataChange : function(field, value, index, row, text) {
+            /*onDataChange : function(field, value, index, row, text) {
                 var _form = this;
                 var schemeName = _form.getData().monitorSchemeId_SEQ;
                 var monitorTmplId = _form.getData().monitorTmplId_SEQ;
@@ -656,18 +659,28 @@ var emcProjScheme = Gikam.getPageObject({
                         emcProjScheme.setShuttleFrameData(row.rows);
                     });
                 }
-            }
+            }*/
         } ];
     },
 
     setShuttleFrameData : function(leftData) {
         emcProjScheme.selectTmplPage.setShuttleFrameData(leftData);
     },
-
+    getShuttleFrameLeftGrid : function() {
+       return  emcProjScheme.selectTmplPage.shuttleFrame.leftGrid;
+    },
     getMonitorTmplListColumns : function() {
         return [ {
             checkbox : true
         }, {
+            field : 'ext$.testclass',
+            title : 'T_EMC_TEST_METHOD.TESTCLASS',
+            type : 'select',
+            category : 'sys',
+            param : {
+                codeCategoryId : 'testClass',
+            },
+        },{
             field : 'ext$.testmethodtype',
             title : 'T_EMC_TEST_METHOD_TESTMETHODTYPE',
             type : 'select',
@@ -689,7 +702,31 @@ var emcProjScheme = Gikam.getPageObject({
         }, {
             field : 'itemGroup',
             title : 'T_EMC_PROJ_ORDER.ITEMGROUP'
-        } ];
+        } , {
+            field : 'ext$.methodscope',
+            title : '方法范围',
+        },{
+            field : 'ext$.trialscope',
+            title : '适用范围',
+        },{
+            field : 'ext$.authentication',
+            title : 'CMA认证',
+            type : 'select',
+            search : false,
+            category : 'sys',
+            param : {
+                codeCategoryId : 'yesorno',
+            },
+        }, {
+            field : 'ext$.approval',
+            title : 'CNAS认可',
+            type : 'select',
+            search : false,
+            category : 'sys',
+            param : {
+                codeCategoryId : 'yesorno',
+            },
+        }];
     },
 
     getOrderEditListColumns : function() {
@@ -1099,6 +1136,8 @@ var emcProjScheme = Gikam.getPageObject({
 
     getUpdateIndexOrderColumns : function() {
         return [ {
+            checkbox : true
+        },{
             index : true
         }, {
             field : 'ext$.testname',
@@ -1128,6 +1167,35 @@ var emcProjScheme = Gikam.getPageObject({
             field : 'ext$.index3',
             title : 'T_EMC_PROJ_ORDER.INDEXID3'
         }, ];
+    },
+
+    getIndexShowAllField: function () {
+        return [{
+            title: '未选择标准',
+            field: 'showFlag',
+            type: 'simpleCheckbox',
+            value: '0',
+            refreshGrid : false,
+            onChange: function (field, value, index) {
+                var grid = Gikam.getComp('emc-update-index-proj-order-grid');
+
+                if (value === '1') {
+                    grid.refresh({
+                        requestData: {
+                            indexId_ISNULL: '1',
+                        }
+                    }).done(function () {
+                    });
+                } else {
+                    grid.refresh({
+                        requestData: {
+                            indexId_ISNULL: '',
+                        }
+                    }).done(function () {
+                    });
+                }
+            },
+        }]
     },
 
 });

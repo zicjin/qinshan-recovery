@@ -10,7 +10,7 @@ emcRoom.editPage = {
             columns : emcRoom.getEditListColumns(),
             service : 'emcRoomServiceImpl',
 	        requestData : {
-	            orgId_SB : workspace.user.ext$.parentorgid,
+	            org_filter : '1',
                 createdByOrgId_SEQ : workspace.user.orgId,
 	        },
             checkOnActive : false,

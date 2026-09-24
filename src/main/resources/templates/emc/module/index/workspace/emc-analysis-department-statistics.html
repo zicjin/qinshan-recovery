@@ -3,6 +3,7 @@
 <!-- 引入项目自定义下拉框和choose选择框配置 -->
 <script th:src="@{/static/emc/config/emc-select-config.js}"></script>
 <script>
+
     Date.prototype.format = function(fmt) { //author: meizz 
         var o = {
             "M+" : this.getMonth() + 1, //月份 
@@ -34,7 +35,7 @@
         if (!Gikam.isEmpty(startTime) && !Gikam.isEmpty(endTime) && !Gikam.isEmpty(analysisOrg)) {
             Gikam.post(IFM_CONTEXT + '/secure/emc/module/bp/bp/order-tasks/analysis-department-statistics/queries', Gikam.getJsonWrapper({
                 f : {
-                    ANALYSISORGID_SEQ : analysisOrg,
+                    ANALYSISORGID_SB : analysisOrg,
                     ANALYSISDATE_DGOE : startTime,
                     ANALYSISDATE_DLOE : endTime,
                 }

@@ -53,7 +53,7 @@ var emcOilFilm = Gikam.getPageObject({
             editor :true,
             onBeforeChoose : function() {
                 return {
-        	            orgId_SB : workspace.user.ext$.parentorgid,
+        	            org_filter : '1',
                 }
             },
             onAfterChoose : function(rows, index) {
@@ -143,7 +143,7 @@ var emcOilFilm = Gikam.getPageObject({
             editor :true,
             onBeforeChoose : function() {
                 return {
-        	            orgId_SB : workspace.user.ext$.parentorgid,
+        	            orgId_filter : '1',
                 }
             },
             onAfterChoose : function(rows, index) {

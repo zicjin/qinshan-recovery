@@ -5,6 +5,15 @@ var emcIndexCategory = Gikam.getPageObject({
     getEditListColumns : function() {
         return [ {
             checkbox : true
+        },{
+            field : 'activatedFlag',
+            title : '状态',
+            type : 'select',
+            search : true,
+            category : 'sys',
+            param : {
+                codeCategoryId : 'activatedFlag'
+            }
         }, {
             field : 'id',
             title : 'T_EMC_INDEX_CATEGORY.VIEW',
@@ -34,8 +43,8 @@ var emcIndexCategory = Gikam.getPageObject({
             field : 'stdName',
             title : 'T_EMC_INDEX_CATEGORY.STDNAME',
             preInsert : true,
-            //validators : [ 'remote[' + emcIndexCategory.baseUrl + '/action/validate-unique]', 'notEmpty', 'strLength[0,200]' ],
-            readonly : true
+            // validators : [ 'remote[' + emcIndexCategory.baseUrl + '/action/validate-unique]', 'notEmpty', 'strLength[0,200]' ],
+            // readonly : true
         }, {
             field : 'ext$.templatename',
             title : 'T_EMC_INDEX_CATEGORY.PROPERTYTMPLID',
@@ -295,7 +304,12 @@ var emcIndexCategory = Gikam.getPageObject({
             },
             editor : true,
             editable : true,
-        } ];
+        },{
+            field : 'applyScope',
+            title : '适用范围',
+            validators : [ 'strLength[0,100]' ],
+            editor : true,
+        }, ];
     },
 
     getIndexSetBatchUpdadeFields : function() {
@@ -447,7 +461,11 @@ var emcIndexCategory = Gikam.getPageObject({
         var modal = Gikam.create('modal', {
             id : 'emc-index-category-base-info-modal',
             width : '80%',
-            height : '70%'
+            height : '70%',
+            onAfterClose : function(data) {
+                var grid = Gikam.getComp('emc-index-category-edit-list-grid');
+                grid.refreshRowById(id);
+            }
         });
         modal.window.load(emcIndexCategory.baseUrl + '/page/detail' + Gikam.param({
             id : id

@@ -27,7 +27,8 @@ emcIndexItem.editPage = {
                     Gikam.preInsert({
                         modalTitle : 'EMC.MODULE.MDM.BASEMDM.INDEXITEMS.MODAL.INDEX_ITEM_ADD',
                         fields : emcIndexItem.getBaseInfoFormFields(),
-                        url : emcIndexItem.baseUrl
+                        url : emcIndexItem.baseUrl,
+                        titleWidth : 100,
                     }).done(function(id) {
                         Gikam.getComp('emc-index-item-edit-list-grid').refresh();
                     });

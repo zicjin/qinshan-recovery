@@ -1,6 +1,7 @@
 package com.sunwayworld.emc.module.bp.report.report.service;
 
 import com.sunwayworld.emc.module.bp.report.report.bean.EmcReportSendInfoBean;
+import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;
 import com.sunwayworld.framework.support.base.service.GenericService;
 
 /**
@@ -8,4 +9,5 @@ import com.sunwayworld.framework.support.base.service.GenericService;
 */
 public interface EmcReportSendInfoService extends GenericService<EmcReportSendInfoBean, Long> {
 
+    int updateByProjectId(RestJsonWrapperBean wrapper);
 }

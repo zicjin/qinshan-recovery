@@ -12,7 +12,7 @@ emcDelivery.auditSearchListPage = {
             requestData : {
                 targetType: 'deliveryAudit',
                 processStatus_SEQ : 'done',
-                orgId_SB : workspace.user.ext$.parentorgid,
+                org_filter : '1',
                 sample_DIFFER : '1',
             },
             onCellClick : function(field, row) {
@@ -25,7 +25,7 @@ emcDelivery.auditSearchListPage = {
                     Gikam.getComp('emc-delivery-audit-list-grid').refresh({
                         requestData : {
                             status_DIFFER : 'draft',
-                            orgId : workspace.user.ext$.parentorgid,
+                            org_filter : '1',
                             projId_SEQ : row.id,
                         },
                         url : emcDelivery.sampleUrl + '/queries',
@@ -235,13 +235,13 @@ emcDelivery.auditSearchListPage = {
                                 Gikam.postText('/core/module/item/files/action/pack',Gikam.getJsonWrapper({}, [ '', fileIds])
                                 ).done(function (fileUrl) {
                                     if (fileUrl != '' && fileUrl != undefined) {
-                                        Gikam.download(IFM_CONTEXT + fileUrl);
+                                        Gikam.emcDownloadFile(IFM_CONTEXT + fileUrl);
                                     }
                                     Gikam.alert('导出完成！');
                                 })
                             }else if (fileIds.length == 1){
                                 Gikam.getJson(IFM_CONTEXT + '/core/module/item/files/' + selections[0]).done(function(coreFile) {
-                                    Gikam.download(IFM_CONTEXT + coreFile.downloadUrl);
+                                    Gikam.emcDownloadFile(IFM_CONTEXT + coreFile.downloadUrl);
                                 });
                                 Gikam.alert('导出完成！');
                             }

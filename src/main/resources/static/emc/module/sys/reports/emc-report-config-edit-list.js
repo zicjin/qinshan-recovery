@@ -1,4 +1,5 @@
 coreReportConfig.editPage = {
+
     getGridParam : function() {
         var _this = this;
         return {
@@ -6,6 +7,7 @@ coreReportConfig.editPage = {
             page : true,
             id : 'core-report-config-edit-list-grid',
             url : coreReportConfig.baseUrl + '/queries/raw',
+            service : 'coreReportConfigServiceImpl',
             columns : coreReportConfig.getEditListColumns(),
             onCellClick : function(field, row) {
                 field === 'id' && _this.loadDetailPage(row.id);

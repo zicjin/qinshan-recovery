@@ -9,7 +9,7 @@ emcAnalysisPretrial.searchPage = {
             requestData : {
                 targetType : 'analysisPretrial',
                 reportEditUserId : workspace.user.id,
-                orgId_SB : workspace.user.ext$.parentorgid
+                org_filter : '1',
             },
             columns : emcAnalysisPretrial.getSearchListColumns(),
             toolbar : [ {
@@ -32,7 +32,7 @@ emcAnalysisPretrial.searchPage = {
                 Gikam.getAsyncComp('emc-analysis-pretrial-list-run-grid').done(function(grid) {
                     grid.setOptions({
                         requestData : {
-                            monitorTmplId : row.ext$.monitortmplid,
+                            // monitorTmplId : row.ext$.monitortmplid,
                             projId : row.id,
                             scheme_only : ''
                         },

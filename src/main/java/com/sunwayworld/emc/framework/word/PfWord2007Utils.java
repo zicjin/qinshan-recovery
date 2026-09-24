@@ -55,7 +55,7 @@ public class PfWord2007Utils extends Word2007Utils {
     private static final Pattern SUP_SUB_PATTERN = Pattern.compile("<(sup|sub).*?>([\\s\\S]*?)<(/sup|/sub)>");
 
     public static void createDynamicTable(XWPFDocument document, WordTemplateDynamicTableDTO dynamicTableDTO) {
-        createDynamicTable(document, dynamicTableDTO, ParagraphAlignment.LEFT);
+        createDynamicTable(document, dynamicTableDTO, ParagraphAlignment.CENTER);
     }
 
     public static void createDynamicTable(XWPFDocument document, WordTemplateDynamicTableDTO dynamicTableDTO, ParagraphAlignment titleAlign) {
@@ -442,7 +442,7 @@ public class PfWord2007Utils extends Word2007Utils {
             cTJc.setVal(enumValue);
         }
         // 设置宽度
-        Integer width = Optional.ofNullable(dynamicTableDTO.getTableWidth()).orElse(10600);
+        Integer width = Optional.ofNullable(dynamicTableDTO.getTableWidth()).orElse(10204);
         tblWidth.setW(BigInteger.valueOf(width));
         tblWidth.setType(STTblWidth.DXA);
 
@@ -452,8 +452,8 @@ public class PfWord2007Utils extends Word2007Utils {
             BigInteger borderSize = new BigInteger(Objects.isNull(tableBorderWidth) ? "12" : tableBorderWidth.toString());
             tblBorders.getTop().setSz(borderSize);
             tblBorders.getBottom().setSz(borderSize);
-            tblBorders.getLeft().setSz(borderSize);
-            tblBorders.getRight().setSz(borderSize);
+            tblBorders.getLeft().setVal(STBorder.NIL);
+            tblBorders.getRight().setVal(STBorder.NIL);
         } else {
             tblBorders.getTop().setVal(STBorder.NIL);
             tblBorders.getBottom().setVal(STBorder.NIL);

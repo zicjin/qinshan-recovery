@@ -41,6 +41,17 @@
 							OR T.FILTERTEST = '0'
 							OR T.FILTERTEST IS NULL))
             </if>
+            <!-- 分析录入选择共同完成人过滤分析科室 -->
+            <if test="targetType == 'analysisUser'">
+                AND EXISTS (SELECT 1
+                              FROM T_CORE_ORG F
+                             WHERE T.DEPARTMENTID = F.ID
+                               AND (F.ORGNAME = '检测部'
+                                OR EXISTS (SELECT 1
+                                             FROM T_CORE_ORG P
+                                            WHERE F.PARENTID = P.ID
+                                              AND P.ORGNAME = '检测部')))
+            </if>
             
         </where>
         ORDER BY 

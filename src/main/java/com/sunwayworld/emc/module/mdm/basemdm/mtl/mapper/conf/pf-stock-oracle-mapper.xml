@@ -16,7 +16,10 @@
         F.SPECIFICATION,
         F.MTLCATEGORYID,
         G.MTLCATEGORYNAME,
-        F.ORGID AS MTLORGID
+        F.ORGID AS MTLORGID,
+        CASE WHEN A.STATUS = '1' THEN '废弃'
+        WHEN A.STOCKQTY > 0 THEN '正常'
+        ELSE '无库存' END AS STOCKSTATUS
         FROM T_EMC_STOCK A
         LEFT JOIN (
         SELECT STOCKID,
@@ -48,6 +51,16 @@
             <if test='folderid != "" and folderid != null'>
                 AND T.MTLCATEGORYNAME in ('标准样品','一般试剂')
             </if>
+            <if test='remind == "lowlimit"'>
+                AND T.STOCKQTY <![CDATA[<=]]> T.LOWLIMIT
+            </if>
+            <if test='remind == "remindDays"'>
+                AND T.STATUS = '0'
+                AND T.STOCKQTY <![CDATA[>]]>0
+                AND T.REMINDDAYS IS NOT NULL
+                AND T.EXPIREDATE IS NOT NULL
+                AND ( T.EXPIREDATE - SYSDATE) <![CDATA[<=]]> T.REMINDDAYS
+            </if>
         </where>
         ORDER BY
         <choose>
@@ -71,13 +84,20 @@
     <select id="selectStockOverdue" parameterType="map" resultType="map">
         SELECT T.*
           FROM T_EMC_STOCK T
-         WHERE T.EXPIREDATE <![CDATA[<=]]> sysdate()
+         WHERE T.EXPIREDATE <![CDATA[<=]]> SYSDATE
     </select>
 
     <select id="selectStockLowLine" parameterType="map" resultType="map">
-        SELECT T.*
-          FROM T_EMC_STOCK T
-         WHERE T.STOCKQTY <![CDATA[<=]]> T.LOWLIMIT
-
+        SELECT T.MTLID
+        FROM(
+        SELECT T.*,B.MANAGEMENTTYPE
+        FROM T_EMC_STOCK T
+        LEFT JOIN T_EMC_MTL A ON T.MTLID = A.ID
+        LEFT JOIN T_EMC_MTL_CATEGORY B ON A.MTLCATEGORYID = B.ID
+        WHERE T.STOCKQTY <![CDATA[<=]]> T.LOWLIMIT)T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+        </where>
+        GROUP BY T.MTLID
     </select>
 </mapper>

@@ -20,7 +20,7 @@ emcRunEquiptCrves.historyPage = {
                 this.hideColumns([ 'addDate' ]);
             },
             requestData : {
-                createdByOrgId_SEQ : workspace.user.orgId,
+                createdByOrgId_SB : workspace.user.orgId,
                 runId_IN: ',',
             },
             toolbar : [ {

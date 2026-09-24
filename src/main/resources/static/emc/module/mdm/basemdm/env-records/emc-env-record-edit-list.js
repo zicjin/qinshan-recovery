@@ -9,7 +9,7 @@ emcEnvRecord.editPage = {
             service : 'emcEnvRecordServiceImpl',
             columns : emcEnvRecord.getEditListColumns(),
 	        requestData : {
-	            orgId_SB : workspace.user.ext$.parentorgid,
+	            org_filter : '1',
                 createdByOrgId_SEQ : workspace.user.orgId,
                 createdById_SEQ : workspace.user.id
 	        },  

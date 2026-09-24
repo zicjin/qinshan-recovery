@@ -50,8 +50,8 @@
                             COUNT( TESTMETHODID ) AS TESTMETHODQTY,
                             B.MONITORTMPLNAME,
                             C.CONTAINERCATEGORYNAME,
-                            WM_CONCAT(O.ID) AS IDS,
-                            WM_CONCAT(O.TESTMETHODID) AS TMIDS,
+                            LISTAGG(O.ID, ',') WITHIN GROUP (ORDER BY O.ID) AS IDS,
+                            LISTAGG(O.TESTMETHODID, ',') WITHIN GROUP (ORDER BY O.TESTMETHODID) AS TMIDS,
                             O.STORECONDITION
                        FROM T_EMC_TEST_ORDER_CATEGORY O
                        LEFT JOIN T_EMC_MONITOR_TMPL B ON O.MONITORTMPLID = B.ID

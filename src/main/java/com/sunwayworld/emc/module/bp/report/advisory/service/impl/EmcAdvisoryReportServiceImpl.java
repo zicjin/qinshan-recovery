@@ -1,7 +1,9 @@
 package com.sunwayworld.emc.module.bp.report.advisory.service.impl;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,13 +15,20 @@ import com.sunwayworld.emc.module.bp.project.project.bean.EmcProjectBean;
 import com.sunwayworld.emc.module.bp.report.advisory.bean.EmcAdvisoryReportBean;
 import com.sunwayworld.emc.module.bp.report.advisory.dao.EmcAdvisoryReportDao;
 import com.sunwayworld.emc.module.bp.report.advisory.service.EmcAdvisoryReportService;
+import com.sunwayworld.emc.module.mdm.basemdm.bizcategory.bean.EmcBizCategoryBean;
+import com.sunwayworld.emc.module.mdm.basemdm.bizcategory.service.EmcBizCategoryService;
 import com.sunwayworld.framework.at.annotation.AuditTrailEntry;
 import com.sunwayworld.framework.at.annotation.AuditTrailType;
 import com.sunwayworld.framework.constant.Constant;
 import com.sunwayworld.framework.context.ApplicationContextHelper;
+import com.sunwayworld.framework.context.LocalContextHelper;
 import com.sunwayworld.framework.mybatis.mapper.MatchPattern;
 import com.sunwayworld.framework.mybatis.mapper.SearchFilter;
 import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;
+import com.sunwayworld.framework.utils.DateTimeUtils;
+import com.sunwayworld.module.mdm.org.bean.CoreOrgBean;
+import com.sunwayworld.module.mdm.org.service.CoreOrgService;
+import com.sunwayworld.module.mdm.user.bean.CoreUserBean;
 import com.sunwayworld.module.sys.bpmn.bean.CoreBpmnInstanceStatusDTO;
 
 /**
@@ -30,6 +39,12 @@ public class EmcAdvisoryReportServiceImpl implements EmcAdvisoryReportService {
 
     @Autowired
     private EmcAdvisoryReportDao emcAdvisoryReportDao;
+
+    @Autowired
+    private CoreOrgService coreOrgService;
+
+    @Autowired
+    private EmcBizCategoryService bizCategoryService;
 
     @Override
     @SuppressWarnings("unchecked")
@@ -44,6 +59,22 @@ public class EmcAdvisoryReportServiceImpl implements EmcAdvisoryReportService {
         EmcAdvisoryReportBean emcAdvisoryReportBean = wrapperBean.parseUnique(EmcAdvisoryReportBean.class);
         Long id = ApplicationContextHelper.getNextIdentity();
         emcAdvisoryReportBean.setId(id);
+        CoreUserBean user = LocalContextHelper.getLoginUser();
+        String parentOrgId = user.getExt$Item("parentorgid");
+        CoreOrgBean parentOrg = (CoreOrgBean) coreOrgService.selectById(parentOrgId);
+        EmcBizCategoryBean bizCategory = (EmcBizCategoryBean) bizCategoryService.selectById(emcAdvisoryReportBean.getBizCategoryId());
+        String orgCode = Optional.ofNullable(parentOrg.getExt$Item("orgshortname")).orElse("XX");
+        String year = DateTimeUtils.formatLocalDateTime(LocalDateTime.now(), "yyyy");
+        String projNoPrefix = orgCode + bizCategory.getBizCategoryId() + year;
+        String reportNo = "";
+        String key = "";
+        if ("SFJD".equals(emcAdvisoryReportBean.getBizClassId())) {
+            key = emcAdvisoryReportBean.getCreatedByOrgName() + "检验检测有限公司司法鉴定所[" + year + "]鉴检字第";
+            reportNo = ApplicationContextHelper.getNextSequence("T_EMC_ADVISORY_REPORT_SF", key) + "号";
+        } else {
+            reportNo = ApplicationContextHelper.getNextSequence("T_EMC_ADVISORY_REPORT_SF", projNoPrefix);
+        }
+        emcAdvisoryReportBean.setReportNo(reportNo);
         getDao().insert(emcAdvisoryReportBean);
         return id;
     }

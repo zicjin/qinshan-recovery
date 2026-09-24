@@ -207,6 +207,17 @@ public class EmcOrderTaskBean extends AbstractPersistable<Long> implements Inser
     private String deviationCauses;//偏离原因
     //秋毫检测字段
 
+    @NotNull(defaultValue = Constant.NO)
+    private String assign;// 是否分配
+
+    private String pretreatWay;// 前处理方式
+
+    private String specifyMethod;// 指定方法
+
+    private String taskLowLimit;// 任务下限
+
+    private String taskHighLimit;// 任务上限
+
 
     @Override
     public Long getId() {
@@ -815,5 +826,45 @@ public class EmcOrderTaskBean extends AbstractPersistable<Long> implements Inser
 
     public void setSampleReceiverTime(String sampleReceiverTime) {
         this.sampleReceiverTime = sampleReceiverTime;
+    }
+
+    public String getAssign() {
+        return assign;
+    }
+
+    public void setAssign(String assign) {
+        this.assign = assign;
+    }
+
+    public String getPretreatWay() {
+        return pretreatWay;
+    }
+
+    public void setPretreatWay(String pretreatWay) {
+        this.pretreatWay = pretreatWay;
+    }
+
+    public String getSpecifyMethod() {
+        return specifyMethod;
+    }
+
+    public void setSpecifyMethod(String specifyMethod) {
+        this.specifyMethod = specifyMethod;
+    }
+
+    public String getTaskLowLimit() {
+        return taskLowLimit;
+    }
+
+    public void setTaskLowLimit(String taskLowLimit) {
+        this.taskLowLimit = taskLowLimit;
+    }
+
+    public String getTaskHighLimit() {
+        return taskHighLimit;
+    }
+
+    public void setTaskHighLimit(String taskHighLimit) {
+        this.taskHighLimit = taskHighLimit;
     }
 }

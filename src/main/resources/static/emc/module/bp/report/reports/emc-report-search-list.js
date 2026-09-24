@@ -6,7 +6,7 @@ emcReport.searchListPage = {
             type : 'grid',
             id : 'emc-report-search-list-grid',
             url : emcReport.baseUrl + '/queries',
-            columns : emcReport.getArchivingListColumns(),
+            columns : emcReport.getReportSearchListColumns(),
             page : true,
             pageSize : 50,
             group : {
@@ -17,7 +17,8 @@ emcReport.searchListPage = {
             },
             requestData :  {
                 status_DIFFER : 'draft',
-                orgId_SB : workspace.user.ext$.parentorgid
+                orgId_filter : '1',
+                orderDate_filter:'1'
             },
             order : {
                 'ext$.projname' : 'asc',
@@ -36,15 +37,39 @@ emcReport.searchListPage = {
             toolbar : [ {
                 type : 'btnGroup',
                 items : [ {
+                //     type : 'button',
+                //     text : 'EMC.MODULE.BP.REPORT.REPORTS.BUTTON.VIEW_REPORT',
+                //     icon : 'browse',
+                //     onClick : function() {
+                //         _this.viewDocument();
+                //     }
+                // } ,{
                     type : 'button',
-                    text : 'EMC.MODULE.BP.REPORT.REPORTS.BUTTON.VIEW_REPORT',
-                    icon : 'browse',
+                    text : '批量下载',
+                    icon: 'move-down',
                     onClick : function() {
-                        _this.viewDocument();
+                        _this.batchDownload();
                     }
-                } ]
+                }]
             } ]
         }
+    },
+
+    batchDownload : function() {
+        var _this=this;
+        var selections = Gikam.getComp('emc-report-search-list-grid').getSelections();
+        if (Gikam.isEmpty(selections)) {
+            Gikam.alert('GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM');
+            return;
+        }
+        Gikam.postText(emcReport.baseUrl + '/action/report-pack',Gikam.getJsonWrapper({ }, [ '', selections ])
+        ).done(function (fileUrl) {
+            if (fileUrl != '' && fileUrl != undefined) {
+                Gikam.emcDownloadFile(IFM_CONTEXT + fileUrl);
+            }else {
+                Gikam.alert('没有可下载的附件');
+            }
+        })
     },
 
     getOtherGridParam : function() {
@@ -103,8 +128,8 @@ emcReport.searchListPage = {
                 if (grid.getActivedRow()) {
                     _this.onReportActive(grid.getActivedRow());
                 }
-                _this.openReportBrowseRecord(rows[0].id);
-                // Gikam.openFile(fileId, true);
+                // _this.openReportBrowseRecord(rows[0].id);
+                Gikam.openFile(fileId, true);
             });
         } else {
             Gikam.alert('EMC.MODULE.BP.REPORT.REPORTS.TIP.NO_FILE');

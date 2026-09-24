@@ -1,8 +1,9 @@
 <script th:inline="javascript">
 /*<![CDATA[*/
     Gikam.requirejs([ '/static/emc/module/item/consume/consumes/emc-consume.js',
-                      '/static/emc/module/item/consume/consumes/emc-consume-edit-list.js'
-                    ]);
-    emcConsume.editPage.init();
+        '/static/emc/module/item/consume/consumes/emc-consume-edit-list.js',
+        '/static/emc/module/qrcode/qrcode.js',
+    ]);
+    emcConsume.editPage.init(Gikam.getElParam([[${param}]]));
 /*]]>*/
 </script>

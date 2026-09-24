@@ -28,9 +28,8 @@ public class PfOrderImportFileFunction implements CoreFileImportFunction {
     @Override
     public CoreFileImportResultDTO apply(CoreFileBean file) {
         CoreFileImportResultDTO CoreFileImportResultDTO = new CoreFileImportResultDTO();
-        FilePathDTO fr = CoreFileUtils.toFilePath(file);
 
-        List<EmcOrderBean> orderList = ExcelHelper.readDataFromExcel(FilePathManager.getLocalPath(fr).toString(), 0, 1, EmcOrderBean.class);
+        List<EmcOrderBean> orderList = ExcelHelper.readDataFromExcel(CoreFileUtils.getLocalPath(file).toString(), 0, 1, EmcOrderBean.class);
         orderService.getDao().update(orderList, Arrays.asList("labelNo", "clientOrderName", "sampleAddress", "orderDesc", "volume", "remark","qcName","sender","checker","sendDate","packing","isblank"), "orderNo");
 
         return CoreFileImportResultDTO;

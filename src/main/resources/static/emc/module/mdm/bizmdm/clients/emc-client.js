@@ -243,6 +243,11 @@ var emcClient = Gikam.getPageObject({
             single : true,
             preInsert : true,
             category : 'monitorPointCategory',
+            onBeforeChoose : function() {
+                return {
+                    orgId_SEQ: workspace.user.ext$.parentorgid
+                }
+            },
             onAfterChoose : function(rows, index) {
                 if (rows) {
                     this.setData({

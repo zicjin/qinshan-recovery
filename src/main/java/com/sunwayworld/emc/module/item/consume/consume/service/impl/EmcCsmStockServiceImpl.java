@@ -61,6 +61,7 @@ public class EmcCsmStockServiceImpl implements EmcCsmStockService {
         emcCsmStock.setStockQty(emcCsmStockLog.getQty());
         emcCsmStock.setMtlId(mtlId);
         emcCsmStock.setStatus(Constant.NO);
+        emcCsmStock.setBatchNo(emcCsmStockLog.getExt$Item("batchno"));
         getDao().insert(emcCsmStock);
 
         // 历史记录
@@ -86,6 +87,7 @@ public class EmcCsmStockServiceImpl implements EmcCsmStockService {
         emcCsmStockLog.setStockId(id);
         emcCsmStockLog.setLogType(LOG_TYPE_STORAGE);
         EmcCsmStockBean emcCsmStock = getDao().selectById(id);
+        emcCsmStockLog.setExt$Item("operateqty", emcCsmStockLog.getQty() + "");
         emcCsmStockLog.setPreviousQty(emcCsmStock.getStockQty());
         emcCsmStock.setStockQty(emcCsmStock.getStockQty() + emcCsmStockLog.getQty());
         emcCsmStockLog.setQty(emcCsmStock.getStockQty());
@@ -107,6 +109,7 @@ public class EmcCsmStockServiceImpl implements EmcCsmStockService {
         List<EmcCsmStockBean> stockList = getDao().selectListByIds(stockIdList);
         List<EmcCsmStockLogBean> stockLogList = stockList.stream().map(stock -> {
             EmcCsmStockLogBean EmcCsmStockLogBean = new EmcCsmStockLogBean();
+            EmcCsmStockLogBean.setExt$Item("operateqty", stock.getStockQty() - emcCsmStockLog.getQty() + "");
             EmcCsmStockLogBean.setPreviousQty(stock.getStockQty());
             EmcCsmStockLogBean.setId(ApplicationContextHelper.getNextIdentity());
             EmcCsmStockLogBean.setStockId(stock.getId());
@@ -136,6 +139,7 @@ public class EmcCsmStockServiceImpl implements EmcCsmStockService {
         List<EmcCsmStockBean> stockList = getDao().selectListByIds(stockIdList);
         List<EmcCsmStockLogBean> stockLogList = stockList.stream().map(stock -> {
             EmcCsmStockLogBean EmcCsmStockLogBean = new EmcCsmStockLogBean();
+            EmcCsmStockLogBean.setExt$Item("operateqty", "0");
             EmcCsmStockLogBean.setPreviousQty(stock.getStockQty());
             EmcCsmStockLogBean.setId(ApplicationContextHelper.getNextIdentity());
             EmcCsmStockLogBean.setStockId(stock.getId());
@@ -165,6 +169,7 @@ public class EmcCsmStockServiceImpl implements EmcCsmStockService {
         emcCsmStockLog.setStockId(id);
         emcCsmStockLog.setLogType(LOG_TYPE_RECIEVE);
         EmcCsmStockBean emcCsmStock = getDao().selectById(id);
+        emcCsmStockLog.setExt$Item("operateqty", emcCsmStockLog.getQty() + "");
         emcCsmStockLog.setPreviousQty(emcCsmStock.getStockQty());
         if (emcCsmStock.getStockQty() - emcCsmStockLog.getQty() < 0) {
             throw new CheckedException("T_EMC_CONSUME.CHECK.STOCKQTY_MAX");

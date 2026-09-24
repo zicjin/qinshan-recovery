@@ -57,8 +57,10 @@ import com.sunwayworld.framework.http.HttpClientManager;
 import com.sunwayworld.framework.mybatis.mapper.MatchPattern;
 import com.sunwayworld.framework.mybatis.mapper.SearchFilter;
 import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;
+import com.sunwayworld.framework.utils.BeanUtils;
 import com.sunwayworld.framework.utils.DateTimeUtils;
 import com.sunwayworld.framework.utils.NumberUtils;
+import com.sunwayworld.framework.utils.ObjectUtils;
 import com.sunwayworld.framework.utils.StringUtils;
 import com.sunwayworld.module.sys.remotecall.service.CoreRemoteCallRequestService;
 
@@ -899,6 +901,54 @@ public class EmcIndexCategoryServiceImpl implements EmcIndexCategoryService {
         }
 
         return new Pagination<>(new ArrayList<>());
+    }
+
+    @Override
+    @Transactional
+    public void copy(RestJsonWrapperBean wrapper) {
+        String name = wrapper.getParamValue("name");
+        if (StringUtils.isBlank(name)) {
+            return;
+        }
+        List<EmcIndexCategoryBean> indexCategoryBeanList = wrapper.parse(EmcIndexCategoryBean.class);
+        List<Long> indexCategoryIdList = indexCategoryBeanList.stream().map(EmcIndexCategoryBean::getId).distinct().collect(Collectors.toList());
+        List<EmcIndexCategoryBean> oldIndexCategoryList = selectListByFilter(SearchFilter.instance().match("Id", indexCategoryIdList).filter(MatchPattern.OR));
+        List<EmcOrderIndexBean> oldOrderIndexList = orderIndexService.selectListByFilter(SearchFilter.instance().match("indexCategoryId", indexCategoryIdList).filter(MatchPattern.OR));
+        List<String> oldOrderIndexIdList = oldOrderIndexList.stream().map(EmcOrderIndexBean::getId).distinct().collect(Collectors.toList());
+        List<EmcIndexSetBean> oldIndexSetList = indexSetService.selectListByFilter(SearchFilter.instance().match("indexId", oldOrderIndexIdList).filter(MatchPattern.OR));
+        List<EmcIndexCategoryBean> newIndexCategoryList = new ArrayList<>();
+        List<EmcOrderIndexBean> newOrderIndexList = new ArrayList<>();
+        List<EmcIndexSetBean> newIndexSetList = new ArrayList<>();
+        for (EmcIndexCategoryBean ic : oldIndexCategoryList) {
+            EmcIndexCategoryBean newIndexCategory = new EmcIndexCategoryBean();
+            BeanUtils.copyProperties(ic, newIndexCategory);
+            Long icId = ApplicationContextHelper.getNextIdentity();
+            newIndexCategory.setId(icId);
+            newIndexCategory.setStdName(name);
+            newIndexCategoryList.add(newIndexCategory);
+            List<EmcOrderIndexBean> curOrderIndexList = oldOrderIndexList.stream().filter(e -> ObjectUtils.equals(ic.getId(), e.getIndexCategoryId())).collect(Collectors.toList());
+            for (EmcOrderIndexBean oi : curOrderIndexList) {
+                EmcOrderIndexBean newOrderIndex = new EmcOrderIndexBean();
+                BeanUtils.copyProperties(oi, newOrderIndex);
+                String oiId = ApplicationContextHelper.getNextSequence(orderIndexService.getDao().getTable());
+                newOrderIndex.setId(oiId);
+                newOrderIndex.setIndexCategoryId(icId);
+                newOrderIndexList.add(newOrderIndex);
+                List<EmcIndexSetBean> curIndexSetList = oldIndexSetList.stream().filter(e -> ObjectUtils.equals(oi.getId(), e.getIndexId())).collect(Collectors.toList());
+                for (EmcIndexSetBean is : curIndexSetList) {
+                    EmcIndexSetBean newIndexSet = new EmcIndexSetBean();
+                    BeanUtils.copyProperties(is, newIndexSet);
+                    Long isId = ApplicationContextHelper.getNextIdentity();
+                    newIndexSet.setId(isId);
+                    newIndexSet.setIndexId(oiId);
+                    newIndexSet.setIndexCategoryId(icId);
+                    newIndexSetList.add(newIndexSet);
+                }
+            }
+        }
+        getDao().insert(newIndexCategoryList);
+        orderIndexService.getDao().insert(newOrderIndexList);
+        indexSetService.getDao().insert(newIndexSetList);
     }
 
     @SuppressWarnings("unchecked")

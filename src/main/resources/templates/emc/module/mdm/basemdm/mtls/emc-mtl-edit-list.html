@@ -1,7 +1,14 @@
 <script th:inline="javascript">
 /*<![CDATA[*/
-    Gikam.requirejs([ '/static/emc/module/mdm/basemdm/mtls/emc-mtl.js',
-                      '/static/emc/module/mdm/basemdm/mtls/emc-mtl-edit-list.js'
+    Gikam.requirejs([   '/static/emc/module/mdm/basemdm/mtls/emc-mtl.js',
+                        '/static/emc/module/mdm/basemdm/mtls/emc-mtl-edit-list.js',
+                        '/static/emc/module/mdm/basemdm/mtls/emc-mtl-recieve.js',
+                        '/static/emc/module/qrcode/hm.js',
+                        '/static/emc/module/qrcode/qrcode.js',
+                        '/static/emc/module/qrcode/jimp.js',
+                        '/static/emc/module/qrcode/jsqr.min.js',
+                        '/static/emc/module/qrcode/base.js',
+                        '/static/emc/module/jsbarcode/JsBarcode.all.min.js'
                     ]);
     emcMtl.editPage.init(Gikam.getElParam([[${param}]]));
 /*]]>*/

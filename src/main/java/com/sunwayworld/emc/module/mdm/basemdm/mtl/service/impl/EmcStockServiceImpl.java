@@ -103,7 +103,9 @@ public class EmcStockServiceImpl implements EmcStockService {
             newStockLog.setQty(1D);
             newStockLog.setId(ApplicationContextHelper.getNextIdentity());
             newStockLog.setStockId(newStock.getId());
-            newStockLog.setLogType(LOG_TYPE_ADD);
+            if (emcStockLog.getLogType() == null) {
+                newStockLog.setLogType(LOG_TYPE_ADD);
+            }
             newStockLogList.add(newStockLog);
 
             EmcStockConcentBean newStockConcent = new EmcStockConcentBean();
@@ -139,8 +141,9 @@ public class EmcStockServiceImpl implements EmcStockService {
         emcStockLog.setStockId(id);
         emcStockLog.setLogType(LOG_TYPE_STORAGE);
         EmcStockBean emcStock = getDao().selectById(id);
-        emcStockLog.setPreviousQty(emcStock.getStockQty());
+        emcStockLog.setPreviousQty(emcStockLog.getQty());
         emcStock.setStockQty(emcStock.getStockQty() + emcStockLog.getQty());
+        emcStockLog.setExt$Item("operateqty", emcStockLog.getQty() + "");
         emcStockLog.setQty(emcStock.getStockQty());
         stockLogService.getDao().insert(emcStockLog);
 
@@ -166,6 +169,8 @@ public class EmcStockServiceImpl implements EmcStockService {
             emcStockLogBean.setStockId(stock.getId());
             emcStockLogBean.setLogType(LOG_TYPE_INVENTORY);
             emcStockLogBean.setQty(emcStockLog.getQty());
+            emcStockLogBean.setLogContent(emcStockLog.getLogContent());
+            emcStockLog.setExt$Item("operateqty", emcStockLog.getQty() + "");
             return emcStockLogBean;
         }).collect(Collectors.toList());
         //历史记录
@@ -195,6 +200,7 @@ public class EmcStockServiceImpl implements EmcStockService {
             emcStockLogBean.setStockId(stock.getId());
             emcStockLogBean.setLogType(LOG_TYPE_ABANDON);
             emcStockLogBean.setQty(stock.getStockQty());
+            emcStockLogBean.setExt$Item("operateqty", "0");
             return emcStockLogBean;
         }).collect(Collectors.toList());
         //历史记录
@@ -213,23 +219,26 @@ public class EmcStockServiceImpl implements EmcStockService {
     @Transactional
     @AuditTrailEntry(AuditTrailType.UPDATE)
     public void recieve(Long id, RestJsonWrapperBean wrapper) {
-        EmcStockLogBean emcStockLog = wrapper.parseUnique(EmcStockLogBean.class);
-        emcStockLog.setId(ApplicationContextHelper.getNextIdentity());
-        emcStockLog.setStockId(id);
-        emcStockLog.setLogType(LOG_TYPE_RECIEVE);
-        EmcStockBean emcStock = getDao().selectById(id);
-        emcStockLog.setPreviousQty(emcStock.getStockQty());
-        emcStock.setStockQty(emcStock.getStockQty() - emcStockLog.getQty());
-        emcStockLog.setQty(emcStock.getStockQty());
+        List<EmcStockLogBean> emcStockLogList = wrapper.parse(EmcStockLogBean.class);
+        emcStockLogList.forEach(emcStockLog -> {
+            emcStockLog.setId(ApplicationContextHelper.getNextIdentity());
+            emcStockLog.setStockId(id);
+            emcStockLog.setLogType(LOG_TYPE_RECIEVE);
+            EmcStockBean emcStock = getDao().selectById(id);
+            emcStockLog.setExt$Item("operateqty", emcStockLog.getQty() + "");
+            emcStockLog.setPreviousQty(emcStock.getStockQty());
+            emcStock.setStockQty(emcStock.getStockQty() - emcStockLog.getQty());
+            emcStockLog.setQty(emcStock.getStockQty());
 
-        //库存
-        getDao().update(emcStock, "STOCKQTY");
+            //库存
+            getDao().update(emcStock, STOCK_QTY);
 
-        //历史记录
-        stockLogService.getDao().insert(emcStockLog);
+            //历史记录
+            stockLogService.getDao().insert(emcStockLog);
 
-        //更新材料管理库存
-        mtlService.updateStockQty(emcStock.getMtlId());
+            //更新材料管理库存
+            mtlService.updateStockQty(emcStock.getMtlId());
+        });
     }
 
     @Override
@@ -285,7 +294,9 @@ public class EmcStockServiceImpl implements EmcStockService {
         //历史记录
         emcStockLog.setId(ApplicationContextHelper.getNextIdentity());
         emcStockLog.setStockId(emcStock.getId());
-        emcStockLog.setLogType(LOG_TYPE_ADD);
+        if (emcStockLog.getLogType() == null) {
+            emcStockLog.setLogType(LOG_TYPE_ADD);
+        }
         stockLogService.getDao().insert(emcStockLog);
 
         //更新材料管理库存

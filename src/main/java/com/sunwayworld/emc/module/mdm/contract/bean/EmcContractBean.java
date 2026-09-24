@@ -10,15 +10,15 @@ import com.sunwayworld.framework.data.annotation.Id;
 import com.sunwayworld.framework.data.annotation.NotNull;
 import com.sunwayworld.framework.data.annotation.Table;
 import com.sunwayworld.framework.data.annotation.Transient;
-import com.sunwayworld.framework.support.domain.AbstractAuditable;
-import com.sunwayworld.framework.support.domain.Auditable;
+import com.sunwayworld.framework.support.domain.AbstractInsertable;
+import com.sunwayworld.framework.support.domain.Insertable;
 
 /**
  * @author jinx@sunwayworld.com
  * @date 2020-04-03
  */
 @Table("T_EMC_CONTRACT")
-public class EmcContractBean extends AbstractAuditable<Long> implements Auditable<Long> {
+public class EmcContractBean extends AbstractInsertable<Long> implements Insertable<Long> {
 
     @Transient
     private static final long serialVersionUID = -8707994197308217260L;
@@ -81,9 +81,6 @@ public class EmcContractBean extends AbstractAuditable<Long> implements Auditabl
     private String createdByOrgId;// 制单人单位编码
 
     private String createdByOrgName;// 制单人单位名称
-
-    @NotNull(defaultValue = "draft")
-    private String processStatus;// 流程状态
 
     //------------------------------------------------------上海水文添加字段记录审核步骤的意见和日期
     @JSONField(format = "yyyy-MM-dd")
@@ -308,14 +305,6 @@ public class EmcContractBean extends AbstractAuditable<Long> implements Auditabl
 
     public void setCreatedByOrgName(String createdByOrgName) {
         this.createdByOrgName = createdByOrgName;
-    }
-
-    public String getProcessStatus() {
-        return processStatus;
-    }
-
-    public void setProcessStatus(String processStatus) {
-        this.processStatus = processStatus;
     }
 
     public String getContractNo() {

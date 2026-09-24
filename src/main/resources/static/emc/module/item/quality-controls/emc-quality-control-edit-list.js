@@ -15,7 +15,7 @@ emcQualityControl.editPage = {
                 if (!Gikam.isEmpty(data)) {
                     this.activeRowByIndex(0);
                 } else {
-                    Gikam.cleanCompData([ 'emc-quality-control-edit-list-quality-control-form', 'emc-quality-control-edit-list-implementation-form', 'emc-quality-control-edit-list-result-form' ]);
+                    // Gikam.cleanCompData([ 'emc-quality-control-edit-list-quality-control-form', 'emc-quality-control-edit-list-implementation-form', 'emc-quality-control-edit-list-result-form' ]);
                     var uploader = Gikam.getComp('emc-quality-control-edit-list-uploader');
                     uploader.setOptions({
                         bizId : ''
@@ -78,7 +78,7 @@ emcQualityControl.editPage = {
     },
     
     onGridActive : function(row) {
-        var url = Gikam.printf(emcQualityControl.baseUrl + '/{id}', {
+        /* var url = Gikam.printf(emcQualityControl.baseUrl + '/{id}', {
             id : row.id
         });
         Gikam.getAsyncComp('emc-quality-control-edit-list-quality-control-form').done(function(form) {
@@ -95,7 +95,7 @@ emcQualityControl.editPage = {
             form.refresh({
                 url : url,
             });
-        });
+        });*/
         var uploader = Gikam.getComp('emc-quality-control-edit-list-uploader');
         uploader.setOptions({
             bizId : row.id
@@ -109,7 +109,7 @@ emcQualityControl.editPage = {
             type : 'tab',
             id : 'emc-quality-control-edit-list-base-info-tab',
             fill : true,
-            panels : [ {
+            panels : [ /*{
                 title : 'EMC.MODULE.ITEM.QUALITYCONTROL.TAB.QC',
                 items : [ {
                     type : 'form',
@@ -137,7 +137,7 @@ emcQualityControl.editPage = {
                     columns : 1,
                     fields : emcQualityControl.getResultFormFields()
                 } ]
-            }, {
+            },*/ {
                 title : 'GIKAM.FILE.ATTACHMENT',
                 items : [ {
                     type : 'uploader',

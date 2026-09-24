@@ -7,9 +7,8 @@ var emcMtl = Gikam.getPageObject({
         return [ {
             checkbox : true
         }, {
-            field : 'id',
-            title : 'T_EMC_MTL.ID',
-            width : 100
+            field : 'mtlNo',
+            title : 'T_EMC_MTL.MTLNO',
         }, {
             field : 'mtlLabNo',
             title : 'T_EMC_MTL.MTLLABNO',
@@ -21,14 +20,9 @@ var emcMtl = Gikam.getPageObject({
             editor : true,
             width : 100
         }, {
-            field : 'specification',
-            title : 'T_EMC_MTL.SPECIFICATION',
-            editor : true,
-            width : 100
-        }, {
             field : 'stockQty',
             title : 'T_EMC_MTL.STOCKQTY',
-            editor :true,
+            readonly : true,
             width : 100
         }, {
             field : 'mtlCategoryId',
@@ -46,6 +40,17 @@ var emcMtl = Gikam.getPageObject({
             field : 'harmfulness',
             title : 'T_EMC_MTL.HARMFULNESS',
             editor : true
+        }, {
+            field : 'ext$.reagentcategory',
+            title : 'T_EMC_STOCK.REAGENTCATEGORY',
+            type : 'comboBox',
+            search : true,
+            category : 'sys',
+            param : {
+                codeCategoryId : 'reagentCategory'
+            },
+            editor: true,
+            editable: true
         } ];
     },
 
@@ -54,9 +59,8 @@ var emcMtl = Gikam.getPageObject({
         return [ {
             checkbox : true
         }, {
-            field : 'id',
-            title : 'T_EMC_MTL.ID',
-            width : 80
+            field : 'mtlNo',
+            title : 'T_EMC_MTL.MTLNO',
         }, {
             field : 'mtlName',
             title : 'T_EMC_MTL.MTLNAME',
@@ -70,6 +74,7 @@ var emcMtl = Gikam.getPageObject({
         }, {
             field : 'stockQty',
             title : 'T_EMC_MTL.STOCKQTY',
+            readonly : true,
             width : 80
         }, {
             field : 'mtlCategoryId',
@@ -85,7 +90,7 @@ var emcMtl = Gikam.getPageObject({
             },
         }, {
             field : 'harmfulness',
-            title : 'T_EMC_MTL.HARMFULNESS',
+            title : 'Cas号',
             editor : true
         } ];
     },
@@ -110,7 +115,23 @@ var emcMtl = Gikam.getPageObject({
             firstBlank : false,
             selectedIndex : 0,
             preInsert : true
-        } ];
+        } ,{
+            field : 'ext$.reagentcategory',
+            title : 'T_EMC_STOCK.REAGENTCATEGORY',
+            preInsert : true,
+            width : 100,
+            type : 'select',
+            search : true,
+            category : 'sys',
+            param : {
+                codeCategoryId : 'reagentCategory'
+            },
+        }, {
+            field : 'mtlNo',
+            title : 'T_EMC_MTL.MTLNO',
+            preInsert : true,
+            validators : [ 'remote[' + emcMtl.baseUrl + '/action/validate-unique{mtlNo}]' ],
+        }];
     },
 
     /** 一般试剂添加表单 */
@@ -132,6 +153,11 @@ var emcMtl = Gikam.getPageObject({
                 managementType_SEQ : 'genericReagent'
             },
             preInsert : true,
+        }, {
+            field : 'mtlNo',
+            title : 'T_EMC_MTL.MTLNO',
+            preInsert : true,
+            validators : [ 'remote[' + emcMtl.baseUrl + '/action/validate-unique{mtlNo}]' ],
         } ];
     },
 
@@ -144,6 +170,7 @@ var emcMtl = Gikam.getPageObject({
             title : 'T_EMC_STOCK.BATCHNO',
             validators : [ 'remote[' + emcMtl.baseUrl + '/stocks/{id}/action/validate-unique{batchNo}]', 'strLength[0,32]' ],
             editor : true,
+            width : 160
         }, {
             field : 'ext$.reagentcategory',
             title : 'T_EMC_STOCK.REAGENTCATEGORY',
@@ -183,9 +210,20 @@ var emcMtl = Gikam.getPageObject({
             },
             editor : true,
         }, {
+            field : 'lowLimit',
+            title : 'T_EMC_STOCK.LOWLIMIT',
+            type : 'number',
+            editor : true,
+        }, {
             field : 'expireDate',
             title : 'T_EMC_STOCK.EXPIREDATE',
             type : 'date',
+            editor : true,
+        }, {
+            field : 'remindDays',
+            title : 'T_EMC_STOCK.REMINDDAYS',
+            type : 'number',
+            isInteger : true,
             editor : true,
         }, {
             field : 'ext$.storagelocation',
@@ -199,7 +237,6 @@ var emcMtl = Gikam.getPageObject({
         }, {
             field : 'ext$.stockstatus',
             title : 'T_EMC_STOCK.STOCKSTATUS',
-            editor : true,
         }, {
             field : 'lowLimit',
             title : 'T_EMC_STOCK.LOWLIMIT',
@@ -210,6 +247,10 @@ var emcMtl = Gikam.getPageObject({
             title : 'T_EMC_STOCK.STOCKSPECIFICATION',
             editor : true,
         }, {
+            field : 'verdorName',
+            title : '生产商',
+            editor : true,
+        }, {
             field : 'ext$.productiondate',
             title : 'T_EMC_STOCK.PRODUCTIONDATE',
             type : 'date',
@@ -218,57 +259,13 @@ var emcMtl = Gikam.getPageObject({
             field : 'ext$.storagecondition',
             title : 'T_EMC_STOCK.STORAGECONDITION',
             editor : true,
-            type : 'select',
+            type : 'comboBox',
             search : true,
             category : 'sys',
             param : {
                 codeCategoryId : 'savedition'
             },
-        }, {
-            field : 'ext$.istermofvalidity',
-            title : 'T_EMC_STOCK.ISTERMOFVALIDITY',
-            editor : true,
-            type : 'select',
-            category : 'sys',
-            param : {
-                codeCategoryId : 'yesorno'
-            },
-        }, {
-            field : 'ext$.issuittemperature',
-            title : 'T_EMC_STOCK.ISSUITTEMPERATURE',
-            editor : true,
-            type : 'select',
-            category : 'sys',
-            param : {
-                codeCategoryId : 'yesorno'
-            },
-        }, {
-            field : 'ext$.ispackagingdamage',
-            title : 'T_EMC_STOCK.ISPACKAGINGDAMAGE',
-            editor : true,
-            type : 'select',
-            category : 'sys',
-            param : {
-                codeCategoryId : 'yesorno'
-            },
-        }, {
-            field : 'ext$.issolutiondeposition',
-            title : 'T_EMC_STOCK.ISSOLUTIONDEPOSITION',
-            editor : true,
-            type : 'select',
-            category : 'sys',
-            param : {
-                codeCategoryId : 'yesorno'
-            },
-        }, {
-            field : 'ext$.other',
-            title : 'T_EMC_STOCK.OTHER',
-            editor : true,
-        } , {
-            field : 'ext$.checkconclusion',
-            title : 'T_EMC_STOCK.CHECKCONCLUSION',
-            editor : true,
-        }  ];
+        } ];
     },
 
     getStockBaseInfoFormFields : function() {
@@ -283,7 +280,6 @@ var emcMtl = Gikam.getPageObject({
             type : 'select',
             search : true,
             category : 'sys',
-            preInsert : true,
             param : {
                 codeCategoryId : 'reagentCategory'
             },
@@ -300,10 +296,20 @@ var emcMtl = Gikam.getPageObject({
             range : [1, 100],
             preInsert : true
         }, {
-            field : 'vendorId',
-            title : 'T_EMC_STOCK_LOG.VENDOR',
+            field: 'verdorName',
+            title: 'T_EMC_STOCK_LOG.VENDOR',
+            type: 'select',
+            search : true,
+            category: 'vendor',
+            param:{
+                vendorCategory_SEQ : 'produce'
+            },
             preInsert : true
-            /*type : 'choose',
+        }, /*{
+            field : 'verdorName',
+            title : '供应商',
+            preInsert : true
+            type : 'choose',
             category : 'vendor',
             single : true,
             preInsert : true,
@@ -323,15 +329,23 @@ var emcMtl = Gikam.getPageObject({
                 this.setData({
                     vendorId : '',
                 });
-            },*/
-        }, {
+            },
+        }, */{
             field : 'expireDate',
             title : 'T_EMC_STOCK.EXPIREDATE',
             type : 'date',
             preInsert : true,
         }, {
+            field : 'remindDays',
+            title : 'T_EMC_STOCK.REMINDDAYS',
+            type : 'number',
+        }, {
             field : 'ext$.stockspecification',
             title : 'T_EMC_STOCK.STOCKSPECIFICATION',
+            preInsert : true,
+        }, {
+            field : 'ext$.productionno',
+            title : '出厂编码',
             preInsert : true,
         }, {
             field : 'ext$.productiondate',
@@ -342,7 +356,7 @@ var emcMtl = Gikam.getPageObject({
             field : 'ext$.storagecondition',
             title : 'T_EMC_STOCK.STORAGECONDITION',
             editor : true,
-            type : 'select',
+            type : 'comboBox',
             search : true,
             category : 'sys',
             param : {
@@ -380,14 +394,33 @@ var emcMtl = Gikam.getPageObject({
             field : 'qty',
             title : 'T_EMC_STOCK_LOG.RECIEVEQTY',
             validators : [ 'number' ],
-            preInsert : true
+            preInsert : true,
+            value: 1
+        }, {
+            field : 'userName',
+            title : 'T_EMC_STOCK_LOG.RECEIVEDBYID',
+            type : 'choose',
+            validators : [ 'notEmpty' ],
+            preInsert : true,
+            category : 'user-simple',
+            // single : true,
+            onAfterChoose : function(rows) {
+                if (!Gikam.isEmpty(rows)) {
+                    this.setData({
+                        receivedById : rows.map(r=>r.id).join(','),
+                        receivedbyname: rows.map(r=>r.userName).join(','),
+                        userName : rows.map(r=>r.userName).join(','),
+                        receivedByOrgId: rows.map(r=>r.orgId).join(','),
+                        orgName: rows.map(r=>r.orgName).join(','),
+                    });
+                }
+            },
         }, {
             field : 'orgName',
             title : 'T_EMC_STOCK_LOG.RECEIVEDBYORGID',
             type : 'choose',
             category : 'org-simple',
             single : true,
-            validators : [ 'notEmpty' ],
             preInsert : true,
             onBeforeChoose : function() {
                 return {
@@ -403,8 +436,23 @@ var emcMtl = Gikam.getPageObject({
                 }
             },
         }, {
-            field : 'userName',
-            title : 'T_EMC_STOCK_LOG.RECEIVEDBYID',
+            field : 'logContent',
+            title : 'T_EMC_STOCK_LOG.LOGCONTENT',
+            validators : [ 'strLength[0,20]' ],
+            preInsert : true
+        } ];
+    },
+
+    getStockReturnFormFields : function() {
+        return [ {
+            field : 'qty',
+            title : 'T_EMC_STOCK_LOG.RETURNQTY',
+            validators : [ 'number' ],
+            preInsert : true,
+            value: 1
+        }, {
+            field : 'ext$.returnbyname',
+            title : 'T_EMC_STOCK_LOG.RETURNBYNAME',
             type : 'choose',
             validators : [ 'notEmpty' ],
             preInsert : true,
@@ -413,8 +461,34 @@ var emcMtl = Gikam.getPageObject({
             onAfterChoose : function(rows) {
                 if (!Gikam.isEmpty(rows)) {
                     this.setData({
-                        receivedById : rows[0].id,
-                        userName : rows[0].userName
+                        returnById : rows[0].id,
+                        returnByOrgId: rows[0].orgId,
+                        ext$ :{
+                            returnbyname: rows[0].userName,
+                            returnbyorgname: rows[0].orgName
+                        }
+                    });
+                }
+            },
+        }, {
+            field : 'ext$.returnbyorgname',
+            title : 'T_EMC_STOCK_LOG.RETURNBYORGNAME',
+            type : 'choose',
+            category : 'org-simple',
+            single : true,
+            preInsert : true,
+            onBeforeChoose : function() {
+                return {
+                    orgCategory_SEQ : 'department'
+                }
+            },
+            onAfterChoose : function(rows) {
+                if (!Gikam.isEmpty(rows)) {
+                    this.setData({
+                        returnByOrgId : rows[0].id,
+                        ext$ :{
+                            returnbyorgname: rows[0].orgName
+                        }
                     });
                 }
             },
@@ -439,19 +513,19 @@ var emcMtl = Gikam.getPageObject({
         } ];
     },
 
-    getStockLogListColumns : function() {
+    getStockLogListColumns : function(type) {
         return [ {
             field : 'logType',
             title : 'T_EMC_STOCK_LOG.LOGTYPE',
+        }, {
+            field : 'ext$.operateqty',
+            title : '操作数量',
         }, {
             field : 'previousQty',
             title : 'T_EMC_STOCK_LOG.PREVIOUSQTY',
         }, {
             field : 'qty',
             title : 'T_EMC_STOCK_LOG.QTY',
-        }, {
-            field : 'vendorId',
-            title : 'T_EMC_STOCK_LOG.VENDOR',
         }, {
             field : 'price',
             title : 'T_EMC_STOCK_LOG.PRICE',
@@ -467,6 +541,7 @@ var emcMtl = Gikam.getPageObject({
         }, {
             field : 'logContent',
             title : 'T_EMC_STOCK_LOG.LOGCONTENT',
+            editor : true
         }, {
             field : 'ext$.receivetime',
             title : 'T_EMC_STOCK_LOG.RECEIVETIME',
@@ -482,16 +557,15 @@ var emcMtl = Gikam.getPageObject({
             title : 'T_EMC_STOCK_LOG.RECEIVEDBYNAME',
             type : 'choose',
             category : 'user-simple',
-            single : true,
             editor : true,
             onAfterChoose : function(rows, index) {
                 if (rows) {
                     var grid = this;
                     grid.setData({
                         index : index,
-                        receivedById : rows[0].id,
+                        receivedById : rows.map(r=>r.id).join(','),
 	                    ext$ :{
-	                    	   receivedbyname: rows[0].userName
+	                    	   receivedbyname: rows.map(r=>r.userName).join(',')
 	                    }
                     });
                 }
@@ -499,6 +573,30 @@ var emcMtl = Gikam.getPageObject({
         }, {
             field : 'ext$.orgname',
             title : 'T_EMC_STOCK_LOG.RECEIVEDBYORGID',
+        }, {
+            field : 'ext$.returnbyname',
+            title : 'T_EMC_STOCK_LOG.RETURNBYNAME',
+            type : 'choose',
+            category : 'user-simple',
+            single : true,
+            editor : true,
+            onAfterChoose : function(rows, index) {
+                if (rows) {
+                    var grid = this;
+                    grid.setData({
+                        index : index,
+                        returnById : rows[0].id,
+                        returnByOrgId: rows[0].orgId,
+                        ext$ :{
+                            returnbyname: rows[0].userName,
+                            returnbyorgname: rows[0].orgName
+                        }
+                    });
+                }
+            },
+        }, {
+            field : 'ext$.returnbyorgname',
+            title : 'T_EMC_STOCK_LOG.RETURNBYORGNAME',
         } ];
     },
 
@@ -544,196 +642,16 @@ var emcMtl = Gikam.getPageObject({
             title : 'T_EMC_STOCK_CONCENT.STDVALUE',
             editor : true,
             validators : [ 'number' ],
-            onChange : function(name, value, index) {
-                if (Gikam.isEmpty(value)) {
-                    this.setData({
-                        index : index,
-                        stdValue : '',
-                        lowLimit : '',
-                        highLimit : '',
-                    });
-                } else {
-                    var uncertainty = this.getData()[index].uncertainty;
-                    var uncertaintyPercent = this.getData()[index].uncertaintyPercent;
-                    var   length1 = String(value).indexOf(".")+1;//小数点的位数
-                    var   length2 = String(uncertainty).indexOf(".")+1;//小数点的位数
-                    var   length3 = String(uncertaintyPercent).indexOf(".")+1;//小数点的位数
-                    if(length1>0){
-                    	length1 = String(value).length - length1;
-                    }
-                    if(length2>0){
-                    	length2 = String(uncertainty).length - length2;
-                    }
-                    if(length3>0){
-                    	length3 = String(uncertaintyPercent).length - length3;
-                    }
-                    if(length1>length2){
-                        var temp=length1;
-                        length1=length2;
-                        length2=temp; //交换
-                    }
-                    if(length2>length3){
-                        var temp=length2;
-                        length2=length3;
-                        length3=temp; //交换
-                    }
-
-                    if (uncertainty) {
-                        this.setData({
-                            index : index,
-                            lowLimit : (Number(value) - Number(uncertainty)).toFixed(length3),
-                            highLimit : (Number(value) + Number(uncertainty)).toFixed(length3),
-                            stdValue : value
-                        });
-                        return;
-                    }
-                    if (uncertaintyPercent) {
-                        this.setData({
-                            index : index,
-                            lowLimit : (Number(value) * (1 - Number(uncertaintyPercent))).toFixed(length3),
-                            highLimit : (Number(value) * (1 + Number(uncertaintyPercent))).toFixed(length3),
-                            stdValue : value
-                        });
-                        return;
-                    }
-                    this.setData({
-                        index : index,
-                        lowLimit :  Number(value).toFixed(length3),
-                        highLimit : Number(value).toFixed(length3),
-                        stdValue : Number(value).toFixed(length3)
-                    });
-                }
-            },
         }, {
             field : 'uncertainty',
             title : 'T_EMC_STOCK_CONCENT.UNCERTAINTY',
             editor : true,
             validators : [ 'number' ],
-            onChange : function(name, value, index) {
-                var stdValue = this.getData()[index].stdValue;
-                var uncertaintyPercent = this.getData()[index].uncertaintyPercent;
-                if (Gikam.isEmpty(stdValue)) {
-                    this.setData({
-                        index : index,
-                        lowLimit : '',
-                        highLimit : '',
-                        uncertainty : value
-                    });
-                } else {
-                    var   length1 = String(value).indexOf(".")+1;//小数点的位数
-                    var   length2 = String(stdValue).indexOf(".")+1;//小数点的位数
-                    var   length3 = String(uncertaintyPercent).indexOf(".")+1;//小数点的位数
-                    if(length1>0){
-                    	length1 = String(value).length - length1;
-                    }
-                    if(length2>0){
-                    	length2 = String(stdValue).length - length2;
-                    }
-                    if(length3>0){
-                    	length3 = String(uncertaintyPercent).length - length3;
-                    }
-                    if(length1>length2){
-                        var temp=length1;
-                        length1=length2;
-                        length2=temp; //交换
-                    }
-                    if(length2>length3){
-                        var temp=length2;
-                        length2=length3;
-                        length3=temp; //交换
-                    }
-
-                    if (Gikam.isEmpty(value)) {
-                        if (Gikam.isEmpty(uncertaintyPercent)) {
-                            this.setData({
-                                index : index,
-                                lowLimit : stdValue.toFixed(length3),
-                                highLimit : stdValue.toFixed(length3),
-                                uncertainty : ''
-                            });
-                        } else {
-                            this.setData({
-                                index : index,
-                                lowLimit : (Number(stdValue) * (1 - Number(uncertaintyPercent) / 100)).toFixed(length3),
-                                highLimit : (Number(stdValue) * (1 + Number(uncertaintyPercent) / 100)).toFixed(length3),
-                                uncertainty : ''
-                            });
-                        }
-                    } else {
-                        this.setData({
-                            index : index,
-                            lowLimit : (Number(stdValue) - Number(value)).toFixed(length3),
-                            highLimit : (Number(stdValue) + Number(value)).toFixed(length3),
-                            uncertainty : value
-                        });
-                    }
-                }
-            },
         }, {
             field : 'uncertaintyPercent',
             title : 'T_EMC_STOCK_CONCENT.UNCERTAINTYPERCENT',
             editor : true,
             validators : [ 'number', 'numRange[0,100]' ],
-            onChange : function(name, value, index) {
-                var stdValue = this.getData()[index].stdValue;
-                var uncertainty = this.getData()[index].uncertainty;
-                if (Gikam.isEmpty(stdValue)) {
-                    this.setData({
-                        index : index,
-                        lowLimit : '',
-                        highLimit : '',
-                        uncertaintyPercent : value
-                    });
-                } else {
-                    var   length1 = String(value).indexOf(".")+1;//小数点的位数
-                    var   length2 = String(uncertainty).indexOf(".")+1;//小数点的位数
-                    var   length3 = String(stdValue).indexOf(".")+1;//小数点的位数
-                    if(length1>0){
-                    	length1 = String(value).length - length1;
-                    }
-                    if(length2>0){
-                    	length2 = String(uncertainty).length - length2;
-                    }
-                    if(length3>0){
-                    	length3 = String(stdValue).length - length3;
-                    }
-                    if(length1>length2){
-                        var temp=length1;
-                        length1=length2;
-                        length2=temp; //交换
-                    }
-                    if(length2>length3){
-                        var temp=length2;
-                        length2=length3;
-                        length3=temp; //交换
-                    }
-
-                    if (Gikam.isEmpty(value)) {
-                        if (Gikam.isEmpty(uncertainty)) {
-                            this.setData({
-                                index : index,
-                                lowLimit : stdValue.toFixed(length3),
-                                highLimit : stdValue.toFixed(length3),
-                                uncertaintyPercent : ''
-                            });
-                        } else {
-                            this.setData({
-                                index : index,
-                                lowLimit : (Number(stdValue) - Number(uncertainty)).toFixed(length3),
-                                highLimit : (Number(stdValue) + Number(uncertainty)).toFixed(length3),
-                                uncertaintyPercent : ''
-                            });
-                        }
-                    } else {
-                        this.setData({
-                            index : index,
-                            lowLimit : (Number(stdValue) * (1 - Number(value) / 100)).toFixed(length3),
-                            highLimit : (Number(stdValue) * (1 + Number(value) / 100)).toFixed(length3),
-                            uncertaintyPercent : value
-                        });
-                    }
-                }
-            }
         }, {
             field : 'concentUnitName',
             title : 'T_EMC_STOCK_CONCENT.CONCENTUNITNAME',
@@ -787,6 +705,62 @@ var emcMtl = Gikam.getPageObject({
         } ];
     },
 
+    getBatchUpdateStockConcentFields : function() {
+        return [ {
+            field : 'stdValue',
+            title : 'T_EMC_STOCK_CONCENT.STDVALUE',
+            validators : [ 'number' ],
+        }, {
+            field : 'uncertainty',
+            title : 'T_EMC_STOCK_CONCENT.UNCERTAINTY',
+            validators : [ 'number' ],
+        }, {
+            field : 'uncertaintyPercent',
+            title : 'T_EMC_STOCK_CONCENT.UNCERTAINTYPERCENT',
+            editor : true,
+            validators : [ 'number', 'numRange[0,100]' ],
+        }, {
+            field : 'concentUnitName',
+            title : 'T_EMC_STOCK_CONCENT.CONCENTUNITNAME',
+            type : 'choose',
+            category : 'unit',
+            single : true,
+            onAfterChoose : function(rows) {
+                if (!Gikam.isEmpty(rows)) {
+                    this.setData({
+                        concentUnitName : rows[0].unitName,
+                    });
+                }
+            },
+            validators : [ 'strLength[0,21]' ]
+        }, {
+            field : 'remark',
+            title : 'T_EMC_STOCK_CONCENT.REMARK',
+            validators : [ 'strLength[0,170]' ]
+        }, {
+            field : 'lowLimit',
+            title : 'T_EMC_STOCK_CONCENT.LOWLIMIT',
+        }, {
+            field : 'highLimit',
+            title : 'T_EMC_STOCK_CONCENT.HIGHLIMIT',
+            formatter : function(i, v ,r) {
+                return Gikam.scientificNotation(v);
+            }
+        }, {
+            field : 'revisionRule',
+            title : 'T_EMC_STOCK_CONCENT.REVISIONRULE',
+            type : 'choose',
+            category : 'rounding-rule',
+            single : true,
+            onAfterChoose : function(back) {
+                if (back) {
+                    this.setData({
+                        'revisionRule' : back
+                    });
+                }
+            }
+        } ];
+    },
     getItemListColumns : function() {
         return [ {
             checkbox : true
@@ -1020,8 +994,12 @@ var emcMtl = Gikam.getPageObject({
             checkbox : true
         }, {
             field : 'batchNo',
-            title : 'T_EMC_STOCK.STANDARDLEVEL',
+            title : '批号',
             validators : [ 'remote[' + emcMtl.baseUrl + '/stocks/{id}/action/validate-unique{batchNo}]', 'strLength[0,32]' ],
+            editor : true,
+        }, {
+            field : 'ext$.storagelocation',
+            title : '存放位置',
             editor : true,
         }, {
             field : 'stockQty',
@@ -1048,6 +1026,12 @@ var emcMtl = Gikam.getPageObject({
             type : 'date',
             editor : true,
         }, {
+            field : 'remindDays',
+            title : 'T_EMC_STOCK.REMINDDAYS',
+            type : 'number',
+            isInteger : true,
+            editor : true,
+        }, {
             field : 'lowLimit',
             title : 'T_EMC_STOCK.LOWLIMIT',
             validators : [ 'number' ],
@@ -1066,6 +1050,16 @@ var emcMtl = Gikam.getPageObject({
             type : 'date',
             editor : true,
         }, {
+            field: 'ext$.vendorid',
+            title: 'T_EMC_STOCK_LOG.VENDOR',
+            type: 'select',
+            search : true,
+            category: 'vendor',
+            param:{
+                vendorCategory_SEQ : 'produce'
+            },
+            editor : true
+        }, {
             field : 'ext$.storagecondition',
             title : 'T_EMC_STOCK.STORAGECONDITION',
             editor : true,
@@ -1080,11 +1074,7 @@ var emcMtl = Gikam.getPageObject({
 
     /** 一般试剂添加库存 */
     getGeneralStockBaseInfoFormFields : function() {
-        return [ {
-            field : 'batchNo',
-            title : 'T_EMC_STOCK.STANDARDLEVEL',
-            preInsert : true
-        }, {
+        return [  {
             field : 'qty',
             title : 'T_EMC_STOCK_LOG.ADDQTY',
             validators : [ 'number' ],
@@ -1092,6 +1082,16 @@ var emcMtl = Gikam.getPageObject({
             range : [1, 100],
             preInsert : true
         }, {
+            field: 'vendorId',
+            title: 'T_EMC_STOCK_LOG.VENDOR',
+            type: 'select',
+            search : true,
+            category: 'vendor',
+            param:{
+                vendorCategory_SEQ : 'produce'
+            },
+            preInsert : true
+        },/*{
             field : 'vendorId',
             title : 'T_EMC_STOCK_LOG.VENDOR',
             type : 'choose',
@@ -1115,12 +1115,17 @@ var emcMtl = Gikam.getPageObject({
                     vendorId : '',
                 });
             },
-        }, {
+        },*/ {
             field : 'expireDate',
             title : 'T_EMC_STOCK.EXPIREDATE',
             type : 'date',
             preInsert : true,
         }, {
+            field : 'remindDays',
+            title : 'T_EMC_STOCK.REMINDDAYS',
+            type : 'number',
+            isInteger : true,
+        },{
             field : 'ext$.stockspecification',
             title : 'T_EMC_STOCK.STOCKSPECIFICATION',
             preInsert : true,
@@ -1136,8 +1141,14 @@ var emcMtl = Gikam.getPageObject({
         }, {
             field : 'ext$.storagecondition',
             title : 'T_EMC_STOCK.STORAGECONDITION',
+            type : 'select',
+            search : true,
+            category : 'sys',
+            param : {
+                codeCategoryId : 'savedition'
+            },
             preInsert : true,
-        } ];
+        }];
     },
 
     getMtlCheckSearchColumns : function() {
@@ -1211,6 +1222,12 @@ var emcMtl = Gikam.getPageObject({
             type : 'date',
             editor : true,
         }, {
+            field : 'remindDays',
+            title : 'T_EMC_STOCK.REMINDDAYS',
+            type : 'number',
+            isInteger : true,
+            editor : true,
+        }, {
             field : 'ext$.storagelocation',
             title : 'T_EMC_STOCK.STORAGELOCATION',
             editor : true,
@@ -1218,10 +1235,6 @@ var emcMtl = Gikam.getPageObject({
             field : 'ext$.stocktime',
             title : 'T_EMC_STOCK.STOCKTIME',
             type :'date',
-            editor : true,
-        }, {
-            field : 'ext$.stockstatus',
-            title : 'T_EMC_STOCK.STOCKSTATUS',
             editor : true,
         }, {
             field : 'lowLimit',
@@ -1337,5 +1350,72 @@ var emcMtl = Gikam.getPageObject({
                 }
             },
         } ]
+    },
+    getMtlStockRecieveFormFields : function() {
+        return [ {
+            field : 'batchNo',
+            title : 'T_EMC_STOCK.BATCHNO',
+            onChange : function(field, value) {
+                let _form = this;
+                _form.setData({batchNo:value,stockQty : '',stockId: '',mtlId:''});
+                if(value){
+                    Gikam.post(emcMtl.baseUrl + '/0/stocks/queries',Gikam.getJsonWrapper({
+                        f:{status_SEQ: "0", stockQty_NG: 0,batchNo_SEQ: value}
+                    })).done(function(page){
+                        if(page.total==0){
+                            Gikam.alert('未查询到相关库存!<br/>'+value);
+                            return;
+                        }else{
+                            _form.setData({stockQty:page.rows[0].stockQty,stockId:page.rows[0].id,mtlId:page.rows[0].mtlId})
+                        }
+                    });
+                }
+            }
+        }, {
+            field : 'stockQty',
+            title : 'T_EMC_STOCK.STOCKQTY',
+            readonly : true
+        }, {
+            field : 'userName',
+            title : 'T_EMC_STOCK_LOG.RECEIVEDBYID',
+            type : 'choose',
+            validators : [ 'notEmpty' ],
+            category : 'user-simple',
+            single : true,
+            onAfterChoose : function(rows) {
+                if (!Gikam.isEmpty(rows)) {
+                    this.setData({
+                        receivedById : rows[0].id,
+                        receivedbyname: rows[0].userName,
+                        userName : rows[0].userName,
+                        receivedByOrgId : rows[0].orgId,
+                        orgName : rows[0].orgName,
+                    });
+                }
+            },
+        }, {
+            field : 'orgName',
+            title : 'T_EMC_STOCK_LOG.RECEIVEDBYORGID',
+            type : 'choose',
+            category : 'org-simple',
+            single : true,
+            onBeforeChoose : function() {
+                return {
+                    orgCategory_SEQ : 'department'
+                }
+            },
+            onAfterChoose : function(rows) {
+                if (!Gikam.isEmpty(rows)) {
+                    this.setData({
+                        receivedByOrgId : rows[0].id,
+                        orgName : rows[0].orgName,
+                    });
+                }
+            },
+        }, {
+            field : 'logContent',
+            title : 'T_EMC_STOCK_LOG.LOGCONTENT',
+            validators : [ 'strLength[0,20]' ],
+        } ];
     },
 });

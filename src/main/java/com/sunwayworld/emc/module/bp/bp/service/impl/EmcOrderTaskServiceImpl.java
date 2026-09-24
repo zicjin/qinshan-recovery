@@ -1446,4 +1446,9 @@ public class EmcOrderTaskServiceImpl implements EmcOrderTaskService {
         PageRowBounds rowBounds = wrapper.extractPageRowBounds();
         return MybatisPageHelper.get(rowBounds, () -> getDao().selectRunnableAnalAssignList(parameter));
     }
+    @Override
+    public Page<EmcOrderTaskBean> selectOrderTaskPagationByOrderAndTask(RestJsonWrapperBean wrapper) {
+        return selectOrderTaskPagationByOrder(wrapper);
+    }
+
 }

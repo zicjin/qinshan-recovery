@@ -16,6 +16,9 @@ emcTestMethod.emcTestmethodBeforehandleEditPage = {
                     this.activeRowByIndex(0);
                 }
             },
+            deleteFormatter : function(row) {
+                return row.beforeHandleName || row.id;
+            },
             toolbar : [ {
                 type : 'button',
                 text : 'GIKAM.BUTTON.INSERT',
@@ -37,6 +40,7 @@ emcTestMethod.emcTestmethodBeforehandleEditPage = {
                     var url = Gikam.printf(emcTestMethod.baseUrl + '/testmethods/{testMethodId}/beforehandles', {
                         testMethodId : _this.param.testMethodId
                     });
+                    Gikam.getComp('emc-testmethod-beforehandle-edit-list-grid').deleteRows(url);
                 }
             } ]
         }

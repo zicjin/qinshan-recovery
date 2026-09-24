@@ -31,7 +31,10 @@ emcMtlCategory.editPage = {
                         titleWidth : 100,
                         modalTitle : 'EMC.MODULE.MDM.BASEMDM.MTLCATEGORIES.MODAL.MTL_CATEGORY_ADD',
                         fields : emcMtlCategory.getPreInsertFields(),
-                        url : emcMtlCategory.baseUrl
+                        url : emcMtlCategory.baseUrl,
+                        onFormRendered : function() {
+                            this.removeFieldValidator( 'managementType' , ['notEmpty'] );
+                        }
                     }).done(function(id) {
                         Gikam.getComp('emc-mtl-category-edit-list-grid').refresh();
                     });

@@ -7,15 +7,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcItemQcIndexBean;
 import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcRelatedTestMethodBean;
 import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcTestMethodDefaultQcBean;
 import com.sunwayworld.emc.module.mdm.bizmdm.test.resource.PfTestMethodResource;
+import com.sunwayworld.emc.module.mdm.bizmdm.test.service.EmcItemQcIndexService;
 import com.sunwayworld.emc.module.mdm.bizmdm.test.service.EmcTestService;
 import com.sunwayworld.emc.module.mdm.bizmdm.test.service.PfTestMethodService;
 import com.sunwayworld.framework.data.page.Page;
 import com.sunwayworld.framework.log.annotation.Log;
 import com.sunwayworld.framework.log.annotation.LogModule;
 import com.sunwayworld.framework.log.annotation.LogType;
+import com.sunwayworld.framework.mybatis.mapper.SearchFilter;
 import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;
 import com.sunwayworld.framework.restful.data.RestValidationResultBean;
 import com.sunwayworld.framework.spring.annotation.GikamBean;
@@ -34,6 +37,9 @@ public class PfTestMethodResourceImpl extends EmcTestMethodResourceImpl implemen
 
     @Autowired
     private PfTestMethodService testMethodService;
+
+    @Autowired
+    private EmcItemQcIndexService itemQcIndexService;
 
     @Override
     @Log(value = "验证测试名称唯一性", type = LogType.VALIDATE)
@@ -109,5 +115,39 @@ public class PfTestMethodResourceImpl extends EmcTestMethodResourceImpl implemen
     @RequestMapping(value = "/action/sync-test-id", method = RequestMethod.POST)
     public void syncTestId(RestJsonWrapperBean wrapper) {
         testMethodService.syncTestId(wrapper);
+    }
+
+    @Override
+    @Log(value = "前处理复制到其它测试", type = LogType.INSERT)
+    @RequestMapping(value = "/before-handle/action/copy-to", method = RequestMethod.POST)
+    public void beforeHandleCopyTo(RestJsonWrapperBean wrapper) {
+        testMethodService.beforeHandleCopyTo(wrapper);
+    }
+
+    @Override
+    @Log(value = "公式附件复制到其它测试", type = LogType.INSERT)
+    @RequestMapping(value = "/script-file/action/copy-to", method = RequestMethod.POST)
+    public void scriptFileCopyTo(RestJsonWrapperBean wrapper) {
+        testMethodService.scriptFileCopyTo(wrapper);
+    }
+
+    @Log(value = "批量删除QC指标", type = LogType.DELETE)
+    @RequestMapping(value = "/items/action/qc-index", method = RequestMethod.DELETE)
+    public Long delQcIndex(RestJsonWrapperBean wrapper) {
+        testMethodService.delQcIndex(wrapper);
+        return 1L;
+    }
+
+    @Log(value = "批量删除分段修约", type = LogType.DELETE)
+    @RequestMapping(value = "/items/action/revision", method = RequestMethod.DELETE)
+    public Long delRevision(RestJsonWrapperBean wrapper) {
+        testMethodService.delRevision(wrapper);
+        return 1L;
+    }
+
+    @Log(value = "查询QC指标", type = LogType.SELECT)
+    @RequestMapping(value = "/items/qc-indexes/queries", method = RequestMethod.POST)
+    public Page<EmcItemQcIndexBean> selectQcIndexPagation(RestJsonWrapperBean wrapper) {
+        return itemQcIndexService.selectPaginationByFilter(SearchFilter.instance(), wrapper);
     }
 }

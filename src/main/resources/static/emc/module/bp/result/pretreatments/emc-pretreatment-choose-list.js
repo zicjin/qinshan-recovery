@@ -12,7 +12,7 @@ emcPretreatment.choosePage = {
             filterOpen : true,
             readonly : true,
 	        requestData : {
-	            orgId_SEQ : workspace.user.ext$.parentorgid,
+	            org_filter : '1',
                 status_SEQ : '0',
                 sampleReceiverFlag_SEQ : '1',
                 id_DIFFER : _this.param.pretreatmentId

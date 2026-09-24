@@ -23,6 +23,7 @@ emcTestMethod.resultRunMethodParamDetailPage = {
                         });
                         var selectFormData = Gikam.getComp('emc-method-param-edit-test-method-select-form').getData(); // 选择的模板
                         // id
+
                         Gikam.getLastModal().window.showMask(true);
                         Gikam.put('/secure/emc/module/mdm/basemdm/property-tmpls/result-runs/property-datas/' + selectFormData.templateUse + '/action/' + _this.param.id, Gikam.getJsonWrapper({}, [ '', [ formData ] ])).done(function(id) {
                             Gikam.getLastModal().close();
@@ -44,7 +45,8 @@ emcTestMethod.resultRunMethodParamDetailPage = {
             fields : emcTestMethod.getRunTestMethodParamSelectColumns(_this.param.id),
             autoSave : false,
             onRendered : function(data) {
-                // 获取数据
+                // 获取数据 老版本获取的是方法上的数据，或者是run上的数据
+                //新版获取数据是 /secure/emc/module/mdm/basemdm/property-tmpls/result-runs/property-datas/'  + runId  ， 这个获取是run的数据
                 Gikam.getJson('/secure/emc/module/mdm/basemdm/property-tmpls/result-runs/0/property-datas/' + _this.param.id).done(function(data) {
                     this.setData({
                         templateUse : data.tmplId

@@ -2,7 +2,7 @@ emcProject.schemeEditPage = {
 
     getGridParam : function() {
         var _this = this;
-        _this.param.orgId_SB = workspace.user.ext$.parentorgid;
+        _this.param.org_filter = '1';
         return {
             type : 'grid',
             id : 'emc-project-audit-list-grid',

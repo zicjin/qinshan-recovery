@@ -21,6 +21,14 @@ var emcTestCapacity = Gikam.getPageObject({
             category : 'testCategory',
             readonly : true,
         }, {
+            field : 'ext$.testclass',
+            title : 'T_EMC_TEST_METHOD.TESTCLASS',
+            type : 'select',
+            category : 'sys',
+            param : {
+                codeCategoryId : 'testClass',
+            },
+        }, {
             field : 'ext$.testid',
             title : 'T_EMC_TEST_METHOD.TESTID',
             readonly : true,
@@ -29,15 +37,31 @@ var emcTestCapacity = Gikam.getPageObject({
             title : 'T_EMC_TEST_METHOD.TESTNAME',
             readonly : true,
         }, {
+            field: 'reportTestName',
+            title: '报告中显示名称',
+            editor: true,
+            width: 150
+        }, {
             field : 'ext$.methodname',
             title : 'T_EMC_TEST_METHOD.METHODNAME',
             width : 250,
             readonly : true,
         }, {
+             field : 'ext$.maxcapacity',
+             title : '实验室最大承载量',
+             width : 250,
+             type : 'number',
+             editor : true
+         }, {
             field : 'ext$.testmethodbasis',
             title : 'T_EMC_TEST_METHOD.TESTMETHODBASIS',
             readonly : true
         }, {
+            field : 'ext$.methodscope',
+            title : '方法范围',
+            validators : [ 'strLength[0,200]' ],
+            editor : true,
+        },{
             field : 'ext$.testmethodaliasbasis',
             title : 'T_EMC_TEST_METHOD.TESTMETHODALIASBASIS',
             readonly : true
@@ -74,16 +98,16 @@ var emcTestCapacity = Gikam.getPageObject({
                     name : '方法参数'
                 });
             }
-        }, {
-            field : 'ext$.methodparam',
-            title : '方法参数2',
-            formatter : function(i, v, row) {
-                return Gikam.printf('<a href="javascript:;" onclick="emcTestCapacity.editPage.loadMethodParamPage2(\'{id}\')">{name}</a>', {
-                    id : row.id,
-                    flag : 0,
-                    name : '方法参数'
-                });
-            }
+        // }, {
+        //     field : 'ext$.methodparam',
+        //     title : '方法参数2',
+        //     formatter : function(i, v, row) {
+        //         return Gikam.printf('<a href="javascript:;" onclick="emcTestCapacity.editPage.loadMethodParamPage2(\'{id}\')">{name}</a>', {
+        //             id : row.id,
+        //             flag : 0,
+        //             name : '方法参数'
+        //         });
+        //     }
         }, {
             field : 'ext$.analysisorgname',
             title : 'T_EMC_TEST_METHOD.ANALYSISORGID',
@@ -122,7 +146,7 @@ var emcTestCapacity = Gikam.getPageObject({
             editor : true,
         }, {
             field : 'ext$.authentication',
-            title : 'T_EMC_TEST_METHOD.AUTHENTICATION',
+            title : 'CMA认证',
             type : 'select',
             search : false,
             category : 'sys',
@@ -132,7 +156,7 @@ var emcTestCapacity = Gikam.getPageObject({
             editor : true,
         }, {
             field : 'ext$.approval',
-            title : 'T_EMC_TEST_METHOD.APPROVAL',
+            title : 'CNAS认可',
             type : 'select',
             search : false,
             category : 'sys',
@@ -140,7 +164,11 @@ var emcTestCapacity = Gikam.getPageObject({
                 codeCategoryId : 'yesorno',
             },
             editor : true,
-        }, {
+        // }, {
+        //      field : 'ext$.userange',
+        //      title : '适用范围',
+        //      editor : true,
+         }, {
             field : 'ext$.outsourcing',
             title : 'T_EMC_TEST_CAPACITY.OUTSOURCING',
             type : 'select',
@@ -189,21 +217,28 @@ var emcTestCapacity = Gikam.getPageObject({
             width : 100,
             category : 'emp',
             type : 'choose',
-            single : true,
+            // single : true,
             onBeforeChoose : function() {
-                var activedRow = Gikam.getComp('emc-test-capacity-edit-list-grid').getActivedRow();
+                // var activedRow = Gikam.getComp('emc-test-capacity-edit-list-grid').getActivedRow();
                 return {
-                    departmentid_SEQ : activedRow.ext$.analysisorgid,
+                    orgid_SEQ : workspace.user.ext$.parentorgid,
                     status_DIFFER : 'locked'
                 }
             },
             onAfterChoose : function(rows) {
                 if (!Gikam.isEmpty(rows)) {
+                    var userNames = [];
+                    var userIds = [];
+                    Gikam.each(rows, function(index, item) {
+                        userNames.push(item.userName);
+                        userIds.push(item.id);
+                    });
                     Gikam.getComp('emc-test-capacity-edit-list-grid').setData({
                         id : Gikam.getComp('emc-test-capacity-edit-list-grid').getActivedRow().id,
                         ext$ : {
-                        	inputusername : rows[0].userName,
-                        	inputuserid : rows[0].id
+                        	inputusername : userNames.join(','),
+                        	inputuserid : userIds.join(','),
+                            analysisorgname : rows[0].ext$.departmentname
                         }
                     });
                 }
@@ -387,6 +422,15 @@ var emcTestCapacity = Gikam.getPageObject({
             field : 'ext$.calicurvecontrolno',
             title : '校准曲线受控编号',
             editor :true
+        }, {
+            field : 'tube',
+            title : '是否前后管',
+            editor : true,
+            type : 'select',
+            category : 'sys',
+            param : {
+                codeCategoryId : 'yesorno',
+            }
         }  ];
     },
 
@@ -808,7 +852,7 @@ var emcTestCapacity = Gikam.getPageObject({
             editor : true,
             category : 'emp',
             type : 'choose',
-            single : true,
+            // single : true,
             onBeforeChoose : function() {
                 var activedRow = Gikam.getComp('emc-test-capacity-edit-list-grid').getActivedRow();
                 return {
@@ -818,10 +862,15 @@ var emcTestCapacity = Gikam.getPageObject({
             },
             onAfterChoose : function(rows) {
                 if (!Gikam.isEmpty(rows)) {
+                    var userIds = [], userNames = [];
+                    rows.map(function (row) {
+                        userIds.push(row.id);
+                        userNames.push(row.userName);
+                    });
                     this.setData({
                         ext$ : {
-                        	inputusername : rows[0].userName,
-                        	inputuserid : rows[0].id
+                            inputusername : userNames.join(),
+                            inputuserid : userIds.join(),
                         }
                     });
                 }
@@ -942,6 +991,11 @@ var emcTestCapacity = Gikam.getPageObject({
             field : 'ext$.calicurvecontrolno',
             title : '校准曲线受控编号',
             editor :true
+        },{
+            field : 'ext$.methodscope',
+            title : '方法范围',
+            validators : [ 'strLength[0,200]' ],
+            editor : true,
         }  ];
     },
 
@@ -1284,12 +1338,7 @@ var emcTestCapacity = Gikam.getPageObject({
             title : 'T_EMC_ITEM.LOWLIMIT',
             validators : [ 'number' ],
             editor : true
-        }, /*{
-            field : 'ext$.lowlimit2',
-            title : 'T_EMC_ITEM.LOWLIMIT2',
-            validators : [ 'number' ],
-            editor : true
-        },*/ {
+        }, {
             field : 'ext$.limitunitname',
             title : 'T_EMC_ITEM.LIMITUNITNAME',
             editor : true,
@@ -1347,11 +1396,11 @@ var emcTestCapacity = Gikam.getPageObject({
             },
             editor : false
         }, {
-            field : 'itemQcIndexAndRevision',
+            field : '',
             title : 'T_EMC_ITEM.ITEMQCINDEXANDREVISION',
             formatter : function(i, v, r) {
-                return Gikam.printf('<a href="javascript:;" onclick="emcTestMethod.editPage.editQcIndexAndRevision(\'{index}\')">{name}</a>', {
-                    index : i,
+                return Gikam.printf('<a href="javascript:;" onclick="emcTestMethod.editPage.editQcIndexAndRevision(\'{id}\')">{name}</a>', {
+                    id : r.id,
                     name : 'QC指标和分段修约'
                 });
             }
@@ -1557,17 +1606,7 @@ var emcTestCapacity = Gikam.getPageObject({
             title : 'T_EMC_ITEM.HIGHLIMIT',
             validators : [ 'number' ],
             editor : true
-        },  /*{
-            field : 'limitFlag',
-            title : 'T_EMC_ITEM.LIMITFLAG',
-            type : 'select',
-            search : false,
-            category : 'sys',
-            param : {
-                codeCategoryId : 'limitFlag',
-            },
-            editor : true
-        },*/ {
+        }, {
             field : 'itemResult',
             title : 'T_EMC_ITEM.ITEMRESULT',
             formatter : function(i, v, r) {
@@ -1630,31 +1669,9 @@ var emcTestCapacity = Gikam.getPageObject({
             field : 'allowableError',
             title : 'T_EMC_ITEM.ALLOWABLEERROR',
         }, {
-            field : 'ext$.coefficient',
-            title : 'T_EMC_ITEM.COEFFICIENT',
-        }, {
-            field : 'ext$.nonsnrange',
-            title : 'T_EMC_ITEM.NONSNRANGE',
-        }, {
-            field : 'ext$.issendtoresult',
-            title : 'T_EMC_ITEM.ISSENDTORESULT',
-            type : 'select',
-            search : false,
-            category : 'sys',
-            param : {
-                codeCategoryId : 'yesorno',
-            },
-        }, {
             field : 'ext$.theorycontent',
-            title : 'T_EMC_ITEM.THEORYCONTENT',
-        }, {
-            field : 'ext$.judgebasis',
-            title : 'T_EMC_ITEM.JUDGEBASIS',
-        }, {
-            field : 'ext$.sendcoefficient',
-            title : 'T_EMC_ITEM.SENDCOEFFICIENT',
-            validators : [ 'integer' ],
-            type : 'number',
+            title : '标点值',
+            editor : true
         }, {
             field : 'sampleParam',
             title : 'T_EMC_ITEM.SAMPLEPARAM',
@@ -1665,6 +1682,317 @@ var emcTestCapacity = Gikam.getPageObject({
                 codeCategoryId : 'yesorno',
             },
             editor : true
+        } ];
+    },
+
+    getBatchItemFormFields : function() {
+        return [ {
+            field : 'orderNo',
+            title : 'T_EMC_ITEM.ORDERNO',
+            validators : [ 'integer' ],
+            type : 'number',
+        }, {
+            field : 'unitName',
+            title : 'T_EMC_ITEM.UNITNAME',
+            type : 'choose',
+            category : 'unit',
+            single : true,
+            onBeforeChoose : function() {
+                return {
+                    filterOpen : true
+                }
+            },
+            onAfterChoose : function(rows, index) {
+                if (rows) {
+                    this.setData({
+                        index : index,
+                        unitName : rows[0].unitName
+                    })
+                }
+            }
+        }, {
+            field : 'lowLimit',
+            title : 'T_EMC_ITEM.LOWLIMIT',
+            validators : [ 'number' ],
+        }, {
+            field : 'ext$.limitunitname',
+            title : 'T_EMC_ITEM.LIMITUNITNAME',
+            type : 'choose',
+            category : 'unit',
+            single : true,
+            onBeforeChoose : function() {
+                return {
+                    filterOpen : true
+                }
+            },
+            onAfterChoose : function(rows, index) {
+                if (rows) {
+                    this.setData({
+                        ext$ : {
+                            limitunitname : rows[0].unitName
+                        }
+                    })
+                }
+            }
+        }, {
+            field : 'revisionRule',
+            title : 'T_EMC_ITEM.REVISIONRULE',
+            type : 'choose',
+            category : 'rounding-rule',
+            single : true,
+            onAfterChoose : function(back, index) {
+                if (back) {
+                    this.setData({
+                        'revisionRule' : back
+                    })
+                }
+            }
+        }, {
+            field : 'resultCategory',
+            title : 'T_EMC_ITEM.RESULTCATEGORY',
+            type : 'select',
+            search : false,
+            category : 'sys',
+            param : {
+                codeCategoryId : 'resultCategory',
+            },
+        }, {
+            field : 'analysisCategory',
+            title : 'T_EMC_ITEM.ANALYSISCATEGORY',
+            type : 'select',
+            search : true,
+            category : 'sys',
+            param : {
+                codeCategoryId : 'analysisCategory',
+            },
+        }, {
+            field : 'defaultResult',
+            title : 'T_EMC_ITEM.DEFAULTRESULT',
+        }, {
+            field : 'qcCategoryName',
+            title : 'T_EMC_ITEM.QCCATEGORYID',
+            editor : false,
+            type : 'choose',
+            category : 'qcCategory',
+            onBeforeChoose : function(index) {
+                var selectedQcCategoryId = this.getData().qcCategoryId;
+                return {
+                    selectedQcCategoryId : selectedQcCategoryId,
+                    SETNAME_DIFFER : 'QC_CAL'
+                }
+            },
+            onAfterChoose : function(rows, index) {
+                if (!Gikam.isEmpty(rows)) {
+                    var qcCategoryId = '';
+                    var qcCategoryName = '';
+                    rows.map(function(item, i) {
+                        qcCategoryId += rows[i].id + ',';
+                        qcCategoryName += rows[i].qcName + ',';
+                    });
+
+                    this.setData({
+                        qcCategoryId : qcCategoryId.substring(0, qcCategoryId.length - 1),
+                        qcCategoryName : qcCategoryName.substring(0, qcCategoryName.length - 1)
+                    });
+                }
+            },
+            onClean : function() {
+                this.setData({
+                    qcCategoryId : '',
+                    qcCategoryName : ''
+                });
+            }
+        }, {
+            field : 'originalRecordDisplay',
+            title : 'T_EMC_ITEM.ORIGINALRECORDDISPLAY',
+            type : 'select',
+            search : false,
+            category : 'sys',
+            param : {
+                codeCategoryId : 'yesorno',
+            },
+        }, {
+            field : 'reportDisplay',
+            title : 'T_EMC_ITEM.REPORTDISPLAY',
+            type : 'select',
+            search : false,
+            category : 'sys',
+            param : {
+                codeCategoryId : 'yesorno',
+            },
+        }, {
+            field : 'standSetId',
+            title : 'T_EMC_ITEM.STANDSETID',
+            type : 'select',
+            search : false,
+            category : 'standardSetCategory',
+            param : {
+                standardSet : 'Default'
+            },
+            onChange : function (field, value, rowIndex, oldValue, text) {
+                if (text.indexOf('数字') !== -1) {
+                    this.setData({
+                        standSetId : value,
+                        resultCategory : 'number'
+                    });
+                }
+                if (text.indexOf('字符') !== -1) {
+                    this.setData({
+                        standSetId : value,
+                        resultCategory : 'char'
+                    });
+                }
+            }
+        }, {
+            field : 'interceptRevision',
+            title : 'T_EMC_ITEM.INTERCEPTREVISION',
+            type : 'choose',
+            category : 'rounding-rule',
+            single : true,
+            onAfterChoose : function(back, index) {
+                if (back) {
+                    this.setData({
+                        'interceptRevision' : back
+                    })
+                }
+            }
+        }, {
+            field : 'slopeRevision',
+            title : 'T_EMC_ITEM.SLOPEREVISION',
+            type : 'choose',
+            category : 'rounding-rule',
+            single : true,
+            onAfterChoose : function(back, index) {
+                if (back) {
+                    this.setData({
+                        'slopeRevision' : back
+                    })
+                }
+            }
+        }, {
+            field : 'ext$.detectedquantity',
+            title : 'T_EMC_ITEM.DETECTEDQUANTITY',
+        }, {
+            field : 'ext$.detectedquantityunit',
+            title : 'T_EMC_ITEM.DETECTEDQUANTITYUNIT',
+            type : 'choose',
+            category : 'unit',
+            single : true,
+            onBeforeChoose : function() {
+                return {
+                    filterOpen : true
+                }
+            },
+            onAfterChoose : function(rows, index) {
+                if (rows) {
+                    this.setData({
+                        ext$ : {
+                            detectedquantityunit : rows[0].unitName
+                        }
+                    })
+                }
+            }
+        }, {
+            field : 'ext$.usetype',
+            title : 'T_EMC_ITEM.USETYPE',
+            type : 'select',
+            search : true,
+            category : 'sys',
+            param : {
+                codeCategoryId : 'itemUseType',
+            },
+        }, {
+            field : 'param',
+            title : 'T_EMC_ITEM.PARAM',
+            type : 'select',
+            search : false,
+            category : 'sys',
+            param : {
+                codeCategoryId : 'yesorno',
+            },
+        }, {
+            field : 'ext$.ignorezero',
+            title : 'T_EMC_ITEM.IGNOREZERO',
+            type : 'select',
+            search : false,
+            category : 'sys',
+            param : {
+                codeCategoryId : 'yesorno',
+            },
+        },  {
+            field : 'originalRecordName',
+            title : 'T_EMC_ITEM.ORIGINALRECORDNAME',
+            type : 'script',
+            onChange : function (field, value) {
+                let replacedValue = value.replace(/\s_mst\w*="\d+"/g, '').replace(/<p><br><\/p>/g, '').replace(/<p>/g, '').replace(/<\/p>/g, '');
+                this.setData({
+                    originalRecordName : replacedValue
+                })
+            }
+        }, {
+            field : 'highLimit',
+            title : 'T_EMC_ITEM.HIGHLIMIT',
+            validators : [ 'number' ],
+        }, {
+            field : 'pnFunc',
+            title : 'T_EMC_ITEM.PNFUNC',
+            type : 'select',
+            search : false,
+            category : 'sys',
+            param : {
+                codeCategoryId : 'pnFunc',
+            },
+        }, {
+            field : 'limitRevision',
+            title : 'T_EMC_ITEM.LIMITREVISION',
+            type : 'select',
+            search : false,
+            category : 'sys',
+            param : {
+                codeCategoryId : 'yesorno',
+            },
+        },  {
+            field : 'calQcResult',
+            title : 'T_EMC_ITEM.CALQCRESULT',
+            type : 'select',
+            search : false,
+            category : 'sys',
+            param : {
+                codeCategoryId : 'yesorno',
+            },
+        }, {
+            field : 'scientificNotation',
+            title : 'T_EMC_ITEM.SCIENTIFICNOTATION',
+            type : 'select',
+            search : false,
+            category : 'sys',
+            param : {
+                codeCategoryId : 'yesorno',
+            },
+        }, {
+            field : 'negativeToZero',
+            title : 'T_EMC_ITEM.NEGATIVETOZERO',
+            type : 'select',
+            search : false,
+            category : 'sys',
+            param : {
+                codeCategoryId : 'yesorno',
+            },
+        }, {
+            field : 'allowableError',
+            title : 'T_EMC_ITEM.ALLOWABLEERROR',
+        }, {
+            field : 'ext$.theorycontent',
+            title : '标点值',
+        }, {
+            field : 'sampleParam',
+            title : 'T_EMC_ITEM.SAMPLEPARAM',
+            type : 'select',
+            search : false,
+            category : 'sys',
+            param : {
+                codeCategoryId : 'yesorno',
+            },
         } ];
     },
 

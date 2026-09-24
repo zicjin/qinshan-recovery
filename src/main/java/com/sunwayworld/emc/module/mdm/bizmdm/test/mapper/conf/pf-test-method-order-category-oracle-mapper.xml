@@ -52,8 +52,10 @@
                             COUNT( TESTMETHODID ) AS TESTMETHODQTY,
                             B.MONITORTMPLNAME,
                             C.CONTAINERCATEGORYNAME,
-                            WM_CONCAT(DISTINCT O.ID) AS IDS,
-                            WM_CONCAT(DISTINCT O.TESTMETHODID) AS TMIDS,
+                            LISTAGG(DISTINCT O.ID, ',') WITHIN GROUP (ORDER BY O.ID) AS IDS,
+                            LISTAGG(DISTINCT O.TESTMETHODID, ',') WITHIN GROUP (ORDER BY O.TESTMETHODID) AS TMIDS,
+                            -- XMLAGG(XMLPARSE(CONTENT O.ID||',') ORDER BY O.ID).GETCLOBVAL() AS IDS,
+                            -- XMLAGG(XMLPARSE(CONTENT O.TESTMETHODID||',') ORDER BY O.TESTMETHODID).GETCLOBVAL() AS TMIDS,
                             O.STORECONDITION
                        FROM T_EMC_TEST_ORDER_CATEGORY O
                        LEFT JOIN T_EMC_MONITOR_TMPL B ON O.MONITORTMPLID = B.ID
@@ -65,6 +67,14 @@
                       GROUP BY MONITORTMPLID,MONITORTMPLNAME,O.ORGID,CONTAINERCATEGORYNAME,CONTAINERGROUP,SAMPLEQTY,SAMPLEWEIGHT,FIXATIVE,O.CONTAINERCATEGORYID,C.CONTAINERCATEGORYID,O.STORECONDITION )T
         <where>
             <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+            <!-- 筛选登录人的部门权限 -->
+            <if test="org_filter != null">
+                AND EXISTS (SELECT 1
+                              FROM T_CORE_USER_PERMISSION UP
+                             WHERE UP.PERMISSIONTYPEID = 'T_CORE_ORG'
+                               AND UP.TARGETID = T.ORGID
+                               AND UP.USERID = #{loginUser.id})
+            </if>
         </where>
         ORDER BY
         <choose>

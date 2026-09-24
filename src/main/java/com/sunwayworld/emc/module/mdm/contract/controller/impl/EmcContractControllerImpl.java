@@ -23,12 +23,6 @@ public class EmcContractControllerImpl implements EmcContractController {
         return "emc/module/mdm/contracts/emc-contract-detail";
     }
 
-    @Log(value = "合同表审核列表页", type = LogType.CONTROLLER)
-    @Override
-    public String auditListPage() {
-        return "emc/module/mdm/contracts/emc-contract-audit-list";
-    }
-
     @Log(value = "合同表查询列表页", type = LogType.CONTROLLER)
     @Override
     public String searchListPage() {

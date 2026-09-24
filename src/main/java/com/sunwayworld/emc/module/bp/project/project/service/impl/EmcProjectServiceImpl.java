@@ -1467,4 +1467,15 @@ public class EmcProjectServiceImpl implements EmcProjectService {
         PageRowBounds rowBounds = wrapper.extractPageRowBounds();
         return selectPagination(() -> getDao().selectTodoAnalysisPretrialProject(parameter), rowBounds);
     }
+
+    @Override
+    public Page<EmcProjectBean> selectByReportEdit(RestJsonWrapperBean wrapper) { MapperParameter p = wrapper.extractMapFilter(); return selectPagination(() -> getDao().selectByReportEdit(p), wrapper.extractPageRowBounds()); }
+    @Override
+    public Page<EmcProjectBean> selectCrmInvoiceProjPagination(RestJsonWrapperBean wrapper) { MapperParameter p = wrapper.extractMapFilter(); return selectPagination(() -> getDao().selectCrmInvoiceProjListByCondition(p), wrapper.extractPageRowBounds()); }
+    @Override
+    public Page<EmcProjectBean> selectCrmPaymentProjPagination(RestJsonWrapperBean wrapper) { MapperParameter p = wrapper.extractMapFilter(); return selectPagination(() -> getDao().selectCrmPaymentProjListByCondition(p), wrapper.extractPageRowBounds()); }
+    @Override
+    public Page<EmcProjectBean> selectCrmProjListByCondition(RestJsonWrapperBean wrapper) { MapperParameter p = wrapper.extractMapFilter(); return selectPagination(() -> getDao().selectCrmProjListByCondition(p), wrapper.extractPageRowBounds()); }
+    @Override
+    public Page<EmcProjectBean> selectProjListPagination(RestJsonWrapperBean wrapper) { MapperParameter p = wrapper.extractMapFilter(); return selectPagination(() -> getDao().selectProjListByCondition(p), wrapper.extractPageRowBounds()); }
 }

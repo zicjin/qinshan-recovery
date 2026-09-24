@@ -28,4 +28,10 @@ public interface EmcProjectDao extends GenericDao<EmcProjectBean, Long> {
     List<Map<String, Object>> selectTodoAnalysisAuditProject(MapperParameter parameter);
 
     List<Map<String, Object>> selectTodoAnalysisPretrialProject(MapperParameter parameter);
+
+    List<Map<String, Object>> selectByReportEdit(MapperParameter parameter);
+    List<Map<String, Object>> selectCrmInvoiceProjListByCondition(MapperParameter parameter);
+    List<Map<String, Object>> selectCrmPaymentProjListByCondition(MapperParameter parameter);
+    List<EmcProjectBean> selectCrmProjListByCondition(MapperParameter parameter);
+    List<EmcProjectBean> selectProjListByCondition(MapperParameter parameter);
 }

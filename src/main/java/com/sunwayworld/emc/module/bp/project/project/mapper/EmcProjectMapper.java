@@ -28,4 +28,5 @@ public interface EmcProjectMapper extends GenericMapper<Long> {
     List<Map<String, Object>> selectTodoAnalysisAuditProject(MapperParameter parameter);
 
     List<Map<String, Object>> selectTodoAnalysisPretrialProject(MapperParameter parameter);
+
 }

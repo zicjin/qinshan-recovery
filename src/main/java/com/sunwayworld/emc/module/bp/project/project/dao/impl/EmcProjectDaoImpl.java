@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import com.sunwayworld.emc.module.bp.project.project.bean.EmcProjectBean;
 import com.sunwayworld.emc.module.bp.project.project.dao.EmcProjectDao;
-import com.sunwayworld.emc.module.bp.project.project.mapper.EmcProjectMapper;
+import com.sunwayworld.emc.module.bp.project.project.mapper.PfProjectMapper;
 import com.sunwayworld.framework.mybatis.dao.MybatisDaoSupport;
 import com.sunwayworld.framework.mybatis.mapper.MapperParameter;
 import com.sunwayworld.framework.spring.annotation.GikamBean;
@@ -22,10 +22,10 @@ import com.sunwayworld.framework.spring.annotation.GikamBean;
 public class EmcProjectDaoImpl extends MybatisDaoSupport<EmcProjectBean, Long>implements EmcProjectDao {
 
     @Autowired
-    private EmcProjectMapper emcProjectMapper;
+    private PfProjectMapper emcProjectMapper;
 
     @Override
-    public EmcProjectMapper getMapper() {
+    public PfProjectMapper getMapper() {
         return emcProjectMapper;
     }
 
@@ -63,4 +63,15 @@ public class EmcProjectDaoImpl extends MybatisDaoSupport<EmcProjectBean, Long>im
     public List<Map<String, Object>> selectTodoAnalysisPretrialProject(MapperParameter parameter) {
         return getMapper().selectTodoAnalysisPretrialProject(parameter);
     }
+
+    @Override
+    public List<Map<String, Object>> selectByReportEdit(MapperParameter parameter) { return getMapper().selectByReportEdit(parameter); }
+    @Override
+    public List<Map<String, Object>> selectCrmInvoiceProjListByCondition(MapperParameter parameter) { return getMapper().selectCrmInvoiceProjListByCondition(parameter); }
+    @Override
+    public List<Map<String, Object>> selectCrmPaymentProjListByCondition(MapperParameter parameter) { return getMapper().selectCrmPaymentProjListByCondition(parameter); }
+    @Override
+    public List<EmcProjectBean> selectCrmProjListByCondition(MapperParameter parameter) { return (List<EmcProjectBean>)(List<?>)getMapper().selectCrmProjListByCondition(parameter).stream().map(m -> (EmcProjectBean)com.sunwayworld.framework.support.PersistableHelper.mapToPersistable((Map)m, EmcProjectBean.class)).collect(java.util.stream.Collectors.toList()); }
+    @Override
+    public List<EmcProjectBean> selectProjListByCondition(MapperParameter parameter) { return (List<EmcProjectBean>)(List<?>)getMapper().selectProjListByCondition(parameter).stream().map(m -> (EmcProjectBean)com.sunwayworld.framework.support.PersistableHelper.mapToPersistable((Map)m, EmcProjectBean.class)).collect(java.util.stream.Collectors.toList()); }
 }

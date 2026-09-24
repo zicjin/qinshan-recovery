@@ -1,7 +1,5 @@
 package com.sunwayworld.emc.module.bp.project.project.service;
 
-import java.util.List;
-
 import com.sunwayworld.emc.module.bp.bp.bean.EmcOrderBean;
 import com.sunwayworld.emc.module.bp.bp.bean.EmcOrderTaskBean;
 import com.sunwayworld.emc.module.bp.project.project.bean.EmcProjectBean;
@@ -13,77 +11,85 @@ import com.sunwayworld.framework.support.auditable.service.GenericAuditableServi
 import com.sunwayworld.framework.support.base.service.GenericService;
 import com.sunwayworld.framework.support.choosable.service.GenericChoosableService;
 import com.sunwayworld.module.sys.bpmn.bean.CoreBpmnInstanceStatusDTO;
+import java.util.List;
 
-/**
- * @author magh@sunwayworld.com
- * @date 2019-09-27
- */
+public interface EmcProjectService
+extends GenericService<EmcProjectBean, Long>,
+GenericChoosableService<EmcProjectBean, Long>,
+GenericAuditableService<EmcProjectBean, Long> {
+    public Long insert(RestJsonWrapperBean var1);
 
-public interface EmcProjectService extends GenericService<EmcProjectBean, Long>, GenericChoosableService<EmcProjectBean, Long>, GenericAuditableService<EmcProjectBean, Long> {
+    public void copy(RestJsonWrapperBean var1);
 
-    Long insert(RestJsonWrapperBean wrapper);
+    public Page<EmcOrderBean> selectOrderPaginationByProjectId(Long var1, RestJsonWrapperBean var2);
 
-    void copy(RestJsonWrapperBean wrapper);
+    public Long insertOrder(Long var1, RestJsonWrapperBean var2);
 
-    Page<EmcOrderBean> selectOrderPaginationByProjectId(Long id, RestJsonWrapperBean wrapper);
+    public void deleteOrder(Long var1, RestJsonWrapperBean var2);
 
-    Long insertOrder(Long id, RestJsonWrapperBean wrapper);
+    public Page<EmcOrderTaskBean> selectTaskPaginationByOrderId(Long var1, RestJsonWrapperBean var2);
 
-    void deleteOrder(Long id, RestJsonWrapperBean wrapper);
+    public void copeOrder(RestJsonWrapperBean var1);
 
-    Page<EmcOrderTaskBean> selectTaskPaginationByOrderId(Long orderId, RestJsonWrapperBean wrapper);
+    public void copeQcOrder(RestJsonWrapperBean var1);
 
-    void copeOrder(RestJsonWrapperBean jsonWrapper);
+    public void submitToReport(RestJsonWrapperBean var1);
 
-    void copeQcOrder(RestJsonWrapperBean jsonWrapper);
+    public Page<EmcProjectBean> selectProjectStatistics(RestJsonWrapperBean var1);
 
-    void submitToReport(RestJsonWrapperBean wrapper);
+    public Page<EmcProjectBean> selectAnnualProjectStatistics(RestJsonWrapperBean var1);
 
-    Page<EmcProjectBean> selectProjectStatistics(RestJsonWrapperBean wrapper);
+    public Page<EmcProjectBean> selectByReportEdit(RestJsonWrapperBean var1);
 
-    Page<EmcProjectBean> selectAnnualProjectStatistics(RestJsonWrapperBean wrapper);
+    public Page<EmcProjectBean> selectCrmInvoiceProjPagination(RestJsonWrapperBean var1);
 
-    Page<EmcProjectBean> selectAllProjects(RestJsonWrapperBean wrapper);
+    public Page<EmcProjectBean> selectCrmPaymentProjPagination(RestJsonWrapperBean var1);
 
-    Long selectIdByKeyword(String keyword);
+    public Page<EmcProjectBean> selectCrmProjListByCondition(RestJsonWrapperBean var1);
 
-    Long insertPlan(RestJsonWrapperBean wrapper);
+    public Page<EmcProjectBean> selectProjListPagination(RestJsonWrapperBean var1);
 
-    void changeSchedule(RestJsonWrapperBean wrapper);
+    public Page<EmcProjectBean> selectAllProjects(RestJsonWrapperBean var1);
 
-    void startProcessBySchedule(String id);
+    public Long selectIdByKeyword(String var1);
 
-    void copyPlan(RestJsonWrapperBean wrapper);
+    public Long insertPlan(RestJsonWrapperBean var1);
 
-    void submitPlan(RestJsonWrapperBean wrapper);
+    public void changeSchedule(RestJsonWrapperBean var1);
 
-    void stopSchedule(RestJsonWrapperBean wrapper);
+    public void startProcessBySchedule(String var1);
 
-    String getSequenceNo(String bizCategoryCode);
+    public void copyPlan(RestJsonWrapperBean var1);
 
-    Page<EmcProjectDirectorBean> selectDirectorPaginationByProjectId(Long id, RestJsonWrapperBean wrapper);
+    public void submitPlan(RestJsonWrapperBean var1);
 
-    void insertDirector(RestJsonWrapperBean wrapper);
+    public void stopSchedule(RestJsonWrapperBean var1);
 
-    void deleteDirector(RestJsonWrapperBean wrapper);
+    public String getSequenceNo(String var1);
 
-    List<CoreBpmnInstanceStatusDTO<Long>> startProcessBasic(RestJsonWrapperBean wrapper);
+    public Page<EmcProjectDirectorBean> selectDirectorPaginationByProjectId(Long var1, RestJsonWrapperBean var2);
 
-    List<CoreBpmnInstanceStatusDTO<Long>> completeTaskBasic(RestJsonWrapperBean wrapper);
+    public void insertDirector(RestJsonWrapperBean var1);
 
-    List<CoreBpmnInstanceStatusDTO<Long>> undoBasic(RestJsonWrapperBean wrapper);
+    public void deleteDirector(RestJsonWrapperBean var1);
 
-    List<CoreBpmnInstanceStatusDTO<Long>> rejectTaskBasic(RestJsonWrapperBean wrapper);
+    public List<CoreBpmnInstanceStatusDTO<Long>> startProcessBasic(RestJsonWrapperBean var1);
 
-    Page<EmcProjectBean> selectAnalysisAuditProject(RestJsonWrapperBean wrapper);
+    public List<CoreBpmnInstanceStatusDTO<Long>> completeTaskBasic(RestJsonWrapperBean var1);
 
-    List<EmcProjectBean> selectProjectByContractId(Long contractId);
+    public List<CoreBpmnInstanceStatusDTO<Long>> undoBasic(RestJsonWrapperBean var1);
 
-    EmcProjectBean selectProjectDetail(Long id, RestJsonWrapperBean wrapper);
+    public List<CoreBpmnInstanceStatusDTO<Long>> rejectTaskBasic(RestJsonWrapperBean var1);
 
-    List<CoreBpmnInstanceStatusDTO<Long>> startProcessBasic(List<Long> projIdList, CoreBpmnParameterDTO parameter);
+    public Page<EmcProjectBean> selectAnalysisAuditProject(RestJsonWrapperBean var1);
 
-    Page<EmcProjectBean> selectTodoAnalysisAuditProject(RestJsonWrapperBean wrapper);
+    public List<EmcProjectBean> selectProjectByContractId(Long var1);
 
-    Page<EmcProjectBean> selectTodoAnalysisPretrialProject(RestJsonWrapperBean wrapper);
+    public EmcProjectBean selectProjectDetail(Long var1, RestJsonWrapperBean var2);
+
+    public List<CoreBpmnInstanceStatusDTO<Long>> startProcessBasic(List<Long> var1, CoreBpmnParameterDTO var2);
+
+    public Page<EmcProjectBean> selectTodoAnalysisAuditProject(RestJsonWrapperBean var1);
+
+    public Page<EmcProjectBean> selectTodoAnalysisPretrialProject(RestJsonWrapperBean var1);
 }

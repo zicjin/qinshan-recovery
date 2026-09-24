@@ -1,4 +1,5 @@
 package com.sunwayworld.emc.module.mdm.equipt.equipt.service.impl;
+import com.sunwayworld.framework.database.sql.Order;
 
 
 
@@ -37,6 +38,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import com.sunwayworld.framework.utils.StringUtils;;
 
 
@@ -219,4 +221,15 @@ public class PfEquiptServiceImpl extends EmcEquiptServiceImpl implements PfEquip
 
     }
     
+    @Override
+    @Transactional
+    public void updateStatusBySourceDate() {
+        List<EmcEquiptBean> emcEquiptBeanList = this.selectListByFilter(SearchFilter.instance().match("SOURCEDATE", (Object)LocalDate.now()).filter(MatchPattern.DL), new Order[0]);
+        if (!emcEquiptBeanList.isEmpty()) {
+            for (EmcEquiptBean e : emcEquiptBeanList) {
+                e.setStatus("notUse");
+            }
+            this.getDao().update(emcEquiptBeanList, new String[]{"STATUS"});
+        }
+    }
 }

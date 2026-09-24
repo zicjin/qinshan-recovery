@@ -18,6 +18,8 @@ public interface PfEquiptService extends EmcEquiptService {
 	
 	Page<PfEquiptUserDTO> selectEquiptUser(RestJsonWrapperBean wrapper);	
 
+    void updateStatusBySourceDate();
+
 }
 
 

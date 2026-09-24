@@ -251,6 +251,16 @@ public class EmcFolderServiceImpl implements EmcFolderService {
     }
 
     @Override
+    public String generateFolderNoByProjId(Long projId, String projectNo, String monitorTmplId) {
+        return null;
+    }
+
+    @Override
+    public List<String> generateFolderNosByProjId(Long projId, String projectNo, String monitorTmplId, int num) {
+        return null;
+    }
+
+    @Override
     public String generateFolderNoByProjId(Long projId, String projectNo) {
         List<EmcFolderBean> folderOfProjectList = getDao().selectListByOneColumnValue(projId, "PROJID", Collections.singletonList("FOLDERNO"));
         String newFolderNo = "";

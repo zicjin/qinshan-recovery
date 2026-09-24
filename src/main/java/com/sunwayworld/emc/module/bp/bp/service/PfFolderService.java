@@ -10,6 +10,8 @@ import com.sunwayworld.framework.restful.data.RestValidationResultBean;
 public interface PfFolderService extends EmcFolderService {
 
     String generateFolderNo(EmcProjectBean project);
+
+    String generateFolderNo(EmcProjectBean project, String monitorTmplId);
     
     String submitRemind (RestJsonWrapperBean wrapper);
 

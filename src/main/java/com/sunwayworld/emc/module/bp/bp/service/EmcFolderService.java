@@ -7,6 +7,7 @@ import com.sunwayworld.emc.module.bp.bp.bean.EmcOrderBean;
 import com.sunwayworld.emc.module.bp.bp.bean.EmcOrderTaskBean;
 import com.sunwayworld.emc.module.bp.sample.sample.bean.EmcSampleBean;
 import com.sunwayworld.framework.data.page.Page;
+import com.sunwayworld.framework.database.sql.Order;
 import com.sunwayworld.framework.mybatis.mapper.MatchPattern;
 import com.sunwayworld.framework.mybatis.mapper.SearchFilter;
 import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;
@@ -39,7 +40,11 @@ public interface EmcFolderService extends GenericService<EmcFolderBean, Long>, G
 
     String generateFolderNoByProjId(Long projId, String projectNo);
 
+    String generateFolderNoByProjId(Long projId, String projectNo, String monitorTmplId);
+
     List<String> generateFolderNosByProjId(Long projId, String projectNo, int num);
+
+    List<String> generateFolderNosByProjId(Long projId, String projectNo, String monitorTmplId, int num);
 
     Page<EmcFolderBean> querySamplePlans(RestJsonWrapperBean wrapper);
 
@@ -48,6 +53,6 @@ public interface EmcFolderService extends GenericService<EmcFolderBean, Long>, G
     void updateStatus(List<EmcOrderTaskBean> orderTaskList);
     
     public default List<EmcFolderBean> getBpmnVarsItemList(List<Long> idList) {
-        return selectListByFilter(SearchFilter.instance().match("ID", idList).filter(MatchPattern.OR));
+        return selectListByFilter(SearchFilter.instance().match("ID", idList).filter(MatchPattern.OR), new Order[0]);
     }
 }

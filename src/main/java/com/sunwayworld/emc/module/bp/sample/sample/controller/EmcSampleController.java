@@ -80,4 +80,19 @@ public interface EmcSampleController extends GenericEditListPageController, Gene
     
     
 
+
+    @RequestMapping("/folder-dbs-desc-detail")
+    String folderDBSDetailPage();
+
+    @RequestMapping("/folder-dxs-desc-detail")
+    String folderDXSDetailPage();
+
+    @RequestMapping("/folder-fs-desc-detail")
+    String folderFSDetailPage();
+
+    @RequestMapping("/folder-tr-desc-detail")
+    String folderTRDetailPage();
+
+    @RequestMapping("/folder-cjw-desc-detail")
+    String folderCJWDetailPage();
 }

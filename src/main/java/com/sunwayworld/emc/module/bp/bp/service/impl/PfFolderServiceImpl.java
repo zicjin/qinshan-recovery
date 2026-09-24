@@ -86,7 +86,7 @@ public class PfFolderServiceImpl extends EmcFolderServiceImpl implements PfFolde
         EmcProjectBean project = projectService.selectById(projId);
         EmcMonitorTmplBean monitorTmpl = monitorTmplService.selectById(order.getMonitorTmplId());
 
-        String newFolderNo = generateFolderNo(project);
+        String newFolderNo = generateFolderNo(project, order.getMonitorTmplId());
 
         folder.setFolderNo(newFolderNo);
         folder.setProjId(order.getProjId());
@@ -120,7 +120,7 @@ public class PfFolderServiceImpl extends EmcFolderServiceImpl implements PfFolde
         Long projId = folder.getProjId();
 
         EmcProjectBean project = projectService.selectById(projId);
-        String newFolderNo = generateFolderNo(project);
+        String newFolderNo = generateFolderNo(project, selectedFolder.getMonitorTmplId());
         newFolder.setFolderNo(newFolderNo);
         getDao().insert(newFolder);
 
@@ -226,6 +226,49 @@ public class PfFolderServiceImpl extends EmcFolderServiceImpl implements PfFolde
         }
 
         return newFolderNoList;
+    }
+
+    @Override
+    public List<String> generateFolderNosByProjId(Long projId, String projectNo, String monitorTmplId, int num) {
+        String orderCategoryCode = "";
+        if (!StringUtils.isEmpty(monitorTmplId)) {
+            EmcMonitorTmplBean monitorTmpl = monitorTmplService.selectById(monitorTmplId);
+            if (monitorTmpl != null) {
+                orderCategoryCode = monitorTmpl.getExt$Item("ordercategorycode");
+            }
+        }
+        if (StringUtils.isEmpty(orderCategoryCode)) {
+            orderCategoryCode = "";
+        }
+        List<EmcFolderBean> projectFolders = getDao().selectListByOneColumnValue(projId, "PROJID");
+        List<EmcFolderBean> sameTemplateFolders = projectFolders.stream()
+                .filter(folder -> ObjectUtils.equals(monitorTmplId, folder.getMonitorTmplId()))
+                .collect(Collectors.toList());
+        List<String> folderNoList = new ArrayList<>();
+        String firstFolderNo;
+        if (sameTemplateFolders.isEmpty()) {
+            firstFolderNo = projectNo + orderCategoryCode + "001";
+        } else {
+            String maxFolderNo = sameTemplateFolders.stream().max(Comparator.comparing(EmcFolderBean::getFolderNo)).get().getFolderNo();
+            firstFolderNo = maxFolderNo.substring(0, maxFolderNo.length() - 3)
+                    + String.format("%03d", Long.parseLong(maxFolderNo.substring(maxFolderNo.length() - 3)) + 1L);
+        }
+        folderNoList.add(firstFolderNo);
+        for (int i = 1; i < num; i++) {
+            String previous = folderNoList.get(i - 1);
+            folderNoList.add(previous.substring(0, previous.length() - 3)
+                    + String.format("%03d", Long.parseLong(previous.substring(previous.length() - 3)) + 1L));
+        }
+        return folderNoList;
+    }
+
+    @Override
+    public String generateFolderNo(EmcProjectBean project, String monitorTmplId) {
+        List<String> seqNoList = generateFolderNosByProjId(project.getId(), project.getProjNo(), monitorTmplId, 1);
+        if (!seqNoList.isEmpty()) {
+            return seqNoList.get(0);
+        }
+        return ApplicationContextHelper.getNextSequence(getDao().getTable());
     }
 
     @Override

@@ -1,102 +1,99 @@
+/*
+ * Decompiled with CFR.
+ */
 package com.sunwayworld.emc.module.mdm.equipt.equipt.bean;
 
-import java.time.LocalDate;
-
 import com.alibaba.fastjson.annotation.JSONField;
-import org.springframework.format.annotation.DateTimeFormat;
-
 import com.sunwayworld.framework.data.annotation.Id;
+import com.sunwayworld.framework.data.annotation.NotNull;
 import com.sunwayworld.framework.data.annotation.Table;
 import com.sunwayworld.framework.data.annotation.Transient;
 import com.sunwayworld.framework.support.domain.AbstractInsertable;
+import java.time.LocalDate;
+import org.springframework.format.annotation.DateTimeFormat;
 
-/**
- * 容器类型
- *
- * @author magt@sunwayworld.com 2019/9/9
- *
- */
-@Table("T_EMC_EQUIPT")
-public class EmcEquiptBean extends AbstractInsertable<Long> {
-
+@Table(value="T_EMC_EQUIPT")
+public class EmcEquiptBean
+extends AbstractInsertable<Long> {
     @Transient
     private static final long serialVersionUID = 1036700237775060656L;
-
     @Id
-    private Long id; // 主键
-    private String equiptId; // 站内编号
-    private String equiptName; // 仪器名称
-    private String equiptEnglishName; // 仪器英文名称
-    private String specification; // 规格型号
-    private String manufacturer; // 生产厂家
-    @JSONField(format = "yyyy-MM-dd")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate factoryDate; // 出厂日期
-    private String factoryNo; // 出厂编号
-    private String price; // 购置价格
-    @JSONField(format = "yyyy-MM-dd")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate purchaseDate; // 购买日期
-    @JSONField(format = "yyyy-MM-dd")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate arrivalDate; // 到货日期
-    @JSONField(format = "yyyy-MM-dd")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate openDate; // 开箱日期
-    @JSONField(format = "yyyy-MM-dd")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate installDate; // 安装调试日期
-    private String installUser; // 安装人员
-    @JSONField(format = "yyyy-MM-dd")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate acceptDate; // 验收日期
-    @JSONField(format = "yyyy-MM-dd")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate usedDate; // 投入使用日期
-    private String usedDepartmentId; // 使用科室
-    private String usedDepostId; // 使用岗位
-    private String usedUserId; // 仪器使用人员ID
-    private String usedUserName; // 仪器使用人员
-    private String maintainUserId; // 维护人
-    private String address; // 地点
-    private String keepUserId; // 保管人
-    private String state; // 仪器现状
-    private String func; // 功能及应用范围
-    private String tecIndex; // 主要技术指标
-    private String testRange; // 测量范围
-    private String accuracy; // 精确度
-    private String status; // 仪器状态
-    private Long equiptCategoryId; // 仪器类型
-    private String installOrg; // 安装单位
-    private String installPhone; // 安装联系电话
-    private String serviceContactName; // 售后服务联系人
-    private String servicePhone; // 售后服务联系电话
-    private String sharing; // 是否共享
-    private String maintain; // 需要维护
-    private String sourceMethod; // 仪器溯源方式
-    @JSONField(format = "yyyy-MM-dd")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate sourceDate; // 溯源有效期
-    private String remark; // 备注
-    private Long acqScriptId; // 采集脚本ID
-    private String acqScriptIds; // 多采集脚本ID
-    private String scriptDesc;// 脚本描述
-    private String scriptDescs;// 多采集脚本描述
-    private String interfaceCategory; // 接口类型 （下拉列表 ：文件采集）
-    private String catalog; // 扫描文件夹 private String scriptCategory; // 脚本类型 下拉列表
-                            // 通用配置、定制配置
-    private String scriptCategory; // 脚本类型 下拉列表 通用配置、定制配置
-    private String maintenanceUserId;// 维护人编码
-    private String maintenanceUserName;// 维护人名称
-    private String isOnStock;//是否在库
-
-    private String orgId;//所属单位编码
-
-    private String calibrationType; // 校准类型
+    private Long id;
+    private String equiptId;
+    private String equiptName;
+    private String equiptEnglishName;
+    private String specification;
+    private String manufacturer;
+    @JSONField(format="yyyy-MM-dd")
+    @DateTimeFormat(pattern="yyyy-MM-dd")
+    private LocalDate factoryDate;
+    private String factoryNo;
+    private String price;
+    @JSONField(format="yyyy-MM-dd")
+    @DateTimeFormat(pattern="yyyy-MM-dd")
+    private LocalDate purchaseDate;
+    @JSONField(format="yyyy-MM-dd")
+    @DateTimeFormat(pattern="yyyy-MM-dd")
+    private LocalDate arrivalDate;
+    @JSONField(format="yyyy-MM-dd")
+    @DateTimeFormat(pattern="yyyy-MM-dd")
+    private LocalDate openDate;
+    @JSONField(format="yyyy-MM-dd")
+    @DateTimeFormat(pattern="yyyy-MM-dd")
+    private LocalDate installDate;
+    private String installUser;
+    @JSONField(format="yyyy-MM-dd")
+    @DateTimeFormat(pattern="yyyy-MM-dd")
+    private LocalDate acceptDate;
+    @JSONField(format="yyyy-MM-dd")
+    @DateTimeFormat(pattern="yyyy-MM-dd")
+    private LocalDate usedDate;
+    private String usedDepartmentId;
+    private String usedDepostId;
+    private String usedUserId;
+    private String usedUserName;
+    private String maintainUserId;
+    private String address;
+    private String keepUserId;
+    private String state;
+    private String func;
+    private String tecIndex;
+    private String testRange;
+    private String accuracy;
+    private String status;
+    private Long equiptCategoryId;
+    private String installOrg;
+    private String installPhone;
+    private String serviceContactName;
+    private String servicePhone;
+    private String sharing;
+    private String maintain;
+    private String sourceMethod;
+    @JSONField(format="yyyy-MM-dd")
+    @DateTimeFormat(pattern="yyyy-MM-dd")
+    private LocalDate sourceDate;
+    @NotNull(defaultValue="\u81ea\u6709")
+    private String equiptBelong;
+    private String remark;
+    private Long acqScriptId;
+    private String acqScriptIds;
+    private String scriptDesc;
+    private String scriptDescs;
+    private String interfaceCategory;
+    private String catalog;
+    private String scriptCategory;
+    private String maintenanceUserId;
+    private String maintenanceUserName;
+    private String isOnStock;
+    private String orgId;
+    private String calibrationType;
+    @NotNull(defaultValue="1")
+    private String equiptRecord;
+    private String sceneEquiptNo;
 
     @Override
     public Long getId() {
-        return id;
+        return this.id;
     }
 
     @Override
@@ -105,7 +102,7 @@ public class EmcEquiptBean extends AbstractInsertable<Long> {
     }
 
     public String getEquiptId() {
-        return equiptId;
+        return this.equiptId;
     }
 
     public void setEquiptId(String equiptId) {
@@ -113,7 +110,7 @@ public class EmcEquiptBean extends AbstractInsertable<Long> {
     }
 
     public String getEquiptName() {
-        return equiptName;
+        return this.equiptName;
     }
 
     public void setEquiptName(String equiptName) {
@@ -121,7 +118,7 @@ public class EmcEquiptBean extends AbstractInsertable<Long> {
     }
 
     public String getEquiptEnglishName() {
-        return equiptEnglishName;
+        return this.equiptEnglishName;
     }
 
     public void setEquiptEnglishName(String equiptEnglishName) {
@@ -129,7 +126,7 @@ public class EmcEquiptBean extends AbstractInsertable<Long> {
     }
 
     public String getSpecification() {
-        return specification;
+        return this.specification;
     }
 
     public void setSpecification(String specification) {
@@ -137,7 +134,7 @@ public class EmcEquiptBean extends AbstractInsertable<Long> {
     }
 
     public String getManufacturer() {
-        return manufacturer;
+        return this.manufacturer;
     }
 
     public void setManufacturer(String manufacturer) {
@@ -145,7 +142,7 @@ public class EmcEquiptBean extends AbstractInsertable<Long> {
     }
 
     public LocalDate getFactoryDate() {
-        return factoryDate;
+        return this.factoryDate;
     }
 
     public void setFactoryDate(LocalDate factoryDate) {
@@ -153,7 +150,7 @@ public class EmcEquiptBean extends AbstractInsertable<Long> {
     }
 
     public String getFactoryNo() {
-        return factoryNo;
+        return this.factoryNo;
     }
 
     public void setFactoryNo(String factoryNo) {
@@ -161,7 +158,7 @@ public class EmcEquiptBean extends AbstractInsertable<Long> {
     }
 
     public String getPrice() {
-        return price;
+        return this.price;
     }
 
     public void setPrice(String price) {
@@ -169,7 +166,7 @@ public class EmcEquiptBean extends AbstractInsertable<Long> {
     }
 
     public LocalDate getPurchaseDate() {
-        return purchaseDate;
+        return this.purchaseDate;
     }
 
     public void setPurchaseDate(LocalDate purchaseDate) {
@@ -177,7 +174,7 @@ public class EmcEquiptBean extends AbstractInsertable<Long> {
     }
 
     public LocalDate getArrivalDate() {
-        return arrivalDate;
+        return this.arrivalDate;
     }
 
     public void setArrivalDate(LocalDate arrivalDate) {
@@ -185,7 +182,7 @@ public class EmcEquiptBean extends AbstractInsertable<Long> {
     }
 
     public LocalDate getOpenDate() {
-        return openDate;
+        return this.openDate;
     }
 
     public void setOpenDate(LocalDate openDate) {
@@ -193,7 +190,7 @@ public class EmcEquiptBean extends AbstractInsertable<Long> {
     }
 
     public LocalDate getInstallDate() {
-        return installDate;
+        return this.installDate;
     }
 
     public void setInstallDate(LocalDate installDate) {
@@ -201,7 +198,7 @@ public class EmcEquiptBean extends AbstractInsertable<Long> {
     }
 
     public String getInstallUser() {
-        return installUser;
+        return this.installUser;
     }
 
     public void setInstallUser(String installUser) {
@@ -209,7 +206,7 @@ public class EmcEquiptBean extends AbstractInsertable<Long> {
     }
 
     public LocalDate getAcceptDate() {
-        return acceptDate;
+        return this.acceptDate;
     }
 
     public void setAcceptDate(LocalDate acceptDate) {
@@ -217,7 +214,7 @@ public class EmcEquiptBean extends AbstractInsertable<Long> {
     }
 
     public LocalDate getUsedDate() {
-        return usedDate;
+        return this.usedDate;
     }
 
     public void setUsedDate(LocalDate usedDate) {
@@ -225,7 +222,7 @@ public class EmcEquiptBean extends AbstractInsertable<Long> {
     }
 
     public String getUsedDepartmentId() {
-        return usedDepartmentId;
+        return this.usedDepartmentId;
     }
 
     public void setUsedDepartmentId(String usedDepartmentId) {
@@ -233,7 +230,7 @@ public class EmcEquiptBean extends AbstractInsertable<Long> {
     }
 
     public String getUsedDepostId() {
-        return usedDepostId;
+        return this.usedDepostId;
     }
 
     public void setUsedDepostId(String usedDepostId) {
@@ -241,7 +238,7 @@ public class EmcEquiptBean extends AbstractInsertable<Long> {
     }
 
     public String getUsedUserId() {
-        return usedUserId;
+        return this.usedUserId;
     }
 
     public void setUsedUserId(String usedUserId) {
@@ -249,7 +246,7 @@ public class EmcEquiptBean extends AbstractInsertable<Long> {
     }
 
     public String getUsedUserName() {
-        return usedUserName;
+        return this.usedUserName;
     }
 
     public void setUsedUserName(String usedUserName) {
@@ -257,7 +254,7 @@ public class EmcEquiptBean extends AbstractInsertable<Long> {
     }
 
     public String getMaintainUserId() {
-        return maintainUserId;
+        return this.maintainUserId;
     }
 
     public void setMaintainUserId(String maintainUserId) {
@@ -265,7 +262,7 @@ public class EmcEquiptBean extends AbstractInsertable<Long> {
     }
 
     public String getAddress() {
-        return address;
+        return this.address;
     }
 
     public void setAddress(String address) {
@@ -273,7 +270,7 @@ public class EmcEquiptBean extends AbstractInsertable<Long> {
     }
 
     public String getKeepUserId() {
-        return keepUserId;
+        return this.keepUserId;
     }
 
     public void setKeepUserId(String keepUserId) {
@@ -281,7 +278,7 @@ public class EmcEquiptBean extends AbstractInsertable<Long> {
     }
 
     public String getState() {
-        return state;
+        return this.state;
     }
 
     public void setState(String state) {
@@ -289,7 +286,7 @@ public class EmcEquiptBean extends AbstractInsertable<Long> {
     }
 
     public String getFunc() {
-        return func;
+        return this.func;
     }
 
     public void setFunc(String func) {
@@ -297,7 +294,7 @@ public class EmcEquiptBean extends AbstractInsertable<Long> {
     }
 
     public String getTecIndex() {
-        return tecIndex;
+        return this.tecIndex;
     }
 
     public void setTecIndex(String tecIndex) {
@@ -305,7 +302,7 @@ public class EmcEquiptBean extends AbstractInsertable<Long> {
     }
 
     public String getTestRange() {
-        return testRange;
+        return this.testRange;
     }
 
     public void setTestRange(String testRange) {
@@ -313,7 +310,7 @@ public class EmcEquiptBean extends AbstractInsertable<Long> {
     }
 
     public String getAccuracy() {
-        return accuracy;
+        return this.accuracy;
     }
 
     public void setAccuracy(String accuracy) {
@@ -321,7 +318,7 @@ public class EmcEquiptBean extends AbstractInsertable<Long> {
     }
 
     public String getStatus() {
-        return status;
+        return this.status;
     }
 
     public void setStatus(String status) {
@@ -329,7 +326,7 @@ public class EmcEquiptBean extends AbstractInsertable<Long> {
     }
 
     public Long getEquiptCategoryId() {
-        return equiptCategoryId;
+        return this.equiptCategoryId;
     }
 
     public void setEquiptCategoryId(Long equiptCategoryId) {
@@ -337,7 +334,7 @@ public class EmcEquiptBean extends AbstractInsertable<Long> {
     }
 
     public String getInstallOrg() {
-        return installOrg;
+        return this.installOrg;
     }
 
     public void setInstallOrg(String installOrg) {
@@ -345,7 +342,7 @@ public class EmcEquiptBean extends AbstractInsertable<Long> {
     }
 
     public String getInstallPhone() {
-        return installPhone;
+        return this.installPhone;
     }
 
     public void setInstallPhone(String installPhone) {
@@ -353,7 +350,7 @@ public class EmcEquiptBean extends AbstractInsertable<Long> {
     }
 
     public String getServiceContactName() {
-        return serviceContactName;
+        return this.serviceContactName;
     }
 
     public void setServiceContactName(String serviceContactName) {
@@ -361,7 +358,7 @@ public class EmcEquiptBean extends AbstractInsertable<Long> {
     }
 
     public String getServicePhone() {
-        return servicePhone;
+        return this.servicePhone;
     }
 
     public void setServicePhone(String servicePhone) {
@@ -369,7 +366,7 @@ public class EmcEquiptBean extends AbstractInsertable<Long> {
     }
 
     public String getSharing() {
-        return sharing;
+        return this.sharing;
     }
 
     public void setSharing(String sharing) {
@@ -377,7 +374,7 @@ public class EmcEquiptBean extends AbstractInsertable<Long> {
     }
 
     public String getMaintain() {
-        return maintain;
+        return this.maintain;
     }
 
     public void setMaintain(String maintain) {
@@ -385,7 +382,7 @@ public class EmcEquiptBean extends AbstractInsertable<Long> {
     }
 
     public String getSourceMethod() {
-        return sourceMethod;
+        return this.sourceMethod;
     }
 
     public void setSourceMethod(String sourceMethod) {
@@ -393,15 +390,23 @@ public class EmcEquiptBean extends AbstractInsertable<Long> {
     }
 
     public LocalDate getSourceDate() {
-        return sourceDate;
+        return this.sourceDate;
     }
 
     public void setSourceDate(LocalDate sourceDate) {
         this.sourceDate = sourceDate;
     }
 
+    public String getEquiptBelong() {
+        return this.equiptBelong;
+    }
+
+    public void setEquiptBelong(String equiptBelong) {
+        this.equiptBelong = equiptBelong;
+    }
+
     public String getRemark() {
-        return remark;
+        return this.remark;
     }
 
     public void setRemark(String remark) {
@@ -409,7 +414,7 @@ public class EmcEquiptBean extends AbstractInsertable<Long> {
     }
 
     public Long getAcqScriptId() {
-        return acqScriptId;
+        return this.acqScriptId;
     }
 
     public void setAcqScriptId(Long acqScriptId) {
@@ -417,7 +422,7 @@ public class EmcEquiptBean extends AbstractInsertable<Long> {
     }
 
     public String getAcqScriptIds() {
-        return acqScriptIds;
+        return this.acqScriptIds;
     }
 
     public void setAcqScriptIds(String acqScriptIds) {
@@ -425,7 +430,7 @@ public class EmcEquiptBean extends AbstractInsertable<Long> {
     }
 
     public String getScriptDesc() {
-        return scriptDesc;
+        return this.scriptDesc;
     }
 
     public void setScriptDesc(String scriptDesc) {
@@ -433,7 +438,7 @@ public class EmcEquiptBean extends AbstractInsertable<Long> {
     }
 
     public String getScriptDescs() {
-        return scriptDescs;
+        return this.scriptDescs;
     }
 
     public void setScriptDescs(String scriptDescs) {
@@ -441,7 +446,7 @@ public class EmcEquiptBean extends AbstractInsertable<Long> {
     }
 
     public String getInterfaceCategory() {
-        return interfaceCategory;
+        return this.interfaceCategory;
     }
 
     public void setInterfaceCategory(String interfaceCategory) {
@@ -449,7 +454,7 @@ public class EmcEquiptBean extends AbstractInsertable<Long> {
     }
 
     public String getCatalog() {
-        return catalog;
+        return this.catalog;
     }
 
     public void setCatalog(String catalog) {
@@ -457,7 +462,7 @@ public class EmcEquiptBean extends AbstractInsertable<Long> {
     }
 
     public String getScriptCategory() {
-        return scriptCategory;
+        return this.scriptCategory;
     }
 
     public void setScriptCategory(String scriptCategory) {
@@ -465,7 +470,7 @@ public class EmcEquiptBean extends AbstractInsertable<Long> {
     }
 
     public String getMaintenanceUserId() {
-        return maintenanceUserId;
+        return this.maintenanceUserId;
     }
 
     public void setMaintenanceUserId(String maintenanceUserId) {
@@ -473,7 +478,7 @@ public class EmcEquiptBean extends AbstractInsertable<Long> {
     }
 
     public String getMaintenanceUserName() {
-        return maintenanceUserName;
+        return this.maintenanceUserName;
     }
 
     public void setMaintenanceUserName(String maintenanceUserName) {
@@ -481,26 +486,43 @@ public class EmcEquiptBean extends AbstractInsertable<Long> {
     }
 
     public String getIsOnStock() {
-        return isOnStock;
+        return this.isOnStock;
     }
 
     public void setIsOnStock(String isOnStock) {
         this.isOnStock = isOnStock;
     }
 
-	public String getOrgId() {
-		return orgId;
-	}
+    public String getOrgId() {
+        return this.orgId;
+    }
 
-	public void setOrgId(String orgId) {
-		this.orgId = orgId;
-	}
+    public void setOrgId(String orgId) {
+        this.orgId = orgId;
+    }
 
     public String getCalibrationType() {
-        return calibrationType;
+        return this.calibrationType;
     }
 
     public void setCalibrationType(String calibrationType) {
         this.calibrationType = calibrationType;
     }
+
+    public String getEquiptRecord() {
+        return this.equiptRecord;
+    }
+
+    public void setEquiptRecord(String equiptRecord) {
+        this.equiptRecord = equiptRecord;
+    }
+
+    public String getSceneEquiptNo() {
+        return this.sceneEquiptNo;
+    }
+
+    public void setSceneEquiptNo(String sceneEquiptNo) {
+        this.sceneEquiptNo = sceneEquiptNo;
+    }
 }
+

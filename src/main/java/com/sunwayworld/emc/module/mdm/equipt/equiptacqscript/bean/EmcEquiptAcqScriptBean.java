@@ -1,70 +1,56 @@
+/*
+ * Decompiled with CFR.
+ */
 package com.sunwayworld.emc.module.mdm.equipt.equiptacqscript.bean;
 
-import java.time.LocalDateTime;
-
 import com.alibaba.fastjson.annotation.JSONField;
-import org.springframework.format.annotation.DateTimeFormat;
-
-import com.sunwayworld.emc.framework.constant.EmcConstant;
 import com.sunwayworld.framework.data.annotation.Id;
 import com.sunwayworld.framework.data.annotation.NotNull;
 import com.sunwayworld.framework.data.annotation.Table;
 import com.sunwayworld.framework.data.annotation.Transient;
 import com.sunwayworld.framework.support.domain.AbstractPersistable;
 import com.sunwayworld.framework.support.domain.Insertable;
+import java.time.LocalDateTime;
+import org.springframework.format.annotation.DateTimeFormat;
 
-/**
- * 设备台账-仪器采集脚本配置(T_EMC_EQUIPT_ACQ_SCRIPT)
- *
- */
-@Table("T_EMC_EQUIPT_ACQ_SCRIPT")
-public class EmcEquiptAcqScriptBean extends AbstractPersistable<Long> implements Insertable<Long> {
-
+@Table(value="T_EMC_EQUIPT_ACQ_SCRIPT")
+public class EmcEquiptAcqScriptBean
+extends AbstractPersistable<Long>
+implements Insertable<Long> {
     @Transient
     private static final long serialVersionUID = 7455032350715272800L;
-
     @Id
-    private Long id; // 主键
+    private Long id;
+    private String scriptDesc;
+    private String dataFormat;
+    private String orderNoFormat;
+    private String resultFormat;
+    private String testFormat;
+    private String rowDataSeparator;
+    @NotNull(defaultValue="sequence")
+    private String analysisWay;
+    private String source;
+    private String serialAcq;
+    private String createdById;
+    private String createdByName;
+    @JSONField(format="yyyy-MM-dd")
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime createdTime;
+    private String createdByOrgId;
+    private String createdByOrgName;
 
-    private String scriptDesc; // 配置描述
-
-    private String dataFormat; // 数据格式 下拉列表equiptAcqDataFormat
-
-    private String orderNoFormat; // 样品编号格式 下拉列表equiptAcqOrderNoFormat
-
-    private String resultFormat; // 仪器采购结果格式 下拉列表equiptAcqResultFormat
-
-    private String testFormat; // 分析项名称是否手动配置（no根据配置的列号取，yes直接取结果编码名称） 下拉列表yesorno
-
-    private String rowDataSeparator; // 行数据分隔符
-
-    @NotNull(defaultValue = EmcConstant.ANALYSIS_WAY_PRIOR_SEQUENCE)
-    private String analysisWay; // 解析方式 下拉列表analysisWay
-
-    private String source; // 采集来源
-
-    private String createdById; // 制单人编码
-
-    private String createdByName; // 制单人名称
-
-    @JSONField(format = "yyyy-MM-dd")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime createdTime; // 制单时间
-
-    private String createdByOrgId; // 制单人单位编码
-
-    private String createdByOrgName; // 制单人单位名称
-
+    @Override
     public Long getId() {
-        return id;
+        return this.id;
     }
 
+    @Override
     public void setId(Long id) {
         this.id = id;
     }
 
     public String getScriptDesc() {
-        return scriptDesc;
+        return this.scriptDesc;
     }
 
     public void setScriptDesc(String scriptDesc) {
@@ -72,7 +58,7 @@ public class EmcEquiptAcqScriptBean extends AbstractPersistable<Long> implements
     }
 
     public String getDataFormat() {
-        return dataFormat;
+        return this.dataFormat;
     }
 
     public void setDataFormat(String dataFormat) {
@@ -80,7 +66,7 @@ public class EmcEquiptAcqScriptBean extends AbstractPersistable<Long> implements
     }
 
     public String getOrderNoFormat() {
-        return orderNoFormat;
+        return this.orderNoFormat;
     }
 
     public void setOrderNoFormat(String orderNoFormat) {
@@ -88,11 +74,11 @@ public class EmcEquiptAcqScriptBean extends AbstractPersistable<Long> implements
     }
 
     public String getResultFormat() {
-        return resultFormat;
+        return this.resultFormat;
     }
 
     public String getTestFormat() {
-        return testFormat;
+        return this.testFormat;
     }
 
     public void setTestFormat(String testFormat) {
@@ -104,7 +90,7 @@ public class EmcEquiptAcqScriptBean extends AbstractPersistable<Long> implements
     }
 
     public String getRowDataSeparator() {
-        return rowDataSeparator;
+        return this.rowDataSeparator;
     }
 
     public void setRowDataSeparator(String rowDataSeparator) {
@@ -112,7 +98,7 @@ public class EmcEquiptAcqScriptBean extends AbstractPersistable<Long> implements
     }
 
     public String getAnalysisWay() {
-        return analysisWay;
+        return this.analysisWay;
     }
 
     public void setAnalysisWay(String analysisWay) {
@@ -120,16 +106,24 @@ public class EmcEquiptAcqScriptBean extends AbstractPersistable<Long> implements
     }
 
     public String getSource() {
-        return source;
+        return this.source;
     }
 
     public void setSource(String source) {
         this.source = source;
     }
 
+    public String getSerialAcq() {
+        return this.serialAcq;
+    }
+
+    public void setSerialAcq(String serialAcq) {
+        this.serialAcq = serialAcq;
+    }
+
     @Override
     public String getCreatedById() {
-        return createdById;
+        return this.createdById;
     }
 
     @Override
@@ -139,7 +133,7 @@ public class EmcEquiptAcqScriptBean extends AbstractPersistable<Long> implements
 
     @Override
     public String getCreatedByName() {
-        return createdByName;
+        return this.createdByName;
     }
 
     @Override
@@ -149,7 +143,7 @@ public class EmcEquiptAcqScriptBean extends AbstractPersistable<Long> implements
 
     @Override
     public LocalDateTime getCreatedTime() {
-        return createdTime;
+        return this.createdTime;
     }
 
     @Override
@@ -159,7 +153,7 @@ public class EmcEquiptAcqScriptBean extends AbstractPersistable<Long> implements
 
     @Override
     public String getCreatedByOrgId() {
-        return createdByOrgId;
+        return this.createdByOrgId;
     }
 
     @Override
@@ -169,7 +163,7 @@ public class EmcEquiptAcqScriptBean extends AbstractPersistable<Long> implements
 
     @Override
     public String getCreatedByOrgName() {
-        return createdByOrgName;
+        return this.createdByOrgName;
     }
 
     @Override
@@ -177,3 +171,4 @@ public class EmcEquiptAcqScriptBean extends AbstractPersistable<Long> implements
         this.createdByOrgName = createdByOrgName;
     }
 }
+

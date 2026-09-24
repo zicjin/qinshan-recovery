@@ -1,12 +1,9 @@
+/*
+ * Decompiled with CFR.
+ */
 package com.sunwayworld.emc.module.bp.result.run.bean;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-
-import org.springframework.format.annotation.DateTimeFormat;
-
 import com.alibaba.fastjson.annotation.JSONField;
-import com.sunwayworld.emc.framework.constant.EmcBizConstant;
 import com.sunwayworld.framework.data.annotation.Clob;
 import com.sunwayworld.framework.data.annotation.Id;
 import com.sunwayworld.framework.data.annotation.NotNull;
@@ -14,103 +11,107 @@ import com.sunwayworld.framework.data.annotation.Table;
 import com.sunwayworld.framework.data.annotation.Transient;
 import com.sunwayworld.framework.support.domain.AbstractAuditable;
 import com.sunwayworld.framework.support.domain.Insertable;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import org.springframework.format.annotation.DateTimeFormat;
 
-/**
- * 样品测试批表
- *
- * @author magt@sunwayworld.com 2019/10/16
- *
- */
-@Table("T_EMC_RUN")
-public class EmcRunBean extends AbstractAuditable<String> implements Insertable<String> {
-
-	@Transient
-	private static final long serialVersionUID = 4908341682974050355L;
-
-	@Id
-    private String id; // 批号
-    private Long projId;// 项目编码
-    private String humidity; // 湿度
-    private String temperature; // 温度
-    @JSONField(format = "yyyy-MM-dd")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate analysisBeginDate; // 分析开始日期
-    private String analysisBeginTime; // 分析开始时间
-    @JSONField(format = "yyyy-MM-dd")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate analysisEndDate; // 分析结束日期
-    private String analysisEndTime; // 分析结束时间
-    private String receiveDate; // 领样日期
-    private String receiveTime; // 领样时间
-    @JSONField(format = "yyyy-MM-dd")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate handleDate; // 处置日期
-    private String handleMethod; // 处置方式
+@Table(value="T_EMC_RUN")
+public class EmcRunBean
+extends AbstractAuditable<String>
+implements Insertable<String> {
+    @Transient
+    private static final long serialVersionUID = 4908341682974050355L;
+    @Id
+    private String id;
+    private Long projId;
+    private String humidity;
+    private String temperature;
+    @JSONField(format="yyyy-MM-dd")
+    @DateTimeFormat(pattern="yyyy-MM-dd")
+    private LocalDate analysisBeginDate;
+    private String analysisBeginTime;
+    @JSONField(format="yyyy-MM-dd")
+    @DateTimeFormat(pattern="yyyy-MM-dd")
+    private LocalDate analysisEndDate;
+    private String analysisEndTime;
+    private String receiveDate;
+    private String receiveTime;
+    @JSONField(format="yyyy-MM-dd")
+    @DateTimeFormat(pattern="yyyy-MM-dd")
+    private LocalDate handleDate;
+    private String handleMethod;
     @Clob
-    private String beforeHandle; // 前处理
-    private String beforeHandleId; // 前处理id
-    private String methodParam; // 方法参数
-    private String analysisUserId; // 分析员编码
-    private String analysisUserName; // 分析员
-    private String partakeUserId; // 共同完成人编码
-    private String partakeUserName; // 共同完成人
-    private String assistEquiptId; // 辅助仪器
-    private String assistEquiptName; // 辅助仪器名称
-    private Long equiptId; // 现场仪器
-    private String curveId;// 曲线ID
-    private String curveNo; // 曲线编码
-    private String orderCategory; // 样品类型
-    private String checkUserId; // 校核人编码
-    private String checkUserName; // 校核人
-    private String testMethodId; // 测试方法编码
-    private String testId; // 测试编码
-    private String testName; // 测试名称
-    private Long methodId; // 测试编码
-    private Long reportConfigLineId; // 报表模版id
+    private String beforeHandle;
+    private String beforeHandleId;
+    private String methodParam;
+    private String analysisUserId;
+    private String analysisUserName;
+    private String partakeUserId;
+    private String partakeUserName;
+    private String assistEquiptId;
+    private String assistEquiptName;
+    private Long equiptId;
+    private String curveId;
+    private String curveNo;
+    private String orderCategory;
+    private String checkUserId;
+    private String checkUserName;
+    private String testMethodId;
+    private String testId;
+    private String testName;
+    private Long methodId;
+    private Long reportConfigLineId;
     private Long sol1Id;
     private Long sol2Id;
     private Long reagentId;
-    @NotNull(defaultValue = EmcBizConstant.RUN_STATUS_DRAFT)
+    @NotNull(defaultValue="draft")
     private String status;
-
-    private String checkStatus; // 预审状态
-    private String assistEquiptModel; // 辅助仪器名称型号
-    private String assistEquiptNo; // 辅助仪器编号
-    private String relatedRunId; // 关联批号（用于多批次共用同一实验室空白质控样数据情况）
-    private String remark; // 备注
-
+    private String checkStatus;
+    private String assistEquiptModel;
+    private String assistEquiptNo;
+    private String relatedRunId;
+    private String remark;
     private String createdById;
     private String createdByName;
-    @JSONField(format = "yyyy-MM-dd")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JSONField(format="yyyy-MM-dd")
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdTime;
     private String createdByOrgId;
     private String createdByOrgName;
-    private String orgId;// 所属单位编码
-    private String orgName;// 所属单位名称
+    private String orgId;
+    private String orgName;
     private String auditedUserId;
     private String auditedUserName;
-    @JSONField(format = "yyyy-MM-dd")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JSONField(format="yyyy-MM-dd")
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private LocalDateTime auditedDate;
-
-    private String sol1Amount;//溶液1使用量(新锐)
-
-    private String sol2Amount;//溶液2使用量(新锐)
-
-    private String projNo;//项目编号
-
-    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private String sol1Amount;
+    private String sol2Amount;
+    private String projNo;
+    @JSONField(format="yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private LocalDateTime weightTime;
+    private Long weighingReportLineId;
+    private String undoReason;
+    private String undoFlag;
+    private String stNo;
+    private String stConcent;
+    @JSONField(format="yyyy-MM-dd")
+    @DateTimeFormat(pattern="yyyy-MM-dd")
+    private LocalDate stValiDate;
+    private String stValiDateStr;
 
-    private Long weighingReportLineId; // 称重记录模板
+    public String getUndoFlag() {
+        return this.undoFlag;
+    }
 
-    private String undoReason; // 回退原因
+    public void setUndoFlag(String undoFlag) {
+        this.undoFlag = undoFlag;
+    }
 
     @Override
     public String getId() {
-        return id;
+        return this.id;
     }
 
     @Override
@@ -119,7 +120,7 @@ public class EmcRunBean extends AbstractAuditable<String> implements Insertable<
     }
 
     public Long getProjId() {
-        return projId;
+        return this.projId;
     }
 
     public void setProjId(Long projId) {
@@ -127,7 +128,7 @@ public class EmcRunBean extends AbstractAuditable<String> implements Insertable<
     }
 
     public String getHumidity() {
-        return humidity;
+        return this.humidity;
     }
 
     public void setHumidity(String humidity) {
@@ -135,7 +136,7 @@ public class EmcRunBean extends AbstractAuditable<String> implements Insertable<
     }
 
     public String getTemperature() {
-        return temperature;
+        return this.temperature;
     }
 
     public void setTemperature(String temperature) {
@@ -143,7 +144,7 @@ public class EmcRunBean extends AbstractAuditable<String> implements Insertable<
     }
 
     public LocalDate getAnalysisBeginDate() {
-        return analysisBeginDate;
+        return this.analysisBeginDate;
     }
 
     public void setAnalysisBeginDate(LocalDate analysisBeginDate) {
@@ -151,7 +152,7 @@ public class EmcRunBean extends AbstractAuditable<String> implements Insertable<
     }
 
     public String getAnalysisBeginTime() {
-        return analysisBeginTime;
+        return this.analysisBeginTime;
     }
 
     public void setAnalysisBeginTime(String analysisBeginTime) {
@@ -159,7 +160,7 @@ public class EmcRunBean extends AbstractAuditable<String> implements Insertable<
     }
 
     public LocalDate getAnalysisEndDate() {
-        return analysisEndDate;
+        return this.analysisEndDate;
     }
 
     public void setAnalysisEndDate(LocalDate analysisEndDate) {
@@ -167,7 +168,7 @@ public class EmcRunBean extends AbstractAuditable<String> implements Insertable<
     }
 
     public String getAnalysisEndTime() {
-        return analysisEndTime;
+        return this.analysisEndTime;
     }
 
     public void setAnalysisEndTime(String analysisEndTime) {
@@ -175,7 +176,7 @@ public class EmcRunBean extends AbstractAuditable<String> implements Insertable<
     }
 
     public String getReceiveDate() {
-        return receiveDate;
+        return this.receiveDate;
     }
 
     public void setReceiveDate(String receiveDate) {
@@ -183,7 +184,7 @@ public class EmcRunBean extends AbstractAuditable<String> implements Insertable<
     }
 
     public String getReceiveTime() {
-        return receiveTime;
+        return this.receiveTime;
     }
 
     public void setReceiveTime(String receiveTime) {
@@ -191,7 +192,7 @@ public class EmcRunBean extends AbstractAuditable<String> implements Insertable<
     }
 
     public LocalDate getHandleDate() {
-        return handleDate;
+        return this.handleDate;
     }
 
     public void setHandleDate(LocalDate handleDate) {
@@ -199,7 +200,7 @@ public class EmcRunBean extends AbstractAuditable<String> implements Insertable<
     }
 
     public String getHandleMethod() {
-        return handleMethod;
+        return this.handleMethod;
     }
 
     public void setHandleMethod(String handleMethod) {
@@ -207,7 +208,7 @@ public class EmcRunBean extends AbstractAuditable<String> implements Insertable<
     }
 
     public String getBeforeHandle() {
-        return beforeHandle;
+        return this.beforeHandle;
     }
 
     public void setBeforeHandle(String beforeHandle) {
@@ -215,7 +216,7 @@ public class EmcRunBean extends AbstractAuditable<String> implements Insertable<
     }
 
     public String getMethodParam() {
-        return methodParam;
+        return this.methodParam;
     }
 
     public void setMethodParam(String methodParam) {
@@ -223,7 +224,7 @@ public class EmcRunBean extends AbstractAuditable<String> implements Insertable<
     }
 
     public String getAnalysisUserId() {
-        return analysisUserId;
+        return this.analysisUserId;
     }
 
     public void setAnalysisUserId(String analysisUserId) {
@@ -231,7 +232,7 @@ public class EmcRunBean extends AbstractAuditable<String> implements Insertable<
     }
 
     public String getAnalysisUserName() {
-        return analysisUserName;
+        return this.analysisUserName;
     }
 
     public void setAnalysisUserName(String analysisUserName) {
@@ -239,7 +240,7 @@ public class EmcRunBean extends AbstractAuditable<String> implements Insertable<
     }
 
     public String getPartakeUserId() {
-        return partakeUserId;
+        return this.partakeUserId;
     }
 
     public void setPartakeUserId(String partakeUserId) {
@@ -247,7 +248,7 @@ public class EmcRunBean extends AbstractAuditable<String> implements Insertable<
     }
 
     public String getPartakeUserName() {
-        return partakeUserName;
+        return this.partakeUserName;
     }
 
     public void setPartakeUserName(String partakeUserName) {
@@ -255,7 +256,7 @@ public class EmcRunBean extends AbstractAuditable<String> implements Insertable<
     }
 
     public String getAssistEquiptId() {
-        return assistEquiptId;
+        return this.assistEquiptId;
     }
 
     public void setAssistEquiptId(String assistEquiptId) {
@@ -263,7 +264,7 @@ public class EmcRunBean extends AbstractAuditable<String> implements Insertable<
     }
 
     public String getAssistEquiptName() {
-        return assistEquiptName;
+        return this.assistEquiptName;
     }
 
     public void setAssistEquiptName(String assistEquiptName) {
@@ -271,7 +272,7 @@ public class EmcRunBean extends AbstractAuditable<String> implements Insertable<
     }
 
     public Long getEquiptId() {
-        return equiptId;
+        return this.equiptId;
     }
 
     public void setEquiptId(Long equiptId) {
@@ -279,7 +280,7 @@ public class EmcRunBean extends AbstractAuditable<String> implements Insertable<
     }
 
     public String getCurveId() {
-        return curveId;
+        return this.curveId;
     }
 
     public void setCurveId(String curveId) {
@@ -287,7 +288,7 @@ public class EmcRunBean extends AbstractAuditable<String> implements Insertable<
     }
 
     public String getCurveNo() {
-        return curveNo;
+        return this.curveNo;
     }
 
     public void setCurveNo(String curveNo) {
@@ -295,7 +296,7 @@ public class EmcRunBean extends AbstractAuditable<String> implements Insertable<
     }
 
     public String getOrderCategory() {
-        return orderCategory;
+        return this.orderCategory;
     }
 
     public void setOrderCategory(String orderCategory) {
@@ -303,7 +304,7 @@ public class EmcRunBean extends AbstractAuditable<String> implements Insertable<
     }
 
     public String getCheckUserId() {
-        return checkUserId;
+        return this.checkUserId;
     }
 
     public void setCheckUserId(String checkUserId) {
@@ -311,7 +312,7 @@ public class EmcRunBean extends AbstractAuditable<String> implements Insertable<
     }
 
     public String getCheckUserName() {
-        return checkUserName;
+        return this.checkUserName;
     }
 
     public void setCheckUserName(String checkUserName) {
@@ -319,7 +320,7 @@ public class EmcRunBean extends AbstractAuditable<String> implements Insertable<
     }
 
     public String getTestMethodId() {
-        return testMethodId;
+        return this.testMethodId;
     }
 
     public void setTestMethodId(String testMethodId) {
@@ -327,7 +328,7 @@ public class EmcRunBean extends AbstractAuditable<String> implements Insertable<
     }
 
     public String getTestId() {
-        return testId;
+        return this.testId;
     }
 
     public void setTestId(String testId) {
@@ -335,7 +336,7 @@ public class EmcRunBean extends AbstractAuditable<String> implements Insertable<
     }
 
     public String getTestName() {
-        return testName;
+        return this.testName;
     }
 
     public void setTestName(String testName) {
@@ -343,7 +344,7 @@ public class EmcRunBean extends AbstractAuditable<String> implements Insertable<
     }
 
     public Long getMethodId() {
-        return methodId;
+        return this.methodId;
     }
 
     public void setMethodId(Long methodId) {
@@ -351,7 +352,7 @@ public class EmcRunBean extends AbstractAuditable<String> implements Insertable<
     }
 
     public Long getReportConfigLineId() {
-        return reportConfigLineId;
+        return this.reportConfigLineId;
     }
 
     public void setReportConfigLineId(Long reportConfigLineId) {
@@ -359,7 +360,7 @@ public class EmcRunBean extends AbstractAuditable<String> implements Insertable<
     }
 
     public Long getSol1Id() {
-        return sol1Id;
+        return this.sol1Id;
     }
 
     public void setSol1Id(Long sol1Id) {
@@ -367,7 +368,7 @@ public class EmcRunBean extends AbstractAuditable<String> implements Insertable<
     }
 
     public Long getSol2Id() {
-        return sol2Id;
+        return this.sol2Id;
     }
 
     public void setSol2Id(Long sol2Id) {
@@ -375,7 +376,7 @@ public class EmcRunBean extends AbstractAuditable<String> implements Insertable<
     }
 
     public Long getReagentId() {
-        return reagentId;
+        return this.reagentId;
     }
 
     public void setReagentId(Long reagentId) {
@@ -383,7 +384,7 @@ public class EmcRunBean extends AbstractAuditable<String> implements Insertable<
     }
 
     public String getStatus() {
-        return status;
+        return this.status;
     }
 
     public void setStatus(String status) {
@@ -391,7 +392,7 @@ public class EmcRunBean extends AbstractAuditable<String> implements Insertable<
     }
 
     public String getCheckStatus() {
-        return checkStatus;
+        return this.checkStatus;
     }
 
     public void setCheckStatus(String checkStatus) {
@@ -399,7 +400,7 @@ public class EmcRunBean extends AbstractAuditable<String> implements Insertable<
     }
 
     public String getAssistEquiptModel() {
-        return assistEquiptModel;
+        return this.assistEquiptModel;
     }
 
     public void setAssistEquiptModel(String assistEquiptModel) {
@@ -407,7 +408,7 @@ public class EmcRunBean extends AbstractAuditable<String> implements Insertable<
     }
 
     public String getAssistEquiptNo() {
-        return assistEquiptNo;
+        return this.assistEquiptNo;
     }
 
     public void setAssistEquiptNo(String assistEquiptNo) {
@@ -415,7 +416,7 @@ public class EmcRunBean extends AbstractAuditable<String> implements Insertable<
     }
 
     public String getRelatedRunId() {
-        return relatedRunId;
+        return this.relatedRunId;
     }
 
     public void setRelatedRunId(String relatedRunId) {
@@ -423,7 +424,7 @@ public class EmcRunBean extends AbstractAuditable<String> implements Insertable<
     }
 
     public String getRemark() {
-        return remark;
+        return this.remark;
     }
 
     public void setRemark(String remark) {
@@ -432,7 +433,7 @@ public class EmcRunBean extends AbstractAuditable<String> implements Insertable<
 
     @Override
     public String getCreatedById() {
-        return createdById;
+        return this.createdById;
     }
 
     @Override
@@ -442,7 +443,7 @@ public class EmcRunBean extends AbstractAuditable<String> implements Insertable<
 
     @Override
     public String getCreatedByName() {
-        return createdByName;
+        return this.createdByName;
     }
 
     @Override
@@ -452,7 +453,7 @@ public class EmcRunBean extends AbstractAuditable<String> implements Insertable<
 
     @Override
     public LocalDateTime getCreatedTime() {
-        return createdTime;
+        return this.createdTime;
     }
 
     @Override
@@ -462,7 +463,7 @@ public class EmcRunBean extends AbstractAuditable<String> implements Insertable<
 
     @Override
     public String getCreatedByOrgId() {
-        return createdByOrgId;
+        return this.createdByOrgId;
     }
 
     @Override
@@ -472,7 +473,7 @@ public class EmcRunBean extends AbstractAuditable<String> implements Insertable<
 
     @Override
     public String getCreatedByOrgName() {
-        return createdByOrgName;
+        return this.createdByOrgName;
     }
 
     @Override
@@ -481,7 +482,7 @@ public class EmcRunBean extends AbstractAuditable<String> implements Insertable<
     }
 
     public String getAuditedUserId() {
-        return auditedUserId;
+        return this.auditedUserId;
     }
 
     public void setAuditedUserId(String auditedUserId) {
@@ -489,7 +490,7 @@ public class EmcRunBean extends AbstractAuditable<String> implements Insertable<
     }
 
     public String getAuditedUserName() {
-        return auditedUserName;
+        return this.auditedUserName;
     }
 
     public void setAuditedUserName(String auditedUserName) {
@@ -497,7 +498,7 @@ public class EmcRunBean extends AbstractAuditable<String> implements Insertable<
     }
 
     public LocalDateTime getAuditedDate() {
-        return auditedDate;
+        return this.auditedDate;
     }
 
     public void setAuditedDate(LocalDateTime auditedDate) {
@@ -505,7 +506,7 @@ public class EmcRunBean extends AbstractAuditable<String> implements Insertable<
     }
 
     public String getOrgId() {
-        return orgId;
+        return this.orgId;
     }
 
     public void setOrgId(String orgId) {
@@ -513,7 +514,7 @@ public class EmcRunBean extends AbstractAuditable<String> implements Insertable<
     }
 
     public String getOrgName() {
-        return orgName;
+        return this.orgName;
     }
 
     public void setOrgName(String orgName) {
@@ -521,7 +522,7 @@ public class EmcRunBean extends AbstractAuditable<String> implements Insertable<
     }
 
     public String getBeforeHandleId() {
-        return beforeHandleId;
+        return this.beforeHandleId;
     }
 
     public void setBeforeHandleId(String beforeHandleId) {
@@ -529,7 +530,7 @@ public class EmcRunBean extends AbstractAuditable<String> implements Insertable<
     }
 
     public String getSol1Amount() {
-        return sol1Amount;
+        return this.sol1Amount;
     }
 
     public void setSol1Amount(String sol1Amount) {
@@ -537,7 +538,7 @@ public class EmcRunBean extends AbstractAuditable<String> implements Insertable<
     }
 
     public String getSol2Amount() {
-        return sol2Amount;
+        return this.sol2Amount;
     }
 
     public void setSol2Amount(String sol2Amount) {
@@ -545,7 +546,7 @@ public class EmcRunBean extends AbstractAuditable<String> implements Insertable<
     }
 
     public String getProjNo() {
-        return projNo;
+        return this.projNo;
     }
 
     public void setProjNo(String projNo) {
@@ -553,7 +554,7 @@ public class EmcRunBean extends AbstractAuditable<String> implements Insertable<
     }
 
     public LocalDateTime getWeightTime() {
-        return weightTime;
+        return this.weightTime;
     }
 
     public void setWeightTime(LocalDateTime weightTime) {
@@ -561,7 +562,7 @@ public class EmcRunBean extends AbstractAuditable<String> implements Insertable<
     }
 
     public Long getWeighingReportLineId() {
-        return weighingReportLineId;
+        return this.weighingReportLineId;
     }
 
     public void setWeighingReportLineId(Long weighingReportLineId) {
@@ -569,10 +570,43 @@ public class EmcRunBean extends AbstractAuditable<String> implements Insertable<
     }
 
     public String getUndoReason() {
-        return undoReason;
+        return this.undoReason;
     }
 
     public void setUndoReason(String undoReason) {
         this.undoReason = undoReason;
     }
+
+    public String getStNo() {
+        return this.stNo;
+    }
+
+    public void setStNo(String stNo) {
+        this.stNo = stNo;
+    }
+
+    public String getStConcent() {
+        return this.stConcent;
+    }
+
+    public void setStConcent(String stConcent) {
+        this.stConcent = stConcent;
+    }
+
+    public LocalDate getStValiDate() {
+        return this.stValiDate;
+    }
+
+    public void setStValiDate(LocalDate stValiDate) {
+        this.stValiDate = stValiDate;
+    }
+
+    public String getStValiDateStr() {
+        return this.stValiDateStr;
+    }
+
+    public void setStValiDateStr(String stValiDateStr) {
+        this.stValiDateStr = stValiDateStr;
+    }
 }
+

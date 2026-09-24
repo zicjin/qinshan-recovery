@@ -1,82 +1,60 @@
+/*
+ * Decompiled with CFR.
+ */
 package com.sunwayworld.emc.module.bp.project.projscheme.bean;
 
-import java.time.LocalDateTime;
-
 import com.alibaba.fastjson.annotation.JSONField;
-import org.springframework.format.annotation.DateTimeFormat;
-
 import com.sunwayworld.framework.data.annotation.Id;
 import com.sunwayworld.framework.data.annotation.Table;
 import com.sunwayworld.framework.data.annotation.Transient;
 import com.sunwayworld.framework.support.domain.AbstractPersistable;
 import com.sunwayworld.framework.support.domain.Insertable;
+import java.time.LocalDateTime;
+import org.springframework.format.annotation.DateTimeFormat;
 
-/**
- * 检测方案表
- *
- * @author yuanhh@sunwayworld.com
- * @date 2019-10-08
- */
-
-@Table("T_EMC_PROJ_SCHEME")
-public class EmcProjSchemeBean extends AbstractPersistable<Long> implements Insertable<Long> {
-
+@Table(value="T_EMC_PROJ_SCHEME")
+public class EmcProjSchemeBean
+extends AbstractPersistable<Long>
+implements Insertable<Long> {
     @Transient
     private static final long serialVersionUID = 8013335846960248120L;
-
     @Id
-    private Long id;// 主键
+    private Long id;
+    private Long projId;
+    private String folderNo;
+    private String monitorPointCategoryId;
+    private String monitorPointCategoryName;
+    private Long monitorPointId;
+    private String monitorPointNo;
+    private String monitorPointName;
+    private String monitorTmplId;
+    private Long cycle;
+    private Long frequency;
+    private String sampleOrgId;
+    private String remark;
+    private String referFolder;
+    private Long erpGbId;
+    private Long sortNum;
+    private String createdById;
+    private String createdByName;
+    @JSONField(format="yyyy-MM-dd")
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime createdTime;
+    private String createdByOrgId;
+    private String createdByOrgName;
 
-    private Long projId;// 项目编码
-
-    private String folderNo;// 点位样品编号
-
-    private String monitorPointCategoryId;// 检测点类型编码
-
-    private String monitorPointCategoryName;// 检测点类型名称
-
-    private Long monitorPointId;// 监测点ID
-
-    private String monitorPointNo;// 监测点编码
-
-    private String monitorPointName;// 监测点名称
-
-    private String monitorTmplId;// 监测模板编码
-
-    private Long cycle;// 周期
-
-    private Long frequency;// 频次
-
-    private String sampleOrgId;// 采样科室
-
-    private String remark;// 备注
-
-    private Long erpGbId; // ERP的样品ID
-
-    private Long sortNum; // 排序码
-
-    private String createdById;// 制单人编码
-
-    private String createdByName;// 制单人名称
-
-    @JSONField(format = "yyyy-MM-dd")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime createdTime;// 制单时间
-
-    private String createdByOrgId;// 制单人单位编码
-
-    private String createdByOrgName;// 制单人单位名称
-
+    @Override
     public Long getId() {
-        return id;
+        return this.id;
     }
 
+    @Override
     public void setId(Long id) {
         this.id = id;
     }
 
     public Long getProjId() {
-        return projId;
+        return this.projId;
     }
 
     public void setProjId(Long projId) {
@@ -84,7 +62,7 @@ public class EmcProjSchemeBean extends AbstractPersistable<Long> implements Inse
     }
 
     public String getFolderNo() {
-        return folderNo;
+        return this.folderNo;
     }
 
     public void setFolderNo(String folderNo) {
@@ -92,7 +70,7 @@ public class EmcProjSchemeBean extends AbstractPersistable<Long> implements Inse
     }
 
     public String getMonitorPointCategoryId() {
-        return monitorPointCategoryId;
+        return this.monitorPointCategoryId;
     }
 
     public void setMonitorPointCategoryId(String monitorPointCategoryId) {
@@ -100,7 +78,7 @@ public class EmcProjSchemeBean extends AbstractPersistable<Long> implements Inse
     }
 
     public String getMonitorPointCategoryName() {
-        return monitorPointCategoryName;
+        return this.monitorPointCategoryName;
     }
 
     public void setMonitorPointCategoryName(String monitorPointCategoryName) {
@@ -108,7 +86,7 @@ public class EmcProjSchemeBean extends AbstractPersistable<Long> implements Inse
     }
 
     public Long getMonitorPointId() {
-        return monitorPointId;
+        return this.monitorPointId;
     }
 
     public void setMonitorPointId(Long monitorPointId) {
@@ -116,7 +94,7 @@ public class EmcProjSchemeBean extends AbstractPersistable<Long> implements Inse
     }
 
     public String getMonitorPointNo() {
-        return monitorPointNo;
+        return this.monitorPointNo;
     }
 
     public void setMonitorPointNo(String monitorPointNo) {
@@ -124,7 +102,7 @@ public class EmcProjSchemeBean extends AbstractPersistable<Long> implements Inse
     }
 
     public String getMonitorPointName() {
-        return monitorPointName;
+        return this.monitorPointName;
     }
 
     public void setMonitorPointName(String monitorPointName) {
@@ -132,7 +110,7 @@ public class EmcProjSchemeBean extends AbstractPersistable<Long> implements Inse
     }
 
     public String getMonitorTmplId() {
-        return monitorTmplId;
+        return this.monitorTmplId;
     }
 
     public void setMonitorTmplId(String monitorTmplId) {
@@ -140,7 +118,7 @@ public class EmcProjSchemeBean extends AbstractPersistable<Long> implements Inse
     }
 
     public Long getCycle() {
-        return cycle;
+        return this.cycle;
     }
 
     public void setCycle(Long cycle) {
@@ -148,7 +126,7 @@ public class EmcProjSchemeBean extends AbstractPersistable<Long> implements Inse
     }
 
     public Long getFrequency() {
-        return frequency;
+        return this.frequency;
     }
 
     public void setFrequency(Long frequency) {
@@ -156,7 +134,7 @@ public class EmcProjSchemeBean extends AbstractPersistable<Long> implements Inse
     }
 
     public String getSampleOrgId() {
-        return sampleOrgId;
+        return this.sampleOrgId;
     }
 
     public void setSampleOrgId(String sampleOrgId) {
@@ -164,15 +142,23 @@ public class EmcProjSchemeBean extends AbstractPersistable<Long> implements Inse
     }
 
     public String getRemark() {
-        return remark;
+        return this.remark;
     }
 
     public void setRemark(String remark) {
         this.remark = remark;
     }
 
+    public String getReferFolder() {
+        return this.referFolder;
+    }
+
+    public void setReferFolder(String referFolder) {
+        this.referFolder = referFolder;
+    }
+
     public Long getErpGbId() {
-        return erpGbId;
+        return this.erpGbId;
     }
 
     public void setErpGbId(Long erpGbId) {
@@ -181,7 +167,7 @@ public class EmcProjSchemeBean extends AbstractPersistable<Long> implements Inse
 
     @Override
     public String getCreatedById() {
-        return createdById;
+        return this.createdById;
     }
 
     @Override
@@ -191,7 +177,7 @@ public class EmcProjSchemeBean extends AbstractPersistable<Long> implements Inse
 
     @Override
     public String getCreatedByName() {
-        return createdByName;
+        return this.createdByName;
     }
 
     @Override
@@ -201,7 +187,7 @@ public class EmcProjSchemeBean extends AbstractPersistable<Long> implements Inse
 
     @Override
     public LocalDateTime getCreatedTime() {
-        return createdTime;
+        return this.createdTime;
     }
 
     @Override
@@ -211,7 +197,7 @@ public class EmcProjSchemeBean extends AbstractPersistable<Long> implements Inse
 
     @Override
     public String getCreatedByOrgId() {
-        return createdByOrgId;
+        return this.createdByOrgId;
     }
 
     @Override
@@ -221,7 +207,7 @@ public class EmcProjSchemeBean extends AbstractPersistable<Long> implements Inse
 
     @Override
     public String getCreatedByOrgName() {
-        return createdByOrgName;
+        return this.createdByOrgName;
     }
 
     @Override
@@ -230,10 +216,11 @@ public class EmcProjSchemeBean extends AbstractPersistable<Long> implements Inse
     }
 
     public Long getSortNum() {
-        return sortNum;
+        return this.sortNum;
     }
 
     public void setSortNum(Long sortNum) {
         this.sortNum = sortNum;
     }
 }
+

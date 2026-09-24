@@ -197,7 +197,7 @@ public class PfOrderServiceImpl extends EmcOrderServiceImpl implements PfOrderSe
 
         order.setId(ApplicationContextHelper.getNextIdentity());
         order.setFolderId(folder.getId());
-        order.setOrderNo(folder.getFolderNo() + "A001");
+        order.setOrderNo(folder.getFolderNo() + "001");
         if (order.getLabelNo() == null) {
             order.setLabelNo(order.getOrderNo());
         }
@@ -338,7 +338,7 @@ public class PfOrderServiceImpl extends EmcOrderServiceImpl implements PfOrderSe
                     BeanUtils.copyProperties(oldOrder, newOrder);
                     Long newOrderId = ApplicationContextHelper.getNextIdentity();
                     newOrder.setId(newOrderId);
-                    String newOrderNo = newFolderNo + "A001";
+                    String newOrderNo = newFolderNo + "001";
                     newOrder.setOrderNo(newOrderNo);
                     newOrder.setLabelNo(newOrderNo);
                     newOrder.setOrderNum(Long.parseLong(newFolderNo.substring(newFolderNo.length() - 3)));
@@ -535,7 +535,7 @@ public class PfOrderServiceImpl extends EmcOrderServiceImpl implements PfOrderSe
         List<EmcOrderBean> filterOrderList = orderList.stream().filter(o -> o.getOrderNo().contains(cl)).collect(Collectors.toList());
         String maxOrderNo = filterOrderList.stream().max(Comparator.comparing(EmcOrderBean::getOrderNo)).map(EmcOrderBean::getOrderNo).orElse(null);
 
-        String newOrderNo = StringUtils.isEmpty(maxOrderNo) ? folder.getFolderNo() + "A001" : folder.getFolderNo() + EmcBizConstant.NUMFORENG[Integer.parseInt(order.getCycle().toString())-1] + StringUtils.leftPad((NumberUtils.parseInt(maxOrderNo.substring(folder.getFolderNo().length()+1)) + 1) + "", 3);
+        String newOrderNo = StringUtils.isEmpty(maxOrderNo) ? folder.getFolderNo() + "001" : folder.getFolderNo() + EmcBizConstant.NUMFORENG[Integer.parseInt(order.getCycle().toString())-1] + StringUtils.leftPad((NumberUtils.parseInt(maxOrderNo.substring(folder.getFolderNo().length()+1)) + 1) + "", 3);
 
         EmcOrderBean newOrder = new EmcOrderBean();
         BeanUtils.copyProperties(order, newOrder);

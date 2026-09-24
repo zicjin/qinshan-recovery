@@ -15,6 +15,8 @@ public interface EmcEquiptAcqResultService extends GenericService<EmcEquiptAcqRe
 
     void insertResultByAnalyAcqFiles(List<EmcEquiptAcqFileBean> acqFileList);
 
+    void insertSceneResultByAnalyAcqFiles(List<EmcEquiptAcqFileBean> acqFileList);
+
     String preAnalyContent(String content, List<EmcEasPreAnalyBean> scriptPreAnalyList);
 
     String analyParagraphArray(Long acqFileId, String rowDataSeparator, List<EmcEasParamBean> scriptParamList, List<EmcEasParamBean> orderNoParamList, List<EmcEasResultBean> scriptResultList, EmcEquiptAcqScriptBean script,
@@ -22,5 +24,7 @@ public interface EmcEquiptAcqResultService extends GenericService<EmcEquiptAcqRe
 
     String analyParagraphArray(Long acqFileId, String rowDataSeparator, List<EmcEasParamBean> scriptParamList, List<EmcEasParamBean> orderNoParamList, List<EmcEasParamBean> testNameParamList,List<EmcEasResultBean> scriptResultList, EmcEquiptAcqScriptBean script,
                                String[] paragraphArray, List<EmcEquiptAcqResultBean> resultList);
+
+    List<EmcEquiptAcqResultBean> getSceneResultList(List<String> contentList, Long scriptId);
 
 }

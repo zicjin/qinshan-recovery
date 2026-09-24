@@ -518,6 +518,15 @@ public class EmcEquiptAcqResultServiceImpl implements EmcEquiptAcqResultService 
     }
 
     @Override
+    public void insertSceneResultByAnalyAcqFiles(List<EmcEquiptAcqFileBean> acqFileList) {
+    }
+
+    @Override
+    public List<EmcEquiptAcqResultBean> getSceneResultList(List<String> contentList, Long scriptId) {
+        return null;
+    }
+
+    @Override
     public String analyParagraphArray(Long acqFileId, String rowDataSeparator, List<EmcEasParamBean> resultParamList, List<EmcEasParamBean> orderNoParamList, List<EmcEasResultBean> scriptResultList, EmcEquiptAcqScriptBean script, String[] paragraphArray, List<EmcEquiptAcqResultBean> resultList) {
         StringBuilder allResultContent = new StringBuilder();
         Long rowNo = 1L; // 行号 从1开始,一个文件出来的行号递增

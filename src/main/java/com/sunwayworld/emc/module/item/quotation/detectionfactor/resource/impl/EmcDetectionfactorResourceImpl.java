@@ -1,42 +1,38 @@
 package com.sunwayworld.emc.module.item.quotation.detectionfactor.resource.impl;
 
+import com.sunwayworld.emc.module.item.quotation.detectionfactor.resource.EmcDetectionfactorResource;
+import com.sunwayworld.emc.module.item.quotation.detectionfactor.service.EmcDetectionfactorService;
+import com.sunwayworld.framework.log.annotation.Log;
+import com.sunwayworld.framework.log.annotation.LogModule;
+import com.sunwayworld.framework.log.annotation.LogType;
+import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;
+import com.sunwayworld.framework.spring.annotation.GikamBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sunwayworld.emc.module.item.quotation.detectionfactor.resource.EmcDetectionfactorResource;
-import com.sunwayworld.emc.module.item.quotation.detectionfactor.service.EmcDetectionfactorService;
-import com.sunwayworld.framework.spring.annotation.GikamBean;
-import com.sunwayworld.framework.log.annotation.Log;
-import com.sunwayworld.framework.log.annotation.LogModule;
-import com.sunwayworld.framework.log.annotation.LogType;
-import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;
-
-@LogModule("检测因子价格管理表")
+@LogModule(value="\u68c0\u6d4b\u56e0\u5b50\u4ef7\u683c\u7ba1\u7406\u8868")
 @RestController
 @GikamBean
-public class EmcDetectionfactorResourceImpl implements EmcDetectionfactorResource {
-
+public class EmcDetectionfactorResourceImpl
+implements EmcDetectionfactorResource {
     @Autowired
     private EmcDetectionfactorService emcDetectionfactorService;
 
-    @Override
     public EmcDetectionfactorService getService() {
-        return emcDetectionfactorService;
+        return this.emcDetectionfactorService;
     }
 
-    @Log(value = "新增检测因子价格管理表", type = LogType.INSERT)
-    @Override
-    @RequestMapping(method = RequestMethod.POST)
+    @Log(value="\u65b0\u589e\u68c0\u6d4b\u56e0\u5b50\u4ef7\u683c\u7ba1\u7406\u8868", type=LogType.INSERT)
+    @RequestMapping(method={RequestMethod.POST})
     public Long insert(RestJsonWrapperBean wrapper) {
-        return getService().insert(wrapper);
+        return (Long)this.getService().insert(wrapper);
     }
 
-    @Override
-    @RequestMapping(value = "/action/insert-by-item-group", method = RequestMethod.POST)
+    @Log(value="\u6309\u5206\u6790\u9879\u7ec4-\u6dfb\u52a0\u68c0\u6d4b\u56e0\u5b50", type=LogType.INSERT)
+    @RequestMapping(value={"/insertByItemGroup"}, method={RequestMethod.POST})
     public Long insertByItemGroup(RestJsonWrapperBean wrapper) {
-        return getService().insertByItemGroup(wrapper);
+        return this.getService().insertByItemGroup(wrapper);
     }
-
 }

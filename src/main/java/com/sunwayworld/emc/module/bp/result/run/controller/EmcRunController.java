@@ -61,4 +61,6 @@ public interface EmcRunController extends GenericEditListPageController, Generic
 
     @RequestMapping("/copy-blank-spkc-to")
     String copyBlankSpkcToPage();
+
+    String undoOrderTaskEditPage();
 }

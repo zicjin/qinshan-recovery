@@ -13,6 +13,10 @@ import com.sunwayworld.framework.spring.annotation.GikamBean;
 public class EmcRunControllerImpl implements EmcRunController {
 
     @Override
+    @Log(value = "未完成样品测试编辑页面", type = LogType.CONTROLLER)
+    public String undoOrderTaskEditPage() { return "emc/module/bp/result/runs/emc-run-order-task-edit-list"; }
+
+    @Override
     @Log(value = "分析录入页面", type = LogType.CONTROLLER)
     public String editListPage() {
         return "emc/module/bp/result/runs/emc-run-edit-list";

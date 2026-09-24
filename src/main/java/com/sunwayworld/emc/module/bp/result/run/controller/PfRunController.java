@@ -113,4 +113,6 @@ public interface PfRunController extends EmcRunController, GenericChoosePageCont
 
     @RequestMapping("/run-query-search-list")
     String runQuerySearchPage();
+    String browseSampleRecordPage();
+    String preprocessingResultInputPage();
 }

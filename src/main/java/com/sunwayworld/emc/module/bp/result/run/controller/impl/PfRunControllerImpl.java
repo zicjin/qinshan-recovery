@@ -1,6 +1,7 @@
 package com.sunwayworld.emc.module.bp.result.run.controller.impl;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.sunwayworld.emc.module.bp.result.run.controller.PfRunController;
 import com.sunwayworld.framework.log.annotation.Log;
@@ -225,9 +226,18 @@ public class PfRunControllerImpl extends EmcRunControllerImpl implements PfRunCo
     }
 
     @Override
+    @Log(value = "查询采样单及附件", type = LogType.CONTROLLER)
+    public String browseSampleRecordPage() { return "emc/module/bp/result/runs/emc-browse-sample-record-search-list"; }
+
+    @Override
     @Log(value = "分析记录查询", type = LogType.CONTROLLER)
     public String runQuerySearchPage() {
         return "emc/module/bp/result/runs/emc-run-query-search-list";
     }
+
+    @Override
+    @RequestMapping("/preprocessing-result-input")
+    @Log(value = "前处理分析项数据录入", type = LogType.CONTROLLER)
+    public String preprocessingResultInputPage() { return "emc/module/bp/result/runs/emc-run-preprocessing-result-input-list"; }
 
 }

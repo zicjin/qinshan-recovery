@@ -95,6 +95,12 @@ public class EmcRunResourceImpl implements EmcRunResource {
         return runService.selectEquiptPagination(testMethodId);
     }
 
+    @Override
+    @RequestMapping(value = "/equipt/{testMethodId}", method = RequestMethod.POST)
+    public Page<EmcEquiptBean> selectEquiptPagination(String testMethodId, RestJsonWrapperBean wrapper) {
+        return runService.selectEquiptPagination(testMethodId, wrapper);
+    }
+
     @Log(value = "分析录入-批录入", type = LogType.UPDATE)
     @Override
     @RequestMapping(value = "/action/run-input", method = RequestMethod.POST)

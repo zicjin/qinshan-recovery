@@ -1344,6 +1344,27 @@ public class EmcRunServiceImpl implements EmcRunService {
     }
 
     @Override
+    public Page<EmcEquiptBean> selectEquiptPagination(String testMethodId, RestJsonWrapperBean wrapper) {
+        List<String> list = Arrays.stream(StringUtils.split(testMethodId, ",")).distinct().collect(Collectors.toList());
+        String[] array = list.toArray(new String[0]);
+        if (array.length == 0) return new Pagination<>();
+        List<Long> testMethodIdList = Arrays.stream(array).map(NumberUtils::parseLong).collect(Collectors.toList());
+        List<EmcEquiptTestMethodBean> testMethodEquiptList = equiptTestMethodService.getDao().selectListByOneColumnValues(testMethodIdList, "TESTMETHODID").stream().filter(a -> "analysis".equals(a.getAnalysisCategory())).collect(Collectors.toList());
+        if (testMethodEquiptList.isEmpty()) {
+            EmcEquiptBean filter = new EmcEquiptBean(); filter.setEquiptName("N/A");
+            EmcEquiptBean equipt = equiptService.getDao().selectFirstIfPresent(filter);
+            Pagination<EmcEquiptBean> pagination = new Pagination<>(Arrays.asList(equipt == null ? filter : equipt));
+            return pagination;
+        }
+        Map<Long, List<EmcEquiptTestMethodBean>> grouped = testMethodEquiptList.stream().collect(Collectors.groupingBy(EmcEquiptTestMethodBean::getEquiptId));
+        List<Long> equiptIdList = grouped.entrySet().stream().filter(e -> e.getValue().size() == array.length).map(Map.Entry::getKey).collect(Collectors.toList());
+        List<EmcEquiptBean> equiptList = equiptService.selectListByFilter(SearchFilter.instance().match("ID", equiptIdList).filter(MatchPattern.OR), wrapper);
+        equiptList.forEach(a -> testMethodEquiptList.stream().filter(b -> b.getEquiptId().equals(a.getId())).forEach(c -> a.setExt$Item("defaultflag", c.getDefaultFlag())));
+        List<EmcEquiptBean> visible = equiptList.stream().filter(e -> e.getMaintenanceUserId() == null || ObjectUtils.equals("", e.getMaintenanceUserId()) || e.getMaintenanceUserId().contains(LocalContextHelper.getLoginUserId())).collect(Collectors.toList());
+        return new Pagination<>(visible);
+    }
+
+    @Override
     public Page<EmcEquiptBean> selectEquiptPagination(String testMethodId) {
         List<String> list = Stream.of(StringUtils.split(testMethodId, ",")).distinct().collect(Collectors.toList());
         String[] array = list.toArray(new String[list.size()]);

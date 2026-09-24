@@ -30,6 +30,8 @@ public interface EmcRunService extends GenericService<EmcRunBean, String>, Gener
 
     Page<EmcEquiptBean> selectEquiptPagination(String testMethodId);
 
+    Page<EmcEquiptBean> selectEquiptPagination(String testMethodId, RestJsonWrapperBean wrapper);
+
     Long runInput(RestJsonWrapperBean wrapper);
 
     Page<EmcItemBean> selectEditItem(Long id,RestJsonWrapperBean wrapper);

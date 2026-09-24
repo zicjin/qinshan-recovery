@@ -5,15 +5,18 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sunwayworld.emc.module.mdm.basemdm.equiptcategory.bean.EmcEquiptMaintBean;
 import com.sunwayworld.emc.module.mdm.basemdm.equiptcategory.service.EmcEquiptMaintService;
+import com.sunwayworld.emc.module.mdm.equipt.equipt.bean.EmcEquiptBean;
 import com.sunwayworld.emc.module.mdm.equipt.equipt.bean.EmcEquiptPlanBean;
 import com.sunwayworld.emc.module.mdm.equipt.equipt.bean.EmcEquiptRecordBean;
 import com.sunwayworld.emc.module.mdm.equipt.equipt.dao.EmcEquiptRecordDao;
 import com.sunwayworld.emc.module.mdm.equipt.equipt.service.EmcEquiptPlanService;
+import com.sunwayworld.emc.module.mdm.equipt.equipt.service.EmcEquiptService;
 import com.sunwayworld.emc.module.mdm.equipt.equipt.service.EmcEquiptRecordService;
 import com.sunwayworld.framework.at.annotation.AuditTrailEntry;
 import com.sunwayworld.framework.at.annotation.AuditTrailType;
@@ -40,6 +43,10 @@ public class EmcEquiptRecordServiceImpl implements EmcEquiptRecordService {
 
     @Autowired
     private EmcEquiptPlanService equiptPlanService;
+
+    @Autowired
+    @Lazy
+    private EmcEquiptService equiptService;
 
     @Autowired
     CoreCodeService coreCodeService;
@@ -70,7 +77,7 @@ public class EmcEquiptRecordServiceImpl implements EmcEquiptRecordService {
 
     @Override
     public List<EmcEquiptMaintBean> selectRecordMaintSelectableList(Long equiptId) {
-        List<EmcEquiptPlanBean> equiptPlanList = equiptPlanService.getDao().selectListByOneColumnValue(equiptId, "equiptId");
+        List<EmcEquiptPlanBean> equiptPlanList = equiptPlanService.getDao().selectListByOneColumnValue(equiptId, "equiptId", new Order[0]);
 
         List<Long> idList = equiptPlanList.stream().map(p -> p.getMaintId()).collect(Collectors.toList());
 
@@ -96,8 +103,9 @@ public class EmcEquiptRecordServiceImpl implements EmcEquiptRecordService {
 
         List<Long> maintIdList = emcEquipRecordList.stream().map(e -> e.getMaintId()).collect(Collectors.toList());
 
-        List<EmcEquiptPlanBean> emcEquiptPlanList = equiptPlanService.getDao().selectListByOneColumnValues(maintIdList, "MAINTID");
+        List<EmcEquiptPlanBean> emcEquiptPlanList = equiptPlanService.getDao().selectListByOneColumnValues(maintIdList, "MAINTID", new Order[0]);
         List<EmcEquiptPlanBean> emcEquiptPlanUpdateList = new ArrayList<>();
+        List<EmcEquiptBean> emcEquiptUpdateList = new ArrayList<>();
         for (EmcEquiptRecordBean emcEquipRecord : emcEquipRecordList) {
             emcEquipRecord.setCompleteFlag("2");
 
@@ -114,10 +122,16 @@ public class EmcEquiptRecordServiceImpl implements EmcEquiptRecordService {
             emcEquiptPlan.setCertCategory(emcEquipRecord.getCertCategory());
             emcEquiptPlan.setRemark(emcEquipRecord.getRemark());
             emcEquiptPlanUpdateList.add(emcEquiptPlan);
+            EmcEquiptBean equiptBean = new EmcEquiptBean();
+            equiptBean.setId(emcEquipRecord.getEquiptId());
+            if (emcEquipRecord.getMaintEndDate() != null) {
+                equiptBean.setSourceDate(emcEquipRecord.getMaintEndDate().toLocalDate());
+            }
+            emcEquiptUpdateList.add(equiptBean);
         }
-        //equiptPlanService.updatePlan(emcEquiptPlanUpdateList.get(0));
         equiptPlanService.getDao().update(emcEquiptPlanUpdateList, "CYCLE", "MAINTDATE", "MAINTENDDATE", "VERIFYORG", "GIST", "CERTCATEGORY", "REMARK");
         getDao().update(emcEquipRecordList, "completeFlag");
+        equiptService.getDao().update(emcEquiptUpdateList, "SourceDate");
     }
 
 }

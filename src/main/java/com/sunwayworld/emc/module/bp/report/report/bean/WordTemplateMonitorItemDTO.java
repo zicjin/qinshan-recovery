@@ -6,7 +6,7 @@ package com.sunwayworld.emc.module.bp.report.report.bean;
  */
 public class WordTemplateMonitorItemDTO {
 
-    /** 样品类型 */
+    /** 样品类型（兼容历史报告表格调用） */
     private String orderCategory;
     /** 检测项目 */
     private String testName;
@@ -14,6 +14,7 @@ public class WordTemplateMonitorItemDTO {
     private String testMethodName;
     /** 检测设备 */
     private String detectDevice;
+    private String lowLimit;
 
     public String getOrderCategory() {
         return orderCategory;
@@ -47,10 +48,17 @@ public class WordTemplateMonitorItemDTO {
         this.detectDevice = detectDevice;
     }
 
+    public String getLowLimit() {
+        return lowLimit;
+    }
+
+    public void setLowLimit(String lowLimit) {
+        this.lowLimit = lowLimit;
+    }
+
     @Override
     public String toString() {
         return "WordTemplateMonitorItemDTO{" +
-                "orderCategory='" + orderCategory + '\'' +
                 ", testName='" + testName + '\'' +
                 ", testMethodName='" + testMethodName + '\'' +
                 ", detectDevice='" + detectDevice + '\'' +

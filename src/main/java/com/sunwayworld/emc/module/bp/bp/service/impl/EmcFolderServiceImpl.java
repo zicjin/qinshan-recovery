@@ -43,6 +43,7 @@ import com.sunwayworld.framework.at.annotation.AuditTrailType;
 import com.sunwayworld.framework.constant.Constant;
 import com.sunwayworld.framework.context.ApplicationContextHelper;
 import com.sunwayworld.framework.data.page.Page;
+import com.sunwayworld.framework.database.sql.Order;
 import com.sunwayworld.framework.mybatis.mapper.MatchPattern;
 import com.sunwayworld.framework.mybatis.mapper.SearchFilter;
 import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;
@@ -121,23 +122,31 @@ public class EmcFolderServiceImpl implements EmcFolderService {
     @AuditTrailEntry(AuditTrailType.UPDATE)
     public void terminateFolder(RestJsonWrapperBean jsonWrapper) {
         String termination = jsonWrapper.getParamValue("termination");
-        String remark = Constant.YES.equals(termination) ? "终止点位" : "取消终止点位";
+        String remark = "1".equals(termination) ? "终止点位" : "取消终止点位";
+        String folderStatus = "1".equals(termination) ? "done" : "draw";
+        String orderTaskStatus = "1".equals(termination) ? "done" : "draft";
+        String type = jsonWrapper.getParamValue("type");
         List<EmcOrderBean> orderList = jsonWrapper.parse(EmcOrderBean.class);
         List<Long> folderIdList = orderList.stream().map(e -> e.getFolderId()).distinct().collect(Collectors.toList());
-
-        List<EmcFolderBean> updateFolderList = getDao().selectListByIds(folderIdList);
+        if ("byFolder".equals(type)) {
+            folderIdList = orderList.stream().map(e -> e.getId()).distinct().collect(Collectors.toList());
+        }
+        List<EmcFolderBean> updateFolderList = getDao().selectListByIds(folderIdList, new Order[0]);
         updateFolderList.stream().forEach(e -> {
             e.setTermination(termination);
             e.setRemark(remark);
+            e.setStatus(folderStatus);
         });
-        List<EmcOrderBean> updateOrderList = orderService.getDao().selectListByOneColumnValues(folderIdList, "FOLDERID");
+        List<EmcOrderBean> updateOrderList = orderService.getDao().selectListByOneColumnValues(folderIdList, "FOLDERID", new Order[0]);
         updateOrderList.stream().forEach(e -> {
             e.setTermination(termination);
             e.setRemark(remark);
         });
-
-        getDao().update(updateFolderList, "TERMINATION", "REMARK");
+        List<EmcOrderTaskBean> taskList = orderTaskService.getDao().selectListByOneColumnValues(folderIdList, "FOLDERID", new Order[0]);
+        taskList.stream().forEach(e -> e.setStatus(orderTaskStatus));
+        getDao().update(updateFolderList, "TERMINATION", "REMARK", "STATUS");
         orderService.getDao().update(updateOrderList, "TERMINATION", "REMARK");
+        orderTaskService.getDao().update(taskList, "STATUS");
     }
 
     @Override

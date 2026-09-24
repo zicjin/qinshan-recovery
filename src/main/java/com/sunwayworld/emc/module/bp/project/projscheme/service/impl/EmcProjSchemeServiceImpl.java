@@ -504,6 +504,37 @@ public class EmcProjSchemeServiceImpl implements EmcProjSchemeService {
     }
 
     @Override
+    public List<String> generateFolderNosByProjId(Long projId, String projectNo, String monitorTmplId, String orderCategoryCode, int num) {
+        if (StringUtils.isEmpty(orderCategoryCode) && !StringUtils.isEmpty(monitorTmplId)) {
+            EmcMonitorTmplBean monitorTmpl = monitorTmplService.selectById(monitorTmplId);
+            if (monitorTmpl != null) {
+                orderCategoryCode = monitorTmpl.getExt$Item("ordercategorycode");
+            }
+        }
+        if (StringUtils.isEmpty(orderCategoryCode)) {
+            orderCategoryCode = "";
+        }
+        List<EmcProjSchemeBean> schemeList = selectListByFilter(
+                SearchFilter.instance().match("PROJID", projId).filter(MatchPattern.EQ)
+                        .match("orderCategoryCode", orderCategoryCode).filter(MatchPattern.SEQ));
+        List<String> folderNoList = new ArrayList<>();
+        String firstFolderNo;
+        if (schemeList.isEmpty()) {
+            firstFolderNo = projectNo + orderCategoryCode + "001";
+        } else {
+            String maxFolderNo = schemeList.stream().max(Comparator.comparing(EmcProjSchemeBean::getFolderNo)).get().getFolderNo();
+            firstFolderNo = maxFolderNo.substring(0, maxFolderNo.length() - 3)
+                    + String.format("%03d", Long.parseLong(maxFolderNo.substring(maxFolderNo.length() - 3)) + 1L);
+        }
+        folderNoList.add(firstFolderNo);
+        for (int i = 1; i < num; i++) {
+            String previous = folderNoList.get(i - 1);
+            folderNoList.add(previous.substring(0, previous.length() - 3)
+                    + String.format("%03d", Long.parseLong(previous.substring(previous.length() - 3)) + 1L));
+        }
+        return folderNoList;
+    }
+
     public List<String> generateFolderNosByProjId(Long projId, String projectNo, int num) {
 
         List<EmcProjSchemeBean> schemeOfProjectList = getDao().selectListByOneColumnValue(projId, "PROJID");

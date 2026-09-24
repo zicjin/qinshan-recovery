@@ -1,0 +1,2 @@
+# Maven 构建产物（scripts/build.sh 可重建，约数百 MB，不入库）
+target/

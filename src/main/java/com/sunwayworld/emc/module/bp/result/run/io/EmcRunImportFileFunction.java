@@ -51,8 +51,7 @@ public class EmcRunImportFileFunction implements CoreFileImportFunction {
     public CoreFileImportResultDTO apply(CoreFileBean file) {
         CoreFileImportResultDTO CoreFileImportResultDTO = new CoreFileImportResultDTO();
 
-        FilePathDTO fr = CoreFileUtils.toFilePath(file);
-        importOrderTaskResult(FilePathManager.getLocalPath(fr).toFile());
+        importOrderTaskResult(CoreFileUtils.getLocalPath(file).toFile());
         return CoreFileImportResultDTO;
     }
 

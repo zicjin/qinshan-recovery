@@ -45,8 +45,7 @@ public class EmcPurchapplyImportFileFunction implements CoreFileImportFunction {
     public CoreFileImportResultDTO apply(CoreFileBean file) {
         CoreFileImportResultDTO fileImportResultDTO = new CoreFileImportResultDTO();
         String purchId = file.getTargetId().split("\\$")[1];
-        FilePathDTO fr = CoreFileUtils.toFilePath(file);
-        importPurchDetail(FilePathManager.getLocalPath(fr).toFile().getAbsolutePath(),purchId);
+        importPurchDetail(CoreFileUtils.getLocalPath(file).toFile().getAbsolutePath(), purchId);
         return fileImportResultDTO;
     }
 

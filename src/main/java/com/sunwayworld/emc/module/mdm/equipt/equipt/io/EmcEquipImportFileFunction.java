@@ -43,9 +43,7 @@ public class EmcEquipImportFileFunction implements CoreFileImportFunction {
     @Override
     public CoreFileImportResultDTO apply(CoreFileBean file) {
         CoreFileImportResultDTO fileImportResultDTO = new CoreFileImportResultDTO();
-        FilePathDTO fr = CoreFileUtils.toFilePath(file);
-
-        List<EmcEquiptBean> equiptList = ExcelHelper.readDataFromExcel(FilePathManager.getLocalPath(fr).toString(), 2, 3, EmcEquiptBean.class);
+        List<EmcEquiptBean> equiptList = ExcelHelper.readDataFromExcel(CoreFileUtils.getLocalPath(file).toString(), 2, 3, EmcEquiptBean.class);
         if (equiptList.isEmpty()) {
             return fileImportResultDTO;
         }

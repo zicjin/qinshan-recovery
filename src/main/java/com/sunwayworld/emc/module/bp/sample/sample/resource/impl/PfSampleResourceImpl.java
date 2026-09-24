@@ -125,4 +125,11 @@ public class PfSampleResourceImpl extends EmcSampleResourceImpl implements PfSam
     public EmcSampleBean selectSampleRecordDetail(RestJsonWrapperBean wrapper) {
         return getService().selectSampleRecordDetail(wrapper);
     }
+    @Override
+    @Log(value = "批量导出采样原始记录Excel", type = LogType.SELECT)
+    @RequestMapping(value = "/action/export-original-record-excel-zip", method = RequestMethod.POST)
+    public String exportOriginalRecordExcelZip(RestJsonWrapperBean wrapper) {
+        return getService().exportOriginalRecordExcelZip(wrapper);
+    }
+
 }

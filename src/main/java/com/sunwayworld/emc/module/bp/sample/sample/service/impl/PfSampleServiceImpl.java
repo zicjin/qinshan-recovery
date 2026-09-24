@@ -1,9 +1,13 @@
 package com.sunwayworld.emc.module.bp.sample.sample.service.impl;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.time.LocalDate;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.attribute.FileAttribute;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -18,9 +22,14 @@ import com.sunwayworld.framework.exception.UnsupportedException;
 import com.sunwayworld.framework.executor.ExecutorHelper;
 import com.sunwayworld.framework.http.HttpClientManager;
 import com.sunwayworld.framework.io.file.FileScope;
+import com.sunwayworld.framework.io.file.FilePathDTO;
+import com.sunwayworld.framework.io.file.FilePathManager;
 import com.sunwayworld.framework.utils.*;
+import com.sunwayworld.framework.database.sql.Order;
+import com.sunwayworld.framework.exception.FileException;
 import com.sunwayworld.module.item.file.bean.CoreFileBean;
 import com.sunwayworld.module.item.file.service.CoreFileService;
+import com.sunwayworld.module.item.file.manager.CoreFileManager;
 import com.sunwayworld.module.sys.code.bean.CoreCodeBean;
 import com.sunwayworld.module.sys.code.service.CoreCodeService;
 import com.sunwayworld.module.sys.constant.bean.CoreConstantBean;
@@ -34,6 +43,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.sunwayworld.emc.framework.constant.EmcBizConstant;
 import com.sunwayworld.emc.framework.constant.PfConstant;
 import com.sunwayworld.emc.framework.projectnode.ProjectNodeUtils;
+import com.sunwayworld.emc.framework.word.ReportingServiceUtils;
 import com.sunwayworld.emc.module.bp.bp.bean.EmcFolderBean;
 import com.sunwayworld.emc.module.bp.bp.bean.EmcOrderBean;
 import com.sunwayworld.emc.module.bp.bp.bean.EmcOrderContainerBean;
@@ -1704,5 +1714,93 @@ public class PfSampleServiceImpl extends EmcSampleServiceImpl implements PfSampl
             }
         }
         return null;
+    }
+
+    public String exportOriginalRecordExcelZip(RestJsonWrapperBean wrapper) {
+        List<EmcSampleBean> selectedSampleList = wrapper.parse(EmcSampleBean.class);
+        if (selectedSampleList.isEmpty()) {
+            return "";
+        }
+        List sampleIdList = selectedSampleList.stream().map(EmcSampleBean::getId).filter(sampleId -> !ObjectUtils.isEmpty((Object)sampleId)).distinct().collect(Collectors.toList());
+        List<EmcSampleBean> sampleList = this.getDao().selectListByIds(sampleIdList, new Order[0]);
+        if (sampleList.isEmpty()) {
+            return "";
+        }
+        List<Long> reportConfigLineIdList = sampleList.stream().map(EmcSampleBean::getReportConfigLineId).filter(reportConfigLineId -> !StringUtils.isEmpty((String)reportConfigLineId)).map(NumberUtils::parseLong).distinct().collect(Collectors.toList());
+        List<CoreReportConfigLineBean> configLineList = this.coreReportConfigLineService.selectListByIds(reportConfigLineIdList);
+        if (configLineList.isEmpty()) {
+            return "";
+        }
+        String reportingServiceServer = ApplicationContextHelper.getConstantValue((String)"REPORTING_SERVICE_SERVER_URL");
+        String fineBaseUrl = ApplicationContextHelper.getEnvironment().getProperty("sunway.config.fine.independent-deploy-server.url");
+        ArrayList<Path> exportPathList = new ArrayList<Path>();
+        try {
+            for (EmcSampleBean sample : sampleList) {
+                if (StringUtils.isEmpty((String)sample.getReportConfigLineId())) continue;
+                Long reportConfigLineId2 = NumberUtils.parseLong((Object)sample.getReportConfigLineId());
+                Optional<CoreReportConfigLineBean> configLineOptional = configLineList.stream().filter(configLine -> ObjectUtils.equals((Object)configLine.getId(), (Object)reportConfigLineId2)).findFirst();
+                if (!configLineOptional.isPresent()) continue;
+                CoreReportConfigLineBean configLine2 = configLineOptional.get();
+                String downloadUrl = null;
+                if ("reportingService".equals(configLine2.getReportCategory())) {
+                    downloadUrl = ReportingServiceUtils.getDownloadUrl(reportingServiceServer, configLine2, (Object)sample, "EXCEL");
+                } else if ("fanruan".equals(configLine2.getReportCategory())) {
+                    List<String> configReportLineIdList = Collections.singletonList(this.coreReportConfigLineService.getDao().getTable() + "$" + configLine2.getId());
+                    List configFileList = this.coreFileService.getDao().selectListByOneColumnValues(configReportLineIdList, "TARGETID", new Order[0]);
+                    Optional configFileOptional = configFileList.stream().findFirst();
+                    if (configFileOptional.isPresent()) {
+                        downloadUrl = this.buildFanruanOriginalRecordExcelUrl(fineBaseUrl, (CoreFileBean)configFileOptional.get(), configLine2, sample);
+                    }
+                }
+                if (StringUtils.isEmpty((String)downloadUrl)) continue;
+                String bizNo = StringUtils.isEmpty((String)sample.getSampleNo()) ? sample.getId() + "" : sample.getSampleNo();
+                exportPathList.add(this.downloadToTempPath(downloadUrl, "\u91c7\u6837\u539f\u59cb\u8bb0\u5f55_" + bizNo + ".xls"));
+            }
+            if (exportPathList.isEmpty()) {
+                return "";
+            }
+            FilePathDTO filePath = FilePathDTO.of((String)FileScope.temp.name(), (LocalDateTime)LocalDateTime.now(), (String)StringUtils.randomUUID((int)16), (String)"\u91c7\u6837\u539f\u59cb\u8bb0\u5f55\u6279\u91cf\u5bfc\u51fa.zip");
+            ArchiveUtils.zip((Path)FilePathManager.getLocalPath((FilePathDTO)filePath), (Path[])exportPathList.toArray(new Path[0]));
+            CoreFileManager fileManager = (CoreFileManager)ApplicationContextHelper.getBean(CoreFileManager.class);
+            fileManager.upload(filePath, FilePathManager.getLocalPath((FilePathDTO)filePath));
+            return fileManager.getDownloadUrl(filePath);
+        }
+        catch (Exception e) {
+            throw new FileException((Throwable)e);
+        }
+    }
+
+    private Path downloadToTempPath(String url, String fileName) {
+        FilePathDTO filePath = FilePathDTO.of((String)FileScope.temp.name(), (LocalDateTime)LocalDateTime.now(), (String)StringUtils.randomUUID((int)16), (String)fileName);
+        try {
+            Files.createDirectories(FilePathManager.getLocalDirPath((FilePathDTO)filePath), new FileAttribute[0]);
+        }
+        catch (IOException e) {
+            throw new FileException((Throwable)e);
+        }
+        HttpClientManager.getInstance().download(url, FilePathManager.getLocalPath((FilePathDTO)filePath).toFile());
+        return FilePathManager.getLocalPath((FilePathDTO)filePath);
+    }
+
+    private String buildFanruanOriginalRecordExcelUrl(String fineBaseUrl, CoreFileBean configFile, CoreReportConfigLineBean configLine, EmcSampleBean source) {
+        if (StringUtils.isEmpty((String)fineBaseUrl) || configFile == null) {
+            return null;
+        }
+        if (StringUtils.isEmpty((String)configFile.getName())) {
+            return null;
+        }
+        StringBuilder reportUrl = new StringBuilder();
+        try {
+            String fileName = configLine.getReportConfigLineNo() + "/" + configFile.getName();
+            reportUrl.append(fineBaseUrl).append("/decision/view/report?viewlet=").append(URLEncoder.encode(fileName, "UTF-8")).append("&format=excel");
+            String paramStr = this.parseReportParam(source, configLine.getParam());
+            if (!StringUtils.isEmpty((String)paramStr)) {
+                reportUrl.append("&").append(paramStr);
+            }
+            return reportUrl.toString();
+        }
+        catch (UnsupportedEncodingException e) {
+            throw new FileException((Throwable)e);
+        }
     }
 }

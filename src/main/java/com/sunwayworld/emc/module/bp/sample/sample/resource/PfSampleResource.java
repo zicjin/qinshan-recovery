@@ -34,4 +34,6 @@ public interface PfSampleResource extends EmcSampleResource {
     void partHandover(RestJsonWrapperBean wrapper);
 
     EmcSampleBean selectSampleRecordDetail(RestJsonWrapperBean wrapper);
+
+    String exportOriginalRecordExcelZip(RestJsonWrapperBean wrapper);
 }

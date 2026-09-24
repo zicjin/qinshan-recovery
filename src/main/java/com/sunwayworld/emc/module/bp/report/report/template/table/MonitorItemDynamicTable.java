@@ -97,6 +97,11 @@ public class MonitorItemDynamicTable implements DynamicTable {
     }
 
     @Override
+    public int getTableWidth() {
+        return 10204;
+    }
+
+    @Override
     public List<List<Object>> buildTableHeader(WordTemplateDynamicTableDTO dynamicTableDTO) {
         List<List<Object>> headerDataList = buildTableDynamicHeader(PfConstant.MONITOR_ITEM_TABLE_HEADER_TITLES, 4, null);
         setTableTitle(PfConstant.MONITOR_ITEM_TABLE_HEADER_TITLES, 4, headerDataList, dynamicTableDTO);

@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.sunwayworld.emc.module.item.consume.consume.io;
 
 import com.sunwayworld.framework.data.Pair;
@@ -14,10 +11,9 @@ import org.springframework.stereotype.Component;
 @Component(value="emcConsumeExportTemplate")
 public class EmcConsumeExportTemplate
 implements GenericTemplateService<String> {
-    @Override
     public List<Pair<String, String>> getTemplatePairList() {
-        ArrayList<Pair<String, String>> templatePairList = new ArrayList<Pair<String, String>>();
-        Pair<String, String> templatePair = Pair.of("emcConsumeExportTemplate", "\u8017\u6750\u5bfc\u5165\u6a21\u677f");
+        List<Pair<String, String>> templatePairList = new ArrayList<Pair<String, String>>();
+        Pair templatePair = Pair.of((Object)"emcConsumeExportTemplate", (Object)"\u8017\u6750\u5bfc\u5165\u6a21\u677f");
         templatePairList.add(templatePair);
         return templatePairList;
     }

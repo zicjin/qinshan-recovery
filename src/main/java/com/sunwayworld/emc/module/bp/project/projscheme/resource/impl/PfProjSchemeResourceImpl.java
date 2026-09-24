@@ -177,14 +177,14 @@ public class PfProjSchemeResourceImpl extends EmcProjSchemeResourceImpl implemen
     }
     @Override
     @Log(value = "删除方案样品", type = LogType.UPDATE)
-    @RequestMapping(value = "/action/del-proj-order", method = RequestMethod.POST)
+    @RequestMapping(value = "/proj-order", method = RequestMethod.DELETE)
     public void delProjOrder(RestJsonWrapperBean wrapper) {
         getService().delProjOrder(wrapper);
     }
 
     @Override
     @Log(value = "方案点位编号排序", type = LogType.UPDATE)
-    @RequestMapping(value = "/action/sort-folder-no", method = RequestMethod.POST)
+    @RequestMapping(value = "/sort-folderno", method = RequestMethod.PUT)
     public void sortFolderNo(RestJsonWrapperBean wrapper) {
         getService().sortFolderNo(wrapper);
     }

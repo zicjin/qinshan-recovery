@@ -1,7 +1,10 @@
 package com.sunwayworld.emc.module.bp.report.report.validator;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.IntStream;
+import org.apache.commons.collections4.ListUtils;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,14 +48,20 @@ public class PfGenerateReportResultValidator implements DataValidator {
         List<EmcReportLineBean> reportLineList = reportLineService.getDao().selectListByOneColumnValue(report.getId(), "reportId");
 
         // 查询需要在报告中展示的样品结果数据
-        List<Long> orderTaskIdList = reportLineList.stream().map(EmcReportLineBean::getOrderTaskId).collect(Collectors.toList());
+        List<Long> orderTaskIdList = reportLineList.stream().map(EmcReportLineBean::getOrderTaskId).distinct().collect(Collectors.toList());
         if (orderTaskIdList.isEmpty()) {
             this.addConstraintViolation("EMC.MODULE.BP.REPORT.REPORTS.TIP.REPORT_HAS_NO_TASK");
             return false;
         }
         // 过滤掉分析录入合并的测试
-        List<EmcOrderTaskBean> orderTaskList = orderTaskService.getDao().selectListByOneColumnValues(orderTaskIdList, "id", Arrays.asList("id", "virtual"));
-        List<Long> validOrderTaskIdList = orderTaskList.stream().filter(task -> !StringUtils.equals(task.getExt$Item("virtual"), Constant.YES)).map(EmcOrderTaskBean::getId).collect(Collectors.toList());
+        List<List<Long>> partitions = ListUtils.partition(orderTaskIdList, 200);
+        List<EmcOrderTaskBean> orderTaskList = new ArrayList<>();
+        IntStream.range(0, partitions.size()).forEach(index -> {
+            List<Long> partition = partitions.get(index);
+            List<EmcOrderTaskBean> tasks = orderTaskService.getDao().selectListByOneColumnValues(partition, "id", Arrays.asList("id", "virtual"));
+            orderTaskList.addAll(tasks);
+        });
+        List<Long> validOrderTaskIdList = orderTaskList.stream().filter(task -> !StringUtils.equals(task.getExt$Item("virtual"), Constant.YES)).map(EmcOrderTaskBean::getId).distinct().collect(Collectors.toList());
         if (validOrderTaskIdList.isEmpty()) {
             this.addConstraintViolation("EMC.MODULE.BP.REPORT.REPORTS.TIP.REPORT_HAS_NO_TASK");
             return false;

@@ -1,57 +1,61 @@
-/*
- * Decompiled with CFR.
- */
 package com.sunwayworld.emc.module.mdm.equipt.equipt.bean;
 
+import java.time.LocalDateTime;
+
 import com.alibaba.fastjson.annotation.JSONField;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import com.sunwayworld.framework.data.annotation.Id;
 import com.sunwayworld.framework.data.annotation.Table;
 import com.sunwayworld.framework.data.annotation.Transient;
 import com.sunwayworld.framework.support.domain.AbstractPersistable;
 import com.sunwayworld.framework.support.domain.Insertable;
-import java.time.LocalDateTime;
-import org.springframework.format.annotation.DateTimeFormat;
 
-@Table(value="T_EMC_EQUIPT_USE_RECORD")
-public class EmcEquiptUseRecordBean
-extends AbstractPersistable<Long>
-implements Insertable<Long> {
+/**
+ * @author qianc@sunwayworld.com
+ * @date 2019-12-18
+ */
+@Table("T_EMC_EQUIPT_USE_RECORD")
+    public class EmcEquiptUseRecordBean extends AbstractPersistable<Long>implements Insertable<Long> {
+
     @Transient
     private static final long serialVersionUID = -2915409537745707942L;
     @Id
-    private Long id;
-    private Long projId;
-    private String projNo;
-    private Long sampleId;
-    private String sampleNo;
-    private String testId;
-    private String testName;
-    private Long equiptId;
-    @JSONField(format="yyyy-MM-dd HH:mm:ss")
-    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime usedTime;
-    private String beforeUseStatus;
-    private String afterUseStatus;
-    private String userId;
-    private String userName;
-    private String runId;
-    private String equiptCondition;
-    private String orderQty;
-    private String startDate;
-    private String startTime;
-    private String endDate;
-    private String endTime;
-    private String createdById;
-    private String createdByName;
-    @JSONField(format="yyyy-MM-dd")
-    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime createdTime;
-    private String createdByOrgId;
-    private String createdByOrgName;
+    private Long id;// 主键
+    private Long projId;// 项目编码
+    private String projNo;// 项目编号
+    private Long sampleId;// 采样单编码
+    private String sampleNo;// 采样单编号
+    private Long testId;// 测试编号
+    private String testName;// 测试名称
+    private Long equiptId;// 仪器编码
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime usedTime;// 仪器使用时间
+    private String beforeUseStatus;// 使用前状态
+    private String afterUseStatus;// 使用后状态
+    private String userId;// 使用人
+    private String userName;// 使用人名称
+
+    private String runId; // 批号
+    private String equiptCondition; // 仪器条件
+    private String orderQty; // 样品数量
+    private String startDate; // 开始日期
+    private String startTime; // 开始时间
+    private String endDate; // 结束日期
+    private String endTime; // 结束时间
+
+    private String createdById;// 制单人编码
+    private String createdByName;// 制单人名称
+    @JSONField(format = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime createdTime;// 制单时间
+    private String createdByOrgId;// 制单人单位编码
+    private String createdByOrgName;// 制单人单位名称
 
     @Override
     public Long getId() {
-        return this.id;
+        return id;
     }
 
     @Override
@@ -60,7 +64,7 @@ implements Insertable<Long> {
     }
 
     public Long getProjId() {
-        return this.projId;
+        return projId;
     }
 
     public void setProjId(Long projId) {
@@ -68,7 +72,7 @@ implements Insertable<Long> {
     }
 
     public String getProjNo() {
-        return this.projNo;
+        return projNo;
     }
 
     public void setProjNo(String projNo) {
@@ -76,7 +80,7 @@ implements Insertable<Long> {
     }
 
     public Long getSampleId() {
-        return this.sampleId;
+        return sampleId;
     }
 
     public void setSampleId(Long sampleId) {
@@ -84,23 +88,23 @@ implements Insertable<Long> {
     }
 
     public String getSampleNo() {
-        return this.sampleNo;
+        return sampleNo;
     }
 
     public void setSampleNo(String sampleNo) {
         this.sampleNo = sampleNo;
     }
 
-    public String getTestId() {
-        return this.testId;
+    public Long getTestId() {
+        return testId;
     }
 
-    public void setTestId(String testId) {
+    public void setTestId(Long testId) {
         this.testId = testId;
     }
 
     public String getTestName() {
-        return this.testName;
+        return testName;
     }
 
     public void setTestName(String testName) {
@@ -108,7 +112,7 @@ implements Insertable<Long> {
     }
 
     public Long getEquiptId() {
-        return this.equiptId;
+        return equiptId;
     }
 
     public void setEquiptId(Long equiptId) {
@@ -116,7 +120,7 @@ implements Insertable<Long> {
     }
 
     public LocalDateTime getUsedTime() {
-        return this.usedTime;
+        return usedTime;
     }
 
     public void setUsedTime(LocalDateTime usedTime) {
@@ -124,7 +128,7 @@ implements Insertable<Long> {
     }
 
     public String getBeforeUseStatus() {
-        return this.beforeUseStatus;
+        return beforeUseStatus;
     }
 
     public void setBeforeUseStatus(String beforeUseStatus) {
@@ -132,7 +136,7 @@ implements Insertable<Long> {
     }
 
     public String getAfterUseStatus() {
-        return this.afterUseStatus;
+        return afterUseStatus;
     }
 
     public void setAfterUseStatus(String afterUseStatus) {
@@ -140,7 +144,7 @@ implements Insertable<Long> {
     }
 
     public String getUserId() {
-        return this.userId;
+        return userId;
     }
 
     public void setUserId(String userId) {
@@ -148,7 +152,7 @@ implements Insertable<Long> {
     }
 
     public String getUserName() {
-        return this.userName;
+        return userName;
     }
 
     public void setUserName(String userName) {
@@ -156,7 +160,7 @@ implements Insertable<Long> {
     }
 
     public String getRunId() {
-        return this.runId;
+        return runId;
     }
 
     public void setRunId(String runId) {
@@ -164,7 +168,7 @@ implements Insertable<Long> {
     }
 
     public String getEquiptCondition() {
-        return this.equiptCondition;
+        return equiptCondition;
     }
 
     public void setEquiptCondition(String equiptCondition) {
@@ -172,7 +176,7 @@ implements Insertable<Long> {
     }
 
     public String getOrderQty() {
-        return this.orderQty;
+        return orderQty;
     }
 
     public void setOrderQty(String orderQty) {
@@ -180,7 +184,7 @@ implements Insertable<Long> {
     }
 
     public String getStartDate() {
-        return this.startDate;
+        return startDate;
     }
 
     public void setStartDate(String startDate) {
@@ -188,7 +192,7 @@ implements Insertable<Long> {
     }
 
     public String getStartTime() {
-        return this.startTime;
+        return startTime;
     }
 
     public void setStartTime(String startTime) {
@@ -196,7 +200,7 @@ implements Insertable<Long> {
     }
 
     public String getEndDate() {
-        return this.endDate;
+        return endDate;
     }
 
     public void setEndDate(String endDate) {
@@ -204,7 +208,7 @@ implements Insertable<Long> {
     }
 
     public String getEndTime() {
-        return this.endTime;
+        return endTime;
     }
 
     public void setEndTime(String endTime) {
@@ -213,7 +217,7 @@ implements Insertable<Long> {
 
     @Override
     public String getCreatedById() {
-        return this.createdById;
+        return createdById;
     }
 
     @Override
@@ -223,7 +227,7 @@ implements Insertable<Long> {
 
     @Override
     public String getCreatedByName() {
-        return this.createdByName;
+        return createdByName;
     }
 
     @Override
@@ -233,7 +237,7 @@ implements Insertable<Long> {
 
     @Override
     public LocalDateTime getCreatedTime() {
-        return this.createdTime;
+        return createdTime;
     }
 
     @Override
@@ -243,7 +247,7 @@ implements Insertable<Long> {
 
     @Override
     public String getCreatedByOrgId() {
-        return this.createdByOrgId;
+        return createdByOrgId;
     }
 
     @Override
@@ -253,12 +257,13 @@ implements Insertable<Long> {
 
     @Override
     public String getCreatedByOrgName() {
-        return this.createdByOrgName;
+        return createdByOrgName;
     }
 
     @Override
     public void setCreatedByOrgName(String createdByOrgName) {
         this.createdByOrgName = createdByOrgName;
     }
-}
 
+
+}

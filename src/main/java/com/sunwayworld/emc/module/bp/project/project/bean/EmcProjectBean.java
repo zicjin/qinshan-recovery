@@ -1,9 +1,12 @@
-/*
- * Decompiled with CFR.
- */
 package com.sunwayworld.emc.module.bp.project.project.bean;
 
+import java.time.LocalDateTime;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
 import com.alibaba.fastjson.annotation.JSONField;
+import com.sunwayworld.emc.framework.constant.EmcBizConstant;
+import com.sunwayworld.framework.constant.Constant;
 import com.sunwayworld.framework.data.annotation.Clob;
 import com.sunwayworld.framework.data.annotation.Id;
 import com.sunwayworld.framework.data.annotation.NotNull;
@@ -12,228 +15,270 @@ import com.sunwayworld.framework.data.annotation.Transient;
 import com.sunwayworld.framework.support.domain.AbstractAuditable;
 import com.sunwayworld.framework.support.domain.Auditable;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import org.springframework.format.annotation.DateTimeFormat;
 
-@Table(value="T_EMC_PROJECT")
-public class EmcProjectBean
-extends AbstractAuditable<Long>
-implements Auditable<Long> {
+/**
+ * 项目
+ *
+ * @author magh@sunwayworld.com
+ * @date 2019-09-27
+ */
+
+@Table("T_EMC_PROJECT")
+    public class EmcProjectBean extends AbstractAuditable<Long> implements Auditable<Long> {
+
     @Transient
     private static final long serialVersionUID = -8279392325526171185L;
+
     @Id
-    private Long id;
-    private String projNo;
-    private String projName;
-    private String testOrgId;
-    private String testOrgName;
-    private String projAddress;
-    private String entrustOrgId;
-    private String entrustOrgName;
-    private String entrustOrgAddress;
-    private Long bizCategoryId;
-    private String bizCategoryCode;
-    private String taskNo;
-    private String description;
-    @JSONField(format="yyyy-MM-dd")
-    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime registDate;
-    private String reportOrgId;
-    @JSONField(format="yyyy-MM-dd")
-    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime acceptDate;
-    @JSONField(format="yyyy-MM-dd")
-    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime compleDate;
-    private String projAmount;
+    private Long id;// 主键
+
+    private String projNo;// 项目编号
+
+    private String projName;// 项目名称
+
+    private String testOrgId;// 受检单位编码
+
+    private String testOrgName;// 受检单位名称
+
+    private String projAddress;// 项目地址
+
+    private String entrustOrgId;// 委托单位编码
+
+    private String entrustOrgName;// 委托单位名称
+
+    private String entrustOrgAddress;// 委托单位地址
+
+    private Long bizCategoryId;// 业务类型编码
+
+    private String bizCategoryCode;// 业务类型编号
+
+    private String taskNo;// 任务编号
+
+    private String description;//项目描述
+
+    @JSONField(format = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime registDate;// 登记日期
+
+    private String reportOrgId;// 报告科室编码
+
+    @JSONField(format = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime acceptDate;// 受理日期
+
+    @JSONField(format = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime compleDate;// 项目完成期限
+
     private String monitorCategory;
-    @JSONField(format="yyyy-MM-dd")
-    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime entrustDate;
-    @JSONField(format="yyyy-MM-dd")
-    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime sendDate;
-    private String sendType;
-    private String entrustMethod;
-    private String subPackageDesc;
-    private String ndCal;
-    @NotNull(defaultValue="create")
-    private String status;
-    private String cancleReason;
-    private String sendUsername;
-    @JSONField(format="yyyy-MM-dd")
-    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime taskDate;
-    private String testContent;
-    private String qcReq;
-    private String remark;
-    private String entrustOrgContact;
-    private String entrustOrgPhone;
-    private String testOrgAddress;
-    private String testOrgContact;
-    private String testOrgPhone;
-    private String monitorOrgName;
-    private String source;
-    @JSONField(format="yyyy-MM-dd HH:mm:ss")
-    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime nextTaskDate;
-    @JSONField(format="yyyy-MM-dd HH:mm:ss")
-    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime startTime;
-    @JSONField(format="yyyy-MM-dd HH:mm:ss")
-    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime endTime;
-    private String cron;
-    private String mobileId;
-    @NotNull(defaultValue="\u767b\u8bb0")
-    private String projNode;
-    private String sample;
-    private String urgent;
-    private String beforeStatus;
-    private String reportEditUserId;
-    private String reportEditUserName;
-    @NotNull(defaultValue="0")
-    private String qcCheck;
-    private String cancelReason;
-    private String schemeReportLineId;
-    private String testOrgEmail;
-    private String testOrgFixedPhone;
-    private String projectQcUserId;
-    private String projectQcUserName;
-    private String projectSampleOrgId;
-    private String sampleOrgName;
-    private String projectSampleById;
-    private String projectSampleByName;
-    @JSONField(format="yyyy-MM-dd")
-    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime projectSampleBeginDate;
-    @JSONField(format="yyyy-MM-dd")
-    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime projectSampleEndDate;
-    private String createdById;
-    private String createdByName;
-    @JSONField(format="yyyy-MM-dd")
-    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime createdTime;
-    private String createdByOrgId;
-    private String createdByOrgName;
-    private String orgId;
-    private String orgName;
-    private String keepDescription;
-    private String remainSampleDeal;
-    private String testsMethod;
-    private String servicePay;
-    private String invoiceTitle;
-    private String taxNo;
-    private String payType;
-    private String reportFormat;
-    private String reportNum;
-    private String reportGrantTime;
-    private String reportSendType;
-    @NotNull(defaultValue="0")
-    private String prospect;
-    @JSONField(format="yyyy-MM-dd")
-    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime prospectDate;
-    @Clob
-    private String opinion;
-    @Clob
-    private String safetyMeasures;
-    @Clob
-    private String monitorCondition;
-    @Clob
-    private String prospecRemark;
-    private String testCycle;
-    private String reportDeliveryWay;
-    private String packMethod;
-    private String requiredSamptime;
-    private String orderNum;
-    private Long sampleOrderCount;
-    private Long erpGbId;
-    private Long erpReviewId;
-    private String reportAptitude;
-    private String reportUse;
-    private String pretreatment;
-    private String needQcReport;
-    private String qcReportType;
-    private String needSplitReport;
-    private String subcontractSupplier;
-    private String reportEnName;
-    private String reportCnName;
-    private String reportEnAddress;
-    private String reportCnAddress;
-    private String testingLab;
-    @NotNull(defaultValue="1")
-    private String testMethodAssigner;
-    private String mergeReport;
-    private String reportPostAddress;
-    private String addressee;
-    private String recipientPhone;
-    private String detectPurpose;
-    private String erpOrderNumber;
-    private String reportTitle;
-    private Long splitContractId;
-    private String securityLevel;
-    private String reportFee;
-    private String needReport;
-    private String periodType;
-    @NotNull(defaultValue="7~15")
-    private String period;
-    private String otherReportUse;
-    private String erpContactGbId;
-    private String entrustOrgEmail;
-    @JSONField(format="yyyy-MM-dd")
-    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime projCreatedTime;
-    private String labInnerNo;
-    private Long subcontractorId;
-    private String projType;
-    private LocalDate requiredCompleteDate;
-    @JSONField(format="yyyy-MM-dd")
-    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime reportIssueTime;
-    private String testProjectName;
-    private String businessUserId;
-    private String businessUserName;
-    private String minSampleDuration;
-    private Long year;
-    @JSONField(format="yyyy-MM-dd")
-    @DateTimeFormat(pattern="yyyy-MM-dd")
-    private LocalDate toReportEditDate;
-    private String reportAssignStatus;
-    private String projectType;
-    @JSONField(format="yyyy-MM-dd HH:mm:ss")
-    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime firstIssueDateTime;
-    @NotNull(defaultValue="0")
-    private String projectPrice;
-    private String folderRemark;
-    private String projSection;
-    private String customerSource;
-    private String remarkOne;
-    private String remarkTwo;
-    @NotNull(defaultValue="0")
-    private String amountDeterm;
 
-    public String getReportAssignStatus() {
-        return this.reportAssignStatus;
-    }
+    @JSONField(format = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime entrustDate;// 委托日期
 
-    public void setReportAssignStatus(String reportAssignStatus) {
-        this.reportAssignStatus = reportAssignStatus;
-    }
+    @JSONField(format = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime sendDate;// 送样日期
 
-    public LocalDateTime getReportIssueTime() {
-        return this.reportIssueTime;
-    }
+    private String sendType;// 送样方式
 
-    public void setReportIssueTime(LocalDateTime reportIssueTime) {
-        this.reportIssueTime = reportIssueTime;
-    }
+    private String entrustMethod;// 委托方式
+
+    private String subPackageDesc;// 分包说明
+
+    private String ndCal;// nd计算方式
+
+    @NotNull(defaultValue = EmcBizConstant.PROJECT_STATUS_CREATE)
+    private String status;// 状态 正常/取消
+
+    private String cancleReason;// 取消原因
+
+    private String sendUsername;// 送样人
+
+    @JSONField(format = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime taskDate;// 任务日期
+
+    private String testContent;// 检测内容及要求
+
+    private String qcReq;// 质控要求
+
+    private String remark;// 备注
+
+    private String entrustOrgContact; // 委托单位联系人
+
+    private String entrustOrgPhone; // 委托单位联系电话
+
+    private String testOrgAddress; // 受检单位地址
+
+    private String testOrgContact; // 受检单位联系人
+
+    private String testOrgPhone; // 受检单位联系电话
+
+    private String monitorOrgName; // 检测单位名称
+
+    private String source; // 来源
+
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime nextTaskDate;// 下次任务日期
+
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime startTime; // 开始时间
+
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime endTime; // 结束时间
+
+    private String cron;// CRON表达式
+
+    private String mobileId; // 移动端项目ID
+
+    @NotNull(defaultValue = EmcBizConstant.PROJECT_CN_NODE_XMDJ)
+    private String projNode; // 项目节点
+
+    private String sample; // 是否采样
+
+    private String urgent; // 是否加急
+
+    private String beforeStatus; // 项目终止前状态
+
+    private String reportEditUserId; // 报告编制人编码
+
+    private String reportEditUserName; // 报告编制人
+
+    @NotNull(defaultValue = Constant.NO)
+    private String qcCheck; // 是否质控考核
+
+    private String cancelReason; // 终止原因
+
+    private String schemeReportLineId; // 监测方案报表模板ID
+
+    private String testOrgEmail; // 受检单位邮箱
+
+    private String testOrgFixedPhone; // 受检单位固定电话
+
+    private String projectQcUserId; // 项目质控人ID
+
+    private String projectQcUserName; // 项目质控人
+
+    private String projectSampleOrgId; // 采样科室id
+
+    private String sampleOrgName; // 采样科室名称
+
+    private String projectSampleById;//采样员编码
+
+    private String projectSampleByName;// 采样员
+
+    @JSONField(format = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime projectSampleBeginDate;//采样开始日期
+    @JSONField(format = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime projectSampleEndDate;//采样结束日期
+
+    private String createdById;// 制单人编码
+
+    private String createdByName;// 制单人名称
+
+    @JSONField(format = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime createdTime;// 制单时间
+
+    private String createdByOrgId;// 制单人单位编码
+
+    private String createdByOrgName;// 制单人单位名称
+
+    private String orgId;// 所属单位编码
+
+    private String orgName;// 所属单位名称
+
+    /**
+     * 广州分析测试中心
+     */
+    private String keepDescription;// 样品性质与保存描述
+    private String remainSampleDeal;// 余样处理
+    private String testsMethod;// 测试方法
+    private String servicePay;// 服务费用
+    private String invoiceTitle;// 发票抬头及类别
+    private String taxNo;// 税号
+    private String payType;// 付费方式
+    private String reportFormat;// 报告格式
+    private String reportNum;// 报告数量
+    private String reportGrantTime;// 监测报告发放时间
+    private String reportSendType;// 监测报告发送
+    /**
+     * 现场踏勘功能
+     */
+    @NotNull(defaultValue = Constant.NO)
+    private String prospect; // 是否踏勘
+    @JSONField(format = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime prospectDate; // 勘察日期
+    @Clob
+    private String opinion; // 现场意见
+    @Clob
+    private String safetyMeasures; // 安全措施
+    @Clob
+    private String monitorCondition; // 监测条件
+    @Clob
+    private String prospecRemark;// 踏勘备注
+
+    private String testCycle;//测试周期(江苏新锐)
+
+    private String reportDeliveryWay;//报告交付方式(江苏新锐)
+
+    private String packMethod;//包装方式(江苏新锐)
+
+    private String requiredSamptime;//要求采样时间(广分所)
+
+    private String orderNum;//样品数量(江苏新锐)
+
+    private Long erpGbId; // ERP订单ID
+    private Long erpReviewId; // ERP评审ID
+
+    private String reportAptitude; // 报告资质;
+    private String reportUse; // 报告用途;
+    private String pretreatment; // 前处理方式备注;
+    private String needQcReport; // 是否需要提供质控报告;
+    private String qcReportType; // 质控报告类型
+    private String needSplitReport; // 是否拆分报告;
+    private String subcontractSupplier; // 分包供应商名称;
+    private String reportEnName; // 报告抬头公司名称(英文);
+    private String reportCnName; // 报告抬头公司名称(中文);
+    private String reportEnAddress; // 报告抬头公司地址(英文);
+    private String reportCnAddress; // 报告抬头公司地址(中文);
+    private String testingLab; // 做单实验室;
+    private String testMethodAssigner; // 检测方法指定方;
+    private String mergeReport; // 分包项目是否合并至微谱报告;
+    private String reportPostAddress; // 报告寄送地址;
+    private String addressee; // 收件人;
+    private String recipientPhone; // 收件人联系电话
+
+    private String detectPurpose; // 检测目的
+    private String erpOrderNumber; // ERP订单编号
+    private String reportTitle; // 报告抬头
+    private Long splitContractId; // 拆分子合同ID
+
+    private String securityLevel; // 保密度
+    private String reportFee; // 报告费
+    private String needReport; // 是否需要报告
+    private String periodType; // 服务周期类型
+    private String period; // 服务周期（工作日，服务周期类型为加急或特急时需要填写）
+    private String otherReportUse; // 其他报告用途
+    private String erpContactGbId; // ERP委托联系人ID
+    private String entrustOrgEmail; // 委托邮箱
+
+    @JSONField(format = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime projCreatedTime; // 用于修改
+
+    private String labInnerNo; // 实验室内部编号
 
     @Override
     public Long getId() {
-        return this.id;
+        return id;
     }
 
     @Override
@@ -242,7 +287,7 @@ implements Auditable<Long> {
     }
 
     public String getProjNo() {
-        return this.projNo;
+        return projNo;
     }
 
     public void setProjNo(String projNo) {
@@ -250,7 +295,7 @@ implements Auditable<Long> {
     }
 
     public String getProjName() {
-        return this.projName;
+        return projName;
     }
 
     public void setProjName(String projName) {
@@ -258,7 +303,7 @@ implements Auditable<Long> {
     }
 
     public String getTestOrgId() {
-        return this.testOrgId;
+        return testOrgId;
     }
 
     public void setTestOrgId(String testOrgId) {
@@ -266,7 +311,7 @@ implements Auditable<Long> {
     }
 
     public String getTestOrgName() {
-        return this.testOrgName;
+        return testOrgName;
     }
 
     public void setTestOrgName(String testOrgName) {
@@ -274,7 +319,7 @@ implements Auditable<Long> {
     }
 
     public String getProjAddress() {
-        return this.projAddress;
+        return projAddress;
     }
 
     public void setProjAddress(String projAddress) {
@@ -282,7 +327,7 @@ implements Auditable<Long> {
     }
 
     public String getEntrustOrgId() {
-        return this.entrustOrgId;
+        return entrustOrgId;
     }
 
     public void setEntrustOrgId(String entrustOrgId) {
@@ -290,7 +335,7 @@ implements Auditable<Long> {
     }
 
     public String getEntrustOrgName() {
-        return this.entrustOrgName;
+        return entrustOrgName;
     }
 
     public void setEntrustOrgName(String entrustOrgName) {
@@ -298,7 +343,7 @@ implements Auditable<Long> {
     }
 
     public String getEntrustOrgAddress() {
-        return this.entrustOrgAddress;
+        return entrustOrgAddress;
     }
 
     public void setEntrustOrgAddress(String entrustOrgAddress) {
@@ -306,7 +351,7 @@ implements Auditable<Long> {
     }
 
     public Long getBizCategoryId() {
-        return this.bizCategoryId;
+        return bizCategoryId;
     }
 
     public void setBizCategoryId(Long bizCategoryId) {
@@ -314,7 +359,7 @@ implements Auditable<Long> {
     }
 
     public String getBizCategoryCode() {
-        return this.bizCategoryCode;
+        return bizCategoryCode;
     }
 
     public void setBizCategoryCode(String bizCategoryCode) {
@@ -322,7 +367,7 @@ implements Auditable<Long> {
     }
 
     public String getTaskNo() {
-        return this.taskNo;
+        return taskNo;
     }
 
     public void setTaskNo(String taskNo) {
@@ -330,7 +375,7 @@ implements Auditable<Long> {
     }
 
     public LocalDateTime getRegistDate() {
-        return this.registDate;
+        return registDate;
     }
 
     public void setRegistDate(LocalDateTime registDate) {
@@ -338,7 +383,7 @@ implements Auditable<Long> {
     }
 
     public String getReportOrgId() {
-        return this.reportOrgId;
+        return reportOrgId;
     }
 
     public void setReportOrgId(String reportOrgId) {
@@ -346,7 +391,7 @@ implements Auditable<Long> {
     }
 
     public LocalDateTime getAcceptDate() {
-        return this.acceptDate;
+        return acceptDate;
     }
 
     public void setAcceptDate(LocalDateTime acceptDate) {
@@ -354,7 +399,7 @@ implements Auditable<Long> {
     }
 
     public LocalDateTime getCompleDate() {
-        return this.compleDate;
+        return compleDate;
     }
 
     public void setCompleDate(LocalDateTime compleDate) {
@@ -362,7 +407,7 @@ implements Auditable<Long> {
     }
 
     public String getMonitorCategory() {
-        return this.monitorCategory;
+        return monitorCategory;
     }
 
     public void setMonitorCategory(String monitorCategory) {
@@ -370,7 +415,7 @@ implements Auditable<Long> {
     }
 
     public LocalDateTime getEntrustDate() {
-        return this.entrustDate;
+        return entrustDate;
     }
 
     public void setEntrustDate(LocalDateTime entrustDate) {
@@ -378,7 +423,7 @@ implements Auditable<Long> {
     }
 
     public LocalDateTime getSendDate() {
-        return this.sendDate;
+        return sendDate;
     }
 
     public void setSendDate(LocalDateTime sendDate) {
@@ -386,7 +431,7 @@ implements Auditable<Long> {
     }
 
     public String getSendType() {
-        return this.sendType;
+        return sendType;
     }
 
     public void setSendType(String sendType) {
@@ -394,7 +439,7 @@ implements Auditable<Long> {
     }
 
     public String getEntrustMethod() {
-        return this.entrustMethod;
+        return entrustMethod;
     }
 
     public void setEntrustMethod(String entrustMethod) {
@@ -402,7 +447,7 @@ implements Auditable<Long> {
     }
 
     public String getSubPackageDesc() {
-        return this.subPackageDesc;
+        return subPackageDesc;
     }
 
     public void setSubPackageDesc(String subPackageDesc) {
@@ -410,7 +455,7 @@ implements Auditable<Long> {
     }
 
     public String getNdCal() {
-        return this.ndCal;
+        return ndCal;
     }
 
     public void setNdCal(String ndCal) {
@@ -418,7 +463,7 @@ implements Auditable<Long> {
     }
 
     public String getStatus() {
-        return this.status;
+        return status;
     }
 
     public void setStatus(String status) {
@@ -426,7 +471,7 @@ implements Auditable<Long> {
     }
 
     public String getCancleReason() {
-        return this.cancleReason;
+        return cancleReason;
     }
 
     public void setCancleReason(String cancleReason) {
@@ -434,7 +479,7 @@ implements Auditable<Long> {
     }
 
     public String getSendUsername() {
-        return this.sendUsername;
+        return sendUsername;
     }
 
     public void setSendUsername(String sendUsername) {
@@ -442,7 +487,7 @@ implements Auditable<Long> {
     }
 
     public LocalDateTime getTaskDate() {
-        return this.taskDate;
+        return taskDate;
     }
 
     public void setTaskDate(LocalDateTime taskDate) {
@@ -450,7 +495,7 @@ implements Auditable<Long> {
     }
 
     public String getTestContent() {
-        return this.testContent;
+        return testContent;
     }
 
     public void setTestContent(String testContent) {
@@ -458,7 +503,7 @@ implements Auditable<Long> {
     }
 
     public String getQcReq() {
-        return this.qcReq;
+        return qcReq;
     }
 
     public void setQcReq(String qcReq) {
@@ -466,7 +511,7 @@ implements Auditable<Long> {
     }
 
     public String getRemark() {
-        return this.remark;
+        return remark;
     }
 
     public void setRemark(String remark) {
@@ -474,7 +519,7 @@ implements Auditable<Long> {
     }
 
     public String getEntrustOrgContact() {
-        return this.entrustOrgContact;
+        return entrustOrgContact;
     }
 
     public void setEntrustOrgContact(String entrustOrgContact) {
@@ -482,7 +527,7 @@ implements Auditable<Long> {
     }
 
     public String getEntrustOrgPhone() {
-        return this.entrustOrgPhone;
+        return entrustOrgPhone;
     }
 
     public void setEntrustOrgPhone(String entrustOrgPhone) {
@@ -490,7 +535,7 @@ implements Auditable<Long> {
     }
 
     public String getTestOrgAddress() {
-        return this.testOrgAddress;
+        return testOrgAddress;
     }
 
     public void setTestOrgAddress(String testOrgAddress) {
@@ -498,7 +543,7 @@ implements Auditable<Long> {
     }
 
     public String getTestOrgContact() {
-        return this.testOrgContact;
+        return testOrgContact;
     }
 
     public void setTestOrgContact(String testOrgContact) {
@@ -506,7 +551,7 @@ implements Auditable<Long> {
     }
 
     public String getTestOrgPhone() {
-        return this.testOrgPhone;
+        return testOrgPhone;
     }
 
     public void setTestOrgPhone(String testOrgPhone) {
@@ -514,7 +559,7 @@ implements Auditable<Long> {
     }
 
     public String getMonitorOrgName() {
-        return this.monitorOrgName;
+        return monitorOrgName;
     }
 
     public void setMonitorOrgName(String monitorOrgName) {
@@ -522,7 +567,7 @@ implements Auditable<Long> {
     }
 
     public String getSource() {
-        return this.source;
+        return source;
     }
 
     public void setSource(String source) {
@@ -530,7 +575,7 @@ implements Auditable<Long> {
     }
 
     public LocalDateTime getNextTaskDate() {
-        return this.nextTaskDate;
+        return nextTaskDate;
     }
 
     public void setNextTaskDate(LocalDateTime nextTaskDate) {
@@ -538,7 +583,7 @@ implements Auditable<Long> {
     }
 
     public LocalDateTime getStartTime() {
-        return this.startTime;
+        return startTime;
     }
 
     public void setStartTime(LocalDateTime startTime) {
@@ -546,7 +591,7 @@ implements Auditable<Long> {
     }
 
     public LocalDateTime getEndTime() {
-        return this.endTime;
+        return endTime;
     }
 
     public void setEndTime(LocalDateTime endTime) {
@@ -554,7 +599,7 @@ implements Auditable<Long> {
     }
 
     public String getCron() {
-        return this.cron;
+        return cron;
     }
 
     public void setCron(String cron) {
@@ -562,7 +607,7 @@ implements Auditable<Long> {
     }
 
     public String getMobileId() {
-        return this.mobileId;
+        return mobileId;
     }
 
     public void setMobileId(String mobileId) {
@@ -570,7 +615,7 @@ implements Auditable<Long> {
     }
 
     public String getProjNode() {
-        return this.projNode;
+        return projNode;
     }
 
     public void setProjNode(String projNode) {
@@ -578,7 +623,7 @@ implements Auditable<Long> {
     }
 
     public String getSample() {
-        return this.sample;
+        return sample;
     }
 
     public void setSample(String sample) {
@@ -586,7 +631,7 @@ implements Auditable<Long> {
     }
 
     public String getUrgent() {
-        return this.urgent;
+        return urgent;
     }
 
     public void setUrgent(String urgent) {
@@ -594,7 +639,7 @@ implements Auditable<Long> {
     }
 
     public String getBeforeStatus() {
-        return this.beforeStatus;
+        return beforeStatus;
     }
 
     public void setBeforeStatus(String beforeStatus) {
@@ -602,7 +647,7 @@ implements Auditable<Long> {
     }
 
     public String getReportEditUserId() {
-        return this.reportEditUserId;
+        return reportEditUserId;
     }
 
     public void setReportEditUserId(String reportEditUserId) {
@@ -610,7 +655,7 @@ implements Auditable<Long> {
     }
 
     public String getReportEditUserName() {
-        return this.reportEditUserName;
+        return reportEditUserName;
     }
 
     public void setReportEditUserName(String reportEditUserName) {
@@ -618,7 +663,7 @@ implements Auditable<Long> {
     }
 
     public String getQcCheck() {
-        return this.qcCheck;
+        return qcCheck;
     }
 
     public void setQcCheck(String qcCheck) {
@@ -626,7 +671,7 @@ implements Auditable<Long> {
     }
 
     public String getCancelReason() {
-        return this.cancelReason;
+        return cancelReason;
     }
 
     public void setCancelReason(String cancelReason) {
@@ -634,7 +679,7 @@ implements Auditable<Long> {
     }
 
     public String getSchemeReportLineId() {
-        return this.schemeReportLineId;
+        return schemeReportLineId;
     }
 
     public void setSchemeReportLineId(String schemeReportLineId) {
@@ -642,7 +687,7 @@ implements Auditable<Long> {
     }
 
     public String getTestOrgEmail() {
-        return this.testOrgEmail;
+        return testOrgEmail;
     }
 
     public void setTestOrgEmail(String testOrgEmail) {
@@ -650,7 +695,7 @@ implements Auditable<Long> {
     }
 
     public String getTestOrgFixedPhone() {
-        return this.testOrgFixedPhone;
+        return testOrgFixedPhone;
     }
 
     public void setTestOrgFixedPhone(String testOrgFixedPhone) {
@@ -658,7 +703,7 @@ implements Auditable<Long> {
     }
 
     public String getProjectQcUserId() {
-        return this.projectQcUserId;
+        return projectQcUserId;
     }
 
     public void setProjectQcUserId(String projectQcUserId) {
@@ -666,7 +711,7 @@ implements Auditable<Long> {
     }
 
     public String getProjectQcUserName() {
-        return this.projectQcUserName;
+        return projectQcUserName;
     }
 
     public void setProjectQcUserName(String projectQcUserName) {
@@ -674,7 +719,7 @@ implements Auditable<Long> {
     }
 
     public String getProjectSampleOrgId() {
-        return this.projectSampleOrgId;
+        return projectSampleOrgId;
     }
 
     public void setProjectSampleOrgId(String projectSampleOrgId) {
@@ -682,7 +727,7 @@ implements Auditable<Long> {
     }
 
     public String getSampleOrgName() {
-        return this.sampleOrgName;
+        return sampleOrgName;
     }
 
     public void setSampleOrgName(String sampleOrgName) {
@@ -690,7 +735,7 @@ implements Auditable<Long> {
     }
 
     public String getProjectSampleById() {
-        return this.projectSampleById;
+        return projectSampleById;
     }
 
     public void setProjectSampleById(String projectSampleById) {
@@ -698,7 +743,7 @@ implements Auditable<Long> {
     }
 
     public String getProjectSampleByName() {
-        return this.projectSampleByName;
+        return projectSampleByName;
     }
 
     public void setProjectSampleByName(String projectSampleByName) {
@@ -706,7 +751,7 @@ implements Auditable<Long> {
     }
 
     public LocalDateTime getProjectSampleBeginDate() {
-        return this.projectSampleBeginDate;
+        return projectSampleBeginDate;
     }
 
     public void setProjectSampleBeginDate(LocalDateTime projectSampleBeginDate) {
@@ -714,7 +759,7 @@ implements Auditable<Long> {
     }
 
     public LocalDateTime getProjectSampleEndDate() {
-        return this.projectSampleEndDate;
+        return projectSampleEndDate;
     }
 
     public void setProjectSampleEndDate(LocalDateTime projectSampleEndDate) {
@@ -722,7 +767,7 @@ implements Auditable<Long> {
     }
 
     public String getCreatedById() {
-        return this.createdById;
+        return createdById;
     }
 
     public void setCreatedById(String createdById) {
@@ -730,7 +775,7 @@ implements Auditable<Long> {
     }
 
     public String getCreatedByName() {
-        return this.createdByName;
+        return createdByName;
     }
 
     public void setCreatedByName(String createdByName) {
@@ -738,7 +783,7 @@ implements Auditable<Long> {
     }
 
     public LocalDateTime getCreatedTime() {
-        return this.createdTime;
+        return createdTime;
     }
 
     public void setCreatedTime(LocalDateTime createdTime) {
@@ -746,7 +791,7 @@ implements Auditable<Long> {
     }
 
     public String getCreatedByOrgId() {
-        return this.createdByOrgId;
+        return createdByOrgId;
     }
 
     public void setCreatedByOrgId(String createdByOrgId) {
@@ -754,7 +799,7 @@ implements Auditable<Long> {
     }
 
     public String getCreatedByOrgName() {
-        return this.createdByOrgName;
+        return createdByOrgName;
     }
 
     public void setCreatedByOrgName(String createdByOrgName) {
@@ -762,71 +807,71 @@ implements Auditable<Long> {
     }
 
     public String getDescription() {
-        return this.description;
+        return description;
     }
 
     public void setDescription(String description) {
         this.description = description;
     }
 
-    public String getOrgId() {
-        return this.orgId;
-    }
+	public String getOrgId() {
+		return orgId;
+	}
 
-    public void setOrgId(String orgId) {
-        this.orgId = orgId;
-    }
+	public void setOrgId(String orgId) {
+		this.orgId = orgId;
+	}
 
-    public String getOrgName() {
-        return this.orgName;
-    }
+	public String getOrgName() {
+		return orgName;
+	}
 
-    public void setOrgName(String orgName) {
-        this.orgName = orgName;
-    }
+	public void setOrgName(String orgName) {
+		this.orgName = orgName;
+	}
 
     public String getKeepDescription() {
-        return this.keepDescription;
+        return keepDescription;
     }
 
     public String getRemainSampleDeal() {
-        return this.remainSampleDeal;
+        return remainSampleDeal;
     }
 
     public String getTestsMethod() {
-        return this.testsMethod;
+        return testsMethod;
     }
 
     public String getServicePay() {
-        return this.servicePay;
+        return servicePay;
     }
 
     public String getInvoiceTitle() {
-        return this.invoiceTitle;
+        return invoiceTitle;
     }
 
     public String getTaxNo() {
-        return this.taxNo;
+        return taxNo;
     }
 
     public String getPayType() {
-        return this.payType;
+        return payType;
     }
 
     public String getReportFormat() {
-        return this.reportFormat;
+        return reportFormat;
     }
 
     public String getReportNum() {
-        return this.reportNum;
+        return reportNum;
     }
 
     public String getReportGrantTime() {
-        return this.reportGrantTime;
+        return reportGrantTime;
     }
 
     public String getReportSendType() {
-        return this.reportSendType;
+        return reportSendType;
     }
 
     public void setKeepDescription(String keepDescription) {
@@ -874,7 +919,7 @@ implements Auditable<Long> {
     }
 
     public LocalDateTime getProspectDate() {
-        return this.prospectDate;
+        return prospectDate;
     }
 
     public void setProspectDate(LocalDateTime prospectDate) {
@@ -882,7 +927,7 @@ implements Auditable<Long> {
     }
 
     public String getOpinion() {
-        return this.opinion;
+        return opinion;
     }
 
     public void setOpinion(String opinion) {
@@ -890,7 +935,7 @@ implements Auditable<Long> {
     }
 
     public String getSafetyMeasures() {
-        return this.safetyMeasures;
+        return safetyMeasures;
     }
 
     public void setSafetyMeasures(String safetyMeasures) {
@@ -898,7 +943,7 @@ implements Auditable<Long> {
     }
 
     public String getMonitorCondition() {
-        return this.monitorCondition;
+        return monitorCondition;
     }
 
     public void setMonitorCondition(String monitorCondition) {
@@ -906,7 +951,7 @@ implements Auditable<Long> {
     }
 
     public String getProspecRemark() {
-        return this.prospecRemark;
+        return prospecRemark;
     }
 
     public void setProspecRemark(String prospecRemark) {
@@ -914,7 +959,7 @@ implements Auditable<Long> {
     }
 
     public String getProspect() {
-        return this.prospect;
+        return prospect;
     }
 
     public void setProspect(String prospect) {
@@ -922,7 +967,7 @@ implements Auditable<Long> {
     }
 
     public String getTestCycle() {
-        return this.testCycle;
+        return testCycle;
     }
 
     public void setTestCycle(String testCycle) {
@@ -930,7 +975,7 @@ implements Auditable<Long> {
     }
 
     public String getReportDeliveryWay() {
-        return this.reportDeliveryWay;
+        return reportDeliveryWay;
     }
 
     public void setReportDeliveryWay(String reportDeliveryWay) {
@@ -938,7 +983,7 @@ implements Auditable<Long> {
     }
 
     public String getPackMethod() {
-        return this.packMethod;
+        return packMethod;
     }
 
     public void setPackMethod(String packMethod) {
@@ -946,7 +991,7 @@ implements Auditable<Long> {
     }
 
     public String getRequiredSamptime() {
-        return this.requiredSamptime;
+        return requiredSamptime;
     }
 
     public void setRequiredSamptime(String requiredSamptime) {
@@ -954,23 +999,15 @@ implements Auditable<Long> {
     }
 
     public String getOrderNum() {
-        return this.orderNum;
+        return orderNum;
     }
 
     public void setOrderNum(String orderNum) {
         this.orderNum = orderNum;
     }
 
-    public Long getSampleOrderCount() {
-        return this.sampleOrderCount;
-    }
-
-    public void setSampleOrderCount(Long sampleOrderCount) {
-        this.sampleOrderCount = sampleOrderCount;
-    }
-
     public Long getErpGbId() {
-        return this.erpGbId;
+        return erpGbId;
     }
 
     public void setErpGbId(Long erpGbId) {
@@ -978,7 +1015,7 @@ implements Auditable<Long> {
     }
 
     public Long getErpReviewId() {
-        return this.erpReviewId;
+        return erpReviewId;
     }
 
     public void setErpReviewId(Long erpReviewId) {
@@ -986,7 +1023,7 @@ implements Auditable<Long> {
     }
 
     public String getReportAptitude() {
-        return this.reportAptitude;
+        return reportAptitude;
     }
 
     public void setReportAptitude(String reportAptitude) {
@@ -994,7 +1031,7 @@ implements Auditable<Long> {
     }
 
     public String getReportUse() {
-        return this.reportUse;
+        return reportUse;
     }
 
     public void setReportUse(String reportUse) {
@@ -1002,7 +1039,7 @@ implements Auditable<Long> {
     }
 
     public String getPretreatment() {
-        return this.pretreatment;
+        return pretreatment;
     }
 
     public void setPretreatment(String pretreatment) {
@@ -1010,7 +1047,7 @@ implements Auditable<Long> {
     }
 
     public String getNeedQcReport() {
-        return this.needQcReport;
+        return needQcReport;
     }
 
     public void setNeedQcReport(String needQcReport) {
@@ -1018,7 +1055,7 @@ implements Auditable<Long> {
     }
 
     public String getQcReportType() {
-        return this.qcReportType;
+        return qcReportType;
     }
 
     public void setQcReportType(String qcReportType) {
@@ -1026,7 +1063,7 @@ implements Auditable<Long> {
     }
 
     public String getNeedSplitReport() {
-        return this.needSplitReport;
+        return needSplitReport;
     }
 
     public void setNeedSplitReport(String needSplitReport) {
@@ -1034,7 +1071,7 @@ implements Auditable<Long> {
     }
 
     public String getSubcontractSupplier() {
-        return this.subcontractSupplier;
+        return subcontractSupplier;
     }
 
     public void setSubcontractSupplier(String subcontractSupplier) {
@@ -1042,7 +1079,7 @@ implements Auditable<Long> {
     }
 
     public String getReportEnName() {
-        return this.reportEnName;
+        return reportEnName;
     }
 
     public void setReportEnName(String reportEnName) {
@@ -1050,7 +1087,7 @@ implements Auditable<Long> {
     }
 
     public String getReportCnName() {
-        return this.reportCnName;
+        return reportCnName;
     }
 
     public void setReportCnName(String reportCnName) {
@@ -1058,7 +1095,7 @@ implements Auditable<Long> {
     }
 
     public String getReportEnAddress() {
-        return this.reportEnAddress;
+        return reportEnAddress;
     }
 
     public void setReportEnAddress(String reportEnAddress) {
@@ -1066,7 +1103,7 @@ implements Auditable<Long> {
     }
 
     public String getReportCnAddress() {
-        return this.reportCnAddress;
+        return reportCnAddress;
     }
 
     public void setReportCnAddress(String reportCnAddress) {
@@ -1074,7 +1111,7 @@ implements Auditable<Long> {
     }
 
     public String getTestingLab() {
-        return this.testingLab;
+        return testingLab;
     }
 
     public void setTestingLab(String testingLab) {
@@ -1082,7 +1119,7 @@ implements Auditable<Long> {
     }
 
     public String getTestMethodAssigner() {
-        return this.testMethodAssigner;
+        return testMethodAssigner;
     }
 
     public void setTestMethodAssigner(String testMethodAssigner) {
@@ -1090,7 +1127,7 @@ implements Auditable<Long> {
     }
 
     public String getMergeReport() {
-        return this.mergeReport;
+        return mergeReport;
     }
 
     public void setMergeReport(String mergeReport) {
@@ -1098,7 +1135,7 @@ implements Auditable<Long> {
     }
 
     public String getReportPostAddress() {
-        return this.reportPostAddress;
+        return reportPostAddress;
     }
 
     public void setReportPostAddress(String reportPostAddress) {
@@ -1106,7 +1143,7 @@ implements Auditable<Long> {
     }
 
     public String getAddressee() {
-        return this.addressee;
+        return addressee;
     }
 
     public void setAddressee(String addressee) {
@@ -1114,7 +1151,7 @@ implements Auditable<Long> {
     }
 
     public String getDetectPurpose() {
-        return this.detectPurpose;
+        return detectPurpose;
     }
 
     public void setDetectPurpose(String detectPurpose) {
@@ -1122,7 +1159,7 @@ implements Auditable<Long> {
     }
 
     public String getRecipientPhone() {
-        return this.recipientPhone;
+        return recipientPhone;
     }
 
     public void setRecipientPhone(String recipientPhone) {
@@ -1130,7 +1167,7 @@ implements Auditable<Long> {
     }
 
     public String getErpOrderNumber() {
-        return this.erpOrderNumber;
+        return erpOrderNumber;
     }
 
     public void setErpOrderNumber(String erpOrderNumber) {
@@ -1138,7 +1175,7 @@ implements Auditable<Long> {
     }
 
     public String getReportTitle() {
-        return this.reportTitle;
+        return reportTitle;
     }
 
     public void setReportTitle(String reportTitle) {
@@ -1146,7 +1183,7 @@ implements Auditable<Long> {
     }
 
     public Long getSplitContractId() {
-        return this.splitContractId;
+        return splitContractId;
     }
 
     public void setSplitContractId(Long splitContractId) {
@@ -1154,7 +1191,7 @@ implements Auditable<Long> {
     }
 
     public String getSecurityLevel() {
-        return this.securityLevel;
+        return securityLevel;
     }
 
     public void setSecurityLevel(String securityLevel) {
@@ -1162,7 +1199,7 @@ implements Auditable<Long> {
     }
 
     public String getReportFee() {
-        return this.reportFee;
+        return reportFee;
     }
 
     public void setReportFee(String reportFee) {
@@ -1170,7 +1207,7 @@ implements Auditable<Long> {
     }
 
     public String getNeedReport() {
-        return this.needReport;
+        return needReport;
     }
 
     public void setNeedReport(String needReport) {
@@ -1178,7 +1215,7 @@ implements Auditable<Long> {
     }
 
     public String getPeriodType() {
-        return this.periodType;
+        return periodType;
     }
 
     public void setPeriodType(String periodType) {
@@ -1186,7 +1223,7 @@ implements Auditable<Long> {
     }
 
     public String getPeriod() {
-        return this.period;
+        return period;
     }
 
     public void setPeriod(String period) {
@@ -1194,7 +1231,7 @@ implements Auditable<Long> {
     }
 
     public String getOtherReportUse() {
-        return this.otherReportUse;
+        return otherReportUse;
     }
 
     public void setOtherReportUse(String otherReportUse) {
@@ -1202,7 +1239,7 @@ implements Auditable<Long> {
     }
 
     public String getErpContactGbId() {
-        return this.erpContactGbId;
+        return erpContactGbId;
     }
 
     public void setErpContactGbId(String erpContactGbId) {
@@ -1210,7 +1247,7 @@ implements Auditable<Long> {
     }
 
     public String getEntrustOrgEmail() {
-        return this.entrustOrgEmail;
+        return entrustOrgEmail;
     }
 
     public void setEntrustOrgEmail(String entrustOrgEmail) {
@@ -1218,7 +1255,7 @@ implements Auditable<Long> {
     }
 
     public LocalDateTime getProjCreatedTime() {
-        return this.projCreatedTime;
+        return projCreatedTime;
     }
 
     public void setProjCreatedTime(LocalDateTime projCreatedTime) {
@@ -1226,163 +1263,174 @@ implements Auditable<Long> {
     }
 
     public String getLabInnerNo() {
-        return this.labInnerNo;
+        return labInnerNo;
     }
 
     public void setLabInnerNo(String labInnerNo) {
         this.labInnerNo = labInnerNo;
     }
 
+    private String projAmount;
+    private Long sampleOrderCount;
+    private Long subcontractorId;
+    private String projType;
+    private LocalDate requiredCompleteDate;
+    @JSONField(format = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime reportIssueTime;
+    private String testProjectName;
+    private String businessUserId;
+    private String businessUserName;
+    private String minSampleDuration;
+    private Long year;
+    @JSONField(format = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate toReportEditDate;
+    private String reportAssignStatus;
+    private String projectType;
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime firstIssueDateTime;
+    @NotNull(defaultValue="0")
+    private String projectPrice;
+    private String folderRemark;
+    private String projSection;
+    private String customerSource;
+    private String remarkOne;
+    private String remarkTwo;
+    @NotNull(defaultValue="0")
+    private String amountDeterm;
+
+    public String getReportAssignStatus() {
+        return this.reportAssignStatus;
+    }
+    public void setReportAssignStatus(String reportAssignStatus) {
+        this.reportAssignStatus = reportAssignStatus;
+    }
+    public LocalDateTime getReportIssueTime() {
+        return this.reportIssueTime;
+    }
+    public void setReportIssueTime(LocalDateTime reportIssueTime) {
+        this.reportIssueTime = reportIssueTime;
+    }
+    public Long getSampleOrderCount() {
+        return this.sampleOrderCount;
+    }
+    public void setSampleOrderCount(Long sampleOrderCount) {
+        this.sampleOrderCount = sampleOrderCount;
+    }
     public Long getSubcontractorId() {
         return this.subcontractorId;
     }
-
     public void setSubcontractorId(Long subcontractorId) {
         this.subcontractorId = subcontractorId;
     }
-
     public String getProjType() {
         return this.projType;
     }
-
     public void setProjType(String projType) {
         this.projType = projType;
     }
-
     public String getProjAmount() {
         return this.projAmount;
     }
-
     public void setProjAmount(String projAmount) {
         this.projAmount = projAmount;
     }
-
     public LocalDate getRequiredCompleteDate() {
         return this.requiredCompleteDate;
     }
-
     public void setRequiredCompleteDate(LocalDate requiredCompleteDate) {
         this.requiredCompleteDate = requiredCompleteDate;
     }
-
     public String getTestProjectName() {
         return this.testProjectName;
     }
-
     public void setTestProjectName(String testProjectName) {
         this.testProjectName = testProjectName;
     }
-
     public String getBusinessUserId() {
         return this.businessUserId;
     }
-
     public void setBusinessUserId(String businessUserId) {
         this.businessUserId = businessUserId;
     }
-
     public String getBusinessUserName() {
         return this.businessUserName;
     }
-
     public void setBusinessUserName(String businessUserName) {
         this.businessUserName = businessUserName;
     }
-
     public String getMinSampleDuration() {
         return this.minSampleDuration;
     }
-
     public void setMinSampleDuration(String minSampleDuration) {
         this.minSampleDuration = minSampleDuration;
     }
-
     public Long getYear() {
         return this.year;
     }
-
     public void setYear(Long year) {
         this.year = year;
     }
-
     public LocalDate getToReportEditDate() {
         return this.toReportEditDate;
     }
-
     public void setToReportEditDate(LocalDate toReportEditDate) {
         this.toReportEditDate = toReportEditDate;
     }
-
     public String getProjectType() {
         return this.projectType;
     }
-
     public void setProjectType(String projectType) {
         this.projectType = projectType;
     }
-
     public LocalDateTime getFirstIssueDateTime() {
         return this.firstIssueDateTime;
     }
-
     public void setFirstIssueDateTime(LocalDateTime firstIssueDateTime) {
         this.firstIssueDateTime = firstIssueDateTime;
     }
-
     public String getProjectPrice() {
         return this.projectPrice;
     }
-
     public void setProjectPrice(String projectPrice) {
         this.projectPrice = projectPrice;
     }
-
     public String getFolderRemark() {
         return this.folderRemark;
     }
-
     public void setFolderRemark(String folderRemark) {
         this.folderRemark = folderRemark;
     }
-
     public String getProjSection() {
         return this.projSection;
     }
-
     public void setProjSection(String projSection) {
         this.projSection = projSection;
     }
-
     public String getCustomerSource() {
         return this.customerSource;
     }
-
     public void setCustomerSource(String customerSource) {
         this.customerSource = customerSource;
     }
-
     public String getRemarkOne() {
         return this.remarkOne;
     }
-
     public void setRemarkOne(String remarkOne) {
         this.remarkOne = remarkOne;
     }
-
     public String getRemarkTwo() {
         return this.remarkTwo;
     }
-
     public void setRemarkTwo(String remarkTwo) {
         this.remarkTwo = remarkTwo;
     }
-
     public String getAmountDeterm() {
         return this.amountDeterm;
     }
-
     public void setAmountDeterm(String amountDeterm) {
         this.amountDeterm = amountDeterm;
     }
 }
-

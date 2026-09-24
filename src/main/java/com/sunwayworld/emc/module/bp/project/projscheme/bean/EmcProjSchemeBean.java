@@ -1,60 +1,82 @@
-/*
- * Decompiled with CFR.
- */
 package com.sunwayworld.emc.module.bp.project.projscheme.bean;
 
+import java.time.LocalDateTime;
+
 import com.alibaba.fastjson.annotation.JSONField;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import com.sunwayworld.framework.data.annotation.Id;
 import com.sunwayworld.framework.data.annotation.Table;
 import com.sunwayworld.framework.data.annotation.Transient;
 import com.sunwayworld.framework.support.domain.AbstractPersistable;
 import com.sunwayworld.framework.support.domain.Insertable;
-import java.time.LocalDateTime;
-import org.springframework.format.annotation.DateTimeFormat;
 
-@Table(value="T_EMC_PROJ_SCHEME")
-public class EmcProjSchemeBean
-extends AbstractPersistable<Long>
-implements Insertable<Long> {
+/**
+ * 检测方案表
+ *
+ * @author yuanhh@sunwayworld.com
+ * @date 2019-10-08
+ */
+
+@Table("T_EMC_PROJ_SCHEME")
+    public class EmcProjSchemeBean extends AbstractPersistable<Long> implements Insertable<Long> {
+
     @Transient
     private static final long serialVersionUID = 8013335846960248120L;
-    @Id
-    private Long id;
-    private Long projId;
-    private String folderNo;
-    private String monitorPointCategoryId;
-    private String monitorPointCategoryName;
-    private Long monitorPointId;
-    private String monitorPointNo;
-    private String monitorPointName;
-    private String monitorTmplId;
-    private Long cycle;
-    private Long frequency;
-    private String sampleOrgId;
-    private String remark;
-    private String referFolder;
-    private Long erpGbId;
-    private Long sortNum;
-    private String createdById;
-    private String createdByName;
-    @JSONField(format="yyyy-MM-dd")
-    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime createdTime;
-    private String createdByOrgId;
-    private String createdByOrgName;
 
-    @Override
+    @Id
+    private Long id;// 主键
+
+    private Long projId;// 项目编码
+
+    private String folderNo;// 点位样品编号
+
+    private String monitorPointCategoryId;// 检测点类型编码
+
+    private String monitorPointCategoryName;// 检测点类型名称
+
+    private Long monitorPointId;// 监测点ID
+
+    private String monitorPointNo;// 监测点编码
+
+    private String monitorPointName;// 监测点名称
+
+    private String monitorTmplId;// 监测模板编码
+
+    private Long cycle;// 周期
+
+    private Long frequency;// 频次
+
+    private String sampleOrgId;// 采样科室
+
+    private String remark;// 备注
+
+    private Long erpGbId; // ERP的样品ID
+
+    private Long sortNum; // 排序码
+
+    private String createdById;// 制单人编码
+
+    private String createdByName;// 制单人名称
+
+    @JSONField(format = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime createdTime;// 制单时间
+
+    private String createdByOrgId;// 制单人单位编码
+
+    private String createdByOrgName;// 制单人单位名称
+
     public Long getId() {
-        return this.id;
+        return id;
     }
 
-    @Override
     public void setId(Long id) {
         this.id = id;
     }
 
     public Long getProjId() {
-        return this.projId;
+        return projId;
     }
 
     public void setProjId(Long projId) {
@@ -62,7 +84,7 @@ implements Insertable<Long> {
     }
 
     public String getFolderNo() {
-        return this.folderNo;
+        return folderNo;
     }
 
     public void setFolderNo(String folderNo) {
@@ -70,7 +92,7 @@ implements Insertable<Long> {
     }
 
     public String getMonitorPointCategoryId() {
-        return this.monitorPointCategoryId;
+        return monitorPointCategoryId;
     }
 
     public void setMonitorPointCategoryId(String monitorPointCategoryId) {
@@ -78,7 +100,7 @@ implements Insertable<Long> {
     }
 
     public String getMonitorPointCategoryName() {
-        return this.monitorPointCategoryName;
+        return monitorPointCategoryName;
     }
 
     public void setMonitorPointCategoryName(String monitorPointCategoryName) {
@@ -86,7 +108,7 @@ implements Insertable<Long> {
     }
 
     public Long getMonitorPointId() {
-        return this.monitorPointId;
+        return monitorPointId;
     }
 
     public void setMonitorPointId(Long monitorPointId) {
@@ -94,7 +116,7 @@ implements Insertable<Long> {
     }
 
     public String getMonitorPointNo() {
-        return this.monitorPointNo;
+        return monitorPointNo;
     }
 
     public void setMonitorPointNo(String monitorPointNo) {
@@ -102,7 +124,7 @@ implements Insertable<Long> {
     }
 
     public String getMonitorPointName() {
-        return this.monitorPointName;
+        return monitorPointName;
     }
 
     public void setMonitorPointName(String monitorPointName) {
@@ -110,7 +132,7 @@ implements Insertable<Long> {
     }
 
     public String getMonitorTmplId() {
-        return this.monitorTmplId;
+        return monitorTmplId;
     }
 
     public void setMonitorTmplId(String monitorTmplId) {
@@ -118,7 +140,7 @@ implements Insertable<Long> {
     }
 
     public Long getCycle() {
-        return this.cycle;
+        return cycle;
     }
 
     public void setCycle(Long cycle) {
@@ -126,7 +148,7 @@ implements Insertable<Long> {
     }
 
     public Long getFrequency() {
-        return this.frequency;
+        return frequency;
     }
 
     public void setFrequency(Long frequency) {
@@ -134,7 +156,7 @@ implements Insertable<Long> {
     }
 
     public String getSampleOrgId() {
-        return this.sampleOrgId;
+        return sampleOrgId;
     }
 
     public void setSampleOrgId(String sampleOrgId) {
@@ -142,23 +164,15 @@ implements Insertable<Long> {
     }
 
     public String getRemark() {
-        return this.remark;
+        return remark;
     }
 
     public void setRemark(String remark) {
         this.remark = remark;
     }
 
-    public String getReferFolder() {
-        return this.referFolder;
-    }
-
-    public void setReferFolder(String referFolder) {
-        this.referFolder = referFolder;
-    }
-
     public Long getErpGbId() {
-        return this.erpGbId;
+        return erpGbId;
     }
 
     public void setErpGbId(Long erpGbId) {
@@ -167,7 +181,7 @@ implements Insertable<Long> {
 
     @Override
     public String getCreatedById() {
-        return this.createdById;
+        return createdById;
     }
 
     @Override
@@ -177,7 +191,7 @@ implements Insertable<Long> {
 
     @Override
     public String getCreatedByName() {
-        return this.createdByName;
+        return createdByName;
     }
 
     @Override
@@ -187,7 +201,7 @@ implements Insertable<Long> {
 
     @Override
     public LocalDateTime getCreatedTime() {
-        return this.createdTime;
+        return createdTime;
     }
 
     @Override
@@ -197,7 +211,7 @@ implements Insertable<Long> {
 
     @Override
     public String getCreatedByOrgId() {
-        return this.createdByOrgId;
+        return createdByOrgId;
     }
 
     @Override
@@ -207,7 +221,7 @@ implements Insertable<Long> {
 
     @Override
     public String getCreatedByOrgName() {
-        return this.createdByOrgName;
+        return createdByOrgName;
     }
 
     @Override
@@ -216,11 +230,19 @@ implements Insertable<Long> {
     }
 
     public Long getSortNum() {
-        return this.sortNum;
+        return sortNum;
     }
 
     public void setSortNum(Long sortNum) {
         this.sortNum = sortNum;
     }
-}
 
+    private String referFolder;
+
+    public String getReferFolder() {
+        return this.referFolder;
+    }
+    public void setReferFolder(String referFolder) {
+        this.referFolder = referFolder;
+    }
+}

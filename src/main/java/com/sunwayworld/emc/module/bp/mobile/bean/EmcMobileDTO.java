@@ -1,7 +1,6 @@
-/*
- * Decompiled with CFR.
- */
 package com.sunwayworld.emc.module.bp.mobile.bean;
+
+import java.util.List;
 
 import com.sunwayworld.emc.module.bp.bp.bean.EmcFolderBean;
 import com.sunwayworld.emc.module.bp.bp.bean.EmcOrderBean;
@@ -21,8 +20,6 @@ import com.sunwayworld.emc.module.mdm.basemdm.propertytmpl.bean.EmcPropertyField
 import com.sunwayworld.emc.module.mdm.basemdm.qccategory.bean.EmcQcCategoryBean;
 import com.sunwayworld.emc.module.mdm.basemdm.testcategory.bean.EmcTestCategoryBean;
 import com.sunwayworld.emc.module.mdm.basemdm.unit.bean.EmcUnitBean;
-import com.sunwayworld.emc.module.mdm.bizmdm.capacity.bean.EmcCapacityItemBean;
-import com.sunwayworld.emc.module.mdm.bizmdm.capacity.bean.EmcCapacityItemGroupBean;
 import com.sunwayworld.emc.module.mdm.bizmdm.client.bean.EmcClientBean;
 import com.sunwayworld.emc.module.mdm.bizmdm.client.bean.EmcMonitorPointBean;
 import com.sunwayworld.emc.module.mdm.bizmdm.method.bean.EmcMethodBean;
@@ -32,7 +29,6 @@ import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcGroupItemBean;
 import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcItemBean;
 import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcItemGroupBean;
 import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcItemResultBean;
-import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcRelatedTestMethodBean;
 import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcTestBean;
 import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcTestMethodBean;
 import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcTestMethodEquiptBean;
@@ -44,60 +40,70 @@ import com.sunwayworld.emc.module.mdm.equipt.equiptcalibration.bean.EmcEquiptCal
 import com.sunwayworld.emc.module.mdm.equipt.equiptcalibration.bean.EmcEquiptCalibrationLineBean;
 import com.sunwayworld.module.item.file.bean.CoreFileBean;
 import com.sunwayworld.module.sys.code.bean.CoreCodeBean;
-import java.util.List;
+import com.sunwayworld.emc.module.mdm.bizmdm.capacity.bean.EmcCapacityItemBean;
+import com.sunwayworld.emc.module.mdm.bizmdm.capacity.bean.EmcCapacityItemGroupBean;
+import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcRelatedTestMethodBean;
 
-public class EmcMobileDTO {
+/**
+ * @author zhengxy@sunwayworld.com 2019年11月19日
+ */
+    public class EmcMobileDTO {
+
     private String message;
-    private List<EmcProjectBean> projectList;
-    private List<EmcFolderBean> folderList;
-    private List<EmcSampleBean> sampleList;
-    private List<EmcOrderBean> orderList;
+    /** 业务数据 */
+    private List<EmcProjectBean> projectList; // 项目列表
+    private List<EmcFolderBean> folderList; // 点位列表
+    private List<EmcSampleBean> sampleList; // 采样单列表
+    private List<EmcOrderBean> orderList; // 样品列表
     private List<EmcOrderContainerBean> orderContainerList;
-    private List<EmcOrderTaskBean> orderTaskList;
-    private List<EmcOrderTaskResultBean> orderTaskResultList;
-    private List<EmcPropertyDataBean> propertyDataList;
-    private List<CoreFileBean> projectFileList;
-    private List<EmcEquiptCalibrationBean> calibrationList;
-    private List<EmcEquiptCalibrationLineBean> calibrationLineList;
-    private List<EmcOrderItemGroupBean> orderItemGroupList;
-    private List<EmcEquiptRequisitionBean> requisitionList;
-    private List<String> operateTypeList;
-    private List<EmcEquiptBean> equiptList;
-    private List<EmcEmpBean> empList;
-    private List<EmcTestMethodEquiptBean> testMethodEquiptList;
+    private List<EmcOrderTaskBean> orderTaskList; // 样品测试列表
+    private List<EmcOrderTaskResultBean> orderTaskResultList; // 样品测试结果列表
+    private List<EmcPropertyDataBean> propertyDataList; // 属性值列表
+    private List<CoreFileBean> projectFileList; // 项目附件
+    private List<EmcEquiptCalibrationBean> calibrationList; // 仪器校准
+    private List<EmcEquiptCalibrationLineBean> calibrationLineList; // 仪器校准记录
+    private List<EmcOrderItemGroupBean> orderItemGroupList; // 样品分析项组
+    private List<EmcEquiptRequisitionBean> requisitionList; // 仪器领用出入库记录
+    /** 静态数据 */
+    private List<String> operateTypeList; // 操作类型
+    private List<EmcEquiptBean> equiptList; // 仪器列表
+    private List<EmcEmpBean> empList; // 人员列表
+    private List<EmcTestMethodEquiptBean> testMethodEquiptList; // 测试关联仪器列表
     private List<EmcEquiptTestMethodBean> equiptTestMethodList;
-    private List<EmcPropertyFieldBean> propertyFieldList;
-    private List<EmcMonitorTmplBean> monitorTmplList;
-    private List<EmcItemResultBean> itemResultList;
-    private List<CoreCodeBean> codeList;
-    private List<EmcMonitorPointBean> monitorPointList;
-    private List<EmcClientBean> clientList;
-    private List<EmcMonitorTmplGroupBean> monitorTmplGroupList;
-    private List<EmcMonitorSchemeBean> monitorSchemeList;
-    private List<EmcTestCategoryBean> testCategoryList;
-    private List<EmcTestBean> testList;
-    private List<EmcTestMethodBean> testMethodList;
-    private List<EmcMethodBean> methodList;
-    private List<EmcItemBean> itemList;
-    private List<EmcItemGroupBean> itemGroupList;
-    private List<EmcGroupItemBean> groupItemList;
-    private List<EmcContainerCategoryBean> containerCategoryBeanList;
-    private List<EmcEquiptCategoryBean> equiptCategoryList;
-    private List<EmcUnitBean> unitList;
-    private List<EmcQcCategoryBean> qcCategoryList;
-    private List<EmcMonitorPointCategoryBean> monitorPointCategoryList;
-    private List<EmcTestMethodOrderCategoryBean> testOrderCategoryList;
-    private List<EmcFolderBean> sampleParamFolderList;
-    private List<EmcOrderBean> sampleParamOrderList;
-    private List<EmcOrderTaskBean> sampleParamOrderTaskList;
-    private List<EmcOrderTaskResultBean> sampleParamOrderTaskResultList;
-    private List<EmcOrderItemGroupBean> sampleParamOrderItemGroupList;
-    private List<EmcCapacityItemGroupBean> capacityItemGroupList;
-    private List<EmcCapacityItemBean> capacityItemList;
-    private List<EmcRelatedTestMethodBean> relatedTestMethodList;
+    private List<EmcPropertyFieldBean> propertyFieldList; // 属性字段列表
+    private List<EmcMonitorTmplBean> monitorTmplList; // 监测模板列表
+    private List<EmcItemResultBean> itemResultList; // 测试分析项列表
+    private List<CoreCodeBean> codeList; // 系统编码列表
+    private List<EmcMonitorPointBean> monitorPointList; // 监测点列表
+    private List<EmcClientBean> clientList; // 客户列表
+    private List<EmcMonitorTmplGroupBean> monitorTmplGroupList; // 监测模板分组
+    private List<EmcMonitorSchemeBean> monitorSchemeList; // 监测方案
+    private List<EmcTestCategoryBean> testCategoryList; // 测试分类
+    private List<EmcTestBean> testList; // 测试库
+    private List<EmcTestMethodBean> testMethodList; // 测试方法
+    private List<EmcMethodBean> methodList; // 方法库
+    private List<EmcItemBean> itemList; // 分析项
+    private List<EmcItemGroupBean> itemGroupList; // 分析项组
+    private List<EmcGroupItemBean> groupItemList; // 分析项组分析项
+    private List<EmcContainerCategoryBean> containerCategoryBeanList; // 容器组
+    private List<EmcEquiptCategoryBean> equiptCategoryList; // 仪器类型
+    private List<EmcUnitBean> unitList; // 单位
+    private List<EmcQcCategoryBean> qcCategoryList; // QC类型
+    private List<EmcMonitorPointCategoryBean> monitorPointCategoryList; // 监测点类型
+    private List<EmcTestMethodOrderCategoryBean> testOrderCategoryList; // 测试样品类型
+
+    private List<EmcFolderBean> sampleParamFolderList; // 气的采样参数点位列表
+
+    private List<EmcOrderBean> sampleParamOrderList; // 气的采样参数样品列表
+
+    private List<EmcOrderTaskBean> sampleParamOrderTaskList; // 气的采样参数样品测试列表
+
+    private List<EmcOrderTaskResultBean> sampleParamOrderTaskResultList; // 气的采样参数样品测试结果列表
+
+    private List<EmcOrderItemGroupBean> sampleParamOrderItemGroupList; // 气的采样参数样品分析项组
 
     public String getMessage() {
-        return this.message;
+        return message;
     }
 
     public void setMessage(String message) {
@@ -105,7 +111,7 @@ public class EmcMobileDTO {
     }
 
     public List<EmcProjectBean> getProjectList() {
-        return this.projectList;
+        return projectList;
     }
 
     public void setProjectList(List<EmcProjectBean> projectList) {
@@ -113,7 +119,7 @@ public class EmcMobileDTO {
     }
 
     public List<EmcFolderBean> getFolderList() {
-        return this.folderList;
+        return folderList;
     }
 
     public void setFolderList(List<EmcFolderBean> folderList) {
@@ -121,7 +127,7 @@ public class EmcMobileDTO {
     }
 
     public List<EmcSampleBean> getSampleList() {
-        return this.sampleList;
+        return sampleList;
     }
 
     public void setSampleList(List<EmcSampleBean> sampleList) {
@@ -129,7 +135,7 @@ public class EmcMobileDTO {
     }
 
     public List<EmcOrderBean> getOrderList() {
-        return this.orderList;
+        return orderList;
     }
 
     public void setOrderList(List<EmcOrderBean> orderList) {
@@ -137,7 +143,7 @@ public class EmcMobileDTO {
     }
 
     public List<EmcOrderContainerBean> getOrderContainerList() {
-        return this.orderContainerList;
+        return orderContainerList;
     }
 
     public void setOrderContainerList(List<EmcOrderContainerBean> orderContainerList) {
@@ -145,7 +151,7 @@ public class EmcMobileDTO {
     }
 
     public List<EmcOrderTaskBean> getOrderTaskList() {
-        return this.orderTaskList;
+        return orderTaskList;
     }
 
     public void setOrderTaskList(List<EmcOrderTaskBean> orderTaskList) {
@@ -153,7 +159,7 @@ public class EmcMobileDTO {
     }
 
     public List<EmcOrderTaskResultBean> getOrderTaskResultList() {
-        return this.orderTaskResultList;
+        return orderTaskResultList;
     }
 
     public void setOrderTaskResultList(List<EmcOrderTaskResultBean> orderTaskResultList) {
@@ -161,7 +167,7 @@ public class EmcMobileDTO {
     }
 
     public List<EmcPropertyDataBean> getPropertyDataList() {
-        return this.propertyDataList;
+        return propertyDataList;
     }
 
     public void setPropertyDataList(List<EmcPropertyDataBean> propertyDataList) {
@@ -169,11 +175,11 @@ public class EmcMobileDTO {
     }
 
     public List<String> getOperateTypeList() {
-        return this.operateTypeList;
+        return operateTypeList;
     }
 
     public List<CoreFileBean> getProjectFileList() {
-        return this.projectFileList;
+        return projectFileList;
     }
 
     public void setProjectFileList(List<CoreFileBean> projectFileList) {
@@ -181,7 +187,7 @@ public class EmcMobileDTO {
     }
 
     public List<EmcEquiptCalibrationBean> getCalibrationList() {
-        return this.calibrationList;
+        return calibrationList;
     }
 
     public void setCalibrationList(List<EmcEquiptCalibrationBean> calibrationList) {
@@ -189,7 +195,7 @@ public class EmcMobileDTO {
     }
 
     public List<EmcEquiptCalibrationLineBean> getCalibrationLineList() {
-        return this.calibrationLineList;
+        return calibrationLineList;
     }
 
     public void setCalibrationLineList(List<EmcEquiptCalibrationLineBean> calibrationLineList) {
@@ -197,7 +203,7 @@ public class EmcMobileDTO {
     }
 
     public List<EmcEquiptRequisitionBean> getRequisitionList() {
-        return this.requisitionList;
+        return requisitionList;
     }
 
     public void setRequisitionList(List<EmcEquiptRequisitionBean> requisitionList) {
@@ -205,7 +211,7 @@ public class EmcMobileDTO {
     }
 
     public List<EmcOrderItemGroupBean> getOrderItemGroupList() {
-        return this.orderItemGroupList;
+        return orderItemGroupList;
     }
 
     public void setOrderItemGroupList(List<EmcOrderItemGroupBean> orderItemGroupList) {
@@ -217,7 +223,7 @@ public class EmcMobileDTO {
     }
 
     public List<EmcEquiptBean> getEquiptList() {
-        return this.equiptList;
+        return equiptList;
     }
 
     public void setEquiptList(List<EmcEquiptBean> equiptList) {
@@ -225,7 +231,7 @@ public class EmcMobileDTO {
     }
 
     public List<EmcEmpBean> getEmpList() {
-        return this.empList;
+        return empList;
     }
 
     public void setEmpList(List<EmcEmpBean> empList) {
@@ -233,7 +239,7 @@ public class EmcMobileDTO {
     }
 
     public List<EmcTestMethodEquiptBean> getTestMethodEquiptList() {
-        return this.testMethodEquiptList;
+        return testMethodEquiptList;
     }
 
     public void setTestMethodEquiptList(List<EmcTestMethodEquiptBean> testMethodEquiptList) {
@@ -241,7 +247,7 @@ public class EmcMobileDTO {
     }
 
     public List<EmcEquiptTestMethodBean> getEquiptTestMethodList() {
-        return this.equiptTestMethodList;
+        return equiptTestMethodList;
     }
 
     public void setEquiptTestMethodList(List<EmcEquiptTestMethodBean> equiptTestMethodList) {
@@ -249,7 +255,7 @@ public class EmcMobileDTO {
     }
 
     public List<EmcPropertyFieldBean> getPropertyFieldList() {
-        return this.propertyFieldList;
+        return propertyFieldList;
     }
 
     public void setPropertyFieldList(List<EmcPropertyFieldBean> propertyFieldList) {
@@ -257,7 +263,7 @@ public class EmcMobileDTO {
     }
 
     public List<EmcMonitorTmplBean> getMonitorTmplList() {
-        return this.monitorTmplList;
+        return monitorTmplList;
     }
 
     public void setMonitorTmplList(List<EmcMonitorTmplBean> monitorTmplList) {
@@ -265,7 +271,7 @@ public class EmcMobileDTO {
     }
 
     public List<EmcItemResultBean> getItemResultList() {
-        return this.itemResultList;
+        return itemResultList;
     }
 
     public void setItemResultList(List<EmcItemResultBean> itemResultList) {
@@ -273,7 +279,7 @@ public class EmcMobileDTO {
     }
 
     public List<CoreCodeBean> getCodeList() {
-        return this.codeList;
+        return codeList;
     }
 
     public void setCodeList(List<CoreCodeBean> codeList) {
@@ -281,7 +287,7 @@ public class EmcMobileDTO {
     }
 
     public List<EmcMonitorPointBean> getMonitorPointList() {
-        return this.monitorPointList;
+        return monitorPointList;
     }
 
     public void setMonitorPointList(List<EmcMonitorPointBean> monitorPointList) {
@@ -289,7 +295,7 @@ public class EmcMobileDTO {
     }
 
     public List<EmcClientBean> getClientList() {
-        return this.clientList;
+        return clientList;
     }
 
     public void setClientList(List<EmcClientBean> clientList) {
@@ -297,7 +303,7 @@ public class EmcMobileDTO {
     }
 
     public List<EmcMonitorTmplGroupBean> getMonitorTmplGroupList() {
-        return this.monitorTmplGroupList;
+        return monitorTmplGroupList;
     }
 
     public void setMonitorTmplGroupList(List<EmcMonitorTmplGroupBean> monitorTmplGroupList) {
@@ -305,7 +311,7 @@ public class EmcMobileDTO {
     }
 
     public List<EmcMonitorSchemeBean> getMonitorSchemeList() {
-        return this.monitorSchemeList;
+        return monitorSchemeList;
     }
 
     public void setMonitorSchemeList(List<EmcMonitorSchemeBean> monitorSchemeList) {
@@ -313,7 +319,7 @@ public class EmcMobileDTO {
     }
 
     public List<EmcTestCategoryBean> getTestCategoryList() {
-        return this.testCategoryList;
+        return testCategoryList;
     }
 
     public void setTestCategoryList(List<EmcTestCategoryBean> testCategoryList) {
@@ -321,7 +327,7 @@ public class EmcMobileDTO {
     }
 
     public List<EmcTestBean> getTestList() {
-        return this.testList;
+        return testList;
     }
 
     public void setTestList(List<EmcTestBean> testList) {
@@ -329,7 +335,7 @@ public class EmcMobileDTO {
     }
 
     public List<EmcTestMethodBean> getTestMethodList() {
-        return this.testMethodList;
+        return testMethodList;
     }
 
     public void setTestMethodList(List<EmcTestMethodBean> testMethodList) {
@@ -337,7 +343,7 @@ public class EmcMobileDTO {
     }
 
     public List<EmcMethodBean> getMethodList() {
-        return this.methodList;
+        return methodList;
     }
 
     public void setMethodList(List<EmcMethodBean> methodList) {
@@ -345,7 +351,7 @@ public class EmcMobileDTO {
     }
 
     public List<EmcItemBean> getItemList() {
-        return this.itemList;
+        return itemList;
     }
 
     public void setItemList(List<EmcItemBean> itemList) {
@@ -353,7 +359,7 @@ public class EmcMobileDTO {
     }
 
     public List<EmcItemGroupBean> getItemGroupList() {
-        return this.itemGroupList;
+        return itemGroupList;
     }
 
     public void setItemGroupList(List<EmcItemGroupBean> itemGroupList) {
@@ -361,7 +367,7 @@ public class EmcMobileDTO {
     }
 
     public List<EmcGroupItemBean> getGroupItemList() {
-        return this.groupItemList;
+        return groupItemList;
     }
 
     public void setGroupItemList(List<EmcGroupItemBean> groupItemList) {
@@ -369,7 +375,7 @@ public class EmcMobileDTO {
     }
 
     public List<EmcContainerCategoryBean> getContainerCategoryBeanList() {
-        return this.containerCategoryBeanList;
+        return containerCategoryBeanList;
     }
 
     public void setContainerCategoryBeanList(List<EmcContainerCategoryBean> containerCategoryBeanList) {
@@ -377,7 +383,7 @@ public class EmcMobileDTO {
     }
 
     public List<EmcEquiptCategoryBean> getEquiptCategoryList() {
-        return this.equiptCategoryList;
+        return equiptCategoryList;
     }
 
     public void setEquiptCategoryList(List<EmcEquiptCategoryBean> equiptCategoryList) {
@@ -385,7 +391,7 @@ public class EmcMobileDTO {
     }
 
     public List<EmcUnitBean> getUnitList() {
-        return this.unitList;
+        return unitList;
     }
 
     public void setUnitList(List<EmcUnitBean> unitList) {
@@ -393,7 +399,7 @@ public class EmcMobileDTO {
     }
 
     public List<EmcQcCategoryBean> getQcCategoryList() {
-        return this.qcCategoryList;
+        return qcCategoryList;
     }
 
     public void setQcCategoryList(List<EmcQcCategoryBean> qcCategoryList) {
@@ -401,7 +407,7 @@ public class EmcMobileDTO {
     }
 
     public List<EmcMonitorPointCategoryBean> getMonitorPointCategoryList() {
-        return this.monitorPointCategoryList;
+        return monitorPointCategoryList;
     }
 
     public void setMonitorPointCategoryList(List<EmcMonitorPointCategoryBean> monitorPointCategoryList) {
@@ -409,7 +415,7 @@ public class EmcMobileDTO {
     }
 
     public List<EmcTestMethodOrderCategoryBean> getTestOrderCategoryList() {
-        return this.testOrderCategoryList;
+        return testOrderCategoryList;
     }
 
     public void setTestOrderCategoryList(List<EmcTestMethodOrderCategoryBean> testOrderCategoryList) {
@@ -417,7 +423,7 @@ public class EmcMobileDTO {
     }
 
     public List<EmcFolderBean> getSampleParamFolderList() {
-        return this.sampleParamFolderList;
+        return sampleParamFolderList;
     }
 
     public void setSampleParamFolderList(List<EmcFolderBean> sampleParamFolderList) {
@@ -425,7 +431,7 @@ public class EmcMobileDTO {
     }
 
     public List<EmcOrderBean> getSampleParamOrderList() {
-        return this.sampleParamOrderList;
+        return sampleParamOrderList;
     }
 
     public void setSampleParamOrderList(List<EmcOrderBean> sampleParamOrderList) {
@@ -433,7 +439,7 @@ public class EmcMobileDTO {
     }
 
     public List<EmcOrderTaskBean> getSampleParamOrderTaskList() {
-        return this.sampleParamOrderTaskList;
+        return sampleParamOrderTaskList;
     }
 
     public void setSampleParamOrderTaskList(List<EmcOrderTaskBean> sampleParamOrderTaskList) {
@@ -441,7 +447,7 @@ public class EmcMobileDTO {
     }
 
     public List<EmcOrderTaskResultBean> getSampleParamOrderTaskResultList() {
-        return this.sampleParamOrderTaskResultList;
+        return sampleParamOrderTaskResultList;
     }
 
     public void setSampleParamOrderTaskResultList(List<EmcOrderTaskResultBean> sampleParamOrderTaskResultList) {
@@ -449,39 +455,84 @@ public class EmcMobileDTO {
     }
 
     public List<EmcOrderItemGroupBean> getSampleParamOrderItemGroupList() {
-        return this.sampleParamOrderItemGroupList;
+        return sampleParamOrderItemGroupList;
     }
 
     public void setSampleParamOrderItemGroupList(List<EmcOrderItemGroupBean> sampleParamOrderItemGroupList) {
         this.sampleParamOrderItemGroupList = sampleParamOrderItemGroupList;
     }
 
+    @Override
     public String toString() {
-        return "EmcMobileDTO{message='" + this.message + '\'' + ", projectList=" + this.projectList + ", folderList=" + this.folderList + ", sampleList=" + this.sampleList + ", orderList=" + this.orderList + ", orderContainerList=" + this.orderContainerList + ", orderTaskList=" + this.orderTaskList + ", orderTaskResultList=" + this.orderTaskResultList + ", propertyDataList=" + this.propertyDataList + ", projectFileList=" + this.projectFileList + ", calibrationList=" + this.calibrationList + ", calibrationLineList=" + this.calibrationLineList + ", orderItemGroupList=" + this.orderItemGroupList + ", requisitionList=" + this.requisitionList + ", operateTypeList=" + this.operateTypeList + ", equiptList=" + this.equiptList + ", empList=" + this.empList + ", testMethodEquiptList=" + this.testMethodEquiptList + ", equiptTestMethodList=" + this.equiptTestMethodList + ", propertyFieldList=" + this.propertyFieldList + ", monitorTmplList=" + this.monitorTmplList + ", itemResultList=" + this.itemResultList + ", codeList=" + this.codeList + ", monitorPointList=" + this.monitorPointList + ", clientList=" + this.clientList + ", monitorTmplGroupList=" + this.monitorTmplGroupList + ", monitorSchemeList=" + this.monitorSchemeList + ", testCategoryList=" + this.testCategoryList + ", testList=" + this.testList + ", testMethodList=" + this.testMethodList + ", methodList=" + this.methodList + ", itemList=" + this.itemList + ", itemGroupList=" + this.itemGroupList + ", groupItemList=" + this.groupItemList + ", containerCategoryBeanList=" + this.containerCategoryBeanList + ", equiptCategoryList=" + this.equiptCategoryList + ", unitList=" + this.unitList + ", qcCategoryList=" + this.qcCategoryList + ", monitorPointCategoryList=" + this.monitorPointCategoryList + ", testOrderCategoryList=" + this.testOrderCategoryList + ", sampleParamFolderList=" + this.sampleParamFolderList + ", sampleParamOrderList=" + this.sampleParamOrderList + ", sampleParamOrderTaskList=" + this.sampleParamOrderTaskList + ", sampleParamOrderTaskResultList=" + this.sampleParamOrderTaskResultList + ", sampleParamOrderItemGroupList=" + this.sampleParamOrderItemGroupList + '}';
+        return "EmcMobileDTO{" +
+                "message='" + message + '\'' +
+                ", projectList=" + projectList +
+                ", folderList=" + folderList +
+                ", sampleList=" + sampleList +
+                ", orderList=" + orderList +
+                ", orderContainerList=" + orderContainerList +
+                ", orderTaskList=" + orderTaskList +
+                ", orderTaskResultList=" + orderTaskResultList +
+                ", propertyDataList=" + propertyDataList +
+                ", projectFileList=" + projectFileList +
+                ", calibrationList=" + calibrationList +
+                ", calibrationLineList=" + calibrationLineList +
+                ", orderItemGroupList=" + orderItemGroupList +
+                ", requisitionList=" + requisitionList +
+                ", operateTypeList=" + operateTypeList +
+                ", equiptList=" + equiptList +
+                ", empList=" + empList +
+                ", testMethodEquiptList=" + testMethodEquiptList +
+                ", equiptTestMethodList=" + equiptTestMethodList +
+                ", propertyFieldList=" + propertyFieldList +
+                ", monitorTmplList=" + monitorTmplList +
+                ", itemResultList=" + itemResultList +
+                ", codeList=" + codeList +
+                ", monitorPointList=" + monitorPointList +
+                ", clientList=" + clientList +
+                ", monitorTmplGroupList=" + monitorTmplGroupList +
+                ", monitorSchemeList=" + monitorSchemeList +
+                ", testCategoryList=" + testCategoryList +
+                ", testList=" + testList +
+                ", testMethodList=" + testMethodList +
+                ", methodList=" + methodList +
+                ", itemList=" + itemList +
+                ", itemGroupList=" + itemGroupList +
+                ", groupItemList=" + groupItemList +
+                ", containerCategoryBeanList=" + containerCategoryBeanList +
+                ", equiptCategoryList=" + equiptCategoryList +
+                ", unitList=" + unitList +
+                ", qcCategoryList=" + qcCategoryList +
+                ", monitorPointCategoryList=" + monitorPointCategoryList +
+                ", testOrderCategoryList=" + testOrderCategoryList +
+                ", sampleParamFolderList=" + sampleParamFolderList +
+                ", sampleParamOrderList=" + sampleParamOrderList +
+                ", sampleParamOrderTaskList=" + sampleParamOrderTaskList +
+                ", sampleParamOrderTaskResultList=" + sampleParamOrderTaskResultList +
+                ", sampleParamOrderItemGroupList=" + sampleParamOrderItemGroupList +
+                '}';
     }
+
+    private List<EmcCapacityItemGroupBean> capacityItemGroupList;
+    private List<EmcCapacityItemBean> capacityItemList;
+    private List<EmcRelatedTestMethodBean> relatedTestMethodList;
 
     public List<EmcCapacityItemGroupBean> getCapacityItemGroupList() {
         return this.capacityItemGroupList;
     }
-
     public void setCapacityItemGroupList(List<EmcCapacityItemGroupBean> capacityItemGroupList) {
         this.capacityItemGroupList = capacityItemGroupList;
     }
-
     public List<EmcCapacityItemBean> getCapacityItemList() {
         return this.capacityItemList;
     }
-
     public void setCapacityItemList(List<EmcCapacityItemBean> capacityItemList) {
         this.capacityItemList = capacityItemList;
     }
-
     public List<EmcRelatedTestMethodBean> getRelatedTestMethodList() {
         return this.relatedTestMethodList;
     }
-
     public void setRelatedTestMethodList(List<EmcRelatedTestMethodBean> relatedTestMethodList) {
         this.relatedTestMethodList = relatedTestMethodList;
     }
 }
-

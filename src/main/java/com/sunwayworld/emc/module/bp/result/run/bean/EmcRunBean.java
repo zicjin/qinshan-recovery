@@ -1,9 +1,12 @@
-/*
- * Decompiled with CFR.
- */
 package com.sunwayworld.emc.module.bp.result.run.bean;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
 import com.alibaba.fastjson.annotation.JSONField;
+import com.sunwayworld.emc.framework.constant.EmcBizConstant;
 import com.sunwayworld.framework.data.annotation.Clob;
 import com.sunwayworld.framework.data.annotation.Id;
 import com.sunwayworld.framework.data.annotation.NotNull;
@@ -11,107 +14,103 @@ import com.sunwayworld.framework.data.annotation.Table;
 import com.sunwayworld.framework.data.annotation.Transient;
 import com.sunwayworld.framework.support.domain.AbstractAuditable;
 import com.sunwayworld.framework.support.domain.Insertable;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import org.springframework.format.annotation.DateTimeFormat;
 
-@Table(value="T_EMC_RUN")
-public class EmcRunBean
-extends AbstractAuditable<String>
-implements Insertable<String> {
-    @Transient
-    private static final long serialVersionUID = 4908341682974050355L;
-    @Id
-    private String id;
-    private Long projId;
-    private String humidity;
-    private String temperature;
-    @JSONField(format="yyyy-MM-dd")
-    @DateTimeFormat(pattern="yyyy-MM-dd")
-    private LocalDate analysisBeginDate;
-    private String analysisBeginTime;
-    @JSONField(format="yyyy-MM-dd")
-    @DateTimeFormat(pattern="yyyy-MM-dd")
-    private LocalDate analysisEndDate;
-    private String analysisEndTime;
-    private String receiveDate;
-    private String receiveTime;
-    @JSONField(format="yyyy-MM-dd")
-    @DateTimeFormat(pattern="yyyy-MM-dd")
-    private LocalDate handleDate;
-    private String handleMethod;
+/**
+ * 样品测试批表
+ *
+ * @author magt@sunwayworld.com 2019/10/16
+ *
+ */
+@Table("T_EMC_RUN")
+    public class EmcRunBean extends AbstractAuditable<String> implements Insertable<String> {
+
+	@Transient
+	private static final long serialVersionUID = 4908341682974050355L;
+
+	@Id
+    private String id; // 批号
+    private Long projId;// 项目编码
+    private String humidity; // 湿度
+    private String temperature; // 温度
+    @JSONField(format = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate analysisBeginDate; // 分析开始日期
+    private String analysisBeginTime; // 分析开始时间
+    @JSONField(format = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate analysisEndDate; // 分析结束日期
+    private String analysisEndTime; // 分析结束时间
+    private String receiveDate; // 领样日期
+    private String receiveTime; // 领样时间
+    @JSONField(format = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate handleDate; // 处置日期
+    private String handleMethod; // 处置方式
     @Clob
-    private String beforeHandle;
-    private String beforeHandleId;
-    private String methodParam;
-    private String analysisUserId;
-    private String analysisUserName;
-    private String partakeUserId;
-    private String partakeUserName;
-    private String assistEquiptId;
-    private String assistEquiptName;
-    private Long equiptId;
-    private String curveId;
-    private String curveNo;
-    private String orderCategory;
-    private String checkUserId;
-    private String checkUserName;
-    private String testMethodId;
-    private String testId;
-    private String testName;
-    private Long methodId;
-    private Long reportConfigLineId;
+    private String beforeHandle; // 前处理
+    private String beforeHandleId; // 前处理id
+    private String methodParam; // 方法参数
+    private String analysisUserId; // 分析员编码
+    private String analysisUserName; // 分析员
+    private String partakeUserId; // 共同完成人编码
+    private String partakeUserName; // 共同完成人
+    private String assistEquiptId; // 辅助仪器
+    private String assistEquiptName; // 辅助仪器名称
+    private Long equiptId; // 现场仪器
+    private String curveId;// 曲线ID
+    private String curveNo; // 曲线编码
+    private String orderCategory; // 样品类型
+    private String checkUserId; // 校核人编码
+    private String checkUserName; // 校核人
+    private String testMethodId; // 测试方法编码
+    private String testId; // 测试编码
+    private String testName; // 测试名称
+    private Long methodId; // 测试编码
+    private Long reportConfigLineId; // 报表模版id
     private Long sol1Id;
     private Long sol2Id;
     private Long reagentId;
-    @NotNull(defaultValue="draft")
+    @NotNull(defaultValue = EmcBizConstant.RUN_STATUS_DRAFT)
     private String status;
-    private String checkStatus;
-    private String assistEquiptModel;
-    private String assistEquiptNo;
-    private String relatedRunId;
-    private String remark;
+
+    private String checkStatus; // 预审状态
+    private String assistEquiptModel; // 辅助仪器名称型号
+    private String assistEquiptNo; // 辅助仪器编号
+    private String relatedRunId; // 关联批号（用于多批次共用同一实验室空白质控样数据情况）
+    private String remark; // 备注
+
     private String createdById;
     private String createdByName;
-    @JSONField(format="yyyy-MM-dd")
-    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @JSONField(format = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdTime;
     private String createdByOrgId;
     private String createdByOrgName;
-    private String orgId;
-    private String orgName;
+    private String orgId;// 所属单位编码
+    private String orgName;// 所属单位名称
     private String auditedUserId;
     private String auditedUserName;
-    @JSONField(format="yyyy-MM-dd")
-    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @JSONField(format = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime auditedDate;
-    private String sol1Amount;
-    private String sol2Amount;
-    private String projNo;
-    @JSONField(format="yyyy-MM-dd HH:mm:ss")
-    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+
+    private String sol1Amount;//溶液1使用量(新锐)
+
+    private String sol2Amount;//溶液2使用量(新锐)
+
+    private String projNo;//项目编号
+
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime weightTime;
-    private Long weighingReportLineId;
-    private String undoReason;
-    private String undoFlag;
-    private String stNo;
-    private String stConcent;
-    @JSONField(format="yyyy-MM-dd")
-    @DateTimeFormat(pattern="yyyy-MM-dd")
-    private LocalDate stValiDate;
-    private String stValiDateStr;
 
-    public String getUndoFlag() {
-        return this.undoFlag;
-    }
+    private Long weighingReportLineId; // 称重记录模板
 
-    public void setUndoFlag(String undoFlag) {
-        this.undoFlag = undoFlag;
-    }
+    private String undoReason; // 回退原因
 
     @Override
     public String getId() {
-        return this.id;
+        return id;
     }
 
     @Override
@@ -120,7 +119,7 @@ implements Insertable<String> {
     }
 
     public Long getProjId() {
-        return this.projId;
+        return projId;
     }
 
     public void setProjId(Long projId) {
@@ -128,7 +127,7 @@ implements Insertable<String> {
     }
 
     public String getHumidity() {
-        return this.humidity;
+        return humidity;
     }
 
     public void setHumidity(String humidity) {
@@ -136,7 +135,7 @@ implements Insertable<String> {
     }
 
     public String getTemperature() {
-        return this.temperature;
+        return temperature;
     }
 
     public void setTemperature(String temperature) {
@@ -144,7 +143,7 @@ implements Insertable<String> {
     }
 
     public LocalDate getAnalysisBeginDate() {
-        return this.analysisBeginDate;
+        return analysisBeginDate;
     }
 
     public void setAnalysisBeginDate(LocalDate analysisBeginDate) {
@@ -152,7 +151,7 @@ implements Insertable<String> {
     }
 
     public String getAnalysisBeginTime() {
-        return this.analysisBeginTime;
+        return analysisBeginTime;
     }
 
     public void setAnalysisBeginTime(String analysisBeginTime) {
@@ -160,7 +159,7 @@ implements Insertable<String> {
     }
 
     public LocalDate getAnalysisEndDate() {
-        return this.analysisEndDate;
+        return analysisEndDate;
     }
 
     public void setAnalysisEndDate(LocalDate analysisEndDate) {
@@ -168,7 +167,7 @@ implements Insertable<String> {
     }
 
     public String getAnalysisEndTime() {
-        return this.analysisEndTime;
+        return analysisEndTime;
     }
 
     public void setAnalysisEndTime(String analysisEndTime) {
@@ -176,7 +175,7 @@ implements Insertable<String> {
     }
 
     public String getReceiveDate() {
-        return this.receiveDate;
+        return receiveDate;
     }
 
     public void setReceiveDate(String receiveDate) {
@@ -184,7 +183,7 @@ implements Insertable<String> {
     }
 
     public String getReceiveTime() {
-        return this.receiveTime;
+        return receiveTime;
     }
 
     public void setReceiveTime(String receiveTime) {
@@ -192,7 +191,7 @@ implements Insertable<String> {
     }
 
     public LocalDate getHandleDate() {
-        return this.handleDate;
+        return handleDate;
     }
 
     public void setHandleDate(LocalDate handleDate) {
@@ -200,7 +199,7 @@ implements Insertable<String> {
     }
 
     public String getHandleMethod() {
-        return this.handleMethod;
+        return handleMethod;
     }
 
     public void setHandleMethod(String handleMethod) {
@@ -208,7 +207,7 @@ implements Insertable<String> {
     }
 
     public String getBeforeHandle() {
-        return this.beforeHandle;
+        return beforeHandle;
     }
 
     public void setBeforeHandle(String beforeHandle) {
@@ -216,7 +215,7 @@ implements Insertable<String> {
     }
 
     public String getMethodParam() {
-        return this.methodParam;
+        return methodParam;
     }
 
     public void setMethodParam(String methodParam) {
@@ -224,7 +223,7 @@ implements Insertable<String> {
     }
 
     public String getAnalysisUserId() {
-        return this.analysisUserId;
+        return analysisUserId;
     }
 
     public void setAnalysisUserId(String analysisUserId) {
@@ -232,7 +231,7 @@ implements Insertable<String> {
     }
 
     public String getAnalysisUserName() {
-        return this.analysisUserName;
+        return analysisUserName;
     }
 
     public void setAnalysisUserName(String analysisUserName) {
@@ -240,7 +239,7 @@ implements Insertable<String> {
     }
 
     public String getPartakeUserId() {
-        return this.partakeUserId;
+        return partakeUserId;
     }
 
     public void setPartakeUserId(String partakeUserId) {
@@ -248,7 +247,7 @@ implements Insertable<String> {
     }
 
     public String getPartakeUserName() {
-        return this.partakeUserName;
+        return partakeUserName;
     }
 
     public void setPartakeUserName(String partakeUserName) {
@@ -256,7 +255,7 @@ implements Insertable<String> {
     }
 
     public String getAssistEquiptId() {
-        return this.assistEquiptId;
+        return assistEquiptId;
     }
 
     public void setAssistEquiptId(String assistEquiptId) {
@@ -264,7 +263,7 @@ implements Insertable<String> {
     }
 
     public String getAssistEquiptName() {
-        return this.assistEquiptName;
+        return assistEquiptName;
     }
 
     public void setAssistEquiptName(String assistEquiptName) {
@@ -272,7 +271,7 @@ implements Insertable<String> {
     }
 
     public Long getEquiptId() {
-        return this.equiptId;
+        return equiptId;
     }
 
     public void setEquiptId(Long equiptId) {
@@ -280,7 +279,7 @@ implements Insertable<String> {
     }
 
     public String getCurveId() {
-        return this.curveId;
+        return curveId;
     }
 
     public void setCurveId(String curveId) {
@@ -288,7 +287,7 @@ implements Insertable<String> {
     }
 
     public String getCurveNo() {
-        return this.curveNo;
+        return curveNo;
     }
 
     public void setCurveNo(String curveNo) {
@@ -296,7 +295,7 @@ implements Insertable<String> {
     }
 
     public String getOrderCategory() {
-        return this.orderCategory;
+        return orderCategory;
     }
 
     public void setOrderCategory(String orderCategory) {
@@ -304,7 +303,7 @@ implements Insertable<String> {
     }
 
     public String getCheckUserId() {
-        return this.checkUserId;
+        return checkUserId;
     }
 
     public void setCheckUserId(String checkUserId) {
@@ -312,7 +311,7 @@ implements Insertable<String> {
     }
 
     public String getCheckUserName() {
-        return this.checkUserName;
+        return checkUserName;
     }
 
     public void setCheckUserName(String checkUserName) {
@@ -320,7 +319,7 @@ implements Insertable<String> {
     }
 
     public String getTestMethodId() {
-        return this.testMethodId;
+        return testMethodId;
     }
 
     public void setTestMethodId(String testMethodId) {
@@ -328,7 +327,7 @@ implements Insertable<String> {
     }
 
     public String getTestId() {
-        return this.testId;
+        return testId;
     }
 
     public void setTestId(String testId) {
@@ -336,7 +335,7 @@ implements Insertable<String> {
     }
 
     public String getTestName() {
-        return this.testName;
+        return testName;
     }
 
     public void setTestName(String testName) {
@@ -344,7 +343,7 @@ implements Insertable<String> {
     }
 
     public Long getMethodId() {
-        return this.methodId;
+        return methodId;
     }
 
     public void setMethodId(Long methodId) {
@@ -352,7 +351,7 @@ implements Insertable<String> {
     }
 
     public Long getReportConfigLineId() {
-        return this.reportConfigLineId;
+        return reportConfigLineId;
     }
 
     public void setReportConfigLineId(Long reportConfigLineId) {
@@ -360,7 +359,7 @@ implements Insertable<String> {
     }
 
     public Long getSol1Id() {
-        return this.sol1Id;
+        return sol1Id;
     }
 
     public void setSol1Id(Long sol1Id) {
@@ -368,7 +367,7 @@ implements Insertable<String> {
     }
 
     public Long getSol2Id() {
-        return this.sol2Id;
+        return sol2Id;
     }
 
     public void setSol2Id(Long sol2Id) {
@@ -376,7 +375,7 @@ implements Insertable<String> {
     }
 
     public Long getReagentId() {
-        return this.reagentId;
+        return reagentId;
     }
 
     public void setReagentId(Long reagentId) {
@@ -384,7 +383,7 @@ implements Insertable<String> {
     }
 
     public String getStatus() {
-        return this.status;
+        return status;
     }
 
     public void setStatus(String status) {
@@ -392,7 +391,7 @@ implements Insertable<String> {
     }
 
     public String getCheckStatus() {
-        return this.checkStatus;
+        return checkStatus;
     }
 
     public void setCheckStatus(String checkStatus) {
@@ -400,7 +399,7 @@ implements Insertable<String> {
     }
 
     public String getAssistEquiptModel() {
-        return this.assistEquiptModel;
+        return assistEquiptModel;
     }
 
     public void setAssistEquiptModel(String assistEquiptModel) {
@@ -408,7 +407,7 @@ implements Insertable<String> {
     }
 
     public String getAssistEquiptNo() {
-        return this.assistEquiptNo;
+        return assistEquiptNo;
     }
 
     public void setAssistEquiptNo(String assistEquiptNo) {
@@ -416,7 +415,7 @@ implements Insertable<String> {
     }
 
     public String getRelatedRunId() {
-        return this.relatedRunId;
+        return relatedRunId;
     }
 
     public void setRelatedRunId(String relatedRunId) {
@@ -424,7 +423,7 @@ implements Insertable<String> {
     }
 
     public String getRemark() {
-        return this.remark;
+        return remark;
     }
 
     public void setRemark(String remark) {
@@ -433,7 +432,7 @@ implements Insertable<String> {
 
     @Override
     public String getCreatedById() {
-        return this.createdById;
+        return createdById;
     }
 
     @Override
@@ -443,7 +442,7 @@ implements Insertable<String> {
 
     @Override
     public String getCreatedByName() {
-        return this.createdByName;
+        return createdByName;
     }
 
     @Override
@@ -453,7 +452,7 @@ implements Insertable<String> {
 
     @Override
     public LocalDateTime getCreatedTime() {
-        return this.createdTime;
+        return createdTime;
     }
 
     @Override
@@ -463,7 +462,7 @@ implements Insertable<String> {
 
     @Override
     public String getCreatedByOrgId() {
-        return this.createdByOrgId;
+        return createdByOrgId;
     }
 
     @Override
@@ -473,7 +472,7 @@ implements Insertable<String> {
 
     @Override
     public String getCreatedByOrgName() {
-        return this.createdByOrgName;
+        return createdByOrgName;
     }
 
     @Override
@@ -482,7 +481,7 @@ implements Insertable<String> {
     }
 
     public String getAuditedUserId() {
-        return this.auditedUserId;
+        return auditedUserId;
     }
 
     public void setAuditedUserId(String auditedUserId) {
@@ -490,7 +489,7 @@ implements Insertable<String> {
     }
 
     public String getAuditedUserName() {
-        return this.auditedUserName;
+        return auditedUserName;
     }
 
     public void setAuditedUserName(String auditedUserName) {
@@ -498,7 +497,7 @@ implements Insertable<String> {
     }
 
     public LocalDateTime getAuditedDate() {
-        return this.auditedDate;
+        return auditedDate;
     }
 
     public void setAuditedDate(LocalDateTime auditedDate) {
@@ -506,7 +505,7 @@ implements Insertable<String> {
     }
 
     public String getOrgId() {
-        return this.orgId;
+        return orgId;
     }
 
     public void setOrgId(String orgId) {
@@ -514,7 +513,7 @@ implements Insertable<String> {
     }
 
     public String getOrgName() {
-        return this.orgName;
+        return orgName;
     }
 
     public void setOrgName(String orgName) {
@@ -522,7 +521,7 @@ implements Insertable<String> {
     }
 
     public String getBeforeHandleId() {
-        return this.beforeHandleId;
+        return beforeHandleId;
     }
 
     public void setBeforeHandleId(String beforeHandleId) {
@@ -530,7 +529,7 @@ implements Insertable<String> {
     }
 
     public String getSol1Amount() {
-        return this.sol1Amount;
+        return sol1Amount;
     }
 
     public void setSol1Amount(String sol1Amount) {
@@ -538,7 +537,7 @@ implements Insertable<String> {
     }
 
     public String getSol2Amount() {
-        return this.sol2Amount;
+        return sol2Amount;
     }
 
     public void setSol2Amount(String sol2Amount) {
@@ -546,7 +545,7 @@ implements Insertable<String> {
     }
 
     public String getProjNo() {
-        return this.projNo;
+        return projNo;
     }
 
     public void setProjNo(String projNo) {
@@ -554,7 +553,7 @@ implements Insertable<String> {
     }
 
     public LocalDateTime getWeightTime() {
-        return this.weightTime;
+        return weightTime;
     }
 
     public void setWeightTime(LocalDateTime weightTime) {
@@ -562,7 +561,7 @@ implements Insertable<String> {
     }
 
     public Long getWeighingReportLineId() {
-        return this.weighingReportLineId;
+        return weighingReportLineId;
     }
 
     public void setWeighingReportLineId(Long weighingReportLineId) {
@@ -570,43 +569,49 @@ implements Insertable<String> {
     }
 
     public String getUndoReason() {
-        return this.undoReason;
+        return undoReason;
     }
 
     public void setUndoReason(String undoReason) {
         this.undoReason = undoReason;
     }
 
+    private String undoFlag;
+    private String stNo;
+    private String stConcent;
+    @JSONField(format = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate stValiDate;
+    private String stValiDateStr;
+
+    public String getUndoFlag() {
+        return this.undoFlag;
+    }
+    public void setUndoFlag(String undoFlag) {
+        this.undoFlag = undoFlag;
+    }
     public String getStNo() {
         return this.stNo;
     }
-
     public void setStNo(String stNo) {
         this.stNo = stNo;
     }
-
     public String getStConcent() {
         return this.stConcent;
     }
-
     public void setStConcent(String stConcent) {
         this.stConcent = stConcent;
     }
-
     public LocalDate getStValiDate() {
         return this.stValiDate;
     }
-
     public void setStValiDate(LocalDate stValiDate) {
         this.stValiDate = stValiDate;
     }
-
     public String getStValiDateStr() {
         return this.stValiDateStr;
     }
-
     public void setStValiDateStr(String stValiDateStr) {
         this.stValiDateStr = stValiDateStr;
     }
 }
-

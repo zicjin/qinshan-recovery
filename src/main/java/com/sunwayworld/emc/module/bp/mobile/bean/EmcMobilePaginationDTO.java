@@ -1,14 +1,12 @@
-/*
- * Decompiled with CFR.
- */
 package com.sunwayworld.emc.module.bp.mobile.bean;
+
+import java.util.List;
 
 import com.sunwayworld.emc.module.bp.bp.bean.EmcFolderBean;
 import com.sunwayworld.emc.module.bp.bp.bean.EmcOrderBean;
 import com.sunwayworld.emc.module.bp.bp.bean.EmcOrderContainerBean;
 import com.sunwayworld.emc.module.bp.bp.bean.EmcOrderTaskBean;
 import com.sunwayworld.emc.module.bp.bp.bean.EmcOrderTaskResultBean;
-import com.sunwayworld.emc.module.bp.project.project.bean.EmcOrderItemBean;
 import com.sunwayworld.emc.module.bp.project.project.bean.EmcOrderItemGroupBean;
 import com.sunwayworld.emc.module.bp.project.project.bean.EmcProjectBean;
 import com.sunwayworld.emc.module.bp.sample.sample.bean.EmcSampleBean;
@@ -21,8 +19,6 @@ import com.sunwayworld.emc.module.mdm.basemdm.propertytmpl.bean.EmcPropertyField
 import com.sunwayworld.emc.module.mdm.basemdm.qccategory.bean.EmcQcCategoryBean;
 import com.sunwayworld.emc.module.mdm.basemdm.testcategory.bean.EmcTestCategoryBean;
 import com.sunwayworld.emc.module.mdm.basemdm.unit.bean.EmcUnitBean;
-import com.sunwayworld.emc.module.mdm.bizmdm.capacity.bean.EmcCapacityItemBean;
-import com.sunwayworld.emc.module.mdm.bizmdm.capacity.bean.EmcCapacityItemGroupBean;
 import com.sunwayworld.emc.module.mdm.bizmdm.capacity.bean.EmcTestCapacityBean;
 import com.sunwayworld.emc.module.mdm.bizmdm.client.bean.EmcClientBean;
 import com.sunwayworld.emc.module.mdm.bizmdm.client.bean.EmcMonitorPointBean;
@@ -33,7 +29,6 @@ import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcGroupItemBean;
 import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcItemBean;
 import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcItemGroupBean;
 import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcItemResultBean;
-import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcRelatedTestMethodBean;
 import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcTestBean;
 import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcTestMethodBean;
 import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcTestMethodEquiptBean;
@@ -51,65 +46,77 @@ import com.sunwayworld.emc.module.mdm.equipt.equiptcalibration.bean.EmcEquiptCal
 import com.sunwayworld.framework.data.page.Page;
 import com.sunwayworld.module.item.file.bean.CoreFileBean;
 import com.sunwayworld.module.sys.code.bean.CoreCodeBean;
+import com.sunwayworld.emc.module.bp.project.project.bean.EmcOrderItemBean;
+import com.sunwayworld.emc.module.mdm.bizmdm.capacity.bean.EmcCapacityItemBean;
+import com.sunwayworld.emc.module.mdm.bizmdm.capacity.bean.EmcCapacityItemGroupBean;
+import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcRelatedTestMethodBean;
 
-public class EmcMobilePaginationDTO {
+/**
+ * @author zhengxy@sunwayworld.com 2021年11月09日
+ */
+    public class EmcMobilePaginationDTO {
+
     private String message;
-    private Page<EmcProjectBean> projectPage;
-    private Page<EmcFolderBean> folderPage;
-    private Page<EmcSampleBean> samplePage;
-    private Page<EmcOrderBean> orderPage;
-    private Page<EmcOrderContainerBean> orderContainerPage;
-    private Page<EmcOrderTaskBean> orderTaskPage;
-    private Page<EmcOrderTaskResultBean> orderTaskResultPage;
-    private Page<EmcPropertyDataBean> propertyDataPage;
-    private Page<CoreFileBean> projectFilePage;
-    private Page<EmcEquiptCalibrationBean> calibrationPage;
-    private Page<EmcEquiptCalibrationLineBean> calibrationLinePage;
-    private Page<EmcOrderItemGroupBean> orderItemGroupPage;
-    private Page<EmcOrderItemBean> orderItemPage;
-    private Page<String> operateTypePage;
-    private Page<EmcEquiptBean> equiptPage;
-    private Page<EmcEmpBean> empPage;
-    private Page<EmcTestMethodEquiptBean> testMethodEquiptPage;
+    /** 业务数据 */
+    private Page<EmcProjectBean> projectPage; // 项目列表
+    private Page<EmcFolderBean> folderPage; // 点位列表
+    private Page<EmcSampleBean> samplePage; // 采样单列表
+    private Page<EmcOrderBean> orderPage; // 样品列表
+    private Page<EmcOrderContainerBean> orderContainerPage; // 样品容器列表
+    private Page<EmcOrderTaskBean> orderTaskPage; // 样品测试列表
+    private Page<EmcOrderTaskResultBean> orderTaskResultPage; // 样品测试结果列表
+    private Page<EmcPropertyDataBean> propertyDataPage; // 属性值列表
+    private Page<CoreFileBean> projectFilePage; // 项目附件
+    private Page<EmcEquiptCalibrationBean> calibrationPage; // 仪器校准
+    private Page<EmcEquiptCalibrationLineBean> calibrationLinePage; // 仪器校准记录
+    private Page<EmcOrderItemGroupBean> orderItemGroupPage; // 样品分析项组
+    /** 静态数据 */
+    private Page<String> operateTypePage; // 操作类型
+    private Page<EmcEquiptBean> equiptPage; // 仪器列表
+    private Page<EmcEmpBean> empPage; // 人员列表
+    private Page<EmcTestMethodEquiptBean> testMethodEquiptPage; // 测试关联仪器列表
     private Page<EmcEquiptTestMethodBean> equiptTestMethodPage;
-    private Page<EmcPropertyFieldBean> propertyFieldPage;
-    private Page<EmcMonitorTmplBean> monitorTmplPage;
-    private Page<EmcItemResultBean> itemResultPage;
-    private Page<CoreCodeBean> coreCodePage;
-    private Page<EmcMonitorPointBean> monitorPointPage;
-    private Page<EmcClientBean> clientPage;
-    private Page<EmcMonitorTmplGroupBean> monitorTmplGroupPage;
-    private Page<EmcMonitorSchemeBean> monitorSchemePage;
-    private Page<EmcTestCategoryBean> testCategoryPage;
-    private Page<EmcTestBean> testPage;
-    private Page<EmcTestMethodBean> testMethodPage;
-    private Page<EmcMethodBean> methodPage;
-    private Page<EmcItemBean> itemPage;
-    private Page<EmcItemGroupBean> itemGroupPage;
-    private Page<EmcGroupItemBean> groupItemPage;
-    private Page<EmcContainerCategoryBean> containerPage;
-    private Page<EmcEquiptCategoryBean> equiptCategoryPage;
-    private Page<EmcUnitBean> unitPage;
-    private Page<EmcQcCategoryBean> qcCategoryPage;
-    private Page<EmcMonitorPointCategoryBean> monitorPointCategoryPage;
-    private Page<EmcTestMethodOrderCategoryBean> testOrderCategoryPage;
-    private Page<EmcTestCapacityBean> testCapacityPage;
-    private Page<EmcEquiptAcqScriptBean> acqScriptPage;
-    private Page<EmcEasParamBean> easParamPage;
-    private Page<EmcEasPreAnalyBean> easPreAnalyPage;
-    private Page<EmcEasResultBean> easResultPage;
-    private Page<EmcEquiptTestItemBean> equiptTestItemPage;
-    private Page<EmcFolderBean> sampleParamFolderPage;
-    private Page<EmcOrderBean> sampleParamOrderPage;
-    private Page<EmcOrderTaskBean> sampleParamOrderTaskPage;
-    private Page<EmcOrderTaskResultBean> sampleParamOrderTaskResultPage;
-    private Page<EmcOrderItemGroupBean> sampleParamOrderItemGroupPage;
-    private Page<EmcCapacityItemGroupBean> capacityItemGroupPage;
-    private Page<EmcCapacityItemBean> capacityItemPage;
-    private Page<EmcRelatedTestMethodBean> relatedTestMethodPage;
+    private Page<EmcPropertyFieldBean> propertyFieldPage; // 属性字段列表
+    private Page<EmcMonitorTmplBean> monitorTmplPage; // 监测模板列表
+    private Page<EmcItemResultBean> itemResultPage; // 测试分析项列表
+    private Page<CoreCodeBean> coreCodePage; // 系统编码列表
+    private Page<EmcMonitorPointBean> monitorPointPage; // 监测点列表
+    private Page<EmcClientBean> clientPage; // 客户列表
+    private Page<EmcMonitorTmplGroupBean> monitorTmplGroupPage; // 监测模板分组
+    private Page<EmcMonitorSchemeBean> monitorSchemePage; // 监测方案
+    private Page<EmcTestCategoryBean> testCategoryPage; // 测试分类
+    private Page<EmcTestBean> testPage; // 测试库
+    private Page<EmcTestMethodBean> testMethodPage; // 测试方法
+    private Page<EmcMethodBean> methodPage; // 方法库
+    private Page<EmcItemBean> itemPage; // 分析项
+    private Page<EmcItemGroupBean> itemGroupPage; // 分析项组
+    private Page<EmcGroupItemBean> groupItemPage; // 分析项组分析项
+    private Page<EmcContainerCategoryBean> containerPage; // 容器组
+    private Page<EmcEquiptCategoryBean> equiptCategoryPage; // 仪器类型
+    private Page<EmcUnitBean> unitPage; // 单位
+    private Page<EmcQcCategoryBean> qcCategoryPage; // QC类型
+    private Page<EmcMonitorPointCategoryBean> monitorPointCategoryPage; // 监测点类型
+    private Page<EmcTestMethodOrderCategoryBean> testOrderCategoryPage; // 测试样品类型
+    private Page<EmcTestCapacityBean> testCapacityPage; // 监测能力库
+    /** 仪器采集 */
+    private Page<EmcEquiptAcqScriptBean> acqScriptPage; // 仪器采集脚本
+    private Page<EmcEasParamBean> easParamPage; // 采集参数
+    private Page<EmcEasPreAnalyBean> easPreAnalyPage; // 预处理
+    private Page<EmcEasResultBean> easResultPage; // 结果参数
+    private Page<EmcEquiptTestItemBean> equiptTestItemPage; // 采集分析项对照表
+
+    private Page<EmcFolderBean> sampleParamFolderPage; // 气的采样参数点位列表
+
+    private Page<EmcOrderBean> sampleParamOrderPage; // 气的采样参数样品列表
+
+    private Page<EmcOrderTaskBean> sampleParamOrderTaskPage; // 气的采样参数样品测试列表
+
+    private Page<EmcOrderTaskResultBean> sampleParamOrderTaskResultPage; // 气的采样参数样品测试结果列表
+
+    private Page<EmcOrderItemGroupBean> sampleParamOrderItemGroupPage; // 气的采样参数样品分析项组
 
     public String getMessage() {
-        return this.message;
+        return message;
     }
 
     public void setMessage(String message) {
@@ -117,7 +124,7 @@ public class EmcMobilePaginationDTO {
     }
 
     public Page<EmcProjectBean> getProjectPage() {
-        return this.projectPage;
+        return projectPage;
     }
 
     public void setProjectPage(Page<EmcProjectBean> projectPage) {
@@ -125,7 +132,7 @@ public class EmcMobilePaginationDTO {
     }
 
     public Page<EmcFolderBean> getFolderPage() {
-        return this.folderPage;
+        return folderPage;
     }
 
     public void setFolderPage(Page<EmcFolderBean> folderPage) {
@@ -133,7 +140,7 @@ public class EmcMobilePaginationDTO {
     }
 
     public Page<EmcSampleBean> getSamplePage() {
-        return this.samplePage;
+        return samplePage;
     }
 
     public void setSamplePage(Page<EmcSampleBean> samplePage) {
@@ -141,7 +148,7 @@ public class EmcMobilePaginationDTO {
     }
 
     public Page<EmcOrderBean> getOrderPage() {
-        return this.orderPage;
+        return orderPage;
     }
 
     public void setOrderPage(Page<EmcOrderBean> orderPage) {
@@ -149,7 +156,7 @@ public class EmcMobilePaginationDTO {
     }
 
     public Page<EmcOrderContainerBean> getOrderContainerPage() {
-        return this.orderContainerPage;
+        return orderContainerPage;
     }
 
     public void setOrderContainerPage(Page<EmcOrderContainerBean> orderContainerPage) {
@@ -157,7 +164,7 @@ public class EmcMobilePaginationDTO {
     }
 
     public Page<EmcOrderTaskBean> getOrderTaskPage() {
-        return this.orderTaskPage;
+        return orderTaskPage;
     }
 
     public void setOrderTaskPage(Page<EmcOrderTaskBean> orderTaskPage) {
@@ -165,7 +172,7 @@ public class EmcMobilePaginationDTO {
     }
 
     public Page<EmcOrderTaskResultBean> getOrderTaskResultPage() {
-        return this.orderTaskResultPage;
+        return orderTaskResultPage;
     }
 
     public void setOrderTaskResultPage(Page<EmcOrderTaskResultBean> orderTaskResultPage) {
@@ -173,7 +180,7 @@ public class EmcMobilePaginationDTO {
     }
 
     public Page<EmcPropertyDataBean> getPropertyDataPage() {
-        return this.propertyDataPage;
+        return propertyDataPage;
     }
 
     public void setPropertyDataPage(Page<EmcPropertyDataBean> propertyDataPage) {
@@ -181,7 +188,7 @@ public class EmcMobilePaginationDTO {
     }
 
     public Page<CoreFileBean> getProjectFilePage() {
-        return this.projectFilePage;
+        return projectFilePage;
     }
 
     public void setProjectFilePage(Page<CoreFileBean> projectFilePage) {
@@ -189,7 +196,7 @@ public class EmcMobilePaginationDTO {
     }
 
     public Page<EmcEquiptCalibrationBean> getCalibrationPage() {
-        return this.calibrationPage;
+        return calibrationPage;
     }
 
     public void setCalibrationPage(Page<EmcEquiptCalibrationBean> calibrationPage) {
@@ -197,7 +204,7 @@ public class EmcMobilePaginationDTO {
     }
 
     public Page<EmcEquiptCalibrationLineBean> getCalibrationLinePage() {
-        return this.calibrationLinePage;
+        return calibrationLinePage;
     }
 
     public void setCalibrationLinePage(Page<EmcEquiptCalibrationLineBean> calibrationLinePage) {
@@ -205,23 +212,15 @@ public class EmcMobilePaginationDTO {
     }
 
     public Page<EmcOrderItemGroupBean> getOrderItemGroupPage() {
-        return this.orderItemGroupPage;
+        return orderItemGroupPage;
     }
 
     public void setOrderItemGroupPage(Page<EmcOrderItemGroupBean> orderItemGroupPage) {
         this.orderItemGroupPage = orderItemGroupPage;
     }
 
-    public Page<EmcOrderItemBean> getOrderItemPage() {
-        return this.orderItemPage;
-    }
-
-    public void setOrderItemPage(Page<EmcOrderItemBean> orderItemPage) {
-        this.orderItemPage = orderItemPage;
-    }
-
     public Page<String> getOperateTypePage() {
-        return this.operateTypePage;
+        return operateTypePage;
     }
 
     public void setOperateTypePage(Page<String> operateTypePage) {
@@ -229,7 +228,7 @@ public class EmcMobilePaginationDTO {
     }
 
     public Page<EmcEquiptBean> getEquiptPage() {
-        return this.equiptPage;
+        return equiptPage;
     }
 
     public void setEquiptPage(Page<EmcEquiptBean> equiptPage) {
@@ -237,7 +236,7 @@ public class EmcMobilePaginationDTO {
     }
 
     public Page<EmcEmpBean> getEmpPage() {
-        return this.empPage;
+        return empPage;
     }
 
     public void setEmpPage(Page<EmcEmpBean> empPage) {
@@ -245,7 +244,7 @@ public class EmcMobilePaginationDTO {
     }
 
     public Page<EmcTestMethodEquiptBean> getTestMethodEquiptPage() {
-        return this.testMethodEquiptPage;
+        return testMethodEquiptPage;
     }
 
     public void setTestMethodEquiptPage(Page<EmcTestMethodEquiptBean> testMethodEquiptPage) {
@@ -253,7 +252,7 @@ public class EmcMobilePaginationDTO {
     }
 
     public Page<EmcEquiptTestMethodBean> getEquiptTestMethodPage() {
-        return this.equiptTestMethodPage;
+        return equiptTestMethodPage;
     }
 
     public void setEquiptTestMethodPage(Page<EmcEquiptTestMethodBean> equiptTestMethodPage) {
@@ -261,7 +260,7 @@ public class EmcMobilePaginationDTO {
     }
 
     public Page<EmcPropertyFieldBean> getPropertyFieldPage() {
-        return this.propertyFieldPage;
+        return propertyFieldPage;
     }
 
     public void setPropertyFieldPage(Page<EmcPropertyFieldBean> propertyFieldPage) {
@@ -269,7 +268,7 @@ public class EmcMobilePaginationDTO {
     }
 
     public Page<EmcMonitorTmplBean> getMonitorTmplPage() {
-        return this.monitorTmplPage;
+        return monitorTmplPage;
     }
 
     public void setMonitorTmplPage(Page<EmcMonitorTmplBean> monitorTmplPage) {
@@ -277,7 +276,7 @@ public class EmcMobilePaginationDTO {
     }
 
     public Page<EmcItemResultBean> getItemResultPage() {
-        return this.itemResultPage;
+        return itemResultPage;
     }
 
     public void setItemResultPage(Page<EmcItemResultBean> itemResultPage) {
@@ -285,7 +284,7 @@ public class EmcMobilePaginationDTO {
     }
 
     public Page<CoreCodeBean> getCoreCodePage() {
-        return this.coreCodePage;
+        return coreCodePage;
     }
 
     public void setCoreCodePage(Page<CoreCodeBean> coreCodePage) {
@@ -293,7 +292,7 @@ public class EmcMobilePaginationDTO {
     }
 
     public Page<EmcMonitorPointBean> getMonitorPointPage() {
-        return this.monitorPointPage;
+        return monitorPointPage;
     }
 
     public void setMonitorPointPage(Page<EmcMonitorPointBean> monitorPointPage) {
@@ -301,7 +300,7 @@ public class EmcMobilePaginationDTO {
     }
 
     public Page<EmcClientBean> getClientPage() {
-        return this.clientPage;
+        return clientPage;
     }
 
     public void setClientPage(Page<EmcClientBean> clientPage) {
@@ -309,7 +308,7 @@ public class EmcMobilePaginationDTO {
     }
 
     public Page<EmcMonitorTmplGroupBean> getMonitorTmplGroupPage() {
-        return this.monitorTmplGroupPage;
+        return monitorTmplGroupPage;
     }
 
     public void setMonitorTmplGroupPage(Page<EmcMonitorTmplGroupBean> monitorTmplGroupPage) {
@@ -317,7 +316,7 @@ public class EmcMobilePaginationDTO {
     }
 
     public Page<EmcMonitorSchemeBean> getMonitorSchemePage() {
-        return this.monitorSchemePage;
+        return monitorSchemePage;
     }
 
     public void setMonitorSchemePage(Page<EmcMonitorSchemeBean> monitorSchemePage) {
@@ -325,7 +324,7 @@ public class EmcMobilePaginationDTO {
     }
 
     public Page<EmcTestCategoryBean> getTestCategoryPage() {
-        return this.testCategoryPage;
+        return testCategoryPage;
     }
 
     public void setTestCategoryPage(Page<EmcTestCategoryBean> testCategoryPage) {
@@ -333,7 +332,7 @@ public class EmcMobilePaginationDTO {
     }
 
     public Page<EmcTestBean> getTestPage() {
-        return this.testPage;
+        return testPage;
     }
 
     public void setTestPage(Page<EmcTestBean> testPage) {
@@ -341,7 +340,7 @@ public class EmcMobilePaginationDTO {
     }
 
     public Page<EmcTestMethodBean> getTestMethodPage() {
-        return this.testMethodPage;
+        return testMethodPage;
     }
 
     public void setTestMethodPage(Page<EmcTestMethodBean> testMethodPage) {
@@ -349,7 +348,7 @@ public class EmcMobilePaginationDTO {
     }
 
     public Page<EmcMethodBean> getMethodPage() {
-        return this.methodPage;
+        return methodPage;
     }
 
     public void setMethodPage(Page<EmcMethodBean> methodPage) {
@@ -357,7 +356,7 @@ public class EmcMobilePaginationDTO {
     }
 
     public Page<EmcItemBean> getItemPage() {
-        return this.itemPage;
+        return itemPage;
     }
 
     public void setItemPage(Page<EmcItemBean> itemPage) {
@@ -365,7 +364,7 @@ public class EmcMobilePaginationDTO {
     }
 
     public Page<EmcItemGroupBean> getItemGroupPage() {
-        return this.itemGroupPage;
+        return itemGroupPage;
     }
 
     public void setItemGroupPage(Page<EmcItemGroupBean> itemGroupPage) {
@@ -373,7 +372,7 @@ public class EmcMobilePaginationDTO {
     }
 
     public Page<EmcGroupItemBean> getGroupItemPage() {
-        return this.groupItemPage;
+        return groupItemPage;
     }
 
     public void setGroupItemPage(Page<EmcGroupItemBean> groupItemPage) {
@@ -381,7 +380,7 @@ public class EmcMobilePaginationDTO {
     }
 
     public Page<EmcContainerCategoryBean> getContainerPage() {
-        return this.containerPage;
+        return containerPage;
     }
 
     public void setContainerPage(Page<EmcContainerCategoryBean> containerPage) {
@@ -389,7 +388,7 @@ public class EmcMobilePaginationDTO {
     }
 
     public Page<EmcEquiptCategoryBean> getEquiptCategoryPage() {
-        return this.equiptCategoryPage;
+        return equiptCategoryPage;
     }
 
     public void setEquiptCategoryPage(Page<EmcEquiptCategoryBean> equiptCategoryPage) {
@@ -397,7 +396,7 @@ public class EmcMobilePaginationDTO {
     }
 
     public Page<EmcUnitBean> getUnitPage() {
-        return this.unitPage;
+        return unitPage;
     }
 
     public void setUnitPage(Page<EmcUnitBean> unitPage) {
@@ -405,7 +404,7 @@ public class EmcMobilePaginationDTO {
     }
 
     public Page<EmcQcCategoryBean> getQcCategoryPage() {
-        return this.qcCategoryPage;
+        return qcCategoryPage;
     }
 
     public void setQcCategoryPage(Page<EmcQcCategoryBean> qcCategoryPage) {
@@ -413,7 +412,7 @@ public class EmcMobilePaginationDTO {
     }
 
     public Page<EmcMonitorPointCategoryBean> getMonitorPointCategoryPage() {
-        return this.monitorPointCategoryPage;
+        return monitorPointCategoryPage;
     }
 
     public void setMonitorPointCategoryPage(Page<EmcMonitorPointCategoryBean> monitorPointCategoryPage) {
@@ -421,7 +420,7 @@ public class EmcMobilePaginationDTO {
     }
 
     public Page<EmcTestMethodOrderCategoryBean> getTestOrderCategoryPage() {
-        return this.testOrderCategoryPage;
+        return testOrderCategoryPage;
     }
 
     public void setTestOrderCategoryPage(Page<EmcTestMethodOrderCategoryBean> testOrderCategoryPage) {
@@ -429,7 +428,7 @@ public class EmcMobilePaginationDTO {
     }
 
     public Page<EmcTestCapacityBean> getTestCapacityPage() {
-        return this.testCapacityPage;
+        return testCapacityPage;
     }
 
     public void setTestCapacityPage(Page<EmcTestCapacityBean> testCapacityPage) {
@@ -437,7 +436,7 @@ public class EmcMobilePaginationDTO {
     }
 
     public Page<EmcEquiptAcqScriptBean> getAcqScriptPage() {
-        return this.acqScriptPage;
+        return acqScriptPage;
     }
 
     public void setAcqScriptPage(Page<EmcEquiptAcqScriptBean> acqScriptPage) {
@@ -445,7 +444,7 @@ public class EmcMobilePaginationDTO {
     }
 
     public Page<EmcEasParamBean> getEasParamPage() {
-        return this.easParamPage;
+        return easParamPage;
     }
 
     public void setEasParamPage(Page<EmcEasParamBean> easParamPage) {
@@ -453,7 +452,7 @@ public class EmcMobilePaginationDTO {
     }
 
     public Page<EmcEasPreAnalyBean> getEasPreAnalyPage() {
-        return this.easPreAnalyPage;
+        return easPreAnalyPage;
     }
 
     public void setEasPreAnalyPage(Page<EmcEasPreAnalyBean> easPreAnalyPage) {
@@ -461,7 +460,7 @@ public class EmcMobilePaginationDTO {
     }
 
     public Page<EmcEasResultBean> getEasResultPage() {
-        return this.easResultPage;
+        return easResultPage;
     }
 
     public void setEasResultPage(Page<EmcEasResultBean> easResultPage) {
@@ -469,7 +468,7 @@ public class EmcMobilePaginationDTO {
     }
 
     public Page<EmcEquiptTestItemBean> getEquiptTestItemPage() {
-        return this.equiptTestItemPage;
+        return equiptTestItemPage;
     }
 
     public void setEquiptTestItemPage(Page<EmcEquiptTestItemBean> equiptTestItemPage) {
@@ -477,7 +476,7 @@ public class EmcMobilePaginationDTO {
     }
 
     public Page<EmcFolderBean> getSampleParamFolderPage() {
-        return this.sampleParamFolderPage;
+        return sampleParamFolderPage;
     }
 
     public void setSampleParamFolderPage(Page<EmcFolderBean> sampleParamFolderPage) {
@@ -485,7 +484,7 @@ public class EmcMobilePaginationDTO {
     }
 
     public Page<EmcOrderBean> getSampleParamOrderPage() {
-        return this.sampleParamOrderPage;
+        return sampleParamOrderPage;
     }
 
     public void setSampleParamOrderPage(Page<EmcOrderBean> sampleParamOrderPage) {
@@ -493,7 +492,7 @@ public class EmcMobilePaginationDTO {
     }
 
     public Page<EmcOrderTaskBean> getSampleParamOrderTaskPage() {
-        return this.sampleParamOrderTaskPage;
+        return sampleParamOrderTaskPage;
     }
 
     public void setSampleParamOrderTaskPage(Page<EmcOrderTaskBean> sampleParamOrderTaskPage) {
@@ -501,7 +500,7 @@ public class EmcMobilePaginationDTO {
     }
 
     public Page<EmcOrderTaskResultBean> getSampleParamOrderTaskResultPage() {
-        return this.sampleParamOrderTaskResultPage;
+        return sampleParamOrderTaskResultPage;
     }
 
     public void setSampleParamOrderTaskResultPage(Page<EmcOrderTaskResultBean> sampleParamOrderTaskResultPage) {
@@ -509,35 +508,40 @@ public class EmcMobilePaginationDTO {
     }
 
     public Page<EmcOrderItemGroupBean> getSampleParamOrderItemGroupPage() {
-        return this.sampleParamOrderItemGroupPage;
+        return sampleParamOrderItemGroupPage;
     }
 
     public void setSampleParamOrderItemGroupPage(Page<EmcOrderItemGroupBean> sampleParamOrderItemGroupPage) {
         this.sampleParamOrderItemGroupPage = sampleParamOrderItemGroupPage;
     }
 
+    private Page<EmcOrderItemBean> orderItemPage;
+    private Page<EmcCapacityItemGroupBean> capacityItemGroupPage;
+    private Page<EmcCapacityItemBean> capacityItemPage;
+    private Page<EmcRelatedTestMethodBean> relatedTestMethodPage;
+
+    public Page<EmcOrderItemBean> getOrderItemPage() {
+        return this.orderItemPage;
+    }
+    public void setOrderItemPage(Page<EmcOrderItemBean> orderItemPage) {
+        this.orderItemPage = orderItemPage;
+    }
     public Page<EmcCapacityItemGroupBean> getCapacityItemGroupPage() {
         return this.capacityItemGroupPage;
     }
-
     public void setCapacityItemGroupPage(Page<EmcCapacityItemGroupBean> capacityItemGroupPage) {
         this.capacityItemGroupPage = capacityItemGroupPage;
     }
-
     public Page<EmcCapacityItemBean> getCapacityItemPage() {
         return this.capacityItemPage;
     }
-
     public void setCapacityItemPage(Page<EmcCapacityItemBean> capacityItemPage) {
         this.capacityItemPage = capacityItemPage;
     }
-
     public Page<EmcRelatedTestMethodBean> getRelatedTestMethodPage() {
         return this.relatedTestMethodPage;
     }
-
     public void setRelatedTestMethodPage(Page<EmcRelatedTestMethodBean> relatedTestMethodPage) {
         this.relatedTestMethodPage = relatedTestMethodPage;
     }
 }
-

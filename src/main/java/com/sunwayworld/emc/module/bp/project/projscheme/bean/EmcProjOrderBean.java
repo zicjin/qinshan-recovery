@@ -1,72 +1,101 @@
-/*
- * Decompiled with CFR.
- */
 package com.sunwayworld.emc.module.bp.project.projscheme.bean;
 
+import java.time.LocalDateTime;
+
 import com.alibaba.fastjson.annotation.JSONField;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.sunwayworld.framework.constant.Constant;
 import com.sunwayworld.framework.data.annotation.Id;
 import com.sunwayworld.framework.data.annotation.NotNull;
 import com.sunwayworld.framework.data.annotation.Table;
 import com.sunwayworld.framework.data.annotation.Transient;
 import com.sunwayworld.framework.support.domain.AbstractPersistable;
 import com.sunwayworld.framework.support.domain.Insertable;
-import java.time.LocalDateTime;
-import org.springframework.format.annotation.DateTimeFormat;
 
-@Table(value="T_EMC_PROJ_ORDER")
-public class EmcProjOrderBean
-extends AbstractPersistable<Long>
-implements Insertable<Long> {
+/**
+ * 监测方案样品表
+ *
+ * @author yuanhh@sunwayworld.com
+ * @date 2019-10-08
+ */
+
+@Table("T_EMC_PROJ_ORDER")
+    public class EmcProjOrderBean extends AbstractPersistable<Long> implements Insertable<Long> {
+
     @Transient
     private static final long serialVersionUID = 6428765035601708948L;
-    @Id
-    private Long id;
-    private Long projSchemeId;
-    private Long sampleNum;
-    private Long testId;
-    private String schemeName;
-    private Long methodId;
-    private String subPackageName;
-    private Long itemGroupId;
-    private String itemGroup;
-    private Long indexCategoryId;
-    private String indexId;
-    private Long subcontractorId;
-    private String subPackageNo;
-    @NotNull(defaultValue="0")
-    private String dataSharing;
-    private Double sampleFee;
-    private Double analysisFee;
-    private String createdById;
-    private String createdByName;
-    @JSONField(format="yyyy-MM-dd")
-    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime createdTime;
-    private String createdByOrgId;
-    private String createdByOrgName;
-    private String indexSetId;
-    private String emissionLowlimit;
-    private String emissionHighlimit;
-    @NotNull(defaultValue="0")
-    private String customerSpecified;
-    private Long sortNum;
-    private String abnormal;
-    private String specifyMethod;
-    private String taskLowLimit;
-    private String taskHighLimit;
 
-    @Override
+    @Id
+    private Long id;// 主键
+
+    private Long projSchemeId;// 项目监测方案编码
+
+    private Long sampleNum;// 采样个数
+
+    private Long testId;// 测试ID
+
+    private String schemeName;// 监测方案名称
+
+    private Long methodId;// 方法编码
+
+    private String subPackageName;// 分包商名称
+
+    private Long itemGroupId;// 分析项组编码
+
+    private String itemGroup;// 分析项组
+
+    private Long indexCategoryId;// 指标分类id
+
+    private String indexId;// 样品指标id
+
+    private Long subcontractorId;// 分包商ID
+
+    private String subPackageNo;// 分包单号
+
+    @NotNull(defaultValue = Constant.NO)
+    private String dataSharing;// 是否数据共享
+
+    private Double sampleFee;// 采样费
+
+    private Double analysisFee;// 分析费
+
+    private String createdById;// 制单人编码
+
+    private String createdByName;// 制单人名称
+
+    @JSONField(format = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime createdTime;// 制单时间
+
+    private String createdByOrgId;// 制单人单位编码
+
+    private String createdByOrgName;// 制单人单位名称
+
+    private String indexSetId;// 指标设置ID(江苏新锐)
+
+    private String emissionLowlimit;// 排污许可低限(江苏新锐)
+
+    private String emissionHighlimit;// 排污许可高限(江苏新锐)
+
+    /**
+     * 广州分析测试中心项目
+     */
+    @NotNull(defaultValue = Constant.NO)
+    private String customerSpecified;// 是否客户指定
+
+    private Long sortNum; // 排序码
+
     public Long getId() {
-        return this.id;
+        return id;
     }
 
-    @Override
     public void setId(Long id) {
         this.id = id;
     }
 
     public Long getProjSchemeId() {
-        return this.projSchemeId;
+        return projSchemeId;
     }
 
     public void setProjSchemeId(Long projSchemeId) {
@@ -74,7 +103,7 @@ implements Insertable<Long> {
     }
 
     public Long getSampleNum() {
-        return this.sampleNum;
+        return sampleNum;
     }
 
     public void setSampleNum(Long sampleNum) {
@@ -82,7 +111,7 @@ implements Insertable<Long> {
     }
 
     public Long getTestId() {
-        return this.testId;
+        return testId;
     }
 
     public void setTestId(Long testId) {
@@ -90,7 +119,7 @@ implements Insertable<Long> {
     }
 
     public String getSchemeName() {
-        return this.schemeName;
+        return schemeName;
     }
 
     public void setSchemeName(String schemeName) {
@@ -98,7 +127,7 @@ implements Insertable<Long> {
     }
 
     public Long getMethodId() {
-        return this.methodId;
+        return methodId;
     }
 
     public void setMethodId(Long methodId) {
@@ -106,7 +135,7 @@ implements Insertable<Long> {
     }
 
     public String getSubPackageName() {
-        return this.subPackageName;
+        return subPackageName;
     }
 
     public void setSubPackageName(String subPackageName) {
@@ -114,7 +143,7 @@ implements Insertable<Long> {
     }
 
     public Long getItemGroupId() {
-        return this.itemGroupId;
+        return itemGroupId;
     }
 
     public void setItemGroupId(Long itemGroupId) {
@@ -122,7 +151,7 @@ implements Insertable<Long> {
     }
 
     public String getItemGroup() {
-        return this.itemGroup;
+        return itemGroup;
     }
 
     public void setItemGroup(String itemGroup) {
@@ -130,7 +159,7 @@ implements Insertable<Long> {
     }
 
     public Long getIndexCategoryId() {
-        return this.indexCategoryId;
+        return indexCategoryId;
     }
 
     public void setIndexCategoryId(Long indexCategoryId) {
@@ -138,7 +167,7 @@ implements Insertable<Long> {
     }
 
     public String getIndexId() {
-        return this.indexId;
+        return indexId;
     }
 
     public void setIndexId(String indexId) {
@@ -146,7 +175,7 @@ implements Insertable<Long> {
     }
 
     public Double getSampleFee() {
-        return this.sampleFee;
+        return sampleFee;
     }
 
     public void setSampleFee(Double sampleFee) {
@@ -154,7 +183,7 @@ implements Insertable<Long> {
     }
 
     public Double getAnalysisFee() {
-        return this.analysisFee;
+        return analysisFee;
     }
 
     public void setAnalysisFee(Double analysisFee) {
@@ -162,7 +191,7 @@ implements Insertable<Long> {
     }
 
     public Long getSubcontractorId() {
-        return this.subcontractorId;
+        return subcontractorId;
     }
 
     public void setSubcontractorId(Long subcontractorId) {
@@ -170,7 +199,7 @@ implements Insertable<Long> {
     }
 
     public String getSubPackageNo() {
-        return this.subPackageNo;
+        return subPackageNo;
     }
 
     public void setSubPackageNo(String subPackageNo) {
@@ -178,65 +207,55 @@ implements Insertable<Long> {
     }
 
     public String getDataSharing() {
-        return this.dataSharing;
+        return dataSharing;
     }
 
     public void setDataSharing(String dataSharing) {
         this.dataSharing = dataSharing;
     }
 
-    @Override
     public String getCreatedById() {
-        return this.createdById;
+        return createdById;
     }
 
-    @Override
     public void setCreatedById(String createdById) {
         this.createdById = createdById;
     }
 
-    @Override
     public String getCreatedByName() {
-        return this.createdByName;
+        return createdByName;
     }
 
-    @Override
     public void setCreatedByName(String createdByName) {
         this.createdByName = createdByName;
     }
 
-    @Override
     public LocalDateTime getCreatedTime() {
-        return this.createdTime;
+        return createdTime;
     }
 
-    @Override
     public void setCreatedTime(LocalDateTime createdTime) {
         this.createdTime = createdTime;
     }
 
-    @Override
     public String getCreatedByOrgId() {
-        return this.createdByOrgId;
+        return createdByOrgId;
     }
 
-    @Override
     public void setCreatedByOrgId(String createdByOrgId) {
         this.createdByOrgId = createdByOrgId;
     }
 
-    @Override
     public String getCreatedByOrgName() {
-        return this.createdByOrgName;
+        return createdByOrgName;
     }
 
-    @Override
     public void setCreatedByOrgName(String createdByOrgName) {
         this.createdByOrgName = createdByOrgName;
     }
 
     public String getCustomerSpecified() {
-        return this.customerSpecified;
+        return customerSpecified;
     }
 
     public void setCustomerSpecified(String customerSpecified) {
@@ -244,7 +263,7 @@ implements Insertable<Long> {
     }
 
     public String getEmissionLowlimit() {
-        return this.emissionLowlimit;
+        return emissionLowlimit;
     }
 
     public void setEmissionLowlimit(String emissionLowlimit) {
@@ -252,7 +271,7 @@ implements Insertable<Long> {
     }
 
     public String getEmissionHighlimit() {
-        return this.emissionHighlimit;
+        return emissionHighlimit;
     }
 
     public void setEmissionHighlimit(String emissionHighlimit) {
@@ -260,7 +279,7 @@ implements Insertable<Long> {
     }
 
     public String getIndexSetId() {
-        return this.indexSetId;
+        return indexSetId;
     }
 
     public void setIndexSetId(String indexSetId) {
@@ -268,43 +287,40 @@ implements Insertable<Long> {
     }
 
     public Long getSortNum() {
-        return this.sortNum;
+        return sortNum;
     }
 
     public void setSortNum(Long sortNum) {
         this.sortNum = sortNum;
     }
 
+    private String abnormal;
+    private String specifyMethod;
+    private String taskLowLimit;
+    private String taskHighLimit;
+
     public String getAbnormal() {
         return this.abnormal;
     }
-
     public void setAbnormal(String abnormal) {
         this.abnormal = abnormal;
     }
-
     public String getSpecifyMethod() {
         return this.specifyMethod;
     }
-
     public void setSpecifyMethod(String specifyMethod) {
         this.specifyMethod = specifyMethod;
     }
-
     public String getTaskLowLimit() {
         return this.taskLowLimit;
     }
-
     public void setTaskLowLimit(String taskLowLimit) {
         this.taskLowLimit = taskLowLimit;
     }
-
     public String getTaskHighLimit() {
         return this.taskHighLimit;
     }
-
     public void setTaskHighLimit(String taskHighLimit) {
         this.taskHighLimit = taskHighLimit;
     }
 }
-

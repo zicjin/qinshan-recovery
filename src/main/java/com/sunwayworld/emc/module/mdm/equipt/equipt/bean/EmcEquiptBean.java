@@ -1,99 +1,103 @@
-/*
- * Decompiled with CFR.
- */
 package com.sunwayworld.emc.module.mdm.equipt.equipt.bean;
 
+import java.time.LocalDate;
+
 import com.alibaba.fastjson.annotation.JSONField;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import com.sunwayworld.framework.data.annotation.Id;
-import com.sunwayworld.framework.data.annotation.NotNull;
 import com.sunwayworld.framework.data.annotation.Table;
 import com.sunwayworld.framework.data.annotation.Transient;
 import com.sunwayworld.framework.support.domain.AbstractInsertable;
-import java.time.LocalDate;
-import org.springframework.format.annotation.DateTimeFormat;
+import com.sunwayworld.framework.data.annotation.NotNull;
 
-@Table(value="T_EMC_EQUIPT")
-public class EmcEquiptBean
-extends AbstractInsertable<Long> {
+/**
+ * 容器类型
+ *
+ * @author magt@sunwayworld.com 2019/9/9
+ *
+ */
+@Table("T_EMC_EQUIPT")
+    public class EmcEquiptBean extends AbstractInsertable<Long> {
+
     @Transient
     private static final long serialVersionUID = 1036700237775060656L;
+
     @Id
-    private Long id;
-    private String equiptId;
-    private String equiptName;
-    private String equiptEnglishName;
-    private String specification;
-    private String manufacturer;
-    @JSONField(format="yyyy-MM-dd")
-    @DateTimeFormat(pattern="yyyy-MM-dd")
-    private LocalDate factoryDate;
-    private String factoryNo;
-    private String price;
-    @JSONField(format="yyyy-MM-dd")
-    @DateTimeFormat(pattern="yyyy-MM-dd")
-    private LocalDate purchaseDate;
-    @JSONField(format="yyyy-MM-dd")
-    @DateTimeFormat(pattern="yyyy-MM-dd")
-    private LocalDate arrivalDate;
-    @JSONField(format="yyyy-MM-dd")
-    @DateTimeFormat(pattern="yyyy-MM-dd")
-    private LocalDate openDate;
-    @JSONField(format="yyyy-MM-dd")
-    @DateTimeFormat(pattern="yyyy-MM-dd")
-    private LocalDate installDate;
-    private String installUser;
-    @JSONField(format="yyyy-MM-dd")
-    @DateTimeFormat(pattern="yyyy-MM-dd")
-    private LocalDate acceptDate;
-    @JSONField(format="yyyy-MM-dd")
-    @DateTimeFormat(pattern="yyyy-MM-dd")
-    private LocalDate usedDate;
-    private String usedDepartmentId;
-    private String usedDepostId;
-    private String usedUserId;
-    private String usedUserName;
-    private String maintainUserId;
-    private String address;
-    private String keepUserId;
-    private String state;
-    private String func;
-    private String tecIndex;
-    private String testRange;
-    private String accuracy;
-    private String status;
-    private Long equiptCategoryId;
-    private String installOrg;
-    private String installPhone;
-    private String serviceContactName;
-    private String servicePhone;
-    private String sharing;
-    private String maintain;
-    private String sourceMethod;
-    @JSONField(format="yyyy-MM-dd")
-    @DateTimeFormat(pattern="yyyy-MM-dd")
-    private LocalDate sourceDate;
-    @NotNull(defaultValue="\u81ea\u6709")
-    private String equiptBelong;
-    private String remark;
-    private Long acqScriptId;
-    private String acqScriptIds;
-    private String scriptDesc;
-    private String scriptDescs;
-    private String interfaceCategory;
-    private String catalog;
-    private String scriptCategory;
-    private String maintenanceUserId;
-    private String maintenanceUserName;
-    private String isOnStock;
-    private String orgId;
-    private String calibrationType;
-    @NotNull(defaultValue="1")
-    private String equiptRecord;
-    private String sceneEquiptNo;
+    private Long id; // 主键
+    private String equiptId; // 站内编号
+    private String equiptName; // 仪器名称
+    private String equiptEnglishName; // 仪器英文名称
+    private String specification; // 规格型号
+    private String manufacturer; // 生产厂家
+    @JSONField(format = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate factoryDate; // 出厂日期
+    private String factoryNo; // 出厂编号
+    private String price; // 购置价格
+    @JSONField(format = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate purchaseDate; // 购买日期
+    @JSONField(format = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate arrivalDate; // 到货日期
+    @JSONField(format = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate openDate; // 开箱日期
+    @JSONField(format = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate installDate; // 安装调试日期
+    private String installUser; // 安装人员
+    @JSONField(format = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate acceptDate; // 验收日期
+    @JSONField(format = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate usedDate; // 投入使用日期
+    private String usedDepartmentId; // 使用科室
+    private String usedDepostId; // 使用岗位
+    private String usedUserId; // 仪器使用人员ID
+    private String usedUserName; // 仪器使用人员
+    private String maintainUserId; // 维护人
+    private String address; // 地点
+    private String keepUserId; // 保管人
+    private String state; // 仪器现状
+    private String func; // 功能及应用范围
+    private String tecIndex; // 主要技术指标
+    private String testRange; // 测量范围
+    private String accuracy; // 精确度
+    private String status; // 仪器状态
+    private Long equiptCategoryId; // 仪器类型
+    private String installOrg; // 安装单位
+    private String installPhone; // 安装联系电话
+    private String serviceContactName; // 售后服务联系人
+    private String servicePhone; // 售后服务联系电话
+    private String sharing; // 是否共享
+    private String maintain; // 需要维护
+    private String sourceMethod; // 仪器溯源方式
+    @JSONField(format = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate sourceDate; // 溯源有效期
+    private String remark; // 备注
+    private Long acqScriptId; // 采集脚本ID
+    private String acqScriptIds; // 多采集脚本ID
+    private String scriptDesc;// 脚本描述
+    private String scriptDescs;// 多采集脚本描述
+    private String interfaceCategory; // 接口类型 （下拉列表 ：文件采集）
+    private String catalog; // 扫描文件夹 private String scriptCategory; // 脚本类型 下拉列表
+                            // 通用配置、定制配置
+    private String scriptCategory; // 脚本类型 下拉列表 通用配置、定制配置
+    private String maintenanceUserId;// 维护人编码
+    private String maintenanceUserName;// 维护人名称
+    private String isOnStock;//是否在库
+
+    private String orgId;//所属单位编码
+
+    private String calibrationType; // 校准类型
 
     @Override
     public Long getId() {
-        return this.id;
+        return id;
     }
 
     @Override
@@ -102,7 +106,7 @@ extends AbstractInsertable<Long> {
     }
 
     public String getEquiptId() {
-        return this.equiptId;
+        return equiptId;
     }
 
     public void setEquiptId(String equiptId) {
@@ -110,7 +114,7 @@ extends AbstractInsertable<Long> {
     }
 
     public String getEquiptName() {
-        return this.equiptName;
+        return equiptName;
     }
 
     public void setEquiptName(String equiptName) {
@@ -118,7 +122,7 @@ extends AbstractInsertable<Long> {
     }
 
     public String getEquiptEnglishName() {
-        return this.equiptEnglishName;
+        return equiptEnglishName;
     }
 
     public void setEquiptEnglishName(String equiptEnglishName) {
@@ -126,7 +130,7 @@ extends AbstractInsertable<Long> {
     }
 
     public String getSpecification() {
-        return this.specification;
+        return specification;
     }
 
     public void setSpecification(String specification) {
@@ -134,7 +138,7 @@ extends AbstractInsertable<Long> {
     }
 
     public String getManufacturer() {
-        return this.manufacturer;
+        return manufacturer;
     }
 
     public void setManufacturer(String manufacturer) {
@@ -142,7 +146,7 @@ extends AbstractInsertable<Long> {
     }
 
     public LocalDate getFactoryDate() {
-        return this.factoryDate;
+        return factoryDate;
     }
 
     public void setFactoryDate(LocalDate factoryDate) {
@@ -150,7 +154,7 @@ extends AbstractInsertable<Long> {
     }
 
     public String getFactoryNo() {
-        return this.factoryNo;
+        return factoryNo;
     }
 
     public void setFactoryNo(String factoryNo) {
@@ -158,7 +162,7 @@ extends AbstractInsertable<Long> {
     }
 
     public String getPrice() {
-        return this.price;
+        return price;
     }
 
     public void setPrice(String price) {
@@ -166,7 +170,7 @@ extends AbstractInsertable<Long> {
     }
 
     public LocalDate getPurchaseDate() {
-        return this.purchaseDate;
+        return purchaseDate;
     }
 
     public void setPurchaseDate(LocalDate purchaseDate) {
@@ -174,7 +178,7 @@ extends AbstractInsertable<Long> {
     }
 
     public LocalDate getArrivalDate() {
-        return this.arrivalDate;
+        return arrivalDate;
     }
 
     public void setArrivalDate(LocalDate arrivalDate) {
@@ -182,7 +186,7 @@ extends AbstractInsertable<Long> {
     }
 
     public LocalDate getOpenDate() {
-        return this.openDate;
+        return openDate;
     }
 
     public void setOpenDate(LocalDate openDate) {
@@ -190,7 +194,7 @@ extends AbstractInsertable<Long> {
     }
 
     public LocalDate getInstallDate() {
-        return this.installDate;
+        return installDate;
     }
 
     public void setInstallDate(LocalDate installDate) {
@@ -198,7 +202,7 @@ extends AbstractInsertable<Long> {
     }
 
     public String getInstallUser() {
-        return this.installUser;
+        return installUser;
     }
 
     public void setInstallUser(String installUser) {
@@ -206,7 +210,7 @@ extends AbstractInsertable<Long> {
     }
 
     public LocalDate getAcceptDate() {
-        return this.acceptDate;
+        return acceptDate;
     }
 
     public void setAcceptDate(LocalDate acceptDate) {
@@ -214,7 +218,7 @@ extends AbstractInsertable<Long> {
     }
 
     public LocalDate getUsedDate() {
-        return this.usedDate;
+        return usedDate;
     }
 
     public void setUsedDate(LocalDate usedDate) {
@@ -222,7 +226,7 @@ extends AbstractInsertable<Long> {
     }
 
     public String getUsedDepartmentId() {
-        return this.usedDepartmentId;
+        return usedDepartmentId;
     }
 
     public void setUsedDepartmentId(String usedDepartmentId) {
@@ -230,7 +234,7 @@ extends AbstractInsertable<Long> {
     }
 
     public String getUsedDepostId() {
-        return this.usedDepostId;
+        return usedDepostId;
     }
 
     public void setUsedDepostId(String usedDepostId) {
@@ -238,7 +242,7 @@ extends AbstractInsertable<Long> {
     }
 
     public String getUsedUserId() {
-        return this.usedUserId;
+        return usedUserId;
     }
 
     public void setUsedUserId(String usedUserId) {
@@ -246,7 +250,7 @@ extends AbstractInsertable<Long> {
     }
 
     public String getUsedUserName() {
-        return this.usedUserName;
+        return usedUserName;
     }
 
     public void setUsedUserName(String usedUserName) {
@@ -254,7 +258,7 @@ extends AbstractInsertable<Long> {
     }
 
     public String getMaintainUserId() {
-        return this.maintainUserId;
+        return maintainUserId;
     }
 
     public void setMaintainUserId(String maintainUserId) {
@@ -262,7 +266,7 @@ extends AbstractInsertable<Long> {
     }
 
     public String getAddress() {
-        return this.address;
+        return address;
     }
 
     public void setAddress(String address) {
@@ -270,7 +274,7 @@ extends AbstractInsertable<Long> {
     }
 
     public String getKeepUserId() {
-        return this.keepUserId;
+        return keepUserId;
     }
 
     public void setKeepUserId(String keepUserId) {
@@ -278,7 +282,7 @@ extends AbstractInsertable<Long> {
     }
 
     public String getState() {
-        return this.state;
+        return state;
     }
 
     public void setState(String state) {
@@ -286,7 +290,7 @@ extends AbstractInsertable<Long> {
     }
 
     public String getFunc() {
-        return this.func;
+        return func;
     }
 
     public void setFunc(String func) {
@@ -294,7 +298,7 @@ extends AbstractInsertable<Long> {
     }
 
     public String getTecIndex() {
-        return this.tecIndex;
+        return tecIndex;
     }
 
     public void setTecIndex(String tecIndex) {
@@ -302,7 +306,7 @@ extends AbstractInsertable<Long> {
     }
 
     public String getTestRange() {
-        return this.testRange;
+        return testRange;
     }
 
     public void setTestRange(String testRange) {
@@ -310,7 +314,7 @@ extends AbstractInsertable<Long> {
     }
 
     public String getAccuracy() {
-        return this.accuracy;
+        return accuracy;
     }
 
     public void setAccuracy(String accuracy) {
@@ -318,7 +322,7 @@ extends AbstractInsertable<Long> {
     }
 
     public String getStatus() {
-        return this.status;
+        return status;
     }
 
     public void setStatus(String status) {
@@ -326,7 +330,7 @@ extends AbstractInsertable<Long> {
     }
 
     public Long getEquiptCategoryId() {
-        return this.equiptCategoryId;
+        return equiptCategoryId;
     }
 
     public void setEquiptCategoryId(Long equiptCategoryId) {
@@ -334,7 +338,7 @@ extends AbstractInsertable<Long> {
     }
 
     public String getInstallOrg() {
-        return this.installOrg;
+        return installOrg;
     }
 
     public void setInstallOrg(String installOrg) {
@@ -342,7 +346,7 @@ extends AbstractInsertable<Long> {
     }
 
     public String getInstallPhone() {
-        return this.installPhone;
+        return installPhone;
     }
 
     public void setInstallPhone(String installPhone) {
@@ -350,7 +354,7 @@ extends AbstractInsertable<Long> {
     }
 
     public String getServiceContactName() {
-        return this.serviceContactName;
+        return serviceContactName;
     }
 
     public void setServiceContactName(String serviceContactName) {
@@ -358,7 +362,7 @@ extends AbstractInsertable<Long> {
     }
 
     public String getServicePhone() {
-        return this.servicePhone;
+        return servicePhone;
     }
 
     public void setServicePhone(String servicePhone) {
@@ -366,7 +370,7 @@ extends AbstractInsertable<Long> {
     }
 
     public String getSharing() {
-        return this.sharing;
+        return sharing;
     }
 
     public void setSharing(String sharing) {
@@ -374,7 +378,7 @@ extends AbstractInsertable<Long> {
     }
 
     public String getMaintain() {
-        return this.maintain;
+        return maintain;
     }
 
     public void setMaintain(String maintain) {
@@ -382,7 +386,7 @@ extends AbstractInsertable<Long> {
     }
 
     public String getSourceMethod() {
-        return this.sourceMethod;
+        return sourceMethod;
     }
 
     public void setSourceMethod(String sourceMethod) {
@@ -390,23 +394,15 @@ extends AbstractInsertable<Long> {
     }
 
     public LocalDate getSourceDate() {
-        return this.sourceDate;
+        return sourceDate;
     }
 
     public void setSourceDate(LocalDate sourceDate) {
         this.sourceDate = sourceDate;
     }
 
-    public String getEquiptBelong() {
-        return this.equiptBelong;
-    }
-
-    public void setEquiptBelong(String equiptBelong) {
-        this.equiptBelong = equiptBelong;
-    }
-
     public String getRemark() {
-        return this.remark;
+        return remark;
     }
 
     public void setRemark(String remark) {
@@ -414,7 +410,7 @@ extends AbstractInsertable<Long> {
     }
 
     public Long getAcqScriptId() {
-        return this.acqScriptId;
+        return acqScriptId;
     }
 
     public void setAcqScriptId(Long acqScriptId) {
@@ -422,7 +418,7 @@ extends AbstractInsertable<Long> {
     }
 
     public String getAcqScriptIds() {
-        return this.acqScriptIds;
+        return acqScriptIds;
     }
 
     public void setAcqScriptIds(String acqScriptIds) {
@@ -430,7 +426,7 @@ extends AbstractInsertable<Long> {
     }
 
     public String getScriptDesc() {
-        return this.scriptDesc;
+        return scriptDesc;
     }
 
     public void setScriptDesc(String scriptDesc) {
@@ -438,7 +434,7 @@ extends AbstractInsertable<Long> {
     }
 
     public String getScriptDescs() {
-        return this.scriptDescs;
+        return scriptDescs;
     }
 
     public void setScriptDescs(String scriptDescs) {
@@ -446,7 +442,7 @@ extends AbstractInsertable<Long> {
     }
 
     public String getInterfaceCategory() {
-        return this.interfaceCategory;
+        return interfaceCategory;
     }
 
     public void setInterfaceCategory(String interfaceCategory) {
@@ -454,7 +450,7 @@ extends AbstractInsertable<Long> {
     }
 
     public String getCatalog() {
-        return this.catalog;
+        return catalog;
     }
 
     public void setCatalog(String catalog) {
@@ -462,7 +458,7 @@ extends AbstractInsertable<Long> {
     }
 
     public String getScriptCategory() {
-        return this.scriptCategory;
+        return scriptCategory;
     }
 
     public void setScriptCategory(String scriptCategory) {
@@ -470,7 +466,7 @@ extends AbstractInsertable<Long> {
     }
 
     public String getMaintenanceUserId() {
-        return this.maintenanceUserId;
+        return maintenanceUserId;
     }
 
     public void setMaintenanceUserId(String maintenanceUserId) {
@@ -478,7 +474,7 @@ extends AbstractInsertable<Long> {
     }
 
     public String getMaintenanceUserName() {
-        return this.maintenanceUserName;
+        return maintenanceUserName;
     }
 
     public void setMaintenanceUserName(String maintenanceUserName) {
@@ -486,43 +482,51 @@ extends AbstractInsertable<Long> {
     }
 
     public String getIsOnStock() {
-        return this.isOnStock;
+        return isOnStock;
     }
 
     public void setIsOnStock(String isOnStock) {
         this.isOnStock = isOnStock;
     }
 
-    public String getOrgId() {
-        return this.orgId;
-    }
+	public String getOrgId() {
+		return orgId;
+	}
 
-    public void setOrgId(String orgId) {
-        this.orgId = orgId;
-    }
+	public void setOrgId(String orgId) {
+		this.orgId = orgId;
+	}
 
     public String getCalibrationType() {
-        return this.calibrationType;
+        return calibrationType;
     }
 
     public void setCalibrationType(String calibrationType) {
         this.calibrationType = calibrationType;
     }
 
+    @NotNull(defaultValue="\u81ea\u6709")
+    private String equiptBelong;
+    @NotNull(defaultValue="1")
+    private String equiptRecord;
+    private String sceneEquiptNo;
+
+    public String getEquiptBelong() {
+        return this.equiptBelong;
+    }
+    public void setEquiptBelong(String equiptBelong) {
+        this.equiptBelong = equiptBelong;
+    }
     public String getEquiptRecord() {
         return this.equiptRecord;
     }
-
     public void setEquiptRecord(String equiptRecord) {
         this.equiptRecord = equiptRecord;
     }
-
     public String getSceneEquiptNo() {
         return this.sceneEquiptNo;
     }
-
     public void setSceneEquiptNo(String sceneEquiptNo) {
         this.sceneEquiptNo = sceneEquiptNo;
     }
 }
-

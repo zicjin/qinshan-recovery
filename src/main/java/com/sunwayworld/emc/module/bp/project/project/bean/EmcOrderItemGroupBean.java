@@ -1,80 +1,121 @@
-/*
- * Decompiled with CFR.
- */
 package com.sunwayworld.emc.module.bp.project.project.bean;
 
+import java.time.LocalDateTime;
+
 import com.alibaba.fastjson.annotation.JSONField;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.sunwayworld.framework.constant.Constant;
 import com.sunwayworld.framework.data.annotation.Id;
 import com.sunwayworld.framework.data.annotation.NotNull;
 import com.sunwayworld.framework.data.annotation.Table;
 import com.sunwayworld.framework.data.annotation.Transient;
 import com.sunwayworld.framework.support.domain.AbstractPersistable;
 import com.sunwayworld.framework.support.domain.Insertable;
-import java.time.LocalDateTime;
-import org.springframework.format.annotation.DateTimeFormat;
 
-@Table(value="T_EMC_ORDER_ITEM_GROUP")
-public class EmcOrderItemGroupBean
-extends AbstractPersistable<Long>
-implements Insertable<Long> {
+@Table("T_EMC_ORDER_ITEM_GROUP")
+    public class EmcOrderItemGroupBean extends AbstractPersistable<Long> implements Insertable<Long> {
+
     @Transient
     private static final long serialVersionUID = 6073654199714691276L;
+
     @Id
-    private Long id;
-    private Long orderId;
-    private String schemeName;
-    private Long testId;
-    private String testName;
-    private Long testMethodId;
-    private Long methodId;
-    private String methodName;
-    private Long methodVersionId;
-    private String testMethodBasis;
-    private Long itemGroupId;
-    private String itemGroup;
-    private String analysisOrgId;
-    private String analysisOrgName;
-    private Long qcCategoryId;
-    private String qcCategoryCode;
-    private String qcName;
-    private String subPackageNo;
-    private Long subcontractorId;
-    @NotNull(defaultValue="0")
-    private String dataSharing;
-    private String inputUserId;
-    private String inputUserName;
-    private String monitorTmplId;
-    private String orderCategory;
-    private Long containerCategoryId;
-    private String containerCategoryCode;
-    private String containerCategoryName;
-    private String containerGroup;
-    private String fixative;
-    private String originalOrderNo;
-    private String storeCondition;
-    private String abnormal;
-    private String createdById;
-    private String createdByName;
-    @JSONField(format="yyyy-MM-dd")
-    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime createdTime;
-    private String createdByOrgId;
-    private String createdByOrgName;
-    @NotNull(defaultValue="0")
-    private String customerSpecified;
-    private String batchNo;
-    private String mobileId;
-    private Long sortNum;
-    private String qualification;
-    private Long indexCategoryId;
-    private String indexId;
-    private String specifyMethod;
-    private String taskLowLimit;
-    private String taskHighLimit;
+    private Long id;// 主键
+
+    private Long orderId;// 样品编码
+
+    private String schemeName;// 方案名称
+
+    private Long testId;// 测试编码
+
+    private String testName;// 测试名称
+
+    private Long testMethodId;// 测试方法编码
+
+    private Long methodId;// 方法编码
+
+    private String methodName;// 方法名称
+
+    private Long methodVersionId;// 方法版本编码
+
+    private String testMethodBasis;// 检测方法及依据
+
+    private Long itemGroupId;// 分析项组编码
+
+    private String itemGroup;// 分析项组
+
+    private String analysisOrgId;// 分析科室编码
+
+    private String analysisOrgName;// 分析科室名称
+
+    private Long qcCategoryId;// QC类型主键
+
+    private String qcCategoryCode; // QC类型编码
+
+    private String qcName; // QC类型中文
+
+    private String subPackageNo;// 分包单号
+
+    private Long subcontractorId;// 分包商ID
+
+    @NotNull(defaultValue = Constant.NO)
+    private String dataSharing;// 是否数据共享
+
+    private String inputUserId; // 录入人编码
+
+    private String inputUserName; // 录入人名称
+
+    private String monitorTmplId; // 监测模板ID
+
+    private String orderCategory; // 样品类型
+
+    private Long containerCategoryId;// 容器类型主键
+
+    private String containerCategoryCode; // 容器类型编码
+
+    private String containerCategoryName;// 容器类型名称
+
+    private String containerGroup;// 容器组
+
+    private String fixative;// 固定剂
+
+    private String originalOrderNo; // 原样品编号
+
+    private String storeCondition; // 保存条件
+
+    private String createdById;// 制单人编码
+
+    private String createdByName;// 制单人名称
+
+    @JSONField(format = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime createdTime;// 制单时间
+
+    private String createdByOrgId;// 制单人单位编码
+
+    private String createdByOrgName;// 制单人单位名称
+
+    /**
+     * 广州分析测试中心项目
+     */
+    @NotNull(defaultValue = Constant.NO)
+    private String customerSpecified;// 是否客户指定
+
+    private String batchNo;//批号
+
+    private String mobileId; // 移动端样品分析项组ID
+
+    private Long sortNum; // 排序码
+
+    private String qualification; // 是否有资质
+
+    private Long indexCategoryId;// 指标分类id
+
+    private String indexId;// 样品指标id
 
     @Override
     public Long getId() {
-        return this.id;
+        return id;
     }
 
     @Override
@@ -83,7 +124,7 @@ implements Insertable<Long> {
     }
 
     public String getMobileId() {
-        return this.mobileId;
+        return mobileId;
     }
 
     public void setMobileId(String mobileId) {
@@ -91,7 +132,7 @@ implements Insertable<Long> {
     }
 
     public Long getOrderId() {
-        return this.orderId;
+        return orderId;
     }
 
     public void setOrderId(Long orderId) {
@@ -99,7 +140,7 @@ implements Insertable<Long> {
     }
 
     public Long getTestMethodId() {
-        return this.testMethodId;
+        return testMethodId;
     }
 
     public void setTestMethodId(Long testMethodId) {
@@ -107,11 +148,11 @@ implements Insertable<Long> {
     }
 
     public Long getItemGroupId() {
-        return this.itemGroupId;
+        return itemGroupId;
     }
 
     public String getTestName() {
-        return this.testName;
+        return testName;
     }
 
     public void setTestName(String testName) {
@@ -119,7 +160,7 @@ implements Insertable<Long> {
     }
 
     public String getQcCategoryCode() {
-        return this.qcCategoryCode;
+        return qcCategoryCode;
     }
 
     public void setQcCategoryCode(String qcCategoryCode) {
@@ -127,7 +168,7 @@ implements Insertable<Long> {
     }
 
     public String getQcName() {
-        return this.qcName;
+        return qcName;
     }
 
     public void setQcName(String qcName) {
@@ -135,7 +176,7 @@ implements Insertable<Long> {
     }
 
     public String getContainerCategoryCode() {
-        return this.containerCategoryCode;
+        return containerCategoryCode;
     }
 
     public void setContainerCategoryCode(String containerCategoryCode) {
@@ -147,7 +188,7 @@ implements Insertable<Long> {
     }
 
     public String getSchemeName() {
-        return this.schemeName;
+        return schemeName;
     }
 
     public void setSchemeName(String schemeName) {
@@ -155,7 +196,7 @@ implements Insertable<Long> {
     }
 
     public String getContainerCategoryName() {
-        return this.containerCategoryName;
+        return containerCategoryName;
     }
 
     public void setContainerCategoryName(String containerCategoryName) {
@@ -163,7 +204,7 @@ implements Insertable<Long> {
     }
 
     public Long getContainerCategoryId() {
-        return this.containerCategoryId;
+        return containerCategoryId;
     }
 
     public void setContainerCategoryId(Long containerCategoryId) {
@@ -171,7 +212,7 @@ implements Insertable<Long> {
     }
 
     public String getContainerGroup() {
-        return this.containerGroup;
+        return containerGroup;
     }
 
     public void setContainerGroup(String containerGroup) {
@@ -179,7 +220,7 @@ implements Insertable<Long> {
     }
 
     public String getFixative() {
-        return this.fixative;
+        return fixative;
     }
 
     public void setFixative(String fixative) {
@@ -187,7 +228,7 @@ implements Insertable<Long> {
     }
 
     public Long getTestId() {
-        return this.testId;
+        return testId;
     }
 
     public void setTestId(Long testId) {
@@ -195,7 +236,7 @@ implements Insertable<Long> {
     }
 
     public String getItemGroup() {
-        return this.itemGroup;
+        return itemGroup;
     }
 
     public void setItemGroup(String itemGroup) {
@@ -203,7 +244,7 @@ implements Insertable<Long> {
     }
 
     public Long getSubcontractorId() {
-        return this.subcontractorId;
+        return subcontractorId;
     }
 
     public void setSubcontractorId(Long subcontractorId) {
@@ -211,7 +252,7 @@ implements Insertable<Long> {
     }
 
     public String getDataSharing() {
-        return this.dataSharing;
+        return dataSharing;
     }
 
     public void setDataSharing(String dataSharing) {
@@ -219,7 +260,7 @@ implements Insertable<Long> {
     }
 
     public String getInputUserId() {
-        return this.inputUserId;
+        return inputUserId;
     }
 
     public void setInputUserId(String inputUserId) {
@@ -227,7 +268,7 @@ implements Insertable<Long> {
     }
 
     public String getInputUserName() {
-        return this.inputUserName;
+        return inputUserName;
     }
 
     public void setInputUserName(String inputUserName) {
@@ -235,7 +276,7 @@ implements Insertable<Long> {
     }
 
     public String getMonitorTmplId() {
-        return this.monitorTmplId;
+        return monitorTmplId;
     }
 
     public void setMonitorTmplId(String monitorTmplId) {
@@ -243,7 +284,7 @@ implements Insertable<Long> {
     }
 
     public String getOrderCategory() {
-        return this.orderCategory;
+        return orderCategory;
     }
 
     public void setOrderCategory(String orderCategory) {
@@ -251,7 +292,7 @@ implements Insertable<Long> {
     }
 
     public Long getMethodId() {
-        return this.methodId;
+        return methodId;
     }
 
     public void setMethodId(Long methodId) {
@@ -259,7 +300,7 @@ implements Insertable<Long> {
     }
 
     public String getMethodName() {
-        return this.methodName;
+        return methodName;
     }
 
     public void setMethodName(String methodName) {
@@ -267,7 +308,7 @@ implements Insertable<Long> {
     }
 
     public String getTestMethodBasis() {
-        return this.testMethodBasis;
+        return testMethodBasis;
     }
 
     public void setTestMethodBasis(String testMethodBasis) {
@@ -275,7 +316,7 @@ implements Insertable<Long> {
     }
 
     public Long getMethodVersionId() {
-        return this.methodVersionId;
+        return methodVersionId;
     }
 
     public void setMethodVersionId(Long methodVersionId) {
@@ -283,7 +324,7 @@ implements Insertable<Long> {
     }
 
     public String getAnalysisOrgId() {
-        return this.analysisOrgId;
+        return analysisOrgId;
     }
 
     public void setAnalysisOrgId(String analysisOrgId) {
@@ -291,7 +332,7 @@ implements Insertable<Long> {
     }
 
     public String getAnalysisOrgName() {
-        return this.analysisOrgName;
+        return analysisOrgName;
     }
 
     public void setAnalysisOrgName(String analysisOrgName) {
@@ -299,7 +340,7 @@ implements Insertable<Long> {
     }
 
     public Long getQcCategoryId() {
-        return this.qcCategoryId;
+        return qcCategoryId;
     }
 
     public void setQcCategoryId(Long qcCategoryId) {
@@ -307,7 +348,7 @@ implements Insertable<Long> {
     }
 
     public String getSubPackageNo() {
-        return this.subPackageNo;
+        return subPackageNo;
     }
 
     public void setSubPackageNo(String subPackageNo) {
@@ -315,7 +356,7 @@ implements Insertable<Long> {
     }
 
     public String getOriginalOrderNo() {
-        return this.originalOrderNo;
+        return originalOrderNo;
     }
 
     public void setOriginalOrderNo(String originalOrderNo) {
@@ -323,7 +364,7 @@ implements Insertable<Long> {
     }
 
     public String getStoreCondition() {
-        return this.storeCondition;
+        return storeCondition;
     }
 
     public void setStoreCondition(String storeCondition) {
@@ -332,7 +373,7 @@ implements Insertable<Long> {
 
     @Override
     public String getCreatedById() {
-        return this.createdById;
+        return createdById;
     }
 
     @Override
@@ -342,7 +383,7 @@ implements Insertable<Long> {
 
     @Override
     public String getCreatedByName() {
-        return this.createdByName;
+        return createdByName;
     }
 
     @Override
@@ -352,7 +393,7 @@ implements Insertable<Long> {
 
     @Override
     public LocalDateTime getCreatedTime() {
-        return this.createdTime;
+        return createdTime;
     }
 
     @Override
@@ -362,7 +403,7 @@ implements Insertable<Long> {
 
     @Override
     public String getCreatedByOrgId() {
-        return this.createdByOrgId;
+        return createdByOrgId;
     }
 
     @Override
@@ -372,7 +413,7 @@ implements Insertable<Long> {
 
     @Override
     public String getCreatedByOrgName() {
-        return this.createdByOrgName;
+        return createdByOrgName;
     }
 
     @Override
@@ -381,7 +422,7 @@ implements Insertable<Long> {
     }
 
     public String getCustomerSpecified() {
-        return this.customerSpecified;
+        return customerSpecified;
     }
 
     public void setCustomerSpecified(String customerSpecified) {
@@ -389,7 +430,7 @@ implements Insertable<Long> {
     }
 
     public String getBatchNo() {
-        return this.batchNo;
+        return batchNo;
     }
 
     public void setBatchNo(String batchNo) {
@@ -397,7 +438,7 @@ implements Insertable<Long> {
     }
 
     public Long getSortNum() {
-        return this.sortNum;
+        return sortNum;
     }
 
     public void setSortNum(Long sortNum) {
@@ -405,7 +446,7 @@ implements Insertable<Long> {
     }
 
     public String getQualification() {
-        return this.qualification;
+        return qualification;
     }
 
     public void setQualification(String qualification) {
@@ -413,7 +454,7 @@ implements Insertable<Long> {
     }
 
     public Long getIndexCategoryId() {
-        return this.indexCategoryId;
+        return indexCategoryId;
     }
 
     public void setIndexCategoryId(Long indexCategoryId) {
@@ -421,43 +462,40 @@ implements Insertable<Long> {
     }
 
     public String getIndexId() {
-        return this.indexId;
+        return indexId;
     }
 
     public void setIndexId(String indexId) {
         this.indexId = indexId;
     }
 
+    private String abnormal;
+    private String specifyMethod;
+    private String taskLowLimit;
+    private String taskHighLimit;
+
     public String getSpecifyMethod() {
         return this.specifyMethod;
     }
-
     public void setSpecifyMethod(String specifyMethod) {
         this.specifyMethod = specifyMethod;
     }
-
     public String getAbnormal() {
         return this.abnormal;
     }
-
     public void setAbnormal(String abnormal) {
         this.abnormal = abnormal;
     }
-
     public String getTaskLowLimit() {
         return this.taskLowLimit;
     }
-
     public void setTaskLowLimit(String taskLowLimit) {
         this.taskLowLimit = taskLowLimit;
     }
-
     public String getTaskHighLimit() {
         return this.taskHighLimit;
     }
-
     public void setTaskHighLimit(String taskHighLimit) {
         this.taskHighLimit = taskHighLimit;
     }
 }
-

@@ -234,20 +234,7 @@ public class EmcFolderServiceImpl implements EmcFolderService {
 
     @Override
     public EmcFolderBean insertByOrder(EmcOrderBean order) {
-        EmcFolderBean folder = new EmcFolderBean();
-        folder.setId(ApplicationContextHelper.getNextIdentity());
-        Long projId = order.getProjId();
-
-        String newFolderNo = generateFolderNoByProjId(projId, projectService.selectDetail(projId).getProjNo());
-
-        folder.setFolderNo(newFolderNo);
-        folder.setProjId(order.getProjId());
-        folder.setOrderCategory(order.getOrderCategory());
-        folder.setSource(EmcBizConstant.BP_SOURCE_ORDERREGISTRATION);
-        folder.setTermination(Constant.NO);
-
-        getDao().insert(folder);
-        return folder;
+        return null;
     }
 
     @Override
@@ -351,103 +338,6 @@ public class EmcFolderServiceImpl implements EmcFolderService {
     @Override
     @Transactional
     public void copyFolders(String folderNo, RestJsonWrapperBean wrapper) {
-        EmcFolderBean folder = wrapper.parseUnique(EmcFolderBean.class);
-
-        // 查询点位信息
-        EmcFolderBean selectedFolder = getDao().selectById(folder.getId());
-
-        EmcFolderBean newFolder = new EmcFolderBean();
-        BeanUtils.copyProperties(selectedFolder, newFolder);
-        PersistableHelper.resetBasicProperties(newFolder);
-
-        Long newFolderId = ApplicationContextHelper.getNextIdentity();
-        newFolder.setId(newFolderId);
-        Long projId = folder.getProjId();
-        String newFolderNo = generateFolderNoByProjId(projId, projectService.selectDetail(projId).getProjNo());
-        newFolder.setFolderNo(newFolderNo);
-        getDao().insert(newFolder);
-
-        // 查询对应点位下的样品信息
-        List<EmcOrderBean> orderList = orderService.getDao().selectListByOneColumnValues(Arrays.asList(folder.getId()), "FOLDERID");
-        List<Long> orderIdList = orderList.stream().map(e -> e.getId()).collect(Collectors.toList());
-
-        // 查询样品下的对应测试信息
-        List<EmcOrderTaskBean> orderTaskList = orderTaskService.getDao().selectListByOneColumnValues(orderIdList, "ORDERID");
-
-        // 查询样品下对应的结果信息
-        List<EmcOrderTaskResultBean> orderTaskResultList = orderTaskResultService.getDao().selectListByOneColumnValues(orderIdList, "ORDERID");
-
-        // 查询样品对应的分析项组
-        List<EmcOrderItemGroupBean> orderItemGroupList = orderItemGroupService.getDao().selectListByOneColumnValues(orderIdList, "ORDERID");
-
-        List<EmcOrderBean> newOrderList = new ArrayList<>();
-        List<EmcOrderTaskBean> newOrderTaskList = new ArrayList<>();
-        List<EmcOrderTaskResultBean> newOrderTaskResultList = new ArrayList<>();
-        List<EmcOrderItemGroupBean> newOrderItemGroupList = new ArrayList<>();
-
-        for (int i = 0; i < orderList.size(); i++) {
-            EmcOrderBean oldOrder = orderList.get(i);
-            EmcOrderBean newOrder = new EmcOrderBean();
-
-            BeanUtils.copyProperties(oldOrder, newOrder);
-            PersistableHelper.resetBasicProperties(newOrder);
-
-            newOrder.setId(ApplicationContextHelper.getNextIdentity());
-            newOrder.setFolderId(newFolder.getId());
-
-
-            if(newFolder.getFolderNo().contains("-")){
-                newOrder.setOrderNo(newFolder.getFolderNo() + "-" + String.format("%03d", i + 1));
-            }else{
-                newOrder.setOrderNo(newFolder.getFolderNo() + String.format("%03d", i + 1));
-            }
-
-
-            newOrder.setLabelNo(newOrder.getOrderNo());
-            newOrderList.add(newOrder);
-
-            for (EmcOrderTaskBean orderTask : orderTaskList) {
-                if (oldOrder.getId().equals(orderTask.getOrderId())) {
-                    EmcOrderTaskBean newOrderTask = new EmcOrderTaskBean();
-                    BeanUtils.copyProperties(orderTask, newOrderTask);
-                    PersistableHelper.resetBasicProperties(newOrderTask);
-
-                    newOrderTask.setId(ApplicationContextHelper.getNextIdentity());
-                    newOrderTask.setOrderId(newOrder.getId());
-                    newOrderTask.setFolderId(newFolder.getId());
-                    newOrderTask.setEquiptAcquNo(newOrder.getLabelNo());
-                    newOrderTaskList.add(newOrderTask);
-
-                    for (EmcOrderTaskResultBean orderTaskResult : orderTaskResultList) {
-                        if (orderTask.getId().equals(orderTaskResult.getOrderTaskId())) {
-                            EmcOrderTaskResultBean newOrderTaskResult = new EmcOrderTaskResultBean();
-                            BeanUtils.copyProperties(orderTaskResult, newOrderTaskResult);
-
-                            newOrderTaskResult.setId(ApplicationContextHelper.getNextIdentity());
-                            newOrderTaskResult.setFolderId(newFolderId);
-                            newOrderTaskResult.setOrderId(newOrder.getId());
-                            newOrderTaskResult.setOrderTaskId(newOrderTask.getId());
-                            newOrderTaskResult.setOrderNo(newOrder.getOrderNo());
-                            newOrderTaskResultList.add(newOrderTaskResult);
-                        }
-                    }
-                }
-            }
-
-            List<EmcOrderItemGroupBean> oldItemGroupList = orderItemGroupList.stream().filter(group -> ObjectUtils.equals(oldOrder.getId(), group.getOrderId())).collect(Collectors.toList());
-            oldItemGroupList.forEach(group -> {
-                EmcOrderItemGroupBean newItemGroup = new EmcOrderItemGroupBean();
-                BeanUtils.copyProperties(group, newItemGroup, EmcConstant.CREATED_COLUMNS);
-                newItemGroup.setId(ApplicationContextHelper.getNextIdentity());
-                newItemGroup.setOrderId(newOrder.getId());
-                newOrderItemGroupList.add(newItemGroup);
-            });
-        }
-
-        orderService.getDao().insert(newOrderList);
-        orderTaskService.getDao().insert(newOrderTaskList);
-        orderTaskResultService.getDao().insert(newOrderTaskResultList);
-        orderItemGroupService.getDao().insert(newOrderItemGroupList);
     }
 
     @Override

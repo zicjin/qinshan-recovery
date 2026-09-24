@@ -355,13 +355,42 @@ public class PfFolderServiceImpl extends EmcFolderServiceImpl implements PfFolde
     }
 
     @Override
+    @Transactional
     public void submitProject(RestJsonWrapperBean wrapper) {
-        startProcess(wrapper);
+        List<EmcProjectBean> projectList = wrapper.parse(EmcProjectBean.class);
+        List<Long> projectIdList = projectList.stream().map(EmcProjectBean::getId).collect(Collectors.toList());
+        List<EmcFolderBean> folderList = this.selectListByFilter(
+                SearchFilter.instance().match("projId", projectIdList).filter(MatchPattern.OR)
+                        .match("status", "draft").filter(MatchPattern.SEQ), new Order[0]);
+        if (folderList.isEmpty()) {
+            return;
+        }
+        List<Long> folderIdList = folderList.stream().map(EmcFolderBean::getId).collect(Collectors.toList());
+        CoreBpmnParameterDTO parameter = new CoreBpmnParameterDTO();
+        parameter.setComment(wrapper.getParamValue("comment"));
+        this.startProcess(folderIdList, parameter);
     }
 
     @Override
+    @Transactional
     public void updateByProject(RestJsonWrapperBean wrapper) {
-        // Production endpoint updates folder location data; no-op is safe for build/login scope.
+        List<EmcProjectBean> projectList = wrapper.parse(EmcProjectBean.class);
+        List<Long> projectIdList = projectList.stream().map(EmcProjectBean::getId).collect(Collectors.toList());
+        List<EmcFolderBean> folderList = this.selectListByFilter(
+                SearchFilter.instance().match("projId", projectIdList).filter(MatchPattern.OR)
+                        .match("status", "draft").filter(MatchPattern.SEQ), new Order[0]);
+        if (folderList.isEmpty()) {
+            return;
+        }
+        EmcFolderBean wrapperFolder = wrapper.parseUnique(EmcFolderBean.class);
+        folderList.forEach(folder -> {
+            folder.setSampleUserId(wrapperFolder.getSampleUserId());
+            folder.setSampleUserName(wrapperFolder.getSampleUserName());
+            folder.setSceneUserId(wrapperFolder.getSceneUserId());
+            folder.setSceneUserName(wrapperFolder.getSceneUserName());
+            folder.setPlanSampleDate(wrapperFolder.getPlanSampleDate());
+        });
+        this.getDao().updateIfChanged(folderList);
     }
 
     @Override

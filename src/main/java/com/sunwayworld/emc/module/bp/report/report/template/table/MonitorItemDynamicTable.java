@@ -68,7 +68,7 @@ public class MonitorItemDynamicTable implements DynamicTable {
         this.coreCodeList = coreCodeList;
         this.tableIndex = tableIndex;
         this.isDioxin = StringUtils.equalsIgnoreCase(project.getBizCategoryCode(), "C");
-        this.sampling = Constant.YES.equals(project.getSample());
+        this.sampling = "1".equals(project.getSample());
     }
 
     @Override
@@ -78,12 +78,12 @@ public class MonitorItemDynamicTable implements DynamicTable {
 
     @Override
     public String getTableTitle() {
-        return String.format(PfConstant.MONITOR_ITEM_TABLE_TITLE, tableIndex);
+        return String.format("表%d 检测依据、仪器一览表", tableIndex);
     }
 
     @Override
     public int getTableIndex() {
-        return 2;
+        return 3;
     }
 
     @Override
@@ -98,15 +98,15 @@ public class MonitorItemDynamicTable implements DynamicTable {
 
     @Override
     public List<List<Object>> buildTableHeader(WordTemplateDynamicTableDTO dynamicTableDTO) {
-        List<List<Object>> headerDataList = buildTableDynamicHeader(PfConstant.MONITOR_ITEM_TABLE_HEADER_TITLES, PfConstant.MONITOR_ITEM_TABLE_HEADER_COLUMN_QTY, null);
-        setTableTitle(PfConstant.MONITOR_ITEM_TABLE_HEADER_TITLES, PfConstant.MONITOR_ITEM_TABLE_HEADER_COLUMN_QTY, headerDataList, dynamicTableDTO);
+        List<List<Object>> headerDataList = buildTableDynamicHeader(PfConstant.MONITOR_ITEM_TABLE_HEADER_TITLES, 4, null);
+        setTableTitle(PfConstant.MONITOR_ITEM_TABLE_HEADER_TITLES, 4, headerDataList, dynamicTableDTO);
 
         return headerDataList;
     }
 
     @Override
     public List<Integer> getColumnWidthList() {
-        return Arrays.asList(1531, 2030, 0, 0);
+        return Arrays.asList(2000, 0, 0, 1000);
     }
 
     @Override

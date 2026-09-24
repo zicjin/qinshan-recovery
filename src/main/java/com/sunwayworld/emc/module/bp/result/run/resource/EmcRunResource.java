@@ -28,8 +28,6 @@ public interface EmcRunResource extends GenericResource<EmcRunService, EmcRunBea
 
     Long delQc(RestJsonWrapperBean wrapper);
 
-    Page<EmcEquiptBean> selectEquiptPagination(String testMethodId);
-
     Page<EmcEquiptBean> selectEquiptPagination(String testMethodId, RestJsonWrapperBean wrapper);
 
     Long runInput(RestJsonWrapperBean wrapper);

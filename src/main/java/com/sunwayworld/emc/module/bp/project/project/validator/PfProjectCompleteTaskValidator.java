@@ -12,9 +12,14 @@ import org.springframework.stereotype.Repository;
 import com.sunwayworld.emc.framework.constant.PfBizConstant;
 import com.sunwayworld.emc.framework.constant.PfConstant;
 import com.sunwayworld.emc.module.bp.bp.bean.EmcOrderBean;
+import com.sunwayworld.emc.module.bp.project.project.bean.EmcOrderItemBean;
+import com.sunwayworld.emc.module.bp.project.project.bean.EmcOrderItemGroupBean;
 import com.sunwayworld.emc.module.bp.bp.service.EmcOrderService;
 import com.sunwayworld.emc.module.bp.project.project.bean.EmcProjectBean;
 import com.sunwayworld.emc.module.bp.project.project.service.EmcProjectService;
+import com.sunwayworld.emc.module.bp.project.project.service.EmcProjectDirectorService;
+import com.sunwayworld.emc.module.bp.project.project.service.EmcOrderItemGroupService;
+import com.sunwayworld.emc.module.bp.project.project.service.EmcOrderItemService;
 import com.sunwayworld.emc.module.bp.project.projscheme.bean.EmcProjSchemeBean;
 import com.sunwayworld.emc.module.bp.project.projscheme.service.EmcProjSchemeService;
 import com.sunwayworld.emc.module.bp.project.projscheme.service.PfProjSchemeService;
@@ -25,6 +30,7 @@ import com.sunwayworld.emc.module.mdm.basemdm.monitortmplgroup.service.EmcMonito
 import com.sunwayworld.emc.module.mdm.bizmdm.monitortmpl.bean.EmcMonitorTmplBean;
 import com.sunwayworld.emc.module.mdm.bizmdm.monitortmpl.service.EmcMonitorTmplService;
 import com.sunwayworld.framework.constant.Constant;
+import com.sunwayworld.framework.database.sql.Order;
 import com.sunwayworld.framework.context.LocalContextHelper;
 import com.sunwayworld.framework.i18n.I18nHelper;
 import com.sunwayworld.framework.mybatis.mapper.MatchPattern;
@@ -63,12 +69,26 @@ public class PfProjectCompleteTaskValidator extends EmcProjectCompleteTaskValida
     @Autowired
     private EmcReportSendInfoService reportSendInfoService;
 
+    @Autowired
+    private EmcProjectDirectorService emcProjectDirectorService;
+
+    @Autowired
+    private EmcOrderItemGroupService emcOrderItemGroupService;
+
+    @Autowired
+    private EmcOrderItemService emcOrderItemService;
+
     @Override
     public boolean doValid(Object... args) {
         RestJsonWrapperBean wrapper = ArrayUtils.getUniqueTypeValue(args, RestJsonWrapperBean.class);
 
         List<Long> projectIdList = wrapper.parse(EmcProjectBean.class).stream().map(EmcProjectBean::getId).collect(Collectors.toList());
         List<EmcProjectBean> projectList = projectService.selectListByFilter(SearchFilter.instance().match("id", projectIdList).filter(MatchPattern.OR));
+        emcProjectDirectorService.getDao().selectListByOneColumnValues(projectIdList, "PROJECTID");
+        if (projectList.stream().anyMatch(e -> e.getEntrustDate() == null)) {
+            this.addConstraintViolation("委托日期不能为空");
+            return false;
+        }
 
         List<EmcProjectBean> advisoryProjectList = projectList.stream().filter(p -> StringUtils.endsWith(p.getProjNo(), "X")).collect(Collectors.toList());
         List<EmcProjectBean> normalProjectList = projectList.stream().filter(p -> !StringUtils.endsWith(p.getProjNo(), "X")).collect(Collectors.toList());
@@ -134,6 +154,12 @@ public class PfProjectCompleteTaskValidator extends EmcProjectCompleteTaskValida
                 return false;
             }
 
+            boolean emptySenderId = orderList.stream().anyMatch(order -> StringUtils.isEmpty(order.getSenderId()));
+            if (emptySenderId) {
+                this.addConstraintViolation("送样人不能为空");
+                return false;
+            }
+
             boolean emptySendDateTime = orderList.stream().anyMatch(order -> ObjectUtils.isEmpty(order.getSendDate()) || StringUtils.isEmpty(order.getSendTime()));
             if (emptySendDateTime) {
                 this.addConstraintViolation("EMC.MODULE.BP.PROJECT.PROJECTS.TIP.SEND_DATE_OR_TIME_IS_EMPTY");
@@ -145,6 +171,26 @@ public class PfProjectCompleteTaskValidator extends EmcProjectCompleteTaskValida
                 String orderNos = emptyPdupOrderList.stream().map(EmcOrderBean::getOrderNo).collect(Collectors.joining(","));
                 this.addConstraintViolation(I18nHelper.getMessage("EMC.MODULE.BP.PROJECT.PROJECTS.TIP.HAS_NO_PARENT_ORDER_NO", orderNos));
                 return false;
+            }
+
+            List<Long> orderIdList = orderList.stream().map(EmcOrderBean::getId).distinct().collect(Collectors.toList());
+            List<EmcOrderItemGroupBean> orderItemGroupList = emcOrderItemGroupService.getDao().selectListByOneColumnValues(orderIdList, "ORDERID");
+            for (EmcOrderBean order : orderList) {
+                if (orderItemGroupList.stream().noneMatch(group -> ObjectUtils.equals(group.getOrderId(), order.getId()))) {
+                    this.addConstraintViolation(I18nHelper.getMessage("存在样品下没有维护分析项组：" + order.getOrderNo()));
+                    return false;
+                }
+            }
+            List<Long> orderItemGroupIdList = orderItemGroupList.stream().map(EmcOrderItemGroupBean::getId).distinct().collect(Collectors.toList());
+            List<EmcOrderItemBean> orderItemList = new ArrayList<>();
+            for (int i = 0; i < orderItemGroupIdList.size(); i += 1000) {
+                orderItemList.addAll(emcOrderItemService.getDao().selectListByOneColumnValues(orderItemGroupIdList.subList(i, Math.min(i + 1000, orderItemGroupIdList.size())), "ORDERITEMGROUPID"));
+            }
+            for (EmcOrderItemGroupBean group : orderItemGroupList) {
+                if (orderItemList.stream().noneMatch(item -> ObjectUtils.equals(item.getOrderItemGroupId(), group.getId()))) {
+                    this.addConstraintViolation(I18nHelper.getMessage("存在分析项组下没有维护分析项：" + group.getItemGroup()));
+                    return false;
+                }
             }
         }
 

@@ -116,17 +116,22 @@ public class MonitorItemDynamicTable implements DynamicTable {
 
         Map<Long, String> sampleEquiptMap = equiptList.stream().collect(Collectors.toMap(EmcEquiptBean::getId, equipt -> equipt.getEquiptName() + "\n" + equipt.getSpecification() + "\n" + "（" + equipt.getEquiptId() + "）", (k1, k2) -> k1));
 
-        // 去除包含参数的测试
-        List<EmcOrderTaskBean> validOrderTaskList = orderTaskList.stream().filter(r -> !StringUtils.contains(r.getTestName(), EmcConstant.PARAMETER_TEST_MATCH_KEYWORD)
-                /*&& !StringUtils.contains(r.getTestName(), EmcConstant.DRY_MATTER_TEST_MATCH_KEYWORD)
-                && !StringUtils.contains(r.getTestName(), PfConstant.WATER_CONTENT_TEST_MATCH_KEYWORD)*/
-                && !StringUtils.contains(r.getTestName(), PfConstant.WATER_CONTENT_TEST_MATCH_KEYWORD_2)
-                && !StringUtils.contains(r.getExt$Item("relatedTest"), Constant.YES)
-                && EmcConstant.N_A.equals(r.getQcCategoryCode())).collect(Collectors.toList());
-
-        // 如果是二噁英，则直接排除含水率测试
+        List<EmcReportResultBean> sampleReportResultList = reportResultList.stream()
+                .filter(result -> StringUtils.equals(result.getDataType(), "sample"))
+                .collect(Collectors.toList());
+        sampleReportResultList.stream()
+                .filter(result -> StringUtils.isEmpty(result.getExt$Item("itemGroup")))
+                .forEach(result -> result.setExt$Item("itemGroup", result.getTestName()));
+        List<EmcOrderTaskBean> validOrderTaskList = orderTaskList.stream()
+                .filter(r -> !StringUtils.contains(r.getTestName(), "参数")
+                        && !StringUtils.contains(r.getTestName(), "水分含量")
+                        && !StringUtils.contains(r.getExt$Item("relatedTest"), "1")
+                        && "N/A".equals(r.getQcCategoryCode()))
+                .collect(Collectors.toList());
         if (isDioxin) {
-            validOrderTaskList = validOrderTaskList.stream().filter(task -> !StringUtils.contains(task.getTestName(), PfConstant.WATER_CONTENT_TEST_MATCH_KEYWORD)).collect(Collectors.toList());
+            validOrderTaskList = validOrderTaskList.stream()
+                    .filter(task -> !StringUtils.contains(task.getTestName(), "含水率"))
+                    .collect(Collectors.toList());
         }
 
         AtomicInteger mergedRowIndex = new AtomicInteger(0);

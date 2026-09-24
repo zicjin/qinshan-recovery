@@ -34,8 +34,7 @@ public class PfUserImportFileFunction implements CoreFileImportFunction {
     public CoreFileImportResultDTO apply(CoreFileBean file) {
         CoreFileImportResultDTO fileImportResultDTO = new CoreFileImportResultDTO();
 
-        FilePathDTO fr = CoreFileUtils.toFilePath(file);
-        List<CoreUserBean> userList = ExcelHelper.readDataFromExcel(FilePathManager.getLocalPath(fr).toString(), 1, 2, CoreUserBean.class);
+        List<CoreUserBean> userList = ExcelHelper.readDataFromExcel(CoreFileUtils.getLocalPath(file).toString(), 1, 2, CoreUserBean.class);
 
         if (userList.isEmpty()) {
             return fileImportResultDTO;

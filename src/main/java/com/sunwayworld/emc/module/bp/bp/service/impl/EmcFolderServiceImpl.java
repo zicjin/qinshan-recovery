@@ -237,26 +237,14 @@ public class EmcFolderServiceImpl implements EmcFolderService {
         return null;
     }
 
+    @Override
     public String generateFolderNoByProjId(Long projId, String projectNo, String monitorTmplId) {
         return null;
     }
 
+    @Override
     public List<String> generateFolderNosByProjId(Long projId, String projectNo, String monitorTmplId, int num) {
         return null;
-    }
-
-
-    public String generateFolderNoByProjId(Long projId, String projectNo) {
-        List<EmcFolderBean> folderOfProjectList = getDao().selectListByOneColumnValue(projId, "PROJID", Collections.singletonList("FOLDERNO"));
-        String newFolderNo = "";
-        if (folderOfProjectList.isEmpty()) {
-            newFolderNo = projectNo + "001";
-        } else {
-            String maxFolderNo = folderOfProjectList.stream().max(Comparator.comparing(EmcFolderBean::getFolderNo)).get().getFolderNo();
-            newFolderNo = maxFolderNo.substring(0, maxFolderNo.length() - 3) + String.format("%03d", Long.parseLong(maxFolderNo.substring(maxFolderNo.length() - 3)) + 1);
-        }
-
-        return newFolderNo;
     }
 
     @Override

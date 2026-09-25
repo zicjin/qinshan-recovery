@@ -11,6 +11,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sunwayworld.emc.module.bp.result.run.service.EmcRunService;
+import com.sunwayworld.emc.module.bp.sample.sample.bean.EmcSampleBean;
+import com.sunwayworld.emc.module.bp.sample.sample.service.EmcSampleService;
 import com.sunwayworld.emc.module.mdm.basemdm.monitorpointcategory.bean.EmcMonitorPointCategoryBean;
 import com.sunwayworld.emc.module.mdm.basemdm.monitorpointcategory.service.EmcMonitorPointCategoryService;
 import com.sunwayworld.emc.module.mdm.basemdm.propertytmpl.bean.EmcPropertyDataBean;
@@ -49,6 +51,10 @@ public class EmcPropertyDataServiceImpl implements EmcPropertyDataService {
     @Autowired
     @Lazy
     private EmcRunService runSerivce;
+
+    @Autowired
+    @Lazy
+    private EmcSampleService emcSampleService;
 
     @SuppressWarnings("unchecked")
     @Override
@@ -151,7 +157,7 @@ public class EmcPropertyDataServiceImpl implements EmcPropertyDataService {
         List<Long> testMethodIdList = testMethodIdStrList.stream().map(NumberUtils::parseLong).collect(Collectors.toList());
 
         List<EmcPropertyDataBean> testMethodDataList = selectListByFilter(SearchFilter.instance().match("BIZID", testMethodIdList).filter(MatchPattern.OR));
-        List<EmcPropertyDataBean> runDataList = selectListByFilter(SearchFilter.instance().match("BIZID", NumberUtils.parseLong(runId)).filter(MatchPattern.EQ));
+        List<EmcPropertyDataBean> runDataList = selectListByFilter(SearchFilter.instance().match("BIZID2", runId).filter(MatchPattern.EQ));
 
         if (tmplId != 0 && !runDataList.isEmpty()) {
             runDataList = runDataList.stream().filter(e -> ObjectUtils.equals(tmplId, e.getTmplId())).collect(Collectors.toList());

@@ -8,7 +8,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.util.List;
 import net.qiyuesuo.sdk.SDKClient;
+import net.qiyuesuo.sdk.api.ContractService;
 import net.qiyuesuo.sdk.bean.company.TenantType;
 import net.qiyuesuo.sdk.bean.contract.Action;
 import net.qiyuesuo.sdk.bean.contract.ActionType;
@@ -246,7 +248,7 @@ public class FileSealUtils {
             if (!originalFile.exists() || originalFile.length() == 0L) {
                 logger.info("\u521b\u5efa\u5408\u540c\u6587\u4ef6\u5927\u5c0f\u5f02\u5e38\uff1a" + file);
             }
-            ContractServiceImpl contractService = new ContractServiceImpl(client);
+            ContractService contractService = new ContractServiceImpl(client);
             CreateDocumentRequest request = new CreateDocumentRequest();
             request.setFile(new StreamFile(new FileInputStream(originalFile)));
             request.setFileType("pdf");
@@ -267,23 +269,23 @@ public class FileSealUtils {
             CreateContractRequest createContractRequest = new CreateContractRequest();
             createContractRequest.setSend(true);
             createContractRequest.setSubject("\u9752\u5c71\u7eff\u6c34\u62a5\u544a");
-            ArrayList<Long> docIds = new ArrayList<Long>();
+            List<Long> docIds = new ArrayList<Long>();
             docIds.add(docId);
             createContractRequest.setDocuments(docIds);
             createContractRequest.setCategoryName("\u9ed8\u8ba4");
-            ArrayList<Signatory> signatories = new ArrayList<Signatory>();
+            List<Signatory> signatories = new ArrayList<Signatory>();
             Signatory signatory1 = new Signatory();
             signatory1.setTenantType(TenantType.INNER_COMPANY);
             signatory1.setTenantName(SEAL_COMPANYNAME);
             signatory1.setSerialNo(1);
-            ArrayList<Action> actions = new ArrayList<Action>();
+            List<Action> actions = new ArrayList<Action>();
             Action action = new Action();
             action.setType(ActionType.CORPORATE);
             action.setName("\u7ec4\u7ec7\u7b7e\u7ae0");
             action.setSerialNo(1);
             action.setSealId(SEALID);
             if (isAcross.booleanValue()) {
-                ArrayList<SignatoryRect> rectList = new ArrayList<SignatoryRect>();
+                List<SignatoryRect> rectList = new ArrayList<SignatoryRect>();
                 SignatoryRect rect = new SignatoryRect();
                 rect.setDocumentId(docId);
                 rect.setRectType(StamperType.ACROSS_PAGE);
@@ -311,11 +313,11 @@ public class FileSealUtils {
 
     private static Long createIssueSignContract(SDKClient client, Long docId, Long sealId) {
         try {
-            ContractServiceImpl contractService = new ContractServiceImpl(client);
+            ContractService contractService = new ContractServiceImpl(client);
             CreateContractRequest createContractRequest = new CreateContractRequest();
             createContractRequest.setSend(true);
             createContractRequest.setSubject("\u9752\u5c71\u7eff\u6c34\u62a5\u544a");
-            ArrayList<Long> docIds = new ArrayList<Long>();
+            List<Long> docIds = new ArrayList<Long>();
             docIds.add(docId);
             createContractRequest.setDocuments(docIds);
             createContractRequest.setCategoryName("\u9ed8\u8ba4");
@@ -329,10 +331,10 @@ public class FileSealUtils {
             action.setSerialNo(1);
             action.setSealId(sealId);
             action.setSealCategoryName(REPORT_ISSUE_SEAL_CATEGORY_NAME);
-            ArrayList<Action> actions = new ArrayList<Action>();
+            List<Action> actions = new ArrayList<Action>();
             actions.add(action);
             signatory.setActions(actions);
-            ArrayList<Signatory> signatories = new ArrayList<Signatory>();
+            List<Signatory> signatories = new ArrayList<Signatory>();
             signatories.add(signatory);
             createContractRequest.setSignatories(signatories);
             Long contractId = contractService.createContractByCategory(createContractRequest);
@@ -346,7 +348,7 @@ public class FileSealUtils {
 
     private static void downloadDoc(SDKClient client, Long docId, String downloadUrl) {
         try {
-            ContractServiceImpl contractService = new ContractServiceImpl(client);
+            ContractService contractService = new ContractServiceImpl(client);
             DownloadDocRequest request = new DownloadDocRequest();
             FileOutputStream fos = new FileOutputStream(downloadUrl);
             request.setDocumentId(docId);

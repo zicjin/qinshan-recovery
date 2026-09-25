@@ -45,9 +45,10 @@ implements PfEquiptRequisitionService {
                         fProjNos = fProjNos.replace(projNosSplit[i] + ",", "");
                         continue;
                     }
-                    if (fProjIds.indexOf(projIdsSplit[i]) <= 0) continue;
-                    fProjIds = fProjIds.replace("," + projIdsSplit[i], "");
-                    fProjNos = fProjNos.replace("," + projNosSplit[i], "");
+                    if (fProjIds.indexOf(projIdsSplit[i]) > 0) {
+                        fProjIds = fProjIds.replace("," + projIdsSplit[i], "");
+                        fProjNos = fProjNos.replace("," + projNosSplit[i], "");
+                    }
                 }
                 f.setProjIds(fProjIds);
                 f.setProjNos(fProjNos);

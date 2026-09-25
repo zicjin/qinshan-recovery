@@ -11,9 +11,8 @@ import com.spire.pdf.PdfPageBase;
 import com.spire.pdf.graphics.PdfImage;
 import com.spire.xls.FileFormat;
 import com.spire.xls.Workbook;
+import com.spire.xls.Worksheet;
 import com.spire.xls.collections.WorksheetsCollection;
-import com.spire.xls.core.IWorksheet;
-import com.spire.xls.core.spreadsheet.XlsWorksheet;
 import com.sunwayworld.emc.framework.utils.AsposeExcelUtils;
 import com.sunwayworld.framework.utils.FileUtils;
 import java.io.File;
@@ -53,9 +52,9 @@ public class SpireOfficeUtil {
         if (sheetIndex > workSheets.size() - 1) {
             return;
         }
-        IWorksheet sheet = workSheets.get(sheetIndex);
+        Worksheet sheet = workSheets.get(sheetIndex);
         wb.getConverterSetting().setSheetFitToPage(true);
-        ((XlsWorksheet)sheet).saveToPdf(pdfFile.getAbsolutePath());
+        sheet.saveToPdf(pdfFile.getAbsolutePath());
     }
 
     public static void imageToPdf(File file, File pdfFile) {
@@ -133,8 +132,8 @@ public class SpireOfficeUtil {
     public static void copyFile(File oldFile, File newFile) {
         try (FileInputStream fis = new FileInputStream(oldFile);
              FileOutputStream fos = new FileOutputStream(newFile);){
-            int length;
             byte[] buffer = new byte[1024];
+            int length;
             while ((length = fis.read(buffer)) > 0) {
                 fos.write(buffer, 0, length);
             }

@@ -51,9 +51,10 @@ import com.sunwayworld.emc.module.bp.bp.bean.EmcOrderBean;
 import com.sunwayworld.emc.module.bp.bp.bean.EmcOrderContainerBean;
 import com.sunwayworld.emc.module.bp.bp.bean.EmcOrderTaskBean;
 import com.sunwayworld.emc.module.bp.bp.bean.EmcOrderTaskResultBean;
+import com.sunwayworld.emc.module.bp.bp.dao.EmcOrderTaskDao;
 import com.sunwayworld.emc.module.bp.bp.service.EmcFolderService;
 import com.sunwayworld.emc.module.bp.bp.service.EmcOrderContainerService;
-import com.sunwayworld.emc.module.bp.bp.service.EmcOrderService;
+import com.sunwayworld.emc.module.bp.bp.service.PfOrderService;
 import com.sunwayworld.emc.module.bp.bp.service.EmcOrderTaskLogService;
 import com.sunwayworld.emc.module.bp.bp.service.EmcOrderTaskResultService;
 import com.sunwayworld.emc.module.bp.bp.service.EmcOrderTaskService;
@@ -82,6 +83,7 @@ import com.sunwayworld.emc.module.mdm.basemdm.subcontractor.bean.EmcSubcontractR
 import com.sunwayworld.emc.module.mdm.basemdm.subcontractor.service.EmcSubcontractRecordService;
 import com.sunwayworld.emc.module.mdm.bizmdm.capacity.bean.EmcCapacityItemGroupBean;
 import com.sunwayworld.emc.module.mdm.bizmdm.capacity.service.EmcCapacityItemGroupService;
+import com.sunwayworld.emc.module.mdm.bizmdm.capacity.service.EmcTestCapacityService;
 import com.sunwayworld.emc.module.mdm.bizmdm.monitortmpl.bean.EmcMonitorTmplBean;
 import com.sunwayworld.emc.module.mdm.bizmdm.monitortmpl.service.EmcMonitorTmplService;
 import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcGroupItemBean;
@@ -100,6 +102,7 @@ import com.sunwayworld.framework.data.page.Pagination;
 import com.sunwayworld.framework.exception.UnexpectedException;
 import com.sunwayworld.framework.i18n.I18nHelper;
 import com.sunwayworld.framework.mybatis.mapper.MatchPattern;
+import com.sunwayworld.framework.mybatis.mapper.MapperParameter;
 import com.sunwayworld.framework.mybatis.mapper.SearchFilter;
 import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;
 import com.sunwayworld.framework.spring.annotation.GikamBean;
@@ -120,11 +123,14 @@ public class PfSampleServiceImpl extends EmcSampleServiceImpl implements PfSampl
 
     @Autowired
     @Lazy
-    private EmcOrderService orderService;
+    private PfOrderService orderService;
 
     @Autowired
     @Lazy
     private EmcOrderTaskService orderTaskService;
+
+    @Autowired
+    private EmcOrderTaskDao orderTaskDao;
 
     @Autowired
     @Lazy
@@ -133,9 +139,6 @@ public class PfSampleServiceImpl extends EmcSampleServiceImpl implements PfSampl
     @Autowired
     @Lazy
     private EmcReportService reportService;
-
-    @Autowired
-    private EmcAuditRecordService sampleAuditRecordService;
 
     @Autowired
     @Lazy
@@ -203,6 +206,13 @@ public class PfSampleServiceImpl extends EmcSampleServiceImpl implements PfSampl
     @Autowired
     private CoreCodeService coreCodeService;
 
+    @Autowired
+    @Lazy
+    private EmcTestCapacityService emcTestCapacityService;
+
+    @Autowired
+    private EmcAuditRecordService auditRecordService;
+
     @Override
     @SuppressWarnings("unchecked")
     public EmcSampleDao getDao() {
@@ -216,12 +226,16 @@ public class PfSampleServiceImpl extends EmcSampleServiceImpl implements PfSampl
         List<EmcOrderBean> orderList = wrapper.parse(EmcOrderBean.class);
 
         List<Long> folderIdList = orderList.stream().map(EmcOrderBean::getFolderId).distinct().collect(Collectors.toList());
-        List<EmcFolderBean> folderList = folderService.getDao().selectListByOneColumnValues(folderIdList, "id", Arrays.asList("id", "sampleUserId", "sampleUserName"));
+        List<EmcFolderBean> folderList = folderService.getDao().selectListByOneColumnValues(folderIdList, "id");
         Set<String> sampleUserIdSet = new HashSet<>();
         Set<String> sampleUserNameSet = new HashSet<>();
+        Set<String> sampleSceneUserIdSet = new HashSet<>();
+        Set<String> sampleSceneUserNameSet = new HashSet<>();
         folderList.forEach(folder -> {
             sampleUserIdSet.addAll(Arrays.asList(StringUtils.split(folder.getSampleUserId(), ",")));
             sampleUserNameSet.addAll(Arrays.asList(StringUtils.split(folder.getSampleUserName(), ",")));
+            sampleSceneUserIdSet.addAll(Arrays.asList(StringUtils.split(folder.getSceneUserId(), ",")));
+            sampleSceneUserNameSet.addAll(Arrays.asList(StringUtils.split(folder.getSceneUserName(), ",")));
         });
 
         EmcOrderBean addOrder = orderList.get(0);
@@ -232,6 +246,8 @@ public class PfSampleServiceImpl extends EmcSampleServiceImpl implements PfSampl
         sampleBean.setMonitorTmplId(addOrder.getMonitorTmplId());
         sampleBean.setExt$Item("sampleUserId", String.join(",", sampleUserIdSet));
         sampleBean.setExt$Item("sampleUserName", String.join(",", sampleUserNameSet));
+        sampleBean.setSampleSceneUserId(String.join(",", sampleSceneUserIdSet));
+        sampleBean.setSampleSceneUserName(String.join(",", sampleSceneUserNameSet));
         getDao().update(sampleBean);
 
         // 根据(monitorTmplid) id 查询 tmplid
@@ -1811,6 +1827,111 @@ public class PfSampleServiceImpl extends EmcSampleServiceImpl implements PfSampl
         }
     }
     @Override
+    @Transactional
+    public void moveTask(RestJsonWrapperBean wrapper) {
+        List<EmcOrderBean> wrapperOrderList = wrapper.parse(EmcOrderBean.class);
+        List<EmcOrderContainerBean> wrapperOrderContainerList = wrapper.parse(EmcOrderContainerBean.class);
+        List<Long> orderIdList = wrapperOrderList.stream().map(EmcOrderBean::getId).distinct().collect(Collectors.toList());
+        List<EmcOrderContainerBean> allOrderContainerList = orderContainerService.getDao().selectListByOneColumnValues(orderIdList, "ORDERID", new Order[0]);
+        for (EmcOrderBean order : wrapperOrderList) {
+            List<EmcOrderContainerBean> currentOrderContainerList = allOrderContainerList.stream()
+                    .filter(container -> ObjectUtils.equals(order.getId(), container.getOrderId()))
+                    .collect(Collectors.toList());
+            if (currentOrderContainerList.size() == wrapperOrderContainerList.size()) {
+                throw new InvalidDataException("不能移动样品下所有测试");
+            }
+        }
+
+        List<Long> wrapperOrderContainerIdList = wrapperOrderContainerList.stream().map(EmcOrderContainerBean::getId).distinct().collect(Collectors.toList());
+        List<EmcOrderTaskBean> wrapperOrderTaskList = orderTaskService.getDao().selectListByOneColumnValues(wrapperOrderContainerIdList, "ORDERCONTAINERID", new Order[0]);
+        List<Long> testMethodIdList = wrapperOrderTaskList.stream().map(EmcOrderTaskBean::getTestMethodId).distinct().collect(Collectors.toList());
+        MapperParameter mapperParameter = new MapperParameter();
+        mapperParameter.setFilter(SearchFilter.instance().match("ORDERID", orderIdList).filter(MatchPattern.OR)
+                .match("TESTMETHODID", testMethodIdList).filter(MatchPattern.OR));
+        List<EmcOrderTaskBean> orderTaskList = orderTaskDao.selectOrderTaskList(mapperParameter);
+        List<Long> orderTaskIdList = orderTaskList.stream().map(EmcOrderTaskBean::getId).distinct().collect(Collectors.toList());
+        List<EmcOrderTaskResultBean> orderTaskResultList = orderTaskResultService.getDao().selectListByOneColumnValues(orderTaskIdList, "ORDERTASKID", new Order[0]);
+        List<Long> orderContainerIdList = orderTaskList.stream().map(EmcOrderTaskBean::getOrderContainerId).distinct().collect(Collectors.toList());
+        List<EmcOrderContainerBean> orderContainerList = allOrderContainerList.stream()
+                .filter(container -> orderContainerIdList.contains(container.getId())).collect(Collectors.toList());
+        List<EmcOrderItemGroupBean> orderItemGroupList = orderItemGroupService.selectListByFilter(
+                SearchFilter.instance().match("ORDERID", orderIdList).filter(MatchPattern.OR)
+                        .match("TESTMETHODID", testMethodIdList).filter(MatchPattern.OR), new Order[0]);
+
+        Long folderId = wrapperOrderList.get(0).getFolderId();
+        EmcFolderBean folder = folderService.selectById(folderId);
+        List<EmcOrderBean> orderList = orderService.getDao().selectListByOneColumnValue(folderId, "FOLDERID", new Order[0]);
+        String maxOrderNo = orderList.stream().max(Comparator.comparing(EmcOrderBean::getOrderNo))
+                .map(EmcOrderBean::getOrderNo).orElse(null);
+        int orderIndex = NumberUtils.parseInt(maxOrderNo.substring(folder.getFolderNo().length(), folder.getFolderNo().length() + 3));
+
+        List<EmcOrderBean> newOrderList = new ArrayList<>();
+        List<EmcOrderTaskBean> newOrderTaskList = new ArrayList<>();
+        List<EmcOrderTaskBean> deleteOrderTaskList = new ArrayList<>();
+        List<EmcOrderContainerBean> deleteOrderContainerList = new ArrayList<>();
+        List<EmcOrderTaskResultBean> newOrderTaskResultList = new ArrayList<>();
+        List<EmcOrderTaskResultBean> deleteOrderTaskResultList = new ArrayList<>();
+        List<EmcOrderItemGroupBean> newOrderItemGroupList = new ArrayList<>();
+        List<EmcOrderItemGroupBean> deleteOrderItemGroupList = new ArrayList<>();
+
+        for (EmcOrderBean order : wrapperOrderList) {
+            EmcOrderBean newOrder = new EmcOrderBean();
+            BeanUtils.copyProperties(order, newOrder);
+            String newOrderNo = folder.getFolderNo() + StringUtils.leftPad(String.valueOf(++orderIndex), 3);
+            Long newOrderId = ApplicationContextHelper.getNextIdentity();
+            newOrder.setId(newOrderId);
+            newOrder.setOrderNo(newOrderNo);
+            newOrder.setLabelNo(newOrderNo);
+            newOrderList.add(newOrder);
+
+            List<EmcOrderContainerBean> currentOrderContainerList = orderContainerList.stream()
+                    .filter(container -> ObjectUtils.equals(order.getId(), container.getOrderId())).collect(Collectors.toList());
+            deleteOrderContainerList.addAll(currentOrderContainerList);
+            List<EmcOrderTaskBean> currentOrderTaskList = orderTaskList.stream()
+                    .filter(task -> ObjectUtils.equals(order.getId(), task.getOrderId())).collect(Collectors.toList());
+            deleteOrderTaskList.addAll(currentOrderTaskList);
+            List<EmcOrderTaskResultBean> currentOrderTaskResultList = orderTaskResultList.stream()
+                    .filter(result -> ObjectUtils.equals(order.getId(), result.getOrderId())).collect(Collectors.toList());
+            deleteOrderTaskResultList.addAll(currentOrderTaskResultList);
+            List<EmcOrderItemGroupBean> currentOrderItemGroupList = orderItemGroupList.stream()
+                    .filter(group -> ObjectUtils.equals(order.getId(), group.getOrderId())).collect(Collectors.toList());
+            deleteOrderItemGroupList.addAll(currentOrderItemGroupList);
+            orderService.copyOrderItemGroup(currentOrderItemGroupList, order, newOrderId, newOrderItemGroupList);
+
+            for (EmcOrderTaskBean orderTask : currentOrderTaskList) {
+                EmcOrderTaskBean newOrderTask = new EmcOrderTaskBean();
+                BeanUtils.copyProperties(orderTask, newOrderTask);
+                Long newOrderTaskId = ApplicationContextHelper.getNextIdentity();
+                newOrderTask.setId(newOrderTaskId);
+                newOrderTask.setOrderId(newOrderId);
+                newOrderTask.setEquiptAcquNo(newOrderNo);
+                newOrderTaskList.add(newOrderTask);
+                List<EmcOrderTaskResultBean> currentTaskResultList = currentOrderTaskResultList.stream()
+                        .filter(result -> ObjectUtils.equals(orderTask.getId(), result.getOrderTaskId())).collect(Collectors.toList());
+                for (EmcOrderTaskResultBean orderTaskResult : currentTaskResultList) {
+                    EmcOrderTaskResultBean newOrderTaskResult = new EmcOrderTaskResultBean();
+                    BeanUtils.copyProperties(orderTaskResult, newOrderTaskResult);
+                    newOrderTaskResult.setId(ApplicationContextHelper.getNextIdentity());
+                    newOrderTaskResult.setOrderId(newOrderId);
+                    newOrderTaskResult.setOrderTaskId(newOrderTaskId);
+                    newOrderTaskResult.setOrderNo(newOrderNo);
+                    newOrderTaskResultList.add(newOrderTaskResult);
+                }
+            }
+            orderContainerService.createOrderContainer(Collections.singletonList(newOrder), newOrderTaskList);
+        }
+
+        orderService.getDao().insert(newOrderList);
+        orderTaskService.getDao().insert(newOrderTaskList);
+        orderTaskService.getDao().deleteBy(deleteOrderTaskList, new String[0]);
+        orderContainerService.getDao().deleteBy(deleteOrderContainerList, new String[0]);
+        orderTaskResultService.getDao().insert(newOrderTaskResultList);
+        orderTaskResultService.getDao().deleteBy(deleteOrderTaskResultList, new String[0]);
+        orderItemGroupService.getDao().insert(newOrderItemGroupList);
+        orderItemGroupService.getDao().deleteBy(deleteOrderItemGroupList, new String[0]);
+    }
+
+    @Override
     public void equiptCollect(RestJsonWrapperBean wrapper) {
         List<Long> fileIdList = wrapper.parse(CoreFileBean.class).stream().map(CoreFileBean::getId).collect(Collectors.toList());
         List<CoreFileBean> fileList = this.coreFileService.getDao().selectListByIds(fileIdList, new Order[0]);
@@ -1921,7 +2042,7 @@ public class PfSampleServiceImpl extends EmcSampleServiceImpl implements PfSampl
         audit.setTaskName("报告编制");
         audit.setOperateCategory(comment);
         audit.setNextTaskName("采样审核");
-        this.sampleAuditRecordService.getDao().insert(audit);
+        this.auditRecordService.getDao().insert(audit);
     }
 
 }

@@ -532,6 +532,11 @@ public class EmcOrderTaskServiceImpl implements EmcOrderTaskService {
     }
 
     @Override
+    public Page<EmcOrderTaskBean> selectOrderTaskPagationByOrderAndTask(RestJsonWrapperBean wrapper) {
+        return new Pagination<>();
+    }
+
+    @Override
     public void editResult(Long orderTaskId, RestJsonWrapperBean wrapper) {
 
         EmcOrderTaskBean orderTask = getDao().selectById(orderTaskId);
@@ -1004,6 +1009,7 @@ public class EmcOrderTaskServiceImpl implements EmcOrderTaskService {
                         a.setContainerCategoryName(orderCategory.getExt$Item("containercategoryname"));
                         a.setContainerGroup(orderCategory.getContainerGroup());
                         a.setFixative(orderCategory.getFixative());
+                        a.setStoreCondition(orderCategory.getStoreCondition());
 
                     }
 
@@ -1372,7 +1378,7 @@ public class EmcOrderTaskServiceImpl implements EmcOrderTaskService {
         }
 
         List<Long> folderIdList = folderList.stream().map(EmcFolderBean::getId).collect(Collectors.toList());
-        List<EmcOrderTaskBean> relatedOrderTaskList = getDao().selectListByOneColumnValues(folderIdList, "FOLDERID", Arrays.asList("ID", "TESTMETHODID", "MONITORTMPLID"));
+        List<EmcOrderTaskBean> relatedOrderTaskList = getDao().selectListByOneColumnValues(folderIdList, "FOLDERID");
         syncContainerInfo(relatedOrderTaskList);
         
     }
@@ -1446,9 +1452,6 @@ public class EmcOrderTaskServiceImpl implements EmcOrderTaskService {
         PageRowBounds rowBounds = wrapper.extractPageRowBounds();
         return MybatisPageHelper.get(rowBounds, () -> getDao().selectRunnableAnalAssignList(parameter));
     }
-    @Override
-    public Page<EmcOrderTaskBean> selectOrderTaskPagationByOrderAndTask(RestJsonWrapperBean wrapper) {
-        return selectOrderTaskPagationByOrder(wrapper);
-    }
+
 
 }

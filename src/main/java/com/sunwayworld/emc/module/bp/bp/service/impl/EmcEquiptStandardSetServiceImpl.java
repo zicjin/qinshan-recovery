@@ -8,6 +8,7 @@ import com.sunwayworld.framework.context.ApplicationContextHelper;
 import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;
 import com.sunwayworld.framework.spring.annotation.GikamBean;
 import java.util.ArrayList;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,9 +27,9 @@ implements EmcEquiptStandardSetService {
     @Transactional
     @Audit(value="AUDIT.INSERT")
     public Long insert(RestJsonWrapperBean jsonWrapper) {
-        String[] gasNames;
         EmcEquiptStandardSetBean emcEquiptStandardSet = (EmcEquiptStandardSetBean)jsonWrapper.parseUnique(EmcEquiptStandardSetBean.class);
-        ArrayList<EmcEquiptStandardSetBean> insertList = new ArrayList<EmcEquiptStandardSetBean>();
+        List<EmcEquiptStandardSetBean> insertList = new ArrayList<EmcEquiptStandardSetBean>();
+        String[] gasNames;
         gasNames = emcEquiptStandardSet.getGasName().split(",");
         for (String gasName : gasNames) {
             EmcEquiptStandardSetBean standardSet = new EmcEquiptStandardSetBean();

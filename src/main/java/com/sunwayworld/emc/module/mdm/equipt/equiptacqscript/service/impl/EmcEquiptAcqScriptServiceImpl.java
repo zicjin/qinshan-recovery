@@ -51,6 +51,7 @@ import com.sunwayworld.framework.utils.ObjectUtils;
 import com.sunwayworld.framework.utils.StringUtils;
 import com.sunwayworld.module.item.file.bean.CoreFileBean;
 import com.sunwayworld.module.item.file.service.CoreFileService;
+import com.sunwayworld.module.item.file.utils.CoreFileUtils;
 
 @Repository
 @GikamBean
@@ -222,8 +223,7 @@ public class EmcEquiptAcqScriptServiceImpl implements EmcEquiptAcqScriptService 
     // 将文件的文本内容解析出来
     private String extractTextByFileId(Long fileId, String analysisWay) {
         CoreFileBean coreFile = coreFileService.selectDetail(fileId);
-        File file = FilePathManager.getLocalPath(FilePathDTO.of(coreFile.getScope(), DateTimeUtils.getDateSerialNumber(coreFile.getCreatedTime()), coreFile.getMd5Name(),
-                coreFile.getName().substring(0, coreFile.getName().lastIndexOf(coreFile.getFileExt()) - 1) + "." + coreFile.getFileExt())).toFile();
+        File file = CoreFileUtils.getLocalPath(coreFile).toFile();
 
         String result = null;
         String fileExtension = FileUtils.getFileExtension(file.getName()).toLowerCase();
@@ -299,7 +299,7 @@ public class EmcEquiptAcqScriptServiceImpl implements EmcEquiptAcqScriptService 
         if (EmcConstant.EQUIPT_ACQ_DATA_FORMAT_MULTIPLE.equals(script.getDataFormat()) && !StringUtils.isEmpty(paragraphMark) && content.contains(paragraphMark)) {
             paragraphArray = content.split(paragraphMark);
             for (int i = paragraphArray.length - 1; i >= 0; i--) {
-                paragraphArray[i] = paragraphArray[i] + paragraphMark;
+                paragraphArray[i] = "defaultStartFlag" + paragraphArray[i] + "defaultEndFlag";
             }
         } else {
             paragraphArray = new String[1];

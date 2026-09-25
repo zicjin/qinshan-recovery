@@ -38,6 +38,8 @@ public interface EmcFolderService extends GenericService<EmcFolderBean, Long>, G
 
     void dataSharing(RestJsonWrapperBean wrapper);
 
+    String generateFolderNoByProjId(Long projId, String projectNo, String monitorTmplId);
+
     List<String> generateFolderNosByProjId(Long projId, String projectNo, int num);
 
     List<String> generateFolderNosByProjId(Long projId, String projectNo, String monitorTmplId, int num);

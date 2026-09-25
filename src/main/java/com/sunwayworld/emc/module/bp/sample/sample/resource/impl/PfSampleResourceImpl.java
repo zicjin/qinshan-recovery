@@ -125,29 +125,39 @@ public class PfSampleResourceImpl extends EmcSampleResourceImpl implements PfSam
     public EmcSampleBean selectSampleRecordDetail(RestJsonWrapperBean wrapper) {
         return getService().selectSampleRecordDetail(wrapper);
     }
+
+    @Log(value = "移动测试", type = LogType.INSERT)
+    @RequestMapping(value = "/order-tasks/move", method = RequestMethod.POST)
+    public Long moveTask(RestJsonWrapperBean wrapper) {
+        getService().moveTask(wrapper);
+        return 1L;
+    }
+
+    @Log(value = "现场仪器采集", type = LogType.INSERT)
+    @RequestMapping(value = "/equipt-collect", method = RequestMethod.POST)
+    public Long equiptCollect(RestJsonWrapperBean wrapper) {
+        getService().equiptCollect(wrapper);
+        return 1L;
+    }
+
+    @Log(value = "采样审核撤回", type = LogType.INSERT)
+    @RequestMapping(value = "/action/with-draw", method = RequestMethod.POST)
+    public Long withDraw(RestJsonWrapperBean wrapper) {
+        getService().withDraw(wrapper);
+        return 1L;
+    }
+
+    @Log(value = "取消样品交接", type = LogType.UPDATE)
+    @RequestMapping(value = "/action/undo-handsample", method = RequestMethod.POST)
+    public Long undoHandSample(RestJsonWrapperBean wrapper) {
+        getService().undoHandSample(wrapper);
+        return 1L;
+    }
+
     @Override
     @Log(value = "批量导出采样原始记录Excel", type = LogType.SELECT)
     @RequestMapping(value = "/action/export-original-record-excel-zip", method = RequestMethod.POST)
     public String exportOriginalRecordExcelZip(RestJsonWrapperBean wrapper) {
         return getService().exportOriginalRecordExcelZip(wrapper);
     }
-
-    @Log(value = "现场仪器采集", type = LogType.INSERT)
-    @RequestMapping(value = "/equipt-collect", method = RequestMethod.POST)
-    public void equiptCollect(RestJsonWrapperBean wrapper) {
-        getService().equiptCollect(wrapper);
-    }
-
-    @Log(value = "取消样品交接", type = LogType.UPDATE)
-    @RequestMapping(value = "/action/undo-handsample", method = RequestMethod.POST)
-    public void undoHandSample(RestJsonWrapperBean wrapper) {
-        getService().undoHandSample(wrapper);
-    }
-
-    @Log(value = "采样审核撤回", type = LogType.UPDATE)
-    @RequestMapping(value = "/action/with-draw", method = RequestMethod.POST)
-    public void withDraw(RestJsonWrapperBean wrapper) {
-        getService().withDraw(wrapper);
-    }
-
 }

@@ -40,6 +40,7 @@ import com.sunwayworld.framework.at.annotation.AuditTrailEntry;
 import com.sunwayworld.framework.at.annotation.AuditTrailType;
 import com.sunwayworld.framework.constant.Constant;
 import com.sunwayworld.framework.context.ApplicationContextHelper;
+import com.sunwayworld.framework.database.sql.Order;
 import com.sunwayworld.framework.data.page.Page;
 import com.sunwayworld.framework.data.page.Pagination;
 import com.sunwayworld.framework.mybatis.mapper.MapperParameter;
@@ -300,11 +301,15 @@ public class EmcOrderTaskResultServiceImpl implements EmcOrderTaskResultService 
         List<Long> itemIds = orderTaskResultList.stream().map(e -> e.getItemId()).collect(Collectors.toList());
         if(itemIds.size()>0) {
         	// itemId 查 t_emc_item
-            List<EmcItemBean> itemList = itemService.selectListByFilter(SearchFilter.instance().match("ID", itemIds).filter(MatchPattern.OR));
+            List<EmcItemBean> itemList = itemService.selectListByFilter(SearchFilter.instance().match("ID", itemIds).filter(MatchPattern.OR), new Order[0]);
             List<Long> orderTaskIdsList = orderTaskResultList.stream().map(e -> e.getOrderTaskId()).collect(Collectors.toList());
             // 查分析项相同的样品集合
-            List<EmcOrderTaskResultBean> orderTaskResultAllItemList = this.selectListByFilter(SearchFilter.instance().match("ITEMID", itemIds).filter(MatchPattern.OR)
-                    .match("ORDERTASKID", orderTaskIdsList).filter(MatchPattern.OR).match("ANALYSISTYPE", orderTaskResultList.get(0).getExt$Item("analysisType")).filter(MatchPattern.SEQ), wrapper);
+            SearchFilter filter = SearchFilter.instance().match("ITEMID", itemIds).filter(MatchPattern.OR)
+                    .match("ORDERTASKID", orderTaskIdsList).filter(MatchPattern.OR);
+            if (wrapper.getParamValue("emission") == null) {
+                filter.match("ANALYSISTYPE", orderTaskResultList.get(0).getExt$Item("analysisType")).filter(MatchPattern.SEQ);
+            }
+            List<EmcOrderTaskResultBean> orderTaskResultAllItemList = this.selectListByFilter(filter, wrapper);
             orderTaskResultAllItemList.stream().forEach(e -> {
                 itemList.stream().forEach(v -> {
                     if (e.getItemId().equals(v.getId())) {
@@ -682,8 +687,8 @@ public class EmcOrderTaskResultServiceImpl implements EmcOrderTaskResultService 
             List<EmcOrderBean> orderList = orderService.getDao().selectListByOneColumnValues(projIdList, "PROJID");
             orderIdList = orderList.stream().map(e -> e.getId()).collect(Collectors.toList());
         } else if (EmcConstant.SUMMARY_TYPE_RUN.equals(summaryType)) {// 批入口
-            List<Long> runIdList = Arrays.asList(ids.split(",")).stream().map(e -> NumberUtils.parseLong(e)).collect(Collectors.toList());
-            List<EmcOrderTaskBean> orderTaskList = orderTaskService.getDao().selectListByOneColumnValues(runIdList, "RUNID");
+            List<String> runIdList = Arrays.asList(ids.split(",")).stream().map(e -> e).collect(Collectors.toList());
+            List<EmcOrderTaskBean> orderTaskList = orderTaskService.getDao().selectListByOneColumnValues(runIdList, "RUNID", new Order[0]);
             orderIdList = orderTaskList.stream().map(e -> e.getOrderId()).distinct().collect(Collectors.toList());
         } else if (EmcConstant.SUMMARY_TYPE_FOLDER.equals(summaryType)) {// 点位入口
             List<Long> folderIdList = Arrays.asList(ids.split(",")).stream().map(e -> NumberUtils.parseLong(e)).collect(Collectors.toList());

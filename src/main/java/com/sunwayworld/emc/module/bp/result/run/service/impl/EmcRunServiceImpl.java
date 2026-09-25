@@ -1365,46 +1365,6 @@ public class EmcRunServiceImpl implements EmcRunService {
     }
 
     @Override
-    public Page<EmcEquiptBean> selectEquiptPagination(String testMethodId) {
-        List<String> list = Stream.of(StringUtils.split(testMethodId, ",")).distinct().collect(Collectors.toList());
-        String[] array = list.toArray(new String[list.size()]);
-        if (array.length > 0) {
-            List<Long> testMethodIdList = Arrays.stream(array).map(NumberUtils::parseLong).collect(Collectors.toList());
-
-            List<EmcEquiptTestMethodBean> testMethodEquiptList = equiptTestMethodService.getDao().selectListByOneColumnValues(testMethodIdList, "TESTMETHODID").stream()
-                    .filter(a -> "analysis".equals(a.getAnalysisCategory())).collect(Collectors.toList());
-
-            if (testMethodEquiptList.isEmpty()) {
-                EmcEquiptBean filter = new EmcEquiptBean();
-                filter.setEquiptName("N/A");
-                EmcEquiptBean equipt = equiptService.getDao().selectFirstIfPresent(filter);
-                EmcEquiptBean selectEquipt = equipt == null ? filter : equipt;
-                return new Pagination<EmcEquiptBean>(Arrays.asList(selectEquipt));
-            }
-
-            // 根据equiptId分组，如果list元素和testMethodId的数量一致，说明该测试下都维护了该仪器。
-            Map<Long, List<EmcEquiptTestMethodBean>> testMethodEquiptMap = testMethodEquiptList.stream().collect(Collectors.groupingBy(EmcEquiptTestMethodBean::getEquiptId));
-
-            List<Long> equiptIdList = testMethodEquiptMap.entrySet().stream().filter(e -> e.getValue().size() == array.length).map(Entry::getKey).collect(Collectors.toList());
-
-            List<EmcEquiptBean> equiptList = equiptService.getDao().selectListByIds(equiptIdList);
-            equiptList.stream().forEach(a -> {
-                testMethodEquiptList.stream().filter(b -> b.getEquiptId().equals(a.getId())).forEach(c -> {
-                    a.setExt$Item("defaultflag", c.getDefaultFlag());
-                });
-            });
-
-            // 只能看到当前账号有权限的仪器
-            List<EmcEquiptBean> equiptOfMaintenanceUserList = equiptList.stream()
-                    .filter(e -> e.getMaintenanceUserId() == null || ObjectUtils.equals("", e.getMaintenanceUserId()) || e.getMaintenanceUserId().contains(LocalContextHelper.getLoginUserId()))
-                    .collect(Collectors.toList());
-            return new Pagination<>(equiptOfMaintenanceUserList);
-        }
-
-        return new Pagination<>();
-    }
-
-    @Override
     @Transactional
     @AuditTrailEntry(AuditTrailType.UPDATE)
     public void editEquipt(RestJsonWrapperBean wrapper) {

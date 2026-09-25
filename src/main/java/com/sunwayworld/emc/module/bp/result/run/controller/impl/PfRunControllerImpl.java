@@ -235,9 +235,10 @@ public class PfRunControllerImpl extends EmcRunControllerImpl implements PfRunCo
         return "emc/module/bp/result/runs/emc-run-query-search-list";
     }
 
-    @Override
     @RequestMapping("/preprocessing-result-input")
     @Log(value = "前处理分析项数据录入", type = LogType.CONTROLLER)
-    public String preprocessingResultInputPage() { return "emc/module/bp/result/runs/emc-run-preprocessing-result-input-list"; }
+    public String preprocessingResultInputPage() {
+        return "emc/module/bp/result/runs/emc-run-preprocessing-result-input-list";
+    }
 
 }

@@ -175,33 +175,33 @@ public class PfProjSchemeResourceImpl extends EmcProjSchemeResourceImpl implemen
     public void moveProjOrder(RestJsonWrapperBean wrapper) {
         pfprojSchemeService.moveProjOrder(wrapper);
     }
-    @Override
-    @Log(value = "删除方案样品", type = LogType.UPDATE)
+    @Log(value = "删除分析项组", type = LogType.DELETE)
     @RequestMapping(value = "/proj-order", method = RequestMethod.DELETE)
-    public void delProjOrder(RestJsonWrapperBean wrapper) {
+    public Long delProjOrder(RestJsonWrapperBean wrapper) {
         getService().delProjOrder(wrapper);
+        return 1L;
     }
 
-    @Override
-    @Log(value = "方案点位编号排序", type = LogType.UPDATE)
+    @Log(value = "点位重新编码", type = LogType.UPDATE)
     @RequestMapping(value = "/sort-folderno", method = RequestMethod.PUT)
-    public void sortFolderNo(RestJsonWrapperBean wrapper) {
+    public Long sortFolderNo(RestJsonWrapperBean wrapper) {
         getService().sortFolderNo(wrapper);
+        return 1L;
     }
 
     @Override
-    @Log(value = "批量删除方案样品", type = LogType.UPDATE)
-    @RequestMapping(value = "/action/batch-del-proj-order", method = RequestMethod.POST)
+    @Log(value = "批删因子", type = LogType.DELETE)
+    @RequestMapping(value = "/batch-del-proj-order", method = RequestMethod.POST)
     public Long batchDelProjOrder(RestJsonWrapperBean wrapper) {
         getService().batchDelProjOrder(wrapper);
         return 1L;
     }
 
     @Override
-    @Log(value = "同步评价标准", type = LogType.UPDATE)
+    @Log(value = "客服方案修改-同步评价标准", type = LogType.UPDATE)
     @RequestMapping(value = "/action/sync-eval-std", method = RequestMethod.POST)
     public void syncEvalStd(RestJsonWrapperBean wrapper) {
-        getService().syncEvalStd(wrapper);
+        pfprojSchemeService.syncEvalStd(wrapper);
     }
 
 }

@@ -227,8 +227,6 @@ public class QcQuantityDynamicTable implements DynamicTable {
             curOrderTaskList.stream().filter(task -> StringUtils.isEmpty(task.getAnalysisOrgId())).forEach(task -> task.setAnalysisOrgId(""));
             curOrderTaskList.sort(Comparator.comparing(EmcOrderTaskBean::getAnalysisOrgId));
 
-            int startRowIndex = mergedRowIndex.get() + 1;
-
             WordTemplateUtils.sortedByAnalysisOrg(curOrderTaskList);
 
             Map<String, List<EmcOrderTaskBean>> orgOrderTaskMap = curOrderTaskList.stream().collect(Collectors.groupingBy(EmcOrderTaskBean::getAnalysisOrgId, LinkedHashMap::new, Collectors.toList()));
@@ -265,7 +263,6 @@ public class QcQuantityDynamicTable implements DynamicTable {
                         rowDataList.add(quantityPair.getSecond());
                     });
                     tableBodyDataList.add(rowDataList);
-                    mergedRowIndex.incrementAndGet();
 
                 });
 
@@ -297,10 +294,8 @@ public class QcQuantityDynamicTable implements DynamicTable {
 
             curOrderTaskList.stream().filter(task -> StringUtils.isEmpty(task.getExt$Item("itemGroup"))).forEach(task -> task.setExt$Item("itemGroup", task.getTestName()));
             ArrayList<EmcOrderTaskBean> uniqueTaskList = curOrderTaskList.stream().collect(Collectors.collectingAndThen(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(task -> task.getExt$Item("itemGroup")))), ArrayList::new));
-            mergedRowList.add(new WordTemplateDynamicTableDTO.MergedRow(0, startRowIndex, mergedRowIndex.get()));
         });
 
-        dynamicTableDTO.setMergedRowList(mergedRowList);
         return tableBodyDataList;
     }
 

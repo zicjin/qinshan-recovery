@@ -139,10 +139,11 @@ public class FileSealUtils {
             request.addStamper(stamperBean);
             String response = sdkClient.service(request);
             SdkResponse responseObj = JSONUtils.toQysResponse(response);
-            if (responseObj.getCode() != 0) {
+            if (responseObj.getCode() == 0) {
+                logger.info("\u62a5\u544a\u7b7e\u53d1\u7ec4\u7ec7\u7ae0\u8bf7\u6c42\u6210\u529f");
+            } else {
                 throw new InvalidDataException(responseObj.getMessage());
             }
-            logger.info("\u62a5\u544a\u7b7e\u53d1\u7ec4\u7ec7\u7ae0\u8bf7\u6c42\u6210\u529f");
         }
         catch (Exception e) {
             throw new InvalidDataException(e.getMessage());
@@ -265,7 +266,7 @@ public class FileSealUtils {
 
     private static Long createContractByCategory(SDKClient client, Long docId, Boolean isAcross) {
         try {
-            ContractServiceImpl contractService = new ContractServiceImpl(client);
+            ContractService contractService = new ContractServiceImpl(client);
             CreateContractRequest createContractRequest = new CreateContractRequest();
             createContractRequest.setSend(true);
             createContractRequest.setSubject("\u9752\u5c71\u7eff\u6c34\u62a5\u544a");

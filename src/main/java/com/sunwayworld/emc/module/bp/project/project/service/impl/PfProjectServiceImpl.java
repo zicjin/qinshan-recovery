@@ -9,6 +9,7 @@ import java.net.URLEncoder;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -21,9 +22,11 @@ import java.util.OptionalInt;
 import java.util.stream.Collectors;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.sunwayworld.cloud.module.fr.report.bean.CoreReportConfigLineBean;
 import com.sunwayworld.cloud.module.fr.report.service.CoreReportConfigLineService;
 import com.sunwayworld.framework.io.file.FilePathManager;
+import com.sunwayworld.framework.io.file.FilePathDTO;
 import com.sunwayworld.framework.utils.*;
 import com.sunwayworld.module.item.file.utils.CoreFileUtils;
 import org.apache.logging.log4j.LogManager;
@@ -75,6 +78,7 @@ import com.sunwayworld.emc.module.erp.service.ErpOrderService;
 import com.sunwayworld.emc.module.mdm.basemdm.bizcategory.bean.EmcBizCategoryBean;
 import com.sunwayworld.emc.module.mdm.basemdm.bizcategory.service.EmcBizCategoryService;
 import com.sunwayworld.emc.module.mdm.bizmdm.capacity.bean.EmcCapacityItemGroupBean;
+import com.sunwayworld.emc.module.mdm.bizmdm.capacity.bean.EmcCapacityItemBean;
 import com.sunwayworld.emc.module.mdm.bizmdm.capacity.bean.EmcTestCapacityBean;
 import com.sunwayworld.emc.module.mdm.bizmdm.capacity.service.EmcCapacityItemGroupService;
 import com.sunwayworld.emc.module.mdm.bizmdm.capacity.service.EmcCapacityItemService;
@@ -87,9 +91,11 @@ import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcGroupItemBean;
 import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcItemGroupBean;
 import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcTestBean;
 import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcTestMethodBean;
+import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcTestMethodOrderCategoryBean;
 import com.sunwayworld.emc.module.mdm.bizmdm.test.service.EmcGroupItemService;
 import com.sunwayworld.emc.module.mdm.bizmdm.test.service.EmcItemGroupService;
 import com.sunwayworld.emc.module.mdm.bizmdm.test.service.EmcTestMethodService;
+import com.sunwayworld.emc.module.mdm.bizmdm.test.service.EmcTestMethodOrderCategoryService;
 import com.sunwayworld.emc.module.mdm.bizmdm.test.service.EmcTestService;
 import com.sunwayworld.emc.module.mdm.crm.bean.CrmOpportunityContractBean;
 import com.sunwayworld.emc.module.mdm.crm.bean.CrmOpportunityMainBean;
@@ -343,6 +349,9 @@ public class PfProjectServiceImpl extends EmcProjectServiceImpl implements PfPro
 
     @Autowired
     private EmcCapacityItemService capacityItemService;
+
+    @Autowired
+    private EmcTestMethodOrderCategoryService testMethodOrderCategoryService;
 
     private final static String SAMPLING_CONTACT_RECORD_NEW_FILES = "samplingContactRecordFilesNew";
     private final static String DELIVERY_RECORD_NEW_FILES = "deliveryRecordFilesNew";
@@ -3455,4 +3464,85 @@ public class PfProjectServiceImpl extends EmcProjectServiceImpl implements PfPro
 
 
 
+    @Override
+    @Transactional
+    public String submitRemind(RestJsonWrapperBean wrapper) {
+        List<EmcProjectBean> projectList = wrapper.parse(EmcProjectBean.class);
+        List<Long> projectIdList = projectList.stream().map(EmcProjectBean::getId).collect(Collectors.toList());
+        List<EmcProjSchemeBean> schemeList = projSchemeService.getDao().selectListByOneColumnValues(projectIdList, "PROJID");
+        List<Long> schemeIdList = schemeList.stream().map(EmcProjSchemeBean::getId).collect(Collectors.toList());
+        if (schemeIdList.isEmpty()) return null;
+        List<EmcProjOrderBean> projOrderList = projOrderService.selectListByFilter(SearchFilter.instance().match("PROJSCHEMEID", schemeIdList).filter(MatchPattern.OR));
+        List<Long> itemGroupIdList = projOrderList.stream().map(EmcProjOrderBean::getItemGroupId).collect(Collectors.toList());
+        if (itemGroupIdList.isEmpty()) return null;
+        List<EmcCapacityItemBean> groupItemBeans = capacityItemService.selectListByFilter(SearchFilter.instance().match("CAPITEMGROUPID", itemGroupIdList).filter(MatchPattern.OR).match("TESTMETHODTYPE", "scene").filter(MatchPattern.DIFFER));
+        List<EmcCapacityItemBean> analysisGroupItemList = groupItemBeans.stream().filter(g -> StringUtils.equals(g.getAnalysisCategory(), "analysis")).collect(Collectors.toList());
+        if (analysisGroupItemList.isEmpty()) return null;
+        List<Long> testMethodIdList = groupItemBeans.stream().map(EmcCapacityItemBean::getTestMethodId).distinct().collect(Collectors.toList());
+        List<EmcTestMethodOrderCategoryBean> testOrderList = testMethodOrderCategoryService.selectListByFilter(SearchFilter.instance().match("TESTMETHODID", testMethodIdList).filter(MatchPattern.OR));
+        List<Long> noContainerGroupIdList = new ArrayList<>();
+        for (EmcProjSchemeBean scheme : schemeList) {
+            List<EmcProjOrderBean> schemeOrderList = projOrderList.stream().filter(p -> ObjectUtils.equals(p.getProjSchemeId(), scheme.getId())).collect(Collectors.toList());
+            if (schemeOrderList.isEmpty()) continue;
+            List<Long> schemeGroupIds = schemeOrderList.stream().map(EmcProjOrderBean::getItemGroupId).distinct().collect(Collectors.toList());
+            List<EmcCapacityItemBean> schemeItemList = analysisGroupItemList.stream().filter(g -> schemeGroupIds.contains(g.getCapItemGroupId())).collect(Collectors.toList());
+            for (EmcCapacityItemBean item : schemeItemList) {
+                boolean exists = testOrderList.stream().anyMatch(o -> ObjectUtils.equals(o.getTestMethodId(), item.getTestMethodId()) && ObjectUtils.equals(o.getMonitorTmplId(), scheme.getMonitorTmplId()));
+                if (!exists && !noContainerGroupIdList.contains(item.getCapItemGroupId())) noContainerGroupIdList.add(item.getCapItemGroupId());
+            }
+        }
+        if (noContainerGroupIdList.isEmpty()) return null;
+        List<EmcProjOrderBean> noContainerOrderList = projOrderList.stream().filter(p -> noContainerGroupIdList.contains(p.getItemGroupId())).collect(Collectors.toList());
+        if (noContainerOrderList.isEmpty()) return null;
+        String testNames = noContainerOrderList.stream().map(o -> o.getExt$Item("testname")).distinct().collect(Collectors.joining("、"));
+        return "测试【" + testNames + "】未维护容器";
+    }
+
+    @Override
+    public JSONObject exportProjectToExcel(RestJsonWrapperBean wrapper) {
+        List<EmcProjectBean> projects = wrapper.parse(EmcProjectBean.class);
+        JSONObject result = new JSONObject();
+        List<String> urls = new ArrayList<>();
+        for (EmcProjectBean project : projects) {
+            String tmplId = "-1";
+            if (StringUtils.equals("0", project.getSample())) tmplId = "1453125616129984";
+            else if (StringUtils.equals("1", project.getSample())) tmplId = "1344186996217184";
+            if (StringUtils.equals("-1", tmplId)) continue;
+            String fineBaseUrl = ApplicationContextHelper.getEnvironment().getProperty("sunway.config.fine.independent-deploy-server.url");
+            CoreReportConfigLineBean line = coreReportConfigLineService.selectFirstByFilter(SearchFilter.instance().match("id", tmplId).filter(MatchPattern.EQ), new Order[0]);
+            String excelUrl;
+            try {
+                excelUrl = fineBaseUrl + "/decision/view/report?viewlet=" + line.getReportConfigLineNo() + "/" + URLEncoder.encode(line.getExt$Item("filename"), "UTF-8") + parseFineReportParqam(project, line.getParam()) + "&format=excel";
+            } catch (UnsupportedEncodingException e) {
+                throw new RuntimeException(e);
+            }
+            String fileName = project.getProjNo() + project.getProjName() + "-任务流转单" + DateTimeUtils.formatLocalDateTime(project.getEntrustDate(), "yyyy年MM月dd日") + ".xlsx";
+            File excelFile = downloadFileFromFr(excelUrl, fileName);
+            CoreFileBean file = new CoreFileBean();
+            file.setTargetId("T_EMC_PORJECT-export$" + project.getId());
+            file.setBizCategory("export");
+            Long fileId = coreFileService.upload(file, excelFile);
+            urls.add(coreFileService.selectDetail(fileId).getDownloadUrl());
+        }
+        result.put("code", "200");
+        result.put("url", urls);
+        return result;
+    }
+
+    private String parseFineReportParqam(Object object, String param) {
+        if (StringUtils.isEmpty(param)) return "";
+        StringBuilder sb = new StringBuilder();
+        for (String item : StringUtils.split(param, ",")) {
+            String[] pair = StringUtils.split(item, "=");
+            sb.append("&").append(pair[0]).append("=").append(String.valueOf(BeanUtils.getPropertyValue(object, pair[1])));
+        }
+        return sb.toString();
+    }
+
+    private File downloadFileFromFr(String url, String fileName) {
+        FilePathDTO path = FilePathDTO.of(FileScope.temp.name(), "", StringUtils.randomUUID(8), fileName);
+        File file = FilePathManager.getLocalPath(path).toFile();
+        HttpClientManager.getInstance().download(url, file);
+        return file;
+    }
 }

@@ -7,6 +7,7 @@ import com.sunwayworld.emc.module.bp.project.project.bean.PfProjectTaskProcessDT
 import com.sunwayworld.framework.data.page.Page;
 import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;
 import com.sunwayworld.module.item.file.bean.CoreFileBean;
+import com.alibaba.fastjson.JSONObject;
 
 /**
  * @author zhengxy@sunwayworld.com 2021年06月01日
@@ -49,7 +50,13 @@ public interface PfProjectService extends EmcProjectService {
 
     void moveOrderItemGroup(RestJsonWrapperBean wrapper);
 
+    String submitRemind(RestJsonWrapperBean wrapper);
+
+    JSONObject exportProjectToExcel(RestJsonWrapperBean wrapper);
+
+
     void undoCompleteTaskData(RestJsonWrapperBean wrapper);
 
     void toReport(RestJsonWrapperBean wrapper);
+
 }

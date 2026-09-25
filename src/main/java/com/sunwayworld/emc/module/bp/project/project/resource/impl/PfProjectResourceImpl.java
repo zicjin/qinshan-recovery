@@ -1,5 +1,6 @@
 package com.sunwayworld.emc.module.bp.project.project.resource.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -151,6 +152,19 @@ public class PfProjectResourceImpl extends EmcProjectResourceImpl implements PfP
         projectService.moveOrderItemGroup(wrapper);
     }
 
+    @Log(value = "提示信息", type = LogType.SELECT)
+    @RequestMapping(value = "/action/submit-remind", method = RequestMethod.POST)
+    public String submitRemind(RestJsonWrapperBean wrapper) {
+        return projectService.submitRemind(wrapper);
+    }
+
+    @Override
+    @Log(value = "导出任务流转单", type = LogType.SELECT)
+    @RequestMapping(value = "/export-project-to-excel", method = RequestMethod.POST)
+    public JSONObject exportProjectToExcel(RestJsonWrapperBean wrapper) {
+        return projectService.exportProjectToExcel(wrapper);
+    }
+
     @Log(value = "回退业务数据", type = LogType.INSERT)
     @RequestMapping(value = "/undo-complete-task-data", method = RequestMethod.POST)
     public Long undoCompleteTaskData(RestJsonWrapperBean wrapper) {
@@ -164,5 +178,7 @@ public class PfProjectResourceImpl extends EmcProjectResourceImpl implements PfP
         projectService.toReport(wrapper);
         return 1L;
     }
+
+
 
 }

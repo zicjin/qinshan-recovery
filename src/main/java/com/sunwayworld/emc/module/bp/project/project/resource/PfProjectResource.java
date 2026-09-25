@@ -1,6 +1,7 @@
 package com.sunwayworld.emc.module.bp.project.project.resource;
 
 import org.springframework.web.bind.annotation.RequestMapping;
+import com.alibaba.fastjson.JSONObject;
 
 import com.sunwayworld.framework.data.page.Page;
 import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;
@@ -43,9 +44,9 @@ public interface PfProjectResource extends EmcProjectResource{
 
     void moveOrderItemGroup(RestJsonWrapperBean wrapper);
 
-    Long undoCompleteTaskData(RestJsonWrapperBean wrapper);
+    String submitRemind(RestJsonWrapperBean wrapper);
 
-    Long toReport(RestJsonWrapperBean wrapper);
+    JSONObject exportProjectToExcel(RestJsonWrapperBean wrapper);
 
 
 }

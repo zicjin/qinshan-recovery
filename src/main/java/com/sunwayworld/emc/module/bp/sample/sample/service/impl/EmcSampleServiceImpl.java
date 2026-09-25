@@ -145,10 +145,6 @@ public class EmcSampleServiceImpl implements EmcSampleService {
 
     @Autowired
     @Lazy
-    private CoreFileService coreFileService;
-
-    @Autowired
-    @Lazy
     private EmcOrderTaskResultService orderTaskResultService;
 
     @Autowired
@@ -177,6 +173,10 @@ public class EmcSampleServiceImpl implements EmcSampleService {
 
     @Autowired
     private EmcTestMethodService testMethodService;
+
+    @Autowired
+    @Lazy
+    private CoreFileService coreFileService;
 
     @Override
     @SuppressWarnings("unchecked")
@@ -240,7 +240,9 @@ public class EmcSampleServiceImpl implements EmcSampleService {
             sample.setAcceptedDate(acceptedDate);
         });
 
-        getDao().update(submitSampleList, "ACCEPTEDUSERID", "ACCEPTEUSERNAME", "ACCEPTEDDATE");
+        submitSampleList.forEach(sample -> sample.setAcceptStatus("2"));
+
+        getDao().update(submitSampleList, "ACCEPTEDUSERID", "ACCEPTEUSERNAME", "ACCEPTEDDATE", "ACCEPTSTATUS");
 
         // 过滤出样品登记生成的采样单
         List<EmcSampleBean> orderRegistrationSampleList = submitSampleList.stream().filter(s -> StringUtils.equals(EmcBizConstant.BP_SOURCE_ORDERREGISTRATION, s.getSource())).collect(Collectors.toList());

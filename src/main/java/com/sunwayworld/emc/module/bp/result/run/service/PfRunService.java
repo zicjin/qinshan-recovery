@@ -135,5 +135,9 @@ public interface PfRunService extends EmcRunService, GenericChoosableService<Emc
 
     EmcAnalysisRecordDTO selectBrowseRecordFile(RestJsonWrapperBean wrapper);
 
+    EmcAnalysisRecordDTO selectRunAuditFile(RestJsonWrapperBean wrapper);
+
+    void bathUploadFile(RestJsonWrapperBean wrapper);
+
     String exportOriginalRecordExcelZip(RestJsonWrapperBean wrapper);
 }

@@ -178,6 +178,41 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
     private static final String COMPOSE_ALL_RUNLIST_REPORT_FAILURE = "composeAllRunListReportFailure";
 
     @Override
+    public EmcAnalysisRecordDTO selectRunAuditFile(RestJsonWrapperBean wrapper) {
+        String runId = wrapper.getParamValue("runId");
+        EmcAnalysisRecordDTO dto = new EmcAnalysisRecordDTO();
+        if (!ObjectUtils.isEmpty(runId)) {
+            List<CoreFileBean> files = new ArrayList<>();
+            files.addAll(coreFileService.selectListByFilter(SearchFilter.instance().match("targetId", "T_EMC_EQUIPT$" + runId).filter(MatchPattern.SEQ), new Order[0]));
+            files.addAll(coreFileService.selectListByFilter(SearchFilter.instance().match("targetId", "T_EMC_RUN$" + runId).filter(MatchPattern.SEQ), new Order[0]));
+            dto.setOtherRecordList(files);
+        }
+        return dto;
+    }
+
+    @Override
+    @Transactional
+    public void bathUploadFile(RestJsonWrapperBean wrapper) {
+        String[] ids = wrapper.getParamValue("ids").split(",");
+        String[] fileIds = wrapper.getParamValue("fileIds").split(",");
+        String dbTable = wrapper.getParamValue("dbTable");
+        if (dbTable == null) dbTable = "T_EMC_RUN";
+        List<Long> fileIdList = Arrays.stream(fileIds).map(NumberUtils::parseLong).collect(Collectors.toList());
+        List<CoreFileBean> sourceFiles = coreFileService.getDao().selectListByIds(fileIdList, new Order[0]);
+        List<CoreFileBean> insertFiles = new ArrayList<>();
+        for (CoreFileBean source : sourceFiles) {
+            for (String id : ids) {
+                CoreFileBean file = new CoreFileBean();
+                BeanUtils.copyProperties(source, file);
+                file.setId(ApplicationContextHelper.getNextIdentity());
+                file.setTargetId(dbTable + "$" + id);
+                insertFiles.add(file);
+            }
+        }
+        coreFileService.getDao().insert(insertFiles);
+    }
+
+    @Override
     public String exportOriginalRecordExcelZip(RestJsonWrapperBean wrapper) {
         List<EmcRunBean> selectedRunList = wrapper.parse(EmcRunBean.class);
         if (selectedRunList.isEmpty()) return "";

@@ -29,7 +29,8 @@ implements EmcEquiptStandardSetService {
         String[] gasNames;
         EmcEquiptStandardSetBean emcEquiptStandardSet = (EmcEquiptStandardSetBean)jsonWrapper.parseUnique(EmcEquiptStandardSetBean.class);
         ArrayList<EmcEquiptStandardSetBean> insertList = new ArrayList<EmcEquiptStandardSetBean>();
-        for (String gasName : gasNames = emcEquiptStandardSet.getGasName().split(",")) {
+        gasNames = emcEquiptStandardSet.getGasName().split(",");
+        for (String gasName : gasNames) {
             EmcEquiptStandardSetBean standardSet = new EmcEquiptStandardSetBean();
             standardSet.setId(ApplicationContextHelper.getNextIdentity());
             standardSet.setGasName(gasName);

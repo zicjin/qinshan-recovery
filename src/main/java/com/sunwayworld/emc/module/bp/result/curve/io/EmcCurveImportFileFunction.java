@@ -10,8 +10,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import com.sunwayworld.framework.io.file.FilePathDTO;
-import com.sunwayworld.framework.io.file.FilePathManager;
 import com.sunwayworld.module.item.file.utils.CoreFileUtils;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
@@ -65,11 +63,10 @@ public class EmcCurveImportFileFunction implements CoreFileImportFunction {
     public CoreFileImportResultDTO apply(CoreFileBean file) {
         CoreFileImportResultDTO CoreFileImportResultDTO = new CoreFileImportResultDTO();
 
-        FilePathDTO fr = CoreFileUtils.toFilePath(file);
         String[] idArray = StringUtils.split(file.getTargetId(), "$");
         long curveId = NumberUtils.parseLong(idArray[0]);
         long folderId = NumberUtils.parseLong(idArray[1]);
-        importOrderTaskResultFromExcel(FilePathManager.getLocalPath(fr).toFile().getAbsolutePath(), folderId, curveId);
+        importOrderTaskResultFromExcel(CoreFileUtils.getLocalPath(file).toFile().getAbsolutePath(), folderId, curveId);
         return CoreFileImportResultDTO;
     }
 

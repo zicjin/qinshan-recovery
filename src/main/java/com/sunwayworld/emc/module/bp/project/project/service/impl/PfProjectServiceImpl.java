@@ -145,6 +145,31 @@ public class PfProjectServiceImpl extends EmcProjectServiceImpl implements PfPro
 
     private static final Logger logger = LogManager.getLogger(PfProjectServiceImpl.class);
 
+    @Override
+    @Transactional
+    public void reportAssignSubmit(RestJsonWrapperBean wrapper) {
+        List<EmcProjectBean> projectList = wrapper.parse(EmcProjectBean.class);
+        projectList.forEach(p -> p.setReportAssignStatus("1"));
+        getDao().update(projectList, "reportAssignStatus");
+        List<EmcAuditRecordBean> auditRecordList = new ArrayList<>(projectList.size());
+        projectList.forEach(project -> {
+            EmcAuditRecordBean auditRecord = new EmcAuditRecordBean();
+            auditRecord.setProjId(project.getId());
+            auditRecord.setProjNo(project.getProjNo());
+            auditRecord.setComments("提交");
+            auditRecord.setLogDesc("项目:" + project.getProjNo());
+            auditRecord.setBizCategory("report");
+            auditRecord.setStepCode("6");
+            auditRecord.setAuditCategory("报告管理");
+            auditRecord.setTaskName("报告指派");
+            auditRecord.setNextTaskName("报告编制");
+            auditRecord.setOperateCategory("提交");
+            auditRecord.setId(ApplicationContextHelper.getNextIdentity());
+            auditRecordList.add(auditRecord);
+        });
+        auditRecordService.getDao().insert(auditRecordList);
+    }
+
     @Autowired
     private EmcBizCategoryService bizCategoryService;
 

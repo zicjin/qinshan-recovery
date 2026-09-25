@@ -273,16 +273,6 @@ public class PfFolderServiceImpl extends EmcFolderServiceImpl implements PfFolde
     }
 
     @Override
-    public String generateFolderNo(EmcProjectBean project) {
-        List<String> seqNoList = generateFolderNosByProjId(project.getId(), project.getProjNo(), 1);
-        if (!seqNoList.isEmpty()) {
-            return seqNoList.get(0);
-        }
-
-        return ApplicationContextHelper.getNextSequence(getDao().getTable());
-    }
-
-    @Override
     @Transactional
     @AuditTrailEntry(AuditTrailType.PROCESS_START)
     public List<CoreBpmnInstanceStatusDTO<Long>> startProcess(RestJsonWrapperBean wrapper) {

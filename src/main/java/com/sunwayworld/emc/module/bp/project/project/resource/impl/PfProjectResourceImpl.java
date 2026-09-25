@@ -35,6 +35,13 @@ public class PfProjectResourceImpl extends EmcProjectResourceImpl implements PfP
     private PfOrderItemGroupService orderItemGroupService;
 
     @Override
+    @Log(value = "报告指派提交", type = LogType.UPDATE)
+    @RequestMapping(value = "/action/report-assign-submit", method = RequestMethod.POST)
+    public void reportAssignSubmit(RestJsonWrapperBean wrapper) {
+        projectService.reportAssignSubmit(wrapper);
+    }
+
+    @Override
     @Log(value = "选择材料批次号", type = LogType.UPDATE)
     @RequestMapping(value = "/qcMtlSelect", method = RequestMethod.PUT)
     public void qcMtlSelect(RestJsonWrapperBean wrapper) {
@@ -143,4 +150,5 @@ public class PfProjectResourceImpl extends EmcProjectResourceImpl implements PfP
     public void moveOrderItemGroup(RestJsonWrapperBean wrapper) {
         projectService.moveOrderItemGroup(wrapper);
     }
+
 }

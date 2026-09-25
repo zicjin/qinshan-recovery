@@ -13,6 +13,8 @@ import com.sunwayworld.module.item.file.bean.CoreFileBean;
 @RequestMapping("/secure/emc/module/bp/project/projects")
 public interface PfProjectResource extends EmcProjectResource{
 
+    void reportAssignSubmit(RestJsonWrapperBean wrapper);
+
     void qcMtlSelect(RestJsonWrapperBean wrapper);
 
     void undoDelivery(RestJsonWrapperBean wrapper);
@@ -40,5 +42,6 @@ public interface PfProjectResource extends EmcProjectResource{
     void moveOrder(RestJsonWrapperBean wrapper);
 
     void moveOrderItemGroup(RestJsonWrapperBean wrapper);
+
 
 }

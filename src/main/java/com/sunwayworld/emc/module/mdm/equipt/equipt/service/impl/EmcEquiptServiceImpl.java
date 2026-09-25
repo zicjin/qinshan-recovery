@@ -63,8 +63,7 @@ public class EmcEquiptServiceImpl implements EmcEquiptService {
         Long id = ApplicationContextHelper.getNextIdentity();
         equipt.setId(id);
         //赋值所属单位信息
-        CoreUserBean user = new CoreUserBean();
-        user = LocalContextHelper.getLoginUser();
+        CoreUserBean user = LocalContextHelper.getLoginUser();
         String parentOrgId = user.getExt$Item("parentorgid");
         equipt.setOrgId(parentOrgId);
         

@@ -13,6 +13,8 @@ import com.sunwayworld.module.item.file.bean.CoreFileBean;
  */
 public interface PfProjectService extends EmcProjectService {
 
+    void reportAssignSubmit(RestJsonWrapperBean wrapper);
+
     void undoDelivery(RestJsonWrapperBean wrapper);
 
     void schemeEditSubmit(RestJsonWrapperBean wrapper);

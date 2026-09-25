@@ -2184,7 +2184,7 @@ public class PfMobileProjectServiceImpl extends EmcMobileProjectServiceImpl impl
         Long projId = selectedFolder.getProjId();
 
         EmcProjectBean project = projectService.selectById(projId);
-        String newFolderNo = folderService.generateFolderNo(project);
+        String newFolderNo = folderService.generateFolderNo(project, selectedFolder.getMonitorTmplId());
         newFolder.setFolderNo(newFolderNo);
 
         // 查询对应点位下的样品信息，这里复制该点位下的所有样品，不过滤未关联采样单的样品

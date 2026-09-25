@@ -12,6 +12,9 @@ import com.sunwayworld.framework.controller.GenericEditListPageController;
 @RequestMapping("/secure/emc/module/bp/result/runs/page")
 public interface EmcRunController extends GenericEditListPageController, GenericAuditListPageController {
 
+    @RequestMapping("/undo-order-task")
+    String undoOrderTaskEditPage();
+
     @RequestMapping("/analysis-audit-list")
     String analysisAuditListPage();
 
@@ -62,6 +65,4 @@ public interface EmcRunController extends GenericEditListPageController, Generic
     @RequestMapping("/copy-blank-spkc-to")
     String copyBlankSpkcToPage();
 
-    @RequestMapping("/undo-order-task")
-    String undoOrderTaskEditPage();
 }

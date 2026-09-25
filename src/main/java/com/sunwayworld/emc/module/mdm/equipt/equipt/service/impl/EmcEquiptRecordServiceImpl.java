@@ -45,11 +45,11 @@ public class EmcEquiptRecordServiceImpl implements EmcEquiptRecordService {
     private EmcEquiptPlanService equiptPlanService;
 
     @Autowired
-    @Lazy
-    private EmcEquiptService equiptService;
+    CoreCodeService coreCodeService;
 
     @Autowired
-    CoreCodeService coreCodeService;
+    @Lazy
+    private EmcEquiptService equiptService;
 
     @Autowired
     private EmcEquiptMaintService equiptMaintService;
@@ -124,9 +124,7 @@ public class EmcEquiptRecordServiceImpl implements EmcEquiptRecordService {
             emcEquiptPlanUpdateList.add(emcEquiptPlan);
             EmcEquiptBean equiptBean = new EmcEquiptBean();
             equiptBean.setId(emcEquipRecord.getEquiptId());
-            if (emcEquipRecord.getMaintEndDate() != null) {
-                equiptBean.setSourceDate(emcEquipRecord.getMaintEndDate().toLocalDate());
-            }
+            equiptBean.setSourceDate(emcEquipRecord.getMaintEndDate().toLocalDate());
             emcEquiptUpdateList.add(equiptBean);
         }
         equiptPlanService.getDao().update(emcEquiptPlanUpdateList, "CYCLE", "MAINTDATE", "MAINTENDDATE", "VERIFYORG", "GIST", "CERTCATEGORY", "REMARK");

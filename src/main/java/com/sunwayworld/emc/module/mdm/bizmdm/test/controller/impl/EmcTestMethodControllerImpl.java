@@ -142,7 +142,7 @@ public class EmcTestMethodControllerImpl implements EmcTestMethodController {
         return "emc/module/mdm/bizmdm/tests/emc-method-param-edit-test-method-list";
     }
 
-    @Log(value = "方法录入方法参数设置页", type = LogType.CONTROLLER)
+    @Log(value = "分析录入方法参数设置页", type = LogType.CONTROLLER)
     @Override
     public String resultRunMethodParamDetailPage() {
         return "emc/module/mdm/bizmdm/tests/emc-result-run-method-param-edit-test-method-list";

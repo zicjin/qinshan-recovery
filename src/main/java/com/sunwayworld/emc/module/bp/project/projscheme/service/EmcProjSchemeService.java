@@ -38,9 +38,9 @@ public interface EmcProjSchemeService extends GenericService<EmcProjSchemeBean, 
 
     void updateOrderIndex(RestJsonWrapperBean wrapper);
 
-    List<String> generateFolderNosByProjId(Long projId, String projectNo, String monitorTmplId, String orderCategoryCode, int num);
-
     List<String> generateFolderNosByProjId(Long projId, String projectNo, int num);
+
+    List<String> generateFolderNosByProjId(Long projId, String projectNo, String monitorTmplId, String orderCategoryCode, int num);
 
     void relevanceUpdateSubcontractor(RestJsonWrapperBean wrapper);
 

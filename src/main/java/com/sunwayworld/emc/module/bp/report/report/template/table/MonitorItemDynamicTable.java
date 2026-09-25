@@ -189,7 +189,6 @@ public class MonitorItemDynamicTable implements DynamicTable {
 
                     uniqueTestIdSet.add(groupKey);
                     WordTemplateMonitorItemDTO monitorItemDTO = new WordTemplateMonitorItemDTO();
-                    monitorItemDTO.setOrderCategory(WordTemplateUtils.handleOrderCategory(orderCategory));
 
                     String itemSortCode = groupKey.substring(0, groupKey.indexOf("$"));
                     String sortName = testItemSortCodeMap.get(itemSortCode);
@@ -229,7 +228,6 @@ public class MonitorItemDynamicTable implements DynamicTable {
 
                     uniqueTestIdSet.add(key);
                     WordTemplateMonitorItemDTO monitorItemDTO = new WordTemplateMonitorItemDTO();
-                    monitorItemDTO.setOrderCategory(WordTemplateUtils.handleOrderCategory(orderCategory));
                     String itemGroup = StringUtils.replace(t.getExt$Item("itemGroup"), PfConstant.SPECIAL_TEST_NAME, PfConstant.SPECIAL_REPLACED_TEST_NAME);
                     monitorItemDTO.setTestName(itemGroup);
                     monitorItemDTO.setTestMethodName(t.getTestMethodBasis());
@@ -258,12 +256,11 @@ public class MonitorItemDynamicTable implements DynamicTable {
         });
 
         // 按照样品类型、检测依据和检测仪器分组
-        Map<String, List<WordTemplateMonitorItemDTO>> monitorItemGroupMap = monitorItemDTOList.stream().collect(Collectors.groupingBy(dto -> String.join("$", dto.getOrderCategory(), dto.getTestMethodName(), dto.getDetectDevice()), LinkedHashMap::new, Collectors.toList()));
+        Map<String, List<WordTemplateMonitorItemDTO>> monitorItemGroupMap = monitorItemDTOList.stream().collect(Collectors.groupingBy(dto -> String.join("$", dto.getTestMethodName(), dto.getDetectDevice()), LinkedHashMap::new, Collectors.toList()));
         List<WordTemplateMonitorItemDTO> monitorItemGroupList = new ArrayList<>(monitorItemGroupMap.size());
         monitorItemGroupMap.forEach((key, curMonitorItemList) -> {
             WordTemplateMonitorItemDTO basicMonitorItem = curMonitorItemList.get(0);
             WordTemplateMonitorItemDTO monitorItemDTO = new WordTemplateMonitorItemDTO();
-            monitorItemDTO.setOrderCategory(basicMonitorItem.getOrderCategory());
             String testName = curMonitorItemList.stream().map(WordTemplateMonitorItemDTO::getTestName).distinct().collect(Collectors.joining("、"));
             monitorItemDTO.setTestName(testName);
             monitorItemDTO.setTestMethodName(basicMonitorItem.getTestMethodName());

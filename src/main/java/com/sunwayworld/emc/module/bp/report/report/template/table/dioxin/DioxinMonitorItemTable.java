@@ -174,7 +174,6 @@ public class DioxinMonitorItemTable implements DynamicTable {
 
                     uniqueTestIdSet.add(groupKey);
                     WordTemplateMonitorItemDTO monitorItemDTO = new WordTemplateMonitorItemDTO();
-                    monitorItemDTO.setOrderCategory(WordTemplateUtils.handleOrderCategory(orderCategory));
 
                     String itemSortCode = groupKey.substring(0, groupKey.indexOf("$"));
                     String sortName = testItemSortCodeMap.get(itemSortCode);
@@ -214,7 +213,6 @@ public class DioxinMonitorItemTable implements DynamicTable {
 
                     uniqueTestIdSet.add(key);
                     WordTemplateMonitorItemDTO monitorItemDTO = new WordTemplateMonitorItemDTO();
-                    monitorItemDTO.setOrderCategory(WordTemplateUtils.handleOrderCategory(orderCategory));
                     String itemGroup = StringUtils.replace(t.getExt$Item("itemGroup"), PfConstant.SPECIAL_TEST_NAME, PfConstant.SPECIAL_REPLACED_TEST_NAME);
                     monitorItemDTO.setTestName(itemGroup);
                     monitorItemDTO.setTestMethodName(t.getTestMethodBasis());

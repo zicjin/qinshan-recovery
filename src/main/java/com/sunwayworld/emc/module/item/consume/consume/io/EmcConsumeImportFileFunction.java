@@ -57,11 +57,11 @@ implements CoreFileImportFunction {
         List<String> mtlNameList = csmList.stream().filter(e -> StringUtils.isBlank(e.getProductNo()) && !StringUtils.isBlank(e.getMtlName())).map(e -> e.getMtlName()).distinct().collect(Collectors.toList());
         List<EmcConsumeBean> existcsmList = this.consumeService.getDao().selectListByOneColumnValues(productNoList, "productNo", new Order[0]);
         List<EmcConsumeBean> existcsmList2 = this.consumeService.getDao().selectListByOneColumnValues(mtlNameList, "mtlName", new Order[0]).stream().filter(e -> StringUtils.isBlank(e.getProductNo())).collect(Collectors.toList());
-        ArrayList<EmcConsumeBean> insertCsmList = new ArrayList<EmcConsumeBean>();
-        ArrayList<EmcConsumeBean> updateCsmList = new ArrayList<EmcConsumeBean>();
-        ArrayList insertCsmStockList = new ArrayList();
-        ArrayList updateCsmStockList = new ArrayList();
-        ArrayList insertCsmLogList = new ArrayList();
+        List<EmcConsumeBean> insertCsmList = new ArrayList<EmcConsumeBean>();
+        List<EmcConsumeBean> updateCsmList = new ArrayList<EmcConsumeBean>();
+        List<EmcCsmStockBean> insertCsmStockList = new ArrayList<>();
+        List<EmcCsmStockBean> updateCsmStockList = new ArrayList<>();
+        List<EmcCsmStockLogBean> insertCsmLogList = new ArrayList<>();
         insertCsmList.addAll(csmList);
         updateCsmList.addAll(csmList);
         insertCsmList.removeIf(u -> existcsmList.stream().anyMatch(m -> StringUtils.equals(m.getProductNo(), u.getProductNo())));
@@ -136,9 +136,9 @@ implements CoreFileImportFunction {
             }
         });
         this.consumeService.getDao().insert(insertCsmList);
-        this.consumeService.getDao().update(updateCsmList, (String[])new String[0]);
+        this.consumeService.getDao().update(updateCsmList, new String[0]);
         this.csmStockService.getDao().insert(insertCsmStockList);
-        this.csmStockService.getDao().update(updateCsmStockList, (String[])new String[0]);
+        this.csmStockService.getDao().update(updateCsmStockList, new String[0]);
         this.csmStockLogService.getDao().insert(insertCsmLogList);
         return importResultRepresentation;
     }

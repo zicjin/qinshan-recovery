@@ -55,37 +55,9 @@ public class EmcSampleExportTemplate implements GenericTemplateService<String> {
         return templatePairList;
     }
 
-    //对于现场采样，导出excel存在超过256列的情况，因此由xls改为xlsx：
-    //由于当前项目核心的版本为9版本，没有getTemplateExtension可以继承来修改文件类型，则只能继承getDownLoadTemplateUrl方法，只对现场采样做单独处理
     @Override
-    public String getDownloadUrl(String templateCode, String id) {
-        List<Pair<String, String>> templatePairList = this.getTemplatePairList();
-
-        Pair<String, String> templatePair = (Pair)Objects.requireNonNull(templatePairList.stream().filter((t) -> {
-            return ((String)t.getFirst()).equals(templateCode);
-        }).findFirst().orElse(null));
-        FilePathDTO fr = FilePathDTO.of(FileScope.temp.name(), "" + System.currentTimeMillis(), UUID.randomUUID().toString(), (String)templatePair.getSecond() + ".xlsx");
-
-        try {
-            Files.createDirectories(FilePathManager.getLocalDirPath(fr));
-            URL resource = this.getClass().getResource("");
-            if (FileUtils.isInJarURL(resource)) {
-                InputStream is = this.getClass().getResourceAsStream("templates/" + templateCode + ".xlsx");
-                Files.copy(is, FilePathManager.getLocalPath(fr), new CopyOption[]{StandardCopyOption.REPLACE_EXISTING});
-            } else {
-                Path templatePath = (new File(resource.getPath())).toPath().resolve("templates").resolve(templateCode + ".xlsx");
-                Files.copy(templatePath, FilePathManager.getLocalPath(fr), StandardCopyOption.REPLACE_EXISTING);
-            }
-
-            this.initTemplateData(FilePathManager.getLocalPath(fr), id);
-            File exportTemplateFile = FilePathManager.getLocalPath(fr).toFile();
-            CoreFileManager fileManager = (CoreFileManager)ApplicationContextHelper.getBean(CoreFileManager.class);
-            fileManager.upload(fr, exportTemplateFile);
-        } catch (IOException var9) {
-            throw new FileException(var9);
-        }
-
-        return FilePathManager.getUrl(fr);
+    public String getTemplateExtension() {
+        return "xlsx";
     }
 
     @Override
@@ -165,7 +137,7 @@ public class EmcSampleExportTemplate implements GenericTemplateService<String> {
                     IntStream.range(0, uniqueItemList.size()).filter(i -> uniqueItemList.get(i).equals(uniqueItemName)).findFirst().ifPresent(i -> {
                         Cell markCell = Optional.ofNullable(markCommentRow.getCell(3 + i)).orElseGet(() -> markCommentRow.createCell(3 + i));
                         Comment comment1 =  markCell.getCellComment();
-                        XSSFComment comment = Optional.ofNullable((XSSFComment)markCell.getCellComment()).orElseGet(() -> patriarch.createCellComment(new XSSFClientAnchor(1, 1, 1, 1,  3, 3,  0, 0)));
+                        XSSFComment comment = Optional.ofNullable((XSSFComment)markCell.getCellComment()).orElseGet(() -> patriarch.createCellComment(new XSSFClientAnchor(1, 1, 1, 1, markCell.getColumnIndex() + 1, markCommentRow.getRowNum() + 1, 0, 0)));
                         comment.setString(new XSSFRichTextString(result.getId() + ""));
                         markCell.setCellComment(comment);
                         markCell.setCellValue(result.getId() + "");

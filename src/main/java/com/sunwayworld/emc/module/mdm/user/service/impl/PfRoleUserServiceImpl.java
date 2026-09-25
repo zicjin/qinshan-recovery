@@ -69,7 +69,7 @@ implements PfRoleUserService {
         List<CoreRoleUserBean> allRoleUserList = this.proxyInstance.selectAll();
         List<CoreRoleUserBean> roleUserList = allRoleUserList.stream().filter(e -> userIdList.contains(e.getUserId())).collect(Collectors.toList());
         Map<String, List<CoreRoleUserBean>> map = roleUserList.stream().collect(Collectors.groupingBy(CoreRoleUserBean::getUserId, Collectors.toList()));
-        ArrayList<MatrixRowMap> rowList = new ArrayList<MatrixRowMap>();
+        List<MatrixRowMap> rowList = new ArrayList<MatrixRowMap>();
         for (CoreUserBean user : coreUserList) {
             List<CoreRoleUserBean> filteredRoleList = map.get(user.getId());
             MatrixRowMap row = new MatrixRowMap();
@@ -94,19 +94,15 @@ implements PfRoleUserService {
         }
         List<MatrixRowMap> filteredRowList = MatrixHelper.getFilteredRowList((MapperParameter)parameter, rowList);
         MatrixHelper.sortRowList((MapperParameter)parameter, (List)filteredRowList);
-        Pagination matrixRowPagination = new Pagination(filteredRowList);
+        Page<MatrixRowMap> matrixRowPagination = new Pagination<>(filteredRowList);
         matrixRowPagination.setTotal(userPage.getTotal());
         matrixRowPagination.setPageNumber(userPage.getPageNumber());
-        HashMap<String, String> userColumnTypeMap = new HashMap<String, String>();
+        Map<String, String> userColumnTypeMap = new HashMap<String, String>();
         userColumnTypeMap.put("id", "string");
         userColumnTypeMap.put("username", "string");
         matrixRowPagination.setColumnTypeMap(userColumnTypeMap);
         List<MatrixHeaderBean> headerList = this.selectMatrixHeaderList();
-        headerList.forEach(arg_0 -> PfRoleUserServiceImpl.lambda$selectMatrixRowPagination$4((Page)matrixRowPagination, arg_0));
+        headerList.forEach(m -> matrixRowPagination.getColumnTypeMap().put(m.getField(), m.getJavaType().toLowerCase()));
         return matrixRowPagination;
-    }
-
-    private static /* synthetic */ void lambda$selectMatrixRowPagination$4(Page matrixRowPagination, MatrixHeaderBean m) {
-        matrixRowPagination.getColumnTypeMap().put(m.getField(), m.getJavaType().toLowerCase());
     }
 }

@@ -155,7 +155,6 @@ public class QcQuantityDynamicTable implements DynamicTable {
             Set<String> uniqueTestIdSet = new HashSet<>();
             curOrderTaskList.stream().filter(task -> StringUtils.isEmpty(task.getAnalysisOrgId())).forEach(task -> task.setAnalysisOrgId(""));
             curOrderTaskList.sort(Comparator.comparing(EmcOrderTaskBean::getAnalysisOrgId));
-
             int startRowIndex = mergedRowIndex.get() + 1;
 
             WordTemplateUtils.sortedByAnalysisOrg(curOrderTaskList);
@@ -186,6 +185,7 @@ public class QcQuantityDynamicTable implements DynamicTable {
                     });
                     tableBodyDataList.add(rowDataList);
                     mergedRowIndex.incrementAndGet();
+                    mergedRowIndex.incrementAndGet();
                 });
             });
 
@@ -201,6 +201,9 @@ public class QcQuantityDynamicTable implements DynamicTable {
     @Override
     public List<List<Object>> buildTableBody(WordTemplateDynamicTableDTO dynamicTableDTO) {
         List<List<Object>> tableBodyDataList = new ArrayList<>();
+
+        AtomicInteger mergedRowIndex = new AtomicInteger(1);
+        List<WordTemplateDynamicTableDTO.MergedRow> mergedRowList = Optional.ofNullable(dynamicTableDTO.getMergedRowList()).orElseGet(ArrayList::new);
 
         List<String> qcCodeList = Arrays.asList(PfConstant.QCCATEGORY_QCCATEGORYID_P_BLANK, PfConstant.QC_P_YSKB, PfConstant.QCCATEGORY_QCCATEGORYID_L_BLANK, PfConstant.QC_P_DUP, EmcConstant.QC_L_DUP, PfConstant.QCCATEGORY_QCCATEGORYID_QC_STD, EmcConstant.QCCATEGORY_QCCATGORYID_L_SPKC);
 
@@ -224,6 +227,8 @@ public class QcQuantityDynamicTable implements DynamicTable {
             Set<String> uniqueTestIdSet = new HashSet<>();
             curOrderTaskList.stream().filter(task -> StringUtils.isEmpty(task.getAnalysisOrgId())).forEach(task -> task.setAnalysisOrgId(""));
             curOrderTaskList.sort(Comparator.comparing(EmcOrderTaskBean::getAnalysisOrgId));
+
+            int startRowIndex = mergedRowIndex.get() + 1;
 
             WordTemplateUtils.sortedByAnalysisOrg(curOrderTaskList);
 
@@ -292,8 +297,10 @@ public class QcQuantityDynamicTable implements DynamicTable {
 
             curOrderTaskList.stream().filter(task -> StringUtils.isEmpty(task.getExt$Item("itemGroup"))).forEach(task -> task.setExt$Item("itemGroup", task.getTestName()));
             ArrayList<EmcOrderTaskBean> uniqueTaskList = curOrderTaskList.stream().collect(Collectors.collectingAndThen(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(task -> task.getExt$Item("itemGroup")))), ArrayList::new));
+            mergedRowList.add(new WordTemplateDynamicTableDTO.MergedRow(0, startRowIndex, mergedRowIndex.get()));
         });
 
+        dynamicTableDTO.setMergedRowList(mergedRowList);
         return tableBodyDataList;
     }
 

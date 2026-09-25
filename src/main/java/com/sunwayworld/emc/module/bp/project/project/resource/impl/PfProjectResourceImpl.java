@@ -151,4 +151,18 @@ public class PfProjectResourceImpl extends EmcProjectResourceImpl implements PfP
         projectService.moveOrderItemGroup(wrapper);
     }
 
+    @Log(value = "回退业务数据", type = LogType.INSERT)
+    @RequestMapping(value = "/undo-complete-task-data", method = RequestMethod.POST)
+    public Long undoCompleteTaskData(RestJsonWrapperBean wrapper) {
+        projectService.undoCompleteTaskData(wrapper);
+        return 1L;
+    }
+
+    @Log(value = "更新至报告编制", type = LogType.UPDATE)
+    @RequestMapping(value = "/action/to-report", method = RequestMethod.PUT)
+    public Long toReport(RestJsonWrapperBean wrapper) {
+        projectService.toReport(wrapper);
+        return 1L;
+    }
+
 }

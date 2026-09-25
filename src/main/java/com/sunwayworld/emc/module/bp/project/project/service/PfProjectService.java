@@ -48,4 +48,8 @@ public interface PfProjectService extends EmcProjectService {
     void moveOrder(RestJsonWrapperBean wrapper);
 
     void moveOrderItemGroup(RestJsonWrapperBean wrapper);
+
+    void undoCompleteTaskData(RestJsonWrapperBean wrapper);
+
+    void toReport(RestJsonWrapperBean wrapper);
 }

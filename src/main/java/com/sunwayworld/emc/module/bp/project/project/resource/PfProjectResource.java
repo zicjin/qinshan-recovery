@@ -43,5 +43,9 @@ public interface PfProjectResource extends EmcProjectResource{
 
     void moveOrderItemGroup(RestJsonWrapperBean wrapper);
 
+    Long undoCompleteTaskData(RestJsonWrapperBean wrapper);
+
+    Long toReport(RestJsonWrapperBean wrapper);
+
 
 }

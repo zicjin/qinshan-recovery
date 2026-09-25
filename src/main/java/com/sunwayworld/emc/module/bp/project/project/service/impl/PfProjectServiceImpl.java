@@ -107,9 +107,11 @@ import com.sunwayworld.framework.context.ApplicationContextHelper;
 import com.sunwayworld.framework.context.LocalContextHelper;
 import com.sunwayworld.framework.data.Pair;
 import com.sunwayworld.framework.data.page.Page;
+import com.sunwayworld.framework.database.sql.Order;
 import com.sunwayworld.framework.data.page.Pagination;
 import com.sunwayworld.framework.exception.FileException;
 import com.sunwayworld.framework.exception.UnsupportedException;
+import com.sunwayworld.framework.exception.InvalidDataException;
 import com.sunwayworld.framework.executor.ExecutorHelper;
 import com.sunwayworld.framework.http.HttpClientManager;
 import com.sunwayworld.framework.io.file.FileScope;
@@ -168,6 +170,55 @@ public class PfProjectServiceImpl extends EmcProjectServiceImpl implements PfPro
             auditRecordList.add(auditRecord);
         });
         auditRecordService.getDao().insert(auditRecordList);
+    }
+
+    @Override
+    public void undoCompleteTaskData(RestJsonWrapperBean wrapper) {
+        List<EmcProjectBean> projectList = wrapper.parse(EmcProjectBean.class);
+        List<Long> idList = projectList.stream().map(EmcProjectBean::getId).collect(Collectors.toList());
+        CoreBpmnParameterDTO parameter = new CoreBpmnParameterDTO();
+        parameter.setComment("业务数据生成失败,进行回退");
+        undo(idList, parameter);
+        CoreBpmnParameterDTO retry = new CoreBpmnParameterDTO();
+        retry.setComment("业务数据生成失败，重新提交到任务审核");
+        startProcess(idList, retry);
+    }
+
+    @Override
+    @Transactional
+    public void toReport(RestJsonWrapperBean wrapper) {
+        List<EmcProjectBean> wrapperProjectList = wrapper.parse(EmcProjectBean.class);
+        List<Long> projIdList = wrapperProjectList.stream().map(EmcProjectBean::getId).distinct().collect(Collectors.toList());
+        List<EmcProjectBean> projectBeanList = selectListByIds(projIdList);
+        if (projectBeanList.stream().anyMatch(e -> !ObjectUtils.equals("auditFinished", e.getStatus()))) {
+            throw new InvalidDataException("只能更新报告编制前的数据");
+        }
+        updateProject(projIdList);
+        ProjectNodeUtils.updateNodes(projIdList);
+    }
+
+    private void updateProject(List<Long> projIdList) {
+        List<EmcOrderTaskBean> orderTaskList = orderTaskService.getDao().selectListByOneColumnValues(projIdList, "PROJID", new Order[0]);
+        List<EmcOrderTaskBean> analysisOrderTaskList = orderTaskList.stream()
+                .filter(e -> ObjectUtils.equals("analysis", e.getAnalysisType()) || ObjectUtils.equals("sampling", e.getAnalysisType()))
+                .collect(Collectors.toList());
+        List<EmcProjectBean> updateProjectList = new ArrayList<>();
+        List<EmcOrderTaskBean> updateOrderTaskList = new ArrayList<>();
+        for (Long projectId : projIdList) {
+            boolean allDone = analysisOrderTaskList.stream().filter(e -> ObjectUtils.equals(e.getProjId(), projectId)).allMatch(e -> "done".equals(e.getStatus()));
+            if (!allDone) continue;
+            EmcProjectBean project = new EmcProjectBean();
+            project.setId(projectId);
+            project.setStatus("reportEdit");
+            project.setToReportEditDate(LocalDate.now());
+            updateProjectList.add(project);
+            updateOrderTaskList.addAll(orderTaskList.stream().filter(e -> ObjectUtils.equals(e.getProjId(), projectId)).filter(e -> "calculate".equals(e.getAnalysisType())).collect(Collectors.toList()));
+        }
+        getDao().update(updateProjectList, "STATUS", "TOREPORTEDITDATE");
+        if (!updateOrderTaskList.isEmpty()) {
+            updateOrderTaskList.forEach(e -> e.setStatus("done"));
+            orderTaskService.getDao().update(updateOrderTaskList, "STATUS");
+        }
     }
 
     @Autowired

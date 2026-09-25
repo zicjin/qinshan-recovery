@@ -245,6 +245,25 @@ public class EmcFolderServiceImpl implements EmcFolderService {
         return null;
     }
 
+    @Override
+    public List<String> generateFolderNosByProjId(Long projId, String projectNo, int num) {
+        List<EmcFolderBean> folderOfProjectList = getDao().selectListByOneColumnValue(projId, "PROJID");
+        List<String> newFolderNoList = new ArrayList<>();
+        String firstFolderNo;
+        if (folderOfProjectList.isEmpty()) {
+            firstFolderNo = projectNo + "001";
+        } else {
+            String maxFolderNo = folderOfProjectList.stream().max(Comparator.comparing(EmcFolderBean::getFolderNo)).get().getFolderNo();
+            firstFolderNo = maxFolderNo.substring(0, maxFolderNo.length() - 3) + String.format("%03d", Long.parseLong(maxFolderNo.substring(maxFolderNo.length() - 3)) + 1);
+        }
+        newFolderNoList.add(firstFolderNo);
+        for (int i = 1; i < num; i++) {
+            String previous = newFolderNoList.get(i - 1);
+            newFolderNoList.add(previous.substring(0, previous.length() - 3) + String.format("%03d", Long.parseLong(previous.substring(previous.length() - 3)) + 1));
+        }
+        return newFolderNoList;
+    }
+
     public String generateFolderNoByProjId(Long projId, String projectNo) {
         List<EmcFolderBean> folderOfProjectList = getDao().selectListByOneColumnValue(projId, "PROJID", Collections.singletonList("FOLDERNO"));
         String newFolderNo = "";
@@ -256,32 +275,6 @@ public class EmcFolderServiceImpl implements EmcFolderService {
         }
 
         return newFolderNo;
-    }
-
-    @Override
-    public List<String> generateFolderNosByProjId(Long projId, String projectNo, int num) {
-
-        List<EmcFolderBean> folderOfProjectList = getDao().selectListByOneColumnValue(projId, "PROJID");
-        List<String> newFolderNoList = new ArrayList<>();
-        String firstFolderNo = "";
-        if (folderOfProjectList.isEmpty()) {
-            firstFolderNo = projectNo + "001";
-            newFolderNoList.add(firstFolderNo);
-        } else {
-            String maxFolderNo = folderOfProjectList.stream().max(Comparator.comparing(EmcFolderBean::getFolderNo)).get().getFolderNo();
-            firstFolderNo = maxFolderNo.substring(0, maxFolderNo.length() - 3) + String.format("%03d", Long.parseLong(maxFolderNo.substring(maxFolderNo.length() - 3)) + 1);
-            newFolderNoList.add(firstFolderNo);
-        }
-
-        if (num > 1) {
-            for (int i = 0; i < num - 1; i++) {
-                String beforeFolderNo = newFolderNoList.get(i);
-                String nextFolderNo = beforeFolderNo.substring(0, beforeFolderNo.length() - 3) + String.format("%03d", Long.parseLong(beforeFolderNo.substring(beforeFolderNo.length() - 3)) + 1);
-                newFolderNoList.add(nextFolderNo);
-            }
-        }
-
-        return newFolderNoList;
     }
 
     @Override

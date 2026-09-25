@@ -54,6 +54,9 @@ public interface EmcSampleController extends GenericEditListPageController, Gene
     @RequestMapping("/edit-item")
     String editItem();
 
+    @RequestMapping("/hand-sample")
+    String handSample();
+
     @RequestMapping("/sample-edit-info-detail")
     String sampleEditInfoDetailPage();
 
@@ -62,24 +65,6 @@ public interface EmcSampleController extends GenericEditListPageController, Gene
 
     @RequestMapping("/order-desc-detail")
     String orderDescDetailPage();
-
-    @RequestMapping("/order-result-batch-input")
-    String orderResultBatchInputPage();
-    
-    @RequestMapping("/result-input")
-    String resultInputPage();
-
-    @RequestMapping("/sampling-equipt")
-    String samplingEquiptPage();
-
-    @RequestMapping("/sample-detail")
-    String sampleDetailPage();
-
-    @RequestMapping("/sample-date")
-    String sampleDatePage();
-    
-    
-
 
     @RequestMapping("/folder-dbs-desc-detail")
     String folderDBSDetailPage();
@@ -95,4 +80,19 @@ public interface EmcSampleController extends GenericEditListPageController, Gene
 
     @RequestMapping("/folder-cjw-desc-detail")
     String folderCJWDetailPage();
+
+    @RequestMapping("/order-result-batch-input")
+    String orderResultBatchInputPage();
+
+    @RequestMapping("/result-input")
+    String resultInputPage();
+
+    @RequestMapping("/sampling-equipt")
+    String samplingEquiptPage();
+
+    @RequestMapping("/sample-detail")
+    String sampleDetailPage();
+
+    @RequestMapping("/sample-date")
+    String sampleDatePage();
 }

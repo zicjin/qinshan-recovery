@@ -332,7 +332,7 @@ public class PfCurveServiceImpl extends EmcCurveServiceImpl implements PfCurveSe
         if (!curveOrderTaskResultList.isEmpty() && curveOrderTaskResultList.stream().noneMatch(e -> StringUtils.isEmpty(e.getOriginalResult())) && curveOrderTaskResultList.stream().noneMatch(e -> ObjectUtils.isEmpty(e.getStandQty()))) {
             List<EmcOrderTaskResultBean> zeroOrderTaskResultList = curveOrderTaskResultList.stream().filter(e -> e.getQcCategoryCode().contains("QC-CAL0")).collect(Collectors.toList());
             boolean ignoreZero = curveItemList.stream().anyMatch(item -> StringUtils.equals("1", item.getExt$Item("ignoreZero")));
-            ArrayList<EmcOrderTaskResultBean> calcCurveOrderTaskResultList = new ArrayList<EmcOrderTaskResultBean>();
+            List<EmcOrderTaskResultBean> calcCurveOrderTaskResultList = new ArrayList<EmcOrderTaskResultBean>();
             String blankcal = "0";
             if (!zeroOrderTaskResultList.isEmpty() && !ignoreZero) {
                 Double sum = 0.0;
@@ -342,7 +342,7 @@ public class PfCurveServiceImpl extends EmcCurveServiceImpl implements PfCurveSe
                 }
                 blankcal = NumberUtils.rounding(ArithUtils.div(sum, zeroOrderTaskResultList.size()) + "", "FDA,3");
                 EmcOrderTaskResultBean zeroOrderTaskResult = new EmcOrderTaskResultBean();
-                zeroOrderTaskResult.setStandQty(((EmcOrderTaskResultBean)zeroOrderTaskResultList.get(0)).getStandQty());
+                zeroOrderTaskResult.setStandQty(zeroOrderTaskResultList.get(0).getStandQty());
                 zeroOrderTaskResult.setOriginalResult(blankcal);
                 calcCurveOrderTaskResultList.add(zeroOrderTaskResult);
             }

@@ -66,7 +66,7 @@ implements GenericTemplateService<String> {
 
     @Override
     public List<Pair<String, String>> getTemplatePairList() {
-        ArrayList<Pair<String, String>> templatePairList = new ArrayList<Pair<String, String>>();
+        List<Pair<String, String>> templatePairList = new ArrayList<Pair<String, String>>();
         Pair<String, String> templatePair = Pair.of("emcRunItemGroupExportTemplate", "\u5206\u6790\u5f55\u5165(\u591a\u56e0\u5b50)\u5bfc\u5165\u7ed3\u679c\u6a21\u7248-" + System.currentTimeMillis());
         templatePairList.add(templatePair);
         return templatePairList;

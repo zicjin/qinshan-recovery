@@ -48,11 +48,11 @@ public class EmcEquiptRecordServiceImpl implements EmcEquiptRecordService {
     CoreCodeService coreCodeService;
 
     @Autowired
-    @Lazy
-    private EmcEquiptService equiptService;
+    private EmcEquiptMaintService equiptMaintService;
 
     @Autowired
-    private EmcEquiptMaintService equiptMaintService;
+    @Lazy
+    private EmcEquiptService equiptService;
 
     @Override
     @SuppressWarnings("unchecked")

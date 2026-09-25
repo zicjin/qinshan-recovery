@@ -26,9 +26,9 @@ implements PfEquiptRequisitionService {
     @Override
     public void deleteInstrumentOut(RestJsonWrapperBean wrapper) {
         List<EmcEquiptRequisitionBean> equiptRequisition = wrapper.parse(EmcEquiptRequisitionBean.class);
-        ArrayList updateEquiptRequisition = new ArrayList();
+        List<EmcEquiptRequisitionBean> updateEquiptRequisition = new ArrayList<>();
         List equiptIdList = equiptRequisition.stream().map(f -> f.getEquiptId()).collect(Collectors.toList());
-        ArrayList deleteIds = new ArrayList();
+        List<Long> deleteIds = new ArrayList<>();
         equiptRequisition.forEach(f -> {
             String projIds = wrapper.getParamValue("projIds");
             String projNos = wrapper.getParamValue("projNos");

@@ -170,7 +170,7 @@ public class EmcEquiptAcqResultServiceImpl implements EmcEquiptAcqResultService 
                 if (EmcConstant.EQUIPT_ACQ_DATA_FORMAT_MULTIPLE.equals(script.getDataFormat()) && !StringUtils.isEmpty(paragraphMark) && content.contains(paragraphMark)) {
                     paragraphArray = content.split(paragraphMark);
                     for (int i = paragraphArray.length - 1; i >= 0; i--) {
-                        paragraphArray[i] = paragraphArray[i] + paragraphMark;
+                        paragraphArray[i] = "defaultStartFlag" + paragraphArray[i] + "defaultEndFlag";
                     }
                 } else {
                     paragraphArray = new String[1];
@@ -300,6 +300,16 @@ public class EmcEquiptAcqResultServiceImpl implements EmcEquiptAcqResultService 
         if (!orderTaskResultIdList.isEmpty()) {
             EmcOrderTaskResultComputingEngine.getEngine(orderTaskResultIdList).compute();
         }
+    }
+
+    @Override
+    @Transactional
+    public void insertSceneResultByAnalyAcqFiles(List<EmcEquiptAcqFileBean> acqFileList) {
+    }
+
+    @Override
+    public List<EmcEquiptAcqResultBean> getSceneResultList(List<String> contentList, Long scriptId) {
+        return null;
     }
 
     @Override
@@ -515,15 +525,6 @@ public class EmcEquiptAcqResultServiceImpl implements EmcEquiptAcqResultService 
             }
         }
         return content;
-    }
-
-    @Override
-    public void insertSceneResultByAnalyAcqFiles(List<EmcEquiptAcqFileBean> acqFileList) {
-    }
-
-    @Override
-    public List<EmcEquiptAcqResultBean> getSceneResultList(List<String> contentList, Long scriptId) {
-        return null;
     }
 
     @Override

@@ -417,4 +417,10 @@ public class PfRunResourceImpl extends EmcRunResourceImpl implements PfRunResour
     public EmcAnalysisRecordDTO selectBrowseRecordFile(RestJsonWrapperBean wrapper) {
         return runService.selectBrowseRecordFile(wrapper);
     }
+
+    @Log(value = "批量导出分析原始记录Excel", type = LogType.SELECT)
+    @RequestMapping(value = "/action/export-original-record-excel-zip", method = RequestMethod.POST)
+    public String exportOriginalRecordExcelZip(RestJsonWrapperBean wrapper) {
+        return runService.exportOriginalRecordExcelZip(wrapper);
+    }
 }

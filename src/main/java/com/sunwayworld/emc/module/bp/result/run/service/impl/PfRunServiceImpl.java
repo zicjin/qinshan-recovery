@@ -2,8 +2,12 @@ package com.sunwayworld.emc.module.bp.result.run.service.impl;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.nio.file.Path;
+import java.nio.file.Files;
+import java.nio.file.attribute.FileAttribute;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -43,6 +47,7 @@ import com.sunwayworld.emc.framework.constant.PfBizConstant;
 import com.sunwayworld.emc.framework.constant.PfConstant;
 import com.sunwayworld.emc.framework.projectnode.ProjectNodeUtils;
 import com.sunwayworld.emc.framework.utils.EmcPdfUtils;
+import com.sunwayworld.emc.framework.word.ReportingServiceUtils;
 import com.sunwayworld.emc.module.bp.auditrecord.bean.EmcAuditRecordBean;
 import com.sunwayworld.emc.module.bp.auditrecord.service.EmcAuditRecordService;
 import com.sunwayworld.emc.module.bp.bp.bean.EmcFolderBean;
@@ -130,6 +135,7 @@ import com.sunwayworld.framework.executor.ExecutorHelper;
 import com.sunwayworld.framework.http.HttpClientManager;
 import com.sunwayworld.framework.i18n.I18nHelper;
 import com.sunwayworld.framework.io.file.FileScope;
+import com.sunwayworld.framework.utils.ArchiveUtils;
 import com.sunwayworld.framework.mybatis.mapper.MatchPattern;
 import com.sunwayworld.framework.mybatis.mapper.SearchFilter;
 import com.sunwayworld.framework.mybatis.page.MybatisPageHelper;
@@ -147,6 +153,7 @@ import com.sunwayworld.framework.utils.ObjectUtils;
 import com.sunwayworld.framework.utils.StringUtils;
 import com.sunwayworld.framework.validator.data.annotation.ValidateDataWith;
 import com.sunwayworld.module.item.file.bean.CoreFileBean;
+import com.sunwayworld.module.item.file.manager.CoreFileManager;
 import com.sunwayworld.module.item.file.service.CoreFileService;
 import com.sunwayworld.module.mdm.org.bean.CoreOrgBean;
 import com.sunwayworld.module.mdm.org.service.CoreOrgService;
@@ -169,6 +176,70 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
     private static final String COMPOSE_ALL_RUNLIST_REPORT_SUCCESS = "composeAllRunListReportSuccess";
 
     private static final String COMPOSE_ALL_RUNLIST_REPORT_FAILURE = "composeAllRunListReportFailure";
+
+    @Override
+    public String exportOriginalRecordExcelZip(RestJsonWrapperBean wrapper) {
+        List<EmcRunBean> selectedRunList = wrapper.parse(EmcRunBean.class);
+        if (selectedRunList.isEmpty()) return "";
+        List<String> runIdList = selectedRunList.stream().map(run -> run.getId() + "").distinct().collect(Collectors.toList());
+        List<EmcRunBean> runList = getDao().selectListByIds(runIdList, new Order[0]);
+        if (runList.isEmpty()) return "";
+        List<Long> reportConfigLineIdList = runList.stream().map(EmcRunBean::getReportConfigLineId).filter(v -> !ObjectUtils.isEmpty(v)).distinct().collect(Collectors.toList());
+        List<CoreReportConfigLineBean> configLineList = coreReportConfigLineService.selectListByIds(reportConfigLineIdList);
+        if (configLineList.isEmpty()) return "";
+        String reportingServiceServer = ApplicationContextHelper.getConstantValue("REPORTING_SERVICE_SERVER_URL");
+        String fineBaseUrl = ApplicationContextHelper.getEnvironment().getProperty("sunway.config.fine.independent-deploy-server.url");
+        List<Path> exportPathList = new ArrayList<>();
+        try {
+            for (EmcRunBean run : runList) {
+                if (ObjectUtils.isEmpty(run.getReportConfigLineId())) continue;
+                CoreReportConfigLineBean configLine = configLineList.stream().filter(c -> ObjectUtils.equals(c.getId(), run.getReportConfigLineId())).findFirst().orElse(null);
+                if (configLine == null) continue;
+                String downloadUrl = null;
+                if ("reportingService".equals(configLine.getReportCategory())) {
+                    downloadUrl = ReportingServiceUtils.getDownloadUrl(reportingServiceServer, configLine, run, "EXCEL");
+                } else if ("fanruan".equals(configLine.getReportCategory())) {
+                    List<String> targetIds = Collections.singletonList(coreReportConfigLineService.getDao().getTable() + "$" + configLine.getId());
+                    CoreFileBean file = coreFileService.getDao().selectListByOneColumnValues(targetIds, "TARGETID", new Order[0]).stream().findFirst().orElse(null);
+                    if (file != null) downloadUrl = buildRunFanruanOriginalRecordExcelUrl(fineBaseUrl, configLine, file.getName(), run);
+                }
+                if (!StringUtils.isEmpty(downloadUrl)) exportPathList.add(downloadToRunTempPath(downloadUrl, "分析原始记录_" + run.getId() + ".xls"));
+            }
+            if (exportPathList.isEmpty()) return "";
+            FilePathDTO filePath = FilePathDTO.of(FileScope.temp.name(), LocalDateTime.now(), StringUtils.randomUUID(16), "分析原始记录批量导出.zip");
+            ArchiveUtils.zip(FilePathManager.getLocalPath(filePath), exportPathList.toArray(new Path[0]));
+            CoreFileManager fileManager = ApplicationContextHelper.getBean(CoreFileManager.class);
+            fileManager.upload(filePath, FilePathManager.getLocalPath(filePath));
+            return fileManager.getDownloadUrl(filePath);
+        } catch (Exception e) {
+            throw new FileException(e);
+        }
+    }
+
+    private Path downloadToRunTempPath(String url, String fileName) {
+        FilePathDTO filePath = FilePathDTO.of(FileScope.temp.name(), LocalDateTime.now(), StringUtils.randomUUID(16), fileName);
+        try {
+            Files.createDirectories(FilePathManager.getLocalDirPath(filePath), new FileAttribute[0]);
+        } catch (IOException e) {
+            throw new FileException(e);
+        }
+        HttpClientManager.getInstance().download(url, FilePathManager.getLocalPath(filePath).toFile());
+        return FilePathManager.getLocalPath(filePath);
+    }
+
+    private String buildRunFanruanOriginalRecordExcelUrl(String fineBaseUrl, CoreReportConfigLineBean configLine, String reportFileName, EmcRunBean source) {
+        if (StringUtils.isEmpty(fineBaseUrl) || StringUtils.isEmpty(reportFileName)) return null;
+        try {
+            String fileName = configLine.getReportConfigLineNo() + "/" + reportFileName;
+            StringBuilder url = new StringBuilder(fineBaseUrl).append("/decision/view/report?viewlet=")
+                    .append(URLEncoder.encode(fileName, "UTF-8")).append("&format=excel");
+            String params = parseReportParam(source, configLine.getParam());
+            if (!StringUtils.isEmpty(params)) url.append("&").append(params);
+            return url.toString();
+        } catch (UnsupportedEncodingException e) {
+            throw new FileException(e);
+        }
+    }
 
     @Autowired
     @Lazy

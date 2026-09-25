@@ -213,17 +213,18 @@ public class EmcPropertyDataServiceImpl implements EmcPropertyDataService {
     }
 
     @Override
+    @Transactional
     public String saveResultRunPropertyDataByRunId(Long tmplId, String runId, RestJsonWrapperBean wrapper) {
         EmcPropertyDataBean propertyData = wrapper.parseUnique(EmcPropertyDataBean.class);
 
         EmcPropertyDataBean filterPropertyData = new EmcPropertyDataBean();
-        filterPropertyData.setBizId(NumberUtils.parseLong(runId));
+        filterPropertyData.setBizId2(runId);
         filterPropertyData.setTableName("T_EMC_RUN");
         List<EmcPropertyDataBean> dataList = getDao().selectList(filterPropertyData);
 
         EmcPropertyDataBean newPropertyData = new EmcPropertyDataBean();
         BeanUtils.copyProperties(propertyData, newPropertyData);
-        newPropertyData.setBizId(NumberUtils.parseLong(runId));
+        newPropertyData.setBizId2(runId);
         newPropertyData.setTableName("T_EMC_RUN");
         newPropertyData.setTmplId(tmplId);
 

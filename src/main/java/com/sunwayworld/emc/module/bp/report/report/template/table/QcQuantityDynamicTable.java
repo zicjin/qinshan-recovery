@@ -80,7 +80,7 @@ public class QcQuantityDynamicTable implements DynamicTable {
 
     @Override
     public int getTableWidth() {
-        return 10500;
+        return 10204;
     }
 
     @Override

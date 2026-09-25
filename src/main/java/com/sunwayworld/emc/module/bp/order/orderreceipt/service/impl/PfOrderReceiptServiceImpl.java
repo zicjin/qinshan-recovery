@@ -122,7 +122,7 @@ public class PfOrderReceiptServiceImpl extends EmcOrderReceiptServiceImpl {
 
         if (!addFolderQcCategoryList.isEmpty()) {
             long totalNum = addFolderQcCategoryList.stream().mapToLong(qc -> Optional.ofNullable(qc.getAddNum()).orElse(1L)).sum();
-            List<String> newFolderNoList = folderService.generateFolderNosByProjId(projectId, projectService.selectDetail(projectId).getProjNo(), (int) totalNum);
+            List<String> newFolderNoList = folderService.generateFolderNosByProjId(projectId, projectService.selectDetail(projectId).getProjNo(), copiedOrderList.get(0).getMonitorTmplId(), (int) totalNum);
 
             AtomicInteger folderNoIndex = new AtomicInteger(-1);
             copiedOrderList.forEach(copiedOrder -> addFolderQcCategoryList.forEach(copiedQc -> {

@@ -501,7 +501,7 @@ public class PfProjectServiceImpl extends EmcProjectServiceImpl implements PfPro
                     newEmcProjectBeanList.add(projectBean);
 
                     int qty = schemeBeanList.size();
-                    List<String> folderNoList = folderService.generateFolderNosByProjId(newProjectId, newProjectNo, qty);
+                    List<String> folderNoList = folderService.generateFolderNosByProjId(newProjectId, newProjectNo, schemeBeanList.get(0).getMonitorTmplId(), qty);
                     // 复制项目对应的方案
                     for (int p = 0; p < qty; p++) {
                         EmcProjSchemeBean schemeBean = new EmcProjSchemeBean();
@@ -593,7 +593,7 @@ public class PfProjectServiceImpl extends EmcProjectServiceImpl implements PfPro
 
                     // 批量生成新的点位编号
                     int folderSize = folderBeans.size();
-                    List<String> newFolderNoList = folderService.generateFolderNosByProjId(newProjectId, newProjectNo, folderSize);
+                    List<String> newFolderNoList = folderService.generateFolderNosByProjId(newProjectId, newProjectNo, folderBeans.get(0).getMonitorTmplId(), folderSize);
 
                     for (int k = 0; k < folderSize; k++) {
 
@@ -709,7 +709,7 @@ public class PfProjectServiceImpl extends EmcProjectServiceImpl implements PfPro
         projSchemeMap.forEach((projId, v) -> {
             List<EmcProjSchemeBean> sortProjSchemeList = v.stream().sorted(Comparator.comparing(EmcProjSchemeBean::getSortNum)).collect(Collectors.toList());
             EmcProjectBean projBean = sampleProjectList.stream().filter(e -> ObjectUtils.equals(e.getId(), projId)).findFirst().get();
-            List<String> folderNoList = folderService.generateFolderNosByProjId(projId, projBean.getProjNo(), v.size());
+            List<String> folderNoList = folderService.generateFolderNosByProjId(projId, projBean.getProjNo(), v.get(0).getMonitorTmplId(), v.size());
             for (int i = 0; i < sortProjSchemeList.size(); i++) {
                 sortProjSchemeList.get(i).setFolderNo(folderNoList.get(i));
             }
@@ -720,7 +720,7 @@ public class PfProjectServiceImpl extends EmcProjectServiceImpl implements PfPro
             List<EmcOrderBean> normalOrderList = v.stream().filter(e -> "N/A".equals(e.getQcCategoryCode())).sorted(Comparator.comparing(EmcOrderBean::getOrderNum)).collect(Collectors.toList());
             EmcProjectBean projBean = noSampleProjectList.stream().filter(e -> ObjectUtils.equals(e.getId(), projId)).findFirst().get();
             // 给个不存在的projId，让其重新生成folderNo
-            List<String> folderNoList = folderService.generateFolderNosByProjId(1L, projBean.getProjNo(), normalOrderList.size());
+            List<String> folderNoList = folderService.generateFolderNosByProjId(1L, projBean.getProjNo(), normalOrderList.get(0).getMonitorTmplId(), normalOrderList.size());
             List<EmcFolderBean> findFolderList = noSampleFolderList.stream().filter(e -> ObjectUtils.equals(projId, e.getProjId())).collect(Collectors.toList());
             for (int i = 0; i < normalOrderList.size(); i++) {
                 normalOrderList.get(i).setOrderNo(folderNoList.get(i) + "001");

@@ -575,7 +575,7 @@ public class EmcMobileProjectServiceImpl implements EmcMobileProjectService {
         int newFolderSize = mobileNewFolderList.size();
         Long projectId = mobileNewFolderList.get(0).getProjId();
         EmcProjectBean project = projectService.getDao().selectById(projectId);
-        List<String> newFolderNoList = folderService.generateFolderNosByProjId(projectId, project.getProjNo(), newFolderSize);
+        List<String> newFolderNoList = folderService.generateFolderNosByProjId(projectId, project.getProjNo(), mobileNewFolderList.get(0).getMonitorTmplId(), newFolderSize);
 
         for (int i = 0; i < newFolderSize; i++) {
             EmcFolderBean folderBean = mobileNewFolderList.get(i);

@@ -802,7 +802,7 @@ public class EmcReportServiceImpl implements EmcReportService {
         // 点位
         // 批量生成新的点位编号
         int folderCount = folderList.size();
-        List<String> newFolderNoList = folderService.generateFolderNosByProjId(newProjectId, newProjectNo, folderCount);
+        List<String> newFolderNoList = folderService.generateFolderNosByProjId(newProjectId, newProjectNo, folderList.get(0).getMonitorTmplId(), folderCount);
 
         for (int i = 0; i < folderCount; i++) {
             EmcFolderBean folder = folderList.get(i);

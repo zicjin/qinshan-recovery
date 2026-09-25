@@ -202,7 +202,6 @@ public class PfFolderServiceImpl extends EmcFolderServiceImpl implements PfFolde
         pfOrderItemGroupService.getDao().insert(newOrderItemGroupList);
     }
 
-    @Override
     public List<String> generateFolderNosByProjId(Long projId, String projectNo, int num) {
         List<EmcFolderBean> schemeOfProjectList = getDao().selectListByOneColumnValue(projId, "PROJID");
         List<String> newFolderNoList = new ArrayList<>();

@@ -345,7 +345,7 @@ public class EmcProjectServiceImpl implements EmcProjectService {
                     newEmcProjectBeanList.add(projectBean);
 
                     int qty = schemeBeanList.size();
-                    List<String> folderNoList = folderService.generateFolderNosByProjId(newProjectId, newProjectNo, qty);
+                    List<String> folderNoList = folderService.generateFolderNosByProjId(newProjectId, newProjectNo, schemeBeanList.get(0).getMonitorTmplId(), qty);
                     // 复制项目对应的方案
                     for (int p = 0; p < qty; p++) {
                         EmcProjSchemeBean schemeBean = new EmcProjSchemeBean();
@@ -428,7 +428,7 @@ public class EmcProjectServiceImpl implements EmcProjectService {
 
                     // 批量生成新的点位编号
                     int folderSize = folderBeans.size();
-                    List<String> newFolderNoList = folderService.generateFolderNosByProjId(newProjectId, newProjectNo, folderSize);
+                    List<String> newFolderNoList = folderService.generateFolderNosByProjId(newProjectId, newProjectNo, folderBeans.get(0).getMonitorTmplId(), folderSize);
 
                     for (int k = 0; k < folderSize; k++) {
 

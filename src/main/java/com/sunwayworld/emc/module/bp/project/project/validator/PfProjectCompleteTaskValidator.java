@@ -22,6 +22,7 @@ import com.sunwayworld.emc.module.bp.project.project.service.EmcOrderItemGroupSe
 import com.sunwayworld.emc.module.bp.project.project.service.EmcOrderItemService;
 import com.sunwayworld.emc.module.bp.project.projscheme.bean.EmcProjSchemeBean;
 import com.sunwayworld.emc.module.bp.project.projscheme.service.EmcProjSchemeService;
+import com.sunwayworld.emc.module.bp.project.projscheme.service.EmcProjOrderService;
 import com.sunwayworld.emc.module.bp.project.projscheme.service.PfProjSchemeService;
 import com.sunwayworld.emc.module.bp.report.report.bean.EmcReportSendInfoBean;
 import com.sunwayworld.emc.module.bp.report.report.service.EmcReportSendInfoService;
@@ -64,6 +65,9 @@ public class PfProjectCompleteTaskValidator extends EmcProjectCompleteTaskValida
     private EmcMonitorTmplService monitorTmplService;
 
     @Autowired
+    private EmcProjOrderService projOrderService;
+
+    @Autowired
     private PfProjSchemeService projSchemeService;
 
     @Autowired
@@ -83,8 +87,8 @@ public class PfProjectCompleteTaskValidator extends EmcProjectCompleteTaskValida
         RestJsonWrapperBean wrapper = ArrayUtils.getUniqueTypeValue(args, RestJsonWrapperBean.class);
 
         List<Long> projectIdList = wrapper.parse(EmcProjectBean.class).stream().map(EmcProjectBean::getId).collect(Collectors.toList());
+        List projDirectorList = emcProjectDirectorService.getDao().selectListByOneColumnValues(projectIdList, "PROJECTID", new Order[0]);
         List<EmcProjectBean> projectList = projectService.selectListByFilter(SearchFilter.instance().match("id", projectIdList).filter(MatchPattern.OR));
-        emcProjectDirectorService.getDao().selectListByOneColumnValues(projectIdList, "PROJECTID");
         if (projectList.stream().anyMatch(e -> e.getEntrustDate() == null)) {
             this.addConstraintViolation("委托日期不能为空");
             return false;
@@ -182,9 +186,12 @@ public class PfProjectCompleteTaskValidator extends EmcProjectCompleteTaskValida
                 }
             }
             List<Long> orderItemGroupIdList = orderItemGroupList.stream().map(EmcOrderItemGroupBean::getId).distinct().collect(Collectors.toList());
+            int batchSize = 1000;
             List<EmcOrderItemBean> orderItemList = new ArrayList<>();
-            for (int i = 0; i < orderItemGroupIdList.size(); i += 1000) {
-                orderItemList.addAll(emcOrderItemService.getDao().selectListByOneColumnValues(orderItemGroupIdList.subList(i, Math.min(i + 1000, orderItemGroupIdList.size())), "ORDERITEMGROUPID"));
+            for (int i = 0; i < orderItemGroupIdList.size(); i += batchSize) {
+                List<Long> subList = orderItemGroupIdList.subList(i, Math.min(i + batchSize, orderItemGroupIdList.size()));
+                List<EmcOrderItemBean> batchResult = emcOrderItemService.getDao().selectListByOneColumnValues(subList, "ORDERITEMGROUPID");
+                orderItemList.addAll(batchResult);
             }
             for (EmcOrderItemGroupBean group : orderItemGroupList) {
                 if (orderItemList.stream().noneMatch(item -> ObjectUtils.equals(item.getOrderItemGroupId(), group.getId()))) {
@@ -196,10 +203,10 @@ public class PfProjectCompleteTaskValidator extends EmcProjectCompleteTaskValida
 
         List<Long> sampleProjectIdList = normalProjectList.stream().filter(e -> Constant.YES.equals(e.getSample())).map(EmcProjectBean::getId).collect(Collectors.toList());
 
-        List<EmcProjSchemeBean> schemeList = emcProjSchemeService.getDao().selectListByOneColumnValues(sampleProjectIdList, "PROJID");
+        List<EmcProjSchemeBean> schemeList = emcProjSchemeService.getDao().selectListByOneColumnValues(sampleProjectIdList, "PROJID", new Order[0]);
 
         for (Long projId : sampleProjectIdList) {
-            List<EmcProjSchemeBean> projSchemeList = schemeList.stream().filter(e -> ObjectUtils.equals(projId, e.getProjId())).collect(Collectors.toList());
+            List<EmcProjSchemeBean> projSchemeList = schemeList.stream().filter(e -> ObjectUtils.equals(projId, e.getProjId()) && !StringUtils.equals(e.getReferFolder(), Constant.YES)).collect(Collectors.toList());
             if (projSchemeList.isEmpty()) {
                 this.addConstraintViolation("EMC.MODULE.BP.PROJECT.PROJECTS.TIP.NO_PROJECT_SCHEME");
                 return false;
@@ -221,31 +228,6 @@ public class PfProjectCompleteTaskValidator extends EmcProjectCompleteTaskValida
         boolean emptyCycleOrFrequency = schemeList.stream().anyMatch(scheme -> ObjectUtils.isEmpty(scheme.getCycle()) || ObjectUtils.isEmpty(scheme.getFrequency()));
         if(emptyCycleOrFrequency){
             this.addConstraintViolation("EMC.MODULE.BP.PROJECT.PROJECTS.TIP.CYCLE_OR_FREQUENCY_IS_EMPTY");
-            return false;
-        }
-
-        // 如果没有填写报告发送信息，也不让提交
-        List<EmcReportSendInfoBean> reportSendInfoList = reportSendInfoService.getDao().selectListByOneColumnValues(projectIdList, "projId");
-        boolean emptyReportSendInfo = reportSendInfoList.stream().anyMatch(info -> !Constant.YES.equals(info.getNeedCnReport())
-                && !Constant.YES.equals(info.getNeedEnReport())
-                && !Constant.YES.equals(info.getNeedCnEnReport())
-                && ObjectUtils.isEmpty(info.getCnReportCnt())
-                && ObjectUtils.isEmpty(info.getEnReportCnt())
-                && ObjectUtils.isEmpty(info.getCnEnReportCnt()));
-
-        if (emptyReportSendInfo) {
-            this.addConstraintViolation("EMC.MODULE.BP.PROJECT.PROJECTS.TIP.REPORT_SEND_INFO_IS_EMPTY");
-            return false;
-        }
-
-        // 如果设置了纸质报告，则报告寄送地址必填
-        List<Long> needPaperReportProjectIdList = reportSendInfoList.stream().filter(info -> !ObjectUtils.isEmpty(info.getCnReportCnt())
-                || !ObjectUtils.isEmpty(info.getEnReportCnt())
-                || !ObjectUtils.isEmpty(info.getCnEnReportCnt())).map(EmcReportSendInfoBean::getProjId).collect(Collectors.toList());
-
-        boolean emptyReportPostAddress = projectList.stream().filter(p -> needPaperReportProjectIdList.contains(p.getId())).anyMatch(p -> StringUtils.isEmpty(p.getReportPostAddress()));
-        if (emptyReportPostAddress) {
-            this.addConstraintViolation("EMC.MODULE.BP.PROJECT.PROJECTS.TIP.REPORT_POST_ADDRESS_IS_EMPTY");
             return false;
         }
 

@@ -40,6 +40,7 @@ import com.sunwayworld.emc.module.bp.bp.service.EmcFolderService;
 import com.sunwayworld.emc.module.bp.bp.service.EmcOrderTaskResultService;
 import com.sunwayworld.emc.module.bp.bp.service.EmcOrderTaskService;
 import com.sunwayworld.framework.constant.Constant;
+import com.sunwayworld.framework.context.ApplicationContextHelper;
 import com.sunwayworld.framework.data.Pair;
 import com.sunwayworld.framework.exception.FileException;
 import com.sunwayworld.framework.io.file.FileScope;
@@ -50,6 +51,7 @@ import com.sunwayworld.framework.utils.FileUtils;
 import com.sunwayworld.framework.utils.NumberUtils;
 import com.sunwayworld.framework.utils.ObjectUtils;
 import com.sunwayworld.framework.utils.StringUtils;
+import com.sunwayworld.module.item.file.manager.CoreFileManager;
 
 @Component(value = "emcCurveExportTemplate")
 public class EmcCurveExportTemplate implements GenericTemplateService<String> {
@@ -86,6 +88,7 @@ public class EmcCurveExportTemplate implements GenericTemplateService<String> {
         String fileName = Optional.ofNullable(folder).map(f -> f.getFolderNo() + "_" + dateStr).orElse(dateStr);
 
         FilePathDTO fr = FilePathDTO.of(FileScope.temp.name(), "" + System.currentTimeMillis(), UUID.randomUUID().toString(), fileName + ".xls");
+        CoreFileManager fileManager = ApplicationContextHelper.getBean(CoreFileManager.class);
         try {
             Files.createDirectories(FilePathManager.getLocalDirPath(fr));
 
@@ -99,6 +102,7 @@ public class EmcCurveExportTemplate implements GenericTemplateService<String> {
             }
 
             initTemplateData(FilePathManager.getLocalPath(fr), id);
+            fileManager.upload(fr, FilePathManager.getLocalPath(fr));
         } catch (IOException ioe) {
             throw new FileException(ioe);
         }

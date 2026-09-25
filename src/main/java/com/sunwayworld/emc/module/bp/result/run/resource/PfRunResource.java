@@ -127,9 +127,5 @@ public interface PfRunResource extends EmcRunResource, GenericChoosableResource<
 
     EmcAnalysisRecordDTO selectBrowseRecordFile(RestJsonWrapperBean wrapper);
 
-    EmcAnalysisRecordDTO selectRunAuditFile(RestJsonWrapperBean wrapper);
-
-    Long bathUploadFile(RestJsonWrapperBean wrapper);
-
     String exportOriginalRecordExcelZip(RestJsonWrapperBean wrapper);
 }

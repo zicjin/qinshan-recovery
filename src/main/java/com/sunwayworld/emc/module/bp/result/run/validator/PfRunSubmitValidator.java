@@ -3,6 +3,7 @@ package com.sunwayworld.emc.module.bp.result.run.validator;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -19,12 +20,15 @@ import com.sunwayworld.emc.module.bp.bp.service.EmcOrderService;
 import com.sunwayworld.emc.module.bp.bp.service.EmcOrderTaskResultService;
 import com.sunwayworld.emc.module.bp.bp.service.EmcOrderTaskService;
 import com.sunwayworld.emc.module.bp.result.run.bean.EmcRunBean;
+import com.sunwayworld.emc.module.bp.result.run.service.EmcRunService;
 import com.sunwayworld.emc.module.bp.sample.sample.bean.EmcSampleBean;
 import com.sunwayworld.emc.module.bp.sample.sample.service.EmcSampleService;
 import com.sunwayworld.framework.i18n.I18nHelper;
+import com.sunwayworld.framework.database.sql.Order;
 import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;
 import com.sunwayworld.framework.spring.annotation.GikamBean;
 import com.sunwayworld.framework.utils.ArrayUtils;
+import com.sunwayworld.framework.utils.DateTimeUtils;
 import com.sunwayworld.framework.utils.NumberUtils;
 import com.sunwayworld.framework.utils.ObjectUtils;
 import com.sunwayworld.framework.utils.StringUtils;
@@ -46,18 +50,35 @@ public class PfRunSubmitValidator extends EmcRunSubmitValidator implements DataV
     @Autowired
     private EmcSampleService sampleService;
 
+    @Autowired
+    private EmcRunService emcRunService;
+
     @Override
     public boolean doValid(Object... args) {
         RestJsonWrapperBean wrapper = ArrayUtils.getUniqueTypeValue(args, RestJsonWrapperBean.class);
         List<EmcRunBean> runList = wrapper.parse(EmcRunBean.class);
         List<String> runIdList = runList.stream().filter(r -> !StringUtils.isEmpty(r.getId())).map(EmcRunBean::getId).collect(Collectors.toList());
+        runList = emcRunService.selectListByIds(runIdList);
 
         // 筛选状态为logged记录
-        List<EmcOrderTaskBean> orderTaskList = orderTaskService.getDao().selectListByOneColumnValues(runIdList, "RUNID").stream().filter(e -> "logged".equals(e.getStatus()))
+        List<EmcOrderTaskBean> orderTaskList = orderTaskService.getDao().selectListByOneColumnValues(runIdList, "RUNID", new Order[0]).stream().filter(e -> "logged".equals(e.getStatus()))
                 .collect(Collectors.toList());
         if (orderTaskList.isEmpty()) {
             this.addConstraintViolation("EMC.MODULE.BP.RESULT.RUNS.TIP.EMPTY_SAMPLE");
             return false;
+        }
+
+        List orderIdList = orderTaskList.stream().map(e -> e.getOrderId()).distinct().collect(Collectors.toList());
+        List<EmcOrderBean> orderList = orderService.selectListByIds(orderIdList);
+        for (EmcRunBean run : runList) {
+            List<Long> curOrderIdList = orderTaskList.stream().filter(e -> ObjectUtils.equals(run.getId(), e.getRunId())).map(EmcOrderTaskBean::getOrderId).distinct().collect(Collectors.toList());
+            List<EmcOrderBean> curOrderList = orderList.stream().filter(e -> curOrderIdList.contains(e.getId())).collect(Collectors.toList());
+            EmcOrderBean minSampleBeginDateOrder = curOrderList.stream().min(Comparator.comparing(EmcOrderBean::getSampleBeginDate, Comparator.nullsLast(java.time.LocalDate::compareTo))).orElse(new EmcOrderBean());
+            java.time.LocalDate minSampleBeginDate = minSampleBeginDateOrder.getSampleBeginDate();
+            if (minSampleBeginDate != null && DateTimeUtils.isBefore(run.getAnalysisBeginDate(), minSampleBeginDate)) {
+                this.addConstraintViolation("分析日期小于采样日期，不允许提交");
+                return false;
+            }
         }
 
         List<Long> orderTaskIdList = orderTaskList.stream().map(EmcOrderTaskBean::getId).distinct().collect(Collectors.toList());
@@ -117,20 +138,6 @@ public class PfRunSubmitValidator extends EmcRunSubmitValidator implements DataV
         List<EmcOrderTaskBean> emptyStockBatchNoTaskList = orderTaskList.stream().filter(task -> PfConstant.QCCATEGORY_QCCATEGORYID_QC_STD.equals(task.getQcCategoryCode()) && StringUtils.isEmpty(task.getStockBatchNo())).collect(Collectors.toList());
         if (!emptyStockBatchNoTaskList.isEmpty()) {
             this.addConstraintViolation("EMC.MODULE.BP.RESULT.RUNS.TIP.STOCK_BATCH_NO_IS_EMPTY");
-            return false;
-        }
-
-        // 批下样品关联的采样单如果未审核，不允许提交批
-        List<Long> orderIdList = orderTaskList.stream().map(EmcOrderTaskBean::getOrderId).distinct().collect(Collectors.toList());
-        List<EmcOrderBean> orderList = orderService.getDao().selectListByOneColumnValues(orderIdList, "id", Arrays.asList("id", "sampleId", "orderNo"));
-        List<Long> sampleIdList = orderList.stream().filter(order -> !ObjectUtils.isEmpty(order.getSampleId())).map(EmcOrderBean::getSampleId).distinct().collect(Collectors.toList());
-        List<EmcSampleBean> sampleList = sampleService.getDao().selectListByOneColumnValues(sampleIdList, "id", Arrays.asList("id", "status"));
-
-        List<Long> unDoneSampleIdList = sampleList.stream().filter(sample -> !StringUtils.equals("done", sample.getStatus())).map(EmcSampleBean::getId).collect(Collectors.toList());
-        if (!unDoneSampleIdList.isEmpty()) {
-            String orderNos = orderList.stream().filter(order -> unDoneSampleIdList.contains(order.getSampleId())).map(EmcOrderBean::getOrderNo).collect(Collectors.joining(","));
-            String message = I18nHelper.getMessage("EMC.MODULE.BP.RESULT.RUNS.TIP.EXIST_NOT_AUDIT_SAMPLE", orderNos);
-            this.addConstraintViolation(message);
             return false;
         }
 

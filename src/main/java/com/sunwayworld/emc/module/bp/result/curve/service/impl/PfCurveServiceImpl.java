@@ -99,7 +99,14 @@ public class PfCurveServiceImpl extends EmcCurveServiceImpl implements PfCurveSe
         List<EmcOrderTaskResultBean> curveOrderTaskResultList = orderTaskResultList.stream().filter(e -> curveItemIdList.contains(e.getItemId())).collect(Collectors.toList());
 
         String computeType = curve.getExt$Item("type");
-        List<EmcOrderTaskResultBean> updateOrderTaskResultList = StringUtils.equals("logCompute", computeType) ? calculateSlopeInterceptWithLog(curveOrderTaskResultList, curveItemList) : (StringUtils.equals("zeroCompute", computeType) ? calculateSlopeInterceptWithZero(curveOrderTaskResultList, curveItemList) : calculateSlopeIntercept(curveOrderTaskResultList, curveItemList));
+        List<EmcOrderTaskResultBean> updateOrderTaskResultList = new ArrayList<>();
+        if (StringUtils.equals("logCompute", computeType)) {
+            updateOrderTaskResultList = calculateSlopeInterceptWithLog(curveOrderTaskResultList, curveItemList);
+        } else if (StringUtils.equals("zeroCompute", computeType)) {
+            updateOrderTaskResultList = calculateSlopeInterceptWithZero(curveOrderTaskResultList, curveItemList);
+        } else {
+            updateOrderTaskResultList = calculateSlopeIntercept(curveOrderTaskResultList, curveItemList);
+        }
 
         if (!updateOrderTaskResultList.isEmpty()) {
             orderTaskResultService.getDao().update(curveOrderTaskResultList, "RN2", "RN3", "RN4");

@@ -87,6 +87,11 @@ public class EmcPropertyDataServiceImpl implements EmcPropertyDataService {
         emcPropertyDataBean.setTmplId(tmplId);
         List<EmcPropertyDataBean> dataList = getDao().selectList(emcPropertyDataBean);
         if (!dataList.isEmpty()) {
+            EmcSampleBean sampleBean = emcSampleService.selectById(id);
+            if (sampleBean != null) {
+                dataList.get(0).setExt$Item("samplingequiptname", sampleBean.getExt$Item("samplingequiptname"));
+                dataList.get(0).setExt$Item("samplingequiptid", sampleBean.getExt$Item("samplingequiptid"));
+            }
             return dataList.get(0);
         }
 

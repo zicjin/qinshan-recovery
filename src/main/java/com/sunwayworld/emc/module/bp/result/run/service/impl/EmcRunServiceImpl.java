@@ -556,10 +556,12 @@ public class EmcRunServiceImpl implements EmcRunService {
         // 分析校核审核插入审核记录
         this.insertAuditRecordByRun(runList, "PROCESS_COMPLETE", wrapper.getParamValue("bpmn_comment"), null);
 
-        runList.stream().forEach(e -> {
+        for (EmcRunBean e : runList) {
             e.setStatus(EmcBizConstant.RUN_STATUS_AUDIT);
-        });
-        getDao().update(runList, "STATUS");
+            e.setCheckUserId(LocalContextHelper.getLoginUserId());
+            e.setCheckUserName(LocalContextHelper.getLoginUserName());
+        }
+        getDao().update(runList, "STATUS", "checkUserId", "checkUserName");
 
         ExecutorHelper.submit(
                 new TimerTask() {
@@ -1345,23 +1347,41 @@ public class EmcRunServiceImpl implements EmcRunService {
 
     @Override
     public Page<EmcEquiptBean> selectEquiptPagination(String testMethodId, RestJsonWrapperBean wrapper) {
-        List<String> list = Arrays.stream(StringUtils.split(testMethodId, ",")).distinct().collect(Collectors.toList());
-        String[] array = list.toArray(new String[0]);
-        if (array.length == 0) return new Pagination<>();
+        List<String> list = Stream.of(StringUtils.split(testMethodId, ",")).distinct().collect(Collectors.toList());
+        String[] array = list.toArray(new String[list.size()]);
+        Map<String, String> columnTypeMap = new HashMap<>();
+        columnTypeMap.put("equiptid", "string");
+        columnTypeMap.put("equiptname", "string");
+        columnTypeMap.put("specification", "string");
+        columnTypeMap.put("factoryno", "string");
+        columnTypeMap.put("status", "string");
+        columnTypeMap.put("equiptcategoryid", "string");
+        columnTypeMap.put("useddepartmentid", "string");
+        columnTypeMap.put("sharing", "string");
+        columnTypeMap.put("maintain", "string");
+        columnTypeMap.put("sourcemethod", "string");
+        columnTypeMap.put("sourcedate", "string");
+        if (array.length > 0) {
         List<Long> testMethodIdList = Arrays.stream(array).map(NumberUtils::parseLong).collect(Collectors.toList());
         List<EmcEquiptTestMethodBean> testMethodEquiptList = equiptTestMethodService.getDao().selectListByOneColumnValues(testMethodIdList, "TESTMETHODID").stream().filter(a -> "analysis".equals(a.getAnalysisCategory())).collect(Collectors.toList());
         if (testMethodEquiptList.isEmpty()) {
             EmcEquiptBean filter = new EmcEquiptBean(); filter.setEquiptName("N/A");
             EmcEquiptBean equipt = equiptService.getDao().selectFirstIfPresent(filter);
-            Pagination<EmcEquiptBean> pagination = new Pagination<>(Arrays.asList(equipt == null ? filter : equipt));
+            EmcEquiptBean selectedEquipt = equipt == null ? filter : equipt;
+            Pagination<EmcEquiptBean> pagination = new Pagination<>(Arrays.asList(selectedEquipt));
+            pagination.setColumnTypeMap(columnTypeMap);
             return pagination;
         }
         Map<Long, List<EmcEquiptTestMethodBean>> grouped = testMethodEquiptList.stream().collect(Collectors.groupingBy(EmcEquiptTestMethodBean::getEquiptId));
         List<Long> equiptIdList = grouped.entrySet().stream().filter(e -> e.getValue().size() == array.length).map(Map.Entry::getKey).collect(Collectors.toList());
         List<EmcEquiptBean> equiptList = equiptService.selectListByFilter(SearchFilter.instance().match("ID", equiptIdList).filter(MatchPattern.OR), wrapper);
-        equiptList.forEach(a -> testMethodEquiptList.stream().filter(b -> b.getEquiptId().equals(a.getId())).forEach(c -> a.setExt$Item("defaultflag", c.getDefaultFlag())));
+        equiptList.stream().forEach(a -> testMethodEquiptList.stream().filter(b -> b.getEquiptId().equals(a.getId())).forEach(c -> a.setExt$Item("defaultflag", c.getDefaultFlag())));
         List<EmcEquiptBean> visible = equiptList.stream().filter(e -> e.getMaintenanceUserId() == null || ObjectUtils.equals("", e.getMaintenanceUserId()) || e.getMaintenanceUserId().contains(LocalContextHelper.getLoginUserId())).collect(Collectors.toList());
-        return new Pagination<>(visible);
+        Pagination<EmcEquiptBean> pagination = new Pagination<>(visible);
+        pagination.setColumnTypeMap(columnTypeMap);
+        return pagination;
+        }
+        return new Pagination<>();
     }
 
     @Override

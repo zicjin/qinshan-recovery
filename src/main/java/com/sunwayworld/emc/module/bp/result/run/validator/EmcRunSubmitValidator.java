@@ -44,7 +44,7 @@ public class EmcRunSubmitValidator implements DataValidator {
     public boolean doValid(Object... args) {
         RestJsonWrapperBean wrapper = ArrayUtils.getUniqueTypeValue(args, RestJsonWrapperBean.class);
         List<EmcRunBean> runList = wrapper.parse(EmcRunBean.class);
-        List<String> runIdList = runList.stream().map(EmcRunBean::getId).collect(Collectors.toList());
+        List<String> runIdList = runList.stream().map(e -> e.getId()).collect(Collectors.toList());
         runList = emcRunService.selectListByIds(runIdList);
 
         // 筛选状态为logged记录
@@ -54,10 +54,10 @@ public class EmcRunSubmitValidator implements DataValidator {
             this.addConstraintViolation("EMC.MODULE.BP.RESULT.RUNS.TIP.EMPTY_SAMPLE");
             return false;
         }
-        List<Long> orderIdList = orderTaskList.stream().map(EmcOrderTaskBean::getOrderId).distinct().collect(Collectors.toList());
+        List<Long> orderIdList = orderTaskList.stream().map(e -> e.getOrderId()).distinct().collect(Collectors.toList());
         List<EmcOrderBean> orderList = orderService.selectListByIds(orderIdList);
         for (EmcRunBean run : runList) {
-            List<Long> curOrderIdList = orderTaskList.stream().filter(e -> ObjectUtils.equals(run.getId(), e.getRunId())).map(EmcOrderTaskBean::getOrderId).distinct().collect(Collectors.toList());
+            List<Long> curOrderIdList = orderTaskList.stream().filter(e -> ObjectUtils.equals(run.getId(), e.getRunId())).map(e -> e.getOrderId()).distinct().collect(Collectors.toList());
             List<EmcOrderBean> curOrderList = orderList.stream().filter(e -> curOrderIdList.contains(e.getId())).collect(Collectors.toList());
             EmcOrderBean minSampleBeginDateOrder = curOrderList.stream().min(Comparator.comparing(EmcOrderBean::getSampleBeginDate, Comparator.nullsLast(LocalDate::compareTo))).orElse(new EmcOrderBean());
             LocalDate minSampleBeginDate = minSampleBeginDateOrder.getSampleBeginDate();

@@ -337,8 +337,9 @@ public class PfCurveServiceImpl extends EmcCurveServiceImpl implements PfCurveSe
             if (!zeroOrderTaskResultList.isEmpty() && !ignoreZero) {
                 Double sum = 0.0;
                 for (EmcOrderTaskResultBean taskResult : zeroOrderTaskResultList) {
-                    if (!NumberUtils.isNumber(taskResult.getOriginalResult())) continue;
-                    sum = ArithUtils.add(sum.toString(), taskResult.getOriginalResult());
+                    if (NumberUtils.isNumber(taskResult.getOriginalResult())) {
+                        sum = ArithUtils.add(sum.toString(), taskResult.getOriginalResult());
+                    }
                 }
                 blankcal = NumberUtils.rounding(ArithUtils.div(sum, zeroOrderTaskResultList.size()) + "", "FDA,3");
                 EmcOrderTaskResultBean zeroOrderTaskResult = new EmcOrderTaskResultBean();

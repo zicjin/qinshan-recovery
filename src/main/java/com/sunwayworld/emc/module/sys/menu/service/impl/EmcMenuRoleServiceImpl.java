@@ -55,7 +55,7 @@ extends CoreMenuRoleServiceImpl {
         }
         List<CoreRolePermissionBean> rolePermissionList = this.rolePermissionService.selectListByFilter(SearchFilter.instance().match("PERMISSIONTYPEID", "T_CORE_MENU").filter(MatchPattern.OR), new Order[0]);
         Map<String, List<CoreRolePermissionBean>> map = rolePermissionList.stream().collect(Collectors.groupingBy(CoreRolePermissionBean::getTargetId, Collectors.toList()));
-        ArrayList<MatrixRowMap> rowList = new ArrayList<MatrixRowMap>();
+        List<MatrixRowMap> rowList = new ArrayList<>();
         for (CoreMenuDTO menu : menuTreePagination.getRows()) {
             boolean leaf = CollectionUtils.isEmpty(menu.getChildren());
             List<CoreRolePermissionBean> filteredRolePermissionList = map.get(menu.getId());
@@ -66,9 +66,9 @@ extends CoreMenuRoleServiceImpl {
                 if (leaf) {
                     filteredRolePermissionList.forEach(ru -> row.putRotateValue(this.coreRoleService.getDao().getTable(), ru.getRoleId(), "ROLENAME", "1"));
                 } else {
-                    List childrenMenuIdList = this.getAllChildren(menu).stream().map(e -> e.getId()).collect(Collectors.toList());
+                    List<String> childrenMenuIdList = this.getAllChildren(menu).stream().map(e -> e.getId()).collect(Collectors.toList());
                     filteredRolePermissionList.forEach(ru -> {
-                        List menuIdList = rolePermissionList.stream().filter(f -> f.getRoleId().equals(ru.getRoleId())).map(e -> e.getTargetId()).collect(Collectors.toList());
+                        List<String> menuIdList = rolePermissionList.stream().filter(f -> f.getRoleId().equals(ru.getRoleId())).map(e -> e.getTargetId()).collect(Collectors.toList());
                         if (childrenMenuIdList.stream().anyMatch(f -> !menuIdList.contains(f))) {
                             row.putRotateValue(this.coreRoleService.getDao().getTable(), ru.getRoleId(), "ROLENAME", "2");
                         } else {
@@ -94,7 +94,7 @@ extends CoreMenuRoleServiceImpl {
         }
         List<MatrixRowMap> filteredRowList = MatrixHelper.getFilteredRowList(parameter, rowList);
         MatrixHelper.sortRowList(parameter, filteredRowList);
-        Pagination<MatrixRowMap> matrixRowPagination = new Pagination<MatrixRowMap>(filteredRowList);
+        Page<MatrixRowMap> matrixRowPagination = new Pagination<>(filteredRowList);
         matrixRowPagination.setTotal(menuTreePagination.getTotal());
         matrixRowPagination.setPageNumber(menuTreePagination.getPageNumber());
         matrixRowPagination.setColumnTypeMap(menuTreePagination.getColumnTypeMap());
@@ -105,7 +105,7 @@ extends CoreMenuRoleServiceImpl {
 
     private void buildChildMixRow(MatrixRowMap row, List<AbstractTreeNode> treeNodeList, Map<String, List<CoreRolePermissionBean>> map, List<CoreRolePermissionBean> rolePermissionList) {
         if (treeNodeList != null && !treeNodeList.isEmpty()) {
-            ArrayList<MatrixRowMap> childRowList = new ArrayList<MatrixRowMap>();
+            List<MatrixRowMap> childRowList = new ArrayList<>();
             for (AbstractTreeNode child : treeNodeList) {
                 CoreMenuDTO menuDTO = (CoreMenuDTO)child;
                 boolean leaf = CollectionUtils.isEmpty(menuDTO.getChildren());
@@ -117,9 +117,9 @@ extends CoreMenuRoleServiceImpl {
                     if (leaf) {
                         filteredRolePermissionList.forEach(ru -> childRow.putRotateValue(this.coreRoleService.getDao().getTable(), ru.getRoleId(), "ROLENAME", "1"));
                     } else {
-                        List childrenMenuIdList = this.getAllChildren(menuDTO).stream().map(e -> e.getId()).collect(Collectors.toList());
+                        List<String> childrenMenuIdList = this.getAllChildren(menuDTO).stream().map(e -> e.getId()).collect(Collectors.toList());
                         filteredRolePermissionList.forEach(ru -> {
-                            List menuIdList = rolePermissionList.stream().filter(f -> f.getRoleId().equals(ru.getRoleId())).map(e -> e.getTargetId()).collect(Collectors.toList());
+                            List<String> menuIdList = rolePermissionList.stream().filter(f -> f.getRoleId().equals(ru.getRoleId())).map(e -> e.getTargetId()).collect(Collectors.toList());
                             if (childrenMenuIdList.stream().anyMatch(f -> !menuIdList.contains(f))) {
                                 childRow.putRotateValue(this.coreRoleService.getDao().getTable(), ru.getRoleId(), "ROLENAME", "2");
                             } else {
@@ -148,7 +148,7 @@ extends CoreMenuRoleServiceImpl {
     }
 
     private List<CoreMenuDTO> getAllChildren(CoreMenuDTO menuDTO) {
-        ArrayList<CoreMenuDTO> menuDTOList = new ArrayList<CoreMenuDTO>();
+        List<CoreMenuDTO> menuDTOList = new ArrayList<>();
         if (CollectionUtils.isEmpty(menuDTO.getChildren())) {
             return menuDTOList;
         }

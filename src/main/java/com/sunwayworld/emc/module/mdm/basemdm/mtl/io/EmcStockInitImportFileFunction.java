@@ -30,6 +30,7 @@ import com.sunwayworld.module.item.file.utils.CoreFileUtils;
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -69,7 +70,7 @@ implements CoreFileImportFunction {
         if (stockList.isEmpty()) {
             return CoreFileImportResultDTO2;
         }
-        try (BufferedInputStream is = new BufferedInputStream(new FileInputStream(FilePathManager.getLocalPath(fr).toString()));
+        try (InputStream is = new BufferedInputStream(new FileInputStream(FilePathManager.getLocalPath(fr).toString()));
              HSSFWorkbook wb = new HSSFWorkbook(is);){
             HSSFSheet firstSheet = wb.getSheetAt(0);
             int realRowCount = firstSheet.getPhysicalNumberOfRows();
@@ -86,11 +87,11 @@ implements CoreFileImportFunction {
         catch (IOException e2) {
             throw new FileException(e2);
         }
-        ArrayList<EmcMtlBean> insertEmcMtlList = new ArrayList<>();
-        ArrayList<EmcStockBean> insertEmcStockList = new ArrayList<>();
-        ArrayList<EmcStockLogBean> newStockLogList = new ArrayList<>();
-        ArrayList<EmcStockConcentBean> newStockConcentList = new ArrayList<>();
-        ArrayList<EmcMtlMaintainBean> insertEmcMtlMaintainList = new ArrayList<EmcMtlMaintainBean>();
+        List<EmcMtlBean> insertEmcMtlList = new ArrayList<>();
+        List<EmcStockBean> insertEmcStockList = new ArrayList<>();
+        List<EmcStockLogBean> newStockLogList = new ArrayList<>();
+        List<EmcStockConcentBean> newStockConcentList = new ArrayList<>();
+        List<EmcMtlMaintainBean> insertEmcMtlMaintainList = new ArrayList<>();
         stockList.stream().filter(e -> e.getExt$Item("mtlname") != null).collect(Collectors.groupingBy(e -> e.getExt$Item("mtlname"))).forEach((mtlName, list) -> {
             list.stream().filter(e -> e.getMtlId() != null).collect(Collectors.groupingBy(e -> e.getMtlId())).forEach((mtlNo, mtlStockList) -> {
                 EmcMtlBean mtl = new EmcMtlBean();

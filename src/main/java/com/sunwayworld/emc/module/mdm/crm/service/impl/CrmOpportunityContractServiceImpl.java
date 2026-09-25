@@ -82,6 +82,7 @@ import com.sunwayworld.framework.data.page.Pagination;
 import com.sunwayworld.framework.mybatis.mapper.MapperParameter;
 import com.sunwayworld.framework.mybatis.mapper.MatchPattern;
 import com.sunwayworld.framework.mybatis.mapper.SearchFilter;
+import com.sunwayworld.framework.database.sql.Order;
 import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;
 import com.sunwayworld.framework.support.PersistableHelper;
 import com.sunwayworld.framework.utils.DateTimeUtils;
@@ -844,7 +845,7 @@ public class CrmOpportunityContractServiceImpl implements CrmOpportunityContract
         List<EmcCapacityItemGroupBean> capacityItemGroupList = capacityItemGroupService.selectListByIds(capacityItemGroupIdList);
 
         List<Long> testMethodIdList = capacityItemGroupList.stream().map(EmcCapacityItemGroupBean::getTestMethodId).distinct().collect(Collectors.toList());
-        List<EmcRelatedTestMethodBean> relatedTestMethodList = relatedTestMethodService.getDao().selectListByOneColumnValues(testMethodIdList, "testMethodId");
+        List<EmcRelatedTestMethodBean> relatedTestMethodList = relatedTestMethodService.selectListByFilter(SearchFilter.instance().match("testMethodId", testMethodIdList).filter(MatchPattern.OR).match("replaceFlag2", Arrays.asList("1", null)).filter(MatchPattern.DIFFER), new Order[0]);
         Map<Long, List<EmcRelatedTestMethodBean>> relatedTestMethodMap = relatedTestMethodList.stream().collect(Collectors.groupingBy(EmcRelatedTestMethodBean::getRelatedTestMethodId));
         List<Long> relatedTestMethodIdList = relatedTestMethodList.stream().map(EmcRelatedTestMethodBean::getRelatedTestMethodId).distinct().collect(Collectors.toList());
         List<EmcTestMethodBean> testMethodList = testMethodService.selectListByIds(relatedTestMethodIdList);
@@ -916,7 +917,7 @@ public class CrmOpportunityContractServiceImpl implements CrmOpportunityContract
         List<EmcCapacityItemGroupBean> capacityItemGroupList = capacityItemGroupService.selectListByIds(capacityItemGroupIdList);
 
         List<Long> testMethodIdList = capacityItemGroupList.stream().map(EmcCapacityItemGroupBean::getTestMethodId).distinct().collect(Collectors.toList());
-        List<EmcRelatedTestMethodBean> relatedTestMethodList = relatedTestMethodService.getDao().selectListByOneColumnValues(testMethodIdList, "testMethodId");
+        List<EmcRelatedTestMethodBean> relatedTestMethodList = relatedTestMethodService.selectListByFilter(SearchFilter.instance().match("testMethodId", testMethodIdList).filter(MatchPattern.OR).match("replaceFlag2", Arrays.asList("1", null)).filter(MatchPattern.DIFFER), new Order[0]);
         if (relatedTestMethodList.isEmpty()) {
             return relatedOrderItemGroupList;
         }

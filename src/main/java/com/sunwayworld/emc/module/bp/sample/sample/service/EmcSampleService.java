@@ -58,8 +58,6 @@ public interface EmcSampleService extends GenericService<EmcSampleBean, Long>, G
 
     Page<EmcOrderTaskBean> selectOrderTaskBySample(RestJsonWrapperBean wrapper);
 
-    Page<EmcSampleBean> selectAssignSamplePagination(RestJsonWrapperBean wrapper);
-    
     void bizUndo(RestJsonWrapperBean wrapper);
 
     Long resultInput(RestJsonWrapperBean wrapper);
@@ -69,5 +67,7 @@ public interface EmcSampleService extends GenericService<EmcSampleBean, Long>, G
     Page<EmcSampleBean> selectTodoSampleList(RestJsonWrapperBean wrapper);
 
     Page<EmcSampleBean> selectTodoSampleOrderReceiptList(RestJsonWrapperBean wrapper);
+
+    Page<EmcSampleBean> selectAssignSamplePagination(RestJsonWrapperBean wrapper);
 
 }

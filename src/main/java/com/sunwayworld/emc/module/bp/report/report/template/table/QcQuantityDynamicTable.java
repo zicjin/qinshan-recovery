@@ -202,9 +202,6 @@ public class QcQuantityDynamicTable implements DynamicTable {
     public List<List<Object>> buildTableBody(WordTemplateDynamicTableDTO dynamicTableDTO) {
         List<List<Object>> tableBodyDataList = new ArrayList<>();
 
-        AtomicInteger mergedRowIndex = new AtomicInteger(1);
-        List<WordTemplateDynamicTableDTO.MergedRow> mergedRowList = Optional.ofNullable(dynamicTableDTO.getMergedRowList()).orElseGet(ArrayList::new);
-
         List<String> qcCodeList = Arrays.asList(PfConstant.QCCATEGORY_QCCATEGORYID_P_BLANK, PfConstant.QC_P_YSKB, PfConstant.QCCATEGORY_QCCATEGORYID_L_BLANK, PfConstant.QC_P_DUP, EmcConstant.QC_L_DUP, PfConstant.QCCATEGORY_QCCATEGORYID_QC_STD, EmcConstant.QCCATEGORY_QCCATGORYID_L_SPKC);
 
         List<EmcOrderTaskBean> validOrderTaskList = qcOrderTaskList.stream().filter(r -> !StringUtils.contains(r.getTestName(), EmcConstant.PARAMETER_TEST_MATCH_KEYWORD)
@@ -295,7 +292,6 @@ public class QcQuantityDynamicTable implements DynamicTable {
 
             curOrderTaskList.stream().filter(task -> StringUtils.isEmpty(task.getExt$Item("itemGroup"))).forEach(task -> task.setExt$Item("itemGroup", task.getTestName()));
             ArrayList<EmcOrderTaskBean> uniqueTaskList = curOrderTaskList.stream().collect(Collectors.collectingAndThen(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(task -> task.getExt$Item("itemGroup")))), ArrayList::new));
-            mergedRowList.add(new WordTemplateDynamicTableDTO.MergedRow(0, mergedRowIndex.get() + 1, mergedRowIndex.addAndGet(uniqueTaskList.size())));
         });
 
         return tableBodyDataList;

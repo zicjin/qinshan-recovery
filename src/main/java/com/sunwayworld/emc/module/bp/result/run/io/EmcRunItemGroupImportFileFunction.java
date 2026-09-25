@@ -19,9 +19,11 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -49,14 +51,14 @@ implements CoreFileImportFunction {
     }
 
     protected void importOrderTaskResult(File file) {
-        try (BufferedInputStream is = new BufferedInputStream(new FileInputStream(file));
+        try (InputStream is = new BufferedInputStream(new FileInputStream(file));
              HSSFWorkbook wb = new HSSFWorkbook(is);){
             HSSFSheet firstSheet = wb.getSheetAt(0);
             HSSFRow firstRow = firstSheet.getRow(0);
             int lastRowNum = firstSheet.getPhysicalNumberOfRows();
-            short lastCellNum = firstRow.getLastCellNum();
-            ArrayList<EmcOrderTaskResultBean> updateResultList = new ArrayList<EmcOrderTaskResultBean>();
-            LinkedHashMap<String, List> relationRowMap = new LinkedHashMap<String, List>();
+            int lastCellNum = firstRow.getLastCellNum();
+            List<EmcOrderTaskResultBean> updateResultList = new ArrayList<>();
+            Map<String, List<HSSFRow>> relationRowMap = new LinkedHashMap<>();
             IntStream.range(3, lastRowNum).forEach(rowIndex -> {
                 HSSFRow row = firstSheet.getRow(rowIndex);
                 if (row == null) {
@@ -67,7 +69,7 @@ implements CoreFileImportFunction {
                 if (StringUtils.isBlank(idArrayStr)) {
                     return;
                 }
-                List rowList = Optional.ofNullable(relationRowMap.get(idArrayStr)).orElseGet(ArrayList::new);
+                List<HSSFRow> rowList = Optional.ofNullable(relationRowMap.get(idArrayStr)).orElseGet(ArrayList::new);
                 rowList.add(row);
                 relationRowMap.put(idArrayStr, rowList);
             });
@@ -75,8 +77,8 @@ implements CoreFileImportFunction {
                 if (rowList.size() < 2) {
                     return;
                 }
-                ArrayList cellIndexList = new ArrayList();
-                ArrayList resultIdList = new ArrayList();
+                List<Integer> cellIndexList = new ArrayList<>();
+                List<String> resultIdList = new ArrayList<>();
                 HSSFRow markRow = (HSSFRow)rowList.get(0);
                 IntStream.range(3, lastCellNum).forEach(cellIndex -> {
                     HSSFCell cell = markRow.getCell(cellIndex);
@@ -107,7 +109,7 @@ implements CoreFileImportFunction {
     }
 
     protected void updateAndComputing(List<EmcOrderTaskResultBean> updateList) {
-        this.orderTaskResultService.getDao().update(updateList, (String[])new String[]{"ORIGINALRESULT"});
+        this.orderTaskResultService.getDao().update(updateList, new String[]{"ORIGINALRESULT"});
         if (updateList.size() > 0) {
             EmcOrderTaskResultComputingEngine.getEngine(updateList.stream().map(EmcOrderTaskResultBean::getId).distinct().collect(Collectors.toList())).compute();
         }

@@ -175,7 +175,6 @@ public class EmcSampleServiceImpl implements EmcSampleService {
     private EmcTestMethodService testMethodService;
 
     @Autowired
-    @Lazy
     private CoreFileService coreFileService;
 
     @Override
@@ -404,6 +403,9 @@ public class EmcSampleServiceImpl implements EmcSampleService {
             sample.setProcessStatus(ProcessStatus.DRAFT.name().toLowerCase());
             sample.setOrgId(LocalContextHelper.getLoginUser().getExt$Item("parentorgid"));
             sample.setOrgName(LocalContextHelper.getLoginUser().getExt$Item("parentorgname"));
+            if ("preLogged".equals(status)) {
+                sample.setAcceptStatus("1");
+            }
 
             insertSampleList.add(sample);
 
@@ -536,9 +538,10 @@ public class EmcSampleServiceImpl implements EmcSampleService {
             EmcSampleBean updateSample = new EmcSampleBean();
             updateSample.setId(e.getId());
             updateSample.setStatus(EmcBizConstant.SAMPLE_STATUS_APPROVE);
+            updateSample.setAcceptStatus("1");
             updateSampleList.add(updateSample);
         });
-        getDao().update(updateSampleList, "STATUS");
+        getDao().update(updateSampleList, "STATUS", "ACCEPTSTATUS");
 
         // 把类型为采样的ordtask状态改成approve（提交到采样互审）
         List<EmcOrderBean> orderList = orderService.getDao().selectListByOneColumnValues(sampleIdList, "SAMPLEID");
@@ -855,15 +858,18 @@ public class EmcSampleServiceImpl implements EmcSampleService {
             if (!orderIdList.isEmpty()) {
                 List<EmcOrderTaskBean> orderTaskList = orderTaskService.getDao().selectListByOneColumnValues(orderIdList, "ORDERID");
                 if (!orderTaskList.isEmpty()) {
-                    orderTaskList.stream().forEach(a -> a.setStatus(EmcBizConstant.ORDERTASK_STATUS_DRAFT));
+                    orderTaskList.forEach(a -> a.setStatus(EmcBizConstant.ORDERTASK_STATUS_DRAFT));
                     orderTaskService.getDao().update(orderTaskList, "STATUS");
                 }
             }
 
             ProjectNodeUtils.updateNodes(projectIdList);
             // 将sample表status置为draft
-            sampleList.stream().forEach(a -> a.setStatus(EmcBizConstant.SAMPLE_STATUS_DRAFT));
-            getDao().update(sampleList, "STATUS");
+            sampleList.forEach(a -> {
+                a.setStatus(EmcBizConstant.SAMPLE_STATUS_DRAFT);
+                a.setAcceptStatus("0");
+            });
+            getDao().update(sampleList, "STATUS", "ACCEPTSTATUS");
 
         }
 
@@ -931,6 +937,12 @@ public class EmcSampleServiceImpl implements EmcSampleService {
         }
 
         return orderTaskService.selectPaginationByFilter(SearchFilter.instance().match("ORDERID", orderIdList).filter(MatchPattern.OR), wrapper);
+    }
+
+    @Override
+    public void batchUpdateFileBizCategory(RestJsonWrapperBean wrapper) {
+        List<CoreFileBean> files = wrapper.parse(CoreFileBean.class, 0);
+        coreFileService.getDao().update(files, "bizCategory");
     }
 
     @Override
@@ -1222,7 +1234,13 @@ public class EmcSampleServiceImpl implements EmcSampleService {
                 CoreBpmnInstanceStatusDTO bpmnInstance = coreBpmnInstanceStatusDTOList.stream().filter(f -> ObjectUtils.equals(f.getId(), sample.getId())).findFirst().orElse(null);
                 if ("audit".equals(bpmnInstance.getStatusCode())) {
                     auditRecord.setTaskName("采样审核");
-                    auditRecord.setNextTaskName("样品接收");
+                    Long projId = sample.getProjId();
+                    EmcProjectBean project = projectService.selectById(projId);
+                    if ("reportEdit".equals(project.getStatus())) {
+                        auditRecord.setNextTaskName("报告编制");
+                    } else {
+                        auditRecord.setNextTaskName("样品接收");
+                    }
                 } else {
                     auditRecord.setTaskName("同组互审-按采样单");
                     auditRecord.setNextTaskName("主任审核-按采样单");
@@ -1587,22 +1605,28 @@ public class EmcSampleServiceImpl implements EmcSampleService {
      */
     public void updateProject(List<Long> projIdList) {
         List<EmcOrderTaskBean> orderTaskList = orderTaskService.getDao().selectListByOneColumnValues(projIdList, "PROJID");
+        List<EmcOrderTaskBean> analysisOrderTaskList = orderTaskList.stream().filter(e -> ObjectUtils.equals("analysis", e.getAnalysisType()) || ObjectUtils.equals("sampling", e.getAnalysisType())).collect(Collectors.toList());
         List<EmcSampleBean> sampleList = getDao().selectListByOneColumnValues(projIdList, "PROJID");
         List<EmcProjectBean> updateProjList = new ArrayList<>();
+        List<EmcOrderTaskBean> updateOrderTaskList = new ArrayList<>();
         for (Long a : projIdList) {
-            boolean orderTaskAllMatch = orderTaskList.stream().filter(b -> ObjectUtils.equals(b.getProjId(), a)).allMatch(e -> EmcBizConstant.ORDERTASK_STATUS_DONE.equals(e.getStatus()));
-
-            boolean sampleAllMatch = sampleList.stream().filter(b -> ObjectUtils.equals(b.getProjId(), a)).allMatch(e -> EmcBizConstant.SAMPLE_STATUS_DONE.equals(e.getStatus()));
-
+            boolean orderTaskAllMatch = analysisOrderTaskList.stream().filter(b -> ObjectUtils.equals(b.getProjId(), a)).allMatch(e -> "done".equals(e.getStatus()));
+            boolean sampleAllMatch = sampleList.stream().filter(b -> ObjectUtils.equals(b.getProjId(), a)).allMatch(e -> "done".equals(e.getStatus()));
             if (orderTaskAllMatch && sampleAllMatch) {
                 EmcProjectBean project = new EmcProjectBean();
                 project.setId(a);
-                project.setStatus(EmcBizConstant.PROJECT_STATUS_REPORTEDIT);
+                project.setStatus("reportEdit");
+                project.setToReportEditDate(LocalDate.now());
                 updateProjList.add(project);
+                List<EmcOrderTaskBean> calculateTaskList = orderTaskList.stream().filter(b -> ObjectUtils.equals(b.getProjId(), a)).filter(e -> "calculate".equals(e.getAnalysisType())).collect(Collectors.toList());
+                updateOrderTaskList.addAll(calculateTaskList);
             }
         }
-
-        projectService.getDao().update(updateProjList, "STATUS");
+        projectService.getDao().update(updateProjList, "STATUS", "TOREPORTEDITDATE");
+        if (!updateOrderTaskList.isEmpty()) {
+            updateOrderTaskList.forEach(e -> e.setStatus("done"));
+            orderTaskService.getDao().update(updateOrderTaskList, "STATUS");
+        }
     }
 
     /**
@@ -1682,9 +1706,4 @@ public class EmcSampleServiceImpl implements EmcSampleService {
         return selectPagination(() -> getDao().selectAssignSampleList(parameter), rowBounds);
     }
 
-    @Override
-    public void batchUpdateFileBizCategory(RestJsonWrapperBean wrapper) {
-        List<CoreFileBean> files = wrapper.parse(CoreFileBean.class, 0);
-        coreFileService.getDao().update(files, "bizCategory");
-    }
 }

@@ -11,7 +11,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -119,14 +118,13 @@ public class MonitorItemDynamicTable implements DynamicTable {
         List<List<Object>> tableBodyDataList = new ArrayList<>();
         List<WordTemplateMonitorItemDTO> monitorItemDTOList = new ArrayList<>();
 
-        Map<Long, String> sampleEquiptMap = equiptList.stream().collect(Collectors.toMap(EmcEquiptBean::getId, equipt -> equipt.getEquiptName() + "\n" + equipt.getSpecification() + "\n" + "（" + equipt.getEquiptId() + "）", (k1, k2) -> k1));
-
         List<EmcReportResultBean> sampleReportResultList = reportResultList.stream()
                 .filter(result -> StringUtils.equals(result.getDataType(), "sample"))
                 .collect(Collectors.toList());
         sampleReportResultList.stream()
                 .filter(result -> StringUtils.isEmpty(result.getExt$Item("itemGroup")))
                 .forEach(result -> result.setExt$Item("itemGroup", result.getTestName()));
+        Map<Long, String> sampleEquiptMap = equiptList.stream().collect(Collectors.toMap(EmcEquiptBean::getId, equipt -> equipt.getEquiptName() + "\n" + equipt.getSpecification() + "\n" + "（" + equipt.getEquiptId() + "）", (k1, k2) -> k1));
         List<EmcOrderTaskBean> validOrderTaskList = orderTaskList.stream()
                 .filter(r -> !StringUtils.contains(r.getTestName(), "参数")
                         && !StringUtils.contains(r.getTestName(), "水分含量")
@@ -138,9 +136,6 @@ public class MonitorItemDynamicTable implements DynamicTable {
                     .filter(task -> !StringUtils.contains(task.getTestName(), "含水率"))
                     .collect(Collectors.toList());
         }
-
-        AtomicInteger mergedRowIndex = new AtomicInteger(0);
-        List<WordTemplateDynamicTableDTO.MergedRow> mergedRowList = Optional.ofNullable(dynamicTableDTO.getMergedRowList()).orElseGet(ArrayList::new);
 
         Map<String, EmcRunBean> runMap = runList.stream().collect(Collectors.toMap(EmcRunBean::getId, Function.identity()));
 
@@ -215,6 +210,12 @@ public class MonitorItemDynamicTable implements DynamicTable {
 
                     monitorItemDTO.setDetectDevice(StringUtils.contains(analysisDevice, EmcConstant.N_A) ? null : (deviceSet.isEmpty() ? null : String.join("、", deviceSet)));
 
+                    List<EmcReportResultBean> itemGroupReportResultList = sampleReportResultList.stream().filter(e -> ObjectUtils.equals(e.getOrderTaskId(), firstTask.getId()) && ObjectUtils.equals(e.getExt$Item("itemGroup"), firstTask.getExt$Item("itemGroup"))).collect(Collectors.toList());
+                    List<EmcReportResultBean> lowLimitNotEmptyList = itemGroupReportResultList.stream().filter(e -> !StringUtils.isEmpty(e.getLowLimit())).collect(Collectors.toList());
+                    EmcReportResultBean limitResult = lowLimitNotEmptyList.isEmpty() ? new EmcReportResultBean() : lowLimitNotEmptyList.get(0);
+                    String limitValue = StringUtils.isBlank(limitResult.getLowLimit()) ? "-" : limitResult.getLowLimit() + Optional.ofNullable(limitResult.getExt$Item("limitUnitName")).orElse(limitResult.getUnitName());
+                    monitorItemDTO.setLowLimit(limitValue);
+
                     monitorItemDTOList.add(monitorItemDTO);
                 });
 
@@ -248,10 +249,15 @@ public class MonitorItemDynamicTable implements DynamicTable {
 
                     monitorItemDTO.setDetectDevice(StringUtils.contains(analysisDevice, EmcConstant.N_A) ? null : (deviceSet.isEmpty() ? null : String.join("、", deviceSet)));
 
+                    List<EmcReportResultBean> itemGroupReportResultList = sampleReportResultList.stream().filter(e -> ObjectUtils.equals(e.getOrderTaskId(), t.getId()) && ObjectUtils.equals(e.getExt$Item("itemGroup"), t.getExt$Item("itemGroup"))).collect(Collectors.toList());
+                    List<EmcReportResultBean> lowLimitNotEmptyList = itemGroupReportResultList.stream().filter(e -> !StringUtils.isEmpty(e.getLowLimit())).collect(Collectors.toList());
+                    EmcReportResultBean limitResult = lowLimitNotEmptyList.isEmpty() ? new EmcReportResultBean() : lowLimitNotEmptyList.get(0);
+                    String limitValue = StringUtils.isBlank(limitResult.getLowLimit()) ? "-" : limitResult.getLowLimit() + Optional.ofNullable(limitResult.getExt$Item("limitUnitName")).orElse(limitResult.getUnitName());
+                    monitorItemDTO.setLowLimit(limitValue);
+
                     monitorItemDTOList.add(monitorItemDTO);
                 });
 
-                mergedRowList.add(new WordTemplateDynamicTableDTO.MergedRow(0, mergedRowIndex.get() + 1, mergedRowIndex.addAndGet(uniqueTaskList.size())));
             });
         });
 
@@ -265,6 +271,7 @@ public class MonitorItemDynamicTable implements DynamicTable {
             monitorItemDTO.setTestName(testName);
             monitorItemDTO.setTestMethodName(basicMonitorItem.getTestMethodName());
             monitorItemDTO.setDetectDevice(basicMonitorItem.getDetectDevice());
+            monitorItemDTO.setLowLimit(basicMonitorItem.getLowLimit());
             monitorItemGroupList.add(monitorItemDTO);
         });
 
@@ -292,7 +299,6 @@ public class MonitorItemDynamicTable implements DynamicTable {
         tableDataList.addAll(buildTableBody(dynamicTableDTO));
         WordTemplateUtils.listListNullToString(tableDataList, PfConstant.NULL_REPLACED_VALUE);
 
-        dynamicTableDTO.setTableTitle(getTableTitle());
         dynamicTableDTO.setTableDataList(tableDataList);
         dynamicTableDTO.setReplaceKeyword(EmcConstant.MONITOR_TABLE_PLACEHOLDER);
 

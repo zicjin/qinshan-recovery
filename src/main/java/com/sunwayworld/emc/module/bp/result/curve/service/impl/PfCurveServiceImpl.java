@@ -99,7 +99,7 @@ public class PfCurveServiceImpl extends EmcCurveServiceImpl implements PfCurveSe
         List<EmcOrderTaskResultBean> curveOrderTaskResultList = orderTaskResultList.stream().filter(e -> curveItemIdList.contains(e.getItemId())).collect(Collectors.toList());
 
         String computeType = curve.getExt$Item("type");
-        List<EmcOrderTaskResultBean> updateOrderTaskResultList = StringUtils.equals("logCompute", computeType) ? calculateSlopeInterceptWithLog(curveOrderTaskResultList, curveItemList) : calculateSlopeIntercept(curveOrderTaskResultList, curveItemList);
+        List<EmcOrderTaskResultBean> updateOrderTaskResultList = StringUtils.equals("logCompute", computeType) ? calculateSlopeInterceptWithLog(curveOrderTaskResultList, curveItemList) : (StringUtils.equals("zeroCompute", computeType) ? calculateSlopeInterceptWithZero(curveOrderTaskResultList, curveItemList) : calculateSlopeIntercept(curveOrderTaskResultList, curveItemList));
 
         if (!updateOrderTaskResultList.isEmpty()) {
             orderTaskResultService.getDao().update(curveOrderTaskResultList, "RN2", "RN3", "RN4");
@@ -321,7 +321,79 @@ public class PfCurveServiceImpl extends EmcCurveServiceImpl implements PfCurveSe
         return Collections.emptyList();
     }
 
-    @Override
+    public List<EmcOrderTaskResultBean> calculateSlopeInterceptWithZero(List<EmcOrderTaskResultBean> curveOrderTaskResultList, List<EmcItemBean> curveItemList) {
+        if (!curveOrderTaskResultList.isEmpty() && curveOrderTaskResultList.stream().noneMatch(e -> StringUtils.isEmpty(e.getOriginalResult())) && curveOrderTaskResultList.stream().noneMatch(e -> ObjectUtils.isEmpty(e.getStandQty()))) {
+            List<EmcOrderTaskResultBean> zeroOrderTaskResultList = curveOrderTaskResultList.stream().filter(e -> e.getQcCategoryCode().contains("QC-CAL0")).collect(Collectors.toList());
+            boolean ignoreZero = curveItemList.stream().anyMatch(item -> StringUtils.equals("1", item.getExt$Item("ignoreZero")));
+            ArrayList<EmcOrderTaskResultBean> calcCurveOrderTaskResultList = new ArrayList<EmcOrderTaskResultBean>();
+            String blankcal = "0";
+            if (!zeroOrderTaskResultList.isEmpty() && !ignoreZero) {
+                Double sum = 0.0;
+                for (EmcOrderTaskResultBean taskResult : zeroOrderTaskResultList) {
+                    if (!NumberUtils.isNumber(taskResult.getOriginalResult())) continue;
+                    sum = ArithUtils.add(sum.toString(), taskResult.getOriginalResult());
+                }
+                blankcal = NumberUtils.rounding(ArithUtils.div(sum, zeroOrderTaskResultList.size()) + "", "FDA,3");
+                EmcOrderTaskResultBean zeroOrderTaskResult = new EmcOrderTaskResultBean();
+                zeroOrderTaskResult.setStandQty(((EmcOrderTaskResultBean)zeroOrderTaskResultList.get(0)).getStandQty());
+                zeroOrderTaskResult.setOriginalResult(blankcal);
+                calcCurveOrderTaskResultList.add(zeroOrderTaskResult);
+            }
+            calcCurveOrderTaskResultList.addAll(curveOrderTaskResultList.stream().filter(e -> !e.getQcCategoryCode().contains("QC-CAL0")).collect(Collectors.toList()));
+            String[] x = (String[])calcCurveOrderTaskResultList.stream().map(EmcOrderTaskResultBean::getStandQty).toArray(String[]::new);
+            String[] y = (String[])calcCurveOrderTaskResultList.stream().map(EmcOrderTaskResultBean::getOriginalResult).toArray(String[]::new);
+            for (int k = 0; k < y.length; ++k) {
+                y[k] = new BigDecimal(y[k]).subtract(new BigDecimal(blankcal)).toString();
+            }
+            BigDecimal n = new BigDecimal(x.length);
+            BigDecimal sigmaxy = BigDecimal.ZERO;
+            BigDecimal sigmax = BigDecimal.ZERO;
+            BigDecimal sigmay = BigDecimal.ZERO;
+            BigDecimal sigmax2 = BigDecimal.ZERO;
+            BigDecimal sigmay2 = BigDecimal.ZERO;
+            BigDecimal avx = BigDecimal.ZERO;
+            BigDecimal avy = BigDecimal.ZERO;
+            for (int k = 0; k < x.length; ++k) {
+                BigDecimal xi = new BigDecimal(x[k]);
+                BigDecimal yi = new BigDecimal(y[k]);
+                sigmaxy = sigmaxy.add(xi.multiply(yi));
+                sigmax = sigmax.add(xi);
+                sigmay = sigmay.add(yi);
+                sigmax2 = sigmax2.add(xi.multiply(xi));
+                sigmay2 = sigmay2.add(yi.multiply(yi));
+            }
+            BigDecimal slope = BigDecimal.ZERO;
+            if (sigmax2.compareTo(BigDecimal.ZERO) != 0) {
+                slope = sigmaxy.divide(sigmax2, 12, 4);
+            }
+            BigDecimal intercept = BigDecimal.ZERO;
+            BigDecimal r2u = n.multiply(sigmaxy).subtract(sigmax.multiply(sigmay));
+            BigDecimal r2l = new BigDecimal(Math.sqrt(n.multiply(sigmax2).subtract(sigmax.multiply(sigmax)).multiply(n.multiply(sigmay2).subtract(sigmay.multiply(sigmay))).doubleValue()));
+            BigDecimal r2 = BigDecimal.ZERO;
+            if (r2l.compareTo(BigDecimal.ZERO) != 0) {
+                r2 = r2u.divide(r2l, 6, 4);
+            }
+            for (EmcOrderTaskResultBean curveOrderTaskResult : curveOrderTaskResultList) {
+                String RN4;
+                EmcItemBean curveItem = curveItemList.stream().filter(e -> ObjectUtils.equals(curveOrderTaskResult.getItemId(), e.getId())).findFirst().get();
+                String slopeRevision = StringUtils.isEmpty(curveItem.getSlopeRevision()) ? "ISO,4" : curveItem.getSlopeRevision();
+                String RN2 = NumberUtils.rounding(slope.toString(), slopeRevision);
+                String interceptRevision = StringUtils.isEmpty(curveItem.getInterceptRevision()) ? "ISO,4" : curveItem.getInterceptRevision();
+                String RN3 = NumberUtils.rounding(intercept.toString(), interceptRevision);
+                BigDecimal mysteryValueDecimal = new BigDecimal(Math.abs(Float.parseFloat(r2.toString())));
+                String string = RN4 = mysteryValueDecimal.toString().length() > 6 ? NumberUtils.rounding(mysteryValueDecimal.toString(), "ZSBR,4") : mysteryValueDecimal.toString();
+                if ("1.0000".equals(RN4)) {
+                    RN4 = "0.9999";
+                }
+                curveOrderTaskResult.setRn2(RN2);
+                curveOrderTaskResult.setRn3(RN3);
+                curveOrderTaskResult.setRn4(RN4);
+            }
+            return curveOrderTaskResultList;
+        }
+        return Collections.emptyList();
+    }
+
     @Transactional
     @AuditTrailEntry(AuditTrailType.INSERT)
     public Long insert(RestJsonWrapperBean jsonWrapper) {

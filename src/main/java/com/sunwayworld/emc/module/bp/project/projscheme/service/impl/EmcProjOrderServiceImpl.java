@@ -115,7 +115,7 @@ public class EmcProjOrderServiceImpl implements EmcProjOrderService {
         List<Long> schemeIdList = projSchemeService.getDao().selectListByOneColumnValue(projSchemeService.selectById(projOrderList.get(0).getProjSchemeId()).getProjId(), "PROJID", Arrays.asList("ID"))
                 .stream().map(e -> e.getId()).collect(Collectors.toList());
         List<EmcProjOrderBean> subcontractorProjOrderList = getDao().selectListByOneColumnValues(schemeIdList, "PROJSCHEMEID", Arrays.asList("ID", "SUBCONTRACTORID", "SUBPACKAGENO")).stream()
-                .filter(e -> !ObjectUtils.isEmpty(e.getSubcontractorId())).collect(Collectors.toList());
+                .filter(e -> !ObjectUtils.isEmpty(e.getSubcontractorId()) && !e.getId().equals(projOrderList.get(0).getId())).collect(Collectors.toList());
 
         EmcProjOrderBean updateProjOrder = new EmcProjOrderBean();
         updateProjOrder.setSubcontractorId(projOrderList.get(0).getSubcontractorId());

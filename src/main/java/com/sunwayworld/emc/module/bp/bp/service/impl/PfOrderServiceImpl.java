@@ -1958,9 +1958,12 @@ public class PfOrderServiceImpl extends EmcOrderServiceImpl implements PfOrderSe
     @Override
     public void updateOrderIndex(RestJsonWrapperBean wrapper) {
         List<EmcOrderBean> targetOrderList = wrapper.parse(EmcOrderBean.class);
+        List<EmcOrderItemGroupBean> wrapperOrderItemGroupList = wrapper.parse(EmcOrderItemGroupBean.class);
         List<Long> orderIdList = targetOrderList.stream().map(EmcOrderBean::getId).collect(Collectors.toList());
-
-        List<EmcOrderItemGroupBean> orderItemGroupList = orderItemGroupService.getDao().selectListByOneColumnValues(orderIdList, "orderId");
+        List<Long> wrapperItemGroupIdList = wrapperOrderItemGroupList.stream().map(EmcOrderItemGroupBean::getItemGroupId).distinct().collect(Collectors.toList());
+        List<EmcOrderItemGroupBean> orderItemGroupList = orderItemGroupService.selectListByFilter(
+                SearchFilter.instance().match("orderId", orderIdList).filter(MatchPattern.OR)
+                        .match("itemGroupId", wrapperItemGroupIdList).filter(MatchPattern.OR));
         List<Long> capacityItemGroupIdList = orderItemGroupList.stream().map(EmcOrderItemGroupBean::getItemGroupId).distinct().collect(Collectors.toList());
 
         List<EmcCapacityItemGroupBean> capacityItemGroupList = capacityItemGroupService.selectListByIds(capacityItemGroupIdList);
@@ -1975,7 +1978,12 @@ public class PfOrderServiceImpl extends EmcOrderServiceImpl implements PfOrderSe
         // 分析项
         List<Long> itemIdList = indexTestItemList.stream().map(EmcIndexTestItemBean::getItemId).distinct().collect(Collectors.toList());
         // 分析项组分析项
-        List<EmcGroupItemBean> groupItemList = groupItemService.getDao().selectListByOneColumnValues(itemIdList, "itemId");
+        int batchSize = 1000;
+        List<EmcGroupItemBean> groupItemList = new ArrayList<>();
+        for (int i = 0; i < itemIdList.size(); i += batchSize) {
+            List<Long> subList = itemIdList.subList(i, Math.min(i + batchSize, itemIdList.size()));
+            groupItemList.addAll(groupItemService.getDao().selectListByOneColumnValues(subList, "itemId"));
+        }
         // 分析项组
         List<Long> itemGroupIdList = groupItemList.stream().map(EmcGroupItemBean::getItemGroupId).distinct().collect(Collectors.toList());
 
@@ -2049,7 +2057,7 @@ public class PfOrderServiceImpl extends EmcOrderServiceImpl implements PfOrderSe
                 result.setMethodVersionId(orderTask.getMethodVersionId());
                 result.setItemId(item.getId());
                 result.setItemOrderNo(item.getOrderNo());
-                result.setRepeatNo((long) index);
+                result.setRepeatNo(0L + (long) index);
                 result.setRepeatQty(item.getRepeatItem());
                 result.setQcCategoryId(orderTask.getQcCategoryId());
                 result.setQcCategoryCode(orderTask.getQcCategoryCode());
@@ -2063,10 +2071,11 @@ public class PfOrderServiceImpl extends EmcOrderServiceImpl implements PfOrderSe
                 result.setFrequency(order.getFrequency());
                 result.setAnalysisType(item.getAnalysisCategory());
                 if (!StringUtils.isEmpty(item.getExt$Item("ISSENDTORESULT")) && !StringUtils.isEmpty(volume)
-                        && "1".equals(item.getExt$Item("ISSENDTORESULT"))) {
+                        && item.getExt$Item("ISSENDTORESULT").equals("1")) {
                     if (!StringUtils.isEmpty(item.getExt$Item("SENDCOEFFICIENT"))) {
-                        String value = String.valueOf(ArithUtils.div(volume.trim(), item.getExt$Item("SENDCOEFFICIENT")));
-                        result.setOriginalResult(value); result.setReportResult(value);
+                        Double volumeValue = ArithUtils.div(volume.trim(), item.getExt$Item("SENDCOEFFICIENT"));
+                        result.setOriginalResult(volumeValue.toString() + "");
+                        result.setReportResult(volumeValue.toString() + "");
                     } else {
                         result.setOriginalResult(volume); result.setReportResult(volume);
                     }

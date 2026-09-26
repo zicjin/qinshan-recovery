@@ -1,5 +1,7 @@
 package com.sunwayworld.emc.module.bp.bp.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -735,11 +737,36 @@ public class PfOrderTaskResultServiceImpl extends EmcOrderTaskResultServiceImpl 
     }
     @Override
     public List<String> selectQcNames(RestJsonWrapperBean wrapper) {
-        return new ArrayList<String>();
+        String sampleId = wrapper.getParamValue("sampleId");
+        List<EmcOrderTaskResultBean> results = selectListByFilter(SearchFilter.instance().match("sampleId", sampleId).filter(MatchPattern.EQ).match("qcname", "N/A").filter(MatchPattern.DIFFER));
+        return results.stream().map(EmcOrderTaskResultBean::getQcName).distinct().collect(Collectors.toList());
     }
 
     @Override
+    @Transactional
     public void batchInputGasParameter(RestJsonWrapperBean wrapper) {
+        List<EmcOrderTaskBean> targetTaskList = wrapper.parse(EmcOrderTaskBean.class);
+        List<EmcOrderTaskResultBean> valueList = wrapper.parse(EmcOrderTaskResultBean.class);
+        Map<String, String> valueMap = valueList.get(0).getExt$();
+        List<String> fieldList = new ArrayList<>(valueMap.keySet());
+        List<EmcOrderTaskResultBean> updateResultList = new ArrayList<>();
+        targetTaskList.forEach(task -> task.getExt$().entrySet().stream()
+                .filter(entry -> StringUtils.endsWith(entry.getKey(), "_ext$") && fieldList.stream().anyMatch(field -> StringUtils.startsWith(entry.getKey(), field)))
+                .forEach(entry -> {
+                    JSONObject valueObject = JSON.parseObject((String) entry.getValue());
+                    String key = StringUtils.replace(entry.getKey(), "_ext$", "");
+                    Optional.ofNullable(valueMap.get(key)).ifPresent(value -> {
+                        EmcOrderTaskResultBean updateResult = new EmcOrderTaskResultBean();
+                        updateResult.setId(valueObject.getLong("id"));
+                        updateResult.setOriginalResult(String.valueOf(value));
+                        updateResultList.add(updateResult);
+                    });
+                }));
+        if (!updateResultList.isEmpty()) {
+            getDao().update(updateResultList, new String[]{"originalResult"});
+            List<Long> calcResultIdList = updateResultList.stream().map(EmcOrderTaskResultBean::getId).collect(Collectors.toList());
+            EmcOrderTaskResultComputingEngine.getEngine(calcResultIdList).compute();
+        }
     }
 
     @Override

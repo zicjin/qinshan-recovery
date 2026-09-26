@@ -135,7 +135,7 @@ public class PfOrderReceiptServiceImpl extends EmcOrderReceiptServiceImpl {
         List<EmcFolderBean> copiedFolderList = folderService.getDao().selectListByIds(copiedFolderIdList);
         List<EmcOrderTaskBean> copiedOrderTaskList = orderTaskService.getDao().selectListByOneColumnValues(copiedOrderIdList, "ORDERID");
         List<EmcOrderTaskResultBean> copiedOrderTaskResultList = orderTaskResultService.getDao().selectListByOneColumnValues(copiedOrderIdList, "ORDERID");
-        List<Long> copiedItemIdList = copiedOrderTaskResultList.stream().map(EmcOrderTaskResultBean::getItemId).collect(Collectors.toList());
+        List<Long> copiedItemIdList = copiedOrderTaskResultList.stream().map(EmcOrderTaskResultBean::getItemId).distinct().collect(Collectors.toList());
         List<EmcItemBean> copiedItemList = itemService.getDao().selectListByIds(copiedItemIdList);
         List<EmcOrderItemGroupBean> copiedOrderItemGroupList = orderItemGroupService.getDao().selectListByOneColumnValues(copiedOrderIdList, "ORDERID");
         List<Long> testMethodIdList = copiedOrderTaskResultList.stream().map(EmcOrderTaskResultBean::getTestMethodId).distinct().collect(Collectors.toList());
@@ -157,7 +157,7 @@ public class PfOrderReceiptServiceImpl extends EmcOrderReceiptServiceImpl {
 
         if (!addFolderQcCategoryList.isEmpty()) {
             long totalNum = addFolderQcCategoryList.stream().mapToLong(qc -> Optional.ofNullable(qc.getAddNum()).orElse(1L)).sum();
-            List<String> newFolderNoList = folderService.generateFolderNosByProjId(projectId, projectService.selectDetail(projectId).getProjNo(), copiedOrderList.get(0).getMonitorTmplId(), (int) totalNum);
+            List<String> newFolderNoList = folderService.generateFolderNosByProjId(projectId, projectService.selectDetail(projectId).getProjNo(), copiedFolderList.get(0).getMonitorTmplId(), (int) totalNum);
 
             AtomicInteger folderNoIndex = new AtomicInteger(-1);
             copiedOrderList.forEach(copiedOrder -> addFolderQcCategoryList.forEach(copiedQc -> {
@@ -228,7 +228,7 @@ public class PfOrderReceiptServiceImpl extends EmcOrderReceiptServiceImpl {
             orderTaskService.insertByOrder(reloadOrderList);
         }
 
-        List<EmcOrderBean> existedOrderList = orderService.getDao().selectListByOneColumnValues(copiedFolderIdList, "FOLDERID", Arrays.asList("ID", "FOLDERID", "ORDERNO"));
+        List<EmcOrderBean> existedOrderList = orderService.getDao().selectListByOneColumnValues(copiedFolderIdList, "FOLDERID", Arrays.asList("ID", "FOLDERID", "ORDERNO", "QCCATEGORYID", "QCCATEGORYCODE"));
         existedOrderList.forEach(o ->{
             if(o.getOrderNo().contains("-H")){
              o.setOrderNo(o.getOrderNo().replace("-H", ""));

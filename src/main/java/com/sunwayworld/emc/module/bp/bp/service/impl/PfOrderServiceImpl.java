@@ -95,6 +95,7 @@ import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;
 import com.sunwayworld.framework.spring.annotation.GikamBean;
 import com.sunwayworld.framework.utils.ArrayUtils;
 import com.sunwayworld.framework.utils.BeanUtils;
+import com.sunwayworld.framework.utils.ArithUtils;
 import com.sunwayworld.framework.utils.DateTimeUtils;
 import com.sunwayworld.framework.utils.NumberUtils;
 import com.sunwayworld.framework.utils.ObjectUtils;
@@ -1858,6 +1859,62 @@ public class PfOrderServiceImpl extends EmcOrderServiceImpl implements PfOrderSe
         orderTaskList.forEach(a2 -> a2.setStatus("preLogged"));
         this.orderTaskService.getDao().update(orderTaskList, new String[]{"STATUS"});
         return 1L;
+    }
+
+    public List<EmcOrderTaskResultBean> getInsertOrderTaskResultList(EmcOrderTaskBean orderTask,
+            List<EmcItemBean> itemList, EmcOrderBean order, List<EmcOrderTaskResultBean> deleteResultList) {
+        List<EmcOrderTaskResultBean> resultList = new ArrayList<>();
+        String volume = order.getExt$Item("volume");
+        if (!StringUtils.isEmpty(volume)) volume = volume.replaceAll("[^0-9.]", "");
+        for (EmcItemBean item : itemList) {
+            int index = 1;
+            while ((long) index <= item.getRepeatItem()) {
+                EmcOrderTaskResultBean result = new EmcOrderTaskResultBean();
+                BeanUtils.copyProperties(item, result, new String[0]);
+                result.setId(ApplicationContextHelper.getNextIdentity());
+                result.setFolderId(orderTask.getFolderId());
+                result.setOrderId(orderTask.getOrderId());
+                result.setProjId(orderTask.getProjId());
+                result.setOrderTaskId(orderTask.getId());
+                result.setTestMethodId(orderTask.getTestMethodId());
+                result.setMethodId(orderTask.getMethodId());
+                result.setMethodVersionId(orderTask.getMethodVersionId());
+                result.setItemId(item.getId());
+                result.setItemOrderNo(item.getOrderNo());
+                result.setRepeatNo((long) index);
+                result.setRepeatQty(item.getRepeatItem());
+                result.setQcCategoryId(orderTask.getQcCategoryId());
+                result.setQcCategoryCode(orderTask.getQcCategoryCode());
+                result.setQcName(orderTask.getQcName());
+                result.setTestId(orderTask.getTestId());
+                result.setScriptFlag(item.getScriptFlag());
+                result.setResultCategory(item.getResultCategory());
+                result.setCycle(order.getCycle());
+                result.setOrderNo(order.getOrderNo());
+                result.setParentOrderNo(order.getParentOrderNo());
+                result.setFrequency(order.getFrequency());
+                result.setAnalysisType(item.getAnalysisCategory());
+                if (!StringUtils.isEmpty(item.getExt$Item("ISSENDTORESULT")) && !StringUtils.isEmpty(volume)
+                        && "1".equals(item.getExt$Item("ISSENDTORESULT"))) {
+                    if (!StringUtils.isEmpty(item.getExt$Item("SENDCOEFFICIENT"))) {
+                        String value = String.valueOf(ArithUtils.div(volume.trim(), item.getExt$Item("SENDCOEFFICIENT")));
+                        result.setOriginalResult(value); result.setReportResult(value);
+                    } else {
+                        result.setOriginalResult(volume); result.setReportResult(volume);
+                    }
+                }
+                EmcOrderTaskResultBean old = deleteResultList.stream()
+                        .filter(existing -> ObjectUtils.equals(existing.getItemName(), item.getItemName()))
+                        .findFirst().orElse(null);
+                if (old != null) {
+                    result.setOriginalResult(old.getOriginalResult());
+                    result.setReportResult(old.getReportResult());
+                }
+                resultList.add(result);
+                ++index;
+            }
+        }
+        return resultList;
     }
 
     @Transactional

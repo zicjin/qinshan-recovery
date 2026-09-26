@@ -326,6 +326,9 @@ public class PfSampleServiceImpl extends EmcSampleServiceImpl implements PfSampl
             sample.setProcessStatus(ProcessStatus.DRAFT.name().toLowerCase());
             sample.setOrgId(LocalContextHelper.getLoginUser().getExt$Item("parentorgid"));
             sample.setOrgName(LocalContextHelper.getLoginUser().getExt$Item("parentorgname"));
+            if ("preLogged".equals(status)) {
+                sample.setAcceptStatus("1");
+            }
 
             insertSampleList.add(sample);
 
@@ -568,7 +571,11 @@ public class PfSampleServiceImpl extends EmcSampleServiceImpl implements PfSampl
 
     //现场采样交接
     @Override
+    @Transactional
     public List<EmcSampleBean> handSample(RestJsonWrapperBean wrapper) {
+        String acceptedDateStr = wrapper.getParamValue("acceptedDate");
+        LocalDateTime acceptedDate = DateTimeUtils.parseLocalDateTime(acceptedDateStr);
+        String acceptedTime = wrapper.getParamValue("acceptedTime");
         List<EmcSampleBean> sampleList = wrapper.parse(EmcSampleBean.class);
         List<Long> sampleIdList = sampleList.stream().map(EmcSampleBean::getId).collect(Collectors.toList());
         List<EmcOrderBean> orderList = orderService.getDao().selectListByOneColumnValues(sampleIdList, "SAMPLEID");
@@ -580,8 +587,10 @@ public class PfSampleServiceImpl extends EmcSampleServiceImpl implements PfSampl
         sampleList.forEach(b -> {
             b.setHandStatus(EmcBizConstant.SAMPLE_STATUS_PRELOGGED);
             b.setExt$Item("RECEIVEDATE", currentDate);
+            b.setAcceptedDate(acceptedDate);
+            b.setAcceptedTime(acceptedTime);
         });
-        getDao().update(sampleList, "HANDSTATUS", "RECEIVEDATE");
+        getDao().update(sampleList, "HANDSTATUS", "RECEIVEDATE", "ACCEPTEDDATE", "ACCEPTEDTIME");
 
         if (!orderTaskAnalysisList.isEmpty()) {
             EmcOrderTaskBean updateOrderTask = new EmcOrderTaskBean();

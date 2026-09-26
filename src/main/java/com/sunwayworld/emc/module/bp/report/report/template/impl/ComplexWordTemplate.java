@@ -68,56 +68,33 @@ public class ComplexWordTemplate extends BaseWordTemplate {
 
     @Override
     public void createResultTable() {
-        // 获取点位对应的监测模板
         List<String> monitorTmplIdList = templateSourceDTO.getOrderList().stream().filter(f -> !StringUtils.isEmpty(f.getMonitorTmplId())).map(EmcOrderBean::getMonitorTmplId).distinct().collect(Collectors.toList());
         if (monitorTmplIdList.isEmpty()) {
             return;
         }
-
-        // 根据监测模板ID查询监测模板，通过监测模板组ID来区分水、气、土、声
         List<EmcMonitorTmplBean> monitorTmplList = templateSourceDTO.getMonitorTmplList();
-        // 根据监测模板组ID对监测模板进行分组
         Map<Long, List<EmcMonitorTmplBean>> monitorTmplMap = monitorTmplList.stream().collect(Collectors.groupingBy(EmcMonitorTmplBean::getMonitorTmplGroupId));
-
-        // 水对应的监测模板
         List<EmcMonitorTmplBean> waterMonitorTmplList = Optional.ofNullable(monitorTmplMap.get(PfConstant.WATER_MONITOR_TMPL_GROUP_ID)).orElseGet(ArrayList::new);
-
-        // 气对应的监测模板
         List<EmcMonitorTmplBean> gasMonitorTmplList = Optional.ofNullable(monitorTmplMap.get(PfConstant.GAS_MONITOR_TMPL_GROUP_ID)).orElseGet(ArrayList::new);
-
-        // 土对应的监测模板
         List<EmcMonitorTmplBean> soilMonitorTmplList = Optional.ofNullable(monitorTmplMap.get(PfConstant.SOIL_MONITOR_TMPL_GROUP_ID)).orElseGet(ArrayList::new);
-        // 固废对应的监测模板
         List<EmcMonitorTmplBean> solidWasteMonitorTmplList = Optional.ofNullable(monitorTmplMap.get(PfConstant.SOLID_WASTE_MONITOR_TMPL_GROUP_ID)).orElseGet(ArrayList::new);
         soilMonitorTmplList.addAll(solidWasteMonitorTmplList);
-
-        // 声对应的监测模板
         List<EmcMonitorTmplBean> noiseMonitorTmplList = Optional.ofNullable(monitorTmplMap.get(PfConstant.NOISE_MONITOR_TMPL_GROUP_ID)).orElseGet(ArrayList::new);
-
         Map<String, LocalDate> minDateMap = sortResult(waterMonitorTmplList, gasMonitorTmplList, soilMonitorTmplList, noiseMonitorTmplList, templateSourceDTO.getOrderList());
-
         AtomicInteger totalTableIndex = new AtomicInteger(monitorTmplList.size());
         int totalTableCount = totalTableIndex.get();
-
-        // 送样或现场照片
+        
         if (showPhoto) {
             List<CoreFileBean> photoList = templateSourceDTO.getCoreFileList().stream().filter(file -> StringUtils.equals(file.getBizCategory(), "photo")
                     && (StringUtils.startsWith(file.getTargetId(), "T_EMC_SAMPLE") || StringUtils.startsWith(file.getTargetId(), "T_EMC_PROJECT"))).collect(Collectors.toList());
             List<CoreFileBean> validPhotoList = photoList.stream().filter(file -> FilePathManager.getLocalDirPath(CoreFileUtils.toFilePath(file)).toFile().exists()).collect(Collectors.toList());
-
             OrderScenePhotoTable photoTable = new OrderScenePhotoTable(getDocument(), templateSourceDTO.getProject(), templateSourceDTO.getFolderList(), templateSourceDTO.getOrderList(), validPhotoList, monitorTmplList.size() + 1);
             photoTable.create();
         }
-
-        // 创建结果表
         createResultTable(waterMonitorTmplList, gasMonitorTmplList, soilMonitorTmplList,noiseMonitorTmplList, totalTableIndex, totalTableCount, minDateMap);
-
-        // 创建检测项目表
         int monitorItemTableIndex = monitorTmplList.size() + (showPhoto ? 3 : 2);
         MonitorItemDynamicTable monitorItemDynamicTable = new MonitorItemDynamicTable(getDocument(), templateSourceDTO.getProject(), templateSourceDTO.getReport(), templateSourceDTO.getOrderTaskList(), templateSourceDTO.getReportResultList(), templateSourceDTO.getEquiptList(), templateSourceDTO.getRunList(), templateSourceDTO.getCoreCodeList(), monitorItemTableIndex);
         monitorItemDynamicTable.create();
-
-        // 创建检测项目一览表
         int simpleMiTableIndex = monitorTmplList.size() + (showPhoto ? 2 : 1);
         SimpleMonitorItemDynamicTable simpleMonitorItemDynamicTable = new SimpleMonitorItemDynamicTable(getDocument(), templateSourceDTO.getProject(), templateSourceDTO.getOrderList(), templateSourceDTO.getOrderTaskList(), simpleMiTableIndex);
         simpleMonitorItemDynamicTable.create();

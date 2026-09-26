@@ -713,6 +713,9 @@ public class PfProjSchemeServiceImpl extends EmcProjSchemeServiceImpl implements
                         orderTask.setSubcontractorId(projOrder.getSubcontractorId());
                         orderTask.setSubPackageNo(projOrder.getSubPackageNo());
                         orderTask.setDataSharing(projOrder.getDataSharing());
+                        orderTask.setSpecifyMethod(projOrder.getSpecifyMethod());
+                        orderTask.setTaskLowLimit(projOrder.getTaskLowLimit());
+                        orderTask.setTaskHighLimit(projOrder.getTaskHighLimit());
                         orderTask.setExt$Item("relatedTest", projOrder.getExt$Item("relatedTest"));
                         // 如果样品测试的分析类型为采样，样品测试的分析科室为监测方案的采样科室
                         String analysisCategory = analysisItem.getExt$Item("analysiscategory");
@@ -850,6 +853,9 @@ public class PfProjSchemeServiceImpl extends EmcProjSchemeServiceImpl implements
                         orderTask.setSubcontractorId(projOrder.getSubcontractorId());
                         orderTask.setSubPackageNo(projOrder.getSubPackageNo());
                         orderTask.setDataSharing(projOrder.getDataSharing());
+                        orderTask.setSpecifyMethod(projOrder.getSpecifyMethod());
+                        orderTask.setTaskLowLimit(projOrder.getTaskLowLimit());
+                        orderTask.setTaskHighLimit(projOrder.getTaskHighLimit());
                         orderTask.setExt$Item("relatedTest", projOrder.getExt$Item("relatedTest"));
                         // 如果样品测试的分析类型为采样，样品测试的分析科室为监测方案的采样科室
                         String analysisCategory = analysisItem.getExt$Item("analysiscategory");

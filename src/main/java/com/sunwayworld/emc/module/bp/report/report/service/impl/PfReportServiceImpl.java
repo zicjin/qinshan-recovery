@@ -19,6 +19,7 @@ import java.util.OptionalDouble;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.function.Function;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -3420,6 +3421,45 @@ public class PfReportServiceImpl extends EmcReportServiceImpl implements PfRepor
             EmcOrderTaskResultComputingEngine.getEngine(additions.stream().map(EmcOrderTaskResultBean::getId)
                     .distinct().collect(Collectors.toList())).compute();
         }
+    }
+
+    private Long getQcOrderNum(List<EmcOrderTaskResultBean> results, List<String> codes) {
+        return results.stream().filter(result -> codes.contains(result.getQcCategoryCode()))
+                .map(EmcOrderTaskResultBean::getOrderId).distinct().count();
+    }
+
+    private String numberToChinese(int num) {
+        String[] chinese = {"", "一", "二", "三", "四", "五", "六", "七"};
+        return num >= 0 && num < chinese.length ? chinese[num] : "";
+    }
+
+    private String transScientificCounting(String input) {
+        if ("ND".equals(input) || StringUtils.isEmpty(input)) return input;
+        Pattern pattern = Pattern.compile("^(>|<|>=|<=|≥|≤)?[-+]*(\\.\\d+|\\d+\\.{0,1}\\d*)[Ee]{1}[+-]?[\\d]+$");
+        if (!pattern.matcher(input).matches() || !input.contains("E")) return input;
+        String head = input.substring(0, input.indexOf("E"));
+        String tail = input.substring(input.indexOf("E") + 1);
+        if (NumberUtils.parseDouble(tail) == 0.0) return head;
+        tail = tail.replace("0", "⁰").replace("1", "¹").replace("2", "²").replace("3", "³")
+                .replace("4", "⁴").replace("5", "⁵").replace("6", "⁶").replace("7", "⁷")
+                .replace("8", "⁸").replace("9", "⁹").replace("+", "").replace("-", "⁻");
+        return head + "×10" + tail;
+    }
+
+    private String getNdValue(EmcReportResultBean result) {
+        String value = result.getReportResult();
+        if ("ND".equals(value) && NumberUtils.isNumber(result.getLowLimit())) {
+            value = NumberUtils.parseDouble(result.getLowLimit()) / 2.0 + "";
+        }
+        return value;
+    }
+
+    private String getNdValue2(EmcReportResultBean result) {
+        String value = result.getReportResult();
+        if ("ND".equals(value) && NumberUtils.isNumber(result.getLowLimit()) && "生活饮用水".equals(result.getOrderCategory())) {
+            value = "<" + result.getLowLimit();
+        }
+        return value;
     }
 
 }

@@ -1,8 +1,12 @@
 package com.sunwayworld.emc.module.mdm.equipt.equiptacqresult.service.impl;
 
 import java.math.BigDecimal;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -50,6 +54,7 @@ import com.sunwayworld.framework.at.annotation.AuditTrailEntry;
 import com.sunwayworld.framework.at.annotation.AuditTrailType;
 import com.sunwayworld.framework.constant.Constant;
 import com.sunwayworld.framework.context.ApplicationContextHelper;
+import com.sunwayworld.framework.database.sql.Order;
 import com.sunwayworld.framework.mybatis.mapper.MatchPattern;
 import com.sunwayworld.framework.mybatis.mapper.SearchFilter;
 import com.sunwayworld.framework.spring.annotation.GikamBean;
@@ -57,6 +62,7 @@ import com.sunwayworld.framework.utils.BeanUtils;
 import com.sunwayworld.framework.utils.NumberUtils;
 import com.sunwayworld.framework.utils.ObjectUtils;
 import com.sunwayworld.framework.utils.StringUtils;
+import com.sunwayworld.framework.exception.UnexpectedException;
 import com.sunwayworld.module.item.file.bean.CoreFileBean;
 import com.sunwayworld.module.item.file.service.CoreFileService;
 
@@ -68,8 +74,8 @@ import com.sunwayworld.module.item.file.service.CoreFileService;
 public class PfEquiptAcqResultServiceImpl extends EmcEquiptAcqResultServiceImpl {
 
     private static final String DILUTION_ITEM_NAME = "稀释倍数";
-    private static final String[] SERIAL_ACQ_SUFFIXS = {"前", "后"};
     private static final Pattern DILUTION_ORDER_NO_PATTERN = Pattern.compile("\\S+-\\d+");
+    private static final String[] SERIAL_ACQ_SUFFIXS = {"前", "后"};
 
     @Autowired
     private EmcEquiptService equiptService;
@@ -361,6 +367,142 @@ public class PfEquiptAcqResultServiceImpl extends EmcEquiptAcqResultServiceImpl 
             asyncFormulaComputingService.asyncComputing(runList, orderTaskResultIdList);
         }
     }
+
+    @Override
+    @Transactional
+    public void insertSceneResultByAnalyAcqFiles(List<EmcEquiptAcqFileBean> acqFileList) {
+        ArrayList updateAcqFileList = new ArrayList();
+        Long scriptId = EmcConstant.EQUIPT_ACQ_SCRIPT_ID;
+        ArrayList<String> contentList = new ArrayList<String>();
+        for (EmcEquiptAcqFileBean equiptAcqFile : acqFileList) {
+            String content = equiptAcqFile.getContent();
+            contentList.add(content);
+        }
+        List<EmcEquiptAcqResultBean> allResultList = this.getSceneResultList(contentList, scriptId);
+        if (allResultList.isEmpty()) {
+            return;
+        }
+        this.getDao().insert(allResultList);
+        List equiptNoList = allResultList.stream().filter(e -> !StringUtils.isBlank(e.getSceneEquiptNo())).map(EmcEquiptAcqResultBean::getSceneEquiptNo).distinct().collect(Collectors.toList());
+        if (equiptNoList.isEmpty()) {
+            return;
+        }
+        List fileNoList = allResultList.stream().filter(e -> !StringUtils.isBlank(e.getSceneFileNo())).map(EmcEquiptAcqResultBean::getSceneFileNo).distinct().collect(Collectors.toList());
+        if (fileNoList.isEmpty()) {
+            return;
+        }
+        List<EmcOrderTaskResultBean> allOrderTaskResultList = this.orderTaskResultService.selectListByFilter(SearchFilter.instance().match("SCENEEQUIPTCOLLECTNO", equiptNoList).filter(MatchPattern.OR).match("SCENEFILENO", fileNoList).filter(MatchPattern.OR), new Order[0]);
+        ArrayList<EmcOrderTaskResultBean> allUpdateOrderTaskResultList = new ArrayList<>();
+        allResultList.forEach(a2 -> {
+            List<EmcOrderTaskResultBean> updateOrderTaskResultList = allOrderTaskResultList.stream().filter(o -> ObjectUtils.equals(o.getItemName(), a2.getItemName()) && ObjectUtils.equals(o.getExt$Item("sceneequiptcollectno"), a2.getSceneEquiptNo()) && ObjectUtils.equals(o.getSceneFileNo(), a2.getSceneFileNo())).collect(Collectors.toList());
+            if (!updateOrderTaskResultList.isEmpty()) {
+                updateOrderTaskResultList.forEach(o -> o.setOriginalResult(a2.getResult()));
+            }
+            allUpdateOrderTaskResultList.addAll(updateOrderTaskResultList);
+        });
+        this.orderTaskResultService.getDao().update(allUpdateOrderTaskResultList, new String[]{"originalResult"});
+    }
+
+    @Override
+    public List<EmcEquiptAcqResultBean> getSceneResultList(List<String> contentList, Long scriptId) {
+        ArrayList<EmcEquiptAcqResultBean> allResultList = new ArrayList<EmcEquiptAcqResultBean>();
+        EmcEquiptAcqScriptBean scriptBean = (EmcEquiptAcqScriptBean)this.equiptAcqScriptService.selectByIdIfPresent(scriptId);
+        if (scriptBean == null) {
+            return Collections.emptyList();
+        }
+        List<EmcEasResultBean> scriptResultList = this.easResultService.selectListByFilter(SearchFilter.instance().match("SCRIPTID", scriptId).filter(MatchPattern.EQ), new Order[0]);
+        if (scriptResultList.isEmpty()) {
+            return Collections.emptyList();
+        }
+        List<EmcEasParamBean> scriptParamList = this.easParamService.selectListByFilter(SearchFilter.instance().match("SCRIPTID", scriptId).filter(MatchPattern.EQ), new Order[0]);
+        EmcEasParamBean equipNoParamBean = scriptParamList.stream().filter(e -> ObjectUtils.equals("equiptNo", e.getExt$Item("field"))).findFirst().orElse(null);
+        if (equipNoParamBean == null) {
+            return Collections.emptyList();
+        }
+        EmcEasParamBean fileNoParamBean = scriptParamList.stream().filter(e -> ObjectUtils.equals("fileNo", e.getExt$Item("field"))).findFirst().orElse(null);
+        if (fileNoParamBean == null) {
+            return Collections.emptyList();
+        }
+        List<EmcEasPreAnalyBean> scriptPreAnalyList = this.easPreAnalyService.selectListByFilter(SearchFilter.instance().match("SCRIPTID", scriptId).filter(MatchPattern.EQ), new Order[0]);
+        for (String content : contentList) {
+            if (StringUtils.isEmpty(content)) continue;
+            content = this.preAnalyContent(content, scriptPreAnalyList);
+            ArrayList<String> rowList = new ArrayList<String>();
+            BufferedReader reader = new BufferedReader(new StringReader(content));
+            String resultRow = null;
+            try {
+                while ((resultRow = reader.readLine()) != null) {
+                    if (StringUtils.isBlank(resultRow)) continue;
+                    rowList.add(resultRow);
+                }
+            }
+            catch (IOException e2) {
+                throw new UnexpectedException(e2);
+            }
+            finally {
+                if (reader != null) {
+                    try {
+                        reader.close();
+                    }
+                    catch (IOException iOException) {}
+                }
+            }
+            String equiptNo = this.getSceneResultByKey(rowList, equipNoParamBean.getBeginSymbol());
+            String fileNo = this.getSceneResultByKey(rowList, fileNoParamBean.getBeginSymbol());
+            for (EmcEasResultBean easResultBean : scriptResultList) {
+                this.updateSceneAcqResultBeanList(allResultList, equiptNo, fileNo, easResultBean.getFieldName(), this.getSceneResultByKey(rowList, easResultBean.getFieldName()));
+            }
+        }
+        return allResultList;
+    }
+
+    private void updateSceneAcqResultBeanList(List<EmcEquiptAcqResultBean> allResultList, String equiptNo, String fileNo, String itemName, String result) {
+        EmcEquiptAcqResultBean acqResultBean = this.getSceneAcqResultBean(equiptNo, fileNo, itemName, result);
+        if (acqResultBean != null) {
+            allResultList.add(acqResultBean);
+        }
+    }
+
+    private EmcEquiptAcqResultBean getSceneAcqResultBean(String equiptNo, String fileNo, String itemName, String result) {
+        if (StringUtils.isBlank(itemName)) {
+            return null;
+        }
+        if (StringUtils.isBlank(result)) {
+            return null;
+        }
+        if (!NumberUtils.isNumber(result)) {
+            return null;
+        }
+        EmcEquiptAcqResultBean acqResultBean = new EmcEquiptAcqResultBean();
+        acqResultBean.setId(ApplicationContextHelper.getNextIdentity());
+        acqResultBean.setSceneEquiptNo(equiptNo);
+        acqResultBean.setSceneFileNo(fileNo);
+        acqResultBean.setItemName(itemName);
+        acqResultBean.setResult(result);
+        return acqResultBean;
+    }
+
+    private String getSceneResultByKey(List<String> rowList, String key) {
+        if (rowList == null || rowList.isEmpty()) {
+            return null;
+        }
+        if (StringUtils.isBlank(key)) {
+            return null;
+        }
+        String row = rowList.stream().filter(e -> e.contains(key)).findFirst().orElse(null);
+        if (row == null) {
+            return null;
+        }
+        int resultBeginIndex = row.indexOf(key) + key.length();
+        if (resultBeginIndex >= row.length()) {
+            return null;
+        }
+        String result = row.substring(resultBeginIndex);
+        result = StringUtils.trim(result);
+        result = result.replaceAll("/r/n", "");
+        return result;
+    }
+
 
     /**
      * 判定后采集

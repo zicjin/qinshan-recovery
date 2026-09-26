@@ -230,34 +230,32 @@ public class PfFolderServiceImpl extends EmcFolderServiceImpl implements PfFolde
 
     @Override
     public List<String> generateFolderNosByProjId(Long projId, String projectNo, String monitorTmplId, int num) {
-        String orderCategoryCode = "";
-        if (!StringUtils.isEmpty(monitorTmplId)) {
-            EmcMonitorTmplBean monitorTmpl = monitorTmplService.selectById(monitorTmplId);
-            if (monitorTmpl != null) {
-                orderCategoryCode = monitorTmpl.getExt$Item("ordercategorycode");
-            }
-        }
+        String orderCategoryCode = monitorTmplService.selectById(monitorTmplId).getExt$Item("ordercategorycode");
         if (StringUtils.isEmpty(orderCategoryCode)) {
             orderCategoryCode = "";
         }
         List<EmcFolderBean> projectFolders = getDao().selectListByOneColumnValue(projId, "PROJID");
+        List<String> folderNoList = new ArrayList<>();
         List<EmcFolderBean> sameTemplateFolders = projectFolders.stream()
                 .filter(folder -> ObjectUtils.equals(monitorTmplId, folder.getMonitorTmplId()))
                 .collect(Collectors.toList());
-        List<String> folderNoList = new ArrayList<>();
         String firstFolderNo;
         if (sameTemplateFolders.isEmpty()) {
             firstFolderNo = projectNo + orderCategoryCode + "001";
+            folderNoList.add(firstFolderNo);
         } else {
             String maxFolderNo = sameTemplateFolders.stream().max(Comparator.comparing(EmcFolderBean::getFolderNo)).get().getFolderNo();
             firstFolderNo = maxFolderNo.substring(0, maxFolderNo.length() - 3)
                     + String.format("%03d", Long.parseLong(maxFolderNo.substring(maxFolderNo.length() - 3)) + 1L);
+            folderNoList.add(firstFolderNo);
         }
-        folderNoList.add(firstFolderNo);
-        for (int i = 1; i < num; i++) {
-            String previous = folderNoList.get(i - 1);
-            folderNoList.add(previous.substring(0, previous.length() - 3)
-                    + String.format("%03d", Long.parseLong(previous.substring(previous.length() - 3)) + 1L));
+        if (num > 1) {
+            for (int i = 0; i < num - 1; i++) {
+                String previous = folderNoList.get(i);
+                String next = previous.substring(0, previous.length() - 3)
+                        + String.format("%03d", Long.parseLong(previous.substring(previous.length() - 3)) + 1L);
+                folderNoList.add(next);
+            }
         }
         return folderNoList;
     }
@@ -384,13 +382,13 @@ public class PfFolderServiceImpl extends EmcFolderServiceImpl implements PfFolde
             return;
         }
         EmcFolderBean wrapperFolder = wrapper.parseUnique(EmcFolderBean.class);
-        folderList.forEach(folder -> {
+        for (EmcFolderBean folder : folderList) {
             folder.setSampleUserId(wrapperFolder.getSampleUserId());
             folder.setSampleUserName(wrapperFolder.getSampleUserName());
             folder.setSceneUserId(wrapperFolder.getSceneUserId());
             folder.setSceneUserName(wrapperFolder.getSceneUserName());
             folder.setPlanSampleDate(wrapperFolder.getPlanSampleDate());
-        });
+        }
         this.getDao().updateIfChanged(folderList);
     }
 
@@ -398,33 +396,30 @@ public class PfFolderServiceImpl extends EmcFolderServiceImpl implements PfFolde
     @Transactional
     public void sortFolderNo(RestJsonWrapperBean wrapper) {
         List<EmcOrderBean> orderList = wrapper.parse(EmcOrderBean.class);
-        if (orderList.isEmpty()) {
-            return;
-        }
         List<Long> folderIdList = orderList.stream().map(EmcOrderBean::getFolderId).distinct().collect(Collectors.toList());
         List<EmcFolderBean> folderList = this.selectListByIds(folderIdList);
         String monitorTmplId = orderList.get(0).getMonitorTmplId();
-        EmcMonitorTmplBean monitorTmpl = this.monitorTmplService.selectById(monitorTmplId);
-        String orderCategoryCode = monitorTmpl == null ? "" : monitorTmpl.getExt$Item("ordercategorycode");
+        String orderCategoryCode = this.monitorTmplService.selectById(monitorTmplId).getExt$Item("ordercategorycode");
         if (StringUtils.isEmpty(orderCategoryCode)) {
             orderCategoryCode = "";
         }
-        EmcProjectBean project = this.projectService.selectById(orderList.get(0).getProjId());
-        String prefix = project.getProjNo() + orderCategoryCode;
-        folderList.sort(Comparator.comparing(EmcFolderBean::getId, Comparator.nullsLast(Long::compareTo)));
+        Long projId = orderList.get(0).getProjId();
+        String projectNo = this.projectService.selectById(projId).getProjNo();
+        String prefix = projectNo + orderCategoryCode;
+        List<EmcFolderBean> updateFolderList = new ArrayList<>();
         List<EmcOrderBean> updateOrderList = new ArrayList<>();
-        for (int i = 0; i < folderList.size(); i++) {
+        folderList.sort(Comparator.comparing(EmcFolderBean::getId, Comparator.nullsLast(Long::compareTo)));
+        for (int i = 0; i <= folderList.size() - 1; i++) {
             EmcFolderBean folder = folderList.get(i);
             folder.setFolderNo(prefix + String.format("%03d", i + 1));
+            updateFolderList.add(folder);
             EmcOrderBean order = orderList.stream().filter(o -> ObjectUtils.equals(folder.getId(), o.getFolderId())).findFirst().orElse(null);
-            if (order != null) {
-                order.setOrderNo(folder.getFolderNo() + "001");
-                order.setLabelNo(order.getOrderNo());
-                updateOrderList.add(order);
-            }
+            order.setOrderNo(folder.getFolderNo() + "001");
+            order.setLabelNo(order.getOrderNo());
+            updateOrderList.add(order);
         }
-        this.getDao().update(folderList, "FOLDERNO");
-        this.pfOrderService.getDao().update(updateOrderList, "ORDERNO", "LABELNO");
+        this.getDao().update(updateFolderList, "FOLDERNO");
+        this.orderService.getDao().update(updateOrderList, "ORDERNO", "LABELNO");
     }
 
     private List<EmcOrderItemGroupBean> dealAbnormalData(List<Long> folderIdList) {

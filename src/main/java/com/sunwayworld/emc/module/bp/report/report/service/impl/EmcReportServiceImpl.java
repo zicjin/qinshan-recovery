@@ -20,6 +20,7 @@ import com.sunwayworld.framework.io.file.FilePathDTO;
 import com.sunwayworld.framework.io.file.FilePathManager;
 import com.sunwayworld.framework.utils.ArchiveUtils;
 import com.sunwayworld.framework.i18n.I18nHelper;
+import com.sunwayworld.framework.database.sql.Order;
 import com.sunwayworld.module.item.file.manager.CoreFileManager;
 import com.sunwayworld.module.item.file.utils.CoreFileUtils;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
@@ -401,34 +402,31 @@ public class EmcReportServiceImpl implements EmcReportService {
     @Transactional
     @AuditTrailEntry(AuditTrailType.INSERT)
     public void insertByProject(List<Long> projectIdList, boolean viewFlag) {
-        List<EmcReportBean> reportList = new ArrayList<>();
+        ArrayList<EmcReportBean> reportList = new ArrayList<EmcReportBean>();
         if (viewFlag) {
             for (Long projId : projectIdList) {
                 EmcReportBean report = new EmcReportBean();
                 report.setId(ApplicationContextHelper.getNextIdentity());
                 report.setProjId(projId);
-                report.setStatus(EmcBizConstant.REPORT_STATUS_REPORTEDIT);
+                report.setStatus("draft");
                 reportList.add(report);
             }
         } else {
-            List<EmcOrderBean> orderList = orderService.getDao().selectListByOneColumnValues(projectIdList, "PROJID");
+            List<EmcOrderBean> orderList = this.orderService.getDao().selectListByOneColumnValues(projectIdList, "PROJID", new Order[0]);
             Map<Long, List<EmcOrderBean>> map = orderList.stream().collect(Collectors.groupingBy(EmcOrderBean::getProjId));
             map.forEach((k, v) -> {
-                // 根据监测模板ID去重
-                List<EmcOrderBean> filterOrderList = v.stream()
-                        .collect(Collectors.collectingAndThen(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(EmcOrderBean::getMonitorTmplId))), ArrayList::new));
-                for (EmcOrderBean order : filterOrderList) {
-                    EmcReportBean report = new EmcReportBean();
-                    report.setId(ApplicationContextHelper.getNextIdentity());
-                    report.setProjId(order.getProjId());
-                    report.setMonitorTmplId(order.getMonitorTmplId());
-                    report.setOrderCategory(order.getOrderCategory());
-                    report.setStatus(EmcBizConstant.REPORT_STATUS_DRAFT);
-                    reportList.add(report);
-                }
+                List monitorTmplIdList = v.stream().map(e -> e.getMonitorTmplId()).distinct().collect(Collectors.toList());
+                List orderCategoryList = v.stream().map(e -> e.getOrderCategory()).distinct().collect(Collectors.toList());
+                EmcReportBean report = new EmcReportBean();
+                report.setId(ApplicationContextHelper.getNextIdentity());
+                report.setProjId(k);
+                report.setMonitorTmplId(StringUtils.join(monitorTmplIdList, (String)","));
+                report.setOrderCategory(StringUtils.join(orderCategoryList, (String)","));
+                report.setStatus("draft");
+                report.setToArchivingFlag("1");
+                reportList.add(report);
             });
         }
-
         this.getDao().insert(reportList);
     }
 

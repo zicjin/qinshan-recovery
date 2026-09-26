@@ -1,5 +1,6 @@
 package com.sunwayworld.emc.module.bp.bp.service.impl;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -31,6 +32,8 @@ import com.sunwayworld.emc.module.bp.bp.bean.EmcOrderTaskResultBean;
 import com.sunwayworld.emc.module.bp.bp.computing.EmcOrderTaskResultComputingEngine;
 import com.sunwayworld.emc.module.bp.bp.computing.async.AsyncFormulaComputingService;
 import com.sunwayworld.emc.module.bp.bp.dao.PfOrderTaskDao;
+import com.sunwayworld.emc.module.bp.bp.dao.EmcOrderContainerDao;
+import com.sunwayworld.emc.module.bp.bp.service.EmcFolderService;
 import com.sunwayworld.emc.module.bp.bp.service.EmcOrderContainerService;
 import com.sunwayworld.emc.module.bp.bp.service.EmcOrderService;
 import com.sunwayworld.emc.module.bp.bp.service.EmcOrderTaskLogService;
@@ -93,6 +96,7 @@ import com.sunwayworld.emc.module.mdm.bizmdm.test.service.EmcTestService;
 import com.sunwayworld.framework.at.annotation.AuditTrailEntry;
 import com.sunwayworld.framework.at.annotation.AuditTrailType;
 import com.sunwayworld.framework.context.ApplicationContextHelper;
+import com.sunwayworld.framework.database.sql.Order;
 import com.sunwayworld.framework.context.LocalContextHelper;
 import com.sunwayworld.framework.data.page.Page;
 import com.sunwayworld.framework.data.page.Pagination;
@@ -227,6 +231,14 @@ public  class PfOrderTaskServiceImpl extends EmcOrderTaskServiceImpl implements 
     @Lazy
     private EmcOrderContainerService orderContainerService;
 
+    @Autowired
+    @Lazy
+    private EmcFolderService folderService;
+
+    @Autowired
+    @Lazy
+    private EmcOrderContainerDao orderContainerDao;
+
     @Override
     public PfOrderTaskDao getDao() {
         return orderTaskDao;
@@ -283,6 +295,10 @@ public  class PfOrderTaskServiceImpl extends EmcOrderTaskServiceImpl implements 
 
                 // 判断当前样品测试分析项组下启用的分析项有几种分析类型,决定插入几条样品测试数据
                 List<String> analysisCategoryList = filterItemList.stream().map(EmcItemBean::getAnalysisCategory).distinct().collect(Collectors.toList());
+                EmcProjectBean project = projectService.getDao().selectById(order.getProjId());
+                if ("0".equals(project.getSample())) {
+                    analysisCategoryList = Arrays.asList("analysis");
+                }
 
                 for (String analysisCategory : analysisCategoryList) {
 
@@ -1006,6 +1022,31 @@ public  class PfOrderTaskServiceImpl extends EmcOrderTaskServiceImpl implements 
         List<EmcOrderTaskBean> orderTaskContainerList = orderTaskList.stream().collect(Collectors.collectingAndThen(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(EmcOrderTaskBean::getTestName))), ArrayList::new));
 
         return new Pagination<>(orderTaskContainerList);
+    }
+
+    @Override
+    public Page<EmcOrderTaskBean> selectOrderTaskPagationByOrderAndTask(RestJsonWrapperBean wrapper) {
+        List<EmcOrderBean> orderList = wrapper.parse(EmcOrderBean.class);
+        EmcOrderTaskBean containerTask = wrapper.parseUnique(EmcOrderTaskBean.class);
+        List<Long> orderIds = orderList.stream().map(e -> e.getId()).distinct().collect(Collectors.toList());
+        if (orderIds.isEmpty()) return new Pagination<>();
+        SearchFilter filter = SearchFilter.instance().match("orderId", orderIds).filter(MatchPattern.OR);
+        if (!ObjectUtils.isEmpty(containerTask.getContainerCategoryId())) {
+            filter.match("ContainerCategoryId", containerTask.getContainerCategoryId()).filter(MatchPattern.SEQ);
+        }
+        if (!ObjectUtils.isEmpty(containerTask.getContainerGroup())) {
+            filter.match("ContainerGroup", containerTask.getContainerGroup()).filter(MatchPattern.SEQ);
+        }
+        if (!ObjectUtils.isEmpty(containerTask.getFixative())) {
+            filter.match("Fixative", containerTask.getFixative()).filter(MatchPattern.SEQ);
+        }
+        if (!ObjectUtils.isEmpty(containerTask.getStoreCondition())) {
+            filter.match("StoreCondition", containerTask.getStoreCondition()).filter(MatchPattern.SEQ);
+        }
+        List<EmcOrderTaskBean> taskList = selectListByFilter(filter, new Order[0]);
+        List<EmcOrderTaskBean> uniqueTasks = taskList.stream().collect(Collectors.collectingAndThen(
+                Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(EmcOrderTaskBean::getTestName))), ArrayList::new));
+        return new Pagination<>(uniqueTasks);
     }
 
     // ----------------------------------------------------------------------

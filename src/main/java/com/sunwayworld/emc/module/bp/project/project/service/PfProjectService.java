@@ -52,13 +52,25 @@ public interface PfProjectService extends EmcProjectService {
 
     String submitRemind(RestJsonWrapperBean wrapper);
 
-    JSONObject exportProjectToExcel(RestJsonWrapperBean wrapper);
-
     Long copyTo(RestJsonWrapperBean wrapper);
+
+    void pushProjectToNc(List<EmcProjectBean> projectList);
+
+    void pushProjectToNc(RestJsonWrapperBean wrapper);
+
+    void generateCompleteTaskData(RestJsonWrapperBean wrapper);
 
 
     void undoCompleteTaskData(RestJsonWrapperBean wrapper);
 
     void toReport(RestJsonWrapperBean wrapper);
+
+    JSONObject exportProjectToExcel(RestJsonWrapperBean wrapper);
+
+    void copyOrderTo(RestJsonWrapperBean wrapper);
+
+    Long createImage(RestJsonWrapperBean wrapper);
+
+    Long reportSendInfo(RestJsonWrapperBean wrapper);
 
 }

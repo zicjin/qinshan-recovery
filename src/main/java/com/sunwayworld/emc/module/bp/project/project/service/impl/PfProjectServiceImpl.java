@@ -10,6 +10,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.nio.file.Path;
+import java.nio.file.Files;
+import java.nio.file.attribute.FileAttribute;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -24,6 +26,7 @@ import java.util.stream.Collectors;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import org.apache.commons.codec.binary.Base64;
 import com.sunwayworld.cloud.module.fr.report.bean.CoreReportConfigLineBean;
 import com.sunwayworld.cloud.module.fr.report.service.CoreReportConfigLineService;
 import com.sunwayworld.framework.io.file.FilePathManager;
@@ -55,10 +58,14 @@ import com.sunwayworld.emc.module.bp.bp.service.PfFolderService;
 import com.sunwayworld.emc.module.bp.project.project.bean.EmcOrderItemBean;
 import com.sunwayworld.emc.module.bp.project.project.bean.EmcOrderItemGroupBean;
 import com.sunwayworld.emc.module.bp.project.project.bean.EmcProjectBean;
+import com.sunwayworld.emc.module.bp.project.project.bean.EmcProjectDirectorBean;
+import com.sunwayworld.emc.module.bp.project.project.bean.NcProjectReqBean;
 import com.sunwayworld.emc.module.bp.project.project.bean.PfProjectTaskProcessDTO;
 import com.sunwayworld.emc.module.bp.project.project.service.EmcOrderItemGroupService;
 import com.sunwayworld.emc.module.bp.project.project.service.EmcOrderItemService;
+import com.sunwayworld.emc.module.bp.project.project.service.EmcProjectDirectorService;
 import com.sunwayworld.emc.module.bp.project.project.service.EmcProjectOtherFeeService;
+import com.sunwayworld.emc.module.bp.project.project.service.EmcProjectService;
 import com.sunwayworld.emc.module.bp.project.project.service.PfProjectService;
 import com.sunwayworld.emc.module.bp.project.project.validator.EmcProjectDeleteValidator;
 import com.sunwayworld.emc.module.bp.project.project.validator.PfProjectCompleteTaskValidator;
@@ -89,6 +96,7 @@ import com.sunwayworld.emc.module.mdm.bizmdm.client.bean.EmcClientBean;
 import com.sunwayworld.emc.module.mdm.bizmdm.client.service.EmcClientService;
 import com.sunwayworld.emc.module.mdm.bizmdm.method.bean.EmcMethodBean;
 import com.sunwayworld.emc.module.mdm.bizmdm.method.service.EmcMethodService;
+import com.sunwayworld.emc.module.mdm.bizmdm.monitortmpl.service.EmcMonitorTmplService;
 import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcGroupItemBean;
 import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcItemGroupBean;
 import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcTestBean;
@@ -106,6 +114,10 @@ import com.sunwayworld.emc.module.mdm.crm.service.CrmOpportunityContractService;
 import com.sunwayworld.emc.module.mdm.crm.service.CrmOpportunityMainService;
 import com.sunwayworld.emc.module.mdm.crm.service.CrmOpportunityOpenService;
 import com.sunwayworld.emc.module.mdm.crm.service.CrmWriteOffService;
+import com.sunwayworld.emc.module.mdm.oa.bean.EmcOaOrgRelationBean;
+import com.sunwayworld.emc.module.mdm.oa.service.EmcOaOrgRelationService;
+import com.sunwayworld.emc.module.mdm.oa.service.EmcOaOrgService;
+import com.sunwayworld.cloud.module.schedule.schedule.service.CoreScheduleTaskConfigService;
 import com.sunwayworld.framework.at.annotation.AuditTrailEntry;
 import com.sunwayworld.framework.at.annotation.AuditTrailType;
 import com.sunwayworld.framework.audit.aunnotation.Audit;
@@ -133,6 +145,7 @@ import com.sunwayworld.framework.support.auditable.bean.CoreBpmnParameterDTO;
 import com.sunwayworld.framework.validator.data.annotation.ValidateDataWith;
 import com.sunwayworld.module.item.file.bean.CoreFileBean;
 import com.sunwayworld.module.item.file.service.CoreFileService;
+import com.sunwayworld.module.item.file.manager.CoreFileManager;
 import com.sunwayworld.module.mdm.org.bean.CoreOrgBean;
 import com.sunwayworld.module.mdm.org.service.CoreOrgService;
 import com.sunwayworld.module.mdm.user.bean.CoreUserBean;
@@ -178,6 +191,55 @@ public class PfProjectServiceImpl extends EmcProjectServiceImpl implements PfPro
             auditRecordList.add(auditRecord);
         });
         auditRecordService.getDao().insert(auditRecordList);
+    }
+
+    @Transactional
+    public void submitToDoneReport(RestJsonWrapperBean wrapper) {
+        List<EmcProjectBean> projects = wrapper.parse(EmcProjectBean.class);
+        List<Long> projectIds = projects.stream().map(EmcProjectBean::getId).collect(Collectors.toList());
+        reportService.insertByProjectDone(projectIds, true);
+        CoreBpmnParameterDTO parameter = new CoreBpmnParameterDTO();
+        parameter.setComment("提交到报告发送");
+        List<EmcReportBean> reports = reportService.getDao().selectListByOneColumnValues(projectIds, "projid", new Order[0]);
+        if (reports.isEmpty()) return;
+        List<Long> reportIds = reports.stream().map(EmcReportBean::getId).collect(Collectors.toList());
+        reportService.startProcess(reportIds, parameter);
+        startProcess(projectIds, parameter);
+        endTask(projectIds, parameter);
+        List<EmcProjectBean> projectUpdates = new ArrayList<>();
+        for (Long id : projectIds) {
+            EmcProjectBean update = new EmcProjectBean(); update.setId(id); update.setStatus("reportAudit");
+            update.setProjNode("报告发送"); update.setToReportEditDate(LocalDate.now());
+            EmcProjectBean source = projects.stream().filter(p -> ObjectUtils.equals(id, p.getId())).findFirst().orElse(new EmcProjectBean());
+            update.setFirstIssueDateTime(source.getFirstIssueDateTime() == null ? LocalDateTime.now() : source.getFirstIssueDateTime());
+            projectUpdates.add(update);
+        }
+        getDao().update(projectUpdates, "STATUS", "PROJNODE", "TOREPORTEDITDATE", "FIRSTISSUEDATETIME");
+        List<EmcReportBean> reportUpdates = new ArrayList<>();
+        for (EmcReportBean report : reports) {
+            EmcReportBean update = new EmcReportBean(); update.setId(report.getId()); update.setStatus("reportSeal");
+            EmcProjectBean source = projects.stream().filter(p -> ObjectUtils.equals(report.getProjId(), p.getId())).findFirst().orElse(new EmcProjectBean());
+            update.setReportNo(source.getProjNo()); reportUpdates.add(update);
+        }
+        reportService.getDao().update(reportUpdates, "STATUS", "REPORTNO");
+        insertReportTransitionAudit(projects, "提交到报告发送", "报告发送");
+    }
+
+    @Transactional
+    public void submitToReport(RestJsonWrapperBean wrapper) {
+        List<EmcProjectBean> projects = wrapper.parse(EmcProjectBean.class);
+        if ("1".equals(wrapper.getParamValue("gdflag"))) {
+            submitToDoneReport(wrapper);
+            return;
+        }
+        List<Long> ids = projects.stream().map(EmcProjectBean::getId).collect(Collectors.toList());
+        reportService.insertByProject(ids, true);
+        CoreBpmnParameterDTO parameter = new CoreBpmnParameterDTO(); parameter.setComment("提交至报告编制");
+        startProcess(ids, parameter); endTask(ids, parameter);
+        List<EmcProjectBean> updates = new ArrayList<>();
+        for (Long id : ids) { EmcProjectBean u = new EmcProjectBean(); u.setId(id); u.setStatus("reportEdit"); u.setProjNode("报告编制"); u.setToReportEditDate(LocalDate.now()); updates.add(u); }
+        getDao().update(updates, "STATUS", "PROJNODE", "TOREPORTEDITDATE");
+        insertReportTransitionAudit(projects, "提交至报告编制", "报告编制");
     }
 
     @Override
@@ -354,6 +416,35 @@ public class PfProjectServiceImpl extends EmcProjectServiceImpl implements PfPro
 
     @Autowired
     private EmcTestMethodOrderCategoryService testMethodOrderCategoryService;
+
+    @Autowired
+    private EmcMonitorTmplService monitorTmplService;
+
+    @Autowired
+    @Lazy
+    private EmcProjectDirectorService emcProjectDirectorService;
+
+    @Autowired
+    private CoreScheduleTaskConfigService scheduleTaskConfigService;
+
+    @Autowired
+    @Lazy
+    private EmcProjectService emcProjectService;
+
+    @Autowired
+    @Lazy
+    private EmcReportService emcReportService;
+
+    @Autowired
+    private EmcOaOrgService emcOaOrgService;
+
+    @Autowired
+    @Lazy
+    private EmcOaOrgRelationService emcOaOrgRelationService;
+
+    @Autowired
+    @Lazy
+    private CoreFileManager fileManager;
 
     private final static String SAMPLING_CONTACT_RECORD_NEW_FILES = "samplingContactRecordFilesNew";
     private final static String DELIVERY_RECORD_NEW_FILES = "deliveryRecordFilesNew";
@@ -3712,5 +3803,253 @@ public class PfProjectServiceImpl extends EmcProjectServiceImpl implements PfPro
         File file = FilePathManager.getLocalPath(path).toFile();
         HttpClientManager.getInstance().download(url, file);
         return file;
+    }
+
+    private void insertReportTransitionAudit(List<EmcProjectBean> projects, String comment, String nextTask) {
+        List<EmcAuditRecordBean> records = new ArrayList<>();
+        for (EmcProjectBean project : projects) {
+            EmcAuditRecordBean record = new EmcAuditRecordBean();
+            record.setId(ApplicationContextHelper.getNextIdentity()); record.setProjId(project.getId()); record.setProjNo(project.getProjNo());
+            record.setComments(comment); record.setLogDesc("项目:" + project.getProjNo()); record.setBizCategory("proj");
+            record.setStepCode("1"); record.setAuditCategory("项目登记"); record.setTaskName("项目登记");
+            record.setOperateCategory("提交"); record.setNextTaskName(nextTask); records.add(record);
+        }
+        auditRecordService.getDao().insert(records);
+    }
+
+    @Override
+    @Transactional
+    public void generateCompleteTaskData(RestJsonWrapperBean wrapper) {
+        List<EmcProjectBean> projectList = wrapper.parse(EmcProjectBean.class);
+        List<Long> ids = projectList.stream().map(EmcProjectBean::getId).collect(Collectors.toList());
+        projectList = selectListByFilter(SearchFilter.instance().match("ID", ids).filter(MatchPattern.OR), new Order[0]);
+        try {
+            List<EmcProjectBean> planContract = projectList.stream()
+                    .filter(p -> !ObjectUtils.isEmpty(p.getSplitContractId())).collect(Collectors.toList());
+            List<EmcProjectBean> normal = projectList.stream()
+                    .filter(p -> ObjectUtils.isEmpty(p.getSplitContractId())).collect(Collectors.toList());
+            planContract.forEach(p -> p.setStatus("erpConfirm"));
+            if (!planContract.isEmpty()) getDao().update(planContract, "STATUS");
+
+            List<EmcProjectBean> noSample = normal.stream().filter(p -> "0".equals(p.getSample())).collect(Collectors.toList());
+            if (!noSample.isEmpty()) {
+                List<Long> noSampleIds = noSample.stream().map(EmcProjectBean::getId).collect(Collectors.toList());
+                orderService.insertBpDataByProject(noSampleIds);
+                List<CoreBpmnCommentBean> comments = new ArrayList<>();
+                for (Long id : noSampleIds) {
+                    CoreBpmnCommentBean comment = new CoreBpmnCommentBean();
+                    comment.setTargetId(getDao().getTable() + "$" + id);
+                    comment.setStatusCode("schemeedit");
+                    comments.add(comment);
+                }
+                List<EmcOrderTaskBean> tasks = orderTaskService.getDao().selectListByOneColumnValues(noSampleIds, "PROJID", new Order[0]);
+                tasks.forEach(t -> t.setStatus("preLogged"));
+                orderTaskService.getDao().update(tasks, "STATUS");
+                coreBpmnCommentService.getDao().deleteBy(comments, "statusCode");
+                reportService.insertByProject(noSampleIds, false);
+                List<EmcFolderBean> folders = tasks.stream().filter(t -> t.getFolderId() != null)
+                        .map(EmcOrderTaskBean::getFolderId).distinct().map(id -> {
+                            EmcFolderBean f = new EmcFolderBean(); f.setId(id); f.setStatus("draw"); f.setProcessStatus("done"); return f;
+                        }).collect(Collectors.toList());
+                if (!folders.isEmpty()) folderService.getDao().update(folders, "STATUS", "PROCESSSTATUS");
+                List<EmcProjectBean> updates = noSample.stream().map(p -> { EmcProjectBean u = new EmcProjectBean(); u.setId(p.getId()); u.setStatus("auditFinished"); return u; }).collect(Collectors.toList());
+                getDao().update(updates, "STATUS");
+            }
+
+            List<EmcProjectBean> sample = normal.stream().filter(p -> "1".equals(p.getSample())).collect(Collectors.toList());
+            if (!sample.isEmpty()) {
+                List<Long> sampleIds = sample.stream().map(EmcProjectBean::getId).collect(Collectors.toList());
+                projSchemeService.insertBpData(sampleIds);
+                reportService.insertByProject(sampleIds, false);
+                List<EmcProjectBean> updates = sample.stream().map(p -> { EmcProjectBean u = new EmcProjectBean(); u.setId(p.getId()); u.setStatus("auditFinished"); return u; }).collect(Collectors.toList());
+                getDao().update(updates, "STATUS");
+            }
+
+            List<EmcAuditRecordBean> auditRecords = new ArrayList<>();
+            for (EmcProjectBean project : projectList) {
+                EmcAuditRecordBean record = new EmcAuditRecordBean();
+                record.setId(ApplicationContextHelper.getNextIdentity());
+                record.setProjId(project.getId()); record.setProjNo(project.getProjNo());
+                record.setComments(wrapper.getParamValue("bpmn_comment"));
+                record.setLogDesc("项目:" + project.getProjNo()); record.setBizCategory("proj"); record.setStepCode("2");
+                record.setAuditCategory("项目管理"); record.setOperateCategory("审核"); record.setTaskName("方案审核");
+                record.setNextTaskName("0".equals(project.getSample()) ? "客户样品接收" : "采样安排");
+                auditRecords.add(record);
+            }
+            auditRecordService.getDao().insert(auditRecords);
+            ProjectNodeUtils.updateNodes(normal.stream().map(EmcProjectBean::getId).collect(Collectors.toList()));
+            projectList.forEach(p -> p.setExt$Item("dataStatus", ""));
+            getDao().update(projectList, "dataStatus");
+            erpOrderService.reviewOrderContract(projectList, false, null);
+            projectList.forEach(erpContractOrderService::pushPlanContractOrder);
+        } catch (Exception e) {
+            logger.error(e);
+            String projectNos = projectList.stream().filter(p -> !StringUtils.isEmpty(p.getProjNo())).map(EmcProjectBean::getProjNo).collect(Collectors.joining(","));
+            throw new InvalidDataException("项目【" + projectNos + "】业务数据生成失败，请联系管理员");
+        }
+    }
+
+    @Override
+    @Transactional
+    public void pushProjectToNc(RestJsonWrapperBean wrapper) {
+        pushProjectToNc(wrapper.parse(EmcProjectBean.class));
+    }
+
+    @Override
+    @Transactional
+    public void pushProjectToNc(List<EmcProjectBean> projectList) {
+        String url = ApplicationContextHelper.getEnvironment().getProperty("sunway.emc.nc.jcrwaddservice");
+        List<Long> ids = projectList.stream().map(EmcProjectBean::getId).distinct().collect(Collectors.toList());
+        List<EmcProjectBean> all = emcProjectService.selectListByFilter(
+                SearchFilter.instance().match("id", ids).filter(MatchPattern.OR), new Order[0]);
+        List<EmcProjectBean> eligible = all.stream()
+                .filter(p -> "1".equals(p.getExt$Item("accountingflag")) && !"已推送".equals(p.getExt$Item("syncncstatus")))
+                .collect(Collectors.toList());
+        if (eligible.isEmpty()) throw new InvalidDataException("没有可推送的的项目");
+        List<String> orgIds = eligible.stream().map(EmcProjectBean::getOrgId).collect(Collectors.toList());
+        List<EmcOaOrgRelationBean> relations = emcOaOrgRelationService.selectListByFilter(
+                SearchFilter.instance().match("LIMSORGCODE", orgIds).filter(MatchPattern.OR), new Order[0]);
+        if (relations.isEmpty()) throw new InvalidDataException("没查询到所属OA组织部门");
+        Map<String, List<EmcOaOrgRelationBean>> orgMap = relations.stream()
+                .collect(Collectors.groupingBy(EmcOaOrgRelationBean::getLimsOrgCode));
+        List<NcProjectReqBean> requests = new ArrayList<>();
+        for (EmcProjectBean project : eligible) {
+            NcProjectReqBean req = new NcProjectReqBean();
+            req.setCommission_no(project.getProjNo()); req.setListno(project.getProjNo());
+            req.setCommission_date(project.getCreatedTime()); req.setCommission_unit(project.getEntrustOrgName());
+            req.setMission_mny(project.getProjectPrice()); req.setReportnum(project.getReportNum());
+            req.setCreator(project.getCreatedById()); req.setCreationtime(project.getCreatedTime());
+            req.setContractno(project.getExt$Item("contractno"));
+            req.setOrgcode(orgMap.get(project.getOrgId()).get(0).getOaCwOrgCode()); req.setDeptcode("16");
+            req.setReportindate(project.getFirstIssueDateTime());
+            String deliveryDate = project.getExt$Item("deliverydate");
+            req.setReportoutdate(StringUtils.isBlank(deliveryDate) ? LocalDateTime.now() : DateTimeUtils.parseLocalDateTime(deliveryDate));
+            req.setJclxcode(project.getExt$Item("nccode"));
+            requests.add(req);
+        }
+        logger.info("同步任务信息至NC==========req=" + JSONObject.toJSONString(requests));
+        String response = HttpClientManager.getInstance().sendHttpPost(url, JSONObject.toJSONString(requests));
+        String status = (response.contains("success") || response.contains("成功")) ? "已推送" : "失败";
+        for (EmcProjectBean project : eligible) {
+            project.setExt$Item("syncncstatus", status);
+            project.setExt$Item("syncncdesc", response);
+        }
+        getDao().update(eligible, "syncncstatus", "syncncdesc");
+    }
+
+    @Override
+    public void copyOrderTo(RestJsonWrapperBean wrapper) {
+        EmcOrderBean sourceOrder = wrapper.parseUnique(EmcOrderBean.class);
+        EmcProjectBean targetProject = wrapper.parseUnique(EmcProjectBean.class);
+        Long projectId = targetProject.getId();
+        EmcProjectBean project = selectById(projectId);
+        Long folderId = ApplicationContextHelper.getNextIdentity();
+        EmcFolderBean folder = new EmcFolderBean();
+        folder.setId(folderId);
+        folder.setFolderNo(folderService.generateFolderNo(project, sourceOrder.getMonitorTmplId()));
+        folder.setProjId(projectId);
+        folder.setOrderCategory(sourceOrder.getOrderCategory());
+        folder.setMonitorTmplId(sourceOrder.getMonitorTmplId());
+        folder.setSource("orderregistration");
+        folder.setTermination("0");
+        folderService.getDao().insert(folder);
+
+        Long orderId = ApplicationContextHelper.getNextIdentity();
+        EmcOrderBean order = new EmcOrderBean();
+        BeanUtils.copyProperties(sourceOrder, order, EmcConstant.CREATED_COLUMNS);
+        order.setId(orderId);
+        order.setProjId(projectId);
+        order.setFolderId(folderId);
+        order.setOrderNo(folder.getFolderNo() + "001");
+        order.setLabelNo(order.getOrderNo());
+        orderService.getDao().insert(order);
+
+        List<EmcOrderItemGroupBean> sourceGroups = orderItemGroupService.getDao()
+                .selectListByOneColumnValue(sourceOrder.getId(), "orderid", new Order[0]);
+        List<EmcOrderItemBean> sourceItems = orderItemService.getDao()
+                .selectListByOneColumnValue(sourceOrder.getId(), "orderid", new Order[0]);
+        List<EmcOrderItemGroupBean> groups = new ArrayList<>();
+        List<EmcOrderItemBean> items = new ArrayList<>();
+        for (EmcOrderItemGroupBean sourceGroup : sourceGroups) {
+            Long groupId = ApplicationContextHelper.getNextIdentity();
+            EmcOrderItemGroupBean group = new EmcOrderItemGroupBean();
+            BeanUtils.copyProperties(sourceGroup, group, EmcConstant.CREATED_COLUMNS);
+            group.setId(groupId);
+            group.setOrderId(orderId);
+            groups.add(group);
+            for (EmcOrderItemBean sourceItem : sourceItems) {
+                if (!ObjectUtils.equals(sourceItem.getOrderItemGroupId(), sourceGroup.getId())) continue;
+                EmcOrderItemBean item = new EmcOrderItemBean();
+                BeanUtils.copyProperties(sourceItem, item, EmcConstant.CREATED_COLUMNS);
+                item.setId(ApplicationContextHelper.getNextIdentity());
+                item.setOrderId(orderId);
+                item.setOrderItemGroupId(groupId);
+                items.add(item);
+            }
+        }
+        orderItemGroupService.getDao().insert(groups);
+        orderItemService.getDao().insert(items);
+    }
+
+    @Override
+    @Transactional
+    public Long createImage(RestJsonWrapperBean wrapper) {
+        String base64 = wrapper.getParamValue("base64").replace("data:image/png;base64,", "");
+        Long id = ApplicationContextHelper.getNextIdentity();
+        File tempFile = FileUtils.createTempFile("png");
+        try {
+            decoderBase64File(base64, tempFile.getPath());
+        } catch (IOException e) {
+            throw new FileException(e);
+        }
+        CoreFileBean insertCoreFile = new CoreFileBean();
+        Long key = ApplicationContextHelper.getNextIdentity();
+        insertCoreFile.setId(key);
+        insertCoreFile.setTargetId("T_EMC_REPORT_INFO_SIGN$" + id);
+        insertCoreFile.setName(tempFile.getName());
+        insertCoreFile.setFileExt(FileUtils.getFileExtension(insertCoreFile.getName()));
+        insertCoreFile.setMd5Name(EncryptUtils.MD5Encrypt(key + "$" + insertCoreFile.getName()));
+        insertCoreFile.setScope(FileScope.export.name());
+        insertCoreFile.setTimes(0L);
+        insertCoreFile.setDownloadable("1");
+        insertCoreFile.setCreatedTime(LocalDateTime.now());
+        insertCoreFile.setBizCategory("signature");
+        insertCoreFile.setSize(tempFile.length());
+        fileManager.upload(CoreFileUtils.toFilePath(insertCoreFile), tempFile);
+        coreFileService.getDao().insert(insertCoreFile);
+        return key;
+    }
+
+    private File decoderBase64File(String base64Code, String targetPath) throws IOException {
+        File file = new File(targetPath);
+        Files.createDirectories(file.getParentFile().toPath(), new FileAttribute[0]);
+        if (file.exists() && !file.delete()) {
+            throw new IOException("无法覆盖临时图片: " + targetPath);
+        }
+        byte[] buffer = Base64.decodeBase64(base64Code);
+        try (FileOutputStream out = new FileOutputStream(targetPath)) {
+            out.write(buffer);
+        }
+        return file;
+    }
+
+    @Override
+    @Transactional
+    public Long reportSendInfo(RestJsonWrapperBean wrapper) {
+        List<EmcReportBean> reportList = wrapper.parse(EmcReportBean.class);
+        List<Long> projectIds = reportList.stream().map(EmcReportBean::getProjId).distinct().collect(Collectors.toList());
+        List<EmcReportSendInfoBean> sendInfoList = reportSendInfoService.getDao()
+                .selectListByOneColumnValues(projectIds, "projId", new Order[0]);
+        for (EmcReportSendInfoBean sendInfo : sendInfoList) {
+            sendInfo.setExt$Item("issurer", wrapper.getParamValue("issurer"));
+            sendInfo.setExt$Item("issurerdate", DateTimeUtils.formatLocalDateTime(LocalDateTime.now(), "yyyy-MM-dd HH:mm:ss"));
+            sendInfo.setExt$Item("pic", wrapper.getParamValue("pic"));
+            sendInfo.setExt$Item("remark", wrapper.getParamValue("remark"));
+            sendInfo.setExpressNo(ApplicationContextHelper.getNextSequence("T_EMC_REPORT_SEND_INFO"));
+            sendInfo.setExpressType("自取");
+        }
+        reportSendInfoService.getDao().update(sendInfoList,
+                "issurer", "issurerdate", "pic", "remark", "expressno", "expresstype");
+        return 1L;
     }
 }

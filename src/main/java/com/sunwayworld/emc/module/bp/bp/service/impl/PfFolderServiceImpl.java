@@ -70,47 +70,63 @@ public class PfFolderServiceImpl extends EmcFolderServiceImpl implements PfFolde
     @Autowired
     // @Lazy
     private PfProjectService projectService;
-
-    @Autowired
-    private EmcMonitorTmplService monitorTmplService;
-
     @Autowired
     private PfProjSchemeService projSchemeService;
-
     @Autowired
-    @Lazy
-    private EmcOrderService orderService;
-
-    @Autowired
-    @Lazy
-    private EmcOrderItemGroupService orderItemGroupService;
-
-    @Autowired
-    @Lazy
-    private EmcItemGroupService itemGroupService;
-
-    @Autowired
-    @Lazy
-    private EmcCapacityItemGroupService capacityItemGroupService;
-
+    private EmcMonitorTmplService monitorTmplService;
     @Autowired
     @Lazy
     private PfOrderService pfOrderService;
-
     @Autowired
     @Lazy
     private PfOrderTaskService pfOrderTaskService;
-
     @Autowired
     @Lazy
     private PfOrderTaskResultService pfOrderTaskResultService;
-
     @Autowired
     private PfOrderItemGroupService pfOrderItemGroupService;
-
+    @Autowired
+    @Lazy
+    private EmcOrderService orderService;
+    @Autowired
+    @Lazy
+    private EmcOrderItemGroupService orderItemGroupService;
+    @Autowired
+    @Lazy
+    private EmcItemGroupService itemGroupService;
+    @Autowired
+    @Lazy
+    private EmcCapacityItemGroupService capacityItemGroupService;
     @Autowired
     @Lazy
     private EmcOrderContainerService orderContainerService;
+
+    @Override
+    public RestValidationResultBean customizeValidate(Long id, String columnName, String columnValue) {
+        if (!StringUtils.equalsIgnoreCase("monitorPointNo", columnName)) {
+            return new RestValidationResultBean(true);
+        }
+        String monitorPointNo = columnValue;
+        if (monitorPointNo == null) {
+            return new RestValidationResultBean(true);
+        }
+        List<EmcOrderBean> orderBeanList = this.pfOrderService.getDao().selectListByOneColumnValue(id, "folderid", new Order[0]);
+        if (orderBeanList.stream().anyMatch(e -> e.getQcCategoryId() != null)) {
+            return new RestValidationResultBean(true);
+        }
+        if (!this.validateString(monitorPointNo)) {
+            return new RestValidationResultBean(false, "必须包含大写字母和数字");
+        }
+        return new RestValidationResultBean(true);
+    }
+
+    public boolean validateString(String input) {
+        if (input == null || input.isEmpty()) {
+            return false;
+        }
+        String regex = "^(?=.*[A-Z])(?=.*\\d).+$";
+        return input.matches(regex);
+    }
 
     @Override
     public EmcFolderBean insertByOrder(EmcOrderBean order) {
@@ -376,25 +392,6 @@ public class PfFolderServiceImpl extends EmcFolderServiceImpl implements PfFolde
             folder.setPlanSampleDate(wrapperFolder.getPlanSampleDate());
         });
         this.getDao().updateIfChanged(folderList);
-    }
-
-    @Override
-    public RestValidationResultBean customizeValidate(Long id, String columnName, String columnValue) {
-        if (!StringUtils.equalsIgnoreCase("monitorPointNo", columnName) || columnValue == null) {
-            return new RestValidationResultBean(true);
-        }
-        List<EmcOrderBean> orderList = this.pfOrderService.getDao().selectListByOneColumnValue(id, "folderid", new Order[0]);
-        if (orderList.stream().anyMatch(order -> order.getQcCategoryId() != null)) {
-            return new RestValidationResultBean(true);
-        }
-        if (!validateString(columnValue)) {
-            return new RestValidationResultBean(false, "必须包含大写字母和数字");
-        }
-        return new RestValidationResultBean(true);
-    }
-
-    public boolean validateString(String input) {
-        return input != null && !input.isEmpty() && input.matches("^(?=.*[A-Z])(?=.*\\d).+$");
     }
 
     @Override

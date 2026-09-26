@@ -39,6 +39,7 @@ import com.sunwayworld.emc.module.bp.bp.service.EmcOrderTaskResultService;
 import com.sunwayworld.emc.module.bp.bp.service.PfOrderService;
 import com.sunwayworld.emc.module.bp.bp.service.PfOrderTaskService;
 import com.sunwayworld.emc.module.bp.bp.validator.PfDeleteItemGroupValidator;
+import com.sunwayworld.emc.module.bp.bp.validator.PfDeleteCheckProjectOrderItemGroupValidator;
 import com.sunwayworld.emc.module.bp.bp.validator.PfDeleteOrderItemGroupValidator;
 import com.sunwayworld.emc.module.bp.bp.validator.PfEditOrderQcValidator;
 import com.sunwayworld.emc.module.bp.bp.validator.PfSubpackageTestValidator;
@@ -1823,25 +1824,93 @@ public class PfOrderServiceImpl extends EmcOrderServiceImpl implements PfOrderSe
     private boolean isSolidWaste(EmcOrderBean order) {
         return Arrays.stream(PfConstant.DIOXIN_SOLID_WASTE_ORDER_CATEGORIES).anyMatch(keyword -> StringUtils.contains(order.getOrderCategory(), keyword));
     }
-    @Override
     @Transactional
     public Long updateItemGroupOrderContainer(RestJsonWrapperBean wrapper) {
-        return 0L;
+        List<EmcOrderItemGroupBean> wrapperOrderItemGroupList = wrapper.parse(EmcOrderItemGroupBean.class);
+        List<EmcOrderBean> wrapperOrderList = wrapper.parse(EmcOrderBean.class);
+        EmcOrderTaskBean wrapperOrderTask = wrapper.parseUnique(EmcOrderTaskBean.class);
+        Long containerCategoryId = wrapperOrderTask.getContainerCategoryId();
+        String containerCategoryCode = wrapperOrderTask.getContainerCategoryCode();
+        String containerCategoryName = wrapperOrderTask.getContainerCategoryName();
+        String containerGroup = wrapperOrderTask.getContainerGroup();
+        String fixative = wrapperOrderTask.getFixative();
+        String storeCondition = wrapperOrderTask.getStoreCondition();
+        EmcOrderItemGroupBean updateOrderItemGroup = new EmcOrderItemGroupBean();
+        updateOrderItemGroup.setContainerCategoryId(containerCategoryId);
+        updateOrderItemGroup.setContainerCategoryCode(containerCategoryCode);
+        updateOrderItemGroup.setContainerCategoryName(containerCategoryName);
+        updateOrderItemGroup.setContainerGroup(containerGroup);
+        updateOrderItemGroup.setFixative(fixative);
+        updateOrderItemGroup.setStoreCondition(storeCondition);
+        List<Long> itemGroupIdList = wrapperOrderItemGroupList.stream().map(EmcOrderItemGroupBean::getItemGroupId).distinct().collect(Collectors.toList());
+        List<Long> orderIdList = wrapperOrderList.stream().map(EmcOrderBean::getId).distinct().collect(Collectors.toList());
+        List<EmcOrderItemGroupBean> updateOrderItemGroupList = this.orderItemGroupService.selectListByFilter(SearchFilter.instance().match("orderId", orderIdList).filter(MatchPattern.OR).match("itemGroupId", itemGroupIdList).filter(MatchPattern.OR), new Order[0]);
+        List<Long> updateOrderItemGroupIdList = updateOrderItemGroupList.stream().map(EmcOrderItemGroupBean::getId).distinct().collect(Collectors.toList());
+        this.orderItemGroupService.getDao().updateByIds(updateOrderItemGroup, updateOrderItemGroupIdList, "ContainerCategoryId", "ContainerCategoryCode", "ContainerCategoryName", "ContainerGroup", "Fixative", "StoreCondition");
+        List<EmcOrderBean> orderList = this.selectListByIds(orderIdList);
+        this.orderContainerService.deleteContainer(orderList);
+        List delOrderTaskList = this.orderTaskService.selectListByFilter(SearchFilter.instance().match("orderId", orderIdList).filter(MatchPattern.OR), new Order[0]);
+        List delOrderTaskResultList = this.orderTaskResultService.selectListByFilter(SearchFilter.instance().match("orderId", orderIdList).filter(MatchPattern.OR), new Order[0]);
+        this.orderTaskService.getDao().deleteBy(delOrderTaskList, new String[0]);
+        this.orderTaskResultService.getDao().deleteBy(delOrderTaskResultList, new String[0]);
+        this.orderTaskService.insertByOrder(orderList);
+        List<EmcOrderTaskBean> orderTaskList = this.orderTaskService.getDao().selectListByOneColumnValues(orderIdList, "ORDERID", new Order[0]);
+        orderTaskList.forEach(a2 -> a2.setStatus("preLogged"));
+        this.orderTaskService.getDao().update(orderTaskList, new String[]{"STATUS"});
+        return 1L;
     }
 
-    @Override
     @Transactional
     public Long syncOrderItemGroupItem(RestJsonWrapperBean wrapper) {
-        syncNewTest(wrapper);
-        return 0L;
+        List<EmcOrderItemGroupBean> orderItemGroupList = wrapper.parse(EmcOrderItemGroupBean.class);
+        List<Long> capacityItemGroupIdList = orderItemGroupList.stream().map(EmcOrderItemGroupBean::getItemGroupId).distinct().collect(Collectors.toList());
+        List<EmcCapacityItemGroupBean> capacityItemGroupList = this.capacityItemGroupService.selectListByIds(capacityItemGroupIdList);
+        List<Long> itemGroupIdList = capacityItemGroupList.stream().map(EmcCapacityItemGroupBean::getItemGroupId).collect(Collectors.toList());
+        List<EmcGroupItemBean> groupItemList = this.groupItemService.getDao().selectListByOneColumnValues(itemGroupIdList, "ITEMGROUPID", new Order[0]);
+        ArrayList<EmcOrderItemBean> orderItemList = new ArrayList<EmcOrderItemBean>();
+        ArrayList<EmcOrderItemBean> delOrderItemFilterList = new ArrayList<EmcOrderItemBean>();
+        for (EmcOrderItemGroupBean orderItemGroup : orderItemGroupList) {
+            EmcOrderItemBean delOrderItemFilter = new EmcOrderItemBean();
+            delOrderItemFilter.setOrderItemGroupId(orderItemGroup.getId());
+            delOrderItemFilterList.add(delOrderItemFilter);
+            Long capacityItemGroupId = orderItemGroup.getItemGroupId();
+            EmcCapacityItemGroupBean capacityItemGroup = capacityItemGroupList.stream().filter(e -> ObjectUtils.equals(e.getId(), capacityItemGroupId)).findFirst().orElse(null);
+            if (capacityItemGroup == null) continue;
+            Long itemGroupId = capacityItemGroup.getItemGroupId();
+            List<EmcGroupItemBean> curGroupItemList = groupItemList.stream().filter(e -> ObjectUtils.equals(itemGroupId, e.getItemGroupId())).collect(Collectors.toList());
+            for (EmcGroupItemBean groupItem : curGroupItemList) {
+                EmcOrderItemBean orderItemBean = new EmcOrderItemBean();
+                orderItemBean.setId(ApplicationContextHelper.getNextIdentity());
+                orderItemBean.setOrderItemGroupId(orderItemGroup.getId());
+                orderItemBean.setOrderId(orderItemGroup.getOrderId());
+                orderItemBean.setItemId(groupItem.getItemId());
+                orderItemList.add(orderItemBean);
+            }
+        }
+        this.orderItemService.getDao().deleteBy(delOrderItemFilterList, new String[]{"ORDERITEMGROUPID"});
+        this.orderItemService.getDao().insert(orderItemList);
+        return 1L;
     }
 
-    @Override
-    public void delOrderItemGroup(RestJsonWrapperBean wrapper) {
-    }
-
-    @Override
+    @Transactional
+    @ValidateDataWith(value=PfDeleteCheckProjectOrderItemGroupValidator.class)
     public void delCheckProjectOrderItemGroup(RestJsonWrapperBean wrapper) {
+        List<EmcOrderTaskBean> orderTaskList = wrapper.parse(EmcOrderTaskBean.class);
+        ArrayList deleteOrderItemGroupList = new ArrayList();
+        orderTaskList.forEach(task -> {
+            EmcOrderItemGroupBean deleteOrderItemGroup = new EmcOrderItemGroupBean();
+            deleteOrderItemGroup.setOrderId(task.getOrderId());
+            deleteOrderItemGroup.setTestMethodId(task.getTestMethodId());
+            deleteOrderItemGroup.setItemGroup(task.getExt$Item("itemGroup"));
+            deleteOrderItemGroupList.add(deleteOrderItemGroup);
+        });
+        this.orderItemGroupService.getDao().deleteBy(deleteOrderItemGroupList, new String[]{"orderId", "testMethodId", "itemGroup"});
     }
+
+    @Transactional
+    public void delOrderItemGroup(RestJsonWrapperBean wrapper) {
+        this.orderItemGroupService.delete(wrapper);
+    }
+
 
 }

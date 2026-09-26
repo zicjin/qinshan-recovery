@@ -441,6 +441,7 @@ public  class PfOrderTaskServiceImpl extends EmcOrderTaskServiceImpl implements 
                         a.setContainerCategoryName(orderCategory.getExt$Item("containercategoryname"));
                         a.setContainerGroup(orderCategory.getContainerGroup());
                         a.setFixative(orderCategory.getFixative());
+                        a.setStoreCondition(orderCategory.getStoreCondition());
 
                     }
 
@@ -485,6 +486,7 @@ public  class PfOrderTaskServiceImpl extends EmcOrderTaskServiceImpl implements 
                         }
 
                         insertOrderTaskList.add(orderTask);
+                        allOldOrderTaskList.add(orderTask);
 
                         // 样品测试结果
                         List<EmcItemBean> analysisCategoryItemList = filterItemList.stream().filter(e -> ObjectUtils.equals(e.getAnalysisCategory(), analysisCategory)).collect(Collectors.toList());

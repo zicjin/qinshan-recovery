@@ -47,6 +47,7 @@ import com.sunwayworld.emc.module.bp.mobile.bean.EmcOperationType;
 import com.sunwayworld.emc.module.bp.mobile.service.PfMobileProjectService;
 import com.sunwayworld.emc.module.bp.project.project.bean.EmcOrderItemGroupBean;
 import com.sunwayworld.emc.module.bp.project.project.bean.EmcProjectBean;
+import com.sunwayworld.emc.module.bp.project.project.service.EmcOrderItemService;
 import com.sunwayworld.emc.module.bp.project.project.service.EmcOrderItemGroupService;
 import com.sunwayworld.emc.module.bp.project.project.service.EmcProjectService;
 import com.sunwayworld.emc.module.bp.sample.sample.bean.EmcSampleBean;
@@ -258,6 +259,9 @@ public class PfMobileProjectServiceImpl extends EmcMobileProjectServiceImpl impl
 
     @Autowired
     private EmcOrderItemGroupService orderItemGroupService;
+
+    @Autowired
+    private EmcOrderItemService orderItemService;
 
     @Autowired
     private CoreReportConfigLineService reportConfigLineService;
@@ -476,6 +480,11 @@ public class PfMobileProjectServiceImpl extends EmcMobileProjectServiceImpl impl
                 List<Long> orderIdList = orderList.stream().map(EmcOrderBean::getId).collect(Collectors.toList());
                 Page<EmcOrderItemGroupBean> orderItemGroupPage = orderItemGroupService.selectPagination(() -> orderItemGroupService.getDao().selectListByOneColumnValues(orderIdList, "orderId"), wrapper.extractPageRowBounds());
                 mobileDTO.setOrderItemGroupPage(orderItemGroupPage);
+                break;
+            case "orderItem" :
+                List<EmcOrderBean> curOrderList = orderService.getDao().selectListByOneColumnValues(folderIdList, "folderId", Collections.singletonList("id"));
+                List<Long> curOrderIdList = curOrderList.stream().map(EmcOrderBean::getId).collect(Collectors.toList());
+                mobileDTO.setOrderItemPage(orderItemService.selectPagination(() -> orderItemService.getDao().selectListByOneColumnValues(curOrderIdList, "orderId"), wrapper.extractPageRowBounds()));
                 break;
             case "projectFile" :
                 String targetId = projectService.getDao().getTable() + "$" + id;

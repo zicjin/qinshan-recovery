@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.NumberFormat;
+import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -17,6 +18,8 @@ import com.sunwayworld.cloud.module.fr.report.bean.CoreReportConfigLineBean;
 import com.sunwayworld.cloud.module.fr.report.service.CoreReportConfigLineService;
 import com.sunwayworld.framework.io.file.FilePathDTO;
 import com.sunwayworld.framework.io.file.FilePathManager;
+import com.sunwayworld.framework.utils.ArchiveUtils;
+import com.sunwayworld.framework.i18n.I18nHelper;
 import com.sunwayworld.module.item.file.manager.CoreFileManager;
 import com.sunwayworld.module.item.file.utils.CoreFileUtils;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
@@ -3973,7 +3976,21 @@ public class EmcReportServiceImpl implements EmcReportService {
 
     @Override
     public String pack(RestJsonWrapperBean wrapper) {
-        return null;
+        List<Long> idList = wrapper.parseId(Long.class);
+        if (idList.isEmpty()) return null;
+        List<CoreFileBean> fileList = coreFileService.getDao().selectListByIds(idList);
+        return fileList.isEmpty() ? null : pack(fileList, wrapper.getParamValue("fileName"));
+    }
+
+    private String pack(List<CoreFileBean> fileList, String fileName) {
+        if (StringUtils.isBlank(fileName)) {
+            fileName = I18nHelper.getMessage("GIKAM.FILE.PACK.DEFAULT_FILE_NAME");
+        }
+        FilePathDTO filePath = FilePathDTO.of(FileScope.temp.name(), LocalDateTime.now(), StringUtils.randomUUID(16), fileName + ".zip");
+        List<Path> zipPathList = fileList.stream().map(CoreFileUtils::getLocalPath).collect(Collectors.toList());
+        ArchiveUtils.zip(FilePathManager.getLocalPath(filePath), zipPathList.toArray(new Path[0]));
+        fileManager.upload(filePath, FilePathManager.getLocalPath(filePath));
+        return fileManager.getDownloadUrl(filePath);
     }
 
     @Override

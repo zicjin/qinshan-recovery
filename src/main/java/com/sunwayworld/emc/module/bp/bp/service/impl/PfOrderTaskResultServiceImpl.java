@@ -127,6 +127,12 @@ public class PfOrderTaskResultServiceImpl extends EmcOrderTaskResultServiceImpl 
     }
 
     @Override
+    public List<String> selectQcNames(RestJsonWrapperBean wrapper) {
+        String sampleId = wrapper.getParamValue("sampleId");
+        List<EmcOrderTaskResultBean> results = selectListByFilter(SearchFilter.instance().match("sampleId", sampleId).filter(MatchPattern.EQ).match("qcname", "N/A").filter(MatchPattern.DIFFER));
+        return results.stream().map(EmcOrderTaskResultBean::getQcName).distinct().collect(Collectors.toList());
+    }
+
     public List<TableRowBean> selectResultInputResultRowList(RestJsonWrapperBean wrapper) {
         EmcRunBean run = wrapper.parseUnique(EmcRunBean.class);
 
@@ -735,13 +741,6 @@ public class PfOrderTaskResultServiceImpl extends EmcOrderTaskResultServiceImpl 
 
         return tableRowList;
     }
-    @Override
-    public List<String> selectQcNames(RestJsonWrapperBean wrapper) {
-        String sampleId = wrapper.getParamValue("sampleId");
-        List<EmcOrderTaskResultBean> results = selectListByFilter(SearchFilter.instance().match("sampleId", sampleId).filter(MatchPattern.EQ).match("qcname", "N/A").filter(MatchPattern.DIFFER));
-        return results.stream().map(EmcOrderTaskResultBean::getQcName).distinct().collect(Collectors.toList());
-    }
-
     @Override
     @Transactional
     public void batchInputGasParameter(RestJsonWrapperBean wrapper) {

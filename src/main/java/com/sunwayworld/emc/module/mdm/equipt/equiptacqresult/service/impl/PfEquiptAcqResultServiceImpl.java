@@ -1,5 +1,7 @@
 package com.sunwayworld.emc.module.mdm.equipt.equiptacqresult.service.impl;
 
+import java.util.stream.Stream;
+
 import java.math.BigDecimal;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -170,7 +172,7 @@ public class PfEquiptAcqResultServiceImpl extends EmcEquiptAcqResultServiceImpl 
             // 判定后采集
             boolean judgedAcq = Constant.YES.equals(curScript.getExt$Item("judgedAcq"));
             boolean serialAcq = "1".equals(curScript.getSerialAcq()) && allResultList.stream()
-                    .map(EmcEquiptAcqResultBean::getBizNo)
+                    .map(EmcEquiptAcqResultBean::getBizNo).distinct()
                     .anyMatch(bizNo -> Arrays.stream(SERIAL_ACQ_SUFFIXS).anyMatch(suffix -> StringUtils.contains(bizNo, suffix)));
 
             getDao().insert(allResultList);
@@ -198,7 +200,7 @@ public class PfEquiptAcqResultServiceImpl extends EmcEquiptAcqResultServiceImpl 
                 orderNoList.stream().filter(orderNo -> DILUTION_ORDER_NO_PATTERN.matcher(orderNo).matches()).forEach(orderNo -> actualOrderNoList.add(orderNo.substring(0, orderNo.lastIndexOf("-"))));
             }
             if (serialAcq) {
-                Arrays.stream(SERIAL_ACQ_SUFFIXS).forEach(suffix -> orderNoList.forEach(orderNo -> actualOrderNoList.add(StringUtils.replace(orderNo, suffix, ""))));
+                Stream.of(SERIAL_ACQ_SUFFIXS).forEach(suffix -> orderNoList.forEach(orderNo -> actualOrderNoList.add(StringUtils.replace(orderNo, suffix, ""))));
             }
 
             List<EmcOrderTaskResultBean> allOrderTaskResultList = orderTaskResultService.selectListByFilter(SearchFilter.instance()
@@ -615,7 +617,7 @@ public class PfEquiptAcqResultServiceImpl extends EmcEquiptAcqResultServiceImpl 
             if (EmcConstant.EQUIPT_ACQ_DATA_FORMAT_MULTIPLE.equals(script.getDataFormat()) && !StringUtils.isEmpty(paragraphMark) && content.contains(paragraphMark)) {
                 paragraphArray = content.split(paragraphMark);
                 for (int i = paragraphArray.length - 1; i >= 0; i--) {
-                    paragraphArray[i] = paragraphArray[i] + paragraphMark;
+                    paragraphArray[i] = "defaultStartFlag" + paragraphArray[i] + "defaultEndFlag";
                 }
             } else {
                 paragraphArray = new String[1];

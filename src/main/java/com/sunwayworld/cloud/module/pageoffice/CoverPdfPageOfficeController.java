@@ -92,7 +92,6 @@ public class CoverPdfPageOfficeController {
     @RequestMapping(value={"/pdf/direct/document"})
     public void directWordSaveToPdf(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
-            DocumentOpenType docType;
             long fileId = Long.parseLong(request.getParameter("fileId"));
             String bizId = ObjectUtils.toString(request.getParameter("bizId"));
             String bizType = ObjectUtils.toString(request.getParameter("bizType"));
@@ -110,6 +109,7 @@ public class CoverPdfPageOfficeController {
             makerCtrl.setSaveFilePage("/open/cover/page-office/pdf/save?sourceFileId=" + fileId + "&targetId=" + sourceCoreFileBean.getTargetId() + "&bizId=" + bizId + "&bizType=" + bizType + "&springServiceBeanName=" + springServiceBeanName);
             String url = this.fileManager.getDownloadUrl(sourceCoreFileBean);
             LOGGER.info("\u7ed9\u524d\u7aef\u53d1\u8d77\u8f6c\u6362PDF\u8bf7\u6c42,url={}", (Object)url);
+            DocumentOpenType docType;
             if (sourceCoreFileBean.getName().endsWith(".docx") || sourceCoreFileBean.getName().endsWith(".doc")) {
                 docType = DocumentOpenType.Word;
             } else if (sourceCoreFileBean.getName().endsWith(".xlsx") || sourceCoreFileBean.getName().endsWith(".xls")) {

@@ -2,6 +2,7 @@ package com.sunwayworld.emc.module.mdm.equipt.equiptacqfile.service.impl;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.CopyOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -62,6 +63,7 @@ public class PfEquiptAcqFileServiceImpl extends EmcEquiptAcqFileServiceImpl impl
 
     private static final Logger logger = LogManager.getLogger(PfEquiptAcqFileServiceImpl.class);
     private static final String MERGED_FILE_KEY = "MERGED_FILE::";
+    private static final int MAX_FILE_SIZE_PER_TIME = 30;
 
     @Autowired
     private EmcEquiptAcqScriptService acqScriptService;
@@ -80,61 +82,96 @@ public class PfEquiptAcqFileServiceImpl extends EmcEquiptAcqFileServiceImpl impl
 
     @Override
     @Transactional
-    @Scheduled(fixedDelay = 15000)
-    @AuditTrailEntry(AuditTrailType.INSERT)
+    @Scheduled(fixedDelay=10000L)
+    @AuditTrailEntry(value=AuditTrailType.INSERT)
     public void dcuAcquisition() {
         String equiptDirString = ApplicationContextHelper.getEnvironment().getProperty("sunway.equipt.acq.file.local.path");
         if (StringUtils.isEmpty(equiptDirString)) {
             return;
         }
-
-        Path equiptDir = Paths.get(equiptDirString);
+        Path equiptDir = Paths.get(equiptDirString, new String[0]);
         File equiptDirFile = equiptDir.toFile();
         if (!equiptDirFile.exists()) {
             return;
         }
-
         List<File> dcuFile = FileUtils.getFileList(equiptDir);
         if (dcuFile.isEmpty()) {
             return;
         }
-
+        List<File> validDcuFileList = dcuFile.stream().filter(file -> !file.isDirectory()).collect(Collectors.toList());
+        List<File> maxDcuFileList = validDcuFileList.subList(0, Math.min(validDcuFileList.size(), 30));
+        logger.info("DCU File Size -> {}", (Object)maxDcuFileList.size());
         String equiptBackupDirValue = ApplicationContextHelper.getEnvironment().getProperty("sunway.equipt.acq.file.local.backup.path");
         List<EmcEquiptAcqFileBean> acqFileList = new ArrayList<>();
         long currentTimeMillis = System.currentTimeMillis();
-
-        dcuFile.stream().filter(file -> !file.isDirectory()).forEach(file -> {
+        maxDcuFileList.stream().filter(file -> !file.isDirectory()).forEach(file -> {
             try {
-                EmcEquiptAcqFileBean equiptAcqFile = copyAcqFile(file, equiptDirFile);
+                EmcEquiptAcqFileBean equiptAcqFile = this.copyAcqFile((File)file, equiptDirFile);
                 if (equiptAcqFile != null) {
                     acqFileList.add(equiptAcqFile);
                     return;
                 }
-
                 if (StringUtils.isEmpty(equiptBackupDirValue)) {
                     file.delete();
                     return;
                 }
-
                 File equiptBackupDir = new File(equiptBackupDirValue + File.separator + currentTimeMillis);
                 if (!equiptBackupDir.exists()) {
                     equiptBackupDir.mkdir();
                 }
-                Files.move(file.toPath(), Paths.get(equiptBackupDir.getPath() + File.separator + file.getName()));
-            } catch (Exception e) {
+                Files.move(file.toPath(), Paths.get(equiptBackupDir.getPath() + File.separator + file.getName(), new String[0]), new CopyOption[0]);
+            }
+            catch (Exception e) {
                 e.printStackTrace();
                 file.delete();
             }
         });
-
         if (!acqFileList.isEmpty()) {
-            getDao().insert(acqFileList);
+            this.getDao().insert(acqFileList);
             Map<Long, List<EmcEquiptAcqFileBean>> acqFileMap = acqFileList.stream().filter(f -> !ObjectUtils.isEmpty(f.getEquiptId())).collect(Collectors.groupingBy(EmcEquiptAcqFileBean::getEquiptId));
-            acqFileMap.forEach((equiptId, curFileList) -> equiptAcqResultService.insertResultByAnalyAcqFiles(curFileList));
+            acqFileMap.forEach((equiptId, curFileList) -> this.equiptAcqResultService.insertResultByAnalyAcqFiles((List<EmcEquiptAcqFileBean>)curFileList));
+        }
+        logger.info("\u672c\u6b21DCU\u91c7\u96c6{}\u4e2a\u6587\u4ef6\u8017\u65f6 -> {} \u79d2", (Object)maxDcuFileList.size(), (Object)((System.currentTimeMillis() - currentTimeMillis) / 1000L));
+    }
+
+    @Transactional
+    @Scheduled(fixedDelay=15000L)
+    @AuditTrailEntry(value=AuditTrailType.INSERT)
+    public void dcuSceneAcquisition() {
+        String equiptDirString = ApplicationContextHelper.getEnvironment().getProperty("sunway.equipt.acq.scene.file.local.path");
+        if (StringUtils.isEmpty(equiptDirString)) {
+            return;
+        }
+        Path equiptDir = Paths.get(equiptDirString, new String[0]);
+        File equiptDirFile = equiptDir.toFile();
+        if (!equiptDirFile.exists()) {
+            return;
+        }
+        List<File> dcuFileList = FileUtils.getFileList(equiptDir);
+        if (dcuFileList.isEmpty()) {
+            return;
+        }
+        List<EmcEquiptAcqFileBean> acqFileList = new ArrayList<EmcEquiptAcqFileBean>();
+        long currentTimeMillis = System.currentTimeMillis();
+        dcuFileList.stream().filter(file -> !file.isDirectory()).forEach(file -> {
+            try {
+                EmcEquiptAcqFileBean equiptAcqFile = this.copySceneAcqFile((File)file, equiptDirFile);
+                if (equiptAcqFile != null) {
+                    acqFileList.add(equiptAcqFile);
+                    return;
+                }
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+                file.delete();
+            }
+        });
+        if (!acqFileList.isEmpty()) {
+            this.getDao().insert(acqFileList);
+            this.equiptAcqResultService.insertSceneResultByAnalyAcqFiles(acqFileList);
         }
     }
 
-    @Override
     @Scheduled(fixedDelay = 20000)
     @AuditTrailEntry(AuditTrailType.INSERT)
     public void mergeEquiptAcqFile() {
@@ -355,6 +392,8 @@ public class PfEquiptAcqFileServiceImpl extends EmcEquiptAcqFileServiceImpl impl
             content = EmcFileUtils.extractTextFromPDF(file);
         } else if (EmcConstant.FILECATAEGORY_XLSX.equals(fileExtension) || EmcConstant.FILECATAEGORY_XLS.equals(fileExtension)) {
             content = EmcFileUtils.extractTextFromXlsx(file);
+        } else if ("lyd".equalsIgnoreCase(fileExtension)) {
+            content = EmcFileUtils.extractTextFromTextFile(file);
         } else {
             content = FileUtils.extractTextFromFile(file);
         }
@@ -376,6 +415,47 @@ public class PfEquiptAcqFileServiceImpl extends EmcEquiptAcqFileServiceImpl impl
      * @param file
      * @return 设备编码
      */
+    private EmcEquiptAcqFileBean copySceneAcqFile(File file, File equiptDirFile) {
+        EmcEquiptAcqFileBean acqFileBean = new EmcEquiptAcqFileBean();
+        acqFileBean.setId(ApplicationContextHelper.getNextIdentity());
+        String fileName = file.getName();
+        LocalDateTime now = LocalDateTime.now();
+        acqFileBean.setSourceFileName(fileName);
+        acqFileBean.setCreatedTime(now);
+        acqFileBean.setStatus("0");
+        CoreFileBean insertCoreFile = new CoreFileBean();
+        insertCoreFile.setId(ApplicationContextHelper.getNextIdentity());
+        insertCoreFile.setTargetId(this.getDao().getTable() + "$" + acqFileBean.getId());
+        insertCoreFile.setName(acqFileBean.getSourceFileName());
+        insertCoreFile.setFileExt(FileUtils.getFileExtension(insertCoreFile.getName()));
+        insertCoreFile.setMd5Name(EncryptUtils.MD5Encrypt(insertCoreFile.getTargetId() + "$" + insertCoreFile.getName()));
+        insertCoreFile.setScope(FileScope.equipt.name());
+        insertCoreFile.setSize(file.length());
+        insertCoreFile.setTimes(0L);
+        insertCoreFile.setDownloadable("1");
+        insertCoreFile.setCreatedTime(now);
+        Long fileId = this.coreFileService.upload(insertCoreFile, file);
+        acqFileBean.getExt$().put("fileId", fileId + "");
+        String content = null;
+        Long acqScriptId = EmcConstant.EQUIPT_ACQ_SCRIPT_ID;
+        String fileExtension = FileUtils.getFileExtension(file.getName()).toLowerCase();
+        if ("data".equals(((EmcEquiptAcqScriptBean) this.equiptAcqScriptService.selectDetail(acqScriptId)).getAnalysisWay()) && "pdf".equals(fileExtension)) {
+            content = EmcFileUtils.extractTextFromPDF(file);
+        } else if ("xlsx".equals(fileExtension) || "xls".equals(fileExtension)) {
+            content = EmcFileUtils.extractTextFromXlsx(file);
+        } else if ("lyd".equalsIgnoreCase(fileExtension)) {
+            content = EmcFileUtils.extractTextFromTextFile(file);
+        } else {
+            content = FileUtils.extractTextFromFile(file);
+        }
+        if (StringUtils.isEmpty(content)) {
+            return null;
+        }
+        acqFileBean.setContent(content);
+        this.moveFileToBackup(file, equiptDirFile);
+        return acqFileBean;
+    }
+
     private String getEquiptNo(File file) {
         return file.getParentFile().getParentFile().getName();
     }

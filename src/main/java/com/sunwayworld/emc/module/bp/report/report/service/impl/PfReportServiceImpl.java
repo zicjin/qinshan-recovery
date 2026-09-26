@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -85,6 +86,7 @@ import com.sunwayworld.emc.module.erp.service.ErpReportService;
 import com.sunwayworld.emc.module.mdm.basemdm.mtl.bean.EmcStockBean;
 import com.sunwayworld.emc.module.mdm.basemdm.mtl.service.EmcStockService;
 import com.sunwayworld.emc.module.mdm.basemdm.propertytmpl.bean.EmcPropertyDataBean;
+import com.sunwayworld.emc.module.mdm.basemdm.propertytmpl.bean.EmcPropertyFieldBean;
 import com.sunwayworld.emc.module.mdm.basemdm.propertytmpl.service.EmcPropertyDataService;
 import com.sunwayworld.emc.module.mdm.basemdm.subcontractor.service.EmcSubcontractRecordService;
 import com.sunwayworld.emc.module.mdm.basemdm.unit.bean.EmcUnitBean;
@@ -3471,6 +3473,49 @@ public class PfReportServiceImpl extends EmcReportServiceImpl implements PfRepor
     private EmcReportResultBean getReportResultBeanByItemName(List<EmcReportResultBean> results, String itemName) {
         return results.stream().filter(item -> ObjectUtils.equals(item.getItemName(), itemName))
                 .findFirst().orElse(new EmcReportResultBean());
+    }
+
+    private String getNoiseSampleDateTimeRange(EmcReportResultBean result) {
+        String begin = getNoiseSampleDateTime(result.getSampleBeginDate(), result.getSampleBeginTime());
+        LocalDate endDate = result.getSampleCompleteDate() == null ? result.getSampleBeginDate() : result.getSampleCompleteDate();
+        String endTime = StringUtils.isBlank(result.getSampleCompleteTime()) ? result.getSampleBeginTime() : result.getSampleCompleteTime();
+        String end = getNoiseSampleDateTime(endDate, endTime);
+        if (StringUtils.isBlank(begin)) return end;
+        if (StringUtils.isBlank(end) || StringUtils.equals(begin, end)) return begin;
+        return begin + "——" + end;
+    }
+
+    private String getNoiseSampleDateTime(LocalDate date, String time) {
+        String dateText = date == null ? "" : DateTimeUtils.formatLocalDate(date, "yyyy年MM月dd日");
+        if (StringUtils.isBlank(dateText)) return StringUtils.isBlank(time) ? "" : time;
+        if (StringUtils.isBlank(time)) return dateText;
+        return dateText + " " + time;
+    }
+
+    private String getSampleDate(EmcProjectBean project, List<EmcOrderBean> orders) {
+        if ("1".equals(project.getSample())) {
+            List<LocalDate> starts = orders.stream().map(EmcOrderBean::getSampleBeginDate).distinct().collect(Collectors.toList());
+            if (orders.stream().anyMatch(order -> StringUtils.contains(order.getOrderCategory(), "噪声"))) {
+                List<LocalDate> ends = orders.stream().map(EmcOrderBean::getSampleCompleteDate).distinct().collect(Collectors.toList());
+                return WordTemplateUtils.getDate(starts, ends);
+            }
+            return WordTemplateUtils.getDate(starts, true);
+        }
+        return WordTemplateUtils.getDate(orders.stream().filter(order -> !ObjectUtils.isEmpty(order.getSendDate()))
+                .map(EmcOrderBean::getSendDate).distinct().collect(Collectors.toList()), true);
+    }
+
+    private String getPropertyDataByFieldName(List<EmcPropertyFieldBean> fields, Map<String, Object> data, String fieldName) {
+        EmcPropertyFieldBean field = fields.stream().filter(item -> ObjectUtils.equals(fieldName, item.getFieldName())).findFirst().orElse(null);
+        if (field == null || data.get(field.getInternalField()) == null) return "";
+        return String.valueOf(data.get(field.getInternalField()));
+    }
+
+    protected String getAnalysisDate(WordTemplateSourceDTO source) {
+        List<EmcRunBean> runs = source.getRunList();
+        List<LocalDate> starts = runs.stream().filter(run -> !ObjectUtils.isEmpty(run.getAnalysisBeginDate())).map(EmcRunBean::getAnalysisBeginDate).distinct().collect(Collectors.toList());
+        List<LocalDate> ends = runs.stream().filter(run -> !ObjectUtils.isEmpty(run.getAnalysisEndDate())).map(EmcRunBean::getAnalysisEndDate).distinct().collect(Collectors.toList());
+        return WordTemplateUtils.getDate(starts, ends);
     }
 
 }

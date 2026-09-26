@@ -1,5 +1,6 @@
 package com.sunwayworld.emc.module.bp.bp.service.impl;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -56,6 +57,12 @@ import com.sunwayworld.emc.module.bp.project.project.service.EmcProjectService;
 import com.sunwayworld.emc.module.bp.project.projectlog.bean.EmcProjectEditLogBean;
 import com.sunwayworld.emc.module.bp.project.projectlog.service.EmcProjectEditLogService;
 import com.sunwayworld.emc.module.bp.project.projscheme.service.PfProjSchemeService;
+import com.sunwayworld.emc.module.bp.project.projscheme.bean.EmcProjOrderBean;
+import com.sunwayworld.emc.module.bp.project.projscheme.bean.EmcProjSchemeBean;
+import com.sunwayworld.emc.module.bp.project.projscheme.service.EmcProjOrderService;
+import com.sunwayworld.emc.module.mdm.bizmdm.monitortmpl.bean.EmcMonitorSchemeBean;
+import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcTestMethodOrderCategoryBean;
+import com.sunwayworld.emc.module.mdm.bizmdm.test.service.EmcTestMethodOrderCategoryService;
 import com.sunwayworld.emc.module.bp.project.projscheme.validator.PfDeleteOrderValidator;
 import com.sunwayworld.emc.module.bp.report.report.bean.EmcReportBean;
 import com.sunwayworld.emc.module.bp.report.report.service.EmcReportService;
@@ -147,6 +154,12 @@ public class PfOrderServiceImpl extends EmcOrderServiceImpl implements PfOrderSe
 
     @Autowired
     private EmcMonitorTmplService monitorTmplService;
+
+    @Autowired
+    private EmcProjOrderService emcProjOrderService;
+
+    @Autowired
+    private EmcTestMethodOrderCategoryService testMethodOrderCategoryService;
 
     @Autowired
     private EmcItemService itemService;
@@ -781,6 +794,142 @@ public class PfOrderServiceImpl extends EmcOrderServiceImpl implements PfOrderSe
         // 删除样品测试结果
         orderTaskResultService.getDao().deleteByIdList(delOrderTaskResultList.stream().map(e -> e.getId()).collect(Collectors.toList()));
 
+    }
+
+    @Transactional
+    public void editCheckProjectItemGroup(Long orderId, RestJsonWrapperBean wrapper) {
+        List<EmcOrderTaskResultBean> deleteResultList;
+        EmcOrderTaskBean deleteOrderTask;
+        EmcOrderBean order = (EmcOrderBean)this.getDao().selectByIdIfPresent(orderId);
+        EmcFolderBean folder = (EmcFolderBean)this.folderService.getDao().selectByIdIfPresent((Long)order.getFolderId());
+        EmcProjSchemeBean emcProjSchemeBean = (EmcProjSchemeBean)this.pfProjSchemeService.selectFirstByFilter(SearchFilter.instance().match("MonitorPointId", folder.getMonitorPointId()).filter(MatchPattern.SEQ).match("MonitorPointname", folder.getMonitorPointName()).filter(MatchPattern.SEQ).match("PROJID", folder.getProjId()).filter(MatchPattern.SEQ), new Order[0]);
+        List<EmcProjOrderBean> allOldProjOrderList = this.emcProjOrderService.getDao().selectListByOneColumnValue(emcProjSchemeBean.getId(), "projSchemeId", new Order[0]);
+        List<EmcMonitorSchemeBean> insertMonitorSchemeBeanList = wrapper.parse(EmcMonitorSchemeBean.class);
+        Long delCapacityItemGroupId = NumberUtils.parseLong(wrapper.getParamValue("delCapacityItemGroupId"));
+        EmcOrderItemGroupBean delOrderItemGroup = (EmcOrderItemGroupBean)this.orderItemGroupService.selectFirstByFilter(SearchFilter.instance().match("orderid", orderId).filter(MatchPattern.SEQ).match("itemgroupid", delCapacityItemGroupId).filter(MatchPattern.SEQ), new Order[0]);
+        this.orderItemGroupService.getDao().deleteBy(delOrderItemGroup, new String[0]);
+        List<EmcOrderItemGroupBean> allOldOrderItemGroupList = this.orderItemGroupService.selectListByFilter(SearchFilter.instance().match("FOLDERID", folder.getId()).filter(MatchPattern.SEQ), new Order[0]);
+        if (allOldOrderItemGroupList.stream().noneMatch(e -> ObjectUtils.equals(e.getItemGroupId(), delCapacityItemGroupId))) {
+            List<EmcProjOrderBean> delProjOrderList = allOldProjOrderList.stream().filter(e -> ObjectUtils.equals(e.getItemGroupId(), delCapacityItemGroupId)).collect(Collectors.toList());
+            this.emcProjOrderService.getDao().deleteBy(delProjOrderList, new String[0]);
+        }
+        Long delTestMethodId = delOrderItemGroup.getTestMethodId();
+        List<EmcOrderItemGroupBean> otherOrderItemGroupList = this.orderItemGroupService.selectListByFilter(SearchFilter.instance().match("orderid", orderId).filter(MatchPattern.SEQ).match("testMethodId", delTestMethodId).filter(MatchPattern.SEQ), new Order[0]);
+        if (otherOrderItemGroupList.isEmpty()) {
+            deleteOrderTask = (EmcOrderTaskBean)this.orderTaskService.selectFirstByFilter(SearchFilter.instance().match("orderid", orderId).filter(MatchPattern.SEQ).match("testMethodId", delTestMethodId).filter(MatchPattern.SEQ), new Order[0]);
+            deleteResultList = this.orderTaskResultService.selectListByFilter(SearchFilter.instance().match("ordertaskid", deleteOrderTask.getId()).filter(MatchPattern.SEQ), new Order[0]);
+            this.orderTaskService.getDao().deleteBy(deleteOrderTask, new String[0]);
+            this.orderTaskResultService.getDao().deleteBy(deleteResultList, new String[0]);
+        } else {
+            deleteResultList = new ArrayList();
+            deleteOrderTask = new EmcOrderTaskBean();
+        }
+        List<String> samplingItemNameList = deleteResultList.stream().filter(e -> ObjectUtils.equals(e.getAnalysisType(), "sampling")).map(e -> e.getItemName()).collect(Collectors.toList());
+        List<EmcOrderTaskBean> allOldOrderTaskList = this.orderTaskService.getDao().selectListByOneColumnValue(orderId, "ORDERID", new Order[0]);
+        List<Long> allOldOrderTaskIdList = allOldOrderTaskList.stream().map(e -> e.getId()).collect(Collectors.toList());
+        List<EmcOrderTaskResultBean> allOldOrderTaskResultList = this.orderTaskResultService.selectListByFilter(SearchFilter.instance().match("ordertaskid", allOldOrderTaskIdList).filter(MatchPattern.OR), new Order[0]);
+        List<Long> testMethodIdList = insertMonitorSchemeBeanList.stream().map(e -> e.getTestMethodId()).distinct().collect(Collectors.toList());
+        List<EmcTestMethodOrderCategoryBean> filterTestMethodOrderCategoryList = testMethodIdList.stream().map(testMethodId -> {
+            EmcTestMethodOrderCategoryBean testMethodOrderCategory = new EmcTestMethodOrderCategoryBean();
+            testMethodOrderCategory.setTestMethodId(testMethodId);
+            testMethodOrderCategory.setMonitorTmplId(order.getMonitorTmplId());
+            return testMethodOrderCategory;
+        }).collect(Collectors.toList());
+        List<Long> testMethodOrderCategoryIdList = this.testMethodOrderCategoryService.getDao().selectList(filterTestMethodOrderCategoryList, Arrays.asList("TESTMETHODID", "MONITORTMPLID"), Arrays.asList("ID"), new Order[0]).stream().map(e -> e.getId()).collect(Collectors.toList());
+        List<EmcTestMethodOrderCategoryBean> testMethodOrderCategoryList = testMethodOrderCategoryIdList.isEmpty() ? Collections.emptyList() : this.testMethodOrderCategoryService.selectListByFilter(SearchFilter.instance().match("ID", testMethodOrderCategoryIdList).filter(MatchPattern.OR), new Order[0]);
+        List<Long> capacityItemGroupIdList = insertMonitorSchemeBeanList.stream().map(e -> e.getItemGroupId()).collect(Collectors.toList());
+        List<EmcCapacityItemGroupBean> capacityItemGroupList = this.capacityItemGroupService.getDao().selectListByIds(capacityItemGroupIdList, new Order[0]);
+        List<Long> itemGroupIdList = capacityItemGroupList.stream().map(e -> e.getItemGroupId()).collect(Collectors.toList());
+        List<EmcGroupItemBean> groupItemList = this.groupItemService.getDao().selectListByOneColumnValues(itemGroupIdList, "ITEMGROUPID", new Order[0]);
+        List<EmcItemBean> itemList = this.itemService.getDao().selectListByOneColumnValues(groupItemList.stream().map(e -> e.getItemId()).collect(Collectors.toList()), "ID", new Order[0]);
+        List<EmcOrderItemGroupBean> insertOrderItemGroupList = new ArrayList<>();
+        List<EmcProjOrderBean> insertProjOrderList = new ArrayList<>();
+        List<EmcOrderTaskBean> insertOrderTaskList = new ArrayList<>();
+        List<EmcOrderTaskResultBean> insertOrderTaskResultList = new ArrayList<>();
+        String parentOrderNo = order.getParentOrderNo();
+        List<EmcOrderTaskBean> parentOrderTaskList = Collections.emptyList();
+        if (!StringUtils.isBlank(parentOrderNo)) {
+            List<EmcOrderBean> parentOrderList = this.getDao().selectListByOneColumnValue((Object)parentOrderNo, "ORDERNO", Arrays.asList("ID", "ORDERNO"), new Order[0]);
+            List<Long> parentOrderIdList = parentOrderList.stream().map(EmcOrderBean::getId).collect(Collectors.toList());
+            parentOrderTaskList = this.orderTaskService.getDao().selectListByOneColumnValues(parentOrderIdList, "ORDERID", Arrays.asList("ID", "ORDERID", "TESTID", "TESTMETHODID"), new Order[0]);
+        }
+        List<EmcOrderTaskBean> validParentOrderTaskList = parentOrderTaskList;
+        insertMonitorSchemeBeanList.stream().forEach(ms -> {
+            List<EmcTestMethodOrderCategoryBean> orderCategoryList;
+            EmcOrderItemGroupBean insertOrderItemGroup = new EmcOrderItemGroupBean();
+            insertOrderItemGroup.setId(ApplicationContextHelper.getNextIdentity());
+            insertOrderItemGroup.setOrderId(orderId);
+            insertOrderItemGroup.setMonitorTmplId(order.getMonitorTmplId());
+            insertOrderItemGroup.setOrderCategory(order.getOrderCategory());
+            insertOrderItemGroup.setSchemeName("default");
+            insertOrderItemGroup.setMethodId(NumberUtils.parseLong(ms.getExt$Item("methodid")));
+            insertOrderItemGroup.setTestId(ms.getTestId());
+            insertOrderItemGroup.setTestMethodId(ms.getTestMethodId());
+            insertOrderItemGroup.setTestName(ms.getExt$Item("testName"));
+            insertOrderItemGroup.setMethodName(ms.getExt$Item("methodName"));
+            insertOrderItemGroup.setTestMethodBasis(ms.getExt$Item("testMethodBasis"));
+            insertOrderItemGroup.setItemGroupId(ms.getItemGroupId());
+            insertOrderItemGroup.setItemGroup(ms.getItemGroup());
+            insertOrderItemGroup.setQcCategoryId(order.getQcCategoryId());
+            insertOrderItemGroup.setQcCategoryCode(order.getQcCategoryCode());
+            insertOrderItemGroup.setQcName(order.getQcName());
+            EmcProjOrderBean haveProjOrder = allOldProjOrderList.stream().filter(e -> ObjectUtils.equals(e.getItemGroupId(), ms.getItemGroupId())).findFirst().orElse(null);
+            if (haveProjOrder == null) {
+                EmcProjOrderBean insertProjOrder = new EmcProjOrderBean();
+                insertProjOrder.setId(ApplicationContextHelper.getNextIdentity());
+                insertProjOrder.setProjSchemeId(emcProjSchemeBean.getId());
+                insertProjOrder.setSampleNum(order.getSampleNum());
+                insertProjOrder.setSchemeName("default");
+                insertProjOrder.setMethodId(NumberUtils.parseLong(ms.getExt$Item("methodid")));
+                insertProjOrder.setTestId(ms.getTestId());
+                insertProjOrder.setItemGroupId(ms.getItemGroupId());
+                insertProjOrder.setItemGroup(ms.getItemGroup());
+                insertProjOrderList.add(insertProjOrder);
+            }
+            if (!(orderCategoryList = testMethodOrderCategoryList.stream().filter(c -> ObjectUtils.equals(ms.getTestMethodId(), c.getTestMethodId())).collect(Collectors.toList())).isEmpty()) {
+                EmcTestMethodOrderCategoryBean orderCategory = (EmcTestMethodOrderCategoryBean)orderCategoryList.get(0);
+                insertOrderItemGroup.setContainerCategoryId(orderCategory.getContainerCategoryId());
+                insertOrderItemGroup.setContainerCategoryCode(orderCategory.getExt$Item("containercategorycode"));
+                insertOrderItemGroup.setContainerCategoryName(orderCategory.getExt$Item("containercategoryname"));
+                insertOrderItemGroup.setContainerGroup(orderCategory.getContainerGroup());
+                insertOrderItemGroup.setFixative(orderCategory.getFixative());
+            }
+            insertOrderItemGroupList.add(insertOrderItemGroup);
+            EmcOrderTaskBean haveOrderTask = allOldOrderTaskList.stream().filter(e -> ObjectUtils.equals(e.getTestMethodId(), ms.getTestMethodId())).findFirst().orElse(null);
+            if (haveOrderTask == null) {
+                EmcCapacityItemGroupBean capacityGroupItem = (EmcCapacityItemGroupBean)capacityItemGroupList.stream().filter(e -> ObjectUtils.equals(e.getId(), ms.getItemGroupId())).collect(Collectors.toList()).get(0);
+                Long itemGroupId = capacityGroupItem.getItemGroupId();
+                List<EmcGroupItemBean> filterGroupItemList = groupItemList.stream().filter(e -> ObjectUtils.equals(e.getItemGroupId(), itemGroupId)).collect(Collectors.toList());
+                List<Long> itemIdList = filterGroupItemList.stream().map(e -> e.getItemId()).collect(Collectors.toList());
+                List<EmcItemBean> filterItemList = itemList.stream().filter(e -> itemIdList.contains(e.getId()) && "1".equals(e.getActivatedFlag())).collect(Collectors.toList());
+                List<String> analysisCategoryList = filterItemList.stream().map(e -> e.getAnalysisCategory()).distinct().collect(Collectors.toList());
+                EmcOrderTaskBean parentOrderTask = validParentOrderTaskList.stream().filter(t -> ObjectUtils.equals(t.getTestMethodId(), ms.getTestMethodId())).findFirst().orElse(null);
+                for (String analysisCategory : analysisCategoryList) {
+                    EmcOrderTaskBean orderTask = new EmcOrderTaskBean();
+                    BeanUtils.copyProperties((Object)insertOrderItemGroup, (Object)orderTask, new String[0]);
+                    orderTask.setId(ApplicationContextHelper.getNextIdentity());
+                    orderTask.setAnalysisType(analysisCategory);
+                    orderTask.setFolderId(order.getFolderId());
+                    orderTask.setProjId(order.getProjId());
+                    orderTask.setStatus("logged");
+                    orderTask.setEquiptAcquNo(order.getOrderNo());
+                    if (parentOrderTask != null) {
+                        orderTask.setParentId(parentOrderTask.getId());
+                    }
+                    insertOrderTaskList.add(orderTask);
+                    allOldOrderTaskList.add(orderTask);
+                    List<EmcItemBean> analysisCategoryItemList = filterItemList.stream().filter(e -> ObjectUtils.equals(e.getAnalysisCategory(), analysisCategory)).collect(Collectors.toList());
+                    if (analysisCategoryItemList.size() == samplingItemNameList.size() && analysisCategoryItemList.stream().allMatch(e -> samplingItemNameList.contains(e.getItemName()))) {
+                        orderTask.setStatus(deleteOrderTask.getStatus());
+                    }
+                    insertOrderTaskResultList.addAll(this.getInsertOrderTaskResultList(orderTask, analysisCategoryItemList, order, deleteResultList));
+                }
+            }
+        });
+        this.emcProjOrderService.getDao().insert(insertProjOrderList);
+        this.orderItemGroupService.getDao().insert(insertOrderItemGroupList);
+        this.orderTaskService.getDao().insert(insertOrderTaskList);
+        this.orderTaskResultService.getDao().insert(insertOrderTaskResultList);
     }
 
     @Override

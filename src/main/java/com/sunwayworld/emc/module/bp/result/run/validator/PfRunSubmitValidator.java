@@ -71,7 +71,7 @@ public class PfRunSubmitValidator extends EmcRunSubmitValidator implements DataV
         List orderIdList = orderTaskList.stream().map(e -> e.getOrderId()).distinct().collect(Collectors.toList());
         List<EmcOrderBean> orderList = orderService.selectListByIds(orderIdList);
         for (EmcRunBean run : runList) {
-            List<Long> curOrderIdList = orderTaskList.stream().filter(e -> ObjectUtils.equals(run.getId(), e.getRunId())).map(EmcOrderTaskBean::getOrderId).distinct().collect(Collectors.toList());
+            List<Long> curOrderIdList = orderTaskList.stream().filter(e -> ObjectUtils.equals(run.getId(), e.getRunId())).map(e -> e.getOrderId()).distinct().collect(Collectors.toList());
             List<EmcOrderBean> curOrderList = orderList.stream().filter(e -> curOrderIdList.contains(e.getId())).collect(Collectors.toList());
             EmcOrderBean minSampleBeginDateOrder = curOrderList.stream().min(Comparator.comparing(EmcOrderBean::getSampleBeginDate, Comparator.nullsLast(java.time.LocalDate::compareTo))).orElse(new EmcOrderBean());
             java.time.LocalDate minSampleBeginDate = minSampleBeginDateOrder.getSampleBeginDate();

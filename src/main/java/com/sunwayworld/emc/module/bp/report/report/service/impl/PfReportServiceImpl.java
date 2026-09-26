@@ -3462,4 +3462,15 @@ public class PfReportServiceImpl extends EmcReportServiceImpl implements PfRepor
         return value;
     }
 
+    private String getReportResultByItemName(List<EmcReportResultBean> results, String itemName) {
+        EmcReportResultBean result = results.stream().filter(item -> ObjectUtils.equals(item.getItemName(), itemName))
+                .findFirst().orElse(new EmcReportResultBean());
+        return StringUtils.isBlank(result.getReportResult()) ? "" : transScientificCounting(result.getReportResult());
+    }
+
+    private EmcReportResultBean getReportResultBeanByItemName(List<EmcReportResultBean> results, String itemName) {
+        return results.stream().filter(item -> ObjectUtils.equals(item.getItemName(), itemName))
+                .findFirst().orElse(new EmcReportResultBean());
+    }
+
 }

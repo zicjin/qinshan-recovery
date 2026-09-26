@@ -3,6 +3,7 @@ package com.sunwayworld.emc.module.mdm.basemdm.mtl.service.impl;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Comparator;
@@ -39,8 +40,10 @@ import com.sunwayworld.framework.data.page.Pagination;
 import com.sunwayworld.framework.mybatis.mapper.MatchPattern;
 import com.sunwayworld.framework.mybatis.mapper.SearchFilter;
 import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;
+import com.sunwayworld.framework.support.domain.Persistable;
 import com.sunwayworld.framework.spring.annotation.GikamBean;
 import com.sunwayworld.framework.utils.StringUtils;
+import com.sunwayworld.framework.utils.DateTimeUtils;
 
 @Repository
 @GikamBean
@@ -50,6 +53,7 @@ public class PfStockServiceImpl extends EmcStockServiceImpl implements PfStockSe
     private EmcStockLogService stockLogService;
 
     @Autowired
+    @Lazy
     private PfMtlService mtlService;
 
     @Autowired
@@ -63,138 +67,60 @@ public class PfStockServiceImpl extends EmcStockServiceImpl implements PfStockSe
     @Transactional
     @AuditTrailEntry(AuditTrailType.INSERT)
     public Long insert(String mtlId, RestJsonWrapperBean wrapper) {
-        EmcStockLogBean emcStockLog = wrapper.parseUnique(EmcStockLogBean.class);
-        //库存
-        EmcStockBean emcStock = wrapper.parseUnique(EmcStockBean.class);
-        //根据试剂类别(RS/QC/RW)生成不同的序号
-        String reagentCategory = emcStock.getExt$Item("REAGENTCATEGORY");
-		String tagetHead = null;
-		String tagetNo = null;
-		String  batchTargetNo = null;
-		Calendar calendar = Calendar.getInstance();
-		String year = Integer.toString(calendar.get(Calendar.YEAR)).substring(2);
-        if(reagentCategory != null && reagentCategory !=""){
-        	if(reagentCategory.equals("QC")){
-        		//ZK-QC22-0001
-        		tagetHead ="ZK-QC";
-        		tagetNo = tagetHead +year;
-        		//找到对应试剂类别下的最大编号
-/*                List<EmcStockBean> stockQCList = getDao().selectListByOneColumnValue(reagentCategory,"REAGENTCATEGORY");
-*/
-                List<EmcStockBean> stockQCList = selectListByFilter(SearchFilter.instance().match("REAGENTCATEGORY", reagentCategory).filter(MatchPattern.SEQ)
-                	       .match("batchNo", tagetHead).filter(MatchPattern.SB));
-
-                if(stockQCList.isEmpty()){
-                     batchTargetNo = tagetNo +"-"+"0001";
-                }else{
-                    stockQCList.sort(Comparator.comparing(EmcStockBean::getBatchNo).reversed());
-                    String batchNo = stockQCList.get(0).getBatchNo();//此类别下的最大ID,例ZK-QC23-1000
-                    int batchNoNumber=Integer.parseInt(batchNo.substring(8));
-                    int batchNoTargetNumber= batchNoNumber+1;
-
-                    batchTargetNo = tagetNo +"-"+String.format("%0"+4+"d", batchNoTargetNumber);
-                }
-
-        	}else if(reagentCategory.equals("RS")){
-        		//ZKRS220001
-        		tagetHead ="ZK-RS";
-        		tagetNo = tagetHead +year;
-        		//找到对应试剂类别下的最大编号
-                List<EmcStockBean> stockQCList = selectListByFilter(SearchFilter.instance().match("REAGENTCATEGORY", reagentCategory).filter(MatchPattern.SEQ)
-             	       .match("batchNo", tagetHead).filter(MatchPattern.SB));
-                if(stockQCList.isEmpty()){
-                    batchTargetNo = tagetNo +"-"+"0001";
-                }else{
-                    stockQCList.sort(Comparator.comparing(EmcStockBean::getBatchNo).reversed());
-                    String batchNo = stockQCList.get(0).getBatchNo();//此类别下的最大ID,例ZK-RS-23-1000
-                    int batchNoNumber=Integer.parseInt(batchNo.substring(8));
-                    int batchNoTargetNumber= batchNoNumber+1;
-                    batchTargetNo = tagetNo+"-" +String.format("%0"+4+"d", batchNoTargetNumber);
-                }
-        	}else{
-        		//ZKRSW220001
-        		tagetHead ="ZK-RW";
-        		tagetNo = tagetHead +year;
-        		//找到对应试剂类别下的最大编号
-                List<EmcStockBean> stockQCList = selectListByFilter(SearchFilter.instance().match("REAGENTCATEGORY", reagentCategory).filter(MatchPattern.SEQ)
-                		 .match("batchNo", tagetHead).filter(MatchPattern.SB));
-                if(stockQCList.isEmpty()){
-                    batchTargetNo = tagetNo +"-"+"0001";
-                }else{
-                    stockQCList.sort(Comparator.comparing(EmcStockBean::getBatchNo).reversed());
-                    String batchNo = stockQCList.get(0).getBatchNo();//此类别下的最大ID,例ZKRW231000
-                    int batchNoNumber=Integer.parseInt(batchNo.substring(8));
-                    int batchNoTargetNumber= batchNoNumber+1;
-                    batchTargetNo = tagetNo +"-"+String.format("%0"+4+"d", batchNoTargetNumber);
-                }
-        	}
-
-        }
-        List<String> batchNoList = new ArrayList<>();
-        batchNoList.add(batchTargetNo);
-
-        List<EmcMtlMaintainBean> maintainList = mtlMaintainService.getDao().selectListByOneColumnValue(mtlId,"MTLID");
-
-        int qty = Optional.ofNullable(emcStockLog.getQty()).orElse(0D).intValue();
-
-        List<EmcStockBean> newStockList = new ArrayList<>(qty);
-        List<EmcStockLogBean> newStockLogList = new ArrayList<>(qty);
-        List<EmcStockConcentBean> newStockConcentList = new ArrayList<>();
-
-        IntStream.range(0, qty).forEach(i -> {
-            EmcStockBean newStock = new EmcStockBean();
-            BeanUtils.copyProperties(emcStock, newStock);
-
-
-            int batchNoNumber=Integer.parseInt(batchNoList.get(0).substring(8));
-            String batchTargetNoHead = batchNoList.get(0).substring(0,8);//ZK-RS-23-1000
-            int batchNoTargetNumber= batchNoNumber+i;
-            String targetNo = batchTargetNoHead+String.format("%0"+4+"d", batchNoTargetNumber);
-
-            newStock.setStockQty(1D);
-            newStock.setId(ApplicationContextHelper.getNextIdentity());
-            newStock.setMtlId(mtlId);
-            newStock.setStatus(Constant.NO);
-            newStock.setBatchNo(targetNo);
-            newStockList.add(newStock);
-
-            EmcStockLogBean newStockLog = new EmcStockLogBean();
-            BeanUtils.copyProperties(emcStockLog, newStockLog);
-            newStockLog.setQty(1D);
-            newStockLog.setId(ApplicationContextHelper.getNextIdentity());
-            newStockLog.setStockId(newStock.getId());
-            newStockLog.setLogType(LOG_TYPE_ADD);
-            newStockLogList.add(newStockLog);
-            for(int a =0;a<maintainList.size();a++){
-            	 EmcStockConcentBean newStockConcent = new EmcStockConcentBean();
-                 newStockConcent.setId(ApplicationContextHelper.getNextIdentity()+a);
-                 newStockConcent.setStockId(newStock.getId());
-                 newStockConcent.setCategory(maintainList.get(a).getCategory());
-                 newStockConcent.setMtlMaintainId(maintainList.get(a).getId());
-                 newStockConcentList.add(newStockConcent);
+        EmcMtlBean emcMtl = mtlService.selectByIdIfPresent(mtlId);
+        EmcStockLogBean stockLog = wrapper.parseUnique(EmcStockLogBean.class);
+        EmcStockBean stock = wrapper.parseUnique(EmcStockBean.class);
+        String batchNo = stock.getBatchNo();
+        int num = 0;
+        String targetNo = null;
+        if (batchNo == null) {
+            String reagentCategory = stock.getExt$Item("REAGENTCATEGORY");
+            if (emcMtl.getMtlNo() == null && reagentCategory != null) {
+                emcMtl.setExt$Item("REAGENTCATEGORY", reagentCategory);
+                mtlService.generateMtlNo(emcMtl);
+                mtlService.getDao().update(emcMtl, "MTLNO");
             }
-
-        });
-
-        getDao().insert(newStockList);
-
-        //历史记录
-        stockLogService.getDao().insert(newStockLogList);
-
-        //更新材料管理库存
-/*        if(!StringUtils.isEmpty(mtlId)){
-            mtlService.updateStockQty(mtlId);
-        }*/
-        //已存在的数量
-        List<EmcStockBean> stockExistList = getDao().selectListByOneColumnValue(mtlId, "mtlId");
-        int insertFinal = stockExistList.size();
-        EmcMtlBean mtlBean = mtlService.getDao().selectById(mtlId);
-        mtlBean.setStockQty(Double.valueOf(insertFinal));
-        mtlService.getDao().update(mtlBean, "stockQty");
-        //添加浓度
-        stockConcentService.getDao().insert(newStockConcentList);
-
-        return emcStock.getId();
+            if (emcMtl.getMtlNo() != null) {
+                String productionNo = stock.getExt$Item("productionno");
+                targetNo = productionNo != null ? productionNo : emcMtl.getMtlNo() + "-" + DateTimeUtils.formatLocalDateTime(LocalDateTime.now(), "yyMM");
+            }
+            if (targetNo != null) {
+                List<EmcStockBean> existing = selectListByFilter(SearchFilter.instance()
+                        .match("REAGENTCATEGORY", reagentCategory).filter(MatchPattern.SEQ)
+                        .match("batchNo", targetNo).filter(MatchPattern.SB), new com.sunwayworld.framework.database.sql.Order[0]);
+                num = existing.stream().filter(e -> e.getBatchNo() != null && e.getBatchNo().length() >= 3)
+                        .map(e -> Integer.parseInt(e.getBatchNo().substring(e.getBatchNo().length() - 3)))
+                        .max(Comparator.naturalOrder()).orElse(0);
+            }
+        }
+        List<EmcMtlMaintainBean> maintainList = mtlMaintainService.getDao().selectListByOneColumnValue(mtlId, "MTLID");
+        List<EmcStockBean> newStockList = new ArrayList<>();
+        List<EmcStockLogBean> newStockLogList = new ArrayList<>();
+        List<EmcStockConcentBean> newConcentList = new ArrayList<>();
+        int qty = Optional.ofNullable(stockLog.getQty()).orElse(0D).intValue();
+        for (int i = 0; i < qty; i++) {
+            EmcStockBean newStock = new EmcStockBean();
+            org.springframework.beans.BeanUtils.copyProperties(stock, newStock);
+            num++;
+            if (stock.getBatchNo() == null) batchNo = targetNo + "-" + String.format("%03d", num);
+            newStock.setStockQty(1D); newStock.setId(ApplicationContextHelper.getNextIdentity());
+            newStock.setMtlId(mtlId); newStock.setStatus(Constant.NO); newStock.setBatchNo(batchNo);
+            newStockList.add(newStock);
+            EmcStockLogBean newLog = new EmcStockLogBean();
+            org.springframework.beans.BeanUtils.copyProperties(stockLog, newLog);
+            newLog.setQty(1D); newLog.setId(ApplicationContextHelper.getNextIdentity()); newLog.setStockId(newStock.getId()); newLog.setLogType(LOG_TYPE_ADD); newStockLogList.add(newLog);
+            for (int j = 0; j < maintainList.size(); j++) {
+                EmcStockConcentBean concentration = new EmcStockConcentBean();
+                concentration.setId(ApplicationContextHelper.getNextIdentity() + j); concentration.setStockId(newStock.getId());
+                concentration.setCategory(maintainList.get(j).getCategory()); concentration.setMtlMaintainId(maintainList.get(j).getId()); newConcentList.add(concentration);
+            }
+        }
+        getDao().insert(newStockList); stockLogService.getDao().insert(newStockLogList);
+        List<EmcStockBean> existingStocks = getDao().selectListByOneColumnValue(mtlId, "mtlId");
+        double totalQty = existingStocks.stream().mapToDouble(EmcStockBean::getStockQty).sum();
+        EmcMtlBean mtl = mtlService.getDao().selectById(mtlId); mtl.setStockQty(totalQty); mtlService.getDao().update(mtl, "stockQty");
+        stockConcentService.getDao().insert(newConcentList);
+        return newStockList.get(0).getId();
     }
 
     @Override

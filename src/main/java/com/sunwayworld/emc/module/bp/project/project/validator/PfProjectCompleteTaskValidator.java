@@ -177,7 +177,7 @@ public class PfProjectCompleteTaskValidator extends EmcProjectCompleteTaskValida
                 return false;
             }
 
-            List<Long> orderIdList = orderList.stream().map(EmcOrderBean::getId).distinct().collect(Collectors.toList());
+            List<Long> orderIdList = orderList.stream().map(e -> e.getId()).distinct().collect(Collectors.toList());
             List<EmcOrderItemGroupBean> orderItemGroupList = emcOrderItemGroupService.getDao().selectListByOneColumnValues(orderIdList, "ORDERID");
             for (EmcOrderBean order : orderList) {
                 if (orderItemGroupList.stream().noneMatch(group -> ObjectUtils.equals(group.getOrderId(), order.getId()))) {
@@ -185,7 +185,7 @@ public class PfProjectCompleteTaskValidator extends EmcProjectCompleteTaskValida
                     return false;
                 }
             }
-            List<Long> orderItemGroupIdList = orderItemGroupList.stream().map(EmcOrderItemGroupBean::getId).distinct().collect(Collectors.toList());
+            List<Long> orderItemGroupIdList = orderItemGroupList.stream().map(e -> e.getId()).distinct().collect(Collectors.toList());
             int batchSize = 1000;
             List<EmcOrderItemBean> orderItemList = new ArrayList<>();
             for (int i = 0; i < orderItemGroupIdList.size(); i += batchSize) {

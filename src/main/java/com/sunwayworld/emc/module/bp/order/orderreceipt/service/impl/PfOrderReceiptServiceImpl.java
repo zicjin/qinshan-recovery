@@ -137,9 +137,21 @@ public class PfOrderReceiptServiceImpl extends EmcOrderReceiptServiceImpl {
                     Long newOrderId = ApplicationContextHelper.getNextIdentity();
                     Long newFolderId = ApplicationContextHelper.getNextIdentity();
                     String newFolderNo = newFolderNoList.get(folderNoIndex.incrementAndGet());
-                    String newOrderNo = newFolderNo + "01";
-                    if(newFolderNo.contains("-")){
-                        newOrderNo = newFolderNo + "-01";
+                    String newOrderNo = newFolderNo + "001";
+                    if ("P-BLANK".equals(copiedQc.getQcCategoryId())) {
+                        newOrderNo = newFolderNo.substring(0, newFolderNo.length() - 3) + "QK" + newFolderNo.substring(newFolderNo.length() - 3) + "001";
+                    }
+                    if ("P-YSKB".equals(copiedQc.getQcCategoryId())) {
+                        newOrderNo = newFolderNo.substring(0, newFolderNo.length() - 3) + "YK" + newFolderNo.substring(newFolderNo.length() - 3) + "001";
+                    }
+                    if ("zcsbkb".equals(copiedQc.getQcCategoryId())) {
+                        newOrderNo = newFolderNo.substring(0, newFolderNo.length() - 3) + "BK" + newFolderNo.substring(newFolderNo.length() - 3) + "001";
+                    }
+                    if ("Q-DUP".equals(copiedQc.getQcCategoryId())) {
+                        newOrderNo = newFolderNo.substring(0, newFolderNo.length() - 3) + "MP" + newFolderNo.substring(newFolderNo.length() - 3) + "001";
+                    }
+                    if (newFolderNo.contains("-")) {
+                        newOrderNo = newFolderNo + "-001";
                     }
                     copyOrder(copiedOrder, copiedQc, newFolderId, newOrder, newOrderId, newOrderNo, newOrderList);
 

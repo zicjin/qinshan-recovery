@@ -40,6 +40,7 @@ import com.sunwayworld.framework.at.annotation.AuditTrailType;
 import com.sunwayworld.framework.constant.Constant;
 import com.sunwayworld.framework.context.ApplicationContextHelper;
 import com.sunwayworld.framework.context.LocalContextHelper;
+import com.sunwayworld.framework.database.sql.Order;
 import com.sunwayworld.framework.mybatis.mapper.MapperParameter;
 import com.sunwayworld.framework.mybatis.mapper.MatchPattern;
 import com.sunwayworld.framework.mybatis.mapper.SearchFilter;
@@ -770,12 +771,65 @@ public class PfOrderTaskResultServiceImpl extends EmcOrderTaskResultServiceImpl 
 
     @Override
     public List<TableHeadBean> selectPreprocessingQuickInputResultTitleListByProjIds(RestJsonWrapperBean wrapper) {
-        return selectQuickInputResultTitleList(wrapper);
+        MapperParameter parameter = wrapper.extractMapFilter();
+        parameter.setFilter(SearchFilter.instance().match("PROJID", wrapper.getParamValue("projIds")).filter(MatchPattern.OR)
+                .match("ANALYSISTYPE", "Preprocessing").filter(MatchPattern.SEQ));
+        List<EmcOrderTaskResultBean> results = orderTaskResultDao.selectQuickInputResultList(parameter);
+        List<Long> taskIds = results.stream().map(EmcOrderTaskResultBean::getOrderTaskId).distinct().collect(Collectors.toList());
+        List<EmcOrderTaskBean> tasks = orderTaskService.getDao().selectListByIds(taskIds, new Order[0]);
+        Map<Long, List<EmcOrderTaskBean>> tests = tasks.stream().collect(Collectors.groupingBy(EmcOrderTaskBean::getTestId, TreeMap::new, Collectors.toList()));
+        List<EmcOrderTaskResultBean> unique = results.stream().collect(Collectors.collectingAndThen(
+                Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(e -> e.getItemId() + "" + e.getRepeatNo()))), ArrayList::new));
+        unique = unique.stream().sorted(Comparator.comparing(EmcOrderTaskResultBean::getTestId)
+                .thenComparing(EmcOrderTaskResultBean::getItemOrderNo)).collect(Collectors.toList());
+        List<TableHeadBean> heads = new ArrayList<>();
+        boolean multiple = tests.size() > 1;
+        unique.forEach(result -> {
+            TableHeadBean head = new TableHeadBean();
+            head.setField(result.getTestId() + "$" + result.getItemId() + "$" + result.getRepeatNo());
+            StringBuilder title = new StringBuilder();
+            if (multiple) title.append(result.getExt$Item("testname")).append("<br>");
+            title.append(result.getItemAliasName()).append("_").append(result.getRepeatNo()).append("<br>");
+            title.append(Optional.ofNullable(result.getUnitName()).orElse("-"));
+            head.setTitle(title.toString()); head.setExt$Item("script", result.getScriptFlag()); heads.add(head);
+        });
+        return heads;
     }
 
     @Override
     public List<TableRowBean> selectPreprocessingQuickInputResultRowListByProjIds(RestJsonWrapperBean wrapper) {
-        return selectQuickInputResultRowList(wrapper);
+        MapperParameter parameter = wrapper.extractMapFilter();
+        parameter.setFilter(SearchFilter.instance().match("PROJID", wrapper.getParamValue("projIds")).filter(MatchPattern.OR)
+                .match("ANALYSISTYPE", "Preprocessing").filter(MatchPattern.SEQ));
+        List<EmcOrderTaskResultBean> results = orderTaskResultDao.selectQuickInputResultList(parameter);
+        List<Long> taskIds = results.stream().map(EmcOrderTaskResultBean::getOrderTaskId).distinct().collect(Collectors.toList());
+        List<ResultInputResultDTO> dtoList = new ArrayList<>();
+        taskIds.forEach(taskId -> results.stream().filter(r -> ObjectUtils.equals(taskId, r.getOrderTaskId())).forEach(r -> {
+            ResultInputResultDTO dto = new ResultInputResultDTO(); dto.setId(r.getId());
+            dto.setColId(r.getTestId() + "$" + r.getItemId() + "$" + r.getRepeatNo());
+            dto.setColVal("1".equals(r.getScriptFlag()) ? r.getReportResult() : r.getOriginalResult());
+            dto.setRowNo(r.getOrderNo()); dto.setExt$Item("submitFlag", r.getSubmitFlag()); dto.setExt$Item("scriptFlag", r.getScriptFlag()); dtoList.add(dto);
+        }));
+        TableCellDescriptor<ResultInputResultDTO> descriptor = new TableCellDescriptor<>("colId", "colVal");
+        descriptor.addPivot("rowNo"); descriptor.addExt("submitFlag", "scriptFlag", "resultStatus", "resultCategory");
+        List<TableRowBean> rows = TableHelper.parseTableRowList(dtoList, descriptor);
+        for (TableRowBean row : rows) {
+            String orderNo = row.getPivotValue("rowNo");
+            results.stream().filter(r -> ObjectUtils.equals(orderNo, r.getOrderNo())).findFirst().ifPresent(result -> {
+                row.put("projId", result.getProjId()); row.put("projNo", result.getExt$Item("projNo")); row.put("projName", result.getExt$Item("projName"));
+                row.put("id", result.getOrderTaskId()); row.put("folderId", result.getFolderId()); row.put("folderNo", result.getExt$Item("folderNo"));
+                row.put("section", result.getExt$Item("section")); row.put("orderId", result.getOrderId()); row.put("orderNo", result.getExt$Item("orderContainerNo"));
+                row.put("equiptAcquNo", result.getExt$Item("equiptAcquNo")); row.put("orderCategory", result.getExt$Item("orderCategory"));
+                row.put("labelNumber", result.getExt$Item("labelNumber")); row.put("labDisplayLabelNumber", result.getExt$Item("labDisplayLabelNumber"));
+                row.put("cupNo", result.getExt$Item("cupNo")); row.put("sampleBeginDateTime", result.getExt$Item("sampleBeginDateTime"));
+                row.put("analysisOrgId", result.getExt$Item("analysisOrgId")); row.put("analysisOrgName", result.getExt$Item("analysisOrgName"));
+                row.put("sampleOrgId", result.getExt$Item("sampleOrgId")); row.put("sampleOrgName", result.getExt$Item("sampleOrgName"));
+                row.put("qcName", result.getQcName()); row.put("runId", result.getRunId());
+                row.put("labDisplayQcName", "lab".equals(result.getExt$Item("useCategory")) ? result.getQcName() : "N/A");
+            });
+        }
+        if (!rows.isEmpty() && !ObjectUtils.isEmpty(rows.get(0).get("cupNo"))) rows.sort(Comparator.comparing(r -> NumberUtils.parseInt(r.get("cupNo"))));
+        return rows;
     }
 
 }

@@ -3511,6 +3511,31 @@ public class PfReportServiceImpl extends EmcReportServiceImpl implements PfRepor
         return String.valueOf(data.get(field.getInternalField()));
     }
 
+    private void mapNullToString(Map<String, Object> map, String replacement) {
+        map.keySet().forEach(key -> {
+            if (map.get(key) == null) map.put(key, replacement);
+        });
+    }
+
+    private void listListNullToString(List<List<Object>> rows, String replacement) {
+        rows.forEach(row -> {
+            for (int i = 0; i < row.size(); i++) {
+                if (row.get(i) == null || StringUtils.isBlank(String.valueOf(row.get(i)))) row.set(i, replacement);
+            }
+        });
+    }
+
+    private static String getScientificValue(String result, String revisionRule) {
+        String scientific = NumberUtils.scientificNotationFormat(NumberUtils.parseDouble(result), getRadix(result));
+        return StringUtils.isEmpty(revisionRule) ? scientific : NumberUtils.rounding(scientific, revisionRule);
+    }
+
+    private static int getRadix(String number) {
+        String value = NumberUtils.isScientificNumber(number) ? NumberUtils.formatNumber(new BigDecimal(number)) : number;
+        if (!value.contains(".")) return 0;
+        return value.length() - value.indexOf('.') - 1;
+    }
+
     protected String getAnalysisDate(WordTemplateSourceDTO source) {
         List<EmcRunBean> runs = source.getRunList();
         List<LocalDate> starts = runs.stream().filter(run -> !ObjectUtils.isEmpty(run.getAnalysisBeginDate())).map(EmcRunBean::getAnalysisBeginDate).distinct().collect(Collectors.toList());

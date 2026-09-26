@@ -380,6 +380,18 @@ public class PfOrderReceiptServiceImpl extends EmcOrderReceiptServiceImpl {
         return ++nextOrderNum;
     }
 
+    private static int getNormalNextOrderNum(List<EmcOrderBean> existedOrderList) {
+        int nextOrderNum = 0;
+        List<EmcOrderBean> normalOrders = existedOrderList.stream()
+                .filter(order -> order.getQcCategoryId() == null || "Q-DUP".equals(order.getQcCategoryCode()))
+                .collect(Collectors.toList());
+        if (!normalOrders.isEmpty()) {
+            EmcOrderBean maxOrder = normalOrders.stream().max(Comparator.comparing(EmcOrderBean::getOrderNo)).orElse(null);
+            nextOrderNum = NumberUtils.parseInt(maxOrder.getOrderNo().substring(maxOrder.getOrderNo().length() - 3));
+        }
+        return ++nextOrderNum;
+    }
+
     public String genQcOrderNo(EmcQcCategoryBean qcCategory, EmcOrderBean copyOrder, List<EmcOrderBean> existedOrderList) {
         if ("P-DUP".equals(qcCategory.getQcCategoryId())) {
             String shortHand = StringUtils.isEmpty(qcCategory.getQcShortHand()) ? "XP" : qcCategory.getQcShortHand();

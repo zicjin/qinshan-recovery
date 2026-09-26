@@ -30,6 +30,10 @@ import com.sunwayworld.emc.module.bp.project.project.bean.EmcOrderItemGroupBean;
 import com.sunwayworld.emc.module.bp.project.project.bean.EmcProjectBean;
 import com.sunwayworld.emc.module.bp.project.project.service.PfOrderItemGroupService;
 import com.sunwayworld.emc.module.bp.project.projscheme.service.PfProjSchemeService;
+import com.sunwayworld.emc.module.bp.bp.service.EmcOrderService;
+import com.sunwayworld.emc.module.bp.project.project.service.EmcOrderItemGroupService;
+import com.sunwayworld.emc.module.mdm.bizmdm.test.service.EmcItemGroupService;
+import com.sunwayworld.emc.module.mdm.bizmdm.capacity.service.EmcCapacityItemGroupService;
 import com.sunwayworld.emc.module.mdm.bizmdm.monitortmpl.bean.EmcMonitorTmplBean;
 import com.sunwayworld.emc.module.mdm.bizmdm.monitortmpl.service.EmcMonitorTmplService;
 import com.sunwayworld.framework.at.annotation.AuditTrailEntry;
@@ -65,6 +69,25 @@ public class PfFolderServiceImpl extends EmcFolderServiceImpl implements PfFolde
 
     @Autowired
     private EmcMonitorTmplService monitorTmplService;
+
+    @Autowired
+    private PfProjSchemeService projSchemeService;
+
+    @Autowired
+    @Lazy
+    private EmcOrderService orderService;
+
+    @Autowired
+    @Lazy
+    private EmcOrderItemGroupService orderItemGroupService;
+
+    @Autowired
+    @Lazy
+    private EmcItemGroupService itemGroupService;
+
+    @Autowired
+    @Lazy
+    private EmcCapacityItemGroupService capacityItemGroupService;
 
     @Autowired
     @Lazy

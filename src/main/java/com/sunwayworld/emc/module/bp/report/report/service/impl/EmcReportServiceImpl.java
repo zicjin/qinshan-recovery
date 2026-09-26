@@ -593,43 +593,40 @@ public class EmcReportServiceImpl implements EmcReportService {
     public void updateReportStatus(List<EmcOrderTaskBean> orderTaskList) {
 
         List<EmcOrderTaskBean> filterOrderTaskList = orderTaskList.stream()
-                .collect(Collectors.collectingAndThen(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(o -> o.getProjId() + "#" + o.getMonitorTmplId()))), ArrayList::new));
-        List<EmcOrderTaskBean> allOrderTaskList = orderTaskService.getDao().selectList(filterOrderTaskList, Arrays.asList("PROJID", "MONITORTMPLID"), Collections.emptyList());
+                .collect(Collectors.collectingAndThen(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(EmcOrderTaskBean::getProjId))), ArrayList::new));
+        List<EmcOrderTaskBean> allOrderTaskList = orderTaskService.getDao().selectList(filterOrderTaskList, Collections.singletonList("PROJID"), Collections.emptyList());
 
         List<EmcSampleBean> filterSampleList = new ArrayList<>();
         filterOrderTaskList.forEach(e -> {
             EmcSampleBean filterSample = new EmcSampleBean();
             filterSample.setProjId(e.getProjId());
-            filterSample.setMonitorTmplId(e.getMonitorTmplId());
             filterSampleList.add(filterSample);
         });
-        List<EmcSampleBean> allSampleList = sampleService.getDao().selectList(filterSampleList, Arrays.asList("PROJID", "MONITORTMPLID"), Collections.emptyList());
+        List<EmcSampleBean> allSampleList = sampleService.getDao().selectList(filterSampleList, Collections.singletonList("PROJID"), Collections.emptyList());
 
         List<EmcReportBean> filterReportList = new ArrayList<>();
         filterOrderTaskList.forEach(e -> {
             EmcReportBean filterReport = new EmcReportBean();
             filterReport.setProjId(e.getProjId());
-            filterReport.setMonitorTmplId(e.getMonitorTmplId());
             filterReportList.add(filterReport);
         });
-        List<EmcReportBean> allReportList = getDao().selectList(filterReportList, Arrays.asList("PROJID", "MONITORTMPLID"), Collections.emptyList());
+        List<EmcReportBean> allReportList = getDao().selectList(filterReportList, Collections.singletonList("PROJID"), Collections.emptyList());
 
         List<EmcReportBean> updateReportList = new ArrayList<>();
 
         for (EmcOrderTaskBean orderTask : filterOrderTaskList) {
 
             Long projId = orderTask.getProjId();
-            String monitorTmplId = orderTask.getMonitorTmplId();
 
-            boolean orderTaskAllMatch = allOrderTaskList.stream().filter(e -> ObjectUtils.equals(e.getProjId(), projId) && ObjectUtils.equals(e.getMonitorTmplId(), monitorTmplId))
+            boolean orderTaskAllMatch = allOrderTaskList.stream().filter(e -> ObjectUtils.equals(e.getProjId(), projId))
                     .allMatch(e -> EmcBizConstant.ORDERTASK_STATUS_DONE.equals(e.getStatus()));
 
-            boolean sampleAllMatch = allSampleList.stream().filter(e -> ObjectUtils.equals(e.getProjId(), projId) && ObjectUtils.equals(e.getMonitorTmplId(), monitorTmplId))
+            boolean sampleAllMatch = allSampleList.stream().filter(e -> ObjectUtils.equals(e.getProjId(), projId))
                     .allMatch(e -> EmcBizConstant.SAMPLE_STATUS_DONE.equals(e.getStatus()));
 
             if (orderTaskAllMatch && sampleAllMatch) {
 
-                EmcReportBean report = allReportList.stream().filter(e -> ObjectUtils.equals(projId, e.getProjId()) && ObjectUtils.equals(monitorTmplId, e.getMonitorTmplId())).findFirst()
+                EmcReportBean report = allReportList.stream().filter(e -> ObjectUtils.equals(projId, e.getProjId())).findFirst()
                         .orElse(null);
                 EmcReportBean updateReport = new EmcReportBean();
 
@@ -951,52 +948,6 @@ public class EmcReportServiceImpl implements EmcReportService {
     @Transactional
     @ValidateDataWith(EmcViewDocumentValidator.class)
     public Long viewDocument(RestJsonWrapperBean wrapper) {
-        EmcReportBean report = wrapper.parseUnique(EmcReportBean.class);
-
-        Long projectId = report.getProjId();
-        List<EmcReportBean> reportList = getDao().selectListByOneColumnValue(projectId, "PROJID");
-        List<String> targetIdList = reportList.stream().map(r -> getDao().getTable() + "$" + r.getId()).collect(Collectors.toList());
-
-        List<CoreFileBean> wordReportFileList = coreFileService.selectListByFilter(SearchFilter.instance().match("targetId",
-                targetIdList).filter(MatchPattern.OR).match("bizCategory", EmcConstant.WORD_REPORT_ATTACHMENT_TYPE).filter(MatchPattern.EQ));
-        EmcProjectBean project = projectService.getDao().selectById(projectId);
-
-        // 如果Word报告之前已经生成了，不再重复生成数据
-        if (!wordReportFileList.isEmpty()) {
-            List<CoreFileBean> updateCoreFileList = new ArrayList<>();
-            wordReportFileList.forEach(e -> {
-                CoreFileBean updateCoreFile = new CoreFileBean();
-                updateCoreFile.setId(e.getId());
-                updateCoreFile.setTargetId("X" + e.getTargetId());
-                updateCoreFileList.add(updateCoreFile);
-            });
-            coreFileService.getDao().update(updateCoreFileList, "TARGETID");
-
-            CoreFileBean wordTemplateConfigFile = wordReportFileList.get(0);
-            File templateFile = FilePathManager.getLocalPath(FilePathDTO.of(wordTemplateConfigFile.getScope(), DateTimeUtils.getDateSerialNumber(wordTemplateConfigFile.getCreatedTime()),
-                    wordTemplateConfigFile.getMd5Name(), wordTemplateConfigFile.getName())).toFile();
-            generateWordReport(templateFile, templateFile, report, reportList, project, true);
-            List<CoreFileBean> newCoreFileList = saveWordReportCoreFile(wordTemplateConfigFile.getName(), templateFile, reportList);
-
-            return newCoreFileList.get(0).getId();
-        }
-
-        Long reportConfigLineId = report.getReportConfigLineId();
-        List<CoreFileBean> wordTemplateConfigFileList = coreFileService.getDao().selectListByOneColumnValue("T_CORE_REPORT_CONFIG_LINE$" + reportConfigLineId, "targetId");
-        if (!wordTemplateConfigFileList.isEmpty()) {
-            CoreFileBean wordTemplateConfigFile = wordTemplateConfigFileList.get(0);
-
-            String wordReportFileName = FileUtils.getFileBaseName(wordTemplateConfigFile.getName()) + "-" + System.currentTimeMillis() + "." + FileUtils.getFileExtension(wordTemplateConfigFile.getName());
-            File templateFile = FilePathManager.getLocalPath(FilePathDTO.of(wordTemplateConfigFile.getScope(), "",
-                    wordTemplateConfigFile.getExt(), wordTemplateConfigFile.getName())).toFile();
-            File wordReportFile = FilePathManager.getLocalPath(FilePathDTO.of(wordTemplateConfigFile.getScope(), "",
-                    wordTemplateConfigFile.getExt(), wordReportFileName)).toFile();
-
-            generateWordReport(templateFile, wordReportFile, report, reportList, project, false);
-            List<CoreFileBean> newCoreFileList = saveWordReportCoreFile(wordReportFileName, wordReportFile, reportList);
-            return newCoreFileList.get(0).getId();
-        }
-
         return 0L;
     }
 
@@ -3575,33 +3526,6 @@ public class EmcReportServiceImpl implements EmcReportService {
         return insertCoreFileList;
     }
 
-    public void generateWordReport(File templateFile, File wordReportFile, EmcReportBean report, List<EmcReportBean> reportList, EmcProjectBean project, boolean exist) {
-        try (FileInputStream inputStream = new FileInputStream(templateFile);
-             XWPFDocument document = new XWPFDocument(inputStream);
-             FileOutputStream outputStream = new FileOutputStream(wordReportFile)) {
-
-            if (!exist) {
-                writeDataToWord(templateFile, document, report, project);
-            }
-
-            setSubmitInformation(document, report);
-
-            document.write(outputStream);
-        } catch (IOException e) {
-            throw new FileException(e);
-        }
-    }
-
-    /**
-     * 向 Word 报告模板中写入数据
-     * @param document
-     * @param report
-     * @param project
-     */
-    public void writeDataToWord(File templateFile, XWPFDocument document, EmcReportBean report, EmcProjectBean project) {
-
-    }
-
     private CoreCodeBean getContractCode(EmcProjectBean project) {
         // 根据项目中的合同ID来查询检测类别，一个项目可能绑定了多个合同
         CoreCodeBean coreCode = new CoreCodeBean();
@@ -4012,7 +3936,10 @@ public class EmcReportServiceImpl implements EmcReportService {
             fileName = I18nHelper.getMessage("GIKAM.FILE.PACK.DEFAULT_FILE_NAME");
         }
         FilePathDTO filePath = FilePathDTO.of(FileScope.temp.name(), LocalDateTime.now(), StringUtils.randomUUID(16), fileName + ".zip");
-        List<Path> zipPathList = fileList.stream().map(CoreFileUtils::getLocalPath).collect(Collectors.toList());
+        ArrayList<Path> zipPathList = new ArrayList<>();
+        for (CoreFileBean coreFile : fileList) {
+            zipPathList.add(CoreFileUtils.getLocalPath(coreFile));
+        }
         ArchiveUtils.zip(FilePathManager.getLocalPath(filePath), zipPathList.toArray(new Path[0]));
         fileManager.upload(filePath, FilePathManager.getLocalPath(filePath));
         return fileManager.getDownloadUrl(filePath);
@@ -4020,7 +3947,18 @@ public class EmcReportServiceImpl implements EmcReportService {
 
     @Override
     public String packReportFile(RestJsonWrapperBean wrapper) {
-        return pack(wrapper);
+        List<EmcReportBean> reportBeanList = wrapper.parse(EmcReportBean.class);
+        if (reportBeanList.isEmpty()) {
+            return null;
+        }
+        List<String> targetIdList = reportBeanList.stream().map(e -> "T_EMC_REPORT$" + e.getId()).distinct().collect(Collectors.toList());
+        List<CoreFileBean> reportFileList = coreFileService.selectListByFilter(
+                SearchFilter.instance().match("targetId", targetIdList).filter(MatchPattern.OR)
+                        .match("ext", "sealPdf").filter(MatchPattern.SEQ));
+        if (reportFileList.isEmpty()) {
+            return null;
+        }
+        return pack(reportFileList, "报告附件");
     }
 
 }

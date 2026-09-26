@@ -894,7 +894,6 @@ public class PfReportServiceImpl extends EmcReportServiceImpl implements PfRepor
         return 0L;
     }
 
-    @Override
     public void generateWordReport(File templateFile, File wordReportFile, EmcReportBean report, List<EmcReportBean> reportList, EmcProjectBean project, boolean exist) {
         try (FileInputStream inputStream = new FileInputStream(templateFile);
              XWPFDocument document = new XWPFDocument(inputStream);
@@ -918,7 +917,6 @@ public class PfReportServiceImpl extends EmcReportServiceImpl implements PfRepor
      * @param report
      * @param project
      */
-    @Override
     public void writeDataToWord(File templateFile, XWPFDocument document, EmcReportBean report, EmcProjectBean project) {
         // 根据项目ID查询所有未终止的点位列表，包含正常点位、现场空白和现场平行
         List<EmcFolderBean> allFolderList = folderService.selectListByFilter(SearchFilter.instance().match("projId",

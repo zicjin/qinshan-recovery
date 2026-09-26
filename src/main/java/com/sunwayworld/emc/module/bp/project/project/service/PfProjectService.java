@@ -54,6 +54,8 @@ public interface PfProjectService extends EmcProjectService {
 
     JSONObject exportProjectToExcel(RestJsonWrapperBean wrapper);
 
+    Long copyTo(RestJsonWrapperBean wrapper);
+
 
     void undoCompleteTaskData(RestJsonWrapperBean wrapper);
 

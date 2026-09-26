@@ -165,6 +165,12 @@ public class PfProjectResourceImpl extends EmcProjectResourceImpl implements PfP
         return projectService.exportProjectToExcel(wrapper);
     }
 
+    @Log(value = "复制到", type = LogType.SELECT)
+    @RequestMapping(value = "/copy-to", method = RequestMethod.POST)
+    public Long copyTo(RestJsonWrapperBean wrapper) {
+        return projectService.copyTo(wrapper);
+    }
+
     @Log(value = "回退业务数据", type = LogType.INSERT)
     @RequestMapping(value = "/undo-complete-task-data", method = RequestMethod.POST)
     public Long undoCompleteTaskData(RestJsonWrapperBean wrapper) {

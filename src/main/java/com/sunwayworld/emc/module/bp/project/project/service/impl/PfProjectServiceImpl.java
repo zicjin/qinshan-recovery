@@ -15,6 +15,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -38,6 +39,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sunwayworld.emc.framework.constant.EmcBizConstant;
+import com.sunwayworld.emc.framework.constant.EmcConstant;
 import com.sunwayworld.emc.framework.constant.PfConstant;
 import com.sunwayworld.emc.framework.projectnode.ProjectNodeUtils;
 import com.sunwayworld.emc.module.bp.auditrecord.bean.EmcAuditRecordBean;
@@ -3497,6 +3499,172 @@ public class PfProjectServiceImpl extends EmcProjectServiceImpl implements PfPro
         String testNames = noContainerOrderList.stream().map(o -> o.getExt$Item("testname")).distinct().collect(Collectors.joining("、"));
         return "测试【" + testNames + "】未维护容器";
     }
+
+    @Override
+    @Transactional
+    public Long copyTo(RestJsonWrapperBean wrapper) {
+        EmcProjectBean sourceProject = wrapper.parseUnique(EmcProjectBean.class);
+        Long sourceProjectId = sourceProject.getId();
+        Long toProjectId = NumberUtils.parseLong(wrapper.getParamValue("id"));
+        EmcProjectBean toProject = (EmcProjectBean)this.selectById(toProjectId);
+        List<EmcProjSchemeBean> delSchemeList = this.projSchemeService.getDao().selectListByOneColumnValue((Long)toProjectId, "PROJID", new Order[0]);
+        List<EmcProjOrderBean> delProjOrderList = this.projOrderService.getDao().selectListByOneColumnValues(delSchemeList.stream().map(EmcProjSchemeBean::getId).collect(Collectors.toList()), "PROJSCHEMEID", new Order[0]);
+        List<EmcOrderBean> delOrderList = this.orderService.getDao().selectListByOneColumnValue(toProjectId, "PROJID", new Order[0]);
+        List<EmcFolderBean> delFolderList = this.folderService.getDao().selectListByIds(delOrderList.stream().filter(r -> r.getFolderId() != null).map(EmcOrderBean::getFolderId).collect(Collectors.toList()), new Order[0]);
+        List<Long> delOrderIdList = delOrderList.stream().map(EmcOrderBean::getId).distinct().collect(Collectors.toList());
+        List<EmcOrderItemGroupBean> delOrderItemGroupList = this.orderItemGroupService.getDao().selectListByOneColumnValues(delOrderIdList, "ORDERID", new Order[0]);
+        List<EmcOrderItemBean> delOrderItemList = this.orderItemService.getDao().selectListByOneColumnValues(delOrderIdList, "ORDERID", new Order[0]);
+        List<EmcReportSendInfoBean> delReportSendInfoList = this.reportSendInfoService.getDao().selectListByOneColumnValue(toProjectId, "PROJID", new Order[0]);
+        this.projSchemeService.getDao().deleteBy(delSchemeList, new String[0]);
+        this.projOrderService.getDao().deleteBy(delProjOrderList, new String[0]);
+        this.folderService.getDao().deleteBy(delFolderList, new String[0]);
+        this.orderService.getDao().deleteBy(delOrderList, new String[0]);
+        this.orderItemGroupService.getDao().deleteBy(delOrderItemGroupList, new String[0]);
+        this.orderItemService.getDao().deleteBy(delOrderItemList, new String[0]);
+        this.reportSendInfoService.getDao().deleteBy(delReportSendInfoList, new String[0]);
+        BeanUtils.copyProperties((Object)sourceProject, (Object)toProject, "ID", "PROJNO", "PROJNAME", "STATUS", "PROCESSSTATUS", "PROJNODE", "CREATEDBYID", "CREATEDBYNAME", "CREATEDTIME", "CREATEDBYORGID", "CREATEDBYORGNAME");
+        this.getDao().updateIfChanged(toProject);
+        List<EmcReportSendInfoBean> oldReportSendInfoList = this.reportSendInfoService.getDao().selectListByOneColumnValue(sourceProjectId, "PROJID", new Order[0]);
+        ArrayList<EmcReportSendInfoBean> newReportSendInfoList = new ArrayList<EmcReportSendInfoBean>();
+        for (EmcReportSendInfoBean rsi : oldReportSendInfoList) {
+            EmcReportSendInfoBean newReportSendInfo = new EmcReportSendInfoBean();
+            newReportSendInfo.setId(ApplicationContextHelper.getNextIdentity());
+            newReportSendInfo.setProjId(toProjectId);
+            newReportSendInfoList.add(newReportSendInfo);
+        }
+        this.reportSendInfoService.getDao().insert(newReportSendInfoList);
+        String sample = sourceProject.getSample();
+        if (ObjectUtils.equals(sample, "1")) {
+            ArrayList<EmcProjSchemeBean> newEmcProjSchemeBeanList = new ArrayList<EmcProjSchemeBean>();
+            ArrayList<EmcProjOrderBean> newEmcProjOrderBeanList = new ArrayList<EmcProjOrderBean>();
+            List<EmcProjSchemeBean> schemeBeanList = this.projSchemeService.getDao().selectListByOneColumnValue((Long)sourceProjectId, "PROJID", Order.asc("ID"));
+            List<EmcProjOrderBean> emcProjOrderBeanList = this.projOrderService.getDao().selectListByOneColumnValues(schemeBeanList.stream().map(EmcProjSchemeBean::getId).collect(Collectors.toList()), "PROJSCHEMEID", new Order[0]);
+            if (schemeBeanList.isEmpty()) {
+                return 1L;
+            }
+            int qty = schemeBeanList.size();
+            HashMap<String, List<String>> folderNoListMap = new HashMap<String, List<String>>();
+            List<String> monitorTmplIdList = schemeBeanList.stream().map(e -> e.getMonitorTmplId()).distinct().collect(Collectors.toList());
+            for (String monitorTmplId : monitorTmplIdList) {
+                long count = schemeBeanList.stream().filter(e -> ObjectUtils.equals(monitorTmplId, e.getMonitorTmplId())).count();
+                int countInt = NumberUtils.parseInt(count);
+                List<String> folderNoList = this.folderService.generateFolderNosByProjId(toProjectId, toProject.getProjNo(), monitorTmplId, countInt);
+                folderNoListMap.put(monitorTmplId, folderNoList);
+            }
+            for (int p2 = 0; p2 < qty; ++p2) {
+                EmcProjSchemeBean schemeBean = new EmcProjSchemeBean();
+                EmcProjSchemeBean oldschemeBean = (EmcProjSchemeBean)schemeBeanList.get(p2);
+                BeanUtils.copyProperties((Object)oldschemeBean, (Object)schemeBean, EmcConstant.CREATED_COLUMNS);
+                schemeBean.setProjId(toProjectId);
+                String monitorTmplId = oldschemeBean.getMonitorTmplId();
+                List folderNoList = (List)folderNoListMap.get(monitorTmplId);
+                String folderNo = (String)folderNoList.get(0);
+                folderNoList.remove(0);
+                schemeBean.setFolderNo(folderNo);
+                schemeBean.setSortNum(Long.parseLong(folderNo.substring(folderNo.length() - 3)));
+                long newSchemeId = ApplicationContextHelper.getNextIdentity();
+                List<EmcProjOrderBean> filterProjOrderList = emcProjOrderBeanList.stream().filter(m -> ObjectUtils.equals(oldschemeBean.getId(), m.getProjSchemeId())).collect(Collectors.toList());
+                for (int k = 0; k < filterProjOrderList.size(); ++k) {
+                    EmcProjOrderBean orderBean = new EmcProjOrderBean();
+                    BeanUtils.copyProperties(filterProjOrderList.get(k), (Object)orderBean, EmcConstant.CREATED_COLUMNS);
+                    orderBean.setId(ApplicationContextHelper.getNextIdentity());
+                    orderBean.setProjSchemeId(newSchemeId);
+                    orderBean.setSortNum((long)k + 1L);
+                    newEmcProjOrderBeanList.add(orderBean);
+                }
+                schemeBean.setId(newSchemeId);
+                newEmcProjSchemeBeanList.add(schemeBean);
+            }
+            this.projSchemeService.getDao().insert(newEmcProjSchemeBeanList);
+            this.projOrderService.getDao().insert(newEmcProjOrderBeanList);
+        } else {
+            List folderNoList;
+            List<EmcOrderBean> emcOrderBeanList = this.orderService.getDao().selectListByOneColumnValue(sourceProjectId, "PROJID", new Order[0]);
+            List<EmcFolderBean> emcFolderBeanList = this.folderService.getDao().selectListByIds(emcOrderBeanList.stream().filter(r -> r.getFolderId() != null).map(EmcOrderBean::getFolderId).collect(Collectors.toList()), new Order[0]);
+            List<Long> emcOrderIdList = emcOrderBeanList.stream().map(EmcOrderBean::getId).distinct().collect(Collectors.toList());
+            List<EmcOrderItemGroupBean> emcOrderItemGroupBeanList = this.orderItemGroupService.getDao().selectListByOneColumnValues(emcOrderIdList, "ORDERID", new Order[0]);
+            List<EmcOrderItemBean> emcOrderItemBeanList = this.orderItemService.getDao().selectListByOneColumnValues(emcOrderIdList, "ORDERID", new Order[0]);
+            ArrayList<EmcFolderBean> newEmcFolderBeanList = new ArrayList<EmcFolderBean>();
+            ArrayList<EmcOrderBean> newEmcOrderBeanList = new ArrayList<EmcOrderBean>();
+            ArrayList<EmcOrderItemGroupBean> newEmcOrderItemGroupBeanList = new ArrayList<EmcOrderItemGroupBean>();
+            List<EmcOrderItemBean> newEmcOrderItemBeanList = new ArrayList<>();
+            if (emcFolderBeanList.isEmpty()) {
+                return 1L;
+            }
+            int folderSize = emcFolderBeanList.size();
+            Map<String, List<String>> folderNoListMap = new HashMap<>();
+            List<String> monitorTmplIdList = emcFolderBeanList.stream().map(e -> e.getMonitorTmplId()).distinct().collect(Collectors.toList());
+            for (String monitorTmplId : monitorTmplIdList) {
+                long count = emcFolderBeanList.stream().filter(e -> ObjectUtils.equals(monitorTmplId, e.getMonitorTmplId())).count();
+                int countInt = NumberUtils.parseInt(count);
+                folderNoList = this.folderService.generateFolderNosByProjId(toProjectId, toProject.getProjNo(), monitorTmplId, countInt);
+                folderNoListMap.put(monitorTmplId, folderNoList);
+            }
+            for (int k = 0; k < folderSize; ++k) {
+                EmcFolderBean f = (EmcFolderBean)emcFolderBeanList.get(k);
+                EmcFolderBean newFolder = new EmcFolderBean();
+                BeanUtils.copyProperties((Object)f, (Object)newFolder, EmcConstant.CREATED_COLUMNS);
+                Long newFolderId = ApplicationContextHelper.getNextIdentity();
+                newFolder.setId(newFolderId);
+                String monitorTmplId = f.getMonitorTmplId();
+                folderNoList = (List)folderNoListMap.get(monitorTmplId);
+                String newFolderNo = (String)folderNoList.get(0);
+                folderNoList.remove(0);
+                newFolder.setFolderNo(newFolderNo);
+                newFolder.setProjId(toProjectId);
+                newEmcFolderBeanList.add(newFolder);
+                List<EmcOrderBean> orderBeans = emcOrderBeanList.stream().filter(e -> ObjectUtils.equals(e.getFolderId(), f.getId())).collect(Collectors.toList());
+                for (int m2 = 0; m2 < orderBeans.size(); ++m2) {
+                    EmcOrderBean t = (EmcOrderBean)orderBeans.get(m2);
+                    EmcOrderBean newOrderBean = new EmcOrderBean();
+                    BeanUtils.copyProperties((Object)t, (Object)newOrderBean, EmcConstant.CREATED_COLUMNS);
+                    newOrderBean.setOrderNo(newFolderNo + String.format("%03d", m2 + 1));
+                    newOrderBean.setLabelNo(newOrderBean.getOrderNo());
+                    Long newOrderId = ApplicationContextHelper.getNextIdentity();
+                    newOrderBean.setId(newOrderId);
+                    newOrderBean.setFolderId(newFolderId);
+                    newOrderBean.setProjId(toProjectId);
+                    newOrderBean.setOrderNum(Long.valueOf(Long.parseLong(newFolderNo.substring(newFolderNo.length() - 3))));
+                    newOrderBean.setSampleId(null);
+                    newOrderBean.setOrderDesc(null);
+                    newOrderBean.setAcceptedDate(null);
+                    newOrderBean.setAcceptedUserId(null);
+                    newOrderBean.setAccepteUserName(null);
+                    newOrderBean.setErpGbId(null);
+                    newOrderBean.setExt$Item("packing", null);
+                    newOrderBean.setSendDate(null);
+                    newOrderBean.setSendTime(null);
+                    newEmcOrderBeanList.add(newOrderBean);
+                    List<EmcOrderItemGroupBean> filterOrderItemGroupList = emcOrderItemGroupBeanList.stream().filter(o -> ObjectUtils.equals(o.getOrderId(), t.getId())).collect(Collectors.toList());
+                    int q = 0;
+                    while (q < filterOrderItemGroupList.size()) {
+                        EmcOrderItemGroupBean itemGroupBean = new EmcOrderItemGroupBean();
+                        BeanUtils.copyProperties(filterOrderItemGroupList.get(q), (Object)itemGroupBean, EmcConstant.CREATED_COLUMNS);
+                        itemGroupBean.setOrderId(newOrderId);
+                        Long newItemGroupId = ApplicationContextHelper.getNextIdentity();
+                        itemGroupBean.setId(newItemGroupId);
+                        itemGroupBean.setSortNum((long)q + 1L);
+                        newEmcOrderItemGroupBeanList.add(itemGroupBean);
+                        int finalQ = q++;
+                        emcOrderItemBeanList.stream().filter(o -> ObjectUtils.equals(o.getOrderItemGroupId(), ((EmcOrderItemGroupBean)filterOrderItemGroupList.get(finalQ)).getId())).forEach(p -> {
+                            EmcOrderItemBean itemBean = new EmcOrderItemBean();
+                            BeanUtils.copyProperties(p, (Object)itemBean, EmcConstant.CREATED_COLUMNS);
+                            itemBean.setOrderId(newOrderId);
+                            itemBean.setOrderItemGroupId(newItemGroupId);
+                            itemBean.setId(ApplicationContextHelper.getNextIdentity());
+                            newEmcOrderItemBeanList.add(itemBean);
+                        });
+                    }
+                }
+            }
+            this.folderService.getDao().insert(newEmcFolderBeanList);
+            this.orderService.getDao().insert(newEmcOrderBeanList);
+            this.orderItemGroupService.getDao().insert(newEmcOrderItemGroupBeanList);
+            this.orderItemService.getDao().insert(newEmcOrderItemBeanList);
+        }
+        return 1L;
+    }
+
 
     @Override
     public JSONObject exportProjectToExcel(RestJsonWrapperBean wrapper) {

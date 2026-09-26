@@ -3052,6 +3052,51 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
         return new Pagination<>(EquiptList);
     }
 
+    @Override
+    public Page<EmcEquiptBean> selectEquiptPagination(String testMethodId, RestJsonWrapperBean wrapper) {
+        List<String> testMethodIdList = Stream.of(StringUtils.split(testMethodId, ","))
+                .filter(NumberUtils::isNumber).distinct().collect(Collectors.toList());
+        HashMap<String, String> columnTypeMap = new HashMap<>();
+        Arrays.asList("equiptid", "equiptname", "specification", "factoryno", "status", "equiptcategoryid",
+                "useddepartmentid", "sharing", "maintain", "sourcemethod", "sourcedate")
+                .forEach(column -> columnTypeMap.put(column, "string"));
+        if (testMethodIdList.isEmpty()) {
+            Pagination<EmcEquiptBean> pagination = new Pagination<>();
+            pagination.setColumnTypeMap(columnTypeMap);
+            return pagination;
+        }
+        List<EmcEquiptTestMethodBean> methodEquiptList = equiptTestMethodService.selectListByFilter(
+                SearchFilter.instance().match("testMethodId", testMethodIdList).filter(MatchPattern.OR)
+                        .match("analysisCategory", "analysis").filter(MatchPattern.SEQ)
+                        .match("orgId", LocalContextHelper.getLoginUser().getExt$Item("parentOrgId")).filter(MatchPattern.SEQ));
+        if (methodEquiptList.isEmpty()) {
+            EmcEquiptBean filter = new EmcEquiptBean();
+            filter.setEquiptName("N/A");
+            EmcEquiptBean equipt = equiptService.getDao().selectFirstIfPresent(filter);
+            Pagination<EmcEquiptBean> pagination = new Pagination<>(Collections.singletonList(equipt == null ? filter : equipt));
+            pagination.setColumnTypeMap(columnTypeMap);
+            return pagination;
+        }
+        Map<Long, List<EmcEquiptTestMethodBean>> grouped = methodEquiptList.stream()
+                .collect(Collectors.groupingBy(EmcEquiptTestMethodBean::getEquiptId));
+        List<Long> equiptIdList = grouped.entrySet().stream()
+                .filter(entry -> entry.getValue().size() == testMethodIdList.size())
+                .map(Map.Entry::getKey).collect(Collectors.toList());
+        List<EmcEquiptBean> equiptList = equiptService.selectListByFilter(
+                SearchFilter.instance().match("ID", equiptIdList).filter(MatchPattern.OR), wrapper);
+        equiptList.forEach(equipt -> methodEquiptList.stream()
+                .filter(method -> method.getEquiptId().equals(equipt.getId()))
+                .forEach(method -> equipt.setExt$Item("defaultflag", method.getDefaultFlag())));
+        List<EmcEquiptBean> validList = equiptList.stream()
+                .filter(equipt -> equipt.getMaintenanceUserId() == null
+                        || ObjectUtils.equals("", equipt.getMaintenanceUserId())
+                        || equipt.getMaintenanceUserId().contains(LocalContextHelper.getLoginUserId()))
+                .collect(Collectors.toList());
+        Pagination<EmcEquiptBean> pagination = new Pagination<>(validList);
+        pagination.setColumnTypeMap(columnTypeMap);
+        return pagination;
+    }
+
     public void equiptReCollect(String id, RestJsonWrapperBean wrapper) {
         String targetId = "T_EMC_EQUIPT$" + id;
         List<CoreFileBean> fileList = coreFileService.getDao().selectListByOneColumnValue(targetId, "targetId");

@@ -20,6 +20,7 @@ import org.apache.commons.collections4.ListUtils;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 
 import com.sunwayworld.emc.framework.constant.PfConstant;
+import com.sunwayworld.emc.framework.word.Word2007Utils;
 import com.sunwayworld.emc.module.bp.bp.bean.EmcFolderBean;
 import com.sunwayworld.emc.module.bp.bp.bean.EmcOrderBean;
 import com.sunwayworld.emc.module.bp.bp.bean.EmcOrderTaskBean;
@@ -695,6 +696,11 @@ public class ComplexWordTemplate extends BaseWordTemplate {
         });
 
         return minDateMap;
+    }
+
+    public void clean() {
+        super.clean();
+        Word2007Utils.removeKey(getDocument(), "qcQuantityTable");
     }
 
 }

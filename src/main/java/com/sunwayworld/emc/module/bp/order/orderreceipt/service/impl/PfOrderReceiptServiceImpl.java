@@ -367,4 +367,36 @@ public class PfOrderReceiptServiceImpl extends EmcOrderReceiptServiceImpl {
 
         return 0;
     }
+    private static int getQCNextOrderNum(List<EmcOrderBean> existedOrderList, String qcShortHand) {
+        int nextOrderNum = 0;
+        List<EmcOrderBean> existedQcOrderList = existedOrderList.stream()
+                .filter(order -> order.getOrderNo().contains(qcShortHand)).collect(Collectors.toList());
+        if (!existedQcOrderList.isEmpty()) {
+            EmcOrderBean maxExistedQcOrder = existedQcOrderList.stream()
+                    .max(Comparator.comparing(EmcOrderBean::getOrderNo)).orElse(null);
+            nextOrderNum = NumberUtils.parseInt(maxExistedQcOrder.getOrderNo()
+                    .substring(maxExistedQcOrder.getOrderNo().length() - 3));
+        }
+        return ++nextOrderNum;
+    }
+
+    public String genQcOrderNo(EmcQcCategoryBean qcCategory, EmcOrderBean copyOrder, List<EmcOrderBean> existedOrderList) {
+        if ("P-DUP".equals(qcCategory.getQcCategoryId())) {
+            String shortHand = StringUtils.isEmpty(qcCategory.getQcShortHand()) ? "XP" : qcCategory.getQcShortHand();
+            return copyOrder.getOrderNo() + shortHand;
+        }
+        if ("P-VOCS".equals(qcCategory.getQcCategoryId())) {
+            String shortHand = StringUtils.isEmpty(qcCategory.getQcShortHand()) ? "CT" : qcCategory.getQcShortHand();
+            return copyOrder.getOrderNo() + shortHand;
+        }
+        String shortHand;
+        if ("P-BLANK".equals(qcCategory.getQcCategoryId())) shortHand = StringUtils.isEmpty(qcCategory.getQcShortHand()) ? "QK" : qcCategory.getQcShortHand();
+        else if ("P-YSKB".equals(qcCategory.getQcCategoryId())) shortHand = StringUtils.isEmpty(qcCategory.getQcShortHand()) ? "YK" : qcCategory.getQcShortHand();
+        else if ("zcsbkb".equals(qcCategory.getQcCategoryId())) shortHand = StringUtils.isEmpty(qcCategory.getQcShortHand()) ? "BK" : qcCategory.getQcShortHand();
+        else if ("Q-DUP".equals(qcCategory.getQcCategoryId())) shortHand = StringUtils.isEmpty(qcCategory.getQcShortHand()) ? "MP" : qcCategory.getQcShortHand();
+        else return copyOrder.getOrderNo();
+        int next = getQCNextOrderNum(existedOrderList, shortHand);
+        String folderNum = copyOrder.getOrderNo().substring(copyOrder.getOrderNo().length() - 6, copyOrder.getOrderNo().length() - 3);
+        return copyOrder.getExt$Item("projno") + copyOrder.getExt$Item("ordercategorycode") + shortHand + folderNum + StringUtils.leftPad(next + "", 3);
+    }
 }

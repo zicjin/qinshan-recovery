@@ -66,6 +66,7 @@ import com.sunwayworld.framework.audit.constant.AuditConstant;
 import com.sunwayworld.framework.beans.BeanPropertyDescriptor;
 import com.sunwayworld.framework.constant.Constant;
 import com.sunwayworld.framework.context.ApplicationContextHelper;
+import com.sunwayworld.framework.database.sql.Order;
 import com.sunwayworld.framework.context.LocalContextHelper;
 import com.sunwayworld.framework.context.concurrent.GikamConcurrentLocker;
 import com.sunwayworld.framework.data.page.Page;
@@ -263,228 +264,6 @@ public class EmcProjectServiceImpl implements EmcProjectService {
     @Transactional
     @AuditTrailEntry(AuditTrailType.INSERT)
     public void copy(RestJsonWrapperBean wrapper) {
-        List<EmcProjectBean> copyEmcProjectBeanList = wrapper.parse(EmcProjectBean.class);
-        if (copyEmcProjectBeanList.isEmpty()) {
-            return;
-        }
-        EmcProjectBean emcProjectBean = copyEmcProjectBeanList.get(0);
-        String copyQtyStr = emcProjectBean.getExt$Item("copyqty");
-        if (StringUtils.isEmpty(copyQtyStr) || !NumberUtils.isNumber(copyQtyStr)) {
-            return;
-        }
-        //查询当前用户的所属单位信息
-        CoreUserBean user = new CoreUserBean();
-        user = LocalContextHelper.getLoginUser();
-        String parentOrgId = user.getExt$Item("parentorgid");
-        String parentOrgName = user.getExt$Item("parentorgname");
-        
-        int copyQty = Integer.parseInt(copyQtyStr);
-        int projectQty = copyEmcProjectBeanList.size();
-        List<EmcProjectBean> oldEmcProjectBeanList = getDao().selectListByIds(copyEmcProjectBeanList.stream().map(EmcProjectBean::getId).collect(Collectors.toList()));
-        // 拷贝列表项属性
-        oldEmcProjectBeanList.stream().forEach(m -> {
-            copyEmcProjectBeanList.stream().filter(c -> ObjectUtils.equals(c.getId(), m.getId())).forEach(t -> {
-                m.setBizCategoryId(t.getBizCategoryId());
-                m.setTaskDate(t.getTaskDate());
-                m.setSample(t.getSample());
-            });
-        });
-        // 查询业务编码
-        String bizCategoryCode = bizCategoryService.selectById(copyEmcProjectBeanList.get(0).getBizCategoryId()).getBizCategoryId();
-        // 批量获取项目编号，数量为项目数 * 复制份数
-        List<String> newProjectNoList = new ArrayList<>();
-        String sequenceNo = getSequenceNo(bizCategoryCode);
-        if (projectQty * copyQty > 1) {
-            newProjectNoList = ApplicationContextHelper.getNextSequenceList(getDao().getTable() + LocalDate.now().getYear(), bizCategoryCode, projectQty * copyQty - 1);
-            newProjectNoList.add(0, sequenceNo);
-        } else {
-            newProjectNoList.add(sequenceNo);
-        }
-        LocalDateTime taskDate = emcProjectBean.getTaskDate() == null ? LocalDateTime.now() : emcProjectBean.getTaskDate();
-        String taskDateStr = DateTimeUtils.formatLocalDateTime(taskDate, "yy");
-        newProjectNoList = newProjectNoList.stream().map(r -> taskDateStr + r).collect(Collectors.toList());
-
-        // 采样业务项目
-        List<EmcProjectBean> emcSampleProjectList = oldEmcProjectBeanList.stream().filter(m -> ObjectUtils.equals(m.getSample(), "1")).collect(Collectors.toList());
-        if (!emcSampleProjectList.isEmpty()) {
-            List<EmcProjectBean> newEmcProjectBeanList = new ArrayList<>();
-            List<EmcProjSchemeBean> newEmcProjSchemeBeanList = new ArrayList<>();
-            List<EmcProjOrderBean> newEmcProjOrderBeanList = new ArrayList<>();
-
-            List<EmcProjSchemeBean> emcProjSchemeBeanList = projSchemeService.getDao()
-                    .selectListByOneColumnValues(emcSampleProjectList.stream().map(EmcProjectBean::getId).collect(Collectors.toList()), "PROJID");
-            List<EmcProjOrderBean> emcProjOrderBeanList = projOrderService.getDao()
-                    .selectListByOneColumnValues(emcProjSchemeBeanList.stream().map(EmcProjSchemeBean::getId).collect(Collectors.toList()), "PROJSCHEMEID");
-
-            // 开始复制项目
-            for (int i = 0; i < emcSampleProjectList.size(); i++) {
-                EmcProjectBean c = emcSampleProjectList.get(i);
-                List<EmcProjSchemeBean> schemeBeanList = emcProjSchemeBeanList.stream().filter(e -> ObjectUtils.equals(e.getProjId(), c.getId())).collect(Collectors.toList());
-                for (int j = 0; j < copyQty; j++) {
-                    EmcProjectBean projectBean = new EmcProjectBean();
-                    BeanUtils.copyProperties(c, projectBean);
-                    projectBean.setProcessStatus(EmcBizConstant.REPORT_STATUS_DRAFT);
-                    long newProjectId = ApplicationContextHelper.getNextIdentity();
-                    LocalDateTime now = LocalDateTime.now();
-                    projectBean.setId(newProjectId);
-                    String newProjectNo = bizCategoryCode + newProjectNoList.get(i * copyQty + j);
-                    projectBean.setProjNo(newProjectNo);
-                    projectBean.setRegistDate(now);
-                    projectBean.setAcceptDate(now);
-                    projectBean.setCreatedById(LocalContextHelper.getLoginUserId());
-                    projectBean.setCreatedByName(LocalContextHelper.getLoginUserName());
-                    projectBean.setCreatedTime(LocalDateTime.now());
-                    projectBean.setCreatedByOrgId(LocalContextHelper.getLoginOrgId());
-                    projectBean.setCreatedByOrgName(LocalContextHelper.getLoginOrgName());
-                    projectBean.setSource("");
-                    projectBean.setStatus(EmcBizConstant.PROJECT_STATUS_CREATE);
-                    //赋值所属单位信息                    
-                    projectBean.setOrgId(parentOrgId);
-                    projectBean.setOrgName(parentOrgName);
-                    
-                    newEmcProjectBeanList.add(projectBean);
-
-                    int qty = schemeBeanList.size();
-                    List<String> folderNoList = folderService.generateFolderNosByProjId(newProjectId, newProjectNo, schemeBeanList.get(0).getMonitorTmplId(), qty);
-                    // 复制项目对应的方案
-                    for (int p = 0; p < qty; p++) {
-                        EmcProjSchemeBean schemeBean = new EmcProjSchemeBean();
-                        EmcProjSchemeBean oldschemeBean = schemeBeanList.get(p);
-                        BeanUtils.copyProperties(oldschemeBean, schemeBean);
-                        schemeBean.setProjId(newProjectId);
-                        schemeBean.setFolderNo(folderNoList.get(p));
-                        long newSchemeId = ApplicationContextHelper.getNextIdentity();
-                        emcProjOrderBeanList.stream().filter(m -> ObjectUtils.equals(oldschemeBean.getId(), m.getProjSchemeId())).forEach(k -> {
-                            EmcProjOrderBean orderBean = new EmcProjOrderBean();
-                            BeanUtils.copyProperties(k, orderBean);
-                            orderBean.setId(ApplicationContextHelper.getNextIdentity());
-                            orderBean.setProjSchemeId(newSchemeId);
-                            newEmcProjOrderBeanList.add(orderBean);
-                        });
-                        schemeBean.setId(newSchemeId);
-                        newEmcProjSchemeBeanList.add(schemeBean);
-                    }
-                }
-            }
-            this.getDao().insert(newEmcProjectBeanList);
-            projSchemeService.getDao().insert(newEmcProjSchemeBeanList);
-            projOrderService.getDao().insert(newEmcProjOrderBeanList);
-        }
-
-        // 送样业务项目
-        List<EmcProjectBean> emcOrderProjectList = oldEmcProjectBeanList.stream().filter(m -> ObjectUtils.equals(m.getSample(), "0")).collect(Collectors.toList());
-        if (!emcOrderProjectList.isEmpty()) {
-            // 查询项目对应的所有样品
-            List<EmcOrderBean> emcOrderBeanList = orderService.getDao().selectListByOneColumnValues(emcOrderProjectList.stream().map(EmcProjectBean::getId).collect(Collectors.toList()), "PROJID");
-            // 查询点位列表
-            List<EmcFolderBean> emcFolderBeanList = folderService.getDao()
-                    .selectListByIds(emcOrderBeanList.stream().filter(r -> r.getFolderId() != null).map(EmcOrderBean::getFolderId).collect(Collectors.toList()));
-            if (emcFolderBeanList.isEmpty()) {
-                // 无点位信息，不进行复制，此数据有问题
-                return;
-            }
-
-            List<EmcProjectBean> newEmcProjectBeanList = new ArrayList<>();
-            List<Long> emcOrderIdList = emcOrderBeanList.stream().map(EmcOrderBean::getId).collect(Collectors.toList());
-            List<EmcOrderItemGroupBean> emcOrderItemGroupBeanList = orderItemGroupService.getDao().selectListByOneColumnValues(emcOrderIdList, "ORDERID");
-            List<EmcOrderItemBean> emcOrderItemBeanList = orderItemService.getDao().selectListByOneColumnValues(emcOrderIdList, "ORDERID");
-
-            List<EmcFolderBean> newEmcFolderBeanList = new ArrayList<>();
-            List<EmcOrderBean> newEmcOrderBeanList = new ArrayList<>();
-            List<EmcOrderItemGroupBean> newEmcOrderItemGroupBeanList = new ArrayList<>();
-            List<EmcOrderItemBean> newEmcOrderItemBeanList = new ArrayList<>();
-
-            // 开始复制项目
-            for (int i = 0; i < emcOrderProjectList.size(); i++) {
-                EmcProjectBean c = emcOrderProjectList.get(i);
-                // 当前项目需要复制的点位列表
-                List<EmcFolderBean> folderBeans = emcFolderBeanList.stream().filter(e -> ObjectUtils.equals(e.getProjId(), c.getId())).collect(Collectors.toList());
-
-                if (folderBeans.isEmpty()) {
-                    // 无点位信息，不进行复制，此数据有问题
-                    continue;
-                }
-                for (int j = 0; j < copyQty; j++) {
-                    EmcProjectBean projectBean = new EmcProjectBean();
-                    BeanUtils.copyProperties(c, projectBean);
-                    projectBean.setProcessStatus(EmcBizConstant.REPORT_STATUS_DRAFT);
-                    long newProjectId = ApplicationContextHelper.getNextIdentity();
-                    LocalDateTime now = LocalDateTime.now();
-                    projectBean.setId(newProjectId);
-                    String newProjectNo = bizCategoryCode + newProjectNoList.get(emcSampleProjectList.size() * copyQty + i * copyQty + j);
-                    projectBean.setProjNo(newProjectNo);
-                    projectBean.setRegistDate(now);
-                    projectBean.setAcceptDate(now);
-                    projectBean.setCreatedById(LocalContextHelper.getLoginUserId());
-                    projectBean.setCreatedByName(LocalContextHelper.getLoginUserName());
-                    projectBean.setCreatedTime(LocalDateTime.now());
-                    projectBean.setCreatedByOrgId(LocalContextHelper.getLoginOrgId());
-                    projectBean.setCreatedByOrgName(LocalContextHelper.getLoginOrgName());
-                    projectBean.setStatus(EmcBizConstant.PROJECT_STATUS_CREATE);
-                    //赋值所属单位信息                    
-                    projectBean.setOrgId(parentOrgId);
-                    projectBean.setOrgName(parentOrgName);
-                    newEmcProjectBeanList.add(projectBean);
-
-                    // 批量生成新的点位编号
-                    int folderSize = folderBeans.size();
-                    List<String> newFolderNoList = folderService.generateFolderNosByProjId(newProjectId, newProjectNo, folderBeans.get(0).getMonitorTmplId(), folderSize);
-
-                    for (int k = 0; k < folderSize; k++) {
-
-                        EmcFolderBean f = folderBeans.get(k);
-                        EmcFolderBean newFolder = new EmcFolderBean();
-                        BeanUtils.copyProperties(f, newFolder);
-                        Long newFolderId = ApplicationContextHelper.getNextIdentity();
-                        String newFolderNo = newFolderNoList.get(k);
-                        newFolder.setId(newFolderId);
-                        newFolder.setFolderNo(newFolderNo);
-                        newFolder.setProjId(newProjectId);
-                        newEmcFolderBeanList.add(newFolder);
-
-                        // 当前项目需要复制的样品列表
-                        List<EmcOrderBean> orderBeans = emcOrderBeanList.stream().filter(e -> ObjectUtils.equals(e.getFolderId(), f.getId())).collect(Collectors.toList());
-                        for (int m = 0; m < orderBeans.size(); m++) {
-
-                            EmcOrderBean t = orderBeans.get(m);
-                            EmcOrderBean newOrderBean = new EmcOrderBean();
-                            BeanUtils.copyProperties(t, newOrderBean);
-                            newOrderBean.setOrderNo(newFolderNo + String.format("%03d", m + 1));
-                            newOrderBean.setLabelNo(newOrderBean.getOrderNo());
-                            Long newOrderId = ApplicationContextHelper.getNextIdentity();
-                            newOrderBean.setId(newOrderId);
-                            newOrderBean.setFolderId(newFolderId);
-                            newOrderBean.setProjId(newProjectId);
-                            newOrderBean.setSampleId(null);
-                            newEmcOrderBeanList.add(newOrderBean);
-
-                            emcOrderItemGroupBeanList.stream().filter(o -> ObjectUtils.equals(o.getOrderId(), t.getId())).forEach(q -> {
-                                EmcOrderItemGroupBean itemGroupBean = new EmcOrderItemGroupBean();
-                                BeanUtils.copyProperties(q, itemGroupBean);
-                                itemGroupBean.setOrderId(newOrderId);
-                                Long newItemGroupId = ApplicationContextHelper.getNextIdentity();
-                                itemGroupBean.setId(newItemGroupId);
-                                newEmcOrderItemGroupBeanList.add(itemGroupBean);
-
-                                emcOrderItemBeanList.stream().filter(o -> ObjectUtils.equals(o.getOrderId(), t.getId())).forEach(p -> {
-                                    EmcOrderItemBean itemBean = new EmcOrderItemBean();
-                                    BeanUtils.copyProperties(p, itemBean);
-                                    itemBean.setOrderId(newOrderId);
-                                    itemBean.setOrderItemGroupId(newItemGroupId);
-                                    itemBean.setId(ApplicationContextHelper.getNextIdentity());
-                                    newEmcOrderItemBeanList.add(itemBean);
-                                });
-                            });
-                        }
-                    }
-                }
-            }
-            this.getDao().insert(newEmcProjectBeanList);
-            folderService.getDao().insert(newEmcFolderBeanList);
-            orderService.getDao().insert(newEmcOrderBeanList);
-            orderItemGroupService.getDao().insert(newEmcOrderItemGroupBeanList);
-            orderItemService.getDao().insert(newEmcOrderItemBeanList);
-        }
     }
 
     @Override
@@ -823,12 +602,23 @@ public class EmcProjectServiceImpl implements EmcProjectService {
     @Transactional
     public void submitToReport(RestJsonWrapperBean wrapper) {
         List<EmcProjectBean> projectList = wrapper.parse(EmcProjectBean.class);
-        List<Long> projIdList = projectList.stream().map(e -> e.getId()).collect(Collectors.toList());
-        reportService.insertByProject(projIdList, true);// 新增报告数据,可见
+        List<Long> projIdList = projectList.stream().map(EmcProjectBean::getId).collect(Collectors.toList());
+        this.reportService.insertByProject(projIdList, true);
         CoreBpmnParameterDTO parameter = new CoreBpmnParameterDTO();
-        parameter.setComment("提交到报告");
+        parameter.setComment("\u63d0\u4ea4\u5230\u62a5\u544a");
         this.startProcess(projIdList, parameter);
-        //this.endTask(projIdList, "提交到报告");
+        CoreBpmnParameterDTO endParameter = new CoreBpmnParameterDTO();
+        endParameter.setComment("\u63d0\u4ea4\u5230\u62a5\u544a");
+        this.endTask(projIdList, endParameter);
+        List<EmcProjectBean> updateProjList = new ArrayList<>();
+        projIdList.forEach(id -> {
+            EmcProjectBean updateProj = new EmcProjectBean();
+            updateProj.setId((Long)id);
+            updateProj.setStatus("reportEdit");
+            updateProj.setProjNode("\u62a5\u544a\u5f52\u6863");
+            updateProjList.add(updateProj);
+        });
+        this.getDao().update(updateProjList, new String[]{"STATUS", "PROJNODE"});
     }
 
     @Override
@@ -843,6 +633,37 @@ public class EmcProjectServiceImpl implements EmcProjectService {
         MapperParameter parameter = wrapper.extractMapFilter();
         PageRowBounds rowBounds = wrapper.extractPageRowBounds();
         return selectPagination(() -> getDao().selectAnnualProjectStatistics(parameter), rowBounds);
+    }
+
+    @Override
+    public Page<EmcProjectBean> selectByReportEdit(RestJsonWrapperBean wrapper) {
+        MapperParameter parameter = wrapper.extractMapFilter();
+        PageRowBounds rowBounds = wrapper.extractPageRowBounds();
+        return selectPagination(() -> getDao().selectByReportEdit(parameter), rowBounds);
+    }
+    @Override
+    public Page<EmcProjectBean> selectCrmInvoiceProjPagination(RestJsonWrapperBean wrapper) {
+        MapperParameter parameter = wrapper.extractMapFilter();
+        PageRowBounds rowBounds = wrapper.extractPageRowBounds();
+        return selectPagination(() -> getDao().selectCrmInvoiceProjListByCondition(parameter), rowBounds);
+    }
+    @Override
+    public Page<EmcProjectBean> selectCrmPaymentProjPagination(RestJsonWrapperBean wrapper) {
+        MapperParameter parameter = wrapper.extractMapFilter();
+        PageRowBounds rowBounds = wrapper.extractPageRowBounds();
+        return selectPagination(() -> getDao().selectCrmPaymentProjListByCondition(parameter), rowBounds);
+    }
+    @Override
+    public Page<EmcProjectBean> selectCrmProjListByCondition(RestJsonWrapperBean wrapper) {
+        MapperParameter parameter = wrapper.extractMapFilter();
+        PageRowBounds rowBounds = wrapper.extractPageRowBounds();
+        return selectPagination(() -> getDao().selectCrmProjListByCondition(parameter), rowBounds);
+    }
+    @Override
+    public Page<EmcProjectBean> selectProjListPagination(RestJsonWrapperBean wrapper) {
+        MapperParameter parameter = wrapper.extractMapFilter();
+        PageRowBounds rowBounds = wrapper.extractPageRowBounds();
+        return selectPagination(() -> getDao().selectProjListByCondition(parameter), rowBounds);
     }
 
     @Override
@@ -1077,9 +898,9 @@ public class EmcProjectServiceImpl implements EmcProjectService {
 
     @Override
     @Transactional
-    @AuditTrailEntry(AuditTrailType.INSERT)
+    @AuditTrailEntry(value=AuditTrailType.INSERT)
     public void copyPlan(RestJsonWrapperBean wrapper) {
-        List<EmcProjectBean> copyEmcProjectBeanList = wrapper.parse(EmcProjectBean.class);// 传递过来的复制对象
+        List<EmcProjectBean> copyEmcProjectBeanList = wrapper.parse(EmcProjectBean.class);
         if (copyEmcProjectBeanList.isEmpty()) {
             return;
         }
@@ -1090,33 +911,15 @@ public class EmcProjectServiceImpl implements EmcProjectService {
         }
         int copyQty = Integer.parseInt(copyQtyStr);
         int projectQty = copyEmcProjectBeanList.size();
-        List<EmcProjectBean> emcOrderProjectList = getDao().selectListByIds(copyEmcProjectBeanList.stream().map(EmcProjectBean::getId).collect(Collectors.toList()));// 原始对象
-        // 拷贝列表项属性
-        emcOrderProjectList.stream().forEach(m -> {
-            copyEmcProjectBeanList.stream().filter(c -> ObjectUtils.equals(c.getId(), m.getId())).forEach(t -> {
-                m.setBizCategoryId(t.getBizCategoryId());
-                m.setTaskDate(t.getTaskDate());
-                m.setSource(t.getSource());
-                m.setSample(t.getSample());
-            });
-        });
-        // 查询业务编码
-        String bizCategoryCode = bizCategoryService.selectById(copyEmcProjectBeanList.get(0).getBizCategoryId()).getBizCategoryId();
-        // 批量获取项目编号，数量为项目数 * 复制份数
-        List<String> newProjectNoList = new ArrayList<>();
-        String sequenceNo = getSequenceNo(bizCategoryCode);
-        if (projectQty * copyQty > 1) {
-            newProjectNoList = ApplicationContextHelper.getNextSequenceList(getDao().getTable() + LocalDate.now().getYear(), bizCategoryCode, projectQty * copyQty - 1);
-            newProjectNoList.add(0, sequenceNo);
-        } else {
-            newProjectNoList.add(sequenceNo);
-        }
-        LocalDateTime taskDate = emcProjectBean.getTaskDate() == null ? LocalDateTime.now() : emcProjectBean.getTaskDate();
-        String taskDateStr = DateTimeUtils.formatLocalDateTime(taskDate, "yy");
-        newProjectNoList = newProjectNoList.stream().map(r -> bizCategoryCode + taskDateStr + r).collect(Collectors.toList());
-
-        copySampleProject(copyQty, emcOrderProjectList, newProjectNoList);
-
+        List<EmcProjectBean> emcOrderProjectList = this.getDao().selectListByIds(copyEmcProjectBeanList.stream().map(EmcProjectBean::getId).collect(Collectors.toList()), new Order[0]);
+        emcOrderProjectList.stream().forEach(m -> copyEmcProjectBeanList.stream().filter(c -> ObjectUtils.equals(c.getId(), m.getId())).forEach(t -> {
+            m.setBizCategoryId(t.getBizCategoryId());
+            m.setTaskDate(t.getTaskDate());
+            m.setSource(t.getSource());
+            m.setSample(t.getSample());
+        }));
+        List<String> newProjectNoList = ApplicationContextHelper.getNextSequenceList("T_EMC_PROJECT_PLAN", projectQty * copyQty);
+        this.copySampleProject(copyQty, emcOrderProjectList, newProjectNoList);
     }
 
     @Override
@@ -1272,7 +1075,7 @@ public class EmcProjectServiceImpl implements EmcProjectService {
     }
 
     // 手动提交项目
-    private void submitNewProjectList(List<EmcProjectBean> newProjectList) {
+    public void submitNewProjectList(List<EmcProjectBean> newProjectList) {
         // 提交项目
         List<Long> projIdList = newProjectList.stream().map(e -> e.getId()).collect(Collectors.toList());
         CoreBpmnParameterDTO parameter = new CoreBpmnParameterDTO();
@@ -1468,14 +1271,5 @@ public class EmcProjectServiceImpl implements EmcProjectService {
         return selectPagination(() -> getDao().selectTodoAnalysisPretrialProject(parameter), rowBounds);
     }
 
-    @Override
-    public Page<EmcProjectBean> selectByReportEdit(RestJsonWrapperBean wrapper) { MapperParameter p = wrapper.extractMapFilter(); return selectPagination(() -> getDao().selectByReportEdit(p), wrapper.extractPageRowBounds()); }
-    @Override
-    public Page<EmcProjectBean> selectCrmInvoiceProjPagination(RestJsonWrapperBean wrapper) { MapperParameter p = wrapper.extractMapFilter(); return selectPagination(() -> getDao().selectCrmInvoiceProjListByCondition(p), wrapper.extractPageRowBounds()); }
-    @Override
-    public Page<EmcProjectBean> selectCrmPaymentProjPagination(RestJsonWrapperBean wrapper) { MapperParameter p = wrapper.extractMapFilter(); return selectPagination(() -> getDao().selectCrmPaymentProjListByCondition(p), wrapper.extractPageRowBounds()); }
-    @Override
-    public Page<EmcProjectBean> selectCrmProjListByCondition(RestJsonWrapperBean wrapper) { MapperParameter p = wrapper.extractMapFilter(); return selectPagination(() -> getDao().selectCrmProjListByCondition(p), wrapper.extractPageRowBounds()); }
-    @Override
-    public Page<EmcProjectBean> selectProjListPagination(RestJsonWrapperBean wrapper) { MapperParameter p = wrapper.extractMapFilter(); return selectPagination(() -> getDao().selectProjListByCondition(p), wrapper.extractPageRowBounds()); }
+
 }

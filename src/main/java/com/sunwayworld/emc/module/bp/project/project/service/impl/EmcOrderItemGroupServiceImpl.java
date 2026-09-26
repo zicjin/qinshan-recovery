@@ -26,6 +26,7 @@ import com.sunwayworld.emc.module.mdm.bizmdm.test.service.EmcTestMethodOrderCate
 import com.sunwayworld.framework.at.annotation.AuditTrailEntry;
 import com.sunwayworld.framework.at.annotation.AuditTrailType;
 import com.sunwayworld.framework.context.ApplicationContextHelper;
+import com.sunwayworld.framework.database.sql.Order;
 import com.sunwayworld.framework.mybatis.mapper.MatchPattern;
 import com.sunwayworld.framework.mybatis.mapper.SearchFilter;
 import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;
@@ -100,12 +101,12 @@ public class EmcOrderItemGroupServiceImpl implements EmcOrderItemGroupService {
         }).collect(Collectors.toList());
 
         List<Long> testMethodOrderCategoryIdList = testMethodOrderCategoryService.getDao()
-                .selectList(filterTestMethodOrderCategoryList, Arrays.asList("TESTMETHODID", "MONITORTMPLID"), Arrays.asList("ID")).stream().map(e -> e.getId()).collect(Collectors.toList());
+                .selectList(filterTestMethodOrderCategoryList, Arrays.asList("TESTMETHODID", "MONITORTMPLID"), Arrays.asList("ID"), new Order[0]).stream().map(e -> e.getId()).collect(Collectors.toList());
         List<EmcTestMethodOrderCategoryBean> testMethodOrderCategoryList = testMethodOrderCategoryIdList.isEmpty() ? Collections.emptyList()
-                : testMethodOrderCategoryService.selectListByFilter(SearchFilter.instance().match("ID", testMethodOrderCategoryIdList).filter(MatchPattern.OR));
+                : testMethodOrderCategoryService.selectListByFilter(SearchFilter.instance().match("ID", testMethodOrderCategoryIdList).filter(MatchPattern.OR), new Order[0]);
 
         List<EmcGroupItemBean> groupItemList = groupItemService.getDao().selectListByOneColumnValues(orderItemGroupList.stream().map(e -> e.getItemGroupId()).collect(Collectors.toList()),
-                "ITEMGROUPID");
+                "ITEMGROUPID", new Order[0]);
 
         List<EmcOrderItemBean> insertOrderItemList = new ArrayList<>();
         List<EmcOrderItemGroupBean> insertOrderItemGroupList = new ArrayList<>();
@@ -132,7 +133,7 @@ public class EmcOrderItemGroupServiceImpl implements EmcOrderItemGroupService {
 
                 // 样品分析项组
                 EmcOrderItemGroupBean orderItemGroup = new EmcOrderItemGroupBean();
-                BeanUtils.copyProperties(o, orderItemGroup);
+                BeanUtils.copyProperties(o, orderItemGroup, new String[0]);
                 orderItemGroup.setOrderId(order.getId());
 
                 Long orderItemGroupId = ApplicationContextHelper.getNextIdentity();

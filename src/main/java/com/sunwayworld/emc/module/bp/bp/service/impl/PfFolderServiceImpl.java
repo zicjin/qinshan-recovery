@@ -5,6 +5,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.io.Serializable;
 
 import com.sunwayworld.emc.module.bp.project.project.service.PfProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,7 @@ import com.sunwayworld.emc.module.bp.bp.service.PfFolderService;
 import com.sunwayworld.emc.module.bp.bp.service.PfOrderService;
 import com.sunwayworld.emc.module.bp.bp.service.PfOrderTaskResultService;
 import com.sunwayworld.emc.module.bp.bp.service.PfOrderTaskService;
+import com.sunwayworld.emc.module.bp.bp.service.EmcOrderContainerService;
 import com.sunwayworld.emc.module.bp.project.project.bean.EmcOrderItemGroupBean;
 import com.sunwayworld.emc.module.bp.project.project.bean.EmcProjectBean;
 import com.sunwayworld.emc.module.bp.project.project.service.PfOrderItemGroupService;
@@ -42,6 +44,7 @@ import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;
 import com.sunwayworld.framework.restful.data.RestValidationResultBean;
 import com.sunwayworld.framework.spring.annotation.GikamBean;
 import com.sunwayworld.framework.support.PersistableHelper;
+import com.sunwayworld.framework.support.domain.Persistable;
 import com.sunwayworld.framework.support.auditable.bean.CoreBpmnParameterDTO;
 import com.sunwayworld.framework.utils.BeanUtils;
 import com.sunwayworld.framework.utils.ObjectUtils;
@@ -78,6 +81,10 @@ public class PfFolderServiceImpl extends EmcFolderServiceImpl implements PfFolde
     @Autowired
     private PfOrderItemGroupService pfOrderItemGroupService;
 
+    @Autowired
+    @Lazy
+    private EmcOrderContainerService orderContainerService;
+
     @Override
     public EmcFolderBean insertByOrder(EmcOrderBean order) {
         EmcFolderBean folder = new EmcFolderBean();
@@ -99,6 +106,84 @@ public class PfFolderServiceImpl extends EmcFolderServiceImpl implements PfFolde
         getDao().insert(folder);
         return folder;
     }
+
+    @Override
+    @Transactional
+    public void copyFolders(String folderNo, RestJsonWrapperBean wrapper) {
+        EmcFolderBean folder = wrapper.parseUnique(EmcFolderBean.class);
+        EmcFolderBean selectedFolder = this.getDao().selectById(folder.getId());
+        EmcFolderBean newFolder = new EmcFolderBean();
+        BeanUtils.copyProperties((Object)selectedFolder, (Object)newFolder, new String[0]);
+        PersistableHelper.resetBasicProperties(newFolder);
+        EmcMonitorTmplBean monitorTmpl = this.monitorTmplService.selectById(selectedFolder.getMonitorTmplId());
+        Long newFolderId = ApplicationContextHelper.getNextIdentity();
+        newFolder.setId(newFolderId);
+        newFolder.setSource("COPY");
+        Long projId = folder.getProjId();
+        EmcProjectBean project = (EmcProjectBean)this.projectService.selectById(projId);
+        List<String> newFolderNoList = this.generateFolderNosByProjId(projId, project.getProjNo(), selectedFolder.getMonitorTmplId(), 1);
+        String newFolderNo = newFolderNoList.get(0);
+        newFolder.setProcessStatus(selectedFolder.getProcessStatus());
+        newFolder.setFolderNo(newFolderNo);
+        this.getDao().insert(newFolder);
+        List<EmcOrderBean> folderOrderList = this.pfOrderService.getDao().selectListByOneColumnValue(folder.getId(), "FOLDERID", new Order[0]);
+        List<EmcOrderBean> copiedOrderList = folderOrderList.stream().filter(order -> ObjectUtils.isEmpty(order.getSampleId())).collect(Collectors.toList());
+        List<Long> orderIdList = copiedOrderList.stream().map(EmcOrderBean::getId).collect(Collectors.toList());
+        List<EmcOrderTaskBean> orderTaskList = this.pfOrderTaskService.getDao().selectListByOneColumnValues(orderIdList, "ORDERID", new Order[0]);
+        List<EmcOrderTaskResultBean> orderTaskResultList = this.pfOrderTaskResultService.getDao().selectListByOneColumnValues(orderIdList, "ORDERID", new Order[0]);
+        List<EmcOrderItemGroupBean> orderItemGroupList = this.pfOrderItemGroupService.getDao().selectListByOneColumnValues(orderIdList, "ORDERID", new Order[0]);
+        ArrayList<EmcOrderBean> newOrderList = new ArrayList<EmcOrderBean>();
+        ArrayList<EmcOrderTaskBean> newOrderTaskList = new ArrayList<EmcOrderTaskBean>();
+        ArrayList<EmcOrderTaskResultBean> newOrderTaskResultList = new ArrayList<EmcOrderTaskResultBean>();
+        ArrayList<EmcOrderItemGroupBean> newOrderItemGroupList = new ArrayList<>();
+        for (int i = 0; i < copiedOrderList.size(); ++i) {
+            EmcOrderBean oldOrder = (EmcOrderBean)copiedOrderList.get(i);
+            EmcOrderBean newOrder = new EmcOrderBean();
+            BeanUtils.copyProperties((Object)oldOrder, (Object)newOrder, PfConstant.CREATED_COLUMNS);
+            PersistableHelper.resetBasicProperties(newOrder);
+            newOrder.setId(ApplicationContextHelper.getNextIdentity());
+            newOrder.setFolderId(newFolder.getId());
+            newOrder.setOrderNo(newFolderNo + StringUtils.leftPad(i + 1 + "", 3));
+            newOrder.setLabelNo(newOrder.getOrderNo());
+            newOrderList.add(newOrder);
+            for (EmcOrderTaskBean orderTask : orderTaskList) {
+                if (!oldOrder.getId().equals(orderTask.getOrderId())) continue;
+                EmcOrderTaskBean newOrderTask = new EmcOrderTaskBean();
+                BeanUtils.copyProperties((Object)orderTask, (Object)newOrderTask, new String[0]);
+                PersistableHelper.resetBasicProperties(newOrderTask);
+                newOrderTask.setId(ApplicationContextHelper.getNextIdentity());
+                newOrderTask.setOrderId(newOrder.getId());
+                newOrderTask.setFolderId(newFolder.getId());
+                newOrderTask.setEquiptAcquNo(newOrder.getOrderNo());
+                newOrderTaskList.add(newOrderTask);
+                for (EmcOrderTaskResultBean orderTaskResult : orderTaskResultList) {
+                    if (!orderTask.getId().equals(orderTaskResult.getOrderTaskId())) continue;
+                    EmcOrderTaskResultBean newOrderTaskResult = new EmcOrderTaskResultBean();
+                    BeanUtils.copyProperties((Object)orderTaskResult, (Object)newOrderTaskResult, new String[0]);
+                    newOrderTaskResult.setId(ApplicationContextHelper.getNextIdentity());
+                    newOrderTaskResult.setFolderId(newFolderId);
+                    newOrderTaskResult.setOrderId(newOrder.getId());
+                    newOrderTaskResult.setOrderTaskId(newOrderTask.getId());
+                    newOrderTaskResult.setOrderNo(newOrder.getOrderNo());
+                    newOrderTaskResultList.add(newOrderTaskResult);
+                }
+            }
+            List<EmcOrderItemGroupBean> oldItemGroupList = orderItemGroupList.stream().filter(group -> ObjectUtils.equals(oldOrder.getId(), group.getOrderId())).collect(Collectors.toList());
+            oldItemGroupList.forEach(group -> {
+                EmcOrderItemGroupBean newItemGroup = new EmcOrderItemGroupBean();
+                BeanUtils.copyProperties(group, (Object)newItemGroup, EmcConstant.CREATED_COLUMNS);
+                newItemGroup.setId(ApplicationContextHelper.getNextIdentity());
+                newItemGroup.setOrderId(newOrder.getId());
+                newOrderItemGroupList.add(newItemGroup);
+            });
+        }
+        this.orderContainerService.createOrderContainer(newOrderList, newOrderTaskList);
+        this.pfOrderService.getDao().insert(newOrderList);
+        this.pfOrderTaskService.getDao().insert(newOrderTaskList);
+        this.pfOrderTaskResultService.getDao().insert(newOrderTaskResultList);
+        this.pfOrderItemGroupService.getDao().insert(newOrderItemGroupList);
+    }
+
 
     @Override
     public List<String> generateFolderNosByProjId(Long projId, String projectNo, String monitorTmplId, int num) {

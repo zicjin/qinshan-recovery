@@ -116,6 +116,8 @@ import com.sunwayworld.emc.module.mdm.bizmdm.test.service.EmcItemRevisionService
 import com.sunwayworld.emc.module.mdm.bizmdm.test.service.EmcItemService;
 import com.sunwayworld.emc.module.mdm.bizmdm.test.service.EmcTestMethodDefaultQcService;
 import com.sunwayworld.emc.module.mdm.bizmdm.test.service.EmcTestMethodService;
+import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcTestmethodBeforehandleBean;
+import com.sunwayworld.emc.module.mdm.bizmdm.test.service.EmcTestmethodBeforehandleService;
 import com.sunwayworld.emc.module.mdm.equipt.equipt.bean.EmcEquiptBean;
 import com.sunwayworld.emc.module.mdm.equipt.equipt.bean.EmcEquiptTestMethodBean;
 import com.sunwayworld.emc.module.mdm.equipt.equipt.service.EmcEquiptService;
@@ -289,6 +291,9 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
     private EmcTestCapacityService testCapacityService;
 
     @Autowired
+    private EmcTestmethodBeforehandleService testmethodBeforehandleService;
+
+    @Autowired
     @Lazy
     private EmcMtlMaintainService mtlMaintainService;
 
@@ -359,12 +364,23 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
 
         CoreOrgBean parentOrg = coreOrgService.selectById(parentOrgId);
         String orgShortName = parentOrg.getExt$Item("orgShortName");
-        String runId = ApplicationContextHelper.getNextSequence(getDao().getTable(), orgShortName);
+        String date = LocalDate.now().format(DateTimeFormatter.ofPattern("yyMMdd"));
+        List<EmcRunBean> runList = selectListByFilter(SearchFilter.instance().match("ID", orgShortName + date).filter(MatchPattern.SB));
+        String no = "001";
+        Optional<String> maxRunIdOpt = runList.stream().map(EmcRunBean::getId).max(Comparator.comparing(Function.identity()));
+        if (maxRunIdOpt.isPresent()) {
+            String existMaxRunId = maxRunIdOpt.get();
+            no = StringUtils.leftPad(Integer.parseInt(existMaxRunId.substring(existMaxRunId.length() - 3)) + 1 + "", 3);
+        }
+        String runId = orgShortName + date + no;
         Long reportConfigLineId = methodService.selectReportConfigLineIdById(orderTask.getMethodId());
 
         // 查询项目编号
         List<Long> projectIdList = orderTaskList.stream().map(EmcOrderTaskBean::getProjId).distinct().sorted(Comparator.comparing(Function.identity())).collect(Collectors.toList());
         List<EmcProjectBean> projectList = projectService.getDao().selectListByOneColumnValues(projectIdList, "id", Arrays.asList("id", "projNo", "sample"));
+
+        EmcTestmethodBeforehandleBean beforehandleBean = testmethodBeforehandleService.selectFirstByFilter(
+                SearchFilter.instance().match("TESTMETHODID", testMethodIdList.get(0)).filter(MatchPattern.EQ), new Order[0]);
 
         // 查询测试方法中的前处理
         EmcTestMethodBean testMethod = testMethodService.getDao().selectById(testMethodIdList.get(0));
@@ -399,8 +415,11 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
         run.setEquiptId(equipt.getId());
         run.setMethodId(orderTask.getMethodId());
         run.setReportConfigLineId(reportConfigLineId);
-        run.setBeforeHandle(testMethod.getBeforeHandle());
-        run.setBeforeHandleId(testMethod.getBeforeHandleId());
+        if (!ObjectUtils.isEmpty(beforehandleBean)) {
+            run.setBeforeHandleId(String.valueOf(beforehandleBean.getId()));
+            run.setBeforeHandle(beforehandleBean.getBeforeHandle());
+        }
+        run.setRemark(testCapacity.getExt$Item("remark"));
         run.setOrgId(parentOrgId);
         run.setOrgName(parentOrgName);
         run.setExt$Item("adddate", DateTimeUtils.formatLocalDate(LocalDate.now()));

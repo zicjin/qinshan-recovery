@@ -227,19 +227,29 @@ public class PfProjectServiceImpl extends EmcProjectServiceImpl implements PfPro
 
     @Transactional
     public void submitToReport(RestJsonWrapperBean wrapper) {
-        List<EmcProjectBean> projects = wrapper.parse(EmcProjectBean.class);
-        if ("1".equals(wrapper.getParamValue("gdflag"))) {
+        List<EmcProjectBean> projectList = wrapper.parse(EmcProjectBean.class);
+        String gdFlag = wrapper.getParamValue("gdflag");
+        if ("1".equals(gdFlag)) {
             submitToDoneReport(wrapper);
             return;
         }
-        List<Long> ids = projects.stream().map(EmcProjectBean::getId).collect(Collectors.toList());
-        reportService.insertByProject(ids, true);
+        List<Long> projIdList = projectList.stream().map(EmcProjectBean::getId).collect(Collectors.toList());
+        reportService.insertByProject(projIdList, true);
         CoreBpmnParameterDTO parameter = new CoreBpmnParameterDTO(); parameter.setComment("提交至报告编制");
-        startProcess(ids, parameter); endTask(ids, parameter);
-        List<EmcProjectBean> updates = new ArrayList<>();
-        for (Long id : ids) { EmcProjectBean u = new EmcProjectBean(); u.setId(id); u.setStatus("reportEdit"); u.setProjNode("报告编制"); u.setToReportEditDate(LocalDate.now()); updates.add(u); }
-        getDao().update(updates, "STATUS", "PROJNODE", "TOREPORTEDITDATE");
-        insertReportTransitionAudit(projects, "提交至报告编制", "报告编制");
+        startProcess(projIdList, parameter);
+        CoreBpmnParameterDTO endParameter = new CoreBpmnParameterDTO(); endParameter.setComment("提交至报告编制");
+        endTask(projIdList, endParameter);
+        List<EmcProjectBean> updateProjList = new ArrayList<>();
+        for (Long id : projIdList) {
+            EmcProjectBean updateProj = new EmcProjectBean();
+            updateProj.setId(id);
+            updateProj.setStatus("reportEdit");
+            updateProj.setProjNode("报告编制");
+            updateProj.setToReportEditDate(LocalDate.now());
+            updateProjList.add(updateProj);
+        }
+        getDao().update(updateProjList, "STATUS", "PROJNODE", "TOREPORTEDITDATE");
+        insertReportTransitionAudit(projectList, "提交至报告编制", "报告编制");
     }
 
     @Override

@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -36,6 +37,7 @@ import org.thymeleaf.util.ListUtils;
 import com.sunwayworld.emc.framework.constant.EmcBizConstant;
 import com.sunwayworld.emc.framework.constant.EmcConstant;
 import com.sunwayworld.emc.framework.constant.PfConstant;
+import com.sunwayworld.emc.framework.utils.FileSealUtils;
 import com.sunwayworld.emc.framework.word.JSTIeSealHelper;
 import com.sunwayworld.emc.framework.word.Word2007Utils;
 import com.sunwayworld.emc.framework.word.WordTemplateUtils;
@@ -45,6 +47,7 @@ import com.sunwayworld.emc.module.bp.bp.bean.EmcFolderBean;
 import com.sunwayworld.emc.module.bp.bp.bean.EmcOrderBean;
 import com.sunwayworld.emc.module.bp.bp.bean.EmcOrderTaskBean;
 import com.sunwayworld.emc.module.bp.bp.bean.EmcOrderTaskResultBean;
+import com.sunwayworld.emc.module.bp.bp.computing.EmcOrderTaskResultComputingEngine;
 import com.sunwayworld.emc.module.bp.bp.service.EmcFolderService;
 import com.sunwayworld.emc.module.bp.bp.service.EmcOrderService;
 import com.sunwayworld.emc.module.bp.bp.service.EmcOrderTaskResultService;
@@ -127,6 +130,7 @@ import com.sunwayworld.framework.data.Pair;
 import com.sunwayworld.framework.data.page.Page;
 import com.sunwayworld.framework.data.page.Pagination;
 import com.sunwayworld.framework.exception.FileException;
+import com.sunwayworld.framework.exception.InvalidDataException;
 import com.sunwayworld.framework.executor.ExecutorHelper;
 import com.sunwayworld.framework.i18n.I18nHelper;
 import com.sunwayworld.framework.io.file.FileScope;
@@ -152,6 +156,7 @@ import com.sunwayworld.module.item.file.service.CoreFileService;
 import com.sunwayworld.module.mdm.org.bean.CoreOrgBean;
 import com.sunwayworld.module.mdm.org.service.CoreOrgService;
 import com.sunwayworld.module.mdm.user.bean.CoreUserBean;
+import com.sunwayworld.module.mdm.user.service.CoreUserService;
 import com.sunwayworld.module.sys.bpmn.bean.CoreBpmnCommentBean;
 import com.sunwayworld.module.sys.bpmn.bean.CoreBpmnInstanceStatusDTO;
 import com.sunwayworld.module.sys.bpmn.service.CoreBpmnCommentService;
@@ -224,6 +229,9 @@ public class PfReportServiceImpl extends EmcReportServiceImpl implements PfRepor
 
     @Autowired
     private CoreBpmnCommentService bpmnCommentService;
+
+    @Autowired
+    private CoreUserService coreUserService;
 
     @Autowired
     private CoreOrgService coreOrgService;
@@ -3209,15 +3217,180 @@ public class PfReportServiceImpl extends EmcReportServiceImpl implements PfRepor
     }
 
     @Override
+    @Transactional
     public void seal(RestJsonWrapperBean wrapper) {
+        List<CoreFileBean> coreFileList = wrapper.parse(CoreFileBean.class);
+        seal(coreFileList);
+    }
+
+    private void seal(List<CoreFileBean> coreFileList) {
+        List<CoreFileBean> fileFilters = new ArrayList<>();
+        coreFileList.forEach(file -> {
+            CoreFileBean filter = new CoreFileBean();
+            filter.setTargetId(file.getTargetId());
+            filter.setExt("sealPdf");
+            fileFilters.add(filter);
+        });
+        coreFileService.getDao().deleteBy(fileFilters, "TARGETID", "EXT");
+        for (CoreFileBean file : coreFileList) {
+            File originalFile = CoreFileUtils.getLocalPath(file).toFile();
+            FilePathDTO archivePdf = CoreFileUtils.toFilePath(FileScope.temp,
+                    FileUtils.getFileBaseName(file.getName()) + "-盖章.pdf");
+            Path sealPath = FilePathManager.getLocalPath(archivePdf);
+            FileUtils.makeDirs(sealPath);
+            FileSealUtils.seal(originalFile.toString(), sealPath.toString(), true, originalFile.getName());
+            CoreFileBean sealedFile = new CoreFileBean();
+            sealedFile.setTargetId(file.getTargetId());
+            sealedFile.setScope(FileScope.secure.name());
+            sealedFile.setExt("sealPdf");
+            coreFileService.upload(sealedFile, sealPath.toFile());
+        }
     }
 
     @Override
-    public void signIssuePdfIfRequired(CoreFileBean coreFile) {
+    public void signIssuePdfIfRequired(CoreFileBean pdfFile) {
+        Long reportId = parseReportId(pdfFile);
+        if (reportId == null) {
+            return;
+        }
+        EmcReportBean report = getDao().selectByIdIfPresent(reportId);
+        if (report == null || !isQysIssueSignMode(report)) {
+            return;
+        }
+        CoreBpmnCommentBean issueComment = selectLatestReportIssueComment(reportId);
+        if (issueComment == null) {
+            throw new InvalidDataException("未找到报告签发记录，无法进行契约锁报告签发章签署");
+        }
+        CoreUserBean issuer = coreUserService.selectByIdIfPresent(issueComment.getCreatedById());
+        Long sealId = getIssueSealId(issuer);
+        fileManager.download(pdfFile);
+        File originalFile = CoreFileUtils.getLocalPath(pdfFile).toFile();
+        FilePathDTO signedPdf = CoreFileUtils.toFilePath(FileScope.temp,
+                FileUtils.getFileBaseName(pdfFile.getName()) + "-issue-sign.pdf");
+        Path signedPath = FilePathManager.getLocalPath(signedPdf);
+        FileUtils.makeDirs(signedPath);
+        FileSealUtils.signReportIssue(originalFile.toString(), signedPath.toString(), sealId);
+        fileManager.upload(CoreFileUtils.toFilePath(pdfFile), signedPath.toFile());
+        pdfFile.setSize(signedPath.toFile().length());
+        coreFileService.getDao().update(pdfFile, "SIZE");
+        fileManager.download(pdfFile);
+    }
+
+    private Long parseReportId(CoreFileBean pdfFile) {
+        if (pdfFile == null || !StringUtils.equals("wordReportPdf", pdfFile.getExt())) {
+            return null;
+        }
+        String targetId = pdfFile.getTargetId();
+        String prefix = getDao().getTable() + "$";
+        if (StringUtils.isBlank(targetId) || !targetId.startsWith(prefix)) {
+            return null;
+        }
+        String reportIdText = targetId.substring(prefix.length());
+        return NumberUtils.isNumber(reportIdText) ? NumberUtils.parseLong(reportIdText) : null;
+    }
+
+    private CoreBpmnCommentBean selectLatestReportIssueComment(Long reportId) {
+        return bpmnCommentService.selectListByFilter(SearchFilter.instance()
+                .match("targetId", getDao().getTable() + "$" + reportId).filter(MatchPattern.EQ)
+                .match("status", "REJECT").filter(MatchPattern.DIFFER)).stream()
+                .filter(comment -> ObjectUtils.equals("reportIssue", comment.getStatusCode()))
+                .sorted(Comparator.comparing(CoreBpmnCommentBean::getCreatedTime).reversed())
+                .limit(1).findFirst().orElse(null);
+    }
+
+    private boolean isQysIssueSignMode(EmcReportBean report) {
+        return !isPictureIssueSignMode(report);
+    }
+
+    private boolean isPictureIssueSignMode(EmcReportBean report) {
+        return report != null && ObjectUtils.equals("picture", report.getIssueSignMode());
+    }
+
+    private Long getIssueSealId(CoreUserBean issuer) {
+        if (issuer == null) {
+            throw new InvalidDataException("未找到报告签发人，无法进行契约锁报告签发章签署");
+        }
+        String sealId = issuer.getExt$Item("sealid");
+        if (StringUtils.isBlank(sealId)) sealId = issuer.getExt$Item("sealId");
+        if (StringUtils.isBlank(sealId)) sealId = issuer.getExt$Item("SEALID");
+        if (StringUtils.isBlank(sealId)) {
+            throw new InvalidDataException("签发人[" + issuer.getUserName() + "]未维护契约锁签章ID");
+        }
+        if (!NumberUtils.isNumber(sealId)) {
+            throw new InvalidDataException("签发人[" + issuer.getUserName() + "]维护的契约锁签章ID不是有效数字");
+        }
+        return NumberUtils.parseLong(sealId);
     }
 
     @Override
+    @Transactional
     public void editItem(RestJsonWrapperBean wrapper) {
+        List<EmcOrderTaskResultBean> requestedResults = wrapper.parse(EmcOrderTaskResultBean.class);
+        List<EmcItemBean> items = wrapper.parse(EmcItemBean.class);
+        List<Long> orderIds = requestedResults.stream().map(EmcOrderTaskResultBean::getOrderId).distinct().collect(Collectors.toList());
+        Long testMethodId = requestedResults.get(0).getTestMethodId();
+        List<EmcOrderBean> orders = orderService.getDao().selectListByIds(orderIds);
+        Map<Long, List<EmcOrderTaskResultBean>> resultMap = orderTaskResultService.selectListByFilter(
+                SearchFilter.instance().match("ORDERID", orderIds).filter(MatchPattern.OR)
+                        .match("testMethodId", testMethodId).filter(MatchPattern.SEQ)
+                        .match("AnalysisType", "calculate").filter(MatchPattern.SEQ))
+                .stream().collect(Collectors.groupingBy(EmcOrderTaskResultBean::getOrderId));
+        List<EmcOrderTaskResultBean> additions = new ArrayList<>();
+        List<EmcOrderTaskResultBean> deletions = new ArrayList<>();
+        resultMap.forEach((orderId, results) -> {
+            List<EmcOrderTaskResultBean> retained = new ArrayList<>();
+            Long sampleNum = orders.stream().filter(order -> ObjectUtils.equals(orderId, order.getId()))
+                    .findAny().orElse(null).getSampleNum();
+            results.forEach(result -> {
+                if (items.stream().anyMatch(item -> ObjectUtils.equals(result.getItemId(), item.getId()))) {
+                    retained.add(result);
+                }
+            });
+            results.forEach(result -> {
+                if (retained.stream().noneMatch(keep -> ObjectUtils.equals(result.getItemId(), keep.getItemId()))) {
+                    deletions.add(result);
+                }
+            });
+            items.forEach(item -> {
+                if (retained.stream().noneMatch(keep -> ObjectUtils.equals(item.getId(), keep.getItemId()))) {
+                    Long repeatItem = item.getRepeatItem() == null ? EmcConstant.ONE : item.getRepeatItem();
+                    EmcOrderTaskResultBean template = results.get(0);
+                    String pnFunc = item.getPnFunc();
+                    if ((!"peraverage".equalsIgnoreCase(pnFunc) && !"dayaverage".equalsIgnoreCase(pnFunc))
+                            || ObjectUtils.equals(1L, sampleNum)) {
+                        int i = 1;
+                        while ((long) i <= repeatItem) {
+                            EmcOrderTaskResultBean result = new EmcOrderTaskResultBean();
+                            BeanUtils.copyProperties(template, result, EmcConstant.CREATED_COLUMNS);
+                            result.setTestMethodId(item.getTestMethodId());
+                            result.setItemId(item.getId());
+                            result.setItemOrderNo(item.getOrderNo());
+                            result.setItemName(item.getItemName());
+                            result.setItemAliasName(item.getItemAliasName());
+                            result.setScriptFlag(item.getScriptFlag());
+                            result.setResultCategory(item.getResultCategory());
+                            result.setRevisionRule(item.getRevisionRule());
+                            result.setUnitName(item.getUnitName());
+                            result.setReportDisplay(item.getReportDisplay());
+                            result.setLowLimit(item.getLowLimit());
+                            result.setHighLimit(item.getHighLimit());
+                            result.setOriginalResult(item.getDefaultResult());
+                            result.setRepeatNo(NumberUtils.parseLong(i));
+                            result.setId(ApplicationContextHelper.getNextIdentity());
+                            additions.add(result);
+                            ++i;
+                        }
+                    }
+                }
+            });
+        });
+        orderTaskResultService.getDao().insert(additions);
+        List<Long> deleteIds = deletions.stream().map(EmcOrderTaskResultBean::getId).collect(Collectors.toList());
+        orderTaskResultService.getDao().deleteByIdList(deleteIds);
+        if (!additions.isEmpty()) {
+            EmcOrderTaskResultComputingEngine.getEngine(additions.stream().map(EmcOrderTaskResultBean::getId)
+                    .distinct().collect(Collectors.toList())).compute();
+        }
     }
 
 }

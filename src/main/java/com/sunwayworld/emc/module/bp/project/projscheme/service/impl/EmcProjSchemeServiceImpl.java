@@ -230,10 +230,11 @@ public class EmcProjSchemeServiceImpl implements EmcProjSchemeService {
         List<EmcMonitorPointSchemeBean> pointSchemeList = monitorPointSchemeService.selectListByFilter(SearchFilter.instance().match("MONITORPOINTID", monitorPointIdList).filter(MatchPattern.OR));
 
         int qty = schemeList.size();
-        List<String> folderNoList = generateFolderNosByProjId(projId, projectService.selectDetail(projId).getProjNo(), qty);
+        EmcProjectBean emcProject = projectService.selectById(projId);
+        String projNo = emcProject.getProjNo();
+        List<String> folderNoList = generateFolderNosByProjId(projId, projNo, qty);
 
         //首先获取业务类型中维护的默认采样科室，如果为空则是本单位下第一个采样科室
-        EmcProjectBean emcProject = projectService.selectById(projId);
         Long bizCategoryId = emcProject.getBizCategoryId();
         EmcBizCategoryBean bizCategory= emcBizCategoryService.selectById(bizCategoryId);
         if(StringUtils.isEmpty(bizCategory.getSampleOrgId())){
@@ -256,6 +257,7 @@ public class EmcProjSchemeServiceImpl implements EmcProjSchemeService {
 
             Long id = ApplicationContextHelper.getNextIdentity();
             scheme.setId(id);
+            scheme.setSortNum((long) i + 1L);
             scheme.setFolderNo(folderNoList.get(i));
             scheme.setCycle(ObjectUtils.isEmpty(scheme.getCycle()) ? EmcConstant.ONE : scheme.getCycle());
             scheme.setFrequency(ObjectUtils.isEmpty(scheme.getFrequency()) ? EmcConstant.ONE : scheme.getFrequency());
@@ -265,11 +267,18 @@ public class EmcProjSchemeServiceImpl implements EmcProjSchemeService {
 
             String monitorTmplId = filterPointSchemeList.isEmpty() ? null : filterPointSchemeList.get(0).getMonitorTmplId();
             scheme.setMonitorTmplId(monitorTmplId);
-            for (EmcMonitorPointSchemeBean pointScheme : filterPointSchemeList) {
+            String orderCategoryCode = filterPointSchemeList.isEmpty() ? null : filterPointSchemeList.get(0).getExt$Item("ordercategorycode");
+            if (!ObjectUtils.isEmpty(orderCategoryCode)) {
+                String newFolderNo = projNo + orderCategoryCode + folderNoList.get(i).substring(folderNoList.get(i).length() - 3);
+                scheme.setFolderNo(newFolderNo);
+            }
+            for (int j = 0; j < filterPointSchemeList.size(); j++) {
+                EmcMonitorPointSchemeBean pointScheme = filterPointSchemeList.get(j);
                 EmcProjOrderBean order = new EmcProjOrderBean();
                 order.setId(ApplicationContextHelper.getNextIdentity());
                 order.setProjSchemeId(id);
                 order.setSampleNum(ObjectUtils.isEmpty(pointScheme.getSampleNum()) ? EmcConstant.ONE : pointScheme.getSampleNum());
+                order.setSortNum((long) j + 1L);
 
                 order.setTestId(NumberUtils.parseLong(pointScheme.getExt$Item("testid")));
                 order.setSchemeName(pointScheme.getSchemeName());
@@ -505,11 +514,8 @@ public class EmcProjSchemeServiceImpl implements EmcProjSchemeService {
 
     @Override
     public List<String> generateFolderNosByProjId(Long projId, String projectNo, String monitorTmplId, String orderCategoryCode, int num) {
-        if (StringUtils.isEmpty(orderCategoryCode) && !StringUtils.isEmpty(monitorTmplId)) {
-            EmcMonitorTmplBean monitorTmpl = monitorTmplService.selectById(monitorTmplId);
-            if (monitorTmpl != null) {
-                orderCategoryCode = monitorTmpl.getExt$Item("ordercategorycode");
-            }
+        if (StringUtils.isEmpty(orderCategoryCode)) {
+            orderCategoryCode = monitorTmplService.selectById(monitorTmplId).getExt$Item("ordercategorycode");
         }
         if (StringUtils.isEmpty(orderCategoryCode)) {
             orderCategoryCode = "";
@@ -521,20 +527,25 @@ public class EmcProjSchemeServiceImpl implements EmcProjSchemeService {
         String firstFolderNo;
         if (schemeList.isEmpty()) {
             firstFolderNo = projectNo + orderCategoryCode + "001";
+            folderNoList.add(firstFolderNo);
         } else {
             String maxFolderNo = schemeList.stream().max(Comparator.comparing(EmcProjSchemeBean::getFolderNo)).get().getFolderNo();
             firstFolderNo = maxFolderNo.substring(0, maxFolderNo.length() - 3)
                     + String.format("%03d", Long.parseLong(maxFolderNo.substring(maxFolderNo.length() - 3)) + 1L);
+            folderNoList.add(firstFolderNo);
         }
-        folderNoList.add(firstFolderNo);
-        for (int i = 1; i < num; i++) {
-            String previous = folderNoList.get(i - 1);
-            folderNoList.add(previous.substring(0, previous.length() - 3)
-                    + String.format("%03d", Long.parseLong(previous.substring(previous.length() - 3)) + 1L));
+        if (num > 1) {
+            for (int i = 0; i < num - 1; i++) {
+                String previous = folderNoList.get(i);
+                String next = previous.substring(0, previous.length() - 3)
+                        + String.format("%03d", Long.parseLong(previous.substring(previous.length() - 3)) + 1L);
+                folderNoList.add(next);
+            }
         }
         return folderNoList;
     }
 
+    @Override
     public List<String> generateFolderNosByProjId(Long projId, String projectNo, int num) {
 
         List<EmcProjSchemeBean> schemeOfProjectList = getDao().selectListByOneColumnValue(projId, "PROJID");
@@ -633,6 +644,7 @@ public class EmcProjSchemeServiceImpl implements EmcProjSchemeService {
                 orderItemGroup.setDataSharing(projOrder.getDataSharing());
                 orderItemGroup.setMonitorTmplId(order.getMonitorTmplId());
                 orderItemGroup.setOrderCategory(order.getOrderCategory());
+                orderItemGroup.setSpecifyMethod(projOrder.getSpecifyMethod());
                 list.add(orderItemGroup);
             }
         }
@@ -701,6 +713,8 @@ public class EmcProjSchemeServiceImpl implements EmcProjSchemeService {
                         orderTask.setSubcontractorId(projOrder.getSubcontractorId());
                         orderTask.setSubPackageNo(projOrder.getSubPackageNo());
                         orderTask.setDataSharing(projOrder.getDataSharing());
+                        orderTask.setTaskLowLimit(projOrder.getTaskLowLimit());
+                        orderTask.setTaskHighLimit(projOrder.getTaskHighLimit());
                         // 如果样品测试的分析类型为采样，样品测试的分析科室为监测方案的采样科室
                         String analysisCategory = analysisItem.getExt$Item("analysiscategory");
                         if (EmcBizConstant.ANALYSISCATEGORY_SAMPLING.equals(analysisCategory)) {
@@ -821,6 +835,9 @@ public class EmcProjSchemeServiceImpl implements EmcProjSchemeService {
                 result.setAnalysisType(item.getExt$Item("analysiscategory"));
                 result.setLowLimit(StringUtils.isEmpty(item.getExt$Item("lowlimit")) ? null : item.getExt$Item("lowlimit"));
                 result.setHighLimit(StringUtils.isEmpty(item.getExt$Item("highlimit")) ? null : item.getExt$Item("highlimit"));
+                result.setQcCategoryId(order.getQcCategoryId());
+                result.setQcCategoryCode(order.getQcCategoryCode());
+                result.setQcName(order.getQcName());
 
                 // 添加指标高低限
                 if (indexTestItemList != null && indexSetList != null) {
@@ -897,7 +914,6 @@ public class EmcProjSchemeServiceImpl implements EmcProjSchemeService {
         folder.setMonitorPointId(projScheme.getMonitorPointId());
         folder.setMonitorPointNo(projScheme.getMonitorPointNo());
         folder.setMonitorPointName(projScheme.getMonitorPointName());
-        folder.setRemark(projScheme.getRemark());
         folder.setTermination(Constant.NO);
         folder.setMonitorTmplId(projScheme.getMonitorTmplId());
         if (point != null) {

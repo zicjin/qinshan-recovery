@@ -530,76 +530,7 @@ public class EmcMobileProjectServiceImpl implements EmcMobileProjectService {
      *            新点位
      */
     protected void updateFolder(EmcMobileDTO mobileDTO, Map<Long, Long> projectIdMap, Map<Long, EmcFolderBean> folderMap,String ... sampleParamFlag) {
-        List<EmcFolderBean> mobileFolderList = mobileDTO.getFolderList();
-        if (mobileFolderList == null || mobileFolderList.isEmpty()) {
-            return;
-        }
-
-        // mobileId 为空即表示为待更新的点位
-        List<EmcFolderBean> updateFolderList = mobileFolderList.stream().filter(f -> StringUtils.isEmpty(f.getMobileId())).collect(Collectors.toList());
-
-        // 查询已完成采样的点位，对于已完成的点位重复上传不再更新信息
-        // TODO 修改流程状态了可能数据筛选不准确
-        List<Long> folderIdList = mobileFolderList.stream().map(EmcFolderBean::getId).collect(Collectors.toList());
-        // 这里通过状态来查询已完成采样的点位是有问题的，应该根据点位下的所有样品是否都有采样单来判断
-        /*List<EmcFolderBean> completedFolderList = folderService.getDao().selectListByIds(folderIdList).stream()
-                .filter(e -> EmcBizConstant.FOLDER_STATUS_DRAW.equals(e.getStatus()) || EmcBizConstant.FOLDER_STATUS_DONE.equals(e.getStatus())).collect(Collectors.toList());*/
-
-        List<Long> completedFolderIdList = new ArrayList<>();
-        List<EmcOrderBean> folderOrderList = orderService.getDao().selectListByOneColumnValues(folderIdList, "FOLDERID", Arrays.asList("ID", "SAMPLEID"));
-        folderOrderList.stream().filter(o -> !ObjectUtils.isEmpty(o.getFolderId())).collect(Collectors.groupingBy(EmcOrderBean::getFolderId)).forEach((k, v) -> {
-            if (v.stream().noneMatch(o -> ObjectUtils.isEmpty(o.getSampleId()))) {
-                completedFolderIdList.add(k);
-            }
-        });
-        List<EmcFolderBean> completedFolderList = folderService.getDao().selectListByIds(completedFolderIdList);
-
-        List<EmcFolderBean> varFolderList = mobileFolderList.stream().filter(f -> !StringUtils.isEmpty(f.getMobileId())).collect(Collectors.toList());
-        if (varFolderList.isEmpty()) {
-            folderService.getDao().update(filterCompletedFolder(updateFolderList, completedFolderList));
-            return;
-        }
-
-        List<String> mobileIdList = varFolderList.stream().map(EmcFolderBean::getMobileId).collect(Collectors.toList());
-        List<EmcFolderBean> existFolderList = folderService.getDao().selectListByOneColumnValues(mobileIdList, "MOBILEID");
-        List<String> existMobileIdList = existFolderList.stream().map(EmcFolderBean::getMobileId).collect(Collectors.toList());
-
-        updateFolderList.addAll(varFolderList.stream().filter(f -> existMobileIdList.contains(f.getMobileId())).collect(Collectors.toList()));
-        List<EmcFolderBean> mobileNewFolderList = varFolderList.stream().filter(f -> !existMobileIdList.contains(f.getMobileId())).collect(Collectors.toList());
-        if (mobileNewFolderList.isEmpty()) {
-            folderService.getDao().update(filterCompletedFolder(updateFolderList, completedFolderList));
-            return;
-        }
-
-        List<EmcFolderBean> newFolderList = new ArrayList<>();
-        int newFolderSize = mobileNewFolderList.size();
-        Long projectId = mobileNewFolderList.get(0).getProjId();
-        EmcProjectBean project = projectService.getDao().selectById(projectId);
-        List<String> newFolderNoList = folderService.generateFolderNosByProjId(projectId, project.getProjNo(), mobileNewFolderList.get(0).getMonitorTmplId(), newFolderSize);
-
-        for (int i = 0; i < newFolderSize; i++) {
-            EmcFolderBean folderBean = mobileNewFolderList.get(i);
-            EmcFolderBean newFolder = new EmcFolderBean();
-            BeanUtils.copyProperties(folderBean, newFolder);
-            if (!projectIdMap.isEmpty()) {
-                Long newProjectId = projectIdMap.get(folderBean.getProjId());
-                if (newProjectId != null) {
-                    newFolder.setProjId(newProjectId);
-                }
-            }
-            newFolder.setId(ApplicationContextHelper.getNextIdentity());
-            newFolder.setFolderNo(newFolderNoList.get(i));
-            newFolder.setSource(SOURCE_FROM_PAD);
-            newFolder.setProcessStatus("done");
-            // 对于平板新增的点位，直接更改状态为已完成
-            newFolder.setStatus(EmcBizConstant.FOLDER_STATUS_DRAW);
-
-            newFolderList.add(newFolder);
-            folderMap.put(folderBean.getId(), newFolder);
-        }
-
-        folderService.getDao().insert(newFolderList);
-        folderService.getDao().update(filterCompletedFolder(updateFolderList, completedFolderList));
+        // 生产版本保留该扩展点，但当前移动端上传流程不更新点位。
     }
 
     /**

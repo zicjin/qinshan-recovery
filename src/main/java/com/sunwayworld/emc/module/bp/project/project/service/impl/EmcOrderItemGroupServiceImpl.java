@@ -26,6 +26,7 @@ import com.sunwayworld.emc.module.mdm.bizmdm.test.service.EmcTestMethodOrderCate
 import com.sunwayworld.framework.at.annotation.AuditTrailEntry;
 import com.sunwayworld.framework.at.annotation.AuditTrailType;
 import com.sunwayworld.framework.context.ApplicationContextHelper;
+import com.sunwayworld.framework.context.LocalContextHelper;
 import com.sunwayworld.framework.database.sql.Order;
 import com.sunwayworld.framework.mybatis.mapper.MatchPattern;
 import com.sunwayworld.framework.mybatis.mapper.SearchFilter;
@@ -90,18 +91,20 @@ public class EmcOrderItemGroupServiceImpl implements EmcOrderItemGroupService {
     public void insert(List<EmcOrderBean> orderList, List<EmcOrderItemGroupBean> orderItemGroupList, boolean itemFlag) {
 
         List<Long> testMethodIdList = orderItemGroupList.stream().map(e -> e.getTestMethodId()).distinct().collect(Collectors.toList());
+        String parentOrgId = LocalContextHelper.getLoginUser().getExt$Item("parentOrgId");
 
         List<EmcTestMethodOrderCategoryBean> filterTestMethodOrderCategoryList = testMethodIdList.stream().map(testMethodId -> {
             EmcTestMethodOrderCategoryBean testMethodOrderCategory = new EmcTestMethodOrderCategoryBean();
 
             testMethodOrderCategory.setTestMethodId(testMethodId);
             testMethodOrderCategory.setMonitorTmplId(orderList.get(0).getMonitorTmplId());
+            testMethodOrderCategory.setExt$Item("orgid", parentOrgId);
 
             return testMethodOrderCategory;
         }).collect(Collectors.toList());
 
         List<Long> testMethodOrderCategoryIdList = testMethodOrderCategoryService.getDao()
-                .selectList(filterTestMethodOrderCategoryList, Arrays.asList("TESTMETHODID", "MONITORTMPLID"), Arrays.asList("ID"), new Order[0]).stream().map(e -> e.getId()).collect(Collectors.toList());
+                .selectList(filterTestMethodOrderCategoryList, Arrays.asList("TESTMETHODID", "MONITORTMPLID", "ORGID"), Arrays.asList("ID"), new Order[0]).stream().map(e -> e.getId()).collect(Collectors.toList());
         List<EmcTestMethodOrderCategoryBean> testMethodOrderCategoryList = testMethodOrderCategoryIdList.isEmpty() ? Collections.emptyList()
                 : testMethodOrderCategoryService.selectListByFilter(SearchFilter.instance().match("ID", testMethodOrderCategoryIdList).filter(MatchPattern.OR), new Order[0]);
 
@@ -128,6 +131,7 @@ public class EmcOrderItemGroupServiceImpl implements EmcOrderItemGroupService {
                     o.setContainerCategoryName(orderCategory.getExt$Item("containercategoryname"));
                     o.setContainerGroup(orderCategory.getContainerGroup());
                     o.setFixative(orderCategory.getFixative());
+                    o.setStoreCondition(orderCategory.getStoreCondition());
 
                 }
 

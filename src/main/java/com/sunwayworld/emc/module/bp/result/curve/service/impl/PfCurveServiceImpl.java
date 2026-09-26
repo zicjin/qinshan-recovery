@@ -348,8 +348,8 @@ public class PfCurveServiceImpl extends EmcCurveServiceImpl implements PfCurveSe
                 calcCurveOrderTaskResultList.add(zeroOrderTaskResult);
             }
             calcCurveOrderTaskResultList.addAll(curveOrderTaskResultList.stream().filter(e -> !e.getQcCategoryCode().contains("QC-CAL0")).collect(Collectors.toList()));
-            String[] x = (String[])calcCurveOrderTaskResultList.stream().map(EmcOrderTaskResultBean::getStandQty).toArray(String[]::new);
-            String[] y = (String[])calcCurveOrderTaskResultList.stream().map(EmcOrderTaskResultBean::getOriginalResult).toArray(String[]::new);
+            String[] x = calcCurveOrderTaskResultList.stream().map(EmcOrderTaskResultBean::getStandQty).toArray(String[]::new);
+            String[] y = calcCurveOrderTaskResultList.stream().map(EmcOrderTaskResultBean::getOriginalResult).toArray(String[]::new);
             for (int k = 0; k < y.length; ++k) {
                 y[k] = new BigDecimal(y[k]).subtract(new BigDecimal(blankcal)).toString();
             }
@@ -382,14 +382,13 @@ public class PfCurveServiceImpl extends EmcCurveServiceImpl implements PfCurveSe
                 r2 = r2u.divide(r2l, 6, 4);
             }
             for (EmcOrderTaskResultBean curveOrderTaskResult : curveOrderTaskResultList) {
-                String RN4;
                 EmcItemBean curveItem = curveItemList.stream().filter(e -> ObjectUtils.equals(curveOrderTaskResult.getItemId(), e.getId())).findFirst().get();
                 String slopeRevision = StringUtils.isEmpty(curveItem.getSlopeRevision()) ? "ISO,4" : curveItem.getSlopeRevision();
                 String RN2 = NumberUtils.rounding(slope.toString(), slopeRevision);
                 String interceptRevision = StringUtils.isEmpty(curveItem.getInterceptRevision()) ? "ISO,4" : curveItem.getInterceptRevision();
                 String RN3 = NumberUtils.rounding(intercept.toString(), interceptRevision);
                 BigDecimal mysteryValueDecimal = new BigDecimal(Math.abs(Float.parseFloat(r2.toString())));
-                String string = RN4 = mysteryValueDecimal.toString().length() > 6 ? NumberUtils.rounding(mysteryValueDecimal.toString(), "ZSBR,4") : mysteryValueDecimal.toString();
+                String RN4 = mysteryValueDecimal.toString().length() > 6 ? NumberUtils.rounding(mysteryValueDecimal.toString(), "ZSBR,4") : mysteryValueDecimal.toString();
                 if ("1.0000".equals(RN4)) {
                     RN4 = "0.9999";
                 }

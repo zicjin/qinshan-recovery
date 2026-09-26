@@ -177,105 +177,6 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
 
     private static final String COMPOSE_ALL_RUNLIST_REPORT_FAILURE = "composeAllRunListReportFailure";
 
-    @Override
-    public EmcAnalysisRecordDTO selectRunAuditFile(RestJsonWrapperBean wrapper) {
-        String runId = wrapper.getParamValue("runId");
-        EmcAnalysisRecordDTO dto = new EmcAnalysisRecordDTO();
-        if (!ObjectUtils.isEmpty(runId)) {
-            List<CoreFileBean> files = new ArrayList<>();
-            files.addAll(coreFileService.selectListByFilter(SearchFilter.instance().match("targetId", "T_EMC_EQUIPT$" + runId).filter(MatchPattern.SEQ), new Order[0]));
-            files.addAll(coreFileService.selectListByFilter(SearchFilter.instance().match("targetId", "T_EMC_RUN$" + runId).filter(MatchPattern.SEQ), new Order[0]));
-            dto.setOtherRecordList(files);
-        }
-        return dto;
-    }
-
-    @Override
-    @Transactional
-    public void bathUploadFile(RestJsonWrapperBean wrapper) {
-        String[] ids = wrapper.getParamValue("ids").split(",");
-        String[] fileIds = wrapper.getParamValue("fileIds").split(",");
-        String dbTable = wrapper.getParamValue("dbTable");
-        if (dbTable == null) dbTable = "T_EMC_RUN";
-        List<Long> fileIdList = Arrays.stream(fileIds).map(NumberUtils::parseLong).collect(Collectors.toList());
-        List<CoreFileBean> sourceFiles = coreFileService.getDao().selectListByIds(fileIdList, new Order[0]);
-        List<CoreFileBean> insertFiles = new ArrayList<>();
-        for (CoreFileBean source : sourceFiles) {
-            for (String id : ids) {
-                CoreFileBean file = new CoreFileBean();
-                BeanUtils.copyProperties(source, file);
-                file.setId(ApplicationContextHelper.getNextIdentity());
-                file.setTargetId(dbTable + "$" + id);
-                insertFiles.add(file);
-            }
-        }
-        coreFileService.getDao().insert(insertFiles);
-    }
-
-    @Override
-    public String exportOriginalRecordExcelZip(RestJsonWrapperBean wrapper) {
-        List<EmcRunBean> selectedRunList = wrapper.parse(EmcRunBean.class);
-        if (selectedRunList.isEmpty()) return "";
-        List<String> runIdList = selectedRunList.stream().map(run -> run.getId() + "").distinct().collect(Collectors.toList());
-        List<EmcRunBean> runList = getDao().selectListByIds(runIdList, new Order[0]);
-        if (runList.isEmpty()) return "";
-        List<Long> reportConfigLineIdList = runList.stream().map(EmcRunBean::getReportConfigLineId).filter(v -> !ObjectUtils.isEmpty(v)).distinct().collect(Collectors.toList());
-        List<CoreReportConfigLineBean> configLineList = coreReportConfigLineService.selectListByIds(reportConfigLineIdList);
-        if (configLineList.isEmpty()) return "";
-        String reportingServiceServer = ApplicationContextHelper.getConstantValue("REPORTING_SERVICE_SERVER_URL");
-        String fineBaseUrl = ApplicationContextHelper.getEnvironment().getProperty("sunway.config.fine.independent-deploy-server.url");
-        List<Path> exportPathList = new ArrayList<>();
-        try {
-            for (EmcRunBean run : runList) {
-                if (ObjectUtils.isEmpty(run.getReportConfigLineId())) continue;
-                CoreReportConfigLineBean configLine = configLineList.stream().filter(c -> ObjectUtils.equals(c.getId(), run.getReportConfigLineId())).findFirst().orElse(null);
-                if (configLine == null) continue;
-                String downloadUrl = null;
-                if ("reportingService".equals(configLine.getReportCategory())) {
-                    downloadUrl = ReportingServiceUtils.getDownloadUrl(reportingServiceServer, configLine, run, "EXCEL");
-                } else if ("fanruan".equals(configLine.getReportCategory())) {
-                    List<String> targetIds = Collections.singletonList(coreReportConfigLineService.getDao().getTable() + "$" + configLine.getId());
-                    CoreFileBean file = coreFileService.getDao().selectListByOneColumnValues(targetIds, "TARGETID", new Order[0]).stream().findFirst().orElse(null);
-                    if (file != null) downloadUrl = buildRunFanruanOriginalRecordExcelUrl(fineBaseUrl, configLine, file.getName(), run);
-                }
-                if (!StringUtils.isEmpty(downloadUrl)) exportPathList.add(downloadToRunTempPath(downloadUrl, "分析原始记录_" + run.getId() + ".xls"));
-            }
-            if (exportPathList.isEmpty()) return "";
-            FilePathDTO filePath = FilePathDTO.of(FileScope.temp.name(), LocalDateTime.now(), StringUtils.randomUUID(16), "分析原始记录批量导出.zip");
-            ArchiveUtils.zip(FilePathManager.getLocalPath(filePath), exportPathList.toArray(new Path[0]));
-            CoreFileManager fileManager = ApplicationContextHelper.getBean(CoreFileManager.class);
-            fileManager.upload(filePath, FilePathManager.getLocalPath(filePath));
-            return fileManager.getDownloadUrl(filePath);
-        } catch (Exception e) {
-            throw new FileException(e);
-        }
-    }
-
-    private Path downloadToRunTempPath(String url, String fileName) {
-        FilePathDTO filePath = FilePathDTO.of(FileScope.temp.name(), LocalDateTime.now(), StringUtils.randomUUID(16), fileName);
-        try {
-            Files.createDirectories(FilePathManager.getLocalDirPath(filePath), new FileAttribute[0]);
-        } catch (IOException e) {
-            throw new FileException(e);
-        }
-        HttpClientManager.getInstance().download(url, FilePathManager.getLocalPath(filePath).toFile());
-        return FilePathManager.getLocalPath(filePath);
-    }
-
-    private String buildRunFanruanOriginalRecordExcelUrl(String fineBaseUrl, CoreReportConfigLineBean configLine, String reportFileName, EmcRunBean source) {
-        if (StringUtils.isEmpty(fineBaseUrl) || StringUtils.isEmpty(reportFileName)) return null;
-        try {
-            String fileName = configLine.getReportConfigLineNo() + "/" + reportFileName;
-            StringBuilder url = new StringBuilder(fineBaseUrl).append("/decision/view/report?viewlet=")
-                    .append(URLEncoder.encode(fileName, "UTF-8")).append("&format=excel");
-            String params = parseReportParam(source, configLine.getParam());
-            if (!StringUtils.isEmpty(params)) url.append("&").append(params);
-            return url.toString();
-        } catch (UnsupportedEncodingException e) {
-            throw new FileException(e);
-        }
-    }
-
     @Autowired
     @Lazy
     private EmcProjectService projectService;
@@ -3551,6 +3452,71 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
     /**
      * 解析报表参数，忽略参数名大小写
      */
+    @Override
+    public String exportOriginalRecordExcelZip(RestJsonWrapperBean wrapper) {
+        List<EmcRunBean> selectedRunList = wrapper.parse(EmcRunBean.class);
+        if (selectedRunList.isEmpty()) return "";
+        List<String> runIdList = selectedRunList.stream().map(run -> run.getId() + "").distinct().collect(Collectors.toList());
+        List<EmcRunBean> runList = getDao().selectListByIds(runIdList, new Order[0]);
+        if (runList.isEmpty()) return "";
+        List<Long> reportConfigLineIdList = runList.stream().map(EmcRunBean::getReportConfigLineId).filter(v -> !ObjectUtils.isEmpty(v)).distinct().collect(Collectors.toList());
+        List<CoreReportConfigLineBean> configLineList = coreReportConfigLineService.selectListByIds(reportConfigLineIdList);
+        if (configLineList.isEmpty()) return "";
+        String reportingServiceServer = ApplicationContextHelper.getConstantValue("REPORTING_SERVICE_SERVER_URL");
+        String fineBaseUrl = ApplicationContextHelper.getEnvironment().getProperty("sunway.config.fine.independent-deploy-server.url");
+        List<Path> exportPathList = new ArrayList<>();
+        try {
+            for (EmcRunBean run : runList) {
+                if (ObjectUtils.isEmpty(run.getReportConfigLineId())) continue;
+                CoreReportConfigLineBean configLine = configLineList.stream().filter(c -> ObjectUtils.equals(c.getId(), run.getReportConfigLineId())).findFirst().orElse(null);
+                if (configLine == null) continue;
+                String downloadUrl = null;
+                if ("reportingService".equals(configLine.getReportCategory())) {
+                    downloadUrl = ReportingServiceUtils.getDownloadUrl(reportingServiceServer, configLine, run, "EXCEL");
+                } else if ("fanruan".equals(configLine.getReportCategory())) {
+                    List<String> targetIds = Collections.singletonList(coreReportConfigLineService.getDao().getTable() + "$" + configLine.getId());
+                    CoreFileBean file = coreFileService.getDao().selectListByOneColumnValues(targetIds, "TARGETID", new Order[0]).stream().findFirst().orElse(null);
+                    if (file != null) downloadUrl = buildFanruanOriginalRecordExcelUrl(fineBaseUrl, configLine, file.getName(), run);
+                }
+                if (!StringUtils.isEmpty(downloadUrl)) exportPathList.add(downloadToTempPath(downloadUrl, "分析原始记录_" + run.getId() + ".xls"));
+            }
+            if (exportPathList.isEmpty()) return "";
+            FilePathDTO filePath = FilePathDTO.of(FileScope.temp.name(), LocalDateTime.now(), StringUtils.randomUUID(16), "分析原始记录批量导出.zip");
+            ArchiveUtils.zip(FilePathManager.getLocalPath(filePath), exportPathList.toArray(new Path[0]));
+            CoreFileManager fileManager = ApplicationContextHelper.getBean(CoreFileManager.class);
+            fileManager.upload(filePath, FilePathManager.getLocalPath(filePath));
+            return fileManager.getDownloadUrl(filePath);
+        } catch (Exception e) {
+            throw new FileException(e);
+        }
+    }
+
+    private Path downloadToTempPath(String url, String fileName) {
+        FilePathDTO filePath = FilePathDTO.of(FileScope.temp.name(), LocalDateTime.now(), StringUtils.randomUUID(16), fileName);
+        try {
+            Files.createDirectories(FilePathManager.getLocalDirPath(filePath), new FileAttribute[0]);
+        } catch (IOException e) {
+            throw new FileException(e);
+        }
+        HttpClientManager.getInstance().download(url, FilePathManager.getLocalPath(filePath).toFile());
+        return FilePathManager.getLocalPath(filePath);
+    }
+
+    private String buildFanruanOriginalRecordExcelUrl(String fineBaseUrl, CoreReportConfigLineBean configLine, String reportFileName, EmcRunBean source) {
+        if (StringUtils.isEmpty(fineBaseUrl) || StringUtils.isEmpty(reportFileName)) return null;
+        try {
+            String fileName = configLine.getReportConfigLineNo() + "/" + reportFileName;
+            StringBuilder url = new StringBuilder(fineBaseUrl).append("/decision/view/report?viewlet=")
+                    .append(URLEncoder.encode(fileName, "UTF-8")).append("&format=excel");
+            String params = parseReportParam(source, configLine.getParam());
+            if (!StringUtils.isEmpty(params)) url.append("&").append(params);
+            return url.toString();
+        } catch (UnsupportedEncodingException e) {
+            throw new FileException(e);
+        }
+    }
+
+
     private String parseReportParam(EmcRunBean run, String param) {
         if (StringUtils.isEmpty(param)) {
             return "";
@@ -5631,4 +5597,39 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
 
         return analysisRecordDTO;
     }
+    @Override
+    public EmcAnalysisRecordDTO selectRunAuditFile(RestJsonWrapperBean wrapper) {
+        String runId = wrapper.getParamValue("runId");
+        EmcAnalysisRecordDTO dto = new EmcAnalysisRecordDTO();
+        if (!ObjectUtils.isEmpty(runId)) {
+            List<CoreFileBean> files = new ArrayList<>();
+            files.addAll(coreFileService.selectListByFilter(SearchFilter.instance().match("targetId", "T_EMC_EQUIPT$" + runId).filter(MatchPattern.SEQ), new Order[0]));
+            files.addAll(coreFileService.selectListByFilter(SearchFilter.instance().match("targetId", "T_EMC_RUN$" + runId).filter(MatchPattern.SEQ), new Order[0]));
+            dto.setOtherRecordList(files);
+        }
+        return dto;
+    }
+
+    @Override
+    @Transactional
+    public void bathUploadFile(RestJsonWrapperBean wrapper) {
+        String[] ids = wrapper.getParamValue("ids").split(",");
+        String[] fileIds = wrapper.getParamValue("fileIds").split(",");
+        String dbTable = wrapper.getParamValue("dbTable");
+        if (dbTable == null) dbTable = "T_EMC_RUN";
+        List<Long> fileIdList = Arrays.stream(fileIds).map(NumberUtils::parseLong).collect(Collectors.toList());
+        List<CoreFileBean> sourceFiles = coreFileService.getDao().selectListByIds(fileIdList, new Order[0]);
+        List<CoreFileBean> insertFiles = new ArrayList<>();
+        for (CoreFileBean source : sourceFiles) {
+            for (String id : ids) {
+                CoreFileBean file = new CoreFileBean();
+                BeanUtils.copyProperties(source, file);
+                file.setId(ApplicationContextHelper.getNextIdentity());
+                file.setTargetId(dbTable + "$" + id);
+                insertFiles.add(file);
+            }
+        }
+        coreFileService.getDao().insert(insertFiles);
+    }
+
 }

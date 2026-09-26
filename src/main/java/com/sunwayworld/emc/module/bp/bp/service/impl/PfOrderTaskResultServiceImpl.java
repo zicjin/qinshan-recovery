@@ -131,7 +131,8 @@ public class PfOrderTaskResultServiceImpl extends EmcOrderTaskResultServiceImpl 
     public List<String> selectQcNames(RestJsonWrapperBean wrapper) {
         String sampleId = wrapper.getParamValue("sampleId");
         List<EmcOrderTaskResultBean> results = selectListByFilter(SearchFilter.instance().match("sampleId", sampleId).filter(MatchPattern.EQ).match("qcname", "N/A").filter(MatchPattern.DIFFER));
-        return results.stream().map(EmcOrderTaskResultBean::getQcName).distinct().collect(Collectors.toList());
+        List<String> qcNames = results.stream().map(EmcOrderTaskResultBean::getQcName).distinct().collect(Collectors.toList());
+        return qcNames;
     }
 
     public List<TableRowBean> selectResultInputResultRowList(RestJsonWrapperBean wrapper) {
@@ -496,9 +497,9 @@ public class PfOrderTaskResultServiceImpl extends EmcOrderTaskResultServiceImpl 
                 ResultInputResultDTO quickInputResult = new ResultInputResultDTO();
                 quickInputResult.setId(r.getId());
                 quickInputResult.setColId(r.getTestId() + "$" + r.getItemId() + "$" + r.getRepeatNo());
-                if("1".equals(r.getScriptFlag())){
+                if ("1".equals(r.getScriptFlag())) {
                     quickInputResult.setColVal(r.getReportResult());
-                }else{
+                } else {
                     quickInputResult.setColVal(r.getOriginalResult());
                 }
                 quickInputResult.setRowNo(r.getExt$Item("sampleparamorderno"));
@@ -561,9 +562,15 @@ public class PfOrderTaskResultServiceImpl extends EmcOrderTaskResultServiceImpl 
         List<EmcOrderTaskResultBean> oldotrUniqueList = orderTaskResultList.stream()
                 .collect(Collectors.collectingAndThen(Collectors.toCollection(
                         () -> new TreeSet<>(Comparator.comparing(e -> e.getItemId() + "" + e.getRepeatNo()))), ArrayList::new));
-        //otrUniqueList.sort(Comparator.comparingLong(EmcOrderTaskResultBean::getTestId));
-        //otrUniqueList.sort(Comparator.comparingLong(EmcOrderTaskResultBean::getItemOrderNo));
-        List<EmcOrderTaskResultBean> otrUniqueList = oldotrUniqueList.stream().sorted(Comparator.comparing(EmcOrderTaskResultBean::getTestId).thenComparing(EmcOrderTaskResultBean::getItemOrderNo)).collect(Collectors.toList());
+        String sorttype = wrapper.getParamValue("sorttype");
+        List<EmcOrderTaskResultBean> otrUniqueList = oldotrUniqueList.stream()
+                .sorted(Comparator.comparing(EmcOrderTaskResultBean::getItemOrderNo).thenComparing(EmcOrderTaskResultBean::getTestId))
+                .collect(Collectors.toList());
+        if ("test".equals(sorttype)) {
+            otrUniqueList = oldotrUniqueList.stream()
+                    .sorted(Comparator.comparing(EmcOrderTaskResultBean::getTestId).thenComparing(EmcOrderTaskResultBean::getItemOrderNo))
+                    .collect(Collectors.toList());
+        }
         List<TableHeadBean> tableHeadList = new ArrayList<>();
 
         boolean containMultipleTest = testOrderTaskMap.size() > 1;
@@ -603,9 +610,9 @@ public class PfOrderTaskResultServiceImpl extends EmcOrderTaskResultServiceImpl 
                 ResultInputResultDTO quickInputResult = new ResultInputResultDTO();
                 quickInputResult.setId(r.getId());
                 quickInputResult.setColId(r.getTestId() + "$" + r.getItemId() + "$" + r.getRepeatNo());
-                if("1".equals(r.getScriptFlag())){
+                if ("1".equals(r.getScriptFlag())) {
                     quickInputResult.setColVal(r.getReportResult());
-                }else{
+                } else {
                     quickInputResult.setColVal(r.getOriginalResult());
                 }
                 quickInputResult.setRowNo(r.getOrderNo());
@@ -653,6 +660,112 @@ public class PfOrderTaskResultServiceImpl extends EmcOrderTaskResultServiceImpl 
      * 生成交叉表表头：设置到itemId一级，用在现场采样、分析录入页面
      * 标题也显示到itemAliasName
      */
+    @Override
+    @Transactional
+    public void batchInputGasParameter(RestJsonWrapperBean wrapper) {
+        List<EmcOrderTaskBean> targetTaskList = wrapper.parse(EmcOrderTaskBean.class);
+        List<EmcOrderTaskResultBean> valueList = wrapper.parse(EmcOrderTaskResultBean.class);
+        Map<String, String> valueMap = valueList.get(0).getExt$();
+        List<String> fieldList = new ArrayList<>(valueMap.keySet());
+        List<EmcOrderTaskResultBean> updateResultList = new ArrayList<>();
+        targetTaskList.forEach(task -> {
+            Map<String, String> taskExt = task.getExt$();
+            taskExt.entrySet().stream()
+                .filter(entry -> StringUtils.endsWith(entry.getKey(), "_ext$") && fieldList.stream().anyMatch(field -> StringUtils.startsWith(entry.getKey(), field)))
+                .forEach(entry -> {
+                    JSONObject valueObject = JSON.parseObject((String) entry.getValue());
+                    String key = StringUtils.replace(entry.getKey(), "_ext$", "");
+                    Optional.ofNullable(valueMap.get(key)).ifPresent(value -> {
+                        EmcOrderTaskResultBean updateResult = new EmcOrderTaskResultBean();
+                        updateResult.setId(valueObject.getLong("id"));
+                        updateResult.setOriginalResult(value);
+                        updateResultList.add(updateResult);
+                    });
+                });
+        });
+        if (!updateResultList.isEmpty()) {
+            getDao().update(updateResultList, new String[]{"originalResult"});
+            List<Long> calcResultIdList = updateResultList.stream().map(EmcOrderTaskResultBean::getId).collect(Collectors.toList());
+            EmcOrderTaskResultComputingEngine.getEngine(calcResultIdList).compute();
+        }
+    }
+
+    @Override
+    public List<TableHeadBean> selectPreprocessingQuickInputResultTitleListByProjIds(RestJsonWrapperBean wrapper) {
+        MapperParameter parameter = wrapper.extractMapFilter();
+        parameter.setFilter(SearchFilter.instance().match("PROJID", wrapper.getParamValue("projIds")).filter(MatchPattern.OR)
+                .match("ANALYSISTYPE", "Preprocessing").filter(MatchPattern.SEQ));
+        List<EmcOrderTaskResultBean> results = orderTaskResultDao.selectQuickInputResultList(parameter);
+        List<Long> taskIds = results.stream().map(r -> r.getOrderTaskId()).distinct().collect(Collectors.toList());
+        List<EmcOrderTaskBean> tasks = orderTaskService.getDao().selectListByIds(taskIds, new Order[0]);
+        Map<Long, List<EmcOrderTaskBean>> tests = tasks.stream().collect(Collectors.groupingBy(EmcOrderTaskBean::getTestId, TreeMap::new, Collectors.toList()));
+        List<EmcOrderTaskResultBean> oldUnique = results.stream().collect(Collectors.collectingAndThen(
+                Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(e -> e.getItemId() + "" + e.getRepeatNo()))), ArrayList::new));
+        List<EmcOrderTaskResultBean> unique = oldUnique.stream().sorted(Comparator.comparing(EmcOrderTaskResultBean::getTestId)
+                .thenComparing(EmcOrderTaskResultBean::getItemOrderNo)).collect(Collectors.toList());
+        List<TableHeadBean> heads = new ArrayList<>();
+        boolean multiple = tests.size() > 1;
+        unique.forEach(result -> {
+            TableHeadBean head = new TableHeadBean();
+            head.setField(result.getTestId() + "$" + result.getItemId() + "$" + result.getRepeatNo());
+            StringBuilder title = new StringBuilder();
+            if (multiple) title.append(result.getExt$Item("testname")).append("<br>");
+            title.append(result.getItemAliasName()).append("_").append(result.getRepeatNo()).append("<br>");
+            title.append(Optional.ofNullable(result.getUnitName()).orElse("-"));
+            head.setTitle(title.toString()); head.setExt$Item("script", result.getScriptFlag()); heads.add(head);
+        });
+        return heads;
+    }
+
+    @Override
+    public List<TableRowBean> selectPreprocessingQuickInputResultRowListByProjIds(RestJsonWrapperBean wrapper) {
+        MapperParameter parameter = wrapper.extractMapFilter();
+        parameter.setFilter(SearchFilter.instance().match("PROJID", wrapper.getParamValue("projIds")).filter(MatchPattern.OR)
+                .match("ANALYSISTYPE", "Preprocessing").filter(MatchPattern.SEQ));
+        List<EmcOrderTaskResultBean> results = orderTaskResultDao.selectQuickInputResultList(parameter);
+        List<Long> taskIds = results.stream().map(r -> r.getOrderTaskId()).distinct().collect(Collectors.toList());
+        List<ResultInputResultDTO> dataList = new ArrayList<>();
+        taskIds.forEach(taskId -> results.stream()
+                .filter(r -> ObjectUtils.equals(taskId, r.getOrderTaskId()))
+                .forEach(r -> {
+                    ResultInputResultDTO quickInputResult = new ResultInputResultDTO();
+                    quickInputResult.setId(r.getId());
+                    quickInputResult.setColId(r.getTestId() + "$" + r.getItemId() + "$" + r.getRepeatNo());
+                    if ("1".equals(r.getScriptFlag())) {
+                        quickInputResult.setColVal(r.getReportResult());
+                    } else {
+                        quickInputResult.setColVal(r.getOriginalResult());
+                    }
+                    quickInputResult.setRowNo(r.getOrderNo());
+                    quickInputResult.setExt$Item("submitFlag", r.getSubmitFlag());
+                    quickInputResult.setExt$Item("scriptFlag", r.getScriptFlag());
+                    dataList.add(quickInputResult);
+                }));
+        TableCellDescriptor<ResultInputResultDTO> cellDescriptor = new TableCellDescriptor<>("colId", "colVal");
+        cellDescriptor.addPivot("rowNo");
+        cellDescriptor.addExt("submitFlag");
+        cellDescriptor.addExt("scriptFlag");
+        List<TableRowBean> tableRowList = TableHelper.parseTableRowList(dataList, cellDescriptor);
+        for (TableRowBean row : tableRowList) {
+            String orderNo = row.getPivotValue("rowNo");
+            EmcOrderTaskResultBean result = results.stream()
+                    .filter(r -> ObjectUtils.equals(orderNo, r.getOrderNo()))
+                    .findFirst().orElse(null);
+            if (result != null) {
+                String naMonitorPointName = StringUtils.isEmpty(result.getExt$Item("monitorpointname")) ? "" : result.getExt$Item("ordercategory") + "_" + result.getExt$Item("monitorpointname");
+                String monitorPointName = StringUtils.equals("N/A", result.getQcCategoryCode()) ? naMonitorPointName : result.getQcName();
+                row.put("monitorPointName", monitorPointName);
+                row.put("orderNo", result.getOrderNo());
+                row.put("qcName", result.getQcName());
+                row.put("id", result.getOrderTaskId());
+                row.put("clientOrderName", result.getExt$Item("clientordername"));
+                row.put("sampleBeginDate", result.getExt$Item("samplebegindate"));
+                row.put("sampleBeginTime", result.getExt$Item("samplebegintime"));
+            }
+        }
+        return tableRowList;
+    }
+
     private List<TableHeadBean> getTableHeadListWithItemId(List<EmcOrderTaskResultBean> orderTaskResultList) {
 
         if (orderTaskResultList == null || orderTaskResultList.isEmpty()) {
@@ -719,7 +832,7 @@ public class PfOrderTaskResultServiceImpl extends EmcOrderTaskResultServiceImpl 
                 row.put("folderNo", result.getExt$Item("folderNo"));
                 row.put("section", result.getExt$Item("section"));
                 row.put("orderId", result.getOrderId());
-                row.put("orderNo", result.getExt$Item("orderContainerNo"));
+                row.put("orderNo", result.getOrderNo());
                 row.put("equiptAcquNo", result.getExt$Item("equiptAcquNo"));
                 row.put("orderCategory", result.getExt$Item("orderCategory"));
                 row.put("labelNumber", result.getExt$Item("labelNumber"));
@@ -742,94 +855,4 @@ public class PfOrderTaskResultServiceImpl extends EmcOrderTaskResultServiceImpl 
 
         return tableRowList;
     }
-    @Override
-    @Transactional
-    public void batchInputGasParameter(RestJsonWrapperBean wrapper) {
-        List<EmcOrderTaskBean> targetTaskList = wrapper.parse(EmcOrderTaskBean.class);
-        List<EmcOrderTaskResultBean> valueList = wrapper.parse(EmcOrderTaskResultBean.class);
-        Map<String, String> valueMap = valueList.get(0).getExt$();
-        List<String> fieldList = new ArrayList<>(valueMap.keySet());
-        List<EmcOrderTaskResultBean> updateResultList = new ArrayList<>();
-        targetTaskList.forEach(task -> task.getExt$().entrySet().stream()
-                .filter(entry -> StringUtils.endsWith(entry.getKey(), "_ext$") && fieldList.stream().anyMatch(field -> StringUtils.startsWith(entry.getKey(), field)))
-                .forEach(entry -> {
-                    JSONObject valueObject = JSON.parseObject((String) entry.getValue());
-                    String key = StringUtils.replace(entry.getKey(), "_ext$", "");
-                    Optional.ofNullable(valueMap.get(key)).ifPresent(value -> {
-                        EmcOrderTaskResultBean updateResult = new EmcOrderTaskResultBean();
-                        updateResult.setId(valueObject.getLong("id"));
-                        updateResult.setOriginalResult(String.valueOf(value));
-                        updateResultList.add(updateResult);
-                    });
-                }));
-        if (!updateResultList.isEmpty()) {
-            getDao().update(updateResultList, new String[]{"originalResult"});
-            List<Long> calcResultIdList = updateResultList.stream().map(EmcOrderTaskResultBean::getId).collect(Collectors.toList());
-            EmcOrderTaskResultComputingEngine.getEngine(calcResultIdList).compute();
-        }
-    }
-
-    @Override
-    public List<TableHeadBean> selectPreprocessingQuickInputResultTitleListByProjIds(RestJsonWrapperBean wrapper) {
-        MapperParameter parameter = wrapper.extractMapFilter();
-        parameter.setFilter(SearchFilter.instance().match("PROJID", wrapper.getParamValue("projIds")).filter(MatchPattern.OR)
-                .match("ANALYSISTYPE", "Preprocessing").filter(MatchPattern.SEQ));
-        List<EmcOrderTaskResultBean> results = orderTaskResultDao.selectQuickInputResultList(parameter);
-        List<Long> taskIds = results.stream().map(EmcOrderTaskResultBean::getOrderTaskId).distinct().collect(Collectors.toList());
-        List<EmcOrderTaskBean> tasks = orderTaskService.getDao().selectListByIds(taskIds, new Order[0]);
-        Map<Long, List<EmcOrderTaskBean>> tests = tasks.stream().collect(Collectors.groupingBy(EmcOrderTaskBean::getTestId, TreeMap::new, Collectors.toList()));
-        List<EmcOrderTaskResultBean> unique = results.stream().collect(Collectors.collectingAndThen(
-                Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(e -> e.getItemId() + "" + e.getRepeatNo()))), ArrayList::new));
-        unique = unique.stream().sorted(Comparator.comparing(EmcOrderTaskResultBean::getTestId)
-                .thenComparing(EmcOrderTaskResultBean::getItemOrderNo)).collect(Collectors.toList());
-        List<TableHeadBean> heads = new ArrayList<>();
-        boolean multiple = tests.size() > 1;
-        unique.forEach(result -> {
-            TableHeadBean head = new TableHeadBean();
-            head.setField(result.getTestId() + "$" + result.getItemId() + "$" + result.getRepeatNo());
-            StringBuilder title = new StringBuilder();
-            if (multiple) title.append(result.getExt$Item("testname")).append("<br>");
-            title.append(result.getItemAliasName()).append("_").append(result.getRepeatNo()).append("<br>");
-            title.append(Optional.ofNullable(result.getUnitName()).orElse("-"));
-            head.setTitle(title.toString()); head.setExt$Item("script", result.getScriptFlag()); heads.add(head);
-        });
-        return heads;
-    }
-
-    @Override
-    public List<TableRowBean> selectPreprocessingQuickInputResultRowListByProjIds(RestJsonWrapperBean wrapper) {
-        MapperParameter parameter = wrapper.extractMapFilter();
-        parameter.setFilter(SearchFilter.instance().match("PROJID", wrapper.getParamValue("projIds")).filter(MatchPattern.OR)
-                .match("ANALYSISTYPE", "Preprocessing").filter(MatchPattern.SEQ));
-        List<EmcOrderTaskResultBean> results = orderTaskResultDao.selectQuickInputResultList(parameter);
-        List<Long> taskIds = results.stream().map(EmcOrderTaskResultBean::getOrderTaskId).distinct().collect(Collectors.toList());
-        List<ResultInputResultDTO> dtoList = new ArrayList<>();
-        taskIds.forEach(taskId -> results.stream().filter(r -> ObjectUtils.equals(taskId, r.getOrderTaskId())).forEach(r -> {
-            ResultInputResultDTO dto = new ResultInputResultDTO(); dto.setId(r.getId());
-            dto.setColId(r.getTestId() + "$" + r.getItemId() + "$" + r.getRepeatNo());
-            dto.setColVal("1".equals(r.getScriptFlag()) ? r.getReportResult() : r.getOriginalResult());
-            dto.setRowNo(r.getOrderNo()); dto.setExt$Item("submitFlag", r.getSubmitFlag()); dto.setExt$Item("scriptFlag", r.getScriptFlag()); dtoList.add(dto);
-        }));
-        TableCellDescriptor<ResultInputResultDTO> descriptor = new TableCellDescriptor<>("colId", "colVal");
-        descriptor.addPivot("rowNo"); descriptor.addExt("submitFlag", "scriptFlag", "resultStatus", "resultCategory");
-        List<TableRowBean> rows = TableHelper.parseTableRowList(dtoList, descriptor);
-        for (TableRowBean row : rows) {
-            String orderNo = row.getPivotValue("rowNo");
-            results.stream().filter(r -> ObjectUtils.equals(orderNo, r.getOrderNo())).findFirst().ifPresent(result -> {
-                row.put("projId", result.getProjId()); row.put("projNo", result.getExt$Item("projNo")); row.put("projName", result.getExt$Item("projName"));
-                row.put("id", result.getOrderTaskId()); row.put("folderId", result.getFolderId()); row.put("folderNo", result.getExt$Item("folderNo"));
-                row.put("section", result.getExt$Item("section")); row.put("orderId", result.getOrderId()); row.put("orderNo", result.getExt$Item("orderContainerNo"));
-                row.put("equiptAcquNo", result.getExt$Item("equiptAcquNo")); row.put("orderCategory", result.getExt$Item("orderCategory"));
-                row.put("labelNumber", result.getExt$Item("labelNumber")); row.put("labDisplayLabelNumber", result.getExt$Item("labDisplayLabelNumber"));
-                row.put("cupNo", result.getExt$Item("cupNo")); row.put("sampleBeginDateTime", result.getExt$Item("sampleBeginDateTime"));
-                row.put("analysisOrgId", result.getExt$Item("analysisOrgId")); row.put("analysisOrgName", result.getExt$Item("analysisOrgName"));
-                row.put("sampleOrgId", result.getExt$Item("sampleOrgId")); row.put("sampleOrgName", result.getExt$Item("sampleOrgName"));
-                row.put("qcName", result.getQcName()); row.put("runId", result.getRunId());
-                row.put("labDisplayQcName", "lab".equals(result.getExt$Item("useCategory")) ? result.getQcName() : "N/A");
-            });
-        }
-        if (!rows.isEmpty() && !ObjectUtils.isEmpty(rows.get(0).get("cupNo"))) rows.sort(Comparator.comparing(r -> NumberUtils.parseInt(r.get("cupNo"))));
-        return rows;
-    }
-
 }

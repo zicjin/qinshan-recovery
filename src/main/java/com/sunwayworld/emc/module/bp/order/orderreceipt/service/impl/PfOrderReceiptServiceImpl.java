@@ -4,11 +4,13 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BinaryOperator;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.LongStream;
 
@@ -39,8 +41,19 @@ import com.sunwayworld.emc.module.bp.sample.sample.bean.EmcSampleBean;
 import com.sunwayworld.emc.module.mdm.basemdm.qccategory.bean.EmcQcCategoryBean;
 import com.sunwayworld.emc.module.mdm.basemdm.qccategory.service.EmcQcCategoryService;
 import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcItemBean;
+import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcGroupItemBean;
+import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcRelatedTestMethodBean;
+import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcTestMethodBean;
+import com.sunwayworld.emc.module.mdm.bizmdm.capacity.bean.EmcCapacityItemGroupBean;
+import com.sunwayworld.emc.module.mdm.bizmdm.capacity.bean.EmcTestCapacityBean;
 import com.sunwayworld.emc.module.mdm.bizmdm.test.service.EmcItemService;
+import com.sunwayworld.emc.module.mdm.bizmdm.test.service.EmcRelatedTestMethodService;
+import com.sunwayworld.emc.module.mdm.bizmdm.test.service.EmcTestMethodService;
+import com.sunwayworld.emc.module.mdm.bizmdm.capacity.service.EmcCapacityItemGroupService;
+import com.sunwayworld.emc.module.mdm.bizmdm.capacity.service.EmcTestCapacityService;
+import com.sunwayworld.emc.module.mdm.bizmdm.test.service.EmcGroupItemService;
 import com.sunwayworld.framework.constant.Constant;
+import com.sunwayworld.framework.database.sql.Order;
 import com.sunwayworld.framework.context.ApplicationContextHelper;
 import com.sunwayworld.framework.context.LocalContextHelper;
 import com.sunwayworld.framework.mybatis.mapper.MatchPattern;
@@ -93,6 +106,23 @@ public class PfOrderReceiptServiceImpl extends EmcOrderReceiptServiceImpl {
     @Autowired
     private EmcOrderLabelService orderLabelService;
 
+    @Autowired
+    private EmcTestMethodService testMethodService;
+
+    @Autowired
+    @Lazy
+    private EmcTestCapacityService testCapacityService;
+
+    @Autowired
+    @Lazy
+    private EmcCapacityItemGroupService capacityItemGroupService;
+
+    @Autowired
+    private EmcGroupItemService groupItemService;
+
+    @Autowired
+    private EmcRelatedTestMethodService relatedTestMethodService;
+
     @Override
     @Transactional
     public void copyQcOrder(RestJsonWrapperBean wrapper) {
@@ -108,6 +138,10 @@ public class PfOrderReceiptServiceImpl extends EmcOrderReceiptServiceImpl {
         List<Long> copiedItemIdList = copiedOrderTaskResultList.stream().map(EmcOrderTaskResultBean::getItemId).collect(Collectors.toList());
         List<EmcItemBean> copiedItemList = itemService.getDao().selectListByIds(copiedItemIdList);
         List<EmcOrderItemGroupBean> copiedOrderItemGroupList = orderItemGroupService.getDao().selectListByOneColumnValues(copiedOrderIdList, "ORDERID");
+        List<Long> testMethodIdList = copiedOrderTaskResultList.stream().map(EmcOrderTaskResultBean::getTestMethodId).distinct().collect(Collectors.toList());
+        List<EmcRelatedTestMethodBean> relatedTestMethodList = relatedTestMethodService.selectListByFilter(
+                SearchFilter.instance().match("testMethodId", testMethodIdList).filter(MatchPattern.OR)
+                        .match("replaceFlag", "1").filter(MatchPattern.EQ), new Order[0]);
 
         List<EmcOrderBean> newOrderList = new ArrayList<>();
         List<EmcFolderBean> newFolderList = new ArrayList<>();
@@ -116,6 +150,7 @@ public class PfOrderReceiptServiceImpl extends EmcOrderReceiptServiceImpl {
         List<EmcOrderTaskResultBean> newOrderTaskResultList = new ArrayList<>();
 
         List<EmcOrderTaskBean> updateTaskList = new ArrayList<>();
+        List<EmcOrderBean> reloadOrderList = new ArrayList<>();
 
         Long projectId = copiedOrderList.get(0).getProjId();
         List<EmcQcCategoryBean> addFolderQcCategoryList = copiedQcCategoryList.stream().filter(qc -> StringUtils.equals(qc.getAddFolder(), Constant.YES)).collect(Collectors.toList());
@@ -155,14 +190,19 @@ public class PfOrderReceiptServiceImpl extends EmcOrderReceiptServiceImpl {
                     }
                     copyOrder(copiedOrder, copiedQc, newFolderId, newOrder, newOrderId, newOrderNo, newOrderList);
 
-                    // 复制分析项组
-                    copyOrderItemGroup(copiedOrderItemGroupList, copiedOrder, newOrderId, newOrderItemGroupList);
-
                     // 复制点位
                     copyFolder(copiedFolderList, copiedOrder, copiedQc, newFolderId, newFolderNo, newFolderList);
 
                     // 复制样品测试和样品测试结果
-                    currentOrderTaskList.forEach(copiedOrderTask -> {
+                    if ("zcsbkb".equals(copiedQc.getQcCategoryId()) && !relatedTestMethodList.isEmpty()) {
+                        List<EmcOrderItemGroupBean> relatedGroups = createRelatedOrderItemGroups(copiedOrder, newOrder, currentOrderTaskList, copiedOrderItemGroupList, relatedTestMethodList);
+                        if (relatedGroups != null) {
+                            orderItemGroupService.insert(Collections.singletonList(newOrder), relatedGroups);
+                            reloadOrderList.add(newOrder);
+                        }
+                    } else {
+                        copyOrderItemGroup(copiedOrderItemGroupList, copiedOrder, newOrderId, newOrderItemGroupList);
+                        currentOrderTaskList.forEach(copiedOrderTask -> {
                         Long newOrderTaskId = ApplicationContextHelper.getNextIdentity();
                         List<EmcOrderTaskResultBean> currentResultList = copiedOrderTaskResultList.stream().filter(result -> ObjectUtils.equals(result.getOrderTaskId(), copiedOrderTask.getId())).collect(Collectors.toList());
                         currentResultList.forEach(copiedOrderTaskResult -> {
@@ -178,9 +218,14 @@ public class PfOrderReceiptServiceImpl extends EmcOrderReceiptServiceImpl {
                                 }
                             }}
                         });
-                    });
+                        });
+                    }
                 });
             }));
+        }
+
+        if (!reloadOrderList.isEmpty()) {
+            orderTaskService.insertByOrder(reloadOrderList);
         }
 
         List<EmcOrderBean> existedOrderList = orderService.getDao().selectListByOneColumnValues(copiedFolderIdList, "FOLDERID", Arrays.asList("ID", "FOLDERID", "ORDERNO"));
@@ -265,6 +310,58 @@ public class PfOrderReceiptServiceImpl extends EmcOrderReceiptServiceImpl {
 
         // 更新
         orderTaskService.getDao().update(updateTaskList, "equiptAcquNo");
+    }
+
+    private List<EmcOrderItemGroupBean> createRelatedOrderItemGroups(EmcOrderBean copiedOrder,
+                                                                       EmcOrderBean newOrder,
+                                                                       List<EmcOrderTaskBean> currentOrderTaskList,
+                                                                       List<EmcOrderItemGroupBean> copiedOrderItemGroupList,
+                                                                       List<EmcRelatedTestMethodBean> relatedTestMethodList) {
+        List<EmcOrderItemGroupBean> result = new ArrayList<>();
+        List<Long> testMethodIdList = currentOrderTaskList.stream().map(EmcOrderTaskBean::getTestMethodId).distinct().collect(Collectors.toList());
+        List<EmcRelatedTestMethodBean> matched = relatedTestMethodList.stream().filter(x -> testMethodIdList.contains(x.getTestMethodId())).collect(Collectors.toList());
+        List<Long> relatedTestMethodIdList = matched.stream().map(EmcRelatedTestMethodBean::getRelatedTestMethodId).distinct().collect(Collectors.toList());
+        if (relatedTestMethodIdList.isEmpty()) return null;
+        String parentOrgId = LocalContextHelper.getLoginUser().getExt$Item("parentOrgId");
+        List<EmcTestMethodBean> testMethods = testMethodService.selectListByFilter(SearchFilter.instance().match("id", relatedTestMethodIdList).filter(MatchPattern.OR), new Order[0]);
+        List<EmcTestCapacityBean> capacities = testCapacityService.selectListByFilter(SearchFilter.instance().match("testMethodId", relatedTestMethodIdList).filter(MatchPattern.OR).match("orgId", parentOrgId).filter(MatchPattern.SEQ), new Order[0]);
+        Map<Long, EmcTestCapacityBean> capacityMap = capacities.stream().collect(Collectors.toMap(EmcTestCapacityBean::getId, Function.identity()));
+        List<Long> capacityIds = capacities.stream().map(EmcTestCapacityBean::getId).collect(Collectors.toList());
+        List<EmcCapacityItemGroupBean> capacityGroups = capacityItemGroupService.getDao().selectListByOneColumnValues(capacityIds, "testCapacityId", new Order[0]);
+        for (Long relatedTestMethodId : relatedTestMethodIdList) {
+            List<Long> currentMethodIds = matched.stream().filter(x -> ObjectUtils.equals(relatedTestMethodId, x.getRelatedTestMethodId())).map(EmcRelatedTestMethodBean::getTestMethodId).distinct().collect(Collectors.toList());
+            List<String> groupNames = copiedOrderItemGroupList.stream().filter(x -> ObjectUtils.equals(copiedOrder.getId(), x.getOrderId()) && currentMethodIds.contains(x.getTestMethodId())).map(EmcOrderItemGroupBean::getItemGroup).distinct().collect(Collectors.toList());
+            List<EmcCapacityItemGroupBean> candidates = capacityGroups.stream().filter(x -> groupNames.contains(x.getItemGroup())).collect(Collectors.toList());
+            for (EmcCapacityItemGroupBean related : candidates) {
+                List<EmcGroupItemBean> groupItems = groupItemService.getDao().selectListByOneColumnValues(Collections.singletonList(related.getItemGroupId()), "itemGroupId", new Order[0]);
+                List<Long> itemIds = groupItems.stream().map(EmcGroupItemBean::getItemId).distinct().collect(Collectors.toList());
+                List<EmcItemBean> items = itemService.getDao().selectListByOneColumnValues(itemIds, "id", Arrays.asList("id", "analysisCategory"), new Order[0]);
+                if (items.stream().allMatch(x -> StringUtils.equals("sampling", x.getAnalysisCategory()))) continue;
+                EmcOrderItemGroupBean group = new EmcOrderItemGroupBean();
+                group.setItemGroup(related.getItemGroup());
+                group.setItemGroupId(related.getId());
+                group.setSchemeName("default");
+                testMethods.stream().filter(x -> ObjectUtils.equals(related.getTestMethodId(), x.getId())).findFirst().ifPresent(x -> {
+                    group.setMethodId(x.getMethodId()); group.setTestId(x.getTestId()); group.setTestMethodId(x.getId());
+                    group.setTestName(x.getExt$Item("testName")); group.setMethodName(x.getExt$Item("methodName"));
+                    group.setTestMethodBasis(x.getExt$Item("testMethodBasis"));
+                    String version = x.getExt$Item("methodVersionId");
+                    if (NumberUtils.isNumber(version)) group.setMethodVersionId(NumberUtils.parseLong(version));
+                });
+                EmcTestCapacityBean capacity = capacityMap.get(related.getTestCapacityId());
+                if (capacity != null) {
+                    group.setAnalysisOrgId(capacity.getExt$Item("analysisOrgId"));
+                    group.setAnalysisOrgName(capacity.getExt$Item("analysisOrgName"));
+                    group.setInputUserId(capacity.getExt$Item("inputUserId"));
+                    group.setInputUserName(capacity.getExt$Item("inputUserName"));
+                }
+                group.setExt$Item("relatedTest", "1");
+                group.setOrderId(newOrder.getId());
+                group.setId(ApplicationContextHelper.getNextIdentity());
+                result.add(group);
+            }
+        }
+        return result;
     }
 
     @Override

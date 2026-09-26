@@ -490,12 +490,10 @@ public class PfProjectServiceImpl extends EmcProjectServiceImpl implements PfPro
             emcProject.setEntrustOrgPhone(entrustClient.getPhone());
         }
         CoreOrgBean parentOrg = coreOrgService.selectById(parentOrgId);
-        String orgCode = Optional.ofNullable(parentOrg.getExt$Item("orgShortName")).orElse("XX");
-        int nowYear = LocalDate.now().getYear();
-        int year = Integer.parseInt(Optional.ofNullable(parentOrg.getExt$Item("quayear")).orElse(nowYear + "")) ;
-        int month = emcProject.getTaskDate().getMonthValue();
-
-        List<String> newProjectNoList = generateProjNos(orgCode, year, nowYear, month, 1);
+        String orgCode = Optional.ofNullable(parentOrg.getExt$Item("orgshortname")).orElse("XX");
+        List<String> newProjectNoList = generateProjNos(emcProject.getYear(), orgCode,
+                bizCategory.getBizCategoryId(), emcProject.getProjName(), 1,
+                emcProject.getExt$Item("contractno"));
 
         emcProject.setProjNo(newProjectNoList.get(0));
         emcProject.setReportOrgId(bizCategory.getReportEditOrgId());
@@ -512,34 +510,50 @@ public class PfProjectServiceImpl extends EmcProjectServiceImpl implements PfPro
         return emcProject.getId();
     }
 
-    public List<String> generateProjNos(String orgCode, int year, int nowYear,int month, int num) {
-        String projNo = orgCode + EmcBizConstant.NUMFORENG[nowYear-year] + EmcBizConstant.NUMFORENG[month-1];
-
+    public List<String> generateProjNos(Long yearCode, String orgCode, String bizCategoryId,
+                                        String projName, int num, String contractNo) {
+        if (yearCode == null) yearCode = (long) LocalDate.now().getYear();
+        String year = String.valueOf(yearCode).substring(2, 4);
+        String prefix = orgCode + bizCategoryId + year;
         RestJsonWrapperBean wrapper = new RestJsonWrapperBean();
         wrapper.setFilterValue("targetType", "modifyProjectInfo");
-        List<EmcProjectBean> existedProjectList = selectListByFilter(SearchFilter.instance().match("projNo", projNo).filter(MatchPattern.SB), wrapper);
-
-        EmcProjectBean maxNoProject = existedProjectList.stream().max(Comparator.comparing(p -> NumberUtils.parseInt(StringUtils.replace(p.getProjNo(), projNo, "")))).orElse(null);
-
-        List<String> newProjectNoList = new ArrayList<>();
-        String firstProjNo = "";
-        if (ObjectUtils.isEmpty(maxNoProject)) {
-            firstProjNo = projNo + "001";
-            newProjectNoList.add(firstProjNo);
-        } else {
-            firstProjNo = maxNoProject.getProjNo().substring(0, maxNoProject.getProjNo().length() - 3) + String.format("%03d", Long.parseLong(maxNoProject.getProjNo().substring(maxNoProject.getProjNo().length() - 3)) + 1);
-            newProjectNoList.add(firstProjNo);
-        }
-
-        if (num > 1) {
-            for (int i = 0; i < num - 1; i++) {
-                String beforeProjNo = newProjectNoList.get(i);
-                String nextProjNo = beforeProjNo.substring(0, beforeProjNo.length() - 3) + String.format("%03d", Long.parseLong(beforeProjNo.substring(beforeProjNo.length() - 3)) + 1);
-                newProjectNoList.add(nextProjNo);
+        List<EmcProjectBean> existing;
+        if (!"ND".equals(bizCategoryId)) {
+            existing = selectListByFilter(SearchFilter.instance().match("projNo", prefix).filter(MatchPattern.SB), wrapper)
+                    .stream().filter(p -> !"ND".equals(p.getBizCategoryCode())).collect(Collectors.toList());
+            EmcProjectBean max = existing.stream().max(Comparator.comparing(p -> NumberUtils.parseInt(StringUtils.replace(p.getProjNo(), prefix, "")))).orElse(null);
+            List<String> result = new ArrayList<>();
+            String first = max == null ? prefix + "0001" : max.getProjNo().substring(0, max.getProjNo().length() - 4)
+                    + String.format("%04d", Long.parseLong(max.getProjNo().substring(max.getProjNo().length() - 4)) + 1);
+            result.add(first);
+            for (int i = 1; i < num; i++) {
+                String before = result.get(i - 1);
+                result.add(before.substring(0, before.length() - 4) + String.format("%04d", Long.parseLong(before.substring(before.length() - 4)) + 1));
             }
+            return result;
         }
-
-        return newProjectNoList;
+        existing = selectListByFilter(SearchFilter.instance().match("projNo", prefix).filter(MatchPattern.SB)
+                .match("BizCategoryCode", "ND").filter(MatchPattern.SEQ), wrapper).stream()
+                .filter(p -> p.getProjNo() != null && (p.getProjNo().length() == 12 || p.getProjNo().length() == 13)).collect(Collectors.toList());
+        List<EmcProjectBean> sameName = existing.stream().filter(p -> ObjectUtils.equals(projName, p.getProjName())
+                && ObjectUtils.equals(contractNo, p.getExt$Item("contractno"))).collect(Collectors.toList());
+        List<String> result = new ArrayList<>();
+        String first;
+        if (existing.isEmpty()) first = prefix + "0001001";
+        else if (sameName.isEmpty()) {
+            EmcProjectBean max = existing.stream().max(Comparator.comparing(p -> NumberUtils.parseInt(StringUtils.replace(p.getProjNo(), prefix, "").substring(0, 4)))).get();
+            first = prefix + String.format("%04d", Long.parseLong(max.getProjNo().substring(prefix.length(), prefix.length() + 4)) + 1) + "001";
+        } else {
+            EmcProjectBean max = sameName.stream().max(Comparator.comparing(p -> NumberUtils.parseInt(StringUtils.replace(p.getProjNo(), prefix, "")))).get();
+            String number = max.getProjNo().substring(prefix.length() + 4);
+            first = max.getProjNo().substring(0, prefix.length() + 4) + String.format("%03d", Integer.parseInt(number) + 1);
+        }
+        result.add(first);
+        for (int i = 1; i < num; i++) {
+            String before = result.get(i - 1);
+            result.add(before.substring(0, prefix.length() + 4) + String.format("%03d", Integer.parseInt(before.substring(prefix.length() + 4)) + 1));
+        }
+        return result;
     }
 
     @Override
@@ -593,14 +607,12 @@ public class PfProjectServiceImpl extends EmcProjectServiceImpl implements PfPro
         });
 
         // 批量获取项目编号，数量为项目数 * 复制份数
-        List<String> newProjectNoList = new ArrayList<>();
-        LocalDateTime taskDate = emcProjectBean.getTaskDate() == null ? LocalDateTime.now() : emcProjectBean.getTaskDate();
         CoreOrgBean parentOrg = coreOrgService.selectById(parentOrgId);
         String orgCode = Optional.ofNullable(parentOrg.getExt$Item("orgShortName")).orElse("null");
-        int year = Integer.parseInt(Optional.ofNullable(parentOrg.getExt$Item("quayear")).orElse("null")) ;
-        int nowYear = LocalDate.now().getYear();
-        int month = taskDate.getMonthValue();
-        newProjectNoList = generateProjNos(orgCode,year,nowYear,month,projectQty * copyQty);
+        String bizCategoryCode = bizCategoryService.selectById(emcProjectBean.getBizCategoryId()).getBizCategoryId();
+        List<String> newProjectNoList = generateProjNos(emcProjectBean.getYear(), orgCode,
+                bizCategoryCode, emcProjectBean.getProjName(), projectQty * copyQty,
+                oldEmcProjectBeanList.get(0).getExt$Item("contractno"));
 
         // 采样业务项目
         List<EmcProjectBean> emcSampleProjectList = oldEmcProjectBeanList.stream().filter(m -> ObjectUtils.equals(m.getSample(), "1")).collect(Collectors.toList());
@@ -843,6 +855,18 @@ public class PfProjectServiceImpl extends EmcProjectServiceImpl implements PfPro
                 p.setProjCreatedTime(LocalDateTime.now());
             }
         });
+        List<EmcProjectBean> sampleProjects = projectList.stream().filter(e -> "1".equals(e.getSample())).collect(Collectors.toList());
+        List<Long> sampleProjectIds = sampleProjects.stream().map(EmcProjectBean::getId).collect(Collectors.toList());
+        List<EmcProjOrderBean> abnormalSampleOrders = dealSampleAbnormalData(sampleProjectIds);
+        if (!abnormalSampleOrders.isEmpty()) {
+            throw new InvalidDataException("任务存在异常数据不允许提交");
+        }
+        List<EmcProjectBean> sendProjects = projectList.stream().filter(e -> !"1".equals(e.getSample())).collect(Collectors.toList());
+        List<Long> sendProjectIds = sendProjects.stream().map(EmcProjectBean::getId).collect(Collectors.toList());
+        List<EmcOrderItemGroupBean> abnormalSendGroups = dealSendAbnormalData(sendProjectIds);
+        if (!abnormalSendGroups.isEmpty()) {
+            throw new InvalidDataException("任务存在异常数据不允许提交,异常数据为：" + abnormalSendGroups.get(0).getItemGroup());
+        }
         // 采样任务
         List<EmcProjectBean> sampleProjectList = projectList.stream().filter(e -> Constant.YES.equals(e.getSample())).collect(Collectors.toList());
         List<Long> sampleProjIdList = sampleProjectList.stream().map(e -> e.getId()).collect(Collectors.toList());
@@ -902,6 +926,58 @@ public class PfProjectServiceImpl extends EmcProjectServiceImpl implements PfPro
         orderService.getDao().update(updateOrderList, "ORDERNO", "LABELNO");
         insertAuditRecordByProject(projectList, "PROCESS_START", wrapper.getParamValue("bpmn_comment"), coreBpmnInstanceStatusDTOList);
         return coreBpmnInstanceStatusDTOList;
+    }
+
+    private List<EmcProjOrderBean> dealSampleAbnormalData(List<Long> projectIds) {
+        if (projectIds.isEmpty()) return Collections.emptyList();
+        List<EmcProjSchemeBean> schemes = projSchemeService.selectListByFilter(
+                SearchFilter.instance().match("PROJID", projectIds).filter(MatchPattern.OR), new Order[0]);
+        List<Long> schemeIds = schemes.stream().map(EmcProjSchemeBean::getId).collect(Collectors.toList());
+        List<EmcProjOrderBean> orders = projOrderService.selectListByFilter(
+                SearchFilter.instance().match("PROJSCHEMEID", schemeIds).filter(MatchPattern.OR)
+                        .match("SAMPLEPARAM", "1").filter(MatchPattern.DIFFER), new Order[0]);
+        List<Long> capacityGroupIds = orders.stream().map(EmcProjOrderBean::getItemGroupId).distinct().collect(Collectors.toList());
+        List<EmcCapacityItemGroupBean> capacityGroups = capacityItemGroupService.selectListByFilter(
+                SearchFilter.instance().match("id", capacityGroupIds).filter(MatchPattern.OR), new Order[0]);
+        List<Long> itemGroupIds = capacityGroups.stream().map(EmcCapacityItemGroupBean::getItemGroupId).distinct().collect(Collectors.toList());
+        List<EmcItemGroupBean> itemGroups = itemGroupService.selectListByFilter(
+                SearchFilter.instance().match("id", itemGroupIds).filter(MatchPattern.OR), new Order[0]);
+        List<EmcProjOrderBean> abnormal = new ArrayList<>();
+        for (EmcProjOrderBean order : orders) {
+            EmcCapacityItemGroupBean capacity = capacityGroups.stream().filter(e -> ObjectUtils.equals(order.getItemGroupId(), e.getId())).findFirst().orElse(new EmcCapacityItemGroupBean());
+            EmcItemGroupBean item = itemGroups.stream().filter(e -> ObjectUtils.equals(capacity.getItemGroupId(), e.getId())).findFirst().orElse(null);
+            if (item != null && ObjectUtils.equals(order.getItemGroup(), item.getItemGroup())
+                    && ObjectUtils.equals(order.getMethodId() + "", item.getExt$Item("methodid"))
+                    && ObjectUtils.equals(order.getTestId() + "", item.getExt$Item("testmethodtestid"))) continue;
+            EmcProjOrderBean update = new EmcProjOrderBean(); update.setId(order.getId()); update.setAbnormal("1"); abnormal.add(update);
+        }
+        ExecutorHelper.submit(() -> projOrderService.getDao().update(abnormal, "ABNORMAL"));
+        return abnormal;
+    }
+
+    private List<EmcOrderItemGroupBean> dealSendAbnormalData(List<Long> projectIds) {
+        if (projectIds.isEmpty()) return Collections.emptyList();
+        List<EmcOrderBean> orders = orderService.selectListByFilter(
+                SearchFilter.instance().match("PROJID", projectIds).filter(MatchPattern.OR), new Order[0]);
+        List<Long> orderIds = orders.stream().map(EmcOrderBean::getId).collect(Collectors.toList());
+        List<EmcOrderItemGroupBean> groups = orderItemGroupService.getDao().selectListByOneColumnValues(orderIds, "ORDERID", new Order[0]);
+        List<Long> capacityGroupIds = groups.stream().map(EmcOrderItemGroupBean::getItemGroupId).distinct().collect(Collectors.toList());
+        List<EmcCapacityItemGroupBean> capacityGroups = capacityItemGroupService.selectListByFilter(
+                SearchFilter.instance().match("id", capacityGroupIds).filter(MatchPattern.OR), new Order[0]);
+        List<Long> itemGroupIds = capacityGroups.stream().map(EmcCapacityItemGroupBean::getItemGroupId).distinct().collect(Collectors.toList());
+        List<EmcItemGroupBean> itemGroups = itemGroupService.selectListByFilter(
+                SearchFilter.instance().match("id", itemGroupIds).filter(MatchPattern.OR), new Order[0]);
+        List<EmcOrderItemGroupBean> abnormal = new ArrayList<>();
+        for (EmcOrderItemGroupBean group : groups) {
+            EmcCapacityItemGroupBean capacity = capacityGroups.stream().filter(e -> ObjectUtils.equals(group.getItemGroupId(), e.getId())).findFirst().orElse(new EmcCapacityItemGroupBean());
+            EmcItemGroupBean item = itemGroups.stream().filter(e -> ObjectUtils.equals(capacity.getItemGroupId(), e.getId())).findFirst().orElse(null);
+            if (item != null && ObjectUtils.equals(group.getItemGroup(), item.getItemGroup())
+                    && ObjectUtils.equals(group.getMethodId() + "", item.getExt$Item("methodid"))
+                    && ObjectUtils.equals(group.getTestId() + "", item.getExt$Item("testmethodtestid"))) continue;
+            EmcOrderItemGroupBean update = new EmcOrderItemGroupBean(); update.setId(group.getId()); update.setTestId(group.getTestId()); update.setItemGroup(group.getItemGroup()); update.setAbnormal("1"); abnormal.add(update);
+        }
+        ExecutorHelper.submit(() -> orderItemGroupService.getDao().update(abnormal, "ABNORMAL"));
+        return abnormal;
     }
 
     @Override
@@ -3754,6 +3830,97 @@ public class PfProjectServiceImpl extends EmcProjectServiceImpl implements PfPro
             this.orderItemService.getDao().insert(newEmcOrderItemBeanList);
         }
         return 1L;
+    }
+
+    @Override
+    @Transactional
+    @AuditTrailEntry(AuditTrailType.INSERT)
+    public Long insertPlan(RestJsonWrapperBean jsonWrapper) {
+        EmcProjectBean project = jsonWrapper.parseUnique(EmcProjectBean.class);
+        project.setId(ApplicationContextHelper.getNextIdentity());
+        project.setRegistDate(LocalDateTime.now());
+        EmcBizCategoryBean category = bizCategoryService.selectById(project.getBizCategoryId());
+        CoreUserBean user = LocalContextHelper.getLoginUser();
+        project.setOrgId(user.getExt$Item("parentorgid"));
+        project.setOrgName(user.getExt$Item("parentorgname"));
+        if (category.getTestOrgId() != null) {
+            EmcClientBean client = clientService.getDao().selectById(category.getTestOrgId());
+            project.setTestOrgId(client.getClientNo()); project.setTestOrgName(client.getClientName());
+            project.setTestOrgAddress(client.getAddress()); project.setTestOrgPhone(client.getPhone());
+        }
+        if (category.getEntrustOrgId() != null) {
+            EmcClientBean client = clientService.getDao().selectById(category.getEntrustOrgId());
+            project.setEntrustOrgId(client.getClientNo()); project.setEntrustOrgName(client.getClientName());
+            project.setEntrustOrgAddress(client.getAddress()); project.setEntrustOrgPhone(client.getPhone());
+        }
+        project.setProjNo(ApplicationContextHelper.getNextSequence("T_EMC_PROJECT_PLAN"));
+        project.setReportOrgId(category.getReportEditOrgId()); project.setBizCategoryCode(category.getBizCategoryId());
+        project.setProjCreatedTime(LocalDateTime.now()); project.setSource("plan");
+        getDao().insert(project);
+        return project.getId();
+    }
+
+    @Override
+    @Transactional
+    @AuditTrailEntry(AuditTrailType.PROCESS_START)
+    public void submitPlan(RestJsonWrapperBean wrapper) {
+        Long id = wrapper.parseId(Long.class).get(0);
+        EmcProjectBean plan = selectById(id);
+        plan.setSource("");
+        CoreOrgBean parentOrg = coreOrgService.selectById(plan.getOrgId());
+        String orgCode = Optional.ofNullable(parentOrg.getExt$Item("orgshortname")).orElse("XX");
+        String newNo = generateProjNos(plan.getYear(), orgCode, plan.getBizCategoryCode(), plan.getProjName(), 1, plan.getExt$Item("contractno")).get(0);
+        List<EmcProjSchemeBean> schemes = projSchemeService.getDao().selectListByOneColumnValue(plan.getId(), "PROJID", new Order[0]);
+        List<Long> schemeIds = schemes.stream().map(EmcProjSchemeBean::getId).collect(Collectors.toList());
+        List<EmcProjOrderBean> orders = projOrderService.getDao().selectListByOneColumnValues(schemeIds, "PROJSCHEMEID", new Order[0]);
+        plan.setId(ApplicationContextHelper.getNextIdentity()); plan.setProjNo(newNo); plan.setRegistDate(LocalDateTime.now()); plan.setCreatedTime(LocalDateTime.now());
+        for (EmcProjSchemeBean scheme : schemes) {
+            List<EmcProjOrderBean> schemeOrders = orders.stream().filter(o -> ObjectUtils.equals(o.getProjSchemeId(), scheme.getId())).collect(Collectors.toList());
+            scheme.setId(ApplicationContextHelper.getNextIdentity());
+            String folderNo = scheme.getFolderNo(); scheme.setFolderNo(plan.getProjNo() + folderNo.substring(folderNo.length() - 4)); scheme.setProjId(plan.getId());
+            for (EmcProjOrderBean order : schemeOrders) { order.setId(ApplicationContextHelper.getNextIdentity()); order.setProjSchemeId(scheme.getId()); }
+        }
+        getDao().insert(plan); projSchemeService.getDao().insert(schemes); projOrderService.getDao().insert(orders);
+    }
+
+    @Override
+    @Transactional
+    @AuditTrailEntry(AuditTrailType.PROCESS_START)
+    public void startProcessBySchedule(String projId) {
+        EmcProjectBean plan = selectById(NumberUtils.parseLong(projId));
+        LocalDateTime next = CronUtils.getNextExecutionTime(plan.getCron(), plan.getStartTime(), plan.getEndTime());
+        plan.setNextTaskDate(next); getDao().update(plan, "NEXTTASKDATE");
+        if (next == null) return;
+        plan.setSource("");
+        CoreOrgBean parentOrg = coreOrgService.selectById(plan.getOrgId());
+        String orgCode = Optional.ofNullable(parentOrg.getExt$Item("orgshortname")).orElse("XX");
+        String newNo = generateProjNos(plan.getYear(), orgCode, plan.getBizCategoryCode(), plan.getProjName(), 1, plan.getExt$Item("contractno")).get(0);
+        List<EmcProjSchemeBean> schemes = projSchemeService.getDao().selectListByOneColumnValue(plan.getId(), "PROJID", new Order[0]);
+        List<Long> schemeIds = schemes.stream().map(EmcProjSchemeBean::getId).collect(Collectors.toList());
+        List<EmcProjOrderBean> orders = projOrderService.getDao().selectListByOneColumnValues(schemeIds, "PROJSCHEMEID", new Order[0]);
+        plan.setId(ApplicationContextHelper.getNextIdentity()); plan.setProjNo(newNo); plan.setRegistDate(LocalDateTime.now()); plan.setCreatedTime(LocalDateTime.now());
+        for (EmcProjSchemeBean scheme : schemes) {
+            List<EmcProjOrderBean> schemeOrders = orders.stream().filter(o -> ObjectUtils.equals(o.getProjSchemeId(), scheme.getId())).collect(Collectors.toList());
+            scheme.setId(ApplicationContextHelper.getNextIdentity());
+            String folderNo = scheme.getFolderNo(); scheme.setFolderNo(plan.getProjNo() + folderNo.substring(folderNo.length() - 4)); scheme.setProjId(plan.getId());
+            for (EmcProjOrderBean order : schemeOrders) { order.setId(ApplicationContextHelper.getNextIdentity()); order.setProjSchemeId(scheme.getId()); }
+        }
+        getDao().insert(plan); projSchemeService.getDao().insert(schemes); projOrderService.getDao().insert(orders);
+    }
+
+    private void deleteProjectBpData(List<EmcProjectBean> projects) {
+        List<EmcOrderTaskBean> tasks = projects.stream().map(p -> { EmcOrderTaskBean t = new EmcOrderTaskBean(); t.setProjId(p.getId()); return t; }).collect(Collectors.toList());
+        List<EmcOrderTaskResultBean> results = projects.stream().map(p -> { EmcOrderTaskResultBean r = new EmcOrderTaskResultBean(); r.setProjId(p.getId()); return r; }).collect(Collectors.toList());
+        orderTaskService.getDao().deleteBy(tasks, "projId"); orderTaskResultService.getDao().deleteBy(results, "projId");
+        List<EmcProjectBean> samples = projects.stream().filter(p -> "1".equals(p.getSample())).collect(Collectors.toList());
+        if (samples.isEmpty()) return;
+        List<Long> sampleIds = samples.stream().map(EmcProjectBean::getId).distinct().collect(Collectors.toList());
+        List<EmcOrderBean> orders = orderService.getDao().selectListByOneColumnValues(sampleIds, "projId", Arrays.asList("id", "folderId"), new Order[0]);
+        List<Long> folderIds = orders.stream().map(EmcOrderBean::getFolderId).distinct().collect(Collectors.toList());
+        List<Long> orderIds = orders.stream().map(EmcOrderBean::getId).collect(Collectors.toList());
+        folderService.getDao().deleteByIdList(folderIds); orderService.getDao().deleteByIdList(orderIds);
+        List<EmcOrderItemGroupBean> groups = orderIds.stream().map(id -> { EmcOrderItemGroupBean g = new EmcOrderItemGroupBean(); g.setOrderId(id); return g; }).collect(Collectors.toList());
+        orderItemGroupService.getDao().deleteBy(groups, "orderId");
     }
 
 

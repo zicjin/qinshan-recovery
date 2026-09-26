@@ -171,6 +171,20 @@ public class PfProjectResourceImpl extends EmcProjectResourceImpl implements PfP
         return projectService.copyTo(wrapper);
     }
 
+    @Log(value = "推送到NC", type = LogType.UPDATE)
+    @RequestMapping(value = "/push-to-nc", method = RequestMethod.POST)
+    public Long pushProjectToNc(RestJsonWrapperBean wrapper) {
+        projectService.pushProjectToNc(wrapper);
+        return 1L;
+    }
+
+    @Log(value = "生成业务数据", type = LogType.INSERT)
+    @RequestMapping(value = "/generate-complete-task-data", method = RequestMethod.POST)
+    public Long generateCompleteTaskData(RestJsonWrapperBean wrapper) {
+        projectService.generateCompleteTaskData(wrapper);
+        return 1L;
+    }
+
     @Log(value = "回退业务数据", type = LogType.INSERT)
     @RequestMapping(value = "/undo-complete-task-data", method = RequestMethod.POST)
     public Long undoCompleteTaskData(RestJsonWrapperBean wrapper) {
@@ -183,6 +197,25 @@ public class PfProjectResourceImpl extends EmcProjectResourceImpl implements PfP
     public Long toReport(RestJsonWrapperBean wrapper) {
         projectService.toReport(wrapper);
         return 1L;
+    }
+
+    @Log(value = "复制样品到其他任务", type = LogType.INSERT)
+    @RequestMapping(value = "/copy-order-to", method = RequestMethod.POST)
+    public Long copyOrderTo(RestJsonWrapperBean wrapper) {
+        projectService.copyOrderTo(wrapper);
+        return 1L;
+    }
+
+    @Log(value = "保存签名文件", type = LogType.SELECT)
+    @RequestMapping(value = "/create-image", method = RequestMethod.POST)
+    public Long createImage(RestJsonWrapperBean wrapper) {
+        return projectService.createImage(wrapper);
+    }
+
+    @Log(value = "保存报告发送信息", type = LogType.SELECT)
+    @RequestMapping(value = "/report-send-info", method = RequestMethod.POST)
+    public Long reportSendInfo(RestJsonWrapperBean wrapper) {
+        return projectService.reportSendInfo(wrapper);
     }
 
 

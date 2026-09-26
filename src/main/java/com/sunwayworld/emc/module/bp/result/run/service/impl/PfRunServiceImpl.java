@@ -3052,8 +3052,34 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
         return new Pagination<>(EquiptList);
     }
 
+    public void equiptReCollect(String id, RestJsonWrapperBean wrapper) {
+        String targetId = "T_EMC_EQUIPT$" + id;
+        List<CoreFileBean> fileList = coreFileService.getDao().selectListByOneColumnValue(targetId, "targetId");
+        String equiptNo = wrapper.getParamValue("equiptid");
+        if (equiptNo == null) {
+            equiptNo = equiptService.selectById(selectById(id).getEquiptId()).getEquiptId();
+        }
+        String equiptDirString = ApplicationContextHelper.getEnvironment().getProperty("sunway.equipt.acq.file.local.path");
+        for (CoreFileBean file : fileList) {
+            File inputFile = FilePathManager.getLocalPath(FilePathDTO.of(file.getScope(),
+                    DateTimeUtils.getDateSerialNumber(file.getCreatedTime()), file.getMd5Name(), file.getName())).toFile();
+            try (FileInputStream fis = new FileInputStream(inputFile)) {
+                File newFile = new File(equiptDirString + File.separator + equiptNo + File.separator + id + File.separator + file.getName());
+                if (!newFile.getParentFile().exists()) newFile.getParentFile().mkdirs();
+                if (newFile.exists()) newFile.delete();
+                FileUtils.write(newFile, fis);
+            } catch (Exception e) {
+                throw new FileException(e);
+            }
+        }
+    }
+
     @Override
     public void equiptCollect(String id, RestJsonWrapperBean wrapper) {
+        if ("repeate".equals(wrapper.getParamValue("type"))) {
+            equiptReCollect(id, wrapper);
+            return;
+        }
         List<CoreFileBean> fileList = coreFileService.getDao().selectListByIds(wrapper.parse(CoreFileBean.class).stream().map(e -> e.getId()).collect(Collectors.toList()));
 
         String equiptNo;

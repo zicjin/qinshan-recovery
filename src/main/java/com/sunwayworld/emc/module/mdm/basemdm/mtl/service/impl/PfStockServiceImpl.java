@@ -83,17 +83,16 @@ public class PfStockServiceImpl extends EmcStockServiceImpl implements PfStockSe
                 this.mtlService.getDao().update(emcMtl, new String[]{"MTLNO"});
             }
             if (emcMtl.getMtlNo() != null) {
-                String productionNo = emcStock.getExt$Item("productionno");
-                tagetNo = productionNo != null ? productionNo : emcMtl.getMtlNo() + "-" + DateTimeUtils.formatLocalDateTime(LocalDateTime.now(), "yyMM");
+                tagetNo = emcStock.getExt$Item("productionno") != null ? emcStock.getExt$Item("productionno") : emcMtl.getMtlNo() + "-" + DateTimeUtils.formatLocalDateTime(LocalDateTime.now(), "yyMM");
             }
             if (tagetNo != null) {
                 List<EmcStockBean> stockQCList = this.selectListByFilter(SearchFilter.instance().match("REAGENTCATEGORY", reagentCategory).filter(MatchPattern.SEQ).match("batchNo", tagetNo).filter(MatchPattern.SB), new Order[0]);
                 num = stockQCList.stream().filter(e -> NumberUtils.isNumber(e.getBatchNo().substring(e.getBatchNo().length() - 3))).map(e -> Integer.parseInt(e.getBatchNo().substring(e.getBatchNo().length() - 3))).max(Comparator.naturalOrder()).orElse(0);
             }
         }
-        List<EmcStockBean> newStockList = new ArrayList<EmcStockBean>();
-        List<EmcStockLogBean> newStockLogList = new ArrayList<EmcStockLogBean>();
-        List<EmcStockConcentBean> newStockConcentList = new ArrayList<EmcStockConcentBean>();
+        ArrayList<EmcStockBean> newStockList = new ArrayList<EmcStockBean>();
+        ArrayList<EmcStockLogBean> newStockLogList = new ArrayList<EmcStockLogBean>();
+        ArrayList<EmcStockConcentBean> newStockConcentList = new ArrayList<EmcStockConcentBean>();
         List maintainList = this.mtlMaintainService.getDao().selectListByOneColumnValue(mtlId, "MTLID", new Order[0]);
         for (double i = 0.0; i < emcStockLog.getQty(); i += 1.0) {
             EmcStockBean newStock = new EmcStockBean();

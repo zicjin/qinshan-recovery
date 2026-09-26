@@ -590,6 +590,7 @@ public class PfOrderServiceImpl extends EmcOrderServiceImpl implements PfOrderSe
                 Long newOrderTaskId = ApplicationContextHelper.getNextIdentity();
                 newOrderTask.setId(newOrderTaskId);
                 newOrderTask.setOrderId(newOrderId);
+                newOrderTask.setRunId(null);
                 newOrderTask.setEquiptAcquNo(newOrderNo);
                 newOrderTaskList.add(newOrderTask);
 
@@ -602,6 +603,7 @@ public class PfOrderServiceImpl extends EmcOrderServiceImpl implements PfOrderSe
                         newOrderTaskResult.setOrderId(newOrderId);
                         newOrderTaskResult.setOrderTaskId(newOrderTaskId);
                         newOrderTaskResult.setOrderNo(newOrderNo);
+                        newOrderTaskResult.setRunId(null);
                         newOrderTaskResultList.add(newOrderTaskResult);
                     }
                 }
@@ -638,7 +640,7 @@ public class PfOrderServiceImpl extends EmcOrderServiceImpl implements PfOrderSe
             List<Long> testMethodIdList = newOrderItemGroupList.stream().map(EmcOrderItemGroupBean::getTestMethodId).distinct().collect(Collectors.toList());
             List<EmcRelatedTestMethodBean> relatedTestMethodList = relatedTestMethodService.selectListByFilter(
                 SearchFilter.instance().match("testMethodId", testMethodIdList).filter(MatchPattern.OR)
-                        .match("replaceFlag2", "1").filter(MatchPattern.DIFFER), new Order[0]);
+                        .match("replaceFlag2", Arrays.asList("1", null)).filter(MatchPattern.DIFFER), new Order[0]);
             List<Long> relatedTestMethodIdList = relatedTestMethodList.stream().map(EmcRelatedTestMethodBean::getRelatedTestMethodId).distinct().collect(Collectors.toList());
             if (!relatedTestMethodIdList.isEmpty()) {
                 List<EmcTestMethodBean> testMethodList = testMethodService.selectListByFilter(SearchFilter.instance().match("id", relatedTestMethodIdList).filter(MatchPattern.OR));

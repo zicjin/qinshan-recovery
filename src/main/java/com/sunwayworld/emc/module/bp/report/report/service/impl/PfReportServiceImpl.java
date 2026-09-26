@@ -2398,6 +2398,35 @@ public class PfReportServiceImpl extends EmcReportServiceImpl implements PfRepor
         }
     }
 
+    public void generateWordReport(File templateFile, File wordReportFile, EmcReportBean report,
+            EmcProjectBean project, boolean exist) {
+        generateWordReport(templateFile, wordReportFile, report, project, exist, EmcConstant.WORD_REPORT_ATTACHMENT_TYPE);
+    }
+
+    public void writeDataToReport2024(File templateFile, XWPFDocument document,
+            EmcReportBean report, EmcProjectBean project) {
+        writeDataToReport(templateFile, document, report, project);
+    }
+
+    public void setSignatureInfo(EmcReportBean report) {
+        CoreFileBean reportFile = coreFileService.selectFirstByFilter(SearchFilter.instance()
+                .match("targetId", getDao().getTable() + "$" + report.getId()).filter(MatchPattern.SEQ)
+                .match("bizCategory", "wordReport").filter(MatchPattern.SEQ));
+        if (reportFile == null) return;
+        fileManager.download(reportFile);
+        File inputFile = CoreFileUtils.getLocalPath(reportFile).toFile();
+        File outputFile = FilePathManager.getLocalPath(CoreFileUtils.toFilePath(reportFile)).toFile();
+        try (FileInputStream input = new FileInputStream(inputFile);
+             XWPFDocument document = new XWPFDocument(input);
+             FileOutputStream output = new FileOutputStream(outputFile)) {
+            setSubmitInformation(inputFile, document, report);
+            document.write(output);
+        } catch (IOException e) {
+            throw new FileException(e);
+        }
+        coreFileService.upload(reportFile, outputFile);
+    }
+
     public void writeDataToReport(File templateFile, XWPFDocument document, EmcReportBean report, EmcProjectBean project) {
         List<EmcReportLineBean> reportLineList = reportLineService.getDao().selectListByOneColumnValue(report.getId(), "reportId");
         List<Long> reportFolderIdList = reportLineList.stream().map(EmcReportLineBean::getFolderId).distinct().collect(Collectors.toList());

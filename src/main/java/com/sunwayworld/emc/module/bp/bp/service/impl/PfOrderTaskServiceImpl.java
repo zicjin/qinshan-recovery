@@ -819,18 +819,19 @@ public  class PfOrderTaskServiceImpl extends EmcOrderTaskServiceImpl implements 
 
     @Override
     public void updateBatchNo(RestJsonWrapperBean wrapper) {
-        List<EmcOrderTaskBean> orderTaskList = wrapper.parse(EmcOrderTaskBean.class);
-        String stockBatchNo = orderTaskList.get(0).getStockBatchNo();
-        List<Long> orderTaskIdList = orderTaskList.stream().map(EmcOrderTaskBean::getId).distinct().collect(Collectors.toList());
-        List<EmcOrderTaskBean> selectedTaskList = getDao().selectListByIds(orderTaskIdList);
-        List<Long> orderIdList = selectedTaskList.stream().map(EmcOrderTaskBean::getOrderId).distinct().collect(Collectors.toList());
-        List<String> runIdList = selectedTaskList.stream().map(EmcOrderTaskBean::getRunId).distinct().collect(Collectors.toList());
-        List<EmcOrderTaskBean> updateTaskList = selectListByFilter(SearchFilter.instance()
-                .match("RUNID", runIdList).filter(MatchPattern.OR)
-                .match("ORDERID", orderIdList).filter(MatchPattern.OR)
-                .match("STATUS", "logged").filter(MatchPattern.SEQ));
-        updateTaskList.forEach(task -> task.setStockBatchNo(stockBatchNo));
-        getDao().update(updateTaskList, "STOCKBATCHNO");
+        List orderTaskList = wrapper.parse(EmcOrderTaskBean.class);
+        String stockBatchNo = ((EmcOrderTaskBean) orderTaskList.get(0)).getStockBatchNo();
+        List orderTaskIdList = (List) orderTaskList.stream().map(e -> ((EmcOrderTaskBean) e).getId()).distinct().collect(Collectors.toList());
+        orderTaskList = getDao().selectListByIds(orderTaskIdList, new Order[0]);
+        List orderIdList = (List) orderTaskList.stream().map(e -> ((EmcOrderTaskBean) e).getOrderId()).distinct().collect(Collectors.toList());
+        List runIdList = (List) orderTaskList.stream().map(e -> ((EmcOrderTaskBean) e).getRunId()).distinct().collect(Collectors.toList());
+        List updateOrderTaskList = selectListByFilter(SearchFilter.instance().match("RUNID", runIdList).filter(MatchPattern.OR)
+                .match("ORDERID", orderIdList).filter(MatchPattern.OR).match("STATUS", "logged").filter(MatchPattern.SEQ), new Order[0]);
+        for (Object value : updateOrderTaskList) {
+            EmcOrderTaskBean task = (EmcOrderTaskBean) value;
+            task.setStockBatchNo(stockBatchNo);
+        }
+        getDao().update(updateOrderTaskList, new String[]{"STOCKBATCHNO"});
     }
 
     @Override

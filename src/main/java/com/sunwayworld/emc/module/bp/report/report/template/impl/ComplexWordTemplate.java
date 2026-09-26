@@ -35,6 +35,7 @@ import com.sunwayworld.emc.module.bp.report.report.template.table.NoiseDynamicTa
 import com.sunwayworld.emc.module.bp.report.report.template.table.NonSamplingSoilDynamicTable;
 import com.sunwayworld.emc.module.bp.report.report.template.table.NonSamplingWaterDynamicTable;
 import com.sunwayworld.emc.module.bp.report.report.template.table.OrderScenePhotoTable;
+import com.sunwayworld.emc.module.bp.report.report.template.table.QcQuantityDynamicTable;
 import com.sunwayworld.emc.module.bp.report.report.template.table.SimpleMonitorItemDynamicTable;
 import com.sunwayworld.emc.module.bp.report.report.template.table.SoilDynamicTable;
 import com.sunwayworld.emc.module.bp.report.report.template.table.UnorganizedGasDynamicTable;
@@ -68,6 +69,9 @@ public class ComplexWordTemplate extends BaseWordTemplate {
 
     @Override
     public void createResultTable() {
+        int monitorItemTableIndex = 3;
+        MonitorItemDynamicTable monitorItemDynamicTable = new MonitorItemDynamicTable(getDocument(), templateSourceDTO.getProject(), templateSourceDTO.getReport(), templateSourceDTO.getOrderTaskList(), templateSourceDTO.getReportResultList(), templateSourceDTO.getEquiptList(), templateSourceDTO.getRunList(), templateSourceDTO.getCoreCodeList(), monitorItemTableIndex);
+        monitorItemDynamicTable.create();
         List<String> monitorTmplIdList = templateSourceDTO.getOrderList().stream().filter(f -> !StringUtils.isEmpty(f.getMonitorTmplId())).map(EmcOrderBean::getMonitorTmplId).distinct().collect(Collectors.toList());
         if (monitorTmplIdList.isEmpty()) {
             return;
@@ -83,21 +87,14 @@ public class ComplexWordTemplate extends BaseWordTemplate {
         Map<String, LocalDate> minDateMap = sortResult(waterMonitorTmplList, gasMonitorTmplList, soilMonitorTmplList, noiseMonitorTmplList, templateSourceDTO.getOrderList());
         AtomicInteger totalTableIndex = new AtomicInteger(monitorTmplList.size());
         int totalTableCount = totalTableIndex.get();
-        
-        if (showPhoto) {
-            List<CoreFileBean> photoList = templateSourceDTO.getCoreFileList().stream().filter(file -> StringUtils.equals(file.getBizCategory(), "photo")
-                    && (StringUtils.startsWith(file.getTargetId(), "T_EMC_SAMPLE") || StringUtils.startsWith(file.getTargetId(), "T_EMC_PROJECT"))).collect(Collectors.toList());
-            List<CoreFileBean> validPhotoList = photoList.stream().filter(file -> FilePathManager.getLocalDirPath(CoreFileUtils.toFilePath(file)).toFile().exists()).collect(Collectors.toList());
-            OrderScenePhotoTable photoTable = new OrderScenePhotoTable(getDocument(), templateSourceDTO.getProject(), templateSourceDTO.getFolderList(), templateSourceDTO.getOrderList(), validPhotoList, monitorTmplList.size() + 1);
-            photoTable.create();
-        }
         createResultTable(waterMonitorTmplList, gasMonitorTmplList, soilMonitorTmplList,noiseMonitorTmplList, totalTableIndex, totalTableCount, minDateMap);
-        int monitorItemTableIndex = monitorTmplList.size() + (showPhoto ? 3 : 2);
-        MonitorItemDynamicTable monitorItemDynamicTable = new MonitorItemDynamicTable(getDocument(), templateSourceDTO.getProject(), templateSourceDTO.getReport(), templateSourceDTO.getOrderTaskList(), templateSourceDTO.getReportResultList(), templateSourceDTO.getEquiptList(), templateSourceDTO.getRunList(), templateSourceDTO.getCoreCodeList(), monitorItemTableIndex);
-        monitorItemDynamicTable.create();
-        int simpleMiTableIndex = monitorTmplList.size() + (showPhoto ? 2 : 1);
-        SimpleMonitorItemDynamicTable simpleMonitorItemDynamicTable = new SimpleMonitorItemDynamicTable(getDocument(), templateSourceDTO.getProject(), templateSourceDTO.getOrderList(), templateSourceDTO.getOrderTaskList(), simpleMiTableIndex);
-        simpleMonitorItemDynamicTable.create();
+        List<EmcOrderBean> curProjectOrderList = templateSourceDTO.getOrderList().stream().filter(order -> ObjectUtils.equals(order.getProjId(), templateSourceDTO.getProject().getId())).collect(Collectors.toList());
+        if (templateSourceDTO.getQcOrderList() != null) {
+            List<EmcOrderBean> curProjectQCDupOrderList = templateSourceDTO.getQcOrderList().stream().filter(order -> StringUtils.equals(order.getQcCategoryCode(), "P-DUP")).collect(Collectors.toList());
+            curProjectOrderList.addAll(curProjectQCDupOrderList);
+            QcQuantityDynamicTable qcQuantityDynamicTable = new QcQuantityDynamicTable(document, templateSourceDTO.getProject(), curProjectOrderList, templateSourceDTO.getOrderTaskList(), templateSourceDTO.getQcOrderTaskList(), templateSourceDTO.getQcTaskResultList(), templateSourceDTO.getCoreCodeList());
+            qcQuantityDynamicTable.create();
+        }
     }
 
     @Override

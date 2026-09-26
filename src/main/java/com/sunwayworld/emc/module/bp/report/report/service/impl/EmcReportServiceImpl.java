@@ -3969,7 +3969,34 @@ public class EmcReportServiceImpl implements EmcReportService {
 
     @Override
     public void insertByProjectDone(List<Long> projectIdList, boolean viewFlag) {
-        insertByProject(projectIdList, viewFlag);
+        ArrayList<EmcReportBean> reportList = new ArrayList<EmcReportBean>();
+        if (viewFlag) {
+            for (Long projId : projectIdList) {
+                EmcReportBean report = new EmcReportBean();
+                report.setId(ApplicationContextHelper.getNextIdentity());
+                report.setProjId(projId);
+                report.setStatus("draft");
+                report.setToArchivingFlag("1");
+                reportList.add(report);
+            }
+        } else {
+            List<EmcOrderBean> orderList = this.orderService.getDao().selectListByOneColumnValues(projectIdList, "PROJID", new Order[0]);
+            Map<Long, List<EmcOrderBean>> map = orderList.stream().collect(Collectors.groupingBy(EmcOrderBean::getProjId));
+            map.forEach((k, v) -> {
+                List<EmcOrderBean> filterOrderList = v.stream().collect(Collectors.collectingAndThen(Collectors.toCollection(() -> new TreeSet<EmcOrderBean>(Comparator.comparing(EmcOrderBean::getMonitorTmplId))), ArrayList::new));
+                for (EmcOrderBean order : filterOrderList) {
+                    EmcReportBean report = new EmcReportBean();
+                    report.setId(ApplicationContextHelper.getNextIdentity());
+                    report.setProjId(order.getProjId());
+                    report.setMonitorTmplId(order.getMonitorTmplId());
+                    report.setOrderCategory(order.getOrderCategory());
+                    report.setStatus("draft");
+                    report.setToArchivingFlag("1");
+                    reportList.add(report);
+                }
+            });
+        }
+        this.getDao().insert(reportList);
     }
 
     @Override

@@ -319,6 +319,10 @@ public class PfOrderServiceImpl extends EmcOrderServiceImpl implements PfOrderSe
         List<Long> oldOrderIdList = oldOrderList.stream().map(EmcOrderBean::getId).collect(Collectors.toList());
         List<EmcOrderItemGroupBean> oldOrderItemGroupList = orderItemGroupService.getDao().selectListByOneColumnValues(oldOrderIdList, "orderId");
         List<EmcOrderItemBean> oldOrderItemList = orderItemService.getDao().selectListByOneColumnValues(oldOrderIdList, "orderId");
+        List<Long> capacityItemGroupIdList = oldOrderItemGroupList.stream().map(EmcOrderItemGroupBean::getItemGroupId).collect(Collectors.toList());
+        List<EmcCapacityItemGroupBean> capacityItemGroupList = capacityItemGroupService.getDao().selectListByIds(capacityItemGroupIdList);
+        List<Long> capacityIdList = capacityItemGroupList.stream().map(EmcCapacityItemGroupBean::getTestCapacityId).distinct().collect(Collectors.toList());
+        List<EmcTestCapacityBean> testCapacityList = testCapacityService.getDao().selectListByIds(capacityIdList);
 
         List<EmcOrderBean> newOrderList = new ArrayList<>();
         List<EmcOrderItemGroupBean> newOrderItemGroupList = new ArrayList<>();
@@ -338,7 +342,7 @@ public class PfOrderServiceImpl extends EmcOrderServiceImpl implements PfOrderSe
         List<EmcFolderBean> insertFolderList = new ArrayList<>();
         Map<String, List<EmcOrderBean>> orderListMap = oldOrderList.stream().collect(Collectors.groupingBy(EmcOrderBean::getOrderCategory));
         orderListMap.forEach((orderCategory, curOrderList) -> {
-            List<String> curNewFolderNoList = generateFolderNosByProjId(project.getId(), project.getProjNo(), curOrderList.size() * copies);
+            List<String> curNewFolderNoList = folderService.generateFolderNosByProjId(project.getId(), project.getProjNo(), curOrderList.get(0).getMonitorTmplId(), curOrderList.size() * copies);
             List<Long> curFolderIdList = curOrderList.stream().map(EmcOrderBean::getFolderId).distinct().collect(Collectors.toList());
             List<EmcFolderBean> curFolderList = oldFolderList.stream().filter(f -> curFolderIdList.contains(f.getId())).collect(Collectors.toList());
             int curFolderCount = curFolderList.size();
@@ -387,6 +391,15 @@ public class PfOrderServiceImpl extends EmcOrderServiceImpl implements PfOrderSe
                         newOrderItemGroup.setOrderId(newOrderId);
                         newOrderItemGroup.setExt$Item("syncStatus", schemeEdit ? Constant.YES : null);
                         newOrderItemGroup.setExt$Item("source", schemeEdit ? "schemeEdit" : null);
+                        EmcTestCapacityBean testCapacity = testCapacityList.stream()
+                                .filter(f -> ObjectUtils.equals(f.getTestMethodId(), t.getTestMethodId()))
+                                .findFirst().orElseGet(EmcTestCapacityBean::new);
+                        newOrderItemGroup.setAnalysisOrgId(testCapacity.getExt$Item("analysisOrgId"));
+                        newOrderItemGroup.setAnalysisOrgName(testCapacity.getExt$Item("analysisOrgName"));
+                        if (!StringUtils.isEmpty(testCapacity.getExt$Item("inputUserId"))) {
+                            newOrderItemGroup.setInputUserId(testCapacity.getExt$Item("inputUserId"));
+                            newOrderItemGroup.setInputUserName(testCapacity.getExt$Item("inputUserName"));
+                        }
                         newOrderItemGroupList.add(newOrderItemGroup);
                     });
                 });
@@ -557,7 +570,7 @@ public class PfOrderServiceImpl extends EmcOrderServiceImpl implements PfOrderSe
         List<EmcOrderBean> filterOrderList = orderList.stream().filter(o -> o.getOrderNo().contains(cl)).collect(Collectors.toList());
         String maxOrderNo = filterOrderList.stream().max(Comparator.comparing(EmcOrderBean::getOrderNo)).map(EmcOrderBean::getOrderNo).orElse(null);
 
-        String newOrderNo = StringUtils.isEmpty(maxOrderNo) ? folder.getFolderNo() + "001" : folder.getFolderNo() + EmcBizConstant.NUMFORENG[Integer.parseInt(order.getCycle().toString())-1] + StringUtils.leftPad((NumberUtils.parseInt(maxOrderNo.substring(folder.getFolderNo().length()+1)) + 1) + "", 3);
+        String newOrderNo = StringUtils.isEmpty(maxOrderNo) ? folder.getFolderNo() + "001" : folder.getFolderNo() + StringUtils.leftPad((NumberUtils.parseInt(maxOrderNo.substring(folder.getFolderNo().length(), folder.getFolderNo().length() + 3)) + 1) + "", 3);
 
         EmcOrderBean newOrder = new EmcOrderBean();
         BeanUtils.copyProperties(order, newOrder);
@@ -566,6 +579,11 @@ public class PfOrderServiceImpl extends EmcOrderServiceImpl implements PfOrderSe
         newOrder.setId(newOrderId);
         newOrder.setOrderNo(newOrderNo);
         newOrder.setLabelNo(newOrderNo);
+        newOrder.setSampleBeginDate(null);
+        newOrder.setSampleCompleteDate(null);
+        newOrder.setSampleBeginTime(null);
+        newOrder.setSampleCompleteTime(null);
+        newOrder.setSampleId(null);
         getDao().insert(newOrder);
 
         // 查询样品下的对应测试信息和测试结果信息
@@ -711,12 +729,6 @@ public class PfOrderServiceImpl extends EmcOrderServiceImpl implements PfOrderSe
         }
 
         newOrderItemGroupList.forEach(itemGroup -> itemGroup.setMonitorTmplId(orderList.get(0).getMonitorTmplId()));
-        if (!ObjectUtils.isEmpty(existOrderItemGroupList)) {
-            Long maxSortNum = existOrderItemGroupList.stream().map(EmcOrderItemGroupBean::getSortNum).max(Comparator.naturalOrder()).orElse(0L);
-            for (int i = 0; i < newOrderItemGroupList.size(); i++) {
-                newOrderItemGroupList.get(i).setSortNum(i + 1L + maxSortNum);
-            }
-        }
         orderItemGroupService.insert(orderList, newOrderItemGroupList);
     }
 
@@ -795,6 +807,11 @@ public class PfOrderServiceImpl extends EmcOrderServiceImpl implements PfOrderSe
 
         // 删除样品测试结果
         orderTaskResultService.getDao().deleteByIdList(delOrderTaskResultList.stream().map(e -> e.getId()).collect(Collectors.toList()));
+
+        orderContainerService.deleteContainer(orderList);
+        List<EmcOrderTaskBean> refreshedOrderTaskList = orderTaskService.getDao().selectListByOneColumnValues(orderIdList, "orderId");
+        orderContainerService.createOrderContainer(orderList, refreshedOrderTaskList);
+        orderTaskService.getDao().update(refreshedOrderTaskList, "ORDERCONTAINERID");
 
     }
 

@@ -238,7 +238,8 @@ implements EmcOaOrgService {
                 user.setOrgId(dep.getId());
                 user.setOrgName(dep.getOrgName());
             }
-            if ((compOrg = this.getCompOrg(oo.getSsbm(), oaOrgBeanList, emcOaOrgRelationBeanList, coreOrgBeanList)) == null) continue;
+            compOrg = this.getCompOrg(oo.getSsbm(), oaOrgBeanList, emcOaOrgRelationBeanList, coreOrgBeanList);
+            if (compOrg == null) continue;
             user.setExt$Item("parentorgid", compOrg.getId());
         }
         this.coreUserService.getDao().insert(insertBeanList);
@@ -469,7 +470,8 @@ implements EmcOaOrgService {
     public void syncOaNewClient(String contractName) {
         List<EmcOaBankBean> allOldBankBeanList;
         List<EmcOaNewClientBean> allOldOaClientBeanList = this.emcOaNewClientService.selectAll();
-        JSONObject dataJSONObject = this.syncOaNewClientOfPage("1", allOldOaClientBeanList, allOldBankBeanList = this.emcOaBankService.selectAll(), contractName);
+        allOldBankBeanList = this.emcOaBankService.selectAll();
+        JSONObject dataJSONObject = this.syncOaNewClientOfPage("1", allOldOaClientBeanList, allOldBankBeanList, contractName);
         if (dataJSONObject == null) {
             return;
         }

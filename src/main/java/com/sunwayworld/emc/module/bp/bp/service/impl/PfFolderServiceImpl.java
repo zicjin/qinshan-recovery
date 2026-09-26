@@ -178,7 +178,7 @@ public class PfFolderServiceImpl extends EmcFolderServiceImpl implements PfFolde
         ArrayList<EmcOrderBean> newOrderList = new ArrayList<EmcOrderBean>();
         ArrayList<EmcOrderTaskBean> newOrderTaskList = new ArrayList<EmcOrderTaskBean>();
         ArrayList<EmcOrderTaskResultBean> newOrderTaskResultList = new ArrayList<EmcOrderTaskResultBean>();
-        ArrayList<EmcOrderItemGroupBean> newOrderItemGroupList = new ArrayList<>();
+        List<EmcOrderItemGroupBean> newOrderItemGroupList = new ArrayList<>();
         for (int i = 0; i < copiedOrderList.size(); ++i) {
             EmcOrderBean oldOrder = (EmcOrderBean)copiedOrderList.get(i);
             EmcOrderBean newOrder = new EmcOrderBean();
@@ -406,12 +406,13 @@ public class PfFolderServiceImpl extends EmcFolderServiceImpl implements PfFolde
         Long projId = orderList.get(0).getProjId();
         String projectNo = this.projectService.selectById(projId).getProjNo();
         String prefix = projectNo + orderCategoryCode;
-        List<EmcFolderBean> updateFolderList = new ArrayList<>();
-        List<EmcOrderBean> updateOrderList = new ArrayList<>();
+        ArrayList<EmcFolderBean> updateFolderList = new ArrayList<>();
+        ArrayList<EmcOrderBean> updateOrderList = new ArrayList<>();
         folderList.sort(Comparator.comparing(EmcFolderBean::getId, Comparator.nullsLast(Long::compareTo)));
         for (int i = 0; i <= folderList.size() - 1; i++) {
             EmcFolderBean folder = folderList.get(i);
-            folder.setFolderNo(prefix + String.format("%03d", i + 1));
+            String folderNo = prefix + String.format("%03d", i + 1);
+            folder.setFolderNo(folderNo);
             updateFolderList.add(folder);
             EmcOrderBean order = orderList.stream().filter(o -> ObjectUtils.equals(folder.getId(), o.getFolderId())).findFirst().orElse(null);
             order.setOrderNo(folder.getFolderNo() + "001");

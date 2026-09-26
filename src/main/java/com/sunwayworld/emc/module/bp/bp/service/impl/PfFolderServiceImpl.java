@@ -2,6 +2,7 @@ package com.sunwayworld.emc.module.bp.bp.service.impl;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -34,6 +35,8 @@ import com.sunwayworld.emc.module.bp.bp.service.EmcOrderService;
 import com.sunwayworld.emc.module.bp.project.project.service.EmcOrderItemGroupService;
 import com.sunwayworld.emc.module.mdm.bizmdm.test.service.EmcItemGroupService;
 import com.sunwayworld.emc.module.mdm.bizmdm.capacity.service.EmcCapacityItemGroupService;
+import com.sunwayworld.emc.module.mdm.bizmdm.capacity.bean.EmcCapacityItemGroupBean;
+import com.sunwayworld.emc.module.mdm.bizmdm.test.bean.EmcItemGroupBean;
 import com.sunwayworld.emc.module.mdm.bizmdm.monitortmpl.bean.EmcMonitorTmplBean;
 import com.sunwayworld.emc.module.mdm.bizmdm.monitortmpl.service.EmcMonitorTmplService;
 import com.sunwayworld.framework.at.annotation.AuditTrailEntry;
@@ -42,6 +45,7 @@ import com.sunwayworld.framework.constant.Constant;
 import com.sunwayworld.framework.database.sql.Order;
 import com.sunwayworld.framework.context.ApplicationContextHelper;
 import com.sunwayworld.framework.i18n.I18nHelper;
+import com.sunwayworld.framework.exception.InvalidDataException;
 import com.sunwayworld.framework.mybatis.mapper.MatchPattern;
 import com.sunwayworld.framework.mybatis.mapper.SearchFilter;
 import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;
@@ -261,6 +265,12 @@ public class PfFolderServiceImpl extends EmcFolderServiceImpl implements PfFolde
             return coreBpmnInstanceStatusDTOList;
         }
 
+        List<EmcOrderItemGroupBean> abnormalOrderItemGroupList = dealAbnormalData(idList);
+        if (!abnormalOrderItemGroupList.isEmpty()) {
+            List<String> names = abnormalOrderItemGroupList.stream().map(EmcOrderItemGroupBean::getItemGroup).distinct().collect(Collectors.toList());
+            throw new InvalidDataException("点位存在异常数据不允许提交,异常数据为：" + StringUtils.join(names, ","));
+        }
+
         List<EmcFolderBean> folderList = selectListByFilter(SearchFilter.instance().match("ID", idList).filter(MatchPattern.OR));
         // 采样安排提交插入审核记录
         this.insertAuditRecordByFolder(folderList, "PROCESS_START", wrapper.getParamValue("bpmn_comment"), null);
@@ -281,6 +291,12 @@ public class PfFolderServiceImpl extends EmcFolderServiceImpl implements PfFolde
         List<Long> idList = coreBpmnInstanceStatusList.stream().map(CoreBpmnInstanceStatusDTO::getId).collect(Collectors.toList());
         if (idList.isEmpty()) {
             return coreBpmnInstanceStatusList;
+        }
+
+        List<EmcOrderItemGroupBean> abnormalOrderItemGroupList = dealAbnormalData(itemIdList);
+        if (!abnormalOrderItemGroupList.isEmpty()) {
+            List<String> names = abnormalOrderItemGroupList.stream().map(EmcOrderItemGroupBean::getItemGroup).distinct().collect(Collectors.toList());
+            throw new InvalidDataException("点位存在异常数据不允许提交,异常数据为：" + StringUtils.join(names, ","));
         }
 
         List<EmcFolderBean> folderList = selectListByFilter(SearchFilter.instance().match("ID", idList).filter(MatchPattern.OR));
@@ -412,6 +428,33 @@ public class PfFolderServiceImpl extends EmcFolderServiceImpl implements PfFolde
         }
         this.getDao().update(folderList, "FOLDERNO");
         this.pfOrderService.getDao().update(updateOrderList, "ORDERNO", "LABELNO");
+    }
+
+    private List<EmcOrderItemGroupBean> dealAbnormalData(List<Long> folderIdList) {
+        if (folderIdList.isEmpty()) return Collections.emptyList();
+        List<EmcOrderBean> orders = orderService.selectListByFilter(
+                SearchFilter.instance().match("folderId", folderIdList).filter(MatchPattern.OR), new Order[0]);
+        List<Long> orderIds = orders.stream().map(EmcOrderBean::getId).collect(Collectors.toList());
+        List<EmcOrderItemGroupBean> groups = orderItemGroupService.getDao().selectListByOneColumnValues(orderIds, "ORDERID", new Order[0]);
+        List<Long> capacityIds = groups.stream().map(EmcOrderItemGroupBean::getItemGroupId).distinct().collect(Collectors.toList());
+        List<EmcCapacityItemGroupBean> capacities = capacityItemGroupService.selectListByFilter(
+                SearchFilter.instance().match("id", capacityIds).filter(MatchPattern.OR), new Order[0]);
+        List<Long> itemGroupIds = capacities.stream().map(EmcCapacityItemGroupBean::getItemGroupId).distinct().collect(Collectors.toList());
+        List<EmcItemGroupBean> itemGroups = itemGroupService.selectListByFilter(
+                SearchFilter.instance().match("id", itemGroupIds).filter(MatchPattern.OR), new Order[0]);
+        List<EmcOrderItemGroupBean> abnormal = new ArrayList<>();
+        for (EmcOrderItemGroupBean group : groups) {
+            EmcCapacityItemGroupBean capacity = capacities.stream().filter(e -> ObjectUtils.equals(group.getItemGroupId(), e.getId())).findFirst().orElse(new EmcCapacityItemGroupBean());
+            EmcItemGroupBean item = itemGroups.stream().filter(e -> ObjectUtils.equals(capacity.getItemGroupId(), e.getId())).findFirst().orElse(null);
+            if (item != null && ObjectUtils.equals(item.getExt$Item("SHOWFLAG"), "1")
+                    && ObjectUtils.equals(group.getItemGroup(), item.getItemGroup())
+                    && ObjectUtils.equals(group.getMethodId() + "", item.getExt$Item("methodid"))
+                    && ObjectUtils.equals(group.getTestId() + "", item.getExt$Item("testmethodtestid"))) continue;
+            EmcOrderItemGroupBean update = new EmcOrderItemGroupBean();
+            update.setId(group.getId()); update.setTestName(group.getTestName()); update.setItemGroup(group.getItemGroup()); update.setAbnormal("1");
+            abnormal.add(update);
+        }
+        return abnormal;
     }
 
 }

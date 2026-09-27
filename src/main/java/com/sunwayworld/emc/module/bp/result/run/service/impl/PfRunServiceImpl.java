@@ -3773,7 +3773,7 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
         // 插入样品测试关联批的审核人信息
         List<String> runIdList = validOrderTaskList.stream().filter(a -> !StringUtils.isEmpty(a.getRunId())).map(EmcOrderTaskBean::getRunId).distinct().collect(Collectors.toList());
         EmcRunBean updateRun = new EmcRunBean();
-        updateRun.setAuditedUserId(LocalContextHelper.getLoginUserId());
+        updateRun.setAuditedUserId(loginUserId);
         updateRun.setAuditedUserName(LocalContextHelper.getLoginUser().getUserName());
         updateRun.setAuditedDate(LocalDateTime.now());
         updateRun.setStatus(EmcBizConstant.RUN_STATUS_DONE);

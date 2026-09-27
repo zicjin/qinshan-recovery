@@ -82,6 +82,7 @@ import com.sunwayworld.emc.module.mdm.basemdm.propertytmpl.service.EmcPropertyDa
 import com.sunwayworld.emc.module.mdm.basemdm.subcontractor.bean.EmcSubcontractRecordBean;
 import com.sunwayworld.emc.module.mdm.basemdm.subcontractor.service.EmcSubcontractRecordService;
 import com.sunwayworld.emc.module.mdm.bizmdm.capacity.bean.EmcCapacityItemGroupBean;
+import com.sunwayworld.emc.module.mdm.bizmdm.capacity.bean.EmcTestCapacityBean;
 import com.sunwayworld.emc.module.mdm.bizmdm.capacity.service.EmcCapacityItemGroupService;
 import com.sunwayworld.emc.module.mdm.bizmdm.capacity.service.EmcTestCapacityService;
 import com.sunwayworld.emc.module.mdm.bizmdm.monitortmpl.bean.EmcMonitorTmplBean;
@@ -1638,6 +1639,25 @@ public class PfSampleServiceImpl extends EmcSampleServiceImpl implements PfSampl
                 updateOrderTask.setStatus(EmcBizConstant.ORDERTASK_STATUS_PRELOGGED);
 
                 orderTaskService.getDao().updateByIds(updateOrderTask, analysisOrderTaskList.stream().map(e -> e.getId()).collect(Collectors.toList()), "STATUS");
+
+                List<EmcOrderTaskBean> groupedAnalysisTaskList = analysisOrderTaskList.stream()
+                        .collect(Collectors.collectingAndThen(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(e -> e.getTestMethodId() + e.getExt$Item("orgid")))), ArrayList::new));
+                List<EmcTestCapacityBean> capacityFilters = groupedAnalysisTaskList.stream().map(task -> {
+                    EmcTestCapacityBean filterCapacity = new EmcTestCapacityBean();
+                    filterCapacity.setTestMethodId(task.getTestMethodId());
+                    filterCapacity.setOrgId(task.getExt$Item("orgid"));
+                    return filterCapacity;
+                }).collect(Collectors.toList());
+                List<EmcTestCapacityBean> capacityList = emcTestCapacityService.getDao().selectList(capacityFilters,
+                        Arrays.asList("orgId", "testMethodId"), Arrays.asList("id", "testMethodId", "orgId", "analysisOrgId", "analysisOrgName"));
+                analysisOrderTaskList.forEach(task -> capacityList.stream()
+                        .filter(capacity -> ObjectUtils.equals(capacity.getOrgId(), task.getExt$Item("orgid"))
+                                && ObjectUtils.equals(capacity.getTestMethodId(), task.getTestMethodId()))
+                        .findFirst().ifPresent(capacity -> {
+                            task.setAnalysisOrgId(capacity.getExt$Item("analysisorgid"));
+                            task.setAnalysisOrgName(capacity.getExt$Item("analysisorgname"));
+                        }));
+                orderTaskService.getDao().update(analysisOrderTaskList, "ANALYSISORGID", "ANALYSISORGNAME");
             }
             // 判断更新的样品测试对应的项目样品类型下的样品测试是不是都已经完成，完成的话将报告状态置为preLogged
             updateReportStatus(sampleIdList, orderList, orderTaskList);

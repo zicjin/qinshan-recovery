@@ -1,0 +1,242 @@
+package com.sunwayworld.emc.framework.security;
+
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import javax.servlet.FilterChain;
+import javax.servlet.ReadListener;
+import javax.servlet.ServletInputStream;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.filter.OncePerRequestFilter;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sunwayworld.framework.context.LocalContextHelper;
+import com.sunwayworld.framework.mybatis.mapper.MatchPattern;
+import com.sunwayworld.framework.mybatis.mapper.SearchFilter;
+import com.sunwayworld.module.item.file.bean.CoreFileBean;
+import com.sunwayworld.module.item.file.service.CoreFileService;
+import com.sunwayworld.module.sys.menu.bean.CoreMenuBean;
+import com.sunwayworld.module.sys.menu.service.CoreMenuService;
+
+/**
+ * The private file filter validates a signed URL but does not map a personnel
+ * signature back to the menu permission that revealed it. Keep that boundary
+ * aligned with the personnel query page without changing other file domains.
+ */
+public class PersonnelSignatureFileFilter extends OncePerRequestFilter {
+
+    private static final String FILE_RESOURCE_PREFIX = "/core/module/item/files/";
+    private static final String FILE_QUERY_PATH = "/core/module/item/files/queries";
+    private static final String FILE_CONTENT_PREFIX = "/files/";
+    private static final String PERSONNEL_TARGET_PREFIX = "T_CORE_USER$";
+    private static final String PERSONNEL_MENU_ID = "100001";
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+
+    private final CoreFileService coreFileService;
+    private final CoreMenuService menuService;
+
+    public PersonnelSignatureFileFilter(CoreFileService coreFileService, CoreMenuService menuService) {
+        this.coreFileService = coreFileService;
+        this.menuService = menuService;
+    }
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        String path = pathWithinApplication(request);
+        return !path.startsWith(FILE_RESOURCE_PREFIX) && !path.startsWith(FILE_CONTENT_PREFIX);
+    }
+
+    @Override
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
+        if (!hasAuthenticatedPrincipal()) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        String path = pathWithinApplication(request);
+        if (isFileQuery(request, path)) {
+            CachedBodyRequest cachedRequest = new CachedBodyRequest(request);
+            if (!hasPersonnelMenu() && !isExplicitlyNonPersonnelQuery(cachedRequest.getBody())) {
+                deny(response);
+                return;
+            }
+            filterChain.doFilter(cachedRequest, response);
+            return;
+        }
+
+        CoreFileBean file = findRequestedFile(request);
+        if (file != null && file.getTargetId() != null && file.getTargetId().startsWith(PERSONNEL_TARGET_PREFIX)
+                && !hasPersonnelMenu()) {
+            deny(response);
+            return;
+        }
+        filterChain.doFilter(request, response);
+    }
+
+    private CoreFileBean findRequestedFile(HttpServletRequest request) {
+        String path = pathWithinApplication(request);
+        if (path.startsWith(FILE_RESOURCE_PREFIX)) {
+            String id = path.substring(FILE_RESOURCE_PREFIX.length());
+            if (id.matches("[0-9]+")) {
+                try {
+                    return coreFileService.selectByIdIfPresent(Long.valueOf(id));
+                } catch (NumberFormatException ignored) {
+                    return null;
+                }
+            }
+            return null;
+        }
+
+        String relativePath = path.substring(FILE_CONTENT_PREFIX.length());
+        String[] segments = relativePath.split("/", 4);
+        if (segments.length != 4 || segments[2].isEmpty()) {
+            return null;
+        }
+        // /files/{scope}/{date}/{md5Name}/{fileName}; the filename may be URL encoded.
+        String md5Name = segments[2];
+        return coreFileService.selectFirstByFilter(
+                SearchFilter.instance().match("MD5NAME", md5Name).filter(MatchPattern.SEQ));
+    }
+
+    private boolean isFileQuery(HttpServletRequest request, String path) {
+        return "POST".equals(request.getMethod()) && FILE_QUERY_PATH.equals(path);
+    }
+
+    /**
+     * Generic file queries can include a signed URL in every returned row. For a user
+     * without the personnel menu, only a concrete non-personnel target is safe to pass
+     * through; a missing or flexible target could enumerate personnel signatures.
+     */
+    private boolean isExplicitlyNonPersonnelQuery(byte[] body) {
+        try {
+            JsonNode root = OBJECT_MAPPER.readTree(body);
+            JsonNode filter = root == null ? null : root.get("f");
+            JsonNode targetId = filter == null ? null : filter.get("targetId");
+            return targetId != null && targetId.isTextual()
+                    && !targetId.asText().startsWith(PERSONNEL_TARGET_PREFIX);
+        } catch (IOException ignored) {
+            return false;
+        }
+    }
+
+    private void deny(HttpServletResponse response) throws IOException {
+        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+        response.setContentType("application/json;charset=UTF-8");
+        response.getWriter().write("{\"message\":\"GIKAM.PERMISSION.UNAUTHORIZED\"}");
+    }
+
+    private boolean hasAuthenticatedPrincipal() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated()
+                && !"anonymousUser".equals(authentication.getName())) {
+            return true;
+        }
+        String loginUserId = LocalContextHelper.getLoginUserId();
+        return loginUserId != null && !loginUserId.trim().isEmpty();
+    }
+
+    private boolean hasPersonnelMenu() {
+        List<CoreMenuBean> menus = menuService.selectCurrentUserMenuList();
+        if (menus == null) {
+            return false;
+        }
+        Set<String> ids = menus.stream().map(CoreMenuBean::getId).collect(Collectors.toSet());
+        return ids.contains(PERSONNEL_MENU_ID);
+    }
+
+    private String pathWithinApplication(HttpServletRequest request) {
+        String contextPath = request.getContextPath();
+        String requestUri = request.getRequestURI();
+        return requestUri.startsWith(contextPath) ? requestUri.substring(contextPath.length()) : requestUri;
+    }
+
+    private static final class CachedBodyRequest extends HttpServletRequestWrapper {
+
+        private final byte[] body;
+
+        private CachedBodyRequest(HttpServletRequest request) throws IOException {
+            super(request);
+            this.body = readBody(request.getInputStream());
+        }
+
+        private byte[] getBody() {
+            return body;
+        }
+
+        @Override
+        public ServletInputStream getInputStream() {
+            return new CachedBodyInputStream(body);
+        }
+
+        @Override
+        public BufferedReader getReader() {
+            return new BufferedReader(new InputStreamReader(getInputStream(), java.nio.charset.StandardCharsets.UTF_8));
+        }
+
+        private static byte[] readBody(InputStream input) throws IOException {
+            ByteArrayOutputStream output = new ByteArrayOutputStream();
+            byte[] buffer = new byte[4096];
+            int read;
+            while ((read = input.read(buffer)) != -1) {
+                output.write(buffer, 0, read);
+            }
+            return output.toByteArray();
+        }
+    }
+
+    private static final class CachedBodyInputStream extends ServletInputStream {
+
+        private final ByteArrayInputStream input;
+
+        private CachedBodyInputStream(byte[] body) {
+            this.input = new ByteArrayInputStream(body);
+        }
+
+        @Override
+        public int read() {
+            return input.read();
+        }
+
+        @Override
+        public boolean isFinished() {
+            return input.available() == 0;
+        }
+
+        @Override
+        public boolean isReady() {
+            return true;
+        }
+
+        @Override
+        public void setReadListener(ReadListener listener) {
+            if (listener == null) {
+                throw new IllegalArgumentException("ReadListener must not be null");
+            }
+            try {
+                if (!isFinished()) {
+                    listener.onDataAvailable();
+                }
+                if (isFinished()) {
+                    listener.onAllDataRead();
+                }
+            } catch (IOException e) {
+                listener.onError(e);
+            }
+        }
+    }
+}

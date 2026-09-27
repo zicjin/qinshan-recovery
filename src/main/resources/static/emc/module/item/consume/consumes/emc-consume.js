@@ -10,7 +10,7 @@ var emcConsume = Gikam.getPageObject({
             title : 'T_EMC_CONSUME.ID',
         }, {
             field : 'mtlName',
-            title : 'T_EMC_CONSUME.MTLNAME',
+            title : '材料名称（构建验证）',
             editor : true,
         }, {
             field : 'specification',

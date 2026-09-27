@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.LongStream;
@@ -62,6 +61,7 @@ import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;
 import com.sunwayworld.framework.spring.annotation.GikamBean;
 import com.sunwayworld.framework.utils.ArrayUtils;
 import com.sunwayworld.framework.utils.BeanUtils;
+import com.sunwayworld.framework.utils.CollectionUtils;
 import com.sunwayworld.framework.utils.NumberUtils;
 import com.sunwayworld.framework.utils.ObjectUtils;
 import com.sunwayworld.framework.utils.StringUtils;
@@ -194,59 +194,138 @@ public class PfOrderReceiptServiceImpl extends EmcOrderReceiptServiceImpl {
                     copyFolder(copiedFolderList, copiedOrder, copiedQc, newFolderId, newFolderNo, newFolderList);
 
                     // 复制样品测试和样品测试结果
-                    if ("zcsbkb".equals(copiedQc.getQcCategoryId()) && !relatedTestMethodList.isEmpty()) {
-                        List<EmcOrderItemGroupBean> relatedGroups = createRelatedOrderItemGroups(copiedOrder, newOrder, currentOrderTaskList, copiedOrderItemGroupList, relatedTestMethodList);
-                        if (relatedGroups != null) {
+                    if ("zcsbkb".equals(copiedQc.getQcCategoryId()) && !CollectionUtils.isEmpty(relatedTestMethodList)) {
+                        List<EmcOrderItemGroupBean> relatedGroups = new ArrayList<>();
+                        List<Long> testMethodIds = currentOrderTaskList.stream().map(EmcOrderTaskBean::getTestMethodId).distinct().collect(Collectors.toList());
+                        List<EmcRelatedTestMethodBean> matchedRelatedMethods = relatedTestMethodList.stream()
+                                .filter(method -> testMethodIds.contains(method.getTestMethodId())).collect(Collectors.toList());
+                        List<Long> relatedTestMethodIds = matchedRelatedMethods.stream().map(EmcRelatedTestMethodBean::getRelatedTestMethodId)
+                                .distinct().collect(Collectors.toList());
+                        if (!relatedTestMethodIds.isEmpty()) {
+                            for (Long relatedTestMethodId : relatedTestMethodIds) {
+                                List<EmcTestMethodBean> testMethodList = testMethodService.selectListByFilter(
+                                        SearchFilter.instance().match("id", relatedTestMethodId).filter(MatchPattern.SEQ), new Order[0]);
+                                String parentOrgId = LocalContextHelper.getLoginUser().getExt$Item("parentOrgId");
+                                List<EmcTestCapacityBean> relatedCapacityList = testCapacityService.selectListByFilter(
+                                        SearchFilter.instance().match("testMethodId", relatedTestMethodId).filter(MatchPattern.SEQ)
+                                                .match("orgId", parentOrgId).filter(MatchPattern.SEQ), new Order[0]);
+                                List<Long> testCapacityIds = relatedCapacityList.stream().map(EmcTestCapacityBean::getId).collect(Collectors.toList());
+                                Map<Long, EmcTestCapacityBean> relatedCapacityMap = relatedCapacityList.stream()
+                                        .collect(Collectors.toMap(EmcTestCapacityBean::getId, Function.identity()));
+                                List<EmcCapacityItemGroupBean> relatedItemGroupList = capacityItemGroupService.getDao()
+                                        .selectListByOneColumnValues(testCapacityIds, "testCapacityId", new Order[0]);
+                                List<Long> currentMethodIds = matchedRelatedMethods.stream()
+                                        .filter(method -> ObjectUtils.equals(relatedTestMethodId, method.getRelatedTestMethodId()))
+                                        .map(EmcRelatedTestMethodBean::getTestMethodId).distinct().collect(Collectors.toList());
+                                List<EmcOrderItemGroupBean> currentCopiedGroups = copiedOrderItemGroupList.stream()
+                                        .filter(group -> ObjectUtils.equals(group.getOrderId(), copiedOrder.getId())
+                                                && currentMethodIds.contains(group.getTestMethodId())).collect(Collectors.toList());
+                                List<String> groupNames = currentCopiedGroups.stream().map(EmcOrderItemGroupBean::getItemGroup)
+                                        .distinct().collect(Collectors.toList());
+                                List<EmcCapacityItemGroupBean> newRelatedItemGroupList = relatedItemGroupList.stream()
+                                        .filter(group -> !currentCopiedGroups.contains(group.getId()) && groupNames.contains(group.getItemGroup()))
+                                        .collect(Collectors.toList());
+                                List<Long> newItemGroupIds = newRelatedItemGroupList.stream().map(EmcCapacityItemGroupBean::getItemGroupId)
+                                        .distinct().collect(Collectors.toList());
+                                List<EmcGroupItemBean> groupItemList = groupItemService.getDao()
+                                        .selectListByOneColumnValues(newItemGroupIds, "itemGroupId", new Order[0]);
+                                List<Long> itemIds = groupItemList.stream().map(EmcGroupItemBean::getItemId).distinct().collect(Collectors.toList());
+                                List<EmcItemBean> itemList = itemService.getDao().selectListByOneColumnValues(itemIds, "id",
+                                        Arrays.asList("id", "analysisCategory"), new Order[0]);
+                                List<Long> validCapacityItemGroupIds = new ArrayList<>();
+                                newRelatedItemGroupList.forEach(group -> {
+                                    List<Long> currentItemIds = groupItemList.stream()
+                                            .filter(groupItem -> ObjectUtils.equals(group.getItemGroupId(), groupItem.getItemGroupId()))
+                                            .map(EmcGroupItemBean::getItemId).distinct().collect(Collectors.toList());
+                                    boolean allSamplingItem = itemList.stream().filter(item -> currentItemIds.contains(item.getId()))
+                                            .allMatch(item -> StringUtils.equals(item.getAnalysisCategory(), "sampling"));
+                                    if (!allSamplingItem) {
+                                        validCapacityItemGroupIds.add(group.getId());
+                                    }
+                                });
+                                List<EmcCapacityItemGroupBean> validCapacityItemGroupList = newRelatedItemGroupList.stream()
+                                        .filter(group -> validCapacityItemGroupIds.contains(group.getId())).collect(Collectors.toList());
+                                validCapacityItemGroupList.forEach(related -> {
+                                    EmcOrderItemGroupBean relatedOrderItemGroup = new EmcOrderItemGroupBean();
+                                    relatedOrderItemGroup.setItemGroup(related.getItemGroup());
+                                    relatedOrderItemGroup.setItemGroupId(related.getId());
+                                    relatedOrderItemGroup.setSchemeName("default");
+                                    testMethodList.stream().filter(method -> ObjectUtils.equals(related.getTestMethodId(), method.getId()))
+                                            .findFirst().ifPresent(method -> {
+                                                relatedOrderItemGroup.setMethodId(method.getMethodId());
+                                                relatedOrderItemGroup.setTestId(method.getTestId());
+                                                relatedOrderItemGroup.setTestMethodId(method.getId());
+                                                relatedOrderItemGroup.setTestName(method.getExt$Item("testName"));
+                                                relatedOrderItemGroup.setMethodName(method.getExt$Item("methodName"));
+                                                relatedOrderItemGroup.setTestMethodBasis(method.getExt$Item("testMethodBasis"));
+                                                String methodVersionId = method.getExt$Item("methodVersionId");
+                                                if (NumberUtils.isNumber(methodVersionId)) {
+                                                    relatedOrderItemGroup.setMethodVersionId(NumberUtils.parseLong(methodVersionId));
+                                                }
+                                            });
+                                    Optional.ofNullable(relatedCapacityMap.get(related.getTestCapacityId())).ifPresent(capacity -> {
+                                        relatedOrderItemGroup.setAnalysisOrgId(capacity.getExt$Item("analysisOrgId"));
+                                        relatedOrderItemGroup.setAnalysisOrgName(capacity.getExt$Item("analysisOrgName"));
+                                        relatedOrderItemGroup.setInputUserId(capacity.getExt$Item("inputUserId"));
+                                        relatedOrderItemGroup.setInputUserName(capacity.getExt$Item("inputUserName"));
+                                    });
+                                    relatedOrderItemGroup.setExt$Item("relatedTest", "1");
+                                    relatedOrderItemGroup.setOrderId(newOrder.getId());
+                                    Long orderItemGroupId = ApplicationContextHelper.getNextIdentity();
+                                    relatedOrderItemGroup.setId(orderItemGroupId);
+                                    relatedGroups.add(relatedOrderItemGroup);
+                                });
+                            }
                             orderItemGroupService.insert(Collections.singletonList(newOrder), relatedGroups);
                             reloadOrderList.add(newOrder);
                         }
                     } else {
                         currentOrderTaskList.forEach(copiedOrderTask -> {
-                        Long newOrderTaskId = ApplicationContextHelper.getNextIdentity();
-                        List<EmcOrderTaskResultBean> currentResultList = copiedOrderTaskResultList.stream().filter(result -> ObjectUtils.equals(result.getOrderTaskId(), copiedOrderTask.getId())).collect(Collectors.toList());
-                        currentResultList.forEach(copiedOrderTaskResult -> {
-                            EmcItemBean currentItem = copiedItemList.stream().filter(item -> ObjectUtils.equals(item.getId(), copiedOrderTaskResult.getItemId())).findFirst().orElse(null);
-                            if (currentItem == null) {
-                                return;
-                            }
-
-                            if (!StringUtils.isEmpty(currentItem.getQcCategoryId()) && Constant.YES.equals(currentItem.getActivatedFlag()) && ArrayUtils.contains(StringUtils.split(currentItem.getQcCategoryId(), ","), "" + copiedQc.getId())) { {
-                                copyOrderTaskResult(copiedOrderTaskResult, newFolderId, newOrderTaskId, newOrder, copiedOrder, copiedQc, newOrderTaskResultList);
-                                if (newOrderTaskList.stream().noneMatch(c -> ObjectUtils.equals(c.getId(), newOrderTaskId))) {
-                                    copyOrderTask(copiedOrderTask, copiedQc, newOrderTaskId, newFolderId, newOrder, newOrderTaskList);
+                            Long newOrderTaskId = ApplicationContextHelper.getNextIdentity();
+                            List<EmcOrderTaskResultBean> currentResultList = copiedOrderTaskResultList.stream()
+                                    .filter(result -> ObjectUtils.equals(result.getOrderTaskId(), copiedOrderTask.getId()))
+                                    .collect(Collectors.toList());
+                            currentResultList.forEach(copiedOrderTaskResult -> {
+                                EmcItemBean currentItem = copiedItemList.stream()
+                                        .filter(item -> ObjectUtils.equals(item.getId(), copiedOrderTaskResult.getItemId()))
+                                        .findFirst().orElse(null);
+                                if (currentItem == null) {
+                                    return;
                                 }
-                            }}
+                                if (!StringUtils.isEmpty(currentItem.getQcCategoryId())
+                                        && Constant.YES.equals(currentItem.getActivatedFlag())
+                                        && ArrayUtils.contains(StringUtils.split(currentItem.getQcCategoryId(), ","), "" + copiedQc.getId())) {
+                                    copyOrderTaskResult(copiedOrderTaskResult, newFolderId, newOrderTaskId, newOrder,
+                                            copiedOrder, copiedQc, newOrderTaskResultList);
+                                    if (newOrderTaskList.stream().noneMatch(c -> ObjectUtils.equals(c.getId(), newOrderTaskId))) {
+                                        copyOrderTask(copiedOrderTask, copiedQc, newOrderTaskId, newFolderId, newOrder, newOrderTaskList);
+                                    }
+                                }
+                            });
                         });
-                        });
-                        List<EmcOrderItemGroupBean> curCopiedOrderItemGroupList = copiedOrderItemGroupList.stream()
-                                .filter(group -> newOrderTaskList.stream().anyMatch(task -> ObjectUtils.equals(task.getTestMethodId(), group.getTestMethodId())))
+                        List<EmcOrderItemGroupBean> currentCopiedGroups = copiedOrderItemGroupList.stream()
+                                .filter(group -> newOrderTaskList.stream()
+                                        .anyMatch(task -> ObjectUtils.equals(task.getTestMethodId(), group.getTestMethodId())))
                                 .collect(Collectors.toList());
-                        copyOrderItemGroup(curCopiedOrderItemGroupList, copiedOrder, newOrderId, newOrderItemGroupList);
+                        copyOrderItemGroup(currentCopiedGroups, copiedOrder, newOrderId, newOrderItemGroupList);
                     }
                 });
             }));
         }
 
-        if (!reloadOrderList.isEmpty()) {
+        if (!CollectionUtils.isEmpty(reloadOrderList)) {
             orderTaskService.insertByOrder(reloadOrderList);
         }
 
         List<EmcOrderBean> existedOrderList = orderService.getDao().selectListByOneColumnValues(copiedFolderIdList, "FOLDERID", Arrays.asList("ID", "FOLDERID", "ORDERNO", "QCCATEGORYID", "QCCATEGORYCODE"));
-        existedOrderList.forEach(o ->{
-            if(o.getOrderNo().contains("-H")){
-             o.setOrderNo(o.getOrderNo().replace("-H", ""));
-            }
-           });
-        Map<Long, EmcOrderBean> existedFolderOrderMap = existedOrderList.stream().collect(Collectors.groupingBy(EmcOrderBean::getFolderId, Collectors.collectingAndThen(Collectors.reducing(BinaryOperator.maxBy(Comparator.comparing(EmcOrderBean::getOrderNo))), Optional::get)));
-        Map<Long, Integer> existedFolderMaxOrderNoMap = existedFolderOrderMap.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, e -> NumberUtils.parseInt(e.getValue().getOrderNo().substring(e.getValue().getOrderNo().length() - 3))));
-
         List<EmcQcCategoryBean> notAddFolderQcCategoryList = copiedQcCategoryList.stream().filter(qc -> !StringUtils.equals(qc.getAddFolder(), Constant.YES)).collect(Collectors.toList());
         copiedOrderList.forEach(copiedOrder -> notAddFolderQcCategoryList.forEach(copiedQc -> {
             Long addNum = Optional.ofNullable(copiedQc.getAddNum()).orElse(1L);
             List<EmcOrderTaskBean> currentOrderTaskList = copiedOrderTaskList.stream().filter(task -> ObjectUtils.equals(task.getOrderId(), copiedOrder.getId())).collect(Collectors.toList());
             LongStream.range(0, addNum).forEach(index -> {
-                Integer currentMaxOrderNum = existedFolderMaxOrderNoMap.get(copiedOrder.getFolderId());
-                if (currentMaxOrderNum == null) {
+                List<EmcOrderBean> existedFolderOrderList = existedOrderList.stream()
+                        .filter(order -> ObjectUtils.equals(copiedOrder.getFolderId(), order.getFolderId())).collect(Collectors.toList());
+                if (existedFolderOrderList.isEmpty()) {
                     return;
                 }
 
@@ -254,19 +333,12 @@ public class PfOrderReceiptServiceImpl extends EmcOrderReceiptServiceImpl {
                 EmcOrderBean newOrder = new EmcOrderBean();
                 BeanUtils.copyProperties(copiedOrder, newOrder, EmcConstant.CREATED_COLUMNS);
                 Long newOrderId = ApplicationContextHelper.getNextIdentity();
-                int nextOrderNum = currentMaxOrderNum + 1;
-                String newOrderNo = copiedOrder.getOrderNo().substring(0, copiedOrder.getOrderNo().length() - 3) + StringUtils.leftPad(nextOrderNum + "", 3);
-
-                // 判断是否为后管
-                boolean isBlabQc = PfConstant.QC_L_BLAB.equals(copiedQc.getQcCategoryId());
-                // 判断是否为尘氟
-                boolean isCfQc = PfConstant.QC_P_CF.equals(copiedQc.getQcCategoryId());
-                if (isBlabQc || isCfQc) {
-                    newOrderNo = copiedOrder.getOrderNo() + "-" + (isBlabQc ? PfConstant.QC_L_BLAB_ORDER_NO_SUFFIX : PfConstant.QC_P_CF_ORDER_NO_SUFFIX);
-                }
-
+                String newOrderNo = genQcOrderNo(copiedQc, copiedOrder, existedFolderOrderList);
                 copyOrder(copiedOrder, copiedQc, copiedOrder.getFolderId(), newOrder, newOrderId, newOrderNo, newOrderList);
-                existedFolderMaxOrderNoMap.put(copiedOrder.getFolderId(), nextOrderNum);
+                newOrder.setQcCategoryId(copiedQc.getId());
+                newOrder.setQcCategoryCode(copiedQc.getQcCategoryId());
+                newOrder.setQcName(copiedQc.getQcName());
+                existedOrderList.add(newOrder);
 
                 // 复制分析项组
                 copyOrderItemGroup(copiedOrderItemGroupList, copiedOrder, newOrderId, newOrderItemGroupList);
@@ -281,23 +353,14 @@ public class PfOrderReceiptServiceImpl extends EmcOrderReceiptServiceImpl {
                             return;
                         }
 
-                        if (!StringUtils.isEmpty(currentItem.getQcCategoryId()) && Constant.YES.equals(currentItem.getActivatedFlag()) && ArrayUtils.contains(StringUtils.split(currentItem.getQcCategoryId(), ","), "" + copiedQc.getId())) { {
+                        if (!StringUtils.isEmpty(currentItem.getQcCategoryId()) && Constant.YES.equals(currentItem.getActivatedFlag()) && ArrayUtils.contains(StringUtils.split(currentItem.getQcCategoryId(), ","), "" + copiedQc.getId())) {
                             copyOrderTaskResult(copiedOrderTaskResult, copiedOrder.getFolderId(), newOrderTaskId, newOrder, copiedOrder, copiedQc, newOrderTaskResultList);
                             if (newOrderTaskList.stream().noneMatch(c -> ObjectUtils.equals(c.getId(), newOrderTaskId))) {
                                 copyOrderTask(copiedOrderTask, copiedQc, newOrderTaskId, copiedOrder.getFolderId(), newOrder, newOrderTaskList);
                             }
-                        }}
+                        }
                     });
                 });
-
-                if (isBlabQc || isCfQc) {
-                    String acqNoSuffix = "-" + PfConstant.QC_L_ALAB_ORDER_NO_SUFFIX;
-                    List<Long> newTestMethodIdList = newOrderTaskList.stream().filter(task -> StringUtils.equals(copiedQc.getQcCategoryId(), task.getQcCategoryCode()) && ObjectUtils.equals(newOrderId, task.getOrderId())).map(EmcOrderTaskBean::getTestMethodId).distinct().collect(Collectors.toList());
-                    List<EmcOrderTaskBean> needUpdateTaskList = currentOrderTaskList.stream().filter(task -> newTestMethodIdList.contains(task.getTestMethodId()) && !StringUtils.endsWith(task.getEquiptAcquNo(), acqNoSuffix)).collect(Collectors.toList());
-                    needUpdateTaskList.forEach(task -> task.setEquiptAcquNo(copiedOrder.getOrderNo() + acqNoSuffix));
-                    updateTaskList.addAll(needUpdateTaskList);
-                }
-
             });
         }));
 
@@ -313,58 +376,6 @@ public class PfOrderReceiptServiceImpl extends EmcOrderReceiptServiceImpl {
 
         // 更新
         orderTaskService.getDao().update(updateTaskList, "equiptAcquNo");
-    }
-
-    private List<EmcOrderItemGroupBean> createRelatedOrderItemGroups(EmcOrderBean copiedOrder,
-                                                                       EmcOrderBean newOrder,
-                                                                       List<EmcOrderTaskBean> currentOrderTaskList,
-                                                                       List<EmcOrderItemGroupBean> copiedOrderItemGroupList,
-                                                                       List<EmcRelatedTestMethodBean> relatedTestMethodList) {
-        List<EmcOrderItemGroupBean> result = new ArrayList<>();
-        List<Long> testMethodIdList = currentOrderTaskList.stream().map(EmcOrderTaskBean::getTestMethodId).distinct().collect(Collectors.toList());
-        List<EmcRelatedTestMethodBean> matched = relatedTestMethodList.stream().filter(x -> testMethodIdList.contains(x.getTestMethodId())).collect(Collectors.toList());
-        List<Long> relatedTestMethodIdList = matched.stream().map(EmcRelatedTestMethodBean::getRelatedTestMethodId).distinct().collect(Collectors.toList());
-        if (relatedTestMethodIdList.isEmpty()) return null;
-        String parentOrgId = LocalContextHelper.getLoginUser().getExt$Item("parentOrgId");
-        List<EmcTestMethodBean> testMethods = testMethodService.selectListByFilter(SearchFilter.instance().match("id", relatedTestMethodIdList).filter(MatchPattern.OR), new Order[0]);
-        List<EmcTestCapacityBean> capacities = testCapacityService.selectListByFilter(SearchFilter.instance().match("testMethodId", relatedTestMethodIdList).filter(MatchPattern.OR).match("orgId", parentOrgId).filter(MatchPattern.SEQ), new Order[0]);
-        Map<Long, EmcTestCapacityBean> capacityMap = capacities.stream().collect(Collectors.toMap(EmcTestCapacityBean::getId, Function.identity()));
-        List<Long> capacityIds = capacities.stream().map(EmcTestCapacityBean::getId).collect(Collectors.toList());
-        List<EmcCapacityItemGroupBean> capacityGroups = capacityItemGroupService.getDao().selectListByOneColumnValues(capacityIds, "testCapacityId", new Order[0]);
-        for (Long relatedTestMethodId : relatedTestMethodIdList) {
-            List<Long> currentMethodIds = matched.stream().filter(x -> ObjectUtils.equals(relatedTestMethodId, x.getRelatedTestMethodId())).map(EmcRelatedTestMethodBean::getTestMethodId).distinct().collect(Collectors.toList());
-            List<String> groupNames = copiedOrderItemGroupList.stream().filter(x -> ObjectUtils.equals(copiedOrder.getId(), x.getOrderId()) && currentMethodIds.contains(x.getTestMethodId())).map(EmcOrderItemGroupBean::getItemGroup).distinct().collect(Collectors.toList());
-            List<EmcCapacityItemGroupBean> candidates = capacityGroups.stream().filter(x -> groupNames.contains(x.getItemGroup())).collect(Collectors.toList());
-            for (EmcCapacityItemGroupBean related : candidates) {
-                List<EmcGroupItemBean> groupItems = groupItemService.getDao().selectListByOneColumnValues(Collections.singletonList(related.getItemGroupId()), "itemGroupId", new Order[0]);
-                List<Long> itemIds = groupItems.stream().map(EmcGroupItemBean::getItemId).distinct().collect(Collectors.toList());
-                List<EmcItemBean> items = itemService.getDao().selectListByOneColumnValues(itemIds, "id", Arrays.asList("id", "analysisCategory"), new Order[0]);
-                if (items.stream().allMatch(x -> StringUtils.equals("sampling", x.getAnalysisCategory()))) continue;
-                EmcOrderItemGroupBean group = new EmcOrderItemGroupBean();
-                group.setItemGroup(related.getItemGroup());
-                group.setItemGroupId(related.getId());
-                group.setSchemeName("default");
-                testMethods.stream().filter(x -> ObjectUtils.equals(related.getTestMethodId(), x.getId())).findFirst().ifPresent(x -> {
-                    group.setMethodId(x.getMethodId()); group.setTestId(x.getTestId()); group.setTestMethodId(x.getId());
-                    group.setTestName(x.getExt$Item("testName")); group.setMethodName(x.getExt$Item("methodName"));
-                    group.setTestMethodBasis(x.getExt$Item("testMethodBasis"));
-                    String version = x.getExt$Item("methodVersionId");
-                    if (NumberUtils.isNumber(version)) group.setMethodVersionId(NumberUtils.parseLong(version));
-                });
-                EmcTestCapacityBean capacity = capacityMap.get(related.getTestCapacityId());
-                if (capacity != null) {
-                    group.setAnalysisOrgId(capacity.getExt$Item("analysisOrgId"));
-                    group.setAnalysisOrgName(capacity.getExt$Item("analysisOrgName"));
-                    group.setInputUserId(capacity.getExt$Item("inputUserId"));
-                    group.setInputUserName(capacity.getExt$Item("inputUserName"));
-                }
-                group.setExt$Item("relatedTest", "1");
-                group.setOrderId(newOrder.getId());
-                group.setId(ApplicationContextHelper.getNextIdentity());
-                result.add(group);
-            }
-        }
-        return result;
     }
 
     @Override
@@ -506,21 +517,56 @@ public class PfOrderReceiptServiceImpl extends EmcOrderReceiptServiceImpl {
 
     public String genQcOrderNo(EmcQcCategoryBean qcCategory, EmcOrderBean copyOrder, List<EmcOrderBean> existedOrderList) {
         if ("P-DUP".equals(qcCategory.getQcCategoryId())) {
-            String shortHand = StringUtils.isEmpty(qcCategory.getQcShortHand()) ? "XP" : qcCategory.getQcShortHand();
-            return copyOrder.getOrderNo() + shortHand;
+            String qcShortHand = "XP";
+            if (!StringUtils.isEmpty(qcCategory.getQcShortHand())) {
+                qcShortHand = qcCategory.getQcShortHand();
+            }
+            return copyOrder.getOrderNo() + qcShortHand;
         }
         if ("P-VOCS".equals(qcCategory.getQcCategoryId())) {
-            String shortHand = StringUtils.isEmpty(qcCategory.getQcShortHand()) ? "CT" : qcCategory.getQcShortHand();
-            return copyOrder.getOrderNo() + shortHand;
+            String qcShortHand = "CT";
+            if (!StringUtils.isEmpty(qcCategory.getQcShortHand())) {
+                qcShortHand = qcCategory.getQcShortHand();
+            }
+            return copyOrder.getOrderNo() + qcShortHand;
         }
-        String shortHand;
-        if ("P-BLANK".equals(qcCategory.getQcCategoryId())) shortHand = StringUtils.isEmpty(qcCategory.getQcShortHand()) ? "QK" : qcCategory.getQcShortHand();
-        else if ("P-YSKB".equals(qcCategory.getQcCategoryId())) shortHand = StringUtils.isEmpty(qcCategory.getQcShortHand()) ? "YK" : qcCategory.getQcShortHand();
-        else if ("zcsbkb".equals(qcCategory.getQcCategoryId())) shortHand = StringUtils.isEmpty(qcCategory.getQcShortHand()) ? "BK" : qcCategory.getQcShortHand();
-        else if ("Q-DUP".equals(qcCategory.getQcCategoryId())) shortHand = StringUtils.isEmpty(qcCategory.getQcShortHand()) ? "MP" : qcCategory.getQcShortHand();
-        else return copyOrder.getOrderNo();
-        int next = getQCNextOrderNum(existedOrderList, shortHand);
-        String folderNum = copyOrder.getOrderNo().substring(copyOrder.getOrderNo().length() - 6, copyOrder.getOrderNo().length() - 3);
-        return copyOrder.getExt$Item("projno") + copyOrder.getExt$Item("ordercategorycode") + shortHand + folderNum + StringUtils.leftPad(next + "", 3);
+        if ("P-BLANK".equals(qcCategory.getQcCategoryId())) {
+            String qcShortHand = "QK";
+            if (!StringUtils.isEmpty(qcCategory.getQcShortHand())) {
+                qcShortHand = qcCategory.getQcShortHand();
+            }
+            int nextOrderNum = getQCNextOrderNum(existedOrderList, qcShortHand);
+            String folderNum = copyOrder.getOrderNo().substring(copyOrder.getOrderNo().length() - 6, copyOrder.getOrderNo().length() - 3);
+            return copyOrder.getExt$Item("projno") + copyOrder.getExt$Item("ordercategorycode") + qcShortHand + folderNum + StringUtils.leftPad((nextOrderNum + ""), 3);
+        }
+        if ("P-YSKB".equals(qcCategory.getQcCategoryId())) {
+            String qcShortHand = "YK";
+            if (!StringUtils.isEmpty(qcCategory.getQcShortHand())) {
+                qcShortHand = qcCategory.getQcShortHand();
+            }
+            int nextOrderNum = getQCNextOrderNum(existedOrderList, qcShortHand);
+            String folderNum = copyOrder.getOrderNo().substring(copyOrder.getOrderNo().length() - 6, copyOrder.getOrderNo().length() - 3);
+            return copyOrder.getExt$Item("projno") + copyOrder.getExt$Item("ordercategorycode") + qcShortHand + folderNum + StringUtils.leftPad((nextOrderNum + ""), 3);
+        }
+        if ("zcsbkb".equals(qcCategory.getQcCategoryId())) {
+            String qcShortHand = "BK";
+            if (!StringUtils.isEmpty(qcCategory.getQcShortHand())) {
+                qcShortHand = qcCategory.getQcShortHand();
+            }
+            int nextOrderNum = getQCNextOrderNum(existedOrderList, qcShortHand);
+            String folderNum = copyOrder.getOrderNo().substring(copyOrder.getOrderNo().length() - 6, copyOrder.getOrderNo().length() - 3);
+            return copyOrder.getExt$Item("projno") + copyOrder.getExt$Item("ordercategorycode") + qcShortHand + folderNum + StringUtils.leftPad((nextOrderNum + ""), 3);
+        }
+        if ("Q-DUP".equals(qcCategory.getQcCategoryId())) {
+            String qcShortHand = "MP";
+            if (!StringUtils.isEmpty(qcCategory.getQcShortHand())) {
+                qcShortHand = qcCategory.getQcShortHand();
+            }
+            int nextOrderNum = getQCNextOrderNum(existedOrderList, qcShortHand);
+            String folderNum = copyOrder.getOrderNo().substring(copyOrder.getOrderNo().length() - 6, copyOrder.getOrderNo().length() - 3);
+            return copyOrder.getExt$Item("projno") + copyOrder.getExt$Item("ordercategorycode") + qcShortHand + folderNum + StringUtils.leftPad((nextOrderNum + ""), 3);
+        }
+        return copyOrder.getOrderNo().substring(0, copyOrder.getOrderNo().length() - 3)
+                + StringUtils.leftPad((getNormalNextOrderNum(existedOrderList) + ""), 3);
     }
 }

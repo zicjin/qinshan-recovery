@@ -1357,6 +1357,15 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
             result.setResultCategory(item.getResultCategory());
             // 同步允许偏差
             result.setRn13(item.getAllowableError());
+            if (("L-SPKC".equals(result.getQcCategoryCode()) || "L-SPKCK".equals(result.getQcCategoryCode()))
+                    && "1".equals(item.getCalQcResult())) {
+                if (StringUtils.isEmpty(result.getStandQty())) {
+                    result.setStandQty(item.getExt$Item("detectedquantity"));
+                }
+                if (StringUtils.isEmpty(result.getRn12())) {
+                    result.setRn12(item.getExt$Item("detectedquantityunit"));
+                }
+            }
 
             // 从监测能力库分析项同步
             capacityItemList.stream().filter(ci -> ObjectUtils.equals(item.getId(), ci.getItemId())).findFirst().ifPresent(ci -> {
@@ -1364,10 +1373,14 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
                 result.setHighLimit(ci.getHighLimit());
                 result.setOriginalResult(ci.getDefaultResult());
                 result.setRevisionRule(ci.getRevisionRule());
+                if ("L-QXCH".equals(result.getQcCategoryCode()) && "1".equals(item.getCalQcResult())
+                        && StringUtils.isEmpty(result.getStandQty())) {
+                    result.setStandQty(ci.getExt$Item("theorycontent"));
+                }
             });
         }));
 
-        orderTaskResultService.getDao().update(selectOrderTaskResultList, "ITEMID", "ITEMNAME", "ITEMORDERNO", "ITEMALIASNAME", "REVISIONRULE", "UNITNAME", "LOWLIMIT", "HIGHLIMIT", "REPORTDISPLAY", "SCRIPTFLAG", "RESULTCATEGORY", "RN13");
+        orderTaskResultService.getDao().update(selectOrderTaskResultList, "ITEMID", "ITEMNAME", "ITEMORDERNO", "ITEMALIASNAME", "REVISIONRULE", "UNITNAME", "LOWLIMIT", "HIGHLIMIT", "REPORTDISPLAY", "SCRIPTFLAG", "RESULTCATEGORY", "RN13", "STANDQTY", "RN12");
         List<Long> resultIdList = selectOrderTaskResultList.stream().map(EmcOrderTaskResultBean::getId).distinct().collect(Collectors.toList());
 
         asyncFormulaComputingService.asyncComputing(runId, resultIdList, LocalContextHelper.getLoginUserId(), false);

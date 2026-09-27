@@ -137,6 +137,7 @@ import com.sunwayworld.framework.http.HttpClientManager;
 import com.sunwayworld.framework.io.file.FileScope;
 import com.sunwayworld.framework.mail.MailHelper;
 import com.sunwayworld.framework.mybatis.mapper.MatchPattern;
+import com.sunwayworld.framework.mybatis.mapper.MapperParameter;
 import com.sunwayworld.framework.mybatis.mapper.SearchFilter;
 import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;
 import com.sunwayworld.framework.security.bean.LoginUser;
@@ -1242,8 +1243,15 @@ public class PfProjectServiceImpl extends EmcProjectServiceImpl implements PfPro
 
     @Override
     public String cancelCheck(RestJsonWrapperBean wrapper) {
-    	List<EmcProjectBean> projList = wrapper.parse(EmcProjectBean.class);
-        getDao().update(projList, "beforeStatus", "status", "cancelReason");
+        List<EmcProjectBean> projList = wrapper.parse(EmcProjectBean.class);
+        List<String> projIdList = projList.stream().map(e -> e.getId() + "").collect(Collectors.toList());
+        MapperParameter parameter = new MapperParameter();
+        parameter.setFilter(SearchFilter.instance().match("id", projIdList).filter(MatchPattern.OR));
+        List<EmcProjectBean> crmProjList = getDao().selectCrmProjListByCondition(parameter);
+        if (!crmProjList.isEmpty()) {
+            throw new InvalidDataException("发票&收款已绑定，请先解绑后，再终止");
+        }
+        getDao().update(projList, "beforeStatus", "status", "cancelReason", "cancelbyid", "cancelbyname", "canceltime", "projectPrice");
         return null;
     }
 

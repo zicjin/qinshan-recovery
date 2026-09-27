@@ -322,7 +322,8 @@ public class PfProjectServiceImpl extends EmcProjectServiceImpl implements PfPro
             project.setStatus("reportEdit");
             project.setToReportEditDate(LocalDate.now());
             updateProjectList.add(project);
-            updateOrderTaskList.addAll(orderTaskList.stream().filter(e -> ObjectUtils.equals(e.getProjId(), projectId)).filter(e -> "calculate".equals(e.getAnalysisType())).collect(Collectors.toList()));
+            List calculateTaskList = orderTaskList.stream().filter(e -> ObjectUtils.equals(e.getProjId(), projectId)).filter(e -> "calculate".equals(e.getAnalysisType())).collect(Collectors.toList());
+            updateOrderTaskList.addAll(calculateTaskList);
         }
         getDao().update(updateProjectList, "STATUS", "TOREPORTEDITDATE");
         if (!updateOrderTaskList.isEmpty()) {
@@ -3033,9 +3034,7 @@ public class PfProjectServiceImpl extends EmcProjectServiceImpl implements PfPro
                     List<CoreFileBean> fileNewList = coreFileService.selectListByFilter(SearchFilter.instance().match("targetId", e.getValue().getTargetId()).filter(MatchPattern.OR)
                     		.match("bizCategory",SAMPLING_CONTACT_RECORD_NEW_FILES).filter(MatchPattern.SEQ));
                     List<Long> fileIdOldList = fileNewList.stream().map(CoreFileBean :: getId).distinct().collect(Collectors.toList());
-                    fileIdOldList.forEach(f ->{
-                    	fieldList.add(f.toString());
-                    });
+                    fileIdOldList.forEach(f -> fieldList.add(f.toString()));
 
                 }
             });
@@ -3458,9 +3457,7 @@ public class PfProjectServiceImpl extends EmcProjectServiceImpl implements PfPro
 
         List<Long> fileIdOldList = fileNewList.stream().map(CoreFileBean :: getId).distinct().collect(Collectors.toList());
         List<String> fileIdNewList = new ArrayList<>();
-        fileIdOldList.forEach(f ->{
-        	fileIdNewList.add(f.toString());
-        });
+        fileIdOldList.forEach(f -> fileIdNewList.add(f.toString()));
 
         if(!fileIdNewList.isEmpty()){
             return StringUtils.join(fileIdNewList,",");
@@ -3775,16 +3772,18 @@ public class PfProjectServiceImpl extends EmcProjectServiceImpl implements PfPro
         project.setId(ApplicationContextHelper.getNextIdentity());
         project.setRegistDate(LocalDateTime.now());
         EmcBizCategoryBean category = bizCategoryService.selectById(project.getBizCategoryId());
+        Long testOrgId = category.getTestOrgId();
         CoreUserBean user = LocalContextHelper.getLoginUser();
         project.setOrgId(user.getExt$Item("parentorgid"));
         project.setOrgName(user.getExt$Item("parentorgname"));
-        if (category.getTestOrgId() != null) {
-            EmcClientBean client = clientService.getDao().selectById(category.getTestOrgId());
+        if (testOrgId != null) {
+            EmcClientBean client = clientService.getDao().selectById(testOrgId);
             project.setTestOrgId(client.getClientNo()); project.setTestOrgName(client.getClientName());
             project.setTestOrgAddress(client.getAddress()); project.setTestOrgPhone(client.getPhone());
         }
-        if (category.getEntrustOrgId() != null) {
-            EmcClientBean client = clientService.getDao().selectById(category.getEntrustOrgId());
+        Long entrustOrgId = category.getEntrustOrgId();
+        if (entrustOrgId != null) {
+            EmcClientBean client = clientService.getDao().selectById(entrustOrgId);
             project.setEntrustOrgId(client.getClientNo()); project.setEntrustOrgName(client.getClientName());
             project.setEntrustOrgAddress(client.getAddress()); project.setEntrustOrgPhone(client.getPhone());
         }
@@ -3804,7 +3803,8 @@ public class PfProjectServiceImpl extends EmcProjectServiceImpl implements PfPro
         plan.setSource("");
         CoreOrgBean parentOrg = coreOrgService.selectById(plan.getOrgId());
         String orgCode = Optional.ofNullable(parentOrg.getExt$Item("orgshortname")).orElse("XX");
-        String newNo = generateProjNos(plan.getYear(), orgCode, plan.getBizCategoryCode(), plan.getProjName(), 1, plan.getExt$Item("contractno")).get(0);
+        List<String> newProjectNoList = generateProjNos(plan.getYear(), orgCode, plan.getBizCategoryCode(), plan.getProjName(), 1, plan.getExt$Item("contractno"));
+        String newNo = newProjectNoList.get(0);
         List<EmcProjSchemeBean> schemes = projSchemeService.getDao().selectListByOneColumnValue(plan.getId(), "PROJID", new Order[0]);
         List<Long> schemeIds = schemes.stream().map(EmcProjSchemeBean::getId).collect(Collectors.toList());
         List<EmcProjOrderBean> orders = projOrderService.getDao().selectListByOneColumnValues(schemeIds, "PROJSCHEMEID", new Order[0]);
@@ -3829,7 +3829,8 @@ public class PfProjectServiceImpl extends EmcProjectServiceImpl implements PfPro
         plan.setSource("");
         CoreOrgBean parentOrg = coreOrgService.selectById(plan.getOrgId());
         String orgCode = Optional.ofNullable(parentOrg.getExt$Item("orgshortname")).orElse("XX");
-        String newNo = generateProjNos(plan.getYear(), orgCode, plan.getBizCategoryCode(), plan.getProjName(), 1, plan.getExt$Item("contractno")).get(0);
+        List<String> newProjectNoList = generateProjNos(plan.getYear(), orgCode, plan.getBizCategoryCode(), plan.getProjName(), 1, plan.getExt$Item("contractno"));
+        String newNo = newProjectNoList.get(0);
         List<EmcProjSchemeBean> schemes = projSchemeService.getDao().selectListByOneColumnValue(plan.getId(), "PROJID", new Order[0]);
         List<Long> schemeIds = schemes.stream().map(EmcProjSchemeBean::getId).collect(Collectors.toList());
         List<EmcProjOrderBean> orders = projOrderService.getDao().selectListByOneColumnValues(schemeIds, "PROJSCHEMEID", new Order[0]);
@@ -3887,7 +3888,7 @@ public class PfProjectServiceImpl extends EmcProjectServiceImpl implements PfPro
             if (StringUtils.equals("-1", tmplId)) continue;
             String fineBaseUrl = ApplicationContextHelper.getEnvironment().getProperty("sunway.config.fine.independent-deploy-server.url");
             CoreReportConfigLineBean line = coreReportConfigLineService.selectFirstByFilter(SearchFilter.instance().match("id", tmplId).filter(MatchPattern.EQ), new Order[0]);
-            String excelUrl;
+            String excelUrl = null;
             try {
                 excelUrl = fineBaseUrl + "/decision/view/report?viewlet=" + line.getReportConfigLineNo() + "/" + URLEncoder.encode(line.getExt$Item("filename"), "UTF-8") + parseFineReportParqam(project, line.getParam()) + "&format=excel";
             } catch (UnsupportedEncodingException e) {
@@ -4000,11 +4001,15 @@ public class PfProjectServiceImpl extends EmcProjectServiceImpl implements PfPro
             logger.info("普通采样项目数量 -> {}", planContractProjectList.size());
             List<EmcAuditRecordBean> auditRecordList = new ArrayList<>();
             for (EmcProjectBean project : projectList) {
-                EmcAuditRecordBean auditRecord = new EmcAuditRecordBean(); auditRecord.setId(ApplicationContextHelper.getNextIdentity());
+            EmcAuditRecordBean auditRecord = new EmcAuditRecordBean(); auditRecord.setId(ApplicationContextHelper.getNextIdentity());
                 auditRecord.setProjId(project.getId()); auditRecord.setProjNo(project.getProjNo()); auditRecord.setComments(wrapper.getParamValue("bpmn_comment"));
                 auditRecord.setLogDesc("项目:" + project.getProjNo()); auditRecord.setBizCategory("proj"); auditRecord.setStepCode("2"); auditRecord.setAuditCategory("项目管理"); auditRecord.setOperateCategory("审核");
-                auditRecord.setTaskName("方案审核");
-                auditRecord.setNextTaskName("0".equals(project.getSample()) ? "客户样品接收" : "采样安排"); auditRecordList.add(auditRecord);
+                if ("0".equals(project.getSample())) {
+                    auditRecord.setTaskName("方案审核"); auditRecord.setNextTaskName("客户样品接收");
+                } else {
+                    auditRecord.setTaskName("方案审核"); auditRecord.setNextTaskName("采样安排");
+                }
+                auditRecordList.add(auditRecord);
             }
             auditRecordService.getDao().insert(auditRecordList);
             ProjectNodeUtils.updateNodes(normalProjectList.stream().map(EmcProjectBean::getId).collect(Collectors.toList()));
@@ -4087,7 +4092,8 @@ public class PfProjectServiceImpl extends EmcProjectServiceImpl implements PfPro
         EmcFolderBean folder = new EmcFolderBean();
         Long folderId = ApplicationContextHelper.getNextIdentity();
         folder.setId(folderId);
-        folder.setFolderNo(folderService.generateFolderNo(project, sourceOrder.getMonitorTmplId()));
+        String newFolderNo = folderService.generateFolderNo(project, sourceOrder.getMonitorTmplId());
+        folder.setFolderNo(newFolderNo);
         folder.setProjId(projectId);
         folder.setOrderCategory(sourceOrder.getOrderCategory());
         folder.setMonitorTmplId(sourceOrder.getMonitorTmplId());

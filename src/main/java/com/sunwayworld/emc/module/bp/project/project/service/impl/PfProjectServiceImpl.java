@@ -3917,18 +3917,6 @@ public class PfProjectServiceImpl extends EmcProjectServiceImpl implements PfPro
         return file;
     }
 
-    private void insertReportTransitionAudit(List<EmcProjectBean> projects, String comment, String nextTask) {
-        List<EmcAuditRecordBean> records = new ArrayList<>();
-        for (EmcProjectBean project : projects) {
-            EmcAuditRecordBean record = new EmcAuditRecordBean();
-            record.setId(ApplicationContextHelper.getNextIdentity()); record.setProjId(project.getId()); record.setProjNo(project.getProjNo());
-            record.setComments(comment); record.setLogDesc("项目:" + project.getProjNo()); record.setBizCategory("proj");
-            record.setStepCode("1"); record.setAuditCategory("项目登记"); record.setTaskName("项目登记");
-            record.setOperateCategory("提交"); record.setNextTaskName(nextTask); records.add(record);
-        }
-        auditRecordService.getDao().insert(records);
-    }
-
     @Override
     @Transactional
     public void generateCompleteTaskData(RestJsonWrapperBean wrapper) {

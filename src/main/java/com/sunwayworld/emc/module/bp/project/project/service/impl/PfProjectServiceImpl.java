@@ -312,7 +312,7 @@ public class PfProjectServiceImpl extends EmcProjectServiceImpl implements PfPro
                 .filter(e -> ObjectUtils.equals("analysis", e.getAnalysisType()) || ObjectUtils.equals("sampling", e.getAnalysisType()))
                 .collect(Collectors.toList());
         List<EmcProjectBean> updateProjectList = new ArrayList<>();
-        List<EmcOrderTaskBean> updateOrderTaskList = new ArrayList<>();
+        ArrayList updateOrderTaskList = new ArrayList();
         for (Long projectId : projIdList) {
             boolean allDone = analysisOrderTaskList.stream().filter(e -> ObjectUtils.equals(e.getProjId(), projectId)).allMatch(e -> "done".equals(e.getStatus()));
             if (!allDone) continue;
@@ -325,7 +325,7 @@ public class PfProjectServiceImpl extends EmcProjectServiceImpl implements PfPro
         }
         getDao().update(updateProjectList, "STATUS", "TOREPORTEDITDATE");
         if (!updateOrderTaskList.isEmpty()) {
-            updateOrderTaskList.forEach(e -> e.setStatus("done"));
+            updateOrderTaskList.forEach(e -> ((EmcOrderTaskBean)e).setStatus("done"));
             orderTaskService.getDao().update(updateOrderTaskList, "STATUS");
         }
     }
@@ -3867,8 +3867,8 @@ public class PfProjectServiceImpl extends EmcProjectServiceImpl implements PfPro
                 throw new RuntimeException(e);
             }
             logger.info("excelFileUrl----------" + excelUrl);
-            String fileName = project.getProjNo() + project.getProjName() + "-任务流转单" + DateTimeUtils.formatLocalDateTime(project.getEntrustDate(), "yyyy年MM月dd日") + ".xlsx";
             File excelFile = new File("");
+            String fileName = project.getProjNo() + project.getProjName() + "-任务流转单" + DateTimeUtils.formatLocalDateTime(project.getEntrustDate(), "yyyy年MM月dd日") + ".xlsx";
             try {
                 excelFile = downloadFileFromFr(excelUrl, fileName);
             } catch (Exception first) {
@@ -3890,7 +3890,8 @@ public class PfProjectServiceImpl extends EmcProjectServiceImpl implements PfPro
             file.setTargetId("T_EMC_PORJECT-export$" + project.getId());
             file.setBizCategory("export");
             Long fileId = coreFileService.upload(file, excelFile);
-            urls.add(coreFileService.selectDetail(fileId).getDownloadUrl());
+            CoreFileBean fileDetail = coreFileService.selectDetail(fileId);
+            urls.add(fileDetail.getDownloadUrl());
         }
         result.put("code", "200");
         result.put("url", urls);
@@ -3975,7 +3976,8 @@ public class PfProjectServiceImpl extends EmcProjectServiceImpl implements PfPro
                 EmcAuditRecordBean auditRecord = new EmcAuditRecordBean(); auditRecord.setId(ApplicationContextHelper.getNextIdentity());
                 auditRecord.setProjId(project.getId()); auditRecord.setProjNo(project.getProjNo()); auditRecord.setComments(wrapper.getParamValue("bpmn_comment"));
                 auditRecord.setLogDesc("项目:" + project.getProjNo()); auditRecord.setBizCategory("proj"); auditRecord.setStepCode("2"); auditRecord.setAuditCategory("项目管理"); auditRecord.setOperateCategory("审核");
-                auditRecord.setTaskName("方案审核"); auditRecord.setNextTaskName("0".equals(project.getSample()) ? "客户样品接收" : "采样安排"); auditRecordList.add(auditRecord);
+                auditRecord.setTaskName("方案审核");
+                auditRecord.setNextTaskName("0".equals(project.getSample()) ? "客户样品接收" : "采样安排"); auditRecordList.add(auditRecord);
             }
             auditRecordService.getDao().insert(auditRecordList);
             ProjectNodeUtils.updateNodes(normalProjectList.stream().map(EmcProjectBean::getId).collect(Collectors.toList()));
@@ -3985,7 +3987,7 @@ public class PfProjectServiceImpl extends EmcProjectServiceImpl implements PfPro
             logger.info("给ERP发送方案审核结果");
             erpOrderService.reviewOrderContract(projectList, false, null);
             logger.info("推送项目信息到ERP");
-            projectList.forEach(erpContractOrderService::pushPlanContractOrder);
+            projectList.forEach(project -> erpContractOrderService.pushPlanContractOrder(project));
         } catch (Exception e) {
             logger.error(e);
             e.printStackTrace();
@@ -3998,7 +4000,8 @@ public class PfProjectServiceImpl extends EmcProjectServiceImpl implements PfPro
     @Override
     @Transactional
     public void pushProjectToNc(RestJsonWrapperBean wrapper) {
-        pushProjectToNc(wrapper.parse(EmcProjectBean.class));
+        List<EmcProjectBean> projectList = wrapper.parse(EmcProjectBean.class);
+        pushProjectToNc(projectList);
     }
 
     @Override
@@ -4011,11 +4014,11 @@ public class PfProjectServiceImpl extends EmcProjectServiceImpl implements PfPro
         List<EmcProjectBean> eligible = all.stream()
                 .filter(p -> "1".equals(p.getExt$Item("accountingflag")) && !"已推送".equals(p.getExt$Item("syncncstatus")))
                 .collect(Collectors.toList());
-        if (eligible.isEmpty()) throw new InvalidDataException("没有可推送的的项目");
+        if (CollectionUtils.isEmpty(eligible)) throw new InvalidDataException("没有可推送的的项目");
         List<String> orgIds = eligible.stream().map(EmcProjectBean::getOrgId).collect(Collectors.toList());
         List<EmcOaOrgRelationBean> relations = emcOaOrgRelationService.selectListByFilter(
                 SearchFilter.instance().match("LIMSORGCODE", orgIds).filter(MatchPattern.OR), new Order[0]);
-        if (relations.isEmpty()) throw new InvalidDataException("没查询到所属OA组织部门");
+        if (CollectionUtils.isEmpty(relations)) throw new InvalidDataException("没查询到所属OA组织部门");
         Map<String, List<EmcOaOrgRelationBean>> orgMap = relations.stream()
                 .collect(Collectors.groupingBy(EmcOaOrgRelationBean::getLimsOrgCode));
         List<NcProjectReqBean> requests = new ArrayList<>();
@@ -4035,9 +4038,14 @@ public class PfProjectServiceImpl extends EmcProjectServiceImpl implements PfPro
         });
         logger.info("同步任务信息至NC==========req=" + JSONObject.toJSONString(requests));
         String response = HttpClientManager.getInstance().sendHttpPost(url, JSONObject.toJSONString(requests));
-        String status = (response.contains("success") || response.contains("成功")) ? "已推送" : "失败";
+        logger.info("同步任务信息至NC==========req=" + response);
+        String status = "失败";
+        if (response.contains("success") || response.contains("成功")) {
+            status = "已推送";
+        }
+        String finalStatus = status;
         eligible.stream().forEach(project -> {
-            project.setExt$Item("syncncstatus", status);
+            project.setExt$Item("syncncstatus", finalStatus);
             project.setExt$Item("syncncdesc", response);
         });
         getDao().update(eligible, "syncncstatus", "syncncdesc");
@@ -4049,8 +4057,8 @@ public class PfProjectServiceImpl extends EmcProjectServiceImpl implements PfPro
         EmcProjectBean targetProject = wrapper.parseUnique(EmcProjectBean.class);
         Long projectId = targetProject.getId();
         EmcProjectBean project = selectById(projectId);
-        Long folderId = ApplicationContextHelper.getNextIdentity();
         EmcFolderBean folder = new EmcFolderBean();
+        Long folderId = ApplicationContextHelper.getNextIdentity();
         folder.setId(folderId);
         folder.setFolderNo(folderService.generateFolderNo(project, sourceOrder.getMonitorTmplId()));
         folder.setProjId(projectId);
@@ -4060,9 +4068,9 @@ public class PfProjectServiceImpl extends EmcProjectServiceImpl implements PfPro
         folder.setTermination("0");
         folderService.getDao().insert(folder);
 
-        Long orderId = ApplicationContextHelper.getNextIdentity();
         EmcOrderBean order = new EmcOrderBean();
         BeanUtils.copyProperties(sourceOrder, order, EmcConstant.CREATED_COLUMNS);
+        Long orderId = ApplicationContextHelper.getNextIdentity();
         order.setId(orderId);
         order.setProjId(projectId);
         order.setFolderId(folderId);
@@ -4077,9 +4085,9 @@ public class PfProjectServiceImpl extends EmcProjectServiceImpl implements PfPro
         List<EmcOrderItemGroupBean> groups = new ArrayList<>();
         List<EmcOrderItemBean> items = new ArrayList<>();
         for (EmcOrderItemGroupBean sourceGroup : sourceGroups) {
-            Long groupId = ApplicationContextHelper.getNextIdentity();
             EmcOrderItemGroupBean group = new EmcOrderItemGroupBean();
             BeanUtils.copyProperties(sourceGroup, group, EmcConstant.CREATED_COLUMNS);
+            Long groupId = ApplicationContextHelper.getNextIdentity();
             group.setId(groupId);
             group.setOrderId(orderId);
             groups.add(group);

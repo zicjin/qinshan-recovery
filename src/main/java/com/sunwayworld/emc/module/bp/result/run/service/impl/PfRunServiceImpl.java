@@ -2394,19 +2394,14 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
                 newOc.setQcName(basicTask.getQcName());
 
                 String orderNo = co.getOrderNo();
-                if (StringUtils.contains(orderNo, "-")) {
-                    String suffix = orderNo.substring(orderNo.indexOf("-"));
-                    newOc.setOrderContainerNo((concatOrderNo ? originalOc.getOrderContainerNo() : runId) + suffix);
-                } else {
-                    newOc.setOrderContainerNo(orderNo + StringUtils.leftPad(ocIndex.getAndIncrement() + "", 3));
-                }
+                newOc.setOrderContainerNo(orderNo + StringUtils.leftPad(ocIndex.getAndIncrement() + "", 3));
 
                 newOc.setOrderNo(orderNo);
                 newOcList.add(newOc);
 
                 copyTaskList.stream().filter(task -> taskIdList.contains(task.getId())).forEach(task -> {
                     task.setOrderContainerId(newOc.getId());
-                    task.setEquiptAcquNo(newOc.getOrderContainerNo());
+                    task.setEquiptAcquNo(orderNo);
                 });
             });
         });
@@ -3094,7 +3089,8 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
             File inputFile = CoreFileUtils.getLocalPath(file).toFile();
             try {
                 FileInputStream fis = new FileInputStream(inputFile);
-                File newFile = new File(collectDir + File.separator + collectEquiptNo + File.separator + id + File.separator + file.getName());
+                String fileName = collectDir + File.separator + collectEquiptNo + File.separator + id + File.separator + file.getName();
+                File newFile = new File(fileName);
                 if (!newFile.getParentFile().exists()) {
                     newFile.getParentFile().mkdirs();
                 }
@@ -3811,8 +3807,8 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
         List<Long> validOrderTaskIdList = validOrderTaskList.stream().map(EmcOrderTaskBean::getId).collect(Collectors.toList());
         List<EmcOrderTaskBean> folderOrderTaskList = orderTaskService.getDao().selectListByOneColumnValues(folderIdList, "folderId", Arrays.asList("id", "folderId", "status"));
         folderOrderTaskList = folderOrderTaskList.stream()
-                .filter(task -> EmcBizConstant.ANALYSISCATEGORY_ANALYSIS.equals(task.getAnalysisType())
-                        || EmcBizConstant.ANALYSISCATEGORY_SAMPLING.equals(task.getAnalysisType()))
+                .filter(task -> ObjectUtils.equals(EmcBizConstant.ANALYSISCATEGORY_ANALYSIS, task.getAnalysisType())
+                        || ObjectUtils.equals(EmcBizConstant.ANALYSISCATEGORY_SAMPLING, task.getAnalysisType()))
                 .collect(Collectors.toList());
         Map<Long, List<EmcOrderTaskBean>> folderOrderTaskMap = folderOrderTaskList.stream().collect(Collectors.groupingBy(EmcOrderTaskBean::getFolderId));
 

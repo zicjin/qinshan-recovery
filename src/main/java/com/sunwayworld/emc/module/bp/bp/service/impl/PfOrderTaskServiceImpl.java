@@ -1348,6 +1348,7 @@ public  class PfOrderTaskServiceImpl extends EmcOrderTaskServiceImpl implements 
         }
 
         getDao().update(orderTaskList, "status", "samplingsubpackage", "subcontractorId", "subpackageNo", "subpackageType");
+        folderService.updateStatus(orderTaskList);
 
         //给日志信息
         //登陆人信息

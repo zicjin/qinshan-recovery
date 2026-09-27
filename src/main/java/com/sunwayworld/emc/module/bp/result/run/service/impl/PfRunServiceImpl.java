@@ -378,24 +378,24 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
         Long reportConfigLineId = methodService.selectReportConfigLineIdById(orderTask.getMethodId());
 
         // 查询项目编号
-        List<Long> projectIdList = orderTaskList.stream().map(EmcOrderTaskBean::getProjId).distinct().sorted(Comparator.comparing(Function.identity())).collect(Collectors.toList());
+        List<Long> projectIdList = orderTaskList.stream().map(EmcOrderTaskBean::getProjId).sorted(Comparator.comparing(Function.identity())).collect(Collectors.toList());
         List<EmcProjectBean> projectList = projectService.getDao().selectListByOneColumnValues(projectIdList, "id", Arrays.asList("id", "projNo", "sample"));
 
         EmcTestmethodBeforehandleBean beforehandleBean = testmethodBeforehandleService.selectFirstByFilter(
                 SearchFilter.instance().match("TESTMETHODID", testMethodIdList.get(0)).filter(MatchPattern.EQ), new Order[0]);
 
         // 查询测试方法中的前处理
-        EmcTestMethodBean testMethod = testMethodService.getDao().selectById(testMethodIdList.get(0));
-
         // 允许多个样品类型的同一个方法添加到一个批
         String orderCategories = orderTaskList.stream().map(EmcOrderTaskBean::getOrderCategory).distinct().collect(Collectors.joining(","));
 
         EmcTestCapacityBean filterCapacity = new EmcTestCapacityBean();
         filterCapacity.setTestMethodId(testMethodIdList.get(0));
         filterCapacity.setOrgId(parentOrgId);
-        EmcTestCapacityBean testCapacity = testCapacityService.getDao().selectOne(filterCapacity, "id", "inputuserid", "inputusername", "pretreatUserId", "pretreatUserName", "weighingUserId", "weighingUserName");
-        String inputUserId = testCapacity.getExt$Item("inputuserid");
-        String inputUserName = testCapacity.getExt$Item("inputusername");
+        EmcTestCapacityBean testCapacity = testCapacityService.selectFirstByFilter(SearchFilter.instance()
+                .match("TestMethodId", testMethodIdList.get(0)).filter(MatchPattern.SEQ)
+                .match("OrgId", parentOrgId).filter(MatchPattern.SEQ));
+        String inputUserId = userId;
+        String inputUserName = userName;
         String pretreatUserId = testCapacity.getExt$Item("pretreatUserId");
         String pretreatUserName = testCapacity.getExt$Item("pretreatUserName");
         String weighingUserId = testCapacity.getExt$Item("weighingUserId");
@@ -566,7 +566,10 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
 
         // 5、属性数据表装配数据
         // 添加批的时候在 property_data 表中插入方法参数数据(根据 testMethodId 查询 属性数据表)
-        List<EmcPropertyDataBean> propertyDataList = propertyDataService.getDao().selectListByOneColumnValue(testCapacity.getId(), "bizId");
+        List<EmcPropertyDataBean> propertyDataList = propertyDataService.selectListByFilter(SearchFilter.instance()
+                .match("bizId", testCapacity.getId()).filter(MatchPattern.EQ)
+                .match("TABLENAME", "T_EMC_TEST_CAPACITY").filter(MatchPattern.EQ)
+                .match("FLAG1", "1").filter(MatchPattern.EQ));
         if (!propertyDataList.isEmpty()) {
             EmcPropertyDataBean basicPropertyData = propertyDataList.get(0);
             EmcPropertyDataBean runPropertyData = new EmcPropertyDataBean();
@@ -724,7 +727,7 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
         });
         // 遍历样品分析项组表修改数据
         targetOrderItemGroupList.forEach(a -> {
-            a.setOrderId(orderTask.getOrderId());
+            a.setSchemeName(monitorScheme.getSchemeName());
             a.setMethodId(methodId);
             a.setTestMethodId(testMethodId);
             a.setTestMethodBasis(testMethodBasis);
@@ -735,7 +738,7 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
             EmcCapacityItemGroupBean capacityItemGroupBean = capacityItemGroupList.stream().filter(e -> ObjectUtils.equals(e.getItemGroup(), a.getItemGroup()))
                     .findFirst().orElse(null);
             if (!ObjectUtils.isEmpty(capacityItemGroupBean)) {
-                a.setItemGroupId(capacityItemGroupBean.getItemGroupId());
+                a.setItemGroupId(capacityItemGroupBean.getId());
                 a.setItemGroup(capacityItemGroupBean.getItemGroup());
             }
         });
@@ -774,7 +777,7 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
                     // 根据重复数插入多条分析项
                     for (Long i = 1L; i <= repeatItem; i++) {
                         EmcOrderTaskResultBean orderTaskResult = new EmcOrderTaskResultBean();
-                        BeanUtils.copyProperties(resultBean, orderTaskResult, "ORIGINALRESULT", "REPORTRESULT", "RESULTSTATUS", "QCCATEGORYID", "QCCATEGORYCODE", "QCNAME",
+                        BeanUtils.copyProperties(resultBean, orderTaskResult, "ORIGINALRESULT", "REPORTRESULT", "RESULTSTATUS",
                                 "CREATEDBYID", "CREATEDBYNAME", "CREATEDTIME", "CREATEDBYORGID", "CREATEDBYORGNAME");
 
                         orderTaskResult.setId(ApplicationContextHelper.getNextIdentity());
@@ -863,7 +866,7 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
             filterData.setBizId(taskId);
             filterDataList.add(filterData);
         });
-        propertyDataService.getDao().deleteBy(filterDataList, "bizId");
+        propertyDataService.getDao().deleteBy(filterDataList, "bizId2");
     }
 
     @Override
@@ -1276,6 +1279,14 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
 
     @Override
     public void triggerFormlua(RestJsonWrapperBean wrapper) {
+        if (wrapper.getParamValue("emission") != null) {
+            List<EmcOrderBean> orderList = wrapper.parse(EmcOrderBean.class);
+            List<Long> orderIdList = orderList.stream().map(EmcOrderBean::getId).distinct().collect(Collectors.toList());
+            List<EmcOrderTaskResultBean> resultList = orderTaskResultService.getDao().selectListByOneColumnValues(orderIdList, "ORDERID", Collections.singletonList("ID"));
+            List<Long> resultIdList = resultList.stream().map(EmcOrderTaskResultBean::getId).distinct().collect(Collectors.toList());
+            EmcOrderTaskResultComputingEngine.getEngine(resultIdList).compute();
+            return;
+        }
         List<EmcOrderTaskBean> orderTaskList = wrapper.parse(EmcOrderTaskBean.class);
         if (orderTaskList.isEmpty()) {
             return;
@@ -1286,9 +1297,8 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
         List<Long> orderTaskIdList = relatedOrderTaskList.stream().map(EmcOrderTaskBean::getId).collect(Collectors.toList());
         List<EmcOrderTaskResultBean> resultList = orderTaskResultService.getDao().selectListByOneColumnValues(orderTaskIdList, "ORDERTASKID", Collections.singletonList("ID"));
 
-        String runId = orderTaskList.get(0).getRunId();
         List<Long> resultIdList = resultList.stream().map(EmcOrderTaskResultBean::getId).distinct().collect(Collectors.toList());
-        asyncFormulaComputingService.asyncComputing(runId, resultIdList, LocalContextHelper.getLoginUserId(), false);
+        EmcOrderTaskResultComputingEngine.getEngine(resultIdList).compute();
     }
 
     @Override
@@ -1357,30 +1367,16 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
             result.setResultCategory(item.getResultCategory());
             // 同步允许偏差
             result.setRn13(item.getAllowableError());
-            if (("L-SPKC".equals(result.getQcCategoryCode()) || "L-SPKCK".equals(result.getQcCategoryCode()))
-                    && "1".equals(item.getCalQcResult())) {
-                if (StringUtils.isEmpty(result.getStandQty())) {
-                    result.setStandQty(item.getExt$Item("detectedquantity"));
-                }
-                if (StringUtils.isEmpty(result.getRn12())) {
-                    result.setRn12(item.getExt$Item("detectedquantityunit"));
-                }
-            }
-
             // 从监测能力库分析项同步
             capacityItemList.stream().filter(ci -> ObjectUtils.equals(item.getId(), ci.getItemId())).findFirst().ifPresent(ci -> {
                 result.setLowLimit(ci.getLowLimit());
                 result.setHighLimit(ci.getHighLimit());
                 result.setOriginalResult(ci.getDefaultResult());
                 result.setRevisionRule(ci.getRevisionRule());
-                if ("L-QXCH".equals(result.getQcCategoryCode()) && "1".equals(item.getCalQcResult())
-                        && StringUtils.isEmpty(result.getStandQty())) {
-                    result.setStandQty(ci.getExt$Item("theorycontent"));
-                }
             });
         }));
 
-        orderTaskResultService.getDao().update(selectOrderTaskResultList, "ITEMID", "ITEMNAME", "ITEMORDERNO", "ITEMALIASNAME", "REVISIONRULE", "UNITNAME", "LOWLIMIT", "HIGHLIMIT", "REPORTDISPLAY", "SCRIPTFLAG", "RESULTCATEGORY", "RN13", "STANDQTY", "RN12");
+        orderTaskResultService.getDao().update(selectOrderTaskResultList, "ITEMID", "ITEMNAME", "ITEMORDERNO", "ITEMALIASNAME", "REVISIONRULE", "UNITNAME", "LOWLIMIT", "HIGHLIMIT", "REPORTDISPLAY", "SCRIPTFLAG", "RESULTCATEGORY", "RN13");
         List<Long> resultIdList = selectOrderTaskResultList.stream().map(EmcOrderTaskResultBean::getId).distinct().collect(Collectors.toList());
 
         asyncFormulaComputingService.asyncComputing(runId, resultIdList, LocalContextHelper.getLoginUserId(), false);
@@ -1486,7 +1482,7 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
         EmcOrderTaskBean orderTask = orderTaskService.selectById(id);
         // 获取分析项组
         EmcOrderItemGroupBean filter = new EmcOrderItemGroupBean();
-        filter.setSchemeName(orderTask.getSchemeName());
+        filter.setOrderId(orderTask.getOrderId());
         filter.setTestId(orderTask.getTestId());
         filter.setTestMethodId(orderTask.getTestMethodId());
         filter.setMonitorTmplId(orderTask.getMonitorTmplId());
@@ -1538,7 +1534,8 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
         orderTaskLogService.insert(allOrderTaskList, EmcBizConstant.ORDER_TASK_LOG_LEADER_AUDIT_UNDO, EmcBizConstant.ORDER_TASK_LOG_ANALYSE_AUDIT);
 
         // 分析审核回退插入审核记录
-        this.insertAuditRecordByRun(runList, "PROCESS_UNDO", wrapper.getParamValue("bpmn_comment"), null);
+        String reason = wrapper.getParamValue("bpmn_comment");
+        this.insertAuditRecordByRun(runList, "PROCESS_UNDO", reason, null);
 
         runList.forEach(e -> {
             e.setCheckStatus(Constant.NO);
@@ -1546,7 +1543,7 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
             e.setAuditedUserName(null);
             e.setAuditedDate(null);
             e.setStatus(EmcBizConstant.RUN_STATUS_DRAFT);
-            e.setUndoReason(null);
+            e.setUndoReason(reason);
         });
         getDao().update(runList, "STATUS", "CHECKSTATUS", "AUDITEDUSERID", "AUDITEDUSERNAME", "AUDITEDDATE", "UNDOREASON");
         return instanceStatusList;
@@ -1567,12 +1564,11 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
             projectList.stream().filter(p -> qcProjectIdList.contains(p.getId())).forEach(p -> {
                 EmcOrderTaskBean filter = new EmcOrderTaskBean();
                 filter.setProjId(p.getId());
-                filter.setMonitorTmplId(p.getExt$Item("monitortmplid"));
                 filter.setAnalysisType(EmcBizConstant.ANALYSISCATEGORY_ANALYSIS);
                 filter.setStatus(EmcBizConstant.ORDERTASK_STATUS_AUDIT);
                 filterList.add(filter);
             });
-            List<EmcOrderTaskBean> orderTaskAnalysisList = orderTaskService.getDao().selectList(filterList, Arrays.asList("PROJID", "MONITORTMPLID", "ANALYSISTYPE", "STATUS"), Collections.emptyList());
+            List<EmcOrderTaskBean> orderTaskAnalysisList = orderTaskService.getDao().selectList(filterList, Arrays.asList("PROJID", "ANALYSISTYPE", "STATUS"), Collections.emptyList());
             // 当前用户拥有权限的科室
             String userId = LocalContextHelper.getLoginUserId();
             CoreUserPermissionBean filter = new CoreUserPermissionBean();
@@ -1689,11 +1685,10 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
         projectList.forEach(e -> {
             EmcOrderTaskBean filter = new EmcOrderTaskBean();
             filter.setProjId(e.getId());
-            filter.setMonitorTmplId(e.getExt$Item("monitortmplid"));
             filter.setAnalysisType(EmcBizConstant.ANALYSISCATEGORY_ANALYSIS);
             filterList.add(filter);
         });
-        List<EmcOrderTaskBean> orderTaskAnalysisList = orderTaskService.getDao().selectList(filterList, Arrays.asList("PROJID", "MONITORTMPLID", "ANALYSISTYPE"), Collections.emptyList());
+        List<EmcOrderTaskBean> orderTaskAnalysisList = orderTaskService.getDao().selectList(filterList, Arrays.asList("PROJID", "ANALYSISTYPE"), Collections.emptyList());
         // 当前用户拥有权限的科室
         String userId = LocalContextHelper.getLoginUserId();
         CoreUserPermissionBean filter = new CoreUserPermissionBean();
@@ -1799,6 +1794,8 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
         uniqueOrderTaskList.forEach(task -> uniqueTaskResultList.stream().filter(r -> ObjectUtils.equals(task.getTestMethodId(), r.getTestMethodId())).forEach(r -> r.setOrderTaskId(task.getId())));
         List<Long> uniqueItemIdList = uniqueTaskResultList.stream().map(EmcOrderTaskResultBean::getItemId).distinct().collect(Collectors.toList());
         List<EmcItemBean> uniqueItemList = itemService.selectListByIds(uniqueItemIdList);
+        List<Long> uniqueOrderIdList = uniqueTaskResultList.stream().map(EmcOrderTaskResultBean::getOrderId).distinct().collect(Collectors.toList());
+        List<EmcOrderItemGroupBean> uniqueOrderItemGroupList = orderItemGroupService.getDao().selectListByOneColumnValues(uniqueOrderIdList, "ORDERID");
 
         // order表数据
         List<Long> idList = orderTaskList.stream().map(EmcOrderTaskBean::getOrderId).distinct().collect(Collectors.toList());
@@ -1827,7 +1824,8 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
         Map<Long, String> acqNoSuffixMap = testMethodList.stream().filter(testMethod -> !StringUtils.isEmpty(testMethod.getAcqNoSuffix())).collect(Collectors.toMap(EmcTestMethodBean::getId, EmcTestMethodBean::getAcqNoSuffix));
 
         List<EmcItemBean> itemTempList = itemService.selectListByFilter(SearchFilter.instance().match("TESTMETHODID", testMethodIdList).filter(MatchPattern.OR)
-                .match("ACTIVATEDFLAG", Constant.ACTIVATED_STATUS_YES).filter(MatchPattern.EQ).match("ANALYSISCATEGORY", EmcBizConstant.ANALYSISCATEGORY_ANALYSIS).filter(MatchPattern.EQ));
+                .match("ACTIVATEDFLAG", Constant.ACTIVATED_STATUS_YES).filter(MatchPattern.EQ)
+                .match("ANALYSISCATEGORY", Arrays.asList("analysis", "Preprocessing")).filter(MatchPattern.OR));
         List<EmcItemBean> itemList = new ArrayList<>();
         List<EmcOrderItemGroupBean> oldOrderItemGroupList = orderItemGroupService.getDao().selectListByOneColumnValues(idList, "ORDERID");
         // 限制分析项需要时对应分析项组里面的数据
@@ -1919,6 +1917,9 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
                     .match("qcCategoryCode", PfConstant.QCCATEGORY_QCCATEGORYID_L_SPKCK).filter(MatchPattern.DIFFER)
                     .match("qcCategoryCode", PfConstant.QC_L_SPKCK_P).filter(MatchPattern.DIFFER)
                     .match("qcCategoryCode", PfConstant.QC_QXJH).filter(MatchPattern.DIFFER)
+                    .match("qcCategoryCode", PfConstant.QC_YZSY).filter(MatchPattern.DIFFER)
+                    .match("qcCategoryCode", PfConstant.QC_SJKB).filter(MatchPattern.DIFFER)
+                    .match("qcCategoryCode", PfConstant.QC_CZKB).filter(MatchPattern.DIFFER)
                     .match("qcCategoryCode", PfConstant.QC_L_QXCHD).filter(MatchPattern.DIFFER), Order.desc("ORDERNO"));
             orderNo = tempOrder == null ? qcFolder.getFolderNo() + "000" : tempOrder.getOrderNo();
         }
@@ -2007,10 +2008,6 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
                             newOrderNo = runId + specialQcSuffixMap.get(qcCategory.getQcCategoryId())
                                     + StringUtils.leftPad((newOrderSeqNo == 0 ? "" : Long.valueOf(newOrderSeqNo)) + "", leftPadLength);
                         }
-                        if (isCurveCheck) {
-                            String checkPoint = isLowestCurveCheck ? "0" : Optional.ofNullable(qcCategory.getExt$Item("checkPoint")).orElse("1");
-                            newOrderNo = runId + "-" + specialQcSuffixMap.get(qcCategory.getQcCategoryId()) + checkPoint + (newOrderSeqNo == 0 ? "" : "-" + newOrderSeqNo);
-                        }
                         orderInfo.setOrderNo(newOrderNo);
                     } else {
                         orderNoTemp = getNextOrderNo(orderNoTemp);
@@ -2041,7 +2038,8 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
                     List<EmcOrderTaskBean> orderTaskTempList = new ArrayList<>();
 
                     // 复制orderItemGroup表和其他业务不相关
-                    List<EmcOrderItemGroupBean> tempOrderItemList = oldOrderItemGroupList.stream().filter(e -> ObjectUtils.equals(order.getId(), e.getOrderId())).collect(Collectors.toList());
+                    List<EmcOrderItemGroupBean> tempOrderItemList = isBlank ? uniqueOrderItemGroupList
+                            : oldOrderItemGroupList.stream().filter(e -> ObjectUtils.equals(order.getId(), e.getOrderId())).collect(Collectors.toList());
                     tempOrderItemList.stream().forEach(e -> {
                         EmcOrderItemGroupBean orderItemGroup = new EmcOrderItemGroupBean();
                         BeanUtils.copyProperties(e, orderItemGroup, EmcConstant.CREATED_COLUMNS);
@@ -2182,7 +2180,7 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
                                             otrInfo.setItemName(b.getItemName());
                                             otrInfo.setItemOrderNo(b.getOrderNo());
                                             otrInfo.setOriginalResult(b.getDefaultResult());
-                                            otrInfo.setAnalysisType(EmcBizConstant.ANALYSISCATEGORY_ANALYSIS);
+                                            otrInfo.setAnalysisType(b.getAnalysisCategory());
                                             otrInfo.setScriptFlag(b.getScriptFlag());
                                             otrInfo.setRepeatNo(b.getRepeatItem());
                                             otrInfo.setRepeatQty(b.getRepeatItem());
@@ -2355,8 +2353,6 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
             List<EmcOrderTaskBean> curTaskList = validTaskList.stream().filter(ct -> ObjectUtils.equals(ct.getOrderId(), co.getId())).collect(Collectors.toList());
             Map<Long, List<EmcOrderTaskBean>> validTaskMap = curTaskList.stream().collect(Collectors.groupingBy(EmcOrderTaskBean::getOrderContainerId));
 
-            boolean concatOrderNo = concatOrderNoQcCodeList.contains(co.getQcCategoryCode());
-
             AtomicInteger ocIndex = new AtomicInteger(1);
             validTaskMap.forEach((orderContainerId, taskList) -> {
                 List<Long> taskIdList = taskList.stream().map(EmcOrderTaskBean::getId).collect(Collectors.toList());
@@ -2375,19 +2371,14 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
                 newOc.setQcName(basicTask.getQcName());
 
                 String orderNo = co.getOrderNo();
-                if (StringUtils.contains(orderNo, "-")) {
-                    String suffix = orderNo.substring(orderNo.indexOf("-"));
-                    newOc.setOrderContainerNo((concatOrderNo ? originalOc.getOrderContainerNo() : runId) + suffix);
-                } else {
-                    newOc.setOrderContainerNo(orderNo + StringUtils.leftPad(ocIndex.getAndIncrement() + "", 3));
-                }
+                newOc.setOrderContainerNo(orderNo + StringUtils.leftPad(ocIndex.getAndIncrement() + "", 3));
 
                 newOc.setOrderNo(orderNo);
                 newOcList.add(newOc);
 
                 copyTaskList.stream().filter(task -> taskIdList.contains(task.getId())).forEach(task -> {
                     task.setOrderContainerId(newOc.getId());
-                    task.setEquiptAcquNo(newOc.getOrderContainerNo());
+                    task.setEquiptAcquNo(orderNo);
                 });
             });
         });
@@ -2472,21 +2463,32 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
      */
     private void updateProject(List<Long> projIdList) {
         List<EmcOrderTaskBean> orderTaskList = orderTaskService.getDao().selectListByOneColumnValues(projIdList, "PROJID");
+        List<EmcOrderTaskBean> analysisOrderTaskList = orderTaskList.stream()
+                .filter(e -> ObjectUtils.equals("analysis", e.getAnalysisType()) || ObjectUtils.equals("sampling", e.getAnalysisType()))
+                .collect(Collectors.toList());
         List<EmcSampleBean> sampleList = sampleService.getDao().selectListByOneColumnValues(projIdList, "PROJID");
         List<EmcProjectBean> updateProjList = new ArrayList<>();
+        List<EmcOrderTaskBean> updateOrderTaskList = new ArrayList<>();
         for (Long a : projIdList) {
-            boolean orderTaskAllMatch = orderTaskList.stream().filter(b -> ObjectUtils.equals(b.getProjId(), a)).allMatch(e -> EmcBizConstant.ORDERTASK_STATUS_DONE.equals(e.getStatus()));
+            boolean orderTaskAllMatch = analysisOrderTaskList.stream().filter(b -> ObjectUtils.equals(b.getProjId(), a)).allMatch(e -> "done".equals(e.getStatus()));
 
-            boolean sampleAllMatch = sampleList.stream().filter(b -> ObjectUtils.equals(b.getProjId(), a)).allMatch(e -> EmcBizConstant.SAMPLE_STATUS_DONE.equals(e.getStatus()));
+            boolean sampleAllMatch = sampleList.stream().filter(b -> ObjectUtils.equals(b.getProjId(), a)).allMatch(e -> "done".equals(e.getStatus()));
 
             if (orderTaskAllMatch && sampleAllMatch) {
                 EmcProjectBean project = new EmcProjectBean();
                 project.setId(a);
-                project.setStatus(EmcBizConstant.PROJECT_STATUS_REPORTEDIT);
+                project.setStatus("reportEdit");
+                project.setToReportEditDate(LocalDate.now());
                 updateProjList.add(project);
+                updateOrderTaskList.addAll(orderTaskList.stream().filter(b -> ObjectUtils.equals(b.getProjId(), a))
+                        .filter(e -> "calculate".equals(e.getAnalysisType())).collect(Collectors.toList()));
             }
         }
-        projectService.getDao().update(updateProjList, "STATUS");
+        projectService.getDao().update(updateProjList, "STATUS", "TOREPORTEDITDATE");
+        if (!updateOrderTaskList.isEmpty()) {
+            updateOrderTaskList.forEach(e -> e.setStatus("done"));
+            orderTaskService.getDao().update(updateOrderTaskList, "STATUS");
+        }
     }
 
     @Override
@@ -2916,7 +2918,7 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
         // 触发有默认值的公式计算
         if (!defaultValueResultIdList.isEmpty()) {
             List<Long> resultIdList = virtualResultList.stream().map(EmcOrderTaskResultBean::getId).collect(Collectors.toList());
-            asyncFormulaComputingService.asyncComputing(null, resultIdList, false);
+            EmcOrderTaskResultComputingEngine.getEngine(resultIdList).compute();
         }
     }
 
@@ -3059,8 +3061,7 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
         }
         String equiptDirString = ApplicationContextHelper.getEnvironment().getProperty("sunway.equipt.acq.file.local.path");
         for (CoreFileBean file : fileList) {
-            File inputFile = FilePathManager.getLocalPath(FilePathDTO.of(file.getScope(),
-                    DateTimeUtils.getDateSerialNumber(file.getCreatedTime()), file.getMd5Name(), file.getName())).toFile();
+            File inputFile = CoreFileUtils.getLocalPath(file).toFile();
             try (FileInputStream fis = new FileInputStream(inputFile)) {
                 File newFile = new File(equiptDirString + File.separator + equiptNo + File.separator + id + File.separator + file.getName());
                 if (!newFile.getParentFile().exists()) newFile.getParentFile().mkdirs();
@@ -3090,7 +3091,7 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
 
         fileList.forEach(file -> {
 
-            File inputFile = FilePathManager.getLocalPath(FilePathDTO.of(file.getScope(), DateTimeUtils.getDateSerialNumber(file.getCreatedTime()), file.getMd5Name(), file.getName())).toFile();
+            File inputFile = CoreFileUtils.getLocalPath(file).toFile();
 
             try {
 
@@ -3730,15 +3731,7 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
 
         List<EmcOrderTaskBean> analysisOrderTaskList = orderTaskService.getDao().selectList(filterOrderTaskList, Arrays.asList("runId", "analysisType", "projId"), Collections.emptyList());
 
-        // 当前用户拥有权限的科室
-        String userId = LocalContextHelper.getLoginUserId();
-        CoreUserPermissionBean filter = new CoreUserPermissionBean();
-        filter.setUserId(userId);
-        filter.setPermissionTypeId("T_CORE_ORG");
-        List<CoreUserPermissionBean> userPermissionList = userPermissionService.getDao().selectList(filter);
-        List<String> orgIdList = userPermissionList.stream().map(CoreUserPermissionBean::getTargetId).collect(Collectors.toList());
-
-        List<EmcOrderTaskBean> validOrderTaskList = analysisOrderTaskList.stream().filter(a -> orgIdList.contains(a.getAnalysisOrgId())).collect(Collectors.toList());
+        List<EmcOrderTaskBean> validOrderTaskList = analysisOrderTaskList;
         validOrderTaskList.forEach(task -> task.setStatus(EmcBizConstant.ORDERTASK_STATUS_DONE));
         orderTaskService.getDao().update(validOrderTaskList, "STATUS");
 
@@ -4200,6 +4193,10 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
 
         List<String> runIdList = coreBpmnInstanceStatusDTOList.stream().map(CoreBpmnInstanceStatusDTO::getId).collect(Collectors.toList());
         List<EmcRunBean> runList = getDao().selectListByIds(runIdList);
+        String loginUserId = LocalContextHelper.getLoginUserId();
+        if (runList.stream().anyMatch(e -> ObjectUtils.equals(loginUserId, e.getAnalysisUserId()))) {
+            throw new InvalidDataException("校核人不能和检测人相同");
+        }
 
         List<EmcOrderTaskBean> filterOrderTaskList = new ArrayList<>();
         runIdList.forEach(runId -> {
@@ -4238,7 +4235,6 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
         getDao().update(runList, "STATUS");
 
         // 合并原始记录
-        String loginUserId = LocalContextHelper.getLoginUserId();
 //        ExecutorHelper.submit(() -> composeReportPdfOfProject(runList, loginUserId));
         ExecutorHelper.submit(
                 new TimerTask() {
@@ -4673,15 +4669,7 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
 
         List<EmcOrderTaskBean> analysisOrderTaskList = orderTaskService.getDao().selectList(filterOrderTaskList, Arrays.asList("runId", "analysisType", "projId"), Collections.emptyList());
 
-        // 当前用户拥有权限的科室
-        String userId = LocalContextHelper.getLoginUserId();
-        CoreUserPermissionBean filter = new CoreUserPermissionBean();
-        filter.setUserId(userId);
-        filter.setPermissionTypeId("T_CORE_ORG");
-        List<CoreUserPermissionBean> userPermissionList = userPermissionService.getDao().selectList(filter);
-        List<String> orgIdList = userPermissionList.stream().map(CoreUserPermissionBean::getTargetId).collect(Collectors.toList());
-
-        List<EmcOrderTaskBean> validOrderTaskList = analysisOrderTaskList.stream().filter(a -> orgIdList.contains(a.getAnalysisOrgId())).collect(Collectors.toList());
+        List<EmcOrderTaskBean> validOrderTaskList = analysisOrderTaskList;
 
         if (validOrderTaskList.isEmpty()) {
             return;

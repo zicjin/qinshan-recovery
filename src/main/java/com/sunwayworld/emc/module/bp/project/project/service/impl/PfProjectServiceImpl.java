@@ -3546,7 +3546,7 @@ public class PfProjectServiceImpl extends EmcProjectServiceImpl implements PfPro
     public String submitRemind(RestJsonWrapperBean wrapper) {
         List<EmcProjectBean> projectList = wrapper.parse(EmcProjectBean.class);
         List<Long> projectIdList = projectList.stream().map(EmcProjectBean::getId).collect(Collectors.toList());
-        List<EmcProjSchemeBean> schemeList = projSchemeService.getDao().selectListByOneColumnValues(projectIdList, "PROJID");
+        List<EmcProjSchemeBean> schemeList = projSchemeService.getDao().selectListByOneColumnValues(projectIdList, "PROJID", Arrays.asList("ID", "PROJID", "MONITORTMPLID"), new Order[0]);
         List<Long> schemeIdList = schemeList.stream().map(EmcProjSchemeBean::getId).collect(Collectors.toList());
         if (schemeIdList.isEmpty()) return null;
         List<EmcProjOrderBean> projOrderList = projOrderService.selectListByFilter(SearchFilter.instance().match("PROJSCHEMEID", schemeIdList).filter(MatchPattern.OR));
@@ -3564,8 +3564,11 @@ public class PfProjectServiceImpl extends EmcProjectServiceImpl implements PfPro
             List<Long> schemeGroupIds = schemeOrderList.stream().map(EmcProjOrderBean::getItemGroupId).distinct().collect(Collectors.toList());
             List<EmcCapacityItemBean> schemeItemList = analysisGroupItemList.stream().filter(g -> schemeGroupIds.contains(g.getCapItemGroupId())).collect(Collectors.toList());
             for (EmcCapacityItemBean item : schemeItemList) {
-                boolean exists = testOrderList.stream().anyMatch(o -> ObjectUtils.equals(o.getTestMethodId(), item.getTestMethodId()) && ObjectUtils.equals(o.getMonitorTmplId(), scheme.getMonitorTmplId()));
-                if (!exists && !noContainerGroupIdList.contains(item.getCapItemGroupId())) noContainerGroupIdList.add(item.getCapItemGroupId());
+                EmcTestMethodOrderCategoryBean testOrder = testOrderList.stream()
+                        .filter(o -> ObjectUtils.equals(o.getTestMethodId(), item.getTestMethodId()) && ObjectUtils.equals(o.getMonitorTmplId(), scheme.getMonitorTmplId()))
+                        .findFirst().orElse(null);
+                if (testOrder != null || noContainerGroupIdList.contains(item.getCapItemGroupId())) continue;
+                noContainerGroupIdList.add(item.getCapItemGroupId());
             }
         }
         if (noContainerGroupIdList.isEmpty()) return null;

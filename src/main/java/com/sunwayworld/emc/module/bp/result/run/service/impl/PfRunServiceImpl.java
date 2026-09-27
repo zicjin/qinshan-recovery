@@ -1915,7 +1915,7 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
         List<String> specialSuffixQcCodeList = Arrays.asList(EmcConstant.QC_L_DUP, EmcConstant.QCCATEGORY_QCCATGORYID_L_SPKC, PfConstant.QC_L_SPKC_P);
         List<String> specialPrefixQcCodeList = Arrays.asList(EmcConstant.QCCATEGORY_QCCATEGORYID_L_BLANK, EmcConstant.QCCATEGORY_QCCATEGORYID_QC_STD,
                 EmcConstant.QCCATEGORY_QCCATEGORYID_L_SPKCK, PfConstant.QC_L_SPKCK_P,
-                PfConstant.QC_QXJH, PfConstant.QC_L_QXCHD);
+                PfConstant.QC_QXJH, PfConstant.QC_YZSY, PfConstant.QC_SJKB, PfConstant.QC_CZKB, PfConstant.QC_L_QXCHD);
 
         boolean hasSpecialSuffixQc = qcCategoryCodeList.stream().anyMatch(specialSuffixQcCodeList::contains);
         boolean hasSpecialPrefixQc = qcCategoryCodeList.stream().anyMatch(specialPrefixQcCodeList::contains);
@@ -1929,6 +1929,9 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
         specialQcSuffixMap.put(EmcConstant.QCCATEGORY_QCCATEGORYID_L_SPKCK, PfConstant.QC_SPKCK_ORDER_NO_PREFIX);
         specialQcSuffixMap.put(PfConstant.QC_L_SPKCK_P, PfConstant.QC_SPKCK_P_ORDER_NO_PREFIX);
         specialQcSuffixMap.put(PfConstant.QC_QXJH, PfConstant.QC_QXCH_ORDER_NO_PREFIX);
+        specialQcSuffixMap.put(PfConstant.QC_YZSY, PfConstant.QC_YZSY_ORDER_NO_PREFIX);
+        specialQcSuffixMap.put(PfConstant.QC_SJKB, PfConstant.QC_SJKB_ORDER_NO_PREFIX);
+        specialQcSuffixMap.put(PfConstant.QC_CZKB, PfConstant.QC_CZKB_ORDER_NO_PREFIX);
         specialQcSuffixMap.put(PfConstant.QC_L_QXCHD, PfConstant.QC_QXCHD_ORDER_NO_PREFIX);
         Map<String, Integer> specialSuffixOrderSeqNoMap = hasSpecialSuffixQc ? getSpecialSuffixOrderSeqNo(qcCategoryCodeList, specialSuffixQcCodeList, specialQcSuffixMap, orderList, folderId) : null;
         Map<String, Integer> specialPrefixOrderSeqNoMap = hasSpecialPrefixQc ? getSpecialPrefixOrderSeqNo(qcCategoryList, specialPrefixQcCodeList, specialQcSuffixMap, orderList, folderId) : null;

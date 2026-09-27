@@ -85,10 +85,6 @@ import com.sunwayworld.emc.module.mdm.bizmdm.test.service.EmcRelatedTestMethodSe
 import com.sunwayworld.emc.module.mdm.bizmdm.test.service.EmcTestMethodOrderCategoryService;
 import com.sunwayworld.emc.module.mdm.bizmdm.test.service.EmcTestMethodService;
 import com.sunwayworld.emc.module.mdm.bizmdm.test.service.EmcTestService;
-import com.sunwayworld.emc.module.mdm.crm.bean.CrmOpportunityContractBean;
-import com.sunwayworld.emc.module.mdm.crm.bean.CrmOpportunityMainBean;
-import com.sunwayworld.emc.module.mdm.crm.bean.CrmOpportunityOrdersBean;
-import com.sunwayworld.emc.module.mdm.crm.bean.CrmOpportunityOrdtaskBean;
 import com.sunwayworld.emc.module.mdm.crm.service.CrmOpportunityContractService;
 import com.sunwayworld.emc.module.mdm.crm.service.CrmOpportunityMainService;
 import com.sunwayworld.emc.module.mdm.crm.service.CrmOpportunityOrdersService;
@@ -281,13 +277,17 @@ public class PfProjSchemeServiceImpl extends EmcProjSchemeServiceImpl implements
             }
             List<EmcProjOrderBean> copyOrderList = (List<EmcProjOrderBean>)ObjectUtils.clone(orderList);
             for (EmcProjOrderBean order : copyOrderList) {
-                EmcMonitorPointBean monitorPoint;
                 order.setId(ApplicationContextHelper.getNextIdentity());
                 order.setProjSchemeId(id);
                 order.setSampleNum(EmcConstant.ONE);
-                if (monitorPointId == null || (monitorPoint = (EmcMonitorPointBean)monitorPointList.stream().filter(e -> ObjectUtils.equals(monitorPointId, e.getId())).findFirst().orElse(null)) == null) continue;
-                order.setIndexCategoryId(Long.valueOf(NumberUtils.parseLong(monitorPoint.getExt$Item("indexcategoryid"))));
-                order.setIndexId(monitorPoint.getIndexId());
+                if (monitorPointId != null) {
+                    EmcMonitorPointBean monitorPoint = monitorPointList.stream()
+                            .filter(e -> ObjectUtils.equals(monitorPointId, e.getId())).findFirst().orElse(null);
+                    if (monitorPoint != null) {
+                        order.setIndexCategoryId(NumberUtils.parseLong(monitorPoint.getExt$Item("indexcategoryid")));
+                        order.setIndexId(monitorPoint.getIndexId());
+                    }
+                }
             }
             insertOrderList.addAll(copyOrderList);
         }
@@ -375,7 +375,8 @@ public class PfProjSchemeServiceImpl extends EmcProjSchemeServiceImpl implements
                 insertOrderList.addAll(copyOrderList);
             }
             if (!ObjectUtils.isEmpty(existOrderList)) {
-                Long maxSortNum = existOrderList.stream().map(EmcProjOrderBean::getSortNum).max(Comparator.naturalOrder()).orElse(0L);
+                Long maxSortNum = existOrderList.stream().filter(e -> !ObjectUtils.isEmpty(e.getSortNum()))
+                        .map(EmcProjOrderBean::getSortNum).max(Comparator.naturalOrder()).orElse(0L);
                 for (int i = 0; i < insertOrderList.size(); i++) {
                     insertOrderList.get(i).setSortNum(i + 1L + maxSortNum);
                 }
@@ -409,9 +410,10 @@ public class PfProjSchemeServiceImpl extends EmcProjSchemeServiceImpl implements
 
         int copyNum = NumberUtils.parseInt(copies);
         Map<String, List<EmcProjSchemeBean>> schemeMap = copySchemeList.stream().collect(Collectors.groupingBy(EmcProjSchemeBean::getMonitorTmplId));
-        List<String> newFolderNoList = generateFolderNosByProjId(project.getId(), project.getProjNo(), copySchemeList.size() * copyNum);
-        AtomicInteger folderNoIndex = new AtomicInteger();
         schemeMap.forEach((monitorTmplId, schemeList) -> {
+            List<String> newFolderNoList = generateFolderNosByProjId(project.getId(), project.getProjNo(), monitorTmplId,
+                    schemeList.get(0).getExt$Item("ordercategorycode"), schemeList.size() * copyNum);
+            AtomicInteger folderNoIndex = new AtomicInteger();
             IntStream.range(0, schemeList.size()).forEach(index -> {
                 IntStream.range(0, copyNum).forEach(num -> {
                     EmcProjSchemeBean newScheme = new EmcProjSchemeBean();
@@ -586,13 +588,13 @@ public class PfProjSchemeServiceImpl extends EmcProjSchemeServiceImpl implements
         Long frequency = projScheme.getFrequency();// 频次
         long sampleNum = projOrderList.stream().mapToLong(EmcProjOrderBean::getSampleNum).max().orElse(1L);// 最大采样数
 
+        int orderno = 1;
         for (int i = 1; i <= cycle; i++) {
-            int orderno = 1;
             for (int j = 1; j <= frequency; j++) {
                 for (int k = 1; k <= sampleNum; k++) {
                     EmcOrderBean order = new EmcOrderBean();
                     order.setId(ApplicationContextHelper.getNextIdentity());
-                    order.setOrderNo(folder.getFolderNo() + EmcBizConstant.NUMFORENG[i-1] +StringUtils.leftPad("" + (orderno), 3));// 生成样品编码
+                    order.setOrderNo(folder.getFolderNo() + StringUtils.leftPad("" + orderno, 3));// 生成样品编码
                     order.setLabelNo(order.getOrderNo());
                     order.setProjId(projScheme.getProjId());
                     order.setFolderId(folder.getId());
@@ -606,7 +608,7 @@ public class PfProjSchemeServiceImpl extends EmcProjSchemeServiceImpl implements
                     order.setTermination(Constant.NO);
 
                     list.add(order);
-                    orderno = orderno+1;
+                    orderno++;
                 }
             }
         }
@@ -690,7 +692,6 @@ public class PfProjSchemeServiceImpl extends EmcProjSchemeServiceImpl implements
                         orderTask.setQcCategoryId(order.getQcCategoryId());
                         orderTask.setQcCategoryCode(order.getQcCategoryCode());
                         orderTask.setQcName(order.getQcName());
-
                         boolean isSolidWaste = isSolidWaste(order);
                         String acqNoSuffix = acqNoSuffixMap.get(orderTask.getTestMethodId());
                         String acqNo = (isSolidWaste && acqNoSuffix != null) ? String.join("-", order.getOrderNo(), acqNoSuffix) : order.getOrderNo();
@@ -771,6 +772,18 @@ public class PfProjSchemeServiceImpl extends EmcProjSchemeServiceImpl implements
         boolean containSubcontract = projOrderList.stream().anyMatch(projOrder -> Constant.YES.equals(projOrder.getExt$Item("subcontract2")));
         String subPackageNo = containSubcontract ? ApplicationContextHelper.getNextSequence(orderItemGroupService.getDao().getTable()) : null;
 
+        List<String> parentOrderNoList = orderList.stream().filter(order -> !StringUtils.isEmpty(order.getParentOrderNo()))
+                .map(EmcOrderBean::getParentOrderNo).collect(Collectors.toList());
+        List<EmcOrderTaskBean> parentOrderTaskList = Collections.emptyList();
+        if (!parentOrderNoList.isEmpty()) {
+            List<EmcOrderBean> parentOrderList = orderService.getDao().selectListByOneColumnValues(parentOrderNoList,
+                    "ORDERNO", Arrays.asList("ID", "ORDERNO"), new Order[0]);
+            List<Long> parentOrderIdList = parentOrderList.stream().map(EmcOrderBean::getId).collect(Collectors.toList());
+            parentOrderTaskList = orderTaskService.getDao().selectListByOneColumnValues(parentOrderIdList,
+                    "ORDERID", Arrays.asList("ID", "ORDERID", "TESTID", "METHODID"), new Order[0]);
+        }
+        List<EmcOrderTaskBean> validParentOrderTaskList = parentOrderTaskList;
+
         List<EmcOrderTaskBean> list = new ArrayList<>();
         for (EmcOrderBean order : orderList) {
             for (EmcProjOrderBean projOrder : groupProjOrderList) {
@@ -795,6 +808,11 @@ public class PfProjSchemeServiceImpl extends EmcProjSchemeServiceImpl implements
 
                 // 是否需要采样后分包
                 boolean samplingSubcontract = Constant.YES.equals(projOrder.getExt$Item("subcontract2"));
+
+                EmcOrderTaskBean parentOrderTask = validParentOrderTaskList.stream()
+                        .filter(t -> ObjectUtils.equals(t.getTestId(), projOrder.getTestId())
+                                && ObjectUtils.equals(t.getMethodId(), projOrder.getMethodId()))
+                        .findFirst().orElse(null);
 
                 // 取当前监测方案样品的分析类型List
                 List<EmcGroupItemBean> analysisCategoryList = getDistinctItemList(filterItemList);
@@ -830,6 +848,9 @@ public class PfProjSchemeServiceImpl extends EmcProjSchemeServiceImpl implements
                         orderTask.setQcCategoryId(order.getQcCategoryId());
                         orderTask.setQcCategoryCode(order.getQcCategoryCode());
                         orderTask.setQcName(order.getQcName());
+                        if (parentOrderTask != null) {
+                            orderTask.setParentId(parentOrderTask.getId());
+                        }
 
                         boolean isSolidWaste = isSolidWaste(order);
                         String acqNoSuffix = acqNoSuffixMap.get(orderTask.getTestMethodId());
@@ -841,9 +862,6 @@ public class PfProjSchemeServiceImpl extends EmcProjSchemeServiceImpl implements
                         orderTask.setSubcontractorId(projOrder.getSubcontractorId());
                         orderTask.setSubPackageNo(projOrder.getSubPackageNo());
                         orderTask.setDataSharing(projOrder.getDataSharing());
-                        orderTask.setSpecifyMethod(projOrder.getSpecifyMethod());
-                        orderTask.setTaskLowLimit(projOrder.getTaskLowLimit());
-                        orderTask.setTaskHighLimit(projOrder.getTaskHighLimit());
                         orderTask.setExt$Item("relatedTest", projOrder.getExt$Item("relatedTest"));
                         // 如果样品测试的分析类型为采样，样品测试的分析科室为监测方案的采样科室
                         String analysisCategory = analysisItem.getExt$Item("analysiscategory");
@@ -958,6 +976,9 @@ public class PfProjSchemeServiceImpl extends EmcProjSchemeServiceImpl implements
         List<EmcProjSchemeBean> orgList = selectListByFilter(SearchFilter.instance().match("ID", id).filter(MatchPattern.OR));
         String folderNo = orgList.get(0).getFolderNo();
         List<EmcFolderBean> folderlist = folderService.selectListByFilter(SearchFilter.instance().match("FOLDERNO", folderNo).filter(MatchPattern.OR));
+        if (folderlist.isEmpty()) {
+            return;
+        }
         EmcFolderBean folderBean = folderlist.get(0);
         if(monitorPointName!=null){
             folderBean.setMonitorPointName(monitorPointName);
@@ -1642,34 +1663,8 @@ public class PfProjSchemeServiceImpl extends EmcProjSchemeServiceImpl implements
         List<EmcOrderBean> orderList = wrapper.parse(EmcOrderBean.class, 1);
         List<EmcProjSchemeBean> schemeList = wrapper.parse(EmcProjSchemeBean.class, 2);
         List<EmcProjOrderBean> newSchemeOrderList = wrapper.parse(EmcProjOrderBean.class, 3);
-        if (schemeList.isEmpty()) {
-            return;
-        }
         EmcProjectBean projectBean = projectService.selectById(schemeList.get(0).getProjId());
         String contractNo = projectBean.getProjNo().substring(0, 10);
-        List<CrmOpportunityContractBean> crmOpportunityContractBeans = opportunityContractService.getDao().selectListByOneColumnValue(contractNo, "contractno");
-        if (!crmOpportunityContractBeans.isEmpty()) {
-            CrmOpportunityMainBean crmOpportunityMainBean = opportunityMainService.selectById(crmOpportunityContractBeans.get(0).getOpportunityId().toString());
-            List<CrmOpportunityOrdersBean> crmOpportunityOrdersBeans = opportunityOrdersService.getDao().selectListByOneColumnValue(crmOpportunityMainBean.getOpportunityNo(), "opportunityNo");
-            List<CrmOpportunityOrdtaskBean> crmOpportunityOrdtaskBeans = opportunityOrdtaskService.getDao().selectListByOneColumnValue(crmOpportunityMainBean.getOpportunityNo(), "opportunityNo");
-            List<EmcProjOrderBean> updateSchemeOrderList = new ArrayList<>();
-            newSchemeOrderList.forEach(s -> {
-                List<CrmOpportunityOrdtaskBean> matched = crmOpportunityOrdtaskBeans.stream()
-                        .filter(c -> StringUtils.equals(String.valueOf(s.getTestId()), c.getTestCode()))
-                        .filter(c -> StringUtils.equals(String.valueOf(s.getMethodId()), c.getMethod())).collect(Collectors.toList());
-                if (!matched.isEmpty()) {
-                    List<String> ordNos = matched.stream().map(CrmOpportunityOrdtaskBean::getOrdNo).distinct().collect(Collectors.toList());
-                    crmOpportunityOrdersBeans.stream().filter(o -> ordNos.contains(o.getOrdNo())).findFirst().ifPresent(o -> {
-                        s.setExt$Item("realFrequency", String.valueOf(o.getTestingFrequency()));
-                        s.setExt$Item("realCycle", String.valueOf(o.getTestingDays()));
-                    });
-                    updateSchemeOrderList.add(s);
-                }
-            });
-            if (!updateSchemeOrderList.isEmpty()) {
-                projOrderService.getDao().update(updateSchemeOrderList, "realFrequency", "realCycle");
-            }
-        }
         // 查询测试方法和监测能力库方法
         List<Long> capacityItemGroupIdList = newSchemeOrderList.stream().map(EmcProjOrderBean::getItemGroupId).distinct().collect(Collectors.toList());
         List<EmcCapacityItemGroupBean> capacityItemGroupList = capacityItemGroupService.getDao().selectListByOneColumnValues(capacityItemGroupIdList, "id");
@@ -2551,23 +2546,21 @@ public class PfProjSchemeServiceImpl extends EmcProjSchemeServiceImpl implements
     @Transactional
     public void sortFolderNo(RestJsonWrapperBean wrapper) {
         List<EmcProjSchemeBean> schemes = wrapper.parse(EmcProjSchemeBean.class);
-        if (schemes.isEmpty()) {
-            return;
-        }
         String monitorTmplId = schemes.get(0).getMonitorTmplId();
-        EmcMonitorTmplBean monitorTmpl = this.monitorTmplService.selectById(monitorTmplId);
-        String orderCategoryCode = monitorTmpl == null ? "" : monitorTmpl.getExt$Item("ordercategorycode");
+        String orderCategoryCode = ((EmcMonitorTmplBean) monitorTmplService.selectById(monitorTmplId)).getExt$Item("ordercategorycode");
         if (StringUtils.isEmpty(orderCategoryCode)) {
             orderCategoryCode = "";
         }
         Long projId = schemes.get(0).getProjId();
-        EmcProjectBean project = this.projectService.selectById(projId);
-        String prefix = project.getProjNo() + orderCategoryCode;
+        String prefix = ((EmcProjectBean) projectService.selectById(projId)).getProjNo() + orderCategoryCode;
+        List<EmcProjSchemeBean> updateList = new ArrayList<>();
         schemes.sort(Comparator.comparing(EmcProjSchemeBean::getSortNum, Comparator.nullsLast(Long::compareTo)));
-        for (int i = 0; i < schemes.size(); i++) {
-            schemes.get(i).setFolderNo(prefix + String.format("%03d", i + 1));
+        for (int i = 0; i <= schemes.size() - 1; ++i) {
+            EmcProjSchemeBean scheme = schemes.get(i);
+            scheme.setFolderNo(prefix + String.format("%03d", i + 1));
+            updateList.add(scheme);
         }
-        this.getDao().update(schemes, "FOLDERNO");
+        this.getDao().update(updateList, new String[]{"FOLDERNO"});
     }
 
     @Override

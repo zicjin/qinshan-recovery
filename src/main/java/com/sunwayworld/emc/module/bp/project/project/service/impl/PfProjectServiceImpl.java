@@ -803,7 +803,7 @@ public class PfProjectServiceImpl extends EmcProjectServiceImpl implements PfPro
             ArrayList<EmcFolderBean> newEmcFolderBeanList = new ArrayList<EmcFolderBean>();
             ArrayList<EmcOrderBean> newEmcOrderBeanList = new ArrayList<EmcOrderBean>();
             ArrayList<EmcOrderItemGroupBean> newEmcOrderItemGroupBeanList = new ArrayList<EmcOrderItemGroupBean>();
-            ArrayList newEmcOrderItemBeanList = new ArrayList();
+            List newEmcOrderItemBeanList = new ArrayList();
             ArrayList<EmcReportSendInfoBean> newReportSendInfoList = new ArrayList<EmcReportSendInfoBean>();
             ArrayList<EmcProjectDirectorBean> newProjectDirectorList = new ArrayList<EmcProjectDirectorBean>();
             for (int i = 0; i < emcOrderProjectList.size(); ++i) {
@@ -2993,7 +2993,7 @@ public class PfProjectServiceImpl extends EmcProjectServiceImpl implements PfPro
     	EmcProjectBean projectBean = wrapper.parseUnique(EmcProjectBean.class);
         List<CoreReportConfigLineBean> configLineBeforeList = wrapper.parse(CoreReportConfigLineBean.class);
         List<CoreReportConfigLineBean> normalConfigLineBeanList = configLineBeforeList.stream().filter(r -> !StringUtils.equals("fanruan", r.getReportCategory())).collect(Collectors.toList());
-        ArrayList fieldList = new ArrayList();
+        List fieldList = new ArrayList();
         String fieldIdOne = archiveSamplingContactRecordFiles(projectBean,normalConfigLineBeanList);
         // 帆软报表模板
         List<CoreReportConfigLineBean> frConfigLineBeanList = configLineBeforeList.stream().filter(r -> "fanruan".equals(r.getReportCategory())).collect(Collectors.toList());
@@ -4068,8 +4068,9 @@ public class PfProjectServiceImpl extends EmcProjectServiceImpl implements PfPro
             req.setContractno(project.getExt$Item("contractno"));
             req.setOrgcode(orgMap.get(project.getOrgId()).get(0).getOaCwOrgCode()); req.setDeptcode("16");
             req.setReportindate(project.getFirstIssueDateTime());
-            String deliveryDate = project.getExt$Item("deliverydate");
-            req.setReportoutdate(StringUtils.isBlank(deliveryDate) ? LocalDateTime.now() : DateTimeUtils.parseLocalDateTime(deliveryDate));
+            String deliveryDateStr = project.getExt$Item("deliverydate");
+            LocalDateTime deliveryDate = StringUtils.isBlank(deliveryDateStr) ? LocalDateTime.now() : DateTimeUtils.parseLocalDateTime(deliveryDateStr);
+            req.setReportoutdate(deliveryDate);
             req.setJclxcode(project.getExt$Item("nccode"));
             requests.add(req);
         });

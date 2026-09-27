@@ -313,21 +313,25 @@ public class PfProjectServiceImpl extends EmcProjectServiceImpl implements PfPro
                 .filter(e -> ObjectUtils.equals("analysis", e.getAnalysisType()) || ObjectUtils.equals("sampling", e.getAnalysisType()))
                 .collect(Collectors.toList());
         List<EmcProjectBean> updateProjectList = new ArrayList<>();
-        ArrayList updateOrderTaskList = new ArrayList();
+        List<EmcOrderTaskBean> updateOrderTaskList = new ArrayList<>();
         for (Long projectId : projIdList) {
             boolean allDone = analysisOrderTaskList.stream().filter(e -> ObjectUtils.equals(e.getProjId(), projectId)).allMatch(e -> "done".equals(e.getStatus()));
-            if (!allDone) continue;
-            EmcProjectBean project = new EmcProjectBean();
-            project.setId(projectId);
-            project.setStatus("reportEdit");
-            project.setToReportEditDate(LocalDate.now());
-            updateProjectList.add(project);
-            List calculateTaskList = orderTaskList.stream().filter(e -> ObjectUtils.equals(e.getProjId(), projectId)).filter(e -> "calculate".equals(e.getAnalysisType())).collect(Collectors.toList());
-            updateOrderTaskList.addAll(calculateTaskList);
+            if (allDone) {
+                EmcProjectBean project = new EmcProjectBean();
+                project.setId(projectId);
+                project.setStatus("reportEdit");
+                project.setToReportEditDate(LocalDate.now());
+                updateProjectList.add(project);
+                List<EmcOrderTaskBean> calculateTaskList = orderTaskList.stream()
+                        .filter(e -> ObjectUtils.equals(e.getProjId(), projectId))
+                        .filter(e -> "calculate".equals(e.getAnalysisType()))
+                        .collect(Collectors.toList());
+                updateOrderTaskList.addAll(calculateTaskList);
+            }
         }
         getDao().update(updateProjectList, "STATUS", "TOREPORTEDITDATE");
         if (!updateOrderTaskList.isEmpty()) {
-            updateOrderTaskList.forEach(e -> ((EmcOrderTaskBean)e).setStatus("done"));
+            updateOrderTaskList.forEach(e -> e.setStatus("done"));
             orderTaskService.getDao().update(updateOrderTaskList, "STATUS");
         }
     }
@@ -614,7 +618,8 @@ public class PfProjectServiceImpl extends EmcProjectServiceImpl implements PfPro
                 prefix = beforeProjNo.substring(0, projNoPrefix.length() + 4);
                 numberPart = beforeProjNo.substring(projNoPrefix.length() + 4);
                 incrementedNumber = Integer.parseInt(numberPart) + 1;
-                newProjectNoList.add(prefix + String.format("%03d", incrementedNumber));
+                String newData = prefix + String.format("%03d", incrementedNumber);
+                newProjectNoList.add(newData);
             }
         }
         return newProjectNoList;

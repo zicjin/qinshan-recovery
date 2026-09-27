@@ -724,7 +724,7 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
         });
         // 遍历样品分析项组表修改数据
         targetOrderItemGroupList.forEach(a -> {
-            a.setSchemeName(monitorScheme.getSchemeName());
+            a.setOrderId(orderTask.getOrderId());
             a.setMethodId(methodId);
             a.setTestMethodId(testMethodId);
             a.setTestMethodBasis(testMethodBasis);
@@ -3180,7 +3180,7 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
             return suffixValue + 1;
         }
 
-        return 0;
+        return 1;
     }
 
     private Map<String, Integer> getSpecialPrefixOrderSeqNo(List<EmcQcCategoryBean> qcCategoryList, List<String> specialQcCodeList, Map<String, String> specialQcSuffixMap, List<EmcOrderBean> orderList, Long folderId) {
@@ -3201,30 +3201,15 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
 
     private int getPrefixMaxOrderSeqNo(List<EmcOrderBean> orderList, EmcQcCategoryBean qcCategory, String suffix) {
         EmcOrderBean maxOrder = orderList.stream().filter(order -> StringUtils.equals(order.getQcCategoryCode(), qcCategory.getQcCategoryId())
-                && StringUtils.contains(order.getOrderNo(), suffix + Optional.ofNullable(qcCategory.getExt$Item("checkPoint")).orElse(""))).max(Comparator.comparing(EmcOrderBean::getOrderNo)).orElseGet(EmcOrderBean::new);
+                && StringUtils.contains(order.getOrderNo(), suffix)).max(Comparator.comparing(EmcOrderBean::getOrderNo)).orElseGet(EmcOrderBean::new);
 
         if (!StringUtils.isEmpty(maxOrder.getOrderNo())) {
             String maxOrderNo = maxOrder.getOrderNo();
-            if (!Arrays.asList(PfConstant.QC_QXJH, PfConstant.QC_L_QXCHD).contains(qcCategory.getQcCategoryId())) {
-                String orderNoSuffix = maxOrderNo.substring(maxOrderNo.lastIndexOf(suffix) + suffix.length());
-                int suffixValue = StringUtils.isEmpty(orderNoSuffix) ? 0 : NumberUtils.parseInt(orderNoSuffix);
-
-                return suffixValue + 1;
-            }
-
-            // 对于曲线校核，需要特殊处理，曲线校核样品编号引入了中间校核点
-            boolean isLowestCurveCheck = PfConstant.QC_L_QXCHD.equals(qcCategory.getQcCategoryId());
-            String qcSuffix = suffix + (isLowestCurveCheck ? "0" : Optional.ofNullable(qcCategory.getExt$Item("checkPoint")).orElse("1"));
-            String orderNoSuffix = maxOrderNo.substring(maxOrderNo.lastIndexOf(qcSuffix) + qcSuffix.length());
-            if (!StringUtils.isEmpty(orderNoSuffix) && orderNoSuffix.startsWith("-")) {
-                orderNoSuffix = orderNoSuffix.substring(1);
-            }
-            int suffixValue = StringUtils.isEmpty(orderNoSuffix) || !NumberUtils.isNumber(orderNoSuffix) ? 0 : NumberUtils.parseInt(orderNoSuffix);
-
+            String orderNoSuffix = maxOrderNo.substring(maxOrderNo.lastIndexOf(suffix) + suffix.length());
+            int suffixValue = StringUtils.isEmpty(orderNoSuffix) ? 0 : NumberUtils.parseInt(orderNoSuffix);
             return suffixValue + 1;
         }
-
-        return 0;
+        return 1;
     }
 
     /**

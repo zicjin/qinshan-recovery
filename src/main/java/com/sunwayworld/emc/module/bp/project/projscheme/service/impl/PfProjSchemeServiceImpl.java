@@ -276,7 +276,8 @@ public class PfProjSchemeServiceImpl extends EmcProjSchemeServiceImpl implements
             orderList.add(relatedProjOrder);
         });
 
-        List<String> folderNoList = generateFolderNosByProjId(emcProject.getId(), emcProject.getProjNo(), qty);
+        String orderCategoryCode = ObjectUtils.isEmpty(monitorTmpl) ? "" : monitorTmpl.getExt$Item("ordercategorycode");
+        List<String> folderNoList = generateFolderNosByProjId(emcProject.getId(), emcProject.getProjNo(), monitorTmplId, orderCategoryCode, qty);
         List<EmcProjOrderBean> insertOrderList = new ArrayList<>();
         for (int i = 0; i < qty; i++) {
             EmcProjSchemeBean scheme = schemeList.get(i);
@@ -287,8 +288,8 @@ public class PfProjSchemeServiceImpl extends EmcProjSchemeServiceImpl implements
             scheme.setId(id);
             scheme.setFolderNo(folderNoList.get(i));
             scheme.setSortNum(Long.parseLong(folderNoList.get(i).substring(folderNoList.get(i).length() - 3)));
-            /*scheme.setCycle(cycle);
-            scheme.setFrequency(frequency);*/
+            scheme.setCycle(cycle);
+            scheme.setFrequency(frequency);
             //如果采样科室为空则赋值任务表的默认采样科室
             if(StringUtils.isEmpty(scheme.getSampleOrgId())) {
                 scheme.setSampleOrgId(emcProject.getProjectSampleOrgId());
@@ -457,7 +458,9 @@ public class PfProjSchemeServiceImpl extends EmcProjSchemeServiceImpl implements
 
     @Override
     public void insertBpData(List<Long> projectIdList) {
-        List<EmcProjSchemeBean> schemeList = this.selectListByFilter(SearchFilter.instance().match("PROJID", projectIdList).filter(MatchPattern.OR));
+        List<EmcProjSchemeBean> schemeList = this.selectListByFilter(SearchFilter.instance()
+                .match("PROJID", projectIdList).filter(MatchPattern.OR)
+                .match("REFERFOLDER", Arrays.asList("0", null)).filter(MatchPattern.OR));
         if (schemeList.isEmpty()) {
             return;
         }
@@ -501,7 +504,8 @@ public class PfProjSchemeServiceImpl extends EmcProjSchemeServiceImpl implements
 /*        CoreUserBean user = LocalContextHelper.getLoginUser();
         //赋值所属单位和流程类型
         String parentOrgId = user.getExt$Item("parentorgid");*/
-        String parentOrgId = testCapacityList.get(0).getOrgId();
+        EmcProjectBean project = projectService.selectById(schemeList.get(0).getProjId());
+        String parentOrgId = project.getOrgId();
         List<Long> testMethodIdList = testMethodList.stream().map(e -> e.getId()).collect(Collectors.toList());
         List<EmcTestMethodOrderCategoryBean> testOrderList = testMethodOrderCategoryService
                 .selectListByFilter(SearchFilter.instance().match("TESTMETHODID", testMethodIdList).filter(MatchPattern.OR)
@@ -1658,6 +1662,34 @@ public class PfProjSchemeServiceImpl extends EmcProjSchemeServiceImpl implements
         List<EmcOrderBean> orderList = wrapper.parse(EmcOrderBean.class, 1);
         List<EmcProjSchemeBean> schemeList = wrapper.parse(EmcProjSchemeBean.class, 2);
         List<EmcProjOrderBean> newSchemeOrderList = wrapper.parse(EmcProjOrderBean.class, 3);
+        if (schemeList.isEmpty()) {
+            return;
+        }
+        EmcProjectBean projectBean = projectService.selectById(schemeList.get(0).getProjId());
+        String contractNo = projectBean.getProjNo().substring(0, 10);
+        List<CrmOpportunityContractBean> crmOpportunityContractBeans = opportunityContractService.getDao().selectListByOneColumnValue(contractNo, "contractno");
+        if (!crmOpportunityContractBeans.isEmpty()) {
+            CrmOpportunityMainBean crmOpportunityMainBean = opportunityMainService.selectById(crmOpportunityContractBeans.get(0).getOpportunityId().toString());
+            List<CrmOpportunityOrdersBean> crmOpportunityOrdersBeans = opportunityOrdersService.getDao().selectListByOneColumnValue(crmOpportunityMainBean.getOpportunityNo(), "opportunityNo");
+            List<CrmOpportunityOrdtaskBean> crmOpportunityOrdtaskBeans = opportunityOrdtaskService.getDao().selectListByOneColumnValue(crmOpportunityMainBean.getOpportunityNo(), "opportunityNo");
+            List<EmcProjOrderBean> updateSchemeOrderList = new ArrayList<>();
+            newSchemeOrderList.forEach(s -> {
+                List<CrmOpportunityOrdtaskBean> matched = crmOpportunityOrdtaskBeans.stream()
+                        .filter(c -> StringUtils.equals(String.valueOf(s.getTestId()), c.getTestCode()))
+                        .filter(c -> StringUtils.equals(String.valueOf(s.getMethodId()), c.getMethod())).collect(Collectors.toList());
+                if (!matched.isEmpty()) {
+                    List<String> ordNos = matched.stream().map(CrmOpportunityOrdtaskBean::getOrdNo).distinct().collect(Collectors.toList());
+                    crmOpportunityOrdersBeans.stream().filter(o -> ordNos.contains(o.getOrdNo())).findFirst().ifPresent(o -> {
+                        s.setExt$Item("realFrequency", String.valueOf(o.getTestingFrequency()));
+                        s.setExt$Item("realCycle", String.valueOf(o.getTestingDays()));
+                    });
+                    updateSchemeOrderList.add(s);
+                }
+            });
+            if (!updateSchemeOrderList.isEmpty()) {
+                projOrderService.getDao().update(updateSchemeOrderList, "realFrequency", "realCycle");
+            }
+        }
         // 查询测试方法和监测能力库方法
         List<Long> capacityItemGroupIdList = newSchemeOrderList.stream().map(EmcProjOrderBean::getItemGroupId).distinct().collect(Collectors.toList());
         List<EmcCapacityItemGroupBean> capacityItemGroupList = capacityItemGroupService.getDao().selectListByOneColumnValues(capacityItemGroupIdList, "id");

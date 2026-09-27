@@ -544,7 +544,7 @@ public class PfProjectServiceImpl extends EmcProjectServiceImpl implements PfPro
         }
         existing = selectListByFilter(SearchFilter.instance().match("projNo", prefix).filter(MatchPattern.SB)
                 .match("BizCategoryCode", "ND").filter(MatchPattern.SEQ), wrapper).stream()
-                .filter(p -> p.getProjNo() != null && (p.getProjNo().length() == 12 || p.getProjNo().length() == 13)).collect(Collectors.toList());
+                .filter(p -> p.getProjNo().length() == 12 || p.getProjNo().length() == 13).collect(Collectors.toList());
         List<EmcProjectBean> sameName = existing.stream().filter(p -> ObjectUtils.equals(projName, p.getProjName())
                 && ObjectUtils.equals(contractNo, p.getExt$Item("contractno"))).collect(Collectors.toList());
         List<String> result = new ArrayList<>();
@@ -910,63 +910,7 @@ public class PfProjectServiceImpl extends EmcProjectServiceImpl implements PfPro
         if (!abnormalSendGroups.isEmpty()) {
             throw new InvalidDataException("任务存在异常数据不允许提交,异常数据为：" + abnormalSendGroups.get(0).getItemGroup());
         }
-        // 采样任务
-        List<EmcProjectBean> sampleProjectList = projectList.stream().filter(e -> Constant.YES.equals(e.getSample())).collect(Collectors.toList());
-        List<Long> sampleProjIdList = sampleProjectList.stream().map(e -> e.getId()).collect(Collectors.toList());
-        List<EmcProjSchemeBean> projSchemeList = projSchemeService.selectListByFilter(SearchFilter.instance().match("PROJID", sampleProjIdList).filter(MatchPattern.OR));
-        Map<Long, List<EmcProjSchemeBean>> projSchemeMap = projSchemeList.stream().collect(Collectors.groupingBy(r -> r.getProjId()));
-        // 送样任务
-        List<EmcProjectBean> noSampleProjectList = projectList.stream().filter(e -> !Constant.YES.equals(e.getSample())).collect(Collectors.toList());
-        List<Long> noSampleProjIdList = noSampleProjectList.stream().map(e -> e.getId()).collect(Collectors.toList());
-        List<EmcFolderBean> noSampleFolderList = folderService.selectListByFilter(SearchFilter.instance().match("PROJID", noSampleProjIdList).filter(MatchPattern.OR));
-        List<EmcOrderBean> orderList = orderService.selectListByFilter(SearchFilter.instance().match("PROJID", noSampleProjIdList).filter(MatchPattern.OR));
-        Map<Long, List<EmcOrderBean>> orderMap = orderList.stream().collect(Collectors.groupingBy(r -> r.getProjId()));
-
-        List<EmcProjSchemeBean> updateSchemeList = new ArrayList<>();
-        List<EmcFolderBean> updateFolderList = new ArrayList<>();
-        List<EmcOrderBean> updateOrderList = new ArrayList<>();
-        // 采样任务根据监测方案的排序码生成folderNo，送样任务的根据送样的排序码生成orderNo
-        projSchemeMap.forEach((projId, v) -> {
-            List<EmcProjSchemeBean> sortProjSchemeList = v.stream().sorted(Comparator.comparing(EmcProjSchemeBean::getSortNum)).collect(Collectors.toList());
-            EmcProjectBean projBean = sampleProjectList.stream().filter(e -> ObjectUtils.equals(e.getId(), projId)).findFirst().get();
-            List<String> folderNoList = folderService.generateFolderNosByProjId(projId, projBean.getProjNo(), v.get(0).getMonitorTmplId(), v.size());
-            for (int i = 0; i < sortProjSchemeList.size(); i++) {
-                sortProjSchemeList.get(i).setFolderNo(folderNoList.get(i));
-            }
-            updateSchemeList.addAll(sortProjSchemeList);
-        });
-
-        orderMap.forEach((projId, v) -> {
-            List<EmcOrderBean> normalOrderList = v.stream().filter(e -> "N/A".equals(e.getQcCategoryCode())).sorted(Comparator.comparing(EmcOrderBean::getOrderNum)).collect(Collectors.toList());
-            EmcProjectBean projBean = noSampleProjectList.stream().filter(e -> ObjectUtils.equals(e.getId(), projId)).findFirst().get();
-            // 给个不存在的projId，让其重新生成folderNo
-            List<String> folderNoList = folderService.generateFolderNosByProjId(1L, projBean.getProjNo(), normalOrderList.get(0).getMonitorTmplId(), normalOrderList.size());
-            List<EmcFolderBean> findFolderList = noSampleFolderList.stream().filter(e -> ObjectUtils.equals(projId, e.getProjId())).collect(Collectors.toList());
-            for (int i = 0; i < normalOrderList.size(); i++) {
-                normalOrderList.get(i).setOrderNo(folderNoList.get(i) + "001");
-                normalOrderList.get(i).setLabelNo(folderNoList.get(i) + "001");
-                for (int j = 0; j < findFolderList.size(); j++) {
-                    if (ObjectUtils.equals(findFolderList.get(j).getId(), normalOrderList.get(i).getFolderId())) {
-                        EmcFolderBean updateFolder = new EmcFolderBean();
-                        updateFolder.setId(findFolderList.get(j).getId());
-                        updateFolder.setFolderNo(folderNoList.get(i));
-                        updateFolderList.add(updateFolder);
-                    }
-                }
-            }
-            updateOrderList.addAll(normalOrderList);
-        });
-
         getDao().update(projectList, "STATUS", "PROJNODE", "PROJCREATEDTIME");
-        projSchemeService.getDao().update(updateSchemeList, "FOLDERNO");
-        // folderNo唯一键，先设置成其它值，再设置为正常值
-        List<EmcFolderBean> cloneFolderList = ObjectUtils.clone(updateFolderList);
-        cloneFolderList.forEach(f -> {
-            f.setFolderNo(f.getFolderNo() + "-u");
-        });
-        folderService.getDao().update(cloneFolderList, "FOLDERNO");
-        folderService.getDao().update(updateFolderList, "FOLDERNO");
-        orderService.getDao().update(updateOrderList, "ORDERNO", "LABELNO");
         insertAuditRecordByProject(projectList, "PROCESS_START", wrapper.getParamValue("bpmn_comment"), coreBpmnInstanceStatusDTOList);
         return coreBpmnInstanceStatusDTOList;
     }
@@ -1031,126 +975,6 @@ public class PfProjectServiceImpl extends EmcProjectServiceImpl implements PfPro
         List<Long> idList = coreBpmnInstanceStatusDTOList.stream().map(CoreBpmnInstanceStatusDTO::getId).collect(Collectors.toList());
         List<EmcProjectBean> projectList = selectListByFilter(SearchFilter.instance().match("ID", idList).filter(MatchPattern.OR));
 
-        LoginUser loginUser = LocalContextHelper.getLoginPrincipal();
-        ExecutorHelper.submit(() -> {
-            try {
-                LocalContextHelper.setUserLogin(loginUser);
-                // 计划合同项目
-                List<EmcProjectBean> planContractProjectList = projectList.stream().filter(p -> !ObjectUtils.isEmpty(p.getSplitContractId())).collect(Collectors.toList());
-                List<EmcProjectBean> normalProjectList = projectList.stream().filter(p -> ObjectUtils.isEmpty(p.getSplitContractId())).collect(Collectors.toList());
-
-                if (!planContractProjectList.isEmpty()) {
-                    // 对于计划合同项目，需要ERP系统进行下单确认后才能生成业务数据
-                    planContractProjectList.forEach(p -> p.setStatus("erpConfirm"));
-                    getDao().update(planContractProjectList, "STATUS");
-                }
-
-                logger.info("计划合同项目数量 -> {}", planContractProjectList.size());
-
-                // 样品登记的项目提交时插入业务流程表
-                // 筛选不采样的数据进行处理
-                List<EmcProjectBean> noSampleProjectList = normalProjectList.stream().filter(e -> Constant.NO.equals(e.getSample())).collect(Collectors.toList());
-                // 样品登记的项目提交完成项目流程结束
-                if (!noSampleProjectList.isEmpty()) {
-                    List<EmcProjectBean> updateProjectList = new ArrayList<>();
-                    List<Long> noSampleProjectIdList = noSampleProjectList.stream().map(EmcProjectBean::getId).collect(Collectors.toList());
-
-                    orderService.insertBpDataByProject(noSampleProjectIdList);
-
-                    // 删除无效审核记录
-                    List<CoreBpmnCommentBean> filterBpmnCommentList = new ArrayList<>();
-                    noSampleProjectIdList.forEach(id -> {
-                        CoreBpmnCommentBean filterBpmnComment = new CoreBpmnCommentBean();
-                        filterBpmnComment.setTargetId(getDao().getTable() + "$" + id);
-                        filterBpmnComment.setStatusCode("schemeedit");
-                        filterBpmnCommentList.add(filterBpmnComment);
-                    });
-
-                    // 样品测试status置为preLogged
-                    List<EmcOrderTaskBean> orderTaskList = orderTaskService.getDao().selectListByOneColumnValues(noSampleProjectIdList, "PROJID");
-                    orderTaskList.forEach(a -> a.setStatus(EmcBizConstant.ORDERTASK_STATUS_PRELOGGED));
-                    orderTaskService.getDao().update(orderTaskList, "STATUS");
-
-                    coreBpmnCommentService.getDao().deleteBy(filterBpmnCommentList, "statusCode");
-                    //sampleService.insertByProject(noSampleProjectIdList, EmcBizConstant.SAMPLE_STATUS_PRELOGGED);
-                    // 新增报告数据,不可见，也就是项目监测的样品类型表，因为禅城是按照样品类型进行出报告，所以这里把t_emc_report作为报告数据主表了
-                    reportService.insertByProject(noSampleProjectIdList, false);
-                    // 更新folder表状态
-                    List<Long> folderIdList = orderTaskList.stream().filter(t -> !ObjectUtils.isEmpty(t.getFolderId())).map(EmcOrderTaskBean::getFolderId).distinct().collect(Collectors.toList());
-                    List<EmcFolderBean> folderList = new ArrayList<>();
-                    folderIdList.forEach(e -> {
-                        EmcFolderBean folder = new EmcFolderBean();
-                        folder.setId(e);
-                        folder.setStatus(EmcBizConstant.FOLDER_STATUS_DRAW);
-                        folder.setProcessStatus(EmcBizConstant.FOLDER_PROCESSSTATUS_DONE);
-                        folderList.add(folder);
-                    });
-                    folderService.getDao().update(folderList, "STATUS", "PROCESSSTATUS");
-                    // 更新项目节点状态
-                    noSampleProjectIdList.forEach(id -> {
-                        EmcProjectBean updateProject = new EmcProjectBean();
-                        updateProject.setId(id);
-                        updateProject.setStatus(EmcBizConstant.PROJECT_STATUS_AUDITFINISHED);
-                        updateProjectList.add(updateProject);
-                    });
-
-                    // 更新项目节点状态
-                    getDao().update(updateProjectList, "STATUS");
-                }
-                logger.info("普通送样项目数量 -> {}", planContractProjectList.size());
-
-                // 采样任务
-                List<EmcProjectBean> sampleProjectList = normalProjectList.stream().filter(e -> Constant.YES.equals(e.getSample())).collect(Collectors.toList());
-                if (!sampleProjectList.isEmpty()) {
-                    List<Long> sampleProjectIdList = sampleProjectList.stream().map(EmcProjectBean::getId).collect(Collectors.toList());
-                    List<EmcProjectBean> updateProjectList = new ArrayList<>();
-
-                    if (!sampleProjectIdList.isEmpty()) {
-                        // 不存在过质量控制的项目，新增主业务流程数据
-                        projSchemeService.insertBpData(sampleProjectIdList);
-                        // 新增报告数据，不可见，也就是项目监测的样品类型表，因为禅城是按照样品类型进行出报告，所以这里把t_emc_report作为报告数据主表了
-                        reportService.insertByProject(sampleProjectIdList, false);
-
-                        // 更新项目节点状态
-                        sampleProjectIdList.forEach(i -> {
-                            EmcProjectBean updateProject = new EmcProjectBean();
-                            updateProject.setId(i);
-                            updateProject.setStatus(EmcBizConstant.PROJECT_STATUS_AUDITFINISHED);
-                            updateProjectList.add(updateProject);
-                        });
-                    }
-
-                    // 更新项目节点状态
-                    getDao().update(updateProjectList, "STATUS");
-                }
-
-                logger.info("普通采样项目数量 -> {}", planContractProjectList.size());
-
-                insertAuditRecordByProject(normalProjectList, "PROCESS_COMPLETE", wrapper.getParamValue("bpmn_comment"), coreBpmnInstanceStatusDTOList);
-                List<Long> normalProjectIdList = normalProjectList.stream().map(EmcProjectBean::getId).collect(Collectors.toList());
-
-                ProjectNodeUtils.updateNodes(normalProjectIdList);
-
-                logger.info("更新数据状态");
-                projectList.forEach(p -> p.setExt$Item("dataStatus", ""));
-                getDao().update(projectList, "dataStatus");
-
-                // 给ERP发送方案审核结果
-                logger.info("给ERP发送方案审核结果");
-                erpOrderService.reviewOrderContract(projectList, false, null);
-
-                // 推送项目信息到ERP
-                logger.info("推送项目信息到ERP");
-                projectList.forEach(project -> erpContractOrderService.pushPlanContractOrder(project));
-            } catch (Exception e) {
-                logger.error(e);
-                String projectNos = projectList.stream().filter(p -> !StringUtils.isEmpty(p.getProjNo())).map(EmcProjectBean::getProjNo).collect(Collectors.joining(","));
-                logger.error("项目【{}】业务数据生成失败，准备回退业务流程，错误原因为：{}", projectNos, e.getMessage());
-                e.printStackTrace();
-                undoBasic(wrapper);
-                logger.info("项目【{}】业务业务流程回退成功", projectNos);
-            }
-        });
         return coreBpmnInstanceStatusDTOList;
     }
 
@@ -3985,8 +3809,26 @@ public class PfProjectServiceImpl extends EmcProjectServiceImpl implements PfPro
             } catch (UnsupportedEncodingException e) {
                 throw new RuntimeException(e);
             }
+            logger.info("excelFileUrl----------" + excelUrl);
             String fileName = project.getProjNo() + project.getProjName() + "-任务流转单" + DateTimeUtils.formatLocalDateTime(project.getEntrustDate(), "yyyy年MM月dd日") + ".xlsx";
-            File excelFile = downloadFileFromFr(excelUrl, fileName);
+            File excelFile = new File("");
+            try {
+                excelFile = downloadFileFromFr(excelUrl, fileName);
+            } catch (Exception first) {
+                logger.info(project.getProjName() + "第一次请求异常，开始重试第二次请求");
+                try {
+                    excelFile = downloadFileFromFr(excelUrl, fileName);
+                } catch (Exception second) {
+                    logger.info(project.getProjName() + "第二次请求异常，开始重试第三次请求");
+                    try {
+                        excelFile = downloadFileFromFr(excelUrl, fileName);
+                    } catch (Exception third) {
+                        logger.info(project.getProjName() + "第三次请求异常，跳到下一个项目");
+                        logger.error(third.getMessage());
+                        continue;
+                    }
+                }
+            }
             CoreFileBean file = new CoreFileBean();
             file.setTargetId("T_EMC_PORJECT-export$" + project.getId());
             file.setBizCategory("export");
@@ -4000,17 +3842,20 @@ public class PfProjectServiceImpl extends EmcProjectServiceImpl implements PfPro
 
     private String parseFineReportParqam(Object object, String param) {
         if (StringUtils.isEmpty(param)) return "";
+        String[] params = StringUtils.split(param, ",");
         StringBuilder sb = new StringBuilder();
-        for (String item : StringUtils.split(param, ",")) {
+        for (String item : params) {
             String[] pair = StringUtils.split(item, "=");
-            sb.append("&").append(pair[0]).append("=").append(String.valueOf(BeanUtils.getPropertyValue(object, pair[1])));
+            Object value = BeanUtils.getPropertyValue(object, pair[1]);
+            sb.append("&").append(pair[0]).append("=").append(value);
         }
         return sb.toString();
     }
 
     private File downloadFileFromFr(String url, String fileName) {
         FilePathDTO path = FilePathDTO.of(FileScope.temp.name(), "", StringUtils.randomUUID(8), fileName);
-        File file = FilePathManager.getLocalPath(path).toFile();
+        Path destPath = FilePathManager.getLocalPath(path);
+        File file = new File(destPath.toString());
         HttpClientManager.getInstance().download(url, file);
         return file;
     }
@@ -4210,7 +4055,7 @@ public class PfProjectServiceImpl extends EmcProjectServiceImpl implements PfPro
         try {
             decoderBase64File(base64, tempFile.getPath());
         } catch (IOException e) {
-            throw new FileException(e);
+            e.printStackTrace();
         }
         CoreFileBean insertCoreFile = new CoreFileBean();
         Long key = ApplicationContextHelper.getNextIdentity();
@@ -4233,13 +4078,13 @@ public class PfProjectServiceImpl extends EmcProjectServiceImpl implements PfPro
     private File decoderBase64File(String base64Code, String targetPath) throws IOException {
         File file = new File(targetPath);
         Files.createDirectories(file.getParentFile().toPath(), new FileAttribute[0]);
-        if (file.exists() && !file.delete()) {
-            throw new IOException("无法覆盖临时图片: " + targetPath);
+        if (file.exists()) {
+            file.delete();
         }
         byte[] buffer = Base64.decodeBase64(base64Code);
-        try (FileOutputStream out = new FileOutputStream(targetPath)) {
-            out.write(buffer);
-        }
+        FileOutputStream out = new FileOutputStream(targetPath);
+        out.write(buffer);
+        out.close();
         return file;
     }
 

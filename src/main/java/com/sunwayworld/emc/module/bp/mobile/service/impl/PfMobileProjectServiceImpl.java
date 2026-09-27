@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import com.alibaba.fastjson.JSONObject;
@@ -19,6 +20,7 @@ import com.sunwayworld.cloud.module.fr.report.bean.CoreReportConfigLineBean;
 import com.sunwayworld.cloud.module.fr.report.service.CoreReportConfigLineService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.commons.collections4.ListUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.sunwayworld.emc.framework.constant.EmcBizConstant;
 import com.sunwayworld.emc.framework.constant.EmcConstant;
 import com.sunwayworld.emc.framework.constant.PfConstant;
+import com.sunwayworld.emc.module.bp.auditrecord.service.EmcAuditRecordService;
 import com.sunwayworld.emc.module.bp.bp.bean.EmcFolderBean;
 import com.sunwayworld.emc.module.bp.bp.bean.EmcOrderBean;
 import com.sunwayworld.emc.module.bp.bp.bean.EmcOrderContainerBean;
@@ -46,6 +49,7 @@ import com.sunwayworld.emc.module.bp.mobile.bean.EmcMobilePaginationDTO;
 import com.sunwayworld.emc.module.bp.mobile.bean.EmcOperationType;
 import com.sunwayworld.emc.module.bp.mobile.service.PfMobileProjectService;
 import com.sunwayworld.emc.module.bp.project.project.bean.EmcOrderItemGroupBean;
+import com.sunwayworld.emc.module.bp.project.project.bean.EmcOrderItemBean;
 import com.sunwayworld.emc.module.bp.project.project.bean.EmcProjectBean;
 import com.sunwayworld.emc.module.bp.project.project.service.EmcOrderItemService;
 import com.sunwayworld.emc.module.bp.project.project.service.EmcOrderItemGroupService;
@@ -73,6 +77,8 @@ import com.sunwayworld.emc.module.mdm.basemdm.testcategory.service.EmcTestCatego
 import com.sunwayworld.emc.module.mdm.basemdm.unit.bean.EmcUnitBean;
 import com.sunwayworld.emc.module.mdm.basemdm.unit.service.EmcUnitService;
 import com.sunwayworld.emc.module.mdm.bizmdm.capacity.service.EmcTestCapacityService;
+import com.sunwayworld.emc.module.mdm.bizmdm.capacity.service.EmcCapacityItemGroupService;
+import com.sunwayworld.emc.module.mdm.bizmdm.capacity.service.EmcCapacityItemService;
 import com.sunwayworld.emc.module.mdm.bizmdm.client.bean.EmcClientBean;
 import com.sunwayworld.emc.module.mdm.bizmdm.client.bean.EmcMonitorPointBean;
 import com.sunwayworld.emc.module.mdm.bizmdm.client.service.EmcClientService;
@@ -95,6 +101,7 @@ import com.sunwayworld.emc.module.mdm.bizmdm.test.service.EmcItemResultService;
 import com.sunwayworld.emc.module.mdm.bizmdm.test.service.EmcItemService;
 import com.sunwayworld.emc.module.mdm.bizmdm.test.service.EmcTestMethodOrderCategoryService;
 import com.sunwayworld.emc.module.mdm.bizmdm.test.service.EmcTestMethodService;
+import com.sunwayworld.emc.module.mdm.bizmdm.test.service.EmcRelatedTestMethodService;
 import com.sunwayworld.emc.module.mdm.bizmdm.test.service.EmcTestService;
 import com.sunwayworld.emc.module.mdm.emp.emp.service.EmcEmpService;
 import com.sunwayworld.emc.module.mdm.equipt.equipt.bean.EmcEquiptBean;
@@ -121,6 +128,7 @@ import com.sunwayworld.framework.data.page.Pagination;
 import com.sunwayworld.framework.i18n.I18nHelper;
 import com.sunwayworld.framework.mybatis.mapper.MatchPattern;
 import com.sunwayworld.framework.mybatis.mapper.SearchFilter;
+import com.sunwayworld.framework.database.sql.Order;
 import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;
 import com.sunwayworld.framework.spring.annotation.GikamBean;
 import com.sunwayworld.framework.support.PersistableHelper;
@@ -295,6 +303,18 @@ public class PfMobileProjectServiceImpl extends EmcMobileProjectServiceImpl impl
 
     @Autowired
     private EmcDeliveryService deliveryService;
+
+    @Autowired
+    private EmcAuditRecordService auditRecordService;
+
+    @Autowired
+    private EmcCapacityItemGroupService capacityItemGroupService;
+
+    @Autowired
+    private EmcCapacityItemService capacityItemService;
+
+    @Autowired
+    private EmcRelatedTestMethodService relatedTestMethodService;
 
     @Override
     public EmcMobileDTO selectProjectListByCond(RestJsonWrapperBean wrapper) {
@@ -472,7 +492,7 @@ public class PfMobileProjectServiceImpl extends EmcMobileProjectServiceImpl impl
                 mobileDTO.setOrderTaskPage(orderTaskPage);
                 break;
             case "orderTaskResult" :
-                Page<EmcOrderTaskResultBean> resultPage = folderIdList.isEmpty() ? new Pagination<>() : orderTaskResultService.selectPaginationByFilter(SearchFilter.instance().match("folderId", folderIdList).filter(MatchPattern.OR).match("analysisType", EmcBizConstant.ANALYSISCATEGORY_SAMPLING).filter(MatchPattern.SEQ), wrapper);
+                Page<EmcOrderTaskResultBean> resultPage = folderIdList.isEmpty() ? new Pagination<>() : orderTaskResultService.selectPaginationByFilter(SearchFilter.instance().match("folderId", folderIdList).filter(MatchPattern.OR), wrapper);
                 mobileDTO.setOrderTaskResultPage(resultPage);
                 break;
             case "orderItemGroup" :
@@ -484,7 +504,8 @@ public class PfMobileProjectServiceImpl extends EmcMobileProjectServiceImpl impl
             case "orderItem" :
                 List<EmcOrderBean> curOrderList = orderService.getDao().selectListByOneColumnValues(folderIdList, "folderId", Collections.singletonList("id"));
                 List<Long> curOrderIdList = curOrderList.stream().map(EmcOrderBean::getId).collect(Collectors.toList());
-                mobileDTO.setOrderItemPage(orderItemService.selectPagination(() -> orderItemService.getDao().selectListByOneColumnValues(curOrderIdList, "orderId"), wrapper.extractPageRowBounds()));
+                Page<EmcOrderItemBean> orderItemPage = this.orderItemService.selectPagination(() -> this.orderItemService.getDao().selectListByOneColumnValues(curOrderIdList, "orderId"), wrapper.extractPageRowBounds());
+                mobileDTO.setOrderItemPage(orderItemPage);
                 break;
             case "projectFile" :
                 String targetId = projectService.getDao().getTable() + "$" + id;
@@ -640,126 +661,163 @@ public class PfMobileProjectServiceImpl extends EmcMobileProjectServiceImpl impl
     public EmcMobilePaginationDTO selectStaticDataByPagination(RestJsonWrapperBean wrapper) {
         String operationTypeStr = wrapper.getParamValue("operationType");
         EmcMobilePaginationDTO mobileDTO = new EmcMobilePaginationDTO();
-        if (StringUtils.isEmpty(operationTypeStr)) {
-            mobileDTO.setMessage(I18nHelper.getMessage("EMC.MODULE.BP.MOBILE.OPERATIONTYPE.TIP.IS_EMPTY"));
+        if (StringUtils.isEmpty((String)operationTypeStr)) {
+            mobileDTO.setMessage(I18nHelper.getMessage((String)"EMC.MODULE.BP.MOBILE.OPERATIONTYPE.TIP.IS_EMPTY", (String[])new String[0]));
             return mobileDTO;
         }
-
-        EmcOperationType operationType = EmcOperationType.getOperationType(operationTypeStr);
+        EmcOperationType operationType = EmcOperationType.getOperationType((String)operationTypeStr);
         if (operationType == null) {
-            mobileDTO.setMessage(I18nHelper.getMessage("EMC.MODULE.BP.MOBILE.OPERATIONTYPE.TIP.NOT_EXIST"));
+            mobileDTO.setMessage(I18nHelper.getMessage((String)"EMC.MODULE.BP.MOBILE.OPERATIONTYPE.TIP.NOT_EXIST", (String[])new String[0]));
             return mobileDTO;
         }
-
         String parentOrgId = LocalContextHelper.getLoginUser().getExt$Item("parentOrgId");
         switch (operationType) {
-            case EQUIPT:
-                mobileDTO.setEquiptPage(equiptService.selectPaginationByFilter(SearchFilter.instance().match("STATUS", "inUse").filter(MatchPattern.EQ).match("orgId", parentOrgId).filter(MatchPattern.SB), wrapper));
+            case EQUIPT: {
+                mobileDTO.setEquiptPage(this.equiptService.selectPaginationByFilter(SearchFilter.instance().match("STATUS", (Object)"inUse").filter(MatchPattern.EQ).match("orgId", (Object)parentOrgId).filter(MatchPattern.SB), wrapper));
                 break;
-            case EQUIPT_TEST_METHOD:
-                Page<EmcEquiptTestMethodBean> equiptTestMethodPage = equiptTestMethodService.selectPaginationByFilter(SearchFilter.instance().match("orgId", parentOrgId).filter(MatchPattern.SEQ), wrapper);
+            }
+            case EQUIPT_TEST_METHOD: {
+                Page<EmcEquiptTestMethodBean> equiptTestMethodPage = this.equiptTestMethodService.selectPaginationByFilter(SearchFilter.instance().match("orgId", (Object)parentOrgId).filter(MatchPattern.SEQ), wrapper);
                 mobileDTO.setEquiptTestMethodPage(equiptTestMethodPage);
                 break;
-            case EMP:
-                mobileDTO.setEmpPage(empService.selectPaginationByFilter(SearchFilter.instance().match("orgId", parentOrgId).filter(MatchPattern.SB), wrapper));
+            }
+            case EMP: {
+                mobileDTO.setEmpPage(this.empService.selectPaginationByFilter(SearchFilter.instance().match("orgId", (Object)parentOrgId).filter(MatchPattern.SB), wrapper));
                 break;
-            case PROPERTY_FIELD:
-                mobileDTO.setPropertyFieldPage(propertyFieldService.selectPagination(() -> propertyFieldService.getDao().selectList(new EmcPropertyFieldBean()), wrapper.extractPageRowBounds()));
+            }
+            case PROPERTY_FIELD: {
+                mobileDTO.setPropertyFieldPage(this.propertyFieldService.selectPagination(wrapper));
                 break;
-            case MONITOR_TMPL:
-                mobileDTO.setMonitorTmplPage(monitorTmplService.selectPaginationByFilter(SearchFilter.instance().match("orgId", parentOrgId).filter(MatchPattern.SB), wrapper));
+            }
+            case MONITOR_TMPL: {
+                mobileDTO.setMonitorTmplPage(this.monitorTmplService.selectPaginationByFilter(SearchFilter.instance().match("orgId", (Object)parentOrgId).filter(MatchPattern.SB), wrapper));
                 break;
-            case CORE_CODE:
-                mobileDTO.setCoreCodePage(codeService.selectPagination(() -> codeService.getDao().selectList(new CoreCodeBean()), wrapper.extractPageRowBounds()));
+            }
+            case CORE_CODE: {
+                mobileDTO.setCoreCodePage(this.codeService.selectPagination(wrapper));
                 break;
-            case ITEM_RESULT:
-                mobileDTO.setItemResultPage(itemResultService.selectPagination(() -> itemResultService.getDao().selectList(new EmcItemResultBean()), wrapper.extractPageRowBounds()));
+            }
+            case ITEM_RESULT: {
+                mobileDTO.setItemResultPage(this.itemResultService.selectPagination(wrapper));
                 break;
-            case MONITOR_POINT:
-                mobileDTO.setMonitorPointPage(monitorPointService.selectPagination(() -> monitorPointService.getDao().selectList(new EmcMonitorPointBean()), wrapper.extractPageRowBounds()));
+            }
+            case MONITOR_POINT: {
+                mobileDTO.setMonitorPointPage(this.monitorPointService.selectPagination(wrapper));
                 break;
-            case CLIENT:
-                mobileDTO.setClientPage(clientService.selectPagination(() -> clientService.getDao().selectList(new EmcClientBean()), wrapper.extractPageRowBounds()));
+            }
+            case CLIENT: {
+                mobileDTO.setClientPage(this.clientService.selectPagination(wrapper));
                 break;
-            case MONITOR_TMPL_GROUP:
-                mobileDTO.setMonitorTmplGroupPage(monitorTmplGroupService.selectPagination(() -> monitorTmplGroupService.getDao().selectList(new EmcMonitorTmplGroupBean()), wrapper.extractPageRowBounds()));
+            }
+            case MONITOR_TMPL_GROUP: {
+                mobileDTO.setMonitorTmplGroupPage(this.monitorTmplGroupService.selectPagination(wrapper));
                 break;
-            case MONITOR_SCHEME:
-                List<EmcMonitorTmplBean> monitorTmplList = monitorTmplService.selectListByFilter(SearchFilter.instance().match("orgId", parentOrgId).filter(MatchPattern.SB));
+            }
+            case MONITOR_SCHEME: {
+                List<EmcMonitorTmplBean> monitorTmplList = this.monitorTmplService.selectListByFilter(SearchFilter.instance().match("orgId", (Object)parentOrgId).filter(MatchPattern.SB), new Order[0]);
                 List<String> monitorTmplIdList = monitorTmplList.stream().map(EmcMonitorTmplBean::getId).collect(Collectors.toList());
-                mobileDTO.setMonitorSchemePage(monitorSchemeService.selectPaginationByFilter(SearchFilter.instance().match("monitorTmplId", monitorTmplIdList).filter(MatchPattern.OR), wrapper));
+                mobileDTO.setMonitorSchemePage(this.monitorSchemeService.selectPaginationByFilter(SearchFilter.instance().match("monitorTmplId", monitorTmplIdList).filter(MatchPattern.OR), wrapper));
                 break;
-            case TEST:
-                mobileDTO.setTestPage(testService.selectPagination(() -> testService.getDao().selectList(new EmcTestBean()), wrapper.extractPageRowBounds()));
+            }
+            case TEST: {
+                mobileDTO.setTestPage(this.testService.selectPagination(wrapper));
                 break;
-            case TEST_CATEGORY:
-                mobileDTO.setTestCategoryPage(testCategoryService.selectPagination(() -> testCategoryService.getDao().selectList(new EmcTestCategoryBean()), wrapper.extractPageRowBounds()));
+            }
+            case TEST_CATEGORY: {
+                mobileDTO.setTestCategoryPage(this.testCategoryService.selectPagination(wrapper));
                 break;
-            case TEST_METHOD:
-                mobileDTO.setTestMethodPage(testMethodService.selectPagination(() -> testMethodService.getDao().selectList(new EmcTestMethodBean()), wrapper.extractPageRowBounds()));
+            }
+            case TEST_METHOD: {
+                mobileDTO.setTestMethodPage(this.testMethodService.selectPagination(wrapper));
                 break;
-            case METHOD:
-                mobileDTO.setMethodPage(methodService.selectPagination(() -> methodService.getDao().selectList(new EmcMethodBean()), wrapper.extractPageRowBounds()));
+            }
+            case METHOD: {
+                mobileDTO.setMethodPage(this.methodService.selectPagination(wrapper));
                 break;
-            case ITEM:
-                Page<EmcItemBean> itemPage = itemService.selectPagination(() -> itemService.getDao().selectList(new EmcItemBean()), wrapper.extractPageRowBounds());
+            }
+            case ITEM: {
+                Page<EmcItemBean> itemPage = this.itemService.selectPagination(wrapper);
                 mobileDTO.setItemPage(itemPage);
                 break;
-            case ITEMGROUP:
-                mobileDTO.setItemGroupPage(itemGroupService.selectPagination(() -> itemGroupService.getDao().selectList(new EmcItemGroupBean()), wrapper.extractPageRowBounds()));
+            }
+            case ITEMGROUP: {
+                mobileDTO.setItemGroupPage(this.itemGroupService.selectPagination(wrapper));
                 break;
-            case GROUPITEM:
-                mobileDTO.setGroupItemPage(groupItemService.selectPagination(() -> groupItemService.getDao().selectList(new EmcGroupItemBean()), wrapper.extractPageRowBounds()));
+            }
+            case GROUPITEM: {
+                mobileDTO.setGroupItemPage(this.groupItemService.selectPagination(wrapper));
                 break;
-            case CONTAINER:
-                mobileDTO.setContainerPage(containerCategoryService.selectPagination(() -> containerCategoryService.getDao().selectList(new EmcContainerCategoryBean()), wrapper.extractPageRowBounds()));
+            }
+            case CONTAINER: {
+                mobileDTO.setContainerPage(this.containerCategoryService.selectPagination(wrapper));
                 break;
-            case CALIBRATION:
-                LocalDate startDate = DateTimeUtils.plusDays(LocalDate.now(), -7L);
-                Page<EmcEquiptCalibrationBean> calibrationPage = calibrationService.selectPaginationByFilter(SearchFilter.instance().match("CALIBRATIONDATE", startDate).filter(MatchPattern.DGOE), wrapper);
+            }
+            case CALIBRATION: {
+                LocalDate startDate = DateTimeUtils.plusDays((LocalDate)LocalDate.now(), -7L);
+                Page<EmcEquiptCalibrationBean> calibrationPage = this.calibrationService.selectPaginationByFilter(SearchFilter.instance().match("CALIBRATIONDATE", (Object)startDate).filter(MatchPattern.DGOE), wrapper);
                 List<Long> calibrationIdList = calibrationPage.getRows().stream().map(EmcEquiptCalibrationBean::getId).collect(Collectors.toList());
-                List<EmcEquiptCalibrationLineBean> calibrationLineList = calibrationLineService.getDao().selectListByOneColumnValues(calibrationIdList, "CALIBRATIONID");
+                List<EmcEquiptCalibrationLineBean> calibrationLineList = this.calibrationLineService.getDao().selectListByOneColumnValues(calibrationIdList, "CALIBRATIONID", new Order[0]);
                 mobileDTO.setCalibrationPage(calibrationPage);
-                mobileDTO.setCalibrationLinePage(new Pagination<>(calibrationLineList));
+                mobileDTO.setCalibrationLinePage((Page)new Pagination(calibrationLineList));
                 break;
-            case EQUIPTCATEGORY:
-                mobileDTO.setEquiptCategoryPage(equiptCategoryService.selectPagination(() -> equiptCategoryService.getDao().selectList(new EmcEquiptCategoryBean()), wrapper.extractPageRowBounds()));
+            }
+            case EQUIPTCATEGORY: {
+                mobileDTO.setEquiptCategoryPage(this.equiptCategoryService.selectPagination(wrapper));
                 break;
-            case UNIT:
-                mobileDTO.setUnitPage(unitService.selectPagination(() -> unitService.getDao().selectList(new EmcUnitBean()), wrapper.extractPageRowBounds()));
+            }
+            case UNIT: {
+                mobileDTO.setUnitPage(this.unitService.selectPagination(wrapper));
                 break;
-            case QC_CATEGORY:
-                mobileDTO.setQcCategoryPage(qcCategoryService.selectPagination(() -> qcCategoryService.getDao().selectListByOneColumnValue("scene", "USECATEGORY"), wrapper.extractPageRowBounds()));
+            }
+            case QC_CATEGORY: {
+                mobileDTO.setQcCategoryPage(this.qcCategoryService.selectPagination(() -> this.qcCategoryService.getDao().selectListByOneColumnValue((Object)"scene", "USECATEGORY", new Order[0]), wrapper.extractPageRowBounds()));
                 break;
-            case TEST_ORDER_CATEGORY:
-                mobileDTO.setTestOrderCategoryPage(orderCategoryService.selectPagination(() -> orderCategoryService.getDao().selectList(new EmcTestMethodOrderCategoryBean()), wrapper.extractPageRowBounds()));
+            }
+            case TEST_ORDER_CATEGORY: {
+                mobileDTO.setTestOrderCategoryPage(this.orderCategoryService.selectPagination(wrapper));
                 break;
-            case TEST_CAPACITY:
-                mobileDTO.setTestCapacityPage(testCapacityService.selectPagination(() -> testCapacityService.getDao().selectListByOneColumnValue(parentOrgId, "orgId"), wrapper.extractPageRowBounds()));
+            }
+            case TEST_CAPACITY: {
+                mobileDTO.setTestCapacityPage(this.testCapacityService.selectPagination(() -> this.testCapacityService.getDao().selectListByOneColumnValue((Object)parentOrgId, "orgId", new Order[0]), wrapper.extractPageRowBounds()));
                 break;
-            case ACQ_SCRIPT:
-                mobileDTO.setAcqScriptPage(acqScriptService.selectPaginationByFilter(SearchFilter.instance().match("orgId", parentOrgId).filter(MatchPattern.SEQ).match("source", "sampling").filter(MatchPattern.SEQ), wrapper));
+            }
+            case ACQ_SCRIPT: {
+                mobileDTO.setAcqScriptPage(this.acqScriptService.selectPaginationByFilter(SearchFilter.instance().match("orgId", (Object)parentOrgId).filter(MatchPattern.SEQ).match("source", (Object)"sampling").filter(MatchPattern.SEQ), wrapper));
                 break;
-            case EAS_PARAM:
-                mobileDTO.setEasParamPage(easParamService.selectPagination(wrapper));
+            }
+            case EAS_PARAM: {
+                mobileDTO.setEasParamPage(this.easParamService.selectPagination(wrapper));
                 break;
-            case EAS_PRE_ANALY:
-                mobileDTO.setEasPreAnalyPage(easPreAnalyService.selectPagination(wrapper));
+            }
+            case EAS_PRE_ANALY: {
+                mobileDTO.setEasPreAnalyPage(this.easPreAnalyService.selectPagination(wrapper));
                 break;
-            case EAS_RESULT:
-                mobileDTO.setEasResultPage(easResultService.selectPagination(wrapper));
+            }
+            case EAS_RESULT: {
+                mobileDTO.setEasResultPage(this.easResultService.selectPagination(wrapper));
                 break;
-            case EQUIPT_TEST_ITEM:
-                List<EmcEquiptAcqScriptBean> acqScriptList = acqScriptService.selectListByFilter(SearchFilter.instance().match("orgId", parentOrgId).filter(MatchPattern.SEQ).match("source", "sampling").filter(MatchPattern.SEQ));
+            }
+            case CAPACITY_ITEM_GROUP: {
+                mobileDTO.setCapacityItemGroupPage(this.capacityItemGroupService.selectPagination(wrapper));
+                break;
+            }
+            case CAPACITY_ITEM: {
+                mobileDTO.setCapacityItemPage(this.capacityItemService.selectPagination(wrapper));
+                break;
+            }
+            case RELATED_TEST_METHOD: {
+                mobileDTO.setRelatedTestMethodPage(this.relatedTestMethodService.selectPagination(wrapper));
+                break;
+            }
+            case EQUIPT_TEST_ITEM: {
+                List<EmcEquiptAcqScriptBean> acqScriptList = this.acqScriptService.selectListByFilter(SearchFilter.instance().match("orgId", (Object)parentOrgId).filter(MatchPattern.SEQ).match("source", (Object)"sampling").filter(MatchPattern.SEQ), new Order[0]);
                 List<Long> acqScriptIdList = acqScriptList.stream().map(EmcEquiptAcqScriptBean::getId).collect(Collectors.toList());
-                List<EmcEquiptBean> equiptList = equiptService.getDao().selectListByOneColumnValues(acqScriptIdList, "acqScriptId", Collections.singletonList("id"));
+                List<EmcEquiptBean> equiptList = this.equiptService.getDao().selectListByOneColumnValues(acqScriptIdList, "acqScriptId", Collections.singletonList("id"), new Order[0]);
                 List<Long> acqEquiptIdList = equiptList.stream().map(EmcEquiptBean::getId).collect(Collectors.toList());
-                mobileDTO.setEquiptTestItemPage(acqEquiptIdList.isEmpty() ? new Pagination<>() : equiptTestItemService.selectPaginationByFilter(SearchFilter.instance().match("equiptId", acqEquiptIdList).filter(MatchPattern.OR), wrapper));
+                mobileDTO.setEquiptTestItemPage((Page)(acqEquiptIdList.isEmpty() ? new Pagination() : this.equiptTestItemService.selectPaginationByFilter(SearchFilter.instance().match("equiptId", acqEquiptIdList).filter(MatchPattern.OR), wrapper)));
                 break;
-            default:
-                break;
+            }
         }
-
         return mobileDTO;
     }
 
@@ -833,10 +891,10 @@ public class PfMobileProjectServiceImpl extends EmcMobileProjectServiceImpl impl
         Map<Long, EmcOrderTaskBean> orderTaskMap = new HashMap<>();
         updateOrderTask(mobileDTO, orderMap, orderTaskMap);
 
-        updateOrderTaskResult(mobileDTO, orderMap, orderTaskMap);
-
         //更新气的采样参数数据
         updateSampleParamData(mobileDTO,projectIdMap);
+
+        updateOrderTaskResult(mobileDTO, orderMap, orderTaskMap);
 
         updateEquiptRequisition(mobileDTO, sampleIdMap, calibrationIdMap);
 
@@ -1507,156 +1565,97 @@ public class PfMobileProjectServiceImpl extends EmcMobileProjectServiceImpl impl
         if (mobileOrderList == null || mobileOrderList.isEmpty()) {
             return;
         }
-
-        EmcOrderBean maxExtOrder = mobileOrderList.stream().max(Comparator.comparing(order -> order.getExt$().size())).orElseGet(EmcOrderBean::new);
-        List<String> updateColNames = getUpdateColNames(maxExtOrder);
-
-        // 区分需要更新或是新增的样品，mobileId 为空即表示为待更新的样品
         List<EmcOrderBean> allUpdateOrderList = mobileOrderList.stream().filter(f -> StringUtils.isEmpty(f.getMobileId())).collect(Collectors.toList());
         List<Long> updateOrderIdList = allUpdateOrderList.stream().map(EmcOrderBean::getId).collect(Collectors.toList());
-        List<EmcOrderBean> existUpdateOrderList = orderService.getDao().selectListByIds(updateOrderIdList, Collections.singletonList("ID"));
+        List<EmcOrderBean> existUpdateOrderList = this.orderService.getDao().selectListByIds(updateOrderIdList, Collections.singletonList("ID"), new Order[0]);
         List<Long> existUpdateOrderIdList = existUpdateOrderList.stream().map(EmcOrderBean::getId).collect(Collectors.toList());
-        // 过滤掉平板中存在但是系统中不存在的样品
         List<EmcOrderBean> updateOrderList = allUpdateOrderList.stream().filter(order -> existUpdateOrderIdList.contains(order.getId())).collect(Collectors.toList());
-
         List<EmcOrderBean> varOrderList = mobileOrderList.stream().filter(f -> !StringUtils.isEmpty(f.getMobileId())).collect(Collectors.toList());
         if (varOrderList.isEmpty()) {
-            updateOrderList.forEach(updateOrder -> orderMap.put(updateOrder.getId(), updateOrder));
-            convertSampleId(updateOrderList, sampleIdMap);
-            updateFolderStatus(updateOrderList);
-            orderService.getDao().update(updateOrderList, updateColNames);
+            updateOrderList.forEach(updateOrder -> orderMap.put(updateOrder.getId(), (EmcOrderBean)updateOrder));
+            this.convertSampleId(updateOrderList, sampleIdMap);
+            this.updateFolderStatus(updateOrderList);
+            this.orderService.getDao().updateIfChanged(updateOrderList);
             return;
         }
-
         List<String> mobileIdList = varOrderList.stream().map(EmcOrderBean::getMobileId).collect(Collectors.toList());
-        List<EmcOrderBean> existOrderList = orderService.getDao().selectListByOneColumnValues(mobileIdList, "MOBILEID");
+        List<EmcOrderBean> existOrderList = this.orderService.getDao().selectListByOneColumnValues(mobileIdList, "MOBILEID", new Order[0]);
         List<String> existMobileIdList = existOrderList.stream().map(EmcOrderBean::getMobileId).collect(Collectors.toList());
-
-        updateOrderList.forEach(updateOrder -> orderMap.put(updateOrder.getId(), updateOrder));
-
-        // 针对重复上传平板端复制的样品
+        updateOrderList.forEach(updateOrder -> orderMap.put(updateOrder.getId(), (EmcOrderBean)updateOrder));
         varOrderList.forEach(mobileOrder -> existOrderList.stream().filter(existOrder -> StringUtils.equals(existOrder.getMobileId(), mobileOrder.getMobileId())).findFirst().ifPresent(existOrder -> {
-            orderMap.put(mobileOrder.getId(), existOrder);
+            orderMap.put(mobileOrder.getId(), (EmcOrderBean)existOrder);
             mobileOrder.setId(existOrder.getId());
             mobileOrder.setOrderNo(existOrder.getOrderNo());
             mobileOrder.setLabelNo(existOrder.getLabelNo());
             mobileOrder.setParentOrderNo(existOrder.getParentOrderNo());
         }));
-
         updateOrderList.addAll(varOrderList.stream().filter(f -> existMobileIdList.contains(f.getMobileId())).collect(Collectors.toList()));
         List<EmcOrderBean> mobileNewOrderList = varOrderList.stream().filter(f -> !existMobileIdList.contains(f.getMobileId())).collect(Collectors.toList());
         if (mobileNewOrderList.isEmpty()) {
-            convertSampleId(updateOrderList, sampleIdMap);
-            updateFolderStatus(updateOrderList);
-            orderService.getDao().update(updateOrderList, updateColNames);
+            this.convertSampleId(updateOrderList, sampleIdMap);
+            this.updateFolderStatus(updateOrderList);
+            this.orderService.getDao().updateIfChanged(updateOrderList);
             return;
         }
-
-        // 关于样品编号的处理，需要先查出所有关联点位的所有样品
-        // 然后筛选出最大的样品编号，对于新增样品然后递增即可
         List<Long> folderIdList = mobileOrderList.stream().map(EmcOrderBean::getFolderId).distinct().collect(Collectors.toList());
         if (!folderMap.isEmpty()) {
             folderIdList.addAll(folderMap.values().stream().map(EmcFolderBean::getId).distinct().collect(Collectors.toList()));
         }
-        List<EmcOrderBean> orderBeanList = orderService.getDao().selectListByOneColumnValues(folderIdList, "FOLDERID", Arrays.asList("ID", "FOLDERID", "ORDERNO"));
+        List<EmcOrderBean> orderBeanList = this.orderService.getDao().selectListByOneColumnValues(folderIdList, "FOLDERID", Arrays.asList("ID", "FOLDERID", "ORDERNO"), new Order[0]);
         Map<Long, List<EmcOrderBean>> folderOrderMap = orderBeanList.stream().collect(Collectors.groupingBy(EmcOrderBean::getFolderId));
-        Map<Long, String> maxFolderOrderNoMap = new HashMap<>();
-        folderOrderMap.forEach((k, v) -> {
-            EmcOrderBean orderBean = v.stream().max(Comparator.comparing(EmcOrderBean::getOrderNo)).get();
-            maxFolderOrderNoMap.put(k, orderBean.getOrderNo());
-        });
-
-        // 样品编号-ID对应关系集合
         Map<String, Long> orderNoIdMap = orderBeanList.stream().collect(Collectors.toMap(EmcOrderBean::getOrderNo, EmcOrderBean::getId));
-
-        // 查询现场的QC类型
-        List<EmcQcCategoryBean> qcCategoryList = qcCategoryService.getDao().selectListByOneColumnValue("scene", "USECATEGORY");
-
-        //
-        Map<String, String> oldNewOrderNoMap = new HashMap<>();
-
-        List<EmcOrderBean> newOrderList = new ArrayList<>();
-        for (int i = 0; i < mobileNewOrderList.size(); i++) {
-            EmcOrderBean oldOrder = mobileNewOrderList.get(i);
+        List<EmcQcCategoryBean> qcCategoryList = this.qcCategoryService.getDao().selectListByOneColumnValue("scene", "USECATEGORY", new Order[0]);
+        HashMap<String, String> oldNewOrderNoMap = new HashMap<String, String>();
+        ArrayList<EmcOrderBean> newOrderList = new ArrayList<EmcOrderBean>();
+        for (int i = 0; i < mobileNewOrderList.size(); ++i) {
+            String parentOrderNo;
+            EmcFolderBean newFolder;
+            Long newSampleId;
+            EmcOrderBean oldOrder = (EmcOrderBean)mobileNewOrderList.get(i);
             EmcOrderBean newOrder = new EmcOrderBean();
-            BeanUtils.copyProperties(oldOrder, newOrder);
+            BeanUtils.copyProperties(oldOrder, newOrder, (String[])new String[0]);
             PersistableHelper.resetBasicProperties(newOrder);
-
-            if (!sampleIdMap.isEmpty()) {
-                Long newSampleId = sampleIdMap.get(oldOrder.getSampleId());
-                if (newSampleId != null) {
-                    newOrder.setSampleId(newSampleId);
-                }
+            if (!sampleIdMap.isEmpty() && (newSampleId = sampleIdMap.get(oldOrder.getSampleId())) != null) {
+                newOrder.setSampleId(newSampleId);
             }
-
-            if (!folderMap.isEmpty()) {
-                EmcFolderBean newFolder = folderMap.get(oldOrder.getFolderId());
-                if (newFolder != null) {
-                    newOrder.setFolderId(newFolder.getId());
-                    newOrder.setProjId(newFolder.getProjId());
-                }
+            if (!folderMap.isEmpty() && (newFolder = folderMap.get(oldOrder.getFolderId())) != null) {
+                newOrder.setFolderId(newFolder.getId());
+                newOrder.setProjId(newFolder.getProjId());
             }
-
-            // 获取点位下最大的样品编号，然后依次递增
-            String orderNo = maxFolderOrderNoMap.get(newOrder.getFolderId());
-            if (StringUtils.isEmpty(orderNo)) {
-                EmcFolderBean newFolder = folderMap.get(oldOrder.getFolderId());
-                String maxOrderNo = newFolder.getFolderNo() + "001";
-                newOrder.setOrderNo(maxOrderNo);
-                newOrder.setLabelNo(maxOrderNo);
-                maxFolderOrderNoMap.put(newOrder.getFolderId(), maxOrderNo);
-            } else {
-                String orderNoPrefix = orderNo.substring(0, orderNo.length() - 3);
-                String orderNoSuffix = orderNo.substring(orderNo.length() - 3);
-                String maxOrderNo = orderNoPrefix + StringUtils.leftPad((NumberUtils.parseInt(orderNoSuffix) + 1) + "", 3);
-                newOrder.setOrderNo(maxOrderNo);
-                newOrder.setLabelNo(maxOrderNo);
-                maxFolderOrderNoMap.put(newOrder.getFolderId(), maxOrderNo);
-            }
-
             qcCategoryList.stream().filter(qc -> StringUtils.equals(qc.getQcCategoryId(), newOrder.getQcCategoryCode())).findFirst().ifPresent(qc -> {
                 newOrder.setQcCategoryId(qc.getId());
-                if (StringUtils.equals(EmcConstant.QCCATEGORY_QCCATEGORYID_P_BLANK, newOrder.getQcCategoryCode())) {
-                    // 这里保存父样编号到ext主要是为了后面能够正常复制样品分析项组，如果设置为null了，就无法复制父样的分析项组了
+                if (StringUtils.equals("P-BLANK", newOrder.getQcCategoryCode())) {
                     newOrder.setExt$Item("parentorderno", newOrder.getParentOrderNo());
                     newOrder.setParentOrderNo(null);
                 }
             });
-
-            // 平板复制出来的正常样品也不需要保存父样编号
-            if (StringUtils.equals(EmcConstant.N_A, newOrder.getQcCategoryCode())) {
-                // 这里保存父样编号到ext主要是为了后面能够正常复制样品分析项组，如果设置为null了，就无法复制父样的分析项组了
+            if (StringUtils.equals("N/A", newOrder.getQcCategoryCode())) {
                 newOrder.setExt$Item("parentorderno", newOrder.getParentOrderNo());
                 newOrder.setParentOrderNo(null);
-            } else if (!StringUtils.equals(EmcConstant.QCCATEGORY_QCCATEGORYID_P_BLANK, newOrder.getQcCategoryCode())) {
-                // 处理平板上复制出来的新样品，当添加现场平行时，父样编号不正确问题
-                String parentOrderNo = newOrder.getParentOrderNo();
-                if (!StringUtils.isEmpty(oldNewOrderNoMap.get(parentOrderNo))) {
+            } else if (!StringUtils.equals("P-BLANK", newOrder.getQcCategoryCode())) {
+                parentOrderNo = newOrder.getParentOrderNo();
+                if (!StringUtils.isEmpty((String) oldNewOrderNoMap.get(parentOrderNo))) {
                     newOrder.setParentOrderNo(oldNewOrderNoMap.get(parentOrderNo));
                 }
             }
-
             newOrder.setSource(SOURCE_FROM_PAD);
             newOrder.setId(ApplicationContextHelper.getNextIdentity());
             newOrder.setSendDate(LocalDate.now());
-            newOrder.setSendTime(DateTimeUtils.formatLocalDateTime(LocalDateTime.now(), "HH:mm"));
+            newOrder.setSendTime(DateTimeUtils.formatLocalDateTime((LocalDateTime)LocalDateTime.now(), "HH:mm"));
             newOrder.setOrderNum(EmcConstant.ONE);
             newOrder.setCycle(EmcConstant.ONE);
             newOrder.setFrequency(EmcConstant.ONE);
             newOrder.setOrderNum(EmcConstant.ONE);
-            newOrder.setTermination(Constant.NO);
+            newOrder.setTermination("0");
             newOrderList.add(newOrder);
             orderMap.put(oldOrder.getId(), newOrder);
             oldNewOrderNoMap.put(oldOrder.getOrderNo(), newOrder.getOrderNo());
         }
-
-        convertSampleId(updateOrderList, sampleIdMap);
-        updateFolderStatus(updateOrderList);
-
-        copyOrderItemGroup(newOrderList, orderNoIdMap);
-
-        orderService.getDao().insert(newOrderList);
-        orderService.getDao().update(updateOrderList, updateColNames);
+        this.convertSampleId(updateOrderList, sampleIdMap);
+        this.updateFolderStatus(updateOrderList);
+        this.copyOrderItemGroup(newOrderList, orderNoIdMap);
+        this.orderService.getDao().insert(newOrderList);
+        this.orderService.getDao().updateIfChanged(updateOrderList);
     }
 
     protected void convertSampleId(List<EmcOrderBean> orderList, Map<Long, Long> sampleIdMap) {
@@ -1887,65 +1886,50 @@ public class PfMobileProjectServiceImpl extends EmcMobileProjectServiceImpl impl
      *            新样品测试
      */
     @Override
-    protected void updateOrderTaskResult(EmcMobileDTO mobileDTO, Map<Long, EmcOrderBean> orderMap, Map<Long, EmcOrderTaskBean> orderTaskMap,String ... sampleParamFlag) {
-        List<EmcOrderTaskResultBean> mobileOrderTaskResultList = sampleParamFlag.length == 0 ? mobileDTO.getOrderTaskResultList() : mobileDTO.getSampleParamOrderTaskResultList();
+    protected void updateOrderTaskResult(EmcMobileDTO mobileDTO, Map<Long, EmcOrderBean> orderMap, Map<Long, EmcOrderTaskBean> orderTaskMap, String ... sampleParamFlag) {
+        List<EmcOrderTaskResultBean> mobileOrderTaskResultList;
+        List<EmcOrderTaskResultBean> list = mobileOrderTaskResultList = sampleParamFlag.length == 0 ? mobileDTO.getOrderTaskResultList() : mobileDTO.getSampleParamOrderTaskResultList();
         if (mobileOrderTaskResultList == null || mobileOrderTaskResultList.isEmpty()) {
             return;
         }
-
-        //padWorkable  active正常的 unactive删除的
-        List<EmcOrderTaskResultBean> deleteList = mobileOrderTaskResultList.stream()
-                .filter(p -> !StringUtils.isEmpty(p.getExt$Item("padworkable"))
-                        && ObjectUtils.equals(p.getExt$Item("padworkable"), "unactive"))
-                .collect(Collectors.toList());
+        List<EmcOrderTaskResultBean> deleteList = mobileOrderTaskResultList.stream().filter(p -> !StringUtils.isEmpty(p.getExt$Item("padworkable")) && ObjectUtils.equals(p.getExt$Item("padworkable"), "unactive")).collect(Collectors.toList());
         if (!CollectionUtils.isEmpty(deleteList)) {
             mobileOrderTaskResultList.removeAll(deleteList);
-//            orderTaskResultService.getDao().deleteBy(deleteList, "ID");
-            List<Long> deleteIdList = new ArrayList<>();
-            //mobileId不为空，是平板新增的数据，删除用MobileId来删除。MobileId为空是pc端新增的数据，删除用id删除
-            List<String> deleteMobileIdList = deleteList.stream().filter(e -> !ObjectUtils.isEmpty(e.getMobileId()))
-                    .map(EmcOrderTaskResultBean :: getMobileId).distinct().collect(Collectors.toList());
-
-            if(!CollectionUtils.isEmpty(deleteMobileIdList)){
-                List<Long> idByMobileIdList = orderTaskResultService.getDao().selectListByOneColumnValues(deleteMobileIdList,"MOBILEID").
-                        stream().map(EmcOrderTaskResultBean :: getId).collect(Collectors.toList());
+            ArrayList<Long> deleteIdList = new ArrayList<>();
+            List<String> deleteMobileIdList = deleteList.stream().filter(e -> !ObjectUtils.isEmpty(e.getMobileId())).map(EmcOrderTaskResultBean::getMobileId).distinct().collect(Collectors.toList());
+            if (!CollectionUtils.isEmpty(deleteMobileIdList)) {
+                List<Long> idByMobileIdList = this.orderTaskResultService.getDao().selectListByOneColumnValues(deleteMobileIdList, "MOBILEID", new Order[0]).stream().map(EmcOrderTaskResultBean::getId).collect(Collectors.toList());
                 deleteIdList.addAll(idByMobileIdList);
             }
-
-            List<Long> nullMobileIdList = deleteList.stream().filter(e -> ObjectUtils.isEmpty(e.getMobileId()))
-                    .map(EmcOrderTaskResultBean :: getId).distinct().collect(Collectors.toList());
+            List<Long> nullMobileIdList = deleteList.stream().filter(e -> ObjectUtils.isEmpty(e.getMobileId())).map(EmcOrderTaskResultBean::getId).distinct().collect(Collectors.toList());
             deleteIdList.addAll(nullMobileIdList);
-
-            orderTaskResultService.getDao().deleteByIdList(deleteIdList);
+            this.orderTaskResultService.getDao().deleteByIdList(deleteIdList);
         }
-
-        // 区分需要更新或是新增的样品测试结果，mobileId 为空即表示为待更新的样品测试结果
         List<EmcOrderTaskResultBean> allUpdateOrderTaskResultList = mobileOrderTaskResultList.stream().filter(f -> StringUtils.isEmpty(f.getMobileId())).collect(Collectors.toList());
         List<Long> allUpdateResultIdList = allUpdateOrderTaskResultList.stream().map(EmcOrderTaskResultBean::getId).collect(Collectors.toList());
-        List<EmcOrderTaskResultBean> existUpdateResultList = orderTaskResultService.getDao().selectListByIds(allUpdateResultIdList, Collections.singletonList("ID"));
+        List<EmcOrderTaskResultBean> existUpdateResultList = this.orderTaskResultService.getDao().selectListByIds(allUpdateResultIdList, Collections.singletonList("ID"), new Order[0]);
         List<Long> existUpdateResultIdList = existUpdateResultList.stream().map(EmcOrderTaskResultBean::getId).collect(Collectors.toList());
-        // 过滤掉平板上存在但是系统中不存在的样品测试结果
         List<EmcOrderTaskResultBean> updateOrderTaskResultList = allUpdateOrderTaskResultList.stream().filter(result -> existUpdateResultIdList.contains(result.getId())).collect(Collectors.toList());
-
-        // 过滤掉系统已设置分包，但是平板端未及时同步的测试数据，这部分数据不更新
         List<Long> validTaskIdList = orderTaskMap.values().stream().map(EmcOrderTaskBean::getId).distinct().collect(Collectors.toList());
         updateOrderTaskResultList = updateOrderTaskResultList.stream().filter(r -> validTaskIdList.contains(r.getOrderTaskId())).collect(Collectors.toList());
-
         List<EmcOrderTaskResultBean> varOrderTaskResultList = mobileOrderTaskResultList.stream().filter(f -> !StringUtils.isEmpty(f.getMobileId())).collect(Collectors.toList());
         if (varOrderTaskResultList.isEmpty()) {
-            orderTaskResultService.getDao().updateIfChanged(updateOrderTaskResultList);
-            computeResult(updateOrderTaskResultList);
+            this.orderTaskResultService.getDao().updateIfChanged(updateOrderTaskResultList);
+            this.computeResult(updateOrderTaskResultList);
             return;
         }
-
-        List<String> mobileIdList = varOrderTaskResultList.stream().map(EmcOrderTaskResultBean::getMobileId).collect(Collectors.toList());
-        List<EmcOrderTaskResultBean> existOrderTaskResultList = orderTaskResultService.getDao().selectListByOneColumnValues(mobileIdList, "MOBILEID");
+        List<String> mobileIdList = varOrderTaskResultList.stream().map(EmcOrderTaskResultBean::getMobileId).distinct().collect(Collectors.toList());
+        List<List<String>> naPartitionList = ListUtils.partition(mobileIdList, (int)200);
+        List<EmcOrderTaskResultBean> existOrderTaskResultList = new ArrayList<>();
+        IntStream.range(0, naPartitionList.size()).forEach(index -> {
+            List<String> curNaPartitionList = (List)naPartitionList.get(index);
+            List<EmcOrderTaskResultBean> taskList = this.orderTaskResultService.getDao().selectListByOneColumnValues(curNaPartitionList, "MOBILEID", new Order[0]);
+            existOrderTaskResultList.addAll(taskList);
+        });
         List<String> existMobileIdList = existOrderTaskResultList.stream().map(EmcOrderTaskResultBean::getMobileId).collect(Collectors.toList());
-
-        // 处理平板端重复上传复制或新添加的样品测试结果
         varOrderTaskResultList.forEach(mobileTaskResult -> existOrderTaskResultList.stream().filter(existResult -> StringUtils.equals(existResult.getMobileId(), mobileTaskResult.getMobileId())).findFirst().ifPresent(existResult -> {
             mobileTaskResult.setId(existResult.getId());
-            EmcOrderBean currentOrder = orderMap.get(mobileTaskResult.getOrderId());
+            EmcOrderBean currentOrder = (EmcOrderBean)orderMap.get(mobileTaskResult.getOrderId());
             mobileTaskResult.setOrderNo(currentOrder.getOrderNo());
             mobileTaskResult.setOrderId(currentOrder.getId());
             Optional.ofNullable(orderTaskMap.get(mobileTaskResult.getOrderTaskId())).ifPresent(task -> mobileTaskResult.setOrderTaskId(task.getId()));
@@ -1953,56 +1937,45 @@ public class PfMobileProjectServiceImpl extends EmcMobileProjectServiceImpl impl
             mobileTaskResult.setQcCategoryCode(currentOrder.getQcCategoryCode());
             mobileTaskResult.setQcName(currentOrder.getQcName());
         }));
-
         updateOrderTaskResultList.addAll(varOrderTaskResultList.stream().filter(f -> existMobileIdList.contains(f.getMobileId())).collect(Collectors.toList()));
         List<EmcOrderTaskResultBean> mobileNewOrderTaskResultList = varOrderTaskResultList.stream().filter(f -> !existMobileIdList.contains(f.getMobileId())).collect(Collectors.toList());
-
         if (mobileNewOrderTaskResultList.isEmpty()) {
-            orderTaskResultService.getDao().updateIfChanged(updateOrderTaskResultList);
-            computeResult(updateOrderTaskResultList);
+            this.orderTaskResultService.getDao().updateIfChanged(updateOrderTaskResultList);
+            this.computeResult(updateOrderTaskResultList);
             return;
         }
-
         List<EmcOrderTaskResultBean> newOrderTaskResultList = new ArrayList<>();
         mobileNewOrderTaskResultList.forEach(r -> {
+            EmcOrderTaskBean newOrderTask;
+            EmcOrderBean newOrder;
             EmcOrderTaskResultBean newOrderTaskResult = new EmcOrderTaskResultBean();
-            BeanUtils.copyProperties(r, newOrderTaskResult);
-
-            if (!orderMap.isEmpty()) {
-                EmcOrderBean newOrder = orderMap.get(r.getOrderId());
-                if (newOrder != null) {
-                    // 现场空白和现场平行不复制现场分析项
-                    boolean isSceneQc = EmcConstant.QCCATEGORY_QCCATEGORYID_P_BLANK.equals(newOrder.getQcCategoryCode()) || EmcConstant.QCCATEGORY_QCCATEGORYID_P_DUP.equals(newOrder.getQcCategoryCode());
-                    if (EmcBizConstant.ANALYSISCATEGORY_SAMPLING.equals(newOrderTaskResult.getAnalysisType()) && isSceneQc) {
-                        return;
-                    }
-                    newOrderTaskResult.setOrderNo(newOrder.getOrderNo());
+            BeanUtils.copyProperties(r, newOrderTaskResult, (String[])new String[0]);
+            if (!orderMap.isEmpty() && (newOrder = (EmcOrderBean)orderMap.get(r.getOrderId())) != null) {
+                boolean isSceneQc;
+                boolean bl = isSceneQc = "P-BLANK".equals(newOrder.getQcCategoryCode()) || "P-DUP".equals(newOrder.getQcCategoryCode());
+                if ("sampling".equals(newOrderTaskResult.getAnalysisType()) && isSceneQc) {
+                    return;
                 }
+                newOrderTaskResult.setOrderNo(newOrder.getOrderNo());
             }
-
-            if (!orderTaskMap.isEmpty()) {
-                EmcOrderTaskBean newOrderTask = orderTaskMap.get(r.getOrderTaskId());
-                if (newOrderTask != null) {
-                    newOrderTaskResult.setOrderId(newOrderTask.getOrderId());
-                    newOrderTaskResult.setOrderTaskId(newOrderTask.getId());
-                    newOrderTaskResult.setFolderId(newOrderTask.getFolderId());
-                    newOrderTaskResult.setProjId(newOrderTask.getProjId());
-                    newOrderTaskResult.setQcCategoryId(newOrderTask.getQcCategoryId());
-                    newOrderTaskResult.setQcCategoryCode(newOrderTask.getQcCategoryCode());
-                    newOrderTaskResult.setQcName(newOrderTask.getQcName());
-                }
+            if (!orderTaskMap.isEmpty() && (newOrderTask = (EmcOrderTaskBean)orderTaskMap.get(r.getOrderTaskId())) != null) {
+                newOrderTaskResult.setOrderId(newOrderTask.getOrderId());
+                newOrderTaskResult.setOrderTaskId(newOrderTask.getId());
+                newOrderTaskResult.setFolderId(newOrderTask.getFolderId());
+                newOrderTaskResult.setProjId(newOrderTask.getProjId());
+                newOrderTaskResult.setQcCategoryId(newOrderTask.getQcCategoryId());
+                newOrderTaskResult.setQcCategoryCode(newOrderTask.getQcCategoryCode());
+                newOrderTaskResult.setQcName(newOrderTask.getQcName());
             }
             newOrderTaskResult.setId(ApplicationContextHelper.getNextIdentity());
             newOrderTaskResult.setSource(SOURCE_FROM_PAD);
             newOrderTaskResultList.add(newOrderTaskResult);
         });
-
-        orderTaskResultService.getDao().insert(newOrderTaskResultList);
-        orderTaskResultService.getDao().updateIfChanged(updateOrderTaskResultList);
-
+        this.orderTaskResultService.getDao().insert(newOrderTaskResultList);
+        this.orderTaskResultService.getDao().updateIfChanged(updateOrderTaskResultList);
         List<EmcOrderTaskResultBean> taskResultList = new ArrayList<>(newOrderTaskResultList);
         taskResultList.addAll(updateOrderTaskResultList);
-        computeResult(taskResultList);
+        this.computeResult(taskResultList);
     }
 
     /**

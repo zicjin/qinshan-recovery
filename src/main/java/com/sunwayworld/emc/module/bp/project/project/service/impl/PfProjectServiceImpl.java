@@ -4128,19 +4128,6 @@ public class PfProjectServiceImpl extends EmcProjectServiceImpl implements PfPro
         return key;
     }
 
-    private File decoderBase64File(String base64Code, String targetPath) throws IOException {
-        File file = new File(targetPath);
-        Files.createDirectories(file.getParentFile().toPath(), new FileAttribute[0]);
-        if (file.exists()) {
-            file.delete();
-        }
-        byte[] buffer = Base64.decodeBase64(base64Code);
-        FileOutputStream out = new FileOutputStream(targetPath);
-        out.write(buffer);
-        out.close();
-        return file;
-    }
-
     @Override
     @Transactional
     public Long reportSendInfo(RestJsonWrapperBean wrapper) {
@@ -4159,5 +4146,18 @@ public class PfProjectServiceImpl extends EmcProjectServiceImpl implements PfPro
         reportSendInfoService.getDao().update(sendInfoList,
                 "issurer", "issurerdate", "pic", "remark", "expressno", "expresstype");
         return 1L;
+    }
+
+    private File decoderBase64File(String base64Code, String targetPath) throws IOException {
+        File file = new File(targetPath);
+        Files.createDirectories(file.getParentFile().toPath(), new FileAttribute[0]);
+        if (file.exists()) {
+            file.delete();
+        }
+        byte[] buffer = Base64.decodeBase64(base64Code);
+        FileOutputStream out = new FileOutputStream(targetPath);
+        out.write(buffer);
+        out.close();
+        return file;
     }
 }

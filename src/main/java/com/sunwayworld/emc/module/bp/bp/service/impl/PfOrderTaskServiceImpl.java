@@ -1855,27 +1855,26 @@ public  class PfOrderTaskServiceImpl extends EmcOrderTaskServiceImpl implements 
     @Override
     @Transactional
     public void updateContainerInfo(RestJsonWrapperBean wrapper) {
+        String maxOrderContainerNo;
+        EmcOrderContainerBean maxOrderContainer;
+        List<EmcOrderContainerBean> orderContainerList;
+        EmcOrderTaskBean basicTask;
         List<EmcOrderTaskBean> targetTaskList = wrapper.parse(EmcOrderTaskBean.class, 0);
-        EmcOrderTaskBean sourceTask = wrapper.parse(EmcOrderTaskBean.class, 1).get(0);
-
-        // 查询是否已经存在有相同的容器
+        EmcOrderTaskBean sourceTask = (EmcOrderTaskBean)wrapper.parse(EmcOrderTaskBean.class, 1).get(0);
         EmcOrderContainerBean filterContainer = new EmcOrderContainerBean();
-        filterContainer.setOrderId(targetTaskList.get(0).getOrderId());
+        filterContainer.setOrderId(((EmcOrderTaskBean)targetTaskList.get(0)).getOrderId());
         filterContainer.setContainerCategoryId(sourceTask.getContainerCategoryId());
         filterContainer.setContainerCategoryCode(sourceTask.getContainerCategoryCode());
         filterContainer.setContainerCategoryName(sourceTask.getContainerCategoryName());
         filterContainer.setContainerGroup(sourceTask.getContainerGroup());
         filterContainer.setFixative(sourceTask.getFixative());
         filterContainer.setStoreCondition(sourceTask.getStoreCondition());
-        List<EmcOrderContainerBean> existedContainerList = orderContainerService.getDao().selectList(filterContainer, Collections.singletonList("id"));
-
+        List<EmcOrderContainerBean> existedContainerList = this.orderContainerService.getDao().selectList(filterContainer, Collections.singletonList("id"), new Order[0]);
         List<Long> targetOrderIdList = targetTaskList.stream().map(EmcOrderTaskBean::getOrderId).distinct().collect(Collectors.toList());
         List<Long> testMethodIdList = targetTaskList.stream().map(EmcOrderTaskBean::getTestMethodId).distinct().collect(Collectors.toList());
-        targetTaskList = selectListByFilter(SearchFilter.instance().match("orderId", targetOrderIdList).filter(MatchPattern.OR).match("testMethodId", testMethodIdList).filter(MatchPattern.OR));
-
-        // 如果已经存在，则直接更新
+        targetTaskList = this.selectListByFilter(SearchFilter.instance().match("orderId", targetOrderIdList).filter(MatchPattern.OR).match("testMethodId", testMethodIdList).filter(MatchPattern.OR), new Order[0]);
         if (!existedContainerList.isEmpty()) {
-            Long orderContainerId = existedContainerList.get(0).getId();
+            Long orderContainerId = ((EmcOrderContainerBean)existedContainerList.get(0)).getId();
             targetTaskList.forEach(task -> {
                 task.setOrderContainerId(orderContainerId);
                 task.setContainerCategoryId(sourceTask.getContainerCategoryId());
@@ -1885,46 +1884,58 @@ public  class PfOrderTaskServiceImpl extends EmcOrderTaskServiceImpl implements 
                 task.setFixative(sourceTask.getFixative());
                 task.setStoreCondition(sourceTask.getStoreCondition());
             });
-
-            getDao().update(targetTaskList, Arrays.asList("orderContainerId", "ContainerCategoryId", "ContainerCategoryCode", "ContainerCategoryName", "ContainerGroup", "Fixative", "StoreCondition"));
-            return;
+            this.getDao().update(targetTaskList, Arrays.asList("orderContainerId", "ContainerCategoryId", "ContainerCategoryCode", "ContainerCategoryName", "ContainerGroup", "Fixative", "StoreCondition"), new String[0]);
+        } else {
+            basicTask = (EmcOrderTaskBean)targetTaskList.get(0);
+            orderContainerList = this.orderContainerService.getDao().selectListByOneColumnValue(basicTask.getOrderId(), "orderId", new Order[0]);
+            maxOrderContainer = orderContainerList.stream().max(Comparator.comparing(EmcOrderContainerBean::getOrderContainerNo)).orElse((EmcOrderContainerBean)orderContainerList.get(0));
+            maxOrderContainerNo = maxOrderContainer.getOrderContainerNo();
+            int maxSuffix = NumberUtils.parseInt(maxOrderContainerNo.substring(maxOrderContainerNo.length() - 3));
+            String newOrderContainerNo = maxOrderContainerNo.substring(0, maxOrderContainerNo.length() - 3) + StringUtils.leftPad((maxSuffix + 1 + ""), (int)3);
+            EmcOrderContainerBean newContainer = new EmcOrderContainerBean();
+            BeanUtils.copyProperties(maxOrderContainer, newContainer, (String[])PfConstant.CREATED_COLUMNS);
+            newContainer.setId(ApplicationContextHelper.getNextIdentity());
+            newContainer.setOrderContainerNo(newOrderContainerNo);
+            newContainer.setOrderNum(Long.valueOf((long)orderContainerList.size() + 1L));
+            newContainer.setContainerCategoryId(sourceTask.getContainerCategoryId());
+            newContainer.setContainerCategoryCode(sourceTask.getContainerCategoryCode());
+            newContainer.setContainerCategoryName(sourceTask.getContainerCategoryName());
+            newContainer.setContainerGroup(sourceTask.getContainerGroup());
+            newContainer.setFixative(sourceTask.getFixative());
+            newContainer.setStoreCondition(sourceTask.getStoreCondition());
+            this.orderContainerService.getDao().insert(newContainer);
+            targetTaskList.forEach(task -> {
+                task.setOrderContainerId(newContainer.getId());
+                task.setContainerCategoryId(sourceTask.getContainerCategoryId());
+                task.setContainerCategoryCode(sourceTask.getContainerCategoryCode());
+                task.setContainerCategoryName(sourceTask.getContainerCategoryName());
+                task.setContainerGroup(sourceTask.getContainerGroup());
+                task.setFixative(sourceTask.getFixative());
+                task.setStoreCondition(sourceTask.getStoreCondition());
+            });
+            this.getDao().update(targetTaskList, Arrays.asList("orderContainerId", "ContainerCategoryId", "ContainerCategoryCode", "ContainerCategoryName", "ContainerGroup", "Fixative", "StoreCondition"), new String[0]);
         }
-
-        // 如果容器不存在，则新建
-        EmcOrderTaskBean basicTask = targetTaskList.get(0);
-        List<EmcOrderContainerBean> orderContainerList = orderContainerService.getDao().selectListByOneColumnValue(basicTask.getOrderId(), "orderId");
-        EmcOrderContainerBean maxOrderContainer = orderContainerList.stream().max(Comparator.comparing(EmcOrderContainerBean::getOrderContainerNo)).orElse(orderContainerList.get(0));
-        String maxOrderContainerNo = maxOrderContainer.getOrderContainerNo();
-        int maxSuffix = NumberUtils.parseInt(maxOrderContainerNo.substring(maxOrderContainerNo.length() - 3));
-        String newOrderContainerNo = maxOrderContainerNo.substring(0, maxOrderContainerNo.length() - 3) + StringUtils.leftPad((maxSuffix + 1) + "", 3);
-
-        EmcOrderContainerBean newContainer = new EmcOrderContainerBean();
-        BeanUtils.copyProperties(maxOrderContainer, newContainer, PfConstant.CREATED_COLUMNS);
-        newContainer.setId(ApplicationContextHelper.getNextIdentity());
-        newContainer.setOrderContainerNo(newOrderContainerNo);
-        newContainer.setOrderNum((long) orderContainerList.size() + 1);
-        newContainer.setContainerCategoryId(sourceTask.getContainerCategoryId());
-        newContainer.setContainerCategoryCode(sourceTask.getContainerCategoryCode());
-        newContainer.setContainerCategoryName(sourceTask.getContainerCategoryName());
-        newContainer.setContainerGroup(sourceTask.getContainerGroup());
-        newContainer.setFixative(sourceTask.getFixative());
-        newContainer.setStoreCondition(sourceTask.getStoreCondition());
-
-        orderContainerService.getDao().insert(newContainer);
-
-        // 更新测试中的容器ID
-        targetTaskList.forEach(task -> {
-            task.setOrderContainerId(newContainer.getId());
-            task.setContainerCategoryId(sourceTask.getContainerCategoryId());
-            task.setContainerCategoryCode(sourceTask.getContainerCategoryCode());
-            task.setContainerCategoryName(sourceTask.getContainerCategoryName());
-            task.setContainerGroup(sourceTask.getContainerGroup());
-            task.setFixative(sourceTask.getFixative());
-            task.setStoreCondition(sourceTask.getStoreCondition());
-        });
-
-        getDao().update(targetTaskList, Arrays.asList("orderContainerId", "ContainerCategoryId", "ContainerCategoryCode", "ContainerCategoryName", "ContainerGroup", "Fixative", "StoreCondition"));
-
+        basicTask = (EmcOrderTaskBean)targetTaskList.get(0);
+        orderContainerList = this.orderContainerService.getDao().selectListByOneColumnValue(basicTask.getOrderId(), "orderId", new Order[0]);
+        maxOrderContainer = orderContainerList.stream().max(Comparator.comparing(EmcOrderContainerBean::getOrderContainerNo)).orElse((EmcOrderContainerBean)orderContainerList.get(0));
+        maxOrderContainerNo = maxOrderContainer.getOrderContainerNo();
+        List<Long> orderContainerIdList = orderContainerList.stream().map(EmcOrderContainerBean::getId).distinct().collect(Collectors.toList());
+        List<EmcOrderTaskBean> orderTaskList = this.getDao().selectListByOneColumnValues(orderContainerIdList, "orderContainerId", new Order[0]);
+        List<Long> delOrderContainerIdList = orderContainerIdList.stream().filter(e -> orderTaskList.stream().noneMatch(o -> ObjectUtils.equals(e, o.getOrderContainerId()))).collect(Collectors.toList());
+        this.orderContainerService.getDao().deleteByIdList(delOrderContainerIdList);
+        MapperParameter parameter = new MapperParameter();
+        parameter.put("orderId", basicTask.getOrderId());
+        List<EmcOrderContainerBean> allOrderContainerList = this.orderContainerDao.selectOrderContainerList(parameter);
+        ArrayList<EmcOrderContainerBean> updateOrderContainerList = new ArrayList<EmcOrderContainerBean>();
+        ArrayList<EmcOrderTaskBean> updateOrderTaskList = new ArrayList<>();
+        for (int i = 0; i < allOrderContainerList.size(); ++i) {
+            EmcOrderContainerBean container = (EmcOrderContainerBean)allOrderContainerList.get(i);
+            EmcOrderContainerBean updateOrderContainer = new EmcOrderContainerBean();
+            updateOrderContainer.setId(container.getId());
+            updateOrderContainer.setOrderContainerNo(maxOrderContainerNo.substring(0, maxOrderContainerNo.length() - 3) + StringUtils.leftPad((i + 1 + ""), (int)3));
+            updateOrderContainerList.add(updateOrderContainer);
+        }
+        this.orderContainerService.getDao().update(updateOrderContainerList, new String[]{"ORDERCONTAINERNO"});
     }
 
     @Override

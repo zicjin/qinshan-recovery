@@ -910,7 +910,7 @@ public class PfProjectServiceImpl extends EmcProjectServiceImpl implements PfPro
                                     itemGroupBean.setInputUserName(testCapacity.getExt$Item("inputUserName"));
                                 }
                                 newEmcOrderItemGroupBeanList.add(itemGroupBean);
-                                int finalQ = q++;
+                                int finalQ = q;
                                 emcOrderItemBeanList.stream().filter(o -> ObjectUtils.equals((Object)o.getOrderItemGroupId(), (Object)((EmcOrderItemGroupBean)((Object)((Object)filterOrderItemGroupList.get(finalQ)))).getId())).forEach(p -> {
                                     EmcOrderItemBean itemBean = new EmcOrderItemBean();
                                     BeanUtils.copyProperties((Object)p, (Object)itemBean, (String[])new String[0]);
@@ -919,6 +919,7 @@ public class PfProjectServiceImpl extends EmcProjectServiceImpl implements PfPro
                                     itemBean.setId(ApplicationContextHelper.getNextIdentity());
                                     newEmcOrderItemBeanList.add(itemBean);
                                 });
+                                q++;
                             }
                         }
                     }
@@ -3749,7 +3750,7 @@ public class PfProjectServiceImpl extends EmcProjectServiceImpl implements PfPro
                         itemGroupBean.setId(newItemGroupId);
                         itemGroupBean.setSortNum((long)q + 1L);
                         newEmcOrderItemGroupBeanList.add(itemGroupBean);
-                        int finalQ = q++;
+                        int finalQ = q;
                         emcOrderItemBeanList.stream().filter(o -> ObjectUtils.equals(o.getOrderItemGroupId(), ((EmcOrderItemGroupBean)filterOrderItemGroupList.get(finalQ)).getId())).forEach(p -> {
                             EmcOrderItemBean itemBean = new EmcOrderItemBean();
                             BeanUtils.copyProperties(p, (Object)itemBean, EmcConstant.CREATED_COLUMNS);
@@ -3758,6 +3759,7 @@ public class PfProjectServiceImpl extends EmcProjectServiceImpl implements PfPro
                             itemBean.setId(ApplicationContextHelper.getNextIdentity());
                             newEmcOrderItemBeanList.add(itemBean);
                         });
+                        q++;
                     }
                 }
             }

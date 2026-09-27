@@ -861,9 +861,10 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
 
         // 删除批下测试关联的方法参数数据
         List<EmcPropertyDataBean> filterDataList = new ArrayList<>(orderTaskIdList.size());
-        orderTaskIdList.forEach(taskId -> {
+        List<String> propertyDataBizIdList = orderTaskIdList.stream().map(taskId -> String.valueOf(taskId)).collect(Collectors.toList());
+        propertyDataBizIdList.forEach(taskId -> {
             EmcPropertyDataBean filterData = new EmcPropertyDataBean();
-            filterData.setBizId2(String.valueOf(taskId));
+            filterData.setBizId2(taskId);
             filterDataList.add(filterData);
         });
         propertyDataService.getDao().deleteBy(filterDataList, "bizId2");
@@ -1367,19 +1368,32 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
             result.setResultCategory(item.getResultCategory());
             // 同步允许偏差
             result.setRn13(item.getAllowableError());
+            if (("L-SPKC".equals(result.getQcCategoryCode()) || "L-SPKCK".equals(result.getQcCategoryCode()))
+                    && "1".equals(item.getCalQcResult())) {
+                if (StringUtils.isEmpty(result.getStandQty())) {
+                    result.setStandQty(item.getExt$Item("detectedquantity"));
+                }
+                if (StringUtils.isEmpty(result.getRn12())) {
+                    result.setRn12(item.getExt$Item("detectedquantityunit"));
+                }
+            }
             // 从监测能力库分析项同步
             capacityItemList.stream().filter(ci -> ObjectUtils.equals(item.getId(), ci.getItemId())).findFirst().ifPresent(ci -> {
                 result.setLowLimit(ci.getLowLimit());
                 result.setHighLimit(ci.getHighLimit());
                 result.setOriginalResult(ci.getDefaultResult());
                 result.setRevisionRule(ci.getRevisionRule());
+                if ("L-QXCH".equals(result.getQcCategoryCode()) && "1".equals(item.getCalQcResult())
+                        && StringUtils.isEmpty(result.getStandQty())) {
+                    result.setStandQty(ci.getExt$Item("theorycontent"));
+                }
             });
         }));
 
-        orderTaskResultService.getDao().update(selectOrderTaskResultList, "ITEMID", "ITEMNAME", "ITEMORDERNO", "ITEMALIASNAME", "REVISIONRULE", "UNITNAME", "LOWLIMIT", "HIGHLIMIT", "REPORTDISPLAY", "SCRIPTFLAG", "RESULTCATEGORY", "RN13");
+        orderTaskResultService.getDao().update(selectOrderTaskResultList, "ITEMID", "ITEMNAME", "ITEMORDERNO", "ITEMALIASNAME", "REVISIONRULE", "UNITNAME", "LOWLIMIT", "HIGHLIMIT", "REPORTDISPLAY", "SCRIPTFLAG", "RESULTCATEGORY", "RN13", "STANDQTY", "RN12");
         List<Long> resultIdList = selectOrderTaskResultList.stream().map(EmcOrderTaskResultBean::getId).distinct().collect(Collectors.toList());
 
-        asyncFormulaComputingService.asyncComputing(runId, resultIdList, LocalContextHelper.getLoginUserId(), false);
+        EmcOrderTaskResultComputingEngine.getEngine(resultIdList).compute();
         //同步标样试剂
         List<Long> orderOrgTaskIdList = selectOrderTaskResultList.stream().map(EmcOrderTaskResultBean::getOrderTaskId).distinct().collect(Collectors.toList());
         List<Long> orderTaskIdList = orderOrgTaskIdList.stream().filter(item -> !ObjectUtils.isEmpty(item)).distinct().collect(Collectors.toList());
@@ -1973,6 +1987,8 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
                 // 是否为曲线校核
                 boolean isCurveCheck = Arrays.asList(PfConstant.QC_QXJH, PfConstant.QC_L_QXCHD).contains(qcCategory.getQcCategoryId());
                 boolean isLowestCurveCheck = PfConstant.QC_L_QXCHD.equals(qcCategory.getQcCategoryId());
+                boolean isYpjb = "L-SPKC".equals(qcCategory.getQcCategoryId());
+                boolean isKbjb = "L-SPKCK".equals(qcCategory.getQcCategoryId());
                 // 是否为具有特殊编号规则的QC
                 boolean isSpecialSuffixQc = specialSuffixQcCodeList.contains(qcCategory.getQcCategoryId());
                 boolean isSpecialPrefixQc = specialPrefixQcCodeList.contains(qcCategory.getQcCategoryId());
@@ -2126,6 +2142,13 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
                                                 otrInfo.setAvgResult(null);
                                                 // 曲线校核设置默认的相对相差修约规则为FDA,1
                                                 otrInfo.setRn10(isCurveCheck && Constant.YES.equals(b.getCalQcResult()) ? "FDA,1" : null);
+                                                if ((isYpjb || isKbjb) && Constant.YES.equals(b.getCalQcResult())) {
+                                                    otrInfo.setStandQty(b.getExt$Item("detectedquantity"));
+                                                    otrInfo.setRn12(b.getExt$Item("detectedquantityunit"));
+                                                }
+                                                if (isCurveCheck && Constant.YES.equals(b.getCalQcResult())) {
+                                                    otrInfo.setStandQty(b.getExt$Item("theorycontent"));
+                                                }
 
                                                 if (updateParNoFlag) {
                                                     otrInfo.setParentOrderNo(order.getOrderNo());
@@ -2196,7 +2219,6 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
                                             otrInfo.setAvgResult(null);
                                             // 曲线校核设置默认的相对相差修约规则为FDA,1
                                             otrInfo.setRn10(isCurveCheck && Constant.YES.equals(b.getCalQcResult()) ? "FDA,1" : null);
-
                                             if (updateParNoFlag) {
                                                 otrInfo.setParentOrderNo(order.getOrderNo());
                                             }
@@ -2353,6 +2375,7 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
             List<EmcOrderTaskBean> curTaskList = validTaskList.stream().filter(ct -> ObjectUtils.equals(ct.getOrderId(), co.getId())).collect(Collectors.toList());
             Map<Long, List<EmcOrderTaskBean>> validTaskMap = curTaskList.stream().collect(Collectors.groupingBy(EmcOrderTaskBean::getOrderContainerId));
 
+            boolean concatOrderNo = concatOrderNoQcCodeList.contains(co.getQcCategoryCode());
             AtomicInteger ocIndex = new AtomicInteger(1);
             validTaskMap.forEach((orderContainerId, taskList) -> {
                 List<Long> taskIdList = taskList.stream().map(EmcOrderTaskBean::getId).collect(Collectors.toList());
@@ -2371,14 +2394,19 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
                 newOc.setQcName(basicTask.getQcName());
 
                 String orderNo = co.getOrderNo();
-                newOc.setOrderContainerNo(orderNo + StringUtils.leftPad(ocIndex.getAndIncrement() + "", 3));
+                if (StringUtils.contains(orderNo, "-")) {
+                    String suffix = orderNo.substring(orderNo.indexOf("-"));
+                    newOc.setOrderContainerNo((concatOrderNo ? originalOc.getOrderContainerNo() : runId) + suffix);
+                } else {
+                    newOc.setOrderContainerNo(orderNo + StringUtils.leftPad(ocIndex.getAndIncrement() + "", 3));
+                }
 
                 newOc.setOrderNo(orderNo);
                 newOcList.add(newOc);
 
                 copyTaskList.stream().filter(task -> taskIdList.contains(task.getId())).forEach(task -> {
                     task.setOrderContainerId(newOc.getId());
-                    task.setEquiptAcquNo(orderNo);
+                    task.setEquiptAcquNo(newOc.getOrderContainerNo());
                 });
             });
         });
@@ -2470,7 +2498,7 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
         List<EmcProjectBean> updateProjList = new ArrayList<>();
         List<EmcOrderTaskBean> updateOrderTaskList = new ArrayList<>();
         for (Long a : projIdList) {
-            boolean orderTaskAllMatch = analysisOrderTaskList.stream().filter(b -> ObjectUtils.equals(b.getProjId(), a)).allMatch(e -> "done".equals(e.getStatus()));
+        boolean orderTaskAllMatch = analysisOrderTaskList.stream().filter(b -> ObjectUtils.equals(b.getProjId(), a)).allMatch(e -> "done".equals(e.getStatus()));
 
             boolean sampleAllMatch = sampleList.stream().filter(b -> ObjectUtils.equals(b.getProjId(), a)).allMatch(e -> "done".equals(e.getStatus()));
 
@@ -2918,7 +2946,7 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
         // 触发有默认值的公式计算
         if (!defaultValueResultIdList.isEmpty()) {
             List<Long> resultIdList = virtualResultList.stream().map(EmcOrderTaskResultBean::getId).collect(Collectors.toList());
-            EmcOrderTaskResultComputingEngine.getEngine(resultIdList).compute();
+            asyncFormulaComputingService.asyncComputing(null, resultIdList, false);
         }
     }
 
@@ -3060,17 +3088,24 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
             equiptNo = equiptService.selectById(selectById(id).getEquiptId()).getEquiptId();
         }
         String equiptDirString = ApplicationContextHelper.getEnvironment().getProperty("sunway.equipt.acq.file.local.path");
-        for (CoreFileBean file : fileList) {
+        final String collectEquiptNo = equiptNo;
+        final String collectDir = equiptDirString;
+        fileList.forEach(file -> {
             File inputFile = CoreFileUtils.getLocalPath(file).toFile();
-            try (FileInputStream fis = new FileInputStream(inputFile)) {
-                File newFile = new File(equiptDirString + File.separator + equiptNo + File.separator + id + File.separator + file.getName());
-                if (!newFile.getParentFile().exists()) newFile.getParentFile().mkdirs();
-                if (newFile.exists()) newFile.delete();
+            try {
+                FileInputStream fis = new FileInputStream(inputFile);
+                File newFile = new File(collectDir + File.separator + collectEquiptNo + File.separator + id + File.separator + file.getName());
+                if (!newFile.getParentFile().exists()) {
+                    newFile.getParentFile().mkdirs();
+                }
+                if (newFile.exists()) {
+                    newFile.delete();
+                }
                 FileUtils.write(newFile, fis);
-            } catch (Exception e) {
-                throw new FileException(e);
+            } catch (Exception ioe) {
+                throw new FileException(ioe);
             }
-        }
+        });
     }
 
     @Override
@@ -3542,13 +3577,14 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
 
     private String buildFanruanOriginalRecordExcelUrl(String fineBaseUrl, CoreReportConfigLineBean configLine, String reportFileName, EmcRunBean source) {
         if (StringUtils.isEmpty(fineBaseUrl) || StringUtils.isEmpty(reportFileName)) return null;
+        StringBuilder reportUrl = new StringBuilder();
         try {
             String fileName = configLine.getReportConfigLineNo() + "/" + reportFileName;
-            StringBuilder url = new StringBuilder(fineBaseUrl).append("/decision/view/report?viewlet=")
+            reportUrl.append(fineBaseUrl).append("/decision/view/report?viewlet=")
                     .append(URLEncoder.encode(fileName, "UTF-8")).append("&format=excel");
             String params = parseReportParam(source, configLine.getParam());
-            if (!StringUtils.isEmpty(params)) url.append("&").append(params);
-            return url.toString();
+            if (!StringUtils.isEmpty(params)) reportUrl.append("&").append(params);
+            return reportUrl.toString();
         } catch (UnsupportedEncodingException e) {
             throw new FileException(e);
         }
@@ -5650,7 +5686,7 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
         String[] fileIds = wrapper.getParamValue("fileIds").split(",");
         String dbTable = wrapper.getParamValue("dbTable");
         if (dbTable == null) dbTable = "T_EMC_RUN";
-        List<Long> fileIdList = Arrays.stream(fileIds).map(NumberUtils::parseLong).collect(Collectors.toList());
+        List<Long> fileIdList = Arrays.asList(fileIds).stream().map(id -> NumberUtils.parseLong(id)).collect(Collectors.toList());
         List<CoreFileBean> sourceFiles = coreFileService.getDao().selectListByIds(fileIdList, new Order[0]);
         List<CoreFileBean> insertFiles = new ArrayList<>();
         for (CoreFileBean source : sourceFiles) {

@@ -117,6 +117,7 @@ import com.sunwayworld.emc.module.mdm.crm.service.CrmWriteOffService;
 import com.sunwayworld.emc.module.mdm.oa.bean.EmcOaOrgRelationBean;
 import com.sunwayworld.emc.module.mdm.oa.service.EmcOaOrgRelationService;
 import com.sunwayworld.emc.module.mdm.oa.service.EmcOaOrgService;
+import com.sunwayworld.cloud.module.schedule.bean.CoreScheduleTaskConfigBean;
 import com.sunwayworld.cloud.module.schedule.schedule.service.CoreScheduleTaskConfigService;
 import com.sunwayworld.framework.at.annotation.AuditTrailEntry;
 import com.sunwayworld.framework.at.annotation.AuditTrailType;
@@ -2986,7 +2987,7 @@ public class PfProjectServiceImpl extends EmcProjectServiceImpl implements PfPro
     	EmcProjectBean projectBean = wrapper.parseUnique(EmcProjectBean.class);
         List<CoreReportConfigLineBean> configLineBeforeList = wrapper.parse(CoreReportConfigLineBean.class);
         List<CoreReportConfigLineBean> normalConfigLineBeanList = configLineBeforeList.stream().filter(r -> !StringUtils.equals("fanruan", r.getReportCategory())).collect(Collectors.toList());
-        List<String> fieldList = new ArrayList<>();
+        ArrayList fieldList = new ArrayList();
         String fieldIdOne = archiveSamplingContactRecordFiles(projectBean,normalConfigLineBeanList);
         // 帆软报表模板
         List<CoreReportConfigLineBean> frConfigLineBeanList = configLineBeforeList.stream().filter(r -> "fanruan".equals(r.getReportCategory())).collect(Collectors.toList());
@@ -3100,7 +3101,7 @@ public class PfProjectServiceImpl extends EmcProjectServiceImpl implements PfPro
         getDao().deleteByIdList(projectIdList);
 
         List<String> uidList = projectIdList.stream().map(id -> "T_EMC_PROJECT$" + id).collect(Collectors.toList());
-        List scheduleTaskConfigList = scheduleTaskConfigService.selectListByFilter(
+        List<CoreScheduleTaskConfigBean> scheduleTaskConfigList = scheduleTaskConfigService.selectListByFilter(
                 SearchFilter.instance().match("uid", uidList).filter(MatchPattern.OR));
         scheduleTaskConfigService.deleteBy(scheduleTaskConfigList);
     }

@@ -178,6 +178,8 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
     private static final String COMPOSE_ALL_RUNLIST_REPORT_SUCCESS = "composeAllRunListReportSuccess";
 
     private static final String COMPOSE_ALL_RUNLIST_REPORT_FAILURE = "composeAllRunListReportFailure";
+    private static final List<String> LEFT_PAD_LENGTH_TWO_CODE_CATEGORY_LIST = Arrays.asList("L-BLANK", "L-QXCH", "L-YZSY", "L-SJKB", "L-CZKB", "L-SPKCK", "QC-STD");
+    private static final List<String> LEFT_PAD_LENGTH_ONE_WITH_ORDER_NO_CODE_CATEGORY_LIST = Arrays.asList("L-DUP");
 
     @Autowired
     @Lazy
@@ -1971,12 +1973,27 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
                     orderInfo.setId(id);
                     orderInfo.setFolderId(folderId);
                     if (isSpecialSuffixQc) {
-                        long newOrderSeqNo = Optional.ofNullable(specialSuffixOrderSeqNoMap.get(qcCategory.getQcCategoryId() + order.getOrderNo())).orElse(0) + num;
-                        String newOrderNo = order.getOrderNo() + specialQcSuffixMap.get(qcCategory.getQcCategoryId()) + (newOrderSeqNo == 0 ? "" : newOrderSeqNo);
+                        String newOrderNo;
+                        if (LEFT_PAD_LENGTH_ONE_WITH_ORDER_NO_CODE_CATEGORY_LIST.contains(qcCategory.getQcCategoryId())) {
+                            long newOrderSeqNo = Optional.ofNullable(specialSuffixOrderSeqNoMap.get(qcCategory.getQcCategoryId() + order.getOrderNo())).orElse(0) + (i * addNum + num);
+                            newOrderNo = order.getOrderNo() + specialQcSuffixMap.get(qcCategory.getQcCategoryId())
+                                    + StringUtils.leftPad((newOrderSeqNo == 0 ? "" : Long.valueOf(newOrderSeqNo)) + "", 1);
+                        } else {
+                            newOrderNo = order.getOrderNo() + specialQcSuffixMap.get(qcCategory.getQcCategoryId());
+                        }
                         orderInfo.setOrderNo(newOrderNo);
                     } else if (isSpecialPrefixQc) {
                         long newOrderSeqNo = Optional.ofNullable(specialPrefixOrderSeqNoMap.get(qcCategory.getQcCategoryId())).orElse(0) + ((i * addNum) + num);
-                        String newOrderNo = runId + "-" + specialQcSuffixMap.get(qcCategory.getQcCategoryId()) + (newOrderSeqNo == 0 ? "" : newOrderSeqNo);
+                        int leftPadLength = 2;
+                        String newOrderNo;
+                        if (LEFT_PAD_LENGTH_TWO_CODE_CATEGORY_LIST.contains(qcCategory.getQcCategoryId())) {
+                            leftPadLength = 1;
+                            newOrderNo = specialQcSuffixMap.get(qcCategory.getQcCategoryId())
+                                    + StringUtils.leftPad((newOrderSeqNo == 0 ? "" : Long.valueOf(newOrderSeqNo)) + "", leftPadLength);
+                        } else {
+                            newOrderNo = runId + specialQcSuffixMap.get(qcCategory.getQcCategoryId())
+                                    + StringUtils.leftPad((newOrderSeqNo == 0 ? "" : Long.valueOf(newOrderSeqNo)) + "", leftPadLength);
+                        }
                         if (isCurveCheck) {
                             String checkPoint = isLowestCurveCheck ? "0" : Optional.ofNullable(qcCategory.getExt$Item("checkPoint")).orElse("1");
                             newOrderNo = runId + "-" + specialQcSuffixMap.get(qcCategory.getQcCategoryId()) + checkPoint + (newOrderSeqNo == 0 ? "" : "-" + newOrderSeqNo);

@@ -3817,18 +3817,34 @@ public class PfProjectServiceImpl extends EmcProjectServiceImpl implements PfPro
     }
 
     private void deleteProjectBpData(List<EmcProjectBean> projects) {
-        List<EmcOrderTaskBean> tasks = projects.stream().map(p -> { EmcOrderTaskBean t = new EmcOrderTaskBean(); t.setProjId(p.getId()); return t; }).collect(Collectors.toList());
-        List<EmcOrderTaskResultBean> results = projects.stream().map(p -> { EmcOrderTaskResultBean r = new EmcOrderTaskResultBean(); r.setProjId(p.getId()); return r; }).collect(Collectors.toList());
-        orderTaskService.getDao().deleteBy(tasks, "projId"); orderTaskResultService.getDao().deleteBy(results, "projId");
-        List<EmcProjectBean> samples = projects.stream().filter(p -> "1".equals(p.getSample())).collect(Collectors.toList());
-        if (samples.isEmpty()) return;
-        List<Long> sampleIds = samples.stream().map(EmcProjectBean::getId).distinct().collect(Collectors.toList());
-        List<EmcOrderBean> orders = orderService.getDao().selectListByOneColumnValues(sampleIds, "projId", Arrays.asList("id", "folderId"), new Order[0]);
-        List<Long> folderIds = orders.stream().map(EmcOrderBean::getFolderId).distinct().collect(Collectors.toList());
-        List<Long> orderIds = orders.stream().map(EmcOrderBean::getId).collect(Collectors.toList());
-        folderService.getDao().deleteByIdList(folderIds); orderService.getDao().deleteByIdList(orderIds);
-        List<EmcOrderItemGroupBean> groups = orderIds.stream().map(id -> { EmcOrderItemGroupBean g = new EmcOrderItemGroupBean(); g.setOrderId(id); return g; }).collect(Collectors.toList());
-        orderItemGroupService.getDao().deleteBy(groups, "orderId");
+        List<EmcOrderTaskBean> deleteTaskList = new ArrayList<>(projects.size());
+        List<EmcOrderTaskResultBean> deleteResultList = new ArrayList<>(projects.size());
+        projects.forEach(p -> {
+            EmcOrderTaskBean deleteTask = new EmcOrderTaskBean();
+            deleteTask.setProjId(p.getId());
+            deleteTaskList.add(deleteTask);
+            EmcOrderTaskResultBean deleteResult = new EmcOrderTaskResultBean();
+            deleteResult.setProjId(p.getId());
+            deleteResultList.add(deleteResult);
+        });
+        orderTaskService.getDao().deleteBy(deleteTaskList, "projId");
+        orderTaskResultService.getDao().deleteBy(deleteResultList, "projId");
+        List<EmcProjectBean> sampleProjectList = projects.stream().filter(e -> "1".equals(e.getSample())).collect(Collectors.toList());
+        if (!sampleProjectList.isEmpty()) {
+            List<Long> sampleProjectIdList = sampleProjectList.stream().map(EmcProjectBean::getId).distinct().collect(Collectors.toList());
+            List<EmcOrderBean> orderList = orderService.getDao().selectListByOneColumnValues(sampleProjectIdList, "projId", Arrays.asList("id", "folderId"), new Order[0]);
+            List<Long> folderIdList = orderList.stream().map(EmcOrderBean::getFolderId).distinct().collect(Collectors.toList());
+            List<Long> orderIdList = orderList.stream().map(EmcOrderBean::getId).collect(Collectors.toList());
+            folderService.getDao().deleteByIdList(folderIdList);
+            orderService.getDao().deleteByIdList(orderIdList);
+            List<EmcOrderItemGroupBean> deleteItemGroupList = new ArrayList<>(orderIdList.size());
+            orderIdList.forEach(orderId -> {
+                EmcOrderItemGroupBean deleteItemGroup = new EmcOrderItemGroupBean();
+                deleteItemGroup.setOrderId(orderId);
+                deleteItemGroupList.add(deleteItemGroup);
+            });
+            orderItemGroupService.getDao().deleteBy(deleteItemGroupList, "orderId");
+        }
     }
 
 

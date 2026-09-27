@@ -551,48 +551,71 @@ public class PfProjectServiceImpl extends EmcProjectServiceImpl implements PfPro
 
     public List<String> generateProjNos(Long yearCode, String orgCode, String bizCategoryId,
                                         String projName, int num, String contractNo) {
-        if (yearCode == null) yearCode = (long) LocalDate.now().getYear();
+        int incrementedNumber;
+        String numberPart;
+        String prefix;
+        String beforeProjNo;
+        EmcProjectBean maxNoProject;
+        String firstProjNo;
+        if (yearCode == null) yearCode = NumberUtils.parseLong(LocalDate.now().getYear());
         String year = String.valueOf(yearCode).substring(2, 4);
-        String prefix = orgCode + bizCategoryId + year;
+        if (!"ND".equals(bizCategoryId)) {
+            String projNoPrefix = orgCode + bizCategoryId + year;
+            RestJsonWrapperBean wrapper = new RestJsonWrapperBean();
+            wrapper.setFilterValue("targetType", "modifyProjectInfo");
+            List<EmcProjectBean> existedProjectList = selectListByFilter(SearchFilter.instance().match("projNo", projNoPrefix).filter(MatchPattern.SB), wrapper);
+            List<EmcProjectBean> filterProjList = existedProjectList.stream().filter(e -> !"ND".equals(e.getBizCategoryCode())).collect(Collectors.toList());
+            EmcProjectBean maxNoProject2 = filterProjList.stream().max(Comparator.comparing(p -> NumberUtils.parseInt(StringUtils.replace(p.getProjNo(), projNoPrefix, "")))).orElse(null);
+            List<String> newProjectNoList = new ArrayList<>();
+            if (ObjectUtils.isEmpty(maxNoProject2)) {
+                firstProjNo = projNoPrefix + "0001";
+                newProjectNoList.add(firstProjNo);
+            } else {
+                firstProjNo = maxNoProject2.getProjNo().substring(0, maxNoProject2.getProjNo().length() - 4) + String.format("%04d", Long.parseLong(maxNoProject2.getProjNo().substring(maxNoProject2.getProjNo().length() - 4)) + 1L);
+                newProjectNoList.add(firstProjNo);
+            }
+            if (num > 1) {
+                for (int i = 0; i < num - 1; ++i) {
+                    String beforeProjNo2 = newProjectNoList.get(i);
+                    String nextProjNo = beforeProjNo2.substring(0, beforeProjNo2.length() - 4) + String.format("%04d", Long.parseLong(beforeProjNo2.substring(beforeProjNo2.length() - 4)) + 1L);
+                    newProjectNoList.add(nextProjNo);
+                }
+            }
+            return newProjectNoList;
+        }
+        String projNoPrefix = orgCode + bizCategoryId + year;
         RestJsonWrapperBean wrapper = new RestJsonWrapperBean();
         wrapper.setFilterValue("targetType", "modifyProjectInfo");
-        List<EmcProjectBean> existing;
-        if (!"ND".equals(bizCategoryId)) {
-            existing = selectListByFilter(SearchFilter.instance().match("projNo", prefix).filter(MatchPattern.SB), wrapper)
-                    .stream().filter(p -> !"ND".equals(p.getBizCategoryCode())).collect(Collectors.toList());
-            EmcProjectBean max = existing.stream().max(Comparator.comparing(p -> NumberUtils.parseInt(StringUtils.replace(p.getProjNo(), prefix, "")))).orElse(null);
-            List<String> result = new ArrayList<>();
-            String first = max == null ? prefix + "0001" : max.getProjNo().substring(0, max.getProjNo().length() - 4)
-                    + String.format("%04d", Long.parseLong(max.getProjNo().substring(max.getProjNo().length() - 4)) + 1);
-            result.add(first);
-            for (int i = 1; i < num; i++) {
-                String before = result.get(i - 1);
-                result.add(before.substring(0, before.length() - 4) + String.format("%04d", Long.parseLong(before.substring(before.length() - 4)) + 1));
-            }
-            return result;
-        }
-        existing = selectListByFilter(SearchFilter.instance().match("projNo", prefix).filter(MatchPattern.SB)
-                .match("BizCategoryCode", "ND").filter(MatchPattern.SEQ), wrapper).stream()
-                .filter(p -> p.getProjNo().length() == 12 || p.getProjNo().length() == 13).collect(Collectors.toList());
-        List<EmcProjectBean> sameName = existing.stream().filter(p -> ObjectUtils.equals(projName, p.getProjName())
-                && ObjectUtils.equals(contractNo, p.getExt$Item("contractno"))).collect(Collectors.toList());
-        List<String> result = new ArrayList<>();
-        String first;
-        if (existing.isEmpty()) first = prefix + "0001001";
-        else if (sameName.isEmpty()) {
-            EmcProjectBean max = existing.stream().max(Comparator.comparing(p -> NumberUtils.parseInt(StringUtils.replace(p.getProjNo(), prefix, "").substring(0, 4)))).get();
-            first = prefix + String.format("%04d", Long.parseLong(max.getProjNo().substring(prefix.length(), prefix.length() + 4)) + 1) + "001";
+        List<EmcProjectBean> existedProjectList = selectListByFilter(SearchFilter.instance().match("projNo", projNoPrefix).filter(MatchPattern.SB).match("BizCategoryCode", "ND").filter(MatchPattern.SEQ), wrapper);
+        existedProjectList = existedProjectList.stream().filter(e -> e.getProjNo().length() == 12 || e.getProjNo().length() == 13).collect(Collectors.toList());
+        List<EmcProjectBean> sameNameProjList = existedProjectList.stream().filter(e -> ObjectUtils.equals(projName, e.getProjName()) && ObjectUtils.equals(contractNo, e.getExt$Item("contractno"))).collect(Collectors.toList());
+        List<String> newProjectNoList = new ArrayList<>();
+        if (existedProjectList.isEmpty()) {
+            firstProjNo = projNoPrefix + "0001001";
+            newProjectNoList.add(firstProjNo);
+        } else if (sameNameProjList.isEmpty()) {
+            maxNoProject = existedProjectList.stream().max(Comparator.comparing(p -> NumberUtils.parseInt(StringUtils.replace(p.getProjNo(), projNoPrefix, "").substring(0, 4)))).orElse(null);
+            firstProjNo = maxNoProject.getProjNo().substring(0, projNoPrefix.length()) + String.format("%04d", Long.parseLong(maxNoProject.getProjNo().substring(projNoPrefix.length(), projNoPrefix.length() + 4)) + 1L) + "001";
+            newProjectNoList.add(firstProjNo);
         } else {
-            EmcProjectBean max = sameName.stream().max(Comparator.comparing(p -> NumberUtils.parseInt(StringUtils.replace(p.getProjNo(), prefix, "")))).get();
-            String number = max.getProjNo().substring(prefix.length() + 4);
-            first = max.getProjNo().substring(0, prefix.length() + 4) + String.format("%03d", Integer.parseInt(number) + 1);
+            maxNoProject = sameNameProjList.stream().max(Comparator.comparing(p -> NumberUtils.parseInt(StringUtils.replace(p.getProjNo(), projNoPrefix, "")))).orElse(null);
+            beforeProjNo = maxNoProject.getProjNo();
+            prefix = beforeProjNo.substring(0, projNoPrefix.length() + 4);
+            numberPart = beforeProjNo.substring(projNoPrefix.length() + 4);
+            incrementedNumber = Integer.parseInt(numberPart) + 1;
+            firstProjNo = prefix + String.format("%03d", incrementedNumber);
+            newProjectNoList.add(firstProjNo);
         }
-        result.add(first);
-        for (int i = 1; i < num; i++) {
-            String before = result.get(i - 1);
-            result.add(before.substring(0, prefix.length() + 4) + String.format("%03d", Integer.parseInt(before.substring(prefix.length() + 4)) + 1));
+        if (num > 1) {
+            for (int i = 0; i < num - 1; ++i) {
+                beforeProjNo = newProjectNoList.get(i);
+                prefix = beforeProjNo.substring(0, projNoPrefix.length() + 4);
+                numberPart = beforeProjNo.substring(projNoPrefix.length() + 4);
+                incrementedNumber = Integer.parseInt(numberPart) + 1;
+                newProjectNoList.add(prefix + String.format("%03d", incrementedNumber));
+            }
         }
-        return result;
+        return newProjectNoList;
     }
 
     @Override

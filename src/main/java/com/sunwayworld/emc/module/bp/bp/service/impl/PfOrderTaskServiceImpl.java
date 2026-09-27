@@ -246,7 +246,6 @@ public  class PfOrderTaskServiceImpl extends EmcOrderTaskServiceImpl implements 
 
     @Override
     @Transactional
-    @AuditTrailEntry(AuditTrailType.INSERT)
     public void insertByOrder(List<EmcOrderBean> orderList) {
         List<EmcOrderTaskBean> insertOrderTaskList = new ArrayList<>();
         List<EmcOrderTaskResultBean> insertOrderTaskResultList = new ArrayList<>();
@@ -486,7 +485,7 @@ public  class PfOrderTaskServiceImpl extends EmcOrderTaskServiceImpl implements 
                         }
 
                         insertOrderTaskList.add(orderTask);
-                        allOldOrderTaskList.add(orderTask);
+                        oldOrderTaskList.add(orderTask);
 
                         // 样品测试结果
                         List<EmcItemBean> analysisCategoryItemList = filterItemList.stream().filter(e -> ObjectUtils.equals(e.getAnalysisCategory(), analysisCategory)).collect(Collectors.toList());
@@ -1035,27 +1034,28 @@ public  class PfOrderTaskServiceImpl extends EmcOrderTaskServiceImpl implements 
 
     @Override
     public Page<EmcOrderTaskBean> selectOrderTaskPagationByOrderAndTask(RestJsonWrapperBean wrapper) {
-        List<EmcOrderBean> orderList = wrapper.parse(EmcOrderBean.class);
-        EmcOrderTaskBean containerTask = wrapper.parseUnique(EmcOrderTaskBean.class);
-        List<Long> orderIds = orderList.stream().map(e -> e.getId()).distinct().collect(Collectors.toList());
-        if (orderIds.isEmpty()) return new Pagination<>();
-        SearchFilter filter = SearchFilter.instance().match("orderId", orderIds).filter(MatchPattern.OR);
-        if (!ObjectUtils.isEmpty(containerTask.getContainerCategoryId())) {
-            filter.match("ContainerCategoryId", containerTask.getContainerCategoryId()).filter(MatchPattern.SEQ);
+        List<EmcOrderBean> orderBeanList = wrapper.parse(EmcOrderBean.class);
+        EmcOrderTaskBean containerOrderTask = wrapper.parseUnique(EmcOrderTaskBean.class);
+        List<Long> orderIdList = orderBeanList.stream().map(EmcOrderBean::getId).distinct().collect(Collectors.toList());
+        if (orderIdList.isEmpty()) return new Pagination<>();
+        SearchFilter searchFilter = SearchFilter.instance();
+        searchFilter.match("orderId", orderIdList).filter(MatchPattern.OR);
+        if (!ObjectUtils.isEmpty(containerOrderTask.getContainerCategoryId())) {
+            searchFilter.match("ContainerCategoryId", containerOrderTask.getContainerCategoryId()).filter(MatchPattern.SEQ);
         }
-        if (!ObjectUtils.isEmpty(containerTask.getContainerGroup())) {
-            filter.match("ContainerGroup", containerTask.getContainerGroup()).filter(MatchPattern.SEQ);
+        if (!ObjectUtils.isEmpty(containerOrderTask.getContainerGroup())) {
+            searchFilter.match("ContainerGroup", containerOrderTask.getContainerGroup()).filter(MatchPattern.SEQ);
         }
-        if (!ObjectUtils.isEmpty(containerTask.getFixative())) {
-            filter.match("Fixative", containerTask.getFixative()).filter(MatchPattern.SEQ);
+        if (!ObjectUtils.isEmpty(containerOrderTask.getFixative())) {
+            searchFilter.match("Fixative", containerOrderTask.getFixative()).filter(MatchPattern.SEQ);
         }
-        if (!ObjectUtils.isEmpty(containerTask.getStoreCondition())) {
-            filter.match("StoreCondition", containerTask.getStoreCondition()).filter(MatchPattern.SEQ);
+        if (!ObjectUtils.isEmpty(containerOrderTask.getStoreCondition())) {
+            searchFilter.match("StoreCondition", containerOrderTask.getStoreCondition()).filter(MatchPattern.SEQ);
         }
-        List<EmcOrderTaskBean> taskList = selectListByFilter(filter, new Order[0]);
-        List<EmcOrderTaskBean> uniqueTasks = taskList.stream().collect(Collectors.collectingAndThen(
+        List<EmcOrderTaskBean> orderTaskList = selectListByFilter(searchFilter, new Order[0]);
+        List<EmcOrderTaskBean> orderTaskContainerList = orderTaskList.stream().collect(Collectors.collectingAndThen(
                 Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(EmcOrderTaskBean::getTestName))), ArrayList::new));
-        return new Pagination<>(uniqueTasks);
+        return new Pagination<>(orderTaskContainerList);
     }
 
     // ----------------------------------------------------------------------
@@ -1274,7 +1274,7 @@ public  class PfOrderTaskServiceImpl extends EmcOrderTaskServiceImpl implements 
 
         List<Long> testMethodIdList = orderTaskList.stream().map(EmcOrderTaskBean::getTestMethodId).distinct().collect(Collectors.toList());
         if (folderList.size() == 1) {
-            List<Long> orderIdList = orderList.stream().map(EmcOrderBean::getId).collect(Collectors.toList());
+            List<Long> orderIdList = orderList.stream().map(EmcOrderBean::getId).distinct().collect(Collectors.toList());
             List<String> searchColumns = new ArrayList<>(Arrays.asList("orderId", "testMethodId"));
             orderIdList.forEach(orderId -> testMethodIdList.forEach(testMethodId -> {
                 EmcOrderTaskBean filterTask = new EmcOrderTaskBean();
@@ -1283,22 +1283,18 @@ public  class PfOrderTaskServiceImpl extends EmcOrderTaskServiceImpl implements 
                 filterTaskList.add(filterTask);
             }));
 
-            orderTaskList = getDao().selectList(filterTaskList, searchColumns, Arrays.asList("id", "runId","orderId","testMethodId", "status", "analysisType"));
+            orderTaskList = getDao().selectList(filterTaskList, searchColumns, null);
         } else {
-            List<Long> folderIdList = folderList.stream().map(EmcFolderBean::getId).collect(Collectors.toList());
+            List<Long> folderIdList = folderList.stream().map(EmcFolderBean::getId).distinct().collect(Collectors.toList());
             List<String> searchColumns = new ArrayList<>(Arrays.asList("folderId", "testMethodId"));
             folderIdList.forEach(folderId -> testMethodIdList.forEach(testMethodId -> {
                 EmcOrderTaskBean filterTask = new EmcOrderTaskBean();
                 filterTask.setFolderId(folderId);
                 filterTask.setTestMethodId(testMethodId);
-                if (!beforeSampling) {
-                    filterTask.setAnalysisType(PfBizConstant.ANALYSISCATEGORY_ANALYSIS);
-                    searchColumns.add("analysisType");
-                }
                 filterTaskList.add(filterTask);
             }));
 
-            orderTaskList = getDao().selectList(filterTaskList, searchColumns, Arrays.asList("id", "runId","orderId","testMethodId","status", "analysisType"));
+            orderTaskList = getDao().selectList(filterTaskList, searchColumns, null);
         }
 
         // 如果是采样后分包（即样品分包）的话，只需要分包分析的
@@ -1520,7 +1516,10 @@ public  class PfOrderTaskServiceImpl extends EmcOrderTaskServiceImpl implements 
         List<EmcOrderTaskResultBean> resultList = orderTaskResultService.getDao().selectListByOneColumnValues(orderTaskIdList, "ORDERTASKID");
         List<String> runIdList = resultList.stream().map(EmcOrderTaskResultBean :: getRunId)
                 .filter(r -> !StringUtils.isEmpty(r)).distinct().collect(Collectors.toList());
-        String runId = runIdList.get(0);
+        String runId = null;
+        if (!runIdList.isEmpty()) {
+            runId = runIdList.get(0);
+        }
         List<Long> resultIdList = resultList.stream().map(EmcOrderTaskResultBean :: getId).distinct().collect(Collectors.toList());
         Map<Long,String> propertytmplId2NameMap = propertyTmplService.getDao().selectListByOneColumnValue("evaluationStandard", "TEMPLATEUSE").stream().collect(Collectors.toMap(e -> e.getId(),e -> e.getTemplateName(),  (s1, s2) -> s1));
         List<Long> indexItemIdList = indexSetList.stream().map(e -> e.getIndexItemId()).collect(Collectors.toList());
@@ -1685,7 +1684,9 @@ public  class PfOrderTaskServiceImpl extends EmcOrderTaskServiceImpl implements 
             res.setExt$Item("indexaddflag","1");
         });
         orderTaskResultService.getDao().update(resultList, "INDEXLOWLIMIT", "INDEXHIGHLIMIT","INDEXADDFLAG", "INDEXLIMITUNIT");
-        asyncFormulaComputingService.asyncComputing(runId, resultIdList, LocalContextHelper.getLoginUserId());
+        if (runId != null) {
+            asyncFormulaComputingService.asyncComputing(runId, resultIdList, LocalContextHelper.getLoginUserId());
+        }
 
     }
 
@@ -1888,7 +1889,7 @@ public  class PfOrderTaskServiceImpl extends EmcOrderTaskServiceImpl implements 
         } else {
             basicTask = (EmcOrderTaskBean)targetTaskList.get(0);
             orderContainerList = this.orderContainerService.getDao().selectListByOneColumnValue(basicTask.getOrderId(), "orderId", new Order[0]);
-            maxOrderContainer = orderContainerList.stream().max(Comparator.comparing(EmcOrderContainerBean::getOrderContainerNo)).orElse((EmcOrderContainerBean)orderContainerList.get(0));
+            maxOrderContainer = (EmcOrderContainerBean) ((Optional) orderContainerList.stream().max(Comparator.comparing(EmcOrderContainerBean::getOrderContainerNo))).orElse(orderContainerList.get(0));
             maxOrderContainerNo = maxOrderContainer.getOrderContainerNo();
             int maxSuffix = NumberUtils.parseInt(maxOrderContainerNo.substring(maxOrderContainerNo.length() - 3));
             String newOrderContainerNo = maxOrderContainerNo.substring(0, maxOrderContainerNo.length() - 3) + StringUtils.leftPad((maxSuffix + 1 + ""), (int)3);
@@ -1917,7 +1918,7 @@ public  class PfOrderTaskServiceImpl extends EmcOrderTaskServiceImpl implements 
         }
         basicTask = (EmcOrderTaskBean)targetTaskList.get(0);
         orderContainerList = this.orderContainerService.getDao().selectListByOneColumnValue(basicTask.getOrderId(), "orderId", new Order[0]);
-        maxOrderContainer = orderContainerList.stream().max(Comparator.comparing(EmcOrderContainerBean::getOrderContainerNo)).orElse((EmcOrderContainerBean)orderContainerList.get(0));
+        maxOrderContainer = (EmcOrderContainerBean) ((Optional) orderContainerList.stream().max(Comparator.comparing(EmcOrderContainerBean::getOrderContainerNo))).orElse(orderContainerList.get(0));
         maxOrderContainerNo = maxOrderContainer.getOrderContainerNo();
         List<Long> orderContainerIdList = orderContainerList.stream().map(EmcOrderContainerBean::getId).distinct().collect(Collectors.toList());
         List<EmcOrderTaskBean> orderTaskList = this.getDao().selectListByOneColumnValues(orderContainerIdList, "orderContainerId", new Order[0]);

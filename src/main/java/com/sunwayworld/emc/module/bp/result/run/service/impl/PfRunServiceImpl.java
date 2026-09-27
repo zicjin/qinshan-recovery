@@ -863,7 +863,7 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
         List<EmcPropertyDataBean> filterDataList = new ArrayList<>(orderTaskIdList.size());
         orderTaskIdList.forEach(taskId -> {
             EmcPropertyDataBean filterData = new EmcPropertyDataBean();
-            filterData.setBizId(taskId);
+            filterData.setBizId2(String.valueOf(taskId));
             filterDataList.add(filterData);
         });
         propertyDataService.getDao().deleteBy(filterDataList, "bizId2");

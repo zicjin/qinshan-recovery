@@ -4031,7 +4031,7 @@ public class PfProjectServiceImpl extends EmcProjectServiceImpl implements PfPro
         Map<String, List<EmcOaOrgRelationBean>> orgMap = relations.stream()
                 .collect(Collectors.groupingBy(EmcOaOrgRelationBean::getLimsOrgCode));
         List<NcProjectReqBean> requests = new ArrayList<>();
-        for (EmcProjectBean project : eligible) {
+        eligible.stream().forEach(project -> {
             NcProjectReqBean req = new NcProjectReqBean();
             req.setCommission_no(project.getProjNo()); req.setListno(project.getProjNo());
             req.setCommission_date(project.getCreatedTime()); req.setCommission_unit(project.getEntrustOrgName());
@@ -4044,14 +4044,14 @@ public class PfProjectServiceImpl extends EmcProjectServiceImpl implements PfPro
             req.setReportoutdate(StringUtils.isBlank(deliveryDate) ? LocalDateTime.now() : DateTimeUtils.parseLocalDateTime(deliveryDate));
             req.setJclxcode(project.getExt$Item("nccode"));
             requests.add(req);
-        }
+        });
         logger.info("同步任务信息至NC==========req=" + JSONObject.toJSONString(requests));
         String response = HttpClientManager.getInstance().sendHttpPost(url, JSONObject.toJSONString(requests));
         String status = (response.contains("success") || response.contains("成功")) ? "已推送" : "失败";
-        for (EmcProjectBean project : eligible) {
+        eligible.stream().forEach(project -> {
             project.setExt$Item("syncncstatus", status);
             project.setExt$Item("syncncdesc", response);
-        }
+        });
         getDao().update(eligible, "syncncstatus", "syncncdesc");
     }
 

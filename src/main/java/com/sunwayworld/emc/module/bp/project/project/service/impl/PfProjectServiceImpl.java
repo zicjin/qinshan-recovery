@@ -3774,8 +3774,10 @@ public class PfProjectServiceImpl extends EmcProjectServiceImpl implements PfPro
         EmcBizCategoryBean category = bizCategoryService.selectById(project.getBizCategoryId());
         Long testOrgId = category.getTestOrgId();
         CoreUserBean user = LocalContextHelper.getLoginUser();
-        project.setOrgId(user.getExt$Item("parentorgid"));
-        project.setOrgName(user.getExt$Item("parentorgname"));
+        String parentOrgId = user.getExt$Item("parentorgid");
+        String parentOrgName = user.getExt$Item("parentorgname");
+        project.setOrgId(parentOrgId);
+        project.setOrgName(parentOrgName);
         if (testOrgId != null) {
             EmcClientBean client = clientService.getDao().selectById(testOrgId);
             project.setTestOrgId(client.getClientNo()); project.setTestOrgName(client.getClientName());
@@ -3804,11 +3806,10 @@ public class PfProjectServiceImpl extends EmcProjectServiceImpl implements PfPro
         CoreOrgBean parentOrg = coreOrgService.selectById(plan.getOrgId());
         String orgCode = Optional.ofNullable(parentOrg.getExt$Item("orgshortname")).orElse("XX");
         List<String> newProjectNoList = generateProjNos(plan.getYear(), orgCode, plan.getBizCategoryCode(), plan.getProjName(), 1, plan.getExt$Item("contractno"));
-        String newNo = newProjectNoList.get(0);
         List<EmcProjSchemeBean> schemes = projSchemeService.getDao().selectListByOneColumnValue(plan.getId(), "PROJID", new Order[0]);
         List<Long> schemeIds = schemes.stream().map(EmcProjSchemeBean::getId).collect(Collectors.toList());
         List<EmcProjOrderBean> orders = projOrderService.getDao().selectListByOneColumnValues(schemeIds, "PROJSCHEMEID", new Order[0]);
-        plan.setId(ApplicationContextHelper.getNextIdentity()); plan.setProjNo(newNo); plan.setRegistDate(LocalDateTime.now()); plan.setCreatedTime(LocalDateTime.now());
+        plan.setId(ApplicationContextHelper.getNextIdentity()); plan.setProjNo(newProjectNoList.get(0)); plan.setRegistDate(LocalDateTime.now()); plan.setCreatedTime(LocalDateTime.now());
         for (EmcProjSchemeBean scheme : schemes) {
             List<EmcProjOrderBean> schemeOrders = orders.stream().filter(o -> ObjectUtils.equals(o.getProjSchemeId(), scheme.getId())).collect(Collectors.toList());
             scheme.setId(ApplicationContextHelper.getNextIdentity());
@@ -3830,11 +3831,10 @@ public class PfProjectServiceImpl extends EmcProjectServiceImpl implements PfPro
         CoreOrgBean parentOrg = coreOrgService.selectById(plan.getOrgId());
         String orgCode = Optional.ofNullable(parentOrg.getExt$Item("orgshortname")).orElse("XX");
         List<String> newProjectNoList = generateProjNos(plan.getYear(), orgCode, plan.getBizCategoryCode(), plan.getProjName(), 1, plan.getExt$Item("contractno"));
-        String newNo = newProjectNoList.get(0);
         List<EmcProjSchemeBean> schemes = projSchemeService.getDao().selectListByOneColumnValue(plan.getId(), "PROJID", new Order[0]);
         List<Long> schemeIds = schemes.stream().map(EmcProjSchemeBean::getId).collect(Collectors.toList());
         List<EmcProjOrderBean> orders = projOrderService.getDao().selectListByOneColumnValues(schemeIds, "PROJSCHEMEID", new Order[0]);
-        plan.setId(ApplicationContextHelper.getNextIdentity()); plan.setProjNo(newNo); plan.setRegistDate(LocalDateTime.now()); plan.setCreatedTime(LocalDateTime.now());
+        plan.setId(ApplicationContextHelper.getNextIdentity()); plan.setProjNo(newProjectNoList.get(0)); plan.setRegistDate(LocalDateTime.now()); plan.setCreatedTime(LocalDateTime.now());
         for (EmcProjSchemeBean scheme : schemes) {
             List<EmcProjOrderBean> schemeOrders = orders.stream().filter(o -> ObjectUtils.equals(o.getProjSchemeId(), scheme.getId())).collect(Collectors.toList());
             scheme.setId(ApplicationContextHelper.getNextIdentity());

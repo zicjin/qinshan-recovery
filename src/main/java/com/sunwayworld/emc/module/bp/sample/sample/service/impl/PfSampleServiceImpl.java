@@ -1178,6 +1178,17 @@ public class PfSampleServiceImpl extends EmcSampleServiceImpl implements PfSampl
                         reminds += firstParamPointResult;
                     }
                 }
+                List<String> orderCategoryList = Arrays.asList("有组织废气", "无组织废气", "环境空气");
+                List<EmcOrderBean> checkOrderList = orderList.stream()
+                        .filter(e -> !orderCategoryList.contains(e.getOrderCategory())
+                                && (e.getSampleBeginDate() == null || e.getSampleBeginTime() == null
+                                || e.getSampleCompleteDate() == null || e.getSampleCompleteTime() == null))
+                        .collect(Collectors.toList());
+                if (!checkOrderList.isEmpty()) {
+                    String orderNos = StringUtils.join(checkOrderList.stream().map(EmcOrderBean::getOrderNo).distinct().collect(Collectors.toList()), ",");
+                    String orderReminds = "样品编号: " + orderNos + "采样时间需完善。";
+                    reminds = StringUtils.isBlank(reminds) ? orderReminds : reminds + orderReminds;
+                }
             }
         }
         return reminds;
@@ -1187,13 +1198,27 @@ public class PfSampleServiceImpl extends EmcSampleServiceImpl implements PfSampl
     public void submitDelivery(RestJsonWrapperBean wrapper) {
         List<EmcSampleBean> sampleList = wrapper.parse(EmcSampleBean.class);
         String currentDate = DateTimeUtils.formatLocalDate(LocalDate.now());
+        List<Long> sampleIdList = sampleList.stream().map(EmcSampleBean::getId).distinct().collect(Collectors.toList());
+        List<EmcOrderBean> deliveryOrderList = orderService.getDao().selectListByOneColumnValues(sampleIdList, "sampleid");
+        if (deliveryOrderList.stream().anyMatch(e -> e.getOrderDesc() == null)) {
+            throw new InvalidDataException("样品描述未维护");
+        }
         sampleList.forEach(sample -> {
             sample.setStatus(EmcBizConstant.SAMPLE_STATUS_PRELOGGED);
             sample.setHandStatus(EmcBizConstant.SAMPLE_STATUS_PRELOGGED);
             sample.setExt$Item("RECEIVEDATE", currentDate);
+            List<EmcOrderBean> currentOrderList = deliveryOrderList.stream().filter(e -> ObjectUtils.equals(e.getSampleId(), sample.getId())).collect(Collectors.toList());
+            LocalDateTime minSendDateTime = currentOrderList.stream()
+                    .filter(e -> e.getSendDate() != null && e.getSendTime() != null)
+                    .map(e -> String.format("%s %s%s", DateTimeUtils.formatLocalDate(e.getSendDate(), "yyyy-MM-dd"), e.getSendTime(), ":00"))
+                    .map(DateTimeUtils::parseLocalDateTime).min(LocalDateTime::compareTo).orElse(null);
+            if (minSendDateTime != null) {
+                sample.setAcceptedDate(minSendDateTime);
+                sample.setAcceptedTime(DateTimeUtils.formatLocalDateTime(minSendDateTime, "HH:mm"));
+            }
         });
 
-        getDao().update(sampleList, "status", "HANDSTATUS", "RECEIVEDATE");
+        getDao().update(sampleList, "status", "HANDSTATUS", "RECEIVEDATE", "ACCEPTEDDATE", "ACCEPTEDTIME");
         deliveryService.createDelivery(sampleList);
     }
 

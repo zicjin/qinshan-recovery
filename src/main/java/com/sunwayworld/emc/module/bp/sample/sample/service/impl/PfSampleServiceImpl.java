@@ -1,6 +1,8 @@
 package com.sunwayworld.emc.module.bp.sample.sample.service.impl;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -69,13 +71,13 @@ import com.sunwayworld.emc.module.bp.project.project.bean.EmcProjectBean;
 import com.sunwayworld.emc.module.bp.project.project.service.EmcOrderItemGroupService;
 import com.sunwayworld.emc.module.bp.project.project.service.EmcProjectService;
 import com.sunwayworld.emc.module.bp.report.report.service.EmcReportService;
+import com.sunwayworld.emc.module.bp.report.report.bean.EmcReportBean;
 import com.sunwayworld.emc.module.bp.result.pretreatment.bean.EmcPretreatmentBean;
 import com.sunwayworld.emc.module.bp.result.pretreatment.service.EmcPretreatmentService;
 import com.sunwayworld.emc.module.bp.sample.sample.bean.EmcSampleBean;
 import com.sunwayworld.emc.module.bp.sample.sample.dao.EmcSampleDao;
 import com.sunwayworld.emc.module.bp.sample.sample.service.PfSampleService;
 import com.sunwayworld.emc.module.bp.sample.sample.validator.PfSampleAcceptValidator;
-import com.sunwayworld.emc.module.bp.sample.sample.validator.PfSampleCompleteValidator;
 import com.sunwayworld.emc.module.bp.sample.sample.validator.PfSampleSubmitValidator;
 import com.sunwayworld.emc.module.mdm.basemdm.propertytmpl.bean.EmcPropertyDataBean;
 import com.sunwayworld.emc.module.mdm.basemdm.propertytmpl.service.EmcPropertyDataService;
@@ -630,13 +632,13 @@ public class PfSampleServiceImpl extends EmcSampleServiceImpl implements PfSampl
     @Override
     @Transactional
     @AuditTrailEntry(AuditTrailType.PROCESS_COMPLETE)
-    @ValidateDataWith(PfSampleCompleteValidator.class)
     public List<CoreBpmnInstanceStatusDTO<Long>> completeTask(RestJsonWrapperBean wrapper) {
 
         List<CoreBpmnInstanceStatusDTO<Long>> coreBpmnInstanceStatusDTOList = completeTaskBasic(wrapper);
 
         List<Long> sampleIdList = coreBpmnInstanceStatusDTOList.stream().map(e -> e.getId()).collect(Collectors.toList());
-        List<EmcSampleBean> sampleList = getDao().selectListByIds(sampleIdList);
+        List<EmcSampleBean> sampleList = selectListByFilter(
+                SearchFilter.instance().match("ID", sampleIdList).filter(MatchPattern.OR));
         List<Long> projIdList = sampleList.stream().map(a -> a.getProjId()).distinct().collect(Collectors.toList());
         List<EmcOrderBean> orderList = orderService.getDao().selectListByOneColumnValues(sampleIdList, "SAMPLEID");
 
@@ -650,6 +652,12 @@ public class PfSampleServiceImpl extends EmcSampleServiceImpl implements PfSampl
         //采样复核默认采样开始时间，若手填以手填为准
         //采样审核默认当天日期，若手填以手填为准
         if (ObjectUtils.equals(EmcBizConstant.SAMPLE_STATUS_MUTUAL, taskStatus)) {
+            String loginUserName = LocalContextHelper.getLoginUserName();
+            for (EmcSampleBean sample : sampleList) {
+                if (!ObjectUtils.equals(sample.getSampleSceneUserName(), loginUserName)) {
+                    throw new InvalidDataException("非现场负责人无法审核");
+                }
+            }
             // 采样单的状态改成audit
             sampleList.forEach(e -> {
                 EmcOrderBean basisOrder = orderList.stream().filter(order -> ObjectUtils.equals(order.getSampleId(), e.getId()) && !ObjectUtils.isEmpty(order.getSampleCompleteDate())).findFirst().orElseGet(EmcOrderBean::new);
@@ -740,8 +748,6 @@ public class PfSampleServiceImpl extends EmcSampleServiceImpl implements PfSampl
 
                     // 更新点位状态
                     folderService.updateStatus(orderTaskList);
-                    // 判断对应的项目样品类型下的样品测试是不是都已经完成，完成的话将报告状态置为待录入
-                    reportService.updateReportStatus(orderTaskList);
                     // 判断是否修改项目表状态
                     updateProject(projIdList);
                 }
@@ -876,11 +882,14 @@ public class PfSampleServiceImpl extends EmcSampleServiceImpl implements PfSampl
         }
         // 修改项目节点状态
         ProjectNodeUtils.updateNodes(projIdList);
+        sampleList.forEach(sample -> {
+            sample.setStatus(EmcBizConstant.SAMPLE_STATUS_DRAFT);
+            sample.setAcceptStatus("0");
+        });
+        getDao().update(sampleList, "STATUS", "ACCEPTSTATUS");
     }
 
     @Override
-    @Transactional
-    @AuditTrailEntry(AuditTrailType.PROCESS_REJECT)
     public List<CoreBpmnInstanceStatusDTO<Long>> rejectTask(RestJsonWrapperBean wrapper) {
         // 采样互审、采样审核拒绝
         List<CoreBpmnInstanceStatusDTO<Long>> coreBpmnInstanceStatusDTOList = rejectTaskBasic(wrapper);
@@ -958,9 +967,9 @@ public class PfSampleServiceImpl extends EmcSampleServiceImpl implements PfSampl
     //根据样品类型与模板模板名称相匹配找到模板组
     @Override
     public String selectCategoryCode(RestJsonWrapperBean wrapper) {
-        List<EmcSampleBean> sampleList = wrapper.parse(EmcSampleBean.class);
+        EmcSampleBean sample = wrapper.parseUnique(EmcSampleBean.class);
 
-        String monitorTmplId = sampleList.get(0).getMonitorTmplId();
+        String monitorTmplId = sample.getMonitorTmplId();
         if (monitorTmplId == null) {
             return null;
         }
@@ -1115,7 +1124,7 @@ public class PfSampleServiceImpl extends EmcSampleServiceImpl implements PfSampl
                 List<EmcOrderTaskBean> orderTaskList = orderTaskService.selectListByFilter(SearchFilter.instance().match("ORDERID", orderIdList).filter(MatchPattern.OR)
                         .match("ANALYSISTYPE", "sampling").filter(MatchPattern.SEQ)
                         .match("SUBCONTRACTORID", null).filter(MatchPattern.SEQ)
-                        .match("QCCATEGORYCODE", "P-BLANK").filter(MatchPattern.DIFFER), wrapper);
+                        .match("QCCATEGORYCODE", Arrays.asList("P-BLANK", "P-YSKB")).filter(MatchPattern.DIFFER), wrapper);
 
                 String equiptId = "";
                 String analysisUserId = "";
@@ -1642,21 +1651,26 @@ public class PfSampleServiceImpl extends EmcSampleServiceImpl implements PfSampl
 
                 List<EmcOrderTaskBean> groupedAnalysisTaskList = analysisOrderTaskList.stream()
                         .collect(Collectors.collectingAndThen(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(e -> e.getTestMethodId() + e.getExt$Item("orgid")))), ArrayList::new));
-                List<EmcTestCapacityBean> capacityFilters = groupedAnalysisTaskList.stream().map(task -> {
+                ArrayList<EmcTestCapacityBean> capacityFilters = new ArrayList<>();
+                for (EmcOrderTaskBean task : groupedAnalysisTaskList) {
                     EmcTestCapacityBean filterCapacity = new EmcTestCapacityBean();
                     filterCapacity.setTestMethodId(task.getTestMethodId());
                     filterCapacity.setOrgId(task.getExt$Item("orgid"));
-                    return filterCapacity;
-                }).collect(Collectors.toList());
+                    capacityFilters.add(filterCapacity);
+                }
                 List<EmcTestCapacityBean> capacityList = emcTestCapacityService.getDao().selectList(capacityFilters,
                         Arrays.asList("orgId", "testMethodId"), Arrays.asList("id", "testMethodId", "orgId", "analysisOrgId", "analysisOrgName"));
-                analysisOrderTaskList.forEach(task -> capacityList.stream()
-                        .filter(capacity -> ObjectUtils.equals(capacity.getOrgId(), task.getExt$Item("orgid"))
-                                && ObjectUtils.equals(capacity.getTestMethodId(), task.getTestMethodId()))
-                        .findFirst().ifPresent(capacity -> {
-                            task.setAnalysisOrgId(capacity.getExt$Item("analysisorgid"));
-                            task.setAnalysisOrgName(capacity.getExt$Item("analysisorgname"));
-                        }));
+                for (EmcOrderTaskBean task : analysisOrderTaskList) {
+                    EmcTestCapacityBean capacity = capacityList.stream()
+                            .filter(item -> ObjectUtils.equals(item.getOrgId(), task.getExt$Item("orgid"))
+                                    && ObjectUtils.equals(item.getTestMethodId(), task.getTestMethodId()))
+                            .findFirst().orElse(null);
+                    if (capacity == null) {
+                        continue;
+                    }
+                    task.setAnalysisOrgId(capacity.getExt$Item("analysisorgid"));
+                    task.setAnalysisOrgName(capacity.getExt$Item("analysisorgname"));
+                }
                 orderTaskService.getDao().update(analysisOrderTaskList, "ANALYSISORGID", "ANALYSISORGNAME");
             }
             // 判断更新的样品测试对应的项目样品类型下的样品测试是不是都已经完成，完成的话将报告状态置为preLogged
@@ -1776,13 +1790,6 @@ public class PfSampleServiceImpl extends EmcSampleServiceImpl implements PfSampl
                     }
                 }
 
-                // 判断是否是采样任务
-                Long projId = order.getProjId();
-                String sample = projectService.selectColumnById(projId, "sample");
-                if (ObjectUtils.equals(sample, Constant.NO)) {
-                    throw new AuthenticationServiceException("所选样品为送样任务,无采样单！");
-                }
-
                 Long sampleId = order.getSampleId();
                 if (ObjectUtils.isEmpty(order)) {
                     throw new AuthenticationServiceException("所选样品的采样单号为空！");
@@ -1811,7 +1818,7 @@ public class PfSampleServiceImpl extends EmcSampleServiceImpl implements PfSampl
         }
         String reportingServiceServer = ApplicationContextHelper.getConstantValue((String)"REPORTING_SERVICE_SERVER_URL");
         String fineBaseUrl = ApplicationContextHelper.getEnvironment().getProperty("sunway.config.fine.independent-deploy-server.url");
-        ArrayList<Path> exportPathList = new ArrayList<Path>();
+        List<Path> exportPathList = new ArrayList<Path>();
         try {
             for (EmcSampleBean sample : sampleList) {
                 if (StringUtils.isEmpty((String)sample.getReportConfigLineId())) continue;
@@ -1930,9 +1937,10 @@ public class PfSampleServiceImpl extends EmcSampleServiceImpl implements PfSampl
         List<EmcOrderItemGroupBean> deleteOrderItemGroupList = new ArrayList<>();
 
         for (EmcOrderBean order : wrapperOrderList) {
+            ++orderIndex;
             EmcOrderBean newOrder = new EmcOrderBean();
             BeanUtils.copyProperties(order, newOrder);
-            String newOrderNo = folder.getFolderNo() + StringUtils.leftPad(String.valueOf(++orderIndex), 3);
+            String newOrderNo = folder.getFolderNo() + StringUtils.leftPad(orderIndex + "", 3);
             Long newOrderId = ApplicationContextHelper.getNextIdentity();
             newOrder.setId(newOrderId);
             newOrder.setOrderNo(newOrderNo);
@@ -1988,26 +1996,29 @@ public class PfSampleServiceImpl extends EmcSampleServiceImpl implements PfSampl
 
     @Override
     public void equiptCollect(RestJsonWrapperBean wrapper) {
-        List<Long> fileIdList = wrapper.parse(CoreFileBean.class).stream().map(CoreFileBean::getId).collect(Collectors.toList());
-        List<CoreFileBean> fileList = this.coreFileService.getDao().selectListByIds(fileIdList, new Order[0]);
+        List<CoreFileBean> fileList = this.coreFileService.getDao().selectListByIds(
+                wrapper.parse(CoreFileBean.class).stream().map(CoreFileBean::getId).collect(Collectors.toList()), new Order[0]);
         String equiptDirString = ApplicationContextHelper.getEnvironment().getProperty("sunway.equipt.acq.scene.file.local.path");
-        if (StringUtils.isEmpty(equiptDirString)) {
+        if (equiptDirString == null) {
             return;
         }
         fileList.forEach(file -> {
-            File inputFile = CoreFileUtils.getLocalPath(file).toFile();
-            File newFile = new File(equiptDirString, file.getName());
-            try (java.io.FileInputStream fis = new java.io.FileInputStream(inputFile)) {
-                File parent = newFile.getParentFile();
-                if (parent != null && !parent.exists()) {
-                    parent.mkdirs();
+            File inputFile = FilePathManager.getLocalPath(FilePathDTO.of(
+                    file.getScope(), DateTimeUtils.getDateSerialNumber(file.getCreatedTime()),
+                    file.getMd5Name(), file.getName())).toFile();
+            try {
+                FileInputStream fis = new FileInputStream(inputFile);
+                String fileName = equiptDirString + File.separator + file.getName();
+                File newFile = new File(fileName);
+                if (!newFile.getParentFile().exists()) {
+                    newFile.getParentFile().mkdirs();
                 }
                 if (newFile.exists()) {
                     newFile.delete();
                 }
-                FileUtils.write(newFile, fis);
+                FileUtils.write(newFile, (InputStream) fis);
             } catch (Exception e) {
-                throw new com.sunwayworld.framework.exception.FileException(e);
+                throw new FileException(e);
             }
         });
     }
@@ -2038,9 +2049,10 @@ public class PfSampleServiceImpl extends EmcSampleServiceImpl implements PfSampl
             this.orderTaskService.getDao().updateByIds(updateTask,
                     analysisTasks.stream().map(EmcOrderTaskBean::getId).collect(Collectors.toList()), "STATUS");
         }
-        List<Long> containerIdList = allOrderTaskList.stream().map(EmcOrderTaskBean::getOrderContainerId)
-                .filter(id -> !ObjectUtils.isEmpty(id)).distinct().collect(Collectors.toList());
-        List<EmcOrderContainerBean> updateContainerList = new ArrayList<>();
+        ArrayList<EmcOrderContainerBean> updateContainerList = new ArrayList<>();
+        List<Long> containerIdList = allOrderTaskList.stream()
+                .filter(task -> !ObjectUtils.isEmpty(task.getOrderContainerId()))
+                .map(EmcOrderTaskBean::getOrderContainerId).distinct().collect(Collectors.toList());
         containerIdList.forEach(id -> {
             EmcOrderContainerBean container = new EmcOrderContainerBean();
             container.setId(id);
@@ -2054,14 +2066,16 @@ public class PfSampleServiceImpl extends EmcSampleServiceImpl implements PfSampl
     @Transactional
     public void withDraw(RestJsonWrapperBean wrapper) {
         List<EmcSampleBean> sampleList = wrapper.parse(EmcSampleBean.class);
-        sampleList.forEach(this::withDraw);
+        for (EmcSampleBean sample : sampleList) {
+            this.withDraw(sample);
+        }
     }
 
     @Transactional
     public void withDraw(EmcSampleBean sample) {
         Long projId = sample.getProjId();
-        List<?> reportList = this.reportService.getDao().selectListByOneColumnValue(projId, "projId", new Order[0]);
-        if (reportList.stream().anyMatch(report -> !"draft".equals(((com.sunwayworld.emc.module.bp.report.report.bean.EmcReportBean) report).getStatus()))) {
+        List<EmcReportBean> reportList = this.reportService.getDao().selectListByOneColumnValue(projId, "projId", new Order[0]);
+        if (reportList.stream().anyMatch(report -> !"draft".equals(report.getStatus()))) {
             throw new InvalidDataException("已出报告，无法撤回！");
         }
         List<Long> sampleIdList = Collections.singletonList(sample.getId());
@@ -2080,7 +2094,9 @@ public class PfSampleServiceImpl extends EmcSampleServiceImpl implements PfSampl
         List<EmcOrderTaskBean> taskList = this.orderTaskService.selectListByFilter(
                 SearchFilter.instance().match("sampleid", sample.getId()).filter(MatchPattern.SEQ)
                         .match("AnalysisType", "sampling").filter(MatchPattern.SEQ), new Order[0]);
-        taskList.forEach(task -> task.setStatus("audit"));
+        for (EmcOrderTaskBean task : taskList) {
+            task.setStatus("audit");
+        }
         this.orderTaskService.getDao().update(taskList, "status");
         ProjectNodeUtils.updateNodes(Collections.singletonList(projId));
         EmcAuditRecordBean audit = new EmcAuditRecordBean();
@@ -2095,7 +2111,7 @@ public class PfSampleServiceImpl extends EmcSampleServiceImpl implements PfSampl
         audit.setStepCode("3");
         audit.setAuditCategory("采样管理");
         audit.setTaskName("报告编制");
-        audit.setOperateCategory(comment);
+        audit.setOperateCategory("撤回");
         audit.setNextTaskName("采样审核");
         this.auditRecordService.getDao().insert(audit);
     }

@@ -17,6 +17,7 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -238,50 +239,68 @@ public class PfEquiptAcqResultServiceImpl extends EmcEquiptAcqResultServiceImpl 
                             Map<String, List<EmcOrderTaskResultBean>> orderTaskResultMap = allOrderTaskResultList.stream().collect(Collectors.groupingBy(result -> Optional.ofNullable(result.getExt$Item("equiptacquno")).orElse(result.getOrderNo())));
                             orderTaskResultMap.forEach((orderNo, taskResultList) -> {
                                 taskResultList.stream().filter(r -> StringUtils.isEmpty(r.getExt$Item("itemGroupId"))).forEach(r -> r.setExt$Item("itemGroupId", r.getOrderTaskId() + ""));
-                                Map<String, List<EmcOrderTaskResultBean>> itemGroupResultMap = taskResultList.stream().collect(Collectors.groupingBy(r -> r.getExt$Item("itemGroupId")));
-
-                                // 按测试进行分组，每个测试的稀释倍数可能不一样
-                                itemGroupResultMap.forEach((orderTaskId, resultList) -> {
+                                Map<String, List<EmcOrderTaskResultBean>> itemGroupResultMap = taskResultList.stream().collect(Collectors.groupingBy(r -> r.getOrderNo() + "$" + r.getExt$Item("itemGroupId")));
+                                itemGroupResultMap.forEach((resultKey, resultList) -> {
                                     EmcOrderTaskResultBean dilutionResult = resultList.stream().filter(result -> StringUtils.contains(result.getItemName(), DILUTION_ITEM_NAME)).findFirst().orElseGet(EmcOrderTaskResultBean::new);
                                     String dilutionValue = Optional.ofNullable(dilutionResult.getOriginalResult()).orElse("");
-                                    String realOrderNo = (StringUtils.equals(dilutionValue, "1") || !NumberUtils.isNumber(dilutionValue)) ? orderNo : String.join("-", orderNo, dilutionValue);
-                                    Optional.ofNullable(orderNoAcqResultMap.get(realOrderNo)).ifPresent(acqResultList -> {
-
-                                        // 判定后采集，只针对曲线校核和实验室标准样品两种质控
-                                        if (judgedAcq && judgedQcCodeList.contains(dilutionResult.getQcCategoryCode())) {
-                                            judgeAndAcq(e, resultList, dilutionResult, acqResultList, allUpdateOrderTaskResultList);
-                                            return;
-                                        }
-
-                                        acqResultList.forEach(acqResult -> {
-                                            boolean scientificNumber = NumberUtils.isScientificNumber(acqResult.getResult());
-                                            List<EmcOrderTaskResultBean> curUpdateResultList = resultList.stream().filter(result -> ObjectUtils.equals(e.getItemId(), result.getItemId()) && ObjectUtils.equals(e.getTestMethodId(), result.getTestMethodId())).collect(Collectors.toList());
-                                            curUpdateResultList.forEach(result -> {
-                                                result.setOriginalResult(scientificNumber ? NumberUtils.formatNumber(new BigDecimal(acqResult.getResult())) : acqResult.getResult());
+                                    if (!serialAcq) {
+                                        String realOrderNo = StringUtils.equals(dilutionValue, "1") || !NumberUtils.isNumber(dilutionValue) ? orderNo : String.join("-", orderNo, dilutionValue);
+                                        Optional.ofNullable(orderNoAcqResultMap.get(realOrderNo)).ifPresent(acqResultList -> {
+                                            if (judgedAcq && judgedQcCodeList.contains(dilutionResult.getQcCategoryCode())) {
+                                                judgeAndAcq(e, resultList, dilutionResult, acqResultList, allUpdateOrderTaskResultList);
+                                                return;
+                                            }
+                                            acqResultList.forEach(acqResult -> {
+                                                boolean scientificNumber = NumberUtils.isScientificNumber(acqResult.getResult());
+                                                List<EmcOrderTaskResultBean> curUpdateResultList = resultList.stream().filter(result -> ObjectUtils.equals(e.getItemId(), result.getItemId()) && ObjectUtils.equals(e.getTestMethodId(), result.getTestMethodId())).collect(Collectors.toList());
+                                                curUpdateResultList.forEach(result -> result.setOriginalResult(scientificNumber ? NumberUtils.formatNumber(new BigDecimal(acqResult.getResult())) : acqResult.getResult()));
+                                                allUpdateOrderTaskResultList.addAll(curUpdateResultList);
                                             });
-                                            allUpdateOrderTaskResultList.addAll(curUpdateResultList);
                                         });
-                                    });
+                                    } else {
+                                        IntStream.range(0, SERIAL_ACQ_SUFFIXS.length).forEach(index -> {
+                                            String suffix = SERIAL_ACQ_SUFFIXS[index];
+                                            String realOrderNo = StringUtils.equals(dilutionValue, "1") || !NumberUtils.isNumber(dilutionValue) ? orderNo + suffix : String.join("-", orderNo + suffix, dilutionValue);
+                                            boolean specialOrder = resultList.stream().anyMatch(r -> !ObjectUtils.isEmpty(r.getQcCategoryId())) && ObjectUtils.isEmpty(orderNoAcqResultMap.get(realOrderNo));
+                                            if (specialOrder) {
+                                                realOrderNo = realOrderNo.replace(suffix, "");
+                                            }
+                                            Optional.ofNullable(orderNoAcqResultMap.get(realOrderNo)).ifPresent(acqResultList -> {
+                                                if (judgedAcq && judgedQcCodeList.contains(dilutionResult.getQcCategoryCode())) {
+                                                    judgeAndAcq(e, resultList, dilutionResult, acqResultList, allUpdateOrderTaskResultList);
+                                                    return;
+                                                }
+                                                acqResultList.forEach(acqResult -> {
+                                                    boolean scientificNumber = NumberUtils.isScientificNumber(acqResult.getResult());
+                                                    List<EmcOrderTaskResultBean> curUpdateResultList = resultList.stream().filter(result -> ObjectUtils.equals(e.getItemId(), result.getItemId()) && ObjectUtils.equals(e.getTestMethodId(), result.getTestMethodId()) && ObjectUtils.equals(result.getRepeatNo(), (long) index + 1L)).collect(Collectors.toList());
+                                                    curUpdateResultList.forEach(result -> result.setOriginalResult(scientificNumber ? NumberUtils.formatNumber(new BigDecimal(acqResult.getResult())) : acqResult.getResult()));
+                                                    allUpdateOrderTaskResultList.addAll(curUpdateResultList);
+                                                });
+                                            });
+                                        });
+                                    }
                                 });
                             });
                         } else {
                             matchAcqResultList.forEach(a -> {
-                                // 匹配到结果表的分析项
-                                List<EmcOrderTaskResultBean> updateOrderTaskResultList = allOrderTaskResultList.stream()
-                                        .filter(o -> ObjectUtils.equals(o.getItemId(), e.getItemId()) && ObjectUtils.equals(o.getTestMethodId(), e.getTestMethodId())
-                                                && (ObjectUtils.equals(o.getExt$Item("equiptacquno"), a.getBizNo())
-                                                    || (StringUtils.isEmpty(o.getExt$Item("equiptacquno")) && ObjectUtils.equals(o.getOrderNo(), a.getBizNo()))
-                                                    || (serialAcq && Arrays.stream(SERIAL_ACQ_SUFFIXS).anyMatch(suffix -> ObjectUtils.equals(o.getExt$Item("equiptacquno") + suffix, a.getBizNo()) || (StringUtils.isEmpty(o.getExt$Item("equiptacquno")) && ObjectUtils.equals(o.getOrderNo() + suffix, a.getBizNo()))))))
-                                        .collect(Collectors.toList());
-
-                                if (!updateOrderTaskResultList.isEmpty()) {
-                                    boolean scientificNumber = NumberUtils.isScientificNumber(a.getResult());
-                                    updateOrderTaskResultList.forEach(o -> {
-                                        o.setOriginalResult(scientificNumber ? NumberUtils.formatNumber(new BigDecimal(a.getResult())) : a.getResult());
+                                if (serialAcq) {
+                                    IntStream.range(0, SERIAL_ACQ_SUFFIXS.length).forEach(index -> {
+                                        String suffix = SERIAL_ACQ_SUFFIXS[index];
+                                        List<EmcOrderTaskResultBean> updateOrderTaskResultList = allOrderTaskResultList.stream().filter(o -> ObjectUtils.equals(o.getItemId(), e.getItemId()) && ObjectUtils.equals(o.getTestMethodId(), e.getTestMethodId()) && ObjectUtils.equals(o.getRepeatNo(), (long) index + 1L) && (ObjectUtils.equals(o.getExt$Item("equiptacquno") + suffix, a.getBizNo()) || StringUtils.isEmpty(o.getExt$Item("equiptacquno")) && ObjectUtils.equals(o.getOrderNo() + suffix, a.getBizNo()))).collect(Collectors.toList());
+                                        if (!updateOrderTaskResultList.isEmpty()) {
+                                            boolean scientificNumber = NumberUtils.isScientificNumber(a.getResult());
+                                            updateOrderTaskResultList.forEach(o -> o.setOriginalResult(scientificNumber ? NumberUtils.formatNumber(new BigDecimal(a.getResult())) : a.getResult()));
+                                        }
+                                        allUpdateOrderTaskResultList.addAll(updateOrderTaskResultList);
                                     });
+                                } else {
+                                    List<EmcOrderTaskResultBean> updateOrderTaskResultList = allOrderTaskResultList.stream().filter(o -> ObjectUtils.equals(o.getItemId(), e.getItemId()) && ObjectUtils.equals(o.getTestMethodId(), e.getTestMethodId()) && (ObjectUtils.equals(o.getExt$Item("equiptacquno"), a.getBizNo()) || StringUtils.isEmpty(o.getExt$Item("equiptacquno")) && ObjectUtils.equals(o.getOrderNo(), a.getBizNo()))).collect(Collectors.toList());
+                                    if (!updateOrderTaskResultList.isEmpty()) {
+                                        boolean scientificNumber = NumberUtils.isScientificNumber(a.getResult());
+                                        updateOrderTaskResultList.forEach(o -> o.setOriginalResult(scientificNumber ? NumberUtils.formatNumber(new BigDecimal(a.getResult())) : a.getResult()));
+                                    }
+                                    allUpdateOrderTaskResultList.addAll(updateOrderTaskResultList);
                                 }
-
-                                allUpdateOrderTaskResultList.addAll(updateOrderTaskResultList);
                             });
                         }
                     }
@@ -394,7 +413,7 @@ public class PfEquiptAcqResultServiceImpl extends EmcEquiptAcqResultServiceImpl 
             return;
         }
         List<EmcOrderTaskResultBean> allOrderTaskResultList = this.orderTaskResultService.selectListByFilter(SearchFilter.instance().match("SCENEEQUIPTCOLLECTNO", equiptNoList).filter(MatchPattern.OR).match("SCENEFILENO", fileNoList).filter(MatchPattern.OR), new Order[0]);
-        ArrayList<EmcOrderTaskResultBean> allUpdateOrderTaskResultList = new ArrayList<>();
+        List<EmcOrderTaskResultBean> allUpdateOrderTaskResultList = new ArrayList<>();
         allResultList.forEach(a2 -> {
             List<EmcOrderTaskResultBean> updateOrderTaskResultList = allOrderTaskResultList.stream().filter(o -> ObjectUtils.equals(o.getItemName(), a2.getItemName()) && ObjectUtils.equals(o.getExt$Item("sceneequiptcollectno"), a2.getSceneEquiptNo()) && ObjectUtils.equals(o.getSceneFileNo(), a2.getSceneFileNo())).collect(Collectors.toList());
             if (!updateOrderTaskResultList.isEmpty()) {

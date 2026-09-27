@@ -4095,8 +4095,10 @@ public class PfProjectServiceImpl extends EmcProjectServiceImpl implements PfPro
             group.setId(groupId);
             group.setOrderId(orderId);
             groups.add(group);
-            for (EmcOrderItemBean sourceItem : sourceItems) {
-                if (!ObjectUtils.equals(sourceItem.getOrderItemGroupId(), sourceGroup.getId())) continue;
+            List<EmcOrderItemBean> currentItems = sourceItems.stream()
+                    .filter(sourceItem -> ObjectUtils.equals(sourceItem.getOrderItemGroupId(), sourceGroup.getId()))
+                    .collect(Collectors.toList());
+            for (EmcOrderItemBean sourceItem : currentItems) {
                 EmcOrderItemBean item = new EmcOrderItemBean();
                 BeanUtils.copyProperties(sourceItem, item, EmcConstant.CREATED_COLUMNS);
                 item.setId(ApplicationContextHelper.getNextIdentity());

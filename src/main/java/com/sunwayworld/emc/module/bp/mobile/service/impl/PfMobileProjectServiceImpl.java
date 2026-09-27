@@ -1447,6 +1447,21 @@ public class PfMobileProjectServiceImpl extends EmcMobileProjectServiceImpl impl
         propertyDataService.getDao().insert(newPropertyDataList);
         sampleService.getDao().update(updateSampleList);
 
+        newSampleList.forEach(s -> {
+            s.setAcceptStatus("1");
+            s.setAssignStatus("0");
+            s.setProcessStatus("draft");
+            s.setStatus("draft");
+        });
+        sampleService.getDao().update(newSampleList);
+        updateSampleList.forEach(s -> {
+            s.setAcceptStatus("1");
+            s.setAssignStatus("0");
+            s.setProcessStatus("draft");
+            s.setStatus("draft");
+        });
+        sampleService.getDao().update(updateSampleList);
+
         return newSampleList;
     }
 

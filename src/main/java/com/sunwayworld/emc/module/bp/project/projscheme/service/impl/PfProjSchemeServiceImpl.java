@@ -251,7 +251,9 @@ public class PfProjSchemeServiceImpl extends EmcProjSchemeServiceImpl implements
         List<EmcCapacityItemGroupBean> capacityItemGroupList = capacityItemGroupService.selectListByIds(capacityItemGroupIdList);
 
         List<Long> testMethodIdList = capacityItemGroupList.stream().map(EmcCapacityItemGroupBean::getTestMethodId).distinct().collect(Collectors.toList());
-        List<EmcRelatedTestMethodBean> relatedTestMethodList = relatedTestMethodService.getDao().selectListByOneColumnValues(testMethodIdList, "testMethodId");
+        List<EmcRelatedTestMethodBean> relatedTestMethodList = relatedTestMethodService.selectListByFilter(SearchFilter.instance()
+                .match("testMethodId", testMethodIdList).filter(MatchPattern.OR)
+                .match("replaceFlag2", Arrays.asList("1", null)).filter(MatchPattern.DIFFER));
         List<Long> relatedTestMethodIdList = relatedTestMethodList.stream().map(EmcRelatedTestMethodBean::getRelatedTestMethodId).distinct().collect(Collectors.toList());
         List<EmcTestMethodBean> testMethodList = testMethodService.selectListByIds(relatedTestMethodIdList);
 
@@ -344,7 +346,9 @@ public class PfProjSchemeServiceImpl extends EmcProjSchemeServiceImpl implements
             List<EmcCapacityItemGroupBean> capacityItemGroupList = capacityItemGroupService.selectListByIds(capacityItemGroupIdList);
 
             List<Long> testMethodIdList = capacityItemGroupList.stream().map(EmcCapacityItemGroupBean::getTestMethodId).distinct().collect(Collectors.toList());
-            List<EmcRelatedTestMethodBean> relatedTestMethodList = relatedTestMethodService.getDao().selectListByOneColumnValues(testMethodIdList, "testMethodId");
+            List<EmcRelatedTestMethodBean> relatedTestMethodList = relatedTestMethodService.selectListByFilter(SearchFilter.instance()
+                    .match("testMethodId", testMethodIdList).filter(MatchPattern.OR)
+                    .match("replaceFlag2", Arrays.asList("1", null)).filter(MatchPattern.DIFFER));
             if (!relatedTestMethodList.isEmpty()) {
                 List<Long> relatedTestMethodIdList = relatedTestMethodList.stream().map(EmcRelatedTestMethodBean::getRelatedTestMethodId).distinct().collect(Collectors.toList());
                 List<EmcTestMethodBean> testMethodList = testMethodService.selectListByIds(relatedTestMethodIdList);
@@ -1654,31 +1658,6 @@ public class PfProjSchemeServiceImpl extends EmcProjSchemeServiceImpl implements
         List<EmcOrderBean> orderList = wrapper.parse(EmcOrderBean.class, 1);
         List<EmcProjSchemeBean> schemeList = wrapper.parse(EmcProjSchemeBean.class, 2);
         List<EmcProjOrderBean> newSchemeOrderList = wrapper.parse(EmcProjOrderBean.class, 3);
-        EmcProjectBean projectBean = projectService.selectById(schemeList.get(0).getProjId());
-        String contractNo = projectBean.getProjNo().substring(0,10);
-
-        List<CrmOpportunityContractBean> crmOpportunityContractBeans = opportunityContractService.getDao().selectListByOneColumnValue(contractNo,"contractno");
-        CrmOpportunityMainBean crmOpportunityMainBean = opportunityMainService.selectById(crmOpportunityContractBeans.get(0).getOpportunityId().toString());
-        List<CrmOpportunityOrdersBean> crmOpportunityOrdersBeans = opportunityOrdersService.getDao().selectListByOneColumnValue(crmOpportunityMainBean.getOpportunityNo(),"opportunityNo");
-        List<CrmOpportunityOrdtaskBean> crmOpportunityOrdtaskBeans = opportunityOrdtaskService.getDao().selectListByOneColumnValue(crmOpportunityMainBean.getOpportunityNo(),"opportunityNo");
-        List<EmcProjOrderBean> updateSchemeOrderList = new ArrayList<>();
-        newSchemeOrderList.forEach(s ->{
-            List<CrmOpportunityOrdtaskBean> crmOpportunityOrdtaskMatchBeans = crmOpportunityOrdtaskBeans.stream().filter(cok ->StringUtils.equals(s.getTestId().toString(),cok.getTestCode()))
-                    .filter(cok ->StringUtils.equals(s.getMethodId().toString(),cok.getMethod())).collect(Collectors.toList());
-            if(!crmOpportunityOrdtaskMatchBeans.isEmpty()){
-                List<String> ordNos = crmOpportunityOrdtaskMatchBeans.stream().map(CrmOpportunityOrdtaskBean :: getOrdNo).distinct().collect(Collectors.toList());
-                List<CrmOpportunityOrdersBean> crmOpportunityOrdersFilterBeans = crmOpportunityOrdersBeans.stream().filter(co ->ordNos.contains(co.getOrdNo())).distinct().collect(Collectors.toList());
-                if(!crmOpportunityOrdersFilterBeans.isEmpty()){
-                    s.setExt$Item("realFrequency", crmOpportunityOrdersFilterBeans.get(0).getTestingFrequency() + "");
-                    s.setExt$Item("realCycle", crmOpportunityOrdersFilterBeans.get(0).getTestingDays() + "");
-                }
-                updateSchemeOrderList.add(s);
-            }
-
-        });
-        if(!updateSchemeOrderList.isEmpty()){
-            projOrderService.getDao().update(updateSchemeOrderList,"realFrequency","realCycle");
-        }
         // 查询测试方法和监测能力库方法
         List<Long> capacityItemGroupIdList = newSchemeOrderList.stream().map(EmcProjOrderBean::getItemGroupId).distinct().collect(Collectors.toList());
         List<EmcCapacityItemGroupBean> capacityItemGroupList = capacityItemGroupService.getDao().selectListByOneColumnValues(capacityItemGroupIdList, "id");

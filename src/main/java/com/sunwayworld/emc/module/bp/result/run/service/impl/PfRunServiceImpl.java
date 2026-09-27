@@ -3726,6 +3726,11 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
     public void submitProjectRun(RestJsonWrapperBean wrapper) {
         EmcProjectBean project = wrapper.parseUnique(EmcProjectBean.class);
         List<EmcRunBean> selectedRunList = wrapper.parse(EmcRunBean.class);
+        String loginUserId = LocalContextHelper.getLoginUserId();
+        if (selectedRunList.stream().anyMatch(run -> ObjectUtils.equals(loginUserId, run.getAnalysisUserId())
+                || ObjectUtils.equals(loginUserId, run.getCheckUserId()))) {
+            throw new InvalidDataException("审核人不能和检测人或校核人相同");
+        }
 
         // 查询当前项目，所提交批次下的样品测试
         List<String> selectedRunIdList = selectedRunList.stream().filter(r -> !StringUtils.isEmpty(r.getId())).map(EmcRunBean::getId).collect(Collectors.toList());
@@ -3791,6 +3796,10 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
         List<Long> folderIdList = validOrderTaskList.stream().map(EmcOrderTaskBean::getFolderId).distinct().collect(Collectors.toList());
         List<Long> validOrderTaskIdList = validOrderTaskList.stream().map(EmcOrderTaskBean::getId).collect(Collectors.toList());
         List<EmcOrderTaskBean> folderOrderTaskList = orderTaskService.getDao().selectListByOneColumnValues(folderIdList, "folderId", Arrays.asList("id", "folderId", "status"));
+        folderOrderTaskList = folderOrderTaskList.stream()
+                .filter(task -> EmcBizConstant.ANALYSISCATEGORY_ANALYSIS.equals(task.getAnalysisType())
+                        || EmcBizConstant.ANALYSISCATEGORY_SAMPLING.equals(task.getAnalysisType()))
+                .collect(Collectors.toList());
         Map<Long, List<EmcOrderTaskBean>> folderOrderTaskMap = folderOrderTaskList.stream().collect(Collectors.groupingBy(EmcOrderTaskBean::getFolderId));
 
         List<EmcFolderBean> updateFolderList = new ArrayList<>();
@@ -3809,8 +3818,8 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
             folderService.getDao().update(updateFolderList, "status");
 
             if (!EmcBizConstant.PROJECT_STATUS_REPORTEDIT.equals(project.getStatus())) {
-                project.setStatus(EmcBizConstant.PROJECT_STATUS_REPORTEDIT);
-                projectService.getDao().update(project, "status");
+                updateProject(Collections.singletonList(project.getId()));
+                ProjectNodeUtils.updateNodes(Collections.singletonList(project.getId()));
             }
         }
 
@@ -3823,7 +3832,6 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
 
         validRunList.forEach(run -> run.setExt$Item("composeStatus", "pending"));
         getDao().update(validRunList, "composeStatus");
-        String loginUserId = LocalContextHelper.getLoginUserId();
 //        ExecutorHelper.submit(() -> composeReportPdfOfProject(validRunList, loginUserId));
         ExecutorHelper.submit(
                 new TimerTask() {

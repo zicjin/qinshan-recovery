@@ -378,7 +378,7 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
         Long reportConfigLineId = methodService.selectReportConfigLineIdById(orderTask.getMethodId());
 
         // 查询项目编号
-        List<Long> projectIdList = orderTaskList.stream().map(EmcOrderTaskBean::getProjId).sorted(Comparator.comparing(Function.identity())).collect(Collectors.toList());
+        List<Long> projectIdList = orderTaskList.stream().map(EmcOrderTaskBean::getProjId).distinct().sorted(Comparator.comparing(Function.identity())).collect(Collectors.toList());
         List<EmcProjectBean> projectList = projectService.getDao().selectListByOneColumnValues(projectIdList, "id", Arrays.asList("id", "projNo", "sample"));
 
         EmcTestmethodBeforehandleBean beforehandleBean = testmethodBeforehandleService.selectFirstByFilter(
@@ -462,7 +462,7 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
         // 4、结果表装配数据
 
         // 查询出来ordertask下的result
-        List<Long> orderTaskIdList = orderTaskList.stream().map(EmcOrderTaskBean::getId).collect(Collectors.toList());
+        List<Long> orderTaskIdList = orderTaskList.stream().map(EmcOrderTaskBean::getId).distinct().collect(Collectors.toList());
         List<EmcOrderTaskResultBean> orderTaskResultList = orderTaskResultService.getDao().selectListByOneColumnValues(orderTaskIdList, "ORDERTASKID");
 
         List<Long> itemIdList = orderTaskResultList.stream().map(EmcOrderTaskResultBean::getItemId).distinct().collect(Collectors.toList());
@@ -1315,7 +1315,7 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
 
         if (orderTaskList.size() > 1) {
             List<Long> orderIdList = orderTaskList.stream().map(EmcOrderTaskBean::getOrderId).collect(Collectors.toList());
-            List<EmcOrderTaskResultBean> resultList = orderTaskResultService.getDao().selectListByOneColumnValues(orderIdList, "orderId", Arrays.asList("id", "itemId", "runId"));
+            List<EmcOrderTaskResultBean> resultList = orderTaskResultService.getDao().selectListByOneColumnValues(orderIdList, "orderId");
             selectOrderTaskResultList = resultList.stream().filter(r -> StringUtils.equals(r.getRunId(), runId) && selectItemIdList.contains(r.getItemId())).collect(Collectors.toList());
             resultList.clear();
         }
@@ -1761,7 +1761,7 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
         auditRecordService.getDao().insert(auditRecordList);
 
         // 判断提交的分析审核数据，是否可以生成报告。（相同的projId和monitorTmplId下的所有样品测试状态全部为done，则生成报告）
-        List<EmcOrderTaskBean> reportOrderTaskList = orderTaskService.getDao().selectList(filterList, Arrays.asList("PROJID", "MONITORTMPLID"), Collections.emptyList());
+        List<EmcOrderTaskBean> reportOrderTaskList = orderTaskService.getDao().selectList(filterList, Arrays.asList("PROJID"), Collections.emptyList());
         // 更新点位状态
         folderService.updateStatus(reportOrderTaskList);
         // 判断对应的项目样品类型下的样品测试是不是都已经完成，完成的话将报告状态置为待录入
@@ -3805,7 +3805,7 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
         // 更新点位状态
         List<Long> folderIdList = validOrderTaskList.stream().map(EmcOrderTaskBean::getFolderId).distinct().collect(Collectors.toList());
         List<Long> validOrderTaskIdList = validOrderTaskList.stream().map(EmcOrderTaskBean::getId).collect(Collectors.toList());
-        List<EmcOrderTaskBean> folderOrderTaskList = orderTaskService.getDao().selectListByOneColumnValues(folderIdList, "folderId", Arrays.asList("id", "folderId", "status"));
+        List<EmcOrderTaskBean> folderOrderTaskList = orderTaskService.getDao().selectListByOneColumnValues(folderIdList, "folderId");
         folderOrderTaskList = folderOrderTaskList.stream()
                 .filter(task -> ObjectUtils.equals(EmcBizConstant.ANALYSISCATEGORY_ANALYSIS, task.getAnalysisType())
                         || ObjectUtils.equals(EmcBizConstant.ANALYSISCATEGORY_SAMPLING, task.getAnalysisType()))
@@ -4350,7 +4350,7 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
         List<CoreNotificationInstanceToBean> instanceToList = notificationInstanceToService.getDao().selectList(filterInstTo, Arrays.asList("notifiedId", "read"), Arrays.asList("id", "instId"));
         List<Long> instIdList = instanceToList.stream().map(CoreNotificationInstanceToBean::getInstId).distinct().collect(Collectors.toList());
 
-        List<CoreNotificationInstanceBean> instanceList = notificationInstanceService.getDao().selectListByOneColumnValues(instIdList, "id", Arrays.asList("id", "desc"));
+        List<CoreNotificationInstanceBean> instanceList = notificationInstanceService.getDao().selectListByOneColumnValues(instIdList, "id", Arrays.asList("id", "content"));
         List<Long> updateInstIdList = instanceList.stream().filter(inst -> idList.stream().anyMatch(runId -> StringUtils.contains(inst.getContent(), runId))).map(CoreNotificationInstanceBean::getId).collect(Collectors.toList());
         List<CoreNotificationInstanceToBean> updateInstToList = instanceToList.stream().filter(instTo -> updateInstIdList.contains(instTo.getInstId())).collect(Collectors.toList());
         updateInstToList.forEach(instTo -> instTo.setRead("2"));

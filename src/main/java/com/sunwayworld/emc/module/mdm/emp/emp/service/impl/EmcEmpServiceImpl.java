@@ -39,6 +39,9 @@ import com.sunwayworld.framework.mybatis.mapper.SearchFilter;
 import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;
 import com.sunwayworld.framework.spring.annotation.GikamBean;
 import com.sunwayworld.framework.utils.StringUtils;
+import com.sunwayworld.module.item.file.bean.CoreFileBean;
+import com.sunwayworld.module.item.file.manager.CoreFileManager;
+import com.sunwayworld.module.item.file.service.CoreFileService;
 
 /**
  * @author yuanhh@sunwayworld.com 2019骞�9鏈�4鏃�
@@ -58,6 +61,12 @@ public class EmcEmpServiceImpl implements EmcEmpService {
     private EmcCertTestMethodService certTestMethodService;
 
     @Autowired
+    private CoreFileService coreFileService;
+
+    @Autowired
+    private CoreFileManager coreFileManager;
+
+    @Autowired
     @Lazy
     private EmcProjectService projectService;
 
@@ -73,6 +82,30 @@ public class EmcEmpServiceImpl implements EmcEmpService {
     @SuppressWarnings("unchecked")
     public EmcEmpDao getDao() {
         return empDao;
+    }
+
+    @Override
+    public EmcEmpBean selectDetail(String id) {
+        EmcEmpBean employee = EmcEmpService.super.selectDetail(id);
+        if (employee == null) {
+            return null;
+        }
+        employee.setElectronicSignature(getSecuredFileUrl(employee.getElectronicSignature(), "T_CORE_USER", id));
+        employee.setPic(getSecuredFileUrl(employee.getPic(), "T_EMC_EMP", id));
+        return employee;
+    }
+
+    private String getSecuredFileUrl(String currentUrl, String table, String id) {
+        if (StringUtils.isEmpty(currentUrl)) {
+            return currentUrl;
+        }
+        List<CoreFileBean> files = coreFileService.selectFileList(table, id);
+        for (CoreFileBean file : files) {
+            if (StringUtils.contains(currentUrl, file.getMd5Name())) {
+                return coreFileManager.getDownloadUrl(file);
+            }
+        }
+        return currentUrl;
     }
 
     @Override

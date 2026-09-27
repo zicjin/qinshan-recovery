@@ -196,34 +196,51 @@ public class PfProjectServiceImpl extends EmcProjectServiceImpl implements PfPro
 
     @Transactional
     public void submitToDoneReport(RestJsonWrapperBean wrapper) {
-        List<EmcProjectBean> projects = wrapper.parse(EmcProjectBean.class);
-        List<Long> projectIds = projects.stream().map(EmcProjectBean::getId).collect(Collectors.toList());
+        List<EmcProjectBean> projectList = wrapper.parse(EmcProjectBean.class);
+        List<Long> projectIds = projectList.stream().map(EmcProjectBean::getId).collect(Collectors.toList());
         reportService.insertByProjectDone(projectIds, true);
-        CoreBpmnParameterDTO parameter = new CoreBpmnParameterDTO();
-        parameter.setComment("提交到报告发送");
+        CoreBpmnParameterDTO reportParameter = new CoreBpmnParameterDTO();
+        reportParameter.setComment("提交到报告发送");
         List<EmcReportBean> reports = reportService.getDao().selectListByOneColumnValues(projectIds, "projid", new Order[0]);
-        if (reports.isEmpty()) return;
+        if (CollectionUtils.isEmpty(reports)) return;
         List<Long> reportIds = reports.stream().map(EmcReportBean::getId).collect(Collectors.toList());
-        reportService.startProcess(reportIds, parameter);
+        reportService.startProcess(reportIds, reportParameter);
+        CoreBpmnParameterDTO parameter = new CoreBpmnParameterDTO();
+        parameter.setComment("提交至报告发送");
         startProcess(projectIds, parameter);
-        endTask(projectIds, parameter);
+        CoreBpmnParameterDTO endParameter = new CoreBpmnParameterDTO();
+        endParameter.setComment("提交至报告发送");
+        endTask(projectIds, endParameter);
         List<EmcProjectBean> projectUpdates = new ArrayList<>();
-        for (Long id : projectIds) {
+        projectIds.forEach(id -> {
             EmcProjectBean update = new EmcProjectBean(); update.setId(id); update.setStatus("reportAudit");
             update.setProjNode("报告发送"); update.setToReportEditDate(LocalDate.now());
-            EmcProjectBean source = projects.stream().filter(p -> ObjectUtils.equals(id, p.getId())).findFirst().orElse(new EmcProjectBean());
-            update.setFirstIssueDateTime(source.getFirstIssueDateTime() == null ? LocalDateTime.now() : source.getFirstIssueDateTime());
+            EmcProjectBean source = projectList.stream().filter(p -> ObjectUtils.equals(id, p.getId())).findFirst().orElse(new EmcProjectBean());
+            LocalDateTime firstIssueDateTime = source.getFirstIssueDateTime();
+            if (firstIssueDateTime == null) firstIssueDateTime = LocalDateTime.now();
+            update.setFirstIssueDateTime(firstIssueDateTime);
             projectUpdates.add(update);
-        }
+        });
         getDao().update(projectUpdates, "STATUS", "PROJNODE", "TOREPORTEDITDATE", "FIRSTISSUEDATETIME");
         List<EmcReportBean> reportUpdates = new ArrayList<>();
-        for (EmcReportBean report : reports) {
+        reports.forEach(report -> {
             EmcReportBean update = new EmcReportBean(); update.setId(report.getId()); update.setStatus("reportSeal");
-            EmcProjectBean source = projects.stream().filter(p -> ObjectUtils.equals(report.getProjId(), p.getId())).findFirst().orElse(new EmcProjectBean());
+            EmcProjectBean source = projectList.stream().filter(p -> ObjectUtils.equals(report.getProjId(), p.getId())).findFirst().orElse(new EmcProjectBean());
             update.setReportNo(source.getProjNo()); reportUpdates.add(update);
-        }
+        });
         reportService.getDao().update(reportUpdates, "STATUS", "REPORTNO");
-        insertReportTransitionAudit(projects, "提交到报告发送", "报告发送");
+        List<EmcAuditRecordBean> auditRecords = new ArrayList<>();
+        for (EmcProjectBean project : projectList) {
+            EmcAuditRecordBean record = new EmcAuditRecordBean();
+            record.setId(ApplicationContextHelper.getNextIdentity());
+            record.setProjId(project.getId()); record.setProjNo(project.getProjNo());
+            record.setComments("提交至报告发送"); record.setLogDesc("项目:" + project.getProjNo());
+            record.setBizCategory("proj"); record.setStepCode("1");
+            record.setAuditCategory("项目登记"); record.setTaskName("项目登记");
+            record.setOperateCategory("提交"); record.setNextTaskName("报告发送");
+            auditRecords.add(record);
+        }
+        auditRecordService.getDao().insert(auditRecords);
     }
 
     @Transactional
@@ -241,16 +258,27 @@ public class PfProjectServiceImpl extends EmcProjectServiceImpl implements PfPro
         CoreBpmnParameterDTO endParameter = new CoreBpmnParameterDTO(); endParameter.setComment("提交至报告编制");
         endTask(projIdList, endParameter);
         List<EmcProjectBean> updateProjList = new ArrayList<>();
-        for (Long id : projIdList) {
+        projIdList.forEach(id -> {
             EmcProjectBean updateProj = new EmcProjectBean();
             updateProj.setId(id);
             updateProj.setStatus("reportEdit");
             updateProj.setProjNode("报告编制");
             updateProj.setToReportEditDate(LocalDate.now());
             updateProjList.add(updateProj);
-        }
+        });
         getDao().update(updateProjList, "STATUS", "PROJNODE", "TOREPORTEDITDATE");
-        insertReportTransitionAudit(projectList, "提交至报告编制", "报告编制");
+        List<EmcAuditRecordBean> auditRecords = new ArrayList<>();
+        for (EmcProjectBean project : projectList) {
+            EmcAuditRecordBean record = new EmcAuditRecordBean();
+            record.setId(ApplicationContextHelper.getNextIdentity());
+            record.setProjId(project.getId()); record.setProjNo(project.getProjNo());
+            record.setComments("提交至报告编制"); record.setLogDesc("项目:" + project.getProjNo());
+            record.setBizCategory("proj"); record.setStepCode("1");
+            record.setAuditCategory("项目登记"); record.setTaskName("项目登记");
+            record.setOperateCategory("提交"); record.setNextTaskName("报告编制");
+            auditRecords.add(record);
+        }
+        auditRecordService.getDao().insert(auditRecords);
     }
 
     @Override

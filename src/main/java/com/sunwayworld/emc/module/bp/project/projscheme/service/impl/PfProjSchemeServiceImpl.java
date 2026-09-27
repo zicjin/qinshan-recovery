@@ -2552,12 +2552,15 @@ public class PfProjSchemeServiceImpl extends EmcProjSchemeServiceImpl implements
             orderCategoryCode = "";
         }
         Long projId = schemes.get(0).getProjId();
-        String prefix = ((EmcProjectBean) projectService.selectById(projId)).getProjNo() + orderCategoryCode;
+        EmcProjectBean project = (EmcProjectBean) projectService.selectById(projId);
+        String projectNo = project.getProjNo();
+        String prefix = new StringBuilder().append(projectNo).append(orderCategoryCode).toString();
         List<EmcProjSchemeBean> updateList = new ArrayList<>();
         schemes.sort(Comparator.comparing(EmcProjSchemeBean::getSortNum, Comparator.nullsLast(Long::compareTo)));
         for (int i = 0; i <= schemes.size() - 1; ++i) {
             EmcProjSchemeBean scheme = schemes.get(i);
-            scheme.setFolderNo(prefix + String.format("%03d", i + 1));
+            String folderNo = new StringBuilder().append(prefix).append(String.format("%03d", i + 1)).toString();
+            scheme.setFolderNo(folderNo);
             updateList.add(scheme);
         }
         this.getDao().update(updateList, new String[]{"FOLDERNO"});

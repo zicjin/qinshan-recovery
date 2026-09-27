@@ -1244,7 +1244,8 @@ public class PfSampleServiceImpl extends EmcSampleServiceImpl implements PfSampl
             }
         });
 
-        getDao().update(submitSampleList, "ACCEPTEDUSERID", "ACCEPTEUSERNAME");
+        submitSampleList.forEach(sample -> sample.setAcceptStatus("2"));
+        getDao().update(submitSampleList, "ACCEPTEDUSERID", "ACCEPTEUSERNAME", "ACCEPTSTATUS");
 
         // 过滤出样品登记生成的采样单
         List<EmcSampleBean> orderRegistrationSampleList = submitSampleList.stream().filter(s -> StringUtils.equals(EmcBizConstant.BP_SOURCE_ORDERREGISTRATION, s.getSource())).collect(Collectors.toList());

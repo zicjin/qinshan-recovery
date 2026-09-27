@@ -3047,6 +3047,11 @@ public class PfProjectServiceImpl extends EmcProjectServiceImpl implements PfPro
         List<EmcAuditRecordBean> auditRecordList = auditRecordService.getDao().selectListByOneColumnValues(projectIdList, "projId");
         auditRecordService.getDao().deleteBy(auditRecordList);
         getDao().deleteByIdList(projectIdList);
+
+        List<String> uidList = projectIdList.stream().map(id -> "T_EMC_PROJECT$" + id).collect(Collectors.toList());
+        List scheduleTaskConfigList = scheduleTaskConfigService.selectListByFilter(
+                SearchFilter.instance().match("uid", uidList).filter(MatchPattern.OR));
+        scheduleTaskConfigService.deleteBy(scheduleTaskConfigList);
     }
 
     @Override

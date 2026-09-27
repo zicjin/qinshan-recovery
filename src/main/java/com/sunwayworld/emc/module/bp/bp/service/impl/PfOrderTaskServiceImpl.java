@@ -1225,6 +1225,7 @@ public  class PfOrderTaskServiceImpl extends EmcOrderTaskServiceImpl implements 
     public void subpackageTest(RestJsonWrapperBean wrapper) {
         String subpackageType = wrapper.getParamValue("subpackageType");
         String byFolder = wrapper.getParamValue("byFolder");
+        String subcontractorIdStr = wrapper.getParamValue("subcontractorId");
 
         boolean beforeSampling = StringUtils.equals(subpackageType, "beforeSampling");
         boolean isByFolder = StringUtils.equals(byFolder, "1");
@@ -1303,7 +1304,7 @@ public  class PfOrderTaskServiceImpl extends EmcOrderTaskServiceImpl implements 
         // 如果是采样后分包（即样品分包）的话，只需要分包分析的
         List<EmcOrderTaskBean> validTaskList = beforeSampling ? orderTaskList : orderTaskList.stream().filter(task -> PfBizConstant.ANALYSISCATEGORY_ANALYSIS.equals(task.getAnalysisType())).collect(Collectors.toList());;
 
-        Long subcontractorId = ApplicationContextHelper.getNextIdentity();
+        Long subcontractorId = NumberUtils.isNumber(subcontractorIdStr) ? NumberUtils.parseLong(subcontractorIdStr) : ApplicationContextHelper.getNextIdentity();
         String subpackageNo = ApplicationContextHelper.getNextSequence(orderItemGroupService.getDao().getTable());
 
         List<Long> validOrderTaskIdList = validTaskList.stream().map(EmcOrderTaskBean::getId).distinct().collect(Collectors.toList());

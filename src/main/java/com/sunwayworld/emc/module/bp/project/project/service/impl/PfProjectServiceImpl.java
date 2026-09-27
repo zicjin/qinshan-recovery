@@ -3936,67 +3936,73 @@ public class PfProjectServiceImpl extends EmcProjectServiceImpl implements PfPro
         List<Long> ids = projectList.stream().map(EmcProjectBean::getId).collect(Collectors.toList());
         projectList = selectListByFilter(SearchFilter.instance().match("ID", ids).filter(MatchPattern.OR), new Order[0]);
         try {
-            List<EmcProjectBean> planContract = projectList.stream()
-                    .filter(p -> !ObjectUtils.isEmpty(p.getSplitContractId())).collect(Collectors.toList());
-            List<EmcProjectBean> normal = projectList.stream()
-                    .filter(p -> ObjectUtils.isEmpty(p.getSplitContractId())).collect(Collectors.toList());
-            planContract.forEach(p -> p.setStatus("erpConfirm"));
-            if (!planContract.isEmpty()) getDao().update(planContract, "STATUS");
-
-            List<EmcProjectBean> noSample = normal.stream().filter(p -> "0".equals(p.getSample())).collect(Collectors.toList());
-            if (!noSample.isEmpty()) {
-                List<Long> noSampleIds = noSample.stream().map(EmcProjectBean::getId).collect(Collectors.toList());
-                orderService.insertBpDataByProject(noSampleIds);
-                List<CoreBpmnCommentBean> comments = new ArrayList<>();
-                for (Long id : noSampleIds) {
+            List<EmcProjectBean> planContractProjectList = projectList.stream().filter(p -> !ObjectUtils.isEmpty(p.getSplitContractId())).collect(Collectors.toList());
+            List<EmcProjectBean> normalProjectList = projectList.stream().filter(p -> ObjectUtils.isEmpty(p.getSplitContractId())).collect(Collectors.toList());
+            if (!planContractProjectList.isEmpty()) {
+                planContractProjectList.forEach(p -> p.setStatus("erpConfirm"));
+                getDao().update(planContractProjectList, "STATUS");
+            }
+            logger.info("计划合同项目数量 -> {}", planContractProjectList.size());
+            List<EmcProjectBean> noSampleProjectList = normalProjectList.stream().filter(e -> "0".equals(e.getSample())).collect(Collectors.toList());
+            if (!noSampleProjectList.isEmpty()) {
+                List<EmcProjectBean> updateProjectList = new ArrayList<>();
+                List<Long> noSampleProjectIdList = noSampleProjectList.stream().map(EmcProjectBean::getId).collect(Collectors.toList());
+                orderService.insertBpDataByProject(noSampleProjectIdList);
+                List<CoreBpmnCommentBean> filterBpmnCommentList = new ArrayList<>();
+                noSampleProjectIdList.forEach(id -> {
                     CoreBpmnCommentBean comment = new CoreBpmnCommentBean();
                     comment.setTargetId(getDao().getTable() + "$" + id);
                     comment.setStatusCode("schemeedit");
-                    comments.add(comment);
+                    filterBpmnCommentList.add(comment);
+                });
+                List<EmcOrderTaskBean> orderTaskList = orderTaskService.getDao().selectListByOneColumnValues(noSampleProjectIdList, "PROJID", new Order[0]);
+                orderTaskList.forEach(a -> a.setStatus("preLogged"));
+                orderTaskService.getDao().update(orderTaskList, "STATUS");
+                coreBpmnCommentService.getDao().deleteBy(filterBpmnCommentList, "statusCode");
+                reportService.insertByProject(noSampleProjectIdList, false);
+                List<Long> folderIdList = orderTaskList.stream().filter(t -> !ObjectUtils.isEmpty(t.getFolderId())).map(EmcOrderTaskBean::getFolderId).distinct().collect(Collectors.toList());
+                List<EmcFolderBean> folderList = new ArrayList<>();
+                folderIdList.forEach(e -> {
+                    EmcFolderBean folder = new EmcFolderBean(); folder.setId(e); folder.setStatus("draw"); folder.setProcessStatus("done"); folderList.add(folder);
+                });
+                folderService.getDao().update(folderList, "STATUS", "PROCESSSTATUS");
+                noSampleProjectIdList.forEach(id -> { EmcProjectBean updateProject = new EmcProjectBean(); updateProject.setId(id); updateProject.setStatus("auditFinished"); updateProjectList.add(updateProject); });
+                getDao().update(updateProjectList, "STATUS");
+            }
+            logger.info("普通送样项目数量 -> {}", planContractProjectList.size());
+            List<EmcProjectBean> sampleProjectList = normalProjectList.stream().filter(e -> "1".equals(e.getSample())).collect(Collectors.toList());
+            if (!sampleProjectList.isEmpty()) {
+                List<Long> sampleProjectIdList = sampleProjectList.stream().map(EmcProjectBean::getId).collect(Collectors.toList());
+                List<EmcProjectBean> updateProjectList = new ArrayList<>();
+                if (!sampleProjectIdList.isEmpty()) {
+                    projSchemeService.insertBpData(sampleProjectIdList);
+                    reportService.insertByProject(sampleProjectIdList, false);
+                    sampleProjectIdList.forEach(i -> { EmcProjectBean updateProject = new EmcProjectBean(); updateProject.setId(i); updateProject.setStatus("auditFinished"); updateProjectList.add(updateProject); });
                 }
-                List<EmcOrderTaskBean> tasks = orderTaskService.getDao().selectListByOneColumnValues(noSampleIds, "PROJID", new Order[0]);
-                tasks.forEach(t -> t.setStatus("preLogged"));
-                orderTaskService.getDao().update(tasks, "STATUS");
-                coreBpmnCommentService.getDao().deleteBy(comments, "statusCode");
-                reportService.insertByProject(noSampleIds, false);
-                List<EmcFolderBean> folders = tasks.stream().filter(t -> t.getFolderId() != null)
-                        .map(EmcOrderTaskBean::getFolderId).distinct().map(id -> {
-                            EmcFolderBean f = new EmcFolderBean(); f.setId(id); f.setStatus("draw"); f.setProcessStatus("done"); return f;
-                        }).collect(Collectors.toList());
-                if (!folders.isEmpty()) folderService.getDao().update(folders, "STATUS", "PROCESSSTATUS");
-                List<EmcProjectBean> updates = noSample.stream().map(p -> { EmcProjectBean u = new EmcProjectBean(); u.setId(p.getId()); u.setStatus("auditFinished"); return u; }).collect(Collectors.toList());
-                getDao().update(updates, "STATUS");
+                getDao().update(updateProjectList, "STATUS");
             }
-
-            List<EmcProjectBean> sample = normal.stream().filter(p -> "1".equals(p.getSample())).collect(Collectors.toList());
-            if (!sample.isEmpty()) {
-                List<Long> sampleIds = sample.stream().map(EmcProjectBean::getId).collect(Collectors.toList());
-                projSchemeService.insertBpData(sampleIds);
-                reportService.insertByProject(sampleIds, false);
-                List<EmcProjectBean> updates = sample.stream().map(p -> { EmcProjectBean u = new EmcProjectBean(); u.setId(p.getId()); u.setStatus("auditFinished"); return u; }).collect(Collectors.toList());
-                getDao().update(updates, "STATUS");
-            }
-
-            List<EmcAuditRecordBean> auditRecords = new ArrayList<>();
+            logger.info("普通采样项目数量 -> {}", planContractProjectList.size());
+            List<EmcAuditRecordBean> auditRecordList = new ArrayList<>();
             for (EmcProjectBean project : projectList) {
-                EmcAuditRecordBean record = new EmcAuditRecordBean();
-                record.setId(ApplicationContextHelper.getNextIdentity());
-                record.setProjId(project.getId()); record.setProjNo(project.getProjNo());
-                record.setComments(wrapper.getParamValue("bpmn_comment"));
-                record.setLogDesc("项目:" + project.getProjNo()); record.setBizCategory("proj"); record.setStepCode("2");
-                record.setAuditCategory("项目管理"); record.setOperateCategory("审核"); record.setTaskName("方案审核");
-                record.setNextTaskName("0".equals(project.getSample()) ? "客户样品接收" : "采样安排");
-                auditRecords.add(record);
+                EmcAuditRecordBean auditRecord = new EmcAuditRecordBean(); auditRecord.setId(ApplicationContextHelper.getNextIdentity());
+                auditRecord.setProjId(project.getId()); auditRecord.setProjNo(project.getProjNo()); auditRecord.setComments(wrapper.getParamValue("bpmn_comment"));
+                auditRecord.setLogDesc("项目:" + project.getProjNo()); auditRecord.setBizCategory("proj"); auditRecord.setStepCode("2"); auditRecord.setAuditCategory("项目管理"); auditRecord.setOperateCategory("审核");
+                auditRecord.setTaskName("方案审核"); auditRecord.setNextTaskName("0".equals(project.getSample()) ? "客户样品接收" : "采样安排"); auditRecordList.add(auditRecord);
             }
-            auditRecordService.getDao().insert(auditRecords);
-            ProjectNodeUtils.updateNodes(normal.stream().map(EmcProjectBean::getId).collect(Collectors.toList()));
+            auditRecordService.getDao().insert(auditRecordList);
+            ProjectNodeUtils.updateNodes(normalProjectList.stream().map(EmcProjectBean::getId).collect(Collectors.toList()));
+            logger.info("更新数据状态");
             projectList.forEach(p -> p.setExt$Item("dataStatus", ""));
             getDao().update(projectList, "dataStatus");
+            logger.info("给ERP发送方案审核结果");
             erpOrderService.reviewOrderContract(projectList, false, null);
+            logger.info("推送项目信息到ERP");
             projectList.forEach(erpContractOrderService::pushPlanContractOrder);
         } catch (Exception e) {
             logger.error(e);
+            e.printStackTrace();
             String projectNos = projectList.stream().filter(p -> !StringUtils.isEmpty(p.getProjNo())).map(EmcProjectBean::getProjNo).collect(Collectors.joining(","));
+            logger.error("项目【{}】业务数据生成失败，准备回退业务流程，错误原因为：{}", projectNos, e.getMessage());
             throw new InvalidDataException("项目【" + projectNos + "】业务数据生成失败，请联系管理员");
         }
     }

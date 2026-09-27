@@ -201,7 +201,6 @@ public class PfOrderReceiptServiceImpl extends EmcOrderReceiptServiceImpl {
                             reloadOrderList.add(newOrder);
                         }
                     } else {
-                        copyOrderItemGroup(copiedOrderItemGroupList, copiedOrder, newOrderId, newOrderItemGroupList);
                         currentOrderTaskList.forEach(copiedOrderTask -> {
                         Long newOrderTaskId = ApplicationContextHelper.getNextIdentity();
                         List<EmcOrderTaskResultBean> currentResultList = copiedOrderTaskResultList.stream().filter(result -> ObjectUtils.equals(result.getOrderTaskId(), copiedOrderTask.getId())).collect(Collectors.toList());
@@ -219,6 +218,10 @@ public class PfOrderReceiptServiceImpl extends EmcOrderReceiptServiceImpl {
                             }}
                         });
                         });
+                        List<EmcOrderItemGroupBean> curCopiedOrderItemGroupList = copiedOrderItemGroupList.stream()
+                                .filter(group -> newOrderTaskList.stream().anyMatch(task -> ObjectUtils.equals(task.getTestMethodId(), group.getTestMethodId())))
+                                .collect(Collectors.toList());
+                        copyOrderItemGroup(curCopiedOrderItemGroupList, copiedOrder, newOrderId, newOrderItemGroupList);
                     }
                 });
             }));

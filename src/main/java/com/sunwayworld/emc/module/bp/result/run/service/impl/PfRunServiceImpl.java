@@ -3180,7 +3180,7 @@ public class PfRunServiceImpl extends EmcRunServiceImpl implements PfRunService 
             return suffixValue + 1;
         }
 
-        return 1;
+        return 0;
     }
 
     private Map<String, Integer> getSpecialPrefixOrderSeqNo(List<EmcQcCategoryBean> qcCategoryList, List<String> specialQcCodeList, Map<String, String> specialQcSuffixMap, List<EmcOrderBean> orderList, Long folderId) {

@@ -222,101 +222,81 @@ public class PfProjSchemeServiceImpl extends EmcProjSchemeServiceImpl implements
     @Transactional
     @AuditTrailEntry(AuditTrailType.INSERT)
     public Long insert(RestJsonWrapperBean jsonWrapper) {
+        int i;
         List<EmcProjSchemeBean> schemeList = jsonWrapper.parse(EmcProjSchemeBean.class);
         List<EmcProjOrderBean> orderList = jsonWrapper.parse(EmcProjOrderBean.class);
-
         int qty = schemeList.size();
-        Long projId = schemeList.get(0).getProjId();
-        EmcProjectBean emcProject = projectService.selectById(projId);
-
-        // 将监测点管理下维护的样品指标带过了
+        Long projId = ((EmcProjSchemeBean)schemeList.get(0)).getProjId();
+        EmcProjectBean emcProject = (EmcProjectBean)this.projectService.selectById(projId);
         List<Long> monitorPointIdList = schemeList.stream().filter(e -> !ObjectUtils.isEmpty(e.getMonitorPointId())).map(EmcProjSchemeBean::getMonitorPointId).distinct().collect(Collectors.toList());
         List<EmcMonitorPointBean> monitorPointList = Collections.emptyList();
         if (!monitorPointIdList.isEmpty()) {
-            monitorPointList = monitorPointService.selectListByFilter(SearchFilter.instance().match("ID", monitorPointIdList).filter(MatchPattern.OR)).stream()
-                    .filter(e -> !ObjectUtils.isEmpty(e.getIndexId())).collect(Collectors.toList());
+            monitorPointList = this.monitorPointService.selectListByFilter(SearchFilter.instance().match("ID", monitorPointIdList).filter(MatchPattern.OR), new Order[0]).stream().filter(e -> !ObjectUtils.isEmpty(e.getIndexId())).collect(Collectors.toList());
         }
-
-        String monitorTmplId = schemeList.get(0).getMonitorTmplId();
-        EmcMonitorTmplBean monitorTmpl = monitorTmplService.selectById(monitorTmplId);
-        Long cycle= EmcConstant.ONE;
-        Long frequency= EmcConstant.ONE;
-        if(!ObjectUtils.isEmpty(monitorTmpl)){
+        String monitorTmplId = ((EmcProjSchemeBean)schemeList.get(0)).getMonitorTmplId();
+        EmcMonitorTmplBean monitorTmpl = (EmcMonitorTmplBean)this.monitorTmplService.selectById((monitorTmplId));
+        String orderCategoryCode = "";
+        Long cycle = EmcConstant.ONE;
+        Long frequency = EmcConstant.ONE;
+        if (!ObjectUtils.isEmpty(monitorTmpl)) {
+            orderCategoryCode = ObjectUtils.isEmpty(monitorTmpl.getExt$Item("ordercategorycode")) ? "" : monitorTmpl.getExt$Item("ordercategorycode");
             cycle = ObjectUtils.isEmpty(monitorTmpl.getCycle()) ? EmcConstant.ONE : monitorTmpl.getCycle();
             frequency = ObjectUtils.isEmpty(monitorTmpl.getFrequency()) ? EmcConstant.ONE : monitorTmpl.getFrequency();
         }
-
-        // 关联测试
         List<Long> capacityItemGroupIdList = orderList.stream().map(EmcProjOrderBean::getItemGroupId).distinct().collect(Collectors.toList());
-        List<EmcCapacityItemGroupBean> capacityItemGroupList = capacityItemGroupService.selectListByIds(capacityItemGroupIdList);
-
+        List<EmcCapacityItemGroupBean> capacityItemGroupList = this.capacityItemGroupService.selectListByIds(capacityItemGroupIdList);
         List<Long> testMethodIdList = capacityItemGroupList.stream().map(EmcCapacityItemGroupBean::getTestMethodId).distinct().collect(Collectors.toList());
-        List<EmcRelatedTestMethodBean> relatedTestMethodList = relatedTestMethodService.selectListByFilter(SearchFilter.instance()
-                .match("testMethodId", testMethodIdList).filter(MatchPattern.OR)
-                .match("replaceFlag2", Arrays.asList("1", null)).filter(MatchPattern.DIFFER));
+        List<EmcRelatedTestMethodBean> relatedTestMethodList = this.relatedTestMethodService.selectListByFilter(SearchFilter.instance().match("testMethodId", testMethodIdList).filter(MatchPattern.OR).match("replaceFlag2", Arrays.asList("1", null)).filter(MatchPattern.DIFFER), new Order[0]);
         List<Long> relatedTestMethodIdList = relatedTestMethodList.stream().map(EmcRelatedTestMethodBean::getRelatedTestMethodId).distinct().collect(Collectors.toList());
-        List<EmcTestMethodBean> testMethodList = testMethodService.selectListByIds(relatedTestMethodIdList);
-
+        List<EmcTestMethodBean> testMethodList = this.testMethodService.selectListByIds(relatedTestMethodIdList);
         String parentOrgId = LocalContextHelper.getLoginUser().getExt$Item("parentOrgId");
-        List<EmcTestCapacityBean> relatedCapacityList = relatedTestMethodIdList.isEmpty() ? Collections.emptyList() : testCapacityService.selectListByFilter(SearchFilter.instance().match("testMethodId", relatedTestMethodIdList).filter(MatchPattern.OR).match("orgId", parentOrgId).filter(MatchPattern.SEQ));
+        List<EmcTestCapacityBean> relatedCapacityList = relatedTestMethodIdList.isEmpty() ? Collections.emptyList() : this.testCapacityService.selectListByFilter(SearchFilter.instance().match("testMethodId", relatedTestMethodIdList).filter(MatchPattern.OR).match("orgId", parentOrgId).filter(MatchPattern.SEQ), new Order[0]);
         List<Long> testCapacityIdList = relatedCapacityList.stream().map(EmcTestCapacityBean::getId).collect(Collectors.toList());
-
-        List<EmcCapacityItemGroupBean> relatedItemGroupList = capacityItemGroupService.getDao().selectListByOneColumnValues(testCapacityIdList, "testCapacityId");
-
+        List<EmcCapacityItemGroupBean> relatedItemGroupList = this.capacityItemGroupService.getDao().selectListByOneColumnValues(testCapacityIdList, "testCapacityId", new Order[0]);
         relatedItemGroupList.stream().filter(related -> !capacityItemGroupIdList.contains(related.getId())).forEach(related -> {
             EmcProjOrderBean relatedProjOrder = new EmcProjOrderBean();
             relatedProjOrder.setItemGroup(related.getItemGroup());
             relatedProjOrder.setItemGroupId(related.getId());
             relatedProjOrder.setSchemeName("default");
-            relatedProjOrder.setExt$Item("relatedTest", Constant.YES);
+            relatedProjOrder.setExt$Item("relatedTest", "1");
             testMethodList.stream().filter(testMethod -> ObjectUtils.equals(related.getTestMethodId(), testMethod.getId())).findFirst().ifPresent(testMethod -> {
                 relatedProjOrder.setMethodId(testMethod.getMethodId());
                 relatedProjOrder.setTestId(testMethod.getTestId());
             });
             orderList.add(relatedProjOrder);
         });
-
-        String orderCategoryCode = ObjectUtils.isEmpty(monitorTmpl) ? "" : monitorTmpl.getExt$Item("ordercategorycode");
-        List<String> folderNoList = generateFolderNosByProjId(emcProject.getId(), emcProject.getProjNo(), monitorTmplId, orderCategoryCode, qty);
-        List<EmcProjOrderBean> insertOrderList = new ArrayList<>();
-        for (int i = 0; i < qty; i++) {
-            EmcProjSchemeBean scheme = schemeList.get(i);
-
+        List<String> folderNoList = this.generateFolderNosByProjId(emcProject.getId(), emcProject.getProjNo(), monitorTmpl.getId(), orderCategoryCode, qty);
+        ArrayList<EmcProjOrderBean> insertOrderList = new ArrayList<>();
+        for (i = 0; i < qty; ++i) {
+            EmcProjSchemeBean scheme = (EmcProjSchemeBean)schemeList.get(i);
             Long monitorPointId = scheme.getMonitorPointId();
-
             Long id = ApplicationContextHelper.getNextIdentity();
             scheme.setId(id);
             scheme.setFolderNo(folderNoList.get(i));
-            scheme.setSortNum(Long.parseLong(folderNoList.get(i).substring(folderNoList.get(i).length() - 3)));
+            scheme.setSortNum(Long.valueOf(Long.parseLong((folderNoList.get(i)).substring((folderNoList.get(i)).length() - 3))));
             scheme.setCycle(cycle);
             scheme.setFrequency(frequency);
-            //如果采样科室为空则赋值任务表的默认采样科室
-            if(StringUtils.isEmpty(scheme.getSampleOrgId())) {
+            if (StringUtils.isEmpty(scheme.getSampleOrgId())) {
                 scheme.setSampleOrgId(emcProject.getProjectSampleOrgId());
             }
-
-            List<EmcProjOrderBean> copyOrderList = ObjectUtils.clone(orderList);
+            List<EmcProjOrderBean> copyOrderList = (List<EmcProjOrderBean>)ObjectUtils.clone(orderList);
             for (EmcProjOrderBean order : copyOrderList) {
+                EmcMonitorPointBean monitorPoint;
                 order.setId(ApplicationContextHelper.getNextIdentity());
                 order.setProjSchemeId(id);
                 order.setSampleNum(EmcConstant.ONE);
-                if (monitorPointId != null) {
-                    EmcMonitorPointBean monitorPoint = monitorPointList.stream().filter(e -> ObjectUtils.equals(monitorPointId, e.getId())).findFirst().orElse(null);
-                    if (monitorPoint != null) {
-                        order.setIndexCategoryId(NumberUtils.parseLong(monitorPoint.getExt$Item("indexcategoryid")));
-                        order.setIndexId(monitorPoint.getIndexId());
-                    }
-                }
+                if (monitorPointId == null || (monitorPoint = (EmcMonitorPointBean)monitorPointList.stream().filter(e -> ObjectUtils.equals(monitorPointId, e.getId())).findFirst().orElse(null)) == null) continue;
+                order.setIndexCategoryId(Long.valueOf(NumberUtils.parseLong(monitorPoint.getExt$Item("indexcategoryid"))));
+                order.setIndexId(monitorPoint.getIndexId());
             }
             insertOrderList.addAll(copyOrderList);
         }
-        for (int i = 0; i < insertOrderList.size(); i++) {
-            insertOrderList.get(i).setSortNum(i + 1L);
+        for (i = 0; i < insertOrderList.size(); ++i) {
+            ((EmcProjOrderBean)insertOrderList.get(i)).setSortNum(Long.valueOf((long)i + 1L));
         }
-
-        getDao().insert(schemeList);
-        projOrderService.getDao().insert(insertOrderList);
-        return schemeList.get(0).getId();
+        this.getDao().insert(schemeList);
+        this.projOrderService.getDao().insert(insertOrderList);
+        return ((EmcProjSchemeBean)schemeList.get(0)).getId();
     }
 
     @Override

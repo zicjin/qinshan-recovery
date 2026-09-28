@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Arrays;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -213,53 +212,10 @@ public class PersonnelSignatureFileFilter extends OncePerRequestFilter {
     }
 
     private boolean isExplicitlyNonPersonnelPack(String path, byte[] body) {
-        String suffix = path.substring(PACK_PATH.length());
-        if (!suffix.isEmpty()) {
-            String table = suffix.substring(1).split("/", 2)[0];
-            return !table.isEmpty() && !"T_CORE_USER".equalsIgnoreCase(table);
-        }
-        try {
-            JsonNode root = OBJECT_MAPPER.readTree(body);
-            List<String> ids = new ArrayList<>();
-            collectPackIds(root == null ? null : root.get("b"), ids);
-            if (ids.isEmpty()) {
-                return false;
-            }
-            for (String id : ids) {
-                CoreFileBean file = findFileById(id);
-                if (file == null || file.getTargetId() == null
-                        || file.getTargetId().startsWith(PERSONNEL_TARGET_PREFIX)) {
-                    return false;
-                }
-            }
-            return true;
-        } catch (IOException ignored) {
-            return false;
-        }
-    }
-
-    private void collectPackIds(JsonNode node, List<String> ids) {
-        if (node == null || node.isNull()) {
-            return;
-        }
-        if (node.isArray()) {
-            for (JsonNode child : node) {
-                collectPackIds(child, ids);
-            }
-            return;
-        }
-        if (!node.isObject()) {
-            return;
-        }
-        JsonNode id = node.get("id");
-        if (id != null && (id.isIntegralNumber() || id.isTextual()) && !isBlank(id)) {
-            ids.add(id.asText());
-            return;
-        }
-        java.util.Iterator<JsonNode> children = node.elements();
-        while (children.hasNext()) {
-            collectPackIds(children.next(), ids);
-        }
+        // Packing can resolve arbitrary file IDs and create a new bearer URL.
+        // Keep it restricted to the same personnel-management boundary; the
+        // first-acceptance low-privilege role has no safe generic pack scope.
+        return false;
     }
 
     private JsonNode queryFilter(JsonNode root) {

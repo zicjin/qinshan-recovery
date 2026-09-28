@@ -42,6 +42,8 @@ public class PersonnelSignatureFileFilter extends OncePerRequestFilter {
 
     private static final String FILE_RESOURCE_PREFIX = "/core/module/item/files/";
     private static final String FILE_QUERY_PATH = "/core/module/item/files/queries";
+    private static final String EMC_FILE_RESOURCE_PREFIX = "/secure/emc/module/mdm/file/files/";
+    private static final String EMC_FILE_QUERY_PATH = "/secure/emc/module/mdm/file/files/queries";
     private static final String FILE_CONTENT_PREFIX = "/files/";
     private static final String PERSONNEL_TARGET_PREFIX = "T_CORE_USER$";
     private static final String PERSONNEL_MENU_ID = "100001";
@@ -58,7 +60,9 @@ public class PersonnelSignatureFileFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = pathWithinApplication(request);
-        return !path.startsWith(FILE_RESOURCE_PREFIX) && !path.startsWith(FILE_CONTENT_PREFIX);
+        return !path.startsWith(FILE_RESOURCE_PREFIX)
+                && !path.startsWith(EMC_FILE_RESOURCE_PREFIX)
+                && !path.startsWith(FILE_CONTENT_PREFIX);
     }
 
     @Override
@@ -91,8 +95,10 @@ public class PersonnelSignatureFileFilter extends OncePerRequestFilter {
 
     private CoreFileBean findRequestedFile(HttpServletRequest request) {
         String path = pathWithinApplication(request);
-        if (path.startsWith(FILE_RESOURCE_PREFIX)) {
-            String id = path.substring(FILE_RESOURCE_PREFIX.length());
+        if (path.startsWith(FILE_RESOURCE_PREFIX) || path.startsWith(EMC_FILE_RESOURCE_PREFIX)) {
+            String prefix = path.startsWith(FILE_RESOURCE_PREFIX)
+                    ? FILE_RESOURCE_PREFIX : EMC_FILE_RESOURCE_PREFIX;
+            String id = path.substring(prefix.length()).split("/", 2)[0];
             if (id.matches("[0-9]+")) {
                 try {
                     return coreFileService.selectByIdIfPresent(Long.valueOf(id));
@@ -116,7 +122,11 @@ public class PersonnelSignatureFileFilter extends OncePerRequestFilter {
 
     private boolean isFileQuery(HttpServletRequest request, String path) {
         return "POST".equals(request.getMethod())
-                && (FILE_QUERY_PATH.equals(path) || path.startsWith(FILE_QUERY_PATH + "/"));
+                && (isQueryPath(path, FILE_QUERY_PATH) || isQueryPath(path, EMC_FILE_QUERY_PATH));
+    }
+
+    private boolean isQueryPath(String path, String queryPath) {
+        return queryPath.equals(path) || path.startsWith(queryPath + "/");
     }
 
     /**

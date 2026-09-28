@@ -74,6 +74,10 @@ public class PersonnelSignatureFileFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         String path = pathWithinApplication(request);
+        if (isNonCanonicalContentPath(request, path)) {
+            deny(response);
+            return;
+        }
         // FileSecureFilter sees the raw servlet URI. Check the normalized
         // content path before the anonymous short-circuit so matrix parameters
         // or duplicate slashes cannot expose a personnel attachment.
@@ -312,10 +316,18 @@ public class PersonnelSignatureFileFilter extends OncePerRequestFilter {
     }
 
     private String pathWithinApplication(HttpServletRequest request) {
+        return normalizePath(rawPathWithinApplication(request));
+    }
+
+    private String rawPathWithinApplication(HttpServletRequest request) {
         String contextPath = request.getContextPath();
         String requestUri = request.getRequestURI();
-        String path = requestUri.startsWith(contextPath) ? requestUri.substring(contextPath.length()) : requestUri;
-        return normalizePath(path);
+        return requestUri.startsWith(contextPath) ? requestUri.substring(contextPath.length()) : requestUri;
+    }
+
+    private boolean isNonCanonicalContentPath(HttpServletRequest request, String normalizedPath) {
+        return normalizedPath.startsWith(FILE_CONTENT_PREFIX)
+                && !normalizedPath.equals(rawPathWithinApplication(request));
     }
 
     /**

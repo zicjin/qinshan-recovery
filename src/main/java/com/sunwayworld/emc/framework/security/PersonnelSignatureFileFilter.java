@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -44,6 +45,9 @@ public class PersonnelSignatureFileFilter extends OncePerRequestFilter {
     private static final String FILE_QUERY_PATH = "/core/module/item/files/queries";
     private static final String EMC_FILE_RESOURCE_PREFIX = "/secure/emc/module/mdm/file/files/";
     private static final String EMC_FILE_QUERY_PATH = "/secure/emc/module/mdm/file/files/queries";
+    private static final String PAGE_OFFICE_PREFIX = "/open/page-office/";
+    private static final String COVER_PAGE_OFFICE_PREFIX = "/open/cover/page-office/";
+    private static final String PACK_PATH = "/core/module/item/files/action/pack";
     private static final String FILE_CONTENT_PREFIX = "/files/";
     private static final String PERSONNEL_TARGET_PREFIX = "T_CORE_USER$";
     private static final String PERSONNEL_MENU_ID = "100001";
@@ -62,18 +66,42 @@ public class PersonnelSignatureFileFilter extends OncePerRequestFilter {
         String path = pathWithinApplication(request);
         return !path.startsWith(FILE_RESOURCE_PREFIX)
                 && !path.startsWith(EMC_FILE_RESOURCE_PREFIX)
+                && !path.startsWith(PAGE_OFFICE_PREFIX)
+                && !path.startsWith(COVER_PAGE_OFFICE_PREFIX)
                 && !path.startsWith(FILE_CONTENT_PREFIX);
     }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
+        String path = pathWithinApplication(request);
+        if (isPageOfficeRequest(path)) {
+            if (!hasAuthenticatedPrincipal()) {
+                deny(response);
+                return;
+            }
+            if (denyIfPersonnelFileWithoutMenu(findRequestedFile(request), response)) {
+                return;
+            }
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         if (!hasAuthenticatedPrincipal()) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        String path = pathWithinApplication(request);
+        if (isPackRequest(request, path)) {
+            CachedBodyRequest cachedRequest = new CachedBodyRequest(request);
+            if (!hasPersonnelMenu() && !isExplicitlyNonPersonnelPack(path, cachedRequest.getBody())) {
+                deny(response);
+                return;
+            }
+            filterChain.doFilter(cachedRequest, response);
+            return;
+        }
+
         if (isFileQuery(request, path)) {
             CachedBodyRequest cachedRequest = new CachedBodyRequest(request);
             if (!hasPersonnelMenu() && !isExplicitlyNonPersonnelQuery(cachedRequest.getBody())) {
@@ -84,13 +112,19 @@ public class PersonnelSignatureFileFilter extends OncePerRequestFilter {
             return;
         }
 
-        CoreFileBean file = findRequestedFile(request);
-        if (file != null && file.getTargetId() != null && file.getTargetId().startsWith(PERSONNEL_TARGET_PREFIX)
-                && !hasPersonnelMenu()) {
-            deny(response);
+        if (denyIfPersonnelFileWithoutMenu(findRequestedFile(request), response)) {
             return;
         }
         filterChain.doFilter(request, response);
+    }
+
+    private boolean denyIfPersonnelFileWithoutMenu(CoreFileBean file, HttpServletResponse response) throws IOException {
+        if (file != null && file.getTargetId() != null && file.getTargetId().startsWith(PERSONNEL_TARGET_PREFIX)
+                && !hasPersonnelMenu()) {
+            deny(response);
+            return true;
+        }
+        return false;
     }
 
     private CoreFileBean findRequestedFile(HttpServletRequest request) {
@@ -104,6 +138,16 @@ public class PersonnelSignatureFileFilter extends OncePerRequestFilter {
                     return coreFileService.selectByIdIfPresent(Long.valueOf(id));
                 } catch (NumberFormatException ignored) {
                     return null;
+                }
+            }
+            return null;
+        }
+
+        if (isPageOfficeRequest(path)) {
+            for (String parameter : Arrays.asList("fileId", "businessId", "sourceFileId")) {
+                CoreFileBean file = findFileById(request.getParameter(parameter));
+                if (file != null) {
+                    return file;
                 }
             }
             return null;
@@ -123,6 +167,15 @@ public class PersonnelSignatureFileFilter extends OncePerRequestFilter {
     private boolean isFileQuery(HttpServletRequest request, String path) {
         return "POST".equals(request.getMethod())
                 && (isQueryPath(path, FILE_QUERY_PATH) || isQueryPath(path, EMC_FILE_QUERY_PATH));
+    }
+
+    private boolean isPackRequest(HttpServletRequest request, String path) {
+        return "POST".equals(request.getMethod())
+                && (PACK_PATH.equals(path) || path.startsWith(PACK_PATH + "/"));
+    }
+
+    private boolean isPageOfficeRequest(String path) {
+        return path.startsWith(PAGE_OFFICE_PREFIX) || path.startsWith(COVER_PAGE_OFFICE_PREFIX);
     }
 
     private boolean isQueryPath(String path, String queryPath) {
@@ -156,6 +209,56 @@ public class PersonnelSignatureFileFilter extends OncePerRequestFilter {
             return hasConcreteTarget;
         } catch (IOException ignored) {
             return false;
+        }
+    }
+
+    private boolean isExplicitlyNonPersonnelPack(String path, byte[] body) {
+        String suffix = path.substring(PACK_PATH.length());
+        if (!suffix.isEmpty()) {
+            String table = suffix.substring(1).split("/", 2)[0];
+            return !table.isEmpty() && !"T_CORE_USER".equalsIgnoreCase(table);
+        }
+        try {
+            JsonNode root = OBJECT_MAPPER.readTree(body);
+            List<String> ids = new ArrayList<>();
+            collectPackIds(root == null ? null : root.get("b"), ids);
+            if (ids.isEmpty()) {
+                return false;
+            }
+            for (String id : ids) {
+                CoreFileBean file = findFileById(id);
+                if (file == null || file.getTargetId() == null
+                        || file.getTargetId().startsWith(PERSONNEL_TARGET_PREFIX)) {
+                    return false;
+                }
+            }
+            return true;
+        } catch (IOException ignored) {
+            return false;
+        }
+    }
+
+    private void collectPackIds(JsonNode node, List<String> ids) {
+        if (node == null || node.isNull()) {
+            return;
+        }
+        if (node.isArray()) {
+            for (JsonNode child : node) {
+                collectPackIds(child, ids);
+            }
+            return;
+        }
+        if (!node.isObject()) {
+            return;
+        }
+        JsonNode id = node.get("id");
+        if (id != null && (id.isIntegralNumber() || id.isTextual()) && !isBlank(id)) {
+            ids.add(id.asText());
+            return;
+        }
+        java.util.Iterator<JsonNode> children = node.elements();
+        while (children.hasNext()) {
+            collectPackIds(children.next(), ids);
         }
     }
 
@@ -196,6 +299,17 @@ public class PersonnelSignatureFileFilter extends OncePerRequestFilter {
             }
         }
         return true;
+    }
+
+    private CoreFileBean findFileById(String id) {
+        if (id == null || !id.matches("[0-9]+")) {
+            return null;
+        }
+        try {
+            return coreFileService.selectByIdIfPresent(Long.valueOf(id));
+        } catch (NumberFormatException ignored) {
+            return null;
+        }
     }
 
     private void deny(HttpServletResponse response) throws IOException {

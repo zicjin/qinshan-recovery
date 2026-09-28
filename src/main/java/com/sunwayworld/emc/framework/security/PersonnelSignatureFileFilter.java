@@ -74,6 +74,14 @@ public class PersonnelSignatureFileFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         String path = pathWithinApplication(request);
+        // FileSecureFilter sees the raw servlet URI. Check the normalized
+        // content path before the anonymous short-circuit so matrix parameters
+        // or duplicate slashes cannot expose a personnel attachment.
+        if (path.startsWith(FILE_CONTENT_PREFIX)
+                && denyIfPersonnelFileWithoutMenu(findRequestedFile(request), response)) {
+            return;
+        }
+
         if (isPageOfficeRequest(path)) {
             if (!hasAuthenticatedPrincipal()) {
                 deny(response);

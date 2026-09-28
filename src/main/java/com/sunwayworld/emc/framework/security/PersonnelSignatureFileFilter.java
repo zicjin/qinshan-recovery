@@ -6,6 +6,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
@@ -22,6 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.util.UriUtils;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -41,8 +43,10 @@ import com.sunwayworld.module.sys.menu.service.CoreMenuService;
 public class PersonnelSignatureFileFilter extends OncePerRequestFilter {
 
     private static final String FILE_RESOURCE_PREFIX = "/core/module/item/files/";
+    private static final String FILE_RESOURCE_BASE = "/core/module/item/files";
     private static final String FILE_QUERY_PATH = "/core/module/item/files/queries";
     private static final String EMC_FILE_RESOURCE_PREFIX = "/secure/emc/module/mdm/file/files/";
+    private static final String EMC_FILE_RESOURCE_BASE = "/secure/emc/module/mdm/file/files";
     private static final String EMC_FILE_QUERY_PATH = "/secure/emc/module/mdm/file/files/queries";
     private static final String PAGE_OFFICE_PREFIX = "/open/page-office/";
     private static final String COVER_PAGE_OFFICE_PREFIX = "/open/cover/page-office/";
@@ -64,7 +68,9 @@ public class PersonnelSignatureFileFilter extends OncePerRequestFilter {
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = pathWithinApplication(request);
         return !path.startsWith(FILE_RESOURCE_PREFIX)
+                && !FILE_RESOURCE_BASE.equals(path)
                 && !path.startsWith(EMC_FILE_RESOURCE_PREFIX)
+                && !EMC_FILE_RESOURCE_BASE.equals(path)
                 && !path.startsWith(PAGE_OFFICE_PREFIX)
                 && !path.startsWith(COVER_PAGE_OFFICE_PREFIX)
                 && !path.startsWith(FILE_CONTENT_PREFIX);
@@ -74,6 +80,14 @@ public class PersonnelSignatureFileFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         String path = pathWithinApplication(request);
+        if (isNonCanonicalRoutePath(request, path)) {
+            deny(response);
+            return;
+        }
+        if (hasNonCanonicalResourceFileId(path)) {
+            deny(response);
+            return;
+        }
         if (isNonCanonicalContentPath(request, path)) {
             deny(response);
             return;
@@ -91,7 +105,7 @@ public class PersonnelSignatureFileFilter extends OncePerRequestFilter {
                 deny(response);
                 return;
             }
-            if (denyIfPersonnelFileWithoutMenu(findRequestedFile(request), response)) {
+            if (denyIfAnyPersonnelPageOfficeFileWithoutMenu(request, response)) {
                 return;
             }
             filterChain.doFilter(request, response);
@@ -100,6 +114,11 @@ public class PersonnelSignatureFileFilter extends OncePerRequestFilter {
 
         if (!hasAuthenticatedPrincipal()) {
             filterChain.doFilter(request, response);
+            return;
+        }
+
+        if (isMutableFileRequest(request, path) && !hasPersonnelMenu()) {
+            deny(response);
             return;
         }
 
@@ -138,6 +157,52 @@ public class PersonnelSignatureFileFilter extends OncePerRequestFilter {
         return false;
     }
 
+    private boolean denyIfAnyPersonnelPageOfficeFileWithoutMenu(HttpServletRequest request,
+            HttpServletResponse response) throws IOException {
+        for (String parameter : Arrays.asList("fileId", "businessId", "sourceFileId")) {
+            String[] values = request.getParameterValues(parameter);
+            if (values == null) {
+                continue;
+            }
+            for (String value : values) {
+                if (value != null && !value.isEmpty() && !value.matches("[0-9]+")) {
+                    deny(response);
+                    return true;
+                }
+                if (denyIfPersonnelFileWithoutMenu(findFileById(value), response)) {
+                    return true;
+                }
+            }
+        }
+        String[] fileUrls = request.getParameterValues("fileUrl");
+        if (fileUrls != null) {
+            for (String fileUrl : fileUrls) {
+                if (fileUrl != null && !fileUrl.isEmpty() && !fileUrl.startsWith(FILE_CONTENT_PREFIX)) {
+                    deny(response);
+                    return true;
+                }
+                if (fileUrl != null && fileUrl.startsWith(FILE_CONTENT_PREFIX)
+                        && findFileByContentPath(fileUrl) == null) {
+                    deny(response);
+                    return true;
+                }
+                if (denyIfPersonnelFileWithoutMenu(findFileByContentPath(fileUrl), response)) {
+                    return true;
+                }
+            }
+        }
+        String[] targetIds = request.getParameterValues("targetId");
+        if (targetIds != null) {
+            for (String targetId : targetIds) {
+                if (targetId != null && targetId.startsWith(PERSONNEL_TARGET_PREFIX) && !hasPersonnelMenu()) {
+                    deny(response);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     private CoreFileBean findRequestedFile(HttpServletRequest request) {
         String path = pathWithinApplication(request);
         if (path.startsWith(FILE_RESOURCE_PREFIX) || path.startsWith(EMC_FILE_RESOURCE_PREFIX)) {
@@ -147,22 +212,9 @@ public class PersonnelSignatureFileFilter extends OncePerRequestFilter {
             if (segments.length > 0 && segments[0].matches("[0-9]+")) {
                 return findFileById(segments[0]);
             }
-            if (segments.length > 1 && "sunwayoffices".equals(segments[0])) {
+            if (segments.length > 1 && "sunwayoffices".equals(segments[0])
+                    && segments[1].matches("[0-9]+")) {
                 return findFileById(segments[1]);
-            }
-            return null;
-        }
-
-        if (isPageOfficeRequest(path)) {
-            for (String parameter : Arrays.asList("fileId", "businessId", "sourceFileId")) {
-                CoreFileBean file = findFileById(request.getParameter(parameter));
-                if (file != null) {
-                    return file;
-                }
-            }
-            String fileUrl = request.getParameter("fileUrl");
-            if (fileUrl != null && fileUrl.startsWith(FILE_CONTENT_PREFIX)) {
-                return findFileByContentPath(fileUrl);
             }
             return null;
         }
@@ -190,6 +242,16 @@ public class PersonnelSignatureFileFilter extends OncePerRequestFilter {
                 && (isQueryPath(path, FILE_QUERY_PATH) || isQueryPath(path, EMC_FILE_QUERY_PATH));
     }
 
+    private boolean isMutableFileRequest(HttpServletRequest request, String path) {
+        String method = request.getMethod();
+        if ("GET".equals(method) || "HEAD".equals(method) || "OPTIONS".equals(method)) {
+            return false;
+        }
+        boolean coreFileRoute = FILE_RESOURCE_BASE.equals(path) || path.startsWith(FILE_RESOURCE_PREFIX);
+        boolean emcFileRoute = EMC_FILE_RESOURCE_BASE.equals(path) || path.startsWith(EMC_FILE_RESOURCE_PREFIX);
+        return (coreFileRoute || emcFileRoute) && !isFileQuery(request, path);
+    }
+
     private boolean isPackRequest(HttpServletRequest request, String path) {
         return "POST".equals(request.getMethod())
                 && (PACK_PATH.equals(path) || path.startsWith(PACK_PATH + "/"));
@@ -197,6 +259,27 @@ public class PersonnelSignatureFileFilter extends OncePerRequestFilter {
 
     private boolean isPageOfficeRequest(String path) {
         return path.startsWith(PAGE_OFFICE_PREFIX) || path.startsWith(COVER_PAGE_OFFICE_PREFIX);
+    }
+
+    private boolean hasNonCanonicalResourceFileId(String path) {
+        if (!path.startsWith(FILE_RESOURCE_PREFIX) && !path.startsWith(EMC_FILE_RESOURCE_PREFIX)) {
+            return false;
+        }
+        String prefix = path.startsWith(FILE_RESOURCE_PREFIX) ? FILE_RESOURCE_PREFIX : EMC_FILE_RESOURCE_PREFIX;
+        String[] segments = path.substring(prefix.length()).split("/");
+        if (segments.length == 0 || segments[0].isEmpty()) {
+            return false;
+        }
+        if ("sunwayoffices".equals(segments[0])) {
+            return segments.length > 1 && looksNumeric(segments[1]) && !segments[1].matches("[0-9]+");
+        }
+        return looksNumeric(segments[0]) && !segments[0].matches("[0-9]+");
+    }
+
+    private boolean looksNumeric(String value) {
+        return value.matches("[+-]?[0-9]+")
+                || value.matches("[+-]?0[xX][0-9a-fA-F]+")
+                || value.matches("[+-]?0[0-7]+");
     }
 
     private boolean isQueryPath(String path, String queryPath) {
@@ -316,7 +399,7 @@ public class PersonnelSignatureFileFilter extends OncePerRequestFilter {
     }
 
     private String pathWithinApplication(HttpServletRequest request) {
-        return normalizePath(rawPathWithinApplication(request));
+        return normalizePath(decodePath(rawPathWithinApplication(request)));
     }
 
     private String rawPathWithinApplication(HttpServletRequest request) {
@@ -326,8 +409,33 @@ public class PersonnelSignatureFileFilter extends OncePerRequestFilter {
     }
 
     private boolean isNonCanonicalContentPath(HttpServletRequest request, String normalizedPath) {
-        return normalizedPath.startsWith(FILE_CONTENT_PREFIX)
-                && !normalizedPath.equals(rawPathWithinApplication(request));
+        if (!normalizedPath.startsWith(FILE_CONTENT_PREFIX)) {
+            return false;
+        }
+        String rawPath = rawPathWithinApplication(request);
+        if (!rawPath.startsWith(FILE_CONTENT_PREFIX) || rawPath.indexOf(';') >= 0 || rawPath.contains("//")) {
+            return true;
+        }
+        String[] segments = rawPath.substring(FILE_CONTENT_PREFIX.length()).split("/", 4);
+        return segments.length != 4
+                || !segments[0].matches("[A-Za-z0-9_-]+")
+                || !segments[1].matches("[0-9]{8}")
+                || !segments[2].matches("[A-Fa-f0-9]{32}");
+    }
+
+    private boolean isNonCanonicalRoutePath(HttpServletRequest request, String normalizedPath) {
+        boolean protectedRoute = normalizedPath.startsWith(FILE_RESOURCE_PREFIX)
+                || normalizedPath.startsWith(EMC_FILE_RESOURCE_PREFIX)
+                || isPageOfficeRequest(normalizedPath);
+        return protectedRoute && !normalizedPath.equals(rawPathWithinApplication(request));
+    }
+
+    private String decodePath(String path) {
+        try {
+            return UriUtils.decode(path, StandardCharsets.UTF_8);
+        } catch (IllegalArgumentException ignored) {
+            return "/__invalid_encoded_path__";
+        }
     }
 
     /**

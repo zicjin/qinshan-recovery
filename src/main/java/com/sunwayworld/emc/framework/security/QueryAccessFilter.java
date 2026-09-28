@@ -1,6 +1,7 @@
 package com.sunwayworld.emc.framework.security;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -15,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.util.UriUtils;
 
 import com.sunwayworld.framework.context.LocalContextHelper;
 import com.sunwayworld.module.sys.menu.bean.CoreMenuBean;
@@ -54,6 +56,10 @@ public class QueryAccessFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
+        if (isNonCanonicalProtectedPath(request)) {
+            deny(response);
+            return;
+        }
         if (!hasAuthenticatedPrincipal()) {
             filterChain.doFilter(request, response);
             return;
@@ -73,9 +79,7 @@ public class QueryAccessFilter extends OncePerRequestFilter {
         }
 
         if (!permitted) {
-            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-            response.setContentType("application/json;charset=UTF-8");
-            response.getWriter().write("{\"message\":\"GIKAM.PERMISSION.UNAUTHORIZED\"}");
+            deny(response);
             return;
         }
         filterChain.doFilter(request, response);
@@ -89,6 +93,12 @@ public class QueryAccessFilter extends OncePerRequestFilter {
         }
         String loginUserId = LocalContextHelper.getLoginUserId();
         return loginUserId != null && !loginUserId.trim().isEmpty();
+    }
+
+    private void deny(HttpServletResponse response) throws IOException {
+        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+        response.setContentType("application/json;charset=UTF-8");
+        response.getWriter().write("{\"message\":\"GIKAM.PERMISSION.UNAUTHORIZED\"}");
     }
 
     private Set<String> currentMenuIds() {
@@ -123,8 +133,45 @@ public class QueryAccessFilter extends OncePerRequestFilter {
     }
 
     private String pathWithinApplication(HttpServletRequest request) {
+        return normalizePath(decodePath(rawPathWithinApplication(request)));
+    }
+
+    private String rawPathWithinApplication(HttpServletRequest request) {
         String contextPath = request.getContextPath();
         String requestUri = request.getRequestURI();
         return requestUri.startsWith(contextPath) ? requestUri.substring(contextPath.length()) : requestUri;
+    }
+
+    private boolean isNonCanonicalProtectedPath(HttpServletRequest request) {
+        String rawPath = rawPathWithinApplication(request);
+        String canonicalPath = pathWithinApplication(request);
+        return (canonicalPath.startsWith(EMPLOYEE_PATH)
+                || canonicalPath.startsWith(EQUIPMENT_PATH)
+                || canonicalPath.startsWith(CONSUMABLE_PATH))
+                && !canonicalPath.equals(rawPath);
+    }
+
+    private String decodePath(String path) {
+        try {
+            return UriUtils.decode(path, StandardCharsets.UTF_8);
+        } catch (IllegalArgumentException ignored) {
+            return "/__invalid_encoded_path__";
+        }
+    }
+
+    private String normalizePath(String path) {
+        String[] segments = path.split("/", -1);
+        StringBuilder normalized = new StringBuilder(path.length());
+        for (String segment : segments) {
+            int matrixParameter = segment.indexOf(';');
+            if (matrixParameter >= 0) {
+                segment = segment.substring(0, matrixParameter);
+            }
+            if (segment.isEmpty()) {
+                continue;
+            }
+            normalized.append('/').append(segment);
+        }
+        return normalized.length() == 0 ? "/" : normalized.toString();
     }
 }

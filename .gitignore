@@ -1,4 +1,4 @@
-# Maven 构建输出（scripts/build.sh 可重建，不入库）
+# Maven build output (recreated by scripts/build.sh)
 target/
 pom.xml.tag
 pom.xml.releaseBackup
@@ -8,18 +8,15 @@ dependency-reduced-pom.xml
 buildNumber.properties
 .mvn/timing.properties
 
-# 编译产物
+# Compiled artifacts
 *.class
 
-# 说明：不全局忽略 *.jar —— src/main/resources/lib/private-sdk.jar
-# 是随包发布的资源，需进版本控制；构建产物 jar 已在 target/ 下被忽略。
-
-# 日志与 JVM 崩溃转储
+# Logs and JVM dumps
 *.log
-hs_err_pid_*
+hs_err_pid*
 replay_pid*
 
-# IDE / 编辑器
+# IDE / editor files
 .idea/
 *.iml
 .vscode/
@@ -29,6 +26,14 @@ replay_pid*
 *.swp
 *~
 
-# 操作系统
+# Operating system
 .DS_Store
 Thumbs.db
+
+# Production and local runtime configuration must never be tracked in the
+# business-source repository. Supply isolated configuration through the
+# recovery root's restricted private/ directory at deployment time.
+application.properties
+application-*.properties
+bootstrap*.properties
+*.env

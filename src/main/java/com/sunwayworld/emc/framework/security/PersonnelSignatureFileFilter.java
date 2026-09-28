@@ -6,6 +6,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -114,7 +115,8 @@ public class PersonnelSignatureFileFilter extends OncePerRequestFilter {
     }
 
     private boolean isFileQuery(HttpServletRequest request, String path) {
-        return "POST".equals(request.getMethod()) && FILE_QUERY_PATH.equals(path);
+        return "POST".equals(request.getMethod())
+                && (FILE_QUERY_PATH.equals(path) || path.startsWith(FILE_QUERY_PATH + "/"));
     }
 
     /**
@@ -125,13 +127,65 @@ public class PersonnelSignatureFileFilter extends OncePerRequestFilter {
     private boolean isExplicitlyNonPersonnelQuery(byte[] body) {
         try {
             JsonNode root = OBJECT_MAPPER.readTree(body);
-            JsonNode filter = root == null ? null : root.get("f");
-            JsonNode targetId = filter == null ? null : filter.get("targetId");
-            return targetId != null && targetId.isTextual()
-                    && !targetId.asText().startsWith(PERSONNEL_TARGET_PREFIX);
+            JsonNode filter = queryFilter(root);
+            if (filter == null || !filter.isObject()) {
+                return false;
+            }
+
+            boolean hasConcreteTarget = false;
+            for (String name : Arrays.asList("targetId", "targetId_SEQ", "targetId_IN")) {
+                JsonNode targetId = filter.get(name);
+                if (targetId == null || targetId.isNull() || isBlank(targetId)) {
+                    continue;
+                }
+                hasConcreteTarget = true;
+                if (!targetsAreNonPersonnel(targetId)) {
+                    return false;
+                }
+            }
+            return hasConcreteTarget;
         } catch (IOException ignored) {
             return false;
         }
+    }
+
+    private JsonNode queryFilter(JsonNode root) {
+        if (root == null) {
+            return null;
+        }
+        JsonNode parameter = root.get("p");
+        JsonNode wrappedFilter = parameter == null ? null : parameter.get("f");
+        return wrappedFilter == null ? root.get("f") : wrappedFilter;
+    }
+
+    private boolean isBlank(JsonNode targetId) {
+        return targetId.isTextual() && targetId.asText().trim().isEmpty();
+    }
+
+    private boolean targetsAreNonPersonnel(JsonNode targetId) {
+        if (targetId.isTextual()) {
+            boolean found = false;
+            for (String value : targetId.asText().split(",")) {
+                String trimmed = value.trim();
+                if (trimmed.isEmpty()) {
+                    continue;
+                }
+                found = true;
+                if (trimmed.startsWith(PERSONNEL_TARGET_PREFIX)) {
+                    return false;
+                }
+            }
+            return found;
+        }
+        if (!targetId.isArray() || targetId.isEmpty()) {
+            return false;
+        }
+        for (JsonNode item : targetId) {
+            if (!item.isTextual() || isBlank(item) || !targetsAreNonPersonnel(item)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private void deny(HttpServletResponse response) throws IOException {

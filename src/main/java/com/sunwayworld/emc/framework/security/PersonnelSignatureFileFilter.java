@@ -306,7 +306,29 @@ public class PersonnelSignatureFileFilter extends OncePerRequestFilter {
     private String pathWithinApplication(HttpServletRequest request) {
         String contextPath = request.getContextPath();
         String requestUri = request.getRequestURI();
-        return requestUri.startsWith(contextPath) ? requestUri.substring(contextPath.length()) : requestUri;
+        String path = requestUri.startsWith(contextPath) ? requestUri.substring(contextPath.length()) : requestUri;
+        return normalizePath(path);
+    }
+
+    /**
+     * Match the route after servlet path normalization. Without this, matrix
+     * parameters and duplicate slashes can bypass a prefix check while Spring
+     * still maps the request to the protected controller.
+     */
+    private String normalizePath(String path) {
+        String[] segments = path.split("/", -1);
+        StringBuilder normalized = new StringBuilder(path.length());
+        for (String segment : segments) {
+            int matrixParameter = segment.indexOf(';');
+            if (matrixParameter >= 0) {
+                segment = segment.substring(0, matrixParameter);
+            }
+            if (segment.isEmpty()) {
+                continue;
+            }
+            normalized.append('/').append(segment);
+        }
+        return normalized.length() == 0 ? "/" : normalized.toString();
     }
 
     private static final class CachedBodyRequest extends HttpServletRequestWrapper {

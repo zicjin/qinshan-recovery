@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -293,22 +294,40 @@ public class PersonnelSignatureFileFilter extends OncePerRequestFilter {
      */
     private boolean isExplicitlyNonPersonnelQuery(byte[] body) {
         try {
-            JsonNode root = OBJECT_MAPPER.readTree(body);
-            JsonNode filter = queryFilter(root);
+            JsonNode root = effectiveRequestJson(OBJECT_MAPPER.readTree(body));
+            if (root == null || !root.isObject()) {
+                return false;
+            }
+            JsonNode parameter = parseJsonValue(root.get("p"));
+            if (parameter == null || !parameter.isObject()) {
+                return false;
+            }
+            for (String name : Arrays.asList("qf", "af", "mf")) {
+                if (hasMeaningfulValue(parameter.get(name))) {
+                    return false;
+                }
+            }
+            JsonNode filter = parseJsonValue(parameter.get("f"));
             if (filter == null || !filter.isObject()) {
                 return false;
             }
 
             boolean hasConcreteTarget = false;
-            for (String name : Arrays.asList("targetId", "targetId_SEQ", "targetId_IN")) {
-                JsonNode targetId = filter.get(name);
-                if (targetId == null || targetId.isNull() || isBlank(targetId)) {
-                    continue;
-                }
-                hasConcreteTarget = true;
-                if (!targetsAreNonPersonnel(targetId)) {
+            Iterator<String> names = filter.fieldNames();
+            while (names.hasNext()) {
+                String name = names.next();
+                String normalizedName = name.startsWith("ext$.") ? name.substring(5) : name;
+                if (isTargetIdOperator(normalizedName) && !isAllowedTargetIdOperator(name)) {
                     return false;
                 }
+                if (!isAllowedTargetIdOperator(name)) {
+                    continue;
+                }
+                JsonNode targetId = filter.get(name);
+                if (!hasMeaningfulValue(targetId) || !targetsAreNonPersonnel(targetId)) {
+                    return false;
+                }
+                hasConcreteTarget = true;
             }
             return hasConcreteTarget;
         } catch (IOException ignored) {
@@ -323,13 +342,56 @@ public class PersonnelSignatureFileFilter extends OncePerRequestFilter {
         return false;
     }
 
-    private JsonNode queryFilter(JsonNode root) {
-        if (root == null) {
+    private JsonNode effectiveRequestJson(JsonNode root) throws IOException {
+        if (root == null || !root.isObject()) {
             return null;
         }
-        JsonNode parameter = root.get("p");
-        JsonNode wrappedFilter = parameter == null ? null : parameter.get("f");
-        return wrappedFilter == null ? root.get("f") : wrappedFilter;
+        JsonNode requestJson = root.get("requestJson");
+        if (hasMeaningfulValue(requestJson)) {
+            if (!requestJson.isTextual()) {
+                return null;
+            }
+            JsonNode nested = OBJECT_MAPPER.readTree(requestJson.asText());
+            return nested != null && nested.isObject() ? nested : null;
+        }
+        return root;
+    }
+
+    private JsonNode parseJsonValue(JsonNode value) throws IOException {
+        if (value == null || value.isNull()) {
+            return null;
+        }
+        if (!value.isTextual()) {
+            return value;
+        }
+        String text = value.asText().trim();
+        return text.isEmpty() ? null : OBJECT_MAPPER.readTree(text);
+    }
+
+    private boolean hasMeaningfulValue(JsonNode value) {
+        if (value == null || value.isNull()) {
+            return false;
+        }
+        if (value.isTextual()) {
+            return !value.asText().trim().isEmpty();
+        }
+        if (value.isContainerNode()) {
+            return value.size() > 0;
+        }
+        return true;
+    }
+
+    private boolean isTargetIdOperator(String name) {
+        int prefixLength = "targetId".length();
+        return name.length() >= prefixLength
+                && name.regionMatches(true, 0, "targetId", 0, prefixLength)
+                && (name.length() == prefixLength || name.charAt(prefixLength) == '_');
+    }
+
+    private boolean isAllowedTargetIdOperator(String name) {
+        return "targetId".equals(name)
+                || "targetId_SEQ".equals(name)
+                || "targetId_IN".equals(name);
     }
 
     private boolean isBlank(JsonNode targetId) {

@@ -131,13 +131,12 @@ public class PersonnelSignatureFileFilter extends OncePerRequestFilter {
         if (path.startsWith(FILE_RESOURCE_PREFIX) || path.startsWith(EMC_FILE_RESOURCE_PREFIX)) {
             String prefix = path.startsWith(FILE_RESOURCE_PREFIX)
                     ? FILE_RESOURCE_PREFIX : EMC_FILE_RESOURCE_PREFIX;
-            String id = path.substring(prefix.length()).split("/", 2)[0];
-            if (id.matches("[0-9]+")) {
-                try {
-                    return coreFileService.selectByIdIfPresent(Long.valueOf(id));
-                } catch (NumberFormatException ignored) {
-                    return null;
-                }
+            String[] segments = path.substring(prefix.length()).split("/");
+            if (segments.length > 0 && segments[0].matches("[0-9]+")) {
+                return findFileById(segments[0]);
+            }
+            if (segments.length > 1 && "sunwayoffices".equals(segments[0])) {
+                return findFileById(segments[1]);
             }
             return null;
         }
@@ -149,9 +148,20 @@ public class PersonnelSignatureFileFilter extends OncePerRequestFilter {
                     return file;
                 }
             }
+            String fileUrl = request.getParameter("fileUrl");
+            if (fileUrl != null && fileUrl.startsWith(FILE_CONTENT_PREFIX)) {
+                return findFileByContentPath(fileUrl);
+            }
             return null;
         }
 
+        return findFileByContentPath(path);
+    }
+
+    private CoreFileBean findFileByContentPath(String path) {
+        if (!path.startsWith(FILE_CONTENT_PREFIX)) {
+            return null;
+        }
         String relativePath = path.substring(FILE_CONTENT_PREFIX.length());
         String[] segments = relativePath.split("/", 4);
         if (segments.length != 4 || segments[2].isEmpty()) {

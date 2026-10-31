@@ -1,0 +1,70 @@
+{
+  "schema": 1,
+  "family": "consumables-materials",
+  "description": "HTTP read contracts for owned standard-material periodic-check resources.",
+  "cases": [
+    {
+      "id": "material-per-check.status",
+      "method": "GET",
+      "path": "/secure/emc/module/item/mtl-per-checks/info/status",
+      "route_id": "54fbcb62da474f89",
+      "operation": "read",
+      "scope": "project-route",
+      "disposition": "owned-pass",
+      "expected_status": 200,
+      "assert": {"json_keys": ["ext$"]},
+      "fixture": "none",
+      "audit": "not-required"
+    },
+    {
+      "id": "material-per-check.query",
+      "method": "POST",
+      "path": "/secure/emc/module/item/mtl-per-checks/queries",
+      "route_id": "d5909e14f79b5744",
+      "operation": "read",
+      "scope": "project-route",
+      "disposition": "owned-pass",
+      "body": {"p": {"n": 1, "s": 10}},
+      "expected_status": 200,
+      "assert": {"json_keys": ["rows", "total"]},
+      "fixture": "none",
+      "audit": "not-required"
+    },
+    {
+      "id": "material-per-check.raw",
+      "method": "POST",
+      "path": "/secure/emc/module/item/mtl-per-checks/queries/raw",
+      "route_id": "b6fbce190b2659c2",
+      "operation": "read",
+      "scope": "project-route",
+      "disposition": "owned-pass",
+      "body": {"p": {"n": 1, "s": 10}},
+      "expected_status": 200,
+      "assert": {"json_keys": ["rows", "total"]},
+      "fixture": "none",
+      "audit": "not-required"
+    },
+    {
+      "id": "material-per-check.searchable",
+      "method": "POST",
+      "path": "/secure/emc/module/item/mtl-per-checks/queries/searchable",
+      "route_id": "057b3c8cc1d07e0d",
+      "operation": "read",
+      "scope": "project-route",
+      "disposition": "owned-pass",
+      "body": {"p": {"n": 1, "s": 10}},
+      "expected_status": 200,
+      "assert": {"json_keys": ["rows", "total"]},
+      "fixture": "none",
+      "audit": "not-required"
+    }
+  ],
+  "route_execution_model": {
+    "application": "one owned Spring application per wave",
+    "oracle": "persistent Oracle baseline/runtime schema",
+    "redis": "reused sss2 Redis database 15",
+    "boundary_process": false,
+    "internal_http_bridge": false,
+    "jni_replacement_process": false
+  }
+}

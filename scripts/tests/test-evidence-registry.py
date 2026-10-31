@@ -26,7 +26,7 @@ class EvidenceRegistryTest(unittest.TestCase):
         self.assertFalse(MANAGE.inside(MANAGE.EVIDENCE.parent / "outside.json", MANAGE.EVIDENCE))
 
     def test_promoted_report_uses_canonical_closure_reference(self):
-        pending = MANAGE.ROOT / ".scratch/sunway-supplier-exit-api-first/diagnostic-evidence/pending/closure.json"
+        pending = MANAGE.FEATURE / "diagnostic-evidence/pending/closure.json"
         canonical = MANAGE.EVIDENCE / "closure.json"
         self.assertEqual(MANAGE.canonical_closure_reference(pending),
                          EVIDENCE_PREFIX + "closure.json")

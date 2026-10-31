@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 from pathlib import Path
 import subprocess
 from typing import Any, Iterable, Mapping, Optional, Sequence
@@ -43,6 +44,62 @@ def discover_repo_root() -> Path:
 
 
 REPO_ROOT = discover_repo_root()
+
+FEATURE_SLUG = "sunway-supplier-exit-api-first"
+
+
+def feature_root(repo_root: Path = REPO_ROOT,
+                 feature_slug: str = FEATURE_SLUG) -> Path:
+    """Return the authoritative planning/diagnostic feature directory.
+
+    The standalone recovery repository owns implementation and canonical
+    evidence, while the parent checkout owns ``.scratch`` planning and
+    diagnostic artifacts.  During a clean standalone clone there may be no
+    parent worktree, so fall back to a repository-local ``.scratch`` tree.
+    ``SUNWAY_FEATURE_ROOT`` remains an explicit override for CI or an
+    external artifact workspace.
+    """
+    override = os.environ.get("SUNWAY_FEATURE_ROOT")
+    if override:
+        return Path(override).expanduser().resolve()
+
+    root = Path(repo_root).resolve()
+    if is_standalone_root(root):
+        parent_candidate = root.parent / ".scratch" / feature_slug
+        if parent_candidate.exists():
+            return parent_candidate.resolve()
+        return (root / ".scratch" / feature_slug).resolve()
+    return (root / ".scratch" / feature_slug).resolve()
+
+
+def workspace_root(repo_root: Path = REPO_ROOT) -> Path:
+    """Return the checkout root used to resolve workspace-relative inputs."""
+    root = Path(repo_root).resolve()
+    if is_standalone_root(root):
+        return feature_root(root).parent.parent
+    return root
+
+
+def resolve_workspace_path(value: str | Path,
+                           repo_root: Path = REPO_ROOT) -> Path:
+    """Resolve paths used by jobs/manifests in parent or standalone mode.
+
+    Existing manifests use ``lims-recovery/...`` for source inputs and
+    ``.scratch/...`` for parent-workspace artifacts.  Accept both forms after
+    the root migration without creating a second copy of either tree.
+    """
+    path = Path(value)
+    if path.is_absolute():
+        return path
+    raw = path.as_posix()
+    root = Path(repo_root).resolve()
+    if is_standalone_root(root) and raw == "lims-recovery":
+        return root
+    if is_standalone_root(root) and raw.startswith("lims-recovery/"):
+        return root / raw.removeprefix("lims-recovery/")
+    if raw == ".scratch" or raw.startswith(".scratch/"):
+        return workspace_root(root) / raw
+    return root / raw
 
 
 def is_standalone_root(repo_root: Path = REPO_ROOT) -> bool:

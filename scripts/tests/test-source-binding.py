@@ -3,10 +3,12 @@
 from __future__ import annotations
 
 import importlib.util
+import os
 import subprocess
 import tempfile
 from pathlib import Path
 import unittest
+from unittest import mock
 
 MODULE = Path(__file__).resolve().parents[1] / "source_binding.py"
 spec = importlib.util.spec_from_file_location("source_binding", MODULE)
@@ -25,6 +27,8 @@ class SourceBindingTest(unittest.TestCase):
         (self.root / "docs" / "spec.md").write_text("docs-v1\n", encoding="utf-8")
         (self.root / "evidence").mkdir()
         (self.root / "evidence" / "index.tsv").write_text("index-v1\n", encoding="utf-8")
+        (self.root / "project").mkdir()
+        (self.root / "owned-framework").mkdir()
         subprocess.run(["git", "init", "-q"], cwd=self.root, check=True)
         subprocess.run(["git", "config", "user.email", "test@example.invalid"], cwd=self.root, check=True)
         subprocess.run(["git", "config", "user.name", "source-binding-test"], cwd=self.root, check=True)
@@ -70,6 +74,32 @@ class SourceBindingTest(unittest.TestCase):
         second = self.capture()
         self.assertNotEqual(first["implementation_tree_digest"], second["implementation_tree_digest"])
         self.assertTrue(second["implementation_dirty"])
+
+    def test_feature_root_prefers_parent_workspace_for_standalone_repo(self):
+        parent = self.root.parent
+        feature = parent / ".scratch" / binding.FEATURE_SLUG
+        feature.mkdir(parents=True, exist_ok=True)
+        self.assertEqual(binding.feature_root(self.root), feature.resolve())
+
+    def test_feature_root_override_is_respected(self):
+        override = self.root / "external-feature"
+        with mock.patch.dict(os.environ, {
+            "SUNWAY_FEATURE_ROOT": str(override),
+        }):
+            self.assertEqual(binding.feature_root(self.root), override.resolve())
+
+    def test_workspace_path_resolves_legacy_prefixes_in_standalone_mode(self):
+        parent = self.root.parent
+        feature = parent / ".scratch" / binding.FEATURE_SLUG
+        feature.mkdir(parents=True, exist_ok=True)
+        self.assertEqual(
+            binding.resolve_workspace_path("lims-recovery/api-contracts/core/read.json", self.root),
+            self.root / "api-contracts/core/read.json",
+        )
+        self.assertEqual(
+            binding.resolve_workspace_path(".scratch/sunway-supplier-exit-api-first/diagnostic-evidence/pending/jobs.json", self.root),
+            parent / ".scratch/sunway-supplier-exit-api-first/diagnostic-evidence/pending/jobs.json",
+        )
 
 
 if __name__ == "__main__":

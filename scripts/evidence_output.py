@@ -16,6 +16,7 @@ try:
         IMPLEMENTATION_SCOPE,
         capture_binding,
         binding_from_payload,
+        feature_root,
         REPO_ROOT,
     )
 except ModuleNotFoundError:
@@ -24,13 +25,14 @@ except ModuleNotFoundError:
     IMPLEMENTATION_SCOPE,
     capture_binding,
     binding_from_payload,
+    feature_root,
     REPO_ROOT,
     )
 
 ROOT = Path(__file__).resolve().parents[1]
 GIT_ROOT = REPO_ROOT
 CANONICAL_ROOT = ROOT / "evidence"
-DIAGNOSTIC_ROOT = ROOT.parent / ".scratch" / "sunway-supplier-exit-api-first" / "diagnostic-evidence"
+DIAGNOSTIC_ROOT = feature_root(REPO_ROOT) / "diagnostic-evidence"
 WRITE_METHODS = {"POST", "PUT", "PATCH", "DELETE"}
 REQUIRED_CLEANUP = (
     "application_stopped", "oracle_stopped", "redis_stopped",

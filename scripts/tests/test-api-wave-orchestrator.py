@@ -24,6 +24,18 @@ def standalone_head(*suffix):
 
 
 class ApiWaveOrchestratorTest(unittest.TestCase):
+    def test_standalone_resolves_parent_feature_and_source_paths(self):
+        self.assertTrue(str(module.FEATURE_ROOT).endswith(
+            ".scratch/sunway-supplier-exit-api-first"))
+        self.assertEqual(
+            module._repo_path("lims-recovery/api-contracts/core/read.json"),
+            module.REPO_ROOT / "api-contracts/core/read.json",
+        )
+        self.assertEqual(
+            module._repo_path(".scratch/sunway-supplier-exit-api-first/diagnostic-evidence/pending/jobs.json"),
+            module.FEATURE_ROOT / "diagnostic-evidence/pending/jobs.json",
+        )
+
     def test_plan_exposes_one_runtime_per_wave(self):
         head = standalone_head("HEAD")
         plan = {

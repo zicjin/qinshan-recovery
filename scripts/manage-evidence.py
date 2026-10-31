@@ -13,7 +13,6 @@ import csv
 import datetime as dt
 import hashlib
 import json
-import os
 from pathlib import Path
 import re
 import shutil
@@ -30,16 +29,18 @@ from evidence_output import (
     source_scope_unchanged,
     strict_case_contract,
 )
-from source_binding import REPO_ROOT as DISCOVERED_REPO_ROOT, is_standalone_root
+from source_binding import (
+    REPO_ROOT as DISCOVERED_REPO_ROOT,
+    feature_root,
+    is_standalone_root,
+    resolve_workspace_path,
+    workspace_root,
+)
 
 ROOT = DISCOVERED_REPO_ROOT
 EVIDENCE = ROOT / "evidence"
-FEATURE = Path(os.environ.get(
-    "SUNWAY_FEATURE_ROOT",
-    (ROOT.parent / ".scratch" / "sunway-supplier-exit-api-first")
-    if not is_standalone_root(ROOT)
-    else (ROOT / ".scratch" / "sunway-supplier-exit-api-first"),
-)).resolve()
+FEATURE = feature_root(DISCOVERED_REPO_ROOT)
+WORKSPACE = workspace_root(DISCOVERED_REPO_ROOT)
 DIAGNOSTIC = FEATURE / "diagnostic-evidence"
 ARCHIVE = FEATURE / "archive"
 REGISTRY = EVIDENCE / "evidence-index.tsv"
@@ -143,7 +144,16 @@ def json_payload(path: Path) -> Dict[str, Any]:
 
 
 def relative(path: Path) -> str:
-    return path.relative_to(ROOT).as_posix()
+    resolved = path.resolve()
+    try:
+        return resolved.relative_to(ROOT.resolve()).as_posix()
+    except ValueError:
+        return resolved.relative_to(WORKSPACE.resolve()).as_posix()
+
+
+def resolve_registry_path(value: str | Path) -> Path:
+    """Resolve root-relative or parent-workspace registry paths."""
+    return resolve_workspace_path(value, ROOT)
 
 
 def inside(path: Path, root: Path) -> bool:
@@ -245,7 +255,7 @@ def closure_report_paths_exist(value: Mapping[str, Any], root: Path = ROOT) -> T
             return False, "closure report index has no path"
         path = Path(str(item["path"]))
         if not path.is_absolute():
-            path = root / path
+            path = resolve_registry_path(path)
         if not path.is_file():
             return False, "closure report path does not exist: " + str(item["path"])
     return True, "closure report paths exist"
@@ -267,7 +277,11 @@ def closure_report_registry_valid(value: Mapping[str, Any], registry: Mapping[st
             except ValueError:
                 return False, "closure report path is outside repository"
         else:
-            rel = path.as_posix()
+            rel = resolve_registry_path(path)
+            try:
+                rel = rel.resolve().relative_to(ROOT.resolve()).as_posix()
+            except ValueError:
+                return False, "closure report path is outside repository"
         row = registry.get(rel)
         if row is None or row.get("class") != "canonical-strict":
             return False, "closure report is not canonical-strict: " + rel
@@ -752,7 +766,7 @@ def planned_destination(row: Mapping[str, str], occupied: set[str], demote_canon
     so a reviewed plan can never overwrite an existing artifact.
     """
     source = str(row.get("path", ""))
-    source_path = ROOT / source
+    source_path = resolve_registry_path(source)
     if not source_path.is_file() or not source.endswith(".json"):
         return "", "retain-missing-or-non-json"
     if not inside(source_path, EVIDENCE):
@@ -792,7 +806,7 @@ def cmd_plan(args: argparse.Namespace) -> int:
     rows = scan_rows()
     output = Path(args.output) if args.output else DIAGNOSTIC / "evidence-migration-plan-current.tsv"
     if not output.is_absolute():
-        output = ROOT / output
+        output = resolve_registry_path(output)
     occupied = {relative(path) for path in EVIDENCE.rglob("*.json")}
     occupied.update(relative(path) for path in DIAGNOSTIC.rglob("*.json"))
     occupied.update(relative(path) for path in ARCHIVE.rglob("*.json"))
@@ -867,7 +881,7 @@ def cmd_scan(args: argparse.Namespace) -> int:
     rows = scan_rows()
     output = Path(args.output) if args.output else DEFAULT_SCAN
     if not output.is_absolute():
-        output = ROOT / output
+        output = resolve_registry_path(output)
     write_tsv(output, rows, SCAN_FIELDS)
     counts: Dict[str, int] = {}
     for row in rows:
@@ -913,16 +927,16 @@ def cmd_verify(args: argparse.Namespace) -> int:
     # consumed by strict closure. Git canonical files must exist, while
     # artifact references are verified by digest/reference metadata offline.
     missing = sorted(path for path, row in by_path.items()
-                     if not (ROOT / path).is_file()
+                     if not resolve_registry_path(path).is_file()
                      and row.get("storage", "git") not in {"artifact", "local"})
     unregistered = sorted(actual - set(by_path))
     invalid = []
     current = head()
     for path, row in by_path.items():
-        file = ROOT / path
+        file = resolve_registry_path(path)
         if not file.is_file():
             continue
-        if not inside(file, ROOT):
+        if not inside(file, ROOT) and not inside(file, WORKSPACE):
             invalid.append(f"{path}: registry path escapes repository root")
             continue
         is_root_json = path.startswith(EVIDENCE_PREFIX) and path.endswith(".json")
@@ -958,13 +972,15 @@ def cmd_verify(args: argparse.Namespace) -> int:
         if has_reference(row.get("referenced_by")):
             for reference in str(row.get("referenced_by")).split(";"):
                 if reference and reference != "-":
-                    reference_path = ROOT / reference
-                    if not inside(reference_path, ROOT) or not reference_path.is_file():
+                    reference_path = resolve_registry_path(reference)
+                    if (not inside(reference_path, ROOT)
+                            and not inside(reference_path, WORKSPACE)) or not reference_path.is_file():
                         invalid.append(f"{path}: referenced_by path does not exist: {reference}")
         superseded = str(row.get("superseded_by", ""))
         if superseded and superseded != "-":
-            superseded_path = ROOT / superseded
-            if not inside(superseded_path, ROOT) or not superseded_path.is_file():
+            superseded_path = resolve_registry_path(superseded)
+            if (not inside(superseded_path, ROOT)
+                    and not inside(superseded_path, WORKSPACE)) or not superseded_path.is_file():
                 invalid.append(f"{path}: superseded_by path does not exist: {superseded}")
         if row.get("class") == "canonical-strict":
             if "api-route-closure" in file.name:
@@ -1005,10 +1021,10 @@ def cmd_verify(args: argparse.Namespace) -> int:
 def cmd_promote(args: argparse.Namespace) -> int:
     source = Path(args.report)
     if not source.is_absolute():
-        source = ROOT / source
+        source = resolve_registry_path(source)
     target = Path(args.output) if args.output else EVIDENCE / source.name
     if not target.is_absolute():
-        target = ROOT / target
+        target = resolve_registry_path(target)
     if not source.is_file():
         raise SystemExit(f"report not found: {source}")
     if source.resolve().is_relative_to(EVIDENCE.resolve()):
@@ -1032,7 +1048,7 @@ def cmd_promote(args: argparse.Namespace) -> int:
                 EVIDENCE_PREFIX + Path(raw).name
             )
             report_row = registry_rows.get(candidate)
-            report_file = ROOT / candidate
+            report_file = resolve_registry_path(candidate)
             if (report_row is None or report_row.get("class") != "canonical-strict"
                     or not report_file.is_file()):
                 raise SystemExit(
@@ -1050,7 +1066,7 @@ def cmd_promote(args: argparse.Namespace) -> int:
     if not is_closure:
         closure = Path(args.closure) if args.closure else None
         if closure and not closure.is_absolute():
-            closure = ROOT / closure
+            closure = resolve_registry_path(closure)
     if not is_closure and (not closure or not closure.is_file()):
         raise SystemExit("promotion requires --closure pointing to a finalized closure report")
     # Reports are promoted before their closure so the closure can validate
@@ -1150,8 +1166,9 @@ def cmd_archive(args: argparse.Namespace) -> int:
             continue
         if row.get("class") in {"canonical-strict", "canonical-diagnostic"} and not getattr(args, "demote_canonical", False):
             continue
-        source = ROOT / rel
-        if (not source.is_file() or not inside(source, ROOT)
+        source = resolve_registry_path(rel)
+        if (not source.is_file()
+                or (not inside(source, ROOT) and not inside(source, WORKSPACE))
                 or (not inside(source, EVIDENCE) and not inside(source, DIAGNOSTIC))
                 or inside(source, ARCHIVE)):
             continue
@@ -1243,7 +1260,7 @@ def cmd_prune(args: argparse.Namespace) -> int:
     today = dt.datetime.now(dt.timezone.utc).date()
     actions: List[Dict[str, str]] = []
     for row in rows:
-        row_path = ROOT / row["path"]
+        row_path = resolve_registry_path(row["path"])
         if row.get("class") in {"canonical-strict", "canonical-diagnostic"}:
             continue
         if has_reference(row.get("referenced_by")):
@@ -1296,7 +1313,7 @@ def cmd_prune(args: argparse.Namespace) -> int:
         deleted = {item["path"] for item in actions}
         write_tsv(REGISTRY, [row for row in rows if row.get("path") not in deleted], REGISTRY_FIELDS)
         for item in actions:
-            (ROOT / item["path"]).unlink()
+            resolve_registry_path(item["path"]).unlink()
     print(json.dumps({
         "dry_run": dry_run,
         "count": len(actions),
@@ -1315,7 +1332,7 @@ def load_migration(path: Path) -> List[Dict[str, str]]:
 def cmd_rewrite(args: argparse.Namespace) -> int:
     plan = Path(args.plan)
     if not plan.is_absolute():
-        plan = ROOT / plan
+        plan = resolve_registry_path(plan)
     mapping = {
         row["source"]: row["target"]
         for row in load_migration(plan)

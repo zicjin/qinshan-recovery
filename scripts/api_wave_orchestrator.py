@@ -30,10 +30,15 @@ from typing import Any, Dict, Iterable, List, Mapping, Sequence
 from urllib.parse import urlsplit
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from evidence_output import CANONICAL_ROOT, DIAGNOSTIC_ROOT, cleanup_contract_complete, current_implementation_binding, pending_path
-from source_binding import REPO_ROOT as DISCOVERED_REPO_ROOT
+from source_binding import (
+    REPO_ROOT as DISCOVERED_REPO_ROOT,
+    feature_root,
+    resolve_workspace_path,
+)
 
 ROOT = Path(__file__).resolve().parents[1]
 REPO_ROOT = DISCOVERED_REPO_ROOT
+FEATURE_ROOT = feature_root(REPO_ROOT)
 WAVE_ORDER = ("foundation", "personnel", "equipment", "consumables-materials", "secondary")
 REQUIRED_CLEANUP = (
     "application_stopped", "oracle_stopped", "redis_stopped",
@@ -64,8 +69,7 @@ def _load_json(path: Path) -> Dict[str, Any]:
 
 
 def _repo_path(value: str) -> Path:
-    path = Path(value)
-    return path if path.is_absolute() else REPO_ROOT / path
+    return resolve_workspace_path(value, REPO_ROOT)
 
 
 def _digest_file(path: Path) -> str:
@@ -500,7 +504,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser.add_argument("--wave", choices=WAVE_ORDER)
     parser.add_argument("--jobs", type=Path)
     parser.add_argument("--milestone", type=Path)
-    parser.add_argument("--plan", type=Path, default=REPO_ROOT / ".scratch/sunway-supplier-exit-api-first/diagnostic-evidence/pending/current/api-route-execution-plan-current-head.json")
+    parser.add_argument("--plan", type=Path, default=FEATURE_ROOT / "diagnostic-evidence/pending/current/api-route-execution-plan-current-head.json")
     parser.add_argument("--runtime-report", type=Path)
     parser.add_argument("--start-script", type=Path)
     parser.add_argument("--cleanup-script", type=Path)

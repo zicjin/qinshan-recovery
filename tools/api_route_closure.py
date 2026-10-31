@@ -134,6 +134,10 @@ def build_closure(ledger: Mapping[str, Any], report_paths: Iterable[Path]) -> Di
             "status": report.get("status"),
             "strict_evidence": report.get("strict_evidence"),
             "source_commit": report.get("source_commit"),
+            "repository_head_at_capture": report.get("repository_head_at_capture"),
+            "implementation_binding": report.get("implementation_binding"),
+            "implementation_tree_digest": report.get("implementation_tree_digest"),
+            "implementation_dirty": report.get("implementation_dirty"),
             "strict_contract": strict_reason,
         })
         if isinstance(report.get("source_scope"), list):

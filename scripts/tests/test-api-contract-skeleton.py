@@ -7,7 +7,7 @@ import unittest
 ROOT = Path(__file__).resolve().parents[2]
 import sys
 sys.path.insert(0, str(ROOT / "scripts"))
-from source_binding import REPO_ROOT, is_standalone_root
+from source_binding import REPO_ROOT, is_standalone_root, capture_binding
 MODULE_PATH = ROOT / "tools" / "api_contract_skeleton.py"
 spec = importlib.util.spec_from_file_location("api_contract_skeleton", MODULE_PATH)
 module = importlib.util.module_from_spec(spec)
@@ -18,8 +18,25 @@ spec.loader.exec_module(module)
 class ContractSkeletonTest(unittest.TestCase):
     def setUp(self):
         if is_standalone_root(REPO_ROOT):
-            ledger_path = REPO_ROOT / ".scratch/sunway-supplier-exit-api-first/archive/historical/api-route-ledger-current-head--9769aa2122b6.json"
-            plan_path = REPO_ROOT / ".scratch/sunway-supplier-exit-api-first/archive/historical/api-route-execution-plan-current-head--9c7f17af1853.json"
+            pending = REPO_ROOT.parent / ".scratch/sunway-supplier-exit-api-first/diagnostic-evidence/pending"
+            binding = capture_binding(REPO_ROOT)
+            candidates = []
+            for ledger in pending.glob("current-*/api-route-ledger-current-head.json"):
+                try:
+                    payload = json.loads(ledger.read_text())
+                except (OSError, ValueError):
+                    continue
+                if (payload.get("implementation_binding") == binding["binding_id"]
+                        and payload.get("implementation_tree_digest") == binding["implementation_tree_digest"]
+                        and payload.get("implementation_dirty") is False):
+                    plan = ledger.with_name("api-route-execution-plan-current-head.json")
+                    if plan.is_file():
+                        candidates.append((ledger.stat().st_mtime_ns, ledger, plan))
+            if candidates:
+                _, ledger_path, plan_path = max(candidates, key=lambda item: (item[0], item[1].as_posix()))
+            else:
+                ledger_path = REPO_ROOT / ".scratch/sunway-supplier-exit-api-first/archive/historical/api-route-ledger-current-head--9769aa2122b6.json"
+                plan_path = REPO_ROOT / ".scratch/sunway-supplier-exit-api-first/archive/historical/api-route-execution-plan-current-head--9c7f17af1853.json"
         else:
             ledger_path = REPO_ROOT.parent / ".scratch/sunway-supplier-exit-api-first/archive/historical/api-route-ledger-20261027-current-head.json"
             plan_path = REPO_ROOT.parent / ".scratch/sunway-supplier-exit-api-first/archive/historical/api-route-execution-plan-20261027-current-head.json"

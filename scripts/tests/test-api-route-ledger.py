@@ -8,20 +8,24 @@ import subprocess
 ROOT = Path(__file__).resolve().parents[2]
 import sys
 sys.path.insert(0, str(ROOT / "scripts"))
-from source_binding import REPO_ROOT, is_standalone_root
+from source_binding import REPO_ROOT, is_standalone_root, capture_binding
 PENDING = REPO_ROOT.parent / ".scratch/sunway-supplier-exit-api-first/diagnostic-evidence/pending"
 CURRENT_HEAD = subprocess.check_output(
     ["git", "-C", str(REPO_ROOT), "rev-parse", "HEAD"], text=True
 ).strip()
+CURRENT_BINDING = capture_binding(REPO_ROOT)
 LEDGER = (REPO_ROOT / ".scratch/sunway-supplier-exit-api-first/archive/historical/api-route-ledger-current-head--9769aa2122b6.json"
           if is_standalone_root(REPO_ROOT) else
           REPO_ROOT.parent / ".scratch/sunway-supplier-exit-api-first/archive/historical/api-route-ledger-20261027-current-head.json")
-for candidate in sorted(PENDING.glob("current-*/api-route-ledger-current-head.json"), reverse=True):
+for candidate in sorted(PENDING.glob("current-*/api-route-ledger-current-head.json"),
+                        key=lambda path: (path.stat().st_mtime_ns, path.as_posix()), reverse=True):
     try:
         payload = json.loads(candidate.read_text(encoding="utf-8"))
     except (OSError, ValueError):
         continue
-    if payload.get("source_commit") == CURRENT_HEAD and payload.get("source_dirty") is False:
+    if (payload.get("implementation_binding") == CURRENT_BINDING["binding_id"]
+            and payload.get("implementation_tree_digest") == CURRENT_BINDING["implementation_tree_digest"]
+            and payload.get("implementation_dirty") is False):
         LEDGER = candidate
         break
 MODULE_PATH = ROOT / "tools" / "api_route_ledger.py"

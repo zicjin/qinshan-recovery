@@ -82,7 +82,12 @@ python3 "$ROOT/tools/deps_repo.py" \
   --manifest "$ROOT/evidence/t02-deps-manifest.sha256"
 
 echo "[build-prep] 校验并解包离线 Maven 插件种子"
-"$ROOT/scripts/verify-materials.sh" "$PLUGIN_SEED_MANIFEST"
+expected_seed_hash="$(awk '$2 ~ /maven-build-plugin-seed/ {print $1; exit}' "$PLUGIN_SEED_MANIFEST")"
+actual_seed_hash="$(sha256sum "$PLUGIN_SEED" | awk '{print $1}')"
+[ -n "$expected_seed_hash" ] && [ "$actual_seed_hash" = "$expected_seed_hash" ] || {
+  echo "offline Maven plugin seed hash mismatch" >&2
+  exit 1
+}
 tar -xzf "$PLUGIN_SEED" -C "$ROOT/build/maven-repo"
 
 echo "[build-prep] 完成。下一步: scripts/build.sh"

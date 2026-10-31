@@ -1120,7 +1120,11 @@ def cmd_promote(args: argparse.Namespace) -> int:
         "artifact_ref": str(payload.get("artifact_ref", "")),
     }
     write_tsv(REGISTRY, [registry_rows[key] for key in sorted(registry_rows)], REGISTRY_FIELDS)
-    print(json.dumps({"status": "promoted", "source": str(source), "target": relative(target), "closure": relative(closure) if closure else "-"}, ensure_ascii=False))
+    try:
+        closure_display = relative(closure) if closure else "-"
+    except ValueError:
+        closure_display = str(closure) if closure else "-"
+    print(json.dumps({"status": "promoted", "source": str(source), "target": relative(target), "closure": closure_display}, ensure_ascii=False))
     return 0
 
 

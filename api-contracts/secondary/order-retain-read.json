@@ -1,0 +1,101 @@
+{
+  "schema": 1,
+  "family": "secondary",
+  "description": "Owned Java order-retain inherited resource read/status contracts.",
+  "cases": [
+    {
+      "id": "order-retain.query",
+      "method": "POST",
+      "path": "/secure/emc/module/bp/order/order-retains/queries",
+      "route_id": "e514030790b58406",
+      "operation": "read",
+      "scope": "project-route",
+      "disposition": "owned-pass",
+      "body": {"p": {"n": 1, "s": 10}},
+      "expected_status": 200,
+      "assert": {"json_keys": ["rows", "total"]},
+      "fixture": "none",
+      "audit": "not-required"
+    },
+    {
+      "id": "order-retain.query-raw",
+      "method": "POST",
+      "path": "/secure/emc/module/bp/order/order-retains/queries/raw",
+      "route_id": "111cacb6b79f93a1",
+      "operation": "read",
+      "scope": "project-route",
+      "disposition": "owned-pass",
+      "body": {"p": {"n": 1, "s": 10}},
+      "expected_status": 200,
+      "assert": {"json_keys": ["rows", "total"]},
+      "fixture": "none",
+      "audit": "not-required"
+    },
+    {
+      "id": "order-retain.query-searchable",
+      "method": "POST",
+      "path": "/secure/emc/module/bp/order/order-retains/queries/searchable",
+      "route_id": "381ccb9555126d44",
+      "operation": "read",
+      "scope": "project-route",
+      "disposition": "owned-pass",
+      "body": {"p": {"n": 1, "s": 10}},
+      "expected_status": 200,
+      "assert": {"json_keys": ["rows", "total"]},
+      "fixture": "none",
+      "audit": "not-required"
+    },
+    {
+      "id": "order-retain.detail-missing",
+      "method": "GET",
+      "path": "/secure/emc/module/bp/order/order-retains/999999999999999999",
+      "route_id": "fb6a9a3a68209462",
+      "operation": "read",
+      "scope": "project-route",
+      "disposition": "owned-pass",
+      "expected_status": 200,
+      "assert": {"json_keys": []},
+      "fixture": "none",
+      "audit": "not-required"
+    },
+    {
+      "id": "order-retain.status",
+      "method": "GET",
+      "path": "/secure/emc/module/bp/order/order-retains/info/status",
+      "route_id": "2281a74eefcd2815",
+      "operation": "read",
+      "scope": "project-route",
+      "disposition": "owned-pass",
+      "expected_status": 200,
+      "assert": {"json_keys": ["ext$"]},
+      "fixture": "none",
+      "audit": "not-required"
+    },
+    {
+      "id": "order-retain.status-by-id",
+      "method": "GET",
+      "path": "/secure/emc/module/bp/order/order-retains/999999999999999999/info/status",
+      "route_id": "e37f6a62f7b3f15b",
+      "operation": "read",
+      "scope": "project-route",
+      "disposition": "owned-pass",
+      "expected_status": 200,
+      "assert": {"json_keys": ["ext$"]},
+      "fixture": "none",
+      "audit": "not-required"
+    },
+    {
+      "id": "order-retain.print-missing",
+      "method": "GET",
+      "path": "/secure/emc/module/bp/order/order-retains/999999999999999999/action/print",
+      "route_id": "bc01eba6051a9171",
+      "operation": "read",
+      "scope": "project-route",
+      "disposition": "owned-pass",
+      "expected_status": 200,
+      "assert": {"json_keys": []},
+      "fixture": "none",
+      "audit": "not-required"
+    }
+  ]
+}

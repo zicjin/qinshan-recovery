@@ -1,0 +1,6 @@
+# Built-image context only contains the already-packaged owned distribution.
+*
+!owned-distribution/
+!owned-distribution/target/
+!owned-distribution/target/distribution/
+!owned-distribution/target/distribution/**

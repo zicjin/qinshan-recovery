@@ -1,0 +1,3 @@
+package com.sunwayworld.framework.converter.string;
+import com.sunwayworld.framework.converter.Converter;import com.sunwayworld.framework.converter.exception.ConvertFailedException;
+public enum StringToBooleanConverter implements Converter<String,Boolean>{INSTANCE;public Boolean convert(String v){if(v==null)return false;if(v.equalsIgnoreCase("true")||v.equalsIgnoreCase("yes")||v.equalsIgnoreCase("on")||v.equals("1"))return true;if(v.equalsIgnoreCase("false")||v.equalsIgnoreCase("no")||v.equalsIgnoreCase("off")||v.equals("0"))return false;throw new ConvertFailedException(getSourceType(),getTargetType(),v);}}

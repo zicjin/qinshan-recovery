@@ -1,0 +1,299 @@
+{
+  "schema": 1,
+  "family": "consumables-materials",
+  "description": "Authenticated consumables/material/reagent read strict HTTP contracts.",
+  "cases": [
+    {
+      "id": "consumables.raw.read",
+      "method": "POST",
+      "path": "/secure/emc/module/item/consume/consumes/queries/raw",
+      "route_id": "dd7e0271a7b832eb",
+      "operation": "read",
+      "scope": "project-route",
+      "disposition": "owned-pass",
+      "body": {
+        "p": {
+          "n": 1,
+          "s": 10
+        }
+      },
+      "expected_status": 200,
+      "assert": {
+        "json_keys": [
+          "rows",
+          "total"
+        ]
+      },
+      "fixture": "none",
+      "audit": "not-required"
+    },
+    {
+      "id": "consumables.query.no-match",
+      "method": "POST",
+      "path": "/secure/emc/module/item/consume/consumes/queries",
+      "route_id": "6403be1cba2acbaf",
+      "operation": "read",
+      "scope": "project-route",
+      "disposition": "owned-pass",
+      "body": {
+        "p": {
+          "f": {
+            "MTLNAME_EQ": "__strict_no_match__"
+          }
+        }
+      },
+      "expected_status": 200,
+      "assert": {
+        "json_keys": [
+          "rows",
+          "total"
+        ]
+      },
+      "fixture": "none",
+      "audit": "not-required"
+    },
+    {
+      "id": "mdm.material.raw.read",
+      "method": "POST",
+      "path": "/secure/emc/module/mdm/basemdm/mtls/queries/raw",
+      "route_id": "0f89a26a8876f5de",
+      "operation": "read",
+      "scope": "project-route",
+      "disposition": "owned-pass",
+      "body": {
+        "p": {
+          "n": 1,
+          "s": 10
+        }
+      },
+      "expected_status": 200,
+      "assert": {
+        "json_keys": [
+          "rows",
+          "total"
+        ]
+      },
+      "fixture": "none",
+      "audit": "not-required"
+    },
+    {
+      "id": "mdm.material.choosable.read",
+      "method": "POST",
+      "path": "/secure/emc/module/mdm/basemdm/mtls/queries/choosable",
+      "route_id": "8166f7d7e62d4616",
+      "operation": "read",
+      "scope": "owned-java-source-only-route",
+      "disposition": "owned-pass",
+      "body": {
+        "p": {
+          "n": 1,
+          "s": 10
+        }
+      },
+      "expected_status": 200,
+      "assert": {
+        "json_keys": [
+          "rows",
+          "total"
+        ]
+      },
+      "fixture": "none",
+      "audit": "not-required",
+      "route_origin": "owned-java-source-only",
+      "boundary_semantics": "owned Java source-only route; boundary route != boundary process",
+      "runtime_model": "same-spring-application"
+    },
+    {
+      "id": "reagent.query",
+      "method": "POST",
+      "path": "/secure/emc/module/bp/reagents/queries",
+      "route_id": "53ef6cae78fe1457",
+      "operation": "read",
+      "scope": "project-route",
+      "disposition": "owned-pass",
+      "body": {
+        "p": {
+          "s": 50
+        }
+      },
+      "expected_status": 200,
+      "assert": {
+        "json_keys": [
+          "rows",
+          "total"
+        ]
+      },
+      "fixture": "none",
+      "audit": "not-required"
+    },
+    {
+      "id": "reagent.query.raw",
+      "method": "POST",
+      "path": "/secure/emc/module/bp/reagents/queries/raw",
+      "route_id": "a413b3f30aa30c47",
+      "operation": "read",
+      "scope": "project-route",
+      "disposition": "owned-pass",
+      "body": {
+        "p": {
+          "s": 50
+        }
+      },
+      "expected_status": 200,
+      "assert": {
+        "json_keys": [
+          "rows",
+          "total"
+        ]
+      },
+      "fixture": "none",
+      "audit": "not-required"
+    },
+    {
+      "id": "material.apply.query",
+      "method": "POST",
+      "path": "/secure/emc/module/item/mtl-applies/queries",
+      "route_id": "54f1b134c78e0bfd",
+      "operation": "read",
+      "scope": "project-route",
+      "disposition": "owned-pass",
+      "body": {
+        "p": {
+          "s": 50
+        }
+      },
+      "expected_status": 200,
+      "assert": {
+        "json_keys": [
+          "rows",
+          "total"
+        ]
+      },
+      "fixture": "none",
+      "audit": "not-required"
+    },
+    {
+      "id": "material.apply.query.raw",
+      "method": "POST",
+      "path": "/secure/emc/module/item/mtl-applies/queries/raw",
+      "route_id": "3f2f825c18d13a87",
+      "operation": "read",
+      "scope": "project-route",
+      "disposition": "owned-pass",
+      "body": {
+        "p": {
+          "s": 50
+        }
+      },
+      "expected_status": 200,
+      "assert": {
+        "json_keys": [
+          "rows",
+          "total"
+        ]
+      },
+      "fixture": "none",
+      "audit": "not-required"
+    },
+    {
+      "id": "material.apply.withdrawable",
+      "method": "POST",
+      "path": "/secure/emc/module/item/mtl-applies/queries/withdrawable",
+      "route_id": "b0e4c7d2bafd642a",
+      "operation": "read",
+      "scope": "project-route",
+      "disposition": "owned-pass",
+      "body": {
+        "p": {
+          "s": 50
+        }
+      },
+      "expected_status": 200,
+      "assert": {
+        "json_keys": [
+          "rows",
+          "total"
+        ]
+      },
+      "fixture": "none",
+      "audit": "not-required"
+    },
+    {
+      "id": "material.apply.undoable",
+      "method": "POST",
+      "path": "/secure/emc/module/item/mtl-applies/queries/undoable",
+      "route_id": "623d7499f6404b64",
+      "operation": "read",
+      "scope": "project-route",
+      "disposition": "owned-pass",
+      "body": {
+        "p": {
+          "s": 50
+        }
+      },
+      "expected_status": 200,
+      "assert": {
+        "json_keys": [
+          "rows",
+          "total"
+        ]
+      },
+      "fixture": "none",
+      "audit": "not-required"
+    },
+    {
+      "id": "mdm.stock.detail-choosable",
+      "method": "POST",
+      "path": "/secure/emc/module/mdm/basemdm/mtls/queries/detail-choosable",
+      "route_id": "57315e3525711fdf",
+      "operation": "read",
+      "scope": "project-route",
+      "disposition": "owned-pass",
+      "body": {
+        "p": {
+          "s": 50
+        }
+      },
+      "expected_status": 200,
+      "assert": {
+        "json_keys": [
+          "rows",
+          "total"
+        ]
+      },
+      "fixture": "none",
+      "audit": "not-required"
+    },
+    {
+      "id": "mdm.stock.qc-std",
+      "method": "POST",
+      "path": "/secure/emc/module/mdm/basemdm/mtls/queries/qc-std-stock",
+      "route_id": "7401f5c1ce05b5ef",
+      "operation": "read",
+      "scope": "project-route",
+      "disposition": "owned-pass",
+      "body": {
+        "p": {
+          "s": 50
+        }
+      },
+      "expected_status": 200,
+      "assert": {
+        "json_keys": [
+          "rows",
+          "total"
+        ]
+      },
+      "fixture": "none",
+      "audit": "not-required"
+    }
+  ],
+  "route_execution_model": {
+    "application": "one owned Spring application per wave",
+    "oracle": "one clone-derived Oracle per wave",
+    "redis": "one Redis per wave",
+    "boundary_process": false,
+    "internal_http_bridge": false,
+    "jni_replacement_process": false
+  }
+}

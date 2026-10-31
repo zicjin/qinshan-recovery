@@ -1,0 +1,20 @@
+*
+!materials/
+materials/*
+!materials/gikam-third-czjky-14.1.5-run.jar
+!materials/jdk-8u391-linux-x64.tar.gz
+!materials/log4j2.xml
+!materials/simsun.ttc
+!materials/sunway-app.so
+!project/
+project/*
+!project/target/
+project/target/*
+!project/target/gikam-third-czjky-14.1.5-run.jar
+# Never send nested Git metadata or local configuration to the Docker daemon.
+project/.git
+project/.git/**
+project/**/.git
+project/**/.git/**
+project/application.properties
+project/application-*.properties

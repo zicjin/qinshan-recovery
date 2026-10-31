@@ -1,0 +1,192 @@
+{
+  "schema": 1,
+  "family": "core-boundary-negative-read",
+  "description": "Route-specific manager denial/validation and reagent composition read contracts.",
+  "cases": [
+    {
+      "id": "menu.query.raw.manager-denied",
+      "method": "POST",
+      "path": "/secure/core/module/sys/menus/queries/raw",
+      "route_id": "b8f0f859c99d1b2a",
+      "operation": "permission-check",
+      "scope": "owned-java-source-only-route",
+      "disposition": "owned-pass",
+      "body": {
+        "p": {
+          "s": 50
+        }
+      },
+      "expected_status": 403,
+      "assert": {
+        "json_keys": [
+          "message"
+        ]
+      },
+      "fixture": "none",
+      "audit": "not-required",
+      "route_origin": "owned-java-source-only",
+      "boundary_semantics": "owned Java source-only route; boundary route != boundary process",
+      "runtime_model": "same-spring-application"
+    },
+    {
+      "id": "audit.lines.invalid-query",
+      "method": "POST",
+      "path": "/secure/core/module/sys/at-records/record-lines/queries",
+      "route_id": "2587be1807735bce",
+      "operation": "error",
+      "scope": "owned-java-source-only-route",
+      "disposition": "owned-pass",
+      "body": {
+        "p": {
+          "s": 50
+        }
+      },
+      "expected_status": 400,
+      "assert": {
+        "json_keys": [
+          "message"
+        ]
+      },
+      "fixture": "none",
+      "audit": "not-required",
+      "route_origin": "owned-java-source-only",
+      "boundary_semantics": "owned Java source-only route; boundary route != boundary process",
+      "runtime_model": "same-spring-application"
+    },
+    {
+      "id": "organization.query.manager-denied",
+      "method": "POST",
+      "path": "/secure/core/module/mdm/orgs/queries/raw",
+      "route_id": "6bd87f77690f5037",
+      "operation": "permission-check",
+      "scope": "owned-java-source-only-route",
+      "disposition": "owned-pass",
+      "body": {
+        "p": {
+          "s": 50
+        }
+      },
+      "expected_status": 403,
+      "assert": {
+        "json_keys": [
+          "message"
+        ]
+      },
+      "fixture": "none",
+      "audit": "not-required",
+      "route_origin": "owned-java-source-only",
+      "boundary_semantics": "owned Java source-only route; boundary route != boundary process",
+      "runtime_model": "same-spring-application"
+    },
+    {
+      "id": "role.query.manager-denied",
+      "method": "POST",
+      "path": "/secure/core/module/sys/roles/queries/raw",
+      "route_id": "f951f6546809b6cf",
+      "operation": "permission-check",
+      "scope": "owned-java-source-only-route",
+      "disposition": "owned-pass",
+      "body": {
+        "p": {
+          "s": 50
+        }
+      },
+      "expected_status": 403,
+      "assert": {
+        "json_keys": [
+          "message"
+        ]
+      },
+      "fixture": "none",
+      "audit": "not-required",
+      "route_origin": "owned-java-source-only",
+      "boundary_semantics": "owned Java source-only route; boundary route != boundary process",
+      "runtime_model": "same-spring-application"
+    },
+    {
+      "id": "result.run.query.manager-allowed",
+      "method": "POST",
+      "path": "/secure/core/module/bp/result/runs/queries/raw",
+      "route_id": "a6700d464cfc2573",
+      "operation": "read",
+      "scope": "owned-java-source-only-route",
+      "disposition": "owned-pass",
+      "body": {
+        "p": {
+          "s": 50
+        }
+      },
+      "expected_status": 200,
+      "assert": {
+        "json_keys": [
+          "rows",
+          "total"
+        ]
+      },
+      "fixture": "none",
+      "audit": "not-required",
+      "route_origin": "owned-java-source-only",
+      "boundary_semantics": "owned Java source-only route; boundary route != boundary process",
+      "runtime_model": "same-spring-application"
+    },
+    {
+      "id": "order.retain.query.manager-denied",
+      "method": "POST",
+      "path": "/secure/core/module/bp/order/order-retains/queries/raw",
+      "route_id": "de4e716c2ad5e7af",
+      "operation": "permission-check",
+      "scope": "owned-java-source-only-route",
+      "disposition": "owned-pass",
+      "body": {
+        "p": {
+          "s": 50
+        }
+      },
+      "expected_status": 403,
+      "assert": {
+        "json_keys": [
+          "message"
+        ]
+      },
+      "fixture": "none",
+      "audit": "not-required",
+      "route_origin": "owned-java-source-only",
+      "boundary_semantics": "owned Java source-only route; boundary route != boundary process",
+      "runtime_model": "same-spring-application"
+    },
+    {
+      "id": "reagent.compositions.query",
+      "method": "POST",
+      "path": "/secure/emc/module/bp/reagents/1/compositions/queries",
+      "route_id": "d09a36d5994c252e",
+      "operation": "read",
+      "scope": "owned-java-source-only-route",
+      "disposition": "owned-pass",
+      "body": {
+        "p": {
+          "s": 50
+        }
+      },
+      "expected_status": 200,
+      "assert": {
+        "json_keys": [
+          "rows",
+          "total"
+        ]
+      },
+      "fixture": "none",
+      "audit": "not-required",
+      "route_origin": "owned-java-source-only",
+      "boundary_semantics": "owned Java source-only route; boundary route != boundary process",
+      "runtime_model": "same-spring-application"
+    }
+  ],
+  "route_execution_model": {
+    "application": "one owned Spring application per wave",
+    "oracle": "one clone-derived Oracle per wave",
+    "redis": "one Redis per wave",
+    "boundary_process": false,
+    "internal_http_bridge": false,
+    "jni_replacement_process": false
+  }
+}

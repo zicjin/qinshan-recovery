@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+
+    <meta charset=UTF-8/>
+    <meta name=viewport content="width=device-width,initial-scale=1"/>
+    <meta http-equiv=X-UA-Compatible content="ie=edge"/>
+    <link rel="icon" href="data:;"/>
+    <base href="/">
+    <script>
+/*<![CDATA[*/
+    (function(win) {
+        var servletContext = "\/";
+        if (servletContext !== '') {
+            servletContext = servletContext.replace(/\/$/,'');
+        }
+        win.IFM_CONTEXT = location.origin + servletContext;
+        if (win.$frontendAlone !== true) {
+            win.history.replaceState({}, '', win.IFM_CONTEXT.replace(location.origin, '') + '/' + location.search + location.hash);
+        }
+    })(window);
+/*]]>*/
+
+
+    </script>
+
+    <link href="/static/gikam/main/css/chunk-common.css" rel="preload" as="style"/>
+    <link href="/static/gikam/main/css/home.css" rel="preload" as="style"/>
+    <link href="/static/gikam/main/js/chunk-common.js" rel="preload" as="script"/>
+    <link href="/static/gikam/main/js/chunk-vendors.js" rel="preload" as="script"/>
+    <link href="/static/gikam/main/js/home.js" rel=preload as="script"/>
+    <link href="/static/gikam/main/css/chunk-common.css" rel="stylesheet"/>
+    <link href="/static/gikam/main/css/home.css" rel="stylesheet"/>
+
+</head>
+
+<body>
+<script src="/static/gikam/main/js/chunk-vendors.js"></script>
+<script src="/static/gikam/main/js/chunk-common.js"></script>
+<script src="/static/gikam/main/js/home.js"></script>
+</body>
+
+</html>
+
+<script>
+/*<![CDATA[*/
+    IndexPage.setConfig({"ext$":{"addomainsupport":"0","showloginauthoption":"0"},"id":"login-config","pageStyle":"kapok","pageSkin":"green","loginOrg":"0","loginRole":"0","qrCode":"0","retrievePassword":"0","retrievePasswordWay":"1","smsLogin":null,"mobileClient":"1","iphoneQrCode":null,"androidMobileQrCode":null,"androidPadQrCode":"\/files\/secure\/20250225\/56595aca6a924195f582c7b336037a02\/qrcode.png","loginAuthMethod":null,"adDomainServer":null,"adDomainPort":null,"adDomainUpnSuffix":null,"adUserIdIgnoreCase":null,"captcha":"0","loginTenant":null,"grayMode":null});
+/*]]>*/
+
+
+</script>
+
+<script>
+    /*<![CDATA[*/
+    new IndexPage({
+        system : '检测信息管理系统',
+        title : '检测信息管理系统',
+        xIconUrl : IFM_CONTEXT + '/static/emc/icon/favicon.ico',
+        nativePassword : true,
+        showExternalLink : false,
+        logo : IFM_CONTEXT + '/static/emc/icon/logo.png',
+    });
+    /*]]>*/
+</script>
+<style type="text/css">
+    .lavender .lavender-content .logo-in[data-v-3da83641] {
+        height : 70px;
+    }
+    .kapok .kapok-content .right .logo[data-v-3622afb8] {
+        height : 100px;
+        background-size: contain;
+    }
+</style>

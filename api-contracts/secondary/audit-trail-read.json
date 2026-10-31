@@ -1,0 +1,49 @@
+{
+  "schema": 1,
+  "family": "secondary",
+  "description": "Owned Java audit-trail records and record-lines read contracts.",
+  "cases": [
+    {
+      "id": "audit-trail.records.query",
+      "method": "POST",
+      "path": "/secure/emc/module/sys/at-records/queries",
+      "route_id": "5709f1cd4739e042",
+      "operation": "read",
+      "scope": "owned-java-source-only-route",
+      "disposition": "owned-pass",
+      "body": {"p": {"n": 1, "s": 10}},
+      "expected_status": 200,
+      "assert": {"json_keys": ["rows", "total"]},
+      "fixture": "none",
+      "audit": "not-required",
+      "route_origin": "owned-java-source-only",
+      "boundary_semantics": "owned Java source-only route; boundary route != boundary process",
+      "runtime_model": "same-spring-application"
+    },
+    {
+      "id": "audit-trail.record-lines.query-missing",
+      "method": "POST",
+      "path": "/secure/emc/module/sys/at-records/record-lines/queries",
+      "route_id": "425c4ee16fe5757e",
+      "operation": "read",
+      "scope": "owned-java-source-only-route",
+      "disposition": "owned-pass",
+      "body": {"p": {"n": 1, "s": 10, "f": {"recordId_SEQ": "999999999999999999"}}},
+      "expected_status": 200,
+      "assert": {"json_keys": ["rows", "total"]},
+      "fixture": "none",
+      "audit": "not-required",
+      "route_origin": "owned-java-source-only",
+      "boundary_semantics": "owned Java source-only route; boundary route != boundary process",
+      "runtime_model": "same-spring-application"
+    }
+  ],
+  "route_execution_model": {
+    "application": "one owned Spring application per wave",
+    "oracle": "one clone-derived Oracle per wave",
+    "redis": "one Redis per wave",
+    "boundary_process": false,
+    "internal_http_bridge": false,
+    "jni_replacement_process": false
+  }
+}

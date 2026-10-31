@@ -1,0 +1,184 @@
+{
+  "schema": 1,
+  "family": "business-read",
+  "description": "Authenticated equipment and consumables/material read strict HTTP contracts.",
+  "cases": [
+    {
+      "id": "equipment.raw.read",
+      "method": "POST",
+      "path": "/secure/emc/module/mdm/equipt/equipts/queries/raw",
+      "route_id": "5a5c61cf9322ab29",
+      "operation": "read",
+      "scope": "project-route",
+      "disposition": "owned-pass",
+      "body": {
+        "p": {
+          "n": 1,
+          "s": 10
+        }
+      },
+      "expected_status": 200,
+      "assert": {
+        "json_keys": [
+          "rows",
+          "total"
+        ]
+      },
+      "fixture": "none",
+      "audit": "not-required"
+    },
+    {
+      "id": "equipment.choosable.read",
+      "method": "POST",
+      "path": "/secure/emc/module/mdm/equipt/equipts/queries/choosable",
+      "route_id": "2e21364ed96e1bb2",
+      "operation": "read",
+      "scope": "owned-java-source-only-route",
+      "disposition": "owned-pass",
+      "body": {
+        "p": {
+          "n": 1,
+          "s": 10
+        }
+      },
+      "expected_status": 200,
+      "assert": {
+        "json_keys": [
+          "rows",
+          "total"
+        ]
+      },
+      "fixture": "none",
+      "audit": "not-required",
+      "route_origin": "owned-java-source-only",
+      "boundary_semantics": "owned Java source-only route; boundary route != boundary process",
+      "runtime_model": "same-spring-application"
+    },
+    {
+      "id": "equipment.raw.invalid-input",
+      "method": "POST",
+      "path": "/secure/emc/module/mdm/equipt/equipts/queries/raw",
+      "route_id": "5a5c61cf9322ab29",
+      "operation": "error",
+      "scope": "project-route",
+      "disposition": "owned-pass",
+      "body": {
+        "unknown": 1
+      },
+      "expected_status": 400,
+      "assert": {
+        "content_type": "application/json"
+      },
+      "fixture": "none",
+      "audit": "not-required"
+    },
+    {
+      "id": "consumables.raw.read",
+      "method": "POST",
+      "path": "/secure/emc/module/item/consume/consumes/queries/raw",
+      "route_id": "dd7e0271a7b832eb",
+      "operation": "read",
+      "scope": "project-route",
+      "disposition": "owned-pass",
+      "body": {
+        "p": {
+          "n": 1,
+          "s": 10
+        }
+      },
+      "expected_status": 200,
+      "assert": {
+        "json_keys": [
+          "rows",
+          "total"
+        ]
+      },
+      "fixture": "none",
+      "audit": "not-required"
+    },
+    {
+      "id": "consumables.query.no-match",
+      "method": "POST",
+      "path": "/secure/emc/module/item/consume/consumes/queries",
+      "route_id": "6403be1cba2acbaf",
+      "operation": "read",
+      "scope": "project-route",
+      "disposition": "owned-pass",
+      "body": {
+        "p": {
+          "f": {
+            "MTLNAME_EQ": "__strict_no_match__"
+          }
+        }
+      },
+      "expected_status": 200,
+      "assert": {
+        "json_keys": [
+          "rows",
+          "total"
+        ]
+      },
+      "fixture": "none",
+      "audit": "not-required"
+    },
+    {
+      "id": "mdm.material.raw.read",
+      "method": "POST",
+      "path": "/secure/emc/module/mdm/basemdm/mtls/queries/raw",
+      "route_id": "0f89a26a8876f5de",
+      "operation": "read",
+      "scope": "project-route",
+      "disposition": "owned-pass",
+      "body": {
+        "p": {
+          "n": 1,
+          "s": 10
+        }
+      },
+      "expected_status": 200,
+      "assert": {
+        "json_keys": [
+          "rows",
+          "total"
+        ]
+      },
+      "fixture": "none",
+      "audit": "not-required"
+    },
+    {
+      "id": "mdm.material.choosable.read",
+      "method": "POST",
+      "path": "/secure/emc/module/mdm/basemdm/mtls/queries/choosable",
+      "route_id": "8166f7d7e62d4616",
+      "operation": "read",
+      "scope": "owned-java-source-only-route",
+      "disposition": "owned-pass",
+      "body": {
+        "p": {
+          "n": 1,
+          "s": 10
+        }
+      },
+      "expected_status": 200,
+      "assert": {
+        "json_keys": [
+          "rows",
+          "total"
+        ]
+      },
+      "fixture": "none",
+      "audit": "not-required",
+      "route_origin": "owned-java-source-only",
+      "boundary_semantics": "owned Java source-only route; boundary route != boundary process",
+      "runtime_model": "same-spring-application"
+    }
+  ],
+  "route_execution_model": {
+    "application": "one owned Spring application per wave",
+    "oracle": "one clone-derived Oracle per wave",
+    "redis": "one Redis per wave",
+    "boundary_process": false,
+    "internal_http_bridge": false,
+    "jni_replacement_process": false
+  }
+}

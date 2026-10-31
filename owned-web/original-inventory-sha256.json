@@ -1,0 +1,20 @@
+{
+  "schema": 1,
+  "source": "recovered historical project business resources",
+  "files": {
+    "static/emc/module/mdm/equipt/equipts/emc-equipt-plan.js": "2e3397f5bf88b83fd8e4ff676631f15bdd33dfd06cd24222deac6196ded008af",
+    "static/emc/module/mdm/equipt/equipts/emc-equipt-record.js": "a81949d6778b71df9bd7b645e80040d91ef2631192251dd3beea0c32f8aa4838",
+    "static/emc/module/mdm/equipt/equipts/emc-equipt.js": "b66567eb74df58ec13bd3a6ed9511fc616c27b5ede45260f5fba4a4917a90115",
+    "static/emc/module/mdm/equipt/equipts/emc-equipt-edit-list.js": "c7c088872bcb0aae64e342e4589e3bba7857cfd56da83ce6a7c25a6d2569f896",
+    "static/emc/module/mdm/equipt/equipts/emc-equipt-use-record.js": "cc26f0fdd5b698d63bfdbecb70b7058aa74eaeee511b50dde361295a0fa33490",
+    "static/emc/module/mdm/equipt/equipts/emc-equipt-per-check-plan.js": "8ba2e451d161139c8afe7b75dd3b4f8ede7540fd0b0ebc4ce58bc0a84c4e589a",
+    "static/emc/module/mdm/equipt/equipts/emc-equipt-per-check-plan-add.js": "f5e6d8714b6bc71f1ad39714248dfd40878fb2c749f35251ad05f7f24ccf92fa",
+    "static/emc/module/mdm/equipt/equipts/emc-equipt-per-check-record.js": "1dc0a6ad842f0044d53105739c677fc304662c34cbfa19402c606bfb63b3c6aa",
+    "static/emc/module/mdm/equipt/equipts/emc-equipt-per-check-record-add.js": "b4803553ad2f73498c17a65d834096eaf1e98cc52522ad0e03f671c2bf10fb96",
+    "static/emc/module/item/consume/consumes/emc-consume.js": "f9028382310e4d330d8c20ba187cb262bfd8ad15b54df9d54660fd46cc2ed1c2",
+    "static/emc/module/item/consume/consumes/emc-consume-edit-list.js": "3beeb400d53c4c7b3518c7878bc6ad5d1106748fbf5b66ed4a4358067f1e0384",
+    "static/emc/module/qrcode/qrcode.js": "3ee72de9f69c668f9567363a9358df955960bae9000d9ebd66414670f88e8735",
+    "templates/emc/module/mdm/equipt/equipts/emc-equipt-edit-list.html": "459473972838923689fdda86e9dae8a73c744b5e001396cf1b6e7f811d2ac2b4",
+    "templates/emc/module/item/consume/consumes/emc-consume-edit-list.html": "356a5c1c32b245b18053c95cae9aec4c0de9eeea4105ecbbe2aa88901fa956e8"
+  }
+}

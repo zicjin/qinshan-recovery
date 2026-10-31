@@ -1,0 +1,352 @@
+{
+  "schema": 1,
+  "family": "consumables-materials",
+  "description": "HTTP-only MDM stock action writes with API fixture creation and deletion restore.",
+  "cases": [
+    {
+      "id": "mdm.stock.stockin.http",
+      "method": "PUT",
+      "path": "/secure/emc/module/mdm/basemdm/mtls/stocks/${fixture.stock-create}/action/stockin",
+      "route_id": "9fb1fd1fe117182b",
+      "operation": "write",
+      "write_via": "http",
+      "scope": "owned-java-source-only-route",
+      "disposition": "owned-pass",
+      "body": {
+        "b": [
+          "",
+          [
+            {
+              "qty": 2.0,
+              "logContent": "strict stock-in"
+            }
+          ]
+        ]
+      },
+      "expected_status": 200,
+      "assert": {},
+      "fixture": {
+        "id": "mdm-stock-stockin-api-fixture",
+        "mode": "api",
+        "setup_requests": [
+          {
+            "id": "stock-create",
+            "capture_json": true,
+            "method": "POST",
+            "path": "/secure/emc/module/mdm/basemdm/mtls/20250700570/general-mtl-stocks",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "batchNo": "STRICT-WAVE-STOCK",
+                    "stockQty": 3.0,
+                    "unitName": "box",
+                    "lowLimit": 1.0,
+                    "qty": 3.0,
+                    "vendorId": "strict-vendor",
+                    "logContent": "strict stock fixture"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          }
+        ],
+        "restore_requests": [
+          {
+            "id": "stock-restore",
+            "method": "DELETE",
+            "path": "/secure/emc/module/mdm/basemdm/mtls/20250700570/stocks",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "id": "${fixture.stock-create}"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          }
+        ],
+        "business_write_via": "http"
+      },
+      "audit": {
+        "required": true,
+        "status": "observed",
+        "event": "mdm-stock-storage",
+        "outcome": "ALLOWED",
+        "source": "owned-http"
+      },
+      "route_origin": "owned-java-source-only",
+      "boundary_semantics": "owned Java source-only route; boundary route != boundary process",
+      "runtime_model": "same-spring-application"
+    },
+    {
+      "id": "mdm.stock.inventory.http",
+      "method": "PUT",
+      "path": "/secure/emc/module/mdm/basemdm/mtls/20250700570/stocks/action/inventory",
+      "route_id": "cf2d3adbf47467f2",
+      "operation": "write",
+      "write_via": "http",
+      "scope": "owned-java-source-only-route",
+      "disposition": "owned-pass",
+      "body": {
+        "b": [
+          "",
+          [
+            {
+              "qty": 4.0,
+              "logContent": "strict inventory",
+              "ext$": {
+                "stockId": "${fixture.stock-create}"
+              }
+            }
+          ]
+        ]
+      },
+      "expected_status": 200,
+      "assert": {},
+      "fixture": {
+        "id": "mdm-stock-inventory-api-fixture",
+        "mode": "api",
+        "setup_requests": [
+          {
+            "id": "stock-create",
+            "capture_json": true,
+            "method": "POST",
+            "path": "/secure/emc/module/mdm/basemdm/mtls/20250700570/general-mtl-stocks",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "batchNo": "STRICT-WAVE-STOCK",
+                    "stockQty": 3.0,
+                    "unitName": "box",
+                    "lowLimit": 1.0,
+                    "qty": 3.0,
+                    "vendorId": "strict-vendor",
+                    "logContent": "strict stock fixture"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          }
+        ],
+        "restore_requests": [
+          {
+            "id": "stock-restore",
+            "method": "DELETE",
+            "path": "/secure/emc/module/mdm/basemdm/mtls/20250700570/stocks",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "id": "${fixture.stock-create}"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          }
+        ],
+        "business_write_via": "http"
+      },
+      "audit": {
+        "required": true,
+        "status": "observed",
+        "event": "mdm-stock-inventory",
+        "outcome": "ALLOWED",
+        "source": "owned-http"
+      },
+      "route_origin": "owned-java-source-only",
+      "boundary_semantics": "owned Java source-only route; boundary route != boundary process",
+      "runtime_model": "same-spring-application"
+    },
+    {
+      "id": "mdm.stock.abandon.http",
+      "method": "PUT",
+      "path": "/secure/emc/module/mdm/basemdm/mtls/20250700570/stocks/action/abandon",
+      "route_id": "0e644b96cb39b71e",
+      "operation": "write",
+      "write_via": "http",
+      "scope": "owned-java-source-only-route",
+      "disposition": "owned-pass",
+      "body": {
+        "b": [
+          "",
+          [
+            {
+              "logContent": "strict abandon",
+              "ext$": {
+                "stockId": "${fixture.stock-create}"
+              }
+            }
+          ]
+        ]
+      },
+      "expected_status": 200,
+      "assert": {},
+      "fixture": {
+        "id": "mdm-stock-abandon-api-fixture",
+        "mode": "api",
+        "setup_requests": [
+          {
+            "id": "stock-create",
+            "capture_json": true,
+            "method": "POST",
+            "path": "/secure/emc/module/mdm/basemdm/mtls/20250700570/general-mtl-stocks",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "batchNo": "STRICT-WAVE-STOCK",
+                    "stockQty": 3.0,
+                    "unitName": "box",
+                    "lowLimit": 1.0,
+                    "qty": 3.0,
+                    "vendorId": "strict-vendor",
+                    "logContent": "strict stock fixture"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          }
+        ],
+        "restore_requests": [
+          {
+            "id": "stock-restore",
+            "method": "DELETE",
+            "path": "/secure/emc/module/mdm/basemdm/mtls/20250700570/stocks",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "id": "${fixture.stock-create}"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          }
+        ],
+        "business_write_via": "http"
+      },
+      "audit": {
+        "required": true,
+        "status": "observed",
+        "event": "mdm-stock-abandon",
+        "outcome": "ALLOWED",
+        "source": "owned-http"
+      },
+      "route_origin": "owned-java-source-only",
+      "boundary_semantics": "owned Java source-only route; boundary route != boundary process",
+      "runtime_model": "same-spring-application"
+    },
+    {
+      "id": "mdm.stock.receive.http",
+      "method": "PUT",
+      "path": "/secure/emc/module/mdm/basemdm/mtls/stocks/${fixture.stock-create}/action/recieve",
+      "route_id": "6a7eee799df04f4b",
+      "operation": "write",
+      "write_via": "http",
+      "scope": "owned-java-source-only-route",
+      "disposition": "owned-pass",
+      "body": {
+        "b": [
+          "",
+          [
+            {
+              "qty": 1.0,
+              "logContent": "strict receive"
+            }
+          ]
+        ]
+      },
+      "expected_status": 200,
+      "assert": {},
+      "fixture": {
+        "id": "mdm-stock-receive-api-fixture",
+        "mode": "api",
+        "setup_requests": [
+          {
+            "id": "stock-create",
+            "capture_json": true,
+            "method": "POST",
+            "path": "/secure/emc/module/mdm/basemdm/mtls/20250700570/general-mtl-stocks",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "batchNo": "STRICT-WAVE-STOCK",
+                    "stockQty": 3.0,
+                    "unitName": "box",
+                    "lowLimit": 1.0,
+                    "qty": 3.0,
+                    "vendorId": "strict-vendor",
+                    "logContent": "strict stock fixture"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          }
+        ],
+        "restore_requests": [
+          {
+            "id": "stock-restore",
+            "method": "DELETE",
+            "path": "/secure/emc/module/mdm/basemdm/mtls/20250700570/stocks",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "id": "${fixture.stock-create}"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          }
+        ],
+        "business_write_via": "http"
+      },
+      "audit": {
+        "required": true,
+        "status": "observed",
+        "event": "mdm-stock-receive",
+        "outcome": "ALLOWED",
+        "source": "owned-http"
+      },
+      "route_origin": "owned-java-source-only",
+      "boundary_semantics": "owned Java source-only route; boundary route != boundary process",
+      "runtime_model": "same-spring-application"
+    }
+  ],
+  "route_execution_model": {
+    "application": "one owned Spring application per wave",
+    "oracle": "one clone-derived Oracle per wave",
+    "redis": "one Redis per wave",
+    "boundary_process": false,
+    "internal_http_bridge": false,
+    "jni_replacement_process": false
+  }
+}

@@ -1,0 +1,51 @@
+=== 隔离边界检查 2026-09-28T10:01:32+08:00 ===
+
+--- 1) 静态配置扫描: /home/ts/qinshan/lims-recovery/private/application-isolated.properties
+PASS 隔离配置不含生产与外部地址
+PASS 定时任务、业务同步、文件采集相关 profile 已停用
+
+--- 0) 运行时前置条件
+PASS 隔离网络 lims-iso 为 internal 网络
+PASS lims-app 仅接入 lims-iso 网络（lims-iso ）
+PASS lims-oracle 仅接入 lims-iso 网络（lims-iso ）
+PASS lims-redis 仅接入 lims-iso 网络（lims-iso ）
+
+--- 2) 运行时出网检查（容器 lims-app）
+PASS lims-app 无法连通 生产Oracle
+PASS lims-app 无法连通 生产文件服务
+PASS lims-app 无法连通 生产FTP
+PASS lims-app 无法连通 OA接口
+PASS lims-app 无法连通 帆软报表
+PASS lims-app 无法连通 NC系统
+PASS lims-app 无法连通 NC测试
+PASS lims-app 无法连通 客商接口
+PASS lims-app 无法连通 外部邮件
+PASS lims-app 无法连通 历史测试库
+
+--- 3) 正向对照（容器 lims-app 到隔离副本内服务）
+PASS lims-app 可连通 隔离Oracle
+PASS lims-app 可连通 隔离Redis
+
+--- 网络路由（容器 lims-app）
+
+
+--- 2) 运行时出网检查（容器 lims-oracle）
+PASS lims-oracle 无法连通 生产Oracle
+PASS lims-oracle 无法连通 生产文件服务
+PASS lims-oracle 无法连通 生产FTP
+PASS lims-oracle 无法连通 OA接口
+PASS lims-oracle 无法连通 帆软报表
+PASS lims-oracle 无法连通 NC系统
+PASS lims-oracle 无法连通 NC测试
+PASS lims-oracle 无法连通 客商接口
+PASS lims-oracle 无法连通 外部邮件
+PASS lims-oracle 无法连通 历史测试库
+
+--- 3) 正向对照（容器 lims-oracle 到隔离副本内服务）
+PASS lims-oracle 可连通 隔离Oracle
+PASS lims-oracle 可连通 隔离Redis
+
+--- 网络路由（容器 lims-oracle）
+
+
+结果: PASS —— 应用与数据库均无法写入生产或外部系统

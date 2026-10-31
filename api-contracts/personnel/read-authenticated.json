@@ -1,0 +1,109 @@
+{
+  "schema": 1,
+  "family": "personnel",
+  "description": "Authenticated personnel read and invalid-input strict HTTP contracts.",
+  "cases": [
+    {
+      "id": "personnel.raw.read",
+      "method": "POST",
+      "path": "/secure/emc/module/mdm/emp/emps/queries/raw",
+      "route_id": "755ab8065a09651a",
+      "operation": "read",
+      "scope": "project-route",
+      "disposition": "owned-pass",
+      "body": {
+        "p": {
+          "n": 1,
+          "s": 10
+        }
+      },
+      "expected_status": 200,
+      "assert": {
+        "json_keys": [
+          "rows",
+          "total"
+        ]
+      },
+      "fixture": "none",
+      "audit": "not-required"
+    },
+    {
+      "id": "personnel.choosable.read",
+      "method": "POST",
+      "path": "/secure/emc/module/mdm/emp/emps/queries/choosable",
+      "route_id": "8444bc3a97ef4df0",
+      "operation": "read",
+      "scope": "owned-java-source-only-route",
+      "disposition": "owned-pass",
+      "body": {
+        "p": {
+          "n": 1,
+          "s": 10
+        }
+      },
+      "expected_status": 200,
+      "assert": {
+        "json_keys": [
+          "rows",
+          "total"
+        ]
+      },
+      "fixture": "none",
+      "audit": "not-required",
+      "route_origin": "owned-java-source-only",
+      "boundary_semantics": "owned Java source-only route; boundary route != boundary process",
+      "runtime_model": "same-spring-application"
+    },
+    {
+      "id": "personnel.query.no-match",
+      "method": "POST",
+      "path": "/secure/emc/module/mdm/emp/emps/queries",
+      "route_id": "0fd21ac6abfdc8b2",
+      "operation": "read",
+      "scope": "project-route",
+      "disposition": "owned-pass",
+      "body": {
+        "p": {
+          "f": {
+            "USERNAME_EQ": "__strict_no_match__"
+          }
+        }
+      },
+      "expected_status": 200,
+      "assert": {
+        "json_keys": [
+          "rows",
+          "total"
+        ]
+      },
+      "fixture": "none",
+      "audit": "not-required"
+    },
+    {
+      "id": "personnel.raw.invalid-input",
+      "method": "POST",
+      "path": "/secure/emc/module/mdm/emp/emps/queries/raw",
+      "route_id": "755ab8065a09651a",
+      "operation": "error",
+      "scope": "project-route",
+      "disposition": "owned-pass",
+      "body": {
+        "unknown": 1
+      },
+      "expected_status": 400,
+      "assert": {
+        "content_type": "application/json"
+      },
+      "fixture": "none",
+      "audit": "not-required"
+    }
+  ],
+  "route_execution_model": {
+    "application": "one owned Spring application per wave",
+    "oracle": "one clone-derived Oracle per wave",
+    "redis": "one Redis per wave",
+    "boundary_process": false,
+    "internal_http_bridge": false,
+    "jni_replacement_process": false
+  }
+}

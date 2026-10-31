@@ -1,0 +1,270 @@
+{
+  "schema": 1,
+  "family": "equipment",
+  "description": "HTTP-only equipment master update/delete and scoped read-back; each case creates its fixture through the API and restores it through the API.",
+  "cases": [
+    {
+      "id": "equipment.master-update.http",
+      "method": "PUT",
+      "path": "/secure/emc/module/mdm/equipt/equipts/${fixture.fixture-create}",
+      "route_id": "ba4a49d707b539e3",
+      "operation": "write",
+      "write_via": "http",
+      "scope": "project-route",
+      "disposition": "owned-pass",
+      "body": {
+        "b": [
+          "",
+          [
+            {
+              "id": "${fixture.fixture-create}",
+              "equiptName": "Strict API Equipment Updated",
+              "specification": "2x",
+              "manufacturer": "Owned Updated",
+              "factoryNo": "STRICT-01-U",
+              "status": "retired",
+              "equiptBelong": "自有",
+              "equiptRecord": "1"
+            }
+          ]
+        ]
+      },
+      "expected_status": 200,
+      "assert": {},
+      "fixture": {
+        "id": "equipment-master-api-fixture",
+        "mode": "api",
+        "setup_requests": [
+          {
+            "id": "fixture-create",
+            "capture_json": true,
+            "method": "POST",
+            "path": "/secure/emc/module/mdm/equipt/equipts",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "equiptId": "STRICT-EQ-API-01",
+                    "equiptName": "Strict API Equipment",
+                    "specification": "1x",
+                    "manufacturer": "Owned",
+                    "factoryNo": "STRICT-01",
+                    "equiptCategoryId": 201823440568064,
+                    "status": "active",
+                    "equiptBelong": "自有",
+                    "equiptRecord": "1"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {
+              "content_type": "application/json"
+            }
+          }
+        ],
+        "restore_requests": [
+          {
+            "id": "fixture-restore",
+            "method": "PUT",
+            "path": "/secure/emc/module/mdm/equipt/equipts/${fixture.fixture-create}",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "id": "${fixture.fixture-create}",
+                    "equiptName": "Strict API Equipment",
+                    "specification": "1x",
+                    "manufacturer": "Owned",
+                    "factoryNo": "STRICT-01",
+                    "status": "active",
+                    "equiptBelong": "自有",
+                    "equiptRecord": "1"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          },
+          {
+            "id": "fixture-delete",
+            "method": "DELETE",
+            "path": "/secure/emc/module/mdm/equipt/equipts",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "id": "${fixture.fixture-create}"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          }
+        ],
+        "business_write_via": "http"
+      },
+      "audit": {
+        "required": true,
+        "status": "observed",
+        "event": "equipment-update",
+        "outcome": "ALLOWED",
+        "source": "owned-http"
+      }
+    },
+    {
+      "id": "equipment.master-readback.http",
+      "method": "POST",
+      "path": "/secure/emc/module/mdm/equipt/equipts/queries",
+      "route_id": "7ed7bbe29779e950",
+      "operation": "read",
+      "scope": "project-route",
+      "disposition": "owned-pass",
+      "body": {
+        "p": {
+          "f": {
+            "EQUIPTID_EQ": "STRICT-EQ-API-01"
+          },
+          "n": 1,
+          "s": 10
+        }
+      },
+      "expected_status": 200,
+      "assert": {
+        "json_keys": [
+          "rows",
+          "total"
+        ],
+        "json_values": {
+          "total": 1
+        }
+      },
+      "fixture": {
+        "id": "equipment-read-api-fixture",
+        "mode": "api",
+        "setup_requests": [
+          {
+            "id": "fixture-create",
+            "capture_json": true,
+            "method": "POST",
+            "path": "/secure/emc/module/mdm/equipt/equipts",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "equiptId": "STRICT-EQ-API-01",
+                    "equiptName": "Strict API Equipment",
+                    "specification": "1x",
+                    "manufacturer": "Owned",
+                    "factoryNo": "STRICT-01",
+                    "equiptCategoryId": 201823440568064,
+                    "status": "active",
+                    "equiptBelong": "自有",
+                    "equiptRecord": "1"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {
+              "content_type": "application/json"
+            }
+          }
+        ],
+        "restore_requests": [
+          {
+            "id": "fixture-delete",
+            "method": "DELETE",
+            "path": "/secure/emc/module/mdm/equipt/equipts",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "id": "${fixture.fixture-create}"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          }
+        ],
+        "business_write_via": "http"
+      },
+      "audit": "not-required"
+    },
+    {
+      "id": "equipment.master-delete.http",
+      "method": "DELETE",
+      "path": "/secure/emc/module/mdm/equipt/equipts",
+      "route_id": "e267f427a950a5d5",
+      "operation": "write",
+      "write_via": "http",
+      "scope": "project-route",
+      "disposition": "owned-pass",
+      "body": {
+        "b": [
+          "",
+          [
+            {
+              "id": "${fixture.fixture-create}"
+            }
+          ]
+        ]
+      },
+      "expected_status": 200,
+      "assert": {},
+      "fixture": {
+        "id": "equipment-delete-api-fixture",
+        "mode": "api",
+        "setup_requests": [
+          {
+            "id": "fixture-create",
+            "capture_json": true,
+            "method": "POST",
+            "path": "/secure/emc/module/mdm/equipt/equipts",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "equiptId": "STRICT-EQ-API-02",
+                    "equiptName": "Strict API Equipment Delete",
+                    "specification": "1x",
+                    "manufacturer": "Owned",
+                    "factoryNo": "STRICT-02",
+                    "equiptCategoryId": 201823440568064,
+                    "status": "active",
+                    "equiptBelong": "自有",
+                    "equiptRecord": "1"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {
+              "content_type": "application/json"
+            }
+          }
+        ],
+        "restore_requests": [],
+        "cleanup_via": "case-http",
+        "business_write_via": "http"
+      },
+      "audit": {
+        "required": true,
+        "status": "observed",
+        "event": "equipment-delete",
+        "outcome": "ALLOWED",
+        "source": "owned-http"
+      }
+    }
+  ]
+}

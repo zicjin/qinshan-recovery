@@ -1,0 +1,5 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.sunwayworld.owned.internal.web.OwnedIdentityConfiguration,\
+com.sunwayworld.owned.internal.web.OwnedReadWebConfiguration,\
+com.sunwayworld.owned.internal.web.OwnedQueryAccessConfiguration,\
+com.sunwayworld.owned.internal.web.OwnedTemplateViewConfiguration

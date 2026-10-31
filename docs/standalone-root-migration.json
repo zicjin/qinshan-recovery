@@ -1,0 +1,342 @@
+{
+  "schema": 1,
+  "migration": "standalone-lims-recovery-root",
+  "created_at": "2026-10-31T03:09:17.172436+00:00",
+  "source_remote": "git@10.100.2.198:lims/qinshanlushui-copy.git",
+  "legacy_remote_head": "06c2bcf65fdf73a7c89b2f6faa4dce47848500f5",
+  "legacy_backup_ref": "legacy-project-before-root-migration-20261031-ca83b0a4",
+  "parent_repository_head": "ca83b0a41f2d1bf54c92853dab1a1616c6c4d3a3",
+  "project_source_commit": "27932b1fe4d71d64a02f9a63e55f56acb403e3a0",
+  "project_tree_hash": "7f95f517a02b6d0430500416b9a2f10c6110dae8",
+  "project_file_tree_hash": "c34b6b81867edaac5a96d20eda552de43e32996dcd094776e5f678ce7b55d6f7",
+  "project_history_note": "project was materialized from the detached local commit; its .git metadata is intentionally absent",
+  "excluded_material_count": 45,
+  "excluded_materials": [
+    {
+      "path": "materials/gikam-third-czjky-14.1.5-run.jar",
+      "size": 546766277,
+      "sha256": "4a720797810fd2f8cca6e22604657028cb87830ca0e24bb55a5f42f040f6ee9f",
+      "storage": "external-artifact",
+      "reason": "not allowed in standalone source/distribution"
+    },
+    {
+      "path": "materials/index/_11z.fdt",
+      "size": 2429520,
+      "sha256": "d9752935acc948d67b86acd561823ab4762b35ed5edbba108f681b1e7e4e704c",
+      "storage": "external-artifact",
+      "reason": "not allowed in standalone source/distribution"
+    },
+    {
+      "path": "materials/index/_11z.fdx",
+      "size": 2203,
+      "sha256": "0ba49050f93428143b5d4c0abc6c7017de44c2fd14cdcbf90f2b1ce12b078b75",
+      "storage": "external-artifact",
+      "reason": "not allowed in standalone source/distribution"
+    },
+    {
+      "path": "materials/index/_11z.fnm",
+      "size": 930,
+      "sha256": "760ec988086e2207adb0f0a4c939640a7f674c7263c76109f3017e76e8fbdcb3",
+      "storage": "external-artifact",
+      "reason": "not allowed in standalone source/distribution"
+    },
+    {
+      "path": "materials/index/_11z.nvd",
+      "size": 5809,
+      "sha256": "6c872ba52cff8ce884f8d35a330dc9c00f1c81ee8ef2ae14562e83fa151f731e",
+      "storage": "external-artifact",
+      "reason": "not allowed in standalone source/distribution"
+    },
+    {
+      "path": "materials/index/_11z.nvm",
+      "size": 319,
+      "sha256": "896a206e7b56c3618fdf86e0aa3b5d3ef93b6cb365c3118068d77cd0bb148c70",
+      "storage": "external-artifact",
+      "reason": "not allowed in standalone source/distribution"
+    },
+    {
+      "path": "materials/index/_11z.si",
+      "size": 546,
+      "sha256": "386c803491d630a674873f0af4470e435d36ac847caccd04132ddb2fbd55fd77",
+      "storage": "external-artifact",
+      "reason": "not allowed in standalone source/distribution"
+    },
+    {
+      "path": "materials/index/_11z_Lucene84_0.doc",
+      "size": 48894,
+      "sha256": "2bacdc5d08ee9dc7a407e69f5db185da823753aff9b735376556d5f0beded777",
+      "storage": "external-artifact",
+      "reason": "not allowed in standalone source/distribution"
+    },
+    {
+      "path": "materials/index/_11z_Lucene84_0.pos",
+      "size": 11362,
+      "sha256": "c39e84c8b401c0611e80ae5f412ccdba2fe81062aadeed5495c865eddf20fca5",
+      "storage": "external-artifact",
+      "reason": "not allowed in standalone source/distribution"
+    },
+    {
+      "path": "materials/index/_11z_Lucene84_0.tim",
+      "size": 1545160,
+      "sha256": "7b63584a3c0bc9667e36753ea671c04adcb0a06b9e8b313bb360d7cfcc658101",
+      "storage": "external-artifact",
+      "reason": "not allowed in standalone source/distribution"
+    },
+    {
+      "path": "materials/index/_11z_Lucene84_0.tip",
+      "size": 5663,
+      "sha256": "93fa7b891ebe613628f69a1467687c44f2931a1886e1e358b928dd0b48b67f36",
+      "storage": "external-artifact",
+      "reason": "not allowed in standalone source/distribution"
+    },
+    {
+      "path": "materials/index/_120.cfe",
+      "size": 299,
+      "sha256": "215aa7ace52065faf3102efb8248c6ae8beed8b768e1c7c5561271f00e01a84d",
+      "storage": "external-artifact",
+      "reason": "not allowed in standalone source/distribution"
+    },
+    {
+      "path": "materials/index/_120.cfs",
+      "size": 503100,
+      "sha256": "584e10901b68bc74f1c0ff522cc1596d1d47eb750e0b1c57720b45d22697a264",
+      "storage": "external-artifact",
+      "reason": "not allowed in standalone source/distribution"
+    },
+    {
+      "path": "materials/index/_120.si",
+      "size": 401,
+      "sha256": "76bdb33dd35e969339f28c9c957048d76add24ac27acbe802d5679e29233649a",
+      "storage": "external-artifact",
+      "reason": "not allowed in standalone source/distribution"
+    },
+    {
+      "path": "materials/index/_121.cfe",
+      "size": 299,
+      "sha256": "1bcdeed325c5e903d450e09622a9dfd821cfa051803a3332171abdeb116cca26",
+      "storage": "external-artifact",
+      "reason": "not allowed in standalone source/distribution"
+    },
+    {
+      "path": "materials/index/_121.cfs",
+      "size": 50425,
+      "sha256": "bf1f08a0987edfa77b0b55c95a76877e03ad0fa1e29da4a937a088d7bb1b679c",
+      "storage": "external-artifact",
+      "reason": "not allowed in standalone source/distribution"
+    },
+    {
+      "path": "materials/index/_121.si",
+      "size": 401,
+      "sha256": "ea5ccbd8fea0ca51606e66ae8dba4383dc2cc30a5c2fa5d943712496a7f4f0d2",
+      "storage": "external-artifact",
+      "reason": "not allowed in standalone source/distribution"
+    },
+    {
+      "path": "materials/index/_122.cfe",
+      "size": 299,
+      "sha256": "03d60e0b34b677a0a9919a8ef20838f7fd729faab9777669cf9e900eb96a3c3d",
+      "storage": "external-artifact",
+      "reason": "not allowed in standalone source/distribution"
+    },
+    {
+      "path": "materials/index/_122.cfs",
+      "size": 48709,
+      "sha256": "bf2f586472d699e87617d96342ce06b9c38880562a336e13f6e52a0f2d67f9a3",
+      "storage": "external-artifact",
+      "reason": "not allowed in standalone source/distribution"
+    },
+    {
+      "path": "materials/index/_122.si",
+      "size": 401,
+      "sha256": "a2595dd95b7fc35c8eb62a792b79481410cfd6bb5a7cc770a5172dd9887289ea",
+      "storage": "external-artifact",
+      "reason": "not allowed in standalone source/distribution"
+    },
+    {
+      "path": "materials/index/_123.cfe",
+      "size": 299,
+      "sha256": "dc5a8c60b3f3339f8a1a1d84dfada17f1ab07d62087918a1dc71216a0ffb0c06",
+      "storage": "external-artifact",
+      "reason": "not allowed in standalone source/distribution"
+    },
+    {
+      "path": "materials/index/_123.cfs",
+      "size": 49478,
+      "sha256": "50534e06f0177c9c974f4e5d6c5971acb61bf2dea81ddc8511eb65e7b4c20757",
+      "storage": "external-artifact",
+      "reason": "not allowed in standalone source/distribution"
+    },
+    {
+      "path": "materials/index/_123.si",
+      "size": 401,
+      "sha256": "4109dae37cac1a82d93c1c483ef99710bae80fa24f7753d38c3244aaebe3de5a",
+      "storage": "external-artifact",
+      "reason": "not allowed in standalone source/distribution"
+    },
+    {
+      "path": "materials/index/_124.cfe",
+      "size": 299,
+      "sha256": "1a2112b025ca1058c8f121259bfd13e2c29f50da51e5ef9dadc0eedb6a879d8c",
+      "storage": "external-artifact",
+      "reason": "not allowed in standalone source/distribution"
+    },
+    {
+      "path": "materials/index/_124.cfs",
+      "size": 51216,
+      "sha256": "8c81fe718b8affc0d344a6ff5ebe4336d0ca52e4f985e51f279883691ac43f12",
+      "storage": "external-artifact",
+      "reason": "not allowed in standalone source/distribution"
+    },
+    {
+      "path": "materials/index/_124.si",
+      "size": 401,
+      "sha256": "daa2b75e1c7ec54f9f2637bc33e2d6d10f8507c2aae8485a3e03935592e3c5b9",
+      "storage": "external-artifact",
+      "reason": "not allowed in standalone source/distribution"
+    },
+    {
+      "path": "materials/index/_125.cfe",
+      "size": 299,
+      "sha256": "34ae4ad9c0d1dfd071c696b8bd869a682efb6c4f8f2933cf423dc00e588efa62",
+      "storage": "external-artifact",
+      "reason": "not allowed in standalone source/distribution"
+    },
+    {
+      "path": "materials/index/_125.cfs",
+      "size": 214367,
+      "sha256": "a1ef60fe4dafd1e2899e16ad6c5e255935d398a5875a6a7331a76afd55f7a6aa",
+      "storage": "external-artifact",
+      "reason": "not allowed in standalone source/distribution"
+    },
+    {
+      "path": "materials/index/_125.si",
+      "size": 401,
+      "sha256": "d963a6c925f28c7b8d4b7dfb244d9af22fb5d9b0f295d989b4fd7118fa0f0fdd",
+      "storage": "external-artifact",
+      "reason": "not allowed in standalone source/distribution"
+    },
+    {
+      "path": "materials/index/_w3.fdt",
+      "size": 6861345,
+      "sha256": "fb7b99e7c9c1f58799b682ba9c0b262a1a6c41902891ef32c7a2c7058256bb8e",
+      "storage": "external-artifact",
+      "reason": "not allowed in standalone source/distribution"
+    },
+    {
+      "path": "materials/index/_w3.fdx",
+      "size": 6351,
+      "sha256": "a587acb6a111f452df439f5c3985645818c7bf2050c4fe93a8ca1bf7dacdc33b",
+      "storage": "external-artifact",
+      "reason": "not allowed in standalone source/distribution"
+    },
+    {
+      "path": "materials/index/_w3.fnm",
+      "size": 930,
+      "sha256": "174ff33de2d69e17ead13e71350281d0a93a1fdb02ca68334f257ac63ffd8826",
+      "storage": "external-artifact",
+      "reason": "not allowed in standalone source/distribution"
+    },
+    {
+      "path": "materials/index/_w3.nvd",
+      "size": 21898,
+      "sha256": "56cdb7a7f18c1087ed2106360917d595682e0b2c2cf11cb4853ed0c3f3260bd5",
+      "storage": "external-artifact",
+      "reason": "not allowed in standalone source/distribution"
+    },
+    {
+      "path": "materials/index/_w3.nvm",
+      "size": 319,
+      "sha256": "59703554c32f188a391aab673d08d30fac697a83783804c61e13d65eb9eb6502",
+      "storage": "external-artifact",
+      "reason": "not allowed in standalone source/distribution"
+    },
+    {
+      "path": "materials/index/_w3.si",
+      "size": 536,
+      "sha256": "928d93fd7f6cdcdb651db5257d00d217b0c3c0f782d70bc80f1cfd2339ebd905",
+      "storage": "external-artifact",
+      "reason": "not allowed in standalone source/distribution"
+    },
+    {
+      "path": "materials/index/_w3_Lucene84_0.doc",
+      "size": 200954,
+      "sha256": "49c39c0be5b86b4013b4cf71f9e899b14b46a9a99b15075827e7239ce8b83026",
+      "storage": "external-artifact",
+      "reason": "not allowed in standalone source/distribution"
+    },
+    {
+      "path": "materials/index/_w3_Lucene84_0.pos",
+      "size": 31932,
+      "sha256": "dace3024e381f219afe4ac2cafacf6b9cd9686d6814ffeab18dbb0bc8d4bc3fb",
+      "storage": "external-artifact",
+      "reason": "not allowed in standalone source/distribution"
+    },
+    {
+      "path": "materials/index/_w3_Lucene84_0.tim",
+      "size": 5284531,
+      "sha256": "aec865bdc8338509a07eee40dc07e25295af51b1c6b2497084e77a4072cdaa28",
+      "storage": "external-artifact",
+      "reason": "not allowed in standalone source/distribution"
+    },
+    {
+      "path": "materials/index/_w3_Lucene84_0.tip",
+      "size": 18146,
+      "sha256": "95ff41f1ddd2e48d058cd678ff2b6d49c61db60750587433aa30beed70878a68",
+      "storage": "external-artifact",
+      "reason": "not allowed in standalone source/distribution"
+    },
+    {
+      "path": "materials/index/segments_10f",
+      "size": 610,
+      "sha256": "ba449c3d1cc429956dbba7eff7a872e5f6f0dbceac06ad5c2cec3f4d0b451c9e",
+      "storage": "external-artifact",
+      "reason": "not allowed in standalone source/distribution"
+    },
+    {
+      "path": "materials/jdk-8u391-linux-x64.tar.gz",
+      "size": 141887242,
+      "sha256": "c2f9513727fa7a06d6cf9a10a4c1712a984baa33a69373c0b909785b1f805108",
+      "storage": "external-artifact",
+      "reason": "not allowed in standalone source/distribution"
+    },
+    {
+      "path": "materials/log4j2.xml",
+      "size": 3097,
+      "sha256": "d10d6245895b9bd2bcff32a41aa97c0fefa21601c375dca91b12c1d924949ad9",
+      "storage": "external-artifact",
+      "reason": "not allowed in standalone source/distribution"
+    },
+    {
+      "path": "materials/maven-build-plugin-seed.tar.gz",
+      "size": 16734324,
+      "sha256": "625154286cb1d5b56e1ac8331537a151bec6e4a8d8284f2243c8444a257ae5d5",
+      "storage": "external-artifact",
+      "reason": "not allowed in standalone source/distribution"
+    },
+    {
+      "path": "materials/simsun.ttc",
+      "size": 18214472,
+      "sha256": "2e3cc9dbd787c827f73496f01633bba430e15c5db4d4f6ed9938386ea01f0171",
+      "storage": "external-artifact",
+      "reason": "not allowed in standalone source/distribution"
+    },
+    {
+      "path": "materials/sunway-app.so",
+      "size": 186512,
+      "sha256": "dc06e05d55252211e44b3a177267b68efc970b095d74c7ebd815057f5393d40a",
+      "storage": "external-artifact",
+      "reason": "not allowed in standalone source/distribution"
+    }
+  ],
+  "excluded_private_policy": {
+    "path": "private/",
+    "storage": "external-restricted",
+    "content_in_tree": false,
+    "reason": "credentials, license, Oracle snapshots, attachments and production config"
+  },
+  "native_policy": {
+    "path": "materials/sunway-app.so",
+    "content_in_tree": false,
+    "reason": "supplier native runtime removed from standalone tree and distribution"
+  }
+}

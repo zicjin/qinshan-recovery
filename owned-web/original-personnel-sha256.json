@@ -1,0 +1,11 @@
+{
+  "schema": 1,
+  "source": "recovered project business resources",
+  "files": {
+    "static/emc/module/mdm/emp/emps/emc-emp-detail.js": "be919a302c7dde02e384322856421aa4218f7203e1aaefd256d778e34c1f7b68",
+    "static/emc/module/mdm/emp/emps/emc-emp-edit-list.js": "04545cd9c10ca2f3dbfcefe08e7f37a64505ced032e31f9176196198d0afc076",
+    "static/emc/module/mdm/emp/emps/emc-emp.js": "6c7bfe2998ce6784db0d528de25c4336bb824e8048a94fe9288c16c0a56328ae",
+    "templates/emc/module/mdm/emp/emps/emc-emp-detail.html": "7d7b80f7c761ec6005665e612ebf405b452afeeeaddc67e1ca0b2f4cf6a91cae",
+    "templates/emc/module/mdm/emp/emps/emc-emp-edit-list.html": "afe08cdabbd5990e4182c7491eaba6e9935ca5b45559f748c17619c371e30608"
+  }
+}

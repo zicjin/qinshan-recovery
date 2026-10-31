@@ -1,0 +1,232 @@
+{
+  "schema": 1,
+  "family": "core-workspace-boundary",
+  "description": "Owned workspace/Gikam shell HTTP boundary routes and menu tree root.",
+  "cases": [
+    {
+      "id": "workspace.shell",
+      "method": "GET",
+      "path": "/module/index/workspaces",
+      "route_id": "fb28ef3927759d5a",
+      "operation": "read",
+      "scope": "owned-java-source-only-route",
+      "disposition": "owned-pass",
+      "expected_status": 200,
+      "assert": {
+        "content_type": "text/html"
+      },
+      "fixture": "none",
+      "audit": "not-required",
+      "route_origin": "owned-java-source-only",
+      "boundary_semantics": "owned Java source-only route; boundary route != boundary process",
+      "runtime_model": "same-spring-application"
+    },
+    {
+      "id": "workspace.index",
+      "method": "GET",
+      "path": "/secure/core/module/index/workspace/index",
+      "route_id": "3ad9975ec02aa858",
+      "operation": "read",
+      "scope": "owned-java-source-only-route",
+      "disposition": "owned-pass",
+      "expected_status": 200,
+      "assert": {
+        "content_type": "text/html"
+      },
+      "fixture": "none",
+      "audit": "not-required",
+      "route_origin": "owned-java-source-only",
+      "boundary_semantics": "owned Java source-only route; boundary route != boundary process",
+      "runtime_model": "same-spring-application"
+    },
+    {
+      "id": "workspace.todo",
+      "method": "GET",
+      "path": "/secure/core/module/index/workspace/todo",
+      "route_id": "017d8ca01095078c",
+      "operation": "read",
+      "scope": "owned-java-source-only-route",
+      "disposition": "owned-pass",
+      "expected_status": 200,
+      "assert": {
+        "content_type": "text/html"
+      },
+      "fixture": "none",
+      "audit": "not-required",
+      "route_origin": "owned-java-source-only",
+      "boundary_semantics": "owned Java source-only route; boundary route != boundary process",
+      "runtime_model": "same-spring-application"
+    },
+    {
+      "id": "workspace.report",
+      "method": "GET",
+      "path": "/secure/core/module/index/workspace/report",
+      "route_id": "40e86feb133cc753",
+      "operation": "read",
+      "scope": "owned-java-source-only-route",
+      "disposition": "owned-pass",
+      "expected_status": 200,
+      "assert": {
+        "content_type": "text/html"
+      },
+      "fixture": "none",
+      "audit": "not-required",
+      "route_origin": "owned-java-source-only",
+      "boundary_semantics": "owned Java source-only route; boundary route != boundary process",
+      "runtime_model": "same-spring-application"
+    },
+    {
+      "id": "workspace.sample",
+      "method": "GET",
+      "path": "/secure/core/module/index/workspace/sample",
+      "route_id": "91a974e18d32888b",
+      "operation": "read",
+      "scope": "owned-java-source-only-route",
+      "disposition": "owned-pass",
+      "expected_status": 200,
+      "assert": {
+        "content_type": "text/html"
+      },
+      "fixture": "none",
+      "audit": "not-required",
+      "route_origin": "owned-java-source-only",
+      "boundary_semantics": "owned Java source-only route; boundary route != boundary process",
+      "runtime_model": "same-spring-application"
+    },
+    {
+      "id": "workspace.run-analysis",
+      "method": "GET",
+      "path": "/secure/core/module/index/workspace/run-analysis",
+      "route_id": "2a1ad49b3d2ffc4f",
+      "operation": "read",
+      "scope": "owned-java-source-only-route",
+      "disposition": "owned-pass",
+      "expected_status": 200,
+      "assert": {
+        "content_type": "text/html"
+      },
+      "fixture": "none",
+      "audit": "not-required",
+      "route_origin": "owned-java-source-only",
+      "boundary_semantics": "owned Java source-only route; boundary route != boundary process",
+      "runtime_model": "same-spring-application"
+    },
+    {
+      "id": "workspace.business-process-diagram",
+      "method": "GET",
+      "path": "/secure/core/module/index/workspace/business-process-diagram",
+      "route_id": "3d83b8a77d6c9859",
+      "operation": "read",
+      "scope": "owned-java-source-only-route",
+      "disposition": "owned-pass",
+      "expected_status": 200,
+      "assert": {
+        "content_type": "text/html"
+      },
+      "fixture": "none",
+      "audit": "not-required",
+      "route_origin": "owned-java-source-only",
+      "boundary_semantics": "owned Java source-only route; boundary route != boundary process",
+      "runtime_model": "same-spring-application"
+    },
+    {
+      "id": "workspace.project-statistics",
+      "method": "GET",
+      "path": "/secure/core/module/index/workspace/project-statistics",
+      "route_id": "1f61648f6c50c7ee",
+      "operation": "read",
+      "scope": "owned-java-source-only-route",
+      "disposition": "owned-pass",
+      "expected_status": 200,
+      "assert": {
+        "content_type": "text/html"
+      },
+      "fixture": "none",
+      "audit": "not-required",
+      "route_origin": "owned-java-source-only",
+      "boundary_semantics": "owned Java source-only route; boundary route != boundary process",
+      "runtime_model": "same-spring-application"
+    },
+    {
+      "id": "workspace.annual-project-statistics",
+      "method": "GET",
+      "path": "/secure/core/module/index/workspace/annual-project-statistics",
+      "route_id": "66f7402092931971",
+      "operation": "read",
+      "scope": "owned-java-source-only-route",
+      "disposition": "owned-pass",
+      "expected_status": 200,
+      "assert": {
+        "content_type": "text/html"
+      },
+      "fixture": "none",
+      "audit": "not-required",
+      "route_origin": "owned-java-source-only",
+      "boundary_semantics": "owned Java source-only route; boundary route != boundary process",
+      "runtime_model": "same-spring-application"
+    },
+    {
+      "id": "workspace.personnel-workload-statistics",
+      "method": "GET",
+      "path": "/secure/core/module/index/workspace/personnel-workload-statistics",
+      "route_id": "d2902707435f7152",
+      "operation": "read",
+      "scope": "owned-java-source-only-route",
+      "disposition": "owned-pass",
+      "expected_status": 200,
+      "assert": {
+        "content_type": "text/html"
+      },
+      "fixture": "none",
+      "audit": "not-required",
+      "route_origin": "owned-java-source-only",
+      "boundary_semantics": "owned Java source-only route; boundary route != boundary process",
+      "runtime_model": "same-spring-application"
+    },
+    {
+      "id": "workspace.analysis-department-statistics",
+      "method": "GET",
+      "path": "/secure/core/module/index/workspace/analysis-department-statistics",
+      "route_id": "6e54da490f60e809",
+      "operation": "read",
+      "scope": "owned-java-source-only-route",
+      "disposition": "owned-pass",
+      "expected_status": 200,
+      "assert": {
+        "content_type": "text/html"
+      },
+      "fixture": "none",
+      "audit": "not-required",
+      "route_origin": "owned-java-source-only",
+      "boundary_semantics": "owned Java source-only route; boundary route != boundary process",
+      "runtime_model": "same-spring-application"
+    },
+    {
+      "id": "menu.tree.root",
+      "method": "POST",
+      "path": "/secure/core/module/sys/menus/tree/root",
+      "route_id": "e7f54352ba64802b",
+      "operation": "read",
+      "scope": "owned-java-source-only-route",
+      "disposition": "owned-pass",
+      "body": {},
+      "expected_status": 200,
+      "assert": {
+        "content_type": "application/json"
+      },
+      "fixture": "none",
+      "audit": "not-required",
+      "route_origin": "owned-java-source-only",
+      "boundary_semantics": "owned Java source-only route; boundary route != boundary process",
+      "runtime_model": "same-spring-application"
+    }
+  ],
+  "route_execution_model": {
+    "application": "one owned Spring application per wave",
+    "oracle": "one clone-derived Oracle per wave",
+    "redis": "one Redis per wave",
+    "boundary_process": false,
+    "internal_http_bridge": false,
+    "jni_replacement_process": false
+  }
+}

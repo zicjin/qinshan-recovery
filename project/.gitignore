@@ -1,0 +1,39 @@
+# Maven build output (recreated by scripts/build.sh)
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+
+# Compiled artifacts
+*.class
+
+# Logs and JVM dumps
+*.log
+hs_err_pid*
+replay_pid*
+
+# IDE / editor files
+.idea/
+*.iml
+.vscode/
+.settings/
+.project
+.classpath
+*.swp
+*~
+
+# Operating system
+.DS_Store
+Thumbs.db
+
+# Production and local runtime configuration must never be tracked in the
+# business-source repository. Supply isolated configuration through the
+# recovery root's restricted private/ directory at deployment time.
+application.properties
+application-*.properties
+bootstrap*.properties
+*.env

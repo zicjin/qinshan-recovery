@@ -1,0 +1,3 @@
+package com.sunwayworld.framework.converter.sql;
+import com.sunwayworld.framework.converter.Converter;import com.sunwayworld.framework.converter.exception.ConvertFailedException;import java.io.Reader;import java.sql.Blob;import java.sql.Clob;
+public enum ClobToPrimitiveCharacterArrayConverter implements Converter<Clob,char[]>{INSTANCE;public char[] convert(Clob c){if(c==null)return null;Reader r=null;try{long l=c.length();if(l==0)return new char[0];r=c.getCharacterStream();char[] out=new char[(int)l];r.read(out);return out;}catch(Exception e){throw new ConvertFailedException(Blob.class,byte[].class,e);}finally{if(r!=null)try{r.close();}catch(Exception ignored){}}}}

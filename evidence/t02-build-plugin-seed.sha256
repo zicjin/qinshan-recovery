@@ -1,0 +1,4 @@
+# Offline Maven build-plugin seed. The archive is a restricted build material,
+# not a production deployment artifact. It supplies only public Maven plugin
+# artifacts and transitive metadata missing from the run.jar-derived repo.
+625154286cb1d5b56e1ac8331537a151bec6e4a8d8284f2243c8444a257ae5d5  materials/maven-build-plugin-seed.tar.gz

@@ -1,0 +1,84 @@
+{
+  "schema": 1,
+  "family": "personnel",
+  "description": "HTTP-only personnel master update and read-back with API fixture creation and deletion restore.",
+  "cases": [
+    {
+      "id": "personnel.master-update.http",
+      "method": "PUT",
+      "path": "/secure/emc/module/mdm/emp/emps/strict-api-employee",
+      "route_id": "7d51315569bf623d",
+      "operation": "write",
+      "write_via": "http",
+      "scope": "project-route",
+      "disposition": "owned-pass",
+      "body": {"b": ["", [{"id": "strict-api-employee", "userName": "Strict API Personnel Updated"}]]},
+      "expected_status": 200,
+      "assert": {},
+      "fixture": {
+        "id": "personnel-master-api-fixture",
+        "mode": "api",
+        "setup_requests": [
+          {
+            "id": "fixture-create",
+            "method": "POST",
+            "path": "/secure/emc/module/mdm/emp/emps",
+            "body": {"b": ["", [{"id": "strict-api-employee", "userName": "Strict API Personnel", "age": 30}]]},
+            "expected_status": 200,
+            "assert": {}
+          }
+        ],
+        "restore_requests": [
+          {
+            "id": "fixture-delete",
+            "method": "DELETE",
+            "path": "/secure/emc/module/mdm/emp/emps",
+            "body": {"b": ["", [{"id": "strict-api-employee"}]]},
+            "expected_status": 200,
+            "assert": {}
+          }
+        ],
+        "business_write_via": "http"
+      },
+      "audit": {"required": true, "status": "observed", "event": "personnel-update", "outcome": "ALLOWED", "source": "owned-http"}
+    },
+    {
+      "id": "personnel.master-readback.http",
+      "method": "POST",
+      "path": "/secure/emc/module/mdm/emp/emps/queries",
+      "route_id": "0fd21ac6abfdc8b2",
+      "operation": "read",
+      "scope": "project-route",
+      "disposition": "owned-pass",
+      "body": {"p": {"f": {"USERNAME_EQ": "Strict API Personnel"}, "n": 1, "s": 10}},
+      "expected_status": 200,
+      "assert": {"json_keys": ["rows", "total"]},
+      "fixture": {
+        "id": "personnel-read-api-fixture",
+        "mode": "api",
+        "setup_requests": [
+          {
+            "id": "fixture-create",
+            "method": "POST",
+            "path": "/secure/emc/module/mdm/emp/emps",
+            "body": {"b": ["", [{"id": "strict-api-employee", "userName": "Strict API Personnel", "age": 30}]]},
+            "expected_status": 200,
+            "assert": {}
+          }
+        ],
+        "restore_requests": [
+          {
+            "id": "fixture-delete",
+            "method": "DELETE",
+            "path": "/secure/emc/module/mdm/emp/emps",
+            "body": {"b": ["", [{"id": "strict-api-employee"}]]},
+            "expected_status": 200,
+            "assert": {}
+          }
+        ],
+        "business_write_via": "http"
+      },
+      "audit": "not-required"
+    }
+  ]
+}

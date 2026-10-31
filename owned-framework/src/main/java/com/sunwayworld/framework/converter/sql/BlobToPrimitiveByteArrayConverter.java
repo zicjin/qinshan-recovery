@@ -1,0 +1,3 @@
+package com.sunwayworld.framework.converter.sql;
+import com.sunwayworld.framework.converter.Converter;import com.sunwayworld.framework.converter.exception.ConvertFailedException;import java.io.InputStream;import java.sql.Blob;
+public enum BlobToPrimitiveByteArrayConverter implements Converter<Blob,byte[]>{INSTANCE;public byte[] convert(Blob b){if(b==null)return null;InputStream in=null;try{long l=b.length();if(l==0)return new byte[0];in=b.getBinaryStream();byte[] out=new byte[(int)l];in.read(out,0,(int)l);return out;}catch(Exception e){throw new ConvertFailedException(Blob.class,byte[].class,e);}finally{if(in!=null)try{in.close();}catch(Exception ignored){}}}}

@@ -1,0 +1,409 @@
+{
+  "schema": 1,
+  "status": "executed-pass",
+  "execution": "strict",
+  "strict_evidence": true,
+  "production_access": false,
+  "scope": "clone-derived Spring Web API contract runner",
+  "route_execution_model": {
+    "application": "one owned Spring application per wave",
+    "oracle": "persistent Oracle baseline/runtime schema",
+    "redis": "reused sss2 Redis database 15",
+    "boundary_route": "owned Java source-only route in the same Spring application",
+    "boundary_process": false,
+    "internal_http_bridge": false,
+    "jni_replacement_process": false
+  },
+  "started_at": "2026-10-30T23:57:26.907531+00:00",
+  "source_commit": "b687098676efc67d27a5bf7763a77f717f834628",
+  "source_dirty": false,
+  "source_scope": [
+    "project/src/main/java",
+    "api-contracts/core/workspace-resource-reads.json",
+    "scripts/spring_api_contract_runner.py",
+    "scripts/api_wave_orchestrator.py",
+    "scripts/owned_runtime_contract.py",
+    "scripts/api_fixture.py",
+    "scripts/remote-sql-fixture-executor.py",
+    "scripts/fast_differential_api_runner.py",
+    "scripts/run-fast-differential-jobs.py",
+    "scripts/generate-fast-strict-contracts.py",
+    "tools/api_route_ledger.py",
+    "tools/api_route_execution_plan.py",
+    "tools/api_route_closure.py",
+    "tools/fast_contract_skeleton.py",
+    "tools/api_contract_skeleton.py",
+    "scripts/start-strict-sss2-api-runtime.sh",
+    "scripts/start-reused-sss2-api-runtime.sh",
+    "owned-framework/src",
+    "owned-personnel/src",
+    "owned-equipment/src",
+    "owned-consumables/src",
+    "owned-attachments/src",
+    "owned-report/src",
+    "owned-scheduler/src",
+    "owned-web/src"
+  ],
+  "artifact_sha256": {
+    "owned-distribution/target/distribution/app/lims-owned-application.jar": "e33a8f1f79aa12b62fe371a06e01574dbdd88525fc85df6477bf5f34b7d03213",
+    "owned-distribution/target/distribution/manifest.json": "fde2ab1abf0b4f758608c5982cb4101d145be6787357b3fa98aeeb0bdf95f65f"
+  },
+  "clone_identity": "lims-owned-sss2-oracle:LIMS_BASELINE_SSS2:LIMS_RUNTIME_SSS2:f1c43b53750ec720488ef7780527ea303081ab2dc6a0fc029a1d17f33dc10a6c",
+  "runtime_report": ".scratch/sunway-supplier-exit-api-first/diagnostic-evidence/runtime/strict-api-runtime-core-batch-b687098676ef.json",
+  "runtime_contract": {
+    "mode": "strict",
+    "strict_evidence": false,
+    "runtime_identity": "lims-owned-sss2-oracle:LIMS_BASELINE_SSS2:LIMS_RUNTIME_SSS2:f1c43b53750ec720488ef7780527ea303081ab2dc6a0fc029a1d17f33dc10a6c",
+    "reuse": true,
+    "oracle_reused": true,
+    "baseline_schema": "LIMS_BASELINE_SSS2",
+    "runtime_schema": "LIMS_RUNTIME_SSS2",
+    "baseline_schema_hash": "f1c43b53750ec720488ef7780527ea303081ab2dc6a0fc029a1d17f33dc10a6c",
+    "runtime_schema_hash_before": "75db8bf320d0ab1cc103c6ea1862d3fc644bf40a3c499f7f01971e2654169548",
+    "runtime_schema_hash_after": "75db8bf320d0ab1cc103c6ea1862d3fc644bf40a3c499f7f01971e2654169548",
+    "source_commit": "b687098676efc67d27a5bf7763a77f717f834628"
+  },
+  "role": "manager",
+  "organization": "org-a",
+  "mode": "strict",
+  "base_url": "http://127.0.0.1:18090",
+  "case_count": 4,
+  "cases": [
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": null,
+      "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "body_bytes": 0,
+      "assertions": {},
+      "id": "workspace.keep-online",
+      "method": "POST",
+      "path": "/core/module/sys/statuses/action/keep-online",
+      "url": "http://127.0.0.1:18090/core/module/sys/statuses/action/keep-online",
+      "status": 200,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-length": "0",
+        "date": "Fri, 30 Oct 2026 23:57:27 GMT",
+        "connection": "close"
+      },
+      "request_headers": {},
+      "elapsed_ms": 9.966,
+      "route": {
+        "method": "POST",
+        "path": "/core/module/sys/statuses/action/keep-online",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "owned-java-source-only-route",
+        "route_id": "7eb23411c21651a1"
+      },
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r660a513f71b6"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": null,
+      "body_sha256": "64fea61f093e02410f1fd4c2831ed25e0e9151c8d258066626d4b4a4c6e74cdc",
+      "body_bytes": 2000,
+      "assertions": {
+        "content_type": "application/json"
+      },
+      "id": "workspace.code-selectable",
+      "method": "GET",
+      "path": "/secure/core/module/sys/codes/queries/selectable?codeCategoryId=infocategory",
+      "url": "http://127.0.0.1:18090/secure/core/module/sys/codes/queries/selectable?codeCategoryId=infocategory",
+      "status": 200,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "2000",
+        "date": "Fri, 30 Oct 2026 23:57:28 GMT",
+        "connection": "close"
+      },
+      "request_headers": {},
+      "elapsed_ms": 175.104,
+      "route": {
+        "method": "GET",
+        "path": "/secure/core/module/sys/codes/queries/selectable?codeCategoryId=infocategory",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "owned-java-source-only-route",
+        "route_id": "4d8d840457eaab2f"
+      },
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r20fdc123fd42"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "f8583c381d280e61b17fa07c4f313fb97d41d1be588c0218fccfa32296eea103",
+      "body_bytes": 13101,
+      "assertions": {
+        "json_keys": [
+          "rows",
+          "total"
+        ]
+      },
+      "id": "workspace.home-report-lines",
+      "method": "POST",
+      "path": "/secure/core/module/sys/report-configs/homePageReport/lines/queries",
+      "url": "http://127.0.0.1:18090/secure/core/module/sys/report-configs/homePageReport/lines/queries",
+      "status": 200,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "13101",
+        "date": "Fri, 30 Oct 2026 23:57:28 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 243.582,
+      "route": {
+        "method": "POST",
+        "path": "/secure/core/module/sys/report-configs/homePageReport/lines/queries",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "owned-java-source-only-route",
+        "route_id": "f312b6423d005283"
+      },
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "reab0aa49b3c2"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": null,
+      "body_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "body_bytes": 2,
+      "assertions": {
+        "content_type": "application/json"
+      },
+      "id": "workspace.notice-index",
+      "method": "POST",
+      "path": "/secure/core/module/item/notices/queries/index",
+      "url": "http://127.0.0.1:18090/secure/core/module/item/notices/queries/index",
+      "status": 200,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "2",
+        "date": "Fri, 30 Oct 2026 23:57:28 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 11.02,
+      "route": {
+        "method": "POST",
+        "path": "/secure/core/module/item/notices/queries/index",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "owned-java-source-only-route",
+        "route_id": "bfd987b8919bcf94"
+      },
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "rfcb873e41a5f"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    }
+  ],
+  "cleanup": {
+    "application_stopped": true,
+    "baseline_schema_immutable": true,
+    "cleanup_mode": "persistent-oracle",
+    "network_preserved": true,
+    "oracle_preserved": true,
+    "oracle_reused": true,
+    "oracle_stopped": false,
+    "redis_preserved": true,
+    "redis_stopped": false,
+    "runtime_dirty": false,
+    "runtime_schema_restored": true,
+    "temporary_files_removed": true,
+    "volume_preserved": true
+  },
+  "cleanup_pending": false,
+  "phase_timings_ms": {
+    "http_cases": 558.137
+  },
+  "authentication": {
+    "attempted": true,
+    "authenticated": true,
+    "status": 200
+  },
+  "finished_at": "2026-10-30T23:57:27.465702+00:00",
+  "wave": "foundation",
+  "wave_runtime_id": "api-wave-foundation",
+  "wave_finalized_at": "2026-10-30T23:57:44.283933+00:00",
+  "repository_head_at_capture": "b687098676efc67d27a5bf7763a77f717f834628",
+  "implementation_binding": "impl-31297346d4463832",
+  "implementation_tree_digest": "31297346d446383273889c7e041a09dbbf411911392d47be26267827f9b463fe",
+  "implementation_dirty": false,
+  "implementation_scope": [
+    "project/src/main/java",
+    "owned-framework/src",
+    "owned-personnel/src",
+    "owned-equipment/src",
+    "owned-consumables/src",
+    "owned-attachments/src",
+    "owned-report/src",
+    "owned-scheduler/src",
+    "owned-web/src",
+    "scripts/source_binding.py",
+    "scripts/evidence_output.py",
+    "scripts/spring_api_contract_runner.py",
+    "scripts/api_wave_orchestrator.py",
+    "scripts/owned_runtime_contract.py",
+    "scripts/api_fixture.py",
+    "scripts/remote-sql-fixture-executor.py",
+    "scripts/start-strict-sss2-api-runtime.sh",
+    "scripts/start-reused-sss2-api-runtime.sh",
+    "scripts/cleanup-strict-sss2-api-runtime.sh",
+    "scripts/refresh-owned-sss2-app.sh",
+    "tools/business_api_inventory.py",
+    "tools/api_route_ledger.py",
+    "tools/api_route_execution_plan.py",
+    "tools/api_contract_skeleton.py",
+    "tools/api_route_closure.py",
+    "tools/vertical_slices/matrix.py",
+    "project/pom.xml",
+    "owned-framework/pom.xml",
+    "owned-personnel/pom.xml",
+    "owned-equipment/pom.xml",
+    "owned-consumables/pom.xml",
+    "owned-attachments/pom.xml",
+    "owned-report/pom.xml",
+    "owned-scheduler/pom.xml",
+    "owned-web/pom.xml",
+    "owned-distribution/package.py",
+    "owned-distribution/start.sh",
+    "owned-distribution/example",
+    "owned-web/build-owned-web.sh",
+    "scripts/build-owned-distribution.sh",
+    "scripts/build-owned-framework.sh",
+    "scripts/build-owned-personnel.sh",
+    "scripts/build-owned-equipment.sh",
+    "scripts/build-owned-consumables.sh",
+    "scripts/build-owned-attachments.sh",
+    "scripts/build-owned-report.sh",
+    "scripts/build-owned-scheduler.sh",
+    "build/oracle-free-source-manifest.json",
+    "docker/Dockerfile.built"
+  ],
+  "nested_project_commit": "27932b1fe4d71d64a02f9a63e55f56acb403e3a0",
+  "distribution_input_digest": "c430b4e4e6bf7ee1703f705a85c89e82406707fa088793c89b094887541227ce"
+}

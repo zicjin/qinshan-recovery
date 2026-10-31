@@ -1,0 +1,922 @@
+{
+  "schema": 1,
+  "family": "attachment-report",
+  "description": "Clone-derived read contract for the original home-attachment detail, protected URL, content and permission-list routes. The fixture is discovered through the real query API; no business rows are written by SQL.",
+  "cases": [
+    {
+      "id": "attachment.detail-read",
+      "method": "GET",
+      "path": "/secure/emc/module/item/home-attachments/${fixture.attachment-create}",
+      "route_id": "34e92573f017fa8a",
+      "operation": "read",
+      "scope": "project-route",
+      "disposition": "owned-pass",
+      "expected_status": 200,
+      "assert": {
+        "json_keys": [
+          "id"
+        ]
+      },
+      "fixture": {
+        "id": "attachment.detail-read",
+        "mode": "sql-control",
+        "setup_requests": [
+          {
+            "id": "attachment-create",
+            "method": "POST",
+            "path": "/secure/emc/module/item/home-attachments",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "endDate": "2030-01-01T00:00:00",
+                    "activatedFlag": "1"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {},
+            "capture_text": true
+          },
+          {
+            "id": "attachment-upload",
+            "method": "POST",
+            "path": "/core/module/item/files",
+            "multipart": {
+              "fields": {
+                "targetId": "T_EMC_HOME_ATTACHMENT$${fixture.attachment-create}",
+                "bizCategory": "document"
+              },
+              "file": {
+                "field": "file",
+                "filename": "strict-api-attachment.txt",
+                "content_type": "text/plain",
+                "content": "strict attachment fixture\n"
+              }
+            },
+            "expected_status": 200,
+            "assert": {
+              "json_keys": [
+                "id",
+                "targetId",
+                "name"
+              ]
+            },
+            "capture_json": true
+          },
+          {
+            "id": "attachment-grant",
+            "method": "POST",
+            "path": "/secure/emc/module/item/home-attachments/permissions",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "attachmentId": "${fixture.attachment-create}",
+                    "userId": "Test"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          },
+          {
+            "id": "attachment-permission-query",
+            "method": "POST",
+            "path": "/secure/emc/module/item/home-attachments/${fixture.attachment-create}/permissions/queries",
+            "body": {},
+            "expected_status": 200,
+            "assert": {
+              "json_keys": [
+                "rows",
+                "total"
+              ]
+            },
+            "capture_json": true
+          }
+        ],
+        "restore_requests": [
+          {
+            "id": "attachment-permission-delete",
+            "method": "DELETE",
+            "path": "/secure/emc/module/item/home-attachments/permissions",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "id": "${fixture.attachment-permission-query.rows.0.id}",
+                    "attachmentId": "${fixture.attachment-create}",
+                    "userId": "Test"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          },
+          {
+            "id": "attachment-delete",
+            "method": "DELETE",
+            "path": "/secure/emc/module/item/home-attachments",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "id": "${fixture.attachment-create}"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          }
+        ],
+        "business_write_via": "http",
+        "cleanup_via": "restore-http",
+        "setup_sql_files": [
+          "attachment/t_core_file.sql"
+        ],
+        "restore_sql_files": [
+          "attachment/t_core_file_restore.sql"
+        ],
+        "sql_files": []
+      },
+      "audit": "not-required"
+    },
+    {
+      "id": "attachment.get-url",
+      "method": "POST",
+      "path": "/secure/emc/module/item/home-attachments/${fixture.attachment-create}/action/get-url",
+      "route_id": "cfddec43e983450f",
+      "operation": "read",
+      "scope": "project-route",
+      "disposition": "owned-pass",
+      "body": {},
+      "expected_status": 200,
+      "capture_text": true,
+      "assert": {},
+      "fixture": {
+        "id": "attachment.get-url",
+        "mode": "sql-control",
+        "setup_requests": [
+          {
+            "id": "attachment-create",
+            "method": "POST",
+            "path": "/secure/emc/module/item/home-attachments",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "endDate": "2030-01-01T00:00:00",
+                    "activatedFlag": "1"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {},
+            "capture_text": true
+          },
+          {
+            "id": "attachment-upload",
+            "method": "POST",
+            "path": "/core/module/item/files",
+            "multipart": {
+              "fields": {
+                "targetId": "T_EMC_HOME_ATTACHMENT$${fixture.attachment-create}",
+                "bizCategory": "document"
+              },
+              "file": {
+                "field": "file",
+                "filename": "strict-api-attachment.txt",
+                "content_type": "text/plain",
+                "content": "strict attachment fixture\n"
+              }
+            },
+            "expected_status": 200,
+            "assert": {
+              "json_keys": [
+                "id",
+                "targetId",
+                "name"
+              ]
+            },
+            "capture_json": true
+          },
+          {
+            "id": "attachment-grant",
+            "method": "POST",
+            "path": "/secure/emc/module/item/home-attachments/permissions",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "attachmentId": "${fixture.attachment-create}",
+                    "userId": "Test"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          },
+          {
+            "id": "attachment-permission-query",
+            "method": "POST",
+            "path": "/secure/emc/module/item/home-attachments/${fixture.attachment-create}/permissions/queries",
+            "body": {},
+            "expected_status": 200,
+            "assert": {
+              "json_keys": [
+                "rows",
+                "total"
+              ]
+            },
+            "capture_json": true
+          }
+        ],
+        "restore_requests": [
+          {
+            "id": "attachment-permission-delete",
+            "method": "DELETE",
+            "path": "/secure/emc/module/item/home-attachments/permissions",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "id": "${fixture.attachment-permission-query.rows.0.id}",
+                    "attachmentId": "${fixture.attachment-create}",
+                    "userId": "Test"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          },
+          {
+            "id": "attachment-delete",
+            "method": "DELETE",
+            "path": "/secure/emc/module/item/home-attachments",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "id": "${fixture.attachment-create}"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          }
+        ],
+        "business_write_via": "http",
+        "cleanup_via": "restore-http",
+        "setup_sql_files": [
+          "attachment/t_core_file.sql"
+        ],
+        "restore_sql_files": [
+          "attachment/t_core_file_restore.sql"
+        ],
+        "sql_files": []
+      },
+      "audit": "not-required"
+    },
+    {
+      "id": "attachment.content-read",
+      "method": "GET",
+      "path": "${fixture.attachment-url}",
+      "route_id": "33ce324dc52a56ee",
+      "operation": "read",
+      "scope": "owned-java-source-only-route",
+      "disposition": "owned-pass",
+      "expected_status": 200,
+      "assert": {
+        "content_type": "application/octet-stream"
+      },
+      "fixture": {
+        "id": "attachment.content-read",
+        "mode": "sql-control",
+        "setup_requests": [
+          {
+            "id": "attachment-create",
+            "method": "POST",
+            "path": "/secure/emc/module/item/home-attachments",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "endDate": "2030-01-01T00:00:00",
+                    "activatedFlag": "1"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {},
+            "capture_text": true
+          },
+          {
+            "id": "attachment-upload",
+            "method": "POST",
+            "path": "/core/module/item/files",
+            "multipart": {
+              "fields": {
+                "targetId": "T_EMC_HOME_ATTACHMENT$${fixture.attachment-create}",
+                "bizCategory": "document"
+              },
+              "file": {
+                "field": "file",
+                "filename": "strict-api-attachment.txt",
+                "content_type": "text/plain",
+                "content": "strict attachment fixture\n"
+              }
+            },
+            "expected_status": 200,
+            "assert": {
+              "json_keys": [
+                "id",
+                "targetId",
+                "name"
+              ]
+            },
+            "capture_json": true
+          },
+          {
+            "id": "attachment-grant",
+            "method": "POST",
+            "path": "/secure/emc/module/item/home-attachments/permissions",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "attachmentId": "${fixture.attachment-create}",
+                    "userId": "Test"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          },
+          {
+            "id": "attachment-permission-query",
+            "method": "POST",
+            "path": "/secure/emc/module/item/home-attachments/${fixture.attachment-create}/permissions/queries",
+            "body": {},
+            "expected_status": 200,
+            "assert": {
+              "json_keys": [
+                "rows",
+                "total"
+              ]
+            },
+            "capture_json": true
+          },
+          {
+            "id": "attachment-url",
+            "method": "POST",
+            "path": "/secure/emc/module/item/home-attachments/${fixture.attachment-create}/action/get-url",
+            "body": {},
+            "expected_status": 200,
+            "assert": {},
+            "capture_text": true
+          }
+        ],
+        "restore_requests": [
+          {
+            "id": "attachment-permission-delete",
+            "method": "DELETE",
+            "path": "/secure/emc/module/item/home-attachments/permissions",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "id": "${fixture.attachment-permission-query.rows.0.id}",
+                    "attachmentId": "${fixture.attachment-create}",
+                    "userId": "Test"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          },
+          {
+            "id": "attachment-delete",
+            "method": "DELETE",
+            "path": "/secure/emc/module/item/home-attachments",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "id": "${fixture.attachment-create}"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          }
+        ],
+        "business_write_via": "http",
+        "cleanup_via": "restore-http",
+        "setup_sql_files": [
+          "attachment/t_core_file.sql"
+        ],
+        "restore_sql_files": [
+          "attachment/t_core_file_restore.sql"
+        ],
+        "sql_files": []
+      },
+      "audit": "not-required"
+    },
+    {
+      "id": "attachment.permission-list",
+      "method": "POST",
+      "path": "/secure/emc/module/item/home-attachments/${fixture.attachment-create}/permissions/queries",
+      "route_id": "a2aacdd3a63f5e91",
+      "operation": "read",
+      "scope": "project-route",
+      "disposition": "owned-pass",
+      "body": {},
+      "expected_status": 200,
+      "assert": {
+        "json_keys": [
+          "rows",
+          "total"
+        ]
+      },
+      "fixture": {
+        "id": "attachment.permission-list",
+        "mode": "sql-control",
+        "setup_requests": [
+          {
+            "id": "attachment-create",
+            "method": "POST",
+            "path": "/secure/emc/module/item/home-attachments",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "endDate": "2030-01-01T00:00:00",
+                    "activatedFlag": "1"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {},
+            "capture_text": true
+          },
+          {
+            "id": "attachment-upload",
+            "method": "POST",
+            "path": "/core/module/item/files",
+            "multipart": {
+              "fields": {
+                "targetId": "T_EMC_HOME_ATTACHMENT$${fixture.attachment-create}",
+                "bizCategory": "document"
+              },
+              "file": {
+                "field": "file",
+                "filename": "strict-api-attachment.txt",
+                "content_type": "text/plain",
+                "content": "strict attachment fixture\n"
+              }
+            },
+            "expected_status": 200,
+            "assert": {
+              "json_keys": [
+                "id",
+                "targetId",
+                "name"
+              ]
+            },
+            "capture_json": true
+          },
+          {
+            "id": "attachment-grant",
+            "method": "POST",
+            "path": "/secure/emc/module/item/home-attachments/permissions",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "attachmentId": "${fixture.attachment-create}",
+                    "userId": "Test"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          },
+          {
+            "id": "attachment-permission-query",
+            "method": "POST",
+            "path": "/secure/emc/module/item/home-attachments/${fixture.attachment-create}/permissions/queries",
+            "body": {},
+            "expected_status": 200,
+            "assert": {
+              "json_keys": [
+                "rows",
+                "total"
+              ]
+            },
+            "capture_json": true
+          }
+        ],
+        "restore_requests": [
+          {
+            "id": "attachment-permission-delete",
+            "method": "DELETE",
+            "path": "/secure/emc/module/item/home-attachments/permissions",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "id": "${fixture.attachment-permission-query.rows.0.id}",
+                    "attachmentId": "${fixture.attachment-create}",
+                    "userId": "Test"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          },
+          {
+            "id": "attachment-delete",
+            "method": "DELETE",
+            "path": "/secure/emc/module/item/home-attachments",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "id": "${fixture.attachment-create}"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          }
+        ],
+        "business_write_via": "http",
+        "cleanup_via": "restore-http",
+        "setup_sql_files": [
+          "attachment/t_core_file.sql"
+        ],
+        "restore_sql_files": [
+          "attachment/t_core_file_restore.sql"
+        ],
+        "sql_files": []
+      },
+      "audit": "not-required"
+    },
+    {
+      "id": "attachment.permission-grant",
+      "method": "POST",
+      "path": "/secure/emc/module/item/home-attachments/permissions",
+      "route_id": "639f3e4522c44dfc",
+      "operation": "write",
+      "write_via": "http",
+      "scope": "project-route",
+      "disposition": "owned-pass",
+      "expected_status": 200,
+      "assert": {},
+      "fixture": {
+        "id": "attachment.permission-grant-fixture",
+        "mode": "sql-control",
+        "setup_requests": [
+          {
+            "id": "attachment-create",
+            "method": "POST",
+            "path": "/secure/emc/module/item/home-attachments",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "endDate": "2030-01-01T00:00:00",
+                    "activatedFlag": "1"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {},
+            "capture_text": true
+          },
+          {
+            "id": "attachment-upload",
+            "method": "POST",
+            "path": "/core/module/item/files",
+            "multipart": {
+              "fields": {
+                "targetId": "T_EMC_HOME_ATTACHMENT$${fixture.attachment-create}",
+                "bizCategory": "document"
+              },
+              "file": {
+                "field": "file",
+                "filename": "strict-api-attachment.txt",
+                "content_type": "text/plain",
+                "content": "strict attachment fixture\n"
+              }
+            },
+            "expected_status": 200,
+            "assert": {
+              "json_keys": [
+                "id",
+                "targetId",
+                "name"
+              ]
+            },
+            "capture_json": true
+          }
+        ],
+        "restore_requests": [
+          {
+            "id": "attachment-permission-delete",
+            "method": "DELETE",
+            "path": "/secure/emc/module/item/home-attachments/permissions",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "id": "${fixture.attachment-permission-query.rows.0.id}",
+                    "attachmentId": "${fixture.attachment-create}",
+                    "userId": "Test"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          },
+          {
+            "id": "attachment-delete",
+            "method": "DELETE",
+            "path": "/secure/emc/module/item/home-attachments",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "id": "${fixture.attachment-create}"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          }
+        ],
+        "business_write_via": "http",
+        "cleanup_via": "restore-http",
+        "setup_sql_files": [
+          "attachment/t_core_file.sql"
+        ],
+        "restore_sql_files": [
+          "attachment/t_core_file_restore.sql"
+        ],
+        "sql_files": []
+      },
+      "audit": {
+        "required": true,
+        "status": "observed",
+        "event": "attachment-permission-insert",
+        "outcome": "ALLOWED",
+        "source": "owned-http"
+      },
+      "body": {
+        "b": [
+          "",
+          [
+            {
+              "attachmentId": "${fixture.attachment-create}",
+              "userId": "Test"
+            }
+          ]
+        ]
+      },
+      "readback_requests": [
+        {
+          "id": "attachment-permission-query",
+          "method": "POST",
+          "path": "/secure/emc/module/item/home-attachments/${fixture.attachment-create}/permissions/queries",
+          "body": {},
+          "expected_status": 200,
+          "assert": {
+            "json_keys": [
+              "rows",
+              "total"
+            ],
+            "json_contains": [
+              {
+                "path": "rows",
+                "where": {
+                  "userId": "Test"
+                },
+                "values": {
+                  "userId": "Test"
+                }
+              }
+            ]
+          },
+          "capture_json": true
+        }
+      ]
+    },
+    {
+      "id": "attachment.permission-revoke",
+      "method": "DELETE",
+      "path": "/secure/emc/module/item/home-attachments/permissions",
+      "route_id": "1321afe953f65369",
+      "operation": "write",
+      "write_via": "http",
+      "scope": "project-route",
+      "disposition": "owned-pass",
+      "expected_status": 200,
+      "assert": {},
+      "fixture": {
+        "id": "attachment.permission-revoke-fixture",
+        "mode": "sql-control",
+        "setup_requests": [
+          {
+            "id": "attachment-create",
+            "method": "POST",
+            "path": "/secure/emc/module/item/home-attachments",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "endDate": "2030-01-01T00:00:00",
+                    "activatedFlag": "1"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {},
+            "capture_text": true
+          },
+          {
+            "id": "attachment-upload",
+            "method": "POST",
+            "path": "/core/module/item/files",
+            "multipart": {
+              "fields": {
+                "targetId": "T_EMC_HOME_ATTACHMENT$${fixture.attachment-create}",
+                "bizCategory": "document"
+              },
+              "file": {
+                "field": "file",
+                "filename": "strict-api-attachment.txt",
+                "content_type": "text/plain",
+                "content": "strict attachment fixture\n"
+              }
+            },
+            "expected_status": 200,
+            "assert": {
+              "json_keys": [
+                "id",
+                "targetId",
+                "name"
+              ]
+            },
+            "capture_json": true
+          },
+          {
+            "id": "attachment-grant",
+            "method": "POST",
+            "path": "/secure/emc/module/item/home-attachments/permissions",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "attachmentId": "${fixture.attachment-create}",
+                    "userId": "Test"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          },
+          {
+            "id": "attachment-permission-query",
+            "method": "POST",
+            "path": "/secure/emc/module/item/home-attachments/${fixture.attachment-create}/permissions/queries",
+            "body": {},
+            "expected_status": 200,
+            "assert": {
+              "json_keys": [
+                "rows",
+                "total"
+              ]
+            },
+            "capture_json": true
+          }
+        ],
+        "restore_requests": [
+          {
+            "id": "attachment-delete",
+            "method": "DELETE",
+            "path": "/secure/emc/module/item/home-attachments",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "id": "${fixture.attachment-create}"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          }
+        ],
+        "business_write_via": "http",
+        "cleanup_via": "restore-http",
+        "setup_sql_files": [
+          "attachment/t_core_file.sql"
+        ],
+        "restore_sql_files": [
+          "attachment/t_core_file_restore.sql"
+        ],
+        "sql_files": []
+      },
+      "audit": {
+        "required": true,
+        "status": "observed",
+        "event": "attachment-permission-delete",
+        "outcome": "ALLOWED",
+        "source": "owned-http"
+      },
+      "body": {
+        "b": [
+          "",
+          [
+            {
+              "id": "${fixture.attachment-permission-query.rows.0.id}",
+              "attachmentId": "${fixture.attachment-create}",
+              "userId": "Test"
+            }
+          ]
+        ]
+      },
+      "readback_requests": [
+        {
+          "id": "attachment-permission-query",
+          "method": "POST",
+          "path": "/secure/emc/module/item/home-attachments/${fixture.attachment-create}/permissions/queries",
+          "body": {},
+          "expected_status": 200,
+          "assert": {
+            "json_keys": [
+              "rows",
+              "total"
+            ],
+            "json_values": {
+              "total": 0
+            }
+          },
+          "capture_json": true
+        }
+      ]
+    }
+  ],
+  "route_execution_model": {
+    "application": "one owned Spring application per wave",
+    "oracle": "one clone-derived Oracle per wave",
+    "redis": "one Redis per wave",
+    "boundary_process": false,
+    "internal_http_bridge": false,
+    "jni_replacement_process": false
+  }
+}

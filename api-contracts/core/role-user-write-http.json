@@ -1,0 +1,135 @@
+{
+  "schema": 1,
+  "family": "core",
+  "description": "HTTP-only role-user matrix grant/revoke with API fixture restore against the clone baseline.",
+  "cases": [
+    {
+      "id": "role-user.grant.http",
+      "method": "PUT",
+      "path": "/secure/core/module/sys/role-users/instant",
+      "route_id": "fc623fe6a8374ba1",
+      "operation": "write",
+      "write_via": "http",
+      "scope": "owned-java-source-only-route",
+      "disposition": "owned-pass",
+      "body": {
+        "p": {
+          "id": "00375QS",
+          "T_CORE_ROLE$ROLENAME$1189435382169664": "1"
+        }
+      },
+      "expected_status": 200,
+      "assert": {"json_keys": ["updated"]},
+      "readback_requests": [
+        {
+          "id": "grant-readback",
+          "method": "POST",
+          "path": "/secure/core/module/sys/role-users/queries/matrix-rows",
+          "body": {"p": {"n": 1, "s": 1000}},
+          "expected_status": 200,
+          "assert": {
+            "json_keys": ["rows"],
+            "json_contains": [{"path": "rows", "where": {"id": "00375QS"}, "values": {"T_CORE_ROLE$ROLENAME$1189435382169664": "1"}}]
+          }
+        }
+      ],
+      "fixture": {
+        "id": "role-user-grant-api-fixture",
+        "mode": "api",
+        "setup_requests": [
+          {
+            "id": "grant-target-reset",
+            "method": "PUT",
+            "path": "/secure/core/module/sys/role-users/instant",
+            "body": {"p": {"id": "00375QS", "T_CORE_ROLE$ROLENAME$1189435382169664": "0"}},
+            "expected_status": 200,
+            "assert": {"json_keys": ["updated"]}
+          }
+        ],
+        "restore_requests": [
+          {
+            "id": "grant-target-restore",
+            "method": "PUT",
+            "path": "/secure/core/module/sys/role-users/instant",
+            "body": {"p": {"id": "00375QS", "T_CORE_ROLE$ROLENAME$1189435382169664": "0"}},
+            "expected_status": 200,
+            "assert": {"json_keys": ["updated"]}
+          }
+        ],
+        "business_write_via": "http"
+      },
+      "audit": {"required": true, "status": "observed", "event": "role-user-write", "outcome": "ALLOWED", "source": "owned-http"},
+      "route_origin": "owned-java-source-only",
+      "boundary_semantics": "owned Java source-only route; boundary route != boundary process",
+      "runtime_model": "same-spring-application"
+    },
+    {
+      "id": "role-user.revoke.http",
+      "method": "PUT",
+      "path": "/secure/core/module/sys/role-users/instant",
+      "route_id": "fc623fe6a8374ba1",
+      "operation": "write",
+      "write_via": "http",
+      "scope": "owned-java-source-only-route",
+      "disposition": "owned-pass",
+      "body": {
+        "p": {
+          "id": "Test",
+          "T_CORE_ROLE$ROLENAME$1189435382169664": "0"
+        }
+      },
+      "expected_status": 200,
+      "assert": {"json_keys": ["updated"]},
+      "readback_requests": [
+        {
+          "id": "revoke-readback",
+          "method": "POST",
+          "path": "/secure/core/module/sys/role-users/queries/matrix-rows",
+          "body": {"p": {"n": 1, "s": 1000}},
+          "expected_status": 200,
+          "assert": {
+            "json_keys": ["rows"],
+            "json_contains": [{"path": "rows", "where": {"id": "Test"}, "values": {"T_CORE_ROLE$ROLENAME$1189435382169664": "0"}}]
+          }
+        }
+      ],
+      "fixture": {
+        "id": "role-user-revoke-api-fixture",
+        "mode": "api",
+        "setup_requests": [
+          {
+            "id": "revoke-actor-reset",
+            "method": "PUT",
+            "path": "/secure/core/module/sys/role-users/instant",
+            "body": {"p": {"id": "Test", "T_CORE_ROLE$ROLENAME$1189435382169664": "1"}},
+            "expected_status": 200,
+            "assert": {"json_keys": ["updated"]}
+          }
+        ],
+        "restore_requests": [
+          {
+            "id": "revoke-actor-restore",
+            "method": "PUT",
+            "path": "/secure/core/module/sys/role-users/instant",
+            "body": {"p": {"id": "Test", "T_CORE_ROLE$ROLENAME$1189435382169664": "1"}},
+            "expected_status": 200,
+            "assert": {"json_keys": ["updated"]}
+          }
+        ],
+        "business_write_via": "http"
+      },
+      "audit": {"required": true, "status": "observed", "event": "role-user-write", "outcome": "ALLOWED", "source": "owned-http"},
+      "route_origin": "owned-java-source-only",
+      "boundary_semantics": "owned Java source-only route; boundary route != boundary process",
+      "runtime_model": "same-spring-application"
+    }
+  ],
+  "route_execution_model": {
+    "application": "one owned Spring application per wave",
+    "oracle": "persistent Oracle baseline/runtime schema",
+    "redis": "reused sss2 Redis database 15",
+    "boundary_process": false,
+    "internal_http_bridge": false,
+    "jni_replacement_process": false
+  }
+}

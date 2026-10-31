@@ -1,0 +1,30 @@
+{
+  "schema": 1,
+  "family": "secondary",
+  "description": "Authenticated secondary task read strict HTTP contracts.",
+  "cases": [
+    {
+      "id": "material.apply.tasks",
+      "method": "POST",
+      "path": "/secure/emc/module/item/mtl-applies/queries/tasks",
+      "route_id": "2468aeab9356a30a",
+      "operation": "read",
+      "scope": "project-route",
+      "disposition": "owned-pass",
+      "body": {
+        "p": {
+          "s": 50
+        }
+      },
+      "expected_status": 200,
+      "assert": {
+        "json_keys": [
+          "rows",
+          "total"
+        ]
+      },
+      "fixture": "none",
+      "audit": "not-required"
+    }
+  ]
+}

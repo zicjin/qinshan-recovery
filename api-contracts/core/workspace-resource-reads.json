@@ -1,0 +1,111 @@
+{
+  "schema": 1,
+  "family": "core",
+  "description": "Original workspace resource reads restored in the same owned Spring application.",
+  "cases": [
+    {
+      "id": "workspace.keep-online",
+      "method": "POST",
+      "path": "/core/module/sys/statuses/action/keep-online",
+      "route_id": "7eb23411c21651a1",
+      "operation": "read",
+      "scope": "owned-java-source-only-route",
+      "disposition": "owned-pass",
+      "expected_status": 200,
+      "assert": {},
+      "fixture": "none",
+      "audit": "not-required",
+      "route_origin": "owned-java-source-only",
+      "boundary_semantics": "owned Java source-only route; boundary route != boundary process",
+      "runtime_model": "same-spring-application"
+    },
+    {
+      "id": "workspace.code-selectable",
+      "method": "GET",
+      "path": "/secure/core/module/sys/codes/queries/selectable?codeCategoryId=infocategory",
+      "route_id": "4d8d840457eaab2f",
+      "operation": "read",
+      "scope": "owned-java-source-only-route",
+      "disposition": "owned-pass",
+      "expected_status": 200,
+      "assert": {
+        "content_type": "application/json"
+      },
+      "fixture": "none",
+      "audit": "not-required",
+      "route_origin": "owned-java-source-only",
+      "boundary_semantics": "owned Java source-only route; boundary route != boundary process",
+      "runtime_model": "same-spring-application"
+    },
+    {
+      "id": "workspace.home-report-lines",
+      "method": "POST",
+      "path": "/secure/core/module/sys/report-configs/homePageReport/lines/queries",
+      "route_id": "f312b6423d005283",
+      "operation": "read",
+      "scope": "owned-java-source-only-route",
+      "disposition": "owned-pass",
+      "body": {
+        "p": {
+          "f": {
+            "filter_userIdSY": "Test",
+            "activatedFlag_SEQ": "1"
+          },
+          "n": -1,
+          "s": 50,
+          "qf": {},
+          "o": [
+            {
+              "reportconfiglinecategory": "asc"
+            }
+          ]
+        }
+      },
+      "expected_status": 200,
+      "assert": {
+        "json_keys": [
+          "rows",
+          "total"
+        ]
+      },
+      "fixture": "none",
+      "audit": "not-required",
+      "route_origin": "owned-java-source-only",
+      "boundary_semantics": "owned Java source-only route; boundary route != boundary process",
+      "runtime_model": "same-spring-application"
+    },
+    {
+      "id": "workspace.notice-index",
+      "method": "POST",
+      "path": "/secure/core/module/item/notices/queries/index",
+      "route_id": "bfd987b8919bcf94",
+      "operation": "read",
+      "scope": "owned-java-source-only-route",
+      "disposition": "owned-pass",
+      "body": {
+        "p": {
+          "f": {
+            "indexDisplay_EQ": "panelDisplay"
+          }
+        }
+      },
+      "expected_status": 200,
+      "assert": {
+        "content_type": "application/json"
+      },
+      "fixture": "none",
+      "audit": "not-required",
+      "route_origin": "owned-java-source-only",
+      "boundary_semantics": "owned Java source-only route; boundary route != boundary process",
+      "runtime_model": "same-spring-application"
+    }
+  ],
+  "route_execution_model": {
+    "application": "one owned Spring application per wave",
+    "oracle": "one clone-derived Oracle per wave",
+    "redis": "one Redis per wave",
+    "boundary_process": false,
+    "internal_http_bridge": false,
+    "jni_replacement_process": false
+  }
+}

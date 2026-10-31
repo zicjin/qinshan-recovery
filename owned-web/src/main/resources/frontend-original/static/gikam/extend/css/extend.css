@@ -1,0 +1,7 @@
+/*
+ * The read-only supplier runtime at sss2:18081 does not serve this optional
+ * stylesheet, although the original workspace template references its URL.
+ * Keep that URL as a valid CSS response in the owned distribution so the
+ * browser does not receive Spring's JSON 404 error page. No visual rules are
+ * invented here; workspace.css remains the original layout stylesheet.
+ */

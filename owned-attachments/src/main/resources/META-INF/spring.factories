@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.sunwayworld.owned.attachments.OwnedAttachmentConfiguration,\
+com.sunwayworld.owned.attachments.replay.OwnedErpReplayConfiguration

@@ -1,0 +1,43 @@
+{
+  "schema": 1,
+  "family": "core",
+  "description": "Anonymous public-key and removed-license boundary contracts.",
+  "cases": [
+    {
+      "id": "core.public-key",
+      "method": "GET",
+      "path": "/open/security/public-key",
+      "operation": "read",
+      "scope": "non-ledger",
+      "disposition": "owned-pass",
+      "expected_status": 200,
+      "assert": {"content_type": "text/plain"},
+      "fixture": "none",
+      "audit": "not-required"
+    },
+    {
+      "id": "core.removed-license-route",
+      "method": "GET",
+      "path": "/core/module/sys/licenses",
+      "operation": "removed-negative",
+      "scope": "removed-negative",
+      "disposition": "removed-negative-pass",
+      "expected_status": 404,
+      "assert": {"content_type": "application/json", "json_keys": ["status", "error", "path"]},
+      "fixture": "none",
+      "audit": "not-required"
+    },
+    {
+      "id": "core.removed-open-license-route",
+      "method": "GET",
+      "path": "/open/security/licenses",
+      "operation": "removed-negative",
+      "scope": "removed-negative",
+      "disposition": "removed-negative-pass",
+      "expected_status": 404,
+      "assert": {"content_type": "application/json", "json_keys": ["status", "error", "path"]},
+      "fixture": "none",
+      "audit": "not-required"
+    }
+  ]
+}

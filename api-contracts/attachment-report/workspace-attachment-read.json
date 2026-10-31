@@ -1,0 +1,46 @@
+{
+  "schema": 1,
+  "family": "attachment-report",
+  "description": "Owned attachment metadata read fallback on the clone-derived workspace.",
+  "cases": [
+    {
+      "id": "workspace.attachment-query",
+      "method": "POST",
+      "path": "/secure/emc/module/item/home-attachments/queries/raw",
+      "route_id": "225f8cd784f34d2a",
+      "operation": "read",
+      "scope": "project-route",
+      "disposition": "owned-pass",
+      "body": {
+        "p": {
+          "f": {
+            "targetType": "download",
+            "activatedFlag_SEQ": "1"
+          },
+          "n": -1,
+          "s": 50,
+          "qf": {},
+          "o": []
+        }
+      },
+      "expected_status": 200,
+      "assert": {
+        "json_keys": [
+          "rows",
+          "total"
+        ]
+      },
+      "fixture": "none",
+      "audit": "not-required",
+      "runtime_model": "same-spring-application"
+    }
+  ],
+  "route_execution_model": {
+    "application": "one owned Spring application per wave",
+    "oracle": "one clone-derived Oracle per wave",
+    "redis": "one Redis per wave",
+    "boundary_process": false,
+    "internal_http_bridge": false,
+    "jni_replacement_process": false
+  }
+}

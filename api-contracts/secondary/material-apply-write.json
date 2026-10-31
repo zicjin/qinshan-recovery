@@ -1,0 +1,107 @@
+{
+  "schema": 1,
+  "family": "core-material-apply-boundary-write",
+  "description": "HTTP-only material-apply workflow write with API precondition and API restore. Route ledger classifies these owned boundary paths in the foundation/core wave.",
+  "cases": [
+    {
+      "id": "material.apply.reject-task.http",
+      "method": "PUT",
+      "path": "/secure/emc/module/item/mtl-applies/action/reject-task",
+      "route_id": "ff4995ee697e2d04",
+      "operation": "write",
+      "write_via": "http",
+      "scope": "owned-java-source-only-route",
+      "disposition": "owned-pass",
+      "body": {
+        "b": [
+          "",
+          [
+            {
+              "id": "${fixture.fixture-create.ids.0}"
+            }
+          ]
+        ]
+      },
+      "expected_status": 200,
+      "assert": {},
+      "fixture": {
+        "id": "material-apply-reject-api-fixture",
+        "mode": "api",
+        "setup_requests": [
+          {
+            "id": "fixture-create",
+            "capture_json": true,
+            "method": "POST",
+            "path": "/secure/emc/module/item/mtl-applies",
+            "body": {
+              "p": [
+                {
+                  "stockId": 1699608087166691,
+                  "mtlId": "20250700570",
+                  "applyQty": 0.1,
+                  "remark": "strict-api-fixture"
+                }
+              ]
+            },
+            "expected_status": 200,
+            "assert": {
+              "json_keys": [
+                "ids"
+              ]
+            }
+          },
+          {
+            "id": "fixture-submit",
+            "method": "PUT",
+            "path": "/secure/emc/module/item/mtl-applies/action/start-process",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "id": "${fixture.fixture-create.ids.0}"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          }
+        ],
+        "restore_requests": [
+          {
+            "id": "fixture.restore",
+            "method": "DELETE",
+            "path": "/secure/emc/module/item/mtl-applies",
+            "body": {
+              "ids": [
+                "${fixture.fixture-create.ids.0}"
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          }
+        ],
+        "business_write_via": "http"
+      },
+      "audit": {
+        "required": true,
+        "status": "observed",
+        "event": "material-apply-reject-task",
+        "outcome": "ALLOWED",
+        "source": "owned-http"
+      },
+      "route_origin": "owned-java-source-only",
+      "boundary_semantics": "owned Java source-only route; boundary route != boundary process",
+      "runtime_model": "same-spring-application"
+    }
+  ],
+  "route_execution_model": {
+    "application": "one owned Spring application per wave",
+    "oracle": "one clone-derived Oracle per wave",
+    "redis": "one Redis per wave",
+    "boundary_process": false,
+    "internal_http_bridge": false,
+    "jni_replacement_process": false
+  }
+}

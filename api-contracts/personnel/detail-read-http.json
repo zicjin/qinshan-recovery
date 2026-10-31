@@ -1,0 +1,456 @@
+{
+  "schema": 1,
+  "family": "personnel",
+  "description": "Personnel detail-tab and chooser read contracts over the original Spring Web routes.",
+  "cases": [
+    {
+      "id": "personnel.qualification.read",
+      "method": "POST",
+      "path": "/secure/emc/module/mdm/emp/emps/strict-api-employee/quals/queries",
+      "route_id": "8cb22dd76c6ec909",
+      "operation": "read",
+      "scope": "project-route",
+      "disposition": "owned-pass",
+      "body": {
+        "p": {
+          "n": 1,
+          "s": 10
+        }
+      },
+      "expected_status": 200,
+      "assert": {
+        "json_keys": [
+          "rows",
+          "total"
+        ]
+      },
+      "fixture": {
+        "id": "personnel-detail-api-fixture",
+        "mode": "api",
+        "setup_requests": [
+          {
+            "id": "fixture-create",
+            "method": "POST",
+            "path": "/secure/emc/module/mdm/emp/emps",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "id": "strict-api-employee",
+                    "userName": "Strict API Personnel",
+                    "age": 30
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          }
+        ],
+        "restore_requests": [
+          {
+            "id": "fixture-delete",
+            "method": "DELETE",
+            "path": "/secure/emc/module/mdm/emp/emps",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "id": "strict-api-employee"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          }
+        ],
+        "business_write_via": "http"
+      },
+      "audit": "not-required"
+    },
+    {
+      "id": "personnel.visible-test.read",
+      "method": "POST",
+      "path": "/secure/emc/module/mdm/emp/emps/strict-api-employee/tests/queries",
+      "route_id": "5d7475193dd7256e",
+      "operation": "read",
+      "scope": "project-route",
+      "disposition": "owned-pass",
+      "body": {
+        "p": {
+          "n": 1,
+          "s": 10
+        }
+      },
+      "expected_status": 200,
+      "assert": {
+        "json_keys": [
+          "rows",
+          "total"
+        ]
+      },
+      "fixture": {
+        "id": "personnel-detail-api-fixture",
+        "mode": "api",
+        "setup_requests": [
+          {
+            "id": "fixture-create",
+            "method": "POST",
+            "path": "/secure/emc/module/mdm/emp/emps",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "id": "strict-api-employee",
+                    "userName": "Strict API Personnel",
+                    "age": 30
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          }
+        ],
+        "restore_requests": [
+          {
+            "id": "fixture-delete",
+            "method": "DELETE",
+            "path": "/secure/emc/module/mdm/emp/emps",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "id": "strict-api-employee"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          }
+        ],
+        "business_write_via": "http"
+      },
+      "audit": "not-required"
+    },
+    {
+      "id": "personnel.training.read",
+      "method": "POST",
+      "path": "/secure/emc/module/mdm/emp/emps/strict-api-employee/trains/queries",
+      "route_id": "18a0616025ca40f1",
+      "operation": "read",
+      "scope": "project-route",
+      "disposition": "owned-pass",
+      "body": {
+        "p": {
+          "n": 1,
+          "s": 10
+        }
+      },
+      "expected_status": 200,
+      "assert": {
+        "json_keys": [
+          "rows",
+          "total"
+        ]
+      },
+      "fixture": {
+        "id": "personnel-detail-api-fixture",
+        "mode": "api",
+        "setup_requests": [
+          {
+            "id": "fixture-create",
+            "method": "POST",
+            "path": "/secure/emc/module/mdm/emp/emps",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "id": "strict-api-employee",
+                    "userName": "Strict API Personnel",
+                    "age": 30
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          }
+        ],
+        "restore_requests": [
+          {
+            "id": "fixture-delete",
+            "method": "DELETE",
+            "path": "/secure/emc/module/mdm/emp/emps",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "id": "strict-api-employee"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          }
+        ],
+        "business_write_via": "http"
+      },
+      "audit": "not-required"
+    },
+    {
+      "id": "personnel.credential.read",
+      "method": "POST",
+      "path": "/secure/emc/module/mdm/emp/emps/strict-api-employee/credentials/queries",
+      "route_id": "90310070a54fbf08",
+      "operation": "read",
+      "scope": "project-route",
+      "disposition": "owned-pass",
+      "body": {
+        "p": {
+          "n": 1,
+          "s": 10
+        }
+      },
+      "expected_status": 200,
+      "assert": {
+        "json_keys": [
+          "rows",
+          "total"
+        ]
+      },
+      "fixture": {
+        "id": "personnel-detail-api-fixture",
+        "mode": "api",
+        "setup_requests": [
+          {
+            "id": "fixture-create",
+            "method": "POST",
+            "path": "/secure/emc/module/mdm/emp/emps",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "id": "strict-api-employee",
+                    "userName": "Strict API Personnel",
+                    "age": 30
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          }
+        ],
+        "restore_requests": [
+          {
+            "id": "fixture-delete",
+            "method": "DELETE",
+            "path": "/secure/emc/module/mdm/emp/emps",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "id": "strict-api-employee"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          }
+        ],
+        "business_write_via": "http"
+      },
+      "audit": "not-required"
+    },
+    {
+      "id": "personnel.report-chooser.read",
+      "method": "POST",
+      "path": "/secure/emc/module/mdm/emp/emps/report-users/queries/choosable",
+      "route_id": "5a5f971813717457",
+      "operation": "read",
+      "scope": "project-route",
+      "disposition": "owned-pass",
+      "body": {
+        "p": {
+          "n": 1,
+          "s": 10
+        }
+      },
+      "expected_status": 200,
+      "assert": {
+        "json_keys": [
+          "rows",
+          "total"
+        ]
+      },
+      "fixture": "none",
+      "audit": "not-required"
+    },
+    {
+      "id": "personnel.sample-chooser.read",
+      "method": "POST",
+      "path": "/secure/emc/module/mdm/emp/emps/sample/queries/choosable",
+      "route_id": "1107b1626d4600d6",
+      "operation": "read",
+      "scope": "project-route",
+      "disposition": "owned-pass",
+      "body": {
+        "p": {
+          "n": 1,
+          "s": 10
+        }
+      },
+      "expected_status": 200,
+      "assert": {
+        "json_keys": [
+          "rows",
+          "total"
+        ]
+      },
+      "fixture": "none",
+      "audit": "not-required"
+    },
+    {
+      "route_id": "8444bc3a97ef4df0",
+      "operation": "read",
+      "scope": "project-route",
+      "disposition": "owned-pass",
+      "expected_status": 200,
+      "assert": {
+        "json_keys": [
+          "rows",
+          "total"
+        ]
+      },
+      "fixture": "none",
+      "audit": "not-required",
+      "id": "personnel.chooser.sample-plan",
+      "method": "POST",
+      "path": "/secure/emc/module/mdm/emp/emps/queries/choosable",
+      "body": {
+        "targetType": "samplePlan",
+        "sampleOrgId": "dept_2052",
+        "status_DIFFER": "activated"
+      }
+    },
+    {
+      "route_id": "8444bc3a97ef4df0",
+      "operation": "read",
+      "scope": "project-route",
+      "disposition": "owned-pass",
+      "expected_status": 200,
+      "assert": {
+        "json_keys": [
+          "rows",
+          "total"
+        ]
+      },
+      "fixture": "none",
+      "audit": "not-required",
+      "id": "personnel.chooser.analysis-check",
+      "method": "POST",
+      "path": "/secure/emc/module/mdm/emp/emps/queries/choosable",
+      "body": {
+        "targetType": "analysisCheck",
+        "analysisUserId": "Test"
+      }
+    },
+    {
+      "route_id": "8444bc3a97ef4df0",
+      "operation": "read",
+      "scope": "project-route",
+      "disposition": "owned-pass",
+      "expected_status": 200,
+      "assert": {
+        "json_keys": [
+          "rows",
+          "total"
+        ]
+      },
+      "fixture": "none",
+      "audit": "not-required",
+      "id": "personnel.chooser.analysis-user",
+      "method": "POST",
+      "path": "/secure/emc/module/mdm/emp/emps/queries/choosable",
+      "body": {
+        "targetType": "analysisUser"
+      }
+    },
+    {
+      "route_id": "8444bc3a97ef4df0",
+      "operation": "read",
+      "scope": "project-route",
+      "disposition": "owned-pass",
+      "expected_status": 200,
+      "assert": {
+        "json_keys": [
+          "rows",
+          "total"
+        ]
+      },
+      "fixture": "none",
+      "audit": "not-required",
+      "id": "personnel.chooser.insert-director",
+      "method": "POST",
+      "path": "/secure/emc/module/mdm/emp/emps/queries/choosable",
+      "body": {
+        "targetFilter": {
+          "type": "insertDirector",
+          "targetTable": "T_EMC_PROJECT_DIRECTOR",
+          "targetMatchColumn": "EMPID",
+          "thisMatchColumn": "ID",
+          "targetFilter": {
+            "PROJECTID": "0"
+          }
+        },
+        "org_filter": "1",
+        "emc_role_assigned": "1160933173854272"
+      }
+    },
+    {
+      "route_id": "1107b1626d4600d6",
+      "operation": "read",
+      "scope": "project-route",
+      "disposition": "owned-pass",
+      "expected_status": 200,
+      "assert": {
+        "json_keys": [
+          "rows",
+          "total"
+        ]
+      },
+      "fixture": "none",
+      "audit": "not-required",
+      "id": "personnel.sample-chooser.date-filter",
+      "path": "/secure/emc/module/mdm/emp/emps/sample/queries/choosable",
+      "body": {
+        "p": {
+          "n": 1,
+          "s": 10
+        },
+        "planSampleDate": "2026-10-27"
+      }
+    }
+  ],
+  "route_execution_model": {
+    "application": "one owned Spring application per wave",
+    "oracle": "one clone-derived Oracle per wave",
+    "redis": "one Redis per wave",
+    "boundary_process": false,
+    "internal_http_bridge": false,
+    "jni_replacement_process": false
+  }
+}

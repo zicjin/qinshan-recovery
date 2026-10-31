@@ -1,0 +1,3 @@
+package com.sunwayworld.framework.converter.sql;
+import com.sunwayworld.framework.converter.Converter;import com.sunwayworld.framework.converter.exception.ConvertFailedException;import java.io.Reader;import java.sql.Clob;
+public enum ClobToStringConverter implements Converter<Clob,String>{INSTANCE;public String convert(Clob c){if(c==null)return null;Reader r=null;try{r=c.getCharacterStream();int n=(int)c.length();char[] out=new char[n];r.read(out);return String.valueOf(out);}catch(Exception e){throw new ConvertFailedException(getSourceType(),getTargetType(),e);}finally{if(r!=null)try{r.close();}catch(Exception ignored){}}}}

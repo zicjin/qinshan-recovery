@@ -1,0 +1,5 @@
+# ListChunkIterator contract
+
+`ChunkIterator<I>` is a closed three-method interface: `hasNext`, `nextChunk`, and `getChunkSize`. `ListChunkIterator.of(list, chunkSize)` requires a non-null list, snapshots the source list size at construction, and retains the original list for element reads. Each non-final chunk has the requested size; the final chunk contains the remaining snapshot range. Returned chunks are new mutable `ArrayList` instances. Once the snapshot position reaches its captured size, `hasNext()` is false and `nextChunk()` throws `InvalidDataException` with the exact message `No more element.`.
+
+The parentless differential test compares the hash-pinned supplier common JAR with the owned classes across null/empty/single/multi-element lists, extreme negative/zero/positive chunk sizes, repeated exhaustion, source mutation, returned-list independence, source shrinking and restoration, transient source read failures, and owned class provenance. It passes 475 observations. The owned build declaration gate passes 147 selected classes and the supplier-runtime residue scan passes. No application context, database, or production materials are involved.

@@ -1,0 +1,46 @@
+{
+  "schema": 1,
+  "family": "core",
+  "description": "Unauthenticated identity and default-deny HTTP contracts.",
+  "cases": [
+    {
+      "id": "core.login-empty-request",
+      "method": "POST",
+      "path": "/core/module/sys/login",
+      "operation": "read",
+      "scope": "non-ledger",
+      "disposition": "owned-pass",
+      "body_raw": "",
+      "content_type": "application/x-www-form-urlencoded",
+      "expected_status": 400,
+      "assert": {"content_type": "application/json", "json_keys": ["message"]},
+      "fixture": "none",
+      "audit": "not-required"
+    },
+    {
+      "id": "core.logout-anonymous",
+      "method": "POST",
+      "path": "/core/module/sys/logout",
+      "operation": "read",
+      "scope": "non-ledger",
+      "disposition": "owned-pass",
+      "body_raw": "",
+      "content_type": "application/x-www-form-urlencoded",
+      "expected_status": 200,
+      "assert": {"content_type": "application/json", "json_keys": ["authenticated"]},
+      "fixture": "none",
+      "audit": "not-required"
+    },
+    {
+      "id": "core.menu-default-deny",
+      "method": "GET",
+      "path": "/secure/core/module/sys/menus",
+      "operation": "permission-check",
+      "disposition": "owned-pass",
+      "expected_status": 403,
+      "assert": {"content_type": "application/json", "json_keys": ["message"]},
+      "fixture": "none",
+      "audit": "not-required"
+    }
+  ]
+}

@@ -1,0 +1,647 @@
+[
+  {
+    "class": "com/sunwayworld/framework/restful/data/RestJsonWrapperBean",
+    "jar": "BOOT-INF/lib/gikam-core-common-14.1.5.jar",
+    "missing_symbolic_dependencies": [
+      "com/sunwayworld/framework/context/ApplicationContextHelper",
+      "com/sunwayworld/framework/data/page/PageRequest",
+      "com/sunwayworld/framework/database/sql/SqlHelper",
+      "com/sunwayworld/framework/exception/HackingDataException",
+      "com/sunwayworld/framework/exception/InvalidDataException",
+      "com/sunwayworld/framework/exception/OutOfRangeException",
+      "com/sunwayworld/framework/json/deserializer/DefaultJsonDeserializer",
+      "com/sunwayworld/framework/mybatis/mapper/AdvancedFilterPattern",
+      "com/sunwayworld/framework/mybatis/mapper/MapperParameter",
+      "com/sunwayworld/framework/mybatis/mapper/MultiPropertyFilterPattern",
+      "com/sunwayworld/framework/restful/data/RestJsonWrapperBean$1",
+      "com/sunwayworld/framework/restful/data/RestJsonWrapperBean$2",
+      "com/sunwayworld/framework/restful/data/RestJsonWrapperBean$3",
+      "com/sunwayworld/framework/restful/data/RestJsonWrapperBean$4",
+      "com/sunwayworld/framework/restful/data/RestJsonWrapperBean$5",
+      "com/sunwayworld/framework/restful/data/RestJsonWrapperBean$6",
+      "com/sunwayworld/framework/restful/data/RestJsonWrapperBean$FilterData",
+      "com/sunwayworld/framework/restful/data/RestJsonWrapperBean$LcdpParameter",
+      "com/sunwayworld/framework/restful/data/RestJsonWrapperBean$TargetTableFilterData",
+      "com/sunwayworld/framework/support/base/dao/GenericDao",
+      "com/sunwayworld/framework/support/base/service/GenericService",
+      "com/sunwayworld/framework/utils/BeanUtils",
+      "com/sunwayworld/framework/utils/ClassUtils",
+      "com/sunwayworld/framework/utils/CollectionUtils",
+      "com/sunwayworld/framework/utils/ConvertUtils",
+      "com/sunwayworld/framework/utils/DateTimeUtils",
+      "com/sunwayworld/framework/utils/JsonUtils",
+      "com/sunwayworld/framework/utils/NumberUtils",
+      "com/sunwayworld/framework/utils/ObjectUtils",
+      "com/sunwayworld/framework/utils/StringUtils"
+    ],
+    "owned_symbolic_dependencies": [
+      "com/sunwayworld/framework/mybatis/mapper/FilterParamPattern",
+      "com/sunwayworld/framework/mybatis/mapper/MatchPattern",
+      "com/sunwayworld/framework/mybatis/page/PageRowBounds"
+    ],
+    "public_protected_methods": [
+      {
+        "access": 1,
+        "descriptor": "()V",
+        "name": "<init>"
+      },
+      {
+        "access": 1,
+        "descriptor": "(Ljava/lang/String;)V",
+        "name": "<init>"
+      },
+      {
+        "access": 1,
+        "descriptor": "(Ljava/util/Map;Ljava/util/List;Ljava/util/List;)V",
+        "name": "<init>"
+      },
+      {
+        "access": 1,
+        "descriptor": "(Ljava/lang/String;Ljava/util/Map;Ljava/util/List;Ljava/util/List;)V",
+        "name": "<init>"
+      },
+      {
+        "access": 9,
+        "descriptor": "()Lcom/sunwayworld/framework/restful/data/RestJsonWrapperBean;",
+        "name": "newEmpty"
+      },
+      {
+        "access": 1,
+        "descriptor": "()Ljava/util/Map;",
+        "name": "getParamMap"
+      },
+      {
+        "access": 1,
+        "descriptor": "(Ljava/lang/String;)Ljava/lang/String;",
+        "name": "getParamValue"
+      },
+      {
+        "access": 1,
+        "descriptor": "(Ljava/lang/String;)V",
+        "name": "removeParam"
+      },
+      {
+        "access": 1,
+        "descriptor": "(Ljava/lang/String;Ljava/lang/String;)V",
+        "name": "setParamValue"
+      },
+      {
+        "access": 1,
+        "descriptor": "()Ljava/util/List;",
+        "name": "getBodyList"
+      },
+      {
+        "access": 1,
+        "descriptor": "()Ljava/util/List;",
+        "name": "getBodyServiceList"
+      },
+      {
+        "access": 1,
+        "descriptor": "()Ljava/lang/String;",
+        "name": "getRequestJson"
+      },
+      {
+        "access": 1,
+        "descriptor": "(Ljava/lang/String;)Ljava/lang/String;",
+        "name": "getFilterValue"
+      },
+      {
+        "access": 1,
+        "descriptor": "(Ljava/lang/String;Ljava/lang/Object;)V",
+        "name": "setFilterValue"
+      },
+      {
+        "access": 1,
+        "descriptor": "(Ljava/lang/String;)V",
+        "name": "setAuthority"
+      },
+      {
+        "access": 1,
+        "descriptor": "(Ljava/lang/String;)V",
+        "name": "setQueries"
+      },
+      {
+        "access": 1,
+        "descriptor": "()Lcom/sunwayworld/framework/mybatis/mapper/MapperParameter;",
+        "name": "extractMapFilter"
+      },
+      {
+        "access": 1,
+        "descriptor": "(Ljava/lang/Class;)Lcom/sunwayworld/framework/mybatis/mapper/MapperParameter;",
+        "name": "extractMapFilter"
+      },
+      {
+        "access": 129,
+        "descriptor": "([Ljava/lang/String;)V",
+        "name": "setTotalFieldNames"
+      },
+      {
+        "access": 1,
+        "descriptor": "()[Ljava/lang/String;",
+        "name": "getSumProperties"
+      },
+      {
+        "access": 1,
+        "descriptor": "()[Ljava/lang/String;",
+        "name": "getCountProperties"
+      },
+      {
+        "access": 1,
+        "descriptor": "()Ljava/lang/String;",
+        "name": "getOptionsProperty"
+      },
+      {
+        "access": 1,
+        "descriptor": "()V",
+        "name": "removePageParams"
+      },
+      {
+        "access": 1,
+        "descriptor": "()Lcom/sunwayworld/framework/data/page/PageRequest;",
+        "name": "extractPageRequest"
+      },
+      {
+        "access": 1,
+        "descriptor": "()Lcom/sunwayworld/framework/mybatis/page/PageRowBounds;",
+        "name": "extractPageRowBounds"
+      },
+      {
+        "access": 1,
+        "descriptor": "(Ljava/lang/Class;)V",
+        "name": "setMapperParameterClass"
+      },
+      {
+        "access": 1,
+        "descriptor": "(Ljava/lang/Class;)Ljava/lang/Object;",
+        "name": "parseUnique"
+      },
+      {
+        "access": 1,
+        "descriptor": "(Ljava/lang/Class;)Ljava/util/List;",
+        "name": "parse"
+      },
+      {
+        "access": 1,
+        "descriptor": "(Ljava/lang/Class;I)Ljava/util/List;",
+        "name": "parse"
+      },
+      {
+        "access": 1,
+        "descriptor": "(Ljava/lang/Class;)Ljava/util/List;",
+        "name": "parseId"
+      },
+      {
+        "access": 1,
+        "descriptor": "()Ljava/util/List;",
+        "name": "getAuthorityList"
+      },
+      {
+        "access": 1,
+        "descriptor": "(Ljava/lang/String;)V",
+        "name": "addAuthority"
+      },
+      {
+        "access": 1,
+        "descriptor": "(Ljava/lang/String;Ljava/lang/Object;)V",
+        "name": "addExtFilter"
+      },
+      {
+        "access": 1,
+        "descriptor": "()Ljava/util/Map;",
+        "name": "getExtFilter"
+      },
+      {
+        "access": 1,
+        "descriptor": "(Ljava/lang/String;Ljava/lang/Object;Lcom/sunwayworld/framework/mybatis/mapper/MatchPattern;)V",
+        "name": "addExtStdFilter"
+      },
+      {
+        "access": 1,
+        "descriptor": "()Ljava/lang/String;",
+        "name": "getLcdpSql"
+      },
+      {
+        "access": 1,
+        "descriptor": "(Ljava/lang/String;)V",
+        "name": "setLcdpSql"
+      },
+      {
+        "access": 1,
+        "descriptor": "()Ljava/util/List;",
+        "name": "getLcdpOrderList"
+      },
+      {
+        "access": 1,
+        "descriptor": "(Ljava/util/List;)V",
+        "name": "setLcdpOrderList"
+      },
+      {
+        "access": 1,
+        "descriptor": "()Ljava/lang/String;",
+        "name": "getLcdpTreeNodeName"
+      },
+      {
+        "access": 1,
+        "descriptor": "(Ljava/lang/String;)V",
+        "name": "setLcdpTreeNodeName"
+      },
+      {
+        "access": 17,
+        "descriptor": "()Lcom/sunwayworld/framework/restful/data/RestJsonWrapperBean;",
+        "name": "clearParam"
+      }
+    ],
+    "sha256": "c79585578379d93d0ffae0077ee9b0fc885c1d5ab274ce70c183fbcafaef5e1f",
+    "status": "dependency-cycle-not-implemented"
+  },
+  {
+    "class": "com/sunwayworld/framework/data/page/PageRequest",
+    "jar": "BOOT-INF/lib/gikam-core-common-14.1.5.jar",
+    "missing_symbolic_dependencies": [
+      "com/sunwayworld/framework/restful/data/RestJsonWrapperBean",
+      "com/sunwayworld/framework/utils/ClassUtils",
+      "com/sunwayworld/framework/utils/NumberUtils",
+      "com/sunwayworld/framework/utils/StringUtils"
+    ],
+    "owned_symbolic_dependencies": [
+      "com/sunwayworld/framework/data/page/Pageable"
+    ],
+    "public_protected_methods": [
+      {
+        "access": 9,
+        "descriptor": "(Lcom/sunwayworld/framework/restful/data/RestJsonWrapperBean;)Lcom/sunwayworld/framework/data/page/PageRequest;",
+        "name": "of"
+      },
+      {
+        "access": 9,
+        "descriptor": "(II)Lcom/sunwayworld/framework/data/page/PageRequest;",
+        "name": "of"
+      },
+      {
+        "access": 1,
+        "descriptor": "()V",
+        "name": "<init>"
+      },
+      {
+        "access": 1,
+        "descriptor": "()I",
+        "name": "getPageNumber"
+      },
+      {
+        "access": 1,
+        "descriptor": "()I",
+        "name": "getPageSize"
+      },
+      {
+        "access": 1,
+        "descriptor": "()J",
+        "name": "getOffset"
+      },
+      {
+        "access": 1,
+        "descriptor": "()Lcom/sunwayworld/framework/data/page/Pageable;",
+        "name": "next"
+      },
+      {
+        "access": 1,
+        "descriptor": "()Lcom/sunwayworld/framework/data/page/Pageable;",
+        "name": "previousOrFirst"
+      },
+      {
+        "access": 1,
+        "descriptor": "()Lcom/sunwayworld/framework/data/page/Pageable;",
+        "name": "first"
+      },
+      {
+        "access": 1,
+        "descriptor": "()Lorg/springframework/data/domain/Sort;",
+        "name": "getSort"
+      },
+      {
+        "access": 1,
+        "descriptor": "(Lorg/springframework/data/domain/Sort;)V",
+        "name": "setSort"
+      },
+      {
+        "access": 1,
+        "descriptor": "()Z",
+        "name": "hasPrevious"
+      },
+      {
+        "access": 1,
+        "descriptor": "(I)V",
+        "name": "setPageNumber"
+      },
+      {
+        "access": 1,
+        "descriptor": "(I)V",
+        "name": "setPageSize"
+      },
+      {
+        "access": 1,
+        "descriptor": "(Ljava/lang/String;)V",
+        "name": "setFilterJson"
+      },
+      {
+        "access": 1,
+        "descriptor": "()Ljava/lang/String;",
+        "name": "getFilterJson"
+      },
+      {
+        "access": 1,
+        "descriptor": "(Ljava/lang/Class;)Ljava/lang/Object;",
+        "name": "map"
+      },
+      {
+        "access": 129,
+        "descriptor": "([Ljava/lang/String;)V",
+        "name": "setSumProperties"
+      },
+      {
+        "access": 1,
+        "descriptor": "()[Ljava/lang/String;",
+        "name": "getSumProperties"
+      },
+      {
+        "access": 1,
+        "descriptor": "()[Ljava/lang/String;",
+        "name": "getCountProperties"
+      },
+      {
+        "access": 129,
+        "descriptor": "([Ljava/lang/String;)V",
+        "name": "setCountProperties"
+      },
+      {
+        "access": 1,
+        "descriptor": "()Ljava/lang/String;",
+        "name": "getOptionsProperty"
+      },
+      {
+        "access": 1,
+        "descriptor": "(Ljava/lang/String;)V",
+        "name": "setOptionsProperty"
+      },
+      {
+        "access": 4161,
+        "descriptor": "()Lorg/springframework/data/domain/Pageable;",
+        "name": "first"
+      },
+      {
+        "access": 4161,
+        "descriptor": "()Lorg/springframework/data/domain/Pageable;",
+        "name": "previousOrFirst"
+      },
+      {
+        "access": 4161,
+        "descriptor": "()Lorg/springframework/data/domain/Pageable;",
+        "name": "next"
+      }
+    ],
+    "sha256": "14a6b46c54c074f52353168d064d84e626d2f8a44e73d62e73e17ee96282d0f2",
+    "status": "dependency-cycle-not-implemented"
+  },
+  {
+    "class": "com/sunwayworld/framework/mybatis/mapper/MapperParameter",
+    "jar": "BOOT-INF/lib/gikam-core-common-14.1.5.jar",
+    "missing_symbolic_dependencies": [
+      "com/sunwayworld/framework/beans/BeanPropertyDescriptor",
+      "com/sunwayworld/framework/beans/BeanPropertyEvent",
+      "com/sunwayworld/framework/beans/BeanPropertyHelper",
+      "com/sunwayworld/framework/beans/BeanPropertyListener",
+      "com/sunwayworld/framework/context/ApplicationContextHelper",
+      "com/sunwayworld/framework/context/LocalContextHelper",
+      "com/sunwayworld/framework/data/Pair",
+      "com/sunwayworld/framework/database/context/EntityColumnContext",
+      "com/sunwayworld/framework/database/context/EntityContext",
+      "com/sunwayworld/framework/database/dialect/Dialect",
+      "com/sunwayworld/framework/database/dialect/DialectRepository",
+      "com/sunwayworld/framework/mybatis/mapper/AdvancedFilterPattern",
+      "com/sunwayworld/framework/mybatis/mapper/MapperParameter$1",
+      "com/sunwayworld/framework/mybatis/mapper/MultiPropertyFilterPattern",
+      "com/sunwayworld/framework/mybatis/mapper/SearchFilter$Matcher",
+      "com/sunwayworld/framework/restful/data/RestJsonWrapperBean",
+      "com/sunwayworld/framework/restful/data/RestJsonWrapperBean$TargetTableFilterData",
+      "com/sunwayworld/framework/utils/ArrayUtils",
+      "com/sunwayworld/framework/utils/BeanUtils",
+      "com/sunwayworld/framework/utils/ClassUtils",
+      "com/sunwayworld/framework/utils/CollectionUtils",
+      "com/sunwayworld/framework/utils/ConvertUtils",
+      "com/sunwayworld/framework/utils/StringUtils",
+      "com/sunwayworld/module/mdm/org/bean/CoreOrgBean",
+      "com/sunwayworld/module/mdm/org/service/CoreOrgService",
+      "com/sunwayworld/module/sys/bpmn/diagram/ProcessStatus"
+    ],
+    "owned_symbolic_dependencies": [
+      "com/sunwayworld/framework/data/CaseInsensitiveLinkedMap",
+      "com/sunwayworld/framework/mybatis/mapper/FilterParamPattern",
+      "com/sunwayworld/framework/mybatis/mapper/MatchPattern",
+      "com/sunwayworld/framework/mybatis/mapper/SearchFilter",
+      "com/sunwayworld/framework/support/domain/Persistable"
+    ],
+    "public_protected_methods": [
+      {
+        "access": 1,
+        "descriptor": "()V",
+        "name": "<init>"
+      },
+      {
+        "access": 1,
+        "descriptor": "(I)V",
+        "name": "<init>"
+      },
+      {
+        "access": 1,
+        "descriptor": "(Ljava/util/Map;)V",
+        "name": "<init>"
+      },
+      {
+        "access": 1,
+        "descriptor": "(IF)V",
+        "name": "<init>"
+      },
+      {
+        "access": 1,
+        "descriptor": "(Ljava/lang/String;)V",
+        "name": "setTableName"
+      },
+      {
+        "access": 1,
+        "descriptor": "()V",
+        "name": "setDetailQueries"
+      },
+      {
+        "access": 1,
+        "descriptor": "()V",
+        "name": "setRawQueries"
+      },
+      {
+        "access": 1,
+        "descriptor": "()Z",
+        "name": "isRawQueries"
+      },
+      {
+        "access": 1,
+        "descriptor": "()V",
+        "name": "setSearchableQueries"
+      },
+      {
+        "access": 1,
+        "descriptor": "()V",
+        "name": "setAuditableQueries"
+      },
+      {
+        "access": 1,
+        "descriptor": "()V",
+        "name": "setChoosableQueries"
+      },
+      {
+        "access": 1,
+        "descriptor": "()V",
+        "name": "setSelectableQueries"
+      },
+      {
+        "access": 1,
+        "descriptor": "()V",
+        "name": "setSuspendableQueries"
+      },
+      {
+        "access": 1,
+        "descriptor": "()V",
+        "name": "setUndoableQueries"
+      },
+      {
+        "access": 1,
+        "descriptor": "()V",
+        "name": "setWithdrawableQueries"
+      },
+      {
+        "access": 1,
+        "descriptor": "(Lcom/sunwayworld/framework/mybatis/mapper/SearchFilter;)V",
+        "name": "setFilter"
+      },
+      {
+        "access": 129,
+        "descriptor": "([Lcom/sunwayworld/framework/mybatis/mapper/FilterParamPattern;)V",
+        "name": "addFilterParamPatterns"
+      },
+      {
+        "access": 1,
+        "descriptor": "()[Lcom/sunwayworld/framework/mybatis/mapper/FilterParamPattern;",
+        "name": "getFilterParamPatterns"
+      },
+      {
+        "access": 129,
+        "descriptor": "(Ljava/util/List;[Ljava/lang/String;)V",
+        "name": "setFilter"
+      },
+      {
+        "access": 1,
+        "descriptor": "()Ljava/util/List;",
+        "name": "getFilterByItemList"
+      },
+      {
+        "access": 1,
+        "descriptor": "(Lcom/sunwayworld/framework/restful/data/RestJsonWrapperBean$TargetTableFilterData;)V",
+        "name": "setTargetFilter"
+      },
+      {
+        "access": 1,
+        "descriptor": "()Lcom/sunwayworld/framework/restful/data/RestJsonWrapperBean$TargetTableFilterData;",
+        "name": "getTargetFilter"
+      },
+      {
+        "access": 1,
+        "descriptor": "([Lcom/sunwayworld/framework/mybatis/mapper/AdvancedFilterPattern;)V",
+        "name": "setAdvancedFilterPatterns"
+      },
+      {
+        "access": 1,
+        "descriptor": "()[Lcom/sunwayworld/framework/mybatis/mapper/AdvancedFilterPattern;",
+        "name": "getAdvancedFilterPatterns"
+      },
+      {
+        "access": 1,
+        "descriptor": "(Lcom/sunwayworld/framework/mybatis/mapper/MultiPropertyFilterPattern;)V",
+        "name": "setMultiPropertyFilterPattern"
+      },
+      {
+        "access": 1,
+        "descriptor": "()Lcom/sunwayworld/framework/mybatis/mapper/MultiPropertyFilterPattern;",
+        "name": "getMultiPropertyFilterPattern"
+      },
+      {
+        "access": 1,
+        "descriptor": "(Ljava/lang/String;)V",
+        "name": "setSuspendedFlag"
+      },
+      {
+        "access": 1,
+        "descriptor": "(Ljava/lang/String;Lcom/sunwayworld/module/sys/bpmn/diagram/ProcessStatus;)V",
+        "name": "setProcessStatus"
+      },
+      {
+        "access": 1,
+        "descriptor": "(Ljava/lang/String;)V",
+        "name": "setActivatedFlag"
+      },
+      {
+        "access": 1,
+        "descriptor": "(Ljava/lang/String;)V",
+        "name": "setAuthorityParameter"
+      },
+      {
+        "access": 1,
+        "descriptor": "()V",
+        "name": "setAuditAuthority"
+      },
+      {
+        "access": 1,
+        "descriptor": "()V",
+        "name": "setOrgAuthority"
+      },
+      {
+        "access": 1,
+        "descriptor": "(Ljava/lang/String;)V",
+        "name": "setCurrentAndChildOrgAuthority"
+      },
+      {
+        "access": 1,
+        "descriptor": "(Ljava/lang/String;Ljava/lang/String;)V",
+        "name": "setOrderParam"
+      },
+      {
+        "access": 1,
+        "descriptor": "()Z",
+        "name": "hasOrderParam"
+      },
+      {
+        "access": 1,
+        "descriptor": "(Ljava/lang/Long;)V",
+        "name": "setSelectByRoleIdParam"
+      },
+      {
+        "access": 1,
+        "descriptor": "(Ljava/lang/Long;)V",
+        "name": "setSelectByRoleIdExclusiveParam"
+      },
+      {
+        "access": 1,
+        "descriptor": "(Ljava/lang/String;)V",
+        "name": "setSimpleColumns"
+      },
+      {
+        "access": 9,
+        "descriptor": "(Ljava/util/List;Ljava/lang/String;)Z",
+        "name": "hasOrderParams"
+      },
+      {
+        "access": 1,
+        "descriptor": "(Lcom/sunwayworld/framework/database/context/EntityContext;)V",
+        "name": "reviseParams"
+      }
+    ],
+    "sha256": "c5fc9559e4fde0932943911c9a00e6346f9b9388b46c590500ed469cbf6b90d0",
+    "status": "dependency-cycle-not-implemented"
+  }
+]

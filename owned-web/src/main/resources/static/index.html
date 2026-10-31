@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>检测信息管理系统</title>
+  <base href="/">
+  <script>
+    (function (win) {
+      var servletContext = '/';
+      if (servletContext !== '') servletContext = servletContext.replace(/\/$/, '');
+      win.IFM_CONTEXT = location.origin + servletContext;
+    })(window);
+  </script>
+  <link rel="icon" href="data:;">
+  <link rel="preload" href="/static/gikam/main/css/chunk-common.css" as="style">
+  <link rel="preload" href="/static/gikam/main/css/home.css" as="style">
+  <link rel="preload" href="/static/gikam/main/js/chunk-common.js" as="script">
+  <link rel="preload" href="/static/gikam/main/js/chunk-vendors.js" as="script">
+  <link rel="preload" href="/static/gikam/main/js/home.js" as="script">
+  <link rel="stylesheet" href="/static/gikam/main/css/chunk-common.css">
+  <link rel="stylesheet" href="/static/gikam/main/css/home.css">
+  <link rel="stylesheet" href="/static/gikam/extend/css/extend.css">
+  <link rel="stylesheet" href="/static/gikam/main/css/chunk-vendors.css">
+  <link rel="stylesheet" href="/static/gikam/main/css/workspace.css">
+  <link rel="stylesheet" href="/owned-web/owned.css">
+  <script defer src="/static/gikam/main/js/chunk-vendors.js"></script>
+  <script defer src="/static/gikam/main/js/chunk-common.js"></script>
+  <script defer src="/static/gikam/main/js/home.js"></script>
+  <script defer src="/static/gikam/extend/js/chunk-vendors.js"></script>
+  <script defer src="/static/gikam/extend/js/extend.js"></script>
+  <script defer src="/static/gikam/extends/gikam-extend.js"></script>
+  <script defer src="/static/gikam/main/js/workspace.js"></script>
+  <script defer src="/static/module/lcdp/extends/lcdp-extend.js"></script>
+  <!-- Original project configuration registries; these remain source-owned
+       business assets and are loaded at the same application entrypoint. -->
+  <script defer src="/static/emc/config/emc-choose-config.js"></script>
+  <script defer src="/static/emc/config/emc-select-config.js"></script>
+  <script defer src="/owned-web/rsa-pkcs1.js"></script>
+  <script defer src="/owned-web/owned-ui.js"></script>
+  <script defer src="/owned-web/personnel-labels.js"></script>
+  <script defer src="/owned-web/inventory-labels.js"></script>
+  <script defer src="/owned-web/owned-gikam.js"></script>
+  <script defer src="/owned-web/role-menu-matrix.js"></script>
+  <script defer src="/owned-web/role-user-matrix.js"></script>
+  <script defer src="/owned-web/organization-management.js"></script>
+  <script defer src="/owned-web/role-management.js"></script>
+  <script defer src="/owned-web/menu-management.js"></script>
+  <script defer src="/owned-web/result-runs.js"></script>
+  <script defer src="/owned-web/order-retains.js"></script>
+  <!-- These are unchanged recovered personnel business assets. The owned
+       Gikam facade below supplies only the bounded read seam they exercise. -->
+  <script defer src="/static/emc/module/mdm/emp/emps/emc-emp.js"></script>
+  <script defer src="/static/emc/module/mdm/emp/emps/emc-emp-edit-list.js"></script>
+  <script defer src="/static/emc/module/mdm/emp/emps/emc-emp-detail.js"></script>
+  <script defer src="/static/emc/module/mdm/equipt/equipts/emc-equipt-plan.js"></script>
+  <script defer src="/static/emc/module/mdm/equipt/equipts/emc-equipt-record.js"></script>
+  <script defer src="/static/emc/module/mdm/equipt/equipts/emc-equipt.js"></script>
+  <script defer src="/static/emc/module/mdm/equipt/equipts/emc-equipt-edit-list.js"></script>
+  <script defer src="/static/emc/module/mdm/equipt/equipts/emc-equipt-use-record.js"></script>
+  <script defer src="/static/emc/module/mdm/equipt/equipts/emc-equipt-per-check-plan.js"></script>
+  <script defer src="/static/emc/module/mdm/equipt/equipts/emc-equipt-per-check-plan-add.js"></script>
+  <script defer src="/static/emc/module/mdm/equipt/equipts/emc-equipt-per-check-record.js"></script>
+  <script defer src="/static/emc/module/mdm/equipt/equipts/emc-equipt-per-check-record-add.js"></script>
+  <script defer src="/static/emc/module/item/consume/consumes/emc-consume.js"></script>
+  <script defer src="/static/emc/module/item/consume/consumes/emc-consume-edit-list.js"></script>
+  <script defer src="/static/emc/module/item/home-attachments/emc-home-attachment.js"></script>
+  <script defer src="/static/emc/module/item/home-attachments/emc-home-attachment-download-list.js"></script>
+  <script defer src="/owned-web/attachment-management.js"></script>
+  <script defer src="/owned-web/attachment-download.js"></script>
+  <script defer src="/owned-web/consumable-import-export.js"></script>
+  <script defer src="/owned-web/consumable-stock-editor.js"></script>
+  <script defer src="/owned-web/consumable-editor.js"></script>
+  <script defer src="/owned-web/personnel-editor.js"></script>
+  <script defer src="/owned-web/personnel-test-editor.js"></script>
+  <script defer src="/owned-web/personnel-qualification-editor.js"></script>
+  <script defer src="/owned-web/equipment-editor.js"></script>
+  <script defer src="/owned-web/equipment-plan-editor.js"></script>
+  <script defer src="/owned-web/equipment-record-editor.js"></script>
+  <script defer src="/owned-web/equipment-period-editor.js"></script>
+  <script defer src="/owned-web/equipment-maintain-repair-editor.js"></script>
+  <script defer src="/owned-web/app.js"></script>
+</head>
+<body class="page-style-kapok page-skin-green">
+  <main id="login-view" class="login-view owned-login-page" hidden>
+    <section class="owned-login-brand" aria-label="系统信息">
+      <img src="/static/emc/icon/logo.png" alt="检测信息管理系统">
+      <h1>检测信息管理系统</h1>
+      <p>实验室检测信息管理平台</p>
+    </section>
+    <section class="owned-login-panel">
+    <form id="login-form" class="login-card">
+      <h2>用户登录</h2>
+      <label for="login-id">用户名</label><input id="login-id" name="id" autocomplete="username" required maxlength="64">
+      <label for="login-password">密码</label><input id="login-password" name="password" type="password" autocomplete="current-password" required>
+      <button id="login-submit" type="submit">登录</button><p id="login-error" role="alert"></p>
+    </form>
+    </section>
+    <div class="owned-login-footer">检测信息管理系统 · owned compatibility runtime</div>
+  </main>
+  <div id="workspace-view" hidden>
+    <header class="app-header"><div class="app-brand"><img src="/static/emc/icon/logo.png" alt=""><strong>检测信息管理系统</strong></div><span class="app-subtitle">实验室检测信息管理平台</span><span id="session-name"></span><button id="logout" hidden>退出</button></header>
+    <nav id="menu-nav" aria-label="查询导航"></nav>
+    <div class="scope-notice">当前开放人员、设备与耗材查询、耗材库存和库存日志，以及授权附件下载。隔离验收环境中，获授权的账号可维护人员基本信息与可见测试、管理附件及导入耗材；培训、证书、报表等入口仍保持不可用。</div>
+    <div id="page-status" role="status" aria-live="polite"></div>
+    <main id="owned-workspace" aria-label="人员查询"></main>
+  </div>
+  <noscript>此查询工作台需要启用 JavaScript。</noscript>
+</body>
+</html>

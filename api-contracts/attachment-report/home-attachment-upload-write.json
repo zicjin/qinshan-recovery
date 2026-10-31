@@ -1,0 +1,172 @@
+{
+  "schema": 1,
+  "family": "core",
+  "description": "HTTP attachment upload write contract. The attachment is created and cleaned through HTTP; multipart content is sent by the runner and no SQL business write is used.",
+  "cases": [
+    {
+      "id": "attachment.upload",
+      "method": "POST",
+      "path": "/core/module/item/files",
+      "route_id": "eb1b0555fc717133",
+      "operation": "write",
+      "write_via": "http",
+      "scope": "owned-java-source-only-route",
+      "disposition": "owned-pass",
+      "expected_status": 200,
+      "assert": {},
+      "fixture": {
+        "id": "attachment.upload-fixture",
+        "mode": "sql-control",
+        "setup_requests": [
+          {
+            "id": "attachment-create",
+            "method": "POST",
+            "path": "/secure/emc/module/item/home-attachments",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "endDate": "2030-01-01T00:00:00",
+                    "activatedFlag": "1"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {},
+            "capture_text": true
+          }
+        ],
+        "restore_requests": [
+          {
+            "id": "attachment-permission-delete",
+            "method": "DELETE",
+            "path": "/secure/emc/module/item/home-attachments/permissions",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "id": "${fixture.attachment-permission-query.rows.0.id}",
+                    "attachmentId": "${fixture.attachment-create}",
+                    "userId": "Test"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          },
+          {
+            "id": "attachment-delete",
+            "method": "DELETE",
+            "path": "/secure/emc/module/item/home-attachments",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "id": "${fixture.attachment-create}"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          }
+        ],
+        "business_write_via": "http",
+        "cleanup_via": "restore-http",
+        "setup_sql_files": [
+          "attachment/t_core_file.sql"
+        ],
+        "restore_sql_files": [
+          "attachment/t_core_file_restore.sql"
+        ],
+        "sql_files": []
+      },
+      "audit": {
+        "required": true,
+        "status": "observed",
+        "event": "attachment-file-upload",
+        "outcome": "ALLOWED",
+        "source": "owned-http"
+      },
+      "multipart": {
+        "fields": {
+          "targetId": "T_EMC_HOME_ATTACHMENT$${fixture.attachment-create}",
+          "bizCategory": "document"
+        },
+        "file": {
+          "field": "file",
+          "filename": "strict-api-upload.txt",
+          "content_type": "text/plain",
+          "content": "strict upload fixture\n"
+        }
+      },
+      "readback_requests": [
+        {
+          "id": "attachment-grant",
+          "method": "POST",
+          "path": "/secure/emc/module/item/home-attachments/permissions",
+          "body": {
+            "b": [
+              "",
+              [
+                {
+                  "attachmentId": "${fixture.attachment-create}",
+                  "userId": "Test"
+                }
+              ]
+            ]
+          },
+          "expected_status": 200,
+          "assert": {}
+        },
+        {
+          "id": "attachment-permission-query",
+          "method": "POST",
+          "path": "/secure/emc/module/item/home-attachments/${fixture.attachment-create}/permissions/queries",
+          "body": {},
+          "expected_status": 200,
+          "assert": {
+            "json_keys": [
+              "rows",
+              "total"
+            ]
+          },
+          "capture_json": true
+        },
+        {
+          "id": "attachment-url",
+          "method": "POST",
+          "path": "/secure/emc/module/item/home-attachments/${fixture.attachment-create}/action/get-url",
+          "body": {},
+          "expected_status": 200,
+          "assert": {},
+          "capture_text": true
+        },
+        {
+          "id": "attachment-content",
+          "method": "GET",
+          "path": "${fixture.attachment-url}",
+          "expected_status": 200,
+          "assert": {
+            "content_type": "application/octet-stream"
+          }
+        }
+      ],
+      "capture_json": true,
+      "capture_as": "attachment.upload"
+    }
+  ],
+  "route_execution_model": {
+    "application": "one owned Spring application per wave",
+    "oracle": "one clone-derived Oracle per wave",
+    "redis": "one Redis per wave",
+    "boundary_process": false,
+    "internal_http_bridge": false,
+    "jni_replacement_process": false
+  }
+}

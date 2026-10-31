@@ -1,0 +1,46 @@
+{
+  "schema": 1,
+  "storage": "external-artifact",
+  "root_env": "LIMS_EXTERNAL_ARTIFACT_ROOT",
+  "manifest": "evidence/external-artifacts.sha256",
+  "artifacts": [
+    {
+      "name": "gikam-third-czjky-14.1.5-run.jar",
+      "purpose": "forensics/dependency extraction only",
+      "runtime_dependency": false
+    },
+    {
+      "name": "jdk-8u391-linux-x64.tar.gz",
+      "purpose": "offline source build toolchain",
+      "runtime_dependency": false
+    },
+    {
+      "name": "maven-build-plugin-seed.tar.gz",
+      "purpose": "offline build plugins",
+      "runtime_dependency": false
+    },
+    {
+      "name": "index/",
+      "purpose": "supplier diagnostic index only",
+      "runtime_dependency": false
+    },
+    {
+      "name": "simsun.ttc",
+      "purpose": "under review; external until owned need is proven",
+      "runtime_dependency": false
+    },
+    {
+      "name": "log4j2.xml",
+      "purpose": "under review; external until owned need is proven",
+      "runtime_dependency": false
+    }
+  ],
+  "forbidden": [
+    "sunway-app.so",
+    "license.lic",
+    "vendor.lic",
+    "native loader",
+    "JNI replacement process",
+    "supplier run JAR as owned runtime dependency"
+  ]
+}

@@ -1,0 +1,13 @@
+# Sunway license removal manifest
+
+This manifest is a static, read-only inventory of the original run artifact and source launch/configuration material. It records exact paths, class inventory line references, hashes, routes, methods, and scanner policy tokens without copying license contents, configuration values, credentials, or MAC values.
+
+Runtime reachability is unknown. Presence in a classfile, resource list, or launcher is not proof that a route or method was invoked. `license.lic` and `vendor.lic` are scoped because PageOffice bytecode also references those basenames; `cell-license.xml`, Spire authorization, and business fields containing `license` remain separate third-party/business classifications.
+
+`manifest.json` is authoritative for scanner policy, with owner/name/descriptor method matches rather than a blanket ban on `getLicense`. Inventory line numbers refer to `evidence/framework-contract/classes.jsonl` or `native-declarations.jsonl`; line ranges in source references bind to SHA-256 identities under `source_identities`. Nested artifact identities use `jar!entry` names. Source config values and license file contents are omitted.
+
+The original artifact statically declares `/open/security/licenses` in addition to `/core/module/sys/licenses` and its online-user suffix. Delete only the license methods from shared security resources; retain captcha and LIMS authentication behavior. Home/workspace JavaScript contains the license route in its minified first line; hashes and character offsets identify those branches. The Sunway extractor contains five OS extraction/load paths. Runtime invocation, native control flow, and complete UI/API reachability remain unknown.
+
+PageOffice `Server.class` statically references both `license.lic` and `vendor.lic`; its hash and consumer provenance are recorded. Aspose `AsposeExcelUtils` loads `cell-license.xml`, while the Sunway listener passes `spire.office.license` to Spire's provider. Those authorization boundaries and legal texts remain separate from Sunway deletion. No standalone license-file basename has been proven Sunway-exclusive. The source launchers' blanket required-input checks and mounts must be reviewed per consumer; they do not change file attribution.
+
+Validation: `python3 scripts/tests/test-license-manifest.py` checks scoped filename/method policy, separate business/third-party records, required routes, and opaque-content/credential guards. Manifest class hashes were compared with the current framework inventory and the original run.jar. No scanner implementation or owned-framework source is changed by this ticket.

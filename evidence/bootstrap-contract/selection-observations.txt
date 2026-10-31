@@ -1,0 +1,3 @@
+sunway application selection: PASS
+bootstrap selection differential: PASS [Selected:true:false, Other:false:true]
+test-sunway-application-selection: PASS

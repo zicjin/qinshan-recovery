@@ -1,0 +1,543 @@
+{
+  "schema": 1,
+  "family": "personnel",
+  "description": "HTTP-only personnel qualification and training create/delete contracts. Existing detail-read contract covers their query routes; each write case performs API fixture setup, HTTP mutation, API readback and HTTP cleanup.",
+  "cases": [
+    {
+      "id": "personnel.qualification.insert",
+      "method": "POST",
+      "path": "/secure/emc/module/mdm/emp/emps/strict-api-employee/quals",
+      "route_id": "797921b1cca2eb9c",
+      "operation": "write",
+      "write_via": "http",
+      "scope": "project-route",
+      "disposition": "owned-pass",
+      "body": {
+        "b": [
+          "",
+          [
+            {
+              "qualNo": "Q-STRICT-1",
+              "qualName": "Strict API Qualification",
+              "qualOrg": "Fixture issuer",
+              "validDate": "2026-01-01",
+              "authDate": "2026-01-02",
+              "expireDate": "2027-01-01",
+              "warningDays": 30
+            }
+          ]
+        ]
+      },
+      "expected_status": 200,
+      "assert": {},
+      "readback_requests": [
+        {
+          "id": "insert-readback",
+          "method": "POST",
+          "path": "/secure/emc/module/mdm/emp/emps/strict-api-employee/quals/queries",
+          "body": {
+            "p": {
+              "n": 1,
+              "s": 10
+            }
+          },
+          "expected_status": 200,
+          "assert": {
+            "json_keys": [
+              "rows",
+              "total"
+            ],
+            "json_contains": [
+              {
+                "path": "rows",
+                "where": {
+                  "qualNo": "Q-STRICT-1"
+                },
+                "values": {
+                  "qualName": "Strict API Qualification",
+                  "qualOrg": "Fixture issuer"
+                }
+              }
+            ]
+          },
+          "capture_json": true
+        }
+      ],
+      "fixture": {
+        "id": "personnel-qualification-write-api-fixture",
+        "mode": "api",
+        "setup_requests": [
+          {
+            "id": "fixture-employee-create",
+            "method": "POST",
+            "path": "/secure/emc/module/mdm/emp/emps",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "id": "strict-api-employee",
+                    "userName": "Strict API Personnel",
+                    "age": 30
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          }
+        ],
+        "restore_requests": [
+          {
+            "id": "fixture-child-read",
+            "method": "POST",
+            "path": "/secure/emc/module/mdm/emp/emps/strict-api-employee/quals/queries",
+            "body": {
+              "p": {
+                "n": 1,
+                "s": 10
+              }
+            },
+            "expected_status": 200,
+            "assert": {
+              "json_keys": [
+                "rows",
+                "total"
+              ]
+            },
+            "capture_json": true
+          },
+          {
+            "id": "fixture-child-delete",
+            "method": "DELETE",
+            "path": "/secure/emc/module/mdm/emp/emps/strict-api-employee/quals",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "id": "${fixture.fixture-child-read.rows.0.id}"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          },
+          {
+            "id": "fixture-employee-delete",
+            "method": "DELETE",
+            "path": "/secure/emc/module/mdm/emp/emps",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "id": "strict-api-employee"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          }
+        ],
+        "business_write_via": "http"
+      },
+      "audit": {
+        "required": true,
+        "status": "observed",
+        "event": "personnel-qualification-insert",
+        "outcome": "ALLOWED",
+        "source": "owned-http"
+      }
+    },
+    {
+      "id": "personnel.qualification.delete",
+      "method": "DELETE",
+      "path": "/secure/emc/module/mdm/emp/emps/strict-api-employee/quals",
+      "route_id": "ecaf51a28e1d3cdc",
+      "operation": "write",
+      "write_via": "http",
+      "scope": "project-route",
+      "disposition": "owned-pass",
+      "body": {
+        "b": [
+          "",
+          [
+            {
+              "id": "${fixture.fixture-child-read.rows.0.id}"
+            }
+          ]
+        ]
+      },
+      "expected_status": 200,
+      "assert": {},
+      "fixture": {
+        "id": "personnel-qualification-delete-api-fixture",
+        "mode": "api",
+        "setup_requests": [
+          {
+            "id": "fixture-employee-create",
+            "method": "POST",
+            "path": "/secure/emc/module/mdm/emp/emps",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "id": "strict-api-employee",
+                    "userName": "Strict API Personnel",
+                    "age": 30
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          },
+          {
+            "id": "fixture-child-create",
+            "method": "POST",
+            "path": "/secure/emc/module/mdm/emp/emps/strict-api-employee/quals",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "qualNo": "Q-STRICT-1",
+                    "qualName": "Strict API Qualification",
+                    "qualOrg": "Fixture issuer",
+                    "validDate": "2026-01-01",
+                    "authDate": "2026-01-02",
+                    "expireDate": "2027-01-01",
+                    "warningDays": 30
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          },
+          {
+            "id": "fixture-child-read",
+            "method": "POST",
+            "path": "/secure/emc/module/mdm/emp/emps/strict-api-employee/quals/queries",
+            "body": {
+              "p": {
+                "n": 1,
+                "s": 10
+              }
+            },
+            "expected_status": 200,
+            "assert": {
+              "json_keys": [
+                "rows",
+                "total"
+              ]
+            },
+            "capture_json": true
+          }
+        ],
+        "restore_requests": [
+          {
+            "id": "fixture-employee-delete",
+            "method": "DELETE",
+            "path": "/secure/emc/module/mdm/emp/emps",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "id": "strict-api-employee"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          }
+        ],
+        "cleanup_via": "case-http",
+        "business_write_via": "http"
+      },
+      "audit": {
+        "required": true,
+        "status": "observed",
+        "event": "personnel-qualification-delete",
+        "outcome": "ALLOWED",
+        "source": "owned-http"
+      }
+    },
+    {
+      "id": "personnel.training.insert",
+      "method": "POST",
+      "path": "/secure/emc/module/mdm/emp/emps/strict-api-employee/trains",
+      "route_id": "7e92a537ae3cb1ae",
+      "operation": "write",
+      "write_via": "http",
+      "scope": "project-route",
+      "disposition": "owned-pass",
+      "body": {
+        "b": [
+          "",
+          [
+            {
+              "trainTime": "2026-01-01",
+              "trainContent": "Strict API Training",
+              "trainResult": "passed",
+              "courseCode": "SAFE-1",
+              "courseName": "Safety refresher"
+            }
+          ]
+        ]
+      },
+      "expected_status": 200,
+      "assert": {},
+      "readback_requests": [
+        {
+          "id": "insert-readback",
+          "method": "POST",
+          "path": "/secure/emc/module/mdm/emp/emps/strict-api-employee/trains/queries",
+          "body": {
+            "p": {
+              "n": 1,
+              "s": 10
+            }
+          },
+          "expected_status": 200,
+          "assert": {
+            "json_keys": [
+              "rows",
+              "total"
+            ],
+            "json_contains": [
+              {
+                "path": "rows",
+                "where": {
+                  "courseCode": "SAFE-1"
+                },
+                "values": {
+                  "courseName": "Safety refresher",
+                  "trainResult": "passed"
+                }
+              }
+            ]
+          },
+          "capture_json": true
+        }
+      ],
+      "fixture": {
+        "id": "personnel-training-write-api-fixture",
+        "mode": "api",
+        "setup_requests": [
+          {
+            "id": "fixture-employee-create",
+            "method": "POST",
+            "path": "/secure/emc/module/mdm/emp/emps",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "id": "strict-api-employee",
+                    "userName": "Strict API Personnel",
+                    "age": 30
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          }
+        ],
+        "restore_requests": [
+          {
+            "id": "fixture-child-read",
+            "method": "POST",
+            "path": "/secure/emc/module/mdm/emp/emps/strict-api-employee/trains/queries",
+            "body": {
+              "p": {
+                "n": 1,
+                "s": 10
+              }
+            },
+            "expected_status": 200,
+            "assert": {
+              "json_keys": [
+                "rows",
+                "total"
+              ]
+            },
+            "capture_json": true
+          },
+          {
+            "id": "fixture-child-delete",
+            "method": "DELETE",
+            "path": "/secure/emc/module/mdm/emp/emps/strict-api-employee/trains",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "id": "${fixture.fixture-child-read.rows.0.id}"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          },
+          {
+            "id": "fixture-employee-delete",
+            "method": "DELETE",
+            "path": "/secure/emc/module/mdm/emp/emps",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "id": "strict-api-employee"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          }
+        ],
+        "business_write_via": "http"
+      },
+      "audit": {
+        "required": true,
+        "status": "observed",
+        "event": "personnel-training-insert",
+        "outcome": "ALLOWED",
+        "source": "owned-http"
+      }
+    },
+    {
+      "id": "personnel.training.delete",
+      "method": "DELETE",
+      "path": "/secure/emc/module/mdm/emp/emps/strict-api-employee/trains",
+      "route_id": "864c022a4c2fc0c1",
+      "operation": "write",
+      "write_via": "http",
+      "scope": "project-route",
+      "disposition": "owned-pass",
+      "body": {
+        "b": [
+          "",
+          [
+            {
+              "id": "${fixture.fixture-child-read.rows.0.id}"
+            }
+          ]
+        ]
+      },
+      "expected_status": 200,
+      "assert": {},
+      "fixture": {
+        "id": "personnel-training-delete-api-fixture",
+        "mode": "api",
+        "setup_requests": [
+          {
+            "id": "fixture-employee-create",
+            "method": "POST",
+            "path": "/secure/emc/module/mdm/emp/emps",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "id": "strict-api-employee",
+                    "userName": "Strict API Personnel",
+                    "age": 30
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          },
+          {
+            "id": "fixture-child-create",
+            "method": "POST",
+            "path": "/secure/emc/module/mdm/emp/emps/strict-api-employee/trains",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "trainTime": "2026-01-01",
+                    "trainContent": "Strict API Training",
+                    "trainResult": "passed",
+                    "courseCode": "SAFE-1",
+                    "courseName": "Safety refresher"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          },
+          {
+            "id": "fixture-child-read",
+            "method": "POST",
+            "path": "/secure/emc/module/mdm/emp/emps/strict-api-employee/trains/queries",
+            "body": {
+              "p": {
+                "n": 1,
+                "s": 10
+              }
+            },
+            "expected_status": 200,
+            "assert": {
+              "json_keys": [
+                "rows",
+                "total"
+              ]
+            },
+            "capture_json": true
+          }
+        ],
+        "restore_requests": [
+          {
+            "id": "fixture-employee-delete",
+            "method": "DELETE",
+            "path": "/secure/emc/module/mdm/emp/emps",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "id": "strict-api-employee"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          }
+        ],
+        "cleanup_via": "case-http",
+        "business_write_via": "http"
+      },
+      "audit": {
+        "required": true,
+        "status": "observed",
+        "event": "personnel-training-delete",
+        "outcome": "ALLOWED",
+        "source": "owned-http"
+      }
+    }
+  ],
+  "route_execution_model": {
+    "application": "one owned Spring application per wave",
+    "oracle": "persistent Oracle baseline/runtime schema",
+    "redis": "reused sss2 Redis database 15",
+    "boundary_process": false,
+    "internal_http_bridge": false,
+    "jni_replacement_process": false
+  }
+}

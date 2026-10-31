@@ -1,0 +1,7 @@
+# Ticket 11 consumables runtime handoff
+
+The bounded owned runtime is implemented in `owned-consumables` and preserves the historical consumables resource, controller, service/DAO contracts, three DTOs, templates, and scripts as compile inputs. Its read adapter uses the shared `OwnedReadRequest` transport and current-session `OwnedIdentityHttpBoundary`; stock and stock-log routes accept only the exact server-created `MTLID EQ` and `STOCKID EQ` filter shapes. All writes and unsupported auxiliary calls fail closed.
+
+The packaged runtime check uses the original `GikamWpjcApplication`, real RSA login/session handling, and a digest-pinned internal synthetic Oracle. The post-merge report [consumables-runtime-integration-rerun-20261020.json](consumables-runtime-integration-rerun-20261020.json) records 72 HTTP checks, including list/filter/no-match/pagination/detail, DTO numeric/date projection, visible and show-all stock, stock-log fields and labels, hidden organization suppression, malformed/repeated/unknown input rejection, low privilege, management/read-only menu permissions, current organization and menu revocation, original page HTML, and the original static JavaScript URL. The report records `source_dirty=false`, no production access, no host port or bind mount, and successful container, volume, and network cleanup.
+
+Browser automation and business writes/imports/stock actions remain outside this partial ticket acceptance. The historical Java query evidence remains preserved and the ticket/spec stays open.

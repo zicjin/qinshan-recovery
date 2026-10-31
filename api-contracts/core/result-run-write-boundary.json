@@ -1,0 +1,84 @@
+{
+  "schema": 1,
+  "family": "core-result-run-write-boundary",
+  "description": "HTTP-only result-run status update against a real clone row with API detail/restore.",
+  "cases": [
+    {
+      "id": "result.run.status-update.http",
+      "method": "PUT",
+      "path": "/secure/core/module/bp/result/runs/${fixture.run-query.rows.0.id}",
+      "route_id": "99b9a8171cc75af8",
+      "operation": "write",
+      "write_via": "http",
+      "scope": "owned-java-source-only-route",
+      "disposition": "owned-pass",
+      "body": {
+        "p": {
+          "status": "audit"
+        }
+      },
+      "expected_status": 200,
+      "assert": {
+        "json_keys": [
+          "updated"
+        ]
+      },
+      "fixture": {
+        "id": "result-run-status-api-fixture",
+        "mode": "api",
+        "setup_requests": [
+          {
+            "id": "run-create",
+            "method": "POST",
+            "path": "/secure/core/module/bp/result/runs",
+            "body": {"b": ["", [{"id": "${runtime.id}", "status": "done"}]]},
+            "expected_status": 200,
+            "assert": {"json_keys": ["id", "created"]}
+          },
+          {
+            "id": "run-query",
+            "capture_json": true,
+            "method": "POST",
+            "path": "/secure/core/module/bp/result/runs/queries/raw",
+            "body": {"p": {"runNo": "${runtime.id}", "s": 50}},
+            "expected_status": 200,
+            "assert": {
+              "json_keys": ["rows", "total"]
+            }
+          }
+        ],
+        "restore_requests": [
+          {
+            "id": "run-restore",
+            "method": "DELETE",
+            "path": "/secure/core/module/bp/result/runs",
+            "body": {"b": ["", [{"id": "${fixture.run-query.rows.0.id}"}]]},
+            "expected_status": 200,
+            "assert": {
+              "json_keys": ["deleted"]
+            }
+          }
+        ],
+        "business_write_via": "http"
+      },
+      "audit": {
+        "required": true,
+        "status": "observed",
+        "event": "result-run-update",
+        "outcome": "ALLOWED",
+        "source": "owned-http"
+      },
+      "route_origin": "owned-java-source-only",
+      "boundary_semantics": "owned Java source-only route; boundary route != boundary process",
+      "runtime_model": "same-spring-application"
+    }
+  ],
+  "route_execution_model": {
+    "application": "one owned Spring application per wave",
+    "oracle": "one clone-derived Oracle per wave",
+    "redis": "one Redis per wave",
+    "boundary_process": false,
+    "internal_http_bridge": false,
+    "jni_replacement_process": false
+  }
+}

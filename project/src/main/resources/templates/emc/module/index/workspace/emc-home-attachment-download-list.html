@@ -1,0 +1,11 @@
+<th:block th:replace="module/gikam/workspace" />
+
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/emc/module/item/home-attachments/emc-home-attachment.js',
+                      '/static/emc/module/item/home-attachments/emc-home-attachment-download-list.js'
+                    ]);
+    emcHomeAttachment.downloadListPage.init();
+/*]]>*/
+</script>
+

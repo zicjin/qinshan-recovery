@@ -1,11 +1,11 @@
 {
   "schema": 2,
   "scope": "current-head-spring-web-api-route-ledger",
-  "source_commit": "3b1686bb7b18a3050c667d25b65063b0db90a8bc",
+  "source_commit": "d7403f02d60ea83bc800cd164ecce6e8e7e42656",
   "source_dirty": false,
-  "repository_head_at_capture": "3b1686bb7b18a3050c667d25b65063b0db90a8bc",
-  "implementation_binding": "impl-f3d72023ee0a31f7",
-  "implementation_tree_digest": "f3d72023ee0a31f70ea3e44d63c0e3a1412d505bb0899d73dcb8b43820690dae",
+  "repository_head_at_capture": "d7403f02d60ea83bc800cd164ecce6e8e7e42656",
+  "implementation_binding": "impl-caa421cc0197cd36",
+  "implementation_tree_digest": "caa421cc0197cd3671a916f1aec94daaf5384ef386630459964645006d26fa02",
   "implementation_dirty": false,
   "implementation_scope": [
     "project/src/main/java",
@@ -61,7 +61,7 @@
     "build/oracle-free-source-manifest.json",
     "docker/Dockerfile.built"
   ],
-  "inventory_source": "/tmp/lims-standalone-root.7pl6C3/planning/business-api-inventory-current-head.json",
+  "inventory_source": "../.scratch/sunway-supplier-exit-api-first/diagnostic-evidence/pending/current-caa421cc0197/business-api-inventory-current-head.json",
   "planning_metadata": {
     "native_registry": {
       "path": null,

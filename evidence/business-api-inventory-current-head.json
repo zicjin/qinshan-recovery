@@ -1,11 +1,11 @@
 {
   "schema": 1,
   "scope": "project-java-http-api-source-inventory",
-  "source_commit": "3b1686bb7b18a3050c667d25b65063b0db90a8bc",
+  "source_commit": "d7403f02d60ea83bc800cd164ecce6e8e7e42656",
   "source_dirty": false,
-  "repository_head_at_capture": "3b1686bb7b18a3050c667d25b65063b0db90a8bc",
-  "implementation_binding": "impl-f3d72023ee0a31f7",
-  "implementation_tree_digest": "f3d72023ee0a31f70ea3e44d63c0e3a1412d505bb0899d73dcb8b43820690dae",
+  "repository_head_at_capture": "d7403f02d60ea83bc800cd164ecce6e8e7e42656",
+  "implementation_binding": "impl-caa421cc0197cd36",
+  "implementation_tree_digest": "caa421cc0197cd3671a916f1aec94daaf5384ef386630459964645006d26fa02",
   "implementation_dirty": false,
   "implementation_scope": [
     "project/src/main/java",

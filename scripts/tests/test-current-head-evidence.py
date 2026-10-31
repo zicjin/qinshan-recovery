@@ -11,11 +11,12 @@ import sys
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "scripts"))
 from evidence_output import current_implementation_binding
+from source_binding import REPO_ROOT
 DEFAULT_REPORTS = ()
 
 
 def git_head():
-    return subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT.parent, text=True).strip()
+    return subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=REPO_ROOT, text=True).strip()
 
 
 def main():
@@ -31,7 +32,7 @@ def main():
         with registry.open(encoding="utf-8", newline="") as handle:
             registry_rows = [row for row in csv.DictReader(handle, delimiter="\t")
                              if row.get("class") in {"canonical-strict", "canonical-diagnostic"}]
-        reports = [ROOT.parent / row["path"] for row in registry_rows]
+        reports = [REPO_ROOT / row["path"] for row in registry_rows]
     for index, given in enumerate(reports):
         path = given if given.is_absolute() else ROOT / given
         row = registry_rows[index] if registry_rows is not None else {}
@@ -47,7 +48,7 @@ def main():
         commit = payload.get("source_commit")
         if not isinstance(commit, str) or not re.fullmatch(r"[0-9a-f]{7,40}", commit):
             raise SystemExit("current-head evidence: malformed repository_head_at_capture/source_commit: " + str(path))
-        if subprocess.run(["git", "cat-file", "-e", commit + "^{commit}"], cwd=ROOT.parent,
+        if subprocess.run(["git", "cat-file", "-e", commit + "^{commit}"], cwd=REPO_ROOT,
                           stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode:
             raise SystemExit("current-head evidence: repository_head_at_capture is not a Git object: " + str(path))
         if payload.get("implementation_tree_digest"):

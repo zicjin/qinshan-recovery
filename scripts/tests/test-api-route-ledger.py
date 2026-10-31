@@ -6,11 +6,16 @@ from pathlib import Path
 import subprocess
 
 ROOT = Path(__file__).resolve().parents[2]
-PENDING = ROOT.parent / ".scratch/sunway-supplier-exit-api-first/diagnostic-evidence/pending"
+import sys
+sys.path.insert(0, str(ROOT / "scripts"))
+from source_binding import REPO_ROOT, is_standalone_root
+PENDING = REPO_ROOT.parent / ".scratch/sunway-supplier-exit-api-first/diagnostic-evidence/pending"
 CURRENT_HEAD = subprocess.check_output(
-    ["git", "-C", str(ROOT.parent), "rev-parse", "HEAD"], text=True
+    ["git", "-C", str(REPO_ROOT), "rev-parse", "HEAD"], text=True
 ).strip()
-LEDGER = ROOT.parent / ".scratch/sunway-supplier-exit-api-first/archive/historical/api-route-ledger-20261027-current-head.json"
+LEDGER = (REPO_ROOT / "evidence/api-route-ledger-current-head.json"
+          if is_standalone_root(REPO_ROOT) else
+          REPO_ROOT.parent / ".scratch/sunway-supplier-exit-api-first/archive/historical/api-route-ledger-20261027-current-head.json")
 for candidate in sorted(PENDING.glob("current-*/api-route-ledger-current-head.json"), reverse=True):
     try:
         payload = json.loads(candidate.read_text(encoding="utf-8"))

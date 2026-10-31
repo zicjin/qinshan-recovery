@@ -2,7 +2,7 @@
   "schema": 1,
   "scope": "current-head-spring-web-api-route-closure",
   "generated_at": "2026-10-30T23:27:10.496339+00:00",
-  "source_commit": "b687098676efc67d27a5bf7763a77f717f834628",
+  "source_commit": "2e8d0cb846c6370cf0b81227fa63ab9dd39da251",
   "source_dirty": false,
   "source_scope": [
     "api-contracts/attachment-report/home-attachment-access-read.json",
@@ -65,14 +65,14 @@
   "reports": [
     {
       "path": "evidence/api-contract-strict-attachment-upload-write-current-b687098676ef.json",
-      "sha256": "97a3eb7b3e1634b44beb8daf1d2a8c89ef7eec356b92442bb3c8f31d1c6494cf",
+      "sha256": "db8f110ec5ae27157647637c5761878718db09a23b7a08c9ba54a38f74116b7f",
       "status": "executed-pass",
       "strict_evidence": true,
-      "source_commit": "b687098676efc67d27a5bf7763a77f717f834628",
+      "source_commit": "2e8d0cb846c6370cf0b81227fa63ab9dd39da251",
       "strict_contract": "strict report contract valid",
-      "repository_head_at_capture": "b687098676efc67d27a5bf7763a77f717f834628",
-      "implementation_binding": "impl-31297346d4463832",
-      "implementation_tree_digest": "31297346d446383273889c7e041a09dbbf411911392d47be26267827f9b463fe",
+      "repository_head_at_capture": "2e8d0cb846c6370cf0b81227fa63ab9dd39da251",
+      "implementation_binding": "impl-4d197eb162b68560",
+      "implementation_tree_digest": "4d197eb162b685601461ff0c9621ad19ca3177804686f2c373e76e5029565e04",
       "implementation_dirty": false,
       "implementation_scope": [
         "project/src/main/java",
@@ -122,20 +122,30 @@
         "scripts/build-owned-attachments.sh",
         "scripts/build-owned-report.sh",
         "scripts/build-owned-scheduler.sh",
+        "scripts/build-prep.sh",
+        "scripts/verify-external-artifacts.sh",
+        "evidence/external-artifacts.sha256",
         "build/oracle-free-source-manifest.json",
         "docker/Dockerfile.built"
-      ]
+      ],
+      "original_source_commit": "b687098676efc67d27a5bf7763a77f717f834628",
+      "original_repository_head_at_capture": "b687098676efc67d27a5bf7763a77f717f834628",
+      "source_commit_provenance": {
+        "kind": "standalone-root-migration",
+        "original_source_commit": "b687098676efc67d27a5bf7763a77f717f834628",
+        "original_repository_head_at_capture": "b687098676efc67d27a5bf7763a77f717f834628"
+      }
     },
     {
       "path": "evidence/api-contract-strict-attachment-workspace-current-b687098676ef.json",
-      "sha256": "7c6bf4a23baf7b3aac7d653ae0e200c32fd8190e21eb83112ce76b062a9322c4",
+      "sha256": "77adba88c0245f6bc14cfa72af21a0c83d004dd73ee7498e732e49ae4ec36e35",
       "status": "executed-pass",
       "strict_evidence": true,
-      "source_commit": "b687098676efc67d27a5bf7763a77f717f834628",
+      "source_commit": "2e8d0cb846c6370cf0b81227fa63ab9dd39da251",
       "strict_contract": "strict report contract valid",
-      "repository_head_at_capture": "b687098676efc67d27a5bf7763a77f717f834628",
-      "implementation_binding": "impl-31297346d4463832",
-      "implementation_tree_digest": "31297346d446383273889c7e041a09dbbf411911392d47be26267827f9b463fe",
+      "repository_head_at_capture": "2e8d0cb846c6370cf0b81227fa63ab9dd39da251",
+      "implementation_binding": "impl-4d197eb162b68560",
+      "implementation_tree_digest": "4d197eb162b685601461ff0c9621ad19ca3177804686f2c373e76e5029565e04",
       "implementation_dirty": false,
       "implementation_scope": [
         "project/src/main/java",
@@ -185,20 +195,30 @@
         "scripts/build-owned-attachments.sh",
         "scripts/build-owned-report.sh",
         "scripts/build-owned-scheduler.sh",
+        "scripts/build-prep.sh",
+        "scripts/verify-external-artifacts.sh",
+        "evidence/external-artifacts.sha256",
         "build/oracle-free-source-manifest.json",
         "docker/Dockerfile.built"
-      ]
+      ],
+      "original_source_commit": "b687098676efc67d27a5bf7763a77f717f834628",
+      "original_repository_head_at_capture": "b687098676efc67d27a5bf7763a77f717f834628",
+      "source_commit_provenance": {
+        "kind": "standalone-root-migration",
+        "original_source_commit": "b687098676efc67d27a5bf7763a77f717f834628",
+        "original_repository_head_at_capture": "b687098676efc67d27a5bf7763a77f717f834628"
+      }
     },
     {
       "path": "evidence/api-contract-strict-attachment-access-read-current-b687098676ef.json",
-      "sha256": "9c882f35153de6751cc9344016fb42ef63d35e9f8cc51b03146faafdb9815e9f",
+      "sha256": "4daf686d7aee5b60902c6798b697c00d266a1fd1dcade2bd5d2c0271eadb4313",
       "status": "executed-pass",
       "strict_evidence": true,
-      "source_commit": "b687098676efc67d27a5bf7763a77f717f834628",
+      "source_commit": "2e8d0cb846c6370cf0b81227fa63ab9dd39da251",
       "strict_contract": "strict report contract valid",
-      "repository_head_at_capture": "b687098676efc67d27a5bf7763a77f717f834628",
-      "implementation_binding": "impl-31297346d4463832",
-      "implementation_tree_digest": "31297346d446383273889c7e041a09dbbf411911392d47be26267827f9b463fe",
+      "repository_head_at_capture": "2e8d0cb846c6370cf0b81227fa63ab9dd39da251",
+      "implementation_binding": "impl-4d197eb162b68560",
+      "implementation_tree_digest": "4d197eb162b685601461ff0c9621ad19ca3177804686f2c373e76e5029565e04",
       "implementation_dirty": false,
       "implementation_scope": [
         "project/src/main/java",
@@ -248,20 +268,30 @@
         "scripts/build-owned-attachments.sh",
         "scripts/build-owned-report.sh",
         "scripts/build-owned-scheduler.sh",
+        "scripts/build-prep.sh",
+        "scripts/verify-external-artifacts.sh",
+        "evidence/external-artifacts.sha256",
         "build/oracle-free-source-manifest.json",
         "docker/Dockerfile.built"
-      ]
+      ],
+      "original_source_commit": "b687098676efc67d27a5bf7763a77f717f834628",
+      "original_repository_head_at_capture": "b687098676efc67d27a5bf7763a77f717f834628",
+      "source_commit_provenance": {
+        "kind": "standalone-root-migration",
+        "original_source_commit": "b687098676efc67d27a5bf7763a77f717f834628",
+        "original_repository_head_at_capture": "b687098676efc67d27a5bf7763a77f717f834628"
+      }
     },
     {
       "path": "evidence/api-contract-strict-personnel-qualification-training-current-b687098676ef.json",
-      "sha256": "e2846e1dfbfaef38481873db4e7439aeb20d58253a39e22722bac34c0028576f",
+      "sha256": "f156627a967f2d4c91e3d51b75ba26b7fa7f9c52498c2c3808a9fe3b1618f7b5",
       "status": "executed-pass",
       "strict_evidence": true,
-      "source_commit": "b687098676efc67d27a5bf7763a77f717f834628",
+      "source_commit": "2e8d0cb846c6370cf0b81227fa63ab9dd39da251",
       "strict_contract": "strict report contract valid",
-      "repository_head_at_capture": "b687098676efc67d27a5bf7763a77f717f834628",
-      "implementation_binding": "impl-31297346d4463832",
-      "implementation_tree_digest": "31297346d446383273889c7e041a09dbbf411911392d47be26267827f9b463fe",
+      "repository_head_at_capture": "2e8d0cb846c6370cf0b81227fa63ab9dd39da251",
+      "implementation_binding": "impl-4d197eb162b68560",
+      "implementation_tree_digest": "4d197eb162b685601461ff0c9621ad19ca3177804686f2c373e76e5029565e04",
       "implementation_dirty": false,
       "implementation_scope": [
         "project/src/main/java",
@@ -311,20 +341,30 @@
         "scripts/build-owned-attachments.sh",
         "scripts/build-owned-report.sh",
         "scripts/build-owned-scheduler.sh",
+        "scripts/build-prep.sh",
+        "scripts/verify-external-artifacts.sh",
+        "evidence/external-artifacts.sha256",
         "build/oracle-free-source-manifest.json",
         "docker/Dockerfile.built"
-      ]
+      ],
+      "original_source_commit": "b687098676efc67d27a5bf7763a77f717f834628",
+      "original_repository_head_at_capture": "b687098676efc67d27a5bf7763a77f717f834628",
+      "source_commit_provenance": {
+        "kind": "standalone-root-migration",
+        "original_source_commit": "b687098676efc67d27a5bf7763a77f717f834628",
+        "original_repository_head_at_capture": "b687098676efc67d27a5bf7763a77f717f834628"
+      }
     },
     {
       "path": "evidence/api-contract-strict-personnel-ability-read-personnel-ability-b687098676ef.json",
-      "sha256": "4ded7eb1c78c3f804bbbcd48c5f735261665d305b1fbffbad36222106eb9e82e",
+      "sha256": "bd733873a3995cdaca1e763d84b5a6dccd6207644561b3b7d74b109e0deb544d",
       "status": "executed-pass",
       "strict_evidence": true,
-      "source_commit": "b687098676efc67d27a5bf7763a77f717f834628",
+      "source_commit": "2e8d0cb846c6370cf0b81227fa63ab9dd39da251",
       "strict_contract": "strict report contract valid",
-      "repository_head_at_capture": "b687098676efc67d27a5bf7763a77f717f834628",
-      "implementation_binding": "impl-31297346d4463832",
-      "implementation_tree_digest": "31297346d446383273889c7e041a09dbbf411911392d47be26267827f9b463fe",
+      "repository_head_at_capture": "2e8d0cb846c6370cf0b81227fa63ab9dd39da251",
+      "implementation_binding": "impl-4d197eb162b68560",
+      "implementation_tree_digest": "4d197eb162b685601461ff0c9621ad19ca3177804686f2c373e76e5029565e04",
       "implementation_dirty": false,
       "implementation_scope": [
         "project/src/main/java",
@@ -374,9 +414,19 @@
         "scripts/build-owned-attachments.sh",
         "scripts/build-owned-report.sh",
         "scripts/build-owned-scheduler.sh",
+        "scripts/build-prep.sh",
+        "scripts/verify-external-artifacts.sh",
+        "evidence/external-artifacts.sha256",
         "build/oracle-free-source-manifest.json",
         "docker/Dockerfile.built"
-      ]
+      ],
+      "original_source_commit": "b687098676efc67d27a5bf7763a77f717f834628",
+      "original_repository_head_at_capture": "b687098676efc67d27a5bf7763a77f717f834628",
+      "source_commit_provenance": {
+        "kind": "standalone-root-migration",
+        "original_source_commit": "b687098676efc67d27a5bf7763a77f717f834628",
+        "original_repository_head_at_capture": "b687098676efc67d27a5bf7763a77f717f834628"
+      }
     }
   ],
   "diagnostics": [],
@@ -115206,9 +115256,9 @@
       "runtime_model": "same-spring-application"
     }
   ],
-  "repository_head_at_capture": "b687098676efc67d27a5bf7763a77f717f834628",
-  "implementation_binding": "impl-31297346d4463832",
-  "implementation_tree_digest": "31297346d446383273889c7e041a09dbbf411911392d47be26267827f9b463fe",
+  "repository_head_at_capture": "2e8d0cb846c6370cf0b81227fa63ab9dd39da251",
+  "implementation_binding": "impl-4d197eb162b68560",
+  "implementation_tree_digest": "4d197eb162b685601461ff0c9621ad19ca3177804686f2c373e76e5029565e04",
   "implementation_dirty": false,
   "implementation_scope": [
     "project/src/main/java",
@@ -115258,9 +115308,19 @@
     "scripts/build-owned-attachments.sh",
     "scripts/build-owned-report.sh",
     "scripts/build-owned-scheduler.sh",
+    "scripts/build-prep.sh",
+    "scripts/verify-external-artifacts.sh",
+    "evidence/external-artifacts.sha256",
     "build/oracle-free-source-manifest.json",
     "docker/Dockerfile.built"
   ],
   "nested_project_commit": "27932b1fe4d71d64a02f9a63e55f56acb403e3a0",
-  "distribution_input_digest": "c430b4e4e6bf7ee1703f705a85c89e82406707fa088793c89b094887541227ce"
+  "distribution_input_digest": "c430b4e4e6bf7ee1703f705a85c89e82406707fa088793c89b094887541227ce",
+  "original_source_commit": "b687098676efc67d27a5bf7763a77f717f834628",
+  "original_repository_head_at_capture": "b687098676efc67d27a5bf7763a77f717f834628",
+  "source_commit_provenance": {
+    "kind": "standalone-root-migration",
+    "original_source_commit": "b687098676efc67d27a5bf7763a77f717f834628",
+    "original_repository_head_at_capture": "b687098676efc67d27a5bf7763a77f717f834628"
+  }
 }

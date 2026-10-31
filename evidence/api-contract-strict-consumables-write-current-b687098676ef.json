@@ -15,7 +15,7 @@
     "jni_replacement_process": false
   },
   "started_at": "2026-10-30T23:45:01.081315+00:00",
-  "source_commit": "b687098676efc67d27a5bf7763a77f717f834628",
+  "source_commit": "2e8d0cb846c6370cf0b81227fa63ab9dd39da251",
   "source_dirty": false,
   "source_scope": [
     "project/src/main/java",
@@ -787,9 +787,9 @@
   "wave": "consumables-materials",
   "wave_runtime_id": "api-wave-consumables-materials",
   "wave_finalized_at": "2026-10-30T23:45:06.675992+00:00",
-  "repository_head_at_capture": "b687098676efc67d27a5bf7763a77f717f834628",
-  "implementation_binding": "impl-31297346d4463832",
-  "implementation_tree_digest": "31297346d446383273889c7e041a09dbbf411911392d47be26267827f9b463fe",
+  "repository_head_at_capture": "2e8d0cb846c6370cf0b81227fa63ab9dd39da251",
+  "implementation_binding": "impl-4d197eb162b68560",
+  "implementation_tree_digest": "4d197eb162b685601461ff0c9621ad19ca3177804686f2c373e76e5029565e04",
   "implementation_dirty": false,
   "implementation_scope": [
     "project/src/main/java",
@@ -839,9 +839,19 @@
     "scripts/build-owned-attachments.sh",
     "scripts/build-owned-report.sh",
     "scripts/build-owned-scheduler.sh",
+    "scripts/build-prep.sh",
+    "scripts/verify-external-artifacts.sh",
+    "evidence/external-artifacts.sha256",
     "build/oracle-free-source-manifest.json",
     "docker/Dockerfile.built"
   ],
   "nested_project_commit": "27932b1fe4d71d64a02f9a63e55f56acb403e3a0",
-  "distribution_input_digest": "c430b4e4e6bf7ee1703f705a85c89e82406707fa088793c89b094887541227ce"
+  "distribution_input_digest": "c430b4e4e6bf7ee1703f705a85c89e82406707fa088793c89b094887541227ce",
+  "original_source_commit": "b687098676efc67d27a5bf7763a77f717f834628",
+  "original_repository_head_at_capture": "b687098676efc67d27a5bf7763a77f717f834628",
+  "source_commit_provenance": {
+    "kind": "standalone-root-migration",
+    "original_source_commit": "b687098676efc67d27a5bf7763a77f717f834628",
+    "original_repository_head_at_capture": "b687098676efc67d27a5bf7763a77f717f834628"
+  }
 }

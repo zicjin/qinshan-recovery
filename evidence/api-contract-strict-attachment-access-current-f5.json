@@ -1,0 +1,2810 @@
+{
+  "schema": 1,
+  "status": "executed-pass",
+  "execution": "strict",
+  "strict_evidence": true,
+  "production_access": false,
+  "scope": "clone-derived Spring Web API contract runner",
+  "route_execution_model": {
+    "application": "one owned Spring application per wave",
+    "oracle": "persistent Oracle baseline/runtime schema",
+    "redis": "reused sss2 Redis database 15",
+    "boundary_route": "owned Java source-only route in the same Spring application",
+    "boundary_process": false,
+    "internal_http_bridge": false,
+    "jni_replacement_process": false
+  },
+  "started_at": "2026-10-31T14:31:31.385545+00:00",
+  "source_commit": "95688ee21cf950e1362d9da2baba8cd1b324a865",
+  "repository_head_at_capture": "95688ee21cf950e1362d9da2baba8cd1b324a865",
+  "source_dirty": false,
+  "source_scope": [
+    "project/src/main/java",
+    "owned-framework/src",
+    "owned-personnel/src",
+    "owned-equipment/src",
+    "owned-consumables/src",
+    "owned-attachments/src",
+    "owned-report/src",
+    "owned-scheduler/src",
+    "owned-web/src",
+    "scripts/source_binding.py",
+    "scripts/evidence_output.py",
+    "scripts/spring_api_contract_runner.py",
+    "scripts/api_wave_orchestrator.py",
+    "scripts/owned_runtime_contract.py",
+    "scripts/api_fixture.py",
+    "scripts/remote-sql-fixture-executor.py",
+    "scripts/start-strict-sss2-api-runtime.sh",
+    "scripts/start-reused-sss2-api-runtime.sh",
+    "scripts/cleanup-strict-sss2-api-runtime.sh",
+    "scripts/refresh-owned-sss2-app.sh",
+    "scripts/owned_readiness.py",
+    "tools/business_api_inventory.py",
+    "tools/api_route_ledger.py",
+    "tools/api_route_execution_plan.py",
+    "tools/api_contract_skeleton.py",
+    "tools/api_route_closure.py",
+    "tools/finalize_api_report.py",
+    "tools/vertical_slices/matrix.py",
+    "project/pom.xml",
+    "owned-framework/pom.xml",
+    "owned-personnel/pom.xml",
+    "owned-equipment/pom.xml",
+    "owned-consumables/pom.xml",
+    "owned-attachments/pom.xml",
+    "owned-report/pom.xml",
+    "owned-scheduler/pom.xml",
+    "owned-web/pom.xml",
+    "owned-distribution/package.py",
+    "owned-distribution/start.sh",
+    "owned-distribution/example",
+    "owned-web/build-owned-web.sh",
+    "scripts/build-owned-distribution.sh",
+    "scripts/build-owned-framework.sh",
+    "scripts/build-owned-personnel.sh",
+    "scripts/build-owned-equipment.sh",
+    "scripts/build-owned-consumables.sh",
+    "scripts/build-owned-attachments.sh",
+    "scripts/build-owned-report.sh",
+    "scripts/build-owned-scheduler.sh",
+    "scripts/build-prep.sh",
+    "scripts/verify-external-artifacts.sh",
+    "evidence/external-artifacts.sha256",
+    "build/oracle-free-source-manifest.json",
+    "docker/Dockerfile.built"
+  ],
+  "implementation_binding": "impl-bc79c0d168154756",
+  "implementation_tree_digest": "bc79c0d1681547568fd0ae569ca3dedd2c66694ef9ac51a1b70cf9aa74dfb911",
+  "implementation_dirty": false,
+  "implementation_scope": [
+    "project/src/main/java",
+    "owned-framework/src",
+    "owned-personnel/src",
+    "owned-equipment/src",
+    "owned-consumables/src",
+    "owned-attachments/src",
+    "owned-report/src",
+    "owned-scheduler/src",
+    "owned-web/src",
+    "scripts/source_binding.py",
+    "scripts/evidence_output.py",
+    "scripts/spring_api_contract_runner.py",
+    "scripts/api_wave_orchestrator.py",
+    "scripts/owned_runtime_contract.py",
+    "scripts/api_fixture.py",
+    "scripts/remote-sql-fixture-executor.py",
+    "scripts/start-strict-sss2-api-runtime.sh",
+    "scripts/start-reused-sss2-api-runtime.sh",
+    "scripts/cleanup-strict-sss2-api-runtime.sh",
+    "scripts/refresh-owned-sss2-app.sh",
+    "scripts/owned_readiness.py",
+    "tools/business_api_inventory.py",
+    "tools/api_route_ledger.py",
+    "tools/api_route_execution_plan.py",
+    "tools/api_contract_skeleton.py",
+    "tools/api_route_closure.py",
+    "tools/finalize_api_report.py",
+    "tools/vertical_slices/matrix.py",
+    "project/pom.xml",
+    "owned-framework/pom.xml",
+    "owned-personnel/pom.xml",
+    "owned-equipment/pom.xml",
+    "owned-consumables/pom.xml",
+    "owned-attachments/pom.xml",
+    "owned-report/pom.xml",
+    "owned-scheduler/pom.xml",
+    "owned-web/pom.xml",
+    "owned-distribution/package.py",
+    "owned-distribution/start.sh",
+    "owned-distribution/example",
+    "owned-web/build-owned-web.sh",
+    "scripts/build-owned-distribution.sh",
+    "scripts/build-owned-framework.sh",
+    "scripts/build-owned-personnel.sh",
+    "scripts/build-owned-equipment.sh",
+    "scripts/build-owned-consumables.sh",
+    "scripts/build-owned-attachments.sh",
+    "scripts/build-owned-report.sh",
+    "scripts/build-owned-scheduler.sh",
+    "scripts/build-prep.sh",
+    "scripts/verify-external-artifacts.sh",
+    "evidence/external-artifacts.sha256",
+    "build/oracle-free-source-manifest.json",
+    "docker/Dockerfile.built"
+  ],
+  "nested_project_commit": "27932b1fe4d71d64a02f9a63e55f56acb403e3a0",
+  "distribution_input_digest": "dc97c305b90ba8334548ee522a08b94300580d3ff2b3ebf234b2695653f913e4",
+  "artifact_sha256": {
+    "owned-distribution/target/distribution/app/lims-owned-application.jar": "116c9dfbb837e1ec3b1ea2d3cb5acf4536e1099b60ae828c31a9c1c790701398"
+  },
+  "clone_identity": "lims-owned-sss2-oracle:LIMS_BASELINE_SSS2:LIMS_RUNTIME_SSS2:f1c43b53750ec720488ef7780527ea303081ab2dc6a0fc029a1d17f33dc10a6c",
+  "runtime_report": "/home/ts/qinshan/.scratch/sunway-supplier-exit-api-first/diagnostic-evidence/runtime/strict-api-runtime-manifest-secondary-attachment-f5-r2.json",
+  "runtime_contract": {
+    "mode": "strict",
+    "strict_evidence": false,
+    "runtime_identity": "lims-owned-sss2-oracle:LIMS_BASELINE_SSS2:LIMS_RUNTIME_SSS2:f1c43b53750ec720488ef7780527ea303081ab2dc6a0fc029a1d17f33dc10a6c",
+    "reuse": true,
+    "oracle_reused": true,
+    "baseline_schema": "LIMS_BASELINE_SSS2",
+    "runtime_schema": "LIMS_RUNTIME_SSS2",
+    "baseline_schema_hash": "f1c43b53750ec720488ef7780527ea303081ab2dc6a0fc029a1d17f33dc10a6c",
+    "runtime_schema_hash_before": "1162d1b8a4a6bb9ae0508e30a9db4e4e16199bc89705315d047575445c5d51e7",
+    "runtime_schema_hash_after": "1162d1b8a4a6bb9ae0508e30a9db4e4e16199bc89705315d047575445c5d51e7",
+    "source_commit": "95688ee21cf950e1362d9da2baba8cd1b324a865",
+    "implementation_binding": "impl-bc79c0d168154756",
+    "implementation_tree_digest": "bc79c0d1681547568fd0ae569ca3dedd2c66694ef9ac51a1b70cf9aa74dfb911",
+    "implementation_scope": [
+      "project/src/main/java",
+      "owned-framework/src",
+      "owned-personnel/src",
+      "owned-equipment/src",
+      "owned-consumables/src",
+      "owned-attachments/src",
+      "owned-report/src",
+      "owned-scheduler/src",
+      "owned-web/src",
+      "scripts/source_binding.py",
+      "scripts/evidence_output.py",
+      "scripts/spring_api_contract_runner.py",
+      "scripts/api_wave_orchestrator.py",
+      "scripts/owned_runtime_contract.py",
+      "scripts/api_fixture.py",
+      "scripts/remote-sql-fixture-executor.py",
+      "scripts/start-strict-sss2-api-runtime.sh",
+      "scripts/start-reused-sss2-api-runtime.sh",
+      "scripts/cleanup-strict-sss2-api-runtime.sh",
+      "scripts/refresh-owned-sss2-app.sh",
+      "scripts/owned_readiness.py",
+      "tools/business_api_inventory.py",
+      "tools/api_route_ledger.py",
+      "tools/api_route_execution_plan.py",
+      "tools/api_contract_skeleton.py",
+      "tools/api_route_closure.py",
+      "tools/finalize_api_report.py",
+      "tools/vertical_slices/matrix.py",
+      "project/pom.xml",
+      "owned-framework/pom.xml",
+      "owned-personnel/pom.xml",
+      "owned-equipment/pom.xml",
+      "owned-consumables/pom.xml",
+      "owned-attachments/pom.xml",
+      "owned-report/pom.xml",
+      "owned-scheduler/pom.xml",
+      "owned-web/pom.xml",
+      "owned-distribution/package.py",
+      "owned-distribution/start.sh",
+      "owned-distribution/example",
+      "owned-web/build-owned-web.sh",
+      "scripts/build-owned-distribution.sh",
+      "scripts/build-owned-framework.sh",
+      "scripts/build-owned-personnel.sh",
+      "scripts/build-owned-equipment.sh",
+      "scripts/build-owned-consumables.sh",
+      "scripts/build-owned-attachments.sh",
+      "scripts/build-owned-report.sh",
+      "scripts/build-owned-scheduler.sh",
+      "scripts/build-prep.sh",
+      "scripts/verify-external-artifacts.sh",
+      "evidence/external-artifacts.sha256",
+      "build/oracle-free-source-manifest.json",
+      "docker/Dockerfile.built"
+    ],
+    "implementation_dirty": false,
+    "repository_head_at_capture": "95688ee21cf950e1362d9da2baba8cd1b324a865"
+  },
+  "role": "manager",
+  "organization": "org-a",
+  "mode": "strict",
+  "base_url": "http://127.0.0.1:18091",
+  "case_count": 7,
+  "cases": [
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "activatedFlag",
+        "createdTime",
+        "endDate",
+        "ext$",
+        "id"
+      ],
+      "body_sha256": "be8d38c5e276a3acc62a4398371141b9642540605f4c4d95948c3d80b29dd1fc",
+      "body_bytes": 161,
+      "assertions": {
+        "json_keys": [
+          "id"
+        ]
+      },
+      "id": "attachment.detail-read",
+      "method": "GET",
+      "path": "/secure/emc/module/item/home-attachments/6069",
+      "url": "http://127.0.0.1:18091/secure/emc/module/item/home-attachments/6069",
+      "status": 200,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "161",
+        "date": "Sat, 31 Oct 2026 14:31:35 GMT",
+        "connection": "close"
+      },
+      "request_headers": {},
+      "elapsed_ms": 315.347,
+      "route": {
+        "method": "GET",
+        "path": "/secure/emc/module/item/home-attachments/${fixture.attachment-create}",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "project-route",
+        "route_id": "34e92573f017fa8a"
+      },
+      "fixture": {
+        "id": "attachment.detail-read",
+        "mode": "sql-control",
+        "setup": "executed",
+        "restore": "restored",
+        "setup_requests": [
+          {
+            "id": "attachment-create",
+            "method": "POST",
+            "path": "/secure/emc/module/item/home-attachments",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "endDate": "2030-01-01T00:00:00",
+                    "activatedFlag": "1"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {},
+            "capture_text": true
+          },
+          {
+            "id": "attachment-upload",
+            "method": "POST",
+            "path": "/core/module/item/files",
+            "multipart": {
+              "fields": {
+                "targetId": "T_EMC_HOME_ATTACHMENT$${fixture.attachment-create}",
+                "bizCategory": "document"
+              },
+              "file": {
+                "field": "file",
+                "filename": "strict-api-attachment.txt",
+                "content_type": "text/plain",
+                "content": "strict attachment fixture\n"
+              }
+            },
+            "expected_status": 200,
+            "assert": {
+              "json_keys": [
+                "id",
+                "targetId",
+                "name"
+              ]
+            },
+            "capture_json": true
+          },
+          {
+            "id": "attachment-grant",
+            "method": "POST",
+            "path": "/secure/emc/module/item/home-attachments/permissions",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "attachmentId": "${fixture.attachment-create}",
+                    "userId": "Test"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          },
+          {
+            "id": "attachment-permission-query",
+            "method": "POST",
+            "path": "/secure/emc/module/item/home-attachments/${fixture.attachment-create}/permissions/queries",
+            "body": {},
+            "expected_status": 200,
+            "assert": {
+              "json_keys": [
+                "rows",
+                "total"
+              ]
+            },
+            "capture_json": true
+          }
+        ],
+        "restore_requests": [
+          {
+            "id": "attachment-permission-delete",
+            "method": "DELETE",
+            "path": "/secure/emc/module/item/home-attachments/permissions",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "id": "${fixture.attachment-permission-query.rows.0.id}",
+                    "attachmentId": "${fixture.attachment-create}",
+                    "userId": "Test"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          },
+          {
+            "id": "attachment-delete",
+            "method": "DELETE",
+            "path": "/secure/emc/module/item/home-attachments",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "id": "${fixture.attachment-create}"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          }
+        ],
+        "sql_files": [],
+        "setup_sql_files": [
+          "attachment/t_core_file.sql"
+        ],
+        "restore_sql_files": [
+          "attachment/t_core_file_restore.sql"
+        ],
+        "business_write_via": "http",
+        "cleanup_via": "restore-http",
+        "setup_sql": [
+          {
+            "phase": "setup",
+            "path": "/home/ts/qinshan/lims-recovery/api-fixtures/attachment/t_core_file.sql",
+            "sha256": "6449353aa1f2213947b43e6e272b5bca51add78a2e4c056e0a278a7f1b194231",
+            "status": "executed",
+            "executor": "/home/ts/qinshan/lims-recovery/scripts/remote-sql-fixture-executor.py",
+            "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "output_bytes": 0
+          }
+        ],
+        "restore_sql": [
+          {
+            "phase": "restore",
+            "path": "/home/ts/qinshan/lims-recovery/api-fixtures/attachment/t_core_file_restore.sql",
+            "sha256": "aa2c2fe38cf1b737fac90856506d92c614ee86029c5a583e680dc38aa3ff4392",
+            "status": "executed",
+            "executor": "/home/ts/qinshan/lims-recovery/scripts/remote-sql-fixture-executor.py",
+            "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "output_bytes": 0
+          }
+        ],
+        "runtime_values": {
+          "id": "r8630acf4e0bc"
+        },
+        "setup_http": [
+          {
+            "expected_status": [
+              200
+            ],
+            "json_top_level_keys": null,
+            "body_sha256": "894cc09012f2d0905fcbad47cdedad08b299d48661ce1f0cc34c0e1c4d769873",
+            "body_bytes": 4,
+            "assertions": {},
+            "id": "attachment-create",
+            "method": "POST",
+            "path": "/secure/emc/module/item/home-attachments",
+            "url": "http://127.0.0.1:18091/secure/emc/module/item/home-attachments",
+            "status": 200,
+            "response_headers": {
+              "x-content-type-options": "nosniff",
+              "x-xss-protection": "1; mode=block",
+              "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+              "pragma": "no-cache",
+              "expires": "0",
+              "x-frame-options": "SAMEORIGIN",
+              "content-type": "application/json",
+              "content-length": "4",
+              "date": "Sat, 31 Oct 2026 14:31:34 GMT",
+              "connection": "close"
+            },
+            "request_headers": {
+              "content-type": "application/json"
+            },
+            "elapsed_ms": 535.152
+          },
+          {
+            "expected_status": [
+              200
+            ],
+            "json_top_level_keys": [
+              "id",
+              "name",
+              "targetId"
+            ],
+            "body_sha256": "8953496356243ce3da7f7f07d995ad0c3de999946ce00aef7987234b7a4e1fb8",
+            "body_bytes": 86,
+            "assertions": {
+              "json_keys": [
+                "id",
+                "targetId",
+                "name"
+              ]
+            },
+            "id": "attachment-upload",
+            "method": "POST",
+            "path": "/core/module/item/files",
+            "url": "http://127.0.0.1:18091/core/module/item/files",
+            "status": 200,
+            "response_headers": {
+              "x-content-type-options": "nosniff",
+              "x-xss-protection": "1; mode=block",
+              "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+              "pragma": "no-cache",
+              "expires": "0",
+              "x-frame-options": "SAMEORIGIN",
+              "content-type": "application/json",
+              "content-length": "86",
+              "date": "Sat, 31 Oct 2026 14:31:34 GMT",
+              "connection": "close"
+            },
+            "request_headers": {
+              "content-type": "multipart/form-data; boundary=----ownedApiFixture5cd82d35c47f498aac94b762fc62a465"
+            },
+            "elapsed_ms": 760.107
+          },
+          {
+            "expected_status": [
+              200
+            ],
+            "json_top_level_keys": null,
+            "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "body_bytes": 0,
+            "assertions": {},
+            "id": "attachment-grant",
+            "method": "POST",
+            "path": "/secure/emc/module/item/home-attachments/permissions",
+            "url": "http://127.0.0.1:18091/secure/emc/module/item/home-attachments/permissions",
+            "status": 200,
+            "response_headers": {
+              "x-content-type-options": "nosniff",
+              "x-xss-protection": "1; mode=block",
+              "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+              "pragma": "no-cache",
+              "expires": "0",
+              "x-frame-options": "SAMEORIGIN",
+              "content-length": "0",
+              "date": "Sat, 31 Oct 2026 14:31:35 GMT",
+              "connection": "close"
+            },
+            "request_headers": {
+              "content-type": "application/json"
+            },
+            "elapsed_ms": 461.152
+          },
+          {
+            "expected_status": [
+              200
+            ],
+            "json_top_level_keys": [
+              "columnTypeMap",
+              "first",
+              "last",
+              "numberOfElements",
+              "pageNumber",
+              "pageSize",
+              "rows",
+              "total",
+              "totalMap",
+              "totalPages"
+            ],
+            "body_sha256": "779eed533a08e80e222c04e273353427e33ee62783e64e3fb7c94e247eaccc72",
+            "body_bytes": 200,
+            "assertions": {
+              "json_keys": [
+                "rows",
+                "total"
+              ]
+            },
+            "id": "attachment-permission-query",
+            "method": "POST",
+            "path": "/secure/emc/module/item/home-attachments/6069/permissions/queries",
+            "url": "http://127.0.0.1:18091/secure/emc/module/item/home-attachments/6069/permissions/queries",
+            "status": 200,
+            "response_headers": {
+              "x-content-type-options": "nosniff",
+              "x-xss-protection": "1; mode=block",
+              "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+              "pragma": "no-cache",
+              "expires": "0",
+              "x-frame-options": "SAMEORIGIN",
+              "content-type": "application/json",
+              "content-length": "200",
+              "date": "Sat, 31 Oct 2026 14:31:35 GMT",
+              "connection": "close"
+            },
+            "request_headers": {
+              "content-type": "application/json"
+            },
+            "elapsed_ms": 490.75
+          }
+        ],
+        "restore_http": [
+          {
+            "expected_status": [
+              200
+            ],
+            "json_top_level_keys": null,
+            "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "body_bytes": 0,
+            "assertions": {},
+            "id": "attachment-permission-delete",
+            "method": "DELETE",
+            "path": "/secure/emc/module/item/home-attachments/permissions",
+            "url": "http://127.0.0.1:18091/secure/emc/module/item/home-attachments/permissions",
+            "status": 200,
+            "response_headers": {
+              "x-content-type-options": "nosniff",
+              "x-xss-protection": "1; mode=block",
+              "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+              "pragma": "no-cache",
+              "expires": "0",
+              "x-frame-options": "SAMEORIGIN",
+              "content-length": "0",
+              "date": "Sat, 31 Oct 2026 14:31:37 GMT",
+              "connection": "close"
+            },
+            "request_headers": {
+              "content-type": "application/json"
+            },
+            "elapsed_ms": 463.629
+          },
+          {
+            "expected_status": [
+              200
+            ],
+            "json_top_level_keys": null,
+            "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "body_bytes": 0,
+            "assertions": {},
+            "id": "attachment-delete",
+            "method": "DELETE",
+            "path": "/secure/emc/module/item/home-attachments",
+            "url": "http://127.0.0.1:18091/secure/emc/module/item/home-attachments",
+            "status": 200,
+            "response_headers": {
+              "x-content-type-options": "nosniff",
+              "x-xss-protection": "1; mode=block",
+              "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+              "pragma": "no-cache",
+              "expires": "0",
+              "x-frame-options": "SAMEORIGIN",
+              "content-length": "0",
+              "date": "Sat, 31 Oct 2026 14:31:37 GMT",
+              "connection": "close"
+            },
+            "request_headers": {
+              "content-type": "application/json"
+            },
+            "elapsed_ms": 473.859
+          }
+        ]
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": null,
+      "body_sha256": "b8887688a8d7be7462e6dc620dd4b886a4b455861db2883826e82412791749f8",
+      "body_bytes": 81,
+      "assertions": {},
+      "id": "attachment.get-url",
+      "method": "POST",
+      "path": "/secure/emc/module/item/home-attachments/6072/action/get-url",
+      "url": "http://127.0.0.1:18091/secure/emc/module/item/home-attachments/6072/action/get-url",
+      "status": 200,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "text/plain;charset=UTF-8",
+        "content-length": "81",
+        "date": "Sat, 31 Oct 2026 14:31:40 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 200.93,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/item/home-attachments/${fixture.attachment-create}/action/get-url",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "project-route",
+        "route_id": "cfddec43e983450f"
+      },
+      "fixture": {
+        "id": "attachment.get-url",
+        "mode": "sql-control",
+        "setup": "executed",
+        "restore": "restored",
+        "setup_requests": [
+          {
+            "id": "attachment-create",
+            "method": "POST",
+            "path": "/secure/emc/module/item/home-attachments",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "endDate": "2030-01-01T00:00:00",
+                    "activatedFlag": "1"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {},
+            "capture_text": true
+          },
+          {
+            "id": "attachment-upload",
+            "method": "POST",
+            "path": "/core/module/item/files",
+            "multipart": {
+              "fields": {
+                "targetId": "T_EMC_HOME_ATTACHMENT$${fixture.attachment-create}",
+                "bizCategory": "document"
+              },
+              "file": {
+                "field": "file",
+                "filename": "strict-api-attachment.txt",
+                "content_type": "text/plain",
+                "content": "strict attachment fixture\n"
+              }
+            },
+            "expected_status": 200,
+            "assert": {
+              "json_keys": [
+                "id",
+                "targetId",
+                "name"
+              ]
+            },
+            "capture_json": true
+          },
+          {
+            "id": "attachment-grant",
+            "method": "POST",
+            "path": "/secure/emc/module/item/home-attachments/permissions",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "attachmentId": "${fixture.attachment-create}",
+                    "userId": "Test"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          },
+          {
+            "id": "attachment-permission-query",
+            "method": "POST",
+            "path": "/secure/emc/module/item/home-attachments/${fixture.attachment-create}/permissions/queries",
+            "body": {},
+            "expected_status": 200,
+            "assert": {
+              "json_keys": [
+                "rows",
+                "total"
+              ]
+            },
+            "capture_json": true
+          }
+        ],
+        "restore_requests": [
+          {
+            "id": "attachment-permission-delete",
+            "method": "DELETE",
+            "path": "/secure/emc/module/item/home-attachments/permissions",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "id": "${fixture.attachment-permission-query.rows.0.id}",
+                    "attachmentId": "${fixture.attachment-create}",
+                    "userId": "Test"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          },
+          {
+            "id": "attachment-delete",
+            "method": "DELETE",
+            "path": "/secure/emc/module/item/home-attachments",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "id": "${fixture.attachment-create}"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          }
+        ],
+        "sql_files": [],
+        "setup_sql_files": [
+          "attachment/t_core_file.sql"
+        ],
+        "restore_sql_files": [
+          "attachment/t_core_file_restore.sql"
+        ],
+        "business_write_via": "http",
+        "cleanup_via": "restore-http",
+        "setup_sql": [
+          {
+            "phase": "setup",
+            "path": "/home/ts/qinshan/lims-recovery/api-fixtures/attachment/t_core_file.sql",
+            "sha256": "6449353aa1f2213947b43e6e272b5bca51add78a2e4c056e0a278a7f1b194231",
+            "status": "executed",
+            "executor": "/home/ts/qinshan/lims-recovery/scripts/remote-sql-fixture-executor.py",
+            "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "output_bytes": 0
+          }
+        ],
+        "restore_sql": [
+          {
+            "phase": "restore",
+            "path": "/home/ts/qinshan/lims-recovery/api-fixtures/attachment/t_core_file_restore.sql",
+            "sha256": "aa2c2fe38cf1b737fac90856506d92c614ee86029c5a583e680dc38aa3ff4392",
+            "status": "executed",
+            "executor": "/home/ts/qinshan/lims-recovery/scripts/remote-sql-fixture-executor.py",
+            "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "output_bytes": 0
+          }
+        ],
+        "runtime_values": {
+          "id": "r22b64ed50423"
+        },
+        "setup_http": [
+          {
+            "expected_status": [
+              200
+            ],
+            "json_top_level_keys": null,
+            "body_sha256": "f8da296adf545751ea8b3d8c2c12edf93adf678c540a4bdf4f45438687d9aa17",
+            "body_bytes": 4,
+            "assertions": {},
+            "id": "attachment-create",
+            "method": "POST",
+            "path": "/secure/emc/module/item/home-attachments",
+            "url": "http://127.0.0.1:18091/secure/emc/module/item/home-attachments",
+            "status": 200,
+            "response_headers": {
+              "x-content-type-options": "nosniff",
+              "x-xss-protection": "1; mode=block",
+              "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+              "pragma": "no-cache",
+              "expires": "0",
+              "x-frame-options": "SAMEORIGIN",
+              "content-type": "application/json",
+              "content-length": "4",
+              "date": "Sat, 31 Oct 2026 14:31:39 GMT",
+              "connection": "close"
+            },
+            "request_headers": {
+              "content-type": "application/json"
+            },
+            "elapsed_ms": 449.091
+          },
+          {
+            "expected_status": [
+              200
+            ],
+            "json_top_level_keys": [
+              "id",
+              "name",
+              "targetId"
+            ],
+            "body_sha256": "341e392575fc736dc6dbad98863a3f6c057d87d8315d1d8829a3b8d2d8234460",
+            "body_bytes": 86,
+            "assertions": {
+              "json_keys": [
+                "id",
+                "targetId",
+                "name"
+              ]
+            },
+            "id": "attachment-upload",
+            "method": "POST",
+            "path": "/core/module/item/files",
+            "url": "http://127.0.0.1:18091/core/module/item/files",
+            "status": 200,
+            "response_headers": {
+              "x-content-type-options": "nosniff",
+              "x-xss-protection": "1; mode=block",
+              "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+              "pragma": "no-cache",
+              "expires": "0",
+              "x-frame-options": "SAMEORIGIN",
+              "content-type": "application/json",
+              "content-length": "86",
+              "date": "Sat, 31 Oct 2026 14:31:39 GMT",
+              "connection": "close"
+            },
+            "request_headers": {
+              "content-type": "multipart/form-data; boundary=----ownedApiFixture8baf470f8adb4949ab93a54a75c3e143"
+            },
+            "elapsed_ms": 613.137
+          },
+          {
+            "expected_status": [
+              200
+            ],
+            "json_top_level_keys": null,
+            "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "body_bytes": 0,
+            "assertions": {},
+            "id": "attachment-grant",
+            "method": "POST",
+            "path": "/secure/emc/module/item/home-attachments/permissions",
+            "url": "http://127.0.0.1:18091/secure/emc/module/item/home-attachments/permissions",
+            "status": 200,
+            "response_headers": {
+              "x-content-type-options": "nosniff",
+              "x-xss-protection": "1; mode=block",
+              "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+              "pragma": "no-cache",
+              "expires": "0",
+              "x-frame-options": "SAMEORIGIN",
+              "content-length": "0",
+              "date": "Sat, 31 Oct 2026 14:31:40 GMT",
+              "connection": "close"
+            },
+            "request_headers": {
+              "content-type": "application/json"
+            },
+            "elapsed_ms": 444.537
+          },
+          {
+            "expected_status": [
+              200
+            ],
+            "json_top_level_keys": [
+              "columnTypeMap",
+              "first",
+              "last",
+              "numberOfElements",
+              "pageNumber",
+              "pageSize",
+              "rows",
+              "total",
+              "totalMap",
+              "totalPages"
+            ],
+            "body_sha256": "008e50b2a400363088e3143f3ec024cda6f0d525628c28b7d12c0d8d94dded0e",
+            "body_bytes": 200,
+            "assertions": {
+              "json_keys": [
+                "rows",
+                "total"
+              ]
+            },
+            "id": "attachment-permission-query",
+            "method": "POST",
+            "path": "/secure/emc/module/item/home-attachments/6072/permissions/queries",
+            "url": "http://127.0.0.1:18091/secure/emc/module/item/home-attachments/6072/permissions/queries",
+            "status": 200,
+            "response_headers": {
+              "x-content-type-options": "nosniff",
+              "x-xss-protection": "1; mode=block",
+              "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+              "pragma": "no-cache",
+              "expires": "0",
+              "x-frame-options": "SAMEORIGIN",
+              "content-type": "application/json",
+              "content-length": "200",
+              "date": "Sat, 31 Oct 2026 14:31:40 GMT",
+              "connection": "close"
+            },
+            "request_headers": {
+              "content-type": "application/json"
+            },
+            "elapsed_ms": 460.101
+          }
+        ],
+        "restore_http": [
+          {
+            "expected_status": [
+              200
+            ],
+            "json_top_level_keys": null,
+            "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "body_bytes": 0,
+            "assertions": {},
+            "id": "attachment-permission-delete",
+            "method": "DELETE",
+            "path": "/secure/emc/module/item/home-attachments/permissions",
+            "url": "http://127.0.0.1:18091/secure/emc/module/item/home-attachments/permissions",
+            "status": 200,
+            "response_headers": {
+              "x-content-type-options": "nosniff",
+              "x-xss-protection": "1; mode=block",
+              "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+              "pragma": "no-cache",
+              "expires": "0",
+              "x-frame-options": "SAMEORIGIN",
+              "content-length": "0",
+              "date": "Sat, 31 Oct 2026 14:31:41 GMT",
+              "connection": "close"
+            },
+            "request_headers": {
+              "content-type": "application/json"
+            },
+            "elapsed_ms": 438.969
+          },
+          {
+            "expected_status": [
+              200
+            ],
+            "json_top_level_keys": null,
+            "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "body_bytes": 0,
+            "assertions": {},
+            "id": "attachment-delete",
+            "method": "DELETE",
+            "path": "/secure/emc/module/item/home-attachments",
+            "url": "http://127.0.0.1:18091/secure/emc/module/item/home-attachments",
+            "status": 200,
+            "response_headers": {
+              "x-content-type-options": "nosniff",
+              "x-xss-protection": "1; mode=block",
+              "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+              "pragma": "no-cache",
+              "expires": "0",
+              "x-frame-options": "SAMEORIGIN",
+              "content-length": "0",
+              "date": "Sat, 31 Oct 2026 14:31:41 GMT",
+              "connection": "close"
+            },
+            "request_headers": {
+              "content-type": "application/json"
+            },
+            "elapsed_ms": 438.059
+          }
+        ]
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "restore-http"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": null,
+      "body_sha256": "550362df6113265f3ce734fbb4c492b8905eb55277efbb311d7dc7966d468918",
+      "body_bytes": 26,
+      "assertions": {
+        "content_type": "application/octet-stream"
+      },
+      "id": "attachment.content-read",
+      "method": "GET",
+      "path": "/files/secure/20261031/ee30cfa216b5e1daf86d55d902ca3c69/strict-api-attachment.txt",
+      "url": "http://127.0.0.1:18091/files/secure/20261031/ee30cfa216b5e1daf86d55d902ca3c69/strict-api-attachment.txt",
+      "status": 200,
+      "response_headers": {
+        "cache-control": "no-store",
+        "content-disposition": "attachment; filename*=UTF-8''strict-api-attachment.txt",
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/octet-stream",
+        "content-length": "26",
+        "date": "Sat, 31 Oct 2026 14:31:44 GMT",
+        "connection": "close"
+      },
+      "request_headers": {},
+      "elapsed_ms": 214.616,
+      "route": {
+        "method": "GET",
+        "path": "${fixture.attachment-url}",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "owned-java-source-only-route",
+        "route_id": "33ce324dc52a56ee"
+      },
+      "fixture": {
+        "id": "attachment.content-read",
+        "mode": "sql-control",
+        "setup": "executed",
+        "restore": "restored",
+        "setup_requests": [
+          {
+            "id": "attachment-create",
+            "method": "POST",
+            "path": "/secure/emc/module/item/home-attachments",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "endDate": "2030-01-01T00:00:00",
+                    "activatedFlag": "1"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {},
+            "capture_text": true
+          },
+          {
+            "id": "attachment-upload",
+            "method": "POST",
+            "path": "/core/module/item/files",
+            "multipart": {
+              "fields": {
+                "targetId": "T_EMC_HOME_ATTACHMENT$${fixture.attachment-create}",
+                "bizCategory": "document"
+              },
+              "file": {
+                "field": "file",
+                "filename": "strict-api-attachment.txt",
+                "content_type": "text/plain",
+                "content": "strict attachment fixture\n"
+              }
+            },
+            "expected_status": 200,
+            "assert": {
+              "json_keys": [
+                "id",
+                "targetId",
+                "name"
+              ]
+            },
+            "capture_json": true
+          },
+          {
+            "id": "attachment-grant",
+            "method": "POST",
+            "path": "/secure/emc/module/item/home-attachments/permissions",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "attachmentId": "${fixture.attachment-create}",
+                    "userId": "Test"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          },
+          {
+            "id": "attachment-permission-query",
+            "method": "POST",
+            "path": "/secure/emc/module/item/home-attachments/${fixture.attachment-create}/permissions/queries",
+            "body": {},
+            "expected_status": 200,
+            "assert": {
+              "json_keys": [
+                "rows",
+                "total"
+              ]
+            },
+            "capture_json": true
+          },
+          {
+            "id": "attachment-url",
+            "method": "POST",
+            "path": "/secure/emc/module/item/home-attachments/${fixture.attachment-create}/action/get-url",
+            "body": {},
+            "expected_status": 200,
+            "assert": {},
+            "capture_text": true
+          }
+        ],
+        "restore_requests": [
+          {
+            "id": "attachment-permission-delete",
+            "method": "DELETE",
+            "path": "/secure/emc/module/item/home-attachments/permissions",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "id": "${fixture.attachment-permission-query.rows.0.id}",
+                    "attachmentId": "${fixture.attachment-create}",
+                    "userId": "Test"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          },
+          {
+            "id": "attachment-delete",
+            "method": "DELETE",
+            "path": "/secure/emc/module/item/home-attachments",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "id": "${fixture.attachment-create}"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          }
+        ],
+        "sql_files": [],
+        "setup_sql_files": [
+          "attachment/t_core_file.sql"
+        ],
+        "restore_sql_files": [
+          "attachment/t_core_file_restore.sql"
+        ],
+        "business_write_via": "http",
+        "cleanup_via": "restore-http",
+        "setup_sql": [
+          {
+            "phase": "setup",
+            "path": "/home/ts/qinshan/lims-recovery/api-fixtures/attachment/t_core_file.sql",
+            "sha256": "6449353aa1f2213947b43e6e272b5bca51add78a2e4c056e0a278a7f1b194231",
+            "status": "executed",
+            "executor": "/home/ts/qinshan/lims-recovery/scripts/remote-sql-fixture-executor.py",
+            "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "output_bytes": 0
+          }
+        ],
+        "restore_sql": [
+          {
+            "phase": "restore",
+            "path": "/home/ts/qinshan/lims-recovery/api-fixtures/attachment/t_core_file_restore.sql",
+            "sha256": "aa2c2fe38cf1b737fac90856506d92c614ee86029c5a583e680dc38aa3ff4392",
+            "status": "executed",
+            "executor": "/home/ts/qinshan/lims-recovery/scripts/remote-sql-fixture-executor.py",
+            "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "output_bytes": 0
+          }
+        ],
+        "runtime_values": {
+          "id": "r8724e746f084"
+        },
+        "setup_http": [
+          {
+            "expected_status": [
+              200
+            ],
+            "json_top_level_keys": null,
+            "body_sha256": "c34091bdd840eb499ca5e16a336d5691bc20b7013a88e25ff9eea4216bd7fa91",
+            "body_bytes": 4,
+            "assertions": {},
+            "id": "attachment-create",
+            "method": "POST",
+            "path": "/secure/emc/module/item/home-attachments",
+            "url": "http://127.0.0.1:18091/secure/emc/module/item/home-attachments",
+            "status": 200,
+            "response_headers": {
+              "x-content-type-options": "nosniff",
+              "x-xss-protection": "1; mode=block",
+              "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+              "pragma": "no-cache",
+              "expires": "0",
+              "x-frame-options": "SAMEORIGIN",
+              "content-type": "application/json",
+              "content-length": "4",
+              "date": "Sat, 31 Oct 2026 14:31:43 GMT",
+              "connection": "close"
+            },
+            "request_headers": {
+              "content-type": "application/json"
+            },
+            "elapsed_ms": 437.759
+          },
+          {
+            "expected_status": [
+              200
+            ],
+            "json_top_level_keys": [
+              "id",
+              "name",
+              "targetId"
+            ],
+            "body_sha256": "c6815ab84fba7c356238a145fc6362e86fe8a6c3253c8366d9fac0bfe4401551",
+            "body_bytes": 86,
+            "assertions": {
+              "json_keys": [
+                "id",
+                "targetId",
+                "name"
+              ]
+            },
+            "id": "attachment-upload",
+            "method": "POST",
+            "path": "/core/module/item/files",
+            "url": "http://127.0.0.1:18091/core/module/item/files",
+            "status": 200,
+            "response_headers": {
+              "x-content-type-options": "nosniff",
+              "x-xss-protection": "1; mode=block",
+              "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+              "pragma": "no-cache",
+              "expires": "0",
+              "x-frame-options": "SAMEORIGIN",
+              "content-type": "application/json",
+              "content-length": "86",
+              "date": "Sat, 31 Oct 2026 14:31:43 GMT",
+              "connection": "close"
+            },
+            "request_headers": {
+              "content-type": "multipart/form-data; boundary=----ownedApiFixture629875de17964c51a1df4cdb65ac26d2"
+            },
+            "elapsed_ms": 613.679
+          },
+          {
+            "expected_status": [
+              200
+            ],
+            "json_top_level_keys": null,
+            "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "body_bytes": 0,
+            "assertions": {},
+            "id": "attachment-grant",
+            "method": "POST",
+            "path": "/secure/emc/module/item/home-attachments/permissions",
+            "url": "http://127.0.0.1:18091/secure/emc/module/item/home-attachments/permissions",
+            "status": 200,
+            "response_headers": {
+              "x-content-type-options": "nosniff",
+              "x-xss-protection": "1; mode=block",
+              "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+              "pragma": "no-cache",
+              "expires": "0",
+              "x-frame-options": "SAMEORIGIN",
+              "content-length": "0",
+              "date": "Sat, 31 Oct 2026 14:31:44 GMT",
+              "connection": "close"
+            },
+            "request_headers": {
+              "content-type": "application/json"
+            },
+            "elapsed_ms": 480.978
+          },
+          {
+            "expected_status": [
+              200
+            ],
+            "json_top_level_keys": [
+              "columnTypeMap",
+              "first",
+              "last",
+              "numberOfElements",
+              "pageNumber",
+              "pageSize",
+              "rows",
+              "total",
+              "totalMap",
+              "totalPages"
+            ],
+            "body_sha256": "539eae4ffc64a0ad7078c34ff2db47d7e9c5ba8cfbca108a1f88d1c801ed0739",
+            "body_bytes": 200,
+            "assertions": {
+              "json_keys": [
+                "rows",
+                "total"
+              ]
+            },
+            "id": "attachment-permission-query",
+            "method": "POST",
+            "path": "/secure/emc/module/item/home-attachments/6075/permissions/queries",
+            "url": "http://127.0.0.1:18091/secure/emc/module/item/home-attachments/6075/permissions/queries",
+            "status": 200,
+            "response_headers": {
+              "x-content-type-options": "nosniff",
+              "x-xss-protection": "1; mode=block",
+              "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+              "pragma": "no-cache",
+              "expires": "0",
+              "x-frame-options": "SAMEORIGIN",
+              "content-type": "application/json",
+              "content-length": "200",
+              "date": "Sat, 31 Oct 2026 14:31:44 GMT",
+              "connection": "close"
+            },
+            "request_headers": {
+              "content-type": "application/json"
+            },
+            "elapsed_ms": 445.318
+          },
+          {
+            "expected_status": [
+              200
+            ],
+            "json_top_level_keys": null,
+            "body_sha256": "afb58e731d5b056ea212fb898470b678d603fb86e42821746079c01a0320b66a",
+            "body_bytes": 81,
+            "assertions": {},
+            "id": "attachment-url",
+            "method": "POST",
+            "path": "/secure/emc/module/item/home-attachments/6075/action/get-url",
+            "url": "http://127.0.0.1:18091/secure/emc/module/item/home-attachments/6075/action/get-url",
+            "status": 200,
+            "response_headers": {
+              "x-content-type-options": "nosniff",
+              "x-xss-protection": "1; mode=block",
+              "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+              "pragma": "no-cache",
+              "expires": "0",
+              "x-frame-options": "SAMEORIGIN",
+              "content-type": "text/plain;charset=UTF-8",
+              "content-length": "81",
+              "date": "Sat, 31 Oct 2026 14:31:44 GMT",
+              "connection": "close"
+            },
+            "request_headers": {
+              "content-type": "application/json"
+            },
+            "elapsed_ms": 200.82
+          }
+        ],
+        "restore_http": [
+          {
+            "expected_status": [
+              200
+            ],
+            "json_top_level_keys": null,
+            "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "body_bytes": 0,
+            "assertions": {},
+            "id": "attachment-permission-delete",
+            "method": "DELETE",
+            "path": "/secure/emc/module/item/home-attachments/permissions",
+            "url": "http://127.0.0.1:18091/secure/emc/module/item/home-attachments/permissions",
+            "status": 200,
+            "response_headers": {
+              "x-content-type-options": "nosniff",
+              "x-xss-protection": "1; mode=block",
+              "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+              "pragma": "no-cache",
+              "expires": "0",
+              "x-frame-options": "SAMEORIGIN",
+              "content-length": "0",
+              "date": "Sat, 31 Oct 2026 14:31:45 GMT",
+              "connection": "close"
+            },
+            "request_headers": {
+              "content-type": "application/json"
+            },
+            "elapsed_ms": 447.671
+          },
+          {
+            "expected_status": [
+              200
+            ],
+            "json_top_level_keys": null,
+            "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "body_bytes": 0,
+            "assertions": {},
+            "id": "attachment-delete",
+            "method": "DELETE",
+            "path": "/secure/emc/module/item/home-attachments",
+            "url": "http://127.0.0.1:18091/secure/emc/module/item/home-attachments",
+            "status": 200,
+            "response_headers": {
+              "x-content-type-options": "nosniff",
+              "x-xss-protection": "1; mode=block",
+              "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+              "pragma": "no-cache",
+              "expires": "0",
+              "x-frame-options": "SAMEORIGIN",
+              "content-length": "0",
+              "date": "Sat, 31 Oct 2026 14:31:45 GMT",
+              "connection": "close"
+            },
+            "request_headers": {
+              "content-type": "application/json"
+            },
+            "elapsed_ms": 453.799
+          }
+        ]
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "44eba12ece570a5fe89a972ffa3b57157403920a13d81c8239229e5b25f64150",
+      "body_bytes": 200,
+      "assertions": {
+        "json_keys": [
+          "rows",
+          "total"
+        ]
+      },
+      "id": "attachment.permission-list",
+      "method": "POST",
+      "path": "/secure/emc/module/item/home-attachments/6078/permissions/queries",
+      "url": "http://127.0.0.1:18091/secure/emc/module/item/home-attachments/6078/permissions/queries",
+      "status": 200,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "200",
+        "date": "Sat, 31 Oct 2026 14:31:49 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 453.734,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/item/home-attachments/${fixture.attachment-create}/permissions/queries",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "project-route",
+        "route_id": "a2aacdd3a63f5e91"
+      },
+      "fixture": {
+        "id": "attachment.permission-list",
+        "mode": "sql-control",
+        "setup": "executed",
+        "restore": "restored",
+        "setup_requests": [
+          {
+            "id": "attachment-create",
+            "method": "POST",
+            "path": "/secure/emc/module/item/home-attachments",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "endDate": "2030-01-01T00:00:00",
+                    "activatedFlag": "1"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {},
+            "capture_text": true
+          },
+          {
+            "id": "attachment-upload",
+            "method": "POST",
+            "path": "/core/module/item/files",
+            "multipart": {
+              "fields": {
+                "targetId": "T_EMC_HOME_ATTACHMENT$${fixture.attachment-create}",
+                "bizCategory": "document"
+              },
+              "file": {
+                "field": "file",
+                "filename": "strict-api-attachment.txt",
+                "content_type": "text/plain",
+                "content": "strict attachment fixture\n"
+              }
+            },
+            "expected_status": 200,
+            "assert": {
+              "json_keys": [
+                "id",
+                "targetId",
+                "name"
+              ]
+            },
+            "capture_json": true
+          },
+          {
+            "id": "attachment-grant",
+            "method": "POST",
+            "path": "/secure/emc/module/item/home-attachments/permissions",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "attachmentId": "${fixture.attachment-create}",
+                    "userId": "Test"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          },
+          {
+            "id": "attachment-permission-query",
+            "method": "POST",
+            "path": "/secure/emc/module/item/home-attachments/${fixture.attachment-create}/permissions/queries",
+            "body": {},
+            "expected_status": 200,
+            "assert": {
+              "json_keys": [
+                "rows",
+                "total"
+              ]
+            },
+            "capture_json": true
+          }
+        ],
+        "restore_requests": [
+          {
+            "id": "attachment-permission-delete",
+            "method": "DELETE",
+            "path": "/secure/emc/module/item/home-attachments/permissions",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "id": "${fixture.attachment-permission-query.rows.0.id}",
+                    "attachmentId": "${fixture.attachment-create}",
+                    "userId": "Test"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          },
+          {
+            "id": "attachment-delete",
+            "method": "DELETE",
+            "path": "/secure/emc/module/item/home-attachments",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "id": "${fixture.attachment-create}"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          }
+        ],
+        "sql_files": [],
+        "setup_sql_files": [
+          "attachment/t_core_file.sql"
+        ],
+        "restore_sql_files": [
+          "attachment/t_core_file_restore.sql"
+        ],
+        "business_write_via": "http",
+        "cleanup_via": "restore-http",
+        "setup_sql": [
+          {
+            "phase": "setup",
+            "path": "/home/ts/qinshan/lims-recovery/api-fixtures/attachment/t_core_file.sql",
+            "sha256": "6449353aa1f2213947b43e6e272b5bca51add78a2e4c056e0a278a7f1b194231",
+            "status": "executed",
+            "executor": "/home/ts/qinshan/lims-recovery/scripts/remote-sql-fixture-executor.py",
+            "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "output_bytes": 0
+          }
+        ],
+        "restore_sql": [
+          {
+            "phase": "restore",
+            "path": "/home/ts/qinshan/lims-recovery/api-fixtures/attachment/t_core_file_restore.sql",
+            "sha256": "aa2c2fe38cf1b737fac90856506d92c614ee86029c5a583e680dc38aa3ff4392",
+            "status": "executed",
+            "executor": "/home/ts/qinshan/lims-recovery/scripts/remote-sql-fixture-executor.py",
+            "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "output_bytes": 0
+          }
+        ],
+        "runtime_values": {
+          "id": "r3569fe570816"
+        },
+        "setup_http": [
+          {
+            "expected_status": [
+              200
+            ],
+            "json_top_level_keys": null,
+            "body_sha256": "cc7909fb83012a4438d7ac6e719a14ec62bc1bfee7672f487af794727eb95934",
+            "body_bytes": 4,
+            "assertions": {},
+            "id": "attachment-create",
+            "method": "POST",
+            "path": "/secure/emc/module/item/home-attachments",
+            "url": "http://127.0.0.1:18091/secure/emc/module/item/home-attachments",
+            "status": 200,
+            "response_headers": {
+              "x-content-type-options": "nosniff",
+              "x-xss-protection": "1; mode=block",
+              "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+              "pragma": "no-cache",
+              "expires": "0",
+              "x-frame-options": "SAMEORIGIN",
+              "content-type": "application/json",
+              "content-length": "4",
+              "date": "Sat, 31 Oct 2026 14:31:47 GMT",
+              "connection": "close"
+            },
+            "request_headers": {
+              "content-type": "application/json"
+            },
+            "elapsed_ms": 692.263
+          },
+          {
+            "expected_status": [
+              200
+            ],
+            "json_top_level_keys": [
+              "id",
+              "name",
+              "targetId"
+            ],
+            "body_sha256": "9fa2009a88c1ec0b6529ddc461635af055034b67fd04cc059745432c1a61c677",
+            "body_bytes": 86,
+            "assertions": {
+              "json_keys": [
+                "id",
+                "targetId",
+                "name"
+              ]
+            },
+            "id": "attachment-upload",
+            "method": "POST",
+            "path": "/core/module/item/files",
+            "url": "http://127.0.0.1:18091/core/module/item/files",
+            "status": 200,
+            "response_headers": {
+              "x-content-type-options": "nosniff",
+              "x-xss-protection": "1; mode=block",
+              "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+              "pragma": "no-cache",
+              "expires": "0",
+              "x-frame-options": "SAMEORIGIN",
+              "content-type": "application/json",
+              "content-length": "86",
+              "date": "Sat, 31 Oct 2026 14:31:47 GMT",
+              "connection": "close"
+            },
+            "request_headers": {
+              "content-type": "multipart/form-data; boundary=----ownedApiFixture5bad8063453c40908d9bda1f03d0cfdf"
+            },
+            "elapsed_ms": 610.989
+          },
+          {
+            "expected_status": [
+              200
+            ],
+            "json_top_level_keys": null,
+            "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "body_bytes": 0,
+            "assertions": {},
+            "id": "attachment-grant",
+            "method": "POST",
+            "path": "/secure/emc/module/item/home-attachments/permissions",
+            "url": "http://127.0.0.1:18091/secure/emc/module/item/home-attachments/permissions",
+            "status": 200,
+            "response_headers": {
+              "x-content-type-options": "nosniff",
+              "x-xss-protection": "1; mode=block",
+              "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+              "pragma": "no-cache",
+              "expires": "0",
+              "x-frame-options": "SAMEORIGIN",
+              "content-length": "0",
+              "date": "Sat, 31 Oct 2026 14:31:49 GMT",
+              "connection": "close"
+            },
+            "request_headers": {
+              "content-type": "application/json"
+            },
+            "elapsed_ms": 1184.849
+          },
+          {
+            "expected_status": [
+              200
+            ],
+            "json_top_level_keys": [
+              "columnTypeMap",
+              "first",
+              "last",
+              "numberOfElements",
+              "pageNumber",
+              "pageSize",
+              "rows",
+              "total",
+              "totalMap",
+              "totalPages"
+            ],
+            "body_sha256": "44eba12ece570a5fe89a972ffa3b57157403920a13d81c8239229e5b25f64150",
+            "body_bytes": 200,
+            "assertions": {
+              "json_keys": [
+                "rows",
+                "total"
+              ]
+            },
+            "id": "attachment-permission-query",
+            "method": "POST",
+            "path": "/secure/emc/module/item/home-attachments/6078/permissions/queries",
+            "url": "http://127.0.0.1:18091/secure/emc/module/item/home-attachments/6078/permissions/queries",
+            "status": 200,
+            "response_headers": {
+              "x-content-type-options": "nosniff",
+              "x-xss-protection": "1; mode=block",
+              "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+              "pragma": "no-cache",
+              "expires": "0",
+              "x-frame-options": "SAMEORIGIN",
+              "content-type": "application/json",
+              "content-length": "200",
+              "date": "Sat, 31 Oct 2026 14:31:49 GMT",
+              "connection": "close"
+            },
+            "request_headers": {
+              "content-type": "application/json"
+            },
+            "elapsed_ms": 427.005
+          }
+        ],
+        "restore_http": [
+          {
+            "expected_status": [
+              200
+            ],
+            "json_top_level_keys": null,
+            "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "body_bytes": 0,
+            "assertions": {},
+            "id": "attachment-permission-delete",
+            "method": "DELETE",
+            "path": "/secure/emc/module/item/home-attachments/permissions",
+            "url": "http://127.0.0.1:18091/secure/emc/module/item/home-attachments/permissions",
+            "status": 200,
+            "response_headers": {
+              "x-content-type-options": "nosniff",
+              "x-xss-protection": "1; mode=block",
+              "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+              "pragma": "no-cache",
+              "expires": "0",
+              "x-frame-options": "SAMEORIGIN",
+              "content-length": "0",
+              "date": "Sat, 31 Oct 2026 14:31:51 GMT",
+              "connection": "close"
+            },
+            "request_headers": {
+              "content-type": "application/json"
+            },
+            "elapsed_ms": 473.626
+          },
+          {
+            "expected_status": [
+              200
+            ],
+            "json_top_level_keys": null,
+            "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "body_bytes": 0,
+            "assertions": {},
+            "id": "attachment-delete",
+            "method": "DELETE",
+            "path": "/secure/emc/module/item/home-attachments",
+            "url": "http://127.0.0.1:18091/secure/emc/module/item/home-attachments",
+            "status": 200,
+            "response_headers": {
+              "x-content-type-options": "nosniff",
+              "x-xss-protection": "1; mode=block",
+              "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+              "pragma": "no-cache",
+              "expires": "0",
+              "x-frame-options": "SAMEORIGIN",
+              "content-length": "0",
+              "date": "Sat, 31 Oct 2026 14:31:51 GMT",
+              "connection": "close"
+            },
+            "request_headers": {
+              "content-type": "application/json"
+            },
+            "elapsed_ms": 463.66
+          }
+        ]
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "restore-http"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": null,
+      "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "body_bytes": 0,
+      "assertions": {},
+      "id": "attachment.permission-grant",
+      "method": "POST",
+      "path": "/secure/emc/module/item/home-attachments/permissions",
+      "url": "http://127.0.0.1:18091/secure/emc/module/item/home-attachments/permissions",
+      "status": 200,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-length": "0",
+        "date": "Sat, 31 Oct 2026 14:31:54 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 594.925,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/item/home-attachments/permissions",
+        "operation": "write",
+        "disposition": "owned-pass",
+        "scope": "project-route",
+        "route_id": "639f3e4522c44dfc"
+      },
+      "fixture": {
+        "id": "attachment.permission-grant-fixture",
+        "mode": "sql-control",
+        "setup": "executed",
+        "restore": "restored",
+        "setup_requests": [
+          {
+            "id": "attachment-create",
+            "method": "POST",
+            "path": "/secure/emc/module/item/home-attachments",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "endDate": "2030-01-01T00:00:00",
+                    "activatedFlag": "1"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {},
+            "capture_text": true
+          },
+          {
+            "id": "attachment-upload",
+            "method": "POST",
+            "path": "/core/module/item/files",
+            "multipart": {
+              "fields": {
+                "targetId": "T_EMC_HOME_ATTACHMENT$${fixture.attachment-create}",
+                "bizCategory": "document"
+              },
+              "file": {
+                "field": "file",
+                "filename": "strict-api-attachment.txt",
+                "content_type": "text/plain",
+                "content": "strict attachment fixture\n"
+              }
+            },
+            "expected_status": 200,
+            "assert": {
+              "json_keys": [
+                "id",
+                "targetId",
+                "name"
+              ]
+            },
+            "capture_json": true
+          }
+        ],
+        "restore_requests": [
+          {
+            "id": "attachment-permission-delete",
+            "method": "DELETE",
+            "path": "/secure/emc/module/item/home-attachments/permissions",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "id": "${fixture.attachment-permission-query.rows.0.id}",
+                    "attachmentId": "${fixture.attachment-create}",
+                    "userId": "Test"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          },
+          {
+            "id": "attachment-delete",
+            "method": "DELETE",
+            "path": "/secure/emc/module/item/home-attachments",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "id": "${fixture.attachment-create}"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          }
+        ],
+        "sql_files": [],
+        "setup_sql_files": [
+          "attachment/t_core_file.sql"
+        ],
+        "restore_sql_files": [
+          "attachment/t_core_file_restore.sql"
+        ],
+        "business_write_via": "http",
+        "cleanup_via": "restore-http",
+        "setup_sql": [
+          {
+            "phase": "setup",
+            "path": "/home/ts/qinshan/lims-recovery/api-fixtures/attachment/t_core_file.sql",
+            "sha256": "6449353aa1f2213947b43e6e272b5bca51add78a2e4c056e0a278a7f1b194231",
+            "status": "executed",
+            "executor": "/home/ts/qinshan/lims-recovery/scripts/remote-sql-fixture-executor.py",
+            "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "output_bytes": 0
+          }
+        ],
+        "restore_sql": [
+          {
+            "phase": "restore",
+            "path": "/home/ts/qinshan/lims-recovery/api-fixtures/attachment/t_core_file_restore.sql",
+            "sha256": "aa2c2fe38cf1b737fac90856506d92c614ee86029c5a583e680dc38aa3ff4392",
+            "status": "executed",
+            "executor": "/home/ts/qinshan/lims-recovery/scripts/remote-sql-fixture-executor.py",
+            "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "output_bytes": 0
+          }
+        ],
+        "runtime_values": {
+          "id": "r2113a0861243"
+        },
+        "setup_http": [
+          {
+            "expected_status": [
+              200
+            ],
+            "json_top_level_keys": null,
+            "body_sha256": "a72c3d511056e072040c4b76ec9252d55bb155333581a6cb4be91dedbe52c1de",
+            "body_bytes": 4,
+            "assertions": {},
+            "id": "attachment-create",
+            "method": "POST",
+            "path": "/secure/emc/module/item/home-attachments",
+            "url": "http://127.0.0.1:18091/secure/emc/module/item/home-attachments",
+            "status": 200,
+            "response_headers": {
+              "x-content-type-options": "nosniff",
+              "x-xss-protection": "1; mode=block",
+              "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+              "pragma": "no-cache",
+              "expires": "0",
+              "x-frame-options": "SAMEORIGIN",
+              "content-type": "application/json",
+              "content-length": "4",
+              "date": "Sat, 31 Oct 2026 14:31:52 GMT",
+              "connection": "close"
+            },
+            "request_headers": {
+              "content-type": "application/json"
+            },
+            "elapsed_ms": 439.557
+          },
+          {
+            "expected_status": [
+              200
+            ],
+            "json_top_level_keys": [
+              "id",
+              "name",
+              "targetId"
+            ],
+            "body_sha256": "a7e75afc03c63436d1c18484790a33aa44e066f379b70caecc7e2707092dc6da",
+            "body_bytes": 86,
+            "assertions": {
+              "json_keys": [
+                "id",
+                "targetId",
+                "name"
+              ]
+            },
+            "id": "attachment-upload",
+            "method": "POST",
+            "path": "/core/module/item/files",
+            "url": "http://127.0.0.1:18091/core/module/item/files",
+            "status": 200,
+            "response_headers": {
+              "x-content-type-options": "nosniff",
+              "x-xss-protection": "1; mode=block",
+              "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+              "pragma": "no-cache",
+              "expires": "0",
+              "x-frame-options": "SAMEORIGIN",
+              "content-type": "application/json",
+              "content-length": "86",
+              "date": "Sat, 31 Oct 2026 14:31:52 GMT",
+              "connection": "close"
+            },
+            "request_headers": {
+              "content-type": "multipart/form-data; boundary=----ownedApiFixture9f9e9c09cbf34cc0a736f5377e338893"
+            },
+            "elapsed_ms": 607.282
+          }
+        ],
+        "restore_http": [
+          {
+            "expected_status": [
+              200
+            ],
+            "json_top_level_keys": null,
+            "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "body_bytes": 0,
+            "assertions": {},
+            "id": "attachment-permission-delete",
+            "method": "DELETE",
+            "path": "/secure/emc/module/item/home-attachments/permissions",
+            "url": "http://127.0.0.1:18091/secure/emc/module/item/home-attachments/permissions",
+            "status": 200,
+            "response_headers": {
+              "x-content-type-options": "nosniff",
+              "x-xss-protection": "1; mode=block",
+              "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+              "pragma": "no-cache",
+              "expires": "0",
+              "x-frame-options": "SAMEORIGIN",
+              "content-length": "0",
+              "date": "Sat, 31 Oct 2026 14:31:55 GMT",
+              "connection": "close"
+            },
+            "request_headers": {
+              "content-type": "application/json"
+            },
+            "elapsed_ms": 695.353
+          },
+          {
+            "expected_status": [
+              200
+            ],
+            "json_top_level_keys": null,
+            "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "body_bytes": 0,
+            "assertions": {},
+            "id": "attachment-delete",
+            "method": "DELETE",
+            "path": "/secure/emc/module/item/home-attachments",
+            "url": "http://127.0.0.1:18091/secure/emc/module/item/home-attachments",
+            "status": 200,
+            "response_headers": {
+              "x-content-type-options": "nosniff",
+              "x-xss-protection": "1; mode=block",
+              "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+              "pragma": "no-cache",
+              "expires": "0",
+              "x-frame-options": "SAMEORIGIN",
+              "content-length": "0",
+              "date": "Sat, 31 Oct 2026 14:31:55 GMT",
+              "connection": "close"
+            },
+            "request_headers": {
+              "content-type": "application/json"
+            },
+            "elapsed_ms": 499.179
+          }
+        ]
+      },
+      "readback_http": [
+        {
+          "expected_status": [
+            200
+          ],
+          "json_top_level_keys": [
+            "columnTypeMap",
+            "first",
+            "last",
+            "numberOfElements",
+            "pageNumber",
+            "pageSize",
+            "rows",
+            "total",
+            "totalMap",
+            "totalPages"
+          ],
+          "body_sha256": "2fa84e10cedb372662b43c898364b1356cb87116cc86b69da5a2759fcf6183a6",
+          "body_bytes": 200,
+          "assertions": {
+            "json_keys": [
+              "rows",
+              "total"
+            ],
+            "json_contains": [
+              {
+                "path": "rows",
+                "where": {
+                  "userId": "Test"
+                },
+                "values": {
+                  "userId": "Test"
+                }
+              }
+            ]
+          },
+          "id": "attachment-permission-query",
+          "method": "POST",
+          "path": "/secure/emc/module/item/home-attachments/6081/permissions/queries",
+          "url": "http://127.0.0.1:18091/secure/emc/module/item/home-attachments/6081/permissions/queries",
+          "status": 200,
+          "response_headers": {
+            "x-content-type-options": "nosniff",
+            "x-xss-protection": "1; mode=block",
+            "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+            "pragma": "no-cache",
+            "expires": "0",
+            "x-frame-options": "SAMEORIGIN",
+            "content-type": "application/json",
+            "content-length": "200",
+            "date": "Sat, 31 Oct 2026 14:31:54 GMT",
+            "connection": "close"
+          },
+          "request_headers": {
+            "content-type": "application/json"
+          },
+          "elapsed_ms": 446.974
+        }
+      ],
+      "readback_required": true,
+      "audit": {
+        "required": true,
+        "status": "observed",
+        "event": "attachment-permission-insert",
+        "outcome": "ALLOWED",
+        "source": "owned-http"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "restore-http"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": null,
+      "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "body_bytes": 0,
+      "assertions": {},
+      "id": "attachment.permission-revoke",
+      "method": "DELETE",
+      "path": "/secure/emc/module/item/home-attachments/permissions",
+      "url": "http://127.0.0.1:18091/secure/emc/module/item/home-attachments/permissions",
+      "status": 200,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-length": "0",
+        "date": "Sat, 31 Oct 2026 14:31:59 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 778.173,
+      "route": {
+        "method": "DELETE",
+        "path": "/secure/emc/module/item/home-attachments/permissions",
+        "operation": "write",
+        "disposition": "owned-pass",
+        "scope": "project-route",
+        "route_id": "1321afe953f65369"
+      },
+      "fixture": {
+        "id": "attachment.permission-revoke-fixture",
+        "mode": "sql-control",
+        "setup": "executed",
+        "restore": "restored",
+        "setup_requests": [
+          {
+            "id": "attachment-create",
+            "method": "POST",
+            "path": "/secure/emc/module/item/home-attachments",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "endDate": "2030-01-01T00:00:00",
+                    "activatedFlag": "1"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {},
+            "capture_text": true
+          },
+          {
+            "id": "attachment-upload",
+            "method": "POST",
+            "path": "/core/module/item/files",
+            "multipart": {
+              "fields": {
+                "targetId": "T_EMC_HOME_ATTACHMENT$${fixture.attachment-create}",
+                "bizCategory": "document"
+              },
+              "file": {
+                "field": "file",
+                "filename": "strict-api-attachment.txt",
+                "content_type": "text/plain",
+                "content": "strict attachment fixture\n"
+              }
+            },
+            "expected_status": 200,
+            "assert": {
+              "json_keys": [
+                "id",
+                "targetId",
+                "name"
+              ]
+            },
+            "capture_json": true
+          },
+          {
+            "id": "attachment-grant",
+            "method": "POST",
+            "path": "/secure/emc/module/item/home-attachments/permissions",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "attachmentId": "${fixture.attachment-create}",
+                    "userId": "Test"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          },
+          {
+            "id": "attachment-permission-query",
+            "method": "POST",
+            "path": "/secure/emc/module/item/home-attachments/${fixture.attachment-create}/permissions/queries",
+            "body": {},
+            "expected_status": 200,
+            "assert": {
+              "json_keys": [
+                "rows",
+                "total"
+              ]
+            },
+            "capture_json": true
+          }
+        ],
+        "restore_requests": [
+          {
+            "id": "attachment-delete",
+            "method": "DELETE",
+            "path": "/secure/emc/module/item/home-attachments",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "id": "${fixture.attachment-create}"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          }
+        ],
+        "sql_files": [],
+        "setup_sql_files": [
+          "attachment/t_core_file.sql"
+        ],
+        "restore_sql_files": [
+          "attachment/t_core_file_restore.sql"
+        ],
+        "business_write_via": "http",
+        "cleanup_via": "restore-http",
+        "setup_sql": [
+          {
+            "phase": "setup",
+            "path": "/home/ts/qinshan/lims-recovery/api-fixtures/attachment/t_core_file.sql",
+            "sha256": "6449353aa1f2213947b43e6e272b5bca51add78a2e4c056e0a278a7f1b194231",
+            "status": "executed",
+            "executor": "/home/ts/qinshan/lims-recovery/scripts/remote-sql-fixture-executor.py",
+            "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "output_bytes": 0
+          }
+        ],
+        "restore_sql": [
+          {
+            "phase": "restore",
+            "path": "/home/ts/qinshan/lims-recovery/api-fixtures/attachment/t_core_file_restore.sql",
+            "sha256": "aa2c2fe38cf1b737fac90856506d92c614ee86029c5a583e680dc38aa3ff4392",
+            "status": "executed",
+            "executor": "/home/ts/qinshan/lims-recovery/scripts/remote-sql-fixture-executor.py",
+            "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "output_bytes": 0
+          }
+        ],
+        "runtime_values": {
+          "id": "r0b1aa273ca10"
+        },
+        "setup_http": [
+          {
+            "expected_status": [
+              200
+            ],
+            "json_top_level_keys": null,
+            "body_sha256": "afcbb3a0b0d252e8eb1f2ba0ccb8bac1e5a93befea32241badfbd759713f30fa",
+            "body_bytes": 4,
+            "assertions": {},
+            "id": "attachment-create",
+            "method": "POST",
+            "path": "/secure/emc/module/item/home-attachments",
+            "url": "http://127.0.0.1:18091/secure/emc/module/item/home-attachments",
+            "status": 200,
+            "response_headers": {
+              "x-content-type-options": "nosniff",
+              "x-xss-protection": "1; mode=block",
+              "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+              "pragma": "no-cache",
+              "expires": "0",
+              "x-frame-options": "SAMEORIGIN",
+              "content-type": "application/json",
+              "content-length": "4",
+              "date": "Sat, 31 Oct 2026 14:31:57 GMT",
+              "connection": "close"
+            },
+            "request_headers": {
+              "content-type": "application/json"
+            },
+            "elapsed_ms": 437.704
+          },
+          {
+            "expected_status": [
+              200
+            ],
+            "json_top_level_keys": [
+              "id",
+              "name",
+              "targetId"
+            ],
+            "body_sha256": "d6616fec9443aa6dcfd86511c2b29649cf63c5eeb7894142e914232fb96fa733",
+            "body_bytes": 86,
+            "assertions": {
+              "json_keys": [
+                "id",
+                "targetId",
+                "name"
+              ]
+            },
+            "id": "attachment-upload",
+            "method": "POST",
+            "path": "/core/module/item/files",
+            "url": "http://127.0.0.1:18091/core/module/item/files",
+            "status": 200,
+            "response_headers": {
+              "x-content-type-options": "nosniff",
+              "x-xss-protection": "1; mode=block",
+              "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+              "pragma": "no-cache",
+              "expires": "0",
+              "x-frame-options": "SAMEORIGIN",
+              "content-type": "application/json",
+              "content-length": "86",
+              "date": "Sat, 31 Oct 2026 14:31:57 GMT",
+              "connection": "close"
+            },
+            "request_headers": {
+              "content-type": "multipart/form-data; boundary=----ownedApiFixtured998ceb12a6a427a9f147a664617f860"
+            },
+            "elapsed_ms": 733.179
+          },
+          {
+            "expected_status": [
+              200
+            ],
+            "json_top_level_keys": null,
+            "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "body_bytes": 0,
+            "assertions": {},
+            "id": "attachment-grant",
+            "method": "POST",
+            "path": "/secure/emc/module/item/home-attachments/permissions",
+            "url": "http://127.0.0.1:18091/secure/emc/module/item/home-attachments/permissions",
+            "status": 200,
+            "response_headers": {
+              "x-content-type-options": "nosniff",
+              "x-xss-protection": "1; mode=block",
+              "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+              "pragma": "no-cache",
+              "expires": "0",
+              "x-frame-options": "SAMEORIGIN",
+              "content-length": "0",
+              "date": "Sat, 31 Oct 2026 14:31:58 GMT",
+              "connection": "close"
+            },
+            "request_headers": {
+              "content-type": "application/json"
+            },
+            "elapsed_ms": 440.847
+          },
+          {
+            "expected_status": [
+              200
+            ],
+            "json_top_level_keys": [
+              "columnTypeMap",
+              "first",
+              "last",
+              "numberOfElements",
+              "pageNumber",
+              "pageSize",
+              "rows",
+              "total",
+              "totalMap",
+              "totalPages"
+            ],
+            "body_sha256": "62d568fda21e217b9dd253b25a3f6dabe37158e8c712a82f65c9119073cb1a0e",
+            "body_bytes": 200,
+            "assertions": {
+              "json_keys": [
+                "rows",
+                "total"
+              ]
+            },
+            "id": "attachment-permission-query",
+            "method": "POST",
+            "path": "/secure/emc/module/item/home-attachments/6084/permissions/queries",
+            "url": "http://127.0.0.1:18091/secure/emc/module/item/home-attachments/6084/permissions/queries",
+            "status": 200,
+            "response_headers": {
+              "x-content-type-options": "nosniff",
+              "x-xss-protection": "1; mode=block",
+              "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+              "pragma": "no-cache",
+              "expires": "0",
+              "x-frame-options": "SAMEORIGIN",
+              "content-type": "application/json",
+              "content-length": "200",
+              "date": "Sat, 31 Oct 2026 14:31:58 GMT",
+              "connection": "close"
+            },
+            "request_headers": {
+              "content-type": "application/json"
+            },
+            "elapsed_ms": 436.726
+          }
+        ],
+        "restore_http": [
+          {
+            "expected_status": [
+              200
+            ],
+            "json_top_level_keys": null,
+            "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "body_bytes": 0,
+            "assertions": {},
+            "id": "attachment-delete",
+            "method": "DELETE",
+            "path": "/secure/emc/module/item/home-attachments",
+            "url": "http://127.0.0.1:18091/secure/emc/module/item/home-attachments",
+            "status": 200,
+            "response_headers": {
+              "x-content-type-options": "nosniff",
+              "x-xss-protection": "1; mode=block",
+              "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+              "pragma": "no-cache",
+              "expires": "0",
+              "x-frame-options": "SAMEORIGIN",
+              "content-length": "0",
+              "date": "Sat, 31 Oct 2026 14:32:00 GMT",
+              "connection": "close"
+            },
+            "request_headers": {
+              "content-type": "application/json"
+            },
+            "elapsed_ms": 820.493
+          }
+        ]
+      },
+      "readback_http": [
+        {
+          "expected_status": [
+            200
+          ],
+          "json_top_level_keys": [
+            "columnTypeMap",
+            "first",
+            "last",
+            "numberOfElements",
+            "pageNumber",
+            "pageSize",
+            "rows",
+            "total",
+            "totalMap",
+            "totalPages"
+          ],
+          "body_sha256": "c7acc1e08cbfb45c941604061137f4cfc201ee2dd63687e26e4349799404510e",
+          "body_bytes": 143,
+          "assertions": {
+            "json_keys": [
+              "rows",
+              "total"
+            ],
+            "json_values": {
+              "total": 0
+            }
+          },
+          "id": "attachment-permission-query",
+          "method": "POST",
+          "path": "/secure/emc/module/item/home-attachments/6084/permissions/queries",
+          "url": "http://127.0.0.1:18091/secure/emc/module/item/home-attachments/6084/permissions/queries",
+          "status": 200,
+          "response_headers": {
+            "x-content-type-options": "nosniff",
+            "x-xss-protection": "1; mode=block",
+            "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+            "pragma": "no-cache",
+            "expires": "0",
+            "x-frame-options": "SAMEORIGIN",
+            "content-type": "application/json",
+            "content-length": "143",
+            "date": "Sat, 31 Oct 2026 14:31:59 GMT",
+            "connection": "close"
+          },
+          "request_headers": {
+            "content-type": "application/json"
+          },
+          "elapsed_ms": 460.865
+        }
+      ],
+      "readback_required": true,
+      "audit": {
+        "required": true,
+        "status": "observed",
+        "event": "attachment-permission-delete",
+        "outcome": "ALLOWED",
+        "source": "owned-http"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "restore-http"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "3b118086d5007dd17f9c8e2c3482d3946be73c25ea2f27697f277f639067115a",
+      "body_bytes": 144,
+      "assertions": {
+        "json_keys": [
+          "rows",
+          "total"
+        ]
+      },
+      "id": "workspace.attachment-query",
+      "method": "POST",
+      "path": "/secure/emc/module/item/home-attachments/queries/raw",
+      "url": "http://127.0.0.1:18091/secure/emc/module/item/home-attachments/queries/raw",
+      "status": 200,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "144",
+        "date": "Sat, 31 Oct 2026 14:32:00 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 246.284,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/item/home-attachments/queries/raw",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "project-route",
+        "route_id": "225f8cd784f34d2a"
+      },
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r11b7c54b4e6e"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    }
+  ],
+  "cleanup": {
+    "application_stopped": true,
+    "baseline_schema_immutable": true,
+    "cleanup_mode": "persistent-oracle",
+    "network_preserved": true,
+    "oracle_preserved": true,
+    "oracle_reused": true,
+    "oracle_stopped": false,
+    "redis_preserved": true,
+    "redis_stopped": false,
+    "runtime_dirty": false,
+    "runtime_schema_restored": true,
+    "temporary_files_removed": true,
+    "volume_preserved": true
+  },
+  "cleanup_pending": false,
+  "phase_timings_ms": {
+    "http_cases": 29735.838
+  },
+  "authentication": {
+    "attempted": true,
+    "authenticated": true,
+    "status": 200
+  },
+  "finished_at": "2026-10-31T14:32:01.121475+00:00",
+  "wave": "secondary",
+  "wave_runtime_id": "api-wave-secondary",
+  "wave_finalized_at": "2026-10-31T14:32:01.781370+00:00"
+}

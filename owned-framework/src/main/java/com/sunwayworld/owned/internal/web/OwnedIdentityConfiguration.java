@@ -197,6 +197,13 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @ConditionalOnMissingBean(OwnedMtlPerCheckQueryController.class)
+    public OwnedMtlPerCheckQueryController ownedMtlPerCheckQueryController(
+            OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
+        return new OwnedMtlPerCheckQueryController(boundary, dataSource);
+    }
+
+    @Bean
     @ConditionalOnMissingBean(OwnedReagentWriteController.class)
     public OwnedReagentWriteController ownedReagentWriteController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource, Environment environment) {

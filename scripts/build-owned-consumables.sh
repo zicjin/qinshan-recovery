@@ -20,7 +20,8 @@ if [ "${OWNED_CONSUMABLES_RED:-0}" != 1 ]; then
  for part in bean/EmcConsumeBean bean/EmcCsmStockBean bean/EmcCsmStockLogBean dao/EmcConsumeDao dao/EmcCsmStockDao dao/EmcCsmStockLogDao service/EmcConsumeService service/EmcCsmStockService service/EmcCsmStockLogService resource/EmcConsumeResource resource/impl/EmcConsumeResourceImpl controller/EmcConsumeController controller/impl/EmcConsumeControllerImpl; do
   JAVA_SOURCES+=("$SOURCE/$part.java")
  done
- mapfile -d '' OWNED_SOURCES < <(find "$ROOT/owned-consumables/src/main/java" -name '*.java' -print0 | sort -z)
+ OWNED_SOURCES=()
+ while IFS= read -r -d '' source; do OWNED_SOURCES+=("$source"); done < <(find "$ROOT/owned-consumables/src/main/java" -name '*.java' -print0 | sort -z)
 fi
 "$JDK/bin/javac" -encoding UTF-8 -parameters -source 8 -target 8 -cp "$CP" -d "$OUT/classes" "${JAVA_SOURCES[@]}" "${OWNED_SOURCES[@]}"
 if [ "${OWNED_CONSUMABLES_RED:-0}" != 1 ]; then

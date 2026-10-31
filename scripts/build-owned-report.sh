@@ -13,7 +13,8 @@ if [ "${OWNED_SKIP_DEPENDENCY_BUILD:-0}" != 1 ]; then
 fi
 CP="$FRAMEWORK/classes:$FRAMEWORK/public-deps/*"
 JAVA_SOURCES=("$PROJECT_ROOT/src/main/java/com/sunwayworld/emc/projectfunction/GikamWpjcApplication.java")
-mapfile -d '' OWNED_SOURCES < <(find "$ROOT/owned-report/src/main/java" -name '*.java' -print0 | sort -z)
+OWNED_SOURCES=()
+while IFS= read -r -d '' source; do OWNED_SOURCES+=("$source"); done < <(find "$ROOT/owned-report/src/main/java" -name '*.java' -print0 | sort -z)
 "$JDK/bin/javac" -encoding UTF-8 -parameters -source 8 -target 8 -cp "$CP" -d "$OUT/classes" "${JAVA_SOURCES[@]}" "${OWNED_SOURCES[@]}"
 cp -R "$ROOT/owned-report/src/main/resources/." "$OUT/classes/"
 find "$ROOT/owned-report/src/test" -name '*.java' -print0 | xargs -0 "$JDK/bin/javac" -encoding UTF-8 -source 8 -target 8 -cp "$OUT/classes:$FRAMEWORK/classes:$FRAMEWORK/public-deps/*:$ROOT/owned-personnel/target/classes" -d "$OUT/test-classes"

@@ -14,7 +14,8 @@ CP="$FRAMEWORK/classes:$FRAMEWORK/public-deps/*"
 MAIN="$PROJECT_ROOT/src/main/java/com/sunwayworld/emc/projectfunction/GikamWpjcApplication.java"
 SOURCES=("$MAIN")
 if [ "${OWNED_SCHEDULER_RED:-0}" != 1 ]; then
- mapfile -d '' OWNED < <(find "$ROOT/owned-scheduler/src/main/java" -name '*.java' -print0 | sort -z)
+ OWNED=()
+ while IFS= read -r -d '' source; do OWNED+=("$source"); done < <(find "$ROOT/owned-scheduler/src/main/java" -name '*.java' -print0 | sort -z)
  SOURCES+=("${OWNED[@]}")
 fi
 "$JDK/bin/javac" -encoding UTF-8 -parameters -source 8 -target 8 -cp "$CP" -d "$OUT/classes" "${SOURCES[@]}"

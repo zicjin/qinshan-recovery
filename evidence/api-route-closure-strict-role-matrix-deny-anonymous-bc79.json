@@ -1,9 +1,9 @@
 {
   "schema": 1,
   "scope": "current-head-spring-web-api-route-closure",
-  "generated_at": "2026-10-31T13:29:03.464366+00:00",
-  "source_commit": "b00517775d30c6e9ab71f3a5ed59b0eff140cd1a",
-  "repository_head_at_capture": "b00517775d30c6e9ab71f3a5ed59b0eff140cd1a",
+  "generated_at": "2026-10-31T13:39:37.382610+00:00",
+  "source_commit": "c1ea305d30c7bbeec8d3b694d9f908ffdd52d9e8",
+  "repository_head_at_capture": "c1ea305d30c7bbeec8d3b694d9f908ffdd52d9e8",
   "source_dirty": false,
   "implementation_binding": "impl-bc79c0d168154756",
   "implementation_tree_digest": "bc79c0d1681547568fd0ae569ca3dedd2c66694ef9ac51a1b70cf9aa74dfb911",
@@ -129,23 +129,23 @@
     "internal_http_bridge": false,
     "jni_replacement_process": false
   },
-  "route_count": 6748,
+  "route_count": 6746,
   "project_route_count": 6599,
-  "boundary_route_count": 149,
+  "boundary_route_count": 147,
   "behavior_counts": {
     "executed-pass": 4,
-    "unknown": 6744
+    "unknown": 6742
   },
   "disposition_counts": {
     "owned-pass": 4,
-    "unknown": 6744
+    "unknown": 6742
   },
   "strict_pass_count": 4,
   "non_ledger_strict_pass_count": 0,
   "diagnostic_observation_count": 0,
-  "required_unknown": 6744,
+  "required_unknown": 6742,
   "project_required_unknown": 6599,
-  "boundary_required_unknown": 145,
+  "boundary_required_unknown": 143,
   "failures": [],
   "reports": [
     {
@@ -112688,23 +112688,6 @@
       "runtime_model": "same-spring-application"
     },
     {
-      "id": "d224560d3f44f504",
-      "method": "GET",
-      "path": "/owned-runtime/health",
-      "source_class": "com.sunwayworld.owned.internal.smoke.OwnedRuntimeSmokeController",
-      "source_handler": "GetMapping",
-      "family": "page-other",
-      "behavior_status": "unknown",
-      "disposition": "unknown",
-      "evidence": [],
-      "diagnostic_observations": [],
-      "unknown_reason": "no clone-derived HTTP evidence registered",
-      "boundary_scope": "owned-source-only",
-      "route_origin": "owned-java-source-only",
-      "boundary_semantics": "owned Java source-only route; boundary route != boundary process",
-      "runtime_model": "same-spring-application"
-    },
-    {
       "id": "44f05fbaf7b086dc",
       "method": "GET",
       "path": "/owned/attachments/management",
@@ -114800,23 +114783,6 @@
       "source_class": "com.sunwayworld.owned.internal.web.OwnedAuditTrailController",
       "source_handler": "PostMapping",
       "family": "page-other",
-      "behavior_status": "unknown",
-      "disposition": "unknown",
-      "evidence": [],
-      "diagnostic_observations": [],
-      "unknown_reason": "no clone-derived HTTP evidence registered",
-      "boundary_scope": "owned-source-only",
-      "route_origin": "owned-java-source-only",
-      "boundary_semantics": "owned Java source-only route; boundary route != boundary process",
-      "runtime_model": "same-spring-application"
-    },
-    {
-      "id": "61e5892d6013d285",
-      "method": "GET",
-      "path": "/secure/identity-probe",
-      "source_class": "com.sunwayworld.framework.OwnedIdentityServletContractTest",
-      "source_handler": "GetMapping",
-      "family": "core",
       "behavior_status": "unknown",
       "disposition": "unknown",
       "evidence": [],

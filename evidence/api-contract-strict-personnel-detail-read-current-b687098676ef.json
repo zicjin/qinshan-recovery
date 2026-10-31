@@ -975,8 +975,8 @@
   "wave_runtime_id": "api-wave-personnel",
   "wave_finalized_at": "2026-10-30T23:30:16.388556+00:00",
   "repository_head_at_capture": "2e8d0cb846c6370cf0b81227fa63ab9dd39da251",
-  "implementation_binding": "impl-4d197eb162b68560",
-  "implementation_tree_digest": "4d197eb162b685601461ff0c9621ad19ca3177804686f2c373e76e5029565e04",
+  "implementation_binding": "impl-f3d72023ee0a31f7",
+  "implementation_tree_digest": "f3d72023ee0a31f70ea3e44d63c0e3a1412d505bb0899d73dcb8b43820690dae",
   "implementation_dirty": false,
   "implementation_scope": [
     "project/src/main/java",

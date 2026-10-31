@@ -32,7 +32,7 @@ fi
 python3 "$ROOT/scripts/prepare-owned-public-deps.py" "$FRAMEWORK/public-deps"
 CP="$FRAMEWORK/classes:$FRAMEWORK/public-deps/*"
 mapfile -d '' OWNED_SOURCES < <(find "$ROOT/owned-personnel/src/main/java" -name '*.java' -print0 | sort -z)
-"$JAVAC" -parameters -source 8 -target 8 -cp "$CP" -d "$OUT/classes" "${JAVA_SOURCES[@]}" "${OWNED_SOURCES[@]}"
+"$JAVAC" -encoding UTF-8 -parameters -source 8 -target 8 -cp "$CP" -d "$OUT/classes" "${JAVA_SOURCES[@]}" "${OWNED_SOURCES[@]}"
 python3 - "$PROJECT_ROOT" "$OUT/original-sources.sha256" "${JAVA_SOURCES[@]}" <<'PY_MANIFEST'
 import hashlib, pathlib, sys
 root=pathlib.Path(sys.argv[1]); out=pathlib.Path(sys.argv[2])
@@ -53,7 +53,7 @@ with out.open('a') as manifest:
         manifest.write(hashlib.sha256(path.read_bytes()).hexdigest()+'  '+str(path.relative_to(root))+'\n')
 PY_RESOURCES
 if [ -d "$TEST" ]; then
-  find "$TEST" -name "*.java" -print0 | xargs -0 "$JAVAC" -source 8 -target 8 -cp "$OUT/classes:$CP" -d "$OUT/test-classes"
+  find "$TEST" -name "*.java" -print0 | xargs -0 "$JAVAC" -encoding UTF-8 -source 8 -target 8 -cp "$OUT/classes:$CP" -d "$OUT/test-classes"
 fi
 "$JDK/bin/java" -cp "$OUT/classes:$OUT/test-classes:$CP" com.sunwayworld.framework.OwnedPersonnelAbilityResourceControllerContractTest
 "$JAR" cf "$OUT/lims-owned-personnel-1.0.0.jar" -C "$OUT/classes" .

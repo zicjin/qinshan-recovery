@@ -17,9 +17,9 @@ if [ "${OWNED_SCHEDULER_RED:-0}" != 1 ]; then
  mapfile -d '' OWNED < <(find "$ROOT/owned-scheduler/src/main/java" -name '*.java' -print0 | sort -z)
  SOURCES+=("${OWNED[@]}")
 fi
-"$JDK/bin/javac" -parameters -source 8 -target 8 -cp "$CP" -d "$OUT/classes" "${SOURCES[@]}"
+"$JDK/bin/javac" -encoding UTF-8 -parameters -source 8 -target 8 -cp "$CP" -d "$OUT/classes" "${SOURCES[@]}"
 if [ "${OWNED_SCHEDULER_RED:-0}" != 1 ]; then cp -R "$ROOT/owned-scheduler/src/main/resources/." "$OUT/classes/"; fi
-"$JDK/bin/javac" -source 8 -target 8 -cp "$OUT/classes:$CP" -d "$OUT/test-classes" "$ROOT/owned-scheduler/src/test/java/com/sunwayworld/owned/scheduler/OwnedSchedulerTestApplication.java"
+"$JDK/bin/javac" -encoding UTF-8 -source 8 -target 8 -cp "$OUT/classes:$CP" -d "$OUT/test-classes" "$ROOT/owned-scheduler/src/test/java/com/sunwayworld/owned/scheduler/OwnedSchedulerTestApplication.java"
 sha256sum "$MAIN" > "$OUT/original-sources.sha256"
 "$JDK/bin/jar" cf "$OUT/lims-owned-scheduler-1.0.0.jar" -C "$OUT/classes" .
 "$ROOT/scripts/reject-supplier-runtime.sh" "$OUT/lims-owned-scheduler-1.0.0.jar" "$FRAMEWORK/lims-owned-framework-1.0.0.jar" "$FRAMEWORK/public-deps"

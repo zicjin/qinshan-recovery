@@ -11,8 +11,8 @@ JAVA_BIN="${JAVA_BIN:-$JDK/bin/java}"
 rm -rf "$OUT"
 mkdir -p "$OUT/classes" "$OUT/test-classes"
 python3 "$ROOT/scripts/prepare-owned-public-deps.py" "$OUT/public-deps"
-find "$SRC" -name '*.java' -print0 | xargs -0 "$JAVAC_BIN" -source 8 -target 8 -cp "$OUT/public-deps/*" -d "$OUT/classes"
-find "$TEST" -name '*.java' -print0 | xargs -0 "$JAVAC_BIN" -source 8 -target 8 -cp "$OUT/classes:$OUT/public-deps/*" -d "$OUT/test-classes"
+find "$SRC" -name '*.java' -print0 | xargs -0 "$JAVAC_BIN" -encoding UTF-8 -source 8 -target 8 -cp "$OUT/public-deps/*" -d "$OUT/classes"
+find "$TEST" -name '*.java' -print0 | xargs -0 "$JAVAC_BIN" -encoding UTF-8 -source 8 -target 8 -cp "$OUT/classes:$OUT/public-deps/*" -d "$OUT/test-classes"
 if [ -d "$ROOT/owned-framework/src/main/resources" ]; then
   cp -R "$ROOT/owned-framework/src/main/resources/." "$OUT/classes/"
 fi

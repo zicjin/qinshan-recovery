@@ -22,7 +22,7 @@ if [ "${OWNED_CONSUMABLES_RED:-0}" != 1 ]; then
  done
  mapfile -d '' OWNED_SOURCES < <(find "$ROOT/owned-consumables/src/main/java" -name '*.java' -print0 | sort -z)
 fi
-"$JDK/bin/javac" -parameters -source 8 -target 8 -cp "$CP" -d "$OUT/classes" "${JAVA_SOURCES[@]}" "${OWNED_SOURCES[@]}"
+"$JDK/bin/javac" -encoding UTF-8 -parameters -source 8 -target 8 -cp "$CP" -d "$OUT/classes" "${JAVA_SOURCES[@]}" "${OWNED_SOURCES[@]}"
 if [ "${OWNED_CONSUMABLES_RED:-0}" != 1 ]; then
  cp -R "$ROOT/owned-consumables/src/main/resources/." "$OUT/classes/"
  for directory in templates/emc/module/item/consume/consumes static/emc/module/item/consume/consumes; do
@@ -38,7 +38,7 @@ if len(paths)>1:
  paths += sorted(p for d in ('templates/emc/module/item/consume/consumes','static/emc/module/item/consume/consumes') for p in (root/'src/main/resources'/d).rglob('*') if p.is_file())
 out.write_text(''.join(hashlib.sha256(p.read_bytes()).hexdigest()+'  '+str(p.relative_to(root))+'\n' for p in paths))
 PY_MANIFEST
-find "$ROOT/owned-consumables/src/test" -name '*.java' -print0 | xargs -0 "$JDK/bin/javac" -source 8 -target 8 -cp "$OUT/classes:$CP" -d "$OUT/test-classes"
+find "$ROOT/owned-consumables/src/test" -name '*.java' -print0 | xargs -0 "$JDK/bin/javac" -encoding UTF-8 -source 8 -target 8 -cp "$OUT/classes:$CP" -d "$OUT/test-classes"
 "$JDK/bin/jar" cf "$OUT/lims-owned-consumables-1.0.0.jar" -C "$OUT/classes" .
 "$ROOT/scripts/reject-supplier-runtime.sh" "$OUT/lims-owned-consumables-1.0.0.jar" "$FRAMEWORK/lims-owned-framework-1.0.0.jar" "$FRAMEWORK/public-deps"
 echo "owned consumables main/runtime module build passed"

@@ -77,11 +77,13 @@ _IMPLEMENTATION_SUFFIXES = (
     "scripts/start-reused-sss2-api-runtime.sh",
     "scripts/cleanup-strict-sss2-api-runtime.sh",
     "scripts/refresh-owned-sss2-app.sh",
+    "scripts/owned_readiness.py",
     "tools/business_api_inventory.py",
     "tools/api_route_ledger.py",
     "tools/api_route_execution_plan.py",
     "tools/api_contract_skeleton.py",
     "tools/api_route_closure.py",
+    "tools/finalize_api_report.py",
     "tools/vertical_slices/matrix.py",
 )
 

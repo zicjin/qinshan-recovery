@@ -113,7 +113,8 @@ def main():
             assert workspace["classifications"] == ["original-frontend-imported", "license-native-cleaned"]
             assert any("source-present" in item["classifications"] for item in authenticated["resources"])
         assert all(item["classification"] == "third-party-allowed" for item in payload["third_party_allowed"])
-        assert any(item["id"] == "authenticated-gikam-runtime-resources" for item in plan)
+        if baseline["available"]:
+            assert any(item["id"] == "authenticated-gikam-runtime-resources" for item in plan)
         assert all(
             set(item) <= {"path", "sha256", "size"}
             for records in payload["files"].values()

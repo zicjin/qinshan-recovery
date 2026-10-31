@@ -406,20 +406,29 @@ def reference_index(paths: Sequence[Path]) -> Dict[str, List[str]]:
          "--glob", "!" + EVIDENCE_PREFIX + "**",
          "--glob", "!.scratch/sunway-supplier-exit-api-first/diagnostic-evidence/**",
          "--glob", "!.scratch/sunway-supplier-exit-api-first/archive/**",
+         "--glob", "!diagnostic-evidence/**",
+         "--glob", "!archive/**",
         pattern, str(ROOT), str(FEATURE)],
         text=True, capture_output=True, check=False,
     )
     candidates = [Path(line) for line in search.stdout.splitlines() if line.strip()]
-    name_pattern = re.compile("|".join(re.escape(name) for name in sorted(needles, key=len, reverse=True))) if needles else None
+    # Extract path-like evidence tokens in one linear pass.  Building a
+    # giant alternation from every historical filename becomes quadratic in
+    # memory and CPU once the parent workspace contains thousands of reports.
+    token_pattern = re.compile(
+        r"(?<![A-Za-z0-9_.-])(?:[A-Za-z0-9_.-]+/)*[A-Za-z0-9_.-]+\.(?:json|tsv|md)(?![A-Za-z0-9_.-])"
+    )
     for source in candidates:
         try:
             text = source.read_text(encoding="utf-8", errors="ignore")
         except OSError:
             continue
-        if not name_pattern:
+        if not needles:
             continue
-        for match in name_pattern.finditer(text):
-            targets = needles[match.group(0)]
+        for token in token_pattern.findall(text):
+            targets = needles.get(Path(token).name)
+            if not targets:
+                continue
             if len(targets) == 1:
                 result[targets[0]].append(relative(source))
                 continue
@@ -429,7 +438,7 @@ def reference_index(paths: Sequence[Path]) -> Dict[str, List[str]]:
             # command example cannot pin every historical copy in place.
             for target in targets:
                 short = target.removeprefix(REPO_PREFIX)
-                if target in text or short in text:
+                if target in token or short in token:
                     result[target].append(relative(source))
     # Closure JSON is itself an authoritative reference graph and is excluded
     # from the text search above to avoid counting every embedded observation.
@@ -439,7 +448,11 @@ def reference_index(paths: Sequence[Path]) -> Dict[str, List[str]]:
     exact_targets = {relative(path): relative(path) for path in paths}
     unique_names = {name: targets[0] for name, targets in needles.items() if len(targets) == 1}
     for source in paths:
-        if "closure" not in source.name:
+        # Only canonical-root closures are authoritative references.  Walking
+        # every historical/pending closure recursively re-parses hundreds of
+        # multi-megabyte cumulative route snapshots and is both unnecessary
+        # and prohibitively expensive.
+        if "closure" not in source.name or not inside(source, EVIDENCE):
             continue
         payload = json_payload(source)
         closure_rel = relative(source)

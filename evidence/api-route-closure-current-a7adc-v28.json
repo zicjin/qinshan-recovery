@@ -1,12 +1,12 @@
 {
   "schema": 1,
   "scope": "current-head-spring-web-api-route-closure",
-  "generated_at": "2026-10-31T16:07:02.418628+00:00",
-  "source_commit": "7ef5796f7c2971e0164459345b9c004d973ae79f",
-  "repository_head_at_capture": "7ef5796f7c2971e0164459345b9c004d973ae79f",
+  "generated_at": "2026-10-31T19:47:05.954682+00:00",
+  "source_commit": "483d6e6942b6f060a93d739c97ec4c99f8ccb69b",
+  "repository_head_at_capture": "483d6e6942b6f060a93d739c97ec4c99f8ccb69b",
   "source_dirty": false,
-  "implementation_binding": "impl-0cfa67a7f55714e2",
-  "implementation_tree_digest": "0cfa67a7f55714e2c01b5c5f4a705bd93794336faf58100760a60b5910f5fcc9",
+  "implementation_binding": "impl-a7adc27cb2955d6e",
+  "implementation_tree_digest": "a7adc27cb2955d6e723d155ed934d063e9ed0c5b847ea74e9f880216dd7e6fd2",
   "implementation_dirty": false,
   "implementation_scope": [
     "project/src/main/java",
@@ -133,30 +133,42 @@
   "project_route_count": 6599,
   "boundary_route_count": 147,
   "behavior_counts": {
-    "executed-pass": 3,
-    "unknown": 6743
+    "executed-pass": 16,
+    "unknown": 6730
   },
   "disposition_counts": {
-    "owned-pass": 3,
-    "unknown": 6743
+    "owned-pass": 16,
+    "unknown": 6730
   },
-  "strict_pass_count": 3,
+  "strict_pass_count": 16,
   "non_ledger_strict_pass_count": 0,
   "diagnostic_observation_count": 0,
-  "required_unknown": 6743,
-  "project_required_unknown": 6597,
-  "boundary_required_unknown": 146,
+  "required_unknown": 6730,
+  "project_required_unknown": 6599,
+  "boundary_required_unknown": 131,
   "failures": [],
   "reports": [
     {
-      "path": "evidence/api-contract-strict-personnel-read-authenticated-0cfa.json",
-      "sha256": "20573bc4d3e087134d1b07f5cf8ae0e51938b0c654f4610532d24273bc20cb8d",
+      "path": "evidence/api-contract-strict-core-workspace-boundary-current-a7adc-r2.json",
+      "sha256": "16b4578706284956b3011166a88360af803f1b63ae3b4b280d940769d9de6fdd",
       "status": "executed-pass",
       "strict_evidence": true,
-      "source_commit": "082825bcdf3c0a7852f05291e4eaabe385682cd3",
-      "repository_head_at_capture": "082825bcdf3c0a7852f05291e4eaabe385682cd3",
-      "implementation_binding": "impl-0cfa67a7f55714e2",
-      "implementation_tree_digest": "0cfa67a7f55714e2c01b5c5f4a705bd93794336faf58100760a60b5910f5fcc9",
+      "source_commit": "483d6e6942b6f060a93d739c97ec4c99f8ccb69b",
+      "repository_head_at_capture": "483d6e6942b6f060a93d739c97ec4c99f8ccb69b",
+      "implementation_binding": "impl-a7adc27cb2955d6e",
+      "implementation_tree_digest": "a7adc27cb2955d6e723d155ed934d063e9ed0c5b847ea74e9f880216dd7e6fd2",
+      "implementation_dirty": false,
+      "strict_contract": "strict report contract valid"
+    },
+    {
+      "path": "evidence/api-contract-strict-core-workspace-resources-current-a7adc-r2.json",
+      "sha256": "c45ea2674204e7adb04bf7e72465a9c6920686b989182ca95c9408b0c40b3fed",
+      "status": "executed-pass",
+      "strict_evidence": true,
+      "source_commit": "483d6e6942b6f060a93d739c97ec4c99f8ccb69b",
+      "repository_head_at_capture": "483d6e6942b6f060a93d739c97ec4c99f8ccb69b",
+      "implementation_binding": "impl-a7adc27cb2955d6e",
+      "implementation_tree_digest": "a7adc27cb2955d6e723d155ed934d063e9ed0c5b847ea74e9f880216dd7e6fd2",
       "implementation_dirty": false,
       "strict_contract": "strict report contract valid"
     }
@@ -93297,19 +93309,11 @@
       "source_class": "com.sunwayworld.emc.module.mdm.emp.emp.resource.EmcEmpResource",
       "source_handler": "inherited.GenericResource",
       "family": "personnel",
-      "behavior_status": "executed-pass",
-      "disposition": "owned-pass",
-      "evidence": [
-        {
-          "report": "evidence/api-contract-strict-personnel-read-authenticated-0cfa.json",
-          "report_sha256": "20573bc4d3e087134d1b07f5cf8ae0e51938b0c654f4610532d24273bc20cb8d",
-          "case_id": "personnel.query.no-match",
-          "status": 200,
-          "disposition": "owned-pass"
-        }
-      ],
+      "behavior_status": "unknown",
+      "disposition": "unknown",
+      "evidence": [],
       "diagnostic_observations": [],
-      "unknown_reason": null,
+      "unknown_reason": "no clone-derived HTTP evidence registered",
       "boundary_scope": null,
       "route_origin": "project-spring-source",
       "boundary_semantics": "project Spring route",
@@ -93339,26 +93343,11 @@
       "source_class": "com.sunwayworld.emc.module.mdm.emp.emp.resource.EmcEmpResource",
       "source_handler": "inherited.GenericResource",
       "family": "personnel",
-      "behavior_status": "executed-pass",
-      "disposition": "owned-pass",
-      "evidence": [
-        {
-          "report": "evidence/api-contract-strict-personnel-read-authenticated-0cfa.json",
-          "report_sha256": "20573bc4d3e087134d1b07f5cf8ae0e51938b0c654f4610532d24273bc20cb8d",
-          "case_id": "personnel.raw.read",
-          "status": 200,
-          "disposition": "owned-pass"
-        },
-        {
-          "report": "evidence/api-contract-strict-personnel-read-authenticated-0cfa.json",
-          "report_sha256": "20573bc4d3e087134d1b07f5cf8ae0e51938b0c654f4610532d24273bc20cb8d",
-          "case_id": "personnel.raw.invalid-input",
-          "status": 400,
-          "disposition": "owned-pass"
-        }
-      ],
+      "behavior_status": "unknown",
+      "disposition": "unknown",
+      "evidence": [],
       "diagnostic_observations": [],
-      "unknown_reason": null,
+      "unknown_reason": "no clone-derived HTTP evidence registered",
       "boundary_scope": null,
       "route_origin": "project-spring-source",
       "boundary_semantics": "project Spring route",
@@ -112513,11 +112502,19 @@
       "source_class": "com.sunwayworld.owned.internal.web.OwnedKeepOnlineController",
       "source_handler": "PostMapping",
       "family": "core",
-      "behavior_status": "unknown",
-      "disposition": "unknown",
-      "evidence": [],
+      "behavior_status": "executed-pass",
+      "disposition": "owned-pass",
+      "evidence": [
+        {
+          "report": "evidence/api-contract-strict-core-workspace-resources-current-a7adc-r2.json",
+          "report_sha256": "c45ea2674204e7adb04bf7e72465a9c6920686b989182ca95c9408b0c40b3fed",
+          "case_id": "workspace.keep-online",
+          "status": 200,
+          "disposition": "owned-pass"
+        }
+      ],
       "diagnostic_observations": [],
-      "unknown_reason": "no clone-derived HTTP evidence registered",
+      "unknown_reason": null,
       "boundary_scope": "owned-source-only",
       "route_origin": "owned-java-source-only",
       "boundary_semantics": "owned Java source-only route; boundary route != boundary process",
@@ -112581,11 +112578,19 @@
       "source_class": "com.sunwayworld.owned.internal.web.OwnedWorkspaceShellController",
       "source_handler": "GetMapping",
       "family": "core",
-      "behavior_status": "unknown",
-      "disposition": "unknown",
-      "evidence": [],
+      "behavior_status": "executed-pass",
+      "disposition": "owned-pass",
+      "evidence": [
+        {
+          "report": "evidence/api-contract-strict-core-workspace-boundary-current-a7adc-r2.json",
+          "report_sha256": "16b4578706284956b3011166a88360af803f1b63ae3b4b280d940769d9de6fdd",
+          "case_id": "workspace.shell",
+          "status": 200,
+          "disposition": "owned-pass"
+        }
+      ],
       "diagnostic_observations": [],
-      "unknown_reason": "no clone-derived HTTP evidence registered",
+      "unknown_reason": null,
       "boundary_scope": "owned-source-only",
       "route_origin": "owned-java-source-only",
       "boundary_semantics": "owned Java source-only route; boundary route != boundary process",
@@ -113397,11 +113402,19 @@
       "source_class": "com.sunwayworld.owned.internal.web.OwnedWorkspaceController",
       "source_handler": "GetMapping",
       "family": "core",
-      "behavior_status": "unknown",
-      "disposition": "unknown",
-      "evidence": [],
+      "behavior_status": "executed-pass",
+      "disposition": "owned-pass",
+      "evidence": [
+        {
+          "report": "evidence/api-contract-strict-core-workspace-boundary-current-a7adc-r2.json",
+          "report_sha256": "16b4578706284956b3011166a88360af803f1b63ae3b4b280d940769d9de6fdd",
+          "case_id": "workspace.analysis-department-statistics",
+          "status": 200,
+          "disposition": "owned-pass"
+        }
+      ],
       "diagnostic_observations": [],
-      "unknown_reason": "no clone-derived HTTP evidence registered",
+      "unknown_reason": null,
       "boundary_scope": "owned-source-only",
       "route_origin": "owned-java-source-only",
       "boundary_semantics": "owned Java source-only route; boundary route != boundary process",
@@ -113414,11 +113427,19 @@
       "source_class": "com.sunwayworld.owned.internal.web.OwnedWorkspaceController",
       "source_handler": "GetMapping",
       "family": "core",
-      "behavior_status": "unknown",
-      "disposition": "unknown",
-      "evidence": [],
+      "behavior_status": "executed-pass",
+      "disposition": "owned-pass",
+      "evidence": [
+        {
+          "report": "evidence/api-contract-strict-core-workspace-boundary-current-a7adc-r2.json",
+          "report_sha256": "16b4578706284956b3011166a88360af803f1b63ae3b4b280d940769d9de6fdd",
+          "case_id": "workspace.annual-project-statistics",
+          "status": 200,
+          "disposition": "owned-pass"
+        }
+      ],
       "diagnostic_observations": [],
-      "unknown_reason": "no clone-derived HTTP evidence registered",
+      "unknown_reason": null,
       "boundary_scope": "owned-source-only",
       "route_origin": "owned-java-source-only",
       "boundary_semantics": "owned Java source-only route; boundary route != boundary process",
@@ -113431,11 +113452,19 @@
       "source_class": "com.sunwayworld.owned.internal.web.OwnedWorkspaceController",
       "source_handler": "GetMapping",
       "family": "core",
-      "behavior_status": "unknown",
-      "disposition": "unknown",
-      "evidence": [],
+      "behavior_status": "executed-pass",
+      "disposition": "owned-pass",
+      "evidence": [
+        {
+          "report": "evidence/api-contract-strict-core-workspace-boundary-current-a7adc-r2.json",
+          "report_sha256": "16b4578706284956b3011166a88360af803f1b63ae3b4b280d940769d9de6fdd",
+          "case_id": "workspace.business-process-diagram",
+          "status": 200,
+          "disposition": "owned-pass"
+        }
+      ],
       "diagnostic_observations": [],
-      "unknown_reason": "no clone-derived HTTP evidence registered",
+      "unknown_reason": null,
       "boundary_scope": "owned-source-only",
       "route_origin": "owned-java-source-only",
       "boundary_semantics": "owned Java source-only route; boundary route != boundary process",
@@ -113448,11 +113477,19 @@
       "source_class": "com.sunwayworld.owned.internal.web.OwnedWorkspaceController",
       "source_handler": "GetMapping",
       "family": "core",
-      "behavior_status": "unknown",
-      "disposition": "unknown",
-      "evidence": [],
+      "behavior_status": "executed-pass",
+      "disposition": "owned-pass",
+      "evidence": [
+        {
+          "report": "evidence/api-contract-strict-core-workspace-boundary-current-a7adc-r2.json",
+          "report_sha256": "16b4578706284956b3011166a88360af803f1b63ae3b4b280d940769d9de6fdd",
+          "case_id": "workspace.index",
+          "status": 200,
+          "disposition": "owned-pass"
+        }
+      ],
       "diagnostic_observations": [],
-      "unknown_reason": "no clone-derived HTTP evidence registered",
+      "unknown_reason": null,
       "boundary_scope": "owned-source-only",
       "route_origin": "owned-java-source-only",
       "boundary_semantics": "owned Java source-only route; boundary route != boundary process",
@@ -113465,11 +113502,19 @@
       "source_class": "com.sunwayworld.owned.internal.web.OwnedWorkspaceController",
       "source_handler": "GetMapping",
       "family": "core",
-      "behavior_status": "unknown",
-      "disposition": "unknown",
-      "evidence": [],
+      "behavior_status": "executed-pass",
+      "disposition": "owned-pass",
+      "evidence": [
+        {
+          "report": "evidence/api-contract-strict-core-workspace-boundary-current-a7adc-r2.json",
+          "report_sha256": "16b4578706284956b3011166a88360af803f1b63ae3b4b280d940769d9de6fdd",
+          "case_id": "workspace.personnel-workload-statistics",
+          "status": 200,
+          "disposition": "owned-pass"
+        }
+      ],
       "diagnostic_observations": [],
-      "unknown_reason": "no clone-derived HTTP evidence registered",
+      "unknown_reason": null,
       "boundary_scope": "owned-source-only",
       "route_origin": "owned-java-source-only",
       "boundary_semantics": "owned Java source-only route; boundary route != boundary process",
@@ -113482,11 +113527,19 @@
       "source_class": "com.sunwayworld.owned.internal.web.OwnedWorkspaceController",
       "source_handler": "GetMapping",
       "family": "core",
-      "behavior_status": "unknown",
-      "disposition": "unknown",
-      "evidence": [],
+      "behavior_status": "executed-pass",
+      "disposition": "owned-pass",
+      "evidence": [
+        {
+          "report": "evidence/api-contract-strict-core-workspace-boundary-current-a7adc-r2.json",
+          "report_sha256": "16b4578706284956b3011166a88360af803f1b63ae3b4b280d940769d9de6fdd",
+          "case_id": "workspace.project-statistics",
+          "status": 200,
+          "disposition": "owned-pass"
+        }
+      ],
       "diagnostic_observations": [],
-      "unknown_reason": "no clone-derived HTTP evidence registered",
+      "unknown_reason": null,
       "boundary_scope": "owned-source-only",
       "route_origin": "owned-java-source-only",
       "boundary_semantics": "owned Java source-only route; boundary route != boundary process",
@@ -113499,11 +113552,19 @@
       "source_class": "com.sunwayworld.owned.internal.web.OwnedWorkspaceController",
       "source_handler": "GetMapping",
       "family": "core",
-      "behavior_status": "unknown",
-      "disposition": "unknown",
-      "evidence": [],
+      "behavior_status": "executed-pass",
+      "disposition": "owned-pass",
+      "evidence": [
+        {
+          "report": "evidence/api-contract-strict-core-workspace-boundary-current-a7adc-r2.json",
+          "report_sha256": "16b4578706284956b3011166a88360af803f1b63ae3b4b280d940769d9de6fdd",
+          "case_id": "workspace.report",
+          "status": 200,
+          "disposition": "owned-pass"
+        }
+      ],
       "diagnostic_observations": [],
-      "unknown_reason": "no clone-derived HTTP evidence registered",
+      "unknown_reason": null,
       "boundary_scope": "owned-source-only",
       "route_origin": "owned-java-source-only",
       "boundary_semantics": "owned Java source-only route; boundary route != boundary process",
@@ -113516,11 +113577,19 @@
       "source_class": "com.sunwayworld.owned.internal.web.OwnedWorkspaceController",
       "source_handler": "GetMapping",
       "family": "core",
-      "behavior_status": "unknown",
-      "disposition": "unknown",
-      "evidence": [],
+      "behavior_status": "executed-pass",
+      "disposition": "owned-pass",
+      "evidence": [
+        {
+          "report": "evidence/api-contract-strict-core-workspace-boundary-current-a7adc-r2.json",
+          "report_sha256": "16b4578706284956b3011166a88360af803f1b63ae3b4b280d940769d9de6fdd",
+          "case_id": "workspace.run-analysis",
+          "status": 200,
+          "disposition": "owned-pass"
+        }
+      ],
       "diagnostic_observations": [],
-      "unknown_reason": "no clone-derived HTTP evidence registered",
+      "unknown_reason": null,
       "boundary_scope": "owned-source-only",
       "route_origin": "owned-java-source-only",
       "boundary_semantics": "owned Java source-only route; boundary route != boundary process",
@@ -113533,11 +113602,19 @@
       "source_class": "com.sunwayworld.owned.internal.web.OwnedWorkspaceController",
       "source_handler": "GetMapping",
       "family": "core",
-      "behavior_status": "unknown",
-      "disposition": "unknown",
-      "evidence": [],
+      "behavior_status": "executed-pass",
+      "disposition": "owned-pass",
+      "evidence": [
+        {
+          "report": "evidence/api-contract-strict-core-workspace-boundary-current-a7adc-r2.json",
+          "report_sha256": "16b4578706284956b3011166a88360af803f1b63ae3b4b280d940769d9de6fdd",
+          "case_id": "workspace.sample",
+          "status": 200,
+          "disposition": "owned-pass"
+        }
+      ],
       "diagnostic_observations": [],
-      "unknown_reason": "no clone-derived HTTP evidence registered",
+      "unknown_reason": null,
       "boundary_scope": "owned-source-only",
       "route_origin": "owned-java-source-only",
       "boundary_semantics": "owned Java source-only route; boundary route != boundary process",
@@ -113550,11 +113627,19 @@
       "source_class": "com.sunwayworld.owned.internal.web.OwnedWorkspaceController",
       "source_handler": "GetMapping",
       "family": "core",
-      "behavior_status": "unknown",
-      "disposition": "unknown",
-      "evidence": [],
+      "behavior_status": "executed-pass",
+      "disposition": "owned-pass",
+      "evidence": [
+        {
+          "report": "evidence/api-contract-strict-core-workspace-boundary-current-a7adc-r2.json",
+          "report_sha256": "16b4578706284956b3011166a88360af803f1b63ae3b4b280d940769d9de6fdd",
+          "case_id": "workspace.todo",
+          "status": 200,
+          "disposition": "owned-pass"
+        }
+      ],
       "diagnostic_observations": [],
-      "unknown_reason": "no clone-derived HTTP evidence registered",
+      "unknown_reason": null,
       "boundary_scope": "owned-source-only",
       "route_origin": "owned-java-source-only",
       "boundary_semantics": "owned Java source-only route; boundary route != boundary process",
@@ -113822,11 +113907,19 @@
       "source_class": "com.sunwayworld.owned.internal.web.OwnedWorkspaceBootstrapController",
       "source_handler": "PostMapping",
       "family": "core",
-      "behavior_status": "unknown",
-      "disposition": "unknown",
-      "evidence": [],
+      "behavior_status": "executed-pass",
+      "disposition": "owned-pass",
+      "evidence": [
+        {
+          "report": "evidence/api-contract-strict-core-workspace-resources-current-a7adc-r2.json",
+          "report_sha256": "c45ea2674204e7adb04bf7e72465a9c6920686b989182ca95c9408b0c40b3fed",
+          "case_id": "workspace.notice-index",
+          "status": 200,
+          "disposition": "owned-pass"
+        }
+      ],
       "diagnostic_observations": [],
-      "unknown_reason": "no clone-derived HTTP evidence registered",
+      "unknown_reason": null,
       "boundary_scope": "owned-source-only",
       "route_origin": "owned-java-source-only",
       "boundary_semantics": "owned Java source-only route; boundary route != boundary process",
@@ -114026,11 +114119,19 @@
       "source_class": "com.sunwayworld.owned.internal.web.OwnedCodeQueryController",
       "source_handler": "GetMapping",
       "family": "core",
-      "behavior_status": "unknown",
-      "disposition": "unknown",
-      "evidence": [],
+      "behavior_status": "executed-pass",
+      "disposition": "owned-pass",
+      "evidence": [
+        {
+          "report": "evidence/api-contract-strict-core-workspace-resources-current-a7adc-r2.json",
+          "report_sha256": "c45ea2674204e7adb04bf7e72465a9c6920686b989182ca95c9408b0c40b3fed",
+          "case_id": "workspace.code-selectable",
+          "status": 200,
+          "disposition": "owned-pass"
+        }
+      ],
       "diagnostic_observations": [],
-      "unknown_reason": "no clone-derived HTTP evidence registered",
+      "unknown_reason": null,
       "boundary_scope": "owned-source-only",
       "route_origin": "owned-java-source-only",
       "boundary_semantics": "owned Java source-only route; boundary route != boundary process",
@@ -114179,11 +114280,19 @@
       "source_class": "com.sunwayworld.owned.internal.web.OwnedMenuController",
       "source_handler": "PostMapping",
       "family": "core",
-      "behavior_status": "unknown",
-      "disposition": "unknown",
-      "evidence": [],
+      "behavior_status": "executed-pass",
+      "disposition": "owned-pass",
+      "evidence": [
+        {
+          "report": "evidence/api-contract-strict-core-workspace-boundary-current-a7adc-r2.json",
+          "report_sha256": "16b4578706284956b3011166a88360af803f1b63ae3b4b280d940769d9de6fdd",
+          "case_id": "menu.tree.root",
+          "status": 200,
+          "disposition": "owned-pass"
+        }
+      ],
       "diagnostic_observations": [],
-      "unknown_reason": "no clone-derived HTTP evidence registered",
+      "unknown_reason": null,
       "boundary_scope": "owned-source-only",
       "route_origin": "owned-java-source-only",
       "boundary_semantics": "owned Java source-only route; boundary route != boundary process",
@@ -114230,11 +114339,19 @@
       "source_class": "com.sunwayworld.owned.report.OwnedHomeReportQueryController",
       "source_handler": "PostMapping",
       "family": "core",
-      "behavior_status": "unknown",
-      "disposition": "unknown",
-      "evidence": [],
+      "behavior_status": "executed-pass",
+      "disposition": "owned-pass",
+      "evidence": [
+        {
+          "report": "evidence/api-contract-strict-core-workspace-resources-current-a7adc-r2.json",
+          "report_sha256": "c45ea2674204e7adb04bf7e72465a9c6920686b989182ca95c9408b0c40b3fed",
+          "case_id": "workspace.home-report-lines",
+          "status": 200,
+          "disposition": "owned-pass"
+        }
+      ],
       "diagnostic_observations": [],
-      "unknown_reason": "no clone-derived HTTP evidence registered",
+      "unknown_reason": null,
       "boundary_scope": "owned-source-only",
       "route_origin": "owned-java-source-only",
       "boundary_semantics": "owned Java source-only route; boundary route != boundary process",
@@ -114723,19 +114840,11 @@
       "source_class": "com.sunwayworld.owned.personnel.OwnedPersonnelChoosableController",
       "source_handler": "RequestMapping",
       "family": "personnel",
-      "behavior_status": "executed-pass",
-      "disposition": "owned-pass",
-      "evidence": [
-        {
-          "report": "evidence/api-contract-strict-personnel-read-authenticated-0cfa.json",
-          "report_sha256": "20573bc4d3e087134d1b07f5cf8ae0e51938b0c654f4610532d24273bc20cb8d",
-          "case_id": "personnel.choosable.read",
-          "status": 200,
-          "disposition": "owned-pass"
-        }
-      ],
+      "behavior_status": "unknown",
+      "disposition": "unknown",
+      "evidence": [],
       "diagnostic_observations": [],
-      "unknown_reason": null,
+      "unknown_reason": "no clone-derived HTTP evidence registered",
       "boundary_scope": "owned-source-only",
       "route_origin": "owned-java-source-only",
       "boundary_semantics": "owned Java source-only route; boundary route != boundary process",

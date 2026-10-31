@@ -12,7 +12,7 @@ import java.util.Set;
 /** Normalizes only the observed read envelopes and rejects ambiguous/unknown transport input. */
 public final class OwnedReadRequest {
     private OwnedReadRequest() {}
-    private static final Set<String> DIRECT = new HashSet<String>(Arrays.asList("f", "qf", "af", "mf", "o", "n", "s"));
+    private static final Set<String> DIRECT = new HashSet<String>(Arrays.asList("f", "qf", "af", "mf", "o", "n", "s", "q"));
     private static final Set<String> CHOOSER = new HashSet<String>(Arrays.asList(
             "targetType", "targetFilter", "sampleOrgId", "analysisUserId",
             "emc_role_assigned", "status_DIFFER", "planSampleDate"));

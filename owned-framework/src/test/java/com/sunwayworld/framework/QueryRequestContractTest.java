@@ -37,6 +37,8 @@ public final class QueryRequestContractTest {
         if (!"samplePlan".equals(chooserRequest.getMapperParameters().get("targetType"))) throw new AssertionError("chooser target type");
         QueryRequest mixedSampleRequest = OwnedReadRequest.parse(new RestJsonWrapperBean("{\"p\":{\"n\":1,\"s\":10},\"planSampleDate\":\"2026-10-27\"}", null, null, null));
         if (!"2026-10-27".equals(mixedSampleRequest.getMapperParameters().get("planSampleDate"))) throw new AssertionError("mixed sample chooser envelope");
+        QueryRequest genericKeywordRequest = OwnedReadRequest.parse(new RestJsonWrapperBean("{\"p\":{\"n\":1,\"s\":10},\"q\":{\"keyword\":\"ignored-by-supplier\"}}", null, null, null));
+        if (!(genericKeywordRequest.getMapperParameters().get("q") instanceof Map)) throw new AssertionError("generic q envelope");
         rejects("{\"p\":{\"o\":[{\"NAME;DROP TABLE X\":\"asc\"}]}}", "unsafe");
         rejects("{\"p\":{\"testids\":\"1\"}}", "server-owned");
         rejects("{\"p\":{\"s\":\"501\"}}", "exceeds");

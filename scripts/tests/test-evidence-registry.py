@@ -11,6 +11,9 @@ import unittest
 from unittest import mock
 
 ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "scripts"))
+from source_binding import REPO_ROOT, is_standalone_root
+EVIDENCE_PREFIX = "evidence/" if is_standalone_root(REPO_ROOT) else "lims-recovery/evidence/"
 REGISTRY = ROOT / "evidence" / "evidence-index.tsv"
 SPEC = __import__("importlib.util").util.spec_from_file_location("manage_evidence", ROOT / "scripts" / "manage-evidence.py")
 MANAGE = __import__("importlib.util").util.module_from_spec(SPEC)
@@ -26,9 +29,9 @@ class EvidenceRegistryTest(unittest.TestCase):
         pending = MANAGE.ROOT / ".scratch/sunway-supplier-exit-api-first/diagnostic-evidence/pending/closure.json"
         canonical = MANAGE.EVIDENCE / "closure.json"
         self.assertEqual(MANAGE.canonical_closure_reference(pending),
-                         "lims-recovery/evidence/closure.json")
+                         EVIDENCE_PREFIX + "closure.json")
         self.assertEqual(MANAGE.canonical_closure_reference(canonical),
-                         "lims-recovery/evidence/closure.json")
+                         EVIDENCE_PREFIX + "closure.json")
 
     def test_duplicate_primary_prefers_archived_audit_copy(self):
         paths = [

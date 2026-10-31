@@ -5,6 +5,9 @@ from pathlib import Path
 import unittest
 
 ROOT = Path(__file__).resolve().parents[2]
+import sys
+sys.path.insert(0, str(ROOT / "scripts"))
+from source_binding import REPO_ROOT, is_standalone_root
 MODULE_PATH = ROOT / "tools" / "api_contract_skeleton.py"
 spec = importlib.util.spec_from_file_location("api_contract_skeleton", MODULE_PATH)
 module = importlib.util.module_from_spec(spec)
@@ -14,8 +17,14 @@ spec.loader.exec_module(module)
 
 class ContractSkeletonTest(unittest.TestCase):
     def setUp(self):
-        self.ledger = json.loads((ROOT.parent / ".scratch/sunway-supplier-exit-api-first/archive/historical/api-route-ledger-20261027-current-head.json").read_text())
-        self.plan = json.loads((ROOT.parent / ".scratch/sunway-supplier-exit-api-first/archive/historical/api-route-execution-plan-20261027-current-head.json").read_text())
+        if is_standalone_root(REPO_ROOT):
+            ledger_path = REPO_ROOT / "evidence/api-route-ledger-current-head.json"
+            plan_path = REPO_ROOT / "evidence/api-route-execution-plan-current-head.json"
+        else:
+            ledger_path = REPO_ROOT.parent / ".scratch/sunway-supplier-exit-api-first/archive/historical/api-route-ledger-20261027-current-head.json"
+            plan_path = REPO_ROOT.parent / ".scratch/sunway-supplier-exit-api-first/archive/historical/api-route-execution-plan-20261027-current-head.json"
+        self.ledger = json.loads(ledger_path.read_text())
+        self.plan = json.loads(plan_path.read_text())
 
     def test_all_routes_are_assigned_to_ordered_waves(self):
         output = module.build(self.ledger, self.plan)

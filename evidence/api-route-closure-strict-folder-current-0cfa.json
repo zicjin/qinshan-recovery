@@ -1,12 +1,12 @@
 {
   "schema": 1,
   "scope": "current-head-spring-web-api-route-closure",
-  "generated_at": "2026-10-31T13:39:37.237146+00:00",
-  "source_commit": "c1ea305d30c7bbeec8d3b694d9f908ffdd52d9e8",
-  "repository_head_at_capture": "c1ea305d30c7bbeec8d3b694d9f908ffdd52d9e8",
+  "generated_at": "2026-10-31T15:04:15.979175+00:00",
+  "source_commit": "de706ae3023d2d6ca5c76fcda95eff1622f0e283",
+  "repository_head_at_capture": "de706ae3023d2d6ca5c76fcda95eff1622f0e283",
   "source_dirty": false,
-  "implementation_binding": "impl-bc79c0d168154756",
-  "implementation_tree_digest": "bc79c0d1681547568fd0ae569ca3dedd2c66694ef9ac51a1b70cf9aa74dfb911",
+  "implementation_binding": "impl-0cfa67a7f55714e2",
+  "implementation_tree_digest": "0cfa67a7f55714e2c01b5c5f4a705bd93794336faf58100760a60b5910f5fcc9",
   "implementation_dirty": false,
   "implementation_scope": [
     "project/src/main/java",
@@ -133,59 +133,36 @@
   "project_route_count": 6599,
   "boundary_route_count": 147,
   "behavior_counts": {
-    "executed-pass": 1,
-    "unknown": 6745
+    "executed-pass": 2,
+    "unknown": 6744
   },
   "disposition_counts": {
-    "owned-pass": 1,
-    "unknown": 6745
+    "owned-pass": 2,
+    "unknown": 6744
   },
-  "strict_pass_count": 1,
-  "non_ledger_strict_pass_count": 2,
+  "strict_pass_count": 2,
+  "non_ledger_strict_pass_count": 0,
   "diagnostic_observation_count": 0,
-  "required_unknown": 6745,
-  "project_required_unknown": 6599,
-  "boundary_required_unknown": 146,
+  "required_unknown": 6744,
+  "project_required_unknown": 6597,
+  "boundary_required_unknown": 147,
   "failures": [],
   "reports": [
     {
-      "path": "evidence/api-contract-strict-public-boundary-bc79.json",
-      "sha256": "b1e52f0718d803c7b86b7dc83bae731ded6c8e745e70647a3fbdbb655e0b04d1",
+      "path": "evidence/api-contract-strict-folder-current-0cfa.json",
+      "sha256": "b37580346ff40795e7b73636f39eb5f4a26867d28ae2433486de999812e35743",
       "status": "executed-pass",
       "strict_evidence": true,
-      "source_commit": "4e15afc8b799e5cc90944944482523fa44bee02e",
-      "repository_head_at_capture": "4e15afc8b799e5cc90944944482523fa44bee02e",
-      "implementation_binding": "impl-bc79c0d168154756",
-      "implementation_tree_digest": "bc79c0d1681547568fd0ae569ca3dedd2c66694ef9ac51a1b70cf9aa74dfb911",
+      "source_commit": "de706ae3023d2d6ca5c76fcda95eff1622f0e283",
+      "repository_head_at_capture": "de706ae3023d2d6ca5c76fcda95eff1622f0e283",
+      "implementation_binding": "impl-0cfa67a7f55714e2",
+      "implementation_tree_digest": "0cfa67a7f55714e2c01b5c5f4a705bd93794336faf58100760a60b5910f5fcc9",
       "implementation_dirty": false,
       "strict_contract": "strict report contract valid"
     }
   ],
   "diagnostics": [],
-  "non_ledger_cases": [
-    {
-      "report": "evidence/api-contract-strict-public-boundary-bc79.json",
-      "report_sha256": "b1e52f0718d803c7b86b7dc83bae731ded6c8e745e70647a3fbdbb655e0b04d1",
-      "case_id": "core.removed-license-route",
-      "method": "GET",
-      "path": "/core/module/sys/licenses",
-      "status": 404,
-      "disposition": "removed-negative-pass",
-      "scope": "removed-negative",
-      "strict": true
-    },
-    {
-      "report": "evidence/api-contract-strict-public-boundary-bc79.json",
-      "report_sha256": "b1e52f0718d803c7b86b7dc83bae731ded6c8e745e70647a3fbdbb655e0b04d1",
-      "case_id": "core.removed-open-license-route",
-      "method": "GET",
-      "path": "/open/security/licenses",
-      "status": 404,
-      "disposition": "removed-negative-pass",
-      "scope": "removed-negative",
-      "strict": true
-    }
-  ],
+  "non_ledger_cases": [],
   "routes": [
     {
       "id": "8ef8808cd2645069",
@@ -2302,11 +2279,19 @@
       "source_class": "com.sunwayworld.emc.module.bp.bp.resource.EmcFolderResource",
       "source_handler": "inherited.GenericResource",
       "family": "result-order-project",
-      "behavior_status": "unknown",
-      "disposition": "unknown",
-      "evidence": [],
+      "behavior_status": "executed-pass",
+      "disposition": "owned-pass",
+      "evidence": [
+        {
+          "report": "evidence/api-contract-strict-folder-current-0cfa.json",
+          "report_sha256": "b37580346ff40795e7b73636f39eb5f4a26867d28ae2433486de999812e35743",
+          "case_id": "folder.status",
+          "status": 200,
+          "disposition": "owned-pass"
+        }
+      ],
       "diagnostic_observations": [],
-      "unknown_reason": "no clone-derived HTTP evidence registered",
+      "unknown_reason": null,
       "boundary_scope": null,
       "route_origin": "project-spring-source",
       "boundary_semantics": "project Spring route",
@@ -2591,11 +2576,19 @@
       "source_class": "com.sunwayworld.emc.module.bp.bp.resource.EmcFolderResource",
       "source_handler": "inherited.GenericResource",
       "family": "result-order-project",
-      "behavior_status": "unknown",
-      "disposition": "unknown",
-      "evidence": [],
+      "behavior_status": "executed-pass",
+      "disposition": "owned-pass",
+      "evidence": [
+        {
+          "report": "evidence/api-contract-strict-folder-current-0cfa.json",
+          "report_sha256": "b37580346ff40795e7b73636f39eb5f4a26867d28ae2433486de999812e35743",
+          "case_id": "folder.query",
+          "status": 200,
+          "disposition": "owned-pass"
+        }
+      ],
       "diagnostic_observations": [],
-      "unknown_reason": "no clone-derived HTTP evidence registered",
+      "unknown_reason": null,
       "boundary_scope": null,
       "route_origin": "project-spring-source",
       "boundary_semantics": "project Spring route",
@@ -112700,19 +112693,11 @@
       "source_class": "com.sunwayworld.owned.internal.web.OwnedSecurityKeyController",
       "source_handler": "GetMapping",
       "family": "core",
-      "behavior_status": "executed-pass",
-      "disposition": "owned-pass",
-      "evidence": [
-        {
-          "report": "evidence/api-contract-strict-public-boundary-bc79.json",
-          "report_sha256": "b1e52f0718d803c7b86b7dc83bae731ded6c8e745e70647a3fbdbb655e0b04d1",
-          "case_id": "core.public-key",
-          "status": 200,
-          "disposition": "owned-pass"
-        }
-      ],
+      "behavior_status": "unknown",
+      "disposition": "unknown",
+      "evidence": [],
       "diagnostic_observations": [],
-      "unknown_reason": null,
+      "unknown_reason": "no clone-derived HTTP evidence registered",
       "boundary_scope": "owned-source-only",
       "route_origin": "owned-java-source-only",
       "boundary_semantics": "owned Java source-only route; boundary route != boundary process",

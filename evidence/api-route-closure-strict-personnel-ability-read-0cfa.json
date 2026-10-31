@@ -1,12 +1,12 @@
 {
   "schema": 1,
   "scope": "current-head-spring-web-api-route-closure",
-  "generated_at": "2026-10-31T14:01:20.110842+00:00",
-  "source_commit": "f5f360e13309bbb02dc764fcc82b8b29223d568c",
-  "repository_head_at_capture": "f5f360e13309bbb02dc764fcc82b8b29223d568c",
+  "generated_at": "2026-10-31T15:27:14.502535+00:00",
+  "source_commit": "de706ae3023d2d6ca5c76fcda95eff1622f0e283",
+  "repository_head_at_capture": "de706ae3023d2d6ca5c76fcda95eff1622f0e283",
   "source_dirty": false,
-  "implementation_binding": "impl-bc79c0d168154756",
-  "implementation_tree_digest": "bc79c0d1681547568fd0ae569ca3dedd2c66694ef9ac51a1b70cf9aa74dfb911",
+  "implementation_binding": "impl-0cfa67a7f55714e2",
+  "implementation_tree_digest": "0cfa67a7f55714e2c01b5c5f4a705bd93794336faf58100760a60b5910f5fcc9",
   "implementation_dirty": false,
   "implementation_scope": [
     "project/src/main/java",
@@ -133,30 +133,30 @@
   "project_route_count": 6599,
   "boundary_route_count": 147,
   "behavior_counts": {
-    "executed-pass": 10,
-    "unknown": 6736
+    "executed-pass": 12,
+    "unknown": 6734
   },
   "disposition_counts": {
-    "owned-pass": 10,
-    "unknown": 6736
+    "owned-pass": 12,
+    "unknown": 6734
   },
-  "strict_pass_count": 10,
+  "strict_pass_count": 12,
   "non_ledger_strict_pass_count": 0,
   "diagnostic_observation_count": 0,
-  "required_unknown": 6736,
-  "project_required_unknown": 6589,
+  "required_unknown": 6734,
+  "project_required_unknown": 6587,
   "boundary_required_unknown": 147,
   "failures": [],
   "reports": [
     {
-      "path": "evidence/api-contract-strict-audit-record-read-current-f5.json",
-      "sha256": "594fe52d82854c780f8ce379deb956a3fe55b292fa9279626752a4144079ee6d",
+      "path": "evidence/api-contract-strict-personnel-ability-read-0cfa.json",
+      "sha256": "0b3a28830b0e8a44c9d7ea808c7b4cde7f484a8cc3bdad3abae34cb6d713af81",
       "status": "executed-pass",
       "strict_evidence": true,
-      "source_commit": "e6db70aae4e374bf6afce230ff3bc93169fa2aa5",
-      "repository_head_at_capture": "e6db70aae4e374bf6afce230ff3bc93169fa2aa5",
-      "implementation_binding": "impl-bc79c0d168154756",
-      "implementation_tree_digest": "bc79c0d1681547568fd0ae569ca3dedd2c66694ef9ac51a1b70cf9aa74dfb911",
+      "source_commit": "de706ae3023d2d6ca5c76fcda95eff1622f0e283",
+      "repository_head_at_capture": "de706ae3023d2d6ca5c76fcda95eff1622f0e283",
+      "implementation_binding": "impl-0cfa67a7f55714e2",
+      "implementation_tree_digest": "0cfa67a7f55714e2c01b5c5f4a705bd93794336faf58100760a60b5910f5fcc9",
       "implementation_dirty": false,
       "strict_contract": "strict report contract valid"
     }
@@ -987,19 +987,11 @@
       "source_class": "com.sunwayworld.emc.module.bp.auditrecord.resource.EmcAuditRecordResource",
       "source_handler": "inherited.GenericResource",
       "family": "result-order-project",
-      "behavior_status": "executed-pass",
-      "disposition": "owned-pass",
-      "evidence": [
-        {
-          "report": "evidence/api-contract-strict-audit-record-read-current-f5.json",
-          "report_sha256": "594fe52d82854c780f8ce379deb956a3fe55b292fa9279626752a4144079ee6d",
-          "case_id": "audit-record.validate-unique",
-          "status": 200,
-          "disposition": "owned-pass"
-        }
-      ],
+      "behavior_status": "unknown",
+      "disposition": "unknown",
+      "evidence": [],
       "diagnostic_observations": [],
-      "unknown_reason": null,
+      "unknown_reason": "no clone-derived HTTP evidence registered",
       "boundary_scope": null,
       "route_origin": "project-spring-source",
       "boundary_semantics": "project Spring route",
@@ -1063,19 +1055,11 @@
       "source_class": "com.sunwayworld.emc.module.bp.auditrecord.resource.EmcAuditRecordResource",
       "source_handler": "inherited.GenericResource",
       "family": "result-order-project",
-      "behavior_status": "executed-pass",
-      "disposition": "owned-pass",
-      "evidence": [
-        {
-          "report": "evidence/api-contract-strict-audit-record-read-current-f5.json",
-          "report_sha256": "594fe52d82854c780f8ce379deb956a3fe55b292fa9279626752a4144079ee6d",
-          "case_id": "audit-record.status",
-          "status": 200,
-          "disposition": "owned-pass"
-        }
-      ],
+      "behavior_status": "unknown",
+      "disposition": "unknown",
+      "evidence": [],
       "diagnostic_observations": [],
-      "unknown_reason": null,
+      "unknown_reason": "no clone-derived HTTP evidence registered",
       "boundary_scope": null,
       "route_origin": "project-spring-source",
       "boundary_semantics": "project Spring route",
@@ -1105,19 +1089,11 @@
       "source_class": "com.sunwayworld.emc.module.bp.auditrecord.resource.EmcAuditRecordResource",
       "source_handler": "inherited.GenericResource",
       "family": "result-order-project",
-      "behavior_status": "executed-pass",
-      "disposition": "owned-pass",
-      "evidence": [
-        {
-          "report": "evidence/api-contract-strict-audit-record-read-current-f5.json",
-          "report_sha256": "594fe52d82854c780f8ce379deb956a3fe55b292fa9279626752a4144079ee6d",
-          "case_id": "audit-record.query",
-          "status": 200,
-          "disposition": "owned-pass"
-        }
-      ],
+      "behavior_status": "unknown",
+      "disposition": "unknown",
+      "evidence": [],
       "diagnostic_observations": [],
-      "unknown_reason": null,
+      "unknown_reason": "no clone-derived HTTP evidence registered",
       "boundary_scope": null,
       "route_origin": "project-spring-source",
       "boundary_semantics": "project Spring route",
@@ -1130,19 +1106,11 @@
       "source_class": "com.sunwayworld.emc.module.bp.auditrecord.resource.EmcAuditRecordResource",
       "source_handler": "inherited.GenericResource",
       "family": "result-order-project",
-      "behavior_status": "executed-pass",
-      "disposition": "owned-pass",
-      "evidence": [
-        {
-          "report": "evidence/api-contract-strict-audit-record-read-current-f5.json",
-          "report_sha256": "594fe52d82854c780f8ce379deb956a3fe55b292fa9279626752a4144079ee6d",
-          "case_id": "audit-record.query-raw",
-          "status": 200,
-          "disposition": "owned-pass"
-        }
-      ],
+      "behavior_status": "unknown",
+      "disposition": "unknown",
+      "evidence": [],
       "diagnostic_observations": [],
-      "unknown_reason": null,
+      "unknown_reason": "no clone-derived HTTP evidence registered",
       "boundary_scope": null,
       "route_origin": "project-spring-source",
       "boundary_semantics": "project Spring route",
@@ -1172,19 +1140,11 @@
       "source_class": "com.sunwayworld.emc.module.bp.auditrecord.resource.EmcAuditRecordResource",
       "source_handler": "inherited.GenericResource",
       "family": "result-order-project",
-      "behavior_status": "executed-pass",
-      "disposition": "owned-pass",
-      "evidence": [
-        {
-          "report": "evidence/api-contract-strict-audit-record-read-current-f5.json",
-          "report_sha256": "594fe52d82854c780f8ce379deb956a3fe55b292fa9279626752a4144079ee6d",
-          "case_id": "audit-record.query-searchable",
-          "status": 200,
-          "disposition": "owned-pass"
-        }
-      ],
+      "behavior_status": "unknown",
+      "disposition": "unknown",
+      "evidence": [],
       "diagnostic_observations": [],
-      "unknown_reason": null,
+      "unknown_reason": "no clone-derived HTTP evidence registered",
       "boundary_scope": null,
       "route_origin": "project-spring-source",
       "boundary_semantics": "project Spring route",
@@ -1231,19 +1191,11 @@
       "source_class": "com.sunwayworld.emc.module.bp.auditrecord.resource.EmcAuditRecordResource",
       "source_handler": "inherited.GenericResource",
       "family": "result-order-project",
-      "behavior_status": "executed-pass",
-      "disposition": "owned-pass",
-      "evidence": [
-        {
-          "report": "evidence/api-contract-strict-audit-record-read-current-f5.json",
-          "report_sha256": "594fe52d82854c780f8ce379deb956a3fe55b292fa9279626752a4144079ee6d",
-          "case_id": "audit-record.print-missing",
-          "status": 200,
-          "disposition": "owned-pass"
-        }
-      ],
+      "behavior_status": "unknown",
+      "disposition": "unknown",
+      "evidence": [],
       "diagnostic_observations": [],
-      "unknown_reason": null,
+      "unknown_reason": "no clone-derived HTTP evidence registered",
       "boundary_scope": null,
       "route_origin": "project-spring-source",
       "boundary_semantics": "project Spring route",
@@ -1256,19 +1208,11 @@
       "source_class": "com.sunwayworld.emc.module.bp.auditrecord.resource.EmcAuditRecordResource",
       "source_handler": "inherited.GenericResource",
       "family": "result-order-project",
-      "behavior_status": "executed-pass",
-      "disposition": "owned-pass",
-      "evidence": [
-        {
-          "report": "evidence/api-contract-strict-audit-record-read-current-f5.json",
-          "report_sha256": "594fe52d82854c780f8ce379deb956a3fe55b292fa9279626752a4144079ee6d",
-          "case_id": "audit-record.validate-missing",
-          "status": 200,
-          "disposition": "owned-pass"
-        }
-      ],
+      "behavior_status": "unknown",
+      "disposition": "unknown",
+      "evidence": [],
       "diagnostic_observations": [],
-      "unknown_reason": null,
+      "unknown_reason": "no clone-derived HTTP evidence registered",
       "boundary_scope": null,
       "route_origin": "project-spring-source",
       "boundary_semantics": "project Spring route",
@@ -1281,19 +1225,11 @@
       "source_class": "com.sunwayworld.emc.module.bp.auditrecord.resource.EmcAuditRecordResource",
       "source_handler": "inherited.GenericResource",
       "family": "result-order-project",
-      "behavior_status": "executed-pass",
-      "disposition": "owned-pass",
-      "evidence": [
-        {
-          "report": "evidence/api-contract-strict-audit-record-read-current-f5.json",
-          "report_sha256": "594fe52d82854c780f8ce379deb956a3fe55b292fa9279626752a4144079ee6d",
-          "case_id": "audit-record.validate-unique-by-path",
-          "status": 200,
-          "disposition": "owned-pass"
-        }
-      ],
+      "behavior_status": "unknown",
+      "disposition": "unknown",
+      "evidence": [],
       "diagnostic_observations": [],
-      "unknown_reason": null,
+      "unknown_reason": "no clone-derived HTTP evidence registered",
       "boundary_scope": null,
       "route_origin": "project-spring-source",
       "boundary_semantics": "project Spring route",
@@ -1323,19 +1259,11 @@
       "source_class": "com.sunwayworld.emc.module.bp.auditrecord.resource.EmcAuditRecordResource",
       "source_handler": "inherited.GenericResource",
       "family": "result-order-project",
-      "behavior_status": "executed-pass",
-      "disposition": "owned-pass",
-      "evidence": [
-        {
-          "report": "evidence/api-contract-strict-audit-record-read-current-f5.json",
-          "report_sha256": "594fe52d82854c780f8ce379deb956a3fe55b292fa9279626752a4144079ee6d",
-          "case_id": "audit-record.column-missing",
-          "status": 200,
-          "disposition": "owned-pass"
-        }
-      ],
+      "behavior_status": "unknown",
+      "disposition": "unknown",
+      "evidence": [],
       "diagnostic_observations": [],
-      "unknown_reason": null,
+      "unknown_reason": "no clone-derived HTTP evidence registered",
       "boundary_scope": null,
       "route_origin": "project-spring-source",
       "boundary_semantics": "project Spring route",
@@ -1348,19 +1276,11 @@
       "source_class": "com.sunwayworld.emc.module.bp.auditrecord.resource.EmcAuditRecordResource",
       "source_handler": "inherited.GenericResource",
       "family": "result-order-project",
-      "behavior_status": "executed-pass",
-      "disposition": "owned-pass",
-      "evidence": [
-        {
-          "report": "evidence/api-contract-strict-audit-record-read-current-f5.json",
-          "report_sha256": "594fe52d82854c780f8ce379deb956a3fe55b292fa9279626752a4144079ee6d",
-          "case_id": "audit-record.status-by-id",
-          "status": 200,
-          "disposition": "owned-pass"
-        }
-      ],
+      "behavior_status": "unknown",
+      "disposition": "unknown",
+      "evidence": [],
       "diagnostic_observations": [],
-      "unknown_reason": null,
+      "unknown_reason": "no clone-derived HTTP evidence registered",
       "boundary_scope": null,
       "route_origin": "project-spring-source",
       "boundary_semantics": "project Spring route",
@@ -62403,11 +62323,19 @@
       "source_class": "com.sunwayworld.emc.module.item.staffabilitycheck.resource.EmcStaffAbalityCheckResource",
       "source_handler": "inherited.GenericResource",
       "family": "personnel",
-      "behavior_status": "unknown",
-      "disposition": "unknown",
-      "evidence": [],
+      "behavior_status": "executed-pass",
+      "disposition": "owned-pass",
+      "evidence": [
+        {
+          "report": "evidence/api-contract-strict-personnel-ability-read-0cfa.json",
+          "report_sha256": "0b3a28830b0e8a44c9d7ea808c7b4cde7f484a8cc3bdad3abae34cb6d713af81",
+          "case_id": "personnel.check.status",
+          "status": 200,
+          "disposition": "owned-pass"
+        }
+      ],
       "diagnostic_observations": [],
-      "unknown_reason": "no clone-derived HTTP evidence registered",
+      "unknown_reason": null,
       "boundary_scope": null,
       "route_origin": "project-spring-source",
       "boundary_semantics": "project Spring route",
@@ -62437,11 +62365,19 @@
       "source_class": "com.sunwayworld.emc.module.item.staffabilitycheck.resource.EmcStaffAbalityCheckResource",
       "source_handler": "inherited.GenericResource",
       "family": "personnel",
-      "behavior_status": "unknown",
-      "disposition": "unknown",
-      "evidence": [],
+      "behavior_status": "executed-pass",
+      "disposition": "owned-pass",
+      "evidence": [
+        {
+          "report": "evidence/api-contract-strict-personnel-ability-read-0cfa.json",
+          "report_sha256": "0b3a28830b0e8a44c9d7ea808c7b4cde7f484a8cc3bdad3abae34cb6d713af81",
+          "case_id": "personnel.check.query",
+          "status": 200,
+          "disposition": "owned-pass"
+        }
+      ],
       "diagnostic_observations": [],
-      "unknown_reason": "no clone-derived HTTP evidence registered",
+      "unknown_reason": null,
       "boundary_scope": null,
       "route_origin": "project-spring-source",
       "boundary_semantics": "project Spring route",
@@ -62454,11 +62390,19 @@
       "source_class": "com.sunwayworld.emc.module.item.staffabilitycheck.resource.EmcStaffAbalityCheckResource",
       "source_handler": "inherited.GenericResource",
       "family": "personnel",
-      "behavior_status": "unknown",
-      "disposition": "unknown",
-      "evidence": [],
+      "behavior_status": "executed-pass",
+      "disposition": "owned-pass",
+      "evidence": [
+        {
+          "report": "evidence/api-contract-strict-personnel-ability-read-0cfa.json",
+          "report_sha256": "0b3a28830b0e8a44c9d7ea808c7b4cde7f484a8cc3bdad3abae34cb6d713af81",
+          "case_id": "personnel.check.raw",
+          "status": 200,
+          "disposition": "owned-pass"
+        }
+      ],
       "diagnostic_observations": [],
-      "unknown_reason": "no clone-derived HTTP evidence registered",
+      "unknown_reason": null,
       "boundary_scope": null,
       "route_origin": "project-spring-source",
       "boundary_semantics": "project Spring route",
@@ -62488,11 +62432,19 @@
       "source_class": "com.sunwayworld.emc.module.item.staffabilitycheck.resource.EmcStaffAbalityCheckResource",
       "source_handler": "inherited.GenericResource",
       "family": "personnel",
-      "behavior_status": "unknown",
-      "disposition": "unknown",
-      "evidence": [],
+      "behavior_status": "executed-pass",
+      "disposition": "owned-pass",
+      "evidence": [
+        {
+          "report": "evidence/api-contract-strict-personnel-ability-read-0cfa.json",
+          "report_sha256": "0b3a28830b0e8a44c9d7ea808c7b4cde7f484a8cc3bdad3abae34cb6d713af81",
+          "case_id": "personnel.check.searchable",
+          "status": 200,
+          "disposition": "owned-pass"
+        }
+      ],
       "diagnostic_observations": [],
-      "unknown_reason": "no clone-derived HTTP evidence registered",
+      "unknown_reason": null,
       "boundary_scope": null,
       "route_origin": "project-spring-source",
       "boundary_semantics": "project Spring route",
@@ -62794,11 +62746,19 @@
       "source_class": "com.sunwayworld.emc.module.item.staffabilityevaluation.resource.EmcStaffAbilityEvaluationResource",
       "source_handler": "inherited.GenericResource",
       "family": "personnel",
-      "behavior_status": "unknown",
-      "disposition": "unknown",
-      "evidence": [],
+      "behavior_status": "executed-pass",
+      "disposition": "owned-pass",
+      "evidence": [
+        {
+          "report": "evidence/api-contract-strict-personnel-ability-read-0cfa.json",
+          "report_sha256": "0b3a28830b0e8a44c9d7ea808c7b4cde7f484a8cc3bdad3abae34cb6d713af81",
+          "case_id": "personnel.evaluation.status",
+          "status": 200,
+          "disposition": "owned-pass"
+        }
+      ],
       "diagnostic_observations": [],
-      "unknown_reason": "no clone-derived HTTP evidence registered",
+      "unknown_reason": null,
       "boundary_scope": null,
       "route_origin": "project-spring-source",
       "boundary_semantics": "project Spring route",
@@ -62828,11 +62788,19 @@
       "source_class": "com.sunwayworld.emc.module.item.staffabilityevaluation.resource.EmcStaffAbilityEvaluationResource",
       "source_handler": "inherited.GenericResource",
       "family": "personnel",
-      "behavior_status": "unknown",
-      "disposition": "unknown",
-      "evidence": [],
+      "behavior_status": "executed-pass",
+      "disposition": "owned-pass",
+      "evidence": [
+        {
+          "report": "evidence/api-contract-strict-personnel-ability-read-0cfa.json",
+          "report_sha256": "0b3a28830b0e8a44c9d7ea808c7b4cde7f484a8cc3bdad3abae34cb6d713af81",
+          "case_id": "personnel.evaluation.query",
+          "status": 200,
+          "disposition": "owned-pass"
+        }
+      ],
       "diagnostic_observations": [],
-      "unknown_reason": "no clone-derived HTTP evidence registered",
+      "unknown_reason": null,
       "boundary_scope": null,
       "route_origin": "project-spring-source",
       "boundary_semantics": "project Spring route",
@@ -62845,11 +62813,19 @@
       "source_class": "com.sunwayworld.emc.module.item.staffabilityevaluation.resource.EmcStaffAbilityEvaluationResource",
       "source_handler": "inherited.GenericResource",
       "family": "personnel",
-      "behavior_status": "unknown",
-      "disposition": "unknown",
-      "evidence": [],
+      "behavior_status": "executed-pass",
+      "disposition": "owned-pass",
+      "evidence": [
+        {
+          "report": "evidence/api-contract-strict-personnel-ability-read-0cfa.json",
+          "report_sha256": "0b3a28830b0e8a44c9d7ea808c7b4cde7f484a8cc3bdad3abae34cb6d713af81",
+          "case_id": "personnel.evaluation.raw",
+          "status": 200,
+          "disposition": "owned-pass"
+        }
+      ],
       "diagnostic_observations": [],
-      "unknown_reason": "no clone-derived HTTP evidence registered",
+      "unknown_reason": null,
       "boundary_scope": null,
       "route_origin": "project-spring-source",
       "boundary_semantics": "project Spring route",
@@ -62879,11 +62855,19 @@
       "source_class": "com.sunwayworld.emc.module.item.staffabilityevaluation.resource.EmcStaffAbilityEvaluationResource",
       "source_handler": "inherited.GenericResource",
       "family": "personnel",
-      "behavior_status": "unknown",
-      "disposition": "unknown",
-      "evidence": [],
+      "behavior_status": "executed-pass",
+      "disposition": "owned-pass",
+      "evidence": [
+        {
+          "report": "evidence/api-contract-strict-personnel-ability-read-0cfa.json",
+          "report_sha256": "0b3a28830b0e8a44c9d7ea808c7b4cde7f484a8cc3bdad3abae34cb6d713af81",
+          "case_id": "personnel.evaluation.searchable",
+          "status": 200,
+          "disposition": "owned-pass"
+        }
+      ],
       "diagnostic_observations": [],
-      "unknown_reason": "no clone-derived HTTP evidence registered",
+      "unknown_reason": null,
       "boundary_scope": null,
       "route_origin": "project-spring-source",
       "boundary_semantics": "project Spring route",
@@ -63185,11 +63169,19 @@
       "source_class": "com.sunwayworld.emc.module.item.staffability.resource.EmcStaffAbilityResource",
       "source_handler": "inherited.GenericResource",
       "family": "personnel",
-      "behavior_status": "unknown",
-      "disposition": "unknown",
-      "evidence": [],
+      "behavior_status": "executed-pass",
+      "disposition": "owned-pass",
+      "evidence": [
+        {
+          "report": "evidence/api-contract-strict-personnel-ability-read-0cfa.json",
+          "report_sha256": "0b3a28830b0e8a44c9d7ea808c7b4cde7f484a8cc3bdad3abae34cb6d713af81",
+          "case_id": "personnel.ability.status",
+          "status": 200,
+          "disposition": "owned-pass"
+        }
+      ],
       "diagnostic_observations": [],
-      "unknown_reason": "no clone-derived HTTP evidence registered",
+      "unknown_reason": null,
       "boundary_scope": null,
       "route_origin": "project-spring-source",
       "boundary_semantics": "project Spring route",
@@ -63219,11 +63211,19 @@
       "source_class": "com.sunwayworld.emc.module.item.staffability.resource.EmcStaffAbilityResource",
       "source_handler": "inherited.GenericResource",
       "family": "personnel",
-      "behavior_status": "unknown",
-      "disposition": "unknown",
-      "evidence": [],
+      "behavior_status": "executed-pass",
+      "disposition": "owned-pass",
+      "evidence": [
+        {
+          "report": "evidence/api-contract-strict-personnel-ability-read-0cfa.json",
+          "report_sha256": "0b3a28830b0e8a44c9d7ea808c7b4cde7f484a8cc3bdad3abae34cb6d713af81",
+          "case_id": "personnel.ability.query",
+          "status": 200,
+          "disposition": "owned-pass"
+        }
+      ],
       "diagnostic_observations": [],
-      "unknown_reason": "no clone-derived HTTP evidence registered",
+      "unknown_reason": null,
       "boundary_scope": null,
       "route_origin": "project-spring-source",
       "boundary_semantics": "project Spring route",
@@ -63236,11 +63236,19 @@
       "source_class": "com.sunwayworld.emc.module.item.staffability.resource.EmcStaffAbilityResource",
       "source_handler": "inherited.GenericResource",
       "family": "personnel",
-      "behavior_status": "unknown",
-      "disposition": "unknown",
-      "evidence": [],
+      "behavior_status": "executed-pass",
+      "disposition": "owned-pass",
+      "evidence": [
+        {
+          "report": "evidence/api-contract-strict-personnel-ability-read-0cfa.json",
+          "report_sha256": "0b3a28830b0e8a44c9d7ea808c7b4cde7f484a8cc3bdad3abae34cb6d713af81",
+          "case_id": "personnel.ability.raw",
+          "status": 200,
+          "disposition": "owned-pass"
+        }
+      ],
       "diagnostic_observations": [],
-      "unknown_reason": "no clone-derived HTTP evidence registered",
+      "unknown_reason": null,
       "boundary_scope": null,
       "route_origin": "project-spring-source",
       "boundary_semantics": "project Spring route",
@@ -63270,11 +63278,19 @@
       "source_class": "com.sunwayworld.emc.module.item.staffability.resource.EmcStaffAbilityResource",
       "source_handler": "inherited.GenericResource",
       "family": "personnel",
-      "behavior_status": "unknown",
-      "disposition": "unknown",
-      "evidence": [],
+      "behavior_status": "executed-pass",
+      "disposition": "owned-pass",
+      "evidence": [
+        {
+          "report": "evidence/api-contract-strict-personnel-ability-read-0cfa.json",
+          "report_sha256": "0b3a28830b0e8a44c9d7ea808c7b4cde7f484a8cc3bdad3abae34cb6d713af81",
+          "case_id": "personnel.ability.searchable",
+          "status": 200,
+          "disposition": "owned-pass"
+        }
+      ],
       "diagnostic_observations": [],
-      "unknown_reason": "no clone-derived HTTP evidence registered",
+      "unknown_reason": null,
       "boundary_scope": null,
       "route_origin": "project-spring-source",
       "boundary_semantics": "project Spring route",

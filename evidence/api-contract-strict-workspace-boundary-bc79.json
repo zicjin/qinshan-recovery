@@ -1,0 +1,941 @@
+{
+  "schema": 1,
+  "status": "executed-pass",
+  "execution": "strict",
+  "strict_evidence": true,
+  "production_access": false,
+  "scope": "clone-derived Spring Web API contract runner",
+  "route_execution_model": {
+    "application": "one owned Spring application per wave",
+    "oracle": "persistent Oracle baseline/runtime schema",
+    "redis": "reused sss2 Redis database 15",
+    "boundary_route": "owned Java source-only route in the same Spring application",
+    "boundary_process": false,
+    "internal_http_bridge": false,
+    "jni_replacement_process": false
+  },
+  "started_at": "2026-10-31T13:28:05.335393+00:00",
+  "source_commit": "4e15afc8b799e5cc90944944482523fa44bee02e",
+  "repository_head_at_capture": "4e15afc8b799e5cc90944944482523fa44bee02e",
+  "source_dirty": false,
+  "source_scope": [
+    "project/src/main/java",
+    "owned-framework/src",
+    "owned-personnel/src",
+    "owned-equipment/src",
+    "owned-consumables/src",
+    "owned-attachments/src",
+    "owned-report/src",
+    "owned-scheduler/src",
+    "owned-web/src",
+    "scripts/source_binding.py",
+    "scripts/evidence_output.py",
+    "scripts/spring_api_contract_runner.py",
+    "scripts/api_wave_orchestrator.py",
+    "scripts/owned_runtime_contract.py",
+    "scripts/api_fixture.py",
+    "scripts/remote-sql-fixture-executor.py",
+    "scripts/start-strict-sss2-api-runtime.sh",
+    "scripts/start-reused-sss2-api-runtime.sh",
+    "scripts/cleanup-strict-sss2-api-runtime.sh",
+    "scripts/refresh-owned-sss2-app.sh",
+    "scripts/owned_readiness.py",
+    "tools/business_api_inventory.py",
+    "tools/api_route_ledger.py",
+    "tools/api_route_execution_plan.py",
+    "tools/api_contract_skeleton.py",
+    "tools/api_route_closure.py",
+    "tools/finalize_api_report.py",
+    "tools/vertical_slices/matrix.py",
+    "project/pom.xml",
+    "owned-framework/pom.xml",
+    "owned-personnel/pom.xml",
+    "owned-equipment/pom.xml",
+    "owned-consumables/pom.xml",
+    "owned-attachments/pom.xml",
+    "owned-report/pom.xml",
+    "owned-scheduler/pom.xml",
+    "owned-web/pom.xml",
+    "owned-distribution/package.py",
+    "owned-distribution/start.sh",
+    "owned-distribution/example",
+    "owned-web/build-owned-web.sh",
+    "scripts/build-owned-distribution.sh",
+    "scripts/build-owned-framework.sh",
+    "scripts/build-owned-personnel.sh",
+    "scripts/build-owned-equipment.sh",
+    "scripts/build-owned-consumables.sh",
+    "scripts/build-owned-attachments.sh",
+    "scripts/build-owned-report.sh",
+    "scripts/build-owned-scheduler.sh",
+    "scripts/build-prep.sh",
+    "scripts/verify-external-artifacts.sh",
+    "evidence/external-artifacts.sha256",
+    "build/oracle-free-source-manifest.json",
+    "docker/Dockerfile.built"
+  ],
+  "implementation_binding": "impl-bc79c0d168154756",
+  "implementation_tree_digest": "bc79c0d1681547568fd0ae569ca3dedd2c66694ef9ac51a1b70cf9aa74dfb911",
+  "implementation_dirty": false,
+  "implementation_scope": [
+    "project/src/main/java",
+    "owned-framework/src",
+    "owned-personnel/src",
+    "owned-equipment/src",
+    "owned-consumables/src",
+    "owned-attachments/src",
+    "owned-report/src",
+    "owned-scheduler/src",
+    "owned-web/src",
+    "scripts/source_binding.py",
+    "scripts/evidence_output.py",
+    "scripts/spring_api_contract_runner.py",
+    "scripts/api_wave_orchestrator.py",
+    "scripts/owned_runtime_contract.py",
+    "scripts/api_fixture.py",
+    "scripts/remote-sql-fixture-executor.py",
+    "scripts/start-strict-sss2-api-runtime.sh",
+    "scripts/start-reused-sss2-api-runtime.sh",
+    "scripts/cleanup-strict-sss2-api-runtime.sh",
+    "scripts/refresh-owned-sss2-app.sh",
+    "scripts/owned_readiness.py",
+    "tools/business_api_inventory.py",
+    "tools/api_route_ledger.py",
+    "tools/api_route_execution_plan.py",
+    "tools/api_contract_skeleton.py",
+    "tools/api_route_closure.py",
+    "tools/finalize_api_report.py",
+    "tools/vertical_slices/matrix.py",
+    "project/pom.xml",
+    "owned-framework/pom.xml",
+    "owned-personnel/pom.xml",
+    "owned-equipment/pom.xml",
+    "owned-consumables/pom.xml",
+    "owned-attachments/pom.xml",
+    "owned-report/pom.xml",
+    "owned-scheduler/pom.xml",
+    "owned-web/pom.xml",
+    "owned-distribution/package.py",
+    "owned-distribution/start.sh",
+    "owned-distribution/example",
+    "owned-web/build-owned-web.sh",
+    "scripts/build-owned-distribution.sh",
+    "scripts/build-owned-framework.sh",
+    "scripts/build-owned-personnel.sh",
+    "scripts/build-owned-equipment.sh",
+    "scripts/build-owned-consumables.sh",
+    "scripts/build-owned-attachments.sh",
+    "scripts/build-owned-report.sh",
+    "scripts/build-owned-scheduler.sh",
+    "scripts/build-prep.sh",
+    "scripts/verify-external-artifacts.sh",
+    "evidence/external-artifacts.sha256",
+    "build/oracle-free-source-manifest.json",
+    "docker/Dockerfile.built"
+  ],
+  "nested_project_commit": "27932b1fe4d71d64a02f9a63e55f56acb403e3a0",
+  "distribution_input_digest": "dc97c305b90ba8334548ee522a08b94300580d3ff2b3ebf234b2695653f913e4",
+  "artifact_sha256": {
+    "/home/ts/qinshan/lims-recovery/owned-distribution/target/distribution/app/lims-owned-application.jar": "116c9dfbb837e1ec3b1ea2d3cb5acf4536e1099b60ae828c31a9c1c790701398"
+  },
+  "clone_identity": "lims-owned-sss2-oracle:LIMS_BASELINE_SSS2:LIMS_RUNTIME_SSS2:f1c43b53750ec720488ef7780527ea303081ab2dc6a0fc029a1d17f33dc10a6c",
+  "runtime_report": "/home/ts/qinshan/.scratch/sunway-supplier-exit-api-first/diagnostic-evidence/runtime/strict-api-runtime-manifest-foundation-bc79.json",
+  "runtime_contract": {
+    "mode": "strict",
+    "strict_evidence": false,
+    "runtime_identity": "lims-owned-sss2-oracle:LIMS_BASELINE_SSS2:LIMS_RUNTIME_SSS2:f1c43b53750ec720488ef7780527ea303081ab2dc6a0fc029a1d17f33dc10a6c",
+    "reuse": true,
+    "oracle_reused": true,
+    "baseline_schema": "LIMS_BASELINE_SSS2",
+    "runtime_schema": "LIMS_RUNTIME_SSS2",
+    "baseline_schema_hash": "f1c43b53750ec720488ef7780527ea303081ab2dc6a0fc029a1d17f33dc10a6c",
+    "runtime_schema_hash_before": "1162d1b8a4a6bb9ae0508e30a9db4e4e16199bc89705315d047575445c5d51e7",
+    "runtime_schema_hash_after": "1162d1b8a4a6bb9ae0508e30a9db4e4e16199bc89705315d047575445c5d51e7",
+    "source_commit": "4e15afc8b799e5cc90944944482523fa44bee02e",
+    "implementation_binding": "impl-bc79c0d168154756",
+    "implementation_tree_digest": "bc79c0d1681547568fd0ae569ca3dedd2c66694ef9ac51a1b70cf9aa74dfb911",
+    "implementation_scope": [
+      "project/src/main/java",
+      "owned-framework/src",
+      "owned-personnel/src",
+      "owned-equipment/src",
+      "owned-consumables/src",
+      "owned-attachments/src",
+      "owned-report/src",
+      "owned-scheduler/src",
+      "owned-web/src",
+      "scripts/source_binding.py",
+      "scripts/evidence_output.py",
+      "scripts/spring_api_contract_runner.py",
+      "scripts/api_wave_orchestrator.py",
+      "scripts/owned_runtime_contract.py",
+      "scripts/api_fixture.py",
+      "scripts/remote-sql-fixture-executor.py",
+      "scripts/start-strict-sss2-api-runtime.sh",
+      "scripts/start-reused-sss2-api-runtime.sh",
+      "scripts/cleanup-strict-sss2-api-runtime.sh",
+      "scripts/refresh-owned-sss2-app.sh",
+      "scripts/owned_readiness.py",
+      "tools/business_api_inventory.py",
+      "tools/api_route_ledger.py",
+      "tools/api_route_execution_plan.py",
+      "tools/api_contract_skeleton.py",
+      "tools/api_route_closure.py",
+      "tools/finalize_api_report.py",
+      "tools/vertical_slices/matrix.py",
+      "project/pom.xml",
+      "owned-framework/pom.xml",
+      "owned-personnel/pom.xml",
+      "owned-equipment/pom.xml",
+      "owned-consumables/pom.xml",
+      "owned-attachments/pom.xml",
+      "owned-report/pom.xml",
+      "owned-scheduler/pom.xml",
+      "owned-web/pom.xml",
+      "owned-distribution/package.py",
+      "owned-distribution/start.sh",
+      "owned-distribution/example",
+      "owned-web/build-owned-web.sh",
+      "scripts/build-owned-distribution.sh",
+      "scripts/build-owned-framework.sh",
+      "scripts/build-owned-personnel.sh",
+      "scripts/build-owned-equipment.sh",
+      "scripts/build-owned-consumables.sh",
+      "scripts/build-owned-attachments.sh",
+      "scripts/build-owned-report.sh",
+      "scripts/build-owned-scheduler.sh",
+      "scripts/build-prep.sh",
+      "scripts/verify-external-artifacts.sh",
+      "evidence/external-artifacts.sha256",
+      "build/oracle-free-source-manifest.json",
+      "docker/Dockerfile.built"
+    ],
+    "implementation_dirty": false,
+    "repository_head_at_capture": "4e15afc8b799e5cc90944944482523fa44bee02e"
+  },
+  "role": "manager",
+  "organization": "org-a",
+  "mode": "strict",
+  "base_url": "http://127.0.0.1:18089",
+  "case_count": 12,
+  "cases": [
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": null,
+      "body_sha256": "6b01a4cd692a81b421b1f57fc4c859c5a1118cc03d6f59e5e78e4376beea3d22",
+      "body_bytes": 630156,
+      "assertions": {
+        "content_type": "text/html"
+      },
+      "id": "workspace.shell",
+      "method": "GET",
+      "path": "/module/index/workspaces",
+      "url": "http://127.0.0.1:18089/module/index/workspaces",
+      "status": 200,
+      "response_headers": {
+        "vary": "Access-Control-Request-Headers",
+        "last-modified": "Sat, 31 Oct 2026 13:01:45 GMT",
+        "accept-ranges": "bytes",
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "text/html;charset=UTF-8",
+        "content-language": "en-US",
+        "content-length": "630156",
+        "date": "Sat, 31 Oct 2026 13:28:05 GMT",
+        "connection": "close"
+      },
+      "request_headers": {},
+      "elapsed_ms": 146.04,
+      "route": {
+        "method": "GET",
+        "path": "/module/index/workspaces",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "owned-java-source-only-route",
+        "route_id": "fb28ef3927759d5a"
+      },
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "re860d32b0b3e"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": null,
+      "body_sha256": "ff7a23ed9f3ad8e891562282c58e40efc5dc79dfbb7f4fb262d2068e906788ba",
+      "body_bytes": 26373,
+      "assertions": {
+        "content_type": "text/html"
+      },
+      "id": "workspace.index",
+      "method": "GET",
+      "path": "/secure/core/module/index/workspace/index",
+      "url": "http://127.0.0.1:18089/secure/core/module/index/workspace/index",
+      "status": 200,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "text/html;charset=UTF-8",
+        "content-language": "en-US",
+        "transfer-encoding": "chunked",
+        "date": "Sat, 31 Oct 2026 13:28:05 GMT",
+        "connection": "close"
+      },
+      "request_headers": {},
+      "elapsed_ms": 35.414,
+      "route": {
+        "method": "GET",
+        "path": "/secure/core/module/index/workspace/index",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "owned-java-source-only-route",
+        "route_id": "3ad9975ec02aa858"
+      },
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r261d32e133b7"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": null,
+      "body_sha256": "3fd2a2a30336ed2d4192bccf094c287ea5e82b998c54e2d79236568fca08366c",
+      "body_bytes": 337,
+      "assertions": {
+        "content_type": "text/html"
+      },
+      "id": "workspace.todo",
+      "method": "GET",
+      "path": "/secure/core/module/index/workspace/todo",
+      "url": "http://127.0.0.1:18089/secure/core/module/index/workspace/todo",
+      "status": 200,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "text/html;charset=UTF-8",
+        "content-language": "en-US",
+        "content-length": "337",
+        "date": "Sat, 31 Oct 2026 13:28:05 GMT",
+        "connection": "close"
+      },
+      "request_headers": {},
+      "elapsed_ms": 10.283,
+      "route": {
+        "method": "GET",
+        "path": "/secure/core/module/index/workspace/todo",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "owned-java-source-only-route",
+        "route_id": "017d8ca01095078c"
+      },
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r4030f02d0c29"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": null,
+      "body_sha256": "6d60b06b55f368f9ecf3ad02f06c0ceca8d76937f9e8f180a342046ddcd3c0bc",
+      "body_bytes": 7266,
+      "assertions": {
+        "content_type": "text/html"
+      },
+      "id": "workspace.report",
+      "method": "GET",
+      "path": "/secure/core/module/index/workspace/report",
+      "url": "http://127.0.0.1:18089/secure/core/module/index/workspace/report",
+      "status": 200,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "text/html;charset=UTF-8",
+        "content-language": "en-US",
+        "content-length": "7266",
+        "date": "Sat, 31 Oct 2026 13:28:05 GMT",
+        "connection": "close"
+      },
+      "request_headers": {},
+      "elapsed_ms": 16.305,
+      "route": {
+        "method": "GET",
+        "path": "/secure/core/module/index/workspace/report",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "owned-java-source-only-route",
+        "route_id": "40e86feb133cc753"
+      },
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r9acf4b14bdb6"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": null,
+      "body_sha256": "70ba4d50cb12caf5b10b17007a992fe5188041895de8d9c49b1f95822de1e0cc",
+      "body_bytes": 1499,
+      "assertions": {
+        "content_type": "text/html"
+      },
+      "id": "workspace.sample",
+      "method": "GET",
+      "path": "/secure/core/module/index/workspace/sample",
+      "url": "http://127.0.0.1:18089/secure/core/module/index/workspace/sample",
+      "status": 200,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "text/html;charset=UTF-8",
+        "content-language": "en-US",
+        "content-length": "1499",
+        "date": "Sat, 31 Oct 2026 13:28:05 GMT",
+        "connection": "close"
+      },
+      "request_headers": {},
+      "elapsed_ms": 10.154,
+      "route": {
+        "method": "GET",
+        "path": "/secure/core/module/index/workspace/sample",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "owned-java-source-only-route",
+        "route_id": "91a974e18d32888b"
+      },
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r91986887822f"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": null,
+      "body_sha256": "295739c1af62dfc98255555041f50196ad08562416aa6acb0c8b2ddb0a1e235e",
+      "body_bytes": 273,
+      "assertions": {
+        "content_type": "text/html"
+      },
+      "id": "workspace.run-analysis",
+      "method": "GET",
+      "path": "/secure/core/module/index/workspace/run-analysis",
+      "url": "http://127.0.0.1:18089/secure/core/module/index/workspace/run-analysis",
+      "status": 200,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "text/html;charset=UTF-8",
+        "content-language": "en-US",
+        "content-length": "273",
+        "date": "Sat, 31 Oct 2026 13:28:05 GMT",
+        "connection": "close"
+      },
+      "request_headers": {},
+      "elapsed_ms": 8.943,
+      "route": {
+        "method": "GET",
+        "path": "/secure/core/module/index/workspace/run-analysis",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "owned-java-source-only-route",
+        "route_id": "2a1ad49b3d2ffc4f"
+      },
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r08213ef039f3"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": null,
+      "body_sha256": "87ced91d2396371c910f3db8884e066cf69a4a3a59cf5846a08546f5711ff1c9",
+      "body_bytes": 5828,
+      "assertions": {
+        "content_type": "text/html"
+      },
+      "id": "workspace.business-process-diagram",
+      "method": "GET",
+      "path": "/secure/core/module/index/workspace/business-process-diagram",
+      "url": "http://127.0.0.1:18089/secure/core/module/index/workspace/business-process-diagram",
+      "status": 200,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "text/html;charset=UTF-8",
+        "content-language": "en-US",
+        "content-length": "5828",
+        "date": "Sat, 31 Oct 2026 13:28:05 GMT",
+        "connection": "close"
+      },
+      "request_headers": {},
+      "elapsed_ms": 11.338,
+      "route": {
+        "method": "GET",
+        "path": "/secure/core/module/index/workspace/business-process-diagram",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "owned-java-source-only-route",
+        "route_id": "3d83b8a77d6c9859"
+      },
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r1faddc1a3ed1"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": null,
+      "body_sha256": "177ee925a25dd0b07e0ddbb8d82b86e9edebc3c7a3ef3925963d9fcb65406f12",
+      "body_bytes": 2093,
+      "assertions": {
+        "content_type": "text/html"
+      },
+      "id": "workspace.project-statistics",
+      "method": "GET",
+      "path": "/secure/core/module/index/workspace/project-statistics",
+      "url": "http://127.0.0.1:18089/secure/core/module/index/workspace/project-statistics",
+      "status": 200,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "text/html;charset=UTF-8",
+        "content-language": "en-US",
+        "content-length": "2093",
+        "date": "Sat, 31 Oct 2026 13:28:05 GMT",
+        "connection": "close"
+      },
+      "request_headers": {},
+      "elapsed_ms": 11.452,
+      "route": {
+        "method": "GET",
+        "path": "/secure/core/module/index/workspace/project-statistics",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "owned-java-source-only-route",
+        "route_id": "1f61648f6c50c7ee"
+      },
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r823bbdc6ff5b"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": null,
+      "body_sha256": "d63bfc7c035a4180b052b2400e31d515c298af343a15cb81ffb906908da830ee",
+      "body_bytes": 4709,
+      "assertions": {
+        "content_type": "text/html"
+      },
+      "id": "workspace.annual-project-statistics",
+      "method": "GET",
+      "path": "/secure/core/module/index/workspace/annual-project-statistics",
+      "url": "http://127.0.0.1:18089/secure/core/module/index/workspace/annual-project-statistics",
+      "status": 200,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "text/html;charset=UTF-8",
+        "content-language": "en-US",
+        "content-length": "4709",
+        "date": "Sat, 31 Oct 2026 13:28:05 GMT",
+        "connection": "close"
+      },
+      "request_headers": {},
+      "elapsed_ms": 19.542,
+      "route": {
+        "method": "GET",
+        "path": "/secure/core/module/index/workspace/annual-project-statistics",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "owned-java-source-only-route",
+        "route_id": "66f7402092931971"
+      },
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r96bd5150a75f"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": null,
+      "body_sha256": "87c6afc28d5a6d3fd322d1223e6660520c6c4d956d319acaac730df2d6b7aed0",
+      "body_bytes": 8408,
+      "assertions": {
+        "content_type": "text/html"
+      },
+      "id": "workspace.personnel-workload-statistics",
+      "method": "GET",
+      "path": "/secure/core/module/index/workspace/personnel-workload-statistics",
+      "url": "http://127.0.0.1:18089/secure/core/module/index/workspace/personnel-workload-statistics",
+      "status": 200,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "text/html;charset=UTF-8",
+        "content-language": "en-US",
+        "transfer-encoding": "chunked",
+        "date": "Sat, 31 Oct 2026 13:28:05 GMT",
+        "connection": "close"
+      },
+      "request_headers": {},
+      "elapsed_ms": 18.735,
+      "route": {
+        "method": "GET",
+        "path": "/secure/core/module/index/workspace/personnel-workload-statistics",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "owned-java-source-only-route",
+        "route_id": "d2902707435f7152"
+      },
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "rb5e757cdad65"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": null,
+      "body_sha256": "9c6173afdb0457504360d5e07248a88916459deb40cd0929143fd718d983ebfe",
+      "body_bytes": 8721,
+      "assertions": {
+        "content_type": "text/html"
+      },
+      "id": "workspace.analysis-department-statistics",
+      "method": "GET",
+      "path": "/secure/core/module/index/workspace/analysis-department-statistics",
+      "url": "http://127.0.0.1:18089/secure/core/module/index/workspace/analysis-department-statistics",
+      "status": 200,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "text/html;charset=UTF-8",
+        "content-language": "en-US",
+        "transfer-encoding": "chunked",
+        "date": "Sat, 31 Oct 2026 13:28:06 GMT",
+        "connection": "close"
+      },
+      "request_headers": {},
+      "elapsed_ms": 13.261,
+      "route": {
+        "method": "GET",
+        "path": "/secure/core/module/index/workspace/analysis-department-statistics",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "owned-java-source-only-route",
+        "route_id": "6e54da490f60e809"
+      },
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "rfc830b860a19"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": null,
+      "body_sha256": "24effcfbc7d6359fdb66c13b92beae1427a1a428a69de14f41029fe73aa312ab",
+      "body_bytes": 198738,
+      "assertions": {
+        "content_type": "application/json"
+      },
+      "id": "menu.tree.root",
+      "method": "POST",
+      "path": "/secure/core/module/sys/menus/tree/root",
+      "url": "http://127.0.0.1:18089/secure/core/module/sys/menus/tree/root",
+      "status": 200,
+      "response_headers": {
+        "cache-control": "no-store",
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "198738",
+        "date": "Sat, 31 Oct 2026 13:28:06 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 425.961,
+      "route": {
+        "method": "POST",
+        "path": "/secure/core/module/sys/menus/tree/root",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "owned-java-source-only-route",
+        "route_id": "e7f54352ba64802b"
+      },
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "rec9205973ac8"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    }
+  ],
+  "cleanup": {
+    "application_stopped": true,
+    "baseline_schema_immutable": true,
+    "cleanup_mode": "persistent-oracle",
+    "network_preserved": true,
+    "oracle_preserved": true,
+    "oracle_reused": true,
+    "oracle_stopped": false,
+    "redis_preserved": true,
+    "redis_stopped": false,
+    "runtime_dirty": false,
+    "runtime_schema_restored": true,
+    "temporary_files_removed": true,
+    "volume_preserved": true
+  },
+  "cleanup_pending": false,
+  "phase_timings_ms": {
+    "http_cases": 1445.189
+  },
+  "authentication": {
+    "attempted": true,
+    "authenticated": true,
+    "status": 200
+  },
+  "finished_at": "2026-10-31T13:28:06.780685+00:00",
+  "wave": "foundation",
+  "wave_runtime_id": "api-wave-foundation",
+  "wave_finalized_at": "2026-10-31T13:28:22.702619+00:00"
+}

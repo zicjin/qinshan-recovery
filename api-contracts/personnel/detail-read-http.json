@@ -435,6 +435,7 @@
       "fixture": "none",
       "audit": "not-required",
       "id": "personnel.sample-chooser.date-filter",
+      "method": "POST",
       "path": "/secure/emc/module/mdm/emp/emps/sample/queries/choosable",
       "body": {
         "p": {

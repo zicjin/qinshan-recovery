@@ -114,7 +114,13 @@ public final class ConsumableQueryService {
             throw new IllegalArgumentException("unsupported consumable query shape");
         for (Map.Entry<String,Object> parameter : request.getMapperParameters().entrySet()) {
             String key = parameter.getKey();
-            if ("status_SEQ".equals(key) && "stock".equals(entity)) {
+            // The inherited consume resource accepts the generic q envelope
+            // as an optional UI search hint.  The recovered supplier mapper
+            // does not apply it to this list, so preserve the request shape
+            // without widening SQL or rejecting the otherwise valid query.
+            if ("q".equalsIgnoreCase(key)) {
+                continue;
+            } else if ("status_SEQ".equals(key) && "stock".equals(entity)) {
                 if (parameter.getValue() != null) appendCondition(where, values, alias, "STATUS", MatchPattern.SEQ, parameter.getValue(), entity);
             } else if ("stockQty_NG".equals(key) && "stock".equals(entity)) {
                 if (parameter.getValue() != null) appendCondition(where, values, alias, "STOCKQTY", MatchPattern.NG, parameter.getValue(), entity);

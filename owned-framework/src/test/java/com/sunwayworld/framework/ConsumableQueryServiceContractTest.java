@@ -71,6 +71,8 @@ public final class ConsumableQueryServiceContractTest {
                 "case-insensitive consumable name filter");
         check(service.list(QueryRequest.parse("{\"p\":{\"f\":{\"MTLNAME_EQ\":\"missing\"}}}", null), principal).getTotal() == 0,
                 "consumable no-match");
+        check(service.list(QueryRequest.parse("{\"p\":{\"n\":1,\"s\":1},\"q\":{\"keyword\":\"ignored-by-supplier\"}}", null), principal).getTotal() == 2,
+                "generic consume q envelope is accepted without widening scope");
         check("Alpha Bottle".equals(service.detail("CSM-001", principal).get("MTLNAME")), "consumable detail projection");
         check(service.detail("CSM-002", principal) == null, "out-of-scope consumable detail");
         Map<String,Object> ownedMaterial = service.detail("CSM-001", principal);

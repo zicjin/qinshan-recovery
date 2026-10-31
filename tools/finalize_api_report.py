@@ -11,12 +11,7 @@ import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
-from evidence_output import guard_output_path  # noqa: E402
-
-REQUIRED = (
-    "application_stopped", "oracle_stopped", "redis_stopped",
-    "network_removed", "volumes_removed", "temporary_files_removed",
-)
+from evidence_output import cleanup_contract_complete, guard_output_path  # noqa: E402
 
 
 def finalize(report: Dict[str, Any], cleanup: Dict[str, Any]) -> Dict[str, Any]:
@@ -24,9 +19,8 @@ def finalize(report: Dict[str, Any], cleanup: Dict[str, Any]) -> Dict[str, Any]:
         raise ValueError("report is not awaiting cleanup finalization")
     if report.get("strict_evidence") is not True or report.get("production_access") is not False:
         raise ValueError("only isolated strict reports can be finalized")
-    missing = [key for key in REQUIRED if cleanup.get(key) is not True]
-    if missing:
-        raise ValueError("cleanup contract is incomplete: " + ",".join(missing))
+    if not cleanup_contract_complete(cleanup):
+        raise ValueError("cleanup contract is incomplete")
     report = dict(report)
     report["cleanup"] = dict(cleanup)
     report["cleanup_pending"] = False

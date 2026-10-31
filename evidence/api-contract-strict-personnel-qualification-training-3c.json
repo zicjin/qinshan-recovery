@@ -1,0 +1,1493 @@
+{
+  "schema": 1,
+  "status": "executed-pass",
+  "execution": "strict",
+  "strict_evidence": true,
+  "production_access": false,
+  "scope": "clone-derived Spring Web API contract runner",
+  "route_execution_model": {
+    "application": "one owned Spring application per wave",
+    "oracle": "persistent Oracle baseline/runtime schema",
+    "redis": "reused sss2 Redis database 15",
+    "boundary_route": "owned Java source-only route in the same Spring application",
+    "boundary_process": false,
+    "internal_http_bridge": false,
+    "jni_replacement_process": false
+  },
+  "started_at": "2026-10-31T10:50:52.536827+00:00",
+  "source_commit": "37a2fbe2a69bb24ed57ec9c7714e7021fc50bb79",
+  "repository_head_at_capture": "37a2fbe2a69bb24ed57ec9c7714e7021fc50bb79",
+  "source_dirty": false,
+  "source_scope": [
+    "project/src/main/java",
+    "owned-framework/src",
+    "owned-personnel/src",
+    "owned-equipment/src",
+    "owned-consumables/src",
+    "owned-attachments/src",
+    "owned-report/src",
+    "owned-scheduler/src",
+    "owned-web/src",
+    "scripts/source_binding.py",
+    "scripts/evidence_output.py",
+    "scripts/spring_api_contract_runner.py",
+    "scripts/api_wave_orchestrator.py",
+    "scripts/owned_runtime_contract.py",
+    "scripts/api_fixture.py",
+    "scripts/remote-sql-fixture-executor.py",
+    "scripts/start-strict-sss2-api-runtime.sh",
+    "scripts/start-reused-sss2-api-runtime.sh",
+    "scripts/cleanup-strict-sss2-api-runtime.sh",
+    "scripts/refresh-owned-sss2-app.sh",
+    "scripts/owned_readiness.py",
+    "tools/business_api_inventory.py",
+    "tools/api_route_ledger.py",
+    "tools/api_route_execution_plan.py",
+    "tools/api_contract_skeleton.py",
+    "tools/api_route_closure.py",
+    "tools/finalize_api_report.py",
+    "tools/vertical_slices/matrix.py",
+    "project/pom.xml",
+    "owned-framework/pom.xml",
+    "owned-personnel/pom.xml",
+    "owned-equipment/pom.xml",
+    "owned-consumables/pom.xml",
+    "owned-attachments/pom.xml",
+    "owned-report/pom.xml",
+    "owned-scheduler/pom.xml",
+    "owned-web/pom.xml",
+    "owned-distribution/package.py",
+    "owned-distribution/start.sh",
+    "owned-distribution/example",
+    "owned-web/build-owned-web.sh",
+    "scripts/build-owned-distribution.sh",
+    "scripts/build-owned-framework.sh",
+    "scripts/build-owned-personnel.sh",
+    "scripts/build-owned-equipment.sh",
+    "scripts/build-owned-consumables.sh",
+    "scripts/build-owned-attachments.sh",
+    "scripts/build-owned-report.sh",
+    "scripts/build-owned-scheduler.sh",
+    "scripts/build-prep.sh",
+    "scripts/verify-external-artifacts.sh",
+    "evidence/external-artifacts.sha256",
+    "build/oracle-free-source-manifest.json",
+    "docker/Dockerfile.built"
+  ],
+  "implementation_binding": "impl-3c3b2a69e26506cc",
+  "implementation_tree_digest": "3c3b2a69e26506cc0affa405321939a918f78464cb99c329a390596932a87b61",
+  "implementation_dirty": false,
+  "implementation_scope": [
+    "project/src/main/java",
+    "owned-framework/src",
+    "owned-personnel/src",
+    "owned-equipment/src",
+    "owned-consumables/src",
+    "owned-attachments/src",
+    "owned-report/src",
+    "owned-scheduler/src",
+    "owned-web/src",
+    "scripts/source_binding.py",
+    "scripts/evidence_output.py",
+    "scripts/spring_api_contract_runner.py",
+    "scripts/api_wave_orchestrator.py",
+    "scripts/owned_runtime_contract.py",
+    "scripts/api_fixture.py",
+    "scripts/remote-sql-fixture-executor.py",
+    "scripts/start-strict-sss2-api-runtime.sh",
+    "scripts/start-reused-sss2-api-runtime.sh",
+    "scripts/cleanup-strict-sss2-api-runtime.sh",
+    "scripts/refresh-owned-sss2-app.sh",
+    "scripts/owned_readiness.py",
+    "tools/business_api_inventory.py",
+    "tools/api_route_ledger.py",
+    "tools/api_route_execution_plan.py",
+    "tools/api_contract_skeleton.py",
+    "tools/api_route_closure.py",
+    "tools/finalize_api_report.py",
+    "tools/vertical_slices/matrix.py",
+    "project/pom.xml",
+    "owned-framework/pom.xml",
+    "owned-personnel/pom.xml",
+    "owned-equipment/pom.xml",
+    "owned-consumables/pom.xml",
+    "owned-attachments/pom.xml",
+    "owned-report/pom.xml",
+    "owned-scheduler/pom.xml",
+    "owned-web/pom.xml",
+    "owned-distribution/package.py",
+    "owned-distribution/start.sh",
+    "owned-distribution/example",
+    "owned-web/build-owned-web.sh",
+    "scripts/build-owned-distribution.sh",
+    "scripts/build-owned-framework.sh",
+    "scripts/build-owned-personnel.sh",
+    "scripts/build-owned-equipment.sh",
+    "scripts/build-owned-consumables.sh",
+    "scripts/build-owned-attachments.sh",
+    "scripts/build-owned-report.sh",
+    "scripts/build-owned-scheduler.sh",
+    "scripts/build-prep.sh",
+    "scripts/verify-external-artifacts.sh",
+    "evidence/external-artifacts.sha256",
+    "build/oracle-free-source-manifest.json",
+    "docker/Dockerfile.built"
+  ],
+  "nested_project_commit": "27932b1fe4d71d64a02f9a63e55f56acb403e3a0",
+  "distribution_input_digest": "dc97c305b90ba8334548ee522a08b94300580d3ff2b3ebf234b2695653f913e4",
+  "artifact_sha256": {
+    "/home/ts/qinshan/lims-recovery/owned-distribution/target/distribution/app/lims-owned-application.jar": "bb12a6334b1976c6d7a8cc7a2428b85fad1ae9c829ae10160a9e3af3aa9f6737"
+  },
+  "clone_identity": "lims-owned-sss2-oracle:LIMS_BASELINE_SSS2:LIMS_RUNTIME_SSS2:f1c43b53750ec720488ef7780527ea303081ab2dc6a0fc029a1d17f33dc10a6c",
+  "runtime_report": "/home/ts/qinshan/.scratch/sunway-supplier-exit-api-first/diagnostic-evidence/runtime/strict-api-runtime-personnel-qualification-3c.json",
+  "runtime_contract": {
+    "mode": "strict",
+    "strict_evidence": false,
+    "runtime_identity": "lims-owned-sss2-oracle:LIMS_BASELINE_SSS2:LIMS_RUNTIME_SSS2:f1c43b53750ec720488ef7780527ea303081ab2dc6a0fc029a1d17f33dc10a6c",
+    "reuse": true,
+    "oracle_reused": true,
+    "baseline_schema": "LIMS_BASELINE_SSS2",
+    "runtime_schema": "LIMS_RUNTIME_SSS2",
+    "baseline_schema_hash": "f1c43b53750ec720488ef7780527ea303081ab2dc6a0fc029a1d17f33dc10a6c",
+    "runtime_schema_hash_before": "1749eb6efc83bf15cce703ffea8bded25d1cc2b2ea0b4a7c2da6da93bb42ee9c",
+    "runtime_schema_hash_after": "1749eb6efc83bf15cce703ffea8bded25d1cc2b2ea0b4a7c2da6da93bb42ee9c",
+    "source_commit": "37a2fbe2a69bb24ed57ec9c7714e7021fc50bb79",
+    "implementation_binding": "impl-3c3b2a69e26506cc",
+    "implementation_tree_digest": "3c3b2a69e26506cc0affa405321939a918f78464cb99c329a390596932a87b61",
+    "implementation_scope": [
+      "project/src/main/java",
+      "owned-framework/src",
+      "owned-personnel/src",
+      "owned-equipment/src",
+      "owned-consumables/src",
+      "owned-attachments/src",
+      "owned-report/src",
+      "owned-scheduler/src",
+      "owned-web/src",
+      "scripts/source_binding.py",
+      "scripts/evidence_output.py",
+      "scripts/spring_api_contract_runner.py",
+      "scripts/api_wave_orchestrator.py",
+      "scripts/owned_runtime_contract.py",
+      "scripts/api_fixture.py",
+      "scripts/remote-sql-fixture-executor.py",
+      "scripts/start-strict-sss2-api-runtime.sh",
+      "scripts/start-reused-sss2-api-runtime.sh",
+      "scripts/cleanup-strict-sss2-api-runtime.sh",
+      "scripts/refresh-owned-sss2-app.sh",
+      "scripts/owned_readiness.py",
+      "tools/business_api_inventory.py",
+      "tools/api_route_ledger.py",
+      "tools/api_route_execution_plan.py",
+      "tools/api_contract_skeleton.py",
+      "tools/api_route_closure.py",
+      "tools/finalize_api_report.py",
+      "tools/vertical_slices/matrix.py",
+      "project/pom.xml",
+      "owned-framework/pom.xml",
+      "owned-personnel/pom.xml",
+      "owned-equipment/pom.xml",
+      "owned-consumables/pom.xml",
+      "owned-attachments/pom.xml",
+      "owned-report/pom.xml",
+      "owned-scheduler/pom.xml",
+      "owned-web/pom.xml",
+      "owned-distribution/package.py",
+      "owned-distribution/start.sh",
+      "owned-distribution/example",
+      "owned-web/build-owned-web.sh",
+      "scripts/build-owned-distribution.sh",
+      "scripts/build-owned-framework.sh",
+      "scripts/build-owned-personnel.sh",
+      "scripts/build-owned-equipment.sh",
+      "scripts/build-owned-consumables.sh",
+      "scripts/build-owned-attachments.sh",
+      "scripts/build-owned-report.sh",
+      "scripts/build-owned-scheduler.sh",
+      "scripts/build-prep.sh",
+      "scripts/verify-external-artifacts.sh",
+      "evidence/external-artifacts.sha256",
+      "build/oracle-free-source-manifest.json",
+      "docker/Dockerfile.built"
+    ],
+    "implementation_dirty": false,
+    "repository_head_at_capture": "37a2fbe2a69bb24ed57ec9c7714e7021fc50bb79"
+  },
+  "role": "manager",
+  "organization": "org-a",
+  "mode": "strict",
+  "base_url": "http://127.0.0.1:18090",
+  "case_count": 4,
+  "cases": [
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": null,
+      "body_sha256": "113860f7295ca5452484590f749da41c6ca731e823f09cc36ad5c06314635628",
+      "body_bytes": 4,
+      "assertions": {},
+      "id": "personnel.qualification.insert",
+      "method": "POST",
+      "path": "/secure/emc/module/mdm/emp/emps/strict-api-employee/quals",
+      "url": "http://127.0.0.1:18090/secure/emc/module/mdm/emp/emps/strict-api-employee/quals",
+      "status": 200,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "4",
+        "date": "Sat, 31 Oct 2026 10:50:54 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 909.539,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/mdm/emp/emps/strict-api-employee/quals",
+        "operation": "write",
+        "disposition": "owned-pass",
+        "scope": "project-route",
+        "route_id": "797921b1cca2eb9c"
+      },
+      "fixture": {
+        "id": "personnel-qualification-write-api-fixture",
+        "mode": "api",
+        "setup": "executed",
+        "restore": "restored",
+        "setup_requests": [
+          {
+            "id": "fixture-employee-create",
+            "method": "POST",
+            "path": "/secure/emc/module/mdm/emp/emps",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "id": "strict-api-employee",
+                    "userName": "Strict API Personnel",
+                    "age": 30
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          }
+        ],
+        "restore_requests": [
+          {
+            "id": "fixture-child-read",
+            "method": "POST",
+            "path": "/secure/emc/module/mdm/emp/emps/strict-api-employee/quals/queries",
+            "body": {
+              "p": {
+                "n": 1,
+                "s": 10
+              }
+            },
+            "expected_status": 200,
+            "assert": {
+              "json_keys": [
+                "rows",
+                "total"
+              ]
+            },
+            "capture_json": true
+          },
+          {
+            "id": "fixture-child-delete",
+            "method": "DELETE",
+            "path": "/secure/emc/module/mdm/emp/emps/strict-api-employee/quals",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "id": "${fixture.fixture-child-read.rows.0.id}"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          },
+          {
+            "id": "fixture-employee-delete",
+            "method": "DELETE",
+            "path": "/secure/emc/module/mdm/emp/emps",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "id": "strict-api-employee"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          }
+        ],
+        "sql_files": [],
+        "setup_sql_files": [],
+        "restore_sql_files": [],
+        "business_write_via": "http",
+        "cleanup_via": "restore-http",
+        "runtime_values": {
+          "id": "r2447bc90dfab"
+        },
+        "setup_http": [
+          {
+            "expected_status": [
+              200
+            ],
+            "json_top_level_keys": null,
+            "body_sha256": "df1a1cd543fdaf7a02c03dc1539a1342209ab04bc8e9d4a361599763ab2ffa1d",
+            "body_bytes": 19,
+            "assertions": {},
+            "id": "fixture-employee-create",
+            "method": "POST",
+            "path": "/secure/emc/module/mdm/emp/emps",
+            "url": "http://127.0.0.1:18090/secure/emc/module/mdm/emp/emps",
+            "status": 200,
+            "response_headers": {
+              "x-content-type-options": "nosniff",
+              "x-xss-protection": "1; mode=block",
+              "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+              "pragma": "no-cache",
+              "expires": "0",
+              "x-frame-options": "SAMEORIGIN",
+              "content-type": "text/plain;charset=UTF-8",
+              "content-length": "19",
+              "date": "Sat, 31 Oct 2026 10:50:54 GMT",
+              "connection": "close"
+            },
+            "request_headers": {
+              "content-type": "application/json"
+            },
+            "elapsed_ms": 977.627
+          }
+        ],
+        "restore_http": [
+          {
+            "expected_status": [
+              200
+            ],
+            "json_top_level_keys": [
+              "columnTypeMap",
+              "first",
+              "last",
+              "numberOfElements",
+              "pageNumber",
+              "pageSize",
+              "rows",
+              "total",
+              "totalMap",
+              "totalPages"
+            ],
+            "body_sha256": "9f9956fba8ba4f9fac9b354352edebb458e8e0cd21a7a0b94d4287cccdc1d230",
+            "body_bytes": 505,
+            "assertions": {
+              "json_keys": [
+                "rows",
+                "total"
+              ]
+            },
+            "id": "fixture-child-read",
+            "method": "POST",
+            "path": "/secure/emc/module/mdm/emp/emps/strict-api-employee/quals/queries",
+            "url": "http://127.0.0.1:18090/secure/emc/module/mdm/emp/emps/strict-api-employee/quals/queries",
+            "status": 200,
+            "response_headers": {
+              "x-content-type-options": "nosniff",
+              "x-xss-protection": "1; mode=block",
+              "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+              "pragma": "no-cache",
+              "expires": "0",
+              "x-frame-options": "SAMEORIGIN",
+              "content-type": "application/json",
+              "content-length": "505",
+              "date": "Sat, 31 Oct 2026 10:50:57 GMT",
+              "connection": "close"
+            },
+            "request_headers": {
+              "content-type": "application/json"
+            },
+            "elapsed_ms": 1272.9
+          },
+          {
+            "expected_status": [
+              200
+            ],
+            "json_top_level_keys": null,
+            "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "body_bytes": 0,
+            "assertions": {},
+            "id": "fixture-child-delete",
+            "method": "DELETE",
+            "path": "/secure/emc/module/mdm/emp/emps/strict-api-employee/quals",
+            "url": "http://127.0.0.1:18090/secure/emc/module/mdm/emp/emps/strict-api-employee/quals",
+            "status": 200,
+            "response_headers": {
+              "x-content-type-options": "nosniff",
+              "x-xss-protection": "1; mode=block",
+              "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+              "pragma": "no-cache",
+              "expires": "0",
+              "x-frame-options": "SAMEORIGIN",
+              "content-length": "0",
+              "date": "Sat, 31 Oct 2026 10:50:57 GMT",
+              "connection": "close"
+            },
+            "request_headers": {
+              "content-type": "application/json"
+            },
+            "elapsed_ms": 875.89
+          },
+          {
+            "expected_status": [
+              200
+            ],
+            "json_top_level_keys": null,
+            "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "body_bytes": 0,
+            "assertions": {},
+            "id": "fixture-employee-delete",
+            "method": "DELETE",
+            "path": "/secure/emc/module/mdm/emp/emps",
+            "url": "http://127.0.0.1:18090/secure/emc/module/mdm/emp/emps",
+            "status": 200,
+            "response_headers": {
+              "x-content-type-options": "nosniff",
+              "x-xss-protection": "1; mode=block",
+              "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+              "pragma": "no-cache",
+              "expires": "0",
+              "x-frame-options": "SAMEORIGIN",
+              "content-length": "0",
+              "date": "Sat, 31 Oct 2026 10:50:59 GMT",
+              "connection": "close"
+            },
+            "request_headers": {
+              "content-type": "application/json"
+            },
+            "elapsed_ms": 856.294
+          }
+        ]
+      },
+      "readback_http": [
+        {
+          "expected_status": [
+            200
+          ],
+          "json_top_level_keys": [
+            "columnTypeMap",
+            "first",
+            "last",
+            "numberOfElements",
+            "pageNumber",
+            "pageSize",
+            "rows",
+            "total",
+            "totalMap",
+            "totalPages"
+          ],
+          "body_sha256": "9f9956fba8ba4f9fac9b354352edebb458e8e0cd21a7a0b94d4287cccdc1d230",
+          "body_bytes": 505,
+          "assertions": {
+            "json_keys": [
+              "rows",
+              "total"
+            ],
+            "json_contains": [
+              {
+                "path": "rows",
+                "where": {
+                  "qualNo": "Q-STRICT-1"
+                },
+                "values": {
+                  "qualName": "Strict API Qualification",
+                  "qualOrg": "Fixture issuer"
+                }
+              }
+            ]
+          },
+          "id": "insert-readback",
+          "method": "POST",
+          "path": "/secure/emc/module/mdm/emp/emps/strict-api-employee/quals/queries",
+          "url": "http://127.0.0.1:18090/secure/emc/module/mdm/emp/emps/strict-api-employee/quals/queries",
+          "status": 200,
+          "response_headers": {
+            "x-content-type-options": "nosniff",
+            "x-xss-protection": "1; mode=block",
+            "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+            "pragma": "no-cache",
+            "expires": "0",
+            "x-frame-options": "SAMEORIGIN",
+            "content-type": "application/json",
+            "content-length": "505",
+            "date": "Sat, 31 Oct 2026 10:50:56 GMT",
+            "connection": "close"
+          },
+          "request_headers": {
+            "content-type": "application/json"
+          },
+          "elapsed_ms": 1303.964
+        }
+      ],
+      "readback_required": true,
+      "audit": {
+        "required": true,
+        "status": "observed",
+        "event": "personnel-qualification-insert",
+        "outcome": "ALLOWED",
+        "source": "owned-http"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "restore-http"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": null,
+      "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "body_bytes": 0,
+      "assertions": {},
+      "id": "personnel.qualification.delete",
+      "method": "DELETE",
+      "path": "/secure/emc/module/mdm/emp/emps/strict-api-employee/quals",
+      "url": "http://127.0.0.1:18090/secure/emc/module/mdm/emp/emps/strict-api-employee/quals",
+      "status": 200,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-length": "0",
+        "date": "Sat, 31 Oct 2026 10:51:02 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 863.979,
+      "route": {
+        "method": "DELETE",
+        "path": "/secure/emc/module/mdm/emp/emps/strict-api-employee/quals",
+        "operation": "write",
+        "disposition": "owned-pass",
+        "scope": "project-route",
+        "route_id": "ecaf51a28e1d3cdc"
+      },
+      "fixture": {
+        "id": "personnel-qualification-delete-api-fixture",
+        "mode": "api",
+        "setup": "executed",
+        "restore": "restored",
+        "setup_requests": [
+          {
+            "id": "fixture-employee-create",
+            "method": "POST",
+            "path": "/secure/emc/module/mdm/emp/emps",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "id": "strict-api-employee",
+                    "userName": "Strict API Personnel",
+                    "age": 30
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          },
+          {
+            "id": "fixture-child-create",
+            "method": "POST",
+            "path": "/secure/emc/module/mdm/emp/emps/strict-api-employee/quals",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "qualNo": "Q-STRICT-1",
+                    "qualName": "Strict API Qualification",
+                    "qualOrg": "Fixture issuer",
+                    "validDate": "2026-01-01",
+                    "authDate": "2026-01-02",
+                    "expireDate": "2027-01-01",
+                    "warningDays": 30
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          },
+          {
+            "id": "fixture-child-read",
+            "method": "POST",
+            "path": "/secure/emc/module/mdm/emp/emps/strict-api-employee/quals/queries",
+            "body": {
+              "p": {
+                "n": 1,
+                "s": 10
+              }
+            },
+            "expected_status": 200,
+            "assert": {
+              "json_keys": [
+                "rows",
+                "total"
+              ]
+            },
+            "capture_json": true
+          }
+        ],
+        "restore_requests": [
+          {
+            "id": "fixture-employee-delete",
+            "method": "DELETE",
+            "path": "/secure/emc/module/mdm/emp/emps",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "id": "strict-api-employee"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          }
+        ],
+        "sql_files": [],
+        "setup_sql_files": [],
+        "restore_sql_files": [],
+        "business_write_via": "http",
+        "cleanup_via": "case-http",
+        "runtime_values": {
+          "id": "r88bb7d129111"
+        },
+        "setup_http": [
+          {
+            "expected_status": [
+              200
+            ],
+            "json_top_level_keys": null,
+            "body_sha256": "df1a1cd543fdaf7a02c03dc1539a1342209ab04bc8e9d4a361599763ab2ffa1d",
+            "body_bytes": 19,
+            "assertions": {},
+            "id": "fixture-employee-create",
+            "method": "POST",
+            "path": "/secure/emc/module/mdm/emp/emps",
+            "url": "http://127.0.0.1:18090/secure/emc/module/mdm/emp/emps",
+            "status": 200,
+            "response_headers": {
+              "x-content-type-options": "nosniff",
+              "x-xss-protection": "1; mode=block",
+              "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+              "pragma": "no-cache",
+              "expires": "0",
+              "x-frame-options": "SAMEORIGIN",
+              "content-type": "text/plain;charset=UTF-8",
+              "content-length": "19",
+              "date": "Sat, 31 Oct 2026 10:50:59 GMT",
+              "connection": "close"
+            },
+            "request_headers": {
+              "content-type": "application/json"
+            },
+            "elapsed_ms": 925.342
+          },
+          {
+            "expected_status": [
+              200
+            ],
+            "json_top_level_keys": null,
+            "body_sha256": "7263af08814e11782e313d81492e2c644c3152b0f42deeff9c0efa80667b5094",
+            "body_bytes": 4,
+            "assertions": {},
+            "id": "fixture-child-create",
+            "method": "POST",
+            "path": "/secure/emc/module/mdm/emp/emps/strict-api-employee/quals",
+            "url": "http://127.0.0.1:18090/secure/emc/module/mdm/emp/emps/strict-api-employee/quals",
+            "status": 200,
+            "response_headers": {
+              "x-content-type-options": "nosniff",
+              "x-xss-protection": "1; mode=block",
+              "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+              "pragma": "no-cache",
+              "expires": "0",
+              "x-frame-options": "SAMEORIGIN",
+              "content-type": "application/json",
+              "content-length": "4",
+              "date": "Sat, 31 Oct 2026 10:51:01 GMT",
+              "connection": "close"
+            },
+            "request_headers": {
+              "content-type": "application/json"
+            },
+            "elapsed_ms": 869.23
+          },
+          {
+            "expected_status": [
+              200
+            ],
+            "json_top_level_keys": [
+              "columnTypeMap",
+              "first",
+              "last",
+              "numberOfElements",
+              "pageNumber",
+              "pageSize",
+              "rows",
+              "total",
+              "totalMap",
+              "totalPages"
+            ],
+            "body_sha256": "59a7a751794885d9d0d6fc2d767b6b58091e1144ad6fa75628dc39ada80ba9f8",
+            "body_bytes": 505,
+            "assertions": {
+              "json_keys": [
+                "rows",
+                "total"
+              ]
+            },
+            "id": "fixture-child-read",
+            "method": "POST",
+            "path": "/secure/emc/module/mdm/emp/emps/strict-api-employee/quals/queries",
+            "url": "http://127.0.0.1:18090/secure/emc/module/mdm/emp/emps/strict-api-employee/quals/queries",
+            "status": 200,
+            "response_headers": {
+              "x-content-type-options": "nosniff",
+              "x-xss-protection": "1; mode=block",
+              "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+              "pragma": "no-cache",
+              "expires": "0",
+              "x-frame-options": "SAMEORIGIN",
+              "content-type": "application/json",
+              "content-length": "505",
+              "date": "Sat, 31 Oct 2026 10:51:02 GMT",
+              "connection": "close"
+            },
+            "request_headers": {
+              "content-type": "application/json"
+            },
+            "elapsed_ms": 1332.105
+          }
+        ],
+        "restore_http": [
+          {
+            "expected_status": [
+              200
+            ],
+            "json_top_level_keys": null,
+            "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "body_bytes": 0,
+            "assertions": {},
+            "id": "fixture-employee-delete",
+            "method": "DELETE",
+            "path": "/secure/emc/module/mdm/emp/emps",
+            "url": "http://127.0.0.1:18090/secure/emc/module/mdm/emp/emps",
+            "status": 200,
+            "response_headers": {
+              "x-content-type-options": "nosniff",
+              "x-xss-protection": "1; mode=block",
+              "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+              "pragma": "no-cache",
+              "expires": "0",
+              "x-frame-options": "SAMEORIGIN",
+              "content-length": "0",
+              "date": "Sat, 31 Oct 2026 10:51:04 GMT",
+              "connection": "close"
+            },
+            "request_headers": {
+              "content-type": "application/json"
+            },
+            "elapsed_ms": 849.734
+          }
+        ]
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": true,
+        "status": "observed",
+        "event": "personnel-qualification-delete",
+        "outcome": "ALLOWED",
+        "source": "owned-http"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "case-http"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": null,
+      "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "body_bytes": 0,
+      "assertions": {},
+      "id": "personnel.training.insert",
+      "method": "POST",
+      "path": "/secure/emc/module/mdm/emp/emps/strict-api-employee/trains",
+      "url": "http://127.0.0.1:18090/secure/emc/module/mdm/emp/emps/strict-api-employee/trains",
+      "status": 200,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-length": "0",
+        "date": "Sat, 31 Oct 2026 10:51:06 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 859.258,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/mdm/emp/emps/strict-api-employee/trains",
+        "operation": "write",
+        "disposition": "owned-pass",
+        "scope": "project-route",
+        "route_id": "7e92a537ae3cb1ae"
+      },
+      "fixture": {
+        "id": "personnel-training-write-api-fixture",
+        "mode": "api",
+        "setup": "executed",
+        "restore": "restored",
+        "setup_requests": [
+          {
+            "id": "fixture-employee-create",
+            "method": "POST",
+            "path": "/secure/emc/module/mdm/emp/emps",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "id": "strict-api-employee",
+                    "userName": "Strict API Personnel",
+                    "age": 30
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          }
+        ],
+        "restore_requests": [
+          {
+            "id": "fixture-child-read",
+            "method": "POST",
+            "path": "/secure/emc/module/mdm/emp/emps/strict-api-employee/trains/queries",
+            "body": {
+              "p": {
+                "n": 1,
+                "s": 10
+              }
+            },
+            "expected_status": 200,
+            "assert": {
+              "json_keys": [
+                "rows",
+                "total"
+              ]
+            },
+            "capture_json": true
+          },
+          {
+            "id": "fixture-child-delete",
+            "method": "DELETE",
+            "path": "/secure/emc/module/mdm/emp/emps/strict-api-employee/trains",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "id": "${fixture.fixture-child-read.rows.0.id}"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          },
+          {
+            "id": "fixture-employee-delete",
+            "method": "DELETE",
+            "path": "/secure/emc/module/mdm/emp/emps",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "id": "strict-api-employee"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          }
+        ],
+        "sql_files": [],
+        "setup_sql_files": [],
+        "restore_sql_files": [],
+        "business_write_via": "http",
+        "cleanup_via": "restore-http",
+        "runtime_values": {
+          "id": "r9c8fa6538611"
+        },
+        "setup_http": [
+          {
+            "expected_status": [
+              200
+            ],
+            "json_top_level_keys": null,
+            "body_sha256": "df1a1cd543fdaf7a02c03dc1539a1342209ab04bc8e9d4a361599763ab2ffa1d",
+            "body_bytes": 19,
+            "assertions": {},
+            "id": "fixture-employee-create",
+            "method": "POST",
+            "path": "/secure/emc/module/mdm/emp/emps",
+            "url": "http://127.0.0.1:18090/secure/emc/module/mdm/emp/emps",
+            "status": 200,
+            "response_headers": {
+              "x-content-type-options": "nosniff",
+              "x-xss-protection": "1; mode=block",
+              "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+              "pragma": "no-cache",
+              "expires": "0",
+              "x-frame-options": "SAMEORIGIN",
+              "content-type": "text/plain;charset=UTF-8",
+              "content-length": "19",
+              "date": "Sat, 31 Oct 2026 10:51:04 GMT",
+              "connection": "close"
+            },
+            "request_headers": {
+              "content-type": "application/json"
+            },
+            "elapsed_ms": 841.3
+          }
+        ],
+        "restore_http": [
+          {
+            "expected_status": [
+              200
+            ],
+            "json_top_level_keys": [
+              "columnTypeMap",
+              "first",
+              "last",
+              "numberOfElements",
+              "pageNumber",
+              "pageSize",
+              "rows",
+              "total",
+              "totalMap",
+              "totalPages"
+            ],
+            "body_sha256": "7b2be3afb736f46cb8e6289d4e9ce9b31d28fde9d77bed58011349e606a6fba3",
+            "body_bytes": 465,
+            "assertions": {
+              "json_keys": [
+                "rows",
+                "total"
+              ]
+            },
+            "id": "fixture-child-read",
+            "method": "POST",
+            "path": "/secure/emc/module/mdm/emp/emps/strict-api-employee/trains/queries",
+            "url": "http://127.0.0.1:18090/secure/emc/module/mdm/emp/emps/strict-api-employee/trains/queries",
+            "status": 200,
+            "response_headers": {
+              "x-content-type-options": "nosniff",
+              "x-xss-protection": "1; mode=block",
+              "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+              "pragma": "no-cache",
+              "expires": "0",
+              "x-frame-options": "SAMEORIGIN",
+              "content-type": "application/json",
+              "content-length": "465",
+              "date": "Sat, 31 Oct 2026 10:51:08 GMT",
+              "connection": "close"
+            },
+            "request_headers": {
+              "content-type": "application/json"
+            },
+            "elapsed_ms": 981.069
+          },
+          {
+            "expected_status": [
+              200
+            ],
+            "json_top_level_keys": null,
+            "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "body_bytes": 0,
+            "assertions": {},
+            "id": "fixture-child-delete",
+            "method": "DELETE",
+            "path": "/secure/emc/module/mdm/emp/emps/strict-api-employee/trains",
+            "url": "http://127.0.0.1:18090/secure/emc/module/mdm/emp/emps/strict-api-employee/trains",
+            "status": 200,
+            "response_headers": {
+              "x-content-type-options": "nosniff",
+              "x-xss-protection": "1; mode=block",
+              "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+              "pragma": "no-cache",
+              "expires": "0",
+              "x-frame-options": "SAMEORIGIN",
+              "content-length": "0",
+              "date": "Sat, 31 Oct 2026 10:51:08 GMT",
+              "connection": "close"
+            },
+            "request_headers": {
+              "content-type": "application/json"
+            },
+            "elapsed_ms": 877.928
+          },
+          {
+            "expected_status": [
+              200
+            ],
+            "json_top_level_keys": null,
+            "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "body_bytes": 0,
+            "assertions": {},
+            "id": "fixture-employee-delete",
+            "method": "DELETE",
+            "path": "/secure/emc/module/mdm/emp/emps",
+            "url": "http://127.0.0.1:18090/secure/emc/module/mdm/emp/emps",
+            "status": 200,
+            "response_headers": {
+              "x-content-type-options": "nosniff",
+              "x-xss-protection": "1; mode=block",
+              "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+              "pragma": "no-cache",
+              "expires": "0",
+              "x-frame-options": "SAMEORIGIN",
+              "content-length": "0",
+              "date": "Sat, 31 Oct 2026 10:51:09 GMT",
+              "connection": "close"
+            },
+            "request_headers": {
+              "content-type": "application/json"
+            },
+            "elapsed_ms": 837.762
+          }
+        ]
+      },
+      "readback_http": [
+        {
+          "expected_status": [
+            200
+          ],
+          "json_top_level_keys": [
+            "columnTypeMap",
+            "first",
+            "last",
+            "numberOfElements",
+            "pageNumber",
+            "pageSize",
+            "rows",
+            "total",
+            "totalMap",
+            "totalPages"
+          ],
+          "body_sha256": "7b2be3afb736f46cb8e6289d4e9ce9b31d28fde9d77bed58011349e606a6fba3",
+          "body_bytes": 465,
+          "assertions": {
+            "json_keys": [
+              "rows",
+              "total"
+            ],
+            "json_contains": [
+              {
+                "path": "rows",
+                "where": {
+                  "courseCode": "SAFE-1"
+                },
+                "values": {
+                  "courseName": "Safety refresher",
+                  "trainResult": "passed"
+                }
+              }
+            ]
+          },
+          "id": "insert-readback",
+          "method": "POST",
+          "path": "/secure/emc/module/mdm/emp/emps/strict-api-employee/trains/queries",
+          "url": "http://127.0.0.1:18090/secure/emc/module/mdm/emp/emps/strict-api-employee/trains/queries",
+          "status": 200,
+          "response_headers": {
+            "x-content-type-options": "nosniff",
+            "x-xss-protection": "1; mode=block",
+            "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+            "pragma": "no-cache",
+            "expires": "0",
+            "x-frame-options": "SAMEORIGIN",
+            "content-type": "application/json",
+            "content-length": "465",
+            "date": "Sat, 31 Oct 2026 10:51:06 GMT",
+            "connection": "close"
+          },
+          "request_headers": {
+            "content-type": "application/json"
+          },
+          "elapsed_ms": 996.478
+        }
+      ],
+      "readback_required": true,
+      "audit": {
+        "required": true,
+        "status": "observed",
+        "event": "personnel-training-insert",
+        "outcome": "ALLOWED",
+        "source": "owned-http"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "restore-http"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": null,
+      "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "body_bytes": 0,
+      "assertions": {},
+      "id": "personnel.training.delete",
+      "method": "DELETE",
+      "path": "/secure/emc/module/mdm/emp/emps/strict-api-employee/trains",
+      "url": "http://127.0.0.1:18090/secure/emc/module/mdm/emp/emps/strict-api-employee/trains",
+      "status": 200,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-length": "0",
+        "date": "Sat, 31 Oct 2026 10:51:12 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 828.1,
+      "route": {
+        "method": "DELETE",
+        "path": "/secure/emc/module/mdm/emp/emps/strict-api-employee/trains",
+        "operation": "write",
+        "disposition": "owned-pass",
+        "scope": "project-route",
+        "route_id": "864c022a4c2fc0c1"
+      },
+      "fixture": {
+        "id": "personnel-training-delete-api-fixture",
+        "mode": "api",
+        "setup": "executed",
+        "restore": "restored",
+        "setup_requests": [
+          {
+            "id": "fixture-employee-create",
+            "method": "POST",
+            "path": "/secure/emc/module/mdm/emp/emps",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "id": "strict-api-employee",
+                    "userName": "Strict API Personnel",
+                    "age": 30
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          },
+          {
+            "id": "fixture-child-create",
+            "method": "POST",
+            "path": "/secure/emc/module/mdm/emp/emps/strict-api-employee/trains",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "trainTime": "2026-01-01",
+                    "trainContent": "Strict API Training",
+                    "trainResult": "passed",
+                    "courseCode": "SAFE-1",
+                    "courseName": "Safety refresher"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          },
+          {
+            "id": "fixture-child-read",
+            "method": "POST",
+            "path": "/secure/emc/module/mdm/emp/emps/strict-api-employee/trains/queries",
+            "body": {
+              "p": {
+                "n": 1,
+                "s": 10
+              }
+            },
+            "expected_status": 200,
+            "assert": {
+              "json_keys": [
+                "rows",
+                "total"
+              ]
+            },
+            "capture_json": true
+          }
+        ],
+        "restore_requests": [
+          {
+            "id": "fixture-employee-delete",
+            "method": "DELETE",
+            "path": "/secure/emc/module/mdm/emp/emps",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "id": "strict-api-employee"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          }
+        ],
+        "sql_files": [],
+        "setup_sql_files": [],
+        "restore_sql_files": [],
+        "business_write_via": "http",
+        "cleanup_via": "case-http",
+        "runtime_values": {
+          "id": "ra623c1999d46"
+        },
+        "setup_http": [
+          {
+            "expected_status": [
+              200
+            ],
+            "json_top_level_keys": null,
+            "body_sha256": "df1a1cd543fdaf7a02c03dc1539a1342209ab04bc8e9d4a361599763ab2ffa1d",
+            "body_bytes": 19,
+            "assertions": {},
+            "id": "fixture-employee-create",
+            "method": "POST",
+            "path": "/secure/emc/module/mdm/emp/emps",
+            "url": "http://127.0.0.1:18090/secure/emc/module/mdm/emp/emps",
+            "status": 200,
+            "response_headers": {
+              "x-content-type-options": "nosniff",
+              "x-xss-protection": "1; mode=block",
+              "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+              "pragma": "no-cache",
+              "expires": "0",
+              "x-frame-options": "SAMEORIGIN",
+              "content-type": "text/plain;charset=UTF-8",
+              "content-length": "19",
+              "date": "Sat, 31 Oct 2026 10:51:09 GMT",
+              "connection": "close"
+            },
+            "request_headers": {
+              "content-type": "application/json"
+            },
+            "elapsed_ms": 863.34
+          },
+          {
+            "expected_status": [
+              200
+            ],
+            "json_top_level_keys": null,
+            "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "body_bytes": 0,
+            "assertions": {},
+            "id": "fixture-child-create",
+            "method": "POST",
+            "path": "/secure/emc/module/mdm/emp/emps/strict-api-employee/trains",
+            "url": "http://127.0.0.1:18090/secure/emc/module/mdm/emp/emps/strict-api-employee/trains",
+            "status": 200,
+            "response_headers": {
+              "x-content-type-options": "nosniff",
+              "x-xss-protection": "1; mode=block",
+              "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+              "pragma": "no-cache",
+              "expires": "0",
+              "x-frame-options": "SAMEORIGIN",
+              "content-length": "0",
+              "date": "Sat, 31 Oct 2026 10:51:11 GMT",
+              "connection": "close"
+            },
+            "request_headers": {
+              "content-type": "application/json"
+            },
+            "elapsed_ms": 884.349
+          },
+          {
+            "expected_status": [
+              200
+            ],
+            "json_top_level_keys": [
+              "columnTypeMap",
+              "first",
+              "last",
+              "numberOfElements",
+              "pageNumber",
+              "pageSize",
+              "rows",
+              "total",
+              "totalMap",
+              "totalPages"
+            ],
+            "body_sha256": "6c2a418bfa9ba15765ce3fd083747b7d85db73f76386625e78dd80ad199d5ce0",
+            "body_bytes": 465,
+            "assertions": {
+              "json_keys": [
+                "rows",
+                "total"
+              ]
+            },
+            "id": "fixture-child-read",
+            "method": "POST",
+            "path": "/secure/emc/module/mdm/emp/emps/strict-api-employee/trains/queries",
+            "url": "http://127.0.0.1:18090/secure/emc/module/mdm/emp/emps/strict-api-employee/trains/queries",
+            "status": 200,
+            "response_headers": {
+              "x-content-type-options": "nosniff",
+              "x-xss-protection": "1; mode=block",
+              "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+              "pragma": "no-cache",
+              "expires": "0",
+              "x-frame-options": "SAMEORIGIN",
+              "content-type": "application/json",
+              "content-length": "465",
+              "date": "Sat, 31 Oct 2026 10:51:12 GMT",
+              "connection": "close"
+            },
+            "request_headers": {
+              "content-type": "application/json"
+            },
+            "elapsed_ms": 1009.011
+          }
+        ],
+        "restore_http": [
+          {
+            "expected_status": [
+              200
+            ],
+            "json_top_level_keys": null,
+            "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "body_bytes": 0,
+            "assertions": {},
+            "id": "fixture-employee-delete",
+            "method": "DELETE",
+            "path": "/secure/emc/module/mdm/emp/emps",
+            "url": "http://127.0.0.1:18090/secure/emc/module/mdm/emp/emps",
+            "status": 200,
+            "response_headers": {
+              "x-content-type-options": "nosniff",
+              "x-xss-protection": "1; mode=block",
+              "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+              "pragma": "no-cache",
+              "expires": "0",
+              "x-frame-options": "SAMEORIGIN",
+              "content-length": "0",
+              "date": "Sat, 31 Oct 2026 10:51:14 GMT",
+              "connection": "close"
+            },
+            "request_headers": {
+              "content-type": "application/json"
+            },
+            "elapsed_ms": 974.337
+          }
+        ]
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": true,
+        "status": "observed",
+        "event": "personnel-training-delete",
+        "outcome": "ALLOWED",
+        "source": "owned-http"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "case-http"
+      }
+    }
+  ],
+  "cleanup": {
+    "application_stopped": true,
+    "baseline_schema_immutable": true,
+    "cleanup_mode": "persistent-oracle",
+    "network_preserved": true,
+    "oracle_preserved": true,
+    "oracle_reused": true,
+    "oracle_stopped": false,
+    "redis_preserved": true,
+    "redis_stopped": false,
+    "runtime_dirty": false,
+    "runtime_schema_restored": true,
+    "temporary_files_removed": true,
+    "volume_preserved": true
+  },
+  "cleanup_pending": false,
+  "phase_timings_ms": {
+    "http_cases": 21668.85
+  },
+  "authentication": {
+    "attempted": true,
+    "authenticated": true,
+    "status": 200
+  },
+  "finished_at": "2026-10-31T10:51:14.205719+00:00",
+  "wave": "personnel",
+  "wave_runtime_id": "api-wave-personnel",
+  "wave_finalized_at": "2026-10-31T10:51:14.796694+00:00"
+}

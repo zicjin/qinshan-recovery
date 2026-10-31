@@ -1,0 +1,938 @@
+{
+  "schema": 1,
+  "status": "executed-pass",
+  "execution": "strict",
+  "strict_evidence": true,
+  "production_access": false,
+  "scope": "clone-derived Spring Web API contract runner",
+  "route_execution_model": {
+    "application": "one owned Spring application per wave",
+    "oracle": "persistent Oracle baseline/runtime schema",
+    "redis": "reused sss2 Redis database 15",
+    "boundary_route": "owned Java source-only route in the same Spring application",
+    "boundary_process": false,
+    "internal_http_bridge": false,
+    "jni_replacement_process": false
+  },
+  "started_at": "2026-10-31T08:42:38.479297+00:00",
+  "source_commit": "c362bb5ce527230de8c6efc1d15e0b2093be1e48",
+  "repository_head_at_capture": "c362bb5ce527230de8c6efc1d15e0b2093be1e48",
+  "source_dirty": false,
+  "source_scope": [
+    "project/src/main/java",
+    "owned-framework/src",
+    "owned-personnel/src",
+    "owned-equipment/src",
+    "owned-consumables/src",
+    "owned-attachments/src",
+    "owned-report/src",
+    "owned-scheduler/src",
+    "owned-web/src",
+    "scripts/source_binding.py",
+    "scripts/evidence_output.py",
+    "scripts/spring_api_contract_runner.py",
+    "scripts/api_wave_orchestrator.py",
+    "scripts/owned_runtime_contract.py",
+    "scripts/api_fixture.py",
+    "scripts/remote-sql-fixture-executor.py",
+    "scripts/start-strict-sss2-api-runtime.sh",
+    "scripts/start-reused-sss2-api-runtime.sh",
+    "scripts/cleanup-strict-sss2-api-runtime.sh",
+    "scripts/refresh-owned-sss2-app.sh",
+    "scripts/owned_readiness.py",
+    "tools/business_api_inventory.py",
+    "tools/api_route_ledger.py",
+    "tools/api_route_execution_plan.py",
+    "tools/api_contract_skeleton.py",
+    "tools/api_route_closure.py",
+    "tools/finalize_api_report.py",
+    "tools/vertical_slices/matrix.py",
+    "project/pom.xml",
+    "owned-framework/pom.xml",
+    "owned-personnel/pom.xml",
+    "owned-equipment/pom.xml",
+    "owned-consumables/pom.xml",
+    "owned-attachments/pom.xml",
+    "owned-report/pom.xml",
+    "owned-scheduler/pom.xml",
+    "owned-web/pom.xml",
+    "owned-distribution/package.py",
+    "owned-distribution/start.sh",
+    "owned-distribution/example",
+    "owned-web/build-owned-web.sh",
+    "scripts/build-owned-distribution.sh",
+    "scripts/build-owned-framework.sh",
+    "scripts/build-owned-personnel.sh",
+    "scripts/build-owned-equipment.sh",
+    "scripts/build-owned-consumables.sh",
+    "scripts/build-owned-attachments.sh",
+    "scripts/build-owned-report.sh",
+    "scripts/build-owned-scheduler.sh",
+    "scripts/build-prep.sh",
+    "scripts/verify-external-artifacts.sh",
+    "evidence/external-artifacts.sha256",
+    "build/oracle-free-source-manifest.json",
+    "docker/Dockerfile.built"
+  ],
+  "implementation_binding": "impl-4df00cb5495296ab",
+  "implementation_tree_digest": "4df00cb5495296abd1db45ad553d656a87098f478fbee98c57c0647257b7f14f",
+  "implementation_dirty": false,
+  "implementation_scope": [
+    "project/src/main/java",
+    "owned-framework/src",
+    "owned-personnel/src",
+    "owned-equipment/src",
+    "owned-consumables/src",
+    "owned-attachments/src",
+    "owned-report/src",
+    "owned-scheduler/src",
+    "owned-web/src",
+    "scripts/source_binding.py",
+    "scripts/evidence_output.py",
+    "scripts/spring_api_contract_runner.py",
+    "scripts/api_wave_orchestrator.py",
+    "scripts/owned_runtime_contract.py",
+    "scripts/api_fixture.py",
+    "scripts/remote-sql-fixture-executor.py",
+    "scripts/start-strict-sss2-api-runtime.sh",
+    "scripts/start-reused-sss2-api-runtime.sh",
+    "scripts/cleanup-strict-sss2-api-runtime.sh",
+    "scripts/refresh-owned-sss2-app.sh",
+    "scripts/owned_readiness.py",
+    "tools/business_api_inventory.py",
+    "tools/api_route_ledger.py",
+    "tools/api_route_execution_plan.py",
+    "tools/api_contract_skeleton.py",
+    "tools/api_route_closure.py",
+    "tools/finalize_api_report.py",
+    "tools/vertical_slices/matrix.py",
+    "project/pom.xml",
+    "owned-framework/pom.xml",
+    "owned-personnel/pom.xml",
+    "owned-equipment/pom.xml",
+    "owned-consumables/pom.xml",
+    "owned-attachments/pom.xml",
+    "owned-report/pom.xml",
+    "owned-scheduler/pom.xml",
+    "owned-web/pom.xml",
+    "owned-distribution/package.py",
+    "owned-distribution/start.sh",
+    "owned-distribution/example",
+    "owned-web/build-owned-web.sh",
+    "scripts/build-owned-distribution.sh",
+    "scripts/build-owned-framework.sh",
+    "scripts/build-owned-personnel.sh",
+    "scripts/build-owned-equipment.sh",
+    "scripts/build-owned-consumables.sh",
+    "scripts/build-owned-attachments.sh",
+    "scripts/build-owned-report.sh",
+    "scripts/build-owned-scheduler.sh",
+    "scripts/build-prep.sh",
+    "scripts/verify-external-artifacts.sh",
+    "evidence/external-artifacts.sha256",
+    "build/oracle-free-source-manifest.json",
+    "docker/Dockerfile.built"
+  ],
+  "nested_project_commit": "27932b1fe4d71d64a02f9a63e55f56acb403e3a0",
+  "distribution_input_digest": "dc97c305b90ba8334548ee522a08b94300580d3ff2b3ebf234b2695653f913e4",
+  "artifact_sha256": {
+    "/tmp/tmp.g9EF35wHam/dist/app/lims-owned-application.jar": "7c0971147254ef8a8077d7b7ed85fe632c40358af7e4b652dd5c73cc7014463b"
+  },
+  "clone_identity": "lims-owned-sss2-oracle:LIMS_BASELINE_SSS2:LIMS_RT_M1_1031:f1c43b53750ec720488ef7780527ea303081ab2dc6a0fc029a1d17f33dc10a6c",
+  "runtime_report": ".scratch/sunway-supplier-exit-api-first/diagnostic-evidence/runtime/strict-api-runtime-manifest-m10-stock-actions-4df.json",
+  "runtime_contract": {
+    "mode": "strict",
+    "strict_evidence": false,
+    "runtime_identity": "lims-owned-sss2-oracle:LIMS_BASELINE_SSS2:LIMS_RT_M1_1031:f1c43b53750ec720488ef7780527ea303081ab2dc6a0fc029a1d17f33dc10a6c",
+    "reuse": true,
+    "oracle_reused": true,
+    "baseline_schema": "LIMS_BASELINE_SSS2",
+    "runtime_schema": "LIMS_RT_M1_1031",
+    "baseline_schema_hash": "f1c43b53750ec720488ef7780527ea303081ab2dc6a0fc029a1d17f33dc10a6c",
+    "runtime_schema_hash_before": "ed9a51801dc98f2aeee3d7c4394dd063f1f045173789b05aa572ceb49b2b0c95",
+    "runtime_schema_hash_after": "ed9a51801dc98f2aeee3d7c4394dd063f1f045173789b05aa572ceb49b2b0c95",
+    "source_commit": "c362bb5ce527230de8c6efc1d15e0b2093be1e48",
+    "implementation_binding": "impl-4df00cb5495296ab",
+    "implementation_tree_digest": "4df00cb5495296abd1db45ad553d656a87098f478fbee98c57c0647257b7f14f",
+    "implementation_scope": [
+      "project/src/main/java",
+      "owned-framework/src",
+      "owned-personnel/src",
+      "owned-equipment/src",
+      "owned-consumables/src",
+      "owned-attachments/src",
+      "owned-report/src",
+      "owned-scheduler/src",
+      "owned-web/src",
+      "scripts/source_binding.py",
+      "scripts/evidence_output.py",
+      "scripts/spring_api_contract_runner.py",
+      "scripts/api_wave_orchestrator.py",
+      "scripts/owned_runtime_contract.py",
+      "scripts/api_fixture.py",
+      "scripts/remote-sql-fixture-executor.py",
+      "scripts/start-strict-sss2-api-runtime.sh",
+      "scripts/start-reused-sss2-api-runtime.sh",
+      "scripts/cleanup-strict-sss2-api-runtime.sh",
+      "scripts/refresh-owned-sss2-app.sh",
+      "scripts/owned_readiness.py",
+      "tools/business_api_inventory.py",
+      "tools/api_route_ledger.py",
+      "tools/api_route_execution_plan.py",
+      "tools/api_contract_skeleton.py",
+      "tools/api_route_closure.py",
+      "tools/finalize_api_report.py",
+      "tools/vertical_slices/matrix.py",
+      "project/pom.xml",
+      "owned-framework/pom.xml",
+      "owned-personnel/pom.xml",
+      "owned-equipment/pom.xml",
+      "owned-consumables/pom.xml",
+      "owned-attachments/pom.xml",
+      "owned-report/pom.xml",
+      "owned-scheduler/pom.xml",
+      "owned-web/pom.xml",
+      "owned-distribution/package.py",
+      "owned-distribution/start.sh",
+      "owned-distribution/example",
+      "owned-web/build-owned-web.sh",
+      "scripts/build-owned-distribution.sh",
+      "scripts/build-owned-framework.sh",
+      "scripts/build-owned-personnel.sh",
+      "scripts/build-owned-equipment.sh",
+      "scripts/build-owned-consumables.sh",
+      "scripts/build-owned-attachments.sh",
+      "scripts/build-owned-report.sh",
+      "scripts/build-owned-scheduler.sh",
+      "scripts/build-prep.sh",
+      "scripts/verify-external-artifacts.sh",
+      "evidence/external-artifacts.sha256",
+      "build/oracle-free-source-manifest.json",
+      "docker/Dockerfile.built"
+    ],
+    "implementation_dirty": false,
+    "repository_head_at_capture": "c362bb5ce527230de8c6efc1d15e0b2093be1e48"
+  },
+  "role": "manager",
+  "organization": "org-a",
+  "mode": "strict",
+  "base_url": "http://127.0.0.1:18090",
+  "case_count": 4,
+  "cases": [
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": null,
+      "body_sha256": "4c4192b3de0f23475bdb9285260b227b1abe639309833aaddb69664864c6355b",
+      "body_bytes": 4,
+      "assertions": {},
+      "id": "mdm.stock.stockin.http",
+      "method": "PUT",
+      "path": "/secure/emc/module/mdm/basemdm/mtls/stocks/6033/action/stockin",
+      "url": "http://127.0.0.1:18090/secure/emc/module/mdm/basemdm/mtls/stocks/6033/action/stockin",
+      "status": 200,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "4",
+        "date": "Sat, 31 Oct 2026 08:42:40 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 628.5,
+      "route": {
+        "method": "PUT",
+        "path": "/secure/emc/module/mdm/basemdm/mtls/stocks/${fixture.stock-create}/action/stockin",
+        "operation": "write",
+        "disposition": "owned-pass",
+        "scope": "owned-java-source-only-route",
+        "route_id": "9fb1fd1fe117182b"
+      },
+      "fixture": {
+        "id": "mdm-stock-stockin-api-fixture",
+        "mode": "api",
+        "setup": "executed",
+        "restore": "restored",
+        "setup_requests": [
+          {
+            "id": "stock-create",
+            "capture_json": true,
+            "method": "POST",
+            "path": "/secure/emc/module/mdm/basemdm/mtls/20250700570/general-mtl-stocks",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "batchNo": "STRICT-WAVE-STOCK",
+                    "stockQty": 3.0,
+                    "unitName": "box",
+                    "lowLimit": 1.0,
+                    "qty": 3.0,
+                    "vendorId": "strict-vendor",
+                    "logContent": "strict stock fixture"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          }
+        ],
+        "restore_requests": [
+          {
+            "id": "stock-restore",
+            "method": "DELETE",
+            "path": "/secure/emc/module/mdm/basemdm/mtls/20250700570/stocks",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "id": "${fixture.stock-create}"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          }
+        ],
+        "sql_files": [],
+        "setup_sql_files": [],
+        "restore_sql_files": [],
+        "business_write_via": "http",
+        "cleanup_via": "restore-http",
+        "runtime_values": {
+          "id": "r08b224869c32"
+        },
+        "setup_http": [
+          {
+            "expected_status": [
+              200
+            ],
+            "json_top_level_keys": null,
+            "body_sha256": "4c4192b3de0f23475bdb9285260b227b1abe639309833aaddb69664864c6355b",
+            "body_bytes": 4,
+            "assertions": {},
+            "id": "stock-create",
+            "method": "POST",
+            "path": "/secure/emc/module/mdm/basemdm/mtls/20250700570/general-mtl-stocks",
+            "url": "http://127.0.0.1:18090/secure/emc/module/mdm/basemdm/mtls/20250700570/general-mtl-stocks",
+            "status": 200,
+            "response_headers": {
+              "x-content-type-options": "nosniff",
+              "x-xss-protection": "1; mode=block",
+              "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+              "pragma": "no-cache",
+              "expires": "0",
+              "x-frame-options": "SAMEORIGIN",
+              "content-type": "application/json",
+              "content-length": "4",
+              "date": "Sat, 31 Oct 2026 08:42:40 GMT",
+              "connection": "close"
+            },
+            "request_headers": {
+              "content-type": "application/json"
+            },
+            "elapsed_ms": 757.105
+          }
+        ],
+        "restore_http": [
+          {
+            "expected_status": [
+              200
+            ],
+            "json_top_level_keys": null,
+            "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "body_bytes": 0,
+            "assertions": {},
+            "id": "stock-restore",
+            "method": "DELETE",
+            "path": "/secure/emc/module/mdm/basemdm/mtls/20250700570/stocks",
+            "url": "http://127.0.0.1:18090/secure/emc/module/mdm/basemdm/mtls/20250700570/stocks",
+            "status": 200,
+            "response_headers": {
+              "x-content-type-options": "nosniff",
+              "x-xss-protection": "1; mode=block",
+              "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+              "pragma": "no-cache",
+              "expires": "0",
+              "x-frame-options": "SAMEORIGIN",
+              "content-length": "0",
+              "date": "Sat, 31 Oct 2026 08:42:41 GMT",
+              "connection": "close"
+            },
+            "request_headers": {
+              "content-type": "application/json"
+            },
+            "elapsed_ms": 601.111
+          }
+        ]
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": true,
+        "status": "observed",
+        "event": "mdm-stock-storage",
+        "outcome": "ALLOWED",
+        "source": "owned-http"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "restore-http"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": null,
+      "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "body_bytes": 0,
+      "assertions": {},
+      "id": "mdm.stock.inventory.http",
+      "method": "PUT",
+      "path": "/secure/emc/module/mdm/basemdm/mtls/20250700570/stocks/action/inventory",
+      "url": "http://127.0.0.1:18090/secure/emc/module/mdm/basemdm/mtls/20250700570/stocks/action/inventory",
+      "status": 200,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-length": "0",
+        "date": "Sat, 31 Oct 2026 08:42:42 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 593.338,
+      "route": {
+        "method": "PUT",
+        "path": "/secure/emc/module/mdm/basemdm/mtls/20250700570/stocks/action/inventory",
+        "operation": "write",
+        "disposition": "owned-pass",
+        "scope": "owned-java-source-only-route",
+        "route_id": "cf2d3adbf47467f2"
+      },
+      "fixture": {
+        "id": "mdm-stock-inventory-api-fixture",
+        "mode": "api",
+        "setup": "executed",
+        "restore": "restored",
+        "setup_requests": [
+          {
+            "id": "stock-create",
+            "capture_json": true,
+            "method": "POST",
+            "path": "/secure/emc/module/mdm/basemdm/mtls/20250700570/general-mtl-stocks",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "batchNo": "STRICT-WAVE-STOCK",
+                    "stockQty": 3.0,
+                    "unitName": "box",
+                    "lowLimit": 1.0,
+                    "qty": 3.0,
+                    "vendorId": "strict-vendor",
+                    "logContent": "strict stock fixture"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          }
+        ],
+        "restore_requests": [
+          {
+            "id": "stock-restore",
+            "method": "DELETE",
+            "path": "/secure/emc/module/mdm/basemdm/mtls/20250700570/stocks",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "id": "${fixture.stock-create}"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          }
+        ],
+        "sql_files": [],
+        "setup_sql_files": [],
+        "restore_sql_files": [],
+        "business_write_via": "http",
+        "cleanup_via": "restore-http",
+        "runtime_values": {
+          "id": "r837cef2ba0c5"
+        },
+        "setup_http": [
+          {
+            "expected_status": [
+              200
+            ],
+            "json_top_level_keys": null,
+            "body_sha256": "8b9a9848e2551d6c07ad909df74d1d0255cfa549e5eb24ca4e3fb3f9e8765bf6",
+            "body_bytes": 4,
+            "assertions": {},
+            "id": "stock-create",
+            "method": "POST",
+            "path": "/secure/emc/module/mdm/basemdm/mtls/20250700570/general-mtl-stocks",
+            "url": "http://127.0.0.1:18090/secure/emc/module/mdm/basemdm/mtls/20250700570/general-mtl-stocks",
+            "status": 200,
+            "response_headers": {
+              "x-content-type-options": "nosniff",
+              "x-xss-protection": "1; mode=block",
+              "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+              "pragma": "no-cache",
+              "expires": "0",
+              "x-frame-options": "SAMEORIGIN",
+              "content-type": "application/json",
+              "content-length": "4",
+              "date": "Sat, 31 Oct 2026 08:42:41 GMT",
+              "connection": "close"
+            },
+            "request_headers": {
+              "content-type": "application/json"
+            },
+            "elapsed_ms": 649.105
+          }
+        ],
+        "restore_http": [
+          {
+            "expected_status": [
+              200
+            ],
+            "json_top_level_keys": null,
+            "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "body_bytes": 0,
+            "assertions": {},
+            "id": "stock-restore",
+            "method": "DELETE",
+            "path": "/secure/emc/module/mdm/basemdm/mtls/20250700570/stocks",
+            "url": "http://127.0.0.1:18090/secure/emc/module/mdm/basemdm/mtls/20250700570/stocks",
+            "status": 200,
+            "response_headers": {
+              "x-content-type-options": "nosniff",
+              "x-xss-protection": "1; mode=block",
+              "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+              "pragma": "no-cache",
+              "expires": "0",
+              "x-frame-options": "SAMEORIGIN",
+              "content-length": "0",
+              "date": "Sat, 31 Oct 2026 08:42:42 GMT",
+              "connection": "close"
+            },
+            "request_headers": {
+              "content-type": "application/json"
+            },
+            "elapsed_ms": 590.348
+          }
+        ]
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": true,
+        "status": "observed",
+        "event": "mdm-stock-inventory",
+        "outcome": "ALLOWED",
+        "source": "owned-http"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "restore-http"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": null,
+      "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "body_bytes": 0,
+      "assertions": {},
+      "id": "mdm.stock.abandon.http",
+      "method": "PUT",
+      "path": "/secure/emc/module/mdm/basemdm/mtls/20250700570/stocks/action/abandon",
+      "url": "http://127.0.0.1:18090/secure/emc/module/mdm/basemdm/mtls/20250700570/stocks/action/abandon",
+      "status": 200,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-length": "0",
+        "date": "Sat, 31 Oct 2026 08:42:43 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 601.218,
+      "route": {
+        "method": "PUT",
+        "path": "/secure/emc/module/mdm/basemdm/mtls/20250700570/stocks/action/abandon",
+        "operation": "write",
+        "disposition": "owned-pass",
+        "scope": "owned-java-source-only-route",
+        "route_id": "0e644b96cb39b71e"
+      },
+      "fixture": {
+        "id": "mdm-stock-abandon-api-fixture",
+        "mode": "api",
+        "setup": "executed",
+        "restore": "restored",
+        "setup_requests": [
+          {
+            "id": "stock-create",
+            "capture_json": true,
+            "method": "POST",
+            "path": "/secure/emc/module/mdm/basemdm/mtls/20250700570/general-mtl-stocks",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "batchNo": "STRICT-WAVE-STOCK",
+                    "stockQty": 3.0,
+                    "unitName": "box",
+                    "lowLimit": 1.0,
+                    "qty": 3.0,
+                    "vendorId": "strict-vendor",
+                    "logContent": "strict stock fixture"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          }
+        ],
+        "restore_requests": [
+          {
+            "id": "stock-restore",
+            "method": "DELETE",
+            "path": "/secure/emc/module/mdm/basemdm/mtls/20250700570/stocks",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "id": "${fixture.stock-create}"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          }
+        ],
+        "sql_files": [],
+        "setup_sql_files": [],
+        "restore_sql_files": [],
+        "business_write_via": "http",
+        "cleanup_via": "restore-http",
+        "runtime_values": {
+          "id": "r6ec764a003f2"
+        },
+        "setup_http": [
+          {
+            "expected_status": [
+              200
+            ],
+            "json_top_level_keys": null,
+            "body_sha256": "77a37eb9acef1e6a49e503547742db34b695aefb46af6f609ca6204819cd6a95",
+            "body_bytes": 4,
+            "assertions": {},
+            "id": "stock-create",
+            "method": "POST",
+            "path": "/secure/emc/module/mdm/basemdm/mtls/20250700570/general-mtl-stocks",
+            "url": "http://127.0.0.1:18090/secure/emc/module/mdm/basemdm/mtls/20250700570/general-mtl-stocks",
+            "status": 200,
+            "response_headers": {
+              "x-content-type-options": "nosniff",
+              "x-xss-protection": "1; mode=block",
+              "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+              "pragma": "no-cache",
+              "expires": "0",
+              "x-frame-options": "SAMEORIGIN",
+              "content-type": "application/json",
+              "content-length": "4",
+              "date": "Sat, 31 Oct 2026 08:42:43 GMT",
+              "connection": "close"
+            },
+            "request_headers": {
+              "content-type": "application/json"
+            },
+            "elapsed_ms": 581.935
+          }
+        ],
+        "restore_http": [
+          {
+            "expected_status": [
+              200
+            ],
+            "json_top_level_keys": null,
+            "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "body_bytes": 0,
+            "assertions": {},
+            "id": "stock-restore",
+            "method": "DELETE",
+            "path": "/secure/emc/module/mdm/basemdm/mtls/20250700570/stocks",
+            "url": "http://127.0.0.1:18090/secure/emc/module/mdm/basemdm/mtls/20250700570/stocks",
+            "status": 200,
+            "response_headers": {
+              "x-content-type-options": "nosniff",
+              "x-xss-protection": "1; mode=block",
+              "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+              "pragma": "no-cache",
+              "expires": "0",
+              "x-frame-options": "SAMEORIGIN",
+              "content-length": "0",
+              "date": "Sat, 31 Oct 2026 08:42:44 GMT",
+              "connection": "close"
+            },
+            "request_headers": {
+              "content-type": "application/json"
+            },
+            "elapsed_ms": 577.618
+          }
+        ]
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": true,
+        "status": "observed",
+        "event": "mdm-stock-abandon",
+        "outcome": "ALLOWED",
+        "source": "owned-http"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "restore-http"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": null,
+      "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "body_bytes": 0,
+      "assertions": {},
+      "id": "mdm.stock.receive.http",
+      "method": "PUT",
+      "path": "/secure/emc/module/mdm/basemdm/mtls/stocks/6042/action/recieve",
+      "url": "http://127.0.0.1:18090/secure/emc/module/mdm/basemdm/mtls/stocks/6042/action/recieve",
+      "status": 200,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-length": "0",
+        "date": "Sat, 31 Oct 2026 08:42:46 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 592.455,
+      "route": {
+        "method": "PUT",
+        "path": "/secure/emc/module/mdm/basemdm/mtls/stocks/${fixture.stock-create}/action/recieve",
+        "operation": "write",
+        "disposition": "owned-pass",
+        "scope": "owned-java-source-only-route",
+        "route_id": "6a7eee799df04f4b"
+      },
+      "fixture": {
+        "id": "mdm-stock-receive-api-fixture",
+        "mode": "api",
+        "setup": "executed",
+        "restore": "restored",
+        "setup_requests": [
+          {
+            "id": "stock-create",
+            "capture_json": true,
+            "method": "POST",
+            "path": "/secure/emc/module/mdm/basemdm/mtls/20250700570/general-mtl-stocks",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "batchNo": "STRICT-WAVE-STOCK",
+                    "stockQty": 3.0,
+                    "unitName": "box",
+                    "lowLimit": 1.0,
+                    "qty": 3.0,
+                    "vendorId": "strict-vendor",
+                    "logContent": "strict stock fixture"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          }
+        ],
+        "restore_requests": [
+          {
+            "id": "stock-restore",
+            "method": "DELETE",
+            "path": "/secure/emc/module/mdm/basemdm/mtls/20250700570/stocks",
+            "body": {
+              "b": [
+                "",
+                [
+                  {
+                    "id": "${fixture.stock-create}"
+                  }
+                ]
+              ]
+            },
+            "expected_status": 200,
+            "assert": {}
+          }
+        ],
+        "sql_files": [],
+        "setup_sql_files": [],
+        "restore_sql_files": [],
+        "business_write_via": "http",
+        "cleanup_via": "restore-http",
+        "runtime_values": {
+          "id": "r74bcece3b504"
+        },
+        "setup_http": [
+          {
+            "expected_status": [
+              200
+            ],
+            "json_top_level_keys": null,
+            "body_sha256": "aea7c84e71ff79d7e04d992894ce2ac89edeebdd5a7808ca18920bd2a3f84810",
+            "body_bytes": 4,
+            "assertions": {},
+            "id": "stock-create",
+            "method": "POST",
+            "path": "/secure/emc/module/mdm/basemdm/mtls/20250700570/general-mtl-stocks",
+            "url": "http://127.0.0.1:18090/secure/emc/module/mdm/basemdm/mtls/20250700570/general-mtl-stocks",
+            "status": 200,
+            "response_headers": {
+              "x-content-type-options": "nosniff",
+              "x-xss-protection": "1; mode=block",
+              "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+              "pragma": "no-cache",
+              "expires": "0",
+              "x-frame-options": "SAMEORIGIN",
+              "content-type": "application/json",
+              "content-length": "4",
+              "date": "Sat, 31 Oct 2026 08:42:44 GMT",
+              "connection": "close"
+            },
+            "request_headers": {
+              "content-type": "application/json"
+            },
+            "elapsed_ms": 574.555
+          }
+        ],
+        "restore_http": [
+          {
+            "expected_status": [
+              200
+            ],
+            "json_top_level_keys": null,
+            "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "body_bytes": 0,
+            "assertions": {},
+            "id": "stock-restore",
+            "method": "DELETE",
+            "path": "/secure/emc/module/mdm/basemdm/mtls/20250700570/stocks",
+            "url": "http://127.0.0.1:18090/secure/emc/module/mdm/basemdm/mtls/20250700570/stocks",
+            "status": 200,
+            "response_headers": {
+              "x-content-type-options": "nosniff",
+              "x-xss-protection": "1; mode=block",
+              "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+              "pragma": "no-cache",
+              "expires": "0",
+              "x-frame-options": "SAMEORIGIN",
+              "content-length": "0",
+              "date": "Sat, 31 Oct 2026 08:42:46 GMT",
+              "connection": "close"
+            },
+            "request_headers": {
+              "content-type": "application/json"
+            },
+            "elapsed_ms": 599.097
+          }
+        ]
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": true,
+        "status": "observed",
+        "event": "mdm-stock-receive",
+        "outcome": "ALLOWED",
+        "source": "owned-http"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "restore-http"
+      }
+    }
+  ],
+  "cleanup": {
+    "application_stopped": true,
+    "baseline_schema_immutable": true,
+    "cleanup_mode": "persistent-oracle",
+    "network_preserved": true,
+    "oracle_preserved": true,
+    "oracle_reused": true,
+    "oracle_stopped": false,
+    "redis_preserved": true,
+    "redis_stopped": false,
+    "runtime_dirty": false,
+    "runtime_schema_restored": true,
+    "temporary_files_removed": true,
+    "volume_preserved": true
+  },
+  "cleanup_pending": false,
+  "phase_timings_ms": {
+    "http_cases": 8049.041
+  },
+  "authentication": {
+    "attempted": true,
+    "authenticated": true,
+    "status": 200
+  },
+  "finished_at": "2026-10-31T08:42:46.528385+00:00",
+  "cleanup_finalized_at": "2026-10-31T08:43:10.533840+00:00"
+}

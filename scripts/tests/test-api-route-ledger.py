@@ -13,7 +13,7 @@ PENDING = REPO_ROOT.parent / ".scratch/sunway-supplier-exit-api-first/diagnostic
 CURRENT_HEAD = subprocess.check_output(
     ["git", "-C", str(REPO_ROOT), "rev-parse", "HEAD"], text=True
 ).strip()
-LEDGER = (REPO_ROOT / "evidence/api-route-ledger-current-head.json"
+LEDGER = (REPO_ROOT / ".scratch/sunway-supplier-exit-api-first/archive/historical/api-route-ledger-current-head--9769aa2122b6.json"
           if is_standalone_root(REPO_ROOT) else
           REPO_ROOT.parent / ".scratch/sunway-supplier-exit-api-first/archive/historical/api-route-ledger-20261027-current-head.json")
 for candidate in sorted(PENDING.glob("current-*/api-route-ledger-current-head.json"), reverse=True):

@@ -18,8 +18,8 @@ spec.loader.exec_module(module)
 class ContractSkeletonTest(unittest.TestCase):
     def setUp(self):
         if is_standalone_root(REPO_ROOT):
-            ledger_path = REPO_ROOT / "evidence/api-route-ledger-current-head.json"
-            plan_path = REPO_ROOT / "evidence/api-route-execution-plan-current-head.json"
+            ledger_path = REPO_ROOT / ".scratch/sunway-supplier-exit-api-first/archive/historical/api-route-ledger-current-head--9769aa2122b6.json"
+            plan_path = REPO_ROOT / ".scratch/sunway-supplier-exit-api-first/archive/historical/api-route-execution-plan-current-head--9c7f17af1853.json"
         else:
             ledger_path = REPO_ROOT.parent / ".scratch/sunway-supplier-exit-api-first/archive/historical/api-route-ledger-20261027-current-head.json"
             plan_path = REPO_ROOT.parent / ".scratch/sunway-supplier-exit-api-first/archive/historical/api-route-execution-plan-20261027-current-head.json"

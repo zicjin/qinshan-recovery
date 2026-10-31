@@ -206,7 +206,7 @@ def build(inventory: Dict[str, object], native_registry: Dict[str, object] | Non
         "implementation_tree_digest": inventory.get("implementation_tree_digest"),
         "implementation_dirty": inventory.get("implementation_dirty", inventory.get("source_dirty")),
         "implementation_scope": inventory.get("implementation_scope", []),
-        "inventory_source": inventory_source or "evidence/business-api-inventory-current-head.json",
+        "inventory_source": inventory_source or ".scratch/sunway-supplier-exit-api-first/archive/historical/business-api-inventory-current-head--14a87746122d.json",
         "planning_metadata": {
             "native_registry": {
                 "path": ".scratch/sunway-supplier-exit-api-first/archive/historical/native-api-registry.json" if native_registry else None,

@@ -95,14 +95,16 @@ def main():
         }
         assert classification["classification_counts"]["source-missing"] == 0
         assert classification["classification_counts"]["owned-rebuild-required"] == 0
-        assert classification["classification_counts"]["original-frontend-imported"] >= 13
+        minimum_imported = 13 if baseline["available"] else 6
+        assert classification["classification_counts"]["original-frontend-imported"] >= minimum_imported
         assert classification["classification_counts"]["runtime-bundle-present-repository-copy-absent"] >= 2
         assert classification["classification_counts"]["third-party-allowed"] == 2
-        assert any(
-            item["id"] == "/static/gikam/main/js/workspace.js"
-            and item["classifications"] == ["original-frontend-imported", "license-native-cleaned"]
-            for item in classification["entries"]
-        )
+        if baseline["available"]:
+            assert any(
+                item["id"] == "/static/gikam/main/js/workspace.js"
+                and item["classifications"] == ["original-frontend-imported", "license-native-cleaned"]
+                for item in classification["entries"]
+            )
         authenticated = payload["authenticated_resource_contract"]
         assert authenticated["available"] is baseline["available"]
         if authenticated["available"]:

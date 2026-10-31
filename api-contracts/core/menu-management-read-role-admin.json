@@ -1,0 +1,32 @@
+{
+  "schema": 1,
+  "family": "core-menu-management",
+  "description": "Role-admin read access to the owned menu management query route.",
+  "cases": [
+    {
+      "id": "menu.query.raw.role-admin-allowed",
+      "method": "POST",
+      "path": "/secure/core/module/sys/menus/queries/raw",
+      "route_id": "b8f0f859c99d1b2a",
+      "operation": "read",
+      "scope": "owned-java-source-only-route",
+      "disposition": "owned-pass",
+      "body": {"p": {"s": 50}},
+      "expected_status": 200,
+      "assert": {"json_keys": ["rows", "total"]},
+      "fixture": "none",
+      "audit": "not-required",
+      "route_origin": "owned-java-source-only",
+      "boundary_semantics": "owned Java source-only route; boundary route != boundary process",
+      "runtime_model": "same-spring-application"
+    }
+  ],
+  "route_execution_model": {
+    "application": "one owned Spring application per wave",
+    "oracle": "one clone-derived Oracle per wave",
+    "redis": "one Redis per wave",
+    "boundary_process": false,
+    "internal_http_bridge": false,
+    "jni_replacement_process": false
+  }
+}

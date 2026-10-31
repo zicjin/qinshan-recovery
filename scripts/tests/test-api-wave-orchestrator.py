@@ -16,9 +16,16 @@ assert spec and spec.loader
 spec.loader.exec_module(module)
 
 
+def standalone_head(*suffix):
+    return subprocess.check_output(
+        ["git", "-C", str(module.REPO_ROOT), "rev-parse", *suffix],
+        text=True,
+    ).strip()
+
+
 class ApiWaveOrchestratorTest(unittest.TestCase):
     def test_plan_exposes_one_runtime_per_wave(self):
-        head = subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip()
+        head = standalone_head("HEAD")
         plan = {
             "source_commit": head, "source_dirty": False,
             "wave_order": list(module.WAVE_ORDER), "runtime_count": 5,
@@ -34,7 +41,7 @@ class ApiWaveOrchestratorTest(unittest.TestCase):
         self.assertEqual(module._wave_for_family("core-reagent-write-boundary"), "foundation")
 
     def test_stale_plan_is_rejected_even_when_scope_unchanged(self):
-        parent = subprocess.check_output(["git", "rev-parse", "HEAD^"], text=True).strip()
+        parent = standalone_head("HEAD^")
         plan = {
             "source_commit": parent, "source_dirty": False,
             "wave_order": list(module.WAVE_ORDER), "runtime_count": 5,
@@ -117,7 +124,7 @@ class ApiWaveOrchestratorTest(unittest.TestCase):
                 report = root / (wave + ".report.json")
                 report.write_text(json.dumps({"status": "executed-pass-pending-cleanup", "wave": wave}))
                 reports.append(report)
-            head = subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip()
+            head = standalone_head("HEAD")
             plan = {"source_commit": head, "source_dirty": False,
                     "wave_order": list(module.WAVE_ORDER), "runtime_count": 5,
                     "wave_counts": {wave: 1 for wave in module.WAVE_ORDER}, "route_count": 5,
@@ -152,7 +159,7 @@ class ApiWaveOrchestratorTest(unittest.TestCase):
             manifest.write_text(json.dumps({"schema": 1, "lifecycle_id": "duplicate-lock",
                                             "waves": [{"wave": "foundation", "jobs": "foundation.json"}]}))
             plan = root / "plan.json"
-            head = subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip()
+            head = standalone_head("HEAD")
             plan.write_text(json.dumps({"source_commit": head, "source_dirty": False,
                                         "wave_order": list(module.WAVE_ORDER), "runtime_count": 5,
                                         "wave_counts": {wave: 1 for wave in module.WAVE_ORDER}, "route_count": 5,

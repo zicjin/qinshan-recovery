@@ -31,6 +31,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -48,13 +49,22 @@ public final class OwnedReagentQueryController {
     }
 
     @PostMapping(path = {"/secure/core/module/bp/reagents/queries", "/secure/core/module/bp/reagents/queries/raw",
-            "/secure/emc/module/bp/reagents/queries", "/secure/emc/module/bp/reagents/queries/raw"},
+            "/secure/emc/module/bp/reagents/queries", "/secure/emc/module/bp/reagents/queries/raw",
+            "/secure/core/module/bp/reagents/queries/searchable", "/secure/emc/module/bp/reagents/queries/searchable"},
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> reagents(HttpServletRequest request,
             @RequestBody(required = false) String body) {
         try { return ok(page(read(request, body, false, null))); }
         catch (AccessDeniedException denied) { return forbidden(); }
         catch (IllegalArgumentException invalid) { return badRequest(); }
+        catch (SQLException failure) { return unavailable(); }
+    }
+
+    @GetMapping(path = {"/secure/core/module/bp/reagents/info/status", "/secure/emc/module/bp/reagents/info/status"},
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> status(HttpServletRequest request) {
+        try { require(request); return ok("{\"ext$\":{}}"); }
+        catch (AccessDeniedException denied) { return forbidden(); }
         catch (SQLException failure) { return unavailable(); }
     }
 

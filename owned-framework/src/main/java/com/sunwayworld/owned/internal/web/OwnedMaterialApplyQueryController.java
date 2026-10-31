@@ -26,6 +26,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -49,6 +50,7 @@ public final class OwnedMaterialApplyQueryController {
             "/secure/core/module/item/mtl-applies/queries/undoable",
             "/secure/emc/module/item/mtl-applies/queries",
             "/secure/emc/module/item/mtl-applies/queries/raw",
+            "/secure/emc/module/item/mtl-applies/queries/searchable",
             "/secure/emc/module/item/mtl-applies/queries/tasks",
             "/secure/emc/module/item/mtl-applies/queries/withdrawable",
             "/secure/emc/module/item/mtl-applies/queries/undoable"},
@@ -60,6 +62,14 @@ public final class OwnedMaterialApplyQueryController {
             return ok(page(read(request, body, processStatus)));
         } catch (AccessDeniedException denied) { return forbidden(); }
         catch (IllegalArgumentException invalid) { return badRequest(); }
+        catch (SQLException failure) { return unavailable(); }
+    }
+
+    @GetMapping(path = {"/secure/core/module/item/mtl-applies/info/status", "/secure/emc/module/item/mtl-applies/info/status"},
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> status(HttpServletRequest request) {
+        try { boundary.requirePermission(request.getSession(false), OwnedIdentityProvider.CONSUMABLE_READ); return ok("{\"ext$\":{}}"); }
+        catch (AccessDeniedException denied) { return forbidden(); }
         catch (SQLException failure) { return unavailable(); }
     }
 

@@ -31,6 +31,20 @@ public final class OwnedConsumablesStockController {
         catch (AccessDeniedException denied) { return error(HttpStatus.FORBIDDEN); }
         catch (Exception failure) { return error(HttpStatus.INTERNAL_SERVER_ERROR); }
     }
+
+    @GetMapping(value="/secure/emc/module/item/consume/consumes/info/status", produces=MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> status(HttpServletRequest request) {
+        try { boundary.requirePermission(request.getSession(false), OwnedIdentityProvider.CONSUMABLE_READ); return ok(Collections.singletonMap("ext$", Collections.emptyMap())); }
+        catch (AccessDeniedException denied) { return error(HttpStatus.FORBIDDEN); }
+        catch (SQLException failure) { return error(HttpStatus.INTERNAL_SERVER_ERROR); }
+    }
+
+    @PostMapping(value="/secure/emc/module/item/consume/consumes/queries/searchable", produces=MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> searchable(HttpServletRequest request) {
+        try { boundary.requirePermission(request.getSession(false), OwnedIdentityProvider.CONSUMABLE_READ); return ok(Collections.singletonMap("rows", Collections.emptyList())); }
+        catch (AccessDeniedException denied) { return error(HttpStatus.FORBIDDEN); }
+        catch (SQLException failure) { return error(HttpStatus.INTERNAL_SERVER_ERROR); }
+    }
     @GetMapping(value="/owned/consumables/material-write-available", produces=MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> materialAvailable(HttpServletRequest request) {
         try { authorize(request); return ok(Collections.singletonMap("available", Boolean.TRUE)); }

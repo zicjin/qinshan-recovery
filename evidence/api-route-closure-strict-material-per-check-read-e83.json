@@ -1,12 +1,12 @@
 {
   "schema": 1,
   "scope": "current-head-spring-web-api-route-closure",
-  "generated_at": "2026-10-31T11:15:11.604872+00:00",
-  "source_commit": "37a2fbe2a69bb24ed57ec9c7714e7021fc50bb79",
-  "repository_head_at_capture": "37a2fbe2a69bb24ed57ec9c7714e7021fc50bb79",
+  "generated_at": "2026-10-31T11:49:07.436713+00:00",
+  "source_commit": "7857973ed836cbc62da66d09f0813fe456fd9223",
+  "repository_head_at_capture": "7857973ed836cbc62da66d09f0813fe456fd9223",
   "source_dirty": false,
-  "implementation_binding": "impl-3c3b2a69e26506cc",
-  "implementation_tree_digest": "3c3b2a69e26506cc0affa405321939a918f78464cb99c329a390596932a87b61",
+  "implementation_binding": "impl-e83c557c535725c3",
+  "implementation_tree_digest": "e83c557c535725c39363aeb42b98beb27409afc8359620c40bd0bc0100300593",
   "implementation_dirty": false,
   "implementation_scope": [
     "project/src/main/java",
@@ -133,30 +133,30 @@
   "project_route_count": 6599,
   "boundary_route_count": 147,
   "behavior_counts": {
-    "executed-pass": 2,
-    "unknown": 6744
+    "executed-pass": 4,
+    "unknown": 6742
   },
   "disposition_counts": {
-    "owned-pass": 2,
-    "unknown": 6744
+    "owned-pass": 4,
+    "unknown": 6742
   },
-  "strict_pass_count": 2,
+  "strict_pass_count": 4,
   "non_ledger_strict_pass_count": 0,
   "diagnostic_observation_count": 0,
-  "required_unknown": 6744,
-  "project_required_unknown": 6598,
-  "boundary_required_unknown": 146,
+  "required_unknown": 6742,
+  "project_required_unknown": 6595,
+  "boundary_required_unknown": 147,
   "failures": [],
   "reports": [
     {
-      "path": "evidence/api-contract-strict-equipment-read-3c.json",
-      "sha256": "5995c267d0aec4db267c1a514501e2a34ba3c3419112f94459100dd2b1c13833",
+      "path": "evidence/api-contract-strict-material-per-check-read-e83.json",
+      "sha256": "11e6e96a5ea23409084d104a60687ed9b52a00306c16efc5073513ff0c6b3ce2",
       "status": "executed-pass",
       "strict_evidence": true,
-      "source_commit": "6a251ab7d889b0b2b71eab50b0667e384950aee6",
-      "repository_head_at_capture": "6a251ab7d889b0b2b71eab50b0667e384950aee6",
-      "implementation_binding": "impl-3c3b2a69e26506cc",
-      "implementation_tree_digest": "3c3b2a69e26506cc0affa405321939a918f78464cb99c329a390596932a87b61",
+      "source_commit": "7857973ed836cbc62da66d09f0813fe456fd9223",
+      "repository_head_at_capture": "7857973ed836cbc62da66d09f0813fe456fd9223",
+      "implementation_binding": "impl-e83c557c535725c3",
+      "implementation_tree_digest": "e83c557c535725c39363aeb42b98beb27409afc8359620c40bd0bc0100300593",
       "implementation_dirty": false,
       "strict_contract": "strict report contract valid"
     }
@@ -53024,11 +53024,19 @@
       "source_class": "com.sunwayworld.emc.module.item.mtlpercheck.resource.EmcMtlPerCheckResource",
       "source_handler": "inherited.GenericResource",
       "family": "consumables-materials",
-      "behavior_status": "unknown",
-      "disposition": "unknown",
-      "evidence": [],
+      "behavior_status": "executed-pass",
+      "disposition": "owned-pass",
+      "evidence": [
+        {
+          "report": "evidence/api-contract-strict-material-per-check-read-e83.json",
+          "report_sha256": "11e6e96a5ea23409084d104a60687ed9b52a00306c16efc5073513ff0c6b3ce2",
+          "case_id": "material-per-check.status",
+          "status": 200,
+          "disposition": "owned-pass"
+        }
+      ],
       "diagnostic_observations": [],
-      "unknown_reason": "no clone-derived HTTP evidence registered",
+      "unknown_reason": null,
       "boundary_scope": null,
       "route_origin": "project-spring-source",
       "boundary_semantics": "project Spring route",
@@ -53058,11 +53066,19 @@
       "source_class": "com.sunwayworld.emc.module.item.mtlpercheck.resource.EmcMtlPerCheckResource",
       "source_handler": "inherited.GenericResource",
       "family": "consumables-materials",
-      "behavior_status": "unknown",
-      "disposition": "unknown",
-      "evidence": [],
+      "behavior_status": "executed-pass",
+      "disposition": "owned-pass",
+      "evidence": [
+        {
+          "report": "evidence/api-contract-strict-material-per-check-read-e83.json",
+          "report_sha256": "11e6e96a5ea23409084d104a60687ed9b52a00306c16efc5073513ff0c6b3ce2",
+          "case_id": "material-per-check.query",
+          "status": 200,
+          "disposition": "owned-pass"
+        }
+      ],
       "diagnostic_observations": [],
-      "unknown_reason": "no clone-derived HTTP evidence registered",
+      "unknown_reason": null,
       "boundary_scope": null,
       "route_origin": "project-spring-source",
       "boundary_semantics": "project Spring route",
@@ -53075,11 +53091,19 @@
       "source_class": "com.sunwayworld.emc.module.item.mtlpercheck.resource.EmcMtlPerCheckResource",
       "source_handler": "inherited.GenericResource",
       "family": "consumables-materials",
-      "behavior_status": "unknown",
-      "disposition": "unknown",
-      "evidence": [],
+      "behavior_status": "executed-pass",
+      "disposition": "owned-pass",
+      "evidence": [
+        {
+          "report": "evidence/api-contract-strict-material-per-check-read-e83.json",
+          "report_sha256": "11e6e96a5ea23409084d104a60687ed9b52a00306c16efc5073513ff0c6b3ce2",
+          "case_id": "material-per-check.raw",
+          "status": 200,
+          "disposition": "owned-pass"
+        }
+      ],
       "diagnostic_observations": [],
-      "unknown_reason": "no clone-derived HTTP evidence registered",
+      "unknown_reason": null,
       "boundary_scope": null,
       "route_origin": "project-spring-source",
       "boundary_semantics": "project Spring route",
@@ -53109,11 +53133,19 @@
       "source_class": "com.sunwayworld.emc.module.item.mtlpercheck.resource.EmcMtlPerCheckResource",
       "source_handler": "inherited.GenericResource",
       "family": "consumables-materials",
-      "behavior_status": "unknown",
-      "disposition": "unknown",
-      "evidence": [],
+      "behavior_status": "executed-pass",
+      "disposition": "owned-pass",
+      "evidence": [
+        {
+          "report": "evidence/api-contract-strict-material-per-check-read-e83.json",
+          "report_sha256": "11e6e96a5ea23409084d104a60687ed9b52a00306c16efc5073513ff0c6b3ce2",
+          "case_id": "material-per-check.searchable",
+          "status": 200,
+          "disposition": "owned-pass"
+        }
+      ],
       "diagnostic_observations": [],
-      "unknown_reason": "no clone-derived HTTP evidence registered",
+      "unknown_reason": null,
       "boundary_scope": null,
       "route_origin": "project-spring-source",
       "boundary_semantics": "project Spring route",
@@ -102545,26 +102577,11 @@
       "source_class": "com.sunwayworld.emc.module.mdm.equipt.equipt.resource.EmcEquiptResource",
       "source_handler": "inherited.GenericResource",
       "family": "equipment",
-      "behavior_status": "executed-pass",
-      "disposition": "owned-pass",
-      "evidence": [
-        {
-          "report": "evidence/api-contract-strict-equipment-read-3c.json",
-          "report_sha256": "5995c267d0aec4db267c1a514501e2a34ba3c3419112f94459100dd2b1c13833",
-          "case_id": "equipment.raw.read",
-          "status": 200,
-          "disposition": "owned-pass"
-        },
-        {
-          "report": "evidence/api-contract-strict-equipment-read-3c.json",
-          "report_sha256": "5995c267d0aec4db267c1a514501e2a34ba3c3419112f94459100dd2b1c13833",
-          "case_id": "equipment.raw.invalid-input",
-          "status": 400,
-          "disposition": "owned-pass"
-        }
-      ],
+      "behavior_status": "unknown",
+      "disposition": "unknown",
+      "evidence": [],
       "diagnostic_observations": [],
-      "unknown_reason": null,
+      "unknown_reason": "no clone-derived HTTP evidence registered",
       "boundary_scope": null,
       "route_origin": "project-spring-source",
       "boundary_semantics": "project Spring route",
@@ -114732,19 +114749,11 @@
       "source_class": "com.sunwayworld.owned.equipment.OwnedEquipmentChoosableController",
       "source_handler": "RequestMapping",
       "family": "equipment",
-      "behavior_status": "executed-pass",
-      "disposition": "owned-pass",
-      "evidence": [
-        {
-          "report": "evidence/api-contract-strict-equipment-read-3c.json",
-          "report_sha256": "5995c267d0aec4db267c1a514501e2a34ba3c3419112f94459100dd2b1c13833",
-          "case_id": "equipment.choosable.read",
-          "status": 200,
-          "disposition": "owned-pass"
-        }
-      ],
+      "behavior_status": "unknown",
+      "disposition": "unknown",
+      "evidence": [],
       "diagnostic_observations": [],
-      "unknown_reason": null,
+      "unknown_reason": "no clone-derived HTTP evidence registered",
       "boundary_scope": "owned-source-only",
       "route_origin": "owned-java-source-only",
       "boundary_semantics": "owned Java source-only route; boundary route != boundary process",

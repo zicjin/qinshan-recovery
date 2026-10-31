@@ -1,0 +1,614 @@
+{
+  "schema": 1,
+  "status": "executed-pass",
+  "execution": "strict",
+  "strict_evidence": true,
+  "production_access": false,
+  "scope": "clone-derived Spring Web API contract runner",
+  "route_execution_model": {
+    "application": "one owned Spring application per wave",
+    "oracle": "persistent Oracle baseline/runtime schema",
+    "redis": "reused sss2 Redis database 15",
+    "boundary_route": "owned Java source-only route in the same Spring application",
+    "boundary_process": false,
+    "internal_http_bridge": false,
+    "jni_replacement_process": false
+  },
+  "started_at": "2026-10-31T21:44:52.666154+00:00",
+  "source_commit": "4e14e21cae7aec4148c489c0865ba4eebaf64579",
+  "repository_head_at_capture": "4e14e21cae7aec4148c489c0865ba4eebaf64579",
+  "source_dirty": false,
+  "source_scope": [
+    "project/src/main/java",
+    "owned-framework/src",
+    "owned-personnel/src",
+    "owned-equipment/src",
+    "owned-consumables/src",
+    "owned-attachments/src",
+    "owned-report/src",
+    "owned-scheduler/src",
+    "owned-web/src",
+    "scripts/source_binding.py",
+    "scripts/evidence_output.py",
+    "scripts/spring_api_contract_runner.py",
+    "scripts/api_wave_orchestrator.py",
+    "scripts/owned_runtime_contract.py",
+    "scripts/api_fixture.py",
+    "scripts/remote-sql-fixture-executor.py",
+    "scripts/start-strict-sss2-api-runtime.sh",
+    "scripts/start-reused-sss2-api-runtime.sh",
+    "scripts/cleanup-strict-sss2-api-runtime.sh",
+    "scripts/refresh-owned-sss2-app.sh",
+    "scripts/owned_readiness.py",
+    "tools/business_api_inventory.py",
+    "tools/api_route_ledger.py",
+    "tools/api_route_execution_plan.py",
+    "tools/api_contract_skeleton.py",
+    "tools/api_route_closure.py",
+    "tools/finalize_api_report.py",
+    "tools/vertical_slices/matrix.py",
+    "project/pom.xml",
+    "owned-framework/pom.xml",
+    "owned-personnel/pom.xml",
+    "owned-equipment/pom.xml",
+    "owned-consumables/pom.xml",
+    "owned-attachments/pom.xml",
+    "owned-report/pom.xml",
+    "owned-scheduler/pom.xml",
+    "owned-web/pom.xml",
+    "owned-distribution/package.py",
+    "owned-distribution/start.sh",
+    "owned-distribution/example",
+    "owned-web/build-owned-web.sh",
+    "scripts/build-owned-distribution.sh",
+    "scripts/build-owned-framework.sh",
+    "scripts/build-owned-personnel.sh",
+    "scripts/build-owned-equipment.sh",
+    "scripts/build-owned-consumables.sh",
+    "scripts/build-owned-attachments.sh",
+    "scripts/build-owned-report.sh",
+    "scripts/build-owned-scheduler.sh",
+    "scripts/build-prep.sh",
+    "scripts/verify-external-artifacts.sh",
+    "evidence/external-artifacts.sha256",
+    "build/oracle-free-source-manifest.json",
+    "docker/Dockerfile.built"
+  ],
+  "implementation_binding": "impl-a7adc27cb2955d6e",
+  "implementation_tree_digest": "a7adc27cb2955d6e723d155ed934d063e9ed0c5b847ea74e9f880216dd7e6fd2",
+  "implementation_dirty": false,
+  "implementation_scope": [
+    "project/src/main/java",
+    "owned-framework/src",
+    "owned-personnel/src",
+    "owned-equipment/src",
+    "owned-consumables/src",
+    "owned-attachments/src",
+    "owned-report/src",
+    "owned-scheduler/src",
+    "owned-web/src",
+    "scripts/source_binding.py",
+    "scripts/evidence_output.py",
+    "scripts/spring_api_contract_runner.py",
+    "scripts/api_wave_orchestrator.py",
+    "scripts/owned_runtime_contract.py",
+    "scripts/api_fixture.py",
+    "scripts/remote-sql-fixture-executor.py",
+    "scripts/start-strict-sss2-api-runtime.sh",
+    "scripts/start-reused-sss2-api-runtime.sh",
+    "scripts/cleanup-strict-sss2-api-runtime.sh",
+    "scripts/refresh-owned-sss2-app.sh",
+    "scripts/owned_readiness.py",
+    "tools/business_api_inventory.py",
+    "tools/api_route_ledger.py",
+    "tools/api_route_execution_plan.py",
+    "tools/api_contract_skeleton.py",
+    "tools/api_route_closure.py",
+    "tools/finalize_api_report.py",
+    "tools/vertical_slices/matrix.py",
+    "project/pom.xml",
+    "owned-framework/pom.xml",
+    "owned-personnel/pom.xml",
+    "owned-equipment/pom.xml",
+    "owned-consumables/pom.xml",
+    "owned-attachments/pom.xml",
+    "owned-report/pom.xml",
+    "owned-scheduler/pom.xml",
+    "owned-web/pom.xml",
+    "owned-distribution/package.py",
+    "owned-distribution/start.sh",
+    "owned-distribution/example",
+    "owned-web/build-owned-web.sh",
+    "scripts/build-owned-distribution.sh",
+    "scripts/build-owned-framework.sh",
+    "scripts/build-owned-personnel.sh",
+    "scripts/build-owned-equipment.sh",
+    "scripts/build-owned-consumables.sh",
+    "scripts/build-owned-attachments.sh",
+    "scripts/build-owned-report.sh",
+    "scripts/build-owned-scheduler.sh",
+    "scripts/build-prep.sh",
+    "scripts/verify-external-artifacts.sh",
+    "evidence/external-artifacts.sha256",
+    "build/oracle-free-source-manifest.json",
+    "docker/Dockerfile.built"
+  ],
+  "nested_project_commit": "27932b1fe4d71d64a02f9a63e55f56acb403e3a0",
+  "distribution_input_digest": "dc97c305b90ba8334548ee522a08b94300580d3ff2b3ebf234b2695653f913e4",
+  "artifact_sha256": {
+    "/home/ts/qinshan/lims-recovery/owned-distribution/target/distribution/app/lims-owned-application.jar": "6ccb630ba69f3cd41e5303344ac50be1db064fcf13db44192327136544e03289",
+    "/home/ts/qinshan/.scratch/sunway-supplier-exit-api-first/diagnostic-evidence/pending/current-a7adc27cb2955d6e/api-route-ledger-current-head.json": "ba1daa4b353860cab8f601bf4c7cb51b77f106f4c8ef1df8e86c3487d1810ed8"
+  },
+  "clone_identity": "lims-owned-sss2-oracle:LIMS_BASELINE_SSS2:LIMS_RUNTIME_SSS2:f1c43b53750ec720488ef7780527ea303081ab2dc6a0fc029a1d17f33dc10a6c",
+  "runtime_report": "/home/ts/qinshan/.scratch/sunway-supplier-exit-api-first/diagnostic-evidence/runtime/strict-api-runtime-manifest-a7adc-foundation-write-wave.json",
+  "runtime_contract": {
+    "mode": "strict",
+    "strict_evidence": false,
+    "runtime_identity": "lims-owned-sss2-oracle:LIMS_BASELINE_SSS2:LIMS_RUNTIME_SSS2:f1c43b53750ec720488ef7780527ea303081ab2dc6a0fc029a1d17f33dc10a6c",
+    "reuse": true,
+    "oracle_reused": true,
+    "baseline_schema": "LIMS_BASELINE_SSS2",
+    "runtime_schema": "LIMS_RUNTIME_SSS2",
+    "baseline_schema_hash": "f1c43b53750ec720488ef7780527ea303081ab2dc6a0fc029a1d17f33dc10a6c",
+    "runtime_schema_hash_before": "17873fa4310d1a273530bdce111dba72ac433163f25bdfd0c5b036fc23626979",
+    "runtime_schema_hash_after": "17873fa4310d1a273530bdce111dba72ac433163f25bdfd0c5b036fc23626979",
+    "source_commit": "4e14e21cae7aec4148c489c0865ba4eebaf64579",
+    "implementation_binding": "impl-a7adc27cb2955d6e",
+    "implementation_tree_digest": "a7adc27cb2955d6e723d155ed934d063e9ed0c5b847ea74e9f880216dd7e6fd2",
+    "implementation_scope": [
+      "project/src/main/java",
+      "owned-framework/src",
+      "owned-personnel/src",
+      "owned-equipment/src",
+      "owned-consumables/src",
+      "owned-attachments/src",
+      "owned-report/src",
+      "owned-scheduler/src",
+      "owned-web/src",
+      "scripts/source_binding.py",
+      "scripts/evidence_output.py",
+      "scripts/spring_api_contract_runner.py",
+      "scripts/api_wave_orchestrator.py",
+      "scripts/owned_runtime_contract.py",
+      "scripts/api_fixture.py",
+      "scripts/remote-sql-fixture-executor.py",
+      "scripts/start-strict-sss2-api-runtime.sh",
+      "scripts/start-reused-sss2-api-runtime.sh",
+      "scripts/cleanup-strict-sss2-api-runtime.sh",
+      "scripts/refresh-owned-sss2-app.sh",
+      "scripts/owned_readiness.py",
+      "tools/business_api_inventory.py",
+      "tools/api_route_ledger.py",
+      "tools/api_route_execution_plan.py",
+      "tools/api_contract_skeleton.py",
+      "tools/api_route_closure.py",
+      "tools/finalize_api_report.py",
+      "tools/vertical_slices/matrix.py",
+      "project/pom.xml",
+      "owned-framework/pom.xml",
+      "owned-personnel/pom.xml",
+      "owned-equipment/pom.xml",
+      "owned-consumables/pom.xml",
+      "owned-attachments/pom.xml",
+      "owned-report/pom.xml",
+      "owned-scheduler/pom.xml",
+      "owned-web/pom.xml",
+      "owned-distribution/package.py",
+      "owned-distribution/start.sh",
+      "owned-distribution/example",
+      "owned-web/build-owned-web.sh",
+      "scripts/build-owned-distribution.sh",
+      "scripts/build-owned-framework.sh",
+      "scripts/build-owned-personnel.sh",
+      "scripts/build-owned-equipment.sh",
+      "scripts/build-owned-consumables.sh",
+      "scripts/build-owned-attachments.sh",
+      "scripts/build-owned-report.sh",
+      "scripts/build-owned-scheduler.sh",
+      "scripts/build-prep.sh",
+      "scripts/verify-external-artifacts.sh",
+      "evidence/external-artifacts.sha256",
+      "build/oracle-free-source-manifest.json",
+      "docker/Dockerfile.built"
+    ],
+    "implementation_dirty": false,
+    "repository_head_at_capture": "4e14e21cae7aec4148c489c0865ba4eebaf64579"
+  },
+  "role": "manager",
+  "organization": "org-a",
+  "mode": "strict",
+  "base_url": "http://127.0.0.1:18089",
+  "case_count": 2,
+  "cases": [
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "updated"
+      ],
+      "body_sha256": "3c9c6e533269fec54d4d3cd1c878f6f7005bc77759c636d980a9c07fe236a6ed",
+      "body_bytes": 13,
+      "assertions": {
+        "json_keys": [
+          "updated"
+        ]
+      },
+      "id": "reagent.update.http",
+      "method": "PUT",
+      "path": "/secure/core/module/bp/reagents/6026",
+      "url": "http://127.0.0.1:18089/secure/core/module/bp/reagents/6026",
+      "status": 200,
+      "response_headers": {
+        "cache-control": "no-store",
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "13",
+        "date": "Sat, 31 Oct 2026 21:44:56 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 557.869,
+      "route": {
+        "method": "PUT",
+        "path": "/secure/core/module/bp/reagents/${fixture.reagent-create.id}",
+        "operation": "write",
+        "disposition": "owned-pass",
+        "scope": "owned-java-source-only-route",
+        "route_id": "d11ba07a3ab1488f"
+      },
+      "fixture": {
+        "id": "reagent-update-api-fixture",
+        "mode": "api",
+        "setup": "executed",
+        "restore": "restored",
+        "setup_requests": [
+          {
+            "id": "reagent-create",
+            "capture_json": true,
+            "method": "POST",
+            "path": "/secure/core/module/bp/reagents",
+            "body": {
+              "p": {
+                "reagentName": "Strict API Reagent",
+                "reagentSpecification": "strict-spec",
+                "methodId": 42,
+                "remark": "strict-api-create"
+              }
+            },
+            "expected_status": 200,
+            "assert": {
+              "json_keys": [
+                "id"
+              ]
+            }
+          }
+        ],
+        "restore_requests": [
+          {
+            "id": "reagent-restore",
+            "method": "DELETE",
+            "path": "/secure/core/module/bp/reagents",
+            "body": {
+              "ids": [
+                "${fixture.reagent-create.id}"
+              ]
+            },
+            "expected_status": 200,
+            "assert": {
+              "json_keys": [
+                "deleted"
+              ]
+            }
+          }
+        ],
+        "sql_files": [],
+        "setup_sql_files": [],
+        "restore_sql_files": [],
+        "business_write_via": "http",
+        "cleanup_via": "restore-http",
+        "runtime_values": {
+          "id": "r525b370a5caa"
+        },
+        "setup_http": [
+          {
+            "expected_status": [
+              200
+            ],
+            "json_top_level_keys": [
+              "id"
+            ],
+            "body_sha256": "bef342973416448fad63d6a6d5fb8359e29af9f3ef69d37dc7a38718765dcdb6",
+            "body_bytes": 11,
+            "assertions": {
+              "json_keys": [
+                "id"
+              ]
+            },
+            "id": "reagent-create",
+            "method": "POST",
+            "path": "/secure/core/module/bp/reagents",
+            "url": "http://127.0.0.1:18089/secure/core/module/bp/reagents",
+            "status": 200,
+            "response_headers": {
+              "cache-control": "no-store",
+              "x-content-type-options": "nosniff",
+              "x-xss-protection": "1; mode=block",
+              "x-frame-options": "SAMEORIGIN",
+              "content-type": "application/json",
+              "content-length": "11",
+              "date": "Sat, 31 Oct 2026 21:44:55 GMT",
+              "connection": "close"
+            },
+            "request_headers": {
+              "content-type": "application/json"
+            },
+            "elapsed_ms": 661.284
+          }
+        ],
+        "restore_http": [
+          {
+            "expected_status": [
+              200
+            ],
+            "json_top_level_keys": [
+              "deleted"
+            ],
+            "body_sha256": "78000dac3e3426f05652e1ffb82d95f0faff80840f2a8585edd6cb0f79255f98",
+            "body_bytes": 13,
+            "assertions": {
+              "json_keys": [
+                "deleted"
+              ]
+            },
+            "id": "reagent-restore",
+            "method": "DELETE",
+            "path": "/secure/core/module/bp/reagents",
+            "url": "http://127.0.0.1:18089/secure/core/module/bp/reagents",
+            "status": 200,
+            "response_headers": {
+              "cache-control": "no-store",
+              "x-content-type-options": "nosniff",
+              "x-xss-protection": "1; mode=block",
+              "x-frame-options": "SAMEORIGIN",
+              "content-type": "application/json",
+              "content-length": "13",
+              "date": "Sat, 31 Oct 2026 21:44:56 GMT",
+              "connection": "close"
+            },
+            "request_headers": {
+              "content-type": "application/json"
+            },
+            "elapsed_ms": 475.251
+          }
+        ]
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": true,
+        "status": "observed",
+        "event": "reagent-update",
+        "outcome": "ALLOWED",
+        "source": "owned-http"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "restore-http"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "id"
+      ],
+      "body_sha256": "b5c5f3a98938e0eee7866dc071b79dd7f61667782e1c9b34f45e786235ec9fc1",
+      "body_bytes": 11,
+      "assertions": {
+        "json_keys": [
+          "id"
+        ]
+      },
+      "id": "reagent.composition-insert.http",
+      "method": "POST",
+      "path": "/secure/core/module/bp/reagents/6027/compositions",
+      "url": "http://127.0.0.1:18089/secure/core/module/bp/reagents/6027/compositions",
+      "status": 200,
+      "response_headers": {
+        "cache-control": "no-store",
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "11",
+        "date": "Sat, 31 Oct 2026 21:44:58 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 480.23,
+      "route": {
+        "method": "POST",
+        "path": "/secure/core/module/bp/reagents/${fixture.reagent-create.id}/compositions",
+        "operation": "write",
+        "disposition": "owned-pass",
+        "scope": "owned-java-source-only-route",
+        "route_id": "91f6594d1136e623"
+      },
+      "fixture": {
+        "id": "reagent-composition-api-fixture",
+        "mode": "api",
+        "setup": "executed",
+        "restore": "restored",
+        "setup_requests": [
+          {
+            "id": "reagent-create",
+            "capture_json": true,
+            "method": "POST",
+            "path": "/secure/core/module/bp/reagents",
+            "body": {
+              "p": {
+                "reagentName": "Strict API Composition Parent",
+                "reagentSpecification": "strict-spec",
+                "methodId": 42,
+                "remark": "strict-api-parent"
+              }
+            },
+            "expected_status": 200,
+            "assert": {
+              "json_keys": [
+                "id"
+              ]
+            }
+          }
+        ],
+        "restore_requests": [
+          {
+            "id": "reagent-restore",
+            "method": "DELETE",
+            "path": "/secure/core/module/bp/reagents",
+            "body": {
+              "ids": [
+                "${fixture.reagent-create.id}"
+              ]
+            },
+            "expected_status": 200,
+            "assert": {
+              "json_keys": [
+                "deleted"
+              ]
+            }
+          }
+        ],
+        "sql_files": [],
+        "setup_sql_files": [],
+        "restore_sql_files": [],
+        "business_write_via": "http",
+        "cleanup_via": "restore-http",
+        "runtime_values": {
+          "id": "r8cf7b157047f"
+        },
+        "setup_http": [
+          {
+            "expected_status": [
+              200
+            ],
+            "json_top_level_keys": [
+              "id"
+            ],
+            "body_sha256": "9e9b4c85488cb78ecde6487ac87f0ce1dfa08232c348ca5cb24053d204eb4cbf",
+            "body_bytes": 11,
+            "assertions": {
+              "json_keys": [
+                "id"
+              ]
+            },
+            "id": "reagent-create",
+            "method": "POST",
+            "path": "/secure/core/module/bp/reagents",
+            "url": "http://127.0.0.1:18089/secure/core/module/bp/reagents",
+            "status": 200,
+            "response_headers": {
+              "cache-control": "no-store",
+              "x-content-type-options": "nosniff",
+              "x-xss-protection": "1; mode=block",
+              "x-frame-options": "SAMEORIGIN",
+              "content-type": "application/json",
+              "content-length": "11",
+              "date": "Sat, 31 Oct 2026 21:44:56 GMT",
+              "connection": "close"
+            },
+            "request_headers": {
+              "content-type": "application/json"
+            },
+            "elapsed_ms": 459.798
+          }
+        ],
+        "restore_http": [
+          {
+            "expected_status": [
+              200
+            ],
+            "json_top_level_keys": [
+              "deleted"
+            ],
+            "body_sha256": "78000dac3e3426f05652e1ffb82d95f0faff80840f2a8585edd6cb0f79255f98",
+            "body_bytes": 13,
+            "assertions": {
+              "json_keys": [
+                "deleted"
+              ]
+            },
+            "id": "reagent-restore",
+            "method": "DELETE",
+            "path": "/secure/core/module/bp/reagents",
+            "url": "http://127.0.0.1:18089/secure/core/module/bp/reagents",
+            "status": 200,
+            "response_headers": {
+              "cache-control": "no-store",
+              "x-content-type-options": "nosniff",
+              "x-xss-protection": "1; mode=block",
+              "x-frame-options": "SAMEORIGIN",
+              "content-type": "application/json",
+              "content-length": "13",
+              "date": "Sat, 31 Oct 2026 21:44:58 GMT",
+              "connection": "close"
+            },
+            "request_headers": {
+              "content-type": "application/json"
+            },
+            "elapsed_ms": 455.914
+          }
+        ]
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": true,
+        "status": "observed",
+        "event": "reagent-composition-insert",
+        "outcome": "ALLOWED",
+        "source": "owned-http"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "restore-http"
+      }
+    }
+  ],
+  "cleanup": {
+    "application_stopped": true,
+    "baseline_schema_immutable": true,
+    "cleanup_mode": "persistent-oracle",
+    "network_preserved": true,
+    "oracle_preserved": true,
+    "oracle_reused": true,
+    "oracle_stopped": false,
+    "redis_preserved": true,
+    "redis_stopped": false,
+    "runtime_dirty": false,
+    "runtime_schema_restored": true,
+    "temporary_files_removed": true,
+    "volume_preserved": true
+  },
+  "cleanup_pending": false,
+  "phase_timings_ms": {
+    "http_cases": 4673.63
+  },
+  "authentication": {
+    "attempted": true,
+    "authenticated": true,
+    "status": 200
+  },
+  "finished_at": "2026-10-31T21:44:57.339822+00:00",
+  "wave": "milestone",
+  "wave_runtime_id": "a7adc-foundation-write-wave",
+  "wave_finalized_at": "2026-10-31T21:45:01.774041+00:00"
+}

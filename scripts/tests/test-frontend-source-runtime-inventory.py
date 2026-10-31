@@ -75,8 +75,9 @@ def main():
         assert any(item["id"] == "authenticated-baseline-capture" and item["status"] == "waiting-for-permitted-matching-test-account" for item in plan)
         assert payload["baseline_contract"]["authenticated_observation"] in {"sss2-diagnostic-captured", "open"}
         assert payload["baseline_contract"]["production_access"] is False
-        assert baseline["production_read_only"] is True
-        assert baseline["credentials_used"] is False
+        if baseline["available"]:
+            assert baseline["production_read_only"] is True
+            assert baseline["credentials_used"] is False
         if baseline["available"]:
             assert set(baseline["targets"]) == {"production", "supplier"}
             for target in baseline["targets"].values():

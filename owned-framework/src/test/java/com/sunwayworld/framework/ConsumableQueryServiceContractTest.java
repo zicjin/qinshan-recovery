@@ -61,6 +61,12 @@ public final class ConsumableQueryServiceContractTest {
         Pagination<Map<String,Object>> page = service.list(QueryRequest.parse("{\"p\":{\"n\":1,\"s\":1}}", null), principal);
         check(page.getTotal() == 2 && page.getRows().size() == 1 && "CSM-003".equals(page.getRows().get(0).get("ID")),
                 "consumable list applies organization scope, descending order and pagination");
+        check("number".equals(page.getColumnTypeMap().get("stockqty"))
+                        && "dateTime".equals(page.getColumnTypeMap().get("createdtime"))
+                        && "number".equals(page.getColumnTypeMap().get("rn_")),
+                "consumable pagination preserves supplier column type metadata");
+        check(page.getTotalMap().get("qty_") != null && page.getTotalMap().get("qty_").intValue() == 2,
+                "consumable pagination preserves supplier total map");
         check(service.list(QueryRequest.parse("{\"p\":{\"f\":{\"MTLNAME_CISC\":\"alpha\"}}}", null), principal).getTotal() == 1,
                 "case-insensitive consumable name filter");
         check(service.list(QueryRequest.parse("{\"p\":{\"f\":{\"MTLNAME_EQ\":\"missing\"}}}", null), principal).getTotal() == 0,

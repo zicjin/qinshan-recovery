@@ -13,6 +13,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -99,6 +100,7 @@ public final class OwnedReagentQueryController {
                 }
             }
             List<Map<String, Object>> rows = new ArrayList<Map<String, Object>>();
+            Map<String, String> columnTypes = new LinkedHashMap<String, String>();
             List<Object> pageValues = new ArrayList<Object>(spec.values);
             long start = ((long) query.getPageNumber() - 1L) * query.getPageSize();
             pageValues.add(start); pageValues.add(start + query.getPageSize());
@@ -106,10 +108,18 @@ public final class OwnedReagentQueryController {
                 bind(select, pageValues);
                 try (ResultSet result = select.executeQuery()) {
                     ResultSetMetaData metadata = result.getMetaData();
+                    for (int i = 1; i <= metadata.getColumnCount(); i++) {
+                        String label = metadata.getColumnLabel(i);
+                        if (label == null) continue;
+                        String normalized = "RN".equalsIgnoreCase(label) ? "rn_" : label.toLowerCase(Locale.ROOT);
+                        columnTypes.put(normalized, typeName(metadata.getColumnType(i)));
+                    }
                     while (result.next()) rows.add(row(result, metadata));
                 }
             }
-            return new PageResult(total, query.getPageSize(), query.getPageNumber(), rows);
+            Map<String, Number> totals = new LinkedHashMap<String, Number>();
+            totals.put("qty_", total);
+            return new PageResult(total, query.getPageSize(), query.getPageNumber(), rows, columnTypes, totals);
         }
     }
 
@@ -346,7 +356,7 @@ public final class OwnedReagentQueryController {
 
     private static String page(PageResult page) {
         Map<String, Object> body = new LinkedHashMap<String, Object>();
-        body.put("columnTypeMap", new LinkedHashMap<String, Object>());
+        body.put("columnTypeMap", page.columnTypeMap);
         body.put("first", page.pageNumber == 1);
         body.put("last", page.total == 0 || page.pageNumber >= page.totalPages());
         body.put("numberOfElements", page.rows.size());
@@ -354,7 +364,7 @@ public final class OwnedReagentQueryController {
         body.put("pageSize", page.pageSize);
         body.put("rows", page.rows);
         body.put("total", page.total);
-        body.put("totalMap", new LinkedHashMap<String, Object>());
+        body.put("totalMap", page.totalMap);
         body.put("totalPages", page.totalPages());
         return JSON.toJSONString(body, SerializerFeature.WriteMapNullValue);
     }
@@ -362,6 +372,13 @@ public final class OwnedReagentQueryController {
     private static ResponseEntity<String> forbidden() { return ResponseEntity.status(HttpStatus.FORBIDDEN).body("{\"message\":\"GIKAM.PERMISSION.UNAUTHORIZED\"}"); }
     private static ResponseEntity<String> badRequest() { return ResponseEntity.badRequest().body("{\"message\":\"GIKAM.REAGENT.INVALID_REQUEST\"}"); }
     private static ResponseEntity<String> unavailable() { return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"message\":\"GIKAM.REAGENT.UNAVAILABLE\"}"); }
+
+    private static String typeName(int type) {
+        if (type == Types.DATE || type == Types.TIMESTAMP || type == Types.TIMESTAMP_WITH_TIMEZONE) return "dateTime";
+        if (type == Types.NUMERIC || type == Types.DECIMAL || type == Types.INTEGER
+                || type == Types.BIGINT || type == Types.SMALLINT || type == Types.TINYINT) return "number";
+        return "string";
+    }
 
     private static final class SqlSpec {
         private final String countSql;
@@ -377,11 +394,17 @@ public final class OwnedReagentQueryController {
         private final int pageSize;
         private final int pageNumber;
         private final List<Map<String, Object>> rows;
-        private PageResult(int total, int pageSize, int pageNumber, List<Map<String, Object>> rows) {
+        private final Map<String, String> columnTypeMap;
+        private final Map<String, Number> totalMap;
+        private PageResult(int total, int pageSize, int pageNumber, List<Map<String, Object>> rows,
+                Map<String, String> columnTypeMap, Map<String, Number> totalMap) {
             this.total = total; this.pageSize = pageSize; this.pageNumber = pageNumber; this.rows = rows;
+            this.columnTypeMap = columnTypeMap; this.totalMap = totalMap;
         }
         private static PageResult empty(QueryRequest query) {
-            return new PageResult(0, query.getPageSize(), query.getPageNumber(), Collections.<Map<String, Object>>emptyList());
+            return new PageResult(0, query.getPageSize(), query.getPageNumber(),
+                    Collections.<Map<String, Object>>emptyList(),
+                    new LinkedHashMap<String, String>(), new LinkedHashMap<String, Number>());
         }
         private int totalPages() { return total == 0 ? 0 : (total + pageSize - 1) / pageSize; }
     }

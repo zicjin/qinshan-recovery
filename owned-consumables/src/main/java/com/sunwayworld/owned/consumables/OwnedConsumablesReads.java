@@ -78,7 +78,7 @@ public final class OwnedConsumablesReads {
     private static <T extends AbstractPersistable<?>> Page<T> page(Pagination<Map<String,Object>> page, Class<T> type) {
         List<T> rows = new ArrayList<T>();
         for (Map<String,Object> row : page.getRows()) rows.add(bean(row, type));
-        return new Pagination<T>(page.getTotal(), page.getPageSize(), page.getPageNumber(), rows, page.getTotalMap());
+        return new Pagination<T>(page, rows);
     }
     private static <T extends AbstractPersistable<?>> T bean(Map<String,Object> row, Class<T> type) {
         if (row == null) return null;

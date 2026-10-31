@@ -11,6 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -216,14 +217,37 @@ public final class ConsumableQueryService {
             long start = ((long) request.getPageNumber() - 1) * request.getPageSize();
             pageValues.add(start); pageValues.add(start + request.getPageSize());
             List<Map<String,Object>> rows = new ArrayList<Map<String,Object>>();
+            Map<String,String> columnTypes = new LinkedHashMap<String,String>();
             String sql = "SELECT P.* FROM (SELECT Q.*,ROW_NUMBER() OVER (ORDER BY " + order(request) + ") RN FROM ("
                     + base + ") Q) P WHERE RN > ? AND RN <= ? ORDER BY RN";
             try (PreparedStatement query = connection.prepareStatement(sql)) {
                 bind(query, pageValues);
-                try (ResultSet result = query.executeQuery()) { while (result.next()) rows.add(row(result)); }
+                try (ResultSet result = query.executeQuery()) {
+                    ResultSetMetaData metadata = result.getMetaData();
+                    for (int i = 1; i <= metadata.getColumnCount(); i++) {
+                        String label = metadata.getColumnLabel(i);
+                        if (label == null) continue;
+                        String normalized = "RN".equalsIgnoreCase(label) ? "rn_" : label.toLowerCase(Locale.ROOT);
+                        columnTypes.put(normalized, typeName(metadata.getColumnType(i)));
+                    }
+                    while (result.next()) rows.add(row(result));
+                }
             }
-            return new Pagination<Map<String,Object>>(total, request.getPageSize(), request.getPageNumber(), rows);
+            Pagination<Map<String,Object>> page = new Pagination<Map<String,Object>>(
+                    total, request.getPageSize(), request.getPageNumber(), rows);
+            page.setColumnTypeMap(columnTypes);
+            Map<String,Number> totals = new LinkedHashMap<String,Number>();
+            totals.put("qty_", total);
+            page.setTotalMap(totals);
+            return page;
         }
+    }
+
+    private static String typeName(int type) {
+        if (type == Types.DATE || type == Types.TIMESTAMP || type == Types.TIMESTAMP_WITH_TIMEZONE) return "dateTime";
+        if (type == Types.NUMERIC || type == Types.DECIMAL || type == Types.INTEGER
+                || type == Types.BIGINT || type == Types.SMALLINT || type == Types.TINYINT) return "number";
+        return "string";
     }
 
     private String order(QueryRequest request) {

@@ -69,8 +69,19 @@ for case in cases:
     source_commit = payload.get("source_commit")
     if not isinstance(source_commit, str) or not re.fullmatch(r"[0-9a-f]{7,40}", source_commit):
         raise ValueError("evidence source_commit is invalid for %s" % case.case_id)
-    if subprocess.run(["git", "cat-file", "-e", source_commit + "^{commit}"], cwd=root,
-                      stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode:
+    # Historical matrix evidence may have been produced by the parent
+    # planning checkout, while current standalone evidence is produced by the
+    # lims-recovery repository itself.  Preserve the exact source object
+    # requirement, but look in both repository boundaries instead of treating
+    # a valid parent provenance commit as missing merely because it is not in
+    # the standalone object database.
+    commit_present = False
+    for repository in (root, root.parent):
+        if subprocess.run(["git", "cat-file", "-e", source_commit + "^{commit}"], cwd=repository,
+                          stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode == 0:
+            commit_present = True
+            break
+    if not commit_present:
         raise ValueError("evidence source_commit is not present for %s" % case.case_id)
     if not isinstance(payload.get("source_dirty"), bool):
         raise ValueError("evidence source_dirty must be boolean for %s" % case.case_id)

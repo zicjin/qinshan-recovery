@@ -28,7 +28,8 @@ import urllib.request
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_JDK = ROOT / "build" / "jdk1.8.0_391"
-JDK_ARCHIVE = ROOT / "materials" / "jdk-8u391-linux-x64.tar.gz"
+ARTIFACT_ROOT = Path(os.environ.get("LIMS_EXTERNAL_ARTIFACT_ROOT", ROOT / ".external-materials"))
+JDK_ARCHIVE = Path(os.environ.get("JDK_ARCHIVE", ARTIFACT_ROOT / "jdk-8u391-linux-x64.tar.gz"))
 FORBIDDEN = re.compile(
     r"(?i)(sunway-app\.so|sunway-app\.dll|vendor\.lic|license\.lic|"
     r"license-machine|mac_address|system_mac_address_list|gikam-core-)"

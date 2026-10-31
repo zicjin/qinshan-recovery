@@ -10,11 +10,17 @@ it is a Controller/Resource in this same Spring application and shares its
 Oracle/Redis. The inventory distinction is for source accounting only; no
 compatibility process or internal HTTP bridge is created.
 
-Run from the recovery checkout:
+Run from the standalone `lims-recovery` checkout. Use Python 3.9+ for the
+inventory/evidence tools and inject restricted build artifacts through
+`LIMS_EXTERNAL_ARTIFACT_ROOT` before building:
 
 ```bash
-HOST_PORT=18082 \
-bash lims-recovery/scripts/deploy-owned-sss2-remote.sh
+LIMS_EXTERNAL_ARTIFACT_ROOT=/path/to/external-artifacts \
+bash scripts/verify-external-artifacts.sh
+LIMS_EXTERNAL_ARTIFACT_ROOT=/path/to/external-artifacts \
+bash scripts/build-prep.sh
+LIMS_EXTERNAL_ARTIFACT_ROOT=/path/to/external-artifacts \
+HOST_PORT=18082 bash scripts/deploy-owned-sss2-remote.sh
 ```
 
 The migration reads the existing `sss2` application schema with a temporary
@@ -61,7 +67,7 @@ The owned app is available only on the selected `sss2` host loopback port. To
 remove only this deployment:
 
 ```bash
-bash lims-recovery/scripts/cleanup-owned-sss2-remote.sh
+  bash scripts/cleanup-owned-sss2-remote.sh
 ```
 
 The cleanup command does not touch the existing application, Oracle, Redis,
@@ -77,8 +83,9 @@ To refresh only the owned application after a Java/API or frontend change,
 reuse the existing clone-derived Oracle and Redis:
 
 ```bash
-OWNED_DISTRIBUTION_REUSE=0 bash lims-recovery/scripts/build-owned-distribution.sh
-bash lims-recovery/scripts/refresh-owned-sss2-app.sh
+LIMS_EXTERNAL_ARTIFACT_ROOT=/path/to/external-artifacts \
+OWNED_DISTRIBUTION_REUSE=0 bash scripts/build-owned-distribution.sh
+bash scripts/refresh-owned-sss2-app.sh
 ```
 
 This replaces only `lims-owned-sss2-app`, preserves 18081/18088 and the

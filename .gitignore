@@ -8,3 +8,5 @@
 !/build/oracle-free-source-manifest.json
 *.pid
 *.log
+__pycache__/
+*.pyc

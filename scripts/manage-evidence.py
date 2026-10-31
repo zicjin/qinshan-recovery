@@ -1064,7 +1064,21 @@ def cmd_promote(args: argparse.Namespace) -> int:
         closure_ok, closure_reason = strict_closure_contract(closure_payload, current)
         if not closure_ok:
             raise SystemExit("promotion rejected: " + closure_reason)
-        referenced = any(str(item.get("path", "")) == relative(source) or Path(str(item.get("path", ""))).name == source.name for item in closure_payload.get("reports", []) if isinstance(item, Mapping))
+        try:
+            source_reference = relative(source)
+        except ValueError:
+            # Diagnostic/pending evidence intentionally lives outside the
+            # standalone repository root.  Closure generators may retain an
+            # absolute provenance path for that input; basename matching keeps
+            # promotion deterministic without pretending the pending path is
+            # already canonical.
+            source_reference = ""
+        referenced = any(
+            str(item.get("path", "")) == source_reference
+            or Path(str(item.get("path", ""))).name == source.name
+            for item in closure_payload.get("reports", [])
+            if isinstance(item, Mapping)
+        )
     if not referenced:
         raise SystemExit("promotion rejected: report is not referenced by closure")
     if is_closure:

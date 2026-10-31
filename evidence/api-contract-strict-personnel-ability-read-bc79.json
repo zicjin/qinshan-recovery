@@ -1,0 +1,1115 @@
+{
+  "schema": 1,
+  "status": "executed-pass",
+  "execution": "strict",
+  "strict_evidence": true,
+  "production_access": false,
+  "scope": "clone-derived Spring Web API contract runner",
+  "route_execution_model": {
+    "application": "one owned Spring application per wave",
+    "oracle": "persistent Oracle baseline/runtime schema",
+    "redis": "reused sss2 Redis database 15",
+    "boundary_route": "owned Java source-only route in the same Spring application",
+    "boundary_process": false,
+    "internal_http_bridge": false,
+    "jni_replacement_process": false
+  },
+  "started_at": "2026-10-31T13:19:00.322894+00:00",
+  "source_commit": "22acc6c0793b5bdf548cc95b524c9ee97904df00",
+  "repository_head_at_capture": "22acc6c0793b5bdf548cc95b524c9ee97904df00",
+  "source_dirty": false,
+  "source_scope": [
+    "project/src/main/java",
+    "owned-framework/src",
+    "owned-personnel/src",
+    "owned-equipment/src",
+    "owned-consumables/src",
+    "owned-attachments/src",
+    "owned-report/src",
+    "owned-scheduler/src",
+    "owned-web/src",
+    "scripts/source_binding.py",
+    "scripts/evidence_output.py",
+    "scripts/spring_api_contract_runner.py",
+    "scripts/api_wave_orchestrator.py",
+    "scripts/owned_runtime_contract.py",
+    "scripts/api_fixture.py",
+    "scripts/remote-sql-fixture-executor.py",
+    "scripts/start-strict-sss2-api-runtime.sh",
+    "scripts/start-reused-sss2-api-runtime.sh",
+    "scripts/cleanup-strict-sss2-api-runtime.sh",
+    "scripts/refresh-owned-sss2-app.sh",
+    "scripts/owned_readiness.py",
+    "tools/business_api_inventory.py",
+    "tools/api_route_ledger.py",
+    "tools/api_route_execution_plan.py",
+    "tools/api_contract_skeleton.py",
+    "tools/api_route_closure.py",
+    "tools/finalize_api_report.py",
+    "tools/vertical_slices/matrix.py",
+    "project/pom.xml",
+    "owned-framework/pom.xml",
+    "owned-personnel/pom.xml",
+    "owned-equipment/pom.xml",
+    "owned-consumables/pom.xml",
+    "owned-attachments/pom.xml",
+    "owned-report/pom.xml",
+    "owned-scheduler/pom.xml",
+    "owned-web/pom.xml",
+    "owned-distribution/package.py",
+    "owned-distribution/start.sh",
+    "owned-distribution/example",
+    "owned-web/build-owned-web.sh",
+    "scripts/build-owned-distribution.sh",
+    "scripts/build-owned-framework.sh",
+    "scripts/build-owned-personnel.sh",
+    "scripts/build-owned-equipment.sh",
+    "scripts/build-owned-consumables.sh",
+    "scripts/build-owned-attachments.sh",
+    "scripts/build-owned-report.sh",
+    "scripts/build-owned-scheduler.sh",
+    "scripts/build-prep.sh",
+    "scripts/verify-external-artifacts.sh",
+    "evidence/external-artifacts.sha256",
+    "build/oracle-free-source-manifest.json",
+    "docker/Dockerfile.built"
+  ],
+  "implementation_binding": "impl-bc79c0d168154756",
+  "implementation_tree_digest": "bc79c0d1681547568fd0ae569ca3dedd2c66694ef9ac51a1b70cf9aa74dfb911",
+  "implementation_dirty": false,
+  "implementation_scope": [
+    "project/src/main/java",
+    "owned-framework/src",
+    "owned-personnel/src",
+    "owned-equipment/src",
+    "owned-consumables/src",
+    "owned-attachments/src",
+    "owned-report/src",
+    "owned-scheduler/src",
+    "owned-web/src",
+    "scripts/source_binding.py",
+    "scripts/evidence_output.py",
+    "scripts/spring_api_contract_runner.py",
+    "scripts/api_wave_orchestrator.py",
+    "scripts/owned_runtime_contract.py",
+    "scripts/api_fixture.py",
+    "scripts/remote-sql-fixture-executor.py",
+    "scripts/start-strict-sss2-api-runtime.sh",
+    "scripts/start-reused-sss2-api-runtime.sh",
+    "scripts/cleanup-strict-sss2-api-runtime.sh",
+    "scripts/refresh-owned-sss2-app.sh",
+    "scripts/owned_readiness.py",
+    "tools/business_api_inventory.py",
+    "tools/api_route_ledger.py",
+    "tools/api_route_execution_plan.py",
+    "tools/api_contract_skeleton.py",
+    "tools/api_route_closure.py",
+    "tools/finalize_api_report.py",
+    "tools/vertical_slices/matrix.py",
+    "project/pom.xml",
+    "owned-framework/pom.xml",
+    "owned-personnel/pom.xml",
+    "owned-equipment/pom.xml",
+    "owned-consumables/pom.xml",
+    "owned-attachments/pom.xml",
+    "owned-report/pom.xml",
+    "owned-scheduler/pom.xml",
+    "owned-web/pom.xml",
+    "owned-distribution/package.py",
+    "owned-distribution/start.sh",
+    "owned-distribution/example",
+    "owned-web/build-owned-web.sh",
+    "scripts/build-owned-distribution.sh",
+    "scripts/build-owned-framework.sh",
+    "scripts/build-owned-personnel.sh",
+    "scripts/build-owned-equipment.sh",
+    "scripts/build-owned-consumables.sh",
+    "scripts/build-owned-attachments.sh",
+    "scripts/build-owned-report.sh",
+    "scripts/build-owned-scheduler.sh",
+    "scripts/build-prep.sh",
+    "scripts/verify-external-artifacts.sh",
+    "evidence/external-artifacts.sha256",
+    "build/oracle-free-source-manifest.json",
+    "docker/Dockerfile.built"
+  ],
+  "nested_project_commit": "27932b1fe4d71d64a02f9a63e55f56acb403e3a0",
+  "distribution_input_digest": "dc97c305b90ba8334548ee522a08b94300580d3ff2b3ebf234b2695653f913e4",
+  "artifact_sha256": {
+    "/home/ts/qinshan/lims-recovery/owned-distribution/target/distribution/app/lims-owned-application.jar": "116c9dfbb837e1ec3b1ea2d3cb5acf4536e1099b60ae828c31a9c1c790701398"
+  },
+  "clone_identity": "lims-owned-sss2-oracle:LIMS_BASELINE_SSS2:LIMS_RUNTIME_SSS2:f1c43b53750ec720488ef7780527ea303081ab2dc6a0fc029a1d17f33dc10a6c",
+  "runtime_report": "/home/ts/qinshan/.scratch/sunway-supplier-exit-api-first/diagnostic-evidence/runtime/strict-api-runtime-manifest-personnel-bc79.json",
+  "runtime_contract": {
+    "mode": "strict",
+    "strict_evidence": false,
+    "runtime_identity": "lims-owned-sss2-oracle:LIMS_BASELINE_SSS2:LIMS_RUNTIME_SSS2:f1c43b53750ec720488ef7780527ea303081ab2dc6a0fc029a1d17f33dc10a6c",
+    "reuse": true,
+    "oracle_reused": true,
+    "baseline_schema": "LIMS_BASELINE_SSS2",
+    "runtime_schema": "LIMS_RUNTIME_SSS2",
+    "baseline_schema_hash": "f1c43b53750ec720488ef7780527ea303081ab2dc6a0fc029a1d17f33dc10a6c",
+    "runtime_schema_hash_before": "1162d1b8a4a6bb9ae0508e30a9db4e4e16199bc89705315d047575445c5d51e7",
+    "runtime_schema_hash_after": "1162d1b8a4a6bb9ae0508e30a9db4e4e16199bc89705315d047575445c5d51e7",
+    "source_commit": "22acc6c0793b5bdf548cc95b524c9ee97904df00",
+    "implementation_binding": "impl-bc79c0d168154756",
+    "implementation_tree_digest": "bc79c0d1681547568fd0ae569ca3dedd2c66694ef9ac51a1b70cf9aa74dfb911",
+    "implementation_scope": [
+      "project/src/main/java",
+      "owned-framework/src",
+      "owned-personnel/src",
+      "owned-equipment/src",
+      "owned-consumables/src",
+      "owned-attachments/src",
+      "owned-report/src",
+      "owned-scheduler/src",
+      "owned-web/src",
+      "scripts/source_binding.py",
+      "scripts/evidence_output.py",
+      "scripts/spring_api_contract_runner.py",
+      "scripts/api_wave_orchestrator.py",
+      "scripts/owned_runtime_contract.py",
+      "scripts/api_fixture.py",
+      "scripts/remote-sql-fixture-executor.py",
+      "scripts/start-strict-sss2-api-runtime.sh",
+      "scripts/start-reused-sss2-api-runtime.sh",
+      "scripts/cleanup-strict-sss2-api-runtime.sh",
+      "scripts/refresh-owned-sss2-app.sh",
+      "scripts/owned_readiness.py",
+      "tools/business_api_inventory.py",
+      "tools/api_route_ledger.py",
+      "tools/api_route_execution_plan.py",
+      "tools/api_contract_skeleton.py",
+      "tools/api_route_closure.py",
+      "tools/finalize_api_report.py",
+      "tools/vertical_slices/matrix.py",
+      "project/pom.xml",
+      "owned-framework/pom.xml",
+      "owned-personnel/pom.xml",
+      "owned-equipment/pom.xml",
+      "owned-consumables/pom.xml",
+      "owned-attachments/pom.xml",
+      "owned-report/pom.xml",
+      "owned-scheduler/pom.xml",
+      "owned-web/pom.xml",
+      "owned-distribution/package.py",
+      "owned-distribution/start.sh",
+      "owned-distribution/example",
+      "owned-web/build-owned-web.sh",
+      "scripts/build-owned-distribution.sh",
+      "scripts/build-owned-framework.sh",
+      "scripts/build-owned-personnel.sh",
+      "scripts/build-owned-equipment.sh",
+      "scripts/build-owned-consumables.sh",
+      "scripts/build-owned-attachments.sh",
+      "scripts/build-owned-report.sh",
+      "scripts/build-owned-scheduler.sh",
+      "scripts/build-prep.sh",
+      "scripts/verify-external-artifacts.sh",
+      "evidence/external-artifacts.sha256",
+      "build/oracle-free-source-manifest.json",
+      "docker/Dockerfile.built"
+    ],
+    "implementation_dirty": false,
+    "repository_head_at_capture": "22acc6c0793b5bdf548cc95b524c9ee97904df00"
+  },
+  "role": "manager",
+  "organization": "org-a",
+  "mode": "strict",
+  "base_url": "http://127.0.0.1:18089",
+  "case_count": 12,
+  "cases": [
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "7548ddf5fb295decd33df68cbd80301a4e75a0316feec890d3a7c4af6c38a657",
+      "body_bytes": 404,
+      "assertions": {
+        "json_keys": [
+          "rows",
+          "total"
+        ]
+      },
+      "id": "personnel.ability.query",
+      "method": "POST",
+      "path": "/secure/emc/module/item/staff-abilitys/queries",
+      "url": "http://127.0.0.1:18089/secure/emc/module/item/staff-abilitys/queries",
+      "status": 200,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "404",
+        "date": "Sat, 31 Oct 2026 13:19:01 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 402.778,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/item/staff-abilitys/queries",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "project-route",
+        "route_id": "89d45aa39235f54b"
+      },
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r9e6a90af1ff2"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "7548ddf5fb295decd33df68cbd80301a4e75a0316feec890d3a7c4af6c38a657",
+      "body_bytes": 404,
+      "assertions": {
+        "json_keys": [
+          "rows",
+          "total"
+        ]
+      },
+      "id": "personnel.ability.raw",
+      "method": "POST",
+      "path": "/secure/emc/module/item/staff-abilitys/queries/raw",
+      "url": "http://127.0.0.1:18089/secure/emc/module/item/staff-abilitys/queries/raw",
+      "status": 200,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "404",
+        "date": "Sat, 31 Oct 2026 13:19:01 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 370.658,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/item/staff-abilitys/queries/raw",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "project-route",
+        "route_id": "263493d0e4c0aed2"
+      },
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "rb92ca7b99542"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "7548ddf5fb295decd33df68cbd80301a4e75a0316feec890d3a7c4af6c38a657",
+      "body_bytes": 404,
+      "assertions": {
+        "json_keys": [
+          "rows",
+          "total"
+        ]
+      },
+      "id": "personnel.ability.searchable",
+      "method": "POST",
+      "path": "/secure/emc/module/item/staff-abilitys/queries/searchable",
+      "url": "http://127.0.0.1:18089/secure/emc/module/item/staff-abilitys/queries/searchable",
+      "status": 200,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "404",
+        "date": "Sat, 31 Oct 2026 13:19:01 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 362.161,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/item/staff-abilitys/queries/searchable",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "project-route",
+        "route_id": "ce212815426dc83e"
+      },
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "rd1d5ea5118bc"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "ext$"
+      ],
+      "body_sha256": "f195ca8381d65972cfe1ebdeed49720de585abba84c3789dd8919375d419e7bf",
+      "body_bytes": 11,
+      "assertions": {
+        "json_keys": [
+          "ext$"
+        ]
+      },
+      "id": "personnel.ability.status",
+      "method": "GET",
+      "path": "/secure/emc/module/item/staff-abilitys/info/status",
+      "url": "http://127.0.0.1:18089/secure/emc/module/item/staff-abilitys/info/status",
+      "status": 200,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "11",
+        "date": "Sat, 31 Oct 2026 13:19:02 GMT",
+        "connection": "close"
+      },
+      "request_headers": {},
+      "elapsed_ms": 271.622,
+      "route": {
+        "method": "GET",
+        "path": "/secure/emc/module/item/staff-abilitys/info/status",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "project-route",
+        "route_id": "80d749c5a081dca1"
+      },
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r55c12e015467"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "53ee73d66700d9d4915bb0265adab95b44a3155df26499a4198ad10441e6b1ff",
+      "body_bytes": 1268,
+      "assertions": {
+        "json_keys": [
+          "rows",
+          "total"
+        ]
+      },
+      "id": "personnel.check.query",
+      "method": "POST",
+      "path": "/secure/emc/module/item/staff-abality-checks/queries",
+      "url": "http://127.0.0.1:18089/secure/emc/module/item/staff-abality-checks/queries",
+      "status": 200,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "1268",
+        "date": "Sat, 31 Oct 2026 13:19:02 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 326.186,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/item/staff-abality-checks/queries",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "project-route",
+        "route_id": "b3e34c52a379b621"
+      },
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "rf143e12a451e"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "53ee73d66700d9d4915bb0265adab95b44a3155df26499a4198ad10441e6b1ff",
+      "body_bytes": 1268,
+      "assertions": {
+        "json_keys": [
+          "rows",
+          "total"
+        ]
+      },
+      "id": "personnel.check.raw",
+      "method": "POST",
+      "path": "/secure/emc/module/item/staff-abality-checks/queries/raw",
+      "url": "http://127.0.0.1:18089/secure/emc/module/item/staff-abality-checks/queries/raw",
+      "status": 200,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "1268",
+        "date": "Sat, 31 Oct 2026 13:19:02 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 343.749,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/item/staff-abality-checks/queries/raw",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "project-route",
+        "route_id": "6892aabb26c91b23"
+      },
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "rd9528f498da4"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "53ee73d66700d9d4915bb0265adab95b44a3155df26499a4198ad10441e6b1ff",
+      "body_bytes": 1268,
+      "assertions": {
+        "json_keys": [
+          "rows",
+          "total"
+        ]
+      },
+      "id": "personnel.check.searchable",
+      "method": "POST",
+      "path": "/secure/emc/module/item/staff-abality-checks/queries/searchable",
+      "url": "http://127.0.0.1:18089/secure/emc/module/item/staff-abality-checks/queries/searchable",
+      "status": 200,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "1268",
+        "date": "Sat, 31 Oct 2026 13:19:03 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 330.451,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/item/staff-abality-checks/queries/searchable",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "project-route",
+        "route_id": "a55bee3bd2cd9c00"
+      },
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "ra4da0bc0f66a"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "ext$"
+      ],
+      "body_sha256": "f195ca8381d65972cfe1ebdeed49720de585abba84c3789dd8919375d419e7bf",
+      "body_bytes": 11,
+      "assertions": {
+        "json_keys": [
+          "ext$"
+        ]
+      },
+      "id": "personnel.check.status",
+      "method": "GET",
+      "path": "/secure/emc/module/item/staff-abality-checks/info/status",
+      "url": "http://127.0.0.1:18089/secure/emc/module/item/staff-abality-checks/info/status",
+      "status": 200,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "11",
+        "date": "Sat, 31 Oct 2026 13:19:03 GMT",
+        "connection": "close"
+      },
+      "request_headers": {},
+      "elapsed_ms": 269.421,
+      "route": {
+        "method": "GET",
+        "path": "/secure/emc/module/item/staff-abality-checks/info/status",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "project-route",
+        "route_id": "b8280bfcbcff0490"
+      },
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "rca908ad77812"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "c4bd52078d555158bed3ed15fe5e4fa418945b226a0959bfaccfaa927096db35",
+      "body_bytes": 939,
+      "assertions": {
+        "json_keys": [
+          "rows",
+          "total"
+        ]
+      },
+      "id": "personnel.evaluation.query",
+      "method": "POST",
+      "path": "/secure/emc/module/item/staff-ability-evaluations/queries",
+      "url": "http://127.0.0.1:18089/secure/emc/module/item/staff-ability-evaluations/queries",
+      "status": 200,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "939",
+        "date": "Sat, 31 Oct 2026 13:19:03 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 342.43,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/item/staff-ability-evaluations/queries",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "project-route",
+        "route_id": "7f67a3fe15b91778"
+      },
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r20b645bd8f74"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "c4bd52078d555158bed3ed15fe5e4fa418945b226a0959bfaccfaa927096db35",
+      "body_bytes": 939,
+      "assertions": {
+        "json_keys": [
+          "rows",
+          "total"
+        ]
+      },
+      "id": "personnel.evaluation.raw",
+      "method": "POST",
+      "path": "/secure/emc/module/item/staff-ability-evaluations/queries/raw",
+      "url": "http://127.0.0.1:18089/secure/emc/module/item/staff-ability-evaluations/queries/raw",
+      "status": 200,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "939",
+        "date": "Sat, 31 Oct 2026 13:19:03 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 324.062,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/item/staff-ability-evaluations/queries/raw",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "project-route",
+        "route_id": "dae3c978ba9b515e"
+      },
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "ra5e66660cb0d"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "c4bd52078d555158bed3ed15fe5e4fa418945b226a0959bfaccfaa927096db35",
+      "body_bytes": 939,
+      "assertions": {
+        "json_keys": [
+          "rows",
+          "total"
+        ]
+      },
+      "id": "personnel.evaluation.searchable",
+      "method": "POST",
+      "path": "/secure/emc/module/item/staff-ability-evaluations/queries/searchable",
+      "url": "http://127.0.0.1:18089/secure/emc/module/item/staff-ability-evaluations/queries/searchable",
+      "status": 200,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "939",
+        "date": "Sat, 31 Oct 2026 13:19:05 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 336.102,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/item/staff-ability-evaluations/queries/searchable",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "project-route",
+        "route_id": "79336e00b7f8d63b"
+      },
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r24686d5c7fc0"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "ext$"
+      ],
+      "body_sha256": "f195ca8381d65972cfe1ebdeed49720de585abba84c3789dd8919375d419e7bf",
+      "body_bytes": 11,
+      "assertions": {
+        "json_keys": [
+          "ext$"
+        ]
+      },
+      "id": "personnel.evaluation.status",
+      "method": "GET",
+      "path": "/secure/emc/module/item/staff-ability-evaluations/info/status",
+      "url": "http://127.0.0.1:18089/secure/emc/module/item/staff-ability-evaluations/info/status",
+      "status": 200,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "11",
+        "date": "Sat, 31 Oct 2026 13:19:05 GMT",
+        "connection": "close"
+      },
+      "request_headers": {},
+      "elapsed_ms": 268.617,
+      "route": {
+        "method": "GET",
+        "path": "/secure/emc/module/item/staff-ability-evaluations/info/status",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "project-route",
+        "route_id": "168b1e5128fc7730"
+      },
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "red80a8c9a6b7"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      }
+    }
+  ],
+  "cleanup": {
+    "application_stopped": true,
+    "baseline_schema_immutable": true,
+    "cleanup_mode": "persistent-oracle",
+    "network_preserved": true,
+    "oracle_preserved": true,
+    "oracle_reused": true,
+    "oracle_stopped": false,
+    "redis_preserved": true,
+    "redis_stopped": false,
+    "runtime_dirty": false,
+    "runtime_schema_restored": true,
+    "temporary_files_removed": true,
+    "volume_preserved": true
+  },
+  "cleanup_pending": false,
+  "phase_timings_ms": {
+    "http_cases": 4626.63
+  },
+  "authentication": {
+    "attempted": true,
+    "authenticated": true,
+    "status": 200
+  },
+  "finished_at": "2026-10-31T13:19:04.949569+00:00",
+  "wave": "personnel",
+  "wave_runtime_id": "api-wave-personnel",
+  "wave_finalized_at": "2026-10-31T13:19:59.274685+00:00"
+}

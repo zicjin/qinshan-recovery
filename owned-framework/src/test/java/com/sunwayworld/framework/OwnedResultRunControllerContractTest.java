@@ -30,6 +30,11 @@ public final class OwnedResultRunControllerContractTest {
         require(paths, "/secure/emc/module/bp/result/runs/queries/all");
         require(paths, "/secure/emc/module/bp/result/runs/qc-related-order/queries");
         require(paths, "/secure/emc/module/bp/result/runs/unique-order-task/queries");
+        require(paths, "/secure/emc/module/bp/result/runs/analysis-pretrial/queries");
+        require(paths, "/secure/emc/module/bp/result/runs/queries/run-result");
+        require(paths, "/secure/emc/module/bp/result/runs/browse-record/queries");
+        require(paths, "/secure/emc/module/bp/result/runs/edited-items/queries");
+        require(paths, "/secure/emc/module/bp/result/runs/unique-order-item-group/queries");
         require(paths, "/secure/emc/module/bp/result/runs/info/status");
         require(paths, "/secure/emc/module/bp/result/runs/{id}/info/status");
         Field field = OwnedResultRunController.class.getDeclaredField("QC_RELATED_ORDER_TYPE_PROFILE");

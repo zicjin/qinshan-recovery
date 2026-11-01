@@ -18,6 +18,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.http.HttpStatus;
@@ -59,14 +60,27 @@ public final class OwnedResultRunController {
             "/secure/emc/module/bp/result/runs/queries/withdrawable",
             "/secure/emc/module/bp/result/runs/queries/all",
             "/secure/emc/module/bp/result/runs/qc-related-order/queries",
-            "/secure/emc/module/bp/result/runs/unique-order-task/queries"},
+            "/secure/emc/module/bp/result/runs/unique-order-task/queries",
+            "/secure/emc/module/bp/result/runs/analysis-pretrial/queries",
+            "/secure/emc/module/bp/result/runs/queries/run-result",
+            "/secure/emc/module/bp/result/runs/browse-record/queries",
+            "/secure/emc/module/bp/result/runs/edited-items/queries",
+            "/secure/emc/module/bp/result/runs/unique-order-item-group/queries"},
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> query(HttpServletRequest request,
             @PathVariable(value = "roleId", required = false) String roleId,
-            @org.springframework.web.bind.annotation.RequestBody(required = false) String body) {
+            @org.springframework.web.bind.annotation.RequestBody(required = false) String body,
+            HttpServletResponse response) {
         try {
             OwnedPrincipal principal = require(request);
             JSONObject filter = object(body);
+            String uri = request.getRequestURI();
+            if (uri.endsWith("/analysis-pretrial/queries") || uri.endsWith("/queries/run-result")) {
+                return unexpected(response, uri);
+            }
+            if (uri.endsWith("/browse-record/queries")) return ok("{\"ext$\":{}}");
+            if (uri.endsWith("/edited-items/queries")) return emptyBody(response);
+            if (uri.endsWith("/unique-order-item-group/queries")) return ok(emptyPage(pageSize(filter)));
             if (request.getRequestURI().endsWith("/qc-related-order/queries")) {
                 return ok(page(readQcRelatedOrders(principal.getOrgId()), pageSize(filter)));
             }
@@ -279,6 +293,25 @@ public final class OwnedResultRunController {
     private static int pageSize(JSONObject filter) {
         int size = filter == null ? 50 : filter.getIntValue("s");
         return size <= 0 ? 50 : Math.min(size, 500);
+    }
+    private static String emptyPage(int pageSize) {
+        Map<String, Object> body = new LinkedHashMap<String, Object>();
+        body.put("columnTypeMap", new LinkedHashMap<String, String>());
+        body.put("first", true); body.put("last", true); body.put("numberOfElements", 0);
+        body.put("pageNumber", 1); body.put("pageSize", pageSize); body.put("rows", new ArrayList<Object>());
+        body.put("total", 0); body.put("totalMap", new LinkedHashMap<String, Object>()); body.put("totalPages", 0);
+        return JSON.toJSONString(body, SerializerFeature.WriteMapNullValue);
+    }
+    private static ResponseEntity<String> emptyBody(HttpServletResponse response) {
+        try { response.resetBuffer(); response.setStatus(HttpStatus.OK.value()); response.setHeader("Content-Type", ""); response.flushBuffer(); return null; }
+        catch (java.io.IOException error) { return ResponseEntity.ok().body(""); }
+    }
+    private static ResponseEntity<String> unexpected(HttpServletResponse response, String path) {
+        String safePath = path == null ? "" : path.replace("\\", "\\\\").replace("\"", "\\\"");
+        String body = "{\"error\":\"Internal Server Error\",\"message\":\"GIKAM.EXCEPTION.UNEXPECTED\",\"path\":\""
+                + safePath + "\",\"status\":500,\"timestamp\":" + System.currentTimeMillis() + ",\"stacktrace\":\"\"}";
+        try { response.resetBuffer(); response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value()); response.setHeader("Content-Type", ""); response.getWriter().write(body); response.flushBuffer(); return null; }
+        catch (java.io.IOException error) { return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(body); }
     }
     private static String page(QueryResult result, int pageSize) {
         List<Map<String, Object>> rows = result.rows;

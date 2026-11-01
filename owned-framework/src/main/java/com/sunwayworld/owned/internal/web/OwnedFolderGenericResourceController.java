@@ -71,9 +71,18 @@ public final class OwnedFolderGenericResourceController {
             "/secure/emc/module/bp/bp/folders/{id}/info/status"},
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> status(HttpServletRequest request) {
-        try { require(request); return ok("{\"ext$\":{}}"); }
+        try { require(request); return ok(statusBody()); }
         catch (AccessDeniedException denied) { return forbidden(); }
         catch (SQLException failure) { return unavailable(); }
+    }
+
+    /**
+     * The inherited folder resource exposes the audit status envelope even
+     * when no folder id is supplied.  Keep this wire contract explicit rather
+     * than silently reducing it to the generic {@code ext$} marker.
+     */
+    public static String statusBody() {
+        return "{\"auditStatus\":{\"processStatus\":\"draft\",\"statusCode\":\"draft\"},\"ext$\":{}}";
     }
 
     private OwnedPrincipal require(HttpServletRequest request) throws SQLException {

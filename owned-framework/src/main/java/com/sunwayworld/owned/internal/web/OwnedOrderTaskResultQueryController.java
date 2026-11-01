@@ -160,6 +160,120 @@ public final class OwnedOrderTaskResultQueryController {
         catch (SQLException failure) { return unavailable(); }
     }
 
+    /** Read-only QC-name selector used by the original result-input page. */
+    @PostMapping(path = PREFIX + "/qcnames/queries",
+            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> qcNames(HttpServletRequest request,
+            @RequestBody(required = false) String body) {
+        try {
+            OwnedPrincipal principal = requireRead(request);
+            JSONObject root = body == null || body.trim().isEmpty() ? new JSONObject() : JSON.parseObject(body);
+            String sampleId = root == null ? null : root.getString("sampleId");
+            if ((sampleId == null || sampleId.trim().isEmpty()) && root != null) {
+                JSONObject params = root.getJSONObject("param");
+                if (params != null) sampleId = params.getString("sampleId");
+            }
+            String sql = "SELECT DISTINCT A.QCNAME FROM T_EMC_ORDER_TASK_RESULT A "
+                    + "LEFT JOIN T_EMC_ORDER O ON O.ID=A.ORDERID "
+                    + "WHERE A.CREATEDBYORGID=? AND A.QCNAME IS NOT NULL AND A.QCNAME<>?";
+            if (sampleId != null && !sampleId.trim().isEmpty()) sql += " AND O.SAMPLEID=?";
+            List<String> names = new ArrayList<String>();
+            try (Connection connection = dataSource.getConnection(); PreparedStatement query = connection.prepareStatement(sql)) {
+                int index = 1;
+                query.setString(index++, principal.getOrgId());
+                query.setString(index++, "N/A");
+                if (sampleId != null && !sampleId.trim().isEmpty()) query.setString(index, sampleId.trim());
+                try (ResultSet result = query.executeQuery()) {
+                    while (result.next()) names.add(result.getString(1));
+                }
+            }
+            return ok(JSON.toJSONString(names));
+        } catch (AccessDeniedException denied) { return forbidden(); }
+        catch (IllegalArgumentException invalid) { return badRequest(); }
+        catch (SQLException failure) { return unavailable(); }
+    }
+
+    /**
+     * Read-only data-summary aliases used by the result workspace.  The
+     * supplier currently raises its framework unexpected-error envelope when
+     * the result projection has no rows; preserve that explicit negative
+     * contract instead of returning a fabricated empty success page.  When
+     * rows exist, the same dynamic-column projection as data-query is used.
+     */
+    @PostMapping(path = PREFIX + "/data-titles/queries",
+            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> dataSummaryTitles(HttpServletRequest request,
+            @RequestBody(required = false) String body) {
+        try {
+            OwnedPrincipal principal = requireRead(request);
+            List<Map<String, Object>> source = selectResultRows(principal.getOrgId());
+            if (source.isEmpty()) return unexpected(request.getRequestURI());
+            Map<String, String> titles = new LinkedHashMap<String, String>();
+            for (Map<String, Object> item : source) {
+                String colId = dataColumnId(item);
+                if (!titles.containsKey(colId)) {
+                    Object alias = item.get("itemAliasName");
+                    titles.put(colId, "<font color=\"blue\">" + (alias == null ? "" : alias) + "</font>");
+                }
+            }
+            List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
+            for (Map.Entry<String, String> title : titles.entrySet()) {
+                Map<String, Object> head = new LinkedHashMap<String, Object>();
+                head.put("field", title.getKey());
+                head.put("title", title.getValue());
+                result.add(head);
+            }
+            return ok(JSON.toJSONString(result, SerializerFeature.WriteMapNullValue));
+        } catch (AccessDeniedException denied) { return forbidden(); }
+        catch (IllegalArgumentException invalid) { return badRequest(); }
+        catch (SQLException failure) { return unavailable(); }
+    }
+
+    @PostMapping(path = PREFIX + "/data-rows/queries",
+            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> dataSummaryRows(HttpServletRequest request,
+            @RequestBody(required = false) String body) {
+        try {
+            OwnedPrincipal principal = requireRead(request);
+            List<Map<String, Object>> source = selectResultRows(principal.getOrgId());
+            if (source.isEmpty()) return unexpected(request.getRequestURI());
+            Map<String, Map<String, Object>> grouped = new LinkedHashMap<String, Map<String, Object>>();
+            Map<String, String> columnTypes = new LinkedHashMap<String, String>();
+            for (Map<String, Object> item : source) {
+                String rowNo = String.valueOf(item.get("orderNo"));
+                Map<String, Object> row = grouped.get(rowNo);
+                if (row == null) {
+                    row = new LinkedHashMap<String, Object>();
+                    row.put("rowNo", rowNo);
+                    row.put("orderNo", item.get("orderNo"));
+                    row.put("projName", item.get("projName"));
+                    row.put("monitorPointName", item.get("monitorPointName"));
+                    row.put("folderNo", item.get("folderNo"));
+                    row.put("monitorPointNo", item.get("monitorPointNo"));
+                    grouped.put(rowNo, row);
+                }
+                String colId = dataColumnId(item);
+                row.put(colId, item.get("reportResult"));
+                columnTypes.put(colId, "string");
+            }
+            List<Map<String, Object>> rows = new ArrayList<Map<String, Object>>(grouped.values());
+            Map<String, Object> envelope = new LinkedHashMap<String, Object>();
+            envelope.put("columnTypeMap", columnTypes);
+            envelope.put("first", true);
+            envelope.put("last", true);
+            envelope.put("numberOfElements", rows.size());
+            envelope.put("pageNumber", 1);
+            envelope.put("pageSize", rows.size());
+            envelope.put("rows", rows);
+            envelope.put("total", rows.size());
+            envelope.put("totalMap", new LinkedHashMap<String, Object>());
+            envelope.put("totalPages", 1);
+            return ok(JSON.toJSONString(envelope, SerializerFeature.WriteMapNullValue));
+        } catch (AccessDeniedException denied) { return forbidden(); }
+        catch (IllegalArgumentException invalid) { return badRequest(); }
+        catch (SQLException failure) { return unavailable(); }
+    }
+
     @GetMapping(path = {PREFIX + "/info/status", PREFIX + "/{id}/info/status"},
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> status(HttpServletRequest request) {
@@ -310,6 +424,12 @@ public final class OwnedOrderTaskResultQueryController {
     private static ResponseEntity<String> forbidden() { return ResponseEntity.status(HttpStatus.FORBIDDEN).body("{\"message\":\"GIKAM.PERMISSION.UNAUTHORIZED\"}"); }
     private static ResponseEntity<String> badRequest() { return ResponseEntity.badRequest().body("{\"message\":\"GIKAM.ORDER_TASK_RESULT.INVALID_QUERY\"}"); }
     private static ResponseEntity<String> unavailable() { return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"message\":\"GIKAM.ORDER_TASK_RESULT.UNAVAILABLE\"}"); }
+    private static ResponseEntity<String> unexpected(String path) {
+        String safePath = path == null ? "" : path.replace("\\", "\\\\").replace("\"", "\\\"");
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("{\"error\":\"Internal Server Error\",\"message\":\"GIKAM.EXCEPTION.UNEXPECTED\",\"path\":\""
+                        + safePath + "\",\"status\":500,\"timestamp\":" + System.currentTimeMillis() + "}");
+    }
 
     private static final class Page {
         final int number; final int size;

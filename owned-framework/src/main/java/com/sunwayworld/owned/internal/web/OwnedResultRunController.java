@@ -57,7 +57,8 @@ public final class OwnedResultRunController {
             "/secure/emc/module/bp/result/runs/queries/tasks",
             "/secure/emc/module/bp/result/runs/queries/undoable",
             "/secure/emc/module/bp/result/runs/queries/withdrawable",
-            "/secure/emc/module/bp/result/runs/queries/all"},
+            "/secure/emc/module/bp/result/runs/queries/all",
+            "/secure/emc/module/bp/result/runs/qc-related-order/queries"},
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> query(HttpServletRequest request,
             @PathVariable(value = "roleId", required = false) String roleId,
@@ -65,6 +66,9 @@ public final class OwnedResultRunController {
         try {
             OwnedPrincipal principal = require(request);
             JSONObject filter = object(body);
+            if (request.getRequestURI().endsWith("/qc-related-order/queries")) {
+                return ok(page(readQcRelatedOrders(principal.getOrgId()), pageSize(filter)));
+            }
             return ok(page(readRuns(principal.getOrgId(), text(filter.get("runNo")), text(filter.get("status"))), pageSize(filter)));
         } catch (AccessDeniedException denied) { return forbidden(); }
         catch (IllegalArgumentException invalid) { return badRequest(); }
@@ -140,6 +144,32 @@ public final class OwnedResultRunController {
         return new QueryResult(rows, types);
     }
 
+    private QueryResult readQcRelatedOrders(String organization) throws SQLException {
+        List<Map<String, Object>> rows = new ArrayList<Map<String, Object>>();
+        String sql = "SELECT A.*,C.PROJNO FROM T_EMC_QC_RELATED_ORDER A "
+                + "LEFT JOIN T_EMC_ORDER B ON A.RELATEDORDERID=B.ID "
+                + "LEFT JOIN T_EMC_PROJECT C ON B.PROJID=C.ID "
+                + "WHERE A.CREATEDBYORGID=? ORDER BY A.ID DESC";
+        try (Connection connection = dataSource.getConnection(); PreparedStatement query = connection.prepareStatement(sql)) {
+            query.setString(1, organization);
+            try (ResultSet result = query.executeQuery()) {
+                ResultSetMetaData metadata = result.getMetaData();
+                while (result.next()) rows.add(row(result, metadata));
+            }
+        }
+        return new QueryResult(rows, QC_RELATED_ORDER_TYPE_PROFILE);
+    }
+
+    private static final Map<String, String> QC_RELATED_ORDER_TYPE_PROFILE = qcRelatedOrderTypeProfile();
+    private static Map<String, String> qcRelatedOrderTypeProfile() {
+        String encoded = "createdbyid=string;createdbyname=string;createdbyorgid=string;createdbyorgname=string;createdtime=dateTime;"
+                + "id=number;projno=string;qccategorycode=string;qccategoryid=number;qcname=string;qcorderid=number;"
+                + "qcorderno=string;relatedorderid=number;relatedorderno=string;relatedrunid=string;rn_=number;taskrunid=string";
+        Map<String, String> result = new LinkedHashMap<String, String>();
+        for (String token : encoded.split(";")) { int equals = token.indexOf('='); if (equals > 0) result.put(token.substring(0, equals), token.substring(equals + 1)); }
+        return result;
+    }
+
     /** Supplier column profile for the inherited run GenericResource. */
     private static final Map<String, String> RUN_TYPE_PROFILE = runTypeProfile();
     private static Map<String, String> runTypeProfile() {
@@ -173,6 +203,16 @@ public final class OwnedResultRunController {
             }
         }
         return rows;
+    }
+
+    private static Map<String, Object> row(ResultSet result, ResultSetMetaData metadata) throws SQLException {
+        Map<String, Object> value = new LinkedHashMap<String, Object>();
+        for (int i = 1; i <= metadata.getColumnCount(); i++) {
+            String label = metadata.getColumnLabel(i);
+            if ("RN_".equalsIgnoreCase(label)) continue;
+            value.put(friendly(label), JdbcValue.normalize(result.getObject(i)));
+        }
+        return value;
     }
 
     private static String friendly(String name) {

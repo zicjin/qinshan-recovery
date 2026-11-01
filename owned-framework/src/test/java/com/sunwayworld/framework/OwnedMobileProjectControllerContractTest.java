@@ -21,6 +21,9 @@ public final class OwnedMobileProjectControllerContractTest {
         require(paths, "/secure/emc/module/bp/mobile/projects/operation-types/queries");
         require(paths, "/secure/emc/module/bp/mobile/projects/static-data/queries");
         require(paths, "/secure/emc/module/bp/mobile/projects/static-data/pagination/queries");
+        require(paths, "/secure/emc/module/bp/mobile/projects/detail-label/queries");
+        require(paths, "/secure/emc/module/bp/mobile/projects/label-detail/queries");
+        require(paths, "/secure/emc/module/bp/mobile/projects/todo-accept/queries");
         Field field = OwnedMobileProjectController.class.getDeclaredField("OPERATION_TYPES");
         field.setAccessible(true);
         List<?> types = (List<?>) field.get(null);

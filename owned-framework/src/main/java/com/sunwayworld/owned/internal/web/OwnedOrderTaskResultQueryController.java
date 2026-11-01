@@ -354,7 +354,7 @@ public final class OwnedOrderTaskResultQueryController {
         try {
             OwnedPrincipal principal = requireRead(request);
             List<Map<String, Object>> source = selectResultRows(principal.getOrgId());
-            if (source.isEmpty()) return unexpected(request.getRequestURI());
+            if (source.isEmpty()) return gasUnexpected(request.getRequestURI());
             boolean rowsRequest = request.getRequestURI().endsWith("table-rows/queries");
             if (!rowsRequest) return dynamicTitles(source);
             return dynamicRows(source);
@@ -557,6 +557,12 @@ public final class OwnedOrderTaskResultQueryController {
         String safePath = path == null ? "" : path.replace("\\", "\\\\").replace("\"", "\\\"");
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body("{\"error\":\"Internal Server Error\",\"message\":\"GIKAM.EXCEPTION.UNEXPECTED\",\"path\":\""
+                        + safePath + "\",\"status\":500,\"timestamp\":" + System.currentTimeMillis() + "}");
+    }
+    private static ResponseEntity<String> gasUnexpected(String path) {
+        String safePath = path == null ? "" : path.replace("\\", "\\\\").replace("\"", "\\\"");
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("{\"error\":\"Internal Server Error\",\"message\":\"core.rest.json.unable-parse-unique-bean\",\"path\":\""
                         + safePath + "\",\"status\":500,\"timestamp\":" + System.currentTimeMillis() + "}");
     }
 

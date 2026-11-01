@@ -1,0 +1,2840 @@
+{
+  "schema": 1,
+  "status": "executed-pass",
+  "execution": "strict",
+  "strict_evidence": true,
+  "production_access": false,
+  "scope": "clone-derived Spring Web API contract runner",
+  "route_execution_model": {
+    "application": "one owned Spring application per wave",
+    "oracle": "persistent Oracle baseline/runtime schema",
+    "redis": "reused sss2 Redis database 15",
+    "boundary_route": "owned Java source-only route in the same Spring application",
+    "boundary_process": false,
+    "internal_http_bridge": false,
+    "jni_replacement_process": false
+  },
+  "started_at": "2026-11-01T20:02:12.554098+00:00",
+  "source_commit": "917b5061b87fe1b7104a07cbe22bc22b7177537c",
+  "repository_head_at_capture": "917b5061b87fe1b7104a07cbe22bc22b7177537c",
+  "source_dirty": false,
+  "source_scope": [
+    "project/src/main/java",
+    "owned-framework/src",
+    "owned-personnel/src",
+    "owned-equipment/src",
+    "owned-consumables/src",
+    "owned-attachments/src",
+    "owned-report/src",
+    "owned-scheduler/src",
+    "owned-web/src",
+    "scripts/source_binding.py",
+    "scripts/evidence_output.py",
+    "scripts/spring_api_contract_runner.py",
+    "scripts/api_wave_orchestrator.py",
+    "scripts/owned_runtime_contract.py",
+    "scripts/api_fixture.py",
+    "scripts/remote-sql-fixture-executor.py",
+    "scripts/start-strict-sss2-api-runtime.sh",
+    "scripts/start-reused-sss2-api-runtime.sh",
+    "scripts/cleanup-strict-sss2-api-runtime.sh",
+    "scripts/refresh-owned-sss2-app.sh",
+    "scripts/owned_readiness.py",
+    "tools/business_api_inventory.py",
+    "tools/api_route_ledger.py",
+    "tools/api_route_execution_plan.py",
+    "tools/api_contract_skeleton.py",
+    "tools/api_route_closure.py",
+    "tools/finalize_api_report.py",
+    "tools/vertical_slices/matrix.py",
+    "project/pom.xml",
+    "owned-framework/pom.xml",
+    "owned-personnel/pom.xml",
+    "owned-equipment/pom.xml",
+    "owned-consumables/pom.xml",
+    "owned-attachments/pom.xml",
+    "owned-report/pom.xml",
+    "owned-scheduler/pom.xml",
+    "owned-web/pom.xml",
+    "owned-distribution/package.py",
+    "owned-distribution/start.sh",
+    "owned-distribution/example",
+    "owned-web/build-owned-web.sh",
+    "scripts/build-owned-distribution.sh",
+    "scripts/build-owned-framework.sh",
+    "scripts/build-owned-personnel.sh",
+    "scripts/build-owned-equipment.sh",
+    "scripts/build-owned-consumables.sh",
+    "scripts/build-owned-attachments.sh",
+    "scripts/build-owned-report.sh",
+    "scripts/build-owned-scheduler.sh",
+    "scripts/build-prep.sh",
+    "scripts/verify-external-artifacts.sh",
+    "evidence/external-artifacts.sha256",
+    "build/oracle-free-source-manifest.json",
+    "docker/Dockerfile.built"
+  ],
+  "implementation_binding": "impl-c7e525d4dedd85e2",
+  "implementation_tree_digest": "c7e525d4dedd85e208527e9d13872b00aed0a61066a2c41b6c4ac71fb82d737b",
+  "implementation_dirty": false,
+  "implementation_scope": [
+    "project/src/main/java",
+    "owned-framework/src",
+    "owned-personnel/src",
+    "owned-equipment/src",
+    "owned-consumables/src",
+    "owned-attachments/src",
+    "owned-report/src",
+    "owned-scheduler/src",
+    "owned-web/src",
+    "scripts/source_binding.py",
+    "scripts/evidence_output.py",
+    "scripts/spring_api_contract_runner.py",
+    "scripts/api_wave_orchestrator.py",
+    "scripts/owned_runtime_contract.py",
+    "scripts/api_fixture.py",
+    "scripts/remote-sql-fixture-executor.py",
+    "scripts/start-strict-sss2-api-runtime.sh",
+    "scripts/start-reused-sss2-api-runtime.sh",
+    "scripts/cleanup-strict-sss2-api-runtime.sh",
+    "scripts/refresh-owned-sss2-app.sh",
+    "scripts/owned_readiness.py",
+    "tools/business_api_inventory.py",
+    "tools/api_route_ledger.py",
+    "tools/api_route_execution_plan.py",
+    "tools/api_contract_skeleton.py",
+    "tools/api_route_closure.py",
+    "tools/finalize_api_report.py",
+    "tools/vertical_slices/matrix.py",
+    "project/pom.xml",
+    "owned-framework/pom.xml",
+    "owned-personnel/pom.xml",
+    "owned-equipment/pom.xml",
+    "owned-consumables/pom.xml",
+    "owned-attachments/pom.xml",
+    "owned-report/pom.xml",
+    "owned-scheduler/pom.xml",
+    "owned-web/pom.xml",
+    "owned-distribution/package.py",
+    "owned-distribution/start.sh",
+    "owned-distribution/example",
+    "owned-web/build-owned-web.sh",
+    "scripts/build-owned-distribution.sh",
+    "scripts/build-owned-framework.sh",
+    "scripts/build-owned-personnel.sh",
+    "scripts/build-owned-equipment.sh",
+    "scripts/build-owned-consumables.sh",
+    "scripts/build-owned-attachments.sh",
+    "scripts/build-owned-report.sh",
+    "scripts/build-owned-scheduler.sh",
+    "scripts/build-prep.sh",
+    "scripts/verify-external-artifacts.sh",
+    "evidence/external-artifacts.sha256",
+    "build/oracle-free-source-manifest.json",
+    "docker/Dockerfile.built"
+  ],
+  "nested_project_commit": "27932b1fe4d71d64a02f9a63e55f56acb403e3a0",
+  "distribution_input_digest": "5a958940ac56b8a1f4fdf702229088ad3d5d90dd33fae1555cfa9b7ccf16b978",
+  "artifact_sha256": {
+    "lims-recovery/owned-distribution/target/distribution/app/lims-owned-application.jar": "d63bd3d57da56dd25c498445100c575181a4216ae4d6413bdcfcaf6f126056b5"
+  },
+  "clone_identity": "lims-owned-sss2-oracle:LIMS_BASELINE_SSS2:LIMS_RUNTIME_SSS2:4f23874f86afdf6359396917061720b80bbb78b84843b2c533c8fcc2c71689bd",
+  "runtime_report": "/home/ts/qinshan/.scratch/sunway-supplier-exit-api-first/diagnostic-evidence/runtime/strict-api-runtime-manifest-oa825.json",
+  "runtime_contract": {
+    "mode": "strict",
+    "strict_evidence": false,
+    "runtime_identity": "lims-owned-sss2-oracle:LIMS_BASELINE_SSS2:LIMS_RUNTIME_SSS2:4f23874f86afdf6359396917061720b80bbb78b84843b2c533c8fcc2c71689bd",
+    "reuse": true,
+    "oracle_reused": true,
+    "baseline_schema": "LIMS_BASELINE_SSS2",
+    "runtime_schema": "LIMS_RUNTIME_SSS2",
+    "baseline_schema_hash": "4f23874f86afdf6359396917061720b80bbb78b84843b2c533c8fcc2c71689bd",
+    "runtime_schema_hash_before": "674f918ce233701cd851a04a5cac89284ed7f1959201a1248bb091d08907a3b6",
+    "runtime_schema_hash_after": "674f918ce233701cd851a04a5cac89284ed7f1959201a1248bb091d08907a3b6",
+    "source_commit": "917b5061b87fe1b7104a07cbe22bc22b7177537c",
+    "implementation_binding": "impl-c7e525d4dedd85e2",
+    "implementation_tree_digest": "c7e525d4dedd85e208527e9d13872b00aed0a61066a2c41b6c4ac71fb82d737b",
+    "implementation_scope": [
+      "project/src/main/java",
+      "owned-framework/src",
+      "owned-personnel/src",
+      "owned-equipment/src",
+      "owned-consumables/src",
+      "owned-attachments/src",
+      "owned-report/src",
+      "owned-scheduler/src",
+      "owned-web/src",
+      "scripts/source_binding.py",
+      "scripts/evidence_output.py",
+      "scripts/spring_api_contract_runner.py",
+      "scripts/api_wave_orchestrator.py",
+      "scripts/owned_runtime_contract.py",
+      "scripts/api_fixture.py",
+      "scripts/remote-sql-fixture-executor.py",
+      "scripts/start-strict-sss2-api-runtime.sh",
+      "scripts/start-reused-sss2-api-runtime.sh",
+      "scripts/cleanup-strict-sss2-api-runtime.sh",
+      "scripts/refresh-owned-sss2-app.sh",
+      "scripts/owned_readiness.py",
+      "tools/business_api_inventory.py",
+      "tools/api_route_ledger.py",
+      "tools/api_route_execution_plan.py",
+      "tools/api_contract_skeleton.py",
+      "tools/api_route_closure.py",
+      "tools/finalize_api_report.py",
+      "tools/vertical_slices/matrix.py",
+      "project/pom.xml",
+      "owned-framework/pom.xml",
+      "owned-personnel/pom.xml",
+      "owned-equipment/pom.xml",
+      "owned-consumables/pom.xml",
+      "owned-attachments/pom.xml",
+      "owned-report/pom.xml",
+      "owned-scheduler/pom.xml",
+      "owned-web/pom.xml",
+      "owned-distribution/package.py",
+      "owned-distribution/start.sh",
+      "owned-distribution/example",
+      "owned-web/build-owned-web.sh",
+      "scripts/build-owned-distribution.sh",
+      "scripts/build-owned-framework.sh",
+      "scripts/build-owned-personnel.sh",
+      "scripts/build-owned-equipment.sh",
+      "scripts/build-owned-consumables.sh",
+      "scripts/build-owned-attachments.sh",
+      "scripts/build-owned-report.sh",
+      "scripts/build-owned-scheduler.sh",
+      "scripts/build-prep.sh",
+      "scripts/verify-external-artifacts.sh",
+      "evidence/external-artifacts.sha256",
+      "build/oracle-free-source-manifest.json",
+      "docker/Dockerfile.built"
+    ],
+    "implementation_dirty": false,
+    "repository_head_at_capture": "917b5061b87fe1b7104a07cbe22bc22b7177537c"
+  },
+  "role": "manager",
+  "organization": "org-a",
+  "mode": "strict",
+  "base_url": "http://127.0.0.1:19093",
+  "case_count": 32,
+  "cases": [
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "ext$"
+      ],
+      "body_sha256": "f195ca8381d65972cfe1ebdeed49720de585abba84c3789dd8919375d419e7bf",
+      "body_bytes": 11,
+      "assertions": {
+        "content_type": "application/json",
+        "json_keys": [
+          "ext$"
+        ]
+      },
+      "id": "oa-secure-emc-module-mdm-oa-areas-info-status-get",
+      "method": "GET",
+      "path": "/secure/emc/module/mdm/oa-areas/info/status",
+      "url": "http://127.0.0.1:19093/secure/emc/module/mdm/oa-areas/info/status",
+      "status": 200,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "11",
+        "date": "Sun, 01 Nov 2026 20:02:15 GMT",
+        "connection": "close"
+      },
+      "request_headers": {},
+      "elapsed_ms": 604.21,
+      "route": {
+        "method": "GET",
+        "path": "/secure/emc/module/mdm/oa-areas/info/status",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "project-route",
+        "route_ids": [
+          "a4ce652574f20342"
+        ]
+      },
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "rdbd1659a3b99"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "ext$"
+      ],
+      "body_sha256": "f195ca8381d65972cfe1ebdeed49720de585abba84c3789dd8919375d419e7bf",
+      "body_bytes": 11,
+      "assertions": {
+        "content_type": "application/json",
+        "json_keys": [
+          "ext$"
+        ]
+      },
+      "id": "oa-secure-emc-module-mdm-oa-banks-info-status-get",
+      "method": "GET",
+      "path": "/secure/emc/module/mdm/oa-banks/info/status",
+      "url": "http://127.0.0.1:19093/secure/emc/module/mdm/oa-banks/info/status",
+      "status": 200,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "11",
+        "date": "Sun, 01 Nov 2026 20:02:15 GMT",
+        "connection": "close"
+      },
+      "request_headers": {},
+      "elapsed_ms": 271.113,
+      "route": {
+        "method": "GET",
+        "path": "/secure/emc/module/mdm/oa-banks/info/status",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "project-route",
+        "route_ids": [
+          "c5d0fdd27e5ac16e"
+        ]
+      },
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r67b88d2b0c53"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "ext$"
+      ],
+      "body_sha256": "f195ca8381d65972cfe1ebdeed49720de585abba84c3789dd8919375d419e7bf",
+      "body_bytes": 11,
+      "assertions": {
+        "content_type": "application/json",
+        "json_keys": [
+          "ext$"
+        ]
+      },
+      "id": "oa-secure-emc-module-mdm-oa-clients-info-status-get",
+      "method": "GET",
+      "path": "/secure/emc/module/mdm/oa-clients/info/status",
+      "url": "http://127.0.0.1:19093/secure/emc/module/mdm/oa-clients/info/status",
+      "status": 200,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "11",
+        "date": "Sun, 01 Nov 2026 20:02:15 GMT",
+        "connection": "close"
+      },
+      "request_headers": {},
+      "elapsed_ms": 278.338,
+      "route": {
+        "method": "GET",
+        "path": "/secure/emc/module/mdm/oa-clients/info/status",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "project-route",
+        "route_ids": [
+          "03b7e6ecc8d41d55"
+        ]
+      },
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r7201412f409f"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "ext$"
+      ],
+      "body_sha256": "f195ca8381d65972cfe1ebdeed49720de585abba84c3789dd8919375d419e7bf",
+      "body_bytes": 11,
+      "assertions": {
+        "content_type": "application/json",
+        "json_keys": [
+          "ext$"
+        ]
+      },
+      "id": "oa-secure-emc-module-mdm-oa-equipts-info-status-get",
+      "method": "GET",
+      "path": "/secure/emc/module/mdm/oa-equipts/info/status",
+      "url": "http://127.0.0.1:19093/secure/emc/module/mdm/oa-equipts/info/status",
+      "status": 200,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "11",
+        "date": "Sun, 01 Nov 2026 20:02:15 GMT",
+        "connection": "close"
+      },
+      "request_headers": {},
+      "elapsed_ms": 275.33,
+      "route": {
+        "method": "GET",
+        "path": "/secure/emc/module/mdm/oa-equipts/info/status",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "project-route",
+        "route_ids": [
+          "7ce7828feb47ecd4"
+        ]
+      },
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r87518db713d8"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "ext$"
+      ],
+      "body_sha256": "f195ca8381d65972cfe1ebdeed49720de585abba84c3789dd8919375d419e7bf",
+      "body_bytes": 11,
+      "assertions": {
+        "content_type": "application/json",
+        "json_keys": [
+          "ext$"
+        ]
+      },
+      "id": "oa-secure-emc-module-mdm-oa-new-clients-info-status-get",
+      "method": "GET",
+      "path": "/secure/emc/module/mdm/oa-new-clients/info/status",
+      "url": "http://127.0.0.1:19093/secure/emc/module/mdm/oa-new-clients/info/status",
+      "status": 200,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "11",
+        "date": "Sun, 01 Nov 2026 20:02:16 GMT",
+        "connection": "close"
+      },
+      "request_headers": {},
+      "elapsed_ms": 301.248,
+      "route": {
+        "method": "GET",
+        "path": "/secure/emc/module/mdm/oa-new-clients/info/status",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "project-route",
+        "route_ids": [
+          "2b117d0418c083ae"
+        ]
+      },
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "rf10f4d19fc67"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "ext$"
+      ],
+      "body_sha256": "f195ca8381d65972cfe1ebdeed49720de585abba84c3789dd8919375d419e7bf",
+      "body_bytes": 11,
+      "assertions": {
+        "content_type": "application/json",
+        "json_keys": [
+          "ext$"
+        ]
+      },
+      "id": "oa-secure-emc-module-mdm-oa-org-relations-info-status-get",
+      "method": "GET",
+      "path": "/secure/emc/module/mdm/oa-org-relations/info/status",
+      "url": "http://127.0.0.1:19093/secure/emc/module/mdm/oa-org-relations/info/status",
+      "status": 200,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "11",
+        "date": "Sun, 01 Nov 2026 20:02:16 GMT",
+        "connection": "close"
+      },
+      "request_headers": {},
+      "elapsed_ms": 274.318,
+      "route": {
+        "method": "GET",
+        "path": "/secure/emc/module/mdm/oa-org-relations/info/status",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "project-route",
+        "route_ids": [
+          "b989547f53658d9f"
+        ]
+      },
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "re18d09745582"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "ext$"
+      ],
+      "body_sha256": "f195ca8381d65972cfe1ebdeed49720de585abba84c3789dd8919375d419e7bf",
+      "body_bytes": 11,
+      "assertions": {
+        "content_type": "application/json",
+        "json_keys": [
+          "ext$"
+        ]
+      },
+      "id": "oa-secure-emc-module-mdm-oa-orgs-info-status-get",
+      "method": "GET",
+      "path": "/secure/emc/module/mdm/oa-orgs/info/status",
+      "url": "http://127.0.0.1:19093/secure/emc/module/mdm/oa-orgs/info/status",
+      "status": 200,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "11",
+        "date": "Sun, 01 Nov 2026 20:02:16 GMT",
+        "connection": "close"
+      },
+      "request_headers": {},
+      "elapsed_ms": 277.133,
+      "route": {
+        "method": "GET",
+        "path": "/secure/emc/module/mdm/oa-orgs/info/status",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "project-route",
+        "route_ids": [
+          "4df8e6c005287d45"
+        ]
+      },
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r63dd55b16e24"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "ext$"
+      ],
+      "body_sha256": "f195ca8381d65972cfe1ebdeed49720de585abba84c3789dd8919375d419e7bf",
+      "body_bytes": 11,
+      "assertions": {
+        "content_type": "application/json",
+        "json_keys": [
+          "ext$"
+        ]
+      },
+      "id": "oa-secure-emc-module-mdm-oa-users-info-status-get",
+      "method": "GET",
+      "path": "/secure/emc/module/mdm/oa-users/info/status",
+      "url": "http://127.0.0.1:19093/secure/emc/module/mdm/oa-users/info/status",
+      "status": 200,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "11",
+        "date": "Sun, 01 Nov 2026 20:02:16 GMT",
+        "connection": "close"
+      },
+      "request_headers": {},
+      "elapsed_ms": 265.488,
+      "route": {
+        "method": "GET",
+        "path": "/secure/emc/module/mdm/oa-users/info/status",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "project-route",
+        "route_ids": [
+          "03bc2f7983b393f6"
+        ]
+      },
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r4b929346d359"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "2741b462ee8f313beaa793dde43cd9b0bc1bdf0c581819d2d9d6a8673630b67e",
+      "body_bytes": 472,
+      "assertions": {
+        "content_type": "application/json",
+        "json_keys": [
+          "columnTypeMap",
+          "first",
+          "last",
+          "numberOfElements",
+          "pageNumber",
+          "pageSize",
+          "rows",
+          "total",
+          "totalMap",
+          "totalPages"
+        ]
+      },
+      "id": "oa-secure-emc-module-mdm-oa-areas-queries-post",
+      "method": "POST",
+      "path": "/secure/emc/module/mdm/oa-areas/queries",
+      "url": "http://127.0.0.1:19093/secure/emc/module/mdm/oa-areas/queries",
+      "status": 200,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "472",
+        "date": "Sun, 01 Nov 2026 20:02:17 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 624.118,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/mdm/oa-areas/queries",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "project-route",
+        "route_ids": [
+          "c5d12c285d739da7"
+        ]
+      },
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r25091b57fee1"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "2741b462ee8f313beaa793dde43cd9b0bc1bdf0c581819d2d9d6a8673630b67e",
+      "body_bytes": 472,
+      "assertions": {
+        "content_type": "application/json",
+        "json_keys": [
+          "columnTypeMap",
+          "first",
+          "last",
+          "numberOfElements",
+          "pageNumber",
+          "pageSize",
+          "rows",
+          "total",
+          "totalMap",
+          "totalPages"
+        ]
+      },
+      "id": "oa-secure-emc-module-mdm-oa-areas-queries-raw-post",
+      "method": "POST",
+      "path": "/secure/emc/module/mdm/oa-areas/queries/raw",
+      "url": "http://127.0.0.1:19093/secure/emc/module/mdm/oa-areas/queries/raw",
+      "status": 200,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "472",
+        "date": "Sun, 01 Nov 2026 20:02:17 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 464.495,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/mdm/oa-areas/queries/raw",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "project-route",
+        "route_ids": [
+          "bc159514e63a4be7"
+        ]
+      },
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r0adad01b3e45"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "2741b462ee8f313beaa793dde43cd9b0bc1bdf0c581819d2d9d6a8673630b67e",
+      "body_bytes": 472,
+      "assertions": {
+        "content_type": "application/json",
+        "json_keys": [
+          "columnTypeMap",
+          "first",
+          "last",
+          "numberOfElements",
+          "pageNumber",
+          "pageSize",
+          "rows",
+          "total",
+          "totalMap",
+          "totalPages"
+        ]
+      },
+      "id": "oa-secure-emc-module-mdm-oa-areas-queries-searchable-post",
+      "method": "POST",
+      "path": "/secure/emc/module/mdm/oa-areas/queries/searchable",
+      "url": "http://127.0.0.1:19093/secure/emc/module/mdm/oa-areas/queries/searchable",
+      "status": 200,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "472",
+        "date": "Sun, 01 Nov 2026 20:02:17 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 472.954,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/mdm/oa-areas/queries/searchable",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "project-route",
+        "route_ids": [
+          "10e5847a247d5df7"
+        ]
+      },
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r827ca563152b"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "a5117a4c1510710b22d3cbd15cadeccf2f4502b97947f03a68aaa5bac2530bf8",
+      "body_bytes": 453,
+      "assertions": {
+        "content_type": "application/json",
+        "json_keys": [
+          "columnTypeMap",
+          "first",
+          "last",
+          "numberOfElements",
+          "pageNumber",
+          "pageSize",
+          "rows",
+          "total",
+          "totalMap",
+          "totalPages"
+        ]
+      },
+      "id": "oa-secure-emc-module-mdm-oa-banks-queries-post",
+      "method": "POST",
+      "path": "/secure/emc/module/mdm/oa-banks/queries",
+      "url": "http://127.0.0.1:19093/secure/emc/module/mdm/oa-banks/queries",
+      "status": 200,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "453",
+        "date": "Sun, 01 Nov 2026 20:02:19 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 472.743,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/mdm/oa-banks/queries",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "project-route",
+        "route_ids": [
+          "a3a7f9afeb8de680"
+        ]
+      },
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "rb6c3a02ed7c7"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "a5117a4c1510710b22d3cbd15cadeccf2f4502b97947f03a68aaa5bac2530bf8",
+      "body_bytes": 453,
+      "assertions": {
+        "content_type": "application/json",
+        "json_keys": [
+          "columnTypeMap",
+          "first",
+          "last",
+          "numberOfElements",
+          "pageNumber",
+          "pageSize",
+          "rows",
+          "total",
+          "totalMap",
+          "totalPages"
+        ]
+      },
+      "id": "oa-secure-emc-module-mdm-oa-banks-queries-raw-post",
+      "method": "POST",
+      "path": "/secure/emc/module/mdm/oa-banks/queries/raw",
+      "url": "http://127.0.0.1:19093/secure/emc/module/mdm/oa-banks/queries/raw",
+      "status": 200,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "453",
+        "date": "Sun, 01 Nov 2026 20:02:19 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 607.149,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/mdm/oa-banks/queries/raw",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "project-route",
+        "route_ids": [
+          "e062b782932b2a10"
+        ]
+      },
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "rfedc3b6b524e"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "a5117a4c1510710b22d3cbd15cadeccf2f4502b97947f03a68aaa5bac2530bf8",
+      "body_bytes": 453,
+      "assertions": {
+        "content_type": "application/json",
+        "json_keys": [
+          "columnTypeMap",
+          "first",
+          "last",
+          "numberOfElements",
+          "pageNumber",
+          "pageSize",
+          "rows",
+          "total",
+          "totalMap",
+          "totalPages"
+        ]
+      },
+      "id": "oa-secure-emc-module-mdm-oa-banks-queries-searchable-post",
+      "method": "POST",
+      "path": "/secure/emc/module/mdm/oa-banks/queries/searchable",
+      "url": "http://127.0.0.1:19093/secure/emc/module/mdm/oa-banks/queries/searchable",
+      "status": 200,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "453",
+        "date": "Sun, 01 Nov 2026 20:02:20 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 456.352,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/mdm/oa-banks/queries/searchable",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "project-route",
+        "route_ids": [
+          "dbf878fde9412172"
+        ]
+      },
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r909313613e32"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "464580c6fc6887804789a4187388f6d44c66d1f5d07ffcab30806a5e84fd1bc0",
+      "body_bytes": 1015,
+      "assertions": {
+        "content_type": "application/json",
+        "json_keys": [
+          "columnTypeMap",
+          "first",
+          "last",
+          "numberOfElements",
+          "pageNumber",
+          "pageSize",
+          "rows",
+          "total",
+          "totalMap",
+          "totalPages"
+        ]
+      },
+      "id": "oa-secure-emc-module-mdm-oa-clients-queries-post",
+      "method": "POST",
+      "path": "/secure/emc/module/mdm/oa-clients/queries",
+      "url": "http://127.0.0.1:19093/secure/emc/module/mdm/oa-clients/queries",
+      "status": 200,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "1015",
+        "date": "Sun, 01 Nov 2026 20:02:20 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 443.364,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/mdm/oa-clients/queries",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "project-route",
+        "route_ids": [
+          "96cc5412db583722"
+        ]
+      },
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r06d1666c9d82"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "464580c6fc6887804789a4187388f6d44c66d1f5d07ffcab30806a5e84fd1bc0",
+      "body_bytes": 1015,
+      "assertions": {
+        "content_type": "application/json",
+        "json_keys": [
+          "columnTypeMap",
+          "first",
+          "last",
+          "numberOfElements",
+          "pageNumber",
+          "pageSize",
+          "rows",
+          "total",
+          "totalMap",
+          "totalPages"
+        ]
+      },
+      "id": "oa-secure-emc-module-mdm-oa-clients-queries-raw-post",
+      "method": "POST",
+      "path": "/secure/emc/module/mdm/oa-clients/queries/raw",
+      "url": "http://127.0.0.1:19093/secure/emc/module/mdm/oa-clients/queries/raw",
+      "status": 200,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "1015",
+        "date": "Sun, 01 Nov 2026 20:02:20 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 456.58,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/mdm/oa-clients/queries/raw",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "project-route",
+        "route_ids": [
+          "35dc8f75bc963d38"
+        ]
+      },
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r13447582d3bd"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "464580c6fc6887804789a4187388f6d44c66d1f5d07ffcab30806a5e84fd1bc0",
+      "body_bytes": 1015,
+      "assertions": {
+        "content_type": "application/json",
+        "json_keys": [
+          "columnTypeMap",
+          "first",
+          "last",
+          "numberOfElements",
+          "pageNumber",
+          "pageSize",
+          "rows",
+          "total",
+          "totalMap",
+          "totalPages"
+        ]
+      },
+      "id": "oa-secure-emc-module-mdm-oa-clients-queries-searchable-post",
+      "method": "POST",
+      "path": "/secure/emc/module/mdm/oa-clients/queries/searchable",
+      "url": "http://127.0.0.1:19093/secure/emc/module/mdm/oa-clients/queries/searchable",
+      "status": 200,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "1015",
+        "date": "Sun, 01 Nov 2026 20:02:21 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 476.951,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/mdm/oa-clients/queries/searchable",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "project-route",
+        "route_ids": [
+          "baceeb5795240300"
+        ]
+      },
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "rb6e054e0de03"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "9346b7a4399c0354118749681c80970b7a1beb8f8a75e99f8a54ea51654a45eb",
+      "body_bytes": 555,
+      "assertions": {
+        "content_type": "application/json",
+        "json_keys": [
+          "columnTypeMap",
+          "first",
+          "last",
+          "numberOfElements",
+          "pageNumber",
+          "pageSize",
+          "rows",
+          "total",
+          "totalMap",
+          "totalPages"
+        ]
+      },
+      "id": "oa-secure-emc-module-mdm-oa-equipts-queries-post",
+      "method": "POST",
+      "path": "/secure/emc/module/mdm/oa-equipts/queries",
+      "url": "http://127.0.0.1:19093/secure/emc/module/mdm/oa-equipts/queries",
+      "status": 200,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "555",
+        "date": "Sun, 01 Nov 2026 20:02:21 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 736.24,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/mdm/oa-equipts/queries",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "project-route",
+        "route_ids": [
+          "3ac40e3fa7fb7ea5"
+        ]
+      },
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r1d0299ca61a5"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "9346b7a4399c0354118749681c80970b7a1beb8f8a75e99f8a54ea51654a45eb",
+      "body_bytes": 555,
+      "assertions": {
+        "content_type": "application/json",
+        "json_keys": [
+          "columnTypeMap",
+          "first",
+          "last",
+          "numberOfElements",
+          "pageNumber",
+          "pageSize",
+          "rows",
+          "total",
+          "totalMap",
+          "totalPages"
+        ]
+      },
+      "id": "oa-secure-emc-module-mdm-oa-equipts-queries-raw-post",
+      "method": "POST",
+      "path": "/secure/emc/module/mdm/oa-equipts/queries/raw",
+      "url": "http://127.0.0.1:19093/secure/emc/module/mdm/oa-equipts/queries/raw",
+      "status": 200,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "555",
+        "date": "Sun, 01 Nov 2026 20:02:22 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 443.717,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/mdm/oa-equipts/queries/raw",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "project-route",
+        "route_ids": [
+          "2f17a3dbc5ad564f"
+        ]
+      },
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "rac0d2b52134d"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "9346b7a4399c0354118749681c80970b7a1beb8f8a75e99f8a54ea51654a45eb",
+      "body_bytes": 555,
+      "assertions": {
+        "content_type": "application/json",
+        "json_keys": [
+          "columnTypeMap",
+          "first",
+          "last",
+          "numberOfElements",
+          "pageNumber",
+          "pageSize",
+          "rows",
+          "total",
+          "totalMap",
+          "totalPages"
+        ]
+      },
+      "id": "oa-secure-emc-module-mdm-oa-equipts-queries-searchable-post",
+      "method": "POST",
+      "path": "/secure/emc/module/mdm/oa-equipts/queries/searchable",
+      "url": "http://127.0.0.1:19093/secure/emc/module/mdm/oa-equipts/queries/searchable",
+      "status": 200,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "555",
+        "date": "Sun, 01 Nov 2026 20:02:22 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 450.97,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/mdm/oa-equipts/queries/searchable",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "project-route",
+        "route_ids": [
+          "a5b6fd5df4332d05"
+        ]
+      },
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r76b73ef8b818"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "970fd6678d5cc4459e09336e3d83027c93cc9e1d4055b26752ffafcf4c8ac721",
+      "body_bytes": 469,
+      "assertions": {
+        "content_type": "application/json",
+        "json_keys": [
+          "columnTypeMap",
+          "first",
+          "last",
+          "numberOfElements",
+          "pageNumber",
+          "pageSize",
+          "rows",
+          "total",
+          "totalMap",
+          "totalPages"
+        ]
+      },
+      "id": "oa-secure-emc-module-mdm-oa-new-clients-queries-post",
+      "method": "POST",
+      "path": "/secure/emc/module/mdm/oa-new-clients/queries",
+      "url": "http://127.0.0.1:19093/secure/emc/module/mdm/oa-new-clients/queries",
+      "status": 200,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "469",
+        "date": "Sun, 01 Nov 2026 20:02:22 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 456.314,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/mdm/oa-new-clients/queries",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "project-route",
+        "route_ids": [
+          "c7405bf62fae0098"
+        ]
+      },
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r9829a9a5e912"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "970fd6678d5cc4459e09336e3d83027c93cc9e1d4055b26752ffafcf4c8ac721",
+      "body_bytes": 469,
+      "assertions": {
+        "content_type": "application/json",
+        "json_keys": [
+          "columnTypeMap",
+          "first",
+          "last",
+          "numberOfElements",
+          "pageNumber",
+          "pageSize",
+          "rows",
+          "total",
+          "totalMap",
+          "totalPages"
+        ]
+      },
+      "id": "oa-secure-emc-module-mdm-oa-new-clients-queries-raw-post",
+      "method": "POST",
+      "path": "/secure/emc/module/mdm/oa-new-clients/queries/raw",
+      "url": "http://127.0.0.1:19093/secure/emc/module/mdm/oa-new-clients/queries/raw",
+      "status": 200,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "469",
+        "date": "Sun, 01 Nov 2026 20:02:24 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 464.02,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/mdm/oa-new-clients/queries/raw",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "project-route",
+        "route_ids": [
+          "3fc3c17d0d103dac"
+        ]
+      },
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "rf0a568ea804a"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "970fd6678d5cc4459e09336e3d83027c93cc9e1d4055b26752ffafcf4c8ac721",
+      "body_bytes": 469,
+      "assertions": {
+        "content_type": "application/json",
+        "json_keys": [
+          "columnTypeMap",
+          "first",
+          "last",
+          "numberOfElements",
+          "pageNumber",
+          "pageSize",
+          "rows",
+          "total",
+          "totalMap",
+          "totalPages"
+        ]
+      },
+      "id": "oa-secure-emc-module-mdm-oa-new-clients-queries-searchable-post",
+      "method": "POST",
+      "path": "/secure/emc/module/mdm/oa-new-clients/queries/searchable",
+      "url": "http://127.0.0.1:19093/secure/emc/module/mdm/oa-new-clients/queries/searchable",
+      "status": 200,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "469",
+        "date": "Sun, 01 Nov 2026 20:02:24 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 464.803,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/mdm/oa-new-clients/queries/searchable",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "project-route",
+        "route_ids": [
+          "9e38a26b5bbc82a8"
+        ]
+      },
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "rb132868cd4de"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "051ded7ff42ef0497b6aacf11d7019d125cc26c862ff791744ec9e5fdbada989",
+      "body_bytes": 1973,
+      "assertions": {
+        "content_type": "application/json",
+        "json_keys": [
+          "columnTypeMap",
+          "first",
+          "last",
+          "numberOfElements",
+          "pageNumber",
+          "pageSize",
+          "rows",
+          "total",
+          "totalMap",
+          "totalPages"
+        ]
+      },
+      "id": "oa-secure-emc-module-mdm-oa-org-relations-queries-post",
+      "method": "POST",
+      "path": "/secure/emc/module/mdm/oa-org-relations/queries",
+      "url": "http://127.0.0.1:19093/secure/emc/module/mdm/oa-org-relations/queries",
+      "status": 200,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "1973",
+        "date": "Sun, 01 Nov 2026 20:02:24 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 504.92,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/mdm/oa-org-relations/queries",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "project-route",
+        "route_ids": [
+          "a194ed9e9d85c3d0"
+        ]
+      },
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r9e8117ef7715"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "051ded7ff42ef0497b6aacf11d7019d125cc26c862ff791744ec9e5fdbada989",
+      "body_bytes": 1973,
+      "assertions": {
+        "content_type": "application/json",
+        "json_keys": [
+          "columnTypeMap",
+          "first",
+          "last",
+          "numberOfElements",
+          "pageNumber",
+          "pageSize",
+          "rows",
+          "total",
+          "totalMap",
+          "totalPages"
+        ]
+      },
+      "id": "oa-secure-emc-module-mdm-oa-org-relations-queries-raw-post",
+      "method": "POST",
+      "path": "/secure/emc/module/mdm/oa-org-relations/queries/raw",
+      "url": "http://127.0.0.1:19093/secure/emc/module/mdm/oa-org-relations/queries/raw",
+      "status": 200,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "1973",
+        "date": "Sun, 01 Nov 2026 20:02:25 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 341.367,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/mdm/oa-org-relations/queries/raw",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "project-route",
+        "route_ids": [
+          "5265e187c8e8e94a"
+        ]
+      },
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r3bbb1e40cc93"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "051ded7ff42ef0497b6aacf11d7019d125cc26c862ff791744ec9e5fdbada989",
+      "body_bytes": 1973,
+      "assertions": {
+        "content_type": "application/json",
+        "json_keys": [
+          "columnTypeMap",
+          "first",
+          "last",
+          "numberOfElements",
+          "pageNumber",
+          "pageSize",
+          "rows",
+          "total",
+          "totalMap",
+          "totalPages"
+        ]
+      },
+      "id": "oa-secure-emc-module-mdm-oa-org-relations-queries-searchable-post",
+      "method": "POST",
+      "path": "/secure/emc/module/mdm/oa-org-relations/queries/searchable",
+      "url": "http://127.0.0.1:19093/secure/emc/module/mdm/oa-org-relations/queries/searchable",
+      "status": 200,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "1973",
+        "date": "Sun, 01 Nov 2026 20:02:25 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 324.623,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/mdm/oa-org-relations/queries/searchable",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "project-route",
+        "route_ids": [
+          "5b5d4e0f1e72cc9c"
+        ]
+      },
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r9b3fec12eeb7"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "df59cd194c5d978e5c3169ab9219b21b98cdde7cc28d36b1ce5bb13278806f43",
+      "body_bytes": 616,
+      "assertions": {
+        "content_type": "application/json",
+        "json_keys": [
+          "columnTypeMap",
+          "first",
+          "last",
+          "numberOfElements",
+          "pageNumber",
+          "pageSize",
+          "rows",
+          "total",
+          "totalMap",
+          "totalPages"
+        ]
+      },
+      "id": "oa-secure-emc-module-mdm-oa-orgs-queries-post",
+      "method": "POST",
+      "path": "/secure/emc/module/mdm/oa-orgs/queries",
+      "url": "http://127.0.0.1:19093/secure/emc/module/mdm/oa-orgs/queries",
+      "status": 200,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "616",
+        "date": "Sun, 01 Nov 2026 20:02:25 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 543.406,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/mdm/oa-orgs/queries",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "project-route",
+        "route_ids": [
+          "7d358e0b2adc2f88"
+        ]
+      },
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r0e11a592ef82"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "df59cd194c5d978e5c3169ab9219b21b98cdde7cc28d36b1ce5bb13278806f43",
+      "body_bytes": 616,
+      "assertions": {
+        "content_type": "application/json",
+        "json_keys": [
+          "columnTypeMap",
+          "first",
+          "last",
+          "numberOfElements",
+          "pageNumber",
+          "pageSize",
+          "rows",
+          "total",
+          "totalMap",
+          "totalPages"
+        ]
+      },
+      "id": "oa-secure-emc-module-mdm-oa-orgs-queries-raw-post",
+      "method": "POST",
+      "path": "/secure/emc/module/mdm/oa-orgs/queries/raw",
+      "url": "http://127.0.0.1:19093/secure/emc/module/mdm/oa-orgs/queries/raw",
+      "status": 200,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "616",
+        "date": "Sun, 01 Nov 2026 20:02:26 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 454.039,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/mdm/oa-orgs/queries/raw",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "project-route",
+        "route_ids": [
+          "2f402b40e9e5fd7f"
+        ]
+      },
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r2c15bcdf6acf"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "df59cd194c5d978e5c3169ab9219b21b98cdde7cc28d36b1ce5bb13278806f43",
+      "body_bytes": 616,
+      "assertions": {
+        "content_type": "application/json",
+        "json_keys": [
+          "columnTypeMap",
+          "first",
+          "last",
+          "numberOfElements",
+          "pageNumber",
+          "pageSize",
+          "rows",
+          "total",
+          "totalMap",
+          "totalPages"
+        ]
+      },
+      "id": "oa-secure-emc-module-mdm-oa-orgs-queries-searchable-post",
+      "method": "POST",
+      "path": "/secure/emc/module/mdm/oa-orgs/queries/searchable",
+      "url": "http://127.0.0.1:19093/secure/emc/module/mdm/oa-orgs/queries/searchable",
+      "status": 200,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "616",
+        "date": "Sun, 01 Nov 2026 20:02:26 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 453.02,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/mdm/oa-orgs/queries/searchable",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "project-route",
+        "route_ids": [
+          "b7b1f203e974017c"
+        ]
+      },
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "rd1274d4cf57f"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "4456fda7e8c9953a136e54cd2c772db1036ad064b90f04bf69f6ba5d177bef5c",
+      "body_bytes": 558,
+      "assertions": {
+        "content_type": "application/json",
+        "json_keys": [
+          "columnTypeMap",
+          "first",
+          "last",
+          "numberOfElements",
+          "pageNumber",
+          "pageSize",
+          "rows",
+          "total",
+          "totalMap",
+          "totalPages"
+        ]
+      },
+      "id": "oa-secure-emc-module-mdm-oa-users-queries-post",
+      "method": "POST",
+      "path": "/secure/emc/module/mdm/oa-users/queries",
+      "url": "http://127.0.0.1:19093/secure/emc/module/mdm/oa-users/queries",
+      "status": 200,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "558",
+        "date": "Sun, 01 Nov 2026 20:02:26 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 514.125,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/mdm/oa-users/queries",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "project-route",
+        "route_ids": [
+          "bbd65ae0bf63be46"
+        ]
+      },
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "rc0ea9b6885ce"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "4456fda7e8c9953a136e54cd2c772db1036ad064b90f04bf69f6ba5d177bef5c",
+      "body_bytes": 558,
+      "assertions": {
+        "content_type": "application/json",
+        "json_keys": [
+          "columnTypeMap",
+          "first",
+          "last",
+          "numberOfElements",
+          "pageNumber",
+          "pageSize",
+          "rows",
+          "total",
+          "totalMap",
+          "totalPages"
+        ]
+      },
+      "id": "oa-secure-emc-module-mdm-oa-users-queries-raw-post",
+      "method": "POST",
+      "path": "/secure/emc/module/mdm/oa-users/queries/raw",
+      "url": "http://127.0.0.1:19093/secure/emc/module/mdm/oa-users/queries/raw",
+      "status": 200,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "558",
+        "date": "Sun, 01 Nov 2026 20:02:28 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 463.176,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/mdm/oa-users/queries/raw",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "project-route",
+        "route_ids": [
+          "541423ba02c66358"
+        ]
+      },
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r968db3f42ad8"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "4456fda7e8c9953a136e54cd2c772db1036ad064b90f04bf69f6ba5d177bef5c",
+      "body_bytes": 558,
+      "assertions": {
+        "content_type": "application/json",
+        "json_keys": [
+          "columnTypeMap",
+          "first",
+          "last",
+          "numberOfElements",
+          "pageNumber",
+          "pageSize",
+          "rows",
+          "total",
+          "totalMap",
+          "totalPages"
+        ]
+      },
+      "id": "oa-secure-emc-module-mdm-oa-users-queries-searchable-post",
+      "method": "POST",
+      "path": "/secure/emc/module/mdm/oa-users/queries/searchable",
+      "url": "http://127.0.0.1:19093/secure/emc/module/mdm/oa-users/queries/searchable",
+      "status": 200,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "558",
+        "date": "Sun, 01 Nov 2026 20:02:29 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 1040.299,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/mdm/oa-users/queries/searchable",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "project-route",
+        "route_ids": [
+          "26829686a40dcc91"
+        ]
+      },
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r8ffc84c570ab"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    }
+  ],
+  "cleanup": {
+    "cleanup_mode": "persistent-oracle",
+    "application_stopped": true,
+    "oracle_stopped": false,
+    "redis_stopped": false,
+    "redis_preserved": true,
+    "oracle_reused": true,
+    "oracle_preserved": true,
+    "baseline_schema_immutable": true,
+    "runtime_schema_restored": true,
+    "runtime_dirty": false,
+    "network_preserved": true,
+    "volume_preserved": true,
+    "temporary_files_removed": true
+  },
+  "cleanup_pending": false,
+  "phase_timings_ms": {
+    "http_cases": 15439.545
+  },
+  "authentication": {
+    "attempted": true,
+    "authenticated": true,
+    "status": 200
+  },
+  "finished_at": "2026-11-01T20:02:27.993692+00:00"
+}

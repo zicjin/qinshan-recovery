@@ -1,0 +1,1838 @@
+{
+  "schema": 1,
+  "status": "executed-pass",
+  "execution": "strict",
+  "strict_evidence": true,
+  "production_access": false,
+  "scope": "clone-derived Spring Web API contract runner",
+  "route_execution_model": {
+    "application": "one owned Spring application per wave",
+    "oracle": "persistent Oracle baseline/runtime schema",
+    "redis": "reused sss2 Redis database 15",
+    "boundary_route": "owned Java source-only route in the same Spring application",
+    "boundary_process": false,
+    "internal_http_bridge": false,
+    "jni_replacement_process": false
+  },
+  "started_at": "2026-11-01T09:47:48.274896+00:00",
+  "source_commit": "46c538a94b21bfc349a60b3da3907479117a6d4c",
+  "repository_head_at_capture": "46c538a94b21bfc349a60b3da3907479117a6d4c",
+  "source_dirty": false,
+  "source_scope": [
+    "project/src/main/java",
+    "owned-framework/src",
+    "owned-personnel/src",
+    "owned-equipment/src",
+    "owned-consumables/src",
+    "owned-attachments/src",
+    "owned-report/src",
+    "owned-scheduler/src",
+    "owned-web/src",
+    "scripts/source_binding.py",
+    "scripts/evidence_output.py",
+    "scripts/spring_api_contract_runner.py",
+    "scripts/api_wave_orchestrator.py",
+    "scripts/owned_runtime_contract.py",
+    "scripts/api_fixture.py",
+    "scripts/remote-sql-fixture-executor.py",
+    "scripts/start-strict-sss2-api-runtime.sh",
+    "scripts/start-reused-sss2-api-runtime.sh",
+    "scripts/cleanup-strict-sss2-api-runtime.sh",
+    "scripts/refresh-owned-sss2-app.sh",
+    "scripts/owned_readiness.py",
+    "tools/business_api_inventory.py",
+    "tools/api_route_ledger.py",
+    "tools/api_route_execution_plan.py",
+    "tools/api_contract_skeleton.py",
+    "tools/api_route_closure.py",
+    "tools/finalize_api_report.py",
+    "tools/vertical_slices/matrix.py",
+    "project/pom.xml",
+    "owned-framework/pom.xml",
+    "owned-personnel/pom.xml",
+    "owned-equipment/pom.xml",
+    "owned-consumables/pom.xml",
+    "owned-attachments/pom.xml",
+    "owned-report/pom.xml",
+    "owned-scheduler/pom.xml",
+    "owned-web/pom.xml",
+    "owned-distribution/package.py",
+    "owned-distribution/start.sh",
+    "owned-distribution/example",
+    "owned-web/build-owned-web.sh",
+    "scripts/build-owned-distribution.sh",
+    "scripts/build-owned-framework.sh",
+    "scripts/build-owned-personnel.sh",
+    "scripts/build-owned-equipment.sh",
+    "scripts/build-owned-consumables.sh",
+    "scripts/build-owned-attachments.sh",
+    "scripts/build-owned-report.sh",
+    "scripts/build-owned-scheduler.sh",
+    "scripts/build-prep.sh",
+    "scripts/verify-external-artifacts.sh",
+    "evidence/external-artifacts.sha256",
+    "build/oracle-free-source-manifest.json",
+    "docker/Dockerfile.built"
+  ],
+  "implementation_binding": "impl-c2dc5d6121b44f7d",
+  "implementation_tree_digest": "c2dc5d6121b44f7d7d9808b09d435ef535f9513cd29cab4ba42ca9b944353610",
+  "implementation_dirty": false,
+  "implementation_scope": [
+    "project/src/main/java",
+    "owned-framework/src",
+    "owned-personnel/src",
+    "owned-equipment/src",
+    "owned-consumables/src",
+    "owned-attachments/src",
+    "owned-report/src",
+    "owned-scheduler/src",
+    "owned-web/src",
+    "scripts/source_binding.py",
+    "scripts/evidence_output.py",
+    "scripts/spring_api_contract_runner.py",
+    "scripts/api_wave_orchestrator.py",
+    "scripts/owned_runtime_contract.py",
+    "scripts/api_fixture.py",
+    "scripts/remote-sql-fixture-executor.py",
+    "scripts/start-strict-sss2-api-runtime.sh",
+    "scripts/start-reused-sss2-api-runtime.sh",
+    "scripts/cleanup-strict-sss2-api-runtime.sh",
+    "scripts/refresh-owned-sss2-app.sh",
+    "scripts/owned_readiness.py",
+    "tools/business_api_inventory.py",
+    "tools/api_route_ledger.py",
+    "tools/api_route_execution_plan.py",
+    "tools/api_contract_skeleton.py",
+    "tools/api_route_closure.py",
+    "tools/finalize_api_report.py",
+    "tools/vertical_slices/matrix.py",
+    "project/pom.xml",
+    "owned-framework/pom.xml",
+    "owned-personnel/pom.xml",
+    "owned-equipment/pom.xml",
+    "owned-consumables/pom.xml",
+    "owned-attachments/pom.xml",
+    "owned-report/pom.xml",
+    "owned-scheduler/pom.xml",
+    "owned-web/pom.xml",
+    "owned-distribution/package.py",
+    "owned-distribution/start.sh",
+    "owned-distribution/example",
+    "owned-web/build-owned-web.sh",
+    "scripts/build-owned-distribution.sh",
+    "scripts/build-owned-framework.sh",
+    "scripts/build-owned-personnel.sh",
+    "scripts/build-owned-equipment.sh",
+    "scripts/build-owned-consumables.sh",
+    "scripts/build-owned-attachments.sh",
+    "scripts/build-owned-report.sh",
+    "scripts/build-owned-scheduler.sh",
+    "scripts/build-prep.sh",
+    "scripts/verify-external-artifacts.sh",
+    "evidence/external-artifacts.sha256",
+    "build/oracle-free-source-manifest.json",
+    "docker/Dockerfile.built"
+  ],
+  "nested_project_commit": "27932b1fe4d71d64a02f9a63e55f56acb403e3a0",
+  "distribution_input_digest": "2121fc67991dd241a80c02ee575f69cde2f4a21af05820ef694ce4caabf4ffc7",
+  "artifact_sha256": {
+    "lims-recovery/owned-distribution/target/distribution/app/lims-owned-application.jar": "dc86ba81bf5cfccb7bb95c2bd285e660d8e2d110ee2816a9a04cd72ea1cb1719"
+  },
+  "clone_identity": "lims-owned-sss2-oracle:LIMS_BASELINE_SSS2:LIMS_RUNTIME_SSS2",
+  "runtime_report": ".scratch/sunway-supplier-exit-api-first/diagnostic-evidence/runtime/strict-api-runtime-manifest-replayc4.json",
+  "runtime_contract": {
+    "mode": "strict",
+    "strict_evidence": false,
+    "runtime_identity": "lims-owned-sss2-oracle:LIMS_BASELINE_SSS2:LIMS_RUNTIME_SSS2:4f23874f86afdf6359396917061720b80bbb78b84843b2c533c8fcc2c71689bd",
+    "reuse": true,
+    "oracle_reused": true,
+    "baseline_schema": "LIMS_BASELINE_SSS2",
+    "runtime_schema": "LIMS_RUNTIME_SSS2",
+    "baseline_schema_hash": "4f23874f86afdf6359396917061720b80bbb78b84843b2c533c8fcc2c71689bd",
+    "runtime_schema_hash_before": "674f918ce233701cd851a04a5cac89284ed7f1959201a1248bb091d08907a3b6",
+    "runtime_schema_hash_after": "674f918ce233701cd851a04a5cac89284ed7f1959201a1248bb091d08907a3b6",
+    "source_commit": "46c538a94b21bfc349a60b3da3907479117a6d4c",
+    "implementation_binding": "impl-c2dc5d6121b44f7d",
+    "implementation_tree_digest": "c2dc5d6121b44f7d7d9808b09d435ef535f9513cd29cab4ba42ca9b944353610",
+    "implementation_scope": [
+      "project/src/main/java",
+      "owned-framework/src",
+      "owned-personnel/src",
+      "owned-equipment/src",
+      "owned-consumables/src",
+      "owned-attachments/src",
+      "owned-report/src",
+      "owned-scheduler/src",
+      "owned-web/src",
+      "scripts/source_binding.py",
+      "scripts/evidence_output.py",
+      "scripts/spring_api_contract_runner.py",
+      "scripts/api_wave_orchestrator.py",
+      "scripts/owned_runtime_contract.py",
+      "scripts/api_fixture.py",
+      "scripts/remote-sql-fixture-executor.py",
+      "scripts/start-strict-sss2-api-runtime.sh",
+      "scripts/start-reused-sss2-api-runtime.sh",
+      "scripts/cleanup-strict-sss2-api-runtime.sh",
+      "scripts/refresh-owned-sss2-app.sh",
+      "scripts/owned_readiness.py",
+      "tools/business_api_inventory.py",
+      "tools/api_route_ledger.py",
+      "tools/api_route_execution_plan.py",
+      "tools/api_contract_skeleton.py",
+      "tools/api_route_closure.py",
+      "tools/finalize_api_report.py",
+      "tools/vertical_slices/matrix.py",
+      "project/pom.xml",
+      "owned-framework/pom.xml",
+      "owned-personnel/pom.xml",
+      "owned-equipment/pom.xml",
+      "owned-consumables/pom.xml",
+      "owned-attachments/pom.xml",
+      "owned-report/pom.xml",
+      "owned-scheduler/pom.xml",
+      "owned-web/pom.xml",
+      "owned-distribution/package.py",
+      "owned-distribution/start.sh",
+      "owned-distribution/example",
+      "owned-web/build-owned-web.sh",
+      "scripts/build-owned-distribution.sh",
+      "scripts/build-owned-framework.sh",
+      "scripts/build-owned-personnel.sh",
+      "scripts/build-owned-equipment.sh",
+      "scripts/build-owned-consumables.sh",
+      "scripts/build-owned-attachments.sh",
+      "scripts/build-owned-report.sh",
+      "scripts/build-owned-scheduler.sh",
+      "scripts/build-prep.sh",
+      "scripts/verify-external-artifacts.sh",
+      "evidence/external-artifacts.sha256",
+      "build/oracle-free-source-manifest.json",
+      "docker/Dockerfile.built"
+    ],
+    "implementation_dirty": false,
+    "repository_head_at_capture": "46c538a94b21bfc349a60b3da3907479117a6d4c"
+  },
+  "role": "manager",
+  "organization": "org-a",
+  "mode": "strict",
+  "base_url": "http://127.0.0.1:18089",
+  "case_count": 22,
+  "cases": [
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "3f6d7b3fa150da66f7bc03a158a157672cef924ad2b8f71c840d9a252aed82af",
+      "body_bytes": 1987,
+      "assertions": {
+        "json_keys": [
+          "columnTypeMap",
+          "first",
+          "last",
+          "numberOfElements",
+          "pageNumber",
+          "pageSize",
+          "rows",
+          "total",
+          "totalMap",
+          "totalPages"
+        ]
+      },
+      "id": "folder.emc",
+      "method": "POST",
+      "path": "/secure/emc/module/bp/bp/folders/queries/tasks",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/bp/folders/queries/tasks",
+      "status": 200,
+      "response_headers": {
+        "cache-control": "no-store",
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "1987",
+        "date": "Sun, 01 Nov 2026 09:47:49 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 526.441,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/bp/bp/folders/queries/tasks",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "route_id": "65c4063bb485f320"
+      },
+      "behavior_family": "task-integration",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "ref887cf0f4b9"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "3f6d7b3fa150da66f7bc03a158a157672cef924ad2b8f71c840d9a252aed82af",
+      "body_bytes": 1987,
+      "assertions": {
+        "json_keys": [
+          "columnTypeMap",
+          "first",
+          "last",
+          "numberOfElements",
+          "pageNumber",
+          "pageSize",
+          "rows",
+          "total",
+          "totalMap",
+          "totalPages"
+        ]
+      },
+      "id": "folder.pf",
+      "method": "POST",
+      "path": "/secure/emc/module/bp/bp/folders/queries/tasks",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/bp/folders/queries/tasks",
+      "status": 200,
+      "response_headers": {
+        "cache-control": "no-store",
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "1987",
+        "date": "Sun, 01 Nov 2026 09:47:49 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 453.992,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/bp/bp/folders/queries/tasks",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "route_id": "503bdd62ea8e4159"
+      },
+      "behavior_family": "task-integration",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "rd0bfaefbbf6c"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "147406ac18a4fafe8ee48b34062146d9d5c82c7000cd4bc5d87ab21d9551c863",
+      "body_bytes": 3307,
+      "assertions": {
+        "json_keys": [
+          "columnTypeMap",
+          "first",
+          "last",
+          "numberOfElements",
+          "pageNumber",
+          "pageSize",
+          "rows",
+          "total",
+          "totalMap",
+          "totalPages"
+        ]
+      },
+      "id": "result.q",
+      "method": "POST",
+      "path": "/secure/emc/module/bp/bp/order-task-results/queries",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/bp/order-task-results/queries",
+      "status": 200,
+      "response_headers": {
+        "cache-control": "no-store",
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "3307",
+        "date": "Sun, 01 Nov 2026 09:47:49 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 472.156,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/bp/bp/order-task-results/queries",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "route_ids": [
+          "b1c2274f1490a189",
+          "29d5db2e96ed113f"
+        ]
+      },
+      "behavior_family": "task-integration",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r02b89ae8c2b7"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "147406ac18a4fafe8ee48b34062146d9d5c82c7000cd4bc5d87ab21d9551c863",
+      "body_bytes": 3307,
+      "assertions": {
+        "json_keys": [
+          "columnTypeMap",
+          "first",
+          "last",
+          "numberOfElements",
+          "pageNumber",
+          "pageSize",
+          "rows",
+          "total",
+          "totalMap",
+          "totalPages"
+        ]
+      },
+      "id": "result.r",
+      "method": "POST",
+      "path": "/secure/emc/module/bp/bp/order-task-results/queries/raw",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/bp/order-task-results/queries/raw",
+      "status": 200,
+      "response_headers": {
+        "cache-control": "no-store",
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "3307",
+        "date": "Sun, 01 Nov 2026 09:47:51 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 471.405,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/bp/bp/order-task-results/queries/raw",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "route_ids": [
+          "3d1f88b8a0898a70",
+          "4c3320023299424f"
+        ]
+      },
+      "behavior_family": "task-integration",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r62b5a13a6111"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "147406ac18a4fafe8ee48b34062146d9d5c82c7000cd4bc5d87ab21d9551c863",
+      "body_bytes": 3307,
+      "assertions": {
+        "json_keys": [
+          "columnTypeMap",
+          "first",
+          "last",
+          "numberOfElements",
+          "pageNumber",
+          "pageSize",
+          "rows",
+          "total",
+          "totalMap",
+          "totalPages"
+        ]
+      },
+      "id": "result.s",
+      "method": "POST",
+      "path": "/secure/emc/module/bp/bp/order-task-results/queries/searchable",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/bp/order-task-results/queries/searchable",
+      "status": 200,
+      "response_headers": {
+        "cache-control": "no-store",
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "3307",
+        "date": "Sun, 01 Nov 2026 09:47:51 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 493.789,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/bp/bp/order-task-results/queries/searchable",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "route_ids": [
+          "7ee4d51606f79add",
+          "7f519c02557b537a"
+        ]
+      },
+      "behavior_family": "task-integration",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r4b8330e5802c"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": null,
+      "body_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "body_bytes": 2,
+      "assertions": {},
+      "id": "dq.t",
+      "method": "POST",
+      "path": "/secure/emc/module/bp/bp/order-task-results/data-query-titles/queries",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/bp/order-task-results/data-query-titles/queries",
+      "status": 200,
+      "response_headers": {
+        "cache-control": "no-store",
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "2",
+        "date": "Sun, 01 Nov 2026 09:47:51 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 461.657,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/bp/bp/order-task-results/data-query-titles/queries",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "route_id": "da99d55e7f353281"
+      },
+      "behavior_family": "task-integration",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "rb69fcae35c30"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "c7acc1e08cbfb45c941604061137f4cfc201ee2dd63687e26e4349799404510e",
+      "body_bytes": 143,
+      "assertions": {
+        "json_keys": [
+          "columnTypeMap",
+          "first",
+          "last",
+          "numberOfElements",
+          "pageNumber",
+          "pageSize",
+          "rows",
+          "total",
+          "totalMap",
+          "totalPages"
+        ]
+      },
+      "id": "dq.r",
+      "method": "POST",
+      "path": "/secure/emc/module/bp/bp/order-task-results/data-query-rows/queries",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/bp/order-task-results/data-query-rows/queries",
+      "status": 200,
+      "response_headers": {
+        "cache-control": "no-store",
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "143",
+        "date": "Sun, 01 Nov 2026 09:47:52 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 442.761,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/bp/bp/order-task-results/data-query-rows/queries",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "route_id": "ae9999d7f1c970e7"
+      },
+      "behavior_family": "task-integration",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "rc1bf16ca31fd"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        500
+      ],
+      "json_top_level_keys": [
+        "error",
+        "message",
+        "path",
+        "status",
+        "timestamp"
+      ],
+      "body_sha256": "61d96798485c2f201cf7db8d1000c80a5a3362935003895521f1f915e875a3b9",
+      "body_bytes": 184,
+      "assertions": {
+        "json_keys": [
+          "error",
+          "message",
+          "path",
+          "status",
+          "timestamp"
+        ]
+      },
+      "id": "sum.t",
+      "method": "POST",
+      "path": "/secure/emc/module/bp/bp/order-task-results/data-titles/queries",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/bp/order-task-results/data-titles/queries",
+      "status": 500,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "text/plain;charset=UTF-8",
+        "content-length": "184",
+        "date": "Sun, 01 Nov 2026 09:47:52 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 451.542,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/bp/bp/order-task-results/data-titles/queries",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "route_id": "23cd96e83e1cd5a6"
+      },
+      "behavior_family": "task-integration",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r89cd1789bc69"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        500
+      ],
+      "json_top_level_keys": [
+        "error",
+        "message",
+        "path",
+        "status",
+        "timestamp"
+      ],
+      "body_sha256": "28e42a9e5d0a5e80f86e8d4dca6587da518099d628cbd18b9382ac5926a40c5e",
+      "body_bytes": 182,
+      "assertions": {
+        "json_keys": [
+          "error",
+          "message",
+          "path",
+          "status",
+          "timestamp"
+        ]
+      },
+      "id": "sum.r",
+      "method": "POST",
+      "path": "/secure/emc/module/bp/bp/order-task-results/data-rows/queries",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/bp/order-task-results/data-rows/queries",
+      "status": 500,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "text/plain;charset=UTF-8",
+        "content-length": "182",
+        "date": "Sun, 01 Nov 2026 09:47:52 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 444.468,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/bp/bp/order-task-results/data-rows/queries",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "route_id": "2448d6ad18c5b1d6"
+      },
+      "behavior_family": "task-integration",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r0fbd56938542"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": null,
+      "body_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "body_bytes": 2,
+      "assertions": {},
+      "id": "qc",
+      "method": "POST",
+      "path": "/secure/emc/module/bp/bp/order-task-results/qcnames/queries",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/bp/order-task-results/qcnames/queries",
+      "status": 200,
+      "response_headers": {
+        "cache-control": "no-store",
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "2",
+        "date": "Sun, 01 Nov 2026 09:47:53 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 438.225,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/bp/bp/order-task-results/qcnames/queries",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "route_id": "9061dee3c62b9ecc"
+      },
+      "behavior_family": "task-integration",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r894cf369367c"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": null,
+      "body_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "body_bytes": 2,
+      "assertions": {},
+      "id": "pre.t",
+      "method": "POST",
+      "path": "/secure/emc/module/bp/bp/order-task-results/preprocessing-result/table-heads/queries",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/bp/order-task-results/preprocessing-result/table-heads/queries",
+      "status": 200,
+      "response_headers": {
+        "cache-control": "no-store",
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "2",
+        "date": "Sun, 01 Nov 2026 09:47:53 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 436.256,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/bp/bp/order-task-results/preprocessing-result/table-heads/queries",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "route_id": "97a372b68d2f743b"
+      },
+      "behavior_family": "task-integration",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r166b465992d0"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": null,
+      "body_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "body_bytes": 2,
+      "assertions": {},
+      "id": "pre.r",
+      "method": "POST",
+      "path": "/secure/emc/module/bp/bp/order-task-results/preprocessing-result/table-rows/queries",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/bp/order-task-results/preprocessing-result/table-rows/queries",
+      "status": 200,
+      "response_headers": {
+        "cache-control": "no-store",
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "2",
+        "date": "Sun, 01 Nov 2026 09:47:53 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 429.248,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/bp/bp/order-task-results/preprocessing-result/table-rows/queries",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "route_id": "90658a0f0d67177d"
+      },
+      "behavior_family": "task-integration",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r76d0fd65f0a7"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        500
+      ],
+      "json_top_level_keys": [
+        "error",
+        "message",
+        "path",
+        "status",
+        "timestamp"
+      ],
+      "body_sha256": "a7dce4cd4c7ef8a61a4890510700138791c46a424289416df141b032f6a73698",
+      "body_bytes": 211,
+      "assertions": {
+        "json_keys": [
+          "error",
+          "message",
+          "path",
+          "status",
+          "timestamp"
+        ]
+      },
+      "id": "g.t",
+      "method": "POST",
+      "path": "/secure/emc/module/bp/bp/order-task-results/gas-parameter/table-heads/queries",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/bp/order-task-results/gas-parameter/table-heads/queries",
+      "status": 500,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "211",
+        "date": "Sun, 01 Nov 2026 09:47:55 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 446.692,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/bp/bp/order-task-results/gas-parameter/table-heads/queries",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "route_id": "d8255a6073898790"
+      },
+      "behavior_family": "task-integration",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "ra13d510d2512"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        500
+      ],
+      "json_top_level_keys": [
+        "error",
+        "message",
+        "path",
+        "status",
+        "timestamp"
+      ],
+      "body_sha256": "124faf49be7c8d9591164f1b6eeaa19b26403eb3a196a18c38485c7835c7a65b",
+      "body_bytes": 210,
+      "assertions": {
+        "json_keys": [
+          "error",
+          "message",
+          "path",
+          "status",
+          "timestamp"
+        ]
+      },
+      "id": "g.r",
+      "method": "POST",
+      "path": "/secure/emc/module/bp/bp/order-task-results/gas-parameter/table-rows/queries",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/bp/order-task-results/gas-parameter/table-rows/queries",
+      "status": 500,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "210",
+        "date": "Sun, 01 Nov 2026 09:47:55 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 436.352,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/bp/bp/order-task-results/gas-parameter/table-rows/queries",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "route_id": "76c7fd1d26acaaf0"
+      },
+      "behavior_family": "task-integration",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "rfd47c262c056"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        500
+      ],
+      "json_top_level_keys": [
+        "error",
+        "message",
+        "path",
+        "status",
+        "timestamp"
+      ],
+      "body_sha256": "1f595a43edca0b6756c9f56864ab5d5e375e4cc20b87b5540ab800d6d7809820",
+      "body_bytes": 218,
+      "assertions": {
+        "json_keys": [
+          "error",
+          "message",
+          "path",
+          "status",
+          "timestamp"
+        ]
+      },
+      "id": "gr.t",
+      "method": "POST",
+      "path": "/secure/emc/module/bp/bp/order-task-results/gas-parameter-result/table-heads/queries",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/bp/order-task-results/gas-parameter-result/table-heads/queries",
+      "status": 500,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "218",
+        "date": "Sun, 01 Nov 2026 09:47:55 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 434.703,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/bp/bp/order-task-results/gas-parameter-result/table-heads/queries",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "route_id": "78b5cc4d92451584"
+      },
+      "behavior_family": "task-integration",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r1897335d6a58"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        500
+      ],
+      "json_top_level_keys": [
+        "error",
+        "message",
+        "path",
+        "status",
+        "timestamp"
+      ],
+      "body_sha256": "5a359983785ca21316df4e60c66197b6b3cb29dbed728454ad8709cc7cb35feb",
+      "body_bytes": 217,
+      "assertions": {
+        "json_keys": [
+          "error",
+          "message",
+          "path",
+          "status",
+          "timestamp"
+        ]
+      },
+      "id": "gr.r",
+      "method": "POST",
+      "path": "/secure/emc/module/bp/bp/order-task-results/gas-parameter-result/table-rows/queries",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/bp/order-task-results/gas-parameter-result/table-rows/queries",
+      "status": 500,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "217",
+        "date": "Sun, 01 Nov 2026 09:47:56 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 429.333,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/bp/bp/order-task-results/gas-parameter-result/table-rows/queries",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "route_id": "04ab26e2fd035ed5"
+      },
+      "behavior_family": "task-integration",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "rc7ee049dd334"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": null,
+      "body_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "body_bytes": 2,
+      "assertions": {},
+      "id": "qs.t",
+      "method": "POST",
+      "path": "/secure/emc/module/bp/bp/order-task-results/quick-inputs-sample/table-heads/queries",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/bp/order-task-results/quick-inputs-sample/table-heads/queries",
+      "status": 200,
+      "response_headers": {
+        "cache-control": "no-store",
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "2",
+        "date": "Sun, 01 Nov 2026 09:47:56 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 444.266,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/bp/bp/order-task-results/quick-inputs-sample/table-heads/queries",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "route_id": "1c1d3d9e9419fdfd"
+      },
+      "behavior_family": "task-integration",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "re69cc27de122"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": null,
+      "body_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "body_bytes": 2,
+      "assertions": {},
+      "id": "qs.r",
+      "method": "POST",
+      "path": "/secure/emc/module/bp/bp/order-task-results/quick-inputs-sample/table-rows/queries",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/bp/order-task-results/quick-inputs-sample/table-rows/queries",
+      "status": 200,
+      "response_headers": {
+        "cache-control": "no-store",
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "2",
+        "date": "Sun, 01 Nov 2026 09:47:56 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 448.674,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/bp/bp/order-task-results/quick-inputs-sample/table-rows/queries",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "route_id": "e3d6c8a89f569aa5"
+      },
+      "behavior_family": "task-integration",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r0e6c96de7b09"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        500
+      ],
+      "json_top_level_keys": [
+        "error",
+        "message",
+        "path",
+        "status",
+        "timestamp"
+      ],
+      "body_sha256": "f2d9663d938a38eb2b6f65588734a8734eb78944a21ab01b0cd1e0d0394ba2dd",
+      "body_bytes": 210,
+      "assertions": {
+        "json_keys": [
+          "error",
+          "message",
+          "path",
+          "status",
+          "timestamp"
+        ]
+      },
+      "id": "q.t",
+      "method": "POST",
+      "path": "/secure/emc/module/bp/bp/order-task-results/quick-inputs/table-heads/queries",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/bp/order-task-results/quick-inputs/table-heads/queries",
+      "status": 500,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "210",
+        "date": "Sun, 01 Nov 2026 09:47:57 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 444.232,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/bp/bp/order-task-results/quick-inputs/table-heads/queries",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "route_id": "74cbcf8e3d08594a"
+      },
+      "behavior_family": "task-integration",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "rc3e7843da870"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        500
+      ],
+      "json_top_level_keys": [
+        "error",
+        "message",
+        "path",
+        "status",
+        "timestamp"
+      ],
+      "body_sha256": "541b75c81eb06a27506fb906654362ccdecb568926b7d89b5f00b601ed3c8da1",
+      "body_bytes": 209,
+      "assertions": {
+        "json_keys": [
+          "error",
+          "message",
+          "path",
+          "status",
+          "timestamp"
+        ]
+      },
+      "id": "q.r",
+      "method": "POST",
+      "path": "/secure/emc/module/bp/bp/order-task-results/quick-inputs/table-rows/queries",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/bp/order-task-results/quick-inputs/table-rows/queries",
+      "status": 500,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "209",
+        "date": "Sun, 01 Nov 2026 09:47:57 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 445.442,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/bp/bp/order-task-results/quick-inputs/table-rows/queries",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "route_id": "df8e718ffec691db"
+      },
+      "behavior_family": "task-integration",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "rf426dc8d2021"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        500
+      ],
+      "json_top_level_keys": [
+        "error",
+        "message",
+        "path",
+        "status",
+        "timestamp"
+      ],
+      "body_sha256": "f9d5e08b6a722fa6ed91bc52d2523dc300384051e222ca6d8d4cb5644795339c",
+      "body_bytes": 211,
+      "assertions": {
+        "json_keys": [
+          "error",
+          "message",
+          "path",
+          "status",
+          "timestamp"
+        ]
+      },
+      "id": "ri.t",
+      "method": "POST",
+      "path": "/secure/emc/module/bp/bp/order-task-results/result-inputs/table-heads/queries",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/bp/order-task-results/result-inputs/table-heads/queries",
+      "status": 500,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "211",
+        "date": "Sun, 01 Nov 2026 09:47:57 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 452.296,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/bp/bp/order-task-results/result-inputs/table-heads/queries",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "route_id": "d2b318fcb6e5ab3b"
+      },
+      "behavior_family": "task-integration",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r1e40d7f013b3"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        500
+      ],
+      "json_top_level_keys": [
+        "error",
+        "message",
+        "path",
+        "status",
+        "timestamp"
+      ],
+      "body_sha256": "0510e9d92460c8764b9b044a920204f3de3129d8ce8f02bb5906f4e65ec58fd7",
+      "body_bytes": 210,
+      "assertions": {
+        "json_keys": [
+          "error",
+          "message",
+          "path",
+          "status",
+          "timestamp"
+        ]
+      },
+      "id": "ri.r",
+      "method": "POST",
+      "path": "/secure/emc/module/bp/bp/order-task-results/result-inputs/table-rows/queries",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/bp/order-task-results/result-inputs/table-rows/queries",
+      "status": 500,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "210",
+        "date": "Sun, 01 Nov 2026 09:47:59 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 449.014,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/bp/bp/order-task-results/result-inputs/table-rows/queries",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "route_id": "ad7eb6add31f770c"
+      },
+      "behavior_family": "task-integration",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r3e5037a8e284"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    }
+  ],
+  "cleanup": {
+    "application_stopped": true,
+    "baseline_schema_immutable": true,
+    "cleanup_mode": "persistent-oracle",
+    "network_preserved": true,
+    "oracle_preserved": true,
+    "oracle_reused": true,
+    "oracle_stopped": false,
+    "redis_preserved": true,
+    "redis_stopped": false,
+    "runtime_dirty": false,
+    "runtime_schema_restored": true,
+    "temporary_files_removed": true,
+    "volume_preserved": true
+  },
+  "cleanup_pending": false,
+  "phase_timings_ms": {
+    "http_cases": 10646.628
+  },
+  "authentication": {
+    "attempted": true,
+    "authenticated": true,
+    "status": 200
+  },
+  "finished_at": "2026-11-01T09:47:58.924155+00:00",
+  "cleanup_finalized_at": "2026-11-01T09:48:56.374686+00:00"
+}

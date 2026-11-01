@@ -14,9 +14,9 @@
     "internal_http_bridge": false,
     "jni_replacement_process": false
   },
-  "started_at": "2026-11-01T08:00:00.765376+00:00",
-  "source_commit": "6096ed8ebb82eab54b83a4661cdd1d6bea3b0c94",
-  "repository_head_at_capture": "6096ed8ebb82eab54b83a4661cdd1d6bea3b0c94",
+  "started_at": "2026-11-01T08:30:33.585609+00:00",
+  "source_commit": "3bf9ef750e64d5ef92ec3063810ca4d763d3ef6d",
+  "repository_head_at_capture": "3bf9ef750e64d5ef92ec3063810ca4d763d3ef6d",
   "source_dirty": false,
   "source_scope": [
     "project/src/main/java",
@@ -74,8 +74,8 @@
     "build/oracle-free-source-manifest.json",
     "docker/Dockerfile.built"
   ],
-  "implementation_binding": "impl-8853805d3a577068",
-  "implementation_tree_digest": "8853805d3a5770685be3873d6bda52f817e939be33c2cfb9765d257d8672043e",
+  "implementation_binding": "impl-62dbabc6bdb5849c",
+  "implementation_tree_digest": "62dbabc6bdb5849cb822e62149dfc5afe0ed12768b5bdb52dd11a513d0bf69c0",
   "implementation_dirty": false,
   "implementation_scope": [
     "project/src/main/java",
@@ -136,10 +136,10 @@
   "nested_project_commit": "27932b1fe4d71d64a02f9a63e55f56acb403e3a0",
   "distribution_input_digest": "2121fc67991dd241a80c02ee575f69cde2f4a21af05820ef694ce4caabf4ffc7",
   "artifact_sha256": {
-    "lims-recovery/owned-distribution/target/distribution/app/lims-owned-application.jar": "91b2b5e76a4fa50f25d45c9678a5454f4578fab38d573b39e9dbdad3c0423fe9"
+    "lims-recovery/owned-distribution/target/distribution/app/lims-owned-application.jar": "eaec9f913ad24107030ce7e2b8861eea02fdfb4b75782962be2766da6da7c5be"
   },
   "clone_identity": "lims-owned-sss2-oracle:LIMS_BASELINE_SSS2:LIMS_RUNTIME_SSS2",
-  "runtime_report": ".scratch/sunway-supplier-exit-api-first/diagnostic-evidence/runtime/strict-api-runtime-manifest-resultreads.json",
+  "runtime_report": ".scratch/sunway-supplier-exit-api-first/diagnostic-evidence/runtime/strict-api-runtime-manifest-paramreads.json",
   "runtime_contract": {
     "mode": "strict",
     "strict_evidence": false,
@@ -151,9 +151,9 @@
     "baseline_schema_hash": "4f23874f86afdf6359396917061720b80bbb78b84843b2c533c8fcc2c71689bd",
     "runtime_schema_hash_before": "674f918ce233701cd851a04a5cac89284ed7f1959201a1248bb091d08907a3b6",
     "runtime_schema_hash_after": "674f918ce233701cd851a04a5cac89284ed7f1959201a1248bb091d08907a3b6",
-    "source_commit": "6096ed8ebb82eab54b83a4661cdd1d6bea3b0c94",
-    "implementation_binding": "impl-8853805d3a577068",
-    "implementation_tree_digest": "8853805d3a5770685be3873d6bda52f817e939be33c2cfb9765d257d8672043e",
+    "source_commit": "3bf9ef750e64d5ef92ec3063810ca4d763d3ef6d",
+    "implementation_binding": "impl-62dbabc6bdb5849c",
+    "implementation_tree_digest": "62dbabc6bdb5849cb822e62149dfc5afe0ed12768b5bdb52dd11a513d0bf69c0",
     "implementation_scope": [
       "project/src/main/java",
       "owned-framework/src",
@@ -211,13 +211,13 @@
       "docker/Dockerfile.built"
     ],
     "implementation_dirty": false,
-    "repository_head_at_capture": "6096ed8ebb82eab54b83a4661cdd1d6bea3b0c94"
+    "repository_head_at_capture": "3bf9ef750e64d5ef92ec3063810ca4d763d3ef6d"
   },
   "role": "manager",
   "organization": "org-a",
   "mode": "strict",
   "base_url": "http://127.0.0.1:18089",
-  "case_count": 3,
+  "case_count": 6,
   "cases": [
     {
       "expected_status": [
@@ -229,10 +229,10 @@
       "assertions": {
         "content_type": "application/json"
       },
-      "id": "order-task-result.qcnames",
+      "id": "preprocessing.titles",
       "method": "POST",
-      "path": "/secure/emc/module/bp/bp/order-task-results/qcnames/queries",
-      "url": "http://127.0.0.1:18089/secure/emc/module/bp/bp/order-task-results/qcnames/queries",
+      "path": "/secure/emc/module/bp/bp/order-task-results/preprocessing-result/table-heads/queries",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/bp/order-task-results/preprocessing-result/table-heads/queries",
       "status": 200,
       "response_headers": {
         "cache-control": "no-store",
@@ -241,19 +241,19 @@
         "x-frame-options": "SAMEORIGIN",
         "content-type": "application/json",
         "content-length": "2",
-        "date": "Sun, 01 Nov 2026 08:00:02 GMT",
+        "date": "Sun, 01 Nov 2026 08:30:34 GMT",
         "connection": "close"
       },
       "request_headers": {
         "content-type": "application/json"
       },
-      "elapsed_ms": 532.221,
+      "elapsed_ms": 490.799,
       "route": {
         "method": "POST",
-        "path": "/secure/emc/module/bp/bp/order-task-results/qcnames/queries",
+        "path": "/secure/emc/module/bp/bp/order-task-results/preprocessing-result/table-heads/queries",
         "operation": "read",
         "disposition": "owned-pass",
-        "route_id": "9061dee3c62b9ecc"
+        "route_id": "97a372b68d2f743b"
       },
       "behavior_family": "task-integration",
       "fixture": {
@@ -263,7 +263,67 @@
         "setup": "not-required",
         "restore": "not-required",
         "runtime_values": {
-          "id": "r8bdf1f1c6bf1"
+          "id": "re59cb5c5ab9d"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": null,
+      "body_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "body_bytes": 2,
+      "assertions": {
+        "content_type": "application/json"
+      },
+      "id": "preprocessing.rows",
+      "method": "POST",
+      "path": "/secure/emc/module/bp/bp/order-task-results/preprocessing-result/table-rows/queries",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/bp/order-task-results/preprocessing-result/table-rows/queries",
+      "status": 200,
+      "response_headers": {
+        "cache-control": "no-store",
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "2",
+        "date": "Sun, 01 Nov 2026 08:30:34 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 455.402,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/bp/bp/order-task-results/preprocessing-result/table-rows/queries",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "route_id": "90658a0f0d67177d"
+      },
+      "behavior_family": "task-integration",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r8d7f4f116af6"
         },
         "setup_http": [],
         "restore_http": []
@@ -290,8 +350,8 @@
         "status",
         "timestamp"
       ],
-      "body_sha256": "5d6cae55825a1004066c58826edf477cb3d24fa0d42f882e92e1cfbf3fcf1911",
-      "body_bytes": 184,
+      "body_sha256": "a131ddfa3009ad6e08349f2291b09efa5af07c626704c0c5966e064afe16fb8d",
+      "body_bytes": 211,
       "assertions": {
         "content_type": "application/json",
         "json_keys": [
@@ -302,10 +362,10 @@
           "timestamp"
         ]
       },
-      "id": "order-task-result.data-titles",
+      "id": "gas.parameter.titles",
       "method": "POST",
-      "path": "/secure/emc/module/bp/bp/order-task-results/data-titles/queries",
-      "url": "http://127.0.0.1:18089/secure/emc/module/bp/bp/order-task-results/data-titles/queries",
+      "path": "/secure/emc/module/bp/bp/order-task-results/gas-parameter/table-heads/queries",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/bp/order-task-results/gas-parameter/table-heads/queries",
       "status": 500,
       "response_headers": {
         "x-content-type-options": "nosniff",
@@ -315,20 +375,20 @@
         "expires": "0",
         "x-frame-options": "SAMEORIGIN",
         "content-type": "application/json",
-        "content-length": "184",
-        "date": "Sun, 01 Nov 2026 08:00:02 GMT",
+        "content-length": "211",
+        "date": "Sun, 01 Nov 2026 08:30:34 GMT",
         "connection": "close"
       },
       "request_headers": {
         "content-type": "application/json"
       },
-      "elapsed_ms": 481.361,
+      "elapsed_ms": 442.458,
       "route": {
         "method": "POST",
-        "path": "/secure/emc/module/bp/bp/order-task-results/data-titles/queries",
+        "path": "/secure/emc/module/bp/bp/order-task-results/gas-parameter/table-heads/queries",
         "operation": "read",
         "disposition": "owned-pass",
-        "route_id": "23cd96e83e1cd5a6"
+        "route_id": "d8255a6073898790"
       },
       "behavior_family": "task-integration",
       "fixture": {
@@ -338,7 +398,7 @@
         "setup": "not-required",
         "restore": "not-required",
         "runtime_values": {
-          "id": "rc8ca1318d1fd"
+          "id": "rfec1c29cc21a"
         },
         "setup_http": [],
         "restore_http": []
@@ -365,8 +425,8 @@
         "status",
         "timestamp"
       ],
-      "body_sha256": "842bcef2cb4aaa95df18dea7c59abecee956c819185a8780c43167922a2d497a",
-      "body_bytes": 182,
+      "body_sha256": "30f24400634f553bd33fd840dccfcc9616eff1e9c5ab1c46f3184dfc87980948",
+      "body_bytes": 210,
       "assertions": {
         "content_type": "application/json",
         "json_keys": [
@@ -377,10 +437,10 @@
           "timestamp"
         ]
       },
-      "id": "order-task-result.data-rows",
+      "id": "gas.parameter.rows",
       "method": "POST",
-      "path": "/secure/emc/module/bp/bp/order-task-results/data-rows/queries",
-      "url": "http://127.0.0.1:18089/secure/emc/module/bp/bp/order-task-results/data-rows/queries",
+      "path": "/secure/emc/module/bp/bp/order-task-results/gas-parameter/table-rows/queries",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/bp/order-task-results/gas-parameter/table-rows/queries",
       "status": 500,
       "response_headers": {
         "x-content-type-options": "nosniff",
@@ -390,20 +450,20 @@
         "expires": "0",
         "x-frame-options": "SAMEORIGIN",
         "content-type": "application/json",
-        "content-length": "182",
-        "date": "Sun, 01 Nov 2026 08:00:02 GMT",
+        "content-length": "210",
+        "date": "Sun, 01 Nov 2026 08:30:36 GMT",
         "connection": "close"
       },
       "request_headers": {
         "content-type": "application/json"
       },
-      "elapsed_ms": 455.538,
+      "elapsed_ms": 448.642,
       "route": {
         "method": "POST",
-        "path": "/secure/emc/module/bp/bp/order-task-results/data-rows/queries",
+        "path": "/secure/emc/module/bp/bp/order-task-results/gas-parameter/table-rows/queries",
         "operation": "read",
         "disposition": "owned-pass",
-        "route_id": "2448d6ad18c5b1d6"
+        "route_id": "76c7fd1d26acaaf0"
       },
       "behavior_family": "task-integration",
       "fixture": {
@@ -413,7 +473,157 @@
         "setup": "not-required",
         "restore": "not-required",
         "runtime_values": {
-          "id": "r9a8d9a42211b"
+          "id": "r91bb92f08a14"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        500
+      ],
+      "json_top_level_keys": [
+        "error",
+        "message",
+        "path",
+        "status",
+        "timestamp"
+      ],
+      "body_sha256": "abcf7bce07cf8caf9e88e455f7e02e37239f0f82856a653620645c3c8bcfe8fa",
+      "body_bytes": 218,
+      "assertions": {
+        "content_type": "application/json",
+        "json_keys": [
+          "error",
+          "message",
+          "path",
+          "status",
+          "timestamp"
+        ]
+      },
+      "id": "gas.parameter.result.titles",
+      "method": "POST",
+      "path": "/secure/emc/module/bp/bp/order-task-results/gas-parameter-result/table-heads/queries",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/bp/order-task-results/gas-parameter-result/table-heads/queries",
+      "status": 500,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "218",
+        "date": "Sun, 01 Nov 2026 08:30:36 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 444.762,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/bp/bp/order-task-results/gas-parameter-result/table-heads/queries",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "route_id": "78b5cc4d92451584"
+      },
+      "behavior_family": "task-integration",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r20334dd09072"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        500
+      ],
+      "json_top_level_keys": [
+        "error",
+        "message",
+        "path",
+        "status",
+        "timestamp"
+      ],
+      "body_sha256": "6b02252f0f07747effdc4f7d12aadccfe07b7930abe2974d957194190b35c708",
+      "body_bytes": 217,
+      "assertions": {
+        "content_type": "application/json",
+        "json_keys": [
+          "error",
+          "message",
+          "path",
+          "status",
+          "timestamp"
+        ]
+      },
+      "id": "gas.parameter.result.rows",
+      "method": "POST",
+      "path": "/secure/emc/module/bp/bp/order-task-results/gas-parameter-result/table-rows/queries",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/bp/order-task-results/gas-parameter-result/table-rows/queries",
+      "status": 500,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "217",
+        "date": "Sun, 01 Nov 2026 08:30:36 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 449.588,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/bp/bp/order-task-results/gas-parameter-result/table-rows/queries",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "route_id": "04ab26e2fd035ed5"
+      },
+      "behavior_family": "task-integration",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r362ad45e996e"
         },
         "setup_http": [],
         "restore_http": []
@@ -447,13 +657,13 @@
   },
   "cleanup_pending": false,
   "phase_timings_ms": {
-    "http_cases": 2244.106
+    "http_cases": 3466.493
   },
   "authentication": {
     "attempted": true,
     "authenticated": true,
     "status": 200
   },
-  "finished_at": "2026-11-01T08:00:03.009527+00:00",
-  "cleanup_finalized_at": "2026-11-01T08:00:47.933543+00:00"
+  "finished_at": "2026-11-01T08:30:37.052187+00:00",
+  "cleanup_finalized_at": "2026-11-01T08:31:31.672276+00:00"
 }

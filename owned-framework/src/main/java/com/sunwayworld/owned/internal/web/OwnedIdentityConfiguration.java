@@ -267,6 +267,13 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @ConditionalOnMissingBean(OwnedProjectTaskQueryController.class)
+    public OwnedProjectTaskQueryController ownedProjectTaskQueryController(
+            OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
+        return new OwnedProjectTaskQueryController(boundary, dataSource);
+    }
+
+    @Bean
     @ConditionalOnMissingBean(OwnedOrderTaskResultQueryController.class)
     public OwnedOrderTaskResultQueryController ownedOrderTaskResultQueryController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {

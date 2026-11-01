@@ -81,6 +81,7 @@ public final class OwnedOrderTaskQueryController {
             PREFIX + "/personnel-workload-statistics/queries",
             PREFIX + "/proj-order-categories/queries",
             "/secure/emc/module/bp/bp/orders/order-tasks/queries",
+            "/secure/emc/module/bp/edit/project-change/orders/order-tasks/queries",
             PREFIX + "/queries/runnableanalassign"
             }, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> query(HttpServletRequest request, @RequestBody(required = false) String body) {
@@ -159,9 +160,13 @@ public final class OwnedOrderTaskQueryController {
         envelope.put("columnTypeMap", types); envelope.put("first", page.number == 1);
         envelope.put("last", total == 0 || page.number >= pages(total, page.size));
         envelope.put("numberOfElements", rows.size()); envelope.put("pageNumber", page.number);
-        envelope.put("pageSize", page.size); envelope.put("rows", rows); envelope.put("total", total);
+        boolean emptyOrderResource = total == 0 && (requestPath.endsWith("/orders/order-tasks/queries")
+                || requestPath.endsWith("/edit/project-change/orders/order-tasks/queries"));
+        envelope.put("pageSize", emptyOrderResource ? 0 : page.size);
+        envelope.put("rows", rows); envelope.put("total", total);
         Map<String, Object> totals = new LinkedHashMap<String, Object>(); totals.put("qty_", total);
-        envelope.put("totalMap", totals); envelope.put("totalPages", pages(total, page.size));
+        envelope.put("totalMap", emptyOrderResource ? new LinkedHashMap<String, Object>() : totals);
+        envelope.put("totalPages", pages(total, page.size));
         return JSON.toJSONString(envelope, SerializerFeature.WriteMapNullValue);
     }
 
@@ -185,6 +190,8 @@ public final class OwnedOrderTaskQueryController {
         }
         String ordersPrefix = "/secure/emc/module/bp/bp/orders";
         if (requestPath.startsWith(ordersPrefix)) return requestPath.substring(ordersPrefix.length());
+        String projectChangePrefix = "/secure/emc/module/bp/edit/project-change/orders";
+        if (requestPath.startsWith(projectChangePrefix)) return requestPath.substring(projectChangePrefix.length());
         return "";
     }
 

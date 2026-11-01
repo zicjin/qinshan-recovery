@@ -36,6 +36,7 @@ public final class OwnedOrderTaskQueryControllerContractTest {
         require(paths, PREFIX + "/personnel-workload-statistics/queries");
         require(paths, PREFIX + "/proj-order-categories/queries");
         require(paths, "/secure/emc/module/bp/bp/orders/order-tasks/queries");
+        require(paths, "/secure/emc/module/bp/edit/project-change/orders/order-tasks/queries");
         require(paths, PREFIX + "/info/status");
         require(paths, PREFIX + "/{id}/info/status");
         require(paths, PREFIX + "/{id}");

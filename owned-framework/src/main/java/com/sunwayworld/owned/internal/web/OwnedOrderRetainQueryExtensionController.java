@@ -41,13 +41,13 @@ public final class OwnedOrderRetainQueryExtensionController {
 
     @PostMapping(path = PREFIX + "/queries/tasks", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> tasks(HttpServletRequest request, @RequestBody(required = false) String body) {
-        try { return ok(page(rows(request, TASK_SQL, false), TASK_PROFILE)); }
+        try { return ok(page(rows(request, TASK_SQL, false), TASK_PROFILE, pageSize(body), true)); }
         catch (AccessDeniedException denied) { return forbidden(); } catch (SQLException failure) { return unavailable(); }
     }
 
     @PostMapping(path = PREFIX + "/queries-overdue", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> overdue(HttpServletRequest request, @RequestBody(required = false) String body) {
-        try { return ok(page(rows(request, OVERDUE_SQL, false), new LinkedHashMap<String,String>())); }
+        try { List<Map<String,Object>> values=rows(request, OVERDUE_SQL, false); return ok(page(values, new LinkedHashMap<String,String>(), values.size(), false)); }
         catch (AccessDeniedException denied) { return forbidden(); } catch (SQLException failure) { return unavailable(); }
     }
 
@@ -64,7 +64,8 @@ public final class OwnedOrderRetainQueryExtensionController {
         }
         return rows;
     }
-    private static String page(List<Map<String,Object>> rows, Map<String,String> profile){Map<String,Object> body=new LinkedHashMap<String,Object>();body.put("columnTypeMap",profile);body.put("first",true);body.put("last",true);body.put("numberOfElements",rows.size());body.put("pageNumber",1);body.put("pageSize",rows.size());body.put("rows",rows);body.put("total",rows.size());body.put("totalMap",new LinkedHashMap<String,Object>());body.put("totalPages",rows.isEmpty()?0:1);return JSON.toJSONString(body,SerializerFeature.WriteMapNullValue);}
+    private static int pageSize(String body){if(body==null||body.trim().isEmpty())return 50;try{com.alibaba.fastjson.JSONObject root=JSON.parseObject(body);com.alibaba.fastjson.JSONObject p=root==null?null:root.getJSONObject("p");int size=p==null?50:p.getIntValue("s");return size<=0?50:Math.min(size,500);}catch(RuntimeException ignored){return 50;}}
+    private static String page(List<Map<String,Object>> rows, Map<String,String> profile,int size,boolean quantity){Map<String,Object> body=new LinkedHashMap<String,Object>();body.put("columnTypeMap",profile);body.put("first",true);body.put("last",true);body.put("numberOfElements",rows.size());body.put("pageNumber",1);body.put("pageSize",size);body.put("rows",rows);body.put("total",rows.size());Map<String,Object> total=new LinkedHashMap<String,Object>();if(quantity)total.put("qty_",rows.size());body.put("totalMap",total);body.put("totalPages",rows.isEmpty()?0:1);return JSON.toJSONString(body,SerializerFeature.WriteMapNullValue);}
     private static String camel(String name){StringBuilder b=new StringBuilder();boolean up=false;for(char c:name.toLowerCase(Locale.ROOT).toCharArray()){if(c=='_'){up=true;continue;}b.append(up?Character.toUpperCase(c):c);up=false;}return b.toString();}
     private static final Map<String,String> TASK_PROFILE=profile();
     private static Map<String,String> profile(){String e="processstatus=string;orderno=string;projno=string;samplecompletedate=dateTime;createdbyid=string;retaintimelimit=dateTime;handlerecord=string;folderid=number;retaindate=dateTime;handleuserid=string;retainuserid=string;projname=string;retainusername=string;createdbyorgname=string;id=number;projid=number;rn_=number;orderid=number;createdbyorgid=string;handledate=dateTime;folderno=string;retainindex=string;createdtime=dateTime;handleusernames=string;handleusername=string;retainqty=number;isretain=string;retaindays=number;createdbyname=string;retainloc=string";Map<String,String> r=new LinkedHashMap<String,String>();for(String t:e.split(";")){int i=t.indexOf('=');if(i>0)r.put(t.substring(0,i),t.substring(i+1));}return r;}

@@ -128,6 +128,8 @@ public final class OwnedResultRunController {
                 for (int i = 1; i <= meta.getColumnCount(); i++) {
                     types.put(friendly(meta.getColumnLabel(i)), type(meta.getColumnType(i)));
                 }
+                types.clear();
+                types.putAll(RUN_TYPE_PROFILE);
                 while (result.next()) {
                     Map<String, Object> row = new LinkedHashMap<String, Object>();
                     for (int i = 1; i <= meta.getColumnCount(); i++) row.put(friendly(meta.getColumnLabel(i)), JdbcValue.normalize(result.getObject(i)));
@@ -136,6 +138,18 @@ public final class OwnedResultRunController {
             }
         }
         return new QueryResult(rows, types);
+    }
+
+    /** Supplier column profile for the inherited run GenericResource. */
+    private static final Map<String, String> RUN_TYPE_PROFILE = runTypeProfile();
+    private static Map<String, String> runTypeProfile() {
+        String encoded = "adddate=dateTime;analysisbegindate=dateTime;analysisbegintime=string;analysisenddate=dateTime;analysisendtime=string;analysisuserid=string;analysisusername=string;assistequiptid=string;assistequiptmodel=string;assistequiptname=string;assistequiptno=string;auditeddate=dateTime;auditeduserid=string;auditedusername=string;beforehandle=string;beforehandleid=string;checkstatus=string;checkuserid=string;checkusername=string;composeflag=string;composestatus=string;createdbyid=string;createdbyname=string;createdbyorgid=string;createdbyorgname=string;createdtime=dateTime;curveid=string;curveno=string;equiptcode=string;equiptcodetemp=string;equiptid=number;equiptname=string;handledate=dateTime;handlemethod=string;humidity=string;id=number;isshowstdsolution=string;maxelntmplid=number;maxnanalysisenddate=dateTime;methodid=number;methodname=string;methodparam=string;minanalysisbegindate=dateTime;mulreagentid=string;mulregentname=string;ordercategory=string;orgid=string;orgname=string;partakeuserid=string;partakeusername=string;pretreatstatus=string;pretreatuserid=string;pretreatusername=string;processstatus=string;projid=number;projno=string;projstatus=string;reagentid=number;reagentname=string;receivedate=string;receivetime=string;relatedrunid=string;remark=string;reportconfiglineid=string;rn_=number;roomno=string;runanalysisorgid=string;sampleordernum=number;sol1amount=string;sol1id=number;sol1name=string;sol1no=string;sol2amount=string;sol2id=number;sol2name=string;sol2no=string;status=string;stconcent=string;stno=string;stvalidate=dateTime;stvalidatestr=string;temperature=string;testclass=string;testid=string;testmethodid=string;testname=string;undoflag=string;undoreason=string;urgent=string;weighingequiptid=string;weighingequiptname=string;weighingrelatedrunid=string;weighingreportlineid=number;weighingstatus=string;weighinguserid=string;weighingusername=string;weighttime=dateTime";
+        Map<String, String> result = new LinkedHashMap<String, String>();
+        for (String token : encoded.split(";")) {
+            int equals = token.indexOf('=');
+            if (equals > 0) result.put(token.substring(0, equals), token.substring(equals + 1));
+        }
+        return result;
     }
 
     private List<Map<String, Object>> readRunDetail(String organization, String id) throws SQLException {

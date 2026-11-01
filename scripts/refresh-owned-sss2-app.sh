@@ -10,6 +10,7 @@ HOST_PORT="${HOST_PORT:-18087}"
 APP_NAME="${APP_NAME:-lims-owned-sss2-app}"
 IMAGE_NAME="${IMAGE_NAME:-lims-owned-sss2-owned:refresh}"
 DIST="${DIST:-$ROOT/owned-distribution/target/distribution}"
+BASE_IMAGE="${BASE_IMAGE:-lims-owned-sss2-owned:refresh}"
 # Documentation, ticket and evidence bookkeeping changes are outside the
 # implementation binding. Reuse the shared helper so deployment metadata
 # reflects only the code/runtime scope used by strict evidence.
@@ -28,9 +29,9 @@ ssh "$SSH_HOST" "mkdir -p '$REMOTE_ROOT/incoming-owned' && chmod 700 '$REMOTE_RO
 scp "$WORK/distribution.tgz" "$SSH_HOST:$REMOTE_ROOT/incoming-owned/distribution.tgz"
 
 ssh "$SSH_HOST" bash -s -- \
-  "$REMOTE_ROOT" "$HOST_PORT" "$APP_NAME" "$IMAGE_NAME" "$SOURCE_COMMIT" "$SOURCE_DIRTY" <<'REMOTE'
+  "$REMOTE_ROOT" "$HOST_PORT" "$APP_NAME" "$IMAGE_NAME" "$SOURCE_COMMIT" "$SOURCE_DIRTY" "$BASE_IMAGE" <<'REMOTE'
 set -euo pipefail
-ROOT="$1"; PORT="$2"; APP="$3"; IMAGE="$4"; SOURCE_COMMIT="$5"; SOURCE_DIRTY="$6"
+ROOT="$1"; PORT="$2"; APP="$3"; IMAGE="$4"; SOURCE_COMMIT="$5"; SOURCE_DIRTY="$6"; BASE_IMAGE="$7"
 NET=lims-owned-sss2-net; ORA=lims-owned-sss2-oracle; REDIS=lims-owned-sss2-redis
 for name in "$ORA" "$REDIS"; do
   docker inspect "$name" >/dev/null 2>&1 || { echo "missing required container: $name" >&2; exit 3; }
@@ -49,7 +50,6 @@ if [[ -s "$ROOT/port-forward-app.pid" ]]; then
   [[ "$old_app_pid" =~ ^[0-9]+$ ]] && kill "$old_app_pid" >/dev/null 2>&1 || true
   rm -f "$ROOT/port-forward-app.pid"
 fi
-BASE_IMAGE=lims-owned-sss2-owned:current
 docker image inspect "$BASE_IMAGE" >/dev/null 2>&1 || { echo "missing base image: $BASE_IMAGE" >&2; exit 3; }
 CONTEXT="$ROOT/refresh-owned-app-context"
 rm -rf "$CONTEXT"; mkdir -p "$CONTEXT/distribution"

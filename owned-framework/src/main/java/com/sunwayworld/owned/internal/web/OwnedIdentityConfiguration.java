@@ -295,6 +295,13 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @ConditionalOnMissingBean(OwnedQualityControlChartController.class)
+    public OwnedQualityControlChartController ownedQualityControlChartController(
+            OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
+        return new OwnedQualityControlChartController(boundary, dataSource);
+    }
+
+    @Bean
     @ConditionalOnMissingBean(OwnedItemEquipmentResourceController.class)
     public OwnedItemEquipmentResourceController ownedItemEquipmentResourceController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {

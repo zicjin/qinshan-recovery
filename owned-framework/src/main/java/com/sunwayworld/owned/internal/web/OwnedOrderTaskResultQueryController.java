@@ -113,9 +113,8 @@ public final class OwnedOrderTaskResultQueryController {
             }
             try (PreparedStatement query = connection.prepareStatement(pageSql)) {
                 query.setString(1, organization);
-                query.setString(2, organization);
-                query.setInt(3, page.start());
-                query.setInt(4, page.end());
+                query.setInt(2, page.start());
+                query.setInt(3, page.end());
                 try (ResultSet result = query.executeQuery()) {
                     ResultSetMetaData metadata = result.getMetaData();
                     for (int i = 1; i <= metadata.getColumnCount(); i++) {

@@ -23,8 +23,12 @@ public final class OwnedFolderGenericResourceControllerContractTest {
         require(paths, PREFIX + "/queries/raw");
         require(paths, PREFIX + "/queries/searchable");
         require(paths, PREFIX + "/queries/tasks");
+        require(paths, PREFIX + "/queries/undoable");
+        require(paths, PREFIX + "/queries/withdrawable");
+        require(paths, PREFIX + "/queries/roles/{roleId}");
         require(paths, PREFIX + "/info/status");
         require(paths, PREFIX + "/{id}/info/status");
+        require(paths, PREFIX + "/{id}");
         for (String path : paths) {
             if (path.contains("{resource}")) throw new AssertionError("unbounded folder resource path: " + path);
         }

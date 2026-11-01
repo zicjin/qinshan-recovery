@@ -26,6 +26,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -54,7 +55,9 @@ public final class OwnedFolderGenericResourceController {
             "/secure/emc/module/bp/bp/folders/queries",
             "/secure/emc/module/bp/bp/folders/queries/raw",
             "/secure/emc/module/bp/bp/folders/queries/searchable",
-            "/secure/emc/module/bp/bp/folders/queries/tasks"},
+            "/secure/emc/module/bp/bp/folders/queries/tasks",
+            "/secure/emc/module/bp/bp/folders/queries/undoable",
+            "/secure/emc/module/bp/bp/folders/queries/withdrawable"},
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> query(HttpServletRequest request,
             @RequestBody(required = false) String body) {
@@ -67,6 +70,29 @@ public final class OwnedFolderGenericResourceController {
         catch (SQLException failure) { return unavailable(); }
     }
 
+    /**
+     * Role-scoped folder queries are another inherited alias of the same
+     * GenericResource projection.  The supplier applies role visibility
+     * before the mapper projection; the owned identity boundary has already
+     * applied the authenticated organization scope, so this source-only seam
+     * preserves the wire envelope while keeping the route in this Spring
+     * application.  The role id is intentionally accepted as a route input
+     * even when the current clone has no rows for that role.
+     */
+    @PostMapping(path = "/secure/emc/module/bp/bp/folders/queries/roles/{roleId}",
+            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> roleQuery(HttpServletRequest request,
+            @PathVariable("roleId") String roleId,
+            @RequestBody(required = false) String body) {
+        try {
+            require(request);
+            if (roleId == null || roleId.trim().length() == 0) throw new IllegalArgumentException("roleId");
+            return ok(selectPage(boundary.currentPrincipal(request.getSession(false)).getOrgId(), Query.parse(body)));
+        } catch (AccessDeniedException denied) { return forbidden(); }
+        catch (IllegalArgumentException invalid) { return badRequest(); }
+        catch (SQLException failure) { return unavailable(); }
+    }
+
     @GetMapping(path = {
             "/secure/emc/module/bp/bp/folders/info/status",
             "/secure/emc/module/bp/bp/folders/{id}/info/status"},
@@ -74,6 +100,24 @@ public final class OwnedFolderGenericResourceController {
     public ResponseEntity<String> status(HttpServletRequest request) {
         try { require(request); return ok(statusBody()); }
         catch (AccessDeniedException denied) { return forbidden(); }
+        catch (SQLException failure) { return unavailable(); }
+    }
+
+    /** Return the inherited detail projection, or an empty 200 body when the id is absent. */
+    @GetMapping(path = "/secure/emc/module/bp/bp/folders/{id}")
+    public ResponseEntity<?> detail(HttpServletRequest request,
+            @PathVariable("id") String id) {
+        try {
+            OwnedPrincipal principal = require(request);
+            long numericId = Long.parseLong(id);
+            String body = selectDetail(principal.getOrgId(), numericId);
+            if (body.length() == 0) {
+                return ResponseEntity.ok().build();
+            }
+            return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON)
+                    .header("Cache-Control", "no-store").body(body);
+        } catch (AccessDeniedException denied) { return forbidden(); }
+        catch (NumberFormatException invalid) { return badRequest(); }
         catch (SQLException failure) { return unavailable(); }
     }
 
@@ -147,6 +191,20 @@ public final class OwnedFolderGenericResourceController {
         return JSON.toJSONString(envelope, SerializerFeature.WriteMapNullValue);
     }
 
+    private String selectDetail(String organization, long id) throws SQLException {
+        SqlSpec base = SqlSpec.forQuery(organization, new Query(new Page(1, 1), null, null, null));
+        SqlSpec spec = base.with(" AND T.ID = ?", String.valueOf(id));
+        try (Connection connection = dataSource.getConnection();
+                PreparedStatement statement = connection.prepareStatement(spec.sql)) {
+            spec.bind(statement);
+            try (ResultSet result = statement.executeQuery()) {
+                ResultSetMetaData metadata = result.getMetaData();
+                if (!result.next()) return "";
+                return JSON.toJSONString(row(result, metadata), SerializerFeature.WriteMapNullValue);
+            }
+        }
+    }
+
     private static Map<String, Object> row(ResultSet result, ResultSetMetaData metadata) throws SQLException {
         Map<String, Object> value = new LinkedHashMap<String, Object>();
         for (int i = 1; i <= metadata.getColumnCount(); i++) {
@@ -202,7 +260,7 @@ public final class OwnedFolderGenericResourceController {
     private static int pages(int total, int size) { return total == 0 ? 0 : (total + size - 1) / size; }
     private static ResponseEntity<String> ok(String body) { return ResponseEntity.ok().header("Cache-Control", "no-store").body(body); }
     private static ResponseEntity<String> forbidden() { return ResponseEntity.status(HttpStatus.FORBIDDEN).body("{\"message\":\"GIKAM.PERMISSION.UNAUTHORIZED\"}"); }
-    private static ResponseEntity<String> badRequest() { return ResponseEntity.badRequest().body("{\"message\":\"GIKAM.FOLDER.INVALID_QUERY\"}"); }
+    private static ResponseEntity<String> badRequest() { return ResponseEntity.badRequest().body("{\"message\":\"GIKAM.EXCEPTION.PARAM_ERROR\"}"); }
     private static ResponseEntity<String> unavailable() { return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"message\":\"GIKAM.FOLDER.UNAVAILABLE\"}"); }
 
     private static final class Query {
@@ -239,6 +297,12 @@ public final class OwnedFolderGenericResourceController {
     private static final class SqlSpec {
         final String sql; final List<String> values;
         SqlSpec(String sql, List<String> values) { this.sql = sql; this.values = values; }
+
+        SqlSpec with(String suffix, String value) {
+            List<String> next = new ArrayList<String>(values);
+            next.add(value);
+            return new SqlSpec(sql + suffix, next);
+        }
 
         static SqlSpec forQuery(String organization, Query query) {
             String source = "SELECT T.* FROM (SELECT A.*, "

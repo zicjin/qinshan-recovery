@@ -3,9 +3,11 @@ package com.sunwayworld.framework;
 import com.sunwayworld.owned.internal.web.OwnedIdentityConfiguration;
 import com.sunwayworld.owned.internal.web.OwnedOrderTaskResultQueryController;
 import java.lang.reflect.Method;
+import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.Map;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -18,6 +20,9 @@ public final class OwnedOrderTaskResultQueryControllerContractTest {
         require(paths, PREFIX + "/queries");
         require(paths, PREFIX + "/queries/raw");
         require(paths, PREFIX + "/queries/searchable");
+        requireProfile("/queries", 140);
+        requireProfile("/queries/raw", 140);
+        requireProfile("/queries/searchable", 140);
         require(paths, PREFIX + "/data-query-titles/queries");
         require(paths, PREFIX + "/data-query-rows/queries");
         require(paths, PREFIX + "/qcnames/queries");
@@ -61,5 +66,16 @@ public final class OwnedOrderTaskResultQueryControllerContractTest {
 
     private static void require(Set<String> paths, String path) {
         if (!paths.contains(path)) throw new AssertionError("missing order-task-result path: " + path);
+    }
+
+    @SuppressWarnings("unchecked")
+    private static void requireProfile(String path, int expectedSize) {
+        try {
+            Field field = OwnedOrderTaskResultQueryController.class.getDeclaredField("RESULT_TYPE_PROFILES");
+            field.setAccessible(true);
+            Map<String, Map<String, String>> profiles = (Map<String, Map<String, String>>) field.get(null);
+            Map<String, String> profile = profiles.get(path);
+            if (profile == null || profile.size() != expectedSize) throw new AssertionError("unexpected result type profile " + path);
+        } catch (ReflectiveOperationException error) { throw new AssertionError("cannot inspect result type profiles", error); }
     }
 }

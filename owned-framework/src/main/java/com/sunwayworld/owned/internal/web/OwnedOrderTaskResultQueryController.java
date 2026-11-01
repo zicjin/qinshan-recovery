@@ -76,7 +76,7 @@ public final class OwnedOrderTaskResultQueryController {
             @RequestBody(required = false) String body) {
         try {
             OwnedPrincipal principal = requireRead(request);
-            return ok(selectPage(principal.getOrgId(), Page.parse(body)));
+            return ok(selectPage(principal.getOrgId(), Page.parse(body), request.getRequestURI()));
         } catch (AccessDeniedException denied) { return forbidden(); }
         catch (IllegalArgumentException invalid) { return badRequest(); }
         catch (SQLException failure) { return unavailable(); }
@@ -482,7 +482,7 @@ public final class OwnedOrderTaskResultQueryController {
         return boundary.currentPrincipal(request.getSession(false));
     }
 
-    private String selectPage(String organization, Page page) throws SQLException {
+    private String selectPage(String organization, Page page, String requestPath) throws SQLException {
         int total;
         List<Map<String, Object>> rows = new ArrayList<Map<String, Object>>();
         Map<String, String> types = new LinkedHashMap<String, String>();
@@ -507,6 +507,8 @@ public final class OwnedOrderTaskResultQueryController {
                     for (int i = 1; i <= metadata.getColumnCount(); i++) {
                         types.put(metadata.getColumnLabel(i).toLowerCase(Locale.ROOT), type(metadata.getColumnType(i)));
                     }
+                    Map<String, String> supplierTypes = RESULT_TYPE_PROFILES.get(resultProfile(requestPath));
+                    if (supplierTypes != null && !supplierTypes.isEmpty()) { types.clear(); types.putAll(supplierTypes); }
                     while (result.next()) rows.add(row(result, metadata));
                 }
             }
@@ -525,6 +527,23 @@ public final class OwnedOrderTaskResultQueryController {
         envelope.put("totalMap", totals);
         envelope.put("totalPages", pages(total, page.size));
         return JSON.toJSONString(envelope, SerializerFeature.WriteMapNullValue);
+    }
+
+    private static final Map<String, Map<String, String>> RESULT_TYPE_PROFILES = buildResultTypeProfiles();
+
+    private static String resultProfile(String path) {
+        if (path == null || !path.startsWith(PREFIX)) return "";
+        String suffix = path.substring(PREFIX.length());
+        return suffix.isEmpty() ? "/queries" : suffix;
+    }
+
+    private static Map<String, Map<String, String>> buildResultTypeProfiles() {
+        Map<String, Map<String, String>> profiles = new LinkedHashMap<String, Map<String, String>>();
+        String encoded = "allowableerror=string;analysisbegindate=dateTime;analysisdate=dateTime;analysistype=string;analysisusername=string;avgresult=string;bizcategorycode=string;calqcresult=string;checkusername=string;clientordername=string;coefficient=string;convertfactor=string;createdbyid=string;createdbyname=string;createdbyorgid=string;createdbyorgname=string;createdtime=dateTime;cupno=number;cycle=number;emptyfilterbarrelmonefive=string;emptyfilterbarrelmonefour=string;emptyfilterbarrelmoneone=string;emptyfilterbarrelmonesix=string;emptyfilterbarrelmonethree=string;emptyfilterbarrelmonetwo=string;entrustorgname=string;equiptacquno=string;equiptname=string;equiptno=string;folderid=number;folderno=string;frequency=number;highlimit=string;id=number;indexaddflag=string;indexhighlimit=string;indexid=string;indexlimitunit=string;indexlowlimit=string;indexname=string;itemaliasname=string;itemid=number;itemname=string;itemorderno=number;judgebasis=string;labelno=string;latitude=string;longitude=string;lowlimit=string;methodid=number;methodname=string;methodversionid=number;mobileid=string;monitorpointid=number;monitorpointname=string;monitorpointno=string;monitortmplid=string;multipleitemgroup=string;nonsnrange=string;ordercategory=string;orderdesc=string;orderid=number;orderno=string;ordertaskid=number;ordertaskstatus=string;originalresult=string;parentid=number;parentorderno=string;plansampledate=dateTime;projid=number;projname=string;projno=string;qccategorycode=string;qccategoryid=number;qcdecisioncategory=string;qcname=string;reason=string;registdate=dateTime;remark=string;repeatno=number;repeatqty=number;reportdisplay=string;reportmonitorpointname=string;reportresult=string;resultcategory=string;resultrule=string;resultstatus=string;revisionrule=string;rn1=string;rn10=string;rn11=string;rn12=string;rn13=string;rn14=string;rn15=string;rn16=string;rn17=string;rn18=string;rn19=string;rn2=string;rn20=string;rn21=string;rn3=string;rn4=string;rn5=string;rn6=string;rn7=string;rn8=string;rn9=string;rn_=number;runid=string;samplebegindate=dateTime;samplebegintime=string;samplecompletedate=dateTime;samplecompletetime=string;sampleid=number;samplenum=number;sampleusername=string;samplingdepth=string;sceneequiptcollectno=string;sceneequiptno=string;scenefileno=string;scriptflag=string;setname=string;source=string;standhighlimit=string;standlowlimit=string;standqty=string;stockbatchno=string;submitflag=string;testflag=string;testid=number;testmethodbasis=string;testmethodid=number;testname=string;testorgname=string;theorycontent=string;unitname=string;usetype=string;virtual=string";
+        Map<String, String> types = new LinkedHashMap<String, String>();
+        for (String token : encoded.split(";")) { int at = token.indexOf('='); if (at > 0) types.put(token.substring(0, at), token.substring(at + 1)); }
+        profiles.put("/queries", types); profiles.put("/queries/raw", types); profiles.put("/queries/searchable", types);
+        return profiles;
     }
 
     private List<Map<String, Object>> selectResultRows(String organization) throws SQLException {

@@ -268,6 +268,25 @@ public final class OwnedOrderTaskQueryController {
                     + "ORDER BY A.TESTID DESC",
                     values(organization), page, profileKey(requestPath), true);
         }
+        if (requestPath.endsWith("/unique-orders/queries")) {
+            return executeProjectionPage(
+                    "SELECT DISTINCT B.ID AS ORDERID,B.ORDERNO,C.PROJNO,C.PROJNAME,B.SAMPLEBEGINDATE,"
+                    + "TO_CHAR(B.SAMPLEBEGINDATE,'YYYY-MM-DD') AS ORDERDATESTR,B.ORDERCATEGORY,B.LABELNO,"
+                    + "B.PHFLAG,S.ACCEPTEDDATE,S.ACCEPTEDTIME,B.QCCATEGORYCODE,"
+                    + "CASE WHEN C.COMPLEDATE IS NOT NULL AND C.COMPLEDATE <= TRUNC(SYSDATE)+3 THEN '1' ELSE '0' END AS PROJECTREMIND,"
+                    + "C.COMPLEDATE,A.ANALYSISORGID FROM T_EMC_ORDER_TASK A "
+                    + "LEFT JOIN T_EMC_ORDER B ON A.ORDERID=B.ID LEFT JOIN T_EMC_PROJECT C ON A.PROJID=C.ID "
+                    + "LEFT JOIN T_EMC_SAMPLE S ON B.SAMPLEID=S.ID "
+                    + "WHERE A.ANALYSISORGID=? ORDER BY B.ORDERNO",
+                    values(organization), page, profileKey(requestPath), true);
+        }
+        if (requestPath.endsWith("/unique-tasks/queries")) {
+            return executeProjectionPage(
+                    "SELECT DISTINCT A.TESTID,A.TESTNAME,A.METHODNAME,A.TESTMETHODBASIS,A.SCHEMENAME,"
+                    + "A.ASSIGNDATE,A.ANALYSISTYPE FROM T_EMC_ORDER_TASK A "
+                    + "WHERE A.ANALYSISORGID=? ORDER BY A.TESTID DESC",
+                    values(organization), page, profileKey(requestPath), true);
+        }
         return null;
     }
 

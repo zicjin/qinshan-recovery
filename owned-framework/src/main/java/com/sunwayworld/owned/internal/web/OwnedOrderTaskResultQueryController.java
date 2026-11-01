@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.http.HttpHeaders;
@@ -204,11 +205,12 @@ public final class OwnedOrderTaskResultQueryController {
     @PostMapping(path = PREFIX + "/data-titles/queries",
             consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> dataSummaryTitles(HttpServletRequest request,
+            HttpServletResponse response,
             @RequestBody(required = false) String body) {
         try {
             OwnedPrincipal principal = requireRead(request);
             List<Map<String, Object>> source = selectResultRows(principal.getOrgId());
-            if (source.isEmpty()) return unexpected(request.getRequestURI());
+            if (source.isEmpty()) return unexpected(response, request.getRequestURI());
             Map<String, String> titles = new LinkedHashMap<String, String>();
             for (Map<String, Object> item : source) {
                 String colId = dataColumnId(item);
@@ -233,11 +235,12 @@ public final class OwnedOrderTaskResultQueryController {
     @PostMapping(path = PREFIX + "/data-rows/queries",
             consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> dataSummaryRows(HttpServletRequest request,
+            HttpServletResponse response,
             @RequestBody(required = false) String body) {
         try {
             OwnedPrincipal principal = requireRead(request);
             List<Map<String, Object>> source = selectResultRows(principal.getOrgId());
-            if (source.isEmpty()) return unexpected(request.getRequestURI());
+            if (source.isEmpty()) return unexpected(response, request.getRequestURI());
             Map<String, Map<String, Object>> grouped = new LinkedHashMap<String, Map<String, Object>>();
             Map<String, String> columnTypes = new LinkedHashMap<String, String>();
             for (Map<String, Object> item : source) {
@@ -351,11 +354,12 @@ public final class OwnedOrderTaskResultQueryController {
             PREFIX + "/gas-parameter-result/table-rows/queries"
             }, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> gasParameterTable(HttpServletRequest request,
+            HttpServletResponse response,
             @RequestBody(required = false) String body) {
         try {
             OwnedPrincipal principal = requireRead(request);
             List<Map<String, Object>> source = selectResultRows(principal.getOrgId());
-            if (source.isEmpty()) return gasUnexpected(request.getRequestURI());
+            if (source.isEmpty()) return gasUnexpected(response, request.getRequestURI());
             boolean rowsRequest = request.getRequestURI().endsWith("table-rows/queries");
             if (!rowsRequest) return dynamicTitles(source);
             return dynamicRows(source);
@@ -412,8 +416,9 @@ public final class OwnedOrderTaskResultQueryController {
             PREFIX + "/quick-inputs-sample/table-rows/queries",
             PREFIX + "/result-inputs/table-heads/queries",
             PREFIX + "/result-inputs/table-rows/queries"
-            }, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+            }, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> inputTable(HttpServletRequest request,
+            HttpServletResponse response,
             @RequestBody(required = false) String body) {
         try {
             OwnedPrincipal principal = requireRead(request);
@@ -421,7 +426,7 @@ public final class OwnedOrderTaskResultQueryController {
             List<Map<String, Object>> source = selectResultRows(principal.getOrgId());
             boolean sample = path.contains("quick-inputs-sample");
             if (source.isEmpty()) {
-                return sample ? ok("[]") : gasUnexpected(path);
+                return sample ? ok("[]") : gasUnexpected(response, path);
             }
             return path.endsWith("table-heads/queries") ? dynamicTitles(source) : dynamicRows(source);
         } catch (AccessDeniedException denied) { return forbidden(); }
@@ -598,19 +603,28 @@ public final class OwnedOrderTaskResultQueryController {
     private static ResponseEntity<String> forbidden() { return ResponseEntity.status(HttpStatus.FORBIDDEN).body("{\"message\":\"GIKAM.PERMISSION.UNAUTHORIZED\"}"); }
     private static ResponseEntity<String> badRequest() { return ResponseEntity.badRequest().body("{\"message\":\"GIKAM.ORDER_TASK_RESULT.INVALID_QUERY\"}"); }
     private static ResponseEntity<String> unavailable() { return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"message\":\"GIKAM.ORDER_TASK_RESULT.UNAVAILABLE\"}"); }
-    private static ResponseEntity<String> unexpected(String path) {
+    private static ResponseEntity<String> unexpected(HttpServletResponse response, String path) {
         String safePath = path == null ? "" : path.replace("\\", "\\\\").replace("\"", "\\\"");
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .header(HttpHeaders.CONTENT_TYPE, "")
-                .body("{\"error\":\"Internal Server Error\",\"message\":\"GIKAM.EXCEPTION.UNEXPECTED\",\"path\":\""
-                        + safePath + "\",\"status\":500,\"timestamp\":" + System.currentTimeMillis() + "}");
+        return writeRawError(response, "GIKAM.EXCEPTION.UNEXPECTED", safePath);
     }
-    private static ResponseEntity<String> gasUnexpected(String path) {
+    private static ResponseEntity<String> gasUnexpected(HttpServletResponse response, String path) {
         String safePath = path == null ? "" : path.replace("\\", "\\\\").replace("\"", "\\\"");
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .header(HttpHeaders.CONTENT_TYPE, "")
-                .body("{\"error\":\"Internal Server Error\",\"message\":\"core.rest.json.unable-parse-unique-bean\",\"path\":\""
-                        + safePath + "\",\"status\":500,\"timestamp\":" + System.currentTimeMillis() + "}");
+        return writeRawError(response, "core.rest.json.unable-parse-unique-bean", safePath);
+    }
+    private static ResponseEntity<String> writeRawError(HttpServletResponse response, String message, String path) {
+        String body = "{\"error\":\"Internal Server Error\",\"message\":\"" + message
+                + "\",\"path\":\"" + path + "\",\"status\":500,\"timestamp\":"
+                + System.currentTimeMillis() + "}";
+        try {
+            response.resetBuffer();
+            response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+            response.setHeader(HttpHeaders.CONTENT_TYPE, "");
+            response.getWriter().write(body);
+            response.flushBuffer();
+            return null;
+        } catch (java.io.IOException error) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(body);
+        }
     }
 
     private static final class Page {

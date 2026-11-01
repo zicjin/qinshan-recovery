@@ -14,9 +14,9 @@
     "internal_http_bridge": false,
     "jni_replacement_process": false
   },
-  "started_at": "2026-11-01T11:43:39.077193+00:00",
-  "source_commit": "0bbd13ffeb7754cecec6f107b32c4c98733a5ef2",
-  "repository_head_at_capture": "0bbd13ffeb7754cecec6f107b32c4c98733a5ef2",
+  "started_at": "2026-11-01T12:11:16.855866+00:00",
+  "source_commit": "514c328a7b991f875cfc411889b69d359c19e4e4",
+  "repository_head_at_capture": "514c328a7b991f875cfc411889b69d359c19e4e4",
   "source_dirty": false,
   "source_scope": [
     "project/src/main/java",
@@ -74,8 +74,8 @@
     "build/oracle-free-source-manifest.json",
     "docker/Dockerfile.built"
   ],
-  "implementation_binding": "impl-41506602f6d155f2",
-  "implementation_tree_digest": "41506602f6d155f2dff9a324915c1cb8a46436391598ef60ee6afd1f7479b5f4",
+  "implementation_binding": "impl-98eed6d7d023f066",
+  "implementation_tree_digest": "98eed6d7d023f0667215c906d32c38b09d028fa8ae3a57a1013accadc43bf252",
   "implementation_dirty": false,
   "implementation_scope": [
     "project/src/main/java",
@@ -136,10 +136,10 @@
   "nested_project_commit": "27932b1fe4d71d64a02f9a63e55f56acb403e3a0",
   "distribution_input_digest": "2121fc67991dd241a80c02ee575f69cde2f4a21af05820ef694ce4caabf4ffc7",
   "artifact_sha256": {
-    "lims-recovery/owned-distribution/target/distribution/app/lims-owned-application.jar": "13206c9bc2e2d44d746d82f129456473cfde41f8c52cb00252cd2975316f7e60"
+    "lims-recovery/owned-distribution/target/distribution/app/lims-owned-application.jar": "1cacab4f09b65d04d042fedc8a42ee2ad8b9335d57f962d0b1edb0ac3868236f"
   },
   "clone_identity": "lims-owned-sss2-oracle:LIMS_BASELINE_SSS2:LIMS_RUNTIME_SSS2:4f23874f86afdf6359396917061720b80bbb78b84843b2c533c8fcc2c71689bd",
-  "runtime_report": ".scratch/sunway-supplier-exit-api-first/diagnostic-evidence/runtime/strict-api-runtime-manifest-order415.json",
+  "runtime_report": ".scratch/sunway-supplier-exit-api-first/diagnostic-evidence/runtime/strict-api-runtime-manifest-order98.json",
   "runtime_contract": {
     "mode": "strict",
     "strict_evidence": false,
@@ -151,9 +151,9 @@
     "baseline_schema_hash": "4f23874f86afdf6359396917061720b80bbb78b84843b2c533c8fcc2c71689bd",
     "runtime_schema_hash_before": "674f918ce233701cd851a04a5cac89284ed7f1959201a1248bb091d08907a3b6",
     "runtime_schema_hash_after": "674f918ce233701cd851a04a5cac89284ed7f1959201a1248bb091d08907a3b6",
-    "source_commit": "0bbd13ffeb7754cecec6f107b32c4c98733a5ef2",
-    "implementation_binding": "impl-41506602f6d155f2",
-    "implementation_tree_digest": "41506602f6d155f2dff9a324915c1cb8a46436391598ef60ee6afd1f7479b5f4",
+    "source_commit": "514c328a7b991f875cfc411889b69d359c19e4e4",
+    "implementation_binding": "impl-98eed6d7d023f066",
+    "implementation_tree_digest": "98eed6d7d023f0667215c906d32c38b09d028fa8ae3a57a1013accadc43bf252",
     "implementation_scope": [
       "project/src/main/java",
       "owned-framework/src",
@@ -211,13 +211,13 @@
       "docker/Dockerfile.built"
     ],
     "implementation_dirty": false,
-    "repository_head_at_capture": "0bbd13ffeb7754cecec6f107b32c4c98733a5ef2"
+    "repository_head_at_capture": "514c328a7b991f875cfc411889b69d359c19e4e4"
   },
   "role": "manager",
   "organization": "org-a",
   "mode": "strict",
   "base_url": "http://127.0.0.1:18089",
-  "case_count": 11,
+  "case_count": 12,
   "cases": [
     {
       "expected_status": [
@@ -251,7 +251,7 @@
           "totalPages"
         ]
       },
-      "id": "order-task.alias.00",
+      "id": "order-task.affected.00",
       "method": "POST",
       "path": "/secure/emc/module/bp/bp/order-tasks/analysis-department-statistics/queries",
       "url": "http://127.0.0.1:18089/secure/emc/module/bp/bp/order-tasks/analysis-department-statistics/queries",
@@ -265,13 +265,13 @@
         "x-frame-options": "SAMEORIGIN",
         "content-type": "application/json",
         "content-length": "213",
-        "date": "Sun, 01 Nov 2026 11:43:40 GMT",
+        "date": "Sun, 01 Nov 2026 12:11:18 GMT",
         "connection": "close"
       },
       "request_headers": {
         "content-type": "application/json"
       },
-      "elapsed_ms": 553.264,
+      "elapsed_ms": 546.948,
       "route": {
         "method": "POST",
         "path": "/secure/emc/module/bp/bp/order-tasks/analysis-department-statistics/queries",
@@ -286,7 +286,7 @@
         "setup": "not-required",
         "restore": "not-required",
         "runtime_values": {
-          "id": "reec1883e0d23"
+          "id": "r8183f03d5aaa"
         },
         "setup_http": [],
         "restore_http": []
@@ -334,7 +334,7 @@
           "totalPages"
         ]
       },
-      "id": "order-task.alias.01",
+      "id": "order-task.affected.01",
       "method": "POST",
       "path": "/secure/emc/module/bp/bp/order-tasks/personnel-workload-statistics/queries",
       "url": "http://127.0.0.1:18089/secure/emc/module/bp/bp/order-tasks/personnel-workload-statistics/queries",
@@ -348,13 +348,13 @@
         "x-frame-options": "SAMEORIGIN",
         "content-type": "application/json",
         "content-length": "213",
-        "date": "Sun, 01 Nov 2026 11:43:40 GMT",
+        "date": "Sun, 01 Nov 2026 12:11:18 GMT",
         "connection": "close"
       },
       "request_headers": {
         "content-type": "application/json"
       },
-      "elapsed_ms": 451.704,
+      "elapsed_ms": 466.89,
       "route": {
         "method": "POST",
         "path": "/secure/emc/module/bp/bp/order-tasks/personnel-workload-statistics/queries",
@@ -369,7 +369,7 @@
         "setup": "not-required",
         "restore": "not-required",
         "runtime_values": {
-          "id": "ra5ccfb5458c0"
+          "id": "r53d83a427042"
         },
         "setup_http": [],
         "restore_http": []
@@ -417,7 +417,7 @@
           "totalPages"
         ]
       },
-      "id": "order-task.alias.02",
+      "id": "order-task.affected.02",
       "method": "POST",
       "path": "/secure/emc/module/bp/bp/order-tasks/proj-order-categories/queries",
       "url": "http://127.0.0.1:18089/secure/emc/module/bp/bp/order-tasks/proj-order-categories/queries",
@@ -431,13 +431,13 @@
         "x-frame-options": "SAMEORIGIN",
         "content-type": "application/json",
         "content-length": "377",
-        "date": "Sun, 01 Nov 2026 11:43:40 GMT",
+        "date": "Sun, 01 Nov 2026 12:11:18 GMT",
         "connection": "close"
       },
       "request_headers": {
         "content-type": "application/json"
       },
-      "elapsed_ms": 454.905,
+      "elapsed_ms": 482.195,
       "route": {
         "method": "POST",
         "path": "/secure/emc/module/bp/bp/order-tasks/proj-order-categories/queries",
@@ -452,7 +452,7 @@
         "setup": "not-required",
         "restore": "not-required",
         "runtime_values": {
-          "id": "r0d7e20c106aa"
+          "id": "r1f25126a7cf1"
         },
         "setup_http": [],
         "restore_http": []
@@ -500,7 +500,7 @@
           "totalPages"
         ]
       },
-      "id": "order-task.alias.03",
+      "id": "order-task.affected.03",
       "method": "POST",
       "path": "/secure/emc/module/bp/bp/order-tasks/queries/group-by-test",
       "url": "http://127.0.0.1:18089/secure/emc/module/bp/bp/order-tasks/queries/group-by-test",
@@ -514,13 +514,13 @@
         "x-frame-options": "SAMEORIGIN",
         "content-type": "application/json",
         "content-length": "303",
-        "date": "Sun, 01 Nov 2026 11:43:42 GMT",
+        "date": "Sun, 01 Nov 2026 12:11:19 GMT",
         "connection": "close"
       },
       "request_headers": {
         "content-type": "application/json"
       },
-      "elapsed_ms": 447.003,
+      "elapsed_ms": 452.806,
       "route": {
         "method": "POST",
         "path": "/secure/emc/module/bp/bp/order-tasks/queries/group-by-test",
@@ -535,7 +535,7 @@
         "setup": "not-required",
         "restore": "not-required",
         "runtime_values": {
-          "id": "r644febe48afb"
+          "id": "r7ce69fe95c5f"
         },
         "setup_http": [],
         "restore_http": []
@@ -583,7 +583,7 @@
           "totalPages"
         ]
       },
-      "id": "order-task.alias.04",
+      "id": "order-task.affected.04",
       "method": "POST",
       "path": "/secure/emc/module/bp/bp/order-tasks/queries/order-task",
       "url": "http://127.0.0.1:18089/secure/emc/module/bp/bp/order-tasks/queries/order-task",
@@ -597,13 +597,13 @@
         "x-frame-options": "SAMEORIGIN",
         "content-type": "application/json",
         "content-length": "3032",
-        "date": "Sun, 01 Nov 2026 11:43:42 GMT",
+        "date": "Sun, 01 Nov 2026 12:11:19 GMT",
         "connection": "close"
       },
       "request_headers": {
         "content-type": "application/json"
       },
-      "elapsed_ms": 459.067,
+      "elapsed_ms": 464.212,
       "route": {
         "method": "POST",
         "path": "/secure/emc/module/bp/bp/order-tasks/queries/order-task",
@@ -618,7 +618,7 @@
         "setup": "not-required",
         "restore": "not-required",
         "runtime_values": {
-          "id": "r726f9d37a646"
+          "id": "r4e9a18782524"
         },
         "setup_http": [],
         "restore_http": []
@@ -666,7 +666,7 @@
           "totalPages"
         ]
       },
-      "id": "order-task.alias.05",
+      "id": "order-task.affected.05",
       "method": "POST",
       "path": "/secure/emc/module/bp/bp/order-tasks/queries/select-order-container-info",
       "url": "http://127.0.0.1:18089/secure/emc/module/bp/bp/order-tasks/queries/select-order-container-info",
@@ -680,13 +680,13 @@
         "x-frame-options": "SAMEORIGIN",
         "content-type": "application/json",
         "content-length": "806",
-        "date": "Sun, 01 Nov 2026 11:43:42 GMT",
+        "date": "Sun, 01 Nov 2026 12:11:19 GMT",
         "connection": "close"
       },
       "request_headers": {
         "content-type": "application/json"
       },
-      "elapsed_ms": 448.429,
+      "elapsed_ms": 457.027,
       "route": {
         "method": "POST",
         "path": "/secure/emc/module/bp/bp/order-tasks/queries/select-order-container-info",
@@ -701,7 +701,7 @@
         "setup": "not-required",
         "restore": "not-required",
         "runtime_values": {
-          "id": "r02e544a7ad6d"
+          "id": "ra4c6f4d45dd9"
         },
         "setup_http": [],
         "restore_http": []
@@ -749,7 +749,7 @@
           "totalPages"
         ]
       },
-      "id": "order-task.alias.06",
+      "id": "order-task.affected.06",
       "method": "POST",
       "path": "/secure/emc/module/bp/bp/order-tasks/queries/selectContainerInfo",
       "url": "http://127.0.0.1:18089/secure/emc/module/bp/bp/order-tasks/queries/selectContainerInfo",
@@ -763,13 +763,13 @@
         "x-frame-options": "SAMEORIGIN",
         "content-type": "application/json",
         "content-length": "418",
-        "date": "Sun, 01 Nov 2026 11:43:43 GMT",
+        "date": "Sun, 01 Nov 2026 12:11:21 GMT",
         "connection": "close"
       },
       "request_headers": {
         "content-type": "application/json"
       },
-      "elapsed_ms": 461.645,
+      "elapsed_ms": 466.141,
       "route": {
         "method": "POST",
         "path": "/secure/emc/module/bp/bp/order-tasks/queries/selectContainerInfo",
@@ -784,7 +784,7 @@
         "setup": "not-required",
         "restore": "not-required",
         "runtime_values": {
-          "id": "rd9d790a54907"
+          "id": "rf4376c88e9c6"
         },
         "setup_http": [],
         "restore_http": []
@@ -832,7 +832,7 @@
           "totalPages"
         ]
       },
-      "id": "order-task.alias.07",
+      "id": "order-task.affected.07",
       "method": "POST",
       "path": "/secure/emc/module/bp/bp/order-tasks/unique-item-groups/queries",
       "url": "http://127.0.0.1:18089/secure/emc/module/bp/bp/order-tasks/unique-item-groups/queries",
@@ -846,13 +846,13 @@
         "x-frame-options": "SAMEORIGIN",
         "content-type": "application/json",
         "content-length": "3102",
-        "date": "Sun, 01 Nov 2026 11:43:43 GMT",
+        "date": "Sun, 01 Nov 2026 12:11:21 GMT",
         "connection": "close"
       },
       "request_headers": {
         "content-type": "application/json"
       },
-      "elapsed_ms": 454.723,
+      "elapsed_ms": 487.115,
       "route": {
         "method": "POST",
         "path": "/secure/emc/module/bp/bp/order-tasks/unique-item-groups/queries",
@@ -867,7 +867,7 @@
         "setup": "not-required",
         "restore": "not-required",
         "runtime_values": {
-          "id": "r61b63567326d"
+          "id": "r3836e6780831"
         },
         "setup_http": [],
         "restore_http": []
@@ -915,7 +915,7 @@
           "totalPages"
         ]
       },
-      "id": "order-task.alias.08",
+      "id": "order-task.affected.08",
       "method": "POST",
       "path": "/secure/emc/module/bp/bp/order-tasks/unique-orders/queries",
       "url": "http://127.0.0.1:18089/secure/emc/module/bp/bp/order-tasks/unique-orders/queries",
@@ -929,13 +929,13 @@
         "x-frame-options": "SAMEORIGIN",
         "content-type": "application/json",
         "content-length": "507",
-        "date": "Sun, 01 Nov 2026 11:43:43 GMT",
+        "date": "Sun, 01 Nov 2026 12:11:21 GMT",
         "connection": "close"
       },
       "request_headers": {
         "content-type": "application/json"
       },
-      "elapsed_ms": 449.642,
+      "elapsed_ms": 461.748,
       "route": {
         "method": "POST",
         "path": "/secure/emc/module/bp/bp/order-tasks/unique-orders/queries",
@@ -950,7 +950,7 @@
         "setup": "not-required",
         "restore": "not-required",
         "runtime_values": {
-          "id": "r4d8ac9a505d7"
+          "id": "r808aed4e61f8"
         },
         "setup_http": [],
         "restore_http": []
@@ -998,7 +998,7 @@
           "totalPages"
         ]
       },
-      "id": "order-task.alias.09",
+      "id": "order-task.affected.09",
       "method": "POST",
       "path": "/secure/emc/module/bp/bp/orders/order-tasks/queries",
       "url": "http://127.0.0.1:18089/secure/emc/module/bp/bp/orders/order-tasks/queries",
@@ -1012,13 +1012,13 @@
         "x-frame-options": "SAMEORIGIN",
         "content-type": "application/json",
         "content-length": "143",
-        "date": "Sun, 01 Nov 2026 11:43:44 GMT",
+        "date": "Sun, 01 Nov 2026 12:11:22 GMT",
         "connection": "close"
       },
       "request_headers": {
         "content-type": "application/json"
       },
-      "elapsed_ms": 441.259,
+      "elapsed_ms": 443.201,
       "route": {
         "method": "POST",
         "path": "/secure/emc/module/bp/bp/orders/order-tasks/queries",
@@ -1033,7 +1033,7 @@
         "setup": "not-required",
         "restore": "not-required",
         "runtime_values": {
-          "id": "r09f76743bcc6"
+          "id": "rd988b935bccb"
         },
         "setup_http": [],
         "restore_http": []
@@ -1081,7 +1081,7 @@
           "totalPages"
         ]
       },
-      "id": "order-task.alias.10",
+      "id": "order-task.affected.10",
       "method": "POST",
       "path": "/secure/emc/module/bp/edit/project-change/orders/order-tasks/queries",
       "url": "http://127.0.0.1:18089/secure/emc/module/bp/edit/project-change/orders/order-tasks/queries",
@@ -1095,13 +1095,13 @@
         "x-frame-options": "SAMEORIGIN",
         "content-type": "application/json",
         "content-length": "143",
-        "date": "Sun, 01 Nov 2026 11:43:44 GMT",
+        "date": "Sun, 01 Nov 2026 12:11:22 GMT",
         "connection": "close"
       },
       "request_headers": {
         "content-type": "application/json"
       },
-      "elapsed_ms": 438.633,
+      "elapsed_ms": 447.08,
       "route": {
         "method": "POST",
         "path": "/secure/emc/module/bp/edit/project-change/orders/order-tasks/queries",
@@ -1116,7 +1116,90 @@
         "setup": "not-required",
         "restore": "not-required",
         "runtime_values": {
-          "id": "rc3edc5d35554"
+          "id": "r0972e334e17d"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "c7acc1e08cbfb45c941604061137f4cfc201ee2dd63687e26e4349799404510e",
+      "body_bytes": 143,
+      "assertions": {
+        "json_keys": [
+          "columnTypeMap",
+          "first",
+          "last",
+          "numberOfElements",
+          "pageNumber",
+          "pageSize",
+          "rows",
+          "total",
+          "totalMap",
+          "totalPages"
+        ]
+      },
+      "id": "order-task.affected.11",
+      "method": "POST",
+      "path": "/secure/emc/module/bp/result/runs/blank-order-tasks/queries",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/result/runs/blank-order-tasks/queries",
+      "status": 200,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "143",
+        "date": "Sun, 01 Nov 2026 12:11:22 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 484.884,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/bp/result/runs/blank-order-tasks/queries",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "route_id": "eeaf15cf0ee0619e"
+      },
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r85265cc6e5e4"
         },
         "setup_http": [],
         "restore_http": []
@@ -1150,13 +1233,13 @@
   },
   "cleanup_pending": false,
   "phase_timings_ms": {
-    "http_cases": 5796.283
+    "http_cases": 6387.855
   },
   "authentication": {
     "attempted": true,
     "authenticated": true,
     "status": 200
   },
-  "finished_at": "2026-11-01T11:43:44.873520+00:00",
-  "cleanup_finalized_at": "2026-11-01T11:44:20.144431+00:00"
+  "finished_at": "2026-11-01T12:11:23.243778+00:00",
+  "cleanup_finalized_at": "2026-11-01T12:12:08.120480+00:00"
 }

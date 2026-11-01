@@ -1,12 +1,12 @@
 {
   "schema": 1,
   "scope": "current-head-spring-web-api-route-closure",
-  "generated_at": "2026-11-01T11:44:20.241624+00:00",
-  "source_commit": "0bbd13ffeb7754cecec6f107b32c4c98733a5ef2",
-  "repository_head_at_capture": "0bbd13ffeb7754cecec6f107b32c4c98733a5ef2",
+  "generated_at": "2026-11-01T12:12:08.228393+00:00",
+  "source_commit": "514c328a7b991f875cfc411889b69d359c19e4e4",
+  "repository_head_at_capture": "514c328a7b991f875cfc411889b69d359c19e4e4",
   "source_dirty": false,
-  "implementation_binding": "impl-41506602f6d155f2",
-  "implementation_tree_digest": "41506602f6d155f2dff9a324915c1cb8a46436391598ef60ee6afd1f7479b5f4",
+  "implementation_binding": "impl-98eed6d7d023f066",
+  "implementation_tree_digest": "98eed6d7d023f0667215c906d32c38b09d028fa8ae3a57a1013accadc43bf252",
   "implementation_dirty": false,
   "implementation_scope": [
     "project/src/main/java",
@@ -133,30 +133,30 @@
   "project_route_count": 6599,
   "boundary_route_count": 160,
   "behavior_counts": {
-    "executed-pass": 11,
-    "unknown": 6748
+    "executed-pass": 12,
+    "unknown": 6747
   },
   "disposition_counts": {
-    "owned-pass": 11,
-    "unknown": 6748
+    "owned-pass": 12,
+    "unknown": 6747
   },
-  "strict_pass_count": 11,
+  "strict_pass_count": 12,
   "non_ledger_strict_pass_count": 0,
   "diagnostic_observation_count": 0,
-  "required_unknown": 6748,
-  "project_required_unknown": 6588,
+  "required_unknown": 6747,
+  "project_required_unknown": 6587,
   "boundary_required_unknown": 160,
   "failures": [],
   "reports": [
     {
-      "path": "evidence/api-contract-order-task-aliases-strict-415.json",
-      "sha256": "d41bd22be8ff13c0f4a2c1e493028953dae5961fffce93a2563672f6a9edc2f4",
+      "path": "evidence/api-contract-order-task-affected-strict-98.json",
+      "sha256": "bf38249eae39d65075c662b33846a7690c18f75d611b0ad2068c9aa2ea0c080e",
       "status": "executed-pass",
       "strict_evidence": true,
-      "source_commit": "0bbd13ffeb7754cecec6f107b32c4c98733a5ef2",
-      "repository_head_at_capture": "0bbd13ffeb7754cecec6f107b32c4c98733a5ef2",
-      "implementation_binding": "impl-41506602f6d155f2",
-      "implementation_tree_digest": "41506602f6d155f2dff9a324915c1cb8a46436391598ef60ee6afd1f7479b5f4",
+      "source_commit": "514c328a7b991f875cfc411889b69d359c19e4e4",
+      "repository_head_at_capture": "514c328a7b991f875cfc411889b69d359c19e4e4",
+      "implementation_binding": "impl-98eed6d7d023f066",
+      "implementation_tree_digest": "98eed6d7d023f0667215c906d32c38b09d028fa8ae3a57a1013accadc43bf252",
       "implementation_dirty": false,
       "strict_contract": "strict report contract valid"
     }
@@ -4935,9 +4935,9 @@
       "disposition": "owned-pass",
       "evidence": [
         {
-          "report": "evidence/api-contract-order-task-aliases-strict-415.json",
-          "report_sha256": "d41bd22be8ff13c0f4a2c1e493028953dae5961fffce93a2563672f6a9edc2f4",
-          "case_id": "order-task.alias.00",
+          "report": "evidence/api-contract-order-task-affected-strict-98.json",
+          "report_sha256": "bf38249eae39d65075c662b33846a7690c18f75d611b0ad2068c9aa2ea0c080e",
+          "case_id": "order-task.affected.00",
           "status": 200,
           "disposition": "owned-pass"
         }
@@ -5147,9 +5147,9 @@
       "disposition": "owned-pass",
       "evidence": [
         {
-          "report": "evidence/api-contract-order-task-aliases-strict-415.json",
-          "report_sha256": "d41bd22be8ff13c0f4a2c1e493028953dae5961fffce93a2563672f6a9edc2f4",
-          "case_id": "order-task.alias.01",
+          "report": "evidence/api-contract-order-task-affected-strict-98.json",
+          "report_sha256": "bf38249eae39d65075c662b33846a7690c18f75d611b0ad2068c9aa2ea0c080e",
+          "case_id": "order-task.affected.01",
           "status": 200,
           "disposition": "owned-pass"
         }
@@ -5189,9 +5189,9 @@
       "disposition": "owned-pass",
       "evidence": [
         {
-          "report": "evidence/api-contract-order-task-aliases-strict-415.json",
-          "report_sha256": "d41bd22be8ff13c0f4a2c1e493028953dae5961fffce93a2563672f6a9edc2f4",
-          "case_id": "order-task.alias.02",
+          "report": "evidence/api-contract-order-task-affected-strict-98.json",
+          "report_sha256": "bf38249eae39d65075c662b33846a7690c18f75d611b0ad2068c9aa2ea0c080e",
+          "case_id": "order-task.affected.02",
           "status": 200,
           "disposition": "owned-pass"
         }
@@ -5265,9 +5265,9 @@
       "disposition": "owned-pass",
       "evidence": [
         {
-          "report": "evidence/api-contract-order-task-aliases-strict-415.json",
-          "report_sha256": "d41bd22be8ff13c0f4a2c1e493028953dae5961fffce93a2563672f6a9edc2f4",
-          "case_id": "order-task.alias.03",
+          "report": "evidence/api-contract-order-task-affected-strict-98.json",
+          "report_sha256": "bf38249eae39d65075c662b33846a7690c18f75d611b0ad2068c9aa2ea0c080e",
+          "case_id": "order-task.affected.03",
           "status": 200,
           "disposition": "owned-pass"
         }
@@ -5324,9 +5324,9 @@
       "disposition": "owned-pass",
       "evidence": [
         {
-          "report": "evidence/api-contract-order-task-aliases-strict-415.json",
-          "report_sha256": "d41bd22be8ff13c0f4a2c1e493028953dae5961fffce93a2563672f6a9edc2f4",
-          "case_id": "order-task.alias.04",
+          "report": "evidence/api-contract-order-task-affected-strict-98.json",
+          "report_sha256": "bf38249eae39d65075c662b33846a7690c18f75d611b0ad2068c9aa2ea0c080e",
+          "case_id": "order-task.affected.04",
           "status": 200,
           "disposition": "owned-pass"
         }
@@ -5502,9 +5502,9 @@
       "disposition": "owned-pass",
       "evidence": [
         {
-          "report": "evidence/api-contract-order-task-aliases-strict-415.json",
-          "report_sha256": "d41bd22be8ff13c0f4a2c1e493028953dae5961fffce93a2563672f6a9edc2f4",
-          "case_id": "order-task.alias.05",
+          "report": "evidence/api-contract-order-task-affected-strict-98.json",
+          "report_sha256": "bf38249eae39d65075c662b33846a7690c18f75d611b0ad2068c9aa2ea0c080e",
+          "case_id": "order-task.affected.05",
           "status": 200,
           "disposition": "owned-pass"
         }
@@ -5527,9 +5527,9 @@
       "disposition": "owned-pass",
       "evidence": [
         {
-          "report": "evidence/api-contract-order-task-aliases-strict-415.json",
-          "report_sha256": "d41bd22be8ff13c0f4a2c1e493028953dae5961fffce93a2563672f6a9edc2f4",
-          "case_id": "order-task.alias.06",
+          "report": "evidence/api-contract-order-task-affected-strict-98.json",
+          "report_sha256": "bf38249eae39d65075c662b33846a7690c18f75d611b0ad2068c9aa2ea0c080e",
+          "case_id": "order-task.affected.06",
           "status": 200,
           "disposition": "owned-pass"
         }
@@ -5637,9 +5637,9 @@
       "disposition": "owned-pass",
       "evidence": [
         {
-          "report": "evidence/api-contract-order-task-aliases-strict-415.json",
-          "report_sha256": "d41bd22be8ff13c0f4a2c1e493028953dae5961fffce93a2563672f6a9edc2f4",
-          "case_id": "order-task.alias.07",
+          "report": "evidence/api-contract-order-task-affected-strict-98.json",
+          "report_sha256": "bf38249eae39d65075c662b33846a7690c18f75d611b0ad2068c9aa2ea0c080e",
+          "case_id": "order-task.affected.07",
           "status": 200,
           "disposition": "owned-pass"
         }
@@ -5662,9 +5662,9 @@
       "disposition": "owned-pass",
       "evidence": [
         {
-          "report": "evidence/api-contract-order-task-aliases-strict-415.json",
-          "report_sha256": "d41bd22be8ff13c0f4a2c1e493028953dae5961fffce93a2563672f6a9edc2f4",
-          "case_id": "order-task.alias.08",
+          "report": "evidence/api-contract-order-task-affected-strict-98.json",
+          "report_sha256": "bf38249eae39d65075c662b33846a7690c18f75d611b0ad2068c9aa2ea0c080e",
+          "case_id": "order-task.affected.08",
           "status": 200,
           "disposition": "owned-pass"
         }
@@ -7115,9 +7115,9 @@
       "disposition": "owned-pass",
       "evidence": [
         {
-          "report": "evidence/api-contract-order-task-aliases-strict-415.json",
-          "report_sha256": "d41bd22be8ff13c0f4a2c1e493028953dae5961fffce93a2563672f6a9edc2f4",
-          "case_id": "order-task.alias.09",
+          "report": "evidence/api-contract-order-task-affected-strict-98.json",
+          "report_sha256": "bf38249eae39d65075c662b33846a7690c18f75d611b0ad2068c9aa2ea0c080e",
+          "case_id": "order-task.affected.09",
           "status": 200,
           "disposition": "owned-pass"
         }
@@ -8704,9 +8704,9 @@
       "disposition": "owned-pass",
       "evidence": [
         {
-          "report": "evidence/api-contract-order-task-aliases-strict-415.json",
-          "report_sha256": "d41bd22be8ff13c0f4a2c1e493028953dae5961fffce93a2563672f6a9edc2f4",
-          "case_id": "order-task.alias.10",
+          "report": "evidence/api-contract-order-task-affected-strict-98.json",
+          "report_sha256": "bf38249eae39d65075c662b33846a7690c18f75d611b0ad2068c9aa2ea0c080e",
+          "case_id": "order-task.affected.10",
           "status": 200,
           "disposition": "owned-pass"
         }
@@ -33596,11 +33596,19 @@
       "source_class": "com.sunwayworld.emc.module.bp.result.run.resource.impl.EmcRunResourceImpl",
       "source_handler": "RequestMapping",
       "family": "task-integration",
-      "behavior_status": "unknown",
-      "disposition": "unknown",
-      "evidence": [],
+      "behavior_status": "executed-pass",
+      "disposition": "owned-pass",
+      "evidence": [
+        {
+          "report": "evidence/api-contract-order-task-affected-strict-98.json",
+          "report_sha256": "bf38249eae39d65075c662b33846a7690c18f75d611b0ad2068c9aa2ea0c080e",
+          "case_id": "order-task.affected.11",
+          "status": 200,
+          "disposition": "owned-pass"
+        }
+      ],
       "diagnostic_observations": [],
-      "unknown_reason": "no clone-derived HTTP evidence registered",
+      "unknown_reason": null,
       "boundary_scope": null,
       "route_origin": "project-spring-source",
       "boundary_semantics": "project Spring route",

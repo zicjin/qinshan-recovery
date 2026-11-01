@@ -14,9 +14,9 @@
     "internal_http_bridge": false,
     "jni_replacement_process": false
   },
-  "started_at": "2026-10-31T21:44:58.439001+00:00",
-  "source_commit": "4e14e21cae7aec4148c489c0865ba4eebaf64579",
-  "repository_head_at_capture": "4e14e21cae7aec4148c489c0865ba4eebaf64579",
+  "started_at": "2026-11-01T03:24:32.511011+00:00",
+  "source_commit": "45d7ef0d3b7d9881c410b5bdbabe5ba0dbe63f17",
+  "repository_head_at_capture": "45d7ef0d3b7d9881c410b5bdbabe5ba0dbe63f17",
   "source_dirty": false,
   "source_scope": [
     "project/src/main/java",
@@ -74,8 +74,8 @@
     "build/oracle-free-source-manifest.json",
     "docker/Dockerfile.built"
   ],
-  "implementation_binding": "impl-a7adc27cb2955d6e",
-  "implementation_tree_digest": "a7adc27cb2955d6e723d155ed934d063e9ed0c5b847ea74e9f880216dd7e6fd2",
+  "implementation_binding": "impl-eeb960a8f4a522f7",
+  "implementation_tree_digest": "eeb960a8f4a522f73d378c046b8efa983dad213d83e25cf99cbbc650fa6aac26",
   "implementation_dirty": false,
   "implementation_scope": [
     "project/src/main/java",
@@ -134,13 +134,12 @@
     "docker/Dockerfile.built"
   ],
   "nested_project_commit": "27932b1fe4d71d64a02f9a63e55f56acb403e3a0",
-  "distribution_input_digest": "dc97c305b90ba8334548ee522a08b94300580d3ff2b3ebf234b2695653f913e4",
+  "distribution_input_digest": "67b0d0db061cf9c2cf31ff8466de20f9f8eb017b4f0b4a69d0b45811d8047ee4",
   "artifact_sha256": {
-    "/home/ts/qinshan/lims-recovery/owned-distribution/target/distribution/app/lims-owned-application.jar": "6ccb630ba69f3cd41e5303344ac50be1db064fcf13db44192327136544e03289",
-    "/home/ts/qinshan/.scratch/sunway-supplier-exit-api-first/diagnostic-evidence/pending/current-a7adc27cb2955d6e/api-route-ledger-current-head.json": "ba1daa4b353860cab8f601bf4c7cb51b77f106f4c8ef1df8e86c3487d1810ed8"
+    "lims-recovery/owned-distribution/target/a9c367b145a18da7a405437a64260cef608d9a92a2cb226691509688a7649afd/distribution/app/lims-owned-application.jar": "8743b8375686da1aed15901dfc324ab25f8ca1afc1173242cffd2b5ffcd4c28c"
   },
-  "clone_identity": "lims-owned-sss2-oracle:LIMS_BASELINE_SSS2:LIMS_RUNTIME_SSS2:f1c43b53750ec720488ef7780527ea303081ab2dc6a0fc029a1d17f33dc10a6c",
-  "runtime_report": "/home/ts/qinshan/.scratch/sunway-supplier-exit-api-first/diagnostic-evidence/runtime/strict-api-runtime-manifest-a7adc-foundation-write-wave.json",
+  "clone_identity": "lims-strict-api-foldereeb2",
+  "runtime_report": ".scratch/sunway-supplier-exit-api-first/diagnostic-evidence/runtime/strict-api-runtime-manifest-folder-eeb2.json",
   "runtime_contract": {
     "mode": "strict",
     "strict_evidence": false,
@@ -152,9 +151,9 @@
     "baseline_schema_hash": "f1c43b53750ec720488ef7780527ea303081ab2dc6a0fc029a1d17f33dc10a6c",
     "runtime_schema_hash_before": "17873fa4310d1a273530bdce111dba72ac433163f25bdfd0c5b036fc23626979",
     "runtime_schema_hash_after": "17873fa4310d1a273530bdce111dba72ac433163f25bdfd0c5b036fc23626979",
-    "source_commit": "4e14e21cae7aec4148c489c0865ba4eebaf64579",
-    "implementation_binding": "impl-a7adc27cb2955d6e",
-    "implementation_tree_digest": "a7adc27cb2955d6e723d155ed934d063e9ed0c5b847ea74e9f880216dd7e6fd2",
+    "source_commit": "45d7ef0d3b7d9881c410b5bdbabe5ba0dbe63f17",
+    "implementation_binding": "impl-eeb960a8f4a522f7",
+    "implementation_tree_digest": "eeb960a8f4a522f73d378c046b8efa983dad213d83e25cf99cbbc650fa6aac26",
     "implementation_scope": [
       "project/src/main/java",
       "owned-framework/src",
@@ -212,32 +211,34 @@
       "docker/Dockerfile.built"
     ],
     "implementation_dirty": false,
-    "repository_head_at_capture": "4e14e21cae7aec4148c489c0865ba4eebaf64579"
+    "repository_head_at_capture": "45d7ef0d3b7d9881c410b5bdbabe5ba0dbe63f17"
   },
   "role": "manager",
   "organization": "org-a",
   "mode": "strict",
   "base_url": "http://127.0.0.1:18089",
-  "case_count": 1,
+  "case_count": 4,
   "cases": [
     {
       "expected_status": [
         200
       ],
       "json_top_level_keys": [
-        "updated"
+        "auditStatus",
+        "ext$"
       ],
-      "body_sha256": "3c9c6e533269fec54d4d3cd1c878f6f7005bc77759c636d980a9c07fe236a6ed",
-      "body_bytes": 13,
+      "body_sha256": "56241240acf0c210882966eb1b34b4f0c2fd1d3a704bc88dcc12142f74182a8f",
+      "body_bytes": 72,
       "assertions": {
         "json_keys": [
-          "updated"
+          "auditStatus",
+          "ext$"
         ]
       },
-      "id": "result.run.status-update.http",
-      "method": "PUT",
-      "path": "/secure/core/module/bp/result/runs/rc0098ff84d96",
-      "url": "http://127.0.0.1:18089/secure/core/module/bp/result/runs/rc0098ff84d96",
+      "id": "folder.status",
+      "method": "GET",
+      "path": "/secure/emc/module/bp/bp/folders/info/status",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/bp/folders/info/status",
       "status": 200,
       "response_headers": {
         "cache-control": "no-store",
@@ -245,227 +246,271 @@
         "x-xss-protection": "1; mode=block",
         "x-frame-options": "SAMEORIGIN",
         "content-type": "application/json",
-        "content-length": "13",
-        "date": "Sat, 31 Oct 2026 21:45:00 GMT",
+        "content-length": "72",
+        "date": "Sun, 01 Nov 2026 03:24:35 GMT",
+        "connection": "close"
+      },
+      "request_headers": {},
+      "elapsed_ms": 415.274,
+      "route": {
+        "method": "GET",
+        "path": "/secure/emc/module/bp/bp/folders/info/status",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "route_id": "267cca33aade9348"
+      },
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r8bf23942bdaa"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "d088d676f3481066422fcfda200f9c78654060e2a401e2243271be4b967bee16",
+      "body_bytes": 1674,
+      "assertions": {
+        "json_keys": [
+          "columnTypeMap",
+          "first",
+          "last",
+          "numberOfElements",
+          "pageNumber",
+          "pageSize",
+          "rows",
+          "total",
+          "totalMap",
+          "totalPages"
+        ]
+      },
+      "id": "folder.query",
+      "method": "POST",
+      "path": "/secure/emc/module/bp/bp/folders/queries",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/bp/folders/queries",
+      "status": 200,
+      "response_headers": {
+        "cache-control": "no-store",
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "1674",
+        "date": "Sun, 01 Nov 2026 03:24:35 GMT",
         "connection": "close"
       },
       "request_headers": {
         "content-type": "application/json"
       },
-      "elapsed_ms": 503.625,
+      "elapsed_ms": 511.887,
       "route": {
-        "method": "PUT",
-        "path": "/secure/core/module/bp/result/runs/${fixture.run-query.rows.0.id}",
-        "operation": "write",
+        "method": "POST",
+        "path": "/secure/emc/module/bp/bp/folders/queries",
+        "operation": "read",
         "disposition": "owned-pass",
-        "scope": "owned-java-source-only-route",
-        "route_id": "99b9a8171cc75af8"
+        "route_id": "667a182e3fe643e5"
       },
       "fixture": {
-        "id": "result-run-status-api-fixture",
-        "mode": "api",
-        "setup": "executed",
-        "restore": "restored",
-        "setup_requests": [
-          {
-            "id": "run-create",
-            "method": "POST",
-            "path": "/secure/core/module/bp/result/runs",
-            "body": {
-              "b": [
-                "",
-                [
-                  {
-                    "id": "${runtime.id}",
-                    "status": "done"
-                  }
-                ]
-              ]
-            },
-            "expected_status": 200,
-            "assert": {
-              "json_keys": [
-                "id",
-                "created"
-              ]
-            }
-          },
-          {
-            "id": "run-query",
-            "capture_json": true,
-            "method": "POST",
-            "path": "/secure/core/module/bp/result/runs/queries/raw",
-            "body": {
-              "p": {
-                "runNo": "${runtime.id}",
-                "s": 50
-              }
-            },
-            "expected_status": 200,
-            "assert": {
-              "json_keys": [
-                "rows",
-                "total"
-              ]
-            }
-          }
-        ],
-        "restore_requests": [
-          {
-            "id": "run-restore",
-            "method": "DELETE",
-            "path": "/secure/core/module/bp/result/runs",
-            "body": {
-              "b": [
-                "",
-                [
-                  {
-                    "id": "${fixture.run-query.rows.0.id}"
-                  }
-                ]
-              ]
-            },
-            "expected_status": 200,
-            "assert": {
-              "json_keys": [
-                "deleted"
-              ]
-            }
-          }
-        ],
-        "sql_files": [],
-        "setup_sql_files": [],
-        "restore_sql_files": [],
-        "business_write_via": "http",
-        "cleanup_via": "restore-http",
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
         "runtime_values": {
-          "id": "rc0098ff84d96"
+          "id": "r0f43533dd92a"
         },
-        "setup_http": [
-          {
-            "expected_status": [
-              200
-            ],
-            "json_top_level_keys": [
-              "created",
-              "id"
-            ],
-            "body_sha256": "12abff06a760f69e7bf31cb67887b41079f5447d94f71e6f4223973a3f9b11b0",
-            "body_bytes": 34,
-            "assertions": {
-              "json_keys": [
-                "id",
-                "created"
-              ]
-            },
-            "id": "run-create",
-            "method": "POST",
-            "path": "/secure/core/module/bp/result/runs",
-            "url": "http://127.0.0.1:18089/secure/core/module/bp/result/runs",
-            "status": 200,
-            "response_headers": {
-              "cache-control": "no-store",
-              "x-content-type-options": "nosniff",
-              "x-xss-protection": "1; mode=block",
-              "x-frame-options": "SAMEORIGIN",
-              "content-type": "application/json",
-              "content-length": "34",
-              "date": "Sat, 31 Oct 2026 21:44:59 GMT",
-              "connection": "close"
-            },
-            "request_headers": {
-              "content-type": "application/json"
-            },
-            "elapsed_ms": 463.564
-          },
-          {
-            "expected_status": [
-              200
-            ],
-            "json_top_level_keys": [
-              "pageNumber",
-              "pageSize",
-              "rows",
-              "total"
-            ],
-            "body_sha256": "2856e2b0fd2a89e5cf3c1039fd0c39c244d758ae082f3e356d93f84fe9d02bdc",
-            "body_bytes": 1709,
-            "assertions": {
-              "json_keys": [
-                "rows",
-                "total"
-              ]
-            },
-            "id": "run-query",
-            "method": "POST",
-            "path": "/secure/core/module/bp/result/runs/queries/raw",
-            "url": "http://127.0.0.1:18089/secure/core/module/bp/result/runs/queries/raw",
-            "status": 200,
-            "response_headers": {
-              "cache-control": "no-store",
-              "x-content-type-options": "nosniff",
-              "x-xss-protection": "1; mode=block",
-              "x-frame-options": "SAMEORIGIN",
-              "content-type": "application/json",
-              "content-length": "1709",
-              "date": "Sat, 31 Oct 2026 21:45:00 GMT",
-              "connection": "close"
-            },
-            "request_headers": {
-              "content-type": "application/json"
-            },
-            "elapsed_ms": 504.754
-          }
-        ],
-        "restore_http": [
-          {
-            "expected_status": [
-              200
-            ],
-            "json_top_level_keys": [
-              "deleted"
-            ],
-            "body_sha256": "78000dac3e3426f05652e1ffb82d95f0faff80840f2a8585edd6cb0f79255f98",
-            "body_bytes": 13,
-            "assertions": {
-              "json_keys": [
-                "deleted"
-              ]
-            },
-            "id": "run-restore",
-            "method": "DELETE",
-            "path": "/secure/core/module/bp/result/runs",
-            "url": "http://127.0.0.1:18089/secure/core/module/bp/result/runs",
-            "status": 200,
-            "response_headers": {
-              "cache-control": "no-store",
-              "x-content-type-options": "nosniff",
-              "x-xss-protection": "1; mode=block",
-              "x-frame-options": "SAMEORIGIN",
-              "content-type": "application/json",
-              "content-length": "13",
-              "date": "Sat, 31 Oct 2026 21:45:00 GMT",
-              "connection": "close"
-            },
-            "request_headers": {
-              "content-type": "application/json"
-            },
-            "elapsed_ms": 460.262
-          }
-        ]
+        "setup_http": [],
+        "restore_http": []
       },
       "readback_http": [],
       "readback_required": false,
       "audit": {
-        "required": true,
-        "status": "observed",
-        "event": "result-run-update",
-        "outcome": "ALLOWED",
-        "source": "owned-http"
+        "required": false,
+        "status": "not-required"
       },
       "rollback": {
         "status": "verified-via-fixture-restore",
-        "source": "restore-http"
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "d088d676f3481066422fcfda200f9c78654060e2a401e2243271be4b967bee16",
+      "body_bytes": 1674,
+      "assertions": {
+        "json_keys": [
+          "columnTypeMap",
+          "first",
+          "last",
+          "numberOfElements",
+          "pageNumber",
+          "pageSize",
+          "rows",
+          "total",
+          "totalMap",
+          "totalPages"
+        ]
+      },
+      "id": "folder.tasks",
+      "method": "POST",
+      "path": "/secure/emc/module/bp/bp/folders/queries/tasks",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/bp/folders/queries/tasks",
+      "status": 200,
+      "response_headers": {
+        "cache-control": "no-store",
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "1674",
+        "date": "Sun, 01 Nov 2026 03:24:35 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 479.788,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/bp/bp/folders/queries/tasks",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "route_id": "65c4063bb485f320"
+      },
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "rb8ffc6b6d3ee"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        500
+      ],
+      "json_top_level_keys": [
+        "error",
+        "message",
+        "path",
+        "status",
+        "timestamp"
+      ],
+      "body_sha256": "533320847960ab7237032bfef1ece66bd56c04f26a3690547e67625c1a7fa750",
+      "body_bytes": 135,
+      "assertions": {
+        "json_keys": [
+          "error",
+          "message",
+          "path",
+          "status",
+          "timestamp"
+        ]
+      },
+      "id": "folder.invalid-input",
+      "method": "POST",
+      "path": "/secure/emc/module/bp/bp/folders/queries",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/bp/folders/queries",
+      "status": 500,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "135",
+        "date": "Sun, 01 Nov 2026 03:24:36 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 397.486,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/bp/bp/folders/queries",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "route_id": "667a182e3fe643e5"
+      },
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r6b058b0a1875"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
       }
     }
   ],
@@ -486,15 +531,13 @@
   },
   "cleanup_pending": false,
   "phase_timings_ms": {
-    "http_cases": 2118.578
+    "http_cases": 2473.63
   },
   "authentication": {
     "attempted": true,
     "authenticated": true,
     "status": 200
   },
-  "finished_at": "2026-10-31T21:45:00.557619+00:00",
-  "wave": "milestone",
-  "wave_runtime_id": "a7adc-foundation-write-wave",
-  "wave_finalized_at": "2026-10-31T21:45:01.774421+00:00"
+  "finished_at": "2026-11-01T03:24:34.984691+00:00",
+  "cleanup_finalized_at": "2026-11-01T03:24:54.277669+00:00"
 }

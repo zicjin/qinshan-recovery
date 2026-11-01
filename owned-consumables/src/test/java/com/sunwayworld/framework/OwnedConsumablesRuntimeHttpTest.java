@@ -92,6 +92,10 @@ public final class OwnedConsumablesRuntimeHttpTest {
             check(cookie!=null,"RSA login creates session");
             JSONObject page=JSON.parseObject(http(port,"POST",BASE+"/queries/raw","{\"p\":{\"n\":1,\"s\":1}}",cookie,null,200).body);
             check(page.getIntValue("total")==2 && page.getJSONArray("rows").size()==1,"original consumables raw route returns scoped Page");
+            JSONObject searchable=JSON.parseObject(http(port,"POST",BASE+"/queries/searchable","{\"p\":{\"n\":1,\"s\":1}}",cookie,null,200).body);
+            check(searchable.getIntValue("total")==2 && searchable.getJSONArray("rows").size()==1
+                    && searchable.containsKey("columnTypeMap") && searchable.containsKey("totalPages"),
+                    "consumables searchable route preserves the full pagination envelope");
             JSONObject first=page.getJSONArray("rows").getJSONObject(0);
             check("CSM-003".equals(first.getString("id")) && "Beta Bottle".equals(first.getString("mtlName")) && first.getDoubleValue("stockQty")==0 && "2025-01-03".equals(first.getString("createdTime")),"original DTO fields, numeric quantity and date projection");
             JSONObject filtered=JSON.parseObject(http(port,"POST",BASE+"/queries/raw","{\"f\":{\"MTLNAME_CISC\":\"bottle\",\"MTLCATEGORYID_EQ\":\"glass\"},\"n\":2,\"s\":1}",cookie,null,200).body);

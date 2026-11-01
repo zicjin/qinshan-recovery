@@ -5,6 +5,7 @@ import com.sunwayworld.owned.internal.security.OwnedIdentityProvider;
 import com.sunwayworld.owned.internal.security.OwnedPrincipal;
 import com.sunwayworld.owned.internal.web.OwnedIdentityHttpBoundary;
 import com.sunwayworld.owned.internal.web.OwnedWriteSupport;
+import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;
 import java.sql.*;
 import java.util.*;
 import javax.servlet.http.HttpServletRequest;
@@ -21,9 +22,11 @@ public final class OwnedConsumablesStockController {
     private final OwnedIdentityHttpBoundary boundary;
     private final JdbcPersonnelIdentityProvider provider;
     private final DataSource source;
+    private final OwnedConsumablesReadService readService;
     public OwnedConsumablesStockController(Environment environment, OwnedIdentityHttpBoundary boundary,
-            JdbcPersonnelIdentityProvider provider, DataSource source) {
+            JdbcPersonnelIdentityProvider provider, DataSource source, OwnedConsumablesReadService readService) {
         this.environment = environment; this.boundary = boundary; this.provider = provider; this.source = source;
+        this.readService = readService;
     }
     @GetMapping(value="/owned/consumables/stock-write-available", produces=MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> available(HttpServletRequest request) {
@@ -40,8 +43,11 @@ public final class OwnedConsumablesStockController {
     }
 
     @PostMapping(value="/secure/emc/module/item/consume/consumes/queries/searchable", produces=MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> searchable(HttpServletRequest request) {
-        try { boundary.requirePermission(request.getSession(false), OwnedIdentityProvider.CONSUMABLE_READ); return ok(Collections.singletonMap("rows", Collections.emptyList())); }
+    public ResponseEntity<?> searchable(HttpServletRequest request, RestJsonWrapperBean wrapper) {
+        try {
+            boundary.requirePermission(request.getSession(false), OwnedIdentityProvider.CONSUMABLE_READ);
+            return ok(readService.selectPagination(wrapper));
+        }
         catch (AccessDeniedException denied) { return error(HttpStatus.FORBIDDEN); }
         catch (SQLException failure) { return error(HttpStatus.INTERNAL_SERVER_ERROR); }
     }

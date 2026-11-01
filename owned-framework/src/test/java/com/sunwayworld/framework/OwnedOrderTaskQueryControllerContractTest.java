@@ -37,6 +37,9 @@ public final class OwnedOrderTaskQueryControllerContractTest {
         require(paths, PREFIX + "/proj-order-categories/queries");
         require(paths, "/secure/emc/module/bp/bp/orders/order-tasks/queries");
         require(paths, "/secure/emc/module/bp/edit/project-change/orders/order-tasks/queries");
+        require(paths, "/secure/emc/module/bp/result/runs/blank-order-tasks/queries");
+        require(paths, "/secure/emc/module/bp/sample/samples/order-tasks/queries");
+        require(paths, "/secure/emc/module/bp/sample/samples/{id}/order-tasks/queries");
         require(paths, PREFIX + "/info/status");
         require(paths, PREFIX + "/{id}/info/status");
         require(paths, PREFIX + "/{id}");
@@ -65,6 +68,7 @@ public final class OwnedOrderTaskQueryControllerContractTest {
         requireProfile("/personnel-workload-statistics/queries", 3);
         requireProfile("/proj-order-categories/queries", 10);
         requireProfile("/order-tasks/queries", 0);
+        requireProfile("/blank-order-tasks/queries", 0);
         System.out.println("owned order-task query mapping/profile checks passed");
     }
 

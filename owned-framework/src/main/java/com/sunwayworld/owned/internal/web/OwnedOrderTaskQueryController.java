@@ -82,6 +82,9 @@ public final class OwnedOrderTaskQueryController {
             PREFIX + "/proj-order-categories/queries",
             "/secure/emc/module/bp/bp/orders/order-tasks/queries",
             "/secure/emc/module/bp/edit/project-change/orders/order-tasks/queries",
+            "/secure/emc/module/bp/result/runs/blank-order-tasks/queries",
+            "/secure/emc/module/bp/sample/samples/order-tasks/queries",
+            "/secure/emc/module/bp/sample/samples/{id}/order-tasks/queries",
             PREFIX + "/queries/runnableanalassign"
             }, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> query(HttpServletRequest request, @RequestBody(required = false) String body) {
@@ -161,7 +164,10 @@ public final class OwnedOrderTaskQueryController {
         envelope.put("last", total == 0 || page.number >= pages(total, page.size));
         envelope.put("numberOfElements", rows.size()); envelope.put("pageNumber", page.number);
         boolean emptyOrderResource = total == 0 && (requestPath.endsWith("/orders/order-tasks/queries")
-                || requestPath.endsWith("/edit/project-change/orders/order-tasks/queries"));
+                || requestPath.endsWith("/edit/project-change/orders/order-tasks/queries")
+                || requestPath.endsWith("/blank-order-tasks/queries")
+                || requestPath.endsWith("/samples/order-tasks/queries")
+                || (requestPath.contains("/sample/samples/") && requestPath.endsWith("/order-tasks/queries")));
         envelope.put("pageSize", emptyOrderResource ? 0 : page.size);
         envelope.put("rows", rows); envelope.put("total", total);
         Map<String, Object> totals = new LinkedHashMap<String, Object>(); totals.put("qty_", total);
@@ -192,6 +198,10 @@ public final class OwnedOrderTaskQueryController {
         if (requestPath.startsWith(ordersPrefix)) return requestPath.substring(ordersPrefix.length());
         String projectChangePrefix = "/secure/emc/module/bp/edit/project-change/orders";
         if (requestPath.startsWith(projectChangePrefix)) return requestPath.substring(projectChangePrefix.length());
+        String resultRunsPrefix = "/secure/emc/module/bp/result/runs";
+        if (requestPath.startsWith(resultRunsPrefix)) return requestPath.substring(resultRunsPrefix.length());
+        String samplePrefix = "/secure/emc/module/bp/sample/samples";
+        if (requestPath.startsWith(samplePrefix)) return requestPath.substring(samplePrefix.length());
         return "";
     }
 
@@ -432,6 +442,8 @@ public final class OwnedOrderTaskQueryController {
                 "samplebegindate=dateTime"
         );
         addTypeProfile(profiles, "/order-tasks/queries", "");
+        addTypeProfile(profiles, "/blank-order-tasks/queries", "");
+        addTypeProfile(profiles, "/{id}/order-tasks/queries", "");
         addTypeProfile(profiles, "/analysis-department-statistics/queries",
                 "analysisdate=dateTime;rn_=number;testcount=number"
         );

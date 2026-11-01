@@ -58,7 +58,8 @@ public final class OwnedResultRunController {
             "/secure/emc/module/bp/result/runs/queries/undoable",
             "/secure/emc/module/bp/result/runs/queries/withdrawable",
             "/secure/emc/module/bp/result/runs/queries/all",
-            "/secure/emc/module/bp/result/runs/qc-related-order/queries"},
+            "/secure/emc/module/bp/result/runs/qc-related-order/queries",
+            "/secure/emc/module/bp/result/runs/unique-order-task/queries"},
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> query(HttpServletRequest request,
             @PathVariable(value = "roleId", required = false) String roleId,
@@ -68,6 +69,9 @@ public final class OwnedResultRunController {
             JSONObject filter = object(body);
             if (request.getRequestURI().endsWith("/qc-related-order/queries")) {
                 return ok(page(readQcRelatedOrders(principal.getOrgId()), pageSize(filter)));
+            }
+            if (request.getRequestURI().endsWith("/unique-order-task/queries")) {
+                return ok(page(readUniqueOrderTasks(principal.getOrgId()), pageSize(filter)));
             }
             return ok(page(readRuns(principal.getOrgId(), text(filter.get("runNo")), text(filter.get("status"))), pageSize(filter)));
         } catch (AccessDeniedException denied) { return forbidden(); }
@@ -160,11 +164,46 @@ public final class OwnedResultRunController {
         return new QueryResult(rows, QC_RELATED_ORDER_TYPE_PROFILE);
     }
 
+    private QueryResult readUniqueOrderTasks(String organization) throws SQLException {
+        List<Map<String, Object>> rows = new ArrayList<Map<String, Object>>();
+        String sql = "SELECT * FROM (SELECT A.*,B.ORDERNO,B.LABELNO,B.ORDERDESC,B.SAMPLEBEGINDATE,"
+                + "B.SAMPLEBEGINTIME,B.PARENTORDERNO,C.MONITORPOINTNAME,D.EQUIPTNAME,"
+                + "ROW_NUMBER() OVER (PARTITION BY A.TESTID ORDER BY A.ID) AS UNIQUE_RN "
+                + "FROM T_EMC_ORDER_TASK A LEFT JOIN T_EMC_ORDER B ON A.ORDERID=B.ID "
+                + "LEFT JOIN T_EMC_FOLDER C ON A.FOLDERID=C.ID LEFT JOIN T_EMC_EQUIPT D ON A.EQUIPTID=D.ID "
+                + "WHERE A.ANALYSISORGID=?) Q WHERE Q.UNIQUE_RN=1 ORDER BY Q.ID DESC";
+        try (Connection connection = dataSource.getConnection(); PreparedStatement query = connection.prepareStatement(sql)) {
+            query.setString(1, organization);
+            try (ResultSet result = query.executeQuery()) {
+                ResultSetMetaData metadata = result.getMetaData();
+                while (result.next()) rows.add(row(result, metadata));
+            }
+        }
+        return new QueryResult(rows, UNIQUE_ORDER_TASK_TYPE_PROFILE);
+    }
+
     private static final Map<String, String> QC_RELATED_ORDER_TYPE_PROFILE = qcRelatedOrderTypeProfile();
     private static Map<String, String> qcRelatedOrderTypeProfile() {
         String encoded = "createdbyid=string;createdbyname=string;createdbyorgid=string;createdbyorgname=string;createdtime=dateTime;"
                 + "id=number;projno=string;qccategorycode=string;qccategoryid=number;qcname=string;qcorderid=number;"
                 + "qcorderno=string;relatedorderid=number;relatedorderno=string;relatedrunid=string;rn_=number;taskrunid=string";
+        Map<String, String> result = new LinkedHashMap<String, String>();
+        for (String token : encoded.split(";")) { int equals = token.indexOf('='); if (equals > 0) result.put(token.substring(0, equals), token.substring(equals + 1)); }
+        return result;
+    }
+
+    private static final Map<String, String> UNIQUE_ORDER_TASK_TYPE_PROFILE = uniqueOrderTaskTypeProfile();
+    private static Map<String, String> uniqueOrderTaskTypeProfile() {
+        String encoded = "testmethodid=number;analysisorgname=string;orderno=string;partakeuserid=string;"
+                + "testmethodbasis=string;inputuserid=string;equiptid=number;containercategorycode=string;"
+                + "qccategoryid=number;analysisuserid=string;samplebegindate=dateTime;containercategoryid=number;"
+                + "parentid=number;folderid=number;labelno=string;analysistype=string;parentorderno=string;"
+                + "cupno=number;stockid=number;testid=number;runid=string;id=number;subpackageno=string;"
+                + "methodname=string;indexcategoryid=number;samplebegintime=string;projid=number;"
+                + "containercategoryname=string;orderid=number;qcname=string;folderno=string;methodid=number;"
+                + "monitortmplid=string;testname=string;containergroup=string;orderdesc=string;stockbatchno=string;"
+                + "monitorpointname=string;equiptname=string;schemename=string;analysisorgid=string;indexid=string;"
+                + "ordercategory=string;equiptacquno=string;qccategorycode=string;status=string";
         Map<String, String> result = new LinkedHashMap<String, String>();
         for (String token : encoded.split(";")) { int equals = token.indexOf('='); if (equals > 0) result.put(token.substring(0, equals), token.substring(equals + 1)); }
         return result;

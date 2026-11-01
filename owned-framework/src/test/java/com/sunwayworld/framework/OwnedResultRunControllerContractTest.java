@@ -29,12 +29,16 @@ public final class OwnedResultRunControllerContractTest {
         require(paths, "/secure/emc/module/bp/result/runs/queries/withdrawable");
         require(paths, "/secure/emc/module/bp/result/runs/queries/all");
         require(paths, "/secure/emc/module/bp/result/runs/qc-related-order/queries");
+        require(paths, "/secure/emc/module/bp/result/runs/unique-order-task/queries");
         require(paths, "/secure/emc/module/bp/result/runs/info/status");
         require(paths, "/secure/emc/module/bp/result/runs/{id}/info/status");
         Field field = OwnedResultRunController.class.getDeclaredField("QC_RELATED_ORDER_TYPE_PROFILE");
         field.setAccessible(true);
         Map<?, ?> profile = (Map<?, ?>) field.get(null);
         if (profile.size() != 17) throw new AssertionError("unexpected QC-related-order profile size: " + profile.size());
+        Field unique = OwnedResultRunController.class.getDeclaredField("UNIQUE_ORDER_TASK_TYPE_PROFILE");
+        unique.setAccessible(true);
+        if (((Map<?, ?>) unique.get(null)).size() != 46) throw new AssertionError("unexpected unique-order-task profile size");
         System.out.println("owned result-run read alias contract checks passed");
     }
 

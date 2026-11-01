@@ -14,9 +14,9 @@
     "internal_http_bridge": false,
     "jni_replacement_process": false
   },
-  "started_at": "2026-11-01T08:30:33.585609+00:00",
-  "source_commit": "3bf9ef750e64d5ef92ec3063810ca4d763d3ef6d",
-  "repository_head_at_capture": "3bf9ef750e64d5ef92ec3063810ca4d763d3ef6d",
+  "started_at": "2026-11-01T09:02:15.809740+00:00",
+  "source_commit": "2d6dbe46b4b2cb3b72bd8b9e0c9f8e4eb51c7282",
+  "repository_head_at_capture": "2d6dbe46b4b2cb3b72bd8b9e0c9f8e4eb51c7282",
   "source_dirty": false,
   "source_scope": [
     "project/src/main/java",
@@ -74,8 +74,8 @@
     "build/oracle-free-source-manifest.json",
     "docker/Dockerfile.built"
   ],
-  "implementation_binding": "impl-62dbabc6bdb5849c",
-  "implementation_tree_digest": "62dbabc6bdb5849cb822e62149dfc5afe0ed12768b5bdb52dd11a513d0bf69c0",
+  "implementation_binding": "impl-47708e31081dc64c",
+  "implementation_tree_digest": "47708e31081dc64c0f653eae8b12b4cda5a5d9364d63234d1d9c42ac617363ba",
   "implementation_dirty": false,
   "implementation_scope": [
     "project/src/main/java",
@@ -136,10 +136,10 @@
   "nested_project_commit": "27932b1fe4d71d64a02f9a63e55f56acb403e3a0",
   "distribution_input_digest": "2121fc67991dd241a80c02ee575f69cde2f4a21af05820ef694ce4caabf4ffc7",
   "artifact_sha256": {
-    "lims-recovery/owned-distribution/target/distribution/app/lims-owned-application.jar": "eaec9f913ad24107030ce7e2b8861eea02fdfb4b75782962be2766da6da7c5be"
+    "lims-recovery/owned-distribution/target/distribution/app/lims-owned-application.jar": "eff52663b7a82b52ce62dde9c2748a1330aaee3d0c8a1c19b2eceaf7fb0a6101"
   },
   "clone_identity": "lims-owned-sss2-oracle:LIMS_BASELINE_SSS2:LIMS_RUNTIME_SSS2",
-  "runtime_report": ".scratch/sunway-supplier-exit-api-first/diagnostic-evidence/runtime/strict-api-runtime-manifest-paramreads.json",
+  "runtime_report": ".scratch/sunway-supplier-exit-api-first/diagnostic-evidence/runtime/strict-api-runtime-manifest-inputreads2.json",
   "runtime_contract": {
     "mode": "strict",
     "strict_evidence": false,
@@ -151,9 +151,9 @@
     "baseline_schema_hash": "4f23874f86afdf6359396917061720b80bbb78b84843b2c533c8fcc2c71689bd",
     "runtime_schema_hash_before": "674f918ce233701cd851a04a5cac89284ed7f1959201a1248bb091d08907a3b6",
     "runtime_schema_hash_after": "674f918ce233701cd851a04a5cac89284ed7f1959201a1248bb091d08907a3b6",
-    "source_commit": "3bf9ef750e64d5ef92ec3063810ca4d763d3ef6d",
-    "implementation_binding": "impl-62dbabc6bdb5849c",
-    "implementation_tree_digest": "62dbabc6bdb5849cb822e62149dfc5afe0ed12768b5bdb52dd11a513d0bf69c0",
+    "source_commit": "2d6dbe46b4b2cb3b72bd8b9e0c9f8e4eb51c7282",
+    "implementation_binding": "impl-47708e31081dc64c",
+    "implementation_tree_digest": "47708e31081dc64c0f653eae8b12b4cda5a5d9364d63234d1d9c42ac617363ba",
     "implementation_scope": [
       "project/src/main/java",
       "owned-framework/src",
@@ -211,7 +211,7 @@
       "docker/Dockerfile.built"
     ],
     "implementation_dirty": false,
-    "repository_head_at_capture": "3bf9ef750e64d5ef92ec3063810ca4d763d3ef6d"
+    "repository_head_at_capture": "2d6dbe46b4b2cb3b72bd8b9e0c9f8e4eb51c7282"
   },
   "role": "manager",
   "organization": "org-a",
@@ -241,13 +241,13 @@
         "x-frame-options": "SAMEORIGIN",
         "content-type": "application/json",
         "content-length": "2",
-        "date": "Sun, 01 Nov 2026 08:30:34 GMT",
+        "date": "Sun, 01 Nov 2026 09:02:17 GMT",
         "connection": "close"
       },
       "request_headers": {
         "content-type": "application/json"
       },
-      "elapsed_ms": 490.799,
+      "elapsed_ms": 500.937,
       "route": {
         "method": "POST",
         "path": "/secure/emc/module/bp/bp/order-task-results/preprocessing-result/table-heads/queries",
@@ -263,7 +263,7 @@
         "setup": "not-required",
         "restore": "not-required",
         "runtime_values": {
-          "id": "re59cb5c5ab9d"
+          "id": "rcce0ff436033"
         },
         "setup_http": [],
         "restore_http": []
@@ -301,13 +301,13 @@
         "x-frame-options": "SAMEORIGIN",
         "content-type": "application/json",
         "content-length": "2",
-        "date": "Sun, 01 Nov 2026 08:30:34 GMT",
+        "date": "Sun, 01 Nov 2026 09:02:17 GMT",
         "connection": "close"
       },
       "request_headers": {
         "content-type": "application/json"
       },
-      "elapsed_ms": 455.402,
+      "elapsed_ms": 507.915,
       "route": {
         "method": "POST",
         "path": "/secure/emc/module/bp/bp/order-task-results/preprocessing-result/table-rows/queries",
@@ -323,7 +323,7 @@
         "setup": "not-required",
         "restore": "not-required",
         "runtime_values": {
-          "id": "r8d7f4f116af6"
+          "id": "r1a4eb64cf376"
         },
         "setup_http": [],
         "restore_http": []
@@ -350,7 +350,7 @@
         "status",
         "timestamp"
       ],
-      "body_sha256": "a131ddfa3009ad6e08349f2291b09efa5af07c626704c0c5966e064afe16fb8d",
+      "body_sha256": "043501cce4dba10c12719496cbed086a36adadc12c7898a6ddab334ee2cab060",
       "body_bytes": 211,
       "assertions": {
         "content_type": "application/json",
@@ -376,13 +376,13 @@
         "x-frame-options": "SAMEORIGIN",
         "content-type": "application/json",
         "content-length": "211",
-        "date": "Sun, 01 Nov 2026 08:30:34 GMT",
+        "date": "Sun, 01 Nov 2026 09:02:17 GMT",
         "connection": "close"
       },
       "request_headers": {
         "content-type": "application/json"
       },
-      "elapsed_ms": 442.458,
+      "elapsed_ms": 455.497,
       "route": {
         "method": "POST",
         "path": "/secure/emc/module/bp/bp/order-task-results/gas-parameter/table-heads/queries",
@@ -398,7 +398,7 @@
         "setup": "not-required",
         "restore": "not-required",
         "runtime_values": {
-          "id": "rfec1c29cc21a"
+          "id": "ra1c4fdea90f4"
         },
         "setup_http": [],
         "restore_http": []
@@ -425,7 +425,7 @@
         "status",
         "timestamp"
       ],
-      "body_sha256": "30f24400634f553bd33fd840dccfcc9616eff1e9c5ab1c46f3184dfc87980948",
+      "body_sha256": "edbc05caa050a1549f526c669e82b5be7189ee47327a02b89d9dd576782651c8",
       "body_bytes": 210,
       "assertions": {
         "content_type": "application/json",
@@ -451,13 +451,13 @@
         "x-frame-options": "SAMEORIGIN",
         "content-type": "application/json",
         "content-length": "210",
-        "date": "Sun, 01 Nov 2026 08:30:36 GMT",
+        "date": "Sun, 01 Nov 2026 09:02:18 GMT",
         "connection": "close"
       },
       "request_headers": {
         "content-type": "application/json"
       },
-      "elapsed_ms": 448.642,
+      "elapsed_ms": 461.026,
       "route": {
         "method": "POST",
         "path": "/secure/emc/module/bp/bp/order-task-results/gas-parameter/table-rows/queries",
@@ -473,7 +473,7 @@
         "setup": "not-required",
         "restore": "not-required",
         "runtime_values": {
-          "id": "r91bb92f08a14"
+          "id": "r5da87d42895b"
         },
         "setup_http": [],
         "restore_http": []
@@ -500,7 +500,7 @@
         "status",
         "timestamp"
       ],
-      "body_sha256": "abcf7bce07cf8caf9e88e455f7e02e37239f0f82856a653620645c3c8bcfe8fa",
+      "body_sha256": "16966af739538f1f87909f08237405ee8ccec2cb77bd06af7970e3213dd488ec",
       "body_bytes": 218,
       "assertions": {
         "content_type": "application/json",
@@ -526,13 +526,13 @@
         "x-frame-options": "SAMEORIGIN",
         "content-type": "application/json",
         "content-length": "218",
-        "date": "Sun, 01 Nov 2026 08:30:36 GMT",
+        "date": "Sun, 01 Nov 2026 09:02:18 GMT",
         "connection": "close"
       },
       "request_headers": {
         "content-type": "application/json"
       },
-      "elapsed_ms": 444.762,
+      "elapsed_ms": 451.427,
       "route": {
         "method": "POST",
         "path": "/secure/emc/module/bp/bp/order-task-results/gas-parameter-result/table-heads/queries",
@@ -548,7 +548,7 @@
         "setup": "not-required",
         "restore": "not-required",
         "runtime_values": {
-          "id": "r20334dd09072"
+          "id": "r4ddaf33965c4"
         },
         "setup_http": [],
         "restore_http": []
@@ -575,7 +575,7 @@
         "status",
         "timestamp"
       ],
-      "body_sha256": "6b02252f0f07747effdc4f7d12aadccfe07b7930abe2974d957194190b35c708",
+      "body_sha256": "4a64fc44d768af41b770d1883b366d7fd88ef0f98e8cc3ca28fe2836a14a6e46",
       "body_bytes": 217,
       "assertions": {
         "content_type": "application/json",
@@ -601,13 +601,13 @@
         "x-frame-options": "SAMEORIGIN",
         "content-type": "application/json",
         "content-length": "217",
-        "date": "Sun, 01 Nov 2026 08:30:36 GMT",
+        "date": "Sun, 01 Nov 2026 09:02:18 GMT",
         "connection": "close"
       },
       "request_headers": {
         "content-type": "application/json"
       },
-      "elapsed_ms": 449.588,
+      "elapsed_ms": 449.924,
       "route": {
         "method": "POST",
         "path": "/secure/emc/module/bp/bp/order-task-results/gas-parameter-result/table-rows/queries",
@@ -623,7 +623,7 @@
         "setup": "not-required",
         "restore": "not-required",
         "runtime_values": {
-          "id": "r362ad45e996e"
+          "id": "r8bf1c04e4fa4"
         },
         "setup_http": [],
         "restore_http": []
@@ -657,13 +657,13 @@
   },
   "cleanup_pending": false,
   "phase_timings_ms": {
-    "http_cases": 3466.493
+    "http_cases": 3569.519
   },
   "authentication": {
     "attempted": true,
     "authenticated": true,
     "status": 200
   },
-  "finished_at": "2026-11-01T08:30:37.052187+00:00",
-  "cleanup_finalized_at": "2026-11-01T08:31:31.672276+00:00"
+  "finished_at": "2026-11-01T09:02:19.379328+00:00",
+  "cleanup_finalized_at": "2026-11-01T09:03:22.433420+00:00"
 }

@@ -90,7 +90,9 @@ public final class OwnedOrderTaskQueryController {
     public ResponseEntity<String> query(HttpServletRequest request, @RequestBody(required = false) String body) {
         try {
             OwnedPrincipal principal = require(request);
-            return ok(selectPage(principal.getOrgId(), Page.parse(body), request.getRequestURI()));
+            Page page = Page.parse(body);
+            String specialized = selectSpecializedPage(principal.getOrgId(), page, request.getRequestURI(), body);
+            return ok(specialized == null ? selectPage(principal.getOrgId(), page, request.getRequestURI()) : specialized);
         } catch (AccessDeniedException denied) { return forbidden(); }
         catch (IllegalArgumentException invalid) { return badRequest(); }
         catch (SQLException failure) { return unavailable(); }
@@ -174,6 +176,161 @@ public final class OwnedOrderTaskQueryController {
         envelope.put("totalMap", emptyOrderResource ? new LinkedHashMap<String, Object>() : totals);
         envelope.put("totalPages", pages(total, page.size));
         return JSON.toJSONString(envelope, SerializerFeature.WriteMapNullValue);
+    }
+
+    /**
+     * The inherited resource has several aliases whose SQL is an aggregate or
+     * a narrow projection rather than the normal order-task page.  They used
+     * to be mapped to BASE_SQL, which made an empty fixture look plausible but
+     * returned the wrong rows as soon as a real order/task was present.  Keep
+     * those behaviours in the same controller and identity boundary.
+     *
+     * <p>A null return means that the normal inherited projection is still the
+     * correct implementation for the alias.  For the aggregate routes, a
+     * missing required filter intentionally returns the supplier-shaped empty
+     * page instead of broadening a query over the whole tenant.</p>
+     */
+    private String selectSpecializedPage(String organization, Page page, String requestPath, String body) throws SQLException {
+        if (requestPath == null) return null;
+        if (requestPath.endsWith("/queries/group-by-test")) {
+            String sampleId = queryValue(body, "sampleId");
+            if (sampleId == null) return emptyProfilePage(page, profileKey(requestPath), true);
+            return executeProjectionPage(
+                    "SELECT LISTAGG(TO_CHAR(A.ID), ',') WITHIN GROUP (ORDER BY A.ID) AS IDS, "
+                    + "A.TESTMETHODID,A.TESTID,A.TESTNAME,A.METHODID,A.METHODNAME,P.PROJNO,COUNT(A.ID) AS NUM "
+                    + "FROM T_EMC_ORDER_TASK A LEFT JOIN T_EMC_PROJECT P ON A.PROJID=P.ID "
+                    + "LEFT JOIN T_EMC_ORDER O ON A.ORDERID=O.ID "
+                    + "WHERE (P.STATUS IS NULL OR P.STATUS <> 'cancel') AND A.ANALYSISTYPE='sampling' "
+                    + "AND O.SAMPLEID=? AND A.ANALYSISORGID=? "
+                    + "GROUP BY A.TESTMETHODID,A.TESTID,A.TESTNAME,A.METHODID,A.METHODNAME,P.PROJNO "
+                    + "ORDER BY A.TESTMETHODID DESC",
+                    values(sampleId, organization), page, profileKey(requestPath), true);
+        }
+        if (requestPath.endsWith("/queries/selectContainerInfo")) {
+            String orderId = queryValue(body, "orderId");
+            if (orderId == null) return emptyProfilePage(page, profileKey(requestPath), true);
+            return executeProjectionPage(
+                    "SELECT A.CONTAINERGROUP,A.FIXATIVE,A.CONTAINERCATEGORYNAME,A.CONTAINERCATEGORYID,"
+                    + "A.STORECONDITION,A.SAMPLEWEIGHT,LISTAGG(A.TESTNAME, ',') WITHIN GROUP (ORDER BY A.ID) AS TESTNAME,"
+                    + "LISTAGG(TO_CHAR(A.ID), ',') WITHIN GROUP (ORDER BY A.ID) AS MULTITESTID,"
+                    + "LISTAGG(A.ITEMGROUP, ',') WITHIN GROUP (ORDER BY A.ID) AS ITEMGROUP,A.ORDERCONTAINERNO "
+                    + "FROM (SELECT DISTINCT T.ID,T.TESTNAME,T.SUBCONTRACTORID,T.CONTAINERGROUP,T.FIXATIVE,"
+                    + "T.CONTAINERCATEGORYNAME,T.CONTAINERCATEGORYID,T.STORECONDITION,C.SAMPLEWEIGHT,D.ITEMGROUP,"
+                    + "E.ORDERCONTAINERNO FROM T_EMC_ORDER_TASK T "
+                    + "LEFT JOIN T_EMC_TEST_ORDER_CATEGORY C ON T.CONTAINERCATEGORYID=C.CONTAINERCATEGORYID "
+                    + "AND T.MONITORTMPLID=C.MONITORTMPLID AND T.TESTMETHODID=C.TESTMETHODID AND C.ORGID=? "
+                    + "LEFT JOIN T_EMC_ORDER_ITEM_GROUP D ON T.ORDERID=D.ORDERID AND T.TESTID=D.TESTID "
+                    + "LEFT JOIN T_EMC_ORDER_CONTAINER E ON T.ORDERCONTAINERID=E.ID WHERE T.ORDERID=? "
+                    + ") A GROUP BY A.CONTAINERGROUP,A.FIXATIVE,A.CONTAINERCATEGORYNAME,A.CONTAINERCATEGORYID,"
+                    + "A.STORECONDITION,A.SAMPLEWEIGHT,A.ORDERCONTAINERNO",
+                    values(organization, orderId), page, profileKey(requestPath), true);
+        }
+        if (requestPath.endsWith("/queries/select-order-container-info")) {
+            String orderId = queryValue(body, "orderId");
+            if (orderId == null) return emptyProfilePage(page, profileKey(requestPath), true);
+            return executeProjectionPage(
+                    "SELECT LISTAGG(TO_CHAR(A.ID), ',') WITHIN GROUP (ORDER BY A.ID) AS IDS,"
+                    + "LISTAGG(A.TESTNAME, ',') WITHIN GROUP (ORDER BY A.ID) AS TESTNAME,COUNT(DISTINCT A.ORDERID) AS NUM,"
+                    + "A.PROJID,A.STORECONDITION,A.FOLDERID,A.CONTAINERCATEGORYID,A.CONTAINERCATEGORYCODE,"
+                    + "A.CONTAINERCATEGORYNAME,A.CONTAINERGROUP,A.FIXATIVE,A.QCCATEGORYCODE,QC.QCNAME,"
+                    + "A.ORDERCATEGORY,A.ANALYSISORGID,A.ANALYSISORGNAME,A.PRETREATWAY,O.ORDERNO,O.ORDERDESC,"
+                    + "O.PARENTORDERNO,O.SAMPLEBEGINDATE,F.FOLDERNO,F.SAMPLEORGID,F.SAMPLEORGNAME,S.SAMPLENO,"
+                    + "CC.MATERIAL,CC.COLOR,CC.CAPACITY "
+                    + "FROM T_EMC_ORDER_TASK A LEFT JOIN T_EMC_ORDER O ON A.ORDERID=O.ID "
+                    + "LEFT JOIN T_EMC_SAMPLE S ON O.SAMPLEID=S.ID LEFT JOIN T_EMC_FOLDER F ON A.FOLDERID=F.ID "
+                    + "LEFT JOIN T_EMC_CONTAINER_CATEGORY CC ON A.CONTAINERCATEGORYID=CC.ID "
+                    + "LEFT JOIN T_EMC_QC_CATEGORY QC ON A.QCCATEGORYID=QC.ID "
+                    + "WHERE A.ORDERID=? AND A.ANALYSISORGID=? AND (A.REMARKS IS NULL OR A.REMARKS <> '历史数据') "
+                    + "GROUP BY A.PROJID,A.STORECONDITION,A.FOLDERID,A.CONTAINERCATEGORYID,A.CONTAINERCATEGORYCODE,"
+                    + "A.CONTAINERCATEGORYNAME,A.CONTAINERGROUP,A.FIXATIVE,A.QCCATEGORYCODE,QC.QCNAME,A.ORDERCATEGORY,"
+                    + "A.ANALYSISORGID,A.ANALYSISORGNAME,A.PRETREATWAY,O.ORDERNO,O.ORDERDESC,O.PARENTORDERNO,"
+                    + "O.SAMPLEBEGINDATE,F.FOLDERNO,F.SAMPLEORGID,F.SAMPLEORGNAME,S.SAMPLENO,CC.MATERIAL,CC.COLOR,CC.CAPACITY",
+                    values(orderId, organization), page, profileKey(requestPath), true);
+        }
+        if (requestPath.endsWith("/analysis-department-statistics/queries")) {
+            return executeProjectionPage(
+                    "SELECT A.ANALYSISDATE,COUNT(*) AS TESTCOUNT FROM T_EMC_ORDER_TASK A "
+                    + "WHERE A.ANALYSISORGID=? GROUP BY A.ANALYSISDATE ORDER BY A.ANALYSISDATE ASC",
+                    values(organization), page, profileKey(requestPath), false);
+        }
+        if (requestPath.endsWith("/personnel-workload-statistics/queries")) {
+            return executeProjectionPage(
+                    "SELECT A.ANALYSISUSERID,COUNT(*) AS TESTCOUNT FROM T_EMC_ORDER_TASK A "
+                    + "WHERE A.ANALYSISORGID=? GROUP BY A.ANALYSISUSERID ORDER BY A.ANALYSISUSERID ASC",
+                    values(organization), page, profileKey(requestPath), false);
+        }
+        if (requestPath.endsWith("/queries/analysis")) {
+            return executeProjectionPage(
+                    "SELECT A.TESTID,A.TESTNAME,O.ORDERNO,O.ORDERDESC,O.SAMPLEBEGINDATE,O.SAMPLEBEGINTIME "
+                    + "FROM T_EMC_ORDER_TASK A LEFT JOIN T_EMC_ORDER O ON A.ORDERID=O.ID "
+                    + "LEFT JOIN T_EMC_PROJECT P ON A.PROJID=P.ID "
+                    + "WHERE A.ANALYSISORGID=? AND (P.STATUS IS NULL OR P.STATUS <> 'cancel') "
+                    + "ORDER BY A.TESTID DESC",
+                    values(organization), page, profileKey(requestPath), true);
+        }
+        return null;
+    }
+
+    private String executeProjectionPage(String sql, List<Object> arguments, Page page,
+            String profile, boolean emptyTotalMap) throws SQLException {
+        String countSql = "SELECT COUNT(1) FROM (" + sql + ") Q";
+        String pageSql = "SELECT P.* FROM (SELECT Q.*,ROW_NUMBER() OVER (ORDER BY 1) RN_ FROM ("
+                + sql + ") Q) P WHERE P.RN_>? AND P.RN_<=? ORDER BY P.RN_";
+        int total;
+        List<Map<String, Object>> rows = new ArrayList<Map<String, Object>>();
+        try (Connection connection = dataSource.getConnection()) {
+            try (PreparedStatement query = connection.prepareStatement(countSql)) {
+                bind(query, arguments, 1);
+                try (ResultSet result = query.executeQuery()) { if (!result.next()) throw new SQLException("aggregate count missing"); total = result.getInt(1); }
+            }
+            try (PreparedStatement query = connection.prepareStatement(pageSql)) {
+                int index = bind(query, arguments, 1);
+                query.setInt(index++, page.start()); query.setInt(index, page.end());
+                try (ResultSet result = query.executeQuery()) {
+                    ResultSetMetaData metadata = result.getMetaData();
+                    while (result.next()) rows.add(row(result, metadata));
+                }
+            }
+        }
+        Map<String, Object> envelope = new LinkedHashMap<String, Object>();
+        envelope.put("columnTypeMap", TYPE_PROFILES.get(profile) == null ? new LinkedHashMap<String, String>() : TYPE_PROFILES.get(profile));
+        envelope.put("first", page.number == 1); envelope.put("last", total == 0 || page.number >= pages(total, page.size));
+        envelope.put("numberOfElements", rows.size()); envelope.put("pageNumber", page.number); envelope.put("pageSize", page.size);
+        envelope.put("rows", rows); envelope.put("total", total);
+        envelope.put("totalMap", emptyTotalMap ? new LinkedHashMap<String, Object>() : singletonTotal(total));
+        envelope.put("totalPages", pages(total, page.size));
+        return JSON.toJSONString(envelope, SerializerFeature.WriteMapNullValue);
+    }
+
+    private static Map<String, Object> singletonTotal(int total) {
+        Map<String, Object> value = new LinkedHashMap<String, Object>(); value.put("qty_", total); return value;
+    }
+
+    private String emptyProfilePage(Page page, String profile, boolean emptyTotalMap) {
+        Map<String, Object> envelope = new LinkedHashMap<String, Object>();
+        envelope.put("columnTypeMap", TYPE_PROFILES.get(profile) == null ? new LinkedHashMap<String, String>() : TYPE_PROFILES.get(profile));
+        envelope.put("first", true); envelope.put("last", true); envelope.put("numberOfElements", 0);
+        envelope.put("pageNumber", page.number); envelope.put("pageSize", page.size); envelope.put("rows", new ArrayList<Object>());
+        envelope.put("total", 0); envelope.put("totalMap", emptyTotalMap ? new LinkedHashMap<String, Object>() : singletonTotal(0)); envelope.put("totalPages", 0);
+        return JSON.toJSONString(envelope, SerializerFeature.WriteMapNullValue);
+    }
+
+    private static List<Object> values(Object... values) {
+        List<Object> result = new ArrayList<Object>(); Collections.addAll(result, values); return result;
+    }
+
+    private static int bind(PreparedStatement statement, List<Object> values, int index) throws SQLException {
+        for (Object value : values) statement.setObject(index++, value); return index;
+    }
+
+    private static String queryValue(String body, String key) {
+        if (body == null || body.trim().isEmpty()) return null;
+        JSONObject root = JSON.parseObject(body); if (root == null) return null;
+        String value = root.getString(key);
+        for (String nested : new String[] {"q", "param", "f"}) {
+            if (value == null && root.getJSONObject(nested) != null) value = root.getJSONObject(nested).getString(key);
+        }
+        return value == null || value.trim().isEmpty() ? null : value.trim();
     }
 
     private static Map<String, Object> row(ResultSet result, ResultSetMetaData metadata) throws SQLException {

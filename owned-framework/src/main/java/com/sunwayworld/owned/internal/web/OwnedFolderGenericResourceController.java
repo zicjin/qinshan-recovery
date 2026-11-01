@@ -60,8 +60,8 @@ public final class OwnedFolderGenericResourceController {
             @RequestBody(required = false) String body) {
         try {
             OwnedPrincipal principal = require(request);
-            Page page = Page.parse(body);
-            return ok(selectPage(principal.getOrgId(), page));
+            Query query = Query.parse(body);
+            return ok(selectPage(principal.getOrgId(), query));
         } catch (AccessDeniedException denied) { return forbidden(); }
         catch (IllegalArgumentException invalid) { return badRequest(); }
         catch (SQLException failure) { return unavailable(); }
@@ -91,27 +91,34 @@ public final class OwnedFolderGenericResourceController {
         return boundary.currentPrincipal(request.getSession(false));
     }
 
-    private String selectPage(String organization, Page page) throws SQLException {
-        String base = "SELECT T.* FROM T_EMC_FOLDER T WHERE T.CREATEDBYORGID=?";
-        String countSql = "SELECT COUNT(1) FROM (" + base + ") Q";
-        String pageSql = "SELECT P.* FROM (SELECT Q.*,ROW_NUMBER() OVER (ORDER BY Q.ID DESC) RN_ FROM ("
-                + base + ") Q) P WHERE P.RN_>? AND P.RN_<=? ORDER BY P.RN_";
+    /**
+     * Keep the inherited mapper's joined projection and organization-prefix
+     * scope.  The previous shortcut (CREATEDBYORGID = ?) returned a plausible
+     * empty page but dropped project/client/area fields and excluded child
+     * organizations.  The Java seam must preserve the actual resource query
+     * behavior even when the current fixture has no rows.
+     */
+    private String selectPage(String organization, Query query) throws SQLException {
+        SqlSpec spec = SqlSpec.forQuery(organization, query);
+        String countSql = "SELECT COUNT(1) FROM (" + spec.sql + ") Q";
+        String pageSql = "SELECT P.* FROM (SELECT Q.*,ROW_NUMBER() OVER (ORDER BY Q.FOLDERNO, Q.ID DESC) RN_ FROM ("
+                + spec.sql + ") Q) P WHERE P.RN_>? AND P.RN_<=? ORDER BY P.RN_";
         int total;
         List<Map<String, Object>> rows = new ArrayList<Map<String, Object>>();
         Map<String, String> types = new LinkedHashMap<String, String>();
         try (Connection connection = dataSource.getConnection()) {
-            try (PreparedStatement query = connection.prepareStatement(countSql)) {
-                query.setString(1, organization);
-                try (ResultSet result = query.executeQuery()) {
+            try (PreparedStatement statement = connection.prepareStatement(countSql)) {
+                spec.bind(statement);
+                try (ResultSet result = statement.executeQuery()) {
                     if (!result.next()) throw new SQLException("folder count returned no row");
                     total = result.getInt(1);
                 }
             }
-            try (PreparedStatement query = connection.prepareStatement(pageSql)) {
-                query.setString(1, organization);
-                query.setInt(2, page.start());
-                query.setInt(3, page.end());
-                try (ResultSet result = query.executeQuery()) {
+            try (PreparedStatement statement = connection.prepareStatement(pageSql)) {
+                int next = spec.bind(statement);
+                statement.setInt(next++, query.page.start());
+                statement.setInt(next, query.page.end());
+                try (ResultSet result = statement.executeQuery()) {
                     ResultSetMetaData metadata = result.getMetaData();
                     for (int i = 1; i <= metadata.getColumnCount(); i++) {
                         types.put(metadata.getColumnLabel(i).toLowerCase(Locale.ROOT), type(metadata.getColumnType(i)));
@@ -126,17 +133,17 @@ public final class OwnedFolderGenericResourceController {
         }
         Map<String, Object> envelope = new LinkedHashMap<String, Object>();
         envelope.put("columnTypeMap", types);
-        envelope.put("first", page.number == 1);
-        envelope.put("last", total == 0 || page.number >= pages(total, page.size));
+        envelope.put("first", query.page.number == 1);
+        envelope.put("last", total == 0 || query.page.number >= pages(total, query.page.size));
         envelope.put("numberOfElements", rows.size());
-        envelope.put("pageNumber", page.number);
-        envelope.put("pageSize", page.size);
+        envelope.put("pageNumber", query.page.number);
+        envelope.put("pageSize", query.page.size);
         envelope.put("rows", rows);
         envelope.put("total", total);
         Map<String, Object> totals = new LinkedHashMap<String, Object>();
         totals.put("qty_", total);
         envelope.put("totalMap", totals);
-        envelope.put("totalPages", pages(total, page.size));
+        envelope.put("totalPages", pages(total, query.page.size));
         return JSON.toJSONString(envelope, SerializerFeature.WriteMapNullValue);
     }
 
@@ -198,17 +205,84 @@ public final class OwnedFolderGenericResourceController {
     private static ResponseEntity<String> badRequest() { return ResponseEntity.badRequest().body("{\"message\":\"GIKAM.FOLDER.INVALID_QUERY\"}"); }
     private static ResponseEntity<String> unavailable() { return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"message\":\"GIKAM.FOLDER.UNAVAILABLE\"}"); }
 
-    private static final class Page {
-        final int number; final int size;
-        Page(int number, int size) { this.number = number; this.size = size; }
-        static Page parse(String body) {
+    private static final class Query {
+        final Page page; final String targetType; final String sampleUserId; final String sceneUserId;
+        Query(Page page, String targetType, String sampleUserId, String sceneUserId) {
+            this.page = page; this.targetType = targetType; this.sampleUserId = sampleUserId; this.sceneUserId = sceneUserId;
+        }
+        static Query parse(String body) {
             JSONObject root = body == null || body.trim().isEmpty() ? new JSONObject() : JSON.parseObject(body);
             JSONObject p = root == null ? null : root.getJSONObject("p");
             int number = p == null ? 1 : Math.max(1, p.getIntValue("n"));
             int size = p == null ? 50 : Math.min(500, Math.max(1, p.getIntValue("s")));
-            return new Page(number, size);
+            return new Query(new Page(number, size), text(root, "targetType"),
+                    text(root, "sampleUserId"), text(root, "sceneUserId"));
         }
+        private static String text(JSONObject root, String key) {
+            if (root == null) return null;
+            String value = root.getString(key);
+            if (value == null) {
+                JSONObject q = root.getJSONObject("q");
+                if (q != null) value = q.getString(key);
+            }
+            return value == null || value.trim().length() == 0 ? null : value.trim();
+        }
+    }
+
+    private static final class Page {
+        final int number; final int size;
+        Page(int number, int size) { this.number = number; this.size = size; }
         int start() { return (number - 1) * size; }
         int end() { return number * size; }
+    }
+
+    private static final class SqlSpec {
+        final String sql; final List<String> values;
+        SqlSpec(String sql, List<String> values) { this.sql = sql; this.values = values; }
+
+        static SqlSpec forQuery(String organization, Query query) {
+            String source = "SELECT T.* FROM (SELECT A.*, "
+                    + "(A.FOLDERNO || '-' || A.MONITORPOINTNAME) AS FOLDERNAME, "
+                    + "B.PROJNO, B.PROJNAME, B.TESTORGNAME, B.TESTORGID, "
+                    + "B.STATUS AS PROJECTSTATUS, B.CREATEDBYNAME AS PROJECTCREATEDBYNAME, "
+                    + "B.ENTRUSTORGNAME, B.BIZCATEGORYID, B.BIZCATEGORYCODE, B.URGENT, "
+                    + "B.ORGID, B.ORGNAME, D.AREANAME "
+                    + "FROM T_EMC_FOLDER A "
+                    + "LEFT JOIN T_EMC_PROJECT B ON A.PROJID = B.ID "
+                    + "LEFT JOIN T_EMC_CLIENT C ON B.ENTRUSTORGID = C.ID "
+                    + "LEFT JOIN T_EMC_AREA D ON C.AREAID = D.ID) T";
+            StringBuilder sql = new StringBuilder(source).append(" WHERE T.ORGID LIKE ?");
+            List<String> values = new ArrayList<String>();
+            values.add((organization == null ? "__NO_ORG__" : organization) + "%");
+            String target = query.targetType;
+            if ("checkProjects".equals(target)) sql.append(" AND (T.RUNID IS NULL OR T.RUNID = '')");
+            if ("subcontractor".equals(target)) sql.append(" AND EXISTS (SELECT 1 FROM T_EMC_ORDER_TASK O, T_EMC_SUBCONTRACT_RECORD S WHERE O.ID=S.ORDERTASKID AND O.FOLDERID=T.ID AND O.STATUS='done' AND O.ANALYSISTYPE='analysis' AND O.SUBCONTRACTORID IS NOT NULL)");
+            if ("dataSharing".equals(target)) sql.append(" AND EXISTS (SELECT 1 FROM T_EMC_ORDER_TASK O WHERE O.FOLDERID=T.ID AND O.STATUS='done' AND O.ANALYSISTYPE='analysis' AND O.DATASHARING='1')");
+            if ("emission".equals(target)) sql.append(" AND EXISTS (SELECT 1 FROM T_EMC_ORDER_TASK O WHERE O.FOLDERID=T.ID AND O.STATUS='done' AND O.ANALYSISTYPE='analysis')");
+            if ("reportFolder".equals(target)) sql.append(" AND EXISTS (SELECT 1 FROM T_EMC_ORDER O WHERE O.FOLDERID=T.ID AND O.QCCATEGORYCODE='N/A') AND NOT EXISTS (SELECT 1 FROM T_EMC_ORDER_TASK OT WHERE OT.FOLDERID=T.ID AND OT.STATUS <> 'done')");
+            if ("sampleprepare".equals(target)) {
+                sql.append(" AND EXISTS (SELECT 1 FROM T_EMC_ORDER O WHERE O.FOLDERID=T.ID AND (O.SAMPLEID IS NULL OR O.SAMPLEID=''))");
+                appendUserFilter(sql, values, query.sampleUserId, query.sceneUserId);
+            }
+            return new SqlSpec(sql.toString(), values);
+        }
+
+        private static void appendUserFilter(StringBuilder sql, List<String> values, String sample, String scene) {
+            if (sample != null && scene != null) {
+                sql.append(" AND (INSTR(',' || T.SAMPLEUSERID || ',', ',' || ? || ',') > 0 OR INSTR(',' || T.SCENEUSERID || ',', ',' || ? || ',') > 0 OR INSTR(',' || T.PLANSAMPLEUSERID || ',', ',' || ? || ',') > 0)");
+                values.add(sample); values.add(scene); values.add(sample);
+            } else if (scene != null) {
+                sql.append(" AND INSTR(',' || T.SCENEUSERID || ',', ',' || ? || ',') > 0"); values.add(scene);
+            } else if (sample != null) {
+                sql.append(" AND (INSTR(',' || T.SAMPLEUSERID || ',', ',' || ? || ',') > 0 OR INSTR(',' || T.PLANSAMPLEUSERID || ',', ',' || ? || ',') > 0)");
+                values.add(sample); values.add(sample);
+            }
+        }
+
+        int bind(PreparedStatement statement) throws SQLException {
+            int index = 1;
+            for (String value : values) statement.setString(index++, value);
+            return index;
+        }
     }
 }

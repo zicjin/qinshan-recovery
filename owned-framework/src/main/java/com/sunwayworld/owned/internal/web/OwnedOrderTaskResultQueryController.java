@@ -201,7 +201,7 @@ public final class OwnedOrderTaskResultQueryController {
      * rows exist, the same dynamic-column projection as data-query is used.
      */
     @PostMapping(path = PREFIX + "/data-titles/queries",
-            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+            consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> dataSummaryTitles(HttpServletRequest request,
             @RequestBody(required = false) String body) {
         try {
@@ -230,7 +230,7 @@ public final class OwnedOrderTaskResultQueryController {
     }
 
     @PostMapping(path = PREFIX + "/data-rows/queries",
-            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+            consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> dataSummaryRows(HttpServletRequest request,
             @RequestBody(required = false) String body) {
         try {

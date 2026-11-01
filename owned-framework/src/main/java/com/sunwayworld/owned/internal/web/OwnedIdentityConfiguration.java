@@ -288,6 +288,13 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @ConditionalOnMissingBean(OwnedMobileProjectController.class)
+    public OwnedMobileProjectController ownedMobileProjectController(
+            OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
+        return new OwnedMobileProjectController(boundary, dataSource);
+    }
+
+    @Bean
     @ConditionalOnMissingBean(OwnedItemEquipmentResourceController.class)
     public OwnedItemEquipmentResourceController ownedItemEquipmentResourceController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {

@@ -73,7 +73,14 @@ public final class OwnedOrderTaskQueryController {
             PREFIX + "/queries", PREFIX + "/queries/raw", PREFIX + "/queries/searchable",
             PREFIX + "/queries/runnable", PREFIX + "/queries/un-runnable", PREFIX + "/queries/analysis",
             PREFIX + "/queries/order-group", PREFIX + "/queries/order-group-runs",
-            PREFIX + "/unique-tasks/queries", PREFIX + "/subpackages/queries",
+            PREFIX + "/queries/group-by-test", PREFIX + "/queries/order-task",
+            PREFIX + "/queries/select-order-container-info", PREFIX + "/queries/selectContainerInfo",
+            PREFIX + "/unique-tasks/queries", PREFIX + "/unique-item-groups/queries",
+            PREFIX + "/unique-orders/queries", PREFIX + "/subpackages/queries",
+            PREFIX + "/analysis-department-statistics/queries",
+            PREFIX + "/personnel-workload-statistics/queries",
+            PREFIX + "/proj-order-categories/queries",
+            "/secure/emc/module/bp/bp/orders/order-tasks/queries",
             PREFIX + "/queries/runnableanalassign"
             }, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> query(HttpServletRequest request, @RequestBody(required = false) String body) {
@@ -140,7 +147,7 @@ public final class OwnedOrderTaskQueryController {
                         types.put(metadata.getColumnLabel(i).toLowerCase(Locale.ROOT), type(metadata.getColumnType(i)));
                     }
                     Map<String, String> supplierTypes = TYPE_PROFILES.get(profileKey(requestPath));
-                    if (supplierTypes != null && !supplierTypes.isEmpty()) {
+                    if (supplierTypes != null) {
                         types.clear();
                         types.putAll(supplierTypes);
                     }
@@ -171,9 +178,14 @@ public final class OwnedOrderTaskQueryController {
     private static final Map<String, Map<String, String>> TYPE_PROFILES = buildTypeProfiles();
 
     private static String profileKey(String requestPath) {
-        if (requestPath == null || !requestPath.startsWith(PREFIX)) return "";
-        String suffix = requestPath.substring(PREFIX.length());
-        return suffix.isEmpty() ? "/queries" : suffix;
+        if (requestPath == null) return "";
+        if (requestPath.startsWith(PREFIX)) {
+            String suffix = requestPath.substring(PREFIX.length());
+            return suffix.isEmpty() ? "/queries" : suffix;
+        }
+        String ordersPrefix = "/secure/emc/module/bp/bp/orders";
+        if (requestPath.startsWith(ordersPrefix)) return requestPath.substring(ordersPrefix.length());
+        return "";
     }
 
     private static Map<String, Map<String, String>> buildTypeProfiles() {
@@ -328,6 +340,100 @@ public final class OwnedOrderTaskQueryController {
                 "econdition=string;subcontractorid=number;subpackageno=string;subpackagetype=string;taskhighlimit=string;tasklo" +
                 "wlimit=string;testid=number;testmethodbasis=string;testmethodid=number;testname=string;virtual=string;vocbottl" +
                 "e=string;weighingdate=dateTime;weightenddate=dateTime"
+        );
+        addTypeProfile(profiles, "/queries/order-task",
+                "accepteddate=dateTime;addteststatus=string;analysisdate=dateTime;analysisorgid=string;" +
+                "analysisorgname=string;analysistype=string;analysisuserid=string;analysisusername=string;" +
+                "assign=string;assigndate=dateTime;assistequiptid=string;assistequiptname=string;" +
+                "calibrationequiptid=string;calibrationequiptname=string;confirmusername=string;" +
+                "containercategorycode=string;containercategoryid=number;containercategoryname=string;" +
+                "containergroup=string;createdbyid=string;createdbyname=string;createdbyorgid=string;" +
+                "createdbyorgname=string;createdtime=dateTime;cupno=number;datasharing=string;equiptacquno=string;" +
+                "equiptid=number;equiptname=string;equiptsid=string;factoryno=string;fixative=string;folderid=number;" +
+                "folderno=string;id=number;index1=string;index2=string;index3=string;index4=string;index5=string;" +
+                "index6=string;indexcategoryid=number;indexid=string;indexname=string;inputuserid=string;" +
+                "inputusername=string;labelno=string;methodid=number;methodname=string;methodversionid=number;" +
+                "mobileid=string;monitorpointname=string;monitortmplgroupid=number;monitortmplid=string;" +
+                "oilfilmno=string;ordercategory=string;ordercontainerid=number;orderdesc=string;orderid=number;" +
+                "orderno=string;orgid=string;originalorderno=string;parentflag=string;parentid=number;" +
+                "parentorderno=string;partakeuserid=string;partakeusername=string;pretreatmentstatus=string;" +
+                "pretreatway=string;projid=number;projname=string;projno=string;projstatus=string;" +
+                "qccategorycode=string;qccategoryid=number;qcname=string;receiveusername=string;relatedtest=string;" +
+                "remark=string;remarks=string;rn_=number;runid=string;samplebegindate=dateTime;samplebegintime=string;" +
+                "samplebottleno=string;sampleid=number;sampleorgid=string;samplereceiverdate=dateTime;" +
+                "samplereceiverflag=string;samplereceiverid=string;samplereceivername=string;" +
+                "samplereceivertime=string;sampleweight=string;samplingequiptid=string;samplingequiptname=string;" +
+                "samplingsubpackage=string;scanned=string;schemename=string;source=string;specification=string;" +
+                "specifymethod=string;status=string;stockbatchno=string;stockid=number;storecondition=string;" +
+                "subcontractorid=number;subpackageno=string;subpackagetype=string;taskhighlimit=string;" +
+                "tasklowlimit=string;testcapcityorgid=string;testclass=string;testid=number;testitemsort=string;" +
+                "testmethodbasis=string;testmethodid=number;testname=string;usecategory=string;virtual=string;" +
+                "vocbottle=string;weighingdate=dateTime;weightenddate=dateTime"
+        );
+        addTypeProfile(profiles, "/queries/group-by-test",
+                "ids=number;methodid=number;methodname=string;num=number;projno=string;testid=number;" +
+                "testmethodid=number;testname=string"
+        );
+        addTypeProfile(profiles, "/queries/select-order-container-info",
+                "analysisorgid=string;analysisorgname=string;capacity=string;color=string;" +
+                "containercategorycode=string;containercategoryid=number;containercategoryname=string;" +
+                "containergroup=string;fixative=string;folderid=number;folderno=string;ids=number;material=string;" +
+                "num=number;ordercategory=string;orderdesc=string;orderno=string;parentorderno=string;" +
+                "pretreatway=string;projid=number;qccategorycode=string;qcname=string;rn_=number;" +
+                "samplebegindate=dateTime;sampleno=string;sampleorgid=string;sampleorgname=string;" +
+                "storecondition=string;testname=string"
+        );
+        addTypeProfile(profiles, "/queries/selectContainerInfo",
+                "containercategoryid=number;containercategoryname=string;containergroup=string;fixative=string;" +
+                "itemgroup=string;multitestid=string;ordercontainerno=string;rn_=number;sampleweight=string;" +
+                "storecondition=string;testname=string"
+        );
+        addTypeProfile(profiles, "/unique-item-groups/queries",
+                "accepteddate=dateTime;addteststatus=string;analysisdate=dateTime;analysisorgid=string;" +
+                "analysisorgname=string;analysistype=string;analysisuserid=string;analysisusername=string;" +
+                "assign=string;assigndate=dateTime;assistequiptid=string;assistequiptname=string;" +
+                "calibrationequiptid=string;calibrationequiptname=string;confirmusername=string;" +
+                "containercategorycode=string;containercategoryid=number;containercategoryname=string;" +
+                "containergroup=string;createdbyid=string;createdbyname=string;createdbyorgid=string;" +
+                "createdbyorgname=string;createdtime=dateTime;cupno=number;datasharing=string;equiptacquno=string;" +
+                "equiptid=number;equiptname=string;equiptsid=string;factoryno=string;fixative=string;folderid=number;" +
+                "folderno=string;id=number;index1=string;index2=string;index3=string;index4=string;index5=string;" +
+                "index6=string;indexcategoryid=number;indexid=string;indexname=string;inputuserid=string;" +
+                "inputusername=string;itemgroup=string;itemgroupid=number;labelno=string;methodid=number;" +
+                "methodname=string;methodversionid=number;mobileid=string;monitorpointname=string;" +
+                "monitorpointno=string;monitortmplgroupid=number;monitortmplid=string;oilfilmno=string;" +
+                "ordercategory=string;ordercontainerid=number;orderdesc=string;orderid=number;orderno=string;" +
+                "orgid=string;originalorderno=string;parentflag=string;parentid=number;parentorderno=string;" +
+                "partakeuserid=string;partakeusername=string;pretreatmentstatus=string;pretreatway=string;" +
+                "projid=number;projname=string;projno=string;projstatus=string;qccategorycode=string;" +
+                "qccategoryid=number;qcname=string;receiveusername=string;relatedtest=string;remark=string;" +
+                "remarks=string;rn_=number;runid=string;samplebegindate=dateTime;samplebegintime=string;" +
+                "samplebottleno=string;sampleid=number;sampleorgid=string;samplereceiverdate=dateTime;" +
+                "samplereceiverflag=string;samplereceiverid=string;samplereceivername=string;" +
+                "samplereceivertime=string;sampleweight=string;samplingequiptid=string;samplingequiptname=string;" +
+                "samplingsubpackage=string;scanned=string;schemename=string;source=string;specification=string;" +
+                "specifymethod=string;status=string;stockbatchno=string;stockid=number;storecondition=string;" +
+                "subcontractorid=number;subpackageno=string;subpackagetype=string;taskhighlimit=string;" +
+                "tasklowlimit=string;testcapcityorgid=string;testclass=string;testid=number;testitemsort=string;" +
+                "testmethodbasis=string;testmethodid=number;testname=string;usecategory=string;virtual=string;" +
+                "vocbottle=string;weighingdate=dateTime;weightenddate=dateTime"
+        );
+        addTypeProfile(profiles, "/unique-orders/queries",
+                "accepteddate=dateTime;acceptedtime=string;analysisorgid=string;compledate=dateTime;labelno=string;" +
+                "ordercategory=string;orderdatestr=string;orderid=number;orderno=string;phflag=string;" +
+                "projectremind=string;projname=string;projno=string;qccategorycode=string;rn_=number;" +
+                "samplebegindate=dateTime"
+        );
+        addTypeProfile(profiles, "/order-tasks/queries", "");
+        addTypeProfile(profiles, "/analysis-department-statistics/queries",
+                "analysisdate=dateTime;rn_=number;testcount=number"
+        );
+        addTypeProfile(profiles, "/personnel-workload-statistics/queries",
+                "analysisuserid=string;rn_=number;testcount=number"
+        );
+        addTypeProfile(profiles, "/proj-order-categories/queries",
+                "bizcategoryname=string;entrustorgname=string;monitortmplid=string;ordercategory=string;" +
+                "projcreatedbyname=string;projid=number;projname=string;projno=string;rn_=number;testorgname=string"
         );
         return profiles;
     }

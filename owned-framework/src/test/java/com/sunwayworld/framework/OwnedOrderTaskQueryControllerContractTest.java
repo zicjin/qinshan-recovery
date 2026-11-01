@@ -24,8 +24,18 @@ public final class OwnedOrderTaskQueryControllerContractTest {
         require(paths, PREFIX + "/queries/analysis");
         require(paths, PREFIX + "/queries/order-group");
         require(paths, PREFIX + "/queries/order-group-runs");
+        require(paths, PREFIX + "/queries/group-by-test");
+        require(paths, PREFIX + "/queries/order-task");
+        require(paths, PREFIX + "/queries/select-order-container-info");
+        require(paths, PREFIX + "/queries/selectContainerInfo");
         require(paths, PREFIX + "/unique-tasks/queries");
+        require(paths, PREFIX + "/unique-item-groups/queries");
+        require(paths, PREFIX + "/unique-orders/queries");
         require(paths, PREFIX + "/subpackages/queries");
+        require(paths, PREFIX + "/analysis-department-statistics/queries");
+        require(paths, PREFIX + "/personnel-workload-statistics/queries");
+        require(paths, PREFIX + "/proj-order-categories/queries");
+        require(paths, "/secure/emc/module/bp/bp/orders/order-tasks/queries");
         require(paths, PREFIX + "/info/status");
         require(paths, PREFIX + "/{id}/info/status");
         require(paths, PREFIX + "/{id}");
@@ -42,8 +52,18 @@ public final class OwnedOrderTaskQueryControllerContractTest {
         requireProfile("/queries/analysis", 7);
         requireProfile("/queries/order-group", 46);
         requireProfile("/queries/order-group-runs", 62);
+        requireProfile("/queries/group-by-test", 8);
+        requireProfile("/queries/order-task", 122);
+        requireProfile("/queries/select-order-container-info", 29);
+        requireProfile("/queries/selectContainerInfo", 11);
         requireProfile("/unique-tasks/queries", 7);
+        requireProfile("/unique-item-groups/queries", 125);
+        requireProfile("/unique-orders/queries", 16);
         requireProfile("/subpackages/queries", 89);
+        requireProfile("/analysis-department-statistics/queries", 3);
+        requireProfile("/personnel-workload-statistics/queries", 3);
+        requireProfile("/proj-order-categories/queries", 10);
+        requireProfile("/order-tasks/queries", 0);
         System.out.println("owned order-task query mapping/profile checks passed");
     }
 

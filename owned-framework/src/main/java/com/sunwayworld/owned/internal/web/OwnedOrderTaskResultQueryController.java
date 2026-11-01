@@ -274,6 +274,69 @@ public final class OwnedOrderTaskResultQueryController {
         catch (SQLException failure) { return unavailable(); }
     }
 
+    /** Read-only preprocessing table headers used by the result-input page. */
+    @PostMapping(path = PREFIX + "/preprocessing-result/table-heads/queries",
+            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> preprocessingTitles(HttpServletRequest request,
+            @RequestBody(required = false) String body) {
+        try {
+            OwnedPrincipal principal = requireRead(request);
+            List<Map<String, Object>> source = selectResultRows(principal.getOrgId());
+            if (source.isEmpty()) return ok("[]");
+            Map<String, String> titles = new LinkedHashMap<String, String>();
+            for (Map<String, Object> item : source) {
+                String colId = dataColumnId(item);
+                if (!titles.containsKey(colId)) {
+                    Object alias = item.get("itemAliasName");
+                    titles.put(colId, "<font color=\"blue\">" + (alias == null ? "" : alias) + "</font>");
+                }
+            }
+            List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
+            for (Map.Entry<String, String> title : titles.entrySet()) {
+                Map<String, Object> head = new LinkedHashMap<String, Object>();
+                head.put("field", title.getKey());
+                head.put("title", title.getValue());
+                result.add(head);
+            }
+            return ok(JSON.toJSONString(result, SerializerFeature.WriteMapNullValue));
+        } catch (AccessDeniedException denied) { return forbidden(); }
+        catch (IllegalArgumentException invalid) { return badRequest(); }
+        catch (SQLException failure) { return unavailable(); }
+    }
+
+    /** Read-only preprocessing table rows used by the result-input page. */
+    @PostMapping(path = PREFIX + "/preprocessing-result/table-rows/queries",
+            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> preprocessingRows(HttpServletRequest request,
+            @RequestBody(required = false) String body) {
+        try {
+            OwnedPrincipal principal = requireRead(request);
+            List<Map<String, Object>> source = selectResultRows(principal.getOrgId());
+            if (source.isEmpty()) return ok("[]");
+            Map<String, Map<String, Object>> grouped = new LinkedHashMap<String, Map<String, Object>>();
+            for (Map<String, Object> item : source) {
+                String rowNo = String.valueOf(item.get("orderNo"));
+                Map<String, Object> row = grouped.get(rowNo);
+                if (row == null) {
+                    row = new LinkedHashMap<String, Object>();
+                    row.put("rowNo", rowNo);
+                    row.put("orderNo", item.get("orderNo"));
+                    row.put("projNo", item.get("projNo"));
+                    row.put("projName", item.get("projName"));
+                    row.put("testOrgName", item.get("testOrgName"));
+                    row.put("monitorPointName", item.get("monitorPointName"));
+                    row.put("sampleBeginDate", item.get("sampleBeginDate"));
+                    grouped.put(rowNo, row);
+                }
+                row.put(dataColumnId(item), item.get("reportResult"));
+            }
+            return ok(JSON.toJSONString(new ArrayList<Map<String, Object>>(grouped.values()),
+                    SerializerFeature.WriteMapNullValue));
+        } catch (AccessDeniedException denied) { return forbidden(); }
+        catch (IllegalArgumentException invalid) { return badRequest(); }
+        catch (SQLException failure) { return unavailable(); }
+    }
+
     @GetMapping(path = {PREFIX + "/info/status", PREFIX + "/{id}/info/status"},
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> status(HttpServletRequest request) {

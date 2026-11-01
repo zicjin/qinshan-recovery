@@ -5,8 +5,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.sunwayworld.owned.internal.web.OwnedFolderGenericResourceController;
 import com.sunwayworld.owned.internal.web.OwnedIdentityConfiguration;
 import java.lang.reflect.Method;
+import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,6 +40,11 @@ public final class OwnedFolderGenericResourceControllerContractTest {
             throw new AssertionError("folder status must expose the draft auditStatus envelope");
         }
         if (!status.containsKey("ext$")) throw new AssertionError("folder status must retain ext$ envelope");
+        try {
+            Field profile = OwnedFolderGenericResourceController.class.getDeclaredField("FOLDER_TYPE_PROFILE");
+            profile.setAccessible(true);
+            if (((Map<?, ?>) profile.get(null)).size() != 78) throw new AssertionError("folder supplier type profile must contain 78 fields");
+        } catch (ReflectiveOperationException error) { throw new AssertionError("cannot inspect folder type profile", error); }
         System.out.println("owned folder GenericResource mapping/status checks passed");
     }
 

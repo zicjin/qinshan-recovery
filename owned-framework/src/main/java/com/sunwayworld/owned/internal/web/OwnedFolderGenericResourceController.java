@@ -116,6 +116,10 @@ public final class OwnedFolderGenericResourceController {
                     for (int i = 1; i <= metadata.getColumnCount(); i++) {
                         types.put(metadata.getColumnLabel(i).toLowerCase(Locale.ROOT), type(metadata.getColumnType(i)));
                     }
+                    if (FOLDER_TYPE_PROFILE.size() > 0) {
+                        types.clear();
+                        types.putAll(FOLDER_TYPE_PROFILE);
+                    }
                     while (result.next()) rows.add(row(result, metadata));
                 }
             }
@@ -161,6 +165,31 @@ public final class OwnedFolderGenericResourceController {
         if (sqlType == Types.DATE || sqlType == Types.TIMESTAMP || sqlType == Types.TIMESTAMP_WITH_TIMEZONE) return "dateTime";
         if (sqlType == Types.NUMERIC || sqlType == Types.DECIMAL || sqlType == Types.INTEGER || sqlType == Types.BIGINT) return "number";
         return "string";
+    }
+
+    private static final Map<String, String> FOLDER_TYPE_PROFILE = folderTypeProfile();
+    private static Map<String, String> folderTypeProfile() {
+        String encoded = "areaname=string;bizcategorycode=string;bizcategoryid=number;carnum=string;contractpotname=string;"
+                + "createdbyid=string;createdbyname=string;createdbyorgid=string;createdbyorgname=string;createdtime=dateTime;"
+                + "currentspeed=string;emissionstatus=string;entrustorgname=string;existlnglat=string;existtime=dateTime;"
+                + "fairtemperature=string;flow=string;flowdirection=string;foldername=string;folderno=string;id=number;"
+                + "intolnglat=string;intotime=dateTime;isrange=string;latitude=string;longitude=string;mobileid=string;"
+                + "monitorpointcategory=string;monitorpointcategoryid=string;monitorpointid=number;monitorpointname=string;"
+                + "monitorpointno=string;monitortmplid=string;ordercategory=string;orgid=string;orgname=string;paramprojid=number;"
+                + "plansampledate=dateTime;plansampleuserid=string;plansampleusername=string;processstatus=string;"
+                + "projectcreatedbyname=string;projectstatus=string;projid=number;projname=string;projno=string;realitydistance=string;"
+                + "realitylatitude=string;realitylongitude=string;remark=string;river=string;riverdepth=string;riverwidth=string;"
+                + "rn_=number;runid=string;sampleorgid=string;sampleorgname=string;sampleuserid=string;sampleusername=string;"
+                + "samplingdepth=string;samplingrange=string;sceneuserid=string;sceneusername=string;section=string;"
+                + "sectionconditiondesc=string;sectionwaterdepth=string;sectionwaterquality=string;sectionwaterwidth=string;"
+                + "source=string;status=string;termination=string;testorgid=string;testorgname=string;tributary=string;"
+                + "turbidity=string;urgent=string;usedeptname=string;watertemperature=string";
+        Map<String, String> result = new LinkedHashMap<String, String>();
+        for (String token : encoded.split(";")) {
+            int equals = token.indexOf('=');
+            if (equals > 0) result.put(token.substring(0, equals), token.substring(equals + 1));
+        }
+        return result;
     }
 
     private static int pages(int total, int size) { return total == 0 ? 0 : (total + size - 1) / size; }

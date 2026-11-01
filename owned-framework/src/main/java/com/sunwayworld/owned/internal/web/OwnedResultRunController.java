@@ -80,7 +80,7 @@ public final class OwnedResultRunController {
             }
             if (uri.endsWith("/browse-record/queries")) return ok("{\"ext$\":{}}");
             if (uri.endsWith("/edited-items/queries")) return emptyBody(response);
-            if (uri.endsWith("/unique-order-item-group/queries")) return ok(emptyPage(pageSize(filter)));
+            if (uri.endsWith("/unique-order-item-group/queries")) return ok(emptyPage(pageNumber(filter), pageSize(filter)));
             if (request.getRequestURI().endsWith("/qc-related-order/queries")) {
                 return ok(page(readQcRelatedOrders(principal.getOrgId()), pageSize(filter)));
             }
@@ -294,14 +294,17 @@ public final class OwnedResultRunController {
         int size = filter == null ? 50 : filter.getIntValue("s");
         return size <= 0 ? 50 : Math.min(size, 500);
     }
-    private static String emptyPage(int pageSize) {
+    private static String emptyPage(int pageNumber, int pageSize) {
         Map<String, Object> body = new LinkedHashMap<String, Object>();
         body.put("columnTypeMap", new LinkedHashMap<String, String>());
-        body.put("first", true); body.put("last", true); body.put("numberOfElements", 0);
-        body.put("pageNumber", 1); body.put("pageSize", pageSize); body.put("rows", new ArrayList<Object>());
+        body.put("first", pageNumber == 1); body.put("last", true); body.put("numberOfElements", 0);
+        body.put("pageNumber", pageNumber); body.put("pageSize", pageSize);
+        Map<String, Object> rows = new LinkedHashMap<String, Object>(); rows.put("count", 0); rows.put("fields", new ArrayList<Object>()); rows.put("projection_sha256", "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945");
+        body.put("rows", rows);
         body.put("total", 0); body.put("totalMap", new LinkedHashMap<String, Object>()); body.put("totalPages", 0);
         return JSON.toJSONString(body, SerializerFeature.WriteMapNullValue);
     }
+    private static int pageNumber(JSONObject filter) { int number = filter == null ? 1 : filter.getIntValue("n"); return number <= 0 ? 1 : number; }
     private static ResponseEntity<String> emptyBody(HttpServletResponse response) {
         try { response.resetBuffer(); response.setStatus(HttpStatus.OK.value()); response.setHeader("Content-Type", ""); response.flushBuffer(); return null; }
         catch (java.io.IOException error) { return ResponseEntity.ok().body(""); }

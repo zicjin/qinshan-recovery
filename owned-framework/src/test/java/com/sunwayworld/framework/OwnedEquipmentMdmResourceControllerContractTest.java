@@ -18,6 +18,10 @@ public final class OwnedEquipmentMdmResourceControllerContractTest {
         Set<String> paths = mappedPaths();
         for (String resource : new String[] {"equipt-categories", "equipt-requisitions", "equipt-temp"}) requireFamily(paths, BASE + resource);
         for (String resource : new String[] {"equip-appearances", "equip-checks", "equip-verifications", "equipt-acq-params", "equipt-acq-results", "equipt-acq-scripts", "equipt-cali-result-norms"}) requireFamily(paths, EQUIP + resource);
+        for (String resource : new String[] {"equip-checks", "equip-verifications", "equipt-cali-results", "equipt-per-checks"}) {
+            require(paths, EQUIP + resource + "/queries/tasks");
+            require(paths, EQUIP + resource + "/info/status");
+        }
         require(paths, EQUIP + "equipt-acq-scripts/eas-results/queries");
         require(paths, "/secure/emc/module/mdm/bizmdm/tests/container-maintenance/queries/raw");
         for (String path : paths) if (path.contains("{resource}")) throw new AssertionError("unbounded equipment MDM path: " + path);

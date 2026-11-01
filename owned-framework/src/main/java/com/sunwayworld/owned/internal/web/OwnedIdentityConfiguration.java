@@ -349,4 +349,11 @@ public class OwnedIdentityConfiguration {
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
         return new OwnedReportSampleTaskQueryController(boundary, dataSource);
     }
+
+    @Bean
+    @ConditionalOnMissingBean(OwnedItemTaskQueryController.class)
+    public OwnedItemTaskQueryController ownedItemTaskQueryController(
+            OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
+        return new OwnedItemTaskQueryController(boundary, dataSource);
+    }
 }

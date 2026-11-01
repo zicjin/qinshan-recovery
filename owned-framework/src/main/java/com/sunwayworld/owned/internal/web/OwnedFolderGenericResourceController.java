@@ -53,7 +53,8 @@ public final class OwnedFolderGenericResourceController {
     @PostMapping(path = {
             "/secure/emc/module/bp/bp/folders/queries",
             "/secure/emc/module/bp/bp/folders/queries/raw",
-            "/secure/emc/module/bp/bp/folders/queries/searchable"},
+            "/secure/emc/module/bp/bp/folders/queries/searchable",
+            "/secure/emc/module/bp/bp/folders/queries/tasks"},
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> query(HttpServletRequest request,
             @RequestBody(required = false) String body) {

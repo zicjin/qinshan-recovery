@@ -20,6 +20,7 @@ public final class OwnedFolderGenericResourceControllerContractTest {
         require(paths, PREFIX + "/queries");
         require(paths, PREFIX + "/queries/raw");
         require(paths, PREFIX + "/queries/searchable");
+        require(paths, PREFIX + "/queries/tasks");
         require(paths, PREFIX + "/info/status");
         require(paths, PREFIX + "/{id}/info/status");
         for (String path : paths) {

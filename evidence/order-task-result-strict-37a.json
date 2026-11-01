@@ -14,9 +14,9 @@
     "internal_http_bridge": false,
     "jni_replacement_process": false
   },
-  "started_at": "2026-11-01T06:01:56.764169+00:00",
-  "source_commit": "c5592f1e6a7f2358221d89a9f35f53e16ef92215",
-  "repository_head_at_capture": "c5592f1e6a7f2358221d89a9f35f53e16ef92215",
+  "started_at": "2026-11-01T06:28:47.977083+00:00",
+  "source_commit": "0f1909650a2ecfc63ae6297670ee4e6ef50ec9ba",
+  "repository_head_at_capture": "0f1909650a2ecfc63ae6297670ee4e6ef50ec9ba",
   "source_dirty": false,
   "source_scope": [
     "project/src/main/java",
@@ -74,8 +74,8 @@
     "build/oracle-free-source-manifest.json",
     "docker/Dockerfile.built"
   ],
-  "implementation_binding": "impl-371e14fdaa36f18f",
-  "implementation_tree_digest": "371e14fdaa36f18f49ded5d0d908b1b820e08d6adf59f41232805fea52010d50",
+  "implementation_binding": "impl-37a7cf96a39277e9",
+  "implementation_tree_digest": "37a7cf96a39277e9f717127ab9b7806bdabd59712b34ee91b0d560269863c0a3",
   "implementation_dirty": false,
   "implementation_scope": [
     "project/src/main/java",
@@ -134,12 +134,12 @@
     "docker/Dockerfile.built"
   ],
   "nested_project_commit": "27932b1fe4d71d64a02f9a63e55f56acb403e3a0",
-  "distribution_input_digest": "d5b49f9fbe613f022bc2b42c1fb1e191ed954df8303679cb1587ce6218978de7",
+  "distribution_input_digest": "78a715dba554d5d730f877de9e11d30f99d103998b48dc4503f3327d6ee6992a",
   "artifact_sha256": {
     "lims-recovery/owned-distribution/target/distribution/app/lims-owned-application.jar": "234f9e1b7f72cffe2463b1c99a601f81a67e59c5450f970fdf3990d05debe6c5"
   },
-  "clone_identity": "lims-strict-api-orderc559",
-  "runtime_report": ".scratch/sunway-supplier-exit-api-first/diagnostic-evidence/runtime/strict-api-runtime-manifest-orderc559.json",
+  "clone_identity": "lims-strict-api-order37a",
+  "runtime_report": ".scratch/sunway-supplier-exit-api-first/diagnostic-evidence/runtime/strict-api-runtime-manifest-order37a.json",
   "runtime_contract": {
     "mode": "strict",
     "strict_evidence": false,
@@ -151,9 +151,9 @@
     "baseline_schema_hash": "4f23874f86afdf6359396917061720b80bbb78b84843b2c533c8fcc2c71689bd",
     "runtime_schema_hash_before": "674f918ce233701cd851a04a5cac89284ed7f1959201a1248bb091d08907a3b6",
     "runtime_schema_hash_after": "674f918ce233701cd851a04a5cac89284ed7f1959201a1248bb091d08907a3b6",
-    "source_commit": "c5592f1e6a7f2358221d89a9f35f53e16ef92215",
-    "implementation_binding": "impl-371e14fdaa36f18f",
-    "implementation_tree_digest": "371e14fdaa36f18f49ded5d0d908b1b820e08d6adf59f41232805fea52010d50",
+    "source_commit": "0f1909650a2ecfc63ae6297670ee4e6ef50ec9ba",
+    "implementation_binding": "impl-37a7cf96a39277e9",
+    "implementation_tree_digest": "37a7cf96a39277e9f717127ab9b7806bdabd59712b34ee91b0d560269863c0a3",
     "implementation_scope": [
       "project/src/main/java",
       "owned-framework/src",
@@ -211,7 +211,7 @@
       "docker/Dockerfile.built"
     ],
     "implementation_dirty": false,
-    "repository_head_at_capture": "c5592f1e6a7f2358221d89a9f35f53e16ef92215"
+    "repository_head_at_capture": "0f1909650a2ecfc63ae6297670ee4e6ef50ec9ba"
   },
   "role": "manager",
   "organization": "org-a",
@@ -245,11 +245,11 @@
         "x-frame-options": "SAMEORIGIN",
         "content-type": "application/json",
         "content-length": "11",
-        "date": "Sun, 01 Nov 2026 06:02:00 GMT",
+        "date": "Sun, 01 Nov 2026 06:28:51 GMT",
         "connection": "close"
       },
       "request_headers": {},
-      "elapsed_ms": 520.293,
+      "elapsed_ms": 431.269,
       "route": {
         "method": "GET",
         "path": "/secure/emc/module/bp/bp/order-task-results/info/status",
@@ -264,7 +264,7 @@
         "setup": "not-required",
         "restore": "not-required",
         "runtime_values": {
-          "id": "rffd2a902107c"
+          "id": "rae14a2b523b0"
         },
         "setup_http": [],
         "restore_http": []
@@ -320,13 +320,13 @@
         "x-frame-options": "SAMEORIGIN",
         "content-type": "application/json",
         "content-length": "2939",
-        "date": "Sun, 01 Nov 2026 06:02:00 GMT",
+        "date": "Sun, 01 Nov 2026 06:28:51 GMT",
         "connection": "close"
       },
       "request_headers": {
         "content-type": "application/json"
       },
-      "elapsed_ms": 547.969,
+      "elapsed_ms": 507.849,
       "route": {
         "method": "POST",
         "path": "/secure/emc/module/bp/bp/order-task-results/queries",
@@ -341,7 +341,7 @@
         "setup": "not-required",
         "restore": "not-required",
         "runtime_values": {
-          "id": "rab9e676d5bbf"
+          "id": "rd06553c41c02"
         },
         "setup_http": [],
         "restore_http": []
@@ -401,13 +401,13 @@
         "x-frame-options": "SAMEORIGIN",
         "content-type": "application/json",
         "content-length": "2939",
-        "date": "Sun, 01 Nov 2026 06:02:01 GMT",
+        "date": "Sun, 01 Nov 2026 06:28:51 GMT",
         "connection": "close"
       },
       "request_headers": {
         "content-type": "application/json"
       },
-      "elapsed_ms": 659.168,
+      "elapsed_ms": 457.303,
       "route": {
         "method": "POST",
         "path": "/secure/emc/module/bp/bp/order-task-results/queries/raw",
@@ -422,7 +422,7 @@
         "setup": "not-required",
         "restore": "not-required",
         "runtime_values": {
-          "id": "r09f65ebb0dec"
+          "id": "r4c9de998a2cd"
         },
         "setup_http": [],
         "restore_http": []
@@ -458,11 +458,11 @@
         "x-frame-options": "SAMEORIGIN",
         "content-type": "application/json",
         "content-length": "0",
-        "date": "Sun, 01 Nov 2026 06:02:02 GMT",
+        "date": "Sun, 01 Nov 2026 06:28:52 GMT",
         "connection": "close"
       },
       "request_headers": {},
-      "elapsed_ms": 1057.412,
+      "elapsed_ms": 472.208,
       "route": {
         "method": "GET",
         "path": "/secure/emc/module/bp/bp/order-task-results/1",
@@ -477,7 +477,7 @@
         "setup": "not-required",
         "restore": "not-required",
         "runtime_values": {
-          "id": "r6fe470b5c41a"
+          "id": "r01412f37ccdf"
         },
         "setup_http": [],
         "restore_http": []
@@ -517,11 +517,11 @@
         "x-frame-options": "SAMEORIGIN",
         "content-type": "application/json",
         "content-length": "49",
-        "date": "Sun, 01 Nov 2026 06:02:02 GMT",
+        "date": "Sun, 01 Nov 2026 06:28:52 GMT",
         "connection": "close"
       },
       "request_headers": {},
-      "elapsed_ms": 408.338,
+      "elapsed_ms": 447.615,
       "route": {
         "method": "GET",
         "path": "/secure/emc/module/bp/bp/order-task-results/1/action/print",
@@ -536,7 +536,7 @@
         "setup": "not-required",
         "restore": "not-required",
         "runtime_values": {
-          "id": "r60e02a44332f"
+          "id": "r9206bc5a6729"
         },
         "setup_http": [],
         "restore_http": []
@@ -576,11 +576,11 @@
         "x-frame-options": "SAMEORIGIN",
         "content-type": "application/json",
         "content-length": "49",
-        "date": "Sun, 01 Nov 2026 06:02:03 GMT",
+        "date": "Sun, 01 Nov 2026 06:28:52 GMT",
         "connection": "close"
       },
       "request_headers": {},
-      "elapsed_ms": 735.998,
+      "elapsed_ms": 403.008,
       "route": {
         "method": "GET",
         "path": "/secure/emc/module/bp/bp/order-task-results/1/columns/STATUS",
@@ -595,7 +595,7 @@
         "setup": "not-required",
         "restore": "not-required",
         "runtime_values": {
-          "id": "rf744c00ffea9"
+          "id": "r99d77437b69a"
         },
         "setup_http": [],
         "restore_http": []
@@ -633,11 +633,11 @@
         "x-frame-options": "SAMEORIGIN",
         "content-type": "application/json",
         "content-length": "11",
-        "date": "Sun, 01 Nov 2026 06:02:03 GMT",
+        "date": "Sun, 01 Nov 2026 06:28:53 GMT",
         "connection": "close"
       },
       "request_headers": {},
-      "elapsed_ms": 421.32,
+      "elapsed_ms": 387.31,
       "route": {
         "method": "GET",
         "path": "/secure/emc/module/bp/bp/order-task-results/1/info/status",
@@ -652,7 +652,7 @@
         "setup": "not-required",
         "restore": "not-required",
         "runtime_values": {
-          "id": "r366c05410d1f"
+          "id": "r3234062372df"
         },
         "setup_http": [],
         "restore_http": []
@@ -682,13 +682,13 @@
   },
   "cleanup_pending": false,
   "phase_timings_ms": {
-    "http_cases": 5278.749
+    "http_cases": 3936.707
   },
   "authentication": {
     "attempted": true,
     "authenticated": true,
     "status": 200
   },
-  "finished_at": "2026-11-01T06:02:02.042974+00:00",
-  "cleanup_finalized_at": "2026-11-01T06:02:19.816584+00:00"
+  "finished_at": "2026-11-01T06:28:51.913897+00:00",
+  "cleanup_finalized_at": "2026-11-01T06:29:09.413243+00:00"
 }

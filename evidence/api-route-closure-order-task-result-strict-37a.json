@@ -1,12 +1,12 @@
 {
   "schema": 1,
   "scope": "current-head-spring-web-api-route-closure",
-  "generated_at": "2026-11-01T06:02:47.527227+00:00",
-  "source_commit": "c5592f1e6a7f2358221d89a9f35f53e16ef92215",
-  "repository_head_at_capture": "c5592f1e6a7f2358221d89a9f35f53e16ef92215",
+  "generated_at": "2026-11-01T06:29:41.614637+00:00",
+  "source_commit": "0f1909650a2ecfc63ae6297670ee4e6ef50ec9ba",
+  "repository_head_at_capture": "0f1909650a2ecfc63ae6297670ee4e6ef50ec9ba",
   "source_dirty": false,
-  "implementation_binding": "impl-371e14fdaa36f18f",
-  "implementation_tree_digest": "371e14fdaa36f18f49ded5d0d908b1b820e08d6adf59f41232805fea52010d50",
+  "implementation_binding": "impl-37a7cf96a39277e9",
+  "implementation_tree_digest": "37a7cf96a39277e9f717127ab9b7806bdabd59712b34ee91b0d560269863c0a3",
   "implementation_dirty": false,
   "implementation_scope": [
     "project/src/main/java",
@@ -149,14 +149,14 @@
   "failures": [],
   "reports": [
     {
-      "path": "evidence/order-task-result-strict-c559.json",
-      "sha256": "0950370c263e69e3692e8625d72a9dcb904f3ac2745fa72e3774f1aa7ac66f02",
+      "path": "evidence/order-task-result-strict-37a.json",
+      "sha256": "96115fabdb87d57f59c7cf86e5f66ac63d27fb9f638fb4368c93c6b5ff7926fb",
       "status": "executed-pass",
       "strict_evidence": true,
-      "source_commit": "c5592f1e6a7f2358221d89a9f35f53e16ef92215",
-      "repository_head_at_capture": "c5592f1e6a7f2358221d89a9f35f53e16ef92215",
-      "implementation_binding": "impl-371e14fdaa36f18f",
-      "implementation_tree_digest": "371e14fdaa36f18f49ded5d0d908b1b820e08d6adf59f41232805fea52010d50",
+      "source_commit": "0f1909650a2ecfc63ae6297670ee4e6ef50ec9ba",
+      "repository_head_at_capture": "0f1909650a2ecfc63ae6297670ee4e6ef50ec9ba",
+      "implementation_binding": "impl-37a7cf96a39277e9",
+      "implementation_tree_digest": "37a7cf96a39277e9f717127ab9b7806bdabd59712b34ee91b0d560269863c0a3",
       "implementation_dirty": false,
       "strict_contract": "strict report contract valid"
     }
@@ -3643,8 +3643,8 @@
       "disposition": "owned-pass",
       "evidence": [
         {
-          "report": "evidence/order-task-result-strict-c559.json",
-          "report_sha256": "0950370c263e69e3692e8625d72a9dcb904f3ac2745fa72e3774f1aa7ac66f02",
+          "report": "evidence/order-task-result-strict-37a.json",
+          "report_sha256": "96115fabdb87d57f59c7cf86e5f66ac63d27fb9f638fb4368c93c6b5ff7926fb",
           "case_id": "order-task-result.status",
           "status": 200,
           "disposition": "owned-pass"
@@ -3787,8 +3787,8 @@
       "disposition": "owned-pass",
       "evidence": [
         {
-          "report": "evidence/order-task-result-strict-c559.json",
-          "report_sha256": "0950370c263e69e3692e8625d72a9dcb904f3ac2745fa72e3774f1aa7ac66f02",
+          "report": "evidence/order-task-result-strict-37a.json",
+          "report_sha256": "96115fabdb87d57f59c7cf86e5f66ac63d27fb9f638fb4368c93c6b5ff7926fb",
           "case_id": "order-task-result.query",
           "status": 200,
           "disposition": "owned-pass"
@@ -3829,8 +3829,8 @@
       "disposition": "owned-pass",
       "evidence": [
         {
-          "report": "evidence/order-task-result-strict-c559.json",
-          "report_sha256": "0950370c263e69e3692e8625d72a9dcb904f3ac2745fa72e3774f1aa7ac66f02",
+          "report": "evidence/order-task-result-strict-37a.json",
+          "report_sha256": "96115fabdb87d57f59c7cf86e5f66ac63d27fb9f638fb4368c93c6b5ff7926fb",
           "case_id": "order-task-result.raw",
           "status": 200,
           "disposition": "owned-pass"
@@ -4041,8 +4041,8 @@
       "disposition": "owned-pass",
       "evidence": [
         {
-          "report": "evidence/order-task-result-strict-c559.json",
-          "report_sha256": "0950370c263e69e3692e8625d72a9dcb904f3ac2745fa72e3774f1aa7ac66f02",
+          "report": "evidence/order-task-result-strict-37a.json",
+          "report_sha256": "96115fabdb87d57f59c7cf86e5f66ac63d27fb9f638fb4368c93c6b5ff7926fb",
           "case_id": "order-task-result.detail",
           "status": 200,
           "disposition": "owned-pass"
@@ -4117,8 +4117,8 @@
       "disposition": "owned-pass",
       "evidence": [
         {
-          "report": "evidence/order-task-result-strict-c559.json",
-          "report_sha256": "0950370c263e69e3692e8625d72a9dcb904f3ac2745fa72e3774f1aa7ac66f02",
+          "report": "evidence/order-task-result-strict-37a.json",
+          "report_sha256": "96115fabdb87d57f59c7cf86e5f66ac63d27fb9f638fb4368c93c6b5ff7926fb",
           "case_id": "order-task-result.print-no-data",
           "status": 500,
           "disposition": "owned-pass"
@@ -4261,8 +4261,8 @@
       "disposition": "owned-pass",
       "evidence": [
         {
-          "report": "evidence/order-task-result-strict-c559.json",
-          "report_sha256": "0950370c263e69e3692e8625d72a9dcb904f3ac2745fa72e3774f1aa7ac66f02",
+          "report": "evidence/order-task-result-strict-37a.json",
+          "report_sha256": "96115fabdb87d57f59c7cf86e5f66ac63d27fb9f638fb4368c93c6b5ff7926fb",
           "case_id": "order-task-result.column-no-data",
           "status": 500,
           "disposition": "owned-pass"
@@ -4303,8 +4303,8 @@
       "disposition": "owned-pass",
       "evidence": [
         {
-          "report": "evidence/order-task-result-strict-c559.json",
-          "report_sha256": "0950370c263e69e3692e8625d72a9dcb904f3ac2745fa72e3774f1aa7ac66f02",
+          "report": "evidence/order-task-result-strict-37a.json",
+          "report_sha256": "96115fabdb87d57f59c7cf86e5f66ac63d27fb9f638fb4368c93c6b5ff7926fb",
           "case_id": "order-task-result.item-status",
           "status": 200,
           "disposition": "owned-pass"

@@ -74,7 +74,7 @@ public final class OwnedQualityControlChartController {
         return selectable(request, "SELECT DISTINCT A.INPUTUSERID,A.INPUTUSERNAME,A.TESTID,A.QCCATEGORYID,B.ITEMID FROM T_EMC_ORDER_TASK A LEFT JOIN T_EMC_ORDER_TASK_RESULT B ON B.ORDERTASKID=A.ID WHERE A.ANALYSISORGID=? ORDER BY A.INPUTUSERID");
     }
 
-    @PostMapping(path = {PREFIX + "/queries", PREFIX + "/queries/raw", PREFIX + "/queries/searchable"},
+    @PostMapping(path = {PREFIX + "/queries", PREFIX + "/queries/raw", PREFIX + "/queries/searchable", PREFIX + "/order-task-results/queries"},
             consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> query(HttpServletRequest request, HttpServletResponse response,
             @RequestBody(required = false) String body) {

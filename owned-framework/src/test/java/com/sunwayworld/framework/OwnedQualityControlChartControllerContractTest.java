@@ -26,6 +26,7 @@ public final class OwnedQualityControlChartControllerContractTest {
         require(paths, "/secure/emc/module/sa/quality-control-charts/queries");
         require(paths, "/secure/emc/module/sa/quality-control-charts/queries/raw");
         require(paths, "/secure/emc/module/sa/quality-control-charts/queries/searchable");
+        require(paths, "/secure/emc/module/sa/quality-control-charts/order-task-results/queries");
         System.out.println("owned quality-control chart read contract checks passed");
     }
     private static void require(Set<String> paths, String path) {

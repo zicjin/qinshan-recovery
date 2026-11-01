@@ -342,4 +342,11 @@ public class OwnedIdentityConfiguration {
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
         return new OwnedCrmOpportunityOrdtaskController(boundary, dataSource);
     }
+
+    @Bean
+    @ConditionalOnMissingBean(OwnedReportSampleTaskQueryController.class)
+    public OwnedReportSampleTaskQueryController ownedReportSampleTaskQueryController(
+            OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
+        return new OwnedReportSampleTaskQueryController(boundary, dataSource);
+    }
 }

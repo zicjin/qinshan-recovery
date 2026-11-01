@@ -29,6 +29,10 @@ public final class OwnedProjectTaskQueryControllerContractTest {
         profile.setAccessible(true);
         if (((Map<?, ?>) profile.get(null)).size() != 182)
             throw new AssertionError("project task supplier profile must contain 182 fields");
+        if (!"T_EMC_PROJECT".equals(OwnedProjectTaskQueryController.projectSourceTable(false)))
+            throw new AssertionError("project task route must use T_EMC_PROJECT");
+        if (!"T_EMC_PROJECT_CHANGE".equals(OwnedProjectTaskQueryController.projectSourceTable(true)))
+            throw new AssertionError("project-change task route must use T_EMC_PROJECT_CHANGE");
         System.out.println("owned project task query controller contract checks passed");
     }
 

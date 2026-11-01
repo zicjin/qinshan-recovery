@@ -14,9 +14,9 @@
     "internal_http_bridge": false,
     "jni_replacement_process": false
   },
-  "started_at": "2026-11-01T05:28:22.617390+00:00",
-  "source_commit": "3006b11da34ea4b32c88f1a63ba6fa8aea227730",
-  "repository_head_at_capture": "3006b11da34ea4b32c88f1a63ba6fa8aea227730",
+  "started_at": "2026-11-01T05:47:33.100717+00:00",
+  "source_commit": "3cccfabb43f6a6905d1a692157ae1da993390642",
+  "repository_head_at_capture": "3cccfabb43f6a6905d1a692157ae1da993390642",
   "source_dirty": false,
   "source_scope": [
     "project/src/main/java",
@@ -74,8 +74,8 @@
     "build/oracle-free-source-manifest.json",
     "docker/Dockerfile.built"
   ],
-  "implementation_binding": "impl-633dd198a870eff3",
-  "implementation_tree_digest": "633dd198a870eff368031b937a6b72ecd2e77646b4815b8d901e57e02899e78d",
+  "implementation_binding": "impl-d61eac2f48da64ca",
+  "implementation_tree_digest": "d61eac2f48da64ca55503ecbe2ea84fab087801568b0889e86e76042a26a3227",
   "implementation_dirty": false,
   "implementation_scope": [
     "project/src/main/java",
@@ -136,10 +136,10 @@
   "nested_project_commit": "27932b1fe4d71d64a02f9a63e55f56acb403e3a0",
   "distribution_input_digest": "d5b49f9fbe613f022bc2b42c1fb1e191ed954df8303679cb1587ce6218978de7",
   "artifact_sha256": {
-    "lims-recovery/owned-distribution/target/distribution/app/lims-owned-application.jar": "cf65efaace8fbd602d71d4aa7507822472b1c5031a7a49a83f02f80432ac88af"
+    "lims-recovery/owned-distribution/target/distribution/app/lims-owned-application.jar": "f148a92f60443ffc77be011413d9b5766e52569d12ee34e6ff80778cf24af704"
   },
-  "clone_identity": "lims-strict-api-orderc633",
-  "runtime_report": ".scratch/sunway-supplier-exit-api-first/diagnostic-evidence/runtime/strict-api-runtime-manifest-orderc633.json",
+  "clone_identity": "lims-strict-api-orderd61",
+  "runtime_report": ".scratch/sunway-supplier-exit-api-first/diagnostic-evidence/runtime/strict-api-runtime-manifest-orderd61.json",
   "runtime_contract": {
     "mode": "strict",
     "strict_evidence": false,
@@ -151,9 +151,9 @@
     "baseline_schema_hash": "4f23874f86afdf6359396917061720b80bbb78b84843b2c533c8fcc2c71689bd",
     "runtime_schema_hash_before": "674f918ce233701cd851a04a5cac89284ed7f1959201a1248bb091d08907a3b6",
     "runtime_schema_hash_after": "674f918ce233701cd851a04a5cac89284ed7f1959201a1248bb091d08907a3b6",
-    "source_commit": "3006b11da34ea4b32c88f1a63ba6fa8aea227730",
-    "implementation_binding": "impl-633dd198a870eff3",
-    "implementation_tree_digest": "633dd198a870eff368031b937a6b72ecd2e77646b4815b8d901e57e02899e78d",
+    "source_commit": "3cccfabb43f6a6905d1a692157ae1da993390642",
+    "implementation_binding": "impl-d61eac2f48da64ca",
+    "implementation_tree_digest": "d61eac2f48da64ca55503ecbe2ea84fab087801568b0889e86e76042a26a3227",
     "implementation_scope": [
       "project/src/main/java",
       "owned-framework/src",
@@ -211,13 +211,13 @@
       "docker/Dockerfile.built"
     ],
     "implementation_dirty": false,
-    "repository_head_at_capture": "3006b11da34ea4b32c88f1a63ba6fa8aea227730"
+    "repository_head_at_capture": "3cccfabb43f6a6905d1a692157ae1da993390642"
   },
   "role": "manager",
   "organization": "org-a",
   "mode": "strict",
   "base_url": "http://127.0.0.1:18089",
-  "case_count": 3,
+  "case_count": 7,
   "cases": [
     {
       "expected_status": [
@@ -245,11 +245,11 @@
         "x-frame-options": "SAMEORIGIN",
         "content-type": "application/json",
         "content-length": "11",
-        "date": "Sun, 01 Nov 2026 05:28:25 GMT",
+        "date": "Sun, 01 Nov 2026 05:47:36 GMT",
         "connection": "close"
       },
       "request_headers": {},
-      "elapsed_ms": 456.122,
+      "elapsed_ms": 480.09,
       "route": {
         "method": "GET",
         "path": "/secure/emc/module/bp/bp/order-task-results/info/status",
@@ -264,7 +264,7 @@
         "setup": "not-required",
         "restore": "not-required",
         "runtime_values": {
-          "id": "r031427ea1c02"
+          "id": "r3aff791236a7"
         },
         "setup_http": [],
         "restore_http": []
@@ -320,13 +320,13 @@
         "x-frame-options": "SAMEORIGIN",
         "content-type": "application/json",
         "content-length": "2939",
-        "date": "Sun, 01 Nov 2026 05:28:27 GMT",
+        "date": "Sun, 01 Nov 2026 05:47:36 GMT",
         "connection": "close"
       },
       "request_headers": {
         "content-type": "application/json"
       },
-      "elapsed_ms": 857.95,
+      "elapsed_ms": 524.95,
       "route": {
         "method": "POST",
         "path": "/secure/emc/module/bp/bp/order-task-results/queries",
@@ -341,7 +341,7 @@
         "setup": "not-required",
         "restore": "not-required",
         "runtime_values": {
-          "id": "rc4d23bea1c58"
+          "id": "r42fdfeea63c7"
         },
         "setup_http": [],
         "restore_http": []
@@ -401,13 +401,13 @@
         "x-frame-options": "SAMEORIGIN",
         "content-type": "application/json",
         "content-length": "2939",
-        "date": "Sun, 01 Nov 2026 05:28:27 GMT",
+        "date": "Sun, 01 Nov 2026 05:47:36 GMT",
         "connection": "close"
       },
       "request_headers": {
         "content-type": "application/json"
       },
-      "elapsed_ms": 473.009,
+      "elapsed_ms": 470.935,
       "route": {
         "method": "POST",
         "path": "/secure/emc/module/bp/bp/order-task-results/queries/raw",
@@ -422,7 +422,7 @@
         "setup": "not-required",
         "restore": "not-required",
         "runtime_values": {
-          "id": "r89474245bc1c"
+          "id": "r7b2dfa8f3cf3"
         },
         "setup_http": [],
         "restore_http": []
@@ -436,6 +436,232 @@
       "rollback": {
         "status": "verified-via-fixture-restore",
         "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": null,
+      "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "body_bytes": 0,
+      "assertions": {},
+      "id": "order-task-result.detail",
+      "method": "GET",
+      "path": "/secure/emc/module/bp/bp/order-task-results/1",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/bp/order-task-results/1",
+      "status": 200,
+      "response_headers": {
+        "cache-control": "no-store",
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "0",
+        "date": "Sun, 01 Nov 2026 05:47:37 GMT",
+        "connection": "close"
+      },
+      "request_headers": {},
+      "elapsed_ms": 583.378,
+      "route": {
+        "method": "GET",
+        "path": "/secure/emc/module/bp/bp/order-task-results/1",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "route_id": "aa5102d0275b6d71"
+      },
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "ra372b1730797"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      }
+    },
+    {
+      "expected_status": [
+        500
+      ],
+      "json_top_level_keys": [
+        "message"
+      ],
+      "body_sha256": "b59cb69844738c3bb0c0243c05feca7402bb0458f77b09a1f3fc45f638c966b6",
+      "body_bytes": 49,
+      "assertions": {
+        "json_keys": [
+          "message"
+        ]
+      },
+      "id": "order-task-result.print-no-data",
+      "method": "GET",
+      "path": "/secure/emc/module/bp/bp/order-task-results/1/action/print",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/bp/order-task-results/1/action/print",
+      "status": 500,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "49",
+        "date": "Sun, 01 Nov 2026 05:47:37 GMT",
+        "connection": "close"
+      },
+      "request_headers": {},
+      "elapsed_ms": 409.475,
+      "route": {
+        "method": "GET",
+        "path": "/secure/emc/module/bp/bp/order-task-results/1/action/print",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "route_id": "c7b5f37c4633e36a"
+      },
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r824cdfe0c02c"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      }
+    },
+    {
+      "expected_status": [
+        500
+      ],
+      "json_top_level_keys": [
+        "message"
+      ],
+      "body_sha256": "b59cb69844738c3bb0c0243c05feca7402bb0458f77b09a1f3fc45f638c966b6",
+      "body_bytes": 49,
+      "assertions": {
+        "json_keys": [
+          "message"
+        ]
+      },
+      "id": "order-task-result.column-no-data",
+      "method": "GET",
+      "path": "/secure/emc/module/bp/bp/order-task-results/1/columns/STATUS",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/bp/order-task-results/1/columns/STATUS",
+      "status": 500,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "49",
+        "date": "Sun, 01 Nov 2026 05:47:37 GMT",
+        "connection": "close"
+      },
+      "request_headers": {},
+      "elapsed_ms": 393.668,
+      "route": {
+        "method": "GET",
+        "path": "/secure/emc/module/bp/bp/order-task-results/1/columns/STATUS",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "route_id": "3c4795cd4229e06d"
+      },
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r4a7368b12b01"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "ext$"
+      ],
+      "body_sha256": "f195ca8381d65972cfe1ebdeed49720de585abba84c3789dd8919375d419e7bf",
+      "body_bytes": 11,
+      "assertions": {
+        "json_keys": [
+          "ext$"
+        ]
+      },
+      "id": "order-task-result.item-status",
+      "method": "GET",
+      "path": "/secure/emc/module/bp/bp/order-task-results/1/info/status",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/bp/order-task-results/1/info/status",
+      "status": 200,
+      "response_headers": {
+        "cache-control": "no-store",
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "11",
+        "date": "Sun, 01 Nov 2026 05:47:38 GMT",
+        "connection": "close"
+      },
+      "request_headers": {},
+      "elapsed_ms": 401.328,
+      "route": {
+        "method": "GET",
+        "path": "/secure/emc/module/bp/bp/order-task-results/1/info/status",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "route_id": "6093d977703e8625"
+      },
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "re8d364e4a675"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
       }
     }
   ],
@@ -456,13 +682,13 @@
   },
   "cleanup_pending": false,
   "phase_timings_ms": {
-    "http_cases": 3101.455
+    "http_cases": 3942.753
   },
   "authentication": {
     "attempted": true,
     "authenticated": true,
     "status": 200
   },
-  "finished_at": "2026-11-01T05:28:25.718891+00:00",
-  "cleanup_finalized_at": "2026-11-01T05:28:42.910083+00:00"
+  "finished_at": "2026-11-01T05:47:37.043520+00:00",
+  "cleanup_finalized_at": "2026-11-01T05:47:56.659297+00:00"
 }

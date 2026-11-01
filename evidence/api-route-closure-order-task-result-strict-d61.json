@@ -1,12 +1,12 @@
 {
   "schema": 1,
   "scope": "current-head-spring-web-api-route-closure",
-  "generated_at": "2026-11-01T05:28:58.223152+00:00",
-  "source_commit": "3006b11da34ea4b32c88f1a63ba6fa8aea227730",
-  "repository_head_at_capture": "3006b11da34ea4b32c88f1a63ba6fa8aea227730",
+  "generated_at": "2026-11-01T05:48:15.501066+00:00",
+  "source_commit": "3cccfabb43f6a6905d1a692157ae1da993390642",
+  "repository_head_at_capture": "3cccfabb43f6a6905d1a692157ae1da993390642",
   "source_dirty": false,
-  "implementation_binding": "impl-633dd198a870eff3",
-  "implementation_tree_digest": "633dd198a870eff368031b937a6b72ecd2e77646b4815b8d901e57e02899e78d",
+  "implementation_binding": "impl-d61eac2f48da64ca",
+  "implementation_tree_digest": "d61eac2f48da64ca55503ecbe2ea84fab087801568b0889e86e76042a26a3227",
   "implementation_dirty": false,
   "implementation_scope": [
     "project/src/main/java",
@@ -129,34 +129,34 @@
     "internal_http_bridge": false,
     "jni_replacement_process": false
   },
-  "route_count": 6749,
+  "route_count": 6751,
   "project_route_count": 6599,
-  "boundary_route_count": 150,
+  "boundary_route_count": 152,
   "behavior_counts": {
-    "executed-pass": 3,
-    "unknown": 6746
+    "executed-pass": 7,
+    "unknown": 6744
   },
   "disposition_counts": {
-    "owned-pass": 3,
-    "unknown": 6746
+    "owned-pass": 7,
+    "unknown": 6744
   },
-  "strict_pass_count": 3,
+  "strict_pass_count": 7,
   "non_ledger_strict_pass_count": 0,
   "diagnostic_observation_count": 0,
-  "required_unknown": 6746,
-  "project_required_unknown": 6596,
-  "boundary_required_unknown": 150,
+  "required_unknown": 6744,
+  "project_required_unknown": 6592,
+  "boundary_required_unknown": 152,
   "failures": [],
   "reports": [
     {
-      "path": "evidence/order-task-result-strict-c633.json",
-      "sha256": "c5492caaf0f9f51da7ad5ab3651ea08e09db8ce44ea96bf22fe492b599c201e9",
+      "path": "evidence/order-task-result-strict-d61.json",
+      "sha256": "af5e7a49a11521997c98c449adfadf578d78935644416fb7453409d2af8a9ba0",
       "status": "executed-pass",
       "strict_evidence": true,
-      "source_commit": "3006b11da34ea4b32c88f1a63ba6fa8aea227730",
-      "repository_head_at_capture": "3006b11da34ea4b32c88f1a63ba6fa8aea227730",
-      "implementation_binding": "impl-633dd198a870eff3",
-      "implementation_tree_digest": "633dd198a870eff368031b937a6b72ecd2e77646b4815b8d901e57e02899e78d",
+      "source_commit": "3cccfabb43f6a6905d1a692157ae1da993390642",
+      "repository_head_at_capture": "3cccfabb43f6a6905d1a692157ae1da993390642",
+      "implementation_binding": "impl-d61eac2f48da64ca",
+      "implementation_tree_digest": "d61eac2f48da64ca55503ecbe2ea84fab087801568b0889e86e76042a26a3227",
       "implementation_dirty": false,
       "strict_contract": "strict report contract valid"
     }
@@ -3643,8 +3643,8 @@
       "disposition": "owned-pass",
       "evidence": [
         {
-          "report": "evidence/order-task-result-strict-c633.json",
-          "report_sha256": "c5492caaf0f9f51da7ad5ab3651ea08e09db8ce44ea96bf22fe492b599c201e9",
+          "report": "evidence/order-task-result-strict-d61.json",
+          "report_sha256": "af5e7a49a11521997c98c449adfadf578d78935644416fb7453409d2af8a9ba0",
           "case_id": "order-task-result.status",
           "status": 200,
           "disposition": "owned-pass"
@@ -3787,8 +3787,8 @@
       "disposition": "owned-pass",
       "evidence": [
         {
-          "report": "evidence/order-task-result-strict-c633.json",
-          "report_sha256": "c5492caaf0f9f51da7ad5ab3651ea08e09db8ce44ea96bf22fe492b599c201e9",
+          "report": "evidence/order-task-result-strict-d61.json",
+          "report_sha256": "af5e7a49a11521997c98c449adfadf578d78935644416fb7453409d2af8a9ba0",
           "case_id": "order-task-result.query",
           "status": 200,
           "disposition": "owned-pass"
@@ -3829,8 +3829,8 @@
       "disposition": "owned-pass",
       "evidence": [
         {
-          "report": "evidence/order-task-result-strict-c633.json",
-          "report_sha256": "c5492caaf0f9f51da7ad5ab3651ea08e09db8ce44ea96bf22fe492b599c201e9",
+          "report": "evidence/order-task-result-strict-d61.json",
+          "report_sha256": "af5e7a49a11521997c98c449adfadf578d78935644416fb7453409d2af8a9ba0",
           "case_id": "order-task-result.raw",
           "status": 200,
           "disposition": "owned-pass"
@@ -4037,11 +4037,19 @@
       "source_class": "com.sunwayworld.emc.module.bp.bp.resource.EmcOrderTaskResultResource",
       "source_handler": "inherited.GenericResource",
       "family": "task-integration",
-      "behavior_status": "unknown",
-      "disposition": "unknown",
-      "evidence": [],
+      "behavior_status": "executed-pass",
+      "disposition": "owned-pass",
+      "evidence": [
+        {
+          "report": "evidence/order-task-result-strict-d61.json",
+          "report_sha256": "af5e7a49a11521997c98c449adfadf578d78935644416fb7453409d2af8a9ba0",
+          "case_id": "order-task-result.detail",
+          "status": 200,
+          "disposition": "owned-pass"
+        }
+      ],
       "diagnostic_observations": [],
-      "unknown_reason": "no clone-derived HTTP evidence registered",
+      "unknown_reason": null,
       "boundary_scope": null,
       "route_origin": "project-spring-source",
       "boundary_semantics": "project Spring route",
@@ -4105,11 +4113,19 @@
       "source_class": "com.sunwayworld.emc.module.bp.bp.resource.EmcOrderTaskResultResource",
       "source_handler": "inherited.GenericResource",
       "family": "task-integration",
-      "behavior_status": "unknown",
-      "disposition": "unknown",
-      "evidence": [],
+      "behavior_status": "executed-pass",
+      "disposition": "owned-pass",
+      "evidence": [
+        {
+          "report": "evidence/order-task-result-strict-d61.json",
+          "report_sha256": "af5e7a49a11521997c98c449adfadf578d78935644416fb7453409d2af8a9ba0",
+          "case_id": "order-task-result.print-no-data",
+          "status": 500,
+          "disposition": "owned-pass"
+        }
+      ],
       "diagnostic_observations": [],
-      "unknown_reason": "no clone-derived HTTP evidence registered",
+      "unknown_reason": null,
       "boundary_scope": null,
       "route_origin": "project-spring-source",
       "boundary_semantics": "project Spring route",
@@ -4241,11 +4257,19 @@
       "source_class": "com.sunwayworld.emc.module.bp.bp.resource.EmcOrderTaskResultResource",
       "source_handler": "inherited.GenericResource",
       "family": "task-integration",
-      "behavior_status": "unknown",
-      "disposition": "unknown",
-      "evidence": [],
+      "behavior_status": "executed-pass",
+      "disposition": "owned-pass",
+      "evidence": [
+        {
+          "report": "evidence/order-task-result-strict-d61.json",
+          "report_sha256": "af5e7a49a11521997c98c449adfadf578d78935644416fb7453409d2af8a9ba0",
+          "case_id": "order-task-result.column-no-data",
+          "status": 500,
+          "disposition": "owned-pass"
+        }
+      ],
       "diagnostic_observations": [],
-      "unknown_reason": "no clone-derived HTTP evidence registered",
+      "unknown_reason": null,
       "boundary_scope": null,
       "route_origin": "project-spring-source",
       "boundary_semantics": "project Spring route",
@@ -4275,11 +4299,19 @@
       "source_class": "com.sunwayworld.emc.module.bp.bp.resource.EmcOrderTaskResultResource",
       "source_handler": "inherited.GenericResource",
       "family": "task-integration",
-      "behavior_status": "unknown",
-      "disposition": "unknown",
-      "evidence": [],
+      "behavior_status": "executed-pass",
+      "disposition": "owned-pass",
+      "evidence": [
+        {
+          "report": "evidence/order-task-result-strict-d61.json",
+          "report_sha256": "af5e7a49a11521997c98c449adfadf578d78935644416fb7453409d2af8a9ba0",
+          "case_id": "order-task-result.item-status",
+          "status": 200,
+          "disposition": "owned-pass"
+        }
+      ],
       "diagnostic_observations": [],
-      "unknown_reason": "no clone-derived HTTP evidence registered",
+      "unknown_reason": null,
       "boundary_scope": null,
       "route_origin": "project-spring-source",
       "boundary_semantics": "project Spring route",
@@ -114911,6 +114943,40 @@
       "source_class": "com.sunwayworld.owned.scheduler.OwnedSchedulerIsolatedController",
       "source_handler": "PostMapping",
       "family": "task-integration",
+      "behavior_status": "unknown",
+      "disposition": "unknown",
+      "evidence": [],
+      "diagnostic_observations": [],
+      "unknown_reason": "no clone-derived HTTP evidence registered",
+      "boundary_scope": "owned-source-only",
+      "route_origin": "owned-java-source-only",
+      "boundary_semantics": "owned Java source-only route; boundary route != boundary process",
+      "runtime_model": "same-spring-application"
+    },
+    {
+      "id": "6e5fddd84000ccae",
+      "method": "GET",
+      "path": "/{id}/action/print",
+      "source_class": "com.sunwayworld.owned.internal.web.OwnedOrderTaskResultQueryController",
+      "source_handler": "GetMapping",
+      "family": "page-other",
+      "behavior_status": "unknown",
+      "disposition": "unknown",
+      "evidence": [],
+      "diagnostic_observations": [],
+      "unknown_reason": "no clone-derived HTTP evidence registered",
+      "boundary_scope": "owned-source-only",
+      "route_origin": "owned-java-source-only",
+      "boundary_semantics": "owned Java source-only route; boundary route != boundary process",
+      "runtime_model": "same-spring-application"
+    },
+    {
+      "id": "633c21f935dd4b09",
+      "method": "GET",
+      "path": "/{id}/columns/{column}",
+      "source_class": "com.sunwayworld.owned.internal.web.OwnedOrderTaskResultQueryController",
+      "source_handler": "GetMapping",
+      "family": "page-other",
       "behavior_status": "unknown",
       "disposition": "unknown",
       "evidence": [],

@@ -14,9 +14,9 @@
     "internal_http_bridge": false,
     "jni_replacement_process": false
   },
-  "started_at": "2026-11-01T21:08:14.287278+00:00",
-  "source_commit": "3144ece36a50200cf26563a0fc9d1a1cc2cf2258",
-  "repository_head_at_capture": "3144ece36a50200cf26563a0fc9d1a1cc2cf2258",
+  "started_at": "2026-11-01T21:26:45.649079+00:00",
+  "source_commit": "577c181e01fb10ef030369bc34225db398eb3d28",
+  "repository_head_at_capture": "577c181e01fb10ef030369bc34225db398eb3d28",
   "source_dirty": false,
   "source_scope": [
     "project/src/main/java",
@@ -74,8 +74,8 @@
     "build/oracle-free-source-manifest.json",
     "docker/Dockerfile.built"
   ],
-  "implementation_binding": "impl-2359dbdbdcdf79e6",
-  "implementation_tree_digest": "2359dbdbdcdf79e68d2c660f316aca1882852597431e48b13f99847e2c020f80",
+  "implementation_binding": "impl-d254b87a7f281485",
+  "implementation_tree_digest": "d254b87a7f2814858b021820aec9e0c0e4bb5fb1ebeec818533453fbc1c19fbd",
   "implementation_dirty": false,
   "implementation_scope": [
     "project/src/main/java",
@@ -136,10 +136,10 @@
   "nested_project_commit": "27932b1fe4d71d64a02f9a63e55f56acb403e3a0",
   "distribution_input_digest": "5a958940ac56b8a1f4fdf702229088ad3d5d90dd33fae1555cfa9b7ccf16b978",
   "artifact_sha256": {
-    "lims-recovery/owned-distribution/target/distribution/app/lims-owned-application.jar": "89a6e52d079ac60df12fc0d96172b76fe66e92d3f3f6b75c6c701999e958324f"
+    "lims-recovery/owned-distribution/target/distribution/app/lims-owned-application.jar": "a30559caa3d162b14beb6f1187908c789106191b69e256cd76b666169aa2b23e"
   },
   "clone_identity": "lims-owned-sss2-oracle:LIMS_BASELINE_SSS2:LIMS_RUNTIME_SSS2:4f23874f86afdf6359396917061720b80bbb78b84843b2c533c8fcc2c71689bd",
-  "runtime_report": "/home/ts/qinshan/lims-recovery/.scratch/sunway-supplier-exit-api-first/diagnostic-evidence/runtime/strict-api-runtime-manifest-consumables-searchable-3144.json",
+  "runtime_report": "/home/ts/qinshan/lims-recovery/.scratch/sunway-supplier-exit-api-first/diagnostic-evidence/runtime/strict-api-runtime-manifest-project-task-577c.json",
   "runtime_contract": {
     "mode": "strict",
     "strict_evidence": false,
@@ -151,9 +151,9 @@
     "baseline_schema_hash": "4f23874f86afdf6359396917061720b80bbb78b84843b2c533c8fcc2c71689bd",
     "runtime_schema_hash_before": "674f918ce233701cd851a04a5cac89284ed7f1959201a1248bb091d08907a3b6",
     "runtime_schema_hash_after": "674f918ce233701cd851a04a5cac89284ed7f1959201a1248bb091d08907a3b6",
-    "source_commit": "3144ece36a50200cf26563a0fc9d1a1cc2cf2258",
-    "implementation_binding": "impl-2359dbdbdcdf79e6",
-    "implementation_tree_digest": "2359dbdbdcdf79e68d2c660f316aca1882852597431e48b13f99847e2c020f80",
+    "source_commit": "577c181e01fb10ef030369bc34225db398eb3d28",
+    "implementation_binding": "impl-d254b87a7f281485",
+    "implementation_tree_digest": "d254b87a7f2814858b021820aec9e0c0e4bb5fb1ebeec818533453fbc1c19fbd",
     "implementation_scope": [
       "project/src/main/java",
       "owned-framework/src",
@@ -211,7 +211,7 @@
       "docker/Dockerfile.built"
     ],
     "implementation_dirty": false,
-    "repository_head_at_capture": "3144ece36a50200cf26563a0fc9d1a1cc2cf2258"
+    "repository_head_at_capture": "577c181e01fb10ef030369bc34225db398eb3d28"
   },
   "role": "manager",
   "organization": "org-a",
@@ -235,8 +235,8 @@
         "totalMap",
         "totalPages"
       ],
-      "body_sha256": "c7b5ac50bcee472587ac7ffd4f7d164556fcbbf2c14cf3dab0c9ce07471070e8",
-      "body_bytes": 3108,
+      "body_sha256": "aaa4be05e58829bdb265a8a3e9b6670a98744a72d4ffbad48fa0b8e09322f3e0",
+      "body_bytes": 4551,
       "assertions": {
         "content_type": "application/json",
         "json_keys": [
@@ -252,10 +252,10 @@
           "totalPages"
         ]
       },
-      "id": "consumables-searchable-query",
+      "id": "project-task-project",
       "method": "POST",
-      "path": "/secure/emc/module/item/consume/consumes/queries/searchable",
-      "url": "http://127.0.0.1:28089/secure/emc/module/item/consume/consumes/queries/searchable",
+      "path": "/secure/emc/module/bp/project/projects/queries/tasks",
+      "url": "http://127.0.0.1:28089/secure/emc/module/bp/project/projects/queries/tasks",
       "status": 200,
       "response_headers": {
         "cache-control": "no-store",
@@ -263,22 +263,23 @@
         "x-xss-protection": "1; mode=block",
         "x-frame-options": "SAMEORIGIN",
         "content-type": "application/json",
-        "content-length": "3108",
-        "date": "Sun, 01 Nov 2026 21:08:18 GMT",
+        "content-length": "4551",
+        "date": "Sun, 01 Nov 2026 21:26:48 GMT",
         "connection": "close"
       },
       "request_headers": {
         "content-type": "application/json"
       },
-      "elapsed_ms": 1822.413,
+      "elapsed_ms": 603.569,
       "route": {
         "method": "POST",
-        "path": "/secure/emc/module/item/consume/consumes/queries/searchable",
+        "path": "/secure/emc/module/bp/project/projects/queries/tasks",
         "operation": "read",
         "disposition": "owned-pass",
         "scope": "project-route",
         "route_ids": [
-          "0586be072198494d"
+          "374e94f6cefca4f7",
+          "a1b81767dee66265"
         ]
       },
       "fixture": {
@@ -288,7 +289,7 @@
         "setup": "not-required",
         "restore": "not-required",
         "runtime_values": {
-          "id": "rf251825396be"
+          "id": "rb74dda57f0c7"
         },
         "setup_http": [],
         "restore_http": []
@@ -320,8 +321,8 @@
         "totalMap",
         "totalPages"
       ],
-      "body_sha256": "8d1520112108b4a84f9a76695ac3571fe1ec374940202da83cfddec9f2db0ba1",
-      "body_bytes": 460,
+      "body_sha256": "3b0f4f8f2e5795bb836eae1c87c0653381aebb845b767bdf9b3a47ccec86b557",
+      "body_bytes": 3514,
       "assertions": {
         "content_type": "application/json",
         "json_keys": [
@@ -335,17 +336,12 @@
           "total",
           "totalMap",
           "totalPages"
-        ],
-        "json_values": {
-          "total": 0,
-          "numberOfElements": 0,
-          "totalPages": 0
-        }
+        ]
       },
-      "id": "consumables-searchable-no-match",
+      "id": "project-task-change",
       "method": "POST",
-      "path": "/secure/emc/module/item/consume/consumes/queries/searchable",
-      "url": "http://127.0.0.1:28089/secure/emc/module/item/consume/consumes/queries/searchable",
+      "path": "/secure/emc/module/bp/edit/project-change/projects/queries/tasks",
+      "url": "http://127.0.0.1:28089/secure/emc/module/bp/edit/project-change/projects/queries/tasks",
       "status": 200,
       "response_headers": {
         "cache-control": "no-store",
@@ -353,22 +349,22 @@
         "x-xss-protection": "1; mode=block",
         "x-frame-options": "SAMEORIGIN",
         "content-type": "application/json",
-        "content-length": "460",
-        "date": "Sun, 01 Nov 2026 21:08:19 GMT",
+        "content-length": "3514",
+        "date": "Sun, 01 Nov 2026 21:26:48 GMT",
         "connection": "close"
       },
       "request_headers": {
         "content-type": "application/json"
       },
-      "elapsed_ms": 1293.293,
+      "elapsed_ms": 660.875,
       "route": {
         "method": "POST",
-        "path": "/secure/emc/module/item/consume/consumes/queries/searchable",
+        "path": "/secure/emc/module/bp/edit/project-change/projects/queries/tasks",
         "operation": "read",
         "disposition": "owned-pass",
         "scope": "project-route",
         "route_ids": [
-          "0586be072198494d"
+          "7aafaa4aafce7647"
         ]
       },
       "fixture": {
@@ -378,7 +374,7 @@
         "setup": "not-required",
         "restore": "not-required",
         "runtime_values": {
-          "id": "redac85ab2760"
+          "id": "rd895f2d348e6"
         },
         "setup_http": [],
         "restore_http": []
@@ -412,13 +408,13 @@
   },
   "cleanup_pending": false,
   "phase_timings_ms": {
-    "http_cases": 3817.556
+    "http_cases": 1930.457
   },
   "authentication": {
     "attempted": true,
     "authenticated": true,
     "status": 200
   },
-  "finished_at": "2026-11-01T21:08:18.104878+00:00",
-  "cleanup_finalized_at": "2026-11-01T21:08:18.858428+00:00"
+  "finished_at": "2026-11-01T21:26:47.579584+00:00",
+  "cleanup_finalized_at": "2026-11-01T21:26:48.255621+00:00"
 }

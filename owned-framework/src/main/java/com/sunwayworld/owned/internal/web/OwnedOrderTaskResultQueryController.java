@@ -20,6 +20,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.sql.DataSource;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -348,7 +349,7 @@ public final class OwnedOrderTaskResultQueryController {
             PREFIX + "/gas-parameter-result/table-heads/queries",
             PREFIX + "/gas-parameter/table-rows/queries",
             PREFIX + "/gas-parameter-result/table-rows/queries"
-            }, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+            }, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> gasParameterTable(HttpServletRequest request,
             @RequestBody(required = false) String body) {
         try {
@@ -600,12 +601,14 @@ public final class OwnedOrderTaskResultQueryController {
     private static ResponseEntity<String> unexpected(String path) {
         String safePath = path == null ? "" : path.replace("\\", "\\\\").replace("\"", "\\\"");
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .header(HttpHeaders.CONTENT_TYPE, "")
                 .body("{\"error\":\"Internal Server Error\",\"message\":\"GIKAM.EXCEPTION.UNEXPECTED\",\"path\":\""
                         + safePath + "\",\"status\":500,\"timestamp\":" + System.currentTimeMillis() + "}");
     }
     private static ResponseEntity<String> gasUnexpected(String path) {
         String safePath = path == null ? "" : path.replace("\\", "\\\\").replace("\"", "\\\"");
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .header(HttpHeaders.CONTENT_TYPE, "")
                 .body("{\"error\":\"Internal Server Error\",\"message\":\"core.rest.json.unable-parse-unique-bean\",\"path\":\""
                         + safePath + "\",\"status\":500,\"timestamp\":" + System.currentTimeMillis() + "}");
     }

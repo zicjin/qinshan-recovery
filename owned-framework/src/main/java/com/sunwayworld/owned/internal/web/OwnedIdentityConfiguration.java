@@ -328,4 +328,11 @@ public class OwnedIdentityConfiguration {
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
         return new OwnedOaGenericResourceController(boundary, dataSource);
     }
+
+    @Bean
+    @ConditionalOnMissingBean(OwnedCrmOpportunityOrdtaskController.class)
+    public OwnedCrmOpportunityOrdtaskController ownedCrmOpportunityOrdtaskController(
+            OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
+        return new OwnedCrmOpportunityOrdtaskController(boundary, dataSource);
+    }
 }

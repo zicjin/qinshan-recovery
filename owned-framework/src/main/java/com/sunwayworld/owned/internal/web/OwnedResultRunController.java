@@ -41,10 +41,26 @@ public final class OwnedResultRunController {
         this.boundary = boundary; this.dataSource = dataSource;
     }
 
-    @PostMapping(path = {"/secure/core/module/bp/result/runs/queries/raw",
-            "/secure/emc/module/bp/result/runs/queries/raw"},
+    @PostMapping(path = {
+            "/secure/core/module/bp/result/runs/queries",
+            "/secure/core/module/bp/result/runs/queries/raw",
+            "/secure/core/module/bp/result/runs/queries/searchable",
+            "/secure/core/module/bp/result/runs/queries/roles/{roleId}",
+            "/secure/core/module/bp/result/runs/queries/tasks",
+            "/secure/core/module/bp/result/runs/queries/undoable",
+            "/secure/core/module/bp/result/runs/queries/withdrawable",
+            "/secure/core/module/bp/result/runs/queries/all",
+            "/secure/emc/module/bp/result/runs/queries",
+            "/secure/emc/module/bp/result/runs/queries/raw",
+            "/secure/emc/module/bp/result/runs/queries/searchable",
+            "/secure/emc/module/bp/result/runs/queries/roles/{roleId}",
+            "/secure/emc/module/bp/result/runs/queries/tasks",
+            "/secure/emc/module/bp/result/runs/queries/undoable",
+            "/secure/emc/module/bp/result/runs/queries/withdrawable",
+            "/secure/emc/module/bp/result/runs/queries/all"},
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> query(HttpServletRequest request,
+            @PathVariable(value = "roleId", required = false) String roleId,
             @org.springframework.web.bind.annotation.RequestBody(required = false) String body) {
         try {
             OwnedPrincipal principal = require(request);
@@ -69,7 +85,9 @@ public final class OwnedResultRunController {
     }
 
     @GetMapping(path = {"/secure/core/module/bp/result/runs/info/status",
-            "/secure/emc/module/bp/result/runs/info/status"}, produces = MediaType.APPLICATION_JSON_VALUE)
+            "/secure/core/module/bp/result/runs/{id}/info/status",
+            "/secure/emc/module/bp/result/runs/info/status",
+            "/secure/emc/module/bp/result/runs/{id}/info/status"}, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> status(HttpServletRequest request) {
         try {
             require(request);
@@ -89,14 +107,20 @@ public final class OwnedResultRunController {
     private QueryResult readRuns(String organization, String runNo, String status) throws SQLException {
         List<Map<String, Object>> rows = new ArrayList<Map<String, Object>>();
         Map<String, String> types = new LinkedHashMap<String, String>();
-        StringBuilder sql = new StringBuilder("SELECT * FROM T_EMC_RUN WHERE ORGID=?");
+        StringBuilder sql = new StringBuilder(
+                "SELECT A.*,D.EQUIPTNAME,D.EQUIPTID AS EQUIPTCODE,M.MAXELNTMPLID,M.METHODNAME,"
+                + "S1.SOLNAME AS SOL1NAME,S2.SOLNAME AS SOL2NAME,S1.SOLNO AS SOL1NO,S2.SOLNO AS SOL2NO,"
+                + "R.REAGENTNAME FROM T_EMC_RUN A LEFT JOIN T_EMC_EQUIPT D ON A.EQUIPTID=D.ID "
+                + "LEFT JOIN T_EMC_METHOD M ON A.METHODID=M.ID LEFT JOIN T_EMC_SOL S1 ON A.SOL1ID=S1.ID "
+                + "LEFT JOIN T_EMC_SOL S2 ON A.SOL2ID=S2.ID LEFT JOIN T_EMC_REAGENT R ON A.REAGENTID=R.ID "
+                + "WHERE A.ORGID=?");
         List<String> values = new ArrayList<String>(); values.add(organization);
         // The cloned production table has no RUNNO column.  The original
         // selector labels this input as a run number, but the stable owned
         // seam can safely resolve it against the real ID column.
-        if (runNo != null && runNo.length() != 0) { sql.append(" AND ID=?"); values.add(runNo); }
-        if (status != null && status.length() != 0) { sql.append(" AND STATUS=?"); values.add(status); }
-        sql.append(" ORDER BY ID DESC");
+        if (runNo != null && runNo.length() != 0) { sql.append(" AND A.ID=?"); values.add(runNo); }
+        if (status != null && status.length() != 0) { sql.append(" AND A.STATUS=?"); values.add(status); }
+        sql.append(" ORDER BY A.ID DESC");
         try (Connection connection = dataSource.getConnection(); PreparedStatement query = connection.prepareStatement(sql.toString())) {
             for (int i = 0; i < values.size(); i++) query.setString(i + 1, values.get(i));
             try (ResultSet result = query.executeQuery()) {

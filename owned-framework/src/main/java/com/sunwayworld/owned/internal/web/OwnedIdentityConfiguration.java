@@ -321,4 +321,11 @@ public class OwnedIdentityConfiguration {
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
         return new OwnedEquipmentMdmResourceController(boundary, dataSource);
     }
+
+    @Bean
+    @ConditionalOnMissingBean(OwnedOaGenericResourceController.class)
+    public OwnedOaGenericResourceController ownedOaGenericResourceController(
+            OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
+        return new OwnedOaGenericResourceController(boundary, dataSource);
+    }
 }

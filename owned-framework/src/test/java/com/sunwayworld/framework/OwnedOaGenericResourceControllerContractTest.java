@@ -1,0 +1,6 @@
+package com.sunwayworld.framework;
+import com.sunwayworld.owned.internal.web.OwnedOaGenericResourceController;
+import java.lang.reflect.*;import java.util.*;import org.springframework.web.bind.annotation.*;
+public final class OwnedOaGenericResourceControllerContractTest {
+ public static void main(String[] args) throws Exception { Set<String> paths=new HashSet<String>(); for(Method m:OwnedOaGenericResourceController.class.getDeclaredMethods()){PostMapping p=m.getAnnotation(PostMapping.class); if(p!=null) for(String v:p.path()) paths.add(v); GetMapping g=m.getAnnotation(GetMapping.class); if(g!=null) for(String v:g.path()) paths.add(v);} String[] rs={"oa-areas","oa-banks","oa-clients","oa-equipts","oa-new-clients","oa-orgs","oa-users"}; for(String r:rs){ if(!paths.contains("/secure/emc/module/mdm/"+r+"/queries"))throw new AssertionError(r+" query missing"); if(!paths.contains("/secure/emc/module/mdm/"+r+"/queries/raw"))throw new AssertionError(r+" raw missing"); if(!paths.contains("/secure/emc/module/mdm/"+r+"/queries/searchable"))throw new AssertionError(r+" searchable missing"); if(!paths.contains("/secure/emc/module/mdm/"+r+"/info/status"))throw new AssertionError(r+" status missing"); } System.out.println("owned OA generic resource contract checks passed"); }
+}

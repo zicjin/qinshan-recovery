@@ -18,6 +18,8 @@ public final class OwnedOrderTaskResultQueryControllerContractTest {
         require(paths, PREFIX + "/queries");
         require(paths, PREFIX + "/queries/raw");
         require(paths, PREFIX + "/queries/searchable");
+        require(paths, PREFIX + "/data-query-titles/queries");
+        require(paths, PREFIX + "/data-query-rows/queries");
         require(paths, PREFIX + "/info/status");
         require(paths, PREFIX + "/{id}/info/status");
         require(paths, PREFIX + "/{id}");

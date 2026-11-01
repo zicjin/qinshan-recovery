@@ -82,6 +82,84 @@ public final class OwnedOrderTaskResultQueryController {
         catch (SQLException failure) { return unavailable(); }
     }
 
+    /**
+     * Read-only data-query aliases used by the original result workspace.
+     * They are backed by the same result projection and organization seam as
+     * the inherited resource; no second service or bridge is introduced.
+     */
+    @PostMapping(path = PREFIX + "/data-query-titles/queries",
+            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> dataQueryTitles(HttpServletRequest request,
+            @RequestBody(required = false) String body) {
+        try {
+            OwnedPrincipal principal = requireRead(request);
+            List<Map<String, Object>> source = selectResultRows(principal.getOrgId());
+            Map<String, String> titles = new LinkedHashMap<String, String>();
+            for (Map<String, Object> item : source) {
+                String colId = dataColumnId(item);
+                if (!titles.containsKey(colId)) {
+                    Object alias = item.get("itemAliasName");
+                    titles.put(colId, "<font color=\"blue\">" + (alias == null ? "" : alias) + "</font>");
+                }
+            }
+            List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
+            for (Map.Entry<String, String> title : titles.entrySet()) {
+                Map<String, Object> head = new LinkedHashMap<String, Object>();
+                head.put("field", title.getKey());
+                head.put("title", title.getValue());
+                result.add(head);
+            }
+            return ok(JSON.toJSONString(result, SerializerFeature.WriteMapNullValue));
+        } catch (AccessDeniedException denied) { return forbidden(); }
+        catch (IllegalArgumentException invalid) { return badRequest(); }
+        catch (SQLException failure) { return unavailable(); }
+    }
+
+    @PostMapping(path = PREFIX + "/data-query-rows/queries",
+            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> dataQueryRows(HttpServletRequest request,
+            @RequestBody(required = false) String body) {
+        try {
+            OwnedPrincipal principal = requireRead(request);
+            List<Map<String, Object>> source = selectResultRows(principal.getOrgId());
+            Map<String, Map<String, Object>> grouped = new LinkedHashMap<String, Map<String, Object>>();
+            Map<String, String> columnTypes = new LinkedHashMap<String, String>();
+            for (Map<String, Object> item : source) {
+                String rowNo = String.valueOf(item.get("orderNo"));
+                Map<String, Object> row = grouped.get(rowNo);
+                if (row == null) {
+                    row = new LinkedHashMap<String, Object>();
+                    row.put("rowNo", rowNo);
+                    row.put("orderNo", item.get("orderNo"));
+                    row.put("projNo", item.get("projNo"));
+                    row.put("projName", item.get("projName"));
+                    row.put("testOrgName", item.get("testOrgName"));
+                    row.put("monitorPointName", item.get("monitorPointName"));
+                    row.put("sampleBeginDate", item.get("sampleBeginDate"));
+                    grouped.put(rowNo, row);
+                }
+                String colId = dataColumnId(item);
+                row.put(colId, item.get("reportResult"));
+                columnTypes.put(colId, "string");
+            }
+            List<Map<String, Object>> rows = new ArrayList<Map<String, Object>>(grouped.values());
+            Map<String, Object> envelope = new LinkedHashMap<String, Object>();
+            envelope.put("columnTypeMap", columnTypes);
+            envelope.put("first", true);
+            envelope.put("last", true);
+            envelope.put("numberOfElements", rows.size());
+            envelope.put("pageNumber", 1);
+            envelope.put("pageSize", rows.isEmpty() ? 0 : rows.size());
+            envelope.put("rows", rows);
+            envelope.put("total", rows.size());
+            envelope.put("totalMap", new LinkedHashMap<String, Object>());
+            envelope.put("totalPages", rows.isEmpty() ? 0 : 1);
+            return ok(JSON.toJSONString(envelope, SerializerFeature.WriteMapNullValue));
+        } catch (AccessDeniedException denied) { return forbidden(); }
+        catch (IllegalArgumentException invalid) { return badRequest(); }
+        catch (SQLException failure) { return unavailable(); }
+    }
+
     @GetMapping(path = {PREFIX + "/info/status", PREFIX + "/{id}/info/status"},
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> status(HttpServletRequest request) {
@@ -179,6 +257,24 @@ public final class OwnedOrderTaskResultQueryController {
         envelope.put("totalMap", totals);
         envelope.put("totalPages", pages(total, page.size));
         return JSON.toJSONString(envelope, SerializerFeature.WriteMapNullValue);
+    }
+
+    private List<Map<String, Object>> selectResultRows(String organization) throws SQLException {
+        List<Map<String, Object>> rows = new ArrayList<Map<String, Object>>();
+        String sql = BASE_SQL + " WHERE A.CREATEDBYORGID=? ORDER BY A.ID DESC";
+        try (Connection connection = dataSource.getConnection(); PreparedStatement query = connection.prepareStatement(sql)) {
+            query.setString(1, organization);
+            try (ResultSet result = query.executeQuery()) {
+                ResultSetMetaData metadata = result.getMetaData();
+                while (result.next() && rows.size() < 1000) rows.add(row(result, metadata));
+            }
+        }
+        return rows;
+    }
+
+    private static String dataColumnId(Map<String, Object> row) {
+        return String.valueOf(row.get("testId")) + String.valueOf(row.get("itemId"))
+                + String.valueOf(row.get("repeatNo"));
     }
 
     private static Map<String, Object> row(ResultSet result, ResultSetMetaData metadata) throws SQLException {

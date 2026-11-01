@@ -1,12 +1,12 @@
 {
   "schema": 1,
   "scope": "current-head-spring-web-api-route-closure",
-  "generated_at": "2026-11-01T04:47:39.884981+00:00",
-  "source_commit": "79bbc87f7aa570e2ff53e59fa2617615b2f297e6",
-  "repository_head_at_capture": "79bbc87f7aa570e2ff53e59fa2617615b2f297e6",
+  "generated_at": "2026-11-01T05:28:58.223152+00:00",
+  "source_commit": "3006b11da34ea4b32c88f1a63ba6fa8aea227730",
+  "repository_head_at_capture": "3006b11da34ea4b32c88f1a63ba6fa8aea227730",
   "source_dirty": false,
-  "implementation_binding": "impl-c8b9e7b55581c8da",
-  "implementation_tree_digest": "c8b9e7b55581c8daf7e2caa3264873b842f7ae1fb7e7e16f0c71f1cde75bfaa4",
+  "implementation_binding": "impl-633dd198a870eff3",
+  "implementation_tree_digest": "633dd198a870eff368031b937a6b72ecd2e77646b4815b8d901e57e02899e78d",
   "implementation_dirty": false,
   "implementation_scope": [
     "project/src/main/java",
@@ -149,14 +149,14 @@
   "failures": [],
   "reports": [
     {
-      "path": "evidence/result-run-strict-c8.json",
-      "sha256": "2293690a1e52fbda858ba2d20ee3e370522a4cd32671f45e62f2ee8878a4df49",
+      "path": "evidence/order-task-result-strict-c633.json",
+      "sha256": "c5492caaf0f9f51da7ad5ab3651ea08e09db8ce44ea96bf22fe492b599c201e9",
       "status": "executed-pass",
       "strict_evidence": true,
-      "source_commit": "79bbc87f7aa570e2ff53e59fa2617615b2f297e6",
-      "repository_head_at_capture": "79bbc87f7aa570e2ff53e59fa2617615b2f297e6",
-      "implementation_binding": "impl-c8b9e7b55581c8da",
-      "implementation_tree_digest": "c8b9e7b55581c8daf7e2caa3264873b842f7ae1fb7e7e16f0c71f1cde75bfaa4",
+      "source_commit": "3006b11da34ea4b32c88f1a63ba6fa8aea227730",
+      "repository_head_at_capture": "3006b11da34ea4b32c88f1a63ba6fa8aea227730",
+      "implementation_binding": "impl-633dd198a870eff3",
+      "implementation_tree_digest": "633dd198a870eff368031b937a6b72ecd2e77646b4815b8d901e57e02899e78d",
       "implementation_dirty": false,
       "strict_contract": "strict report contract valid"
     }
@@ -3639,11 +3639,19 @@
       "source_class": "com.sunwayworld.emc.module.bp.bp.resource.EmcOrderTaskResultResource",
       "source_handler": "inherited.GenericResource",
       "family": "task-integration",
-      "behavior_status": "unknown",
-      "disposition": "unknown",
-      "evidence": [],
+      "behavior_status": "executed-pass",
+      "disposition": "owned-pass",
+      "evidence": [
+        {
+          "report": "evidence/order-task-result-strict-c633.json",
+          "report_sha256": "c5492caaf0f9f51da7ad5ab3651ea08e09db8ce44ea96bf22fe492b599c201e9",
+          "case_id": "order-task-result.status",
+          "status": 200,
+          "disposition": "owned-pass"
+        }
+      ],
       "diagnostic_observations": [],
-      "unknown_reason": "no clone-derived HTTP evidence registered",
+      "unknown_reason": null,
       "boundary_scope": null,
       "route_origin": "project-spring-source",
       "boundary_semantics": "project Spring route",
@@ -3775,11 +3783,19 @@
       "source_class": "com.sunwayworld.emc.module.bp.bp.resource.EmcOrderTaskResultResource",
       "source_handler": "inherited.GenericResource",
       "family": "task-integration",
-      "behavior_status": "unknown",
-      "disposition": "unknown",
-      "evidence": [],
+      "behavior_status": "executed-pass",
+      "disposition": "owned-pass",
+      "evidence": [
+        {
+          "report": "evidence/order-task-result-strict-c633.json",
+          "report_sha256": "c5492caaf0f9f51da7ad5ab3651ea08e09db8ce44ea96bf22fe492b599c201e9",
+          "case_id": "order-task-result.query",
+          "status": 200,
+          "disposition": "owned-pass"
+        }
+      ],
       "diagnostic_observations": [],
-      "unknown_reason": "no clone-derived HTTP evidence registered",
+      "unknown_reason": null,
       "boundary_scope": null,
       "route_origin": "project-spring-source",
       "boundary_semantics": "project Spring route",
@@ -3809,11 +3825,19 @@
       "source_class": "com.sunwayworld.emc.module.bp.bp.resource.EmcOrderTaskResultResource",
       "source_handler": "inherited.GenericResource",
       "family": "task-integration",
-      "behavior_status": "unknown",
-      "disposition": "unknown",
-      "evidence": [],
+      "behavior_status": "executed-pass",
+      "disposition": "owned-pass",
+      "evidence": [
+        {
+          "report": "evidence/order-task-result-strict-c633.json",
+          "report_sha256": "c5492caaf0f9f51da7ad5ab3651ea08e09db8ce44ea96bf22fe492b599c201e9",
+          "case_id": "order-task-result.raw",
+          "status": 200,
+          "disposition": "owned-pass"
+        }
+      ],
       "diagnostic_observations": [],
-      "unknown_reason": "no clone-derived HTTP evidence registered",
+      "unknown_reason": null,
       "boundary_scope": null,
       "route_origin": "project-spring-source",
       "boundary_semantics": "project Spring route",
@@ -33729,19 +33753,11 @@
       "source_class": "com.sunwayworld.emc.module.bp.result.run.resource.EmcRunResource",
       "source_handler": "inherited.GenericResource",
       "family": "result-order-project",
-      "behavior_status": "executed-pass",
-      "disposition": "owned-pass",
-      "evidence": [
-        {
-          "report": "evidence/result-run-strict-c8.json",
-          "report_sha256": "2293690a1e52fbda858ba2d20ee3e370522a4cd32671f45e62f2ee8878a4df49",
-          "case_id": "result-run.status",
-          "status": 200,
-          "disposition": "owned-pass"
-        }
-      ],
+      "behavior_status": "unknown",
+      "disposition": "unknown",
+      "evidence": [],
       "diagnostic_observations": [],
-      "unknown_reason": null,
+      "unknown_reason": "no clone-derived HTTP evidence registered",
       "boundary_scope": null,
       "route_origin": "project-spring-source",
       "boundary_semantics": "project Spring route",
@@ -34910,19 +34926,11 @@
       "source_class": "com.sunwayworld.emc.module.bp.result.run.resource.EmcRunResource",
       "source_handler": "inherited.GenericResource",
       "family": "result-order-project",
-      "behavior_status": "executed-pass",
-      "disposition": "owned-pass",
-      "evidence": [
-        {
-          "report": "evidence/result-run-strict-c8.json",
-          "report_sha256": "2293690a1e52fbda858ba2d20ee3e370522a4cd32671f45e62f2ee8878a4df49",
-          "case_id": "result-run.query.raw",
-          "status": 200,
-          "disposition": "owned-pass"
-        }
-      ],
+      "behavior_status": "unknown",
+      "disposition": "unknown",
+      "evidence": [],
       "diagnostic_observations": [],
-      "unknown_reason": null,
+      "unknown_reason": "no clone-derived HTTP evidence registered",
       "boundary_scope": null,
       "route_origin": "project-spring-source",
       "boundary_semantics": "project Spring route",
@@ -35207,26 +35215,11 @@
       "source_class": "com.sunwayworld.emc.module.bp.result.run.resource.EmcRunResource",
       "source_handler": "inherited.GenericResource",
       "family": "result-order-project",
-      "behavior_status": "executed-pass",
-      "disposition": "owned-pass",
-      "evidence": [
-        {
-          "report": "evidence/result-run-strict-c8.json",
-          "report_sha256": "2293690a1e52fbda858ba2d20ee3e370522a4cd32671f45e62f2ee8878a4df49",
-          "case_id": "result-run.detail.no-match",
-          "status": 200,
-          "disposition": "owned-pass"
-        },
-        {
-          "report": "evidence/result-run-strict-c8.json",
-          "report_sha256": "2293690a1e52fbda858ba2d20ee3e370522a4cd32671f45e62f2ee8878a4df49",
-          "case_id": "result-run.invalid-id",
-          "status": 400,
-          "disposition": "owned-pass"
-        }
-      ],
+      "behavior_status": "unknown",
+      "disposition": "unknown",
+      "evidence": [],
       "diagnostic_observations": [],
-      "unknown_reason": null,
+      "unknown_reason": "no clone-derived HTTP evidence registered",
       "boundary_scope": null,
       "route_origin": "project-spring-source",
       "boundary_semantics": "project Spring route",

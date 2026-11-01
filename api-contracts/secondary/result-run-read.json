@@ -1,0 +1,36 @@
+{
+  "schema": 1,
+  "family": "secondary",
+  "description": "Result-run inherited/resource read aliases on the owned Java seam.",
+  "cases": [
+    {
+      "id": "result-run.query",
+      "method": "POST",
+      "path": "/secure/emc/module/bp/result/runs/queries",
+      "route_id": "c2f7d7724f46f28d",
+      "operation": "read",
+      "scope": "project-route",
+      "disposition": "owned-pass",
+      "behavior_family": "result-run-read",
+      "body": {"p": {"n": 1, "s": 10}},
+      "expected_status": 200,
+      "assert": {"json_keys": ["columnTypeMap", "rows", "total", "totalPages"]},
+      "fixture": "none",
+      "audit": "not-required"
+    },
+    {
+      "id": "result-run.status",
+      "method": "GET",
+      "path": "/secure/emc/module/bp/result/runs/info/status",
+      "route_id": "9eef726bdf8676e0",
+      "operation": "read",
+      "scope": "project-route",
+      "disposition": "owned-pass",
+      "behavior_family": "result-run-status",
+      "expected_status": 200,
+      "assert": {"json_keys": ["auditStatus", "ext$"]},
+      "fixture": "none",
+      "audit": "not-required"
+    }
+  ]
+}

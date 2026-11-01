@@ -614,7 +614,7 @@ public final class OwnedOrderTaskResultQueryController {
     private static ResponseEntity<String> writeRawError(HttpServletResponse response, String message, String path) {
         String body = "{\"error\":\"Internal Server Error\",\"message\":\"" + message
                 + "\",\"path\":\"" + path + "\",\"status\":500,\"timestamp\":"
-                + System.currentTimeMillis() + "}";
+                + System.currentTimeMillis() + ",\"stacktrace\":\"\"}";
         try {
             response.resetBuffer();
             response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());

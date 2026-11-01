@@ -1,0 +1,36 @@
+{
+  "schema": 1,
+  "family": "secondary",
+  "description": "Order-task aggregate query and status contracts for the owned Java resource seam.",
+  "cases": [
+    {
+      "id": "order-task.group-by-test",
+      "method": "POST",
+      "path": "/secure/emc/module/bp/bp/order-tasks/queries/group-by-test",
+      "route_id": "e4c24c8c075d70fa",
+      "operation": "read",
+      "scope": "project-route",
+      "disposition": "owned-pass",
+      "behavior_family": "order-task-aggregate",
+      "body": {"q": {"sampleId": "0"}, "p": {"n": 1, "s": 10}},
+      "expected_status": 200,
+      "assert": {"json_keys": ["columnTypeMap", "rows", "total", "totalPages"]},
+      "fixture": "none",
+      "audit": "not-required"
+    },
+    {
+      "id": "order-task.status",
+      "method": "GET",
+      "path": "/secure/emc/module/bp/bp/order-tasks/info/status",
+      "route_id": "0aea61c274f8b924",
+      "operation": "read",
+      "scope": "project-route",
+      "disposition": "owned-pass",
+      "behavior_family": "order-task-status",
+      "expected_status": 200,
+      "assert": {"json_keys": ["ext$"]},
+      "fixture": "none",
+      "audit": "not-required"
+    }
+  ]
+}

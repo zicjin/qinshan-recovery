@@ -50,7 +50,7 @@ public final class OwnedOrderRetainController {
         try {
             OwnedPrincipal principal = require(request);
             JSONObject filter = object(body);
-            return ok(page(read(principal.getOrgId(), text(filter.get("orderNo")))));
+            return ok(page(read(principal.getOrgId(), text(filter.get("orderNo"))), pageSize(body)));
         } catch (AccessDeniedException denied) { return forbidden(); }
         catch (IllegalArgumentException invalid) { return badRequest(); }
         catch (SQLException failure) { return unavailable(); }
@@ -76,7 +76,7 @@ public final class OwnedOrderRetainController {
     public ResponseEntity<String> status(HttpServletRequest request) {
         try {
             boundary.requireOrderRetainRead(request.getSession(false));
-            return ok("{\"ext$\":{}}");
+            return ok("{\"auditStatus\":{\"processStatus\":\"draft\",\"statusCode\":\"draft\"},\"ext$\":{}}");
         } catch (AccessDeniedException denied) { return forbidden(); }
         catch (SQLException failure) { return unavailable(); }
     }
@@ -107,7 +107,32 @@ public final class OwnedOrderRetainController {
     }
     private static JSONObject object(String body){if(body==null||body.trim().length()==0)return new JSONObject();Object value=JSON.parse(body);if(!(value instanceof JSONObject))throw new IllegalArgumentException("request must be an object");JSONObject object=(JSONObject)value;return object.containsKey("p")?object.getJSONObject("p"):object;}
     private static String text(Object value){return value==null?"":String.valueOf(value).trim();}
-    private static String page(List<Map<String,Object>> rows){Map<String,Object> body=new LinkedHashMap<String,Object>();body.put("total",rows.size());body.put("pageNumber",1);body.put("pageSize",rows.size());body.put("rows",rows);return JSON.toJSONString(body,SerializerFeature.WriteMapNullValue);}
+    private static int pageSize(String body){
+        if(body==null||body.trim().length()==0)return 50;
+        try{
+            JSONObject root=JSON.parseObject(body);
+            JSONObject p=root==null?null:root.getJSONObject("p");
+            int size=p==null?50:p.getIntValue("s");
+            return size<=0?50:Math.min(size,500);
+        }catch(RuntimeException ignored){return 50;}
+    }
+    private static String page(List<Map<String,Object>> rows,int requestedSize){
+        Map<String,Object> body=new LinkedHashMap<String,Object>();
+        body.put("columnTypeMap",profile());
+        body.put("first",true); body.put("last",true);
+        body.put("numberOfElements",rows.size()); body.put("pageNumber",1);
+        body.put("pageSize",requestedSize); body.put("rows",rows);
+        body.put("total",rows.size());
+        Map<String,Object> total=new LinkedHashMap<String,Object>(); total.put("qty_",rows.size());
+        body.put("totalMap",total); body.put("totalPages",rows.isEmpty()?0:1);
+        return JSON.toJSONString(body,SerializerFeature.WriteMapNullValue);
+    }
+    private static Map<String,String> profile(){
+        String encoded="processstatus=string;orderno=string;projno=string;samplecompletedate=dateTime;createdbyid=string;retaintimelimit=dateTime;handlerecord=string;folderid=number;retaindate=dateTime;handleuserid=string;retainuserid=string;projname=string;retainusername=string;createdbyorgname=string;id=number;projid=number;rn_=number;orderid=number;createdbyorgid=string;handledate=dateTime;folderno=string;retainindex=string;createdtime=dateTime;handleusernames=string;handleusername=string;retainqty=number;isretain=string;retaindays=number;createdbyname=string;retainloc=string";
+        Map<String,String> values=new LinkedHashMap<String,String>();
+        for(String token:encoded.split(";")){int split=token.indexOf('=');if(split>0)values.put(token.substring(0,split),token.substring(split+1));}
+        return values;
+    }
     private static String friendly(String name){String upper=name.toUpperCase();if("ID".equals(upper))return "id";if("ORDERID".equals(upper))return "orderId";if("ORDERNO".equals(upper))return "orderNo";if("ORDERORGID".equals(upper))return "orgId";if("RETAINQTY".equals(upper))return "retainQty";if("RETAINLOC".equals(upper))return "retainLoc";if("RETAINTIMELIMIT".equals(upper))return "retainTimeLimit";StringBuilder result=new StringBuilder();boolean next=false;for(char c:name.toLowerCase().toCharArray()){if(c=='_'){next=true;continue;}result.append(next?Character.toUpperCase(c):c);next=false;}return result.toString();}
     private static ResponseEntity<String> ok(String body){return ResponseEntity.ok().header("Cache-Control","no-store").body(body);}
     private static ResponseEntity<String> forbidden(){return ResponseEntity.status(HttpStatus.FORBIDDEN).body("{\"message\":\"GIKAM.PERMISSION.UNAUTHORIZED\"}");}

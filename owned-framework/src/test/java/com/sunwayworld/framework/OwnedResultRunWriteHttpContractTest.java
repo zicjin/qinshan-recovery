@@ -56,6 +56,12 @@ public final class OwnedResultRunWriteHttpContractTest {
         int port = tomcat.getConnector().getLocalPort();
         try {
             String manager = login(port, "manager", "secret"); String reader = login(port, "reader", "secret");
+            String query = request(port, "POST", "/secure/emc/module/bp/result/runs/queries/raw", "{\"p\":{\"n\":1,\"s\":10}}", manager, 200);
+            check(query.contains("columnTypeMap") && query.contains("totalPages"), "supplier result-run query envelope is exposed on emc alias");
+            String statusProbe = request(port, "GET", "/secure/emc/module/bp/result/runs/info/status", "", manager, 200);
+            check(statusProbe.contains("auditStatus") && statusProbe.contains("ext$"), "supplier result-run status envelope is exposed on emc alias");
+            String detail = request(port, "GET", "/secure/emc/module/bp/result/runs/1", "", manager, 200);
+            check(detail.contains("\"id\":\"1\""), "supplier result-run detail is exposed on emc alias");
             String updated = request(port, "PUT", "/secure/core/module/bp/result/runs/1", "{\"p\":{\"status\":\"done\"}}", manager, 200);
             check(updated.contains("\"updated\":1"), "same-organization result status update returns count");
             check(status(dataSource, 1).equals("done"), "same-organization result status persisted");
@@ -73,7 +79,7 @@ public final class OwnedResultRunWriteHttpContractTest {
             }
             check(allowed, "result status update audit is recorded"); check(denied, "result status denial audit is recorded");
             System.out.println("RESULT_RUN_WRITE|manager|org-a|isolated|PASS");
-            System.out.println("owned result-run write HTTP: PASS (8 checks; synthetic Oracle only)");
+            System.out.println("owned result-run read/write HTTP: PASS (11 checks; synthetic Oracle only)");
         } finally {
             tomcat.stop(); tomcat.destroy(); application.close(); System.clearProperty("owned.result.write.mode"); cleanup(dataSource);
         }

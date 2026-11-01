@@ -12,6 +12,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -23,6 +24,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -39,21 +41,22 @@ public final class OwnedResultRunController {
         this.boundary = boundary; this.dataSource = dataSource;
     }
 
-    @PostMapping(path = "/secure/core/module/bp/result/runs/queries/raw",
+    @PostMapping(path = {"/secure/core/module/bp/result/runs/queries/raw",
+            "/secure/emc/module/bp/result/runs/queries/raw"},
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> query(HttpServletRequest request,
             @org.springframework.web.bind.annotation.RequestBody(required = false) String body) {
         try {
             OwnedPrincipal principal = require(request);
             JSONObject filter = object(body);
-            return ok(page(readRuns(principal.getOrgId(), text(filter.get("runNo")), text(filter.get("status")))));
+            return ok(page(readRuns(principal.getOrgId(), text(filter.get("runNo")), text(filter.get("status"))), pageSize(filter)));
         } catch (AccessDeniedException denied) { return forbidden(); }
         catch (IllegalArgumentException invalid) { return badRequest(); }
         catch (SQLException failure) { return unavailable(); }
     }
 
-    @PostMapping(path = "/secure/core/module/bp/result/runs/{id}",
-            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path = {"/secure/core/module/bp/result/runs/{id}",
+            "/secure/emc/module/bp/result/runs/{id}"}, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> detail(HttpServletRequest request, @PathVariable("id") String id) {
         try {
             OwnedPrincipal principal = require(request);
@@ -65,13 +68,27 @@ public final class OwnedResultRunController {
         catch (SQLException failure) { return unavailable(); }
     }
 
+    @GetMapping(path = {"/secure/core/module/bp/result/runs/info/status",
+            "/secure/emc/module/bp/result/runs/info/status"}, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> status(HttpServletRequest request) {
+        try {
+            require(request);
+            return ResponseEntity.ok().header("gikam-instant-save-path",
+                    "/secure/emc/module/bp/result/runs/instant")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body("{\"auditStatus\":{},\"ext$\":{}}");
+        } catch (AccessDeniedException denied) { return forbidden(); }
+        catch (SQLException failure) { return unavailable(); }
+    }
+
     private OwnedPrincipal require(HttpServletRequest request) throws SQLException {
         boundary.requireResultRead(request.getSession(false));
         return boundary.currentPrincipal(request.getSession(false));
     }
 
-    private List<Map<String, Object>> readRuns(String organization, String runNo, String status) throws SQLException {
+    private QueryResult readRuns(String organization, String runNo, String status) throws SQLException {
         List<Map<String, Object>> rows = new ArrayList<Map<String, Object>>();
+        Map<String, String> types = new LinkedHashMap<String, String>();
         StringBuilder sql = new StringBuilder("SELECT * FROM T_EMC_RUN WHERE ORGID=?");
         List<String> values = new ArrayList<String>(); values.add(organization);
         // The cloned production table has no RUNNO column.  The original
@@ -84,6 +101,9 @@ public final class OwnedResultRunController {
             for (int i = 0; i < values.size(); i++) query.setString(i + 1, values.get(i));
             try (ResultSet result = query.executeQuery()) {
                 ResultSetMetaData meta = result.getMetaData();
+                for (int i = 1; i <= meta.getColumnCount(); i++) {
+                    types.put(friendly(meta.getColumnLabel(i)), type(meta.getColumnType(i)));
+                }
                 while (result.next()) {
                     Map<String, Object> row = new LinkedHashMap<String, Object>();
                     for (int i = 1; i <= meta.getColumnCount(); i++) row.put(friendly(meta.getColumnLabel(i)), JdbcValue.normalize(result.getObject(i)));
@@ -91,7 +111,7 @@ public final class OwnedResultRunController {
                 }
             }
         }
-        return rows;
+        return new QueryResult(rows, types);
     }
 
     private List<Map<String, Object>> readRunDetail(String organization, String id) throws SQLException {
@@ -139,7 +159,31 @@ public final class OwnedResultRunController {
         JSONObject object = (JSONObject) value; return object.containsKey("p") ? object.getJSONObject("p") : object;
     }
     private static String text(Object value) { return value == null ? "" : String.valueOf(value).trim(); }
-    private static String page(List<Map<String, Object>> rows) { Map<String, Object> body = new LinkedHashMap<String, Object>(); body.put("total", rows.size()); body.put("pageNumber", 1); body.put("pageSize", rows.size()); body.put("rows", rows); return JSON.toJSONString(body, SerializerFeature.WriteMapNullValue); }
+    private static int pageSize(JSONObject filter) {
+        int size = filter == null ? 50 : filter.getIntValue("s");
+        return size <= 0 ? 50 : Math.min(size, 500);
+    }
+    private static String page(QueryResult result, int pageSize) {
+        List<Map<String, Object>> rows = result.rows;
+        Map<String, Object> body = new LinkedHashMap<String, Object>();
+        body.put("columnTypeMap", result.types);
+        body.put("first", true); body.put("last", true);
+        body.put("numberOfElements", rows.size()); body.put("pageNumber", 1);
+        body.put("pageSize", pageSize); body.put("rows", rows);
+        body.put("total", rows.size());
+        Map<String, Object> totals = new LinkedHashMap<String, Object>(); totals.put("qty_", rows.size());
+        body.put("totalMap", totals); body.put("totalPages", rows.isEmpty() ? 0 : 1);
+        return JSON.toJSONString(body, SerializerFeature.WriteMapNullValue);
+    }
+    private static String type(int sqlType) {
+        if (sqlType == Types.DATE || sqlType == Types.TIMESTAMP || sqlType == Types.TIMESTAMP_WITH_TIMEZONE) return "dateTime";
+        if (sqlType == Types.NUMERIC || sqlType == Types.DECIMAL || sqlType == Types.INTEGER || sqlType == Types.BIGINT) return "number";
+        return "string";
+    }
+    private static final class QueryResult {
+        final List<Map<String, Object>> rows; final Map<String, String> types;
+        QueryResult(List<Map<String, Object>> rows, Map<String, String> types) { this.rows = rows; this.types = types; }
+    }
     private static ResponseEntity<String> ok(String body) { return ResponseEntity.ok().header("Cache-Control", "no-store").body(body); }
     private static ResponseEntity<String> forbidden() { return ResponseEntity.status(HttpStatus.FORBIDDEN).body("{\"message\":\"GIKAM.PERMISSION.UNAUTHORIZED\"}"); }
     private static ResponseEntity<String> badRequest() { return ResponseEntity.badRequest().body("{\"message\":\"GIKAM.RESULT.INVALID_REQUEST\"}"); }

@@ -403,6 +403,31 @@ public final class OwnedOrderTaskResultQueryController {
         return ok(JSON.toJSONString(envelope, SerializerFeature.WriteMapNullValue));
     }
 
+    /** Quick/result input tables use the same dynamic result projection. */
+    @PostMapping(path = {
+            PREFIX + "/quick-inputs/table-heads/queries",
+            PREFIX + "/quick-inputs/table-rows/queries",
+            PREFIX + "/quick-inputs-sample/table-heads/queries",
+            PREFIX + "/quick-inputs-sample/table-rows/queries",
+            PREFIX + "/result-inputs/table-heads/queries",
+            PREFIX + "/result-inputs/table-rows/queries"
+            }, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> inputTable(HttpServletRequest request,
+            @RequestBody(required = false) String body) {
+        try {
+            OwnedPrincipal principal = requireRead(request);
+            String path = request.getRequestURI();
+            List<Map<String, Object>> source = selectResultRows(principal.getOrgId());
+            boolean sample = path.contains("quick-inputs-sample");
+            if (source.isEmpty()) {
+                return sample ? ok("[]") : gasUnexpected(path);
+            }
+            return path.endsWith("table-heads/queries") ? dynamicTitles(source) : dynamicRows(source);
+        } catch (AccessDeniedException denied) { return forbidden(); }
+        catch (IllegalArgumentException invalid) { return badRequest(); }
+        catch (SQLException failure) { return unavailable(); }
+    }
+
     @GetMapping(path = {PREFIX + "/info/status", PREFIX + "/{id}/info/status"},
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> status(HttpServletRequest request) {

@@ -27,6 +27,12 @@ public final class OwnedOrderTaskResultQueryControllerContractTest {
         require(paths, PREFIX + "/gas-parameter/table-rows/queries");
         require(paths, PREFIX + "/gas-parameter-result/table-heads/queries");
         require(paths, PREFIX + "/gas-parameter-result/table-rows/queries");
+        require(paths, PREFIX + "/quick-inputs/table-heads/queries");
+        require(paths, PREFIX + "/quick-inputs/table-rows/queries");
+        require(paths, PREFIX + "/quick-inputs-sample/table-heads/queries");
+        require(paths, PREFIX + "/quick-inputs-sample/table-rows/queries");
+        require(paths, PREFIX + "/result-inputs/table-heads/queries");
+        require(paths, PREFIX + "/result-inputs/table-rows/queries");
         require(paths, PREFIX + "/preprocessing-result/table-heads/queries");
         require(paths, PREFIX + "/preprocessing-result/table-rows/queries");
         require(paths, PREFIX + "/info/status");

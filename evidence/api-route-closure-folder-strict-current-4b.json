@@ -1,12 +1,12 @@
 {
   "schema": 1,
   "scope": "current-head-spring-web-api-route-closure",
-  "generated_at": "2026-11-01T03:25:05.623351+00:00",
-  "source_commit": "45d7ef0d3b7d9881c410b5bdbabe5ba0dbe63f17",
-  "repository_head_at_capture": "45d7ef0d3b7d9881c410b5bdbabe5ba0dbe63f17",
+  "generated_at": "2026-11-01T04:21:37.243788+00:00",
+  "source_commit": "98b34faa404da759f4cc37f1898307e0f225b3b6",
+  "repository_head_at_capture": "98b34faa404da759f4cc37f1898307e0f225b3b6",
   "source_dirty": false,
-  "implementation_binding": "impl-eeb960a8f4a522f7",
-  "implementation_tree_digest": "eeb960a8f4a522f73d378c046b8efa983dad213d83e25cf99cbbc650fa6aac26",
+  "implementation_binding": "impl-4b7987a00f0f0179",
+  "implementation_tree_digest": "4b7987a00f0f0179252c6c22234c4820981ec804c93522ea13cd4a660b5f41df",
   "implementation_dirty": false,
   "implementation_scope": [
     "project/src/main/java",
@@ -149,14 +149,14 @@
   "failures": [],
   "reports": [
     {
-      "path": "evidence/api-contract-folder-strict-final-eeb2.json",
-      "sha256": "b65dc752301a0a08166d3582578bddb0f7f9f11b1aa4e93ef0c01fde6b614a45",
+      "path": "evidence/api-contract-folder-strict-current-4b.json",
+      "sha256": "f36074b2934025b35ae51247e1b9a80b25a8376d8290ec8eaae281a68b57e4b9",
       "status": "executed-pass",
       "strict_evidence": true,
-      "source_commit": "45d7ef0d3b7d9881c410b5bdbabe5ba0dbe63f17",
-      "repository_head_at_capture": "45d7ef0d3b7d9881c410b5bdbabe5ba0dbe63f17",
-      "implementation_binding": "impl-eeb960a8f4a522f7",
-      "implementation_tree_digest": "eeb960a8f4a522f73d378c046b8efa983dad213d83e25cf99cbbc650fa6aac26",
+      "source_commit": "98b34faa404da759f4cc37f1898307e0f225b3b6",
+      "repository_head_at_capture": "98b34faa404da759f4cc37f1898307e0f225b3b6",
+      "implementation_binding": "impl-4b7987a00f0f0179",
+      "implementation_tree_digest": "4b7987a00f0f0179252c6c22234c4820981ec804c93522ea13cd4a660b5f41df",
       "implementation_dirty": false,
       "strict_contract": "strict report contract valid"
     }
@@ -2283,8 +2283,8 @@
       "disposition": "owned-pass",
       "evidence": [
         {
-          "report": "evidence/api-contract-folder-strict-final-eeb2.json",
-          "report_sha256": "b65dc752301a0a08166d3582578bddb0f7f9f11b1aa4e93ef0c01fde6b614a45",
+          "report": "evidence/api-contract-folder-strict-current-4b.json",
+          "report_sha256": "f36074b2934025b35ae51247e1b9a80b25a8376d8290ec8eaae281a68b57e4b9",
           "case_id": "folder.status",
           "status": 200,
           "disposition": "owned-pass"
@@ -2580,15 +2580,15 @@
       "disposition": "owned-pass",
       "evidence": [
         {
-          "report": "evidence/api-contract-folder-strict-final-eeb2.json",
-          "report_sha256": "b65dc752301a0a08166d3582578bddb0f7f9f11b1aa4e93ef0c01fde6b614a45",
+          "report": "evidence/api-contract-folder-strict-current-4b.json",
+          "report_sha256": "f36074b2934025b35ae51247e1b9a80b25a8376d8290ec8eaae281a68b57e4b9",
           "case_id": "folder.query",
           "status": 200,
           "disposition": "owned-pass"
         },
         {
-          "report": "evidence/api-contract-folder-strict-final-eeb2.json",
-          "report_sha256": "b65dc752301a0a08166d3582578bddb0f7f9f11b1aa4e93ef0c01fde6b614a45",
+          "report": "evidence/api-contract-folder-strict-current-4b.json",
+          "report_sha256": "f36074b2934025b35ae51247e1b9a80b25a8376d8290ec8eaae281a68b57e4b9",
           "case_id": "folder.invalid-input",
           "status": 500,
           "disposition": "owned-pass"
@@ -2731,8 +2731,8 @@
       "disposition": "owned-pass",
       "evidence": [
         {
-          "report": "evidence/api-contract-folder-strict-final-eeb2.json",
-          "report_sha256": "b65dc752301a0a08166d3582578bddb0f7f9f11b1aa4e93ef0c01fde6b614a45",
+          "report": "evidence/api-contract-folder-strict-current-4b.json",
+          "report_sha256": "f36074b2934025b35ae51247e1b9a80b25a8376d8290ec8eaae281a68b57e4b9",
           "case_id": "folder.tasks",
           "status": 200,
           "disposition": "owned-pass"

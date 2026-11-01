@@ -90,6 +90,47 @@ public final class OwnedOrderTaskResultQueryController {
         catch (SQLException failure) { return unavailable(); }
     }
 
+    @GetMapping(path = PREFIX + "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> detail(HttpServletRequest request,
+            @org.springframework.web.bind.annotation.PathVariable("id") String id) {
+        try {
+            OwnedPrincipal principal = requireRead(request);
+            if (id == null || !id.matches("[0-9]{1,30}")) return badRequest();
+            String sql = BASE_SQL + " WHERE A.ID=? AND A.CREATEDBYORGID=?";
+            try (Connection connection = dataSource.getConnection(); PreparedStatement query = connection.prepareStatement(sql)) {
+                query.setLong(1, Long.parseLong(id)); query.setString(2, principal.getOrgId());
+                try (ResultSet result = query.executeQuery()) {
+                    if (!result.next()) return ok("");
+                    return ok(JSON.toJSONString(row(result, result.getMetaData()), SerializerFeature.WriteMapNullValue));
+                }
+            }
+        } catch (AccessDeniedException denied) { return forbidden(); }
+        catch (IllegalArgumentException invalid) { return badRequest(); }
+        catch (SQLException failure) { return unavailable(); }
+    }
+
+    @GetMapping(path = PREFIX + "/{id}/action/print", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> print(HttpServletRequest request,
+            @org.springframework.web.bind.annotation.PathVariable("id") String id) {
+        return unavailableIfReadAllowed(request, id);
+    }
+
+    @GetMapping(path = PREFIX + "/{id}/columns/{column}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> column(HttpServletRequest request,
+            @org.springframework.web.bind.annotation.PathVariable("id") String id,
+            @org.springframework.web.bind.annotation.PathVariable("column") String column) {
+        return unavailableIfReadAllowed(request, id);
+    }
+
+    private ResponseEntity<String> unavailableIfReadAllowed(HttpServletRequest request, String id) {
+        try {
+            requireRead(request);
+            if (id == null || !id.matches("[0-9]{1,30}")) return badRequest();
+            return unavailable();
+        } catch (AccessDeniedException denied) { return forbidden(); }
+        catch (SQLException failure) { return unavailable(); }
+    }
+
     private OwnedPrincipal requireRead(HttpServletRequest request) throws SQLException {
         boundary.requirePermission(request.getSession(false), OwnedIdentityProvider.RESULT_READ);
         return boundary.currentPrincipal(request.getSession(false));

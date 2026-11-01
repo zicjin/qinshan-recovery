@@ -20,6 +20,9 @@ public final class OwnedOrderTaskResultQueryControllerContractTest {
         require(paths, PREFIX + "/queries/searchable");
         require(paths, PREFIX + "/info/status");
         require(paths, PREFIX + "/{id}/info/status");
+        require(paths, PREFIX + "/{id}");
+        require(paths, PREFIX + "/{id}/action/print");
+        require(paths, PREFIX + "/{id}/columns/{column}");
         boolean registered = false;
         for (Method method : OwnedIdentityConfiguration.class.getDeclaredMethods()) {
             if (method.getReturnType() == OwnedOrderTaskResultQueryController.class) registered = true;

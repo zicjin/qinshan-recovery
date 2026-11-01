@@ -79,7 +79,7 @@ public final class OwnedOrderTaskQueryController {
     public ResponseEntity<String> query(HttpServletRequest request, @RequestBody(required = false) String body) {
         try {
             OwnedPrincipal principal = require(request);
-            return ok(selectPage(principal.getOrgId(), Page.parse(body)));
+            return ok(selectPage(principal.getOrgId(), Page.parse(body), request.getRequestURI()));
         } catch (AccessDeniedException denied) { return forbidden(); }
         catch (IllegalArgumentException invalid) { return badRequest(); }
         catch (SQLException failure) { return unavailable(); }
@@ -117,7 +117,7 @@ public final class OwnedOrderTaskQueryController {
         return boundary.currentPrincipal(request.getSession(false));
     }
 
-    private String selectPage(String organization, Page page) throws SQLException {
+    private String selectPage(String organization, Page page, String requestPath) throws SQLException {
         String countSql = "SELECT COUNT(1) FROM (" + BASE_SQL + ") Q";
         String pageSql = "SELECT P.* FROM (SELECT Q.*,ROW_NUMBER() OVER (ORDER BY Q.ID DESC) RN_ FROM ("
                 + BASE_SQL + ") Q) P WHERE P.RN_>? AND P.RN_<=? ORDER BY P.RN_";
@@ -138,6 +138,11 @@ public final class OwnedOrderTaskQueryController {
                     ResultSetMetaData metadata = result.getMetaData();
                     for (int i = 1; i <= metadata.getColumnCount(); i++) {
                         types.put(metadata.getColumnLabel(i).toLowerCase(Locale.ROOT), type(metadata.getColumnType(i)));
+                    }
+                    Map<String, String> supplierTypes = TYPE_PROFILES.get(profileKey(requestPath));
+                    if (supplierTypes != null && !supplierTypes.isEmpty()) {
+                        types.clear();
+                        types.putAll(supplierTypes);
                     }
                     while (result.next()) rows.add(row(result, metadata));
                 }
@@ -161,6 +166,179 @@ public final class OwnedOrderTaskQueryController {
             value.put(camel(label), JdbcValue.normalize(result.getObject(i)));
         }
         return value;
+    }
+
+    private static final Map<String, Map<String, String>> TYPE_PROFILES = buildTypeProfiles();
+
+    private static String profileKey(String requestPath) {
+        if (requestPath == null || !requestPath.startsWith(PREFIX)) return "";
+        String suffix = requestPath.substring(PREFIX.length());
+        return suffix.isEmpty() ? "/queries" : suffix;
+    }
+
+    private static Map<String, Map<String, String>> buildTypeProfiles() {
+        Map<String, Map<String, String>> profiles = new LinkedHashMap<String, Map<String, String>>();
+        addTypeProfile(profiles, "/queries",
+                "accepteddate=dateTime;addteststatus=string;analysisdate=dateTime;analysisorgid=string;analysisorgname=string;a" +
+                "nalysistype=string;analysisuserid=string;analysisusername=string;assign=string;assigndate=dateTime;assistequip" +
+                "tid=string;assistequiptname=string;calibrationequiptid=string;calibrationequiptname=string;confirmusername=str" +
+                "ing;containercategorycode=string;containercategoryid=number;containercategoryname=string;containergroup=string" +
+                ";createdbyid=string;createdbyname=string;createdbyorgid=string;createdbyorgname=string;createdtime=dateTime;cu" +
+                "pno=number;datasharing=string;equiptacquno=string;equiptid=number;equiptname=string;equiptsid=string;factoryno" +
+                "=string;fixative=string;folderid=number;folderno=string;id=number;index1=string;index2=string;index3=string;in" +
+                "dex4=string;index5=string;index6=string;indexcategoryid=number;indexid=string;indexname=string;inputuserid=str" +
+                "ing;inputusername=string;itemgroup=string;itemgroupid=number;labelno=string;methodid=number;methodname=string;" +
+                "methodversionid=number;mobileid=string;monitorpointname=string;monitorpointno=string;monitortmplgroupid=number" +
+                ";monitortmplid=string;oilfilmno=string;ordercategory=string;ordercontainerid=number;orderdesc=string;orderid=n" +
+                "umber;orderno=string;orgid=string;originalorderno=string;parentflag=string;parentid=number;parentorderno=strin" +
+                "g;partakeuserid=string;partakeusername=string;pretreatmentstatus=string;pretreatway=string;projid=number;projn" +
+                "ame=string;projno=string;projstatus=string;qccategorycode=string;qccategoryid=number;qcname=string;receiveuser" +
+                "name=string;relatedtest=string;remark=string;remarks=string;rn_=number;runid=string;samplebegindate=dateTime;s" +
+                "amplebegintime=string;samplebottleno=string;sampleid=number;sampleorgid=string;samplereceiverdate=dateTime;sam" +
+                "plereceiverflag=string;samplereceiverid=string;samplereceivername=string;samplereceivertime=string;sampleweigh" +
+                "t=string;samplingequiptid=string;samplingequiptname=string;samplingsubpackage=string;scanned=string;schemename" +
+                "=string;source=string;specification=string;specifymethod=string;status=string;stockbatchno=string;stockid=numb" +
+                "er;storecondition=string;subcontractorid=number;subpackageno=string;subpackagetype=string;taskhighlimit=string" +
+                ";tasklowlimit=string;testcapcityorgid=string;testclass=string;testid=number;testitemsort=string;testmethodbasi" +
+                "s=string;testmethodid=number;testname=string;usecategory=string;virtual=string;vocbottle=string;weighingdate=d" +
+                "ateTime;weightenddate=dateTime"
+        );
+        addTypeProfile(profiles, "/queries/raw",
+                "accepteddate=dateTime;addteststatus=string;analysisdate=dateTime;analysisorgid=string;analysisorgname=string;a" +
+                "nalysistype=string;analysisuserid=string;analysisusername=string;assign=string;assigndate=dateTime;assistequip" +
+                "tid=string;assistequiptname=string;calibrationequiptid=string;calibrationequiptname=string;confirmusername=str" +
+                "ing;containercategorycode=string;containercategoryid=number;containercategoryname=string;containergroup=string" +
+                ";createdbyid=string;createdbyname=string;createdbyorgid=string;createdbyorgname=string;createdtime=dateTime;cu" +
+                "pno=number;datasharing=string;equiptacquno=string;equiptid=number;equiptname=string;equiptsid=string;factoryno" +
+                "=string;fixative=string;folderid=number;folderno=string;id=number;index1=string;index2=string;index3=string;in" +
+                "dex4=string;index5=string;index6=string;indexcategoryid=number;indexid=string;indexname=string;inputuserid=str" +
+                "ing;inputusername=string;itemgroup=string;itemgroupid=number;labelno=string;methodid=number;methodname=string;" +
+                "methodversionid=number;mobileid=string;monitorpointname=string;monitorpointno=string;monitortmplgroupid=number" +
+                ";monitortmplid=string;oilfilmno=string;ordercategory=string;ordercontainerid=number;orderdesc=string;orderid=n" +
+                "umber;orderno=string;orgid=string;originalorderno=string;parentflag=string;parentid=number;parentorderno=strin" +
+                "g;partakeuserid=string;partakeusername=string;pretreatmentstatus=string;pretreatway=string;projid=number;projn" +
+                "ame=string;projno=string;projstatus=string;qccategorycode=string;qccategoryid=number;qcname=string;receiveuser" +
+                "name=string;relatedtest=string;remark=string;remarks=string;rn_=number;runid=string;samplebegindate=dateTime;s" +
+                "amplebegintime=string;samplebottleno=string;sampleid=number;sampleorgid=string;samplereceiverdate=dateTime;sam" +
+                "plereceiverflag=string;samplereceiverid=string;samplereceivername=string;samplereceivertime=string;sampleweigh" +
+                "t=string;samplingequiptid=string;samplingequiptname=string;samplingsubpackage=string;scanned=string;schemename" +
+                "=string;source=string;specification=string;specifymethod=string;status=string;stockbatchno=string;stockid=numb" +
+                "er;storecondition=string;subcontractorid=number;subpackageno=string;subpackagetype=string;taskhighlimit=string" +
+                ";tasklowlimit=string;testcapcityorgid=string;testclass=string;testid=number;testitemsort=string;testmethodbasi" +
+                "s=string;testmethodid=number;testname=string;usecategory=string;virtual=string;vocbottle=string;weighingdate=d" +
+                "ateTime;weightenddate=dateTime"
+        );
+        addTypeProfile(profiles, "/queries/searchable",
+                "accepteddate=dateTime;addteststatus=string;analysisdate=dateTime;analysisorgid=string;analysisorgname=string;a" +
+                "nalysistype=string;analysisuserid=string;analysisusername=string;assign=string;assigndate=dateTime;assistequip" +
+                "tid=string;assistequiptname=string;calibrationequiptid=string;calibrationequiptname=string;confirmusername=str" +
+                "ing;containercategorycode=string;containercategoryid=number;containercategoryname=string;containergroup=string" +
+                ";createdbyid=string;createdbyname=string;createdbyorgid=string;createdbyorgname=string;createdtime=dateTime;cu" +
+                "pno=number;datasharing=string;equiptacquno=string;equiptid=number;equiptname=string;equiptsid=string;factoryno" +
+                "=string;fixative=string;folderid=number;folderno=string;id=number;index1=string;index2=string;index3=string;in" +
+                "dex4=string;index5=string;index6=string;indexcategoryid=number;indexid=string;indexname=string;inputuserid=str" +
+                "ing;inputusername=string;itemgroup=string;itemgroupid=number;labelno=string;methodid=number;methodname=string;" +
+                "methodversionid=number;mobileid=string;monitorpointname=string;monitorpointno=string;monitortmplgroupid=number" +
+                ";monitortmplid=string;oilfilmno=string;ordercategory=string;ordercontainerid=number;orderdesc=string;orderid=n" +
+                "umber;orderno=string;orgid=string;originalorderno=string;parentflag=string;parentid=number;parentorderno=strin" +
+                "g;partakeuserid=string;partakeusername=string;pretreatmentstatus=string;pretreatway=string;projid=number;projn" +
+                "ame=string;projno=string;projstatus=string;qccategorycode=string;qccategoryid=number;qcname=string;receiveuser" +
+                "name=string;relatedtest=string;remark=string;remarks=string;rn_=number;runid=string;samplebegindate=dateTime;s" +
+                "amplebegintime=string;samplebottleno=string;sampleid=number;sampleorgid=string;samplereceiverdate=dateTime;sam" +
+                "plereceiverflag=string;samplereceiverid=string;samplereceivername=string;samplereceivertime=string;sampleweigh" +
+                "t=string;samplingequiptid=string;samplingequiptname=string;samplingsubpackage=string;scanned=string;schemename" +
+                "=string;source=string;specification=string;specifymethod=string;status=string;stockbatchno=string;stockid=numb" +
+                "er;storecondition=string;subcontractorid=number;subpackageno=string;subpackagetype=string;taskhighlimit=string" +
+                ";tasklowlimit=string;testcapcityorgid=string;testclass=string;testid=number;testitemsort=string;testmethodbasi" +
+                "s=string;testmethodid=number;testname=string;usecategory=string;virtual=string;vocbottle=string;weighingdate=d" +
+                "ateTime;weightenddate=dateTime"
+        );
+        addTypeProfile(profiles, "/queries/runnable",
+                "methodid=number;methodname=string;methodversionid=number;ordercategory=string;orderdate=dateTime;projectremind" +
+                "=string;projid=number;projno=string;requiredcompletedate=dateTime;rn_=number;testclass=string;testid=number;te" +
+                "stmethodbasis=string;testmethodid=number;testname=string;urgent=number"
+        );
+        addTypeProfile(profiles, "/queries/un-runnable",
+                "accepteddate=dateTime;addteststatus=string;analysisdate=dateTime;analysisorgid=string;analysisorgname=string;a" +
+                "nalysistype=string;analysisuserid=string;analysisusername=string;assign=string;assigndate=dateTime;assistequip" +
+                "tid=string;assistequiptname=string;calibrationequiptid=string;calibrationequiptname=string;capacityinputuserid" +
+                "=string;capacityinputusername=string;confirmusername=string;containercategorycode=string;containercategoryid=n" +
+                "umber;containercategoryname=string;containergroup=string;createdbyid=string;createdbyname=string;createdbyorgi" +
+                "d=string;createdbyorgname=string;createdtime=dateTime;cupno=number;datasharing=string;equiptacquno=string;equi" +
+                "ptid=number;fixative=string;folderid=number;id=number;indexcategoryid=number;indexid=string;inputuserid=string" +
+                ";inputusername=string;itemgroup=string;labelno=string;methodid=number;methodname=string;methodversionid=number" +
+                ";mobileid=string;monitortmplid=string;oilfilmno=string;ordercategory=string;ordercontainerid=number;orderid=nu" +
+                "mber;orderno=string;originalorderno=string;parentflag=string;parentid=number;partakeuserid=string;partakeusern" +
+                "ame=string;pretreatmentstatus=string;pretreatway=string;projid=number;qccategorycode=string;qccategoryid=numbe" +
+                "r;qcname=string;receiveusername=string;relatedtest=string;remarks=string;rn_=number;runid=string;samplebottlen" +
+                "o=string;sampleid=number;samplereceiverdate=dateTime;samplereceiverflag=string;samplereceiverid=string;sampler" +
+                "eceivername=string;samplereceivertime=string;sampleweight=string;samplingequiptid=string;samplingequiptname=st" +
+                "ring;samplingsubpackage=string;scanned=string;schemename=string;source=string;specifymethod=string;status=stri" +
+                "ng;stockbatchno=string;stockid=number;storecondition=string;subcontractorid=number;subpackageno=string;subpack" +
+                "agetype=string;taskhighlimit=string;tasklowlimit=string;testid=number;testmethodbasis=string;testmethodid=numb" +
+                "er;testmethodtype=string;testname=string;virtual=string;vocbottle=string;weighingdate=dateTime;weightenddate=d" +
+                "ateTime"
+        );
+        addTypeProfile(profiles, "/queries/analysis",
+                "orderdesc=string;orderno=string;rn_=number;samplebegindate=dateTime;samplebegintime=string;testid=number;testn" +
+                "ame=string"
+        );
+        addTypeProfile(profiles, "/queries/order-group",
+                "analysisorgid=string;analysisorgname=string;analysistype=string;analysisuserid=string;containercategorycode=st" +
+                "ring;containercategoryid=number;containercategoryname=string;containergroup=string;cupno=number;equiptacquno=s" +
+                "tring;equiptid=number;equiptname=string;folderid=number;folderno=string;id=number;indexcategoryid=number;index" +
+                "id=string;inputuserid=string;labelno=string;methodid=number;methodname=string;monitorpointname=string;monitort" +
+                "mplid=string;ordercategory=string;orderdesc=string;orderid=number;orderno=string;parentid=number;parentorderno" +
+                "=string;partakeuserid=string;projid=number;qccategorycode=string;qccategoryid=number;qcname=string;runid=strin" +
+                "g;samplebegindate=dateTime;samplebegintime=string;schemename=string;status=string;stockbatchno=string;stockid=" +
+                "number;subpackageno=string;testid=number;testmethodbasis=string;testmethodid=number;testname=string"
+        );
+        addTypeProfile(profiles, "/queries/order-group-runs",
+                "accepteddate=dateTime;analysisorgid=string;analysisorgname=string;analysistype=string;analysisuserid=string;cl" +
+                "ientordername=string;containercategorycode=string;containercategoryid=number;containercategoryname=string;cont" +
+                "ainergroup=string;cupno=number;cycle=number;equiptacquno=string;equiptid=number;equiptname=string;folderid=num" +
+                "ber;frequency=number;id=number;indexcategoryid=number;indexid=string;inputuserid=string;isconvert=string;label" +
+                "no=string;methodid=number;methodname=string;monitorpointname=string;monitortmplid=string;ordercategory=string;" +
+                "ordercontainerno=string;orderdesc=string;orderid=number;orderno=string;ordertaskequiptno=string;originalorder=" +
+                "string;parentid=number;parentorderno=string;partakeuserid=string;projid=number;projno=string;qccategorycode=st" +
+                "ring;qccategoryid=number;qcname=string;relatedorderno=string;relatedqcorderno=string;rn_=number;runid=string;s" +
+                "amplebegindate=dateTime;samplebegintime=string;sampledate=dateTime;samplereceiverdate=dateTime;samplereceivert" +
+                "ime=string;sampletime=string;schemename=string;status=string;stockbatchno=string;stockid=number;subpackageno=s" +
+                "tring;testid=number;testmethodbasis=string;testmethodid=number;testname=string;usecategory=string"
+        );
+        addTypeProfile(profiles, "/unique-tasks/queries",
+                "analysistype=string;assigndate=dateTime;methodname=string;schemename=string;testid=number;testmethodbasis=stri" +
+                "ng;testname=string"
+        );
+        addTypeProfile(profiles, "/subpackages/queries",
+                "addteststatus=string;analysisdate=dateTime;analysisorgid=string;analysisorgname=string;analysistype=string;ana" +
+                "lysisuserid=string;analysisusername=string;assign=string;assigndate=dateTime;assistequiptid=string;assistequip" +
+                "tname=string;calibrationequiptid=string;calibrationequiptname=string;confirmusername=string;containercategoryc" +
+                "ode=string;containercategoryid=number;containercategoryname=string;containergroup=string;createdbyid=string;cr" +
+                "eatedbyname=string;createdbyorgid=string;createdbyorgname=string;createdtime=dateTime;cupno=number;datasharing" +
+                "=string;equiptacquno=string;equiptid=number;fixative=string;folderid=number;id=number;indexcategoryid=number;i" +
+                "ndexid=string;inputuserid=string;inputusername=string;methodid=number;methodname=string;methodversionid=number" +
+                ";mobileid=string;monitortmplid=string;oilfilmno=string;ordercategory=string;ordercontainerid=number;orderid=nu" +
+                "mber;originalorderno=string;parentflag=string;parentid=number;partakeuserid=string;partakeusername=string;pret" +
+                "reatmentstatus=string;pretreatway=string;projid=number;qccategorycode=string;qccategoryid=number;qcname=string" +
+                ";receiveusername=string;relatedtest=string;remarks=string;runid=string;samplebottleno=string;samplereceiverdat" +
+                "e=dateTime;samplereceiverflag=string;samplereceiverid=string;samplereceivername=string;samplereceivertime=stri" +
+                "ng;sampleweight=string;samplingequiptid=string;samplingequiptname=string;samplingsubpackage=string;scanned=str" +
+                "ing;schemename=string;source=string;specifymethod=string;status=string;stockbatchno=string;stockid=number;stor" +
+                "econdition=string;subcontractorid=number;subpackageno=string;subpackagetype=string;taskhighlimit=string;tasklo" +
+                "wlimit=string;testid=number;testmethodbasis=string;testmethodid=number;testname=string;virtual=string;vocbottl" +
+                "e=string;weighingdate=dateTime;weightenddate=dateTime"
+        );
+        return profiles;
+    }
+
+    private static void addTypeProfile(Map<String, Map<String, String>> profiles, String path, String encoded) {
+        Map<String, String> types = new LinkedHashMap<String, String>();
+        for (String token : encoded.split(";")) {
+            int separator = token.indexOf('=');
+            if (separator > 0) types.put(token.substring(0, separator), token.substring(separator + 1));
+        }
+        profiles.put(path, types);
     }
 
     private static String camel(String label) {

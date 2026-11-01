@@ -337,6 +337,72 @@ public final class OwnedOrderTaskResultQueryController {
         catch (SQLException failure) { return unavailable(); }
     }
 
+    /**
+     * Gas-parameter result tables share the result projection and organization
+     * boundary.  The supplier emits its framework unexpected envelope when
+     * the clone has no result rows; preserve that observable negative contract
+     * while keeping a real dynamic projection for populated fixtures.
+     */
+    @PostMapping(path = {
+            PREFIX + "/gas-parameter/table-heads/queries",
+            PREFIX + "/gas-parameter-result/table-heads/queries",
+            PREFIX + "/gas-parameter/table-rows/queries",
+            PREFIX + "/gas-parameter-result/table-rows/queries"
+            }, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> gasParameterTable(HttpServletRequest request,
+            @RequestBody(required = false) String body) {
+        try {
+            OwnedPrincipal principal = requireRead(request);
+            List<Map<String, Object>> source = selectResultRows(principal.getOrgId());
+            if (source.isEmpty()) return unexpected(request.getRequestURI());
+            boolean rowsRequest = request.getRequestURI().endsWith("table-rows/queries");
+            if (!rowsRequest) return dynamicTitles(source);
+            return dynamicRows(source);
+        } catch (AccessDeniedException denied) { return forbidden(); }
+        catch (IllegalArgumentException invalid) { return badRequest(); }
+        catch (SQLException failure) { return unavailable(); }
+    }
+
+    private static ResponseEntity<String> dynamicTitles(List<Map<String, Object>> source) {
+        Map<String, String> titles = new LinkedHashMap<String, String>();
+        for (Map<String, Object> item : source) {
+            String colId = dataColumnId(item);
+            if (!titles.containsKey(colId)) {
+                Object alias = item.get("itemAliasName");
+                titles.put(colId, "<font color=\"blue\">" + (alias == null ? "" : alias) + "</font>");
+            }
+        }
+        List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
+        for (Map.Entry<String, String> title : titles.entrySet()) {
+            Map<String, Object> head = new LinkedHashMap<String, Object>();
+            head.put("field", title.getKey()); head.put("title", title.getValue()); result.add(head);
+        }
+        return ok(JSON.toJSONString(result, SerializerFeature.WriteMapNullValue));
+    }
+
+    private static ResponseEntity<String> dynamicRows(List<Map<String, Object>> source) {
+        Map<String, Map<String, Object>> grouped = new LinkedHashMap<String, Map<String, Object>>();
+        Map<String, String> types = new LinkedHashMap<String, String>();
+        for (Map<String, Object> item : source) {
+            String rowNo = String.valueOf(item.get("orderNo"));
+            Map<String, Object> row = grouped.get(rowNo);
+            if (row == null) {
+                row = new LinkedHashMap<String, Object>(); row.put("rowNo", rowNo);
+                row.put("orderNo", item.get("orderNo")); row.put("projNo", item.get("projNo"));
+                row.put("projName", item.get("projName")); row.put("testOrgName", item.get("testOrgName"));
+                row.put("monitorPointName", item.get("monitorPointName")); grouped.put(rowNo, row);
+            }
+            String colId = dataColumnId(item); row.put(colId, item.get("reportResult")); types.put(colId, "string");
+        }
+        List<Map<String, Object>> rows = new ArrayList<Map<String, Object>>(grouped.values());
+        Map<String, Object> envelope = new LinkedHashMap<String, Object>(); envelope.put("columnTypeMap", types);
+        envelope.put("first", true); envelope.put("last", true); envelope.put("numberOfElements", rows.size());
+        envelope.put("pageNumber", 1); envelope.put("pageSize", rows.size()); envelope.put("rows", rows);
+        envelope.put("total", rows.size()); envelope.put("totalMap", new LinkedHashMap<String, Object>());
+        envelope.put("totalPages", rows.isEmpty() ? 0 : 1);
+        return ok(JSON.toJSONString(envelope, SerializerFeature.WriteMapNullValue));
+    }
+
     @GetMapping(path = {PREFIX + "/info/status", PREFIX + "/{id}/info/status"},
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> status(HttpServletRequest request) {

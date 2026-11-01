@@ -15,9 +15,11 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -72,6 +74,21 @@ public final class OwnedQualityControlChartController {
         return selectable(request, "SELECT DISTINCT A.INPUTUSERID,A.INPUTUSERNAME,A.TESTID,A.QCCATEGORYID,B.ITEMID FROM T_EMC_ORDER_TASK A LEFT JOIN T_EMC_ORDER_TASK_RESULT B ON B.ORDERTASKID=A.ID WHERE A.ANALYSISORGID=? ORDER BY A.INPUTUSERID");
     }
 
+    @PostMapping(path = {PREFIX + "/queries", PREFIX + "/queries/raw", PREFIX + "/queries/searchable"},
+            consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> query(HttpServletRequest request, HttpServletResponse response,
+            @RequestBody(required = false) String body) {
+        try {
+            require(request);
+            // The supplier clone currently exposes a real mapper binding
+            // failure for this inherited GenericResource. Preserve that
+            // observable negative contract until its source mapper is fixed;
+            // never replace it with a fabricated empty 200 page.
+            return unexpected(response, request.getRequestURI());
+        } catch (AccessDeniedException denied) { return forbidden(); }
+        catch (SQLException failure) { return unavailable(); }
+    }
+
     private ResponseEntity<String> selectable(HttpServletRequest request, String sql) {
         try {
             OwnedPrincipal principal = require(request);
@@ -105,4 +122,19 @@ public final class OwnedQualityControlChartController {
     private static ResponseEntity<String> ok(String body) { return ResponseEntity.ok().header("Cache-Control", "no-store").body(body); }
     private static ResponseEntity<String> forbidden() { return ResponseEntity.status(HttpStatus.FORBIDDEN).body("{\"message\":\"GIKAM.PERMISSION.UNAUTHORIZED\"}"); }
     private static ResponseEntity<String> unavailable() { return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"message\":\"GIKAM.QUALITY_CONTROL_CHART.UNAVAILABLE\"}"); }
+    private static ResponseEntity<String> unexpected(HttpServletResponse response, String path) {
+        String safePath = path == null ? "" : path.replace("\\", "\\\\").replace("\"", "\\\"");
+        String body = "{\"error\":\"Internal Server Error\",\"message\":\"GIKAM.EXCEPTION.UNEXPECTED\",\"path\":\""
+                + safePath + "\",\"status\":500,\"timestamp\":" + System.currentTimeMillis() + ",\"stacktrace\":\"\"}";
+        try {
+            response.resetBuffer();
+            response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+            response.setHeader(HttpHeaders.CONTENT_TYPE, "");
+            response.getWriter().write(body);
+            response.flushBuffer();
+            return null;
+        } catch (java.io.IOException error) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(body);
+        }
+    }
 }

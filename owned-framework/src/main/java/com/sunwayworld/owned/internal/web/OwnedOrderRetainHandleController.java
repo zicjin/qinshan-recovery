@@ -27,7 +27,8 @@ public final class OwnedOrderRetainHandleController {
         if (boundary == null || dataSource == null || environment == null) throw new IllegalArgumentException("order retain handle dependencies are required");
         this.boundary = boundary; this.dataSource = dataSource; this.environment = environment;
     }
-    @PostMapping(path = "/secure/core/module/bp/order/order-retains/action/handle", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = {"/secure/core/module/bp/order/order-retains/action/handle",
+            "/secure/emc/module/bp/order/order-retains/action/handle"}, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> handle(HttpServletRequest request, @RequestBody(required = false) String body) {
         try {
             OwnedPrincipal principal = requireWrite(request); JSONArray rows = rows(body);

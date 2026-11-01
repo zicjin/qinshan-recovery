@@ -1,7 +1,10 @@
 package com.sunwayworld.framework;
 
 import com.sunwayworld.owned.internal.web.OwnedOrderRetainController;
+import com.sunwayworld.owned.internal.web.OwnedOrderRetainHandleController;
+import com.sunwayworld.owned.internal.web.OwnedOrderRetainWriteController;
 import java.lang.reflect.Method;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -32,6 +35,18 @@ public final class OwnedOrderRetainControllerContractTest {
                     + query + "/" + raw + "/" + searchable + "/" + detail + "/"
                     + status + "/" + statusById + "/" + print);
         }
+        boolean emcInsert = false, emcDelete = false, emcHandle = false;
+        for (Method method : OwnedOrderRetainWriteController.class.getDeclaredMethods()) {
+            PostMapping post = method.getAnnotation(PostMapping.class);
+            if (post != null) for (String path : post.path()) emcInsert |= "/secure/emc/module/bp/order/order-retains".equals(path);
+            DeleteMapping delete = method.getAnnotation(DeleteMapping.class);
+            if (delete != null) for (String path : delete.path()) emcDelete |= "/secure/emc/module/bp/order/order-retains/{id}".equals(path);
+        }
+        for (Method method : OwnedOrderRetainHandleController.class.getDeclaredMethods()) {
+            PostMapping post = method.getAnnotation(PostMapping.class);
+            if (post != null) for (String path : post.path()) emcHandle |= "/secure/emc/module/bp/order/order-retains/action/handle".equals(path);
+        }
+        if (!(emcInsert && emcDelete && emcHandle)) throw new AssertionError("order-retain emc write aliases incomplete");
         System.out.println("owned order-retain controller contract checks passed");
     }
 

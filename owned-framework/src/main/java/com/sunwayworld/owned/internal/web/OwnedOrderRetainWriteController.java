@@ -35,7 +35,8 @@ public final class OwnedOrderRetainWriteController {
         this.boundary = boundary; this.dataSource = dataSource; this.environment = environment;
     }
 
-    @PostMapping(path = "/secure/core/module/bp/order/order-retains",
+    @PostMapping(path = {"/secure/core/module/bp/order/order-retains",
+            "/secure/emc/module/bp/order/order-retains"},
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> insert(HttpServletRequest request,
             @RequestBody(required = false) String body) {
@@ -71,7 +72,8 @@ public final class OwnedOrderRetainWriteController {
         catch (java.sql.SQLException failure) { denied(request); return unavailable(); }
     }
 
-    @DeleteMapping(path = "/secure/core/module/bp/order/order-retains/{id}",
+    @DeleteMapping(path = {"/secure/core/module/bp/order/order-retains/{id}",
+            "/secure/emc/module/bp/order/order-retains/{id}"},
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> delete(HttpServletRequest request, @PathVariable("id") String id) {
         try {

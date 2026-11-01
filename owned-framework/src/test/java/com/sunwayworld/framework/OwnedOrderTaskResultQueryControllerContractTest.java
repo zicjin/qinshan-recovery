@@ -1,5 +1,6 @@
 package com.sunwayworld.framework;
 
+import com.sunwayworld.owned.internal.web.OwnedIdentityConfiguration;
 import com.sunwayworld.owned.internal.web.OwnedOrderTaskResultQueryController;
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -19,6 +20,11 @@ public final class OwnedOrderTaskResultQueryControllerContractTest {
         require(paths, PREFIX + "/queries/searchable");
         require(paths, PREFIX + "/info/status");
         require(paths, PREFIX + "/{id}/info/status");
+        boolean registered = false;
+        for (Method method : OwnedIdentityConfiguration.class.getDeclaredMethods()) {
+            if (method.getReturnType() == OwnedOrderTaskResultQueryController.class) registered = true;
+        }
+        if (!registered) throw new AssertionError("order-task-result controller is not registered");
         System.out.println("owned order-task-result query mapping checks passed");
     }
 

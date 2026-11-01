@@ -310,6 +310,66 @@ def summarize_json(value: Any, key: str = "") -> Any:
     return normalize(value, key)
 
 
+DATA_PROJECTION_KEYS = {
+    "rows", "data", "items", "results", "total", "totalPages",
+    "numberOfElements", "totalMap", "first", "last",
+}
+
+
+def _projection_fields(value: Mapping[str, Any]) -> Tuple[set[str], set[str]]:
+    """Return observed row fields and internal metadata fields.
+
+    ``rows`` is returned by the real resources either as a list of objects or
+    as the already-summarised ``{fields: [...]}`` shape.  Empty result pages
+    have no row objects, so the response's ``columnTypeMap`` remains the only
+    schema hint.  The second set is kept separate so helper SQL columns such
+    as ``rn_`` can be ignored without hiding a real business-field drift.
+    """
+    fields: set[str] = set()
+    metadata: set[str] = set()
+    for name in ("rows", "data", "items", "results"):
+        node = value.get(name)
+        if isinstance(node, list):
+            fields.update(
+                str(field)
+                for row in node
+                if isinstance(row, Mapping)
+                for field in row
+            )
+        elif isinstance(node, Mapping):
+            listed = node.get("fields")
+            if isinstance(listed, list):
+                fields.update(str(field) for field in listed)
+        if node is not None:
+            break
+    column_map = value.get("columnTypeMap")
+    if isinstance(column_map, Mapping):
+        metadata.update(str(field) for field in column_map)
+    return fields, metadata
+
+
+def _data_projection_view(value: Mapping[str, Any]) -> Dict[str, Any]:
+    """Drop data-baseline values while retaining response-contract shape.
+
+    Counts, pagination flags, aggregate maps and row values are allowed to
+    differ between the supplier snapshot and the owned clone.  Type metadata
+    still participates in the comparison, except for SQL helper columns whose
+    names end with ``_`` (for example ``rn_``), which are not part of the
+    business row projection.
+    """
+    result = dict(value)
+    for key in DATA_PROJECTION_KEYS:
+        result.pop(key, None)
+    column_map = result.get("columnTypeMap")
+    if isinstance(column_map, Mapping):
+        result["columnTypeMap"] = {
+            str(key): value
+            for key, value in column_map.items()
+            if not str(key).endswith("_")
+        }
+    return normalize(result)
+
+
 def compare(supplier: Mapping[str, Any], owned: Mapping[str, Any], path: str = "") -> Tuple[str, Dict[str, Any]]:
     if supplier.get("status") != owned.get("status"):
         return "fast-mismatch", {"reason": "status", "supplier": supplier.get("status"), "owned": owned.get("status")}
@@ -333,20 +393,31 @@ def compare(supplier: Mapping[str, Any], owned: Mapping[str, Any], path: str = "
                         "supplier_fields": sorted(left_keys),
                         "owned_fields": sorted(right_keys),
                     }
+                left_fields, left_metadata = _projection_fields(left)
+                right_fields, right_metadata = _projection_fields(right)
+                if left_fields and right_fields and left_fields != right_fields:
+                    return "fast-mismatch", {
+                        "reason": "projection-schema-mismatch",
+                        "supplier_fields": sorted(left_fields),
+                        "owned_fields": sorted(right_fields),
+                    }
                 # Pagination totals and row projections describe the observed
                 # data baseline. Keep them out of the envelope/schema
                 # comparison so an organization/data snapshot difference is
                 # reported as diagnostic data-scope drift rather than a false
-                # controller-contract mismatch.
-                data_keys = {"rows", "data", "items", "results", "total", "totalPages",
-                             "numberOfElements", "totalMap"}
-                comparable = {key: value for key, value in left.items() if key not in data_keys}
-                comparable_right = {key: value for key, value in right.items() if key not in data_keys}
-                if normalize(comparable) == normalize(comparable_right):
+                # controller-contract mismatch. ``rn_`` and similar helper
+                # columns are excluded by _data_projection_view.
+                comparable = _data_projection_view(left)
+                comparable_right = _data_projection_view(right)
+                if comparable == comparable_right:
                     return "fast-equivalent", {"reason": "row-projection-drift", "category": "data-scope-mismatch",
                                                 "supplier_total": left.get("total"), "owned_total": right.get("total"),
                                                 "supplier_row_count": len(left.get("rows", [])) if isinstance(left.get("rows"), list) else 0,
-                                                "owned_row_count": len(right.get("rows", [])) if isinstance(right.get("rows"), list) else 0}
+                                                "owned_row_count": len(right.get("rows", [])) if isinstance(right.get("rows"), list) else 0,
+                                                "supplier_projection_fields": sorted(left_fields),
+                                                "owned_projection_fields": sorted(right_fields),
+                                                "supplier_metadata_fields": sorted(left_metadata),
+                                                "owned_metadata_fields": sorted(right_metadata)}
             return "fast-mismatch", {"reason": "normalized-json",
                                     "supplier": summarize_json(left),
                                     "owned": summarize_json(right)}

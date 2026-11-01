@@ -104,6 +104,28 @@ class FastDifferentialTest(unittest.TestCase):
         self.assertEqual(classification, "fast-equivalent")
         self.assertEqual(diff["category"], "data-scope-mismatch")
 
+    def test_empty_owned_rows_and_sql_helper_metadata_are_data_scope_drift(self):
+        classification, diff = MODULE.compare(
+            {"status": 200, "content_type": "application/json", "json": {
+                "first": True, "last": False, "numberOfElements": 10,
+                "pageNumber": 1, "pageSize": 10, "total": 100,
+                "totalPages": 10, "totalMap": {"qty_": 100},
+                "columnTypeMap": {"id": "number", "name": "string", "rn_": "number"},
+                "rows": [{"id": 1, "name": "supplier"}],
+            }},
+            {"status": 200, "content_type": "application/json", "json": {
+                "first": True, "last": True, "numberOfElements": 0,
+                "pageNumber": 1, "pageSize": 10, "total": 0,
+                "totalPages": 0, "totalMap": {},
+                "columnTypeMap": {"id": "number", "name": "string"},
+                "rows": [],
+            }},
+            "/x/queries",
+        )
+        self.assertEqual(classification, "fast-equivalent")
+        self.assertEqual(diff["category"], "data-scope-mismatch")
+        self.assertIn("rn_", diff["supplier_metadata_fields"])
+
     def test_get_non_query_is_not_safe_to_probe(self):
         self.assertFalse(MODULE.route_safe({"method": "GET", "path": "/module/page", "route_kind": "api-resource"})[0])
 

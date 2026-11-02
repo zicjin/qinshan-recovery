@@ -227,7 +227,7 @@ public final class OwnedResultRunController {
                 + "M.METHODNAME AS ITEM_METHODNAME, SS.SETNAME AS ITEM_SETNAME, "
                 + "CASE WHEN EXISTS (SELECT 1 FROM T_EMC_ORDER_TASK_RESULT R "
                 + "JOIN T_EMC_ORDER_TASK RT ON RT.ID=R.ORDERTASKID WHERE RT.ID IN (" + placeholders + ") "
-                + "AND R.ITEMID=I.ID) THEN 'yes' ELSE NULL END AS SELECTED_FLAG "
+                + "AND R.ITEMID=I.ID) THEN '1' ELSE NULL END AS SELECTED_FLAG "
                 + "FROM T_EMC_ITEM I LEFT JOIN T_EMC_TEST_METHOD TM ON TM.ID=I.TESTMETHODID "
                 + "LEFT JOIN T_EMC_TEST T ON T.ID=TM.TESTID "
                 + "LEFT JOIN T_EMC_METHOD M ON M.ID=TM.METHODID "

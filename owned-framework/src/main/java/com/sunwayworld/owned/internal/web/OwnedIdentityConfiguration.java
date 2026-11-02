@@ -379,6 +379,13 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @ConditionalOnMissingBean(OwnedProjectEditLogQueryController.class)
+    public OwnedProjectEditLogQueryController ownedProjectEditLogQueryController(
+            OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
+        return new OwnedProjectEditLogQueryController(boundary, dataSource);
+    }
+
+    @Bean
     @ConditionalOnMissingBean(OwnedProjectChangeQueryController.class)
     public OwnedProjectChangeQueryController ownedProjectChangeQueryController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {

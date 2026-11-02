@@ -57,7 +57,7 @@ public final class OwnedInfoConfigDataController {
                 else { extra = " AND T.PARENTID=?"; values.add(query.parentId); }
             }
             return ok(selectPage("SELECT T.* FROM T_EMC_INFO_CONFIG T WHERE T.CREATEDBYORGID=?" + extra,
-                    "T.ORDERNO", principal.getOrgId(), values, query.page));
+                    "Q.ORDERNO", principal.getOrgId(), values, query.page));
         } catch (AccessDeniedException denied) { return forbidden(); }
         catch (IllegalArgumentException invalid) { return badRequest(); }
         catch (SQLException failure) { return unavailable(); }
@@ -83,7 +83,7 @@ public final class OwnedInfoConfigDataController {
             }
             String base = "SELECT T.* FROM (SELECT DISTINCT A.*, B.MONITORPOINTNAME FROM T_EMC_INFO_DATA A "
                     + "LEFT JOIN T_EMC_INFO_DATA_ITEM B ON B.INFODATAID=A.ID) T WHERE T.CREATEDBYORGID=?" + extra;
-            return ok(selectPage(base, "T.ID DESC", principal.getOrgId(), values, query.page));
+            return ok(selectPage(base, "Q.ID DESC", principal.getOrgId(), values, query.page));
         } catch (AccessDeniedException denied) { return forbidden(); }
         catch (IllegalArgumentException invalid) { return badRequest(); }
         catch (SQLException failure) { return unavailable(); }

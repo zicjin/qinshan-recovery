@@ -97,7 +97,7 @@ public final class OwnedProjectQueryController {
             JSONObject root = body == null || body.trim().isEmpty() ? new JSONObject() : JSON.parseObject(body);
             String projectId = text(root, "projectId");
             String source = "SELECT F.* FROM T_CORE_FILE F WHERE EXISTS (SELECT 1 FROM T_EMC_REPORT R "
-                    + "WHERE R.CREATEDBYORGID=? AND F.TARGETID=CONCAT('T_EMC_REPORT$',R.ID,'F')";
+                    + "WHERE R.CREATEDBYORGID=? AND F.TARGETID=('T_EMC_REPORT$' || R.ID || 'F')";
             List<String> values = new ArrayList<String>();
             if (projectId != null && projectId.matches("[0-9]+")) {
                 source += " AND R.PROJID=?";

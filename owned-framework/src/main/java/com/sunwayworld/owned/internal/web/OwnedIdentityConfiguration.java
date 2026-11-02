@@ -204,6 +204,13 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @ConditionalOnMissingBean(OwnedWorkConditionQueryController.class)
+    public OwnedWorkConditionQueryController ownedWorkConditionQueryController(
+            OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
+        return new OwnedWorkConditionQueryController(boundary, dataSource);
+    }
+
+    @Bean
     @ConditionalOnMissingBean(OwnedMaterialApplyQueryController.class)
     public OwnedMaterialApplyQueryController ownedMaterialApplyQueryController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {

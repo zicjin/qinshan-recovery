@@ -15,7 +15,7 @@ fi
 CP="$FRAMEWORK/classes:$FRAMEWORK/public-deps/*"
 OWNED_SOURCES=()
 JAVA_SOURCES=("$PROJECT_ROOT/src/main/java/com/sunwayworld/emc/projectfunction/GikamWpjcApplication.java")
-JAVA_SOURCES+=("$PROJECT_ROOT/src/main/java/com/sunwayworld/emc/module/mdm/basemdm/mtl/bean/EmcMtlBean.java" "$PROJECT_ROOT/src/main/java/com/sunwayworld/emc/module/mdm/basemdm/mtl/bean/EmcStockBean.java" "$PROJECT_ROOT/src/main/java/com/sunwayworld/emc/module/mdm/basemdm/mtl/bean/EmcStockLogBean.java")
+JAVA_SOURCES+=("$PROJECT_ROOT/src/main/java/com/sunwayworld/emc/module/mdm/basemdm/mtl/bean/EmcMtlBean.java" "$PROJECT_ROOT/src/main/java/com/sunwayworld/emc/module/mdm/basemdm/mtl/bean/EmcStockBean.java" "$PROJECT_ROOT/src/main/java/com/sunwayworld/emc/module/mdm/basemdm/mtl/bean/EmcStockLogBean.java" "$PROJECT_ROOT/src/main/java/com/sunwayworld/emc/module/mdm/basemdm/mtl/bean/EmcMtlUseRecordBean.java")
 if [ "${OWNED_CONSUMABLES_RED:-0}" != 1 ]; then
  for part in bean/EmcConsumeBean bean/EmcCsmStockBean bean/EmcCsmStockLogBean dao/EmcConsumeDao dao/EmcCsmStockDao dao/EmcCsmStockLogDao service/EmcConsumeService service/EmcCsmStockService service/EmcCsmStockLogService resource/EmcConsumeResource resource/impl/EmcConsumeResourceImpl controller/EmcConsumeController controller/impl/EmcConsumeControllerImpl; do
   JAVA_SOURCES+=("$SOURCE/$part.java")

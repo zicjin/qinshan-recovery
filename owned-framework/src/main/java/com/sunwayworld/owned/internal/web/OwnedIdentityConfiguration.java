@@ -232,6 +232,13 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @ConditionalOnMissingBean(OwnedMtlCategoryQueryController.class)
+    public OwnedMtlCategoryQueryController ownedMtlCategoryQueryController(
+            OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
+        return new OwnedMtlCategoryQueryController(boundary, dataSource);
+    }
+
+    @Bean
     @ConditionalOnMissingBean(OwnedReagentWriteController.class)
     public OwnedReagentWriteController ownedReagentWriteController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource, Environment environment) {

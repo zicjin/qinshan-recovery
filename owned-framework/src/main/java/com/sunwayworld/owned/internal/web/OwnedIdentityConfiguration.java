@@ -302,6 +302,13 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @ConditionalOnMissingBean(OwnedDeliveryOrderLabelQueryController.class)
+    public OwnedDeliveryOrderLabelQueryController ownedDeliveryOrderLabelQueryController(
+            OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
+        return new OwnedDeliveryOrderLabelQueryController(boundary, dataSource);
+    }
+
+    @Bean
     @ConditionalOnMissingBean(OwnedMobileProjectController.class)
     public OwnedMobileProjectController ownedMobileProjectController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {

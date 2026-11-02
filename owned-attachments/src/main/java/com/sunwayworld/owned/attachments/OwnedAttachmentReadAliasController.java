@@ -37,6 +37,6 @@ public final class OwnedAttachmentReadAliasController {
     @GetMapping(path = PREFIX + "/info/status", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> status(HttpServletRequest request) throws java.sql.SQLException {
         identity.currentPrincipal(request.getSession(false));
-        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body("{\"ext$\":{}}");
+        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body("{\"activeStatus\":{\"activatedFlag\":\"0\"},\"ext$\":{}}");
     }
 }

@@ -101,6 +101,7 @@ public final class OwnedResultRunController {
             "/secure/emc/module/bp/result/runs/analysis-pretrial/queries",
             "/secure/emc/module/bp/result/runs/queries/run-result",
             "/secure/emc/module/bp/result/runs/browse-record/queries",
+            "/secure/emc/module/bp/result/runs/run-audit-file/queries",
             "/secure/emc/module/bp/result/runs/edited-items/queries",
             "/secure/emc/module/bp/result/runs/unique-order-item-group/queries"},
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -120,6 +121,7 @@ public final class OwnedResultRunController {
                 return ok(page(readRunResult(principal.getOrgId(), filter, pageRequest)));
             }
             if (uri.endsWith("/browse-record/queries")) return ok(JSON.toJSONString(readBrowseRecord(principal.getOrgId(), filter), SerializerFeature.WriteMapNullValue));
+            if (uri.endsWith("/run-audit-file/queries")) return ok(JSON.toJSONString(readRunAuditFile(principal.getOrgId(), filter), SerializerFeature.WriteMapNullValue));
             if (uri.endsWith("/edited-items/queries")) {
                 return ok(page(readEditedItems(principal.getOrgId(), filter, pageRequest)));
             }
@@ -440,6 +442,27 @@ public final class OwnedResultRunController {
             }
             body.put("analysisRecord", analysis); body.put("otherRecordList", others);
         }
+        return body;
+    }
+
+    private Map<String, Object> readRunAuditFile(String organization, JSONObject filter) throws SQLException {
+        Map<String, Object> body = new LinkedHashMap<String, Object>();
+        body.put("ext$", new LinkedHashMap<String, Object>());
+        String runId = text(queryValue(filter, "runId"));
+        if (runId.length() == 0) return body;
+        if (!runId.matches("[A-Za-z0-9_-]+")) throw new IllegalArgumentException("run id is invalid");
+        List<Map<String, Object>> files = new ArrayList<Map<String, Object>>();
+        try (Connection connection = dataSource.getConnection()) {
+            try (PreparedStatement guard = connection.prepareStatement("SELECT COUNT(1) FROM T_EMC_RUN WHERE ID=? AND ORGID=?")) {
+                guard.setString(1, runId); guard.setString(2, organization);
+                try (ResultSet result = guard.executeQuery()) { if (!result.next() || result.getInt(1) == 0) return body; }
+            }
+            try (PreparedStatement query = connection.prepareStatement("SELECT F.* FROM T_CORE_FILE F WHERE F.TARGETID IN (?,?) ORDER BY F.ID")) {
+                query.setString(1, "T_EMC_RUN$" + runId); query.setString(2, "T_EMC_EQUIPT$" + runId);
+                try (ResultSet result = query.executeQuery()) { ResultSetMetaData metadata = result.getMetaData(); while (result.next()) files.add(row(result, metadata)); }
+            }
+        }
+        if (!files.isEmpty()) body.put("otherRecordList", files);
         return body;
     }
 

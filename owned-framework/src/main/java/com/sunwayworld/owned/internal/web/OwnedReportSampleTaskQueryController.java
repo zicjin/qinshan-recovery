@@ -52,6 +52,15 @@ public final class OwnedReportSampleTaskQueryController {
     }
 
     @PostMapping(path = {
+            REPORT + "/queries",
+            REPORT + "/queries/raw",
+            REPORT + "/queries/searchable",
+            ADVISORY + "/queries",
+            ADVISORY + "/queries/raw",
+            ADVISORY + "/queries/searchable",
+            SAMPLE + "/queries",
+            SAMPLE + "/queries/raw",
+            SAMPLE + "/queries/searchable",
             REPORT + "/queries/tasks",
             ADVISORY + "/queries/tasks",
             SAMPLE + "/queries/tasks"

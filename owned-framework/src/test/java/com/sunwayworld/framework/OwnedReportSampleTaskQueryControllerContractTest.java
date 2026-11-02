@@ -18,6 +18,15 @@ public final class OwnedReportSampleTaskQueryControllerContractTest {
             if (get != null) paths.addAll(Arrays.asList(get.path()));
         }
         for (String path : new String[] {
+                "/secure/emc/module/bp/report/reports/queries",
+                "/secure/emc/module/bp/report/reports/queries/raw",
+                "/secure/emc/module/bp/report/reports/queries/searchable",
+                "/secure/emc/module/bp/report/advisory-reports/queries",
+                "/secure/emc/module/bp/report/advisory-reports/queries/raw",
+                "/secure/emc/module/bp/report/advisory-reports/queries/searchable",
+                "/secure/emc/module/bp/sample/samples/queries",
+                "/secure/emc/module/bp/sample/samples/queries/raw",
+                "/secure/emc/module/bp/sample/samples/queries/searchable",
                 "/secure/emc/module/bp/report/reports/queries/tasks",
                 "/secure/emc/module/bp/report/advisory-reports/queries/tasks",
                 "/secure/emc/module/bp/sample/samples/queries/tasks",

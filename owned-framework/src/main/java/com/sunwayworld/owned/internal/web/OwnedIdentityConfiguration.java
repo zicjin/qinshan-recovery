@@ -260,6 +260,13 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @ConditionalOnMissingBean(OwnedCurveQueryController.class)
+    public OwnedCurveQueryController ownedCurveQueryController(
+            OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
+        return new OwnedCurveQueryController(boundary, dataSource);
+    }
+
+    @Bean
     @ConditionalOnMissingBean(OwnedFolderGenericResourceController.class)
     public OwnedFolderGenericResourceController ownedFolderGenericResourceController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {

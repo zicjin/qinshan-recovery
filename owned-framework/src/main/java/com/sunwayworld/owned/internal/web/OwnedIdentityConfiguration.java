@@ -267,6 +267,13 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @ConditionalOnMissingBean(OwnedPhysChemicQueryController.class)
+    public OwnedPhysChemicQueryController ownedPhysChemicQueryController(
+            OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
+        return new OwnedPhysChemicQueryController(boundary, dataSource);
+    }
+
+    @Bean
     @ConditionalOnMissingBean(OwnedFolderGenericResourceController.class)
     public OwnedFolderGenericResourceController ownedFolderGenericResourceController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
@@ -278,6 +285,13 @@ public class OwnedIdentityConfiguration {
     public OwnedProjectTaskQueryController ownedProjectTaskQueryController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
         return new OwnedProjectTaskQueryController(boundary, dataSource);
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(OwnedProjectQcQueryController.class)
+    public OwnedProjectQcQueryController ownedProjectQcQueryController(
+            OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
+        return new OwnedProjectQcQueryController(boundary, dataSource);
     }
 
     @Bean

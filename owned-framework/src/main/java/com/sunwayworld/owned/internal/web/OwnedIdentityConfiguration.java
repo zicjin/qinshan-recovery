@@ -302,6 +302,13 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @ConditionalOnMissingBean(OwnedProjectQueryController.class)
+    public OwnedProjectQueryController ownedProjectQueryController(
+            OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
+        return new OwnedProjectQueryController(boundary, dataSource);
+    }
+
+    @Bean
     @ConditionalOnMissingBean(OwnedFolderGenericResourceController.class)
     public OwnedFolderGenericResourceController ownedFolderGenericResourceController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {

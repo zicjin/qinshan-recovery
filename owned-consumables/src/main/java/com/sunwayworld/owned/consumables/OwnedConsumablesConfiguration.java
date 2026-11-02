@@ -46,6 +46,11 @@ public class OwnedConsumablesConfiguration {
             OwnedIdentityHttpBoundary boundary, DataSource source) {
         return new OwnedMtlUseRecordReadController(boundary, source);
     }
+    @Bean @ConditionalOnMissingBean(OwnedPfStockReadController.class)
+    public OwnedPfStockReadController ownedPfStockReadController(
+            OwnedIdentityHttpBoundary boundary, OwnedMdmStockReadController delegate) {
+        return new OwnedPfStockReadController(boundary, delegate);
+    }
     @Bean @ConditionalOnMissingBean(EmcConsumeResourceImpl.class) public EmcConsumeResourceImpl emcConsumeResource() { return new EmcConsumeResourceImpl(); }
     @Bean @ConditionalOnMissingBean(OwnedConsumablesExceptionHandler.class) public OwnedConsumablesExceptionHandler ownedConsumablesExceptionHandler() { return new OwnedConsumablesExceptionHandler(); }
 }

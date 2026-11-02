@@ -35,6 +35,17 @@ public class OwnedConsumablesConfiguration {
     @Bean public OwnedConsumablesReadService ownedConsumablesReadService(OwnedConsumablesReadDao dao) { return new OwnedConsumablesReadService(dao); }
     @Bean public OwnedConsumablesStockService ownedConsumablesStockService(OwnedConsumablesStockDao dao) { return new OwnedConsumablesStockService(dao); }
     @Bean public OwnedConsumablesStockLogService ownedConsumablesStockLogService(OwnedConsumablesStockLogDao dao) { return new OwnedConsumablesStockLogService(dao); }
+    @Bean @ConditionalOnMissingBean(OwnedMdmStockReadController.class)
+    public OwnedMdmStockReadController ownedMdmStockReadController(DataSource source,
+            JdbcPersonnelIdentityProvider provider, OwnedIdentityHttpBoundary boundary,
+            org.springframework.core.env.Environment environment, AuditEventSink audit) {
+        return new OwnedMdmStockReadController(source, provider, boundary, environment, audit);
+    }
+    @Bean @ConditionalOnMissingBean(OwnedMtlUseRecordReadController.class)
+    public OwnedMtlUseRecordReadController ownedMtlUseRecordReadController(
+            OwnedIdentityHttpBoundary boundary, DataSource source) {
+        return new OwnedMtlUseRecordReadController(boundary, source);
+    }
     @Bean @ConditionalOnMissingBean(EmcConsumeResourceImpl.class) public EmcConsumeResourceImpl emcConsumeResource() { return new EmcConsumeResourceImpl(); }
     @Bean @ConditionalOnMissingBean(OwnedConsumablesExceptionHandler.class) public OwnedConsumablesExceptionHandler ownedConsumablesExceptionHandler() { return new OwnedConsumablesExceptionHandler(); }
 }

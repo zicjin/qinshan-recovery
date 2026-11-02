@@ -14,6 +14,10 @@ public final class OwnedCrmOpportunityOrdtaskControllerContractTest {
    String source = new String(java.nio.file.Files.readAllBytes(java.nio.file.Paths.get("src/main/java/com/sunwayworld/owned/internal/web/OwnedCrmOpportunityOrdtaskController.java")), "UTF-8");
    require(source.contains("T_CRM_OPPORTUNITY_ORDTASK"), "missing CRM source table");
    require(source.contains("GROUPFIELDS"), "missing GROUPFIELDS projection");
+   require(source.contains("DBMS_LOB.SUBSTR(T.TESTNO,4000,1)"), "CLOB TESTNO is not projected as VARCHAR2");
+   require(source.contains("DBMS_LOB.SUBSTR(T.TESTMETHODS,4000,1)"), "CLOB TESTMETHODS is not projected as VARCHAR2");
+   require(!source.contains("T.TESTNO AS TESTNAME"), "raw CLOB TESTNO alias remains");
+   require(!source.contains("T.TESTMETHODS AS METHODNAME"), "raw CLOB TESTMETHODS alias remains");
    require(source.contains("ORDERSID"), "missing ordersId filter");
    require(source.contains("totalMap"), "missing pagination envelope");
    require(!source.contains("GIKAM.EXCEPTION.UNEXPECTED"), "CRM route remains an unexpected-error stub");

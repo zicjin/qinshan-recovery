@@ -34,7 +34,10 @@ import org.springframework.web.bind.annotation.RestController;
 @ConditionalOnBean({OwnedIdentityHttpBoundary.class, DataSource.class})
 public final class OwnedCrmOpportunityOrdtaskController {
     private static final String PREFIX = "/secure/emc/module/mdm/crm/ordtasks";
-    private static final String PROJECTION = "SELECT T.*, CASE WHEN T.SCHEMENAME = 'default' THEN T.TESTNO ELSE T.SCHEMENAME END AS GROUPFIELDS, T.TESTNO AS TESTNAME, T.TESTMETHODS AS METHODNAME, T.TESTCODE AS TESTID FROM T_CRM_OPPORTUNITY_ORDTASK T WHERE T.CREATEDBYORGID=?";
+    /* TESTNO and TESTMETHODS are Oracle CLOBs in the clone.  Project them to
+       VARCHAR2 before CASE/JSON handling; comparing or returning the CLOB
+       aliases directly raises ORA-00932 in the inherited query family. */
+    private static final String PROJECTION = "SELECT T.*, CASE WHEN T.SCHEMENAME = 'default' THEN DBMS_LOB.SUBSTR(T.TESTNO,4000,1) ELSE T.SCHEMENAME END AS GROUPFIELDS, DBMS_LOB.SUBSTR(T.TESTNO,4000,1) AS TESTNAME, DBMS_LOB.SUBSTR(T.TESTMETHODS,4000,1) AS METHODNAME, T.TESTCODE AS TESTID FROM T_CRM_OPPORTUNITY_ORDTASK T WHERE T.CREATEDBYORGID=?";
     private final OwnedIdentityHttpBoundary boundary;
     private final DataSource dataSource;
 

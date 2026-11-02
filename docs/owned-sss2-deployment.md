@@ -28,12 +28,13 @@ read-only `expdp` connection to its `XEPDB1` service, then imports into a new
 owned XE schema with `REMAP_SCHEMA` and the source tablespace remapped to
 `USERS`. It does not connect to `sss` or any production host. Attachment tables
 (`T_CORE_FILE`, `T_EMC_EQUIPT_ACQ_FILE`) and large history/operational tables
-are excluded. `T_CORE_AT_RECORD_LINE` is also excluded because the source table
-is approximately 1.2 GB; the deployment creates an empty schema-compatible
-owned table with its primary key and record index so the original audit-line
-query can return an empty page instead of a missing-table error. No source rows
-are copied into that compatibility table, so this does not prove audit-history
-parity. Attachment files and Redis business cache state are not migrated.
+are excluded. `T_CORE_FILE` and `T_CORE_AT_RECORD_LINE` are therefore created
+as empty schema-compatible owned compatibility tables, with the file primary
+key and audit-line primary key/index, so report-file and audit-line queries
+return an explicit empty page instead of a missing-table error. No source rows
+or attachment bytes are copied into these tables, so this does not prove
+report-file, attachment, or audit-history parity. `T_EMC_EQUIPT_ACQ_FILE` and
+Redis business cache state are not migrated.
 The bounded import may retain Oracle `ORA-39346` comment charset warnings and
 `ORA-39082` function compilation warnings; these are recorded in the report
 and do not claim exact data parity.

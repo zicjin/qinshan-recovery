@@ -101,12 +101,25 @@ begin
   end if;
 end;
 /
+declare
+  present number;
+begin
+  select count(*) into present from user_tables where table_name = 'T_CORE_FILE';
+  if present = 0 then
+    execute immediate 'create table T_CORE_FILE (' ||
+      'ID NUMBER NOT NULL, TARGETID VARCHAR2(200), NAME VARCHAR2(256), FILEEXT VARCHAR2(32), ' ||
+      'SCOPE VARCHAR2(32), MD5NAME VARCHAR2(128), CREATEDTIME TIMESTAMP, ' ||
+      'BIZCATEGORY VARCHAR2(128), EXT VARCHAR2(64), DOWNLOADABLE VARCHAR2(8))';
+    execute immediate 'alter table T_CORE_FILE add constraint PK_OWNED_CORE_FILE primary key (ID)';
+  end if;
+end;
+/
 exit
 EOF3
 chmod 600 "$ROOT/audit-line-schema.sql"
 docker exec -i "$ORA" bash -lc 'export ORACLE_HOME=${ORACLE_HOME:-/opt/oracle/product/21c/dbhomeXE}; export PATH=$ORACLE_HOME/bin:$PATH; sqlplus -s /nolog' < "$ROOT/audit-line-schema.sql" > "$ROOT/logs/audit-line-schema.log" 2>&1 || { cat "$ROOT/logs/audit-line-schema.log" >&2; rm -f "$ROOT/audit-line-schema.sql"; die 'audit-line compatibility table creation failed'; }
 rm -f "$ROOT/audit-line-schema.sql"
-SYNTHETIC_COMPAT_TABLES="T_CORE_AT_RECORD_LINE"
+SYNTHETIC_COMPAT_TABLES="T_CORE_AT_RECORD_LINE,T_CORE_FILE"
 cat > "$ROOT/application.properties" <<EOF2
 server.address=0.0.0.0
 server.port=8080

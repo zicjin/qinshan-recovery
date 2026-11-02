@@ -39,6 +39,17 @@ public final class OwnedProjectQueryController {
             + "C.ORGNAME AS REPORTORGNAME, CASE WHEN T.STATUS='cancel' THEN '终止' ELSE '正常' END AS CANCELSTATUS "
             + "FROM T_EMC_PROJECT T LEFT JOIN T_EMC_BIZ_CATEGORY B ON B.ID=T.BIZCATEGORYID "
             + "LEFT JOIN T_CORE_ORG C ON C.ID=T.REPORTORGID WHERE T.CREATEDBYORGID=?";
+    private static final String REPORT_EDIT_SOURCE =
+            "SELECT T.*, B.FORMSTYLE, B.BIZCATEGORYNAME, B.EDITMONITORINFO, B.SAMPLEORGID, "
+            + "(SELECT COUNT(1) FROM T_EMC_ORDER O WHERE O.PROJID=T.ID AND O.TERMINATION!='1') AS SAMPLEORDERCOUNT, "
+            + "C.ORGNAME AS REPORTORGNAME, "
+            + "CASE WHEN T.STATUS='cancel' THEN '终止' ELSE '正常' END AS CANCELSTATUS, "
+            + "CASE WHEN (SELECT COUNT(1) FROM T_EMC_AUDIT_RECORD AR WHERE AR.PROJID=T.ID AND AR.TASKNAME='报告归档')>1 THEN '报告已外发' "
+            + "WHEN (SELECT COUNT(1) FROM T_EMC_AUDIT_RECORD AR WHERE AR.PROJID=T.ID AND AR.TASKNAME='盖章发送')>1 THEN '报告已打印' ELSE '无' END AS REPORTCHANGEINFO, "
+            + "D.ACTIVATEDFLAG AS SCHEDULEACTIVEDFLAG "
+            + "FROM T_EMC_PROJECT T LEFT JOIN T_EMC_BIZ_CATEGORY B ON B.ID=T.BIZCATEGORYID "
+            + "LEFT JOIN T_CORE_ORG C ON C.ID=T.REPORTORGID "
+            + "LEFT JOIN T_CORE_SCHEDULE_TASK_CONFIG D ON D.\"UID\"=CONCAT('T_EMC_PROJECT$',T.ID) WHERE T.CREATEDBYORGID=?";
 
     private final OwnedIdentityHttpBoundary boundary;
     private final DataSource dataSource;
@@ -65,15 +76,31 @@ public final class OwnedProjectQueryController {
         catch (SQLException failure) { return unavailable(); }
     }
 
+    @PostMapping(path = PREFIX + "/select-by-reportedit/queries",
+            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> selectByReportEdit(HttpServletRequest request,
+            @RequestBody(required = false) String body) {
+        try {
+            OwnedPrincipal principal = require(request);
+            return ok(selectPage(REPORT_EDIT_SOURCE, principal.getOrgId(), Page.parse(body)));
+        } catch (AccessDeniedException denied) { return forbidden(); }
+        catch (IllegalArgumentException invalid) { return badRequest(); }
+        catch (SQLException failure) { return unavailable(); }
+    }
+
     private OwnedPrincipal require(HttpServletRequest request) throws SQLException {
         boundary.requirePermission(request.getSession(false), OwnedIdentityProvider.RESULT_READ);
         return boundary.currentPrincipal(request.getSession(false));
     }
 
     private String selectPage(String organization, Page page) throws SQLException {
-        String countSql = "SELECT COUNT(1) FROM (" + SOURCE + ") Q";
+        return selectPage(SOURCE, organization, page);
+    }
+
+    private String selectPage(String source, String organization, Page page) throws SQLException {
+        String countSql = "SELECT COUNT(1) FROM (" + source + ") Q";
         String pageSql = "SELECT P.* FROM (SELECT Q.*,ROW_NUMBER() OVER (ORDER BY Q.ID DESC) RN_ FROM ("
-                + SOURCE + ") Q) P WHERE P.RN_>? AND P.RN_<=? ORDER BY P.RN_";
+                + source + ") Q) P WHERE P.RN_>? AND P.RN_<=? ORDER BY P.RN_";
         int total;
         List<Map<String,Object>> rows = new ArrayList<Map<String,Object>>();
         Map<String,String> types = new LinkedHashMap<String,String>();

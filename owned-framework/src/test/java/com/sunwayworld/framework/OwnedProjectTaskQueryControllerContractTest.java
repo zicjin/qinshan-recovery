@@ -20,6 +20,10 @@ public final class OwnedProjectTaskQueryControllerContractTest {
         }
         require(paths, "/secure/emc/module/bp/project/projects/queries/tasks");
         require(paths, "/secure/emc/module/bp/edit/project-change/projects/queries/tasks");
+        require(paths, "/secure/emc/module/bp/edit/project-change/projects/queries");
+        require(paths, "/secure/emc/module/bp/edit/project-change/projects/queries/raw");
+        require(paths, "/secure/emc/module/bp/edit/project-change/projects/queries/searchable");
+        require(paths, "/secure/emc/module/bp/edit/project-change/projects/info/status");
         boolean registered = false;
         for (Method method : OwnedIdentityConfiguration.class.getDeclaredMethods()) {
             if (method.getReturnType() == OwnedProjectTaskQueryController.class) registered = true;

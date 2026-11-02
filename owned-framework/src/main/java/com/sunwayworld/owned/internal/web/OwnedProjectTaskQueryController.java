@@ -24,6 +24,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -39,13 +40,24 @@ public final class OwnedProjectTaskQueryController {
     }
     @PostMapping(path = {
             "/secure/emc/module/bp/project/projects/queries/tasks",
-            "/secure/emc/module/bp/edit/project-change/projects/queries/tasks"},
+            "/secure/emc/module/bp/edit/project-change/projects/queries/tasks",
+            "/secure/emc/module/bp/edit/project-change/projects/queries",
+            "/secure/emc/module/bp/edit/project-change/projects/queries/raw",
+            "/secure/emc/module/bp/edit/project-change/projects/queries/searchable"},
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> query(HttpServletRequest request, @RequestBody(required = false) String body) {
         try { OwnedPrincipal principal = require(request); boolean projectChange = request.getRequestURI().contains("/edit/project-change/");
             return ok(selectPage(principal.getOrgId(), Query.parse(body), projectChange ? PROJECT_CHANGE_TYPE_PROFILE : PROJECT_TYPE_PROFILE, projectChange)); }
         catch (AccessDeniedException denied) { return forbidden(); }
         catch (IllegalArgumentException invalid) { return badRequest(); }
+        catch (SQLException failure) { return unavailable(); }
+    }
+
+    @GetMapping(path = "/secure/emc/module/bp/edit/project-change/projects/info/status",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> projectChangeStatus(HttpServletRequest request) {
+        try { require(request); return ok("{\"ext$\":{}}"); }
+        catch (AccessDeniedException denied) { return forbidden(); }
         catch (SQLException failure) { return unavailable(); }
     }
     private OwnedPrincipal require(HttpServletRequest request) throws SQLException {

@@ -84,7 +84,7 @@ public final class OwnedResultRunController {
             }
             if (uri.endsWith("/browse-record/queries")) return ok(JSON.toJSONString(readBrowseRecord(principal.getOrgId(), filter), SerializerFeature.WriteMapNullValue));
             if (uri.endsWith("/edited-items/queries")) return emptyBody(response);
-            if (uri.endsWith("/unique-order-item-group/queries")) return ok(emptyPage(pageNumber(filter), pageSize(filter)));
+            if (uri.endsWith("/unique-order-item-group/queries")) return ok(page(readUniqueOrderItemGroups(principal.getOrgId(), filter, pageRequest)));
             if (request.getRequestURI().endsWith("/qc-related-order/queries")) {
                 return ok(page(readQcRelatedOrders(principal.getOrgId(), filter, pageRequest)));
             }
@@ -193,6 +193,16 @@ public final class OwnedResultRunController {
         appendStringFilter(inner, values, "A.STATUS", queryValue(filter, "status"));
         return readPaged("SELECT * FROM (" + inner + ") Q WHERE Q.UNIQUE_RN=1", values, page,
                 UNIQUE_ORDER_TASK_TYPE_PROFILE);
+    }
+
+    private QueryResult readUniqueOrderItemGroups(String organization, JSONObject filter, PageRequest page) throws SQLException {
+        List<Object> values = new ArrayList<Object>();
+        StringBuilder source = new StringBuilder("SELECT G.* FROM T_EMC_ORDER_ITEM_GROUP G WHERE G.CREATEDBYORGID=? AND EXISTS (SELECT 1 FROM T_EMC_ORDER_TASK T WHERE T.ORDERID=G.ORDERID AND T.TESTMETHODID=G.TESTMETHODID AND T.ANALYSISORGID=?");
+        values.add(organization); values.add(organization);
+        appendLongFilter(source, values, "T.ORDERID", queryValue(filter, "orderId"));
+        appendLongFilter(source, values, "T.TESTMETHODID", queryValue(filter, "testMethodId"));
+        source.append(")");
+        return readPaged("SELECT DISTINCT Q.* FROM (" + source + ") Q", values, page, UNIQUE_ORDER_ITEM_GROUP_TYPE_PROFILE);
     }
 
     /**
@@ -334,6 +344,14 @@ public final class OwnedResultRunController {
                 + "monitortmplid=string;testname=string;containergroup=string;orderdesc=string;stockbatchno=string;"
                 + "monitorpointname=string;equiptname=string;schemename=string;analysisorgid=string;indexid=string;"
                 + "ordercategory=string;equiptacquno=string;qccategorycode=string;status=string";
+        Map<String, String> result = new LinkedHashMap<String, String>();
+        for (String token : encoded.split(";")) { int equals = token.indexOf('='); if (equals > 0) result.put(token.substring(0, equals), token.substring(equals + 1)); }
+        return result;
+    }
+
+    private static final Map<String, String> UNIQUE_ORDER_ITEM_GROUP_TYPE_PROFILE = uniqueOrderItemGroupTypeProfile();
+    private static Map<String, String> uniqueOrderItemGroupTypeProfile() {
+        String encoded = "id=number;orderid=number;schemename=string;testid=number;testname=string;testmethodid=number;methodid=number;methodname=string;itemgroupid=number;itemgroup=string;analysisorgid=string;analysisorgname=string;qccategoryid=number;qccategorycode=string;qcname=string;subpackageno=string;containercategoryid=number;containercategorycode=string;containercategoryname=string;ordercategory=string;createdbyid=string;createdbyname=string;createdtime=dateTime;createdbyorgid=string;createdbyorgname=string;sortnum=number";
         Map<String, String> result = new LinkedHashMap<String, String>();
         for (String token : encoded.split(";")) { int equals = token.indexOf('='); if (equals > 0) result.put(token.substring(0, equals), token.substring(equals + 1)); }
         return result;

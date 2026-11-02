@@ -47,6 +47,9 @@ public final class OwnedResultRunControllerContractTest {
         Field unique = OwnedResultRunController.class.getDeclaredField("UNIQUE_ORDER_TASK_TYPE_PROFILE");
         unique.setAccessible(true);
         if (((Map<?, ?>) unique.get(null)).size() != 46) throw new AssertionError("unexpected unique-order-task profile size");
+        Field itemGroup = OwnedResultRunController.class.getDeclaredField("UNIQUE_ORDER_ITEM_GROUP_TYPE_PROFILE");
+        itemGroup.setAccessible(true);
+        if (((Map<?, ?>) itemGroup.get(null)).size() != 26) throw new AssertionError("unexpected unique-order-item-group profile size");
         PathCheck.requireSource();
         System.out.println("owned result-run read alias contract checks passed");
     }
@@ -60,7 +63,7 @@ public final class OwnedResultRunControllerContractTest {
             Path path = Paths.get("owned-framework/src/main/java/com/sunwayworld/owned/internal/web/OwnedResultRunController.java");
             if (!Files.exists(path)) path = Paths.get("src/main/java/com/sunwayworld/owned/internal/web/OwnedResultRunController.java");
             String source = new String(Files.readAllBytes(path), "UTF-8");
-        for (String token : new String[]{"T_EMC_QC_RELATED_ORDER", "A.CREATEDBYORGID=?", "T_EMC_ORDER_TASK", "A.ANALYSISORGID=?", "STATUS IN ('audit','qcAudit')", "T_CORE_FILE", "readBrowseRecord", "readAnalysisPretrial", "readRunResult", "ROW_NUMBER() OVER", "PAGE_RN_", "relatedOrderId", "testId", "totalPages"}) {
+        for (String token : new String[]{"T_EMC_QC_RELATED_ORDER", "A.CREATEDBYORGID=?", "T_EMC_ORDER_TASK", "A.ANALYSISORGID=?", "STATUS IN ('audit','qcAudit')", "T_CORE_FILE", "readBrowseRecord", "readAnalysisPretrial", "readRunResult", "readUniqueOrderItemGroups", "ROW_NUMBER() OVER", "PAGE_RN_", "relatedOrderId", "testId", "totalPages"}) {
                 if (!source.contains(token)) throw new AssertionError("missing result-run contract token: " + token);
             }
         }

@@ -484,6 +484,13 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @ConditionalOnMissingBean(OwnedMdmGenericReadController.class)
+    public OwnedMdmGenericReadController ownedMdmGenericReadController(
+            OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
+        return new OwnedMdmGenericReadController(boundary, dataSource);
+    }
+
+    @Bean
     @ConditionalOnMissingBean(OwnedClientResourceExtensionController.class)
     public OwnedClientResourceExtensionController ownedClientResourceExtensionController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {

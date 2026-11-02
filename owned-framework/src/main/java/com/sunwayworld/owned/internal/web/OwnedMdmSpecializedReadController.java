@@ -40,6 +40,9 @@ public final class OwnedMdmSpecializedReadController {
 
     @PostMapping(path = {
             "/secure/emc/module/mdm/bizmdm/methods/estand-datas/queries",
+            "/secure/emc/module/mdm/basemdm/seal-rules/queries",
+            "/secure/emc/module/mdm/basemdm/seal-rules/queries/raw",
+            "/secure/emc/module/mdm/basemdm/seal-rules/queries/searchable",
             "/secure/emc/module/mdm/basemdm/biz-categories/biz-class/queries",
             "/secure/emc/module/mdm/basemdm/certs/certs/queries/choosable",
             "/secure/emc/module/mdm/basemdm/seal-rules/rule-detailss/queries",
@@ -57,7 +60,8 @@ public final class OwnedMdmSpecializedReadController {
             "/secure/emc/module/mdm/bizmdm/test/test-capacitys/item-groups/queries/choosable"
             }, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> query(HttpServletRequest request, @RequestBody(required = false) String body) {
-        if (request.getRequestURI().endsWith("/methods/estand-datas/queries")) return estandUnavailable(request);
+        if (request.getRequestURI().contains("/methods/estand-datas/queries")) return estandUnavailable(request);
+        if (request.getRequestURI().contains("/seal-rules/queries")) return sealUnavailable(request);
         try { return ok(selectPage(resource(request), require(request).getOrgId(), Page.parse(body))); }
         catch (AccessDeniedException denied) { return forbidden(); }
         catch (IllegalArgumentException invalid) { return badRequest(); }
@@ -66,6 +70,12 @@ public final class OwnedMdmSpecializedReadController {
 
     private ResponseEntity<String> estandUnavailable(HttpServletRequest request) {
         try { require(request); return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).contentType(MediaType.APPLICATION_JSON).body("{\"message\":\"GIKAM.ESTANDARD.DISABLED_IN_ISOLATED_ENV\"}"); }
+        catch (AccessDeniedException denied) { return forbidden(); }
+        catch (SQLException failure) { return unavailable(); }
+    }
+
+    private ResponseEntity<String> sealUnavailable(HttpServletRequest request) {
+        try { require(request); return unavailable(); }
         catch (AccessDeniedException denied) { return forbidden(); }
         catch (SQLException failure) { return unavailable(); }
     }

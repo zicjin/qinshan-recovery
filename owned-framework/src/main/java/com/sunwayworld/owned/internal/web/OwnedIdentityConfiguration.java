@@ -531,4 +531,11 @@ public class OwnedIdentityConfiguration {
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
         return new OwnedInfoTmplController(boundary, dataSource);
     }
+
+    @Bean
+    @ConditionalOnMissingBean(OwnedReportTmplController.class)
+    public OwnedReportTmplController ownedReportTmplController(
+            OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
+        return new OwnedReportTmplController(boundary, dataSource);
+    }
 }

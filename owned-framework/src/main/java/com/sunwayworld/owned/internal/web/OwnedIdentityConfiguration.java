@@ -377,4 +377,11 @@ public class OwnedIdentityConfiguration {
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
         return new OwnedInfoIndexController(boundary, dataSource);
     }
+
+    @Bean
+    @ConditionalOnMissingBean(OwnedInfoConfigDataController.class)
+    public OwnedInfoConfigDataController ownedInfoConfigDataController(
+            OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
+        return new OwnedInfoConfigDataController(boundary, dataSource);
+    }
 }

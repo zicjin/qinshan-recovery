@@ -218,6 +218,13 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @ConditionalOnMissingBean(OwnedSampleRecordQueryController.class)
+    public OwnedSampleRecordQueryController ownedSampleRecordQueryController(
+            OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
+        return new OwnedSampleRecordQueryController(boundary, dataSource);
+    }
+
+    @Bean
     @ConditionalOnMissingBean(OwnedMaterialApplyQueryController.class)
     public OwnedMaterialApplyQueryController ownedMaterialApplyQueryController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {

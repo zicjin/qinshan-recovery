@@ -393,6 +393,13 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @ConditionalOnMissingBean(OwnedProjectSchemeQueryController.class)
+    public OwnedProjectSchemeQueryController ownedProjectSchemeQueryController(
+            OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
+        return new OwnedProjectSchemeQueryController(boundary, dataSource);
+    }
+
+    @Bean
     @ConditionalOnMissingBean(OwnedProjectChangeQueryController.class)
     public OwnedProjectChangeQueryController ownedProjectChangeQueryController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {

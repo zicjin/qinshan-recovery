@@ -1,0 +1,60 @@
+package com.sunwayworld.owned.internal.web;
+
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.sunwayworld.owned.internal.data.JdbcValue;
+import com.sunwayworld.owned.internal.security.OwnedIdentityProvider;
+import com.sunwayworld.owned.internal.security.OwnedPrincipal;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
+import javax.sql.DataSource;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+/** Owned read seams for pretreatment, extraction and purification resources. */
+@RestController
+@ConditionalOnBean({OwnedIdentityHttpBoundary.class, DataSource.class})
+public final class OwnedPretreatmentQueryController {
+    private static final String PREFIX = "/secure/emc/module/bp/result/pretreatments";
+    private static final String MAIN_SQL = "SELECT A.*,B.PROJNO,C.ORDERNO,C.LABELNO,C.ORDERCATEGORY,C.ACCEPTEDDATE,D.TESTNAME,D.SAMPLERECEIVERFLAG,D.TESTMETHODID,D.MONITORTMPLID,E.EXTRACTMETHOD,G.ORDERCONTAINERNO FROM T_EMC_PRETREATMENT A LEFT JOIN T_EMC_PROJECT B ON B.ID=A.PROJID LEFT JOIN T_EMC_ORDER C ON C.ID=A.ORDERID LEFT JOIN T_EMC_ORDER_TASK D ON D.ID=A.ORDERTASKID LEFT JOIN T_EMC_EXTRACT_METHOD E ON A.EXTRACTMETHODID=E.ID LEFT JOIN T_EMC_PURIFY_METHOD F ON A.PURIFYMETHODID=F.ID LEFT JOIN T_EMC_ORDER_CONTAINER G ON D.ORDERCONTAINERID=G.ID WHERE (A.CREATEDBYORGID=? OR A.ORGID=?)";
+    private static final Map<String,String> MAIN_PROFILE=profile("accepteddate=dateTime;createdbyid=string;createdbyname=string;createdbyorgid=string;createdbyorgname=string;createdtime=dateTime;extractmethod=string;extractmethodid=number;folderid=number;id=number;injectstd=string;injectstdadditive=string;injectstdunit=string;injectstduserid=string;injectstdusername=string;injectstdvolume=string;labelno=string;monitortmplid=string;ordercategory=string;ordercontainerno=string;orderdivision=string;orderid=number;orderno=string;ordertaskid=number;orgid=string;projid=number;projno=string;purifymethod=string;purifymethodid=number;purifystd=string;purifystdadditive=string;purifystdtime=dateTime;purifystdunit=string;purifystduserid=string;purifystdusername=string;remark=string;rn_=number;samplereceiverflag=string;status=string;testmethodid=number;testname=string");
+    private static final Map<String,String> EXTRACT_PROFILE=profile("createdbyid=string;createdbyname=string;createdbyorgid=string;createdbyorgname=string;createdtime=dateTime;endtime=dateTime;equiptid=number;extractmethod=string;id=number;orgid=string;pretreatmentid=number;rn_=number;solvent=string;solventamount=string;starttime=dateTime");
+    private static final Map<String,String> PURIFY_PROFILE=profile("createdbyid=string;createdbyname=string;createdbyorgid=string;createdbyorgname=string;createdtime=dateTime;eluent=string;eluentamount=string;id=number;model=string;orgid=string;pretreatmentid=number;purifymethod=string;rn_=number");
+    private static final Map<String,String> KEYS=keys();
+    private final OwnedIdentityHttpBoundary boundary; private final DataSource dataSource;
+    public OwnedPretreatmentQueryController(OwnedIdentityHttpBoundary boundary,DataSource dataSource){if(boundary==null||dataSource==null)throw new IllegalArgumentException("pretreatment dependencies are required");this.boundary=boundary;this.dataSource=dataSource;}
+    @PostMapping(path={PREFIX+"/queries",PREFIX+"/queries/raw",PREFIX+"/queries/searchable"},consumes=MediaType.APPLICATION_JSON_VALUE,produces=MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> query(HttpServletRequest request,@RequestBody(required=false)String body){try{OwnedPrincipal p=require(request);return ok(selectPage(MAIN_SQL,MAIN_PROFILE,p.getOrgId(),Page.parse(body)));}catch(AccessDeniedException e){return forbidden();}catch(IllegalArgumentException e){return badRequest();}catch(SQLException e){return unavailable();}}
+    @PostMapping(path={PREFIX+"/extract-methods/queries",PREFIX+"/purify-methods/queries"},consumes=MediaType.APPLICATION_JSON_VALUE,produces=MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> methodQuery(HttpServletRequest request,@RequestBody(required=false)String body){try{OwnedPrincipal p=require(request);boolean extract=request.getRequestURI().contains("extract-methods");String table=extract?"T_EMC_EXTRACT_METHOD":"T_EMC_PURIFY_METHOD";return ok(selectPage("SELECT A.* FROM "+table+" A WHERE (A.CREATEDBYORGID=? OR A.ORGID=?)",extract?EXTRACT_PROFILE:PURIFY_PROFILE,p.getOrgId(),Page.parse(body)));}catch(AccessDeniedException e){return forbidden();}catch(IllegalArgumentException e){return badRequest();}catch(SQLException e){return unavailable();}}
+    @GetMapping(path=PREFIX+"/info/status",produces=MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> status(HttpServletRequest request){try{require(request);return ok("{\"ext$\":{}}");}catch(AccessDeniedException e){return forbidden();}catch(SQLException e){return unavailable();}}
+    @GetMapping(path=PREFIX+"/{id}",produces=MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> detail(HttpServletRequest request,@PathVariable("id")String id){try{OwnedPrincipal p=require(request);if(id==null||!id.matches("[0-9]{1,30}"))return badRequest();try(Connection c=dataSource.getConnection();PreparedStatement q=c.prepareStatement(MAIN_SQL+" AND A.ID=?")){q.setString(1,p.getOrgId());q.setString(2,p.getOrgId());q.setLong(3,Long.parseLong(id));try(ResultSet r=q.executeQuery()){return ok(r.next()?JSON.toJSONString(row(r,r.getMetaData()),SerializerFeature.WriteMapNullValue):"{}");}}}catch(AccessDeniedException e){return forbidden();}catch(IllegalArgumentException e){return badRequest();}catch(SQLException e){return unavailable();}}
+    private OwnedPrincipal require(HttpServletRequest r)throws SQLException{boundary.requirePermission(r.getSession(false),OwnedIdentityProvider.RESULT_READ);return boundary.currentPrincipal(r.getSession(false));}
+    private String selectPage(String base,Map<String,String> profile,String org,Page page)throws SQLException{String count="SELECT COUNT(1) FROM ("+base+") Q";String paged="SELECT P.* FROM (SELECT Q.*,ROW_NUMBER() OVER (ORDER BY Q.ID DESC) RN_ FROM ("+base+") Q) P WHERE P.RN_>? AND P.RN_<=? ORDER BY P.RN_";int total;List<Map<String,Object>>rows=new ArrayList<Map<String,Object>>();try(Connection c=dataSource.getConnection()){try(PreparedStatement q=c.prepareStatement(count)){q.setString(1,org);q.setString(2,org);try(ResultSet r=q.executeQuery()){if(!r.next())throw new SQLException("pretreatment count missing");total=r.getInt(1);}}try(PreparedStatement q=c.prepareStatement(paged)){q.setString(1,org);q.setString(2,org);q.setInt(3,page.start());q.setInt(4,page.end());try(ResultSet r=q.executeQuery()){ResultSetMetaData m=r.getMetaData();while(r.next())rows.add(row(r,m));}}}Map<String,Object>e=new LinkedHashMap<String,Object>();e.put("columnTypeMap",profile);e.put("first",page.number==1);e.put("last",total==0||page.number>=pages(total,page.size));e.put("numberOfElements",rows.size());e.put("pageNumber",page.number);e.put("pageSize",page.size);e.put("rows",rows);e.put("total",total);Map<String,Object>t=new LinkedHashMap<String,Object>();t.put("qty_",total);e.put("totalMap",t);e.put("totalPages",pages(total,page.size));return JSON.toJSONString(e,SerializerFeature.WriteMapNullValue);}
+    private static Map<String,Object> row(ResultSet r,ResultSetMetaData m)throws SQLException{Map<String,Object>v=new LinkedHashMap<String,Object>();Map<String,Object>x=new LinkedHashMap<String,Object>();for(int i=1;i<=m.getColumnCount();i++){String n=m.getColumnLabel(i);if("RN_".equalsIgnoreCase(n))continue;Object o=JdbcValue.normalize(r.getObject(i));if(o==null)continue;String k=KEYS.get(n.toUpperCase(Locale.ROOT));if(k==null)x.put(n.toLowerCase(Locale.ROOT),o);else v.put(k,o);}v.put("ext$",x);return v;}
+    private static Map<String,String>profile(String e){Map<String,String>r=new LinkedHashMap<String,String>();for(String t:e.split(";")){int i=t.indexOf('=');if(i>0)r.put(t.substring(0,i),t.substring(i+1));}return Collections.unmodifiableMap(r);}
+    private static Map<String,String>keys(){Map<String,String>r=new LinkedHashMap<String,String>();String[]n={"ID=id","ORGID=orgId","PROJID=projId","FOLDERID=folderId","ORDERID=orderId","ORDERTASKID=orderTaskId","PURIFYSTD=purifyStd","PURIFYSTDADDITIVE=purifyStdAdditive","PURIFYSTDTIME=purifyStdTime","PURIFYSTDUSERID=purifyStdUserId","PURIFYSTDUSERNAME=purifyStdUserName","EXTRACTMETHODID=extractMethodId","ORDERDIVISION=orderDivision","PURIFYMETHODID=purifyMethodId","PURIFYMETHOD=purifyMethod","INJECTSTD=injectStd","INJECTSTDADDITIVE=injectStdAdditive","INJECTSTDVOLUME=injectStdVolume","INJECTSTDUSERID=injectStdUserId","INJECTSTDUSERNAME=injectStdUserName","REMARK=remark","STATUS=status","PURIFYSTDUNIT=purifyStdUnit","INJECTSTDUNIT=injectStdUnit","CREATEDBYID=createdById","CREATEDBYNAME=createdByName","CREATEDTIME=createdTime","CREATEDBYORGID=createdByOrgId","CREATEDBYORGNAME=createdByOrgName","PROJNO=projNo","ORDERNO=orderNo","LABELNO=labelNo","ORDERCATEGORY=orderCategory","ACCEPTEDDATE=acceptedDate","TESTNAME=testName","SAMPLERECEIVERFLAG=sampleReceiverFlag","TESTMETHODID=testMethodId","MONITORTMPLID=monitortmplId","EXTRACTMETHOD=extractMethod","ORDERCONTAINERNO=orderContainerNo","PRETREATMENTID=pretreatmentId","SOLVENT=solvent","SOLVENTAMOUNT=solventAmount","STARTTIME=startTime","ENDTIME=endTime","EQUIPTID=equiptId","PURIFYMETHOD=purifyMethod","MODEL=model","ELUENT=eluent","ELUENTAMOUNT=eluentAmount"};for(String s:n){int i=s.indexOf('=');r.put(s.substring(0,i),s.substring(i+1));}return Collections.unmodifiableMap(r);}
+    private static int pages(int total,int size){return total==0?0:(total+size-1)/size;}private static ResponseEntity<String>ok(String b){return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(b);}private static ResponseEntity<String>forbidden(){return ResponseEntity.status(HttpStatus.FORBIDDEN).contentType(MediaType.APPLICATION_JSON).body("{\"message\":\"GIKAM.PERMISSION.FORBIDDEN\"}");}private static ResponseEntity<String>badRequest(){return ResponseEntity.badRequest().contentType(MediaType.APPLICATION_JSON).body("{\"message\":\"GIKAM.REQUEST.INVALID\"}");}private static ResponseEntity<String>unavailable(){return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).contentType(MediaType.APPLICATION_JSON).body("{\"message\":\"GIKAM.DATA.UNAVAILABLE\"}");}
+    private static final class Page{final int number,size;Page(int n,int s){number=n;size=s;}static Page parse(String b){JSONObject r=b==null||b.trim().isEmpty()?new JSONObject():JSON.parseObject(b);JSONObject p=r==null?null:r.getJSONObject("p");int n=p==null?1:Math.max(1,p.getIntValue("n"));int s=p==null?50:Math.min(500,Math.max(1,p.getIntValue("s")));return new Page(n,s);}int start(){return(number-1)*size;}int end(){return number*size;}}
+}

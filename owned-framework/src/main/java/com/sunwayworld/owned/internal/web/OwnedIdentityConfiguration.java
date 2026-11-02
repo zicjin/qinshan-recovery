@@ -295,6 +295,13 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @ConditionalOnMissingBean(OwnedPretreatmentQueryController.class)
+    public OwnedPretreatmentQueryController ownedPretreatmentQueryController(
+            OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
+        return new OwnedPretreatmentQueryController(boundary, dataSource);
+    }
+
+    @Bean
     @ConditionalOnMissingBean(OwnedFolderGenericResourceController.class)
     public OwnedFolderGenericResourceController ownedFolderGenericResourceController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {

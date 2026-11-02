@@ -33,6 +33,16 @@ HTTP_ANNOTATIONS = {
     "PatchMapping": "PATCH",
 }
 REQUEST_METHODS = {"GET", "POST", "PUT", "DELETE", "PATCH", "HEAD", "OPTIONS"}
+OWNED_ROUTE_ALIAS_EXPANSIONS = {
+    # The controller intentionally uses one bounded {resource} mapping for
+    # these concrete GenericResource status aliases. Keep the inventory
+    # concrete so owned_sources can be associated with project routes.
+    "OwnedEquipmentResourceStatusController": (
+        "equipt-crves-detail", "equipt-crves", "equipt-dioxin-sets",
+        "equipt-flow-sets", "equipt-sets", "equipt-standard-sets",
+        "equipt-sw-sets", "equipt-temp-sets",
+    ),
+}
 GENERIC_INHERITED_PATHS = {"/", "/queries", "/queries/raw", "/{id}", "/instant"}
 GENERIC_RESOURCE_INHERITED_ROUTES = (
     ("POST", "/queries"),
@@ -380,6 +390,28 @@ def _owned_route_is_concrete(route: Dict[str, str]) -> bool:
     return bool(base.strip("/")) or path not in GENERIC_INHERITED_PATHS
 
 
+def _owned_alias_routes(info: Dict[str, object]) -> List[Dict[str, str]]:
+    """Expand explicitly bounded owned controller resource aliases.
+
+    This is provenance metadata for routes already served by the controller;
+    it must remain an explicit allowlist rather than guessing from arbitrary
+    path variables.
+    """
+    aliases = OWNED_ROUTE_ALIAS_EXPANSIONS.get(str(info.get("simple")), ())
+    if not aliases:
+        return []
+    source = str(info["relative"])
+    qualified = str(info["qualified"])
+    return [{
+        "source": source,
+        "class": qualified,
+        "class_base": "",
+        "method": "GET",
+        "path": "/secure/emc/module/bp/%s/info/status" % resource,
+        "annotation": "owned-alias-expansion",
+    } for resource in aliases]
+
+
 def _packaged_classes(distribution: Optional[Path]) -> Set[str]:
     if not distribution:
         return set()
@@ -472,7 +504,8 @@ def main() -> int:
         infos = _source_infos(owned_root)
         for qualified in sorted({str(item["qualified"]) for item in infos.values()}):
             info = infos[qualified]
-            for route in _routes_for_source(info, infos):
+            routes = _routes_for_source(info, infos) + _owned_alias_routes(info)
+            for route in routes:
                 if not _owned_route_is_concrete(route):
                     continue
                 key = "%s %s" % (route["method"], route["path"])

@@ -9,7 +9,8 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "tools"))
 from business_api_inventory import (extract_routes, build_inventory,
                                     build_owned_boundary_inventory,
-                                    _owned_route_is_concrete)  # noqa: E402
+                                    _owned_route_is_concrete,
+                                    _owned_alias_routes)  # noqa: E402
 
 
 class BusinessApiInventoryTest(unittest.TestCase):
@@ -146,6 +147,17 @@ public interface DemoResource extends GenericResource<Object,Object,Long>, Gener
         self.assertEqual("owned-source-only", rows[0]["boundary_scope"])
         self.assertEqual("GET", rows[0]["method"])
         self.assertEqual("/owned-only", rows[0]["path"])
+
+    def test_expands_bounded_equipment_status_aliases(self):
+        routes = _owned_alias_routes({
+            "simple": "OwnedEquipmentResourceStatusController",
+            "relative": "com/example/OwnedEquipmentResourceStatusController.java",
+            "qualified": "com.example.OwnedEquipmentResourceStatusController",
+        })
+        paths = {row["method"] + " " + row["path"] for row in routes}
+        self.assertEqual(8, len(paths))
+        self.assertIn("GET /secure/emc/module/bp/equipt-sets/info/status", paths)
+        self.assertIn("GET /secure/emc/module/bp/equipt-temp-sets/info/status", paths)
 
 
 if __name__ == "__main__":

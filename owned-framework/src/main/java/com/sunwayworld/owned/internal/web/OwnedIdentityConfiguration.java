@@ -470,6 +470,13 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @ConditionalOnMissingBean(OwnedTestMethodAliasReadController.class)
+    public OwnedTestMethodAliasReadController ownedTestMethodAliasReadController(
+            OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
+        return new OwnedTestMethodAliasReadController(boundary, dataSource);
+    }
+
+    @Bean
     @ConditionalOnMissingBean(OwnedOrderRetainQueryExtensionController.class)
     public OwnedOrderRetainQueryExtensionController ownedOrderRetainQueryExtensionController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {

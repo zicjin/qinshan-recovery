@@ -212,7 +212,6 @@ public final class OwnedReportSampleTaskQueryController {
         String reportId = root == null ? null : root.getString("reportId");
         if (reportId == null && root != null && root.getJSONObject("p") != null) reportId = root.getJSONObject("p").getString("reportId");
         Map<String, Object> value = new LinkedHashMap<String, Object>();
-        value.put("reportFile", null);
         value.put("otherRecordList", new ArrayList<Map<String, Object>>());
         value.put("ext$", new LinkedHashMap<String, Object>());
         if (reportId == null || reportId.trim().isEmpty()) return JSON.toJSONString(value, SerializerFeature.WriteMapNullValue);

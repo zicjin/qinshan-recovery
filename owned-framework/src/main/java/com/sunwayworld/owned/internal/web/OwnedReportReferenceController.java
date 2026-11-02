@@ -89,7 +89,7 @@ public final class OwnedReportReferenceController {
                         String label = metadata.getColumnLabel(i); if (!"RN_".equalsIgnoreCase(label)) types.put(label.toLowerCase(Locale.ROOT), type(metadata.getColumnType(i)));
                     }
                     types.put("rn_", "number");
-                    while (result.next()) rows.add(row(result, metadata));
+                    while (result.next()) rows.add(row(result, metadata, table));
                 }
             }
         }
@@ -106,10 +106,27 @@ public final class OwnedReportReferenceController {
         return "SELECT T.ID,T.SORTNUM,T.BIZCATEGORY,T.ORDERCATEGORY,T.REPORTNAME,T.TESTCODE,T.ITEMNAME,T.REPORTSHOWNAME,T.METHOD,T.ANALYSISGROUP,T.GROUPCONDITIONONE,T.GROUPCONDITIONTWO,T.GROUPCONDITIONTHREE,T.GROUPCONDITIONFOUR,T.CREATEDBYID,T.CREATEDBYNAME,T.CREATEDBYORGID,T.CREATEDBYORGNAME,T.CREATEDTIME FROM " + table + " T";
     }
 
-    private static Map<String, Object> row(ResultSet result, ResultSetMetaData metadata) throws SQLException {
+    private static Map<String, Object> row(ResultSet result, ResultSetMetaData metadata, String table) throws SQLException {
         Map<String, Object> value = new LinkedHashMap<String, Object>();
-        for (int i = 1; i <= metadata.getColumnCount(); i++) { String label = metadata.getColumnLabel(i); if ("RN_".equalsIgnoreCase(label)) continue; Object item = JdbcValue.normalize(result.getObject(i)); if (item != null) value.put(camel(label), item); }
+        for (int i = 1; i <= metadata.getColumnCount(); i++) { String label = metadata.getColumnLabel(i); if ("RN_".equalsIgnoreCase(label)) continue; Object item = JdbcValue.normalize(result.getObject(i)); if (item != null) value.put(field(label, table), item); }
         value.put("ext$", new LinkedHashMap<String, Object>()); return value;
+    }
+    private static String field(String label, String table) {
+        String key = label.toUpperCase(Locale.ROOT);
+        if ("T_EMC_FILE_CATEGORY".equals(table)) {
+            if ("FILECATEGORYNO".equals(key)) return "fileCategoryNo";
+            if ("FILECATEGORYNAME".equals(key)) return "fileCategoryName";
+        } else {
+            String[] names = {"SORTNUM","BIZCATEGORY","ORDERCATEGORY","REPORTNAME","TESTCODE","ITEMNAME","REPORTSHOWNAME","METHOD","ANALYSISGROUP","GROUPCONDITIONONE","GROUPCONDITIONTWO","GROUPCONDITIONTHREE","GROUPCONDITIONFOUR"};
+            String[] values = {"sortNum","bizCategory","orderCategory","reportName","testCode","itemName","reportShowName","method","analysisGroup","groupConditionOne","groupConditionTwo","groupConditionThree","groupConditionFour"};
+            for (int i = 0; i < names.length; i++) if (names[i].equals(key)) return values[i];
+        }
+        if ("CREATEDBYID".equals(key)) return "createdById";
+        if ("CREATEDBYNAME".equals(key)) return "createdByName";
+        if ("CREATEDBYORGID".equals(key)) return "createdByOrgId";
+        if ("CREATEDBYORGNAME".equals(key)) return "createdByOrgName";
+        if ("CREATEDTIME".equals(key)) return "createdTime";
+        return camel(label);
     }
     private static String camel(String label) { StringBuilder value = new StringBuilder(); boolean upper = false; for (char c : label.toLowerCase(Locale.ROOT).toCharArray()) { if (c == '_') { upper = true; continue; } value.append(upper ? Character.toUpperCase(c) : c); upper = false; } return value.toString(); }
     private static String type(int type) { if (type == Types.DATE || type == Types.TIMESTAMP || type == Types.TIMESTAMP_WITH_TIMEZONE) return "dateTime"; if (type == Types.NUMERIC || type == Types.DECIMAL || type == Types.INTEGER || type == Types.BIGINT) return "number"; return "string"; }

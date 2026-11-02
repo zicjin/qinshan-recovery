@@ -82,7 +82,7 @@ public final class OwnedResultRunController {
             if (uri.endsWith("/queries/run-result")) {
                 return ok(page(readRunResult(principal.getOrgId(), filter, pageRequest)));
             }
-            if (uri.endsWith("/browse-record/queries")) return ok("{\"ext$\":{}}");
+            if (uri.endsWith("/browse-record/queries")) return ok(JSON.toJSONString(readBrowseRecord(principal.getOrgId(), filter), SerializerFeature.WriteMapNullValue));
             if (uri.endsWith("/edited-items/queries")) return emptyBody(response);
             if (uri.endsWith("/unique-order-item-group/queries")) return ok(emptyPage(pageNumber(filter), pageSize(filter)));
             if (request.getRequestURI().endsWith("/qc-related-order/queries")) {
@@ -222,6 +222,40 @@ public final class OwnedResultRunController {
         appendStringFilter(source, values, "A.ID", queryValue(filter, "runId"));
         appendLongFilter(source, values, "A.PROJID", queryValue(filter, "projId"));
         return readPaged(source.toString(), values, page, RUN_TYPE_PROFILE);
+    }
+
+    private Map<String, Object> readBrowseRecord(String organization, JSONObject filter) throws SQLException {
+        Map<String, Object> body = new LinkedHashMap<String, Object>();
+        body.put("analysisRecord", null);
+        body.put("otherRecordList", new ArrayList<Map<String, Object>>());
+        body.put("ext$", new LinkedHashMap<String, Object>());
+        String runId = text(queryValue(filter, "runId"));
+        if (runId.length() == 0) return body;
+        if (!runId.matches("[A-Za-z0-9_-]+")) throw new IllegalArgumentException("run id is invalid");
+        String sql = "SELECT F.* FROM T_CORE_FILE F WHERE F.TARGETID IN (?,?) ORDER BY F.ID";
+        try (Connection connection = dataSource.getConnection()) {
+            try (PreparedStatement guard = connection.prepareStatement("SELECT COUNT(1) FROM T_EMC_RUN WHERE ID=? AND ORGID=?")) {
+                guard.setString(1, runId); guard.setString(2, organization);
+                try (ResultSet result = guard.executeQuery()) {
+                    if (!result.next() || result.getInt(1) == 0) return body;
+                }
+            }
+            List<Map<String, Object>> files = new ArrayList<Map<String, Object>>();
+            try (PreparedStatement query = connection.prepareStatement(sql)) {
+                query.setString(1, "T_EMC_RUN$" + runId); query.setString(2, "T_EMC_EQUIPT$" + runId);
+                try (ResultSet result = query.executeQuery()) {
+                    ResultSetMetaData metadata = result.getMetaData();
+                    while (result.next()) files.add(row(result, metadata));
+                }
+            }
+            Map<String, Object> analysis = null; List<Map<String, Object>> others = new ArrayList<Map<String, Object>>();
+            for (Map<String, Object> file : files) {
+                if (analysis == null && "composePdf".equals(String.valueOf(file.get("ext")))) analysis = file;
+                else others.add(file);
+            }
+            body.put("analysisRecord", analysis); body.put("otherRecordList", others);
+        }
+        return body;
     }
 
     private static String runSelectSql() {

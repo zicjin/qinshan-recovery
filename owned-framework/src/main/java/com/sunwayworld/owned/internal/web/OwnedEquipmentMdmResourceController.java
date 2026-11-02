@@ -133,6 +133,18 @@ public final class OwnedEquipmentMdmResourceController {
         catch (SQLException failure) { return unavailable(); }
     }
 
+    @GetMapping(path = "/secure/emc/module/mdm/equipt/equipt-calibrations/{id}/info/status",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> calibrationDetailStatus(HttpServletRequest request,
+            @PathVariable("id") String id) {
+        try {
+            requireRead(request); table("equipt-calibrations"); numericId(id);
+            return ok("{\"ext$\":{}}");
+        } catch (AccessDeniedException denied) { return forbidden(); }
+        catch (IllegalArgumentException invalid) { return badRequest(); }
+        catch (SQLException failure) { return unavailable(); }
+    }
+
     @GetMapping(path = {
             "/secure/emc/module/mdm/basemdm/equipt-categories/{id}",
             "/secure/emc/module/mdm/basemdm/equipt-requisitions/{id}",

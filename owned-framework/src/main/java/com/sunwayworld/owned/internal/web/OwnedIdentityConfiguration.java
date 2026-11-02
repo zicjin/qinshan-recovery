@@ -456,6 +456,13 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @ConditionalOnMissingBean(OwnedResultFieldDescriptorController.class)
+    public OwnedResultFieldDescriptorController ownedResultFieldDescriptorController(
+            OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
+        return new OwnedResultFieldDescriptorController(boundary);
+    }
+
+    @Bean
     @ConditionalOnMissingBean(OwnedOrderQueryController.class)
     public OwnedOrderQueryController ownedOrderQueryController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {

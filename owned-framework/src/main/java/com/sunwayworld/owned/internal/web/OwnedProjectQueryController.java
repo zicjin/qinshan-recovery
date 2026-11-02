@@ -88,6 +88,28 @@ public final class OwnedProjectQueryController {
         catch (SQLException failure) { return unavailable(); }
     }
 
+    @PostMapping(path = PREFIX + "/reports/queries",
+            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> reportFiles(HttpServletRequest request,
+            @RequestBody(required = false) String body) {
+        try {
+            OwnedPrincipal principal = require(request);
+            JSONObject root = body == null || body.trim().isEmpty() ? new JSONObject() : JSON.parseObject(body);
+            String projectId = text(root, "projectId");
+            String source = "SELECT F.* FROM T_CORE_FILE F WHERE EXISTS (SELECT 1 FROM T_EMC_REPORT R "
+                    + "WHERE R.CREATEDBYORGID=? AND F.TARGETID=CONCAT('T_EMC_REPORT$',R.ID,'F')";
+            List<String> values = new ArrayList<String>();
+            if (projectId != null && projectId.matches("[0-9]+")) {
+                source += " AND R.PROJID=?";
+                values.add(projectId);
+            }
+            source += ")";
+            return ok(selectPage(source, principal.getOrgId(), values, Page.parse(body)));
+        } catch (AccessDeniedException denied) { return forbidden(); }
+        catch (IllegalArgumentException invalid) { return badRequest(); }
+        catch (SQLException failure) { return unavailable(); }
+    }
+
     private OwnedPrincipal require(HttpServletRequest request) throws SQLException {
         boundary.requirePermission(request.getSession(false), OwnedIdentityProvider.RESULT_READ);
         return boundary.currentPrincipal(request.getSession(false));
@@ -98,6 +120,10 @@ public final class OwnedProjectQueryController {
     }
 
     private String selectPage(String source, String organization, Page page) throws SQLException {
+        return selectPage(source, organization, new ArrayList<String>(), page);
+    }
+
+    private String selectPage(String source, String organization, List<String> values, Page page) throws SQLException {
         String countSql = "SELECT COUNT(1) FROM (" + source + ") Q";
         String pageSql = "SELECT P.* FROM (SELECT Q.*,ROW_NUMBER() OVER (ORDER BY Q.ID DESC) RN_ FROM ("
                 + source + ") Q) P WHERE P.RN_>? AND P.RN_<=? ORDER BY P.RN_";
@@ -106,14 +132,14 @@ public final class OwnedProjectQueryController {
         Map<String,String> types = new LinkedHashMap<String,String>();
         try (Connection connection = dataSource.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(countSql)) {
-                statement.setString(1, organization);
+                bind(statement, organization, values, 1);
                 try (ResultSet result = statement.executeQuery()) {
                     if (!result.next()) throw new SQLException("project count unavailable");
                     total = result.getInt(1);
                 }
             }
             try (PreparedStatement statement = connection.prepareStatement(pageSql)) {
-                statement.setString(1, organization); statement.setInt(2, page.start()); statement.setInt(3, page.end());
+                int index = bind(statement, organization, values, 1); statement.setInt(index++, page.start()); statement.setInt(index, page.end());
                 try (ResultSet result = statement.executeQuery()) {
                     ResultSetMetaData metadata = result.getMetaData();
                     for (int i = 1; i <= metadata.getColumnCount(); i++) {
@@ -142,7 +168,13 @@ public final class OwnedProjectQueryController {
         }
         value.put("ext$", new LinkedHashMap<String,Object>()); return value;
     }
+    private static int bind(PreparedStatement statement, String organization, List<String> values, int index) throws SQLException {
+        statement.setString(index++, organization);
+        for (String value : values) statement.setString(index++, value);
+        return index;
+    }
     private static String camel(String label) { StringBuilder value = new StringBuilder(); boolean upper = false; for (char c : label.toLowerCase(Locale.ROOT).toCharArray()) { if (c == '_') { upper = true; continue; } value.append(upper ? Character.toUpperCase(c) : c); upper = false; } return value.toString(); }
+    private static String text(JSONObject root, String key) { Object value = root == null ? null : root.get(key); return value == null ? null : String.valueOf(value).trim(); }
     private static String type(int type) { return type == Types.DATE || type == Types.TIMESTAMP || type == Types.TIMESTAMP_WITH_TIMEZONE ? "dateTime" : (type == Types.NUMERIC || type == Types.DECIMAL || type == Types.INTEGER || type == Types.BIGINT ? "number" : "string"); }
     private static int pages(int total, int size) { return total == 0 ? 0 : (total + size - 1) / size; }
     private static ResponseEntity<String> ok(String body) { return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(body); }

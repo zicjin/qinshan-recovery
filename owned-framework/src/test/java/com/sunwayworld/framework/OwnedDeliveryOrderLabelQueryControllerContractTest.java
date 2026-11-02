@@ -18,8 +18,8 @@ public final class OwnedDeliveryOrderLabelQueryControllerContractTest {
             if (get != null && method.getName().equals("detail") && get.path().length == 2) detail = true;
         }
         if (!query || !status || !detail) throw new AssertionError("delivery/order-label aliases incomplete");
-        java.nio.file.Path sourcePath = java.nio.file.Paths.get("src/main/java/com/sunwayworld/owned/internal/web/OwnedDeliveryOrderLabelQueryController.java");
-        if (!java.nio.file.Files.exists(sourcePath)) sourcePath = java.nio.file.Paths.get("lims-recovery/owned-framework/src/main/java/com/sunwayworld/owned/internal/web/OwnedDeliveryOrderLabelQueryController.java");
+        java.nio.file.Path sourcePath = java.nio.file.Paths.get("owned-framework/src/main/java/com/sunwayworld/owned/internal/web/OwnedDeliveryOrderLabelQueryController.java");
+        if (!java.nio.file.Files.exists(sourcePath)) sourcePath = java.nio.file.Paths.get("src/main/java/com/sunwayworld/owned/internal/web/OwnedDeliveryOrderLabelQueryController.java");
         String source = new String(java.nio.file.Files.readAllBytes(sourcePath), "UTF-8");
         if (!source.contains("return ok(\"{\\\"ext$\\\":{}}\")")) throw new AssertionError("status envelope must contain ext$ only");
         if (!source.contains("createdById") || !source.contains("createdTime") || !source.contains("labelCode")) throw new AssertionError("order-label camelCase mapping missing");

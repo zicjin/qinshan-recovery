@@ -29,6 +29,8 @@ public final class OwnedReportSampleTaskQueryControllerContractTest {
                 "/secure/emc/module/bp/sample/samples/queries",
                 "/secure/emc/module/bp/sample/samples/queries/raw",
                 "/secure/emc/module/bp/sample/samples/queries/searchable",
+                "/secure/emc/module/bp/sample/samples/queries/all",
+                "/secure/emc/module/bp/sample/samples/assign/queries",
                 "/secure/emc/module/bp/report/reports/queries/tasks",
                 "/secure/emc/module/bp/report/advisory-reports/queries/tasks",
                 "/secure/emc/module/bp/sample/samples/queries/tasks",

@@ -64,6 +64,8 @@ public final class OwnedReportSampleTaskQueryController {
             SAMPLE + "/queries",
             SAMPLE + "/queries/raw",
             SAMPLE + "/queries/searchable",
+            SAMPLE + "/queries/all",
+            SAMPLE + "/assign/queries",
             REPORT + "/queries/tasks",
             ADVISORY + "/queries/tasks",
             SAMPLE + "/queries/tasks"
@@ -72,6 +74,13 @@ public final class OwnedReportSampleTaskQueryController {
             @RequestBody(required = false) String body) {
         try {
             OwnedPrincipal principal = require(request);
+            String requestPath = request.getRequestURI();
+            if (requestPath.endsWith(SAMPLE + "/queries/all")) {
+                return ok(selectPage("sampleAll", principal, Query.parse(body)));
+            }
+            if (requestPath.endsWith(SAMPLE + "/assign/queries")) {
+                return ok(selectPage("sampleAssign", principal, Query.parse(body)));
+            }
             if (request.getRequestURI().endsWith("/archive-categories/queries")) {
                 return ok(selectArchiveCategories(Query.parse(body).page));
             }
@@ -263,6 +272,12 @@ public final class OwnedReportSampleTaskQueryController {
         }
         if ("advisory".equals(resource)) {
             return "SELECT T.* FROM (SELECT A.*,B.PROJNAME,B.CREATEDBYNAME AS PROJUSERNAME,B.ORGNAME,B.TESTORGNAME,B.ACCOUNTINGFLAG,B.ENTRUSTORGNAME,C.BIZCATEGORYNAME FROM T_EMC_ADVISORY_REPORT A LEFT JOIN T_EMC_PROJECT B ON A.PROJID=B.ID LEFT JOIN T_EMC_BIZ_CATEGORY C ON B.BIZCATEGORYID=C.ID) T WHERE T.CREATEDBYORGID=?";
+        }
+        if ("sampleAll".equals(resource)) {
+            return "SELECT T.* FROM (SELECT A.*,P.PROJNO,P.PROJNAME,P.TESTORGNAME,P.ENTRUSTORGNAME,P.BIZCATEGORYID,P.BIZCATEGORYCODE,P.SAMPLE,P.URGENT,B.PROPERTYTMPLID AS TMPLID,B.ELNTMPLID,C.REPORTNAME FROM T_EMC_SAMPLE A LEFT JOIN T_EMC_PROJECT P ON P.ID=A.PROJID LEFT JOIN T_EMC_MONITOR_TMPL B ON B.ID=A.MONITORTMPLID LEFT JOIN T_CORE_REPORT_CONFIG_LINE C ON C.ID=A.REPORTCONFIGLINEID) T WHERE T.CREATEDBYORGID=?";
+        }
+        if ("sampleAssign".equals(resource)) {
+            return "SELECT T.* FROM (SELECT A.*,P.PROJNO,P.PROJNAME,P.TESTORGNAME,P.ENTRUSTORGNAME,P.BIZCATEGORYID,P.BIZCATEGORYCODE,P.SAMPLE FROM T_EMC_SAMPLE A LEFT JOIN T_EMC_PROJECT P ON P.ID=A.PROJID) T WHERE T.CREATEDBYORGID=? AND EXISTS (SELECT 1 FROM T_EMC_ORDER O LEFT JOIN T_EMC_ORDER_TASK OT ON O.ID=OT.ORDERID LEFT JOIN T_EMC_TEST_METHOD TM ON TM.ID=OT.TESTMETHODID WHERE O.SAMPLEID=T.ID AND OT.STATUS='logged' AND OT.ANALYSISTYPE='analysis' AND OT.RUNID IS NULL)";
         }
         sql.append("SELECT T.* FROM (SELECT A.*,P.PROJNO,P.PROJNAME,P.TESTORGNAME,P.ENTRUSTORGNAME,P.BIZCATEGORYID,B.PROPERTYTMPLID AS TMPLID,B.ELNTMPLID,P.BIZCATEGORYCODE,P.SAMPLE,P.URGENT,CASE WHEN OT.ANALYSISCOUNT IS NULL THEN 0 ELSE OT.ANALYSISCOUNT END AS ANALYSISCOUNT,C.REPORTNAME FROM T_EMC_SAMPLE A LEFT JOIN T_EMC_PROJECT P ON P.ID=A.PROJID LEFT JOIN T_EMC_MONITOR_TMPL B ON B.ID=A.MONITORTMPLID LEFT JOIN T_CORE_REPORT_CONFIG_LINE C ON C.ID=A.REPORTCONFIGLINEID LEFT JOIN (SELECT COUNT(OT.ID) AS ANALYSISCOUNT,O.SAMPLEID FROM T_EMC_ORDER O,T_EMC_ORDER_TASK OT WHERE O.ID=OT.ORDERID AND OT.ANALYSISTYPE='analysis' GROUP BY O.SAMPLEID) OT ON A.ID=OT.SAMPLEID) T WHERE T.CREATEDBYORGID=?");
         if ("editSample".equals(query.targetType)) sql.append(" AND EXISTS (SELECT 1 FROM T_EMC_ORDER O LEFT JOIN T_EMC_FOLDER F ON O.FOLDERID=F.ID WHERE O.SAMPLEID=T.ID AND (F.SCENEUSERID=? OR F.SCENEUSERNAME=? OR INSTR(','||F.SAMPLEUSERNAME||',',','||?||',')>0))");

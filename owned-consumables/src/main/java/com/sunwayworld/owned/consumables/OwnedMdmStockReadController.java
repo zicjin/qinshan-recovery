@@ -36,10 +36,12 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.MediaType;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -68,8 +70,21 @@ public final class OwnedMdmStockReadController {
     @PostMapping("/queries/detail-choosable")
     public Page<EmcStockBean> detailChoosable(RestJsonWrapperBean wrapper) { return stockPage(null, wrapper); }
 
-    @PostMapping("/queries/raw")
+    @PostMapping(path = {"/queries", "/queries/raw", "/queries/searchable"},
+            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public Page<EmcMtlBean> materials(RestJsonWrapperBean wrapper) { return materialPage(wrapper); }
+
+    @GetMapping(path = "/info/status", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Map<String, Object> materialStatus() {
+        try {
+            readPrincipal();
+            Map<String, Object> result = new LinkedHashMap<String, Object>();
+            result.put("ext$", new LinkedHashMap<String, Object>());
+            return result;
+        } catch (SQLException failure) {
+            throw new IllegalStateException("mdm material identity check failed", failure);
+        }
+    }
 
     @PostMapping("/queries/choosable")
     public Page<EmcMtlBean> materialChoosable(RestJsonWrapperBean wrapper) { return materialPage(wrapper); }

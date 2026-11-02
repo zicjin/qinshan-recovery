@@ -281,6 +281,13 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @ConditionalOnMissingBean(OwnedVocQueryController.class)
+    public OwnedVocQueryController ownedVocQueryController(
+            OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
+        return new OwnedVocQueryController(boundary, dataSource);
+    }
+
+    @Bean
     @ConditionalOnMissingBean(OwnedPhysChemicQueryController.class)
     public OwnedPhysChemicQueryController ownedPhysChemicQueryController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {

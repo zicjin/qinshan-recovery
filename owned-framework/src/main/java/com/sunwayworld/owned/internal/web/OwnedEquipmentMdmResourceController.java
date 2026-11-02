@@ -56,6 +56,7 @@ public final class OwnedEquipmentMdmResourceController {
             "/secure/emc/module/mdm/equipt/equipt-acq-scripts/queries",
             "/secure/emc/module/mdm/equipt/equipt-cali-result-norms/queries",
             "/secure/emc/module/mdm/equipt/equipt-calibrations/queries",
+            "/secure/emc/module/mdm/equipt/equipt-cali-results/queries",
             "/secure/emc/module/mdm/basemdm/equipt-categories/queries/raw",
             "/secure/emc/module/mdm/basemdm/equipt-requisitions/queries/raw",
             "/secure/emc/module/mdm/basemdm/equipt-temp/queries/raw",
@@ -67,6 +68,7 @@ public final class OwnedEquipmentMdmResourceController {
             "/secure/emc/module/mdm/equipt/equipt-acq-scripts/queries/raw",
             "/secure/emc/module/mdm/equipt/equipt-cali-result-norms/queries/raw",
             "/secure/emc/module/mdm/equipt/equipt-calibrations/queries/raw",
+            "/secure/emc/module/mdm/equipt/equipt-cali-results/queries/raw",
             "/secure/emc/module/mdm/basemdm/equipt-categories/queries/searchable",
             "/secure/emc/module/mdm/basemdm/equipt-requisitions/queries/searchable",
             "/secure/emc/module/mdm/basemdm/equipt-temp/queries/searchable",
@@ -81,7 +83,8 @@ public final class OwnedEquipmentMdmResourceController {
             "/secure/emc/module/mdm/equipt/equipt-acq-results/queries/searchable",
             "/secure/emc/module/mdm/equipt/equipt-acq-scripts/queries/searchable",
             "/secure/emc/module/mdm/equipt/equipt-cali-result-norms/queries/searchable",
-            "/secure/emc/module/mdm/equipt/equipt-calibrations/queries/searchable"
+            "/secure/emc/module/mdm/equipt/equipt-calibrations/queries/searchable",
+            "/secure/emc/module/mdm/equipt/equipt-cali-results/queries/searchable"
             }, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> query(HttpServletRequest request,
             @RequestBody(required = false) String body) {
@@ -123,6 +126,7 @@ public final class OwnedEquipmentMdmResourceController {
             "/secure/emc/module/mdm/equipt/equipt-acq-results/info/status",
             "/secure/emc/module/mdm/equipt/equipt-acq-scripts/info/status",
             "/secure/emc/module/mdm/equipt/equipt-cali-result-norms/info/status",
+            "/secure/emc/module/mdm/equipt/equipt-cali-results/info/status",
             "/secure/emc/module/mdm/equipt/equipt-calibrations/info/status"
             }, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> status(HttpServletRequest request) {
@@ -145,6 +149,18 @@ public final class OwnedEquipmentMdmResourceController {
         catch (SQLException failure) { return unavailable(); }
     }
 
+    @GetMapping(path = "/secure/emc/module/mdm/equipt/equipt-cali-results/{id}/info/status",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> calibrationResultDetailStatus(HttpServletRequest request,
+            @PathVariable("id") String id) {
+        try {
+            requireRead(request); table("equipt-cali-results"); numericId(id);
+            return ok("{\"ext$\":{}}");
+        } catch (AccessDeniedException denied) { return forbidden(); }
+        catch (IllegalArgumentException invalid) { return badRequest(); }
+        catch (SQLException failure) { return unavailable(); }
+    }
+
     @GetMapping(path = {
             "/secure/emc/module/mdm/basemdm/equipt-categories/{id}",
             "/secure/emc/module/mdm/basemdm/equipt-requisitions/{id}",
@@ -156,6 +172,7 @@ public final class OwnedEquipmentMdmResourceController {
             "/secure/emc/module/mdm/equipt/equipt-acq-results/{id}",
             "/secure/emc/module/mdm/equipt/equipt-acq-scripts/{id}",
             "/secure/emc/module/mdm/equipt/equipt-cali-result-norms/{id}",
+            "/secure/emc/module/mdm/equipt/equipt-cali-results/{id}",
             "/secure/emc/module/mdm/equipt/equipt-calibrations/{id}"
             }, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> detail(HttpServletRequest request,

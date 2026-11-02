@@ -281,6 +281,13 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @ConditionalOnMissingBean(OwnedTempHumidityQueryController.class)
+    public OwnedTempHumidityQueryController ownedTempHumidityQueryController(
+            OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
+        return new OwnedTempHumidityQueryController(boundary, dataSource);
+    }
+
+    @Bean
     @ConditionalOnMissingBean(OwnedFolderGenericResourceController.class)
     public OwnedFolderGenericResourceController ownedFolderGenericResourceController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {

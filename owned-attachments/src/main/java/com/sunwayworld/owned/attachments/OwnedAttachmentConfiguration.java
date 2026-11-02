@@ -21,4 +21,9 @@ public class OwnedAttachmentConfiguration {
     }
     @Bean @ConditionalOnMissingBean(EmcHomeAttachmentResourceImpl.class)
     public EmcHomeAttachmentResourceImpl emcHomeAttachmentResource() { return new EmcHomeAttachmentResourceImpl(); }
+    @Bean
+    public OwnedAttachmentReadAliasController ownedAttachmentReadAliasController(
+            OwnedAttachmentReadService service, OwnedIdentityHttpBoundary identity) {
+        return new OwnedAttachmentReadAliasController(service, identity);
+    }
 }

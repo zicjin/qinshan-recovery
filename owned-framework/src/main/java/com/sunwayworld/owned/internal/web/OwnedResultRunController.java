@@ -76,8 +76,11 @@ public final class OwnedResultRunController {
             JSONObject filter = object(body);
             PageRequest pageRequest = PageRequest.parse(filter);
             String uri = request.getRequestURI();
-            if (uri.endsWith("/analysis-pretrial/queries") || uri.endsWith("/queries/run-result")) {
-                return unexpected(response, uri);
+            if (uri.endsWith("/analysis-pretrial/queries")) {
+                return ok(page(readAnalysisPretrial(principal.getOrgId(), filter, pageRequest)));
+            }
+            if (uri.endsWith("/queries/run-result")) {
+                return ok(page(readRunResult(principal.getOrgId(), filter, pageRequest)));
             }
             if (uri.endsWith("/browse-record/queries")) return ok("{\"ext$\":{}}");
             if (uri.endsWith("/edited-items/queries")) return emptyBody(response);
@@ -190,6 +193,43 @@ public final class OwnedResultRunController {
         appendStringFilter(inner, values, "A.STATUS", queryValue(filter, "status"));
         return readPaged("SELECT * FROM (" + inner + ") Q WHERE Q.UNIQUE_RN=1", values, page,
                 UNIQUE_ORDER_TASK_TYPE_PROFILE);
+    }
+
+    /**
+     * Analysis pretrial is the audit queue used by the original run resource.
+     * It is intentionally kept as a read-only query seam: only runs that have
+     * an audit/qc-audit order task in the caller's organization are returned.
+     */
+    private QueryResult readAnalysisPretrial(String organization, JSONObject filter, PageRequest page) throws SQLException {
+        List<Object> values = new ArrayList<Object>();
+        StringBuilder source = new StringBuilder(runSelectSql());
+        source.append(" WHERE A.ORGID=? AND EXISTS (SELECT 1 FROM T_EMC_ORDER_TASK OT WHERE OT.RUNID=A.ID AND OT.STATUS IN ('audit','qcAudit')");
+        values.add(organization);
+        appendLongFilter(source, values, "OT.PROJID", queryValue(filter, "projId"));
+        appendLongFilter(source, values, "OT.MONITORTMPLID", queryValue(filter, "monitorTmplId"));
+        source.append(")");
+        appendStringFilter(source, values, "A.STATUS", queryValue(filter, "status"));
+        return readPaged(source.toString(), values, page, RUN_TYPE_PROFILE);
+    }
+
+    /** Run-result is the same owned projection with the result queue filters. */
+    private QueryResult readRunResult(String organization, JSONObject filter, PageRequest page) throws SQLException {
+        List<Object> values = new ArrayList<Object>();
+        StringBuilder source = new StringBuilder(runSelectSql());
+        source.append(" WHERE A.ORGID=?");
+        values.add(organization);
+        appendStringFilter(source, values, "A.STATUS", queryValue(filter, "status"));
+        appendStringFilter(source, values, "A.ID", queryValue(filter, "runId"));
+        appendLongFilter(source, values, "A.PROJID", queryValue(filter, "projId"));
+        return readPaged(source.toString(), values, page, RUN_TYPE_PROFILE);
+    }
+
+    private static String runSelectSql() {
+        return "SELECT A.*,D.EQUIPTNAME,D.EQUIPTID AS EQUIPTCODE,M.MAXELNTMPLID,M.METHODNAME,"
+                + "S1.SOLNAME AS SOL1NAME,S2.SOLNAME AS SOL2NAME,S1.SOLNO AS SOL1NO,S2.SOLNO AS SOL2NO,"
+                + "R.REAGENTNAME FROM T_EMC_RUN A LEFT JOIN T_EMC_EQUIPT D ON A.EQUIPTID=D.ID "
+                + "LEFT JOIN T_EMC_METHOD M ON A.METHODID=M.ID LEFT JOIN T_EMC_SOL S1 ON A.SOL1ID=S1.ID "
+                + "LEFT JOIN T_EMC_SOL S2 ON A.SOL2ID=S2.ID LEFT JOIN T_EMC_REAGENT R ON A.REAGENTID=R.ID";
     }
 
     private QueryResult readPaged(String source, List<Object> values, PageRequest page,

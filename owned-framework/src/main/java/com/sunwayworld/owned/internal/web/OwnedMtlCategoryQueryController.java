@@ -283,6 +283,17 @@ public final class OwnedMtlCategoryQueryController {
     }
 
     private static String camel(String name) {
+        String key = name == null ? "" : name.toUpperCase(Locale.ROOT);
+        if ("ID".equals(key)) return "id";
+        if ("MTLCATEGORYID".equals(key)) return "mtlCategoryId";
+        if ("MTLCATEGORYNAME".equals(key)) return "mtlCategoryName";
+        if ("MTLCATEGORYDESC".equals(key)) return "mtlCategoryDesc";
+        if ("MANAGEMENTTYPE".equals(key)) return "managementType";
+        if ("CREATEDBYID".equals(key)) return "createdById";
+        if ("CREATEDBYNAME".equals(key)) return "createdByName";
+        if ("CREATEDTIME".equals(key)) return "createdTime";
+        if ("CREATEDBYORGID".equals(key)) return "createdByOrgId";
+        if ("CREATEDBYORGNAME".equals(key)) return "createdByOrgName";
         StringBuilder value = new StringBuilder();
         boolean upper = false;
         for (char c : name.toLowerCase(Locale.ROOT).toCharArray()) {

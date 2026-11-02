@@ -49,7 +49,7 @@ public final class OwnedInfoTmplController {
     public ResponseEntity<String> templateQuery(HttpServletRequest request, @RequestBody(required = false) String body) {
         try {
             OwnedPrincipal principal = require(request);
-            return ok(selectPage("SELECT T.* FROM (SELECT TMPL.*, ORG.ORGNAME USEDORGNAME, T_CORE_FILE.ID EXCELID, T_CORE_FILE.NAME EXCELNAME, '' POINT FROM T_EMC_INFO_TMPL TMPL LEFT JOIN T_CORE_ORG ORG ON ORG.ID=TMPL.USEDORGID LEFT JOIN T_CORE_FILE T_CORE_FILE ON T_CORE_FILE.TARGETID=CONCAT('T_EMC_INFO_TMPL$',TMPL.ID)) T WHERE T.CREATEDBYORGID=?", "Q.ID DESC", principal.getOrgId(), new ArrayList<String>(), Page.parse(body)));
+            return ok(selectPage("SELECT T.* FROM (SELECT TMPL.*, ORG.ORGNAME USEDORGNAME, CAST(NULL AS NUMBER) EXCELID, CAST(NULL AS VARCHAR2(4000)) EXCELNAME, '' POINT FROM T_EMC_INFO_TMPL TMPL LEFT JOIN T_CORE_ORG ORG ON ORG.ID=TMPL.USEDORGID) T WHERE T.CREATEDBYORGID=?", "Q.ID DESC", principal.getOrgId(), new ArrayList<String>(), Page.parse(body)));
         } catch (AccessDeniedException denied) { return forbidden(); }
         catch (IllegalArgumentException invalid) { return badRequest(); }
         catch (SQLException failure) { return unavailable(); }
@@ -127,7 +127,7 @@ public final class OwnedInfoTmplController {
             List<String> values = new ArrayList<String>();
             String extra = "";
             if (tmplId != null) { extra = " AND T.INFOTMPLID=?"; values.add(tmplId); }
-            return ok(selectPage("SELECT T.*, MONITOR_POINT.MONITORPOINTNO, MONITOR_POINT.MONITORPOINTNAME FROM T_EMC_INFO_TMPL_POINT T LEFT JOIN T_EMC_MONITOR_POINT MONITOR_POINT ON MONITOR_POINT.ID=T.MONITORPOINTID WHERE T.CREATEDBYORGID=?" + extra, "Q.ID", principal.getOrgId(), values, Page.parse(body)));
+            return ok(selectPage("SELECT T.*, MONITOR_POINT.MONITORPOINTNO, MONITOR_POINT.MONITORPOINTNAME FROM T_EMC_INFO_TMPL_POINT T LEFT JOIN T_EMC_MONITOR_POINT MONITOR_POINT ON MONITOR_POINT.ID=T.MONITORPOINTID LEFT JOIN T_EMC_INFO_TMPL TMPL ON TMPL.ID=T.INFOTMPLID WHERE TMPL.CREATEDBYORGID=?" + extra, "Q.ID", principal.getOrgId(), values, Page.parse(body)));
         } catch (AccessDeniedException denied) { return forbidden(); }
         catch (IllegalArgumentException invalid) { return badRequest(); }
         catch (SQLException failure) { return unavailable(); }

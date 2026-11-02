@@ -98,7 +98,10 @@ public final class OwnedReportTmplController {
     }
 
     private ResponseEntity<String> statusResponse(HttpServletRequest request) {
-        try { require(request); return ok("{\"ext$\":{}}"); }
+        try {
+            require(request);
+            return ok("{\"activeStatus\":{\"activatedFlag\":\"0\"},\"ext$\":{}}");
+        }
         catch (AccessDeniedException denied) { return forbidden(); }
         catch (SQLException failure) { return unavailable(); }
     }

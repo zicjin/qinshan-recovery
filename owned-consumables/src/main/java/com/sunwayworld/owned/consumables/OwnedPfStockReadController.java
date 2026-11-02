@@ -12,7 +12,6 @@ import javax.sql.DataSource;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 /** Source-owned aliases for the inherited PF stock read resource. */
@@ -32,7 +31,7 @@ public final class OwnedPfStockReadController {
             "/secure/emc/module/mdm/basemdm/stock/queries/raw",
             "/secure/emc/module/mdm/basemdm/stock/queries/searchable"})
     public Page<EmcStockBean> query(HttpServletRequest request,
-            @RequestBody(required = false) RestJsonWrapperBean wrapper) {
+            RestJsonWrapperBean wrapper) {
         return delegate.stocks("0", wrapper);
     }
 

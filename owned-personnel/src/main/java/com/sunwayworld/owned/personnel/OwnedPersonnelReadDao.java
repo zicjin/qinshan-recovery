@@ -4,6 +4,8 @@ import com.sunwayworld.emc.module.mdm.emp.emp.bean.EmcEmpBean;
 import com.sunwayworld.emc.module.mdm.emp.emp.bean.EmcEmpQualBean;
 import com.sunwayworld.emc.module.mdm.emp.emp.bean.EmcEmpTestBean;
 import com.sunwayworld.emc.module.mdm.emp.emp.bean.EmcEmpTrainBean;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.sunwayworld.emc.module.mdm.basemdm.cert.bean.EmcCertTestMethodBean;
 import com.sunwayworld.emc.module.mdm.emp.emp.dao.EmcEmpDao;
 import com.sunwayworld.framework.data.page.Page;
@@ -88,10 +90,23 @@ public final class OwnedPersonnelReadDao extends MybatisDaoSupport<EmcEmpBean, S
         try {
             OwnedPrincipal principal = trustedPrincipal();
             JdbcPersonnelIdentity.Principal delegate = provider.delegatePrincipal(principal);
-            return convert(query.list(OwnedReadRequest.parse(wrapper), delegate));
+            return convert(query.list(OwnedReadRequest.parse(normalizeQuery(wrapper)), delegate));
         } catch (SQLException failure) {
             throw new IllegalStateException("personnel read failed", failure);
         }
+    }
+
+    /** Supplier's inherited employee resource ignores the generic q envelope for these reads. */
+    private static RestJsonWrapperBean normalizeQuery(RestJsonWrapperBean wrapper) {
+        if (wrapper == null || wrapper.getRequestJson() == null || wrapper.getRequestJson().trim().isEmpty()) return wrapper;
+        try {
+            JSONObject root = JSON.parseObject(wrapper.getRequestJson());
+            if (root != null && root.containsKey("q")) {
+                root.remove("q");
+                return new RestJsonWrapperBean(root.toJSONString());
+            }
+        } catch (RuntimeException ignored) { return wrapper; }
+        return wrapper;
     }
 
     @Override

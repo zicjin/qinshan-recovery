@@ -370,4 +370,11 @@ public class OwnedIdentityConfiguration {
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
         return new OwnedMdmTaskQueryController(boundary, dataSource);
     }
+
+    @Bean
+    @ConditionalOnMissingBean(OwnedInfoIndexController.class)
+    public OwnedInfoIndexController ownedInfoIndexController(
+            OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
+        return new OwnedInfoIndexController(boundary, dataSource);
+    }
 }

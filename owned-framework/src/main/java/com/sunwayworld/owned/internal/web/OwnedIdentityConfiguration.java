@@ -190,6 +190,13 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @ConditionalOnMissingBean(OwnedSolQueryController.class)
+    public OwnedSolQueryController ownedSolQueryController(
+            OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
+        return new OwnedSolQueryController(boundary, dataSource);
+    }
+
+    @Bean
     @ConditionalOnMissingBean(OwnedMaterialApplyQueryController.class)
     public OwnedMaterialApplyQueryController ownedMaterialApplyQueryController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {

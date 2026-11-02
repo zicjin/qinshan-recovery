@@ -32,6 +32,7 @@ bash "$ROOT/scripts/tests/test-owned-static-resource-alias.sh"
 "$JAVA_BIN" -cp "$OUT/classes:$OUT/test-classes:$OUT/public-deps/*" com.sunwayworld.framework.OwnedWorkspaceControllerContractTest
 "$JAVA_BIN" -cp "$OUT/classes:$OUT/test-classes:$OUT/public-deps/*" com.sunwayworld.framework.OwnedWorkspacePanelControllerContractTest
 "$JAVA_BIN" -cp "$OUT/classes:$OUT/test-classes:$OUT/public-deps/*" com.sunwayworld.framework.OwnedReagentQueryControllerContractTest
+"$JAVA_BIN" -cp "$OUT/classes:$OUT/test-classes:$OUT/public-deps/*" com.sunwayworld.framework.OwnedSolQueryControllerContractTest
 "$JAVA_BIN" -cp "$OUT/classes:$OUT/test-classes:$OUT/public-deps/*" com.sunwayworld.framework.OwnedReagentWriteControllerContractTest
 "$JAVA_BIN" -cp "$OUT/classes:$OUT/test-classes:$OUT/public-deps/*" com.sunwayworld.framework.OwnedMaterialApplyControllerContractTest
 "$JAVA_BIN" -cp "$OUT/classes:$OUT/test-classes:$OUT/public-deps/*" com.sunwayworld.framework.OwnedMaterialApplyQueryControllerContractTest

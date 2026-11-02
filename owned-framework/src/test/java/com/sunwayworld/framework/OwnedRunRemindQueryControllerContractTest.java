@@ -17,7 +17,7 @@ public final class OwnedRunRemindQueryControllerContractTest {
             PostMapping post = method.getAnnotation(PostMapping.class); if (post != null) paths.addAll(Arrays.asList(post.path()));
             GetMapping get = method.getAnnotation(GetMapping.class); if (get != null) paths.addAll(Arrays.asList(get.path()));
         }
-        require(paths, "/secure/emc/module/bp/result/run-reminds/queries"); require(paths, "/secure/emc/module/bp/result/run-reminds/queries/raw"); require(paths, "/secure/emc/module/bp/result/run-reminds/queries/searchable"); require(paths, "/secure/emc/module/bp/result/run-reminds/info/status"); require(paths, "/secure/emc/module/bp/result/run-reminds/{id}");
+        require(paths, "/secure/emc/module/bp/result/run-reminds/queries"); require(paths, "/secure/emc/module/bp/result/run-reminds/queries/raw"); require(paths, "/secure/emc/module/bp/result/run-reminds/queries/searchable"); require(paths, "/secure/emc/module/bp/result/run-reminds/queries/runRemind/{runId}"); require(paths, "/secure/emc/module/bp/result/run-reminds/info/status"); require(paths, "/secure/emc/module/bp/result/run-reminds/{id}");
         boolean registered = false; for (Method method : OwnedIdentityConfiguration.class.getDeclaredMethods()) if (method.getReturnType() == OwnedRunRemindQueryController.class) registered = true;
         if (!registered) throw new AssertionError("run-remind controller is not registered");
         System.out.println("owned run-remind query contract checks passed");

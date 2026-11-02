@@ -195,6 +195,10 @@ public final class OwnedReportSampleTaskQueryController {
 
     private static Map<String, Object> archiveRow(ResultSet result, ResultSetMetaData metadata) throws SQLException {
         Map<String, Object> value = row(result, metadata);
+        Object categoryCode = value.remove("categorycode");
+        Object categoryName = value.remove("categoryname");
+        if (categoryCode != null) value.put("categoryCode", categoryCode);
+        if (categoryName != null) value.put("categoryName", categoryName);
         value.put("ext$", new LinkedHashMap<String, Object>());
         return value;
     }

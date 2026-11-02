@@ -288,6 +288,13 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @ConditionalOnMissingBean(OwnedRunRemindQueryController.class)
+    public OwnedRunRemindQueryController ownedRunRemindQueryController(
+            OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
+        return new OwnedRunRemindQueryController(boundary, dataSource);
+    }
+
+    @Bean
     @ConditionalOnMissingBean(OwnedFolderGenericResourceController.class)
     public OwnedFolderGenericResourceController ownedFolderGenericResourceController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {

@@ -32,6 +32,7 @@ public final class OwnedReportSampleTaskQueryControllerContractTest {
                 "/secure/emc/module/bp/sample/samples/queries/tasks",
                 "/secure/emc/module/bp/report/reports/info/status",
                 "/secure/emc/module/bp/report/advisory-reports/info/status",
+                "/secure/emc/module/bp/report/advisory-reports/{id}/info/status",
                 "/secure/emc/module/bp/sample/samples/info/status"}) {
             if (!paths.contains(path)) throw new AssertionError("missing report/sample route " + path);
         }

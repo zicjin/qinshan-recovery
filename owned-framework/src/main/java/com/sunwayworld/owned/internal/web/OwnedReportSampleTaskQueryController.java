@@ -25,6 +25,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -78,11 +79,14 @@ public final class OwnedReportSampleTaskQueryController {
     @GetMapping(path = {
             REPORT + "/info/status",
             ADVISORY + "/info/status",
+            ADVISORY + "/{id}/info/status",
             SAMPLE + "/info/status"
             }, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> status(HttpServletRequest request) {
+    public ResponseEntity<String> status(HttpServletRequest request,
+            @PathVariable(value = "id", required = false) String id) {
         try {
             require(request);
+            if (id != null && !id.matches("[0-9]+")) return badRequest();
             return ok("{\"ext$\":{}}");
         } catch (AccessDeniedException denied) { return forbidden(); }
         catch (SQLException failure) { return unavailable(); }

@@ -222,10 +222,17 @@ public final class OwnedResultRunController {
             if (i > 0) placeholders.append(',');
             placeholders.append('?');
         }
-        String source = "SELECT I.*, CASE WHEN EXISTS (SELECT 1 FROM T_EMC_ORDER_TASK_RESULT R "
+        String source = "SELECT I.*, TM.METHODID AS ITEM_METHODID, TM.TESTID AS ITEM_TESTID, "
+                + "TM.ISLOCKED AS ITEM_ISLOCKED, T.TESTNAME AS ITEM_TESTNAME, "
+                + "M.METHODNAME AS ITEM_METHODNAME, SS.SETNAME AS ITEM_SETNAME, "
+                + "CASE WHEN EXISTS (SELECT 1 FROM T_EMC_ORDER_TASK_RESULT R "
                 + "JOIN T_EMC_ORDER_TASK RT ON RT.ID=R.ORDERTASKID WHERE RT.ID IN (" + placeholders + ") "
                 + "AND R.ITEMID=I.ID) THEN 'yes' ELSE NULL END AS SELECTED_FLAG "
-                + "FROM T_EMC_ITEM I WHERE I.ANALYSISCATEGORY='analysis' AND I.ACTIVATEDFLAG='1' "
+                + "FROM T_EMC_ITEM I LEFT JOIN T_EMC_TEST_METHOD TM ON TM.ID=I.TESTMETHODID "
+                + "LEFT JOIN T_EMC_TEST T ON T.ID=TM.TESTID "
+                + "LEFT JOIN T_EMC_METHOD M ON M.ID=TM.METHODID "
+                + "LEFT JOIN T_EMC_STANDARD_SET SS ON SS.ID=I.STANDSETID "
+                + "WHERE I.ANALYSISCATEGORY='analysis' AND I.ACTIVATEDFLAG='1' "
                 + "AND EXISTS (SELECT 1 FROM T_EMC_ORDER_TASK OT "
                 + "JOIN T_EMC_ORDER_ITEM_GROUP OIG ON OIG.ORDERID=OT.ORDERID AND OIG.TESTID=OT.TESTID "
                 + "AND OIG.TESTMETHODID=OT.TESTMETHODID AND (OT.MONITORTMPLID IS NULL OR OIG.MONITORTMPLID=OT.MONITORTMPLID) "
@@ -264,14 +271,21 @@ public final class OwnedResultRunController {
 
     private static Map<String, Object> editedItemRow(ResultSet result, ResultSetMetaData metadata) throws SQLException {
         Map<String, Object> value = new LinkedHashMap<String, Object>();
+        Map<String, Object> extension = new LinkedHashMap<String, Object>();
         String selected = null;
         for (int i = 1; i <= metadata.getColumnCount(); i++) {
             String label = metadata.getColumnLabel(i);
             if ("RN_".equalsIgnoreCase(label) || "PAGE_RN_".equalsIgnoreCase(label)) continue;
             if ("SELECTED_FLAG".equalsIgnoreCase(label)) { selected = result.getString(i); continue; }
+            if ("ITEM_TESTNAME".equalsIgnoreCase(label) || "ITEM_METHODNAME".equalsIgnoreCase(label)
+                    || "ITEM_SETNAME".equalsIgnoreCase(label) || "ITEM_ISLOCKED".equalsIgnoreCase(label)
+                    || "ITEM_METHODID".equalsIgnoreCase(label) || "ITEM_TESTID".equalsIgnoreCase(label)) {
+                String key = label.substring("ITEM_".length()).toLowerCase();
+                extension.put(key, JdbcValue.normalize(result.getObject(i)));
+                continue;
+            }
             value.put(friendly(label), JdbcValue.normalize(result.getObject(i)));
         }
-        Map<String, Object> extension = new LinkedHashMap<String, Object>();
         if (selected != null && selected.length() > 0) extension.put("selected", selected);
         value.put("ext$", extension);
         return value;
@@ -446,7 +460,7 @@ public final class OwnedResultRunController {
     private static Map<String, String> itemTypeProfile() {
         String encoded = "id=number;testmethodid=number;itemname=string;itemaliasname=string;analysiscategory=string;"
                 + "activatedflag=string;unitname=string;resultcategory=string;reportdisplay=string;originalrecorddisplay=string;"
-                + "orderNo=number;selected=string";
+                + "orderno=number;selected=string";
         Map<String, String> result = new LinkedHashMap<String, String>();
         for (String token : encoded.split(";")) {
             int equals = token.indexOf('=');

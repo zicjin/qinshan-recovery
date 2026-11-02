@@ -63,7 +63,7 @@ public final class OwnedResultRunControllerContractTest {
             Path path = Paths.get("owned-framework/src/main/java/com/sunwayworld/owned/internal/web/OwnedResultRunController.java");
             if (!Files.exists(path)) path = Paths.get("src/main/java/com/sunwayworld/owned/internal/web/OwnedResultRunController.java");
             String source = new String(Files.readAllBytes(path), "UTF-8");
-        for (String token : new String[]{"T_EMC_QC_RELATED_ORDER", "A.CREATEDBYORGID=?", "T_EMC_ORDER_TASK", "A.ANALYSISORGID=?", "STATUS IN ('audit','qcAudit')", "T_CORE_FILE", "readBrowseRecord", "readAnalysisPretrial", "readRunResult", "readUniqueOrderItemGroups", "readEditedItems", "T_EMC_CAPACITY_ITEM_GROUP", "T_EMC_GROUP_ITEM", "SELECTED_FLAG", "ROW_NUMBER() OVER", "PAGE_RN_", "relatedOrderId", "testId", "totalPages"}) {
+        for (String token : new String[]{"T_EMC_QC_RELATED_ORDER", "A.CREATEDBYORGID=?", "T_EMC_ORDER_TASK", "A.ANALYSISORGID=?", "STATUS IN ('audit','qcAudit')", "T_CORE_FILE", "readBrowseRecord", "readAnalysisPretrial", "readRunResult", "readUniqueOrderItemGroups", "readEditedItems", "T_EMC_CAPACITY_ITEM_GROUP", "T_EMC_GROUP_ITEM", "T_EMC_TEST_METHOD", "T_EMC_STANDARD_SET", "ITEM_TESTNAME", "ITEM_METHODNAME", "ITEM_SETNAME", "SELECTED_FLAG", "ROW_NUMBER() OVER", "PAGE_RN_", "relatedOrderId", "testId", "totalPages"}) {
                 if (!source.contains(token)) throw new AssertionError("missing result-run contract token: " + token);
             }
         }

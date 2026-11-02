@@ -449,6 +449,13 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @ConditionalOnMissingBean(OwnedCrmReadController.class)
+    public OwnedCrmReadController ownedCrmReadController(
+            OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
+        return new OwnedCrmReadController(boundary, dataSource);
+    }
+
+    @Bean
     @ConditionalOnMissingBean(OwnedOrderQueryController.class)
     public OwnedOrderQueryController ownedOrderQueryController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {

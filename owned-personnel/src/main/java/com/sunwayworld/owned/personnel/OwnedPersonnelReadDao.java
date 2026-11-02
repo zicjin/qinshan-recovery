@@ -103,7 +103,7 @@ public final class OwnedPersonnelReadDao extends MybatisDaoSupport<EmcEmpBean, S
             JSONObject root = JSON.parseObject(wrapper.getRequestJson());
             if (root != null && root.containsKey("q")) {
                 root.remove("q");
-                return new RestJsonWrapperBean(root.toJSONString());
+                return new RestJsonWrapperBean(root.toJSONString(), null, null, null);
             }
         } catch (RuntimeException ignored) { return wrapper; }
         return wrapper;

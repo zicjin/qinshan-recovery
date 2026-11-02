@@ -70,6 +70,60 @@ public final class OwnedItemTaskQueryController {
         catch (SQLException failure) { return unavailable(); }
     }
 
+    /** Shared inherited GenericResource read routes for the item aliases. */
+    @PostMapping(path = {
+            PREFIX + "complaints/queries", PREFIX + "complaints/queries/raw", PREFIX + "complaints/queries/searchable",
+            PREFIX + "corrections/queries", PREFIX + "corrections/queries/raw", PREFIX + "corrections/queries/searchable",
+            PREFIX + "emc-cars/queries", PREFIX + "emc-cars/queries/raw", PREFIX + "emc-cars/queries/searchable",
+            PREFIX + "improvements/queries", PREFIX + "improvements/queries/raw", PREFIX + "improvements/queries/searchable",
+            PREFIX + "inconformitys/queries", PREFIX + "inconformitys/queries/raw", PREFIX + "inconformitys/queries/searchable",
+            PREFIX + "internal-audits/queries", PREFIX + "internal-audits/queries/raw", PREFIX + "internal-audits/queries/searchable",
+            PREFIX + "leave-applies/queries", PREFIX + "leave-applies/queries/raw", PREFIX + "leave-applies/queries/searchable",
+            PREFIX + "leave-replenishs/queries", PREFIX + "leave-replenishs/queries/raw", PREFIX + "leave-replenishs/queries/searchable",
+            PREFIX + "lm/overtimes/queries", PREFIX + "lm/overtimes/queries/raw", PREFIX + "lm/overtimes/queries/searchable",
+            PREFIX + "manage-reviews/queries", PREFIX + "manage-reviews/queries/raw", PREFIX + "manage-reviews/queries/searchable",
+            PREFIX + "precautions/queries", PREFIX + "precautions/queries/raw", PREFIX + "precautions/queries/searchable",
+            PREFIX + "quality-controls/queries", PREFIX + "quality-controls/queries/raw", PREFIX + "quality-controls/queries/searchable",
+            PREFIX + "quality-supervisions/queries", PREFIX + "quality-supervisions/queries/raw", PREFIX + "quality-supervisions/queries/searchable",
+            PREFIX + "quotation/quotationregisters/queries", PREFIX + "quotation/quotationregisters/queries/raw", PREFIX + "quotation/quotationregisters/queries/searchable",
+            PREFIX + "report-queries/queries", PREFIX + "report-queries/queries/raw", PREFIX + "report-queries/queries/searchable",
+            PREFIX + "scm/conven-mtls/queries", PREFIX + "scm/conven-mtls/queries/raw", PREFIX + "scm/conven-mtls/queries/searchable",
+            PREFIX + "scm/equipt-purchs/queries", PREFIX + "scm/equipt-purchs/queries/raw", PREFIX + "scm/equipt-purchs/queries/searchable",
+            PREFIX + "scm/office-mtls/queries", PREFIX + "scm/office-mtls/queries/raw", PREFIX + "scm/office-mtls/queries/searchable",
+            PREFIX + "scm/standard-mtls/queries", PREFIX + "scm/standard-mtls/queries/raw", PREFIX + "scm/standard-mtls/queries/searchable"
+            }, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> genericQuery(HttpServletRequest request,
+            @RequestBody(required = false) String body) {
+        try {
+            OwnedPrincipal principal = require(request);
+            return ok(selectPage(table(resource(request.getRequestURI())), principal.getOrgId(), Page.parse(body)));
+        } catch (AccessDeniedException denied) { return forbidden(); }
+        catch (IllegalArgumentException invalid) { return badRequest(); }
+        catch (SQLException failure) { return unavailable(); }
+    }
+
+    @GetMapping(path = {
+            PREFIX + "complaints/{id}", PREFIX + "corrections/{id}", PREFIX + "emc-cars/{id}",
+            PREFIX + "improvements/{id}", PREFIX + "inconformitys/{id}", PREFIX + "internal-audits/{id}",
+            PREFIX + "leave-applies/{id}", PREFIX + "leave-replenishs/{id}", PREFIX + "lm/overtimes/{id}",
+            PREFIX + "manage-reviews/{id}", PREFIX + "precautions/{id}", PREFIX + "quality-controls/{id}",
+            PREFIX + "quality-supervisions/{id}", PREFIX + "quotation/quotationregisters/{id}",
+            PREFIX + "report-queries/{id}", PREFIX + "scm/conven-mtls/{id}", PREFIX + "scm/equipt-purchs/{id}",
+            PREFIX + "scm/office-mtls/{id}", PREFIX + "scm/standard-mtls/{id}"
+            }, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> genericDetail(HttpServletRequest request,
+            @org.springframework.web.bind.annotation.PathVariable("id") String id) {
+        try {
+            OwnedPrincipal principal = require(request);
+            String path = request.getRequestURI();
+            String name = resourceNameFromDetail(path);
+            if (id == null || id.length() == 0 || id.length() > 128 || id.indexOf('/') >= 0) throw new IllegalArgumentException("item id is invalid");
+            return ok(selectDetail(table(name), principal.getOrgId(), id));
+        } catch (AccessDeniedException denied) { return forbidden(); }
+        catch (IllegalArgumentException invalid) { return badRequest(); }
+        catch (SQLException failure) { return unavailable(); }
+    }
+
     @GetMapping(path = {
             PREFIX + "complaints/info/status", PREFIX + "corrections/info/status",
             PREFIX + "emc-cars/info/status", PREFIX + "improvements/info/status",
@@ -99,6 +153,13 @@ public final class OwnedItemTaskQueryController {
         if (!TABLES.containsKey(value)) throw new IllegalArgumentException("unsupported item task resource");
         return value;
     }
+    private static String resourceNameFromDetail(String path) {
+        if (path == null || !path.startsWith(PREFIX)) throw new IllegalArgumentException("item detail route is invalid");
+        String value = path.substring(PREFIX.length());
+        int slash = value.indexOf('/');
+        if (slash <= 0 || !TABLES.containsKey(value.substring(0, slash))) throw new IllegalArgumentException("unsupported item detail resource");
+        return value.substring(0, slash);
+    }
     private static String table(String resource) { String value = TABLES.get(resource); if (value == null) throw new IllegalArgumentException("unsupported item task resource"); return value; }
 
     private String selectPage(String table, String organization, Page page) throws SQLException {
@@ -114,6 +175,17 @@ public final class OwnedItemTaskQueryController {
             }
         }
         Map<String, Object> envelope = new LinkedHashMap<String, Object>(); envelope.put("columnTypeMap", types); envelope.put("first", page.number == 1); envelope.put("last", total == 0 || page.number >= pages(total, page.size)); envelope.put("numberOfElements", rows.size()); envelope.put("pageNumber", page.number); envelope.put("pageSize", page.size); envelope.put("rows", rows); envelope.put("total", total); Map<String, Object> totalMap = new LinkedHashMap<String, Object>(); totalMap.put("qty_", total); envelope.put("totalMap", totalMap); envelope.put("totalPages", pages(total, page.size)); return JSON.toJSONString(envelope, SerializerFeature.WriteMapNullValue);
+    }
+
+    private String selectDetail(String table, String organization, String id) throws SQLException {
+        String sql = "SELECT T.* FROM " + table + " T WHERE T.CREATEDBYORGID=? AND TO_CHAR(T.ID)=?";
+        try (Connection connection = dataSource.getConnection(); PreparedStatement query = connection.prepareStatement(sql)) {
+            query.setString(1, organization); query.setString(2, id);
+            try (ResultSet result = query.executeQuery()) {
+                if (!result.next()) return "{}";
+                return JSON.toJSONString(row(result, result.getMetaData()), SerializerFeature.WriteMapNullValue);
+            }
+        }
     }
 
     private static Map<String, Object> row(ResultSet result, ResultSetMetaData metadata) throws SQLException { Map<String, Object> value = new LinkedHashMap<String, Object>(); for (int i = 1; i <= metadata.getColumnCount(); i++) { String label = metadata.getColumnLabel(i); if ("RN_".equalsIgnoreCase(label)) continue; Object item = JdbcValue.normalize(result.getObject(i)); if (item != null) value.put(camel(label), item); } return value; }

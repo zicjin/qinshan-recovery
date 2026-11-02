@@ -19,7 +19,11 @@ public final class OwnedItemTaskQueryControllerContractTest {
         for (String name : names) {
             if (!paths.contains("/secure/emc/module/item/" + name + "/queries/tasks")) throw new AssertionError("missing item task route " + name);
             if (!paths.contains("/secure/emc/module/item/" + name + "/info/status")) throw new AssertionError("missing item status route " + name);
+            if (!paths.contains("/secure/emc/module/item/" + name + "/queries")) throw new AssertionError("missing item query route " + name);
+            if (!paths.contains("/secure/emc/module/item/" + name + "/queries/raw")) throw new AssertionError("missing item raw route " + name);
+            if (!paths.contains("/secure/emc/module/item/" + name + "/queries/searchable")) throw new AssertionError("missing item searchable route " + name);
+            if (!paths.contains("/secure/emc/module/item/" + name + "/{id}")) throw new AssertionError("missing item detail route " + name);
         }
-        System.out.println("owned item task-query contract checks passed (19 aliases)");
+        System.out.println("owned item task/query/detail contract checks passed (19 aliases)");
     }
 }

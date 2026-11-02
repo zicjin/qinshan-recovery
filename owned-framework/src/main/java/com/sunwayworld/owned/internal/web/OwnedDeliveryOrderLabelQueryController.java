@@ -60,7 +60,7 @@ public final class OwnedDeliveryOrderLabelQueryController {
     @GetMapping(path = {DELIVERY + "/info/status", LABEL + "/info/status",
             DELIVERY + "/{id}/info/status", LABEL + "/{id}/info/status"}, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> status(HttpServletRequest request) {
-        try { require(request); return ok("{\"auditStatus\":{},\"ext$\":{}}"); }
+        try { require(request); return ok("{\"ext$\":{}}"); }
         catch (AccessDeniedException denied) { return forbidden(); }
         catch (SQLException failure) { return unavailable(); }
     }
@@ -75,7 +75,7 @@ public final class OwnedDeliveryOrderLabelQueryController {
                     : "SELECT A.* FROM T_EMC_ORDER_LABEL A WHERE A.ID=?";
             try (Connection c = dataSource.getConnection(); PreparedStatement q = c.prepareStatement(sql)) {
                 int i=1; if (delivery) q.setString(i++, principal.getOrgId()); q.setLong(i, Long.parseLong(id));
-                try (ResultSet r=q.executeQuery()) { return ok(r.next() ? JSON.toJSONString(row(r,r.getMetaData()), SerializerFeature.WriteMapNullValue) : "{}"); }
+                try (ResultSet r=q.executeQuery()) { return ok(r.next() ? JSON.toJSONString(row(r,r.getMetaData(), delivery), SerializerFeature.WriteMapNullValue) : "{}"); }
             }
         } catch (AccessDeniedException denied) { return forbidden(); }
         catch (IllegalArgumentException invalid) { return badRequest(); }
@@ -95,12 +95,13 @@ public final class OwnedDeliveryOrderLabelQueryController {
         String page = "SELECT P.* FROM (SELECT Q.*,ROW_NUMBER() OVER (ORDER BY Q.ID " + (delivery ? "ASC" : "DESC") + ") RN_ FROM (" + source + ") Q) P WHERE P.RN_>? AND P.RN_<=? ORDER BY P.RN_";
         try (Connection c=dataSource.getConnection()) {
             try (PreparedStatement x=c.prepareStatement(count)) { int i=1; if(delivery)x.setString(i++,org); try(ResultSet r=x.executeQuery()){if(!r.next())throw new SQLException("count missing"); total=r.getInt(1);} }
-            try (PreparedStatement x=c.prepareStatement(page)) { int i=1; if(delivery)x.setString(i++,org); x.setInt(i++,q.start()); x.setInt(i,q.end()); try(ResultSet r=x.executeQuery()){ResultSetMetaData m=r.getMetaData();for(int j=1;j<=m.getColumnCount();j++){String n=m.getColumnLabel(j);if(!"RN_".equalsIgnoreCase(n))types.put(camel(n),type(m.getColumnType(j)));}while(r.next())rows.add(row(r,m));} }
+            try (PreparedStatement x=c.prepareStatement(page)) { int i=1; if(delivery)x.setString(i++,org); x.setInt(i++,q.start()); x.setInt(i,q.end()); try(ResultSet r=x.executeQuery()){ResultSetMetaData m=r.getMetaData();for(int j=1;j<=m.getColumnCount();j++){String n=m.getColumnLabel(j);if(!"RN_".equalsIgnoreCase(n))types.put(resourceKey(n),type(m.getColumnType(j)));}while(r.next())rows.add(row(r,m,delivery));} }
         }
         return new QueryResult(rows,types,total,q.number,q.size);
     }
     private static String page(QueryResult r){Map<String,Object>b=new LinkedHashMap<String,Object>();b.put("columnTypeMap",r.types);b.put("first",r.number==1);b.put("last",r.total==0||r.number>=pages(r.total,r.size));b.put("numberOfElements",r.rows.size());b.put("pageNumber",r.number);b.put("pageSize",r.size);b.put("rows",r.rows);b.put("total",r.total);Map<String,Object>t=new LinkedHashMap<String,Object>();t.put("qty_",r.total);b.put("totalMap",t);b.put("totalPages",pages(r.total,r.size));return JSON.toJSONString(b,SerializerFeature.WriteMapNullValue);}
-    private static Map<String,Object> row(ResultSet r,ResultSetMetaData m)throws SQLException{Map<String,Object>v=new LinkedHashMap<String,Object>();for(int i=1;i<=m.getColumnCount();i++){String n=m.getColumnLabel(i);if(!"RN_".equalsIgnoreCase(n))v.put(camel(n),JdbcValue.normalize(r.getObject(i)));}return v;}
+    private static Map<String,Object> row(ResultSet r,ResultSetMetaData m,boolean delivery)throws SQLException{Map<String,Object>v=new LinkedHashMap<String,Object>();for(int i=1;i<=m.getColumnCount();i++){String n=m.getColumnLabel(i);if(!"RN_".equalsIgnoreCase(n))v.put(resourceKey(n),JdbcValue.normalize(r.getObject(i)));}if(!delivery)v.put("ext$",new LinkedHashMap<String,Object>());return v;}
+    private static String resourceKey(String label){String n=label.toUpperCase(Locale.ROOT);if("CREATEDBYID".equals(n))return "createdById";if("CREATEDBYNAME".equals(n))return "createdByName";if("CREATEDTIME".equals(n))return "createdTime";if("CREATEDBYORGID".equals(n))return "createdByOrgId";if("CREATEDBYORGNAME".equals(n))return "createdByOrgName";if("LABELCODE".equals(n))return "labelCode";if("PROJNO".equals(n))return "projNo";if("PROJNAME".equals(n))return "projName";if("TESTORGNAME".equals(n))return "testOrgName";return camel(label);}
     private static String camel(String n){StringBuilder b=new StringBuilder();boolean u=false;for(char c:n.toLowerCase(Locale.ROOT).toCharArray()){if(c=='_'){u=true;continue;}b.append(u?Character.toUpperCase(c):c);u=false;}return b.toString();}
     private static String type(int t){return t==Types.DATE||t==Types.TIMESTAMP||t==Types.TIMESTAMP_WITH_TIMEZONE?"dateTime":(t==Types.NUMERIC||t==Types.DECIMAL||t==Types.INTEGER||t==Types.BIGINT?"number":"string");}
     private static int pages(int t,int s){return t==0?0:(t+s-1)/s;} private static ResponseEntity<String>ok(String b){return ResponseEntity.ok().header("Cache-Control","no-store").body(b);} private static ResponseEntity<String>forbidden(){return ResponseEntity.status(HttpStatus.FORBIDDEN).body("{\"message\":\"GIKAM.PERMISSION.UNAUTHORIZED\"}");} private static ResponseEntity<String>badRequest(){return ResponseEntity.badRequest().body("{\"message\":\"GIKAM.QUERY.INVALID\"}");} private static ResponseEntity<String>unavailable(){return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"message\":\"GIKAM.QUERY.UNAVAILABLE\"}");}

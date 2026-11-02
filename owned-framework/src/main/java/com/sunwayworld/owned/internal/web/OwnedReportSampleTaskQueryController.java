@@ -56,6 +56,7 @@ public final class OwnedReportSampleTaskQueryController {
             REPORT + "/queries",
             REPORT + "/queries/raw",
             REPORT + "/queries/searchable",
+            REPORT + "/archive-categories/queries",
             ADVISORY + "/queries",
             ADVISORY + "/queries/raw",
             ADVISORY + "/queries/searchable",
@@ -70,6 +71,9 @@ public final class OwnedReportSampleTaskQueryController {
             @RequestBody(required = false) String body) {
         try {
             OwnedPrincipal principal = require(request);
+            if (request.getRequestURI().endsWith("/archive-categories/queries")) {
+                return ok(selectArchiveCategories(Query.parse(body).page));
+            }
             return ok(selectPage(resource(request.getRequestURI()), principal, Query.parse(body)));
         } catch (AccessDeniedException denied) { return forbidden(); }
         catch (IllegalArgumentException invalid) { return badRequest(); }
@@ -150,6 +154,42 @@ public final class OwnedReportSampleTaskQueryController {
         totalMap.put("qty_", total);
         envelope.put("totalMap", totalMap);
         envelope.put("totalPages", pages(total, query.page.size));
+        return JSON.toJSONString(envelope, SerializerFeature.WriteMapNullValue);
+    }
+
+    private String selectArchiveCategories(Page page) throws SQLException {
+        String source = "SELECT T.* FROM T_EMC_ARCHIVE_CATEGORY T";
+        String countSql = "SELECT COUNT(1) FROM (" + source + ") Q";
+        String pageSql = "SELECT P.* FROM (SELECT Q.*,ROW_NUMBER() OVER (ORDER BY Q.ID DESC) RN_ FROM (" + source + ") Q) P WHERE P.RN_>? AND P.RN_<=? ORDER BY P.RN_";
+        int total;
+        List<Map<String, Object>> rows = new ArrayList<Map<String, Object>>();
+        Map<String, String> types = new LinkedHashMap<String, String>();
+        try (Connection connection = dataSource.getConnection()) {
+            try (PreparedStatement count = connection.prepareStatement(countSql);
+                    ResultSet result = count.executeQuery()) {
+                if (!result.next()) throw new SQLException("archive category count returned no row");
+                total = result.getInt(1);
+            }
+            try (PreparedStatement query = connection.prepareStatement(pageSql)) {
+                query.setInt(1, page.start()); query.setInt(2, page.end());
+                try (ResultSet result = query.executeQuery()) {
+                    ResultSetMetaData metadata = result.getMetaData();
+                    for (int i = 1; i <= metadata.getColumnCount(); i++) {
+                        String label = metadata.getColumnLabel(i);
+                        if (!"RN_".equalsIgnoreCase(label)) types.put(label.toLowerCase(Locale.ROOT), type(metadata.getColumnType(i)));
+                    }
+                    types.put("rn_", "number");
+                    while (result.next()) rows.add(row(result, metadata));
+                }
+            }
+        }
+        Map<String, Object> envelope = new LinkedHashMap<String, Object>();
+        envelope.put("columnTypeMap", types); envelope.put("first", page.number == 1);
+        envelope.put("last", total == 0 || page.number >= pages(total, page.size));
+        envelope.put("numberOfElements", rows.size()); envelope.put("pageNumber", page.number);
+        envelope.put("pageSize", page.size); envelope.put("rows", rows); envelope.put("total", total);
+        Map<String, Object> totalMap = new LinkedHashMap<String, Object>(); totalMap.put("qty_", total);
+        envelope.put("totalMap", totalMap); envelope.put("totalPages", pages(total, page.size));
         return JSON.toJSONString(envelope, SerializerFeature.WriteMapNullValue);
     }
 

@@ -18,6 +18,7 @@ public final class OwnedEquipmentMdmResourceControllerContractTest {
         Set<String> paths = mappedPaths();
         for (String resource : new String[] {"equipt-categories", "equipt-requisitions", "equipt-temp"}) requireFamily(paths, BASE + resource);
         for (String resource : new String[] {"equip-appearances", "equip-checks", "equip-verifications", "equipt-acq-params", "equipt-acq-results", "equipt-acq-scripts", "equipt-cali-result-norms", "equipt-calibrations"}) requireFamily(paths, EQUIP + resource);
+        require(paths, EQUIP + "equipt-calibrations/{id}/info/status");
         for (String resource : new String[] {"equip-checks", "equip-verifications", "equipt-cali-results", "equipt-per-checks"}) {
             require(paths, EQUIP + resource + "/queries/tasks");
             require(paths, EQUIP + resource + "/info/status");

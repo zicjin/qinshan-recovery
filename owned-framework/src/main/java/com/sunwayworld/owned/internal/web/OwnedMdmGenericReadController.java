@@ -44,6 +44,13 @@ public final class OwnedMdmGenericReadController {
     }
 
     @PostMapping(path = {
+            "/secure/emc/module/mdm/basemdm/biz-categories/queries", "/secure/emc/module/mdm/basemdm/biz-categories/queries/raw", "/secure/emc/module/mdm/basemdm/biz-categories/queries/searchable",
+            "/secure/emc/module/mdm/basemdm/certs/queries", "/secure/emc/module/mdm/basemdm/certs/queries/raw", "/secure/emc/module/mdm/basemdm/certs/queries/searchable",
+            "/secure/emc/module/mdm/bizmdm/index-categories/queries", "/secure/emc/module/mdm/bizmdm/index-categories/queries/raw", "/secure/emc/module/mdm/bizmdm/index-categories/queries/searchable",
+            "/secure/emc/module/mdm/bizmdm/methods/queries", "/secure/emc/module/mdm/bizmdm/methods/queries/raw", "/secure/emc/module/mdm/bizmdm/methods/queries/searchable",
+            "/secure/emc/module/mdm/bizmdm/monitor-tmpls/queries", "/secure/emc/module/mdm/bizmdm/monitor-tmpls/queries/raw", "/secure/emc/module/mdm/bizmdm/monitor-tmpls/queries/searchable",
+            "/secure/emc/module/mdm/bizmdm/clients/queries", "/secure/emc/module/mdm/bizmdm/clients/queries/raw", "/secure/emc/module/mdm/bizmdm/clients/queries/searchable",
+            "/secure/emc/module/mdm/bizmdm/comparisons/queries", "/secure/emc/module/mdm/bizmdm/comparisons/queries/raw", "/secure/emc/module/mdm/bizmdm/comparisons/queries/searchable",
             "/secure/emc/module/item/sqls/queries", "/secure/emc/module/item/sqls/queries/raw", "/secure/emc/module/item/sqls/queries/searchable",
             "/secure/emc/module/item/year-train-plans/queries", "/secure/emc/module/item/year-train-plans/queries/raw", "/secure/emc/module/item/year-train-plans/queries/searchable",
             "/secure/emc/module/mdm/basemdm/areas/queries", "/secure/emc/module/mdm/basemdm/areas/queries/raw", "/secure/emc/module/mdm/basemdm/areas/queries/searchable",
@@ -78,6 +85,13 @@ public final class OwnedMdmGenericReadController {
     }
 
     @GetMapping(path = {
+            "/secure/emc/module/mdm/basemdm/biz-categories/info/status", "/secure/emc/module/mdm/basemdm/biz-categories/{id}/info/status",
+            "/secure/emc/module/mdm/basemdm/certs/info/status", "/secure/emc/module/mdm/basemdm/certs/{id}/info/status",
+            "/secure/emc/module/mdm/bizmdm/index-categories/info/status", "/secure/emc/module/mdm/bizmdm/index-categories/{id}/info/status",
+            "/secure/emc/module/mdm/bizmdm/methods/info/status", "/secure/emc/module/mdm/bizmdm/methods/{id}/info/status",
+            "/secure/emc/module/mdm/bizmdm/monitor-tmpls/info/status", "/secure/emc/module/mdm/bizmdm/monitor-tmpls/{id}/info/status",
+            "/secure/emc/module/mdm/bizmdm/clients/info/status", "/secure/emc/module/mdm/bizmdm/clients/{id}/info/status",
+            "/secure/emc/module/mdm/bizmdm/comparisons/info/status", "/secure/emc/module/mdm/bizmdm/comparisons/{id}/info/status",
             "/secure/emc/module/item/sqls/info/status", "/secure/emc/module/item/sqls/{id}/info/status",
             "/secure/emc/module/item/year-train-plans/info/status", "/secure/emc/module/item/year-train-plans/{id}/info/status",
             "/secure/emc/module/mdm/basemdm/areas/info/status", "/secure/emc/module/mdm/basemdm/areas/{id}/info/status",
@@ -120,7 +134,7 @@ public final class OwnedMdmGenericReadController {
     }
 
     private String selectPage(Resource resource, String organization, Page page) throws SQLException {
-        String base = "SELECT T.* FROM " + resource.table + " T WHERE T.CREATEDBYORGID=?";
+        String base = "SELECT " + resource.select + " FROM " + resource.from + " WHERE " + resource.organizationColumn + "=?";
         String countSql = "SELECT COUNT(1) FROM (" + base + ") Q";
         String pageSql = "SELECT P.* FROM (SELECT Q.*,ROW_NUMBER() OVER (ORDER BY Q.ID DESC) RN_ FROM (" + base + ") Q) P WHERE P.RN_>? AND P.RN_<=? ORDER BY P.RN_";
         int total;
@@ -155,8 +169,9 @@ public final class OwnedMdmGenericReadController {
     private static ResponseEntity<String> badRequest() { return ResponseEntity.badRequest().contentType(MediaType.APPLICATION_JSON).body("{\"message\":\"GIKAM.QUERY.INVALID\"}"); }
     private static ResponseEntity<String> unavailable() { return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).contentType(MediaType.APPLICATION_JSON).body("{\"message\":\"GIKAM.DATA.UNAVAILABLE\"}"); }
     private static Map<String, Resource> resources() { Map<String, Resource> result = new LinkedHashMap<String, Resource>();
+        result.put("/secure/emc/module/mdm/basemdm/biz-categories", new Resource("T_EMC_BIZ_CATEGORY")); result.put("/secure/emc/module/mdm/basemdm/certs", new Resource("T_EMC_CERT")); result.put("/secure/emc/module/mdm/bizmdm/index-categories", new Resource("T_EMC_INDEX_CATEGORY I LEFT JOIN T_EMC_MONITOR_TMPL_GROUP P ON P.ID=I.MONITORTMPLGROUPID", "P.CREATEDBYORGID", "I.*")); result.put("/secure/emc/module/mdm/bizmdm/methods", new Resource("T_EMC_METHOD")); result.put("/secure/emc/module/mdm/bizmdm/monitor-tmpls", new Resource("T_EMC_MONITOR_TMPL")); result.put("/secure/emc/module/mdm/bizmdm/clients", new Resource("T_EMC_CLIENT")); result.put("/secure/emc/module/mdm/bizmdm/comparisons", new Resource("T_EMC_COMPARISON"));
         result.put("/secure/emc/module/item/sqls", new Resource("T_EMC_SQL")); result.put("/secure/emc/module/item/year-train-plans", new Resource("T_EMC_YEAR_TRAIN_PLAN"));
         result.put("/secure/emc/module/mdm/basemdm/areas", new Resource("T_EMC_AREA")); result.put("/secure/emc/module/mdm/basemdm/biologys", new Resource("T_EMC_BIOLOGY")); result.put("/secure/emc/module/mdm/basemdm/container-categories", new Resource("T_EMC_CONTAINER_CATEGORY")); result.put("/secure/emc/module/mdm/basemdm/data-correlations", new Resource("T_EMC_DATA_CORRELATION")); result.put("/secure/emc/module/mdm/basemdm/env-records", new Resource("T_EMC_ENV_RECORD")); result.put("/secure/emc/module/mdm/basemdm/fetch-data-lines", new Resource("T_EMC_FETCH_DATA_LINE")); result.put("/secure/emc/module/mdm/basemdm/fetch-datas", new Resource("T_EMC_FETCH_DATA")); result.put("/secure/emc/module/mdm/basemdm/fixedassets", new Resource("T_EMC_FIXEDASSET")); result.put("/secure/emc/module/mdm/basemdm/index-items", new Resource("T_EMC_INDEX_ITEM")); result.put("/secure/emc/module/mdm/basemdm/monitor-abilities", new Resource("T_EMC_MONITOR_ABILITY")); result.put("/secure/emc/module/mdm/basemdm/monitor-point-categories", new Resource("T_EMC_MONITOR_POINT_CATEGORY")); result.put("/secure/emc/module/mdm/basemdm/monitor-tmpl-groups", new Resource("T_EMC_MONITOR_TMPL_GROUP")); result.put("/secure/emc/module/mdm/basemdm/property-tmpls", new Resource("T_EMC_PROPERTY_TMPL")); result.put("/secure/emc/module/mdm/basemdm/qc-categories", new Resource("T_EMC_QC_CATEGORY")); result.put("/secure/emc/module/mdm/basemdm/rooms", new Resource("T_EMC_ROOM")); result.put("/secure/emc/module/mdm/basemdm/scripts", new Resource("T_EMC_SCRIPT")); result.put("/secure/emc/module/mdm/basemdm/subcontractors", new Resource("T_EMC_SUBCONTRACTOR")); result.put("/secure/emc/module/mdm/basemdm/test-categories", new Resource("T_EMC_TEST_CATEGORY")); result.put("/secure/emc/module/mdm/basemdm/train-courses", new Resource("T_EMC_TRAIN_COURSE")); result.put("/secure/emc/module/mdm/basemdm/units", new Resource("T_EMC_UNIT")); result.put("/secure/emc/module/mdm/basemdm/vendors", new Resource("T_EMC_VENDOR")); return Collections.unmodifiableMap(result); }
-    private static final class Resource { final String table; Resource(String table) { this.table = table; } }
+    private static final class Resource { final String from, organizationColumn, select; Resource(String table) { this(table + " T", "T.CREATEDBYORGID", "T.*"); } Resource(String from, String organizationColumn, String select) { this.from = from; this.organizationColumn = organizationColumn; this.select = select; } }
     private static final class Page { final int number, size; Page(int number, int size) { this.number = number; this.size = size; } static Page parse(String body) { com.alibaba.fastjson.JSONObject root = body == null || body.trim().isEmpty() ? new com.alibaba.fastjson.JSONObject() : JSON.parseObject(body); com.alibaba.fastjson.JSONObject p = root == null ? null : root.getJSONObject("p"); int number = p == null ? 1 : Math.max(1, p.getIntValue("n")); int size = p == null ? 50 : Math.min(500, Math.max(1, p.getIntValue("s"))); return new Page(number, size); } int start() { return (number - 1) * size; } int end() { return number * size; } }
 }

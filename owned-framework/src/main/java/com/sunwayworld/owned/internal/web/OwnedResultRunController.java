@@ -64,6 +64,22 @@ public final class OwnedResultRunController {
         catch (SQLException failure) { return unavailable(); }
     }
 
+    /** Sampling counterpart of the result-run item selector. */
+    @PostMapping(path = "/secure/emc/module/bp/sample/samples/select-item/{id}",
+            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> selectSampleItem(HttpServletRequest request,
+            @PathVariable("id") String id,
+            @org.springframework.web.bind.annotation.RequestBody(required = false) String body) {
+        try {
+            OwnedPrincipal principal = require(request);
+            if (id == null || !id.matches("[0-9]+")) throw new IllegalArgumentException("order task id is invalid");
+            PageRequest pageRequest = PageRequest.parse(object(body));
+            return ok(page(readSampleItems(principal.getOrgId(), id, pageRequest)));
+        } catch (AccessDeniedException denied) { return forbidden(); }
+        catch (IllegalArgumentException invalid) { return badRequest(); }
+        catch (SQLException failure) { return unavailable(); }
+    }
+
     @PostMapping(path = {
             "/secure/core/module/bp/result/runs/queries",
             "/secure/core/module/bp/result/runs/queries/raw",
@@ -269,6 +285,26 @@ public final class OwnedResultRunController {
                 + "WHERE OT.ANALYSISORGID=? AND OT.ID IN (" + placeholders + ") AND GI.ITEMID=I.ID)";
         List<Object> values = new ArrayList<Object>();
         values.addAll(ids); values.add(organization); values.addAll(ids);
+        return readPagedEditedItems(source, values, page);
+    }
+
+    private QueryResult readSampleItems(String organization, String orderTaskId, PageRequest page) throws SQLException {
+        String source = "SELECT I.*, TM.METHODID AS ITEM_METHODID, TM.TESTID AS ITEM_TESTID, "
+                + "TM.ISLOCKED AS ITEM_ISLOCKED, T.TESTNAME AS ITEM_TESTNAME, "
+                + "M.METHODNAME AS ITEM_METHODNAME, SS.SETNAME AS ITEM_SETNAME "
+                + "FROM T_EMC_ITEM I LEFT JOIN T_EMC_TEST_METHOD TM ON TM.ID=I.TESTMETHODID "
+                + "LEFT JOIN T_EMC_TEST T ON T.ID=TM.TESTID "
+                + "LEFT JOIN T_EMC_METHOD M ON M.ID=TM.METHODID "
+                + "LEFT JOIN T_EMC_STANDARD_SET SS ON SS.ID=I.STANDSETID "
+                + "WHERE I.ANALYSISCATEGORY='sampling' AND I.ACTIVATEDFLAG='1' "
+                + "AND EXISTS (SELECT 1 FROM T_EMC_ORDER_TASK OT "
+                + "JOIN T_EMC_ORDER_ITEM_GROUP OIG ON OIG.SCHEMENAME=OT.SCHEMENAME "
+                + "AND OIG.TESTID=OT.TESTID AND OIG.TESTMETHODID=OT.TESTMETHODID "
+                + "AND (OT.MONITORTMPLID IS NULL OR OIG.MONITORTMPLID=OT.MONITORTMPLID) "
+                + "JOIN T_EMC_CAPACITY_ITEM_GROUP CIG ON CIG.ID=OIG.ITEMGROUPID "
+                + "JOIN T_EMC_GROUP_ITEM GI ON GI.ITEMGROUPID=CIG.ITEMGROUPID "
+                + "WHERE OT.ID=? AND OT.ANALYSISORGID=? AND GI.ITEMID=I.ID)";
+        List<Object> values = new ArrayList<Object>(); values.add(orderTaskId); values.add(organization);
         return readPagedEditedItems(source, values, page);
     }
 

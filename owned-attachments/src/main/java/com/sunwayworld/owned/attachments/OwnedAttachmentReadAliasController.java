@@ -28,14 +28,14 @@ public final class OwnedAttachmentReadAliasController {
     }
 
     @PostMapping(path = PREFIX + "/queries/searchable", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> searchable(HttpServletRequest request, @RequestBody(required = false) String body) {
-        OwnedPrincipal principal = identity.currentPrincipal(request.getSession(false));
+    public ResponseEntity<String> searchable(HttpServletRequest request, @RequestBody(required = false) String body) throws java.sql.SQLException {
+        identity.currentPrincipal(request.getSession(false));
         return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON)
                 .body(JSON.toJSONString(((OwnedAttachmentReadDao) service.getDao()).readPage(new RestJsonWrapperBean(body == null ? "{}" : body))));
     }
 
     @GetMapping(path = PREFIX + "/info/status", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> status(HttpServletRequest request) {
+    public ResponseEntity<String> status(HttpServletRequest request) throws java.sql.SQLException {
         identity.currentPrincipal(request.getSession(false));
         return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body("{\"ext$\":{}}");
     }

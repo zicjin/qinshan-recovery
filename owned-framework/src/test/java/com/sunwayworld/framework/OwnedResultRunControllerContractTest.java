@@ -7,6 +7,9 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -44,10 +47,22 @@ public final class OwnedResultRunControllerContractTest {
         Field unique = OwnedResultRunController.class.getDeclaredField("UNIQUE_ORDER_TASK_TYPE_PROFILE");
         unique.setAccessible(true);
         if (((Map<?, ?>) unique.get(null)).size() != 46) throw new AssertionError("unexpected unique-order-task profile size");
+        PathCheck.requireSource();
         System.out.println("owned result-run read alias contract checks passed");
     }
 
     private static void require(Set<String> paths, String path) {
         if (!paths.contains(path)) throw new AssertionError("missing result-run path: " + path);
+    }
+
+    private static final class PathCheck {
+        static void requireSource() throws Exception {
+            Path path = Paths.get("owned-framework/src/main/java/com/sunwayworld/owned/internal/web/OwnedResultRunController.java");
+            if (!Files.exists(path)) path = Paths.get("src/main/java/com/sunwayworld/owned/internal/web/OwnedResultRunController.java");
+            String source = new String(Files.readAllBytes(path), "UTF-8");
+            for (String token : new String[]{"T_EMC_QC_RELATED_ORDER", "A.CREATEDBYORGID=?", "T_EMC_ORDER_TASK", "A.ANALYSISORGID=?", "ROW_NUMBER() OVER", "PAGE_RN_", "relatedOrderId", "testId", "totalPages"}) {
+                if (!source.contains(token)) throw new AssertionError("missing result-run contract token: " + token);
+            }
+        }
     }
 }

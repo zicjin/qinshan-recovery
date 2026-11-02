@@ -74,6 +74,7 @@ public final class OwnedResultRunController {
         try {
             OwnedPrincipal principal = require(request);
             JSONObject filter = object(body);
+            PageRequest pageRequest = PageRequest.parse(filter);
             String uri = request.getRequestURI();
             if (uri.endsWith("/analysis-pretrial/queries") || uri.endsWith("/queries/run-result")) {
                 return unexpected(response, uri);
@@ -82,12 +83,12 @@ public final class OwnedResultRunController {
             if (uri.endsWith("/edited-items/queries")) return emptyBody(response);
             if (uri.endsWith("/unique-order-item-group/queries")) return ok(emptyPage(pageNumber(filter), pageSize(filter)));
             if (request.getRequestURI().endsWith("/qc-related-order/queries")) {
-                return ok(page(readQcRelatedOrders(principal.getOrgId()), pageSize(filter)));
+                return ok(page(readQcRelatedOrders(principal.getOrgId(), filter, pageRequest)));
             }
             if (request.getRequestURI().endsWith("/unique-order-task/queries")) {
-                return ok(page(readUniqueOrderTasks(principal.getOrgId()), pageSize(filter)));
+                return ok(page(readUniqueOrderTasks(principal.getOrgId(), filter, pageRequest)));
             }
-            return ok(page(readRuns(principal.getOrgId(), text(filter.get("runNo")), text(filter.get("status"))), pageSize(filter)));
+            return ok(page(readRuns(principal.getOrgId(), text(queryValue(filter, "runNo")), text(queryValue(filter, "status"))), pageSize(filter)));
         } catch (AccessDeniedException denied) { return forbidden(); }
         catch (IllegalArgumentException invalid) { return badRequest(); }
         catch (SQLException failure) { return unavailable(); }
@@ -162,38 +163,79 @@ public final class OwnedResultRunController {
         return new QueryResult(rows, types);
     }
 
-    private QueryResult readQcRelatedOrders(String organization) throws SQLException {
-        List<Map<String, Object>> rows = new ArrayList<Map<String, Object>>();
-        String sql = "SELECT A.*,C.PROJNO FROM T_EMC_QC_RELATED_ORDER A "
+    private QueryResult readQcRelatedOrders(String organization, JSONObject filter, PageRequest page) throws SQLException {
+        List<Object> values = new ArrayList<Object>();
+        StringBuilder source = new StringBuilder("SELECT A.*,C.PROJNO FROM T_EMC_QC_RELATED_ORDER A "
                 + "LEFT JOIN T_EMC_ORDER B ON A.RELATEDORDERID=B.ID "
-                + "LEFT JOIN T_EMC_PROJECT C ON B.PROJID=C.ID "
-                + "WHERE A.CREATEDBYORGID=? ORDER BY A.ID DESC";
-        try (Connection connection = dataSource.getConnection(); PreparedStatement query = connection.prepareStatement(sql)) {
-            query.setString(1, organization);
-            try (ResultSet result = query.executeQuery()) {
-                ResultSetMetaData metadata = result.getMetaData();
-                while (result.next()) rows.add(row(result, metadata));
-            }
-        }
-        return new QueryResult(rows, QC_RELATED_ORDER_TYPE_PROFILE);
+                + "LEFT JOIN T_EMC_PROJECT C ON B.PROJID=C.ID WHERE A.CREATEDBYORGID=?");
+        values.add(organization);
+        appendLongFilter(source, values, "A.RELATEDORDERID", queryValue(filter, "relatedOrderId"));
+        appendLongFilter(source, values, "A.QCORD ERID".replace(" ", ""), queryValue(filter, "qcOrderId"));
+        appendStringFilter(source, values, "A.RELATEDRUNID", queryValue(filter, "relatedRunId"));
+        return readPaged(source.toString(), values, page, QC_RELATED_ORDER_TYPE_PROFILE);
     }
 
-    private QueryResult readUniqueOrderTasks(String organization) throws SQLException {
-        List<Map<String, Object>> rows = new ArrayList<Map<String, Object>>();
-        String sql = "SELECT * FROM (SELECT A.*,B.ORDERNO,B.LABELNO,B.ORDERDESC,B.SAMPLEBEGINDATE,"
+    private QueryResult readUniqueOrderTasks(String organization, JSONObject filter, PageRequest page) throws SQLException {
+        List<Object> values = new ArrayList<Object>();
+        StringBuilder inner = new StringBuilder("SELECT A.*,B.ORDERNO,B.LABELNO,B.ORDERDESC,B.SAMPLEBEGINDATE,"
                 + "B.SAMPLEBEGINTIME,B.PARENTORDERNO,C.MONITORPOINTNAME,D.EQUIPTNAME,"
                 + "ROW_NUMBER() OVER (PARTITION BY A.TESTID ORDER BY A.ID) AS UNIQUE_RN "
                 + "FROM T_EMC_ORDER_TASK A LEFT JOIN T_EMC_ORDER B ON A.ORDERID=B.ID "
                 + "LEFT JOIN T_EMC_FOLDER C ON A.FOLDERID=C.ID LEFT JOIN T_EMC_EQUIPT D ON A.EQUIPTID=D.ID "
-                + "WHERE A.ANALYSISORGID=?) Q WHERE Q.UNIQUE_RN=1 ORDER BY Q.ID DESC";
-        try (Connection connection = dataSource.getConnection(); PreparedStatement query = connection.prepareStatement(sql)) {
-            query.setString(1, organization);
-            try (ResultSet result = query.executeQuery()) {
-                ResultSetMetaData metadata = result.getMetaData();
-                while (result.next()) rows.add(row(result, metadata));
+                + "WHERE A.ANALYSISORGID=?");
+        values.add(organization);
+        appendLongFilter(inner, values, "A.TESTID", queryValue(filter, "testId"));
+        appendLongFilter(inner, values, "A.ORDERID", queryValue(filter, "orderId"));
+        appendStringFilter(inner, values, "A.RUNID", queryValue(filter, "runId"));
+        appendStringFilter(inner, values, "A.STATUS", queryValue(filter, "status"));
+        return readPaged("SELECT * FROM (" + inner + ") Q WHERE Q.UNIQUE_RN=1", values, page,
+                UNIQUE_ORDER_TASK_TYPE_PROFILE);
+    }
+
+    private QueryResult readPaged(String source, List<Object> values, PageRequest page,
+            Map<String, String> profile) throws SQLException {
+        String countSql = "SELECT COUNT(1) FROM (" + source + ") Q";
+        String pageSql = "SELECT P.* FROM (SELECT Q.*,ROW_NUMBER() OVER (ORDER BY Q.ID DESC) PAGE_RN_ FROM ("
+                + source + ") Q) P WHERE P.PAGE_RN_>? AND P.PAGE_RN_<=? ORDER BY P.PAGE_RN_";
+        int total;
+        List<Map<String, Object>> rows = new ArrayList<Map<String, Object>>();
+        try (Connection connection = dataSource.getConnection()) {
+            try (PreparedStatement count = connection.prepareStatement(countSql)) {
+                bind(count, values, 1);
+                try (ResultSet result = count.executeQuery()) {
+                    if (!result.next()) throw new SQLException("result query count unavailable");
+                    total = result.getInt(1);
+                }
+            }
+            try (PreparedStatement select = connection.prepareStatement(pageSql)) {
+                int next = bind(select, values, 1);
+                select.setInt(next++, page.start());
+                select.setInt(next, page.end());
+                try (ResultSet result = select.executeQuery()) {
+                    ResultSetMetaData metadata = result.getMetaData();
+                    while (result.next()) rows.add(rowWithExtension(result, metadata));
+                }
             }
         }
-        return new QueryResult(rows, UNIQUE_ORDER_TASK_TYPE_PROFILE);
+        return new QueryResult(rows, profile, total, page.number, page.size);
+    }
+
+    private static int bind(PreparedStatement statement, List<Object> values, int index) throws SQLException {
+        for (Object value : values) statement.setObject(index++, value);
+        return index;
+    }
+
+    private static void appendLongFilter(StringBuilder sql, List<Object> values, String column, Object value) {
+        if (value == null || String.valueOf(value).trim().isEmpty()) return;
+        try { values.add(Long.valueOf(String.valueOf(value))); }
+        catch (NumberFormatException error) { throw new IllegalArgumentException("invalid numeric filter: " + column); }
+        sql.append(" AND ").append(column).append("=?");
+    }
+
+    private static void appendStringFilter(StringBuilder sql, List<Object> values, String column, Object value) {
+        if (value == null || String.valueOf(value).trim().isEmpty()) return;
+        values.add(String.valueOf(value).trim());
+        sql.append(" AND ").append(column).append("=?");
     }
 
     private static final Map<String, String> QC_RELATED_ORDER_TYPE_PROFILE = qcRelatedOrderTypeProfile();
@@ -262,9 +304,16 @@ public final class OwnedResultRunController {
         Map<String, Object> value = new LinkedHashMap<String, Object>();
         for (int i = 1; i <= metadata.getColumnCount(); i++) {
             String label = metadata.getColumnLabel(i);
-            if ("RN_".equalsIgnoreCase(label)) continue;
+            if ("RN_".equalsIgnoreCase(label) || "PAGE_RN_".equalsIgnoreCase(label)
+                    || "UNIQUE_RN".equalsIgnoreCase(label)) continue;
             value.put(friendly(label), JdbcValue.normalize(result.getObject(i)));
         }
+        return value;
+    }
+
+    private static Map<String, Object> rowWithExtension(ResultSet result, ResultSetMetaData metadata) throws SQLException {
+        Map<String, Object> value = row(result, metadata);
+        value.put("ext$", new LinkedHashMap<String, Object>());
         return value;
     }
 
@@ -287,11 +336,23 @@ public final class OwnedResultRunController {
     private static JSONObject object(String body) {
         if (body == null || body.trim().length() == 0) return new JSONObject();
         Object value = JSON.parse(body); if (!(value instanceof JSONObject)) throw new IllegalArgumentException("request must be an object");
-        JSONObject object = (JSONObject) value; return object.containsKey("p") ? object.getJSONObject("p") : object;
+        return (JSONObject) value;
     }
     private static String text(Object value) { return value == null ? "" : String.valueOf(value).trim(); }
+    private static Object queryValue(JSONObject root, String key) {
+        if (root == null) return null;
+        if (root.containsKey(key)) return root.get(key);
+        JSONObject p = root.getJSONObject("p"); if (p != null && p.containsKey(key)) return p.get(key);
+        JSONObject f = root.getJSONObject("f"); if (f != null) {
+            if (f.containsKey(key)) return f.get(key);
+            if (f.containsKey(key + "_SEQ")) return f.get(key + "_SEQ");
+        }
+        JSONObject q = root.getJSONObject("q"); if (q != null && q.containsKey(key)) return q.get(key);
+        return null;
+    }
     private static int pageSize(JSONObject filter) {
-        int size = filter == null ? 50 : filter.getIntValue("s");
+        JSONObject p = filter == null ? null : filter.getJSONObject("p");
+        int size = p == null ? (filter == null ? 50 : filter.getIntValue("s")) : p.getIntValue("s");
         return size <= 0 ? 50 : Math.min(size, 500);
     }
     private static String emptyPage(int pageNumber, int pageSize) {
@@ -304,7 +365,7 @@ public final class OwnedResultRunController {
         body.put("total", 0); body.put("totalMap", new LinkedHashMap<String, Object>()); body.put("totalPages", 0);
         return JSON.toJSONString(body, SerializerFeature.WriteMapNullValue);
     }
-    private static int pageNumber(JSONObject filter) { int number = filter == null ? 1 : filter.getIntValue("n"); return number <= 0 ? 1 : number; }
+    private static int pageNumber(JSONObject filter) { JSONObject p = filter == null ? null : filter.getJSONObject("p"); int number = p == null ? (filter == null ? 1 : filter.getIntValue("n")) : p.getIntValue("n"); return number <= 0 ? 1 : number; }
     private static ResponseEntity<String> emptyBody(HttpServletResponse response) {
         try { response.resetBuffer(); response.setStatus(HttpStatus.OK.value()); response.setHeader("Content-Type", ""); response.flushBuffer(); return null; }
         catch (java.io.IOException error) { return ResponseEntity.ok().body(""); }
@@ -317,15 +378,23 @@ public final class OwnedResultRunController {
         catch (java.io.IOException error) { return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(body); }
     }
     private static String page(QueryResult result, int pageSize) {
+        return page(result, result.pageNumber, pageSize);
+    }
+    private static String page(QueryResult result) {
+        return page(result, result.pageNumber, result.pageSize);
+    }
+    private static String page(QueryResult result, int pageNumber, int pageSize) {
         List<Map<String, Object>> rows = result.rows;
         Map<String, Object> body = new LinkedHashMap<String, Object>();
         body.put("columnTypeMap", result.types);
-        body.put("first", true); body.put("last", true);
-        body.put("numberOfElements", rows.size()); body.put("pageNumber", 1);
+        int total = result.total >= 0 ? result.total : rows.size();
+        int totalPages = total == 0 ? 0 : (total + pageSize - 1) / pageSize;
+        body.put("first", pageNumber == 1); body.put("last", total == 0 || pageNumber >= totalPages);
+        body.put("numberOfElements", rows.size()); body.put("pageNumber", pageNumber);
         body.put("pageSize", pageSize); body.put("rows", rows);
-        body.put("total", rows.size());
-        Map<String, Object> totals = new LinkedHashMap<String, Object>(); totals.put("qty_", rows.size());
-        body.put("totalMap", totals); body.put("totalPages", rows.isEmpty() ? 0 : 1);
+        body.put("total", total);
+        Map<String, Object> totals = new LinkedHashMap<String, Object>(); totals.put("qty_", total);
+        body.put("totalMap", totals); body.put("totalPages", totalPages);
         return JSON.toJSONString(body, SerializerFeature.WriteMapNullValue);
     }
     private static String type(int sqlType) {
@@ -334,8 +403,16 @@ public final class OwnedResultRunController {
         return "string";
     }
     private static final class QueryResult {
-        final List<Map<String, Object>> rows; final Map<String, String> types;
-        QueryResult(List<Map<String, Object>> rows, Map<String, String> types) { this.rows = rows; this.types = types; }
+        final List<Map<String, Object>> rows; final Map<String, String> types; final int total; final int pageNumber; final int pageSize;
+        QueryResult(List<Map<String, Object>> rows, Map<String, String> types) { this(rows, types, -1, 1, 50); }
+        QueryResult(List<Map<String, Object>> rows, Map<String, String> types, int total, int pageNumber, int pageSize) { this.rows = rows; this.types = types; this.total = total; this.pageNumber = pageNumber; this.pageSize = pageSize; }
+    }
+    private static final class PageRequest {
+        final int number; final int size;
+        PageRequest(int number, int size) { this.number = number; this.size = size; }
+        int start() { return (number - 1) * size; }
+        int end() { return number * size; }
+        static PageRequest parse(JSONObject root) { return new PageRequest(pageNumber(root), pageSize(root)); }
     }
     private static ResponseEntity<String> ok(String body) { return ResponseEntity.ok().header("Cache-Control", "no-store").body(body); }
     private static ResponseEntity<String> forbidden() { return ResponseEntity.status(HttpStatus.FORBIDDEN).body("{\"message\":\"GIKAM.PERMISSION.UNAUTHORIZED\"}"); }

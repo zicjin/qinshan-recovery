@@ -56,9 +56,8 @@ public final class OwnedResultRunController {
             OwnedPrincipal principal = require(request);
             if (id == null || !id.matches("[0-9]+")) throw new IllegalArgumentException("order task id is invalid");
             JSONObject filter = object(body);
-            filter.put("id_IN", id);
             PageRequest pageRequest = PageRequest.parse(filter);
-            return ok(page(readEditedItems(principal.getOrgId(), filter, pageRequest)));
+            return ok(page(readSingleEditItems(principal.getOrgId(), id, pageRequest)));
         } catch (AccessDeniedException denied) { return forbidden(); }
         catch (IllegalArgumentException invalid) { return badRequest(); }
         catch (SQLException failure) { return unavailable(); }

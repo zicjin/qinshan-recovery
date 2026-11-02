@@ -197,6 +197,13 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @ConditionalOnMissingBean(OwnedSubpackageQueryController.class)
+    public OwnedSubpackageQueryController ownedSubpackageQueryController(
+            OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
+        return new OwnedSubpackageQueryController(boundary, dataSource);
+    }
+
+    @Bean
     @ConditionalOnMissingBean(OwnedMaterialApplyQueryController.class)
     public OwnedMaterialApplyQueryController ownedMaterialApplyQueryController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {

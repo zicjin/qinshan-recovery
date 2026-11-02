@@ -91,7 +91,7 @@ public final class OwnedReportSampleTaskQueryController {
         try {
             require(request);
             if (id != null && !id.matches("[0-9]+")) return badRequest();
-            return ok("{\"ext$\":{}}");
+            return ok("{\"auditStatus\":{\"processStatus\":\"draft\",\"statusCode\":\"draft\"},\"ext$\":{}}");
         } catch (AccessDeniedException denied) { return forbidden(); }
         catch (SQLException failure) { return unavailable(); }
     }
@@ -158,7 +158,7 @@ public final class OwnedReportSampleTaskQueryController {
     }
 
     private String selectArchiveCategories(Page page) throws SQLException {
-        String source = "SELECT T.* FROM T_EMC_ARCHIVE_CATEGORY T";
+        String source = "SELECT T.ID,T.CATEGORYCODE,T.CATEGORYNAME FROM T_EMC_ARCHIVE_CATEGORY T";
         String countSql = "SELECT COUNT(1) FROM (" + source + ") Q";
         String pageSql = "SELECT P.* FROM (SELECT Q.*,ROW_NUMBER() OVER (ORDER BY Q.ID DESC) RN_ FROM (" + source + ") Q) P WHERE P.RN_>? AND P.RN_<=? ORDER BY P.RN_";
         int total;
@@ -179,7 +179,7 @@ public final class OwnedReportSampleTaskQueryController {
                         if (!"RN_".equalsIgnoreCase(label)) types.put(label.toLowerCase(Locale.ROOT), type(metadata.getColumnType(i)));
                     }
                     types.put("rn_", "number");
-                    while (result.next()) rows.add(row(result, metadata));
+                    while (result.next()) rows.add(archiveRow(result, metadata));
                 }
             }
         }
@@ -191,6 +191,12 @@ public final class OwnedReportSampleTaskQueryController {
         Map<String, Object> totalMap = new LinkedHashMap<String, Object>(); totalMap.put("qty_", total);
         envelope.put("totalMap", totalMap); envelope.put("totalPages", pages(total, page.size));
         return JSON.toJSONString(envelope, SerializerFeature.WriteMapNullValue);
+    }
+
+    private static Map<String, Object> archiveRow(ResultSet result, ResultSetMetaData metadata) throws SQLException {
+        Map<String, Object> value = row(result, metadata);
+        value.put("ext$", new LinkedHashMap<String, Object>());
+        return value;
     }
 
     private static String source(String resource, Query query, OwnedPrincipal principal) {

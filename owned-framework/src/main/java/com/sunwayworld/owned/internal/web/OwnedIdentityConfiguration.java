@@ -484,6 +484,13 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @ConditionalOnMissingBean(OwnedClientResourceExtensionController.class)
+    public OwnedClientResourceExtensionController ownedClientResourceExtensionController(
+            OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
+        return new OwnedClientResourceExtensionController(boundary, dataSource);
+    }
+
+    @Bean
     @ConditionalOnMissingBean(OwnedOrderRetainQueryExtensionController.class)
     public OwnedOrderRetainQueryExtensionController ownedOrderRetainQueryExtensionController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {

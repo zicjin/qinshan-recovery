@@ -57,7 +57,19 @@ public final class OwnedProjectChangeQueryController {
         try {
             OwnedPrincipal principal = require(request);
             boolean scheme = request.getRequestURI().contains("/proj-schemes/");
-            return ok(selectPage(principal.getOrgId(), Query.parse(body), scheme));
+            return ok(selectPage(principal.getOrgId(), Query.parse(body), scheme, false));
+        } catch (AccessDeniedException denied) { return forbidden(); }
+        catch (IllegalArgumentException invalid) { return badRequest(); }
+        catch (SQLException failure) { return unavailable(); }
+    }
+
+    @PostMapping(path = "/secure/emc/module/bp/edit/project-change/proj-schemes/proj-orders/queries",
+            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> projOrders(HttpServletRequest request,
+            @RequestBody(required = false) String body) {
+        try {
+            OwnedPrincipal principal = require(request);
+            return ok(selectPage(principal.getOrgId(), Query.parse(body), false, true));
         } catch (AccessDeniedException denied) { return forbidden(); }
         catch (IllegalArgumentException invalid) { return badRequest(); }
         catch (SQLException failure) { return unavailable(); }
@@ -77,13 +89,17 @@ public final class OwnedProjectChangeQueryController {
         return scheme ? "T_EMC_PROJ_SCHEME_CHANGE" : "T_EMC_ORDER_CHANGE";
     }
 
+    public static String projOrdersSourceTable() {
+        return "T_EMC_PROJ_ORDER_CHANGE";
+    }
+
     private OwnedPrincipal require(HttpServletRequest request) throws SQLException {
         boundary.requirePermission(request.getSession(false), OwnedIdentityProvider.RESULT_READ);
         return boundary.currentPrincipal(request.getSession(false));
     }
 
-    private String selectPage(String organization, Query query, boolean scheme) throws SQLException {
-        SqlSpec spec = SqlSpec.forQuery(organization, scheme);
+    private String selectPage(String organization, Query query, boolean scheme, boolean projOrders) throws SQLException {
+        SqlSpec spec = SqlSpec.forQuery(organization, scheme, projOrders);
         String countSql = "SELECT COUNT(1) FROM (" + spec.sql + ") Q";
         String pageSql = "SELECT P.* FROM (SELECT Q.*,ROW_NUMBER() OVER (ORDER BY Q.ID DESC) RN_ FROM ("
                 + spec.sql + ") Q) P WHERE P.RN_>? AND P.RN_<=? ORDER BY P.RN_";
@@ -191,9 +207,18 @@ public final class OwnedProjectChangeQueryController {
     private static final class SqlSpec {
         final String sql; final List<String> values;
         SqlSpec(String sql, List<String> values) { this.sql = sql; this.values = values; }
-        static SqlSpec forQuery(String organization, boolean scheme) {
+        static SqlSpec forQuery(String organization, boolean scheme, boolean projOrders) {
             String source;
-            if (scheme) {
+            if (projOrders) {
+                source = "SELECT T.* FROM (SELECT A.*, B.METHODNAME, B.TESTMETHODBASIS, "
+                        + "B.MAXVERSIONID AS METHODVERSIONID, D.STDNAME, E.INDEXNAME, E.INDEX1, E.INDEX2, E.INDEX3, "
+                        + "F.TESTMETHODID, G.TESTNAME FROM T_EMC_PROJ_ORDER_CHANGE A "
+                        + "LEFT JOIN T_EMC_METHOD B ON A.METHODID=B.ID "
+                        + "LEFT JOIN T_EMC_INDEX_CATEGORY D ON A.INDEXCATEGORYID=D.ID "
+                        + "LEFT JOIN T_EMC_ORDER_INDEX E ON A.INDEXID=E.ID "
+                        + "LEFT JOIN T_EMC_ITEM_GROUP F ON A.ITEMGROUPID=F.ID "
+                        + "LEFT JOIN T_EMC_TEST G ON A.TESTID=G.ID) T";
+            } else if (scheme) {
                 source = "SELECT T.* FROM (SELECT A.*, C.ORGNAME, D.MONITORTMPLNAME, D.MONITORTMPLGROUPID, "
                         + "D.MONITORPOINTCATEGORYID AS POINTCATEGORY FROM T_EMC_PROJ_SCHEME_CHANGE A "
                         + "LEFT JOIN T_CORE_ORG C ON A.SAMPLEORGID=C.ID "

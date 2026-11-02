@@ -27,6 +27,7 @@ public final class OwnedProjectChangeQueryControllerContractTest {
             require(paths, prefix + "/queries/raw");
             require(paths, prefix + "/queries/searchable");
         }
+        require(paths, "/secure/emc/module/bp/edit/project-change/proj-schemes/proj-orders/queries");
         boolean registered = false;
         for (Method method : OwnedIdentityConfiguration.class.getDeclaredMethods()) {
             if (method.getReturnType() == OwnedProjectChangeQueryController.class) registered = true;
@@ -36,6 +37,8 @@ public final class OwnedProjectChangeQueryControllerContractTest {
             throw new AssertionError("order-change route must use T_EMC_ORDER_CHANGE");
         if (!"T_EMC_PROJ_SCHEME_CHANGE".equals(OwnedProjectChangeQueryController.sourceTable(true)))
             throw new AssertionError("scheme-change route must use T_EMC_PROJ_SCHEME_CHANGE");
+        if (!"T_EMC_PROJ_ORDER_CHANGE".equals(OwnedProjectChangeQueryController.projOrdersSourceTable()))
+            throw new AssertionError("project-order route must use T_EMC_PROJ_ORDER_CHANGE");
         System.out.println("owned project-change query controller contract checks passed");
     }
 

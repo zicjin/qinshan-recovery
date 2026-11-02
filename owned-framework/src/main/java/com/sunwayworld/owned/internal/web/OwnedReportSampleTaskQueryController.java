@@ -57,6 +57,7 @@ public final class OwnedReportSampleTaskQueryController {
             REPORT + "/queries/raw",
             REPORT + "/queries/searchable",
             REPORT + "/archive-categories/queries",
+            REPORT + "/browse-record/queries",
             ADVISORY + "/queries",
             ADVISORY + "/queries/raw",
             ADVISORY + "/queries/searchable",
@@ -73,6 +74,9 @@ public final class OwnedReportSampleTaskQueryController {
             OwnedPrincipal principal = require(request);
             if (request.getRequestURI().endsWith("/archive-categories/queries")) {
                 return ok(selectArchiveCategories(Query.parse(body).page));
+            }
+            if (request.getRequestURI().endsWith("/browse-record/queries")) {
+                return ok(selectBrowseRecord(principal, body));
             }
             return ok(selectPage(resource(request.getRequestURI()), principal, Query.parse(body)));
         } catch (AccessDeniedException denied) { return forbidden(); }
@@ -201,6 +205,42 @@ public final class OwnedReportSampleTaskQueryController {
         Map<String, Object> totalMap = new LinkedHashMap<String, Object>(); totalMap.put("qty_", total);
         envelope.put("totalMap", totalMap); envelope.put("totalPages", pages(total, page.size));
         return JSON.toJSONString(envelope, SerializerFeature.WriteMapNullValue);
+    }
+
+    private String selectBrowseRecord(OwnedPrincipal principal, String body) throws SQLException {
+        JSONObject root = body == null || body.trim().isEmpty() ? new JSONObject() : JSON.parseObject(body);
+        String reportId = root == null ? null : root.getString("reportId");
+        if (reportId == null && root != null && root.getJSONObject("p") != null) reportId = root.getJSONObject("p").getString("reportId");
+        Map<String, Object> value = new LinkedHashMap<String, Object>();
+        value.put("reportFile", null);
+        value.put("otherRecordList", new ArrayList<Map<String, Object>>());
+        value.put("ext$", new LinkedHashMap<String, Object>());
+        if (reportId == null || reportId.trim().isEmpty()) return JSON.toJSONString(value, SerializerFeature.WriteMapNullValue);
+        if (!reportId.matches("[0-9]+")) throw new IllegalArgumentException("report id is invalid");
+        try (Connection connection = dataSource.getConnection()) {
+            try (PreparedStatement guard = connection.prepareStatement(
+                    "SELECT COUNT(1) FROM T_EMC_REPORT WHERE ID=? AND CREATEDBYORGID=?")) {
+                guard.setString(1, reportId); guard.setString(2, principal.getOrgId());
+                try (ResultSet result = guard.executeQuery()) {
+                    if (!result.next() || result.getInt(1) == 0) return JSON.toJSONString(value, SerializerFeature.WriteMapNullValue);
+                }
+            }
+            try (PreparedStatement query = connection.prepareStatement(
+                    "SELECT F.* FROM T_CORE_FILE F WHERE F.TARGETID=? ORDER BY F.ID")) {
+                query.setString(1, "T_EMC_REPORT$" + reportId);
+                try (ResultSet result = query.executeQuery()) {
+                    ResultSetMetaData metadata = result.getMetaData();
+                    List<Map<String, Object>> others = new ArrayList<Map<String, Object>>();
+                    while (result.next()) {
+                        Map<String, Object> file = row(result, metadata);
+                        if (value.get("reportFile") == null && "wordReport".equals(String.valueOf(file.get("ext")))) value.put("reportFile", file);
+                        else others.add(file);
+                    }
+                    value.put("otherRecordList", others);
+                }
+            }
+        }
+        return JSON.toJSONString(value, SerializerFeature.WriteMapNullValue);
     }
 
     private static Map<String, Object> archiveRow(ResultSet result, ResultSetMetaData metadata) throws SQLException {

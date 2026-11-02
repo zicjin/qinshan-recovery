@@ -103,12 +103,10 @@ public final class OwnedResultRunController {
             "/secure/emc/module/bp/result/runs/queries/run-result",
             "/secure/emc/module/bp/result/runs/browse-record/queries",
             "/secure/emc/module/bp/result/runs/edited-items/queries",
-            "/secure/emc/module/bp/result/runs/select-item/{id}",
             "/secure/emc/module/bp/result/runs/unique-order-item-group/queries"},
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> query(HttpServletRequest request,
             @PathVariable(value = "roleId", required = false) String roleId,
-            @PathVariable(value = "id", required = false) String itemTaskId,
             @org.springframework.web.bind.annotation.RequestBody(required = false) String body,
             HttpServletResponse response) {
         try {
@@ -123,10 +121,6 @@ public final class OwnedResultRunController {
                 return ok(page(readRunResult(principal.getOrgId(), filter, pageRequest)));
             }
             if (uri.endsWith("/browse-record/queries")) return ok(JSON.toJSONString(readBrowseRecord(principal.getOrgId(), filter), SerializerFeature.WriteMapNullValue));
-            if (uri.contains("/select-item/")) {
-                if (itemTaskId == null || !itemTaskId.matches("[0-9]+")) throw new IllegalArgumentException("order task id is invalid");
-                return ok(page(readSingleEditItems(principal.getOrgId(), itemTaskId, pageRequest)));
-            }
             if (uri.endsWith("/edited-items/queries")) {
                 return ok(page(readEditedItems(principal.getOrgId(), filter, pageRequest)));
             }

@@ -435,6 +435,13 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @ConditionalOnMissingBean(OwnedOrderContainerQueryController.class)
+    public OwnedOrderContainerQueryController ownedOrderContainerQueryController(
+            OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
+        return new OwnedOrderContainerQueryController(boundary, dataSource);
+    }
+
+    @Bean
     @ConditionalOnMissingBean(OwnedOrderQueryController.class)
     public OwnedOrderQueryController ownedOrderQueryController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {

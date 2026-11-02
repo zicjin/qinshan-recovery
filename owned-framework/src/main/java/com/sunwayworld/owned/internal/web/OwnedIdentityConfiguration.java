@@ -463,6 +463,13 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @ConditionalOnMissingBean(OwnedAdmQuotationGenericResourceController.class)
+    public OwnedAdmQuotationGenericResourceController ownedAdmQuotationGenericResourceController(
+            OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
+        return new OwnedAdmQuotationGenericResourceController(boundary, dataSource);
+    }
+
+    @Bean
     @ConditionalOnMissingBean(OwnedOrderRetainQueryExtensionController.class)
     public OwnedOrderRetainQueryExtensionController ownedOrderRetainQueryExtensionController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {

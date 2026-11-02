@@ -66,7 +66,7 @@ public final class OwnedResultRunController {
 
     /** Sampling counterpart of the result-run item selector. */
     @PostMapping(path = "/secure/emc/module/bp/sample/samples/select-item/{id}",
-            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+            produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> selectSampleItem(HttpServletRequest request,
             @PathVariable("id") String id,
             @org.springframework.web.bind.annotation.RequestBody(required = false) String body) {

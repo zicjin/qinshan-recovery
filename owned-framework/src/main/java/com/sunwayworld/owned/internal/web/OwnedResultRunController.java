@@ -42,6 +42,28 @@ public final class OwnedResultRunController {
         this.boundary = boundary; this.dataSource = dataSource;
     }
 
+    /**
+     * Select the enabled analysis items for one order task.  The project
+     * resource exposes this as a path alias of the batch edited-items query;
+     * keep both aliases on the same Oracle relation chain and Spring process.
+     */
+    @PostMapping(path = "/secure/emc/module/bp/result/runs/select-item/{id}",
+            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> selectItem(HttpServletRequest request,
+            @PathVariable("id") String id,
+            @org.springframework.web.bind.annotation.RequestBody(required = false) String body) {
+        try {
+            OwnedPrincipal principal = require(request);
+            if (id == null || !id.matches("[0-9]+")) throw new IllegalArgumentException("order task id is invalid");
+            JSONObject filter = object(body);
+            filter.put("id_IN", id);
+            PageRequest pageRequest = PageRequest.parse(filter);
+            return ok(page(readEditedItems(principal.getOrgId(), filter, pageRequest)));
+        } catch (AccessDeniedException denied) { return forbidden(); }
+        catch (IllegalArgumentException invalid) { return badRequest(); }
+        catch (SQLException failure) { return unavailable(); }
+    }
+
     @PostMapping(path = {
             "/secure/core/module/bp/result/runs/queries",
             "/secure/core/module/bp/result/runs/queries/raw",
@@ -65,10 +87,12 @@ public final class OwnedResultRunController {
             "/secure/emc/module/bp/result/runs/queries/run-result",
             "/secure/emc/module/bp/result/runs/browse-record/queries",
             "/secure/emc/module/bp/result/runs/edited-items/queries",
+            "/secure/emc/module/bp/result/runs/select-item/{id}",
             "/secure/emc/module/bp/result/runs/unique-order-item-group/queries"},
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> query(HttpServletRequest request,
             @PathVariable(value = "roleId", required = false) String roleId,
+            @PathVariable(value = "id", required = false) String itemTaskId,
             @org.springframework.web.bind.annotation.RequestBody(required = false) String body,
             HttpServletResponse response) {
         try {
@@ -83,6 +107,10 @@ public final class OwnedResultRunController {
                 return ok(page(readRunResult(principal.getOrgId(), filter, pageRequest)));
             }
             if (uri.endsWith("/browse-record/queries")) return ok(JSON.toJSONString(readBrowseRecord(principal.getOrgId(), filter), SerializerFeature.WriteMapNullValue));
+            if (uri.contains("/select-item/")) {
+                if (itemTaskId == null || !itemTaskId.matches("[0-9]+")) throw new IllegalArgumentException("order task id is invalid");
+                return ok(page(readSingleEditItems(principal.getOrgId(), itemTaskId, pageRequest)));
+            }
             if (uri.endsWith("/edited-items/queries")) {
                 return ok(page(readEditedItems(principal.getOrgId(), filter, pageRequest)));
             }
@@ -267,6 +295,25 @@ public final class OwnedResultRunController {
             }
         }
         return new QueryResult(rows, ITEM_TYPE_PROFILE, total, page.number, page.size);
+    }
+
+    /** EmcRunService.selectEditItem uses the scheme-name item-group relation. */
+    private QueryResult readSingleEditItems(String organization, String taskId, PageRequest page) throws SQLException {
+        String source = "SELECT I.*, TM.METHODID AS ITEM_METHODID, TM.TESTID AS ITEM_TESTID, "
+                + "TM.ISLOCKED AS ITEM_ISLOCKED, T.TESTNAME AS ITEM_TESTNAME, "
+                + "M.METHODNAME AS ITEM_METHODNAME, SS.SETNAME AS ITEM_SETNAME "
+                + "FROM T_EMC_ORDER_TASK OT JOIN T_EMC_ORDER_ITEM_GROUP OIG ON OIG.SCHEMENAME=OT.SCHEMENAME "
+                + "AND OIG.TESTID=OT.TESTID AND OIG.TESTMETHODID=OT.TESTMETHODID "
+                + "AND (OT.MONITORTMPLID IS NULL OR OIG.MONITORTMPLID=OT.MONITORTMPLID) "
+                + "JOIN T_EMC_GROUP_ITEM GI ON GI.ITEMGROUPID=OIG.ITEMGROUPID "
+                + "JOIN T_EMC_ITEM I ON I.ID=GI.ITEMID "
+                + "LEFT JOIN T_EMC_TEST_METHOD TM ON TM.ID=I.TESTMETHODID "
+                + "LEFT JOIN T_EMC_TEST T ON T.ID=TM.TESTID "
+                + "LEFT JOIN T_EMC_METHOD M ON M.ID=TM.METHODID "
+                + "LEFT JOIN T_EMC_STANDARD_SET SS ON SS.ID=I.STANDSETID "
+                + "WHERE OT.ID=? AND OT.ANALYSISORGID=? AND I.ANALYSISCATEGORY='analysis' AND I.ACTIVATEDFLAG='1'";
+        List<Object> values = new ArrayList<Object>(); values.add(taskId); values.add(organization);
+        return readPagedEditedItems(source, values, page);
     }
 
     private static Map<String, Object> editedItemRow(ResultSet result, ResultSetMetaData metadata) throws SQLException {

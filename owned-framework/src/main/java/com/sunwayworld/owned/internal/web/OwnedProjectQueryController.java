@@ -67,7 +67,10 @@ public final class OwnedProjectQueryController {
         catch (SQLException failure) { return unavailable(); }
     }
 
-    @PostMapping(path = {PREFIX + "/queries", PREFIX + "/queries/raw", PREFIX + "/queries/searchable"},
+    @PostMapping(path = {PREFIX + "/queries", PREFIX + "/queries/raw", PREFIX + "/queries/searchable",
+            PREFIX + "/queries/all", PREFIX + "/all-proj/queries", PREFIX + "/analysis-projects/queries",
+            PREFIX + "/project-statistics/queries", PREFIX + "/annual-project-statistics/queries",
+            PREFIX + "/crm/invoice-proj/queries", PREFIX + "/crm/payment-proj/queries"},
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> query(HttpServletRequest request, @RequestBody(required = false) String body) {
         try { OwnedPrincipal principal = require(request); return ok(selectPage(principal.getOrgId(), Page.parse(body))); }

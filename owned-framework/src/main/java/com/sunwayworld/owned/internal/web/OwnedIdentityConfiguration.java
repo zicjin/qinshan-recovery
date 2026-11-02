@@ -505,6 +505,13 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @ConditionalOnMissingBean(OwnedReportSendInfoController.class)
+    public OwnedReportSendInfoController ownedReportSendInfoController(
+            OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
+        return new OwnedReportSendInfoController(boundary, dataSource);
+    }
+
+    @Bean
     @ConditionalOnMissingBean(OwnedItemTaskQueryController.class)
     public OwnedItemTaskQueryController ownedItemTaskQueryController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {

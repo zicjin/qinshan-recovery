@@ -42,6 +42,12 @@ OWNED_ROUTE_ALIAS_EXPANSIONS = {
         "equipt-flow-sets", "equipt-sets", "equipt-standard-sets",
         "equipt-sw-sets", "equipt-temp-sets",
     ),
+    # EmcEmpResourceImpl is registered by OwnedPersonnelConfiguration and
+    # delegates the inherited main resource to this owned DAO. The DAO has no
+    # Spring mapping of its own, so keep this wiring explicit in provenance.
+    "OwnedPersonnelReadDao": (
+        "__personnel_main_queries__",
+    ),
 }
 GENERIC_INHERITED_PATHS = {"/", "/queries", "/queries/raw", "/{id}", "/instant"}
 GENERIC_RESOURCE_INHERITED_ROUTES = (
@@ -402,6 +408,18 @@ def _owned_alias_routes(info: Dict[str, object]) -> List[Dict[str, str]]:
         return []
     source = str(info["relative"])
     qualified = str(info["qualified"])
+    if str(info.get("simple")) == "OwnedPersonnelReadDao":
+        return [{
+            "source": str(info["relative"]),
+            "class": str(info["qualified"]),
+            "class_base": "",
+            "method": method,
+            "path": path,
+            "annotation": "owned-configuration-wiring",
+        } for method, path in (
+            ("POST", "/secure/emc/module/mdm/emp/emps/queries"),
+            ("POST", "/secure/emc/module/mdm/emp/emps/queries/raw"),
+        )]
     return [{
         "source": source,
         "class": qualified,

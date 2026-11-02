@@ -159,6 +159,18 @@ public interface DemoResource extends GenericResource<Object,Object,Long>, Gener
         self.assertIn("GET /secure/emc/module/bp/equipt-sets/info/status", paths)
         self.assertIn("GET /secure/emc/module/bp/equipt-temp-sets/info/status", paths)
 
+    def test_expands_personnel_configuration_wiring_aliases(self):
+        routes = _owned_alias_routes({
+            "simple": "OwnedPersonnelReadDao",
+            "relative": "com/example/OwnedPersonnelReadDao.java",
+            "qualified": "com.example.OwnedPersonnelReadDao",
+        })
+        paths = {row["method"] + " " + row["path"] for row in routes}
+        self.assertEqual({
+            "POST /secure/emc/module/mdm/emp/emps/queries",
+            "POST /secure/emc/module/mdm/emp/emps/queries/raw",
+        }, paths)
+
 
 if __name__ == "__main__":
     unittest.main()

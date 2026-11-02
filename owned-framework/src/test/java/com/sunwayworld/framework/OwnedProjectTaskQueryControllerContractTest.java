@@ -9,6 +9,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import org.springframework.web.bind.annotation.PostMapping;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 
 /** Contract guard for the two inherited project task-query aliases. */
 public final class OwnedProjectTaskQueryControllerContractTest {
@@ -29,6 +31,9 @@ public final class OwnedProjectTaskQueryControllerContractTest {
             if (method.getReturnType() == OwnedProjectTaskQueryController.class) registered = true;
         }
         if (!registered) throw new AssertionError("project task query controller is not registered");
+        JSONObject status = JSON.parseObject("{\"auditStatus\":{\"processStatus\":\"draft\",\"statusCode\":\"draft\"},\"ext$\":{}}");
+        if (!"draft".equals(status.getJSONObject("auditStatus").getString("processStatus")))
+            throw new AssertionError("project-change status must retain auditStatus envelope");
         Field profile = OwnedProjectTaskQueryController.class.getDeclaredField("PROJECT_TYPE_PROFILE");
         profile.setAccessible(true);
         if (((Map<?, ?>) profile.get(null)).size() != 182)

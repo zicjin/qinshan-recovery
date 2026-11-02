@@ -56,7 +56,7 @@ public final class OwnedProjectTaskQueryController {
     @GetMapping(path = "/secure/emc/module/bp/edit/project-change/projects/info/status",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> projectChangeStatus(HttpServletRequest request) {
-        try { require(request); return ok("{\"ext$\":{}}"); }
+        try { require(request); return ok("{\"auditStatus\":{\"processStatus\":\"draft\",\"statusCode\":\"draft\"},\"ext$\":{}}"); }
         catch (AccessDeniedException denied) { return forbidden(); }
         catch (SQLException failure) { return unavailable(); }
     }

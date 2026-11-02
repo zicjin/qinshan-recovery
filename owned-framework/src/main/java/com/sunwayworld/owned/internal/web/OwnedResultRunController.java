@@ -170,7 +170,7 @@ public final class OwnedResultRunController {
                 + "LEFT JOIN T_EMC_PROJECT C ON B.PROJID=C.ID WHERE A.CREATEDBYORGID=?");
         values.add(organization);
         appendLongFilter(source, values, "A.RELATEDORDERID", queryValue(filter, "relatedOrderId"));
-        appendLongFilter(source, values, "A.QCORD ERID".replace(" ", ""), queryValue(filter, "qcOrderId"));
+        appendLongFilter(source, values, "A.QCORDERID", queryValue(filter, "qcOrderId"));
         appendStringFilter(source, values, "A.RELATEDRUNID", queryValue(filter, "relatedRunId"));
         return readPaged(source.toString(), values, page, QC_RELATED_ORDER_TYPE_PROFILE);
     }

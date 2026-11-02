@@ -64,7 +64,7 @@ public final class OwnedReportTmplController {
     @PostMapping(path = {PREFIX + "/queries", PREFIX + "/queries/raw", PREFIX + "/queries/searchable"},
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> query(HttpServletRequest request, @RequestBody(required = false) String body) {
-        try { OwnedPrincipal principal = require(request); return ok(selectPage(TEMPLATE_SOURCE, "Q.ID DESC", principal.getOrgId(), new ArrayList<String>(), Page.parse(body))); }
+        try { OwnedPrincipal principal = require(request); return ok(selectPage(TEMPLATE_SOURCE, "Q.ORDERNO ASC, Q.ID ASC", principal.getOrgId(), new ArrayList<String>(), Page.parse(body))); }
         catch (AccessDeniedException denied) { return forbidden(); }
         catch (IllegalArgumentException invalid) { return badRequest(); }
         catch (SQLException failure) { return unavailable(); }
@@ -130,7 +130,16 @@ public final class OwnedReportTmplController {
 
     private static int bind(PreparedStatement statement, String organization, List<String> values, int index) throws SQLException { statement.setString(index++, organization); for (String value : values) statement.setString(index++, value); return index; }
     private static Map<String,Object> row(ResultSet result, ResultSetMetaData metadata) throws SQLException { Map<String,Object> value = new LinkedHashMap<String,Object>(); for (int i=1; i<=metadata.getColumnCount(); i++) { String label=metadata.getColumnLabel(i); if ("RN_".equalsIgnoreCase(label)) continue; Object item=JdbcValue.normalize(result.getObject(i)); if (item != null) value.put(camel(label), item); } value.put("ext$", new LinkedHashMap<String,Object>()); return value; }
-    private static String camel(String label) { StringBuilder value=new StringBuilder(); boolean upper=false; for (char c: label.toLowerCase(Locale.ROOT).toCharArray()) { if (c=='_') { upper=true; continue; } value.append(upper ? Character.toUpperCase(c) : c); upper=false; } return value.toString(); }
+    private static final Map<String, String> FIELD_NAMES = fieldNames();
+    private static Map<String, String> fieldNames() {
+        Map<String, String> names = new LinkedHashMap<String, String>();
+        for (String name : ("id tmplName remark orderNo activatedFlag activatedById activatedByName activatedTime "
+                + "createdById createdByName createdTime createdByOrgId createdByOrgName reportTmplId reportName "
+                + "monitorTmplId schemeName testId itemId itemAliasName itemName testName monitorTmplName").split(" "))
+            names.put(name.toLowerCase(Locale.ROOT), name);
+        return names;
+    }
+    private static String camel(String label) { String key = label.toLowerCase(Locale.ROOT); String declared = FIELD_NAMES.get(key); if (declared != null) return declared; StringBuilder value=new StringBuilder(); boolean upper=false; for (char c: key.toCharArray()) { if (c=='_') { upper=true; continue; } value.append(upper ? Character.toUpperCase(c) : c); upper=false; } return value.toString(); }
     private static String type(int type) { return type == Types.DATE || type == Types.TIMESTAMP || type == Types.TIMESTAMP_WITH_TIMEZONE ? "dateTime" : (type == Types.NUMERIC || type == Types.DECIMAL || type == Types.INTEGER || type == Types.BIGINT ? "number" : "string"); }
     private static int pages(int total, int size) { return total == 0 ? 0 : (total + size - 1) / size; }
     private static ResponseEntity<String> ok(String body) { return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(body); }

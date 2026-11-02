@@ -27,6 +27,7 @@ public final class OwnedResultGenericResourceControllerContractTest {
             require(paths, PREFIX + resource + "/1");
             require(paths, PREFIX + resource + "/1/action/print");
             require(paths, PREFIX + resource + "/1/columns/id");
+            require(paths, PREFIX + resource + "/1/info/status");
         }
         for (String path : paths) if (path.contains("{resource}")) throw new AssertionError("unbounded result resource path: " + path);
         if (paths.contains(PREFIX + "staff-ability-evaluations/queries")) {

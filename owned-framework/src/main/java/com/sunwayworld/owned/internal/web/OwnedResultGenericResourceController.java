@@ -78,6 +78,24 @@ public final class OwnedResultGenericResourceController {
         catch (SQLException failure) { return unavailable(); }
     }
 
+    /** GenericResource detail-status aliases share the same read permission. */
+    @GetMapping(path = {
+            "/secure/emc/module/bp/result/equipt-curve-standards/{id}/info/status",
+            "/secure/emc/module/bp/result/equipt-curves/{id}/info/status"
+            }, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> detailStatus(HttpServletRequest request,
+            @PathVariable("id") String id) {
+        String resource = resource(request);
+        try {
+            descriptor(resource);
+            requireRead(request);
+            numericId(id);
+            return ok("{\"ext$\":{}}");
+        } catch (AccessDeniedException denied) { return forbidden(); }
+        catch (IllegalArgumentException invalid) { return badRequest(); }
+        catch (SQLException failure) { return unavailable(); }
+    }
+
     @GetMapping(path = {
             "/secure/emc/module/bp/result/equipt-curve-standards/{id}",
             "/secure/emc/module/bp/result/equipt-curves/{id}"

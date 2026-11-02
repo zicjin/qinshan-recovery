@@ -83,7 +83,9 @@ public final class OwnedResultRunController {
                 return ok(page(readRunResult(principal.getOrgId(), filter, pageRequest)));
             }
             if (uri.endsWith("/browse-record/queries")) return ok(JSON.toJSONString(readBrowseRecord(principal.getOrgId(), filter), SerializerFeature.WriteMapNullValue));
-            if (uri.endsWith("/edited-items/queries")) return emptyBody(response);
+            if (uri.endsWith("/edited-items/queries")) {
+                return ok(page(readEditedItems(principal.getOrgId(), filter, pageRequest)));
+            }
             if (uri.endsWith("/unique-order-item-group/queries")) return ok(page(readUniqueOrderItemGroups(principal.getOrgId(), filter, pageRequest)));
             if (request.getRequestURI().endsWith("/qc-related-order/queries")) {
                 return ok(page(readQcRelatedOrders(principal.getOrgId(), filter, pageRequest)));
@@ -203,6 +205,89 @@ public final class OwnedResultRunController {
         appendLongFilter(source, values, "T.TESTMETHODID", queryValue(filter, "testMethodId"));
         source.append(")");
         return readPaged("SELECT DISTINCT Q.* FROM (" + source + ") Q", values, page, UNIQUE_ORDER_ITEM_GROUP_TYPE_PROFILE);
+    }
+
+    /**
+     * Returns the enabled analysis items available for the selected order tasks.
+     * The supplier resource derives this list through order-task, order-item-group,
+     * capacity-item-group and group-item relations, and marks items that already
+     * have a task result with ext$.selected=yes.  Keep the same relation chain
+     * here so this endpoint does not become a synthetic empty page.
+     */
+    private QueryResult readEditedItems(String organization, JSONObject filter, PageRequest page) throws SQLException {
+        List<String> ids = numericIds(queryValue(filter, "id_IN"));
+        if (ids.isEmpty()) return new QueryResult(new ArrayList<Map<String, Object>>(), ITEM_TYPE_PROFILE, 0, page.number, page.size);
+        StringBuilder placeholders = new StringBuilder();
+        for (int i = 0; i < ids.size(); i++) {
+            if (i > 0) placeholders.append(',');
+            placeholders.append('?');
+        }
+        String source = "SELECT I.*, CASE WHEN EXISTS (SELECT 1 FROM T_EMC_ORDER_TASK_RESULT R "
+                + "JOIN T_EMC_ORDER_TASK RT ON RT.ID=R.ORDERTASKID WHERE RT.ID IN (" + placeholders + ") "
+                + "AND R.ITEMID=I.ID) THEN 'yes' ELSE NULL END AS SELECTED_FLAG "
+                + "FROM T_EMC_ITEM I WHERE I.ANALYSISCATEGORY='analysis' AND I.ACTIVATEDFLAG='1' "
+                + "AND EXISTS (SELECT 1 FROM T_EMC_ORDER_TASK OT "
+                + "JOIN T_EMC_ORDER_ITEM_GROUP OIG ON OIG.ORDERID=OT.ORDERID AND OIG.TESTID=OT.TESTID "
+                + "AND OIG.TESTMETHODID=OT.TESTMETHODID AND (OT.MONITORTMPLID IS NULL OR OIG.MONITORTMPLID=OT.MONITORTMPLID) "
+                + "JOIN T_EMC_CAPACITY_ITEM_GROUP CIG ON CIG.ID=OIG.ITEMGROUPID "
+                + "JOIN T_EMC_GROUP_ITEM GI ON GI.ITEMGROUPID=CIG.ITEMGROUPID "
+                + "WHERE OT.ANALYSISORGID=? AND OT.ID IN (" + placeholders + ") AND GI.ITEMID=I.ID)";
+        List<Object> values = new ArrayList<Object>();
+        values.addAll(ids); values.add(organization); values.addAll(ids);
+        return readPagedEditedItems(source, values, page);
+    }
+
+    private QueryResult readPagedEditedItems(String source, List<Object> values, PageRequest page) throws SQLException {
+        String countSql = "SELECT COUNT(1) FROM (" + source + ") Q";
+        String pageSql = "SELECT P.* FROM (SELECT Q.*,ROW_NUMBER() OVER (ORDER BY Q.ID ASC) PAGE_RN_ FROM ("
+                + source + ") Q) P WHERE P.PAGE_RN_>? AND P.PAGE_RN_<=? ORDER BY P.PAGE_RN_";
+        int total; List<Map<String, Object>> rows = new ArrayList<Map<String, Object>>();
+        try (Connection connection = dataSource.getConnection()) {
+            try (PreparedStatement count = connection.prepareStatement(countSql)) {
+                bind(count, values, 1);
+                try (ResultSet result = count.executeQuery()) {
+                    if (!result.next()) throw new SQLException("edited item query count unavailable");
+                    total = result.getInt(1);
+                }
+            }
+            try (PreparedStatement select = connection.prepareStatement(pageSql)) {
+                int next = bind(select, values, 1);
+                select.setInt(next++, page.start()); select.setInt(next, page.end());
+                try (ResultSet result = select.executeQuery()) {
+                    ResultSetMetaData metadata = result.getMetaData();
+                    while (result.next()) rows.add(editedItemRow(result, metadata));
+                }
+            }
+        }
+        return new QueryResult(rows, ITEM_TYPE_PROFILE, total, page.number, page.size);
+    }
+
+    private static Map<String, Object> editedItemRow(ResultSet result, ResultSetMetaData metadata) throws SQLException {
+        Map<String, Object> value = new LinkedHashMap<String, Object>();
+        String selected = null;
+        for (int i = 1; i <= metadata.getColumnCount(); i++) {
+            String label = metadata.getColumnLabel(i);
+            if ("RN_".equalsIgnoreCase(label) || "PAGE_RN_".equalsIgnoreCase(label)) continue;
+            if ("SELECTED_FLAG".equalsIgnoreCase(label)) { selected = result.getString(i); continue; }
+            value.put(friendly(label), JdbcValue.normalize(result.getObject(i)));
+        }
+        Map<String, Object> extension = new LinkedHashMap<String, Object>();
+        if (selected != null && selected.length() > 0) extension.put("selected", selected);
+        value.put("ext$", extension);
+        return value;
+    }
+
+    private static List<String> numericIds(Object raw) {
+        List<String> result = new ArrayList<String>();
+        if (raw == null) return result;
+        String value = String.valueOf(raw);
+        for (String token : value.split(",")) {
+            String id = token.trim();
+            if (id.length() == 0) continue;
+            if (!id.matches("[0-9]+")) throw new IllegalArgumentException("invalid order task id");
+            result.add(id);
+        }
+        return result;
     }
 
     /**
@@ -354,6 +439,19 @@ public final class OwnedResultRunController {
         String encoded = "id=number;orderid=number;schemename=string;testid=number;testname=string;testmethodid=number;methodid=number;methodname=string;itemgroupid=number;itemgroup=string;analysisorgid=string;analysisorgname=string;qccategoryid=number;qccategorycode=string;qcname=string;subpackageno=string;containercategoryid=number;containercategorycode=string;containercategoryname=string;ordercategory=string;createdbyid=string;createdbyname=string;createdtime=dateTime;createdbyorgid=string;createdbyorgname=string;sortnum=number";
         Map<String, String> result = new LinkedHashMap<String, String>();
         for (String token : encoded.split(";")) { int equals = token.indexOf('='); if (equals > 0) result.put(token.substring(0, equals), token.substring(equals + 1)); }
+        return result;
+    }
+
+    private static final Map<String, String> ITEM_TYPE_PROFILE = itemTypeProfile();
+    private static Map<String, String> itemTypeProfile() {
+        String encoded = "id=number;testmethodid=number;itemname=string;itemaliasname=string;analysiscategory=string;"
+                + "activatedflag=string;unitname=string;resultcategory=string;reportdisplay=string;originalrecorddisplay=string;"
+                + "orderNo=number;selected=string";
+        Map<String, String> result = new LinkedHashMap<String, String>();
+        for (String token : encoded.split(";")) {
+            int equals = token.indexOf('=');
+            if (equals > 0) result.put(token.substring(0, equals), token.substring(equals + 1));
+        }
         return result;
     }
 

@@ -65,6 +65,16 @@ public final class OwnedPersonnelAbilityResourceController {
         catch (SQLException failure) { return unavailable(); }
     }
 
+    @GetMapping(path = {ABILITY + "/{id}/info/status", CHECK + "/{id}/info/status",
+            EVALUATION + "/{id}/info/status"}, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> detailStatus(HttpServletRequest request,
+            @org.springframework.web.bind.annotation.PathVariable("id") String id) {
+        try { requireRead(request); resource(request); numericId(id); return ok("{\"ext$\":{}}"); }
+        catch (AccessDeniedException denied) { return forbidden(); }
+        catch (IllegalArgumentException invalid) { return badRequest(); }
+        catch (SQLException failure) { return unavailable(); }
+    }
+
     @GetMapping(path = {ABILITY + "/{id}", CHECK + "/{id}", EVALUATION + "/{id}"}, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> detail(HttpServletRequest request, @org.springframework.web.bind.annotation.PathVariable("id") String id) {
         try { requireRead(request); Descriptor descriptor = resource(request); long numeric = numericId(id); try (Connection connection=dataSource.getConnection(); PreparedStatement query=connection.prepareStatement("SELECT T.* FROM "+descriptor.table+" T WHERE T.ID=?")) { query.setLong(1,numeric); try(ResultSet rows=query.executeQuery()){return ok(JSON.toJSONString(rows.next()?row(rows,rows.getMetaData(),descriptor):Collections.emptyMap()));} } }

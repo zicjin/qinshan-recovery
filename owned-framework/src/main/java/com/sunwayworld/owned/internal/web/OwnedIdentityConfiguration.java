@@ -295,13 +295,6 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
-    @ConditionalOnMissingBean(OwnedEquipmentCurveQueryController.class)
-    public OwnedEquipmentCurveQueryController ownedEquipmentCurveQueryController(
-            OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
-        return new OwnedEquipmentCurveQueryController(boundary, dataSource);
-    }
-
-    @Bean
     @ConditionalOnMissingBean(OwnedSampleBottleQueryController.class)
     public OwnedSampleBottleQueryController ownedSampleBottleQueryController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {

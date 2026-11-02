@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.sunwayworld.owned.internal.data.JdbcValue;
 import com.sunwayworld.owned.internal.security.OwnedIdentityProvider;
+import com.sunwayworld.owned.internal.security.OwnedPrincipal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -57,9 +58,9 @@ public final class OwnedResultGenericResourceController {
         String resource = resource(request);
         try {
             Descriptor descriptor = descriptor(resource);
-            requireRead(request);
+            OwnedPrincipal principal = requireRead(request);
             Page page = Page.parse(body);
-            return ok(selectPage(descriptor, page));
+            return ok(selectPage(descriptor, page, principal.getOrgId()));
         } catch (AccessDeniedException denied) { return forbidden(); }
         catch (IllegalArgumentException invalid) { return badRequest(); }
         catch (SQLException failure) { return unavailable(); }
@@ -85,8 +86,8 @@ public final class OwnedResultGenericResourceController {
             @PathVariable("id") String id) {
         String resource = resource(request);
         try {
-            Descriptor descriptor = descriptor(resource); requireRead(request);
-            return ok(JSON.toJSONString(selectDetail(descriptor, numericId(id))));
+            Descriptor descriptor = descriptor(resource); OwnedPrincipal principal = requireRead(request);
+            return ok(JSON.toJSONString(selectDetail(descriptor, numericId(id), principal.getOrgId())));
         } catch (AccessDeniedException denied) { return forbidden(); }
         catch (IllegalArgumentException invalid) { return badRequest(); }
         catch (SQLException failure) { return unavailable(); }
@@ -107,11 +108,11 @@ public final class OwnedResultGenericResourceController {
             @PathVariable("id") String id, @PathVariable("column") String column) {
         String resource = resource(request);
         try {
-            Descriptor descriptor = descriptor(resource); requireRead(request);
+            Descriptor descriptor = descriptor(resource); OwnedPrincipal principal = requireRead(request);
             String selected = descriptor.column(column);
             try (Connection connection = dataSource.getConnection(); PreparedStatement query = connection.prepareStatement(
-                    "SELECT " + selected + " FROM " + descriptor.table + " WHERE ID=?")) {
-                query.setLong(1, numericId(id));
+                    "SELECT " + selected + " FROM " + descriptor.table + " WHERE CREATEDBYORGID=? AND ID=?")) {
+                query.setString(1, principal.getOrgId()); query.setLong(2, numericId(id));
                 try (ResultSet rows = query.executeQuery()) { return ok(JSON.toJSONString(rows.next() ? value(rows.getObject(1)) : null)); }
             }
         } catch (AccessDeniedException denied) { return forbidden(); }
@@ -129,24 +130,28 @@ public final class OwnedResultGenericResourceController {
         return path.substring(start, slash);
     }
 
-    private void requireRead(HttpServletRequest request) throws SQLException {
+    private OwnedPrincipal requireRead(HttpServletRequest request) throws SQLException {
         boundary.requirePermission(request.getSession(false), OwnedIdentityProvider.RESULT_READ);
+        return boundary.currentPrincipal(request.getSession(false));
     }
 
-    private String selectPage(Descriptor descriptor, Page page) throws SQLException {
-        String base = descriptor.baseSql;
-        String count = "SELECT COUNT(1) FROM (" + base + ") Q";
+    private String selectPage(Descriptor descriptor, Page page, String organization) throws SQLException {
+        String base = "SELECT Q.* FROM (" + descriptor.baseSql + ") Q WHERE Q.CREATEDBYORGID=?";
+        String count = "SELECT COUNT(1) FROM (" + base + ") R";
         String paged = "SELECT P.* FROM (SELECT Q.*,ROW_NUMBER() OVER (ORDER BY Q.ID DESC) RN_ FROM ("
                 + base + ") Q) P WHERE P.RN_>? AND P.RN_<=? ORDER BY P.RN_";
         try (Connection connection = dataSource.getConnection()) {
             int total;
-            try (PreparedStatement query = connection.prepareStatement(count); ResultSet rows = query.executeQuery()) {
+            try (PreparedStatement query = connection.prepareStatement(count)) {
+                query.setString(1, organization);
+                try (ResultSet rows = query.executeQuery()) {
                 if (!rows.next()) throw new SQLException("result resource count returned no row"); total = rows.getInt(1);
+                }
             }
             ArrayList<Map<String, Object>> values = new ArrayList<Map<String, Object>>();
             Map<String, String> types = new LinkedHashMap<String, String>();
             try (PreparedStatement query = connection.prepareStatement(paged)) {
-                query.setInt(1, page.start()); query.setInt(2, page.end());
+                query.setString(1, organization); query.setInt(2, page.start()); query.setInt(3, page.end());
                 try (ResultSet rows = query.executeQuery()) {
                     ResultSetMetaData meta = rows.getMetaData();
                     for (int i = 1; i <= meta.getColumnCount(); i++) types.put(meta.getColumnLabel(i).toLowerCase(Locale.ROOT), type(meta.getColumnType(i)));
@@ -163,10 +168,10 @@ public final class OwnedResultGenericResourceController {
         }
     }
 
-    private Map<String, Object> selectDetail(Descriptor descriptor, long id) throws SQLException {
+    private Map<String, Object> selectDetail(Descriptor descriptor, long id, String organization) throws SQLException {
         try (Connection connection = dataSource.getConnection(); PreparedStatement query = connection.prepareStatement(
-                descriptor.baseSql + " WHERE ID=?")) {
-            query.setLong(1, id);
+                "SELECT Q.* FROM (" + descriptor.baseSql + ") Q WHERE Q.CREATEDBYORGID=? AND Q.ID=?")) {
+            query.setString(1, organization); query.setLong(2, id);
             try (ResultSet rows = query.executeQuery()) { return rows.next() ? row(rows, rows.getMetaData(), descriptor) : Collections.emptyMap(); }
         }
     }

@@ -3,6 +3,9 @@ package com.sunwayworld.framework;
 import com.sunwayworld.owned.internal.web.OwnedIdentityConfiguration;
 import com.sunwayworld.owned.internal.web.OwnedResultGenericResourceController;
 import java.lang.reflect.Method;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -34,6 +37,14 @@ public final class OwnedResultGenericResourceControllerContractTest {
             if (method.getReturnType() == OwnedResultGenericResourceController.class) registered = true;
         }
         if (!registered) throw new AssertionError("result GenericResource controller is not registered");
+        Path source = Paths.get("owned-framework/src/main/java/com/sunwayworld/owned/internal/web/OwnedResultGenericResourceController.java");
+        if (!Files.exists(source)) source = Paths.get("src/main/java/com/sunwayworld/owned/internal/web/OwnedResultGenericResourceController.java");
+        String text;
+        try { text = new String(Files.readAllBytes(source), "UTF-8"); }
+        catch (java.io.IOException error) { throw new AssertionError(error); }
+        for (String token : new String[]{"CREATEDBYORGID", "principal.getOrgId()", "WHERE CREATEDBYORGID=?"}) {
+            if (!text.contains(token)) throw new AssertionError("result scope token missing: " + token);
+        }
         System.out.println("owned result GenericResource mapping scope checks passed");
     }
 

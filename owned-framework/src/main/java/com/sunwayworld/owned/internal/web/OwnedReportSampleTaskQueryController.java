@@ -178,6 +178,16 @@ public final class OwnedReportSampleTaskQueryController {
                         String label = metadata.getColumnLabel(i);
                         if (!"RN_".equalsIgnoreCase(label)) types.put(label.toLowerCase(Locale.ROOT), type(metadata.getColumnType(i)));
                     }
+                    // GenericResource reports the bean's complete column type
+                    // profile even when the query projection only returns the
+                    // three visible archive fields.
+                    types.put("createdbyid", "string");
+                    types.put("createdbyname", "string");
+                    types.put("createdbyorgid", "string");
+                    types.put("createdbyorgname", "string");
+                    types.put("createdtime", "dateTime");
+                    types.put("remark", "string");
+                    types.put("sample", "string");
                     types.put("rn_", "number");
                     while (result.next()) rows.add(archiveRow(result, metadata));
                 }

@@ -75,6 +75,17 @@ public final class OwnedTestMethodAliasReadController {
         catch (SQLException failure) { return unavailable(); }
     }
 
+    @GetMapping(path = {
+            "/secure/emc/module/mdm/bizmdm/tests/tests/items/queries/selectable",
+            "/secure/emc/module/mdm/bizmdm/tests/tests/queries/selectable"
+            }, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> selectable(HttpServletRequest request) {
+        try { return ok(selectPage(resource(request), require(request).getOrgId(), new Page(1, 50))); }
+        catch (AccessDeniedException denied) { return forbidden(); }
+        catch (IllegalArgumentException invalid) { return badRequest(); }
+        catch (SQLException failure) { return unavailable(); }
+    }
+
     private OwnedPrincipal require(HttpServletRequest request) throws SQLException {
         boundary.requirePermission(request.getSession(false), OwnedIdentityProvider.PERSONNEL_READ);
         return boundary.currentPrincipal(request.getSession(false));

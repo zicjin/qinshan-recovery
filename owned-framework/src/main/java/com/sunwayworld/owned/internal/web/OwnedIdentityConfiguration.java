@@ -477,6 +477,13 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @ConditionalOnMissingBean(OwnedMdmSpecializedReadController.class)
+    public OwnedMdmSpecializedReadController ownedMdmSpecializedReadController(
+            OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
+        return new OwnedMdmSpecializedReadController(boundary, dataSource);
+    }
+
+    @Bean
     @ConditionalOnMissingBean(OwnedOrderRetainQueryExtensionController.class)
     public OwnedOrderRetainQueryExtensionController ownedOrderRetainQueryExtensionController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {

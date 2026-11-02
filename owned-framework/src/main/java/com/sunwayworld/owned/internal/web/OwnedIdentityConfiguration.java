@@ -442,6 +442,13 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @ConditionalOnMissingBean(OwnedGisMapQueryController.class)
+    public OwnedGisMapQueryController ownedGisMapQueryController(
+            OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
+        return new OwnedGisMapQueryController(boundary, dataSource);
+    }
+
+    @Bean
     @ConditionalOnMissingBean(OwnedOrderQueryController.class)
     public OwnedOrderQueryController ownedOrderQueryController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {

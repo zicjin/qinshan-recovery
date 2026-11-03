@@ -372,7 +372,12 @@ public final class OwnedOrderTaskQueryController {
     private static boolean queryHasOrder(String body) {
         if (body == null || body.trim().isEmpty()) return false;
         JSONObject root = JSON.parseObject(body);
-        return root != null && root.getJSONArray("o") != null && !root.getJSONArray("o").isEmpty();
+        if (root == null) return false;
+        com.alibaba.fastjson.JSONArray direct = root.getJSONArray("o");
+        if (direct != null && !direct.isEmpty()) return true;
+        JSONObject page = root.getJSONObject("p");
+        com.alibaba.fastjson.JSONArray nested = page == null ? null : page.getJSONArray("o");
+        return nested != null && !nested.isEmpty();
     }
 
     private static boolean queryHasNoMatchFilter(String body) {

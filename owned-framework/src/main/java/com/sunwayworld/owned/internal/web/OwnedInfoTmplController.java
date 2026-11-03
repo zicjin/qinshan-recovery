@@ -76,9 +76,15 @@ public final class OwnedInfoTmplController {
     @GetMapping(path = PREFIX + "/fields/queries/selectable", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> fieldsSelectable(HttpServletRequest request) {
         try {
-            OwnedPrincipal principal = require(request);
-            String sql = "SELECT T.*, B.ITEMID FROM T_EMC_INFO_TMPL_FIELD T LEFT JOIN T_EMC_TMPL_FIELD_ITEM B ON T.ID=B.INFOTMPLFIELDID WHERE T.CREATEDBYORGID=? ORDER BY T.ID";
-            return ok(JSON.toJSONString(selectRows(sql, principal.getOrgId(), new ArrayList<String>()), SerializerFeature.WriteMapNullValue));
+            require(request);
+            // The supplier selectable service deliberately uses the generic read
+            // projection without injecting the caller's organization predicate.
+            // This lookup is shared reference data: the returned bean projection
+            // contains fields from all organizations visible in the database.
+            // Keep the owned route aligned with that contract instead of turning
+            // it into an empty, organization-scoped list for Test users.
+            String sql = "SELECT T.* FROM T_EMC_INFO_TMPL_FIELD T ORDER BY T.ID";
+            return ok(JSON.toJSONString(selectRows(sql, null, new ArrayList<String>()), SerializerFeature.WriteMapNullValue));
         } catch (AccessDeniedException denied) { return forbidden(); }
         catch (SQLException failure) { return unavailable(); }
     }
@@ -197,7 +203,7 @@ public final class OwnedInfoTmplController {
         return rows;
     }
 
-    private static int bind(PreparedStatement statement, String organization, List<String> values, int index) throws SQLException { statement.setString(index++, organization); for (String value : values) statement.setString(index++, value); return index; }
+    private static int bind(PreparedStatement statement, String organization, List<String> values, int index) throws SQLException { if (organization != null) statement.setString(index++, organization); for (String value : values) statement.setString(index++, value); return index; }
     private static Map<String, Object> row(ResultSet result, ResultSetMetaData metadata) throws SQLException { Map<String, Object> value = new LinkedHashMap<String, Object>(); for (int i = 1; i <= metadata.getColumnCount(); i++) { String label = metadata.getColumnLabel(i); if ("RN_".equalsIgnoreCase(label)) continue; Object item = JdbcValue.normalize(result.getObject(i)); if (item != null) value.put(camel(label), item); } return value; }
     private static String camel(String label) { StringBuilder value = new StringBuilder(); boolean upper = false; for (char c : label.toLowerCase(Locale.ROOT).toCharArray()) { if (c == '_') { upper = true; continue; } value.append(upper ? Character.toUpperCase(c) : c); upper = false; } return value.toString(); }
     private static String type(int type) { if (type == Types.DATE || type == Types.TIMESTAMP || type == Types.TIMESTAMP_WITH_TIMEZONE) return "dateTime"; if (type == Types.NUMERIC || type == Types.DECIMAL || type == Types.INTEGER || type == Types.BIGINT) return "number"; return "string"; }

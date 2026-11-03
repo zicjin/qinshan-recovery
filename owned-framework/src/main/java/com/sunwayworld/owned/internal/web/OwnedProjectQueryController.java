@@ -64,7 +64,7 @@ public final class OwnedProjectQueryController {
 
     @GetMapping(path = PREFIX + "/info/status", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> status(HttpServletRequest request) {
-        try { require(request); return ok("{\"ext$\":{}}"); }
+        try { require(request); return ok("{\"auditStatus\":{\"processStatus\":\"draft\",\"statusCode\":\"draft\"},\"ext$\":{}}"); }
         catch (AccessDeniedException denied) { return forbidden(); }
         catch (SQLException failure) { return unavailable(); }
     }

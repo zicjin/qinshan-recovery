@@ -25,6 +25,7 @@ public final class OwnedProjectQueryControllerContractTest {
         Path source = Paths.get("owned-framework/src/main/java/com/sunwayworld/owned/internal/web/OwnedProjectQueryController.java"); if (!Files.exists(source)) source = Paths.get("src/main/java/com/sunwayworld/owned/internal/web/OwnedProjectQueryController.java");
         String text = new String(Files.readAllBytes(source), "UTF-8");
         if (!text.contains("T_EMC_PROJECT") || !text.contains("T_CORE_FILE") || !text.contains("T_EMC_REPORT") || !text.contains("CREATEDBYORGID") || !text.contains("BIZCATEGORYNAME") || !text.contains("SAMPLEORDERCOUNT")) throw new AssertionError("project source projection/scope missing");
+        if (!text.contains("auditStatus") || !text.contains("processStatus") || !text.contains("statusCode")) throw new AssertionError("project status audit envelope missing");
         System.out.println("owned project query contract checks passed");
     }
 }

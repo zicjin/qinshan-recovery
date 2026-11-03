@@ -22,6 +22,7 @@ public final class OwnedOrderTaskQueryControllerContractTest {
         require(paths, PREFIX + "/queries/searchable");
         requireSource("queryInvalid(request, response)");
         requireSource("queryHasOrder(body)");
+        requireSource("source-owned assignment projection");
         require(paths, PREFIX + "/queries/runnable");
         require(paths, PREFIX + "/queries/analysis");
         require(paths, PREFIX + "/queries/order-group");

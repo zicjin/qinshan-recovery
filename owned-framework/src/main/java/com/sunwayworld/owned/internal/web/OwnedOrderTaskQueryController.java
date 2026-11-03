@@ -304,6 +304,28 @@ public final class OwnedOrderTaskQueryController {
                     + "WHERE A.ANALYSISORGID=? ORDER BY A.TESTID DESC",
                     values(organization), page, profileKey(requestPath), true);
         }
+        if (requestPath.endsWith("/queries/runnableanalassign")) {
+            // The supplier PfOrderTaskMapper has no bound statement for this
+            // route. Owned Java supplies the intended assignment projection
+            // from the neighbouring selectRunnableList mapper instead of
+            // returning an empty success or reproducing the mapper failure.
+            // This is the source-owned assignment projection.
+            return executeProjectionPage(
+                    "SELECT T.TESTMETHODID,T.TESTCLASS,T.TESTID,T.TESTNAME,T.METHODID,T.METHODNAME,"
+                    + "T.METHODVERSIONID,T.TESTMETHODBASIS,T.ORDERCATEGORY,T.PROJECTREMIND,T.URGENT,T.PROJID,"
+                    + "T.PROJNO,T.REQUIREDCOMPLETEDATE,T.ORDERDATE FROM ("
+                    + "SELECT A.TESTMETHODID,TM.TESTCLASS,A.TESTID,A.TESTNAME,A.METHODID,A.METHODNAME,"
+                    + "A.METHODVERSIONID,A.TESTMETHODBASIS,A.ORDERCATEGORY,A.PROJID,P.PROJNO,P.REQUIREDCOMPLETEDATE,"
+                    + "CASE WHEN P.COMPLEDATE <= TRUNC(SYSDATE)+3 THEN '1' ELSE '0' END PROJECTREMIND,"
+                    + "CASE WHEN P.URGENT='1' THEN 2 ELSE 4 END URGENT,"
+                    + "CASE WHEN P.SAMPLE='1' THEN O.SAMPLEBEGINDATE ELSE O.SENDDATE END ORDERDATE "
+                    + "FROM T_EMC_ORDER_TASK A LEFT JOIN T_EMC_ORDER O ON A.ORDERID=O.ID "
+                    + "LEFT JOIN T_EMC_PROJECT P ON A.PROJID=P.ID LEFT JOIN T_EMC_TEST_METHOD TM ON A.TESTMETHODID=TM.ID "
+                    + "WHERE (P.STATUS <> 'cancel' OR P.STATUS IS NULL) AND (O.TERMINATION <> '1' OR O.TERMINATION IS NULL) "
+                    + "AND A.PROJID IS NOT NULL AND P.ORGID LIKE ? AND (A.RUNID IS NULL OR A.RUNID='')"
+                    + ") T",
+                    values(organization + "%"), page, "/queries/runnable", true);
+        }
         return null;
     }
 

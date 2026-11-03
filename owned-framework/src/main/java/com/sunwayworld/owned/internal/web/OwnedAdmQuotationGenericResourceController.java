@@ -9,6 +9,8 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -159,14 +161,49 @@ public final class OwnedAdmQuotationGenericResourceController {
         return value;
     }
     private static Map<String, Object> detectionFactorRow(ResultSet result, ResultSetMetaData metadata) throws SQLException {
-        Map<String, Object> value = row(result, metadata);
+        Map<String, Object> value = new LinkedHashMap<String, Object>();
         Map<String, Object> extension = new LinkedHashMap<String, Object>();
-        for (String key : new String[]{"methodNamee", "methodNo", "testMethodBasis", "testMethodType",
-                "monitorTmplGroupName", "monitorTmplId", "parentOrgName", "remark", "trialScope"}) {
-            if (value.containsKey(key)) extension.put(key, value.remove(key));
+        for (int i = 1; i <= metadata.getColumnCount(); i++) {
+            String label = metadata.getColumnLabel(i);
+            String key = detectionFactorField(label);
+            Object raw = result.getObject(i);
+            Object normalized = raw == null ? null : detectionFactorValue(raw, metadata.getColumnType(i));
+            if ("RN_".equalsIgnoreCase(label)) {
+                if (normalized != null) extension.put("rn_", normalized);
+            } else if (detectionFactorExtension(label)) {
+                if (normalized != null) extension.put(key.toLowerCase(Locale.ROOT), normalized);
+            } else if (normalized != null) {
+                value.put(key, normalized);
+            }
         }
         value.put("ext$", extension);
         return value;
+    }
+    private static boolean detectionFactorExtension(String label) {
+        String key = label == null ? "" : label.toUpperCase(Locale.ROOT);
+        return "METHODNAMEE".equals(key) || "METHODNO".equals(key) || "TESTMETHODBASIS".equals(key)
+                || "TESTMETHODTYPE".equals(key) || "MONITORTMPLGROUPNAME".equals(key)
+                || "MONITORTMPLID".equals(key) || "PARENTORGNAME".equals(key)
+                || "REMARK".equals(key) || "TRIALSCOPE".equals(key);
+    }
+    private static Object detectionFactorValue(Object raw, int sqlType) {
+        if (sqlType == Types.DATE || sqlType == Types.TIMESTAMP || sqlType == Types.TIMESTAMP_WITH_TIMEZONE) {
+            java.util.Date date = raw instanceof java.util.Date ? (java.util.Date) raw : null;
+            if (date != null) return new SimpleDateFormat("yyyy-MM-dd").format(date);
+        }
+        return raw instanceof Timestamp ? raw.toString() : raw;
+    }
+    private static String detectionFactorField(String label) {
+        String key = label == null ? "" : label.toUpperCase(Locale.ROOT);
+        String[] mappings = {"ID=id", "ANALYSISPRICE=analysisPrice", "CREATEDBYID=createdById", "CREATEDBYNAME=createdByName",
+                "CREATEDBYORGID=createdByOrgId", "CREATEDBYORGNAME=createdByOrgName", "CREATEDTIME=createdTime",
+                "ITEMGROUPID=itemGroupId", "ITEMGROUPNAME=itemGroupName", "METHODID=methodId", "METHODNAME=methodName",
+                "ORGID=orgId", "SAMPLEPRICE=samplePrice", "TESTCATEGORYID=testCategoryId", "TESTID=testId", "TESTNAME=testName",
+                "METHODNAMEE=methodNamee", "METHODNO=methodNo", "TESTMETHODBASIS=testMethodBasis", "TESTMETHODTYPE=testMethodType",
+                "MONITORTMPLGROUPNAME=monitorTmplGroupName", "MONITORTMPLID=monitorTmplId", "PARENTORGNAME=parentOrgName",
+                "TRIALSCOPE=trialScope", "REMARK=remark"};
+        for (String item : mappings) { int split = item.indexOf('='); if (item.substring(0, split).equals(key)) return item.substring(split + 1); }
+        return camel(label);
     }
     private static String camel(String label) { String key = label == null ? "" : label.toUpperCase(Locale.ROOT); Map<String, String> special = new LinkedHashMap<String, String>(); special.put("CREATEDBYID", "createdById"); special.put("CREATEDBYNAME", "createdByName"); special.put("CREATEDTIME", "createdTime"); special.put("CREATEDBYORGID", "createdByOrgId"); special.put("CREATEDBYORGNAME", "createdByOrgName"); special.put("ADMAREANAME", "admAreaName"); special.put("PARENTID", "parentId"); special.put("ORDERNO", "orderNo"); String known = special.get(key); if (known != null) return known; StringBuilder value = new StringBuilder(); boolean upper = false; for (char c : label.toLowerCase(Locale.ROOT).toCharArray()) { if (c == '_') { upper = true; continue; } value.append(upper ? Character.toUpperCase(c) : c); upper = false; } return value.toString(); }
     private static String type(int value) { return value == Types.DATE || value == Types.TIMESTAMP || value == Types.TIMESTAMP_WITH_TIMEZONE ? "dateTime" : (value == Types.NUMERIC || value == Types.DECIMAL || value == Types.INTEGER || value == Types.BIGINT ? "number" : "string"); }

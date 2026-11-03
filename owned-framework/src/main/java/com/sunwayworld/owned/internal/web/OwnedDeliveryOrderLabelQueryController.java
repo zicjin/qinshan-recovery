@@ -102,7 +102,7 @@ public final class OwnedDeliveryOrderLabelQueryController {
         String page = "SELECT P.* FROM (SELECT Q.*,ROW_NUMBER() OVER (ORDER BY Q.ID " + (delivery ? "ASC" : "DESC") + ") RN_ FROM (" + source + ") Q) P WHERE P.RN_>? AND P.RN_<=? ORDER BY P.RN_";
         try (Connection c=dataSource.getConnection()) {
             try (PreparedStatement x=c.prepareStatement(count)) { try(ResultSet r=x.executeQuery()){if(!r.next())throw new SQLException("count missing"); total=r.getInt(1);} }
-            try (PreparedStatement x=c.prepareStatement(page)) { int i=1; x.setInt(i++,q.start()); x.setInt(i,q.end()); try(ResultSet r=x.executeQuery()){ResultSetMetaData m=r.getMetaData();for(int j=1;j<=m.getColumnCount();j++){String n=m.getColumnLabel(j);if(delivery)types.put(n.toLowerCase(Locale.ROOT),type(m.getColumnType(j)));else if(!"RN_".equalsIgnoreCase(n))types.put(resourceKey(n),type(m.getColumnType(j)));}while(r.next())rows.add(row(r,m,delivery));} }
+            try (PreparedStatement x=c.prepareStatement(page)) { int i=1; x.setInt(i++,q.start()); x.setInt(i,q.end()); try(ResultSet r=x.executeQuery()){ResultSetMetaData m=r.getMetaData();for(int j=1;j<=m.getColumnCount();j++){String n=m.getColumnLabel(j);types.put(n.toLowerCase(Locale.ROOT),type(m.getColumnType(j)));}while(r.next())rows.add(row(r,m,delivery));} }
         }
         return new QueryResult(rows,types,total,q.number,q.size);
     }

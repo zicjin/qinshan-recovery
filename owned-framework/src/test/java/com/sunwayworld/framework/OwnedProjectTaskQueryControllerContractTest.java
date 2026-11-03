@@ -42,6 +42,11 @@ public final class OwnedProjectTaskQueryControllerContractTest {
             throw new AssertionError("project task route must use T_EMC_PROJECT");
         if (!"T_EMC_PROJECT_CHANGE".equals(OwnedProjectTaskQueryController.projectSourceTable(true)))
             throw new AssertionError("project-change task route must use T_EMC_PROJECT_CHANGE");
+        java.nio.file.Path sourcePath = java.nio.file.Paths.get("owned-framework/src/main/java/com/sunwayworld/owned/internal/web/OwnedProjectTaskQueryController.java");
+        if (!java.nio.file.Files.exists(sourcePath)) sourcePath = java.nio.file.Paths.get("src/main/java/com/sunwayworld/owned/internal/web/OwnedProjectTaskQueryController.java");
+        String source = new String(java.nio.file.Files.readAllBytes(sourcePath), "UTF-8");
+        for (String token : new String[]{"HttpServletResponse", "GIKAM.EXCEPTION.UNEXPECTED", "MalformedProjectTaskQueryException"})
+            if (!source.contains(token)) throw new AssertionError("missing project-task malformed contract: " + token);
         System.out.println("owned project task query controller contract checks passed");
     }
 

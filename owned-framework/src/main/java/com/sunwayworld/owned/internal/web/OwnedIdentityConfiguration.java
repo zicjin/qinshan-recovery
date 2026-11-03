@@ -225,6 +225,13 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @ConditionalOnMissingBean(OwnedOrderReceiptQueryController.class)
+    public OwnedOrderReceiptQueryController ownedOrderReceiptQueryController(
+            OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
+        return new OwnedOrderReceiptQueryController(boundary, dataSource);
+    }
+
+    @Bean
     @ConditionalOnMissingBean(OwnedSampleMainReadController.class)
     public OwnedSampleMainReadController ownedSampleMainReadController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {

@@ -195,8 +195,9 @@ public final class OwnedOrderTaskQueryController {
     private String selectSpecializedPage(String organization, Page page, String requestPath, String body) throws SQLException {
         if (requestPath == null) return null;
         if (requestPath.endsWith("/queries/group-by-test")) {
+            if (queryHasOrder(body)) throw new IllegalArgumentException("supplier rejects unsupported group-by-test ordering");
             String sampleId = queryValue(body, "sampleId");
-            if (sampleId == null) return emptyProfilePage(page, profileKey(requestPath), true);
+            if (sampleId == null) throw new IllegalArgumentException("sampleId is required");
             return executeProjectionPage(
                     "SELECT LISTAGG(TO_CHAR(A.ID), ',') WITHIN GROUP (ORDER BY A.ID) AS IDS, "
                     + "A.TESTMETHODID,A.TESTID,A.TESTNAME,A.METHODID,A.METHODNAME,P.PROJNO,COUNT(A.ID) AS NUM "
@@ -209,8 +210,9 @@ public final class OwnedOrderTaskQueryController {
                     values(sampleId, organization), page, profileKey(requestPath), true);
         }
         if (requestPath.endsWith("/queries/selectContainerInfo")) {
+            if (queryHasOrder(body)) throw new IllegalArgumentException("supplier rejects unsupported container ordering");
             String orderId = queryValue(body, "orderId");
-            if (orderId == null) return emptyProfilePage(page, profileKey(requestPath), true);
+            if (orderId == null) throw new IllegalArgumentException("orderId is required");
             return executeProjectionPage(
                     "SELECT A.CONTAINERGROUP,A.FIXATIVE,A.CONTAINERCATEGORYNAME,A.CONTAINERCATEGORYID,"
                     + "A.STORECONDITION,A.SAMPLEWEIGHT,LISTAGG(A.TESTNAME, ',') WITHIN GROUP (ORDER BY A.ID) AS TESTNAME,"
@@ -228,8 +230,9 @@ public final class OwnedOrderTaskQueryController {
                     values(organization, orderId), page, profileKey(requestPath), true);
         }
         if (requestPath.endsWith("/queries/select-order-container-info")) {
+            if (queryHasOrder(body)) throw new IllegalArgumentException("supplier rejects unsupported container ordering");
             String orderId = queryValue(body, "orderId");
-            if (orderId == null) return emptyProfilePage(page, profileKey(requestPath), true);
+            if (orderId == null) throw new IllegalArgumentException("orderId is required");
             return executeProjectionPage(
                     "SELECT LISTAGG(TO_CHAR(A.ID), ',') WITHIN GROUP (ORDER BY A.ID) AS IDS,"
                     + "LISTAGG(A.TESTNAME, ',') WITHIN GROUP (ORDER BY A.ID) AS TESTNAME,COUNT(DISTINCT A.ORDERID) AS NUM,"
@@ -250,12 +253,14 @@ public final class OwnedOrderTaskQueryController {
                     values(orderId, organization), page, profileKey(requestPath), true);
         }
         if (requestPath.endsWith("/analysis-department-statistics/queries")) {
+            if (queryHasOrder(body)) throw new IllegalArgumentException("supplier rejects unsupported statistics ordering");
             return executeProjectionPage(
                     "SELECT A.ANALYSISDATE,COUNT(*) AS TESTCOUNT FROM T_EMC_ORDER_TASK A "
                     + "WHERE A.ANALYSISORGID=? GROUP BY A.ANALYSISDATE ORDER BY A.ANALYSISDATE ASC",
                     values(organization), page, profileKey(requestPath), false);
         }
         if (requestPath.endsWith("/personnel-workload-statistics/queries")) {
+            if (queryHasOrder(body)) throw new IllegalArgumentException("supplier rejects unsupported statistics ordering");
             return executeProjectionPage(
                     "SELECT A.ANALYSISUSERID,COUNT(*) AS TESTCOUNT FROM T_EMC_ORDER_TASK A "
                     + "WHERE A.ANALYSISORGID=? GROUP BY A.ANALYSISUSERID ORDER BY A.ANALYSISUSERID ASC",
@@ -283,6 +288,7 @@ public final class OwnedOrderTaskQueryController {
                     values(organization), page, profileKey(requestPath), true);
         }
         if (requestPath.endsWith("/unique-tasks/queries")) {
+            if (queryHasOrder(body)) throw new IllegalArgumentException("supplier rejects unsupported unique-task ordering");
             return executeProjectionPage(
                     "SELECT DISTINCT A.TESTID,A.TESTNAME,A.METHODNAME,A.TESTMETHODBASIS,A.SCHEMENAME,"
                     + "A.ASSIGNDATE,A.ANALYSISTYPE FROM T_EMC_ORDER_TASK A "
@@ -352,6 +358,12 @@ public final class OwnedOrderTaskQueryController {
             if (value == null && root.getJSONObject(nested) != null) value = root.getJSONObject(nested).getString(key);
         }
         return value == null || value.trim().isEmpty() ? null : value.trim();
+    }
+
+    private static boolean queryHasOrder(String body) {
+        if (body == null || body.trim().isEmpty()) return false;
+        JSONObject root = JSON.parseObject(body);
+        return root != null && root.getJSONArray("o") != null && !root.getJSONArray("o").isEmpty();
     }
 
     private static Map<String, Object> row(ResultSet result, ResultSetMetaData metadata) throws SQLException {

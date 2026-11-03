@@ -12,11 +12,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.http.HttpStatus;
@@ -45,13 +47,16 @@ public final class OwnedOrderRetainController {
             "/secure/emc/module/bp/order/order-retains/queries/raw",
             "/secure/emc/module/bp/order/order-retains/queries/searchable"},
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> query(HttpServletRequest request,
+    public ResponseEntity<String> query(HttpServletRequest request, HttpServletResponse response,
             @RequestBody(required = false) String body) {
         try {
             OwnedPrincipal principal = require(request);
-            JSONObject filter = object(body);
+            JSONObject filter;
+            try { validateQuery(body); filter = object(body); }
+            catch (RuntimeException invalid) { throw new MalformedOrderRetainQueryException(invalid); }
             return ok(page(read(principal.getOrgId(), text(filter.get("orderNo"))), pageSize(body)));
         } catch (AccessDeniedException denied) { return forbidden(); }
+        catch (MalformedOrderRetainQueryException malformed) { return unexpected(response, request.getRequestURI()); }
         catch (IllegalArgumentException invalid) { return badRequest(); }
         catch (SQLException failure) { return unavailable(); }
     }
@@ -107,6 +112,13 @@ public final class OwnedOrderRetainController {
     }
     private static JSONObject object(String body){if(body==null||body.trim().length()==0)return new JSONObject();Object value=JSON.parse(body);if(!(value instanceof JSONObject))throw new IllegalArgumentException("request must be an object");JSONObject object=(JSONObject)value;return object.containsKey("p")?object.getJSONObject("p"):object;}
     private static String text(Object value){return value==null?"":String.valueOf(value).trim();}
+    private static void validateQuery(String body){
+        if(body==null||body.trim().isEmpty())return;
+        JSONObject root=JSON.parseObject(body); JSONObject p=root==null?null:root.getJSONObject("p");
+        if(p==null)return;
+        validatePageValue(p.get("n")); validatePageValue(p.get("s"));
+    }
+    private static void validatePageValue(Object value){if(value==null)return;String text=String.valueOf(value).trim();if(!text.matches("[0-9]+"))throw new IllegalArgumentException("invalid page value");}
     private static int pageSize(String body){
         if(body==null||body.trim().length()==0)return 50;
         try{
@@ -138,4 +150,7 @@ public final class OwnedOrderRetainController {
     private static ResponseEntity<String> forbidden(){return ResponseEntity.status(HttpStatus.FORBIDDEN).body("{\"message\":\"GIKAM.PERMISSION.UNAUTHORIZED\"}");}
     private static ResponseEntity<String> badRequest(){return ResponseEntity.badRequest().body("{\"message\":\"GIKAM.ORDER_RETAIN.INVALID_REQUEST\"}");}
     private static ResponseEntity<String> unavailable(){return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"message\":\"GIKAM.ORDER_RETAIN.UNAVAILABLE\"}");}
+    private static ResponseEntity<String> unexpected(HttpServletResponse response,String path){String body=unexpectedBody(path);if(response!=null){try{response.resetBuffer();response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());response.getWriter().write(body);response.getWriter().flush();return null;}catch(IOException ignored){}}return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(body);}
+    private static String unexpectedBody(String path){String safe=path==null?"":path.replace("\\","\\\\").replace("\"","\\\"");return "{\"error\":\"Internal Server Error\",\"message\":\"GIKAM.EXCEPTION.UNEXPECTED\",\"path\":\""+safe+"\",\"stacktrace\":\"owned-order-retain-malformed-query\",\"status\":500,\"timestamp\":\""+new java.util.Date().toString()+"\"}";}
+    private static final class MalformedOrderRetainQueryException extends IllegalArgumentException{MalformedOrderRetainQueryException(Throwable cause){super("malformed order-retain query",cause);}}
 }

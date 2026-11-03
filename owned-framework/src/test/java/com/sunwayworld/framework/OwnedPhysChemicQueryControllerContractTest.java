@@ -29,7 +29,16 @@ public final class OwnedPhysChemicQueryControllerContractTest {
             if (method.getReturnType() == OwnedPhysChemicQueryController.class) registered = true;
         }
         if (!registered) throw new AssertionError("physchemic controller is not registered");
+        assertMalformedContract("OwnedPhysChemicQueryController.java", "GIKAM.EXCEPTION.UNEXPECTED", "MalformedPhysChemicQueryException");
         System.out.println("owned physchemic query contract checks passed");
+    }
+    private static void assertMalformedContract(String file, String... required) {
+        try {
+            java.nio.file.Path path = java.nio.file.Paths.get("owned-framework/src/main/java/com/sunwayworld/owned/internal/web/" + file);
+            if (!java.nio.file.Files.exists(path)) path = java.nio.file.Paths.get("src/main/java/com/sunwayworld/owned/internal/web/" + file);
+            String source = new String(java.nio.file.Files.readAllBytes(path), "UTF-8");
+            for (String token : required) if (!source.contains(token)) throw new AssertionError("missing malformed-query contract: " + token);
+        } catch (java.io.IOException error) { throw new AssertionError(error); }
     }
     private static void require(Set<String> paths, String path) {
         if (!paths.contains(path)) throw new AssertionError("missing physchemic route: " + path);

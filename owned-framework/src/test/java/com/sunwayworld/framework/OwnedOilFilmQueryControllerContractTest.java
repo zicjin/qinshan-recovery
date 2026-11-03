@@ -25,7 +25,16 @@ public final class OwnedOilFilmQueryControllerContractTest {
         boolean registered = false;
         for (Method method : OwnedIdentityConfiguration.class.getDeclaredMethods()) if (method.getReturnType() == OwnedOilFilmQueryController.class) registered = true;
         if (!registered) throw new AssertionError("oil-film controller is not registered");
+        assertMalformedContract("OwnedOilFilmQueryController.java", "GIKAM.EXCEPTION.UNEXPECTED", "MalformedOilFilmQueryException");
         System.out.println("owned oil-film query contract checks passed");
+    }
+    private static void assertMalformedContract(String file, String... required) {
+        try {
+            java.nio.file.Path path = java.nio.file.Paths.get("owned-framework/src/main/java/com/sunwayworld/owned/internal/web/" + file);
+            if (!java.nio.file.Files.exists(path)) path = java.nio.file.Paths.get("src/main/java/com/sunwayworld/owned/internal/web/" + file);
+            String source = new String(java.nio.file.Files.readAllBytes(path), "UTF-8");
+            for (String token : required) if (!source.contains(token)) throw new AssertionError("missing malformed-query contract: " + token);
+        } catch (java.io.IOException error) { throw new AssertionError(error); }
     }
     private static void require(Set<String> paths, String path) { if (!paths.contains(path)) throw new AssertionError("missing oil-film route: " + path); }
 }

@@ -20,7 +20,16 @@ public final class OwnedPretreatmentQueryControllerContractTest {
         require(paths, "/secure/emc/module/bp/result/pretreatments/queries"); require(paths, "/secure/emc/module/bp/result/pretreatments/queries/raw"); require(paths, "/secure/emc/module/bp/result/pretreatments/queries/searchable"); require(paths, "/secure/emc/module/bp/result/pretreatments/extract-methods/queries"); require(paths, "/secure/emc/module/bp/result/pretreatments/purify-methods/queries"); require(paths, "/secure/emc/module/bp/result/pretreatments/info/status"); require(paths, "/secure/emc/module/bp/result/pretreatments/{id}");
         boolean registered = false; for (Method method : OwnedIdentityConfiguration.class.getDeclaredMethods()) if (method.getReturnType() == OwnedPretreatmentQueryController.class) registered = true;
         if (!registered) throw new AssertionError("pretreatment controller is not registered");
+        assertMalformedContract("OwnedPretreatmentQueryController.java", "GIKAM.EXCEPTION.UNEXPECTED", "MalformedPretreatmentQueryException");
         System.out.println("owned pretreatment query contract checks passed");
+    }
+    private static void assertMalformedContract(String file, String... required) {
+        try {
+            java.nio.file.Path path = java.nio.file.Paths.get("owned-framework/src/main/java/com/sunwayworld/owned/internal/web/" + file);
+            if (!java.nio.file.Files.exists(path)) path = java.nio.file.Paths.get("src/main/java/com/sunwayworld/owned/internal/web/" + file);
+            String source = new String(java.nio.file.Files.readAllBytes(path), "UTF-8");
+            for (String token : required) if (!source.contains(token)) throw new AssertionError("missing malformed-query contract: " + token);
+        } catch (java.io.IOException error) { throw new AssertionError(error); }
     }
     private static void require(Set<String> paths, String path) { if (!paths.contains(path)) throw new AssertionError("missing pretreatment route: " + path); }
 }

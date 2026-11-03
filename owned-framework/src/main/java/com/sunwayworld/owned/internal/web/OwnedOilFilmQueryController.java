@@ -17,7 +17,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.http.HttpStatus;
@@ -53,9 +55,10 @@ public final class OwnedOilFilmQueryController {
 
     @PostMapping(path = {PREFIX + "/queries", PREFIX + "/queries/raw", PREFIX + "/queries/searchable"},
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> query(HttpServletRequest request, @RequestBody(required = false) String body) {
-        try { OwnedPrincipal principal = require(request); return ok(selectPage(principal.getOrgId(), Page.parse(body), body)); }
+    public ResponseEntity<String> query(HttpServletRequest request, HttpServletResponse response, @RequestBody(required = false) String body) {
+        try { OwnedPrincipal principal = require(request); Page page; try { page = Page.parse(body); } catch (RuntimeException invalid) { throw new MalformedOilFilmQueryException(invalid); } return ok(selectPage(principal.getOrgId(), page, body)); }
         catch (AccessDeniedException denied) { return forbidden(); }
+        catch (MalformedOilFilmQueryException malformed) { return unexpected(response, request.getRequestURI()); }
         catch (IllegalArgumentException invalid) { return badRequest(); }
         catch (SQLException failure) { return unavailable(); }
     }
@@ -119,5 +122,8 @@ public final class OwnedOilFilmQueryController {
     private static Map<String, String> resourceKeys() { Map<String,String> result=new LinkedHashMap<String,String>(); String[] names={"ID=id","OILFILMNO=oilFilmNo","WEIGHINGUSERID=weighingUserId","WEIGHINGUSERNAME=weighingUserName","PROJID=projId","ORDERID=orderId","ORDERNO=orderNo","PROJNO=projNo","WEIGHINGDATE=weighingDate","EMPTYFILTERBARRELMONEONE=emptyFilterBarrelMOneOne","EMPTYFILTERBARRELMONETWO=emptyFilterBarrelMOneTwo","EMPTYFILTERBARRELMONETHREE=emptyFilterBarrelMOneThree","EMPTYFILTERBARRELMONEFOUR=emptyFilterBarrelMOneFour","EMPTYFILTERBARRELMONEFIVE=emptyFilterBarrelMOneFive","EMPTYFILTERBARRELMONESIX=emptyFilterBarrelMOneSix","CREATEDBYID=createdById","CREATEDBYNAME=createdByName","CREATEDTIME=createdTime","CREATEDBYORGID=createdByOrgId","CREATEDBYORGNAME=createdByOrgName","ORGID=orgId"};for(String name:names){int i=name.indexOf('=');result.put(name.substring(0,i),name.substring(i+1));}return Collections.unmodifiableMap(result); }
     private static int pages(int total,int size){return total==0?0:(total+size-1)/size;}
     private static ResponseEntity<String> ok(String body){return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(body);} private static ResponseEntity<String> forbidden(){return ResponseEntity.status(HttpStatus.FORBIDDEN).contentType(MediaType.APPLICATION_JSON).body("{\"message\":\"GIKAM.PERMISSION.FORBIDDEN\"}");} private static ResponseEntity<String> badRequest(){return ResponseEntity.badRequest().contentType(MediaType.APPLICATION_JSON).body("{\"message\":\"GIKAM.REQUEST.INVALID\"}");} private static ResponseEntity<String> unavailable(){return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).contentType(MediaType.APPLICATION_JSON).body("{\"message\":\"GIKAM.DATA.UNAVAILABLE\"}");}
+    private static ResponseEntity<String> unexpected(HttpServletResponse response,String path){String body=unexpectedBody(path);if(response!=null){try{response.resetBuffer();response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());response.getWriter().write(body);response.getWriter().flush();return null;}catch(IOException ignored){}}return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(body);}
+    private static String unexpectedBody(String path){String safe=path==null?"":path.replace("\\","\\\\").replace("\"","\\\"");return "{\"error\":\"Internal Server Error\",\"message\":\"GIKAM.EXCEPTION.UNEXPECTED\",\"path\":\""+safe+"\",\"stacktrace\":\"owned-oil-film-malformed-query\",\"status\":500,\"timestamp\":\""+new java.util.Date().toString()+"\"}";}
+    private static final class MalformedOilFilmQueryException extends IllegalArgumentException{MalformedOilFilmQueryException(Throwable cause){super("malformed oil-film query",cause);}}
     private static final class Page { final int number,size; Page(int n,int s){number=n;size=s;} static Page parse(String body){JSONObject root=body==null||body.trim().isEmpty()?new JSONObject():JSON.parseObject(body);JSONObject p=root==null?null:root.getJSONObject("p");int n=p==null?1:Math.max(1,p.getIntValue("n"));int s=p==null?50:Math.min(500,Math.max(1,p.getIntValue("s")));return new Page(n,s);}int start(){return(number-1)*size;}int end(){return number*size;} }
 }

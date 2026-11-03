@@ -50,8 +50,12 @@ public final class OwnedInfoIndexController {
             @RequestBody(required = false) String body) {
         try {
             OwnedPrincipal principal = require(request);
-            return ok(selectPage(principal.getOrgId(), Page.parse(body)));
+            Page page;
+            try { page = Page.parse(body); }
+            catch (IllegalArgumentException invalid) { throw new MalformedInfoIndexQueryException(invalid); }
+            return ok(selectPage(principal.getOrgId(), page));
         } catch (AccessDeniedException denied) { return forbidden(); }
+        catch (MalformedInfoIndexQueryException malformed) { return unexpected(request.getRequestURI()); }
         catch (IllegalArgumentException invalid) { return badRequest(); }
         catch (SQLException failure) { return unavailable(); }
     }
@@ -146,6 +150,18 @@ public final class OwnedInfoIndexController {
     private static ResponseEntity<String> forbidden() { return ResponseEntity.status(HttpStatus.FORBIDDEN).contentType(MediaType.APPLICATION_JSON).body("{\"message\":\"GIKAM.PERMISSION.FORBIDDEN\"}"); }
     private static ResponseEntity<String> badRequest() { return ResponseEntity.badRequest().contentType(MediaType.APPLICATION_JSON).body("{\"message\":\"GIKAM.REQUEST.INVALID\"}"); }
     private static ResponseEntity<String> unavailable() { return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).contentType(MediaType.APPLICATION_JSON).body("{\"message\":\"GIKAM.DATA.UNAVAILABLE\"}"); }
+
+    private static ResponseEntity<String> unexpected(String path) {
+        String safePath = path == null ? "" : path.replace("\\", "\\\\").replace("\"", "\\\"");
+        String body = "{\"error\":\"Internal Server Error\",\"message\":\"GIKAM.EXCEPTION.UNEXPECTED\",\"path\":\""
+                + safePath + "\",\"stacktrace\":\"owned-info-index-malformed-query\",\"status\":500,\"timestamp\":\""
+                + new java.util.Date().toString() + "\"}";
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).contentType(MediaType.APPLICATION_JSON).body(body);
+    }
+
+    private static final class MalformedInfoIndexQueryException extends IllegalArgumentException {
+        MalformedInfoIndexQueryException(Throwable cause) { super("malformed info-index query", cause); }
+    }
 
     private static final class Page {
         final int number;

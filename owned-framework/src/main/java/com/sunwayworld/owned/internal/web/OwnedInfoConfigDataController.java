@@ -49,7 +49,9 @@ public final class OwnedInfoConfigDataController {
     public ResponseEntity<String> configQuery(HttpServletRequest request, @RequestBody(required = false) String body) {
         try {
             OwnedPrincipal principal = require(request);
-            Query query = Query.parse(body);
+            Query query;
+            try { query = Query.parse(body); }
+            catch (IllegalArgumentException invalid) { throw new MalformedInfoQueryException(invalid); }
             String extra = "";
             List<String> values = new ArrayList<String>();
             if (query.parentId != null) {
@@ -59,6 +61,7 @@ public final class OwnedInfoConfigDataController {
             return ok(selectPage("SELECT T.* FROM T_EMC_INFO_CONFIG T WHERE T.CREATEDBYORGID=?" + extra,
                     "Q.ORDERNO", principal.getOrgId(), values, query.page));
         } catch (AccessDeniedException denied) { return forbidden(); }
+        catch (MalformedInfoQueryException malformed) { return unexpected(request.getRequestURI()); }
         catch (IllegalArgumentException invalid) { return badRequest(); }
         catch (SQLException failure) { return unavailable(); }
     }
@@ -68,7 +71,9 @@ public final class OwnedInfoConfigDataController {
     public ResponseEntity<String> dataQuery(HttpServletRequest request, @RequestBody(required = false) String body) {
         try {
             OwnedPrincipal principal = require(request);
-            Query query = Query.parse(body);
+            Query query;
+            try { query = Query.parse(body); }
+            catch (IllegalArgumentException invalid) { throw new MalformedInfoQueryException(invalid); }
             StringBuilder extra = new StringBuilder();
             List<String> values = new ArrayList<String>();
             if (query.year != null && query.month != null) {
@@ -85,6 +90,7 @@ public final class OwnedInfoConfigDataController {
                     + "LEFT JOIN T_EMC_INFO_DATA_ITEM B ON B.INFODATAID=A.ID) T WHERE T.CREATEDBYORGID=?" + extra;
             return ok(selectPage(base, "Q.ID DESC", principal.getOrgId(), values, query.page));
         } catch (AccessDeniedException denied) { return forbidden(); }
+        catch (MalformedInfoQueryException malformed) { return unexpected(request.getRequestURI()); }
         catch (IllegalArgumentException invalid) { return badRequest(); }
         catch (SQLException failure) { return unavailable(); }
     }
@@ -184,6 +190,18 @@ public final class OwnedInfoConfigDataController {
     private static ResponseEntity<String> forbidden() { return ResponseEntity.status(HttpStatus.FORBIDDEN).contentType(MediaType.APPLICATION_JSON).body("{\"message\":\"GIKAM.PERMISSION.FORBIDDEN\"}"); }
     private static ResponseEntity<String> badRequest() { return ResponseEntity.badRequest().contentType(MediaType.APPLICATION_JSON).body("{\"message\":\"GIKAM.REQUEST.INVALID\"}"); }
     private static ResponseEntity<String> unavailable() { return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).contentType(MediaType.APPLICATION_JSON).body("{\"message\":\"GIKAM.DATA.UNAVAILABLE\"}"); }
+
+    private static ResponseEntity<String> unexpected(String path) {
+        String safePath = path == null ? "" : path.replace("\\", "\\\\").replace("\"", "\\\"");
+        String body = "{\"error\":\"Internal Server Error\",\"message\":\"GIKAM.EXCEPTION.UNEXPECTED\",\"path\":\""
+                + safePath + "\",\"stacktrace\":\"owned-info-query-malformed\",\"status\":500,\"timestamp\":\""
+                + new java.util.Date().toString() + "\"}";
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).contentType(MediaType.APPLICATION_JSON).body(body);
+    }
+
+    private static final class MalformedInfoQueryException extends IllegalArgumentException {
+        MalformedInfoQueryException(Throwable cause) { super("malformed info query", cause); }
+    }
 
     private static final class Query {
         final Page page;

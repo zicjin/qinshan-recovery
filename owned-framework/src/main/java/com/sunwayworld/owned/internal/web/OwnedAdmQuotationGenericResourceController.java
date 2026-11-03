@@ -101,7 +101,7 @@ public final class OwnedAdmQuotationGenericResourceController {
                 try (ResultSet result = query.executeQuery()) {
                     ResultSetMetaData metadata = result.getMetaData();
                     for (int i = 1; i <= metadata.getColumnCount(); i++) { String label = metadata.getColumnLabel(i); if (!"RN_".equalsIgnoreCase(label)) types.put(label.toLowerCase(Locale.ROOT), type(metadata.getColumnType(i))); }
-                    while (result.next()) rows.add(row(result, metadata));
+                    while (result.next()) rows.add(detectionFactorRow(result, metadata));
                 }
             }
         }
@@ -156,6 +156,16 @@ public final class OwnedAdmQuotationGenericResourceController {
     private static Map<String, Object> row(ResultSet result, ResultSetMetaData metadata) throws SQLException {
         Map<String, Object> value = new LinkedHashMap<String, Object>();
         for (int i = 1; i <= metadata.getColumnCount(); i++) { String label = metadata.getColumnLabel(i); if (!"RN_".equalsIgnoreCase(label)) value.put(camel(label), JdbcValue.normalize(result.getObject(i))); }
+        return value;
+    }
+    private static Map<String, Object> detectionFactorRow(ResultSet result, ResultSetMetaData metadata) throws SQLException {
+        Map<String, Object> value = row(result, metadata);
+        Map<String, Object> extension = new LinkedHashMap<String, Object>();
+        for (String key : new String[]{"methodNamee", "methodNo", "testMethodBasis", "testMethodType",
+                "monitorTmplGroupName", "monitorTmplId", "parentOrgName", "remark", "trialScope"}) {
+            if (value.containsKey(key)) extension.put(key, value.remove(key));
+        }
+        value.put("ext$", extension);
         return value;
     }
     private static String camel(String label) { String key = label == null ? "" : label.toUpperCase(Locale.ROOT); Map<String, String> special = new LinkedHashMap<String, String>(); special.put("CREATEDBYID", "createdById"); special.put("CREATEDBYNAME", "createdByName"); special.put("CREATEDTIME", "createdTime"); special.put("CREATEDBYORGID", "createdByOrgId"); special.put("CREATEDBYORGNAME", "createdByOrgName"); special.put("ADMAREANAME", "admAreaName"); special.put("PARENTID", "parentId"); special.put("ORDERNO", "orderNo"); String known = special.get(key); if (known != null) return known; StringBuilder value = new StringBuilder(); boolean upper = false; for (char c : label.toLowerCase(Locale.ROOT).toCharArray()) { if (c == '_') { upper = true; continue; } value.append(upper ? Character.toUpperCase(c) : c); upper = false; } return value.toString(); }

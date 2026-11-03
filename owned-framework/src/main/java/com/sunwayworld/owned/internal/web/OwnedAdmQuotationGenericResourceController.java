@@ -169,7 +169,7 @@ public final class OwnedAdmQuotationGenericResourceController {
             Object raw = result.getObject(i);
             Object normalized = raw == null ? null : detectionFactorValue(JdbcValue.normalize(raw), metadata.getColumnType(i));
             if ("RN_".equalsIgnoreCase(label)) {
-                if (normalized != null) extension.put("rn_", normalized);
+                if (normalized != null) extension.put("rn_", String.valueOf(normalized));
             } else if (detectionFactorExtension(label)) {
                 if (normalized != null) extension.put(key.toLowerCase(Locale.ROOT), normalized);
             } else if (normalized != null) {

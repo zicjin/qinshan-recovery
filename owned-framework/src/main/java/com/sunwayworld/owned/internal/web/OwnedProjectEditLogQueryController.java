@@ -17,7 +17,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.http.HttpStatus;
@@ -50,9 +52,10 @@ public final class OwnedProjectEditLogQueryController {
     }
 
     @PostMapping(path = {PREFIX + "/queries", PREFIX + "/queries/raw", PREFIX + "/queries/searchable"}, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> query(HttpServletRequest request, @RequestBody(required = false) String body) {
-        try { OwnedPrincipal principal = require(request); return ok(selectPage(principal.getOrgId(), Query.parse(body))); }
+    public ResponseEntity<String> query(HttpServletRequest request, HttpServletResponse response, @RequestBody(required = false) String body) {
+        try { OwnedPrincipal principal = require(request); Query query; try { query = Query.parse(body); } catch (RuntimeException invalid) { throw new MalformedProjectEditLogQueryException(invalid); } return ok(selectPage(principal.getOrgId(), query)); }
         catch (AccessDeniedException denied) { return forbidden(); }
+        catch (MalformedProjectEditLogQueryException malformed) { return unexpected(response, request.getRequestURI()); }
         catch (IllegalArgumentException invalid) { return badRequest(); }
         catch (SQLException failure) { return unavailable(); }
     }
@@ -78,5 +81,8 @@ public final class OwnedProjectEditLogQueryController {
     private static String camel(String label){String n=label.toLowerCase(Locale.ROOT);StringBuilder value=new StringBuilder();boolean upper=false;for(char c:n.toCharArray()){if(c=='_'){upper=true;continue;}value.append(upper?Character.toUpperCase(c):c);upper=false;}String compact=value.toString();if("createdbyid".equals(compact))return "createdById";if("createdbyname".equals(compact))return "createdByName";if("createdtime".equals(compact))return "createdTime";if("createdbyorgid".equals(compact))return "createdByOrgId";if("createdbyorgname".equals(compact))return "createdByOrgName";if("projid".equals(compact))return "projId";if("projno".equals(compact))return "projNo";return compact;}
     private static String type(int sqlType){return sqlType==Types.DATE||sqlType==Types.TIMESTAMP||sqlType==Types.TIMESTAMP_WITH_TIMEZONE?"dateTime":(sqlType==Types.NUMERIC||sqlType==Types.DECIMAL||sqlType==Types.INTEGER||sqlType==Types.BIGINT?"number":"string");}
     private static int pages(int total,int size){return total==0?0:(total+size-1)/size;} private static ResponseEntity<String>ok(String body){return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).header("Cache-Control","no-store").body(body);} private static ResponseEntity<String>forbidden(){return ResponseEntity.status(HttpStatus.FORBIDDEN).contentType(MediaType.APPLICATION_JSON).body("{\"message\":\"GIKAM.PERMISSION.UNAUTHORIZED\"}");} private static ResponseEntity<String>badRequest(){return ResponseEntity.badRequest().contentType(MediaType.APPLICATION_JSON).body("{\"message\":\"GIKAM.PROJECT_EDIT_LOG.INVALID_QUERY\"}");} private static ResponseEntity<String>unavailable(){return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).contentType(MediaType.APPLICATION_JSON).body("{\"message\":\"GIKAM.PROJECT_EDIT_LOG.UNAVAILABLE\"}");}
+    private static ResponseEntity<String> unexpected(HttpServletResponse response,String path){String body=unexpectedBody(path);if(response!=null){try{response.resetBuffer();response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());response.getWriter().write(body);response.getWriter().flush();return null;}catch(IOException ignored){}}return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(body);}
+    private static String unexpectedBody(String path){String safe=path==null?"":path.replace("\\","\\\\").replace("\"","\\\"");return "{\"error\":\"Internal Server Error\",\"message\":\"GIKAM.EXCEPTION.UNEXPECTED\",\"path\":\""+safe+"\",\"stacktrace\":\"owned-project-edit-log-malformed-query\",\"status\":500,\"timestamp\":\""+new java.util.Date().toString()+"\"}";}
+    private static final class MalformedProjectEditLogQueryException extends IllegalArgumentException{MalformedProjectEditLogQueryException(Throwable cause){super("malformed project-edit-log query",cause);}}
     private static final class Query{final int number,size;Query(int n,int s){number=n;size=s;}static Query parse(String body){JSONObject root=body==null||body.trim().isEmpty()?new JSONObject():JSON.parseObject(body);JSONObject p=root==null?null:root.getJSONObject("p");int number=p==null?1:Math.max(1,p.getIntValue("n"));int size=p==null?50:Math.min(500,Math.max(1,p.getIntValue("s")));return new Query(number,size);}int start(){return(number-1)*size;}int end(){return number*size;}}
 }

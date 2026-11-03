@@ -21,7 +21,7 @@ public final class OwnedProjectEditLogQueryControllerContractTest {
             if(!java.nio.file.Files.exists(path))path=java.nio.file.Paths.get("lims-recovery/owned-framework/src/main/java/com/sunwayworld/owned/internal/web/OwnedProjectEditLogQueryController.java");
             if(!java.nio.file.Files.exists(path))path=java.nio.file.Paths.get("src/main/java/com/sunwayworld/owned/internal/web/OwnedProjectEditLogQueryController.java");
             String source=new String(java.nio.file.Files.readAllBytes(path),"UTF-8");
-            for(String required:new String[]{"T_EMC_PROJECT_EDIT_LOG","T.CREATEDBYORGID=?","ROW_NUMBER()","pageNumber","totalMap","ext$","contentType(MediaType.APPLICATION_JSON)"})if(!source.contains(required))throw new AssertionError("missing contract: "+required);
+            for(String required:new String[]{"T_EMC_PROJECT_EDIT_LOG","T.CREATEDBYORGID=?","ROW_NUMBER()","pageNumber","totalMap","ext$","contentType(MediaType.APPLICATION_JSON)","HttpServletResponse","GIKAM.EXCEPTION.UNEXPECTED","MalformedProjectEditLogQueryException"})if(!source.contains(required))throw new AssertionError("missing contract: "+required);
         }catch(java.io.IOException error){throw new AssertionError(error);}
         System.out.println("owned project-edit-log query contract checks passed");
     }

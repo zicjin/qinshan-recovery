@@ -76,7 +76,7 @@ public final class OwnedDeliveryOrderLabelQueryController {
             OwnedPrincipal principal = require(request);
             if (id == null || !id.matches("[0-9]{1,30}")) throw new IllegalArgumentException("invalid id");
             boolean delivery = request.getRequestURI().startsWith(DELIVERY);
-            String sql = delivery ? "SELECT A.*,B.PROJNO,B.PROJNAME,B.TESTORGNAME FROM T_EMC_DELIVERY A LEFT JOIN T_EMC_PROJECT B ON A.PROJID=B.ID WHERE A.ID=?"
+            String sql = delivery ? "SELECT A.* FROM T_EMC_DELIVERY A WHERE A.ID=?"
                     : "SELECT A.* FROM T_EMC_ORDER_LABEL A WHERE A.ID=?";
             try (Connection c = dataSource.getConnection(); PreparedStatement q = c.prepareStatement(sql)) {
                 int i=1; q.setLong(i, Long.parseLong(id));
@@ -95,7 +95,7 @@ public final class OwnedDeliveryOrderLabelQueryController {
     private QueryResult read(boolean delivery, String org, Query q) throws SQLException {
         // Supplier GenericResource uses the delivery table's global mapper
         // without an implicit creator-organization predicate.
-        String source = delivery ? "SELECT A.*,B.PROJNO,B.PROJNAME,B.TESTORGNAME FROM T_EMC_DELIVERY A LEFT JOIN T_EMC_PROJECT B ON A.PROJID=B.ID"
+        String source = delivery ? "SELECT A.* FROM T_EMC_DELIVERY A"
                 : "SELECT A.* FROM T_EMC_ORDER_LABEL A";
         int total; List<Map<String,Object>> rows=new ArrayList<Map<String,Object>>(); Map<String,String> types=new LinkedHashMap<String,String>();
         String count = "SELECT COUNT(1) FROM (" + source + ") Q";
@@ -107,7 +107,8 @@ public final class OwnedDeliveryOrderLabelQueryController {
         return new QueryResult(rows,types,total,q.number,q.size);
     }
     private static String page(QueryResult r){Map<String,Object>b=new LinkedHashMap<String,Object>();b.put("columnTypeMap",r.types);b.put("first",r.number==1);b.put("last",r.total==0||r.number>=pages(r.total,r.size));b.put("numberOfElements",r.rows.size());b.put("pageNumber",r.number);b.put("pageSize",r.size);b.put("rows",r.rows);b.put("total",r.total);Map<String,Object>t=new LinkedHashMap<String,Object>();t.put("qty_",r.total);b.put("totalMap",t);b.put("totalPages",pages(r.total,r.size));return JSON.toJSONString(b,SerializerFeature.WriteMapNullValue);}
-    private static Map<String,Object> row(ResultSet r,ResultSetMetaData m,boolean delivery)throws SQLException{Map<String,Object>v=new LinkedHashMap<String,Object>();for(int i=1;i<=m.getColumnCount();i++){String n=m.getColumnLabel(i);if(!"RN_".equalsIgnoreCase(n))v.put(resourceKey(n),JdbcValue.normalize(r.getObject(i)));}if(!delivery)v.put("ext$",new LinkedHashMap<String,Object>());return v;}
+    private static Map<String,Object> row(ResultSet r,ResultSetMetaData m,boolean delivery)throws SQLException{Map<String,Object>v=new LinkedHashMap<String,Object>();Map<String,Object>x=new LinkedHashMap<String,Object>();for(int i=1;i<=m.getColumnCount();i++){String n=m.getColumnLabel(i);if("RN_".equalsIgnoreCase(n))continue;Object item=JdbcValue.normalize(r.getObject(i));if(delivery){String key=deliveryField(n);if(key==null){if(item!=null)x.put(n.toLowerCase(Locale.ROOT),item);}else if(item!=null)v.put(key,item);}else v.put(resourceKey(n),item);}v.put("ext$",x);return v;}
+    private static String deliveryField(String label){String n=label.toUpperCase(Locale.ROOT);if("ID".equals(n))return "id";if("CREATEDBYID".equals(n))return "createdById";if("CREATEDBYNAME".equals(n))return "createdByName";if("CREATEDBYORGID".equals(n))return "createdByOrgId";if("CREATEDBYORGNAME".equals(n))return "createdByOrgName";if("CREATEDTIME".equals(n))return "createdTime";if("DELIVERYNO".equals(n))return "deliveryNo";if("ORGID".equals(n))return "orgId";if("PROJID".equals(n))return "projId";if("SOURCE".equals(n))return "source";if("STATUS".equals(n))return "status";return null;}
     private static String resourceKey(String label){String n=label.toUpperCase(Locale.ROOT);if("CREATEDBYID".equals(n))return "createdById";if("CREATEDBYNAME".equals(n))return "createdByName";if("CREATEDTIME".equals(n))return "createdTime";if("CREATEDBYORGID".equals(n))return "createdByOrgId";if("CREATEDBYORGNAME".equals(n))return "createdByOrgName";if("LABELCODE".equals(n))return "labelCode";if("PROJNO".equals(n))return "projNo";if("PROJNAME".equals(n))return "projName";if("TESTORGNAME".equals(n))return "testOrgName";return camel(label);}
     private static String camel(String n){StringBuilder b=new StringBuilder();boolean u=false;for(char c:n.toLowerCase(Locale.ROOT).toCharArray()){if(c=='_'){u=true;continue;}b.append(u?Character.toUpperCase(c):c);u=false;}return b.toString();}
     private static String type(int t){return t==Types.DATE||t==Types.TIMESTAMP||t==Types.TIMESTAMP_WITH_TIMEZONE?"dateTime":(t==Types.NUMERIC||t==Types.DECIMAL||t==Types.INTEGER||t==Types.BIGINT?"number":"string");}

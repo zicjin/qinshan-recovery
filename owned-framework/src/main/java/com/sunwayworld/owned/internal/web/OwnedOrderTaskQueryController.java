@@ -197,7 +197,10 @@ public final class OwnedOrderTaskQueryController {
         if (requestPath.endsWith("/queries/group-by-test")) {
             if (queryHasOrder(body)) throw new IllegalArgumentException("supplier rejects unsupported group-by-test ordering");
             String sampleId = queryValue(body, "sampleId");
-            if (sampleId == null) throw new IllegalArgumentException("sampleId is required");
+            if (sampleId == null) {
+                if (queryHasNoMatchFilter(body)) throw new IllegalArgumentException("supplier rejects unscoped group-by-test filter");
+                return emptyProfilePage(page, profileKey(requestPath), true);
+            }
             return executeProjectionPage(
                     "SELECT LISTAGG(TO_CHAR(A.ID), ',') WITHIN GROUP (ORDER BY A.ID) AS IDS, "
                     + "A.TESTMETHODID,A.TESTID,A.TESTNAME,A.METHODID,A.METHODNAME,P.PROJNO,COUNT(A.ID) AS NUM "
@@ -212,7 +215,10 @@ public final class OwnedOrderTaskQueryController {
         if (requestPath.endsWith("/queries/selectContainerInfo")) {
             if (queryHasOrder(body)) throw new IllegalArgumentException("supplier rejects unsupported container ordering");
             String orderId = queryValue(body, "orderId");
-            if (orderId == null) throw new IllegalArgumentException("orderId is required");
+            if (orderId == null) {
+                if (queryHasNoMatchFilter(body)) throw new IllegalArgumentException("supplier rejects unscoped container filter");
+                return emptyProfilePage(page, profileKey(requestPath), true);
+            }
             return executeProjectionPage(
                     "SELECT A.CONTAINERGROUP,A.FIXATIVE,A.CONTAINERCATEGORYNAME,A.CONTAINERCATEGORYID,"
                     + "A.STORECONDITION,A.SAMPLEWEIGHT,LISTAGG(A.TESTNAME, ',') WITHIN GROUP (ORDER BY A.ID) AS TESTNAME,"
@@ -232,7 +238,10 @@ public final class OwnedOrderTaskQueryController {
         if (requestPath.endsWith("/queries/select-order-container-info")) {
             if (queryHasOrder(body)) throw new IllegalArgumentException("supplier rejects unsupported container ordering");
             String orderId = queryValue(body, "orderId");
-            if (orderId == null) throw new IllegalArgumentException("orderId is required");
+            if (orderId == null) {
+                if (queryHasNoMatchFilter(body)) throw new IllegalArgumentException("supplier rejects unscoped container filter");
+                return emptyProfilePage(page, profileKey(requestPath), true);
+            }
             return executeProjectionPage(
                     "SELECT LISTAGG(TO_CHAR(A.ID), ',') WITHIN GROUP (ORDER BY A.ID) AS IDS,"
                     + "LISTAGG(A.TESTNAME, ',') WITHIN GROUP (ORDER BY A.ID) AS TESTNAME,COUNT(DISTINCT A.ORDERID) AS NUM,"
@@ -364,6 +373,13 @@ public final class OwnedOrderTaskQueryController {
         if (body == null || body.trim().isEmpty()) return false;
         JSONObject root = JSON.parseObject(body);
         return root != null && root.getJSONArray("o") != null && !root.getJSONArray("o").isEmpty();
+    }
+
+    private static boolean queryHasNoMatchFilter(String body) {
+        if (body == null || body.trim().isEmpty()) return false;
+        JSONObject root = JSON.parseObject(body);
+        JSONObject page = root == null ? null : root.getJSONObject("p");
+        return page != null && page.getJSONObject("f") != null;
     }
 
     private static Map<String, Object> row(ResultSet result, ResultSetMetaData metadata) throws SQLException {

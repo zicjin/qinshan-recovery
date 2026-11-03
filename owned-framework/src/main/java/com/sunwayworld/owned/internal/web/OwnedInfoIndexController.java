@@ -12,12 +12,14 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.http.HttpStatus;
@@ -46,7 +48,7 @@ public final class OwnedInfoIndexController {
 
     @PostMapping(path = {PREFIX + "/queries", PREFIX + "/queries/raw", PREFIX + "/queries/searchable"},
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> query(HttpServletRequest request,
+    public ResponseEntity<String> query(HttpServletRequest request, HttpServletResponse response,
             @RequestBody(required = false) String body) {
         try {
             OwnedPrincipal principal = require(request);
@@ -55,7 +57,7 @@ public final class OwnedInfoIndexController {
             catch (IllegalArgumentException invalid) { throw new MalformedInfoIndexQueryException(invalid); }
             return ok(selectPage(principal.getOrgId(), page));
         } catch (AccessDeniedException denied) { return forbidden(); }
-        catch (MalformedInfoIndexQueryException malformed) { return unexpected(request.getRequestURI()); }
+        catch (MalformedInfoIndexQueryException malformed) { return unexpected(response, request.getRequestURI()); }
         catch (IllegalArgumentException invalid) { return badRequest(); }
         catch (SQLException failure) { return unavailable(); }
     }
@@ -151,14 +153,25 @@ public final class OwnedInfoIndexController {
     private static ResponseEntity<String> badRequest() { return ResponseEntity.badRequest().contentType(MediaType.APPLICATION_JSON).body("{\"message\":\"GIKAM.REQUEST.INVALID\"}"); }
     private static ResponseEntity<String> unavailable() { return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).contentType(MediaType.APPLICATION_JSON).body("{\"message\":\"GIKAM.DATA.UNAVAILABLE\"}"); }
 
-    private static ResponseEntity<String> unexpected(String path) {
+    private static ResponseEntity<String> unexpected(HttpServletResponse response, String path) {
+        String body = unexpectedBody(path);
+        if (response != null) {
+            try {
+                response.resetBuffer();
+                response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+                response.getWriter().write(body);
+                response.getWriter().flush();
+                return null;
+            } catch (IOException ignored) { }
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(body);
+    }
+
+    private static String unexpectedBody(String path) {
         String safePath = path == null ? "" : path.replace("\\", "\\\\").replace("\"", "\\\"");
-        String body = "{\"error\":\"Internal Server Error\",\"message\":\"GIKAM.EXCEPTION.UNEXPECTED\",\"path\":\""
+        return "{\"error\":\"Internal Server Error\",\"message\":\"GIKAM.EXCEPTION.UNEXPECTED\",\"path\":\""
                 + safePath + "\",\"stacktrace\":\"owned-info-index-malformed-query\",\"status\":500,\"timestamp\":\""
                 + new java.util.Date().toString() + "\"}";
-        // The supplier's framework error writer leaves the content type empty
-        // for this malformed-query 500 response.
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(body);
     }
 
     private static final class MalformedInfoIndexQueryException extends IllegalArgumentException {

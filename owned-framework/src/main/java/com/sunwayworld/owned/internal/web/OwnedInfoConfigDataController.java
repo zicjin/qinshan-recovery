@@ -12,12 +12,14 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.http.HttpStatus;
@@ -46,7 +48,8 @@ public final class OwnedInfoConfigDataController {
 
     @PostMapping(path = {CONFIG_PREFIX + "/queries", CONFIG_PREFIX + "/queries/raw", CONFIG_PREFIX + "/queries/searchable"},
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> configQuery(HttpServletRequest request, @RequestBody(required = false) String body) {
+    public ResponseEntity<String> configQuery(HttpServletRequest request, HttpServletResponse response,
+            @RequestBody(required = false) String body) {
         try {
             OwnedPrincipal principal = require(request);
             Query query;
@@ -61,14 +64,15 @@ public final class OwnedInfoConfigDataController {
             return ok(selectPage("SELECT T.* FROM T_EMC_INFO_CONFIG T WHERE T.CREATEDBYORGID=?" + extra,
                     "Q.ORDERNO", principal.getOrgId(), values, query.page));
         } catch (AccessDeniedException denied) { return forbidden(); }
-        catch (MalformedInfoQueryException malformed) { return unexpected(request.getRequestURI()); }
+        catch (MalformedInfoQueryException malformed) { return unexpected(response, request.getRequestURI()); }
         catch (IllegalArgumentException invalid) { return badRequest(); }
         catch (SQLException failure) { return unavailable(); }
     }
 
     @PostMapping(path = {DATA_PREFIX + "/queries", DATA_PREFIX + "/queries/raw", DATA_PREFIX + "/queries/searchable"},
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> dataQuery(HttpServletRequest request, @RequestBody(required = false) String body) {
+    public ResponseEntity<String> dataQuery(HttpServletRequest request, HttpServletResponse response,
+            @RequestBody(required = false) String body) {
         try {
             OwnedPrincipal principal = require(request);
             Query query;
@@ -90,7 +94,7 @@ public final class OwnedInfoConfigDataController {
                     + "LEFT JOIN T_EMC_INFO_DATA_ITEM B ON B.INFODATAID=A.ID) T WHERE T.CREATEDBYORGID=?" + extra;
             return ok(selectPage(base, "Q.ID DESC", principal.getOrgId(), values, query.page));
         } catch (AccessDeniedException denied) { return forbidden(); }
-        catch (MalformedInfoQueryException malformed) { return unexpected(request.getRequestURI()); }
+        catch (MalformedInfoQueryException malformed) { return unexpected(response, request.getRequestURI()); }
         catch (IllegalArgumentException invalid) { return badRequest(); }
         catch (SQLException failure) { return unavailable(); }
     }
@@ -191,14 +195,25 @@ public final class OwnedInfoConfigDataController {
     private static ResponseEntity<String> badRequest() { return ResponseEntity.badRequest().contentType(MediaType.APPLICATION_JSON).body("{\"message\":\"GIKAM.REQUEST.INVALID\"}"); }
     private static ResponseEntity<String> unavailable() { return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).contentType(MediaType.APPLICATION_JSON).body("{\"message\":\"GIKAM.DATA.UNAVAILABLE\"}"); }
 
-    private static ResponseEntity<String> unexpected(String path) {
+    private static ResponseEntity<String> unexpected(HttpServletResponse response, String path) {
+        String body = unexpectedBody(path);
+        if (response != null) {
+            try {
+                response.resetBuffer();
+                response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+                response.getWriter().write(body);
+                response.getWriter().flush();
+                return null;
+            } catch (IOException ignored) { }
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(body);
+    }
+
+    private static String unexpectedBody(String path) {
         String safePath = path == null ? "" : path.replace("\\", "\\\\").replace("\"", "\\\"");
-        String body = "{\"error\":\"Internal Server Error\",\"message\":\"GIKAM.EXCEPTION.UNEXPECTED\",\"path\":\""
+        return "{\"error\":\"Internal Server Error\",\"message\":\"GIKAM.EXCEPTION.UNEXPECTED\",\"path\":\""
                 + safePath + "\",\"stacktrace\":\"owned-info-query-malformed\",\"status\":500,\"timestamp\":\""
                 + new java.util.Date().toString() + "\"}";
-        // The supplier's framework error writer does not set a JSON content
-        // type for this unexpected 500 envelope. Preserve that wire contract.
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(body);
     }
 
     private static final class MalformedInfoQueryException extends IllegalArgumentException {

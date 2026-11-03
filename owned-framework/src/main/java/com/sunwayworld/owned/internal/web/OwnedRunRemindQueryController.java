@@ -45,6 +45,8 @@ public final class OwnedRunRemindQueryController {
     public ResponseEntity<String> query(HttpServletRequest request,@RequestBody(required=false) String body){try{OwnedPrincipal p=require(request);return ok(selectPage(p.getOrgId(),Page.parse(body)));}catch(AccessDeniedException e){return forbidden();}catch(IllegalArgumentException e){return badRequest();}catch(SQLException e){return unavailable();}}
     @PostMapping(path=PREFIX+"/queries/runRemind/{runId}",consumes=MediaType.APPLICATION_JSON_VALUE,produces=MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> runRemind(HttpServletRequest request,@PathVariable("runId") String runId,@RequestBody(required=false) String body){try{OwnedPrincipal p=require(request);if(runId==null||!runId.matches("[A-Za-z0-9_-]{1,80}"))return badRequest();return ok(selectRunRemind(p.getOrgId(),runId));}catch(AccessDeniedException e){return forbidden();}catch(IllegalArgumentException e){return badRequest();}catch(SQLException e){return unavailable();}}
+    @PostMapping(path=PREFIX+"/queries/resultRemind/{runId}",consumes=MediaType.APPLICATION_JSON_VALUE,produces=MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> resultRemind(HttpServletRequest request,@PathVariable("runId") String runId,@RequestBody(required=false) String body){try{OwnedPrincipal p=require(request);if(runId==null||!runId.matches("[A-Za-z0-9_-]{1,80}"))return badRequest();return ok(selectResultRemind(p.getOrgId(),runId));}catch(AccessDeniedException e){return forbidden();}catch(IllegalArgumentException e){return badRequest();}catch(SQLException e){return unavailable();}}
     @GetMapping(path=PREFIX+"/info/status",produces=MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> status(HttpServletRequest request){try{require(request);return ok("{\"ext$\":{}}");}catch(AccessDeniedException e){return forbidden();}catch(SQLException e){return unavailable();}}
     @GetMapping(path=PREFIX+"/{id}",produces=MediaType.APPLICATION_JSON_VALUE)
@@ -83,6 +85,64 @@ public final class OwnedRunRemindQueryController {
         }
         return envelope(rows.size(), new Page(1, rows.size() == 0 ? 1 : rows.size()), rows);
     }
+    private String selectResultRemind(String org, String runId) throws SQLException {
+        List<Reminder> reminders = new ArrayList<Reminder>();
+        List<Map<String, Object>> rows = new ArrayList<Map<String, Object>>();
+        try (Connection c = dataSource.getConnection()) {
+            try (PreparedStatement q = c.prepareStatement("SELECT A.* FROM T_EMC_RUN_REMIND A WHERE A.CREATEDBYORGID=? AND LOWER(A.CHECKTYPE)=? ORDER BY A.QCCATEGORYCODE,A.ID")) {
+                q.setString(1, org); q.setString(2, "result");
+                try (ResultSet r = q.executeQuery()) {
+                    ResultSetMetaData m = r.getMetaData();
+                    while (r.next()) reminders.add(new Reminder(
+                            text(r, m, "QCCATEGORYCODE"), text(r, m, "QCCATEGORYNAME"),
+                            text(r, m, "REMIND"), text(r, m, "FIELDNAME"), text(r, m, "ABNORMALEXPLAIN")));
+                }
+            }
+            if (reminders.isEmpty()) return envelope(0, new Page(1, 1), rows);
+            String sql = "SELECT R.*,OT.TESTNAME,O.ORDERNO AS LABELNUMBER "
+                    + "FROM T_EMC_ORDER_TASK_RESULT R "
+                    + "LEFT JOIN T_EMC_PROJECT P ON R.PROJID=P.ID "
+                    + "LEFT JOIN T_EMC_ORDER_TASK OT ON R.ORDERTASKID=OT.ID "
+                    + "LEFT JOIN T_EMC_ORDER O ON R.ORDERID=O.ID "
+                    + "WHERE R.RUNID=? AND R.CREATEDBYORGID=? AND (R.PROJID IS NULL OR P.STATUS!='cancel') "
+                    + "AND EXISTS (SELECT 1 FROM T_EMC_TEST_METHOD_QC_ITEM I "
+                    + "LEFT JOIN T_EMC_TEST_METHOD_QC Q ON I.TESTMETHODQCID=Q.ID "
+                    + "WHERE Q.TESTMETHODID=R.TESTMETHODID AND Q.QCCATEGORYCODE=R.QCCATEGORYCODE AND I.ITEMID=R.ITEMID)";
+            try (PreparedStatement q = c.prepareStatement(sql)) {
+                q.setString(1, runId); q.setString(2, org);
+                try (ResultSet r = q.executeQuery()) {
+                    ResultSetMetaData m = r.getMetaData();
+                    while (r.next()) {
+                        Map<String, Object> source = rawRow(r, m);
+                        String qc = stringValue(source.get("QCCATEGORYCODE"));
+                        for (Reminder reminder : reminders) {
+                            if (!same(qc, reminder.qcCategoryCode)) continue;
+                            Object current = source.get(normalizeColumn(reminder.fieldName));
+                            if (!empty(current)) {
+                                continue;
+                            }
+                            Map<String, Object> abnormal = new LinkedHashMap<String, Object>();
+                            String label = stringValue(source.get("LABELNUMBER"));
+                            String test = stringValue(source.get("TESTNAME"));
+                            abnormal.put("remind", (reminder.qcName == null ? "" : reminder.qcName + "-") + reminder.remind);
+                            abnormal.put("value", label + "  " + test);
+                            abnormal.put("checkResult", "异常");
+                            abnormal.put("abnormalExplain", reminder.abnormalExplain);
+                            rows.add(abnormal);
+                        }
+                    }
+                }
+            }
+        }
+        return envelope(rows.size(), new Page(1, rows.size() == 0 ? 1 : rows.size()), rows);
+    }
+    private static Map<String,Object> rawRow(ResultSet r, ResultSetMetaData m) throws SQLException { Map<String,Object> value=new LinkedHashMap<String,Object>(); for(int i=1;i<=m.getColumnCount();i++){ Object item=JdbcValue.normalize(r.getObject(i)); if(item!=null)value.put(normalizeColumn(m.getColumnLabel(i)),item); } return value; }
+    private static String text(ResultSet r, ResultSetMetaData m, String column) throws SQLException { Object value=null; for(int i=1;i<=m.getColumnCount();i++) if(normalizeColumn(m.getColumnLabel(i)).equals(column)) value=r.getObject(i); return value==null?null:String.valueOf(value); }
+    private static String normalizeColumn(String value){return value==null?"":value.replace("_","").toUpperCase(Locale.ROOT);}
+    private static boolean same(String left,String right){return left==null?right==null:left.equalsIgnoreCase(right);}
+    private static boolean empty(Object value){return value==null||String.valueOf(value).trim().length()==0;}
+    private static String stringValue(Object value){return value==null?"":String.valueOf(value);}
+    private static final class Reminder { final String qcCategoryCode,qcName,remind,fieldName,abnormalExplain; Reminder(String qc,String name,String remind,String field,String explain){this.qcCategoryCode=qc;this.qcName=name;this.remind=remind;this.fieldName=field;this.abnormalExplain=explain;} }
     private static String envelope(int total,Page page,List<Map<String,Object>> rows){return envelope(total,page,rows,TYPE_PROFILE);}
     private static String envelope(int total,Page page,List<Map<String,Object>> rows,Map<String,String> types){Map<String,Object> e=new LinkedHashMap<String,Object>();e.put("columnTypeMap",types);e.put("first",page.number==1);e.put("last",total==0||page.number>=pages(total,page.size));e.put("numberOfElements",rows.size());e.put("pageNumber",page.number);e.put("pageSize",page.size);e.put("rows",rows);e.put("total",total);Map<String,Object> t=new LinkedHashMap<String,Object>();t.put("qty_",total);e.put("totalMap",t);e.put("totalPages",pages(total,page.size));return JSON.toJSONString(e,SerializerFeature.WriteMapNullValue);}
     private static Map<String,Object> row(ResultSet r,ResultSetMetaData m)throws SQLException{Map<String,Object> v=new LinkedHashMap<String,Object>();Map<String,Object> x=new LinkedHashMap<String,Object>();for(int i=1;i<=m.getColumnCount();i++){String n=m.getColumnLabel(i);if("RN_".equalsIgnoreCase(n))continue;Object o=JdbcValue.normalize(r.getObject(i));if(o==null)continue;String k=RESOURCE_KEYS.get(n.toUpperCase(Locale.ROOT));if(k==null)x.put(n.toLowerCase(Locale.ROOT),o);else v.put(k,o);}v.put("ext$",x);return v;}

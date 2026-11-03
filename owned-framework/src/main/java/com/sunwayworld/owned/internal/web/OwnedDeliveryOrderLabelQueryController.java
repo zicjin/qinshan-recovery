@@ -76,10 +76,10 @@ public final class OwnedDeliveryOrderLabelQueryController {
             OwnedPrincipal principal = require(request);
             if (id == null || !id.matches("[0-9]{1,30}")) throw new IllegalArgumentException("invalid id");
             boolean delivery = request.getRequestURI().startsWith(DELIVERY);
-            String sql = delivery ? "SELECT A.*,B.PROJNO,B.PROJNAME,B.TESTORGNAME FROM T_EMC_DELIVERY A LEFT JOIN T_EMC_PROJECT B ON A.PROJID=B.ID WHERE A.CREATEDBYORGID=? AND A.ID=?"
+            String sql = delivery ? "SELECT A.*,B.PROJNO,B.PROJNAME,B.TESTORGNAME FROM T_EMC_DELIVERY A LEFT JOIN T_EMC_PROJECT B ON A.PROJID=B.ID WHERE A.ID=?"
                     : "SELECT A.* FROM T_EMC_ORDER_LABEL A WHERE A.ID=?";
             try (Connection c = dataSource.getConnection(); PreparedStatement q = c.prepareStatement(sql)) {
-                int i=1; if (delivery) q.setString(i++, principal.getOrgId()); q.setLong(i, Long.parseLong(id));
+                int i=1; q.setLong(i, Long.parseLong(id));
                 try (ResultSet r=q.executeQuery()) { return ok(r.next() ? JSON.toJSONString(row(r,r.getMetaData(), delivery), SerializerFeature.WriteMapNullValue) : "{}"); }
             }
         } catch (AccessDeniedException denied) { return forbidden(); }
@@ -93,14 +93,16 @@ public final class OwnedDeliveryOrderLabelQueryController {
     }
 
     private QueryResult read(boolean delivery, String org, Query q) throws SQLException {
-        String source = delivery ? "SELECT A.*,B.PROJNO,B.PROJNAME,B.TESTORGNAME FROM T_EMC_DELIVERY A LEFT JOIN T_EMC_PROJECT B ON A.PROJID=B.ID WHERE A.CREATEDBYORGID=?"
+        // Supplier GenericResource uses the delivery table's global mapper
+        // without an implicit creator-organization predicate.
+        String source = delivery ? "SELECT A.*,B.PROJNO,B.PROJNAME,B.TESTORGNAME FROM T_EMC_DELIVERY A LEFT JOIN T_EMC_PROJECT B ON A.PROJID=B.ID"
                 : "SELECT A.* FROM T_EMC_ORDER_LABEL A";
         int total; List<Map<String,Object>> rows=new ArrayList<Map<String,Object>>(); Map<String,String> types=new LinkedHashMap<String,String>();
         String count = "SELECT COUNT(1) FROM (" + source + ") Q";
         String page = "SELECT P.* FROM (SELECT Q.*,ROW_NUMBER() OVER (ORDER BY Q.ID " + (delivery ? "ASC" : "DESC") + ") RN_ FROM (" + source + ") Q) P WHERE P.RN_>? AND P.RN_<=? ORDER BY P.RN_";
         try (Connection c=dataSource.getConnection()) {
-            try (PreparedStatement x=c.prepareStatement(count)) { int i=1; if(delivery)x.setString(i++,org); try(ResultSet r=x.executeQuery()){if(!r.next())throw new SQLException("count missing"); total=r.getInt(1);} }
-            try (PreparedStatement x=c.prepareStatement(page)) { int i=1; if(delivery)x.setString(i++,org); x.setInt(i++,q.start()); x.setInt(i,q.end()); try(ResultSet r=x.executeQuery()){ResultSetMetaData m=r.getMetaData();for(int j=1;j<=m.getColumnCount();j++){String n=m.getColumnLabel(j);if(!"RN_".equalsIgnoreCase(n))types.put(resourceKey(n),type(m.getColumnType(j)));}while(r.next())rows.add(row(r,m,delivery));} }
+            try (PreparedStatement x=c.prepareStatement(count)) { try(ResultSet r=x.executeQuery()){if(!r.next())throw new SQLException("count missing"); total=r.getInt(1);} }
+            try (PreparedStatement x=c.prepareStatement(page)) { int i=1; x.setInt(i++,q.start()); x.setInt(i,q.end()); try(ResultSet r=x.executeQuery()){ResultSetMetaData m=r.getMetaData();for(int j=1;j<=m.getColumnCount();j++){String n=m.getColumnLabel(j);if(!"RN_".equalsIgnoreCase(n))types.put(resourceKey(n),type(m.getColumnType(j)));}while(r.next())rows.add(row(r,m,delivery));} }
         }
         return new QueryResult(rows,types,total,q.number,q.size);
     }

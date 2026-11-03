@@ -12,12 +12,14 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.http.HttpStatus;
@@ -46,12 +48,16 @@ public final class OwnedOrderQueryController {
     @PostMapping(path = {PREFIX + "/queries", PREFIX + "/queries/raw", PREFIX + "/queries/searchable",
             PREFIX + "/queries/roles/{roleId}"}, consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> query(HttpServletRequest request, @RequestBody(required = false) String body) {
+    public ResponseEntity<String> query(HttpServletRequest request, HttpServletResponse response,
+            @RequestBody(required = false) String body) {
         try {
             OwnedPrincipal principal = require(request);
-            RequestFilter filter = RequestFilter.parse(body);
+            RequestFilter filter;
+            try { filter = RequestFilter.parse(body); }
+            catch (IllegalArgumentException invalid) { throw new MalformedOrderQueryException(invalid); }
             return ok(page(read(principal.getOrgId(), filter)));
         } catch (AccessDeniedException denied) { return forbidden(); }
+        catch (MalformedOrderQueryException malformed) { return unexpected(response, request.getRequestURI()); }
         catch (IllegalArgumentException invalid) { return badRequest(); }
         catch (SQLException failure) { return unavailable(); }
     }
@@ -59,7 +65,7 @@ public final class OwnedOrderQueryController {
     @GetMapping(path = {PREFIX + "/info/status", PREFIX + "/{id}/info/status"},
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> status(HttpServletRequest request) {
-        try { require(request); return ok("{\"auditStatus\":{},\"ext$\":{}}"); }
+        try { require(request); return ok("{\"ext$\":{}}"); }
         catch (AccessDeniedException denied) { return forbidden(); }
         catch (SQLException failure) { return unavailable(); }
     }
@@ -134,6 +140,28 @@ public final class OwnedOrderQueryController {
     private static ResponseEntity<String> forbidden(){return ResponseEntity.status(HttpStatus.FORBIDDEN).body("{\"message\":\"GIKAM.PERMISSION.UNAUTHORIZED\"}");}
     private static ResponseEntity<String> badRequest(){return ResponseEntity.badRequest().body("{\"message\":\"GIKAM.ORDER.INVALID_QUERY\"}");}
     private static ResponseEntity<String> unavailable(){return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"message\":\"GIKAM.ORDER.UNAVAILABLE\"}");}
+
+    private static ResponseEntity<String> unexpected(HttpServletResponse response, String path) {
+        if (response != null) {
+            try {
+                response.resetBuffer();
+                response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+                response.getWriter().write(unexpectedBody(path));
+                response.getWriter().flush();
+                return null;
+            } catch (IOException ignored) { /* fall through to a normal response */ }
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(unexpectedBody(path));
+    }
+    private static String unexpectedBody(String path) {
+        String safePath = path == null ? "" : path.replace("\\", "\\\\").replace("\"", "\\\"");
+        return "{\"error\":\"Internal Server Error\",\"message\":\"GIKAM.EXCEPTION.UNEXPECTED\",\"path\":\""
+                + safePath + "\",\"stacktrace\":\"owned-order-malformed-query\",\"status\":500,\"timestamp\":\""
+                + new java.util.Date().toString() + "\"}";
+    }
+    private static final class MalformedOrderQueryException extends IllegalArgumentException {
+        MalformedOrderQueryException(Throwable cause) { super("malformed order query", cause); }
+    }
 
     private static final class RequestFilter { final int number,size; RequestFilter(int n,int s){number=n;size=s;} static RequestFilter parse(String body){JSONObject root=body==null||body.trim().isEmpty()?new JSONObject():JSON.parseObject(body);JSONObject p=root==null?null:root.getJSONObject("p");int n=p==null?1:Math.max(1,p.getIntValue("n"));int s=p==null?50:Math.min(500,Math.max(1,p.getIntValue("s")));return new RequestFilter(n,s);} int start(){return(number-1)*size;}int end(){return number*size;}int pageSize(){return size;} }
     private static final class QueryResult { final List<Map<String,Object>> rows;final Map<String,String> types;final int total,number,size;QueryResult(List<Map<String,Object>> r,Map<String,String> t,int total,int n,int s){rows=r;types=t;this.total=total;number=n;size=s;} }

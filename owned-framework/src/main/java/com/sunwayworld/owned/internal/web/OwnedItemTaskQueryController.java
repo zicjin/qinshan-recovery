@@ -88,7 +88,6 @@ public final class OwnedItemTaskQueryController {
             PREFIX + "quotation/quotationregisters/queries", PREFIX + "quotation/quotationregisters/queries/raw", PREFIX + "quotation/quotationregisters/queries/searchable",
             PREFIX + "report-queries/queries", PREFIX + "report-queries/queries/raw", PREFIX + "report-queries/queries/searchable",
             PREFIX + "scm/conven-mtls/queries", PREFIX + "scm/conven-mtls/queries/raw", PREFIX + "scm/conven-mtls/queries/searchable",
-            PREFIX + "scm/equipt-purchs/queries", PREFIX + "scm/equipt-purchs/queries/raw", PREFIX + "scm/equipt-purchs/queries/searchable",
             PREFIX + "scm/office-mtls/queries", PREFIX + "scm/office-mtls/queries/raw", PREFIX + "scm/office-mtls/queries/searchable",
             PREFIX + "scm/standard-mtls/queries", PREFIX + "scm/standard-mtls/queries/raw", PREFIX + "scm/standard-mtls/queries/searchable"
             }, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -108,7 +107,7 @@ public final class OwnedItemTaskQueryController {
             PREFIX + "leave-applies/{id}", PREFIX + "leave-replenishs/{id}", PREFIX + "lm/overtimes/{id}",
             PREFIX + "manage-reviews/{id}", PREFIX + "precautions/{id}", PREFIX + "quality-controls/{id}",
             PREFIX + "quality-supervisions/{id}", PREFIX + "quotation/quotationregisters/{id}",
-            PREFIX + "report-queries/{id}", PREFIX + "scm/conven-mtls/{id}", PREFIX + "scm/equipt-purchs/{id}",
+            PREFIX + "report-queries/{id}", PREFIX + "scm/conven-mtls/{id}",
             PREFIX + "scm/office-mtls/{id}", PREFIX + "scm/standard-mtls/{id}"
             }, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> genericDetail(HttpServletRequest request,
@@ -133,7 +132,7 @@ public final class OwnedItemTaskQueryController {
             PREFIX + "precautions/info/status", PREFIX + "quality-controls/info/status",
             PREFIX + "quality-supervisions/info/status", PREFIX + "quotation/quotationregisters/info/status",
             PREFIX + "report-queries/info/status", PREFIX + "scm/conven-mtls/info/status",
-            PREFIX + "scm/equipt-purchs/info/status", PREFIX + "scm/office-mtls/info/status",
+            PREFIX + "scm/office-mtls/info/status",
             PREFIX + "scm/standard-mtls/info/status"
             }, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> status(HttpServletRequest request) {

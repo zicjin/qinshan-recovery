@@ -12,12 +12,14 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.http.HttpStatus;
@@ -72,9 +74,10 @@ public final class OwnedProjectQueryController {
             PREFIX + "/project-statistics/queries", PREFIX + "/annual-project-statistics/queries",
             PREFIX + "/crm/invoice-proj/queries", PREFIX + "/crm/payment-proj/queries"},
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> query(HttpServletRequest request, @RequestBody(required = false) String body) {
-        try { OwnedPrincipal principal = require(request); return ok(selectPage(principal.getOrgId(), Page.parse(body))); }
+    public ResponseEntity<String> query(HttpServletRequest request, HttpServletResponse response, @RequestBody(required = false) String body) {
+        try { OwnedPrincipal principal = require(request); Page page; try { page = Page.parse(body); } catch (IllegalArgumentException invalid) { throw new MalformedProjectQueryException(invalid); } return ok(selectPage(principal.getOrgId(), page)); }
         catch (AccessDeniedException denied) { return forbidden(); }
+        catch (MalformedProjectQueryException malformed) { return unexpected(response, request.getRequestURI()); }
         catch (IllegalArgumentException invalid) { return badRequest(); }
         catch (SQLException failure) { return unavailable(); }
     }
@@ -184,6 +187,22 @@ public final class OwnedProjectQueryController {
     private static ResponseEntity<String> forbidden() { return ResponseEntity.status(HttpStatus.FORBIDDEN).contentType(MediaType.APPLICATION_JSON).body("{\"message\":\"GIKAM.PERMISSION.FORBIDDEN\"}"); }
     private static ResponseEntity<String> badRequest() { return ResponseEntity.badRequest().contentType(MediaType.APPLICATION_JSON).body("{\"message\":\"GIKAM.REQUEST.INVALID\"}"); }
     private static ResponseEntity<String> unavailable() { return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).contentType(MediaType.APPLICATION_JSON).body("{\"message\":\"GIKAM.PROJECT.UNAVAILABLE\"}"); }
+
+    private static ResponseEntity<String> unexpected(HttpServletResponse response, String path) {
+        String safe = path == null ? "" : path.replace("\\", "\\\\").replace("\"", "\\\"");
+        String body = "{\"error\":\"Internal Server Error\",\"message\":\"GIKAM.EXCEPTION.UNEXPECTED\",\"path\":\""
+                + safe + "\",\"stacktrace\":\"owned-project-malformed-query\",\"status\":500,\"timestamp\":\""
+                + new java.util.Date().toString() + "\"}";
+        if (response != null) {
+            try { response.resetBuffer(); response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value()); response.getWriter().write(body); response.getWriter().flush(); return null; }
+            catch (IOException ignored) { }
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(body);
+    }
+
+    private static final class MalformedProjectQueryException extends IllegalArgumentException {
+        MalformedProjectQueryException(Throwable cause) { super("malformed project query", cause); }
+    }
 
     private static final class Page {
         final int number, size; Page(int number, int size) { this.number = number; this.size = size; }

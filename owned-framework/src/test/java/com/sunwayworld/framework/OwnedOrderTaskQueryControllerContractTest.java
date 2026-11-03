@@ -20,6 +20,7 @@ public final class OwnedOrderTaskQueryControllerContractTest {
         require(paths, PREFIX + "/queries");
         require(paths, PREFIX + "/queries/raw");
         require(paths, PREFIX + "/queries/searchable");
+        requireSource("queryInvalid(request, response)");
         require(paths, PREFIX + "/queries/runnable");
         require(paths, PREFIX + "/queries/analysis");
         require(paths, PREFIX + "/queries/order-group");
@@ -85,6 +86,14 @@ public final class OwnedOrderTaskQueryControllerContractTest {
 
     private static void require(Set<String> paths, String path) {
         if (!paths.contains(path)) throw new AssertionError("missing order-task path: " + path);
+    }
+
+    private static void requireSource(String token) {
+        try {
+            java.nio.file.Path source = java.nio.file.Paths.get("owned-framework/src/main/java/com/sunwayworld/owned/internal/web/OwnedOrderTaskQueryController.java");
+            if (!java.nio.file.Files.exists(source)) source = java.nio.file.Paths.get("src/main/java/com/sunwayworld/owned/internal/web/OwnedOrderTaskQueryController.java");
+            if (!new String(java.nio.file.Files.readAllBytes(source), "UTF-8").contains(token)) throw new AssertionError("missing order-task error contract: " + token);
+        } catch (java.io.IOException error) { throw new AssertionError(error); }
     }
 
     @SuppressWarnings("unchecked")

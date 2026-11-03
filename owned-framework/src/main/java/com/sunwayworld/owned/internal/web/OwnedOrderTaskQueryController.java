@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.http.HttpStatus;
@@ -87,14 +88,15 @@ public final class OwnedOrderTaskQueryController {
             "/secure/emc/module/bp/sample/samples/{id}/order-tasks/queries",
             PREFIX + "/queries/runnableanalassign"
             }, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> query(HttpServletRequest request, @RequestBody(required = false) String body) {
+    public ResponseEntity<String> query(HttpServletRequest request, HttpServletResponse response,
+            @RequestBody(required = false) String body) {
         try {
             OwnedPrincipal principal = require(request);
             Page page = Page.parse(body);
             String specialized = selectSpecializedPage(principal.getOrgId(), page, request.getRequestURI(), body);
             return ok(specialized == null ? selectPage(principal.getOrgId(), page, request.getRequestURI()) : specialized);
         } catch (AccessDeniedException denied) { return forbidden(); }
-        catch (IllegalArgumentException invalid) { return badRequest(); }
+        catch (IllegalArgumentException invalid) { return queryInvalid(request, response); }
         catch (SQLException failure) { return unavailable(); }
     }
 
@@ -661,6 +663,14 @@ public final class OwnedOrderTaskQueryController {
     private static ResponseEntity<String> ok(String body) { return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(body); }
     private static ResponseEntity<String> forbidden() { return ResponseEntity.status(HttpStatus.FORBIDDEN).contentType(MediaType.APPLICATION_JSON).body("{\"message\":\"GIKAM.PERMISSION.FORBIDDEN\"}"); }
     private static ResponseEntity<String> badRequest() { return ResponseEntity.badRequest().contentType(MediaType.APPLICATION_JSON).body("{\"message\":\"GIKAM.REQUEST.INVALID\"}"); }
+    private static ResponseEntity<String> queryInvalid(HttpServletRequest request, HttpServletResponse response) {
+        String path = request == null ? "" : request.getRequestURI();
+        String body = "{\"error\":\"Internal Server Error\",\"message\":\"GIKAM.EXCEPTION.UNEXPECTED\",\"path\":\""
+                + path.replace("\\", "\\\\").replace("\"", "\\\"")
+                + "\",\"status\":500,\"timestamp\":" + System.currentTimeMillis() + ",\"stacktrace\":\"\"}";
+        try { response.resetBuffer(); response.setStatus(500); response.setHeader("Content-Type", ""); response.getWriter().write(body); response.flushBuffer(); return null; }
+        catch (java.io.IOException error) { return ResponseEntity.status(500).body(body); }
+    }
     private static ResponseEntity<String> unavailable() { return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).contentType(MediaType.APPLICATION_JSON).body("{\"message\":\"GIKAM.DATA.UNAVAILABLE\"}"); }
 
     private static final class Page {

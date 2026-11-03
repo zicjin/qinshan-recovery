@@ -2,6 +2,7 @@ package com.sunwayworld.framework;
 
 import com.sunwayworld.owned.internal.web.OwnedAuditRecordController;
 import java.lang.reflect.Method;
+import java.lang.reflect.InvocationTargetException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -33,6 +34,22 @@ public final class OwnedAuditRecordControllerContractTest {
                     + query + "/" + raw + "/" + searchable + "/" + detail + "/"
                     + column + "/" + print + "/" + validate + "/" + unique);
         }
+        assertMalformedErrorEnvelope();
         System.out.println("owned audit-record controller contract checks passed (query/raw/searchable/detail/column/print/validate/unique)");
+    }
+
+    private static void assertMalformedErrorEnvelope() {
+        try {
+            Method body = OwnedAuditRecordController.class.getDeclaredMethod("unexpectedBody", String.class);
+            body.setAccessible(true);
+            String value = String.valueOf(body.invoke(null, "/secure/emc/module/bp/audit-records/queries"));
+            for (String key : new String[]{"\"error\"", "\"message\"", "\"path\"", "\"stacktrace\"", "\"status\":500", "\"timestamp\""}) {
+                if (!value.contains(key)) throw new AssertionError("audit-record malformed response missing " + key);
+            }
+        } catch (InvocationTargetException error) {
+            throw new AssertionError("audit-record malformed response helper failed", error.getCause());
+        } catch (ReflectiveOperationException error) {
+            throw new AssertionError("audit-record malformed response helper is missing", error);
+        }
     }
 }

@@ -15,6 +15,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -22,6 +23,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.http.HttpStatus;
@@ -60,11 +62,19 @@ public final class OwnedAuditRecordController {
             "/secure/emc/module/bp/audit-records/queries/searchable"},
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> query(HttpServletRequest request,
+            HttpServletResponse response,
             @RequestBody(required = false) String body) {
         try {
             OwnedPrincipal principal = require(request);
-            return ok(page(principal.getOrgId(), QueryRequest.parse(body, null)));
+            QueryRequest query;
+            try {
+                query = QueryRequest.parse(body, null);
+            } catch (IllegalArgumentException invalid) {
+                throw new MalformedAuditQueryException(invalid);
+            }
+            return ok(page(principal.getOrgId(), query));
         } catch (AccessDeniedException denied) { return forbidden(); }
+        catch (MalformedAuditQueryException malformed) { return unexpected(response, request.getRequestURI()); }
         catch (IllegalArgumentException invalid) { return badRequest(); }
         catch (SQLException failure) { return unavailable(); }
     }
@@ -368,6 +378,31 @@ public final class OwnedAuditRecordController {
     private static ResponseEntity<String> forbidden() { return ResponseEntity.status(HttpStatus.FORBIDDEN).body("{\"message\":\"GIKAM.PERMISSION.UNAUTHORIZED\"}"); }
     private static ResponseEntity<String> badRequest() { return ResponseEntity.badRequest().body("{\"message\":\"GIKAM.AUDIT.INVALID_QUERY\"}"); }
     private static ResponseEntity<String> unavailable() { return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"message\":\"GIKAM.AUDIT.UNAVAILABLE\"}"); }
+
+    /** Supplier GenericResource binding failures are unexpected 500 responses. */
+    private static ResponseEntity<String> unexpected(HttpServletResponse response, String path) {
+        if (response != null) {
+            try {
+                response.resetBuffer();
+                response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+                response.getWriter().write(unexpectedBody(path));
+                response.getWriter().flush();
+                return null;
+            } catch (IOException ignored) { /* fall through to a normal response */ }
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(unexpectedBody(path));
+    }
+
+    private static String unexpectedBody(String path) {
+        String safePath = path == null ? "" : path.replace("\\", "\\\\").replace("\"", "\\\"");
+        return "{\"error\":\"Internal Server Error\",\"message\":\"GIKAM.EXCEPTION.UNEXPECTED\",\"path\":\""
+                + safePath + "\",\"stacktrace\":\"owned-audit-record-malformed-query\",\"status\":500,\"timestamp\":\""
+                + new java.util.Date().toString() + "\"}";
+    }
+
+    private static final class MalformedAuditQueryException extends IllegalArgumentException {
+        MalformedAuditQueryException(Throwable cause) { super("malformed audit-record query", cause); }
+    }
 
     private static final class Sql {
         final String countSql, pageSql, detailSql; final List<Object> countValues, pageValues, detailValues; final Map<String, String> metadata;

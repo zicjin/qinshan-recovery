@@ -634,7 +634,8 @@ public final class OwnedOrderTaskResultQueryController {
         Map<String, Object> value = new LinkedHashMap<String, Object>();
         for (int i = 1; i <= metadata.getColumnCount(); i++) {
             String label = metadata.getColumnLabel(i);
-            if ("RN_".equalsIgnoreCase(label)) continue;
+            if ("RN_".equalsIgnoreCase(label) || "DISTINCT_RN".equalsIgnoreCase(label)
+                    || "PAGE_RN_".equalsIgnoreCase(label)) continue;
             Object raw = JdbcValue.normalize(result.getObject(i));
             if (raw != null) value.put(camel(label), raw);
         }

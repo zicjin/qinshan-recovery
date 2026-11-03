@@ -28,12 +28,15 @@ public final class AdmQuotationQueryService {
             if (permittedOrganizations != null) for (String organization : permittedOrganizations) {
                 if (organization != null && !organization.trim().isEmpty()) scope.add(organization);
             }
-        } else {
+        } else if (resource != AdmQuotationQueryDao.Resource.AREA) {
             // Preserve the existing creator/home-org policy until its resource-specific
             // supplier policy has been independently verified; do not widen on parity alone.
             String organization = principal.getOrgId();
             if (organization != null && !organization.trim().isEmpty()) scope.add(organization);
         }
+        // AdmArea is the shared province/city/district reference dictionary.
+        // Its source Mapper and grid/chooser have no implicit organization filter;
+        // authentication/route permission is still enforced by the HTTP boundary.
         return dao.readPage(resource, Collections.unmodifiableSet(scope), request);
     }
 }

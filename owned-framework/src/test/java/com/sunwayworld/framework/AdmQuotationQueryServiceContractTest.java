@@ -34,13 +34,25 @@ public final class AdmQuotationQueryServiceContractTest {
     private static int checks;
 
     public static void main(String[] args) throws Exception {
+        Fixture area = new Fixture();
+        area.areaRows = true;
+        area.scope = Collections.emptySet();
+        JSONObject areaPage = area.call(PREFIX + "adm-areas/queries", "{\"p\":{\"n\":1,\"s\":10,\"f\":{\"org_filter\":\"1\"}}}");
+        check(!area.sql.get(0).contains("CREATEDBYORGID IN") && !area.sql.get(0).contains("1=0")
+                && area.values.get(0).isEmpty(), "area reference data has no implicit creator/organization restriction");
+        JSONObject areaRow = areaPage.getJSONArray("rows").getJSONObject(0);
+        check("fixture-area".equals(areaRow.getString("id")) && "Reference Area".equals(areaRow.getString("admAreaName")), "area Bean field projection");
+        check(!areaRow.containsKey("createdByOrgId") && !areaRow.containsKey("createdTime"), "area null Bean fields omitted");
+        check(areaRow.getJSONObject("ext$") != null && "1".equals(areaRow.getJSONObject("ext$").get("rn_")), "area extension row number is a string");
+        check("number".equals(areaPage.getJSONObject("columnTypeMap").getString("rn_")), "area retains original mapper row-number metadata");
+
         for (String resource : Arrays.asList("adm-areas", "quotation/addprices", "quotation/detectionfactors", "quotation/discounts", "quotation/quotationinformations")) {
             for (String alias : Arrays.asList("/queries", "/queries/raw", "/queries/searchable")) {
                 Fixture fixture = new Fixture();
                 fixture.call(PREFIX + resource + alias, "{\"p\":{\"f\":{\"id_SEQ\":\"-987654321\"},\"o\":[{\"id\":\"asc\"}],\"n\":2,\"s\":2}}");
                 check(fixture.sql.get(0).contains("T.ID = ?"), "every alias applies filter to count");
                 check(fixture.sql.get(1).contains("T.ID = ?") && fixture.sql.get(1).contains("ORDER BY Q.ID ASC"), "every alias applies filter and order to rows");
-                List<Object> expected = new ArrayList<Object>(resource.contains("detectionfactors") ? Arrays.<Object>asList("org-a", "org-child") : Arrays.<Object>asList("org-a"));
+                List<Object> expected = new ArrayList<Object>("adm-areas".equals(resource) ? Collections.<Object>emptyList() : resource.contains("detectionfactors") ? Arrays.<Object>asList("org-a", "org-child") : Arrays.<Object>asList("org-a"));
                 expected.add("-987654321");
                 check(fixture.values.get(0).equals(expected), "count filter bound after trusted organization");
                 expected.add(2L); expected.add(4L);
@@ -84,11 +96,13 @@ public final class AdmQuotationQueryServiceContractTest {
             try { fixture.call(DETECTION, invalid); throw new AssertionError("invalid query accepted"); }
             catch (IllegalArgumentException expected) { check(fixture.sql.isEmpty(), "invalid query rejected before SQL"); }
         }
-        try {
-            Fixture fixture = new Fixture();
-            fixture.service().query(DETECTION, null, fixture.scope, QueryRequest.parse("{}", null));
-            throw new AssertionError("anonymous query accepted");
-        } catch (AccessDeniedException expected) { check(true, "anonymous denied"); }
+        for (String path : Arrays.asList(DETECTION, PREFIX + "adm-areas/queries")) {
+            try {
+                Fixture fixture = new Fixture();
+                fixture.service().query(path, null, fixture.scope, QueryRequest.parse("{}", null));
+                throw new AssertionError("anonymous query accepted");
+            } catch (AccessDeniedException expected) { check(true, "anonymous denied for scoped business and shared reference data"); }
+        }
         Fixture highPage = new Fixture();
         highPage.call(DETECTION, "{\"p\":{\"n\":2147483647,\"s\":500}}");
         check(highPage.values.get(1).contains(1073741823500L), "pagination cannot overflow 32-bit range");
@@ -100,6 +114,7 @@ public final class AdmQuotationQueryServiceContractTest {
     private static final class Fixture {
         final List<String> sql = new ArrayList<String>();
         final List<List<Object>> values = new ArrayList<List<Object>>();
+        boolean areaRows;
         Set<String> scope = new LinkedHashSet<String>(Arrays.asList("org-a", "org-child"));
         AdmQuotationQueryService service() {
             DataSource source = (DataSource) Proxy.newProxyInstance(getClass().getClassLoader(), new Class<?>[]{DataSource.class}, (p, m, a) -> {
@@ -129,13 +144,14 @@ public final class AdmQuotationQueryServiceContractTest {
         ResultSet result(boolean count) throws Exception {
             CachedRowSet rows = RowSetProvider.newFactory().createCachedRowSet();
             RowSetMetaDataImpl metadata = new RowSetMetaDataImpl();
-            String[] labels = count ? new String[]{"TOTAL"} : new String[]{"ID", "CREATEDTIME", "METHODNAMEE", "REMARK", "TESTNAME", "RN_"};
-            int[] types = count ? new int[]{Types.NUMERIC} : new int[]{Types.NUMERIC, Types.TIMESTAMP, Types.VARCHAR, Types.CLOB, Types.VARCHAR, Types.NUMERIC};
+            String[] labels = count ? new String[]{"TOTAL"} : areaRows ? new String[]{"ID", "ADMAREANAME", "PARENTID", "ORDERNO", "CREATEDTIME", "CREATEDBYORGID", "RN_"} : new String[]{"ID", "CREATEDTIME", "METHODNAMEE", "REMARK", "TESTNAME", "RN_"};
+            int[] types = count ? new int[]{Types.NUMERIC} : areaRows ? new int[]{Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.NUMERIC, Types.TIMESTAMP, Types.VARCHAR, Types.NUMERIC} : new int[]{Types.NUMERIC, Types.TIMESTAMP, Types.VARCHAR, Types.CLOB, Types.VARCHAR, Types.NUMERIC};
             metadata.setColumnCount(labels.length);
             for (int i = 0; i < labels.length; i++) { metadata.setColumnName(i + 1, labels[i]); metadata.setColumnLabel(i + 1, labels[i]); metadata.setColumnType(i + 1, types[i]); }
             rows.setMetaData(metadata);
             rows.moveToInsertRow();
             if (count) rows.updateLong(1, 3);
+            else if (areaRows) { rows.updateString(1, "fixture-area"); rows.updateString(2, "Reference Area"); rows.updateString(3, "-1"); rows.updateLong(4, 1); rows.updateNull(5); rows.updateNull(6); rows.updateLong(7, 1); }
             else { rows.updateLong(1, 7); rows.updateTimestamp(2, Timestamp.valueOf("2026-11-03 12:34:56")); rows.updateString(3, "joined method"); rows.updateObject(4, new SerialClob("large remark".toCharArray())); rows.updateNull(5); rows.updateLong(6, 2); }
             rows.insertRow(); rows.moveToCurrentRow(); rows.beforeFirst();
             return rows;

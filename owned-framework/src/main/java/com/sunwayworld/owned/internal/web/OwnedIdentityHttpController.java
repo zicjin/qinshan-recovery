@@ -44,25 +44,9 @@ public final class OwnedIdentityHttpController {
         try {
             decoded = decoder.decode(userId, encoded, transportKey);
             OwnedLoginRequest login = new OwnedLoginRequest(userId, decoded, orgId, roleId, tenantId, loginType);
-            com.sunwayworld.owned.internal.security.OwnedPrincipal principal =
-                    OwnedPrincipalSession.login(boundary, request, login);
-            // The original Gikam workspace consumes the complete login-user
-            // projection immediately after authentication. Returning only the
-            // three identity fields leaves IndexPage.viewModelLoaded=false and
-            // produces a blank page even though the session is valid.
-            String user = "\"id\":" + quote(principal.getId())
-                    + ",\"userNo\":" + quote(principal.getId())
-                    + ",\"userName\":" + quote(principal.getId())
-                    + ",\"userType\":\"normal\",\"isAdmin\":false,\"roles\":[]"
-                    + ",\"orgId\":" + quote(principal.getOrgId())
-                    + ",\"orgName\":" + quote(principal.getOrgName())
-                    + ",\"ext$\":{\"loginorgid\":" + quote(principal.getOrgId())
-                    + ",\"loginorgname\":" + quote(principal.getOrgName()) + "}";
-            // The original Gikam login bundle stores the response object itself
-            // as loginUser. Keep the successful wire shape as the user object;
-            // the nested diagnostic identity is available from the session and
-            // error contracts do not depend on a success wrapper.
-            return json(HttpStatus.OK, "{" + user + "}");
+            OwnedPrincipalSession.login(boundary, request, login);
+            return json(HttpStatus.OK, com.alibaba.fastjson.JSON.toJSONString(
+                    boundary.account(request.getSession(false))));
         } catch (IllegalArgumentException failure) {
             return response(HttpStatus.BAD_REQUEST, "GIKAM.SECURITY.LOGIN.INVALID_REQUEST");
         } catch (org.springframework.security.authentication.BadCredentialsException failure) {
@@ -94,18 +78,7 @@ public final class OwnedIdentityHttpController {
     public ResponseEntity<String> account(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         try {
-            com.sunwayworld.owned.internal.security.OwnedPrincipal principal =
-                    boundary.currentPrincipal(session);
-            String user = "\"id\":" + quote(principal.getId())
-                    + ",\"userNo\":" + quote(principal.getId())
-                    + ",\"userName\":" + quote(principal.getId())
-                    + ",\"userType\":\"normal\",\"isAdmin\":false,\"roles\":[]"
-                    + ",\"orgId\":" + quote(principal.getOrgId())
-                    + ",\"orgName\":" + quote(principal.getOrgName())
-                    + ",\"ext$\":{\"loginorgid\":" + quote(principal.getOrgId())
-                    + ",\"loginorgname\":" + quote(principal.getOrgName())
-                    + ",\"roles\":\"[]\",\"avatarurl\":\"\"}";
-            return json(HttpStatus.OK, "{" + user + "}");
+            return json(HttpStatus.OK, com.alibaba.fastjson.JSON.toJSONString(boundary.account(session)));
         } catch (org.springframework.security.access.AccessDeniedException failure) {
             return response(HttpStatus.UNAUTHORIZED, failure.getMessage());
         } catch (SQLException failure) {
@@ -116,11 +89,6 @@ public final class OwnedIdentityHttpController {
     private static ResponseEntity<String> response(HttpStatus status, String message) {
         String value = message == null ? "GIKAM.PERMISSION.UNAUTHORIZED" : message;
         return json(status, "{\"message\":\"" + value.replace("\\", "\\\\").replace("\"", "\\\"") + "\"}");
-    }
-    private static String quote(String value) {
-        if (value == null) return "null";
-        return "\"" + value.replace("\\", "\\\\").replace("\"", "\\\"")
-                .replace("\r", "\\r").replace("\n", "\\n") + "\"";
     }
     private static ResponseEntity<String> json(HttpStatus status, String body) {
         return ResponseEntity.status(status).header("Content-Type", MediaType.APPLICATION_JSON_VALUE).body(body);

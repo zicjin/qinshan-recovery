@@ -124,6 +124,13 @@ public final class JdbcPersonnelIdentity {
         }
     }
 
+    /** Account reads use the same revalidation as protected API requests. */
+    public java.util.Map<String, Object> accountProfile(Principal principal) throws SQLException {
+        Principal current = refreshPrincipal(principal);
+        return new com.sunwayworld.owned.internal.data.AccountQueryService(
+                new com.sunwayworld.owned.internal.data.AccountQueryDao(dataSource)).load(current.id);
+    }
+
     /** Re-read current account and grants; a cached principal never freezes revoked permission. */
     public void authorizePersonnel(Principal principal) throws SQLException {
         requireIssued(principal);

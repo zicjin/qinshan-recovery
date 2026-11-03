@@ -48,6 +48,10 @@ public final class JdbcPersonnelIdentityProvider implements OwnedIdentityProvide
         return delegate.permittedOrganizationIds(delegatePrincipal(principal));
     }
 
+    @Override public java.util.Map<String, Object> accountProfile(OwnedPrincipal principal) throws SQLException {
+        return delegate.accountProfile(delegatePrincipal(principal));
+    }
+
     private OwnedPrincipal issued(Principal principal) {
         return OwnedPrincipal.issued(principal.getId(), principal.getOrgId(), principal.getOrgName(),
                 new Handle(issuer, principal));

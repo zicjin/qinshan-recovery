@@ -98,7 +98,10 @@ public final class AdmQuotationQueryDao {
     public String readPage(Resource resource, Set<String> organizations, QueryRequest request) throws SQLException {
         List<Object> values = new ArrayList<Object>();
         StringBuilder where = new StringBuilder(" WHERE ");
-        if (organizations.isEmpty()) where.append("1=0");
+        // The administrative-area Mapper has only explicit caller filters. Do
+        // not reuse quotation creator-org isolation for this shared dictionary.
+        if (resource == Resource.AREA) where.append("1=1");
+        else if (organizations.isEmpty()) where.append("1=0");
         else {
             where.append(resource == Resource.DETECTION_FACTOR ? "T.ORGID IN (" : "T.CREATEDBYORGID IN (");
             placeholders(where, organizations.size());
@@ -128,10 +131,11 @@ public final class AdmQuotationQueryDao {
                     ResultSetMetaData metadata = result.getMetaData();
                     for (int i = 1; i <= metadata.getColumnCount(); i++) {
                         String label = metadata.getColumnLabel(i);
-                        if (!"RN_".equalsIgnoreCase(label)) types.put(label.toLowerCase(Locale.ROOT), type(metadata.getColumnType(i)));
+                        if (resource == Resource.AREA || !"RN_".equalsIgnoreCase(label)) types.put(label.toLowerCase(Locale.ROOT), type(metadata.getColumnType(i)));
                     }
                     while (result.next()) rows.add(resource == Resource.DETECTION_FACTOR
-                            ? detectionFactorRow(result, metadata) : row(resource, result, metadata));
+                            ? detectionFactorRow(result, metadata) : resource == Resource.AREA
+                            ? areaRow(result, metadata) : row(resource, result, metadata));
                 }
             }
         }
@@ -261,6 +265,23 @@ public final class AdmQuotationQueryDao {
             String field = resource.fields.get(label.toUpperCase(Locale.ROOT));
             row.put(field == null ? label.toLowerCase(Locale.ROOT) : field, JdbcValue.normalize(result.getObject(i)));
         }
+        return row;
+    }
+
+    /** Original AdmArea Bean omits null fields and carries mapper extras in ext$. */
+    private static Map<String, Object> areaRow(ResultSet result, ResultSetMetaData metadata) throws SQLException {
+        Map<String, Object> row = new LinkedHashMap<String, Object>();
+        Map<String, Object> extension = new LinkedHashMap<String, Object>();
+        for (int i = 1; i <= metadata.getColumnCount(); i++) {
+            String label = metadata.getColumnLabel(i);
+            Object value = JdbcValue.normalize(result.getObject(i));
+            if (value == null) continue;
+            String field = Resource.AREA.fields.get(label.toUpperCase(Locale.ROOT));
+            if ("RN_".equalsIgnoreCase(label)) extension.put("rn_", String.valueOf(value));
+            else if (field == null) extension.put(label.toLowerCase(Locale.ROOT), value);
+            else row.put(field, detectionFactorValue(value, metadata.getColumnType(i)));
+        }
+        row.put("ext$", extension);
         return row;
     }
     private static Map<String, Object> detectionFactorRow(ResultSet result, ResultSetMetaData metadata) throws SQLException {

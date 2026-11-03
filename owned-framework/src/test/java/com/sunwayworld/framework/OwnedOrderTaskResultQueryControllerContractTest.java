@@ -20,6 +20,7 @@ public final class OwnedOrderTaskResultQueryControllerContractTest {
         require(paths, PREFIX + "/queries");
         require(paths, PREFIX + "/queries/raw");
         require(paths, PREFIX + "/queries/searchable");
+        PathCheck.requireInvalidPageContract();
         requireProfile("/queries", 140);
         requireProfile("/queries/raw", 140);
         requireProfile("/queries/searchable", 140);
@@ -83,6 +84,15 @@ public final class OwnedOrderTaskResultQueryControllerContractTest {
     }
 
     private static final class PathCheck {
+        static void requireInvalidPageContract() {
+            try {
+                java.nio.file.Path path = java.nio.file.Paths.get("owned-framework/src/main/java/com/sunwayworld/owned/internal/web/OwnedOrderTaskResultQueryController.java");
+                String source = new String(java.nio.file.Files.readAllBytes(path), "UTF-8");
+                for (String token : new String[]{"queryInvalid(request, response)", "GIKAM.EXCEPTION.UNEXPECTED", "positiveInt(p.get(\"n\")"}) {
+                    if (!source.contains(token)) throw new AssertionError("missing malformed-query error contract token: " + token);
+                }
+            } catch (java.io.IOException error) { throw new AssertionError("cannot inspect malformed-query source", error); }
+        }
         static void requireSource() {
             try {
                 java.nio.file.Path path = java.nio.file.Paths.get("owned-framework/src/main/java/com/sunwayworld/owned/internal/web/OwnedOrderTaskResultQueryController.java");

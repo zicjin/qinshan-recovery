@@ -75,13 +75,13 @@ public final class OwnedOrderTaskResultQueryController {
     @PostMapping(path = {
             PREFIX + "/queries", PREFIX + "/queries/raw", PREFIX + "/queries/searchable"
             }, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> query(HttpServletRequest request,
+    public ResponseEntity<String> query(HttpServletRequest request, HttpServletResponse response,
             @RequestBody(required = false) String body) {
         try {
             OwnedPrincipal principal = requireRead(request);
             return ok(selectPage(principal.getOrgId(), Page.parse(body), request.getRequestURI()));
         } catch (AccessDeniedException denied) { return forbidden(); }
-        catch (IllegalArgumentException invalid) { return badRequest(); }
+        catch (IllegalArgumentException invalid) { return queryInvalid(request, response); }
         catch (SQLException failure) { return unavailable(); }
     }
 
@@ -751,6 +751,9 @@ public final class OwnedOrderTaskResultQueryController {
     private static ResponseEntity<String> ok(String body) { return ResponseEntity.ok().header("Cache-Control", "no-store").body(body); }
     private static ResponseEntity<String> forbidden() { return ResponseEntity.status(HttpStatus.FORBIDDEN).body("{\"message\":\"GIKAM.PERMISSION.UNAUTHORIZED\"}"); }
     private static ResponseEntity<String> badRequest() { return ResponseEntity.badRequest().body("{\"message\":\"GIKAM.ORDER_TASK_RESULT.INVALID_QUERY\"}"); }
+    private static ResponseEntity<String> queryInvalid(HttpServletRequest request, HttpServletResponse response) {
+        return writeRawError(response, "GIKAM.EXCEPTION.UNEXPECTED", request == null ? "" : request.getRequestURI());
+    }
     private static ResponseEntity<String> unavailable() { return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"message\":\"GIKAM.ORDER_TASK_RESULT.UNAVAILABLE\"}"); }
     private static ResponseEntity<String> unexpected(HttpServletResponse response, String path) {
         String safePath = path == null ? "" : path.replace("\\", "\\\\").replace("\"", "\\\"");
@@ -782,9 +785,19 @@ public final class OwnedOrderTaskResultQueryController {
         static Page parse(String body) {
             JSONObject root = body == null || body.trim().isEmpty() ? new JSONObject() : JSON.parseObject(body);
             JSONObject p = root == null ? null : root.getJSONObject("p");
-            int number = p == null ? 1 : Math.max(1, p.getIntValue("n"));
-            int size = p == null ? 50 : Math.min(500, Math.max(1, p.getIntValue("s")));
+            int number = p == null ? 1 : positiveInt(p.get("n"), "n");
+            int size = p == null ? 50 : Math.min(500, positiveInt(p.get("s"), "s"));
             return new Page(number, size);
+        }
+        private static int positiveInt(Object value, String name) {
+            if (value == null) return "n".equals(name) ? 1 : 50;
+            try {
+                int parsed = Integer.parseInt(String.valueOf(value));
+                if (parsed < 1) throw new IllegalArgumentException("invalid " + name);
+                return parsed;
+            } catch (NumberFormatException error) {
+                throw new IllegalArgumentException("invalid " + name, error);
+            }
         }
         int start() { return (number - 1) * size; }
         int end() { return number * size; }

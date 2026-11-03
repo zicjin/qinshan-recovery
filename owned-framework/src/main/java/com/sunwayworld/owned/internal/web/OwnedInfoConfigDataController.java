@@ -196,7 +196,9 @@ public final class OwnedInfoConfigDataController {
         String body = "{\"error\":\"Internal Server Error\",\"message\":\"GIKAM.EXCEPTION.UNEXPECTED\",\"path\":\""
                 + safePath + "\",\"stacktrace\":\"owned-info-query-malformed\",\"status\":500,\"timestamp\":\""
                 + new java.util.Date().toString() + "\"}";
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).contentType(MediaType.APPLICATION_JSON).body(body);
+        // The supplier's framework error writer does not set a JSON content
+        // type for this unexpected 500 envelope. Preserve that wire contract.
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(body);
     }
 
     private static final class MalformedInfoQueryException extends IllegalArgumentException {

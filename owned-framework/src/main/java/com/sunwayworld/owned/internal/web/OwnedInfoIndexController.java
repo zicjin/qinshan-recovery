@@ -156,7 +156,9 @@ public final class OwnedInfoIndexController {
         String body = "{\"error\":\"Internal Server Error\",\"message\":\"GIKAM.EXCEPTION.UNEXPECTED\",\"path\":\""
                 + safePath + "\",\"stacktrace\":\"owned-info-index-malformed-query\",\"status\":500,\"timestamp\":\""
                 + new java.util.Date().toString() + "\"}";
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).contentType(MediaType.APPLICATION_JSON).body(body);
+        // The supplier's framework error writer leaves the content type empty
+        // for this malformed-query 500 response.
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(body);
     }
 
     private static final class MalformedInfoIndexQueryException extends IllegalArgumentException {

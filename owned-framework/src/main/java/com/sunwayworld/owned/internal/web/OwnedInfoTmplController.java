@@ -12,12 +12,14 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.http.HttpStatus;
@@ -46,23 +48,29 @@ public final class OwnedInfoTmplController {
 
     @PostMapping(path = {PREFIX + "/queries", PREFIX + "/queries/raw", PREFIX + "/queries/searchable"},
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> templateQuery(HttpServletRequest request, @RequestBody(required = false) String body) {
+    public ResponseEntity<String> templateQuery(HttpServletRequest request, HttpServletResponse response,
+            @RequestBody(required = false) String body) {
         try {
             OwnedPrincipal principal = require(request);
-            return ok(selectPage("SELECT T.* FROM (SELECT TMPL.*, ORG.ORGNAME USEDORGNAME, CAST(NULL AS NUMBER) EXCELID, CAST(NULL AS VARCHAR2(4000)) EXCELNAME, '' POINT FROM T_EMC_INFO_TMPL TMPL LEFT JOIN T_CORE_ORG ORG ON ORG.ID=TMPL.USEDORGID) T WHERE T.CREATEDBYORGID=?", "Q.ID DESC", principal.getOrgId(), new ArrayList<String>(), Page.parse(body)));
+            Page page;
+            try { page = Page.parse(body); }
+            catch (IllegalArgumentException invalid) { throw new MalformedInfoTmplQueryException(invalid); }
+            return ok(selectPage("SELECT T.* FROM (SELECT TMPL.*, ORG.ORGNAME USEDORGNAME, CAST(NULL AS NUMBER) EXCELID, CAST(NULL AS VARCHAR2(4000)) EXCELNAME, '' POINT FROM T_EMC_INFO_TMPL TMPL LEFT JOIN T_CORE_ORG ORG ON ORG.ID=TMPL.USEDORGID) T WHERE T.CREATEDBYORGID=?", "Q.ID DESC", principal.getOrgId(), new ArrayList<String>(), page));
         } catch (AccessDeniedException denied) { return forbidden(); }
+        catch (MalformedInfoTmplQueryException malformed) { return unexpected(response, request.getRequestURI()); }
         catch (IllegalArgumentException invalid) { return badRequest(); }
         catch (SQLException failure) { return unavailable(); }
     }
 
     @PostMapping(path = PREFIX + "/{tmplId}/fields/queries", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> fieldsByTemplate(HttpServletRequest request, @PathVariable("tmplId") String tmplId, @RequestBody(required = false) String body) {
-        return fields(request, tmplId, body);
+    public ResponseEntity<String> fieldsByTemplate(HttpServletRequest request, HttpServletResponse response,
+            @PathVariable("tmplId") String tmplId, @RequestBody(required = false) String body) {
+        return fields(request, response, tmplId, body);
     }
 
     @GetMapping(path = PREFIX + "/fields/queries/raw", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> fieldsRaw(HttpServletRequest request) {
-        return fields(request, null, null);
+    public ResponseEntity<String> fieldsRaw(HttpServletRequest request, HttpServletResponse response) {
+        return fields(request, response, null, null);
     }
 
     @GetMapping(path = PREFIX + "/fields/queries/selectable", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -76,7 +84,8 @@ public final class OwnedInfoTmplController {
     }
 
     @PostMapping(path = PREFIX + "/items/queries", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> items(HttpServletRequest request, @RequestBody(required = false) String body) {
+    public ResponseEntity<String> items(HttpServletRequest request, HttpServletResponse response,
+            @RequestBody(required = false) String body) {
         try {
             OwnedPrincipal principal = require(request);
             JSONObject root = object(body);
@@ -86,20 +95,27 @@ public final class OwnedInfoTmplController {
             if (tmplId != null) { extra = " AND T.TMPLID=?"; values.add(tmplId); }
             String fieldId = text(root, "infoTmplFieldId");
             if (fieldId != null) { extra += " AND T.INFOTMPLFIELDID=?"; values.add(fieldId); }
-            return ok(selectPage("SELECT T.* FROM T_EMC_TMPL_FIELD_ITEM T WHERE T.CREATEDBYORGID=?" + extra, "Q.ID DESC", principal.getOrgId(), values, Page.parse(body)));
+            Page page;
+            try { page = Page.parse(body); }
+            catch (IllegalArgumentException invalid) { throw new MalformedInfoTmplQueryException(invalid); }
+            return ok(selectPage("SELECT T.* FROM T_EMC_TMPL_FIELD_ITEM T WHERE T.CREATEDBYORGID=?" + extra, "Q.ID DESC", principal.getOrgId(), values, page));
         } catch (AccessDeniedException denied) { return forbidden(); }
+        catch (MalformedInfoTmplQueryException malformed) { return unexpected(response, request.getRequestURI()); }
         catch (IllegalArgumentException invalid) { return badRequest(); }
         catch (SQLException failure) { return unavailable(); }
     }
 
     @PostMapping(path = PREFIX + "/{tmplId}/points/queries", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> pointsByTemplate(HttpServletRequest request, @PathVariable("tmplId") String tmplId, @RequestBody(required = false) String body) {
-        return points(request, tmplId, body);
+    public ResponseEntity<String> pointsByTemplate(HttpServletRequest request, HttpServletResponse response,
+            @PathVariable("tmplId") String tmplId, @RequestBody(required = false) String body) {
+        return points(request, response, tmplId, body);
     }
 
     @PostMapping(path = PREFIX + "/points/queries", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> points(HttpServletRequest request, @RequestBody(required = false) String body) {
-        return points(request, text(object(body), "tmplId"), body);
+    public ResponseEntity<String> points(HttpServletRequest request, HttpServletResponse response,
+            @RequestBody(required = false) String body) {
+        try { return points(request, response, text(object(body), "tmplId"), body); }
+        catch (IllegalArgumentException invalid) { return unexpected(response, request.getRequestURI()); }
     }
 
     @GetMapping(path = PREFIX + "/info/status", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -109,26 +125,34 @@ public final class OwnedInfoTmplController {
         catch (SQLException failure) { return unavailable(); }
     }
 
-    private ResponseEntity<String> fields(HttpServletRequest request, String tmplId, String body) {
+    private ResponseEntity<String> fields(HttpServletRequest request, HttpServletResponse response, String tmplId, String body) {
         try {
             OwnedPrincipal principal = require(request);
             List<String> values = new ArrayList<String>();
             String extra = "";
             if (tmplId != null) { extra = " AND T.INFOTMPLID=?"; values.add(tmplId); }
-            return ok(selectPage("SELECT T.*, B.ITEMID FROM T_EMC_INFO_TMPL_FIELD T LEFT JOIN T_EMC_TMPL_FIELD_ITEM B ON T.ID=B.INFOTMPLFIELDID WHERE T.CREATEDBYORGID=?" + extra, "Q.ID", principal.getOrgId(), values, Page.parse(body)));
+            Page page;
+            try { page = Page.parse(body); }
+            catch (IllegalArgumentException invalid) { throw new MalformedInfoTmplQueryException(invalid); }
+            return ok(selectPage("SELECT T.*, B.ITEMID FROM T_EMC_INFO_TMPL_FIELD T LEFT JOIN T_EMC_TMPL_FIELD_ITEM B ON T.ID=B.INFOTMPLFIELDID WHERE T.CREATEDBYORGID=?" + extra, "Q.ID", principal.getOrgId(), values, page));
         } catch (AccessDeniedException denied) { return forbidden(); }
+        catch (MalformedInfoTmplQueryException malformed) { return unexpected(response, request.getRequestURI()); }
         catch (IllegalArgumentException invalid) { return badRequest(); }
         catch (SQLException failure) { return unavailable(); }
     }
 
-    private ResponseEntity<String> points(HttpServletRequest request, String tmplId, String body) {
+    private ResponseEntity<String> points(HttpServletRequest request, HttpServletResponse response, String tmplId, String body) {
         try {
             OwnedPrincipal principal = require(request);
             List<String> values = new ArrayList<String>();
             String extra = "";
             if (tmplId != null) { extra = " AND T.INFOTMPLID=?"; values.add(tmplId); }
-            return ok(selectPage("SELECT T.*, MONITOR_POINT.MONITORPOINTNO, MONITOR_POINT.MONITORPOINTNAME FROM T_EMC_INFO_TMPL_POINT T LEFT JOIN T_EMC_MONITOR_POINT MONITOR_POINT ON MONITOR_POINT.ID=T.MONITORPOINTID LEFT JOIN T_EMC_INFO_TMPL TMPL ON TMPL.ID=T.INFOTMPLID WHERE TMPL.CREATEDBYORGID=?" + extra, "Q.ID", principal.getOrgId(), values, Page.parse(body)));
+            Page page;
+            try { page = Page.parse(body); }
+            catch (IllegalArgumentException invalid) { throw new MalformedInfoTmplQueryException(invalid); }
+            return ok(selectPage("SELECT T.*, MONITOR_POINT.MONITORPOINTNO, MONITOR_POINT.MONITORPOINTNAME FROM T_EMC_INFO_TMPL_POINT T LEFT JOIN T_EMC_MONITOR_POINT MONITOR_POINT ON MONITOR_POINT.ID=T.MONITORPOINTID LEFT JOIN T_EMC_INFO_TMPL TMPL ON TMPL.ID=T.INFOTMPLID WHERE TMPL.CREATEDBYORGID=?" + extra, "Q.ID", principal.getOrgId(), values, page));
         } catch (AccessDeniedException denied) { return forbidden(); }
+        catch (MalformedInfoTmplQueryException malformed) { return unexpected(response, request.getRequestURI()); }
         catch (IllegalArgumentException invalid) { return badRequest(); }
         catch (SQLException failure) { return unavailable(); }
     }
@@ -184,6 +208,24 @@ public final class OwnedInfoTmplController {
     private static ResponseEntity<String> forbidden() { return ResponseEntity.status(HttpStatus.FORBIDDEN).contentType(MediaType.APPLICATION_JSON).body("{\"message\":\"GIKAM.PERMISSION.FORBIDDEN\"}"); }
     private static ResponseEntity<String> badRequest() { return ResponseEntity.badRequest().contentType(MediaType.APPLICATION_JSON).body("{\"message\":\"GIKAM.REQUEST.INVALID\"}"); }
     private static ResponseEntity<String> unavailable() { return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).contentType(MediaType.APPLICATION_JSON).body("{\"message\":\"GIKAM.DATA.UNAVAILABLE\"}"); }
+    private static ResponseEntity<String> unexpected(HttpServletResponse response, String path) {
+        if (response != null) {
+            try {
+                response.resetBuffer(); response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+                response.getWriter().write(unexpectedBody(path)); response.getWriter().flush(); return null;
+            } catch (IOException ignored) { }
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(unexpectedBody(path));
+    }
+    private static String unexpectedBody(String path) {
+        String safePath = path == null ? "" : path.replace("\\", "\\\\").replace("\"", "\\\"");
+        return "{\"error\":\"Internal Server Error\",\"message\":\"GIKAM.EXCEPTION.UNEXPECTED\",\"path\":\""
+                + safePath + "\",\"stacktrace\":\"owned-info-tmpl-malformed-query\",\"status\":500,\"timestamp\":\""
+                + new java.util.Date().toString() + "\"}";
+    }
+    private static final class MalformedInfoTmplQueryException extends IllegalArgumentException {
+        MalformedInfoTmplQueryException(Throwable cause) { super("malformed info-template query", cause); }
+    }
 
     private static final class Page { final int number, size; Page(int number, int size) { this.number = number; this.size = size; } static Page parse(String body) { JSONObject root = body == null || body.trim().isEmpty() ? new JSONObject() : JSON.parseObject(body); JSONObject p = root == null ? null : root.getJSONObject("p"); int number = p == null ? 1 : Math.max(1, p.getIntValue("n")); int size = p == null ? 50 : Math.min(500, Math.max(1, p.getIntValue("s"))); return new Page(number, size); } int start() { return (number - 1) * size; } int end() { return number * size; } }
 }

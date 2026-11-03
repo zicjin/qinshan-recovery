@@ -26,6 +26,16 @@ public final class OwnedInfoTmplControllerContractTest {
         require(paths, "/secure/emc/module/bp/info/info-tmpls/items/queries");
         require(paths, "/secure/emc/module/bp/info/info-tmpls/{tmplId}/points/queries");
         require(paths, "/secure/emc/module/bp/info/info-tmpls/points/queries");
+        try {
+            Method body = OwnedInfoTmplController.class.getDeclaredMethod("unexpectedBody", String.class);
+            body.setAccessible(true);
+            String value = String.valueOf(body.invoke(null, "/secure/emc/module/bp/info/info-tmpls/queries"));
+            for (String key : new String[]{"\"error\"", "\"message\"", "\"path\"", "\"stacktrace\"", "\"status\":500", "\"timestamp\""}) {
+                if (!value.contains(key)) throw new AssertionError("info-template malformed response missing " + key);
+            }
+        } catch (ReflectiveOperationException error) {
+            throw new AssertionError("info-template malformed response helper is missing", error);
+        }
         System.out.println("owned info-template read contract checks passed");
     }
     private static void require(Set<String> paths, String path) { if (!paths.contains(path)) throw new AssertionError("missing info-template route: " + path); }

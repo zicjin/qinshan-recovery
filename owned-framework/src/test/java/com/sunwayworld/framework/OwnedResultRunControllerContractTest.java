@@ -36,8 +36,12 @@ public final class OwnedResultRunControllerContractTest {
         require(paths, "/secure/emc/module/bp/result/runs/analysis-pretrial/queries");
         require(paths, "/secure/emc/module/bp/result/runs/queries/run-result");
         require(paths, "/secure/emc/module/bp/result/runs/browse-record/queries");
+        require(paths, "/secure/emc/module/bp/result/runs/run-audit-file/queries");
         require(paths, "/secure/emc/module/bp/result/runs/edited-items/queries");
         require(paths, "/secure/emc/module/bp/result/runs/unique-order-item-group/queries");
+        require(paths, "/secure/core/module/bp/result/runs/queries");
+        require(paths, "/secure/emc/module/bp/result/runs/select-item/{id}");
+        require(paths, "/secure/emc/module/bp/sample/samples/select-item/{id}");
         require(paths, "/secure/emc/module/bp/result/runs/info/status");
         require(paths, "/secure/emc/module/bp/result/runs/{id}/info/status");
         Field field = OwnedResultRunController.class.getDeclaredField("QC_RELATED_ORDER_TYPE_PROFILE");
@@ -63,7 +67,7 @@ public final class OwnedResultRunControllerContractTest {
             Path path = Paths.get("owned-framework/src/main/java/com/sunwayworld/owned/internal/web/OwnedResultRunController.java");
             if (!Files.exists(path)) path = Paths.get("src/main/java/com/sunwayworld/owned/internal/web/OwnedResultRunController.java");
             String source = new String(Files.readAllBytes(path), "UTF-8");
-        for (String token : new String[]{"T_EMC_QC_RELATED_ORDER", "A.CREATEDBYORGID=?", "T_EMC_ORDER_TASK", "A.ANALYSISORGID=?", "STATUS IN ('audit','qcAudit')", "T_CORE_FILE", "readBrowseRecord", "readAnalysisPretrial", "readRunResult", "readUniqueOrderItemGroups", "readEditedItems", "readSampleItems", "selectItem", "selectSampleItem", "/secure/emc/module/bp/sample/samples/select-item/{id}", "/select-item/{id}", "T_EMC_CAPACITY_ITEM_GROUP", "T_EMC_GROUP_ITEM", "T_EMC_TEST_METHOD", "T_EMC_STANDARD_SET", "ITEM_TESTNAME", "ITEM_METHODNAME", "ITEM_SETNAME", "SELECTED_FLAG", "THEN '1' ELSE NULL", "ROW_NUMBER() OVER", "PAGE_RN_", "relatedOrderId", "testId", "totalPages"}) {
+        for (String token : new String[]{"T_EMC_QC_RELATED_ORDER", "A.CREATEDBYORGID=?", "T_EMC_ORDER_TASK", "A.ANALYSISORGID=?", "STATUS IN ('audit','qcAudit')", "T_CORE_FILE", "readBrowseRecord", "readAnalysisPretrial", "readRunResult", "readUniqueOrderItemGroups", "readEditedItems", "readSampleItems", "selectItem", "selectSampleItem", "/secure/emc/module/bp/sample/samples/select-item/{id}", "/select-item/{id}", "T_EMC_CAPACITY_ITEM_GROUP", "T_EMC_GROUP_ITEM", "T_EMC_TEST_METHOD", "T_EMC_STANDARD_SET", "ITEM_TESTNAME", "ITEM_METHODNAME", "ITEM_SETNAME", "SELECTED_FLAG", "THEN '1' ELSE NULL", "ROW_NUMBER() OVER", "PAGE_RN_", "relatedOrderId", "testId", "totalPages", "selectedIds", "emptyBody(response)"}) {
                 if (!source.contains(token)) throw new AssertionError("missing result-run contract token: " + token);
             }
         }

@@ -123,6 +123,12 @@ public final class OwnedResultRunController {
             if (uri.endsWith("/browse-record/queries")) return ok(JSON.toJSONString(readBrowseRecord(principal.getOrgId(), filter), SerializerFeature.WriteMapNullValue));
             if (uri.endsWith("/run-audit-file/queries")) return ok(JSON.toJSONString(readRunAuditFile(principal.getOrgId(), filter), SerializerFeature.WriteMapNullValue));
             if (uri.endsWith("/edited-items/queries")) {
+                // The inherited resource emits an empty 200 response until
+                // the selected order-task id_IN filter is supplied. Keep that
+                // observable boundary while valid id_IN requests use the
+                // real Oracle-backed projection below.
+                Object selectedIds = queryValue(filter, "id_IN");
+                if (selectedIds == null || text(selectedIds).length() == 0) return emptyBody(response);
                 return ok(page(readEditedItems(principal.getOrgId(), filter, pageRequest)));
             }
             if (uri.endsWith("/unique-order-item-group/queries")) return ok(page(readUniqueOrderItemGroups(principal.getOrgId(), filter, pageRequest)));
@@ -412,12 +418,16 @@ public final class OwnedResultRunController {
     }
 
     private Map<String, Object> readBrowseRecord(String organization, JSONObject filter) throws SQLException {
+        String runId = text(queryValue(filter, "runId"));
+        if (runId.length() == 0) {
+            Map<String, Object> empty = new LinkedHashMap<String, Object>();
+            empty.put("ext$", new LinkedHashMap<String, Object>());
+            return empty;
+        }
         Map<String, Object> body = new LinkedHashMap<String, Object>();
         body.put("analysisRecord", null);
         body.put("otherRecordList", new ArrayList<Map<String, Object>>());
         body.put("ext$", new LinkedHashMap<String, Object>());
-        String runId = text(queryValue(filter, "runId"));
-        if (runId.length() == 0) return body;
         if (!runId.matches("[A-Za-z0-9_-]+")) throw new IllegalArgumentException("run id is invalid");
         String sql = "SELECT F.* FROM T_CORE_FILE F WHERE F.TARGETID IN (?,?) ORDER BY F.ID";
         try (Connection connection = dataSource.getConnection()) {

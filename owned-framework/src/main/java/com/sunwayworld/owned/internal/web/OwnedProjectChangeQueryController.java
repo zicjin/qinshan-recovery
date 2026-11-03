@@ -11,12 +11,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.http.HttpStatus;
@@ -53,24 +55,33 @@ public final class OwnedProjectChangeQueryController {
             "/secure/emc/module/bp/edit/project-change/proj-schemes/queries/raw",
             "/secure/emc/module/bp/edit/project-change/proj-schemes/queries/searchable"},
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> query(HttpServletRequest request, @RequestBody(required = false) String body) {
+    public ResponseEntity<String> query(HttpServletRequest request, HttpServletResponse response,
+            @RequestBody(required = false) String body) {
         try {
             OwnedPrincipal principal = require(request);
             boolean scheme = request.getRequestURI().contains("/proj-schemes/");
-            return ok(selectPage(principal.getOrgId(), Query.parse(body), scheme, false));
+            Query query;
+            try { query = Query.parse(body); }
+            catch (IllegalArgumentException invalid) { throw new MalformedProjectChangeQueryException(invalid); }
+            return ok(selectPage(principal.getOrgId(), query, scheme, false));
         } catch (AccessDeniedException denied) { return forbidden(); }
+        catch (MalformedProjectChangeQueryException malformed) { return unexpected(response, request.getRequestURI()); }
         catch (IllegalArgumentException invalid) { return badRequest(); }
         catch (SQLException failure) { return unavailable(); }
     }
 
     @PostMapping(path = "/secure/emc/module/bp/edit/project-change/proj-schemes/proj-orders/queries",
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> projOrders(HttpServletRequest request,
+    public ResponseEntity<String> projOrders(HttpServletRequest request, HttpServletResponse response,
             @RequestBody(required = false) String body) {
         try {
             OwnedPrincipal principal = require(request);
-            return ok(selectPage(principal.getOrgId(), Query.parse(body), false, true));
+            Query query;
+            try { query = Query.parse(body); }
+            catch (IllegalArgumentException invalid) { throw new MalformedProjectChangeQueryException(invalid); }
+            return ok(selectPage(principal.getOrgId(), query, false, true));
         } catch (AccessDeniedException denied) { return forbidden(); }
+        catch (MalformedProjectChangeQueryException malformed) { return unexpected(response, request.getRequestURI()); }
         catch (IllegalArgumentException invalid) { return badRequest(); }
         catch (SQLException failure) { return unavailable(); }
     }
@@ -184,6 +195,27 @@ public final class OwnedProjectChangeQueryController {
     private static ResponseEntity<String> forbidden() { return ResponseEntity.status(HttpStatus.FORBIDDEN).body("{\"message\":\"GIKAM.PERMISSION.UNAUTHORIZED\"}"); }
     private static ResponseEntity<String> badRequest() { return ResponseEntity.badRequest().body("{\"message\":\"GIKAM.PROJECT_CHANGE.INVALID_QUERY\"}"); }
     private static ResponseEntity<String> unavailable() { return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"message\":\"GIKAM.PROJECT_CHANGE.UNAVAILABLE\"}"); }
+    private static ResponseEntity<String> unexpected(HttpServletResponse response, String path) {
+        if (response != null) {
+            try {
+                response.resetBuffer();
+                response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+                response.getWriter().write(unexpectedBody(path));
+                response.getWriter().flush();
+                return null;
+            } catch (IOException ignored) { /* fall through to a normal response */ }
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(unexpectedBody(path));
+    }
+    private static String unexpectedBody(String path) {
+        String safePath = path == null ? "" : path.replace("\\", "\\\\").replace("\"", "\\\"");
+        return "{\"error\":\"Internal Server Error\",\"message\":\"GIKAM.EXCEPTION.UNEXPECTED\",\"path\":\""
+                + safePath + "\",\"stacktrace\":\"owned-project-change-malformed-query\",\"status\":500,\"timestamp\":\""
+                + new java.util.Date().toString() + "\"}";
+    }
+    private static final class MalformedProjectChangeQueryException extends IllegalArgumentException {
+        MalformedProjectChangeQueryException(Throwable cause) { super("malformed project-change query", cause); }
+    }
 
     private static final class Query {
         final Page page;

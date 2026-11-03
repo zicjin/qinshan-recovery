@@ -33,6 +33,16 @@ public final class OwnedProjectChangeQueryControllerContractTest {
             if (method.getReturnType() == OwnedProjectChangeQueryController.class) registered = true;
         }
         if (!registered) throw new AssertionError("project-change query controller is not registered");
+        try {
+            Method body = OwnedProjectChangeQueryController.class.getDeclaredMethod("unexpectedBody", String.class);
+            body.setAccessible(true);
+            String value = String.valueOf(body.invoke(null, "/secure/emc/module/bp/edit/project-change/orders/queries"));
+            for (String key : new String[]{"\"error\"", "\"message\"", "\"path\"", "\"stacktrace\"", "\"status\":500", "\"timestamp\""}) {
+                if (!value.contains(key)) throw new AssertionError("project-change malformed response missing " + key);
+            }
+        } catch (ReflectiveOperationException error) {
+            throw new AssertionError("project-change malformed response helper is missing", error);
+        }
         if (!"T_EMC_ORDER_CHANGE".equals(OwnedProjectChangeQueryController.sourceTable(false)))
             throw new AssertionError("order-change route must use T_EMC_ORDER_CHANGE");
         if (!"T_EMC_PROJ_SCHEME_CHANGE".equals(OwnedProjectChangeQueryController.sourceTable(true)))

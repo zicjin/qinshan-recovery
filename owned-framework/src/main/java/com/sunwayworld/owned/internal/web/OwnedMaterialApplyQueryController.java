@@ -68,7 +68,7 @@ public final class OwnedMaterialApplyQueryController {
     @GetMapping(path = {"/secure/core/module/item/mtl-applies/info/status", "/secure/emc/module/item/mtl-applies/info/status"},
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> status(HttpServletRequest request) {
-        try { boundary.requirePermission(request.getSession(false), OwnedIdentityProvider.CONSUMABLE_READ); return ok("{\"ext$\":{}}"); }
+        try { boundary.requirePermission(request.getSession(false), OwnedIdentityProvider.CONSUMABLE_READ); return ok("{\"auditStatus\":{\"processStatus\":\"draft\",\"statusCode\":\"draft\"},\"ext$\":{}}"); }
         catch (AccessDeniedException denied) { return forbidden(); }
         catch (SQLException failure) { return unavailable(); }
     }
@@ -188,13 +188,13 @@ public final class OwnedMaterialApplyQueryController {
         Map<String, Object> value = new LinkedHashMap<String, Object>();
         for (int i = 1; i <= metadata.getColumnCount(); i++) { String label = metadata.getColumnLabel(i); if (!"RN".equalsIgnoreCase(label)) value.put(camel(label), JdbcValue.normalize(result.getObject(i))); }
         Map<String, Object> extension = new LinkedHashMap<String, Object>();
-        extension.put("mtlname", value.get("mtlName"));
-        extension.put("specification", value.get("specification"));
-        extension.put("mtlcategoryid", value.get("mtlCategoryId"));
-        extension.put("harmfulness", value.get("harmfulness"));
-        extension.put("batchno", value.get("batchNo"));
-        extension.put("stockqty", value.get("stockQty"));
-        extension.put("stdvalue", value.get("stdValue"));
+        extension.put("mtlname", value.remove("mtlName"));
+        extension.put("specification", value.remove("specification"));
+        extension.put("mtlcategoryid", value.remove("mtlCategoryId"));
+        extension.put("harmfulness", value.remove("harmfulness"));
+        extension.put("batchno", value.remove("batchNo"));
+        extension.put("stockqty", value.remove("stockQty"));
+        extension.put("stdvalue", value.remove("stdValue"));
         value.put("ext$", extension); return value;
     }
 
@@ -219,7 +219,8 @@ public final class OwnedMaterialApplyQueryController {
         for (char c : name.toLowerCase(Locale.ROOT).toCharArray()) { if (c == '_') { upper = true; continue; } value.append(upper ? Character.toUpperCase(c) : c); upper = false; }
         return value.toString();
     }
-    private static String page(PageResult page) { Map<String, Object> body = new LinkedHashMap<String, Object>(); body.put("columnTypeMap", new LinkedHashMap<String, Object>()); body.put("first", page.pageNumber == 1); body.put("last", page.total == 0 || page.pageNumber >= page.totalPages()); body.put("numberOfElements", page.rows.size()); body.put("pageNumber", page.pageNumber); body.put("pageSize", page.pageSize); body.put("rows", page.rows); body.put("total", page.total); body.put("totalMap", new LinkedHashMap<String, Object>()); body.put("totalPages", page.totalPages()); return JSON.toJSONString(body, SerializerFeature.WriteMapNullValue); }
+    private static String page(PageResult page) { Map<String, Object> body = new LinkedHashMap<String, Object>(); body.put("columnTypeMap", columnTypes()); body.put("first", page.pageNumber == 1); body.put("last", page.total == 0 || page.pageNumber >= page.totalPages()); body.put("numberOfElements", page.rows.size()); body.put("pageNumber", page.pageNumber); body.put("pageSize", page.pageSize); body.put("rows", page.rows); body.put("total", page.total); Map<String, Number> totals = new LinkedHashMap<String, Number>(); totals.put("qty_", Integer.valueOf(page.total)); body.put("totalMap", totals); body.put("totalPages", page.totalPages()); return JSON.toJSONString(body, SerializerFeature.WriteMapNullValue); }
+    private static Map<String, String> columnTypes() { Map<String, String> types = new LinkedHashMap<String, String>(); types.put("applyqty", "number"); types.put("batchno", "string"); types.put("createdbyid", "string"); types.put("createdbyname", "string"); types.put("createdbyorgid", "string"); types.put("createdbyorgname", "string"); types.put("createdtime", "dateTime"); types.put("harmfulness", "string"); types.put("id", "number"); types.put("mtlcategoryid", "number"); types.put("mtlid", "string"); types.put("mtlname", "string"); types.put("processstatus", "string"); types.put("remark", "string"); types.put("rn_", "number"); types.put("specification", "string"); types.put("stdvalue", "string"); types.put("stockid", "number"); types.put("stockqty", "number"); return types; }
     private static ResponseEntity<String> ok(String body) { return ResponseEntity.ok().header("Cache-Control", "no-store").body(body); }
     private static ResponseEntity<String> forbidden() { return ResponseEntity.status(HttpStatus.FORBIDDEN).body("{\"message\":\"GIKAM.PERMISSION.UNAUTHORIZED\"}"); }
     private static ResponseEntity<String> badRequest() { return ResponseEntity.badRequest().body("{\"message\":\"GIKAM.MTL_APPLY.INVALID_QUERY\"}"); }

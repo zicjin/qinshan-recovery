@@ -43,6 +43,7 @@ import org.springframework.web.bind.annotation.RestController;
 @ConditionalOnBean({OwnedIdentityHttpBoundary.class, DataSource.class})
 public final class OwnedOrderTaskResultQueryController {
     private static final String PREFIX = "/secure/emc/module/bp/bp/order-task-results";
+    private static final String ORDER_TASK_PREFIX = "/secure/emc/module/bp/bp/order-tasks";
     private static final String BASE_SQL =
             "SELECT A.*, O.SAMPLENUM,O.ORDERDESC,O.REMARK,O.SAMPLEID,O.SAMPLEBEGINDATE,O.SAMPLEBEGINTIME,"
             + "O.SAMPLECOMPLETEDATE,O.SAMPLECOMPLETETIME,O.LABELNO,"
@@ -79,6 +80,25 @@ public final class OwnedOrderTaskResultQueryController {
         try {
             OwnedPrincipal principal = requireRead(request);
             return ok(selectPage(principal.getOrgId(), Page.parse(body), request.getRequestURI()));
+        } catch (AccessDeniedException denied) { return forbidden(); }
+        catch (IllegalArgumentException invalid) { return badRequest(); }
+        catch (SQLException failure) { return unavailable(); }
+    }
+
+    /** Read result rows for one order task through the shared result projection. */
+    @PostMapping(path = {
+            ORDER_TASK_PREFIX + "/{id}/results/queries",
+            ORDER_TASK_PREFIX + "/{id}/results/distinct/queries"
+            }, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> taskResults(HttpServletRequest request,
+            @org.springframework.web.bind.annotation.PathVariable("id") String id,
+            @RequestBody(required = false) String body) {
+        try {
+            OwnedPrincipal principal = requireRead(request);
+            if (id == null || !id.matches("[0-9]{1,30}")) return badRequest();
+            Page page = Page.parse(body);
+            boolean distinct = request.getRequestURI().endsWith("/results/distinct/queries");
+            return ok(selectTaskResultPage(principal.getOrgId(), Long.parseLong(id), page, distinct));
         } catch (AccessDeniedException denied) { return forbidden(); }
         catch (IllegalArgumentException invalid) { return badRequest(); }
         catch (SQLException failure) { return unavailable(); }
@@ -532,6 +552,46 @@ public final class OwnedOrderTaskResultQueryController {
         totals.put("qty_", total);
         envelope.put("totalMap", totals);
         envelope.put("totalPages", pages(total, page.size));
+        return JSON.toJSONString(envelope, SerializerFeature.WriteMapNullValue);
+    }
+
+    private String selectTaskResultPage(String organization, long orderTaskId, Page page,
+            boolean distinct) throws SQLException {
+        String scoped = BASE_SQL + " WHERE A.CREATEDBYORGID=? AND A.ORDERTASKID=?";
+        String source = distinct
+                ? "SELECT D.* FROM (SELECT Q.*,ROW_NUMBER() OVER (PARTITION BY Q.ITEMID ORDER BY Q.ID DESC) DISTINCT_RN FROM ("
+                    + scoped + ") Q) D WHERE D.DISTINCT_RN=1"
+                : scoped;
+        String countSql = "SELECT COUNT(1) FROM (" + source + ") Q";
+        String pageSql = "SELECT P.* FROM (SELECT Q.*,ROW_NUMBER() OVER (ORDER BY Q.ID DESC) PAGE_RN_ FROM ("
+                + source + ") Q) P WHERE P.PAGE_RN_>? AND P.PAGE_RN_<=? ORDER BY P.PAGE_RN_";
+        int total;
+        List<Map<String, Object>> rows = new ArrayList<Map<String, Object>>();
+        try (Connection connection = dataSource.getConnection()) {
+            try (PreparedStatement count = connection.prepareStatement(countSql)) {
+                count.setString(1, organization); count.setLong(2, orderTaskId);
+                try (ResultSet result = count.executeQuery()) {
+                    if (!result.next()) throw new SQLException("task result count returned no row");
+                    total = result.getInt(1);
+                }
+            }
+            try (PreparedStatement query = connection.prepareStatement(pageSql)) {
+                query.setString(1, organization); query.setLong(2, orderTaskId);
+                query.setInt(3, page.start()); query.setInt(4, page.end());
+                try (ResultSet result = query.executeQuery()) {
+                    ResultSetMetaData metadata = result.getMetaData();
+                    while (result.next()) rows.add(row(result, metadata));
+                }
+            }
+        }
+        Map<String, Object> envelope = new LinkedHashMap<String, Object>();
+        envelope.put("columnTypeMap", RESULT_TYPE_PROFILES.get("/queries"));
+        envelope.put("first", page.number == 1);
+        envelope.put("last", total == 0 || page.number >= pages(total, page.size));
+        envelope.put("numberOfElements", rows.size()); envelope.put("pageNumber", page.number);
+        envelope.put("pageSize", page.size); envelope.put("rows", rows); envelope.put("total", total);
+        Map<String, Object> totals = new LinkedHashMap<String, Object>(); totals.put("qty_", total);
+        envelope.put("totalMap", totals); envelope.put("totalPages", pages(total, page.size));
         return JSON.toJSONString(envelope, SerializerFeature.WriteMapNullValue);
     }
 

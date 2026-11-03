@@ -12,6 +12,7 @@ EOF
 
 input_path=""
 output_path=""
+expected_sha256="dc06e05d55252211e44b3a177267b68efc970b095d74c7ebd815057f5393d40a"
 while (($#)); do
   case "$1" in
     --input)
@@ -22,6 +23,11 @@ while (($#)); do
     --output)
       [[ $# -ge 2 ]] || { usage; exit 2; }
       output_path=$2
+      shift 2
+      ;;
+    --expected-sha256)
+      [[ $# -ge 2 ]] || { usage; exit 2; }
+      expected_sha256=$2
       shift 2
       ;;
     -h|--help)
@@ -37,6 +43,7 @@ done
 
 [[ -n "$input_path" && -n "$output_path" ]] || { usage; exit 2; }
 [[ -f "$input_path" ]] || { echo "input is not a regular file: $input_path" >&2; exit 1; }
+[[ "$expected_sha256" =~ ^[0-9a-fA-F]{64}$ ]] || { echo "expected SHA-256 is invalid" >&2; exit 2; }
 command -v sha256sum >/dev/null || { echo "sha256sum is required" >&2; exit 1; }
 command -v file >/dev/null || { echo "file is required" >&2; exit 1; }
 command -v readelf >/dev/null || { echo "readelf is required" >&2; exit 1; }
@@ -50,7 +57,15 @@ tmp_dir=$(mktemp -d "${TMPDIR:-/tmp}/sunway-app-static.XXXXXX")
 trap 'rm -rf "$tmp_dir"' EXIT
 
 sha256=$(sha256sum "$input_path" | awk '{print $1}')
+if [[ "${sha256,,}" != "${expected_sha256,,}" ]]; then
+  echo "input SHA-256 does not match the controlled artifact" >&2
+  exit 1
+fi
 file_identity=$(file -b "$input_path")
+grep -Eq 'ELF 64-bit LSB (shared object|x86-64)' <<<"$file_identity" || {
+  echo "input is not the controlled ELF64 x86-64 shared object" >&2
+  exit 1
+}
 
 {
   echo "# sunway-app.so static seam dossier"
@@ -59,7 +74,7 @@ file_identity=$(file -b "$input_path")
   echo
   echo "## Target identity"
   echo
-  printf '%s\n' "- Input supplied by caller: \`$input_path\`"
+  printf '%s\n' "- Input identity: external controlled artifact (caller path redacted)"
   printf '%s\n' "- SHA-256: \`$sha256\`"
   printf '%s\n' "- File identity: \`$file_identity\`"
   printf '%s\n' '- Analysis mode: read-only `file`, `readelf`, `nm`, `objdump`, and filtered `strings`; the library was not executed.'
@@ -99,9 +114,9 @@ file_identity=$(file -b "$input_path")
   echo "The following lines are category-level static indicators. License/MAC values and license bodies are intentionally redacted."
   echo
   echo '```text'
-  strings -a "$input_path" \
+    strings -a "$input_path" \
     | grep -Ei 'Mac Address|globalLicense|DataSource|Redis|SqlSession|ResourceHandler|Interceptor|AuthenticationHelper|preLogout|loginLog|spring\.datasource' \
-    | awk 'BEGIN{IGNORECASE=1} /license|mac address/ {print "[redacted security/license token]"; next} {print}' \
+    | sed -E 's/.*([Ll][Ii][Cc][Ee][Nn][Ss][Ee]|[Mm][Aa][Cc][[:space:]]+[Aa][Dd][Dd][Rr][Ee][Ss][Ss]).*/[redacted security\/license token]/' \
     | sort -u
   echo '```'
   echo
@@ -137,5 +152,5 @@ file_identity=$(file -b "$input_path")
   echo "- The binary is external provenance only. It must not enter the standalone owned distribution or become a supplier run-time dependency."
 } > "$output_path"
 
-chmod 0644 "$output_path"
+chmod 0600 "$output_path"
 echo "wrote $output_path"

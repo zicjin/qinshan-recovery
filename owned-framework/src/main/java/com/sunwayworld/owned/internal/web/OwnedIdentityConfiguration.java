@@ -239,6 +239,13 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @ConditionalOnMissingBean(OwnedIndexCategoryReadController.class)
+    public OwnedIndexCategoryReadController ownedIndexCategoryReadController(
+            OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
+        return new OwnedIndexCategoryReadController(boundary, dataSource);
+    }
+
+    @Bean
     @ConditionalOnMissingBean(OwnedMaterialApplyQueryController.class)
     public OwnedMaterialApplyQueryController ownedMaterialApplyQueryController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {

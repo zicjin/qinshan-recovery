@@ -222,7 +222,7 @@ public final class OwnedMtlPerCheckQueryController {
 
     private static String page(PageResult page) {
         Map<String, Object> body = new LinkedHashMap<String, Object>();
-        body.put("columnTypeMap", new LinkedHashMap<String, Object>());
+        body.put("columnTypeMap", columnTypes());
         body.put("first", page.pageNumber == 1);
         body.put("last", page.total == 0 || page.pageNumber >= page.totalPages());
         body.put("numberOfElements", page.rows.size());
@@ -230,9 +230,34 @@ public final class OwnedMtlPerCheckQueryController {
         body.put("pageSize", page.pageSize);
         body.put("rows", page.rows);
         body.put("total", page.total);
-        body.put("totalMap", new LinkedHashMap<String, Object>());
+        Map<String, Number> totals = new LinkedHashMap<String, Number>();
+        totals.put("qty_", Integer.valueOf(page.total));
+        body.put("totalMap", totals);
         body.put("totalPages", page.totalPages());
         return JSON.toJSONString(body, SerializerFeature.WriteMapNullValue);
+    }
+
+    private static Map<String, String> columnTypes() {
+        Map<String, String> types = new LinkedHashMap<String, String>();
+        types.put("checkequipt", "string");
+        types.put("checkreason", "string");
+        types.put("checkusername", "string");
+        types.put("checkway", "string");
+        types.put("codename", "string");
+        types.put("createdbyid", "string");
+        types.put("createdbyname", "string");
+        types.put("createdbyorgid", "string");
+        types.put("createdbyorgname", "string");
+        types.put("createdtime", "dateTime");
+        types.put("cycle", "string");
+        types.put("id", "number");
+        types.put("maintdate", "dateTime");
+        types.put("maintenddate", "dateTime");
+        types.put("plancategory", "string");
+        types.put("remark", "string");
+        types.put("rn_", "number");
+        types.put("verifyorg", "string");
+        return types;
     }
 
     private static ResponseEntity<String> ok(String body) { return ResponseEntity.ok().header("Cache-Control", "no-store").body(body); }

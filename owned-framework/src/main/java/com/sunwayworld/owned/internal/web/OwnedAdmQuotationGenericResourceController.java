@@ -15,6 +15,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.sql.DataSource;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -53,7 +54,8 @@ public final class OwnedAdmQuotationGenericResourceController {
         try {
             Resource resource = resource(request);
             OwnedPrincipal principal = require(request);
-            return ok(selectPage(resource, principal.getOrgId(), Page.parse(body)));
+            Set<String> organizations = boundary.permittedOrganizationIds(request.getSession(false));
+            return ok(selectPage(resource, principal.getOrgId(), organizations, Page.parse(body)));
         } catch (AccessDeniedException denied) { return forbidden(); }
         catch (IllegalArgumentException invalid) { return badRequest(); }
         catch (SQLException failure) { return unavailable(); }
@@ -83,7 +85,8 @@ public final class OwnedAdmQuotationGenericResourceController {
         throw new IllegalArgumentException("unsupported administrative quotation resource");
     }
 
-    private String selectPage(Resource resource, String organization, Page page) throws SQLException {
+    private String selectPage(Resource resource, String organization, Set<String> organizations, Page page) throws SQLException {
+        if (resource.detectionFactor) return selectDetectionFactorPage(organizations, page);
         String base = "SELECT T.* FROM " + resource.table + " T WHERE T.CREATEDBYORGID=?";
         String countSql = "SELECT COUNT(1) FROM (" + base + ") Q";
         String order = resource.area ? "Q.ORDERNO ASC,Q.ID ASC" : "Q.ID DESC";
@@ -109,6 +112,47 @@ public final class OwnedAdmQuotationGenericResourceController {
         return JSON.toJSONString(envelope, SerializerFeature.WriteMapNullValue);
     }
 
+    private String selectDetectionFactorPage(Set<String> organizations, Page page) throws SQLException {
+        if (organizations == null || organizations.isEmpty()) return emptyPage(page);
+        StringBuilder scope = new StringBuilder();
+        for (int i = 0; i < organizations.size(); i++) { if (i > 0) scope.append(','); scope.append('?'); }
+        String base = "SELECT A.*,B.METHODNAME AS METHODNAMEE,B.METHODNO,B.TESTMETHODBASIS,C.ORGNAME AS PARENTORGNAME,E.TESTMETHODTYPE "
+                + "FROM T_EMC_QUOTATION_DETECTIONFACTOR A LEFT JOIN T_EMC_METHOD B ON A.METHODID=B.ID "
+                + "LEFT JOIN T_CORE_ORG C ON A.ORGID=C.ID LEFT JOIN T_EMC_ITEM_GROUP D ON A.ITEMGROUPID=D.ID "
+                + "LEFT JOIN T_EMC_TEST_METHOD E ON D.TESTMETHODID=E.ID WHERE A.ORGID IN (" + scope + ")";
+        String countSql = "SELECT COUNT(1) FROM (" + base + ") Q";
+        String pageSql = "SELECT P.* FROM (SELECT Q.*,ROW_NUMBER() OVER (ORDER BY Q.ID DESC) RN_ FROM (" + base + ") Q) P WHERE P.RN_>? AND P.RN_<=? ORDER BY P.RN_";
+        int total; List<Map<String, Object>> rows = new ArrayList<Map<String, Object>>(); Map<String, String> types = new LinkedHashMap<String, String>();
+        try (Connection connection = dataSource.getConnection()) {
+            try (PreparedStatement count = connection.prepareStatement(countSql)) {
+                int index = 1; for (String value : organizations) count.setString(index++, value);
+                try (ResultSet result = count.executeQuery()) { if (!result.next()) throw new SQLException("detection-factor count unavailable"); total = result.getInt(1); }
+            }
+            try (PreparedStatement query = connection.prepareStatement(pageSql)) {
+                int index = 1; for (String value : organizations) query.setString(index++, value);
+                query.setInt(index++, page.start()); query.setInt(index, page.end());
+                try (ResultSet result = query.executeQuery()) {
+                    ResultSetMetaData metadata = result.getMetaData();
+                    for (int i = 1; i <= metadata.getColumnCount(); i++) { String label = metadata.getColumnLabel(i); if (!"RN_".equalsIgnoreCase(label)) types.put(label.toLowerCase(Locale.ROOT), type(metadata.getColumnType(i))); }
+                    while (result.next()) rows.add(row(result, metadata));
+                }
+            }
+        }
+        return pageEnvelope(page, total, rows, types);
+    }
+
+    private static String emptyPage(Page page) {
+        return pageEnvelope(page, 0, new ArrayList<Map<String, Object>>(), new LinkedHashMap<String, String>());
+    }
+
+    private static String pageEnvelope(Page page, int total, List<Map<String, Object>> rows, Map<String, String> types) {
+        Map<String, Object> envelope = new LinkedHashMap<String, Object>(); envelope.put("columnTypeMap", types);
+        envelope.put("first", page.number == 1); envelope.put("last", total == 0 || page.number >= pages(total, page.size));
+        envelope.put("numberOfElements", rows.size()); envelope.put("pageNumber", page.number); envelope.put("pageSize", page.size);
+        envelope.put("rows", rows); envelope.put("total", total); Map<String, Object> totalMap = new LinkedHashMap<String, Object>(); totalMap.put("qty_", total); envelope.put("totalMap", totalMap); envelope.put("totalPages", pages(total, page.size));
+        return JSON.toJSONString(envelope, SerializerFeature.WriteMapNullValue);
+    }
+
     private static Map<String, Object> row(ResultSet result, ResultSetMetaData metadata) throws SQLException {
         Map<String, Object> value = new LinkedHashMap<String, Object>();
         for (int i = 1; i <= metadata.getColumnCount(); i++) { String label = metadata.getColumnLabel(i); if (!"RN_".equalsIgnoreCase(label)) value.put(camel(label), JdbcValue.normalize(result.getObject(i))); }
@@ -121,7 +165,7 @@ public final class OwnedAdmQuotationGenericResourceController {
     private static ResponseEntity<String> forbidden() { return ResponseEntity.status(HttpStatus.FORBIDDEN).contentType(MediaType.APPLICATION_JSON).body("{\"message\":\"GIKAM.PERMISSION.FORBIDDEN\"}"); }
     private static ResponseEntity<String> badRequest() { return ResponseEntity.badRequest().contentType(MediaType.APPLICATION_JSON).body("{\"message\":\"GIKAM.QUERY.INVALID\"}"); }
     private static ResponseEntity<String> unavailable() { return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).contentType(MediaType.APPLICATION_JSON).body("{\"message\":\"GIKAM.DATA.UNAVAILABLE\"}"); }
-    private static Map<String, Resource> resources() { Map<String, Resource> result = new LinkedHashMap<String, Resource>(); result.put("/secure/emc/module/item/adm-areas", new Resource("T_EMC_ADM_AREA", true)); result.put("/secure/emc/module/item/quotation/addprices", new Resource("T_EMC_QUOTATION_ADDPRICE", false)); result.put("/secure/emc/module/item/quotation/detectionfactors", new Resource("T_EMC_QUOTATION_DETECTIONFACTOR", false)); result.put("/secure/emc/module/item/quotation/discounts", new Resource("T_EMC_QUOTATION_DISCOUNT", false)); result.put("/secure/emc/module/item/quotation/quotationinformations", new Resource("T_EMC_QUOTATION_INFORMATION", false)); return Collections.unmodifiableMap(result); }
-    private static final class Resource { final String table; final boolean area; Resource(String table, boolean area) { this.table = table; this.area = area; } }
+    private static Map<String, Resource> resources() { Map<String, Resource> result = new LinkedHashMap<String, Resource>(); result.put("/secure/emc/module/item/adm-areas", new Resource("T_EMC_ADM_AREA", true, false)); result.put("/secure/emc/module/item/quotation/addprices", new Resource("T_EMC_QUOTATION_ADDPRICE", false, false)); result.put("/secure/emc/module/item/quotation/detectionfactors", new Resource("T_EMC_QUOTATION_DETECTIONFACTOR", false, true)); result.put("/secure/emc/module/item/quotation/discounts", new Resource("T_EMC_QUOTATION_DISCOUNT", false, false)); result.put("/secure/emc/module/item/quotation/quotationinformations", new Resource("T_EMC_QUOTATION_INFORMATION", false, false)); return Collections.unmodifiableMap(result); }
+    private static final class Resource { final String table; final boolean area; final boolean detectionFactor; Resource(String table, boolean area, boolean detectionFactor) { this.table = table; this.area = area; this.detectionFactor = detectionFactor; } }
     private static final class Page { final int number, size; Page(int number, int size) { this.number = number; this.size = size; } static Page parse(String body) { com.alibaba.fastjson.JSONObject root = body == null || body.trim().isEmpty() ? new com.alibaba.fastjson.JSONObject() : JSON.parseObject(body); com.alibaba.fastjson.JSONObject p = root == null ? null : root.getJSONObject("p"); int number = p == null ? 1 : Math.max(1, p.getIntValue("n")); int size = p == null ? 50 : Math.min(500, Math.max(1, p.getIntValue("s"))); return new Page(number, size); } int start() { return (number - 1) * size; } int end() { return number * size; } }
 }

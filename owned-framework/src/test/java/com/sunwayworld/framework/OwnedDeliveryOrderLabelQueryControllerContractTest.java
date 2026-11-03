@@ -24,8 +24,9 @@ public final class OwnedDeliveryOrderLabelQueryControllerContractTest {
         String source = new String(java.nio.file.Files.readAllBytes(sourcePath), "UTF-8");
         if (!source.contains("return ok(\"{\\\"ext$\\\":{}}\")")) throw new AssertionError("status envelope must contain ext$ only");
         if (!source.contains("createdById") || !source.contains("createdTime") || !source.contains("labelCode")) throw new AssertionError("order-label camelCase mapping missing");
-        if (!source.contains("v.put(\"ext$\",new LinkedHashMap<String,Object>())")) throw new AssertionError("order-label ext$ mapping missing");
-        if (!source.contains("FROM T_EMC_DELIVERY A LEFT JOIN T_EMC_PROJECT B ON A.PROJID=B.ID\"")) throw new AssertionError("delivery projection missing");
+        if (!source.contains("v.put(\"ext$\",x)")) throw new AssertionError("order-label ext$ mapping missing");
+        if (!source.contains("SELECT A.* FROM T_EMC_DELIVERY A\"")) throw new AssertionError("delivery projection missing");
+        if (!source.contains("deliveryField") || !source.contains("v.put(\"ext$\",x)")) throw new AssertionError("delivery ext projection missing");
         if (!source.contains("global mapper")) throw new AssertionError("delivery global-scope contract missing");
         boolean registered = false;
         for (Method method : OwnedIdentityConfiguration.class.getDeclaredMethods()) {

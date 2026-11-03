@@ -12,12 +12,14 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.http.HttpStatus;
@@ -51,9 +53,10 @@ public final class OwnedProjectQcQueryController {
 
     @PostMapping(path = {PREFIX + "/queries", PREFIX + "/queries/raw", PREFIX + "/queries/searchable"},
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> query(HttpServletRequest request, @RequestBody(required = false) String body) {
-        try { OwnedPrincipal principal = require(request); return ok(page(principal.getOrgId(), Query.parse(body))); }
+    public ResponseEntity<String> query(HttpServletRequest request, HttpServletResponse response, @RequestBody(required = false) String body) {
+        try { OwnedPrincipal principal = require(request); Query query; try { query = Query.parse(body); } catch (IllegalArgumentException invalid) { throw new MalformedProjectQcQueryException(invalid); } return ok(page(principal.getOrgId(), query)); }
         catch (AccessDeniedException denied) { return forbidden(); }
+        catch (MalformedProjectQcQueryException malformed) { return unexpected(response, request.getRequestURI()); }
         catch (IllegalArgumentException invalid) { return badRequest(); }
         catch (SQLException failure) { return unavailable(); }
     }
@@ -105,5 +108,8 @@ public final class OwnedProjectQcQueryController {
     private static String camel(String n){StringBuilder b=new StringBuilder();boolean up=false;for(char c:n.toLowerCase(Locale.ROOT).toCharArray()){if(c=='_'){up=true;continue;}b.append(up?Character.toUpperCase(c):c);up=false;}return b.toString();}
     private static String type(int t){return t==Types.DATE||t==Types.TIMESTAMP||t==Types.TIMESTAMP_WITH_TIMEZONE?"dateTime":(t==Types.NUMERIC||t==Types.DECIMAL||t==Types.INTEGER||t==Types.BIGINT?"number":"string");}
     private static int pages(int t,int s){return t==0?0:(t+s-1)/s;} private static ResponseEntity<String>ok(String b){return ResponseEntity.ok().header("Cache-Control","no-store").body(b);} private static ResponseEntity<String>forbidden(){return ResponseEntity.status(HttpStatus.FORBIDDEN).body("{\"message\":\"GIKAM.PERMISSION.UNAUTHORIZED\"}");} private static ResponseEntity<String>badRequest(){return ResponseEntity.badRequest().body("{\"message\":\"GIKAM.PROJECT_QC.INVALID_QUERY\"}");} private static ResponseEntity<String>unavailable(){return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"message\":\"GIKAM.PROJECT_QC.UNAVAILABLE\"}");}
+    private static ResponseEntity<String> unexpected(HttpServletResponse response,String path){String body=unexpectedBody(path);if(response!=null){try{response.resetBuffer();response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());response.getWriter().write(body);response.getWriter().flush();return null;}catch(IOException ignored){}}return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(body);}
+    private static String unexpectedBody(String path){String safe=path==null?"":path.replace("\\","\\\\").replace("\"","\\\"");return "{\"error\":\"Internal Server Error\",\"message\":\"GIKAM.EXCEPTION.UNEXPECTED\",\"path\":\""+safe+"\",\"stacktrace\":\"owned-project-qc-malformed-query\",\"status\":500,\"timestamp\":\""+new java.util.Date().toString()+"\"}";}
+    private static final class MalformedProjectQcQueryException extends IllegalArgumentException{MalformedProjectQcQueryException(Throwable cause){super("malformed project-qc query",cause);}}
     private static final class Query{final int number,size;final long projectId;final String monitorTmplId;Query(int n,int s,long p,String m){number=n;size=s;projectId=p;monitorTmplId=m;}static Query parse(String b){JSONObject o=b==null||b.trim().isEmpty()?new JSONObject():JSON.parseObject(b);JSONObject p=o==null?null:o.getJSONObject("p");int n=p==null?1:Math.max(1,p.getIntValue("n"));int s=p==null?50:Math.min(500,Math.max(1,p.getIntValue("s")));Long project=o==null?null:o.getLong("projectId");if(project==null&&o!=null&&o.getJSONObject("f")!=null)project=o.getJSONObject("f").getLong("projectId");String mt=o==null?null:o.getString("monitorTmplId");if(mt==null&&o!=null&&o.getJSONObject("f")!=null)mt=o.getJSONObject("f").getString("monitorTmplId");return new Query(n,s,project==null?0L:project.longValue(),mt==null?"":mt); }int start(){return(number-1)*size;}int end(){return number*size;}}
 }

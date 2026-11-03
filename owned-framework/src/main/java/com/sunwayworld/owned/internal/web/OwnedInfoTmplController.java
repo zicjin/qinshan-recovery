@@ -214,7 +214,9 @@ public final class OwnedInfoTmplController {
             for (Map.Entry<String, Object> entry : source.entrySet()) {
                 String key = selectableProperty(entry.getKey());
                 Object item = entry.getValue();
-                if ("createdTime".equals(key) && item instanceof Number) {
+                if ("createdTime".equals(key) && item instanceof Date) {
+                    item = new SimpleDateFormat("yyyy-MM-dd", Locale.ROOT).format((Date) item);
+                } else if ("createdTime".equals(key) && item instanceof Number) {
                     item = new SimpleDateFormat("yyyy-MM-dd", Locale.ROOT).format(new Date(((Number) item).longValue()));
                 }
                 if (key != null && item != null) value.put(key, item);

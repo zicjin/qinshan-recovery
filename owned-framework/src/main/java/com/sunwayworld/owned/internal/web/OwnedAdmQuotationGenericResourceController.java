@@ -103,7 +103,7 @@ public final class OwnedAdmQuotationGenericResourceController {
                 try (ResultSet result = query.executeQuery()) {
                     ResultSetMetaData metadata = result.getMetaData();
                     for (int i = 1; i <= metadata.getColumnCount(); i++) { String label = metadata.getColumnLabel(i); if (!"RN_".equalsIgnoreCase(label)) types.put(label.toLowerCase(Locale.ROOT), type(metadata.getColumnType(i))); }
-                    while (result.next()) rows.add(detectionFactorRow(result, metadata));
+                    while (result.next()) rows.add(row(result, metadata));
                 }
             }
         }
@@ -136,7 +136,7 @@ public final class OwnedAdmQuotationGenericResourceController {
                 try (ResultSet result = query.executeQuery()) {
                     ResultSetMetaData metadata = result.getMetaData();
                     for (int i = 1; i <= metadata.getColumnCount(); i++) { String label = metadata.getColumnLabel(i); if (!"RN_".equalsIgnoreCase(label)) types.put(label.toLowerCase(Locale.ROOT), type(metadata.getColumnType(i))); }
-                    while (result.next()) rows.add(row(result, metadata));
+                    while (result.next()) rows.add(detectionFactorRow(result, metadata));
                 }
             }
         }

@@ -167,7 +167,7 @@ public final class OwnedAdmQuotationGenericResourceController {
             String label = metadata.getColumnLabel(i);
             String key = detectionFactorField(label);
             Object raw = result.getObject(i);
-            Object normalized = raw == null ? null : detectionFactorValue(raw, metadata.getColumnType(i));
+            Object normalized = raw == null ? null : detectionFactorValue(JdbcValue.normalize(raw), metadata.getColumnType(i));
             if ("RN_".equalsIgnoreCase(label)) {
                 if (normalized != null) extension.put("rn_", normalized);
             } else if (detectionFactorExtension(label)) {

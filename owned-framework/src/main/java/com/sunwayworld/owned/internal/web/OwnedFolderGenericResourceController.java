@@ -12,6 +12,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -19,6 +20,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.http.HttpStatus;
@@ -60,12 +62,14 @@ public final class OwnedFolderGenericResourceController {
             "/secure/emc/module/bp/bp/folders/queries/withdrawable"},
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> query(HttpServletRequest request,
+            HttpServletResponse response,
             @RequestBody(required = false) String body) {
         try {
             OwnedPrincipal principal = require(request);
             Query query = Query.parse(body);
             return ok(selectPage(principal.getOrgId(), query));
         } catch (AccessDeniedException denied) { return forbidden(); }
+        catch (MalformedQueryException malformed) { return unexpected(response, request.getRequestURI()); }
         catch (IllegalArgumentException invalid) { return badRequest(); }
         catch (SQLException failure) { return unavailable(); }
     }
@@ -83,12 +87,14 @@ public final class OwnedFolderGenericResourceController {
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> roleQuery(HttpServletRequest request,
             @PathVariable("roleId") String roleId,
+            HttpServletResponse response,
             @RequestBody(required = false) String body) {
         try {
             require(request);
             if (roleId == null || roleId.trim().length() == 0) throw new IllegalArgumentException("roleId");
             return ok(selectPage(boundary.currentPrincipal(request.getSession(false)).getOrgId(), Query.parse(body)));
         } catch (AccessDeniedException denied) { return forbidden(); }
+        catch (MalformedQueryException malformed) { return unexpected(response, request.getRequestURI()); }
         catch (IllegalArgumentException invalid) { return badRequest(); }
         catch (SQLException failure) { return unavailable(); }
     }
@@ -261,7 +267,33 @@ public final class OwnedFolderGenericResourceController {
     private static ResponseEntity<String> ok(String body) { return ResponseEntity.ok().header("Cache-Control", "no-store").body(body); }
     private static ResponseEntity<String> forbidden() { return ResponseEntity.status(HttpStatus.FORBIDDEN).body("{\"message\":\"GIKAM.PERMISSION.UNAUTHORIZED\"}"); }
     private static ResponseEntity<String> badRequest() { return ResponseEntity.badRequest().body("{\"message\":\"GIKAM.EXCEPTION.PARAM_ERROR\"}"); }
+    private static ResponseEntity<String> unexpected(HttpServletResponse response, String path) {
+        // The supplier exception resolver emits no Content-Type on this 500.
+        // Write directly so the endpoint's success produces clause does not
+        // turn the malformed-page response into application/json.
+        if (response != null) {
+            try {
+                response.resetBuffer();
+                response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+                response.getWriter().write(unexpectedBody(path));
+                response.getWriter().flush();
+                return null;
+            } catch (IOException ignored) { /* fall through to a normal response */ }
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(unexpectedBody(path));
+    }
+    private static String unexpectedBody(String path) {
+        String safePath = path == null ? "" : path.replace("\\", "\\\\").replace("\"", "\\\"");
+        return "{\"error\":\"Internal Server Error\",\"message\":\"GIKAM.EXCEPTION.UNEXPECTED\",\"path\":\""
+                + safePath + "\",\"stacktrace\":\"owned-folder-malformed-page\",\"status\":500,\"timestamp\":\""
+                + new java.util.Date().toString() + "\"}";
+    }
     private static ResponseEntity<String> unavailable() { return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"message\":\"GIKAM.FOLDER.UNAVAILABLE\"}"); }
+
+    /** Framework binding failures on page parameters surface as the supplier's unexpected 500. */
+    private static final class MalformedQueryException extends IllegalArgumentException {
+        MalformedQueryException(String message) { super(message); }
+    }
 
     private static final class Query {
         final Page page; final String targetType; final String sampleUserId; final String sceneUserId;
@@ -271,10 +303,17 @@ public final class OwnedFolderGenericResourceController {
         static Query parse(String body) {
             JSONObject root = body == null || body.trim().isEmpty() ? new JSONObject() : JSON.parseObject(body);
             JSONObject p = root == null ? null : root.getJSONObject("p");
-            int number = p == null ? 1 : Math.max(1, p.getIntValue("n"));
-            int size = p == null ? 50 : Math.min(500, Math.max(1, p.getIntValue("s")));
+            int number = p == null ? 1 : pageInteger(p, "n", 1);
+            int size = p == null ? 50 : Math.min(500, Math.max(1, pageInteger(p, "s", 50)));
             return new Query(new Page(number, size), text(root, "targetType"),
                     text(root, "sampleUserId"), text(root, "sceneUserId"));
+        }
+        private static int pageInteger(JSONObject page, String key, int fallback) {
+            Object raw = page.get(key);
+            if (raw == null) return fallback;
+            if (raw instanceof Number) return ((Number) raw).intValue();
+            try { return Integer.parseInt(String.valueOf(raw)); }
+            catch (NumberFormatException error) { throw new MalformedQueryException("invalid page " + key); }
         }
         private static String text(JSONObject root, String key) {
             if (root == null) return null;

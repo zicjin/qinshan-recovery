@@ -44,6 +44,7 @@ public final class OwnedFolderGenericResourceControllerContractTest {
             throw new AssertionError("folder status must expose the draft auditStatus envelope");
         }
         if (!status.containsKey("ext$")) throw new AssertionError("folder status must retain ext$ envelope");
+        assertMalformedPageInput();
         try {
             Field profile = OwnedFolderGenericResourceController.class.getDeclaredField("FOLDER_TYPE_PROFILE");
             profile.setAccessible(true);
@@ -65,5 +66,21 @@ public final class OwnedFolderGenericResourceControllerContractTest {
 
     private static void require(Set<String> paths, String path) {
         if (!paths.contains(path)) throw new AssertionError("missing folder GenericResource path: " + path);
+    }
+
+    private static void assertMalformedPageInput() {
+        try {
+            Class<?> query = Class.forName("com.sunwayworld.owned.internal.web.OwnedFolderGenericResourceController$Query");
+            Method parse = query.getDeclaredMethod("parse", String.class);
+            parse.setAccessible(true);
+            parse.invoke(null, "{\"p\":{\"n\":\"invalid\",\"s\":10}}");
+            throw new AssertionError("malformed page input must fail before SQL execution");
+        } catch (java.lang.reflect.InvocationTargetException expected) {
+            if (!expected.getCause().getClass().getSimpleName().equals("MalformedQueryException")) {
+                throw new AssertionError("malformed page input must use the supplier unexpected-error path", expected.getCause());
+            }
+        } catch (ReflectiveOperationException error) {
+            throw new AssertionError("cannot inspect folder query parser", error);
+        }
     }
 }

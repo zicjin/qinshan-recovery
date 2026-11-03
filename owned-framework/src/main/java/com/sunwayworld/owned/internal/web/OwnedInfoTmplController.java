@@ -13,7 +13,9 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -84,7 +86,7 @@ public final class OwnedInfoTmplController {
             // Keep the owned route aligned with that contract instead of turning
             // it into an empty, organization-scoped list for Test users.
             String sql = "SELECT T.* FROM T_EMC_INFO_TMPL_FIELD T ORDER BY T.ID";
-            return ok(JSON.toJSONString(selectRows(sql, null, new ArrayList<String>()), SerializerFeature.WriteMapNullValue));
+            return ok(JSON.toJSONString(selectSelectableRows(sql), SerializerFeature.WriteMapNullValue));
         } catch (AccessDeniedException denied) { return forbidden(); }
         catch (SQLException failure) { return unavailable(); }
     }
@@ -201,6 +203,45 @@ public final class OwnedInfoTmplController {
             try (ResultSet result = query.executeQuery()) { ResultSetMetaData metadata = result.getMetaData(); while (result.next()) rows.add(row(result, metadata)); }
         }
         return rows;
+    }
+
+    /** Project JDBC columns through the supplier's bean serializer for this lookup. */
+    private List<Map<String, Object>> selectSelectableRows(String sql) throws SQLException {
+        List<Map<String, Object>> rows = selectRows(sql, null, new ArrayList<String>());
+        List<Map<String, Object>> projected = new ArrayList<Map<String, Object>>();
+        for (Map<String, Object> source : rows) {
+            Map<String, Object> value = new LinkedHashMap<String, Object>();
+            for (Map.Entry<String, Object> entry : source.entrySet()) {
+                String key = selectableProperty(entry.getKey());
+                Object item = entry.getValue();
+                if ("createdTime".equals(key) && item instanceof Number) {
+                    item = new SimpleDateFormat("yyyy-MM-dd", Locale.ROOT).format(new Date(((Number) item).longValue()));
+                }
+                if (key != null && item != null) value.put(key, item);
+            }
+            value.put("ext$", new LinkedHashMap<String, Object>());
+            projected.add(value);
+        }
+        return projected;
+    }
+
+    private static String selectableProperty(String key) {
+        if (key == null) return null;
+        if ("createdbyid".equals(key)) return "createdById";
+        if ("createdbyname".equals(key)) return "createdByName";
+        if ("createdbyorgid".equals(key)) return "createdByOrgId";
+        if ("createdbyorgname".equals(key)) return "createdByOrgName";
+        if ("createdtime".equals(key)) return "createdTime";
+        if ("fieldtitle".equals(key)) return "fieldTitle";
+        if ("infotmplid".equals(key)) return "infoTmplId";
+        if ("lowlimit".equals(key)) return "lowLimit";
+        if ("unitname".equals(key)) return "unitName";
+        if ("revisionrule".equals(key)) return "revisionRule";
+        if ("primaryindex".equals(key)) return "primaryIndex";
+        if ("primaryname".equals(key)) return "primaryName";
+        if ("bizfield".equals(key)) return "bizField";
+        if ("defaultvalue".equals(key)) return "defaultValue";
+        return key;
     }
 
     private static int bind(PreparedStatement statement, String organization, List<String> values, int index) throws SQLException { if (organization != null) statement.setString(index++, organization); for (String value : values) statement.setString(index++, value); return index; }

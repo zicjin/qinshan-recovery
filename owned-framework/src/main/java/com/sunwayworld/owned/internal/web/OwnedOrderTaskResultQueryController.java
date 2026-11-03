@@ -428,6 +428,88 @@ public final class OwnedOrderTaskResultQueryController {
         return ok(JSON.toJSONString(envelope, SerializerFeature.WriteMapNullValue));
     }
 
+    /** Result-input uses item-name hash columns and original/report value rules. */
+    private static ResponseEntity<String> resultInputTitles(List<Map<String, Object>> source) {
+        Map<String, Map<String, Object>> unique = new LinkedHashMap<String, Map<String, Object>>();
+        for (Map<String, Object> item : source) {
+            String column = inputColumnId(item);
+            if (!unique.containsKey(column)) unique.put(column, item);
+        }
+        List<Map<String, Object>> heads = new ArrayList<Map<String, Object>>();
+        for (Map.Entry<String, Map<String, Object>> entry : unique.entrySet()) {
+            Map<String, Object> item = entry.getValue();
+            Map<String, Object> head = new LinkedHashMap<String, Object>();
+            head.put("field", entry.getKey());
+            String alias = item.get("itemAliasName") == null ? text(item.get("itemName")) : text(item.get("itemAliasName"));
+            String unit = text(item.get("unitName"));
+            head.put("title", alias + "<br>" + (unit.length() == 0 ? "" : "(" + unit + ")"));
+            Map<String, Object> ext = new LinkedHashMap<String, Object>(); ext.put("script", item.get("scriptFlag"));
+            head.put("ext$", ext); heads.add(head);
+        }
+        return ok(JSON.toJSONString(heads, SerializerFeature.WriteMapNullValue));
+    }
+
+    private static ResponseEntity<String> resultInputRows(List<Map<String, Object>> source) {
+        Map<String, Map<String, Object>> grouped = new LinkedHashMap<String, Map<String, Object>>();
+        for (Map<String, Object> item : source) {
+            String rowNo = text(item.get("orderNo"));
+            Map<String, Object> row = grouped.get(rowNo);
+            if (row == null) {
+                row = new LinkedHashMap<String, Object>(); row.put("rowNo", rowNo); row.put("orderNo", item.get("orderNo"));
+                row.put("monitorPointName", item.get("monitorPointName")); row.put("qcName", item.get("qcName"));
+                row.put("cupNo", item.get("cupNo")); row.put("id", item.get("orderTaskId"));
+                row.put("orderId", item.get("orderId")); row.put("folderId", item.get("folderId"));
+                row.put("projNo", item.get("projNo")); row.put("sampleBeginDate", item.get("sampleBeginDate"));
+                grouped.put(rowNo, row);
+            }
+            String value = isScripted(item) ? text(item.get("reportResult")) : text(item.get("originalResult"));
+            String column = inputColumnId(item); row.put(column, value);
+            Map<String, Object> ext = new LinkedHashMap<String, Object>();
+            ext.put("scriptFlag", item.get("scriptFlag")); ext.put("submitFlag", item.get("submitFlag"));
+            ext.put("resultCategory", item.get("resultCategory")); row.put("ext$" + column, ext);
+        }
+        List<Map<String, Object>> rows = new ArrayList<Map<String, Object>>(grouped.values());
+        Map<String, Object> envelope = new LinkedHashMap<String, Object>(); envelope.put("rows", rows);
+        envelope.put("numberOfElements", rows.size()); envelope.put("pageNumber", 1); envelope.put("pageSize", rows.size());
+        envelope.put("total", rows.size()); envelope.put("first", true); envelope.put("last", true);
+        envelope.put("totalPages", rows.isEmpty() ? 0 : 1); envelope.put("totalMap", new LinkedHashMap<String, Object>());
+        return ok(JSON.toJSONString(envelope, SerializerFeature.WriteMapNullValue));
+    }
+
+    private List<Map<String, Object>> selectResultInputRows(String organization, String body) throws SQLException {
+        String runId = extractRunId(body);
+        String sql = BASE_SQL + " WHERE A.CREATEDBYORGID=? AND M.STATUS='logged'";
+        if (runId != null) sql += " AND A.RUNID=?";
+        sql += " ORDER BY A.ID DESC";
+        List<Map<String, Object>> rows = new ArrayList<Map<String, Object>>();
+        try (Connection connection = dataSource.getConnection(); PreparedStatement query = connection.prepareStatement(sql)) {
+            int index = 1; query.setString(index++, organization); if (runId != null) query.setString(index, runId);
+            try (ResultSet result = query.executeQuery()) {
+                ResultSetMetaData metadata = result.getMetaData();
+                while (result.next() && rows.size() < 1000) rows.add(row(result, metadata));
+            }
+        }
+        return rows;
+    }
+
+    private static String extractRunId(String body) {
+        if (body == null || body.trim().length() == 0) return null;
+        JSONObject root = JSON.parseObject(body); if (root == null) return null;
+        String value = root.getString("runId"); if (value == null) value = root.getString("id");
+        JSONObject page = root.getJSONObject("p"); if (value == null && page != null) value = page.getString("runId");
+        if (value == null && page != null) value = page.getString("id");
+        JSONObject filter = root.getJSONObject("f"); if (value == null && filter != null) value = filter.getString("runId");
+        if (value == null && filter != null) value = filter.getString("id");
+        return value == null || value.trim().length() == 0 ? null : value.trim();
+    }
+
+    private static String inputColumnId(Map<String, Object> item) { return "$" + text(item.get("itemName")).hashCode(); }
+    private static boolean isScripted(Map<String, Object> item) {
+        String value = text(item.get("scriptFlag"));
+        return "1".equals(value) || "Y".equalsIgnoreCase(value) || "yes".equalsIgnoreCase(value);
+    }
+    private static String text(Object value) { return value == null ? "" : String.valueOf(value); }
+
     /** Quick/result input tables use the same dynamic result projection. */
     @PostMapping(path = {
             PREFIX + "/quick-inputs/table-heads/queries",
@@ -443,12 +525,18 @@ public final class OwnedOrderTaskResultQueryController {
         try {
             OwnedPrincipal principal = requireRead(request);
             String path = request.getRequestURI();
-            List<Map<String, Object>> source = selectResultRows(principal.getOrgId());
+            boolean resultInput = path.contains("/result-inputs/");
+            List<Map<String, Object>> source = resultInput
+                    ? selectResultInputRows(principal.getOrgId(), body)
+                    : selectResultRows(principal.getOrgId());
             boolean sample = path.contains("quick-inputs-sample");
             if (source.isEmpty()) {
                 return sample ? ok("[]") : gasUnexpected(response, path);
             }
-            return path.endsWith("table-heads/queries") ? dynamicTitles(source) : dynamicRows(source);
+            if (path.endsWith("table-heads/queries")) {
+                return resultInput ? resultInputTitles(source) : dynamicTitles(source);
+            }
+            return resultInput ? resultInputRows(source) : dynamicRows(source);
         } catch (AccessDeniedException denied) { return forbidden(); }
         catch (IllegalArgumentException invalid) { return badRequest(); }
         catch (SQLException failure) { return unavailable(); }

@@ -52,6 +52,7 @@ public final class OwnedOrderTaskResultQueryControllerContractTest {
             if (method.getReturnType() == OwnedOrderTaskResultQueryController.class) registered = true;
         }
         if (!registered) throw new AssertionError("order-task-result controller is not registered");
+        PathCheck.requireSource();
         System.out.println("owned order-task-result query mapping checks passed");
     }
 
@@ -79,5 +80,17 @@ public final class OwnedOrderTaskResultQueryControllerContractTest {
             Map<String, String> profile = profiles.get(path);
             if (profile == null || profile.size() != expectedSize) throw new AssertionError("unexpected result type profile " + path);
         } catch (ReflectiveOperationException error) { throw new AssertionError("cannot inspect result type profiles", error); }
+    }
+
+    private static final class PathCheck {
+        static void requireSource() {
+            try {
+                java.nio.file.Path path = java.nio.file.Paths.get("owned-framework/src/main/java/com/sunwayworld/owned/internal/web/OwnedOrderTaskResultQueryController.java");
+                String source = new String(java.nio.file.Files.readAllBytes(path), "UTF-8");
+                for (String token : new String[]{"selectResultInputRows", "resultInputTitles", "resultInputRows", "inputColumnId", "originalResult", "reportResult", "scriptFlag", "M.STATUS='logged'", "extractRunId"}) {
+                    if (!source.contains(token)) throw new AssertionError("missing result-input projection token: " + token);
+                }
+            } catch (java.io.IOException error) { throw new AssertionError("cannot inspect result-input source", error); }
+        }
     }
 }

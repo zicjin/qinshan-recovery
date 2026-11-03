@@ -121,7 +121,11 @@ public final class QueryRequest {
 
     private static JSONObject object(String json) {
         if (json == null || json.trim().isEmpty()) return new JSONObject();
-        try { return JSON.parseObject(json); }
+        try {
+            JSONObject parsed = JSON.parseObject(json);
+            if (parsed == null) throw new IllegalArgumentException("query JSON must be an object");
+            return parsed;
+        }
         catch (RuntimeException error) { throw new IllegalArgumentException("invalid query JSON", error); }
     }
 

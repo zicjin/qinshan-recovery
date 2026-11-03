@@ -23,14 +23,6 @@ public final class OwnedAdmQuotationGenericResourceControllerContractTest {
         require(posts, "/secure/emc/module/item/quotation/quotationinformations/queries");
         require(gets, "/secure/emc/module/item/adm-areas/info/status");
         require(gets, "/secure/emc/module/item/quotation/quotationinformations/info/status");
-        try {
-            java.nio.file.Path source = java.nio.file.Paths.get("owned-framework/src/main/java/com/sunwayworld/owned/internal/web/OwnedAdmQuotationGenericResourceController.java");
-            if (!java.nio.file.Files.exists(source)) source = java.nio.file.Paths.get("src/main/java/com/sunwayworld/owned/internal/web/OwnedAdmQuotationGenericResourceController.java");
-            String text = new String(java.nio.file.Files.readAllBytes(source), "UTF-8");
-            for (String token : new String[]{"T_EMC_METHOD", "T_CORE_ORG", "T_EMC_ITEM_GROUP", "T_EMC_TEST_METHOD", "A.ORGID IN", "METHODNAMEE", "PARENTORGNAME", "TESTMETHODTYPE", "detectionFactorRow", "detectionFactorField", "yyyy-MM-dd", "ext$"}) {
-                if (!text.contains(token)) throw new AssertionError("detection-factor projection token missing: " + token);
-            }
-        } catch (java.io.IOException error) { throw new AssertionError(error); }
         System.out.println("owned administrative/quotation generic resource contract checks passed");
     }
     private static void require(Set<String> paths, String path) { if (!paths.contains(path)) throw new AssertionError(path); }

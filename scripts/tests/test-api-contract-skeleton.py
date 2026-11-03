@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 import importlib.util
 import json
+import hashlib
+import tempfile
 from pathlib import Path
 import unittest
 
@@ -17,34 +19,67 @@ spec.loader.exec_module(module)
 
 class ContractSkeletonTest(unittest.TestCase):
     def setUp(self):
-        if is_standalone_root(REPO_ROOT):
-            pending = REPO_ROOT.parent / ".scratch/sunway-supplier-exit-api-first/diagnostic-evidence/pending"
-            binding = capture_binding(REPO_ROOT)
-            candidates = []
-            for ledger in pending.glob("current-*/api-route-ledger-current-head.json"):
-                try:
-                    payload = json.loads(ledger.read_text())
-                except (OSError, ValueError):
-                    continue
-                if (payload.get("implementation_binding") == binding["binding_id"]
-                        and payload.get("implementation_tree_digest") == binding["implementation_tree_digest"]
-                        and payload.get("implementation_dirty") is False):
-                    plan = ledger.with_name("api-route-execution-plan-current-head.json")
-                    if plan.is_file():
-                        candidates.append((ledger.stat().st_mtime_ns, ledger, plan))
-            if candidates:
-                _, ledger_path, plan_path = max(candidates, key=lambda item: (item[0], item[1].as_posix()))
-            else:
-                ledger_path = REPO_ROOT / ".scratch/sunway-supplier-exit-api-first/archive/historical/api-route-ledger-current-head--9769aa2122b6.json"
-                plan_path = REPO_ROOT / ".scratch/sunway-supplier-exit-api-first/archive/historical/api-route-execution-plan-current-head--9c7f17af1853.json"
-        else:
-            ledger_path = REPO_ROOT.parent / ".scratch/sunway-supplier-exit-api-first/archive/historical/api-route-ledger-20261027-current-head.json"
-            plan_path = REPO_ROOT.parent / ".scratch/sunway-supplier-exit-api-first/archive/historical/api-route-execution-plan-20261027-current-head.json"
-        self.ledger = json.loads(ledger_path.read_text())
-        self.plan = json.loads(plan_path.read_text())
+        self.temp = tempfile.TemporaryDirectory(prefix="api-family-skeleton-")
+        self.addCleanup(self.temp.cleanup)
+        self.root = Path(self.temp.name)
+        self.controller = self.root / "owned-framework/src/main/java/fixture/SharedController.java"
+        self.controller.parent.mkdir(parents=True)
+        self.controller.write_text('''package fixture;
+import fixture.QueryService;
+public class SharedController {
+    private final QueryService service;
+    @PostMapping(path = {"/people/queries", "/people/queries/raw", "/people/queries/searchable",
+                         "/equipment/queries", "/equipment/queries/raw"})
+    public Object query(String body) { return service.query(body); }
+    @GetMapping(path = "/people/info/status")
+    public Object status() { return null; }
+}
+''')
+        service = self.controller.with_name("QueryService.java")
+        service.write_text('''package fixture;
+public class QueryService {
+    private final QueryDao dao;
+    public Object query(String body) { return dao.readPage(body); }
+}
+''')
+        self.controller.with_name("QueryDao.java").write_text('''package fixture;
+public class QueryDao {
+    public Object readPage(String body) { return null; }
+}
+''')
+        project = self.root / "project/src/main/java/fixture/people/resource/PeopleResource.java"
+        project.parent.mkdir(parents=True)
+        project.write_text("package fixture.people.resource; public interface PeopleResource {}")
+        mapper = project.parent.parent / "mapper/conf/people-oracle-mapper.xml"
+        mapper.parent.mkdir(parents=True)
+        mapper.write_text('''<mapper namespace="fixture.PeopleMapper"><select id="selectByCondition">
+SELECT A.ID,A.NAME FROM T_PEOPLE A
+<include refid="GlobalMapper.appendWhereClausesIfPresent"/>
+</select></mapper>''')
+        rows = []
+        for route_id, base, path, method in [
+            ("p-query", "/people", "/people/queries", "POST"),
+            ("p-raw", "/people", "/people/queries/raw", "POST"),
+            ("p-search", "/people", "/people/queries/searchable", "POST"),
+            ("e-query", "/equipment", "/equipment/queries", "POST"),
+            ("e-raw", "/equipment", "/equipment/queries/raw", "POST"),
+            ("p-status", "/people", "/people/info/status", "GET"),
+            ("missing-query", "/missing", "/missing/queries", "POST"),
+            ("missing-raw", "/missing", "/missing/queries/raw", "POST"),
+        ]:
+            rows.append({"id": route_id, "method": method, "path": path, "class_base": base,
+                         "class": "fixture.people.resource.PeopleResource",
+                         "source": "fixture/people/resource/PeopleResource.java",
+                         "family": "personnel" if base == "/people" else "equipment",
+                         "route_kind": "inherited-api", "owned_sources": [str(self.controller.relative_to(self.root))]})
+        self.ledger = {"routes": rows, "boundary_routes": [], "source_commit": "fixture-head"}
+        self.plan = {"assignment": {row["id"]: "group-fixture" for row in rows}}
+
+    def build(self):
+        return module.build(self.ledger, self.plan, source_root=self.root)
 
     def test_all_routes_are_assigned_to_ordered_waves(self):
-        output = module.build(self.ledger, self.plan)
+        output = self.build()
         # The boundary inventory is generated from the current owned source
         # roots and can grow when a new owned compatibility seam is added.
         # Assert consistency with the generated wave rows rather than freezing
@@ -61,11 +96,82 @@ class ContractSkeletonTest(unittest.TestCase):
                             for case in cases))
 
     def test_skeleton_does_not_promote_behavior(self):
-        output = module.build(self.ledger, self.plan)
+        output = self.build()
         cases = [case for wave in output["waves"] for case in wave["cases"]]
         self.assertTrue(all(case["disposition"] == "unknown" for case in cases))
         self.assertTrue(all(case["unknown_reason"] for case in cases))
         self.assertTrue(all(wave["strict_ready"] is False for wave in output["waves"]))
+
+    def test_shared_handler_groups_query_aliases_but_not_other_resources(self):
+        output = self.build()
+        families = output["behavior_families"]
+        people = next(f for f in families if "p-query" in f["alias_route_ids"])
+        self.assertEqual(people["alias_route_ids"], ["p-query", "p-raw", "p-search"])
+        self.assertEqual(people["source_handler"]["class"], "fixture.SharedController")
+        self.assertEqual(people["source_handler"]["method"], "query")
+        equipment = next(f for f in families if "e-query" in f["alias_route_ids"])
+        self.assertEqual(equipment["alias_route_ids"], ["e-query", "e-raw"])
+        self.assertNotEqual(people["id"], equipment["id"])
+        self.assertNotEqual(people["id"], next(f for f in families if "p-status" in f["alias_route_ids"])["id"])
+        cases = [c for wave in output["waves"] for c in wave["cases"]]
+        self.assertTrue(all(case["behavior_family_id"] for case in cases))
+        self.assertEqual(sorted(c["route_id"] for c in cases), sorted(self.plan["assignment"]))
+
+    def test_route_specific_actions_do_not_become_query_aliases(self):
+        text = self.controller.read_text().replace('"/equipment/queries/raw"}', '"/equipment/queries/raw", "/people/queries/tasks"}')
+        self.controller.write_text(text)
+        task = dict(self.ledger["routes"][0], id="p-tasks", path="/people/queries/tasks")
+        self.ledger["routes"].append(task)
+        self.plan["assignment"]["p-tasks"] = "group-fixture"
+        families = self.build()["behavior_families"]
+        family = next(f for f in families if "p-tasks" in f["alias_route_ids"])
+        self.assertEqual(family["alias_route_ids"], ["p-tasks"])
+        self.assertEqual(family["path_template"], "/people/queries/tasks")
+
+    def test_missing_handler_stays_route_specific_and_unknown(self):
+        output = self.build()
+        for route_id in ("missing-query", "missing-raw"):
+            family = next(f for f in output["behavior_families"] if route_id in f["alias_route_ids"])
+            self.assertEqual(family["alias_route_ids"], [route_id])
+            self.assertIsNone(family["source_handler"])
+            self.assertIn("source handler", " ".join(family["unknown_reasons"]))
+
+    def test_source_chain_and_mapper_are_hashed_static_provenance(self):
+        family = next(f for f in self.build()["behavior_families"] if "p-query" in f["alias_route_ids"])
+        source = next(f for f in family["source_provenance"] if f["path"].endswith("SharedController.java"))
+        self.assertEqual(source["sha256"], hashlib.sha256(self.controller.read_bytes()).hexdigest())
+        self.assertEqual({node["class"] for node in family["dependency_chain"]},
+                         {"fixture.SharedController", "fixture.QueryService", "fixture.QueryDao"})
+        mapper = family["mapper_statements"][0]
+        self.assertEqual(mapper["namespace"], "fixture.PeopleMapper")
+        self.assertEqual(mapper["statement_id"], "selectByCondition")
+        self.assertIn("T_PEOPLE", mapper["tables"])
+        self.assertIn("A.ID,A.NAME", mapper["sql_projection"])
+        self.assertEqual(family["permission_policy"], "unknown")
+        self.assertEqual(family["organization_policy"], "unknown")
+        self.assertTrue(any("permission" in reason for reason in family["unknown_reasons"]))
+        self.assertTrue(all(node["evidence_kind"] == "static-source-reference" for node in family["dependency_chain"]))
+
+    def test_parameterized_jobs_keep_each_alias_unexecuted(self):
+        output = self.build()
+        jobs = output["behavior_family_jobs"]
+        people = next(j for j in jobs if any(p["route_id"] == "p-query" for p in j["parameters"]))
+        self.assertEqual({p["path"] for p in people["parameters"]},
+                         {"/people/queries", "/people/queries/raw", "/people/queries/searchable"})
+        self.assertTrue(all(job["strict_evidence"] is False and job["strict_ready"] is False for job in jobs))
+        self.assertTrue(all(f["disposition"] == "unknown" and f["alias_equivalence"] == "unverified"
+                            for f in output["behavior_families"]))
+        self.assertIn("milestone", output["route_execution_model"]["application"])
+        self.assertIn("persistent", output["route_execution_model"]["oracle"])
+        self.assertTrue(all("no Oracle" in wave["runtime_policy"] for wave in output["waves"]))
+
+    def test_ambiguous_handlers_cannot_merge_route_coverage(self):
+        with self.controller.open("a") as out:
+            out.write('\n@PostMapping(path="/people/queries") public Object duplicate(String body) { return null; }\n')
+        family = next(f for f in self.build()["behavior_families"] if "p-query" in f["alias_route_ids"])
+        self.assertEqual(family["alias_route_ids"], ["p-query"])
+        self.assertIsNone(family["source_handler"])
+        self.assertTrue(any("ambiguous" in reason for reason in family["unknown_reasons"]))
 
     def test_fast_skeleton_jobs_are_executable_diagnostic_metadata(self):
         fast_path = ROOT / "tools" / "fast_contract_skeleton.py"

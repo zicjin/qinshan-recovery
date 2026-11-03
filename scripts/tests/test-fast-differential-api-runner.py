@@ -147,8 +147,44 @@ class FastDifferentialTest(unittest.TestCase):
         profiles = MODULE.request_profiles(route)
         self.assertEqual([profile["profile"] for profile in profiles], ["default", "page-2", "empty", "malformed"])
         self.assertEqual(profiles[1]["body"]["p"]["n"], 2)
-        self.assertEqual(profiles[2]["body"]["q"]["keyword"], "__sunway_fast_empty__")
-        self.assertEqual(profiles[3]["body"], {})
+        self.assertEqual(profiles[2]["body"]["p"]["f"], {"id_SEQ": "-987654321"})
+        self.assertTrue(profiles[2]["assert_no_rows"])
+        self.assertEqual(profiles[3]["body"]["p"]["n"], "invalid")
+
+    def test_ignored_no_match_filter_is_behavior_mismatch_not_data_scope(self):
+        route = {"method": "POST", "path": "/x/queries"}
+        profile = MODULE.request_profiles(route, ("empty",))[0]
+        supplier = {"status": 200, "content_type": "application/json", "json": {"total": 0, "rows": []}}
+        owned = {"status": 200, "content_type": "application/json", "json": {"total": 100, "rows": [{"id": 1}]}}
+        result, detail = MODULE.compare(supplier, owned, profile=profile)
+        self.assertEqual(result, "fast-mismatch")
+        self.assertEqual(detail["reason"], "no-match-filter-not-applied")
+        result, detail = MODULE.compare(owned, supplier, profile=profile)
+        self.assertEqual(result, "blocked")
+        self.assertEqual(detail["side"], "supplier")
+
+    def test_ignored_sort_is_not_hidden_by_id_or_row_normalization(self):
+        profile = MODULE.request_profiles({"method": "POST", "path": "/x/queries"}, ("ascending",))[0]
+        supplier = {"status": 200, "content_type": "application/json", "json": {"rows": [{"id": 1}, {"id": 2}]}}
+        owned = {"status": 200, "content_type": "application/json", "json": {"rows": [{"id": 2}, {"id": 1}]}}
+        result, detail = MODULE.compare(supplier, owned, profile=profile)
+        self.assertEqual(result, "fast-mismatch")
+        self.assertEqual(detail["reason"], "requested-sort-not-applied")
+
+    def test_java_error_frames_normalize_but_error_code_remains_contract(self):
+        supplier = {"status": 500, "content_type": "", "json": {"message": "GIKAM.EXCEPTION.UNEXPECTED", "stacktrace": "supplier frames"}}
+        owned = {"status": 500, "content_type": "", "json": {"message": "GIKAM.EXCEPTION.UNEXPECTED", "stacktrace": ""}}
+        self.assertEqual(MODULE.compare(supplier, owned)[0], "fast-equivalent")
+        owned["json"]["message"] = "DIFFERENT.ERROR"
+        self.assertEqual(MODULE.compare(supplier, owned)[0], "fast-mismatch")
+
+    def test_sql_helper_metadata_only_is_not_organization_mismatch(self):
+        supplier = {"status": 200, "content_type": "application/json", "json": {"rows": [{"id": 1}], "total": 1, "columnTypeMap": {"id": "number", "rn_": "number"}}}
+        owned = {"status": 200, "content_type": "application/json", "json": {"rows": [{"id": 1}], "total": 1, "columnTypeMap": {"id": "number"}}}
+        classification, detail = MODULE.compare(supplier, owned)
+        self.assertEqual(classification, "fast-equivalent")
+        self.assertEqual(detail["reason"], "sql-helper-metadata")
+        self.assertNotIn("category", detail)
 
     def test_special_read_profiles_are_named(self):
         self.assertEqual(MODULE.request_profile({"method": "GET", "path": "/x/action/print", "route_kind": "inherited-api"})["profile"], "print")

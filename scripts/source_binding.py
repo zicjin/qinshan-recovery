@@ -126,6 +126,7 @@ _IMPLEMENTATION_SUFFIXES = (
     "scripts/source_binding.py",
     "scripts/evidence_output.py",
     "scripts/spring_api_contract_runner.py",
+    "scripts/fast_differential_api_runner.py",
     "scripts/api_wave_orchestrator.py",
     "scripts/owned_runtime_contract.py",
     "scripts/api_fixture.py",

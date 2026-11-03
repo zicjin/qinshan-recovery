@@ -237,10 +237,11 @@ def request_profiles(route: Mapping[str, Any], enabled: Optional[Sequence[str]] 
         profiles = {
             "default": {"profile": "default", "method": "POST", "body": {"p": {"n": 1, "s": 10}}},
             "page-2": {"profile": "page-2", "method": "POST", "body": {"p": {"n": 2, "s": 10}}},
-            # The token is intentionally impossible and is only a read query.
-            "empty": {"profile": "empty", "method": "POST", "body": {"p": {"n": 1, "s": 10}, "q": {"keyword": "__sunway_fast_empty__"}}},
-            # An empty object exercises validation without changing state.
-            "malformed": {"profile": "malformed", "method": "POST", "body": {}},
+            # Use the mapper's actual filter envelope. A top-level q.keyword
+            # was silently ignored by both applications, so it never tested filtering.
+            "empty": {"profile": "empty", "method": "POST", "body": {"p": {"n": 1, "s": 10, "f": {"id_SEQ": "-987654321"}}}, "assert_no_rows": True},
+            "malformed": {"profile": "malformed", "method": "POST", "body": {"p": {"n": "invalid", "s": 10}}},
+            "ascending": {"profile": "ascending", "method": "POST", "body": {"p": {"n": 1, "s": 10, "o": [{"id": "asc"}]}}, "assert_order": {"field": "id", "direction": "asc"}},
         }
         return [profiles[name] for name in requested if name in requested_set and name in profiles]
     return []
@@ -286,6 +287,10 @@ def normalize(value: Any, key: str = "") -> Any:
         return items
     if DYNAMIC_KEY.search(key):
         return "<NORMALIZED>"
+    if key.lower() == "stacktrace" and isinstance(value, str):
+        # Different Java implementations necessarily have different diagnostic
+        # frames. Retain the envelope/status/error code; normalize frame bodies.
+        return "<NORMALIZED_STACKTRACE>"
     if isinstance(value, str) and (len(value) > 24 and re.fullmatch(r"[0-9a-fA-F-]+", value)):
         return "<NORMALIZED>"
     if isinstance(value, str) and (
@@ -370,7 +375,8 @@ def _data_projection_view(value: Mapping[str, Any]) -> Dict[str, Any]:
     return normalize(result)
 
 
-def compare(supplier: Mapping[str, Any], owned: Mapping[str, Any], path: str = "") -> Tuple[str, Dict[str, Any]]:
+def compare(supplier: Mapping[str, Any], owned: Mapping[str, Any], path: str = "",
+            profile: Optional[Mapping[str, Any]] = None) -> Tuple[str, Dict[str, Any]]:
     if supplier.get("status") != owned.get("status"):
         return "fast-mismatch", {"reason": "status", "supplier": supplier.get("status"), "owned": owned.get("status")}
     if path == "/open/security/public-key" and supplier.get("status") == owned.get("status") == 200:
@@ -380,6 +386,34 @@ def compare(supplier: Mapping[str, Any], owned: Mapping[str, Any], path: str = "
     if supplier.get("content_type") != owned.get("content_type"):
         return "fast-mismatch", {"reason": "content_type", "supplier": supplier.get("content_type"), "owned": owned.get("content_type")}
     if "json" in supplier and "json" in owned:
+        # Filtering and sorting are behavior, not data-baseline drift. Check
+        # profile invariants before normalization drops IDs and sorts rows.
+        for side, observation in (("supplier", supplier), ("owned", owned)):
+            payload = observation["json"]
+            if observation.get("status") != 200 or not isinstance(payload, Mapping):
+                continue
+            failure = None
+            if profile and profile.get("assert_no_rows"):
+                if payload.get("total") != 0 or payload.get("rows") != []:
+                    failure = "no-match-filter-not-applied"
+            ordering = profile.get("assert_order") if profile else None
+            if ordering:
+                rows = payload.get("rows")
+                field = ordering["field"]
+                if not isinstance(rows, list) or any(not isinstance(row, Mapping) or field not in row for row in rows):
+                    failure = "sort-projection-unavailable"
+                else:
+                    try:
+                        values = [row[field] for row in rows]
+                        if values != sorted(values, reverse=ordering.get("direction") == "desc"):
+                            failure = "requested-sort-not-applied"
+                    except TypeError:
+                        failure = "sort-values-not-comparable"
+            if failure:
+                return ("blocked" if side == "supplier" else "fast-mismatch"), {
+                    "reason": failure, "side": side,
+                    "profile": profile.get("profile") if profile else None,
+                }
         left, right = normalize(supplier["json"]), normalize(owned["json"])
         if left != right:
             if isinstance(left, dict) and isinstance(right, dict):
@@ -401,6 +435,13 @@ def compare(supplier: Mapping[str, Any], owned: Mapping[str, Any], path: str = "
                         "supplier_fields": sorted(left_fields),
                         "owned_fields": sorted(right_fields),
                     }
+                helper_left, helper_right = dict(left), dict(right)
+                for view in (helper_left, helper_right):
+                    if isinstance(view.get("columnTypeMap"), Mapping):
+                        view["columnTypeMap"] = {k: v for k, v in view["columnTypeMap"].items()
+                                                 if str(k).lower() != "rn_"}
+                if helper_left == helper_right:
+                    return "fast-equivalent", {"reason": "sql-helper-metadata"}
                 # Pagination totals and row projections describe the observed
                 # data baseline. Keep them out of the envelope/schema
                 # comparison so an organization/data snapshot difference is
@@ -570,7 +611,7 @@ def run(args: argparse.Namespace) -> Dict[str, Any]:
             request_path = str(profile.get("path") or route["path"])
             left = supplier.request(profile["method"], request_path, profile["body"])
             right = owned.request(profile["method"], request_path, profile["body"])
-            classification, diff = compare(left, right, request_path)
+            classification, diff = compare(left, right, request_path, profile=profile)
         except ProbeError as error:
             left = right = {"error": str(error)}
             classification, diff = "blocked", {"reason": str(error)}
@@ -636,7 +677,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     parser.add_argument("--family", default="")
     parser.add_argument("--route-kind", default="inherited-api,api-resource")
     parser.add_argument("--profiles", default="default,page-2,empty,malformed",
-                        help="comma-separated read profiles (default,page-2,empty,malformed)")
+                        help="comma-separated read profiles (default,page-2,empty,malformed,ascending)")
     parser.add_argument("--role", default="manager")
     parser.add_argument("--organization", default="org-a")
     parser.add_argument("--limit", type=int, default=20)

@@ -29,4 +29,7 @@ public interface OwnedIdentityProvider {
     void authorize(OwnedPrincipal principal, String permission) throws SQLException;
 
     Set<String> permittedOrganizationIds(OwnedPrincipal principal) throws SQLException;
+
+    /** Safe DTO inputs for the current identity; never include credentials or grants cached at login. */
+    java.util.Map<String, Object> accountProfile(OwnedPrincipal principal) throws SQLException;
 }

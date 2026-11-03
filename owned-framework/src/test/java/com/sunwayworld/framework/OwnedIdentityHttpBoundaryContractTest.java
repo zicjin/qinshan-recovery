@@ -52,6 +52,8 @@ public final class OwnedIdentityHttpBoundaryContractTest {
             public void run() throws Exception { boundary.login(session.httpSession(), unsupported); }
         });
         check(!unsupported.hasPassword(), "unsupported login fields still clear the password");
+        check(!session.contains(OwnedIdentityHttpBoundary.SESSION_ATTRIBUTE), "unsupported reauthentication clears the prior identity");
+        boundary.login(session.httpSession(), new OwnedLoginRequest("u-a", "secret".toCharArray()));
 
         boundary.requirePermission(session.httpSession(), OwnedIdentityProvider.PERSONNEL_READ);
         check(last(audit.events()).getOutcome() == AuditEvent.Outcome.ALLOWED, "granted permission is audited");
@@ -102,9 +104,22 @@ public final class OwnedIdentityHttpBoundaryContractTest {
         check(String.valueOf(loginResponse.getBody()).contains("\"id\":\"u-a\"")
                 && String.valueOf(loginResponse.getBody()).contains("\"orgName\":\"Fixture Org\""),
                 "login response exposes the authenticated organization context");
+        com.alibaba.fastjson.JSONObject loginUser = com.alibaba.fastjson.JSON.parseObject(String.valueOf(loginResponse.getBody()));
+        String firstToken = loginUser.getJSONObject("ext$").getString("logintoken");
+        check(firstToken != null && firstToken.matches("[a-f0-9]{32}"), "owned session issues an opaque login token");
+        com.alibaba.fastjson.JSONObject accountUser = com.alibaba.fastjson.JSON.parseObject(controller.account(http.request()).getBody());
+        check(firstToken.equals(accountUser.getJSONObject("ext$").getString("logintoken")), "account reuses this session's token");
+        check(!accountUser.containsKey("roles") && !accountUser.containsKey("isAdmin"), "account has no fabricated top-level role/admin fields");
         ResponseEntity<?> logoutResponse = controller.logout(http.request());
         check(logoutResponse.getStatusCode() == HttpStatus.OK
                 && !session.contains(OwnedIdentityHttpBoundary.SESSION_ATTRIBUTE), "observed logout route clears session");
+        check(controller.account(http.request()).getStatusCode() == HttpStatus.UNAUTHORIZED, "logout invalidates account projection");
+        com.alibaba.fastjson.JSONObject secondLogin = com.alibaba.fastjson.JSON.parseObject(controller.login(http.request()).getBody());
+        check(!firstToken.equals(secondLogin.getJSONObject("ext$").getString("logintoken")), "new authentication rotates token");
+        provider.failAuthentication = true;
+        check(controller.login(http.request()).getStatusCode() == HttpStatus.UNAUTHORIZED
+                && controller.account(http.request()).getStatusCode() == HttpStatus.UNAUTHORIZED,
+                "failed reauthentication cannot retain the prior session identity/token");
         SessionFixture expired = new SessionFixture();
         expired.invalidated = true;
         fails(AccessDeniedException.class, new Attempt() {
@@ -141,6 +156,13 @@ public final class OwnedIdentityHttpBoundaryContractTest {
             if (deny || !PERSONNEL_READ.equals(permission)) throw new AccessDeniedException("GIKAM.PERMISSION.UNAUTHORIZED");
         }
         public OwnedPrincipal refresh(OwnedPrincipal value) { return value; }
+        public java.util.Map<String, Object> accountProfile(OwnedPrincipal value) {
+            java.util.Map<String, Object> profile = new java.util.LinkedHashMap<String, Object>();
+            profile.put("id", value.getId()); profile.put("orgId", value.getOrgId());
+            profile.put("orgName", value.getOrgName());
+            profile.put("ext$", new java.util.LinkedHashMap<String, Object>());
+            return profile;
+        }
         public Set<String> permittedOrganizationIds(OwnedPrincipal value) {
             return Collections.unmodifiableSet(new LinkedHashSet<String>(Arrays.asList("org-a")));
         }

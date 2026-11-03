@@ -186,6 +186,16 @@ class FastDifferentialTest(unittest.TestCase):
         self.assertEqual(detail["reason"], "sql-helper-metadata")
         self.assertNotIn("category", detail)
 
+    def test_account_is_read_only_and_session_secrets_are_not_retained(self):
+        self.assertTrue(MODULE.route_safe({"method": "GET", "path": "/core/module/sys/logins/account", "route_kind": "web-controller"})[0])
+        self.assertFalse(MODULE.route_safe({"method": "POST", "path": "/core/module/sys/logins/account", "route_kind": "web-controller"})[0])
+        source = {"status": 200, "content_type": "application/json", "json": {"ext$": {"logintoken": "secret-session-value", "logintime": "dynamic-time", "roles": '[{"roleId":2},{"roleId":7}]'}}}
+        target = {"status": 200, "content_type": "application/json", "json": {"ext$": {"logintoken": "different-session-value", "logintime": "different-time", "roles": '[{"roleId":7},{"roleId":2}]'}}}
+        self.assertEqual(MODULE.compare(source, target)[0], "fast-equivalent")
+        self.assertNotIn("secret-session-value", json.dumps(MODULE.safe_observation(source)))
+        target["json"]["ext$"]["roles"] = '[{"roleId":7}]'
+        self.assertEqual(MODULE.compare(source, target)[0], "fast-mismatch")
+
     def test_special_read_profiles_are_named(self):
         self.assertEqual(MODULE.request_profile({"method": "GET", "path": "/x/action/print", "route_kind": "inherited-api"})["profile"], "print")
         self.assertEqual(MODULE.request_profile({"method": "GET", "path": "/x/columns/name", "route_kind": "inherited-api"})["profile"], "column")

@@ -292,6 +292,13 @@ public final class OwnedIdentityServletContractTest {
         public void authorize(OwnedPrincipal value, String permission) {
             if (!PERSONNEL_READ.equals(permission)) throw new org.springframework.security.access.AccessDeniedException("GIKAM.PERMISSION.UNAUTHORIZED");
         }
+        public java.util.Map<String, Object> accountProfile(OwnedPrincipal value) {
+            java.util.Map<String, Object> profile = new java.util.LinkedHashMap<String, Object>();
+            profile.put("id", value.getId()); profile.put("orgId", value.getOrgId());
+            profile.put("orgName", value.getOrgName());
+            profile.put("ext$", new java.util.LinkedHashMap<String, Object>());
+            return profile;
+        }
         public Set<String> permittedOrganizationIds(OwnedPrincipal value) {
             return Collections.unmodifiableSet(new LinkedHashSet<String>(Collections.singleton("org-a")));
         }

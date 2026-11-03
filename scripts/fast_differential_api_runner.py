@@ -174,6 +174,8 @@ def route_safe(route: Mapping[str, Any]) -> Tuple[bool, str]:
         return False, "method-not-read-only"
     if kind == "web-controller" and method == "GET" and path == "/open/security/public-key":
         return True, "public-key-shape-only"
+    if kind == "web-controller" and method == "GET" and path == "/core/module/sys/logins/account":
+        return True, "authenticated-session-account-read"
     if kind not in {"inherited-api", "api-resource"}:
         return False, "route-kind-not-selected"
     lower_path = path.lower()
@@ -287,6 +289,18 @@ def normalize(value: Any, key: str = "") -> Any:
         return items
     if DYNAMIC_KEY.search(key):
         return "<NORMALIZED>"
+    if key.lower() in {"logintoken", "logintime", "appuuid"}:
+        return "<NORMALIZED_SESSION_VALUE>"
+    if key.lower() == "roles" and isinstance(value, str):
+        try:
+            decoded = json.loads(value)
+        except ValueError:
+            return value
+        if isinstance(decoded, list):
+            # The original DTO encodes assignment records as a JSON string;
+            # membership matters, while the SQL has no ordering contract.
+            return sorted((normalize(item) for item in decoded),
+                          key=lambda item: json.dumps(item, ensure_ascii=False, sort_keys=True))
     if key.lower() == "stacktrace" and isinstance(value, str):
         # Different Java implementations necessarily have different diagnostic
         # frames. Retain the envelope/status/error code; normalize frame bodies.

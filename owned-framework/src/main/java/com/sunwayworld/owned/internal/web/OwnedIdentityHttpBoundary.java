@@ -17,6 +17,8 @@ import org.springframework.security.access.AccessDeniedException;
  */
 public final class OwnedIdentityHttpBoundary {
     public static final String SESSION_ATTRIBUTE = OwnedIdentityHttpBoundary.class.getName() + ".principal";
+    private static final String LOGIN_TIME = OwnedIdentityHttpBoundary.class.getName() + ".login-time";
+    private static final String LOGIN_TOKEN = OwnedIdentityHttpBoundary.class.getName() + ".login-token";
 
     private final OwnedIdentityProvider provider;
     private final AuditEventSink audit;
@@ -37,11 +39,16 @@ public final class OwnedIdentityHttpBoundary {
             OwnedPrincipal principal = provider.authenticate(request.getUserId(), password);
             record("login", principal.getId(), principal.getOrgId(), null, AuditEvent.Outcome.ALLOWED, "authenticated");
             session.setAttribute(SESSION_ATTRIBUTE, principal);
+            session.setAttribute(LOGIN_TIME, java.time.LocalDateTime.now().format(
+                    java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+            session.setAttribute(LOGIN_TOKEN, java.util.UUID.randomUUID().toString().replace("-", ""));
             return principal;
         } catch (SQLException failure) {
+            clearPrincipal(session);
             record("login", request.getUserId(), null, AuditEvent.Outcome.DENIED, "identity-provider-failure");
             throw failure;
         } catch (RuntimeException failure) {
+            clearPrincipal(session);
             record("login", request.getUserId(), null, AuditEvent.Outcome.DENIED, reason(failure));
             throw failure;
         } finally {
@@ -53,7 +60,7 @@ public final class OwnedIdentityHttpBoundary {
     public void logout(HttpSession session) {
         requireSession(session);
         OwnedPrincipal principal = principalAttribute(session);
-        session.removeAttribute(SESSION_ATTRIBUTE);
+        clearPrincipal(session);
         record("logout", principal == null ? null : principal.getId(), principal == null ? null : principal.getOrgId(), null,
                 principal == null ? AuditEvent.Outcome.DENIED : AuditEvent.Outcome.ALLOWED,
                 principal == null ? "anonymous" : "session-cleared");
@@ -81,6 +88,28 @@ public final class OwnedIdentityHttpBoundary {
             record("session", stored.getId(), stored.getOrgId(), null, AuditEvent.Outcome.DENIED, reason(failure));
             throw failure;
         }
+    }
+
+    /** One projection serves login and account reads; role assignments are loaded afresh. */
+    @SuppressWarnings("unchecked")
+    public java.util.Map<String, Object> account(HttpSession session) throws SQLException {
+        OwnedPrincipal principal = currentPrincipal(session);
+        java.util.Map<String, Object> account = new java.util.LinkedHashMap<String, Object>(provider.accountProfile(principal));
+        java.util.Map<String, Object> extension = new java.util.LinkedHashMap<String, Object>();
+        Object values = account.get("ext$");
+        if (values instanceof java.util.Map<?, ?>) extension.putAll((java.util.Map<String, Object>) values);
+        extension.put("loginorgid", principal.getOrgId());
+        extension.put("loginorgname", principal.getOrgName());
+        Object loginTime = session.getAttribute(LOGIN_TIME);
+        Object loginToken = session.getAttribute(LOGIN_TOKEN);
+        if (loginTime == null || loginToken == null) {
+            clearPrincipal(session);
+            throw denied();
+        }
+        extension.put("logintime", loginTime);
+        extension.put("logintoken", loginToken);
+        account.put("ext$", extension);
+        return account;
     }
 
     public void requirePermission(HttpSession session, String permission) throws SQLException {
@@ -163,7 +192,11 @@ public final class OwnedIdentityHttpBoundary {
     }
     private static void clearPrincipal(HttpSession session) {
         if (session == null) return;
-        try { session.removeAttribute(SESSION_ATTRIBUTE); }
+        try {
+            session.removeAttribute(SESSION_ATTRIBUTE);
+            session.removeAttribute(LOGIN_TIME);
+            session.removeAttribute(LOGIN_TOKEN);
+        }
         catch (IllegalStateException ignored) { /* session was already invalidated */ }
     }
     private static void requireSession(HttpSession session) {

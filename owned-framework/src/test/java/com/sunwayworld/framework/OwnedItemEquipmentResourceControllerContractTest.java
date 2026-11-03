@@ -41,6 +41,12 @@ public final class OwnedItemEquipmentResourceControllerContractTest {
             if (method.getReturnType() == OwnedItemEquipmentResourceController.class) registered = true;
         }
         if (!registered) throw new AssertionError("owned item equipment controller is not registered");
+        try {
+            String source = new String(java.nio.file.Files.readAllBytes(java.nio.file.Paths.get(
+                    "owned-framework/src/main/java/com/sunwayworld/owned/internal/web/OwnedItemEquipmentResourceController.java")), "UTF-8");
+            if (!source.contains("equipt-purchs") || !source.contains("auditStatus") || !source.contains("statusCode"))
+                throw new AssertionError("equipment purchase status must preserve auditStatus envelope");
+        } catch (java.io.IOException error) { throw new AssertionError("cannot inspect equipment resource source", error); }
         System.out.println("owned item equipment mapping scope checks passed");
     }
 

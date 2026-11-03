@@ -99,7 +99,13 @@ public final class OwnedItemEquipmentResourceController {
             }, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> status(HttpServletRequest request) {
         String resource = resource(request);
-        try { descriptor(resource); requireRead(request); return ok("{\"ext$\":{}}"); }
+        try {
+            descriptor(resource); requireRead(request);
+            if ("equipt-purchs".equals(resource)) {
+                return ok("{\"auditStatus\":{\"processStatus\":\"draft\",\"statusCode\":\"draft\"},\"ext$\":{}}");
+            }
+            return ok("{\"ext$\":{}}");
+        }
         catch (AccessDeniedException denied) { return forbidden(); } catch (IllegalArgumentException invalid) { return badRequest(); } catch (SQLException failure) { return unavailable(); }
     }
     @GetMapping(path = {

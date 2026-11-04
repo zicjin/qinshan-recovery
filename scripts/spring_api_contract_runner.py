@@ -14,6 +14,7 @@ from __future__ import annotations
 import argparse
 import datetime as dt
 import hashlib
+import http.client
 import json
 import os
 from pathlib import Path
@@ -77,11 +78,42 @@ def read_password_file(path: Path) -> str:
     raise ValueError("password file has no TEST_PASSWORD entry")
 
 
+def _authentication_request(opener: Any, request: Request, *, timeout: float,
+                            attempts: int = 3) -> Tuple[int, bytes, Mapping[str, str]]:
+    """Run an authentication request with bounded transport retries.
+
+    The reused sss2 strict runtime is reached through two loopback relays. A
+    relay can close an idle keep-alive connection while the application is
+    still healthy. Authentication is safe to retry because it only creates a
+    session; business requests are never retried here.
+    """
+    last_error: Optional[BaseException] = None
+    for attempt in range(attempts):
+        try:
+            with opener.open(request, timeout=timeout) as response:
+                return response.status, response.read(), response.headers
+        except HTTPError as error:
+            return error.code, error.read() if error.fp else b"", error.headers
+        except (OSError, URLError, TimeoutError, http.client.RemoteDisconnected) as error:
+            last_error = error
+            if attempt + 1 < attempts:
+                time.sleep(0.25 * (attempt + 1))
+                continue
+            raise RuntimeError("authentication transport failed after %d attempts: %s" % (attempts, error)) from error
+    raise RuntimeError("authentication transport failed: %s" % last_error)
+
+
 def rsa_login(base_url: str, username: str, password: str, *, timeout: float) -> Dict[str, Any]:
-    key_request = Request(base_url.rstrip("/") + "/open/security/public-key", method="GET")
-    with LOOPBACK_OPENER.open(key_request, timeout=timeout) as response:
-        key_body = response.read()
-        key_status = response.status
+    # Use a fresh opener for each authentication boundary. The global opener
+    # is intentionally retained for contract requests, but stale cookies or a
+    # relay's half-closed keep-alive must not poison public-key/login.
+    auth_jar = CookieJar()
+    auth_opener = build_opener(ProxyHandler({}), HTTPCookieProcessor(auth_jar))
+    key_request = Request(
+        base_url.rstrip("/") + "/open/security/public-key",
+        headers={"Connection": "close"}, method="GET",
+    )
+    key_status, key_body, _ = _authentication_request(auth_opener, key_request, timeout=timeout)
     if key_status != 200:
         raise RuntimeError("RSA public-key request returned %d" % key_status)
     try:
@@ -113,18 +145,18 @@ def rsa_login(base_url: str, username: str, password: str, *, timeout: float) ->
     login_request = Request(
         base_url.rstrip("/") + "/core/module/sys/login",
         data=body,
-        headers={"Content-Type": "application/x-www-form-urlencoded", "SECURITY-RSA-KEY": key_body.decode("ascii").strip()},
+        headers={"Content-Type": "application/x-www-form-urlencoded", "Connection": "close",
+                 "SECURITY-RSA-KEY": key_body.decode("ascii").strip()},
         method="POST",
     )
-    try:
-        with LOOPBACK_OPENER.open(login_request, timeout=timeout) as response:
-            status = response.status
-            response_body = response.read()
-    except HTTPError as error:
-        status = error.code
-        response_body = error.read() if error.fp else b""
+    status, response_body, _ = _authentication_request(auth_opener, login_request, timeout=timeout)
     if status != 200:
         raise RuntimeError("RSA login returned %d" % status)
+    # Transfer only the session cookies produced by this login into the
+    # contract opener. No supplier/owned or prior-job cookies are reused.
+    COOKIE_JAR.clear()
+    for cookie in auth_jar:
+        COOKIE_JAR.set_cookie(cookie)
     return {"status": status, "body_sha256": sha256_bytes(response_body), "authenticated": True}
 
 

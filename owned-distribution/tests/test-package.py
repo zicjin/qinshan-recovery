@@ -27,6 +27,23 @@ def main():
     assert builder.is_file(), 'standalone distribution builder must exist'
     result = subprocess.run([str(builder)], text=True, capture_output=True)
     assert result.returncode == 0, 'standalone distribution build failed: ' + result.stderr[-2000:]
+    with tempfile.TemporaryDirectory(prefix='owned-native-license-gate-') as temporary:
+        gate_report = Path(temporary) / 'native-license-removal.json'
+        source_roots = [
+            ROOT / 'project/src/main/java',
+            ROOT / 'project/src/main/resources',
+            ROOT / 'owned-framework/src/main',
+            ROOT / 'reconstituted/framework',
+        ]
+        gate = subprocess.run([
+            sys.executable,
+            str(ROOT / 'scripts/verify-owned-native-license-removal.py'),
+            *sum((["--source-root", str(path)] for path in source_roots), []),
+            '--distribution', str(DIST),
+            '--output', str(gate_report),
+        ], text=True, capture_output=True)
+        assert gate.returncode == 0, 'native/license removal gate failed: ' + gate.stderr[-2000:]
+        assert json.loads(gate_report.read_text())['findings'] == []
     manifest = json.loads((DIST / 'manifest.json').read_text())
     assert manifest['distribution_mode'] == 'source-only-reconstituted'
     assert manifest['main_class'] == 'com.sunwayworld.emc.projectfunction.GikamWpjcApplication'

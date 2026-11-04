@@ -1,7 +1,7 @@
 {
   "schema": "sunway-java-native-seam-dossier-v1",
   "generated_at": "2026-11-04T05:45:00+00:00",
-  "status": "diagnostic-native-seam-open",
+  "status": "diagnostic-native-seam-analyzed-owned-negative-pass",
   "canonical": false,
   "strict_evidence": false,
   "native_executed": false,
@@ -330,12 +330,24 @@
     "business_license_fields_and_third_party_entitlements": "preserve under explicit allowlist",
     "valid_license_mock": "forbidden"
   },
+  "owned_source_distribution_negative_gate": {
+    "verifier": "scripts/verify-owned-native-license-removal.py",
+    "status": "pass",
+    "finding_count": 0,
+    "scope": [
+      "project/src/main/java",
+      "project/src/main/resources",
+      "owned-framework/src/main",
+      "reconstituted/framework",
+      "owned-distribution/target/distribution"
+    ],
+    "policy": "Sunway native/license/MAC/JNI loader inputs are rejected; business license fields and third-party notices are allowed.",
+    "strict_evidence": false
+  },
   "open_work": [
-    "Replace all recovered native declarations with source-only Java behavior.",
-    "Reconcile seven exported Java functions that have no current simple native declaration.",
-    "Remove GikamCoreApplication's ThirdPartyType loader call and SunwayLibraryExtractor implementation.",
-    "Add focused negative contracts proving license, MAC, server-name and loader paths are absent.",
-    "Run the distribution forbidden-content scan over final source and packaged output."
+    "Keep the retained supplier native/JNI dossier as historical read-only provenance; it is not an owned runtime dependency.",
+    "Add strict HTTP negative cases for removed license/MAC/session enforcement once the API milestone is frozen.",
+    "Complete the external artifact inventory for any approved native seam inputs without copying their opaque contents."
   ],
   "limitations": [
     "REA export, ELF, artifact-graph and objdump workflows are observed shipped-artifact evidence.",

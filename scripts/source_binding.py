@@ -145,6 +145,7 @@ _IMPLEMENTATION_SUFFIXES = (
     "scripts/prepare-reconstituted-public-deps.py",
     "scripts/record-reconstituted-framework-build.py",
     "scripts/verify-reconstituted-framework-modules.py",
+    "scripts/verify-owned-native-license-removal.py",
     "scripts/build-reconstituted-framework.sh",
     "scripts/build-source-only-application.py",
     "docs/reconstitution/decompiler-transforms.json",

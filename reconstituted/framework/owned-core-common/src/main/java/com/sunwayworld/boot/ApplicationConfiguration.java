@@ -135,7 +135,9 @@ public class ApplicationConfiguration extends ApplicationObjectSupport
                 new com.sunwayworld.framework.mybatis.interceptor.MybatisInterceptor(),
                 new com.sunwayworld.framework.mybatis.interceptor.MybatisResultSetInterceptor()
         });
-        return factory.getObject();
+        SqlSessionFactory sqlSessionFactory = factory.getObject();
+        sqlSessionFactory.getConfiguration().setJdbcTypeForNull(org.apache.ibatis.type.JdbcType.VARCHAR);
+        return sqlSessionFactory;
     }
 
     @Bean

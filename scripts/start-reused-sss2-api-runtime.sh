@@ -96,7 +96,8 @@ mkdir -p "$ROOT/distribution"; tar -xzf "$ROOT/incoming/distribution.tgz" -C "$R
 # replacement; this still uses one Spring application and does not touch the
 # Oracle/Redis/supplier containers.
 DEPLOY_IMAGE="$IMAGE"
-if ! docker build --pull=false --tag "$IMAGE" "$ROOT" >/dev/null; then
+FORCE_MOUNT_FALLBACK="${FORCE_MOUNT_FALLBACK:-0}"
+if [[ "$FORCE_MOUNT_FALLBACK" == 1 ]] || ! docker build --pull=false --tag "$IMAGE" "$ROOT" >/dev/null; then
   phase 'docker layer build unavailable; using container file replacement'
   DEPLOY_IMAGE="$OWNED_STRICT_BASE_IMAGE"
 fi

@@ -22,7 +22,9 @@ public class CaseInsensitiveLinkedMap<V> extends LinkedHashMap<String, V> {
    }
 
    public CaseInsensitiveLinkedMap(Map<? extends String, ? extends V> m) {
-      super((Map<String, V>)(Map<?, ?>)m);
+      if (m != null) {
+         m.forEach(this::put);
+      }
    }
 
    public CaseInsensitiveLinkedMap(int initialCapacity, float loadFactor, boolean accessOrder) {
@@ -50,7 +52,9 @@ public class CaseInsensitiveLinkedMap<V> extends LinkedHashMap<String, V> {
 
    @Override
    public void putAll(Map<? extends String, ? extends V> m) {
-      super.putAll((Map<String, V>)(Map<?, ?>)m);
+      if (m != null) {
+         m.forEach(this::put);
+      }
    }
 
    @Override

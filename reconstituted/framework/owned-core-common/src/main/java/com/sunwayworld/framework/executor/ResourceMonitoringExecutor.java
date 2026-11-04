@@ -27,12 +27,12 @@ public class ResourceMonitoringExecutor {
     private static boolean enabled = false;
     public static final Map<Long, Thread> THREAD_CONTAINER = new HashMap<Long, Thread>();
 
-    @Value(value="${sunway.executor.resource-monitoring.momery-threshold:50}")
+    @Value(value="${sunway.executor.resource-monitoring.momery-threshold:100}")
     public void setMomeryThreshold(long momeryThreshold) {
         ResourceMonitoringExecutor.momeryThreshold = momeryThreshold;
     }
 
-    @Value(value="${sunway.executor.resource-monitoring.cpu-threshold:50}")
+    @Value(value="${sunway.executor.resource-monitoring.cpu-threshold:100}")
     public void setCpuThreshold(long cpuThreshold) {
         ResourceMonitoringExecutor.cpuThreshold = cpuThreshold;
     }
@@ -47,7 +47,7 @@ public class ResourceMonitoringExecutor {
         ResourceMonitoringExecutor.maxTaskSize = maxTaskSize;
     }
 
-    @Value(value="${sunway.executor.resource-monitoring.enabled:true}")
+    @Value(value="${sunway.executor.resource-monitoring.enabled:false}")
     public void setEnabled(boolean enabled) {
         ResourceMonitoringExecutor.enabled = enabled;
     }

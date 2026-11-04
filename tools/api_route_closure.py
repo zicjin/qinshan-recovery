@@ -172,10 +172,16 @@ def build_closure(ledger: Mapping[str, Any], report_paths: Iterable[Path]) -> Di
                 expected_source_class = str(case.get("class") or "")
                 expected_profile = case.get("request", {}).get("profile") if isinstance(case.get("request"), dict) else None
                 for alias_id in route_ids:
+                    # route_ids are emitted by the contract generator as the
+                    # authoritative alias binding.  A shared owned controller
+                    # is expected to serve project-source aliases, so its
+                    # class name will often differ from the ledger source
+                    # class.  Use source_class only as diagnostic metadata;
+                    # never discard an explicit route id because of that
+                    # implementation seam.
                     alias_candidates = [candidate for candidate in rows.values()
                                         if candidate.get("id") == str(alias_id)
-                                        and str(candidate.get("method", "")).upper() == method
-                                        and (not expected_source_class or str(candidate.get("source_class", "")) == expected_source_class)]
+                                        and str(candidate.get("method", "")).upper() == method]
                     if len(alias_candidates) == 1:
                         alias_target = rows[str(alias_candidates[0]["id"])]
                         alias_observation = {"report": str(report_path), "report_sha256": digest,

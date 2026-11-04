@@ -1,0 +1,3 @@
+var coreMonitor = Gikam.getPageObject({
+    
+});

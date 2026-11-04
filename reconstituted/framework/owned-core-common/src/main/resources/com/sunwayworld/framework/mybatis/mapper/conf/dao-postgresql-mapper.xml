@@ -1,0 +1,483 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.framework.mybatis.mapper.DaoMapper">
+    <!-- 新增 -->
+    <insert id="insert">
+        INSERT INTO ${contextInstance.context.tableName}
+        <foreach collection="contextInstance.columnContextInstanceList" item="columnInstance" open="(" close=")" separator=",">
+            <if test="columnInstance.active">
+                "${columnInstance.columnContext.columnName.toLowerCase}"
+            </if>
+        </foreach>
+        VALUES
+        <foreach collection="contextInstance.columnContextInstanceList" item="columnInstance" open="(" close=")" separator=",">
+            <if test="columnInstance.active">
+                #{columnInstance.value}
+            </if>
+        </foreach>
+    </insert>
+    <!-- 批量新增 -->
+    <insert id="batchInsert">
+        <foreach collection="contextInstanceList" item="contextInstance">
+	        INSERT INTO ${context.tableName}
+	        <foreach collection="context.columnContextList" item="columnContext" open="(" close=")" separator=",">
+	            "${columnContext.columnName.toLowerCase}"
+	        </foreach>
+	        VALUES
+            <foreach collection="contextInstance.columnContextInstanceList" item="columnInstance" open="(" close=")" separator=",">
+                #{columnInstance.value}
+            </foreach>
+            ;
+        </foreach>
+    </insert>
+    
+    <!-- 删除 -->
+    <delete id="deleteById">
+        DELETE FROM ${contextInstance.context.tableName} T WHERE T.ID = #{contextInstance.idInstance.value}
+    </delete>
+    
+    <!-- 批量删除 -->
+    <delete id="batchDeleteById">
+        DELETE FROM ${context.tableName} T WHERE T.ID IN
+        <choose>
+            <when test="context.numberId">
+                <foreach collection="idList" item="id" open="(" close=")" separator=",">
+                    ${id}
+                </foreach>
+            </when>
+            <otherwise>
+                <foreach collection="idList" item="id" open="(" close=")" separator=",">
+                    '${id}'
+                </foreach>
+            </otherwise>
+        </choose>
+    </delete>
+    
+    <!-- 查询 -->
+    <select id="select" resultType="map">
+        SELECT
+        <choose>
+            <when test='selectColumnList != null and selectColumnList.size() > 0'>
+                <foreach collection="selectColumnList" item="column" separator=",">
+                    "${column.toLowerCase}"
+                </foreach>
+            </when>
+            <otherwise>
+                <foreach collection="contextInstance.columnContextInstanceList" item="columnInstance" separator=",">
+                    "${columnInstance.columnContext.columnName.toLowerCase}"
+                </foreach>
+            </otherwise>
+        </choose>
+            FROM ${contextInstance.context.tableName}
+        <where>
+            <foreach collection="contextInstance.columnContextInstanceList" item="columnInstance" separator="AND">
+                <if test="columnInstance.active">
+                    <choose>
+                        <when test='columnInstance.value == null or columnInstance.value.toString() == ""'>
+                            "${columnInstance.columnContext.columnName.toLowerCase}" IS NULL
+                        </when>
+                        <otherwise>
+                            CAST("${columnInstance.columnContext.columnName.toLowerCase}" AS VARCHAR) = CAST(#{columnInstance.value} AS VARCHAR)
+                        </otherwise>
+                    </choose>
+                </if>
+            </foreach>
+        </where>
+        <if test="orderList != null and orderList.size() > 0">
+            ORDER BY
+            <foreach collection="orderList" item="order" separator=",">
+               "${order.column.toLowerCase}" ${order.direction}
+            </foreach>
+        </if>
+    </select>
+    
+    <!-- 查询 -->
+    <select id="selectUnion" resultType="map">
+        SELECT
+        <choose>
+            <when test='selectColumnList != null and selectColumnList.size() > 0'>
+                <foreach collection="selectColumnList" item="column" separator=",">
+                    "${column.toLowerCase}"
+                </foreach>
+            </when>
+            <otherwise>
+                <foreach collection="contextInstance.columnContextInstanceList" item="columnInstance" separator=",">
+                    "${columnInstance.columnContext.columnName.toLowerCase}"
+                </foreach>
+            </otherwise>
+        </choose>
+            FROM ${contextInstance.context.tableName}
+        <where>
+            <foreach collection="contextInstance.columnContextInstanceList" item="columnInstance" separator="OR">
+                <if test="columnInstance.active">
+                    <choose>
+                        <when test='columnInstance.value == null or columnInstance.value.toString() == ""'>
+                            "${columnInstance.columnContext.columnName.toLowerCase}" IS NULL
+                        </when>
+                        <otherwise>
+                            CAST("${columnInstance.columnContext.columnName.toLowerCase}" AS VARCHAR) = CAST(#{columnInstance.value} AS VARCHAR)
+                        </otherwise>
+                    </choose>
+                </if>
+            </foreach>
+        </where>
+        <if test="orderList != null and orderList.size() > 0">
+            ORDER BY
+            <foreach collection="orderList" item="order" separator=",">
+               "${order.column.toLowerCase}" ${order.direction}
+            </foreach>
+        </if>
+    </select>
+    
+    <!-- 查询满足条件的第一条数据 -->
+    <select id="selectFirst" resultType="map">
+        SELECT * FROM (
+        SELECT
+        <choose>
+            <when test='selectColumnList != null and selectColumnList.size() > 0'>
+                <foreach collection="selectColumnList" item="column" separator=",">
+                    "${column.toLowerCase}"
+                </foreach>
+            </when>
+            <otherwise>
+                <foreach collection="contextInstance.columnContextInstanceList" item="columnInstance" separator=",">
+                    "${columnInstance.columnContext.columnName.toLowerCase}"
+                </foreach>
+            </otherwise>
+        </choose>
+            FROM ${contextInstance.context.tableName}
+        <where>
+            <foreach collection="contextInstance.columnContextInstanceList" item="columnInstance" separator="AND">
+                <if test="columnInstance.active">
+                    <choose>
+                        <when test='columnInstance.value == null or columnInstance.value.toString() == ""'>
+                            "${columnInstance.columnContext.columnName.toLowerCase}" IS NULL
+                        </when>
+                        <otherwise>
+                            CAST("${columnInstance.columnContext.columnName.toLowerCase}" AS VARCHAR) = CAST(#{columnInstance.value} AS VARCHAR)
+                        </otherwise>
+                    </choose>
+                </if>
+            </foreach>
+        </where>
+        <if test="orderList != null and orderList.size() > 0">
+            ORDER BY
+            <foreach collection="orderList" item="order" separator=",">
+               "${order.column.toLowerCase}" ${order.direction}
+            </foreach>
+        </if>
+        ) T LIMIT 1
+    </select>
+    
+    <!-- 通过主键列表查询 -->
+    <select id="selectByIds" resultType="map">
+        SELECT
+        <choose>
+            <when test='selectColumnList != null and selectColumnList.size() > 0'>
+                <foreach collection="selectColumnList" item="column" separator=",">
+                    "${column.toLowerCase}"
+                </foreach>
+            </when>
+            <otherwise>
+                <foreach collection="context.columnContextList" item="columnContext" separator=",">
+                    "${columnContext.columnName.toLowerCase}"
+                </foreach>
+            </otherwise>
+        </choose>
+         FROM ${context.tableName}
+        WHERE ID IN
+        <choose>
+            <when test="context.numberId">
+                <foreach collection="idList" item="id" open="(" close=")" separator=",">
+                    ${id}
+                </foreach>
+            </when>
+            <otherwise>
+                <foreach collection="idList" item="id" open="(" close=")" separator=",">
+                    '${id}'
+                </foreach>
+            </otherwise>
+        </choose>
+        <if test="orderList != null and orderList.size() > 0">
+            ORDER BY
+            <foreach collection="orderList" item="order" separator=",">
+               "${order.column.toLowerCase}" ${order.direction}
+            </foreach>
+        </if>
+    </select>
+    
+    <!-- 查询 -->
+    <select id="batchSelect" resultType="map">
+        SELECT
+        <choose>
+            <when test='selectColumnList != null and selectColumnList.size() > 0'>
+                <foreach collection="selectColumnList" item="column" separator=",">
+                    "${column.toLowerCase}"
+                </foreach>
+            </when>
+            <otherwise>
+                <foreach collection="context.columnContextList" item="columnContext" separator=",">
+                    "${columnContext.columnName.toLowerCase}"
+                </foreach>
+            </otherwise>
+        </choose>
+            FROM ${context.tableName}
+        <where>
+            <foreach collection="contextInstanceList" item="contextInstance" open="(" close=")" separator="OR">
+                <foreach collection="contextInstance.columnContextInstanceList" item="columnInstance" open="(" close=")" separator="AND">
+                    <if test="columnInstance.active">
+                        <choose>
+                            <when test='columnInstance.value == null or columnInstance.value.toString() == ""'>
+                                "${columnInstance.columnContext.columnName.toLowerCase}" IS NULL
+                            </when>
+                            <otherwise>
+                                CAST("${columnInstance.columnContext.columnName.toLowerCase}" AS VARCHAR) = CAST(#{columnInstance.value} AS VARCHAR)
+                            </otherwise>
+                        </choose>
+                    </if>
+                </foreach>
+            </foreach>
+        </where>
+        <if test="orderList != null and orderList.size() > 0">
+            ORDER BY
+            <foreach collection="orderList" item="order" separator=",">
+               "${order.column.toLowerCase}" ${order.direction}
+            </foreach>
+        </if>
+    </select>
+
+    <select id="selectByOneColumnValues" resultType="map">
+        SELECT
+        <choose>
+            <when test='selectColumnList != null and selectColumnList.size() > 0'>
+                <foreach collection="selectColumnList" item="column" separator=",">
+                    "${column.toLowerCase}"
+                </foreach>
+            </when>
+            <otherwise>
+                <foreach collection="context.columnContextList" item="columnContext" separator=",">
+                    "${columnContext.columnName.toLowerCase}"
+                </foreach>
+            </otherwise>
+        </choose>
+        FROM ${context.tableName}
+        <where>
+            "${columnName.toLowerCase}" IN
+            <foreach collection="contextInstanceList" item="contextInstance" open="(" close=")" separator=",">
+                <foreach collection="contextInstance.columnContextInstanceList" item="columnInstance" separator=",">
+                    <if test="columnInstance.active">
+                        <choose>
+                            <when test='columnInstance.value == null or columnInstance.value.toString() == ""'>
+                                NULL
+                            </when>
+                            <otherwise>
+                                #{columnInstance.value}
+                            </otherwise>
+                        </choose>
+                    </if>
+                </foreach>
+            </foreach>
+        </where>
+        <if test="orderList != null and orderList.size() > 0">
+            ORDER BY
+            <foreach collection="orderList" item="order" separator=",">
+                "${order.column.toLowerCase}" ${order.direction}
+            </foreach>
+        </if>
+    </select>
+    
+    <!-- 更新 -->
+    <update id="updateById">
+        UPDATE ${contextInstance.context.tableName} SET
+        <foreach collection="contextInstance.columnContextInstanceList" item="columnInstance" separator=",">
+            <if test='columnInstance.active and columnInstance.columnContext.columnName != "ID"'>
+                "${columnInstance.columnContext.columnName.toLowerCase}" =
+                <if test="columnInstance.active">
+                    <choose>
+                        <when test='columnInstance.value == null or columnInstance.value.toString() == ""'>
+                            NULL
+                        </when>
+                        <otherwise>
+                            #{columnInstance.value}
+                        </otherwise>
+                    </choose>
+                </if>
+            </if>
+        </foreach>
+         WHERE ID = #{contextInstance.idInstance.value}
+    </update>
+    
+    <!-- 通过主键列表更新 -->
+    <update id="updateByIds">
+        UPDATE ${contextInstance.context.tableName} SET
+        <foreach collection="contextInstance.columnContextInstanceList" item="columnInstance" separator=",">
+            <if test='columnInstance.active and columnInstance.columnContext.columnName != "id"'>
+                <if test="columnInstance.active">
+                    "${columnInstance.columnContext.columnName.toLowerCase}" = 
+                    <choose>
+                        <when test='columnInstance.value == null or columnInstance.value.toString() == ""'>
+                            NULL
+                        </when>
+                        <otherwise>
+                            #{columnInstance.value}
+                        </otherwise>
+                    </choose>
+                </if>
+            </if>
+        </foreach>
+         WHERE ID IN
+        <choose>
+            <when test="contextInstance.context.numberId">
+                <foreach collection="idList" item="id" open="(" close=")" separator=",">
+                    ${id}
+                </foreach>
+            </when>
+            <otherwise>
+                <foreach collection="idList" item="id" open="(" close=")" separator=",">
+                    '${id}'
+                </foreach>
+            </otherwise>
+        </choose>
+    </update>
+
+    <!-- 通过主键更新 -->
+    <update id="updateByIdExt">
+        UPDATE ${contextInstance.context.tableName} SET
+        <foreach collection="contextInstance.columnContextInstanceList" item="columnInstance" separator=",">
+            <if test='columnInstance.active'>
+                "${columnInstance.columnContext.columnName.toLowerCase}" =
+                <if test="columnInstance.active">
+                    #{columnInstance.value}
+                </if>
+            </if>
+        </foreach>
+        WHERE ID = #{id}
+    </update>
+    
+    <!-- 通过主键批量更新 -->
+    <update id="batchUpdateByIds">
+        UPDATE ${context.tableName} SET
+            <foreach collection="updateColumnList" item="updateColumn" separator=",">
+                "${updateColumn.toLowerCase}" = CASE ID
+                <foreach collection="contextInstanceList" item="contextInstance">
+                    <foreach collection="contextInstance.columnContextInstanceList" item="columnInstance" separator=",">
+                        <if test="@com.sunwayworld.framework.utils.StringUtils@equalsIgnoreCase(columnInstance.columnContext.columnName, updateColumn)">
+                            WHEN 
+                            <choose>
+                                <when test="context.numberId">
+                                    ${contextInstance.idInstance.value}
+                                </when>
+                                <otherwise>
+                                    '${contextInstance.idInstance.value}'
+                                </otherwise>
+                            </choose>
+                            THEN
+                            <choose>
+                                <when test='columnInstance.value == null or columnInstance.value.toString() == ""'>
+                                    <choose>
+                                        <when test="columnInstance.columnContext.timestamp">
+                                            TO_TIMESTAMP(NULL)
+                                        </when>
+                                        <when test="@java.lang.Number@class.isAssignableFrom(columnInstance.columnContext.type)">
+                                            NULL::numeric
+                                        </when>
+                                        <otherwise>
+                                            NULL
+                                        </otherwise>
+                                    </choose>
+                                </when>
+                                <otherwise>
+                                    <choose>
+                                        <when test="columnInstance.columnContext.timestamp">
+                                            TO_TIMESTAMP( #{columnInstance.value},'yyyy-MM-DD hh24:mi:ss')
+                                        </when>
+                                        <otherwise>
+                                            #{columnInstance.value}
+                                        </otherwise>
+                                    </choose>
+
+                                </otherwise>
+                            </choose>
+                        </if>
+                    </foreach>
+                </foreach>
+                END
+            </foreach>
+         WHERE ID IN
+        <choose>
+            <when test="context.numberId">
+                <foreach collection="contextInstanceList" item="contextInstance" open="(" close=")" separator=",">
+                    ${contextInstance.idInstance.value}
+                </foreach>
+            </when>
+            <otherwise>
+                <foreach collection="contextInstanceList" item="contextInstance" open="(" close=")" separator=",">
+                    '${contextInstance.idInstance.value}'
+                </foreach>
+            </otherwise>
+        </choose>
+    </update>
+    
+    <!-- 查询满足条件的数量 -->
+    <select id="count" resultType="int">
+        SELECT COUNT(1) FROM ${contextInstance.context.tableName}
+        <where>
+            <foreach collection="contextInstance.columnContextInstanceList" item="columnInstance" separator="AND">
+                <if test="columnInstance.active">
+                    <choose>
+                        <when test='columnInstance.value == null or columnInstance.value.toString() == ""'>
+                            "${columnInstance.columnContext.columnName.toLowerCase}" IS NULL
+                        </when>
+                        <otherwise>
+                            CAST("${columnInstance.columnContext.columnName.toLowerCase}" AS VARCHAR) = CAST(#{columnInstance.value} AS VARCHAR)
+                        </otherwise>
+                    </choose>
+                </if>
+            </foreach>
+        </where>
+    </select>
+    
+    <!-- 批量查询满足条件的数量 -->
+    <select id="batchCount" resultType="int">
+        SELECT COUNT(1) FROM ${context.tableName}
+        <where>
+            <foreach collection="contextInstanceList" item="contextInstance" open="(" close=")" separator="OR">
+                <foreach collection="contextInstance.columnContextInstanceList" item="columnInstance" separator="AND">
+                    <if test="columnInstance.active">
+                        <choose>
+                            <when test='columnInstance.value == null or columnInstance.value.toString() == ""'>
+                                "${columnInstance.columnContext.columnName.toLowerCase}" IS NULL
+                            </when>
+                            <otherwise>
+                                CAST("${columnInstance.columnContext.columnName.toLowerCase}" AS VARCHAR) = CAST(#{columnInstance.value} AS VARCHAR)
+                            </otherwise>
+                        </choose>
+                    </if>
+                </foreach>
+            </foreach>
+        </where>
+    </select>
+    
+    <!-- 通过一组值来查询满足条件的数量，并根据该值来进行分组 -->
+    <select id="groupCountByValueList" resultType="map">
+        SELECT ${searchColName},
+               COUNT(1) QTY
+          FROM ${context.tableName}
+         WHERE ${searchColName} IN
+             <foreach collection="valueList" item="value"  open="(" close=")" separator=",">
+                 #{value}
+             </foreach>
+         GROUP BY ${searchColName}
+    </select>
+    
+    <!-- 批量锁表行 -->
+    <select id="lockByIds" resultType="map">
+        SELECT ID FROM ${context.tableName}
+         WHERE ID IN
+             <foreach collection="idList" item="id"  open="(" close=")" separator=",">
+                 #{id}
+             </foreach>
+           FOR UPDATE
+    </select>
+</mapper>

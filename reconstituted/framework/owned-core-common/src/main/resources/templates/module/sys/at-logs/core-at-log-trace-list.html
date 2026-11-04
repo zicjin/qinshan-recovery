@@ -1,0 +1,8 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/module/sys/at-logs/core-at-log.js',
+                      '/static/module/sys/at-logs/core-at-log-trace-list.js'
+                 ]);
+    coreAtLog.traceListPage.init([[${param}]]);
+/*]]>*/
+</script>

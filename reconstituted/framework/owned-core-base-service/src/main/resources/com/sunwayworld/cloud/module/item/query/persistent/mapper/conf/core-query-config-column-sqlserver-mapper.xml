@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.cloud.module.item.query.persistent.mapper.CoreQueryConfigColumnMapper">
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM T_CORE_QUERY_CONFIG_COLUMN T
+         <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+		</where>
+         ORDER BY 
+         <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.LASTSUSPENDEDFLAG, T.ORDERNO
+            </otherwise>
+         </choose>
+    </select>
+    
+    <select id="selectDetail" resultType="map">
+        SELECT T.*
+          FROM T_CORE_QUERY_CONFIG_COLUMN T
+         WHERE T.ID = #{id}
+    </select>
+</mapper>

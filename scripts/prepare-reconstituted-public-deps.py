@@ -70,6 +70,7 @@ def main() -> int:
     output.mkdir(parents=True)
 
     seen: set[str] = set()
+    excluded: list[dict[str, str]] = []
     with zipfile.ZipFile(args.run_jar) as archive:
         for item in sorted(allowlist["entries"], key=lambda value: value["filename"]):
             filename = str(item["filename"])
@@ -85,6 +86,15 @@ def main() -> int:
                 raise SystemExit(f"public dependency size mismatch: {filename}")
             if sha256_bytes(data) != item["sha256"]:
                 raise SystemExit(f"public dependency hash mismatch: {filename}")
+            if item.get("prepare_excluded"):
+                excluded.append(
+                    {
+                        "filename": filename,
+                        "sha256": str(item["sha256"]),
+                        "reason": str(item.get("exclusion_reason", "explicit policy")),
+                    }
+                )
+                continue
             (output / filename).write_bytes(data)
 
     print(
@@ -92,7 +102,9 @@ def main() -> int:
             {
                 "status": "pass",
                 "run_jar_sha256": actual_run_sha256,
-                "public_dependency_count": len(seen),
+                "public_dependency_count": len(seen) - len(excluded),
+                "allowlist_entry_count": len(seen),
+                "excluded_dependencies": excluded,
                 "output": str(output),
             },
             indent=2,

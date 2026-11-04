@@ -16,7 +16,18 @@
   "forbidden_content_report": "forbidden-content-report.json",
   "module": "owned-core-report",
   "module_reason": "FR, report, PageOffice and LIMS report-template source/resources.",
+  "override_source_files": [
+    {
+      "generated_sha256": "e9457e478cbff1f7e3d199745de509077ec695a076b389fa6b1efc9fb7a43fd6",
+      "override_sha256": "e78f1768d8eacc6e35f7f457f88b626b0470402cfb50668a7dcdeb5a67335c21",
+      "path": "src/main/java/com/sunwayworld/cloud/module/pageoffice/PageOfficeController.java"
+    }
+  ],
   "public_dependency_allowlist": "public-dependency-allowlist.json",
+  "removed_source_files": [],
+  "resource_file_count": 497,
+  "resource_provenance": "resource-provenance.json",
+  "resource_tree_sha256": "714310023ff9faf5260e1d0657ba00288d0f312ed38eb74869990d91ad56919d",
   "schema": "supplier-reconstituted-module-v1",
   "source_decompilers": {
     "CFR": 321,
@@ -5110,16 +5121,18 @@
       "decompiler": "Vineflower",
       "decompiler_version": "1.11.1",
       "path": "src/main/java/com/sunwayworld/cloud/module/pageoffice/PageOfficeController.java",
-      "sha256": "e9457e478cbff1f7e3d199745de509077ec695a076b389fa6b1efc9fb7a43fd6",
+      "sha256": "e78f1768d8eacc6e35f7f457f88b626b0470402cfb50668a7dcdeb5a67335c21",
       "source_class_path": "com/sunwayworld/cloud/module/pageoffice/PageOfficeController.class",
       "source_jar": "BOOT-INF/lib/gikam-core-report-interface-14.1.5-pageoffice6.jar",
+      "source_sha256_before_overlay": "e9457e478cbff1f7e3d199745de509077ec695a076b389fa6b1efc9fb7a43fd6",
       "source_sha256_before_transform": "e9457e478cbff1f7e3d199745de509077ec695a076b389fa6b1efc9fb7a43fd6",
       "transformations": [
-        "cfr-to-vineflower-fallback"
+        "cfr-to-vineflower-fallback",
+        "overlay:src/main/java/com/sunwayworld/cloud/module/pageoffice/PageOfficeController.java"
       ]
     }
   ],
-  "source_tree_sha256": "1c4a1f70838aa5a1e4d2ff2ba47c18b66b84bd8df86fcfdeebbf22d5702d23a6",
+  "source_tree_sha256": "118c182d46c728b2f9cd7fc73dc3861837d61ce823b7c188a70802a585fd3468",
   "status": "assembled-source-only",
   "transformation_manifest": "docs/reconstitution/decompiler-transforms.json",
   "transformation_manifest_sha256": "8dddef183eece740791f9b179ec2aad9e30a224a0546e971df380fdb576a1d0c",

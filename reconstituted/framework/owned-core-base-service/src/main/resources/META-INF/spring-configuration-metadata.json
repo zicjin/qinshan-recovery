@@ -1,0 +1,32 @@
+{
+  "groups": [
+    {
+      "name": "dingtalk.h5",
+      "type": "com.sunwayworld.cloud.module.mobile.dingtalk.config.DingtalkProperties",
+      "sourceType": "com.sunwayworld.cloud.module.mobile.dingtalk.config.DingtalkProperties"
+    },
+    {
+      "name": "zwdd.h5",
+      "type": "com.sunwayworld.cloud.module.mobile.zwdd.config.ZwddProperties",
+      "sourceType": "com.sunwayworld.cloud.module.mobile.zwdd.config.ZwddProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "dingtalk.h5.app-configs",
+      "type": "java.util.List<com.sunwayworld.cloud.module.mobile.dingtalk.config.DingtalkProperties$DingtalkAppConfig>",
+      "sourceType": "com.sunwayworld.cloud.module.mobile.dingtalk.config.DingtalkProperties"
+    },
+    {
+      "name": "dingtalk.h5.corp-id",
+      "type": "java.lang.String",
+      "sourceType": "com.sunwayworld.cloud.module.mobile.dingtalk.config.DingtalkProperties"
+    },
+    {
+      "name": "zwdd.h5.app-configs",
+      "type": "java.util.List<com.sunwayworld.cloud.module.mobile.zwdd.config.ZwddProperties$ZwddAppConfig>",
+      "sourceType": "com.sunwayworld.cloud.module.mobile.zwdd.config.ZwddProperties"
+    }
+  ],
+  "hints": []
+}

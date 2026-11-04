@@ -1,0 +1,8 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs(['/static/module/qms/risk-identifica-regists/core-risk-identifica-regist.js',
+                     '/static/module/qms/risk-identifica-regists/core-risk-archive-search-list.js',
+                    ]);
+    coreRiskIdentificaRegist.archiveSearchListPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>

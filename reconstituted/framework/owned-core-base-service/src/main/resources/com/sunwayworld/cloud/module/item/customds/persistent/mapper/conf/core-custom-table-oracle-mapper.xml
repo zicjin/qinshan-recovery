@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.cloud.module.item.customds.persistent.mapper.CoreCustomTableMapper">
+    <select id="selectAllTable" parameterType="map" resultType="map">
+        SELECT T.TABLE_NAME AS ID, NVL(C.COMMENTS, T.TABLE_NAME) AS TABLENAME, 'TABLE' AS TABLETYPE 
+          FROM USER_TABLES T, USER_TAB_COMMENTS C 
+         WHERE T.TABLE_NAME = C.TABLE_NAME
+     UNION ALL 
+        SELECT VIEW_NAME AS ID,VIEW_NAME AS TABLENAME, 'VIEW' AS TABLETYPE
+          FROM USER_VIEWS
+    </select>
+
+    <select id="selectColumnByTableName" resultType="map">
+         SELECT COLUMN_NAME AS COLUMNNAME, NVL(COMMENTS, COLUMN_NAME) AS ALIASNAME 
+           FROM USER_COL_COMMENTS 
+          WHERE TABLE_NAME = #{tableName}
+    </select>
+</mapper>

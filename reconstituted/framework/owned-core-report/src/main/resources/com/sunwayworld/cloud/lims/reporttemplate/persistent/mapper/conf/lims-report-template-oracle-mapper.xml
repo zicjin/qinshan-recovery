@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.cloud.lims.reporttemplate.persistent.mapper.LimsReportTemplateMapper">
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM T_LIMS_REPORT_TEMPLATE T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+
+
+            <if test="subtmplfilter != null">  <!--选择模板的时候不展示子模版-->
+                AND (templateType is null or templateType != '子模版')
+                AND exists (select 1 from  T_LIMS_REPORT_TEMPLATE_SOURCE where templateId = t.id )
+            </if>
+            <if test='testCodeIdFlag == "1"'>  <!--选择模板的时候根据项目代码过滤-->
+                AND exists (select 1 from  T_LIMS_TEST_CODE_TEMPLATE
+                where reportTemplateId = t.id
+                <if test="testCodeId != null">
+                    AND testCodeId = #{testCodeId}
+                </if>
+                )
+            </if>
+            <if test="cailiaoflag != null">  <!--子表数据 specid 过滤-->
+
+                AND exists (
+
+                        SELECT 1
+                        FROM T_LIMS_SPEC A, T_LIMS_SPEC_REPORT_TMPL   B
+                        WHERE A.ID = B.SPECID
+                                AND B.TMPLID = T.ID
+                                AND A.ID IN
+                            (SELECT SPECID
+                            FROM T_LIMS_ORDTASK T
+                            WHERE ( FOLDERID = #{folderId} )
+                                    AND EXISTS
+                                (SELECT 1
+                                FROM T_LIMS_BIZ_FLAG TAR__
+                                WHERE TAR__.BIZID = T. ID
+                                        AND ( VAL = #{reportId} AND FLAG = 'reportTask' ) ) )
+
+
+                )
+
+            </if>
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ID DESC
+            </otherwise>
+        </choose>
+    </select>
+
+</mapper>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.cloud.module.item.calendar.persistent.mapper.CoreCalendarMapper">
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+        FROM T_CORE_CALENDAR T
+
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+            AND TO_NUMBER(SUBSTR(T.ID, 1, 4)) = #{year}
+            <if test='month != null'>
+                AND TO_NUMBER(SUBSTR(T.ID, 5, 2)) = #{month}
+            </if>
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ID ASC
+            </otherwise>
+        </choose>
+
+    </select>
+</mapper>

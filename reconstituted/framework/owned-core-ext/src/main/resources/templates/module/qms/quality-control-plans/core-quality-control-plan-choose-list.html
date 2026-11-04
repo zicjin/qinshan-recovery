@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/module/qms/quality-control-plans/core-quality-control-plan.js',
+                      '/static/module/qms/quality-control-plans/core-quality-control-plan-choose-list.js'
+                    ]);
+    coreQualityControlPlan.choosePage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>
+

@@ -1,0 +1,10 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/module/qms/manage-reviews/core-manage-review.js',
+                      '/static/module/qms/manage-reviews/core-manage-review-detail.js',
+                      '/static/module/qms/manage-reviews/core-manage-review-config.js'
+                    ]);
+    coreManageReview.detailPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>
+

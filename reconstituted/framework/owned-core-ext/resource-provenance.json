@@ -1,0 +1,3696 @@
+{
+  "artifact_sha256": "4a720797810fd2f8cca6e22604657028cb87830ca0e24bb55a5f42f040f6ee9f",
+  "duplicate_destination_count": 0,
+  "duplicates": [],
+  "excluded_paths": [
+    "META-INF/MANIFEST.MF",
+    "third-party/sunway-app/**"
+  ],
+  "module": "owned-core-ext",
+  "resource_count": 611,
+  "resource_file_count": 611,
+  "resource_tree_sha256": "5da4803ae404c2dc249026e4b7298b5c12688f59170f4838006da23a7fd9c475",
+  "resources": [
+    {
+      "bytes": 17142,
+      "path": "static/module/codegenerator/code-generate-configs/core-code-generate-config-detail.js",
+      "sha256": "461cfdf2921f52b3c423d9619c2360ba603b8adf1321d88378bedfd7f1eb2502",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 2354,
+      "path": "static/module/codegenerator/code-generate-configs/core-code-generate-config-edit-list.js",
+      "sha256": "0a81f222619aa5f7465992737e683224466514adcea3e71bd17e6bf8341005a3",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 6573,
+      "path": "static/module/codegenerator/code-generate-configs/core-code-generate-config.js",
+      "sha256": "d2b5c287804fb4abde1405996f562eff540a4fbea7a4ccfc1e41b12f2102f713",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 698,
+      "path": "static/module/codegenerator/sql-generate-tables/core-generate-sql.js",
+      "sha256": "6a39d74a1713bea96ffbf423e8a5a64aecb76c8924fe8f764c1e78ee0fd9134a",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 8826,
+      "path": "static/module/codegenerator/sql-generate-tables/core-sql-generate-table-edit-list.js",
+      "sha256": "2f986e351486b44085dd6917b440789d09444ebbdaee3da5a13350dc190dfa18",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 2618,
+      "path": "static/module/codegenerator/sql-generate-tables/core-sql-generate-table.js",
+      "sha256": "7a09839d0f3ff40f2b3574a948cf5446bd3b000fb5a1a292542ab11e8f2197bb",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 9672,
+      "path": "static/module/nfssi/orders/core-nfssi-order-edit-list.js",
+      "sha256": "933598004e7fad07234e999653ac3b399925c87d43ca08e5e01fc4892dc1c1f3",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 22862,
+      "path": "static/module/nfssi/orders/core-nfssi-order.js",
+      "sha256": "cc8968e57312e3a8ca4e4dc20a806ee2297feed50cfd573b97b49e9d395a6298",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 2236,
+      "path": "static/module/nfssi/reports/core-nfssi-report-detail.js",
+      "sha256": "4da148a3e87aff407e7f5cd3fb9103fc761861e7407b3a4323801ebde0e33163",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 4217,
+      "path": "static/module/nfssi/reports/core-nfssi-report.js",
+      "sha256": "cd44445e67cbb8ec7ad7be1096e9e01e8c118abc6f1ddddff20d3f9697b4535e",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 4866,
+      "path": "static/module/qms/annual-plans/core-annual-plan-audit-list.js",
+      "sha256": "4b19640cde5e4f6052e61412f798ea2e2943f8729927bf3a609daaf068a26112",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 1109,
+      "path": "static/module/qms/annual-plans/core-annual-plan-choose-list.js",
+      "sha256": "6680f65c7189ad1bf1b103a7716d9156c64694a785ed340e46d13876dfed3a00",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 1199,
+      "path": "static/module/qms/annual-plans/core-annual-plan-config.js",
+      "sha256": "f46535165b3c8b927b64942b40d5e1e4e39dc48f08b8e229e6425922ad9395c7",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 17611,
+      "path": "static/module/qms/annual-plans/core-annual-plan-detail.js",
+      "sha256": "42b0904bd9a7cbc4436b1b350b61aa46bb0b603610419441f84c6718ea466f77",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 6095,
+      "path": "static/module/qms/annual-plans/core-annual-plan-edit-list.js",
+      "sha256": "d2c6630095ffd78edcb93bff1aec30f731c39c01df464f800f7581eac289b9d9",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 2895,
+      "path": "static/module/qms/annual-plans/core-annual-plan-search-list.js",
+      "sha256": "668766871449b78bfa865641ed92b35268954711950a389c3cc09857ad1e2dbc",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 31297,
+      "path": "static/module/qms/annual-plans/core-annual-plan.js",
+      "sha256": "f70ce025722fc40024b1129c79ab747980ce60b5a38db0aa1d90e980622706d5",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 2878,
+      "path": "static/module/qms/apply-complaints/core-apply-complaint-audit-list.js",
+      "sha256": "287ae00aa6d89c1885d00b4233a7246d7a32a6d8787a01caeb68e105a5f66ae2",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 186,
+      "path": "static/module/qms/apply-complaints/core-apply-complaint-config.js",
+      "sha256": "e1eb3b582abe2f4c5290bd6dcb8211ee03096eecece33a55c06017f68fa468c6",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 4571,
+      "path": "static/module/qms/apply-complaints/core-apply-complaint-detail.js",
+      "sha256": "f28833e93aaa0af93e00890f2e1b6df949dbc472ca492c1947b2f7547515a3e2",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 4752,
+      "path": "static/module/qms/apply-complaints/core-apply-complaint-edit-list.js",
+      "sha256": "2fde0f44c0bd55822d02541a4636743be531088645780f197ebde4c8c409d32d",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 1690,
+      "path": "static/module/qms/apply-complaints/core-apply-complaint-search-list.js",
+      "sha256": "1effd416e5ab0852202af1a23740704336ee07d3fae1b67b3c58c957d958b90a",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 14389,
+      "path": "static/module/qms/apply-complaints/core-apply-complaint.js",
+      "sha256": "fb9dc358d319b7de7a4e51396e8fff2a52ce84bfedddd852882e34b3d9460058",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 5089,
+      "path": "static/module/qms/custom-srt-surveys/core-custom-srt-survey-audit-list.js",
+      "sha256": "ba5d5d5a9c406ac0be46e32d8791124a28ea6429a9432dbaf5eef86ee96d7747",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 1172,
+      "path": "static/module/qms/custom-srt-surveys/core-custom-srt-survey-choose-list.js",
+      "sha256": "c02a94fde18dbb29900635a0b21dfd4446f51816510b43b0365e42fb17beb16e",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 2404,
+      "path": "static/module/qms/custom-srt-surveys/core-custom-srt-survey-config.js",
+      "sha256": "e295b791d2a788e2b886395f102d9b4dd90673ce1f8ef04b3605a808c27535ee",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 3905,
+      "path": "static/module/qms/custom-srt-surveys/core-custom-srt-survey-detail.js",
+      "sha256": "a37e1b5510b77e0d5d1cb16301f400f6732b45bbd020a68579c10a613b854831",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 4545,
+      "path": "static/module/qms/custom-srt-surveys/core-custom-srt-survey-edit-list.js",
+      "sha256": "4c07722244da80bf1e92f24ffa014ba5cab06e50e0ce317a7c28c08c55fdf126",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 1241,
+      "path": "static/module/qms/custom-srt-surveys/core-custom-srt-survey-search-list.js",
+      "sha256": "d4d6812101515a1d0561bf6ad03587ad9c22ea3d450a9df227772941f678c404",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 14017,
+      "path": "static/module/qms/custom-srt-surveys/core-custom-srt-survey.js",
+      "sha256": "8d96a394967b40b9c845abcdcd2d0b66d20073a8ee37159e83649339ecb46675",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 7293,
+      "path": "static/module/qms/custom-surveys/core-custom-survey-audit-list.js",
+      "sha256": "08c513a88c5157f2095cdacac4fcf42b871773b4fbf47dbee3eeb13fe6983d5b",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 16659,
+      "path": "static/module/qms/custom-surveys/core-custom-survey-edit-list.js",
+      "sha256": "6cdec9012cd5cedd62e88ed15a2d2a0d8bda55ad408d5d47f5ab01b573f58455",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 9188,
+      "path": "static/module/qms/custom-surveys/core-custom-survey-search-list.js",
+      "sha256": "591957f377bb17fe4d5f6aeec75f2b148e3ab5852579678721246a8c01b7168d",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 8639,
+      "path": "static/module/qms/custom-surveys/core-custom-survey.js",
+      "sha256": "eb6d4ca19f44c411dd20ba6555cf30e6a0a843b5c2a8d741a33b6a79852d67f7",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 9351,
+      "path": "static/module/qms/daily-supervisions/core-daily-supervision-audit-list.js",
+      "sha256": "17dac0cc76ec61e1409bab376aa23ab8cbba777186ec2b5b60e53056acaba751",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 10870,
+      "path": "static/module/qms/daily-supervisions/core-daily-supervision-edit-list.js",
+      "sha256": "29c8f4d9aa87bee3156337d702c4d573cbdf6f14ac7a28b3f0915a8fe94288b2",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 7104,
+      "path": "static/module/qms/daily-supervisions/core-daily-supervision-search-list.js",
+      "sha256": "22a610577b9b35f3e71e32b2a3e103441768c736909f874e9fa014162672092e",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 7817,
+      "path": "static/module/qms/daily-supervisions/core-daily-supervision.js",
+      "sha256": "14ee34a7cd7f249530e70eb9a5b7dcaa114fa1fa986f64784cd75b48b78381b7",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 5715,
+      "path": "static/module/qms/external-audits/core-external-audit-audit-list.js",
+      "sha256": "587cfcccc783683ee2624749f6aee4d47929cf9a0b1c30d93656155eca816061",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 1119,
+      "path": "static/module/qms/external-audits/core-external-audit-choose-list.js",
+      "sha256": "9a598e3f84d4a51628047dbe97860a0aceae8753999ca4dad4fb9a18bd90eefc",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 1827,
+      "path": "static/module/qms/external-audits/core-external-audit-config.js",
+      "sha256": "c94f134033752ec8865a389e86d6711b0e511284791456ac64cb6a1cf30f221a",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 6988,
+      "path": "static/module/qms/external-audits/core-external-audit-detail.js",
+      "sha256": "974e72c806f9120e54f7d7358de325dc08905978d8f48e4709e7ac7c172e4ce4",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 9734,
+      "path": "static/module/qms/external-audits/core-external-audit-edit-list.js",
+      "sha256": "66b80c3e602e8b9ee0ea0bbb3022e4f7a2224cdcdb33198505e4af99f8d76c9f",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 2543,
+      "path": "static/module/qms/external-audits/core-external-audit-search-list.js",
+      "sha256": "c898c03dca29fdf97f40b05ee561c1d5741caf2e89a1815995d1d9ba24b1f68d",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 12820,
+      "path": "static/module/qms/external-audits/core-external-audit.js",
+      "sha256": "04c93804fce0b885a17b57dd1f20ff467d9c7c304c4462607afd26c3c7be41d0",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 4701,
+      "path": "static/module/qms/file-manages/core-file-manage-audit-list.js",
+      "sha256": "30e7d4b3c85363ee0c80066ef66dac95eef0622fb9280fd08cb465c9a5fbe535",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 20182,
+      "path": "static/module/qms/file-manages/core-file-manage-edit-list.js",
+      "sha256": "fd443e7b1709379784d2c31ea42ea050d658def7d3ef5cca00f4c1a38de29e1f",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 2304,
+      "path": "static/module/qms/file-manages/core-file-manage-search-list.js",
+      "sha256": "066d9521d7a3d323813aa0c0ecd75afe95d999ada8b3b308bb243368f9325b3f",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 2191,
+      "path": "static/module/qms/file-manages/core-file-manage-version-detail.js",
+      "sha256": "144d1ee6b9eb2ee85049de73b51d5357e410bf7780603df4451566f7e1fd5efb",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 22654,
+      "path": "static/module/qms/file-manages/core-file-manage.js",
+      "sha256": "2b8294d041945db53e4ac5f1ce949c1ff0263af97206dca8de65ecca9bbda792",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 1070,
+      "path": "static/module/qms/file-types/core-file-type-choose-list.js",
+      "sha256": "d6f6a52011f73b3afb395be970e4ea6a35344e7abe8f16b314505f451ff5a3ae",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 15791,
+      "path": "static/module/qms/file-types/core-file-type-edit-list.js",
+      "sha256": "6c8f66b27ab01eaf52605f5e419059c3194ed6c232675e195ba289842355b051",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 6142,
+      "path": "static/module/qms/file-types/core-file-type-role-auth.js",
+      "sha256": "137ce5153455b2954cf09672763485afe488e9691eede9a6cc203b31fae159eb",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 3815,
+      "path": "static/module/qms/file-types/core-file-type-search-list.js",
+      "sha256": "66ccd22e127e10130f50c26baec57da2c920003dd98dbba98f4b5cfe207a1bb0",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 9135,
+      "path": "static/module/qms/file-types/core-file-type.js",
+      "sha256": "f42eb1fdf9c3cc39989023be539cde094d16ded71ff870a4b3bd51149c41e1ac",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 1082,
+      "path": "static/module/qms/file-volumes/core-file-volume-choose-list.js",
+      "sha256": "fc29de2231f243b49f5ab7b7037cef1b6606eec2b30149db0aef92876947b329",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 5894,
+      "path": "static/module/qms/file-volumes/core-file-volume-edit-list.js",
+      "sha256": "41ef4f8c20fc6482e94bc526120fd6645a408fe0e35321c3e419f7b8adb84496",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 944,
+      "path": "static/module/qms/file-volumes/core-file-volume-search-list.js",
+      "sha256": "e6e68a420d0c48bd0ff8501eaadc39bf46d7e0caf0267408580bdcb46813e0e7",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 4017,
+      "path": "static/module/qms/file-volumes/core-file-volume.js",
+      "sha256": "f0886559a4a22a505c332e3a06dc70232c8e68864f579875e5dcc23418187bc5",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 11126,
+      "path": "static/module/qms/internal-audits/core-internal-audit-audit-list.js",
+      "sha256": "c87924f3dfe2f50997218bc13087993bffd426135d37c22b1873ead1fab61937",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 1117,
+      "path": "static/module/qms/internal-audits/core-internal-audit-choose-list.js",
+      "sha256": "3ce8e2921687a94a827ec8f8b88fb754236275620f5f412956439e35a6f7b458",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 1346,
+      "path": "static/module/qms/internal-audits/core-internal-audit-config.js",
+      "sha256": "b5967f857b20aa5536a58cc121beee138c55bc8f2d7a23191a62144b2c9a558f",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 8051,
+      "path": "static/module/qms/internal-audits/core-internal-audit-detail.js",
+      "sha256": "07e321adbc48fd5499fb3914e4c73936b95e4273d68ea7cf9cf365b03e200c76",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 10549,
+      "path": "static/module/qms/internal-audits/core-internal-audit-edit-list.js",
+      "sha256": "9be1c4cf5138ff39850135049164bc0102f535a9da8f5b73a05f408729c19855",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 4870,
+      "path": "static/module/qms/internal-audits/core-internal-audit-search-list.js",
+      "sha256": "4d0935a59c6de0395dedfc017b01f90357bcbf4d5f1d33ce9c4a7404abac949a",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 26124,
+      "path": "static/module/qms/internal-audits/core-internal-audit.js",
+      "sha256": "7c7b3b0524d639f2d4f31cd83d733d7b3bb2531ab07647de240888dc36bb168e",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 7549,
+      "path": "static/module/qms/launch-new-projects/core-launch-new-project-audit-list.js",
+      "sha256": "d4589c06e43441850951633df2ffbcac424460d8a348fda166c105feb587d2d6",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 1152,
+      "path": "static/module/qms/launch-new-projects/core-launch-new-project-choose-list.js",
+      "sha256": "9df6ed4d1c49d0c7de3b16663fcc2c0af4cd03bb40a939e3e92bd48ea325b880",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 4100,
+      "path": "static/module/qms/launch-new-projects/core-launch-new-project-config.js",
+      "sha256": "24adcb224e9441da7ad2ccdbcbc9e244fc51b6209e1711c010539374875e8920",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 3965,
+      "path": "static/module/qms/launch-new-projects/core-launch-new-project-detail.js",
+      "sha256": "3897e1aab17dd4dec32973113bd46437b82f0d1be2e31b1b28df537b6cdda4a3",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 4254,
+      "path": "static/module/qms/launch-new-projects/core-launch-new-project-edit-list.js",
+      "sha256": "511b5166ce47128d030d393a8383ade81161eff46cb9353aee8fcbfaa67ee53b",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 1008,
+      "path": "static/module/qms/launch-new-projects/core-launch-new-project-search-list.js",
+      "sha256": "5f8c77401d8678331872e31f57b2122c701ac7ad386a5aae0232784af905c64a",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 30256,
+      "path": "static/module/qms/launch-new-projects/core-launch-new-project.js",
+      "sha256": "e5b1fd51d9e2681c95843a62e5991a06e805b7a6711cd04a14347db0f51f16fc",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 10423,
+      "path": "static/module/qms/manage-reviews/core-manage-review-audit-list.js",
+      "sha256": "b950a85827dd33de1f20af1872c92bb7d88aadc6db2a332b0da0aee319841172",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 1335,
+      "path": "static/module/qms/manage-reviews/core-manage-review-config.js",
+      "sha256": "0f782f4cd9cd60ba3db31caf1ff6eba2bf26dddf72c939f736acd4790f095be3",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 8010,
+      "path": "static/module/qms/manage-reviews/core-manage-review-detail.js",
+      "sha256": "c4f42167fd2c1b3d9a6d11d8c1b5bd294fc3132f09abd4bbe273f48e8907dd0b",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 6457,
+      "path": "static/module/qms/manage-reviews/core-manage-review-edit-list.js",
+      "sha256": "862ad5e053ea6db357a9bf2030313269099bd772c3e501c0a9946aeb81beaf29",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 3878,
+      "path": "static/module/qms/manage-reviews/core-manage-review-search-list.js",
+      "sha256": "4c4f2e46c4ac14a813fb006f6b6e1965745b9f4920273a37ba4d3b3f5c3cc4a5",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 25754,
+      "path": "static/module/qms/manage-reviews/core-manage-review.js",
+      "sha256": "7f48d41ad038f2712a965e7e580fdf82e831a10a1c679751c3ce290e7d7fd0a4",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 4485,
+      "path": "static/module/qms/ncrs/core-ncr-audit-list.js",
+      "sha256": "62d14fec8b701fbbc9963f25c4620914045f5a3a71fbb18aa0945eefd439a684",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 1052,
+      "path": "static/module/qms/ncrs/core-ncr-choose-list.js",
+      "sha256": "acc5e7b00be105ac4ea3c99115a6909acbb949980d982504c50677775b654ce5",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 4005,
+      "path": "static/module/qms/ncrs/core-ncr-config.js",
+      "sha256": "5d2199bd103bb3fba362d332375fed7adf3deeb53ae7da333ebcb7d6e456625d",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 6951,
+      "path": "static/module/qms/ncrs/core-ncr-detail.js",
+      "sha256": "3bad0f3e445993d1f4dcb974096dc350de079f63e04d692984484110c2f9f22c",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 4060,
+      "path": "static/module/qms/ncrs/core-ncr-edit-list.js",
+      "sha256": "5ba49b6ab04d5b86f658300ee23ba49762f5824fc36b3148d7a8515678b3e9b5",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 1895,
+      "path": "static/module/qms/ncrs/core-ncr-search-list.js",
+      "sha256": "49197bbdcd0ab61fe730854545f78596392c9fdb73ab94832d3e7af2c25bf548",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 9317,
+      "path": "static/module/qms/ncrs/core-ncr.js",
+      "sha256": "a1349e9f79bc9372e76740404fe2e85eca8f2a40355def6b26c4d7e25a3c54a7",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 5890,
+      "path": "static/module/qms/preventions/core-prevention-audit-list.js",
+      "sha256": "d35565dd1e93f04bcbbd71d19af1e762f544cf7b28de99ca6efa4e91c302e940",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 3861,
+      "path": "static/module/qms/preventions/core-prevention-config.js",
+      "sha256": "daf7943be00b2e888497492808ca57be28b6e20f33b20d6c13945ac2538b337e",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 4315,
+      "path": "static/module/qms/preventions/core-prevention-detail.js",
+      "sha256": "6f0a5da3c8047c3a4017eb8028079a87cdde0d4506d554392d29217d135ca1ab",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 2652,
+      "path": "static/module/qms/preventions/core-prevention-edit-list.js",
+      "sha256": "3484cd40d05cd06bb0f0cacfa84f19f5718d15417d2db80d28c7db78f859369f",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 832,
+      "path": "static/module/qms/preventions/core-prevention-search-list.js",
+      "sha256": "f64b31c239d2263d3066b7cd6c3104d2908bc07ba1c2f8c3f5e4446c0ee07823",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 11700,
+      "path": "static/module/qms/preventions/core-prevention.js",
+      "sha256": "ef57f38af89af7d6337388ef743a5d685af58319da2a0f943a923332b625954e",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 1129,
+      "path": "static/module/qms/quality-control-plans/core-quality-control-plan-choose-list.js",
+      "sha256": "9eec6983a4148aa3b5cc552dd0b87b3fd2b92de4ba0b966f3be6e7036f45aed2",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 515,
+      "path": "static/module/qms/quality-control-plans/core-quality-control-plan.js",
+      "sha256": "eb3d055accb66ff11fe28a24c4f231d29332847325263ad1d2b9ed3974c1dd14",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 5187,
+      "path": "static/module/qms/quality-controls/core-quality-control-audit-list.js",
+      "sha256": "7a086f211e278242cec0629635c1e55dc83bc4ded3ff907004b13a16f5e12db4",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 3833,
+      "path": "static/module/qms/quality-controls/core-quality-control-config.js",
+      "sha256": "15c3e9cb5b74104df203b6dfafc84c0dbb4d02c7c77294b944f186fbcce20328",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 10037,
+      "path": "static/module/qms/quality-controls/core-quality-control-detail.js",
+      "sha256": "01b55e9de5ecbd9b7c13fbc0c0704e2991bba4c47f511e0dd41d4e872926eed7",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 4830,
+      "path": "static/module/qms/quality-controls/core-quality-control-edit-list.js",
+      "sha256": "6a39063d59b796131056d72f4f5f39eac52b0cb3125a6b75e5aa6c704eb26b61",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 2025,
+      "path": "static/module/qms/quality-controls/core-quality-control-search-list.js",
+      "sha256": "28f3b286e7b34eaeb0735791d131e4c0f8dd801f568fa017494ea869659c40ea",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 9858,
+      "path": "static/module/qms/quality-controls/core-quality-control.js",
+      "sha256": "823aa46fe6e6cdd02f7166d2289d6d002e61bce40f85803ea7bf6361d1ae53aa",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 5882,
+      "path": "static/module/qms/rectifys/core-rectify-audit-list.js",
+      "sha256": "4cdb07c2865459bcbf107bcf2197ccb255dadbfd70e8df1fc447e7092659520c",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 3881,
+      "path": "static/module/qms/rectifys/core-rectify-config.js",
+      "sha256": "9d2d6d0e4787984fb04279bb64012f9694fa620bc3f9472ab33adf2f5be7cc81",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 4298,
+      "path": "static/module/qms/rectifys/core-rectify-detail.js",
+      "sha256": "6259374d193c87eb31dd2f2400417e6370f846677c7c8d45eb42b2c55e5b459b",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 2595,
+      "path": "static/module/qms/rectifys/core-rectify-edit-list.js",
+      "sha256": "1f4d7647d7355470cbd770bfe622670eff032377384cd2bf133e50a2c7195985",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 758,
+      "path": "static/module/qms/rectifys/core-rectify-search-list.js",
+      "sha256": "5ba26f4bdc50119972fdf29e4631e1993a2892d3670aa75a7dda963b64204c85",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 11858,
+      "path": "static/module/qms/rectifys/core-rectify.js",
+      "sha256": "dfc1fe8a91365994f7ce1c9482da427bfad961a80833a06e594f327af52d9078",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 1069,
+      "path": "static/module/qms/risk-factors/core-risk-factor-choose-list.js",
+      "sha256": "d8a413e0d6ebda090a69bd43e8f43f47d55905785202763af8e0ecc8fe1dfd7d",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 5772,
+      "path": "static/module/qms/risk-factors/core-risk-factor-edit-list.js",
+      "sha256": "70fe7d02cccff75d8dbc19de914ff78154a63b98e1995d1ea6bd53fd5f06abc0",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 742,
+      "path": "static/module/qms/risk-factors/core-risk-factor.js",
+      "sha256": "15bdb4289d152ed7be4fa5b5080017a1a136492f41e1ad8eede28846fd6a3a9a",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 2403,
+      "path": "static/module/qms/risk-identifica-regists/core-risk-archive-search-list.js",
+      "sha256": "4e0cd252b99effd197922bd72f6784b56ece68d0095e15b695988239d973aa54",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 3947,
+      "path": "static/module/qms/risk-identifica-regists/core-risk-assess-audit-list.js",
+      "sha256": "03c8db071d3d2316e09b4f36e857443da5c02a08c45ce30d4ea6bd3413376ea7",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 11139,
+      "path": "static/module/qms/risk-identifica-regists/core-risk-assess-edit-list.js",
+      "sha256": "e920fbf228c7abbf3d02e70ed5180e0779eb25d4ffb24a50bdf5474ddf09bda7",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 3872,
+      "path": "static/module/qms/risk-identifica-regists/core-risk-execute-audit-list.js",
+      "sha256": "426dbda14e16a9280a73f01dd7ee6e3777bea2b95ac0efa43f9909e8caf535f4",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 5392,
+      "path": "static/module/qms/risk-identifica-regists/core-risk-execute-edit-list.js",
+      "sha256": "f6bb63d7910b8f3898125beeaa265e3c9a10a00809090d1c3124be6283e69f78",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 4493,
+      "path": "static/module/qms/risk-identifica-regists/core-risk-identifica-regist-audit-list.js",
+      "sha256": "d3b0fe0f278ec1cd59b2854373a5f80466ef7c53abf5b338f76647c76eabcf3b",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 1170,
+      "path": "static/module/qms/risk-identifica-regists/core-risk-identifica-regist-choose-list.js",
+      "sha256": "e3f27ca70d0df5c1ed24ebbf8af7cc44576dda6ce4faf626f4bdef1d6a47fe5d",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 2418,
+      "path": "static/module/qms/risk-identifica-regists/core-risk-identifica-regist-config.js",
+      "sha256": "5f7ab90506f940b8174d1c1aea6d2036a7c1d0c7a0ce691794b2edbd308943a8",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 7591,
+      "path": "static/module/qms/risk-identifica-regists/core-risk-identifica-regist-detail.js",
+      "sha256": "50faa8032488679e6d235a71a49324d738f43b4f3c9e7ce8dc7effee4e84dd72",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 4980,
+      "path": "static/module/qms/risk-identifica-regists/core-risk-identifica-regist-edit-list.js",
+      "sha256": "40f02196495e6e27c6a38fe51ca7b277d072cf1157d2750948e1dc1e49c65b09",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 16541,
+      "path": "static/module/qms/risk-identifica-regists/core-risk-identifica-regist.js",
+      "sha256": "5813c2df5e390def7dc2fc71cc8fdd0f0361daeb3c83da4df4d96a9a16a2f142",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 3919,
+      "path": "static/module/qms/user-trains/core-user-train-audit-list.js",
+      "sha256": "5df2e09000f65c9c34d3802fc9f9f7b4b0a10b04ae76a7df344b3e4a87e96cea",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 887,
+      "path": "static/module/qms/user-trains/core-user-train-config.js",
+      "sha256": "6307f208bc96b42c378de62c031f5d45348d24007191c8a323d94489cd66a50e",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 7750,
+      "path": "static/module/qms/user-trains/core-user-train-detail.js",
+      "sha256": "cabc43b9b2805f088145f283aa92bb59eda31948407483d2136b889b6713b200",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 4742,
+      "path": "static/module/qms/user-trains/core-user-train-edit-list.js",
+      "sha256": "d5d817685c7d519eb1c3c993b3dc24938116934d8876d1d8902e1eec0a327f02",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 2444,
+      "path": "static/module/qms/user-trains/core-user-train-search-list.js",
+      "sha256": "c5393ea00966a55c72e8cdcc8287f48daf431f285fce509bec6a8507b83bcd30",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 19143,
+      "path": "static/module/qms/user-trains/core-user-train.js",
+      "sha256": "853f69ae317f2654d8fa841a16d786a7ecc19bf635c5b60f69f148be314157fa",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 1213,
+      "path": "static/module/script/results/core-result-edit-list.js",
+      "sha256": "6af02e42aef6af7981a52ca591c3fc742a4b2453468340e1163e3b73ed5ef29f",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 867,
+      "path": "static/module/script/results/core-result.js",
+      "sha256": "4fb8ba4f327da0355a6cbcce7a2582d1d1464ac1a2cb683a68d2f6c63bb73ce1",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 5354,
+      "path": "static/module/script/tests/core-test-edit-list.js",
+      "sha256": "cd61d9d399ede7e153629e6db4ec8dcd43478be5e56568f2d0120ae9000358cc",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 15145,
+      "path": "static/module/script/tests/core-test-item-script-detail.js",
+      "sha256": "a3aabc9035f00dff1a824d8832b6409a4b34e1889bbe7cd24dd07db436337b86",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 9233,
+      "path": "static/module/script/tests/core-test-item-script-selector.js",
+      "sha256": "435424efc0487e8f8bbb6a2859648b6b3cc550fd21a31317cdfc2b1d3c4c6817",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 1675,
+      "path": "static/module/script/tests/core-test.js",
+      "sha256": "02cf5771fa7a567a40e095a98e6d08560b50ff96ae564b7b151ef10e9b70dcf5",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 12246,
+      "path": "static/module/train/exam-papers/core-exam-paper-detail.js",
+      "sha256": "b57d355c3a7fe39cfd9a1f175e54c3b5e76e3930edd90a737daec7eb2fd5531c",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 2696,
+      "path": "static/module/train/exam-papers/core-exam-paper-edit-list.js",
+      "sha256": "30c3ac975c74a125b56ef68c7d98996100a27f5b0c4b474501d7a3df551a05f8",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 10691,
+      "path": "static/module/train/exam-papers/core-exam-paper-review-detail.js",
+      "sha256": "3d489673cebe044e44f5d5277d2b6d5c819bb83738ac677e44cbe737f4d39188",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 4107,
+      "path": "static/module/train/exam-papers/core-exam-paper-review-list.js",
+      "sha256": "bca305b368e26c4606f0e9b16f2b4f9928e35319b0f3e86188dce4d3bfa4c3af",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 12116,
+      "path": "static/module/train/exam-papers/core-exam-paper.js",
+      "sha256": "d09a042aa4db88076f7407fbf6a4afe51ce776538f88e5ef03ad2961fc56a1da",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 1849,
+      "path": "static/module/train/exam-tmpls/core-exam-tmpl-choose-list.js",
+      "sha256": "e0528d16859c709e2f396ebb2bf44718eaf00dda7053dc69e4158109843f9634",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 9561,
+      "path": "static/module/train/exam-tmpls/core-exam-tmpl-detail.js",
+      "sha256": "04cc88695cca5c53feec3666a7e75e050079c51a61a4d3a82f3bff44aea672a1",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 5014,
+      "path": "static/module/train/exam-tmpls/core-exam-tmpl-edit-list.js",
+      "sha256": "d40baef707bfb8756bd141c118b11768db19a6e47ef669242c779a31f29d92f9",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 8176,
+      "path": "static/module/train/exam-tmpls/core-exam-tmpl.js",
+      "sha256": "3aaf9a420b183263658b10b104d5d37c987f18cb09019664500ead3f0fa758a2",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 1823,
+      "path": "static/module/train/exams/core-exam-choose-list.js",
+      "sha256": "2273c3c6b1f77b94591c5721021bb36a10ed9bd0febeaf78727bee0ad276dfdf",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 6826,
+      "path": "static/module/train/exams/core-exam-detail.js",
+      "sha256": "9587fdc9858bda6d8bc8fee714269a7b397857b24ead6244e19d62b2950f5855",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 4473,
+      "path": "static/module/train/exams/core-exam-edit-list.js",
+      "sha256": "b3e0d3236b65bba7f01e668ba010a2bab848503e82d8a93f39d928de753b9a4d",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 7233,
+      "path": "static/module/train/exams/core-exam-question-edit.js",
+      "sha256": "d1d5211c8c9ef238e1006ee0a25c24a10a2f27ddd778370855b6350299cfefe2",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 9224,
+      "path": "static/module/train/exams/core-exam.js",
+      "sha256": "c69885eec268642d42d4f7c217effd4a596379a8acf06a184ab362c37077a626",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 18793,
+      "path": "static/module/train/questions/core-question-bank-detail.js",
+      "sha256": "da45c59382555c5486a4b9abb31f3dcd54223800b733f86e897728c72980e9fc",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 6514,
+      "path": "static/module/train/questions/core-question-detail.js",
+      "sha256": "a77191c9b807bd8ee1286076fe667b1c4438ae254c8a5bd1c3331540e4d29ea7",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 5842,
+      "path": "static/module/train/questions/core-question-edit-list.js",
+      "sha256": "1b2b89629f70ffcc5069241b0c1cb4d8d8825c9a5a15dae36f6a41e6f5957622",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 10049,
+      "path": "static/module/train/questions/core-question.js",
+      "sha256": "0e1c3d3967de9f1313631819edb2a3e4e9dafbbb178b0fd80acb71cf2f2f2c2c",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 2221,
+      "path": "static/module/train/train-plans/core-train-plan-audit-list.js",
+      "sha256": "2d977b8b934fafbc74141f591949b5506805ad59f73c1a5a349a8a6c1efc2719",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 1855,
+      "path": "static/module/train/train-plans/core-train-plan-choose-list.js",
+      "sha256": "9744748c15a969987171dee601f76de725cca3e683229c4d3729729c70989def",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 7783,
+      "path": "static/module/train/train-plans/core-train-plan-detail.js",
+      "sha256": "8fbbe2f9c740ddd01065c4384036b2e5faa661d68571ee3911aa1d2a0661f1b2",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 4623,
+      "path": "static/module/train/train-plans/core-train-plan-edit-list.js",
+      "sha256": "66ee7420785ae28fb2b4d53b4cfa15b5ee84ca71e4b5bdb11c7e1d355d7e12b4",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 762,
+      "path": "static/module/train/train-plans/core-train-plan-user-search.js",
+      "sha256": "f8e7a79e14276563f29f6cdf00adc080e2260221d30f28c4ad3d1efd42802966",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 9106,
+      "path": "static/module/train/train-plans/core-train-plan.js",
+      "sha256": "2e630ed6fd88379a5247d11a965ea465b22061120ebf1bc0bfb1ffa29927e3e7",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 5728,
+      "path": "static/module/train/trains/core-train-detail.js",
+      "sha256": "7c1731f21821a4cdf520f77cf732257b4250f2d9b8823ef88529eaa03aae748c",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 3403,
+      "path": "static/module/train/trains/core-train-edit-list.js",
+      "sha256": "913de52c2015d276ef7478863da7f12b8a314ccae1c20aa64b9bc5d3a108c3ad",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 4205,
+      "path": "static/module/train/trains/core-train-search-list.js",
+      "sha256": "d0cbcdfc585273761508089d4f57cdfb344b7f410798c5e33cbfa2c3e6161815",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 751,
+      "path": "static/module/train/trains/core-train-user-search.js",
+      "sha256": "235347d471668745f14e2afdc0dbf89bf5adf7da29ea6dc83874b4083690ab88",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 9133,
+      "path": "static/module/train/trains/core-train.js",
+      "sha256": "16947c0bb6f125ccd79a1a6614145dbccf758f69cbeff16e7e6d6cf42100f7a2",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 316,
+      "path": "static/tmpl/html/template-audit-list.html",
+      "sha256": "cd0bc4ebad2c017a861474b14d36f7a704e57a5d7bf13d79d24e3124bcbaba6b",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 320,
+      "path": "static/tmpl/html/template-choose-list.html",
+      "sha256": "5024039e3239044d208a4032f02532e1b80f48e286c23b2216022d507122443c",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 315,
+      "path": "static/tmpl/html/template-detail.html",
+      "sha256": "64dceca2c84346cc5b039339251a73c21cffa213caa6b668fc7fa310db89873d",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 280,
+      "path": "static/tmpl/html/template-edit-list.html",
+      "sha256": "5cd2bd6b334ac1f62d24260a8d56b1eb60beb51e90b091df8b52fab9eaef5433",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 284,
+      "path": "static/tmpl/html/template-search-list.html",
+      "sha256": "1b7850c41f11b50dc0a216319cea180b6f0770b173f9d0424c06104d76680383",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 33,
+      "path": "static/tmpl/i118n/template-i118n.txt",
+      "sha256": "ccb55acc75da7f4383a0de6668613ff339f1e09467b8199279b8c24acb071242",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 4725,
+      "path": "static/tmpl/java/bean/templateBean.java",
+      "sha256": "bd850c6825be6312d37ded6390926070912b4fbd2031fc110cc665e92a91d397",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 1864,
+      "path": "static/tmpl/java/controller/impl/templateControllerImpl.java",
+      "sha256": "4f53871f86151ce7acad4e5aa7d487f25046553f8f45158b5a69c5a89bbea148",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 1625,
+      "path": "static/tmpl/java/controller/templateController.java",
+      "sha256": "aaa4fdab8add2a3f4acaecca4c04f40338d4eaeeed992c6f6f36641c6db972d1",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 1068,
+      "path": "static/tmpl/java/dao/impl/templateDaoImpl.java",
+      "sha256": "2fc5ed9a42d5c11ad534ecf5104b59fc7cfb44b9a9ac9ada484e6633c1b2e7f5",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 464,
+      "path": "static/tmpl/java/dao/templateDao.java",
+      "sha256": "75f97f23f72c4f8157ce098e3eee64a60a8c5617d89747b5a73bf05ea741f2fd",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 848,
+      "path": "static/tmpl/java/mapper/conf/template-mysql-mapper.xml",
+      "sha256": "c7f6e32c7340a3987265e6946eda7f5efdfca6fd9377933e4fbaba933aa7008d",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 848,
+      "path": "static/tmpl/java/mapper/conf/template-oracle-mapper.xml",
+      "sha256": "c7f6e32c7340a3987265e6946eda7f5efdfca6fd9377933e4fbaba933aa7008d",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 848,
+      "path": "static/tmpl/java/mapper/conf/template-postgresql-mapper.xml",
+      "sha256": "c7f6e32c7340a3987265e6946eda7f5efdfca6fd9377933e4fbaba933aa7008d",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 848,
+      "path": "static/tmpl/java/mapper/conf/template-sqlserver-mapper.xml",
+      "sha256": "c7f6e32c7340a3987265e6946eda7f5efdfca6fd9377933e4fbaba933aa7008d",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 461,
+      "path": "static/tmpl/java/mapper/templateMapper.java",
+      "sha256": "bd8b9e1115812d59a7e0b74f5823312ff2f1044d73c8caa5a3109ac78db5c840",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 3504,
+      "path": "static/tmpl/java/resource/impl/templateResourceImpl.java",
+      "sha256": "3adcb2c49d7e6ea9d332ab69eb85b075eaad9bf24787a89f11dc3a52ca502164",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 2333,
+      "path": "static/tmpl/java/resource/templateResource.java",
+      "sha256": "7eb1f9e3d6a7f959ba7d738486b0e1c85713790726d4e24cc05c2be1cbc7e9ed",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 4546,
+      "path": "static/tmpl/java/service/impl/templateServiceImpl.java",
+      "sha256": "299509f4581b44693af99f33d3ec372d71c03edace798cfa31321bc1511aba5c",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 2056,
+      "path": "static/tmpl/java/service/templateService.java",
+      "sha256": "372bc543ee98022ffeddb5f0f75ecbc8050485cf5b625db4f5145963a8952c3b",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 2108,
+      "path": "static/tmpl/js/template-audit-list.js",
+      "sha256": "ceb015840f2e3b1bd5ea118b29d6a9ae2d3809f07be0951e51e56d3e16242c28",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 1276,
+      "path": "static/tmpl/js/template-choose-list.js",
+      "sha256": "20567710cb9149782533e6f62747bcecd9802c587d5c25784577c2b5600002a2",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 4890,
+      "path": "static/tmpl/js/template-detail.js",
+      "sha256": "c62c8213d507eee00dd276a1de15b5c90c5cea8fb07de4208d13ae3c8915ea66",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 7229,
+      "path": "static/tmpl/js/template-edit-list.js",
+      "sha256": "042de4e3da2d667b5d8f29dd81e5b0f0caddaed33c3bff9036693e226e5b2558",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 998,
+      "path": "static/tmpl/js/template-search-list.js",
+      "sha256": "617fc43cd2c2d998d5c565cde3b9fe030276e98cf08c78b2e7c01bc7535fe142",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 3859,
+      "path": "static/tmpl/js/template.js",
+      "sha256": "cdb65deab86967a8439ae3e732311c5a12ca4989a91333e3c2a27d0551dd8a50",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 275,
+      "path": "static/tmpl/sql/template-mysql-sql.sql",
+      "sha256": "dc17a89eb88920a89f4f5cb9788ba768b66dd32f9bb645048c3763b7ae38dbb8",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 275,
+      "path": "static/tmpl/sql/template-oracle-sql.sql",
+      "sha256": "06f5faa3f765abd4382d1bf4340a88cbba5240fb7639a908342293dd1eae9ea9",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 275,
+      "path": "static/tmpl/sql/template-postgresql-sql.sql",
+      "sha256": "11cbd377bd2446303444d3d1d02833b4214bc3578ffa74a361734ea77b1a30d7",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 264,
+      "path": "static/tmpl/sql/template-sqlserver-sql.sql",
+      "sha256": "d590ccc967a03b735575282ec5b72eda67a7e8983d632dd1fb63f9fc8bff81f7",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 381,
+      "path": "templates/module/codegenerator/code-generate-configs/core-code-generate-config-detail.html",
+      "sha256": "bf3d4214f8ebc15b304ab077fa8133dd5d41e5e2c00cc2924550debd9c39dcc6",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 350,
+      "path": "templates/module/codegenerator/code-generate-configs/core-code-generate-config-edit-list.html",
+      "sha256": "4dea067ca3ca9bbba8b70598b397d2e71c94fd9b6fcc0a37940fa4be3e00bfb5",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 325,
+      "path": "templates/module/codegenerator/sql-generate-tables/core-generate-sql.html",
+      "sha256": "796f51804f91b6754e8b3b202dc8f4b0a227faaff17b8fdcdec97341477c9bf2",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 342,
+      "path": "templates/module/codegenerator/sql-generate-tables/core-sql-generate-table-edit-list.html",
+      "sha256": "255df1518f6c896067d944733ba2ea7f2aa2dc5c6df9b0c94d0852b31bced24d",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 280,
+      "path": "templates/module/nfssi/orders/core-nfssi-order-edit-list.html",
+      "sha256": "1128986570cd557db7a7d2a494993310fa96a5083e17befefefa09910e62e733",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 314,
+      "path": "templates/module/nfssi/reports/core-nfssi-report-detail.html",
+      "sha256": "736f4418c9a29b922942af3da39a89a526f76ead04fb816d2698ac4d6d4616c4",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 318,
+      "path": "templates/module/qms/annual-plans/core-annual-plan-audit-list.html",
+      "sha256": "75f48f74d6c9a43c706bb67126775f37de29ce9cd6db6d7d7972a8582843b198",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 322,
+      "path": "templates/module/qms/annual-plans/core-annual-plan-choose-list.html",
+      "sha256": "14c1cca5a6160aeae48b13f4d0778f9a19ad2ddf4310bed98efc646dda2e6258",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 401,
+      "path": "templates/module/qms/annual-plans/core-annual-plan-detail.html",
+      "sha256": "ddbf884af95b4f42a7210139c376109b47f3001900b279ab81cf96fdef25aac6",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 288,
+      "path": "templates/module/qms/annual-plans/core-annual-plan-edit-list.html",
+      "sha256": "848c433f4ed5a6aa33e53b9a76998c47717645a1d50c24baaa8ca47a895f0807",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 292,
+      "path": "templates/module/qms/annual-plans/core-annual-plan-search-list.html",
+      "sha256": "d60736ba807c29917763a69372a77bc0f765c4bc851ecbd22612690a9b870361",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 338,
+      "path": "templates/module/qms/apply-complaints/core-apply-complaint-audit-list.html",
+      "sha256": "a7322a1c3c41cff0cec4b835971955691325eb58618bbd7907bc62c7ceddf10f",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 429,
+      "path": "templates/module/qms/apply-complaints/core-apply-complaint-detail.html",
+      "sha256": "c751c1d6171566d677cc26358e4905c0341b7036404268063296cacc45e1ad54",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 308,
+      "path": "templates/module/qms/apply-complaints/core-apply-complaint-edit-list.html",
+      "sha256": "21e9062e5b1205803fbb2e03ce5fd3c88af9df42a331e157fb61e3cf3de05042",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 312,
+      "path": "templates/module/qms/apply-complaints/core-apply-complaint-search-list.html",
+      "sha256": "7effb7767fff301a5943cea0d88783d34f21cf0f31105896c3378ef9e27f3cdf",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 443,
+      "path": "templates/module/qms/custom-srt-surveys/core-custom-srt-survey-audit-list.html",
+      "sha256": "3a3c073744c3a7925c0ebb98dd66d213b457301fd854dff433f875e91aefcd0c",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 351,
+      "path": "templates/module/qms/custom-srt-surveys/core-custom-srt-survey-choose-list.html",
+      "sha256": "dc95f0eb82603eeeb1c2d04b18123b82d97dfcea2d12a2f26ef2c45625d4d2d0",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 346,
+      "path": "templates/module/qms/custom-srt-surveys/core-custom-srt-survey-detail.html",
+      "sha256": "9658f7975de75ebb5d3949784d913c5eaa56ff4a89c4f5f4a278b66f6e792aa4",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 317,
+      "path": "templates/module/qms/custom-srt-surveys/core-custom-srt-survey-edit-list.html",
+      "sha256": "058bc8d77c303091335c4211b3555d62ccc40303cf5df4210b65a9339328d145",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 321,
+      "path": "templates/module/qms/custom-srt-surveys/core-custom-srt-survey-search-list.html",
+      "sha256": "a38355d030d56c60cda8ddd24704b000268023fc26486e09cf2d36aeb216f3fe",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 328,
+      "path": "templates/module/qms/custom-surveys/core-custom-survey-audit-list.html",
+      "sha256": "aaf103bdd794f7fe1fc1afcdd2ead3cb4a2e6b99ce6167a1573cd7fb56862a0c",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 298,
+      "path": "templates/module/qms/custom-surveys/core-custom-survey-edit-list.html",
+      "sha256": "ea3adb2edfe6199f7f0976015a95403e57003d3e188f5c5cbe4040ca6c776eea",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 302,
+      "path": "templates/module/qms/custom-surveys/core-custom-survey-search-list.html",
+      "sha256": "1794315d98e2f785d7d78b9b283c3a8368552e18e79deb2aa80aa5632ac25a19",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 348,
+      "path": "templates/module/qms/daily-supervisions/core-daily-supervision-audit-list.html",
+      "sha256": "afa1a57656c9887e2337b36a9ca080794cbf1c131ddb1e923894845660decffc",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 318,
+      "path": "templates/module/qms/daily-supervisions/core-daily-supervision-edit-list.html",
+      "sha256": "10922ff65047ee23a3ea14687593612ee49356e13030a07c1b20742ad5cc8cbc",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 322,
+      "path": "templates/module/qms/daily-supervisions/core-daily-supervision-search-list.html",
+      "sha256": "f3936b71efbbb5794d549498098c742f169529d97804c19c6bd338e995cf8c29",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 423,
+      "path": "templates/module/qms/external-audits/core-external-audit-audit-list.html",
+      "sha256": "f4ddbc71bfc234ef9578ff69d95569de58b438ee233b44a5099ec7376fd0e393",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 337,
+      "path": "templates/module/qms/external-audits/core-external-audit-choose-list.html",
+      "sha256": "640953f6821775fb9fe58930f758dc2a97f092d18eb7140f2f8fdcb274c5f8cc",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 422,
+      "path": "templates/module/qms/external-audits/core-external-audit-detail.html",
+      "sha256": "8200724e36c38a3861f2c7ae113920266b699d4425dcb2a97ce6e10a5a3f8ce7",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 393,
+      "path": "templates/module/qms/external-audits/core-external-audit-edit-list.html",
+      "sha256": "5eaa4901c8f7c7b0c0f4791648813a48ee5ae4b0435fbe0943cea6425d968d4c",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 427,
+      "path": "templates/module/qms/external-audits/core-external-audit-search-list.html",
+      "sha256": "1514baffe76536f3a98ba5f564eda8995c977cc409a66f16f2f5fdbf827164a1",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 318,
+      "path": "templates/module/qms/file-manages/core-file-manage-audit-list.html",
+      "sha256": "da3bad15bfe4996d5b1ef7294e217b566ab9956326a2c1ff3acb0288c13da0d7",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 371,
+      "path": "templates/module/qms/file-manages/core-file-manage-edit-list.html",
+      "sha256": "82d6410a2b0e4b494243d827910689ff335c203ef7f1e71ec3e279f1db2cfb65",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 292,
+      "path": "templates/module/qms/file-manages/core-file-manage-search-list.html",
+      "sha256": "7d5fa711ac7a60e65553f747681da6582330c42cea486b64461da640f5350ee0",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 325,
+      "path": "templates/module/qms/file-manages/core-file-manage-version-detail.html",
+      "sha256": "455b47643099ae5278d27a2565ff84562ad4bbddd1032bca07b7b7c4209ea3bd",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 312,
+      "path": "templates/module/qms/file-types/core-file-type-choose-list.html",
+      "sha256": "95e17810d27781bd77e192094f04dcfc99b7d13d248f11a9f27cd40edd96b67f",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 361,
+      "path": "templates/module/qms/file-types/core-file-type-edit-list.html",
+      "sha256": "a0c2714dc0db90ae71359b8fe632a7a0dfe0d9a53c92e0d39706fa14299e0dce",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 282,
+      "path": "templates/module/qms/file-types/core-file-type-search-list.html",
+      "sha256": "dfe7bf523cfc6510d7e7f1f42519da8fb6d1630692e4c5f9457e92b91b2be155",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 322,
+      "path": "templates/module/qms/file-volumes/core-file-volume-choose-list.html",
+      "sha256": "8cc8d0ea8603623538e99db13cbc2d2f9e232e28f3dffb2fab56ddf860ff6919",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 288,
+      "path": "templates/module/qms/file-volumes/core-file-volume-edit-list.html",
+      "sha256": "4a4ae9e8e5d6a2f5f68fc10f822bf65c1932bd81cfe489b1dffdcae4d41ddb36",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 292,
+      "path": "templates/module/qms/file-volumes/core-file-volume-search-list.html",
+      "sha256": "c51cbf94cb23c10c6469a1c9c76033b23c271f2d571b3e4b9b725caf10ce9969",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 333,
+      "path": "templates/module/qms/internal-audits/core-internal-audit-audit-list.html",
+      "sha256": "bd07e77a4e570d06ab4f2e30c7c9920c334348678dd7c205068d458b701e4fe4",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 337,
+      "path": "templates/module/qms/internal-audits/core-internal-audit-choose-list.html",
+      "sha256": "bb80975c4eea1426c7aa79a5a2ba058f47710f79e3725e085582b4317fb6d231",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 422,
+      "path": "templates/module/qms/internal-audits/core-internal-audit-detail.html",
+      "sha256": "74dbf03e16f437a5e8a6fa3cc44244129b67a47dfc20bb045d0820f54e7b9143",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 303,
+      "path": "templates/module/qms/internal-audits/core-internal-audit-edit-list.html",
+      "sha256": "60967267aed592ef4ec5125499686029f5725e5eb1eaf2c0ea944facaff4f26d",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 307,
+      "path": "templates/module/qms/internal-audits/core-internal-audit-search-list.html",
+      "sha256": "41e44d3df4707bda2ab89395219b4266181d90661b32373776295a8961b39b2a",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 450,
+      "path": "templates/module/qms/launch-new-projects/core-launch-new-project-audit-list.html",
+      "sha256": "7dd46280ca5d95b62d8637336b3ff591f38feea127e2b27453f3033a4f5b4007",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 356,
+      "path": "templates/module/qms/launch-new-projects/core-launch-new-project-choose-list.html",
+      "sha256": "408aed40d2b10b61ad41a08edb8fa24888e7cca2b690a40ac564771f6560ca81",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 351,
+      "path": "templates/module/qms/launch-new-projects/core-launch-new-project-detail.html",
+      "sha256": "9045e98e5a7625b78edd0dc0f1b3b17f5f2f690d529194b0b3140c237858a266",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 450,
+      "path": "templates/module/qms/launch-new-projects/core-launch-new-project-edit-list.html",
+      "sha256": "89a6c824dbcba13819f878bd36d9276237dccfa70f7249d0ccda7785d4fbcf2c",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 326,
+      "path": "templates/module/qms/launch-new-projects/core-launch-new-project-search-list.html",
+      "sha256": "9b40f3f0666f5035077bb5f6fb5dab5989511fe0916ab6c7db7ebf96b3f39dfa",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 328,
+      "path": "templates/module/qms/manage-reviews/core-manage-review-audit-list.html",
+      "sha256": "45fbe60eee85e419227340bfffc2cce0e5522f9913e2ec880e6f49b96e045a8a",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 415,
+      "path": "templates/module/qms/manage-reviews/core-manage-review-detail.html",
+      "sha256": "777db870b98f7a7bc9987372dd779ea06cc3dc05acd21af85462f82fc3432501",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 298,
+      "path": "templates/module/qms/manage-reviews/core-manage-review-edit-list.html",
+      "sha256": "6c2ac2b059429fd5488376a4b0eaa59d7fe7e7918a5fc9eda0a8f8bd54179e65",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 302,
+      "path": "templates/module/qms/manage-reviews/core-manage-review-search-list.html",
+      "sha256": "0c11df3dceb29ba231c0a4b02f15c0382e02905816816224c86a8f1b56b9366e",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 347,
+      "path": "templates/module/qms/ncrs/core-ncr-audit-list.html",
+      "sha256": "f978eb878228c53245ccba430a81a00d3a2e7423a4d749f329d85c38fa217315",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 283,
+      "path": "templates/module/qms/ncrs/core-ncr-choose-list.html",
+      "sha256": "ffdd20a88a8a3e2db0c2dd4cd3e8c73f6352c898a8bf29fb4a068be781c60928",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 346,
+      "path": "templates/module/qms/ncrs/core-ncr-detail.html",
+      "sha256": "9b4d56ce6c65e903ecad4d16c59f603ebd8993faba79df026be6df83f2bea594",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 317,
+      "path": "templates/module/qms/ncrs/core-ncr-edit-list.html",
+      "sha256": "0d79640eeb5af53e39650bd6505b57f5dda75c1c0c3ca9c295ce48cd5d7f2faa",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 321,
+      "path": "templates/module/qms/ncrs/core-ncr-search-list.html",
+      "sha256": "f959e1debbfa005ff38e4be9e3a676cd5dbddaa523432c3eb4019ede4ab2c093",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 396,
+      "path": "templates/module/qms/preventions/core-prevention-audit-list.html",
+      "sha256": "2ff22a83e076f30e5e05923b3b0f06ca2c4da16fc85e3fc05c6f9c47338054e8",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 395,
+      "path": "templates/module/qms/preventions/core-prevention-detail.html",
+      "sha256": "87828aec100df3a91e1ddc2fa5aa1422c857fce0ad2fcca27dc708aff323f709",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 366,
+      "path": "templates/module/qms/preventions/core-prevention-edit-list.html",
+      "sha256": "5c43cd37c69312e0d5dfbb131739ccc8c69a04df161dc6630bd7083548181a90",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 288,
+      "path": "templates/module/qms/preventions/core-prevention-search-list.html",
+      "sha256": "44b30f877d7d22cd14afbb8080b47d0d711e6c2d086ef4297bcb81a806b934ab",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 366,
+      "path": "templates/module/qms/quality-control-plans/core-quality-control-plan-choose-list.html",
+      "sha256": "cea86720578e88160b018b2b1002c7450733e803a643a0aee87152ea05d71b58",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 430,
+      "path": "templates/module/qms/quality-controls/core-quality-control-audit-list.html",
+      "sha256": "175a490e87a50119509520d5da7e02c27b4e5d70879befaacb4aae7b0e9078c6",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 429,
+      "path": "templates/module/qms/quality-controls/core-quality-control-detail.html",
+      "sha256": "b4a90c3600b39f43a06588aa83db497d411b2a1d225b6bc0cf7de3dee294d6b5",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 400,
+      "path": "templates/module/qms/quality-controls/core-quality-control-edit-list.html",
+      "sha256": "b1dfbbb8ae19e13dc17342454cd11b07ce42472abdb0ce584fde2979b6e1ad63",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 404,
+      "path": "templates/module/qms/quality-controls/core-quality-control-search-list.html",
+      "sha256": "8e3103808435f84c85c1b1c3c3a767bb729552c3c228e1a3a32ce893fd98da30",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 375,
+      "path": "templates/module/qms/rectifys/core-rectify-audit-list.html",
+      "sha256": "88455cbe3db91ce0006450d2f1cba02d60347900d11d726dd1e96701e752914d",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 298,
+      "path": "templates/module/qms/rectifys/core-rectify-detail.html",
+      "sha256": "9779c8426bde6931f42457ec78058a379661a198794d199b9fd367d98f84f140",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 345,
+      "path": "templates/module/qms/rectifys/core-rectify-edit-list.html",
+      "sha256": "7ef75f88203ae38ee50745a20d2b4a4923c1ac8a95cdfc14c4628773553bf30d",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 349,
+      "path": "templates/module/qms/rectifys/core-rectify-search-list.html",
+      "sha256": "e3be22ea012777dd280185b9ec972c67c229b91d9f767012f71eb37e34996630",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 318,
+      "path": "templates/module/qms/risk-factors/core-risk-factor-choose-list.html",
+      "sha256": "8b84bcdebdf3eec68955ff5114f0312d76a633f91fb4dcc297ca8726d9d765f5",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 322,
+      "path": "templates/module/qms/risk-factors/core-risk-factor-edit-list.html",
+      "sha256": "8509505a82f2f4922fa185fc9b23ba0178028eda594f2f1b4baf2ac5bb1ae2fb",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 374,
+      "path": "templates/module/qms/risk-identifica-regists/core-risk-archive-search-list.html",
+      "sha256": "d54fceafb07d0cea4a3eb43e37edd65bce9dc162aa07ce9701752e60ffaaa3a1",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 365,
+      "path": "templates/module/qms/risk-identifica-regists/core-risk-assess-audit-list.html",
+      "sha256": "e683592dda354304ee2136e278af6faf46de9ee48a84935a661d8fcdcbe9b190",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 360,
+      "path": "templates/module/qms/risk-identifica-regists/core-risk-assess-edit-list.html",
+      "sha256": "61b94b53ffa6c8d6d20c0cf317d059efffcdd4ea6ffe043a5e7589812bfe7101",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 368,
+      "path": "templates/module/qms/risk-identifica-regists/core-risk-execute-audit-list.html",
+      "sha256": "a219a75db7c253a5e82ae25b3f18c908ce19ef74a4719f08c3ba499afb711422",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 362,
+      "path": "templates/module/qms/risk-identifica-regists/core-risk-execute-edit-list.html",
+      "sha256": "41652a25a15db003261994f5e2a88a839a809387b3f13170c16c395e185aea23",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 369,
+      "path": "templates/module/qms/risk-identifica-regists/core-risk-identifica-regist-audit-list.html",
+      "sha256": "81883c40f5c63681e60d802b7cba4c297929adad1ad52b51277a36942eb75f42",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 372,
+      "path": "templates/module/qms/risk-identifica-regists/core-risk-identifica-regist-choose-list.html",
+      "sha256": "f46f02f6f0bac27a1361b0619a282dc215850f44e479fce66ff8971353b57a0a",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 472,
+      "path": "templates/module/qms/risk-identifica-regists/core-risk-identifica-regist-detail.html",
+      "sha256": "669bad0c68462a17361bf23a569f7b88aa03aa1b2a6235547a1f8a4e3a7cef45",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 368,
+      "path": "templates/module/qms/risk-identifica-regists/core-risk-identifica-regist-edit-list.html",
+      "sha256": "ed75b381d7a91db4e97546e601d06a48e68dc4f1f3c30b8aa7b6b03f0d1c9f6e",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 313,
+      "path": "templates/module/qms/user-trains/core-user-train-audit-list.html",
+      "sha256": "5df35c89e77439dca0634d70c0ff1349669e8730861c3267f4ed0a6cf8220b05",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 394,
+      "path": "templates/module/qms/user-trains/core-user-train-detail.html",
+      "sha256": "deb69160624b052d841fb73353e5db1ad17adbcb878d043bfc9bf35993c1e8c6",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 283,
+      "path": "templates/module/qms/user-trains/core-user-train-edit-list.html",
+      "sha256": "66d20d9e5809c4909812d875d31bd28a99376d32d874827c82808edfaee31883",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 287,
+      "path": "templates/module/qms/user-trains/core-user-train-search-list.html",
+      "sha256": "025bf601adea9db8fd7fcef769a7f2a462ed8112c37b71575d543af1c003714a",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 270,
+      "path": "templates/module/script/results/core-result-edit-list.html",
+      "sha256": "59ab5baf8983e20f5950103088f5b7c10952a22dd85be809ff74aeaba8dacc37",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 260,
+      "path": "templates/module/script/tests/core-test-edit-list.html",
+      "sha256": "db269279f77fb4dcb2044cbb98c9889ff05dc421491ebe7404de9615ce0cbabc",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 309,
+      "path": "templates/module/script/tests/core-test-item-script-detail.html",
+      "sha256": "df97f1447d503992e42588b41640af95d1756f0e4ab3246dac8587d4e1dc841d",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 313,
+      "path": "templates/module/script/tests/core-test-item-script-selector.html",
+      "sha256": "34578aa8ff2bb4e3a9135cb74973dc9c7136cfe0cd8c8c35d5ccc712c96f96c6",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 314,
+      "path": "templates/module/train/exam-papers/core-exam-paper-detail.html",
+      "sha256": "7581db3fc204be6a3e23c0a7b396aa9be1899d09949ec988c029cdf61f8bf6c8",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 315,
+      "path": "templates/module/train/exam-papers/core-exam-paper-edit-list.html",
+      "sha256": "a77a6f0db43be2c1ae4bc22e519152f5b49dbda7d2284bfb59a6043950a5fb2e",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 327,
+      "path": "templates/module/train/exam-papers/core-exam-paper-review-detail.html",
+      "sha256": "cd84510b3da134dcf3462b706e722c1a6918e9dead41863637074e02e5ab1c28",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 319,
+      "path": "templates/module/train/exam-papers/core-exam-paper-review-list.html",
+      "sha256": "e7af3d06b8b5f5156134709073f0b98b2ed65ac89ff6440da1e7d60b95432e9e",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 314,
+      "path": "templates/module/train/exam-tmpls/core-exam-tmpl-choose-list.html",
+      "sha256": "9d63678e791366f012698b3f19c846fdead164c5329dccfc44948128e52443d8",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 309,
+      "path": "templates/module/train/exam-tmpls/core-exam-tmpl-detail.html",
+      "sha256": "d57e059204086b96e0f0d4a953f925ce1e987c6b670b33ed7257bd2aa20b7b12",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 310,
+      "path": "templates/module/train/exam-tmpls/core-exam-tmpl-edit-list.html",
+      "sha256": "f77b2f11e56f7e63a1f21cb80ccfe0e37715258b18dea6e54e2aef354e873b60",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 290,
+      "path": "templates/module/train/exams/core-exam-choose-list.html",
+      "sha256": "0245508b0230de45f944811ef2573b99060d41f1f6907f384086004fe0377cb9",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 285,
+      "path": "templates/module/train/exams/core-exam-detail.html",
+      "sha256": "5ef3fdedf08608081189a5b664d484f315d77b278e430ab935039bdc9dceb195",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 286,
+      "path": "templates/module/train/exams/core-exam-edit-list.html",
+      "sha256": "717910fdcb7efc613768dc4c835f026bc4fd82d6c402ff7b9389470d1c0e7c0d",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 298,
+      "path": "templates/module/train/exams/core-exam-question-edit.html",
+      "sha256": "8d8d35d7379d1e7e2140de957cf5e7bfc4609c8516714697e8cfa1f85d38ccc1",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 322,
+      "path": "templates/module/train/questions/core-question-bank-detail.html",
+      "sha256": "d9b2ef4913e7541d14fb7a701c0082811eed139bfa813d2355053f6b2888d74e",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 305,
+      "path": "templates/module/train/questions/core-question-detail.html",
+      "sha256": "10b4c63d3da37101f8327a1d71668f790ba9e5f308d85ee3faddd89896cea8c8",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 306,
+      "path": "templates/module/train/questions/core-question-edit-list.html",
+      "sha256": "92b777d8237aeb1c8ed905ce5bd1755798c53d0c9c34ec3b7a77db69984a32bc",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 328,
+      "path": "templates/module/train/train-plans/core-train-plan-audit-list.html",
+      "sha256": "6dc0226b642ff0cda98220fd3ff518a968e7d9359096f5df447be03d921cd64c",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 319,
+      "path": "templates/module/train/train-plans/core-train-plan-choose-list.html",
+      "sha256": "982462f9efc28b08e160f418413a0cc11032446f48c3246bf1a6d15aaf8cca4d",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 314,
+      "path": "templates/module/train/train-plans/core-train-plan-detail.html",
+      "sha256": "056eaedcf83c51ce8077b5f0a800dd94a2ab13c7aab0431b006a04c5b88c3ded",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 315,
+      "path": "templates/module/train/train-plans/core-train-plan-edit-list.html",
+      "sha256": "150aaafd32c7d1306d02fb780ac36ed1c84a803dcea3d0f8d3e427f4fe679800",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 323,
+      "path": "templates/module/train/train-plans/core-train-plan-user-search.html",
+      "sha256": "1a9adfe557b13451cdff28d186a7e9d05d77ba7c40f2a1cbab12d589923f70a6",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 290,
+      "path": "templates/module/train/trains/core-train-detail.html",
+      "sha256": "66bbd023e02f1b86bf24e092f89a46d47d309dec545878b92f905acc51c78b03",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 291,
+      "path": "templates/module/train/trains/core-train-edit-list.html",
+      "sha256": "d61d8fcd192332a241560c80b344e4df4a262c8a94a6c4e168a1535c8c64cda4",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 295,
+      "path": "templates/module/train/trains/core-train-search-list.html",
+      "sha256": "83335262db39975b63862fd90980247c4a4ab5946372445c2c0cacffd617237e",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 299,
+      "path": "templates/module/train/trains/core-train-user-search.html",
+      "sha256": "00af0ad7fc75d973c988a3f7997e038453962045d1645f58acbeeee1fd64a277",
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar"
+    },
+    {
+      "bytes": 300,
+      "path": "banner.txt",
+      "sha256": "4499a69bf68769cad5e2609cdca80f3a34736b6b53d9bc64d09da3adb3851c68",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 931,
+      "path": "com/sunwayworld/cloud/module/codegenerator/codegenerateconfig/persistent/mapper/conf/core-code-generate-config-field-mysql-mapper.xml",
+      "sha256": "e2c18bb6c0b4dd93985b19af8bbf5069b750a83c69270da563f6fa404de84691",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 931,
+      "path": "com/sunwayworld/cloud/module/codegenerator/codegenerateconfig/persistent/mapper/conf/core-code-generate-config-field-oracle-mapper.xml",
+      "sha256": "e2c18bb6c0b4dd93985b19af8bbf5069b750a83c69270da563f6fa404de84691",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 931,
+      "path": "com/sunwayworld/cloud/module/codegenerator/codegenerateconfig/persistent/mapper/conf/core-code-generate-config-field-postgresql-mapper.xml",
+      "sha256": "e2c18bb6c0b4dd93985b19af8bbf5069b750a83c69270da563f6fa404de84691",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 931,
+      "path": "com/sunwayworld/cloud/module/codegenerator/codegenerateconfig/persistent/mapper/conf/core-code-generate-config-field-sqlserver-mapper.xml",
+      "sha256": "e2c18bb6c0b4dd93985b19af8bbf5069b750a83c69270da563f6fa404de84691",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1277,
+      "path": "com/sunwayworld/cloud/module/codegenerator/codegenerateconfig/persistent/mapper/conf/core-code-generate-config-mysql-mapper.xml",
+      "sha256": "f2bdf6780ac073e46397e070ff425da0a45186e09a0d27b0360fbddf3729163a",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1277,
+      "path": "com/sunwayworld/cloud/module/codegenerator/codegenerateconfig/persistent/mapper/conf/core-code-generate-config-oracle-mapper.xml",
+      "sha256": "f2bdf6780ac073e46397e070ff425da0a45186e09a0d27b0360fbddf3729163a",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1277,
+      "path": "com/sunwayworld/cloud/module/codegenerator/codegenerateconfig/persistent/mapper/conf/core-code-generate-config-postgresql-mapper.xml",
+      "sha256": "f2bdf6780ac073e46397e070ff425da0a45186e09a0d27b0360fbddf3729163a",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1277,
+      "path": "com/sunwayworld/cloud/module/codegenerator/codegenerateconfig/persistent/mapper/conf/core-code-generate-config-sqlserver-mapper.xml",
+      "sha256": "f2bdf6780ac073e46397e070ff425da0a45186e09a0d27b0360fbddf3729163a",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 922,
+      "path": "com/sunwayworld/cloud/module/codegenerator/codegenerateconfig/persistent/mapper/conf/core-code-generate-config-table-mysql-mapper.xml",
+      "sha256": "e5f9cb4bebe4209ac1f8e4d18b78c3c4f8260d103e87e034aa6246cc28613012",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 922,
+      "path": "com/sunwayworld/cloud/module/codegenerator/codegenerateconfig/persistent/mapper/conf/core-code-generate-config-table-oracle-mapper.xml",
+      "sha256": "e5f9cb4bebe4209ac1f8e4d18b78c3c4f8260d103e87e034aa6246cc28613012",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 922,
+      "path": "com/sunwayworld/cloud/module/codegenerator/codegenerateconfig/persistent/mapper/conf/core-code-generate-config-table-postgresql-mapper.xml",
+      "sha256": "e5f9cb4bebe4209ac1f8e4d18b78c3c4f8260d103e87e034aa6246cc28613012",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 922,
+      "path": "com/sunwayworld/cloud/module/codegenerator/codegenerateconfig/persistent/mapper/conf/core-code-generate-config-table-sqlserver-mapper.xml",
+      "sha256": "e5f9cb4bebe4209ac1f8e4d18b78c3c4f8260d103e87e034aa6246cc28613012",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 900,
+      "path": "com/sunwayworld/cloud/module/codegenerator/sqlgeneratetable/persistent/mapper/conf/core-sql-generate-field-mysql-mapper.xml",
+      "sha256": "d5d782adf50de948ab2b46a467efc526c01af4264919c07b1f98f151dddb7d3e",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 900,
+      "path": "com/sunwayworld/cloud/module/codegenerator/sqlgeneratetable/persistent/mapper/conf/core-sql-generate-field-oracle-mapper.xml",
+      "sha256": "d5d782adf50de948ab2b46a467efc526c01af4264919c07b1f98f151dddb7d3e",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 900,
+      "path": "com/sunwayworld/cloud/module/codegenerator/sqlgeneratetable/persistent/mapper/conf/core-sql-generate-field-postgresql-mapper.xml",
+      "sha256": "d5d782adf50de948ab2b46a467efc526c01af4264919c07b1f98f151dddb7d3e",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 900,
+      "path": "com/sunwayworld/cloud/module/codegenerator/sqlgeneratetable/persistent/mapper/conf/core-sql-generate-field-sqlserver-mapper.xml",
+      "sha256": "d5d782adf50de948ab2b46a467efc526c01af4264919c07b1f98f151dddb7d3e",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 900,
+      "path": "com/sunwayworld/cloud/module/codegenerator/sqlgeneratetable/persistent/mapper/conf/core-sql-generate-table-mysql-mapper.xml",
+      "sha256": "901af4edb0bcea1d0b348910718895bb1cb4c618ed3f93df167f7dc66d160712",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 900,
+      "path": "com/sunwayworld/cloud/module/codegenerator/sqlgeneratetable/persistent/mapper/conf/core-sql-generate-table-oracle-mapper.xml",
+      "sha256": "901af4edb0bcea1d0b348910718895bb1cb4c618ed3f93df167f7dc66d160712",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 900,
+      "path": "com/sunwayworld/cloud/module/codegenerator/sqlgeneratetable/persistent/mapper/conf/core-sql-generate-table-postgresql-mapper.xml",
+      "sha256": "901af4edb0bcea1d0b348910718895bb1cb4c618ed3f93df167f7dc66d160712",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 900,
+      "path": "com/sunwayworld/cloud/module/codegenerator/sqlgeneratetable/persistent/mapper/conf/core-sql-generate-table-sqlserver-mapper.xml",
+      "sha256": "901af4edb0bcea1d0b348910718895bb1cb4c618ed3f93df167f7dc66d160712",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 873,
+      "path": "com/sunwayworld/cloud/module/nfssi/order/persistent/mapper/conf/core-nfssi-order-mysql-mapper.xml",
+      "sha256": "294c740e0a19e51bff943223130e7c3d9f4863a6fd33375e862ce7ea6a93d724",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 873,
+      "path": "com/sunwayworld/cloud/module/nfssi/order/persistent/mapper/conf/core-nfssi-order-oracle-mapper.xml",
+      "sha256": "294c740e0a19e51bff943223130e7c3d9f4863a6fd33375e862ce7ea6a93d724",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 873,
+      "path": "com/sunwayworld/cloud/module/nfssi/order/persistent/mapper/conf/core-nfssi-order-postgresql-mapper.xml",
+      "sha256": "294c740e0a19e51bff943223130e7c3d9f4863a6fd33375e862ce7ea6a93d724",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 873,
+      "path": "com/sunwayworld/cloud/module/nfssi/order/persistent/mapper/conf/core-nfssi-order-sqlserver-mapper.xml",
+      "sha256": "294c740e0a19e51bff943223130e7c3d9f4863a6fd33375e862ce7ea6a93d724",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 891,
+      "path": "com/sunwayworld/cloud/module/nfssi/order/persistent/mapper/conf/core-nfssi-order-test-item-mysql-mapper.xml",
+      "sha256": "4a9ecde0977b27734148b94d5ed2b4059f26465666df7cec7989019fec58fbe2",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 891,
+      "path": "com/sunwayworld/cloud/module/nfssi/order/persistent/mapper/conf/core-nfssi-order-test-item-oracle-mapper.xml",
+      "sha256": "4a9ecde0977b27734148b94d5ed2b4059f26465666df7cec7989019fec58fbe2",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 891,
+      "path": "com/sunwayworld/cloud/module/nfssi/order/persistent/mapper/conf/core-nfssi-order-test-item-postgresql-mapper.xml",
+      "sha256": "4a9ecde0977b27734148b94d5ed2b4059f26465666df7cec7989019fec58fbe2",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 891,
+      "path": "com/sunwayworld/cloud/module/nfssi/order/persistent/mapper/conf/core-nfssi-order-test-item-sqlserver-mapper.xml",
+      "sha256": "4a9ecde0977b27734148b94d5ed2b4059f26465666df7cec7989019fec58fbe2",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 884,
+      "path": "com/sunwayworld/cloud/module/nfssi/order/persistent/mapper/conf/core-nfssi-test-reanson-mysql-mapper.xml",
+      "sha256": "86bbe703383edfcf5bff785afdd4442e34be2bd99d9b17d6a80081d6793c9796",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 884,
+      "path": "com/sunwayworld/cloud/module/nfssi/order/persistent/mapper/conf/core-nfssi-test-reanson-oracle-mapper.xml",
+      "sha256": "86bbe703383edfcf5bff785afdd4442e34be2bd99d9b17d6a80081d6793c9796",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 884,
+      "path": "com/sunwayworld/cloud/module/nfssi/order/persistent/mapper/conf/core-nfssi-test-reanson-postgresql-mapper.xml",
+      "sha256": "86bbe703383edfcf5bff785afdd4442e34be2bd99d9b17d6a80081d6793c9796",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 884,
+      "path": "com/sunwayworld/cloud/module/nfssi/order/persistent/mapper/conf/core-nfssi-test-reanson-sqlserver-mapper.xml",
+      "sha256": "86bbe703383edfcf5bff785afdd4442e34be2bd99d9b17d6a80081d6793c9796",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 888,
+      "path": "com/sunwayworld/cloud/module/nfssi/order/persistent/mapper/conf/core-nfssi-verify-reanson-mysql-mapper.xml",
+      "sha256": "ae5a72ab920a660309296b22f4688df78e4d1a4a02579690fea8b83e0093e529",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 888,
+      "path": "com/sunwayworld/cloud/module/nfssi/order/persistent/mapper/conf/core-nfssi-verify-reanson-oracle-mapper.xml",
+      "sha256": "ae5a72ab920a660309296b22f4688df78e4d1a4a02579690fea8b83e0093e529",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 888,
+      "path": "com/sunwayworld/cloud/module/nfssi/order/persistent/mapper/conf/core-nfssi-verify-reanson-postgresql-mapper.xml",
+      "sha256": "ae5a72ab920a660309296b22f4688df78e4d1a4a02579690fea8b83e0093e529",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 888,
+      "path": "com/sunwayworld/cloud/module/nfssi/order/persistent/mapper/conf/core-nfssi-verify-reanson-sqlserver-mapper.xml",
+      "sha256": "ae5a72ab920a660309296b22f4688df78e4d1a4a02579690fea8b83e0093e529",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 885,
+      "path": "com/sunwayworld/cloud/module/nfssi/report/persistent/mapper/conf/core-nfssi-report-item-mysql-mapper.xml",
+      "sha256": "f96080eeffaa957e549cf6adb964308b24d1feac4f2710b8600087554b8fb074",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 885,
+      "path": "com/sunwayworld/cloud/module/nfssi/report/persistent/mapper/conf/core-nfssi-report-item-oracle-mapper.xml",
+      "sha256": "f96080eeffaa957e549cf6adb964308b24d1feac4f2710b8600087554b8fb074",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 885,
+      "path": "com/sunwayworld/cloud/module/nfssi/report/persistent/mapper/conf/core-nfssi-report-item-postgresql-mapper.xml",
+      "sha256": "f96080eeffaa957e549cf6adb964308b24d1feac4f2710b8600087554b8fb074",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 885,
+      "path": "com/sunwayworld/cloud/module/nfssi/report/persistent/mapper/conf/core-nfssi-report-item-sqlserver-mapper.xml",
+      "sha256": "f96080eeffaa957e549cf6adb964308b24d1feac4f2710b8600087554b8fb074",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 876,
+      "path": "com/sunwayworld/cloud/module/nfssi/report/persistent/mapper/conf/core-nfssi-report-mysql-mapper.xml",
+      "sha256": "d61d7e3e883a25a6d4227ae1d41716f71727147826583ff92ae6d23af6bd0c38",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 876,
+      "path": "com/sunwayworld/cloud/module/nfssi/report/persistent/mapper/conf/core-nfssi-report-oracle-mapper.xml",
+      "sha256": "d61d7e3e883a25a6d4227ae1d41716f71727147826583ff92ae6d23af6bd0c38",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 876,
+      "path": "com/sunwayworld/cloud/module/nfssi/report/persistent/mapper/conf/core-nfssi-report-postgresql-mapper.xml",
+      "sha256": "d61d7e3e883a25a6d4227ae1d41716f71727147826583ff92ae6d23af6bd0c38",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 876,
+      "path": "com/sunwayworld/cloud/module/nfssi/report/persistent/mapper/conf/core-nfssi-report-sqlserver-mapper.xml",
+      "sha256": "d61d7e3e883a25a6d4227ae1d41716f71727147826583ff92ae6d23af6bd0c38",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1061,
+      "path": "com/sunwayworld/cloud/module/qms/annualplan/persistent/mapper/conf/core-annual-plan-mysql-mapper.xml",
+      "sha256": "feeda1db7d2a73b9eaf7429ba4d24ece28dc6ae15ba94963cf20151d579fd7c4",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1061,
+      "path": "com/sunwayworld/cloud/module/qms/annualplan/persistent/mapper/conf/core-annual-plan-oracle-mapper.xml",
+      "sha256": "feeda1db7d2a73b9eaf7429ba4d24ece28dc6ae15ba94963cf20151d579fd7c4",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1061,
+      "path": "com/sunwayworld/cloud/module/qms/annualplan/persistent/mapper/conf/core-annual-plan-postgresql-mapper.xml",
+      "sha256": "feeda1db7d2a73b9eaf7429ba4d24ece28dc6ae15ba94963cf20151d579fd7c4",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1061,
+      "path": "com/sunwayworld/cloud/module/qms/annualplan/persistent/mapper/conf/core-annual-plan-sqlserver-mapper.xml",
+      "sha256": "feeda1db7d2a73b9eaf7429ba4d24ece28dc6ae15ba94963cf20151d579fd7c4",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1168,
+      "path": "com/sunwayworld/cloud/module/qms/annualplan/persistent/mapper/conf/core-daily-supervision-plan-mysql-mapper.xml",
+      "sha256": "eb143eafee4eab532706ab007398dcc8fb39c70bedb00a57d96e56c7dce7436f",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1168,
+      "path": "com/sunwayworld/cloud/module/qms/annualplan/persistent/mapper/conf/core-daily-supervision-plan-oracle-mapper.xml",
+      "sha256": "eb143eafee4eab532706ab007398dcc8fb39c70bedb00a57d96e56c7dce7436f",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1168,
+      "path": "com/sunwayworld/cloud/module/qms/annualplan/persistent/mapper/conf/core-daily-supervision-plan-postgresql-mapper.xml",
+      "sha256": "eb143eafee4eab532706ab007398dcc8fb39c70bedb00a57d96e56c7dce7436f",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1168,
+      "path": "com/sunwayworld/cloud/module/qms/annualplan/persistent/mapper/conf/core-daily-supervision-plan-sqlserver-mapper.xml",
+      "sha256": "eb143eafee4eab532706ab007398dcc8fb39c70bedb00a57d96e56c7dce7436f",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1152,
+      "path": "com/sunwayworld/cloud/module/qms/annualplan/persistent/mapper/conf/core-emp-train-plan-mysql-mapper.xml",
+      "sha256": "2f1d28d8492ce6b62ecf2536343f7f4e5ad59f56cd77d758412117f05aea26ab",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1152,
+      "path": "com/sunwayworld/cloud/module/qms/annualplan/persistent/mapper/conf/core-emp-train-plan-oracle-mapper.xml",
+      "sha256": "2f1d28d8492ce6b62ecf2536343f7f4e5ad59f56cd77d758412117f05aea26ab",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1152,
+      "path": "com/sunwayworld/cloud/module/qms/annualplan/persistent/mapper/conf/core-emp-train-plan-postgresql-mapper.xml",
+      "sha256": "2f1d28d8492ce6b62ecf2536343f7f4e5ad59f56cd77d758412117f05aea26ab",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1152,
+      "path": "com/sunwayworld/cloud/module/qms/annualplan/persistent/mapper/conf/core-emp-train-plan-sqlserver-mapper.xml",
+      "sha256": "2f1d28d8492ce6b62ecf2536343f7f4e5ad59f56cd77d758412117f05aea26ab",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1161,
+      "path": "com/sunwayworld/cloud/module/qms/annualplan/persistent/mapper/conf/core-equ-func-check-plan-mysql-mapper.xml",
+      "sha256": "f11e3d88ecefad0dc31bb915c23919f6b7891f0d5a844dd73aa11e3a4b524762",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1161,
+      "path": "com/sunwayworld/cloud/module/qms/annualplan/persistent/mapper/conf/core-equ-func-check-plan-oracle-mapper.xml",
+      "sha256": "f11e3d88ecefad0dc31bb915c23919f6b7891f0d5a844dd73aa11e3a4b524762",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1161,
+      "path": "com/sunwayworld/cloud/module/qms/annualplan/persistent/mapper/conf/core-equ-func-check-plan-postgresql-mapper.xml",
+      "sha256": "f11e3d88ecefad0dc31bb915c23919f6b7891f0d5a844dd73aa11e3a4b524762",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1161,
+      "path": "com/sunwayworld/cloud/module/qms/annualplan/persistent/mapper/conf/core-equ-func-check-plan-sqlserver-mapper.xml",
+      "sha256": "f11e3d88ecefad0dc31bb915c23919f6b7891f0d5a844dd73aa11e3a4b524762",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1162,
+      "path": "com/sunwayworld/cloud/module/qms/annualplan/persistent/mapper/conf/core-internal-audit-plan-mysql-mapper.xml",
+      "sha256": "270c9af74e04f2436368a48f099941f77c9bdd609aa5dfeafcf2fdbefeab7d9a",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1162,
+      "path": "com/sunwayworld/cloud/module/qms/annualplan/persistent/mapper/conf/core-internal-audit-plan-oracle-mapper.xml",
+      "sha256": "270c9af74e04f2436368a48f099941f77c9bdd609aa5dfeafcf2fdbefeab7d9a",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1162,
+      "path": "com/sunwayworld/cloud/module/qms/annualplan/persistent/mapper/conf/core-internal-audit-plan-postgresql-mapper.xml",
+      "sha256": "270c9af74e04f2436368a48f099941f77c9bdd609aa5dfeafcf2fdbefeab7d9a",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1162,
+      "path": "com/sunwayworld/cloud/module/qms/annualplan/persistent/mapper/conf/core-internal-audit-plan-sqlserver-mapper.xml",
+      "sha256": "270c9af74e04f2436368a48f099941f77c9bdd609aa5dfeafcf2fdbefeab7d9a",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1163,
+      "path": "com/sunwayworld/cloud/module/qms/annualplan/persistent/mapper/conf/core-manage-review-plan-mysql-mapper.xml",
+      "sha256": "d42524a681664b5816614de6d885f4f9bfac28b56f7ebc94b429ec875de605e0",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1163,
+      "path": "com/sunwayworld/cloud/module/qms/annualplan/persistent/mapper/conf/core-manage-review-plan-oracle-mapper.xml",
+      "sha256": "d42524a681664b5816614de6d885f4f9bfac28b56f7ebc94b429ec875de605e0",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1163,
+      "path": "com/sunwayworld/cloud/module/qms/annualplan/persistent/mapper/conf/core-manage-review-plan-postgresql-mapper.xml",
+      "sha256": "d42524a681664b5816614de6d885f4f9bfac28b56f7ebc94b429ec875de605e0",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1163,
+      "path": "com/sunwayworld/cloud/module/qms/annualplan/persistent/mapper/conf/core-manage-review-plan-sqlserver-mapper.xml",
+      "sha256": "d42524a681664b5816614de6d885f4f9bfac28b56f7ebc94b429ec875de605e0",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1160,
+      "path": "com/sunwayworld/cloud/module/qms/annualplan/persistent/mapper/conf/core-period-verify-plan-mysql-mapper.xml",
+      "sha256": "181bb71b657314381260019a69f180e103b9a2575b041a6a795736db32754c0f",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1160,
+      "path": "com/sunwayworld/cloud/module/qms/annualplan/persistent/mapper/conf/core-period-verify-plan-oracle-mapper.xml",
+      "sha256": "181bb71b657314381260019a69f180e103b9a2575b041a6a795736db32754c0f",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1160,
+      "path": "com/sunwayworld/cloud/module/qms/annualplan/persistent/mapper/conf/core-period-verify-plan-postgresql-mapper.xml",
+      "sha256": "181bb71b657314381260019a69f180e103b9a2575b041a6a795736db32754c0f",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1160,
+      "path": "com/sunwayworld/cloud/module/qms/annualplan/persistent/mapper/conf/core-period-verify-plan-sqlserver-mapper.xml",
+      "sha256": "181bb71b657314381260019a69f180e103b9a2575b041a6a795736db32754c0f",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1164,
+      "path": "com/sunwayworld/cloud/module/qms/annualplan/persistent/mapper/conf/core-quality-control-plan-mysql-mapper.xml",
+      "sha256": "28d62aefc26a6364d04986d9686706bd6af5c171eb185bd6a46aafdf75a7d70e",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1164,
+      "path": "com/sunwayworld/cloud/module/qms/annualplan/persistent/mapper/conf/core-quality-control-plan-oracle-mapper.xml",
+      "sha256": "28d62aefc26a6364d04986d9686706bd6af5c171eb185bd6a46aafdf75a7d70e",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1164,
+      "path": "com/sunwayworld/cloud/module/qms/annualplan/persistent/mapper/conf/core-quality-control-plan-postgresql-mapper.xml",
+      "sha256": "28d62aefc26a6364d04986d9686706bd6af5c171eb185bd6a46aafdf75a7d70e",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1164,
+      "path": "com/sunwayworld/cloud/module/qms/annualplan/persistent/mapper/conf/core-quality-control-plan-sqlserver-mapper.xml",
+      "sha256": "28d62aefc26a6364d04986d9686706bd6af5c171eb185bd6a46aafdf75a7d70e",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1166,
+      "path": "com/sunwayworld/cloud/module/qms/annualplan/persistent/mapper/conf/core-verify-calibrate-plan-mysql-mapper.xml",
+      "sha256": "fa4a73beeec61be54bc0439f3611aeb6bda50e62972c1f5a542306c0daaaf3aa",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1166,
+      "path": "com/sunwayworld/cloud/module/qms/annualplan/persistent/mapper/conf/core-verify-calibrate-plan-oracle-mapper.xml",
+      "sha256": "fa4a73beeec61be54bc0439f3611aeb6bda50e62972c1f5a542306c0daaaf3aa",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1166,
+      "path": "com/sunwayworld/cloud/module/qms/annualplan/persistent/mapper/conf/core-verify-calibrate-plan-postgresql-mapper.xml",
+      "sha256": "fa4a73beeec61be54bc0439f3611aeb6bda50e62972c1f5a542306c0daaaf3aa",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1166,
+      "path": "com/sunwayworld/cloud/module/qms/annualplan/persistent/mapper/conf/core-verify-calibrate-plan-sqlserver-mapper.xml",
+      "sha256": "fa4a73beeec61be54bc0439f3611aeb6bda50e62972c1f5a542306c0daaaf3aa",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1073,
+      "path": "com/sunwayworld/cloud/module/qms/applycomplaint/persistent/mapper/conf/core-apply-complaint-mysql-mapper.xml",
+      "sha256": "b0ebc49017927ee3b797c0d93a41a6be62c234aaacd692c41b1e6d62393e7bfe",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1950,
+      "path": "com/sunwayworld/cloud/module/qms/applycomplaint/persistent/mapper/conf/core-apply-complaint-oracle-mapper.xml",
+      "sha256": "d8282a95d828eb3006b980a5b2245525c003c3efb94af40f9d569db60759dd86",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1950,
+      "path": "com/sunwayworld/cloud/module/qms/applycomplaint/persistent/mapper/conf/core-apply-complaint-postgresql-mapper.xml",
+      "sha256": "d8282a95d828eb3006b980a5b2245525c003c3efb94af40f9d569db60759dd86",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1073,
+      "path": "com/sunwayworld/cloud/module/qms/applycomplaint/persistent/mapper/conf/core-apply-complaint-sqlserver-mapper.xml",
+      "sha256": "b0ebc49017927ee3b797c0d93a41a6be62c234aaacd692c41b1e6d62393e7bfe",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 901,
+      "path": "com/sunwayworld/cloud/module/qms/customsrtsurvey/persistent/mapper/conf/core-custom-srt-survey-item-mysql-mapper.xml",
+      "sha256": "9bc0fd994923109bd66698de47c0e8755cc539025371a035d262092fb90c5f57",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 901,
+      "path": "com/sunwayworld/cloud/module/qms/customsrtsurvey/persistent/mapper/conf/core-custom-srt-survey-item-oracle-mapper.xml",
+      "sha256": "9bc0fd994923109bd66698de47c0e8755cc539025371a035d262092fb90c5f57",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 901,
+      "path": "com/sunwayworld/cloud/module/qms/customsrtsurvey/persistent/mapper/conf/core-custom-srt-survey-item-postgresql-mapper.xml",
+      "sha256": "9bc0fd994923109bd66698de47c0e8755cc539025371a035d262092fb90c5f57",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 901,
+      "path": "com/sunwayworld/cloud/module/qms/customsrtsurvey/persistent/mapper/conf/core-custom-srt-survey-item-sqlserver-mapper.xml",
+      "sha256": "9bc0fd994923109bd66698de47c0e8755cc539025371a035d262092fb90c5f57",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1074,
+      "path": "com/sunwayworld/cloud/module/qms/customsrtsurvey/persistent/mapper/conf/core-custom-srt-survey-mysql-mapper.xml",
+      "sha256": "0176403a24a34cdea90d56504f7e5bcf8a362b1018d1cf46c1b63e50870d3219",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1074,
+      "path": "com/sunwayworld/cloud/module/qms/customsrtsurvey/persistent/mapper/conf/core-custom-srt-survey-oracle-mapper.xml",
+      "sha256": "0176403a24a34cdea90d56504f7e5bcf8a362b1018d1cf46c1b63e50870d3219",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1074,
+      "path": "com/sunwayworld/cloud/module/qms/customsrtsurvey/persistent/mapper/conf/core-custom-srt-survey-postgresql-mapper.xml",
+      "sha256": "0176403a24a34cdea90d56504f7e5bcf8a362b1018d1cf46c1b63e50870d3219",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1074,
+      "path": "com/sunwayworld/cloud/module/qms/customsrtsurvey/persistent/mapper/conf/core-custom-srt-survey-sqlserver-mapper.xml",
+      "sha256": "0176403a24a34cdea90d56504f7e5bcf8a362b1018d1cf46c1b63e50870d3219",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 891,
+      "path": "com/sunwayworld/cloud/module/qms/customsurvey/persistent/mapper/conf/core-custom-survey-item-mysql-mapper.xml",
+      "sha256": "28d5a7941ac7b8fe2747340201151753f4fb59bcec8a9734a24bdadd5337d849",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 891,
+      "path": "com/sunwayworld/cloud/module/qms/customsurvey/persistent/mapper/conf/core-custom-survey-item-oracle-mapper.xml",
+      "sha256": "28d5a7941ac7b8fe2747340201151753f4fb59bcec8a9734a24bdadd5337d849",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 891,
+      "path": "com/sunwayworld/cloud/module/qms/customsurvey/persistent/mapper/conf/core-custom-survey-item-postgresql-mapper.xml",
+      "sha256": "28d5a7941ac7b8fe2747340201151753f4fb59bcec8a9734a24bdadd5337d849",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 891,
+      "path": "com/sunwayworld/cloud/module/qms/customsurvey/persistent/mapper/conf/core-custom-survey-item-sqlserver-mapper.xml",
+      "sha256": "28d5a7941ac7b8fe2747340201151753f4fb59bcec8a9734a24bdadd5337d849",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1067,
+      "path": "com/sunwayworld/cloud/module/qms/customsurvey/persistent/mapper/conf/core-custom-survey-mysql-mapper.xml",
+      "sha256": "cfa1ef8398df872a02ec9be6e7114fe8f45ba4e812c853ce15b006fb939da583",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1067,
+      "path": "com/sunwayworld/cloud/module/qms/customsurvey/persistent/mapper/conf/core-custom-survey-oracle-mapper.xml",
+      "sha256": "cfa1ef8398df872a02ec9be6e7114fe8f45ba4e812c853ce15b006fb939da583",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1067,
+      "path": "com/sunwayworld/cloud/module/qms/customsurvey/persistent/mapper/conf/core-custom-survey-postgresql-mapper.xml",
+      "sha256": "cfa1ef8398df872a02ec9be6e7114fe8f45ba4e812c853ce15b006fb939da583",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1067,
+      "path": "com/sunwayworld/cloud/module/qms/customsurvey/persistent/mapper/conf/core-custom-survey-sqlserver-mapper.xml",
+      "sha256": "cfa1ef8398df872a02ec9be6e7114fe8f45ba4e812c853ce15b006fb939da583",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1074,
+      "path": "com/sunwayworld/cloud/module/qms/customsurvey/persistent/mapper/conf/core-custom-survey-sum-mysql-mapper.xml",
+      "sha256": "ea3642e690fc6cbade0340b9fe78b80b6d8bac08149aa9c05a519f764d591393",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1074,
+      "path": "com/sunwayworld/cloud/module/qms/customsurvey/persistent/mapper/conf/core-custom-survey-sum-oracle-mapper.xml",
+      "sha256": "ea3642e690fc6cbade0340b9fe78b80b6d8bac08149aa9c05a519f764d591393",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1074,
+      "path": "com/sunwayworld/cloud/module/qms/customsurvey/persistent/mapper/conf/core-custom-survey-sum-postgresql-mapper.xml",
+      "sha256": "ea3642e690fc6cbade0340b9fe78b80b6d8bac08149aa9c05a519f764d591393",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 896,
+      "path": "com/sunwayworld/cloud/module/qms/customsurvey/persistent/mapper/conf/core-custom-survey-sum-ret-mysql-mapper.xml",
+      "sha256": "e11f2d5e5cddea114f82a1244a120361fb47798bd2a4583d6a7d71467bf2d5e6",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 896,
+      "path": "com/sunwayworld/cloud/module/qms/customsurvey/persistent/mapper/conf/core-custom-survey-sum-ret-oracle-mapper.xml",
+      "sha256": "e11f2d5e5cddea114f82a1244a120361fb47798bd2a4583d6a7d71467bf2d5e6",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 896,
+      "path": "com/sunwayworld/cloud/module/qms/customsurvey/persistent/mapper/conf/core-custom-survey-sum-ret-postgresql-mapper.xml",
+      "sha256": "e11f2d5e5cddea114f82a1244a120361fb47798bd2a4583d6a7d71467bf2d5e6",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 896,
+      "path": "com/sunwayworld/cloud/module/qms/customsurvey/persistent/mapper/conf/core-custom-survey-sum-ret-sqlserver-mapper.xml",
+      "sha256": "e11f2d5e5cddea114f82a1244a120361fb47798bd2a4583d6a7d71467bf2d5e6",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1074,
+      "path": "com/sunwayworld/cloud/module/qms/customsurvey/persistent/mapper/conf/core-custom-survey-sum-sqlserver-mapper.xml",
+      "sha256": "ea3642e690fc6cbade0340b9fe78b80b6d8bac08149aa9c05a519f764d591393",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 901,
+      "path": "com/sunwayworld/cloud/module/qms/dailysupervision/persistent/mapper/conf/core-daily-supervision-con-mysql-mapper.xml",
+      "sha256": "32764ca871e9b592664ad4bdfcbe8b90ff9b5528a0274c0a3c4d16976b212330",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 901,
+      "path": "com/sunwayworld/cloud/module/qms/dailysupervision/persistent/mapper/conf/core-daily-supervision-con-oracle-mapper.xml",
+      "sha256": "32764ca871e9b592664ad4bdfcbe8b90ff9b5528a0274c0a3c4d16976b212330",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 901,
+      "path": "com/sunwayworld/cloud/module/qms/dailysupervision/persistent/mapper/conf/core-daily-supervision-con-postgresql-mapper.xml",
+      "sha256": "32764ca871e9b592664ad4bdfcbe8b90ff9b5528a0274c0a3c4d16976b212330",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 901,
+      "path": "com/sunwayworld/cloud/module/qms/dailysupervision/persistent/mapper/conf/core-daily-supervision-con-sqlserver-mapper.xml",
+      "sha256": "32764ca871e9b592664ad4bdfcbe8b90ff9b5528a0274c0a3c4d16976b212330",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 903,
+      "path": "com/sunwayworld/cloud/module/qms/dailysupervision/persistent/mapper/conf/core-daily-supervision-item-mysql-mapper.xml",
+      "sha256": "3337627c538f19d12131a2ad3557784cc6f0cc4f5e97fccda0c28952768f181b",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 903,
+      "path": "com/sunwayworld/cloud/module/qms/dailysupervision/persistent/mapper/conf/core-daily-supervision-item-oracle-mapper.xml",
+      "sha256": "3337627c538f19d12131a2ad3557784cc6f0cc4f5e97fccda0c28952768f181b",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 903,
+      "path": "com/sunwayworld/cloud/module/qms/dailysupervision/persistent/mapper/conf/core-daily-supervision-item-postgresql-mapper.xml",
+      "sha256": "3337627c538f19d12131a2ad3557784cc6f0cc4f5e97fccda0c28952768f181b",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 903,
+      "path": "com/sunwayworld/cloud/module/qms/dailysupervision/persistent/mapper/conf/core-daily-supervision-item-sqlserver-mapper.xml",
+      "sha256": "3337627c538f19d12131a2ad3557784cc6f0cc4f5e97fccda0c28952768f181b",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1079,
+      "path": "com/sunwayworld/cloud/module/qms/dailysupervision/persistent/mapper/conf/core-daily-supervision-mysql-mapper.xml",
+      "sha256": "50160424f28d1eba76ab15e16c21d2abaf2e23749df8ab4182fba2bf739447a1",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1079,
+      "path": "com/sunwayworld/cloud/module/qms/dailysupervision/persistent/mapper/conf/core-daily-supervision-oracle-mapper.xml",
+      "sha256": "50160424f28d1eba76ab15e16c21d2abaf2e23749df8ab4182fba2bf739447a1",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1079,
+      "path": "com/sunwayworld/cloud/module/qms/dailysupervision/persistent/mapper/conf/core-daily-supervision-postgresql-mapper.xml",
+      "sha256": "50160424f28d1eba76ab15e16c21d2abaf2e23749df8ab4182fba2bf739447a1",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1079,
+      "path": "com/sunwayworld/cloud/module/qms/dailysupervision/persistent/mapper/conf/core-daily-supervision-sqlserver-mapper.xml",
+      "sha256": "50160424f28d1eba76ab15e16c21d2abaf2e23749df8ab4182fba2bf739447a1",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 896,
+      "path": "com/sunwayworld/cloud/module/qms/externalaudit/persistent/mapper/conf/core-external-audit-group-mysql-mapper.xml",
+      "sha256": "0361093a5a58496836017f516e3dfd6e456df1364d393dbfbd73a2d07e9e1873",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 896,
+      "path": "com/sunwayworld/cloud/module/qms/externalaudit/persistent/mapper/conf/core-external-audit-group-oracle-mapper.xml",
+      "sha256": "0361093a5a58496836017f516e3dfd6e456df1364d393dbfbd73a2d07e9e1873",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 896,
+      "path": "com/sunwayworld/cloud/module/qms/externalaudit/persistent/mapper/conf/core-external-audit-group-postgresql-mapper.xml",
+      "sha256": "0361093a5a58496836017f516e3dfd6e456df1364d393dbfbd73a2d07e9e1873",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 896,
+      "path": "com/sunwayworld/cloud/module/qms/externalaudit/persistent/mapper/conf/core-external-audit-group-sqlserver-mapper.xml",
+      "sha256": "0361093a5a58496836017f516e3dfd6e456df1364d393dbfbd73a2d07e9e1873",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1067,
+      "path": "com/sunwayworld/cloud/module/qms/externalaudit/persistent/mapper/conf/core-external-audit-mysql-mapper.xml",
+      "sha256": "eb87294af2a346819db828f52de73dc3b83e7f1af41713cd5ec157545f9e94b4",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 892,
+      "path": "com/sunwayworld/cloud/module/qms/externalaudit/persistent/mapper/conf/core-external-audit-ncr-mysql-mapper.xml",
+      "sha256": "f4878bcc8dd6e17226aa651797785528adc1cf1954371ccf11e660bed75a0ba4",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 892,
+      "path": "com/sunwayworld/cloud/module/qms/externalaudit/persistent/mapper/conf/core-external-audit-ncr-oracle-mapper.xml",
+      "sha256": "f4878bcc8dd6e17226aa651797785528adc1cf1954371ccf11e660bed75a0ba4",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 892,
+      "path": "com/sunwayworld/cloud/module/qms/externalaudit/persistent/mapper/conf/core-external-audit-ncr-postgresql-mapper.xml",
+      "sha256": "f4878bcc8dd6e17226aa651797785528adc1cf1954371ccf11e660bed75a0ba4",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 892,
+      "path": "com/sunwayworld/cloud/module/qms/externalaudit/persistent/mapper/conf/core-external-audit-ncr-sqlserver-mapper.xml",
+      "sha256": "f4878bcc8dd6e17226aa651797785528adc1cf1954371ccf11e660bed75a0ba4",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1067,
+      "path": "com/sunwayworld/cloud/module/qms/externalaudit/persistent/mapper/conf/core-external-audit-oracle-mapper.xml",
+      "sha256": "eb87294af2a346819db828f52de73dc3b83e7f1af41713cd5ec157545f9e94b4",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1067,
+      "path": "com/sunwayworld/cloud/module/qms/externalaudit/persistent/mapper/conf/core-external-audit-postgresql-mapper.xml",
+      "sha256": "eb87294af2a346819db828f52de73dc3b83e7f1af41713cd5ec157545f9e94b4",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1067,
+      "path": "com/sunwayworld/cloud/module/qms/externalaudit/persistent/mapper/conf/core-external-audit-sqlserver-mapper.xml",
+      "sha256": "eb87294af2a346819db828f52de73dc3b83e7f1af41713cd5ec157545f9e94b4",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 888,
+      "path": "com/sunwayworld/cloud/module/qms/filemanage/persistent/mapper/conf/core-file-manage-auth-mysql-mapper.xml",
+      "sha256": "7efe1dc90e8a806f3acf3a88ce9efbac66dc9bd1106e68492cbed82f9e60e0eb",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 888,
+      "path": "com/sunwayworld/cloud/module/qms/filemanage/persistent/mapper/conf/core-file-manage-auth-oracle-mapper.xml",
+      "sha256": "7efe1dc90e8a806f3acf3a88ce9efbac66dc9bd1106e68492cbed82f9e60e0eb",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 888,
+      "path": "com/sunwayworld/cloud/module/qms/filemanage/persistent/mapper/conf/core-file-manage-auth-postgresql-mapper.xml",
+      "sha256": "7efe1dc90e8a806f3acf3a88ce9efbac66dc9bd1106e68492cbed82f9e60e0eb",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 888,
+      "path": "com/sunwayworld/cloud/module/qms/filemanage/persistent/mapper/conf/core-file-manage-auth-sqlserver-mapper.xml",
+      "sha256": "7efe1dc90e8a806f3acf3a88ce9efbac66dc9bd1106e68492cbed82f9e60e0eb",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 879,
+      "path": "com/sunwayworld/cloud/module/qms/filemanage/persistent/mapper/conf/core-file-manage-mysql-mapper.xml",
+      "sha256": "a700871d67631f8dc16837f7dcff6853b4c66af9081f692ac936111d7b076a41",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 879,
+      "path": "com/sunwayworld/cloud/module/qms/filemanage/persistent/mapper/conf/core-file-manage-oracle-mapper.xml",
+      "sha256": "a700871d67631f8dc16837f7dcff6853b4c66af9081f692ac936111d7b076a41",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 879,
+      "path": "com/sunwayworld/cloud/module/qms/filemanage/persistent/mapper/conf/core-file-manage-postgresql-mapper.xml",
+      "sha256": "a700871d67631f8dc16837f7dcff6853b4c66af9081f692ac936111d7b076a41",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 898,
+      "path": "com/sunwayworld/cloud/module/qms/filemanage/persistent/mapper/conf/core-file-manage-print-recor-mysql-mapper.xml",
+      "sha256": "2130907463df9c389354b3d482d46ac0443fb59f9d1301fb0ad7adc324b1174c",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 898,
+      "path": "com/sunwayworld/cloud/module/qms/filemanage/persistent/mapper/conf/core-file-manage-print-recor-oracle-mapper.xml",
+      "sha256": "2130907463df9c389354b3d482d46ac0443fb59f9d1301fb0ad7adc324b1174c",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 898,
+      "path": "com/sunwayworld/cloud/module/qms/filemanage/persistent/mapper/conf/core-file-manage-print-recor-postgresql-mapper.xml",
+      "sha256": "2130907463df9c389354b3d482d46ac0443fb59f9d1301fb0ad7adc324b1174c",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 898,
+      "path": "com/sunwayworld/cloud/module/qms/filemanage/persistent/mapper/conf/core-file-manage-print-recor-sqlserver-mapper.xml",
+      "sha256": "2130907463df9c389354b3d482d46ac0443fb59f9d1301fb0ad7adc324b1174c",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 898,
+      "path": "com/sunwayworld/cloud/module/qms/filemanage/persistent/mapper/conf/core-file-manage-read-record-mysql-mapper.xml",
+      "sha256": "0ef64b3dd1630f3e61eb6e48dff18589b488829e910ce4511619a34aca78472a",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 898,
+      "path": "com/sunwayworld/cloud/module/qms/filemanage/persistent/mapper/conf/core-file-manage-read-record-oracle-mapper.xml",
+      "sha256": "0ef64b3dd1630f3e61eb6e48dff18589b488829e910ce4511619a34aca78472a",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 898,
+      "path": "com/sunwayworld/cloud/module/qms/filemanage/persistent/mapper/conf/core-file-manage-read-record-postgresql-mapper.xml",
+      "sha256": "0ef64b3dd1630f3e61eb6e48dff18589b488829e910ce4511619a34aca78472a",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 898,
+      "path": "com/sunwayworld/cloud/module/qms/filemanage/persistent/mapper/conf/core-file-manage-read-record-sqlserver-mapper.xml",
+      "sha256": "0ef64b3dd1630f3e61eb6e48dff18589b488829e910ce4511619a34aca78472a",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 879,
+      "path": "com/sunwayworld/cloud/module/qms/filemanage/persistent/mapper/conf/core-file-manage-sqlserver-mapper.xml",
+      "sha256": "a700871d67631f8dc16837f7dcff6853b4c66af9081f692ac936111d7b076a41",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1223,
+      "path": "com/sunwayworld/cloud/module/qms/filemanage/persistent/mapper/conf/core-file-manage-version-mysql-mapper.xml",
+      "sha256": "2c80e50e7d1a170c47d0855cae1f733fad0ba53ce77dc9a60902e9e79acb5e73",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1223,
+      "path": "com/sunwayworld/cloud/module/qms/filemanage/persistent/mapper/conf/core-file-manage-version-oracle-mapper.xml",
+      "sha256": "2c80e50e7d1a170c47d0855cae1f733fad0ba53ce77dc9a60902e9e79acb5e73",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1223,
+      "path": "com/sunwayworld/cloud/module/qms/filemanage/persistent/mapper/conf/core-file-manage-version-postgresql-mapper.xml",
+      "sha256": "2c80e50e7d1a170c47d0855cae1f733fad0ba53ce77dc9a60902e9e79acb5e73",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1223,
+      "path": "com/sunwayworld/cloud/module/qms/filemanage/persistent/mapper/conf/core-file-manage-version-sqlserver-mapper.xml",
+      "sha256": "2c80e50e7d1a170c47d0855cae1f733fad0ba53ce77dc9a60902e9e79acb5e73",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 881,
+      "path": "com/sunwayworld/cloud/module/qms/filetype/persistent/mapper/conf/core-file-category-mysql-mapper.xml",
+      "sha256": "52df26507eab6e622171ad7b911103ecf5ed7a67a38e2675e66458994a5c8f5d",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 881,
+      "path": "com/sunwayworld/cloud/module/qms/filetype/persistent/mapper/conf/core-file-category-oracle-mapper.xml",
+      "sha256": "52df26507eab6e622171ad7b911103ecf5ed7a67a38e2675e66458994a5c8f5d",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 881,
+      "path": "com/sunwayworld/cloud/module/qms/filetype/persistent/mapper/conf/core-file-category-postgresql-mapper.xml",
+      "sha256": "52df26507eab6e622171ad7b911103ecf5ed7a67a38e2675e66458994a5c8f5d",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 899,
+      "path": "com/sunwayworld/cloud/module/qms/filetype/persistent/mapper/conf/core-file-category-role-auth-mysql-mapper.xml",
+      "sha256": "34f128c3261619cacf1b83f3260ac7c4d96b816dd4c2aaf268a9362af69ea63e",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 899,
+      "path": "com/sunwayworld/cloud/module/qms/filetype/persistent/mapper/conf/core-file-category-role-auth-oracle-mapper.xml",
+      "sha256": "34f128c3261619cacf1b83f3260ac7c4d96b816dd4c2aaf268a9362af69ea63e",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 899,
+      "path": "com/sunwayworld/cloud/module/qms/filetype/persistent/mapper/conf/core-file-category-role-auth-postgresql-mapper.xml",
+      "sha256": "34f128c3261619cacf1b83f3260ac7c4d96b816dd4c2aaf268a9362af69ea63e",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 899,
+      "path": "com/sunwayworld/cloud/module/qms/filetype/persistent/mapper/conf/core-file-category-role-auth-sqlserver-mapper.xml",
+      "sha256": "34f128c3261619cacf1b83f3260ac7c4d96b816dd4c2aaf268a9362af69ea63e",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 881,
+      "path": "com/sunwayworld/cloud/module/qms/filetype/persistent/mapper/conf/core-file-category-sqlserver-mapper.xml",
+      "sha256": "52df26507eab6e622171ad7b911103ecf5ed7a67a38e2675e66458994a5c8f5d",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 873,
+      "path": "com/sunwayworld/cloud/module/qms/filetype/persistent/mapper/conf/core-file-type-mysql-mapper.xml",
+      "sha256": "b462e071b3627a2a42e2a6f898c950bef0228daa6ca0b7d0f3966943a3a51e43",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 873,
+      "path": "com/sunwayworld/cloud/module/qms/filetype/persistent/mapper/conf/core-file-type-oracle-mapper.xml",
+      "sha256": "b462e071b3627a2a42e2a6f898c950bef0228daa6ca0b7d0f3966943a3a51e43",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 873,
+      "path": "com/sunwayworld/cloud/module/qms/filetype/persistent/mapper/conf/core-file-type-postgresql-mapper.xml",
+      "sha256": "b462e071b3627a2a42e2a6f898c950bef0228daa6ca0b7d0f3966943a3a51e43",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 873,
+      "path": "com/sunwayworld/cloud/module/qms/filetype/persistent/mapper/conf/core-file-type-sqlserver-mapper.xml",
+      "sha256": "b462e071b3627a2a42e2a6f898c950bef0228daa6ca0b7d0f3966943a3a51e43",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 879,
+      "path": "com/sunwayworld/cloud/module/qms/filevolume/persistent/mapper/conf/core-file-volume-mysql-mapper.xml",
+      "sha256": "1fe01ca916aee85fff5881389b838694ef882358137d710130af1f659e9dfe1f",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 879,
+      "path": "com/sunwayworld/cloud/module/qms/filevolume/persistent/mapper/conf/core-file-volume-oracle-mapper.xml",
+      "sha256": "1fe01ca916aee85fff5881389b838694ef882358137d710130af1f659e9dfe1f",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 879,
+      "path": "com/sunwayworld/cloud/module/qms/filevolume/persistent/mapper/conf/core-file-volume-postgresql-mapper.xml",
+      "sha256": "1fe01ca916aee85fff5881389b838694ef882358137d710130af1f659e9dfe1f",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 879,
+      "path": "com/sunwayworld/cloud/module/qms/filevolume/persistent/mapper/conf/core-file-volume-sqlserver-mapper.xml",
+      "sha256": "1fe01ca916aee85fff5881389b838694ef882358137d710130af1f659e9dfe1f",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 896,
+      "path": "com/sunwayworld/cloud/module/qms/internalaudit/persistent/mapper/conf/core-internal-audit-group-mysql-mapper.xml",
+      "sha256": "113f9c66f811d6bbba91d538a612c3141233b6894586eff87d572cd7906cdec5",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 896,
+      "path": "com/sunwayworld/cloud/module/qms/internalaudit/persistent/mapper/conf/core-internal-audit-group-oracle-mapper.xml",
+      "sha256": "113f9c66f811d6bbba91d538a612c3141233b6894586eff87d572cd7906cdec5",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 896,
+      "path": "com/sunwayworld/cloud/module/qms/internalaudit/persistent/mapper/conf/core-internal-audit-group-postgresql-mapper.xml",
+      "sha256": "113f9c66f811d6bbba91d538a612c3141233b6894586eff87d572cd7906cdec5",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 896,
+      "path": "com/sunwayworld/cloud/module/qms/internalaudit/persistent/mapper/conf/core-internal-audit-group-sqlserver-mapper.xml",
+      "sha256": "113f9c66f811d6bbba91d538a612c3141233b6894586eff87d572cd7906cdec5",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1070,
+      "path": "com/sunwayworld/cloud/module/qms/internalaudit/persistent/mapper/conf/core-internal-audit-mysql-mapper.xml",
+      "sha256": "0f6664f4dab502ce9f266f3deb414c2281b849caf2fe6dc1ce5e6194efe6763b",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 892,
+      "path": "com/sunwayworld/cloud/module/qms/internalaudit/persistent/mapper/conf/core-internal-audit-ncr-mysql-mapper.xml",
+      "sha256": "ae798bf90bcba6c7843166339bc616c9de2ad9c6bce926d8e4af0026d68e5f46",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 892,
+      "path": "com/sunwayworld/cloud/module/qms/internalaudit/persistent/mapper/conf/core-internal-audit-ncr-oracle-mapper.xml",
+      "sha256": "ae798bf90bcba6c7843166339bc616c9de2ad9c6bce926d8e4af0026d68e5f46",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 892,
+      "path": "com/sunwayworld/cloud/module/qms/internalaudit/persistent/mapper/conf/core-internal-audit-ncr-postgresql-mapper.xml",
+      "sha256": "ae798bf90bcba6c7843166339bc616c9de2ad9c6bce926d8e4af0026d68e5f46",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 892,
+      "path": "com/sunwayworld/cloud/module/qms/internalaudit/persistent/mapper/conf/core-internal-audit-ncr-sqlserver-mapper.xml",
+      "sha256": "ae798bf90bcba6c7843166339bc616c9de2ad9c6bce926d8e4af0026d68e5f46",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1070,
+      "path": "com/sunwayworld/cloud/module/qms/internalaudit/persistent/mapper/conf/core-internal-audit-oracle-mapper.xml",
+      "sha256": "0f6664f4dab502ce9f266f3deb414c2281b849caf2fe6dc1ce5e6194efe6763b",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1070,
+      "path": "com/sunwayworld/cloud/module/qms/internalaudit/persistent/mapper/conf/core-internal-audit-postgresql-mapper.xml",
+      "sha256": "0f6664f4dab502ce9f266f3deb414c2281b849caf2fe6dc1ce5e6194efe6763b",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1070,
+      "path": "com/sunwayworld/cloud/module/qms/internalaudit/persistent/mapper/conf/core-internal-audit-sqlserver-mapper.xml",
+      "sha256": "0f6664f4dab502ce9f266f3deb414c2281b849caf2fe6dc1ce5e6194efe6763b",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 29184,
+      "path": "com/sunwayworld/cloud/module/qms/io/filemanage/templates/coreFileManageExportTemplate.xls",
+      "sha256": "29a2138219ad82048e25c1c410fe4988800dfe9685e2dc318407c255536ab368",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 904,
+      "path": "com/sunwayworld/cloud/module/qms/launchnewproject/persistent/mapper/conf/core-launch-new-project-item-mysql-mapper.xml",
+      "sha256": "ad465dcb421f0de1d96defbe0d7a37848c98e7d6b1d62b87acaf8b3461b91e91",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 904,
+      "path": "com/sunwayworld/cloud/module/qms/launchnewproject/persistent/mapper/conf/core-launch-new-project-item-oracle-mapper.xml",
+      "sha256": "ad465dcb421f0de1d96defbe0d7a37848c98e7d6b1d62b87acaf8b3461b91e91",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 904,
+      "path": "com/sunwayworld/cloud/module/qms/launchnewproject/persistent/mapper/conf/core-launch-new-project-item-postgresql-mapper.xml",
+      "sha256": "ad465dcb421f0de1d96defbe0d7a37848c98e7d6b1d62b87acaf8b3461b91e91",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 904,
+      "path": "com/sunwayworld/cloud/module/qms/launchnewproject/persistent/mapper/conf/core-launch-new-project-item-sqlserver-mapper.xml",
+      "sha256": "ad465dcb421f0de1d96defbe0d7a37848c98e7d6b1d62b87acaf8b3461b91e91",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1077,
+      "path": "com/sunwayworld/cloud/module/qms/launchnewproject/persistent/mapper/conf/core-launch-new-project-mysql-mapper.xml",
+      "sha256": "788e822a9ed1bc861a876ed1a848e443e26740e384efa32964bf1615b69cd940",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1077,
+      "path": "com/sunwayworld/cloud/module/qms/launchnewproject/persistent/mapper/conf/core-launch-new-project-oracle-mapper.xml",
+      "sha256": "788e822a9ed1bc861a876ed1a848e443e26740e384efa32964bf1615b69cd940",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1077,
+      "path": "com/sunwayworld/cloud/module/qms/launchnewproject/persistent/mapper/conf/core-launch-new-project-postgresql-mapper.xml",
+      "sha256": "788e822a9ed1bc861a876ed1a848e443e26740e384efa32964bf1615b69cd940",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1077,
+      "path": "com/sunwayworld/cloud/module/qms/launchnewproject/persistent/mapper/conf/core-launch-new-project-sqlserver-mapper.xml",
+      "sha256": "788e822a9ed1bc861a876ed1a848e443e26740e384efa32964bf1615b69cd940",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 897,
+      "path": "com/sunwayworld/cloud/module/qms/managereview/persistent/mapper/conf/core-manage-review-improve-mysql-mapper.xml",
+      "sha256": "f301d1dbaa0d1537d6677a9c7dd8145483ca9ac59622d4e6a15aef2cdaaef404",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 897,
+      "path": "com/sunwayworld/cloud/module/qms/managereview/persistent/mapper/conf/core-manage-review-improve-oracle-mapper.xml",
+      "sha256": "f301d1dbaa0d1537d6677a9c7dd8145483ca9ac59622d4e6a15aef2cdaaef404",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 897,
+      "path": "com/sunwayworld/cloud/module/qms/managereview/persistent/mapper/conf/core-manage-review-improve-postgresql-mapper.xml",
+      "sha256": "f301d1dbaa0d1537d6677a9c7dd8145483ca9ac59622d4e6a15aef2cdaaef404",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 897,
+      "path": "com/sunwayworld/cloud/module/qms/managereview/persistent/mapper/conf/core-manage-review-improve-sqlserver-mapper.xml",
+      "sha256": "f301d1dbaa0d1537d6677a9c7dd8145483ca9ac59622d4e6a15aef2cdaaef404",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1067,
+      "path": "com/sunwayworld/cloud/module/qms/managereview/persistent/mapper/conf/core-manage-review-mysql-mapper.xml",
+      "sha256": "8f0de0f921aee592a9e1bee95c4bce73fdb88c8244c82cf30a3b5c3e38673a43",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1067,
+      "path": "com/sunwayworld/cloud/module/qms/managereview/persistent/mapper/conf/core-manage-review-oracle-mapper.xml",
+      "sha256": "8f0de0f921aee592a9e1bee95c4bce73fdb88c8244c82cf30a3b5c3e38673a43",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1067,
+      "path": "com/sunwayworld/cloud/module/qms/managereview/persistent/mapper/conf/core-manage-review-postgresql-mapper.xml",
+      "sha256": "8f0de0f921aee592a9e1bee95c4bce73fdb88c8244c82cf30a3b5c3e38673a43",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1067,
+      "path": "com/sunwayworld/cloud/module/qms/managereview/persistent/mapper/conf/core-manage-review-sqlserver-mapper.xml",
+      "sha256": "8f0de0f921aee592a9e1bee95c4bce73fdb88c8244c82cf30a3b5c3e38673a43",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1036,
+      "path": "com/sunwayworld/cloud/module/qms/ncr/persistent/mapper/conf/core-ncr-mysql-mapper.xml",
+      "sha256": "a9ce5a07ea174f6b48c2c66d241536ce1335aed25d2af7ec2f3048e1dc921eab",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1036,
+      "path": "com/sunwayworld/cloud/module/qms/ncr/persistent/mapper/conf/core-ncr-oracle-mapper.xml",
+      "sha256": "a9ce5a07ea174f6b48c2c66d241536ce1335aed25d2af7ec2f3048e1dc921eab",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1036,
+      "path": "com/sunwayworld/cloud/module/qms/ncr/persistent/mapper/conf/core-ncr-postgresql-mapper.xml",
+      "sha256": "a9ce5a07ea174f6b48c2c66d241536ce1335aed25d2af7ec2f3048e1dc921eab",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1036,
+      "path": "com/sunwayworld/cloud/module/qms/ncr/persistent/mapper/conf/core-ncr-sqlserver-mapper.xml",
+      "sha256": "a9ce5a07ea174f6b48c2c66d241536ce1335aed25d2af7ec2f3048e1dc921eab",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 884,
+      "path": "com/sunwayworld/cloud/module/qms/prevention/persistent/mapper/conf/core-prevention-item-mysql-mapper.xml",
+      "sha256": "d8d4bbf80799142a7c30a7387a4867f5c4fbee3effcf185047c8f3aab4da8846",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 884,
+      "path": "com/sunwayworld/cloud/module/qms/prevention/persistent/mapper/conf/core-prevention-item-oracle-mapper.xml",
+      "sha256": "d8d4bbf80799142a7c30a7387a4867f5c4fbee3effcf185047c8f3aab4da8846",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 884,
+      "path": "com/sunwayworld/cloud/module/qms/prevention/persistent/mapper/conf/core-prevention-item-postgresql-mapper.xml",
+      "sha256": "d8d4bbf80799142a7c30a7387a4867f5c4fbee3effcf185047c8f3aab4da8846",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 884,
+      "path": "com/sunwayworld/cloud/module/qms/prevention/persistent/mapper/conf/core-prevention-item-sqlserver-mapper.xml",
+      "sha256": "d8d4bbf80799142a7c30a7387a4867f5c4fbee3effcf185047c8f3aab4da8846",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1057,
+      "path": "com/sunwayworld/cloud/module/qms/prevention/persistent/mapper/conf/core-prevention-mysql-mapper.xml",
+      "sha256": "b7045f839e95c8cf4f69b10d2288f02fa32678e9e451b34dcdf9d1f1a0336eb5",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1057,
+      "path": "com/sunwayworld/cloud/module/qms/prevention/persistent/mapper/conf/core-prevention-oracle-mapper.xml",
+      "sha256": "b7045f839e95c8cf4f69b10d2288f02fa32678e9e451b34dcdf9d1f1a0336eb5",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1057,
+      "path": "com/sunwayworld/cloud/module/qms/prevention/persistent/mapper/conf/core-prevention-postgresql-mapper.xml",
+      "sha256": "b7045f839e95c8cf4f69b10d2288f02fa32678e9e451b34dcdf9d1f1a0336eb5",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1057,
+      "path": "com/sunwayworld/cloud/module/qms/prevention/persistent/mapper/conf/core-prevention-sqlserver-mapper.xml",
+      "sha256": "b7045f839e95c8cf4f69b10d2288f02fa32678e9e451b34dcdf9d1f1a0336eb5",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 897,
+      "path": "com/sunwayworld/cloud/module/qms/qualitycontrol/persistent/mapper/conf/core-quality-control-item-mysql-mapper.xml",
+      "sha256": "69b383c179ff3467b2f79ec8f0f128d6d13d11ffcbd22c723d6758f1ed0c1321",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 897,
+      "path": "com/sunwayworld/cloud/module/qms/qualitycontrol/persistent/mapper/conf/core-quality-control-item-oracle-mapper.xml",
+      "sha256": "69b383c179ff3467b2f79ec8f0f128d6d13d11ffcbd22c723d6758f1ed0c1321",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 897,
+      "path": "com/sunwayworld/cloud/module/qms/qualitycontrol/persistent/mapper/conf/core-quality-control-item-postgresql-mapper.xml",
+      "sha256": "69b383c179ff3467b2f79ec8f0f128d6d13d11ffcbd22c723d6758f1ed0c1321",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 897,
+      "path": "com/sunwayworld/cloud/module/qms/qualitycontrol/persistent/mapper/conf/core-quality-control-item-sqlserver-mapper.xml",
+      "sha256": "69b383c179ff3467b2f79ec8f0f128d6d13d11ffcbd22c723d6758f1ed0c1321",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1242,
+      "path": "com/sunwayworld/cloud/module/qms/qualitycontrol/persistent/mapper/conf/core-quality-control-mysql-mapper.xml",
+      "sha256": "a6e5d41e5666480adfeff835426f0fce385b4edb55765a2e938e9a16bfc47aec",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1242,
+      "path": "com/sunwayworld/cloud/module/qms/qualitycontrol/persistent/mapper/conf/core-quality-control-oracle-mapper.xml",
+      "sha256": "a6e5d41e5666480adfeff835426f0fce385b4edb55765a2e938e9a16bfc47aec",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1259,
+      "path": "com/sunwayworld/cloud/module/qms/qualitycontrol/persistent/mapper/conf/core-quality-control-postgresql-mapper.xml",
+      "sha256": "0eb2ce6164be78560ebde7c3430bb88ba2255d817ce809b93139af92a70001c7",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1242,
+      "path": "com/sunwayworld/cloud/module/qms/qualitycontrol/persistent/mapper/conf/core-quality-control-sqlserver-mapper.xml",
+      "sha256": "a6e5d41e5666480adfeff835426f0fce385b4edb55765a2e938e9a16bfc47aec",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 875,
+      "path": "com/sunwayworld/cloud/module/qms/rectify/persistent/mapper/conf/core-rectify-item-mysql-mapper.xml",
+      "sha256": "70bdaa635df95164b418fbda40f1d097bfb38ebe0684bfd3eb6dfa80dad659c5",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 875,
+      "path": "com/sunwayworld/cloud/module/qms/rectify/persistent/mapper/conf/core-rectify-item-oracle-mapper.xml",
+      "sha256": "70bdaa635df95164b418fbda40f1d097bfb38ebe0684bfd3eb6dfa80dad659c5",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 875,
+      "path": "com/sunwayworld/cloud/module/qms/rectify/persistent/mapper/conf/core-rectify-item-postgresql-mapper.xml",
+      "sha256": "70bdaa635df95164b418fbda40f1d097bfb38ebe0684bfd3eb6dfa80dad659c5",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 875,
+      "path": "com/sunwayworld/cloud/module/qms/rectify/persistent/mapper/conf/core-rectify-item-sqlserver-mapper.xml",
+      "sha256": "70bdaa635df95164b418fbda40f1d097bfb38ebe0684bfd3eb6dfa80dad659c5",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1048,
+      "path": "com/sunwayworld/cloud/module/qms/rectify/persistent/mapper/conf/core-rectify-mysql-mapper.xml",
+      "sha256": "bc192a215de366529fabdc9e63bfb4437dfc054bb6f8c551ac0624e602ebf37a",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1048,
+      "path": "com/sunwayworld/cloud/module/qms/rectify/persistent/mapper/conf/core-rectify-oracle-mapper.xml",
+      "sha256": "bc192a215de366529fabdc9e63bfb4437dfc054bb6f8c551ac0624e602ebf37a",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1048,
+      "path": "com/sunwayworld/cloud/module/qms/rectify/persistent/mapper/conf/core-rectify-postgresql-mapper.xml",
+      "sha256": "bc192a215de366529fabdc9e63bfb4437dfc054bb6f8c551ac0624e602ebf37a",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1048,
+      "path": "com/sunwayworld/cloud/module/qms/rectify/persistent/mapper/conf/core-rectify-sqlserver-mapper.xml",
+      "sha256": "bc192a215de366529fabdc9e63bfb4437dfc054bb6f8c551ac0624e602ebf37a",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 873,
+      "path": "com/sunwayworld/cloud/module/qms/riskfactor/persistent/mapper/conf/core-risk-factor-mysql-mapper.xml",
+      "sha256": "2e272ead98ec0c52945c8266ee0e515ebf599f207e5e9aa5b0548308efc7915b",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 873,
+      "path": "com/sunwayworld/cloud/module/qms/riskfactor/persistent/mapper/conf/core-risk-factor-oracle-mapper.xml",
+      "sha256": "2e272ead98ec0c52945c8266ee0e515ebf599f207e5e9aa5b0548308efc7915b",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 873,
+      "path": "com/sunwayworld/cloud/module/qms/riskfactor/persistent/mapper/conf/core-risk-factor-postgresql-mapper.xml",
+      "sha256": "2e272ead98ec0c52945c8266ee0e515ebf599f207e5e9aa5b0548308efc7915b",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 873,
+      "path": "com/sunwayworld/cloud/module/qms/riskfactor/persistent/mapper/conf/core-risk-factor-sqlserver-mapper.xml",
+      "sha256": "2e272ead98ec0c52945c8266ee0e515ebf599f207e5e9aa5b0548308efc7915b",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 906,
+      "path": "com/sunwayworld/cloud/module/qms/riskidentificaregist/persistent/mapper/conf/core-risk-identifica-factor-mysql-mapper.xml",
+      "sha256": "b2ecc8574e3b4d14d67101d121859e66fa90fe9cbeab4941742f736dd11325ad",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 906,
+      "path": "com/sunwayworld/cloud/module/qms/riskidentificaregist/persistent/mapper/conf/core-risk-identifica-factor-oracle-mapper.xml",
+      "sha256": "b2ecc8574e3b4d14d67101d121859e66fa90fe9cbeab4941742f736dd11325ad",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 906,
+      "path": "com/sunwayworld/cloud/module/qms/riskidentificaregist/persistent/mapper/conf/core-risk-identifica-factor-postgresql-mapper.xml",
+      "sha256": "b2ecc8574e3b4d14d67101d121859e66fa90fe9cbeab4941742f736dd11325ad",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 906,
+      "path": "com/sunwayworld/cloud/module/qms/riskidentificaregist/persistent/mapper/conf/core-risk-identifica-factor-sqlserver-mapper.xml",
+      "sha256": "b2ecc8574e3b4d14d67101d121859e66fa90fe9cbeab4941742f736dd11325ad",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1395,
+      "path": "com/sunwayworld/cloud/module/qms/riskidentificaregist/persistent/mapper/conf/core-risk-identifica-regist-mysql-mapper.xml",
+      "sha256": "ba2b0746750f1150916c78fc3e3ae3e445b571fe5a0caa62d549b289abafa6c1",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1396,
+      "path": "com/sunwayworld/cloud/module/qms/riskidentificaregist/persistent/mapper/conf/core-risk-identifica-regist-oracle-mapper.xml",
+      "sha256": "429bd82160542295ebe76f4e49b36a10a81e751d1e30feae459f39fe19f35323",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1396,
+      "path": "com/sunwayworld/cloud/module/qms/riskidentificaregist/persistent/mapper/conf/core-risk-identifica-regist-postgresql-mapper.xml",
+      "sha256": "429bd82160542295ebe76f4e49b36a10a81e751d1e30feae459f39fe19f35323",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1395,
+      "path": "com/sunwayworld/cloud/module/qms/riskidentificaregist/persistent/mapper/conf/core-risk-identifica-regist-sqlserver-mapper.xml",
+      "sha256": "ba2b0746750f1150916c78fc3e3ae3e445b571fe5a0caa62d549b289abafa6c1",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1058,
+      "path": "com/sunwayworld/cloud/module/qms/usertrain/persistent/mapper/conf/core-user-train-mysql-mapper.xml",
+      "sha256": "4a6d500ad39e41398d6dd8db28b7375bc0ec6fe1fe40a63bc197aaa777c1adb1",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1058,
+      "path": "com/sunwayworld/cloud/module/qms/usertrain/persistent/mapper/conf/core-user-train-oracle-mapper.xml",
+      "sha256": "4a6d500ad39e41398d6dd8db28b7375bc0ec6fe1fe40a63bc197aaa777c1adb1",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1058,
+      "path": "com/sunwayworld/cloud/module/qms/usertrain/persistent/mapper/conf/core-user-train-postgresql-mapper.xml",
+      "sha256": "4a6d500ad39e41398d6dd8db28b7375bc0ec6fe1fe40a63bc197aaa777c1adb1",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1058,
+      "path": "com/sunwayworld/cloud/module/qms/usertrain/persistent/mapper/conf/core-user-train-sqlserver-mapper.xml",
+      "sha256": "4a6d500ad39e41398d6dd8db28b7375bc0ec6fe1fe40a63bc197aaa777c1adb1",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1003,
+      "path": "com/sunwayworld/cloud/module/script/result/persistent/mapper/conf/core-result-mysql-mapper.xml",
+      "sha256": "fbcea8cf38e936af859c35c65d12ab22e4c972b62ff3cdcf7b5e935c3cd058ab",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1003,
+      "path": "com/sunwayworld/cloud/module/script/result/persistent/mapper/conf/core-result-oracle-mapper.xml",
+      "sha256": "fbcea8cf38e936af859c35c65d12ab22e4c972b62ff3cdcf7b5e935c3cd058ab",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1003,
+      "path": "com/sunwayworld/cloud/module/script/result/persistent/mapper/conf/core-result-postgresql-mapper.xml",
+      "sha256": "fbcea8cf38e936af859c35c65d12ab22e4c972b62ff3cdcf7b5e935c3cd058ab",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1003,
+      "path": "com/sunwayworld/cloud/module/script/result/persistent/mapper/conf/core-result-sqlserver-mapper.xml",
+      "sha256": "fbcea8cf38e936af859c35c65d12ab22e4c972b62ff3cdcf7b5e935c3cd058ab",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 988,
+      "path": "com/sunwayworld/cloud/module/script/test/persistent/mapper/conf/core-item-mysql-mapper.xml",
+      "sha256": "265b5ac20ae4cc1fbbf5abc7f4b2f90b94217b65b412614d5f68640938b8f61e",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 988,
+      "path": "com/sunwayworld/cloud/module/script/test/persistent/mapper/conf/core-item-oracle-mapper.xml",
+      "sha256": "265b5ac20ae4cc1fbbf5abc7f4b2f90b94217b65b412614d5f68640938b8f61e",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 988,
+      "path": "com/sunwayworld/cloud/module/script/test/persistent/mapper/conf/core-item-postgresql-mapper.xml",
+      "sha256": "265b5ac20ae4cc1fbbf5abc7f4b2f90b94217b65b412614d5f68640938b8f61e",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 988,
+      "path": "com/sunwayworld/cloud/module/script/test/persistent/mapper/conf/core-item-sqlserver-mapper.xml",
+      "sha256": "265b5ac20ae4cc1fbbf5abc7f4b2f90b94217b65b412614d5f68640938b8f61e",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 855,
+      "path": "com/sunwayworld/cloud/module/script/test/persistent/mapper/conf/core-test-mysql-mapper.xml",
+      "sha256": "127f5a7784ca5d4df114cc593f8a0119d0364f39f2c08a67520c7306746ccb08",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 855,
+      "path": "com/sunwayworld/cloud/module/script/test/persistent/mapper/conf/core-test-oracle-mapper.xml",
+      "sha256": "127f5a7784ca5d4df114cc593f8a0119d0364f39f2c08a67520c7306746ccb08",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 855,
+      "path": "com/sunwayworld/cloud/module/script/test/persistent/mapper/conf/core-test-postgresql-mapper.xml",
+      "sha256": "127f5a7784ca5d4df114cc593f8a0119d0364f39f2c08a67520c7306746ccb08",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 855,
+      "path": "com/sunwayworld/cloud/module/script/test/persistent/mapper/conf/core-test-sqlserver-mapper.xml",
+      "sha256": "127f5a7784ca5d4df114cc593f8a0119d0364f39f2c08a67520c7306746ccb08",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1725,
+      "path": "com/sunwayworld/cloud/module/train/exam/persistent/mapper/conf/core-exam-mysql-mapper.xml",
+      "sha256": "ece897e70917616c2f62d17d7a83449408bb1ab4bc44bae2fefa6737480caafe",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1716,
+      "path": "com/sunwayworld/cloud/module/train/exam/persistent/mapper/conf/core-exam-oracle-mapper.xml",
+      "sha256": "3fd1902160eeaae24777629bff515cb92656611aefb0917a2e6a48ed7a182839",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1716,
+      "path": "com/sunwayworld/cloud/module/train/exam/persistent/mapper/conf/core-exam-postgresql-mapper.xml",
+      "sha256": "3fd1902160eeaae24777629bff515cb92656611aefb0917a2e6a48ed7a182839",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1130,
+      "path": "com/sunwayworld/cloud/module/train/exam/persistent/mapper/conf/core-exam-question-mysql-mapper.xml",
+      "sha256": "5a7a441442b86343cb3391b1677dc656bd9631204d6eac512f709a9b82649960",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1130,
+      "path": "com/sunwayworld/cloud/module/train/exam/persistent/mapper/conf/core-exam-question-oracle-mapper.xml",
+      "sha256": "5a7a441442b86343cb3391b1677dc656bd9631204d6eac512f709a9b82649960",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1130,
+      "path": "com/sunwayworld/cloud/module/train/exam/persistent/mapper/conf/core-exam-question-postgresql-mapper.xml",
+      "sha256": "5a7a441442b86343cb3391b1677dc656bd9631204d6eac512f709a9b82649960",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1130,
+      "path": "com/sunwayworld/cloud/module/train/exam/persistent/mapper/conf/core-exam-question-sqlserver-mapper.xml",
+      "sha256": "5a7a441442b86343cb3391b1677dc656bd9631204d6eac512f709a9b82649960",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1725,
+      "path": "com/sunwayworld/cloud/module/train/exam/persistent/mapper/conf/core-exam-sqlserver-mapper.xml",
+      "sha256": "ece897e70917616c2f62d17d7a83449408bb1ab4bc44bae2fefa6737480caafe",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1840,
+      "path": "com/sunwayworld/cloud/module/train/exampaper/persistent/mapper/conf/core-exam-paper-answer-mysql-mapper.xml",
+      "sha256": "6448da98c3a40c503a81541c1f5848c3864477991df0f3e5b8791c7b4f0cb2eb",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1840,
+      "path": "com/sunwayworld/cloud/module/train/exampaper/persistent/mapper/conf/core-exam-paper-answer-oracle-mapper.xml",
+      "sha256": "6448da98c3a40c503a81541c1f5848c3864477991df0f3e5b8791c7b4f0cb2eb",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1840,
+      "path": "com/sunwayworld/cloud/module/train/exampaper/persistent/mapper/conf/core-exam-paper-answer-postgresql-mapper.xml",
+      "sha256": "6448da98c3a40c503a81541c1f5848c3864477991df0f3e5b8791c7b4f0cb2eb",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1840,
+      "path": "com/sunwayworld/cloud/module/train/exampaper/persistent/mapper/conf/core-exam-paper-answer-sqlserver-mapper.xml",
+      "sha256": "6448da98c3a40c503a81541c1f5848c3864477991df0f3e5b8791c7b4f0cb2eb",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1448,
+      "path": "com/sunwayworld/cloud/module/train/exampaper/persistent/mapper/conf/core-exam-paper-mysql-mapper.xml",
+      "sha256": "8f2ab7ec4987527451dec5c1a3e3cd79fc89426b82d51ddc8c0b5d485cc97d16",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1449,
+      "path": "com/sunwayworld/cloud/module/train/exampaper/persistent/mapper/conf/core-exam-paper-oracle-mapper.xml",
+      "sha256": "abb29111c7a589a7a662465271757d442591bb01ccb9ac53017a880e22a780c2",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1449,
+      "path": "com/sunwayworld/cloud/module/train/exampaper/persistent/mapper/conf/core-exam-paper-postgresql-mapper.xml",
+      "sha256": "abb29111c7a589a7a662465271757d442591bb01ccb9ac53017a880e22a780c2",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1448,
+      "path": "com/sunwayworld/cloud/module/train/exampaper/persistent/mapper/conf/core-exam-paper-sqlserver-mapper.xml",
+      "sha256": "8f2ab7ec4987527451dec5c1a3e3cd79fc89426b82d51ddc8c0b5d485cc97d16",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 875,
+      "path": "com/sunwayworld/cloud/module/train/examtmpl/persistent/mapper/conf/core-exam-tmpl-mysql-mapper.xml",
+      "sha256": "558fa7833ed26d80c8c5b712d6f611f3d65e54b4538b209da64e5af01b137f36",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 875,
+      "path": "com/sunwayworld/cloud/module/train/examtmpl/persistent/mapper/conf/core-exam-tmpl-oracle-mapper.xml",
+      "sha256": "558fa7833ed26d80c8c5b712d6f611f3d65e54b4538b209da64e5af01b137f36",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 875,
+      "path": "com/sunwayworld/cloud/module/train/examtmpl/persistent/mapper/conf/core-exam-tmpl-postgresql-mapper.xml",
+      "sha256": "558fa7833ed26d80c8c5b712d6f611f3d65e54b4538b209da64e5af01b137f36",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 875,
+      "path": "com/sunwayworld/cloud/module/train/examtmpl/persistent/mapper/conf/core-exam-tmpl-sqlserver-mapper.xml",
+      "sha256": "558fa7833ed26d80c8c5b712d6f611f3d65e54b4538b209da64e5af01b137f36",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1594,
+      "path": "com/sunwayworld/cloud/module/train/question/persistent/mapper/conf/core-question-mysql-mapper.xml",
+      "sha256": "e4bd1dba7d11633a120bbbc87d54a06a95ee42147c09f97c1e9cf5bbc9afc4a2",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1048,
+      "path": "com/sunwayworld/cloud/module/train/question/persistent/mapper/conf/core-question-opt-mysql-mapper.xml",
+      "sha256": "15dc071e6ce02f104d75960adf26d543fa0825897d538e5b817775607c91ab8b",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1048,
+      "path": "com/sunwayworld/cloud/module/train/question/persistent/mapper/conf/core-question-opt-oracle-mapper.xml",
+      "sha256": "15dc071e6ce02f104d75960adf26d543fa0825897d538e5b817775607c91ab8b",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1048,
+      "path": "com/sunwayworld/cloud/module/train/question/persistent/mapper/conf/core-question-opt-postgresql-mapper.xml",
+      "sha256": "15dc071e6ce02f104d75960adf26d543fa0825897d538e5b817775607c91ab8b",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1048,
+      "path": "com/sunwayworld/cloud/module/train/question/persistent/mapper/conf/core-question-opt-sqlserver-mapper.xml",
+      "sha256": "15dc071e6ce02f104d75960adf26d543fa0825897d538e5b817775607c91ab8b",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1571,
+      "path": "com/sunwayworld/cloud/module/train/question/persistent/mapper/conf/core-question-oracle-mapper.xml",
+      "sha256": "0ae4ef0919a1560e67a1fe46fffd8046eef7f7ac0ce671ec6e316f45bd77c2b5",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1571,
+      "path": "com/sunwayworld/cloud/module/train/question/persistent/mapper/conf/core-question-postgresql-mapper.xml",
+      "sha256": "0ae4ef0919a1560e67a1fe46fffd8046eef7f7ac0ce671ec6e316f45bd77c2b5",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1571,
+      "path": "com/sunwayworld/cloud/module/train/question/persistent/mapper/conf/core-question-sqlserver-mapper.xml",
+      "sha256": "0ae4ef0919a1560e67a1fe46fffd8046eef7f7ac0ce671ec6e316f45bd77c2b5",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1412,
+      "path": "com/sunwayworld/cloud/module/train/train/persistent/mapper/conf/core-train-mysql-mapper.xml",
+      "sha256": "b500eb223f77efb23da4c70577f94bda01c6abd165f7b296e7e321c16a421cd6",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1412,
+      "path": "com/sunwayworld/cloud/module/train/train/persistent/mapper/conf/core-train-oracle-mapper.xml",
+      "sha256": "b500eb223f77efb23da4c70577f94bda01c6abd165f7b296e7e321c16a421cd6",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1412,
+      "path": "com/sunwayworld/cloud/module/train/train/persistent/mapper/conf/core-train-postgresql-mapper.xml",
+      "sha256": "b500eb223f77efb23da4c70577f94bda01c6abd165f7b296e7e321c16a421cd6",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1412,
+      "path": "com/sunwayworld/cloud/module/train/train/persistent/mapper/conf/core-train-sqlserver-mapper.xml",
+      "sha256": "b500eb223f77efb23da4c70577f94bda01c6abd165f7b296e7e321c16a421cd6",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1153,
+      "path": "com/sunwayworld/cloud/module/train/train/persistent/mapper/conf/core-train-user-mysql-mapper.xml",
+      "sha256": "75f9fbb06bca0987b177f9d3d52221a2c8dcf60aba06cecc0d219c6ac496e37f",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1153,
+      "path": "com/sunwayworld/cloud/module/train/train/persistent/mapper/conf/core-train-user-oracle-mapper.xml",
+      "sha256": "75f9fbb06bca0987b177f9d3d52221a2c8dcf60aba06cecc0d219c6ac496e37f",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1153,
+      "path": "com/sunwayworld/cloud/module/train/train/persistent/mapper/conf/core-train-user-postgresql-mapper.xml",
+      "sha256": "75f9fbb06bca0987b177f9d3d52221a2c8dcf60aba06cecc0d219c6ac496e37f",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1153,
+      "path": "com/sunwayworld/cloud/module/train/train/persistent/mapper/conf/core-train-user-sqlserver-mapper.xml",
+      "sha256": "75f9fbb06bca0987b177f9d3d52221a2c8dcf60aba06cecc0d219c6ac496e37f",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1063,
+      "path": "com/sunwayworld/cloud/module/train/trainplan/persistent/mapper/conf/core-train-plan-mysql-mapper.xml",
+      "sha256": "3341f80452bfec0d451404d7b9a30113bafd9157c27e580005a8845af7eaf221",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1063,
+      "path": "com/sunwayworld/cloud/module/train/trainplan/persistent/mapper/conf/core-train-plan-oracle-mapper.xml",
+      "sha256": "3341f80452bfec0d451404d7b9a30113bafd9157c27e580005a8845af7eaf221",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1063,
+      "path": "com/sunwayworld/cloud/module/train/trainplan/persistent/mapper/conf/core-train-plan-postgresql-mapper.xml",
+      "sha256": "3341f80452bfec0d451404d7b9a30113bafd9157c27e580005a8845af7eaf221",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1063,
+      "path": "com/sunwayworld/cloud/module/train/trainplan/persistent/mapper/conf/core-train-plan-sqlserver-mapper.xml",
+      "sha256": "3341f80452bfec0d451404d7b9a30113bafd9157c27e580005a8845af7eaf221",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1040,
+      "path": "com/sunwayworld/cloud/module/train/trainplan/persistent/mapper/conf/core-train-plan-user-mysql-mapper.xml",
+      "sha256": "c066f854803c640b0d61e41127bda24e23ff47b88cf55672694a4c5b8e752213",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1040,
+      "path": "com/sunwayworld/cloud/module/train/trainplan/persistent/mapper/conf/core-train-plan-user-oracle-mapper.xml",
+      "sha256": "c066f854803c640b0d61e41127bda24e23ff47b88cf55672694a4c5b8e752213",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1040,
+      "path": "com/sunwayworld/cloud/module/train/trainplan/persistent/mapper/conf/core-train-plan-user-postgresql-mapper.xml",
+      "sha256": "c066f854803c640b0d61e41127bda24e23ff47b88cf55672694a4c5b8e752213",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1040,
+      "path": "com/sunwayworld/cloud/module/train/trainplan/persistent/mapper/conf/core-train-plan-user-sqlserver-mapper.xml",
+      "sha256": "c066f854803c640b0d61e41127bda24e23ff47b88cf55672694a4c5b8e752213",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 856,
+      "path": "config/application-ext_dev.yml",
+      "sha256": "dcdf6fe8c32c7a45b85b092c899961f3bd4c443cbd38a625c2c3fd62a93f9e54",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 615,
+      "path": "config/application-ext_pro.yml",
+      "sha256": "304ae6bd6df5dc0656cb8cd79ceb87ecbae4ac1cf63206ddcbdde5da8eb1099b",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 2364,
+      "path": "config/application-ext_test.yml",
+      "sha256": "a4f97c8cc6ab5a5853f51bae8a67b374051e7ad4dde7f99a1d62c3db0801b1cf",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 122,
+      "path": "config/application.yml",
+      "sha256": "80c47860b444bb1cf876d0b0068125603ab21be06421144558a444384d5e776a",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 662,
+      "path": "config/bootstrap.yml",
+      "sha256": "b41faba3f315c0f24cce196de34e33b0e03791f34fa77eefaf4b52955f0e2137",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 2898,
+      "path": "log4j2.xml",
+      "sha256": "6839ea17d6fae58874cabdb3d7f2d48ff87e02295b08cb993162d1f959fc9757",
+      "source_jar": "gikam-core-ext-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1169,
+      "path": "META-INF/spring-configuration-metadata.json",
+      "sha256": "8314f02b56e32fc2bd1ec0400b5bcb83f3344e8903bf48f9e2002f3a86bb9d15",
+      "source_jar": "gikam-core-file-ftp-14.1.5.jar"
+    }
+  ],
+  "schema": "supplier-reconstituted-private-resource-provenance-v1",
+  "source_jars": [
+    {
+      "source_jar": "gikam-core-ext-interface-14.1.5.jar",
+      "source_jar_sha256": "53919a900f6954f89a6406043ecee558c9bdcd37a485d54136357c99e7868a24"
+    },
+    {
+      "source_jar": "gikam-core-ext-service-14.1.5.jar",
+      "source_jar_sha256": "f89b053d8a01f17e61daabe90ffd9a09067132dbca442bf25d946a90fa5ef5d8"
+    },
+    {
+      "source_jar": "gikam-core-file-ftp-14.1.5.jar",
+      "source_jar_sha256": "03716fef4e705f80562a6c96ba93a1dfc042e9817a4122ab4aad4da173d9a61c"
+    }
+  ]
+}

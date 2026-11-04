@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/${data.jsPath}/${data.jsFileName}.js',
+                      '/static/${data.jsPath}/${data.jsFileName}-edit-list.js'
+                    ]);
+    ${data.jsObjectName}.editPage.init();
+/*]]>*/
+</script>
+

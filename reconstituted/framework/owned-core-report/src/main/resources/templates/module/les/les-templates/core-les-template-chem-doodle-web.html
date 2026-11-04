@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="UTF-8" />
+<title>ChemDoodleWeb</title>
+<link rel="stylesheet" th:href="@{/static/plugin/chem-doodle-web/ChemDoodleWeb.css}" />
+<link rel="stylesheet" th:href="@{/static/plugin/chem-doodle-web/uis/jquery-ui-1.11.4.css}" />
+<style>
+body {
+    text-align: center;
+}
+
+#sketcher_button_save {
+    display: none;
+}
+</style>
+</head>
+
+<script th:inline="javascript">
+/*<![CDATA[*/
+    const IFM_CONTEXT = [[${#httpServletRequest.getScheme() + '://' + #httpServletRequest.getServerName() + ':' + #httpServletRequest.getServerPort()}]];
+/*]]>*/
+</script>
+
+<script th:src="@{/static/plugin/jquery/jquery.min.js}"></script>
+<script th:src="@{/static/gikam/framework/js/gikam.js}"></script>
+<script th:src="@{/static/gikam/framework/js/gikam-extend.js}"></script>
+<script th:src="@{/static/plugin/chem-doodle-web/ChemDoodleWeb-unpacked.js}"></script>
+<script th:src="@{/static/plugin/chem-doodle-web/uis/ChemDoodleWeb-uis-unpacked.js}"></script>
+
+<body>
+    <script th:inline="javascript">
+/*<![CDATA[*/
+    var sketcher;
+    Gikam.create('I18N', {
+        url : parent.workspace.options.I18NUrl,
+        language : parent.workspace.options.language
+    }).done(function() {
+        var param = Gikam.getElParam([[${param}]]);
+        
+        ChemDoodle.ELEMENT['H'].jmolColor = 'black';
+        ChemDoodle.ELEMENT['S'].jmolColor = '#B9A130';
+        
+        sketcher = new ChemDoodle.SketcherCanvas('sketcher', 800, 400, {
+            readonly : false,
+            specs : {
+                atoms_displayTerminalCarbonLabels_2D : true,
+                atoms_useJMOLColors : true,
+                bonds_clearOverlaps_2D : true
+            }
+        });
+        
+    });
+    
+    var getSketcherData = function() {
+        return JSON.stringify( {
+            image : ChemDoodle.io.png.string(sketcher),
+            data : new ChemDoodle.io.JSONInterpreter().molTo(sketcher.getMolecule())
+        } );
+    };
+    
+    var setSketcherData = function(data) {
+        sketcher.loadMolecule(new ChemDoodle.io.JSONInterpreter().molFrom(data));
+        sketcher.repaint();
+    };
+/*]]>*/
+</script>
+</body>
+
+</html>

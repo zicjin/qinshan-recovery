@@ -21,6 +21,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.core.env.Environment;
 
 public class ApplicationContextHelper {
+    private static volatile ApplicationContext applicationContext;
    private static volatile CoreConstantService constantService;
    private static volatile CoreSequenceService sequenceService;
    private static volatile CoreTableService tableService;
@@ -28,19 +29,26 @@ public class ApplicationContextHelper {
    private static volatile Boolean stressTesting = null;
    private static volatile Boolean loggingCountOnlyEnabled = null;
 
-   public static native String getAppId();
+   public static String getAppId() { return getEnvironment().getProperty("spring.application.name", "lims-owned"); }
 
-   public static native LocalDate getLicenseDeadline();
+   public static LocalDate getLicenseDeadline() { throw new UnsupportedOperationException("Sunway license capability removed"); }
 
-   public static native int getLicenseCountdownDays();
+   public static int getLicenseCountdownDays() { throw new UnsupportedOperationException("Sunway license capability removed"); }
 
-   public static native int getNumberOfOnlineUsers();
+   public static int getNumberOfOnlineUsers() { return 0; }
 
-   public static native int getLoginUserLimitation();
+   public static int getLoginUserLimitation() { throw new UnsupportedOperationException("Sunway license capability removed"); }
 
-   public static native ApplicationContext getApplicationContext();
+   public static ApplicationContext getApplicationContext() { return applicationContext; }
 
-   public static final Environment getEnvironment() {
+   public static synchronized void setApplicationContext(ApplicationContext context) {
+      if (applicationContext != null && context != null && applicationContext != context) {
+         throw new IllegalStateException("Application context already initialized");
+      }
+      applicationContext = context;
+   }
+
+public static final Environment getEnvironment() {
       return getApplicationContext().getEnvironment();
    }
 

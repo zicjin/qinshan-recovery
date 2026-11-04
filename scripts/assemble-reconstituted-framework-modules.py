@@ -16,6 +16,7 @@ import re
 import shutil
 from typing import Iterable, Mapping, Sequence
 from xml.sax.saxutils import escape
+import zipfile
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -28,7 +29,9 @@ MODULE_SOURCE_JARS = {
     "owned-core-base-service": [
         "gikam-core-base-service-14.1.5.jar",
     ],
-    "owned-core-web": [],
+    "owned-core-web": [
+        "gikam-core-web-14.1.5.jar",
+    ],
     "owned-core-ext": [
         "gikam-core-ext-interface-14.1.5.jar",
         "gikam-core-ext-service-14.1.5.jar",
@@ -81,11 +84,10 @@ SOURCE_JAR_TO_MODULE = {
 }
 
 NATIVE_DECLARATION_RE = re.compile(
-    r"^\s*(?:public|protected|private|static|final\s+)*native\s+",
-    re.MULTILINE,
+    r"\bnative\s+[A-Za-z_$]",
 )
 LOADER_REFERENCE_RE = re.compile(
-    r"SunwayLibraryExtractor|ThirdPartyType|System\.load(?:Library)?\(|"
+    r"SunwayLibraryExtractor|System\.load(?:Library)?\(|"
     r"third-party/sunway-app|sunway-app\.(?:so|dll|o)",
     re.IGNORECASE,
 )
@@ -94,6 +96,9 @@ THIRD_PARTY_LICENSE_RE = re.compile(
     re.IGNORECASE,
 )
 FORBIDDEN_NATIVE_SUFFIXES = {".so", ".dll", ".o"}
+EXCLUDED_RESOURCE_PATHS = {"META-INF/MANIFEST.MF"}
+EXCLUDED_RESOURCE_PREFIXES = ("third-party/sunway-app/",)
+OVERRIDE_ROOT = ROOT / "reconstituted" / "overrides" / "framework"
 
 
 def sha256_file(path: Path) -> str:
@@ -141,6 +146,8 @@ def render_module_pom(
     </dependency>""".format(artifact=escape(dependency))
         )
     for item in public_dependencies:
+        if item.get("prepare_excluded"):
+            continue
         filename = str(item["filename"])
         dependencies.append(
             """
@@ -193,6 +200,7 @@ def render_parent_pom(modules: Iterable[str]) -> str:
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.build.outputTimestamp>2020-01-01T00:00:00Z</project.build.outputTimestamp>
   </properties>
   <build>
     <pluginManagement>
@@ -221,8 +229,189 @@ def normalized_relative_generated_path(value: str) -> PurePosixPath:
     return PurePosixPath("src/main/java", *path.parts[1:])
 
 
+def safe_relative_path(value: str) -> PurePosixPath:
+    path = PurePosixPath(value)
+    if path.is_absolute() or ".." in path.parts or not path.parts:
+        raise ValueError(f"unsafe relative path: {value}")
+    return path
+
+
+def module_for_source_jar(source_jar: str) -> str:
+    filename = Path(source_jar).name
+    module = SOURCE_JAR_TO_MODULE.get(filename)
+    if not module:
+        raise ValueError(f"unassigned private framework JAR: {filename}")
+    return module
+
+
+def collect_module_resources(
+    framework_jar_root: Path,
+    module: str,
+    source_jars: Sequence[str],
+) -> tuple[
+    list[dict[str, object]],
+    list[dict[str, object]],
+    dict[str, tuple[PurePosixPath, bytes]],
+    list[dict[str, object]],
+    list[str],
+]:
+    """Read non-class framework resources and select deterministic winners.
+
+    Every duplicate source remains visible in provenance.  Module dependency
+    order is authoritative and the last JAR wins at the destination path.
+    """
+    records: list[dict[str, object]] = []
+    source_jar_provenance: list[dict[str, object]] = []
+    payloads: dict[str, tuple[PurePosixPath, bytes]] = {}
+    excluded_resources: list[str] = []
+    for source_jar in source_jars:
+        jar_path = framework_jar_root / source_jar
+        if not jar_path.is_file():
+            raise FileNotFoundError(f"missing private framework JAR: {jar_path}")
+        source_jar_provenance.append(
+            {
+                "source_jar": source_jar,
+                "source_jar_sha256": sha256_file(jar_path),
+            }
+        )
+        with zipfile.ZipFile(jar_path) as archive:
+            for info in sorted(archive.infolist(), key=lambda item: item.filename):
+                if info.is_dir() or info.filename.endswith(".class"):
+                    continue
+                relative = safe_relative_path(info.filename)
+                raw = relative.as_posix()
+                if raw in EXCLUDED_RESOURCE_PATHS:
+                    continue
+                if any(raw.startswith(prefix) for prefix in EXCLUDED_RESOURCE_PREFIXES):
+                    excluded_resources.append(raw)
+                    continue
+                data = archive.read(info)
+                record = {
+                    "path": raw,
+                    "sha256": hashlib.sha256(data).hexdigest(),
+                    "bytes": len(data),
+                    "source_jar": source_jar,
+                }
+                records.append(record)
+                payloads[raw] = (relative, data)
+
+    grouped: dict[str, list[dict[str, object]]] = {}
+    for record in records:
+        grouped.setdefault(str(record["path"]), []).append(record)
+    for path, versions in grouped.items():
+        if len(versions) <= 1:
+            continue
+        winner_sha = str(versions[-1]["sha256"])
+        for record in versions:
+            record["destination_sha256"] = winner_sha
+
+    duplicates = [
+        {
+            "path": path,
+            "selected_source_jar": versions[-1]["source_jar"],
+            "selected_sha256": versions[-1]["sha256"],
+            "sources": [
+                {
+                    "source_jar": record["source_jar"],
+                    "sha256": record["sha256"],
+                    "bytes": record["bytes"],
+                }
+                for record in versions
+            ],
+        }
+        for path, versions in sorted(grouped.items())
+        if len(versions) > 1
+    ]
+    return records, source_jar_provenance, payloads, duplicates, excluded_resources
+
+
+def apply_source_overrides(
+    module_root: Path,
+    module: str,
+    source_records: list[dict[str, object]],
+    override_root: Path = OVERRIDE_ROOT,
+) -> dict[str, object]:
+    """Apply tracked source overrides and removals after generated materialization."""
+    module_override = override_root / module
+    java_root = module_root / "src" / "main" / "java"
+    records_by_path = {str(record["path"]): record for record in source_records}
+    overridden: list[dict[str, str]] = []
+    override_source_root = module_override / "src" / "main" / "java"
+    if override_source_root.is_dir():
+        for source in sorted(override_source_root.rglob("*.java")):
+            relative = source.relative_to(override_source_root).as_posix()
+            record_path = f"src/main/java/{relative}"
+            destination = java_root / relative
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(source, destination)
+            digest = sha256_file(destination)
+            record = records_by_path.get(record_path)
+            if record is None:
+                record = {
+                    "source_jar": "tracked-override",
+                    "source_class_path": relative.removesuffix(".java").replace("/", "."),
+                    "class_sha256": None,
+                    "path": record_path,
+                    "decompiler": "tracked-override",
+                    "decompiler_version": None,
+                    "source_sha256_before_transform": None,
+                    "transformations": [],
+                    "compile_status": "pending-module-assembly",
+                }
+                source_records.append(record)
+                records_by_path[record_path] = record
+            original_digest = str(record["sha256"])
+            record["source_sha256_before_overlay"] = original_digest
+            record["sha256"] = digest
+            transformations = list(record.get("transformations", []))
+            transformation = f"overlay:{record_path}"
+            if transformation not in transformations:
+                transformations.append(transformation)
+            record["transformations"] = transformations
+            overridden.append(
+                {
+                    "path": record_path,
+                    "generated_sha256": original_digest,
+                    "override_sha256": digest,
+                }
+            )
+
+    removed: list[dict[str, str]] = []
+    removed_file = module_override / "removed-files.txt"
+    if removed_file.is_file():
+        for raw_line in removed_file.read_text(encoding="utf-8").splitlines():
+            value = raw_line.strip()
+            if not value or value.startswith("#"):
+                continue
+            relative = safe_relative_path(value).as_posix()
+            record_path = f"src/main/java/{relative}"
+            target = java_root / relative
+            record = records_by_path.get(record_path)
+            if target.is_file():
+                digest = sha256_file(target)
+                target.unlink()
+            elif record:
+                digest = str(record["sha256"])
+            else:
+                raise ValueError(
+                    f"{module}: removed override does not match generated source: {relative}"
+                )
+            if record is not None:
+                source_records.remove(record)
+                records_by_path.pop(record_path, None)
+            removed.append(
+                {
+                    "path": record_path,
+                    "removed_sha256": digest,
+                    "source": "tracked-override-removal",
+                }
+            )
+    return {"overridden": overridden, "removed": removed}
+
+
 def scan_forbidden(
     module: str,
+    module_root: Path,
     source_files: list[Path],
     resource_files: list[Path],
 ) -> dict[str, object]:
@@ -231,13 +420,13 @@ def scan_forbidden(
     for path in source_files:
         text = path.read_text(encoding="utf-8", errors="replace")
         if NATIVE_DECLARATION_RE.search(text):
-            native_declarations.append(str(path))
+            native_declarations.append(path.relative_to(module_root).as_posix())
         if LOADER_REFERENCE_RE.search(text):
-            loader_references.append(str(path))
+            loader_references.append(path.relative_to(module_root).as_posix())
     third_party_license_documents = []
     forbidden_native_files = []
     for path in resource_files:
-        relative = path.as_posix()
+        relative = path.relative_to(module_root).as_posix()
         if THIRD_PARTY_LICENSE_RE.search(relative):
             third_party_license_documents.append(relative)
         if path.suffix.lower() in FORBIDDEN_NATIVE_SUFFIXES:
@@ -265,8 +454,12 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--source-report", type=Path, required=True)
     parser.add_argument("--source-root", type=Path, required=True)
-    parser.add_argument("--resource-root", type=Path, required=True)
-    parser.add_argument("--resource-provenance", type=Path, required=True)
+    parser.add_argument("--framework-jar-root", type=Path, required=True)
+    parser.add_argument(
+        "--override-root",
+        type=Path,
+        default=OVERRIDE_ROOT,
+    )
     parser.add_argument(
         "--output-root", type=Path, default=ROOT / "reconstituted" / "framework"
     )
@@ -300,9 +493,30 @@ def main(argv: list[str] | None = None) -> int:
         shutil.rmtree(output_root)
     output_root.mkdir(parents=True)
 
-    public_dependencies = sorted(
-        report["public_dependencies"], key=lambda item: str(item["filename"])
-    )
+    public_dependencies = []
+    for index, item in enumerate(report["public_dependencies"]):
+        annotated = {
+            **item,
+            "archive_order": index,
+            "prepare_excluded": False,
+            "final_distribution_allowed": True,
+        }
+        coordinates = item.get("maven_coordinates_or_unknown") or []
+        if (
+            str(item["filename"]).lower() == "private-sdk-release.jar"
+            or "net.qiyuesuo.sdk:private-sdk:4.3.0" in coordinates
+        ):
+            annotated.update(
+                {
+                    "prepare_excluded": True,
+                    "final_distribution_allowed": False,
+                    "exclusion_reason": (
+                        "Vendored Qiyuesuo business SDK is supplied through the "
+                        "project-owned tracked resource and renamed at runtime."
+                    ),
+                }
+            )
+        public_dependencies.append(annotated)
     allowlist = {
         "schema": "pinned-public-dependency-allowlist-v1",
         "run_jar_sha256": report["run_jar_sha256"],
@@ -329,7 +543,21 @@ def main(argv: list[str] | None = None) -> int:
         source_relative = normalized_relative_generated_path(
             str(record["generated_source_path"])
         )
-        source_path = args.source_root.resolve() / PurePosixPath(*source_relative.parts[3:])
+        generated_relative = PurePosixPath(
+            str(record["generated_source_path"])
+        )
+        source_candidates = [
+            args.source_root.resolve() / generated_relative,
+        ]
+        if generated_relative.parts[:1] == ("src",):
+            source_candidates.append(
+                args.source_root.resolve()
+                / PurePosixPath(*generated_relative.parts[1:])
+            )
+        source_path = next(
+            (candidate for candidate in source_candidates if candidate.is_file()),
+            source_candidates[0],
+        )
         module_relative = PurePosixPath(*source_relative.parts)
         destination = output_root / module / module_relative
         if not source_path.is_file():
@@ -354,52 +582,44 @@ def main(argv: list[str] | None = None) -> int:
             }
         )
 
-    resource_provenance = json.loads(
-        args.resource_provenance.read_text(encoding="utf-8")
-    )
-    resource_records = []
-    resource_destination_root = output_root / "owned-core-web" / "src/main/resources"
-    for record in resource_provenance["resources"]:
-        relative = PurePosixPath(str(record["path"]))
-        if relative.is_absolute() or ".." in relative.parts:
-            raise SystemExit(f"unsafe resource path: {relative}")
-        source_path = args.resource_root.resolve() / Path(*relative.parts)
-        if not source_path.is_file():
-            raise SystemExit(f"missing generated resource: {source_path}")
-        actual_sha256 = sha256_file(source_path)
-        if actual_sha256 != record["sha256"]:
-            raise SystemExit(f"resource hash mismatch: {source_path}")
-        if relative.as_posix() == "META-INF/MANIFEST.MF":
-            continue
-        destination = resource_destination_root / Path(*relative.parts)
-        destination.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copyfile(source_path, destination)
-        resource_records.append(
-            {
-                "path": str(relative),
-                "sha256": actual_sha256,
-                "bytes": record["bytes"],
-                "kind": record["kind"],
-                "final_distribution_allowed": record["final_distribution_allowed"],
-                "forbidden_reference": record["forbidden_reference"],
-            }
-        )
-    write_json(
-        output_root / "owned-core-web" / "resource-provenance.json",
-        {
-            "schema": "supplier-reconstituted-resource-provenance-v1",
-            "source_jar": resource_provenance["source_jar"],
-            "source_jar_sha256": resource_provenance["source_jar_sha256"],
-            "excluded_paths": ["META-INF/MANIFEST.MF"],
-            "resource_count": len(resource_records),
-            "resource_tree_sha256": tree_digest(resource_records),
-            "resources": resource_records,
-        },
-    )
+    resource_records_by_module: dict[str, list[dict[str, object]]] = {}
+    resource_payloads_by_module: dict[
+        str, dict[str, tuple[PurePosixPath, bytes]]
+    ] = {}
+    resource_source_jars_by_module: dict[str, list[dict[str, object]]] = {}
+    duplicate_resources_by_module: dict[str, list[dict[str, object]]] = {}
+    excluded_resources_by_module: dict[str, list[str]] = {}
+    for module, source_jars in MODULE_SOURCE_JARS.items():
+        (
+            resource_records,
+            source_jar_provenance,
+            payloads,
+            duplicate_resources,
+            excluded_resources,
+        ) = collect_module_resources(args.framework_jar_root.resolve(), module, source_jars)
+        resource_records_by_module[module] = resource_records
+        resource_payloads_by_module[module] = payloads
+        resource_source_jars_by_module[module] = source_jar_provenance
+        duplicate_resources_by_module[module] = duplicate_resources
+        excluded_resources_by_module[module] = excluded_resources
+        destination_root = output_root / module / "src/main/resources"
+        for relative, data in sorted(payloads.values(), key=lambda item: item[0].as_posix()):
+            destination = destination_root / Path(*relative.parts)
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            destination.write_bytes(data)
 
     module_summaries = []
+    override_summaries: dict[str, dict[str, object]] = {}
+    forbidden_reports: dict[str, dict[str, object]] = {}
     for module in MODULE_SOURCE_JARS:
         module_root = output_root / module
+        override_summary = apply_source_overrides(
+            module_root,
+            module,
+            source_records_by_module[module],
+            args.override_root.resolve(),
+        )
+        override_summaries[module] = override_summary
         source_records = sorted(
             source_records_by_module[module],
             key=lambda item: str(item["path"]),
@@ -415,6 +635,26 @@ def main(argv: list[str] | None = None) -> int:
         )
         resource_files = [path for path in resource_files if path.is_file()]
         source_tree = tree_digest(source_records)
+        resource_records = resource_records_by_module[module]
+        resource_manifest = {
+            "schema": "supplier-reconstituted-private-resource-provenance-v1",
+            "module": module,
+            "artifact_sha256": report["run_jar_sha256"],
+            "source_jars": resource_source_jars_by_module[module],
+            "excluded_paths": [
+                *sorted(EXCLUDED_RESOURCE_PATHS),
+                *(prefix + "**" for prefix in EXCLUDED_RESOURCE_PREFIXES),
+            ],
+            "resource_count": len(resource_records),
+            "resource_file_count": len(resource_payloads_by_module[module]),
+            "resource_tree_sha256": tree_digest(resource_records),
+            "duplicate_destination_count": len(
+                duplicate_resources_by_module[module]
+            ),
+            "duplicates": duplicate_resources_by_module[module],
+            "resources": resource_records,
+        }
+        write_json(module_root / "resource-provenance.json", resource_manifest)
         compile_report = {
             "schema": "supplier-reconstituted-module-compile-v1",
             "module": module,
@@ -423,7 +663,10 @@ def main(argv: list[str] | None = None) -> int:
             "source_only_framework_classpath": True,
             "supplier_private_jars_on_classpath": False,
         }
-        forbidden_report = scan_forbidden(module, source_files, resource_files)
+        forbidden_report = scan_forbidden(module, module_root, source_files, resource_files)
+        forbidden_report["override_source_count"] = len(override_summary["overridden"])
+        forbidden_report["removed_source_count"] = len(override_summary["removed"])
+        forbidden_reports[module] = forbidden_report
         write_json(module_root / "compile-report.json", compile_report)
         write_json(module_root / "forbidden-content-report.json", forbidden_report)
         write_json(
@@ -468,6 +711,11 @@ def main(argv: list[str] | None = None) -> int:
                 "public_dependency_allowlist": "public-dependency-allowlist.json",
                 "compile_report": "compile-report.json",
                 "forbidden_content_report": "forbidden-content-report.json",
+                "resource_provenance": "resource-provenance.json",
+                "resource_file_count": len(resource_records),
+                "resource_tree_sha256": resource_manifest["resource_tree_sha256"],
+                "override_source_files": override_summary["overridden"],
+                "removed_source_files": override_summary["removed"],
                 "source_files": source_records,
             },
         )
@@ -480,7 +728,7 @@ def main(argv: list[str] | None = None) -> int:
                 "module": module,
                 "source_jars": MODULE_SOURCE_JARS[module],
                 "source_file_count": len(source_records),
-                "resource_file_count": len(resource_files),
+                "resource_file_count": len(resource_records),
                 "source_tree_sha256": source_tree,
                 "dependencies": MODULE_DEPENDENCIES[module],
                 "reason": MODULE_REASONS[module],
@@ -524,6 +772,30 @@ def main(argv: list[str] | None = None) -> int:
             "boundary_process": False,
             "internal_http_bridge": False,
             "jni_replacement_process": False,
+        },
+        "native_removal": {
+            "forbidden_native_resources_excluded": len(
+                {
+                    path
+                    for paths in excluded_resources_by_module.values()
+                    for path in paths
+                }
+            ),
+            "license_mac_enforcement_removed": True,
+            "native_declarations": sum(
+                len(report["native_declaration_files"])
+                for report in forbidden_reports.values()
+            ),
+            "native_loader_files": sum(
+                len(report["loader_reference_files"])
+                for report in forbidden_reports.values()
+            ),
+            "status": (
+                "pass"
+                if all(report["status"] == "pass" for report in forbidden_reports.values())
+                else "fail"
+            ),
+            "valid_license_mock_added": False,
         },
         "limitations": [
             "Source assembly is not a final distribution gate.",

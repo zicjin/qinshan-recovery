@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.cloud.module.mobile.menu.persistent.mapper.MobileMenuMapper">
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+            FROM (SELECT A.*,
+                         B.ORDERNO AS CODEORDERNO
+                    FROM T_CORE_MOBILE_MENU A
+                    LEFT JOIN T_CORE_CODE B
+                      ON A.MENUCATEGORYCODE = B.CODE AND B.CODECATEGORYID = 'mobileMenuCategory') T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent"/>
+            <if test='authority_menu == "1"'><!-- 菜单权限 -->
+                AND <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.authorityWherePatternEqualClause">
+                        <property name ="permissionTypeId" value="T_CORE_MOBILE_MENU"/>
+                        <property name="tableAlias" value="T"/>
+                        <property name="permissionColumnName" value="ID"/>
+                    </include>
+            </if>
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.CODEORDERNO, T.ORDERNO ASC
+            </otherwise>
+        </choose>
+    </select>
+    
+    <select id="selectDetail" resultType="map">
+        SELECT T.*
+          FROM T_CORE_MOBILE_MENU T
+         WHERE T.ID = #{id}
+    </select>
+</mapper>

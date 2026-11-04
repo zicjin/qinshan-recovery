@@ -1,0 +1,31 @@
+server:
+  port: 8184
+
+spring:
+  profiles: ext_pro
+  resources:
+    chain:
+      strategy:
+        content:
+          enabled: false
+  datasource:
+    driver-class-name: oracle.jdbc.OracleDriver
+    username: lims1_test
+    password: lims1_$test
+    url: jdbc:oracle:thin:@58.56.21.146:1140:orcl
+  redis:
+    database: 0
+    url: redis://192.168.5.164:32379
+  messages:
+    basename: static/i18n/messages-core
+
+sunway:
+  app:
+    license: pro
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    serviceUrl:
+      defaultZone:  http://${spring.cloud.client.ip-address}:${server.port}/eureka

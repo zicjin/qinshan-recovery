@@ -1,0 +1,8 @@
+<th:block th:replace="module/gikam/single" />
+<script th:inline="javascript">
+    var param = Gikam.getElParam([[${param}]]);
+    new IndexPage({
+        url : IFM_CONTEXT + '/secure/core/module/item/custom-charts/page/display/display-menu?share=1&id='+ param.id,
+        title : param.chartName
+    });
+</script>

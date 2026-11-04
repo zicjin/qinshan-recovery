@@ -71,15 +71,34 @@ def main() -> int:
     require(registry["schema"] == "reconstituted-framework-module-registry-v1", "registry schema", errors)
     require(registry["module_count"] == 7, "module count is not seven", errors)
     require(registry["candidate_group_count"] == 8, "candidate count changed", errors)
-    require(registry["source_file_count"] == 4576, "source total mismatch", errors)
-    require(registry["resource_file_count"] == 5301, "resource total mismatch", errors)
+    require(registry["source_file_count"] == 4575, "source total mismatch", errors)
+    require(registry["resource_file_count"] == 9426, "resource total mismatch", errors)
     require(registry["runtime_model"]["boundary_process"] is False, "boundary process flag", errors)
     require(registry["runtime_model"]["internal_http_bridge"] is False, "HTTP bridge flag", errors)
+    require(registry["native_removal"]["status"] == "pass", "native removal status", errors)
+    require(registry["native_removal"]["forbidden_native_resources_excluded"] == 5, "native exclusion count", errors)
+    require(registry["native_removal"]["native_declarations"] == 0, "native declarations remain", errors)
+    require(registry["native_removal"]["native_loader_files"] == 0, "native loader references remain", errors)
+    require(registry["native_removal"]["valid_license_mock_added"] is False, "license mock was added", errors)
 
     allowlist_path = root / "public-dependency-allowlist.json"
     allowlist = json.loads(allowlist_path.read_text(encoding="utf-8"))
     require(allowlist["schema"] == "pinned-public-dependency-allowlist-v1", "allowlist schema", errors)
     require(len(allowlist["entries"]) == 386, "public dependency count", errors)
+    excluded_vendor = [
+        item for item in allowlist["entries"] if item.get("prepare_excluded")
+    ]
+    require(
+        [item.get("filename") for item in excluded_vendor]
+        == ["private-sdk-RELEASE.jar"],
+        "vendored SDK exclusion policy",
+        errors,
+    )
+    require(
+        all(item.get("final_distribution_allowed") is False for item in excluded_vendor),
+        "vendored SDK final-distribution policy",
+        errors,
+    )
     for item in allowlist["entries"]:
         filename = str(item["filename"]).lower()
         require(
@@ -128,6 +147,10 @@ def main() -> int:
             f"{module}: supplier private jar retained",
             errors,
         )
+        require(forbidden["status"] == "pass", f"{module}: forbidden content status", errors)
+        require(not forbidden["native_declaration_files"], f"{module}: native declarations", errors)
+        require(not forbidden["loader_reference_files"], f"{module}: loader references", errors)
+        require(not forbidden["forbidden_native_files"], f"{module}: native resource files", errors)
         if args.compiled:
             compile_report = json.loads(
                 (module_root / "compile-report.json").read_text(encoding="utf-8")
@@ -139,19 +162,27 @@ def main() -> int:
             if jar.is_file():
                 require(sha256_file(jar) == compile_report["output_jar_sha256"], f"{module}: jar hash", errors)
 
-    web_resources = root / "owned-core-web" / "src" / "main" / "resources"
-    resource_records = json.loads(
-        (root / "owned-core-web" / "resource-provenance.json").read_text(encoding="utf-8")
-    )["resources"]
-    resource_total += len(resource_records)
-    require(tree_digest(resource_records) == json.loads(
-        (root / "owned-core-web" / "resource-provenance.json").read_text(encoding="utf-8")
-    )["resource_tree_sha256"], "resource tree", errors)
-    for record in resource_records:
-        path = web_resources / str(record["path"])
-        require(path.is_file(), f"missing resource {record['path']}", errors)
-        if path.is_file():
-            require(sha256_file(path) == record["sha256"], f"resource hash {record['path']}", errors)
+    for module, summary in modules.items():
+        resource_manifest = json.loads(
+            (root / module / "resource-provenance.json").read_text(encoding="utf-8")
+        )
+        resource_records = resource_manifest["resources"]
+        resource_total += len(resource_records)
+        require(
+            tree_digest(resource_records) == resource_manifest["resource_tree_sha256"],
+            f"{module}: resource tree",
+            errors,
+        )
+        for record in resource_records:
+            require(
+                not str(record["path"]).startswith("third-party/sunway-app/"),
+                f"{module}: forbidden native resource {record['path']}",
+                errors,
+            )
+            path = root / module / "src/main/resources" / str(record["path"])
+            require(path.is_file(), f"{module}: missing resource {record['path']}", errors)
+            if path.is_file():
+                require(sha256_file(path) == record.get("destination_sha256", record["sha256"]), f"{module}: resource hash {record['path']}", errors)
     require(source_total == registry["source_file_count"], "registry source total", errors)
     require(resource_total == registry["resource_file_count"], "registry resource total", errors)
 

@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    Gikam.requirejs([
+        '/static/module/item/custom-dses/core-custom-ds.js',
+        '/static/module/item/custom-dses/core-custom-ds-choose-list.js'
+    ]);
+    coreCustomDs.choosePage.init(Gikam.getElParam([[${param}]]));
+    /*]]>*/
+</script>

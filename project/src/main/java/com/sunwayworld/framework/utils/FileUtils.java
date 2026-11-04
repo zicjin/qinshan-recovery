@@ -39,9 +39,14 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.apache.commons.fileupload.disk.DiskFileItem;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import com.sunwayworld.framework.exception.FileException;
 import com.sunwayworld.framework.io.excel.ExcelHelper;
+import com.sunwayworld.framework.io.text.FileToTextExtractor;
+import com.sunwayworld.framework.io.text.FileToTextExtractorFactory;
 
 /**
  * 文件相关的工具类
@@ -69,6 +74,7 @@ public final class FileUtils {
     }
 
     public static final void write(File file, String content) {
+        createFile(file);
         try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8"))) {
             writer.write(content);
             writer.flush();
@@ -78,12 +84,23 @@ public final class FileUtils {
     }
 
     public static final void write(File file, InputStream is) {
+        createFile(file);
         try (FileOutputStream fos = new FileOutputStream(file);) {
             byte[] buffer = new byte[4096048];
             int size = 0;
             while ((size = is.read(buffer)) != -1) {
                 fos.write(buffer, 0, size);
             }
+        } catch (IOException ioe) {
+            throw new FileException(ioe);
+        }
+    }
+
+    public static final void write(Path regularFilePath, String content) {
+        makeDirs(regularFilePath);
+
+        try (BufferedWriter writer = Files.newBufferedWriter(regularFilePath)) {
+            writer.write(content);
         } catch (IOException ioe) {
             throw new FileException(ioe);
         }
@@ -224,6 +241,10 @@ public final class FileUtils {
         return fileName.substring(0, fileName.lastIndexOf("."));
     }
 
+    public static String getFileNameWithNewExtension(String fileName, String newExtension) {
+        return getFileBaseName(fileName) + "." + newExtension;
+    }
+
     /**
      * 删除文件或文件夹，如果是文件夹，将会删除所有所属的文件和文件夹
      */
@@ -318,6 +339,10 @@ public final class FileUtils {
     /**
      * 将文件的字符集转化成指定的字符集
      */
+    public static final void encode(Path srcPath, Path destPath, Charset targetCharset) {
+        encode(srcPath.toString(), destPath.toString(), targetCharset);
+    }
+
     public static final void encode(String srcFile, String destFile, Charset targetCharset) {
         try (FileInputStream fis = new FileInputStream(srcFile); DataInputStream in = new DataInputStream(fis);) {
             BufferedReader d = new BufferedReader(new InputStreamReader(in, EncodingUtils.detect(srcFile)));
@@ -374,6 +399,11 @@ public final class FileUtils {
         }
     }
 
+    public static String extractText(InputStream is, String extension) {
+        FileToTextExtractor extractor = FileToTextExtractorFactory.getFileToTextExtractor(extension);
+        return extractor == null ? "" : extractor.extract(is);
+    }
+
     /**
      * 将文件的文本内容解析出来，与extractTextFromFile(File)相比： 1. .xls/.xlsx文件会将sheet页的名称解析出来
      */
@@ -397,6 +427,11 @@ public final class FileUtils {
         default:
             return "";
         }
+    }
+
+    public static String extractFullText(InputStream is, String extension) {
+        FileToTextExtractor extractor = FileToTextExtractorFactory.getFileToFullTextExtractor(extension);
+        return extractor == null ? "" : extractor.extract(is);
     }
 
     // -------------------------------------------------------------------
@@ -630,5 +665,40 @@ public final class FileUtils {
                 }
             }
         }
+    }
+
+    public static MultipartFile makeMultipartFile(File file) {
+        DiskFileItem fileItem = new DiskFileItem(
+                "file", "multipart/form-data", true, file.getName(), 0xA00000, file.getParentFile());
+        try (OutputStream os = fileItem.getOutputStream();
+             FileInputStream is = new FileInputStream(file)) {
+            byte[] bytes = new byte[4096];
+            int length;
+            while ((length = is.read(bytes)) > 0) {
+                os.write(bytes, 0, length);
+            }
+        } catch (IOException ex) {
+            throw new FileException(ex);
+        }
+        return new CommonsMultipartFile(fileItem);
+    }
+
+    public static MultipartFile makeMultipartFile(String name, InputStream is) {
+        DiskFileItem fileItem = new DiskFileItem(
+                "file", "multipart/form-data", true, name, 0xA00000, getTempDir());
+        try (OutputStream os = fileItem.getOutputStream()) {
+            byte[] bytes = new byte[4096];
+            int length;
+            while ((length = is.read(bytes)) > 0) {
+                os.write(bytes, 0, length);
+            }
+        } catch (IOException ex) {
+            throw new FileException(ex);
+        }
+        return new CommonsMultipartFile(fileItem);
+    }
+
+    public static File getTempDir() {
+        return new File(System.getProperty("java.io.tmpdir"));
     }
 }

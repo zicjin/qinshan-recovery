@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.module.mdm.user.mapper.CoreUserMapper">
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM (SELECT U.*,
+                       A.ADUSERID
+                  FROM T_CORE_USER U
+                  LEFT JOIN T_CORE_AD_DOMAIN_USER A
+                    ON U.ID = A.ID) T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent"/>
+            <if test="role_assigned != null"> <!-- 查询角色下的用户  -->
+                AND EXISTS (SELECT 1
+                              FROM T_CORE_ROLE_USER R
+                             WHERE R.ROLEID = #{role_assigned}
+                               AND R.USERID = T.ID) 
+            </if>
+            <if test="role_unassigned != null"> <!-- 查询不在角色下的用户  -->
+                AND NOT EXISTS (SELECT 1
+                                  FROM T_CORE_ROLE_USER R
+                                 WHERE R.ROLEID = #{role_unassigned}
+                                   AND R.USERID = T.ID) 
+            </if>
+            <!-- 审核中选择阅办或委托人员 -->
+            <if test="targetType == 'audit'">
+                AND T.USERTYPE IN ('normal', 'sysAdmin')
+            </if>
+            <if test="target_unassigned != null"> <!-- 查询不在某业务表下的用户  -->
+                AND NOT EXISTS (SELECT 1
+                                  FROM ${targetTable} TAR_
+                                 WHERE TAR_.${targetUserIdColumn} = T.ID
+                                 <if test="targetFilterColumn != null">
+                                     AND TAR_.${targetFilterColumn} = #{targetFilterValue}
+                                 </if>
+                                 <if test="targetFilterColumn1 != null">
+                                     AND TAR_.${targetFilterColumn1} = #{targetFilterValue1}
+                                 </if>
+                                ) 
+            </if>
+        </where>
+        ORDER BY 
+         <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ORGID, T.ID
+            </otherwise>
+         </choose>
+    </select>
+</mapper>

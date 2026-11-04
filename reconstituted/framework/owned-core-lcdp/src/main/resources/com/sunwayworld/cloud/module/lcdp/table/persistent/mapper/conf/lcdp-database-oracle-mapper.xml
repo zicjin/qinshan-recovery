@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.cloud.module.lcdp.table.persistent.mapper.LcdpDatabaseMapper">
+
+    <select id="selectFieldListByCondition" resultType="map">
+        <choose>
+            <when test="@com.sunwayworld.framework.database.dialect.DialectRepository@isKingbase()">
+        SELECT T.*
+          FROM (SELECT UPPER(COL.TABLE_NAME) TABLENAME,
+                       UPPER(COL.COLUMN_NAME) FIELDNAME,
+                       COL.UDT_NAME FIELDTYPE,
+                       CASE COL.IS_NULLABLE
+                         WHEN 'YES' THEN
+                          '1'
+                         ELSE
+                          '0'
+                       END ALLOWNULL,
+                       CASE COL.UDT_NAME
+                         WHEN 'varchar' THEN
+                          COL.CHARACTER_MAXIMUM_LENGTH
+                         ELSE
+                          NULL
+                       END FIELDLENGTH,
+                       REPLACE(COALESCE(COL.COLUMN_DEFAULT, ''), '''', '') DEFAULTVALUE,
+                       COL.NUMERIC_PRECISION "PRECISION",
+                       COL.NUMERIC_SCALE "SCALE",
+                       COALESCE(DES.DESCRIPTION, '') FIELDCOMMENT
+                  FROM INFORMATION_SCHEMA.COLUMNS COL
+                  LEFT JOIN PG_DESCRIPTION DES
+                    ON COL.TABLE_NAME ::REGCLASS = DES.OBJOID
+                   AND COL.ORDINAL_POSITION = DES.OBJSUBID
+                 WHERE COL.TABLE_SCHEMA = CURRENT_SCHEMA()
+                 ORDER BY ORDINAL_POSITION) T
+            </when>
+            <otherwise>
+        SELECT T.*
+          FROM (SELECT COL.TABLE_NAME TABLENAME,
+                       COL.COLUMN_NAME FIELDNAME,
+                       COL.DATA_TYPE FIELDTYPE,
+                       CASE COL.DATA_TYPE
+                         WHEN 'VARCHAR2' THEN
+                          TO_CHAR(COL.DATA_LENGTH)
+                         ELSE
+                          ''
+                       END FIELDLENGTH,
+                       DECODE(COL.NULLABLE, 'Y', '1', '0') ALLOWNULL,
+                       REPLACE(NVL(DECODE(LONG_TO_CHAR(COL.TABLE_NAME, COL.COLUMN_ID),
+                                          'NULL',
+                                          '',
+                                          LONG_TO_CHAR(COL.TABLE_NAME, COL.COLUMN_ID)),
+                                   ''),
+                               '''',
+                               '') DEFAULTVALUE,
+                       --LONG_TO_CHAR()依赖自定义的函数转换,NULL为了规避掉默认值不能删除
+                       NVL(COM.COMMENTS, '') FIELDCOMMENT,
+                       DECODE(COL.DATA_TYPE,
+                              'NUMBER',
+                              NVL(COL.DATA_PRECISION, 19),
+                                NULL) PRECISION,
+                       DECODE(COL.DATA_TYPE,
+                              'NUMBER',
+                              NVL(COL.DATA_SCALE, 0),
+                              NULL) SCALE
+                  FROM USER_TAB_COLUMNS COL
+                  LEFT JOIN USER_COL_COMMENTS COM
+                    ON COL.TABLE_NAME = COM.TABLE_NAME
+                   AND COL.COLUMN_NAME = COM.COLUMN_NAME
+                   ORDER BY COL.COLUMN_ID) T
+            </otherwise>
+        </choose>
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent"/>
+        </where>
+    </select>
+
+    <select id="selectIndexListByCondition" resultType="map">
+        SELECT T.*
+          FROM (SELECT COL.TABLE_NAME TABLENAME,
+                       COL.INDEX_NAME INDEXNAME,
+                       LISTAGG(COL.COLUMN_NAME, ',') WITHIN GROUP(ORDER BY COL.COLUMN_POSITION) INDEXFIELD,
+                       (SELECT DECODE(AU.CONSTRAINT_TYPE,
+                                      'P',
+                                      '${@com.sunwayworld.cloud.module.lcdp.table.helper.IndexType@primarykey}',
+                                      DECODE(IND.UNIQUENESS,
+                                             'UNIQUE',
+                                             '${@com.sunwayworld.cloud.module.lcdp.table.helper.IndexType@unique}',
+                                             '${@com.sunwayworld.cloud.module.lcdp.table.helper.IndexType@regular}'))
+                          FROM USER_INDEXES IND
+                          LEFT JOIN USER_CONSTRAINTS AU
+                            ON IND.INDEX_NAME = AU.INDEX_NAME
+                           AND AU.CONSTRAINT_TYPE = 'P'
+                         WHERE IND.INDEX_NAME = COL.INDEX_NAME) INDEXTYPE
+                  FROM USER_IND_COLUMNS COL
+                 GROUP BY COL.TABLE_NAME, COL.INDEX_NAME
+                 ORDER BY INDEXTYPE) T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent"/>
+        </where>
+    </select>
+
+    <select id="countByTableName" resultType="int">
+        SELECT COUNT(1)
+          FROM USER_TABLES
+         WHERE TABLE_NAME = #{tableName}
+    </select>
+
+    <select id="countByIndexName" resultType="int">
+        SELECT COUNT(1)
+          FROM USER_INDEXES
+         WHERE INDEX_NAME = #{indexName}
+    </select>
+
+
+    <select id="countByViewName" resultType="int">
+        SELECT COUNT(1)
+          FROM USER_VIEWS
+         WHERE VIEW_NAME = #{viewName}
+    </select>
+
+    <select id="selectTableInfoByCondition" resultType="map">
+        SELECT T.*
+          FROM (SELECT UPPER(TABLE_NAME) TABLENAME, COMMENTS TABLEDESC
+                  FROM USER_TAB_COMMENTS) T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent"/>
+        </where>
+    </select>
+
+    <select id="selectTableNameListByCondition" resultType="map">
+        SELECT T.*
+        FROM (SELECT UPPER(TAB.TABLE_NAME) TABLENAME
+                FROM USER_TABLES TAB
+                WHERE TAB.SECONDARY = 'N' OR TAB.SECONDARY IS NULL /*屏蔽次要表，某些自动生成的表*/
+             ORDER BY TAB.TABLE_NAME) T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent"/>
+        </where>
+    </select>
+
+    <select id="selectViewInfoListByCondition" resultType="map">
+        SELECT T.*
+          FROM (SELECT UPPER(V.VIEW_NAME) VIEWNAME,
+                       UPPER(V.VIEW_NAME) TABLENAME,
+                       VIEW_SELECT(V.VIEW_NAME) SELECTSTATEMENT
+                  FROM USER_VIEWS V
+              ORDER BY V.VIEW_NAME) T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent"/>
+        </where>
+    </select>
+
+    <select id="lockTableByTableName" resultType="map">
+        SELECT * FROM ${tableName} FOR UPDATE
+    </select>
+
+    <select id="selectTableOrViewNameListByCondition" resultType="map">
+        SELECT T.*
+          FROM (SELECT UPPER(TAB.TABLE_NAME) TABLEORVIEWNAME,
+                       'table' DBSTRUCTURETYPE
+                  FROM USER_TABLES TAB
+                 WHERE TAB.SECONDARY = 'N' OR TAB.SECONDARY IS NULL/*屏蔽次要表，某些自动生成的表*/
+                 UNION
+                SELECT UPPER(V.VIEW_NAME) TABLEORVIEWNAME,
+                       'view' DBSTRUCTURETYPE
+                  FROM USER_VIEWS V
+              ORDER BY TABLEORVIEWNAME) T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent"/>
+        </where>
+    </select>
+
+</mapper>

@@ -1,0 +1,8 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/module/sys/remote-calls/core-remote-call-config.js',
+                      '/static/module/sys/remote-calls/core-remote-call-request-detail.js'
+                    ]);
+    coreRemoteCallConfig.requestDetailPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>

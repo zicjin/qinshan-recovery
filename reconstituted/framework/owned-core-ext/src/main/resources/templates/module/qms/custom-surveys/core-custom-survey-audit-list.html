@@ -1,0 +1,8 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/module/qms/custom-surveys/core-custom-survey.js',
+                      '/static/module/qms/custom-surveys/core-custom-survey-audit-list.js'
+                    ]);
+    coreCustomSurvey.auditPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>

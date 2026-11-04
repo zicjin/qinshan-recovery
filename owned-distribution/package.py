@@ -3,10 +3,13 @@
 import hashlib
 import io
 import json
+import os
 from pathlib import Path
 import shutil
 import sys
 import zipfile
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
 
 def digest(data):
     return hashlib.sha256(data).hexdigest()
@@ -85,6 +88,7 @@ def main():
     lib.mkdir(parents=True, exist_ok=True)
     entries = {}
     duplicates = []
+    resource_overrides = []
     factories = {}
     factory_sources = []
     source_hashes = {}
@@ -108,7 +112,17 @@ def main():
                 if name in entries:
                     prior_source, prior_data = entries[name]
                     if prior_data != data:
-                        raise SystemExit('conflicting duplicate runtime entry: ' + name + ' from ' + prior_source + ' and ' + str(source))
+                        if name.endswith('.class'):
+                            raise SystemExit('conflicting duplicate runtime entry: ' + name + ' from ' + prior_source + ' and ' + str(source))
+                        resource_overrides.append({
+                            'entry': name,
+                            'selected_source': prior_source,
+                            'shadowed_source': source.name,
+                            'selected_sha256': digest(prior_data),
+                            'shadowed_sha256': digest(data),
+                            'policy': 'first-source-wins for application resource overrides',
+                        })
+                        continue
                     duplicates.append({'entry': name, 'sources': [prior_source, source.name], 'sha256': digest(data)})
                     continue
                 entries[name] = (source.name, data)
@@ -132,35 +146,88 @@ def main():
             write_entry(name, b'')
         for name in sorted(entries):
             write_entry(name, entries[name][1])
-    framework_lib = jars[0].parent / 'public-deps'
-    if not framework_lib.is_dir():
-        raise SystemExit('missing pinned public dependency directory: ' + str(framework_lib))
+    dependency_dirs = []
+    configured_dependency_dir = os.environ.get('OWNED_PUBLIC_DEPENDENCY_DIR')
+    if configured_dependency_dir:
+        dependency_dirs.append(Path(configured_dependency_dir))
+    else:
+        dependency_dirs.append(jars[0].parent / 'public-deps')
+    dependency_dirs.extend(
+        Path(value)
+        for value in os.environ.get('OWNED_ADDITIONAL_DEPENDENCY_DIRS', '').split(os.pathsep)
+        if value
+    )
+    for dependency_dir in dependency_dirs:
+        if not dependency_dir.is_dir():
+            raise SystemExit('missing pinned dependency directory: ' + str(dependency_dir))
     dependency_hashes = {}
     excluded_dependencies = {}
-    for source in sorted(framework_lib.glob('*.jar')):
-        if source.name == 'javax.servlet-api-4.0.1.jar':
-            # Embedded Tomcat is the runtime servlet provider. The standalone
-            # compile API has differing duplicate classes and is not a runtime input.
-            excluded_dependencies[source.name] = {
-                'sha256': digest(source.read_bytes()),
-                'reason': 'compile-only servlet API; embedded Tomcat supplies the runtime API'}
-            continue
-        shutil.copy2(source, lib / source.name)
-        dependency_hashes[source.name] = digest(source.read_bytes())
+    dependency_sources = {}
+    for dependency_dir in dependency_dirs:
+        for source in sorted(dependency_dir.glob('*.jar')):
+            if source.name == 'javax.servlet-api-4.0.1.jar':
+                # Embedded Tomcat is the runtime servlet provider. The standalone
+                # compile API has differing duplicate classes and is not a runtime input.
+                excluded_dependencies[source.name] = {
+                    'sha256': digest(source.read_bytes()),
+                    'reason': 'compile-only servlet API; embedded Tomcat supplies the runtime API'}
+                continue
+            if source.name in dependency_sources:
+                prior = dependency_sources[source.name]
+                if digest(prior.read_bytes()) != digest(source.read_bytes()):
+                    raise SystemExit(
+                        'conflicting dependency JAR: ' + source.name + ' from ' +
+                        str(prior) + ' and ' + str(source)
+                    )
+                continue
+            dependency_sources[source.name] = source
+    allowlist_path = REPO_ROOT / 'reconstituted/framework/public-dependency-allowlist.json'
+    allowlist_order = {}
+    if allowlist_path.is_file():
+        allowlist = json.loads(allowlist_path.read_text())
+        allowlist_order = {
+            str(item['filename']): int(item.get('archive_order', index))
+            for index, item in enumerate(allowlist.get('entries', []))
+        }
+    dependency_classpath = sorted(
+        dependency_sources,
+        key=lambda name: (allowlist_order.get(name, 1 << 30), name),
+    )
+    for name in dependency_classpath:
+        source = dependency_sources[name]
+        shutil.copy2(source, lib / name)
+        dependency_hashes[name] = digest(source.read_bytes())
+    (lib / 'classpath.txt').write_text('\n'.join(dependency_classpath) + '\n')
     class_entries = {}
     dependency_class_duplicates = []
-    for jar_path in [app] + sorted(lib.glob('*.jar')):
+    dependency_class_shadows = []
+    for jar_path in [app] + [lib / name for name in dependency_classpath]:
         jar_label = str(jar_path.relative_to(output))
         with zipfile.ZipFile(jar_path) as archive:
             for name in archive.namelist():
                 if not name.endswith('.class'):
                     continue
+                if name == 'module-info.class' or name.endswith('/module-info.class'):
+                    # JPMS descriptors are archive-local metadata. Java 8 uses
+                    # the physical classpath and never loads these entries.
+                    continue
                 data = archive.read(name)
                 if name in class_entries:
                     prior_path, prior_data = class_entries[name]
                     if prior_data != data:
-                        raise SystemExit('conflicting duplicate class: ' + name +
-                                         ' from ' + prior_path + ' and ' + str(jar_path))
+                        prior_relative = str(Path(prior_path).relative_to(output))
+                        current_relative = str(jar_path.relative_to(output))
+                        if prior_relative.startswith('app/') or current_relative.startswith('app/'):
+                            raise SystemExit('conflicting duplicate application class: ' + name +
+                                             ' from ' + prior_path + ' and ' + str(jar_path))
+                        dependency_class_shadows.append({
+                            'class': name,
+                            'selected': prior_relative,
+                            'shadowed': current_relative,
+                            'selected_sha256': digest(prior_data),
+                            'shadowed_sha256': digest(data),
+                        })
+                        continue
                     dependency_class_duplicates.append({'class': name,
                                                         'sources': [str(Path(prior_path).relative_to(output)), jar_label],
                                                         'sha256': digest(data)})
@@ -172,15 +239,30 @@ def main():
             files[str(path.relative_to(output))] = digest(path.read_bytes())
     manifest = {
         'schema': 1,
+        'distribution_mode': os.environ.get(
+            'OWNED_DISTRIBUTION_MODE', 'merged-modules'
+        ),
         'main_class': 'com.sunwayworld.emc.projectfunction.GikamWpjcApplication',
         'app_jar': str(app.relative_to(output)),
         'module_jars': [str((modules / source.name).relative_to(output)) for source in jars],
         'source_jar_sha256': source_hashes,
         'source_jar_hash_convention': 'normalized module archives; fixed ZIP timestamps, no generated manifest',
         'dependency_jar_sha256': dependency_hashes,
+        'dependency_classpath': dependency_classpath,
+        'dependency_classpath_file': 'lib/classpath.txt',
+        'dependency_source_directories': [
+            (
+                str(path.resolve().relative_to(REPO_ROOT))
+                if path.resolve().is_relative_to(REPO_ROOT)
+                else path.name
+            )
+            for path in dependency_dirs
+        ],
         'excluded_compile_dependencies': excluded_dependencies,
         'duplicate_conflicts': [],
         'identical_duplicate_entries': duplicates,
+        'dependency_class_shadows': dependency_class_shadows,
+        'resource_overrides': resource_overrides,
         'identical_duplicate_classes': dependency_class_duplicates,
         'merged_resources': {
             'META-INF/spring.factories': {'sources': factory_sources,
@@ -190,6 +272,12 @@ def main():
         'supplier_runtime_included': False,
         'external_configuration_required': True,
     }
+    provenance_path = os.environ.get('OWNED_THIRD_PARTY_DEPENDENCY_PROVENANCE')
+    if provenance_path:
+        provenance = json.loads(Path(provenance_path).read_text(encoding='utf-8'))
+        manifest['third_party_dependency_provenance'] = provenance.get('entries', [])
+    else:
+        manifest['third_party_dependency_provenance'] = []
     (output / 'manifest.json').write_text(json.dumps(manifest, indent=2) + '\n')
     print('owned distribution package merged entries=' + str(len(entries)) + ' identical_duplicates=' + str(len(duplicates)))
 

@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/module/sys/menus/core-menu.js',
+                      '/static/module/sys/menus/core-menu-choose-list.js',
+                      '/static/module/sys/menus/core-menu-edit-choose-list.js'
+                    ]);
+    coreMenu.editChoosePage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>

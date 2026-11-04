@@ -1,0 +1,8 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/module/sys/audit/audit-logs/core-audit-log.js',
+                      '/static/module/sys/audit/audit-logs/core-audit-log-search-list.js'
+                 ]);
+    coreAuditLog.searchPage.init([[${param}]]);
+/*]]>*/
+</script>

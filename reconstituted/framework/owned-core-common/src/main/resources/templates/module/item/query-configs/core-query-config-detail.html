@@ -1,0 +1,6 @@
+<script th:inline="javascript">
+    Gikam.requirejs([ '/static/module/item/query-configs/core-query-config.js',
+                      '/static/module/item/query-configs/core-query-config-detail.js'
+                    ]);
+    coreQueryConfig.detailPage.init(Gikam.getElParam([[${param}]]));
+</script>

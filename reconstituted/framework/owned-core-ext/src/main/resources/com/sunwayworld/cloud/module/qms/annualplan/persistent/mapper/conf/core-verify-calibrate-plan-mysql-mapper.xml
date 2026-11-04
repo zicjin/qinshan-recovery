@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.cloud.module.qms.annualplan.persistent.mapper.CoreVerifyCalibratePlanMapper">
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM (SELECT I.*,
+                       AP.ANNUALPLANNO,
+                       AP.PLANYEAR,
+                       AP.PLANCATEGORY,
+                       AP.ESTIMATEDDATE
+                  FROM T_CORE_VERIFY_CALIBRATE_PLAN I
+                  LEFT JOIN T_CORE_ANNUAL_PLAN AP ON AP.ID = I.ANNUALPLANID) T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ID DESC
+            </otherwise>
+        </choose>
+    </select>
+
+</mapper>

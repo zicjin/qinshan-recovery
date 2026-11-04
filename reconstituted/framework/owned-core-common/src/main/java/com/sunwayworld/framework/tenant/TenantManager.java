@@ -22,7 +22,7 @@ public class TenantManager {
    @Autowired
    private CoreAdminTenantService tenantService;
 
-   public static final native DataSource dataSource(String poolName, String url, String username, String password);
+   public static final DataSource dataSource(String poolName, String url, String username, String password) { return com.sunwayworld.framework.utils.DataSourceUtils.dataSource(com.sunwayworld.framework.context.ApplicationContextHelper.getEnvironment().getProperty("spring.datasource.driver-class-name"), url, username, password); }
 
    public boolean isTenantActivated() {
       return this.dataSource instanceof TenantDataSourceRouter;

@@ -1,0 +1,84 @@
+server:
+  port: 8184
+
+spring:
+  profiles: ext_test
+  resources:
+    chain:
+      strategy:
+        content:
+          enabled: false
+  datasource:
+    driver-class-name: oracle.jdbc.OracleDriver
+    username: lims1_test
+    password: lims1_$test
+    url: jdbc:oracle:thin:@58.56.21.146:1140:orcl
+  redis:
+    database: 0
+    url: redis://192.168.5.163:31379
+  messages:
+    basename: static/i18n/messages-core
+  #链路跟踪
+  sleuth:
+    sampler:
+      probability: 1 #收集比例，1表示100%
+    scheduled:
+      enabled: false #不对Scheduled注解进行trace拦截
+  zipkin:
+    base-url: http://172.16.1.55:29411
+    discoveryClientEnabled: false
+    enabled: true
+  cloud:
+    nacos:
+      discovery:
+        server-addr: ${NACOS_DISCOVERY_SERVER_ADDR:localhost:8848}
+        namespace: ${NACOS_DISCOVERY_NAMESPACE:public}
+        group: ${NACOS_DISCOVERY_GROUP:DEFAULT_GROUP}
+
+sunway:
+  app:
+    license: xMTQFhZz2axJFxQHtVc2Kpa8b3zKxnkWchkikREOOebICS7CnUozijn7/UMyK9qLjAewkE8SZd2OsqZEtObwQQ==
+  cloud:
+    project: GIKAM_CORE@SUNWAY
+
+#监控平台
+management:
+    metrics:
+        export:
+            prometheus:
+                enabled: true
+                descriptions: true
+    endpoints:
+        web:
+            exposure:
+#                include: health,info,env,prometheus,metrics,httptrace,threaddump,heapdump
+                include: prometheus #放开prometheus端口
+
+#feign开启熔断器
+feign:
+  hystrix:
+    enabled: true
+
+#熔断器配置
+hystrix:
+  command:
+    default:  #default全局有效，service id指定应用有效
+      fallback:
+        enabled: false
+      execution:
+        timeout:
+          #如果enabled设置为false，则请求超时交给ribbon控制,为true,否则超时作为熔断根据
+          enabled: true
+        isolation:
+          strategy: SEMAPHORE
+          semaphore:
+            maxConcurrentRequests: 1000 #最大并发请求
+          thread:
+            timeoutInMilliseconds: 60000 #断路器超时时间，默认1000ms
+ribbon:
+  OkToRetryOnAllOperations: false #对所有操作请求都进行重试,默认false
+  ReadTimeout: 30000   #负载均衡超时时间，默认值5000
+  ConnectTimeout: 30000 #ribbon请求连接的超时时间，默认值2000
+  MaxAutoRetries: 0     #对当前实例的重试次数，默认0
+  MaxAutoRetriesNextServer: 0 #对切换实例的重试次数，默认1
+

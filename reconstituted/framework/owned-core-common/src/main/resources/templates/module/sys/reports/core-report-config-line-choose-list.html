@@ -1,0 +1,8 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/module/sys/reports/core-report-config.js',
+                      '/static/module/sys/reports/core-report-config-line-choose-list.js',
+                    ]);
+    coreReportConfig.lineChoosePage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>

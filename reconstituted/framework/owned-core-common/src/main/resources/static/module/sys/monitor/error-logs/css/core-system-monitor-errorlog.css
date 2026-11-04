@@ -1,0 +1,17 @@
+#core-system-monitor-errorlog-edit-list-grid tr td .body-cell[field="logDesc"] .readonly-text {
+    height: 72px;
+}
+
+#core-system-monitor-errorlog-edit-list-grid tr td .body-cell[field="logDesc"] .readonly-text > span{
+    white-space: normal;
+    word-break: break-all;
+}
+
+#core-system-monitor-errorlog-edit-list-grid-revised tr td .body-cell[field="logDesc"] .readonly-text {
+    height: 72px;
+}
+
+#core-system-monitor-errorlog-edit-list-grid-revised tr td .body-cell[field="logDesc"] .readonly-text > span{
+    white-space: normal;
+    word-break: break-all;
+}

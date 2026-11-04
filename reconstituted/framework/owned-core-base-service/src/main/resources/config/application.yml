@@ -1,0 +1,23 @@
+spring:
+  profiles:
+    active:  ${SPRING_PROFILES_ACTIVE:base_dev,oracle,audit-trail,logging}
+  application:
+    name:  gikam-core-base
+  cloud:
+    compatibility-verifier:
+        enabled: true #兼容性检查
+    refresh:
+        enabled: true #refreshScope
+    service-registry:
+        auto-registration:
+            enabled: true #自动注册
+
+server:
+  error:
+    include-exception: true #异常的json串中包含exception类信息
+
+management:
+    endpoint:
+        env:
+            post:
+                enabled: true #环境端点自动配置

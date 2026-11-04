@@ -1,0 +1,10 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ 
+                      '/static/module/eln/eln-dses/core-eln-ds.js',
+                      '/static/module/eln/eln-dses/core-eln-ds-detail.js'
+                    ]);
+    coreElnDs.detailPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>
+

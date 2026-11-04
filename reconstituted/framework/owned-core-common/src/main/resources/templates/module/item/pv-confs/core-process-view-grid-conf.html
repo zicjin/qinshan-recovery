@@ -1,0 +1,8 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/module/item/pv-confs/core-process-view-conf.js',
+                      '/static/module/item/pv-confs/core-process-view-grid-conf.js'
+                    ]);
+    coreProcessViewConf.gridConfPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>

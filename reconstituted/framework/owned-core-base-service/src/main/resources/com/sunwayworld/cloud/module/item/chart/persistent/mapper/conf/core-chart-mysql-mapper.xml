@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.cloud.module.item.chart.persistent.mapper.CoreChartMapper">
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.* 
+          FROM T_CORE_CHART T
+          <where>
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+                <if test='authority_audit == "1"'>
+                    AND <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.auditAuthorityWhereClause" />
+                </if>
+                <if test='authority_org == "1"'>
+                    AND <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.orgAuthorityWhereClause">
+                        <property name="tableAlias" value="T"/>
+                        <property name="permissionColumnName" value="CREATEDBYORGID"/>
+                    </include>
+                </if>
+          </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ID DESC
+            </otherwise>
+        </choose>
+    </select>
+    
+    <select id="selectDetail" parameterType="java.lang.String" resultType="map">
+        SELECT T.*
+          FROM T_CORE_CHART T
+         WHERE T.ID = #{id}
+    </select>
+    
+    <select id="selectSqlData" parameterType="map" resultType="map">
+        SELECT T.* 
+          FROM (${sql}) T
+          <where>
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+                <if test='authority_org == "1"'>
+                    AND <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.orgAuthorityWhereClause">
+                        <property name="tableAlias" value="T"/>
+                        <property name="permissionColumnName" value="CREATEDBYORGID"/>
+                    </include>
+                </if>
+          </where>
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                ORDER BY
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+        </choose>
+    </select>
+    
+</mapper>

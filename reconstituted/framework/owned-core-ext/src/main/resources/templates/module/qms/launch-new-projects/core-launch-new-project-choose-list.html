@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/module/qms/launch-new-projects/core-launch-new-project.js',
+                      '/static/module/qms/launch-new-projects/core-launch-new-project-choose-list.js'
+                    ]);
+    coreLaunchNewProject.choosePage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>
+

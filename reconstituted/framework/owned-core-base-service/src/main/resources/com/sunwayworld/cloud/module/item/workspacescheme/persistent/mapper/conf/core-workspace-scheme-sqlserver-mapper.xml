@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.cloud.module.item.workspacescheme.persistent.mapper.CoreWorkspaceSchemeMapper">
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM T_CORE_WK_SCHEME T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+            <if test='authorized == "1"'>
+                AND <choose>
+                        <when test='loginUser != null and loginUser.userType == "sysAdmin"'>
+                            1 = 1 /* 系统管理员:${permissionTypeId} */
+                        </when>
+                        <otherwise>
+                            EXISTS (SELECT 1
+                                      FROM T_CORE_ROLE_USER RU_, T_CORE_ROLE_PERMISSION RP_
+                                     WHERE RU_.USERID = #{loginUser.id}
+                                     <if test='loginRoleId != null'>
+                                       AND RU_.ROLEID = #{loginRoleId}
+                                     </if>
+                                       AND RU_.ROLEID = RP_.ROLEID
+                                       AND RP_.PERMISSIONTYPEID = 'T_CORE_WK_SCHEME'
+                                       AND (RP_.TARGETID = '0' /* 管理员:T_CORE_WK_SCHEME */
+                                            OR T.ID = RP_.TARGETID))
+                        </otherwise>
+                    </choose>
+            </if>
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ORDERNO, T.ID DESC
+            </otherwise>
+        </choose>
+    </select>
+
+</mapper>

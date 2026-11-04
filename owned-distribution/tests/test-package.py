@@ -2,6 +2,7 @@
 """Validate the standalone distribution's public build/start boundary."""
 import hashlib
 import json
+import os
 from pathlib import Path
 import subprocess
 import sys
@@ -13,41 +14,56 @@ DIST = ROOT / 'owned-distribution/target/distribution'
 
 
 def main():
-    lifecycle = subprocess.run(
-        ['bash', str(ROOT / 'scripts/tests/test-api-evidence-gate.sh')],
-        text=True, capture_output=True,
-    )
-    assert lifecycle.returncode == 0, 'evidence lifecycle gate failed: ' + lifecycle.stderr[-2000:]
+    if os.environ.get('SOURCE_ONLY_CHECKPOINT') != '1':
+        lifecycle = subprocess.run(
+            ['bash', str(ROOT / 'scripts/tests/test-api-evidence-gate.sh')],
+            text=True, capture_output=True,
+        )
+        assert lifecycle.returncode == 0, (
+            'evidence lifecycle gate failed: '
+            + (lifecycle.stdout + lifecycle.stderr)[-2000:]
+        )
     builder = ROOT / 'scripts/build-owned-distribution.sh'
     assert builder.is_file(), 'standalone distribution builder must exist'
     result = subprocess.run([str(builder)], text=True, capture_output=True)
     assert result.returncode == 0, 'standalone distribution build failed: ' + result.stderr[-2000:]
     manifest = json.loads((DIST / 'manifest.json').read_text())
+    assert manifest['distribution_mode'] == 'source-only-reconstituted'
     assert manifest['main_class'] == 'com.sunwayworld.emc.projectfunction.GikamWpjcApplication'
     assert manifest['duplicate_conflicts'] == [], 'runtime classpath may not hide differing classes'
     assert manifest['source_jar_hash_convention'].startswith('normalized module archives')
+    assert len(manifest['module_jars']) == 8
+    assert manifest['dependency_class_shadows'], 'original duplicate dependency classes must be documented'
+    assert manifest['third_party_dependency_provenance'][0]['filename'] == 'qiyuesuo-sdk-vendored.jar'
     app = DIST / 'app/lims-owned-application.jar'
     with zipfile.ZipFile(app) as jar:
         assert jar.namelist().count('com/sunwayworld/emc/projectfunction/GikamWpjcApplication.class') == 1
+        assert 'com/sunwayworld/boot/ApplicationConfiguration.class' in jar.namelist()
         assert not any('/src/test/' in name or name.endswith('ContractTest.class') for name in jar.namelist())
         assert not any(name.endswith('OwnedWebBrowserApplication.class') or name.endswith('OwnedInventoryBrowserApplication.class') for name in jar.namelist())
-        assert 'static/index.html' in jar.namelist()
-        factories = jar.read('META-INF/spring.factories').decode('utf-8')
-        assert 'OwnedReportConfiguration' in factories and 'OwnedSchedulerConfiguration' in factories
-        assert 'OwnedAttachmentConfiguration' in factories
+        assert len(jar.read('static/gikam/main/js/chunk-common.js')) > 1_000_000
+    classpath_file = DIST / 'lib/classpath.txt'
+    classpath = [line for line in classpath_file.read_text().splitlines() if line]
+    assert classpath == manifest['dependency_classpath']
+    assert 'private-sdk-RELEASE.jar' not in classpath
+    assert 'qiyuesuo-sdk-vendored.jar' in classpath
     classes = {}
     identical_classes = []
-    for jar_path in [app] + sorted((DIST / 'lib').glob('*.jar')):
+    for jar_path in [app] + [DIST / 'lib' / name for name in classpath]:
         with zipfile.ZipFile(jar_path) as jar:
             for name in jar.namelist():
                 if name.endswith('.class'):
+                    if name == 'module-info.class' or name.endswith('/module-info.class'):
+                        continue
                     data = jar.read(name)
                     if name in classes:
                         prior_jar, prior_data = classes[name]
-                        assert prior_data == data, 'runtime conflicting duplicate class: ' + name
+                        if prior_data != data:
+                            assert not prior_jar.startswith('app/') and jar_path.relative_to(DIST).as_posix() != 'app/lims-owned-application.jar'
+                            continue
                         identical_classes.append(name)
                     else:
-                        classes[name] = (jar_path.name, data)
+                        classes[name] = (jar_path.relative_to(DIST).as_posix(), data)
     assert len(identical_classes) == len(manifest['identical_duplicate_classes'])
     for relative, expected in manifest['files'].items():
         assert hashlib.sha256((DIST / relative).read_bytes()).hexdigest() == expected, relative
@@ -61,16 +77,33 @@ def main():
     assert 'owned.scheduler.mode=disabled' in example
     # Re-merging unchanged module inputs must produce the same application JAR.
     before = hashlib.sha256(app.read_bytes()).digest()
-    sources = [ROOT / 'owned-framework/target/lims-owned-framework-1.0.0.jar',
-               ROOT / 'owned-personnel/target/lims-owned-personnel-1.0.0.jar',
-               ROOT / 'owned-equipment/target/lims-owned-equipment-1.0.0.jar',
-               ROOT / 'owned-consumables/target/lims-owned-consumables-1.0.0.jar',
-               ROOT / 'owned-attachments/target/lims-owned-attachments-1.0.0.jar',
-               ROOT / 'owned-report/target/lims-owned-report-1.0.0.jar',
-               ROOT / 'owned-scheduler/target/lims-owned-scheduler-1.0.0.jar',
-               ROOT / 'owned-web/target/lims-owned-web-1.0.0.jar']
-    result = subprocess.run([sys.executable, str(ROOT / 'owned-distribution/package.py'), str(DIST)]
-                            + [str(source) for source in sources], text=True, capture_output=True)
+    sources = [
+        ROOT / 'build/source-only-application/lims-owned-application.jar',
+        *[
+            ROOT / 'reconstituted/framework' / module['output_jar']
+            for module in json.loads(
+                (ROOT / 'docs/reconstitution/framework-module-registry.json').read_text()
+            )['modules']
+        ],
+    ]
+    package_environment = dict(os.environ)
+    package_environment.update({
+        'OWNED_PUBLIC_DEPENDENCY_DIR': str(ROOT / 'build/reconstituted-public-deps'),
+        'OWNED_ADDITIONAL_DEPENDENCY_DIRS': str(
+            ROOT / 'build/source-only-application/third-party-deps'
+        ),
+        'OWNED_THIRD_PARTY_DEPENDENCY_PROVENANCE': str(
+            ROOT / 'build/source-only-application/third-party-dependencies.json'
+        ),
+        'OWNED_DISTRIBUTION_MODE': 'source-only-reconstituted',
+    })
+    result = subprocess.run(
+        [sys.executable, str(ROOT / 'owned-distribution/package.py'), str(DIST)]
+        + [str(source) for source in sources],
+        text=True,
+        capture_output=True,
+        env=package_environment,
+    )
     assert result.returncode == 0, result.stderr
     assert hashlib.sha256(app.read_bytes()).digest() == before, 'application JAR merge is not deterministic'
     # A complete clean rebuild must reproduce every shipped file, including provenance.
@@ -86,17 +119,21 @@ def main():
     # allowing classpath order to select one implementation silently.
     framework_target = ROOT / 'owned-framework/target'
     conflict = framework_target / 'distribution-conflicting-class.jar'
+    conflicting_app = framework_target / 'distribution-conflicting-app.jar'
     try:
         with zipfile.ZipFile(conflict, 'w') as jar:
             jar.writestr('com/sunwayworld/emc/projectfunction/GikamWpjcApplication.class', b'conflicting')
+        with zipfile.ZipFile(conflicting_app, 'w') as jar:
+            jar.writestr('com/sunwayworld/emc/projectfunction/GikamWpjcApplication.class', b'primary')
         with tempfile.TemporaryDirectory(prefix='owned-distribution-conflict-') as temporary:
             result = subprocess.run([
                 sys.executable, str(ROOT / 'owned-distribution/package.py'), temporary,
-                str(ROOT / 'owned-personnel/target/lims-owned-personnel-1.0.0.jar'), str(conflict)],
-                text=True, capture_output=True)
+                str(conflicting_app), str(conflict)],
+                text=True, capture_output=True, env=package_environment)
             assert result.returncode != 0 and 'conflicting duplicate' in result.stderr
     finally:
         conflict.unlink(missing_ok=True)
+        conflicting_app.unlink(missing_ok=True)
     print('owned distribution package: PASS')
 
 

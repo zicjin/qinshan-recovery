@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<style type="text/css">
+body {
+    padding: 0;
+    margin: 0;
+}
+</style>
+
+</head>
+<body class="file-body"></body>
+<script th:inline="javascript">
+/*<![CDATA[*/
+    var Gikam = top.Gikam;
+    var IFM_CONTEXT = Gikam.IFM_CONTEXT;
+   
+    /*]]>*/
+</script>
+<script th:src="@{/static/plugin/jquery/jquery.min.js}"></script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    
+     var otherFile = function() {
+         
+        this.getFileUrl = function() {
+            return Gikam.getJson(IFM_CONTEXT + '/core/module/item/files/' + this.param.fileId);
+        };
+
+        this.getFileExt = function(fileExt){
+            var videoFile = ['mp4', 'rmvb', 'wmv', 'avi', 'flv', 'amv'],  pdfFile = ['pdf'],  logFile = ['log'];
+            
+             if (this.getType(videoFile, fileExt) > -1) {
+                return 'videoFile';
+            } else if (this.getType(pdfFile, fileExt) > -1) {
+                return 'pdfFile';
+            } else if (this.getType(logFile, fileExt) > -1) {
+                return 'logFile';
+            }
+        };
+        
+        this.getType = function(array, fileExt) {
+            var num = -1;
+            for (var i = 0; i < array.length; i++) {
+                if(array[i] == (fileExt.toLocaleLowerCase())) {
+                    num = 0
+                    break;
+                }
+            }
+            return num;
+        };
+        
+        this.openOthers = function(file){
+            var _this = this, fileUrl = top.Gikam.getFileContextUrl(decodeURIComponent(file.downloadUrl)), extFile = _this.getFileExt(file.fileExt), 
+             tpl = '<div>' +
+                      '<object data="movie.{fileExt}" width="500" height="400">' + 
+                          '<embed src="{pageUrl}" width="500" height="400" type="audio/mpeg"/>' + 
+                      '</object>' + 
+                  '</div>';  
+            if (extFile === 'pdfFile') {
+                location.href = IFM_CONTEXT + '/static/plugin/pdfjs/web/viewer.html' + Gikam.param({
+                    file : fileUrl.substring(0,fileUrl.lastIndexOf('/') + 1) + encodeURIComponent(file.name)
+                });
+            } else if (extFile === 'videoFile') {
+                tpl = Gikam.printf(tpl, {
+                    fileExt : file.fileExt,
+                    pageUrl : fileUrl
+                })
+                $('.file-body').append(tpl);
+            } else if (extFile === 'logFile') {
+                log_tpl = '<div>' +
+                    '<object  width="100%" height="100%">' + 
+                        '<embed src="{pageUrl}" width="100%" height="739px"/>' + 
+                    '</object>' + 
+                '</div>';  
+                log_tpl = Gikam.printf(log_tpl, {
+                    fileExt : file.fileExt,
+                    pageUrl : fileUrl
+                })
+                $('.file-body').append(log_tpl);
+            } else {
+                window.open(fileUrl, '_blank');
+                parent.Gikam.getLastModal().close();
+            }
+        };
+        
+        this.init = function(param) {
+            var _this = this;
+            this.param = param;
+            this.getFileUrl().done(function(file) {
+               _this.openOthers(file);
+            });
+        }
+    };
+    
+    window.onload = function() {
+        this.param = Gikam.getElParam([[${param}]]);
+        new otherFile().init(Gikam.getElParam([[${param}]]));
+    }; 
+    
+    /*]]>*/
+</script>
+</html>

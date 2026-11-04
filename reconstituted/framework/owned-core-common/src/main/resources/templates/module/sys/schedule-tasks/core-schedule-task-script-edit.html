@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/module/sys/schedule-tasks/core-schedule-task.js',
+                      '/static/module/sys/schedule-tasks/core-schedule-task-script-edit.js'
+                    ]);
+    coreScheduleTask.scriptEditPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>
+

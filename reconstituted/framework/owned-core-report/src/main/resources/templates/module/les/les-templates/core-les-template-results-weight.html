@@ -1,0 +1,11 @@
+<script th:inline="javascript">
+    Gikam.requirejs(['/static/pharm/module/equipt/equipts/pharm-equipt.js',
+                     '/static/pharm/module/equipt/equipts/pharm-equipt-listener.js',
+                     '/static/pharm/module/equipt/equipts/pharm-equipt-collection-edit-list.js',
+                     '/static/plugin/sockjs/sockjs.min.js',
+                     '/static/plugin/stompjs/stomp.min.js',
+                     '/static/module/item/les-templates/core-les-template.js',
+                     '/static/module/item/les-templates/core-les-template-results-weight.js'
+                    ]);
+    coreLesTemplate.resultsWeightPage.init(Gikam.getElParam([[${param}]]));
+</script>

@@ -16,6 +16,7 @@ import zipfile
 ROOT = Path(__file__).resolve().parents[2]
 MODULE_PATH = ROOT / "scripts" / "resolve-java-source-closure.py"
 VERIFY_PATH = ROOT / "scripts" / "verify-reconstituted-framework.py"
+ASSEMBLER_PATH = ROOT / "scripts" / "assemble-reconstituted-framework-modules.py"
 
 
 def load_module(name: str, path: Path):
@@ -260,7 +261,11 @@ def verify_file_utils_source_contract() -> None:
         / "FileUtils.java"
     ).read_text(encoding="utf-8")
     for signature in (
+        r"public\s+static\s+final\s+void\s+write\s*\(\s*Path\s+regularFilePath\s*,\s*String\s+content\s*\)",
+        r"public\s+static\s+final\s+void\s+encode\s*\(\s*Path\s+srcPath\s*,\s*Path\s+destPath\s*,\s*Charset\s+targetCharset\s*\)",
         r"public\s+static\s+final\s+void\s+createFile\s*\(\s*Path\s+path\s*\)",
+        r"public\s+static\s+File\s+getTempDir\s*\(\s*\)",
+        r"public\s+static\s+String\s+getFileNameWithNewExtension\s*\(\s*String\s+fileName\s*,\s*String\s+newExtension\s*\)",
         r"public\s+static\s+boolean\s+isImage\s*\(\s*File\s+file\s*\)",
         r"public\s+static\s+boolean\s+isExtension\s*\(\s*File\s+file\s*,\s*String\s+extension\s*\)",
     ):
@@ -273,10 +278,119 @@ def verify_file_utils_source_contract() -> None:
     assert "extension.equalsIgnoreCase(getFileExtension(file).toLowerCase())" in source
 
 
+def verify_deterministic_assembler_helpers() -> None:
+    assembler = load_module("assemble_reconstituted_framework_modules", ASSEMBLER_PATH)
+    with tempfile.TemporaryDirectory(prefix="supplier-assembler-test-") as temp_name:
+        work = Path(temp_name)
+        jars = work / "jars"
+        jars.mkdir()
+        source_jars = assembler.MODULE_SOURCE_JARS["owned-core-report"]
+        for index, source_jar in enumerate(source_jars):
+            with zipfile.ZipFile(jars / source_jar, "w") as archive:
+                archive.writestr("META-INF/MANIFEST.MF", "fixture\n")
+                archive.writestr("shared/config.txt", f"source-{index}\n")
+                archive.writestr(f"source-{index}.txt", f"unique-{index}\n")
+                if index == 0:
+                    archive.writestr(
+                        "third-party/sunway-app/linux/sunway-app.so",
+                        b"forbidden-native-fixture",
+                    )
+
+        records, source_provenance, payloads, duplicates, excluded = (
+            assembler.collect_module_resources(
+                jars,
+                "owned-core-report",
+                source_jars,
+            )
+        )
+        assert len(source_provenance) == len(source_jars)
+        assert excluded == ["third-party/sunway-app/linux/sunway-app.so"]
+        assert all(record["path"] != "META-INF/MANIFEST.MF" for record in records)
+        assert len(duplicates) == 1
+        duplicate = duplicates[0]
+        assert duplicate["path"] == "shared/config.txt"
+        assert duplicate["selected_source_jar"] == source_jars[-1]
+        assert duplicate["selected_sha256"] == hashlib.sha256(b"source-4\n").hexdigest()
+        assert payloads["shared/config.txt"][1] == b"source-4\n"
+        duplicate_records = [
+            record for record in records if record["path"] == "shared/config.txt"
+        ]
+        assert len(duplicate_records) == len(source_jars)
+        assert all(
+            record["destination_sha256"] == duplicate["selected_sha256"]
+            for record in duplicate_records
+        )
+
+        module_root = work / "module"
+        java_root = module_root / "src/main/java/com/example"
+        java_root.mkdir(parents=True)
+        example = java_root / "Example.java"
+        removed = java_root / "Removed.java"
+        example.write_text("class Example { int value = 1; }\n", encoding="utf-8")
+        removed.write_text("class Removed {}\n", encoding="utf-8")
+        source_records = [
+            {
+                "path": "src/main/java/com/example/Example.java",
+                "sha256": hashlib.sha256(example.read_bytes()).hexdigest(),
+                "transformations": [],
+            },
+            {
+                "path": "src/main/java/com/example/Removed.java",
+                "sha256": hashlib.sha256(removed.read_bytes()).hexdigest(),
+                "transformations": [],
+            },
+        ]
+        override_root = work / "overrides"
+        override_java = override_root / "fixture-module/src/main/java/com/example"
+        override_java.mkdir(parents=True)
+        replacement = override_java / "Example.java"
+        replacement.write_text(
+            "class Example { int value = 2; }\n",
+            encoding="utf-8",
+        )
+        (override_root / "fixture-module/removed-files.txt").write_text(
+            "com/example/Removed.java\n",
+            encoding="utf-8",
+        )
+        result = assembler.apply_source_overrides(
+            module_root,
+            "fixture-module",
+            source_records,
+            override_root,
+        )
+        assert example.read_text(encoding="utf-8") == replacement.read_text(encoding="utf-8")
+        assert not removed.exists()
+        assert len(result["overridden"]) == 1
+        assert len(result["removed"]) == 1
+        assert len(source_records) == 1
+        assert source_records[0]["sha256"] == hashlib.sha256(example.read_bytes()).hexdigest()
+        assert "overlay:src/main/java/com/example/Example.java" in source_records[0][
+            "transformations"
+        ]
+
+        benign = module_root / "ThirdPartyType.java"
+        forbidden = module_root / "SunwayLibraryExtractor.java"
+        benign.write_text("enum ThirdPartyType { VALUE }\n", encoding="utf-8")
+        forbidden.write_text(
+            "class SunwayLibraryExtractor { public native void load(); }\n",
+            encoding="utf-8",
+        )
+        report = assembler.scan_forbidden(
+            "fixture-module",
+            module_root,
+            [benign, forbidden],
+            [],
+        )
+        assert report["status"] == "open-native-removal"
+        assert report["loader_reference_files"] == ["SunwayLibraryExtractor.java"]
+        assert report["native_declaration_files"] == ["SunwayLibraryExtractor.java"]
+
+
 def main() -> int:
     verify_file_utils_source_contract()
     verify_tracked_full_closure_snapshot()
     verify_tracked_all_framework_snapshot()
+    verify_deterministic_assembler_helpers()
     module = load_module("resolve_java_source_closure", MODULE_PATH)
     verify_module = load_module("verify_reconstituted_framework", VERIFY_PATH)
     with tempfile.TemporaryDirectory(prefix="supplier-artifact-test-") as temp_name:

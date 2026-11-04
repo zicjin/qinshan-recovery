@@ -1,0 +1,432 @@
+sentry:
+  enabled: false
+  dsn:
+  exception-resolver-order: 2147483647
+sunway:
+  monitor:
+    datasource:
+      log:
+        enabled: true
+    threadpool:
+      log:
+        enabled: true
+  apmrum:
+    # 前端配置apm服务器的名称，配置自己的，(allowed: a-z, A-Z, 0-9, _, -, <space>)
+    service:
+      name:
+    # 前端配置apm服务器的端口，配置apm服务器的
+    server:
+      url:
+  app:
+    license:
+    stand-alone:
+      enabled: true # 应用启动是否是独立
+  sequence:
+    continuous: false
+  api:
+    check-access-permission: false # 每次请求时验证当前用户是否有权限访问
+  audit: # 审计跟踪配置
+    insert: true
+    update: true
+    delete: true
+  bpmn:
+    process-data-limit: 0 # 工作流批量处理时超过该数量时，异步执行，0时同步执行
+    notification:
+      default:
+        enabled: false # 是否启用默认的通知
+        # 工作流是否开启默认通知策略
+        # 提交或审核通过时，提醒下一级审核人（流程未结束）
+        # 审核拒绝时，到提交人处提醒提交人，到任务节点时否则提醒任务节点中的审核人
+        # 异常回退时，提醒提交人
+        # 会签中时（会签未结束），不提醒
+        # 撤回时，提交之前的审核人
+        # 回退时，提醒提交人
+        strategy:
+          enabled: false
+  #  cloud:
+  #    project: # 微服务的License需要，必需@SUNWAY结尾
+  #   fastdfs: # go-fastdfs的配置
+  #     groups:
+  #       group:
+  #          - http://172.16.29.26:9090/group1
+  #     public-groups:
+  #       group: http://172.16.29.26:9090/group1
+  config:
+    #     file: # 默认文件服务器配置
+    #       server:
+    #         url: # 访问地址
+    fine: # 帆软配置
+      version: 9.0 # 帆软版本9.0或10.0
+      deploy-mode: integration # 帆软集成方式integration（集成）或independent（独立）
+      independent-deploy-path: # 独立部署时CPT模板所在目录
+      independent-deploy-server:
+        url: # 独立部署时的访问路径
+  design: # 是否启用最新版页面配置功能
+    studio:
+      enabled: false
+  # 代码提醒配置
+  code-hints:
+    package-names:
+      - com.sunwayworld.cloud.module.lcdp
+      - com.sunwayworld.framework.utils
+      - com.sunwayworld.framework.data.page
+      - com.sunwayworld.framework.support.base.service
+    class-names:
+      - java.lang.String
+      - java.lang.Long
+      - java.lang.Integer
+      - java.lang.Double
+      - java.util.List
+      - java.util.ArrayList
+      - java.util.Map
+      - java.util.HashMap
+      - java.util.Date
+      - java.time.LocalDate
+      - java.time.LocalDateTime
+      - com.sunwayworld.framework.restful.data.RestValidationResultBean
+      - com.sunwayworld.framework.restful.data.RestJsonWrapperBean
+      - com.sunwayworld.framework.context.ApplicationContextHelper
+  exception:
+    viewable: false # 报错时，页面上是否可查看错误堆栈
+  http-client: # http客户端的配置
+    connect-timeout: 3000
+    socket-timeout: 10000
+  logging:
+    enabled: true # 是否启用日志
+    persistence-mode: default # 日志存储模式，default：默认 exception：仅记录错误 none：不记录
+    count-only:
+      enabled: false
+  mybatis:
+    interceptors:
+      - com.sunwayworld.framework.mybatis.interceptor.MybatisInterceptor
+      - com.sunwayworld.framework.mybatis.interceptor.MonitorInterceptor
+      - com.sunwayworld.cloud.module.sys.monitor.pm.interceptor.CoreSqlMonitorInterceptor
+      - com.sunwayworld.framework.mybatis.interceptor.MybatisResultSetInterceptor
+      - com.sunwayworld.cloud.module.lcdp.log.interceptor.ScriptLogInterceptor
+    guard: # 警卫功能
+      enabled: true
+      momery-threshold: 70 # 内存达到该阈值时抛出异常
+      result-threshold: 0 # 查询数据量的阈值
+    logging:
+      length-limitation: 2000
+    debug-keywords: F_GETSEQ,T_CORE_LOG,T_CORE_SEQUENCE,T_CORE_LOGIN_LOG,T_CORE_MESSAGE_,T_CORE_REMOTE_,T_CORE_SCHEDULE_TASK_CONFIG,T_CORE_EQUIPT_ACQ_RECORD,T_CORE_MONITOR_,T_CORE_NOTIFICATION_,/*IGNORE*/,T_CORE_SMS
+    long-query-time: 0 # 用于判定是否为慢sql，sql执行时间超过该设定时间即为慢sql，默认不记录
+  remote-call:
+    estimated-execution-time: 300 # 远程调用预估执行时间（单位：秒） 
+    max-retries: 5 # 异步请求时重试次数
+  search:
+    multi-value-matching-seperator: ',' # 多值匹配查询时的分隔符
+  security: # 安全相关配置
+    access-host-list: # 运行跨站点访问的地址，逗号隔开
+    file-access-permission: # 附件是否开启访问权限的校验
+      enabled: false
+    headers:
+      xss: true # 阻止跨站脚本攻击
+    login-timeout: 300 # 登录未做任何操作时的超时时间（秒）
+    mobile-login-timeout: 300 # 移动端登录未做任何操作时的超时时间（秒）
+    remote-authenticator-name: # 远程登录所需的Bean的名称，对应Bean必需是实现RemoteAuthenticator接口的
+    unset-login-expired-time-uris: /core/module/sys/todos,/secure/core/module/item/notification/notification-instances/messages/queries # 不刷新登录超时时间的请求路径
+  loop: # 循环执行任务
+    modified-user: false # 定时更新用户
+  shortcut-menu: # 快捷查询是否自动根据客户的使用频率生成
+    auto:
+      enabled: false
+      qty: 5
+  cache:
+    post-start:
+      evict: # 系统启动时，必需清楚的缓存的名称
+        name: T_CORE_MENU::ALL,T_CORE_MENU_EXT::ALL,T_CORE_MONITOR_SERVER:ALL,T_CORE_MONITOR_APP::ALL
+  testing:
+    stress:
+      enabled: false # 是否开启压力测试
+  sms:
+    enabled: false # 短信是否开启
+    max-retries: 5 # 短信最大重试次数
+  progress:
+    mode:
+      async: false # 进度监控任务是否异步执行
+    cache:
+      name: PROGRESS # 进度监控任务信息的缓存名称
+      timeout: 600 # 进度监控任务信息的缓存超时时间
+  executor:
+    resource-monitoring:
+      momery-threshold: 50 # 内存使用率百分比的阈值，当超过该值时停止任务并提醒
+      cpu-threshold: 50 # CPU使用率百分比的阈值，当超过该值时不执行任务
+      max-alive-sec: 600 # 任务执行的最长时间
+      max-task-size: 10 # 任务最大排队数量
+      enabled: true # 是否开启
+spire:
+  office: # 有效期至 2023-04-23
+    license: 45X21OQIpQEAo9slbWDlVwGkHvGjAn/KlpHT4DtVeGjKt44vWWbTDiAej64Yde7pQhi69Azu6emQExOMIijx8fs6iWKXDkm6uybxtaq/U9ccZTslRjeqD4eOnG8O9CrwC9j+00pWRsJi3rjR1ih/bxhxuF3/CIgOi/ic0CXYTVxfMDON01tImMq0/XDvi4dduLRP4+36I2ZomzVuWX6f6p8mFsdMuhc+1URfqxidys5jKKFPXUhmrZgo6EFrXv8mVIrZ0u4C9fIucLDkcbT1l7yIcEXZ32NesOttWo4qzgd9wjgdr9YS78gbnq4NlzyIO0vAJDmfRCG/9bQ86iY71cpcyPH8bi8NNxrappb3zwiaeApZhkdUdbN1H+xstXlGl/jr5X/R8FLufsU5Ekust88MysXBWrq5hLiE3qSn6MAtPXSQLXu9WDAHALKCJrrivc/Ssa7Q762BT3oKnv8xOKLPjmjkyLSuE8zQX9ktvPv+DeNc3zorDvTIZJ1sSIMv4+r4ST9OcrPeT66BQgICpb8dt7DZ5oyWmKvCeIKhZbXyRkKVwb8y+iFxjFpXenyOVRa+nHKToaiZ+X2WefroY0/DCA2PDQw+6vKooeW93GZn1cLNVtlmmUxoIee2yeJlBiwX5ghg7mfdvK2VCeHjhX82I207asXUs3SD68hfE537pJWNgkO+KvdL6cwTOSmrRMpoq5jVwfWqR/JiCxMDMEOH9rSmXPKlgSTB3NzgnQePBmQNAc0qiY0UptefW4NA0OXLvT/mqKLT4j6sbDxCbb+H32KC25RNFrdyzz9rYNCvWgW/ZFZIpaKK6ol+uetDqQDphS5I1QmVRgPNrYXxWW+mgGuxUyUCWBPFsSzqngKrQc4lHuIuqOFnK8MdUY9JsmIxIQW7hitIc9dHgWQv3XQtDjPVDpKpNt02bMrAGYKWM6l/i3oG6yyiJfZJ6H9gy7QOZTyL0eAxx4B978sjXsVgJhdz44v/pM2aX0AW3xlR+axC6pKQD+9lMDm+OPalbhCzHzxbk0AX8/x9y54doxvCHtZxyGnpWVhAQBrYLNtWuslIqBvm92u6AYGUyZXrKjN1qQk6u2N+WNyXmrJR7EDkERa48uF28403H9oyhZZaHRz4IqyME4Bn0XI7r/QVUnicoJbSsXHf6MDd2jwLat2yZHnKwTv6xo6dx8+7ACkAiLhUfCzL6FIvnuvSg6n2dY02YlfY5vSHPEDQqxBYbygcQ3eV6e4RO4KwJvd/2/jY355jL0fMM73lcx37RLtxRd/CW72C4d5zoN6EAZtmEm7GT6RqCMUp5gLmSdnwY1BkrTmk1Kuh+ekQ9O3AXMbr3aWbNpUmcatnKeRRQ96Y1dsGphptMNBp6ShvEbsia3JCYv2M7+BedTXwv/EGZa3cQIDOtbYMqbLdwZLD2d4Yc3qiXbAyvz0OQYRb24WMxtiLlLLnwWFh2Skp/CzZuJ+NmP2m/A5R+sPGwBDe/ib9y4N75BKQktltHJBBOHegtqLtniWU9AXb1hsX6XyV0o+V
+kingbase: # 人大金仓标志
+  enabled: false
+
+#==========================================================#
+# web properties                                           #
+#==========================================================#
+server:
+  port: 80
+  compression:
+    enabled: true
+    mime-types: application/javascript,application/json,application/xml,text/html,text/xml,text/plain,text/css
+    min-response-size: 1024
+  servlet:
+    session:
+      tracking-modes: cookie
+  use-forward-headers: true
+  tomcat:
+    threads:
+      max: 2000
+
+#==========================================================#
+# spring properties                                           #
+#==========================================================#
+spring:
+  profiles:
+    active: dev
+  async: # 异步线程池
+    thread-pool:
+      min-pool-size: 5 # 最小线程数
+      max-pool-size: 10 # 最大线程数
+      min-threshold: 50 # 调整连接数的CPU使用率最小阈值（百分比）
+      max-threshold: 70 # 调整连接数的CPU使用率最大阈值（百分比）
+      keep-alive-seconds: 300 # 线程最大空闲时间（秒）
+  thymeleaf:
+    cache: false
+  scheduled: # 定时任务的线程池
+    thread-pool:
+      core-pool-size: 5
+  resources: # 客户端是否缓存
+    chain:
+      strategy:
+        content: # cache resource in client
+          enabled: true
+          paths: /**
+  datasource: # datasource properties
+    type: com.zaxxer.hikari.HikariDataSource
+    name: sunway-datasource
+    hikari:
+      # https://github.com/brettwooldridge/HikariCP
+      # This property controls the maximum number of milliseconds that a client (that's you)
+      # will wait for a connection from the pool.
+      # If this time is exceeded without a connection becoming available, a SQLException will be thrown.
+      # Lowest acceptable connection timeout is 250 ms. Default: 30000 (30 seconds)
+      connectionTimeout: 10000
+      # This property controls the maximum amount of time that a connection is allowed to sit idle in the pool.
+      # This setting only applies when minimumIdle is defined to be less than maximumPoolSize.
+      # Idle connections will not be retired once the pool reaches minimumIdle connections.
+      # Whether a connection is retired as idle or not is subject to a maximum variation of +30 seconds,
+      # and average variation of +15 seconds.
+      # A connection will never be retired as idle before this timeout.
+      # A value of 0 means that idle connections are never removed from the pool.
+      # The minimum allowed value is 10000ms (10 seconds). Default: 600000 (10 minutes)
+      idleTimeout: 300000
+      # This property controls the maximum lifetime of a connection in the pool.
+      # An in-use connection will never be retired, only when it is closed will it then be removed.
+      # On a connection-by-connection basis, minor negative attenuation is applied to avoid mass-extinction in the pool.
+      # We strongly recommend setting this value, and it should be several seconds shorter than
+      # any database or infrastructure imposed connection time limit.
+      # A value of 0 indicates no maximum lifetime (infinite lifetime), subject of course to the idleTimeout setting.
+      # Default: 1800000 (30 minutes)
+      maxLifetime: 600000
+      # This property controls the minimum number of idle connections that HikariCP tries to maintain in the pool.
+      # If the idle connections dip below this value and total connections in the pool are less than maximumPoolSize,
+      # HikariCP will make a best effort to add additional connections quickly and efficiently. However,
+      # for maximum performance and responsiveness to spike demands, we recommend not setting this value and instead
+      # allowing HikariCP to ahighlightsct as a fixed size connection pool. Default: same as maximumPoolSize
+      minimumIdle: 5
+      # This property controls the maximum size that the pool is allowed to reach, including both idle and in-use connections.
+      # Basically this value will determine the maximum number of actual connections to the database backend.
+      # A reasonable value for this is best determined by your execution environment.
+      # When the pool reaches this size, and no idle connections are available, calls to getConnection() will block for
+      # up to connectionTimeout milliseconds before timing out. Please read about pool sizing. Default: 10
+      maximumPoolSize: 10
+  # 多租户配置
+  #     tenants: <tenantNameA>,<tenantNameB>,...
+  #     tenantNameA:
+  #       driver-class-name:
+  #       url:
+  #       username:
+  #       password:
+  #     tenantNameB:
+  #       driver-class-name:
+  #       url:
+  #       username:
+  #       password:
+  #     ...
+  cache:
+    type: redis
+    redis:
+      cache-null-values: false
+      use-key-prefix: true
+  # ES的设置
+  #   elasticsearch:
+  #     rest:
+  #       enabled: true
+  #     uris:
+  #     username:
+  #     password:
+  #     highlights:
+  #       pre-tags: <span style = 'color:red'>
+  #       post-tags: </span>
+  redis:
+    ssl: false
+    timeout: 5000
+    database: 0
+    # redis单体模式
+    #     password:
+    #     url:
+    #     host:
+    #     port:
+    # redis哨兵模式
+    #     sentinel:
+    #       master: mymaster
+    #       nodes: ip:port,ip:port,ip:port
+    #       password:
+    #     lettuce:
+    #       cluster:
+    #         refresh:
+    #           period: 30s
+    #           adaptive: true
+    lettuce:
+      pool:
+        max-active: 8
+        max-idle: 4
+        max-wait: 5s
+        min-idle: 2
+        time-between-eviction-runs: 600s
+  servlet:
+    multipart:
+      enabled: true
+      file-size-threshold: 2MB
+      max-file-size: 1024MB
+      max-request-size: 1024MB
+      resolve-lazily: false
+  data:
+    jpa:
+      repositories:
+        enabled: false
+    redis:
+      repositories:
+        enabled: false
+  http: # 请求的编码
+    encoding:
+      force: true
+      force-request: true
+      force-response: true
+  #   mail:
+  #     host: smtp.mxhichina.com
+  #     properties:
+  #       mail:
+  #         smtp:
+  #           auth: true
+  #     protocol: smtp
+  #     username:
+  #     password:
+  flyway:
+    enabled: false
+  liquibase:
+    enabled: false
+  devtools:
+    livereload:
+      enabled: false
+    remote:
+      debug:
+        enabled: false
+
+#==========================================================#
+# Custom Mybatis properties                                #
+#==========================================================#
+mybatis:
+  # Globally enables or disables any caches configured in any mapper under this configuration
+  cacheEnabled: false
+  # Globally enables or disables lazy loading. When enabled, all relations will be lazily loaded. This value can be superseded for an specific relation by using the fetchType attribute on it
+  lazyLoadingEnabled: false
+  # When enabled, any method call will load all the lazy properties of the object. Otherwise, each property is loaded on demand (see also lazyLoadTriggerMethods).
+  aggressiveLazyLoading: true
+  # Allows or disallows multiple ResultSets to be returned from a single statement (compatible driver required).
+  multipleResultSetsEnabled: true
+  # Uses the column label instead of the column name. Different drivers behave differently in this respect. Refer to the driver documentation, or test out both modes to determine how your driver behaves.
+  useColumnLabel: true
+  # Allows JDBC support for generated keys. A compatible driver is required. This setting forces generated keys to be used if set to true, as some drivers deny compatibility but still work (e.g. Derby).
+  useGeneratedKeys: false
+  # Specifies if and how MyBatis should automatically map columns to fields/properties. NONE disables auto-mapping. PARTIAL will only auto-map results with no nested result mappings defined inside. FULL will auto-map result mappings of any complexity (containing nested or otherwise).
+  autoMappingBehavior: FULL
+  # Specify the behavior when detects an unknown column (or unknown property type) of automatic mapping target.
+  #     NONE: Do nothing
+  #     WARNING: Output warning log (The log level of 'org.apache.ibatis.session.AutoMappingUnknownColumnBehavior' must be set to WARN)
+  #     FAILING: Fail mapping (Throw SqlSessionException)
+  autoMappingUnknownColumnBehavior: WARNING
+  # Configures the default executor. SIMPLE executor does nothing special. REUSE executor reuses prepared statements. BATCH executor reuses statements and batches updates.
+  defaultExecutorType: SIMPLE
+  # Sets the number of seconds the driver will wait for a response from the database.
+  defaultStatementTimeout:
+  # Sets the driver a hint as to control fetching size for return results. This parameter value can be override by a query setting.
+  defaultFetchSize:
+  # Allows using RowBounds on nested statements. If allow, set the false.
+  safeRowBoundsEnabled: false
+  # Allows using ResultHandler on nested statements. If allow, set the false.
+  safeResultHandlerEnabled: true
+  # Enables automatic mapping from classic database column names A_COLUMN to camel case classic Java property names aColumn.
+  mapUnderscoreToCamelCase: true
+  # MyBatis uses local cache to prevent circular references and speed up repeated nested queries. By default (SESSION) all queries executed during a session are cached. If localCacheScope=STATEMENT local session will be used just for statement execution, no data will be shared between two different calls to the same SqlSession
+  localCacheScope: STATEMENT
+  # Specifies the JDBC type for null values when no specific JDBC type was provided for the parameter. Some drivers require specifying the column JDBC type but others work with generic values like NULL, VARCHAR or OTHER.
+  jdbcTypeForNull: 'NULL'
+  # MyBatis, by default, returns null when all the columns of a returned row are NULL. When this setting is enabled, MyBatis returns an empty instance instead. Note that it is also applied to nested results (i.e. collectioin and association).
+  returnInstanceForEmptyRow: false
+  # Allow referencing statement parameters by their actual names declared in the method signature. To use this feature, your project must be compiled in Java 8 with -parameters option.
+  useActualParamName: true
+
+
+#==========================================================#
+# diable all management                                    #
+#==========================================================#
+management:
+  cloudfoundry:
+    enabled: false
+  health:
+    db:
+      enabled: false
+  trace:
+    http:
+      enabled: false
+  info:
+    build:
+      enabled: false
+  metrics:
+    binders:
+      files:
+        enabled: false
+
+#===============================================#
+# spring cloud properties                       #
+#===============================================#
+feign:
+  client:
+    config:
+      default:
+        connect-timeout: 60000
+        read-timeout: 60000
+  compression:
+    request:
+      enabled: true
+      mime-types: application/javascript,application/json,application/xml,text/html,text/xml,text/plain,text/css
+      min-request-size: 2048
+    response:
+      enabled: true
+
+ribbon:
+  ReadTimeout: 60000
+  ConnectTimeout: 60000
+
+#==========================================================#
+# 默认单体的配置，微服务配置时，全部为true                   #
+#==========================================================#
+# 可写环境端点自动配置是否启用,见org.springframework.cloud.autoconfigure.WritableEnvironmentEndpointAutoConfiguration
+# management.endpoint.env.post.enabled=false
+# springcloud兼容性验证,见org.springframework.cloud.configuration.CompatibilityVerifierAutoConfiguration
+# spring.cloud.compatibility-verifier.enabled=false
+# 服务自动注册是否启用,见org.springframework.cloud.client.serviceregistry.AutoServiceRegistrationAutoConfiguration
+# spring.cloud.service-registry.auto-registration.enabled=false
+#refreshScope是否启用,见org.springframework.cloud.autoconfigure.RefreshAutoConfiguration

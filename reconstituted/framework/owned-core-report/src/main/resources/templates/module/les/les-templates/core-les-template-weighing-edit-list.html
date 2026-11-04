@@ -1,0 +1,7 @@
+<script th:inline="javascript">
+    Gikam.requirejs([ '/static/module/les/les-templates/core-les-template.js',
+                      '/static/module/les/les-templates/core-les-template-weighing-edit-list.js',
+                      '/static/pharm/module/equipt/equipts/pharm-equipt-listener.js',
+                    ]);
+    coreLesTemplate.weighingEditListPage.init(Gikam.getElParam([[${param}]]));
+</script>

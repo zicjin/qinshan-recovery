@@ -1,0 +1,9 @@
+
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/module/sys/mobile/menus/mobile-page.js',
+                      '/static/module/sys/mobile/menus/mobile-page-edit-list.js'
+                    ]);
+    mobilePage.editPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>

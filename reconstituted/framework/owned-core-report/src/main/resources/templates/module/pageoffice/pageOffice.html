@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:th="http://www.thymeleaf.org"
+    xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+>
+    <head>
+        <base th:href="${#request.getContextPath()}+'/'" />
+        <title>Word</title>
+        <style>
+            html {
+                width: 100%;
+                height: 100%;
+            }
+            body {
+                display: flex;
+                width: 100%;
+                height: 100%;
+            }
+            .left-wrapper {
+                display: none;
+                width: 300px;
+                padding-left: 4px;
+                padding-bottom: 6px;
+                padding-top: 4px;
+            }
+            .pageoffice {
+                flex: 1;
+            }
+        </style>
+
+        <script th:inline="javascript">
+            var readonly = [[${readonly}]];
+        </script>
+        <script th:inline="javascript">
+            var tempId = [[${tempId}]];
+        </script>
+        <script th:inline="javascript">
+            var operationWidth = [[${operationWidth}]];
+        </script>
+
+        <link href="static/gikam/main/css/chunk-common.css" rel="stylesheet" />
+        <link href="static/gikam/main/css/chunk-vendors.css" rel="stylesheet" />
+        <script src="static/gikam/main/js/chunk-common.js"></script>
+        <script src="static/gikam/main/js/chunk-vendors.js"></script>
+        <script src="static/gikam/main/js/gikam.js"></script>
+
+        <script type="text/javascript">
+            function SaveAsPDF() {
+                //另存为PDF文件
+                pageofficectrl.WebSaveAsPDF();
+            }
+
+            function AfterDocumentSaved() {
+                alert("保存成功!");
+            }
+
+            // 在模板加载完成后调整宽度，AfterDocumentOpened是文档加载完的事件，先执行onload，后执行AfterDocumentOpened
+            window.onload = function () {
+                if (tempId && readonly === "false") {
+                    init(tempId);
+                }
+            };
+
+            function init(tempId) {
+                if (window.Gikam) {
+                    if (operationWidth) {
+                        window.Gikam.jQuery("#left-wrapper").css({
+                            width: operationWidth + "px",
+                        });
+                    }
+                    window.Gikam.jQuery("#left-wrapper").css({
+                        display: "block",
+                    });
+                    initWordTemplateEditor(tempId);
+                } else {
+                    setTimeout(function () {
+                        init(tempId);
+                    }, 500);
+                }
+            }
+
+            function initWordTemplateEditor(tempId) {
+                const prefix = window.location.pathname.split('/open/page-office/document')[0];
+                window.Gikam.component.FrontI18N.init().then(() => {
+                    window.Gikam.create("WordTemplateEditor", {
+                        renderTo: document.getElementById("left-wrapper"),
+                        type: "WordTemplateEditor",
+                        id: "WordTemplateEditor",
+                        tabSwitchAnimate: false,
+                        showFunction: true,
+                        showSignature: true,
+                        url: prefix + "/secure/core/module/office/tmpls/dses/queries/tree",
+                        requestData: window.Gikam.getJsonWrapper({
+                            officeTmplId: tempId,
+                        }),
+                        dataSourceFormatter: function (res) {
+                            const lists = JSON.parse(res);
+                            return lists;
+                        },
+                        onNodeDblclick: function (nodeId, node) {
+                            const { extraInfo } = node;
+                            if (extraInfo) {
+                                const { copyValue } = extraInfo;
+                                pageofficectrl.word.SetTextToSelection(
+                                    copyValue
+                                );
+                            }
+                        },
+                        onLoadSuccess: function () {
+                            console.log("加载成功");
+                        },
+                    });
+                });
+            }
+
+            function hideToolBar() {
+                pageofficectrl.Menubar = false;
+                pageofficectrl.OfficeToolbars = false;
+            }
+
+            function showToolBar() {
+                pageofficectrl.Menubar = true;
+                pageofficectrl.OfficeToolbars = true;
+            }
+
+            function Save() {
+                pageofficectrl.WebSave();
+            }
+        </script>
+    </head>
+    <body>
+        <div class="left-wrapper" id="left-wrapper"></div>
+        <div id="pageoffice" class="pageoffice" th:utext="${pageoffice}"></div>
+    </body>
+</html>

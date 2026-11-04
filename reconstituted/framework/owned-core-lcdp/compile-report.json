@@ -7,7 +7,7 @@
   "maven_runtime": "\u001b[1mApache Maven 3.9.12\u001b[m",
   "module": "owned-core-lcdp",
   "output_jar": "owned-core-lcdp/target/owned-core-lcdp-1.0.0-SNAPSHOT.jar",
-  "output_jar_sha256": "d580412184264abea9ed938ab430839b8677cb7f725d08a3158036bc8260f2f7",
+  "output_jar_sha256": "578d66a1dc67bededeba64670619bf9933bca22b3bae0704cdf5ebe61d181a53",
   "schema": "supplier-reconstituted-module-compile-v1",
   "source_file_count": 500,
   "source_only_framework_classpath": true,

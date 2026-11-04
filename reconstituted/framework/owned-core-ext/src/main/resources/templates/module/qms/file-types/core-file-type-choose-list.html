@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/module/qms/file-types/core-file-type.js',
+                      '/static/module/qms/file-types/core-file-type-choose-list.js'
+                    ]);
+    coreFileType.choosePage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>
+

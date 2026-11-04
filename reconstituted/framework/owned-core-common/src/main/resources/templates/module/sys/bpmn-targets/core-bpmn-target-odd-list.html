@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/module/sys/bpmn-targets/core-bpmn-target.js',
+                      '/static/module/sys/bpmn-targets/core-bpmn-target-odd-list.js'
+                    ]);
+                    
+    coreBpmnTarget.oddPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>

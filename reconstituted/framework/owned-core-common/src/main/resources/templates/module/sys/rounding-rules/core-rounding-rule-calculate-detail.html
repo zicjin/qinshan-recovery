@@ -1,0 +1,6 @@
+<script th:inline="javascript">
+    Gikam.requirejs([ '/static/module/sys/rounding-rules/core-rounding-rule.js',
+                      '/static/module/sys/rounding-rules/core-rounding-rule-calculate-detail.js'
+                    ]);
+    coreRoundingRule.calculateDetailPage.init(Gikam.getElParam([[${param}]]));
+</script>

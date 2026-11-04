@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    Gikam.requirejs([ '/static/module/item/custom-buttons/core-custom-button.js',
+                      '/static/module/item/custom-buttons/core-custom-button-choose-list.js'
+    ]);
+    coreCustomButton.choosePage.init(Gikam.getElParam([[${param}]]));
+    /*]]>*/
+</script>
+

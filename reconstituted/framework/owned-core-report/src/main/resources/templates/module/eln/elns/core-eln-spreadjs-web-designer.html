@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<!-- disable IE compatible view -->
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="spreadjs culture" content="zh-cn" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" />
+<!-- modified by zhanghang@sunwayworld.com begin -->
+<title>ELN</title>
+
+
+<script th:inline="javascript">
+/*<![CDATA[*/
+    (function(win) {
+        var servletContext = /*[[@{/}]]*/'';
+        if (servletContext !== '') {
+            servletContext = servletContext.replace(/\/$/,'');
+        }
+        win.IFM_CONTEXT = location.origin + servletContext;
+        win.elnUrl = location.href;
+        window.history.replaceState('forward', null, window.IFM_CONTEXT.replace(location.origin, '') + '/' + location.search)
+    })(window);
+/*]]>*/
+</script>
+
+<link rel="icon" th:href="@{/static/plugin/spread-sheets-11.2.6/designer/index/logo.png}" type="image/x-icon" />
+<!-- modified by zhanghang@sunwayworld.com end -->
+<!-- Libraries -->
+<link th:href="@{/static/gikam/main/css/chunk-common.css}" rel="stylesheet" />
+<link th:href="@{/static/plugin/spread-sheets-11.2.6/designer/lib/jquery-ui/css/smoothness/jquery-ui-1.10.3.custom.min.css}" rel="stylesheet" type="text/css" />
+<link th:href="@{/static/plugin/spread-sheets-11.2.6/designer/lib/css/bootstrap.min.css}" rel="stylesheet" />
+<link th:href="@{/static/plugin/spread-sheets-11.2.6/designer/lib/gcui.css}" rel="stylesheet" type="text/css" />
+<link th:href="@{/static/plugin/spread-sheets-11.2.6/css/gc.spread.sheets.excel2013white.11.2.6.css}" rel="stylesheet" type="text/css" />
+<link th:href="@{/static/plugin/spread-sheets-11.2.6/designer/lib/zTreeStyle/css/zTreeStyle.css}" rel="stylesheet" type="text/css" />
+<link th:href="@{/static/plugin/spread-sheets-11.2.6/designer/elnLoaderProgress/elnLoaderProgress.css}" rel="stylesheet" type="text/css" />
+<link th:href="@{/static/plugin/spread-sheets-11.2.6/designer/special-character-picker/picker.css}" rel="stylesheet" type="text/css" />
+
+<link th:href="@{/static/plugin/spread-sheets-11.2.6/designer/sunway-compress/sunway-compress.css}" rel="stylesheet" type="text/css" />
+
+
+<script type="text/javascript">
+/** added by zhanghang@sunwayworld.com begin **/
+    var IFM_CONTEXT;
+    var bizId;
+    var elnTmplId;
+    var versionId;
+    var isTest;
+    var elnId;
+    var jsonData = {};//eln模板的json数据
+    var foldernos;
+    var operateType;//操作类型（0:编辑 、1+isTest：预览、1：实例）
+    var previewType;//是否为预览iframe（1为预览）
+    var fileid;//文件内码
+    var elnDsParams;//ELN数据源参数列表
+    var elntext;//用于获取预览的json数据（其余情况不用）
+    var fontsObj;//设置字体集
+    var mathFunction;//定义修约规则
+    var modelType = 0;//判断模态框类型(0为数据源1为预览)
+    var pageno;//ELN显示页
+    var view;//是否方法版本展示
+    var modifyrecordflag = "0";//审计追踪标记。默认是不开启的。在结果录入查询ajax响应的时候传回这个值。
+    var elnresultsids;//每次保存都能反存。需要知道结果id
+    var elnresultsidsarray;//食品批结果录入使用
+
+    var dataSrcObj = {};//ELN数据源查询出的数据(页面修改之后对应值会更改)
+    var oldDataSrcObj = {};//ELN数据源查询出的数据(用于后台对比数据是否修改过)
+
+    var dataBaseSourceForm = [];//表单数据的数据源
+    var dataBaseSourceList = [];//列表数据的数据源
+    var dataBaseSourceFormBack = [];//表单反写数据的数据源
+    var dataBaseSourceListBack = [];//列表反写数据的数据源
+
+    var isChanged = 0;//用于判断是否更改过 
+
+    var topTab;//记录上层信息
+    
+    var pageObject; // 关闭页面回调
+    var uploadPdf; // true/false 是否显示上传PDF按钮开关
+    var tableName; // ELN生成PDF上传至文件系统作为某个业务的附件时需要传的表名称
+    var uploadBizId; // 用作上传的业务ID不是bizId
+    var autoExportPDF; // 实例中保存自动生成PDF
+    var preload; // 预加载控制
+
+    var uploadPdfName; // pdf上传时的文件名
+    var bizCategory; //pdf上传时的bizCategory
+/** added by zhanghang@sunwayworld.com end * */
+</script>
+
+</head>
+<body unselectable="on" style="-moz-user-select: none; -webkit-user-select: none; user-select: none;">
+    <div class="container">
+        <div class="loading-placeholder background-mask-layer"></div>
+        <span class="loading-placeholder loading-pic"></span>
+        <div class="header">
+            <div data-include="ribbon">
+            </div>
+            <div data-include="formulaBar">
+            </div>
+        </div>
+        <div class="content">
+            <div class="vertical-splitter ui-draggable hidden" id="verticalSplitter"></div>
+            <div class="fill-spread-content" data-include="spreadWrapper">
+            </div>
+        </div>
+        <div class="footer">
+            <div data-include="statusBar">
+            </div>
+        </div>
+        <div class="file-menu hidden">
+            <div data-include="fileMenu"></div>
+        </div>
+        <div class="slicer-contextmenu-width hidden">
+            <span id="name-container"></span>
+        </div>
+        <div class="ui-button-text-icon-primary" style="position: absolute; left: -1000px; top: -1000px; visibility: hidden">
+            <span id="measureWidth" class="ui-button-text"></span>
+        </div>
+        <div class="hidden">
+            <input type="file" id="fileSelector" name="files[]" />
+        </div>
+    </div>
+
+    <!-- 模态框（选择数据源）（预览） -->
+    <div class="modal fade" id="myModaldataSoure" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" style="width: 70%; height: 100%">
+            <div class="modal-content" style="height: 100%">
+                <div id="modalbodydataSoure" style="height: 100%; width: 100%"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 模态框（提示信息） -->
+    <div class="modal fade" id="myModalalertBombBox" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog"></div>
+    </div>
+
+    <script th:src="@{/static/plugin/spread-sheets-11.2.6/designer/index/pako.min.js}"></script>
+    <script th:src="@{/static/plugin/spread-sheets-11.2.6/designer/lib/jquery-2.0.2.min.js}"></script>
+    
+    <script th:src="@{/static/plugin/spread-sheets-11.2.6/designer/lib/bootstrap.min.js}"></script>
+    <script th:src="@{/static/plugin/spread-sheets-11.2.6/designer/lib/jquery-ui/js/jquery-ui-1.10.3.custom.min.js}"></script>
+    <script th:src="@{/static/plugin/spread-sheets-11.2.6/designer/lib/knockout-2.3.0.min.js}"></script>
+    <script th:src="@{/static/plugin/spread-sheets-11.2.6/scripts/gc.spread.sheets.all.14.0.10.min.js}"></script>
+    <script th:src="@{/static/plugin/spread-sheets-11.2.6/scripts/plugins/gc.spread.sheets.charts.14.0.10.min.js}"></script>
+    <script th:src="@{/static/plugin/spread-sheets-11.2.6/scripts/resources/zh/gc.spread.sheets.resources.zh.14.0.10.min.js}"></script>
+    <script th:src="@{/static/plugin/spread-sheets-11.2.6/designer/lib/spread/gc.spread.excelio.14.0.10.min.js}"></script>
+    <script th:src="@{/static/plugin/spread-sheets-11.2.6/scripts/plugins/gc.spread.sheets.print.14.0.10.min.js}"></script>
+    <script th:src="@{/static/plugin/spread-sheets-11.2.6/scripts/plugins/gc.spread.sheets.pdf.14.0.10.min.js}"></script>
+    <script th:src="@{/static/plugin/spread-sheets-11.2.6/designer/lib/zTreeStyle/js/jquery.ztree.all-3.5.min.js}"></script>
+    <script th:src="@{/static/plugin/spread-sheets-11.2.6/designer/lib/FileSaver.min.js}"></script>
+    <script th:src="@{/static/plugin/spread-sheets-11.2.6/designer/common/resources.js}"></script>
+    <script th:src="@{/static/plugin/spread-sheets-11.2.6/designer/common/resources.cn.js}"></script>
+    <script th:src="@{/static/plugin/spread-sheets-11.2.6/designer/sunway-compress/sunway-compress.js}"></script>
+</body>
+
+<script th:inline="javascript">
+/*<![CDATA[*/
+GC.Spread.Sheets.LicenseKey = 'sunway';
+// 初始化进度条
+var _opener = opener || parent.opener || window.parent; // window.open时 opener 有效，iframe（预览）时 parent.opener 有效
+var _Gikam = null;
+if (!_opener) {
+    _Gikam = Gikam;
+} else {
+    _Gikam = _opener.Gikam;
+}
+/*]]>*/
+</script>
+
+</html>

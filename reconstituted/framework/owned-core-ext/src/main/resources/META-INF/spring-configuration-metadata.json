@@ -1,0 +1,38 @@
+{
+  "groups": [
+    {
+      "name": "sunway.config.file.ftp",
+      "type": "com.sunwayworld.module.item.file.core.CoreFileFtpProperties",
+      "sourceType": "com.sunwayworld.module.item.file.core.CoreFileFtpProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "sunway.config.file.ftp.folder",
+      "type": "java.lang.String",
+      "sourceType": "com.sunwayworld.module.item.file.core.CoreFileFtpProperties"
+    },
+    {
+      "name": "sunway.config.file.ftp.ip",
+      "type": "java.lang.String",
+      "sourceType": "com.sunwayworld.module.item.file.core.CoreFileFtpProperties"
+    },
+    {
+      "name": "sunway.config.file.ftp.password",
+      "type": "java.lang.String",
+      "sourceType": "com.sunwayworld.module.item.file.core.CoreFileFtpProperties"
+    },
+    {
+      "name": "sunway.config.file.ftp.port",
+      "type": "java.lang.Integer",
+      "sourceType": "com.sunwayworld.module.item.file.core.CoreFileFtpProperties",
+      "defaultValue": 0
+    },
+    {
+      "name": "sunway.config.file.ftp.user",
+      "type": "java.lang.String",
+      "sourceType": "com.sunwayworld.module.item.file.core.CoreFileFtpProperties"
+    }
+  ],
+  "hints": []
+}

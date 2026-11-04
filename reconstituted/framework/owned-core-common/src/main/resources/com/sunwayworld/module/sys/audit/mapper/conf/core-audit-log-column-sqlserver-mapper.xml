@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.module.sys.audit.mapper.CoreAuditLogColumnMapper">
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM T_CORE_AUDIT_LOG_COLUMN T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ID
+            </otherwise>
+        </choose>
+    </select>
+    <select id="selectDeletedNames"
+            resultType="com.sunwayworld.module.sys.audit.bean.CoreAuditLogColumnNameDTO">
+        SELECT F.TARGETID AS TARGETID, T.OLDVALUE AS NAME
+          FROM T_CORE_AUDIT_LOG_COLUMN T
+          JOIN (SELECT MAX(A.ID) AS ID
+                  FROM T_CORE_AUDIT_LOG_COLUMN A
+                  JOIN T_CORE_AUDIT_LOG_ACTIVITY B ON A.ACTIVITYID = B.ID
+                  JOIN T_CORE_AUDIT_LOG C ON B.LOGID = C.ID
+                 WHERE A."COLUMN" = #{nameField}
+                   AND C.TARGETTABLE = #{tableName}
+                   AND C.TARGETID IN
+        <foreach collection="list" close=")" index="idx" item="item" open="(" separator=",">
+            #{item}
+        </foreach>
+                   AND B.ACTIVITY = 'AUDIT.DELETE'
+              GROUP BY C.TARGETID) D
+            ON T.ID = D.ID
+          JOIN T_CORE_AUDIT_LOG_ACTIVITY E
+            ON T.ACTIVITYID = E.ID
+          JOIN T_CORE_AUDIT_LOG F
+            ON E.LOGID = F.ID
+
+    </select>
+    <select id="selectColumnsByTargetInfo"
+            resultType="com.sunwayworld.module.sys.audit.bean.CoreAuditLogColumnDTO">
+        SELECT T.*, A.ACTIVITY, B.TARGETTABLE, B.TARGETID, A.CREATEDTIME, A.USERID
+          FROM T_CORE_AUDIT_LOG_COLUMN T
+          JOIN T_CORE_AUDIT_LOG_ACTIVITY A
+            ON T.ACTIVITYID = A.ID
+          JOIN T_CORE_AUDIT_LOG B
+            ON A.LOGID = B.ID
+         WHERE B.TARGETTABLE = #{tableName}
+           AND B.TARGETID = #{targetId}
+      ORDER BY T.ID DESC
+    </select>
+</mapper>

@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/module/monitor/configs/core-monitor-config.js',
+                      '/static/module/monitor/configs/core-monitor-config-detail.js'
+                    ]);
+    coreMonitorConfig.detailPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>
+

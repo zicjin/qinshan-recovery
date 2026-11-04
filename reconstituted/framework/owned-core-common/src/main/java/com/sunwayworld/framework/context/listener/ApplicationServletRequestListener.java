@@ -3,6 +3,7 @@
  */
 package com.sunwayworld.framework.context.listener;
 
+import com.sunwayworld.framework.context.LocalContextHelper;
 import javax.servlet.ServletRequestEvent;
 import javax.servlet.ServletRequestListener;
 import javax.servlet.annotation.WebListener;
@@ -13,8 +14,13 @@ import org.springframework.stereotype.Component;
 public class ApplicationServletRequestListener
 implements ServletRequestListener {
     @Override
-    public native void requestDestroyed(ServletRequestEvent var1);
+    public void requestDestroyed(ServletRequestEvent event) {
+        LocalContextHelper.removeServletRequest();
+        LocalContextHelper.removeServletResponse();
+    }
 
     @Override
-    public native void requestInitialized(ServletRequestEvent var1);
+    public void requestInitialized(ServletRequestEvent event) {
+        LocalContextHelper.setServletRequest(event.getServletRequest());
+    }
 }

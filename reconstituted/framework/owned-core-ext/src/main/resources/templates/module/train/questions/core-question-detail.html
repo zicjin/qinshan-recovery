@@ -1,0 +1,8 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/module/train/questions/core-question.js',
+                      '/static/module/train/questions/core-question-detail.js'
+                    ]);
+    coreQuestion.detailPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>

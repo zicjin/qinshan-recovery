@@ -1,6 +1,5 @@
 package com.sunwayworld.boot.listener;
 
-import com.spire.license.LicenseProvider;
 import com.sunwayworld.framework.context.ApplicationContextHelper;
 import com.sunwayworld.framework.context.GikamBeanContext;
 import com.sunwayworld.framework.database.core.DatabaseManager;
@@ -48,8 +47,6 @@ public class ApplicationPreparedListener implements ApplicationListener<Applicat
    @Autowired
    @Lazy
    private TenantManager tenantManager;
-   @Value("${spire.office.license:}")
-   private String spireLicense;
    @Value("#{'${sunway.cache.post-start.evict.name}'.split(',')}")
    private List<String> evictCacheNameList;
    @Value("${sunway.app.stand-alone.enabled:true}")
@@ -72,10 +69,6 @@ public class ApplicationPreparedListener implements ApplicationListener<Applicat
 
       if (ApplicationContextHelper.isProfileActivated("tenant")) {
          this.tenantManager.reload();
-      }
-
-      if (!StringUtils.isBlank(this.spireLicense)) {
-         LicenseProvider.setLicenseKey(this.spireLicense);
       }
 
       if (!cacheDeleted) {

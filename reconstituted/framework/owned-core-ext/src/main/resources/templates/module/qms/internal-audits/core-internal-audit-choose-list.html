@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/module/qms/internal-audits/core-internal-audit.js',
+                      '/static/module/qms/internal-audits/core-internal-audit-choose-list.js'
+                    ]);
+    coreInternalAudit.choosePage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>
+

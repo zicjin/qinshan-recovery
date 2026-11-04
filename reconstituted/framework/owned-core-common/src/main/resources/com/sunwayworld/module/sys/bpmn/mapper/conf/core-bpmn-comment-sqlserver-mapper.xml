@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.module.sys.bpmn.mapper.CoreBpmnCommentMapper">
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM T_CORE_BPMN_COMMENT T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ID
+            </otherwise>
+        </choose>
+    </select>
+    
+    <select id="selectCommentList" resultType="map">
+        SELECT C.ID,
+               C.TASKNAME,
+               C.USERID AUDITEDBYID,
+               C.USERNAME AUDITEDBYNAME,
+               C.CREATEDTIME AUDITEDTIME,
+               C.COMMENT,
+               C.STATUS,
+               C.PROCID,
+               C.ROUTE,
+               F.ID ATTACHMENTID,
+               F.NAME ATTACHMENTNAME
+          FROM T_CORE_BPMN_COMMENT C
+          LEFT JOIN T_CORE_FILE F ON F.ID = C.ATTACHMENTID
+          LEFT JOIN T_CORE_USER U ON C.USERID = U.ID
+         WHERE C.TARGETID = #{targetId}
+         ORDER BY C.ID
+    </select>
+    
+    <select id="selectUserTaskAuditedByList" resultType="java.lang.String">
+        SELECT C.USERID
+          FROM T_CORE_BPMN_COMMENT C
+         WHERE C.TARGETID = #{targetId}
+           AND C.STATUSCODE = #{statusCode}
+           AND NOT EXISTS (SELECT 1
+                             FROM T_CORE_BPMN_COMMENT CC
+                            WHERE CC.TARGETID = C.TARGETID
+                              AND CC.STATUSCODE = 'draft'
+                              AND CC.ID > C.ID)
+    </select>
+</mapper>

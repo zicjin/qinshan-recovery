@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.module.sys.attorney.mapper.CoreAttorneyMapper">
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM (SELECT A.*,
+                       R.USERNAME TRUSTORNAME,
+                       E.USERNAME TRUSTEENAME
+                  FROM T_CORE_ATTORNEY A
+                  LEFT JOIN T_CORE_USER R ON A.TRUSTOR = R.ID
+                  LEFT JOIN T_CORE_USER E ON A.TRUSTEE = E.ID) T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent"/>
+        </where>
+         ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ID DESC
+            </otherwise>
+        </choose>
+    </select>
+    
+    <select id="selectExecutableAttorneyIdList" resultType="java.lang.Long">
+        SELECT T.ID
+        FROM T_CORE_ATTORNEY T
+        WHERE T.ACTIVATEDFLAG = '1'
+        AND T.LASTSUSPENDEDFLAG = '0'
+        AND (T.STARTDATE IS NULL OR T.STARTDATE <![CDATA[<=]]> GETDATE())
+        AND (T.ENDDATE IS NULL OR DATEADD(day, 1, T.ENDDATE) <![CDATA[>]]> GETDATE())
+        AND T.TRUSTOR = #{trustorId}
+        AND T.TRUSTEE = #{trusteeId}
+    </select>
+
+    <select id="selectExecutableAttorneyList" resultType="map">
+        SELECT T.*
+        FROM T_CORE_ATTORNEY T
+        WHERE T.ACTIVATEDFLAG = '1'
+        AND T.LASTSUSPENDEDFLAG = '0'
+        AND (T.STARTDATE IS NULL OR T.STARTDATE <![CDATA[<=]]> GETDATE())
+        AND (T.ENDDATE IS NULL OR DATEADD(day, 1, T.ENDDATE) <![CDATA[>]]> GETDATE())
+        AND T.TRUSTEE = #{trusteeId}
+    </select>
+</mapper>

@@ -1,0 +1,31 @@
+<th:block th:replace="module/gikam/gikam" />
+
+<script th:src="@{/static/plugin/jquery/jquery.min.js}"></script>
+
+<script th:inline="javascript">
+/*<![CDATA[*/
+	var param = Gikam.getElParam([[${param}]]);
+	
+	if (param && param.requestSvgUrl) {
+		Gikam.getText(param.requestSvgUrl).done(function(svg) {
+		    if (svg) {
+		        $("body").html(svg);
+		        if($("svg")[0].clientHeight > $("body")[0].clientHeight) {
+					if($("svg")[0].clientWidth > $("body")[0].clientWidth) {
+						$("body,html").css("overflow","auto");
+					} else {
+						$("body,html").css("overflow-y","auto");
+						$("body,html").css("overflow-x","hidden");
+					}
+				} else {
+					if($("svg")[0].clientWidth > $("body")[0].clientWidth) {
+						$("body,html").css("overflow-x","auto");
+						$("body,html").css("overflow-y","hidden");
+					}
+				}
+		    }
+		});
+	}
+/*]]>*/
+</script>
+

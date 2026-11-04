@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.module.sys.bpmn.mapper.CoreBpmnInstanceMapper">
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM T_CORE_BPMN_INST T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ID DESC
+            </otherwise>
+        </choose>
+    </select>
+    
+    <select id="selectInstanceAuditorList" resultType="map">
+        SELECT T.INSTID,
+               T.INSTTASKID,
+               T.USERID CANDIDATORID,
+               T.ROLEID,
+               T.TASKUSERID,
+               T.TASKROLEID
+          FROM (SELECT U.USERID,
+                       U.ID TASKUSERID,
+                       NULL TASKROLEID,
+                       U.INSTTASKID,
+                       U.INSTID,
+                       NULL ROLEID
+                  FROM T_CORE_BPMN_INST_TASK_USER U
+                UNION ALL
+                SELECT U.USERID,
+                       NULL TASKUSERID,
+                       R.ID TASKROLEID,
+                       R.INSTTASKID,
+                       R.INSTID,
+                       R.ROLEID
+                  FROM T_CORE_BPMN_INST_TASK_ROLE R,
+                       T_CORE_ROLE_USER U,
+                       T_CORE_BPMN_INST_TASK K,
+                       T_CORE_BPMN_INST I
+                 WHERE R.ROLEID = U.ROLEID
+                   AND K.ID = R.INSTTASKID
+                   AND I.ID = K.INSTID
+                   AND (K.COUNTERSIGN = '0' /* 会签时所有人员都要进行审核 */
+                        OR NOT EXISTS (SELECT 1
+                                         FROM T_CORE_BPMN_COMMENT C
+                                        WHERE C.CREATEDTIME <![CDATA[>=]]> K.CREATEDTIME
+                                          AND C.TASKID = K.TASKID
+                                          AND C.TARGETID = I.TARGETID
+                                          AND U.USERID = C.USERID))) T
+         WHERE T.INSTID IN
+           <foreach collection="idList" item="id"  separator="," open="(" close=")">
+                #{id}
+           </foreach>
+    </select>
+    
+    <select id="selectInstanceTaskAuditorList" resultType="map">
+        SELECT DISTINCT T.INSTTASKID,
+                        T.USERID CANDIDATORID
+          FROM (SELECT U.INSTID,
+                       U.USERID,
+                       U.INSTTASKID
+                  FROM T_CORE_BPMN_INST_TASK_USER U
+                UNION ALL
+                SELECT R.INSTID, 
+                       U.USERID,
+                       R.INSTTASKID
+                  FROM T_CORE_BPMN_INST_TASK_ROLE R,
+                       T_CORE_ROLE_USER U,
+                       T_CORE_BPMN_INST_TASK K,
+                       T_CORE_BPMN_INST I
+                 WHERE R.ROLEID = U.ROLEID
+                   AND K.ID = R.INSTTASKID
+                   AND I.ID = K.INSTID
+                   AND (K.COUNTERSIGN = '0' /* 会签时所有人员都要进行审核 */
+                        OR NOT EXISTS (SELECT 1
+                                         FROM T_CORE_BPMN_COMMENT C
+                                        WHERE C.CREATEDTIME <![CDATA[>=]]> K.CREATEDTIME
+                                          AND C.TASKID = K.TASKID
+                                          AND C.TARGETID = I.TARGETID
+                                          AND U.USERID = C.USERID))) T
+         WHERE T.INSTID IN
+           <foreach collection="idList" item="id"  separator="," open="(" close=")">
+                #{id}
+           </foreach>
+    </select>
+    
+    <select id="selectInstanceDetailedCandidatorList" resultType="map">
+        SELECT DISTINCT T.TASKID,
+                        T.TASKNAME,
+                        T.CANDIDATORID,
+                        T.CANDIDATORNAME
+          FROM (SELECT K.INSTID,
+                       U.INSTTASKID TASKID,
+                       K.TASKNAME,
+                       U.USERID CANDIDATORID,
+                       CU.USERNAME CANDIDATORNAME
+                  FROM T_CORE_BPMN_INST_TASK_USER U,
+                       T_CORE_BPMN_INST_TASK K,
+                       T_CORE_USER CU
+                 WHERE U.INSTTASKID = K.ID
+                   AND U.USERID = CU.ID
+                   AND CU.STATUS <![CDATA[<>]]> 'deprecated'
+                UNION ALL
+                SELECT K.INSTID,
+                       R.INSTTASKID TASKID,
+                       K.TASKNAME,
+                       U.USERID CANDIDATORID,
+                       CU.USERNAME CANDIDATORNAME
+                  FROM T_CORE_BPMN_INST_TASK_ROLE R,
+                       T_CORE_ROLE_USER U,
+                       T_CORE_BPMN_INST_TASK K,
+                       T_CORE_BPMN_INST I,
+                       T_CORE_USER CU
+                 WHERE R.ROLEID = U.ROLEID
+                   AND K.ID = R.INSTTASKID
+                   AND I.ID = K.INSTID
+                   AND U.USERID = CU.ID
+                   AND CU.STATUS <![CDATA[<>]]> 'deprecated'
+                   AND (K.COUNTERSIGN = '0' /* 会签时所有人员都要进行审核 */
+                        OR NOT EXISTS (SELECT 1
+                                         FROM T_CORE_BPMN_COMMENT C
+                                        WHERE C.CREATEDTIME <![CDATA[>=]]> K.CREATEDTIME
+                                          AND C.TASKID = K.TASKID
+                                          AND C.TARGETID = I.TARGETID
+                                          AND U.USERID = C.USERID))) T
+         WHERE T.INSTID IN
+           <foreach collection="idList" item="id"  separator="," open="(" close=")">
+                #{id}
+           </foreach>
+    </select>
+</mapper>

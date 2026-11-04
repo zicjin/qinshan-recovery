@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.module.admin.mybatis.mapper.CoreAdminMybatisStatementMapper">
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM T_CORE_ADMIN_MYBATIS_STMT T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent"/>
+        </where>
+         ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ID DESC
+            </otherwise>
+        </choose>
+    </select>
+    
+    <select id="selectActiveList" resultType="map">
+        SELECT T.*
+          FROM T_CORE_ADMIN_MYBATIS_STMT T
+         WHERE NOT EXISTS (SELECT 1
+                             FROM T_CORE_ADMIN_MYBATIS_STMT S
+                            WHERE T.MENUID = S.MENUID
+                              AND T.MAPPERID = S.MAPPERID
+                              AND T.STATEMENTID = S.STATEMENTID
+                              AND S.VERSION > T.VERSION)
+        <if test="menuId != null">
+           AND T.MENUID = ${menuId}
+        </if>
+        <if test="mapperId != null">
+           AND T.MAPPERID = ${mapperId}
+        </if>
+    </select>
+</mapper>

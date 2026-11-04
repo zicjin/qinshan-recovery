@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="132px" height="60px" viewBox="0 0 132 60" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>章节缩略图</title>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="画板" transform="translate(-405.000000, -119.000000)">
+            <g id="章节缩略图" transform="translate(405.000000, 119.000000)">
+                <polygon id="Rectangle-23备份-8" fill="#FFFFFF" fill-rule="nonzero" points="0 0 132 0 132 60 0 60"></polygon>
+                <polygon id="Rectangle-23备份-9" fill="#ECEFF3" fill-rule="nonzero" points="0 0 132 0 132 8 0 8"></polygon>
+                <rect id="矩形备份-5" fill="#ECEFF3" fill-rule="nonzero" x="40" y="16" width="84" height="3" rx="1.5"></rect>
+                <rect id="矩形备份-6" fill="#ECEFF3" fill-rule="nonzero" x="40" y="38" width="84" height="3" rx="1.5"></rect>
+                <rect id="矩形备份-7" fill="#ECEFF3" fill-rule="nonzero" x="40" y="27" width="84" height="3" rx="1.5"></rect>
+                <rect id="矩形备份-8" fill="#ECEFF3" fill-rule="nonzero" x="8" y="49" width="96" height="3" rx="1.5"></rect>
+                <g id="编组-5备份" transform="translate(8.000000, 17.000000)">
+                    <rect id="矩形" x="0" y="0" width="24" height="24"></rect>
+                    <g id="编组-3" transform="translate(1.200000, 0.000000)" fill="#ECEFF3" fill-rule="nonzero">
+                        <rect id="矩形" x="7.8" y="15.6" width="9.6" height="1.8" rx="0.9"></rect>
+                        <rect id="矩形备份-4" x="7.8" y="12" width="9.6" height="1.8" rx="0.9"></rect>
+                        <rect id="矩形备份-9" x="10.2" y="7.8" width="7.2" height="1.8" rx="0.9"></rect>
+                        <rect id="矩形备份-22" x="3.6" y="15.6" width="1.8" height="1.8" rx="0.9"></rect>
+                        <rect id="矩形备份-23" x="3.6" y="12" width="1.8" height="1.8" rx="0.9"></rect>
+                        <path d="M6.81818182,0.6 C7.36042503,0.6 7.8,1.03652237 7.8,1.575 C7.8,2.08180248 7.41061871,2.49829164 6.91273746,2.54553672 L6.81818182,2.55 L2.56363636,2.55 L2.56363636,7.425 C2.56363636,7.93180248 2.17425507,8.34829164 1.67637383,8.39553672 L1.58181818,8.4 C1.07147163,8.4 0.652069956,8.01332275 0.604494487,7.51889901 L0.6,7.425 L0.6,1.575 C0.6,1.06819752 0.989381291,0.651708359 1.48726254,0.604463276 L1.58181818,0.6 L6.81818182,0.6 Z" id="路径-2" transform="translate(4.200000, 4.500000) rotate(-180.000000) translate(-4.200000, -4.500000) "></path>
+                        <path d="M19.8,0 C20.7941125,0 21.6,0.80588745 21.6,1.8 L21.6,22.2 C21.6,23.1941125 20.7941125,24 19.8,24 L1.8,24 C0.80588745,24 0,23.1941125 0,22.2 L0,8.34692394 C0,7.89421142 0.170588896,7.45812245 0.477767457,7.12557177 L6.52519061,0.578647839 C6.86592366,0.209771161 7.34525882,0 7.84742315,0 L19.8,0 Z M19.8,1.8 L7.84742315,1.8 L1.8,8.34692394 L1.8,22.2 L19.8,22.2 L19.8,1.8 Z" id="矩形"></path>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

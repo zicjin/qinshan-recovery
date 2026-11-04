@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/module/lcdp/bps/lcdp-biz-process.js',
+                      '/static/module/lcdp/bps/lcdp-biz-process-detail.js'
+                    ]);
+    lcdpBizProcess.detailPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>
+

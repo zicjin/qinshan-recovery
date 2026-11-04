@@ -1,0 +1,8 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/module/sys/at-configs/core-at-record.js',
+                      '/static/module/sys/at-configs/core-at-record-detail.js'
+                    ]);
+    coreAtRecord.detailPage.init([[${param}]]);
+/*]]>*/
+</script>

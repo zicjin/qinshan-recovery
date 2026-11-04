@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.module.item.specialcharacter.mapper.CoreSpecialCharacterMapper">
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM T_CORE_SPECIAL_CHARACTER T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+        </where>
+        ORDER BY 
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ORDERNO
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="selectByChooseQtyDesc"  parameterType="map" resultType="map">
+        SELECT T.*
+          FROM (SELECT S.*,
+                       C.CHOOSEQTY
+                  FROM T_CORE_SPECIAL_CHARACTER S 
+                  LEFT JOIN T_CORE_COMMON_CHARACTER C
+                    ON S.ID = C.SPECIALID
+                   AND C.CREATEDBYID = #{loginUser.id}) T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+        </where>
+        ORDER BY T.CHOOSEQTY DESC, IF(ISNULL(CHOOSEQTY), 1, 0)
+    </select>
+</mapper>

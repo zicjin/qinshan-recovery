@@ -1,0 +1,8 @@
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    Gikam.requirejs([ '/static/module/equipt/usage-records/core-equipt-usage-record.js',
+                      '/static/module/equipt/usage-records/core-equipt-month-usage-rate-list.js'
+                    ]);
+    coreEquiptUsageRecord.detailPage.init(Gikam.getElParam([[${param}]]));
+    /*]]>*/
+</script>

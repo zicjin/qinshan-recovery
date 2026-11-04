@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/module/qms/ncrs/core-ncr.js',
+                      '/static/module/qms/ncrs/core-ncr-audit-list.js',
+                      '/static/module/qms/ncrs/core-ncr-config.js'
+                    ]);
+    coreNcr.auditPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>

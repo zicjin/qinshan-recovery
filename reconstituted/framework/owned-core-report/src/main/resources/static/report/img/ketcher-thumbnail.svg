@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="132px" height="60px" viewBox="0 0 132 60" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>ketcher分子式缩略图</title>
+    <g id="ketcher分子式缩略图" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <polygon id="Rectangle-23备份-8" fill="#FFFFFF" points="0 0 132 0 132 60 0 60"></polygon>
+        <polygon id="Rectangle-23备份-9" fill="#ECEFF3" points="0 0 132 0 132 8 0 8"></polygon>
+        <g id="编组" transform="translate(40.000000, 16.000000)" fill="#ECEFF3">
+            <rect id="矩形备份-5" x="0" y="0" width="84" height="3" rx="1.5"></rect>
+            <rect id="矩形备份-6" x="0" y="22" width="84" height="3" rx="1.5"></rect>
+            <rect id="矩形备份-7" x="0" y="11" width="84" height="3" rx="1.5"></rect>
+        </g>
+        <rect id="矩形备份-8" fill="#ECEFF3" x="8" y="49" width="96" height="3" rx="1.5"></rect>
+        <g id="编组-40" transform="translate(8.000000, 16.500000)">
+            <rect id="矩形" x="0" y="0" width="24" height="24"></rect>
+            <path d="" id="形状结合" stroke="#ECEFF3" stroke-width="3"></path>
+            <polygon id="k" stroke="#ECEFF3" stroke-width="0.5" fill="#ECEFF3" fill-rule="nonzero" points="11.2464844 16.9898438 11.2464844 14.9976563 12.0140625 14.1949219 13.5785156 16.9898438 15.3539063 16.9898438 13.0746094 13.040625 15.2015625 10.7671875 13.1742188 10.7671875 11.2464844 12.9585938 11.2464844 8.4 9.6 8.4 9.6 16.9898438"></polygon>
+            <rect id="矩形" fill="#ECEFF3" transform="translate(20.464617, 16.728719) rotate(180.000000) translate(-20.464617, -16.728719) " x="19.8646171" y="15.2287187" width="1.2" height="3" rx="0.6"></rect>
+            <rect id="矩形" fill="#ECEFF3" transform="translate(3.235383, 16.728719) scale(-1, 1) rotate(360.000000) translate(-3.235383, -16.728719) " x="2.63538291" y="15.2287187" width="1.2" height="3" rx="0.6"></rect>
+            <path d="M13.44404,3.12179677 C13.7754108,3.12179677 14.04404,3.39042592 14.04404,3.72179677 L14.04404,5.52179677 C14.04404,5.85316762 13.7754108,6.12179677 13.44404,6.12179677 C13.1126691,6.12179677 12.84404,5.85316762 12.84404,5.52179677 L12.84404,3.72179677 C12.84404,3.39042592 13.1126691,3.12179677 13.44404,3.12179677 Z" id="矩形" fill="#ECEFF3" transform="translate(13.444040, 4.621797) scale(-1, 1) rotate(240.000000) translate(-13.444040, -4.621797) "></path>
+        </g>
+    </g>
+</svg>

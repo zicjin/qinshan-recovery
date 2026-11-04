@@ -1,0 +1,13 @@
+<th:block th:replace="module/gikam/single"/>
+
+<script th:inline="javascript">
+/*<![CDATA[*/
+    (function() {
+        var param = Gikam.getElParam([[${param}]]);
+        new IndexPage({
+            url: Gikam.isLcdpPath(param.url) ? param.url : Gikam.IFM_CONTEXT + decodeURIComponent(param.url),
+            title: param.title,
+        });
+})();
+
+</script>

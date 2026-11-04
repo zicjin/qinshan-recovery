@@ -1,0 +1,52 @@
+<th:block th:replace="module/gikam/gikam" />
+
+<script th:src="@{/static/plugin/jquery/jquery.min.js}"></script>
+<script th:src="@{/static/plugin/chem-doodle-web/ChemDoodleWeb-unpacked.js}"></script>
+<script th:src="@{/static/plugin/chem-doodle-web/uis/ChemDoodleWeb-uis-unpacked.js}"></script>
+
+<script th:inline="javascript">
+/*<![CDATA[*/
+    var sketcher;
+    (function() {
+        Gikam.component.I18N.map = top.Gikam.component.I18N.map;
+        var param = Gikam.getElParam([[${param}]]), readonly = Gikam.isTrue(param.readonly),
+        getChemByTargetIdUrl = IFM_CONTEXT + '/secure/core/module/item/chems/filter-target/' + param.targetId;
+        
+        ChemDoodle.ELEMENT['H'].jmolColor = 'black';
+        ChemDoodle.ELEMENT['S'].jmolColor = '#B9A130';
+        
+        sketcher = new ChemDoodle.SketcherCanvas('sketcher', 800, (param.height || 600), {readonly:readonly});
+        
+        sketcher.specs.atoms_displayTerminalCarbonLabels_2D = true;
+        sketcher.specs.atoms_useJMOLColors = true;
+        sketcher.specs.bonds_clearOverlaps_2D = true;
+        
+        Gikam.getText(getChemByTargetIdUrl).done(function(data) {
+            if (Gikam.isNotEmpty(data)) {
+                var json = JSON.parse(data);
+                sketcher.chemId = json.id;
+                Gikam.isNotEmpty(json.chemBody) && sketcher.loadMolecule(new ChemDoodle.io.JSONInterpreter().molFrom(JSON.parse(json.chemBody)))
+                Gikam.isEmpty(json.chemBody) && sketcher.repaint();
+            } else {
+                if (!readonly) {
+                    var insertChemIdUrl = IFM_CONTEXT + '/secure/core/module/item/chems';
+                    Gikam.post(insertChemIdUrl, Gikam.getJsonWrapper(null, [ '', [ {
+                        targetId : param.targetId
+                    } ] ])).done(function(id) {
+                        sketcher.chemId = id;
+                        sketcher.chemVersion = 0;
+                    });
+                }
+                sketcher.repaint();
+            }
+        })
+    })();
+    
+    var getSketcherData = function() {
+        return JSON.stringify( {
+            image : ChemDoodle.io.png.string(sketcher),
+            data : new ChemDoodle.io.JSONInterpreter().molTo(sketcher.getMolecule())
+        } );
+    };
+/*]]>*/
+</script>

@@ -45,18 +45,13 @@ def main():
     package_test = (ROOT / "owned-distribution/tests/test-package.py").read_text(encoding="utf-8")
     assert "OWNED_DISTRIBUTION_REUSE" not in package_test
     builder = (ROOT / "scripts/build-owned-distribution.sh").read_text(encoding="utf-8")
-    assert '"$ROOT/scripts/build-owned-framework.sh"' in builder
-    assert 'OWNED_SKIP_DEPENDENCY_BUILD=1' in builder
-    assert 'hash_source_inputs()' in builder
-    assert 'find owned-framework/src owned-personnel/src' in builder
-    assert 'PROJECT_DIRTY=1' in builder
-    assert '&& [ "$PROJECT_DIRTY" = 0 ]' in builder
-    for relative in (
-        "scripts/build-owned-personnel.sh", "scripts/build-owned-consumables.sh",
-        "scripts/build-owned-attachments.sh", "scripts/build-owned-report.sh",
-        "scripts/build-owned-scheduler.sh",
-    ):
-        assert "OWNED_SKIP_DEPENDENCY_BUILD" in (ROOT / relative).read_text(encoding="utf-8"), relative
+    assert 'bash "$ROOT/scripts/build-reconstituted-framework.sh"' in builder
+    assert 'python3 "$ROOT/scripts/build-source-only-application.py"' in builder
+    assert 'source_hash()' in builder
+    assert 'find project/src reconstituted/overrides scripts' in builder
+    assert 'OWNED_PUBLIC_DEPENDENCY_DIR="$PUBLIC_DEPS"' in builder
+    assert 'source-only-reconstituted' in builder
+    assert 'build-owned-framework.sh' not in builder
     print("distribution runner build mode: PASS (packaged build owns module compilation)")
 
 

@@ -1,0 +1,8 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/${data.jsPath}/${data.jsFileName}.js',
+                      '/static/${data.jsPath}/${data.jsFileName}-audit-list.js'
+                    ]);
+    ${data.jsObjectName}.auditPage.init(Gikam.getElParam([[${r'${param}'}]]));
+/*]]>*/
+</script>

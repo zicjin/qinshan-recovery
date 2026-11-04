@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/module/equipt/file-acq-configs/core-file-acq-config.js',
+                      '/static/module/equipt/file-acq-configs/core-file-acq-config-test-acq-result-list.js'
+                    ]);
+    coreFileAcqConfig.testAcqResultPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>
+

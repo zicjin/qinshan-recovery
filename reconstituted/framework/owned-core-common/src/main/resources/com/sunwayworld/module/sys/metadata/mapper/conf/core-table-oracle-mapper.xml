@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.module.sys.metadata.mapper.CoreTableMapper">
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM T_CORE_TABLE T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent"/>
+        </where>
+         ORDER BY 
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ID
+            </otherwise>
+        </choose>
+    </select>
+    <select id="selectDetail" resultType="map">
+        SELECT T.*
+          FROM T_CORE_TABLE T
+         WHERE T.ID = #{id}
+    </select>
+
+    <select id="selectFieldListByCondition" resultType="map">
+        <choose>
+            <when test="@com.sunwayworld.framework.database.dialect.DialectRepository@isKingbase()">
+        SELECT T.*
+          FROM (SELECT UPPER(COL.TABLE_NAME) TABLENAME,
+                       UPPER(COL.COLUMN_NAME) FIELDNAME,
+                       COL.UDT_NAME FIELDTYPE,
+                       CASE COL.IS_NULLABLE
+                         WHEN 'YES' THEN
+                          '1'
+                         ELSE
+                          '0'
+                       END ALLOWNULL,
+                       CASE COL.UDT_NAME
+                         WHEN 'varchar' THEN
+                          COL.CHARACTER_MAXIMUM_LENGTH
+                         ELSE
+                          NULL
+                       END FIELDLENGTH,
+                       REPLACE(COALESCE(COL.COLUMN_DEFAULT, ''), '''', '') DEFAULTVALUE,
+                       COL.NUMERIC_PRECISION "PRECISION",
+                       COL.NUMERIC_SCALE "SCALE",
+                       COALESCE(DES.DESCRIPTION, '') FIELDCOMMENT
+                  FROM INFORMATION_SCHEMA.COLUMNS COL
+                  LEFT JOIN PG_DESCRIPTION DES
+                    ON COL.TABLE_NAME ::REGCLASS = DES.OBJOID
+                   AND COL.ORDINAL_POSITION = DES.OBJSUBID
+                 WHERE COL.TABLE_SCHEMA = CURRENT_SCHEMA()
+                 ORDER BY ORDINAL_POSITION) T
+            </when>
+            <otherwise>
+        SELECT T.*
+          FROM (SELECT COL.TABLE_NAME TABLENAME,
+                       COL.COLUMN_NAME FIELDNAME,
+                       COL.DATA_TYPE FIELDTYPE,
+                       CASE COL.DATA_TYPE
+                         WHEN 'VARCHAR2' THEN
+                          TO_CHAR(COL.DATA_LENGTH)
+                         ELSE
+                          ''
+                       END FIELDLENGTH,
+                       DECODE(COL.NULLABLE, 'Y', '1', '0') ALLOWNULL,
+                       REPLACE(NVL(DECODE(LONG_TO_CHAR(COL.TABLE_NAME, COL.COLUMN_ID),
+                                          'NULL',
+                                          '',
+                                          LONG_TO_CHAR(COL.TABLE_NAME, COL.COLUMN_ID)),
+                                   ''),
+                               '''',
+                               '') DEFAULTVALUE,
+                       --LONG_TO_CHAR()依赖自定义的函数转换,NULL为了规避掉默认值不能删除
+                       NVL(COM.COMMENTS, '') FIELDCOMMENT,
+                       DECODE(COL.DATA_TYPE,
+                              'NUMBER',
+                              NVL(COL.DATA_PRECISION, 19),
+                                NULL) PRECISION,
+                       DECODE(COL.DATA_TYPE,
+                              'NUMBER',
+                              NVL(COL.DATA_SCALE, 0),
+                              NULL) SCALE
+                  FROM USER_TAB_COLUMNS COL
+                  LEFT JOIN USER_COL_COMMENTS COM
+                    ON COL.TABLE_NAME = COM.TABLE_NAME
+                   AND COL.COLUMN_NAME = COM.COLUMN_NAME
+                   ORDER BY COL.COLUMN_ID) T
+            </otherwise>
+        </choose>
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent"/>
+        </where>
+    </select>
+</mapper>

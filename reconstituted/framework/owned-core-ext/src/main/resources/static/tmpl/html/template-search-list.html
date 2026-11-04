@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/${data.jsPath}/${data.jsFileName}.js',
+                      '/static/${data.jsPath}/${data.jsFileName}-search-list.js'
+                    ]);
+    ${data.jsObjectName}.searchPage.init();
+/*]]>*/
+</script>
+

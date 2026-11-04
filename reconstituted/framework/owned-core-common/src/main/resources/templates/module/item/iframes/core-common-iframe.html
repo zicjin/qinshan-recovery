@@ -1,0 +1,37 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    (function(){
+        var param = Gikam.getElParam([[${param}]]);
+        var src = param.src.split('?');
+        var url = src[0];
+        var modal;
+        if (param.modal_title) {
+            modal = Gikam.create('modal', {
+                title : param.modal_title,
+                toolbarTop : true,
+                headerShow : false
+            });
+            delete param.modal_title;
+        }
+        if (src[1]) {
+            url += '?';
+            var urlParam = '';
+            src[1].split('&').forEach(function(item) {
+                var mapper = item.split('=');
+                urlParam += '&' + mapper[0] + '=' + encodeURIComponent(mapper[1]);
+            });
+            url += urlParam.replace('&', '');
+        }
+        Gikam.create('layout', {
+            renderTo : modal ? modal.window.$dom : workspace.window.$dom,
+            center:{
+                items : [{
+                    type:'iframe',
+                    src : url
+                }]
+            }
+        });
+    })();
+/*]]>*/
+</script>
+

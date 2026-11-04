@@ -1,0 +1,19 @@
+<th:block th:replace="module/gikam/gikam" />
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    Gikam.component.FrontI18N.init(Gikam.locale);	
+    var param = Gikam.getElParam([[${param}]]);
+    window.onload = function() {
+        Gikam.create('pdfView', {
+            renderTo : Gikam.createDom('div', document.body),
+            fileId: param.fileId
+        });
+    }
+    /*]]>*/
+</script>
+<style>
+    body{
+        padding-top: 8px;
+    }
+</style>

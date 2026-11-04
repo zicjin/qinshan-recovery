@@ -1,0 +1,7 @@
+<script th:inline="javascript">
+	Gikam.requirejs([ '/static/module/item/messages/core-message.js',
+	                  '/static/module/item/messages/core-message-query-list.js'
+                    ]);
+	coreMessage.queryPage.init(Gikam.getElParam([[${param}]]));
+</script>
+

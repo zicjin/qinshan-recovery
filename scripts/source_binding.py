@@ -115,6 +115,7 @@ def project_root(repo_root: Path = REPO_ROOT) -> Path:
 
 _IMPLEMENTATION_SUFFIXES = (
     "project/src/main/java",
+    "project/src/main/resources",
     "owned-framework/src",
     "owned-personnel/src",
     "owned-equipment/src",
@@ -140,6 +141,12 @@ _IMPLEMENTATION_SUFFIXES = (
     "scripts/reconstitute-framework-source.sh",
     "scripts/resolve-java-source-closure.py",
     "scripts/verify-reconstituted-framework.py",
+    "scripts/assemble-reconstituted-framework-modules.py",
+    "scripts/prepare-reconstituted-public-deps.py",
+    "scripts/record-reconstituted-framework-build.py",
+    "scripts/verify-reconstituted-framework-modules.py",
+    "scripts/build-reconstituted-framework.sh",
+    "scripts/build-source-only-application.py",
     "docs/reconstitution/decompiler-transforms.json",
     "tools/business_api_inventory.py",
     "tools/api_route_ledger.py",

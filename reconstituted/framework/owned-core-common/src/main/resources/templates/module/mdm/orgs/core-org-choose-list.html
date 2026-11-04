@@ -1,0 +1,8 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/module/mdm/orgs/core-org.js',
+                      '/static/module/mdm/orgs/core-org-choose-list.js'
+                    ]);
+    coreOrg.choosePage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>

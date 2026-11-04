@@ -1,0 +1,8 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs(['/static/module/qms/risk-identifica-regists/core-risk-identifica-regist.js',
+                     '/static/module/qms/risk-identifica-regists/core-risk-assess-audit-list.js',
+                   ]);
+    coreRiskIdentificaRegist.assessAuditPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>

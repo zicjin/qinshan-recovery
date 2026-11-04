@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.cloud.module.email.persistent.mapper.CoreEmailReceipentMapper">
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.ID,
+               T.EMAILID,
+               T.RECEIPENTID,
+               T.RECEIPENTNAME,
+               T.RECEIPENTEMAIL,
+               T.SUCCESS,
+               T.REATTEMPT,
+               T.VERSION,
+               T.CREATEDBYID,
+               T.CREATEDBYNAME,
+               T.CREATEDTIME,
+               T.CREATEDBYORGID,
+               T.CREATEDBYORGNAME,
+               T.LASTUPDATEDBYID,
+               T.LASTUPDATEDBYNAME,
+               T.LASTUPDATEDTIME,
+               T.RECEIPENTCATEGORY
+          FROM T_CORE_EMAIL_RECEIPENT T
+         <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+        </where>
+         ORDER BY
+         <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ID
+            </otherwise>
+         </choose>
+    </select>
+    
+</mapper>

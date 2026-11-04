@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.module.sys.metadata.mapper.CoreTableMapper">
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM T_CORE_TABLE T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent"/>
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ID
+            </otherwise>
+        </choose>
+    </select>
+    
+    <select id="selectDetail" resultType="map">
+        SELECT T.*
+          FROM T_CORE_TABLE T
+         WHERE T.ID = #{id}
+    </select>
+
+    <select id="selectFieldListByCondition" resultType="map">
+        SELECT T.*
+          FROM (SELECT UPPER(C.TABLE_NAME) TABLENAME,
+                       UPPER(C.COLUMN_NAME) FIELDNAME,
+                       UPPER(C.DATA_TYPE) FIELDTYPE,
+                       CASE UPPER(C.DATA_TYPE)
+                         WHEN 'VARCHAR' THEN
+                          C.CHARACTER_MAXIMUM_LENGTH
+                         ELSE
+                          ''
+                       END FIELDLENGTH,
+                       IF(UPPER(C.IS_NULLABLE) = 'YES', '1', '0') ALLOWNULL,
+                       IFNULL(C.COLUMN_COMMENT, '') FIELDCOMMENT,
+                       REPLACE(IFNULL(C.COLUMN_DEFAULT, ''), '''', '') DEFAULTVALUE,
+                       C.NUMERIC_PRECISION `PRECISION`,
+                       C.NUMERIC_SCALE SCALE
+                  FROM INFORMATION_SCHEMA.COLUMNS C
+                 WHERE C.TABLE_SCHEMA = DATABASE()
+                 ORDER BY C.ORDINAL_POSITION) T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent"/>
+        </where>
+    </select>
+
+</mapper>

@@ -1,0 +1,1 @@
+System.register(["./identity-legacy.e46b12c6.js"],(function(t,e){"use strict";var n;return{setters:[function(t){n=t.c}],execute:function(){var e=n;t("g",(function(t,n,r){var i=null==t?void 0:e(t,n);return void 0===i?r:i}))}}}));

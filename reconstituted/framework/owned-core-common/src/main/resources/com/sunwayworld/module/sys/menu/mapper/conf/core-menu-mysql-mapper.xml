@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.module.sys.menu.mapper.CoreMenuMapper">
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM T_CORE_MENU T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent"/>
+            <if test="menuGroupChoose != null"> <!-- 菜单组选择过滤一级菜单 -->
+                AND PARENTID IS NOT NULL
+            </if>
+            <choose>
+                <when test='parentId == "root"'>
+                    AND T.PARENTID IS NULL
+                </when>
+                <when test='parentId != null and parentId != "root"'>
+                    AND T.PARENTID = #{parentId}
+                </when>
+            </choose>
+        </where>
+         ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                CONVERT(T.ORDERNO,CHAR)
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="selectJsonTree" resultType="map">
+        SELECT T.* 
+          FROM T_CORE_MENU T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent"/>
+            AND T.ID IN 
+            <foreach collection="menuIdList" item="menuId" separator="," open="(" close=")">
+                #{menuId}
+            </foreach>
+        </where>
+        ORDER BY T.ORDERNO
+    </select>
+    
+    <select id="selectTreeNodeList" resultType="map">
+        SELECT T.* 
+          FROM T_CORE_MENU T
+        <where>
+            <if test='parentId != null'>
+                <choose>
+                    <when test='parentId == "root"'>
+                        AND T.PARENTID IS NULL
+                    </when>
+                    <otherwise>
+                        AND T.PARENTID = #{parentId}
+                    </otherwise>
+                </choose>
+            </if>
+        </where>
+         ORDER BY T.ORDERNO
+    </select>
+    
+    <select id="selectDetail" resultType="map">
+        SELECT T.* 
+          FROM T_CORE_MENU T
+         WHERE T.ID = #{id}
+    </select>
+</mapper>

@@ -1,0 +1,8 @@
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    Gikam.requirejs([ '/static/module/item/custom-queries/core-custom-query.js',
+                      '/static/module/item/custom-queries/core-custom-query-detail.js'
+    ]);
+    coreCustomQuery.detailPage.init(Gikam.getElParam([[${param}]]));
+    /*]]>*/
+</script>

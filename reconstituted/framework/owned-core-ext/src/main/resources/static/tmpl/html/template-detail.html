@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/${data.jsPath}/${data.jsFileName}.js',
+                      '/static/${data.jsPath}/${data.jsFileName}-detail.js'
+                    ]);
+    ${data.jsObjectName}.detailPage.init(Gikam.getElParam([[${r'${param}'}]]));
+/*]]>*/
+</script>
+

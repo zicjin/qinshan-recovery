@@ -1,0 +1,9 @@
+
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/module/sys/mobile/menus/mobile-menu.js',
+                      '/static/module/sys/mobile/menus/mobile-menu-choose-list.js'
+                    ]);
+    mobileMenu.choosePage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>

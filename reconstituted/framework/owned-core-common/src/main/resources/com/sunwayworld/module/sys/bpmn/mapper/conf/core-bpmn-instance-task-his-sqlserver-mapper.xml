@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.module.sys.bpmn.mapper.CoreBpmnInstanceTaskHisMapper">
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM T_CORE_BPMN_INST_TASK_HIS T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ID DESC
+            </otherwise>
+        </choose>
+    </select>
+    
+    <select id="selectLatestTaskHisList" resultType="map">
+        SELECT T.*
+          FROM T_CORE_BPMN_INST_TASK_HIS T
+         WHERE (
+            <foreach collection="filterList" item="filter" separator="OR" open="(" close=")">
+                T.INSTID = #{filter.instId} AND T.STATUSCODE = #{filter.statusCode}
+            </foreach>
+            ) AND NOT EXISTS (SELECT 1 FROM T_CORE_BPMN_INST_TASK_HIS H WHERE H.INSTID = T.INSTID AND H.STATUSCODE = T.STATUSCODE AND H.ID > T.ID)
+    </select>
+</mapper>

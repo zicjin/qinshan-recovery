@@ -1,0 +1,14 @@
+<th:block th:replace="module/gikam/gikam-panel" />
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    Gikam.select.addConfigParam([[${@coreAdminSelectConfigServiceImpl.selectAll()}]]);
+    Gikam.create('notice', {
+        renderTo : document.body,
+        url : IFM_CONTEXT + '/secure/core/module/item/notices/queries/index',
+        requestData : {
+            indexDisplay_EQ : 'panelDisplay'
+        }
+    });
+    /*]]>*/
+</script>

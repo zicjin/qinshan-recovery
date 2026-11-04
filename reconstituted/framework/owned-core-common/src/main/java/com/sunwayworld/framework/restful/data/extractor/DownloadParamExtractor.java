@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
 import javax.script.Invocable;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
-import jdk.nashorn.api.scripting.ScriptObjectMirror;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.poi.ss.usermodel.FillPatternType;
@@ -131,8 +130,8 @@ public class DownloadParamExtractor implements ParamExtractor<SheetContext> {
                      engine.eval(styleFormatter);
                      Invocable invocable = (Invocable)engine;
                      Object result = invocable.invokeFunction("get", item);
-                     if (result instanceof ScriptObjectMirror) {
-                        for (Entry<String, Object> entry : ((ScriptObjectMirror)result).entrySet()) {
+                     if (result instanceof Map) {
+                        for (Entry<String, Object> entry : ((Map<String, Object>)result).entrySet()) {
                            String key = entry.getKey();
                            Object value = entry.getValue();
                            if ("backgroundColor".equals(key)) {

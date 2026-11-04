@@ -1,0 +1,104 @@
+<th:block th:replace="module/gikam/gikam" />
+
+<script th:src="@{/static/plugin/jquery/jquery.min.js}"></script>
+
+<div class="enter-full-screen" onclick="enterFullScreen()"></div>
+<div class="body-svg"></div>
+
+<script th:inline="javascript">
+/*<![CDATA[*/
+    var param = Gikam.getElParam([[${param}]]);
+    
+    if (param && param.id) {
+        if(param.modalBtn) {
+            $('.enter-full-screen').css("display","none");
+        }
+        var url = IFM_CONTEXT + "/secure/core/module/sys/bpmn-exts/bpmn-diagrams/" + param.id + "/svg" + Gikam.param({
+            dataId : param.dataId,
+            dataTable : param.dataTable
+        });
+        
+        Gikam.getText(url).done(function(svg) {
+            $(".body-svg").html(svg);
+            if($("svg")[0].clientHeight > $("body")[0].clientHeight) {
+                if($("svg")[0].clientWidth > $("body")[0].clientWidth) {
+                    $("body,html").css("overflow","auto");
+                } else {
+                    $("body,html").css("overflow-y","auto");
+                    $("body,html").css("overflow-x","hidden");
+                }
+            } else {
+                if($("svg")[0].clientWidth > $("body")[0].clientWidth) {
+                    $("body,html").css("overflow-x","auto");
+                    $("body,html").css("overflow-y","hidden");
+                }
+            }
+        });
+    }
+    
+    var enterFullScreen = function() {
+        var modal = parent.Gikam.create('modal', {    
+            title: '流程图',
+            width: 700,
+            height: '75%'
+        })
+        var modalUrl = IFM_CONTEXT + '/core/module/item/files/page/bpmn-diagram-viewer' + Gikam.param({
+            id : param.id,
+            dataId : param.dataId,
+            dataTable : param.dataTable
+        });
+        
+       // ?id=' + param.id;
+        
+      //  if (!Gikam.isEmpty(param.instanceId)) {
+      //      modalUrl += '&instanceId=' + param.instanceId;
+      //  }
+        
+        if ($(".enter-full-screen")) {
+            modalUrl += '&modalBtn=' + '1';
+        }
+        
+        
+        var items = [{
+            type : 'tab',
+            panels : [ {
+                title : '流程图',
+                items : [ {
+                    type : 'iframe',
+                    src : modalUrl
+                } ]
+            } ]
+        }]
+        
+        Gikam.create('layout', {
+            center : {
+                items : items
+            },
+            renderTo : modal.window.$dom,
+            readonly : true
+        });
+        
+        
+    }
+/*]]>*/
+</script>
+
+<style scoped>
+body{
+    position: relative;
+}
+.body-svg {
+   width: 100%;
+   height: 100%;
+}
+.enter-full-screen {
+    width: 30px;
+    height: 30px;
+    background: url('static/plugin/bpmn/img/fullScreen.svg') no-repeat;
+    position: fixed;
+    right: 20px;
+    bottom: 10px;
+    cursor: pointer;
+}
+</style>
+

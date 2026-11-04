@@ -1,0 +1,2326 @@
+{
+  "artifact_sha256": "4a720797810fd2f8cca6e22604657028cb87830ca0e24bb55a5f42f040f6ee9f",
+  "duplicate_destination_count": 0,
+  "duplicates": [],
+  "excluded_paths": [
+    "META-INF/MANIFEST.MF",
+    "third-party/sunway-app/**"
+  ],
+  "module": "owned-core-base-service",
+  "resource_count": 384,
+  "resource_file_count": 384,
+  "resource_tree_sha256": "3ec869c08115c5407a9bf707a1447d6dd11d46f076651c4f26ec1db7fb663e5c",
+  "resources": [
+    {
+      "bytes": 1174,
+      "path": "META-INF/spring-configuration-metadata.json",
+      "sha256": "3faf752e58e1912e8566781271d746673e7cb6a832727c750109aebf7e1927ef",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 342,
+      "path": "banner.txt",
+      "sha256": "88cdfdcbf6b99827d7b20c4b1befda9645c7ad0ffc40fcf8a3b90bbb24e972b9",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 12099,
+      "path": "com/sunwayworld/cloud/module/ai/template/io/templates/coreAiTemplateExportTemplate.xlsx",
+      "sha256": "660cd8276e7b2bf08acaa00b13e8094dd332e7392d1bd7f8c40710d18cb4dedc",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 873,
+      "path": "com/sunwayworld/cloud/module/ai/template/persistent/mapper/conf/core-ai-template-mysql-mapper.xml",
+      "sha256": "818bbca0ebe69362949bc0b5dd539a33b853a203e98ab2f32e3c61f45b70d431",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 873,
+      "path": "com/sunwayworld/cloud/module/ai/template/persistent/mapper/conf/core-ai-template-oracle-mapper.xml",
+      "sha256": "818bbca0ebe69362949bc0b5dd539a33b853a203e98ab2f32e3c61f45b70d431",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 873,
+      "path": "com/sunwayworld/cloud/module/ai/template/persistent/mapper/conf/core-ai-template-postgresql-mapper.xml",
+      "sha256": "818bbca0ebe69362949bc0b5dd539a33b853a203e98ab2f32e3c61f45b70d431",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 873,
+      "path": "com/sunwayworld/cloud/module/ai/template/persistent/mapper/conf/core-ai-template-sqlserver-mapper.xml",
+      "sha256": "818bbca0ebe69362949bc0b5dd539a33b853a203e98ab2f32e3c61f45b70d431",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 867,
+      "path": "com/sunwayworld/cloud/module/dms/persistent/mapper/conf/core-dms-category-mysql-mapper.xml",
+      "sha256": "1ff4a60abffd5743b3178b1bfe0a463a3f1e56ed859507aea49a044d452d029a",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 867,
+      "path": "com/sunwayworld/cloud/module/dms/persistent/mapper/conf/core-dms-category-oracle-mapper.xml",
+      "sha256": "1ff4a60abffd5743b3178b1bfe0a463a3f1e56ed859507aea49a044d452d029a",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 867,
+      "path": "com/sunwayworld/cloud/module/dms/persistent/mapper/conf/core-dms-category-postgresql-mapper.xml",
+      "sha256": "1ff4a60abffd5743b3178b1bfe0a463a3f1e56ed859507aea49a044d452d029a",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 867,
+      "path": "com/sunwayworld/cloud/module/dms/persistent/mapper/conf/core-dms-category-sqlserver-mapper.xml",
+      "sha256": "1ff4a60abffd5743b3178b1bfe0a463a3f1e56ed859507aea49a044d452d029a",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1323,
+      "path": "com/sunwayworld/cloud/module/email/persistent/mapper/conf/core-email-config-cc-role-mysql-mapper.xml",
+      "sha256": "c92dab4758bc9b765b272b1251641365a87d0986c8a65474bb3217587c30a35d",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1323,
+      "path": "com/sunwayworld/cloud/module/email/persistent/mapper/conf/core-email-config-cc-role-oracle-mapper.xml",
+      "sha256": "c92dab4758bc9b765b272b1251641365a87d0986c8a65474bb3217587c30a35d",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1323,
+      "path": "com/sunwayworld/cloud/module/email/persistent/mapper/conf/core-email-config-cc-role-postgresql-mapper.xml",
+      "sha256": "c92dab4758bc9b765b272b1251641365a87d0986c8a65474bb3217587c30a35d",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1323,
+      "path": "com/sunwayworld/cloud/module/email/persistent/mapper/conf/core-email-config-cc-role-sqlserver-mapper.xml",
+      "sha256": "c92dab4758bc9b765b272b1251641365a87d0986c8a65474bb3217587c30a35d",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1043,
+      "path": "com/sunwayworld/cloud/module/email/persistent/mapper/conf/core-email-config-cc-user-mysql-mapper.xml",
+      "sha256": "d0fc85f638637c41d6af183024b00878bfddd9bc91516f812d0b61c2a4224f96",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1043,
+      "path": "com/sunwayworld/cloud/module/email/persistent/mapper/conf/core-email-config-cc-user-oracle-mapper.xml",
+      "sha256": "d0fc85f638637c41d6af183024b00878bfddd9bc91516f812d0b61c2a4224f96",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1043,
+      "path": "com/sunwayworld/cloud/module/email/persistent/mapper/conf/core-email-config-cc-user-postgresql-mapper.xml",
+      "sha256": "d0fc85f638637c41d6af183024b00878bfddd9bc91516f812d0b61c2a4224f96",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1043,
+      "path": "com/sunwayworld/cloud/module/email/persistent/mapper/conf/core-email-config-cc-user-sqlserver-mapper.xml",
+      "sha256": "d0fc85f638637c41d6af183024b00878bfddd9bc91516f812d0b61c2a4224f96",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1308,
+      "path": "com/sunwayworld/cloud/module/email/persistent/mapper/conf/core-email-config-mysql-mapper.xml",
+      "sha256": "b7c04d0cb846330de45641ec97f48484f59f52cff5deff4e316bc08150504cbd",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1308,
+      "path": "com/sunwayworld/cloud/module/email/persistent/mapper/conf/core-email-config-oracle-mapper.xml",
+      "sha256": "b7c04d0cb846330de45641ec97f48484f59f52cff5deff4e316bc08150504cbd",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1308,
+      "path": "com/sunwayworld/cloud/module/email/persistent/mapper/conf/core-email-config-postgresql-mapper.xml",
+      "sha256": "b7c04d0cb846330de45641ec97f48484f59f52cff5deff4e316bc08150504cbd",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1343,
+      "path": "com/sunwayworld/cloud/module/email/persistent/mapper/conf/core-email-config-rec-role-mysql-mapper.xml",
+      "sha256": "6459cfda91232ec0a00cb18500356eab5e306c6bfdeb1697cc080da1715b0f4e",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1343,
+      "path": "com/sunwayworld/cloud/module/email/persistent/mapper/conf/core-email-config-rec-role-oracle-mapper.xml",
+      "sha256": "6459cfda91232ec0a00cb18500356eab5e306c6bfdeb1697cc080da1715b0f4e",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1343,
+      "path": "com/sunwayworld/cloud/module/email/persistent/mapper/conf/core-email-config-rec-role-postgresql-mapper.xml",
+      "sha256": "6459cfda91232ec0a00cb18500356eab5e306c6bfdeb1697cc080da1715b0f4e",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1334,
+      "path": "com/sunwayworld/cloud/module/email/persistent/mapper/conf/core-email-config-rec-role-sqlserver-mapper.xml",
+      "sha256": "d803197ff3c11138df74e58b1b299e00f05269c909ad9aa52f5e4d12db30918d",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1093,
+      "path": "com/sunwayworld/cloud/module/email/persistent/mapper/conf/core-email-config-receiptent-mysql-mapper.xml",
+      "sha256": "20fbfa3885a286359e28e0a31290f0f9d15186227693a8498b2bd7cb77b9c62f",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1093,
+      "path": "com/sunwayworld/cloud/module/email/persistent/mapper/conf/core-email-config-receiptent-oracle-mapper.xml",
+      "sha256": "20fbfa3885a286359e28e0a31290f0f9d15186227693a8498b2bd7cb77b9c62f",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1093,
+      "path": "com/sunwayworld/cloud/module/email/persistent/mapper/conf/core-email-config-receiptent-postgresql-mapper.xml",
+      "sha256": "20fbfa3885a286359e28e0a31290f0f9d15186227693a8498b2bd7cb77b9c62f",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1087,
+      "path": "com/sunwayworld/cloud/module/email/persistent/mapper/conf/core-email-config-receiptent-sqlserver-mapper.xml",
+      "sha256": "e8e34893eb60eda9f8f3774093de3863945fb492358a8f5984931beab8a2d96e",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1302,
+      "path": "com/sunwayworld/cloud/module/email/persistent/mapper/conf/core-email-config-sqlserver-mapper.xml",
+      "sha256": "43860e234bcf7e153680e8dcc2ac2ed2e313bc93f347f5afb7942341ca9d60cb",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 865,
+      "path": "com/sunwayworld/cloud/module/email/persistent/mapper/conf/core-email-file-mysql-mapper.xml",
+      "sha256": "d2be7eea7f7e87dd373d66c416880743f05240e0f8d7aabc323e3af294f5ccf6",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 865,
+      "path": "com/sunwayworld/cloud/module/email/persistent/mapper/conf/core-email-file-oracle-mapper.xml",
+      "sha256": "d2be7eea7f7e87dd373d66c416880743f05240e0f8d7aabc323e3af294f5ccf6",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 865,
+      "path": "com/sunwayworld/cloud/module/email/persistent/mapper/conf/core-email-file-postgresql-mapper.xml",
+      "sha256": "d2be7eea7f7e87dd373d66c416880743f05240e0f8d7aabc323e3af294f5ccf6",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 865,
+      "path": "com/sunwayworld/cloud/module/email/persistent/mapper/conf/core-email-file-sqlserver-mapper.xml",
+      "sha256": "d2be7eea7f7e87dd373d66c416880743f05240e0f8d7aabc323e3af294f5ccf6",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 2356,
+      "path": "com/sunwayworld/cloud/module/email/persistent/mapper/conf/core-email-mysql-mapper.xml",
+      "sha256": "ca4d637638a0b4172730a318c6644cb293f624302b7edc12a4db7a3f952bc90f",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 2362,
+      "path": "com/sunwayworld/cloud/module/email/persistent/mapper/conf/core-email-oracle-mapper.xml",
+      "sha256": "83dff2492bc788d1d9c845c4448cefc5ef9ab26e2243740fe214114f595813a3",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 2388,
+      "path": "com/sunwayworld/cloud/module/email/persistent/mapper/conf/core-email-postgresql-mapper.xml",
+      "sha256": "c4025e743cf7e9f16a9bd2df649b22ceae164cd64a3774b21da9f7a4c48a2b10",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1388,
+      "path": "com/sunwayworld/cloud/module/email/persistent/mapper/conf/core-email-receiptent-mysql-mapper.xml",
+      "sha256": "77250ab27ad12104852001a677d004423f9b6cb48eb9ccc1584c15841be1a281",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1388,
+      "path": "com/sunwayworld/cloud/module/email/persistent/mapper/conf/core-email-receiptent-oracle-mapper.xml",
+      "sha256": "77250ab27ad12104852001a677d004423f9b6cb48eb9ccc1584c15841be1a281",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1388,
+      "path": "com/sunwayworld/cloud/module/email/persistent/mapper/conf/core-email-receiptent-postgresql-mapper.xml",
+      "sha256": "77250ab27ad12104852001a677d004423f9b6cb48eb9ccc1584c15841be1a281",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1389,
+      "path": "com/sunwayworld/cloud/module/email/persistent/mapper/conf/core-email-receiptent-sqlserver-mapper.xml",
+      "sha256": "639a1765738ad69b78f14a56e01e8f0e5274aec93ff5deb8c9225a80e9a9f994",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 2382,
+      "path": "com/sunwayworld/cloud/module/email/persistent/mapper/conf/core-email-sqlserver-mapper.xml",
+      "sha256": "9eecf419ee60f60fcecd512671ecee974fa04f9ccefe57b5dd6c0c8398be9e77",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1033,
+      "path": "com/sunwayworld/cloud/module/email/persistent/mapper/conf/core-email-template-mysql-mapper.xml",
+      "sha256": "2d4f6b6432021e5e557a9a1d35fd082c4e3d6158568c337b6e760e60c6ffbdaf",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1033,
+      "path": "com/sunwayworld/cloud/module/email/persistent/mapper/conf/core-email-template-oracle-mapper.xml",
+      "sha256": "2d4f6b6432021e5e557a9a1d35fd082c4e3d6158568c337b6e760e60c6ffbdaf",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1033,
+      "path": "com/sunwayworld/cloud/module/email/persistent/mapper/conf/core-email-template-postgresql-mapper.xml",
+      "sha256": "2d4f6b6432021e5e557a9a1d35fd082c4e3d6158568c337b6e760e60c6ffbdaf",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1027,
+      "path": "com/sunwayworld/cloud/module/email/persistent/mapper/conf/core-email-template-sqlserver-mapper.xml",
+      "sha256": "d80c7938ebd7865f437d886b40ceaa97d87ffed28882900ec3bd108a3470f3c7",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 889,
+      "path": "com/sunwayworld/cloud/module/equipt/acqaffair/persistent/mapper/conf/core-equipt-acq-affair-mysql-mapper.xml",
+      "sha256": "43eaa8a254ac60ae7b1d01c5c7ea6993d4e6e3a184c5ea869594a520f86070ff",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 889,
+      "path": "com/sunwayworld/cloud/module/equipt/acqaffair/persistent/mapper/conf/core-equipt-acq-affair-oracle-mapper.xml",
+      "sha256": "43eaa8a254ac60ae7b1d01c5c7ea6993d4e6e3a184c5ea869594a520f86070ff",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 889,
+      "path": "com/sunwayworld/cloud/module/equipt/acqaffair/persistent/mapper/conf/core-equipt-acq-affair-postgresql-mapper.xml",
+      "sha256": "43eaa8a254ac60ae7b1d01c5c7ea6993d4e6e3a184c5ea869594a520f86070ff",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 889,
+      "path": "com/sunwayworld/cloud/module/equipt/acqaffair/persistent/mapper/conf/core-equipt-acq-affair-sqlserver-mapper.xml",
+      "sha256": "43eaa8a254ac60ae7b1d01c5c7ea6993d4e6e3a184c5ea869594a520f86070ff",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 889,
+      "path": "com/sunwayworld/cloud/module/equipt/acqconfig/persistent/mapper/conf/core-equipt-acq-config-mysql-mapper.xml",
+      "sha256": "b599f4904afb265a84c11ce1c5e7d91a698b38fe56efdfd7867d2f34d6a924c9",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 889,
+      "path": "com/sunwayworld/cloud/module/equipt/acqconfig/persistent/mapper/conf/core-equipt-acq-config-oracle-mapper.xml",
+      "sha256": "b599f4904afb265a84c11ce1c5e7d91a698b38fe56efdfd7867d2f34d6a924c9",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 889,
+      "path": "com/sunwayworld/cloud/module/equipt/acqconfig/persistent/mapper/conf/core-equipt-acq-config-postgresql-mapper.xml",
+      "sha256": "b599f4904afb265a84c11ce1c5e7d91a698b38fe56efdfd7867d2f34d6a924c9",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 889,
+      "path": "com/sunwayworld/cloud/module/equipt/acqconfig/persistent/mapper/conf/core-equipt-acq-config-sqlserver-mapper.xml",
+      "sha256": "b599f4904afb265a84c11ce1c5e7d91a698b38fe56efdfd7867d2f34d6a924c9",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 889,
+      "path": "com/sunwayworld/cloud/module/equipt/acqscript/persistent/mapper/conf/core-equipt-acq-script-mysql-mapper.xml",
+      "sha256": "a1f9708926948f4b7d2ef552edcda3fba5813e52c7666dc47f1a64969e0e2e06",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 889,
+      "path": "com/sunwayworld/cloud/module/equipt/acqscript/persistent/mapper/conf/core-equipt-acq-script-oracle-mapper.xml",
+      "sha256": "a1f9708926948f4b7d2ef552edcda3fba5813e52c7666dc47f1a64969e0e2e06",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 889,
+      "path": "com/sunwayworld/cloud/module/equipt/acqscript/persistent/mapper/conf/core-equipt-acq-script-postgresql-mapper.xml",
+      "sha256": "a1f9708926948f4b7d2ef552edcda3fba5813e52c7666dc47f1a64969e0e2e06",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 889,
+      "path": "com/sunwayworld/cloud/module/equipt/acqscript/persistent/mapper/conf/core-equipt-acq-script-sqlserver-mapper.xml",
+      "sha256": "a1f9708926948f4b7d2ef552edcda3fba5813e52c7666dc47f1a64969e0e2e06",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 865,
+      "path": "com/sunwayworld/cloud/module/equipt/equipt/persistent/mapper/conf/core-equipt-mysql-mapper.xml",
+      "sha256": "2b2e697b8fd46fad1dc99046581d3fd4ec38a30770c7e56ad9b13b52d27140d4",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 865,
+      "path": "com/sunwayworld/cloud/module/equipt/equipt/persistent/mapper/conf/core-equipt-oracle-mapper.xml",
+      "sha256": "2b2e697b8fd46fad1dc99046581d3fd4ec38a30770c7e56ad9b13b52d27140d4",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 865,
+      "path": "com/sunwayworld/cloud/module/equipt/equipt/persistent/mapper/conf/core-equipt-postgresql-mapper.xml",
+      "sha256": "2b2e697b8fd46fad1dc99046581d3fd4ec38a30770c7e56ad9b13b52d27140d4",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 865,
+      "path": "com/sunwayworld/cloud/module/equipt/equipt/persistent/mapper/conf/core-equipt-sqlserver-mapper.xml",
+      "sha256": "2b2e697b8fd46fad1dc99046581d3fd4ec38a30770c7e56ad9b13b52d27140d4",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 889,
+      "path": "com/sunwayworld/cloud/module/equipt/fileacqconfig/persistent/mapper/conf/core-file-acq-config-mysql-mapper.xml",
+      "sha256": "5f5694e879b80de5cd1370b1e5a945e6ca7336c0951b3ffd6cd398771ae642eb",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 889,
+      "path": "com/sunwayworld/cloud/module/equipt/fileacqconfig/persistent/mapper/conf/core-file-acq-config-oracle-mapper.xml",
+      "sha256": "5f5694e879b80de5cd1370b1e5a945e6ca7336c0951b3ffd6cd398771ae642eb",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 889,
+      "path": "com/sunwayworld/cloud/module/equipt/fileacqconfig/persistent/mapper/conf/core-file-acq-config-postgresql-mapper.xml",
+      "sha256": "5f5694e879b80de5cd1370b1e5a945e6ca7336c0951b3ffd6cd398771ae642eb",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 889,
+      "path": "com/sunwayworld/cloud/module/equipt/fileacqconfig/persistent/mapper/conf/core-file-acq-config-sqlserver-mapper.xml",
+      "sha256": "5f5694e879b80de5cd1370b1e5a945e6ca7336c0951b3ffd6cd398771ae642eb",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1111,
+      "path": "com/sunwayworld/cloud/module/equipt/fileacqconfig/persistent/mapper/conf/core-file-acq-param-mysql-mapper.xml",
+      "sha256": "11b42be51e32776a578b0ac9639e657b96ecff9eab5bbbfe901fa325a89486d1",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1111,
+      "path": "com/sunwayworld/cloud/module/equipt/fileacqconfig/persistent/mapper/conf/core-file-acq-param-oracle-mapper.xml",
+      "sha256": "11b42be51e32776a578b0ac9639e657b96ecff9eab5bbbfe901fa325a89486d1",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1111,
+      "path": "com/sunwayworld/cloud/module/equipt/fileacqconfig/persistent/mapper/conf/core-file-acq-param-postgresql-mapper.xml",
+      "sha256": "11b42be51e32776a578b0ac9639e657b96ecff9eab5bbbfe901fa325a89486d1",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1111,
+      "path": "com/sunwayworld/cloud/module/equipt/fileacqconfig/persistent/mapper/conf/core-file-acq-param-sqlserver-mapper.xml",
+      "sha256": "11b42be51e32776a578b0ac9639e657b96ecff9eab5bbbfe901fa325a89486d1",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 897,
+      "path": "com/sunwayworld/cloud/module/equipt/fileacqconfig/persistent/mapper/conf/core-file-acq-preprocess-mysql-mapper.xml",
+      "sha256": "9681fb34da32d77fd75d04c34d0a47d76d336746c675b2a2ea93309ff74fc2ed",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 897,
+      "path": "com/sunwayworld/cloud/module/equipt/fileacqconfig/persistent/mapper/conf/core-file-acq-preprocess-oracle-mapper.xml",
+      "sha256": "9681fb34da32d77fd75d04c34d0a47d76d336746c675b2a2ea93309ff74fc2ed",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 897,
+      "path": "com/sunwayworld/cloud/module/equipt/fileacqconfig/persistent/mapper/conf/core-file-acq-preprocess-postgresql-mapper.xml",
+      "sha256": "9681fb34da32d77fd75d04c34d0a47d76d336746c675b2a2ea93309ff74fc2ed",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 897,
+      "path": "com/sunwayworld/cloud/module/equipt/fileacqconfig/persistent/mapper/conf/core-file-acq-preprocess-sqlserver-mapper.xml",
+      "sha256": "9681fb34da32d77fd75d04c34d0a47d76d336746c675b2a2ea93309ff74fc2ed",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 889,
+      "path": "com/sunwayworld/cloud/module/equipt/fileacqconfig/persistent/mapper/conf/core-file-acq-result-mysql-mapper.xml",
+      "sha256": "2bec31755a933e2caa5b27ae24c57b9502a32e4e773f960b88679c25d8233bfa",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 889,
+      "path": "com/sunwayworld/cloud/module/equipt/fileacqconfig/persistent/mapper/conf/core-file-acq-result-oracle-mapper.xml",
+      "sha256": "2bec31755a933e2caa5b27ae24c57b9502a32e4e773f960b88679c25d8233bfa",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 900,
+      "path": "com/sunwayworld/cloud/module/equipt/fileacqconfig/persistent/mapper/conf/core-file-acq-result-param-mysql-mapper.xml",
+      "sha256": "a2a0c7dea95a0ee865919b4d6fabba1c90f3635dd6b0be112f52ee49ccd792c0",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 900,
+      "path": "com/sunwayworld/cloud/module/equipt/fileacqconfig/persistent/mapper/conf/core-file-acq-result-param-oracle-mapper.xml",
+      "sha256": "a2a0c7dea95a0ee865919b4d6fabba1c90f3635dd6b0be112f52ee49ccd792c0",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 900,
+      "path": "com/sunwayworld/cloud/module/equipt/fileacqconfig/persistent/mapper/conf/core-file-acq-result-param-postgresql-mapper.xml",
+      "sha256": "a2a0c7dea95a0ee865919b4d6fabba1c90f3635dd6b0be112f52ee49ccd792c0",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 900,
+      "path": "com/sunwayworld/cloud/module/equipt/fileacqconfig/persistent/mapper/conf/core-file-acq-result-param-sqlserver-mapper.xml",
+      "sha256": "a2a0c7dea95a0ee865919b4d6fabba1c90f3635dd6b0be112f52ee49ccd792c0",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 889,
+      "path": "com/sunwayworld/cloud/module/equipt/fileacqconfig/persistent/mapper/conf/core-file-acq-result-postgresql-mapper.xml",
+      "sha256": "2bec31755a933e2caa5b27ae24c57b9502a32e4e773f960b88679c25d8233bfa",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 889,
+      "path": "com/sunwayworld/cloud/module/equipt/fileacqconfig/persistent/mapper/conf/core-file-acq-result-sqlserver-mapper.xml",
+      "sha256": "2bec31755a933e2caa5b27ae24c57b9502a32e4e773f960b88679c25d8233bfa",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 901,
+      "path": "com/sunwayworld/cloud/module/equipt/monitorconfig/persistent/mapper/impl/core-equipt-monitor-config-mysql-mapper.xml",
+      "sha256": "91096cb60fa6df005e6fc0b576ec2d2344f504a34c23243e000cae58cac9d569",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 901,
+      "path": "com/sunwayworld/cloud/module/equipt/monitorconfig/persistent/mapper/impl/core-equipt-monitor-config-oracle-mapper.xml",
+      "sha256": "91096cb60fa6df005e6fc0b576ec2d2344f504a34c23243e000cae58cac9d569",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 901,
+      "path": "com/sunwayworld/cloud/module/equipt/monitorconfig/persistent/mapper/impl/core-equipt-monitor-config-postgresql-mapper.xml",
+      "sha256": "91096cb60fa6df005e6fc0b576ec2d2344f504a34c23243e000cae58cac9d569",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 901,
+      "path": "com/sunwayworld/cloud/module/equipt/monitorconfig/persistent/mapper/impl/core-equipt-monitor-config-sqlserver-mapper.xml",
+      "sha256": "91096cb60fa6df005e6fc0b576ec2d2344f504a34c23243e000cae58cac9d569",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 895,
+      "path": "com/sunwayworld/cloud/module/equipt/monitorconfig/persistent/mapper/impl/core-equipt-monitor-log-mysql-mapper.xml",
+      "sha256": "80b329134a2f103325cae0eb204a2cd40abea65ba15699d21aa185889dcee9bf",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 895,
+      "path": "com/sunwayworld/cloud/module/equipt/monitorconfig/persistent/mapper/impl/core-equipt-monitor-log-oracle-mapper.xml",
+      "sha256": "80b329134a2f103325cae0eb204a2cd40abea65ba15699d21aa185889dcee9bf",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 895,
+      "path": "com/sunwayworld/cloud/module/equipt/monitorconfig/persistent/mapper/impl/core-equipt-monitor-log-postgresql-mapper.xml",
+      "sha256": "80b329134a2f103325cae0eb204a2cd40abea65ba15699d21aa185889dcee9bf",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 895,
+      "path": "com/sunwayworld/cloud/module/equipt/monitorconfig/persistent/mapper/impl/core-equipt-monitor-log-sqlserver-mapper.xml",
+      "sha256": "80b329134a2f103325cae0eb204a2cd40abea65ba15699d21aa185889dcee9bf",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 895,
+      "path": "com/sunwayworld/cloud/module/equipt/pdfacqconfig/persistent/mapper/conf/core-pdf-acq-config-line-mysql-mapper.xml",
+      "sha256": "ac9bbc8116d2373ab2e53797ae0937dc73964a070357e201d070f99ac2bb0e8b",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 895,
+      "path": "com/sunwayworld/cloud/module/equipt/pdfacqconfig/persistent/mapper/conf/core-pdf-acq-config-line-oracle-mapper.xml",
+      "sha256": "ac9bbc8116d2373ab2e53797ae0937dc73964a070357e201d070f99ac2bb0e8b",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 895,
+      "path": "com/sunwayworld/cloud/module/equipt/pdfacqconfig/persistent/mapper/conf/core-pdf-acq-config-line-postgresql-mapper.xml",
+      "sha256": "ac9bbc8116d2373ab2e53797ae0937dc73964a070357e201d070f99ac2bb0e8b",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 895,
+      "path": "com/sunwayworld/cloud/module/equipt/pdfacqconfig/persistent/mapper/conf/core-pdf-acq-config-line-sqlserver-mapper.xml",
+      "sha256": "ac9bbc8116d2373ab2e53797ae0937dc73964a070357e201d070f99ac2bb0e8b",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1126,
+      "path": "com/sunwayworld/cloud/module/equipt/pdfacqconfig/persistent/mapper/conf/core-pdf-acq-config-mysql-mapper.xml",
+      "sha256": "ecda9ff8bad5c1b7e2b3231bf8638fdafc46937fd87c7e0dbad62d843d6dfd25",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1126,
+      "path": "com/sunwayworld/cloud/module/equipt/pdfacqconfig/persistent/mapper/conf/core-pdf-acq-config-oracle-mapper.xml",
+      "sha256": "ecda9ff8bad5c1b7e2b3231bf8638fdafc46937fd87c7e0dbad62d843d6dfd25",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1126,
+      "path": "com/sunwayworld/cloud/module/equipt/pdfacqconfig/persistent/mapper/conf/core-pdf-acq-config-postgresql-mapper.xml",
+      "sha256": "ecda9ff8bad5c1b7e2b3231bf8638fdafc46937fd87c7e0dbad62d843d6dfd25",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1126,
+      "path": "com/sunwayworld/cloud/module/equipt/pdfacqconfig/persistent/mapper/conf/core-pdf-acq-config-sqlserver-mapper.xml",
+      "sha256": "ecda9ff8bad5c1b7e2b3231bf8638fdafc46937fd87c7e0dbad62d843d6dfd25",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 894,
+      "path": "com/sunwayworld/cloud/module/equipt/pdfacqconfig/persistent/mapper/conf/core-pdf-acq-preprocess-mysql-mapper.xml",
+      "sha256": "c1c0a574eba52dcb6469aca9adb8d01588caf6d874787afbbb54159b1b665028",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 894,
+      "path": "com/sunwayworld/cloud/module/equipt/pdfacqconfig/persistent/mapper/conf/core-pdf-acq-preprocess-oracle-mapper.xml",
+      "sha256": "c1c0a574eba52dcb6469aca9adb8d01588caf6d874787afbbb54159b1b665028",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 894,
+      "path": "com/sunwayworld/cloud/module/equipt/pdfacqconfig/persistent/mapper/conf/core-pdf-acq-preprocess-postgresql-mapper.xml",
+      "sha256": "c1c0a574eba52dcb6469aca9adb8d01588caf6d874787afbbb54159b1b665028",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 894,
+      "path": "com/sunwayworld/cloud/module/equipt/pdfacqconfig/persistent/mapper/conf/core-pdf-acq-preprocess-sqlserver-mapper.xml",
+      "sha256": "c1c0a574eba52dcb6469aca9adb8d01588caf6d874787afbbb54159b1b665028",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 887,
+      "path": "com/sunwayworld/cloud/module/equipt/record/persistent/mapper/conf/core-equipt-acq-record-mysql-mapper.xml",
+      "sha256": "d18c4789b097b76864dd0862ee35c7a998842ba5354a6145c7942c4b52506734",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 887,
+      "path": "com/sunwayworld/cloud/module/equipt/record/persistent/mapper/conf/core-equipt-acq-record-oracle-mapper.xml",
+      "sha256": "d18c4789b097b76864dd0862ee35c7a998842ba5354a6145c7942c4b52506734",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 887,
+      "path": "com/sunwayworld/cloud/module/equipt/record/persistent/mapper/conf/core-equipt-acq-record-postgresql-mapper.xml",
+      "sha256": "d18c4789b097b76864dd0862ee35c7a998842ba5354a6145c7942c4b52506734",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 887,
+      "path": "com/sunwayworld/cloud/module/equipt/record/persistent/mapper/conf/core-equipt-acq-record-sqlserver-mapper.xml",
+      "sha256": "d18c4789b097b76864dd0862ee35c7a998842ba5354a6145c7942c4b52506734",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 4664,
+      "path": "com/sunwayworld/cloud/module/equipt/usagerecord/persistent/mapper/conf/core-equipt-usage-record-mysql-mapper.xml",
+      "sha256": "b0162cb272d4be9bc68e20d533eceb48f457641538cd4d41ff8f6f4192adf2fb",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 4644,
+      "path": "com/sunwayworld/cloud/module/equipt/usagerecord/persistent/mapper/conf/core-equipt-usage-record-oracle-mapper.xml",
+      "sha256": "b6ae32973bffda3401412b9e5289f1b9eb09e998c2ce218416c2854b8dd4e7de",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 4644,
+      "path": "com/sunwayworld/cloud/module/equipt/usagerecord/persistent/mapper/conf/core-equipt-usage-record-postgresql-mapper.xml",
+      "sha256": "b6ae32973bffda3401412b9e5289f1b9eb09e998c2ce218416c2854b8dd4e7de",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 4771,
+      "path": "com/sunwayworld/cloud/module/equipt/usagerecord/persistent/mapper/conf/core-equipt-usage-record-sqlserver-mapper.xml",
+      "sha256": "73f08bbf3125c8104b43a3e937a86af852c33b6be73ce84586e51c1f69048a01",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 864,
+      "path": "com/sunwayworld/cloud/module/im/persistent/mapper/conf/core-im-contacts-mysql-mapper.xml",
+      "sha256": "8044affe3ea94824164c2f7a4ccebb07d08fdc0f3ec22baea97dd55b71362cfa",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 864,
+      "path": "com/sunwayworld/cloud/module/im/persistent/mapper/conf/core-im-contacts-oracle-mapper.xml",
+      "sha256": "8044affe3ea94824164c2f7a4ccebb07d08fdc0f3ec22baea97dd55b71362cfa",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 864,
+      "path": "com/sunwayworld/cloud/module/im/persistent/mapper/conf/core-im-contacts-postgresql-mapper.xml",
+      "sha256": "8044affe3ea94824164c2f7a4ccebb07d08fdc0f3ec22baea97dd55b71362cfa",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 864,
+      "path": "com/sunwayworld/cloud/module/im/persistent/mapper/conf/core-im-contacts-sqlserver-mapper.xml",
+      "sha256": "8044affe3ea94824164c2f7a4ccebb07d08fdc0f3ec22baea97dd55b71362cfa",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 858,
+      "path": "com/sunwayworld/cloud/module/im/persistent/mapper/conf/core-im-group-mysql-mapper.xml",
+      "sha256": "16a32319e7263eafdf6287125f03bf354e60acf4f7ba887a9f9989136dbcdda4",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 858,
+      "path": "com/sunwayworld/cloud/module/im/persistent/mapper/conf/core-im-group-oracle-mapper.xml",
+      "sha256": "16a32319e7263eafdf6287125f03bf354e60acf4f7ba887a9f9989136dbcdda4",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 858,
+      "path": "com/sunwayworld/cloud/module/im/persistent/mapper/conf/core-im-group-postgresql-mapper.xml",
+      "sha256": "16a32319e7263eafdf6287125f03bf354e60acf4f7ba887a9f9989136dbcdda4",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 858,
+      "path": "com/sunwayworld/cloud/module/im/persistent/mapper/conf/core-im-group-sqlserver-mapper.xml",
+      "sha256": "16a32319e7263eafdf6287125f03bf354e60acf4f7ba887a9f9989136dbcdda4",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1119,
+      "path": "com/sunwayworld/cloud/module/im/persistent/mapper/conf/core-im-message-mysql-mapper.xml",
+      "sha256": "2ab19a8ab0cd112ef78f3bf9e831246a20881bcec6628f9ef3acb1e1ec857973",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1119,
+      "path": "com/sunwayworld/cloud/module/im/persistent/mapper/conf/core-im-message-oracle-mapper.xml",
+      "sha256": "2ab19a8ab0cd112ef78f3bf9e831246a20881bcec6628f9ef3acb1e1ec857973",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1119,
+      "path": "com/sunwayworld/cloud/module/im/persistent/mapper/conf/core-im-message-postgresql-mapper.xml",
+      "sha256": "2ab19a8ab0cd112ef78f3bf9e831246a20881bcec6628f9ef3acb1e1ec857973",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1119,
+      "path": "com/sunwayworld/cloud/module/im/persistent/mapper/conf/core-im-message-sqlserver-mapper.xml",
+      "sha256": "2ab19a8ab0cd112ef78f3bf9e831246a20881bcec6628f9ef3acb1e1ec857973",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 2227,
+      "path": "com/sunwayworld/cloud/module/item/admarea/persistent/mapper/conf/core-adm-area-mysql-mapper.xml",
+      "sha256": "7c2d4680500c1bc4d1fee113e8beb747fd72921ede1ba2d5da70623a096e3756",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 2224,
+      "path": "com/sunwayworld/cloud/module/item/admarea/persistent/mapper/conf/core-adm-area-oracle-mapper.xml",
+      "sha256": "0f52d3f472b6b386fe4685ef95190b7f5c11920db43f28b4052d1fe1dddfec37",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 2229,
+      "path": "com/sunwayworld/cloud/module/item/admarea/persistent/mapper/conf/core-adm-area-postgresql-mapper.xml",
+      "sha256": "d9feb6afde1fdb31b59e58a53995c43334b9f09377809ea45ca71b7d7e624c07",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 2227,
+      "path": "com/sunwayworld/cloud/module/item/admarea/persistent/mapper/conf/core-adm-area-sqlserver-mapper.xml",
+      "sha256": "48f8645dbe0fbbdf1368802d92f9707d9dd6e5b250de5ca4584235e16e83942b",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1069,
+      "path": "com/sunwayworld/cloud/module/item/calendar/persistent/mapper/conf/core-calendar-mysql-mapper.xml",
+      "sha256": "9a4da668f86936bc5890f0b71997885aec021867dfe0a16efb64fbb2542138b5",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1049,
+      "path": "com/sunwayworld/cloud/module/item/calendar/persistent/mapper/conf/core-calendar-oracle-mapper.xml",
+      "sha256": "55a7f0184faeb566d081376490656530d0d7b1ac6970f3553474eb468f6d45ef",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1055,
+      "path": "com/sunwayworld/cloud/module/item/calendar/persistent/mapper/conf/core-calendar-postgresql-mapper.xml",
+      "sha256": "d76a6f5b0a167618460d13100ea125c8f91f5bbaee30cb8e1b50c607f4204482",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1067,
+      "path": "com/sunwayworld/cloud/module/item/calendar/persistent/mapper/conf/core-calendar-sqlserver-mapper.xml",
+      "sha256": "780918cdba2b216f6e54fbf3b514b29890af939fefde677254d2b3ba9a5ff1c5",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1072,
+      "path": "com/sunwayworld/cloud/module/item/chart/persistent/mapper/conf/core-chart-config-mysql-mapper.xml",
+      "sha256": "cdfa580ea0b0df1c0c3aea844ea0e41431e08bea53a17722d64664410c1c4ac3",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1072,
+      "path": "com/sunwayworld/cloud/module/item/chart/persistent/mapper/conf/core-chart-config-oracle-mapper.xml",
+      "sha256": "cdfa580ea0b0df1c0c3aea844ea0e41431e08bea53a17722d64664410c1c4ac3",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1072,
+      "path": "com/sunwayworld/cloud/module/item/chart/persistent/mapper/conf/core-chart-config-postgresql-mapper.xml",
+      "sha256": "cdfa580ea0b0df1c0c3aea844ea0e41431e08bea53a17722d64664410c1c4ac3",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1072,
+      "path": "com/sunwayworld/cloud/module/item/chart/persistent/mapper/conf/core-chart-config-sqlserver-mapper.xml",
+      "sha256": "cdfa580ea0b0df1c0c3aea844ea0e41431e08bea53a17722d64664410c1c4ac3",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 2550,
+      "path": "com/sunwayworld/cloud/module/item/chart/persistent/mapper/conf/core-chart-mysql-mapper.xml",
+      "sha256": "63ac38d1f062dc22fd1226a297b2f7116e300978522fa6a1550dbd0cc33de7ab",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 2562,
+      "path": "com/sunwayworld/cloud/module/item/chart/persistent/mapper/conf/core-chart-oracle-mapper.xml",
+      "sha256": "5fca48a492704f9ee74245a07e0fb27f4062da76621b32d663e663409c1323e0",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 2562,
+      "path": "com/sunwayworld/cloud/module/item/chart/persistent/mapper/conf/core-chart-postgresql-mapper.xml",
+      "sha256": "5fca48a492704f9ee74245a07e0fb27f4062da76621b32d663e663409c1323e0",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1097,
+      "path": "com/sunwayworld/cloud/module/item/chart/persistent/mapper/conf/core-chart-search-config-mysql-mapper.xml",
+      "sha256": "637995b7c49dd4a8ffba459b65e921414a00cf0f9820ef2b39a57fe8957db02a",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1097,
+      "path": "com/sunwayworld/cloud/module/item/chart/persistent/mapper/conf/core-chart-search-config-oracle-mapper.xml",
+      "sha256": "637995b7c49dd4a8ffba459b65e921414a00cf0f9820ef2b39a57fe8957db02a",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1097,
+      "path": "com/sunwayworld/cloud/module/item/chart/persistent/mapper/conf/core-chart-search-config-postgresql-mapper.xml",
+      "sha256": "637995b7c49dd4a8ffba459b65e921414a00cf0f9820ef2b39a57fe8957db02a",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1097,
+      "path": "com/sunwayworld/cloud/module/item/chart/persistent/mapper/conf/core-chart-search-config-sqlserver-mapper.xml",
+      "sha256": "637995b7c49dd4a8ffba459b65e921414a00cf0f9820ef2b39a57fe8957db02a",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 2627,
+      "path": "com/sunwayworld/cloud/module/item/chart/persistent/mapper/conf/core-chart-sqlserver-mapper.xml",
+      "sha256": "4782abb3ea5d289b36b0010b9269f3857b3115f75ab417ad01c64520bc458804",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1008,
+      "path": "com/sunwayworld/cloud/module/item/chem/persistent/mapper/conf/core-chem-mysql-mapper.xml",
+      "sha256": "38fe84605a3d64c9d5e0934767944f63df491d48032294475d2dd9097f5762b8",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1008,
+      "path": "com/sunwayworld/cloud/module/item/chem/persistent/mapper/conf/core-chem-oracle-mapper.xml",
+      "sha256": "38fe84605a3d64c9d5e0934767944f63df491d48032294475d2dd9097f5762b8",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1008,
+      "path": "com/sunwayworld/cloud/module/item/chem/persistent/mapper/conf/core-chem-postgresql-mapper.xml",
+      "sha256": "38fe84605a3d64c9d5e0934767944f63df491d48032294475d2dd9097f5762b8",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1008,
+      "path": "com/sunwayworld/cloud/module/item/chem/persistent/mapper/conf/core-chem-sqlserver-mapper.xml",
+      "sha256": "38fe84605a3d64c9d5e0934767944f63df491d48032294475d2dd9097f5762b8",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 879,
+      "path": "com/sunwayworld/cloud/module/item/customchart/persistent/mapper/conf/core-custom-chart-mysql-mapper.xml",
+      "sha256": "fb1cb47965e2f6a92b36f91483a93849d1516d6f28896f9302937739e9ef728c",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 879,
+      "path": "com/sunwayworld/cloud/module/item/customchart/persistent/mapper/conf/core-custom-chart-oracle-mapper.xml",
+      "sha256": "fb1cb47965e2f6a92b36f91483a93849d1516d6f28896f9302937739e9ef728c",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 879,
+      "path": "com/sunwayworld/cloud/module/item/customchart/persistent/mapper/conf/core-custom-chart-postgresql-mapper.xml",
+      "sha256": "fb1cb47965e2f6a92b36f91483a93849d1516d6f28896f9302937739e9ef728c",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 890,
+      "path": "com/sunwayworld/cloud/module/item/customchart/persistent/mapper/conf/core-custom-chart-share-mysql-mapper.xml",
+      "sha256": "1d69c35a77c78449d322b50d6708eb3d530b53877cfebbde6fda2cf1036bfd85",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 890,
+      "path": "com/sunwayworld/cloud/module/item/customchart/persistent/mapper/conf/core-custom-chart-share-oracle-mapper.xml",
+      "sha256": "1d69c35a77c78449d322b50d6708eb3d530b53877cfebbde6fda2cf1036bfd85",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 890,
+      "path": "com/sunwayworld/cloud/module/item/customchart/persistent/mapper/conf/core-custom-chart-share-postgresql-mapper.xml",
+      "sha256": "1d69c35a77c78449d322b50d6708eb3d530b53877cfebbde6fda2cf1036bfd85",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 890,
+      "path": "com/sunwayworld/cloud/module/item/customchart/persistent/mapper/conf/core-custom-chart-share-sqlserver-mapper.xml",
+      "sha256": "1d69c35a77c78449d322b50d6708eb3d530b53877cfebbde6fda2cf1036bfd85",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 879,
+      "path": "com/sunwayworld/cloud/module/item/customchart/persistent/mapper/conf/core-custom-chart-sqlserver-mapper.xml",
+      "sha256": "fb1cb47965e2f6a92b36f91483a93849d1516d6f28896f9302937739e9ef728c",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 892,
+      "path": "com/sunwayworld/cloud/module/item/customds/persistent/mapper/conf/core-custom-ds-field-mysql-mapper.xml",
+      "sha256": "ca9d5d71a4dfb4958b633785605b2112ff1d94982ed6b5ab0b54cbd889dce99f",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 892,
+      "path": "com/sunwayworld/cloud/module/item/customds/persistent/mapper/conf/core-custom-ds-field-oracle-mapper.xml",
+      "sha256": "ca9d5d71a4dfb4958b633785605b2112ff1d94982ed6b5ab0b54cbd889dce99f",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 892,
+      "path": "com/sunwayworld/cloud/module/item/customds/persistent/mapper/conf/core-custom-ds-field-postgresql-mapper.xml",
+      "sha256": "ca9d5d71a4dfb4958b633785605b2112ff1d94982ed6b5ab0b54cbd889dce99f",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 892,
+      "path": "com/sunwayworld/cloud/module/item/customds/persistent/mapper/conf/core-custom-ds-field-sqlserver-mapper.xml",
+      "sha256": "ca9d5d71a4dfb4958b633785605b2112ff1d94982ed6b5ab0b54cbd889dce99f",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 871,
+      "path": "com/sunwayworld/cloud/module/item/customds/persistent/mapper/conf/core-custom-ds-mysql-mapper.xml",
+      "sha256": "c9f90036ab7efc64beaf696736804258b603e8a86c1066649561bf3079a3e719",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 871,
+      "path": "com/sunwayworld/cloud/module/item/customds/persistent/mapper/conf/core-custom-ds-oracle-mapper.xml",
+      "sha256": "c9f90036ab7efc64beaf696736804258b603e8a86c1066649561bf3079a3e719",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 871,
+      "path": "com/sunwayworld/cloud/module/item/customds/persistent/mapper/conf/core-custom-ds-postgresql-mapper.xml",
+      "sha256": "c9f90036ab7efc64beaf696736804258b603e8a86c1066649561bf3079a3e719",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 889,
+      "path": "com/sunwayworld/cloud/module/item/customds/persistent/mapper/conf/core-custom-ds-sql-field-mysql-mapper.xml",
+      "sha256": "3109160eab92d46584b744a9c78accdafcc6a326fb0a12facf56e7c593ee28fe",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 889,
+      "path": "com/sunwayworld/cloud/module/item/customds/persistent/mapper/conf/core-custom-ds-sql-field-oracle-mapper.xml",
+      "sha256": "3109160eab92d46584b744a9c78accdafcc6a326fb0a12facf56e7c593ee28fe",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 889,
+      "path": "com/sunwayworld/cloud/module/item/customds/persistent/mapper/conf/core-custom-ds-sql-field-postgresql-mapper.xml",
+      "sha256": "3109160eab92d46584b744a9c78accdafcc6a326fb0a12facf56e7c593ee28fe",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 889,
+      "path": "com/sunwayworld/cloud/module/item/customds/persistent/mapper/conf/core-custom-ds-sql-field-sqlserver-mapper.xml",
+      "sha256": "3109160eab92d46584b744a9c78accdafcc6a326fb0a12facf56e7c593ee28fe",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 878,
+      "path": "com/sunwayworld/cloud/module/item/customds/persistent/mapper/conf/core-custom-ds-sql-mysql-mapper.xml",
+      "sha256": "ef46abb69f3643465ab25e6e8c1d3c317c02bd59a167eabaf5710ebdaf39c167",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 878,
+      "path": "com/sunwayworld/cloud/module/item/customds/persistent/mapper/conf/core-custom-ds-sql-oracle-mapper.xml",
+      "sha256": "ef46abb69f3643465ab25e6e8c1d3c317c02bd59a167eabaf5710ebdaf39c167",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 878,
+      "path": "com/sunwayworld/cloud/module/item/customds/persistent/mapper/conf/core-custom-ds-sql-postgresql-mapper.xml",
+      "sha256": "ef46abb69f3643465ab25e6e8c1d3c317c02bd59a167eabaf5710ebdaf39c167",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 878,
+      "path": "com/sunwayworld/cloud/module/item/customds/persistent/mapper/conf/core-custom-ds-sql-sqlserver-mapper.xml",
+      "sha256": "ef46abb69f3643465ab25e6e8c1d3c317c02bd59a167eabaf5710ebdaf39c167",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 871,
+      "path": "com/sunwayworld/cloud/module/item/customds/persistent/mapper/conf/core-custom-ds-sqlserver-mapper.xml",
+      "sha256": "c9f90036ab7efc64beaf696736804258b603e8a86c1066649561bf3079a3e719",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 917,
+      "path": "com/sunwayworld/cloud/module/item/customds/persistent/mapper/conf/core-custom-table-mysql-mapper.xml",
+      "sha256": "6142457d5340d72902b16ba94e7512385dce7ee4ecfb73c1bf313dbf44eb6d4d",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 891,
+      "path": "com/sunwayworld/cloud/module/item/customds/persistent/mapper/conf/core-custom-table-oracle-mapper.xml",
+      "sha256": "8f0485424541d05b3413aa546692ceaea22c1a500bb03557c6f7d2e05dd1bfdb",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1264,
+      "path": "com/sunwayworld/cloud/module/item/customds/persistent/mapper/conf/core-custom-table-postgresql-mapper.xml",
+      "sha256": "e52e6f0dc9c2a08acd507eea6a349b46803d2ef69dd3980385be69e08ee767d6",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1498,
+      "path": "com/sunwayworld/cloud/module/item/customds/persistent/mapper/conf/core-custom-table-sqlserver-mapper.xml",
+      "sha256": "76e01a96a3c2a8d15f114e8e5b996db4f47d880e6d8a259b7cddcb800d44e658",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 882,
+      "path": "com/sunwayworld/cloud/module/item/customquery/presistent/mapper/conf/core-custom-button-mysql-mapper.xml",
+      "sha256": "c996d4ab01c6c0b2558e4ad4435e724a4e130dc5db3cf6aa40b09df33dc02f7e",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 882,
+      "path": "com/sunwayworld/cloud/module/item/customquery/presistent/mapper/conf/core-custom-button-oracle-mapper.xml",
+      "sha256": "c996d4ab01c6c0b2558e4ad4435e724a4e130dc5db3cf6aa40b09df33dc02f7e",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 882,
+      "path": "com/sunwayworld/cloud/module/item/customquery/presistent/mapper/conf/core-custom-button-postgresql-mapper.xml",
+      "sha256": "c996d4ab01c6c0b2558e4ad4435e724a4e130dc5db3cf6aa40b09df33dc02f7e",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 882,
+      "path": "com/sunwayworld/cloud/module/item/customquery/presistent/mapper/conf/core-custom-button-sqlserver-mapper.xml",
+      "sha256": "c996d4ab01c6c0b2558e4ad4435e724a4e130dc5db3cf6aa40b09df33dc02f7e",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 903,
+      "path": "com/sunwayworld/cloud/module/item/customquery/presistent/mapper/conf/core-custom-query-button-mysql-mapper.xml",
+      "sha256": "5291224e5fa1f8f0b38d61872d326db20d859b04b669195096578718241e5db6",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 903,
+      "path": "com/sunwayworld/cloud/module/item/customquery/presistent/mapper/conf/core-custom-query-button-oracle-mapper.xml",
+      "sha256": "5291224e5fa1f8f0b38d61872d326db20d859b04b669195096578718241e5db6",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 903,
+      "path": "com/sunwayworld/cloud/module/item/customquery/presistent/mapper/conf/core-custom-query-button-postgresql-mapper.xml",
+      "sha256": "5291224e5fa1f8f0b38d61872d326db20d859b04b669195096578718241e5db6",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 903,
+      "path": "com/sunwayworld/cloud/module/item/customquery/presistent/mapper/conf/core-custom-query-button-sqlserver-mapper.xml",
+      "sha256": "5291224e5fa1f8f0b38d61872d326db20d859b04b669195096578718241e5db6",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 909,
+      "path": "com/sunwayworld/cloud/module/item/customquery/presistent/mapper/conf/core-custom-query-condition-mysql-mapper.xml",
+      "sha256": "b8ce028e4105e06c7412788f5f1afc87ec9021e54366b69260c88d98c8cc789e",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 909,
+      "path": "com/sunwayworld/cloud/module/item/customquery/presistent/mapper/conf/core-custom-query-condition-oracle-mapper.xml",
+      "sha256": "b8ce028e4105e06c7412788f5f1afc87ec9021e54366b69260c88d98c8cc789e",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 909,
+      "path": "com/sunwayworld/cloud/module/item/customquery/presistent/mapper/conf/core-custom-query-condition-postgresql-mapper.xml",
+      "sha256": "b8ce028e4105e06c7412788f5f1afc87ec9021e54366b69260c88d98c8cc789e",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 909,
+      "path": "com/sunwayworld/cloud/module/item/customquery/presistent/mapper/conf/core-custom-query-condition-sqlserver-mapper.xml",
+      "sha256": "b8ce028e4105e06c7412788f5f1afc87ec9021e54366b69260c88d98c8cc789e",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1345,
+      "path": "com/sunwayworld/cloud/module/item/customquery/presistent/mapper/conf/core-custom-query-field-mysql-mapper.xml",
+      "sha256": "508225a3bb0795f8c37ac753f802336e5b9182c3db0c3555a39aabebc298dc37",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 901,
+      "path": "com/sunwayworld/cloud/module/item/customquery/presistent/mapper/conf/core-custom-query-field-oracle-mapper.xml",
+      "sha256": "87c1e5fb17be2769091fa1f2edc0a5bd43bc833457ed68ae0735a7a0c6655978",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 901,
+      "path": "com/sunwayworld/cloud/module/item/customquery/presistent/mapper/conf/core-custom-query-field-postgresql-mapper.xml",
+      "sha256": "87c1e5fb17be2769091fa1f2edc0a5bd43bc833457ed68ae0735a7a0c6655978",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 901,
+      "path": "com/sunwayworld/cloud/module/item/customquery/presistent/mapper/conf/core-custom-query-field-sqlserver-mapper.xml",
+      "sha256": "87c1e5fb17be2769091fa1f2edc0a5bd43bc833457ed68ae0735a7a0c6655978",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1746,
+      "path": "com/sunwayworld/cloud/module/item/customquery/presistent/mapper/conf/core-custom-query-mysql-mapper.xml",
+      "sha256": "fc841b4ee159d035e76dd8f3683b7032ed90f975fe50ce3cd89535c0bbf783c6",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1771,
+      "path": "com/sunwayworld/cloud/module/item/customquery/presistent/mapper/conf/core-custom-query-oracle-mapper.xml",
+      "sha256": "527a045f8af4ec24854f77588f2654b593c956b827f6c4f23898be644a904963",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1771,
+      "path": "com/sunwayworld/cloud/module/item/customquery/presistent/mapper/conf/core-custom-query-postgresql-mapper.xml",
+      "sha256": "9985c3319da50b24532fec6f448ebfe2a008307eacc5ca9f46e9e013db6ae59c",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1780,
+      "path": "com/sunwayworld/cloud/module/item/customquery/presistent/mapper/conf/core-custom-query-sqlserver-mapper.xml",
+      "sha256": "c818efc7cb21f8ce32d0b8d654807d9fe60e8f308b93063f1e62b163bec695f0",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1050,
+      "path": "com/sunwayworld/cloud/module/item/message/persistent/mapper/conf/core-message-mysql-mapper.xml",
+      "sha256": "34d555675aa33b48beb2f59b8c5931c0eb037ede3fc00b1b989b1282bb100841",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1050,
+      "path": "com/sunwayworld/cloud/module/item/message/persistent/mapper/conf/core-message-oracle-mapper.xml",
+      "sha256": "34d555675aa33b48beb2f59b8c5931c0eb037ede3fc00b1b989b1282bb100841",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1050,
+      "path": "com/sunwayworld/cloud/module/item/message/persistent/mapper/conf/core-message-postgresql-mapper.xml",
+      "sha256": "34d555675aa33b48beb2f59b8c5931c0eb037ede3fc00b1b989b1282bb100841",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1158,
+      "path": "com/sunwayworld/cloud/module/item/message/persistent/mapper/conf/core-message-receipent-mysql-mapper.xml",
+      "sha256": "a08f7663bf7b77e72b5dbbfafff825a4604495fcb36a1c1a6e980b37b2a6bca1",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1158,
+      "path": "com/sunwayworld/cloud/module/item/message/persistent/mapper/conf/core-message-receipent-oracle-mapper.xml",
+      "sha256": "a08f7663bf7b77e72b5dbbfafff825a4604495fcb36a1c1a6e980b37b2a6bca1",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1158,
+      "path": "com/sunwayworld/cloud/module/item/message/persistent/mapper/conf/core-message-receipent-postgresql-mapper.xml",
+      "sha256": "a08f7663bf7b77e72b5dbbfafff825a4604495fcb36a1c1a6e980b37b2a6bca1",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1158,
+      "path": "com/sunwayworld/cloud/module/item/message/persistent/mapper/conf/core-message-receipent-sqlserver-mapper.xml",
+      "sha256": "a08f7663bf7b77e72b5dbbfafff825a4604495fcb36a1c1a6e980b37b2a6bca1",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1050,
+      "path": "com/sunwayworld/cloud/module/item/message/persistent/mapper/conf/core-message-sqlserver-mapper.xml",
+      "sha256": "34d555675aa33b48beb2f59b8c5931c0eb037ede3fc00b1b989b1282bb100841",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 3490,
+      "path": "com/sunwayworld/cloud/module/item/notice/persistent/mapper/conf/core-notice-mysql-mapper.xml",
+      "sha256": "7ae87100cf4e204c5884d0cd562c261abdc74fee9d6c83747d97dd13dab59064",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 3487,
+      "path": "com/sunwayworld/cloud/module/item/notice/persistent/mapper/conf/core-notice-oracle-mapper.xml",
+      "sha256": "0cfba472220d6fdcc943e776b16baf087cddc6a210d9a352ddf0b1aad09d6f7b",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 885,
+      "path": "com/sunwayworld/cloud/module/item/notice/persistent/mapper/conf/core-notice-permission-mysql-mapper.xml",
+      "sha256": "53776099350c278a1c553d104145f5178aacc1bab77e5430af7a887202750016",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 885,
+      "path": "com/sunwayworld/cloud/module/item/notice/persistent/mapper/conf/core-notice-permission-oracle-mapper.xml",
+      "sha256": "53776099350c278a1c553d104145f5178aacc1bab77e5430af7a887202750016",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 885,
+      "path": "com/sunwayworld/cloud/module/item/notice/persistent/mapper/conf/core-notice-permission-postgresql-mapper.xml",
+      "sha256": "53776099350c278a1c553d104145f5178aacc1bab77e5430af7a887202750016",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 885,
+      "path": "com/sunwayworld/cloud/module/item/notice/persistent/mapper/conf/core-notice-permission-sqlserver-mapper.xml",
+      "sha256": "53776099350c278a1c553d104145f5178aacc1bab77e5430af7a887202750016",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 3493,
+      "path": "com/sunwayworld/cloud/module/item/notice/persistent/mapper/conf/core-notice-postgresql-mapper.xml",
+      "sha256": "d80a5216e04b40845f0c5651ca55d28929ee59739471b645ceae9b522c30990c",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 3497,
+      "path": "com/sunwayworld/cloud/module/item/notice/persistent/mapper/conf/core-notice-sqlserver-mapper.xml",
+      "sha256": "fff613b0f0a3f4c92a982a094dfcab12fa319d1eb0e340e6d66cff26af63dcbb",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 899,
+      "path": "com/sunwayworld/cloud/module/item/pagefield/persistent/mapper/conf/core-page-field-comp-field-mysql-mapper.xml",
+      "sha256": "a3a347a86f274c998f70e80029af0e66bbb41e02b9821ee92e2c82157a3a8ed6",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 899,
+      "path": "com/sunwayworld/cloud/module/item/pagefield/persistent/mapper/conf/core-page-field-comp-field-oracle-mapper.xml",
+      "sha256": "a3a347a86f274c998f70e80029af0e66bbb41e02b9821ee92e2c82157a3a8ed6",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 899,
+      "path": "com/sunwayworld/cloud/module/item/pagefield/persistent/mapper/conf/core-page-field-comp-field-postgresql-mapper.xml",
+      "sha256": "a3a347a86f274c998f70e80029af0e66bbb41e02b9821ee92e2c82157a3a8ed6",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 899,
+      "path": "com/sunwayworld/cloud/module/item/pagefield/persistent/mapper/conf/core-page-field-comp-field-sqlserver-mapper.xml",
+      "sha256": "a3a347a86f274c998f70e80029af0e66bbb41e02b9821ee92e2c82157a3a8ed6",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 884,
+      "path": "com/sunwayworld/cloud/module/item/pagefield/persistent/mapper/conf/core-page-field-comp-mysql-mapper.xml",
+      "sha256": "58c38e9d155fdb1eb5a4860b2483407ae40459e6412bcedbcc1deccb2ffd568a",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 884,
+      "path": "com/sunwayworld/cloud/module/item/pagefield/persistent/mapper/conf/core-page-field-comp-oracle-mapper.xml",
+      "sha256": "58c38e9d155fdb1eb5a4860b2483407ae40459e6412bcedbcc1deccb2ffd568a",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 884,
+      "path": "com/sunwayworld/cloud/module/item/pagefield/persistent/mapper/conf/core-page-field-comp-postgresql-mapper.xml",
+      "sha256": "58c38e9d155fdb1eb5a4860b2483407ae40459e6412bcedbcc1deccb2ffd568a",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 884,
+      "path": "com/sunwayworld/cloud/module/item/pagefield/persistent/mapper/conf/core-page-field-comp-sqlserver-mapper.xml",
+      "sha256": "58c38e9d155fdb1eb5a4860b2483407ae40459e6412bcedbcc1deccb2ffd568a",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 874,
+      "path": "com/sunwayworld/cloud/module/item/pagefield/persistent/mapper/conf/core-page-field-mysql-mapper.xml",
+      "sha256": "05c1b13df952d848870cf0dcc5841b616aad138b513cea372c7affe9a8708d34",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 874,
+      "path": "com/sunwayworld/cloud/module/item/pagefield/persistent/mapper/conf/core-page-field-oracle-mapper.xml",
+      "sha256": "05c1b13df952d848870cf0dcc5841b616aad138b513cea372c7affe9a8708d34",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 874,
+      "path": "com/sunwayworld/cloud/module/item/pagefield/persistent/mapper/conf/core-page-field-postgresql-mapper.xml",
+      "sha256": "05c1b13df952d848870cf0dcc5841b616aad138b513cea372c7affe9a8708d34",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 874,
+      "path": "com/sunwayworld/cloud/module/item/pagefield/persistent/mapper/conf/core-page-field-sqlserver-mapper.xml",
+      "sha256": "05c1b13df952d848870cf0dcc5841b616aad138b513cea372c7affe9a8708d34",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 887,
+      "path": "com/sunwayworld/cloud/module/item/pvconf/persistent/mapper/conf/core-process-view-conf-mysql-mapper.xml",
+      "sha256": "1a5cd2db36f00b880a2d4c73c809796603cdceb370e54dc628de1eebdf029316",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 887,
+      "path": "com/sunwayworld/cloud/module/item/pvconf/persistent/mapper/conf/core-process-view-conf-oracle-mapper.xml",
+      "sha256": "1a5cd2db36f00b880a2d4c73c809796603cdceb370e54dc628de1eebdf029316",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 887,
+      "path": "com/sunwayworld/cloud/module/item/pvconf/persistent/mapper/conf/core-process-view-conf-postgresql-mapper.xml",
+      "sha256": "1a5cd2db36f00b880a2d4c73c809796603cdceb370e54dc628de1eebdf029316",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 882,
+      "path": "com/sunwayworld/cloud/module/item/pvconf/persistent/mapper/conf/core-process-view-conf-sqlserver-mapper.xml",
+      "sha256": "7f9e5ffc66620a9ede53a785cf9eaf18eaddfcd664015b9d5b10e4d3cc9eaf0f",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1374,
+      "path": "com/sunwayworld/cloud/module/item/pvconf/persistent/mapper/conf/core-process-view-grid-conf-mysql-mapper.xml",
+      "sha256": "43ed7155722ddb3e3433e9d17e4ed57693e6264529020616bb9c62f3f44a5d70",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1374,
+      "path": "com/sunwayworld/cloud/module/item/pvconf/persistent/mapper/conf/core-process-view-grid-conf-oracle-mapper.xml",
+      "sha256": "43ed7155722ddb3e3433e9d17e4ed57693e6264529020616bb9c62f3f44a5d70",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1374,
+      "path": "com/sunwayworld/cloud/module/item/pvconf/persistent/mapper/conf/core-process-view-grid-conf-postgresql-mapper.xml",
+      "sha256": "43ed7155722ddb3e3433e9d17e4ed57693e6264529020616bb9c62f3f44a5d70",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1374,
+      "path": "com/sunwayworld/cloud/module/item/pvconf/persistent/mapper/conf/core-process-view-grid-conf-sqlserver-mapper.xml",
+      "sha256": "43ed7155722ddb3e3433e9d17e4ed57693e6264529020616bb9c62f3f44a5d70",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 910,
+      "path": "com/sunwayworld/cloud/module/item/pvconf/persistent/mapper/conf/core-process-view-master-conf-mysql-mapper.xml",
+      "sha256": "916734cb63ee975b618c47f17a76304711cc7809b402758d18154559be42ab5a",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 911,
+      "path": "com/sunwayworld/cloud/module/item/pvconf/persistent/mapper/conf/core-process-view-master-conf-oracle-mapper.xml",
+      "sha256": "5462bfa3098360deab9045fb0c7c2c0385472fa48a5ecd86ee602dabf773387b",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 911,
+      "path": "com/sunwayworld/cloud/module/item/pvconf/persistent/mapper/conf/core-process-view-master-conf-postgresql-mapper.xml",
+      "sha256": "5462bfa3098360deab9045fb0c7c2c0385472fa48a5ecd86ee602dabf773387b",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 911,
+      "path": "com/sunwayworld/cloud/module/item/pvconf/persistent/mapper/conf/core-process-view-master-conf-sqlserver-mapper.xml",
+      "sha256": "5462bfa3098360deab9045fb0c7c2c0385472fa48a5ecd86ee602dabf773387b",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 905,
+      "path": "com/sunwayworld/cloud/module/item/pvconf/persistent/mapper/conf/core-process-view-sub-conf-mysql-mapper.xml",
+      "sha256": "ef99f87f412f1beff684f4885ba0136926001915a7751928fdeb21c72678d9c2",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 905,
+      "path": "com/sunwayworld/cloud/module/item/pvconf/persistent/mapper/conf/core-process-view-sub-conf-oracle-mapper.xml",
+      "sha256": "ef99f87f412f1beff684f4885ba0136926001915a7751928fdeb21c72678d9c2",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 905,
+      "path": "com/sunwayworld/cloud/module/item/pvconf/persistent/mapper/conf/core-process-view-sub-conf-postgresql-mapper.xml",
+      "sha256": "ef99f87f412f1beff684f4885ba0136926001915a7751928fdeb21c72678d9c2",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 905,
+      "path": "com/sunwayworld/cloud/module/item/pvconf/persistent/mapper/conf/core-process-view-sub-conf-sqlserver-mapper.xml",
+      "sha256": "ef99f87f412f1beff684f4885ba0136926001915a7751928fdeb21c72678d9c2",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1078,
+      "path": "com/sunwayworld/cloud/module/item/query/persistent/mapper/conf/core-query-config-column-mysql-mapper.xml",
+      "sha256": "1c03766e2522583f88b28ba4563ebad64194ee08e73468395c11fab4ff42e08e",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1078,
+      "path": "com/sunwayworld/cloud/module/item/query/persistent/mapper/conf/core-query-config-column-oracle-mapper.xml",
+      "sha256": "1c03766e2522583f88b28ba4563ebad64194ee08e73468395c11fab4ff42e08e",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1078,
+      "path": "com/sunwayworld/cloud/module/item/query/persistent/mapper/conf/core-query-config-column-postgresql-mapper.xml",
+      "sha256": "1c03766e2522583f88b28ba4563ebad64194ee08e73468395c11fab4ff42e08e",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1072,
+      "path": "com/sunwayworld/cloud/module/item/query/persistent/mapper/conf/core-query-config-column-sqlserver-mapper.xml",
+      "sha256": "a7de36546bcbf4987369315bceaa32a9133d442c1b499c69446fff2b0402b1ad",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1143,
+      "path": "com/sunwayworld/cloud/module/item/query/persistent/mapper/conf/core-query-config-mysql-mapper.xml",
+      "sha256": "dbf72761b04a2b44e7271071846e15f974c837a5b531bf4e6c3f5b3ca36fa998",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1143,
+      "path": "com/sunwayworld/cloud/module/item/query/persistent/mapper/conf/core-query-config-oracle-mapper.xml",
+      "sha256": "dbf72761b04a2b44e7271071846e15f974c837a5b531bf4e6c3f5b3ca36fa998",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1143,
+      "path": "com/sunwayworld/cloud/module/item/query/persistent/mapper/conf/core-query-config-postgresql-mapper.xml",
+      "sha256": "dbf72761b04a2b44e7271071846e15f974c837a5b531bf4e6c3f5b3ca36fa998",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1137,
+      "path": "com/sunwayworld/cloud/module/item/query/persistent/mapper/conf/core-query-config-sqlserver-mapper.xml",
+      "sha256": "fe73353bfeba2b2900d7b5a0dfa2d21631d5dc14d7e8059eebd076c9325e11b8",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 730,
+      "path": "com/sunwayworld/cloud/module/item/query/persistent/mapper/conf/core-query-mysql-mapper.xml",
+      "sha256": "d1f53a2f96f2b637e2af72fce8ba658c9bf1e8b5f292578ecef6462c64979cfa",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 730,
+      "path": "com/sunwayworld/cloud/module/item/query/persistent/mapper/conf/core-query-oracle-mapper.xml",
+      "sha256": "d1f53a2f96f2b637e2af72fce8ba658c9bf1e8b5f292578ecef6462c64979cfa",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 730,
+      "path": "com/sunwayworld/cloud/module/item/query/persistent/mapper/conf/core-query-postgresql-mapper.xml",
+      "sha256": "d1f53a2f96f2b637e2af72fce8ba658c9bf1e8b5f292578ecef6462c64979cfa",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 724,
+      "path": "com/sunwayworld/cloud/module/item/query/persistent/mapper/conf/core-query-sqlserver-mapper.xml",
+      "sha256": "bcb81935b07c6e1d15e3aa5496c8efa7a8022337f4a7d1cadc476fac718c7399",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 886,
+      "path": "com/sunwayworld/cloud/module/item/samplescheme/persistent/mapper/conf/core-sample-qty-code-mysql-mapper.xml",
+      "sha256": "661bf2fed73cdae4cbaeac0dcd7422b44e50ed2b429f527bed104e0709d03735",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 886,
+      "path": "com/sunwayworld/cloud/module/item/samplescheme/persistent/mapper/conf/core-sample-qty-code-oracle-mapper.xml",
+      "sha256": "661bf2fed73cdae4cbaeac0dcd7422b44e50ed2b429f527bed104e0709d03735",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 886,
+      "path": "com/sunwayworld/cloud/module/item/samplescheme/persistent/mapper/conf/core-sample-qty-code-postgresql-mapper.xml",
+      "sha256": "661bf2fed73cdae4cbaeac0dcd7422b44e50ed2b429f527bed104e0709d03735",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 886,
+      "path": "com/sunwayworld/cloud/module/item/samplescheme/persistent/mapper/conf/core-sample-qty-code-sqlserver-mapper.xml",
+      "sha256": "661bf2fed73cdae4cbaeac0dcd7422b44e50ed2b429f527bed104e0709d03735",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 877,
+      "path": "com/sunwayworld/cloud/module/item/samplescheme/persistent/mapper/conf/core-sample-qty-mysql-mapper.xml",
+      "sha256": "cf94e33e157fd9050d0eaea1b272cc78bd7ac7bac3ad22560388b07b79ef2eb4",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 877,
+      "path": "com/sunwayworld/cloud/module/item/samplescheme/persistent/mapper/conf/core-sample-qty-oracle-mapper.xml",
+      "sha256": "cf94e33e157fd9050d0eaea1b272cc78bd7ac7bac3ad22560388b07b79ef2eb4",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 877,
+      "path": "com/sunwayworld/cloud/module/item/samplescheme/persistent/mapper/conf/core-sample-qty-postgresql-mapper.xml",
+      "sha256": "cf94e33e157fd9050d0eaea1b272cc78bd7ac7bac3ad22560388b07b79ef2eb4",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 877,
+      "path": "com/sunwayworld/cloud/module/item/samplescheme/persistent/mapper/conf/core-sample-qty-sqlserver-mapper.xml",
+      "sha256": "cf94e33e157fd9050d0eaea1b272cc78bd7ac7bac3ad22560388b07b79ef2eb4",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 883,
+      "path": "com/sunwayworld/cloud/module/item/samplescheme/persistent/mapper/conf/core-sample-scheme-mysql-mapper.xml",
+      "sha256": "3abe51e0a7c5a99a75d43f4429d729643d48d0cd31dbff47e0c1925cf2513413",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 883,
+      "path": "com/sunwayworld/cloud/module/item/samplescheme/persistent/mapper/conf/core-sample-scheme-oracle-mapper.xml",
+      "sha256": "3abe51e0a7c5a99a75d43f4429d729643d48d0cd31dbff47e0c1925cf2513413",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 883,
+      "path": "com/sunwayworld/cloud/module/item/samplescheme/persistent/mapper/conf/core-sample-scheme-postgresql-mapper.xml",
+      "sha256": "3abe51e0a7c5a99a75d43f4429d729643d48d0cd31dbff47e0c1925cf2513413",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 883,
+      "path": "com/sunwayworld/cloud/module/item/samplescheme/persistent/mapper/conf/core-sample-scheme-sqlserver-mapper.xml",
+      "sha256": "3abe51e0a7c5a99a75d43f4429d729643d48d0cd31dbff47e0c1925cf2513413",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 889,
+      "path": "com/sunwayworld/cloud/module/item/spcs/persistent/mapper/conf/core-coefficient-mysql-mapper.xml",
+      "sha256": "6774c0ccc4fba0a3102b755ac373ea6c335edda9a269582ae0ca2113a9fd7c25",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 886,
+      "path": "com/sunwayworld/cloud/module/item/spcs/persistent/mapper/conf/core-coefficient-oracle-mapper.xml",
+      "sha256": "d2eb2ff8440abdec53e92352c5dbb9ed86157ef283697f19b92363647306ebd7",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 886,
+      "path": "com/sunwayworld/cloud/module/item/spcs/persistent/mapper/conf/core-coefficient-sqlserver-mapper.xml",
+      "sha256": "d2eb2ff8440abdec53e92352c5dbb9ed86157ef283697f19b92363647306ebd7",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 890,
+      "path": "com/sunwayworld/cloud/module/item/workspacepanel/persistent/mapper/conf/core-workspace-panel-mysql-mapper.xml",
+      "sha256": "f5c8813e4a60c77b1d9e72d80c06a4e8adabc6989b89370bd5c3a8e62216f2de",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 890,
+      "path": "com/sunwayworld/cloud/module/item/workspacepanel/persistent/mapper/conf/core-workspace-panel-oracle-mapper.xml",
+      "sha256": "f5c8813e4a60c77b1d9e72d80c06a4e8adabc6989b89370bd5c3a8e62216f2de",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 890,
+      "path": "com/sunwayworld/cloud/module/item/workspacepanel/persistent/mapper/conf/core-workspace-panel-postgresql-mapper.xml",
+      "sha256": "f5c8813e4a60c77b1d9e72d80c06a4e8adabc6989b89370bd5c3a8e62216f2de",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 890,
+      "path": "com/sunwayworld/cloud/module/item/workspacepanel/persistent/mapper/conf/core-workspace-panel-sqlserver-mapper.xml",
+      "sha256": "f5c8813e4a60c77b1d9e72d80c06a4e8adabc6989b89370bd5c3a8e62216f2de",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1998,
+      "path": "com/sunwayworld/cloud/module/item/workspacescheme/persistent/mapper/conf/core-workspace-scheme-mysql-mapper.xml",
+      "sha256": "c51808c2d87b7fec848004368b24e492c19145ffa41e64f5f8b04371ec595a1a",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1998,
+      "path": "com/sunwayworld/cloud/module/item/workspacescheme/persistent/mapper/conf/core-workspace-scheme-oracle-mapper.xml",
+      "sha256": "c51808c2d87b7fec848004368b24e492c19145ffa41e64f5f8b04371ec595a1a",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 896,
+      "path": "com/sunwayworld/cloud/module/item/workspacescheme/persistent/mapper/conf/core-workspace-scheme-panel-config-mysql-mapper.xml",
+      "sha256": "96e571a1ece3d96bf2e929dbb7943bb14a113b5a520b2facf70e416e361bf968",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 896,
+      "path": "com/sunwayworld/cloud/module/item/workspacescheme/persistent/mapper/conf/core-workspace-scheme-panel-config-oracle-mapper.xml",
+      "sha256": "96e571a1ece3d96bf2e929dbb7943bb14a113b5a520b2facf70e416e361bf968",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 896,
+      "path": "com/sunwayworld/cloud/module/item/workspacescheme/persistent/mapper/conf/core-workspace-scheme-panel-config-postgresql-mapper.xml",
+      "sha256": "96e571a1ece3d96bf2e929dbb7943bb14a113b5a520b2facf70e416e361bf968",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 896,
+      "path": "com/sunwayworld/cloud/module/item/workspacescheme/persistent/mapper/conf/core-workspace-scheme-panel-config-sqlserver-mapper.xml",
+      "sha256": "96e571a1ece3d96bf2e929dbb7943bb14a113b5a520b2facf70e416e361bf968",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 2015,
+      "path": "com/sunwayworld/cloud/module/item/workspacescheme/persistent/mapper/conf/core-workspace-scheme-postgresql-mapper.xml",
+      "sha256": "fd63cd97d59d49c14cd9041fdcef4e3f2733c7ca47cb359225711ad8f0489857",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1998,
+      "path": "com/sunwayworld/cloud/module/item/workspacescheme/persistent/mapper/conf/core-workspace-scheme-sqlserver-mapper.xml",
+      "sha256": "c51808c2d87b7fec848004368b24e492c19145ffa41e64f5f8b04371ec595a1a",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 890,
+      "path": "com/sunwayworld/cloud/module/item/workspacescheme/persistent/mapper/conf/core-workspace-user-scheme-mysql-mapper.xml",
+      "sha256": "724e9276a19251af0d87a0bdbeb62c47b4dcaa4a1e4a86564157266f937cd894",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 890,
+      "path": "com/sunwayworld/cloud/module/item/workspacescheme/persistent/mapper/conf/core-workspace-user-scheme-oracle-mapper.xml",
+      "sha256": "724e9276a19251af0d87a0bdbeb62c47b4dcaa4a1e4a86564157266f937cd894",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 901,
+      "path": "com/sunwayworld/cloud/module/item/workspacescheme/persistent/mapper/conf/core-workspace-user-scheme-panel-config-mysql-mapper.xml",
+      "sha256": "a8c1afb49c8176133d3a718c7fdba20ffada386f1bc7f1ccee3dad7b24fd216d",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 901,
+      "path": "com/sunwayworld/cloud/module/item/workspacescheme/persistent/mapper/conf/core-workspace-user-scheme-panel-config-oracle-mapper.xml",
+      "sha256": "a8c1afb49c8176133d3a718c7fdba20ffada386f1bc7f1ccee3dad7b24fd216d",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 901,
+      "path": "com/sunwayworld/cloud/module/item/workspacescheme/persistent/mapper/conf/core-workspace-user-scheme-panel-config-postgresql-mapper.xml",
+      "sha256": "a8c1afb49c8176133d3a718c7fdba20ffada386f1bc7f1ccee3dad7b24fd216d",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 901,
+      "path": "com/sunwayworld/cloud/module/item/workspacescheme/persistent/mapper/conf/core-workspace-user-scheme-panel-config-sqlserver-mapper.xml",
+      "sha256": "a8c1afb49c8176133d3a718c7fdba20ffada386f1bc7f1ccee3dad7b24fd216d",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 890,
+      "path": "com/sunwayworld/cloud/module/item/workspacescheme/persistent/mapper/conf/core-workspace-user-scheme-postgresql-mapper.xml",
+      "sha256": "724e9276a19251af0d87a0bdbeb62c47b4dcaa4a1e4a86564157266f937cd894",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 890,
+      "path": "com/sunwayworld/cloud/module/item/workspacescheme/persistent/mapper/conf/core-workspace-user-scheme-sqlserver-mapper.xml",
+      "sha256": "724e9276a19251af0d87a0bdbeb62c47b4dcaa4a1e4a86564157266f937cd894",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 896,
+      "path": "com/sunwayworld/cloud/module/mobile/dingtalk/persistent/mapper/conf/dingtalk-message-mysql-mapper.xml",
+      "sha256": "4366cce720c84260126a90c9e350fc235bbee6a01de5f89100818ac57f127bab",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 896,
+      "path": "com/sunwayworld/cloud/module/mobile/dingtalk/persistent/mapper/conf/dingtalk-message-oracle-mapper.xml",
+      "sha256": "4366cce720c84260126a90c9e350fc235bbee6a01de5f89100818ac57f127bab",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 896,
+      "path": "com/sunwayworld/cloud/module/mobile/dingtalk/persistent/mapper/conf/dingtalk-message-postgresql-mapper.xml",
+      "sha256": "4366cce720c84260126a90c9e350fc235bbee6a01de5f89100818ac57f127bab",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 896,
+      "path": "com/sunwayworld/cloud/module/mobile/dingtalk/persistent/mapper/conf/dingtalk-message-sqlserver-mapper.xml",
+      "sha256": "4366cce720c84260126a90c9e350fc235bbee6a01de5f89100818ac57f127bab",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 888,
+      "path": "com/sunwayworld/cloud/module/mobile/dingtalk/persistent/mapper/conf/dingtalk-user-mysql-mapper.xml",
+      "sha256": "1a3635a8c84bc2061b3b6362521cb98976b229759ca6608ad954d047f3e420c8",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 888,
+      "path": "com/sunwayworld/cloud/module/mobile/dingtalk/persistent/mapper/conf/dingtalk-user-oracle-mapper.xml",
+      "sha256": "1a3635a8c84bc2061b3b6362521cb98976b229759ca6608ad954d047f3e420c8",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 888,
+      "path": "com/sunwayworld/cloud/module/mobile/dingtalk/persistent/mapper/conf/dingtalk-user-postgresql-mapper.xml",
+      "sha256": "1a3635a8c84bc2061b3b6362521cb98976b229759ca6608ad954d047f3e420c8",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 888,
+      "path": "com/sunwayworld/cloud/module/mobile/dingtalk/persistent/mapper/conf/dingtalk-user-sqlserver-mapper.xml",
+      "sha256": "1a3635a8c84bc2061b3b6362521cb98976b229759ca6608ad954d047f3e420c8",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1736,
+      "path": "com/sunwayworld/cloud/module/mobile/menu/persistent/mapper/conf/mobile-menu-mysql-mapper.xml",
+      "sha256": "1054f9c3ce24dfa86e843c312603000641c0eff84a1cf060d2118bd99886450c",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1746,
+      "path": "com/sunwayworld/cloud/module/mobile/menu/persistent/mapper/conf/mobile-menu-oracle-mapper.xml",
+      "sha256": "fa9cc8f228417859dc314d8b84c9499f51743e411281762825c69bda0f53f007",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1746,
+      "path": "com/sunwayworld/cloud/module/mobile/menu/persistent/mapper/conf/mobile-menu-postgresql-mapper.xml",
+      "sha256": "fa9cc8f228417859dc314d8b84c9499f51743e411281762825c69bda0f53f007",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1736,
+      "path": "com/sunwayworld/cloud/module/mobile/menu/persistent/mapper/conf/mobile-menu-sqlserver-mapper.xml",
+      "sha256": "1054f9c3ce24dfa86e843c312603000641c0eff84a1cf060d2118bd99886450c",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1560,
+      "path": "com/sunwayworld/cloud/module/mobile/menu/persistent/mapper/conf/mobile-page-mysql-mapper.xml",
+      "sha256": "4e1106d46cedc16cea425d3c31ead8cede68f07fff03492f7f7d71d62b157e9e",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1559,
+      "path": "com/sunwayworld/cloud/module/mobile/menu/persistent/mapper/conf/mobile-page-oracle-mapper.xml",
+      "sha256": "bc439fe78a2a31ba85d4edf6e49a083add37b2bcc924487e4e01b27e5c2addcd",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1559,
+      "path": "com/sunwayworld/cloud/module/mobile/menu/persistent/mapper/conf/mobile-page-postgresql-mapper.xml",
+      "sha256": "bc439fe78a2a31ba85d4edf6e49a083add37b2bcc924487e4e01b27e5c2addcd",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1560,
+      "path": "com/sunwayworld/cloud/module/mobile/menu/persistent/mapper/conf/mobile-page-sqlserver-mapper.xml",
+      "sha256": "4e1106d46cedc16cea425d3c31ead8cede68f07fff03492f7f7d71d62b157e9e",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1047,
+      "path": "com/sunwayworld/cloud/module/mobile/push/persistent/mapper/conf/mobile-push-message-mysql-mapper.xml",
+      "sha256": "38504a52d27d3b2c7aa5f7197ac49f303180d07d0056b569a1eb21c249b84d76",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1047,
+      "path": "com/sunwayworld/cloud/module/mobile/push/persistent/mapper/conf/mobile-push-message-oracle-mapper.xml",
+      "sha256": "38504a52d27d3b2c7aa5f7197ac49f303180d07d0056b569a1eb21c249b84d76",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1047,
+      "path": "com/sunwayworld/cloud/module/mobile/push/persistent/mapper/conf/mobile-push-message-postgresql-mapper.xml",
+      "sha256": "38504a52d27d3b2c7aa5f7197ac49f303180d07d0056b569a1eb21c249b84d76",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1047,
+      "path": "com/sunwayworld/cloud/module/mobile/push/persistent/mapper/conf/mobile-push-message-sqlserver-mapper.xml",
+      "sha256": "38504a52d27d3b2c7aa5f7197ac49f303180d07d0056b569a1eb21c249b84d76",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1037,
+      "path": "com/sunwayworld/cloud/module/mobile/push/persistent/mapper/conf/mobile-push-user-mysql-mapper.xml",
+      "sha256": "4d2f70e65ea19d170ffa1cc473b67ab80eb71cf1eae01f80d4026c57681e0fea",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1037,
+      "path": "com/sunwayworld/cloud/module/mobile/push/persistent/mapper/conf/mobile-push-user-oracle-mapper.xml",
+      "sha256": "4d2f70e65ea19d170ffa1cc473b67ab80eb71cf1eae01f80d4026c57681e0fea",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1037,
+      "path": "com/sunwayworld/cloud/module/mobile/push/persistent/mapper/conf/mobile-push-user-postgresql-mapper.xml",
+      "sha256": "4d2f70e65ea19d170ffa1cc473b67ab80eb71cf1eae01f80d4026c57681e0fea",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1037,
+      "path": "com/sunwayworld/cloud/module/mobile/push/persistent/mapper/conf/mobile-push-user-sqlserver-mapper.xml",
+      "sha256": "4d2f70e65ea19d170ffa1cc473b67ab80eb71cf1eae01f80d4026c57681e0fea",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 884,
+      "path": "com/sunwayworld/cloud/module/mobile/zwdd/persistent/mapper/config/zwdd-message-mysql-mapper.xml",
+      "sha256": "c58efcb04ac866a9d1e988424a7234af66bf2d260092544a765b324c221d1ccd",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 884,
+      "path": "com/sunwayworld/cloud/module/mobile/zwdd/persistent/mapper/config/zwdd-message-oracle-mapper.xml",
+      "sha256": "c58efcb04ac866a9d1e988424a7234af66bf2d260092544a765b324c221d1ccd",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 884,
+      "path": "com/sunwayworld/cloud/module/mobile/zwdd/persistent/mapper/config/zwdd-message-postgresql-mapper.xml",
+      "sha256": "c58efcb04ac866a9d1e988424a7234af66bf2d260092544a765b324c221d1ccd",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 884,
+      "path": "com/sunwayworld/cloud/module/mobile/zwdd/persistent/mapper/config/zwdd-message-sqlserver-mapper.xml",
+      "sha256": "c58efcb04ac866a9d1e988424a7234af66bf2d260092544a765b324c221d1ccd",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 876,
+      "path": "com/sunwayworld/cloud/module/mobile/zwdd/persistent/mapper/config/zwdd-user-mysql-mapper.xml.xml",
+      "sha256": "3d00c1e63abc77bfb31cbfc678d7cf90ea76819e22072f7b1a1dba2e9baf1f82",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 876,
+      "path": "com/sunwayworld/cloud/module/mobile/zwdd/persistent/mapper/config/zwdd-user-oracle-mapper.xml",
+      "sha256": "3d00c1e63abc77bfb31cbfc678d7cf90ea76819e22072f7b1a1dba2e9baf1f82",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 876,
+      "path": "com/sunwayworld/cloud/module/mobile/zwdd/persistent/mapper/config/zwdd-user-postgresql-mapper.xml",
+      "sha256": "3d00c1e63abc77bfb31cbfc678d7cf90ea76819e22072f7b1a1dba2e9baf1f82",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 876,
+      "path": "com/sunwayworld/cloud/module/mobile/zwdd/persistent/mapper/config/zwdd-user-sqlserver-mapper.xml",
+      "sha256": "3d00c1e63abc77bfb31cbfc678d7cf90ea76819e22072f7b1a1dba2e9baf1f82",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 882,
+      "path": "com/sunwayworld/cloud/module/monitor/config/persistent/mapper/conf/core-monitor-config-mysql-mapper.xml",
+      "sha256": "5ca2ee8a837883f4454583ac4c6662d9f655e7b98c595d98e415feb130ba7611",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 882,
+      "path": "com/sunwayworld/cloud/module/monitor/config/persistent/mapper/conf/core-monitor-config-oracle-mapper.xml",
+      "sha256": "5ca2ee8a837883f4454583ac4c6662d9f655e7b98c595d98e415feb130ba7611",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 882,
+      "path": "com/sunwayworld/cloud/module/monitor/config/persistent/mapper/conf/core-monitor-config-postgresql-mapper.xml",
+      "sha256": "5ca2ee8a837883f4454583ac4c6662d9f655e7b98c595d98e415feb130ba7611",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 882,
+      "path": "com/sunwayworld/cloud/module/monitor/config/persistent/mapper/conf/core-monitor-config-sqlserver-mapper.xml",
+      "sha256": "5ca2ee8a837883f4454583ac4c6662d9f655e7b98c595d98e415feb130ba7611",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 877,
+      "path": "com/sunwayworld/cloud/module/monitor/monitor/persistent/mapper/conf/core-monitor-app-mysql-mapper.xml",
+      "sha256": "35e9185de3beb85994e3adca8b880d7a0289f7193cf9121384a5bda59736e5db",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 877,
+      "path": "com/sunwayworld/cloud/module/monitor/monitor/persistent/mapper/conf/core-monitor-app-oracle-mapper.xml",
+      "sha256": "35e9185de3beb85994e3adca8b880d7a0289f7193cf9121384a5bda59736e5db",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 877,
+      "path": "com/sunwayworld/cloud/module/monitor/monitor/persistent/mapper/conf/core-monitor-app-postgresql-mapper.xml",
+      "sha256": "35e9185de3beb85994e3adca8b880d7a0289f7193cf9121384a5bda59736e5db",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 936,
+      "path": "com/sunwayworld/cloud/module/monitor/monitor/persistent/mapper/conf/core-monitor-app-runtime-mysql-mapper.xml",
+      "sha256": "2c74208686452fea98118c7a7e4e29f2f04aba2e78bd79c9f4b44b944c286264",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 936,
+      "path": "com/sunwayworld/cloud/module/monitor/monitor/persistent/mapper/conf/core-monitor-app-runtime-oracle-mapper.xml",
+      "sha256": "2c74208686452fea98118c7a7e4e29f2f04aba2e78bd79c9f4b44b944c286264",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 936,
+      "path": "com/sunwayworld/cloud/module/monitor/monitor/persistent/mapper/conf/core-monitor-app-runtime-postgresql-mapper.xml",
+      "sha256": "2c74208686452fea98118c7a7e4e29f2f04aba2e78bd79c9f4b44b944c286264",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 936,
+      "path": "com/sunwayworld/cloud/module/monitor/monitor/persistent/mapper/conf/core-monitor-app-runtime-sqlserver-mapper.xml",
+      "sha256": "2c74208686452fea98118c7a7e4e29f2f04aba2e78bd79c9f4b44b944c286264",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 877,
+      "path": "com/sunwayworld/cloud/module/monitor/monitor/persistent/mapper/conf/core-monitor-app-sqlserver-mapper.xml",
+      "sha256": "35e9185de3beb85994e3adca8b880d7a0289f7193cf9121384a5bda59736e5db",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1327,
+      "path": "com/sunwayworld/cloud/module/monitor/monitor/persistent/mapper/conf/core-monitor-message-mysql-mapper.xml",
+      "sha256": "dd56a6d73af996960abfffdb450fe9d7cbfdd68159e5f79026c01667ee08f31e",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1392,
+      "path": "com/sunwayworld/cloud/module/monitor/monitor/persistent/mapper/conf/core-monitor-message-oracle-mapper.xml",
+      "sha256": "e89acd952cc7d1af30afd7a8f793fff551d7e348e13c776c022aa8d1caa4a16c",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1390,
+      "path": "com/sunwayworld/cloud/module/monitor/monitor/persistent/mapper/conf/core-monitor-message-postgresql-mapper.xml",
+      "sha256": "12794488396b7ce6d7d492e851e9fdde33811b504c4922c2075c6954a641fa7a",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1330,
+      "path": "com/sunwayworld/cloud/module/monitor/monitor/persistent/mapper/conf/core-monitor-message-sqlserver-mapper.xml",
+      "sha256": "523a0ba582425075e7660271852a400725bc3ec0f0dfe1defb64674819b767b9",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 920,
+      "path": "com/sunwayworld/cloud/module/monitor/monitor/persistent/mapper/conf/core-monitor-req-mysql-mapper.xml",
+      "sha256": "e7e9a49c590667502c819c83eb2181e727eaede8993773eb662ac05a52090c94",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 920,
+      "path": "com/sunwayworld/cloud/module/monitor/monitor/persistent/mapper/conf/core-monitor-req-oracle-mapper.xml",
+      "sha256": "e7e9a49c590667502c819c83eb2181e727eaede8993773eb662ac05a52090c94",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 920,
+      "path": "com/sunwayworld/cloud/module/monitor/monitor/persistent/mapper/conf/core-monitor-req-postgresql-mapper.xml",
+      "sha256": "e7e9a49c590667502c819c83eb2181e727eaede8993773eb662ac05a52090c94",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 920,
+      "path": "com/sunwayworld/cloud/module/monitor/monitor/persistent/mapper/conf/core-monitor-req-sqlserver-mapper.xml",
+      "sha256": "e7e9a49c590667502c819c83eb2181e727eaede8993773eb662ac05a52090c94",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 883,
+      "path": "com/sunwayworld/cloud/module/monitor/monitor/persistent/mapper/conf/core-monitor-server-mysql-mapper.xml",
+      "sha256": "8d4a286f384fa30b91e505b8619e28f7dedaf99cd911596cb5874c25739b83f2",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 883,
+      "path": "com/sunwayworld/cloud/module/monitor/monitor/persistent/mapper/conf/core-monitor-server-oracle-mapper.xml",
+      "sha256": "8d4a286f384fa30b91e505b8619e28f7dedaf99cd911596cb5874c25739b83f2",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 883,
+      "path": "com/sunwayworld/cloud/module/monitor/monitor/persistent/mapper/conf/core-monitor-server-postgresql-mapper.xml",
+      "sha256": "8d4a286f384fa30b91e505b8619e28f7dedaf99cd911596cb5874c25739b83f2",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 941,
+      "path": "com/sunwayworld/cloud/module/monitor/monitor/persistent/mapper/conf/core-monitor-server-runtime-mysql-mapper.xml",
+      "sha256": "5fb2db5f428dffe89398212f2b5c858f30c5ef591af36a53f82180b78bd515e8",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 946,
+      "path": "com/sunwayworld/cloud/module/monitor/monitor/persistent/mapper/conf/core-monitor-server-runtime-oracle-mapper.xml",
+      "sha256": "afe113aea978777e226cf9d88bb67e454d78c904191e567d945fa46c50d6f613",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 946,
+      "path": "com/sunwayworld/cloud/module/monitor/monitor/persistent/mapper/conf/core-monitor-server-runtime-postgresql-mapper.xml",
+      "sha256": "afe113aea978777e226cf9d88bb67e454d78c904191e567d945fa46c50d6f613",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 946,
+      "path": "com/sunwayworld/cloud/module/monitor/monitor/persistent/mapper/conf/core-monitor-server-runtime-sqlserver-mapper.xml",
+      "sha256": "afe113aea978777e226cf9d88bb67e454d78c904191e567d945fa46c50d6f613",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 883,
+      "path": "com/sunwayworld/cloud/module/monitor/monitor/persistent/mapper/conf/core-monitor-server-sqlserver-mapper.xml",
+      "sha256": "8d4a286f384fa30b91e505b8619e28f7dedaf99cd911596cb5874c25739b83f2",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 922,
+      "path": "com/sunwayworld/cloud/module/monitor/monitor/persistent/mapper/conf/core-monitor-user-mysql-mapper.xml",
+      "sha256": "15805928c4e24bf5b66ec7805634436e07f355a9e070a0edd526b32a20e29995",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 922,
+      "path": "com/sunwayworld/cloud/module/monitor/monitor/persistent/mapper/conf/core-monitor-user-oracle-mapper.xml",
+      "sha256": "15805928c4e24bf5b66ec7805634436e07f355a9e070a0edd526b32a20e29995",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 922,
+      "path": "com/sunwayworld/cloud/module/monitor/monitor/persistent/mapper/conf/core-monitor-user-postgresql-mapper.xml",
+      "sha256": "15805928c4e24bf5b66ec7805634436e07f355a9e070a0edd526b32a20e29995",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 922,
+      "path": "com/sunwayworld/cloud/module/monitor/monitor/persistent/mapper/conf/core-monitor-user-sqlserver-mapper.xml",
+      "sha256": "15805928c4e24bf5b66ec7805634436e07f355a9e070a0edd526b32a20e29995",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1052,
+      "path": "com/sunwayworld/cloud/module/mytask/persistent/mapper/conf/core-my-task-mysql-mapper.xml",
+      "sha256": "3bd129caddf58e5b7f49f4cf39548c7a15994877be5e548f1a1c6d997415e26c",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1052,
+      "path": "com/sunwayworld/cloud/module/mytask/persistent/mapper/conf/core-my-task-oracle-mapper.xml",
+      "sha256": "3bd129caddf58e5b7f49f4cf39548c7a15994877be5e548f1a1c6d997415e26c",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1052,
+      "path": "com/sunwayworld/cloud/module/mytask/persistent/mapper/conf/core-my-task-postgresql-mapper.xml",
+      "sha256": "3bd129caddf58e5b7f49f4cf39548c7a15994877be5e548f1a1c6d997415e26c",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 1052,
+      "path": "com/sunwayworld/cloud/module/mytask/persistent/mapper/conf/core-my-task-sqlserver-mapper.xml",
+      "sha256": "3bd129caddf58e5b7f49f4cf39548c7a15994877be5e548f1a1c6d997415e26c",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 867,
+      "path": "com/sunwayworld/cloud/module/pdf/persistent/mapper/conf/core-pdf-document-mysql-mapper.xml",
+      "sha256": "fa05ad6b590cd98710e2afb1e80fa6c00f254e1e6f3e7e6b638e77b7fd75ce69",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 867,
+      "path": "com/sunwayworld/cloud/module/pdf/persistent/mapper/conf/core-pdf-document-oracle-mapper.xml",
+      "sha256": "fa05ad6b590cd98710e2afb1e80fa6c00f254e1e6f3e7e6b638e77b7fd75ce69",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 867,
+      "path": "com/sunwayworld/cloud/module/pdf/persistent/mapper/conf/core-pdf-document-postgresql-mapper.xml",
+      "sha256": "fa05ad6b590cd98710e2afb1e80fa6c00f254e1e6f3e7e6b638e77b7fd75ce69",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 867,
+      "path": "com/sunwayworld/cloud/module/pdf/persistent/mapper/conf/core-pdf-document-sqlserver-mapper.xml",
+      "sha256": "fa05ad6b590cd98710e2afb1e80fa6c00f254e1e6f3e7e6b638e77b7fd75ce69",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 874,
+      "path": "com/sunwayworld/cloud/module/printer/printlog/persistent/mapper/conf/core-print-log-mysql-mapper.xml",
+      "sha256": "25d256053ebfde2cd519968500ce6477e615e82e7c3249ec9ec14c908cd7846c",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 874,
+      "path": "com/sunwayworld/cloud/module/printer/printlog/persistent/mapper/conf/core-print-log-oracle-mapper.xml",
+      "sha256": "25d256053ebfde2cd519968500ce6477e615e82e7c3249ec9ec14c908cd7846c",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 874,
+      "path": "com/sunwayworld/cloud/module/printer/printlog/persistent/mapper/conf/core-print-log-postgresql-mapper.xml",
+      "sha256": "25d256053ebfde2cd519968500ce6477e615e82e7c3249ec9ec14c908cd7846c",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 874,
+      "path": "com/sunwayworld/cloud/module/printer/printlog/persistent/mapper/conf/core-print-log-sqlserver-mapper.xml",
+      "sha256": "25d256053ebfde2cd519968500ce6477e615e82e7c3249ec9ec14c908cd7846c",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 899,
+      "path": "com/sunwayworld/cloud/module/sys/monitor/config/persistent/mapper/conf/core-system-monitor-config-mysql-mapper.xml",
+      "sha256": "b562a33bbd98bd8cbd7d1b2013316c709a4b28e9ba99f0a20273541eba615649",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 899,
+      "path": "com/sunwayworld/cloud/module/sys/monitor/config/persistent/mapper/conf/core-system-monitor-config-oracle-mapper.xml",
+      "sha256": "b562a33bbd98bd8cbd7d1b2013316c709a4b28e9ba99f0a20273541eba615649",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 899,
+      "path": "com/sunwayworld/cloud/module/sys/monitor/config/persistent/mapper/conf/core-system-monitor-config-postgresql-mapper.xml",
+      "sha256": "b562a33bbd98bd8cbd7d1b2013316c709a4b28e9ba99f0a20273541eba615649",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 899,
+      "path": "com/sunwayworld/cloud/module/sys/monitor/config/persistent/mapper/conf/core-system-monitor-config-sqlserver-mapper.xml",
+      "sha256": "b562a33bbd98bd8cbd7d1b2013316c709a4b28e9ba99f0a20273541eba615649",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 905,
+      "path": "com/sunwayworld/cloud/module/sys/monitor/errorlog/persistent/mapper/conf/core-system-monitor-errorlog-mysql-mapper.xml",
+      "sha256": "dfb829614fbfe59db1e421c3e68bf4672e5fc4534f651e0a2e4337ad90f3d75e",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 904,
+      "path": "com/sunwayworld/cloud/module/sys/monitor/errorlog/persistent/mapper/conf/core-system-monitor-errorlog-oracle-mapper.xml",
+      "sha256": "5227130af8671e871f01054b278c3f9cfb9340d5bcea2ad2330a8e3b9ceca75e",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 905,
+      "path": "com/sunwayworld/cloud/module/sys/monitor/errorlog/persistent/mapper/conf/core-system-monitor-errorlog-postgresql-mapper.xml",
+      "sha256": "dfb829614fbfe59db1e421c3e68bf4672e5fc4534f651e0a2e4337ad90f3d75e",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 905,
+      "path": "com/sunwayworld/cloud/module/sys/monitor/errorlog/persistent/mapper/conf/core-system-monitor-errorlog-sqlserver-mapper.xml",
+      "sha256": "dfb829614fbfe59db1e421c3e68bf4672e5fc4534f651e0a2e4337ad90f3d75e",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 889,
+      "path": "com/sunwayworld/cloud/module/sys/monitor/pm/persistent/mapper/conf/core-system-monitor-sql-mysql-mapper.xml",
+      "sha256": "7feefe359d2bbf3c2de3a9b0d444bd9dea1bb37b5c42e16b7bb3a2e8f89c314d",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 889,
+      "path": "com/sunwayworld/cloud/module/sys/monitor/pm/persistent/mapper/conf/core-system-monitor-sql-oracle-mapper.xml",
+      "sha256": "7feefe359d2bbf3c2de3a9b0d444bd9dea1bb37b5c42e16b7bb3a2e8f89c314d",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 889,
+      "path": "com/sunwayworld/cloud/module/sys/monitor/pm/persistent/mapper/conf/core-system-monitor-sql-postgresql-mapper.xml",
+      "sha256": "7feefe359d2bbf3c2de3a9b0d444bd9dea1bb37b5c42e16b7bb3a2e8f89c314d",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 889,
+      "path": "com/sunwayworld/cloud/module/sys/monitor/pm/persistent/mapper/conf/core-system-monitor-sql-sqlserver-mapper.xml",
+      "sha256": "7feefe359d2bbf3c2de3a9b0d444bd9dea1bb37b5c42e16b7bb3a2e8f89c314d",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 872,
+      "path": "com/sunwayworld/cloud/module/topology/persistent/mapper/conf/core-topology-mysql-mapper.xml",
+      "sha256": "6e5b07da34a7060efe3d6a06d0b443450d7ce9b1a9f32e4a3a875fea7e3870d9",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 872,
+      "path": "com/sunwayworld/cloud/module/topology/persistent/mapper/conf/core-topology-oracle-mapper.xml",
+      "sha256": "6e5b07da34a7060efe3d6a06d0b443450d7ce9b1a9f32e4a3a875fea7e3870d9",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 872,
+      "path": "com/sunwayworld/cloud/module/topology/persistent/mapper/conf/core-topology-postgresql-mapper.xml",
+      "sha256": "6e5b07da34a7060efe3d6a06d0b443450d7ce9b1a9f32e4a3a875fea7e3870d9",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 872,
+      "path": "com/sunwayworld/cloud/module/topology/persistent/mapper/conf/core-topology-sqlserver-mapper.xml",
+      "sha256": "6e5b07da34a7060efe3d6a06d0b443450d7ce9b1a9f32e4a3a875fea7e3870d9",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 774,
+      "path": "config/application-base_dev.yml",
+      "sha256": "41236468ee62489faec4dafa8f59e5e2e9434f1dcae2a66f248a542f1a833ebb",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 735,
+      "path": "config/application-base_pro.yml",
+      "sha256": "dc17d126d2d87408da40dc17b89ec9e5c19c511abd7bd18e5d163b6dc9409cde",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 2298,
+      "path": "config/application-base_test.yml",
+      "sha256": "f4273311692cb992ced22982ab8aca79975165649fcb682633d1194753a67c5e",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 555,
+      "path": "config/application.yml",
+      "sha256": "057b78f18cccb15d9d186bbad016bd377b3c01e85b3f887850eb94edc5bd44a9",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 686,
+      "path": "config/bootstrap.yml",
+      "sha256": "c63188595e8c78cad8e710a4a813536d16fc872cf6db586401688ff23d798e95",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    },
+    {
+      "bytes": 2898,
+      "path": "log4j2.xml",
+      "sha256": "6839ea17d6fae58874cabdb3d7f2d48ff87e02295b08cb993162d1f959fc9757",
+      "source_jar": "gikam-core-base-service-14.1.5.jar"
+    }
+  ],
+  "schema": "supplier-reconstituted-private-resource-provenance-v1",
+  "source_jars": [
+    {
+      "source_jar": "gikam-core-base-service-14.1.5.jar",
+      "source_jar_sha256": "5d64d5f336464e76078ace721fbc088e94d17129061b1e321de9df8d7be7f0d5"
+    }
+  ]
+}

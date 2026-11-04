@@ -1,0 +1,29 @@
+server:
+  port: 8187
+
+spring:
+  profiles: schedule_dev
+  resources:
+    chain:
+      strategy:
+        content:
+          enabled: false
+  datasource:
+    driver-class-name: oracle.jdbc.OracleDriver
+    username: core_pm_dev
+    password: core_pm_$dev
+    url: jdbc:oracle:thin:@103.43.184.243:15211:utf8
+  redis:
+    database: 0
+    url: redis://sunway612@localhost:6379
+#    url: redis://192.168.5.164:32379
+  messages:
+    basename: static/i18n/messages-core
+  cloud:
+    nacos:
+      discovery:
+        server-addr: ${NACOS_DISCOVERY_SERVER_ADDR:localhost:8848}
+        namespace: ${NACOS_DISCOVERY_NAMESPACE:dev}
+        group: ${NACOS_DISCOVERY_GROUP:DEFAULT_GROUP}
+  zipkin:
+    enabled: false

@@ -1,0 +1,8 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/module/sys/at-logs/core-at-log.js',
+                      '/static/module/sys/at-logs/core-at-log-search-list.js'
+                 ]);
+    coreAtLog.searchPage.init([[${param}]]);
+/*]]>*/
+</script>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.cloud.module.fr.report.persistent.mapper.CoreReportConfigLineMapper">
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM (SELECT L.*,
+                       C.NAME,
+                       C.REMARK,
+                       F.NAME FILENAME,
+                       F.BIZCATEGORY,
+                       F.ID AS FILEID
+                  FROM T_CORE_REPORT_CONFIG_LINE L
+             LEFT JOIN T_CORE_REPORT_CONFIG C
+                    ON L.REPORTCONFIGID = C.ID
+             LEFT JOIN T_CORE_FILE F
+                    ON F.TARGETID = 'T_CORE_REPORT_CONFIG_LINE$' || L.ID
+                    <if test="filter_bizCategory != null">
+                        AND F.BIZCATEGORY = #{filter_bizCategory}
+                    </if>
+                 WHERE 1 = 1) T
+         <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent"/>
+        </where>
+         ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.REPORTCONFIGID, T.ORDERNO, T.ID
+            </otherwise>
+        </choose>
+    </select>
+    
+    <select id="selectTreeList" parameterType="map" resultType="map">
+        SELECT *
+          FROM (SELECT A.*,
+                       B.NAME,
+                       B.CATEGORY,
+                       C.NAME AS FILENAME
+                  FROM T_CORE_REPORT_CONFIG_LINE A
+                  LEFT JOIN T_CORE_REPORT_CONFIG B
+                    ON B.ID = A.REPORTCONFIGID
+                  LEFT JOIN T_CORE_FILE C
+                    ON C.TARGETID = 'T_CORE_REPORT_CONFIG_LINE$' || A.ID) T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+            <if test='authority_role == "1" and loginUser != null'> <!-- 卡角色权限 -->
+                <choose>
+                    <when test='loginUser.ext$.loginroleid != null'> <!-- 登录时选择角色 -->
+                    OR EXISTS (SELECT 1
+                                  FROM T_CORE_ROLE_PERMISSION P
+                                  WHERE P.PERMISSIONTYPEID = 'T_CORE_REPORT_CONFIG_LINE'
+                                   AND P.ROLEID =  <![CDATA[#{loginUser.ext$.loginroleid}]]>
+                                   AND P.TARGETID = CAST(T.ID AS VARCHAR)
+                                   AND T.CATEGORY = 'select'
+                                   AND T.ACTIVATEDFLAG = '1')
+                    </when>
+                    <otherwise> <!-- 登录不选角色 -->
+                    OR EXISTS (SELECT 1
+                                 FROM T_CORE_ROLE_PERMISSION P
+                                 LEFT JOIN T_CORE_ROLE_USER RU
+                                   ON RU.ROLEID = P.ROLEID
+                                WHERE P.PERMISSIONTYPEID = 'T_CORE_REPORT_CONFIG_LINE'
+                                  AND RU.USERID =  #{loginUser.id}
+                                  AND P.TARGETID = CAST(T.ID AS VARCHAR)
+                                  AND T.CATEGORY = 'select'
+                                  AND T.ACTIVATEDFLAG = '1')
+                    </otherwise>
+                </choose>
+            </if>
+        </where>
+            ORDER BY T.ORDERNO, T.ID
+    </select>
+    
+</mapper>

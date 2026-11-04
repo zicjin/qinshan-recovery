@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/module/sys/dp-configs/core-dp-config.js',
+                      '/static/module/sys/dp-configs/core-dp-config-choose-list.js'
+                    ]);
+    coreDpConfig.choosePage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>
+

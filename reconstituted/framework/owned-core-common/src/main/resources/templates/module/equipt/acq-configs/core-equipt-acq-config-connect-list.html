@@ -1,0 +1,12 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/plugin/sockjs/sockjs.min.js',
+                      '/static/plugin/stompjs/stomp.min.js',
+                      '/static/module/equipt/acq-configs/core-equipt-acq-config.js',
+                      '/static/module/equipt/acq-configs/core-equipt-acq-config-connect-list.js',
+                      '/static/module/equipt/acq-configs/core-equipt-serial-listener.js'
+                    ]);
+    coreEquiptAcqConfig.connectPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>
+

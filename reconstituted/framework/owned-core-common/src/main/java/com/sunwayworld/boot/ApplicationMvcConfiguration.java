@@ -6,6 +6,11 @@ package com.sunwayworld.boot;
 import java.util.List;
 import java.util.Map;
 import org.springframework.boot.autoconfigure.web.servlet.WebMvcProperties;
+import com.sunwayworld.framework.restful.resolver.feign.ToRestJsonFeignResolver;
+import com.sunwayworld.framework.restful.resolver.string.ToJsonStringResolver;
+import com.sunwayworld.framework.restful.resolver.wrapper.ToRestJsonWrapperResolver;
+import com.sunwayworld.framework.tenant.TenantInterceptor;
+import com.sunwayworld.framework.json.fastjson.SingletonFastJsonConverter;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.FilterType;
@@ -27,27 +32,43 @@ public class ApplicationMvcConfiguration
 extends WebMvcConfigurationSupport {
     private final WebMvcProperties mvcProperties;
 
+    private final org.springframework.web.servlet.i18n.LocaleChangeInterceptor localeChangeInterceptor = new org.springframework.web.servlet.i18n.LocaleChangeInterceptor();
+
     public ApplicationMvcConfiguration(WebMvcProperties mvcProperties) {
         this.mvcProperties = mvcProperties;
     }
 
     @Override
-    public native void configureDefaultServletHandling(DefaultServletHandlerConfigurer var1);
+    public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) { configurer.enable(); }
 
     @Override
-    public native void addArgumentResolvers(List<HandlerMethodArgumentResolver> var1);
+    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
+        resolvers.add(new ToRestJsonWrapperResolver());
+        resolvers.add(new ToJsonStringResolver());
+        resolvers.add(new ToRestJsonFeignResolver());
+    }
 
     @Override
-    public native void configureMessageConverters(List<HttpMessageConverter<?>> var1);
+    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+        converters.add(SingletonFastJsonConverter.getInstance());
+    }
 
     @Override
-    protected native void addResourceHandlers(ResourceHandlerRegistry var1);
+    protected void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
+    }
 
     @Override
-    public native void configurePathMatch(PathMatchConfigurer var1);
+    public void configurePathMatch(PathMatchConfigurer configurer) {
+        configurer.setUseSuffixPatternMatch(false);
+        configurer.setUseTrailingSlashMatch(true);
+    }
 
     @Override
-    public native void addInterceptors(InterceptorRegistry var1);
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new TenantInterceptor());
+        registry.addInterceptor(this.localeChangeInterceptor);
+    }
 
     @Override
     protected void configureContentNegotiation(ContentNegotiationConfigurer configurer) {

@@ -1,0 +1,8 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/module/train/train-plans/core-train-plan.js',
+                      '/static/module/train/train-plans/core-train-plan-edit-list.js'
+                    ]);
+    coreTrainPlan.editPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.cloud.module.mobile.menu.persistent.mapper.MobilePageMapper">
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+            FROM T_CORE_MOBILE_PAGE T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent"/>
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.PAGENO ASC
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="selectMobilePageTreeList" resultType="map">
+        SELECT T.*
+          FROM T_CORE_MOBILE_PAGE T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+            <if test="selectedTreeNodeId != null">
+                AND T.ID LIKE (#{selectedTreeNodeId} + '%')
+            </if> 
+            <if test='queries_choosable == "1"'>
+                  AND EXISTS (
+                      SELECT 1
+                        FROM T_CORE_MOBILE_MENU P
+                       WHERE T.MENUID = P.ID
+                  )
+              </if>
+        </where>
+        ORDER BY  T.PAGENO
+    </select>
+</mapper>

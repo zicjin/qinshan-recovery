@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.module.sys.bpmn.mapper.CoreBpmnTargetMapper">
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM (SELECT T.*,
+                       N.MESSAGE TARGETTABLENAME,
+                       M.HREF,
+                       M.RESOURCEPATH
+                  FROM T_CORE_BPMN_TARGET T
+                  LEFT JOIN  (SELECT E.TABLENAME,
+                              MAX(M.HREF) HREF,
+                              MAX(M.RESOURCEPATH) RESOURCEPATH
+                         FROM T_CORE_MENU_EXT E, T_CORE_MENU M
+                        WHERE E.ID = M.ID
+                        GROUP BY E.TABLENAME) M
+                 ON T.TARGETTABLE = M.TABLENAME
+                 LEFT JOIN  (SELECT M.MESSAGE,
+                              N.CODE
+                         FROM T_CORE_I18N N, T_CORE_I18N_MESSAGE M
+                        WHERE N.ID = M.I18NID
+                          AND LOWER(M.I18NCONFIGID) = #{_locale}) N
+                   ON CONCAT(T.TARGETTABLE, '.SERVICE_NAME') = N.CODE) T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ID
+            </otherwise>
+        </choose>
+    </select>
+    
+    <select id="selectDetail" resultType="map">
+        SELECT T.*,
+               M.HREF
+          FROM T_CORE_BPMN_TARGET T,
+              (SELECT E.TABLENAME,
+                      MAX(M.HREF) HREF
+                 FROM T_CORE_MENU_EXT E, T_CORE_MENU M
+                WHERE E.ID = M.ID
+                GROUP BY E.TABLENAME) M
+         WHERE T.TARGETTABLE = M.TABLENAME
+           AND T.ID = #{id}
+    </select>
+</mapper>

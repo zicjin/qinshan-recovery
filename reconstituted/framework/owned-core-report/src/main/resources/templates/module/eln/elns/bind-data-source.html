@@ -1,0 +1,14 @@
+<!-- 引入核心组件 -->
+<th:block th:replace="module/gikam/gikam" />
+<script th:src="@{/static/plugin/spread-sheets-11.2.6/designer/index/showDataSource/base.js}"></script>
+<script th:src="@{/static/plugin/spread-sheets-11.2.6/designer/index/showDataSource/dataSource.js}"></script>
+
+<script>
+/*<![CDATA[*/
+    Gikam.component.FrontI18N.init(Gikam.locale).then(function() {
+        var workspace = {}
+        var data = JSON.parse(JSON.stringify(window.opener.dataForDatasourceShow.data));
+        dataSource.editPage.init(data);
+    });
+/*]]>*/
+</script>

@@ -1,0 +1,10 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ 
+                      '/static/module/eln/eln-tmpls/core-eln-tmpl.js',
+                      '/static/module/eln/eln-tmpls/core-eln-tmpl-edit-list.js'
+                    ]);
+    coreElnTmpl.editPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>
+

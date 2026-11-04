@@ -1,0 +1,1 @@
+var coreSystemConfig = Gikam.getPageObject({});

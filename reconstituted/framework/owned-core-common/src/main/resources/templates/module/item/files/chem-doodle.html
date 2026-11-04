@@ -1,0 +1,103 @@
+<th:block th:replace="module/gikam/gikam" />
+
+<link rel="stylesheet" th:href="@{/static/plugin/chem-doodle-web/ChemDoodleWeb.css}" />
+<link rel="stylesheet" th:href="@{/static/plugin/chem-doodle-web/uis/jquery-ui-1.11.4.css}" />
+
+<script th:src="@{/static/plugin/jquery/jquery.min.js}"></script>
+<script th:src="@{/static/plugin/chem-doodle-web/ChemDoodleWeb-unpacked.js}"></script>
+<script th:src="@{/static/plugin/chem-doodle-web/uis/ChemDoodleWeb-uis-unpacked.js}"></script>
+
+<style>
+body {
+	text-align: center;
+}
+
+#sketcher_button_save {
+	display: none;
+}
+</style>
+
+
+
+<script th:inline="javascript">
+/*<![CDATA[*/
+    
+    Gikam.component.I18N.map = top.Gikam.component.I18N.map;
+    var param = Gikam.getElParam([[${param}]]);
+    
+    ChemDoodle.ELEMENT['H'].jmolColor = 'black';
+    ChemDoodle.ELEMENT['S'].jmolColor = '#B9A130';
+    
+    var sketcher = new ChemDoodle.SketcherCanvas('sketcher', 800, 400, {
+        readonly : false,
+        specs : {
+            atoms_displayTerminalCarbonLabels_2D : true,
+            atoms_useJMOLColors : true,
+            bonds_clearOverlaps_2D : true
+        }
+    });
+    
+    var getSketcherData = function() {
+        return Gikam.extend({
+            image : ChemDoodle.io.png.string(sketcher),
+            data : new ChemDoodle.io.JSONInterpreter().molTo(sketcher.getMolecule())
+        }, getWeightAndFormula());
+    };
+    
+    var setSketcherData = function(data) {
+        if(!data) {
+            return;
+        }
+        sketcher.loadMolecule(new ChemDoodle.io.JSONInterpreter().molFrom(data));
+        sketcher.repaint();
+    };
+    
+    var getWeightAndFormula = function() {
+        var molecule = sketcher.getMolecule(), 
+        atoms = molecule.atoms, bonds = molecule.bonds,
+        hydrogenCount = 0, map = {}, mapSortArr = [], formula, mass = 0;
+        
+        Gikam.each(atoms, function(index, item) {
+            hydrogenCount = hydrogenCount + item.getImplicitHydrogenCount();
+            map[item.label] = map[item.label] ? map[item.label] + 1 : 1
+        })
+        
+        if (map['C']) {
+            var obj = {}
+            obj['k'] = 'C';
+            obj['v'] = map['C'];
+            mapSortArr.push(obj);
+        }
+        
+        hydrogenCount = map['H'] ? map['H'] + hydrogenCount: hydrogenCount;
+        
+        if (hydrogenCount > 0) {
+            var obj = {};
+            obj['k'] = 'H';
+            obj['v'] = hydrogenCount;
+            mapSortArr.push(obj);
+        }
+        
+        Gikam.each(map, function(k,v){
+            if(k === 'C' || k === 'H') {
+                return ;
+            }
+            var obj = {};
+            obj['k'] = k;
+            obj['v'] = v;
+            mapSortArr.push(obj);
+        });
+       
+        Gikam.each(mapSortArr, function(index, item){
+            if (item.v > 1) {
+                formula = formula ? formula + item.k+'<sub>'+ item.v +'</sub>' : item.k + '<sub>'+ item.v + '</sub>';
+            } else {
+                formula = formula ? formula + item.k : item.k;
+            }
+            mass = mass + ChemDoodle.ELEMENT[item.k].mass * item.v
+        });
+        
+        return {weight : mass, formula : formula};
+    };
+/*]]>*/
+</script>

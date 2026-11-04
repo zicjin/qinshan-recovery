@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ 
+                      '/static/module/office/dses/core-office-ds.js',
+                      '/static/module/office/dses/core-office-ds-detail.js'
+                    ]);
+    coreOfficeDs.detailPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>

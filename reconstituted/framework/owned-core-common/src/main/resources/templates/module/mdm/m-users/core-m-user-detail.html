@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/module/mdm/m-users/core-m-user.js',
+                      '/static/module/mdm/m-users/core-m-user-detail.js'
+                    ]);
+    modifiedUser.detailPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>
+

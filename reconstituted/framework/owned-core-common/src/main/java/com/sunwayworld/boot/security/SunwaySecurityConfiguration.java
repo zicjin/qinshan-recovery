@@ -7,6 +7,13 @@ import com.sunwayworld.framework.spring.filter.GikamFilterConfig.FilterPos;
 import com.sunwayworld.framework.utils.ArrayUtils;
 import com.sunwayworld.framework.utils.EncryptUtils;
 import com.sunwayworld.framework.utils.StringUtils;
+import com.sunwayworld.framework.security.authentication.AuthenticationHelper;
+import com.sunwayworld.framework.security.support.AjaxAuthenticationFailureHandler;
+import com.sunwayworld.framework.security.support.AjaxAuthenticationSuccessHandler;
+import com.sunwayworld.framework.security.support.DefaultDaoAuthenticationProvider;
+import com.sunwayworld.framework.security.support.Http401UnauthorizedEntryPoint;
+import com.sunwayworld.framework.security.service.DefaultTokenBasedRememberMeServices;
+import com.sunwayworld.framework.security.service.DefaultUserDetailsService;
 import java.util.function.Function;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -48,19 +55,44 @@ public class SunwaySecurityConfiguration extends WebSecurityConfigurerAdapter {
    private String authenticated;
 
    @Autowired
-   public native void configureGlobal(AuthenticationManagerBuilder amb);
+   public void configureGlobal(AuthenticationManagerBuilder amb) throws Exception { amb.userDetailsService(this.userDetailsService()); }
 
    @Bean
    @Override
-   public native UserDetailsService userDetailsService();
+   public UserDetailsService userDetailsService() { return new DefaultUserDetailsService(); }
 
    @Bean
-   public native AuthenticationProvider authenticationProvider();
+   public AuthenticationProvider authenticationProvider() throws Exception {
+        DefaultDaoAuthenticationProvider provider = new DefaultDaoAuthenticationProvider();
+        provider.setUserDetailsService(this.userDetailsService());
+        provider.setPasswordEncoder(this.passwordEncoder());
+        return provider;
+    }
 
    @Bean
-   public native RememberMeServices rememberMeServices();
+   public RememberMeServices rememberMeServices() {
+        DefaultTokenBasedRememberMeServices services = new DefaultTokenBasedRememberMeServices();
+        services.setTokenValiditySeconds(this.getApplicationContext().getEnvironment().getProperty("sunway.security.token-validity-seconds", Integer.class, -1));
+        return services;
+    }
 
-   private native void init(HttpSecurity http) throws Exception;
+   private void init(HttpSecurity http) throws Exception {
+        http.exceptionHandling().authenticationEntryPoint(new Http401UnauthorizedEntryPoint())
+                .and()
+                .formLogin()
+                    .loginProcessingUrl("/core/module/sys/login")
+                    .usernameParameter("id")
+                    .passwordParameter("password")
+                    .successHandler(new AjaxAuthenticationSuccessHandler())
+                    .failureHandler(new AjaxAuthenticationFailureHandler())
+                .and()
+                .logout()
+                    .logoutUrl("/core/module/sys/logout")
+                .and()
+                .rememberMe()
+                    .rememberMeServices(this.rememberMeServices())
+                    .key(REMEMBER_ME_KEY);
+    }
 
    @Bean
    @Order(Integer.MAX_VALUE)

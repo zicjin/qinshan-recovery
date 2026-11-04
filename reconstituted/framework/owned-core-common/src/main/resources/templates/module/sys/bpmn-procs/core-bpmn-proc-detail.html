@@ -1,0 +1,11 @@
+
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs(['/static/module/sys/bpmn-drafts/core-bpmn-draft.js', 
+                     '/static/module/sys/bpmn-procs/core-bpmn-proc.js',
+                     '/static/module/sys/bpmn-procs/core-bpmn-proc-detail.js'
+                    ]);
+    coreBpmnProc.detailPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>
+

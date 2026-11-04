@@ -9,13 +9,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.management.ManagementFactory;
-import java.net.NetworkInterface;
-import java.net.SocketException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -26,7 +23,6 @@ public abstract class SystemUtils {
    private static final boolean IS_OS_MAC = StringUtils.startsWith(getSystemProperty("os.name"), "Mac");
    private static final boolean IS_OS_ARM = "aarch64".equals(getSystemProperty("os.arch"));
    private static final boolean IS_OS_LOONGARCH = "loongarch64".equals(getSystemProperty("os.arch"));
-   private static final List<String> SYSTEM_MAC_ADDRESS_LIST = new ArrayList<>();
 
    public static final boolean isWindows() {
       return IS_OS_WINDOWS;
@@ -83,43 +79,7 @@ public abstract class SystemUtils {
    }
 
    public static final List<String> getMacAddresses() {
-      if (SYSTEM_MAC_ADDRESS_LIST.isEmpty()) {
-         synchronized (SYSTEM_MAC_ADDRESS_LIST) {
-            if (SYSTEM_MAC_ADDRESS_LIST.isEmpty()) {
-               try {
-                  Enumeration<NetworkInterface> niEnum = NetworkInterface.getNetworkInterfaces();
-                  List<String> macAddressList = new ArrayList<>();
-
-                  while (niEnum.hasMoreElements()) {
-                     NetworkInterface ni = niEnum.nextElement();
-                     if (!ni.isPointToPoint() && !ni.isVirtual()) {
-                        byte[] bytes = ni.getHardwareAddress();
-                        if (bytes != null) {
-                           StringBuilder sb = new StringBuilder();
-
-                           for (int i = 0; i < bytes.length; i++) {
-                              if (i != 0) {
-                                 sb.append("-");
-                              }
-
-                              String s = Integer.toHexString(bytes[i] & 255);
-                              sb.append(s.length() == 1 ? 0 + s : s);
-                           }
-
-                           macAddressList.add(sb.toString().toUpperCase());
-                        }
-                     }
-                  }
-
-                  SYSTEM_MAC_ADDRESS_LIST.addAll(macAddressList);
-               } catch (SocketException var9) {
-                  throw new UnexpectedException(var9);
-               }
-            }
-         }
-      }
-
-      return SYSTEM_MAC_ADDRESS_LIST;
+      throw new UnsupportedOperationException("Sunway MAC binding capability removed");
    }
 
    public static final String getOSName() {

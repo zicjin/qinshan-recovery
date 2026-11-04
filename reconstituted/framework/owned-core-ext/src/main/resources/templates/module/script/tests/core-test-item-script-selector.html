@@ -1,0 +1,8 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/module/script/tests/core-test.js',
+                      '/static/module/script/tests/core-test-item-script-selector.js'
+                    ]);
+    coreTest.itemScriptSelectorPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>

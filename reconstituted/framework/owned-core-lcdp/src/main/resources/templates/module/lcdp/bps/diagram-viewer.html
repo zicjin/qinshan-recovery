@@ -1,0 +1,287 @@
+<th:block th:replace="module/gikam/gikam"/>
+<script th:src="@{/static/module/lcdp/bps/x6.js}"></script>
+
+<div style="width:100%; height: 100%; overflow: auto;">
+    <div id="container"></div>
+
+
+</div>
+
+
+<script th:inline="javascript">
+    var param = Gikam.getElParam([[${param}]]);
+    var graphViewDom=document.getElementById('container');
+
+    var x = 10;
+    var y = 20;
+
+    X6.Graph.registerNode(
+        'startNode',
+        {
+            inherit : 'html',
+                  attrs : {
+                      body : {
+                          rx : 30,
+                          ry : 30,
+                          stroke : '#5F95FF',
+                          fill : '#EFF4FF',
+                          strokeWidth : 2,
+                      },
+                  },
+        },
+        true, 
+    );
+
+    X6.Graph.registerNode(
+        'completed-startNode',
+        {
+            inherit : 'html',
+            attrs : {
+                body : {
+                	  rx : 30,
+                      ry : 30,
+                    strokeWidth : 2,
+                    stroke : '#8aff5f',
+                    fill : '#FFF',
+                },
+            },
+        },
+        true,
+    );
+
+    X6.Graph.registerNode(
+        'refused-startNode',
+        {
+            inherit : 'html',
+            attrs : {
+                body : {
+                	  rx : 30,
+                      ry : 30,
+                    strokeWidth : 2,
+                    stroke : '#ff5f5f',
+                    fill : '#FFF',
+                },
+            },
+        },
+        true,
+    );
+
+    X6.Graph.registerNode(
+        'endNode',
+        {
+            inherit : 'html',
+            attrs : {
+                body : {
+                	  rx : 30,
+                      ry : 30,
+                    strokeWidth : 4,
+                    stroke : '#5F95FF',
+                    fill : '#FFF',
+                },
+            },
+        },
+        true,
+    );
+
+    X6.Graph.registerNode(
+        'completed-endNode',
+        {
+            inherit : 'html',
+            attrs : {
+                body : {
+                	  rx : 30,
+                      ry : 30,
+                    strokeWidth : 4,
+                    stroke : '#8aff5f',
+                    fill : '#FFF',
+                },
+            },
+        },
+        true,
+    );
+
+    X6.Graph.registerNode(
+        'activity',
+        {
+            inherit : 'html',
+            attrs : {
+                body : {
+                    rx : 6,
+                    ry : 6,
+                    stroke : '#5F95FF',
+                    fill : '#EFF4FF',
+                    strokeWidth : 1,
+                },
+            },
+        },
+        true,
+    );
+
+    X6.Graph.registerNode(
+        'completed-activity',
+        {
+            inherit : 'html',
+            attrs : {
+                body : {
+                    rx : 6,
+                    ry : 6,
+                    stroke : '#8aff5f',
+                    fill : '#EFF4FF',
+                    strokeWidth : 1,
+                },
+            },
+        },
+        true,
+    );
+
+    X6.Graph.registerNode(
+        'refused-activity',
+        {
+            inherit : 'html',
+            attrs : {
+                body : {
+                    rx : 6,
+                    ry : 6,
+                    stroke : '#ff5f5f',
+                    fill : '#EFF4FF',
+                    strokeWidth : 1,
+                },
+            },
+        },
+        true,
+    );
+
+    X6.Graph.registerEdge(
+        'straight-edge',
+        {
+            inherit : 'edge',
+        },
+        true,
+    );
+
+    X6.Graph.registerEdge(
+        'orth-edge',
+        {
+            inherit : 'edge',
+            router : {
+                name : 'orth'
+            }
+        },
+        true,
+    );
+
+    var graph = new X6.Graph({
+        container : graphViewDom,
+        width:1200,
+        height:200,
+    }); 
+
+    Gikam.post(Gikam.printf(window.IFM_CONTEXT+'/secure/core/module/lcdp/bps/{bpId}/diagram/queries', {
+        bpId : param.bpId
+    }), Gikam.getJsonWrapper({
+        bizId : param.bizId
+    })).done(async function (data) {
+        var cells = [];
+        data.forEach((item) => {
+            if (item.shape === 'straight-edge' || item.shape === 'orth-edge') {
+                cells.push(graph.createEdge(item))
+            } else {
+            	item.html= {
+            	    render(item) {
+            	        return(
+            	          `<div class='text-box'>
+            	            <p title=${item.label} class='text'>${item.label}</p>
+            	          </div>`
+            	        )
+            	      },
+            	}
+                cells.push(graph.createNode(item))
+            }
+        })
+      
+        await graph.resetCells(cells)
+        graph.zoomToFit({padding : 10, maxScale : 1})
+        
+		var svgViewDom=document.getElementsByClassName('x6-graph-svg-viewport')[0];
+	    graphViewDom.style.width=svgViewDom.getBBox().width+40+"px";
+
+        graph.on('node:mouseenter', ({e, node, view}) => {
+            if (Gikam.isEmpty(node.data.auditUser)) {
+                return;
+            }
+            var tooltip = "<div id='tooltip'>" + node.data.auditUser + "<\/div>";
+            var $tooltip = Gikam.jQuery(tooltip).appendTo(document.body).css({
+                top : (e.pageY + y) + "px",
+                left : (e.pageX + x) + "px"
+            });
+        });
+        graph.on('node:mouseleave', ({e, node, view}) => {
+            Gikam.jQuery('#tooltip').remove();
+        });
+    });
+
+</script>
+
+<style>
+    body {
+        margin: 0;
+        padding: 0px;
+        background: #fff;
+        font: 80% Arial, Helvetica, sans-serif;
+        color: #555;
+        line-height: 180%;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+    }
+
+    p {
+        clear: both;
+        margin: 0;
+        padding: .5em 0;
+    }
+    
+    .text-box{
+        display:flex;
+        width:100%;
+        height:100%;
+        align-items:center;
+        justify-content: center;
+    }
+    
+    .text{
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+    
+    .x6-node text{
+    	display:none;
+    }
+
+    .x6-graph-svg-viewport{
+        transform: matrix(1, 0, 0, 1, 20, 40);
+    }
+
+    /* tooltip */
+    #tooltip {
+        position: fixed;
+        border: 1px solid #333;
+        background: #f7f5d1;
+        padding: 8px;
+        color: #333;
+        border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-track {
+        border-radius: 4px;
+        background-color: #fff;
+    }
+
+    ::-webkit-scrollbar-thumb {
+       border-radius: 8px;
+       background-color: rgba(0, 0, 0, 0.15);
+    }
+</style>
+
+

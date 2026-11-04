@@ -1,0 +1,1 @@
+import{X as i}from"./index.09c835c7.js";const o=i(),s=["Grid","TreeGrid","Form","Tree"];function d(n){var t;const r=(t=o.activeResource)==null?void 0:t.components.filter(e=>(n||s).includes(e.type));return r?r.map(e=>({value:e.config.id,label:e.config.id})):[]}export{d as u};

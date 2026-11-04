@@ -1,0 +1,8 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/module/item/email-templates/core-email-template.js',
+                      '/static/module/item/email-templates/core-email-template-choose-list.js'
+                    ]);
+    coreEmailTemplate.choosePage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>

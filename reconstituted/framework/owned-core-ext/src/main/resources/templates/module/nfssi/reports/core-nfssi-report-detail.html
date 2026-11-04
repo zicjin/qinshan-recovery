@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/module/nfssi/reports/core-nfssi-report.js',
+                      '/static/module/nfssi/reports/core-nfssi-report-detail.js'
+                    ]);
+    coreNfssiReport.detailPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>
+

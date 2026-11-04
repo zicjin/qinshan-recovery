@@ -1,0 +1,8 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/module/train/exam-tmpls/core-exam-tmpl.js',
+                      '/static/module/train/exam-tmpls/core-exam-tmpl-edit-list.js'
+                    ]);
+    coreExamTmpl.editPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>

@@ -1,0 +1,8 @@
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    Gikam.requirejs(['/static/module/qms/risk-factors/core-risk-factor.js',
+                     '/static/module/qms/risk-factors/core-risk-factor-edit-list.js'
+                    ]);
+    coreRiskFactor.editPage.init(Gikam.getElParam([[${param}]]));
+    /*]]>*/
+</script>

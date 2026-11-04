@@ -1,0 +1,10 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/module/qms/apply-complaints/core-apply-complaint.js',
+                      '/static/module/qms/apply-complaints/core-apply-complaint-detail.js',
+                      '/static/module/qms/apply-complaints/core-apply-complaint-config.js'
+                    ]);
+    coreApplyComplaint.detailPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>
+

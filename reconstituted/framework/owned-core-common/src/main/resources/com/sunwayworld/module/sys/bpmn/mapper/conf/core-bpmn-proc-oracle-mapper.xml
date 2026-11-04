@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.module.sys.bpmn.mapper.CoreBpmnProcMapper">
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM (SELECT T.*,
+                       (SELECT LISTAGG(O.ORGNAME, ',') WITHIN GROUP (ORDER BY O.ID) FROM T_CORE_BPMN_PROC_ORG D, T_CORE_ORG O WHERE D.USEDORGID = O.ID AND D.PROCID = T.ID) USEDORGNAME,
+                       M.SERVICENAME,
+                       M.TABLENAME
+                  FROM T_CORE_BPMN_PROC T
+                  LEFT JOIN T_CORE_MENU_EXT M
+                         ON T.SERVICEID = M.ID
+                        AND M.TYPE = 'audit_def') T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+            <if test="service == 'modifiable'">
+               AND NOT EXISTS (SELECT 1
+                                 FROM T_CORE_BPMN_PROC P
+                                WHERE P.PROCCODE = T.PROCCODE
+                                  AND P.PROCVERSION <![CDATA[>]]> T.PROCVERSION)
+               AND NOT EXISTS (SELECT 1
+                                 FROM T_CORE_BPMN_DRAFT D
+                                WHERE D.PROCCODE = T.PROCCODE
+                                  AND D.PROCVERSION = T.PROCVERSION + 1)
+            </if>
+            <if test='latest_only != null and latest_only == "1"'>
+               AND NOT EXISTS (SELECT 1
+                                 FROM T_CORE_BPMN_PROC P
+                                WHERE P.PROCCODE = T.PROCCODE
+                                  AND P.PROCVERSION <![CDATA[>]]> T.PROCVERSION)
+            </if>
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.PROCCODE DESC, T.PROCVERSION DESC
+            </otherwise>
+        </choose>
+    </select>
+    
+    <select id="selectRuntimeBpmnProcList" resultType="map">
+        SELECT T.*,
+               (SELECT COUNT(1) FROM T_CORE_BPMN_PROC_ORG WHERE PROCID = T.ID) ORGQTY
+          FROM T_CORE_BPMN_PROC T
+         WHERE EXISTS (SELECT 1
+                         FROM T_CORE_MENU_EXT M
+                        WHERE T.SERVICEID = M.ID
+                          AND M.TYPE = 'audit_def'
+                          AND M.TABLENAME = #{tableName})
+           AND (NOT EXISTS (SELECT 1
+                              FROM T_CORE_BPMN_PROC_ORG O
+                             WHERE O.PROCID = T.ID)
+                OR EXISTS (SELECT 1
+                             FROM T_CORE_BPMN_PROC_ORG O
+                            WHERE O.PROCID = T.ID
+                              AND O.USEDORGID = #{usedOrgId}))
+           AND NOT EXISTS (SELECT 1
+                             FROM T_CORE_BPMN_PROC P
+                            WHERE P.PROCCODE = T.PROCCODE
+                              AND P.PROCVERSION <![CDATA[>]]> T.PROCVERSION)
+    </select>
+    
+    <select id="selectBpmnProcListByServiceId" resultType="map">
+        SELECT T.*
+          FROM T_CORE_BPMN_PROC T
+         WHERE T.SERVICEID = #{serviceId}
+           AND NOT EXISTS (SELECT 1
+                             FROM T_CORE_BPMN_PROC P
+                            WHERE P.PROCCODE = T.PROCCODE
+                              AND P.PROCVERSION <![CDATA[>]]> T.PROCVERSION)
+    </select>
+</mapper>

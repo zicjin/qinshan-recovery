@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.cloud.module.train.exampaper.persistent.mapper.CoreExamPaperAnswerMapper">
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM (SELECT A.*,
+                       E.EXAMNAME,
+                       Q.QUESTIONCATEGORY,
+                       Q.QUESTIONTYPE,
+                       Q.QUESTIONCONTENT,
+                       Q.ANSWER CORRECTANSWER,
+                       L.SINGLECHOICESCORE,
+                       L.MULTIPLECHOICESCORE,
+                       L.COMPLETIONSCORE,
+                       L.JUDGEMENTSCORE,
+                       L.SHORTANSWERSCORE,
+                       P.ACTIVATEDFLAG
+                  FROM T_CORE_EXAM_PAPER_ANSWER A
+                  LEFT JOIN T_CORE_EXAM_PAPER P
+                    ON A.EXAMPAPERID = P.ID
+                  LEFT JOIN T_CORE_EXAM E
+                    ON P.EXAMID = E.ID
+                  LEFT JOIN T_CORE_EXAM_QUESTION EQ
+                    ON EQ.ID = A.EXAMQUESTIONID
+                  LEFT JOIN T_CORE_QUESTION Q
+                    ON A.QUESTIONID = Q.ID
+                  LEFT JOIN T_CORE_EXAM_TMPL L
+                    ON L.ID = E.EXAMTMPLID) T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ID DESC
+            </otherwise>
+        </choose>
+    </select>
+
+</mapper>

@@ -1,0 +1,8 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/module/qms/apply-complaints/core-apply-complaint.js',
+                      '/static/module/qms/apply-complaints/core-apply-complaint-audit-list.js'
+                    ]);
+    coreApplyComplaint.auditPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>

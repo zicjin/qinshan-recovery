@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>ketcher分子式图标</title>
+    <g id="ketcher分子式图标" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="编组-40">
+            <rect id="矩形" x="0" y="0" width="16" height="16"></rect>
+            <path d="" id="形状结合" stroke="#333333" stroke-width="3"></path>
+            <polygon id="k" stroke="#333333" stroke-width="0.5" fill="#333333" fill-rule="nonzero" points="7.49765625 11.3265625 7.49765625 9.9984375 8.009375 9.46328125 9.05234375 11.3265625 10.2359375 11.3265625 8.71640625 8.69375 10.134375 7.178125 8.7828125 7.178125 7.49765625 8.6390625 7.49765625 5.6 6.4 5.6 6.4 11.3265625"></polygon>
+            <rect id="矩形" fill="#333333" transform="translate(13.643078, 11.152479) rotate(180.000000) translate(-13.643078, -11.152479) " x="13.2430781" y="10.1524791" width="1" height="2" rx="0.5"></rect>
+            <rect id="矩形" fill="#333333" transform="translate(2.156922, 11.152479) scale(-1, 1) rotate(360.000000) translate(-2.156922, -11.152479) " x="1.75692194" y="10.1524791" width="1" height="2" rx="0.5"></rect>
+            <path d="M8.9626933,2.08119785 C9.1836072,2.08119785 9.3626933,2.26028395 9.3626933,2.48119785 L9.3626933,3.68119785 C9.3626933,3.90211175 9.1836072,4.08119785 8.9626933,4.08119785 C8.7417794,4.08119785 8.5626933,3.90211175 8.5626933,3.68119785 L8.5626933,2.48119785 C8.5626933,2.26028395 8.7417794,2.08119785 8.9626933,2.08119785 Z" id="矩形" fill="#333333" transform="translate(8.962693, 3.081198) scale(-1, 1) rotate(240.000000) translate(-8.962693, -3.081198) "></path>
+        </g>
+    </g>
+</svg>

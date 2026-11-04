@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/module/sys/bpmn-inst-tasks/core-bpmn-inst-task.js',
+                      '/static/module/sys/bpmn-inst-tasks/core-bpmn-inst-task-edit-list.js'
+                    ]);
+                    
+    coreBpmnInstTask.editListPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>

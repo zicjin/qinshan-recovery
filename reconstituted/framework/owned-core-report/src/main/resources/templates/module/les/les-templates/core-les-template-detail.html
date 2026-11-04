@@ -1,0 +1,19 @@
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    (function() {
+        var param = Gikam.getElParam([[${param}]]);
+        Gikam.create('les', {
+            renderTo : workspace.window.$dom,
+            id : param.id,
+            instance : Gikam.isTrue(param.instance) ? true : false,
+            readonly : param.readonly,
+            showAddButton : param.showAddButton,
+            back : function() {
+                workspace.window.goBack();
+            }
+        });
+    })();
+    
+    /*]]>*/
+</script>

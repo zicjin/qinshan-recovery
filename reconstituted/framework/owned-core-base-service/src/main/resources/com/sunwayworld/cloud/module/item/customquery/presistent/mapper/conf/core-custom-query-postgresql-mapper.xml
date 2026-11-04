@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.cloud.module.item.customquery.presistent.mapper.CoreCustomQueryMapper">
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+            FROM (
+                SELECT TQ.*,
+                       TD.DSNAME,
+                       TL.REPORTNAME,
+                       TM.MENUNAME
+                    FROM T_CORE_CUSTOM_QUERY TQ
+                    LEFT JOIN T_CORE_CUSTOM_DS TD ON TQ.CUSTOMDSID = TD.ID
+                    LEFT JOIN T_CORE_REPORT_CONFIG_LINE TL ON TQ.REPORTCONFIGLINEID = TL.ID
+                    LEFT JOIN T_CORE_MENU TM ON TQ.ID::VARCHAR = TM.ID
+                ) T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ID DESC
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="selectByPage" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM (${sql}) T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+        </where>
+        <if test="orderParams != null and orderParams.size > 0">
+            ORDER BY <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+        </if>
+    </select>
+
+</mapper>

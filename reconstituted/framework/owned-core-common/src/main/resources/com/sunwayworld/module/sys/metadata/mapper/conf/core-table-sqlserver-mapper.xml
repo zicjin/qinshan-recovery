@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.module.sys.metadata.mapper.CoreTableMapper">
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM T_CORE_TABLE T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent"/>
+        </where>
+          ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+               T.ID
+            </otherwise>
+        </choose>
+    </select>
+    
+    <select id="selectDetail" resultType="map">
+        SELECT T.*
+          FROM T_CORE_TABLE T
+         WHERE T.ID = #{id}
+    </select>
+
+    <select id="selectFieldListByCondition" resultType="map">
+        SELECT T.*
+          FROM (SELECT C.TABLE_NAME TABLENAME,
+                       COALESCE(D.VALUE, '') FIELDCOMMENT,
+                       C.COLUMN_NAME FIELDNAME,
+                       UPPER(C.DATA_TYPE) FIELDTYPE,
+                       CASE C.DATA_TYPE
+                         WHEN 'varchar' THEN
+                          LTRIM(STR(C.CHARACTER_MAXIMUM_LENGTH))
+                         ELSE
+                          ''
+                       END FIELDLENGTH,
+                       CASE C.IS_NULLABLE
+                         WHEN 'YES' THEN
+                          '1'
+                         ELSE
+                          '0'
+                       END ALLOWNULL,
+                       REPLACE(COALESCE(C.COLUMN_DEFAULT, ''), '''', '') DEFAULTVALUE,
+                       C.NUMERIC_PRECISION PRECISION,
+                       C.NUMERIC_SCALE SCALE
+                  FROM SYS.COLUMNS B
+                  LEFT JOIN SYS.EXTENDED_PROPERTIES D
+                    ON D.MAJOR_ID = B.OBJECT_ID
+                   AND D.MINOR_ID = B.COLUMN_ID
+                  LEFT JOIN INFORMATION_SCHEMA.COLUMNS C
+                    ON C.COLUMN_NAME = B.NAME
+                   AND B.OBJECT_ID  = OBJECT_ID(C.TABLE_NAME)
+                  LEFT JOIN (SELECT T.NAME TABLE_NAME, T.OBJECT_ID FROM SYS.TABLES T) V
+                    ON B.OBJECT_ID = V.OBJECT_ID
+                   AND C.TABLE_NAME = V.TABLE_NAME
+                    ) T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent"/>
+        </where>
+    </select>
+
+</mapper>

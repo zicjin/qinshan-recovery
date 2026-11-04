@@ -12,7 +12,12 @@
   "forbidden_content_report": "forbidden-content-report.json",
   "module": "owned-core-base-service",
   "module_reason": "Generic persistence and service behavior.",
+  "override_source_files": [],
   "public_dependency_allowlist": "public-dependency-allowlist.json",
+  "removed_source_files": [],
+  "resource_file_count": 384,
+  "resource_provenance": "resource-provenance.json",
+  "resource_tree_sha256": "3ec869c08115c5407a9bf707a1447d6dd11d46f076651c4f26ec1db7fb663e5c",
   "schema": "supplier-reconstituted-module-v1",
   "source_decompilers": {
     "CFR": 761,

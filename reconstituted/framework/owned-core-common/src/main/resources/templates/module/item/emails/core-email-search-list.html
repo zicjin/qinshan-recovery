@@ -1,0 +1,6 @@
+<script th:inline="javascript">
+    Gikam.requirejs([ '/static/module/item/emails/core-email.js',
+                      '/static/module/item/emails/core-email-search-list.js'
+                    ]);
+    coreEmail.searchListPage.init(Gikam.getElParam([[${param}]]));
+</script>

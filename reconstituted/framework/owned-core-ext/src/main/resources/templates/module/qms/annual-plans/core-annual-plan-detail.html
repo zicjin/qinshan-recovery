@@ -1,0 +1,10 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/module/qms/annual-plans/core-annual-plan.js',
+                      '/static/module/qms/annual-plans/core-annual-plan-detail.js',
+                      '/static/module/qms/annual-plans/core-annual-plan-config.js'
+                    ]);
+    coreAnnualPlan.detailPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>
+

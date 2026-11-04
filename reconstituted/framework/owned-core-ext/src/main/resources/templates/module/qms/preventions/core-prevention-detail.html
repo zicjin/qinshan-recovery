@@ -1,0 +1,10 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/module/qms/preventions/core-prevention.js',
+                      '/static/module/qms/preventions/core-prevention-detail.js',
+                      '/static/module/qms/preventions/core-prevention-config.js'
+                    ]);
+    corePrevention.detailPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>
+

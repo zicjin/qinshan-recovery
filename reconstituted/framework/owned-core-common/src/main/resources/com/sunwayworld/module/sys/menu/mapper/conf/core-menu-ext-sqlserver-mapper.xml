@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.module.sys.menu.mapper.CoreMenuExtMapper">
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM T_CORE_MENU_EXT T /*IGNORELOG*/
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent"/>
+            <if test='authority_menu == "1"'><!-- 菜单权限 -->
+                AND <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.authorityWherePatternEqualClause">
+                        <property name ="permissionTypeId" value="T_CORE_MENU"/>
+                        <property name="tableAlias" value="T"/>
+                        <property name="permissionColumnName" value="ID"/>
+                    </include>
+            </if>
+            AND T.ENABLE = '1' 
+        </where>
+         ORDER BY 
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ID
+            </otherwise>
+        </choose>
+    </select>
+    
+    <select id="selectDetail" resultType="map">
+        SELECT T.* 
+          FROM T_CORE_MENU_EXT T
+         WHERE T.ID = #{id}
+    </select>
+    
+</mapper>

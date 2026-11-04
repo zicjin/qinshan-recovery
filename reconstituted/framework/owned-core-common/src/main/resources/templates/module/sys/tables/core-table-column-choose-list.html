@@ -1,0 +1,8 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/module/sys/tables/core-table.js',
+                      '/static/module/sys/tables/core-table-column-choose-list.js'
+                    ]);
+    coreTable.columnChoosePage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>

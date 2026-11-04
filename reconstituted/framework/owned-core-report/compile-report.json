@@ -7,11 +7,11 @@
   "maven_runtime": "\u001b[1mApache Maven 3.9.12\u001b[m",
   "module": "owned-core-report",
   "output_jar": "owned-core-report/target/owned-core-report-1.0.0-SNAPSHOT.jar",
-  "output_jar_sha256": "22d8318d8f1b506978409bd091f48aa5cc59782d114c70cd38142b94de6d8f54",
+  "output_jar_sha256": "6b3a5d6c6fd6c98330bd0d0a7d982645e6ab46aee15c0b8922363854fafd55e5",
   "schema": "supplier-reconstituted-module-compile-v1",
   "source_file_count": 363,
   "source_only_framework_classpath": true,
-  "source_tree_sha256": "1c4a1f70838aa5a1e4d2ff2ba47c18b66b84bd8df86fcfdeebbf22d5702d23a6",
+  "source_tree_sha256": "118c182d46c728b2f9cd7fc73dc3861837d61ce823b7c188a70802a585fd3468",
   "status": "pass",
   "supplier_private_jars_on_classpath": false
 }

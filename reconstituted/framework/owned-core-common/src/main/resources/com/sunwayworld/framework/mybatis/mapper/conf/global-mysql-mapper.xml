@@ -1,0 +1,933 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.framework.mybatis.mapper.GlobalMapper">
+    <update id="update">
+        ${sql}
+    </update>
+    
+    <update id="updateByBoundSql" parameterType="map">
+        ${sql}
+    </update>
+    
+    <select id="selectListBySqlList" resultType="map">
+        <foreach collection="sqlList" item="sql" separator="UNION">
+            ${sql}
+        </foreach>
+    </select>
+
+    <select id="selectListBySqlListUnionAll" resultType="map">
+        <foreach collection="sqlList" item="sql" separator="UNION ALL">
+            ${sql}
+        </foreach>
+    </select>
+
+
+    <select id="selectListBySqlListUnionAllAppendWhere" parameterType="map"  resultType="map">
+        SELECT T.*
+          FROM (
+            <foreach collection="sqlList" item="sql" separator="UNION ALL">
+                ${sql}
+            </foreach>
+          ) T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent"/>
+        </where>
+    </select>
+
+
+
+    <select id="selectOne" resultType="map">
+        ${sql}
+    </select>
+    
+    <select id="selectOneString" resultType="java.lang.String">
+        ${sql}
+    </select>
+    
+    <select id="selectFirstString" resultType="java.lang.String">
+        SELECT S.* FROM (${sql}) S LIMIT 1
+    </select>
+    
+    <select id="selectList" resultType="map">
+        ${sql}
+    </select>
+    
+    <select id="selectDatabaseTime" resultType="java.time.LocalDateTime">
+        SELECT NOW()
+    </select>
+    
+    <sql id="appendWhereClausesIfPresent">
+       <if test='service_table != "T_CORE_USER" and role_assigned != null'> <!-- 查询角色权限范围内的单据 -->
+           AND EXISTS (SELECT 1
+                         FROM T_CORE_ROLE_PERMISSION P
+                        WHERE P.PERMISSIONTYPEID = #{service_table}
+                          AND P.ROLEID = #{role_assigned}
+                          AND P.TARGETID = CONCAT(T.ID, ''))
+       </if>
+       <if test='service_table != "T_CORE_USER" and role_unassigned != null'> <!-- 查询不在角色权限范围内的单据 -->
+           AND NOT EXISTS (SELECT 1
+                             FROM T_CORE_ROLE_PERMISSION P
+                            WHERE P.PERMISSIONTYPEID = #{service_table}
+                              AND P.ROLEID = #{role_unassigned}
+                              AND P.TARGETID = CONCAT(T.ID, ''))
+       </if>
+       <if test='permissionTypeId != null and user_assigned != null'> <!-- 查询用户权限范围内的单据 -->
+           AND EXISTS (SELECT 1
+                         FROM T_CORE_USER_PERMISSION P
+                        WHERE P.PERMISSIONTYPEID = #{permissionTypeId}
+                          AND P.USERID = #{user_assigned}
+                          AND P.TARGETID = CONCAT(T.ID, ''))
+       </if>
+       <if test='permissionTypeId != null and user_unassigned != null'> <!-- 查询不在用户权限范围内的单据 -->
+           AND NOT EXISTS (SELECT 1
+                             FROM T_CORE_USER_PERMISSION P
+                            WHERE P.PERMISSIONTYPEID = #{permissionTypeId}
+                              AND P.USERID = #{user_unassigned}
+                              AND P.TARGETID = CONCAT(T.ID, ''))
+       </if>
+       <if test='queries_withdrawable != null'> <!-- 工作流撤回页查询 -->
+           AND T.PROCESSSTATUS = 'approve'
+           AND EXISTS (SELECT 1
+                         FROM T_CORE_BPMN_COMMENT C
+                        WHERE C.TARGETID = CONCAT(#{service_table}, '$', T.ID)
+                          AND C.STATUS = 'SUBMIT'
+                          AND NOT EXISTS (SELECT 1
+                                            FROM T_CORE_BPMN_COMMENT BC
+                                           WHERE BC.TARGETID = C.TARGETID
+                                             AND BC.ID > C.ID))
+       </if>
+       <if test='targetFilter != null'> <!-- 关联过滤 -->
+           <choose>
+               <when test='targetFilter.type == "assigned"'> <!-- 查询已关联存在的数据 -->
+                   AND EXISTS (SELECT 1
+                                 FROM ${targetFilter.targetTable.toUpperCase} F
+                                WHERE F.${targetFilter.targetMatchColumn.toUpperCase} = T.${targetFilter.thisMatchColumn.toUpperCase}
+                   <if test='targetFilter.targetFilter != null and targetFilter.targetFilter.size() > 0'>
+                       <foreach collection="targetFilter.targetFilter" index="name" item="value">
+                           AND F.${name.toUpperCase} = #{value}
+                       </foreach>
+                   </if>)
+               </when>
+               <otherwise> <!-- 查询已关联不存在的数据 -->
+                   AND NOT EXISTS (SELECT 1
+                                     FROM ${targetFilter.targetTable.toUpperCase} F
+                                    WHERE F.${targetFilter.targetMatchColumn.toUpperCase} = T.${targetFilter.thisMatchColumn.toUpperCase}
+                   <if test='targetFilter.targetFilter != null and targetFilter.targetFilter.size() > 0'>
+                       <foreach collection="targetFilter.targetFilter" index="name" item="value">
+                           AND F.${name.toUpperCase} = #{value}
+                       </foreach>
+                   </if>)
+               </otherwise>
+           </choose>
+       </if>
+       <if test='scheme_only != null'> <!-- 只查询，数据结构 -->
+           AND 1 = 2 /* 只查询，数据结构 */
+       </if>
+       <if test="filter_by_item_list != null">
+           AND <foreach collection="filter_by_item_list" item="map" separator="OR" open="(" close=")">
+                   <foreach collection="map" index="name" item="value" separator="AND" open="(" close=")">
+                      <choose>
+                          <when test='value == null or value.toString() == ""'>
+                              `${name.toUpperCase}` IS NULL
+                          </when>
+                          <otherwise>
+                              `${name.toUpperCase}` = #{value}
+                          </otherwise>
+                      </choose>
+                   </foreach>
+               </foreach>
+       </if>
+       <if test="filterParamPatterns != null and filterParamPatterns.length > 0">
+           <foreach collection="filterParamPatterns" item="paramPattern">
+               <if test="paramPattern.map != null">
+                   <choose>
+                       <when test="paramPattern.map.size == 0">
+                           AND 1 = 2
+                       </when>
+                       <otherwise>
+                           <choose>
+                               <when test='paramPattern.matchPattern == "SB"'> <!-- 字符串左对齐 -->
+                                   AND
+                                   <foreach collection="paramPattern.map" index="name" item="value" separator="AND" open="(" close=")">
+                                       <choose>
+                                           <when test='@com.sunwayworld.framework.database.sql.SqlHelper@containsEscapedValue(value)'>
+                                               `${name.toUpperCase}` LIKE '${@com.sunwayworld.framework.database.sql.SqlHelper@getEscapedStrValue(value)}%'
+                                           </when>
+                                           <otherwise>
+                                               `${name.toUpperCase}` LIKE CONCAT(#{value}, '%')
+                                           </otherwise>
+                                       </choose>
+                                   </foreach>
+                               </when>
+                               <when test='paramPattern.matchPattern == "SC"'> <!-- 字符串居中对齐 -->
+                                   AND
+                                   <foreach collection="paramPattern.map" index="name" item="value" separator="AND" open="(" close=")">
+                                       <choose>
+                                           <when test='@com.sunwayworld.framework.database.sql.SqlHelper@containsEscapedValue(value)'>
+                                               `${name.toUpperCase}` LIKE '%${@com.sunwayworld.framework.database.sql.SqlHelper@getEscapedStrValue(value)}%'
+                                           </when>
+                                           <otherwise>
+                                               `${name.toUpperCase}` LIKE CONCAT('%', #{value}, '%')
+                                           </otherwise>
+                                       </choose>
+                                   </foreach>
+                               </when>
+                               <when test='paramPattern.matchPattern == "NSC"'> <!-- 字符串不包含 -->
+                                   AND
+                                   <foreach collection="paramPattern.map" index="name" item="value" separator="AND" open="(" close=")">
+                                       <choose>
+                                           <when test='@com.sunwayworld.framework.database.sql.SqlHelper@containsEscapedValue(value)'>
+                                               (`${name.toUpperCase}` NOT LIKE '%${@com.sunwayworld.framework.database.sql.SqlHelper@getEscapedStrValue(value)}%' OR `${name.toUpperCase}` IS NULL)
+                                           </when>
+                                           <otherwise>
+                                               (`${name.toUpperCase}` NOT LIKE CONCAT('%', #{value}, '%') OR `${name.toUpperCase}` IS NULL)
+                                           </otherwise>
+                                       </choose>
+                                   </foreach>
+                               </when>
+                               <when test='paramPattern.matchPattern == "SE"'> <!-- 字符串右对齐 -->
+                                   AND
+                                   <foreach collection="paramPattern.map" index="name" item="value" separator="AND" open="(" close=")">
+                                       <choose>
+                                           <when test='@com.sunwayworld.framework.database.sql.SqlHelper@containsEscapedValue(value)'>
+                                               `${name.toUpperCase}` LIKE '%${@com.sunwayworld.framework.database.sql.SqlHelper@getEscapedStrValue(value)}'
+                                           </when>
+                                           <otherwise>
+                                               `${name.toUpperCase}` LIKE CONCAT('%', #{value})
+                                           </otherwise>
+                                       </choose>
+                                   </foreach>
+                               </when>
+                               <when test='paramPattern.matchPattern == "CISB"'> <!-- 字符串不区分大小写左对齐 -->
+                                   AND
+                                   <foreach collection="paramPattern.map" index="name" item="value" separator="AND" open="(" close=")">
+                                       <choose>
+                                           <when test='@com.sunwayworld.framework.database.sql.SqlHelper@containsEscapedValue(value)'>
+                                               UPPER(`${name.toUpperCase}`) LIKE '${@com.sunwayworld.framework.database.sql.SqlHelper@getEscapedStrValue(value)}%'
+                                           </when>
+                                           <otherwise>
+                                               UPPER(`${name.toUpperCase}`) LIKE CONCAT(#{value}, '%')
+                                           </otherwise>
+                                       </choose>
+                                   </foreach>
+                               </when>
+                               <when test='paramPattern.matchPattern == "CISC"'> <!-- 字符串不区分大小写居中对齐 -->
+                                   AND
+                                   <foreach collection="paramPattern.map" index="name" item="value" separator="AND" open="(" close=")">
+                                       <choose>
+                                           <when test='@com.sunwayworld.framework.database.sql.SqlHelper@containsEscapedValue(value)'>
+                                               UPPER(`${name.toUpperCase}`) LIKE '%${@com.sunwayworld.framework.database.sql.SqlHelper@getEscapedStrValue(value)}%'
+                                           </when>
+                                           <otherwise>
+                                               UPPER(`${name.toUpperCase}`) LIKE CONCAT('%', #{value}, '%')
+                                           </otherwise>
+                                       </choose>
+                                   </foreach>
+                               </when>
+                               <when test='paramPattern.matchPattern == "CISE"'> <!-- 字符串不区分大小写右对齐 -->
+                                   AND
+                                   <foreach collection="paramPattern.map" index="name" item="value" separator="AND" open="(" close=")">
+                                       <choose>
+                                           <when test='@com.sunwayworld.framework.database.sql.SqlHelper@containsEscapedValue(value)'>
+                                               UPPER(`${name.toUpperCase}`) LIKE '%${@com.sunwayworld.framework.database.sql.SqlHelper@getEscapedStrValue(value)}'
+                                           </when>
+                                           <otherwise>
+                                               UPPER(`${name.toUpperCase}`) LIKE CONCAT('%', #{value})
+                                           </otherwise>
+                                       </choose>
+                                   </foreach>
+                               </when>
+                               <when test='paramPattern.matchPattern == "CISEQ"'> <!-- 字符串不区分大小写相等 -->
+                                   AND
+                                   <foreach collection="paramPattern.map" index="name" item="value" separator="AND" open="(" close=")">
+                                       UPPER(`${name.toUpperCase}`) = #{value}
+                                   </foreach>
+                               </when>
+                               
+                               <when test='paramPattern.matchPattern == "OSB"'> <!-- 多字段并集字符串左对齐 -->
+                                   AND
+                                   <foreach collection="paramPattern.map" index="name" item="value" separator="OR" open="(" close=")">
+                                       <choose>
+                                           <when test='@com.sunwayworld.framework.database.sql.SqlHelper@containsEscapedValue(value)'>
+                                               `${name.toUpperCase}` LIKE '${@com.sunwayworld.framework.database.sql.SqlHelper@getEscapedStrValue(value)}%'
+                                           </when>
+                                           <otherwise>
+                                               `${name.toUpperCase}` LIKE CONCAT(#{value}, '%')
+                                           </otherwise>
+                                       </choose>
+                                   </foreach>
+                               </when>
+                               <when test='paramPattern.matchPattern == "OSC"'> <!-- 多字段并集字符串居中对齐 -->
+                                   AND
+                                   <foreach collection="paramPattern.map" index="name" item="value" separator="OR" open="(" close=")">
+                                       <choose>
+                                           <when test='@com.sunwayworld.framework.database.sql.SqlHelper@containsEscapedValue(value)'>
+                                               `${name.toUpperCase}` LIKE '%${@com.sunwayworld.framework.database.sql.SqlHelper@getEscapedStrValue(value)}%'
+                                           </when>
+                                           <otherwise>
+                                               `${name.toUpperCase}` LIKE CONCAT('%', #{value}, '%')
+                                           </otherwise>
+                                       </choose>
+                                   </foreach>
+                               </when>
+                               <when test='paramPattern.matchPattern == "OSE"'> <!-- 多字段并集字符串右对齐 -->
+                                   AND
+                                   <foreach collection="paramPattern.map" index="name" item="value" separator="OR" open="(" close=")">
+                                       <choose>
+                                           <when test='@com.sunwayworld.framework.database.sql.SqlHelper@containsEscapedValue(value)'>
+                                               `${name.toUpperCase}` LIKE '%${@com.sunwayworld.framework.database.sql.SqlHelper@getEscapedStrValue(value)}'
+                                           </when>
+                                           <otherwise>
+                                               `${name.toUpperCase}` LIKE CONCAT('%', #{value})
+                                           </otherwise>
+                                       </choose>
+                                   </foreach>
+                               </when>
+                               <when test='paramPattern.matchPattern == "OCISB"'> <!-- 多字段并集字符串不区分大小写左对齐 -->
+                                   AND
+                                   <foreach collection="paramPattern.map" index="name" item="value" separator="OR" open="(" close=")">
+                                       <choose>
+                                           <when test='@com.sunwayworld.framework.database.sql.SqlHelper@containsEscapedValue(value)'>
+                                               UPPER(`${name.toUpperCase}`) LIKE '${@com.sunwayworld.framework.database.sql.SqlHelper@getEscapedStrValue(value)}%'
+                                           </when>
+                                           <otherwise>
+                                               UPPER(`${name.toUpperCase}`) LIKE CONCAT(#{value}, '%')
+                                           </otherwise>
+                                       </choose>
+                                   </foreach>
+                               </when>
+                               <when test='paramPattern.matchPattern == "OCISC"'> <!-- 多字段并集字符串不区分大小写居中对齐 -->
+                                   AND
+                                   <foreach collection="paramPattern.map" index="name" item="value" separator="OR" open="(" close=")">
+                                       <choose>
+                                           <when test='@com.sunwayworld.framework.database.sql.SqlHelper@containsEscapedValue(value)'>
+                                               UPPER(`${name.toUpperCase}`) LIKE '%${@com.sunwayworld.framework.database.sql.SqlHelper@getEscapedStrValue(value)}%'
+                                           </when>
+                                           <otherwise>
+                                               UPPER(`${name.toUpperCase}`) LIKE CONCAT('%', #{value}, '%')
+                                           </otherwise>
+                                       </choose>
+                                   </foreach>
+                               </when>
+                               <when test='paramPattern.matchPattern == "OCISE"'> <!-- 多字段并集字符串不区分大小写右对齐 -->
+                                   AND
+                                   <foreach collection="paramPattern.map" index="name" item="value" separator="OR" open="(" close=")">
+                                       <choose>
+                                           <when test='@com.sunwayworld.framework.database.sql.SqlHelper@containsEscapedValue(value)'>
+                                               UPPER(`${name.toUpperCase}`) LIKE '%${@com.sunwayworld.framework.database.sql.SqlHelper@getEscapedStrValue(value)}'
+                                           </when>
+                                           <otherwise>
+                                               UPPER(`${name.toUpperCase}`) LIKE CONCAT('%', #{value})
+                                           </otherwise>
+                                       </choose>
+                                   </foreach>
+                               </when>
+                               <when test='paramPattern.matchPattern == "OCISEQ"'> <!-- 多字段并集字符串不区分大小写相等 -->
+                                   AND
+                                   <foreach collection="paramPattern.map" index="name" item="value" separator="OR" open="(" close=")">
+                                       UPPER(`${name.toUpperCase}`) = #{value}
+                                   </foreach>
+                               </when>
+                               <when test='paramPattern.matchPattern == "DG"'> <!-- 日期大于 -->
+                                   AND
+                                   <foreach collection="paramPattern.map" index="name" item="value" separator="AND" open="(" close=")">
+                                       `${name.toUpperCase}` <![CDATA[>]]> DATE_FORMAT(#{value}, '%Y-%m-%d')
+                                   </foreach>
+                               </when>
+                               <when test='paramPattern.matchPattern == "DGOE"'> <!-- 日期大于等于 -->
+                                   AND
+                                   <foreach collection="paramPattern.map" index="name" item="value" separator="AND" open="(" close=")">
+                                       `${name.toUpperCase}` <![CDATA[>=]]> DATE_FORMAT(#{value}, '%Y-%m-%d')
+                                   </foreach>
+                               </when>
+                               <when test='paramPattern.matchPattern == "DL"'> <!-- 日期小于 -->
+                                   AND
+                                   <foreach collection="paramPattern.map" index="name" item="value" separator="AND" open="(" close=")">
+                                       `${name.toUpperCase}` <![CDATA[<]]> DATE_FORMAT(#{value}, '%Y-%m-%d')
+                                   </foreach>
+                               </when>
+                               <when test='paramPattern.matchPattern == "DLOE"'> <!-- 日期小于等于 -->
+                                   AND
+                                   <foreach collection="paramPattern.map" index="name" item="value" separator="AND" open="(" close=")">
+                                       `${name.toUpperCase}` <![CDATA[<]]> DATE_ADD(DATE_FORMAT(#{value}, '%Y-%m-%d') ,INTERVAL 1 day)
+                                   </foreach>
+                               </when>
+                               <when test='paramPattern.matchPattern == "DEQ"'> <!-- 日期相等，只比较年月日 -->
+                                   AND
+                                   <foreach collection="paramPattern.map" index="name" item="value" separator="AND" open="(" close=")">
+                                      <choose>
+                                           <when test='value == null or value.toString() == ""'>
+                                               `${name.toUpperCase}` IS NULL
+                                           </when>
+                                           <otherwise>
+                                               DATE_FORMAT(`${name.toUpperCase}`, '%Y-%m-%d') = #{value}
+                                           </otherwise>
+                                       </choose>
+                                   </foreach>
+                               </when>
+                               <when test='paramPattern.matchPattern == "TG"'> <!-- 时间大于 -->
+                                   AND
+                                   <foreach collection="paramPattern.map" index="name" item="value" separator="AND" open="(" close=")">
+                                       `${name.toUpperCase}` <![CDATA[>]]> #{value}
+                                   </foreach>
+                               </when>
+                               <when test='paramPattern.matchPattern == "TGOE"'> <!-- 时间大于等于 -->
+                                   AND
+                                   <foreach collection="paramPattern.map" index="name" item="value" separator="AND" open="(" close=")">
+                                       `${name.toUpperCase}` <![CDATA[>=]]> #{value}
+                                   </foreach>
+                               </when>
+                               <when test='paramPattern.matchPattern == "TL"'> <!-- 时间小于 -->
+                                   AND
+                                   <foreach collection="paramPattern.map" index="name" item="value" separator="AND" open="(" close=")">
+                                       `${name.toUpperCase}` <![CDATA[<]]> #{value}
+                                   </foreach>
+                               </when>
+                               <when test='paramPattern.matchPattern == "TLOE"'> <!-- 时间小于等于 -->
+                                   AND
+                                   <foreach collection="paramPattern.map" index="name" item="value" separator="AND" open="(" close=")">
+                                       `${name.toUpperCase}` <![CDATA[<=]]> #{value}
+                                   </foreach>
+                               </when>
+                               <when test='paramPattern.matchPattern == "TEQ"'> <!-- 时间相等，只比较年月日时分 -->
+                                   AND
+                                   <foreach collection="paramPattern.map" index="name" item="value" separator="AND" open="(" close=")">
+                                      <choose>
+                                           <when test='value == null or value.toString() == ""'>
+                                               `${name.toUpperCase}` IS NULL
+                                           </when>
+                                           <otherwise>
+                                               DATE_FORMAT(`${name.toUpperCase}`, '%Y-%m-%d %H:%i') = #{value}
+                                           </otherwise>
+                                       </choose>
+                                   </foreach>
+                               </when>
+                               <when test='paramPattern.matchPattern == "NG"'> <!-- 数字大于 -->
+                                   AND
+                                   <foreach collection="paramPattern.map" index="name" item="value" separator="AND" open="(" close=")">
+                                       `${name.toUpperCase}` <![CDATA[>]]> #{value}
+                                   </foreach>
+                               </when>
+                               <when test='paramPattern.matchPattern == "NGOE"'> <!-- 数字大于等于 -->
+                                   AND
+                                   <foreach collection="paramPattern.map" index="name" item="value" separator="AND" open="(" close=")">
+                                       `${name.toUpperCase}` <![CDATA[>=]]> #{value}
+                                   </foreach>
+                               </when>
+                               <when test='paramPattern.matchPattern == "NL"'> <!-- 数字小于 -->
+                                   AND
+                                   <foreach collection="paramPattern.map" index="name" item="value" separator="AND" open="(" close=")">
+                                       `${name.toUpperCase}` <![CDATA[<]]> #{value}
+                                   </foreach>
+                               </when>
+                               <when test='paramPattern.matchPattern == "NLOE"'> <!-- 数字小于等于 -->
+                                   AND
+                                   <foreach collection="paramPattern.map" index="name" item="value" separator="AND" open="(" close=")">
+                                       `${name.toUpperCase}` <![CDATA[<=]]> #{value}
+                                   </foreach>
+                               </when>
+                               <when test='paramPattern.matchPattern == "NEQ"'> <!-- 数字等于 -->
+                                   AND
+                                   <foreach collection="paramPattern.map" index="name" item="value" separator="AND" open="(" close=")">
+                                       `${name.toUpperCase}` = #{value}
+                                   </foreach>
+                               </when>
+                               <when test='paramPattern.matchPattern == "SPECIAL"'> <!-- 特殊条件 -->
+                                   AND
+                                   <foreach collection="paramPattern.map" index="name" item="value" separator="AND" open="(" close=")">
+                                       <choose>
+                                           <when test='name == "PROCESSSTATUS"'>
+                                               <choose>
+                                                   <when test='value == "approve_or_done"'>
+                                                      (`${name.toUpperCase}` <![CDATA[=]]> 'done' OR `${name.toUpperCase}` LIKE 'approve%')
+                                                   </when>
+                                                   <otherwise>
+                                                      `${name.toUpperCase}` <![CDATA[=]]> #{value}
+                                                   </otherwise>
+                                               </choose>
+                                           </when>
+                                           <otherwise>
+                                               `${name.toUpperCase}` = #{paramPattern.value}
+                                           </otherwise>
+                                       </choose>
+                                   </foreach>
+                               </when>
+                               <when test='paramPattern.matchPattern == "DIFFER"'> <!-- 不相等 -->
+                                   AND
+                                   <foreach collection="paramPattern.map" index="name" item="value" separator="AND" open="(" close=")">
+                                       <choose>
+                                           <when test='value == null or value.toString() == ""'>
+                                               `${name.toUpperCase}` IS NOT NULL
+                                           </when>
+                                           <otherwise>
+                                               `${name.toUpperCase}` <![CDATA[<>]]> #{value}
+                                           </otherwise>
+                                       </choose>
+                                   </foreach>
+                               </when>
+                               <when test='paramPattern.matchPattern == "OR" || paramPattern.matchPattern == "NOR" || paramPattern.matchPattern == "DOR" || paramPattern.matchPattern == "TOR"'> <!-- 多字段并集 -->
+                                   AND
+                                   <foreach collection="paramPattern.map" index="name" item="value" separator="OR" open="(" close=")">
+                                      <choose>
+                                           <when test='value == null or value.toString() == ""'>
+                                               `${name.toUpperCase}` IS NULL
+                                           </when>
+                                           <otherwise>
+                                               `${name.toUpperCase}` = #{value}
+                                           </otherwise>
+                                       </choose>
+                                   </foreach>
+                               </when>
+                               <when test='paramPattern.matchPattern == "OIN"'> <!-- IN语句 -->
+                                   AND `${paramPattern.matchField.toUpperCase}` IN
+                                   <foreach collection="paramPattern.map" index="name" item="value" separator="," open="(" close=")">
+                                       <choose>
+                                           <when test='value == null or value.toString() == ""'>
+                                               NULL
+                                           </when>
+                                           <otherwise>
+                                               #{value}
+                                           </otherwise>
+                                       </choose>
+                                   </foreach>
+                               </when>
+                               <when test='paramPattern.matchPattern == "COBM"'> <!-- Combox的多值匹配 -->
+                                  AND
+                                   <foreach collection="paramPattern.map" index="name" item="value" separator="OR" open="(" close=")">
+                                       (`${name.toUpperCase}` LIKE CONCAT(#{value}, ',%')  OR `${name.toUpperCase}` LIKE CONCAT('%,', #{value}, ',%') OR `${name.toUpperCase}` LIKE CONCAT('%,', #{value}) OR `${name.toUpperCase}` = #{value})
+                                   </foreach>
+                               </when>
+                               <when test='paramPattern.matchPattern == "CBM"'> <!-- CheckBox的多值匹配 -->
+                                   AND
+                                   <foreach collection="paramPattern.map" index="name" item="value" separator="AND" open="(" close=")">
+                                       `${name.toUpperCase}` LIKE CONCAT('%', #{value}, '%')
+                                   </foreach>
+                               </when>
+                               <when test='paramPattern.matchPattern == "ISNULL"'> <!-- 字段为空匹配 -->
+                                   AND
+                                   <foreach collection="paramPattern.map" index="name" item="value" separator="AND" open="(" close=")">
+                                       `${name.toUpperCase}` IS NULL
+                                   </foreach>
+                               </when>
+                               <when test='paramPattern.matchPattern == "ISNOTNULL"'> <!-- 字段非空匹配 -->
+                                   AND
+                                   <foreach collection="paramPattern.map" index="name" item="value" separator="AND" open="(" close=")">
+                                       `${name.toUpperCase}` IS NOT NULL
+                                   </foreach>
+                               </when>
+                               <otherwise>
+                                   AND
+                                   <foreach collection="paramPattern.map" index="name" item="value" separator="AND" open="(" close=")">
+                                       `${name.toUpperCase}`
+                                       <choose>
+                                           <when test='value == null or value.toString() == ""'>
+                                               IS NULL
+                                           </when>
+                                           <otherwise>
+                                               = #{value}
+                                           </otherwise>
+                                       </choose>
+                                   </foreach>
+                               </otherwise>
+                           </choose>
+                       </otherwise>
+                   </choose>
+               </if>
+           </foreach>
+       </if>
+       <!-- 高级查询 -->
+       <if test="advancedFilterPatterns != null and advancedFilterPatterns.length > 0">
+           AND (
+           <foreach collection="advancedFilterPatterns" item="advancedFilter">
+               <if test="advancedFilter.groupLink != null">
+                   ${advancedFilter.groupLink}
+               </if>
+               
+               <if test="advancedFilter.ingroupLink != null">
+                   ${advancedFilter.ingroupLink}
+               </if>
+               
+               <if test="advancedFilter.groupStart">
+                   (
+               </if>
+               
+               <choose>
+                   <when test='advancedFilter.matchPattern == "SB"'> <!-- 字符串左对齐 -->
+                       <choose>
+                           <when test='@com.sunwayworld.framework.database.sql.SqlHelper@containsEscapedValue(value)'>
+                               `${advancedFilter.name.toUpperCase}` LIKE '${@com.sunwayworld.framework.database.sql.SqlHelper@getEscapedStrValue(advancedFilter.value)}%'
+                           </when>
+                           <otherwise>
+                               `${advancedFilter.name.toUpperCase}` LIKE CONCAT(#{advancedFilter.value}, '%')
+                           </otherwise>
+                       </choose>
+                   </when>
+                   <when test='advancedFilter.matchPattern == "SC"'> <!-- 字符串居中对齐 -->
+                       <choose>
+                           <when test='@com.sunwayworld.framework.database.sql.SqlHelper@containsEscapedValue(value)'>
+                               `${advancedFilter.name.toUpperCase}` LIKE '%${@com.sunwayworld.framework.database.sql.SqlHelper@getEscapedStrValue(advancedFilter.value)}%'
+                           </when>
+                           <otherwise>
+                               `${advancedFilter.name.toUpperCase}` LIKE CONCAT('%', #{advancedFilter.value}, '%')
+                           </otherwise>
+                       </choose>
+                   </when>
+                   <when test='advancedFilter.matchPattern == "NSC"'> <!-- 字符串不包含 -->
+                       <choose>
+                           <when test='@com.sunwayworld.framework.database.sql.SqlHelper@containsEscapedValue(value)'>
+                               (`${advancedFilter.name.toUpperCase}` NOT LIKE '%${@com.sunwayworld.framework.database.sql.SqlHelper@getEscapedStrValue(advancedFilter.value)}%' OR `${advancedFilter.name.toUpperCase}` IS NULL)
+                           </when>
+                           <otherwise>
+                               (`${advancedFilter.name.toUpperCase}` NOT LIKE CONCAT('%', #{advancedFilter.value}, '%') OR `${advancedFilter.name.toUpperCase}` IS NULL)
+                           </otherwise>
+                       </choose>
+                   </when>
+                   <when test='advancedFilter.matchPattern == "SE"'> <!-- 字符串右对齐 -->
+                       <choose>
+                           <when test='@com.sunwayworld.framework.database.sql.SqlHelper@containsEscapedValue(value)'>
+                               `${advancedFilter.name.toUpperCase}` LIKE '%${@com.sunwayworld.framework.database.sql.SqlHelper@getEscapedStrValue(advancedFilter.value)}'
+                           </when>
+                           <otherwise>
+                               `${advancedFilter.name.toUpperCase}` LIKE CONCAT('%', #{advancedFilter.value})
+                           </otherwise>
+                       </choose>
+                   </when>
+                   <when test='advancedFilter.matchPattern == "SEQ"'> <!-- 字符串相等 -->
+                       `${advancedFilter.name.toUpperCase}` = #{advancedFilter.value}
+                   </when>
+                   <when test='advancedFilter.matchPattern == "EQ"'> <!-- 相等 -->
+                       `${advancedFilter.name.toUpperCase}` = #{advancedFilter.value}
+                   </when>
+                   <when test='advancedFilter.matchPattern == "CISB"'> <!-- 字符串不区分大小写左对齐 -->
+                       <choose>
+                           <when test='@com.sunwayworld.framework.database.sql.SqlHelper@containsEscapedValue(value)'>
+                               UPPER(`${advancedFilter.name.toUpperCase}`) LIKE '${@com.sunwayworld.framework.database.sql.SqlHelper@getEscapedStrValue(advancedFilter.value)}%'
+                           </when>
+                           <otherwise>
+                               UPPER(`${advancedFilter.name.toUpperCase}`) LIKE CONCAT(#{advancedFilter.value}, '%')
+                           </otherwise>
+                       </choose>
+                   </when>
+                   <when test='advancedFilter.matchPattern == "CISC"'> <!-- 字符串不区分大小写居中对齐 -->
+                       <choose>
+                           <when test='@com.sunwayworld.framework.database.sql.SqlHelper@containsEscapedValue(value)'>
+                               UPPER(`${advancedFilter.name.toUpperCase}`) LIKE '%${@com.sunwayworld.framework.database.sql.SqlHelper@getEscapedStrValue(advancedFilter.value)}%'
+                           </when>
+                           <otherwise>
+                               UPPER(`${advancedFilter.name.toUpperCase}`) LIKE CONCAT('%', #{advancedFilter.value}, '%')
+                           </otherwise>
+                       </choose>
+                   </when>
+                   <when test='advancedFilter.matchPattern == "CISE"'> <!-- 字符串不区分大小写右对齐 -->
+                       <choose>
+                           <when test='@com.sunwayworld.framework.database.sql.SqlHelper@containsEscapedValue(value)'>
+                               UPPER(`${advancedFilter.name.toUpperCase}`) LIKE '%${@com.sunwayworld.framework.database.sql.SqlHelper@getEscapedStrValue(advancedFilter.value)}'
+                           </when>
+                           <otherwise>
+                               UPPER(`${advancedFilter.name.toUpperCase}`) LIKE CONCAT('%', #{advancedFilter.value})
+                           </otherwise>
+                       </choose>
+                   </when>
+                   <when test='advancedFilter.matchPattern == "CISEQ"'> <!-- 字符串不区分大小写相等 -->
+                       UPPER(`${advancedFilter.name.toUpperCase}`) = #{advancedFilter.value}
+                   </when>
+                   <when test='advancedFilter.matchPattern == "DG"'> <!-- 日期大于 -->
+                       `${advancedFilter.name.toUpperCase}` <![CDATA[>]]> #{advancedFilter.value}
+                   </when>
+                   <when test='advancedFilter.matchPattern == "DGOE"'> <!-- 日期大于等于 -->
+                       `${advancedFilter.name.toUpperCase}` <![CDATA[>=]]> #{advancedFilter.value}
+                   </when>
+                   <when test='advancedFilter.matchPattern == "DL"'> <!-- 日期小于 -->
+                       `${advancedFilter.name.toUpperCase}` <![CDATA[<]]> #{advancedFilter.value}
+                   </when>
+                   <when test='advancedFilter.matchPattern == "DLOE"'> <!-- 日期小于等于 -->
+                       `${advancedFilter.name.toUpperCase}` <![CDATA[<=]]> #{advancedFilter.value}
+                   </when>
+                   <when test='advancedFilter.matchPattern == "DEQ"'> <!-- 日期相等，只比较年月日 -->
+                      <choose>
+                           <when test='advancedFilter.value == null or advancedFilter.value.toString() == ""'>
+                               `${advancedFilter.name.toUpperCase}` IS NULL
+                           </when>
+                           <otherwise>
+                               DATE_FORMAT(`${advancedFilter.name.toUpperCase}`, '%Y-%m-%d') = #{advancedFilter.value}
+                           </otherwise>
+                       </choose>
+                   </when>
+                   <when test='advancedFilter.matchPattern == "TG"'> <!-- 时间大于 -->
+                       `${advancedFilter.name.toUpperCase}` <![CDATA[>]]> #{advancedFilter.value}
+                   </when>
+                   <when test='advancedFilter.matchPattern == "TGOE"'> <!-- 时间大于等于 -->
+                       `${advancedFilter.name.toUpperCase}` <![CDATA[>=]]> #{advancedFilter.value}
+                   </when>
+                   <when test='advancedFilter.matchPattern == "TL"'> <!-- 时间小于 -->
+                       `${advancedFilter.name.toUpperCase}` <![CDATA[<]]> #{advancedFilter.value}
+                   </when>
+                   <when test='advancedFilter.matchPattern == "TLOE"'> <!-- 时间小于等于 -->
+                       `${advancedFilter.name.toUpperCase}` <![CDATA[<=]]> #{advancedFilter.value}
+                   </when>
+                   <when test='advancedFilter.matchPattern == "TEQ"'> <!-- 时间相等，只比较年月日时分 -->
+                       <choose>
+                           <when test='advancedFilter.value == null or advancedFilter.value.toString() == ""'>
+                               `${advancedFilter.name.toUpperCase}` IS NULL
+                           </when>
+                           <otherwise>
+                               DATE_FORMAT(`${advancedFilter.name.toUpperCase}`, '%Y-%m-%d %H:%i') = #{advancedFilter.value}
+                           </otherwise>
+                       </choose>
+                   </when>
+                   <when test='advancedFilter.matchPattern == "NG"'> <!-- 数字大于 -->
+                       `${advancedFilter.name.toUpperCase}` <![CDATA[>]]> #{advancedFilter.value}
+                   </when>
+                   <when test='advancedFilter.matchPattern == "NGOE"'> <!-- 数字大于等于 -->
+                       `${advancedFilter.name.toUpperCase}` <![CDATA[>=]]> #{advancedFilter.value}
+                   </when>
+                   <when test='advancedFilter.matchPattern == "NL"'> <!-- 数字小于 -->
+                       `${advancedFilter.name.toUpperCase}` <![CDATA[<]]> #{advancedFilter.value}
+                   </when>
+                   <when test='advancedFilter.matchPattern == "NLOE"'> <!-- 数字小于等于 -->
+                       `${advancedFilter.name.toUpperCase}` <![CDATA[<=]]> #{advancedFilter.value}
+                   </when>
+                   <when test='advancedFilter.matchPattern == "DIFFER"'> <!-- 不相等 -->
+                       <choose>
+                           <when test='advancedFilter.value == null or advancedFilter.value.toString() == ""'>
+                               `${advancedFilter.name.toUpperCase}` IS NOT NULL
+                           </when>
+                           <otherwise>
+                               `${advancedFilter.name.toUpperCase}` <![CDATA[<>]]> #{advancedFilter.value}
+                           </otherwise>
+                       </choose>
+                   </when>
+               </choose>
+               <if test="advancedFilter.groupEnd">)</if>
+           </foreach>
+           )
+       </if>
+       <!-- 多字段匹配查询 -->
+       <if test="multiPropertyFilterPattern != null">
+           AND (
+           <foreach collection="multiPropertyFilterPattern.names" item="name" separator="OR" open="(" close=")">
+               <choose>
+                   <when test="multiPropertyFilterPattern.caseSensitive">
+                       `${name.toUpperCase}` LIKE CONCAT('%', #{multiPropertyFilterPattern.value}, '%')
+                   </when>
+                   <otherwise>
+                       UPPER(`${name.toUpperCase}`) LIKE CONCAT('%', #{multiPropertyFilterPattern.value}, '%')
+                   </otherwise>
+               </choose>
+           </foreach>
+           )
+       </if>
+    </sql>
+    
+    <!-- ############################# 添加特殊排序，引用前判断是否有特殊排序 #############################  -->
+    <sql id="appendOrderClause">
+        <foreach collection="orderParams" item="orderParam" separator=",">
+            ${orderParam.first} IS NULL, ${orderParam.first} ${orderParam.second}
+        </foreach>
+    </sql>
+    
+    <!-- ############################# 查询当前审核节点 #############################  -->
+    <sql id="selectAuditTaskNameClause">
+        (SELECT GROUP_CONCAT(K.TASKNAME)
+           FROM T_CORE_BPMN_INST I,
+                T_CORE_BPMN_INST_TASK K
+          WHERE I.ID = K.INSTID
+            AND I.TARGETID = CONCAT(#{service_table}, '$', T.ID)
+        <if test='bpmn_statusCode != null'>
+            AND K.STATUSCODE = #{bpmn_statusCode}
+        </if>
+            ) TASKNAME_
+    </sql>
+    
+    <!-- ############################# 审核权限 #############################  -->
+    <sql id="auditAuthorityWhereClause">
+           EXISTS (SELECT 1
+                     FROM T_CORE_BPMN_INST I, T_CORE_BPMN_INST_TASK K, T_CORE_BPMN_INST_TASK_ROLE R, T_CORE_ROLE_USER U
+                    WHERE I.ID = K.INSTID
+                      AND I.TARGETID = CONCAT(#{service_table}, '$', T.ID)
+                      AND K.ID = R.INSTTASKID
+                      AND R.ROLEID = U.ROLEID
+                      AND (K.COUNTERSIGN = '0' /* 会签时所有人员都要进行审核 */
+                           OR NOT EXISTS (SELECT 1
+                                            FROM T_CORE_BPMN_COMMENT C
+                                           WHERE C.CREATEDTIME <![CDATA[>=]]> K.CREATEDTIME
+                                             AND C.TASKID = K.TASKID
+                                             AND C.TARGETID = I.TARGETID
+                                             AND U.USERID = C.USERID))
+               <if test='bpmn_statusCode != null'>
+                      AND K.STATUSCODE IN
+                      <foreach collection='bpmn_statusCode.split(",")' item="value" separator="," open="(" close=")">
+                         #{value}
+                      </foreach>
+               </if>
+                      AND U.USERID = #{loginUser.id}
+                    UNION ALL
+                   SELECT 1
+                     FROM T_CORE_BPMN_INST I, T_CORE_BPMN_INST_TASK K, T_CORE_BPMN_INST_TASK_USER U
+                    WHERE I.ID = K.INSTID
+                      AND K.ID = U.INSTTASKID
+                      AND I.TARGETID = CONCAT(#{service_table}, '$', T.ID)
+               <if test='bpmn_statusCode != null'>
+                      AND K.STATUSCODE IN
+                      <foreach collection='bpmn_statusCode.split(",")' item="value" separator="," open="(" close=")">
+                          #{value}
+                      </foreach>
+               </if>
+                      AND U.USERID = #{loginUser.id})
+    </sql>
+    
+    <!-- 单位权限 -->
+    <sql id="orgAuthorityWhereClause">
+        <choose>
+            <when test='loginUser != null and loginUser.userType == "sysAdmin"'>
+                1 = 1 /* 管理员:单位权限 */
+            </when>
+            <otherwise>
+                EXISTS (SELECT 1
+                          FROM T_CORE_USER_PERMISSION UP_
+                         WHERE UP_.USERID = #{loginUser.id}
+                           AND UP_.PERMISSIONTYPEID = 'T_CORE_ORG'
+                           AND UP_.TARGETID = ${tableAlias}.${permissionColumnName})
+            </otherwise>
+        </choose>
+    </sql>
+    
+    <!-- 业务管理员权限(在角色分析权限时并不分配数据，只是设置管理员) -->
+    <sql id="bizAdminAuthorityWhereClause">
+        <choose>
+            <when test='loginUser != null and loginUser.userType == "sysAdmin"'>
+                1 = 1 /* 管理员:单位权限 */
+            </when>
+            <otherwise>
+                EXISTS (SELECT 1
+                          FROM T_CORE_ROLE_USER RU_, T_CORE_ROLE_PERMISSION RP_
+                         WHERE RU_.USERID = #{loginUser.id}
+                           AND RU_.ROLEID = RP_.ROLEID
+                           AND RP_.PERMISSIONTYPEID = '${permissionTypeId}'
+                           AND RP_.TARGETID = '0')
+            </otherwise>
+        </choose>
+    </sql>
+    
+    <!-- 权限集 WHERE_PATTERN_LIKE -->
+    <sql id="authorityWherePatternLikeClause">
+        <choose>
+            <when test='loginUser != null and loginUser.userType == "sysAdmin"'>
+                1 = 1 /* 系统管理员:${permissionTypeId} */
+            </when>
+            <otherwise>
+                EXISTS (SELECT 1
+                              FROM T_CORE_ROLE_USER RU_, T_CORE_ROLE_PERMISSION RP_
+                             WHERE RU_.USERID = #{loginUser.id}
+                               AND RU_.ROLEID = RP_.ROLEID
+                               AND RP_.PERMISSIONTYPEID = '${permissionTypeId}'
+                               AND (RP_.TARGETID = '0' /* 管理员:${permissionTypeId} */
+                                    OR ${tableAlias}.${permissionColumnName} LIKE CONCAT(RP_.TARGETID, '%')))
+            </otherwise>
+        </choose>
+    </sql>
+    
+    <!-- 权限集-WHERE_PATTERN_EQUAL -->
+    <sql id="authorityWherePatternEqualClause">
+        <choose>
+            <when test='loginUser != null and loginUser.userType == "sysAdmin"'>
+                1 = 1 /* 系统管理员:${permissionTypeId} */
+            </when>
+            <otherwise>
+                EXISTS (SELECT 1
+                          FROM T_CORE_ROLE_USER RU_, T_CORE_ROLE_PERMISSION RP_
+                         WHERE RU_.USERID = #{loginUser.id}
+                           AND RU_.ROLEID = RP_.ROLEID
+                           AND RP_.PERMISSIONTYPEID = '${permissionTypeId}'
+                           AND (RP_.TARGETID = '0' /* 管理员:${permissionTypeId} */
+                                OR ${tableAlias}.${permissionColumnName} = RP_.TARGETID))
+            </otherwise>
+        </choose>
+    </sql>
+    
+    <!-- 权限集 WHERE_PATTERN_LIKE -->
+    <sql id="userAuthorityWherePatternLikeClause">
+        EXISTS (SELECT 1
+                      FROM T_CORE_ROLE_USER RU_, T_CORE_ROLE_PERMISSION RP_
+                     WHERE RU_.USERID = #{_userId_}
+                       AND RU_.ROLEID = RP_.ROLEID
+                       AND RP_.PERMISSIONTYPEID = '${permissionTypeId}'
+                       AND (RP_.TARGETID = '0' /* 管理员:${permissionTypeId} */
+                            OR ${tableAlias}.${permissionColumnName} LIKE CONCAT(RP_.TARGETID, '%')))
+    </sql>
+    
+    <!-- 权限集-WHERE_PATTERN_EQUAL -->
+    <sql id="userAuthorityWherePatternEqualClause">
+        EXISTS (SELECT 1
+                  FROM T_CORE_ROLE_USER RU_, T_CORE_ROLE_PERMISSION RP_
+                 WHERE RU_.USERID = #{_userId_}
+                   AND RU_.ROLEID = RP_.ROLEID
+                   AND RP_.PERMISSIONTYPEID = '${permissionTypeId}'
+                   AND (RP_.TARGETID = '0' /* 管理员:${permissionTypeId} */
+                        OR ${tableAlias}.${permissionColumnName} = RP_.TARGETID))
+    </sql>
+    
+    <!-- ############################# 通过审核菜单ID获取当前用户的审核菜单名称和HREF #############################  -->
+    <sql id="selectCurrentUserAuditMenuByMenuId">
+        SELECT DISTINCT MM_.ID AS MENUID, MM_.SERVICENAME AS MODELNAME, MN_.HREF
+          FROM T_CORE_MENU_EXT MM_, T_CORE_ROLE_USER RU_, T_CORE_ROLE_PERMISSION RP_, T_CORE_MENU MN_
+         WHERE RU_.ROLEID = RP_.ROLEID
+           AND RP_.PERMISSIONTYPEID = 'T_CORE_MENU'
+           AND RU_.USERID = '${loginUser.id}'
+           AND MM_.TYPE = 'audit'
+           AND MM_.ENABLE = '1'
+           AND (RP_.TARGETID = '0' OR MM_.ID = RP_.TARGETID)
+           AND MM_.ID = MN_.ID
+           AND MM_.ID = '${menuId}'
+         GROUP BY MM_.ID, MM_.SERVICENAME, MN_.HREF
+    </sql>
+    
+    <!-- ############################# 通过审核菜单ID获取当前用户的编辑菜单名称和HREF #############################  -->
+    <sql id="selectCurrentUserEditMenuByMenuId">
+        SELECT DISTINCT MM_.ID AS MENUID, MM_.SERVICENAME AS MODELNAME, MN_.HREF
+          FROM T_CORE_MENU_EXT MM_, T_CORE_ROLE_USER RU_, T_CORE_ROLE_PERMISSION RP_, T_CORE_MENU MN_
+         WHERE RU_.ROLEID = RP_.ROLEID
+           AND RP_.PERMISSIONTYPEID = 'T_CORE_MENU'
+           AND RU_.USERID = '${loginUser.id}'
+           AND MM_.TYPE = 'edit'
+           AND MM_.ENABLE = '1'
+           AND (RP_.TARGETID = '0' OR MM_.ID = RP_.TARGETID)
+           AND MM_.ID = MN_.ID
+           AND MM_.ID = '${menuId}'
+         GROUP BY MM_.ID, MM_.SERVICENAME, MN_.HREF
+    </sql>
+    
+    <!-- 查询企业父节点 -->
+    <sql id="selectParentOrgClause">
+        (SELECT ID, PARENTLVL
+           FROM (SELECT @r AS _ID,
+                        (SELECT @r := PARENTID FROM T_CORE_ORG WHERE ID = _ID), 
+                        @l := @l + 1 AS PARENTLVL 
+                   FROM (SELECT @r := #{orgId}, @l := 0) VARS, 
+                        T_CORE_ORG O 
+                  WHERE @r <![CDATA[<>]]> 0) T1
+                JOIN T_CORE_ORG T2 
+                  ON T1._ID = T2.ID)
+    </sql>
+    <!-- 查询企业子节点 -->
+    <sql id="selectChildOrgClause">
+        (SELECT ID
+           FROM (SELECT T1.ID,
+                        IF(FIND_IN_SET(CONCAT('[', PARENTID, ']'), @pids) > 0, @pids := CONCAT(@pids, ',[', ID, ']'), '0') AS ISCHILD
+                   FROM (SELECT ID, PARENTID
+                           FROM T_CORE_ORG T
+                          ORDER BY PARENTID, ID) T1,
+                        (SELECT @pids := CONCAT('[', #{orgId}, ']')) T2) T3
+          WHERE T3.ISCHILD != '0')
+    </sql>
+    
+    <!-- 获取企业编码和企业名称的SQL,含无单位的特殊需求 -->
+    <sql id="selectAllOrgClause">
+        SELECT '-' ID, '[无单位]' ORGNAME, NULL PARENTID
+          FROM DUAL
+         UNION
+        SELECT ID, ORGNAME, PARENTID
+          FROM T_CORE_ORG
+    </sql>
+</mapper>

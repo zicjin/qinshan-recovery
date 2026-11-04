@@ -1,0 +1,10 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/module/qms/quality-controls/core-quality-control.js',
+                      '/static/module/qms/quality-controls/core-quality-control-detail.js',
+                      '/static/module/qms/quality-controls/core-quality-control-config.js'
+                    ]);
+    coreQualityControl.detailPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>
+

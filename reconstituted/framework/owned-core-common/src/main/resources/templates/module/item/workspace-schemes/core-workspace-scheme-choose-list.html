@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/module/item/workspace-schemes/core-workspace-scheme.js',
+                      '/static/module/item/workspace-schemes/core-workspace-scheme-choose-list.js'
+                    ]);
+    coreWorkspaceScheme.choosePage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>
+

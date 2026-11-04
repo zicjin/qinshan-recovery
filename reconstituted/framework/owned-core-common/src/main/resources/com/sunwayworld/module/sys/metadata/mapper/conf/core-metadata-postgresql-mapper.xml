@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.module.sys.metadata.mapper.CoreMetadataMapper">
+    <select id="selectEnabledValidatorByTable" parameterType="java.lang.String" resultType="com.sunwayworld.module.sys.metadata.bean.CoreValidatorBean">
+        SELECT V.*
+          FROM T_CORE_METADATA M, T_CORE_METADATA_VALIDATOR V
+         WHERE M.ID = V.ID
+           AND V.ENABLE = '1'
+           AND M.TABLENAME = #{table}
+    </select>
+    
+    <select id="selectImpValidatorByTable" parameterType="java.lang.String" resultType="map">
+        SELECT A.TABLENAME, A.COLUMNNAME, A.TYPENAME, B.*
+          FROM T_CORE_METADATA A, T_CORE_METADATA_IMPVALIDATOR B
+         WHERE A.ID = B.TARGETID
+           AND A.TABLENAME = #{table}
+           AND B.ENABLE = '1'
+         ORDER BY A.COLUMNNAME
+    </select>
+    
+    <select id="selectSubmitValidatorByTable" parameterType="java.lang.String" resultType="map">
+        SELECT A.TABLENAME, A.COLUMNNAME, A.TYPENAME, B.*
+          FROM T_CORE_METADATA A, T_CORE_METADATA_SUBMITVALIDATOR B
+         WHERE A.ID = B.TARGETID
+           AND A.TABLENAME = #{table}
+           AND B.ENABLE = '1'
+         ORDER BY A.COLUMNNAME, B.ORDERNO
+    </select>
+    
+    <select id="selectIdByMaster" resultType="java.lang.String">
+         SELECT CAST(ID AS VARCHAR)
+           FROM ${table}
+          WHERE CAST(${referColumn} AS VARCHAR) = CAST(#{masterId} AS VARCHAR)
+    </select>
+
+    <select id="selectIdByMasterIdList" resultType="java.lang.String">
+        SELECT CAST(ID AS VARCHAR)
+          FROM ${table}
+        WHERE ${referColumn} in
+        <foreach collection="masterIdList" item="masterId" separator="," open="(" close=")">
+            #{masterId}
+        </foreach>
+    </select>
+    
+    <select id="selectMasterMap" resultType="map">
+         SELECT ID, CAST(${referColumn} AS VARCHAR) MASTERID
+           FROM ${table}
+          WHERE CAST(ID AS VARCHAR) IN
+        <foreach collection="idList" item="id" open="(" close=")" separator=",">
+            CAST(#{id} AS VARCHAR)
+        </foreach>
+    </select>
+    
+    <select id="countMaster" resultType="java.lang.Long">
+         SELECT COUNT(1)
+           FROM ${masterTable} M, ${table} T
+          WHERE CAST(T.${referColumn} AS VARCHAR) = CAST(M.ID AS VARCHAR)
+            AND CAST(T.ID AS VARCHAR) = CAST(#{id} AS VARCHAR)
+    </select>
+    
+    <delete id="deleteByMaster">
+         DELETE FROM ${table} WHERE CAST(${referColumn} AS VARCHAR) = CAST(#{masterId} AS VARCHAR)
+    </delete>
+    
+    <delete id="delete">
+         DELETE FROM ${table} WHERE CAST(ID AS VARCHAR) = CAST(#{id} AS VARCHAR)
+    </delete>
+</mapper>

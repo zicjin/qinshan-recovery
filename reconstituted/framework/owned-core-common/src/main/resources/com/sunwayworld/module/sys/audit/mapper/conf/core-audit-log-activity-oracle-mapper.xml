@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.module.sys.audit.mapper.CoreAuditLogActivityMapper">
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM T_CORE_AUDIT_LOG_ACTIVITY T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ID
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="selectAuditLogActivityByCondition" resultType="map">
+        SELECT T.*
+          FROM (SELECT ALA.*,
+                       AL.TARGETTABLE,
+                       AL.TARGETID,
+                       AL.ITEMDESC,
+                       AC.NAME AS TARGETTABLENAME,
+                       U.USERNAME
+                  FROM T_CORE_AUDIT_LOG_ACTIVITY ALA
+                  JOIN T_CORE_AUDIT_LOG AL ON AL.ID = ALA.LOGID
+             LEFT JOIN T_CORE_AUDIT_CONFIG AC ON AC.ID = AL.TARGETTABLE
+             LEFT JOIN T_CORE_USER U ON U.ID = ALA.USERID) T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.CREATEDTIME DESC
+            </otherwise>
+        </choose>
+    </select>
+</mapper>

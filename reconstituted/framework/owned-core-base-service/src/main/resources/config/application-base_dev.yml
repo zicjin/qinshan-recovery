@@ -1,0 +1,36 @@
+server:
+  port: 8182
+
+spring:
+  profiles: base_dev
+  resources:
+    chain:
+      strategy:
+        content:
+          enabled: false
+  datasource:
+    driver-class-name: oracle.jdbc.OracleDriver
+    username: lims_api_dev
+    password: lims_api_$dev
+    url: jdbc:oracle:thin:@172.16.29.80:1521/utf8
+  redis:
+    database: 0
+    url: redis://sunway612@localhost:6379
+  messages:
+    basename: static/i18n/messages-core
+  cloud:
+    nacos:
+      discovery:
+        server-addr: ${NACOS_DISCOVERY_SERVER_ADDR:localhost:8848}
+        namespace: ${NACOS_DISCOVERY_NAMESPACE:dev}
+        group: ${NACOS_DISCOVERY_GROUP:DEFAULT_GROUP}
+  zipkin:
+    enabled: false
+    
+sunway:
+  app:
+    license: 
+  ai:
+    ocr:
+      server:
+        url: http://127.0.0.1:8866/predict/ocr_system

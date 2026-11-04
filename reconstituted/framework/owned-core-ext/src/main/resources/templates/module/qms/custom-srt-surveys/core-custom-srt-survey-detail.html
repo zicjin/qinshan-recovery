@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/module/qms/custom-srt-surveys/core-custom-srt-survey.js',
+                      '/static/module/qms/custom-srt-surveys/core-custom-srt-survey-detail.js'
+                    ]);
+    coreCustomSrtSurvey.detailPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>
+

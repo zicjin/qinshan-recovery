@@ -8,7 +8,16 @@ if [ -z "$CONFIG" ] || [ ! -f "$CONFIG" ]; then
 fi
 JDK="${JAVA_HOME:?Set JAVA_HOME to pinned Java 8}"
 BIND_ADDRESS="${LIMS_BIND_ADDRESS:-127.0.0.1}"
+CLASSPATH="$ROOT/app/lims-owned-application.jar"
+if [ -f "$ROOT/lib/classpath.txt" ]; then
+    while IFS= read -r jar_name; do
+        [ -z "$jar_name" ] && continue
+        CLASSPATH="$CLASSPATH:$ROOT/lib/$jar_name"
+    done < "$ROOT/lib/classpath.txt"
+else
+    CLASSPATH="$CLASSPATH:$ROOT/lib/*"
+fi
 exec "$JDK/bin/java" -Dserver.address="$BIND_ADDRESS" \
     -Dspring.config.location="file:$CONFIG" \
-    -cp "$ROOT/app/lims-owned-application.jar:$ROOT/lib/*" \
+    -cp "$CLASSPATH" \
     com.sunwayworld.emc.projectfunction.GikamWpjcApplication

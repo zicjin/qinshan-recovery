@@ -1,0 +1,7 @@
+<script th:inline="javascript">
+    Gikam.requirejs([ '/static/module/sys/todos/core-todo.js',
+                      '/static/module/sys/todos/core-todo-query-list.js'
+                    ]);
+    coreTodo.queryPage.init(Gikam.getElParam([[${param}]]));
+</script>
+

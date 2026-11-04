@@ -1,0 +1,8 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/module/qms/user-trains/core-user-train.js',
+                      '/static/module/qms/user-trains/core-user-train-audit-list.js'
+                    ]);
+    coreUserTrain.auditPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.module.sys.mybatis.mapper.CoreMybatisStatementPropertyMapper">
+    <select id="selectList" resultType="com.sunwayworld.module.sys.mybatis.bean.CoreMybatisStatementPropertyBean">
+        SELECT P.*
+          FROM T_CORE_MYBATIS_STMT S, T_CORE_MYBATIS_STMT_PROPERTY P
+         WHERE S.ID = P.MYBATISSTATEMENTID
+           AND S.NAMESPACE = #{namespace}
+           AND S.STATEMENTID = #{statementId}
+    </select>
+</mapper>

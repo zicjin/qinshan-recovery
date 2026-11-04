@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/module/item/data-centers/core-data-center.js',
+                      '/static/module/item/data-centers/core-data-center-report-choose-list.js'
+                    ]);
+    coreDataCenter.reportChoosePage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>
+

@@ -1,0 +1,10 @@
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    Gikam.requirejs([ '/static/module/item/custom-queries/core-custom-query.js',
+                      '/static/module/item/custom-queries/core-custom-query-grid-menu-list.js'
+    ]);
+    Gikam.requireCss(["/static/module/item/custom-queries/css/core-custom-query-grid-menu-list.css"]);
+    coreCustomQuery.gridMenuPage.init(Gikam.getElParam([[${param}]]));
+    /*]]>*/
+</script>
+

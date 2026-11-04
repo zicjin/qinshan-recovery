@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/module/qms/rectifys/core-rectify.js',
+                      '/static/module/qms/rectifys/core-rectify-audit-list.js',
+                      '/static/module/qms/rectifys/core-rectify-config.js'
+                    ]);
+    coreRectify.auditPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>

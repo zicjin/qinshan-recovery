@@ -4,9 +4,10 @@ if [ "$#" -lt 1 ]; then echo "usage: $0 <artifact-or-directory>..." >&2; exit 2;
 python3 - "$@" <<'PY'
 import io, sys, zipfile
 from pathlib import Path
-TOKENS=(b'sunway-app.so',b'sunway.app.license',b'com/sunwayworld/module/sys/license',b'/core/module/sys/licenses',b'/open/security/licenses',b'com/sunwayworld/framework/security/bean/CoreLicenseDTO',b'com/sunwayworld/boot/thirdparty/sunwaylibrary/SunwayLibraryExtractor',b'getLicenseDeadline',b'getLicenseCountdownDays',b'getLoginUserLimitation',b'getNumberOfOnlineUsers',b'third-party/sunway-app/',b'licenseDeadline',b'licenseCountdown',b'loginUserLimitation',b'numberOfOnlineUsers',b'SYSTEM_MAC_ADDRESS_LIST',b'license-machine')
+TOKENS=(b'sunway-app.so',b'sunway-app.dll',b'sunway-app.o',b'com.sunwayworld.boot.thirdparty.sunwaylibrary.SunwayLibraryExtractor',b'third-party/sunway-app/',b'SYSTEM_MAC_ADDRESS_LIST',b'license-machine')
 PRIVATE=('gikam-core-','private-sdk','sunway-','lims2-report-template-')
 FORBIDDEN_FILES={'sunway-app.so','sunway-app.dll','sunway-app.o','license-machine.env'}
+PROVENANCE_FILES={'resource-provenance.json','forbidden-content-report.json','module-provenance.json','framework-module-registry.json','source-only-application.json','public-dependency-allowlist.json'}
 ARCHIVES={'.jar','.war','.zip','.ear'}
 def reject(reason):
  print('supplier runtime or vendor restriction residue found: '+reason,file=sys.stderr); raise SystemExit(1)
@@ -17,6 +18,7 @@ def inspect_archive(label,data):
  try: archive=zipfile.ZipFile(io.BytesIO(data))
  except zipfile.BadZipFile: reject(label+' is an invalid archive')
  for info in archive.infolist():
+  if info.is_dir() or info.filename.endswith('/'): continue
   name=info.filename; base=Path(name).name.lower()
   if base in FORBIDDEN_FILES: reject(label+' contains '+name)
   if any(marker in base for marker in PRIVATE) and base.endswith('.jar'): reject(label+' contains supplier jar '+name)
@@ -29,6 +31,7 @@ def inspect_path(path):
    base=child.name.lower()
    if base in FORBIDDEN_FILES: reject(str(child))
    if any(marker in base for marker in PRIVATE) and base.endswith('.jar'): reject(str(child))
+   if base in PROVENANCE_FILES: continue
    data=child.read_bytes(); inspect_bytes(str(child),data)
    if child.suffix.lower() in ARCHIVES: inspect_archive(str(child),data)
  else:

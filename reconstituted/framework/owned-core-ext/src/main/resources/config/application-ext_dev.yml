@@ -1,0 +1,36 @@
+server:
+  port: 8184
+
+spring:
+  profiles: ext_dev
+  resources:
+    chain:
+      strategy:
+        content:
+          enabled: false
+  datasource:
+    driver-class-name: oracle.jdbc.OracleDriver
+    username: lims_api_dev
+    password: lims_api_$dev
+    url: jdbc:oracle:thin:@172.16.29.80:1521/utf8
+  redis:
+    database: 0
+    url: redis://sunway612@localhost:6379
+#    url: redis://192.168.5.164:32379
+  messages:
+    basename: static/i18n/messages-core
+  cloud:
+    nacos:
+      discovery:
+        server-addr: ${NACOS_DISCOVERY_SERVER_ADDR:localhost:8848}
+        namespace: ${NACOS_DISCOVERY_NAMESPACE:public}
+        group: ${NACOS_DISCOVERY_GROUP:DEFAULT_GROUP}
+  zipkin:
+    enabled: false
+
+sunway:
+  app:
+    license: xMTQFhZz2axJFxQHtVc2Klp/ShP7VNyGuP0RrbhdYAj5iIffDg+12HPJPEnDrvFdJjq3LsGPzst+HwJgM2+GCg==
+
+  cloud:
+    project: GIKAM_CORE@SUNWAY

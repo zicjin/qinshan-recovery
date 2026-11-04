@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.module.mdm.user.mapper.CoreModifiedUserPermissionMapper">
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM T_CORE_M_USER_PERMISSION T
+         <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+       </where>
+         ORDER BY 
+         <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ID
+            </otherwise>
+         </choose>
+    </select>
+    
+    <select id="selectOrgPermissionList" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM (SELECT P.*,
+                       O.ORGNAME
+                  FROM T_CORE_M_USER_PERMISSION P, T_CORE_ORG O
+                 WHERE P.TARGETID = O.ID
+                   AND P.PERMISSIONTYPEID = 'T_CORE_ORG') T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+        </where>
+         ORDER BY 
+         <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.DEFAULTFLAG DESC, T.ID
+            </otherwise>
+         </choose>
+    </select>
+</mapper>

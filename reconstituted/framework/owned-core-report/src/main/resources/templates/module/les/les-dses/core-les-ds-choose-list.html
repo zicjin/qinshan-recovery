@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ 
+                      '/static/module/les/les-dses/core-les-ds.js',
+                      '/static/module/les/les-dses/core-les-ds-choose-list.js'
+                    ]);
+    coreLesDs.choosePage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>

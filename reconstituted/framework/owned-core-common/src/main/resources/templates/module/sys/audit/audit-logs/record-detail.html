@@ -1,0 +1,13 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    (function() {
+        var param = [[${param}]];
+        Gikam.create('auditViewContainer', {
+            renderTo : Gikam.getLastModal().window.$dom,
+            tableName: param.tableName,
+            id: param.id
+        })
+    })()
+    
+/*]]>*/
+</script>

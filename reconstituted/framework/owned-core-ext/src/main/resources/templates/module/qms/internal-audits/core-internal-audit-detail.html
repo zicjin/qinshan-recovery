@@ -1,0 +1,10 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/module/qms/internal-audits/core-internal-audit.js',
+                      '/static/module/qms/internal-audits/core-internal-audit-detail.js',
+                      '/static/module/qms/internal-audits/core-internal-audit-config.js'
+                    ]);
+    coreInternalAudit.detailPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>
+

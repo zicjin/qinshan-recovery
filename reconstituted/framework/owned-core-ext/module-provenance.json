@@ -14,7 +14,12 @@
   "forbidden_content_report": "forbidden-content-report.json",
   "module": "owned-core-ext",
   "module_reason": "Extension interfaces, extension services and FTP support.",
+  "override_source_files": [],
   "public_dependency_allowlist": "public-dependency-allowlist.json",
+  "removed_source_files": [],
+  "resource_file_count": 611,
+  "resource_provenance": "resource-provenance.json",
+  "resource_tree_sha256": "5da4803ae404c2dc249026e4b7298b5c12688f59170f4838006da23a7fd9c475",
   "schema": "supplier-reconstituted-module-v1",
   "source_decompilers": {
     "CFR": 608,

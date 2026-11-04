@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <!-- disable IE compatible view -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+</head>
+
+<body>
+    <script type="text/javascript">
+        function queryUrlValueByName(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null)
+                return unescape(r[2]);
+            return null;
+        }
+        var param = window.location.search;
+        window.location.href = queryUrlValueByName('IFM_CONTEXT') + '/secure/core/module/eln/elns/page/spreadjs-web-designer' + param;
+    </script>
+</body>
+
+</html>

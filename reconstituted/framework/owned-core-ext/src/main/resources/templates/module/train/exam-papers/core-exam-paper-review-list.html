@@ -1,0 +1,8 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/module/train/exam-papers/core-exam-paper.js',
+                      '/static/module/train/exam-papers/core-exam-paper-review-list.js'
+                    ]);
+    coreExamPaper.reviewPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>

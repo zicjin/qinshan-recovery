@@ -1,0 +1,8 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/module/train/exams/core-exam.js',
+                      '/static/module/train/exams/core-exam-question-edit.js'
+                    ]);
+    coreExam.questionEditPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>

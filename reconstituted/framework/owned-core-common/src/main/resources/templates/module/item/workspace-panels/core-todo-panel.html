@@ -1,0 +1,19 @@
+<th:block th:replace="module/gikam/gikam-panel" />
+
+<script th:inline="javascript">
+/*<![CDATA[*/
+    var param = Gikam.getElParam([[${param}]]);
+
+    var todoPanel = Gikam.create('todoPanel', {
+        renderTo : document.body,
+        url : IFM_CONTEXT + '/core/module/sys/todos' + Gikam.param(param),
+        onClick : function(item) {
+            parent.workspace.activeNodeById(item.menuId);
+        }
+    });
+    
+    window.refresh = function() {
+        todoPanel.refresh();
+    }
+/*]]>*/
+</script>

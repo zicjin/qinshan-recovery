@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.cloud.module.email.persistent.mapper.CoreEmailMapper">
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM (SELECT M.*,
+                       C.CONFIGNAME,
+                       R.QTY,
+                       R.SUCCESSQTY,
+                       CASE
+                         WHEN R.SUCCESSQTY = 0 THEN '0' 
+                         WHEN R.QTY - R.SUCCESSQTY > 0 THEN '1'
+                         ELSE '2'
+                       END SUCCESSSTATUS
+                  FROM T_CORE_EMAIL M,
+                       T_CORE_EMAIL_CONFIG C,
+                       (SELECT R.EMAILID,
+                               COUNT(1) QTY,
+                               SUM(DECODE(R.SUCCESS, '1', 1, 0)) SUCCESSQTY
+                          FROM T_CORE_EMAIL_RECEIPENT R
+                         GROUP BY R.EMAILID) R
+                 WHERE M.ID = R.EMAILID
+                   AND M.CONFIGID = C.ID) T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+        </where>
+         ORDER BY 
+         <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ID
+            </otherwise>
+         </choose>
+    </select>
+    
+    <select id="selectDetail" resultType="map">
+        SELECT M.*,
+               C.CONFIGNAME,
+               R.QTY,
+               R.SUCCESSQTY,
+               CASE
+                 WHEN R.SUCCESSQTY = 0 THEN '0' 
+                 WHEN R.QTY - R.SUCCESSQTY > 0 THEN '1'
+                 ELSE '2'
+               END SUCCESSSTATUS
+          FROM T_CORE_EMAIL M,
+               T_CORE_EMAIL_CONFIG C,
+               (SELECT R.EMAILID,
+                       COUNT(1) QTY,
+                       SUM(DECODE(R.SUCCESS, '1', 1, 0)) SUCCESSQTY
+                  FROM T_CORE_EMAIL_RECEIPENT R
+                 GROUP BY R.EMAILID) R
+         WHERE M.ID = R.EMAILID
+           AND M.CONFIGID = C.ID
+           AND M.ID = #{id}
+    </select>
+</mapper>

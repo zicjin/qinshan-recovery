@@ -1,13 +1,17 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.sunwayworld.framework.security.service;
 
-import com.sunwayworld.framework.security.service.AbstractUserDetailsService;
 import com.sunwayworld.module.mdm.user.bean.CoreUserBean;
+import com.sunwayworld.module.mdm.user.service.CoreUserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 
-public class DefaultUserDetailsService
-extends AbstractUserDetailsService {
+public class DefaultUserDetailsService extends AbstractUserDetailsService {
+    @Autowired
+    @Lazy
+    private CoreUserService userService;
+
     @Override
-    protected native CoreUserBean getLoginUser(String var1);
+    protected CoreUserBean getLoginUser(String loginId) {
+        return this.userService.selectByLoginId(loginId);
+    }
 }

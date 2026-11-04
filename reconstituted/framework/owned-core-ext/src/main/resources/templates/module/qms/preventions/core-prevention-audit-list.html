@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/module/qms/preventions/core-prevention.js',
+                      '/static/module/qms/preventions/core-prevention-audit-list.js',
+                      '/static/module/qms/preventions/core-prevention-config.js'
+                    ]);
+    corePrevention.auditPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>

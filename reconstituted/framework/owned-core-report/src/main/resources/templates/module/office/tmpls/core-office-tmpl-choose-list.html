@@ -1,0 +1,10 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ 
+                      '/static/module/office/tmpls/core-office-tmpl.js',
+                      '/static/module/office/tmpls/core-office-tmpl-choose-list.js'
+                    ]);
+    coreOfficeTmpl.choosePage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>
+

@@ -1,0 +1,963 @@
+html, body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    font-family: "Microsoft YaHei", Serif;
+}
+
+* {
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+input:focus {
+    outline: none;
+}
+
+#app {
+    width: 100%;
+    height: 100%;
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: flex;
+}
+
+#app>.sidebar {
+    width: 0;
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-flex-direction: column;
+    -moz-box-orient: vertical;
+    -moz-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -webkit-transition: width 0.3s;
+    -o-transition: width 0.3s;
+    -moz-transition: width 0.3s;
+    transition: width 0.3s;
+}
+
+#app>.sidebar.expand {
+    width: 200px;
+}
+
+#app>.sidebar>section {
+    -webkit-flex: 1;
+    -moz-box-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+    position: relative;
+}
+
+#app>.sidebar>section>.menu {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+#app>.main-container {
+    -webkit-flex: 1;
+    -moz-box-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-flex-direction: column;
+    -moz-box-orient: vertical;
+    -moz-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+}
+
+.sidebar>header .logo {
+    height: 50px;
+    background-image: url(../img/logo.svg);
+    background-repeat: no-repeat;
+    background-position: center;
+    -o-background-size: 140px;
+    background-size: 140px;
+}
+
+#app>.main-container>header>.top-toolbar>.logo {
+    background-image: url(../img/logo-blue.png);
+    background-repeat: no-repeat;
+    width: 170px;
+    height: 100%;
+    background-position: center;
+    margin-right: 10px;
+}
+
+.sidebar>header>.menu-mode-switch {
+    height: 50px;
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-align-items: center;
+    -moz-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-justify-content: center;
+    -moz-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.sidebar>header>.menu-mode-switch>.switch-container {
+    height: 24px;
+    border-radius: 4px;
+    overflow: hidden;
+    width: 150px;
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: flex;
+}
+
+.sidebar>header>.menu-mode-switch>.switch-container>.switch-btn {
+    width: 75px;
+    font-size: 12px;
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-justify-content: center;
+    -moz-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-align-items: center;
+    -moz-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    background-color: #fff;
+    cursor: pointer;
+    color: rgba(0, 0, 0, 0.45);
+}
+
+.sidebar>header>.menu-mode-switch>.switch-container>.switch-btn.active {
+    background-color: #007aff;
+    color: #fff;
+}
+
+.sidebar>header>.menu-search {
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-justify-content: center;
+    -moz-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    padding-bottom: 16px;
+}
+
+.sidebar>header>.menu-search>input {
+    width: 168px;
+    height: 28px;
+    border-radius: 4px;
+    padding-left: 5px;
+    font-size: 12px;
+}
+
+/* 菜单树样式 */
+
+.sidebar>section>.menu ul {
+    margin: 0;
+    padding: 0;
+}
+
+.sidebar>section>.menu ul>li {
+    display: block;
+}
+
+.sidebar>section>.menu ul>li>.node {
+    color: rgba(255, 255, 255, 0.5);
+    padding-left: 16px;
+    font-size: 14px;
+    height: 40px;
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-align-items: center;
+    -moz-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    position: relative;
+    padding-right: 25px;
+    cursor: pointer;
+}
+
+.sidebar>section>.menu ul>li>.node>.arrow-icon {
+    position: absolute;
+    right: 12px;
+    cursor: pointer;
+    top: 0;
+    width: 10px;
+    height: 100%;
+    line-height: 40px;
+}
+
+.sidebar>section>.menu ul>li>.node>.menu-icon {
+    width: 20px;
+    height: 20px;
+    background-position: center;
+    background-repeat: no-repeat;
+    margin-right: 8px;
+    -o-background-size: 14px 14px;
+    background-size: 14px 14px;
+}
+
+.sidebar>section>.menu ul>li>.node>.menu-text {
+    width: 130px;
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+}
+
+.sidebar>section>.menu ul>li>ul {
+    display: none;
+}
+
+.sidebar>section>.menu ul>li.expand>.node>.arrow-icon>svg {
+    -webkit-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    -o-transform: rotate(180deg);
+    transform: rotate(180deg);
+}
+
+.sidebar>section>.menu ul>li>.node>.arrow-icon>svg {
+    -webkit-transition: -webkit-transform 0.1s;
+    transition: -webkit-transform 0.1s;
+    -o-transition: -o-transform 0.1s;
+    -moz-transition: transform 0.1s, -moz-transform 0.1s;
+    transition: transform 0.1s;
+    transition: transform 0.1s, -webkit-transform 0.1s, -moz-transform 0.1s, -o-transform 0.1s;
+}
+
+.sidebar>section>.menu ul>li.leaf>.node {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.sidebar>section>.menu ul>li.expand>.node.active {
+    background-color: unset !important;
+}
+
+/* 黑色背景特有样式 start*/
+
+#app>.black.sidebar {
+    background-color: #333;
+}
+
+#app>.black.sidebar>header>.menu-search>input {
+    border-radius: 4px;
+    border: 1px solid #d9d9d9;
+    color: #fff;
+    background-color: #333;
+    border: 1px solid #444;
+}
+
+#app>.black.sidebar>section>.menu ul>li.expand {
+    background-color: #222;
+}
+
+#app>.black.sidebar>section>.menu ul>li>.node:hover {
+    background-color: rgba(34, 34, 34, 0.5);
+}
+
+#app>.black.sidebar>section>.menu ul>li.expand>.node {
+    font-family: 'MicrosoftYaHei';
+    color: rgba(255, 255, 255, .85);
+}
+
+#app>.black.sidebar>section>.menu ul>li:not(.expand)>.node.active {
+    background-color: #007aff !important;
+    color: #fff;
+    font-weight: lighter;
+}
+
+.black .menu-icon.common {
+    background-image: url('../img/common.png');
+}
+
+/* 黑色背景特有样式  end */
+
+/* 白色背景特有样式  start*/
+
+#app>.white.sidebar {
+    background-color: #fff;
+}
+
+#app>.white.sidebar>header>.out-logo {
+    width: 100%;
+    height: 50px;
+    background: linear-gradient(#379aff, #3976ff);
+}
+
+#app>.white.sidebar>header>.menu-mode-switch .switch-container {
+    border: 1px solid #007aff;
+}
+
+#app>.white.sidebar>header>.menu-search>input {
+    border-radius: 4px;
+    border: 1px solid #d9d9d9;
+}
+
+#app>.white.sidebar>section>.menu ul>li.expand {
+    background-color: #eeeeee;
+}
+
+#app>.white.sidebar>section>.menu ul>li>.node {
+    font-family: 'MicrosoftYaHei';
+    color: rgba(0, 0, 0, .85);
+}
+
+#app>.white.sidebar>section>.menu ul>li.expand>.node {
+    font-family: 'MicrosoftYaHei';
+    color: rgba(0, 0, 0, .85);
+}
+
+#app>.white.sidebar>section>.menu ul>li:not(.expand)>.node.active {
+    background-color: #007aff !important;
+    color: #fff;
+    font-weight: lighter;
+}
+
+#app>.white.sidebar>section>.menu ul>li>.node:hover {
+    background-color: #d9d9d9;
+}
+
+.white .menu-icon.common {
+    background-image: url('../img/bgbz.png');
+}
+
+/* 白色背景特有样式  end */
+
+.high-light.menu-icon.common {
+    background-image: url('../img/common.png');
+}
+
+/* 右侧内容 */
+
+.main-container>header {
+    height: 85px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+    z-index: 9;
+}
+
+.main-container>header>.top-toolbar {
+    height: 48px;
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-align-items: center;
+    -moz-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    padding-left: 14px;
+    padding-right: 32px;
+}
+
+.main-container>header>.top-toolbar>.menu-switch {
+    height: 20px;
+    width: 20px;
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+}
+
+.main-container>header>.top-toolbar>.menu-switch.expand {
+    -webkit-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -ms-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+}
+
+.main-container>header>.top-toolbar>.menu-switch {
+    background-image: url(../img/menu-expand.png);
+    -webkit-transition: -webkit-transform 0.5s;
+    transition: -webkit-transform 0.5s;
+    -o-transition: -o-transform 0.5s;
+    -moz-transition: transform 0.5s, -moz-transform 0.5s;
+    transition: transform 0.5s;
+    transition: transform 0.5s, -webkit-transform 0.5s, -moz-transform 0.5s, -o-transform 0.5s;
+    -webkit-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    -o-transform: rotate(180deg);
+    transform: rotate(180deg);
+}
+
+.main-container>header>.top-toolbar>.sys-info {
+    height: 100%;
+    -webkit-flex: 1;
+    -moz-box-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-align-items: center;
+    -moz-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-justify-content: flex-end;
+    -moz-box-pack: end;
+    -ms-flex-pack: end;
+    justify-content: flex-end;
+    color: rgba(0, 0, 0, 0.85);
+    font-size: 12px;
+}
+
+.main-container>header>.top-toolbar>.sys-info>.user {
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-align-items: center;
+    -moz-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.main-container>header>.top-toolbar>.sys-info>.user>.user-photo {
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+    margin-right: 8px;
+}
+
+.main-container>header>.top-toolbar>.sys-info>.user>.user-photo.common {
+    background: url('../img/user-common-photo.png') no-repeat center;
+}
+
+.main-container>header>.top-toolbar>.sys-info>.message {
+    width: 30px;
+    height: 30px;
+    background: url(../img/bell.png) no-repeat center;
+    margin-right: 28px;
+    cursor: pointer;
+}
+
+.main-container>header>.top-toolbar>.sys-info>.platform {
+    width: 30px;
+    height: 30px;
+    background: url(../img/platform.png) no-repeat center;
+    margin-right: 28px;
+    cursor: pointer;
+    position: relative;
+}
+
+.main-container>header>.top-toolbar>.sys-info>.platform>.todo-num {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: #ff003c;
+    border-radius: 20px;
+    padding: 0 4px;
+    color: #fff;
+    font-family: serif;
+}
+
+.main-container>header>.top-toolbar>.sys-info>.platform {
+    width: 30px;
+    height: 30px;
+    background: url(../img/platform.png) no-repeat center;
+    margin-right: 28px;
+}
+
+.main-container>header>.page-switch-tab {
+    height: 36px;
+    font-size: 12px;
+    color: rgba(0, 0, 0, 0.45);
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-align-items: center;
+    -moz-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    border-top: 1px solid #d9d9d9;
+}
+
+/* 右键菜单 */
+
+.sidebar>section>.menu>.right-simple-menu, .main-container>header>.page-switch-tab>.right-key-menu {
+    display: none;
+    width: 144px;
+    padding: 8px 0;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+    background: #fff;
+    border-radius: 3px;
+    z-index: 9;
+    position: absolute;
+}
+
+.sidebar>section>.menu>.right-simple-menu {
+    width: 136px;
+}
+
+.sidebar>section>.menu>.right-simple-menu>.menu, .main-container>header>.page-switch-tab>.right-key-menu>.menu {
+    width: 100%;
+    height: 30px;
+    line-height: 30px;
+    font-size: 12px;
+    color: rgba(0, 0, 0, 0.65);
+    padding: 0 16px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    cursor: pointer;
+}
+
+.sidebar>section>.menu>.right-simple-menu>.menu:hover, .main-container>header>.page-switch-tab>.right-key-menu>.menu:hover {
+    background: rgba(0, 122, 255, 0.08);
+}
+
+.main-container>header>.page-switch-tab>.home {
+    height: 36px;
+    display: inline-block;
+    font-size: 12px;
+    border: 1px solid #d9d9d9;
+    border-top: none;
+    background-color: #fafafa;
+    cursor: pointer;
+}
+
+.main-container>header>.page-switch-tab>.home>.home-container {
+    height: 100%;
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-align-items: center;
+    -moz-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    padding-right: 12px;
+}
+
+.main-container>header>.page-switch-tab>.home>.home-container>.home-icon {
+    width: 30px;
+    height: 30px;
+    background: url('../img/home.png') no-repeat center;
+}
+
+.main-container>header>.page-switch-tab>.home>.home-container.active>.home-icon {
+    background: url('../img/home-white.svg') no-repeat center;
+    background-size: 12px 12px;
+}
+
+.main-container>section {
+    -webkit-flex: 1;
+    -moz-box-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+    background-color: #f5f7fa;
+    padding: 8px;
+    position: relative;
+}
+
+.main-container>section>#business-container {
+    width: 100%;
+    height: 100%;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
+    background-color: #fff;
+}
+
+.main-container>section>.home-container {
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding-top: 10px;
+}
+
+.main-container>header>.page-switch-tab>.page-switch-container {
+    -webkit-flex: 1;
+    -moz-box-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+    height: 36px;
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: flex;
+    overflow: hidden;
+    width: 0;
+}
+
+.main-container>header>.page-switch-tab>.page-switch-container>.items {
+    border-right: 1px solid #d9d9d9;
+    border-bottom: 1px solid #d9d9d9;
+    background-color: #fafafa;
+    font-size: 12px;
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-align-items: center;
+    -moz-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    padding-left: 12px;
+    padding-right: 30px;
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.main-container>header>.page-switch-tab>.page-switch-container>.items:hover {
+    background-color: #f4f4f4;
+}
+
+.main-container>header>.page-switch-tab>.page-switch-container>.items>.close {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 30px;
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+    background-image: url(../img/tab-close.png);
+}
+
+.main-container>header>.page-switch-tab>.page-switch-container>.items.active, .main-container>header>.page-switch-tab>.home>.home-container.active {
+    background-color: #007aff;
+    color: #fff;
+}
+
+.main-container>header>.page-switch-tab>.page-switch-container>.items.active>.close {
+    background-image: url('../img/tab-close-white.png');
+}
+
+.main-container>header>.page-switch-tab>.more {
+    height: 36px;
+    width: 36px;
+    background-color: #fafafa;
+    border: 1px solid #d9d9d9;
+    border-top: none;
+    background: url('../img/more-arrow-down.png') no-repeat center;
+    cursor: pointer;
+}
+
+[v-cloak] {
+    display: none !important;
+}
+
+.history-page-more {
+    position: absolute;
+    border-radius: 4px;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+    background-color: #fff;
+    padding: 8px 0;
+    font-size: 12px;
+    color: rgba(0, 0, 0, 0.65);
+    z-index: 2;
+}
+
+.history-page-more>ul {
+    list-style: none;
+    margin: 0;
+    z-index: 1;
+    padding: 0;
+}
+
+.history-page-more>ul.active-leaf-node-more-container {
+    border-bottom: 1px solid #d9d9d9;
+}
+
+.history-page-more>ul>li {
+    height: 32px;
+    line-height: 32px;
+    padding: 0 11px 0 14px;
+    cursor: pointer;
+    position: relative;
+}
+
+.history-page-more>ul>li>.close-btn {
+    width: 30px;
+    height: 30px;
+    background: url('../img/tab-close.png') no-repeat center;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.history-page-more>ul>li:hover {
+    background-color: rgba(0, 122, 255, 0.08);
+}
+
+.user-setting-panel {
+    position: absolute;
+    width: 180px;
+    border-radius: 4px;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+    background-color: #fff;
+    padding: 8px 0;
+    font-size: 12px;
+    color: rgba(0, 0, 0, 0.65);
+    z-index: 9;
+}
+
+.user-setting-panel>ul {
+    list-style: none;
+    margin: 0;
+    z-index: 1;
+    padding: 0;
+}
+
+.user-setting-panel>ul>li {
+    height: 32px;
+    line-height: 32px;
+    padding: 0 11px 0 14px;
+    cursor: pointer;
+    position: relative;
+    border-bottom: 1px solid #f4f4f4;
+}
+
+.user-setting-panel>ul>li:last-child {
+    border-bottom: none;
+}
+
+.user-setting-panel>ul>li:hover {
+    background-color: rgba(0, 122, 255, 0.08);
+}
+
+.user-setting-panel>ul>li.user-info {
+    height: 45px;
+    line-height: 15px;
+}
+
+.user-setting-panel>ul>li.user-info>.node-text {
+    height: 30px;
+}
+
+.user-setting-panel>ul>li.user-info>.node-text>.name {
+    height: 15px;
+    padding-top: 12px;
+    font-size: 14px;
+    color: #000;
+    font-weight: bold;
+    padding-bottom: 16px;
+}
+
+.user-setting-panel>ul>li.user-info>.node-text>.dept {
+    color: rgba(0, 0, 0, 0.65);
+    font-size: 10px;
+}
+
+.todo-list-panel {
+    position: absolute;
+    width: 350px;
+    border-radius: 4px;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+    background-color: #fff;
+    padding: 8px;
+    font-size: 12px;
+    color: rgba(0, 0, 0, 0.65);
+    z-index: 9;
+}
+
+.todo-list-panel .container {
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-flex-wrap: wrap;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+}
+
+.todo-list-panel .container>.item {
+    height: 82px;
+    width: 82px;
+    -webkit-align-items: center;
+    -moz-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    background-repeat: no-repeat;
+    background-position: center 15px;
+    -o-background-size: 32px;
+    background-size: 32px;
+    padding-top: 55px;
+    text-align: center;
+    position: relative;
+    cursor: pointer;
+}
+
+.todo-list-panel .container>.item>.badge {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    border-radius: 15px;
+    background-color: red;
+    color: #fff;
+    padding: 0px 4px;
+    font-size: 10px;
+}
+
+.todo-list-panel .container>.item.ybjs {
+    background-image: url(../img/ybjs.png);
+}
+
+.todo-list-panel .container>.item.ypgl {
+    background-image: url(../img/ypgl.png);
+}
+
+.todo-list-panel .container>.item.bgbz {
+    background-image: url(../img/bgbz.png);
+}
+
+.todo-list-panel .container>.item.rwzp {
+    background-image: url(../img/rwzp.png);
+}
+
+.todo-list-panel .container>.item.ywsl {
+    background-image: url(../img/ywsl.png);
+}
+
+/* 业务审计跟踪样式 */
+
+.starter-audit-trail {
+    width: 100%;
+    height: 100%;
+    color: #333;
+    padding: 4px 8px;
+    display: flex;
+    flex-direction: row;
+}
+
+.starter-audit-trail span {
+    display: inline-block;
+}
+
+.starter-audit-trail .audit-body {
+    width: 330px;
+    height: 100%;
+    border: 1px solid #eee;
+    overflow-y: auto;
+}
+
+.starter-audit-trail .audit-body .title {
+    height: 28px;
+    line-height: 28px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #666;
+    padding-left: 8px;
+    background-color: #F2F2F2;
+}
+
+.starter-audit-trail .audit-body ul {
+    padding: 0;
+    margin: 0;
+}
+
+.starter-audit-trail .audit-body ul li {
+    list-style: none;
+    height: 28px;
+    font-size: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+}
+
+.starter-audit-trail .audit-body ul li.active {
+    background-color: #E6F2FF;
+}
+
+.starter-audit-trail .audit-body ul li .name {
+    width: 100px;
+    padding-left: 12px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.starter-audit-trail .audit-body ul li .time {
+    width: 145px;
+    padding: 0 8px;
+}
+
+.starter-audit-trail .audit-body ul li .explain {
+    width: 40px;
+    padding-right: 12px;
+}
+
+.starter-audit-trail .audit-body ul li .explain.yellow {
+    color: #ffba00;
+}
+
+.starter-audit-trail .audit-body ul li .explain.green {
+    color: #0ECE0E;
+}
+
+.starter-audit-trail .audit-body ul li .explain.red {
+    color: #FF1111;
+}
+
+.starter-audit-trail .details-body {
+    flex: 1;
+    height: 100%;
+    margin-left: 4px;
+    overflow-y: auto;
+}
+
+.starter-audit-trail .details-body .details-item {
+    height: 100%;
+    margin-bottom: 8px;
+}
+
+.starter-audit-trail .details-body .details-item:last-child {
+    margin-bottom: 0;
+}
+
+.starter-audit-trail .details-body .title {
+    height: 28px;
+    line-height: 28px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #666;
+    padding-left: 8px;
+    background-color: #F2F2F2;
+}
+
+.starter-audit-trail .grid {
+    height: calc(100% - 28px);
+    padding: 0;
+}
+
+/* 菜单配置树隐藏编辑按钮 */
+#core-menu-edit-list-tree .edit-toolbar > .edit {
+    display: none;
+}

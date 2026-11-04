@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.module.sys.bpmn.mapper.CoreBpmnDraftMapper">
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM (SELECT T.*,
+                       (SELECT LISTAGG(O.ORGNAME, ',') WITHIN GROUP (ORDER BY O.ID) FROM T_CORE_BPMN_DRAFT_ORG D, T_CORE_ORG O WHERE D.USEDORGID = O.ID AND D.DRAFTID = T.ID) USEDORGNAME,
+                       M.SERVICENAME
+                  FROM T_CORE_BPMN_DRAFT T
+                  LEFT JOIN T_CORE_MENU_EXT M
+                         ON T.SERVICEID = M.ID
+                        AND M.TYPE = 'audit_def') T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ID DESC
+            </otherwise>
+        </choose>
+    </select>
+</mapper>

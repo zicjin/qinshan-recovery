@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.cloud.module.item.customds.persistent.mapper.CoreCustomTableMapper">
+    <select id="selectAllTable" parameterType="map" resultType="map">
+        SELECT D.NAME AS ID, ISNULL(F.VALUE, D.NAME) TABLENAME, 'TABLE' AS TABLETYPE
+          FROM SYSOBJECTS D
+         INNER JOIN SYS.SCHEMAS AS SC ON D.UID = SC.SCHEMA_ID
+          LEFT JOIN SYS.EXTENDED_PROPERTIES F ON D.ID = F.MAJOR_ID AND F.MINOR_ID = 0
+         WHERE D.XTYPE = 'U' AND D.NAME  <![CDATA[<>]]> 'DTPROPERTIES' AND SC.NAME = 'dbo'
+         UNION ALL
+        SELECT O.NAME AS ID, O.NAME AS TABLENAME, 'VIEW' AS TABLETYPE
+          FROM SYS.SQL_MODULES AS M
+         INNER JOIN SYS.ALL_OBJECTS AS O ON M.OBJECT_ID = O.OBJECT_ID
+         INNER JOIN SYS.SCHEMAS AS SCH ON O.SCHEMA_ID = SCH.SCHEMA_ID
+         WHERE O.[TYPE] = 'V' AND SCH.NAME ='dbo'
+    </select>
+
+    <select id="selectColumnByTableName" resultType="map">
+        SELECT A.NAME AS COLUMNNAME, CAST(ISNULL(G.[VALUE],'') AS VARCHAR) AS ALIASNAME
+          FROM SYSCOLUMNS A 
+          LEFT JOIN SYSTYPES B ON A.XUSERTYPE = B.XUSERTYPE
+         INNER JOIN SYSOBJECTS D ON A.ID = D.ID AND D.XTYPE = 'U' AND D.NAME <![CDATA[<>]]> 'DTPROPERTIES'
+          LEFT JOIN SYS.EXTENDED_PROPERTIES G ON A.ID = G.MAJOR_ID AND A.COLID = G.MINOR_ID
+         WHERE D.NAME = #{tableName}
+    </select>
+</mapper>

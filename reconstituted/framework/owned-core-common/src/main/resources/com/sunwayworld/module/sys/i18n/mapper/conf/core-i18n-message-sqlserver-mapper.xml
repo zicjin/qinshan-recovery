@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.module.sys.i18n.mapper.CoreI18nMessageMapper">
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT *
+          FROM (SELECT M.*,
+                       I.CODE,
+                       C.LOCALENAME
+                  FROM T_CORE_I18N_MESSAGE M, T_CORE_I18N I, T_CORE_I18N_CONFIG C
+                 WHERE M.I18NCONFIGID = C.ID
+                   AND M.I18NID = I.ID) T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+        </where>
+        ORDER BY 
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.I18NCONFIGID, T.CODE
+            </otherwise>
+        </choose>
+    </select>
+</mapper>

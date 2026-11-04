@@ -5,11 +5,9 @@ package com.sunwayworld;
 
 import com.alibaba.fastjson.serializer.DoubleSerializer;
 import com.alibaba.fastjson.serializer.SerializeConfig;
-import com.sunwayworld.boot.thirdparty.ThirdPartyType;
 import com.sunwayworld.framework.utils.SystemUtils;
 import java.io.File;
 import java.lang.reflect.Type;
-import java.util.Arrays;
 import java.util.function.Function;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.aop.AopAutoConfiguration;
@@ -78,7 +76,6 @@ implements WebServerFactoryCustomizer<ConfigurableServletWebServerFactory> {
     }
 
     static {
-        Arrays.stream(ThirdPartyType.values()).forEach(t -> t.getInstance().extract());
         SerializeConfig config = SerializeConfig.getGlobalInstance();
         config.put((Type)((Object)Double.class), new DoubleSerializer("#.##########"));
         config.put(Double.TYPE, new DoubleSerializer("#.##########"));

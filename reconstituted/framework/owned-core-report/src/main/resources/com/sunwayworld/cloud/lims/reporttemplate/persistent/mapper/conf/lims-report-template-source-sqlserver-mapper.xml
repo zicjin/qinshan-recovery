@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.cloud.lims.reporttemplate.persistent.mapper.LimsReportTemplateSourceMapper">
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM T_LIMS_REPORT_TEMPLATE_SOURCE T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ID ASC
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="selectListBySql" parameterType="map" resultType="com.sunwayworld.cloud.lims.reporttemplate.support.data.LimsTemplateDataMap">
+        SELECT T.*
+          FROM (${sql}) T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+        </where>
+        <if test="orderParams != null and orderParams.size > 0">
+            ORDER BY <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+        </if>
+    </select>
+</mapper>

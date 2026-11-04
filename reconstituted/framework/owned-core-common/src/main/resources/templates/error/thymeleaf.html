@@ -1,0 +1,39 @@
+<base th:href="${#request.getContextPath()}+'/'">
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    (function(win) {
+        var servletContext = /*[[@{/}]]*/'';
+        if (servletContext !== '') {
+            servletContext = servletContext.replace(/\/$/,'');
+        }
+        win.IFM_CONTEXT = location.origin + servletContext;
+        win.history.replaceState({}, '', win.IFM_CONTEXT.replace(location.origin, '') + '/');
+    })(window);
+    /*]]>*/
+</script>
+
+<script>
+(function() {
+    if (typeof Gikam != 'undefined') {
+        var modal = Gikam.getLastModal();
+        var window = modal ? modal.window : workspace.window;
+        
+        Gikam.create('errorPage', {
+            renderTo : window.$dom,
+            window : window
+        });
+    } else {
+        var $img = document.createElement('img');
+        $img.setAttribute('src', IFM_CONTEXT + '/static/error/img/error-page.svg');
+        $img.style.width = 'inherit';
+        $img.style.height = 'inherit';
+        document.childNodes[0].style.width = '100%';
+        document.childNodes[0].style.height = '100%';
+        document.childNodes[0].appendChild($img);
+        setTimeout(function() {
+            document.body.remove();
+        }, 500);
+    }
+})();
+</script>

@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/module/equipt/acq-scripts/core-equipt-acq-script.js',
+                      '/static/module/equipt/acq-scripts/core-equipt-acq-script-choose-list.js'
+                    ]);
+    coreEquiptAcqScript.choosePage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>
+

@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/lims/module/report-templates/lims-report-template.js',
+                      '/static/lims/module/report-templates/lims-report-template-choose-list.js'
+                    ]);
+    limsReportTemplate.choosePage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>
+

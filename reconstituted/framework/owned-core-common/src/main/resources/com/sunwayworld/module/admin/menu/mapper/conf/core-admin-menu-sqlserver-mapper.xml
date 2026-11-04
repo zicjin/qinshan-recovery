@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.module.admin.menu.mapper.CoreAdminMenuMapper">
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM T_CORE_ADMIN_MENU T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent"/>
+            <choose>
+                <when test='parentId == "root"'>
+                    AND T.PARENTID IS NULL
+                </when>
+                <when test='parentId != null and parentId != "root"'>
+                    AND T.PARENTID = #{parentId}
+                </when>
+            </choose>
+        </where>
+        <choose>
+            <when test='parentId != null and childrenOnly == "0"'>
+                ORDER SIBLINGS BY
+            </when>
+            <otherwise>
+                ORDER BY
+            </otherwise>
+        </choose> 
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                CAST(T.ORDERNO AS VARCHAR)
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="selectDetail" resultType="map">
+        SELECT T.* 
+          FROM T_CORE_ADMIN_MENU T
+         WHERE T.ID = #{id}
+    </select>
+</mapper>

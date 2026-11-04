@@ -1,7 +1,9 @@
 {
   "artifact": {
     "run_jar_sha256": "4a720797810fd2f8cca6e22604657028cb87830ca0e24bb55a5f42f040f6ee9f",
-    "source_jars": []
+    "source_jars": [
+      "gikam-core-web-14.1.5.jar"
+    ]
   },
   "compile_report": "compile-report.json",
   "dependencies": [
@@ -10,7 +12,12 @@
   "forbidden_content_report": "forbidden-content-report.json",
   "module": "owned-core-web",
   "module_reason": "Original Thymeleaf/static/MyBatis web resources at their source paths.",
+  "override_source_files": [],
   "public_dependency_allowlist": "public-dependency-allowlist.json",
+  "removed_source_files": [],
+  "resource_file_count": 5301,
+  "resource_provenance": "resource-provenance.json",
+  "resource_tree_sha256": "7ba8e1960f4815f7d6f39013f5438c2445cfad7f9c6498ae45e78742b115c258",
   "schema": "supplier-reconstituted-module-v1",
   "source_decompilers": {},
   "source_file_count": 0,

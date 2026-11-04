@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.cloud.module.lcdp.bp.persistent.mapper.LcdpBizProcessMapper">
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+        FROM T_LCDP_BIZ_PROCESS T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent"/>
+            <if test='latest_only != null and latest_only == "1"'>
+                AND NOT EXISTS (SELECT 1
+                FROM T_LCDP_BIZ_PROCESS P
+                WHERE P.BPCODE = T.BPCODE
+                AND P.VERSION <![CDATA[>]]> T.VERSION)
+            </if>
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause"/>
+            </when>
+            <otherwise>
+                T.ID DESC
+            </otherwise>
+        </choose>
+    </select>
+
+</mapper>

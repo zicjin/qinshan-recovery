@@ -1,0 +1,19 @@
+<th:block th:replace="module/gikam/gikam" />
+
+<script th:src="@{/static/plugin/jquery/jquery.min.js}"></script>
+
+<link rel="stylesheet" th:href="@{/static/plugin/bpmn/css/bpmn-diagram-js.css}" />
+<link rel="stylesheet" th:href="@{/static/plugin/bpmn/css/bpmn-embedded.css}" />
+<link rel="stylesheet" th:href="@{/static/plugin/bpmn/css/bpmn-app.css}" />
+
+<div class="content with-diagram" id="js-drop-zone">
+    <div class="canvas" id="js-canvas"></div>
+    <div class="properties-panel-parent" id="js-properties-panel"></div>
+</div>
+
+<script th:inline="javascript">
+/*<![CDATA[*/
+    var $param = Gikam.getElParam([[${param}]]);/*]]>*/
+</script>
+
+<script th:src="@{/static/plugin/bpmn/js/bpmn-es5.js}"></script>

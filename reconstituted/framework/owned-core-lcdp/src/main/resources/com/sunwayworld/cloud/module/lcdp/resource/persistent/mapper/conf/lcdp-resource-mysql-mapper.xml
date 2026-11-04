@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.cloud.module.lcdp.resource.persistent.mapper.LcdpResourceMapper">
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM T_LCDP_RESOURCE T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ID DESC
+            </otherwise>
+        </choose>
+    </select>
+    <select id="selectTreeChildQtyByParentId" parameterType="list" resultType="map">
+        SELECT T.PARENTID , count(1) count FROM T_LCDP_RESOURCE T
+        WHERE DELETEFLAG ='0' AND
+        PARENTID in
+        <foreach collection="parentIdList" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+        GROUP BY PARENTID
+    </select>
+    <select id="selectPageByCondition" resultType="map">
+        SELECT T.*
+          FROM (SELECT P.ID,
+                       P.PATH,
+                       P.RESOURCENAME,
+                       P.RESOURCEDESC,
+                       CONCAT(M.RESOURCENAME,'(',M.RESOURCEDESC,')') MODULE,
+                       CONCAT(C.RESOURCENAME,'(',C.RESOURCEDESC,')') CATEGORY
+                  FROM T_LCDP_RESOURCE P
+             LEFT JOIN T_LCDP_RESOURCE M
+                    ON P.PARENTID = M.ID
+             LEFT JOIN T_LCDP_RESOURCE C
+                    ON M.PARENTID = C.ID
+                 WHERE P.RESOURCECATEGORY = 'view'
+                   AND P.DELETEFLAG = '0'
+                   AND P.EFFECTVERSION > 0
+                ) T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ID DESC
+            </otherwise>
+        </choose>
+    </select>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</mapper>

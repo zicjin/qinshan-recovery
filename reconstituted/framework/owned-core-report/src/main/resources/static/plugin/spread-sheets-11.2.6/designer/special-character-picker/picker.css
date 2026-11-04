@@ -1,0 +1,31 @@
+.special-character-picker {
+    font-family: 'sunway-font';
+    box-shadow: 0px 1px 4px 1px rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+    max-height: 216px;
+    position: absolute;
+    z-index: 10000;
+    background: #fff;
+}
+
+.special-character-picker .characters-content {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 8px;
+}
+
+.special-character-picker .characters-content .character {
+    background: #f5f7fa;
+    border: 1px solid #eaf0f6;
+    border-radius: 2px;
+    margin: 2px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: content-box;
+}
+
+.special-character-picker .characters-content .character:hover {
+    border-color: #007aff;
+}

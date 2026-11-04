@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/module/mdm/orgs/core-org.js',
+                      '/static/module/mdm/orgs/core-org-detail.js'
+                    ]);
+    coreOrg.detailPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>
+

@@ -1,0 +1,8 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/module/item/special-characters/core-special-character.js',
+                      '/static/module/item/special-characters/core-special-character-edit-list.js'
+                    ]);
+    coreSpecialCharacter.editPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>

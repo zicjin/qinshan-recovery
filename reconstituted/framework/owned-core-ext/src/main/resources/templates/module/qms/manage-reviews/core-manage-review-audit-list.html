@@ -1,0 +1,8 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/module/qms/manage-reviews/core-manage-review.js',
+                      '/static/module/qms/manage-reviews/core-manage-review-audit-list.js'
+                    ]);
+    coreManageReview.auditPage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>

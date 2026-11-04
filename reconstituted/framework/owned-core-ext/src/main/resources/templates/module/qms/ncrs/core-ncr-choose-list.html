@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/module/qms/ncrs/core-ncr.js',
+                      '/static/module/qms/ncrs/core-ncr-choose-list.js'
+                    ]);
+    coreNcr.choosePage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>
+

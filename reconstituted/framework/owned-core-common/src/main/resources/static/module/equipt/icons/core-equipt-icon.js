@@ -1,0 +1,1 @@
+var coreEquiptIcon = Gikam.getPageObject({});

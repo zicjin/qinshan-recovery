@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.module.sys.role.mapper.CoreRolePermissionMapper">
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM (SELECT P.*,
+                       R.ROLENAME
+                  FROM T_CORE_ROLE_PERMISSION P, T_CORE_ROLE R
+                 WHERE P.ROLEID = R.ID) T
+         <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+            <if test="queries_unsuspended"> <!-- 查询未停用的数据 -->
+                AND EXISTS (SELECT 1 FROM T_CORE_ROLE R WHERE R.ID = T.ROLEID AND R.LASTSUSPENDEDFLAG = '0')
+            </if>
+         </where>
+         ORDER BY 
+         <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.PERMISSIONTYPEID, T.ROLEID
+            </otherwise>
+         </choose>
+    </select>
+</mapper>

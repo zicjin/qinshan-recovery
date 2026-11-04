@@ -42,7 +42,7 @@ public class MybatisHelper {
     private static final Logger logger = LogManager.getLogger(MybatisHelper.class);
     private static ThreadLocal<String> KEY_PREFIX = new ThreadLocal();
 
-    public static native SqlSessionFactory getSqlSessionFactory();
+    public static SqlSessionFactory getSqlSessionFactory() { return ApplicationContextHelper.getBean(SqlSessionFactory.class); }
 
     public static Connection getConnection() {
         return DataSourceUtils.getConnection(ApplicationContextHelper.getBean(DataSource.class));

@@ -1,0 +1,6 @@
+<script th:inline="javascript">
+    Gikam.requirejs([ '/static/module/item/email-templates/core-email-template.js',
+                      '/static/module/item/email-templates/core-email-template-edit-list.js'
+                    ]);
+    coreEmailTemplate.editListPage.init(Gikam.getElParam([[${param}]]));
+</script>

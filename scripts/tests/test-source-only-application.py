@@ -1,0 +1,73 @@
+#!/usr/bin/env python3
+from __future__ import annotations
+
+import importlib.util
+import json
+from pathlib import Path
+import sys
+import tempfile
+
+
+ROOT = Path(__file__).resolve().parents[2]
+BUILDER_PATH = ROOT / "scripts" / "build-source-only-application.py"
+
+
+def load_builder():
+    spec = importlib.util.spec_from_file_location("build_source_only_application", BUILDER_PATH)
+    assert spec and spec.loader
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[spec.name] = module
+    spec.loader.exec_module(module)
+    return module
+
+
+def main() -> int:
+    builder = load_builder()
+    with tempfile.TemporaryDirectory(prefix="source-only-application-test-") as temp_name:
+        root = Path(temp_name)
+        java_root = root / "project/src/main/java/com/example"
+        resource_root = root / "project/src/main/resources"
+        java_root.mkdir(parents=True)
+        resource_root.mkdir(parents=True)
+        source = java_root / "Example.java"
+        source.write_text(
+            "package com.example; public class Example {}\n",
+            encoding="utf-8",
+        )
+        assert builder.source_fqn(source, root / "project/src/main/java") == "com.example.Example"
+
+        framework = root / "framework/owned-core-common"
+        framework.mkdir(parents=True)
+        (framework / "module-provenance.json").write_text(
+            json.dumps(
+                {
+                    "source_files": [
+                        {
+                            "source_class_path": (
+                                "com/sunwayworld/framework/utils/FileUtils.class"
+                            )
+                        }
+                    ]
+                }
+            ),
+            encoding="utf-8",
+        )
+        assert builder.framework_source_fqns(root / "framework") == {
+            "com.sunwayworld.framework.utils.FileUtils"
+        }
+
+        (resource_root / "static").mkdir()
+        (resource_root / "static/app.js").write_text("window.ok = true;\n", encoding="utf-8")
+        (resource_root / "lib").mkdir()
+        (resource_root / "lib/private-sdk.jar").write_bytes(b"third-party-sdk")
+        copied_root = root / "resources"
+        records = builder.copy_resource_tree(resource_root, copied_root)
+        assert [record["path"] for record in records] == ["static/app.js"]
+        assert not (copied_root / "lib/private-sdk.jar").exists()
+
+    print("source-only application builder: PASS")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

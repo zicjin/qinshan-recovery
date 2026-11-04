@@ -1,0 +1,53 @@
+#core-custom-query-layout .body .sunway-tabs-bar{
+    margin: 0;
+}
+
+
+.custom-query-form-caption-container{
+    background: #E0EFFF;
+    border-radius: 4px;
+    padding:16px;
+    margin-bottom : 15px;
+}
+
+.custom-query-form-caption-container > .custom-query-form-caption-header{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.custom-query-form-caption-container > .custom-query-form-caption-header > img{
+    margin-right: 8px;
+}
+
+.custom-query-form-caption-container > .custom-query-form-caption-header > div{
+    font-size: 12px;
+    color: #1A1A1A;
+    font-weight: 600;
+}
+
+.custom-query-form-caption-container .custom-query-form-caption-content{
+    padding-left: 28px;
+}
+
+.custom-query-form-caption-container .custom-query-form-caption-content li{
+    font-size: 12px;
+    color: #1A1A1A;
+    font-weight: 400;
+}
+
+#core-custom-query-last-step-button.btn-container>.button>.icon{
+    font-size : 12px;
+}
+
+#core-custom-query-next-step-button.btn-container>.button>.icon{
+    font-size : 12px;
+}
+
+#core-custom-query-finish-button.btn-container>.button>.icon{
+    font-size : 12px;
+}
+
+#core-custom-query-cancel-button.btn-container>.button>.icon{
+    font-size : 12px;
+}

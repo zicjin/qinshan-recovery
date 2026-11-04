@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.module.mdm.org.mapper.CoreOrgMapper">
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM T_CORE_ORG T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+            <if test='parentId != null'>
+                <choose>
+                    <when test='parentId == "root"'>
+                        AND T.PARENTID IS NULL
+                    </when>
+                    <otherwise>
+                        AND T.PARENTID = #{parentId}
+                    </otherwise>
+                </choose>
+            </if>
+            <if test="target_unassigned != null"> <!-- 查询不在某业务表下的单位  -->
+                AND NOT EXISTS (SELECT 1
+                                  FROM ${targetTable} TAR_
+                                 WHERE TAR_.${targetUserIdColumn} = T.ID
+                                 <if test="targetFilterColumn != null">
+                                     AND TAR_.${targetFilterColumn} = #{targetFilterValue}
+                                 </if>
+                                ) 
+            </if>
+        </where>
+        ORDER BY 
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ORDERNO ASC
+            </otherwise>
+        </choose>
+    </select>
+    
+    <select id="selectTreeNodeList" resultType="map">
+        SELECT T.* 
+          FROM (SELECT O.*,
+                       ISNULL(P.CHILDQTY, 0) CHILDQTY
+                  FROM T_CORE_ORG O
+                  LEFT JOIN (SELECT C.PARENTID,
+                                    COUNT(1) CHILDQTY
+                               FROM T_CORE_ORG C
+                              GROUP BY C.PARENTID) P
+                         ON P.PARENTID = O.ID) T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+            <if test='parentId != null'>
+                <choose>
+                    <when test='parentId == "root"'>
+                        AND T.PARENTID IS NULL
+                    </when>
+                    <otherwise>
+                        AND T.PARENTID = #{parentId}
+                    </otherwise>
+                </choose>
+            </if>
+        </where>
+         ORDER BY T.ID
+    </select>
+    
+    <select id="selectRoleOrgList" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM (SELECT P.ID ROLEPERMISSIONID, 
+                       O.ID, 
+                       O.ORGNAME
+                   FROM T_CORE_ORG O, T_CORE_ROLE_PERMISSION P
+                  WHERE O.ID = P.TARGETID
+                    AND P.PERMISSIONTYPEID = 'org'
+                    AND P.ROLEID = #{roleId}) T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+        </where>
+        ORDER BY 
+         <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ID
+            </otherwise>
+         </choose>
+    </select>
+    
+    <select id="selectDetail" resultType="map">
+        SELECT * FROM T_CORE_ORG WHERE ID = #{id}
+    </select>
+    
+    <select id="selectDescendantIdList" parameterType="java.util.List" resultType="java.lang.String">
+        SELECT T.ID
+          FROM T_CORE_ORG T
+        <where>
+            <foreach collection="list" item="id" separator="OR">  
+                T.ID LIKE #{id} + '%'
+            </foreach>  
+        </where>
+    </select>
+</mapper>

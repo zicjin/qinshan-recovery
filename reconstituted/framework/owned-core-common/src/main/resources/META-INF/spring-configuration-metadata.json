@@ -1,0 +1,91 @@
+{
+  "groups": [
+    {
+      "name": "spring.datasource.hikari",
+      "type": "javax.sql.DataSource",
+      "sourceType": "com.sunwayworld.boot.ApplicationConfiguration",
+      "sourceMethod": "dataSource(org.springframework.boot.autoconfigure.jdbc.DataSourceProperties)"
+    },
+    {
+      "name": "sunway.code-hints",
+      "type": "com.sunwayworld.framework.jdk.hints.core.CodeHintsProperties",
+      "sourceType": "com.sunwayworld.framework.jdk.hints.core.CodeHintsProperties"
+    },
+    {
+      "name": "sunway.config.system.common",
+      "type": "com.sunwayworld.framework.restful.property.RestfulResolverProperties",
+      "sourceType": "com.sunwayworld.framework.restful.property.RestfulResolverProperties"
+    },
+    {
+      "name": "sunway.fastdfs",
+      "type": "com.sunwayworld.framework.fastdfs.properties.FastDfsProperties",
+      "sourceType": "com.sunwayworld.framework.fastdfs.properties.FastDfsProperties"
+    },
+    {
+      "name": "sunway.mybatis",
+      "type": "com.sunwayworld.framework.mybatis.interceptor.MybatisInterceptorProperties",
+      "sourceType": "com.sunwayworld.framework.mybatis.interceptor.MybatisInterceptorProperties"
+    },
+    {
+      "name": "sunway.progress",
+      "type": "com.sunwayworld.framework.progress.core.ProgressProperties",
+      "sourceType": "com.sunwayworld.framework.progress.core.ProgressProperties"
+    },
+    {
+      "name": "sunway.progress.cache",
+      "type": "com.sunwayworld.framework.progress.core.ProgressProperties$Cache",
+      "sourceType": "com.sunwayworld.framework.progress.core.ProgressProperties",
+      "sourceMethod": "getCache()"
+    },
+    {
+      "name": "sunway.progress.mode",
+      "type": "com.sunwayworld.framework.progress.core.ProgressProperties$Mode",
+      "sourceType": "com.sunwayworld.framework.progress.core.ProgressProperties",
+      "sourceMethod": "getMode()"
+    }
+  ],
+  "properties": [
+    {
+      "name": "sunway.code-hints.class-names",
+      "type": "java.lang.String[]",
+      "sourceType": "com.sunwayworld.framework.jdk.hints.core.CodeHintsProperties"
+    },
+    {
+      "name": "sunway.code-hints.package-names",
+      "type": "java.lang.String[]",
+      "sourceType": "com.sunwayworld.framework.jdk.hints.core.CodeHintsProperties"
+    },
+    {
+      "name": "sunway.config.system.common.rest-json-wrapper-enable",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.sunwayworld.framework.restful.property.RestfulResolverProperties",
+      "defaultValue": true
+    },
+    {
+      "name": "sunway.fastdfs.groups",
+      "type": "java.util.Map<java.lang.String,java.util.List<java.lang.String>>",
+      "sourceType": "com.sunwayworld.framework.fastdfs.properties.FastDfsProperties"
+    },
+    {
+      "name": "sunway.mybatis.interceptors",
+      "type": "java.lang.String[]",
+      "sourceType": "com.sunwayworld.framework.mybatis.interceptor.MybatisInterceptorProperties"
+    },
+    {
+      "name": "sunway.progress.cache.name",
+      "type": "java.lang.String",
+      "sourceType": "com.sunwayworld.framework.progress.core.ProgressProperties$Cache"
+    },
+    {
+      "name": "sunway.progress.cache.timeout",
+      "type": "java.lang.Integer",
+      "sourceType": "com.sunwayworld.framework.progress.core.ProgressProperties$Cache"
+    },
+    {
+      "name": "sunway.progress.mode.async",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.sunwayworld.framework.progress.core.ProgressProperties$Mode"
+    }
+  ],
+  "hints": []
+}

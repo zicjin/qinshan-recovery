@@ -1,0 +1,6 @@
+<script th:inline="javascript">
+    Gikam.requirejs([ '/static/module/sys/rounding-rules/core-rounding-rule.js',
+                      '/static/module/sys/rounding-rules/core-rounding-rule-choose-list.js'
+                    ]);
+    coreRoundingRule.choosePage.init(Gikam.getElParam([[${param}]]));
+</script>

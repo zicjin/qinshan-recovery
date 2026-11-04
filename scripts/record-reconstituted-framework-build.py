@@ -4,10 +4,12 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import io
 import json
 from pathlib import Path
 import platform
 import subprocess
+import zipfile
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -39,6 +41,23 @@ def command_output(command: list[str], cwd: Path) -> str:
     return (result.stdout + result.stderr).strip()
 
 
+def normalize_jar(path: Path) -> None:
+    """Rewrite Maven output with stable order and timestamps."""
+    with zipfile.ZipFile(path) as source:
+        entries = [
+            (info.filename, source.read(info.filename))
+            for info in source.infolist()
+        ]
+    with io.BytesIO() as output:
+        with zipfile.ZipFile(output, "w", compression=zipfile.ZIP_DEFLATED) as target:
+            for name, data in sorted(entries):
+                info = zipfile.ZipInfo(name, date_time=(1980, 1, 1, 0, 0, 0))
+                info.compress_type = zipfile.ZIP_DEFLATED
+                info.external_attr = 0o644 << 16
+                target.writestr(info, data)
+        path.write_bytes(output.getvalue())
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", type=Path, default=ROOT / "reconstituted" / "framework")
@@ -64,6 +83,7 @@ def main() -> int:
         if len(jars) != 1:
             raise SystemExit(f"expected one module jar for {module}, found {jars}")
         jar = jars[0]
+        normalize_jar(jar)
         provenance = json.loads(
             (module_root / "module-provenance.json").read_text(encoding="utf-8")
         )

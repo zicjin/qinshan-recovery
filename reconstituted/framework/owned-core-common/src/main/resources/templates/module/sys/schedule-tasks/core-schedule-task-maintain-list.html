@@ -1,0 +1,6 @@
+<script th:inline="javascript">
+    Gikam.requirejs([ '/static/module/sys/schedule-tasks/core-schedule-task.js',
+                      '/static/module/sys/schedule-tasks/core-schedule-task-maintain-list.js'
+                    ]);
+    coreScheduleTask.maintainListPage.init(Gikam.getElParam([[${param}]]));
+</script>

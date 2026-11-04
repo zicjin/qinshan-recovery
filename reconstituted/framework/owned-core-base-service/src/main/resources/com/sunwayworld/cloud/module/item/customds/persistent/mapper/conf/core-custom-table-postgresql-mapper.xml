@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.cloud.module.item.customds.persistent.mapper.CoreCustomTableMapper">
+    <select id="selectAllTable" parameterType="map" resultType="map">
+        SELECT RELNAME AS ID, CAST ( OBJ_DESCRIPTION ( OID, 'pg_class' ) AS VARCHAR ) AS TABLENAME, 'TABLE' AS TABLETYPE
+          FROM PG_CLASS C 
+         WHERE RELKIND = 'r' 
+               AND RELNAME NOT LIKE'pg_%' 
+               AND RELNAME NOT LIKE'sql_%' 
+      UNION ALL
+         SELECT VIEWNAME AS ID, VIEWNAME AS TABLENAME, 'VIEW' AS TABLETYPE
+           FROM PG_VIEWS  
+          WHERE SCHEMANAME ='public'
+      
+    </select>
+
+    <select id="selectColumnByTableName" resultType="map">
+        SELECT A.ATTNAME AS COLUMNNAME, D.DESCRIPTION AS ALIASNAME
+          FROM PG_CLASS C, PG_ATTRIBUTE A , PG_TYPE T, PG_DESCRIPTION D 
+         WHERE  C.RELNAME = #{tableName}
+                AND A.ATTNUM>0 
+                AND A.ATTRELID = C.OID 
+                AND A.ATTTYPID = T.OID 
+                AND  D.OBJOID=A.ATTRELID
+                AND D.OBJSUBID=A.ATTNUM
+       ORDER BY C.RELNAME DESC,A.ATTNUM ASC;
+    </select>
+</mapper>

@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.requirejs([ '/static/module/qms/file-volumes/core-file-volume.js',
+                      '/static/module/qms/file-volumes/core-file-volume-choose-list.js'
+                    ]);
+    coreFileVolume.choosePage.init(Gikam.getElParam([[${param}]]));
+/*]]>*/
+</script>
+

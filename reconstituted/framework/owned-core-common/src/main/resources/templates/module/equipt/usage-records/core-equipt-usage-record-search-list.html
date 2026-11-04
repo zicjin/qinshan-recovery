@@ -1,0 +1,8 @@
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    Gikam.requirejs([ '/static/module/equipt/usage-records/core-equipt-usage-record.js',
+                      '/static/module/equipt/usage-records/core-equipt-usage-record-search-list.js'
+    ]);
+    coreEquiptUsageRecord.searchPage.init(Gikam.getElParam([[${param}]]));
+    /*]]>*/
+</script>

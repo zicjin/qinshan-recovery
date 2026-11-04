@@ -1,0 +1,9 @@
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    Gikam.requirejs([ '/static/module/item/custom-queries/core-custom-query.js',
+                      '/static/module/item/custom-queries/core-custom-query-field-choose-list.js'
+    ]);
+    coreCustomQuery.choosePage.init(Gikam.getElParam([[${param}]]));
+    /*]]>*/
+</script>
+

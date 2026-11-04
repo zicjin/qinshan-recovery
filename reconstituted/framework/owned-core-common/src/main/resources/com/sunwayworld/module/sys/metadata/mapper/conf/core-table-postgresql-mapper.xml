@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.module.sys.metadata.mapper.CoreTableMapper">
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM T_CORE_TABLE T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent"/>
+        </where>
+         ORDER BY 
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ID
+            </otherwise>
+        </choose>
+    </select>
+    <select id="selectDetail" resultType="map">
+        SELECT T.*
+          FROM T_CORE_TABLE T
+         WHERE T.ID = #{id}
+    </select>
+
+    <select id="selectFieldListByCondition" resultType="map">
+        SELECT T.*
+          FROM (SELECT UPPER(COL.TABLE_NAME) TABLENAME,
+                       UPPER(COL.COLUMN_NAME) FIELDNAME,
+                       COL.UDT_NAME FIELDTYPE,
+                       CASE COL.IS_NULLABLE
+                         WHEN 'YES' THEN
+                          '1'
+                         ELSE
+                          '0'
+                       END ALLOWNULL,
+                       CASE COL.UDT_NAME
+                         WHEN 'varchar' THEN
+                          COL.CHARACTER_MAXIMUM_LENGTH
+                         ELSE
+                          NULL
+                       END FIELDLENGTH,
+                       REPLACE(COALESCE(COL.COLUMN_DEFAULT, ''), '''', '') DEFAULTVALUE,
+                       COL.NUMERIC_PRECISION "PRECISION",
+                       COL.NUMERIC_SCALE "SCALE",
+                       COALESCE(DES.DESCRIPTION, '') FIELDCOMMENT
+                  FROM INFORMATION_SCHEMA.COLUMNS COL
+                  LEFT JOIN PG_DESCRIPTION DES
+                    ON COL.TABLE_NAME ::REGCLASS = DES.OBJOID
+                   AND COL.ORDINAL_POSITION = DES.OBJSUBID
+                 WHERE COL.TABLE_SCHEMA = 'public'
+                 ORDER BY ORDINAL_POSITION) T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent"/>
+        </where>
+    </select>
+
+</mapper>

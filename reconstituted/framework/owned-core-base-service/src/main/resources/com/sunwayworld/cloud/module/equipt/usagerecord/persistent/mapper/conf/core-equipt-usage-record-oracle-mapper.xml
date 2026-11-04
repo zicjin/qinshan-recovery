@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunwayworld.cloud.module.equipt.usagerecord.persistent.mapper.CoreEquiptUsageRecordMapper">
+    <select id="selectByCondition" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM T_CORE_EQUIPT_USAGE_RECORD T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+            <if test="year != null and year != ''">
+                  AND TO_CHAR(T.UPTIME, 'YYYY') = #{year} AND TO_CHAR(T.DOWNTIME, 'YYYY') = #{year}
+            </if>
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
+            </when>
+            <otherwise>
+                T.ID DESC
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="selectUsageTimeByYear" parameterType="map" resultType="map">
+        SELECT R.EQUIPTCATEGORY,
+               SUM(R.USAGETIME) AS USAGETIME,
+               SUM(E.PLANUSETIME) AS PLANUSETIME
+          FROM T_CORE_EQUIPT_USAGE_RECORD R,
+               T_CORE_EQUIPT E
+        <where>
+            R.EQUIPTID = E.ID
+            <if test="equiptCategory != null and equiptCategory != ''">
+                AND R.EQUIPTCATEGORY = #{equiptCategory}
+            </if>
+            <if test="startTime != null">
+                AND R.UPTIME <![CDATA[>]]> TO_DATE (#{startTime}, 'yyyy-mm-dd hh24:mi:ss')
+            </if>
+            <if test="endTime != null">
+                AND R.DOWNTIME <![CDATA[<]]> TO_DATE (#{endTime}, 'yyyy-mm-dd hh24:mi:ss')
+            </if>
+        </where>
+         GROUP BY R.EQUIPTCATEGORY
+    </select>
+
+    <select id="selectUsageTimeByMonth" resultType="map">
+        SELECT TO_CHAR(R.UPTIME, 'YYYY-MM') AS UPTIME,
+               SUM(R.USAGETIME) AS USAGETIME,
+               SUM(E.PLANUSETIME) AS PLANUSETIME
+          FROM T_CORE_EQUIPT_USAGE_RECORD R,
+               T_CORE_EQUIPT E
+         WHERE R.EQUIPTID = E.ID
+         GROUP BY TO_CHAR(R.UPTIME, 'YYYY-MM')
+    </select>
+
+    <select id="selectAmountGroupByMonth" resultType="map">
+        SELECT TO_CHAR(R.UPTIME, 'YYYY-MM') AS UPTIME,
+               SUM(R.AMOUNT) AS AMOUNT
+          FROM T_CORE_EQUIPT_USAGE_RECORD R
+         GROUP BY TO_CHAR(R.UPTIME, 'YYYY-MM')
+    </select>
+
+    <select id="selectRecordByDate" parameterType="String" resultType="map">
+        SELECT R.EQUIPTNAME,
+               R.EQUIPTCATEGORY,
+               R.USAGETIME,
+               TO_CHAR(R.UPTIME, 'YYYY-MM') AS "YEARMONTH",
+               E.PLANUSETIME
+          FROM T_CORE_EQUIPT_USAGE_RECORD R,
+               T_CORE_EQUIPT E
+          <where>
+              R.EQUIPTID = E.ID
+              <if test="equiptName != null and equiptName != ''">
+                  AND R.EQUIPTNAME LIKE '%' || #{equiptName} || '%'
+              </if>
+              <if test="equiptCategory != null and equiptCategory != ''">
+                  AND R.EQUIPTCATEGORY LIKE '%' || #{equiptCategory} || '%'
+              </if>
+              <if test="date != null and date != ''">
+                  AND TO_CHAR(R.UPTIME, 'YYYY-MM') = #{date}
+              </if>
+          </where>
+    </select>
+
+    <select id="selectAmountGroupByEquiptCategory" parameterType="map" resultType="map">
+        SELECT TO_CHAR(T.UPTIME, 'YYYY') AS YEAR,
+               T.EQUIPTCATEGORY,
+               SUM(T.AMOUNT) AS AMOUNT
+          FROM T_CORE_EQUIPT_USAGE_RECORD T
+         WHERE TO_DATE (TO_CHAR(T.UPTIME, 'YYYY'), 'YYYY') BETWEEN TO_DATE (#{startYear}, 'YYYY') AND TO_DATE (#{endYear}, 'YYYY')
+          <if test="equiptCategory != null and equiptCategory != ''">
+              AND T.EQUIPTCATEGORY = #{equiptCategory}
+          </if>
+          GROUP BY T.EQUIPTCATEGORY, TO_CHAR(T.UPTIME, 'YYYY')
+    </select>
+
+    <select id="selectContributionByDate" parameterType="map" resultType="map">
+        SELECT T.EQUIPTNAME,
+               T.EQUIPTCATEGORY,
+               T.SAMPLEQTY,
+               T.ORDERTASKQTY,
+               T.AMOUNT,
+               TO_CHAR(T.UPTIME, 'YYYY-MM') AS "YEARMONTH"
+          FROM T_CORE_EQUIPT_USAGE_RECORD T
+        <where>
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+            <if test="date != null and date != ''">
+                AND TO_CHAR(T.UPTIME, 'YYYY-MM') = #{date}
+            </if>
+        </where>
+    </select>
+</mapper>

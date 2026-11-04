@@ -10,12 +10,15 @@ class RuntimeScan(unittest.TestCase):
     def scan(self, path):
         return subprocess.run(['bash', str(SCANNER), str(path)], capture_output=True, text=True)
 
-    def test_compressed_nested_route_is_rejected(self):
+    def test_compressed_nested_native_loader_route_is_rejected(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             inner = root / 'inner.zip'
             with zipfile.ZipFile(inner, 'w', zipfile.ZIP_DEFLATED) as archive:
-                archive.writestr('config.bin', b'/core/module/sys/licenses')
+                archive.writestr(
+                    'config.bin',
+                    b'com.sunwayworld.boot.thirdparty.sunwaylibrary.SunwayLibraryExtractor',
+                )
             outer = root / 'candidate.jar'
             with zipfile.ZipFile(outer, 'w', zipfile.ZIP_DEFLATED) as archive:
                 archive.write(inner, 'BOOT-INF/lib/component.jar')

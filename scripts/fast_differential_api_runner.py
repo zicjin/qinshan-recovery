@@ -131,10 +131,15 @@ class Session:
         # Public keys are base64 text and may exceed the observation prefix;
         # fetch the exact bytes through this session's cookie-aware opener.
         request = Request(self.base_url + "/open/security/public-key", method="GET")
-        with self.opener.open(request, timeout=self.timeout) as response:
-            if response.status != 200:
-                raise ProbeError(f"public key returned {response.status}")
-            key_bytes = response.read().strip()
+        try:
+            with self.opener.open(request, timeout=self.timeout) as response:
+                if response.status != 200:
+                    raise ProbeError(f"public key returned {response.status}")
+                key_bytes = response.read().strip()
+        except HTTPError as error:
+            raise ProbeError(f"public key returned {error.code}") from error
+        except (OSError, URLError, TimeoutError) as error:
+            raise ProbeError(f"public key request failed: {error}") from error
         with __import__("tempfile").TemporaryDirectory(prefix="fast-rsa-") as temporary:
             temp = Path(temporary)
             der, pem = temp / "key.der", temp / "key.pem"
@@ -619,8 +624,18 @@ def run(args: argparse.Namespace) -> Dict[str, Any]:
     supplier = Session(supplier_base_url, args.timeout)
     owned = Session(owned_base_url, args.timeout)
     password = read_password(args.password_file)
-    auth = {"supplier": supplier.login(args.auth_user, password), "owned": owned.login(args.auth_user, password)}
-    if any(int(value.get("status", 0)) < 200 or int(value.get("status", 0)) >= 300 for value in auth.values()):
+    try:
+        auth = {"supplier": supplier.login(args.auth_user, password), "owned": owned.login(args.auth_user, password)}
+    except ProbeError as error:
+        # Authentication is a batch precondition.  Preserve the diagnostic
+        # failure as a report instead of emitting a traceback or pretending
+        # that any route was probed.  Per-route connection failures are
+        # handled below and become blocked cases.
+        auth = {"supplier": {"status": 0}, "owned": {"status": 0}, "error": str(error)}
+    if any(
+        int(value.get("status", 0)) < 200 or int(value.get("status", 0)) >= 300
+        for value in auth.values() if isinstance(value, Mapping)
+    ):
         return {
             "schema": 1, "status": "diagnostic-blocked", "execution": "fast-differential",
             "strict_evidence": False, "production_access": False, "source_commit": head,

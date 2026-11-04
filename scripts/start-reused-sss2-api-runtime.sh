@@ -101,10 +101,10 @@ if ! docker build --pull=false --tag "$IMAGE" "$ROOT" >/dev/null; then
   DEPLOY_IMAGE="$OWNED_STRICT_BASE_IMAGE"
 fi
 if [[ "$DEPLOY_IMAGE" == "$OWNED_STRICT_BASE_IMAGE" ]]; then
-  docker create --name "$APP" --network "$NET" --network-alias "$APP" --env LIMS_BIND_ADDRESS=0.0.0.0 --env JAVA_TOOL_OPTIONS=-Djava.security.egd=file:/dev/./urandom --volume "$ROOT/application.properties:/run/config/application.properties:ro" --entrypoint /bin/sh "$DEPLOY_IMAGE" -c 'rm -rf /opt/owned && mv /opt/owned-new /opt/owned && chmod 0755 /opt/owned/start.sh && mkdir -p /var/lib/lims-owned-attachments && exec /opt/owned/start.sh /run/config/application.properties' >/dev/null
+  docker create --name "$APP" --network "$NET" --network-alias "$APP" --env LIMS_BIND_ADDRESS=0.0.0.0 --env SUNWAY_LCDP_ENABLE=false --env JAVA_TOOL_OPTIONS=-Djava.security.egd=file:/dev/./urandom --volume "$ROOT/application.properties:/run/config/application.properties:ro" --entrypoint /bin/sh "$DEPLOY_IMAGE" -c 'rm -rf /opt/owned && mv /opt/owned-new /opt/owned && chmod 0755 /opt/owned/start.sh && mkdir -p /var/lib/lims-owned-attachments && exec /opt/owned/start.sh /run/config/application.properties' >/dev/null
   docker cp "$ROOT/distribution/." "$APP:/opt/owned-new/"
 else
-  docker create --name "$APP" --network "$NET" --network-alias "$APP" --env LIMS_BIND_ADDRESS=0.0.0.0 --env JAVA_TOOL_OPTIONS=-Djava.security.egd=file:/dev/./urandom --volume "$ROOT/application.properties:/run/config/application.properties:ro" "$DEPLOY_IMAGE" >/dev/null
+  docker create --name "$APP" --network "$NET" --network-alias "$APP" --env LIMS_BIND_ADDRESS=0.0.0.0 --env SUNWAY_LCDP_ENABLE=false --env JAVA_TOOL_OPTIONS=-Djava.security.egd=file:/dev/./urandom --volume "$ROOT/application.properties:/run/config/application.properties:ro" "$DEPLOY_IMAGE" >/dev/null
 fi
 docker start "$APP" >/dev/null
 APP_IP="$(docker inspect "$APP" -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}')"; APP_PID="$(docker inspect "$APP" -f '{{.State.Pid}}')"; [[ -n "$APP_IP" && "$APP_PID" =~ ^[0-9]+$ ]] || fail 'strict app network identity unavailable'

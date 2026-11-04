@@ -1,0 +1,79 @@
+{
+  "schema": "supplier-all-framework-source-closure-current-v1",
+  "generated_at": "2026-11-04T05:28:27.508672+00:00",
+  "status": "diagnostic-all-framework-source-compile-pass",
+  "canonical": false,
+  "strict_evidence": false,
+  "api_evidence": false,
+  "artifact": {
+    "path": ".external-materials/gikam-third-czjky-14.1.5-run.jar",
+    "sha256": "4a720797810fd2f8cca6e22604657028cb87830ca0e24bb55a5f42f040f6ee9f",
+    "private_framework_jar_count": 16,
+    "private_framework_class_entry_count": 4876,
+    "private_framework_distinct_class_count": 4876,
+    "public_dependency_jar_count": 386
+  },
+  "implementation_binding_at_capture": {
+    "binding_id": "impl-48fc6f1e099ea18c",
+    "implementation_tree_digest": "48fc6f1e099ea18cff10f2df350c5331640953a77cfb4d575237ea381bc4acb2",
+    "implementation_dirty": true,
+    "repository_head_at_capture": "f809c2b8191a6eddce1357f5116210c7729ba950",
+    "nested_project_commit": "27932b1fe4d71d64a02f9a63e55f56acb403e3a0",
+    "distribution_input_digest": "66bcb312ebe725a0c7037954045476c2567c4f530efd423371469cf2a4a57ac3"
+  },
+  "source_recovery": {
+    "mode": "all-framework-source-compile",
+    "framework_input_jar_count": 16,
+    "closure_class_count": 4876,
+    "generated_top_level_source_count": 4576,
+    "source_decompilers": {
+      "CFR": 4274,
+      "Vineflower": 302
+    },
+    "fallback_compile_round_count": 7,
+    "fallback_replacement_count": 302,
+    "transform_manifest": "docs/reconstitution/decompiler-transforms.json",
+    "transform_manifest_sha256": "8dddef183eece740791f9b179ec2aad9e30a224a0546e971df380fdb576a1d0c",
+    "transform_rule_count": 45,
+    "transformed_source_count": 39,
+    "distinct_applied_transformation_rule_count": 43,
+    "normalized_source_count": 4274,
+    "source_tree_sha256": "7bfe1f1cf055e01ac8379d8a72c66be973dc32609f33611a40a190c3cf5c8b31"
+  },
+  "project_compile": {
+    "project_source_file_count": 3038,
+    "compile_target_source_file_count": 3033,
+    "project_framework_overlay_count": 5,
+    "project_framework_overlays": [
+      "com.sunwayworld.cloud.module.pageoffice.PageOfficeController",
+      "com.sunwayworld.framework.formula.GikamComputingDataHolder",
+      "com.sunwayworld.framework.formula.GikamFormulaHelper",
+      "com.sunwayworld.framework.utils.FileUtils",
+      "com.sunwayworld.module.sys.todo.callable.SelectTodoCallable"
+    ],
+    "java_version": "8",
+    "exit_code": 0,
+    "error_count": 0,
+    "missing_symbol_queue": [],
+    "source_only_framework_classpath": true,
+    "supplier_private_jars_on_classpath": false
+  },
+  "resources": {
+    "source_jar": "BOOT-INF/lib/gikam-core-web-14.1.5.jar",
+    "source_jar_sha256": "26ee3d912789318d3cc0a23136a17382e34cfede3cd65d83d4dbc113b8245628",
+    "web_resource_count": 5302,
+    "resource_tree_sha256": "fe712b1ae17796a339410050a3d940e4f0cd094555b0c07a04781b507ca0a6d3"
+  },
+  "verification": {
+    "command": "python3 scripts/verify-reconstituted-framework.py --run-jar .external-materials/gikam-third-czjky-14.1.5-run.jar --output-dir /tmp/lims-recon-all-framework-20261104/output-r7",
+    "status": "pass",
+    "errors": []
+  },
+  "limitations": [
+    "This is Java source and resource recovery coverage, not Spring startup or API evidence.",
+    "The generated source tree must still be assembled into tracked dependency-directed modules.",
+    "The compile report proves no private framework JAR was on javac's classpath; it does not yet prove the final distribution excludes supplier runtime inputs.",
+    "Native, license, MAC and JNI-loader removal remains a separate source-to-native and distribution gate.",
+    "Fast differential and strict route counts remain separate metrics and are not included in this source-coverage snapshot."
+  ]
+}

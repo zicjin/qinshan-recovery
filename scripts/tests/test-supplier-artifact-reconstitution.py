@@ -203,6 +203,49 @@ def verify_tracked_full_closure_snapshot() -> None:
     assert closure["project_compile"]["supplier_private_jars_on_classpath"] is False
 
 
+def verify_tracked_all_framework_snapshot() -> None:
+    snapshot = json.loads(
+        (
+            ROOT
+            / "docs"
+            / "reconstitution"
+            / "all-framework-source-closure-current.json"
+        ).read_text(encoding="utf-8")
+    )
+    assert snapshot["schema"] == "supplier-all-framework-source-closure-current-v1"
+    assert snapshot["status"] == "diagnostic-all-framework-source-compile-pass"
+    assert snapshot["canonical"] is False
+    assert snapshot["strict_evidence"] is False
+    assert snapshot["api_evidence"] is False
+    assert snapshot["artifact"]["sha256"] == (
+        "4a720797810fd2f8cca6e22604657028cb87830ca0e24bb55a5f42f040f6ee9f"
+    )
+    recovery = snapshot["source_recovery"]
+    assert recovery["closure_class_count"] == 4876
+    assert recovery["generated_top_level_source_count"] == 4576
+    assert recovery["source_decompilers"] == {"CFR": 4274, "Vineflower": 302}
+    assert recovery["transform_rule_count"] == 45
+    assert recovery["transformed_source_count"] == 39
+    assert recovery["source_tree_sha256"] == (
+        "7bfe1f1cf055e01ac8379d8a72c66be973dc32609f33611a40a190c3cf5c8b31"
+    )
+    assert (
+        hashlib.sha256((ROOT / recovery["transform_manifest"]).read_bytes()).hexdigest()
+        == recovery["transform_manifest_sha256"]
+    )
+    project = snapshot["project_compile"]
+    assert project["project_source_file_count"] == 3038
+    assert project["compile_target_source_file_count"] == 3033
+    assert project["project_framework_overlay_count"] == 5
+    assert project["exit_code"] == 0
+    assert project["error_count"] == 0
+    assert project["missing_symbol_queue"] == []
+    assert project["source_only_framework_classpath"] is True
+    assert project["supplier_private_jars_on_classpath"] is False
+    assert snapshot["resources"]["web_resource_count"] == 5302
+    assert snapshot["verification"]["status"] == "pass"
+
+
 def verify_file_utils_source_contract() -> None:
     source = (
         ROOT
@@ -233,6 +276,7 @@ def verify_file_utils_source_contract() -> None:
 def main() -> int:
     verify_file_utils_source_contract()
     verify_tracked_full_closure_snapshot()
+    verify_tracked_all_framework_snapshot()
     module = load_module("resolve_java_source_closure", MODULE_PATH)
     verify_module = load_module("verify_reconstituted_framework", VERIFY_PATH)
     with tempfile.TemporaryDirectory(prefix="supplier-artifact-test-") as temp_name:
@@ -296,7 +340,7 @@ def main() -> int:
         transform_manifest = module.load_transform_manifest(
             module.DEFAULT_TRANSFORM_MANIFEST
         )
-        assert len(transform_manifest["rules"]) == 13
+        assert len(transform_manifest["rules"]) == 45
         transform_source = (
             work
             / "transform-src"

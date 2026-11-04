@@ -99,6 +99,27 @@ The full-closure source tree is currently diagnostic output. It must be split
 into dependency-directed framework modules with tracked provenance before it
 becomes distribution source.
 
+## Compile every private framework source
+
+```bash
+VINEFLOWER_JAR=/path/to/vineflower-1.11.1.jar \
+VINEFLOWER_JAVA=/path/to/java-17-or-newer \
+scripts/reconstitute-framework-source.sh pilot \
+  --all-framework-sources \
+  --target-source project/src/main/java/com/sunwayworld/emc/projectfunction/GikamWpjcApplication.java \
+  --output-dir /tmp/lims-all-framework-source-closure \
+  --extract-web-resources
+```
+
+`--all-framework-sources` decompiles every top-level class from all
+content-classified private framework JARs. It excludes exact project-source
+framework overlays from the javac targets so supplier bytecode is the source of
+record for those framework class names. The output is the input for
+dependency-directed framework module assembly and records the full per-class
+decompiler and deterministic-transformation provenance. It remains diagnostic
+source coverage until tracked modules build independently and the original
+project application builds against them.
+
 ## Verify
 
 ```bash

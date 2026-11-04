@@ -1,0 +1,346 @@
+{
+  "schema": "sunway-java-native-seam-dossier-v1",
+  "generated_at": "2026-11-04T05:45:00+00:00",
+  "status": "diagnostic-native-seam-open",
+  "canonical": false,
+  "strict_evidence": false,
+  "native_executed": false,
+  "native_artifact": {
+    "path": "external-controlled-materials/sunway-app.so",
+    "sha256": "dc06e05d55252211e44b3a177267b68efc970b095d74c7ebd815057f5393d40a",
+    "bytes": 186512,
+    "format": "elf64",
+    "architecture": "x86_64",
+    "build_id": "41a9487cddc6f9ccf4cb0accb2173926730d23b7",
+    "distribution_policy": "forbidden"
+  },
+  "rea_evidence": {
+    "client": "rea-agents 6.8.0 CLI",
+    "native_exports": {
+      "evidence_id": "ev_143c41e92653242e76d3e885bf914b52466fd0c2b387b9621744cdb9ef4b664a",
+      "provider": "rea-native-exports v1",
+      "total_exports": 128,
+      "java_jni_exports": 54
+    },
+    "elf_notes": {
+      "evidence_id": "ev_361ab9281cac7b6f98091152a544d74e7c30f1c9fa1d6de089e82e744346dee9",
+      "provider": "rea-elf-notes v1",
+      "coverage": "complete"
+    },
+    "artifact_graph": {
+      "evidence_id": "ev_19be0b7385803cf7b8be8f1b84f1124fca0324937979b7f6c9659f46b5e8ec66",
+      "provider": "rea-artifact-graph"
+    },
+    "objdump_symbols": {
+      "evidence_id": "ev_3d91260f4ccd6aa19e2d4561602e8fc7a60febe715475b05f42c07d3f60bbb12",
+      "provider": "rea-inspect-with-objdump",
+      "artifact_changed": false
+    },
+    "objdump_disassembly": {
+      "evidence_id": "ev_024d696b1744da50c4c85906d854afc17176c57570870dc11e10fe5fcc879582",
+      "provider": "rea-inspect-with-objdump",
+      "completion_status": "complete",
+      "artifact_changed": false
+    },
+    "focused_functions": {
+      "_Z16_checkInitializeP7JNIEnv_P8_jobject": "ev_977bfbb85fc7e651cfc2aee777a17204e304ba0f5e03dbb9d4406d094dfc53fc",
+      "_Z13_checkRuntimeP7JNIEnv_P8_jobject": "ev_35a50e17901fbb10f99a28b2815fb6acb4e4c5522d5b9f21fea72660b953443c",
+      "_Z12_checkNativeP7JNIEnv_P8_jobject": "ev_0546cab72411102a43cf3e56b763bb3350f41d0c545a7be0af48ec6a61b995dc",
+      "_Z12_checkNativeP7JNIEnv_PKcS2_S2_": "ev_706a8b56b16024e770f9424f11f48d15850780287b9598d44b6e46639f6203e6",
+      "_Z23_checkLimitedServerNameP7JNIEnv_P8_jobjectS2_": "ev_5e6419bfc1df7943aa03519bf188970487b4221be6276bc1d29d7fc8adef1095",
+      "Java_com_sunwayworld_framework_context_ApplicationContextHelper_getLicenseDeadline": "ev_7e82b03d560e6b4efb7672af338161c5a35100f4436034a1c9b6da21f11a0d4a",
+      "Java_com_sunwayworld_framework_context_ApplicationContextHelper_getLicenseCountdownDays": "ev_b13a3e6fbb819e31dc9d13ee25bbc4e374f3dff42d002220ab1b7220c4ed034a"
+    }
+  },
+  "loader_chain": [
+    {
+      "java_class": "com.sunwayworld.GikamCoreApplication",
+      "java_member": "<clinit>",
+      "observed_behavior": "calls ThirdPartyType.values() and extractor.extract() before Spring startup"
+    },
+    {
+      "java_class": "com.sunwayworld.boot.thirdparty.ThirdPartyType",
+      "java_member": "SUNWAY_LIBRARY",
+      "observed_behavior": "constructs SunwayLibraryExtractor"
+    },
+    {
+      "java_class": "com.sunwayworld.boot.thirdparty.sunwaylibrary.SunwayLibraryExtractor",
+      "java_member": "extractForLinux",
+      "observed_behavior": "extracts /third-party/sunway-app/linux/sunway-app.so to the working directory, chmods it and calls System.load"
+    },
+    {
+      "native_artifact": "sunway-app.so",
+      "observed_behavior": "provides Java JNI exports and private license/runtime helpers",
+      "required_disposition": "remove loader and all native runtime dependencies"
+    }
+  ],
+  "loader_controls": {
+    "system_properties": [
+      "sunway-app-reset"
+    ],
+    "embedded_resources": [
+      "/third-party/sunway-app/windows/sunway-app.dll",
+      "/third-party/sunway-app/linux/sunway-app.so",
+      "/third-party/sunway-app/arm/sunway-app.so",
+      "/third-party/sunway-app/loongarch/sunway-app.so",
+      "/third-party/sunway-app/mac/sunway-app.o"
+    ],
+    "forbidden_in_distribution": true
+  },
+  "jni_declaration_export_map": {
+    "summary": {
+      "java_native_declarations": 48,
+      "java_jni_exports": 54,
+      "direct_declaration_export_matches": 47,
+      "declarations_without_direct_export": 1,
+      "exports_without_current_simple_declaration": 7
+    },
+    "classes": [
+      {
+        "java_class": "com.sunwayworld.boot.ApplicationConfiguration",
+        "role": "framework bootstrap and Spring bean construction",
+        "methods": [
+          "initApplicationContext",
+          "init",
+          "restTemplate",
+          "configureTasks",
+          "taskExecutor",
+          "getAsyncUncaughtExceptionHandler",
+          "redisTemplate",
+          "redisCacheWriter",
+          "cacheManager",
+          "sqlSessionFactory",
+          "sqlSessionTemplate",
+          "mapperScannerConfigurer",
+          "multipartConfigElement",
+          "servletHandlerAdapter",
+          "localeResolver",
+          "localeChangeInterceptor",
+          "messageSource",
+          "dataSource",
+          "gikamTemplateResolver"
+        ],
+        "export_rule": "Java_com_sunwayworld_boot_ApplicationConfiguration_<method>"
+      },
+      {
+        "java_class": "com.sunwayworld.boot.ApplicationMvcConfiguration",
+        "role": "Spring MVC configuration",
+        "methods": [
+          "addArgumentResolvers",
+          "addInterceptors",
+          "addResourceHandlers",
+          "configureDefaultServletHandling",
+          "configureMessageConverters",
+          "configurePathMatch"
+        ],
+        "export_rule": "Java_com_sunwayworld_boot_ApplicationMvcConfiguration_<method>"
+      },
+      {
+        "java_class": "com.sunwayworld.boot.security.SunwaySecurityConfiguration",
+        "role": "Spring Security bootstrap",
+        "methods": [
+          "configureGlobal",
+          "userDetailsService",
+          "authenticationProvider",
+          "rememberMeServices",
+          "init"
+        ],
+        "export_rule": "Java_com_sunwayworld_boot_security_SunwaySecurityConfiguration_<method>"
+      },
+      {
+        "java_class": "com.sunwayworld.framework.context.ApplicationContextHelper",
+        "role": "application context and license capability access",
+        "methods": [
+          "getAppId",
+          "getLicenseDeadline",
+          "getLicenseCountdownDays",
+          "getNumberOfOnlineUsers",
+          "getLoginUserLimitation",
+          "getApplicationContext"
+        ],
+        "export_rule": "Java_com_sunwayworld_framework_context_ApplicationContextHelper_<method>"
+      },
+      {
+        "java_class": "com.sunwayworld.framework.security.authentication.AuthenticationHelper",
+        "role": "login session and remember-me state",
+        "methods": [
+          "getPreviousLoginToken",
+          "login",
+          "logout",
+          "getCacheAuthentication",
+          "updateCacheAuthentication"
+        ],
+        "export_rule": "Java_com_sunwayworld_framework_security_authentication_AuthenticationHelper_<method>"
+      },
+      {
+        "java_class": "com.sunwayworld.framework.context.filter.ContextServletRequestFilter",
+        "role": "request boundary and server-name restriction",
+        "methods": [
+          "doFilter"
+        ],
+        "export_rule": "Java_com_sunwayworld_framework_context_filter_ContextServletRequestFilter_doFilter"
+      },
+      {
+        "java_class": "com.sunwayworld.framework.context.listener.ApplicationServletRequestListener",
+        "role": "request lifecycle",
+        "methods": [
+          "requestDestroyed",
+          "requestInitialized"
+        ],
+        "export_rule": "Java_com_sunwayworld_framework_context_listener_ApplicationServletRequestListener_<method>"
+      },
+      {
+        "java_class": "com.sunwayworld.framework.security.service.DefaultUserDetailsService",
+        "role": "login user lookup and licensed online-user limit",
+        "methods": [
+          "getLoginUser"
+        ],
+        "export_rule": "Java_com_sunwayworld_framework_security_service_DefaultUserDetailsService_getLoginUser"
+      },
+      {
+        "java_class": "com.sunwayworld.framework.mybatis.MybatisHelper",
+        "role": "MyBatis bootstrap",
+        "methods": [
+          "getSqlSessionFactory"
+        ],
+        "export_rule": "Java_com_sunwayworld_framework_mybatis_MybatisHelper_getSqlSessionFactory"
+      },
+      {
+        "java_class": "com.sunwayworld.framework.tenant.TenantManager",
+        "role": "tenant data-source construction",
+        "methods": [
+          "dataSource"
+        ],
+        "export_rule": "Java_com_sunwayworld_framework_tenant_TenantManager_dataSource"
+      }
+    ],
+    "declarations_without_direct_export": [
+      {
+        "java_class": "com.sunwayworld.framework.utils.DataSourceUtils",
+        "java_method": "dataSource",
+        "reason": "recovered source declares native but the observed export table has no direct Java_com_sunwayworld_framework_utils_DataSourceUtils_dataSource row",
+        "disposition": "replace with source-only Java implementation and verify no JNI dependency"
+      }
+    ],
+    "exports_without_current_simple_declaration": [
+      "Java_com_sunwayworld_boot_ApplicationConfiguration_customize",
+      "Java_com_sunwayworld_boot_ApplicationConfiguration_requestContextListener",
+      "Java_com_sunwayworld_boot_ApplicationConfiguration_taskScheduler",
+      "Java_com_sunwayworld_boot_security_SunwaySecurityConfiguration_passwordEncoder",
+      "Java_com_sunwayworld_cloud_common_redis_config_RedisAutoConfiguration_cacheManager",
+      "Java_com_sunwayworld_cloud_common_redis_config_RedisAutoConfiguration_redisCacheWriter",
+      "Java_com_sunwayworld_cloud_common_redis_config_RedisAutoConfiguration_redisTemplate"
+    ]
+  },
+  "native_function_roles": [
+    {
+      "native_function": "_Z16_checkInitializeP7JNIEnv_P8_jobject",
+      "java_or_internal_callers": [
+        "most ApplicationConfiguration and ApplicationMvcConfiguration JNI exports",
+        "_Z23_initApplicationContextP7JNIEnv_P8_jobject"
+      ],
+      "observed_role": "initializes and validates the supplier runtime",
+      "observed_strings": [
+        "NO LICENSE",
+        "LICENSE EXPIRED",
+        "INVALID LICENSE 001-004",
+        "Mac Address Unavailable",
+        "Mac Address Mismatch",
+        "sunway.cloud.project Invalid",
+        "sunway.cloud.project Mismatch"
+      ],
+      "required_disposition": "remove"
+    },
+    {
+      "native_function": "_Z13_checkRuntimeP7JNIEnv_P8_jobject",
+      "java_or_internal_callers": [
+        "AuthenticationHelper.login",
+        "AuthenticationHelper.logout"
+      ],
+      "observed_role": "runtime license enforcement on session operations",
+      "observed_strings": [
+        "LICENSE EXPIRED",
+        "LICENSE INVALID 001",
+        "LICENSE INVALID 002"
+      ],
+      "required_disposition": "remove"
+    },
+    {
+      "native_function": "_Z12_checkNativeP7JNIEnv_P8_jobject",
+      "inner_function": "_Z12_checkNativeP7JNIEnv_PKcS2_S2_",
+      "observed_role": "reflectively validates the expected Java native method surface",
+      "observed_strings": [
+        "Native Method Not Exists",
+        "getDeclaredMethods"
+      ],
+      "required_disposition": "remove with all native declarations"
+    },
+    {
+      "native_function": "_Z23_checkLimitedServerNameP7JNIEnv_P8_jobjectS2_",
+      "java_or_internal_callers": [
+        "ContextServletRequestFilter.doFilter"
+      ],
+      "observed_role": "binds or restricts requests by servlet server name",
+      "observed_strings": [
+        "getServerName",
+        "Server Name Mismatch"
+      ],
+      "required_disposition": "remove"
+    },
+    {
+      "native_function": "Java_com_sunwayworld_framework_security_service_DefaultUserDetailsService_getLoginUser",
+      "observed_role": "enforces licensed online-user and login-user limits",
+      "observed_strings": [
+        "GIKAM.SECURITY.LICENSE.LOGIN_USER_EXCEEDED",
+        "Unable Get Number Of Online Users"
+      ],
+      "required_disposition": "replace with unlicensed source-only identity lookup and remove limit enforcement"
+    },
+    {
+      "native_function": "Java_com_sunwayworld_framework_context_ApplicationContextHelper_getLicenseDeadline",
+      "observed_role": "returns native license deadline state",
+      "required_disposition": "remove negative or source-only no-license capability behavior; never mock a valid supplier license"
+    },
+    {
+      "native_function": "Java_com_sunwayworld_framework_context_ApplicationContextHelper_getLicenseCountdownDays",
+      "observed_role": "calculates license countdown through native state",
+      "required_disposition": "remove negative or source-only no-license capability behavior"
+    }
+  ],
+  "runtime_configuration_inputs": [
+    "spring.datasource.driver-class-name",
+    "spring.datasource.url",
+    "spring.datasource.username",
+    "spring.datasource.password",
+    "spring.datasource.hikari",
+    "sunway.security.token-validity-seconds",
+    "sunway.user.password.encoder.type",
+    "sunway.testing.stress.enabled",
+    "sunway.logging.count-only.enabled",
+    "server.address",
+    "server.port"
+  ],
+  "replacement_policy": {
+    "license_activation_or_validation": "remove",
+    "mac_or_machine_fingerprint": "remove",
+    "server_name_binding": "remove",
+    "native_or_jni_loader": "remove",
+    "login_user_license_limit": "remove",
+    "business_framework_bootstrap": "source-only Java replacement in the same Spring application",
+    "business_license_fields_and_third_party_entitlements": "preserve under explicit allowlist",
+    "valid_license_mock": "forbidden"
+  },
+  "open_work": [
+    "Replace all recovered native declarations with source-only Java behavior.",
+    "Reconcile seven exported Java functions that have no current simple native declaration.",
+    "Remove GikamCoreApplication's ThirdPartyType loader call and SunwayLibraryExtractor implementation.",
+    "Add focused negative contracts proving license, MAC, server-name and loader paths are absent.",
+    "Run the distribution forbidden-content scan over final source and packaged output."
+  ],
+  "limitations": [
+    "REA export, ELF, artifact-graph and objdump workflows are observed shipped-artifact evidence.",
+    "A deep Ghidra provider was not configured in this environment, so function pseudocode and decompiler confidence are not claimed.",
+    "Call relationships and string references are derived from retained REA objdump disassembly; the native artifact was never executed.",
+    "Opaque license payloads are intentionally not copied into this dossier."
+  ]
+}

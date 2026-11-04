@@ -213,6 +213,616 @@
         }
       ],
       "reason": "Bind lambda captures to the active interface/field loop variable versions."
+    },
+    {
+      "id": "soap-builder-public-json-serializer",
+      "decompiler": "CFR",
+      "file": "com/sunwayworld/cloud/module/lcdp/apiintegration/webservice/builder/AbstractSoapDynamicBuilder.java",
+      "operations": [
+        {
+          "op": "replace",
+          "find": "import com.alibaba.nacos.common.utils.JacksonUtils;",
+          "replace": "import com.alibaba.fastjson.JSON;",
+          "expected_count": 1
+        },
+        {
+          "op": "replace",
+          "find": "JacksonUtils.toJson(map)",
+          "replace": "JSON.toJSONString(map)",
+          "expected_count": 1
+        }
+      ],
+      "reason": "Use the public JSON library already present in the supplier runtime; the absent Nacos common utility is not a runtime dependency in the stock JAR."
+    },
+    {
+      "id": "result-set-sheet-row-counter",
+      "decompiler": "CFR",
+      "file": "com/sunwayworld/framework/io/excel/impl/ResultSetSheetWriter.java",
+      "operations": [
+        {
+          "op": "replace",
+          "find": "void var25_38;",
+          "replace": "int var25_38 = 0;",
+          "expected_count": 1
+        },
+        {
+          "op": "replace",
+          "find": "(double)(var25_38 + true)",
+          "replace": "(double)(var25_38 + 1)",
+          "expected_count": 1
+        }
+      ],
+      "reason": "Restore the integer result-row counter and one-based serial increment from the source bytecode."
+    },
+    {
+      "id": "audit-relation-context-generic-items",
+      "decompiler": "CFR",
+      "file": "com/sunwayworld/framework/at/handler/RelationTableHandlerContext.java",
+      "operations": [
+        {
+          "op": "replace",
+          "find": "public List<? extends Persistable<?>> getItems() {\n        return this.items;\n    }",
+          "replace": "@SuppressWarnings(\"unchecked\")\n    public <T extends Persistable<?>> List<T> getItems() {\n        return (List<T>)this.items;\n    }",
+          "expected_count": 1
+        }
+      ],
+      "reason": "Preserve handler-specific item types through the wildcard relation-table context without changing runtime data."
+    },
+    {
+      "id": "audit-v2-relation-context-generic-items",
+      "decompiler": "CFR",
+      "file": "com/sunwayworld/framework/audit/handler/AuditV2RelationTableHandlerContext.java",
+      "operations": [
+        {
+          "op": "replace",
+          "find": "public List<? extends Persistable<?>> getItems() {\n        return this.items;\n    }",
+          "replace": "@SuppressWarnings(\"unchecked\")\n    public <T extends Persistable<?>> List<T> getItems() {\n        return (List<T>)this.items;\n    }",
+          "expected_count": 1
+        }
+      ],
+      "reason": "Preserve handler-specific item types through the audit-v2 wildcard context without changing runtime data."
+    },
+    {
+      "id": "result-set-sheet-vf-entry-map",
+      "decompiler": "Vineflower",
+      "file": "com/sunwayworld/framework/io/excel/impl/ResultSetSheetWriter.java",
+      "operations": [
+        {
+          "op": "regex_replace",
+          "pattern": "\\.filter\\(n -> propertyContext\\.getName\\(\\)\\.equalsIgnoreCase\\(n\\.getFirst\\(\\)\\)\\)",
+          "replace": ".filter(n -> propertyContextx.getName().equalsIgnoreCase(n.getFirst()))",
+          "expected_count": 1
+        },
+        {
+          "op": "replace",
+          "find": "((Map)item)\n            .entrySet()",
+          "replace": "((Map<?, ?>)item)\n            .entrySet()",
+          "expected_count": 1
+        }
+      ],
+      "reason": "Bind the active property context and preserve Map.Entry methods after Vineflower raw-type recovery."
+    },
+    {
+      "id": "lcdp-method-list-generic-cast",
+      "decompiler": "Vineflower",
+      "file": "com/sunwayworld/cloud/module/lcdp/resource/service/impl/LcdpResourceServiceImpl.java",
+      "operations": [
+        {
+          "op": "regex_replace",
+          "pattern": "for \\(Method method : \\(List\\)",
+          "replace": "for (Method method : (List<Method>)",
+          "expected_count": 3
+        }
+      ],
+      "reason": "Restore the generic Method list produced by the sorted reflected-method collector."
+    },
+    {
+      "id": "schedule-job-cache-generic-read",
+      "decompiler": "Vineflower",
+      "file": "com/sunwayworld/cloud/module/schedule/support/CoreScheduleJobContainer.java",
+      "operations": [
+        {
+          "op": "replace",
+          "find": "Optional.ofNullable(RedisHelper.get(\"SCHEDULE_JOB\", \"ALL\")).orElse(CollectionUtils.emptyMap())",
+          "replace": "Optional.ofNullable(RedisHelper.<Map<String, CoreScheduleJob>>get(\"SCHEDULE_JOB\", \"ALL\")).orElse(CollectionUtils.emptyMap())",
+          "expected_count": 1
+        }
+      ],
+      "reason": "Restore the generic Redis cache value type erased by the decompiler."
+    },
+    {
+      "id": "lims-function-file-list-cast",
+      "decompiler": "Vineflower",
+      "file": "com/sunwayworld/cloud/lims/reporttemplate/support/function/FunctionAble.java",
+      "operations": [
+        {
+          "op": "replace",
+          "find": "for (CoreFileBean fileBean : (List)data)",
+          "replace": "for (CoreFileBean fileBean : (List<CoreFileBean>)data)",
+          "expected_count": 3
+        }
+      ],
+      "reason": "Restore the element type of the runtime-validated CoreFileBean list."
+    },
+    {
+      "id": "lims-file-function-template-cast",
+      "decompiler": "Vineflower",
+      "file": "com/sunwayworld/cloud/lims/reporttemplate/support/function/FileFunction.java",
+      "operations": [
+        {
+          "op": "replace",
+          "find": "LimsFileUtils.getFileByte(template)",
+          "replace": "LimsFileUtils.getFileByte((CoreFileBean)template)",
+          "expected_count": 1
+        }
+      ],
+      "reason": "Restore the CoreFileBean element cast after the runtime list-element check."
+    },
+    {
+      "id": "lims-excel-template-list-cast",
+      "decompiler": "Vineflower",
+      "file": "com/sunwayworld/cloud/lims/reporttemplate/support/excel/LimsExcelReportGenerator.java",
+      "operations": [
+        {
+          "op": "replace",
+          "find": "(LimsTemplateDataList)excelSheetTemplate",
+          "replace": "(LimsTemplateDataList<CoreFileBean>)excelSheetTemplate",
+          "expected_count": 1
+        }
+      ],
+      "reason": "Restore the template-list element type validated by the report generator."
+    },
+    {
+      "id": "eln-field-generic-dao-witness",
+      "decompiler": "Vineflower",
+      "file": "com/sunwayworld/cloud/module/eln/service/impl/CoreElnFieldServiceImpl.java",
+      "operations": [
+        {
+          "op": "replace",
+          "find": "service.<GenericDao<T, ?>>getDao().getType()",
+          "replace": "service.getDao().getType()",
+          "expected_count": 1
+        }
+      ],
+      "reason": "Remove a spurious explicit type witness on the no-argument getDao call."
+    },
+    {
+      "id": "eln-service-generic-dao-witness",
+      "decompiler": "Vineflower",
+      "file": "com/sunwayworld/cloud/module/eln/service/impl/CoreElnServiceImpl.java",
+      "operations": [
+        {
+          "op": "replace",
+          "find": "service.<GenericDao<T, ?>>getDao().getType()",
+          "replace": "service.getDao().getType()",
+          "expected_count": 1
+        }
+      ],
+      "reason": "Remove a spurious explicit type witness on the no-argument getDao call."
+    },
+    {
+      "id": "office-eln-generic-dao-witness",
+      "decompiler": "Vineflower",
+      "file": "com/sunwayworld/cloud/module/office/service/impl/CoreOfficeELNInvokeConsumer.java",
+      "operations": [
+        {
+          "op": "replace",
+          "find": "updateService.<GenericDao<T, ?>>getDao().getType()",
+          "replace": "updateService.getDao().getType()",
+          "expected_count": 1
+        }
+      ],
+      "reason": "Remove a spurious explicit type witness on the no-argument getDao call."
+    },
+    {
+      "id": "lcdp-bp-node-role-capture",
+      "decompiler": "Vineflower",
+      "file": "com/sunwayworld/cloud/module/lcdp/bp/service/impl/LcdpBizProcessServiceImpl.java",
+      "operations": [
+        {
+          "op": "regex_replace",
+          "pattern": "noneMatch\\(menuRole -> bpNodeRole\\.getRoleId\\(\\)",
+          "replace": "noneMatch(menuRole -> bpNodeRolex.getRoleId()",
+          "expected_count": 1
+        }
+      ],
+      "reason": "Bind the lambda capture to the active node-role loop variable."
+    },
+    {
+      "id": "core-bpmn-target-capture",
+      "decompiler": "Vineflower",
+      "file": "com/sunwayworld/module/sys/bpmn/engine/impl/CoreBpmnRuntimeServiceImpl.java",
+      "operations": [
+        {
+          "op": "replace",
+          "find": "for (CoreBpmnTargetBean selectedBpmnTargetx : selectedBpmnTargetListx) {\n            CoreBpmnTargetBean bpmnTarget = data.getUpdateProcessStatusBpmnTargetList()\n               .stream()\n               .filter(i -> i.getId().equals(selectedBpmnTarget.getId()))",
+          "replace": "for (CoreBpmnTargetBean selectedBpmnTargetx : selectedBpmnTargetListx) {\n            CoreBpmnTargetBean bpmnTarget = data.getUpdateProcessStatusBpmnTargetList()\n               .stream()\n               .filter(i -> i.getId().equals(selectedBpmnTargetx.getId()))",
+          "expected_count": 1
+        }
+      ],
+      "reason": "Bind the lambda capture to the active selected-target loop variable."
+    },
+    {
+      "id": "lcdp-bpmn-table-capture",
+      "decompiler": "Vineflower",
+      "file": "com/sunwayworld/cloud/module/lcdp/sys/bpmn/engine/impl/LcdpBpmnRuntimeServiceImpl.java",
+      "operations": [
+        {
+          "op": "replace",
+          "find": "tableName + \"$\"",
+          "replace": "tableNamex + \"$\"",
+          "expected_count": 2
+        }
+      ],
+      "reason": "Bind target identifiers to the active table-name local restored by Vineflower."
+    },
+    {
+      "id": "mobile-menu-array-list-collector",
+      "decompiler": "Vineflower",
+      "file": "com/sunwayworld/cloud/module/mobile/menu/service/impl/MobileMenuServiceImpl.java",
+      "operations": [
+        {
+          "op": "replace",
+          "find": "return icon;\n      }).collect(Collectors.toList());",
+          "replace": "return icon;\n      }).collect(Collectors.toCollection(ArrayList::new));",
+          "expected_count": 1
+        }
+      ],
+      "reason": "Preserve the declared ArrayList return type from the reflected icon stream."
+    },
+    {
+      "id": "lcdp-base-unique-id-cast",
+      "decompiler": "Vineflower",
+      "file": "com/sunwayworld/cloud/module/lcdp/base/service/LcdpBaseService.java",
+      "operations": [
+        {
+          "op": "replace",
+          "find": "List<ID> idList = this.getMapDao().selectListByOneColumnValue(this.getTable(), columnValue, columnName, Arrays.asList(\"ID\"));",
+          "replace": "List<ID> idList = (List<ID>)(List<?>)this.getMapDao().selectListByOneColumnValue(this.getTable(), columnValue, columnName, Arrays.asList(\"ID\"));",
+          "expected_count": 1
+        }
+      ],
+      "reason": "Restore the validated ID result cast from the map DAO's value-typed result."
+    },
+    {
+      "id": "result-computing-related-capture",
+      "decompiler": "Vineflower",
+      "file": "com/sunwayworld/cloud/module/script/computing/CoreResultComputingEngine.java",
+      "operations": [
+        {
+          "op": "regex_replace",
+          "pattern": "(for \\(CoreResultBean resultx : relatedTaskResultList\\)[\\s\\S]*?equals\\()result\\.getId\\(\\)",
+          "replace": "\\1resultx.getId()",
+          "expected_count": 1
+        }
+      ],
+      "reason": "Bind the lambda capture to the active related-result loop variable."
+    },
+    {
+      "id": "result-computing-copy-capture",
+      "decompiler": "Vineflower",
+      "file": "com/sunwayworld/cloud/module/script/computing/CoreResultComputingEngine.java",
+      "operations": [
+        {
+          "op": "regex_replace",
+          "pattern": "(for \\(CoreResultBean resultxx : resultList\\)[\\s\\S]*?equals\\()result\\.getId\\(\\)",
+          "replace": "\\1resultxx.getId()",
+          "expected_count": 1
+        }
+      ],
+      "reason": "Bind the lambda capture to the active copied-result loop variable."
+    },
+    {
+      "id": "spc-subgroup-list-map",
+      "decompiler": "Vineflower",
+      "file": "com/sunwayworld/cloud/module/item/spcs/support/constant/SpcHelper.java",
+      "operations": [
+        {
+          "op": "replace",
+          "find": ".<List>map",
+          "replace": ".<List<T>>map",
+          "expected_count": 2
+        }
+      ],
+      "reason": "Restore the generic subgroup element type erased from the stream map."
+    },
+    {
+      "id": "bpmn-runtime-status-capture-and-merge",
+      "decompiler": "Vineflower",
+      "file": "com/sunwayworld/module/sys/bpmn/engine/support/AbstractCoreBpmnRuntimeProcessSupport.java",
+      "operations": [
+        {
+          "op": "replace",
+          "find": "for (CoreBpmnInstanceStatusDTO<ID> instanceStatusx : approveOrRejectStatusList) {\n               CoreBpmnRuntimeSource<T, ID> source = sourceList.stream().filter(s -> s.getId().equals(instanceStatus.getId())).findAny().get();",
+          "replace": "for (CoreBpmnInstanceStatusDTO<ID> instanceStatusx : approveOrRejectStatusList) {\n               CoreBpmnRuntimeSource<T, ID> source = sourceList.stream().filter(s -> s.getId().equals(instanceStatusx.getId())).findAny().get();",
+          "expected_count": 1
+        },
+        {
+          "op": "replace",
+          "find": ".filter(t -> t.getInstId().equals(instanceStatus.getRuntimeContainer().getProcInstId()))",
+          "replace": ".filter(t -> t.getInstId().equals(instanceStatusx.getRuntimeContainer().getProcInstId()))",
+          "expected_count": 1
+        },
+        {
+          "op": "replace",
+          "find": "(Collection<T>)notifiedUserIdList",
+          "replace": "(Collection<String>)notifiedUserIdList",
+          "expected_count": 1
+        },
+        {
+          "op": "replace",
+          "find": "(Collection<T>)roleUserMap.get(r)",
+          "replace": "(Collection<String>)roleUserMap.get(r)",
+          "expected_count": 1
+        }
+      ],
+      "reason": "Bind the active status loop variable and restore string collection types for notification merge."
+    },
+    {
+      "id": "dp-config-generic-dao-and-filter-list",
+      "decompiler": "Vineflower",
+      "file": "com/sunwayworld/module/sys/dpconfig/service/impl/CoreDpConfigServiceImpl.java",
+      "operations": [
+        {
+          "op": "replace",
+          "find": "exportService.<GenericDao<T, String>>getDao()",
+          "replace": "exportService.getDao()",
+          "expected_count": 1
+        },
+        {
+          "op": "replace",
+          "find": "releateService.<GenericDao<T, String>>getDao()",
+          "replace": "releateService.getDao()",
+          "expected_count": 1
+        },
+        {
+          "op": "replace",
+          "find": "List filterList = exsitedDataList.stream()",
+          "replace": "List filterList = (List)exsitedDataList.stream()",
+          "expected_count": 1
+        }
+      ],
+      "reason": "Remove invalid type witnesses and preserve the raw list result used by the import validation path."
+    },
+    {
+      "id": "lims-sql-check-function-cast",
+      "decompiler": "Vineflower",
+      "file": "com/sunwayworld/cloud/lims/reporttemplate/support/resolver/LimsSqlDataResolver.java",
+      "operations": [
+        {
+          "op": "replace",
+          "find": "return (parent, childItem) -> ObjectUtils.equals",
+          "replace": "return (BiFunction<LimsTemplateDataMap<Object>, LimsTemplateDataMap<Object>, Boolean>)(parent, childItem) -> ObjectUtils.equals",
+          "expected_count": 1
+        }
+      ],
+      "reason": "Restore the target BiFunction type for the nested relational-check lambda."
+    },
+    {
+      "id": "lims-list-group-generic-collection",
+      "decompiler": "Vineflower",
+      "file": "com/sunwayworld/cloud/lims/reporttemplate/support/function/ListFunction.java",
+      "operations": [
+        {
+          "op": "regex_replace",
+          "pattern": "default <T> LimsTemplateDataList<LimsTemplateDataList<T>> group\\(List<T> list, int maxCount\\) \\{[\\s\\S]*?\\n   \\}\\n\\n   default <T> LimsTemplateDataList<LimsTemplateDataList<T>> groupBy",
+          "replace": "default <T> LimsTemplateDataList<LimsTemplateDataList<T>> group(List<T> list, int maxCount) {\n      if (!CollectionUtils.isEmpty(list) && maxCount != 0) {\n         int limit = (list.size() + maxCount - 1) / maxCount;\n         return Stream.<Integer>iterate(0, n -> n + 1)\n            .limit(limit)\n            .parallel()\n            .map(a -> {\n               LimsTemplateDataList<T> group = new LimsTemplateDataList<>();\n               list.stream().skip(a * maxCount).limit(maxCount).forEach(group::add);\n               return group;\n            })\n            .collect(Collectors.toCollection(() -> new LimsTemplateDataList<LimsTemplateDataList<T>>()));\n      } else {\n         return new LimsTemplateDataList<>();\n      }\n   }\n\n   default <T> LimsTemplateDataList<LimsTemplateDataList<T>> groupBy",
+          "expected_count": 1
+        }
+      ],
+      "reason": "Recover the pure generic group collector without the decompiler's discarded duplicate stream expression."
+    },
+    {
+      "id": "lims-hack-loop-map-values",
+      "decompiler": "Vineflower",
+      "file": "com/sunwayworld/cloud/lims/reporttemplate/support/word/policy/LimsHackLoopTableRenderPolicy.java",
+      "operations": [
+        {
+          "op": "replace",
+          "find": "e.<BigDecimal>get(\"ordtaskid\").longValue()",
+          "replace": "((BigDecimal)e.get(\"ordtaskid\")).longValue()",
+          "expected_count": 2
+        },
+        {
+          "op": "replace",
+          "find": "String standardRequest = result.get(\"tname\");",
+          "replace": "String standardRequest = (String)result.get(\"tname\");",
+          "expected_count": 2
+        },
+        {
+          "op": "replace",
+          "find": "String itemAliasName = result.get(\"subanalyticitem\");",
+          "replace": "String itemAliasName = (String)result.get(\"subanalyticitem\");",
+          "expected_count": 2
+        },
+        {
+          "op": "replace",
+          "find": "String testname = result.get(\"testname\");",
+          "replace": "String testname = (String)result.get(\"testname\");",
+          "expected_count": 2
+        },
+        {
+          "op": "replace",
+          "find": "String itemname = result.get(\"itemname\");",
+          "replace": "String itemname = (String)result.get(\"itemname\");",
+          "expected_count": 2
+        },
+        {
+          "op": "replace",
+          "find": ".map(e -> e.get(\"tname\"))",
+          "replace": ".map(e -> (String)e.get(\"tname\"))",
+          "expected_count": 2
+        },
+        {
+          "op": "replace",
+          "find": ".map(item -> item.get(\"itemname\"))",
+          "replace": ".map(item -> (String)item.get(\"itemname\"))",
+          "expected_count": 2
+        },
+        {
+          "op": "replace",
+          "find": ".map(item -> item.get(\"subanalyticitem\"))",
+          "replace": ".map(item -> (String)item.get(\"subanalyticitem\"))",
+          "expected_count": 2
+        },
+        {
+          "op": "replace",
+          "find": "list.stream().map(e -> e.get(\"itemname\")).distinct()",
+          "replace": "list.stream().map(e -> (String)e.get(\"itemname\")).distinct()",
+          "expected_count": 1
+        },
+        {
+          "op": "replace",
+          "find": "Collectors.groupingBy(e -> e.get(\"itemname\"))",
+          "replace": "Collectors.groupingBy(e -> (String)e.get(\"itemname\"))",
+          "expected_count": 1
+        },
+        {
+          "op": "replace",
+          "find": "StringUtils.isEmpty(dtoResult.get(\"subanalyticitem\"))",
+          "replace": "StringUtils.isEmpty((String)dtoResult.get(\"subanalyticitem\"))",
+          "expected_count": 1
+        },
+        {
+          "op": "replace",
+          "find": "LimsTemplateDataList<LimsTemplateDataMap> subList = source.get(subField);",
+          "replace": "LimsTemplateDataList<LimsTemplateDataMap> subList = (LimsTemplateDataList<LimsTemplateDataMap>)source.get(subField);",
+          "expected_count": 1
+        },
+        {
+          "op": "replace",
+          "find": "Optional.ofNullable(source.get(renderData.getSubFiled())).orElse(new LimsTemplateDataList())",
+          "replace": "Optional.ofNullable((Collection<?>)source.get(renderData.getSubFiled())).orElse(new LimsTemplateDataList())",
+          "expected_count": 1
+        }
+      ],
+      "reason": "Restore raw Map value casts and collection element types from the runtime-validated report-template fields."
+    },
+    {
+      "id": "lims-file-picture-resolved-dimensions",
+      "decompiler": "Vineflower",
+      "file": "com/sunwayworld/cloud/lims/reporttemplate/support/function/FileFunction.java",
+      "operations": [
+        {
+          "op": "replace",
+          "find": "width = width != null ? width : 150;",
+          "replace": "final int resolvedWidth = width != null ? width : 150;",
+          "expected_count": 2
+        },
+        {
+          "op": "replace",
+          "find": "height = height != null ? height : 150;",
+          "replace": "final int resolvedHeight = height != null ? height : 150;",
+          "expected_count": 2
+        },
+        {
+          "op": "replace",
+          "find": "new PictureRenderData(width, height, LimsFileUtils.getFilePath(coreFileBean).toString());",
+          "replace": "new PictureRenderData(resolvedWidth, resolvedHeight, LimsFileUtils.getFilePath(coreFileBean).toString());",
+          "expected_count": 2
+        },
+        {
+          "op": "replace",
+          "find": "int picWidth = width;",
+          "replace": "int picWidth = resolvedWidth;",
+          "expected_count": 2
+        },
+        {
+          "op": "replace",
+          "find": "int picHeight = height;",
+          "replace": "int picHeight = resolvedHeight;",
+          "expected_count": 2
+        }
+      ],
+      "reason": "Bind resolved picture dimensions to effective-final locals before the element lambda without changing their values."
+    },
+    {
+      "id": "lims-hack-loop-subcollection-stream",
+      "decompiler": "Vineflower",
+      "file": "com/sunwayworld/cloud/lims/reporttemplate/support/word/policy/LimsHackLoopTableRenderPolicy.java",
+      "operations": [
+        {
+          "op": "regex_replace",
+          "pattern": "\\.map\\(source -> Optional\\.ofNullable\\(\\(Collection<\\?>\\)source\\.get\\(renderData\\.getSubFiled\\(\\)\\)\\)\\.orElse\\(new LimsTemplateDataList\\(\\)\\)\\)\\n               \\.flatMap\\(Collection::stream\\)",
+          "replace": ".map(source -> Optional.ofNullable((Collection<?>)source.get(renderData.getSubFiled())).orElse(new ArrayList<>()))\n               .flatMap(values -> values.stream())\n               .map(value -> (LimsTemplateDataMap)value)",
+          "expected_count": 1
+        }
+      ],
+      "reason": "Preserve empty nested-list handling and explicitly recover the collection element type from the runtime map."
+    },
+    {
+      "id": "lims-fixed-loop-value-field-capture",
+      "decompiler": "Vineflower",
+      "file": "com/sunwayworld/cloud/lims/reporttemplate/support/word/policy/LimsFixedLoopMultiRowTableRenderPolicy.java",
+      "operations": [
+        {
+          "op": "replace",
+          "find": "fieldName = mergeColumnFlag ? fieldName.substring(1, fieldName.length()) : fieldName;",
+          "replace": "fieldName = mergeColumnFlag ? fieldName.substring(1, fieldName.length()) : fieldName;\n                        final String valueFieldName = fieldName;",
+          "expected_count": 1
+        },
+        {
+          "op": "replace",
+          "find": "curDataMapList.get(0).get(fieldName)",
+          "replace": "curDataMapList.get(0).get(valueFieldName)",
+          "expected_count": 1
+        }
+      ],
+      "reason": "Bind the normalized value-field name to an effective-final local before the nested cell lambda."
+    },
+    {
+      "id": "lims-custom-query-order-sql-capture",
+      "decompiler": "Vineflower",
+      "file": "com/sunwayworld/cloud/module/item/customquery/service/impl/CoreCustomQueryServiceImpl.java",
+      "operations": [
+        {
+          "op": "replace",
+          "find": "orderParamListx.stream().forEach(e -> e.setFirst(this.getSortField(sql, e.getFirst())));",
+          "replace": "final String orderSql = sql;\n         orderParamListx.stream().forEach(e -> e.setFirst(this.getSortField(orderSql, e.getFirst())));",
+          "expected_count": 1
+        }
+      ],
+      "reason": "Bind the resolved query SQL to an effective-final local before the order-field mapping lambda."
+    },
+    {
+      "id": "lcdp-bp-instance-filter-capture",
+      "decompiler": "Vineflower",
+      "file": "com/sunwayworld/cloud/module/lcdp/bp/service/impl/LcdpBizProcessServiceImpl.java",
+      "operations": [
+        {
+          "op": "replace",
+          "find": "} else {\n                  bpInstNode = allBizBpInstNodeList.stream()",
+          "replace": "} else {\n                  final LcdpBpInstBean existingBpInst = bpInst;\n                  bpInstNode = allBizBpInstNodeList.stream()",
+          "expected_count": 1
+        },
+        {
+          "op": "replace",
+          "find": "bizBpInstNode.getBpInstId() == bpInst.getId()",
+          "replace": "bizBpInstNode.getBpInstId() == existingBpInst.getId()",
+          "expected_count": 1
+        }
+      ],
+      "reason": "Bind the selected existing process instance to an effective-final local before the node lookup lambda."
+    },
+    {
+      "id": "lcdp-i18n-message-map-capture",
+      "decompiler": "Vineflower",
+      "file": "com/sunwayworld/cloud/module/lcdp/resource/service/impl/LcdpModulePageI18nServiceImpl.java",
+      "operations": [
+        {
+          "op": "regex_replace",
+          "pattern": "if \\(ObjectUtils\\.isEmpty\\(i18nMessageMap\\)\\) \\{\\n         i18nMessageMap = new HashMap<>\\(\\);",
+          "replace": "if (ObjectUtils.isEmpty(i18nMessageMap)) {\n         i18nMessageMap = new HashMap<>();\n         final Map<String, String> populatedI18nMessageMap = i18nMessageMap;",
+          "expected_count": 1
+        },
+        {
+          "op": "replace",
+          "find": "coreI18nMessageList.forEach(coreI18nMessageBean -> i18nMessageMap.put(coreI18nMessageBean.getMessage(), coreI18nMessageBean.getExt$Item(\"CODE\")));",
+          "replace": "coreI18nMessageList.forEach(coreI18nMessageBean -> populatedI18nMessageMap.put(coreI18nMessageBean.getMessage(), coreI18nMessageBean.getExt$Item(\"CODE\")));",
+          "expected_count": 1
+        }
+      ],
+      "reason": "Bind the populated i18n message map to an effective-final local before the message fill lambda."
     }
   ]
 }

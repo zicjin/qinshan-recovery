@@ -12,6 +12,7 @@ Usage:
     --target-source PROJECT_JAVA_FILE \
     [--seed-class FQN]... \
     [--project-closure] \
+    [--all-framework-sources] \
     --output-dir DIR
 
 External read-only inputs:

@@ -577,6 +577,10 @@ def project_class_names(source_root: Path) -> set[str]:
     }
 
 
+def project_source_class_name(source_root: Path, source: Path) -> str:
+    return ".".join(source.relative_to(source_root).with_suffix("").parts)
+
+
 def resolve_closure(
     run_jar: RunJar,
     entries: Mapping[str, list[ClassEntry]],
@@ -797,9 +801,9 @@ def apply_transform_rules(
             rule
             for rule in transform_manifest["rules"]
             if rule["file"] == relative_file
+            and rule.get("decompiler", transform_manifest.get("decompiler"))
+            == decompiler_name
         ]
-        if transform_manifest.get("decompiler") == decompiler_name
-        else []
     )
     text = source.read_text(encoding="utf-8")
     applied: list[str] = []
@@ -895,6 +899,8 @@ def decompile_pilot_sources(
             decompiler_version = "0.152"
         for entry in run_jar.classes_in_jar(jar_name):
             if entry.fqn not in selected_top_levels:
+                continue
+            if entry.fqn != top_level_fqn(entry.fqn):
                 continue
             source = extracted / source_path_for_class(entry.fqn)
             destination = output_sources / source_path_for_class(entry.fqn)
@@ -1081,11 +1087,11 @@ def pilot(args: argparse.Namespace) -> int:
     project_source = Path(args.project_source).resolve()
     project_sources = sorted(project_source.rglob("*.java"))
     full_project_closure = bool(args.project_closure)
+    all_framework_sources = bool(args.all_framework_sources)
     import_sources = (
-        project_sources if full_project_closure else target_sources
-    )
-    compile_target_sources = (
-        project_sources if full_project_closure else target_sources
+        project_sources
+        if full_project_closure or all_framework_sources
+        else target_sources
     )
     provided_project_classes = project_class_names(project_source)
     transform_manifest_path = Path(args.transform_manifest).resolve()
@@ -1104,17 +1110,36 @@ def pilot(args: argparse.Namespace) -> int:
             )
         )
         private_jar_names = (
-            available_private_jars if full_project_closure else PILOT_PRIVATE_JARS
+            available_private_jars
+            if full_project_closure or all_framework_sources
+            else PILOT_PRIVATE_JARS
         )
         private_entries = run_jar.private_class_entries(private_jar_names)
         imports = project_imports(import_sources)
-        seeds = set(imports)
-        seeds.update(args.seed_class or [])
+        framework_top_level_classes = {
+            top_level_fqn(fqn) for fqn in private_entries
+        }
+        provided_for_resolution = (
+            provided_project_classes - framework_top_level_classes
+            if all_framework_sources
+            else provided_project_classes
+        )
+        compile_target_sources = list(project_sources) if full_project_closure else list(target_sources)
+        if all_framework_sources:
+            compile_target_sources = [
+                source
+                for source in project_sources
+                if project_source_class_name(project_source, source)
+                not in framework_top_level_classes
+            ]
+        seeds = set(private_entries if all_framework_sources else imports)
+        if not all_framework_sources:
+            seeds.update(args.seed_class or [])
         closure, edges, missing_external = resolve_closure(
             run_jar,
             private_entries,
             seeds,
-            provided_classes=provided_project_classes,
+            provided_classes=provided_for_resolution,
         )
 
         if args.work_dir:
@@ -1278,10 +1303,21 @@ def pilot(args: argparse.Namespace) -> int:
         "schema": "supplier-java-source-closure-v1",
         "generated_at": utc_now(),
         "run_jar_sha256": manifest["artifact_sha256"],
-        "mode": "full-project-closure" if full_project_closure else "pilot",
+        "mode": (
+            "all-framework-source-compile"
+            if all_framework_sources
+            else "full-project-closure"
+            if full_project_closure
+            else "pilot"
+        ),
         "project_source_file_count": len(project_sources),
         "compile_target_source_file_count": len(compile_target_sources),
         "provided_project_class_count": len(provided_project_classes),
+        "project_framework_overlay_count": (
+            len(project_sources) - len(compile_target_sources)
+            if all_framework_sources
+            else 0
+        ),
         "project_imports": imports,
         "seed_classes": sorted(seeds),
         "framework_input_jars": list(private_jar_names),
@@ -1327,16 +1363,13 @@ def pilot(args: argparse.Namespace) -> int:
         },
         "gate_status": (
             (
-                "project-source-compile-pass"
+                "all-framework-source-compile"
+                if all_framework_sources
+                else "project-source-compile"
                 if full_project_closure
-                else "pilot-compile-pass"
+                else "pilot-compile"
             )
-            if compile_rc == 0
-            else (
-                "project-source-compile-failed"
-                if full_project_closure
-                else "pilot-compile-failed"
-            )
+            + ("-pass" if compile_rc == 0 else "-failed")
         ),
     }
     write_json(output_dir / "source-closure.json", closure_payload)
@@ -1397,6 +1430,15 @@ def build_parser() -> argparse.ArgumentParser:
         help=(
             "seed from every project Java import, use all private framework "
             "JARs and compile the complete project source tree"
+        ),
+    )
+    pilot_parser.add_argument(
+        "--all-framework-sources",
+        action="store_true",
+        help=(
+            "decompile every top-level private framework class, compile all "
+            "project sources except exact framework source overlays, and use "
+            "the result as the framework-module source input"
         ),
     )
     pilot_parser.add_argument("--output-dir", required=True)

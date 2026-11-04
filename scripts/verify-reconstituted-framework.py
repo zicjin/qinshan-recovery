@@ -233,11 +233,17 @@ def verify_compile(report: Mapping[str, object], output_dir: Path,
             "pilot-compile-failed",
             "project-source-compile-pass",
             "project-source-compile-failed",
+            "all-framework-source-compile-pass",
+            "all-framework-source-compile-failed",
         },
         "unexpected source gate status",
         errors,
     )
-    if gate in {"pilot-compile-pass", "project-source-compile-pass"}:
+    if gate in {
+        "pilot-compile-pass",
+        "project-source-compile-pass",
+        "all-framework-source-compile-pass",
+    }:
         require(compile_report.get("exit_code") == 0, "compile pass has nonzero exit", errors)
         require(compile_report.get("error_count") == 0, "compile pass has errors", errors)
         require(

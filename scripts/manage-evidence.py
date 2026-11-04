@@ -718,7 +718,6 @@ def scan_rows() -> List[Dict[str, str]]:
                    | set(DIAGNOSTIC.rglob("*.json"))
                    | set(ARCHIVE.rglob("*.json")))
     tracked = tracked_paths()
-    payloads = {path: json_payload(path) for path in paths}
     hashes: Dict[str, List[str]] = {}
     for path in paths:
         hashes.setdefault(sha256(path), []).append(relative(path))
@@ -728,7 +727,13 @@ def scan_rows() -> List[Dict[str, str]]:
     registered = {path: row.get("class", "") for path, row in registered_rows.items()}
     rows = []
     for path in paths:
-        row = classify(path, payloads[path], refs.get(relative(path), []), hashes, current,
+        # Read one payload at a time.  The diagnostic tree contains several
+        # multi-megabyte cumulative route reports; retaining every decoded JSON
+        # object here made a full lifecycle scan grow without a bound and could
+        # be killed before it produced a registry.  Hashes and references are
+        # already indexed above, so per-file classification is independent.
+        payload = json_payload(path)
+        row = classify(path, payload, refs.get(relative(path), []), hashes, current,
                        registered.get(relative(path), ""))
         row["tracked"] = "true" if relative(path) in tracked else "false"
         row["untracked"] = "false" if row["tracked"] == "true" else "true"
@@ -736,7 +741,7 @@ def scan_rows() -> List[Dict[str, str]]:
         # Prefer the report's own timestamp.  For legacy payloads that have no
         # timestamp, preserve the prior registry value so repeated scans are
         # idempotent and do not create bookkeeping-only diffs.
-        if not any(payloads[path].get(key) for key in ("generated_at", "finished_at", "created_at", "observed_at")):
+        if not any(payload.get(key) for key in ("generated_at", "finished_at", "created_at", "observed_at")):
             prior = registered_rows.get(relative(path), {})
             if prior.get("generated_at"):
                 row["generated_at"] = prior["generated_at"]

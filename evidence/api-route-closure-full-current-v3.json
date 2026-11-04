@@ -309,7 +309,7 @@
       "strict_contract": "strict report contract valid"
     },
     {
-      "path": "lims-recovery/.scratch/sunway-supplier-exit-api-first/diagnostic-evidence/pending/current-fccf4cdconsr-replay/api-contract-consumables-resource-strict-finalized.json",
+      "path": "evidence/api-contract-consumables-resource-strict-finalized.json",
       "sha256": "44744c660faaa5ef50c2ade39dd728cb0f644ea19d62928c044280e524697f45",
       "status": "executed-pass",
       "strict_evidence": true,
@@ -77645,7 +77645,7 @@
       "disposition": "owned-pass",
       "evidence": [
         {
-          "report": "lims-recovery/.scratch/sunway-supplier-exit-api-first/diagnostic-evidence/pending/current-fccf4cdconsr-replay/api-contract-consumables-resource-strict-finalized.json",
+          "report": "evidence/api-contract-consumables-resource-strict-finalized.json",
           "report_sha256": "44744c660faaa5ef50c2ade39dd728cb0f644ea19d62928c044280e524697f45",
           "case_id": "fast-strict-eb22cbae3d33cbbc-empty",
           "status": 200,
@@ -77675,7 +77675,7 @@
       "disposition": "owned-pass",
       "evidence": [
         {
-          "report": "lims-recovery/.scratch/sunway-supplier-exit-api-first/diagnostic-evidence/pending/current-fccf4cdconsr-replay/api-contract-consumables-resource-strict-finalized.json",
+          "report": "evidence/api-contract-consumables-resource-strict-finalized.json",
           "report_sha256": "44744c660faaa5ef50c2ade39dd728cb0f644ea19d62928c044280e524697f45",
           "case_id": "fast-strict-3f34605bd7652cb0-default",
           "status": 500,
@@ -77687,7 +77687,7 @@
           "request_path": null
         },
         {
-          "report": "lims-recovery/.scratch/sunway-supplier-exit-api-first/diagnostic-evidence/pending/current-fccf4cdconsr-replay/api-contract-consumables-resource-strict-finalized.json",
+          "report": "evidence/api-contract-consumables-resource-strict-finalized.json",
           "report_sha256": "44744c660faaa5ef50c2ade39dd728cb0f644ea19d62928c044280e524697f45",
           "case_id": "fast-strict-5da022dcf5750db7-page-2",
           "status": 500,
@@ -77699,7 +77699,7 @@
           "request_path": null
         },
         {
-          "report": "lims-recovery/.scratch/sunway-supplier-exit-api-first/diagnostic-evidence/pending/current-fccf4cdconsr-replay/api-contract-consumables-resource-strict-finalized.json",
+          "report": "evidence/api-contract-consumables-resource-strict-finalized.json",
           "report_sha256": "44744c660faaa5ef50c2ade39dd728cb0f644ea19d62928c044280e524697f45",
           "case_id": "fast-strict-be18e5dc3b74f16f-empty",
           "status": 200,
@@ -116323,7 +116323,7 @@
       "disposition": "owned-pass",
       "evidence": [
         {
-          "report": "lims-recovery/.scratch/sunway-supplier-exit-api-first/diagnostic-evidence/pending/current-fccf4cdconsr-replay/api-contract-consumables-resource-strict-finalized.json",
+          "report": "evidence/api-contract-consumables-resource-strict-finalized.json",
           "report_sha256": "44744c660faaa5ef50c2ade39dd728cb0f644ea19d62928c044280e524697f45",
           "case_id": "fast-strict-924544a53ca53eac-default",
           "status": 200,
@@ -116335,7 +116335,7 @@
           "request_path": null
         },
         {
-          "report": "lims-recovery/.scratch/sunway-supplier-exit-api-first/diagnostic-evidence/pending/current-fccf4cdconsr-replay/api-contract-consumables-resource-strict-finalized.json",
+          "report": "evidence/api-contract-consumables-resource-strict-finalized.json",
           "report_sha256": "44744c660faaa5ef50c2ade39dd728cb0f644ea19d62928c044280e524697f45",
           "case_id": "fast-strict-13b5dc31515c1b62-page-2",
           "status": 200,
@@ -116347,7 +116347,7 @@
           "request_path": null
         },
         {
-          "report": "lims-recovery/.scratch/sunway-supplier-exit-api-first/diagnostic-evidence/pending/current-fccf4cdconsr-replay/api-contract-consumables-resource-strict-finalized.json",
+          "report": "evidence/api-contract-consumables-resource-strict-finalized.json",
           "report_sha256": "44744c660faaa5ef50c2ade39dd728cb0f644ea19d62928c044280e524697f45",
           "case_id": "fast-strict-8c94c0fc3c27e817-empty",
           "status": 500,
@@ -116394,7 +116394,7 @@
       "disposition": "owned-pass",
       "evidence": [
         {
-          "report": "lims-recovery/.scratch/sunway-supplier-exit-api-first/diagnostic-evidence/pending/current-fccf4cdconsr-replay/api-contract-consumables-resource-strict-finalized.json",
+          "report": "evidence/api-contract-consumables-resource-strict-finalized.json",
           "report_sha256": "44744c660faaa5ef50c2ade39dd728cb0f644ea19d62928c044280e524697f45",
           "case_id": "fast-strict-213dae82d6b1ac50-default",
           "status": 200,
@@ -116406,7 +116406,7 @@
           "request_path": null
         },
         {
-          "report": "lims-recovery/.scratch/sunway-supplier-exit-api-first/diagnostic-evidence/pending/current-fccf4cdconsr-replay/api-contract-consumables-resource-strict-finalized.json",
+          "report": "evidence/api-contract-consumables-resource-strict-finalized.json",
           "report_sha256": "44744c660faaa5ef50c2ade39dd728cb0f644ea19d62928c044280e524697f45",
           "case_id": "fast-strict-3929786c1aa8f990-page-2",
           "status": 200,
@@ -116418,7 +116418,7 @@
           "request_path": null
         },
         {
-          "report": "lims-recovery/.scratch/sunway-supplier-exit-api-first/diagnostic-evidence/pending/current-fccf4cdconsr-replay/api-contract-consumables-resource-strict-finalized.json",
+          "report": "evidence/api-contract-consumables-resource-strict-finalized.json",
           "report_sha256": "44744c660faaa5ef50c2ade39dd728cb0f644ea19d62928c044280e524697f45",
           "case_id": "fast-strict-ea1dbac53c12575d-empty",
           "status": 500,
@@ -116516,7 +116516,7 @@
       "disposition": "owned-pass",
       "evidence": [
         {
-          "report": "lims-recovery/.scratch/sunway-supplier-exit-api-first/diagnostic-evidence/pending/current-fccf4cdconsr-replay/api-contract-consumables-resource-strict-finalized.json",
+          "report": "evidence/api-contract-consumables-resource-strict-finalized.json",
           "report_sha256": "44744c660faaa5ef50c2ade39dd728cb0f644ea19d62928c044280e524697f45",
           "case_id": "fast-strict-b17e5ef0e2c297ff-default",
           "status": 200,
@@ -116528,7 +116528,7 @@
           "request_path": null
         },
         {
-          "report": "lims-recovery/.scratch/sunway-supplier-exit-api-first/diagnostic-evidence/pending/current-fccf4cdconsr-replay/api-contract-consumables-resource-strict-finalized.json",
+          "report": "evidence/api-contract-consumables-resource-strict-finalized.json",
           "report_sha256": "44744c660faaa5ef50c2ade39dd728cb0f644ea19d62928c044280e524697f45",
           "case_id": "fast-strict-a30a7a8634170a87-page-2",
           "status": 200,
@@ -116540,7 +116540,7 @@
           "request_path": null
         },
         {
-          "report": "lims-recovery/.scratch/sunway-supplier-exit-api-first/diagnostic-evidence/pending/current-fccf4cdconsr-replay/api-contract-consumables-resource-strict-finalized.json",
+          "report": "evidence/api-contract-consumables-resource-strict-finalized.json",
           "report_sha256": "44744c660faaa5ef50c2ade39dd728cb0f644ea19d62928c044280e524697f45",
           "case_id": "fast-strict-11c4f1787c21c09e-empty",
           "status": 500,
@@ -116570,7 +116570,7 @@
       "disposition": "owned-pass",
       "evidence": [
         {
-          "report": "lims-recovery/.scratch/sunway-supplier-exit-api-first/diagnostic-evidence/pending/current-fccf4cdconsr-replay/api-contract-consumables-resource-strict-finalized.json",
+          "report": "evidence/api-contract-consumables-resource-strict-finalized.json",
           "report_sha256": "44744c660faaa5ef50c2ade39dd728cb0f644ea19d62928c044280e524697f45",
           "case_id": "fast-strict-8fb9f408408cdf89-default",
           "status": 200,
@@ -116582,7 +116582,7 @@
           "request_path": null
         },
         {
-          "report": "lims-recovery/.scratch/sunway-supplier-exit-api-first/diagnostic-evidence/pending/current-fccf4cdconsr-replay/api-contract-consumables-resource-strict-finalized.json",
+          "report": "evidence/api-contract-consumables-resource-strict-finalized.json",
           "report_sha256": "44744c660faaa5ef50c2ade39dd728cb0f644ea19d62928c044280e524697f45",
           "case_id": "fast-strict-caddfd52a32b75d2-page-2",
           "status": 200,
@@ -116594,7 +116594,7 @@
           "request_path": null
         },
         {
-          "report": "lims-recovery/.scratch/sunway-supplier-exit-api-first/diagnostic-evidence/pending/current-fccf4cdconsr-replay/api-contract-consumables-resource-strict-finalized.json",
+          "report": "evidence/api-contract-consumables-resource-strict-finalized.json",
           "report_sha256": "44744c660faaa5ef50c2ade39dd728cb0f644ea19d62928c044280e524697f45",
           "case_id": "fast-strict-eec66e94e81cf4ae-empty",
           "status": 500,

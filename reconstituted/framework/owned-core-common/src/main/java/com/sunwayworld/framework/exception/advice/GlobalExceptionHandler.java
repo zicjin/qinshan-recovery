@@ -31,7 +31,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 @Order(value=-2147483648)
 public class GlobalExceptionHandler {
     private static final Logger logger = LogManager.getLogger(GlobalExceptionHandler.class);
-    @Value(value="${sunway.exception.viewable:false}")
+    @Value(value="${sunway.exception.viewable:true}")
     private boolean viewable;
     @Value(value="${sentry.enabled:false}")
     private boolean sentryEnable;

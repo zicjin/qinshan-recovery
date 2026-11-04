@@ -61,14 +61,31 @@ COPY distribution /opt/owned
 RUN mkdir -p /var/lib/lims-owned-attachments
 RUN chmod 0755 /opt/owned/start.sh
 EOF
-docker build --pull=false --tag "$IMAGE" "$CONTEXT" >/dev/null
-docker tag "$IMAGE" "$BASE_IMAGE"
+DEPLOY_IMAGE="$IMAGE"
+DEPLOY_MODE="app-only-refresh"
+if ! docker build --pull=false --tag "$IMAGE" "$CONTEXT" >/dev/null; then
+  echo "docker layer build unavailable; using in-container distribution replacement" >&2
+  DEPLOY_IMAGE="$BASE_IMAGE"
+  DEPLOY_MODE="app-only-refresh-fallback"
+else
+  docker tag "$IMAGE" "$BASE_IMAGE"
+fi
 docker rm --force "$APP" >/dev/null 2>&1 || true
 docker create --name "$APP" --network "$NET" --network-alias app \
   --env LIMS_BIND_ADDRESS=0.0.0.0 \
   --env JAVA_TOOL_OPTIONS=-Djava.security.egd=file:/dev/./urandom \
   --volume "$ROOT/application.properties:/run/config/application.properties:ro" \
-  "$IMAGE" >/dev/null
+  "$DEPLOY_IMAGE" >/dev/null
+if [[ "$DEPLOY_MODE" == "app-only-refresh-fallback" ]]; then
+  docker rm --force "$APP" >/dev/null
+  docker create --name "$APP" --network "$NET" --network-alias app \
+    --env LIMS_BIND_ADDRESS=0.0.0.0 \
+    --env JAVA_TOOL_OPTIONS=-Djava.security.egd=file:/dev/./urandom \
+    --volume "$ROOT/application.properties:/run/config/application.properties:ro" \
+    --entrypoint /bin/sh "$DEPLOY_IMAGE" -c \
+    'rm -rf /opt/owned && mv /opt/owned-new /opt/owned && chmod 0755 /opt/owned/start.sh && mkdir -p /var/lib/lims-owned-attachments && exec /opt/owned/start.sh /run/config/application.properties' >/dev/null
+  docker cp "$CONTEXT/distribution/." "$APP:/opt/owned-new/"
+fi
 docker start "$APP" >/dev/null
 APP_IP="$(docker inspect "$APP" -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}')"
 [[ -n "$APP_IP" ]] || { echo "owned app internal IP unavailable" >&2; exit 4; }
@@ -118,7 +135,7 @@ for _ in $(seq 1 120); do
 done
 [[ "$ready" == 1 ]] || { echo "owned app did not become ready" >&2; exit 4; }
 cat > "$ROOT/app-refresh-report.json" <<EOF
-{"schema":1,"status":"diagnostic-running","execution":"app-only-refresh","production_access":false,"source_commit":"$SOURCE_COMMIT","source_dirty":$([[ "$SOURCE_DIRTY" == 1 ]] && echo true || echo false),"container":"$APP","loopback_url":"http://127.0.0.1:$PORT","session_cookie_name":"OWNED_SSS2_SESSION","reused_oracle":"$ORA","reused_redis":"$REDIS","oracle_restarted":false,"redis_restarted":false,"supplier_18081_preserved":true,"debug_18088_preserved":true,"loopback_namespace_relay":true,"boundary_process":false,"internal_http_bridge":false,"strict_evidence":false}
+{"schema":1,"status":"diagnostic-running","execution":"$DEPLOY_MODE","production_access":false,"source_commit":"$SOURCE_COMMIT","source_dirty":$([[ "$SOURCE_DIRTY" == 1 ]] && echo true || echo false),"container":"$APP","loopback_url":"http://127.0.0.1:$PORT","session_cookie_name":"OWNED_SSS2_SESSION","reused_oracle":"$ORA","reused_redis":"$REDIS","oracle_restarted":false,"redis_restarted":false,"supplier_18081_preserved":true,"debug_18088_preserved":true,"loopback_namespace_relay":true,"boundary_process":false,"internal_http_bridge":false,"strict_evidence":false}
 EOF
 rm -f "$ROOT/incoming-owned/distribution.tgz"; chmod 600 "$ROOT/app-refresh-report.json"
 echo "owned sss2 app refreshed on 127.0.0.1:$PORT source=$SOURCE_COMMIT"

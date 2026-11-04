@@ -2,6 +2,7 @@ package com.sunwayworld.framework;
 
 import com.sunwayworld.owned.internal.web.OwnedIdentityConfiguration;
 import com.sunwayworld.owned.internal.web.OwnedProjectQueryController;
+import com.sunwayworld.owned.internal.data.OwnedSupplierPropertyProjection;
 import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -26,6 +27,10 @@ public final class OwnedProjectQueryControllerContractTest {
         String text = new String(Files.readAllBytes(source), "UTF-8");
         if (!text.contains("T_EMC_PROJECT") || !text.contains("T_CORE_FILE") || !text.contains("T_EMC_REPORT") || !text.contains("CREATEDBYORGID") || !text.contains("BIZCATEGORYNAME") || !text.contains("SAMPLEORDERCOUNT")) throw new AssertionError("project source projection/scope missing");
         if (!text.contains("auditStatus") || !text.contains("processStatus") || !text.contains("statusCode")) throw new AssertionError("project status audit envelope missing");
+        if (!"createdByOrgId".equals(OwnedSupplierPropertyProjection.project("CREATEDBYORGID"))) throw new AssertionError("project createdByOrgId property mapping missing");
+        if (OwnedSupplierPropertyProjection.project("FORMSTYLE") != null) throw new AssertionError("join-only FORMSTYLE leaked into project row projection");
+        if (!"createdByOrgId".equals(OwnedSupplierPropertyProjection.order("CREATEDBYORGID"))) throw new AssertionError("order createdByOrgId property mapping missing");
+        if (OwnedSupplierPropertyProjection.order("FOLDERSTATUS") != null) throw new AssertionError("join-only FOLDERSTATUS leaked into order row projection");
         System.out.println("owned project query contract checks passed");
     }
 }

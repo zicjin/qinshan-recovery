@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.sunwayworld.owned.internal.data.JdbcValue;
+import com.sunwayworld.owned.internal.data.OwnedSupplierPropertyProjection;
 import com.sunwayworld.owned.internal.security.OwnedIdentityProvider;
 import com.sunwayworld.owned.internal.security.OwnedPrincipal;
 import java.sql.Connection;
@@ -37,10 +38,12 @@ import org.springframework.web.bind.annotation.RestController;
 public final class OwnedProjectQueryController {
     private static final String PREFIX = "/secure/emc/module/bp/project/projects";
     private static final String SOURCE =
-            "SELECT T.*, B.FORMSTYLE, B.BIZCATEGORYNAME, B.EDITMONITORINFO, B.SAMPLEORGID, "
-            + "C.ORGNAME AS REPORTORGNAME, CASE WHEN T.STATUS='cancel' THEN '终止' ELSE '正常' END AS CANCELSTATUS "
+            "SELECT T.*, B.FORMSTYLE, B.BIZCATEGORYNAME, B.EDITMONITORINFO, B.SAMPLEORGID, B.NCCODE, "
+            + "(SELECT COUNT(1) FROM T_EMC_ORDER O WHERE O.PROJID=T.ID AND O.TERMINATION!='1') AS SAMPLEORDERCOUNT, "
+            + "C.ORGNAME AS REPORTORGNAME, D.ACTIVATEDFLAG AS SCHEDULEACTIVEDFLAG "
             + "FROM T_EMC_PROJECT T LEFT JOIN T_EMC_BIZ_CATEGORY B ON B.ID=T.BIZCATEGORYID "
-            + "LEFT JOIN T_CORE_ORG C ON C.ID=T.REPORTORGID WHERE T.CREATEDBYORGID=?";
+            + "LEFT JOIN T_CORE_ORG C ON C.ID=T.REPORTORGID "
+            + "LEFT JOIN T_CORE_SCHEDULE_TASK_CONFIG D ON D.\"UID\"=CONCAT('T_EMC_PROJECT$',T.ID)";
     private static final String REPORT_EDIT_SOURCE =
             "SELECT T.*, B.FORMSTYLE, B.BIZCATEGORYNAME, B.EDITMONITORINFO, B.SAMPLEORGID, "
             + "(SELECT COUNT(1) FROM T_EMC_ORDER O WHERE O.PROJID=T.ID AND O.TERMINATION!='1') AS SAMPLEORDERCOUNT, "
@@ -51,7 +54,7 @@ public final class OwnedProjectQueryController {
             + "D.ACTIVATEDFLAG AS SCHEDULEACTIVEDFLAG "
             + "FROM T_EMC_PROJECT T LEFT JOIN T_EMC_BIZ_CATEGORY B ON B.ID=T.BIZCATEGORYID "
             + "LEFT JOIN T_CORE_ORG C ON C.ID=T.REPORTORGID "
-            + "LEFT JOIN T_CORE_SCHEDULE_TASK_CONFIG D ON D.\"UID\"=CONCAT('T_EMC_PROJECT$',T.ID) WHERE T.CREATEDBYORGID=?";
+            + "LEFT JOIN T_CORE_SCHEDULE_TASK_CONFIG D ON D.\"UID\"=CONCAT('T_EMC_PROJECT$',T.ID)";
 
     private final OwnedIdentityHttpBoundary boundary;
     private final DataSource dataSource;
@@ -75,7 +78,7 @@ public final class OwnedProjectQueryController {
             PREFIX + "/crm/invoice-proj/queries", PREFIX + "/crm/payment-proj/queries"},
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> query(HttpServletRequest request, HttpServletResponse response, @RequestBody(required = false) String body) {
-        try { OwnedPrincipal principal = require(request); Page page; try { page = Page.parse(body); } catch (IllegalArgumentException invalid) { throw new MalformedProjectQueryException(invalid); } return ok(selectPage(principal.getOrgId(), page)); }
+        try { OwnedPrincipal principal = require(request); Page page; try { page = Page.parse(body); } catch (IllegalArgumentException invalid) { throw new MalformedProjectQueryException(invalid); } return ok(selectPage(SOURCE, principal, new ArrayList<String>(), page)); }
         catch (AccessDeniedException denied) { return forbidden(); }
         catch (MalformedProjectQueryException malformed) { return unexpected(response, request.getRequestURI()); }
         catch (IllegalArgumentException invalid) { return badRequest(); }
@@ -88,7 +91,7 @@ public final class OwnedProjectQueryController {
             @RequestBody(required = false) String body) {
         try {
             OwnedPrincipal principal = require(request);
-            return ok(selectPage(REPORT_EDIT_SOURCE, principal.getOrgId(), Page.parse(body)));
+            return ok(selectPage(REPORT_EDIT_SOURCE, principal, new ArrayList<String>(), Page.parse(body)));
         } catch (AccessDeniedException denied) { return forbidden(); }
         catch (IllegalArgumentException invalid) { return badRequest(); }
         catch (SQLException failure) { return unavailable(); }
@@ -105,12 +108,13 @@ public final class OwnedProjectQueryController {
             String source = "SELECT F.* FROM T_CORE_FILE F WHERE EXISTS (SELECT 1 FROM T_EMC_REPORT R "
                     + "WHERE R.CREATEDBYORGID=? AND F.TARGETID=('T_EMC_REPORT$' || R.ID || 'F')";
             List<String> values = new ArrayList<String>();
+            values.add(principal.getOrgId());
             if (projectId != null && projectId.matches("[0-9]+")) {
                 source += " AND R.PROJID=?";
                 values.add(projectId);
             }
             source += ")";
-            return ok(selectPage(source, principal.getOrgId(), values, Page.parse(body)));
+            return ok(selectPage(source, principal, values, Page.parse(body)));
         } catch (AccessDeniedException denied) { return forbidden(); }
         catch (IllegalArgumentException invalid) { return badRequest(); }
         catch (SQLException failure) { return unavailable(); }
@@ -121,36 +125,36 @@ public final class OwnedProjectQueryController {
         return boundary.currentPrincipal(request.getSession(false));
     }
 
-    private String selectPage(String organization, Page page) throws SQLException {
-        return selectPage(SOURCE, organization, page);
-    }
-
-    private String selectPage(String source, String organization, Page page) throws SQLException {
-        return selectPage(source, organization, new ArrayList<String>(), page);
-    }
-
-    private String selectPage(String source, String organization, List<String> values, Page page) throws SQLException {
-        String countSql = "SELECT COUNT(1) FROM (" + source + ") Q";
+    private String selectPage(String source, OwnedPrincipal principal, List<String> values, Page page) throws SQLException {
+        String scopedSource = page.organizationFilter
+                ? source + " AND EXISTS (SELECT 1 FROM T_CORE_USER_PERMISSION UP "
+                + "WHERE UP.PERMISSIONTYPEID='T_CORE_ORG' AND UP.TARGETID=T.ORGID AND UP.USERID=?)"
+                : source;
+        String countSql = "SELECT COUNT(1) FROM (" + scopedSource + ") Q";
         String pageSql = "SELECT P.* FROM (SELECT Q.*,ROW_NUMBER() OVER (ORDER BY Q.ID DESC) RN_ FROM ("
-                + source + ") Q) P WHERE P.RN_>? AND P.RN_<=? ORDER BY P.RN_";
+                + scopedSource + ") Q) P WHERE P.RN_>? AND P.RN_<=? ORDER BY P.RN_";
         int total;
         List<Map<String,Object>> rows = new ArrayList<Map<String,Object>>();
         Map<String,String> types = new LinkedHashMap<String,String>();
         try (Connection connection = dataSource.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(countSql)) {
-                bind(statement, organization, values, 1);
+                int index = 1;
+                if (page.organizationFilter) statement.setString(index++, principal.getId());
+                bind(statement, values, index);
                 try (ResultSet result = statement.executeQuery()) {
                     if (!result.next()) throw new SQLException("project count unavailable");
                     total = result.getInt(1);
                 }
             }
             try (PreparedStatement statement = connection.prepareStatement(pageSql)) {
-                int index = bind(statement, organization, values, 1); statement.setInt(index++, page.start()); statement.setInt(index, page.end());
+                int index = 1;
+                if (page.organizationFilter) statement.setString(index++, principal.getId());
+                index = bind(statement, values, index); statement.setInt(index++, page.start()); statement.setInt(index, page.end());
                 try (ResultSet result = statement.executeQuery()) {
                     ResultSetMetaData metadata = result.getMetaData();
                     for (int i = 1; i <= metadata.getColumnCount(); i++) {
                         String label = metadata.getColumnLabel(i);
-                        if (!"RN_".equalsIgnoreCase(label)) types.put(label.toLowerCase(Locale.ROOT), type(metadata.getColumnType(i)));
+                        types.put(label.toLowerCase(Locale.ROOT), type(metadata.getColumnType(i)));
                     }
                     while (result.next()) rows.add(row(result, metadata));
                 }
@@ -170,16 +174,15 @@ public final class OwnedProjectQueryController {
         Map<String,Object> value = new LinkedHashMap<String,Object>();
         for (int i = 1; i <= metadata.getColumnCount(); i++) {
             String label = metadata.getColumnLabel(i); if ("RN_".equalsIgnoreCase(label)) continue;
-            Object item = JdbcValue.normalize(result.getObject(i)); if (item != null) value.put(camel(label), item);
+            String property = OwnedSupplierPropertyProjection.project(label);
+            Object item = JdbcValue.normalize(result.getObject(i)); if (property != null && item != null) value.put(property, item);
         }
         value.put("ext$", new LinkedHashMap<String,Object>()); return value;
     }
-    private static int bind(PreparedStatement statement, String organization, List<String> values, int index) throws SQLException {
-        statement.setString(index++, organization);
+    private static int bind(PreparedStatement statement, List<String> values, int index) throws SQLException {
         for (String value : values) statement.setString(index++, value);
         return index;
     }
-    private static String camel(String label) { StringBuilder value = new StringBuilder(); boolean upper = false; for (char c : label.toLowerCase(Locale.ROOT).toCharArray()) { if (c == '_') { upper = true; continue; } value.append(upper ? Character.toUpperCase(c) : c); upper = false; } return value.toString(); }
     private static String text(JSONObject root, String key) { Object value = root == null ? null : root.get(key); return value == null ? null : String.valueOf(value).trim(); }
     private static String type(int type) { return type == Types.DATE || type == Types.TIMESTAMP || type == Types.TIMESTAMP_WITH_TIMEZONE ? "dateTime" : (type == Types.NUMERIC || type == Types.DECIMAL || type == Types.INTEGER || type == Types.BIGINT ? "number" : "string"); }
     private static int pages(int total, int size) { return total == 0 ? 0 : (total + size - 1) / size; }
@@ -205,8 +208,9 @@ public final class OwnedProjectQueryController {
     }
 
     private static final class Page {
-        final int number, size; Page(int number, int size) { this.number = number; this.size = size; }
-        static Page parse(String body) { JSONObject root = body == null || body.trim().isEmpty() ? new JSONObject() : JSON.parseObject(body); JSONObject p = root == null ? null : root.getJSONObject("p"); int n = p == null ? 1 : Math.max(1, p.getIntValue("n")); int s = p == null ? 50 : Math.min(500, Math.max(1, p.getIntValue("s"))); return new Page(n, s); }
+        final int number, size; final boolean organizationFilter;
+        Page(int number, int size, boolean organizationFilter) { this.number = number; this.size = size; this.organizationFilter = organizationFilter; }
+        static Page parse(String body) { JSONObject root = body == null || body.trim().isEmpty() ? new JSONObject() : JSON.parseObject(body); JSONObject p = root == null ? null : root.getJSONObject("p"); int n = p == null ? 1 : Math.max(1, p.getIntValue("n")); int s = p == null ? 50 : Math.min(500, Math.max(1, p.getIntValue("s"))); boolean org = p != null && (p.containsKey("org_filter") || p.containsKey("orgFilter")); return new Page(n, s, org); }
         int start() { return (number - 1) * size; } int end() { return number * size; }
     }
 }

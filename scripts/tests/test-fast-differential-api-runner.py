@@ -82,13 +82,13 @@ class FastDifferentialTest(unittest.TestCase):
         right = {"method": "POST", "path": "/x/queries", "route_kind": "inherited-api", "class": "b.Resource"}
         self.assertNotEqual(MODULE.behavior_family_key(left), MODULE.behavior_family_key(right))
 
-    def test_row_projection_drift_keeps_shape_equivalent(self):
+    def test_row_projection_drift_is_data_scope_mismatch(self):
         classification, diff = MODULE.compare(
             {"status": 200, "content_type": "application/json", "json": {"total": 10, "rows": [{"id": 1}]}},
             {"status": 200, "content_type": "application/json", "json": {"total": 2, "rows": [{"id": 2}]}},
             "/x/queries",
         )
-        self.assertEqual(classification, "fast-equivalent")
+        self.assertEqual(classification, "data-scope-mismatch")
         self.assertEqual(diff["reason"], "row-projection-drift")
 
     def test_pagination_total_pages_is_data_scope_drift(self):
@@ -101,7 +101,7 @@ class FastDifferentialTest(unittest.TestCase):
                        "rows": [{"id": 2}], "columnTypeMap": {"id": "string"}}},
             "/secure/emc/module/mdm/emp/emps/queries",
         )
-        self.assertEqual(classification, "fast-equivalent")
+        self.assertEqual(classification, "data-scope-mismatch")
         self.assertEqual(diff["category"], "data-scope-mismatch")
 
     def test_empty_owned_rows_and_sql_helper_metadata_are_data_scope_drift(self):
@@ -122,9 +122,43 @@ class FastDifferentialTest(unittest.TestCase):
             }},
             "/x/queries",
         )
-        self.assertEqual(classification, "fast-equivalent")
+        self.assertEqual(classification, "data-scope-mismatch")
         self.assertEqual(diff["category"], "data-scope-mismatch")
         self.assertIn("rn_", diff["supplier_metadata_fields"])
+
+    def test_nonnull_bean_projection_with_matching_types_is_data_scope_drift(self):
+        classification, diff = MODULE.compare(
+            {"status": 200, "content_type": "application/json", "json": {
+                "total": 74,
+                "columnTypeMap": {"id": "number", "acceptedDate": "dateTime", "orderDesc": "string"},
+                "rows": [{"id": 1, "orderDesc": "supplier", "ext$": {}}],
+            }},
+            {"status": 200, "content_type": "application/json", "json": {
+                "total": 100,
+                "columnTypeMap": {"id": "number", "acceptedDate": "dateTime", "orderDesc": "string"},
+                "rows": [{"id": 2, "acceptedDate": "2026-01-01", "ext$": {}}],
+            }},
+            "/secure/emc/module/bp/bp/orders/queries",
+        )
+        self.assertEqual(classification, "data-scope-mismatch")
+        self.assertEqual(diff["reason"], "nonnull-row-projection-drift")
+        self.assertIn("acceptedDate", diff["owned_projection_fields"])
+        self.assertIn("orderDesc", diff["supplier_projection_fields"])
+
+    def test_projection_field_not_declared_by_type_map_remains_schema_mismatch(self):
+        classification, diff = MODULE.compare(
+            {"status": 200, "content_type": "application/json", "json": {
+                "columnTypeMap": {"id": "number"},
+                "rows": [{"id": 1, "supplierOnly": "value"}],
+            }},
+            {"status": 200, "content_type": "application/json", "json": {
+                "columnTypeMap": {"id": "number"},
+                "rows": [{"id": 2}],
+            }},
+            "/x/queries",
+        )
+        self.assertEqual(classification, "fast-mismatch")
+        self.assertEqual(diff["reason"], "projection-schema-mismatch")
 
     def test_get_non_query_is_not_safe_to_probe(self):
         self.assertFalse(MODULE.route_safe({"method": "GET", "path": "/module/page", "route_kind": "api-resource"})[0])

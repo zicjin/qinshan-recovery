@@ -16,7 +16,7 @@ SOURCE_DIRTY="$(python3 -c 'import json,sys; print(1 if json.load(sys.stdin)["im
 BASELINE_SCHEMA="${BASELINE_SCHEMA:-LIMS_BASELINE_SSS2}"
 RUNTIME_SCHEMA="${RUNTIME_SCHEMA:-LIMS_RUNTIME_SSS2}"
 ORACLE_INSTANCE="${ORACLE_INSTANCE:-lims-owned-sss2-oracle}"
-OWNED_STRICT_BASE_IMAGE="${OWNED_STRICT_BASE_IMAGE:-lims-owned-sss2-owned:flat}"
+OWNED_STRICT_BASE_IMAGE="${OWNED_STRICT_BASE_IMAGE:-lims-owned-sss2-owned:refresh}"
 REFRESH_BASELINE="${REFRESH_BASELINE:-0}"
 RESET_RUNTIME_SCHEMA="${RESET_RUNTIME_SCHEMA:-0}"
 [[ -f "$DIST/app/lims-owned-application.jar" && -f "$DIST/manifest.json" ]] || { echo 'missing owned distribution' >&2; exit 2; }
@@ -100,14 +100,13 @@ if ! docker build --pull=false --tag "$IMAGE" "$ROOT" >/dev/null; then
   phase 'docker layer build unavailable; using container file replacement'
   DEPLOY_IMAGE="$OWNED_STRICT_BASE_IMAGE"
 fi
-docker create --name "$APP" --network "$NET" --network-alias "$APP" --env LIMS_BIND_ADDRESS=0.0.0.0 --env JAVA_TOOL_OPTIONS=-Djava.security.egd=file:/dev/./urandom --volume "$ROOT/application.properties:/run/config/application.properties:ro" "$DEPLOY_IMAGE" >/dev/null
-docker start "$APP" >/dev/null
 if [[ "$DEPLOY_IMAGE" == "$OWNED_STRICT_BASE_IMAGE" ]]; then
-  docker exec "$APP" sh -c 'rm -rf /opt/owned/* && mkdir -p /opt/owned'
-  docker cp "$ROOT/distribution/." "$APP:/opt/owned/"
-  docker exec "$APP" sh -c 'chmod 0755 /opt/owned/start.sh && mkdir -p /var/lib/lims-owned-attachments'
-  docker restart "$APP" >/dev/null
+  docker create --name "$APP" --network "$NET" --network-alias "$APP" --env LIMS_BIND_ADDRESS=0.0.0.0 --env JAVA_TOOL_OPTIONS=-Djava.security.egd=file:/dev/./urandom --volume "$ROOT/application.properties:/run/config/application.properties:ro" --entrypoint /bin/sh "$DEPLOY_IMAGE" -c 'rm -rf /opt/owned && mv /opt/owned-new /opt/owned && chmod 0755 /opt/owned/start.sh && mkdir -p /var/lib/lims-owned-attachments && exec /opt/owned/start.sh /run/config/application.properties' >/dev/null
+  docker cp "$ROOT/distribution/." "$APP:/opt/owned-new/"
+else
+  docker create --name "$APP" --network "$NET" --network-alias "$APP" --env LIMS_BIND_ADDRESS=0.0.0.0 --env JAVA_TOOL_OPTIONS=-Djava.security.egd=file:/dev/./urandom --volume "$ROOT/application.properties:/run/config/application.properties:ro" "$DEPLOY_IMAGE" >/dev/null
 fi
+docker start "$APP" >/dev/null
 APP_IP="$(docker inspect "$APP" -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}')"; APP_PID="$(docker inspect "$APP" -f '{{.State.Pid}}')"; [[ -n "$APP_IP" && "$APP_PID" =~ ^[0-9]+$ ]] || fail 'strict app network identity unavailable'
 printf '%s\n' 'import socket,sys,threading' 'p=int(sys.argv[1]); target=sys.argv[2]; tp=int(sys.argv[3]); bind=sys.argv[4]' 'def relay(a,b):' ' try:' '  while True:' '   x=a.recv(65536)' '   if not x: break' '   b.sendall(x)' ' except OSError: pass' ' finally:' '  a.close(); b.close()' 'def serve(c):' ' try: u=socket.create_connection((target,tp),5)' ' except OSError: c.close(); return' ' threading.Thread(target=relay,args=(c,u),daemon=True).start(); threading.Thread(target=relay,args=(u,c),daemon=True).start()' 's=socket.socket(); s.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1); s.bind((bind,p)); s.listen(32)' 'while True:' ' c,_=s.accept(); threading.Thread(target=serve,args=(c,),daemon=True).start()' > "$ROOT/port-forward.py"
 chmod 700 "$ROOT/port-forward.py"; nsenter -n -t "$APP_PID" nohup python3 "$ROOT/port-forward.py" "$PORT" 127.0.0.1 8080 0.0.0.0 >"$ROOT/port-forward-app.log" 2>&1 < /dev/null & echo $! >"$ROOT/port-forward-app.pid"; nohup python3 "$ROOT/port-forward.py" "$PORT" "$APP_IP" "$PORT" 127.0.0.1 >"$ROOT/port-forward.log" 2>&1 < /dev/null & echo $! >"$ROOT/port-forward.pid"

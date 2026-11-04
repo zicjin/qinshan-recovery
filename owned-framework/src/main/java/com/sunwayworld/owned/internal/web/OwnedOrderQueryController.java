@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.sunwayworld.owned.internal.data.JdbcValue;
+import com.sunwayworld.owned.internal.data.OwnedSupplierPropertyProjection;
 import com.sunwayworld.owned.internal.security.OwnedIdentityProvider;
 import com.sunwayworld.owned.internal.security.OwnedPrincipal;
 import java.sql.Connection;
@@ -55,7 +56,7 @@ public final class OwnedOrderQueryController {
             RequestFilter filter;
             try { filter = RequestFilter.parse(body); }
             catch (IllegalArgumentException invalid) { throw new MalformedOrderQueryException(invalid); }
-            return ok(page(read(principal.getOrgId(), filter)));
+            return ok(page(read(filter)));
         } catch (AccessDeniedException denied) { return forbidden(); }
         catch (MalformedOrderQueryException malformed) { return unexpected(response, request.getRequestURI()); }
         catch (IllegalArgumentException invalid) { return badRequest(); }
@@ -101,8 +102,10 @@ public final class OwnedOrderQueryController {
             + "LEFT JOIN T_EMC_SAMPLE S ON O.SAMPLEID=S.ID "
             + "LEFT JOIN T_EMC_MONITOR_TMPL MT ON O.MONITORTMPLID=MT.ID";
 
-    private QueryResult read(String organization, RequestFilter filter) throws SQLException {
-        String scoped = BASE_SQL + " WHERE O.CREATEDBYORGID=?";
+    private QueryResult read(RequestFilter filter) throws SQLException {
+        // PfOrderMapper has no implicit CREATEDBYORGID predicate.  Applying the
+        // login organization here hid otherwise visible supplier rows.
+        String scoped = BASE_SQL;
         String countSql = "SELECT COUNT(1) FROM (" + scoped + ") Q";
         String pageSql = "SELECT P.* FROM (SELECT Q.*,ROW_NUMBER() OVER (ORDER BY Q.FOLDERID ASC,Q.ORDERNO ASC,Q.ID DESC) RN_ FROM ("
                 + scoped + ") Q) P WHERE P.RN_>? AND P.RN_<=? ORDER BY P.RN_";
@@ -110,14 +113,13 @@ public final class OwnedOrderQueryController {
         Map<String, String> types = new LinkedHashMap<String, String>();
         try (Connection connection = dataSource.getConnection()) {
             try (PreparedStatement count = connection.prepareStatement(countSql)) {
-                count.setString(1, organization);
                 try (ResultSet result = count.executeQuery()) { if (!result.next()) throw new SQLException("order count missing"); total = result.getInt(1); }
             }
             try (PreparedStatement query = connection.prepareStatement(pageSql)) {
-                query.setString(1, organization); query.setInt(2, filter.start()); query.setInt(3, filter.end());
+                query.setInt(1, filter.start()); query.setInt(2, filter.end());
                 try (ResultSet result = query.executeQuery()) {
                     ResultSetMetaData meta = result.getMetaData();
-                    for (int i=1;i<=meta.getColumnCount();i++) types.put(camel(meta.getColumnLabel(i)), type(meta.getColumnType(i)));
+                    for (int i=1;i<=meta.getColumnCount();i++) types.put(meta.getColumnLabel(i).toLowerCase(Locale.ROOT), type(meta.getColumnType(i)));
                     while (result.next()) rows.add(row(result, meta));
                 }
             }
@@ -132,8 +134,7 @@ public final class OwnedOrderQueryController {
         body.put("rows",result.rows); body.put("total",result.total); Map<String,Object> total=new LinkedHashMap<String,Object>(); total.put("qty_",result.total);
         body.put("totalMap",total); body.put("totalPages",pages(result.total,result.size)); return JSON.toJSONString(body,SerializerFeature.WriteMapNullValue);
     }
-    private static Map<String,Object> row(ResultSet result, ResultSetMetaData meta) throws SQLException { Map<String,Object> v=new LinkedHashMap<String,Object>(); for(int i=1;i<=meta.getColumnCount();i++){String n=meta.getColumnLabel(i);if("RN_".equalsIgnoreCase(n))continue;v.put(camel(n),JdbcValue.normalize(result.getObject(i)));}return v; }
-    private static String camel(String name){StringBuilder b=new StringBuilder();boolean up=false;for(char c:name.toLowerCase(Locale.ROOT).toCharArray()){if(c=='_'){up=true;continue;}b.append(up?Character.toUpperCase(c):c);up=false;}return b.toString();}
+    private static Map<String,Object> row(ResultSet result, ResultSetMetaData meta) throws SQLException { Map<String,Object> v=new LinkedHashMap<String,Object>(); for(int i=1;i<=meta.getColumnCount();i++){String n=meta.getColumnLabel(i);if("RN_".equalsIgnoreCase(n))continue;String property=OwnedSupplierPropertyProjection.order(n);Object item=JdbcValue.normalize(result.getObject(i));if(property!=null&&item!=null)v.put(property,item);}v.put("ext$",new LinkedHashMap<String,Object>());return v; }
     private static String type(int t){return t==Types.DATE||t==Types.TIMESTAMP||t==Types.TIMESTAMP_WITH_TIMEZONE?"dateTime":(t==Types.NUMERIC||t==Types.DECIMAL||t==Types.INTEGER||t==Types.BIGINT?"number":"string");}
     private static int pages(int total,int size){return total==0?0:(total+size-1)/size;}
     private static ResponseEntity<String> ok(String body){return ResponseEntity.ok().header("Cache-Control","no-store").body(body);}

@@ -14,10 +14,14 @@ grep -Fq 'REFRESH_BASELINE' "$ROOT/scripts/start-reused-sss2-api-runtime.sh"
 grep -Fq 'owned.personnel.write.mode=isolated' "$ROOT/scripts/start-reused-sss2-api-runtime.sh"
 grep -Fq 'owned.equipment.write.mode=isolated' "$ROOT/scripts/start-reused-sss2-api-runtime.sh"
 grep -Fq 'owned.consumables.write.mode=isolated' "$ROOT/scripts/start-reused-sss2-api-runtime.sh"
+grep -Fq -- '--entrypoint /bin/sh' "$ROOT/scripts/start-reused-sss2-api-runtime.sh"
+grep -Fq 'docker cp "$ROOT/distribution/." "$APP:/opt/owned-new/"' "$ROOT/scripts/start-reused-sss2-api-runtime.sh"
 grep -Fq 'nsenter -n -t' "$ROOT/scripts/start-strict-sss2-api-runtime.sh"
 grep -Fq 'strict source export failed' "$ROOT/scripts/start-strict-sss2-api-runtime.sh"
 grep -Fq "'remote_root':root" "$ROOT/scripts/start-strict-sss2-api-runtime.sh"
 grep -Fq 'host_forward_pid' "$ROOT/scripts/cleanup-strict-sss2-api-runtime.sh"
+grep -Fq 'runtime_key_after == runtime_key_before == base_key_after' "$ROOT/scripts/cleanup-strict-sss2-api-runtime.sh"
+grep -Fq 'baseline_immutable = base_key_before == base_key_after' "$ROOT/scripts/cleanup-strict-sss2-api-runtime.sh"
 if grep -Fq "'source_dirty':False" "$ROOT/scripts/start-strict-sss2-api-runtime.sh"; then
   echo 'strict runtime script hard-codes source_dirty=false' >&2; exit 1
 fi

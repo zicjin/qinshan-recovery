@@ -367,6 +367,20 @@ def _projection_fields(value: Mapping[str, Any]) -> Tuple[set[str], set[str]]:
     return fields, metadata
 
 
+def _projection_names(values: Iterable[str]) -> set[str]:
+    """Compare Bean field names with SQL metadata without case/underscore drift."""
+    return {
+        "".join(character for character in str(value).upper() if character.isalnum())
+        for value in values
+    }
+
+
+def _projection_declared(fields: set[str], metadata: set[str]) -> bool:
+    """Treat the Bean extension envelope as shape metadata, not a SQL column."""
+    declared_fields = {value for value in fields if value != "ext$"}
+    return _projection_names(declared_fields) <= _projection_names(metadata)
+
+
 def _data_projection_view(value: Mapping[str, Any]) -> Dict[str, Any]:
     """Drop data-baseline values while retaining response-contract shape.
 
@@ -444,6 +458,19 @@ def compare(supplier: Mapping[str, Any], owned: Mapping[str, Any], path: str = "
                 left_fields, left_metadata = _projection_fields(left)
                 right_fields, right_metadata = _projection_fields(right)
                 if left_fields and right_fields and left_fields != right_fields:
+                    if (_projection_names(left_metadata) == _projection_names(right_metadata)
+                            and _projection_declared(left_fields, left_metadata)
+                            and _projection_declared(right_fields, right_metadata)):
+                        return "data-scope-mismatch", {
+                            "reason": "nonnull-row-projection-drift",
+                            "category": "data-scope-mismatch",
+                            "supplier_total": left.get("total"),
+                            "owned_total": right.get("total"),
+                            "supplier_projection_fields": sorted(left_fields),
+                            "owned_projection_fields": sorted(right_fields),
+                            "supplier_metadata_fields": sorted(left_metadata),
+                            "owned_metadata_fields": sorted(right_metadata),
+                        }
                     return "fast-mismatch", {
                         "reason": "projection-schema-mismatch",
                         "supplier_fields": sorted(left_fields),
@@ -465,7 +492,7 @@ def compare(supplier: Mapping[str, Any], owned: Mapping[str, Any], path: str = "
                 comparable = _data_projection_view(left)
                 comparable_right = _data_projection_view(right)
                 if comparable == comparable_right:
-                    return "fast-equivalent", {"reason": "row-projection-drift", "category": "data-scope-mismatch",
+                    return "data-scope-mismatch", {"reason": "row-projection-drift", "category": "data-scope-mismatch",
                                                 "supplier_total": left.get("total"), "owned_total": right.get("total"),
                                                 "supplier_row_count": len(left.get("rows", [])) if isinstance(left.get("rows"), list) else 0,
                                                 "owned_row_count": len(right.get("rows", [])) if isinstance(right.get("rows"), list) else 0,
@@ -643,9 +670,16 @@ def run(args: argparse.Namespace) -> Dict[str, Any]:
             "request": profile, "supplier": safe_observation(left), "owned": safe_observation(right),
             "classification": classification, "diff": diff,
         })
-    counts: Dict[str, int] = {}
+    counts: Dict[str, int] = {
+        "fast-equivalent": 0,
+        "data-scope-mismatch": 0,
+        "fast-mismatch": 0,
+        "blocked": 0,
+        "not-safe-to-probe": 0,
+    }
     for case in cases:
         counts[case["classification"]] = counts.get(case["classification"], 0) + 1
+    counts["not-safe-to-probe"] = sum(skipped.values())
     return {
         "schema": 1, "status": "diagnostic-pass", "execution": "fast-differential",
         "strict_evidence": False, "production_access": False, "source_commit": head,

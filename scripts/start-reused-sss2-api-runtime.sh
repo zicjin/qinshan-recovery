@@ -107,9 +107,9 @@ if [[ "$DEPLOY_IMAGE" == "$OWNED_STRICT_BASE_IMAGE" ]]; then
   # of copying hundreds of megabytes into the root overlay filesystem. This
   # keeps the fallback source-only runtime equivalent while avoiding Docker
   # overlay exhaustion on the long-lived sss2 host.
-  docker create --name "$APP" --network "$NET" --network-alias "$APP" --env LIMS_BIND_ADDRESS=0.0.0.0 --env SUNWAY_LCDP_ENABLE=false --env JAVA_TOOL_OPTIONS=-Djava.security.egd=file:/dev/./urandom --volume "$ROOT/application.properties:/run/config/application.properties:ro" --volume "$ROOT/distribution:/opt/owned:ro" --entrypoint /opt/owned/start.sh "$DEPLOY_IMAGE" /run/config/application.properties >/dev/null
+  docker create --name "$APP" --network "$NET" --network-alias "$APP" --env LIMS_BIND_ADDRESS=0.0.0.0 --env SPRING_PROFILES_ACTIVE=oracle --env SUNWAY_LCDP_ENABLE=false --env JAVA_TOOL_OPTIONS=-Djava.security.egd=file:/dev/./urandom --volume "$ROOT/application.properties:/run/config/application.properties:ro" --volume "$ROOT/distribution:/opt/owned:ro" --entrypoint /opt/owned/start.sh "$DEPLOY_IMAGE" /run/config/application.properties >/dev/null
 else
-  docker create --name "$APP" --network "$NET" --network-alias "$APP" --env LIMS_BIND_ADDRESS=0.0.0.0 --env SUNWAY_LCDP_ENABLE=false --env JAVA_TOOL_OPTIONS=-Djava.security.egd=file:/dev/./urandom --volume "$ROOT/application.properties:/run/config/application.properties:ro" "$DEPLOY_IMAGE" >/dev/null
+  docker create --name "$APP" --network "$NET" --network-alias "$APP" --env LIMS_BIND_ADDRESS=0.0.0.0 --env SPRING_PROFILES_ACTIVE=oracle --env SUNWAY_LCDP_ENABLE=false --env JAVA_TOOL_OPTIONS=-Djava.security.egd=file:/dev/./urandom --volume "$ROOT/application.properties:/run/config/application.properties:ro" "$DEPLOY_IMAGE" >/dev/null
 fi
 docker start "$APP" >/dev/null
 APP_IP="$(docker inspect "$APP" -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}')"; APP_PID="$(docker inspect "$APP" -f '{{.State.Pid}}')"; [[ -n "$APP_IP" && "$APP_PID" =~ ^[0-9]+$ ]] || fail 'strict app network identity unavailable'

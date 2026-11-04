@@ -19,6 +19,7 @@ ORACLE_INSTANCE="${ORACLE_INSTANCE:-lims-owned-sss2-oracle}"
 OWNED_STRICT_BASE_IMAGE="${OWNED_STRICT_BASE_IMAGE:-lims-owned-sss2-owned:refresh}"
 REFRESH_BASELINE="${REFRESH_BASELINE:-0}"
 RESET_RUNTIME_SCHEMA="${RESET_RUNTIME_SCHEMA:-0}"
+FORCE_MOUNT_FALLBACK="${FORCE_MOUNT_FALLBACK:-0}"
 [[ -f "$DIST/app/lims-owned-application.jar" && -f "$DIST/manifest.json" ]] || { echo 'missing owned distribution' >&2; exit 2; }
 WORK="$(mktemp -d -t strict-api-reuse-${RUN_ID}.XXXXXX)"; trap 'python3 - "$WORK" <<"PY"
 import shutil,sys
@@ -29,9 +30,9 @@ ssh -o BatchMode=yes -o ConnectTimeout=5 "$SSH_HOST" "mkdir -p '$REMOTE_ROOT/inc
 scp -q -o ServerAliveInterval=15 "$WORK/distribution.tgz" "$SSH_HOST:$REMOTE_ROOT/incoming/distribution.tgz"
 printf '%s\n' "$BINDING_JSON" > "$WORK/implementation-binding.json"
 scp -q -o ServerAliveInterval=15 "$WORK/implementation-binding.json" "$SSH_HOST:$REMOTE_ROOT/incoming/implementation-binding.json"
-ssh -o BatchMode=yes -o ConnectTimeout=5 "$SSH_HOST" bash -s -- "$REMOTE_ROOT" "$RUN_ID" "$HOST_PORT" "$SOURCE_COMMIT" "$SOURCE_DIRTY" "$ARTIFACT_SHA256" "$ORACLE_INSTANCE" "$BASELINE_SCHEMA" "$RUNTIME_SCHEMA" "$REFRESH_BASELINE" "$RESET_RUNTIME_SCHEMA" "$OWNED_STRICT_BASE_IMAGE" <<'REMOTE_REUSE' > "$WORK/manifest.json"
+ssh -o BatchMode=yes -o ConnectTimeout=5 "$SSH_HOST" bash -s -- "$REMOTE_ROOT" "$RUN_ID" "$HOST_PORT" "$SOURCE_COMMIT" "$SOURCE_DIRTY" "$ARTIFACT_SHA256" "$ORACLE_INSTANCE" "$BASELINE_SCHEMA" "$RUNTIME_SCHEMA" "$REFRESH_BASELINE" "$RESET_RUNTIME_SCHEMA" "$OWNED_STRICT_BASE_IMAGE" "$FORCE_MOUNT_FALLBACK" <<'REMOTE_REUSE' > "$WORK/manifest.json"
 set -euo pipefail
-ROOT="$1"; RUN_ID="$2"; PORT="$3"; COMMIT="$4"; DIRTY="$5"; ARTIFACT="$6"; ORACLE="$7"; BASELINE="$8"; RUNTIME="$9"; REFRESH="${10}"; RESET="${11}"; OWNED_STRICT_BASE_IMAGE="${12}"
+ROOT="$1"; RUN_ID="$2"; PORT="$3"; COMMIT="$4"; DIRTY="$5"; ARTIFACT="$6"; ORACLE="$7"; BASELINE="$8"; RUNTIME="$9"; REFRESH="${10}"; RESET="${11}"; OWNED_STRICT_BASE_IMAGE="${12}"; FORCE_MOUNT_FALLBACK="${13}"
 NET=lims-owned-sss2-net; SOURCE_APP=lims-owned-sss2-app; REDIS=lims-owned-sss2-redis; APP="lims-strict-api-${RUN_ID}-app"; IMAGE="lims-strict-api-${RUN_ID}:owned"
 SECRETS=/data/lims-owned-sss2-runtime-secrets; RUNTIME_SECRET="$SECRETS/${RUNTIME}.password"; LOCK="$SECRETS/${RUNTIME}.lock"
 fail(){ echo "strict-reuse: FAIL: $*" >&2; exit 1; }; phase(){ printf '%s %s\n' "$(date -u +%FT%TZ)" "$*" | tee -a "$ROOT/strict-phase.log" >&2; }

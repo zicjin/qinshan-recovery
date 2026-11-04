@@ -1,0 +1,35 @@
+{
+  "artifact": {
+    "application_class_count": 3088,
+    "application_top_level_class_count": 3034,
+    "application_top_level_source_missing": 0,
+    "application_top_level_source_present": 3034,
+    "artifact_bytes": 546766277,
+    "artifact_sha256": "4a720797810fd2f8cca6e22604657028cb87830ca0e24bb55a5f42f040f6ee9f",
+    "kind_counts": {
+      "application_class": 3088,
+      "config_resource": 38,
+      "forbidden_native_or_license": 3,
+      "frontend_resource": 15,
+      "mapper": 2046,
+      "public_dependency": 387,
+      "resource": 72,
+      "spring_boot_loader": 65,
+      "static": 8292,
+      "sunway_framework": 15,
+      "sunway_framework_class": 4757,
+      "template": 1044
+    },
+    "manifest_member_count": 19822,
+    "nested_jar_count": 402,
+    "outer_member_count": 5641,
+    "private_framework_class_entry_count": 4757,
+    "private_framework_distinct_class_count": 4757,
+    "private_framework_duplicate_class_count": 0,
+    "private_framework_jar_count": 15,
+    "public_dependency_jar_count": 387
+  },
+  "generated_from": "scripts/resolve-java-source-closure.py inventory",
+  "schema": "supplier-artifact-inventory-snapshot-v1",
+  "status": "diagnostic-generated-from-current-external-artifact"
+}

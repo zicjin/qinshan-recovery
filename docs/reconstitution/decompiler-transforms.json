@@ -1,0 +1,218 @@
+{
+  "schema": "supplier-decompiler-transformations-v1",
+  "decompiler": "Vineflower",
+  "decompiler_version": "1.11.1",
+  "rules": [
+    {
+      "id": "redis-helper-disambiguate-execute",
+      "file": "com/sunwayworld/framework/cache/redis/RedisHelper.java",
+      "operations": [
+        {
+          "op": "replace",
+          "find": "getRedisTemplate().execute(connection -> {",
+          "replace": "getRedisTemplate().execute((org.springframework.data.redis.core.RedisCallback<Object>) connection -> {",
+          "expected_count": 1
+        }
+      ],
+      "reason": "Vineflower loses the overload-selecting cast that javac needs for RedisTemplate.execute."
+    },
+    {
+      "id": "number-converter-primitive-cast",
+      "file": "com/sunwayworld/framework/converter/number/NumberToNumberConverterFactory.java",
+      "operations": [
+        {
+          "op": "regex_replace",
+          "pattern": "return \\(T\\)source\\.(byte|short|int|long|float|double)Value\\(\\);",
+          "replace": "return (T)(Object)source.\\1Value();",
+          "expected_count": 6
+        }
+      ],
+      "reason": "Box the primitive numeric result before the erased generic cast required by javac."
+    },
+    {
+      "id": "string-enum-value-of-cast",
+      "file": "com/sunwayworld/framework/converter/string/StringToEnumConverterFactory.java",
+      "operations": [
+        {
+          "op": "replace",
+          "find": "return StringUtils.isEmpty(source) ? null : Enum.valueOf(this.enumType, source.trim());",
+          "replace": "return StringUtils.isEmpty(source) ? null : (T)(Enum)Enum.valueOf((Class)this.enumType, source.trim());",
+          "expected_count": 1
+        }
+      ],
+      "reason": "Recover the erased enum cast omitted by Vineflower."
+    },
+    {
+      "id": "case-insensitive-map-capture-cast",
+      "file": "com/sunwayworld/framework/data/CaseInsensitiveLinkedMap.java",
+      "operations": [
+        {
+          "op": "replace",
+          "find": "super(getMap(m));",
+          "replace": "super((Map<String, V>)(Map<?, ?>)m);",
+          "expected_count": 1
+        },
+        {
+          "op": "replace",
+          "find": "super.putAll(getMap(m));",
+          "replace": "super.putAll((Map<String, V>)(Map<?, ?>)m);",
+          "expected_count": 1
+        }
+      ],
+      "reason": "Restore the erased constructor/putAll argument conversion after wildcard capture."
+    },
+    {
+      "id": "gikam-id-helper-explicit-type-witness",
+      "file": "com/sunwayworld/framework/id/GikamIdHelper.java",
+      "operations": [
+        {
+          "op": "replace",
+          "find": ".map(ix -> RedisHelper.get(\"SUNWAY_WORKERID\", ix))",
+          "replace": ".map(ix -> RedisHelper.<Long>get(\"SUNWAY_WORKERID\", ix))",
+          "expected_count": 1
+        }
+      ],
+      "reason": "Retain the original generic call witness discarded by decompilation."
+    },
+    {
+      "id": "default-sheet-writer-lambda-and-map-types",
+      "file": "com/sunwayworld/framework/io/excel/impl/DefaultSheetWriter.java",
+      "operations": [
+        {
+          "op": "replace",
+          "find": ".filter(n -> propertyContext.getName().equalsIgnoreCase(n.getFirst()))",
+          "replace": ".filter(n -> propertyContextx.getName().equalsIgnoreCase(n.getFirst()))",
+          "expected_count": 1
+        },
+        {
+          "op": "replace",
+          "find": "Object o = ((Map)item)\n            .entrySet()",
+          "replace": "Object o = ((Map<?, ?>)item)\n            .entrySet()",
+          "expected_count": 1
+        },
+        {
+          "op": "replace",
+          "find": "o = ((TableRowBean)item)\n               .getExt$()\n               .entrySet()",
+          "replace": "o = ((Map<?, ?>)((TableRowBean)item)\n               .getExt$())\n               .entrySet()",
+          "expected_count": 1
+        },
+        {
+          "op": "replace",
+          "find": "propertyName.equalsIgnoreCase(e.getKey())",
+          "replace": "propertyName.equalsIgnoreCase((String)e.getKey())",
+          "expected_count": 2
+        }
+      ],
+      "reason": "Repair a decompiler variable-version capture and restore wildcard map entry typing."
+    },
+    {
+      "id": "persistable-helper-old-id-cast",
+      "file": "com/sunwayworld/framework/support/PersistableHelper.java",
+      "operations": [
+        {
+          "op": "replace",
+          "find": "orig.setId(((Modified)item).getOldId());",
+          "replace": "orig.setId((ID)((Modified)item).getOldId());",
+          "expected_count": 1
+        }
+      ],
+      "reason": "Restore the generic ID cast erased around the raw Modified interface."
+    },
+    {
+      "id": "generic-auditable-dao-no-type-witness",
+      "file": "com/sunwayworld/framework/support/auditable/service/GenericAuditableService.java",
+      "operations": [
+        {
+          "op": "replace",
+          "find": "this.<GenericDao<T, ?>>getDao().getType()",
+          "replace": "this.getDao().getType()",
+          "expected_count": 1
+        }
+      ],
+      "reason": "Remove a spurious explicit type argument on a no-argument getDao invocation."
+    },
+    {
+      "id": "generic-downloadable-row-casts",
+      "file": "com/sunwayworld/framework/support/base/service/GenericDownloadableService.java",
+      "operations": [
+        {
+          "op": "replace",
+          "find": "this.buildListByTree(rows)",
+          "replace": "this.buildListByTree((List<AbstractTreeNode>)(List<?>)rows)",
+          "expected_count": 1
+        },
+        {
+          "op": "replace",
+          "find": "this.buildListByMatrix(rows)",
+          "replace": "this.buildListByMatrix((List<MatrixRowMap>)(List<?>)rows)",
+          "expected_count": 1
+        }
+      ],
+      "reason": "Restore checked-instanceof casts erased from the original generic row path."
+    },
+    {
+      "id": "generic-service-page-erasure-cast",
+      "file": "com/sunwayworld/framework/support/base/service/GenericService.java",
+      "operations": [
+        {
+          "op": "replace",
+          "find": "            return page;",
+          "replace": "            return (Page<T>)(Page<?>)page;",
+          "expected_count": 1
+        }
+      ],
+      "reason": "Restore the original unchecked conversion on the verified assignable-row path."
+    },
+    {
+      "id": "bean-utils-wildcard-map-entry",
+      "file": "com/sunwayworld/framework/utils/BeanUtils.java",
+      "operations": [
+        {
+          "op": "replace",
+          "find": "p.getPropertyValue(bean).entrySet()",
+          "replace": "((Map<?, ?>)p.getPropertyValue(bean)).entrySet()",
+          "expected_count": 1
+        }
+      ],
+      "reason": "Preserve entry key/value methods after erasing the dynamic map value."
+    },
+    {
+      "id": "object-utils-wildcard-map-entry",
+      "file": "com/sunwayworld/framework/utils/ObjectUtils.java",
+      "operations": [
+        {
+          "op": "replace",
+          "find": "((Map)v1)",
+          "replace": "((Map<?, ?>)v1)",
+          "expected_count": 2
+        },
+        {
+          "op": "replace",
+          "find": "((Map)v2)",
+          "replace": "((Map<?, ?>)v2)",
+          "expected_count": 2
+        }
+      ],
+      "reason": "Preserve Map.Entry methods in the symmetric recursive map comparison."
+    },
+    {
+      "id": "reflection-utils-loop-variable-version",
+      "file": "com/sunwayworld/framework/utils/ReflectionUtils.java",
+      "operations": [
+        {
+          "op": "replace",
+          "find": "            for (Annotation annotationx : annotations) {\n               if (annotationList.stream().noneMatch(a -> a.annotationType().equals(annotation.annotationType()))) {\n                  annotationList.add(annotationx);\n               }\n            }",
+          "replace": "            for (Annotation annotationx : annotations) {\n               if (annotationList.stream().noneMatch(a -> a.annotationType().equals(annotationx.annotationType()))) {\n                  annotationList.add(annotationx);\n               }\n            }",
+          "expected_count": 1
+        },
+        {
+          "op": "replace",
+          "find": "      for (Field fieldx : clazz.getFields()) {\n         if (fieldWrapperList.stream().noneMatch(w -> w.getField().getName().equals(field.getName()))) {",
+          "replace": "      for (Field fieldx : clazz.getFields()) {\n         if (fieldWrapperList.stream().noneMatch(w -> w.getField().getName().equals(fieldx.getName()))) {",
+          "expected_count": 1
+        }
+      ],
+      "reason": "Bind lambda captures to the active interface/field loop variable versions."
+    }
+  ]
+}

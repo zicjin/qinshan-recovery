@@ -75,6 +75,28 @@ class SourceBindingTest(unittest.TestCase):
         self.assertNotEqual(first["implementation_tree_digest"], second["implementation_tree_digest"])
         self.assertTrue(second["implementation_dirty"])
 
+    def test_reconstituted_source_and_transformations_change_digest(self):
+        first = self.capture()
+        source = self.root / "reconstituted" / "pilot" / "Framework.java"
+        source.parent.mkdir(parents=True)
+        source.write_text("package fixture; public class Framework {}\n", encoding="utf-8")
+        second = self.capture()
+        self.assertNotEqual(first["implementation_tree_digest"], second["implementation_tree_digest"])
+        self.assertTrue(second["implementation_dirty"])
+
+        subprocess.run(["git", "add", "reconstituted"], cwd=self.root, check=True)
+        subprocess.run(["git", "commit", "-qm", "reconstituted source"], cwd=self.root, check=True)
+        clean_source = self.capture()
+        transforms = self.root / "docs" / "reconstitution" / "decompiler-transforms.json"
+        transforms.parent.mkdir(parents=True)
+        transforms.write_text('{"rules": []}\n', encoding="utf-8")
+        transformed = self.capture()
+        self.assertNotEqual(
+            clean_source["implementation_tree_digest"],
+            transformed["implementation_tree_digest"],
+        )
+        self.assertTrue(transformed["implementation_dirty"])
+
     def test_feature_root_prefers_parent_workspace_for_standalone_repo(self):
         parent = self.root.parent
         feature = parent / ".scratch" / binding.FEATURE_SLUG

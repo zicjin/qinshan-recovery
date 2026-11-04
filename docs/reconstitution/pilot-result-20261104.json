@@ -1,0 +1,93 @@
+{
+  "schema": "supplier-source-reconstitution-pilot-v1",
+  "status": "reconstitution-pilot-pass",
+  "canonical": false,
+  "strict_evidence": false,
+  "api_evidence": false,
+  "generated_from": "scripts/resolve-java-source-closure.py pilot",
+  "generated_at_utc": "2026-11-04T03:25:46.672877+00:00",
+  "stock_artifact": {
+    "path": ".external-materials/gikam-third-czjky-14.1.5-run.jar",
+    "sha256": "4a720797810fd2f8cca6e22604657028cb87830ca0e24bb55a5f42f040f6ee9f",
+    "bytes": 546766277,
+    "outer_member_count": 5641,
+    "manifest_member_count": 19822,
+    "nested_jar_count": 402,
+    "private_framework_jar_count": 15,
+    "public_dependency_jar_count": 387,
+    "application_class_count": 3088,
+    "application_top_level_class_count": 3034,
+    "application_top_level_source_present": 3034,
+    "application_top_level_source_missing": 0,
+    "private_framework_class_entry_count": 4757,
+    "private_framework_distinct_class_count": 4757,
+    "private_framework_duplicate_class_count": 0
+  },
+  "pilot": {
+    "project_compile_target": "project/src/main/java/com/sunwayworld/emc/framework/mybatis/mapper/EmcGlobalMapper.java",
+    "seed_classes": [
+      "com.sunwayworld.framework.spring.annotation.GikamBean"
+    ],
+    "framework_inputs": [
+      "gikam-core-base-interface-14.1.5.jar",
+      "gikam-core-common-14.1.5.jar",
+      "gikam-core-base-service-14.1.5.jar"
+    ],
+    "closure_class_count": 531,
+    "top_level_source_count": 399,
+    "missing_external_framework_class_count": 0,
+    "decompile_failure_count": 0,
+    "decompiler_counts": {
+      "cfr_0.152": 351,
+      "vineflower_1.11.1_fallback": 48
+    },
+    "fallback_compile_round_count": 2,
+    "fallback_replacement_count": 48,
+    "transformed_vineflower_source_count": 12,
+    "normalized_generated_source_count": 351,
+    "transformation_manifest": "docs/reconstitution/decompiler-transforms.json",
+    "transformation_manifest_sha256": "1cd9926f3cd559cce12a747d45698a9a89bdb974553d0fc2558d6e07f353d625"
+  },
+  "compile_gate": {
+    "java_version": "8",
+    "exit_code": 0,
+    "error_count": 0,
+    "missing_symbol_queue": [],
+    "supplier_private_jars_on_classpath": false,
+    "source_only_framework_classpath": true
+  },
+  "tracked_source": {
+    "module": "reconstituted/pilot/owned-core-common",
+    "source_file_count": 399,
+    "source_tree_sha256": "95b8d705d8f7b6dbbc8a63e7715590cdf18cd74c575501de4e503847e5feb4f7",
+    "provenance": "reconstituted/pilot/owned-core-common/module-provenance.json"
+  },
+  "web_resources": {
+    "source_jar": "BOOT-INF/lib/gikam-core-web-14.1.5.jar",
+    "source_jar_sha256": "26ee3d912789318d3cc0a23136a17382e34cfede3cd65d83d4dbc113b8245628",
+    "resource_count": 5302,
+    "resource_tree_sha256": "fe712b1ae17796a339410050a3d940e4f0cd094555b0c07a04781b507ca0a6d3",
+    "storage": "external-artifact-required",
+    "status": "extracted-and-hashed-not-promoted-to-distribution"
+  },
+  "generated_report_hashes": {
+    "artifact_manifest_sha256": "26c616db9b6e824beb715250f1ef596951239ac6e40329e20c0241dd6c533679",
+    "source_closure_sha256": "e9d7400af59f8225c46966e220dcd0f1be55fab4c5b554ebc256ca5e921215f4",
+    "javac_log_sha256": "9246d2071828be00c6b1dfc4851fb5c4a746dd0938bdd156e413871c920840fe",
+    "web_resource_manifest_sha256": "593c04753dd30a1f2665873a19df604385c216b74fefe23ae306332c9b0017d8",
+    "verifier_status": "pass"
+  },
+  "implementation_binding": {
+    "binding_id": "impl-2cf41844f8d54195",
+    "implementation_tree_digest": "2cf41844f8d54195a6b4b525e9b036d807a8a0ec3938e0206a927da395db5d83",
+    "repository_head_at_capture": "68d25abd2bc989b1368f45c8b8e912b99080348a",
+    "implementation_dirty_at_capture": true,
+    "note": "The pilot captured a dirty implementation tree. It is source-reconstitution coverage, never strict API evidence; post-commit binding must be recomputed."
+  },
+  "api_closure": {
+    "route_count": 6808,
+    "strict_pass_count": 0,
+    "required_unknown": 6808,
+    "reason": "This pilot did not deploy or issue supplier/owned HTTP requests under a strict runtime."
+  }
+}

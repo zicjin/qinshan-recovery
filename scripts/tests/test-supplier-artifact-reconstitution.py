@@ -404,7 +404,9 @@ def verify_mapper_scanner_covers_both_supplier_conventions() -> None:
         / "advice"
         / "GlobalExceptionHandler.java"
     ).read_text(encoding="utf-8")
-    assert "${sunway.exception.viewable:false}" in exception_handler
+    # The source-only runtime follows the approved supplier configuration so
+    # diagnostic HTTP errors retain the same stacktrace envelope as 18081.
+    assert "${sunway.exception.viewable:true}" in exception_handler
     assert "${sentry.enabled:false}" in exception_handler
     firewall = (
         ROOT

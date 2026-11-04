@@ -131,6 +131,10 @@ public class ApplicationConfiguration extends ApplicationObjectSupport
         factory.setDataSource(dataSource());
         factory.setMapperLocations(new PathMatchingResourcePatternResolver().getResources(
                 "classpath*:com/sunwayworld/**/mapper/conf/*-oracle-mapper.xml"));
+        factory.setPlugins(new org.apache.ibatis.plugin.Interceptor[]{
+                new com.sunwayworld.framework.mybatis.interceptor.MybatisInterceptor(),
+                new com.sunwayworld.framework.mybatis.interceptor.MybatisResultSetInterceptor()
+        });
         return factory.getObject();
     }
 

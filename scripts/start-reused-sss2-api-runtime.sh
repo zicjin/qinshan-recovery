@@ -101,8 +101,11 @@ if ! docker build --pull=false --tag "$IMAGE" "$ROOT" >/dev/null; then
   DEPLOY_IMAGE="$OWNED_STRICT_BASE_IMAGE"
 fi
 if [[ "$DEPLOY_IMAGE" == "$OWNED_STRICT_BASE_IMAGE" ]]; then
-  docker create --name "$APP" --network "$NET" --network-alias "$APP" --env LIMS_BIND_ADDRESS=0.0.0.0 --env SUNWAY_LCDP_ENABLE=false --env JAVA_TOOL_OPTIONS=-Djava.security.egd=file:/dev/./urandom --volume "$ROOT/application.properties:/run/config/application.properties:ro" --entrypoint /bin/sh "$DEPLOY_IMAGE" -c 'rm -rf /opt/owned && mv /opt/owned-new /opt/owned && chmod 0755 /opt/owned/start.sh && mkdir -p /var/lib/lims-owned-attachments && exec /opt/owned/start.sh /run/config/application.properties' >/dev/null
-  docker cp "$ROOT/distribution/." "$APP:/opt/owned-new/"
+  # The distribution is already staged on /data. Mount it directly instead
+  # of copying hundreds of megabytes into the root overlay filesystem. This
+  # keeps the fallback source-only runtime equivalent while avoiding Docker
+  # overlay exhaustion on the long-lived sss2 host.
+  docker create --name "$APP" --network "$NET" --network-alias "$APP" --env LIMS_BIND_ADDRESS=0.0.0.0 --env SUNWAY_LCDP_ENABLE=false --env JAVA_TOOL_OPTIONS=-Djava.security.egd=file:/dev/./urandom --volume "$ROOT/application.properties:/run/config/application.properties:ro" --volume "$ROOT/distribution:/opt/owned:ro" --entrypoint /opt/owned/start.sh "$DEPLOY_IMAGE" /run/config/application.properties >/dev/null
 else
   docker create --name "$APP" --network "$NET" --network-alias "$APP" --env LIMS_BIND_ADDRESS=0.0.0.0 --env SUNWAY_LCDP_ENABLE=false --env JAVA_TOOL_OPTIONS=-Djava.security.egd=file:/dev/./urandom --volume "$ROOT/application.properties:/run/config/application.properties:ro" "$DEPLOY_IMAGE" >/dev/null
 fi

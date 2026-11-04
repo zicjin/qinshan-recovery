@@ -1,0 +1,3600 @@
+{
+  "schema": 1,
+  "status": "executed-pass",
+  "execution": "strict",
+  "strict_evidence": true,
+  "production_access": false,
+  "scope": "clone-derived Spring Web API contract runner",
+  "route_execution_model": {
+    "application": "one owned Spring application per wave",
+    "oracle": "persistent Oracle baseline/runtime schema",
+    "redis": "reused sss2 Redis database 15",
+    "boundary_route": "owned Java source-only route in the same Spring application",
+    "boundary_process": false,
+    "internal_http_bridge": false,
+    "jni_replacement_process": false
+  },
+  "started_at": "2026-11-04T22:48:27.755927+00:00",
+  "source_commit": "b8f8b8fd918802aa921c15b5b0db1ed215708d64",
+  "repository_head_at_capture": "b8f8b8fd918802aa921c15b5b0db1ed215708d64",
+  "source_dirty": false,
+  "source_scope": [
+    "project/src/main/java",
+    "project/src/main/resources",
+    "owned-framework/src",
+    "owned-personnel/src",
+    "owned-equipment/src",
+    "owned-consumables/src",
+    "owned-attachments/src",
+    "owned-report/src",
+    "owned-scheduler/src",
+    "owned-web/src",
+    "reconstituted",
+    "scripts/source_binding.py",
+    "scripts/evidence_output.py",
+    "scripts/spring_api_contract_runner.py",
+    "scripts/fast_differential_api_runner.py",
+    "scripts/api_wave_orchestrator.py",
+    "scripts/owned_runtime_contract.py",
+    "scripts/api_fixture.py",
+    "scripts/remote-sql-fixture-executor.py",
+    "scripts/start-strict-sss2-api-runtime.sh",
+    "scripts/start-reused-sss2-api-runtime.sh",
+    "scripts/cleanup-strict-sss2-api-runtime.sh",
+    "scripts/refresh-owned-sss2-app.sh",
+    "scripts/owned_readiness.py",
+    "scripts/reconstitute-framework-source.sh",
+    "scripts/resolve-java-source-closure.py",
+    "scripts/verify-reconstituted-framework.py",
+    "scripts/assemble-reconstituted-framework-modules.py",
+    "scripts/prepare-reconstituted-public-deps.py",
+    "scripts/record-reconstituted-framework-build.py",
+    "scripts/verify-reconstituted-framework-modules.py",
+    "scripts/verify-owned-native-license-removal.py",
+    "scripts/build-reconstituted-framework.sh",
+    "scripts/build-source-only-application.py",
+    "docs/reconstitution/decompiler-transforms.json",
+    "tools/business_api_inventory.py",
+    "tools/api_route_ledger.py",
+    "tools/api_route_execution_plan.py",
+    "tools/api_contract_skeleton.py",
+    "tools/api_route_closure.py",
+    "tools/finalize_api_report.py",
+    "tools/vertical_slices/matrix.py",
+    "project/pom.xml",
+    "owned-framework/pom.xml",
+    "owned-personnel/pom.xml",
+    "owned-equipment/pom.xml",
+    "owned-consumables/pom.xml",
+    "owned-attachments/pom.xml",
+    "owned-report/pom.xml",
+    "owned-scheduler/pom.xml",
+    "owned-web/pom.xml",
+    "owned-distribution/package.py",
+    "owned-distribution/start.sh",
+    "owned-distribution/example",
+    "owned-web/build-owned-web.sh",
+    "scripts/build-owned-distribution.sh",
+    "scripts/build-owned-framework.sh",
+    "scripts/build-owned-personnel.sh",
+    "scripts/build-owned-equipment.sh",
+    "scripts/build-owned-consumables.sh",
+    "scripts/build-owned-attachments.sh",
+    "scripts/build-owned-report.sh",
+    "scripts/build-owned-scheduler.sh",
+    "scripts/build-prep.sh",
+    "scripts/verify-external-artifacts.sh",
+    "evidence/external-artifacts.sha256",
+    "build/oracle-free-source-manifest.json",
+    "docker/Dockerfile.built"
+  ],
+  "implementation_binding": "impl-fccf4cda113e1896",
+  "implementation_tree_digest": "fccf4cda113e18960f04add0de1fa4a20a361075cd54829b3d3a6b94b18d78d4",
+  "implementation_dirty": false,
+  "implementation_scope": [
+    "project/src/main/java",
+    "project/src/main/resources",
+    "owned-framework/src",
+    "owned-personnel/src",
+    "owned-equipment/src",
+    "owned-consumables/src",
+    "owned-attachments/src",
+    "owned-report/src",
+    "owned-scheduler/src",
+    "owned-web/src",
+    "reconstituted",
+    "scripts/source_binding.py",
+    "scripts/evidence_output.py",
+    "scripts/spring_api_contract_runner.py",
+    "scripts/fast_differential_api_runner.py",
+    "scripts/api_wave_orchestrator.py",
+    "scripts/owned_runtime_contract.py",
+    "scripts/api_fixture.py",
+    "scripts/remote-sql-fixture-executor.py",
+    "scripts/start-strict-sss2-api-runtime.sh",
+    "scripts/start-reused-sss2-api-runtime.sh",
+    "scripts/cleanup-strict-sss2-api-runtime.sh",
+    "scripts/refresh-owned-sss2-app.sh",
+    "scripts/owned_readiness.py",
+    "scripts/reconstitute-framework-source.sh",
+    "scripts/resolve-java-source-closure.py",
+    "scripts/verify-reconstituted-framework.py",
+    "scripts/assemble-reconstituted-framework-modules.py",
+    "scripts/prepare-reconstituted-public-deps.py",
+    "scripts/record-reconstituted-framework-build.py",
+    "scripts/verify-reconstituted-framework-modules.py",
+    "scripts/verify-owned-native-license-removal.py",
+    "scripts/build-reconstituted-framework.sh",
+    "scripts/build-source-only-application.py",
+    "docs/reconstitution/decompiler-transforms.json",
+    "tools/business_api_inventory.py",
+    "tools/api_route_ledger.py",
+    "tools/api_route_execution_plan.py",
+    "tools/api_contract_skeleton.py",
+    "tools/api_route_closure.py",
+    "tools/finalize_api_report.py",
+    "tools/vertical_slices/matrix.py",
+    "project/pom.xml",
+    "owned-framework/pom.xml",
+    "owned-personnel/pom.xml",
+    "owned-equipment/pom.xml",
+    "owned-consumables/pom.xml",
+    "owned-attachments/pom.xml",
+    "owned-report/pom.xml",
+    "owned-scheduler/pom.xml",
+    "owned-web/pom.xml",
+    "owned-distribution/package.py",
+    "owned-distribution/start.sh",
+    "owned-distribution/example",
+    "owned-web/build-owned-web.sh",
+    "scripts/build-owned-distribution.sh",
+    "scripts/build-owned-framework.sh",
+    "scripts/build-owned-personnel.sh",
+    "scripts/build-owned-equipment.sh",
+    "scripts/build-owned-consumables.sh",
+    "scripts/build-owned-attachments.sh",
+    "scripts/build-owned-report.sh",
+    "scripts/build-owned-scheduler.sh",
+    "scripts/build-prep.sh",
+    "scripts/verify-external-artifacts.sh",
+    "evidence/external-artifacts.sha256",
+    "build/oracle-free-source-manifest.json",
+    "docker/Dockerfile.built"
+  ],
+  "nested_project_commit": "27932b1fe4d71d64a02f9a63e55f56acb403e3a0",
+  "distribution_input_digest": "a54d4b11839798a436f68b2be04986c04cbbc1f3abbd85476dd7aeef39a691b0",
+  "artifact_sha256": {
+    "lims-recovery/owned-distribution/target/distribution/app/lims-owned-application.jar": "58026c7b60c872b3d5dc1e2cba3640379e0c1f9f0ce8a2ba0c766d54c3c6ed35"
+  },
+  "clone_identity": "lims-owned-sss2-oracle:LIMS_BASELINE_SSS2:LIMS_RT_0DB3972:a60fc4519f2a89fb6b1761d6e0a2a6480cef8d4bbeab40a2144141f13a9a1dec",
+  "runtime_report": ".scratch/sunway-supplier-exit-api-first/diagnostic-evidence/runtime/strict-api-runtime-manifest-milestonefccf4cdresr.json",
+  "runtime_contract": {
+    "mode": "strict",
+    "strict_evidence": false,
+    "runtime_identity": "lims-owned-sss2-oracle:LIMS_BASELINE_SSS2:LIMS_RT_0DB3972:a60fc4519f2a89fb6b1761d6e0a2a6480cef8d4bbeab40a2144141f13a9a1dec",
+    "reuse": true,
+    "oracle_reused": true,
+    "baseline_schema": "LIMS_BASELINE_SSS2",
+    "runtime_schema": "LIMS_RT_0DB3972",
+    "baseline_schema_hash": "a60fc4519f2a89fb6b1761d6e0a2a6480cef8d4bbeab40a2144141f13a9a1dec",
+    "runtime_schema_hash_before": "aaabc134c6c268a5e50b10301fcf3c5bc9ac4a70e73936285748f95268f8d5fb",
+    "runtime_schema_hash_after": "aaabc134c6c268a5e50b10301fcf3c5bc9ac4a70e73936285748f95268f8d5fb",
+    "source_commit": "b8f8b8fd918802aa921c15b5b0db1ed215708d64",
+    "implementation_binding": "impl-fccf4cda113e1896",
+    "implementation_tree_digest": "fccf4cda113e18960f04add0de1fa4a20a361075cd54829b3d3a6b94b18d78d4",
+    "implementation_scope": [
+      "project/src/main/java",
+      "project/src/main/resources",
+      "owned-framework/src",
+      "owned-personnel/src",
+      "owned-equipment/src",
+      "owned-consumables/src",
+      "owned-attachments/src",
+      "owned-report/src",
+      "owned-scheduler/src",
+      "owned-web/src",
+      "reconstituted",
+      "scripts/source_binding.py",
+      "scripts/evidence_output.py",
+      "scripts/spring_api_contract_runner.py",
+      "scripts/fast_differential_api_runner.py",
+      "scripts/api_wave_orchestrator.py",
+      "scripts/owned_runtime_contract.py",
+      "scripts/api_fixture.py",
+      "scripts/remote-sql-fixture-executor.py",
+      "scripts/start-strict-sss2-api-runtime.sh",
+      "scripts/start-reused-sss2-api-runtime.sh",
+      "scripts/cleanup-strict-sss2-api-runtime.sh",
+      "scripts/refresh-owned-sss2-app.sh",
+      "scripts/owned_readiness.py",
+      "scripts/reconstitute-framework-source.sh",
+      "scripts/resolve-java-source-closure.py",
+      "scripts/verify-reconstituted-framework.py",
+      "scripts/assemble-reconstituted-framework-modules.py",
+      "scripts/prepare-reconstituted-public-deps.py",
+      "scripts/record-reconstituted-framework-build.py",
+      "scripts/verify-reconstituted-framework-modules.py",
+      "scripts/verify-owned-native-license-removal.py",
+      "scripts/build-reconstituted-framework.sh",
+      "scripts/build-source-only-application.py",
+      "docs/reconstitution/decompiler-transforms.json",
+      "tools/business_api_inventory.py",
+      "tools/api_route_ledger.py",
+      "tools/api_route_execution_plan.py",
+      "tools/api_contract_skeleton.py",
+      "tools/api_route_closure.py",
+      "tools/finalize_api_report.py",
+      "tools/vertical_slices/matrix.py",
+      "project/pom.xml",
+      "owned-framework/pom.xml",
+      "owned-personnel/pom.xml",
+      "owned-equipment/pom.xml",
+      "owned-consumables/pom.xml",
+      "owned-attachments/pom.xml",
+      "owned-report/pom.xml",
+      "owned-scheduler/pom.xml",
+      "owned-web/pom.xml",
+      "owned-distribution/package.py",
+      "owned-distribution/start.sh",
+      "owned-distribution/example",
+      "owned-web/build-owned-web.sh",
+      "scripts/build-owned-distribution.sh",
+      "scripts/build-owned-framework.sh",
+      "scripts/build-owned-personnel.sh",
+      "scripts/build-owned-equipment.sh",
+      "scripts/build-owned-consumables.sh",
+      "scripts/build-owned-attachments.sh",
+      "scripts/build-owned-report.sh",
+      "scripts/build-owned-scheduler.sh",
+      "scripts/build-prep.sh",
+      "scripts/verify-external-artifacts.sh",
+      "evidence/external-artifacts.sha256",
+      "build/oracle-free-source-manifest.json",
+      "docker/Dockerfile.built"
+    ],
+    "implementation_dirty": false,
+    "repository_head_at_capture": "b8f8b8fd918802aa921c15b5b0db1ed215708d64"
+  },
+  "role": "manager",
+  "organization": "org-a",
+  "mode": "strict",
+  "base_url": "http://127.0.0.1:18089",
+  "case_count": 39,
+  "cases": [
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "c15d6dd5520173be70c44de3c193df76db0e86c755e0bd9d89db78e7bc715664",
+      "body_bytes": 592,
+      "assertions": {
+        "content_type": "application/json",
+        "json_keys": [
+          "columnTypeMap",
+          "first",
+          "last",
+          "numberOfElements",
+          "pageNumber",
+          "pageSize",
+          "rows",
+          "total",
+          "totalMap",
+          "totalPages"
+        ]
+      },
+      "id": "fast-strict-becfc22368764c23-default",
+      "method": "POST",
+      "path": "/secure/emc/module/bp/bp/orders/containers/queries",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/bp/orders/containers/queries",
+      "status": 200,
+      "response_headers": {
+        "access-control-allow-headers": "security-rsa-key",
+        "access-control-allow-methods": "*",
+        "access-control-allow-credentials": "true",
+        "gikam-instant-save-path": "/secure/emc/module/bp/bp/orders/instant",
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "content-type": "application/json",
+        "content-length": "592",
+        "date": "Wed, 04 Nov 2026 22:48:33 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 663.033,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/bp/bp/orders/containers/queries",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "behavior-family-strict-read",
+        "route_ids": [
+          "8d98aa51bf94bdf2"
+        ]
+      },
+      "class": "com.sunwayworld.emc.module.bp.bp.resource.impl.PfOrderResourceImpl",
+      "behavior_family": "becfc22368764c23",
+      "request_profile": "default",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "rf268f023c6e8"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "c865d74de540efea91ba97887dde362fd363c61993721cba3d5ba6dff99687f9",
+      "body_bytes": 593,
+      "assertions": {
+        "content_type": "application/json",
+        "json_keys": [
+          "columnTypeMap",
+          "first",
+          "last",
+          "numberOfElements",
+          "pageNumber",
+          "pageSize",
+          "rows",
+          "total",
+          "totalMap",
+          "totalPages"
+        ]
+      },
+      "id": "fast-strict-0866bf07a8c9f751-page-2",
+      "method": "POST",
+      "path": "/secure/emc/module/bp/bp/orders/containers/queries",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/bp/orders/containers/queries",
+      "status": 200,
+      "response_headers": {
+        "access-control-allow-headers": "security-rsa-key",
+        "access-control-allow-methods": "*",
+        "access-control-allow-credentials": "true",
+        "gikam-instant-save-path": "/secure/emc/module/bp/bp/orders/instant",
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "content-type": "application/json",
+        "content-length": "593",
+        "date": "Wed, 04 Nov 2026 22:48:34 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 441.246,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/bp/bp/orders/containers/queries",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "behavior-family-strict-read",
+        "route_ids": [
+          "8d98aa51bf94bdf2"
+        ]
+      },
+      "class": "com.sunwayworld.emc.module.bp.bp.resource.impl.PfOrderResourceImpl",
+      "behavior_family": "0866bf07a8c9f751",
+      "request_profile": "page-2",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r7dec2cfe7858"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "c15d6dd5520173be70c44de3c193df76db0e86c755e0bd9d89db78e7bc715664",
+      "body_bytes": 592,
+      "assertions": {
+        "content_type": "application/json",
+        "json_keys": [
+          "columnTypeMap",
+          "first",
+          "last",
+          "numberOfElements",
+          "pageNumber",
+          "pageSize",
+          "rows",
+          "total",
+          "totalMap",
+          "totalPages"
+        ]
+      },
+      "id": "fast-strict-b4ed2a0ebe7b4289-empty",
+      "method": "POST",
+      "path": "/secure/emc/module/bp/bp/orders/containers/queries",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/bp/orders/containers/queries",
+      "status": 200,
+      "response_headers": {
+        "access-control-allow-headers": "security-rsa-key",
+        "access-control-allow-methods": "*",
+        "access-control-allow-credentials": "true",
+        "gikam-instant-save-path": "/secure/emc/module/bp/bp/orders/instant",
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "content-type": "application/json",
+        "content-length": "592",
+        "date": "Wed, 04 Nov 2026 22:48:34 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 467.113,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/bp/bp/orders/containers/queries",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "behavior-family-strict-read",
+        "route_ids": [
+          "8d98aa51bf94bdf2"
+        ]
+      },
+      "class": "com.sunwayworld.emc.module.bp.bp.resource.impl.PfOrderResourceImpl",
+      "behavior_family": "b4ed2a0ebe7b4289",
+      "request_profile": "empty",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "ra10152bf916f"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "746e200bb6f83d3f699ebec739392dc1e891e340ea8597183c38f5d25db1a983",
+      "body_bytes": 1698,
+      "assertions": {
+        "content_type": "application/json",
+        "json_keys": [
+          "columnTypeMap",
+          "first",
+          "last",
+          "numberOfElements",
+          "pageNumber",
+          "pageSize",
+          "rows",
+          "total",
+          "totalMap",
+          "totalPages"
+        ]
+      },
+      "id": "fast-strict-532f0aea581a16de-default",
+      "method": "POST",
+      "path": "/secure/emc/module/bp/bp/orders/receive/containers/queries",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/bp/orders/receive/containers/queries",
+      "status": 200,
+      "response_headers": {
+        "access-control-allow-headers": "security-rsa-key",
+        "access-control-allow-methods": "*",
+        "access-control-allow-credentials": "true",
+        "gikam-instant-save-path": "/secure/emc/module/bp/bp/orders/instant",
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "content-type": "application/json",
+        "content-length": "1698",
+        "date": "Wed, 04 Nov 2026 22:48:34 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 525.822,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/bp/bp/orders/receive/containers/queries",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "behavior-family-strict-read",
+        "route_ids": [
+          "f0cb29167e33165d"
+        ]
+      },
+      "class": "com.sunwayworld.emc.module.bp.bp.resource.impl.PfOrderResourceImpl",
+      "behavior_family": "532f0aea581a16de",
+      "request_profile": "default",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r3afaadcd58c7"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "ecbfd4ad60db67d892570f7578ff93e777c0764fdfedf1517b6aa52a4291699e",
+      "body_bytes": 1699,
+      "assertions": {
+        "content_type": "application/json",
+        "json_keys": [
+          "columnTypeMap",
+          "first",
+          "last",
+          "numberOfElements",
+          "pageNumber",
+          "pageSize",
+          "rows",
+          "total",
+          "totalMap",
+          "totalPages"
+        ]
+      },
+      "id": "fast-strict-715250d8674cf666-page-2",
+      "method": "POST",
+      "path": "/secure/emc/module/bp/bp/orders/receive/containers/queries",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/bp/orders/receive/containers/queries",
+      "status": 200,
+      "response_headers": {
+        "access-control-allow-headers": "security-rsa-key",
+        "access-control-allow-methods": "*",
+        "access-control-allow-credentials": "true",
+        "gikam-instant-save-path": "/secure/emc/module/bp/bp/orders/instant",
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "content-type": "application/json",
+        "content-length": "1699",
+        "date": "Wed, 04 Nov 2026 22:48:36 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 454.4,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/bp/bp/orders/receive/containers/queries",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "behavior-family-strict-read",
+        "route_ids": [
+          "f0cb29167e33165d"
+        ]
+      },
+      "class": "com.sunwayworld.emc.module.bp.bp.resource.impl.PfOrderResourceImpl",
+      "behavior_family": "715250d8674cf666",
+      "request_profile": "page-2",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r984ff10cee93"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "746e200bb6f83d3f699ebec739392dc1e891e340ea8597183c38f5d25db1a983",
+      "body_bytes": 1698,
+      "assertions": {
+        "content_type": "application/json",
+        "json_keys": [
+          "columnTypeMap",
+          "first",
+          "last",
+          "numberOfElements",
+          "pageNumber",
+          "pageSize",
+          "rows",
+          "total",
+          "totalMap",
+          "totalPages"
+        ]
+      },
+      "id": "fast-strict-921c8154c7d5740a-empty",
+      "method": "POST",
+      "path": "/secure/emc/module/bp/bp/orders/receive/containers/queries",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/bp/orders/receive/containers/queries",
+      "status": 200,
+      "response_headers": {
+        "access-control-allow-headers": "security-rsa-key",
+        "access-control-allow-methods": "*",
+        "access-control-allow-credentials": "true",
+        "gikam-instant-save-path": "/secure/emc/module/bp/bp/orders/instant",
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "content-type": "application/json",
+        "content-length": "1698",
+        "date": "Wed, 04 Nov 2026 22:48:36 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 475.522,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/bp/bp/orders/receive/containers/queries",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "behavior-family-strict-read",
+        "route_ids": [
+          "f0cb29167e33165d"
+        ]
+      },
+      "class": "com.sunwayworld.emc.module.bp.bp.resource.impl.PfOrderResourceImpl",
+      "behavior_family": "921c8154c7d5740a",
+      "request_profile": "empty",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r746e8a1f5cee"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "b9ace7986fa9d093be88305da2af149faba24e62ae1f4f1771735b0ced57a080",
+      "body_bytes": 4007,
+      "assertions": {
+        "content_type": "application/json",
+        "json_keys": [
+          "columnTypeMap",
+          "first",
+          "last",
+          "numberOfElements",
+          "pageNumber",
+          "pageSize",
+          "rows",
+          "total",
+          "totalMap",
+          "totalPages"
+        ]
+      },
+      "id": "fast-strict-1c0fc013e8fd4477-default",
+      "method": "POST",
+      "path": "/secure/emc/module/bp/edit/project-change/proj-schemes/proj-orders/queries",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/edit/project-change/proj-schemes/proj-orders/queries",
+      "status": 200,
+      "response_headers": {
+        "access-control-allow-headers": "security-rsa-key",
+        "access-control-allow-methods": "*",
+        "access-control-allow-credentials": "true",
+        "gikam-instant-save-path": "/secure/emc/module/bp/edit/project-change/proj-schemes/instant",
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "content-type": "application/json",
+        "content-length": "4007",
+        "date": "Wed, 04 Nov 2026 22:48:37 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 634.992,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/bp/edit/project-change/proj-schemes/proj-orders/queries",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "behavior-family-strict-read",
+        "route_ids": [
+          "07ce9a16554c8f49"
+        ]
+      },
+      "class": "com.sunwayworld.emc.module.bp.edit.projectchange.resource.impl.EmcProjSchemeChangeResourceImpl",
+      "behavior_family": "1c0fc013e8fd4477",
+      "request_profile": "default",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r5f5700ff222a"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "d80a1d5d96b0b9dcda31b545004381a8ddc093be173733b563002a2c99c9aaab",
+      "body_bytes": 4257,
+      "assertions": {
+        "content_type": "application/json",
+        "json_keys": [
+          "columnTypeMap",
+          "first",
+          "last",
+          "numberOfElements",
+          "pageNumber",
+          "pageSize",
+          "rows",
+          "total",
+          "totalMap",
+          "totalPages"
+        ]
+      },
+      "id": "fast-strict-b35597dd0818057b-page-2",
+      "method": "POST",
+      "path": "/secure/emc/module/bp/edit/project-change/proj-schemes/proj-orders/queries",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/edit/project-change/proj-schemes/proj-orders/queries",
+      "status": 200,
+      "response_headers": {
+        "access-control-allow-headers": "security-rsa-key",
+        "access-control-allow-methods": "*",
+        "access-control-allow-credentials": "true",
+        "gikam-instant-save-path": "/secure/emc/module/bp/edit/project-change/proj-schemes/instant",
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "content-type": "application/json",
+        "content-length": "4257",
+        "date": "Wed, 04 Nov 2026 22:48:37 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 521.252,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/bp/edit/project-change/proj-schemes/proj-orders/queries",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "behavior-family-strict-read",
+        "route_ids": [
+          "07ce9a16554c8f49"
+        ]
+      },
+      "class": "com.sunwayworld.emc.module.bp.edit.projectchange.resource.impl.EmcProjSchemeChangeResourceImpl",
+      "behavior_family": "b35597dd0818057b",
+      "request_profile": "page-2",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r52caf6d0e731"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "97acf86fdc049e2f1fd061da2954eeddb638326a779411fa49a6c8abe9ea4b2c",
+      "body_bytes": 1160,
+      "assertions": {
+        "content_type": "application/json",
+        "json_keys": [
+          "columnTypeMap",
+          "first",
+          "last",
+          "numberOfElements",
+          "pageNumber",
+          "pageSize",
+          "rows",
+          "total",
+          "totalMap",
+          "totalPages"
+        ]
+      },
+      "id": "fast-strict-33d8501c49ac6a22-empty",
+      "method": "POST",
+      "path": "/secure/emc/module/bp/edit/project-change/proj-schemes/proj-orders/queries",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/edit/project-change/proj-schemes/proj-orders/queries",
+      "status": 200,
+      "response_headers": {
+        "access-control-allow-headers": "security-rsa-key",
+        "access-control-allow-methods": "*",
+        "access-control-allow-credentials": "true",
+        "gikam-instant-save-path": "/secure/emc/module/bp/edit/project-change/proj-schemes/instant",
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "content-type": "application/json",
+        "content-length": "1160",
+        "date": "Wed, 04 Nov 2026 22:48:37 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 255.362,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/bp/edit/project-change/proj-schemes/proj-orders/queries",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "behavior-family-strict-read",
+        "route_ids": [
+          "07ce9a16554c8f49"
+        ]
+      },
+      "class": "com.sunwayworld.emc.module.bp.edit.projectchange.resource.impl.EmcProjSchemeChangeResourceImpl",
+      "behavior_family": "33d8501c49ac6a22",
+      "request_profile": "empty",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "ra66b43e621b3"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": null,
+      "body_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "body_bytes": 2,
+      "assertions": {
+        "content_type": "application/json",
+        "json_keys": []
+      },
+      "id": "fast-strict-44a3132586218076-default",
+      "method": "POST",
+      "path": "/secure/emc/module/bp/info/gis-maps/itemAliasNames/queries",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/info/gis-maps/itemAliasNames/queries",
+      "status": 200,
+      "response_headers": {
+        "access-control-allow-headers": "security-rsa-key",
+        "access-control-allow-methods": "*",
+        "access-control-allow-credentials": "true",
+        "gikam-instant-save-path": "/secure/emc/module/bp/info/gis-maps/instant",
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "content-type": "application/json",
+        "content-length": "2",
+        "date": "Wed, 04 Nov 2026 22:48:38 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 542.317,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/bp/info/gis-maps/itemAliasNames/queries",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "behavior-family-strict-read",
+        "route_ids": [
+          "9d4bdfd3fa6bd4da"
+        ]
+      },
+      "class": "com.sunwayworld.emc.module.bp.info.gismap.resource.impl.EmcGisMapResourceImpl",
+      "behavior_family": "44a3132586218076",
+      "request_profile": "default",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r12da4d58ddac"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": null,
+      "body_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "body_bytes": 2,
+      "assertions": {
+        "content_type": "application/json",
+        "json_keys": []
+      },
+      "id": "fast-strict-807737d32b8d109e-page-2",
+      "method": "POST",
+      "path": "/secure/emc/module/bp/info/gis-maps/itemAliasNames/queries",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/info/gis-maps/itemAliasNames/queries",
+      "status": 200,
+      "response_headers": {
+        "access-control-allow-headers": "security-rsa-key",
+        "access-control-allow-methods": "*",
+        "access-control-allow-credentials": "true",
+        "gikam-instant-save-path": "/secure/emc/module/bp/info/gis-maps/instant",
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "content-type": "application/json",
+        "content-length": "2",
+        "date": "Wed, 04 Nov 2026 22:48:38 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 237.145,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/bp/info/gis-maps/itemAliasNames/queries",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "behavior-family-strict-read",
+        "route_ids": [
+          "9d4bdfd3fa6bd4da"
+        ]
+      },
+      "class": "com.sunwayworld.emc.module.bp.info.gismap.resource.impl.EmcGisMapResourceImpl",
+      "behavior_family": "807737d32b8d109e",
+      "request_profile": "page-2",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r24e31fc286ef"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": null,
+      "body_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "body_bytes": 2,
+      "assertions": {
+        "content_type": "application/json",
+        "json_keys": []
+      },
+      "id": "fast-strict-9297cd7757936062-empty",
+      "method": "POST",
+      "path": "/secure/emc/module/bp/info/gis-maps/itemAliasNames/queries",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/info/gis-maps/itemAliasNames/queries",
+      "status": 200,
+      "response_headers": {
+        "access-control-allow-headers": "security-rsa-key",
+        "access-control-allow-methods": "*",
+        "access-control-allow-credentials": "true",
+        "gikam-instant-save-path": "/secure/emc/module/bp/info/gis-maps/instant",
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "content-type": "application/json",
+        "content-length": "2",
+        "date": "Wed, 04 Nov 2026 22:48:38 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 247.625,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/bp/info/gis-maps/itemAliasNames/queries",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "behavior-family-strict-read",
+        "route_ids": [
+          "9d4bdfd3fa6bd4da"
+        ]
+      },
+      "class": "com.sunwayworld.emc.module.bp.info.gismap.resource.impl.EmcGisMapResourceImpl",
+      "behavior_family": "9297cd7757936062",
+      "request_profile": "empty",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r0e37cffb4b95"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": null,
+      "body_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "body_bytes": 2,
+      "assertions": {
+        "content_type": "application/json",
+        "json_keys": []
+      },
+      "id": "fast-strict-bf519868cf2185b7-default",
+      "method": "POST",
+      "path": "/secure/emc/module/bp/info/gis-maps/monitorPointCategories/queries",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/info/gis-maps/monitorPointCategories/queries",
+      "status": 200,
+      "response_headers": {
+        "access-control-allow-headers": "security-rsa-key",
+        "access-control-allow-methods": "*",
+        "access-control-allow-credentials": "true",
+        "gikam-instant-save-path": "/secure/emc/module/bp/info/gis-maps/instant",
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "content-type": "application/json",
+        "content-length": "2",
+        "date": "Wed, 04 Nov 2026 22:48:38 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 445.873,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/bp/info/gis-maps/monitorPointCategories/queries",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "behavior-family-strict-read",
+        "route_ids": [
+          "98476990dfdbb278"
+        ]
+      },
+      "class": "com.sunwayworld.emc.module.bp.info.gismap.resource.impl.EmcGisMapResourceImpl",
+      "behavior_family": "bf519868cf2185b7",
+      "request_profile": "default",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "rbb47eedbd249"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": null,
+      "body_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "body_bytes": 2,
+      "assertions": {
+        "content_type": "application/json",
+        "json_keys": []
+      },
+      "id": "fast-strict-d67df9caa02169c8-page-2",
+      "method": "POST",
+      "path": "/secure/emc/module/bp/info/gis-maps/monitorPointCategories/queries",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/info/gis-maps/monitorPointCategories/queries",
+      "status": 200,
+      "response_headers": {
+        "access-control-allow-headers": "security-rsa-key",
+        "access-control-allow-methods": "*",
+        "access-control-allow-credentials": "true",
+        "gikam-instant-save-path": "/secure/emc/module/bp/info/gis-maps/instant",
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "content-type": "application/json",
+        "content-length": "2",
+        "date": "Wed, 04 Nov 2026 22:48:39 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 234.969,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/bp/info/gis-maps/monitorPointCategories/queries",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "behavior-family-strict-read",
+        "route_ids": [
+          "98476990dfdbb278"
+        ]
+      },
+      "class": "com.sunwayworld.emc.module.bp.info.gismap.resource.impl.EmcGisMapResourceImpl",
+      "behavior_family": "d67df9caa02169c8",
+      "request_profile": "page-2",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "rc35f83098748"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": null,
+      "body_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "body_bytes": 2,
+      "assertions": {
+        "content_type": "application/json",
+        "json_keys": []
+      },
+      "id": "fast-strict-81a465582a8cb1c0-empty",
+      "method": "POST",
+      "path": "/secure/emc/module/bp/info/gis-maps/monitorPointCategories/queries",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/info/gis-maps/monitorPointCategories/queries",
+      "status": 200,
+      "response_headers": {
+        "access-control-allow-headers": "security-rsa-key",
+        "access-control-allow-methods": "*",
+        "access-control-allow-credentials": "true",
+        "gikam-instant-save-path": "/secure/emc/module/bp/info/gis-maps/instant",
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "content-type": "application/json",
+        "content-length": "2",
+        "date": "Wed, 04 Nov 2026 22:48:39 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 249.812,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/bp/info/gis-maps/monitorPointCategories/queries",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "behavior-family-strict-read",
+        "route_ids": [
+          "98476990dfdbb278"
+        ]
+      },
+      "class": "com.sunwayworld.emc.module.bp.info.gismap.resource.impl.EmcGisMapResourceImpl",
+      "behavior_family": "81a465582a8cb1c0",
+      "request_profile": "empty",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r6018a8b93b12"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": null,
+      "body_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "body_bytes": 2,
+      "assertions": {
+        "content_type": "application/json",
+        "json_keys": []
+      },
+      "id": "fast-strict-7d6fe7029c2bc12a-default",
+      "method": "POST",
+      "path": "/secure/emc/module/bp/info/gis-maps/testNames/queries",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/info/gis-maps/testNames/queries",
+      "status": 200,
+      "response_headers": {
+        "access-control-allow-headers": "security-rsa-key",
+        "access-control-allow-methods": "*",
+        "access-control-allow-credentials": "true",
+        "gikam-instant-save-path": "/secure/emc/module/bp/info/gis-maps/instant",
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "content-type": "application/json",
+        "content-length": "2",
+        "date": "Wed, 04 Nov 2026 22:48:39 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 485.466,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/bp/info/gis-maps/testNames/queries",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "behavior-family-strict-read",
+        "route_ids": [
+          "3641abdd0e327028"
+        ]
+      },
+      "class": "com.sunwayworld.emc.module.bp.info.gismap.resource.impl.EmcGisMapResourceImpl",
+      "behavior_family": "7d6fe7029c2bc12a",
+      "request_profile": "default",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "rf4ae5f0ae02d"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": null,
+      "body_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "body_bytes": 2,
+      "assertions": {
+        "content_type": "application/json",
+        "json_keys": []
+      },
+      "id": "fast-strict-a8fd31a90817edc4-page-2",
+      "method": "POST",
+      "path": "/secure/emc/module/bp/info/gis-maps/testNames/queries",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/info/gis-maps/testNames/queries",
+      "status": 200,
+      "response_headers": {
+        "access-control-allow-headers": "security-rsa-key",
+        "access-control-allow-methods": "*",
+        "access-control-allow-credentials": "true",
+        "gikam-instant-save-path": "/secure/emc/module/bp/info/gis-maps/instant",
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "content-type": "application/json",
+        "content-length": "2",
+        "date": "Wed, 04 Nov 2026 22:48:39 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 236.496,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/bp/info/gis-maps/testNames/queries",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "behavior-family-strict-read",
+        "route_ids": [
+          "3641abdd0e327028"
+        ]
+      },
+      "class": "com.sunwayworld.emc.module.bp.info.gismap.resource.impl.EmcGisMapResourceImpl",
+      "behavior_family": "a8fd31a90817edc4",
+      "request_profile": "page-2",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r60fd193d65c2"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": null,
+      "body_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "body_bytes": 2,
+      "assertions": {
+        "content_type": "application/json",
+        "json_keys": []
+      },
+      "id": "fast-strict-c0300e3d2a30991e-empty",
+      "method": "POST",
+      "path": "/secure/emc/module/bp/info/gis-maps/testNames/queries",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/info/gis-maps/testNames/queries",
+      "status": 200,
+      "response_headers": {
+        "access-control-allow-headers": "security-rsa-key",
+        "access-control-allow-methods": "*",
+        "access-control-allow-credentials": "true",
+        "gikam-instant-save-path": "/secure/emc/module/bp/info/gis-maps/instant",
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "content-type": "application/json",
+        "content-length": "2",
+        "date": "Wed, 04 Nov 2026 22:48:41 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 231.618,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/bp/info/gis-maps/testNames/queries",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "behavior-family-strict-read",
+        "route_ids": [
+          "3641abdd0e327028"
+        ]
+      },
+      "class": "com.sunwayworld.emc.module.bp.info.gismap.resource.impl.EmcGisMapResourceImpl",
+      "behavior_family": "c0300e3d2a30991e",
+      "request_profile": "empty",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r805c7d1cc7fb"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "4f7b12e7c3b293f9b9c2c010420a2e17df38ad316f5db6af5b97aea34903dd32",
+      "body_bytes": 13243,
+      "assertions": {
+        "content_type": "application/json",
+        "json_keys": [
+          "columnTypeMap",
+          "first",
+          "last",
+          "numberOfElements",
+          "pageNumber",
+          "pageSize",
+          "rows",
+          "total",
+          "totalMap",
+          "totalPages"
+        ]
+      },
+      "id": "fast-strict-db5a0d23bdc12c0c-default",
+      "method": "GET",
+      "path": "/secure/emc/module/bp/info/info-tmpls/fields/queries/raw",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/info/info-tmpls/fields/queries/raw",
+      "status": 200,
+      "response_headers": {
+        "access-control-allow-headers": "security-rsa-key",
+        "access-control-allow-methods": "*",
+        "access-control-allow-credentials": "true",
+        "gikam-instant-save-path": "/secure/emc/module/bp/info/info-tmpls/instant",
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "content-type": "application/json",
+        "content-length": "13243",
+        "date": "Wed, 04 Nov 2026 22:48:41 GMT",
+        "connection": "close"
+      },
+      "request_headers": {},
+      "elapsed_ms": 968.37,
+      "route": {
+        "method": "GET",
+        "path": "/secure/emc/module/bp/info/info-tmpls/fields/queries/raw",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "behavior-family-strict-read",
+        "route_ids": [
+          "13ff255c37861d9b"
+        ]
+      },
+      "class": "com.sunwayworld.emc.module.bp.info.infotmpl.resource.impl.EmcInfoTmplResourceImpl",
+      "behavior_family": "db5a0d23bdc12c0c",
+      "request_profile": "default",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r3e2c65674451"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "4f7b12e7c3b293f9b9c2c010420a2e17df38ad316f5db6af5b97aea34903dd32",
+      "body_bytes": 13243,
+      "assertions": {
+        "content_type": "application/json",
+        "json_keys": [
+          "columnTypeMap",
+          "first",
+          "last",
+          "numberOfElements",
+          "pageNumber",
+          "pageSize",
+          "rows",
+          "total",
+          "totalMap",
+          "totalPages"
+        ]
+      },
+      "id": "fast-strict-384fe16354986857-page-2",
+      "method": "GET",
+      "path": "/secure/emc/module/bp/info/info-tmpls/fields/queries/raw?page=2&size=10",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/info/info-tmpls/fields/queries/raw?page=2&size=10",
+      "status": 200,
+      "response_headers": {
+        "access-control-allow-headers": "security-rsa-key",
+        "access-control-allow-methods": "*",
+        "access-control-allow-credentials": "true",
+        "gikam-instant-save-path": "/secure/emc/module/bp/info/info-tmpls/instant",
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "content-type": "application/json",
+        "content-length": "13243",
+        "date": "Wed, 04 Nov 2026 22:48:42 GMT",
+        "connection": "close"
+      },
+      "request_headers": {},
+      "elapsed_ms": 355.008,
+      "route": {
+        "method": "GET",
+        "path": "/secure/emc/module/bp/info/info-tmpls/fields/queries/raw?page=2&size=10",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "behavior-family-strict-read",
+        "route_ids": [
+          "13ff255c37861d9b"
+        ]
+      },
+      "class": "com.sunwayworld.emc.module.bp.info.infotmpl.resource.impl.EmcInfoTmplResourceImpl",
+      "behavior_family": "384fe16354986857",
+      "request_profile": "page-2",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r610d8be1f462"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "4f7b12e7c3b293f9b9c2c010420a2e17df38ad316f5db6af5b97aea34903dd32",
+      "body_bytes": 13243,
+      "assertions": {
+        "content_type": "application/json",
+        "json_keys": [
+          "columnTypeMap",
+          "first",
+          "last",
+          "numberOfElements",
+          "pageNumber",
+          "pageSize",
+          "rows",
+          "total",
+          "totalMap",
+          "totalPages"
+        ]
+      },
+      "id": "fast-strict-0af266feec22823b-empty",
+      "method": "GET",
+      "path": "/secure/emc/module/bp/info/info-tmpls/fields/queries/raw?keyword=__sunway_fast_empty__",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/info/info-tmpls/fields/queries/raw?keyword=__sunway_fast_empty__",
+      "status": 200,
+      "response_headers": {
+        "access-control-allow-headers": "security-rsa-key",
+        "access-control-allow-methods": "*",
+        "access-control-allow-credentials": "true",
+        "gikam-instant-save-path": "/secure/emc/module/bp/info/info-tmpls/instant",
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "content-type": "application/json",
+        "content-length": "13243",
+        "date": "Wed, 04 Nov 2026 22:48:42 GMT",
+        "connection": "close"
+      },
+      "request_headers": {},
+      "elapsed_ms": 243.14,
+      "route": {
+        "method": "GET",
+        "path": "/secure/emc/module/bp/info/info-tmpls/fields/queries/raw?keyword=__sunway_fast_empty__",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "behavior-family-strict-read",
+        "route_ids": [
+          "13ff255c37861d9b"
+        ]
+      },
+      "class": "com.sunwayworld.emc.module.bp.info.infotmpl.resource.impl.EmcInfoTmplResourceImpl",
+      "behavior_family": "0af266feec22823b",
+      "request_profile": "empty",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r5c8c33434d24"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": null,
+      "body_sha256": "2b39f9782421159445223d9e73fe90d087aa47cd26245ed70f2febf76722a5d4",
+      "body_bytes": 31356,
+      "assertions": {
+        "content_type": "application/json",
+        "json_keys": []
+      },
+      "id": "fast-strict-1d2b8d9d38c691b2-lookup",
+      "method": "GET",
+      "path": "/secure/emc/module/bp/info/info-tmpls/fields/queries/selectable",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/info/info-tmpls/fields/queries/selectable",
+      "status": 200,
+      "response_headers": {
+        "access-control-allow-headers": "security-rsa-key",
+        "access-control-allow-methods": "*",
+        "access-control-allow-credentials": "true",
+        "gikam-instant-save-path": "/secure/emc/module/bp/info/info-tmpls/instant",
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "content-type": "application/json",
+        "content-length": "31356",
+        "date": "Wed, 04 Nov 2026 22:48:42 GMT",
+        "connection": "close"
+      },
+      "request_headers": {},
+      "elapsed_ms": 374.389,
+      "route": {
+        "method": "GET",
+        "path": "/secure/emc/module/bp/info/info-tmpls/fields/queries/selectable",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "behavior-family-strict-read",
+        "route_ids": [
+          "7b44f3ef5fbd52f5"
+        ]
+      },
+      "class": "com.sunwayworld.emc.module.bp.info.infotmpl.resource.impl.EmcInfoTmplResourceImpl",
+      "behavior_family": "1d2b8d9d38c691b2",
+      "request_profile": "lookup",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "rc3bc22030925"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "15c9a63cf0714afe8a7a03b88d3ac81935ed86cb3b7b1dcf1c2212a1d671b8b6",
+      "body_bytes": 440,
+      "assertions": {
+        "content_type": "application/json",
+        "json_keys": [
+          "columnTypeMap",
+          "first",
+          "last",
+          "numberOfElements",
+          "pageNumber",
+          "pageSize",
+          "rows",
+          "total",
+          "totalMap",
+          "totalPages"
+        ]
+      },
+      "id": "fast-strict-4eaf9559c1f17c71-default",
+      "method": "POST",
+      "path": "/secure/emc/module/bp/info/info-tmpls/items/queries",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/info/info-tmpls/items/queries",
+      "status": 200,
+      "response_headers": {
+        "access-control-allow-headers": "security-rsa-key",
+        "access-control-allow-methods": "*",
+        "access-control-allow-credentials": "true",
+        "gikam-instant-save-path": "/secure/emc/module/bp/info/info-tmpls/instant",
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "content-type": "application/json",
+        "content-length": "440",
+        "date": "Wed, 04 Nov 2026 22:48:42 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 241.954,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/bp/info/info-tmpls/items/queries",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "behavior-family-strict-read",
+        "route_ids": [
+          "f479c975f2235910"
+        ]
+      },
+      "class": "com.sunwayworld.emc.module.bp.info.infotmpl.resource.impl.EmcInfoTmplResourceImpl",
+      "behavior_family": "4eaf9559c1f17c71",
+      "request_profile": "default",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "rab7b61fd75c7"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "20ecd6467b19d53dbf942d864a9bf65c19271ebbbd1507aa698f640f816ae225",
+      "body_bytes": 441,
+      "assertions": {
+        "content_type": "application/json",
+        "json_keys": [
+          "columnTypeMap",
+          "first",
+          "last",
+          "numberOfElements",
+          "pageNumber",
+          "pageSize",
+          "rows",
+          "total",
+          "totalMap",
+          "totalPages"
+        ]
+      },
+      "id": "fast-strict-eb096e93e3c55579-page-2",
+      "method": "POST",
+      "path": "/secure/emc/module/bp/info/info-tmpls/items/queries",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/info/info-tmpls/items/queries",
+      "status": 200,
+      "response_headers": {
+        "access-control-allow-headers": "security-rsa-key",
+        "access-control-allow-methods": "*",
+        "access-control-allow-credentials": "true",
+        "gikam-instant-save-path": "/secure/emc/module/bp/info/info-tmpls/instant",
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "content-type": "application/json",
+        "content-length": "441",
+        "date": "Wed, 04 Nov 2026 22:48:43 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 238.091,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/bp/info/info-tmpls/items/queries",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "behavior-family-strict-read",
+        "route_ids": [
+          "f479c975f2235910"
+        ]
+      },
+      "class": "com.sunwayworld.emc.module.bp.info.infotmpl.resource.impl.EmcInfoTmplResourceImpl",
+      "behavior_family": "eb096e93e3c55579",
+      "request_profile": "page-2",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r12344aef36af"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "15c9a63cf0714afe8a7a03b88d3ac81935ed86cb3b7b1dcf1c2212a1d671b8b6",
+      "body_bytes": 440,
+      "assertions": {
+        "content_type": "application/json",
+        "json_keys": [
+          "columnTypeMap",
+          "first",
+          "last",
+          "numberOfElements",
+          "pageNumber",
+          "pageSize",
+          "rows",
+          "total",
+          "totalMap",
+          "totalPages"
+        ]
+      },
+      "id": "fast-strict-b6646f50526fcaef-empty",
+      "method": "POST",
+      "path": "/secure/emc/module/bp/info/info-tmpls/items/queries",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/info/info-tmpls/items/queries",
+      "status": 200,
+      "response_headers": {
+        "access-control-allow-headers": "security-rsa-key",
+        "access-control-allow-methods": "*",
+        "access-control-allow-credentials": "true",
+        "gikam-instant-save-path": "/secure/emc/module/bp/info/info-tmpls/instant",
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "content-type": "application/json",
+        "content-length": "440",
+        "date": "Wed, 04 Nov 2026 22:48:43 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 249.631,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/bp/info/info-tmpls/items/queries",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "behavior-family-strict-read",
+        "route_ids": [
+          "f479c975f2235910"
+        ]
+      },
+      "class": "com.sunwayworld.emc.module.bp.info.infotmpl.resource.impl.EmcInfoTmplResourceImpl",
+      "behavior_family": "b6646f50526fcaef",
+      "request_profile": "empty",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r2d16ab8ee93c"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "e6a97dec7f3d7021fef34f77c09252366684e900b037ff42dda9fe7d31195679",
+      "body_bytes": 621,
+      "assertions": {
+        "content_type": "application/json",
+        "json_keys": [
+          "columnTypeMap",
+          "first",
+          "last",
+          "numberOfElements",
+          "pageNumber",
+          "pageSize",
+          "rows",
+          "total",
+          "totalMap",
+          "totalPages"
+        ]
+      },
+      "id": "fast-strict-3bcf5c1e2a3d536d-default",
+      "method": "POST",
+      "path": "/secure/emc/module/bp/info/info-tmpls/points/queries",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/info/info-tmpls/points/queries",
+      "status": 200,
+      "response_headers": {
+        "access-control-allow-headers": "security-rsa-key",
+        "access-control-allow-methods": "*",
+        "access-control-allow-credentials": "true",
+        "gikam-instant-save-path": "/secure/emc/module/bp/info/info-tmpls/instant",
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "content-type": "application/json",
+        "content-length": "621",
+        "date": "Wed, 04 Nov 2026 22:48:44 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 1148.758,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/bp/info/info-tmpls/points/queries",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "behavior-family-strict-read",
+        "route_ids": [
+          "1b3a85bcac73d836"
+        ]
+      },
+      "class": "com.sunwayworld.emc.module.bp.info.infotmpl.resource.impl.EmcInfoTmplResourceImpl",
+      "behavior_family": "3bcf5c1e2a3d536d",
+      "request_profile": "default",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r2e47cbe75454"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "aa212c9af2ad9b11789e1bb211460d73450b8294e62ce485c72c1542bbfae9b8",
+      "body_bytes": 311,
+      "assertions": {
+        "content_type": "application/json",
+        "json_keys": [
+          "columnTypeMap",
+          "first",
+          "last",
+          "numberOfElements",
+          "pageNumber",
+          "pageSize",
+          "rows",
+          "total",
+          "totalMap",
+          "totalPages"
+        ]
+      },
+      "id": "fast-strict-0f04118095961c4d-page-2",
+      "method": "POST",
+      "path": "/secure/emc/module/bp/info/info-tmpls/points/queries",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/info/info-tmpls/points/queries",
+      "status": 200,
+      "response_headers": {
+        "access-control-allow-headers": "security-rsa-key",
+        "access-control-allow-methods": "*",
+        "access-control-allow-credentials": "true",
+        "gikam-instant-save-path": "/secure/emc/module/bp/info/info-tmpls/instant",
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "content-type": "application/json",
+        "content-length": "311",
+        "date": "Wed, 04 Nov 2026 22:48:44 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 237.923,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/bp/info/info-tmpls/points/queries",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "behavior-family-strict-read",
+        "route_ids": [
+          "1b3a85bcac73d836"
+        ]
+      },
+      "class": "com.sunwayworld.emc.module.bp.info.infotmpl.resource.impl.EmcInfoTmplResourceImpl",
+      "behavior_family": "0f04118095961c4d",
+      "request_profile": "page-2",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r75ea935fdec6"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "e2faf6009839179559cf7b7db3f6e9c5c68b64cfac5af6675626304b3cd3d2fc",
+      "body_bytes": 310,
+      "assertions": {
+        "content_type": "application/json",
+        "json_keys": [
+          "columnTypeMap",
+          "first",
+          "last",
+          "numberOfElements",
+          "pageNumber",
+          "pageSize",
+          "rows",
+          "total",
+          "totalMap",
+          "totalPages"
+        ]
+      },
+      "id": "fast-strict-62d164872f0623a2-empty",
+      "method": "POST",
+      "path": "/secure/emc/module/bp/info/info-tmpls/points/queries",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/info/info-tmpls/points/queries",
+      "status": 200,
+      "response_headers": {
+        "access-control-allow-headers": "security-rsa-key",
+        "access-control-allow-methods": "*",
+        "access-control-allow-credentials": "true",
+        "gikam-instant-save-path": "/secure/emc/module/bp/info/info-tmpls/instant",
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "content-type": "application/json",
+        "content-length": "310",
+        "date": "Wed, 04 Nov 2026 22:48:44 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 241.312,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/bp/info/info-tmpls/points/queries",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "behavior-family-strict-read",
+        "route_ids": [
+          "1b3a85bcac73d836"
+        ]
+      },
+      "class": "com.sunwayworld.emc.module.bp.info.infotmpl.resource.impl.EmcInfoTmplResourceImpl",
+      "behavior_family": "62d164872f0623a2",
+      "request_profile": "empty",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "rd8515d1e76cd"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "172099468238d4c567cd27e40e48bc9e94c0e300b8a1aee2ae05099f4de62fcf",
+      "body_bytes": 24031,
+      "assertions": {
+        "content_type": "application/json",
+        "json_keys": [
+          "columnTypeMap",
+          "first",
+          "last",
+          "numberOfElements",
+          "pageNumber",
+          "pageSize",
+          "rows",
+          "total",
+          "totalMap",
+          "totalPages"
+        ]
+      },
+      "id": "fast-strict-85799b4e4aa3adff-default",
+      "method": "POST",
+      "path": "/secure/emc/module/bp/order/order-retains/queries-overdue",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/order/order-retains/queries-overdue",
+      "status": 200,
+      "response_headers": {
+        "access-control-allow-headers": "security-rsa-key",
+        "access-control-allow-methods": "*",
+        "access-control-allow-credentials": "true",
+        "gikam-instant-save-path": "/secure/emc/module/bp/order/order-retains/instant",
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "content-type": "application/json",
+        "content-length": "24031",
+        "date": "Wed, 04 Nov 2026 22:48:44 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 371.374,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/bp/order/order-retains/queries-overdue",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "behavior-family-strict-read",
+        "route_ids": [
+          "df9e7a64c91b1550"
+        ]
+      },
+      "class": "com.sunwayworld.emc.module.bp.order.orderretain.resource.EmcOrderRetainResource",
+      "behavior_family": "85799b4e4aa3adff",
+      "request_profile": "default",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r7243cdaa8da6"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "172099468238d4c567cd27e40e48bc9e94c0e300b8a1aee2ae05099f4de62fcf",
+      "body_bytes": 24031,
+      "assertions": {
+        "content_type": "application/json",
+        "json_keys": [
+          "columnTypeMap",
+          "first",
+          "last",
+          "numberOfElements",
+          "pageNumber",
+          "pageSize",
+          "rows",
+          "total",
+          "totalMap",
+          "totalPages"
+        ]
+      },
+      "id": "fast-strict-686638c3a60868c2-page-2",
+      "method": "POST",
+      "path": "/secure/emc/module/bp/order/order-retains/queries-overdue",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/order/order-retains/queries-overdue",
+      "status": 200,
+      "response_headers": {
+        "access-control-allow-headers": "security-rsa-key",
+        "access-control-allow-methods": "*",
+        "access-control-allow-credentials": "true",
+        "gikam-instant-save-path": "/secure/emc/module/bp/order/order-retains/instant",
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "content-type": "application/json",
+        "content-length": "24031",
+        "date": "Wed, 04 Nov 2026 22:48:45 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 191.204,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/bp/order/order-retains/queries-overdue",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "behavior-family-strict-read",
+        "route_ids": [
+          "df9e7a64c91b1550"
+        ]
+      },
+      "class": "com.sunwayworld.emc.module.bp.order.orderretain.resource.EmcOrderRetainResource",
+      "behavior_family": "686638c3a60868c2",
+      "request_profile": "page-2",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r381c09905da1"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "dada421df8411235d860573b7e64da9990268b35db675ceeda3ef22bb400c483",
+      "body_bytes": 5757,
+      "assertions": {
+        "content_type": "application/json",
+        "json_keys": [
+          "columnTypeMap",
+          "first",
+          "last",
+          "numberOfElements",
+          "pageNumber",
+          "pageSize",
+          "rows",
+          "total",
+          "totalMap",
+          "totalPages"
+        ]
+      },
+      "id": "fast-strict-9a287b766b9ee6cc-default",
+      "method": "POST",
+      "path": "/secure/emc/module/bp/project/proj-schemes/proj-orders/queries",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/project/proj-schemes/proj-orders/queries",
+      "status": 200,
+      "response_headers": {
+        "access-control-allow-headers": "security-rsa-key",
+        "access-control-allow-methods": "*",
+        "access-control-allow-credentials": "true",
+        "gikam-instant-save-path": "/secure/emc/module/bp/project/proj-schemes/instant",
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "content-type": "application/json",
+        "content-length": "5757",
+        "date": "Wed, 04 Nov 2026 22:48:48 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 2230.847,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/bp/project/proj-schemes/proj-orders/queries",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "behavior-family-strict-read",
+        "route_ids": [
+          "2b58243f6286b2fa"
+        ]
+      },
+      "class": "com.sunwayworld.emc.module.bp.project.projscheme.resource.impl.EmcProjSchemeResourceImpl",
+      "behavior_family": "9a287b766b9ee6cc",
+      "request_profile": "default",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "red9db905c00f"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "ea595126babfd07b93c2e26de6587f6ea8e8e0ae36bab778263b443fd7b5a79a",
+      "body_bytes": 6249,
+      "assertions": {
+        "content_type": "application/json",
+        "json_keys": [
+          "columnTypeMap",
+          "first",
+          "last",
+          "numberOfElements",
+          "pageNumber",
+          "pageSize",
+          "rows",
+          "total",
+          "totalMap",
+          "totalPages"
+        ]
+      },
+      "id": "fast-strict-54e4c2b363aa5c9a-page-2",
+      "method": "POST",
+      "path": "/secure/emc/module/bp/project/proj-schemes/proj-orders/queries",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/project/proj-schemes/proj-orders/queries",
+      "status": 200,
+      "response_headers": {
+        "access-control-allow-headers": "security-rsa-key",
+        "access-control-allow-methods": "*",
+        "access-control-allow-credentials": "true",
+        "gikam-instant-save-path": "/secure/emc/module/bp/project/proj-schemes/instant",
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "content-type": "application/json",
+        "content-length": "6249",
+        "date": "Wed, 04 Nov 2026 22:48:48 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 297.27,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/bp/project/proj-schemes/proj-orders/queries",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "behavior-family-strict-read",
+        "route_ids": [
+          "2b58243f6286b2fa"
+        ]
+      },
+      "class": "com.sunwayworld.emc.module.bp.project.projscheme.resource.impl.EmcProjSchemeResourceImpl",
+      "behavior_family": "54e4c2b363aa5c9a",
+      "request_profile": "page-2",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r4b42e4491bd4"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "c8883eafbc11b71551e03087cdaaaddee22f7f75c91cce571debcecf1effdf5f",
+      "body_bytes": 1332,
+      "assertions": {
+        "content_type": "application/json",
+        "json_keys": [
+          "columnTypeMap",
+          "first",
+          "last",
+          "numberOfElements",
+          "pageNumber",
+          "pageSize",
+          "rows",
+          "total",
+          "totalMap",
+          "totalPages"
+        ]
+      },
+      "id": "fast-strict-4e950afb4e355819-empty",
+      "method": "POST",
+      "path": "/secure/emc/module/bp/project/proj-schemes/proj-orders/queries",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/project/proj-schemes/proj-orders/queries",
+      "status": 200,
+      "response_headers": {
+        "access-control-allow-headers": "security-rsa-key",
+        "access-control-allow-methods": "*",
+        "access-control-allow-credentials": "true",
+        "gikam-instant-save-path": "/secure/emc/module/bp/project/proj-schemes/instant",
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "content-type": "application/json",
+        "content-length": "1332",
+        "date": "Wed, 04 Nov 2026 22:48:48 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 274.629,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/bp/project/proj-schemes/proj-orders/queries",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "behavior-family-strict-read",
+        "route_ids": [
+          "2b58243f6286b2fa"
+        ]
+      },
+      "class": "com.sunwayworld.emc.module.bp.project.projscheme.resource.impl.EmcProjSchemeResourceImpl",
+      "behavior_family": "4e950afb4e355819",
+      "request_profile": "empty",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r6bd3fe61a7d7"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        500
+      ],
+      "json_top_level_keys": [
+        "error",
+        "message",
+        "path",
+        "stacktrace",
+        "status",
+        "timestamp"
+      ],
+      "body_sha256": "4280f7e53f07f24692c276519f0ef90c1335acc4cc3ae6d64a5089f7a44a02a4",
+      "body_bytes": 20439,
+      "assertions": {
+        "content_type": "",
+        "json_keys": [
+          "error",
+          "message",
+          "path",
+          "stacktrace",
+          "status",
+          "timestamp"
+        ]
+      },
+      "id": "fast-strict-661655801800a256-default",
+      "method": "POST",
+      "path": "/secure/emc/module/bp/project/project-qcs/lines/table-heads/queries",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/project/project-qcs/lines/table-heads/queries",
+      "status": 500,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "transfer-encoding": "chunked",
+        "date": "Wed, 04 Nov 2026 22:48:49 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 551.672,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/bp/project/project-qcs/lines/table-heads/queries",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "behavior-family-strict-read",
+        "route_ids": [
+          "16e82e00f56fe0dd"
+        ]
+      },
+      "class": "com.sunwayworld.emc.module.bp.project.projectqc.resource.impl.EmcProjectQcResourceImpl",
+      "behavior_family": "661655801800a256",
+      "request_profile": "default",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "rf197dddbf6b9"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        500
+      ],
+      "json_top_level_keys": [
+        "error",
+        "message",
+        "path",
+        "stacktrace",
+        "status",
+        "timestamp"
+      ],
+      "body_sha256": "a1eee3e2d58f4284cf3edf945c53813da7d0f0d7df1307e1406311bdda0d6e1d",
+      "body_bytes": 20439,
+      "assertions": {
+        "content_type": "",
+        "json_keys": [
+          "error",
+          "message",
+          "path",
+          "stacktrace",
+          "status",
+          "timestamp"
+        ]
+      },
+      "id": "fast-strict-b6010b8d60528c50-page-2",
+      "method": "POST",
+      "path": "/secure/emc/module/bp/project/project-qcs/lines/table-heads/queries",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/project/project-qcs/lines/table-heads/queries",
+      "status": 500,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "transfer-encoding": "chunked",
+        "date": "Wed, 04 Nov 2026 22:48:49 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 581.841,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/bp/project/project-qcs/lines/table-heads/queries",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "behavior-family-strict-read",
+        "route_ids": [
+          "16e82e00f56fe0dd"
+        ]
+      },
+      "class": "com.sunwayworld.emc.module.bp.project.projectqc.resource.impl.EmcProjectQcResourceImpl",
+      "behavior_family": "b6010b8d60528c50",
+      "request_profile": "page-2",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "re1773db8b58c"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        500
+      ],
+      "json_top_level_keys": [
+        "error",
+        "message",
+        "path",
+        "stacktrace",
+        "status",
+        "timestamp"
+      ],
+      "body_sha256": "bcdc98483dadfaf88319c85a8ea385e200c962c0a12b0b6d0c19ca1affb3df85",
+      "body_bytes": 20439,
+      "assertions": {
+        "content_type": "",
+        "json_keys": [
+          "error",
+          "message",
+          "path",
+          "stacktrace",
+          "status",
+          "timestamp"
+        ]
+      },
+      "id": "fast-strict-4259cea76fb6371f-empty",
+      "method": "POST",
+      "path": "/secure/emc/module/bp/project/project-qcs/lines/table-heads/queries",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/project/project-qcs/lines/table-heads/queries",
+      "status": 500,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "transfer-encoding": "chunked",
+        "date": "Wed, 04 Nov 2026 22:48:50 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 555.557,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/bp/project/project-qcs/lines/table-heads/queries",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "behavior-family-strict-read",
+        "route_ids": [
+          "16e82e00f56fe0dd"
+        ]
+      },
+      "class": "com.sunwayworld.emc.module.bp.project.projectqc.resource.impl.EmcProjectQcResourceImpl",
+      "behavior_family": "4259cea76fb6371f",
+      "request_profile": "empty",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "rf998c67e1c79"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        500
+      ],
+      "json_top_level_keys": [
+        "error",
+        "message",
+        "path",
+        "stacktrace",
+        "status",
+        "timestamp"
+      ],
+      "body_sha256": "a067feed70a6edb7f733ce7d34c20ba1b5510753ac7fd6a61c8af2860145d039",
+      "body_bytes": 20430,
+      "assertions": {
+        "content_type": "",
+        "json_keys": [
+          "error",
+          "message",
+          "path",
+          "stacktrace",
+          "status",
+          "timestamp"
+        ]
+      },
+      "id": "fast-strict-6978b76bdfca71b1-default",
+      "method": "POST",
+      "path": "/secure/emc/module/bp/project/project-qcs/lines/table-rows/queries",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/project/project-qcs/lines/table-rows/queries",
+      "status": 500,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "transfer-encoding": "chunked",
+        "date": "Wed, 04 Nov 2026 22:48:50 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 383.526,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/bp/project/project-qcs/lines/table-rows/queries",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "behavior-family-strict-read",
+        "route_ids": [
+          "92679b487897cb9a"
+        ]
+      },
+      "class": "com.sunwayworld.emc.module.bp.project.projectqc.resource.impl.EmcProjectQcResourceImpl",
+      "behavior_family": "6978b76bdfca71b1",
+      "request_profile": "default",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "radae957008e5"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        500
+      ],
+      "json_top_level_keys": [
+        "error",
+        "message",
+        "path",
+        "stacktrace",
+        "status",
+        "timestamp"
+      ],
+      "body_sha256": "ea73f43a917f4bb20737c69a603da11cc6c46513dcad949e94e30328a23c6ede",
+      "body_bytes": 20430,
+      "assertions": {
+        "content_type": "",
+        "json_keys": [
+          "error",
+          "message",
+          "path",
+          "stacktrace",
+          "status",
+          "timestamp"
+        ]
+      },
+      "id": "fast-strict-60459ab5d8a36c74-page-2",
+      "method": "POST",
+      "path": "/secure/emc/module/bp/project/project-qcs/lines/table-rows/queries",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/project/project-qcs/lines/table-rows/queries",
+      "status": 500,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "transfer-encoding": "chunked",
+        "date": "Wed, 04 Nov 2026 22:48:50 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 538.788,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/bp/project/project-qcs/lines/table-rows/queries",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "behavior-family-strict-read",
+        "route_ids": [
+          "92679b487897cb9a"
+        ]
+      },
+      "class": "com.sunwayworld.emc.module.bp.project.projectqc.resource.impl.EmcProjectQcResourceImpl",
+      "behavior_family": "60459ab5d8a36c74",
+      "request_profile": "page-2",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r7575d2a68054"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        500
+      ],
+      "json_top_level_keys": [
+        "error",
+        "message",
+        "path",
+        "stacktrace",
+        "status",
+        "timestamp"
+      ],
+      "body_sha256": "ea09ee8e756730178f602e0b4663ca7765f2bd1b71cbb290d0419da4691bfa6d",
+      "body_bytes": 20430,
+      "assertions": {
+        "content_type": "",
+        "json_keys": [
+          "error",
+          "message",
+          "path",
+          "stacktrace",
+          "status",
+          "timestamp"
+        ]
+      },
+      "id": "fast-strict-69fbf7b42896b8b2-empty",
+      "method": "POST",
+      "path": "/secure/emc/module/bp/project/project-qcs/lines/table-rows/queries",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/project/project-qcs/lines/table-rows/queries",
+      "status": 500,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "transfer-encoding": "chunked",
+        "date": "Wed, 04 Nov 2026 22:48:51 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 527.974,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/bp/project/project-qcs/lines/table-rows/queries",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "scope": "behavior-family-strict-read",
+        "route_ids": [
+          "92679b487897cb9a"
+        ]
+      },
+      "class": "com.sunwayworld.emc.module.bp.project.projectqc.resource.impl.EmcProjectQcResourceImpl",
+      "behavior_family": "69fbf7b42896b8b2",
+      "request_profile": "empty",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r0f72dff09c73"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    }
+  ],
+  "cleanup": {
+    "cleanup_mode": "persistent-oracle",
+    "application_stopped": true,
+    "oracle_stopped": false,
+    "redis_stopped": false,
+    "redis_preserved": true,
+    "oracle_reused": true,
+    "oracle_preserved": true,
+    "baseline_schema_immutable": true,
+    "runtime_schema_restored": true,
+    "runtime_dirty": false,
+    "network_preserved": true,
+    "volume_preserved": true,
+    "temporary_files_removed": true,
+    "baseline_schema_hash_after": "a60fc4519f2a89fb6b1761d6e0a2a6480cef8d4bbeab40a2144141f13a9a1dec",
+    "baseline_key_data_hash_after": "09437a80d60cd8dad0c92dafe804398ccd2a48b1ddf3be08cf5bda18814a8af4",
+    "runtime_schema_hash_after": "aaabc134c6c268a5e50b10301fcf3c5bc9ac4a70e73936285748f95268f8d5fb",
+    "runtime_key_data_hash_after": "09437a80d60cd8dad0c92dafe804398ccd2a48b1ddf3be08cf5bda18814a8af4"
+  },
+  "cleanup_pending": false,
+  "phase_timings_ms": {
+    "http_cases": 22672.903
+  },
+  "authentication": {
+    "attempted": true,
+    "authenticated": true,
+    "status": 200
+  },
+  "finished_at": "2026-11-04T22:48:50.428875+00:00",
+  "cleanup_finalized_at": "2026-11-04T22:49:29.009984+00:00"
+}

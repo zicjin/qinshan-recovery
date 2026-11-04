@@ -76,6 +76,16 @@
       "generated_sha256": "old",
       "override_sha256": "65a6fc3b8a295d65cf7fd77a3c25a61b0e2d6f7d8c865d89210d2117803d33a5",
       "path": "src/main/java/com/sunwayworld/framework/data/CaseInsensitiveLinkedMap.java"
+    },
+    {
+      "generated_sha256": "old",
+      "override_sha256": "a11d074a437ab7592f8914a7d6f61e2bc01e17e7125b72f1884e6cdb699a0933",
+      "path": "src/main/java/com/sunwayworld/framework/converter/sql/ClobToStringConverter.java"
+    },
+    {
+      "generated_sha256": "old",
+      "override_sha256": "cd9b073254cbfa8707c0739742dc814ac2ac5db43d4f49aecd6f37a97dbe77b2",
+      "path": "src/main/java/com/sunwayworld/framework/mybatis/interceptor/MybatisResultSetInterceptor.java"
     }
   ],
   "override_source_files": [
@@ -6523,7 +6533,7 @@
       "decompiler": "CFR",
       "decompiler_version": "0.152",
       "path": "src/main/java/com/sunwayworld/framework/converter/sql/ClobToStringConverter.java",
-      "sha256": "0639810465e1bc9c30bf63909a65f33c3b343699867368b645a1c5bc371d041e",
+      "sha256": "a11d074a437ab7592f8914a7d6f61e2bc01e17e7125b72f1884e6cdb699a0933",
       "source_class_path": "com/sunwayworld/framework/converter/sql/ClobToStringConverter.class",
       "source_jar": "BOOT-INF/lib/gikam-core-common-14.1.5.jar",
       "source_sha256_before_transform": "56e17ea8d60c79b691878175eb8b86a17374fe1912c4c77ee274fb0225ba8df2",
@@ -9833,7 +9843,7 @@
       "decompiler": "CFR",
       "decompiler_version": "0.152",
       "path": "src/main/java/com/sunwayworld/framework/mybatis/interceptor/MybatisResultSetInterceptor.java",
-      "sha256": "64727cf06ec6459202afd3512726deab028156e578603eb9f5fa0322d8586d35",
+      "sha256": "cd9b073254cbfa8707c0739742dc814ac2ac5db43d4f49aecd6f37a97dbe77b2",
       "source_class_path": "com/sunwayworld/framework/mybatis/interceptor/MybatisResultSetInterceptor.class",
       "source_jar": "BOOT-INF/lib/gikam-core-common-14.1.5.jar",
       "source_sha256_before_transform": "23d274f5cd5216c47fe6c5b7434bce5a24aae89c831a08008c454b09011a0ef0",
@@ -31442,7 +31452,7 @@
       ]
     }
   ],
-  "source_tree_sha256": "a71ed7de5e6e10d63a12882c3c6a6da79e479a687c04fe8c372a18cc49ccf24f",
+  "source_tree_sha256": "5e8f8801177e950edcd8d21c149ccf3bf93d01ccf4529b92a92a011401f40854",
   "status": "assembled-source-only",
   "transformation_manifest": "docs/reconstitution/decompiler-transforms.json",
   "transformation_manifest_sha256": "30ab06626f3e4c863a2855790b0ec6211499394852f2a8598ea3bd444ce87fe8",

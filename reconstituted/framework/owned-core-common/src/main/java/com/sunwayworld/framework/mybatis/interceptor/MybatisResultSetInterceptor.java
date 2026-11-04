@@ -196,9 +196,6 @@ implements Interceptor {
                     columnTypeMap.put(columnName, DialectRepository.getDialect().getJavaType(columnName, dataType, scale));
                 }
                 MybatisColumnTypeHolder.setColumnTypeMap(columnTypeMap);
-                if (!MybatisResultSetInterceptor.this.isGuard().booleanValue()) {
-                    return resultSet;
-                }
                 return MybatisResultSetInterceptor.this.newResultSetInstance(resultSet);
             }
             return method.invoke(this.stmt, args);

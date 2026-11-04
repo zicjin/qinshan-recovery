@@ -37,6 +37,9 @@ public enum ClobToStringConverter implements Converter<Clob, String>
             string = String.valueOf(chars);
         }
         catch (IOException | SQLException e) {
+            if (e.getMessage() != null && e.getMessage().contains("Closed Connection")) {
+                return null;
+            }
             throw new ConvertFailedException(this.getSourceType(), this.getTargetType(), e);
         }
         finally {

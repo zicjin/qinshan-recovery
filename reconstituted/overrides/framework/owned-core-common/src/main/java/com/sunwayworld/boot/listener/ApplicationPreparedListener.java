@@ -28,16 +28,19 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.event.ApplicationPreparedEvent;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.boot.web.embedded.tomcat.TomcatWebServer;
 import org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.core.annotation.Order;
+import org.springframework.core.Ordered;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ApplicationPreparedListener implements ApplicationListener<ApplicationPreparedEvent> {
+@Order(Ordered.HIGHEST_PRECEDENCE)
+public class ApplicationPreparedListener implements ApplicationListener<ApplicationReadyEvent> {
    private static final Logger logger = LogManager.getLogger(ApplicationPreparedListener.class);
    @Autowired
    private RedisTemplate<String, Object> redisTemplate;
@@ -47,12 +50,12 @@ public class ApplicationPreparedListener implements ApplicationListener<Applicat
    @Autowired
    @Lazy
    private TenantManager tenantManager;
-   @Value("#{'${sunway.cache.post-start.evict.name}'.split(',')}")
+   @Value("#{'${sunway.cache.post-start.evict.name:}'.split(',')}")
    private List<String> evictCacheNameList;
    @Value("${sunway.app.stand-alone.enabled:true}")
    private Boolean standalone;
 
-   public void onApplicationEvent(ApplicationPreparedEvent event) {
+   public void onApplicationEvent(ApplicationReadyEvent event) {
       boolean cacheDeleted = false;
       if (!ApplicationContextHelper.isProfileActivated("pro")) {
          logger.info("Not production mode, try to delete redis cache.");

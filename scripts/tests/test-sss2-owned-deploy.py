@@ -35,6 +35,15 @@ class Sss2OwnedDeployTest(unittest.TestCase):
         self.assertIn("port-forward-app.pid", script)
         self.assertIn("loopback_namespace_relay", script)
         self.assertIn('bind_host=sys.argv[4]', script)
+        self.assertIn("container-exited-before-readiness", script)
+        self.assertIn("ready_streak >= 6", script)
+        self.assertIn("post-readiness-stability-failed", script)
+        self.assertIn('docker inspect "$APP" -f \'{{.State.Status}}\'', script)
+        self.assertIn('"status":"diagnostic-ready"', script)
+        self.assertIn('"implementation_tree_digest":"$BINDING_DIGEST"', script)
+        self.assertEqual(script.count("--env SPRING_PROFILES_ACTIVE=oracle"), 2)
+        self.assertIn("--env SUNWAY_LCDP_ENABLE=false", script)
+        self.assertIn("rsync -a --delete --checksum", script)
 
     def test_plan_scans_supplier_free_distribution(self):
         with tempfile.TemporaryDirectory() as temp:

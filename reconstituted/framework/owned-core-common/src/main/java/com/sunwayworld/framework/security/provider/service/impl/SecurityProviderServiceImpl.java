@@ -25,14 +25,24 @@ implements SecurityProviderService {
     public String getPublicKey() {
         return this.tenantManager.masterCall("SECURITY_PUBLIC", () -> {
             EncryptUtils.RsaKeyPair keyPair = EncryptUtils.genRSAKeyPair();
-            RedisHelper.put("SECURITY-RSA-KEY", keyPair.getPublicKey(), keyPair.getPrivateKey(), 60);
+            RedisHelper.put("SECURITY-RSA-KEY", keyPair.getPublicKey(), keyPair.getPrivateKey(), 600);
             return keyPair.getPublicKey();
         });
     }
 
     @Override
     public String getPrivateKey(String publicKey) {
-        return this.tenantManager.masterCall("SECURITY_PUBLIC", () -> (String)RedisHelper.get("SECURITY-RSA-KEY", publicKey));
+        if (publicKey == null) return null;
+        String cleanKey = publicKey.trim();
+        if (cleanKey.startsWith("\"") && cleanKey.endsWith("\"") && cleanKey.length() > 1) {
+            cleanKey = cleanKey.substring(1, cleanKey.length() - 1);
+        }
+        final String searchKey = cleanKey;
+        String result = this.tenantManager.masterCall("SECURITY_PUBLIC", () -> (String)RedisHelper.get("SECURITY-RSA-KEY", searchKey));
+        if (result == null && !searchKey.equals(publicKey)) {
+            result = this.tenantManager.masterCall("SECURITY_PUBLIC", () -> (String)RedisHelper.get("SECURITY-RSA-KEY", publicKey));
+        }
+        return result;
     }
 
     @Override

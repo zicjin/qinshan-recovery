@@ -5,6 +5,7 @@ package com.sunwayworld.framework.context;
 
 import com.sunwayworld.framework.context.ApplicationContextHelper;
 import com.sunwayworld.framework.data.CaseInsensitiveLinkedMap;
+import com.sunwayworld.framework.jdk.tools.DynamicClassLoader;
 import com.sunwayworld.framework.support.PersistableMetadataHelper;
 import com.sunwayworld.framework.support.base.resource.GenericCloudResource;
 import com.sunwayworld.framework.support.base.resource.GenericResource;
@@ -38,6 +39,7 @@ public class GikamBeanContext {
      */
     public static void init() {
         if (context != null) return;
+        Thread.currentThread().setContextClassLoader(DynamicClassLoader.getInstance());
         Class<GikamBeanContext> clazz = GikamBeanContext.class;
         synchronized (GikamBeanContext.class) {
             if (context != null) return;

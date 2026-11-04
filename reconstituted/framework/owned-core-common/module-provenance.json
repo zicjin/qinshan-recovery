@@ -11,6 +11,68 @@
   "forbidden_content_report": "forbidden-content-report.json",
   "module": "owned-core-common",
   "module_reason": "Merges the common foundation and its immediately downstream base-interface JAR to avoid a two-module cycle-free core with no independent runtime boundary.",
+  "overridden_files": [
+    {
+      "generated_sha256": "d3bc4f64de478834bc6684cea03daf0e03e0e554e170f770b5c6dcb3974febd2",
+      "override_sha256": "67194ee27a9a964cd7a4561b4bc3e88bbd69c7a2daed88aa69e9912923344aa1",
+      "path": "src/main/java/com/sunwayworld/boot/ApplicationConfiguration.java"
+    },
+    {
+      "generated_sha256": "28254dca68035a6bed133a2cb1d10e53fd06e4a4e5aed49ae9d7a3c0a55fcbb0",
+      "override_sha256": "ed45491a7be6227bd68d6fca63f70dd43e13ddd02c51c67fd721b43aa49e3693",
+      "path": "src/main/java/com/sunwayworld/boot/ApplicationMvcConfiguration.java"
+    },
+    {
+      "generated_sha256": "30c02cfb6d128880158fba6e5d5de5c7f591beeedc87be50664a7f920097acb4",
+      "override_sha256": "14414d0fe7cabc31772cd3cfc82d088ed768ba8b59c0a693a3bfc51e355376dd",
+      "path": "src/main/java/com/sunwayworld/boot/security/SunwaySecurityConfiguration.java"
+    },
+    {
+      "generated_sha256": "38a6bcf47632f4e8de9550939894dbb3653d79dba86ca9a0b5d01c21ffcebcde",
+      "override_sha256": "fcd853e1f375c347875d8fb069ea2d5b9dc9edf8c35ea399e881fafd8d5423fa",
+      "path": "src/main/java/com/sunwayworld/framework/mybatis/dao/MybatisDaoSupport.java"
+    },
+    {
+      "generated_sha256": "eb6251db331b6a081306268ca1237c8f120148c31ef0537dfd3d07b63daf725a",
+      "override_sha256": "39baf077ab472ae405e2958a8dfd46576d1934ca6f8025bb7f7bc627e0cc59ba",
+      "path": "src/main/java/com/sunwayworld/framework/security/support/Http401UnauthorizedEntryPoint.java"
+    },
+    {
+      "generated_sha256": "6b8bbcf93456f3989f77a8b894faf0ec78cded4feb5d47efb059337f501a5112",
+      "override_sha256": "2dfa5e0e0d2e2ac0bd7deaa52cb53f3305a460ae743e247bd2cd8e9ff5018e2f",
+      "path": "src/main/java/com/sunwayworld/framework/support/base/service/GenericService.java"
+    },
+    {
+      "generated_sha256": "2cc9df9001a80ca87ced6ad971c2e88bf2445b923d0460f7fd95e4b0c523f5b4",
+      "override_sha256": "6ea63058aa33a2d2322901af2accdb920ffee3c4a63a7d89b7544ae3c15a803b",
+      "path": "src/main/java/com/sunwayworld/module/gikam/error/controller/impl/GikamErrorControllerImpl.java"
+    },
+    {
+      "generated_sha256": "7a0c0ce8bdb9e06c056f5a469c87083008073063502a45dc1902aba1fd3ed9c6",
+      "override_sha256": "40faec01adab82591f37751e7ea801d50d248a39dfa61898ff1630941d73fa04",
+      "path": "src/main/java/com/sunwayworld/framework/security/service/AbstractUserDetailsService.java"
+    },
+    {
+      "generated_sha256": "f0e2d823e33b84ced3dfd654d650d6fa1a817ffbb5858ea91f4101553f0688f6",
+      "override_sha256": "3ec8c35a01ea1a2786d75e22d7e463329cd6e1102d1c94758d8d8ac6205ef5c8",
+      "path": "src/main/java/com/sunwayworld/framework/security/service/DefaultUserDetailsService.java"
+    },
+    {
+      "generated_sha256": "3d57e762902615498c0bae9742c4a277b31db8399348d055f59eb51910ee5d87",
+      "override_sha256": "a3567ffa41c77a37a472ef9f9cf8bb7526fabb125414aecb1b3778c367ac02b8",
+      "path": "src/main/java/com/sunwayworld/framework/security/support/AjaxAuthenticationFailureHandler.java"
+    },
+    {
+      "generated_sha256": "ae1d23327b7fb1425793ecaa5d8caf6b4ccb2b96f82b36e129d17b4872ea164d",
+      "override_sha256": "2ccc4105743af019d0589a6a9596cb4d02d4a5d58fa4dacf504394d2d0bbee3a",
+      "path": "src/main/java/com/sunwayworld/framework/security/support/DefaultDaoAuthenticationProvider.java"
+    },
+    {
+      "generated_sha256": "575b12cabaa0f179abaeaeab37d594bca30f95fbd973c8382ac9c40b9104e5e7",
+      "override_sha256": "73c1b181599c596fd7ea9ece3a1440371a7808ac246dd60c95ae7cff5d36f453",
+      "path": "src/main/java/com/sunwayworld/framework/security/provider/service/impl/SecurityProviderServiceImpl.java"
+    }
+  ],
   "override_source_files": [
     {
       "generated_sha256": "b272e82eee19a98666c4eb41143c03c2c3ba15d637b8b8b5bcf8e382e049a86a",
@@ -19,22 +81,27 @@
     },
     {
       "generated_sha256": "d3bc4f64de478834bc6684cea03daf0e03e0e554e170f770b5c6dcb3974febd2",
-      "override_sha256": "f1d934dba958eb12d48606eea94c2f5d55f291459a82667d0b08e40448a1d472",
+      "override_sha256": "538e980f525b5d9f5727781d19d13a3a11f50b81d91301a5e06608c3b5e73b00",
       "path": "src/main/java/com/sunwayworld/boot/ApplicationConfiguration.java"
     },
     {
       "generated_sha256": "28254dca68035a6bed133a2cb1d10e53fd06e4a4e5aed49ae9d7a3c0a55fcbb0",
-      "override_sha256": "d0859cf1fbd999eeb06ec6e25835096990c73f82f14d5cec3a1bff456e4fd872",
+      "override_sha256": "98117ac888b71e27dd76fb288341a770290be93346223e03cbca29fdd2aeef9e",
       "path": "src/main/java/com/sunwayworld/boot/ApplicationMvcConfiguration.java"
     },
     {
+      "generated_sha256": null,
+      "override_sha256": "be13beef174859e99c17484f3d4ab50abf2e94634106ffb596be03f0c222b208",
+      "path": "src/main/java/com/sunwayworld/boot/GikamMapperScannerConfigurer.java"
+    },
+    {
       "generated_sha256": "f3453c3ff9d7ddb30d7c1eed869430363ad61a530453aac0b666b3a50a150d27",
-      "override_sha256": "ed527ef72d742721f630c5aa7de3be5b848241f5dcc812bb1c47cfc857e6089c",
+      "override_sha256": "09980765ad5acd317e0a99758db7af310ec56544a5ac3141138775cc524f11cc",
       "path": "src/main/java/com/sunwayworld/boot/listener/ApplicationPreparedListener.java"
     },
     {
       "generated_sha256": "30c02cfb6d128880158fba6e5d5de5c7f591beeedc87be50664a7f920097acb4",
-      "override_sha256": "c06901b168a8625184b27af4712368e5c1e8a644bb86fc1e6f13aada21609415",
+      "override_sha256": "e1d7968e6b3300c9650d07028a7ead0a193c8a63465be395baba1a480fd086c1",
       "path": "src/main/java/com/sunwayworld/boot/security/SunwaySecurityConfiguration.java"
     },
     {
@@ -48,6 +115,11 @@
       "path": "src/main/java/com/sunwayworld/framework/context/ApplicationContextHelper.java"
     },
     {
+      "generated_sha256": "bfb8affcd37c060efb495792f37aee8d0cfa71d6b02dbbbda7acb91a5d6b480e",
+      "override_sha256": "8408435fa640c10db96982d283f7aefeb525a08cbeb733aa48e8874b431f8cec",
+      "path": "src/main/java/com/sunwayworld/framework/context/GikamBeanContext.java"
+    },
+    {
       "generated_sha256": "bde34795694599fa2e1c686aa6982677a6b4a96f64386957d1c2f9b334abc2ba",
       "override_sha256": "2b36561d97d012c89d5996ccb422ae786bbd0f8b84433efabc7c6b1d8707f13e",
       "path": "src/main/java/com/sunwayworld/framework/context/filter/ContextServletRequestFilter.java"
@@ -58,6 +130,16 @@
       "path": "src/main/java/com/sunwayworld/framework/context/listener/ApplicationServletRequestListener.java"
     },
     {
+      "generated_sha256": "915ebf90d70e96e5af9272c0335d4b1f108cc8453439c18041dddf476a6db631",
+      "override_sha256": "588a7d56327ba17fd217b76922068553f874ee70559b3b10d37fa5e461e56118",
+      "path": "src/main/java/com/sunwayworld/framework/database/monitor/DataSourceMonitor.java"
+    },
+    {
+      "generated_sha256": "008a465924ab06c0b96bbf47fa09c276f79c85ab58d60d6253ec3eacd24c03f8",
+      "override_sha256": "de697e2e271309005eaa1936ae18a8d713b4f55c25a334aaed5fa42d960d5b41",
+      "path": "src/main/java/com/sunwayworld/framework/exception/advice/GlobalExceptionHandler.java"
+    },
+    {
       "generated_sha256": "b989da6ea72e362f9038243b4766a77e54dac2c033fd5064027c5eb27970e491",
       "override_sha256": "3a8c5f7f8cf46bc372eb143701b1b6b8f056adc45c4b1efeba4f25ca5b137d55",
       "path": "src/main/java/com/sunwayworld/framework/formula/GikamComputingDataHolder.java"
@@ -66,6 +148,16 @@
       "generated_sha256": "daa2d6e7d1689622bc917fd23ee0986a412064ccec09c3a0b747c57c3127fb06",
       "override_sha256": "96f0f0e7f3288a3ff2a051e3986f5eba507a079e9bd3f777ef259f98e4109661",
       "path": "src/main/java/com/sunwayworld/framework/formula/GikamFormulaHelper.java"
+    },
+    {
+      "generated_sha256": "50f46e933591c34b17df39a4ab61dfa586115358a34caf8083f05cb28b0ca0e8",
+      "override_sha256": "c908c5085d8b01e7f6cb07346eab59dba00eb7985d91d904fb8e2d66a01636fe",
+      "path": "src/main/java/com/sunwayworld/framework/i18n/I18nHelper.java"
+    },
+    {
+      "generated_sha256": "fc0ec556c74b66b65c0bd2a8a217259cf18859704d5bd51e724086963ae09dd6",
+      "override_sha256": "ea7489f3a3bf1d74f062beca93e2c8a7c4484f03b2ac1dd4737749e3aae158ea",
+      "path": "src/main/java/com/sunwayworld/framework/jdk/tools/DynamicClassLoader.java"
     },
     {
       "generated_sha256": "a0adeda989b64180fd5a351c886813e8c615a57de1585a40ceb6fb37c622acf1",
@@ -83,9 +175,19 @@
       "path": "src/main/java/com/sunwayworld/framework/security/authentication/AuthenticationHelper.java"
     },
     {
+      "generated_sha256": "35ec5d046650cfa971948ff3cd7ee4b4f7f668eda6df12a1f664f2ef42f5f9ac",
+      "override_sha256": "abed7ada6de88956f2d57df6bfd91072eea9740a608f410353029edbaaa1bf46",
+      "path": "src/main/java/com/sunwayworld/framework/security/firewall/SecurityFirewallFilter.java"
+    },
+    {
       "generated_sha256": "f0e2d823e33b84ced3dfd654d650d6fa1a817ffbb5858ea91f4101553f0688f6",
       "override_sha256": "47486a06fb71e7dd25aac8cdb1153d3fb2c967bda46b95230ad843cbf80a30e4",
       "path": "src/main/java/com/sunwayworld/framework/security/service/DefaultUserDetailsService.java"
+    },
+    {
+      "generated_sha256": "6b8bbcf93456f3989f77a8b894faf0ec78cded4feb5d47efb059337f501a5112",
+      "override_sha256": "c6dcb5376bc9e2077687b13ef0fdf4aebdb9fafe02bac7865ef90d53b4bc7aaa",
+      "path": "src/main/java/com/sunwayworld/framework/support/base/service/GenericService.java"
     },
     {
       "generated_sha256": "0284ea87e793686f791ab1fd6049bdd7569c82f0b8b361b40286f3b72bbee2b4",
@@ -101,6 +203,16 @@
       "generated_sha256": "c4b0747a7cca29b90908ef8f736509247105a93f5cb6449f96c2b3d23b1e6bab",
       "override_sha256": "cd0b6a6aef4086025fc9a9a3adc11d7e0506f23a77eb45ba9e581a5bc880fbe3",
       "path": "src/main/java/com/sunwayworld/framework/utils/FileUtils.java"
+    },
+    {
+      "generated_sha256": "989b4d64b7f3586a17835d44a5ae00385c50862c221da28b7f9277badf01519c",
+      "override_sha256": "eab53646c441e8ab6a5568432bfbed4d9c01fc7fa13ea33d6736c093e3f06525",
+      "path": "src/main/java/com/sunwayworld/framework/utils/ReflectionUtils.java"
+    },
+    {
+      "generated_sha256": "b477e45a711ef79161cf52cfadfad079bf5d0e94bdd078296e5c96787e178b2f",
+      "override_sha256": "12139da326b8316bc28905506292468e376b45ba70036a46f7631938147e09a9",
+      "path": "src/main/java/com/sunwayworld/framework/utils/SpringUtils.java"
     },
     {
       "generated_sha256": "21e2265ab408b64ef1da6b666be11e4e4dc7cfb6c7c18c97806c03b74f685e1e",
@@ -127,9 +239,10 @@
   "schema": "supplier-reconstituted-module-v1",
   "source_decompilers": {
     "CFR": 2073,
-    "Vineflower": 148
+    "Vineflower": 148,
+    "tracked-override": 1
   },
-  "source_file_count": 2221,
+  "source_file_count": 2222,
   "source_files": [
     {
       "class_sha256": "9cdca938a81139d5f32d029d86083b2223ae621cbf8f5bbb667445e7344f4e9a",
@@ -153,7 +266,7 @@
       "decompiler": "CFR",
       "decompiler_version": "0.152",
       "path": "src/main/java/com/sunwayworld/boot/ApplicationConfiguration.java",
-      "sha256": "f1d934dba958eb12d48606eea94c2f5d55f291459a82667d0b08e40448a1d472",
+      "sha256": "67194ee27a9a964cd7a4561b4bc3e88bbd69c7a2daed88aa69e9912923344aa1",
       "source_class_path": "com/sunwayworld/boot/ApplicationConfiguration.class",
       "source_jar": "BOOT-INF/lib/gikam-core-common-14.1.5.jar",
       "source_sha256_before_overlay": "d3bc4f64de478834bc6684cea03daf0e03e0e554e170f770b5c6dcb3974febd2",
@@ -169,7 +282,7 @@
       "decompiler": "CFR",
       "decompiler_version": "0.152",
       "path": "src/main/java/com/sunwayworld/boot/ApplicationMvcConfiguration.java",
-      "sha256": "d0859cf1fbd999eeb06ec6e25835096990c73f82f14d5cec3a1bff456e4fd872",
+      "sha256": "ed45491a7be6227bd68d6fca63f70dd43e13ddd02c51c67fd721b43aa49e3693",
       "source_class_path": "com/sunwayworld/boot/ApplicationMvcConfiguration.class",
       "source_jar": "BOOT-INF/lib/gikam-core-common-14.1.5.jar",
       "source_sha256_before_overlay": "28254dca68035a6bed133a2cb1d10e53fd06e4a4e5aed49ae9d7a3c0a55fcbb0",
@@ -180,12 +293,26 @@
       ]
     },
     {
+      "class_sha256": null,
+      "compile_status": "pending-module-assembly",
+      "decompiler": "tracked-override",
+      "decompiler_version": null,
+      "path": "src/main/java/com/sunwayworld/boot/GikamMapperScannerConfigurer.java",
+      "sha256": "be13beef174859e99c17484f3d4ab50abf2e94634106ffb596be03f0c222b208",
+      "source_class_path": "com.sunwayworld.boot.GikamMapperScannerConfigurer",
+      "source_jar": "tracked-override",
+      "source_sha256_before_transform": null,
+      "transformations": [
+        "overlay:src/main/java/com/sunwayworld/boot/GikamMapperScannerConfigurer.java"
+      ]
+    },
+    {
       "class_sha256": "77d833fd8e965a76aba4b9bdf5b8f11ccfd5536369df528a390c1f3eb847f498",
       "compile_status": "pending-module-assembly",
       "decompiler": "Vineflower",
       "decompiler_version": "1.11.1",
       "path": "src/main/java/com/sunwayworld/boot/listener/ApplicationPreparedListener.java",
-      "sha256": "ed527ef72d742721f630c5aa7de3be5b848241f5dcc812bb1c47cfc857e6089c",
+      "sha256": "09980765ad5acd317e0a99758db7af310ec56544a5ac3141138775cc524f11cc",
       "source_class_path": "com/sunwayworld/boot/listener/ApplicationPreparedListener.class",
       "source_jar": "BOOT-INF/lib/gikam-core-common-14.1.5.jar",
       "source_sha256_before_overlay": "f3453c3ff9d7ddb30d7c1eed869430363ad61a530453aac0b666b3a50a150d27",
@@ -201,7 +328,7 @@
       "decompiler": "Vineflower",
       "decompiler_version": "1.11.1",
       "path": "src/main/java/com/sunwayworld/boot/security/SunwaySecurityConfiguration.java",
-      "sha256": "c06901b168a8625184b27af4712368e5c1e8a644bb86fc1e6f13aada21609415",
+      "sha256": "14414d0fe7cabc31772cd3cfc82d088ed768ba8b59c0a693a3bfc51e355376dd",
       "source_class_path": "com/sunwayworld/boot/security/SunwaySecurityConfiguration.class",
       "source_jar": "BOOT-INF/lib/gikam-core-common-14.1.5.jar",
       "source_sha256_before_overlay": "30c02cfb6d128880158fba6e5d5de5c7f591beeedc87be50664a7f920097acb4",
@@ -5475,12 +5602,14 @@
       "decompiler": "CFR",
       "decompiler_version": "0.152",
       "path": "src/main/java/com/sunwayworld/framework/context/GikamBeanContext.java",
-      "sha256": "bfb8affcd37c060efb495792f37aee8d0cfa71d6b02dbbbda7acb91a5d6b480e",
+      "sha256": "8408435fa640c10db96982d283f7aefeb525a08cbeb733aa48e8874b431f8cec",
       "source_class_path": "com/sunwayworld/framework/context/GikamBeanContext.class",
       "source_jar": "BOOT-INF/lib/gikam-core-common-14.1.5.jar",
+      "source_sha256_before_overlay": "bfb8affcd37c060efb495792f37aee8d0cfa71d6b02dbbbda7acb91a5d6b480e",
       "source_sha256_before_transform": "3e7a08b77bf917a9ba4ef26821605a8e31540c00377badc218a6af12372d0693",
       "transformations": [
-        "normalization:generated-source"
+        "normalization:generated-source",
+        "overlay:src/main/java/com/sunwayworld/framework/context/GikamBeanContext.java"
       ]
     },
     {
@@ -7259,12 +7388,14 @@
       "decompiler": "CFR",
       "decompiler_version": "0.152",
       "path": "src/main/java/com/sunwayworld/framework/database/monitor/DataSourceMonitor.java",
-      "sha256": "915ebf90d70e96e5af9272c0335d4b1f108cc8453439c18041dddf476a6db631",
+      "sha256": "588a7d56327ba17fd217b76922068553f874ee70559b3b10d37fa5e461e56118",
       "source_class_path": "com/sunwayworld/framework/database/monitor/DataSourceMonitor.class",
       "source_jar": "BOOT-INF/lib/gikam-core-common-14.1.5.jar",
+      "source_sha256_before_overlay": "915ebf90d70e96e5af9272c0335d4b1f108cc8453439c18041dddf476a6db631",
       "source_sha256_before_transform": "e7ab9a524e4324cf76f80225cb971c3084b9cbfebac891ee0ccd6f0a0a576ec0",
       "transformations": [
-        "normalization:generated-source"
+        "normalization:generated-source",
+        "overlay:src/main/java/com/sunwayworld/framework/database/monitor/DataSourceMonitor.java"
       ]
     },
     {
@@ -7861,12 +7992,14 @@
       "decompiler": "CFR",
       "decompiler_version": "0.152",
       "path": "src/main/java/com/sunwayworld/framework/exception/advice/GlobalExceptionHandler.java",
-      "sha256": "008a465924ab06c0b96bbf47fa09c276f79c85ab58d60d6253ec3eacd24c03f8",
+      "sha256": "de697e2e271309005eaa1936ae18a8d713b4f55c25a334aaed5fa42d960d5b41",
       "source_class_path": "com/sunwayworld/framework/exception/advice/GlobalExceptionHandler.class",
       "source_jar": "BOOT-INF/lib/gikam-core-common-14.1.5.jar",
+      "source_sha256_before_overlay": "008a465924ab06c0b96bbf47fa09c276f79c85ab58d60d6253ec3eacd24c03f8",
       "source_sha256_before_transform": "8721f285f202f04928c939980b3f04ee1dd276538d0f25164bcc54bbf204f7a8",
       "transformations": [
-        "normalization:generated-source"
+        "normalization:generated-source",
+        "overlay:src/main/java/com/sunwayworld/framework/exception/advice/GlobalExceptionHandler.java"
       ]
     },
     {
@@ -8537,12 +8670,14 @@
       "decompiler": "CFR",
       "decompiler_version": "0.152",
       "path": "src/main/java/com/sunwayworld/framework/i18n/I18nHelper.java",
-      "sha256": "50f46e933591c34b17df39a4ab61dfa586115358a34caf8083f05cb28b0ca0e8",
+      "sha256": "c908c5085d8b01e7f6cb07346eab59dba00eb7985d91d904fb8e2d66a01636fe",
       "source_class_path": "com/sunwayworld/framework/i18n/I18nHelper.class",
       "source_jar": "BOOT-INF/lib/gikam-core-common-14.1.5.jar",
+      "source_sha256_before_overlay": "50f46e933591c34b17df39a4ab61dfa586115358a34caf8083f05cb28b0ca0e8",
       "source_sha256_before_transform": "2958d45169038411576897dba287494bb11c0f588163658c6ec9d8f197e54c2f",
       "transformations": [
-        "normalization:generated-source"
+        "normalization:generated-source",
+        "overlay:src/main/java/com/sunwayworld/framework/i18n/I18nHelper.java"
       ]
     },
     {
@@ -9212,12 +9347,14 @@
       "decompiler": "CFR",
       "decompiler_version": "0.152",
       "path": "src/main/java/com/sunwayworld/framework/jdk/tools/DynamicClassLoader.java",
-      "sha256": "fc0ec556c74b66b65c0bd2a8a217259cf18859704d5bd51e724086963ae09dd6",
+      "sha256": "ea7489f3a3bf1d74f062beca93e2c8a7c4484f03b2ac1dd4737749e3aae158ea",
       "source_class_path": "com/sunwayworld/framework/jdk/tools/DynamicClassLoader.class",
       "source_jar": "BOOT-INF/lib/gikam-core-common-14.1.5.jar",
+      "source_sha256_before_overlay": "fc0ec556c74b66b65c0bd2a8a217259cf18859704d5bd51e724086963ae09dd6",
       "source_sha256_before_transform": "f9164d34b562ec979813cebe1c777a5f4cb4df9c684018a7c3ba106d18a5fea3",
       "transformations": [
-        "normalization:generated-source"
+        "normalization:generated-source",
+        "overlay:src/main/java/com/sunwayworld/framework/jdk/tools/DynamicClassLoader.java"
       ]
     },
     {
@@ -9508,12 +9645,13 @@
       "decompiler": "Vineflower",
       "decompiler_version": "1.11.1",
       "path": "src/main/java/com/sunwayworld/framework/mybatis/dao/MybatisDaoSupport.java",
-      "sha256": "38a6bcf47632f4e8de9550939894dbb3653d79dba86ca9a0b5d01c21ffcebcde",
+      "sha256": "fcd853e1f375c347875d8fb069ea2d5b9dc9edf8c35ea399e881fafd8d5423fa",
       "source_class_path": "com/sunwayworld/framework/mybatis/dao/MybatisDaoSupport.class",
       "source_jar": "BOOT-INF/lib/gikam-core-common-14.1.5.jar",
       "source_sha256_before_transform": "38a6bcf47632f4e8de9550939894dbb3653d79dba86ca9a0b5d01c21ffcebcde",
       "transformations": [
-        "cfr-to-vineflower-fallback"
+        "cfr-to-vineflower-fallback",
+        "overlay:src/main/java/com/sunwayworld/framework/mybatis/dao/MybatisDaoSupport.java"
       ]
     },
     {
@@ -10884,12 +11022,14 @@
       "decompiler": "CFR",
       "decompiler_version": "0.152",
       "path": "src/main/java/com/sunwayworld/framework/security/firewall/SecurityFirewallFilter.java",
-      "sha256": "35ec5d046650cfa971948ff3cd7ee4b4f7f668eda6df12a1f664f2ef42f5f9ac",
+      "sha256": "abed7ada6de88956f2d57df6bfd91072eea9740a608f410353029edbaaa1bf46",
       "source_class_path": "com/sunwayworld/framework/security/firewall/SecurityFirewallFilter.class",
       "source_jar": "BOOT-INF/lib/gikam-core-common-14.1.5.jar",
+      "source_sha256_before_overlay": "35ec5d046650cfa971948ff3cd7ee4b4f7f668eda6df12a1f664f2ef42f5f9ac",
       "source_sha256_before_transform": "a33be10a5ea219c27cbf6b8fcdccd271b66554d03a9d86d616afac2fa5693946",
       "transformations": [
-        "normalization:generated-source"
+        "normalization:generated-source",
+        "overlay:src/main/java/com/sunwayworld/framework/security/firewall/SecurityFirewallFilter.java"
       ]
     },
     {
@@ -11038,12 +11178,13 @@
       "decompiler": "CFR",
       "decompiler_version": "0.152",
       "path": "src/main/java/com/sunwayworld/framework/security/provider/service/impl/SecurityProviderServiceImpl.java",
-      "sha256": "47dbe6b02ae4ab9c6f1198b2b6d79bbaaddd326b9ec21554a1ac5ecde517c42d",
+      "sha256": "73c1b181599c596fd7ea9ece3a1440371a7808ac246dd60c95ae7cff5d36f453",
       "source_class_path": "com/sunwayworld/framework/security/provider/service/impl/SecurityProviderServiceImpl.class",
       "source_jar": "BOOT-INF/lib/gikam-core-common-14.1.5.jar",
       "source_sha256_before_transform": "575b12cabaa0f179abaeaeab37d594bca30f95fbd973c8382ac9c40b9104e5e7",
       "transformations": [
-        "normalization:generated-source"
+        "normalization:generated-source",
+        "overlay:src/main/java/com/sunwayworld/framework/security/provider/service/impl/SecurityProviderServiceImpl.java"
       ]
     },
     {
@@ -11108,12 +11249,13 @@
       "decompiler": "CFR",
       "decompiler_version": "0.152",
       "path": "src/main/java/com/sunwayworld/framework/security/service/AbstractUserDetailsService.java",
-      "sha256": "9074cd39aa4b5859f5f3222a78dbff1a51dd80607083a5fbd0f3a61c71863e24",
+      "sha256": "40faec01adab82591f37751e7ea801d50d248a39dfa61898ff1630941d73fa04",
       "source_class_path": "com/sunwayworld/framework/security/service/AbstractUserDetailsService.class",
       "source_jar": "BOOT-INF/lib/gikam-core-common-14.1.5.jar",
       "source_sha256_before_transform": "7a0c0ce8bdb9e06c056f5a469c87083008073063502a45dc1902aba1fd3ed9c6",
       "transformations": [
-        "normalization:generated-source"
+        "normalization:generated-source",
+        "overlay:src/main/java/com/sunwayworld/framework/security/service/AbstractUserDetailsService.java"
       ]
     },
     {
@@ -11150,7 +11292,7 @@
       "decompiler": "CFR",
       "decompiler_version": "0.152",
       "path": "src/main/java/com/sunwayworld/framework/security/service/DefaultUserDetailsService.java",
-      "sha256": "47486a06fb71e7dd25aac8cdb1153d3fb2c967bda46b95230ad843cbf80a30e4",
+      "sha256": "3ec8c35a01ea1a2786d75e22d7e463329cd6e1102d1c94758d8d8ac6205ef5c8",
       "source_class_path": "com/sunwayworld/framework/security/service/DefaultUserDetailsService.class",
       "source_jar": "BOOT-INF/lib/gikam-core-common-14.1.5.jar",
       "source_sha256_before_overlay": "f0e2d823e33b84ced3dfd654d650d6fa1a817ffbb5858ea91f4101553f0688f6",
@@ -11292,12 +11434,13 @@
       "decompiler": "CFR",
       "decompiler_version": "0.152",
       "path": "src/main/java/com/sunwayworld/framework/security/support/AjaxAuthenticationFailureHandler.java",
-      "sha256": "dbb3ee5712ab4c687217c98dd1b4a722814359ca3561635e92418d616b915ad5",
+      "sha256": "a3567ffa41c77a37a472ef9f9cf8bb7526fabb125414aecb1b3778c367ac02b8",
       "source_class_path": "com/sunwayworld/framework/security/support/AjaxAuthenticationFailureHandler.class",
       "source_jar": "BOOT-INF/lib/gikam-core-common-14.1.5.jar",
       "source_sha256_before_transform": "3d57e762902615498c0bae9742c4a277b31db8399348d055f59eb51910ee5d87",
       "transformations": [
-        "normalization:generated-source"
+        "normalization:generated-source",
+        "overlay:src/main/java/com/sunwayworld/framework/security/support/AjaxAuthenticationFailureHandler.java"
       ]
     },
     {
@@ -11334,12 +11477,13 @@
       "decompiler": "CFR",
       "decompiler_version": "0.152",
       "path": "src/main/java/com/sunwayworld/framework/security/support/DefaultDaoAuthenticationProvider.java",
-      "sha256": "b5260c80f183e659184c037b265c72760fd65623682cfb9b0e7ec9c802be9df0",
+      "sha256": "2ccc4105743af019d0589a6a9596cb4d02d4a5d58fa4dacf504394d2d0bbee3a",
       "source_class_path": "com/sunwayworld/framework/security/support/DefaultDaoAuthenticationProvider.class",
       "source_jar": "BOOT-INF/lib/gikam-core-common-14.1.5.jar",
       "source_sha256_before_transform": "ae1d23327b7fb1425793ecaa5d8caf6b4ccb2b96f82b36e129d17b4872ea164d",
       "transformations": [
-        "normalization:generated-source"
+        "normalization:generated-source",
+        "overlay:src/main/java/com/sunwayworld/framework/security/support/DefaultDaoAuthenticationProvider.java"
       ]
     },
     {
@@ -11348,12 +11492,13 @@
       "decompiler": "Vineflower",
       "decompiler_version": "1.11.1",
       "path": "src/main/java/com/sunwayworld/framework/security/support/Http401UnauthorizedEntryPoint.java",
-      "sha256": "eb6251db331b6a081306268ca1237c8f120148c31ef0537dfd3d07b63daf725a",
+      "sha256": "39baf077ab472ae405e2958a8dfd46576d1934ca6f8025bb7f7bc627e0cc59ba",
       "source_class_path": "com/sunwayworld/framework/security/support/Http401UnauthorizedEntryPoint.class",
       "source_jar": "BOOT-INF/lib/gikam-core-common-14.1.5.jar",
       "source_sha256_before_transform": "eb6251db331b6a081306268ca1237c8f120148c31ef0537dfd3d07b63daf725a",
       "transformations": [
-        "cfr-to-vineflower-fallback"
+        "cfr-to-vineflower-fallback",
+        "overlay:src/main/java/com/sunwayworld/framework/security/support/Http401UnauthorizedEntryPoint.java"
       ]
     },
     {
@@ -11925,13 +12070,15 @@
       "decompiler": "Vineflower",
       "decompiler_version": "1.11.1",
       "path": "src/main/java/com/sunwayworld/framework/support/base/service/GenericService.java",
-      "sha256": "6b8bbcf93456f3989f77a8b894faf0ec78cded4feb5d47efb059337f501a5112",
+      "sha256": "2dfa5e0e0d2e2ac0bd7deaa52cb53f3305a460ae743e247bd2cd8e9ff5018e2f",
       "source_class_path": "com/sunwayworld/framework/support/base/service/GenericService.class",
       "source_jar": "BOOT-INF/lib/gikam-core-common-14.1.5.jar",
+      "source_sha256_before_overlay": "6b8bbcf93456f3989f77a8b894faf0ec78cded4feb5d47efb059337f501a5112",
       "source_sha256_before_transform": "620bf73d39300801387f25e3b92400b0039e717eded9b2ae9931085b14b2b6d4",
       "transformations": [
         "cfr-to-vineflower-fallback",
-        "rule:generic-service-page-erasure-cast"
+        "rule:generic-service-page-erasure-cast",
+        "overlay:src/main/java/com/sunwayworld/framework/support/base/service/GenericService.java"
       ]
     },
     {
@@ -13306,13 +13453,15 @@
       "decompiler": "Vineflower",
       "decompiler_version": "1.11.1",
       "path": "src/main/java/com/sunwayworld/framework/utils/ReflectionUtils.java",
-      "sha256": "989b4d64b7f3586a17835d44a5ae00385c50862c221da28b7f9277badf01519c",
+      "sha256": "eab53646c441e8ab6a5568432bfbed4d9c01fc7fa13ea33d6736c093e3f06525",
       "source_class_path": "com/sunwayworld/framework/utils/ReflectionUtils.class",
       "source_jar": "BOOT-INF/lib/gikam-core-common-14.1.5.jar",
+      "source_sha256_before_overlay": "989b4d64b7f3586a17835d44a5ae00385c50862c221da28b7f9277badf01519c",
       "source_sha256_before_transform": "a3936d9110768cf6d638c568a116b0ad25044eabdaa4f63f36ba1d0be7e2bb05",
       "transformations": [
         "cfr-to-vineflower-fallback",
-        "rule:reflection-utils-loop-variable-version"
+        "rule:reflection-utils-loop-variable-version",
+        "overlay:src/main/java/com/sunwayworld/framework/utils/ReflectionUtils.java"
       ]
     },
     {
@@ -13405,12 +13554,14 @@
       "decompiler": "CFR",
       "decompiler_version": "0.152",
       "path": "src/main/java/com/sunwayworld/framework/utils/SpringUtils.java",
-      "sha256": "b477e45a711ef79161cf52cfadfad079bf5d0e94bdd078296e5c96787e178b2f",
+      "sha256": "12139da326b8316bc28905506292468e376b45ba70036a46f7631938147e09a9",
       "source_class_path": "com/sunwayworld/framework/utils/SpringUtils.class",
       "source_jar": "BOOT-INF/lib/gikam-core-common-14.1.5.jar",
+      "source_sha256_before_overlay": "b477e45a711ef79161cf52cfadfad079bf5d0e94bdd078296e5c96787e178b2f",
       "source_sha256_before_transform": "75046dea1f1bee188f13a9d223767057b4436fe39856e782ca262f7d96789540",
       "transformations": [
-        "normalization:generated-source"
+        "normalization:generated-source",
+        "overlay:src/main/java/com/sunwayworld/framework/utils/SpringUtils.java"
       ]
     },
     {
@@ -16305,12 +16456,13 @@
       "decompiler": "CFR",
       "decompiler_version": "0.152",
       "path": "src/main/java/com/sunwayworld/module/gikam/error/controller/impl/GikamErrorControllerImpl.java",
-      "sha256": "533834312132b5c0b12c16a874ae92521b264072876b704265a958f54e31d95d",
+      "sha256": "6ea63058aa33a2d2322901af2accdb920ffee3c4a63a7d89b7544ae3c15a803b",
       "source_class_path": "com/sunwayworld/module/gikam/error/controller/impl/GikamErrorControllerImpl.class",
       "source_jar": "BOOT-INF/lib/gikam-core-common-14.1.5.jar",
       "source_sha256_before_transform": "2cc9df9001a80ca87ced6ad971c2e88bf2445b923d0460f7fd95e4b0c523f5b4",
       "transformations": [
-        "normalization:generated-source"
+        "normalization:generated-source",
+        "overlay:src/main/java/com/sunwayworld/module/gikam/error/controller/impl/GikamErrorControllerImpl.java"
       ]
     },
     {
@@ -31285,9 +31437,9 @@
       ]
     }
   ],
-  "source_tree_sha256": "8f9dfe2e35b5d9a2d59baab77598b890636eac57f8e2208c734e5fb0424433dd",
+  "source_tree_sha256": "8da34664f5cb49f4dd00fc003d9f7b70494b8a020392921090720d1f23dfd467",
   "status": "assembled-source-only",
   "transformation_manifest": "docs/reconstitution/decompiler-transforms.json",
-  "transformation_manifest_sha256": "8dddef183eece740791f9b179ec2aad9e30a224a0546e971df380fdb576a1d0c",
+  "transformation_manifest_sha256": "30ab06626f3e4c863a2855790b0ec6211499394852f2a8598ea3bd444ce87fe8",
   "transformed_source_count": 19
 }

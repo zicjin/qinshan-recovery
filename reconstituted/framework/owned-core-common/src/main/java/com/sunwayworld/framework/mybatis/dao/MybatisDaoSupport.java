@@ -1332,26 +1332,26 @@ public abstract class MybatisDaoSupport<T extends Persistable<ID>, ID extends Se
 
       List<Order> orderList = orders == null ? CollectionUtils.emptyList() : Arrays.asList(orders);
       List<Map<String, Object>> mapList = this.daoMapper.select(contextInstance, ArrayUtils.asList(colName), orderList);
-      return mapList.parallelStream().map(m -> ConvertUtils.convert(CollectionUtils.getFirstValue(m), colType)).collect(Collectors.toList());
+      return mapList.stream().map(m -> ConvertUtils.convert(CollectionUtils.getFirstValue(m), colType)).collect(Collectors.toList());
    }
 
    @Override
    public List<T> selectAll(List<Order> orderList, String... selectColNames) {
       List<Map<String, Object>> mapList = this.daoMapper
          .select(EntityContextInstance.instance(this.getEntityContext(), ClassUtils.newInstance(this.getType())), ArrayUtils.asList(selectColNames), orderList);
-      return mapList.parallelStream().map(m -> PersistableHelper.mapToPersistable((Map<String, Object>)m, this.getType())).collect(Collectors.toList());
+      return mapList.stream().map(m -> PersistableHelper.mapToPersistable((Map<String, Object>)m, this.getType())).collect(Collectors.toList());
    }
 
    @Override
    public List<T> selectListByIds(List<ID> idList, List<String> selectColNameList, Order... orders) {
       List<Map<String, Object>> mapList = this.selectMapListByIdList(idList, selectColNameList, orders);
-      return mapList.parallelStream().map(m -> PersistableHelper.mapToPersistable((Map<String, Object>)m, this.getType())).collect(Collectors.toList());
+      return mapList.stream().map(m -> PersistableHelper.mapToPersistable((Map<String, Object>)m, this.getType())).collect(Collectors.toList());
    }
 
    @Override
    public <V> List<V> selectColumnsByIds(List<ID> idList, String colName, Class<V> colType, Order... orders) {
       List<Map<String, Object>> mapList = this.selectMapListByIdList(idList, Arrays.asList(colName), orders);
-      return mapList.parallelStream()
+      return mapList.stream()
          .map(m -> CollectionUtils.getValueIgnorecase((Map<String, ?>)m, colName))
          .map(v -> ConvertUtils.convert(v, colType))
          .collect(Collectors.toList());
@@ -1370,13 +1370,13 @@ public abstract class MybatisDaoSupport<T extends Persistable<ID>, ID extends Se
       }
 
       List<Map<String, Object>> mapList = this.daoMapper.select(contextInstance, selectColNameList, ArrayUtils.asList(orders));
-      return mapList.parallelStream().map(m -> PersistableHelper.mapToPersistable((Map<String, Object>)m, this.getType())).collect(Collectors.toList());
+      return mapList.stream().map(m -> PersistableHelper.mapToPersistable((Map<String, Object>)m, this.getType())).collect(Collectors.toList());
    }
 
    @Override
    public List<T> selectList(List<T> itemList, List<String> searchColNameList, List<String> selectColNameList, Order... orders) {
       List<Map<String, Object>> mapList = this.selectMapList(itemList, searchColNameList, selectColNameList, orders);
-      return mapList.parallelStream().map(m -> PersistableHelper.mapToPersistable((Map<String, Object>)m, this.getType())).collect(Collectors.toList());
+      return mapList.stream().map(m -> PersistableHelper.mapToPersistable((Map<String, Object>)m, this.getType())).collect(Collectors.toList());
    }
 
    @Override
@@ -1384,7 +1384,7 @@ public abstract class MybatisDaoSupport<T extends Persistable<ID>, ID extends Se
       List<String> selectColNameList = new ArrayList<>();
       selectColNameList.add(colName);
       List<Map<String, Object>> mapList = this.selectMapList(itemList, searchColNameList, selectColNameList, orders);
-      return mapList.parallelStream().map(m -> ConvertUtils.convert(CollectionUtils.getValueIgnorecase(m, colName), colType)).collect(Collectors.toList());
+      return mapList.stream().map(m -> ConvertUtils.convert(CollectionUtils.getValueIgnorecase(m, colName), colType)).collect(Collectors.toList());
    }
 
    @Override
@@ -1408,7 +1408,7 @@ public abstract class MybatisDaoSupport<T extends Persistable<ID>, ID extends Se
       }
 
       List<Map<String, Object>> mapList = this.daoMapper.selectUnion(contextInstance, selectColNameList, ArrayUtils.asList(orders));
-      return mapList.parallelStream().map(m -> PersistableHelper.mapToPersistable((Map<String, Object>)m, this.getType())).collect(Collectors.toList());
+      return mapList.stream().map(m -> PersistableHelper.mapToPersistable((Map<String, Object>)m, this.getType())).collect(Collectors.toList());
    }
 
    @Override
@@ -1424,7 +1424,7 @@ public abstract class MybatisDaoSupport<T extends Persistable<ID>, ID extends Se
          List<String> cloneSelectColNames = selectColNames == null ? new ArrayList<>() : new ArrayList<>(selectColNames);
          List<Map<String, Object>> mapList = new ArrayList<>();
          mapList.addAll(this.daoMapper.selectByOneColumnValues(context, colName, contextInstanceList, cloneSelectColNames, ArrayUtils.asList(orders)));
-         return mapList.parallelStream().map(m -> PersistableHelper.mapToPersistable((Map<String, Object>)m, this.getType())).collect(Collectors.toList());
+         return mapList.stream().map(m -> PersistableHelper.mapToPersistable((Map<String, Object>)m, this.getType())).collect(Collectors.toList());
       } else {
          return CollectionUtils.emptyList();
       }

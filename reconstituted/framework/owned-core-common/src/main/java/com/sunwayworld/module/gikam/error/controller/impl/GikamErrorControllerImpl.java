@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 @GikamBean
 @Controller
@@ -20,8 +22,18 @@ implements GikamErrorController {
     @Override
     public String thymeleafPage() {
         HttpServletRequest request = ServletUtils.getCurrentRequest();
-        StringBuilder sb = new StringBuilder("Request Uri:").append(request.getAttribute("javax.servlet.error.request_uri")).append(" Status Code:").append(request.getAttribute("javax.servlet.error.status_code"));
-        logger.warn(sb.toString());
+        if (request == null) {
+            ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+            if (attributes != null) {
+                request = attributes.getRequest();
+            }
+        }
+        if (request != null) {
+            Object uri = request.getAttribute("javax.servlet.error.request_uri");
+            Object code = request.getAttribute("javax.servlet.error.status_code");
+            StringBuilder sb = new StringBuilder("Request Uri:").append(uri).append(" Status Code:").append(code);
+            logger.warn(sb.toString());
+        }
         return "error/thymeleaf";
     }
 }

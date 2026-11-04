@@ -76,18 +76,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public interface GenericService<T extends Persistable<ID>, ID extends Serializable> extends GenericDownloadableService {
    <D extends GenericDao<T, ID>> D getDao();
 
+   @Transactional(readOnly = true)
    default List<T> selectAll() {
       return this.getDao().selectAll();
    }
 
+   @Transactional(readOnly = true)
    default List<T> selectListByIds(List<ID> idList) {
       return this.<GenericDao<T, ID>>getDao().selectListByIds(idList);
    }
 
+   @Transactional(readOnly = true)
    default List<T> selectList(T item, Order... orders) {
       return this.getDao().selectList(item, orders);
    }
 
+   @Transactional(readOnly = true)
    default T selectDetail(ID id) {
       Map<String, Object> map = this.getDao().selectDetail(id);
       return map != null && !map.isEmpty() ? PersistableHelper.mapToPersistable(map, this.getDao().getType()) : null;
@@ -121,18 +125,22 @@ public interface GenericService<T extends Persistable<ID>, ID extends Serializab
       tableService.deleteCascade(PersistableMetadataHelper.getTableName(this.getDao().getType()), id);
    }
 
+   @Transactional(readOnly = true)
    default T selectById(ID id) {
       return (T)this.getDao().selectById(id);
    }
 
+   @Transactional(readOnly = true)
    default T selectByIdIfPresent(ID id) {
       return (T)this.getDao().selectByIdIfPresent(id);
    }
 
+   @Transactional(readOnly = true)
    default String selectColumnById(ID id, String column) {
       return this.getDao().selectColumnById(id, column, String.class);
    }
 
+   @Transactional(readOnly = true)
    default <V> V selectColumnById(ID id, String column, Class<V> columnType) {
       return this.getDao().selectColumnById(id, column, columnType);
    }
@@ -233,10 +241,12 @@ public interface GenericService<T extends Persistable<ID>, ID extends Serializab
       this.<GenericDao<T, ID>>getDao().updateCreatedBy(itemList);
    }
 
+   @Transactional(readOnly = true)
    default Page<T> selectPagination(MapperParameter parameter, PageRowBounds rowBounds) {
       return this.selectPagination(() -> this.getDao().selectByCondition(parameter), rowBounds);
    }
 
+   @Transactional(readOnly = true)
    default <V> Page<T> selectPagination(Supplier<List<V>> mapOrItemSupplier, PageRowBounds rowBounds) {
       Page<V> page = MybatisPageHelper.get(rowBounds, mapOrItemSupplier);
       if (page.getRows().isEmpty()) {
@@ -245,7 +255,7 @@ public interface GenericService<T extends Persistable<ID>, ID extends Serializab
          Class<V> clazz = (Class<V>)ClassUtils.getRawType(page.getRows().get(0).getClass());
          if (Map.class.isAssignableFrom(clazz)) {
             List<T> itemList = page.getRows()
-               .parallelStream()
+               .stream()
                .map(m -> PersistableHelper.mapToPersistable((Map<String, Object>)m, this.getDao().getType()))
                .collect(Collectors.toList());
             return new Pagination<>(page, itemList);
@@ -257,16 +267,19 @@ public interface GenericService<T extends Persistable<ID>, ID extends Serializab
       }
    }
 
+   @Transactional(readOnly = true)
    default Page<T> selectPagination(MapperParameter parameter) {
       return this.selectPagination(parameter, null);
    }
 
+   @Transactional(readOnly = true)
    default Page<T> selectPagination(RestJsonWrapperBean wrapper) {
       MapperParameter parameter = wrapper.extractMapFilter();
       PageRowBounds rowBounds = wrapper.extractPageRowBounds();
       return this.selectPagination(parameter, rowBounds);
    }
 
+   @Transactional(readOnly = true)
    default Page<T> selectPaginationByFilter(SearchFilter filter, RestJsonWrapperBean wrapper) {
       MapperParameter parameter = wrapper.extractMapFilter();
       parameter.setFilter(filter);
@@ -274,6 +287,7 @@ public interface GenericService<T extends Persistable<ID>, ID extends Serializab
       return this.selectPagination(parameter, rowBounds);
    }
 
+   @Transactional(readOnly = true)
    default Page<T> selectRawPagination(RestJsonWrapperBean wrapper) {
       MapperParameter parameter = wrapper.extractMapFilter();
       PageRowBounds rowBounds = wrapper.extractPageRowBounds();
@@ -295,6 +309,7 @@ public interface GenericService<T extends Persistable<ID>, ID extends Serializab
       return this.selectPagination(parameter, rowBounds);
    }
 
+   @Transactional(readOnly = true)
    default Page<T> selectByRole(Long roleId, RestJsonWrapperBean wrapper) {
       MapperParameter parameter = wrapper.extractMapFilter();
       parameter.setSelectByRoleIdParam(roleId);
@@ -302,6 +317,7 @@ public interface GenericService<T extends Persistable<ID>, ID extends Serializab
       return this.selectPagination(parameter, rowBounds);
    }
 
+   @Transactional(readOnly = true)
    default Page<T> selectSearchablePagination(RestJsonWrapperBean wrapper) {
       MapperParameter parameter = wrapper.extractMapFilter();
       PageRowBounds rowBounds = wrapper.extractPageRowBounds();
@@ -404,6 +420,7 @@ public interface GenericService<T extends Persistable<ID>, ID extends Serializab
       return page.getNumberOfElements() > 0;
    }
 
+   @Transactional(readOnly = true)
    default CoreServiceStatusDTO selectStatus(ID id, String currentStatusCode) {
       CoreServiceStatusDTO status = new CoreServiceStatusDTO();
       T item = (T)(id == null ? null : this.getDao().selectByIdIfPresent(id));
@@ -513,6 +530,7 @@ public interface GenericService<T extends Persistable<ID>, ID extends Serializab
       this.getDao().update(Arrays.asList((T[])(new Persistable[]{first, second})), column);
    }
 
+   @Transactional(readOnly = true)
    default List<T> selectListByFilter(SearchFilter filter, Order... orders) {
       MapperParameter parameter = new MapperParameter();
       parameter.setFilter(filter);
@@ -524,19 +542,22 @@ public interface GenericService<T extends Persistable<ID>, ID extends Serializab
       return this.selectList(parameter);
    }
 
+   @Transactional(readOnly = true)
    default List<T> selectListByFilter(SearchFilter filter, RestJsonWrapperBean wrapper) {
       MapperParameter parameter = wrapper == null ? new MapperParameter() : wrapper.extractMapFilter();
       parameter.setFilter(filter);
       return this.selectList(parameter);
    }
 
+   @Transactional(readOnly = true)
    default List<T> selectList(MapperParameter parameter) {
       List<Map<String, Object>> mapList = this.getDao().selectByCondition(parameter);
       return mapList.isEmpty()
          ? CollectionUtils.emptyList()
-         : mapList.parallelStream().map(m -> PersistableHelper.mapToPersistable((Map<String, Object>)m, this.getDao().getType())).collect(Collectors.toList());
+         : mapList.stream().map(m -> PersistableHelper.mapToPersistable((Map<String, Object>)m, this.getDao().getType())).collect(Collectors.toList());
    }
 
+   @Transactional(readOnly = true)
    default T selectFirst(MapperParameter parameter) {
       PageRequest page = new PageRequest();
       page.setPageSize(1);
@@ -546,12 +567,14 @@ public interface GenericService<T extends Persistable<ID>, ID extends Serializab
       return mapList.getRows().isEmpty() ? null : PersistableHelper.mapToPersistable(mapList.getRows().get(0), this.getDao().getType());
    }
 
+   @Transactional(readOnly = true)
    default T selectFirstByFilter(SearchFilter filter, RestJsonWrapperBean wrapper) {
       MapperParameter parameter = wrapper == null ? new MapperParameter() : wrapper.extractMapFilter();
       parameter.setFilter(filter);
       return this.selectFirst(parameter);
    }
 
+   @Transactional(readOnly = true)
    default T selectFirstByFilter(SearchFilter filter, Order... orders) {
       MapperParameter parameter = new MapperParameter();
       parameter.setFilter(filter);
@@ -569,6 +592,7 @@ public interface GenericService<T extends Persistable<ID>, ID extends Serializab
       return MybatisHelper.getMapperContent(mapperClazz);
    }
 
+   @Transactional(readOnly = true)
    default Page<CoreControllerRequestEntryDTO> getGikamAttrsReqEntryPagination() {
       for (Class<?> clazz = ClassUtils.getRawType(this.getClass()); !Object.class.equals(clazz); clazz = clazz.getSuperclass()) {
          String className = clazz.getSimpleName();
@@ -632,6 +656,7 @@ public interface GenericService<T extends Persistable<ID>, ID extends Serializab
       throw new UnsupportedException("You should implements this method if required.");
    }
 
+   @Transactional(readOnly = true)
    default Long selectProcId(ID id) {
       if (GenericAuditableService.class.isAssignableFrom(this.getClass())) {
          GenericAuditableService auditableService = (GenericAuditableService)this;

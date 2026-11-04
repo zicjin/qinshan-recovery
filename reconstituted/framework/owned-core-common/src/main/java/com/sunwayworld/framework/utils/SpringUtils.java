@@ -34,6 +34,9 @@ public abstract class SpringUtils {
 
     public static synchronized void registerBean(String beanName, Class<?> clazz) {
         DefaultListableBeanFactory defaultListableBeanFactory;
+        if (clazz.getClassLoader() != null) {
+            Thread.currentThread().setContextClassLoader(clazz.getClassLoader());
+        }
         ApplicationContext applicationContext = ApplicationContextHelper.getApplicationContext();
         if (beanName == null) {
             beanName = clazz.getName();

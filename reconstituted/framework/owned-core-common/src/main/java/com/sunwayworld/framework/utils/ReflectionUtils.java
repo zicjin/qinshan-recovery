@@ -111,7 +111,7 @@ public abstract class ReflectionUtils {
    }
 
    public static final Method findMethod(Class<?> clazz, String name) {
-      return findMethod(clazz, name);
+      return findMethod(clazz, name, new Class<?>[0]);
    }
 
    public static final Method findMethod(Class<?> clazz, String name, Class<?>... parameterTypes) {
@@ -153,7 +153,7 @@ public abstract class ReflectionUtils {
    }
 
    public static final Object invokeMethod(Method method, Object target) {
-      return invokeMethod(method, target);
+      return invokeMethod(method, target, new Object[0]);
    }
 
    public static final Object invokeMethod(Method method, Object target, Object... args) {

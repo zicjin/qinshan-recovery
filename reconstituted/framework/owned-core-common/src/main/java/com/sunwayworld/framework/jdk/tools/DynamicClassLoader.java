@@ -39,6 +39,13 @@ extends URLClassLoader {
 
     private DynamicClassLoader() {
         super(new URL[0], DynamicClassLoader.class.getClassLoader());
+        Thread.currentThread().setContextClassLoader(this);
+    }
+
+    @Override
+    protected Class<?> findClass(String name) throws ClassNotFoundException {
+        Class<?> loaded = this.loadedClassMap.get(name);
+        return loaded != null ? loaded : super.findClass(name);
     }
 
     /*

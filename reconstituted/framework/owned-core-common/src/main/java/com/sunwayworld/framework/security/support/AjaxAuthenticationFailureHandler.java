@@ -27,11 +27,7 @@ extends SimpleUrlAuthenticationFailureHandler {
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
         String message = exception.getMessage();
-        if (StringUtils.isBlank(message)) {
-            logger.warn(exception);
-        } else {
-            logger.warn(I18nHelper.getMessageIfPresent(message, new String[0]));
-        }
+        logger.warn("Authentication failure: " + message, (Throwable) exception);
         if (PreviousLoginDetectedException.class.equals(exception.getClass())) {
             ServletUtils.responseError(HttpErrorMessage.of(HttpStatus.PAYMENT_REQUIRED, message));
         } else {

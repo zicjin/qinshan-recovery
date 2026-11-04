@@ -1,0 +1,944 @@
+{
+  "schema": 1,
+  "status": "executed-pass",
+  "execution": "strict",
+  "strict_evidence": true,
+  "production_access": false,
+  "scope": "clone-derived Spring Web API contract runner",
+  "route_execution_model": {
+    "application": "one owned Spring application per wave",
+    "oracle": "persistent Oracle baseline/runtime schema",
+    "redis": "reused sss2 Redis database 15",
+    "boundary_route": "owned Java source-only route in the same Spring application",
+    "boundary_process": false,
+    "internal_http_bridge": false,
+    "jni_replacement_process": false
+  },
+  "started_at": "2026-11-04T02:14:12.872035+00:00",
+  "source_commit": "68d25abd2bc989b1368f45c8b8e912b99080348a",
+  "repository_head_at_capture": "68d25abd2bc989b1368f45c8b8e912b99080348a",
+  "source_dirty": false,
+  "source_scope": [
+    "project/src/main/java",
+    "owned-framework/src",
+    "owned-personnel/src",
+    "owned-equipment/src",
+    "owned-consumables/src",
+    "owned-attachments/src",
+    "owned-report/src",
+    "owned-scheduler/src",
+    "owned-web/src",
+    "scripts/source_binding.py",
+    "scripts/evidence_output.py",
+    "scripts/spring_api_contract_runner.py",
+    "scripts/fast_differential_api_runner.py",
+    "scripts/api_wave_orchestrator.py",
+    "scripts/owned_runtime_contract.py",
+    "scripts/api_fixture.py",
+    "scripts/remote-sql-fixture-executor.py",
+    "scripts/start-strict-sss2-api-runtime.sh",
+    "scripts/start-reused-sss2-api-runtime.sh",
+    "scripts/cleanup-strict-sss2-api-runtime.sh",
+    "scripts/refresh-owned-sss2-app.sh",
+    "scripts/owned_readiness.py",
+    "tools/business_api_inventory.py",
+    "tools/api_route_ledger.py",
+    "tools/api_route_execution_plan.py",
+    "tools/api_contract_skeleton.py",
+    "tools/api_route_closure.py",
+    "tools/finalize_api_report.py",
+    "tools/vertical_slices/matrix.py",
+    "project/pom.xml",
+    "owned-framework/pom.xml",
+    "owned-personnel/pom.xml",
+    "owned-equipment/pom.xml",
+    "owned-consumables/pom.xml",
+    "owned-attachments/pom.xml",
+    "owned-report/pom.xml",
+    "owned-scheduler/pom.xml",
+    "owned-web/pom.xml",
+    "owned-distribution/package.py",
+    "owned-distribution/start.sh",
+    "owned-distribution/example",
+    "owned-web/build-owned-web.sh",
+    "scripts/build-owned-distribution.sh",
+    "scripts/build-owned-framework.sh",
+    "scripts/build-owned-personnel.sh",
+    "scripts/build-owned-equipment.sh",
+    "scripts/build-owned-consumables.sh",
+    "scripts/build-owned-attachments.sh",
+    "scripts/build-owned-report.sh",
+    "scripts/build-owned-scheduler.sh",
+    "scripts/build-prep.sh",
+    "scripts/verify-external-artifacts.sh",
+    "evidence/external-artifacts.sha256",
+    "build/oracle-free-source-manifest.json",
+    "docker/Dockerfile.built"
+  ],
+  "implementation_binding": "impl-f68ecf6517b33558",
+  "implementation_tree_digest": "f68ecf6517b33558ba76bd6d36d3c8e553a9b74b748ed69f22f8fc9881361de7",
+  "implementation_dirty": false,
+  "implementation_scope": [
+    "project/src/main/java",
+    "owned-framework/src",
+    "owned-personnel/src",
+    "owned-equipment/src",
+    "owned-consumables/src",
+    "owned-attachments/src",
+    "owned-report/src",
+    "owned-scheduler/src",
+    "owned-web/src",
+    "scripts/source_binding.py",
+    "scripts/evidence_output.py",
+    "scripts/spring_api_contract_runner.py",
+    "scripts/fast_differential_api_runner.py",
+    "scripts/api_wave_orchestrator.py",
+    "scripts/owned_runtime_contract.py",
+    "scripts/api_fixture.py",
+    "scripts/remote-sql-fixture-executor.py",
+    "scripts/start-strict-sss2-api-runtime.sh",
+    "scripts/start-reused-sss2-api-runtime.sh",
+    "scripts/cleanup-strict-sss2-api-runtime.sh",
+    "scripts/refresh-owned-sss2-app.sh",
+    "scripts/owned_readiness.py",
+    "tools/business_api_inventory.py",
+    "tools/api_route_ledger.py",
+    "tools/api_route_execution_plan.py",
+    "tools/api_contract_skeleton.py",
+    "tools/api_route_closure.py",
+    "tools/finalize_api_report.py",
+    "tools/vertical_slices/matrix.py",
+    "project/pom.xml",
+    "owned-framework/pom.xml",
+    "owned-personnel/pom.xml",
+    "owned-equipment/pom.xml",
+    "owned-consumables/pom.xml",
+    "owned-attachments/pom.xml",
+    "owned-report/pom.xml",
+    "owned-scheduler/pom.xml",
+    "owned-web/pom.xml",
+    "owned-distribution/package.py",
+    "owned-distribution/start.sh",
+    "owned-distribution/example",
+    "owned-web/build-owned-web.sh",
+    "scripts/build-owned-distribution.sh",
+    "scripts/build-owned-framework.sh",
+    "scripts/build-owned-personnel.sh",
+    "scripts/build-owned-equipment.sh",
+    "scripts/build-owned-consumables.sh",
+    "scripts/build-owned-attachments.sh",
+    "scripts/build-owned-report.sh",
+    "scripts/build-owned-scheduler.sh",
+    "scripts/build-prep.sh",
+    "scripts/verify-external-artifacts.sh",
+    "evidence/external-artifacts.sha256",
+    "build/oracle-free-source-manifest.json",
+    "docker/Dockerfile.built"
+  ],
+  "nested_project_commit": "27932b1fe4d71d64a02f9a63e55f56acb403e3a0",
+  "distribution_input_digest": "66bcb312ebe725a0c7037954045476c2567c4f530efd423371469cf2a4a57ac3",
+  "artifact_sha256": {
+    "owned-distribution/target/distribution/app/lims-owned-application.jar": "8ec85b79802af5c5779dfb8534d6e3af27b8c83020feb63d4ca612920a74237d"
+  },
+  "clone_identity": "lims-owned-sss2-oracle:LIMS_BASELINE_SSS2:LIMS_RUNTIME_SSS2:a60fc4519f2a89fb6b1761d6e0a2a6480cef8d4bbeab40a2144141f13a9a1dec",
+  "runtime_report": "../.scratch/sunway-supplier-exit-api-first/diagnostic-evidence/runtime/strict-api-runtime-manifest-order-project-68d25ab-r2.json",
+  "runtime_contract": {
+    "mode": "strict",
+    "strict_evidence": false,
+    "runtime_identity": "lims-owned-sss2-oracle:LIMS_BASELINE_SSS2:LIMS_RUNTIME_SSS2:a60fc4519f2a89fb6b1761d6e0a2a6480cef8d4bbeab40a2144141f13a9a1dec",
+    "reuse": true,
+    "oracle_reused": true,
+    "baseline_schema": "LIMS_BASELINE_SSS2",
+    "runtime_schema": "LIMS_RUNTIME_SSS2",
+    "baseline_schema_hash": "a60fc4519f2a89fb6b1761d6e0a2a6480cef8d4bbeab40a2144141f13a9a1dec",
+    "runtime_schema_hash_before": "cdde6b2eb558dc38edd218ffdad15323107c879d763696fdee62a21a2c0cef89",
+    "runtime_schema_hash_after": "cdde6b2eb558dc38edd218ffdad15323107c879d763696fdee62a21a2c0cef89",
+    "source_commit": "68d25abd2bc989b1368f45c8b8e912b99080348a",
+    "implementation_binding": "impl-f68ecf6517b33558",
+    "implementation_tree_digest": "f68ecf6517b33558ba76bd6d36d3c8e553a9b74b748ed69f22f8fc9881361de7",
+    "implementation_scope": [
+      "project/src/main/java",
+      "owned-framework/src",
+      "owned-personnel/src",
+      "owned-equipment/src",
+      "owned-consumables/src",
+      "owned-attachments/src",
+      "owned-report/src",
+      "owned-scheduler/src",
+      "owned-web/src",
+      "scripts/source_binding.py",
+      "scripts/evidence_output.py",
+      "scripts/spring_api_contract_runner.py",
+      "scripts/fast_differential_api_runner.py",
+      "scripts/api_wave_orchestrator.py",
+      "scripts/owned_runtime_contract.py",
+      "scripts/api_fixture.py",
+      "scripts/remote-sql-fixture-executor.py",
+      "scripts/start-strict-sss2-api-runtime.sh",
+      "scripts/start-reused-sss2-api-runtime.sh",
+      "scripts/cleanup-strict-sss2-api-runtime.sh",
+      "scripts/refresh-owned-sss2-app.sh",
+      "scripts/owned_readiness.py",
+      "tools/business_api_inventory.py",
+      "tools/api_route_ledger.py",
+      "tools/api_route_execution_plan.py",
+      "tools/api_contract_skeleton.py",
+      "tools/api_route_closure.py",
+      "tools/finalize_api_report.py",
+      "tools/vertical_slices/matrix.py",
+      "project/pom.xml",
+      "owned-framework/pom.xml",
+      "owned-personnel/pom.xml",
+      "owned-equipment/pom.xml",
+      "owned-consumables/pom.xml",
+      "owned-attachments/pom.xml",
+      "owned-report/pom.xml",
+      "owned-scheduler/pom.xml",
+      "owned-web/pom.xml",
+      "owned-distribution/package.py",
+      "owned-distribution/start.sh",
+      "owned-distribution/example",
+      "owned-web/build-owned-web.sh",
+      "scripts/build-owned-distribution.sh",
+      "scripts/build-owned-framework.sh",
+      "scripts/build-owned-personnel.sh",
+      "scripts/build-owned-equipment.sh",
+      "scripts/build-owned-consumables.sh",
+      "scripts/build-owned-attachments.sh",
+      "scripts/build-owned-report.sh",
+      "scripts/build-owned-scheduler.sh",
+      "scripts/build-prep.sh",
+      "scripts/verify-external-artifacts.sh",
+      "evidence/external-artifacts.sha256",
+      "build/oracle-free-source-manifest.json",
+      "docker/Dockerfile.built"
+    ],
+    "implementation_dirty": false,
+    "repository_head_at_capture": "68d25abd2bc989b1368f45c8b8e912b99080348a"
+  },
+  "role": "manager",
+  "organization": "org-a",
+  "mode": "strict",
+  "base_url": "http://127.0.0.1:18089",
+  "case_count": 8,
+  "cases": [
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "ext$"
+      ],
+      "body_sha256": "f195ca8381d65972cfe1ebdeed49720de585abba84c3789dd8919375d419e7bf",
+      "body_bytes": 11,
+      "assertions": {
+        "json_keys": [
+          "ext$"
+        ],
+        "content_type": "application/json",
+        "json_values": {
+          "ext$": {}
+        }
+      },
+      "id": "order-status",
+      "method": "GET",
+      "path": "/secure/emc/module/bp/bp/orders/info/status",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/bp/orders/info/status",
+      "status": 200,
+      "response_headers": {
+        "cache-control": "no-store",
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "11",
+        "date": "Wed, 04 Nov 2026 02:14:15 GMT",
+        "connection": "close"
+      },
+      "request_headers": {},
+      "elapsed_ms": 435.793,
+      "route": {
+        "method": "GET",
+        "path": "/secure/emc/module/bp/bp/orders/info/status",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "route_ids": [
+          "8e7a5b754f6d5f45",
+          "615e9d2c3ebf868f"
+        ]
+      },
+      "behavior_family": "order-query",
+      "request_profile": "default",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "rebbab901ce5d"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "88a47bed65669f5ca095b722c617ada4b7063a05444a70bd125cc279333034f0",
+      "body_bytes": 8227,
+      "assertions": {
+        "json_keys": [
+          "columnTypeMap",
+          "first",
+          "last",
+          "numberOfElements",
+          "pageNumber",
+          "pageSize",
+          "rows",
+          "total",
+          "totalMap",
+          "totalPages"
+        ],
+        "content_type": "application/json",
+        "json_values": {
+          "total": 100,
+          "numberOfElements": 10,
+          "pageNumber": 1,
+          "pageSize": 10,
+          "columnTypeMap.createdbyorgid": "string",
+          "columnTypeMap.rn_": "number"
+        }
+      },
+      "id": "order-query",
+      "method": "POST",
+      "path": "/secure/emc/module/bp/bp/orders/queries",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/bp/orders/queries",
+      "status": 200,
+      "response_headers": {
+        "cache-control": "no-store",
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "8227",
+        "date": "Wed, 04 Nov 2026 02:14:16 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 574.8,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/bp/bp/orders/queries",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "route_ids": [
+          "4da9844a86833387",
+          "328d533ee0757f2b"
+        ]
+      },
+      "behavior_family": "order-query",
+      "request_profile": "default",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r94ddfeb7ca17"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "88a47bed65669f5ca095b722c617ada4b7063a05444a70bd125cc279333034f0",
+      "body_bytes": 8227,
+      "assertions": {
+        "json_keys": [
+          "columnTypeMap",
+          "first",
+          "last",
+          "numberOfElements",
+          "pageNumber",
+          "pageSize",
+          "rows",
+          "total",
+          "totalMap",
+          "totalPages"
+        ],
+        "content_type": "application/json",
+        "json_values": {
+          "total": 100,
+          "numberOfElements": 10,
+          "pageNumber": 1,
+          "pageSize": 10,
+          "columnTypeMap.createdbyorgid": "string",
+          "columnTypeMap.rn_": "number"
+        }
+      },
+      "id": "order-query-raw",
+      "method": "POST",
+      "path": "/secure/emc/module/bp/bp/orders/queries/raw",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/bp/orders/queries/raw",
+      "status": 200,
+      "response_headers": {
+        "cache-control": "no-store",
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "8227",
+        "date": "Wed, 04 Nov 2026 02:14:16 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 508.337,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/bp/bp/orders/queries/raw",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "route_ids": [
+          "011678924068c84c",
+          "975f6f7cb63265c4"
+        ]
+      },
+      "behavior_family": "order-query",
+      "request_profile": "default",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "reae761ce5f8a"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "88a47bed65669f5ca095b722c617ada4b7063a05444a70bd125cc279333034f0",
+      "body_bytes": 8227,
+      "assertions": {
+        "json_keys": [
+          "columnTypeMap",
+          "first",
+          "last",
+          "numberOfElements",
+          "pageNumber",
+          "pageSize",
+          "rows",
+          "total",
+          "totalMap",
+          "totalPages"
+        ],
+        "content_type": "application/json",
+        "json_values": {
+          "total": 100,
+          "numberOfElements": 10,
+          "pageNumber": 1,
+          "pageSize": 10,
+          "columnTypeMap.createdbyorgid": "string",
+          "columnTypeMap.rn_": "number"
+        }
+      },
+      "id": "order-query-searchable",
+      "method": "POST",
+      "path": "/secure/emc/module/bp/bp/orders/queries/searchable",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/bp/orders/queries/searchable",
+      "status": 200,
+      "response_headers": {
+        "cache-control": "no-store",
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "8227",
+        "date": "Wed, 04 Nov 2026 02:14:17 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 506.678,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/bp/bp/orders/queries/searchable",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "route_ids": [
+          "1555f278c1581ffe",
+          "6ed084fd10bd6057"
+        ]
+      },
+      "behavior_family": "order-query",
+      "request_profile": "default",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r1bebcbae2efa"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        500
+      ],
+      "json_top_level_keys": [
+        "error",
+        "message",
+        "path",
+        "stacktrace",
+        "status",
+        "timestamp"
+      ],
+      "body_sha256": "e72cf450f9e7ced737ee148e2bf1db54eb29548603002c8165f1374e8221eb00",
+      "body_bytes": 220,
+      "assertions": {
+        "json_keys": [
+          "error",
+          "message",
+          "path",
+          "stacktrace",
+          "status",
+          "timestamp"
+        ],
+        "json_values": {
+          "message": "GIKAM.EXCEPTION.UNEXPECTED",
+          "status": 500
+        }
+      },
+      "id": "order-query-malformed",
+      "method": "POST",
+      "path": "/secure/emc/module/bp/bp/orders/queries",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/bp/orders/queries",
+      "status": 500,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "transfer-encoding": "chunked",
+        "date": "Wed, 04 Nov 2026 02:14:17 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 485.651,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/bp/bp/orders/queries",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "route_ids": [
+          "4da9844a86833387",
+          "328d533ee0757f2b"
+        ]
+      },
+      "behavior_family": "order-query",
+      "request_profile": "malformed",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r8801c1c8ed11"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "auditStatus",
+        "ext$"
+      ],
+      "body_sha256": "56241240acf0c210882966eb1b34b4f0c2fd1d3a704bc88dcc12142f74182a8f",
+      "body_bytes": 72,
+      "assertions": {
+        "json_keys": [
+          "auditStatus",
+          "ext$"
+        ],
+        "content_type": "application/json",
+        "json_values": {
+          "auditStatus.processStatus": "draft",
+          "auditStatus.statusCode": "draft",
+          "ext$": {}
+        }
+      },
+      "id": "project-status",
+      "method": "GET",
+      "path": "/secure/emc/module/bp/project/projects/info/status",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/project/projects/info/status",
+      "status": 200,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "72",
+        "date": "Wed, 04 Nov 2026 02:14:17 GMT",
+        "connection": "close"
+      },
+      "request_headers": {},
+      "elapsed_ms": 413.292,
+      "route": {
+        "method": "GET",
+        "path": "/secure/emc/module/bp/project/projects/info/status",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "route_ids": [
+          "6e955ed9d376a072",
+          "d1b34d82ca6eb0ab"
+        ]
+      },
+      "behavior_family": "project-query",
+      "request_profile": "default",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r55f1f688a131"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      }
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "3606bbe6a1d7b08b29304afff19a18b925fa82796b23a53a26afe5088f48ec95",
+      "body_bytes": 17862,
+      "assertions": {
+        "json_keys": [
+          "columnTypeMap",
+          "first",
+          "last",
+          "numberOfElements",
+          "pageNumber",
+          "pageSize",
+          "rows",
+          "total",
+          "totalMap",
+          "totalPages"
+        ],
+        "content_type": "application/json",
+        "json_values": {
+          "total": 100,
+          "numberOfElements": 10,
+          "pageNumber": 1,
+          "pageSize": 10,
+          "columnTypeMap.createdbyorgid": "string",
+          "columnTypeMap.rn_": "number",
+          "columnTypeMap.scheduleactivedflag": "string"
+        }
+      },
+      "id": "project-query",
+      "method": "POST",
+      "path": "/secure/emc/module/bp/project/projects/queries",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/project/projects/queries",
+      "status": 200,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "content-type": "application/json",
+        "content-length": "17862",
+        "date": "Wed, 04 Nov 2026 02:14:19 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 500.698,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/bp/project/projects/queries",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "route_ids": [
+          "f122775fd38e1532",
+          "9a44a6c885297840"
+        ]
+      },
+      "behavior_family": "project-query",
+      "request_profile": "default",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r7ad33eb65dd8"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    },
+    {
+      "expected_status": [
+        500
+      ],
+      "json_top_level_keys": [
+        "error",
+        "message",
+        "path",
+        "stacktrace",
+        "status",
+        "timestamp"
+      ],
+      "body_sha256": "9b730a262fc9571d1764f465594db580b55aba6ec5a38a88068ba69162a7a146",
+      "body_bytes": 229,
+      "assertions": {
+        "json_keys": [
+          "error",
+          "message",
+          "path",
+          "stacktrace",
+          "status",
+          "timestamp"
+        ],
+        "json_values": {
+          "message": "GIKAM.EXCEPTION.UNEXPECTED",
+          "status": 500
+        }
+      },
+      "id": "project-query-malformed",
+      "method": "POST",
+      "path": "/secure/emc/module/bp/project/projects/queries",
+      "url": "http://127.0.0.1:18089/secure/emc/module/bp/project/projects/queries",
+      "status": 500,
+      "response_headers": {
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "x-frame-options": "SAMEORIGIN",
+        "transfer-encoding": "chunked",
+        "date": "Wed, 04 Nov 2026 02:14:19 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 513.129,
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/bp/project/projects/queries",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "route_ids": [
+          "f122775fd38e1532",
+          "9a44a6c885297840"
+        ]
+      },
+      "behavior_family": "project-query",
+      "request_profile": "malformed",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r703dbbe16bc5"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "rollback": {
+        "status": "verified-via-fixture-restore",
+        "source": "api-fixture-restore"
+      }
+    }
+  ],
+  "cleanup": {
+    "application_absent": true,
+    "application_stopped": true,
+    "baseline_key_data_hash_after": "09437a80d60cd8dad0c92dafe804398ccd2a48b1ddf3be08cf5bda18814a8af4",
+    "baseline_schema_hash_after": "a60fc4519f2a89fb6b1761d6e0a2a6480cef8d4bbeab40a2144141f13a9a1dec",
+    "baseline_schema_immutable": true,
+    "cleanup_mode": "persistent-oracle",
+    "network_preserved": true,
+    "oracle_preserved": true,
+    "oracle_reused": true,
+    "oracle_stopped": false,
+    "redis_preserved": true,
+    "redis_stopped": false,
+    "runtime_dirty": false,
+    "runtime_key_data_hash_after": "09437a80d60cd8dad0c92dafe804398ccd2a48b1ddf3be08cf5bda18814a8af4",
+    "runtime_schema_hash_after": "cdde6b2eb558dc38edd218ffdad15323107c879d763696fdee62a21a2c0cef89",
+    "runtime_schema_restored": true,
+    "temporary_files_removed": true,
+    "volume_preserved": true
+  },
+  "cleanup_pending": false,
+  "phase_timings_ms": {
+    "http_cases": 5019.747
+  },
+  "authentication": {
+    "attempted": true,
+    "authenticated": true,
+    "status": 200
+  },
+  "finished_at": "2026-11-04T02:14:17.891831+00:00",
+  "cleanup_finalized_at": "2026-11-04T02:14:24.494519+00:00"
+}

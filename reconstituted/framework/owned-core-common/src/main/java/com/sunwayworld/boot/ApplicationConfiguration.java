@@ -4,7 +4,6 @@
 package com.sunwayworld.boot;
 
 import com.sunwayworld.framework.context.ApplicationContextHelper;
-import com.sunwayworld.framework.context.GikamBeanContext;
 import com.sunwayworld.framework.i18n.DatabaseDrivenMessageSource;
 import com.sunwayworld.framework.thymeleaf.templateresolver.GikamResourceTemplateResolver;
 import java.util.HashMap;
@@ -89,11 +88,6 @@ public class ApplicationConfiguration extends ApplicationObjectSupport
         ApplicationContextHelper.setApplicationContext(getApplicationContext());
     }
 
-    @PostConstruct
-    public void init() {
-        GikamBeanContext.init();
-    }
-
     @Bean @Primary
     public RestTemplate restTemplate(RestTemplateBuilder builder) {
         return builder.build();
@@ -147,10 +141,9 @@ public class ApplicationConfiguration extends ApplicationObjectSupport
 
     @Bean
     public static MapperScannerConfigurer mapperScannerConfigurer() {
-        MapperScannerConfigurer configurer = new MapperScannerConfigurer();
+        MapperScannerConfigurer configurer = new GikamMapperScannerConfigurer();
         configurer.setBasePackage("com.sunwayworld");
         configurer.setSqlSessionTemplateBeanName("sqlSessionTemplate");
-        configurer.setAnnotationClass(com.sunwayworld.framework.spring.annotation.GikamBean.class);
         return configurer;
     }
 
@@ -161,7 +154,7 @@ public class ApplicationConfiguration extends ApplicationObjectSupport
 
     @Bean
     public HandlerAdapter servletHandlerAdapter() {
-        return new RequestMappingHandlerAdapter();
+        return new org.springframework.web.servlet.handler.SimpleServletHandlerAdapter();
     }
 
     @Bean

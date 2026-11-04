@@ -40,6 +40,34 @@ implements UserDetailsService {
     @Autowired
     private GlobalMapper globalMapper;
 
+    protected CoreOrgService getOrgService() {
+        if (this.orgService == null) {
+            this.orgService = ApplicationContextHelper.getBeanIfPresent(CoreOrgService.class);
+        }
+        return this.orgService;
+    }
+
+    protected CoreRoleService getRoleService() {
+        if (this.roleService == null) {
+            this.roleService = ApplicationContextHelper.getBeanIfPresent(CoreRoleService.class);
+        }
+        return this.roleService;
+    }
+
+    protected CoreTenantService getTenantService() {
+        if (this.tenantService == null) {
+            this.tenantService = ApplicationContextHelper.getBeanIfPresent(CoreTenantService.class);
+        }
+        return this.tenantService;
+    }
+
+    protected GlobalMapper getGlobalMapper() {
+        if (this.globalMapper == null) {
+            this.globalMapper = ApplicationContextHelper.getBeanIfPresent(GlobalMapper.class);
+        }
+        return this.globalMapper;
+    }
+
     @Override
     public UserDetails loadUserByUsername(String loginId) throws UsernameNotFoundException {
         CoreUserBean user = this.getLoginUser(loginId);
@@ -52,15 +80,19 @@ implements UserDetailsService {
         DefaultUserDetailsChecker.check(user);
         LoginUser loginUser = new LoginUser(user.getId(), user.getPassword());
         HttpServletRequest request = ServletUtils.getCurrentRequest();
-        loginUser.setOrgId(request.getParameter("orgId"));
+        loginUser.setOrgId(request != null ? request.getParameter("orgId") : null);
         if (!StringUtils.isEmpty(loginUser.getOrgId())) {
-            CoreOrgBean org = (CoreOrgBean)this.orgService.selectById(loginUser.getOrgId());
-            loginUser.setOrgName(org.getOrgName());
+            CoreOrgService os = this.getOrgService();
+            CoreOrgBean org = os != null ? (CoreOrgBean)os.selectById(loginUser.getOrgId()) : null;
+            if (org != null) {
+                loginUser.setOrgName(org.getOrgName());
+            }
         } else {
             String replaceSql;
             Map<String, Object> map;
             String selectSql = ApplicationContextHelper.getConstantValue("LOGIN_USER_SELECT_ORG_SQL");
-            if (!StringUtils.isBlank(selectSql) && !(map = this.globalMapper.selectOne(replaceSql = StringUtils.replace(selectSql, "${userId}", user.getId()))).isEmpty()) {
+            GlobalMapper gm = this.getGlobalMapper();
+            if (!StringUtils.isBlank(selectSql) && gm != null && !(map = gm.selectOne(replaceSql = StringUtils.replace(selectSql, "${userId}", user.getId()))).isEmpty()) {
                 loginUser.setOrgId((String)CollectionUtils.getValueIgnorecase(map, "ORGID"));
                 loginUser.setOrgName((String)CollectionUtils.getValueIgnorecase(map, "ORGNAME"));
             }
@@ -69,15 +101,21 @@ implements UserDetailsService {
                 loginUser.setOrgName(user.getOrgName());
             }
         }
-        loginUser.setRoleId(ConvertUtils.convert(request.getParameter("roleId"), Long.class));
+        loginUser.setRoleId(ConvertUtils.convert(request != null ? request.getParameter("roleId") : null, Long.class));
         if (loginUser.getRoleId() != null) {
-            CoreRoleBean role = (CoreRoleBean)this.roleService.selectById(loginUser.getRoleId());
-            loginUser.setRoleName(role.getRoleName());
+            CoreRoleService rs = this.getRoleService();
+            CoreRoleBean role = rs != null ? (CoreRoleBean)rs.selectById(loginUser.getRoleId()) : null;
+            if (role != null) {
+                loginUser.setRoleName(role.getRoleName());
+            }
         }
-        loginUser.setTenantId(ConvertUtils.convert(request.getParameter("tenantId"), Long.class));
+        loginUser.setTenantId(ConvertUtils.convert(request != null ? request.getParameter("tenantId") : null, Long.class));
         if (loginUser.getTenantId() != null) {
-            CoreTenantBean tenant = (CoreTenantBean)this.tenantService.selectById(loginUser.getTenantId());
-            loginUser.setTenantName(tenant.getTenantName());
+            CoreTenantService ts = this.getTenantService();
+            CoreTenantBean tenant = ts != null ? (CoreTenantBean)ts.selectById(loginUser.getTenantId()) : null;
+            if (tenant != null) {
+                loginUser.setTenantName(tenant.getTenantName());
+            }
         }
         return loginUser;
     }

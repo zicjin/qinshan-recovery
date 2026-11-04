@@ -53,9 +53,11 @@ public class SunwaySecurityConfiguration extends WebSecurityConfigurerAdapter {
    private String permitAll;
    @Value("${sunway.security.ant-pattern.authenticated:}")
    private String authenticated;
+   @Autowired(required = false)
+   private Http401UnauthorizedEntryPoint http401UnauthorizedEntryPoint;
 
    @Autowired
-   public void configureGlobal(AuthenticationManagerBuilder amb) throws Exception { amb.userDetailsService(this.userDetailsService()); }
+   public void configureGlobal(AuthenticationManagerBuilder amb) throws Exception { amb.authenticationProvider(this.authenticationProvider()); }
 
    @Bean
    @Override
@@ -77,7 +79,7 @@ public class SunwaySecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
    private void init(HttpSecurity http) throws Exception {
-        http.exceptionHandling().authenticationEntryPoint(new Http401UnauthorizedEntryPoint())
+        http.exceptionHandling().authenticationEntryPoint(this.http401UnauthorizedEntryPoint != null ? this.http401UnauthorizedEntryPoint : new Http401UnauthorizedEntryPoint())
                 .and()
                 .formLogin()
                     .loginProcessingUrl("/core/module/sys/login")
@@ -138,7 +140,7 @@ public class SunwaySecurityConfiguration extends WebSecurityConfigurerAdapter {
 
       Environment env = this.getApplicationContext().getEnvironment();
       http.csrf().disable();
-      if (env.getProperty("sunway.security.headers.xss", Boolean.class)) {
+      if (Boolean.TRUE.equals(env.getProperty("sunway.security.headers.xss", Boolean.class))) {
          http.headers().frameOptions().sameOrigin().addHeaderWriter(new XXssProtectionHeaderWriter());
       } else {
          http.headers().frameOptions().disable().addHeaderWriter(new XXssProtectionHeaderWriter());
@@ -168,6 +170,7 @@ public class SunwaySecurityConfiguration extends WebSecurityConfigurerAdapter {
                   "/secure/core/module/mdm/user-permissions/login-role/queries/post-selectable",
                   "/secure/core/module/item/tenants/login-tenant/queries/post-selectable",
                   "/*",
+                  "/error/**",
                   "/static/**",
                   "/open/**",
                   "/files/open/**",

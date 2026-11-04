@@ -1,5 +1,6 @@
 package com.sunwayworld.framework.security.service;
 
+import com.sunwayworld.framework.context.ApplicationContextHelper;
 import com.sunwayworld.module.mdm.user.bean.CoreUserBean;
 import com.sunwayworld.module.mdm.user.service.CoreUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,9 @@ public class DefaultUserDetailsService extends AbstractUserDetailsService {
 
     @Override
     protected CoreUserBean getLoginUser(String loginId) {
+        if (this.userService == null) {
+            this.userService = ApplicationContextHelper.getBean(CoreUserService.class);
+        }
         return this.userService.selectByLoginId(loginId);
     }
 }

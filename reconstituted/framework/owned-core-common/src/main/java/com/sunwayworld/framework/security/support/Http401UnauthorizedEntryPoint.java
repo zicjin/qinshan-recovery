@@ -1,6 +1,7 @@
 package com.sunwayworld.framework.security.support;
 
 import com.alibaba.fastjson.JSON;
+import com.sunwayworld.framework.context.ApplicationContextHelper;
 import com.sunwayworld.framework.security.exception.AccountOfflineException;
 import com.sunwayworld.framework.utils.ServletUtils;
 import java.io.IOException;
@@ -32,6 +33,16 @@ public class Http401UnauthorizedEntryPoint implements AuthenticationEntryPoint {
    @Autowired
    private RequestMappingHandlerMapping requestMappingHandlerMapping;
 
+   private RequestMappingHandlerMapping resolveHandlerMapping() {
+      if (this.requestMappingHandlerMapping == null) {
+         try {
+            this.requestMappingHandlerMapping = ApplicationContextHelper.getBean(RequestMappingHandlerMapping.class);
+         } catch (Exception ignored) {
+         }
+      }
+      return this.requestMappingHandlerMapping;
+   }
+
    @Override
    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
       if (logger.isDebugEnabled()) {
@@ -41,19 +52,24 @@ public class Http401UnauthorizedEntryPoint implements AuthenticationEntryPoint {
       }
 
       String requestUri = ServletUtils.getRequestUri(request);
-      Map<RequestMappingInfo, HandlerMethod> map = this.requestMappingHandlerMapping.getHandlerMethods();
+      RequestMappingHandlerMapping rmhm = this.resolveHandlerMapping();
+      Map<RequestMappingInfo, HandlerMethod> map = rmhm != null ? rmhm.getHandlerMethods() : null;
 
+      if (map != null) {
       for (Entry<RequestMappingInfo, HandlerMethod> m : map.entrySet()) {
          RequestMappingInfo info = m.getKey();
          HandlerMethod method = m.getValue();
          PatternsRequestCondition p = info.getPatternsCondition();
 
+         if (p != null && p.getPatterns() != null) {
          for (String url : p.getPatterns()) {
             if (requestUri.equals(url) && method.getMethod().getDeclaringClass().isAnnotationPresent(Controller.class)) {
                ServletUtils.sendRedirect(request, response, ServletUtils.getContextPath() + "/");
                return;
             }
          }
+         }
+      }
       }
 
       Class<?> clazz = exception.getClass();

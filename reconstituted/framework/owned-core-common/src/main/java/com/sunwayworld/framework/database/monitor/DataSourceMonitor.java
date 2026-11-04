@@ -26,16 +26,14 @@ public class DataSourceMonitor {
         if (this.dataSource instanceof TenantDataSourceRouter) {
             TenantDataSourceRouter tdsr = (TenantDataSourceRouter)this.dataSource;
             tdsr.getResolvedDataSources().forEach((k, v) -> {
-                HikariDataSource hds = (HikariDataSource)v;
-                if (this.enabled) {
+            if (this.enabled && v instanceof HikariDataSource) {
+               HikariDataSource hds = (HikariDataSource)v;
                     log.info("\u79df\u6237\uff1a{} *** \u6700\u5c0f\u8fde\u63a5\u6570\uff1a{} \u6700\u5927\u8fde\u63a5\u6570\uff1a{} -- \u5f53\u524d\u8fde\u63a5\u6570\uff1a{} \u5f53\u524d\u6d3b\u8dc3\u6570\uff1a{} ***", k, hds.getMinimumIdle(), hds.getMaximumPoolSize(), hds.getHikariPoolMXBean() != null ? hds.getHikariPoolMXBean().getTotalConnections() : 0, hds.getHikariPoolMXBean() != null ? hds.getHikariPoolMXBean().getActiveConnections() : 0);
                 }
             });
-        } else {
-            HikariDataSource hds = (HikariDataSource)this.dataSource;
-            if (this.enabled) {
+      } else if (this.enabled && this.dataSource instanceof HikariDataSource) {
+         HikariDataSource hds = (HikariDataSource)this.dataSource;
                 log.info("*** \u6700\u5c0f\u8fde\u63a5\u6570\uff1a{} \u6700\u5927\u8fde\u63a5\u6570\uff1a{} -- \u5f53\u524d\u8fde\u63a5\u6570\uff1a{} \u5f53\u524d\u6d3b\u8dc3\u6570\uff1a{} ***", hds.getMinimumIdle(), hds.getMaximumPoolSize(), hds.getHikariPoolMXBean().getTotalConnections(), hds.getHikariPoolMXBean().getActiveConnections());
-            }
         }
     }
 }

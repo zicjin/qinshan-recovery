@@ -50,11 +50,13 @@ extends WebMvcConfigurationSupport {
 
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+        converters.add(new org.springframework.http.converter.StringHttpMessageConverter(java.nio.charset.StandardCharsets.UTF_8));
         converters.add(SingletonFastJsonConverter.getInstance());
+        addDefaultHttpMessageConverters(converters);
     }
 
     @Override
-    protected void addResourceHandlers(ResourceHandlerRegistry registry) {
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
     }
 
@@ -71,7 +73,7 @@ extends WebMvcConfigurationSupport {
     }
 
     @Override
-    protected void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
+    public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
         WebMvcProperties.Contentnegotiation contentnegotiation = this.mvcProperties.getContentnegotiation();
         configurer.favorPathExtension(contentnegotiation.isFavorPathExtension());
         configurer.favorParameter(contentnegotiation.isFavorParameter());

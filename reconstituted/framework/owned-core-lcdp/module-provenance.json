@@ -13,7 +13,18 @@
   "forbidden_content_report": "forbidden-content-report.json",
   "module": "owned-core-lcdp",
   "module_reason": "LCDP interfaces and services.",
-  "override_source_files": [],
+  "override_source_files": [
+    {
+      "generated_sha256": "4094f673be0a26bd93c3b4f22e3db6df302e794262b7cceeaa0c5dea4f748e45",
+      "override_sha256": "a4bef5d02ccedc48f983452c7e8bb416065a4fda98aad8e19bc72d86b1f7f746",
+      "path": "src/main/java/com/sunwayworld/cloud/module/lcdp/table/helper/impl/LcdpOracleCondition.java"
+    },
+    {
+      "generated_sha256": "1f0d85071620a0bbd079468514e28df1ab3a26374a3e737db5bc91f16272c181",
+      "override_sha256": "7bae60a992b7522f07bbc0685d39de3248d1852cc97f3534b8126f50debfccff",
+      "path": "src/main/java/com/sunwayworld/cloud/module/lcdp/table/helper/impl/LcdpPgsqlCondition.java"
+    }
+  ],
   "public_dependency_allowlist": "public-dependency-allowlist.json",
   "removed_source_files": [],
   "resource_file_count": 1551,
@@ -6437,12 +6448,14 @@
       "decompiler": "CFR",
       "decompiler_version": "0.152",
       "path": "src/main/java/com/sunwayworld/cloud/module/lcdp/table/helper/impl/LcdpOracleCondition.java",
-      "sha256": "4094f673be0a26bd93c3b4f22e3db6df302e794262b7cceeaa0c5dea4f748e45",
+      "sha256": "a4bef5d02ccedc48f983452c7e8bb416065a4fda98aad8e19bc72d86b1f7f746",
       "source_class_path": "com/sunwayworld/cloud/module/lcdp/table/helper/impl/LcdpOracleCondition.class",
       "source_jar": "BOOT-INF/lib/gikam-core-lcdp-service-14.1.5.jar",
+      "source_sha256_before_overlay": "4094f673be0a26bd93c3b4f22e3db6df302e794262b7cceeaa0c5dea4f748e45",
       "source_sha256_before_transform": "4fba486bb9e2ba9a233594339e143977088e7ff1376fcdfcbb1ca3b4034eab19",
       "transformations": [
-        "normalization:generated-source"
+        "normalization:generated-source",
+        "overlay:src/main/java/com/sunwayworld/cloud/module/lcdp/table/helper/impl/LcdpOracleCondition.java"
       ]
     },
     {
@@ -6451,12 +6464,14 @@
       "decompiler": "CFR",
       "decompiler_version": "0.152",
       "path": "src/main/java/com/sunwayworld/cloud/module/lcdp/table/helper/impl/LcdpPgsqlCondition.java",
-      "sha256": "1f0d85071620a0bbd079468514e28df1ab3a26374a3e737db5bc91f16272c181",
+      "sha256": "7bae60a992b7522f07bbc0685d39de3248d1852cc97f3534b8126f50debfccff",
       "source_class_path": "com/sunwayworld/cloud/module/lcdp/table/helper/impl/LcdpPgsqlCondition.class",
       "source_jar": "BOOT-INF/lib/gikam-core-lcdp-service-14.1.5.jar",
+      "source_sha256_before_overlay": "1f0d85071620a0bbd079468514e28df1ab3a26374a3e737db5bc91f16272c181",
       "source_sha256_before_transform": "709cd9b53a006c425e7c90945838a36cada89f48368c9b9d16c4be52a74a742d",
       "transformations": [
-        "normalization:generated-source"
+        "normalization:generated-source",
+        "overlay:src/main/java/com/sunwayworld/cloud/module/lcdp/table/helper/impl/LcdpPgsqlCondition.java"
       ]
     },
     {
@@ -7034,9 +7049,9 @@
       ]
     }
   ],
-  "source_tree_sha256": "557f4b87f1d8b82a2d6895479bec20641e2956758d252ab721b5e6bb0bc695b5",
+  "source_tree_sha256": "193843e3aa08bd53098bf0af47d50ee29363267227881923622e8902550b4b3f",
   "status": "assembled-source-only",
   "transformation_manifest": "docs/reconstitution/decompiler-transforms.json",
-  "transformation_manifest_sha256": "8dddef183eece740791f9b179ec2aad9e30a224a0546e971df380fdb576a1d0c",
+  "transformation_manifest_sha256": "30ab06626f3e4c863a2855790b0ec6211499394852f2a8598ea3bd444ce87fe8",
   "transformed_source_count": 6
 }

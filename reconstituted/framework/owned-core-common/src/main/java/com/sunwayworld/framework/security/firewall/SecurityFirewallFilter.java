@@ -30,7 +30,7 @@ import org.springframework.stereotype.Component;
 public class SecurityFirewallFilter
 implements Filter {
     private static final Logger logger = LogManager.getLogger(SecurityFirewallFilter.class);
-    @Value(value="#{'${sunway.security.access-host-list}'.split(',')}")
+    @Value(value="#{'${sunway.security.access-host-list:}'.split(',')}")
     private List<String> accessHostList;
 
     @Override

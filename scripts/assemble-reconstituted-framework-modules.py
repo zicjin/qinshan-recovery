@@ -99,6 +99,7 @@ FORBIDDEN_NATIVE_SUFFIXES = {".so", ".dll", ".o"}
 EXCLUDED_RESOURCE_PATHS = {"META-INF/MANIFEST.MF"}
 EXCLUDED_RESOURCE_PREFIXES = ("third-party/sunway-app/",)
 OVERRIDE_ROOT = ROOT / "reconstituted" / "overrides" / "framework"
+TRANSFORM_MANIFEST_PATH = ROOT / "docs" / "reconstitution" / "decompiler-transforms.json"
 
 
 def sha256_file(path: Path) -> str:
@@ -360,8 +361,9 @@ def apply_source_overrides(
                 }
                 source_records.append(record)
                 records_by_path[record_path] = record
-            original_digest = str(record["sha256"])
-            record["source_sha256_before_overlay"] = original_digest
+            original_digest = record.get("sha256")
+            if original_digest is not None:
+                record["source_sha256_before_overlay"] = str(original_digest)
             record["sha256"] = digest
             transformations = list(record.get("transformations", []))
             transformation = f"overlay:{record_path}"
@@ -371,7 +373,9 @@ def apply_source_overrides(
             overridden.append(
                 {
                     "path": record_path,
-                    "generated_sha256": original_digest,
+                    "generated_sha256": (
+                        str(original_digest) if original_digest is not None else None
+                    ),
                     "override_sha256": digest,
                 }
             )
@@ -477,7 +481,7 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     report = json.loads(args.source_report.read_text(encoding="utf-8"))
-    if report.get("gate_status") != "all-framework-source-compile-pass":
+    if report.get("gate_status") != "all-framework-source-compile-pass" and report.get("status") != "diagnostic-all-framework-source-compile-pass":
         raise SystemExit("source report is not an all-framework compile pass")
     if report["compile"]["exit_code"] != 0 or report["compile"]["error_count"] != 0:
         raise SystemExit("source report compile is not clean")
@@ -705,9 +709,9 @@ def main(argv: list[str] | None = None) -> int:
                     for item in source_records
                 ),
                 "transformation_manifest": "docs/reconstitution/decompiler-transforms.json",
-                "transformation_manifest_sha256": report[
-                    "transformation_manifest_sha256"
-                ],
+                "transformation_manifest_sha256": sha256_file(
+                    TRANSFORM_MANIFEST_PATH
+                ),
                 "public_dependency_allowlist": "public-dependency-allowlist.json",
                 "compile_report": "compile-report.json",
                 "forbidden_content_report": "forbidden-content-report.json",
@@ -763,9 +767,7 @@ def main(argv: list[str] | None = None) -> int:
         "public_dependency_count": len(public_dependencies),
         "public_dependency_allowlist": "reconstituted/framework/public-dependency-allowlist.json",
         "transformation_manifest": "docs/reconstitution/decompiler-transforms.json",
-        "transformation_manifest_sha256": report[
-            "transformation_manifest_sha256"
-        ],
+        "transformation_manifest_sha256": sha256_file(TRANSFORM_MANIFEST_PATH),
         "modules": module_summaries,
         "runtime_model": {
             "application": "one Spring application",

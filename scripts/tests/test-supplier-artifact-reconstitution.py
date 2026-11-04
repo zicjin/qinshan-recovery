@@ -278,6 +278,249 @@ def verify_file_utils_source_contract() -> None:
     assert "extension.equalsIgnoreCase(getFileExtension(file).toLowerCase())" in source
 
 
+def verify_lcdp_database_conditions_are_null_safe() -> None:
+    condition_root = (
+        ROOT
+        / "reconstituted"
+        / "framework"
+        / "owned-core-lcdp"
+        / "src"
+        / "main"
+        / "java"
+        / "com"
+        / "sunwayworld"
+        / "cloud"
+        / "module"
+        / "lcdp"
+        / "table"
+        / "helper"
+        / "impl"
+    )
+    for filename in ("LcdpOracleCondition.java", "LcdpPgsqlCondition.java"):
+        source = (condition_root / filename).read_text(encoding="utf-8")
+        assert "Boolean.TYPE" not in source
+        assert 'getProperty("kingbase.enabled", Boolean.class)' in source
+        assert "Boolean.TRUE.equals(kingbaseEnabled)" in source
+        assert "activeProfiles != null" in source
+
+
+def verify_mapper_scanner_covers_both_supplier_conventions() -> None:
+    scanner_source = (
+        ROOT
+        / "reconstituted"
+        / "framework"
+        / "owned-core-common"
+        / "src"
+        / "main"
+        / "java"
+        / "com"
+        / "sunwayworld"
+        / "boot"
+        / "GikamMapperScannerConfigurer.java"
+    ).read_text(encoding="utf-8")
+    assert "new AnnotationTypeFilter(GikamBean.class)" in scanner_source
+    assert (
+        'Pattern.compile("^com\\\\.sunwayworld\\\\..+\\\\.mapper\\\\..*Mapper$")'
+        in scanner_source
+    )
+    configuration = (
+        ROOT
+        / "reconstituted"
+        / "framework"
+        / "owned-core-common"
+        / "src"
+        / "main"
+        / "java"
+        / "com"
+        / "sunwayworld"
+        / "boot"
+        / "ApplicationConfiguration.java"
+    ).read_text(encoding="utf-8")
+    assert "new GikamMapperScannerConfigurer()" in configuration
+    assert "setAnnotationClass(" not in configuration
+    mvc_configuration = (
+        ROOT
+        / "reconstituted"
+        / "framework"
+        / "owned-core-common"
+        / "src"
+        / "main"
+        / "java"
+        / "com"
+        / "sunwayworld"
+        / "boot"
+        / "ApplicationMvcConfiguration.java"
+    ).read_text(encoding="utf-8")
+    assert "extends WebMvcConfigurationSupport" in mvc_configuration
+    assert "implements WebMvcConfigurer" not in mvc_configuration
+    assert "public void configureContentNegotiation" in mvc_configuration
+    security_configuration = (
+        ROOT
+        / "reconstituted"
+        / "framework"
+        / "owned-core-common"
+        / "src"
+        / "main"
+        / "java"
+        / "com"
+        / "sunwayworld"
+        / "boot"
+        / "security"
+        / "SunwaySecurityConfiguration.java"
+    ).read_text(encoding="utf-8")
+    assert (
+        'Boolean.TRUE.equals(env.getProperty("sunway.security.headers.xss", '
+        "Boolean.class))"
+    ) in security_configuration
+    prepared_listener = (
+        ROOT
+        / "reconstituted"
+        / "framework"
+        / "owned-core-common"
+        / "src"
+        / "main"
+        / "java"
+        / "com"
+        / "sunwayworld"
+        / "boot"
+        / "listener"
+        / "ApplicationPreparedListener.java"
+    ).read_text(encoding="utf-8")
+    assert "${sunway.cache.post-start.evict.name:}" in prepared_listener
+    assert "implements ApplicationListener<ApplicationReadyEvent>" in prepared_listener
+    assert "@Order(Ordered.HIGHEST_PRECEDENCE)" in prepared_listener
+    exception_handler = (
+        ROOT
+        / "reconstituted"
+        / "framework"
+        / "owned-core-common"
+        / "src"
+        / "main"
+        / "java"
+        / "com"
+        / "sunwayworld"
+        / "framework"
+        / "exception"
+        / "advice"
+        / "GlobalExceptionHandler.java"
+    ).read_text(encoding="utf-8")
+    assert "${sunway.exception.viewable:false}" in exception_handler
+    assert "${sentry.enabled:false}" in exception_handler
+    firewall = (
+        ROOT
+        / "reconstituted"
+        / "framework"
+        / "owned-core-common"
+        / "src"
+        / "main"
+        / "java"
+        / "com"
+        / "sunwayworld"
+        / "framework"
+        / "security"
+        / "firewall"
+        / "SecurityFirewallFilter.java"
+    ).read_text(encoding="utf-8")
+    assert "${sunway.security.access-host-list:}" in firewall
+    i18n_helper = (
+        ROOT
+        / "reconstituted"
+        / "framework"
+        / "owned-core-common"
+        / "src"
+        / "main"
+        / "java"
+        / "com"
+        / "sunwayworld"
+        / "framework"
+        / "i18n"
+        / "I18nHelper.java"
+    ).read_text(encoding="utf-8")
+    assert "@Lazy\n    @Autowired\n    public void setMessageSource" in i18n_helper
+    reflections = (
+        ROOT
+        / "reconstituted"
+        / "framework"
+        / "owned-core-common"
+        / "src"
+        / "main"
+        / "java"
+        / "com"
+        / "sunwayworld"
+        / "framework"
+        / "utils"
+        / "ReflectionUtils.java"
+    ).read_text(encoding="utf-8")
+    assert "return findMethod(clazz, name, new Class<?>[0]);" in reflections
+    assert "return invokeMethod(method, target, new Object[0]);" in reflections
+    generic_service = (
+        ROOT
+        / "reconstituted"
+        / "framework"
+        / "owned-core-common"
+        / "src"
+        / "main"
+        / "java"
+        / "com"
+        / "sunwayworld"
+        / "framework"
+        / "support"
+        / "base"
+        / "service"
+        / "GenericService.java"
+    ).read_text(encoding="utf-8")
+    assert (
+        "@Transactional(readOnly = true)\n"
+        "   default List<T> selectList(MapperParameter parameter)"
+    ) in generic_service
+    assert generic_service.count(
+        "@Transactional(readOnly = true)\n"
+        "   default List<T> selectListByFilter("
+    ) == 2
+    assert (
+        "@Transactional(readOnly = true)\n"
+        "   default T selectByIdIfPresent(ID id)"
+    ) in generic_service
+    dynamic_class_loader = (
+        ROOT
+        / "reconstituted"
+        / "framework"
+        / "owned-core-common"
+        / "src"
+        / "main"
+        / "java"
+        / "com"
+        / "sunwayworld"
+        / "framework"
+        / "jdk"
+        / "tools"
+        / "DynamicClassLoader.java"
+    ).read_text(encoding="utf-8")
+    assert "protected Class<?> findClass(String name)" in dynamic_class_loader
+    assert (
+        "Thread.currentThread().setContextClassLoader(this);"
+        in dynamic_class_loader
+    )
+    bean_context = (
+        ROOT
+        / "reconstituted"
+        / "framework"
+        / "owned-core-common"
+        / "src"
+        / "main"
+        / "java"
+        / "com"
+        / "sunwayworld"
+        / "framework"
+        / "context"
+        / "GikamBeanContext.java"
+    ).read_text(encoding="utf-8")
+    assert (
+        "Thread.currentThread().setContextClassLoader("
+        "DynamicClassLoader.getInstance());"
+    ) in bean_context
+
+
 def verify_deterministic_assembler_helpers() -> None:
     assembler = load_module("assemble_reconstituted_framework_modules", ASSEMBLER_PATH)
     with tempfile.TemporaryDirectory(prefix="supplier-assembler-test-") as temp_name:
@@ -348,6 +591,11 @@ def verify_deterministic_assembler_helpers() -> None:
             "class Example { int value = 2; }\n",
             encoding="utf-8",
         )
+        added_override = override_java / "AddedByOverride.java"
+        added_override.write_text(
+            "class AddedByOverride { int value = 3; }\n",
+            encoding="utf-8",
+        )
         (override_root / "fixture-module/removed-files.txt").write_text(
             "com/example/Removed.java\n",
             encoding="utf-8",
@@ -360,13 +608,23 @@ def verify_deterministic_assembler_helpers() -> None:
         )
         assert example.read_text(encoding="utf-8") == replacement.read_text(encoding="utf-8")
         assert not removed.exists()
-        assert len(result["overridden"]) == 1
+        assert len(result["overridden"]) == 2
         assert len(result["removed"]) == 1
-        assert len(source_records) == 1
-        assert source_records[0]["sha256"] == hashlib.sha256(example.read_bytes()).hexdigest()
-        assert "overlay:src/main/java/com/example/Example.java" in source_records[0][
+        assert len(source_records) == 2
+        records_by_path = {record["path"]: record for record in source_records}
+        example_record = records_by_path["src/main/java/com/example/Example.java"]
+        assert example_record["sha256"] == hashlib.sha256(example.read_bytes()).hexdigest()
+        assert "overlay:src/main/java/com/example/Example.java" in example_record[
             "transformations"
         ]
+        added_record = records_by_path[
+            "src/main/java/com/example/AddedByOverride.java"
+        ]
+        assert added_record["source_jar"] == "tracked-override"
+        assert added_record["sha256"] == hashlib.sha256(
+            added_override.read_bytes()
+        ).hexdigest()
+        assert "source_sha256_before_overlay" not in added_record
 
         benign = module_root / "ThirdPartyType.java"
         forbidden = module_root / "SunwayLibraryExtractor.java"
@@ -388,6 +646,8 @@ def verify_deterministic_assembler_helpers() -> None:
 
 def main() -> int:
     verify_file_utils_source_contract()
+    verify_lcdp_database_conditions_are_null_safe()
+    verify_mapper_scanner_covers_both_supplier_conventions()
     verify_tracked_full_closure_snapshot()
     verify_tracked_all_framework_snapshot()
     verify_deterministic_assembler_helpers()

@@ -210,9 +210,21 @@
           "find": "      for (Field fieldx : clazz.getFields()) {\n         if (fieldWrapperList.stream().noneMatch(w -> w.getField().getName().equals(field.getName()))) {",
           "replace": "      for (Field fieldx : clazz.getFields()) {\n         if (fieldWrapperList.stream().noneMatch(w -> w.getField().getName().equals(fieldx.getName()))) {",
           "expected_count": 1
+        },
+        {
+          "op": "replace",
+          "find": "      return findMethod(clazz, name);",
+          "replace": "      return findMethod(clazz, name, new Class<?>[0]);",
+          "expected_count": 1
+        },
+        {
+          "op": "replace",
+          "find": "      return invokeMethod(method, target);",
+          "replace": "      return invokeMethod(method, target, new Object[0]);",
+          "expected_count": 1
         }
       ],
-      "reason": "Bind lambda captures to the active interface/field loop variable versions."
+      "reason": "Bind lambda captures to active loop variables and preserve empty-array forwarding in reflection convenience overloads."
     },
     {
       "id": "soap-builder-public-json-serializer",

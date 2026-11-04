@@ -28,6 +28,7 @@ import com.sunwayworld.module.sys.log.service.CoreLoginLogService;
 import com.sunwayworld.module.sys.password.bean.CorePasswordPolicyBean;
 import com.sunwayworld.module.sys.password.service.CorePasswordPolicyService;
 import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,15 +67,54 @@ extends DaoAuthenticationProvider {
         this.setHideUserNotFoundExceptions(false);
     }
 
+    protected CoreUserService getUserService() {
+        if (this.userService == null) {
+            this.userService = ApplicationContextHelper.getBeanIfPresent(CoreUserService.class);
+        }
+        return this.userService;
+    }
+
+    protected CorePasswordPolicyService getPasswordPolicyService() {
+        if (this.passwordPolicyService == null) {
+            this.passwordPolicyService = ApplicationContextHelper.getBeanIfPresent(CorePasswordPolicyService.class);
+        }
+        return this.passwordPolicyService;
+    }
+
+    protected PasswordEncoder getPasswordEncoder() {
+        if (this.passwordEncoder == null) {
+            this.passwordEncoder = ApplicationContextHelper.getBeanIfPresent(PasswordEncoder.class);
+        }
+        return this.passwordEncoder;
+    }
+
+    protected SecurityCaptchaService getCaptchaService() {
+        if (this.captchaService == null) {
+            this.captchaService = ApplicationContextHelper.getBeanIfPresent(SecurityCaptchaService.class);
+        }
+        return this.captchaService;
+    }
+
+    protected CoreLoginLogService getLoginLogService() {
+        if (this.loginLogService == null) {
+            this.loginLogService = ApplicationContextHelper.getBeanIfPresent(CoreLoginLogService.class);
+        }
+        return this.loginLogService;
+    }
+
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         RemoteAuthenticator remoteAuthenticator;
         LoginUser loginUser;
-        this.captchaService.checkCaptcha();
+        SecurityCaptchaService cs = this.getCaptchaService();
+        if (cs != null) {
+            cs.checkCaptcha();
+        }
         if (LocalContextHelper.isUserLogin()) {
             throw new SingleBrowserMultiUserException();
         }
-        String loginType = ServletUtils.getCurrentRequest().getParameter("loginType");
+        HttpServletRequest currentReq = ServletUtils.getCurrentRequest();
+        String loginType = currentReq != null ? currentReq.getParameter("loginType") : null;
         if (!StringUtils.isEmpty(loginType)) {
             SsoAuthenticator authenticator = SsoAuthenticatorRegistry.INSTANCE.getAuthenticator(loginType);
             if (authenticator == null) {
@@ -88,7 +128,8 @@ extends DaoAuthenticationProvider {
         }
         if (StringUtils.isEmpty(loginType) && !StringUtils.isBlank(this.remoteAuthenticatorName) && (remoteAuthenticator = (RemoteAuthenticator)ApplicationContextHelper.getBeanIfPresent(this.remoteAuthenticatorName)) != null) {
             loginUser = remoteAuthenticator.authenticate((String)authentication.getPrincipal(), AuthenticationHelper.getRawPassword((String)authentication.getCredentials()));
-            CoreUserBean user = (CoreUserBean)this.userService.selectById(loginUser.getUsername());
+            CoreUserService us = this.getUserService();
+            CoreUserBean user = us != null ? (CoreUserBean)us.selectById(loginUser.getUsername()) : null;
             if (!ApplicationContextHelper.stressTesting()) {
                 this.logoutPreviousLoginIfNecessary(user);
             }
@@ -104,21 +145,28 @@ extends DaoAuthenticationProvider {
     protected void additionalAuthenticationChecks(UserDetails userDetails, UsernamePasswordAuthenticationToken authentication) throws AuthenticationException {
         block20: {
             try {
-                CoreUserBean user = (CoreUserBean)this.userService.selectById(userDetails.getUsername());
+                CoreUserService us = this.getUserService();
+                CoreUserBean user = us != null ? (CoreUserBean)us.selectById(userDetails.getUsername()) : null;
+                if (user == null) {
+                    throw new BadCredentialsException("GIKAM.SECURITY.LOGIN.INCORRECT_USER_OR_PASSWORD");
+                }
                 try {
                     String rawPassword = null;
                     if (!authentication.isAuthenticated() && ((LoginUser)userDetails).getAdditionalCheck()) {
                         rawPassword = AuthenticationHelper.getRawPassword((String)authentication.getCredentials());
-                        DefaultUserDetailsChecker.checkPassword((String)authentication.getPrincipal(), this.passwordEncoder.encode(rawPassword));
+                        PasswordEncoder pe = this.getPasswordEncoder();
+                        String encoded = pe != null ? pe.encode(rawPassword) : rawPassword;
+                        DefaultUserDetailsChecker.checkPassword((String)authentication.getPrincipal(), encoded);
                     }
                     if (ApplicationContextHelper.stressTesting()) break block20;
-                    List<CorePasswordPolicyBean> passwordPolicyList = this.passwordPolicyService.selectEffectedList(user.getId());
-                    Long passwordExpireRemainingDays = this.passwordPolicyService.selectPasswordExpireRemainingDays(user, passwordPolicyList);
+                    CorePasswordPolicyService pps = this.getPasswordPolicyService();
+                    List<CorePasswordPolicyBean> passwordPolicyList = pps != null ? pps.selectEffectedList(user.getId()) : null;
+                    Long passwordExpireRemainingDays = (pps != null && passwordPolicyList != null) ? pps.selectPasswordExpireRemainingDays(user, passwordPolicyList) : null;
                     if (passwordExpireRemainingDays != null && passwordExpireRemainingDays < 0L) {
                         CoreUserBean updateUser = new CoreUserBean();
                         updateUser.setId(user.getId());
                         boolean locked = false;
-                        Long passwordExpiredMaxUse = this.passwordPolicyService.selectPasswordExpiredMaxUse(passwordPolicyList);
+                        Long passwordExpiredMaxUse = pps != null ? pps.selectPasswordExpiredMaxUse(passwordPolicyList) : null;
                         if (user.getExpiredPasswordUses() == null || passwordExpiredMaxUse == null) {
                             locked = true;
                         }
@@ -127,20 +175,21 @@ extends DaoAuthenticationProvider {
                         }
                         if (locked) {
                             updateUser.setStatus("locked");
-                            this.userService.update(updateUser);
+                            if (us != null) us.update(updateUser);
                             throw new LockedException("GIKAM.SECURITY.LOGIN.LOCKED");
                         }
                         updateUser.setExpiredPasswordUses(user.getExpiredPasswordUses() == null ? 1L : user.getExpiredPasswordUses() + 1L);
-                        this.userService.update(updateUser);
+                        if (us != null) us.update(updateUser);
                     }
-                    String loginType = ServletUtils.getCurrentRequest().getParameter("loginType");
+                    HttpServletRequest req = ServletUtils.getCurrentRequest();
+                    String loginType = req != null ? req.getParameter("loginType") : null;
                     if ("1".equals(ApplicationContextHelper.getConstantValue("UPDATE_BAD_PASSWORD_AFTER_LOGIN")) && !"AD".equals(loginType)) {
                         if (StringUtils.isBlank(rawPassword)) {
                             rawPassword = AuthenticationHelper.getRawPassword((String)authentication.getCredentials());
                         }
                         if (!StringUtils.isBlank(rawPassword)) {
                             try {
-                                this.passwordPolicyService.checkPassword(user.getId(), rawPassword);
+                                if (pps != null) pps.checkPassword(user.getId(), rawPassword);
                             }
                             catch (PasswordException pe) {
                                 logger.warn(user.getId() + "-" + pe.getMessage(), (Throwable)pe);
@@ -153,7 +202,7 @@ extends DaoAuthenticationProvider {
                         CoreUserBean updateUser = new CoreUserBean();
                         updateUser.setId(user.getId());
                         updateUser.setFailedLoginAttempts(0L);
-                        this.userService.update(updateUser);
+                        if (us != null) us.update(updateUser);
                     }
                     this.logoutPreviousLoginIfNecessary(user);
                 }

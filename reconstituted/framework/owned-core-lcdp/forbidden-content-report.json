@@ -3,7 +3,7 @@
   "loader_reference_files": [],
   "module": "owned-core-lcdp",
   "native_declaration_files": [],
-  "override_source_count": 0,
+  "override_source_count": 2,
   "policy": {
     "forbidden_native_files": "must be absent before final distribution",
     "loader_reference_files": "must be removed before final distribution",

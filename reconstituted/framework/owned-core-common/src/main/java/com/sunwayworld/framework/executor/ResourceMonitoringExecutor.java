@@ -43,12 +43,12 @@ public class ResourceMonitoringExecutor {
     }
 
     @Value(value="${sunway.executor.resource-monitoring.max-task-size:10}")
-    public static void setMaxTaskSize(long maxTaskSize) {
+    public void setMaxTaskSize(long maxTaskSize) {
         ResourceMonitoringExecutor.maxTaskSize = maxTaskSize;
     }
 
     @Value(value="${sunway.executor.resource-monitoring.enabled:true}")
-    public static void setEnabled(boolean enabled) {
+    public void setEnabled(boolean enabled) {
         ResourceMonitoringExecutor.enabled = enabled;
     }
 

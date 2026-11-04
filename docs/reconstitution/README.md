@@ -15,8 +15,10 @@ results. It is not canonical API evidence.
   deterministic source repairs applied only to Vineflower fallback output.
   Every operation has an exact expected match count. A decompiler upgrade that
   changes the input shape fails the run instead of silently modifying source.
-- Public libraries come only from non-`gikam-core-*` nested JARs. No supplier
-  run JAR or private `gikam-core-*` JAR is placed on the javac classpath.
+- Private framework JARs are identified by actual `com/sunwayworld/*.class`
+  content as well as the established `gikam-core-*` naming convention. Public
+  libraries are the remaining content-classified dependency JARs. No supplier
+  run JAR or private framework JAR is placed on the javac classpath.
 
 ## Generate the complete artifact manifest
 
@@ -65,6 +67,37 @@ The tracked materialized pilot is under
 `reconstituted/pilot/owned-core-common/`. It remains isolated from the existing
 runtime `owned-framework` module until the complete dependency graph,
 duplicate-class disposition and license/MAC/native removal gates are complete.
+
+## Compile the complete imported project closure
+
+```bash
+VINEFLOWER_JAR=/path/to/vineflower-1.11.1.jar \
+VINEFLOWER_JAVA=/path/to/java-17-or-newer \
+scripts/reconstitute-framework-source.sh pilot \
+  --project-closure \
+  --target-source project/src/main/java/com/sunwayworld/emc/projectfunction/GikamWpjcApplication.java \
+  --output-dir /tmp/lims-project-source-closure \
+  --extract-web-resources
+```
+
+`--project-closure` imports every `com.sunwayworld.*` import from all
+`project/src/main/java` sources, uses every content-classified private
+framework JAR, and compiles the complete project source tree. The current
+result is recorded in `project-source-closure-current.json`:
+
+- 229 direct project imports converge to 748 framework classes represented by
+  603 generated Java sources;
+- 543 sources use CFR and 60 use Vineflower fallback across three targeted
+  compile rounds, with 12 tracked transformations;
+- all 3,038 project source files compile under Java 8 with zero errors, zero
+  missing framework symbols and no supplier/private JAR on the compiler
+  classpath;
+- 5,302 core-web resources retain deterministic source JAR and resource-tree
+  hashes.
+
+The full-closure source tree is currently diagnostic output. It must be split
+into dependency-directed framework modules with tracked provenance before it
+becomes distribution source.
 
 ## Verify
 

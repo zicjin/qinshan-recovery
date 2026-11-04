@@ -11,6 +11,7 @@ Usage:
   reconstitute-framework-source.sh pilot \
     --target-source PROJECT_JAVA_FILE \
     [--seed-class FQN]... \
+    [--project-closure] \
     --output-dir DIR
 
 External read-only inputs:

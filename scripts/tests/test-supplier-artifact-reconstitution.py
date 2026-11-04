@@ -6,6 +6,7 @@ import importlib.util
 import io
 import json
 from pathlib import Path
+import re
 import subprocess
 import sys
 import tempfile
@@ -85,6 +86,14 @@ def build_run_jar(work: Path, classes: dict[str, bytes]) -> Path:
     with zipfile.ZipFile(web, "w", compression=zipfile.ZIP_DEFLATED) as archive:
         archive.writestr("static/fixture.css", "body { color: black; }\n")
 
+    vendor = io.BytesIO()
+    with zipfile.ZipFile(vendor, "w", compression=zipfile.ZIP_DEFLATED) as archive:
+        archive.writestr(
+            "com/sunwayworld/cloud/fixture/VendorComponent.class",
+            b"not-real-bytecode",
+        )
+        archive.writestr("fixture/config.properties", "vendor=true\n")
+
     run_jar = work / "supplier-run.jar"
     with zipfile.ZipFile(run_jar, "w", compression=zipfile.ZIP_DEFLATED) as archive:
         archive.writestr("BOOT-INF/classes/com/sunwayworld/emc/app/Main.class", classes["A"])
@@ -100,6 +109,10 @@ def build_run_jar(work: Path, classes: dict[str, bytes]) -> Path:
         archive.writestr(
             "BOOT-INF/lib/gikam-core-web-14.1.5.jar",
             web.getvalue(),
+        )
+        archive.writestr(
+            "BOOT-INF/lib/lims2-report-template-14.1.5.jar",
+            vendor.getvalue(),
         )
         archive.writestr("org/springframework/boot/loader/Launcher.class", b"loader")
     return run_jar
@@ -145,7 +158,81 @@ def verify_tracked_pilot() -> None:
     )
 
 
+def verify_tracked_full_closure_snapshot() -> None:
+    inventory = json.loads(
+        (ROOT / "docs" / "reconstitution" / "artifact-inventory-current.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    artifact = inventory["artifact"]
+    assert artifact["artifact_sha256"] == (
+        "4a720797810fd2f8cca6e22604657028cb87830ca0e24bb55a5f42f040f6ee9f"
+    )
+    assert artifact["private_framework_jar_count"] == 16
+    assert artifact["private_framework_distinct_class_count"] == 4876
+    assert artifact["public_dependency_jar_count"] == 386
+
+    closure = json.loads(
+        (
+            ROOT
+            / "docs"
+            / "reconstitution"
+            / "project-source-closure-current.json"
+        ).read_text(encoding="utf-8")
+    )
+    assert closure["status"] == "diagnostic-project-source-compile-pass"
+    assert closure["canonical"] is False
+    assert closure["strict_evidence"] is False
+    assert closure["api_evidence"] is False
+    assert closure["framework_closure"]["direct_project_import_count"] == 229
+    assert closure["framework_closure"]["closure_class_count"] == 748
+    assert closure["framework_closure"]["generated_source_file_count"] == 603
+    assert closure["framework_closure"]["source_decompilers"] == {
+        "CFR": 543,
+        "Vineflower": 60,
+    }
+    assert closure["framework_closure"]["source_tree_sha256"] == (
+        "6768199e89c25ac8cdb5f1863459080c22bd46842fe4bdcc10b2858a325e7c85"
+    )
+    assert closure["framework_closure"]["missing_external_framework_classes"] == []
+    assert closure["project_compile"]["project_source_file_count"] == 3038
+    assert closure["project_compile"]["exit_code"] == 0
+    assert closure["project_compile"]["error_count"] == 0
+    assert closure["project_compile"]["missing_symbol_queue"] == []
+    assert closure["project_compile"]["source_only_framework_classpath"] is True
+    assert closure["project_compile"]["supplier_private_jars_on_classpath"] is False
+
+
+def verify_file_utils_source_contract() -> None:
+    source = (
+        ROOT
+        / "project"
+        / "src"
+        / "main"
+        / "java"
+        / "com"
+        / "sunwayworld"
+        / "framework"
+        / "utils"
+        / "FileUtils.java"
+    ).read_text(encoding="utf-8")
+    for signature in (
+        r"public\s+static\s+final\s+void\s+createFile\s*\(\s*Path\s+path\s*\)",
+        r"public\s+static\s+boolean\s+isImage\s*\(\s*File\s+file\s*\)",
+        r"public\s+static\s+boolean\s+isExtension\s*\(\s*File\s+file\s*,\s*String\s+extension\s*\)",
+    ):
+        assert re.search(signature, source), f"missing supplier-compatible signature: {signature}"
+    assert '"jpg".equals(extension)' in source
+    assert '"jpeg".equals(extension)' in source
+    assert '"png".equals(extension)' in source
+    assert '"bmp".equals(extension)' in source
+    assert '"gif".equals(extension)' in source
+    assert "extension.equalsIgnoreCase(getFileExtension(file).toLowerCase())" in source
+
+
 def main() -> int:
+    verify_file_utils_source_contract()
+    verify_tracked_full_closure_snapshot()
     module = load_module("resolve_java_source_closure", MODULE_PATH)
     verify_module = load_module("verify_reconstituted_framework", VERIFY_PATH)
     with tempfile.TemporaryDirectory(prefix="supplier-artifact-test-") as temp_name:
@@ -175,12 +262,18 @@ def main() -> int:
             assert manifest["artifact_sha256"] == hashlib.sha256(
                 run_jar_path.read_bytes()
             ).hexdigest()
-            assert manifest["nested_jar_count"] == 3
-            assert manifest["private_framework_jar_count"] == 2
+            assert manifest["nested_jar_count"] == 4
+            assert manifest["private_framework_jar_count"] == 3
             assert manifest["public_dependency_jar_count"] == 1
             assert manifest["application_top_level_class_count"] == 1
             assert manifest["application_top_level_source_present"] == 1
-            assert manifest["private_framework_distinct_class_count"] == 2
+            assert manifest["private_framework_distinct_class_count"] == 3
+            assert (
+                run_jar.nested_jar_info[
+                    "BOOT-INF/lib/lims2-report-template-14.1.5.jar"
+                ].private_framework
+                is True
+            )
 
             entries = run_jar.private_class_entries(("gikam-core-test.jar",))
             closure, edges, missing = module.resolve_closure(
@@ -247,6 +340,7 @@ def main() -> int:
                     "gate_status": "pilot-compile-failed",
                     "closure_class_count": 0,
                     "source_file_count": 0,
+                    "source_tree_sha256": hashlib.sha256().hexdigest(),
                     "web_resource_extracted_count": 0,
                     "provenance": [],
                     "missing_external_framework_classes": [],

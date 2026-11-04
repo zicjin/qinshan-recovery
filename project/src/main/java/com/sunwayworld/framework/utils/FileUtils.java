@@ -137,6 +137,25 @@ public final class FileUtils {
     /**
      * create the given file with directories if not exists
      */
+    public static final void createFile(Path path) {
+        if (Files.exists(path)) {
+            return;
+        }
+
+        makeDirs(path);
+
+        if (!Files.exists(path)) {
+            try {
+                Files.createFile(path);
+            } catch (IOException ioe) {
+                throw new FileException(ioe);
+            }
+        }
+    }
+
+    /**
+     * create the given file with directories if not exists
+     */
     public static final void createFile(File file) {
         if (file.exists()) {
             return;
@@ -167,6 +186,16 @@ public final class FileUtils {
         }
 
         return fileName.substring(fileName.lastIndexOf(".") + 1);
+    }
+
+    public static boolean isImage(File file) {
+        String extension = getFileExtension(file).toLowerCase();
+        return "jpg".equals(extension) || "jpeg".equals(extension) || "png".equals(extension)
+                || "bmp".equals(extension) || "gif".equals(extension);
+    }
+
+    public static boolean isExtension(File file, String extension) {
+        return extension.equalsIgnoreCase(getFileExtension(file).toLowerCase());
     }
 
     /**

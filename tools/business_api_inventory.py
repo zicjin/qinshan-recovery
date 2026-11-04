@@ -441,6 +441,17 @@ def _packaged_classes(distribution: Optional[Path]) -> Set[str]:
         return {name for name in archive.namelist() if name.endswith(".class")}
 
 
+def _runtime_java_sources(source_root: Path) -> Dict[str, Dict[str, object]]:
+    return {
+        qualified: info
+        for qualified, info in _source_infos(source_root).items()
+        if not any(
+            part in {"test", "testFixtures", "integrationTest"}
+            for part in Path(str(info["relative"])).parts
+        )
+    }
+
+
 def build_inventory(source_root: Path, packaged_classes: Set[str],
                     owned_route_map: Optional[Dict[str, List[str]]] = None) -> List[Dict[str, object]]:
     owned_route_map = owned_route_map or {}
@@ -481,7 +492,7 @@ def build_owned_boundary_inventory(owned_roots: Sequence[Path], project_routes: 
     project_keys = {(str(row["method"]), str(row["path"])) for row in project_routes}
     owned: Dict[Tuple[str, str], Dict[str, object]] = {}
     for owned_root in owned_roots:
-        infos = _source_infos(owned_root)
+        infos = _runtime_java_sources(owned_root)
         for qualified in sorted({str(item["qualified"]) for item in infos.values()}):
             info = infos[qualified]
             for route in _routes_for_source(info, infos):
@@ -519,7 +530,7 @@ def main() -> int:
     args = parser.parse_args()
     owned_route_map: Dict[str, List[str]] = {}
     for owned_root in args.owned_source_root:
-        infos = _source_infos(owned_root)
+        infos = _runtime_java_sources(owned_root)
         for qualified in sorted({str(item["qualified"]) for item in infos.values()}):
             info = infos[qualified]
             routes = _routes_for_source(info, infos) + _owned_alias_routes(info)

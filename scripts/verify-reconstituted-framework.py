@@ -115,6 +115,7 @@ def verify_sources(report: Mapping[str, object], output_dir: Path,
         "source file count mismatch",
         errors,
     )
+    tree = hashlib.sha256()
     for index, item in enumerate(provenance):
         if not isinstance(item, dict):
             errors.append(f"provenance row {index} is not an object")
@@ -127,6 +128,9 @@ def verify_sources(report: Mapping[str, object], output_dir: Path,
                 f"generated source hash mismatch: {source_path}",
                 errors,
             )
+            tree.update(str(item.get("generated_source_path", "")).encode("utf-8"))
+            tree.update(b"\0")
+            tree.update(bytes.fromhex(str(item.get("source_sha256", ""))))
         require(bool(item.get("source_jar")), f"provenance {index} missing source_jar", errors)
         require(
             bool(item.get("source_class_path")),
@@ -158,6 +162,11 @@ def verify_sources(report: Mapping[str, object], output_dir: Path,
             f"provenance {index} missing transformations list",
             errors,
         )
+    require(
+        tree.hexdigest() == report.get("source_tree_sha256"),
+        "generated source tree hash mismatch",
+        errors,
+    )
 
 
 def verify_web_resources(report: Mapping[str, object], output_dir: Path,
@@ -219,11 +228,16 @@ def verify_compile(report: Mapping[str, object], output_dir: Path,
         )
     gate = report.get("gate_status")
     require(
-        gate in {"pilot-compile-pass", "pilot-compile-failed"},
-        "unexpected pilot gate status",
+        gate in {
+            "pilot-compile-pass",
+            "pilot-compile-failed",
+            "project-source-compile-pass",
+            "project-source-compile-failed",
+        },
+        "unexpected source gate status",
         errors,
     )
-    if gate == "pilot-compile-pass":
+    if gate in {"pilot-compile-pass", "project-source-compile-pass"}:
         require(compile_report.get("exit_code") == 0, "compile pass has nonzero exit", errors)
         require(compile_report.get("error_count") == 0, "compile pass has errors", errors)
         require(

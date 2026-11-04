@@ -77,6 +77,24 @@ def sha256_file(path: Path) -> str:
     return digest.hexdigest()
 
 
+def source_tree_digest(records: Iterable[Mapping[str, object]]) -> str:
+    digest = hashlib.sha256()
+    for record in sorted(
+        records,
+        key=lambda item: (
+            str(item["generated_source_path"]),
+            str(item["source_class_path"]),
+        ),
+    ):
+        source_sha256 = record.get("source_sha256")
+        if not isinstance(source_sha256, str):
+            continue
+        digest.update(str(record["generated_source_path"]).encode("utf-8"))
+        digest.update(b"\0")
+        digest.update(bytes.fromhex(source_sha256))
+    return digest.hexdigest()
+
+
 def write_json(path: Path, payload: Mapping[str, object]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(
@@ -213,10 +231,8 @@ def classify_resource(name: str) -> str:
 
 
 def source_recovery_required(member: str, entry: str) -> bool:
-    filename = PurePosixPath(member).name
     return (
-        bool(PRIVATE_FRAMEWORK_RE.match(filename))
-        and entry.endswith(".class")
+        entry.endswith(".class")
         and entry.replace("/", ".").startswith("com.sunwayworld.")
     )
 
@@ -261,17 +277,22 @@ class RunJar:
                 continue
             data = self._archive.read(info.filename)
             filename = PurePosixPath(info.filename).name
-            private = bool(PRIVATE_FRAMEWORK_RE.match(filename))
-            coordinates: tuple[str, ...] = ()
+            archive = zipfile.ZipFile(io.BytesIO(data))
+            coordinates = tuple(maven_coordinates(archive))
+            has_sunway_classes = any(
+                not member.is_dir()
+                and member.filename.endswith(".class")
+                and member.filename.startswith("com/sunwayworld/")
+                for member in archive.infolist()
+            )
+            private = bool(PRIVATE_FRAMEWORK_RE.match(filename)) or has_sunway_classes
             if private:
-                archive = zipfile.ZipFile(io.BytesIO(data))
                 self._private_archives[filename] = archive
-                coordinates = tuple(maven_coordinates(archive))
                 for member in archive.infolist():
                     if member.is_dir() or not member.filename.endswith(".class"):
                         continue
                     fqn = class_name_from_entry(member.filename)
-                    if not fqn:
+                    if not fqn or not fqn.startswith("com.sunwayworld."):
                         continue
                     content = archive.read(member.filename)
                     self._class_index[fqn].append(
@@ -283,6 +304,8 @@ class RunJar:
                             size=len(content),
                         )
                     )
+            else:
+                archive.close()
             self.nested_jar_info[info.filename] = NestedJar(
                 outer_member=info.filename,
                 filename=filename,
@@ -327,7 +350,11 @@ class RunJar:
                     "java_package": None,
                     "maven_coordinates_or_unknown": coordinates or ["unknown"],
                     "source_recovery_required": False,
-                    "final_distribution_allowed": distribution_allowed(info.filename, info.filename),
+                    "final_distribution_allowed": (
+                        not self.nested_jar_info[info.filename].private_framework
+                        if info.filename in self.nested_jar_info
+                        else distribution_allowed(info.filename, info.filename)
+                    ),
                     "nested_jar": filename if info.filename.endswith(".jar") else None,
                 }
             )
@@ -357,9 +384,7 @@ class RunJar:
                             "source_recovery_required": source_recovery_required(
                                 info.filename, nested_info.filename
                             ),
-                            "final_distribution_allowed": distribution_allowed(
-                                info.filename, nested_info.filename
-                            ),
+                            "final_distribution_allowed": False,
                             "nested_jar": filename,
                         }
                     )
@@ -545,18 +570,29 @@ def project_imports(paths: Iterable[Path]) -> dict[str, list[str]]:
     return dict(sorted(imports.items()))
 
 
+def project_class_names(source_root: Path) -> set[str]:
+    return {
+        ".".join(path.relative_to(source_root).with_suffix("").parts)
+        for path in source_root.rglob("*.java")
+    }
+
+
 def resolve_closure(
     run_jar: RunJar,
     entries: Mapping[str, list[ClassEntry]],
     seeds: Iterable[str],
+    provided_classes: Iterable[str] = (),
 ) -> tuple[set[str], dict[str, list[str]], list[str]]:
     by_fqn = {fqn.replace("$", "."): fqn for fqn in entries}
+    provided = set(provided_classes)
     queue = list(seeds)
     closure: set[str] = set()
     edges: dict[str, list[str]] = {}
     missing_external: list[str] = []
     while queue:
         requested = queue.pop()
+        if requested in provided:
+            continue
         actual = requested if requested in entries else by_fqn.get(requested)
         if actual is None:
             if requested.startswith("com.sunwayworld."):
@@ -575,6 +611,8 @@ def resolve_closure(
                     if target == actual:
                         continue
                     dependencies.append(target)
+                elif reference in provided:
+                    continue
                 elif reference.startswith("com.sunwayworld."):
                     missing_external.append(reference)
         edges[actual] = sorted(set(dependencies))
@@ -809,11 +847,12 @@ def decompile_pilot_sources(
     primary_decompiler: str,
     closure: set[str],
     transform_manifest: Mapping[str, object],
+    private_jar_names: Sequence[str],
 ) -> tuple[list[dict[str, object]], dict[str, str]]:
     selected_top_levels = {top_level_fqn(item) for item in closure}
     provenance: list[dict[str, object]] = []
     source_to_fqn: dict[str, str] = {}
-    for jar_name in PILOT_PRIVATE_JARS:
+    for jar_name in private_jar_names:
         jar_path = work / "private-jars" / jar_name
         extracted = work / "decompiled" / jar_name
         cfr_fallback_source: Path | None = None
@@ -1040,6 +1079,15 @@ def pilot(args: argparse.Namespace) -> int:
     output_dir.mkdir(parents=True, exist_ok=True)
     target_sources = [Path(item).resolve() for item in args.target_source]
     project_source = Path(args.project_source).resolve()
+    project_sources = sorted(project_source.rglob("*.java"))
+    full_project_closure = bool(args.project_closure)
+    import_sources = (
+        project_sources if full_project_closure else target_sources
+    )
+    compile_target_sources = (
+        project_sources if full_project_closure else target_sources
+    )
+    provided_project_classes = project_class_names(project_source)
     transform_manifest_path = Path(args.transform_manifest).resolve()
     transform_manifest = load_transform_manifest(transform_manifest_path)
     for target in target_sources:
@@ -1048,12 +1096,25 @@ def pilot(args: argparse.Namespace) -> int:
     with RunJar(Path(args.run_jar)) as run_jar:
         manifest = run_jar.manifest(project_source)
         write_json(output_dir / "artifact-manifest.json", manifest)
-        private_entries = run_jar.private_class_entries(PILOT_PRIVATE_JARS)
-        imports = project_imports(target_sources)
+        available_private_jars = tuple(
+            sorted(
+                Path(item.outer_member).name
+                for item in run_jar.nested_jar_info.values()
+                if item.private_framework
+            )
+        )
+        private_jar_names = (
+            available_private_jars if full_project_closure else PILOT_PRIVATE_JARS
+        )
+        private_entries = run_jar.private_class_entries(private_jar_names)
+        imports = project_imports(import_sources)
         seeds = set(imports)
         seeds.update(args.seed_class or [])
         closure, edges, missing_external = resolve_closure(
-            run_jar, private_entries, seeds
+            run_jar,
+            private_entries,
+            seeds,
+            provided_classes=provided_project_classes,
         )
 
         if args.work_dir:
@@ -1066,12 +1127,7 @@ def pilot(args: argparse.Namespace) -> int:
             )
         with work_context as temp_name:
             work = Path(temp_name)
-            all_private_jars = tuple(
-                Path(item.outer_member).name
-                for item in run_jar.nested_jar_info.values()
-                if item.private_framework
-            )
-            run_jar.write_nested_jars(work / "private-jars", all_private_jars)
+            run_jar.write_nested_jars(work / "private-jars", private_jar_names)
             public_deps = run_jar.extract_public_dependencies(work / "public-deps")
             analysis_classpath = sorted(
                 (work / "private-jars").glob("*.jar")
@@ -1116,6 +1172,7 @@ def pilot(args: argparse.Namespace) -> int:
                 primary_decompiler=args.primary_decompiler,
                 closure=closure,
                 transform_manifest=transform_manifest,
+                private_jar_names=private_jar_names,
             )
             sources = sorted(source_dir.rglob("*.java"))
             fallback_compile_round_count = 0
@@ -1125,7 +1182,7 @@ def pilot(args: argparse.Namespace) -> int:
                 compile_rc, compile_log = compile_java8(
                     Path(args.javac),
                     sources,
-                    target_sources,
+                    compile_target_sources,
                     work / "public-deps",
                     work / "classes",
                     work / "javac-first.log",
@@ -1196,7 +1253,7 @@ def pilot(args: argparse.Namespace) -> int:
                     compile_rc, compile_log = compile_java8(
                         Path(args.javac),
                         sources,
-                        target_sources,
+                        compile_target_sources,
                         work / "public-deps",
                         work / f"classes-fallback-{fallback_compile_round_count}",
                         work / f"javac-fallback-{fallback_compile_round_count}.log",
@@ -1204,20 +1261,30 @@ def pilot(args: argparse.Namespace) -> int:
             compile_rc, compile_log = compile_java8(
                 Path(args.javac),
                 sources,
-                target_sources,
+                compile_target_sources,
                 work / "public-deps",
                 work / "classes-final",
                 output_dir / "javac.log",
             )
             summary = compile_summary(compile_log, source_to_fqn)
 
+    provenance.sort(
+        key=lambda item: (
+            str(item["generated_source_path"]),
+            str(item["source_class_path"]),
+        )
+    )
     closure_payload = {
         "schema": "supplier-java-source-closure-v1",
         "generated_at": utc_now(),
         "run_jar_sha256": manifest["artifact_sha256"],
+        "mode": "full-project-closure" if full_project_closure else "pilot",
+        "project_source_file_count": len(project_sources),
+        "compile_target_source_file_count": len(compile_target_sources),
+        "provided_project_class_count": len(provided_project_classes),
         "project_imports": imports,
         "seed_classes": sorted(seeds),
-        "pilot_jars": list(PILOT_PRIVATE_JARS),
+        "framework_input_jars": list(private_jar_names),
         "closure_class_count": len(closure),
         "closure_classes": sorted(closure),
         "edges": {key: edges[key] for key in sorted(edges)},
@@ -1245,6 +1312,10 @@ def pilot(args: argparse.Namespace) -> int:
         "web_resource_count": web_count,
         "web_resource_extracted_count": web_extracted_count,
         "source_file_count": len(provenance),
+        "source_tree_sha256": source_tree_digest(provenance),
+        "source_decompilers": dict(
+            sorted(Counter(str(item["decompiler"]) for item in provenance).items())
+        ),
         "provenance": provenance,
         "compile": {
             "exit_code": compile_rc,
@@ -1254,13 +1325,26 @@ def pilot(args: argparse.Namespace) -> int:
             "supplier_private_jars_on_classpath": False,
             **summary,
         },
-        "gate_status": "pilot-compile-pass" if compile_rc == 0 else "pilot-compile-failed",
+        "gate_status": (
+            (
+                "project-source-compile-pass"
+                if full_project_closure
+                else "pilot-compile-pass"
+            )
+            if compile_rc == 0
+            else (
+                "project-source-compile-failed"
+                if full_project_closure
+                else "pilot-compile-failed"
+            )
+        ),
     }
     write_json(output_dir / "source-closure.json", closure_payload)
     print(
         json.dumps(
             {
                 "gate_status": closure_payload["gate_status"],
+                "mode": closure_payload["mode"],
                 "run_jar_sha256": manifest["artifact_sha256"],
                 "seed_count": len(seeds),
                 "closure_class_count": len(closure),
@@ -1307,6 +1391,14 @@ def build_parser() -> argparse.ArgumentParser:
     )
     pilot_parser.add_argument("--target-source", action="append", required=True)
     pilot_parser.add_argument("--seed-class", action="append")
+    pilot_parser.add_argument(
+        "--project-closure",
+        action="store_true",
+        help=(
+            "seed from every project Java import, use all private framework "
+            "JARs and compile the complete project source tree"
+        ),
+    )
     pilot_parser.add_argument("--output-dir", required=True)
     pilot_parser.add_argument(
         "--work-dir",

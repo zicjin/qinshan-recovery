@@ -148,6 +148,26 @@ public interface DemoResource extends GenericResource<Object,Object,Long>, Gener
         self.assertEqual("GET", rows[0]["method"])
         self.assertEqual("/owned-only", rows[0]["path"])
 
+    def test_test_only_owned_routes_are_not_application_boundary_routes(self):
+        with tempfile.TemporaryDirectory() as raw:
+            root = Path(raw)
+            runtime = root / "owned/src/main/java/com/example/RuntimeController.java"
+            runtime.parent.mkdir(parents=True)
+            runtime.write_text(
+                '@RestController\n'
+                'public class RuntimeController { @GetMapping("/runtime-only") public String read(){return "ok";} }\n',
+                encoding="utf-8",
+            )
+            test = root / "owned/src/test/java/com/example/TestOnlyController.java"
+            test.parent.mkdir(parents=True)
+            test.write_text(
+                '@RestController\n'
+                'public class TestOnlyController { @GetMapping("/test-only") public String read(){return "ok";} }\n',
+                encoding="utf-8",
+            )
+            rows = build_owned_boundary_inventory([root / "owned/src"], [])
+        self.assertEqual([("/runtime-only", "GET")], [(row["path"], row["method"]) for row in rows])
+
     def test_expands_bounded_equipment_status_aliases(self):
         routes = _owned_alias_routes({
             "simple": "OwnedEquipmentResourceStatusController",

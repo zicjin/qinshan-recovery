@@ -9,7 +9,10 @@ ROOT = Path(__file__).resolve().parents[2]
 import sys
 sys.path.insert(0, str(ROOT / "scripts"))
 from source_binding import REPO_ROOT, is_standalone_root, capture_binding
-PENDING = REPO_ROOT.parent / ".scratch/sunway-supplier-exit-api-first/diagnostic-evidence/pending"
+PENDING_ROOTS = (
+    REPO_ROOT / ".scratch/sunway-supplier-exit-api-first/diagnostic-evidence/pending",
+    REPO_ROOT.parent / ".scratch/sunway-supplier-exit-api-first/diagnostic-evidence/pending",
+)
 CURRENT_HEAD = subprocess.check_output(
     ["git", "-C", str(REPO_ROOT), "rev-parse", "HEAD"], text=True
 ).strip()
@@ -17,8 +20,16 @@ CURRENT_BINDING = capture_binding(REPO_ROOT)
 LEDGER = (REPO_ROOT / ".scratch/sunway-supplier-exit-api-first/archive/historical/api-route-ledger-current-head--9769aa2122b6.json"
           if is_standalone_root(REPO_ROOT) else
           REPO_ROOT.parent / ".scratch/sunway-supplier-exit-api-first/archive/historical/api-route-ledger-20261027-current-head.json")
-for candidate in sorted(PENDING.glob("current-*/api-route-ledger-current-head.json"),
-                        key=lambda path: (path.stat().st_mtime_ns, path.as_posix()), reverse=True):
+candidates = sorted(
+    (
+        candidate
+        for pending in PENDING_ROOTS
+        for candidate in pending.glob("current-*/api-route-ledger-current-head.json")
+    ),
+    key=lambda path: (path.stat().st_mtime_ns, path.as_posix()),
+    reverse=True,
+)
+for candidate in candidates:
     try:
         payload = json.loads(candidate.read_text(encoding="utf-8"))
     except (OSError, ValueError):
@@ -60,6 +71,11 @@ assert all(row.get("boundary_scope") == "owned-source-only" for row in boundary_
 assert all(row.get("route_origin") == "owned-java-source-only" for row in boundary_routes)
 assert all(row.get("runtime_model") == "same-spring-application" for row in boundary_routes)
 assert all("boundary route != boundary process" in row.get("boundary_semantics", "") for row in boundary_routes)
+assert all(
+    "/src/test/" not in source and "/src/testFixtures/" not in source
+    for row in boundary_routes
+    for source in row.get("owned_sources", [])
+)
 assert payload["route_execution_model"]["boundary_process"] is False
 assert payload["route_execution_model"]["internal_http_bridge"] is False
 assert all(required.issubset(row) for row in boundary_routes)

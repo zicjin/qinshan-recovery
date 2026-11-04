@@ -20,11 +20,11 @@ import org.springframework.stereotype.Component;
 public class ResourceMonitoringExecutor {
     private static final Logger logger = LogManager.getLogger(ResourceMonitoringExecutor.class);
     private static final int SLEEP_INTERVAL = 100;
-    private static long momeryThreshold = 50L;
-    private static long cpuThreshold = 50L;
+    private static long momeryThreshold = 100L;
+    private static long cpuThreshold = 100L;
     private static long maxAliveSec = 600L;
     private static long maxTaskSize = 10L;
-    private static boolean enabled = true;
+    private static boolean enabled = false;
     public static final Map<Long, Thread> THREAD_CONTAINER = new HashMap<Long, Thread>();
 
     @Value(value="${sunway.executor.resource-monitoring.momery-threshold:50}")

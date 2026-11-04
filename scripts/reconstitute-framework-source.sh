@@ -43,14 +43,17 @@ esac
 
 run_jar="${SUPPLIER_RUN_JAR:-$ROOT/.external-materials/gikam-third-czjky-14.1.5-run.jar}"
 jdk8="${LIMS_JDK8_HOME:-$ROOT/build/jdk1.8.0_391}"
-vineflower_args=()
-if [[ -n "${VINEFLOWER_JAR:-}" ]]; then
-  vineflower_args+=(--vineflower-jar "$VINEFLOWER_JAR")
+resolver_args=(--run-jar "$run_jar")
+if [[ "$command_name" == "pilot" ]]; then
+  vineflower_args=()
+  if [[ -n "${VINEFLOWER_JAR:-}" ]]; then
+    vineflower_args+=(--vineflower-jar "$VINEFLOWER_JAR")
+  fi
+  resolver_args+=(
+    --java8 "$jdk8/bin/java"
+    --javac "$jdk8/bin/javac"
+    "${vineflower_args[@]}"
+  )
 fi
 
-exec python3 "$RESOLVER" "$command_name" \
-  --run-jar "$run_jar" \
-  --java8 "$jdk8/bin/java" \
-  --javac "$jdk8/bin/javac" \
-  "${vineflower_args[@]}" \
-  "$@"
+exec python3 "$RESOLVER" "$command_name" "${resolver_args[@]}" "$@"

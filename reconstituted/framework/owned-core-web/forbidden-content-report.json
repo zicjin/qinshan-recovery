@@ -1,0 +1,30 @@
+{
+  "forbidden_native_files": [],
+  "loader_reference_files": [],
+  "module": "owned-core-web",
+  "native_declaration_files": [],
+  "policy": {
+    "forbidden_native_files": "must be absent before final distribution",
+    "loader_reference_files": "must be removed before final distribution",
+    "native_declaration_files": "must be replaced or removed before final distribution",
+    "third_party_license_documents": "allowlisted documentation only; never Sunway runtime input"
+  },
+  "schema": "supplier-reconstituted-module-forbidden-content-v1",
+  "status": "pass",
+  "sunway_license_payload_retained": false,
+  "supplier_private_jar_retained": false,
+  "third_party_license_documents": [
+    "/home/ts/qinshan/lims-recovery/reconstituted/framework/owned-core-web/src/main/resources/static/gikam/main/ckeditor4/LICENSE.md",
+    "/home/ts/qinshan/lims-recovery/reconstituted/framework/owned-core-web/src/main/resources/static/gikam/main/ckeditor4/plugins/scayt/LICENSE.md",
+    "/home/ts/qinshan/lims-recovery/reconstituted/framework/owned-core-web/src/main/resources/static/gikam/main/ckeditor4/samples/toolbarconfigurator/font/LICENSE.txt",
+    "/home/ts/qinshan/lims-recovery/reconstituted/framework/owned-core-web/src/main/resources/static/gikam/main/ckeditor4/samples/toolbarconfigurator/lib/codemirror/LICENSE",
+    "/home/ts/qinshan/lims-recovery/reconstituted/framework/owned-core-web/src/main/resources/static/plugin/ckeditor/LICENSE.md",
+    "/home/ts/qinshan/lims-recovery/reconstituted/framework/owned-core-web/src/main/resources/static/plugin/ckeditor/plugins/scayt/LICENSE.md",
+    "/home/ts/qinshan/lims-recovery/reconstituted/framework/owned-core-web/src/main/resources/static/plugin/ckeditor/plugins/wsc/LICENSE.md",
+    "/home/ts/qinshan/lims-recovery/reconstituted/framework/owned-core-web/src/main/resources/static/plugin/dhtmlxgantt/license.txt",
+    "/home/ts/qinshan/lims-recovery/reconstituted/framework/owned-core-web/src/main/resources/static/plugin/ketcher/static/js/main.b054cdb3.js.LICENSE.txt",
+    "/home/ts/qinshan/lims-recovery/reconstituted/framework/owned-core-web/src/main/resources/static/plugin/pdfjs/LICENSE",
+    "/home/ts/qinshan/lims-recovery/reconstituted/framework/owned-core-web/src/main/resources/static/plugin/pdfjs/web/cmaps/LICENSE",
+    "/home/ts/qinshan/lims-recovery/reconstituted/framework/owned-core-web/src/main/resources/static/plugin/scheduler/license.txt"
+  ]
+}

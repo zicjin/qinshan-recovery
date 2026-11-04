@@ -1,0 +1,1508 @@
+{
+  "accessors": [
+    {
+      "bufferView": 0,
+      "componentType": 5123,
+      "count": 41472,
+      "max": [8207],
+      "min": [0],
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 1,
+      "componentType": 5126,
+      "count": 8208,
+      "max": [2.963385581970215, 11.999994277954102, 2.9570486545562744],
+      "min": [-2.963385581970215, -11.999981880187988, -2.9570488929748535],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "componentType": 5126,
+      "count": 8208,
+      "max": [1.0, 0.9999272227287292, 1.0],
+      "min": [-1.0, -0.9999272227287292, -1.0],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 3,
+      "componentType": 5126,
+      "count": 8208,
+      "max": [1.0, 0.4059847593307495, 1.0, 1.0],
+      "min": [-1.0, -0.40598538517951965, -1.0, -1.0],
+      "type": "VEC4"
+    },
+    {
+      "bufferView": 4,
+      "componentType": 5126,
+      "count": 8208,
+      "max": [0.9883978962898254, 0.7175823748111725],
+      "min": [0.014580309391021729, 0.27177631855010986],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 5,
+      "componentType": 5123,
+      "count": 93312,
+      "max": [21977],
+      "min": [0],
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 6,
+      "componentType": 5126,
+      "count": 21978,
+      "max": [2.21950626373291, 11.339981079101562, 2.2195911407470703],
+      "min": [-2.219489336013794, -11.340023040771484, -2.2197604179382324],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 7,
+      "componentType": 5126,
+      "count": 21978,
+      "max": [1.0, 0.9842767119407654, 1.0],
+      "min": [-1.0, -0.9842764139175415, -1.0],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 8,
+      "componentType": 5126,
+      "count": 21978,
+      "max": [0.9998270869255066, 0.7183666825294495, 0.9999868273735046, 1.0],
+      "min": [
+        -0.9998270869255066, -0.7183662056922913, -0.9999868273735046, -1.0
+      ],
+      "type": "VEC4"
+    },
+    {
+      "bufferView": 9,
+      "componentType": 5126,
+      "count": 21978,
+      "max": [0.9811952710151672, 0.5971435308456421],
+      "min": [0.0233931727707386, 0.3857065439224243],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 10,
+      "componentType": 5123,
+      "count": 93312,
+      "max": [21977],
+      "min": [0],
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 11,
+      "componentType": 5126,
+      "count": 21978,
+      "max": [2.21950626373291, 11.339981079101562, 2.2195911407470703],
+      "min": [-2.219489336013794, -11.340023040771484, -2.2197604179382324],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 12,
+      "componentType": 5126,
+      "count": 21978,
+      "max": [1.0, 0.9842767119407654, 1.0],
+      "min": [-1.0, -0.9842764139175415, -1.0],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 13,
+      "componentType": 5126,
+      "count": 21978,
+      "max": [0.9998270869255066, 0.7183666825294495, 0.9999868273735046, 1.0],
+      "min": [
+        -0.9998270869255066, -0.7183662056922913, -0.9999868273735046, -1.0
+      ],
+      "type": "VEC4"
+    },
+    {
+      "bufferView": 14,
+      "componentType": 5126,
+      "count": 21978,
+      "max": [0.9811952710151672, 0.5971435308456421],
+      "min": [0.0233931727707386, 0.3857065439224243],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 15,
+      "componentType": 5121,
+      "count": 60,
+      "max": [59],
+      "min": [0],
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 16,
+      "componentType": 5126,
+      "count": 60,
+      "max": [0.44721248745918274, 0.5, 0.42531999945640564],
+      "min": [-0.44721248745918274, -0.5, -0.42531999945640564],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 17,
+      "componentType": 5126,
+      "count": 60,
+      "max": [0.9822461009025574, 0.7946524024009705, 0.9341714978218079],
+      "min": [-0.9822461009025574, -0.7946524024009705, -0.9341714978218079],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 18,
+      "componentType": 5126,
+      "count": 60,
+      "max": [0.9510550498962402, 5.92061155657575e-8, 1.0, -1.0],
+      "min": [-0.9510550498962402, -4.7364963506879576e-8, -1.0, -1.0],
+      "type": "VEC4"
+    },
+    {
+      "bufferView": 19,
+      "componentType": 5126,
+      "count": 60,
+      "max": [1.0, 1.0],
+      "min": [0.0, 0.5276179909706116],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 20,
+      "componentType": 5123,
+      "count": 2904,
+      "max": [1965],
+      "min": [0],
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 21,
+      "componentType": 5126,
+      "count": 1966,
+      "max": [1.3671875, 0.984375, 0.8515625],
+      "min": [-1.3671875, -0.984375, -0.8515625],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 22,
+      "componentType": 5126,
+      "count": 1966,
+      "max": [1.0, 0.9970182180404663, 1.0],
+      "min": [-1.0, -0.992402970790863, -0.9864740371704102],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 23,
+      "componentType": 5126,
+      "count": 1966,
+      "max": [0.9998559951782227, 0.9998559999949066],
+      "min": [0.00014400000509340316, 0.0951489806175232],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 24,
+      "componentType": 5123,
+      "count": 2880,
+      "max": [1983],
+      "min": [0],
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 25,
+      "componentType": 5126,
+      "count": 1984,
+      "max": [1.000000238418579, 1.0, 1.0000003576278687],
+      "min": [-0.9999998211860657, -1.0, -1.0],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 26,
+      "componentType": 5126,
+      "count": 1984,
+      "max": [0.9904382228851318, 0.99513840675354, 0.9904382824897766],
+      "min": [-0.9904382228851318, -0.99513840675354, -0.9904384016990662],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 27,
+      "componentType": 5126,
+      "count": 1984,
+      "max": [1.000000238418579, 1.0],
+      "min": [0.0, 0.0],
+      "type": "VEC2"
+    }
+  ],
+  "asset": {
+    "generator": "Soft8Soft Verge3D for Blender add-on",
+    "version": "2.0"
+  },
+  "bufferViews": [
+    { "buffer": 0, "byteLength": 82944, "byteOffset": 0, "target": 34963 },
+    { "buffer": 0, "byteLength": 98496, "byteOffset": 82944, "target": 34962 },
+    { "buffer": 0, "byteLength": 98496, "byteOffset": 181440, "target": 34962 },
+    {
+      "buffer": 0,
+      "byteLength": 131328,
+      "byteOffset": 279936,
+      "target": 34962
+    },
+    { "buffer": 0, "byteLength": 65664, "byteOffset": 411264, "target": 34962 },
+    {
+      "buffer": 0,
+      "byteLength": 186624,
+      "byteOffset": 476928,
+      "target": 34963
+    },
+    {
+      "buffer": 0,
+      "byteLength": 263736,
+      "byteOffset": 663552,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 263736,
+      "byteOffset": 927288,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 351648,
+      "byteOffset": 1191024,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 175824,
+      "byteOffset": 1542672,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 186624,
+      "byteOffset": 1718496,
+      "target": 34963
+    },
+    {
+      "buffer": 0,
+      "byteLength": 263736,
+      "byteOffset": 1905120,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 263736,
+      "byteOffset": 2168856,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 351648,
+      "byteOffset": 2432592,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 175824,
+      "byteOffset": 2784240,
+      "target": 34962
+    },
+    { "buffer": 0, "byteLength": 60, "byteOffset": 2960064, "target": 34963 },
+    { "buffer": 0, "byteLength": 720, "byteOffset": 2960124, "target": 34962 },
+    { "buffer": 0, "byteLength": 720, "byteOffset": 2960844, "target": 34962 },
+    { "buffer": 0, "byteLength": 960, "byteOffset": 2961564, "target": 34962 },
+    { "buffer": 0, "byteLength": 480, "byteOffset": 2962524, "target": 34962 },
+    { "buffer": 0, "byteLength": 5808, "byteOffset": 2963004, "target": 34963 },
+    {
+      "buffer": 0,
+      "byteLength": 23592,
+      "byteOffset": 2968812,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 23592,
+      "byteOffset": 2992404,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 15728,
+      "byteOffset": 3015996,
+      "target": 34962
+    },
+    { "buffer": 0, "byteLength": 5760, "byteOffset": 3031724, "target": 34963 },
+    {
+      "buffer": 0,
+      "byteLength": 23808,
+      "byteOffset": 3037484,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 23808,
+      "byteOffset": 3061292,
+      "target": 34962
+    },
+    { "buffer": 0, "byteLength": 15872, "byteOffset": 3085100, "target": 34962 }
+  ],
+  "buffers": [{ "byteLength": 3100972, "uri": "loginLimsDNA.bin" }],
+  "cameras": [
+    {
+      "extensions": {
+        "S8S_v3d_camera_data": {
+          "controls": "ORBIT",
+          "enablePan": false,
+          "moveSpeed": 1.0,
+          "orbitMaxAzimuthAngle": 0.0,
+          "orbitMaxDistance": 20.0,
+          "orbitMaxPolarAngle": 1.5707963705062866,
+          "orbitMaxZoom": 100.0,
+          "orbitMinAzimuthAngle": 0.0,
+          "orbitMinDistance": 20.0,
+          "orbitMinPolarAngle": 1.5707963705062866,
+          "orbitMinZoom": 0.009999999776482582,
+          "orbitTarget": [0.0, 0.0, -0.0],
+          "rotateSpeed": 1.0,
+          "viewportFitInitialAspect": 1.7777777777777777,
+          "viewportFitType": "AUTO"
+        }
+      },
+      "name": "Camera",
+      "perspective": {
+        "aspectRatio": 1.7777777777777777,
+        "yfov": 0.5033799372418416,
+        "zfar": 100.0,
+        "znear": 0.10000000149011612
+      },
+      "type": "perspective"
+    }
+  ],
+  "extensionsUsed": [
+    "S8S_v3d_texture_data",
+    "S8S_v3d_material_data",
+    "S8S_v3d_camera_data",
+    "S8S_v3d_mesh_data",
+    "S8S_v3d_node_data",
+    "S8S_v3d_scene_data"
+  ],
+  "images": [
+    { "uri": "DNA.png" },
+    { "uri": "light.png" },
+    { "uri": "studio010.hdr" }
+  ],
+  "materials": [
+    {
+      "extensions": {
+        "S8S_v3d_material_data": {
+          "gtaoVisible": true,
+          "materialIndex": 0,
+          "nodeGraph": {
+            "edges": [
+              { "fromNode": 0, "fromOutput": 0, "toInput": 0, "toNode": 1 }
+            ],
+            "nodes": [
+              {
+                "inputs": [
+                  [
+                    0.800000011920929, 0.800000011920929, 0.800000011920929, 1.0
+                  ],
+                  0.0,
+                  [1.0, 0.20000000298023224, 0.10000000149011612],
+                  [
+                    0.800000011920929, 0.800000011920929, 0.800000011920929, 1.0
+                  ],
+                  0.0,
+                  0.5,
+                  0.0,
+                  0.5,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.5,
+                  0.0,
+                  0.029999999329447746,
+                  1.4500000476837158,
+                  0.0,
+                  0.0,
+                  [1.0, 1.0, 1.0, 1.0],
+                  1.0,
+                  1.0,
+                  [0.0, 0.0, 0.0],
+                  [0.0, 0.0, 0.0],
+                  [0.0, 0.0, 0.0]
+                ],
+                "is_active_output": false,
+                "name": "Principled BSDF",
+                "outputs": [[0, 0, 0, 0]],
+                "type": "BSDF_PRINCIPLED_BL"
+              },
+              {
+                "inputs": [
+                  [0, 0, 0, 0],
+                  [0, 0, 0, 0],
+                  [0.0, 0.0, 0.0]
+                ],
+                "is_active_output": true,
+                "name": "Material Output",
+                "outputs": [],
+                "type": "OUTPUT_MATERIAL_BL"
+              }
+            ]
+          },
+          "useCastShadows": true
+        }
+      },
+      "name": "mat-light1"
+    },
+    {
+      "extensions": {
+        "S8S_v3d_material_data": {
+          "gtaoVisible": true,
+          "materialIndex": 0,
+          "nodeGraph": {
+            "edges": [
+              { "fromNode": 7, "fromOutput": 0, "toInput": 0, "toNode": 0 },
+              { "fromNode": 3, "fromOutput": 0, "toInput": 1, "toNode": 2 },
+              { "fromNode": 4, "fromOutput": 0, "toInput": 0, "toNode": 3 },
+              { "fromNode": 1, "fromOutput": 0, "toInput": 0, "toNode": 5 },
+              { "fromNode": 2, "fromOutput": 0, "toInput": 20, "toNode": 7 },
+              { "fromNode": 8, "fromOutput": 0, "toInput": 0, "toNode": 4 },
+              { "fromNode": 5, "fromOutput": 0, "toInput": 17, "toNode": 7 },
+              { "fromNode": 6, "fromOutput": 0, "toInput": 2, "toNode": 5 },
+              { "fromNode": 9, "fromOutput": 0, "toInput": 0, "toNode": 6 }
+            ],
+            "nodes": [
+              {
+                "inputs": [
+                  [0, 0, 0, 0],
+                  [0, 0, 0, 0],
+                  [0.0, 0.0, 0.0]
+                ],
+                "is_active_output": true,
+                "name": "Material Output",
+                "outputs": [],
+                "type": "OUTPUT_MATERIAL_BL"
+              },
+              {
+                "inputs": [],
+                "is_active_output": false,
+                "name": "值(明度)",
+                "outputs": [0.0],
+                "type": "VALUE_BL"
+              },
+              {
+                "inputs": [1.0, [0.5, 0.5, 1.0, 1.0]],
+                "is_active_output": false,
+                "name": "法线贴图",
+                "outputs": [[0.0, 0.0, 0.0]],
+                "type": "NORMAL_MAP_BL",
+                "uvLayer": "UVMap"
+              },
+              {
+                "inputs": [[0.0, 0.0, 0.0]],
+                "is_active_output": false,
+                "name": "图像纹理.001",
+                "outputs": [[0.0, 0.0, 0.0, 0.0], 0.0],
+                "projection": "FLAT",
+                "projectionBlend": 0.0,
+                "texture": 0,
+                "type": "TEX_IMAGE_BL"
+              },
+              {
+                "inputs": [
+                  [0.0, 0.0, 0.0],
+                  [0.0, 0.0, 0.0],
+                  [0.0, 0.0, 0.0],
+                  [2.0, 2.0, 1.0]
+                ],
+                "is_active_output": false,
+                "name": "映射",
+                "outputs": [[0.0, 0.0, 0.0]],
+                "type": "MAPPING_BL",
+                "vectorType": "POINT"
+              },
+              {
+                "blendType": "MIX",
+                "inputs": [
+                  0.0,
+                  [
+                    0.1587199866771698, 0.20381930470466614,
+                    0.26965245604515076, 1.0
+                  ],
+                  [
+                    0.10000000149011612, 0.10000000149011612,
+                    0.10000000149011612, 1.0
+                  ]
+                ],
+                "is_active_output": false,
+                "name": "混合",
+                "outputs": [[0.0, 0.0, 0.0, 0.0]],
+                "type": "MIX_RGB_BL",
+                "useClamp": false
+              },
+              {
+                "inputs": [[0.0, 0.0, 0.0]],
+                "is_active_output": false,
+                "name": "图像纹理.002",
+                "outputs": [[0.0, 0.0, 0.0, 0.0], 0.0],
+                "projection": "FLAT",
+                "projectionBlend": 0.0,
+                "texture": 1,
+                "type": "TEX_IMAGE_BL"
+              },
+              {
+                "inputs": [
+                  [1.0, 1.0, 1.0, 1.0],
+                  0.0,
+                  [1.0, 0.20000000298023224, 0.10000000149011612],
+                  [
+                    0.800000011920929, 0.800000011920929, 0.800000011920929, 1.0
+                  ],
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.5,
+                  0.0,
+                  0.029999999329447746,
+                  1.4500000476837158,
+                  0.0,
+                  0.0,
+                  [
+                    0.10000000149011612, 0.10000000149011612,
+                    0.10000000149011612, 1.0
+                  ],
+                  1.0,
+                  1.0,
+                  [0.0, 0.0, 0.0],
+                  [0.0, 0.0, 0.0],
+                  [0.0, 0.0, 0.0]
+                ],
+                "is_active_output": false,
+                "name": "Principled BSDF",
+                "outputs": [[0, 0, 0, 0]],
+                "type": "BSDF_PRINCIPLED_BL"
+              },
+              {
+                "inputs": [],
+                "is_active_output": false,
+                "name": "UV 贴图.001",
+                "outputs": [[0.0, 0.0, 0.0]],
+                "type": "UVMAP_BL",
+                "uvLayer": "UVMap"
+              },
+              {
+                "inputs": [],
+                "is_active_output": false,
+                "name": "UV 贴图.002",
+                "outputs": [[0.0, 0.0, 0.0]],
+                "type": "UVMAP_BL",
+                "uvLayer": "UVMap"
+              }
+            ]
+          },
+          "useCastShadows": true
+        }
+      },
+      "name": "mat-main"
+    },
+    {
+      "extensions": {
+        "S8S_v3d_material_data": {
+          "gtaoVisible": true,
+          "materialIndex": 0,
+          "nodeGraph": {
+            "edges": [
+              { "fromNode": 1, "fromOutput": 0, "toInput": 0, "toNode": 0 },
+              { "fromNode": 4, "fromOutput": 0, "toInput": 1, "toNode": 3 },
+              { "fromNode": 5, "fromOutput": 0, "toInput": 0, "toNode": 4 },
+              { "fromNode": 2, "fromOutput": 0, "toInput": 0, "toNode": 7 },
+              { "fromNode": 3, "fromOutput": 0, "toInput": 20, "toNode": 1 },
+              { "fromNode": 6, "fromOutput": 0, "toInput": 0, "toNode": 5 },
+              { "fromNode": 7, "fromOutput": 0, "toInput": 17, "toNode": 1 },
+              { "fromNode": 8, "fromOutput": 0, "toInput": 2, "toNode": 7 }
+            ],
+            "nodes": [
+              {
+                "inputs": [
+                  [0, 0, 0, 0],
+                  [0, 0, 0, 0],
+                  [0.0, 0.0, 0.0]
+                ],
+                "is_active_output": true,
+                "name": "Material Output",
+                "outputs": [],
+                "type": "OUTPUT_MATERIAL_BL"
+              },
+              {
+                "inputs": [
+                  [1.0, 1.0, 1.0, 1.0],
+                  0.0,
+                  [1.0, 0.20000000298023224, 0.10000000149011612],
+                  [
+                    0.800000011920929, 0.800000011920929, 0.800000011920929, 1.0
+                  ],
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.5,
+                  0.0,
+                  0.029999999329447746,
+                  1.4500000476837158,
+                  0.0,
+                  0.0,
+                  [
+                    0.10000000149011612, 0.10000000149011612,
+                    0.10000000149011612, 1.0
+                  ],
+                  1.0,
+                  1.0,
+                  [0.0, 0.0, 0.0],
+                  [0.0, 0.0, 0.0],
+                  [0.0, 0.0, 0.0]
+                ],
+                "is_active_output": false,
+                "name": "Principled BSDF",
+                "outputs": [[0, 0, 0, 0]],
+                "type": "BSDF_PRINCIPLED_BL"
+              },
+              {
+                "inputs": [],
+                "is_active_output": false,
+                "name": "值(明度)",
+                "outputs": [0.8999999761581421],
+                "type": "VALUE_BL"
+              },
+              {
+                "inputs": [1.0, [0.5, 0.5, 1.0, 1.0]],
+                "is_active_output": false,
+                "name": "法线贴图",
+                "outputs": [[0.0, 0.0, 0.0]],
+                "type": "NORMAL_MAP_BL",
+                "uvLayer": "UVMap"
+              },
+              {
+                "inputs": [[0.0, 0.0, 0.0]],
+                "is_active_output": false,
+                "name": "图像纹理.001",
+                "outputs": [[0.0, 0.0, 0.0, 0.0], 0.0],
+                "projection": "FLAT",
+                "projectionBlend": 0.0,
+                "texture": 0,
+                "type": "TEX_IMAGE_BL"
+              },
+              {
+                "inputs": [
+                  [0.0, 0.0, 0.0],
+                  [0.0, 0.0, 0.0],
+                  [0.0, 0.0, 0.0],
+                  [2.0, 2.0, 1.0]
+                ],
+                "is_active_output": false,
+                "name": "映射",
+                "outputs": [[0.0, 0.0, 0.0]],
+                "type": "MAPPING_BL",
+                "vectorType": "POINT"
+              },
+              {
+                "inputs": [],
+                "is_active_output": false,
+                "name": "UV 贴图.001",
+                "outputs": [[0.0, 0.0, 0.0]],
+                "type": "UVMAP_BL",
+                "uvLayer": "UVMap"
+              },
+              {
+                "blendType": "MIX",
+                "inputs": [
+                  0.0,
+                  [0.745404064655304, 0.8549929261207581, 1.0, 1.0],
+                  [
+                    0.10000000149011612, 0.10000000149011612,
+                    0.10000000149011612, 1.0
+                  ]
+                ],
+                "is_active_output": false,
+                "name": "混合",
+                "outputs": [[0.0, 0.0, 0.0, 0.0]],
+                "type": "MIX_RGB_BL",
+                "useClamp": false
+              },
+              {
+                "inputs": [[0.0, 0.0, 0.0]],
+                "is_active_output": false,
+                "name": "图像纹理.002",
+                "outputs": [[0.0, 0.0, 0.0, 0.0], 0.0],
+                "projection": "FLAT",
+                "projectionBlend": 0.0,
+                "texture": 1,
+                "type": "TEX_IMAGE_BL"
+              }
+            ]
+          },
+          "useCastShadows": true
+        }
+      },
+      "name": "mat-main-chosen"
+    },
+    {
+      "extensions": {
+        "S8S_v3d_material_data": {
+          "gtaoVisible": true,
+          "materialIndex": 0,
+          "nodeGraph": {
+            "edges": [
+              { "fromNode": 5, "fromOutput": 0, "toInput": 0, "toNode": 0 },
+              { "fromNode": 1, "fromOutput": 0, "toInput": 0, "toNode": 6 },
+              { "fromNode": 3, "fromOutput": 0, "toInput": 0, "toNode": 4 },
+              { "fromNode": 4, "fromOutput": 0, "toInput": 0, "toNode": 2 },
+              { "fromNode": 2, "fromOutput": 0, "toInput": 1, "toNode": 6 },
+              { "fromNode": 6, "fromOutput": 0, "toInput": 0, "toNode": 5 }
+            ],
+            "nodes": [
+              {
+                "inputs": [
+                  [0, 0, 0, 0],
+                  [0, 0, 0, 0]
+                ],
+                "is_active_output": true,
+                "name": "World Output",
+                "outputs": [],
+                "type": "OUTPUT_WORLD_BL"
+              },
+              {
+                "inputs": [],
+                "is_active_output": false,
+                "name": "Light Path",
+                "outputs": [
+                  0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+                  0.0
+                ],
+                "type": "LIGHT_PATH_BL"
+              },
+              {
+                "inputs": [[0.0, 0.0, 0.0]],
+                "is_active_output": false,
+                "name": "Environment Texture",
+                "outputs": [[0.0, 0.0, 0.0, 0.0]],
+                "projection": "EQUIRECTANGULAR",
+                "texture": 4,
+                "type": "TEX_ENVIRONMENT_BL"
+              },
+              {
+                "inputs": [],
+                "is_active_output": false,
+                "name": "纹理坐标",
+                "object": -1,
+                "outputs": [
+                  [0.0, 0.0, 0.0],
+                  [0.0, 0.0, 0.0],
+                  [0.0, 0.0, 0.0],
+                  [0.0, 0.0, 0.0],
+                  [0.0, 0.0, 0.0],
+                  [0.0, 0.0, 0.0],
+                  [0.0, 0.0, 0.0]
+                ],
+                "type": "TEX_COORD_BL"
+              },
+              {
+                "inputs": [
+                  [0.0, 0.0, 0.0],
+                  [0.0, 0.0, 0.0],
+                  [0.0, 0.0, -2.094395160675049],
+                  [1.0, 1.0, 1.0]
+                ],
+                "is_active_output": false,
+                "name": "映射",
+                "outputs": [[0.0, 0.0, 0.0]],
+                "type": "MAPPING_BL",
+                "vectorType": "POINT"
+              },
+              {
+                "inputs": [
+                  [
+                    0.05087608844041824, 0.05087608844041824,
+                    0.05087608844041824, 1.0
+                  ],
+                  1.0
+                ],
+                "is_active_output": false,
+                "name": "Background",
+                "outputs": [[0, 0, 0, 0]],
+                "type": "BACKGROUND_BL"
+              },
+              {
+                "blendType": "MIX",
+                "inputs": [
+                  0.5,
+                  [0.5, 0.5, 0.5, 1.0],
+                  [
+                    0.46606016159057617, 0.6398614048957825, 0.8962695598602295,
+                    1.0
+                  ]
+                ],
+                "is_active_output": false,
+                "name": "Mix",
+                "outputs": [[0.0, 0.0, 0.0, 0.0]],
+                "type": "MIX_RGB_BL",
+                "useClamp": false
+              }
+            ]
+          },
+          "useCastShadows": true
+        }
+      },
+      "name": "Verge3D_Environment_World"
+    },
+    {
+      "emissiveFactor": [0.0, 0.0, 0.0],
+      "extensions": {
+        "S8S_v3d_material_data": {
+          "nodeGraph": {
+            "edges": [
+              { "fromNode": 1, "fromOutput": 0, "toInput": 0, "toNode": 0 }
+            ],
+            "nodes": [
+              {
+                "inputs": [[0, 0, 0, 0], [0, 0, 0, 0], 0.0],
+                "is_active_output": true,
+                "name": "Material Output",
+                "outputs": [],
+                "type": "OUTPUT_MATERIAL_BL"
+              },
+              {
+                "inputs": [
+                  [
+                    0.800000011920929, 0.800000011920929, 0.800000011920929, 1.0
+                  ],
+                  0.0,
+                  [0.0, 0.0, 0.0]
+                ],
+                "is_active_output": false,
+                "name": "Diffuse BSDF",
+                "outputs": [[0, 0, 0, 0]],
+                "type": "BSDF_DIFFUSE_BL"
+              }
+            ]
+          },
+          "useCastShadows": true,
+          "useShadows": true
+        }
+      },
+      "name": "v3d_default_material"
+    }
+  ],
+  "meshes": [
+    {
+      "extensions": {
+        "S8S_v3d_mesh_data": {
+          "colorLayers": {},
+          "uvLayers": { "UVMap": "TEXCOORD_0" }
+        }
+      },
+      "name": "DNA1.002",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 2,
+            "POSITION": 1,
+            "TANGENT": 3,
+            "TEXCOORD_0": 4
+          },
+          "indices": 0,
+          "material": 1,
+          "mode": 4
+        }
+      ]
+    },
+    {
+      "extensions": {
+        "S8S_v3d_mesh_data": {
+          "colorLayers": {},
+          "uvLayers": { "UVMap": "TEXCOORD_0" }
+        }
+      },
+      "name": "DNAA",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 7,
+            "POSITION": 6,
+            "TANGENT": 8,
+            "TEXCOORD_0": 9
+          },
+          "indices": 5,
+          "material": 1,
+          "mode": 4
+        }
+      ]
+    },
+    {
+      "extensions": {
+        "S8S_v3d_mesh_data": {
+          "colorLayers": {},
+          "uvLayers": { "UVMap": "TEXCOORD_0" }
+        }
+      },
+      "name": "DNAA.001",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 12,
+            "POSITION": 11,
+            "TANGENT": 13,
+            "TEXCOORD_0": 14
+          },
+          "indices": 10,
+          "material": 1,
+          "mode": 4
+        }
+      ]
+    },
+    {
+      "extensions": {
+        "S8S_v3d_mesh_data": {
+          "colorLayers": {},
+          "uvLayers": { "UVMap": "TEXCOORD_0" }
+        }
+      },
+      "name": "棱角球",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 17,
+            "POSITION": 16,
+            "TANGENT": 18,
+            "TEXCOORD_0": 19
+          },
+          "indices": 15,
+          "material": 2,
+          "mode": 4
+        }
+      ]
+    },
+    {
+      "extensions": {
+        "S8S_v3d_mesh_data": { "colorLayers": {}, "uvLayers": {} }
+      },
+      "name": "猴头",
+      "primitives": [
+        {
+          "attributes": { "NORMAL": 22, "POSITION": 21, "TEXCOORD_0": 23 },
+          "indices": 20,
+          "material": 4,
+          "mode": 4
+        }
+      ]
+    },
+    {
+      "extensions": {
+        "S8S_v3d_mesh_data": {
+          "colorLayers": {},
+          "uvLayers": { "UV 贴图": "TEXCOORD_0" }
+        }
+      },
+      "name": "球体",
+      "primitives": [
+        {
+          "attributes": { "NORMAL": 26, "POSITION": 25, "TEXCOORD_0": 27 },
+          "indices": 24,
+          "material": 0,
+          "mode": 4
+        }
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "camera": 0,
+      "extensions": {
+        "S8S_v3d_node_data": {
+          "frustumCulling": true,
+          "groupNames": ["Collection 1"],
+          "hidden": false,
+          "hidpiCompositing": false,
+          "objectColor": [0.0, 0.0, 0.0],
+          "objectIndex": 0,
+          "renderOrder": 0
+        }
+      },
+      "name": "Camera",
+      "rotation": [8.429369557916289e-8, 0.0, 0.0, 1.0],
+      "scale": [1.0, 1.0, 1.0],
+      "translation": [0.0, 0.0, 20.0]
+    },
+    {
+      "extensions": {
+        "S8S_v3d_node_data": {
+          "frustumCulling": true,
+          "groupNames": ["Collection 1"],
+          "hidden": false,
+          "hidpiCompositing": false,
+          "objectColor": [1.0, 1.0, 1.0],
+          "objectIndex": 0,
+          "renderOrder": 0,
+          "useShadows": true
+        }
+      },
+      "mesh": 1,
+      "name": "DNA1",
+      "translation": [3.4752800464630127, -2.3460099697113037, -0.0]
+    },
+    {
+      "children": [1],
+      "name": "v3d_Proxy_Node_0_DNA1",
+      "translation": [-3.4752800464630127, 2.3460099697113037, -0.0]
+    },
+    {
+      "extensions": {
+        "S8S_v3d_node_data": {
+          "frustumCulling": true,
+          "groupNames": ["Collection 1"],
+          "hidden": true,
+          "hidpiCompositing": false,
+          "objectColor": [1.0, 1.0, 1.0],
+          "objectIndex": 0,
+          "renderOrder": 0,
+          "useShadows": true
+        }
+      },
+      "mesh": 0,
+      "name": "DNAbp"
+    },
+    {
+      "extensions": {
+        "S8S_v3d_node_data": {
+          "frustumCulling": true,
+          "groupNames": ["Collection 1"],
+          "hidden": false,
+          "hidpiCompositing": false,
+          "objectColor": [1.0, 1.0, 1.0],
+          "objectIndex": 0,
+          "renderOrder": 0,
+          "useShadows": true
+        }
+      },
+      "mesh": 1,
+      "name": "DNA3",
+      "scale": [0.800000011920929, 0.800000011920929, 0.800000011920929],
+      "translation": [3.4752800464630127, -2.3460099697113037, -0.0]
+    },
+    {
+      "children": [4],
+      "name": "v3d_Proxy_Node_0_DNA3",
+      "translation": [-3.4752800464630127, 2.3460099697113037, -0.0]
+    },
+    {
+      "extensions": {
+        "S8S_v3d_node_data": {
+          "frustumCulling": true,
+          "groupNames": ["Collection 1"],
+          "hidden": false,
+          "hidpiCompositing": false,
+          "objectColor": [1.0, 1.0, 1.0],
+          "objectIndex": 0,
+          "renderOrder": 0,
+          "useShadows": true
+        }
+      },
+      "mesh": 1,
+      "name": "DNA5",
+      "scale": [0.9282793402671814, 0.9282793402671814, 0.9282792210578918],
+      "translation": [
+        4.644360542297363, 0.2986931800842285, -4.075173976048063e-9
+      ]
+    },
+    {
+      "children": [6],
+      "name": "v3d_Proxy_Node_0_DNA5",
+      "translation": [-3.4752800464630127, 2.3460099697113037, -0.0]
+    },
+    {
+      "extensions": {
+        "S8S_v3d_node_data": {
+          "frustumCulling": true,
+          "groupNames": ["Collection 1"],
+          "hidden": false,
+          "hidpiCompositing": false,
+          "objectColor": [1.0, 1.0, 1.0],
+          "objectIndex": 0,
+          "renderOrder": 0,
+          "useShadows": true
+        }
+      },
+      "mesh": 3,
+      "name": "texturebox",
+      "translation": [0.0, 0.0, 30.90094757080078]
+    },
+    {
+      "extensions": {
+        "S8S_v3d_node_data": {
+          "frustumCulling": true,
+          "groupNames": ["Collection 1"],
+          "hidden": false,
+          "hidpiCompositing": false,
+          "objectColor": [1.0, 1.0, 1.0],
+          "objectIndex": 0,
+          "renderOrder": 0
+        }
+      },
+      "name": "direction1",
+      "translation": [0.0, 0.0, 9.778329849243164]
+    },
+    {
+      "children": [18],
+      "extensions": {
+        "S8S_v3d_node_data": {
+          "frustumCulling": true,
+          "groupNames": ["Collection 1"],
+          "hidden": false,
+          "hidpiCompositing": false,
+          "objectColor": [1.0, 1.0, 1.0],
+          "objectIndex": 0,
+          "renderOrder": 0
+        }
+      },
+      "name": "DNA2f",
+      "rotation": [0.0, 0.0, -0.30901697278022766, 0.9510565400123596],
+      "scale": [0.9999998807907104, 0.9999998807907104, 1.0],
+      "translation": [-5.800000190734863, 3.078575849533081, -0.0]
+    },
+    {
+      "children": [20],
+      "extensions": {
+        "S8S_v3d_node_data": {
+          "frustumCulling": true,
+          "groupNames": ["Collection 1"],
+          "hidden": false,
+          "hidpiCompositing": false,
+          "objectColor": [1.0, 1.0, 1.0],
+          "objectIndex": 0,
+          "renderOrder": 0
+        }
+      },
+      "name": "DNA4f",
+      "rotation": [
+        -0.1540278047323227, -0.08018180727958679, 0.45473361015319824,
+        0.87353515625
+      ],
+      "scale": [1.2000001668930054, 1.2000000476837158, 1.2000000476837158],
+      "translation": [-13.69343376159668, -6.897471904754639, -28.0]
+    },
+    {
+      "children": [23, 10, 24, 11, 25, 14],
+      "extensions": {
+        "S8S_v3d_node_data": {
+          "frustumCulling": true,
+          "groupNames": ["Collection 1"],
+          "hidden": false,
+          "hidpiCompositing": false,
+          "objectColor": [1.0, 1.0, 1.0],
+          "objectIndex": 0,
+          "renderOrder": 0
+        }
+      },
+      "name": "fatherm"
+    },
+    {
+      "extensions": {
+        "S8S_v3d_node_data": {
+          "frustumCulling": true,
+          "groupNames": ["Collection 1"],
+          "hidden": true,
+          "hidpiCompositing": false,
+          "objectColor": [1.0, 1.0, 1.0],
+          "objectIndex": 0,
+          "renderOrder": 0,
+          "useShadows": true
+        }
+      },
+      "mesh": 5,
+      "name": "z球体"
+    },
+    {
+      "children": [22],
+      "extensions": {
+        "S8S_v3d_node_data": {
+          "frustumCulling": true,
+          "groupNames": ["Collection 1"],
+          "hidden": false,
+          "hidpiCompositing": false,
+          "objectColor": [1.0, 1.0, 1.0],
+          "objectIndex": 0,
+          "renderOrder": 0
+        }
+      },
+      "name": "DNA6f",
+      "rotation": [0.0, 0.0, -0.5, 0.8660253882408142],
+      "translation": [-14.971426963806152, -9.89084243774414, -40.0]
+    },
+    {
+      "extensions": {
+        "S8S_v3d_node_data": {
+          "frustumCulling": true,
+          "groupNames": ["Collection 1"],
+          "hidden": true,
+          "hidpiCompositing": false,
+          "objectColor": [1.0, 1.0, 1.0],
+          "objectIndex": 0,
+          "renderOrder": 0,
+          "useShadows": true
+        }
+      },
+      "mesh": 4,
+      "name": "zref1",
+      "scale": [0.30000007152557373, 0.30000007152557373, 0.30000007152557373]
+    },
+    {
+      "children": [3, 12],
+      "extensions": {
+        "S8S_v3d_node_data": {
+          "constraints": [
+            {
+              "fixCameraLightRotation": true,
+              "mute": false,
+              "name": "标准跟随",
+              "target": 9,
+              "trackAxis": "Z",
+              "type": "trackTo",
+              "upAxis": "Y"
+            }
+          ],
+          "frustumCulling": true,
+          "groupNames": ["Collection 1"],
+          "hidden": false,
+          "hidpiCompositing": false,
+          "objectColor": [1.0, 1.0, 1.0],
+          "objectIndex": 0,
+          "renderOrder": 0
+        }
+      },
+      "name": "father"
+    },
+    {
+      "extensions": {
+        "S8S_v3d_node_data": {
+          "frustumCulling": true,
+          "groupNames": ["Collection 1"],
+          "hidden": false,
+          "hidpiCompositing": false,
+          "objectColor": [1.0, 1.0, 1.0],
+          "objectIndex": 0,
+          "renderOrder": 0,
+          "useShadows": true
+        }
+      },
+      "mesh": 1,
+      "name": "DNA2",
+      "translation": [
+        5.00396728515625, -1.965191125869751, -2.5809438142232466e-8
+      ]
+    },
+    {
+      "children": [17],
+      "name": "v3d_Proxy_Node_0_DNA2",
+      "translation": [-3.4752800464630127, 2.3460099697113037, -0.0]
+    },
+    {
+      "extensions": {
+        "S8S_v3d_node_data": {
+          "frustumCulling": true,
+          "groupNames": ["Collection 1"],
+          "hidden": false,
+          "hidpiCompositing": false,
+          "objectColor": [1.0, 1.0, 1.0],
+          "objectIndex": 0,
+          "renderOrder": 0,
+          "useShadows": true
+        }
+      },
+      "mesh": 1,
+      "name": "DNA4",
+      "translation": [3.4752800464630127, -2.3460099697113037, -0.0]
+    },
+    {
+      "children": [19],
+      "name": "v3d_Proxy_Node_0_DNA4",
+      "translation": [-3.4752800464630127, 2.3460099697113037, -0.0]
+    },
+    {
+      "extensions": {
+        "S8S_v3d_node_data": {
+          "frustumCulling": true,
+          "groupNames": ["Collection 1"],
+          "hidden": false,
+          "hidpiCompositing": false,
+          "objectColor": [1.0, 1.0, 1.0],
+          "objectIndex": 0,
+          "renderOrder": 0,
+          "useShadows": true
+        }
+      },
+      "mesh": 2,
+      "name": "DNA6",
+      "scale": [0.9282793402671814, 0.9282793402671814, 0.9282792210578918],
+      "translation": [
+        0.36098337173461914, -0.780735969543457, 1.3448121194414853e-7
+      ]
+    },
+    {
+      "children": [21],
+      "name": "v3d_Proxy_Node_0_DNA6",
+      "translation": [-3.4752800464630127, 2.3460099697113037, -0.0]
+    },
+    {
+      "children": [2],
+      "extensions": {
+        "S8S_v3d_node_data": {
+          "frustumCulling": true,
+          "groupNames": ["Collection 1"],
+          "hidden": false,
+          "hidpiCompositing": false,
+          "objectColor": [1.0, 1.0, 1.0],
+          "objectIndex": 0,
+          "renderOrder": 0
+        }
+      },
+      "name": "DNA1f",
+      "rotation": [
+        -0.11383365839719772, 0.11029912531375885, -0.5239173769950867,
+        0.8368910551071167
+      ],
+      "scale": [1.100000023841858, 1.100000023841858, 1.100000023841858],
+      "translation": [8.420673370361328, -4.900744915008545, -12.0]
+    },
+    {
+      "children": [5],
+      "extensions": {
+        "S8S_v3d_node_data": {
+          "frustumCulling": true,
+          "groupNames": ["Collection 1"],
+          "hidden": false,
+          "hidpiCompositing": false,
+          "objectColor": [1.0, 1.0, 1.0],
+          "objectIndex": 0,
+          "renderOrder": 0
+        }
+      },
+      "name": "DNA3f",
+      "rotation": [
+        0.16042998433113098, -0.0664522796869278, -0.37686964869499207,
+        0.9098437428474426
+      ],
+      "scale": [0.9999998807907104, 1.0, 1.0],
+      "translation": [
+        1.9938631057739258, 9.874761581420898, -23.280000686645508
+      ]
+    },
+    {
+      "children": [7],
+      "extensions": {
+        "S8S_v3d_node_data": {
+          "frustumCulling": true,
+          "groupNames": ["Collection 1"],
+          "hidden": false,
+          "hidpiCompositing": false,
+          "objectColor": [1.0, 1.0, 1.0],
+          "objectIndex": 0,
+          "renderOrder": 0
+        }
+      },
+      "name": "DNA5f",
+      "rotation": [
+        -0.17298738658428192, 0.015134434215724468, -0.0858316496014595,
+        0.981060266494751
+      ],
+      "scale": [0.9999999403953552, 1.0, 0.9999999403953552],
+      "translation": [-17.98660659790039, 3.9683492183685303, -20.0]
+    },
+    {
+      "extensions": {
+        "S8S_v3d_node_data": {
+          "frustumCulling": true,
+          "groupNames": ["Collection 1"],
+          "hidden": true,
+          "hidpiCompositing": false,
+          "objectColor": [1.0, 1.0, 1.0],
+          "objectIndex": 0,
+          "renderOrder": 0,
+          "useShadows": true
+        }
+      },
+      "mesh": 1,
+      "name": "zDNAA",
+      "translation": [
+        -8.4627981777885e-6, 10.920021057128906, 8.662629261380062e-5
+      ]
+    }
+  ],
+  "samplers": [{}],
+  "scene": 0,
+  "scenes": [
+    {
+      "extensions": {
+        "S8S_v3d_scene_data": {
+          "aaMethod": "AUTO",
+          "iblEnvironmentMode": "PMREM",
+          "physicallyCorrectLights": true,
+          "pmremMaxTileSize": 256,
+          "shadowMap": {
+            "esmDistanceScale": 1.0,
+            "renderReverseSided": false,
+            "renderSingleSided": true,
+            "type": "PCFPOISSON"
+          },
+          "worldMaterial": 3
+        }
+      },
+      "extras": { "animFrameRate": 24, "coordSystem": "Z_UP_RIGHT" },
+      "name": "Scene",
+      "nodes": [0, 9, 16, 15, 13, 8, 26]
+    }
+  ],
+  "textures": [
+    {
+      "extensions": {
+        "S8S_v3d_texture_data": { "anisotropy": 16, "colorSpace": "srgb" }
+      },
+      "name": "DNA.png",
+      "sampler": 0,
+      "source": 0
+    },
+    {
+      "extensions": {
+        "S8S_v3d_texture_data": { "anisotropy": 16, "colorSpace": "srgb" }
+      },
+      "name": "light.png",
+      "sampler": 0,
+      "source": 1
+    },
+    {
+      "extensions": {
+        "S8S_v3d_texture_data": { "anisotropy": 16, "colorSpace": "srgb" }
+      },
+      "name": "DNA.png",
+      "sampler": 0,
+      "source": 0
+    },
+    {
+      "extensions": {
+        "S8S_v3d_texture_data": { "anisotropy": 16, "colorSpace": "srgb" }
+      },
+      "name": "light.png",
+      "sampler": 0,
+      "source": 1
+    },
+    {
+      "extensions": { "S8S_v3d_texture_data": { "colorSpace": "linear" } },
+      "name": "studio010.hdr",
+      "sampler": 0,
+      "source": 2
+    }
+  ]
+}

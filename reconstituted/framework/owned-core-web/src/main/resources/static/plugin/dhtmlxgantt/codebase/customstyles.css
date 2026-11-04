@@ -1,0 +1,33 @@
+#gantt_here, 
+.gantt_layout_cell.gantt_layout_root.gantt_layout, 
+.gantt_layout_cell.gantt_layout.gantt_layout_x, 
+.gantt_layout_cell.timeline_cell.gantt_layout_outer_scroll, 
+.gantt_layout_content, 
+.gantt_task, .gantt_task_bg, 
+.gantt_data_area {
+    width: auto !important; display: inline-block; height: auto !important;
+} 
+
+.gantt_task_scale, 
+.gantt_scale_line {
+    width: auto !important;
+} 
+
+.gantt_grid_data {
+    overflow: unset; height: auto !important;
+} 
+
+.gantt_task_bg, 
+.gantt_scale_line, 
+.gantt_scale_line {
+    overflow: unset;
+} 
+
+.gantt_layout_cell.gantt_hor_scroll {
+    height: 0px !important;
+}
+
+.gantt_layout_cell.gantt_resizer {
+    width: 2px !important;
+}
+

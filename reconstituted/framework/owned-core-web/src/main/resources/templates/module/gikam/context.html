@@ -1,0 +1,23 @@
+<base th:href="${#request.getContextPath()}+'/'">
+
+<script th:inline="javascript">
+/*<![CDATA[*/
+    (function(win) {
+        var servletContext = /*[[@{/}]]*/'';
+        if (servletContext !== '') {
+            servletContext = servletContext.replace(/\/$/,'');
+        }
+        win.IFM_CONTEXT = location.origin + servletContext;
+        if (win.$frontendAlone !== true) {
+            win.history.replaceState({}, '', win.IFM_CONTEXT.replace(location.origin, '') + '/');
+        }
+    })(window);
+/*]]>*/
+
+
+
+
+
+
+</script>
+

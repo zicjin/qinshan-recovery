@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg  viewBox="0 0 144 80" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+     <defs>
+        <polygon id="icon-bi-report-tool1_path-1" points="0 0 60 0 60 60 0 60"></polygon>
+        <polygon id="icon-bi-report-tool1_path-3" points="-3 -3 3 -3 3 3 -3 3"></polygon>
+        <polygon id="icon-bi-report-tool1_path-5" points="57 -3 63 -3 63 3 57 3"></polygon>
+        <polygon id="icon-bi-report-tool1_path-7" points="-3 57 3 57 3 63 -3 63"></polygon>
+        <polygon id="icon-bi-report-tool1_path-9" points="57 57 63 57 63 63 57 63"></polygon>
+    </defs>
+    <g id="icon-bi-report-tool1_页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="icon-bi-report-tool1_白色版本" transform="translate(-688.000000, -1380.000000)">
+            <g id="icon-bi-report-tool1_文本" transform="translate(672.000000, 1356.000000)">
+                <g transform="translate(16.000000, 24.000000)">
+                    <rect id="icon-bi-report-tool1_矩形" x="0" y="0" width="144" height="80"></rect>
+                    <g id="icon-bi-report-tool1_三角形" transform="translate(42.000000, 10.000000)">
+                        <mask id="icon-bi-report-tool1_mask-2" fill="white">
+                            <use xlink:href="#icon-bi-report-tool1_path-1"></use>
+                        </mask>
+                        <use id="icon-bi-report-tool1_蒙版" stroke="#587EF7" stroke-dasharray="2" fill-rule="nonzero" xlink:href="#icon-bi-report-tool1_path-1"></use>
+                        <path d="M52.3197115,24.7692308 L35.96875,24.7692308 C35.7320913,24.7692308 35.5384615,24.9628606 35.5384615,25.1995192 L35.5384615,31.2235577 C35.5384615,31.4602163 35.7320913,31.6538462 35.96875,31.6538462 L38.5504808,31.6538462 C38.7871394,31.6538462 38.9807692,31.4602163 38.9807692,31.2235577 L38.9807692,28.2115385 L42.2079327,28.2115385 L42.2079327,45.4230769 L39.733774,45.4230769 C39.4971154,45.4230769 39.3034856,45.6167067 39.3034856,45.8533654 L39.3034856,48.4350962 C39.3034856,48.6717548 39.4971154,48.8653846 39.733774,48.8653846 L48.5546875,48.8653846 C48.7913462,48.8653846 48.984976,48.6717548 48.984976,48.4350962 L48.984976,45.8533654 C48.984976,45.6167067 48.7913462,45.4230769 48.5546875,45.4230769 L46.0805288,45.4230769 L46.0805288,28.2115385 L49.3076923,28.2115385 L49.3076923,31.2235577 C49.3076923,31.4602163 49.5013221,31.6538462 49.7379808,31.6538462 L52.3197115,31.6538462 C52.5563702,31.6538462 52.75,31.4602163 52.75,31.2235577 L52.75,25.1995192 C52.75,24.9628606 52.5563702,24.7692308 52.3197115,24.7692308 Z M38.1201923,18.3149038 L38.1201923,11.4302885 C38.1201923,11.1936298 37.9265625,11 37.6899038,11 L8.43028846,11 C8.19362981,11 8,11.1936298 8,11.4302885 L8,18.3149038 C8,18.5515625 8.19362981,18.7451923 8.43028846,18.7451923 L11.4423077,18.7451923 C11.6789663,18.7451923 11.8725962,18.5515625 11.8725962,18.3149038 L11.8725962,14.8725962 L20.9086538,14.8725962 L20.9086538,44.9927885 L15.9603365,44.9927885 C15.7236779,44.9927885 15.5300481,45.1864183 15.5300481,45.4230769 L15.5300481,48.4350962 C15.5300481,48.6717548 15.7236779,48.8653846 15.9603365,48.8653846 L30.1598558,48.8653846 C30.3965144,48.8653846 30.5901442,48.6717548 30.5901442,48.4350962 L30.5901442,45.4230769 C30.5901442,45.1864183 30.3965144,44.9927885 30.1598558,44.9927885 L25.2115385,44.9927885 L25.2115385,14.8725962 L34.2475962,14.8725962 L34.2475962,18.3149038 C34.2475962,18.5515625 34.441226,18.7451923 34.6778846,18.7451923 L37.6899038,18.7451923 C37.9265625,18.7451923 38.1201923,18.5515625 38.1201923,18.3149038 Z" id="icon-bi-report-tool1_形状" fill="#587EF7" fill-rule="nonzero" mask="url(#icon-bi-report-tool1_mask-2)"></path>
+                        <mask id="icon-bi-report-tool1_mask-4" fill="white">
+                            <use xlink:href="#icon-bi-report-tool1_path-3"></use>
+                        </mask>
+                        <use id="icon-bi-report-tool1_蒙版" fill="#8BB3FF" fill-rule="nonzero" xlink:href="#icon-bi-report-tool1_path-3"></use>
+                        <mask id="icon-bi-report-tool1_mask-6" fill="white">
+                            <use xlink:href="#icon-bi-report-tool1_path-5"></use>
+                        </mask>
+                        <use id="icon-bi-report-tool1_蒙版" fill="#8BB3FF" fill-rule="nonzero" xlink:href="#icon-bi-report-tool1_path-5"></use>
+                        <mask id="icon-bi-report-tool1_mask-8" fill="white">
+                            <use xlink:href="#icon-bi-report-tool1_path-7"></use>
+                        </mask>
+                        <use id="icon-bi-report-tool1_蒙版" fill="#8BB3FF" fill-rule="nonzero" xlink:href="#icon-bi-report-tool1_path-7"></use>
+                        <mask id="icon-bi-report-tool1_mask-10" fill="white">
+                            <use xlink:href="#icon-bi-report-tool1_path-9"></use>
+                        </mask>
+                        <use id="icon-bi-report-tool1_蒙版" fill="#8BB3FF" fill-rule="nonzero" xlink:href="#icon-bi-report-tool1_path-9"></use>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

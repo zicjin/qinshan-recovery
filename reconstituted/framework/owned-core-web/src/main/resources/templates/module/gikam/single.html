@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset=utf-8 />
+<meta http-equiv=X-UA-Compatible content="IE=edge" />
+<meta name=viewport content="width=device-width,initial-scale=1" />
+
+<script>
+    window.__$single__ = true;
+</script>
+
+<base th:href="${#request.getContextPath()}+'/'">
+
+<script th:inline="javascript">
+/*<![CDATA[*/
+    (function(win) {
+        var servletContext = /*[[@{/}]]*/'';
+        if (servletContext !== '') {
+            servletContext = servletContext.replace(/\/$/,'');
+        }
+        win.IFM_CONTEXT = location.origin + servletContext;
+    })(window);
+/*]]>*/
+</script>
+
+<style type="text/css">
+    body .grid>.grid-body table>tbody>tr>td {
+        border-right: 1px solid #d9d9d9;
+        border-bottom: 1px solid #d9d9d9;
+    }
+</style>
+
+<link th:href="@{/static/gikam/main/css/chunk-common.css}" rel=stylesheet />
+<link th:href="@{/static/gikam/main/css/chunk-vendors.css}" rel="stylesheet" />
+</head>
+<body>
+    <script th:src="@{/static/gikam/main/js/chunk-vendors.js}"></script>
+    <script th:src="@{/static/gikam/main/js/chunk-common.js}"></script>
+    <script th:src="@{/static/gikam/main/js/gikam.js}"></script>
+    <script th:src="@{/static/gikam/extends/gikam-extend.js}"></script>
+    <script th:src="@{/static/gikam/extend/js/chunk-vendors.js}"></script>
+    <script th:src="@{/static/gikam/extend/js/extend.js}"></script>
+    <th:block th:replace="module/gikam/gikam-config" />
+</body>
+</html>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+
+    var IndexPage = function(options) {
+        var pageParam = Gikam.getElParam([[${param}]])['page-params'];
+        if(pageParam) {
+            try {
+                pageParam = JSON.parse(decodeURIComponent(pageParam));
+            } catch {
+                pageParam= {};
+            }
+        }
+
+        this.initWindow = function() {
+            this.window = Gikam.create('window', {
+                renderTo : document.body,
+                title : (options && options.title) ? options.title : null
+            });
+            options && options.url && this.window.loadPage(options.url, pageParam);
+            Gikam.window = this.window;
+        };
+
+        this.initI18N = function() {
+            return Gikam.component.FrontI18N.init(Gikam.locale);
+        };
+
+        this.init = function() {
+            var _this = this;
+            window.workspace = this;
+            Gikam.getJson(Gikam.IFM_CONTEXT + '/secure/core/module/lcdp/global-configs/SYS_CLIENT_JS/content').then(function(data) {
+                eval(data.content);
+                return Gikam.getJson(Gikam.IFM_CONTEXT + '/secure/core/module/lcdp/global-comp-configs');
+            }).then(function(comps) {
+                Gikam.setCompConfig(comps, true);
+                return Gikam.getText(Gikam.IFM_CONTEXT + '/core/module/sys/logins/account');
+            }).then(function(result) {
+                var user = JSON.parse(result);
+                window.workspace.user = user;
+                Gikam.loginUser = user;
+                if (user.ext$ && user.ext$.roles) {
+                    var roles = JSON.parse(user.ext$.roles);
+                    user.roles = roles.map(function(role) {return role.roleId;} );
+                }
+                _this.initI18N().then(function() {
+                    _this.initWindow();
+                })
+            })
+        };
+
+        this.init();
+
+        return this;
+    };
+
+    /*]]>*/
+</script>
+
+
+
+<!-- -------------------应用------------------>
+
+<!-- 引入单业务页面模板 -->
+<!-- <th:block th:replace="module/gikam/single" />
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+        
+    // 一、 当前页面直接加载js
+    new IndexPage({
+        title : '用户管理'
+    }).done(function() {
+        Gikam.requirejs([ '/static/module/mdm/users/core-user.js',
+                          '/static/module/mdm/users/core-user-edit-list.js'
+                        ]);
+        coreUser.editPage.init(Gikam.getElParam([[${param}]]));
+    });
+    
+    // 二、 引入其他业务页面
+    new IndexPage({
+        url : IFM_CONTEXT + 'secure/core/module/mdm/users/page/edit-list',
+        title : '用户管理'
+    });
+    /*]]>*/
+</script> -->
+
+<!------------------------------------------>
+
+

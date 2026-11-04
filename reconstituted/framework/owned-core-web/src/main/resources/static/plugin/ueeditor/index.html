@@ -1,0 +1,363 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+<head>
+    <title>完整demo</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <script type="text/javascript" charset="utf-8" src="ueditor.config.js"></script>
+    <script type="text/javascript" charset="utf-8" src="ueditor.all.js"> </script>
+    <!--建议手动加在语言，避免在ie下有时因为加载语言失败导致编辑器加载失败-->
+    <!--这里加载的语言文件会覆盖你在配置项目里添加的语言类型，比如你在配置项目里配置的是英文，这里加载的中文，那最后就是中文-->
+    <script type="text/javascript" charset="utf-8" src="lang/zh-cn/zh-cn.js"></script>
+    <script type="text/javascript" charset="utf-8" src="kityformula-plugin/addKityFormulaDialog.js"></script>
+    <script type="text/javascript" charset="utf-8" src="kityformula-plugin/getKfContent.js"></script>
+    <script type="text/javascript" charset="utf-8" src="kityformula-plugin/defaultFilterFix.js"></script>
+
+    <style type="text/css">
+        div {
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <script id="editor" type="text/plain" style="width:800px;height:500px;"></script>
+    </div>
+    <!-- <div id="btns">
+    <div>
+        <button onclick="getAllHtml()">获得整个html的内容</button>
+        <button onclick="getContent()">获得内容</button>
+        <button onclick="setContent()">写入内容</button>
+        <button onclick="setContent(true)">追加内容</button>
+        <button onclick="getContentTxt()">获得纯文本</button>
+        <button onclick="getPlainTxt()">获得带格式的纯文本</button>
+        <button onclick="hasContent()">判断是否有内容</button>
+        <button onclick="setFocus()">使编辑器获得焦点</button>
+        <button onmousedown="isFocus(event)">编辑器是否获得焦点</button>
+        <button onmousedown="setblur(event)" >编辑器失去焦点</button>
+
+    </div>
+    <div>
+        <button onclick="getText()">获得当前选中的文本</button>
+        <button onclick="insertHtml()">插入给定的内容</button>
+        <button id="enable" onclick="setEnabled()">可以编辑</button>
+        <button onclick="setDisabled()">不可编辑</button>
+        <button onclick=" UE.getEditor('editor').setHide()">隐藏编辑器</button>
+        <button onclick=" UE.getEditor('editor').setShow()">显示编辑器</button>
+        <button onclick=" UE.getEditor('editor').setHeight(300)">设置高度为300默认关闭了自动长高</button>
+    </div>
+
+    <div>
+        <button onclick="getLocalData()" >获取草稿箱内容</button>
+        <button onclick="clearLocalData()" >清空草稿箱</button>
+    </div>
+
+</div>
+<div>
+    <button onclick="createEditor()">
+    创建编辑器</button>
+    <button onclick="deleteEditor()">
+    删除编辑器</button>
+</div> -->
+
+    <script type="text/javascript">
+
+        //实例化编辑器
+        //建议使用工厂方法getEditor创建和引用编辑器实例，如果在某个闭包下引用该编辑器，直接调用UE.getEditor('editor')就能拿到相关的实例
+        var ue = UE.getEditor('editor', {
+            toolbars: [[
+            	'source','emotion','preview', 'bold', 'italic', 'underline', 'overline', 'superscript', 'subscript','|', 'fontfamily', 'fontsize', '|', 'spechars', 'kityformula',
+            ]],
+
+            fontsize: [8, 9, 10, 11, 12, 14, 16, 18, 20, 24, 36],
+
+        });
+        if (window.setCommonUsed) {
+            UE.registerUI('commonuse', function (editor, uiName) {
+                //注册按钮执行时的command命令,用uiName作为command名字，使用命令默认就会带有回退操作
+                editor.registerCommand('commonuse', {
+                    execCommand: function (cmdName, value) {
+                    	editor.execCommand('inserthtml', value);
+                    },
+                });
+
+                //创建下拉菜单中的键值对，这里我用字体大小作为例子
+                var items = [];
+                for (var i = 0, ci; ci = window.setCommonUsed[i++];) {
+                    items.push({
+                        //显示的条目
+                        label: ci,
+                        //选中条目后的返回值
+                        value: ci,
+                        //针对每个条目进行特殊的渲染
+                        renderLabelHtml: function () {
+                            //这个是希望每个条目的字体是不同的
+                            return '<div class="edui-label %%-label limit-img" style="line-height:2;font-size:' +
+                                12 + 'px;">' + (this.label || '') + '</div>';
+                        }
+                    });
+                }
+                //创建下来框
+                var combox = new UE.ui.Combox({
+                    //需要指定当前的编辑器实例
+                    editor: editor,
+                    //添加条目
+                    items: items,
+                    //当选中时要做的事情
+                    onselect: function (t, index) {
+                        //拿到选中条目的值
+                        editor.execCommand(uiName, this.items[index].value);
+                    },
+                    //提示
+                    title: '常用文本',
+                    //当编辑器没有焦点时，combox默认显示的内容
+                    initValue: '常用文本',
+                    noLabelChange:true,
+                    className: 'edui-for-commonuse'
+                });
+
+                
+                UE.ui.buttons['commonuse'] = combox;
+                return combox;
+            }, 10/*index 指定添加到工具栏上的那个位置，默认时追加到最后,editorId 指定这个UI是那个编辑器实例上的，默认是页面上所有的编辑器都会添加这个按钮*/);
+        }
+        UE.registerUI('dialog', function (editor, uiName) {
+            //创建dialog
+            var dialog = new UE.ui.Dialog({
+                //指定弹出层中页面的路径，这里只能支持页面,因为跟addCustomizeDialog.js相同目录，所以无需加路径
+                iframeUrl: 'customizeDialogPage.html',
+                //需要指定当前的编辑器实例
+                editor: editor,
+                //指定dialog的名字
+                name: uiName,
+                //dialog的标题
+                title: "提示",
+
+                //指定dialog的外围样式
+                cssRules: "width:600px;height:300px;",
+
+                //如果给出了buttons就代表dialog有确定和取消
+                buttons: [
+                    {
+                        className: 'edui-okbutton',
+                        label: '确定',
+                        onclick: function () {
+                            dialog.close(true);
+                        }
+                    },
+                    {
+                        className: 'edui-cancelbutton',
+                        label: '取消',
+                        onclick: function () {
+                            dialog.close(false);
+                        }
+                    }
+                ]
+            });
+
+            //参考addCustomizeButton.js
+            var btn = new UE.ui.Button({
+                name: 'dialogbutton' + uiName,
+                title: '技巧',
+                //需要添加的额外样式，指定icon图标，这里默认使用一个重复的icon
+                cssRules: 'background-position: -340px 0;',
+                onclick: function () {
+                    //渲染dialog
+                    dialog.render();
+                    dialog.open();
+                }
+            });
+
+            return btn;
+        }/*index 指定添加到工具栏上的那个位置，默认时追加到最后,editorId 指定这个UI是那个编辑器实例上的，默认是页面上所有的编辑器都会添加这个按钮*/);
+
+        UE.registerUI('myupload', function (editor, uiName) {
+            //注册按钮执行时的command命令，使用命令默认就会带有回退操作
+            editor.registerCommand(uiName, {
+                execCommand: function () {
+                    var input = document.createElement('input')
+                    var that = this
+                    input.setAttribute('type', 'file');
+                    input.setAttribute('accept', "image/*");
+                    input.addEventListener('change', function (event) {
+                        var file = event.target.files[0];
+                        // 图片直接转base64
+                        let reader = new FileReader()   //新建一个FileReader对象
+                        reader.readAsDataURL(file)   //将读取的文件转换成base64格式
+                        reader.onload = function (e) {
+                            var img = '<img src=' + e.target.result + ' />'
+                            that.execCommand('inserthtml', img);
+                        }
+                    });
+                    input.click();
+                }
+            });
+
+            //创建一个button
+            var btn = new UE.ui.Button({
+                //按钮的名字
+                name: uiName,
+                //提示
+                title: '上传图片',
+                //需要添加的额外样式，指定icon图标，这里默认使用一个重复的icon
+                cssRules: 'background-position: -380px 0;',
+                //点击时执行的命令
+                onclick: function () {
+                    //这里可以不用执行命令,做你自己的操作也可
+                    editor.execCommand(uiName);
+                }
+            });
+
+            //当点到编辑内容上时，按钮要做的状态反射
+            editor.addListener('selectionchange', function () {
+                var state = editor.queryCommandState(uiName);
+                if (state == -1) {
+                    btn.setDisabled(true);
+                    btn.setChecked(false);
+                } else {
+                    btn.setDisabled(false);
+                    btn.setChecked(state);
+                }
+            });
+
+            //因为你是添加button,所以需要返回这个button
+            return btn;
+        }/*index 指定添加到工具栏上的那个位置，默认时追加到最后,editorId 指定这个UI是那个编辑器实例上的，默认是页面上所有的编辑器都会添加这个按钮*/);
+
+        window.getData = function () {
+            return UE.getEditor('editor').getContent();
+        };
+
+        window.setData = function (value) {
+            var value = value || ''
+            ue.ready(function () {            	
+            	ue.setContent(value);
+            })
+        };
+
+        ue.ready(function () {
+            UE.dom.domUtils.on(ue.body, "keydown", function (oEvent) {
+                var oEvent = oEvent || window.oEvent;
+                //获取键盘的keyCode值
+                var nKeyCode = oEvent.keyCode || oEvent.which || oEvent.charCode;
+                var bCtrlKeyCode = oEvent.ctrlKey || oEvent.metaKey;
+                if (bCtrlKeyCode === true && oEvent.altKey === true && nKeyCode === 187) {
+                    ue.execCommand('superscript'); //设置上标
+                }
+                if (bCtrlKeyCode === true && oEvent.altKey === true && nKeyCode === 189) {
+                    ue.execCommand('subscript'); //设置下标
+                }
+            });
+        });
+
+
+        function isFocus(e) {
+            alert(UE.getEditor('editor').isFocus());
+            UE.dom.domUtils.preventDefault(e)
+        }
+        function setblur(e) {
+            UE.getEditor('editor').blur();
+            UE.dom.domUtils.preventDefault(e)
+        }
+        function insertHtml() {
+            var value = prompt('插入html代码', '');
+            UE.getEditor('editor').execCommand('insertHtml', value)
+        }
+        function createEditor() {
+            enableBtn();
+            UE.getEditor('editor');
+        }
+        function getAllHtml() {
+            alert(UE.getEditor('editor').getAllHtml())
+        }
+        function getContent() {
+            var arr = [];
+            arr.push("使用editor.getContent()方法可以获得编辑器的内容");
+            arr.push("内容为：");
+            arr.push(UE.getEditor('editor').getContent());
+            alert(arr.join("\n"));
+        }
+        function getPlainTxt() {
+            var arr = [];
+            arr.push("使用editor.getPlainTxt()方法可以获得编辑器的带格式的纯文本内容");
+            arr.push("内容为：");
+            arr.push(UE.getEditor('editor').getPlainTxt());
+            alert(arr.join('\n'))
+        }
+        function setContent(isAppendTo) {
+            var arr = [];
+            arr.push("使用editor.setContent('欢迎使用ueditor')方法可以设置编辑器的内容");
+            UE.getEditor('editor').setContent('欢迎使用ueditor', isAppendTo);
+            alert(arr.join("\n"));
+        }
+        function setDisabled() {
+            UE.getEditor('editor').setDisabled('fullscreen');
+            disableBtn("enable");
+        }
+
+        function setEnabled() {
+            UE.getEditor('editor').setEnabled();
+            enableBtn();
+        }
+
+        function getText() {
+            //当你点击按钮时编辑区域已经失去了焦点，如果直接用getText将不会得到内容，所以要在选回来，然后取得内容
+            var range = UE.getEditor('editor').selection.getRange();
+            range.select();
+            var txt = UE.getEditor('editor').selection.getText();
+            alert(txt)
+        }
+
+        function getContentTxt() {
+            var arr = [];
+            arr.push("使用editor.getContentTxt()方法可以获得编辑器的纯文本内容");
+            arr.push("编辑器的纯文本内容为：");
+            arr.push(UE.getEditor('editor').getContentTxt());
+            alert(arr.join("\n"));
+        }
+        function hasContent() {
+            var arr = [];
+            arr.push("使用editor.hasContents()方法判断编辑器里是否有内容");
+            arr.push("判断结果为：");
+            arr.push(UE.getEditor('editor').hasContents());
+            alert(arr.join("\n"));
+        }
+        function setFocus() {
+            UE.getEditor('editor').focus();
+        }
+        function deleteEditor() {
+            disableBtn();
+            UE.getEditor('editor').destroy();
+        }
+        function disableBtn(str) {
+            var div = document.getElementById('btns');
+            var btns = UE.dom.domUtils.getElementsByTagName(div, "button");
+            for (var i = 0, btn; btn = btns[i++];) {
+                if (btn.id == str) {
+                    UE.dom.domUtils.removeAttributes(btn, ["disabled"]);
+                } else {
+                    btn.setAttribute("disabled", "true");
+                }
+            }
+        }
+        function enableBtn() {
+            var div = document.getElementById('btns');
+            var btns = UE.dom.domUtils.getElementsByTagName(div, "button");
+            for (var i = 0, btn; btn = btns[i++];) {
+                UE.dom.domUtils.removeAttributes(btn, ["disabled"]);
+            }
+        }
+
+        function getLocalData() {
+            alert(UE.getEditor('editor').execCommand("getlocaldata"));
+        }
+
+        function clearLocalData() {
+            UE.getEditor('editor').execCommand("clearlocaldata");
+            alert("已清空草稿箱")
+        }
+    </script>
+</body>
+
+</html>

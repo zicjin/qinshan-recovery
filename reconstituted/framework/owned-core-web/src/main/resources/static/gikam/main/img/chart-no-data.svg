@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="92px" height="67px" viewBox="0 0 92 67" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>空数据集</title>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="报告中心-编辑报告-图表-空数据集" transform="translate(-296.000000, -205.000000)">
+            <g id="空数据集" transform="translate(287.000000, 197.000000)">
+                <rect id="矩形" x="0" y="0" width="110" height="80"></rect>
+                <path d="M9,67 L101,67 L101,71 C101,73.209139 99.209139,75 97,75 L13,75 C10.790861,75 9,73.209139 9,71 L9,67 L9,67 Z" id="矩形备份-11" fill="#7AAAF5" fill-rule="nonzero" opacity="0.246039618"></path>
+                <path d="M55.3558521,8 L66,18.7407326 L66,67 L21,67 L21,8 L55.3558521,8 Z M35,52 L30,52 L30,55 L35,55 L35,52 Z M57,52 L38,52 L38,55 L57,55 L57,52 Z M35,45 L30,45 L30,48 L35,48 L35,45 Z M57,45 L38,45 L38,48 L57,48 L57,45 Z M35,38 L30,38 L30,41 L35,41 L35,38 Z M57,38 L38,38 L38,41 L57,41 L57,38 Z M57,28 L30,28 L30,33 L57,33 L57,28 Z" id="形状结合" fill="#7AAAF5" fill-rule="nonzero" opacity="0.653432392"></path>
+                <path d="M67.3558521,8 L78,18.9541187 L78,67 L66,67 L66,54.999 L69,55 L69,52 L66,51.999 L66,47.999 L69,48 L69,45 L66,44.999 L66,40.999 L69,41 L69,38 L66,37.999 L66,33 L69,33 L69,28 L66,28 L66,19 L55,8 L67.3558521,8 Z" id="形状结合" fill="#7AAAF5" fill-rule="nonzero" opacity="0.484589804"></path>
+                <path d="M79.3558521,8 L90,18.9541187 L90,67 L78,67 L78,54.999 L81,55 L81,52 L78,51.999 L78,47.999 L81,48 L81,45 L78,44.999 L78,40.999 L81,41 L81,38 L78,37.999 L78,33 L81,33 L81,28 L78,28 L78,19 L67,8 L79.3558521,8 Z" id="形状结合备份-2" fill="#7AAAF5" fill-rule="nonzero" opacity="0.195098695"></path>
+                <polygon id="矩形备份-15" fill="#7AAAF5" opacity="0.699880327" points="55.2307692 8 66 18.7692308 55.2307692 18.7692308"></polygon>
+            </g>
+        </g>
+    </g>
+</svg>

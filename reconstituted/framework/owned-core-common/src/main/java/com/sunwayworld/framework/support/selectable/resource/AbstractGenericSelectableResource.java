@@ -1,0 +1,29 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
+package com.sunwayworld.framework.support.selectable.resource;
+
+import com.sunwayworld.framework.log.annotation.Log;
+import com.sunwayworld.framework.log.annotation.LogType;
+import com.sunwayworld.framework.support.domain.Persistable;
+import com.sunwayworld.framework.support.selectable.resource.GenericSelectableCloudResource;
+import com.sunwayworld.framework.support.selectable.service.GenericSelectableService;
+import java.io.Serializable;
+import java.util.ArrayList;
+
+public interface AbstractGenericSelectableResource<S extends GenericSelectableService<T, ID>, T extends Persistable<ID>, ID extends Serializable>
+extends GenericSelectableCloudResource<T, ID> {
+    public S getService();
+
+    @Override
+    @Log(value="\u4e0b\u62c9\u6846\u6570\u636e\u67e5\u8be2", type=LogType.SELECT)
+    default public ArrayList<T> selectSelectableList() {
+        return (ArrayList)this.getService().selectSelectableList();
+    }
+
+    @Override
+    @Log(value="\u4e0b\u62c9\u6846\u6570\u636e\u67e5\u8be2\uff08POST\u8bf7\u6c42\uff09", type=LogType.SELECT)
+    default public ArrayList<T> selectPostSelectableList() {
+        return (ArrayList)this.getService().selectSelectableList();
+    }
+}

@@ -1,0 +1,11 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
+package com.sunwayworld.cloud.module.lcdp.moduletmpl.service;
+
+import com.sunwayworld.cloud.module.lcdp.moduletmpl.bean.LcdpCustomTmplResourceBean;
+import com.sunwayworld.framework.support.base.service.GenericService;
+
+public interface LcdpCustomTmplResourceService
+extends GenericService<LcdpCustomTmplResourceBean, Long> {
+}

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="480px" height="216px" viewBox="0 0 480 216" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>详情底图</title>
+    <defs>
+        <rect id="path-1" x="0" y="0" width="480" height="216"></rect>
+        <linearGradient x1="77.2368812%" y1="21.8594995%" x2="93.4291413%" y2="71.9565588%" id="linearGradient-3">
+            <stop stop-color="#FFFFFF" stop-opacity="0" offset="0%"></stop>
+            <stop stop-color="#FFFFFF" stop-opacity="0.85" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="42.9828711%" y1="22.1468597%" x2="112.214383%" y2="50.5379302%" id="linearGradient-4">
+            <stop stop-color="#FFFFFF" stop-opacity="0" offset="0%"></stop>
+            <stop stop-color="#FFFFFF" stop-opacity="0.85" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="控件" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="详情底图">
+            <mask id="mask-2" fill="white">
+                <use xlink:href="#path-1"></use>
+            </mask>
+            <use id="矩形" fill="#F1F1F1" xlink:href="#path-1"></use>
+            <path d="M85,230 C179.440692,230 256,153.440692 256,59 C256,-35.4406922 179.440692,-112 85,-112 C-9.44069222,-112 -86,-35.4406922 -86,59 C-86,128.176481 -59.0928923,203.072229 0,230 C21.5815443,239.834396 59.7357891,230 85,230 Z" id="椭圆形" fill="url(#linearGradient-3)" mask="url(#mask-2)"></path>
+            <circle id="椭圆形备份" fill="url(#linearGradient-4)" mask="url(#mask-2)" cx="206" cy="204" r="171"></circle>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="14px" height="14px" viewBox="0 0 14 14" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 64 (93537) - https://sketch.com -->
+    <title>报告设置-主题风格选中</title>
+    <desc>Created with Sketch.</desc>
+    <g id="报告中心" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="报告中心-编辑报告（样式）" transform="translate(-1001.000000, -158.000000)">
+            <g id="报告设置-主题风格选中" transform="translate(1001.000000, 158.000000)">
+                <circle id="椭圆形" fill="#337BF1" cx="7" cy="7" r="7"></circle>
+                <path d="M10.9083333,4.57916666 L5.62916666,9.8 C5.6,9.82916666 5.54166666,9.82916666 5.5125,9.8 L3.0625,7.2625 C3.03333334,7.23333334 3.03333334,7.175 3.0625,7.14583334 L3.4125,6.67916666 C3.44166666,6.65 3.5,6.65 3.52916666,6.65 L5.5125,8.16666666 C5.54166666,8.19583332 5.6,8.19583332 5.62916666,8.16666666 L10.4708333,4.17083334 C10.5,4.14166668 10.5583333,4.14166668 10.5875,4.17083334 L10.9083333,4.49166666 C10.9375,4.49166666 10.9375,4.55 10.9083333,4.57916666 Z" id="路径" fill="#FFFFFF" fill-rule="nonzero"></path>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>富文本编辑器</title>
+    <style>
+        body {
+            margin: 0;
+        }
+
+        #editor {
+            display: none;
+        }
+
+        .cke {
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+    </style>
+
+    <style id="script-field-style"></style>
+</head>
+
+<body>
+    <textarea id="editor"></textarea>
+</body>
+<script src="./ckeditor.js"></script>
+<script>
+    var isCkeditorBlur = false;
+    var timer = null;
+    var $editor;
+
+    document.body.addEventListener('mouseleave', function () {
+        top.Gikam?.showMask();
+        isCkeditorBlur = true;
+        $editor && $editor.ckeditor.fire('change');
+    })
+
+    document.body.addEventListener('mouseenter', function () {
+        isCkeditorBlur = false;
+    })
+
+    var parent = {
+
+        initEvent: function (param) {
+            var _this = this;
+
+            this.ckeditor.on('instanceReady', function () {
+                _this.options.options.readonly && _this.setReadonly();
+            });
+
+            this.ckeditor.on('contentDom', function () {
+                this.editable().on('click', function (e) {
+                    var target = e.data.getTarget();
+                    if (target.$.tagName === 'INPUT' && target.$.type === 'checkbox') {
+                        var checked = target.getAttributes().checked === 'checked' ? false :
+                            true
+                        delete CKEDITOR.dialog.checkbox
+                        var dom = checked ? '<input checked="checked" type="checkbox"/>' :
+                            '<input type="checkbox"/>'
+                        _this.ckeditor.insertHtml(dom);
+                    }
+                });
+            })
+
+            this.ckeditor.on('focus', function () {
+                if (param === 'ScriptChoose') {
+                    document.getElementsByClassName('cke_top')[0].style.display = 'block';
+                    document.getElementsByClassName('cke_contents')[0].style.paddingLeft = '70px';
+                } else if (param === 'Script') {
+                    document.getElementsByClassName('cke_top')[0].style.display = 'block';
+                    document.getElementsByClassName('cke_contents')[0].style.paddingRight = '32px';
+                }
+                _this.options.options.eventType = 'change'
+                _this.changeBorderColor('#d1d1d1');
+                _this.options.options.$emit('editing', true);
+                _this.ckeditor.focused = true;
+                isCkeditorBlur = false;
+            });
+
+            //键盘事件，有的输入法在输入中文时，会导致ckeditor失焦，触发blur事件
+            this.ckeditor.on('key', function () {
+                isCkeditorBlur = false;
+            });
+
+            this.ckeditor.on('blur', function (e) {
+                if (param === 'ScriptChoose') {
+                    document.getElementsByClassName('cke_top')[0].style.display = 'none';
+                    document.getElementsByClassName('cke_contents')[0].style.paddingLeft = '5px';
+                } else if (param === 'Script') {
+                    document.getElementsByClassName('cke_top')[0].style.display = 'none';
+                    document.getElementsByClassName('cke_contents')[0].style.paddingRight = '5px';
+                }
+                var editorData = e.editor.getData()
+                if (param === 'Script' || param === 'ScriptChoose') {
+                    editorData = editorData ? editorData.replace(/<\/?(?!sub|sup)[a-z]+?[^>]*>/gi, '')
+                        .replace(/(^\s|&nbsp;+)|(\s|&nbsp;+$)/g, "") : '';
+                } else {
+                    // 这里不要再替换标签了，样式都没了，<p>标签也不要替换了
+                    editorData = editorData;
+                }
+                _this.options.options.$emit('editing', false);
+                _this.ckeditor.focused = false;
+                isCkeditorBlur = true;
+                //避免鼠标在外，光标在内时，输入后失焦无法触发onChange
+                $editor && $editor.ckeditor.fire('change');
+            });
+
+            this.ckeditor.on('change', function (e) {
+                var editorData = e.editor.getData()
+                if (param === 'Script' || param === 'ScriptChoose') {
+                    editorData = editorData ? editorData.replace(/<\/?(?!sub|sup)[a-z]+?[^>]*>/gi, '')
+                        .replace(/(^\s|&nbsp;+)|(\s|&nbsp;+$)/g, "") : '';
+                } else {
+                    // 这里不要再替换标签了，样式都没了，<p>标签也不要替换了
+                    editorData = editorData;
+                }
+                top.Gikam?.cleanMask();
+                var ckeditorVue = _this.options.options;
+                if (!(editorData === ckeditorVue.value || (ckeditorVue.value ===
+                    undefined && editorData === ''))) {
+                    if (isCkeditorBlur) {
+                        //ckeditor自己调用的saveValue,需要触发onChange
+                        ckeditorVue.setDataState = false;
+                        ckeditorVue.saveValue && ckeditorVue.saveValue(
+                            editorData,
+                            'change')
+                    }
+                }
+            });
+
+            this.ckeditor.on('fileUploadRequest', function (evt) {
+                delete evt.data.requestData.upload;
+                let fileLoader = evt.data.fileLoader;
+                evt.data.requestData.file = {
+                    file: fileLoader.file,
+                    name: fileLoader.fileName
+                };
+            }, null, null, 6);
+
+            this.ckeditor.on('fileUploadResponse', function (e) {
+                setTimeout(function () {
+                    e.editor.fire('change');
+                }, 0);
+            }, null, null, 6);
+            setTimeout(function () {
+                _this.mutexMarkBtn();
+            }, 2e3);
+            // word复制文本带过来了拼写检查为英文的样式导致字体为斜体
+            this.ckeditor.on('paste', function (evt) {
+                evt.data.dataValue = evt.data.dataValue.replaceAll('lang="EN-US"', '')
+            })
+        },
+
+        mutexMarkBtn: function () {
+            // 单位上下标选中互斥
+            var cke13 = document.getElementById('cke_13');
+            var cke14 = document.getElementById('cke_14');
+            cke13.addEventListener('mouseup', function () {
+                if (cke14.className.indexOf('cke_button_on') > -1) {
+                    cke14.click();
+                }
+            });
+            cke14.addEventListener('mouseup', function () {
+                if (cke13.className.indexOf('cke_button_on') > -1) {
+                    cke13.click();
+                }
+            });
+        },
+
+        setReadonly: function (dom, flag) {
+            var _this = this;
+            this.ckeditor.status === 'ready' ? this.ckeditor.setReadOnly(flag) : setTimeout(function () {
+                _this.setReadonly(dom, flag);
+            }, 100);
+        },
+
+        setValue: function (value) {
+            var _this = this;
+            if (this.ckeditor.status === 'ready') {
+                this.ckeditor.setData(value);
+            } else {
+                setTimeout(function () {
+                    _this.setValue(value);
+                }, 100);
+            }
+        },
+
+        changeBorderColor: function (color) {
+            if (this.ckeEditorBox) {
+                this.ckeEditorBox.style['border-color'] = color
+            } else {
+                this.ckeEditorBox = document.getElementById('cke_editor')
+                this.ckeEditorBox.style['border-color'] = color;
+            }
+        },
+
+        insertContent: function (str) {
+            this.ckeditor.insertHtml(str);
+        }
+    };
+
+    window.ScriptChooseEditor = function (options) {
+        this.options = options;
+        var textarea = document.getElementById('editor');
+        textarea.innerHTML = this.options.options.value || '';
+
+        //解决script组件文字布局中的问题
+        CKEDITOR.addCss("html,body,p{height:100%;} p{line-height:27px}");
+
+        this.ckeditor = CKEDITOR.replace(textarea, {
+            toolbar: [
+                ['Superscript', 'Subscript']
+            ],
+            resize_enabled: false,
+            toolbarCanCollapse: false,
+            height: 30,
+            removePlugins: 'elementspath'
+        });
+
+        var styleStr = 'a.cke_button.cke_button{padding: 4px 8px;} ' +
+            '#cke_1_contents {height: 27px!important;} ' +
+            '.cke_toolgroup > a.cke_button_on {background:#e5e5e5} ' +
+            '.cke_toolgroup{border:0;float:left;margin:1px 2px 6px 0;padding-right:0}' +
+            'a.cke_button_off.cke_button:hover, ' +
+            'a.cke_button_off.cke_button:focus, ' +
+            'a.cke_button_off.cke_button:active {padding: 4px 7px} ' +
+            '.cke_reset{box-sizing: border-box}' +
+            '.cke_toolgroup {margin: 0 !important;} ' +
+            '.cke_top.cke_reset_all {display:none; padding: 0 !important;border:none;background: none;position: absolute;left: 0;top: 0;border-right:1px solid #d9d9d9;} ' +
+            '.cke {border: 1px solid #d9d9d9;border-radius: 4px;overflow: hidden;}'
+
+        document.getElementById('script-field-style').innerHTML = styleStr;
+        this.initEvent('ScriptChoose');
+    };
+
+    window.ScriptEditor = function (options) {
+        this.options = options;
+        var textarea = document.getElementById('editor');
+        textarea.innerHTML = this.options.options.value || '';
+        CKEDITOR.addCss("html,body,p{height:100%;} p{line-height:27px} body{overflow:hidden;}");
+
+        this.ckeditor = CKEDITOR.replace(textarea, {
+            toolbar: [
+                ['Superscript', 'Subscript']
+            ],
+            resize_enabled: false,
+            toolbarCanCollapse: false,
+            height: 30,
+            removePlugins: 'elementspath'
+        });
+
+        var styleStr = 'a.cke_button.cke_button{padding: 5px 6px 4px;} ' +
+            '#cke_1_contents {height: 27px!important;} ' +
+            '.cke_toolgroup > a.cke_button_on {background:#e5e5e5}' +
+            'a.cke_button_off.cke_button:hover, ' +
+            'a.cke_button_off.cke_button:focus, ' +
+            'a.cke_button_off.cke_button:active {padding: 4px 5px; 3px} ' +
+            '.cke_reset{ box-sizing: border-box ;  }' +
+            '.cke_toolgroup {margin: 0 1px 0 0 !important;padding: 0 !important;height: 28px !important;   border-radius: 0 4px 4px 0;  overflow: hidden;} ' +
+            '.cke_contents {padding-left: 5px !important;} ' +
+            '.cke_top.cke_reset_all {  display:none; padding: 0 !important; border:none; background: none; position: absolute; right: 0;top: 0;} ' +
+            '.cke_toolbar.cke_toolbar_last{ height: 28px;}' +
+            'a.cke_button{ display:block !important; height:13.5px !important ; padding: 0 3px !important ; float:none !important; background: #d9d9d9 !important; }' +
+            'a.cke_button.cke_button_off:hover{ padding :  0 3px !important; border:none !important;}' +
+            'a.cke_button:hover{  cursor: pointer;}' +
+            'a.cke_button.cke_button_on {  border:none !important;  background: #b9b9b9 !important;}' +
+            'a.cke_button.cke_button__subscript{margin-top: 1px  !important;}' +
+            '.cke_button_icon {height: 100% !important;}' +
+            'span.cke_button_icon.cke_button__subscript_icon{background-position-y: -71px !important; margin: 0 0 0 7px !important; background-size: 12px !important;}' +
+            'span.cke_button_icon.cke_button__superscript_icon{background-position-y: -89px !important; margin: 0 0 0 7px !important; background-size: 12px !important;}' +
+            '.cke {border: 1px solid #d9d9d9;border-radius: 4px;overflow: hidden;}'
+
+        document.getElementById('script-field-style').innerHTML = styleStr;
+        this.initEvent('Script');
+    };
+
+    window.Ckeditor = function (options) {
+        this.options = options;
+        var textarea = document.getElementById('editor');
+        textarea.innerHTML = this.options.options.value || '';
+        var props = options.options.options;
+        this.ckeditor = CKEDITOR.replace(textarea, {
+            extraPlugins: 'tick',
+            toolbarStartupExpanded: props.toolbarStartupExpanded
+        });
+        CKEDITOR.CONTENT_H = options.options.height ? options.options.height : 350;
+        CKEDITOR.sourceButton = options.options.sourceButton;
+        CKEDITOR.defaultStyle = options.defaultStyle;
+        this.initEvent('Ckeditor');
+    };
+
+    Ckeditor.prototype = ScriptEditor.prototype = ScriptChooseEditor.prototype = parent;
+
+    var validateResult = true
+    CKEDITOR.on('instanceReady', function (e) {
+        if (!validateResult) {
+            document.getElementById('cke_editor').style['border-color'] = 'red';
+        }
+        var maxButton = document.querySelector('.cke_button__maximize');
+        var iframeName = window.name;
+        if (!iframeName || !maxButton) {
+            return;
+        }
+        var iframeDom = null;
+        maxButton.addEventListener('click', function () {
+            if (maxButton.classList.contains('cke_button_on')) {
+                if (!iframeDom) {
+                    iframeDom = top.document.querySelector('iframe[name=' + iframeName + ']');
+                    iframeDom.style.top = 0;
+                    iframeDom.style.left = 0;
+                    iframeDom.style.right = 0;
+                    iframeDom.style.bottom = 0;
+                    iframeDom.style.zIndex = 12;
+                }
+                iframeDom.style.position = 'fixed';
+            } else {
+                iframeDom.style.position = 'static';
+            }
+        })
+    });
+    window.init = function (options) {
+        validateResult = options.options.validateResult
+        $editor = new window[options.type](options);
+        return $editor;
+
+    };
+</script>
+
+</html>

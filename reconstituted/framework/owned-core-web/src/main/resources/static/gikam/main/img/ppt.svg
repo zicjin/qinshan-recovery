@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>ppt</title>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="输入关键词检索" transform="translate(-456.000000, -399.000000)">
+            <g id="ppt" transform="translate(456.000000, 399.000000)">
+                <rect id="矩形" fill="#FF6E3F" x="0" y="0" width="16" height="16" rx="4"></rect>
+                <path d="M8.19999999,4 C9.19999999,4 9.89999997,4.19999999 10.4,4.6 C10.9,5 11.2,5.6 11.2,6.5 C11.2,7 11.1,7.7 10.8,8.10000001 C10.5,8.5 10.2,8.80000001 9.69999998,9 C9.19999999,9.2 8.69999998,9.30000001 8.1,9.30000001 L6.6,9.30000001 L6.6,12 L5,12 L5,4 L8.19999999,4 Z M6.6,8 L7.89999999,8 C8.39999998,8 8.79999998,7.89999999 9.1,7.59999999 C9.39999998,7.4 9.49999999,6.99999999 9.49999999,6.5 C9.49999999,5.6 9,5.2 7.99999999,5.2 L6.6,5.2 L6.6,8 L6.6,8 Z" id="形状" fill="#FFFFFF" fill-rule="nonzero"></path>
+            </g>
+        </g>
+    </g>
+</svg>

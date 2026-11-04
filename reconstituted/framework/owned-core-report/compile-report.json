@@ -1,0 +1,17 @@
+{
+  "command": "mvn -o -DskipTests clean package",
+  "exit_code": 0,
+  "host": "Linux",
+  "java_runtime": "java version \"1.8.0_391\"",
+  "java_version": "8",
+  "maven_runtime": "\u001b[1mApache Maven 3.9.12\u001b[m",
+  "module": "owned-core-report",
+  "output_jar": "owned-core-report/target/owned-core-report-1.0.0-SNAPSHOT.jar",
+  "output_jar_sha256": "22d8318d8f1b506978409bd091f48aa5cc59782d114c70cd38142b94de6d8f54",
+  "schema": "supplier-reconstituted-module-compile-v1",
+  "source_file_count": 363,
+  "source_only_framework_classpath": true,
+  "source_tree_sha256": "1c4a1f70838aa5a1e4d2ff2ba47c18b66b84bd8df86fcfdeebbf22d5702d23a6",
+  "status": "pass",
+  "supplier_private_jars_on_classpath": false
+}

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset=utf-8/>
+<meta http-equiv=X-UA-Compatible content="IE=edge"/>
+<meta name=spread content=zh-cn/>
+<title>ELN</title>
+<link rel=icon th:href="@{/static/plugin/spread-sheets-11.2.6/designer/index/logo.png}" type="image/x-icon"/>
+
+<th:block th:replace="module/gikam/context" />
+
+<link th:href="@{/static/gikam/main/css/chunk-common.css}" rel=stylesheet />
+<link th:href="@{/static/plugin/spread-sheets-11.2.6/designer/lib/jquery-ui/css/smoothness/jquery-ui-1.10.3.custom.min.css}" rel=stylesheet type=text/css />
+<link th:href="@{/static/plugin/spread-sheets-11.2.6/designer/lib/gcui.css}" rel=stylesheet type=text/css />
+<link th:href="@{/static/plugin/spread-sheets-11.2.6/css/gc.spread.sheets.excel2013white.11.2.6.css}" rel=stylesheet type=text/css />
+<link th:href="@{/static/plugin/spread-sheets-11.2.6/designer/lib/zTreeStyle/css/zTreeStyle.css}" rel=stylesheet type=text/css />
+<link th:href="@{/static/plugin/spread-sheets-11.2.6/designer/common/common.css}" rel=stylesheet type=text/css />
+<link th:href="@{/static/plugin/spread-sheets-11.2.6/designer/widgets/colorpicker/colorpicker.css}" rel=stylesheet type=text/css />
+<link th:href="@{/static/plugin/spread-sheets-11.2.6/designer/widgets/fontpicker/fontpicker.css}" rel=stylesheet type=text/css />
+<link th:href="@{/static/plugin/spread-sheets-11.2.6/designer/widgets/comboframe/comboframe.css}" rel=stylesheet type=text/css />
+<link th:href="@{/static/plugin/spread-sheets-11.2.6/designer/widgets/borderpicker/borderpicker.css}" rel=stylesheet type=text/css />
+<link th:href="@{/static/plugin/spread-sheets-11.2.6/designer/widgets/sliderpanel/sliderpanel.css}" rel=stylesheet type=text/css />
+<link th:href="@{/static/plugin/spread-sheets-11.2.6/designer/dialogs/dialogs.css}" rel=stylesheet type=text/css />
+<link th:href="@{/static/plugin/spread-sheets-11.2.6/designer/dialogs/dialogs2.css}" rel=stylesheet type=text/css />
+<link th:href="@{/static/plugin/spread-sheets-11.2.6/designer/dialogs/chartDialogs.css}" rel=stylesheet type=text/css />
+<link th:href="@{/static/plugin/spread-sheets-11.2.6/designer/formatDialog/formatDialog.css}" rel=stylesheet type=text/css />
+<link th:href="@{/static/plugin/spread-sheets-11.2.6/designer/ribbon/ribbon.css}" rel=stylesheet type=text/css />
+<link th:href="@{/static/plugin/spread-sheets-11.2.6/designer/formulaBar/formulaBar.css}" rel=stylesheet type=text/css />
+<link th:href="@{/static/plugin/spread-sheets-11.2.6/designer/spreadWrapper/spreadWrapper.css}" rel=stylesheet type=text/css />
+<link th:href="@{/static/plugin/spread-sheets-11.2.6/designer/statusBar/statusBar.css}" rel=stylesheet type=text/css />
+<link th:href="@{/static/plugin/spread-sheets-11.2.6/designer/contextMenu/contextMenu.css}" rel=stylesheet type=text/css />
+<link th:href="@{/static/plugin/spread-sheets-11.2.6/designer/fileMenu/fileMenu.css}" rel=stylesheet type=text/css />
+<link th:href="@{/static/plugin/spread-sheets-11.2.6/designer/index/index.css}" rel=stylesheet type=text/css />
+<link th:href="@{/static/plugin/spread-sheets-11.2.6/designer/chart/chartColorPicker/chart-colorPicker.css}" rel=stylesheet type=text/css />
+<link th:href="@{/static/plugin/spread-sheets-11.2.6/designer/common/local.cn.css}" rel=stylesheet />
+<link th:href="@{/static/gikam/eln/js/chunk-vendors.js}" rel=preload as=script />
+<link th:href="@{/static/gikam/eln/js/index.js}" rel=preload as=script />
+</head>
+
+<body unselectable=on style="-moz-user-select: none; -webkit-user-select: none; user-select: none;">
+    <div class=container>
+        <div class="loading-placeholder background-mask-layer"></div>
+        <span class="loading-placeholder loading-pic"></span>
+        <div class=header>
+            <div data-include=ribbon></div>
+            <div data-include=formulaBar></div>
+        </div>
+        <div class=content>
+            <div class="vertical-splitter ui-draggable hidden" id=verticalSplitter></div>
+            <div class=fill-spread-content data-include=spreadWrapper></div>
+        </div>
+        <div class=footer>
+            <div data-include=statusBar></div>
+        </div>
+        <div class="file-menu hidden">
+            <div data-include=fileMenu></div>
+        </div>
+        <div class="slicer-contextmenu-width hidden">
+            <span id=name-container></span>
+        </div>
+        <div class=ui-button-text-icon-primary style="position: absolute; left: -1000px; top: -1000px; visibility: hidden">
+            <span id=measureWidth class=ui-button-text></span>
+        </div>
+        <div class=hidden>
+            <input type=file id=fileSelector name=files[]>
+        </div>
+    </div>
+    <div class="modal fade" id=myModaldataSoure tabindex=-1 role=dialog aria-labelledby=myModalLabel aria-hidden=true>
+        <div class="modal-dialog modal-lg" style="width: 70%; height: 100%">
+            <div class=modal-content style="height: 100%">
+                <div id=modalbodydataSoure style="height: 100%; width: 100%"></div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id=myModalalertBombBox tabindex=-1 role=dialog aria-labelledby=myModalLabel aria-hidden=true>
+        <div class=modal-dialog></div>
+    </div>
+    <script>
+                    var bizId;
+                    var elnTmplId;
+                    var versionId;
+                    var isTest;
+                    var elnId;
+                    var jsonData = {};//eln模板的json数据
+                    var foldernos;
+                    var operateType;//操作类型（0为检测方法下  1为结果录入下）
+                    var fileid;//文件内码
+                    var elnDsParams;//ELN数据源参数列表
+                    var elntext;//用于获取预览的json数据（其余情况不用）
+                    var fontsObj;//设置字体集
+                    var mathFunction;//定义修约规则
+                    var modelType = 0;//判断模态框类型(0为数据源1为预览)
+                    var pageno;//ELN显示页
+                    var view;//是否方法版本展示
+                    var modifyrecordflag = "0";//审计追踪标记。默认是不开启的。在结果录入查询ajax响应的时候传回这个值。
+                    var elnresultsids;//每次保存都能反存。需要知道结果id
+                    var elnresultsidsarray;//食品批结果录入使用
+
+                    var dataSrcObj = {};//ELN数据源查询出的数据(页面修改之后对应值会更改)
+                    var oldDataSrcObj = {};//ELN数据源查询出的数据(用于后台对比数据是否修改过)
+
+                    var dataBaseSourceForm = [];//表单数据的数据源
+                    var dataBaseSourceList = [];//列表数据的数据源
+                    var dataBaseSourceFormBack = [];//表单反写数据的数据源
+                    var dataBaseSourceListBack = [];//列表反写数据的数据源
+
+                    var isChanged = 0;//用于判断是否更改过 
+
+                    var topTab;//记录上层信息
+
+                    var pageObject; // 关闭页面回调
+                    var uploadPdf; // true/false 是否显示上传PDF按钮开关
+                    var tableName; // ELN生成PDF上传至文件系统作为某个业务的附件时需要传的表名称
+                </script>
+    <script th:src="{/static/plugin/spread-sheets-11.2.6/designer/lib/jquery-2.0.2.min.js}"></script>
+    <script th:src="{/static/plugin/spread-sheets-11.2.6/designer/lib/jquery-ui/js/jquery-ui-1.10.3.custom.min.js}"></script>
+    <script th:src="{/static/plugin/spread-sheets-11.2.6/designer/lib/knockout-2.3.0.min.js}"></script>
+    <script th:src="{/static/plugin/spread-sheets-11.2.6/scripts/gc.spread.sheets.all.11.2.6.min.js}"></script>
+    <script th:src="{/static/plugin/spread-sheets-11.2.6/scripts/plugins/gc.spread.sheets.charts.11.2.6.min.js}"></script>
+    <script th:src="{/static/plugin/spread-sheets-11.2.6/scripts/resources/zh/gc.spread.sheets.resources.zh.11.2.6.min.js}"></script>
+    <script th:src="{/static/plugin/spread-sheets-11.2.6/designer/lib/spread/gc.spread.excelio.11.1.4.min.js}"></script>
+    <script th:src="{/static/plugin/spread-sheets-11.2.6/scripts/plugins/gc.spread.sheets.print.11.2.6.min.js}"></script>
+    <script th:src="{/static/plugin/spread-sheets-11.2.6/scripts/plugins/gc.spread.sheets.pdf.11.2.6.min.js}"></script>
+    <script th:src="{/static/plugin/spread-sheets-11.2.6/designer/lib/zTreeStyle/js/jquery.ztree.all-3.5.min.js}"></script>
+    <script th:src="{/static/plugin/spread-sheets-11.2.6/designer/lib/FileSaver.min.js}"></script>
+    <script th:src="{/static/plugin/spread-sheets-11.2.6/designer/common/resources.js}"></script>
+    <script th:src="{/static/plugin/spread-sheets-11.2.6/designer/common/resources.cn.js}"></script>
+    <script th:src="{/static/plugin/spread-sheets-11.2.6/designer/chart/chartWrapper.js}"></script>
+    <script th:src="{/static/plugin/spread-sheets-11.2.6/designer/widgets/gcui/gcui.js}"></script>
+    <script th:src="{/static/plugin/spread-sheets-11.2.6/designer/widgets/colorpicker/colorpicker.js}"></script>
+    <script th:src="{/static/plugin/spread-sheets-11.2.6/designer/widgets/fontpicker/fontpicker.js}"></script>
+    <script th:src="{/static/plugin/spread-sheets-11.2.6/designer/widgets/comboframe/comboframe.js}"></script>
+    <script th:src="{/static/plugin/spread-sheets-11.2.6/designer/widgets/borderpicker/borderpicker.js}"></script>
+    <script th:src="{/static/plugin/spread-sheets-11.2.6/designer/widgets/sliderpanel/sliderpanel.js}"></script>
+    <script th:src="{/static/plugin/spread-sheets-11.2.6/designer/chart/chart-templates.js}"></script>
+    <script th:src="{/static/plugin/spread-sheets-11.2.6/designer/common/colorHelper.js}"></script>
+    <script th:src="{/static/plugin/spread-sheets-11.2.6/designer/common/util.js}"></script>
+    <script th:src="{/static/plugin/spread-sheets-11.2.6/designer/common/asyncLoader.js}"></script>
+    <script th:src="{/static/plugin/spread-sheets-11.2.6/designer/common/metadata.js}"></script>
+    <script th:src="{/static/plugin/spread-sheets-11.2.6/designer/spreadWrapper/spreadMeta.js}"></script>
+    <script th:src="{/static/plugin/spread-sheets-11.2.6/designer/spreadWrapper/spreadWrapper.js}"></script>
+    <script th:src="{/static/plugin/spread-sheets-11.2.6/designer/spreadWrapper/spreadActions.js}"></script>
+    <script th:src="{/static/plugin/spread-sheets-11.2.6/designer/spreadWrapper/actions.js}"></script>
+    <script th:src="{/static/plugin/spread-sheets-11.2.6/designer/spreadWrapper/ceUtility.js}"></script>
+    <script th:src="{/static/plugin/spread-sheets-11.2.6/designer/spreadWrapper/spreadUtility.js}"></script>
+    <script th:src="{/static/plugin/spread-sheets-11.2.6/designer/dialogs/baseDialog.js}"></script>
+    <script th:src="{/static/plugin/spread-sheets-11.2.6/designer/dialogs/dialogs.js}"></script>
+    <script th:src="{/static/plugin/spread-sheets-11.2.6/designer/dialogs/dialogs2.js}"></script>
+    <script th:src="{/static/plugin/spread-sheets-11.2.6/designer/dialogs/chartDialogs.js}"></script>
+    <script th:src="{/static/plugin/spread-sheets-11.2.6/designer/index/index.iife.js}"></script>
+    <script th:src="{/static/plugin/spread-sheets-11.2.6/designer/index/bigDecimal.js}"></script>
+    <script th:src="{/static/plugin/spread-sheets-11.2.6/designer/index/spreadjs-sunway.js}"></script>
+    <script th:src="{/static/plugin/spread-sheets-11.2.6/designer/index/formatDialog.js}"></script>
+    <script th:src="{/static/plugin/spread-sheets-11.2.6/designer/ribbon/ribbon.js}"></script>
+    <script th:src="{/static/plugin/spread-sheets-11.2.6/designer/formulaBar/formulaBar.js}"></script>
+    <script th:src="{/static/plugin/spread-sheets-11.2.6/designer/statusBar/statusBar.js}"></script>
+    <script th:src="{/static/plugin/spread-sheets-11.2.6/designer/chartPreviewer/chartPreviewer.js}"></script>
+    <script th:src="{/static/plugin/spread-sheets-11.2.6/designer/chart/addChartElement/chartAddChartElement.js}"></script>
+    <script th:src="{/static/plugin/spread-sheets-11.2.6/designer/chart/chartColorPicker/chart-colorPicker.js}"></script>
+    <script th:src="{/static/plugin/spread-sheets-11.2.6/designer/chart/chartLayoutPicker/chartLayoutPicker.js}"></script>
+    <script th:src="{/static/plugin/spread-sheets-11.2.6/designer/chart/chartTypePicker/chartTypePicker.js}"></script>
+    <script th:src="{/static/plugin/spread-sheets-11.2.6/designer/chart/chartSliderPanel.js}"></script>
+    <script th:src="{/static/plugin/spread-sheets-11.2.6/designer/chart/chartWrapper.js}"></script>
+    <script th:src="{/static/plugin/spread-sheets-11.2.6/designer/contextMenu/contextMenu.js}"></script>
+    <script th:src="{/static/plugin/spread-sheets-11.2.6/designer/fileMenu/fileMenu.js}"></script>
+    <script th:src="{/static/plugin/spread-sheets-11.2.6/designer/common/app.js}"></script>
+    <script th:src="{/static/plugin/spread-sheets-11.2.6/designer/index/license.js}"></script>
+    <script th:src="{/static/gikam/main/js/chunk-vendors.js}"></script>
+    <script th:src="{/static/gikam/main/js/chunk-common.js}"></script>
+    <script th:src="{/static/gikam/main/js/gikam.js}"></script>
+    <script th:src="{/static/gikam/eln/js/chunk-vendors.js}"></script>
+    <script th:src="{/static/gikam/eln/js/index.js}"></script>
+</body>
+
+</html>

@@ -1,0 +1,8 @@
+<th:block th:replace="${'module/index/'+@environment.getProperty('sunway.config.page.style')+'/home'}" />
+
+<script th:inline="javascript">
+    IndexPage.setConfig({
+        I18NUrl : [IFM_CONTEXT + '/static/i18n/messages-core_zh-cn.properties'],
+        skin : [[${@environment.getProperty("sunway.config.page.skin")}]]
+    });
+</script>

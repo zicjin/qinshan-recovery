@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg  viewBox="0 0 144 80" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+     <defs>
+        <polygon id="icon-bi-report-pic_path-1" points="0 0 84 0 84 60 0 60"></polygon>
+    </defs>
+    <g id="icon-bi-report-pic_页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="icon-bi-report-pic_白色版本" transform="translate(-88.000000, -1123.000000)">
+            <g id="icon-bi-report-pic_图片" transform="translate(72.000000, 1099.000000)">
+                <g transform="translate(16.000000, 24.000000)">
+                    <rect id="icon-bi-report-pic_矩形" x="0" y="0" width="144" height="80"></rect>
+                    <g id="icon-bi-report-pic_三角形" transform="translate(30.000000, 10.000000)">
+                        <mask id="icon-bi-report-pic_mask-2" fill="white">
+                            <use xlink:href="#icon-bi-report-pic_path-1"></use>
+                        </mask>
+                        <use id="icon-bi-report-pic_蒙版" fill="#587EF7" fill-rule="nonzero" xlink:href="#icon-bi-report-pic_path-1"></use>
+                        <path d="M2.82030623,62.0412349 L13.0298147,62.0412349 L35,41.6027625 L30.8259469,37.7137755 C26.7920617,34.1503881 20.758301,34.1503881 16.7244158,37.7137755 L0,53.1845636 L0,59.2025582 C0,60.7703161 1.26269411,62.0412349 2.82030623,62.0412349 Z" id="icon-bi-report-pic_路径" fill="#80B8F8" mask="url(#icon-bi-report-pic_mask-2)"></path>
+                        <path d="M53.6640137,24.4996352 L35,41.8394772 L56.7282547,62.0412349 L81.2143263,62.0412349 C82.7528114,62.0412349 84,60.7850356 84,59.2354352 L84,40.7732734 L66.5059693,24.4996352 C62.8438462,21.2217682 57.3261367,21.2217682 53.6640137,24.4996352 Z" id="icon-bi-report-pic_路径" fill="#80B8F8" mask="url(#icon-bi-report-pic_mask-2)"></path>
+                        <polygon id="icon-bi-report-pic_路径" fill="#80B8F8" fill-rule="nonzero" mask="url(#icon-bi-report-pic_mask-2)" points="13 62.0412349 57 62.0412349 35 41.6027625"></polygon>
+                    </g>
+                    <circle id="icon-bi-report-pic_椭圆形" fill="#80B8F8" cx="44" cy="24" r="8"></circle>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

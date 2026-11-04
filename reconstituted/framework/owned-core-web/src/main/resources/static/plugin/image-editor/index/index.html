@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>0. Design</title>
+    <link type="text/css" href="../plugin/tui-color-picker.css" rel="stylesheet">
+    <link type="text/css" href="../dist/tui-image-editor.css" rel="stylesheet">
+    <style>
+        @font-face {
+            font-family: 'Noto Sans';
+            font-style: normal;
+            font-weight: 400;
+            src: local('Noto Sans'), local('NotoSans'), url(../plugin/o-0IIpQlx3QUlC5A4PNr6DRAW_0.woff2) format('woff2');
+            unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+        }
+
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+        }
+
+        .tui-image-editor-main-container>.tui-image-editor-header {
+            display: none;
+        }
+
+        .tui-image-editor-main.tui-image-editor-menu-filter {
+            top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="tui-image-editor-container"></div>
+
+    <script type="text/javascript" src="../plugin/fabric.js"></script>
+    <script type="text/javascript" src="../plugin/tui-code-snippet.min.js"></script>
+    <script type="text/javascript" src="../plugin/FileSaver.min.js"></script>
+    <script type="text/javascript" src="../plugin/tui-color-picker.js"></script>
+    <script type="text/javascript" src="../dist/tui-image-editor.min.js"></script>
+    <script type="text/javascript" src="./js/theme/white-theme.js"></script>
+    <script type="text/javascript" src="./js/theme/black-theme.js"></script>
+
+</body>
+<script>
+    function dataURLtoFile(dataurl, filename) {
+        var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1], bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+        while (n--) {
+            u8arr[n] = bstr.charCodeAt(n);
+        }
+        return new File([u8arr], filename, {
+            type: mime
+        });
+    };
+
+    var imageEditor = new tui.ImageEditor('#tui-image-editor-container', {
+        includeUI: {
+            theme: blackTheme,
+            initMenu: 'filter',
+            menuBarPosition: 'bottom'
+        },
+        cssMaxWidth: 700,
+        cssMaxHeight: 500
+    });
+
+    window.onresize = function () {
+        imageEditor.ui.resizeEditor();
+    };
+
+    var getData = function () {
+        return imageEditor.toDataURL();
+    };
+
+    var setData = function (base64Str) {
+        imageEditor.ui._actions.main.load(dataURLtoFile(base64Str));
+    };
+</script>
+
+</html>

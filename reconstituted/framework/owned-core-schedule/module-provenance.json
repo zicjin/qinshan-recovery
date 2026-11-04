@@ -1,0 +1,675 @@
+{
+  "artifact": {
+    "run_jar_sha256": "4a720797810fd2f8cca6e22604657028cb87830ca0e24bb55a5f42f040f6ee9f",
+    "source_jars": [
+      "gikam-core-schedule-interface-14.1.5.jar",
+      "gikam-core-schedule-service-14.1.5.jar"
+    ]
+  },
+  "compile_report": "compile-report.json",
+  "dependencies": [
+    "owned-core-common"
+  ],
+  "forbidden_content_report": "forbidden-content-report.json",
+  "module": "owned-core-schedule",
+  "module_reason": "Schedule interfaces and services.",
+  "public_dependency_allowlist": "public-dependency-allowlist.json",
+  "schema": "supplier-reconstituted-module-v1",
+  "source_decompilers": {
+    "CFR": 44,
+    "Vineflower": 2
+  },
+  "source_file_count": 46,
+  "source_files": [
+    {
+      "class_sha256": "b303b51d199d0357bee440266a60e93ddf3b1468666a84a51072c4e2fb5f6bc2",
+      "compile_status": "pending-module-assembly",
+      "decompiler": "CFR",
+      "decompiler_version": "0.152",
+      "path": "src/main/java/com/sunwayworld/cloud/module/cron/bean/CoreCronDTO.java",
+      "sha256": "56ab4f09377ed7810e2382efb05606872ef7d519b95d5666b6373b94e0e5ffbd",
+      "source_class_path": "com/sunwayworld/cloud/module/cron/bean/CoreCronDTO.class",
+      "source_jar": "BOOT-INF/lib/gikam-core-schedule-interface-14.1.5.jar",
+      "source_sha256_before_transform": "d81c756f589b768daaaa2f8b36f07809a476b408b918765398e5508cf3e5e5ef",
+      "transformations": [
+        "normalization:generated-source"
+      ]
+    },
+    {
+      "class_sha256": "a8991885e8bc20c1311e0a3df3d48032be1cc3e65ee7099e642f1520b0a0bff8",
+      "compile_status": "pending-module-assembly",
+      "decompiler": "CFR",
+      "decompiler_version": "0.152",
+      "path": "src/main/java/com/sunwayworld/cloud/module/cron/resource/CoreCornResource.java",
+      "sha256": "ac146aa992311ebd5e06751802dd47684a01fa2eb456b065bfd6d8fc9740ee96",
+      "source_class_path": "com/sunwayworld/cloud/module/cron/resource/CoreCornResource.class",
+      "source_jar": "BOOT-INF/lib/gikam-core-schedule-interface-14.1.5.jar",
+      "source_sha256_before_transform": "4882eee88e9a58c7a2d765354fd1d2e9a32226ab3db15bab91e5d7884109b077",
+      "transformations": [
+        "normalization:generated-source"
+      ]
+    },
+    {
+      "class_sha256": "f9a92e1ed8c520f2c371f020a3cd984d09d00b1afbd2df910ecf4bddb749c77d",
+      "compile_status": "pending-module-assembly",
+      "decompiler": "CFR",
+      "decompiler_version": "0.152",
+      "path": "src/main/java/com/sunwayworld/cloud/module/schedule/GikamScheduleApplication.java",
+      "sha256": "850abcd2ad19219dc0159c33a50a8c1ec29504398ed8117c6ec6302a26521e28",
+      "source_class_path": "com/sunwayworld/cloud/module/schedule/GikamScheduleApplication.class",
+      "source_jar": "BOOT-INF/lib/gikam-core-schedule-service-14.1.5.jar",
+      "source_sha256_before_transform": "d31c19ef8bdef1f08873e38c6440721a11d44042e058529e4fd776cf61c0c446",
+      "transformations": [
+        "normalization:generated-source"
+      ]
+    },
+    {
+      "class_sha256": "1cb2619d8df74fe56f07007cca47a6458c1f4879393baaa00f10c143f96126f4",
+      "compile_status": "pending-module-assembly",
+      "decompiler": "CFR",
+      "decompiler_version": "0.152",
+      "path": "src/main/java/com/sunwayworld/cloud/module/schedule/bean/CoreScheduleTaskBean.java",
+      "sha256": "f0bd646965d0300028e52bbd2930c99a5f3f458394a8380027fe1a8804d8ac78",
+      "source_class_path": "com/sunwayworld/cloud/module/schedule/bean/CoreScheduleTaskBean.class",
+      "source_jar": "BOOT-INF/lib/gikam-core-schedule-interface-14.1.5.jar",
+      "source_sha256_before_transform": "cf528f95024aa46d44521d912bc4e00cc1f7e77d3852358122d97e1f1258ba75",
+      "transformations": [
+        "normalization:generated-source"
+      ]
+    },
+    {
+      "class_sha256": "bf03e624b20261729ae346d480728b0d474556cf4a7ee1227127a29ce653d8a7",
+      "compile_status": "pending-module-assembly",
+      "decompiler": "CFR",
+      "decompiler_version": "0.152",
+      "path": "src/main/java/com/sunwayworld/cloud/module/schedule/bean/CoreScheduleTaskConfigBean.java",
+      "sha256": "48b81cb959751eed647a56cd44bed8a057ac30c291b4dabbb22c3ffbf2c4a429",
+      "source_class_path": "com/sunwayworld/cloud/module/schedule/bean/CoreScheduleTaskConfigBean.class",
+      "source_jar": "BOOT-INF/lib/gikam-core-schedule-interface-14.1.5.jar",
+      "source_sha256_before_transform": "ceea66fc076c2b4049b27bdbd7385fcf2d122e491390a7bf2d0602b4a29a748b",
+      "transformations": [
+        "normalization:generated-source"
+      ]
+    },
+    {
+      "class_sha256": "333fc0d604b6d2948536c9af79da9a991f4192e7af8df430f345a6bb00dd7e78",
+      "compile_status": "pending-module-assembly",
+      "decompiler": "CFR",
+      "decompiler_version": "0.152",
+      "path": "src/main/java/com/sunwayworld/cloud/module/schedule/bean/CoreScheduleTaskLogBean.java",
+      "sha256": "3d89b5734b10a78e363f5926fac2dcd33126d637cb35ca7c488952ec7e664566",
+      "source_class_path": "com/sunwayworld/cloud/module/schedule/bean/CoreScheduleTaskLogBean.class",
+      "source_jar": "BOOT-INF/lib/gikam-core-schedule-interface-14.1.5.jar",
+      "source_sha256_before_transform": "c7ca9627ca2f8dc3307ae9dd489d4497b9fad909096d5653d2efbe54c50a34b5",
+      "transformations": [
+        "normalization:generated-source"
+      ]
+    },
+    {
+      "class_sha256": "eade9540f38046a0a6347536d4edc7f377030922f19aafe7e9932f02d49b955c",
+      "compile_status": "pending-module-assembly",
+      "decompiler": "CFR",
+      "decompiler_version": "0.152",
+      "path": "src/main/java/com/sunwayworld/cloud/module/schedule/controller/CoreScheduleTaskConfigController.java",
+      "sha256": "b964ebf70fc71bc3f579d3e8c4ff6b45efa5f0e0c133875d34f419df147a5a4b",
+      "source_class_path": "com/sunwayworld/cloud/module/schedule/controller/CoreScheduleTaskConfigController.class",
+      "source_jar": "BOOT-INF/lib/gikam-core-schedule-interface-14.1.5.jar",
+      "source_sha256_before_transform": "ae90577f5e6e8a8e6728a106fa159ecb3516d3dee9d5af60d8b5db60abf7863a",
+      "transformations": [
+        "normalization:generated-source"
+      ]
+    },
+    {
+      "class_sha256": "73b76bea71c93d11004f5b9ac405aa88f1bcaa9937f6c810da26f24f9a960197",
+      "compile_status": "pending-module-assembly",
+      "decompiler": "CFR",
+      "decompiler_version": "0.152",
+      "path": "src/main/java/com/sunwayworld/cloud/module/schedule/controller/CoreScheduleTaskController.java",
+      "sha256": "985c094edef632c022e8932dd9b91b030ad428f8356da9f4611a676861076ea1",
+      "source_class_path": "com/sunwayworld/cloud/module/schedule/controller/CoreScheduleTaskController.class",
+      "source_jar": "BOOT-INF/lib/gikam-core-schedule-interface-14.1.5.jar",
+      "source_sha256_before_transform": "80607d7c48a03c2ce5de83a8dd0f5c2fd8c712ee1560ceb598e8299b7bb5564d",
+      "transformations": [
+        "normalization:generated-source"
+      ]
+    },
+    {
+      "class_sha256": "5cdbc24d1a90abaad98d77bab8330f04c5018fc2fe9ff316c70d1b857ebf15d3",
+      "compile_status": "pending-module-assembly",
+      "decompiler": "CFR",
+      "decompiler_version": "0.152",
+      "path": "src/main/java/com/sunwayworld/cloud/module/schedule/controller/CoreScheduleTaskLogController.java",
+      "sha256": "8bd81981e2ab77f256488261fab4f509da39a04f6dfb47d2b7f8621e79e0af11",
+      "source_class_path": "com/sunwayworld/cloud/module/schedule/controller/CoreScheduleTaskLogController.class",
+      "source_jar": "BOOT-INF/lib/gikam-core-schedule-interface-14.1.5.jar",
+      "source_sha256_before_transform": "a43ca0e0b0dfb9b97298e4eda47f4c429eabbc9618bbc6998fd38eb8c03eda3a",
+      "transformations": [
+        "normalization:generated-source"
+      ]
+    },
+    {
+      "class_sha256": "9d27a680d0d5eaa4d48f2ba2f32ad8a7b1ca058a8be679f1ebf112951e656d61",
+      "compile_status": "pending-module-assembly",
+      "decompiler": "CFR",
+      "decompiler_version": "0.152",
+      "path": "src/main/java/com/sunwayworld/cloud/module/schedule/controller/impl/CoreScheduleTaskConfigControllerImpl.java",
+      "sha256": "36065c85358bc252a01c82164fd24277a53332864eb24a435b9e1b48a20a2858",
+      "source_class_path": "com/sunwayworld/cloud/module/schedule/controller/impl/CoreScheduleTaskConfigControllerImpl.class",
+      "source_jar": "BOOT-INF/lib/gikam-core-schedule-interface-14.1.5.jar",
+      "source_sha256_before_transform": "66d52b6d84f524b9febdf509a00380c25acdbcc856595e3a97db6d2d1a749bc9",
+      "transformations": [
+        "normalization:generated-source"
+      ]
+    },
+    {
+      "class_sha256": "92a45260f88abe9e43f41f55917e7e50e26cf9752f5238f2536f3a2ef05585ce",
+      "compile_status": "pending-module-assembly",
+      "decompiler": "CFR",
+      "decompiler_version": "0.152",
+      "path": "src/main/java/com/sunwayworld/cloud/module/schedule/controller/impl/CoreScheduleTaskControllerImpl.java",
+      "sha256": "d77ffea95b1cc2b4e0e173dbe048b7f7140e554faa581a104dff8b21e9fd334b",
+      "source_class_path": "com/sunwayworld/cloud/module/schedule/controller/impl/CoreScheduleTaskControllerImpl.class",
+      "source_jar": "BOOT-INF/lib/gikam-core-schedule-interface-14.1.5.jar",
+      "source_sha256_before_transform": "bd610d9dec9b4238628e5a6fc147140dde75fdb573d74ef95ba58fce69876042",
+      "transformations": [
+        "normalization:generated-source"
+      ]
+    },
+    {
+      "class_sha256": "e0820c699a31a6be6d050c532abc3fa0027df29c0049c062e3bc91c89c6d3997",
+      "compile_status": "pending-module-assembly",
+      "decompiler": "CFR",
+      "decompiler_version": "0.152",
+      "path": "src/main/java/com/sunwayworld/cloud/module/schedule/controller/impl/CoreScheduleTaskLogControllerImpl.java",
+      "sha256": "0620312d13f6ff8bb6eef55c431c24c5ac0ed76a676f3f1418427a9f48d6550c",
+      "source_class_path": "com/sunwayworld/cloud/module/schedule/controller/impl/CoreScheduleTaskLogControllerImpl.class",
+      "source_jar": "BOOT-INF/lib/gikam-core-schedule-interface-14.1.5.jar",
+      "source_sha256_before_transform": "6a863a8726e049c5fdbdcc0efd66f0d270c2c57b9994c4e7396951c541020400",
+      "transformations": [
+        "normalization:generated-source"
+      ]
+    },
+    {
+      "class_sha256": "10ac7ac23357ca9597f547bebe99cf24591e7ad298402aca815cc66dfc2e4cd5",
+      "compile_status": "pending-module-assembly",
+      "decompiler": "CFR",
+      "decompiler_version": "0.152",
+      "path": "src/main/java/com/sunwayworld/cloud/module/schedule/cron/resource/impl/CoreCronResourceImpl.java",
+      "sha256": "cce7f420ff8f4b12a9456c9c78d9cfbc237b63d3cd89f3aec0b83db7a14208d6",
+      "source_class_path": "com/sunwayworld/cloud/module/schedule/cron/resource/impl/CoreCronResourceImpl.class",
+      "source_jar": "BOOT-INF/lib/gikam-core-schedule-service-14.1.5.jar",
+      "source_sha256_before_transform": "ebde1e6a6ba983b85e3eb9e71248d229e5e289b2a212212ea94bc8b18ae3755f",
+      "transformations": [
+        "normalization:generated-source"
+      ]
+    },
+    {
+      "class_sha256": "c8969d097b7c4801686b87806e1dd83791344f908295fa23e9af25fcc213d7d1",
+      "compile_status": "pending-module-assembly",
+      "decompiler": "CFR",
+      "decompiler_version": "0.152",
+      "path": "src/main/java/com/sunwayworld/cloud/module/schedule/cron/service/CoreCronService.java",
+      "sha256": "aa43e7cec68eecbf7f85daf855e169374be6f3a8608ac3d0143656369b8d752e",
+      "source_class_path": "com/sunwayworld/cloud/module/schedule/cron/service/CoreCronService.class",
+      "source_jar": "BOOT-INF/lib/gikam-core-schedule-service-14.1.5.jar",
+      "source_sha256_before_transform": "a0cc3fe73f2d0d5095c6fe6d895697e7910f20463465cc634621d625b22530d5",
+      "transformations": [
+        "normalization:generated-source"
+      ]
+    },
+    {
+      "class_sha256": "e4b1bc67f4ee8bd83f23e1b5c39ce2c70c0e52ef89773f715e25c54206d49354",
+      "compile_status": "pending-module-assembly",
+      "decompiler": "CFR",
+      "decompiler_version": "0.152",
+      "path": "src/main/java/com/sunwayworld/cloud/module/schedule/cron/service/impl/CoreCronServiceImpl.java",
+      "sha256": "3ce94a78550f66faf5a7d387faa885ec8add3bdf04654e9a986f3cac1bc92836",
+      "source_class_path": "com/sunwayworld/cloud/module/schedule/cron/service/impl/CoreCronServiceImpl.class",
+      "source_jar": "BOOT-INF/lib/gikam-core-schedule-service-14.1.5.jar",
+      "source_sha256_before_transform": "2af3e92cde1fad6ea68baaf2987b8d8a4ec2c380ad996b9c3ab3dd00c98c304e",
+      "transformations": [
+        "normalization:generated-source"
+      ]
+    },
+    {
+      "class_sha256": "5a97e912bf90b41b1da7492fc377d755dda03d0e57040457302814b33d98c3ef",
+      "compile_status": "pending-module-assembly",
+      "decompiler": "CFR",
+      "decompiler_version": "0.152",
+      "path": "src/main/java/com/sunwayworld/cloud/module/schedule/resource/CoreScheduleTaskConfigResource.java",
+      "sha256": "86f4369510e7854c343310af3aa8ef0b77f26c6bbb6a85f90f5d1b5f60a305d5",
+      "source_class_path": "com/sunwayworld/cloud/module/schedule/resource/CoreScheduleTaskConfigResource.class",
+      "source_jar": "BOOT-INF/lib/gikam-core-schedule-interface-14.1.5.jar",
+      "source_sha256_before_transform": "c2266e64abd97d4c41406682d6efe6f1cc7a1a3c203df119b777f49f368217f7",
+      "transformations": [
+        "normalization:generated-source"
+      ]
+    },
+    {
+      "class_sha256": "b6dbb9253b7670ab410f25d2d73c2b7f0329cb00c3b18d58973a128f4535a92b",
+      "compile_status": "pending-module-assembly",
+      "decompiler": "CFR",
+      "decompiler_version": "0.152",
+      "path": "src/main/java/com/sunwayworld/cloud/module/schedule/resource/CoreScheduleTaskLogResource.java",
+      "sha256": "ed99eef8bd2839ae376c2a2ce569f7c32619e92289c6341365010e3335cd818c",
+      "source_class_path": "com/sunwayworld/cloud/module/schedule/resource/CoreScheduleTaskLogResource.class",
+      "source_jar": "BOOT-INF/lib/gikam-core-schedule-interface-14.1.5.jar",
+      "source_sha256_before_transform": "a01789b4eab0606f63f8a0ee3d668ec43ae673058dd4931add76f892718aa64a",
+      "transformations": [
+        "normalization:generated-source"
+      ]
+    },
+    {
+      "class_sha256": "9800173f23d18fb1e410faefaf8ed82c5e09260ca6efc89f068cc9523b8c497a",
+      "compile_status": "pending-module-assembly",
+      "decompiler": "CFR",
+      "decompiler_version": "0.152",
+      "path": "src/main/java/com/sunwayworld/cloud/module/schedule/resource/CoreScheduleTaskResource.java",
+      "sha256": "83de44a3262c3c8ff576c42213bc9a72ba64b96b4e338dc7c147bb416faf2e2d",
+      "source_class_path": "com/sunwayworld/cloud/module/schedule/resource/CoreScheduleTaskResource.class",
+      "source_jar": "BOOT-INF/lib/gikam-core-schedule-interface-14.1.5.jar",
+      "source_sha256_before_transform": "c9bcdb949afd792d707d62a2698342edc836f00ae6ee54ce219723f9674bbd16",
+      "transformations": [
+        "normalization:generated-source"
+      ]
+    },
+    {
+      "class_sha256": "2537fc14106b155374f8835416ed454c5a1fff9c42c27419303fd1e35ef7602c",
+      "compile_status": "pending-module-assembly",
+      "decompiler": "CFR",
+      "decompiler_version": "0.152",
+      "path": "src/main/java/com/sunwayworld/cloud/module/schedule/schedule/persistent/dao/CoreScheduleTaskConfigDao.java",
+      "sha256": "3c1614f612ac140c92fa409e7e5a180573532efebdccfa01bcee9366a5176061",
+      "source_class_path": "com/sunwayworld/cloud/module/schedule/schedule/persistent/dao/CoreScheduleTaskConfigDao.class",
+      "source_jar": "BOOT-INF/lib/gikam-core-schedule-service-14.1.5.jar",
+      "source_sha256_before_transform": "973cac291099ed32ae0571a240070b87c3b6ec87bd31346dccef5c382c5fc709",
+      "transformations": [
+        "normalization:generated-source"
+      ]
+    },
+    {
+      "class_sha256": "1e7fec6d069cfa952eb0bff9b66e5418a898ebde8982bd00eda977402285345e",
+      "compile_status": "pending-module-assembly",
+      "decompiler": "CFR",
+      "decompiler_version": "0.152",
+      "path": "src/main/java/com/sunwayworld/cloud/module/schedule/schedule/persistent/dao/CoreScheduleTaskDao.java",
+      "sha256": "423cc4b194f22d701cd3b1f275c54d74c43fcdec848c6e57ae43cf0bfcb47e6d",
+      "source_class_path": "com/sunwayworld/cloud/module/schedule/schedule/persistent/dao/CoreScheduleTaskDao.class",
+      "source_jar": "BOOT-INF/lib/gikam-core-schedule-service-14.1.5.jar",
+      "source_sha256_before_transform": "7e5d40ba89153b238f86766d566bae58d6ae007a292ea6d9e46b18257cb1f789",
+      "transformations": [
+        "normalization:generated-source"
+      ]
+    },
+    {
+      "class_sha256": "a1be55d7737781b3e13fcb75ebbeee76d8f584a71bbbd03616177e6183e25b82",
+      "compile_status": "pending-module-assembly",
+      "decompiler": "CFR",
+      "decompiler_version": "0.152",
+      "path": "src/main/java/com/sunwayworld/cloud/module/schedule/schedule/persistent/dao/CoreScheduleTaskLogDao.java",
+      "sha256": "f32c02f4fef9569cd319b627c35057a85f8942b86b5be56eb4f1ed52d5657a3c",
+      "source_class_path": "com/sunwayworld/cloud/module/schedule/schedule/persistent/dao/CoreScheduleTaskLogDao.class",
+      "source_jar": "BOOT-INF/lib/gikam-core-schedule-service-14.1.5.jar",
+      "source_sha256_before_transform": "fe7d3ee74ecfd0effc7778dbc3fee8981dcf8ac55122404cca2d6a199df9a041",
+      "transformations": [
+        "normalization:generated-source"
+      ]
+    },
+    {
+      "class_sha256": "a3256e1a4d849afcefde15e9462644c298a3312de7ab1c7a3f12dc35adea315d",
+      "compile_status": "pending-module-assembly",
+      "decompiler": "CFR",
+      "decompiler_version": "0.152",
+      "path": "src/main/java/com/sunwayworld/cloud/module/schedule/schedule/persistent/dao/impl/CoreScheduleTaskConfigDaoImpl.java",
+      "sha256": "bb2684f2e222b40fb96220f30c5db466ce9b6c16c0149e1ddfdcd67c8f1bd051",
+      "source_class_path": "com/sunwayworld/cloud/module/schedule/schedule/persistent/dao/impl/CoreScheduleTaskConfigDaoImpl.class",
+      "source_jar": "BOOT-INF/lib/gikam-core-schedule-service-14.1.5.jar",
+      "source_sha256_before_transform": "aa03ca84633203fd37ce8d99dc9bb241e8aa267c20d0cc332594addbdd137b0f",
+      "transformations": [
+        "normalization:generated-source"
+      ]
+    },
+    {
+      "class_sha256": "a9790286e44ca26c0c89038d0133fe095da4e46bc140ce54f9f0971ffeaad2d2",
+      "compile_status": "pending-module-assembly",
+      "decompiler": "CFR",
+      "decompiler_version": "0.152",
+      "path": "src/main/java/com/sunwayworld/cloud/module/schedule/schedule/persistent/dao/impl/CoreScheduleTaskDaoImpl.java",
+      "sha256": "995d9ab7ab5c13884a84bf3192ffc7b212d24327f0c824b82b8a96f805312866",
+      "source_class_path": "com/sunwayworld/cloud/module/schedule/schedule/persistent/dao/impl/CoreScheduleTaskDaoImpl.class",
+      "source_jar": "BOOT-INF/lib/gikam-core-schedule-service-14.1.5.jar",
+      "source_sha256_before_transform": "50a23b86ca8217f0ad027813caa62fa066a1e91789a5541d0874d3cdbd28ffaf",
+      "transformations": [
+        "normalization:generated-source"
+      ]
+    },
+    {
+      "class_sha256": "aaf20bf0bd2f8f5bf77554ecafb6539e889b6de1b35872ba1c9d024e25fcadae",
+      "compile_status": "pending-module-assembly",
+      "decompiler": "CFR",
+      "decompiler_version": "0.152",
+      "path": "src/main/java/com/sunwayworld/cloud/module/schedule/schedule/persistent/dao/impl/CoreScheduleTaskLogDaoImpl.java",
+      "sha256": "db97d498757874197d74348138cad17289ff26a2be533fcff4fe97c25db5600e",
+      "source_class_path": "com/sunwayworld/cloud/module/schedule/schedule/persistent/dao/impl/CoreScheduleTaskLogDaoImpl.class",
+      "source_jar": "BOOT-INF/lib/gikam-core-schedule-service-14.1.5.jar",
+      "source_sha256_before_transform": "22dd060aee5a5a42da942ed25bca23fb2b3ca367b0995b696ab1ef6c55cbb36c",
+      "transformations": [
+        "normalization:generated-source"
+      ]
+    },
+    {
+      "class_sha256": "9574f8e9718b06677296036410dcf5892d9246c261056a3d695db9ee02b1a918",
+      "compile_status": "pending-module-assembly",
+      "decompiler": "CFR",
+      "decompiler_version": "0.152",
+      "path": "src/main/java/com/sunwayworld/cloud/module/schedule/schedule/persistent/mapper/CoreScheduleTaskConfigMapper.java",
+      "sha256": "b7f392ca71d643cb20f5224639133b99c78f14d341772f1152a6e1bbefa22b1d",
+      "source_class_path": "com/sunwayworld/cloud/module/schedule/schedule/persistent/mapper/CoreScheduleTaskConfigMapper.class",
+      "source_jar": "BOOT-INF/lib/gikam-core-schedule-service-14.1.5.jar",
+      "source_sha256_before_transform": "6b4d487ebee24277fac3bc6cb02e4a528d1367374908b8fa162759db818fbfcb",
+      "transformations": [
+        "normalization:generated-source"
+      ]
+    },
+    {
+      "class_sha256": "d6bd9bcbc7949c8109d5d8d2692f10206daeb3d6d1614efb642797359902a3f2",
+      "compile_status": "pending-module-assembly",
+      "decompiler": "CFR",
+      "decompiler_version": "0.152",
+      "path": "src/main/java/com/sunwayworld/cloud/module/schedule/schedule/persistent/mapper/CoreScheduleTaskLogMapper.java",
+      "sha256": "291793f9750be5b2a7430e594f9a251fbb4bb5fd3a335f4a841aa0f276d73712",
+      "source_class_path": "com/sunwayworld/cloud/module/schedule/schedule/persistent/mapper/CoreScheduleTaskLogMapper.class",
+      "source_jar": "BOOT-INF/lib/gikam-core-schedule-service-14.1.5.jar",
+      "source_sha256_before_transform": "8839098779fb71bacffd52ba053f6368f93d477c54101d037c2a8379af294739",
+      "transformations": [
+        "normalization:generated-source"
+      ]
+    },
+    {
+      "class_sha256": "59339ee27fd4fc972dd52ce22463956d43bb2a86765b422b555bbd443307f2e7",
+      "compile_status": "pending-module-assembly",
+      "decompiler": "CFR",
+      "decompiler_version": "0.152",
+      "path": "src/main/java/com/sunwayworld/cloud/module/schedule/schedule/persistent/mapper/CoreScheduleTaskMapper.java",
+      "sha256": "530caeab5c9fe65104e9c306b7edd9cdc6bafe7a6d3b5066e3a7760a24cfbc23",
+      "source_class_path": "com/sunwayworld/cloud/module/schedule/schedule/persistent/mapper/CoreScheduleTaskMapper.class",
+      "source_jar": "BOOT-INF/lib/gikam-core-schedule-service-14.1.5.jar",
+      "source_sha256_before_transform": "aa3dcf41256f203a0ab8b6d37e2a08f9d0cf6ee508e888baa5857f7ee6797e5e",
+      "transformations": [
+        "normalization:generated-source"
+      ]
+    },
+    {
+      "class_sha256": "cad1202df8fe5c41acf2b4d76775d016821fb4a794b3ddd03af3356f80189afd",
+      "compile_status": "pending-module-assembly",
+      "decompiler": "CFR",
+      "decompiler_version": "0.152",
+      "path": "src/main/java/com/sunwayworld/cloud/module/schedule/schedule/resource/impl/CoreScheduleTaskConfigResourceImpl.java",
+      "sha256": "7caaae004f047073bdfaa7b4b47ea06afd0ced1694ba6601350dd07c713aba6e",
+      "source_class_path": "com/sunwayworld/cloud/module/schedule/schedule/resource/impl/CoreScheduleTaskConfigResourceImpl.class",
+      "source_jar": "BOOT-INF/lib/gikam-core-schedule-service-14.1.5.jar",
+      "source_sha256_before_transform": "5e0b72aa9abcbb5034ab085da44fc46476d69b035cbbb11f049590ae5e092786",
+      "transformations": [
+        "normalization:generated-source"
+      ]
+    },
+    {
+      "class_sha256": "1242f8576212687f90a4ff211409c96d088f35304f23941741cd78c111d1efa2",
+      "compile_status": "pending-module-assembly",
+      "decompiler": "CFR",
+      "decompiler_version": "0.152",
+      "path": "src/main/java/com/sunwayworld/cloud/module/schedule/schedule/resource/impl/CoreScheduleTaskLogResourceImpl.java",
+      "sha256": "7977799d086ba5ceefc757bf4dbea2e26e74c799ab76b7e50d448e3ef0574b0c",
+      "source_class_path": "com/sunwayworld/cloud/module/schedule/schedule/resource/impl/CoreScheduleTaskLogResourceImpl.class",
+      "source_jar": "BOOT-INF/lib/gikam-core-schedule-service-14.1.5.jar",
+      "source_sha256_before_transform": "6bf7ee03e17b69e74bda4238e5f00e1c52c911da0d6d53175dd193ce2781aa00",
+      "transformations": [
+        "normalization:generated-source"
+      ]
+    },
+    {
+      "class_sha256": "eb5c7634227eefb74697db5c01f32903f39dbebf08d65c6984a3ebab9fb0c383",
+      "compile_status": "pending-module-assembly",
+      "decompiler": "CFR",
+      "decompiler_version": "0.152",
+      "path": "src/main/java/com/sunwayworld/cloud/module/schedule/schedule/resource/impl/CoreScheduleTaskResourceImpl.java",
+      "sha256": "f88191f75bf6294f5845a5eacb8a023bcd95e5def973fe95706a5d4389d2f0e6",
+      "source_class_path": "com/sunwayworld/cloud/module/schedule/schedule/resource/impl/CoreScheduleTaskResourceImpl.class",
+      "source_jar": "BOOT-INF/lib/gikam-core-schedule-service-14.1.5.jar",
+      "source_sha256_before_transform": "caf72de014a3f355cae636ebda96eced69ddf59076ca8669b620cda6142fd285",
+      "transformations": [
+        "normalization:generated-source"
+      ]
+    },
+    {
+      "class_sha256": "f2e687565cca73691d0c46aa7533ed9f08b481c0ed6f049f76865d346d0f6dad",
+      "compile_status": "pending-module-assembly",
+      "decompiler": "CFR",
+      "decompiler_version": "0.152",
+      "path": "src/main/java/com/sunwayworld/cloud/module/schedule/schedule/service/CoreScheduleManager.java",
+      "sha256": "6fd061c05812b0150d4d1a1ee9be5666f784ccc2f6e382fbad11f9ee0919fa86",
+      "source_class_path": "com/sunwayworld/cloud/module/schedule/schedule/service/CoreScheduleManager.class",
+      "source_jar": "BOOT-INF/lib/gikam-core-schedule-service-14.1.5.jar",
+      "source_sha256_before_transform": "97d9233b2560978ff1548519873aab23b015e958d85ed3e0aa43d19ca2b0ae01",
+      "transformations": [
+        "normalization:generated-source"
+      ]
+    },
+    {
+      "class_sha256": "eaeb43f40e6709d9c194dab934b53da0addba3c87ef781e03f6bad2c67cc3a76",
+      "compile_status": "pending-module-assembly",
+      "decompiler": "CFR",
+      "decompiler_version": "0.152",
+      "path": "src/main/java/com/sunwayworld/cloud/module/schedule/schedule/service/CoreScheduleTaskConfigService.java",
+      "sha256": "9bf57b6edb8de99f86034e4f9dc00b8192ab931d75b7ba1d2aff5cc63fc840b9",
+      "source_class_path": "com/sunwayworld/cloud/module/schedule/schedule/service/CoreScheduleTaskConfigService.class",
+      "source_jar": "BOOT-INF/lib/gikam-core-schedule-service-14.1.5.jar",
+      "source_sha256_before_transform": "866031e191c06deac04ad219fc134a4c2becde0b888c42616d01297ffaf4a750",
+      "transformations": [
+        "normalization:generated-source"
+      ]
+    },
+    {
+      "class_sha256": "ae765504ec9ebd2b885681cd3f063ab8fa576ce3737b4e688dcebfd37ead93d9",
+      "compile_status": "pending-module-assembly",
+      "decompiler": "CFR",
+      "decompiler_version": "0.152",
+      "path": "src/main/java/com/sunwayworld/cloud/module/schedule/schedule/service/CoreScheduleTaskLogService.java",
+      "sha256": "baa4f1487236630912ef429c63ae53e9e54db57d82a2ebba972c3b95dada8cff",
+      "source_class_path": "com/sunwayworld/cloud/module/schedule/schedule/service/CoreScheduleTaskLogService.class",
+      "source_jar": "BOOT-INF/lib/gikam-core-schedule-service-14.1.5.jar",
+      "source_sha256_before_transform": "e09b2a97ac9afc460c9e8e0deaeced711c448b6dd2056d90307441f20c4f78ad",
+      "transformations": [
+        "normalization:generated-source"
+      ]
+    },
+    {
+      "class_sha256": "533f7e773a504d3d810f2bbc078ea3698124da3b1d68016a36588bcb3708ad69",
+      "compile_status": "pending-module-assembly",
+      "decompiler": "CFR",
+      "decompiler_version": "0.152",
+      "path": "src/main/java/com/sunwayworld/cloud/module/schedule/schedule/service/CoreScheduleTaskService.java",
+      "sha256": "9d38587bb8db538840dd42eaadc9088519206b3884f8dd0424a80085b67cd0fe",
+      "source_class_path": "com/sunwayworld/cloud/module/schedule/schedule/service/CoreScheduleTaskService.class",
+      "source_jar": "BOOT-INF/lib/gikam-core-schedule-service-14.1.5.jar",
+      "source_sha256_before_transform": "f311335ca792def4a2778a7bf96af3f8d25c693e9ac5d05ebc2a553f174706e5",
+      "transformations": [
+        "normalization:generated-source"
+      ]
+    },
+    {
+      "class_sha256": "ae0534bb25a537aa26985c116cbacb1ee3a7597a223b6a172d96f009584c48ad",
+      "compile_status": "pending-module-assembly",
+      "decompiler": "Vineflower",
+      "decompiler_version": "1.11.1",
+      "path": "src/main/java/com/sunwayworld/cloud/module/schedule/schedule/service/impl/CoreScheduleManagerImpl.java",
+      "sha256": "45da171ab156ad0cf25c8aea79cbeeea87fe608ac337f561d17e337ba1132992",
+      "source_class_path": "com/sunwayworld/cloud/module/schedule/schedule/service/impl/CoreScheduleManagerImpl.class",
+      "source_jar": "BOOT-INF/lib/gikam-core-schedule-service-14.1.5.jar",
+      "source_sha256_before_transform": "45da171ab156ad0cf25c8aea79cbeeea87fe608ac337f561d17e337ba1132992",
+      "transformations": [
+        "cfr-to-vineflower-fallback"
+      ]
+    },
+    {
+      "class_sha256": "00950b65c4c64ea5d507c07b8cb1cc027421b642267039a995688a6a2c7780e5",
+      "compile_status": "pending-module-assembly",
+      "decompiler": "CFR",
+      "decompiler_version": "0.152",
+      "path": "src/main/java/com/sunwayworld/cloud/module/schedule/schedule/service/impl/CoreScheduleTaskConfigServiceImpl.java",
+      "sha256": "83aab7752bcee7cceb5bcea4724b21677b3b97d5d707861d1e831ab4d7cf6af1",
+      "source_class_path": "com/sunwayworld/cloud/module/schedule/schedule/service/impl/CoreScheduleTaskConfigServiceImpl.class",
+      "source_jar": "BOOT-INF/lib/gikam-core-schedule-service-14.1.5.jar",
+      "source_sha256_before_transform": "b99107e0360e3431d254346aacda6d4f4ba91cecf09c9a3fd05d99d6c3b54e31",
+      "transformations": [
+        "normalization:generated-source"
+      ]
+    },
+    {
+      "class_sha256": "e490d819b933e914b31450d3e7bcf5c89f14942b9b61ed608e0965f714bf6e17",
+      "compile_status": "pending-module-assembly",
+      "decompiler": "CFR",
+      "decompiler_version": "0.152",
+      "path": "src/main/java/com/sunwayworld/cloud/module/schedule/schedule/service/impl/CoreScheduleTaskLogServiceImpl.java",
+      "sha256": "589ecfcbc0e05512b30af7b886e9f1024f9af493091a153b65269a9d9916b21e",
+      "source_class_path": "com/sunwayworld/cloud/module/schedule/schedule/service/impl/CoreScheduleTaskLogServiceImpl.class",
+      "source_jar": "BOOT-INF/lib/gikam-core-schedule-service-14.1.5.jar",
+      "source_sha256_before_transform": "23f50a241440d40b45caf13f80891b233ecea1eaef1afdecaf54e09a4d1a2f23",
+      "transformations": [
+        "normalization:generated-source"
+      ]
+    },
+    {
+      "class_sha256": "8ee80422b2e57de7b6286dbaf7093d50e7209f4bf688fdd7f9e22b300e386c23",
+      "compile_status": "pending-module-assembly",
+      "decompiler": "CFR",
+      "decompiler_version": "0.152",
+      "path": "src/main/java/com/sunwayworld/cloud/module/schedule/schedule/service/impl/CoreScheduleTaskServiceImpl.java",
+      "sha256": "bbe994f25112939a7bbabb14cd9ae0cfdc5a0b1d1ad1a5435fddebba49613685",
+      "source_class_path": "com/sunwayworld/cloud/module/schedule/schedule/service/impl/CoreScheduleTaskServiceImpl.class",
+      "source_jar": "BOOT-INF/lib/gikam-core-schedule-service-14.1.5.jar",
+      "source_sha256_before_transform": "08714d2842962c92b8bc722a7f7fdcf76a717531a764f15d1f42a6961630f3d0",
+      "transformations": [
+        "normalization:generated-source"
+      ]
+    },
+    {
+      "class_sha256": "3cadf761f1f0825a6d6e3c96e00241e91b046a45e06711e8a038704c7cc97df9",
+      "compile_status": "pending-module-assembly",
+      "decompiler": "CFR",
+      "decompiler_version": "0.152",
+      "path": "src/main/java/com/sunwayworld/cloud/module/schedule/schedule/support/CoreScheduleTaskScriptTemplateHelper.java",
+      "sha256": "26ed169718ac29094fda989a17bc3ee8073672b5c5503fe5d70e48387efa8faf",
+      "source_class_path": "com/sunwayworld/cloud/module/schedule/schedule/support/CoreScheduleTaskScriptTemplateHelper.class",
+      "source_jar": "BOOT-INF/lib/gikam-core-schedule-service-14.1.5.jar",
+      "source_sha256_before_transform": "0d01f82122092dcd318b86d8495ab9a04acdfcd1de0a23548b1f018a930029d2",
+      "transformations": [
+        "normalization:generated-source"
+      ]
+    },
+    {
+      "class_sha256": "a871c1098f4c02fa3f8fc7f2a4a04c58ef954c4ef4f357818fd1f7bd153cde21",
+      "compile_status": "pending-module-assembly",
+      "decompiler": "CFR",
+      "decompiler_version": "0.152",
+      "path": "src/main/java/com/sunwayworld/cloud/module/schedule/schedule/validator/CoreScheduleTaskSaveValidator.java",
+      "sha256": "73b661f15b22ba2647dab9e3c6e1846442ba3e08f8827795fd6ebd8d416dd059",
+      "source_class_path": "com/sunwayworld/cloud/module/schedule/schedule/validator/CoreScheduleTaskSaveValidator.class",
+      "source_jar": "BOOT-INF/lib/gikam-core-schedule-service-14.1.5.jar",
+      "source_sha256_before_transform": "3041026450af18daee7ad072df5796136d4105965aad1e4f0f2bad18b710c985",
+      "transformations": [
+        "normalization:generated-source"
+      ]
+    },
+    {
+      "class_sha256": "f78c415559eb8d3e8d77f2be0bfe30f00f6bb89336a44b75bb72545fdaf6e7d8",
+      "compile_status": "pending-module-assembly",
+      "decompiler": "CFR",
+      "decompiler_version": "0.152",
+      "path": "src/main/java/com/sunwayworld/cloud/module/schedule/support/CoreScheduleJob.java",
+      "sha256": "247d03e8591285b17faea7a74d292af87cb901ef6cf0e57022eb39a2c8285541",
+      "source_class_path": "com/sunwayworld/cloud/module/schedule/support/CoreScheduleJob.class",
+      "source_jar": "BOOT-INF/lib/gikam-core-schedule-service-14.1.5.jar",
+      "source_sha256_before_transform": "44ddde0b9a917e0c4e34a2c4f2bd4b20042ee78954e6d9644ca1847080747806",
+      "transformations": [
+        "normalization:generated-source"
+      ]
+    },
+    {
+      "class_sha256": "3cd401b5bca2cea70536fcbe724723f9e7699197cec26a82ffa611c9a4e74b80",
+      "compile_status": "pending-module-assembly",
+      "decompiler": "Vineflower",
+      "decompiler_version": "1.11.1",
+      "path": "src/main/java/com/sunwayworld/cloud/module/schedule/support/CoreScheduleJobContainer.java",
+      "sha256": "630d32240c2d60f1df4cf13c64b6033b3385dcbacae5106f8e80a336f008645d",
+      "source_class_path": "com/sunwayworld/cloud/module/schedule/support/CoreScheduleJobContainer.class",
+      "source_jar": "BOOT-INF/lib/gikam-core-schedule-service-14.1.5.jar",
+      "source_sha256_before_transform": "f070bcff122260ba60a95e24de700edc1a58817099109f9aae2b6c0a3af530e6",
+      "transformations": [
+        "cfr-to-vineflower-fallback",
+        "rule:schedule-job-cache-generic-read"
+      ]
+    },
+    {
+      "class_sha256": "3b35c9151fa0cb4d4110e94cacb3448a0340dfdf1aa1576bc665184d6b81d063",
+      "compile_status": "pending-module-assembly",
+      "decompiler": "CFR",
+      "decompiler_version": "0.152",
+      "path": "src/main/java/com/sunwayworld/cloud/module/schedule/support/CoreScheduleLoopRunner.java",
+      "sha256": "2810412e2e754a0adde41d4435861a5d0a6b063fe65a87c8e05c906b3a34e989",
+      "source_class_path": "com/sunwayworld/cloud/module/schedule/support/CoreScheduleLoopRunner.class",
+      "source_jar": "BOOT-INF/lib/gikam-core-schedule-service-14.1.5.jar",
+      "source_sha256_before_transform": "3fc2221cd6f2c20daa30fd66edbbb8c7db188ff89dd1052bd55abeeac7291f42",
+      "transformations": [
+        "normalization:generated-source"
+      ]
+    },
+    {
+      "class_sha256": "76eaedd46fa883eda12e5d9e89ca3aafda1c99c23ccf645b43f6bd14049e4c0f",
+      "compile_status": "pending-module-assembly",
+      "decompiler": "CFR",
+      "decompiler_version": "0.152",
+      "path": "src/main/java/com/sunwayworld/cloud/module/schedule/support/CoreScheduleScheduleService.java",
+      "sha256": "01931d7ea086a6c9746f05aca92d566745c943549fca46d42088de4feb562971",
+      "source_class_path": "com/sunwayworld/cloud/module/schedule/support/CoreScheduleScheduleService.class",
+      "source_jar": "BOOT-INF/lib/gikam-core-schedule-service-14.1.5.jar",
+      "source_sha256_before_transform": "e1ea2d2eccd5432b2306c939432d9294c6ff0c2e4ca8ab44fec69a67a47fde30",
+      "transformations": [
+        "normalization:generated-source"
+      ]
+    },
+    {
+      "class_sha256": "7eb95757308726b16dd4a8571a39fc719f269c6f5473dd1cdb8306f2be2f60f3",
+      "compile_status": "pending-module-assembly",
+      "decompiler": "CFR",
+      "decompiler_version": "0.152",
+      "path": "src/main/java/com/sunwayworld/cloud/module/schedule/support/constant/SchedulePathConstant.java",
+      "sha256": "c591e0902823acc843ae0fde23a1da5210dd88f54b81aeef36e1baab2b2fd938",
+      "source_class_path": "com/sunwayworld/cloud/module/schedule/support/constant/SchedulePathConstant.class",
+      "source_jar": "BOOT-INF/lib/gikam-core-schedule-interface-14.1.5.jar",
+      "source_sha256_before_transform": "94c506f7c9059f32863f81948f32b37ee376ab01ef34372322aff9f3378fc08f",
+      "transformations": [
+        "normalization:generated-source"
+      ]
+    },
+    {
+      "class_sha256": "9353286cb9f890065121598fe4b6628278e6df4db515847f6dfbc676f1218bfe",
+      "compile_status": "pending-module-assembly",
+      "decompiler": "CFR",
+      "decompiler_version": "0.152",
+      "path": "src/main/java/com/sunwayworld/cloud/module/schedule/support/impl/CoreScheduleScheduleServiceImpl.java",
+      "sha256": "8002fa3735a9965e09254bf23acd4448f208524ab9ea2920ba409e70dab5013b",
+      "source_class_path": "com/sunwayworld/cloud/module/schedule/support/impl/CoreScheduleScheduleServiceImpl.class",
+      "source_jar": "BOOT-INF/lib/gikam-core-schedule-service-14.1.5.jar",
+      "source_sha256_before_transform": "05ffd0f42c39125173616259e29c37f9d7c93cfd526a349739e16b7e5259048b",
+      "transformations": [
+        "normalization:generated-source"
+      ]
+    }
+  ],
+  "source_tree_sha256": "f0deb3024d4ab07c400bb341f963b868111842ae8e7b4edaf4ff922631bed311",
+  "status": "assembled-source-only",
+  "transformation_manifest": "docs/reconstitution/decompiler-transforms.json",
+  "transformation_manifest_sha256": "8dddef183eece740791f9b179ec2aad9e30a224a0546e971df380fdb576a1d0c",
+  "transformed_source_count": 1
+}

@@ -1,0 +1,17 @@
+{
+  "command": "mvn -o -DskipTests clean package",
+  "exit_code": 0,
+  "host": "Linux",
+  "java_runtime": "java version \"1.8.0_391\"",
+  "java_version": "8",
+  "maven_runtime": "\u001b[1mApache Maven 3.9.12\u001b[m",
+  "module": "owned-core-schedule",
+  "output_jar": "owned-core-schedule/target/owned-core-schedule-1.0.0-SNAPSHOT.jar",
+  "output_jar_sha256": "7155294a08a125d7c6e48de435fe25bc1bbf6ad4e4e933ef8cf25bc741622512",
+  "schema": "supplier-reconstituted-module-compile-v1",
+  "source_file_count": 46,
+  "source_only_framework_classpath": true,
+  "source_tree_sha256": "f0deb3024d4ab07c400bb341f963b868111842ae8e7b4edaf4ff922631bed311",
+  "status": "pass",
+  "supplier_private_jars_on_classpath": false
+}

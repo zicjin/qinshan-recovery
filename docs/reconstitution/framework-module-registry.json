@@ -1,0 +1,160 @@
+{
+  "all_modules_compile_pass": true,
+  "api_evidence": false,
+  "artifact_sha256": "4a720797810fd2f8cca6e22604657028cb87830ca0e24bb55a5f42f040f6ee9f",
+  "candidate_group_count": 8,
+  "canonical": false,
+  "generated_at": "2026-11-04T05:28:27.508672+00:00",
+  "limitations": [
+    "Source assembly is not a final distribution gate.",
+    "Native/license removal and module compile reports must be completed before runtime packaging.",
+    "Public dependency JARs remain external controlled build inputs and are never copied into source control."
+  ],
+  "merged_candidate_groups": {
+    "owned-core-interface": "owned-core-common"
+  },
+  "module_count": 7,
+  "modules": [
+    {
+      "compile_status": "pass",
+      "dependencies": [],
+      "forbidden_content_status": "open-native-removal",
+      "module": "owned-core-common",
+      "output_jar": "owned-core-common/target/owned-core-common-1.0.0-SNAPSHOT.jar",
+      "output_jar_sha256": "8c7b0a23e2b2f3f75e2e32237ae1b5192fdd6da67d60bf0f2a7d4edebd034db9",
+      "reason": "Merges the common foundation and its immediately downstream base-interface JAR to avoid a two-module cycle-free core with no independent runtime boundary.",
+      "resource_file_count": 0,
+      "source_file_count": 2222,
+      "source_jars": [
+        "gikam-core-base-interface-14.1.5.jar",
+        "gikam-core-common-14.1.5.jar"
+      ],
+      "source_tree_sha256": "2f2d182fe616d9ae86611d6f77b5b1269c8aa9c99d113db68fd1031cc6957d25"
+    },
+    {
+      "compile_status": "pass",
+      "dependencies": [
+        "owned-core-common"
+      ],
+      "forbidden_content_status": "pass",
+      "module": "owned-core-base-service",
+      "output_jar": "owned-core-base-service/target/owned-core-base-service-1.0.0-SNAPSHOT.jar",
+      "output_jar_sha256": "c324ce1db395fe82649a5ad252ac2e0cebfd9556618a88e378802d2271abe900",
+      "reason": "Generic persistence and service behavior.",
+      "resource_file_count": 0,
+      "source_file_count": 801,
+      "source_jars": [
+        "gikam-core-base-service-14.1.5.jar"
+      ],
+      "source_tree_sha256": "1ab1d6e826d0a9f0786ec063799aaf2bd8b7968305fe2560329b2fc83f6f488d"
+    },
+    {
+      "compile_status": "pass",
+      "dependencies": [
+        "owned-core-common"
+      ],
+      "forbidden_content_status": "pass",
+      "module": "owned-core-web",
+      "output_jar": "owned-core-web/target/owned-core-web-1.0.0-SNAPSHOT.jar",
+      "output_jar_sha256": "406216dfe0e8e334726188cc2cc6cb078707bcffc32ada79c5711a2a840bf3e2",
+      "reason": "Original Thymeleaf/static/MyBatis web resources at their source paths.",
+      "resource_file_count": 5301,
+      "source_file_count": 0,
+      "source_jars": [],
+      "source_tree_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "compile_status": "pass",
+      "dependencies": [
+        "owned-core-common"
+      ],
+      "forbidden_content_status": "pass",
+      "module": "owned-core-ext",
+      "output_jar": "owned-core-ext/target/owned-core-ext-1.0.0-SNAPSHOT.jar",
+      "output_jar_sha256": "4abc4f11e3fccb649b28d7a88fb3548427c05291c3bd39f883b075169ed993ae",
+      "reason": "Extension interfaces, extension services and FTP support.",
+      "resource_file_count": 0,
+      "source_file_count": 644,
+      "source_jars": [
+        "gikam-core-ext-interface-14.1.5.jar",
+        "gikam-core-ext-service-14.1.5.jar",
+        "gikam-core-file-ftp-14.1.5.jar"
+      ],
+      "source_tree_sha256": "e8476568c4d0321a2182e3b12a26f3dfaf72371b3c8f7c3278b6a9178f90437e"
+    },
+    {
+      "compile_status": "pass",
+      "dependencies": [
+        "owned-core-common"
+      ],
+      "forbidden_content_status": "pass",
+      "module": "owned-core-lcdp",
+      "output_jar": "owned-core-lcdp/target/owned-core-lcdp-1.0.0-SNAPSHOT.jar",
+      "output_jar_sha256": "d580412184264abea9ed938ab430839b8677cb7f725d08a3158036bc8260f2f7",
+      "reason": "LCDP interfaces and services.",
+      "resource_file_count": 0,
+      "source_file_count": 500,
+      "source_jars": [
+        "gikam-core-lcdp-interface-14.1.5.jar",
+        "gikam-core-lcdp-service-14.1.5.jar"
+      ],
+      "source_tree_sha256": "557f4b87f1d8b82a2d6895479bec20641e2956758d252ab721b5e6bb0bc695b5"
+    },
+    {
+      "compile_status": "pass",
+      "dependencies": [
+        "owned-core-common"
+      ],
+      "forbidden_content_status": "pass",
+      "module": "owned-core-report",
+      "output_jar": "owned-core-report/target/owned-core-report-1.0.0-SNAPSHOT.jar",
+      "output_jar_sha256": "22d8318d8f1b506978409bd091f48aa5cc59782d114c70cd38142b94de6d8f54",
+      "reason": "FR, report, PageOffice and LIMS report-template source/resources.",
+      "resource_file_count": 0,
+      "source_file_count": 363,
+      "source_jars": [
+        "gikam-core-fr-interface-14.1.5.jar",
+        "gikam-core-fr-service-base-14.1.5.jar",
+        "gikam-core-report-interface-14.1.5-pageoffice6.jar",
+        "gikam-core-report-service-14.1.5-pageoffice6.jar",
+        "lims2-report-template-14.1.5.jar"
+      ],
+      "source_tree_sha256": "1c4a1f70838aa5a1e4d2ff2ba47c18b66b84bd8df86fcfdeebbf22d5702d23a6"
+    },
+    {
+      "compile_status": "pass",
+      "dependencies": [
+        "owned-core-common"
+      ],
+      "forbidden_content_status": "pass",
+      "module": "owned-core-schedule",
+      "output_jar": "owned-core-schedule/target/owned-core-schedule-1.0.0-SNAPSHOT.jar",
+      "output_jar_sha256": "7155294a08a125d7c6e48de435fe25bc1bbf6ad4e4e933ef8cf25bc741622512",
+      "reason": "Schedule interfaces and services.",
+      "resource_file_count": 0,
+      "source_file_count": 46,
+      "source_jars": [
+        "gikam-core-schedule-interface-14.1.5.jar",
+        "gikam-core-schedule-service-14.1.5.jar"
+      ],
+      "source_tree_sha256": "f0deb3024d4ab07c400bb341f963b868111842ae8e7b4edaf4ff922631bed311"
+    }
+  ],
+  "public_dependency_allowlist": "reconstituted/framework/public-dependency-allowlist.json",
+  "public_dependency_count": 386,
+  "resource_file_count": 5301,
+  "runtime_model": {
+    "application": "one Spring application",
+    "boundary_process": false,
+    "internal_http_bridge": false,
+    "jni_replacement_process": false
+  },
+  "schema": "reconstituted-framework-module-registry-v1",
+  "source_closure_gate_status": "all-framework-source-compile-pass",
+  "source_closure_mode": "all-framework-source-compile",
+  "source_file_count": 4576,
+  "status": "compiled-source-only",
+  "strict_evidence": false,
+  "transformation_manifest": "docs/reconstitution/decompiler-transforms.json",
+  "transformation_manifest_sha256": "8dddef183eece740791f9b179ec2aad9e30a224a0546e971df380fdb576a1d0c"
+}

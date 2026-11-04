@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="144px" height="80px" viewBox="0 0 144 80" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>象形图</title>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="象形图">
+            <rect id="矩形" x="0" y="0" width="144" height="80"></rect>
+            <text id="A" font-family="PingFangSC-Regular, PingFang SC" font-size="8" font-weight="normal" fill="#000000" fill-opacity="0.847820149">
+                <tspan x="24" y="75">A</tspan>
+            </text>
+            <text id="B" font-family="PingFangSC-Regular, PingFang SC" font-size="8" font-weight="normal" fill="#000000" fill-opacity="0.847820149">
+                <tspan x="55" y="75">B</tspan>
+            </text>
+            <text id="C" font-family="PingFangSC-Regular, PingFang SC" font-size="8" font-weight="normal" fill="#000000" fill-opacity="0.847820149">
+                <tspan x="86" y="75">C</tspan>
+            </text>
+            <text id="D" font-family="PingFangSC-Regular, PingFang SC" font-size="8" font-weight="normal" fill="#000000" fill-opacity="0.847820149">
+                <tspan x="116" y="75">D</tspan>
+            </text>
+            <rect id="矩形" fill="#2B2F31" x="8" y="63" width="128" height="1"></rect>
+            <rect id="矩形" fill="#2B2F31" x="8" y="8" width="1" height="56"></rect>
+            <path d="M15.4221372,63.197371 C22.6872486,63.197371 27.4221372,10.8739497 27.4221372,7.19737096 L27.4235555,7.3221614 C27.517088,11.9151858 32.229677,63.197371 39.4221372,63.197371 L39.4221372,63.197371 L15.4221372,63.197371 L15.4221372,63.197371 Z" id="形状结合" fill="#587EF7"></path>
+            <path d="M45.9909921,63 C53.2615571,63 58,22.0447821 58,19.1670062 L58.0014193,19.2646837 C58.0950221,22.859791 62.8111486,63 70.0090079,63 L70.0090079,63 L45.9909921,63 L45.9909921,63 Z" id="形状结合" fill="#587EF7"></path>
+            <path d="M76.9909921,63 C84.2615571,63 89,28.560385 89,26.140437 L89.0014193,26.2225749 C89.0950221,29.2457333 93.8111486,63 101.009008,63 L101.009008,63 L76.9909921,63 L76.9909921,63 Z" id="形状结合" fill="#587EF7"></path>
+            <path d="M106.990992,63 C114.261557,63 119,38.7991894 119,37.0986855 L119.001508,37.1584013 C119.097969,39.2956031 123.813397,63 131.009008,63 L131.009008,63 L106.990992,63 L106.990992,63 Z" id="形状结合" fill="#587EF7"></path>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="36px" height="36px" viewBox="0 0 36 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>告警</title>
+    <g id="系统监控指标" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g transform="translate(-197.000000, -510.000000)" id="告警">
+            <g transform="translate(197.000000, 510.000000)">
+                <path d="M0,18 C0,27.96 8.04,36 18,36 C27.96,36 36,27.96 36,18 C36,8.04 27.96,0 18,0 C8.04,0 0,8.04 0,18 Z" id="路径" fill="#FFF7E0" fill-rule="nonzero"></path>
+                <path d="M11.25,23.75 L24.75,23.75 C25.4403559,23.75 26,24.3096441 26,25 C26,25.6903559 25.4403559,26.25 24.75,26.25 L11.25,26.25 C10.5596441,26.25 10,25.6903559 10,25 C10,24.3096441 10.5596441,23.75 11.25,23.75 Z" id="矩形" fill="#FFC11C"></path>
+                <rect id="矩形" fill="#FFC11C" x="17" y="7.75" width="2" height="4" rx="1"></rect>
+                <rect id="矩形" fill="#FFC11C" transform="translate(11.000000, 11.871320) rotate(-45.000000) translate(-11.000000, -11.871320) " x="10" y="9.87132034" width="2" height="4" rx="1"></rect>
+                <rect id="矩形" fill="#FFC11C" transform="translate(25.000000, 11.871320) rotate(45.000000) translate(-25.000000, -11.871320) " x="24" y="9.87132034" width="2" height="4" rx="1"></rect>
+                <path d="M18,12.75 C21.3137085,12.75 24,15.4362915 24,18.75 L24,23.75 L12,23.75 L12,18.75 C12,15.4362915 14.6862915,12.75 18,12.75 Z" id="矩形" fill="#FFC11C"></path>
+                <path d="M16,18.75 C16.5522847,18.75 17,19.1977153 17,19.75 L17,23.75 L15,23.75 L15,19.75 C15,19.1977153 15.4477153,18.75 16,18.75 Z" id="矩形" fill="#FDF1D3"></path>
+            </g>
+        </g>
+    </g>
+</svg>

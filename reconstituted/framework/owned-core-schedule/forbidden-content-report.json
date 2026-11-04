@@ -1,0 +1,17 @@
+{
+  "forbidden_native_files": [],
+  "loader_reference_files": [],
+  "module": "owned-core-schedule",
+  "native_declaration_files": [],
+  "policy": {
+    "forbidden_native_files": "must be absent before final distribution",
+    "loader_reference_files": "must be removed before final distribution",
+    "native_declaration_files": "must be replaced or removed before final distribution",
+    "third_party_license_documents": "allowlisted documentation only; never Sunway runtime input"
+  },
+  "schema": "supplier-reconstituted-module-forbidden-content-v1",
+  "status": "pass",
+  "sunway_license_payload_retained": false,
+  "supplier_private_jar_retained": false,
+  "third_party_license_documents": []
+}

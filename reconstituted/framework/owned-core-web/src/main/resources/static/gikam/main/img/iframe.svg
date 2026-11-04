@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="72px" height="54px" viewBox="0 0 72 54" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>编组</title>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="二期补充" transform="translate(-52.000000, -857.000000)">
+            <g id="网页组件" transform="translate(0.000000, 816.000000)">
+                <g id="编组" transform="translate(52.000000, 41.000000)">
+                    <path d="M72,12 L72,54 L0,54 L0,12 L72,12 Z M69,13 L3,13 L3,51 L69,51 L69,13 Z" id="形状结合备份" fill="#587EF7" fill-rule="nonzero"></path>
+                    <path d="M68,2 C68.5522847,2 69.0522847,2.22385763 69.4142136,2.58578644 C69.7761424,2.94771525 70,3.44771525 70,4 L70,4 L70,14 L2,14 L2,4 C2,3.44771525 2.22385763,2.94771525 2.58578644,2.58578644 C2.94771525,2.22385763 3.44771525,2 4,2 L4,2 Z" id="矩形备份-5" stroke="#587EF7" stroke-width="4" fill-rule="nonzero"></path>
+                    <circle id="椭圆形" fill="#FA5E58" cx="8" cy="8" r="2"></circle>
+                    <circle id="椭圆形" fill="#FABC2E" cx="14" cy="8" r="2"></circle>
+                    <circle id="椭圆形" fill="#28C83F" cx="20" cy="8" r="2"></circle>
+                    <text id="&lt;iframe&gt;" font-family="PingFangSC-Semibold, PingFang SC" font-size="14" font-weight="500" fill="#37CFC9">
+                        <tspan x="6.68" y="38">&lt;iframe&gt;</tspan>
+                    </text>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

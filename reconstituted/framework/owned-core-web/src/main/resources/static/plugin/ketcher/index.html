@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="description" content="Ketcher is a web-based chemical structure editor" />
+    <link rel="shortcut icon" type="image/x-icon" href="./favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="./favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="./favicon-16x16.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png" />
+    <link rel="manifest" href="./manifest.json" />
+    <title>Ketcher v2.7.2</title>
+    <script defer="defer" src="./static/js/main.b054cdb3.js"></script>
+    <link href="./static/css/main.4d9ef476.css" rel="stylesheet">
+</head>
+
+<body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    <script src="./lib/html2canvas.min.js"></script>
+    <script>
+        function hasKetcher(callback) {
+            const interval = setInterval(() => {
+                if (ketcher) {
+                    callback();
+                    clearInterval(interval)
+                }
+            }, 5)
+        }
+
+        function setData(data) {
+            if (ketcher) {
+                ketcher.setMolecule(data);
+            }
+        }
+
+        async function getData() {
+            const res = {};
+            if (ketcher) {
+                res.smile = await ketcher.getSmiles();
+                res.graph = await ketcher.getKet();
+                // 注释掉的代码是为了前端能画分子式之外的箭头等符号，不然转mol时会抛出异常
+                if (res.smile.indexOf('>>') < 0) {
+                    res.molfile = await ketcher.getMolfile();
+                }
+                const box = ketcher.editor.render.clientArea;
+                const svg = box.childNodes[0];
+                box.style.width = svg.getAttribute('width') + 'px';
+                box.style.height = svg.getAttribute('height') + 'px';
+                box.style.border = 'none';
+                box.nextElementSibling.style.display = 'none';
+
+                res.image = (await html2canvas(box)).toDataURL()
+            }
+            return res;
+        }
+    </script>
+</body>
+
+</html>

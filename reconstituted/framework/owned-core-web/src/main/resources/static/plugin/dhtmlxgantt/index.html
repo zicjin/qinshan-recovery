@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+<script src="codebase/dhtmlxgantt.js"></script>
+<script src="codebase/ext/dhtmlxgantt_marker.js"></script>
+<script src="codebase/ext/dhtmlxgantt_tooltip.js"></script>
+<script src="codebase/ext/dhtmlxgantt_keyboard_navigation.js"></script>
+<script src="./lib/html2canvas.js"></script>
+<script src="./lib/jquery.js"></script>
+<script src="./lib/exportApi.js"></script>
+
+
+<link rel="stylesheet" href="codebase/dhtmlxgantt.css">
+<link rel="stylesheet" href="common/controls_styles.css">
+<link rel="stylesheet" id="skin">
+<link rel="stylesheet" href="codebase/index.css">
+
+<style type="text/css">
+.weekend {
+    background: #f4f7f4;
+}
+
+.gantt_selected .weekend {
+    background: #f7eb91;
+}
+</style>
+
+</head>
+<body>
+    <div id="gantt_here" style="width:100%; height:100%;"></div>
+</body>
+<script>
+    if (parent.Gikam.locale.toLocaleLowerCase() === 'zh-cn') {
+        var script = document.createElement('script');
+        script.src = 'codebase/locale/locale_cn.js';
+        document.body.appendChild(script);	
+     }
+    
+    function fontI18N(key){
+        return parent.Gikam.component.FrontI18N.prop(key);
+    }
+    
+    gantt.initForm = function (zoomConfig) {
+        if (!zoomConfig || !zoomConfig.levels || !zoomConfig.levels.length || zoomConfig.levels.length <= 0) {
+            return
+        }
+
+        var input = ''
+        zoomConfig.levels.forEach( function (element, i){
+            _input = '<input type="radio" id=' + element.name + ' class="gantt_radio" name="scale" value=' + element.name + '> <label for= ' + element.name + ' > ' + element.label + '</label > '
+            input += _input
+        });
+
+        var gantt_control = document.createElement('div')
+        gantt_control.setAttribute('class', 'gantt_control')
+        gantt_control.innerHTML = input
+
+        document.body.insertBefore(gantt_control, document.getElementById('gantt_here'))
+        document.getElementById('gantt_here').style.height = 'calc(100% - 45px)'
+
+        this.ext.zoom.init(zoomConfig);
+
+        this.ext.zoom.setLevel("month");
+
+        document.getElementsByClassName("gantt_control")[0].onclick = function (event) {
+            if (event.target.hasAttribute('name')) {
+                this.ext.zoom.setLevel(event.target.value);
+            }
+        }.bind(this);
+    }
+    
+    function toggleMode(toggle) {
+        toggle.enabled = !toggle.enabled;
+        if (toggle.enabled) {
+            toggle.innerHTML = fontI18N('set.default.scale');
+            saveConfig();
+            zoomToFit();
+        } else {
+            toggle.innerHTML = fontI18N('zoom.to.fit');
+            restoreConfig();
+            gantt.render();
+        }
+    }
+    
+    var cachedSettings = {};
+
+    function saveConfig() {
+        var config = gantt.config;
+        cachedSettings = {};
+        cachedSettings.scales = config.scales;
+        cachedSettings.start_date = config.start_date;
+        cachedSettings.end_date = config.end_date;
+    }
+    
+    function restoreConfig() {
+        applyConfig(cachedSettings);
+    }
+
+    function applyConfig(config, dates) {
+
+        gantt.config.scales = config.scales;
+
+        if (dates && dates.start_date && dates.end_date) {
+            gantt.config.start_date = gantt.date.add(dates.start_date, -1, config.scales[0].subscale_unit);
+            gantt.config.end_date = gantt.date.add(gantt.date[config.scales[0].subscale_unit + "_start"](dates.end_date), 2, config.scales[0].subscale_unit);
+        } else {
+            gantt.config.start_date = gantt.config.end_date = null;
+        }
+    }
+    
+    // get number of columns in timeline
+    function getUnitsBetween(from, to, unit, step) {
+        var start = new Date(from),
+            end = new Date(to);
+        var units = 0;
+        while (start.valueOf() < end.valueOf()) {
+            units++;
+            start = gantt.date.add(start, step, unit);
+        }
+        return units;
+    }
+
+    //Setting available scales
+    var scaleConfigs = [
+        // decades
+        {
+            scales: [
+                {
+                    subscale_unit: "year", unit: "year", step: 10, template: function (date) {
+                        var dateToStr = gantt.date.date_to_str("%Y");
+                        var endDate = gantt.date.add(gantt.date.add(date, 10, "year"), -1, "day");
+                        return dateToStr(date) + " - " + dateToStr(endDate);
+                    }
+                },
+                {
+                    unit: "year", step: 100, template: function (date) {
+                        var dateToStr = gantt.date.date_to_str("%Y");
+                        var endDate = gantt.date.add(gantt.date.add(date, 100, "year"), -1, "day");
+                        return dateToStr(date) + " - " + dateToStr(endDate);
+                    }
+                }
+            ]
+        },
+        // years
+        {
+            scales: [
+                {subscale_unit: "year", unit: "year", step: 1, date: "%Y"},
+                {
+                    unit: "year", step: 5, template: function (date) {
+                        var dateToStr = gantt.date.date_to_str("%Y");
+                        var endDate = gantt.date.add(gantt.date.add(date, 5, "year"), -1, "day");
+                        return dateToStr(date) + " - " + dateToStr(endDate);
+                    }
+                }
+            ]
+        },
+        // quarters
+        {
+            scales: [
+                {subscale_unit: "month", unit: "year", step: 3, format: "%Y"},
+                {
+                    unit: "month", step: 3, template: function (date) {
+                        var dateToStr = gantt.date.date_to_str("%M");
+                        var endDate = gantt.date.add(gantt.date.add(date, 3, "month"), -1, "day");
+                        return dateToStr(date) + " - " + dateToStr(endDate);
+                    }
+                }
+            ]
+        },
+        // months
+        {
+            scales: [
+                {subscale_unit: "month", unit: "year", step: 1, format: "%Y"},
+                {unit: "month", step: 1, format: "%M"}
+            ]
+        },
+        // weeks
+        {
+            scales: [
+                {subscale_unit: "week", unit: "month", step: 1, date: "%F"},
+                {
+                    unit: "week", step: 1, template: function (date) {
+                        var dateToStr = gantt.date.date_to_str("%d %M");
+                        var endDate = gantt.date.add(gantt.date.add(date, 1, "week"), -1, "day");
+                        return dateToStr(date) + " - " + dateToStr(endDate);
+                    }
+                }
+            ]
+        },
+        // days
+        {
+            scales: [
+                {subscale_unit: "day", unit: "month", step: 1, format: "%F"},
+                {unit: "day", step: 1, format: "%j"}
+            ]
+        },
+        // hours
+        {
+            scales: [
+                {subscale_unit: "hour", unit: "day", step: 1, format: "%j %M"},
+                {unit: "hour", step: 1, format: "%H:%i"}
+
+            ]
+        },
+        // minutes
+        {
+            scales: [
+                {subscale_unit: "minute", unit: "hour", step: 1, format: "%H"},
+                {unit: "minute", step: 1, format: "%H:%i"}
+            ]
+        }
+    ];
+    
+    function zoomToFit() {
+        var project = gantt.getSubtaskDates(),
+            areaWidth = gantt.$task.offsetWidth;
+
+        for (var i = 0; i < scaleConfigs.length; i++) {
+            var columnCount = getUnitsBetween(project.start_date, project.end_date, scaleConfigs[i].scales[0].subscale_unit, scaleConfigs[i].scales[0].step);
+            if ((columnCount + 2) * gantt.config.min_column_width >= areaWidth) {
+                --i;
+                break;
+            }
+        }
+        
+
+        if (i == scaleConfigs.length) {
+            i--;
+        }
+
+        applyConfig(scaleConfigs[i], project);
+        gantt.render();
+    }
+     
+    function changeSkin(name) {
+        var link = document.createElement("link");
+        link.rel = "stylesheet";
+        link.type = "text/css";
+        link.id = "skin";
+        link.href = "codebase/skins/dhtmlxgantt_" + name + ".css";
+        document.head.replaceChild(link, document.querySelector("#skin"));
+    }
+    
+    function addWeekendStyle() {
+        gantt.templates.scale_cell_class = function (date) {
+            if (date.getDay() == 0 || date.getDay() == 6) {
+                return "weekend";
+            }
+        };
+        gantt.templates.timeline_cell_class = function (item, date) {
+            if (date.getDay() == 0 || date.getDay() == 6) {
+                return "weekend"
+            }
+        };
+    }
+    
+    function exportToPDF() {
+         gantt.exportToPDF({
+            raw: true,
+            fileName: this.pdfName
+        }); 
+    }
+    
+    function exportToPNG() {
+        parent.Gikam.showMask();
+        var $nodeOriginal = $('#gantt_here');
+        var $node = $nodeOriginal.clone().appendTo('body');
+        
+         $node.find('.gantt_task').css({
+            width : 'auto',
+            display : 'inline-block'
+        }).parent().css({
+            width : 'auto',
+            display : 'inline-block'
+        }).parent().css({
+            width : 'auto',
+            display : 'inline-block'
+        }).parent().css({
+            width : 'auto',
+            display : 'inline-block'
+        }).parent().css({
+            width : 'auto',
+            display : 'inline-block'
+        }).parent().css({
+            width : 'auto',
+            display : 'inline-block'
+        });
+        
+        $node.find('.gantt_grid_data').css({
+            overflow : 'unset',
+            height : 'auto'
+        }).parent().css({
+            height : 'auto'
+        }).parent().css({
+            height : 'auto'
+        }).parent().css({
+            height : 'auto'
+        }).parent().css({
+            height : 'auto'
+        }).parent().css({
+            height : 'auto'
+        }).parent().css({
+            height : 'auto'
+        });
+        
+        $node.find('.gantt_task_bg').css({
+            overflow : 'unset',
+        }).parent().css({
+            height : 'auto'
+        }).parent().css({
+            height : 'auto'
+        }).parent().css({
+            height : 'auto'
+        }).parent().css({
+            height : 'auto'
+        }).parent().css({
+            height : 'auto'
+        }).parent().css({
+            height : 'auto'
+        }); 
+        
+          html2canvas($node, {
+            height: $nodeOriginal.outerHeight() - 10,
+            widht : $nodeOriginal.outerWidth(),
+            onrendered: function(canvas) {
+                var image = canvas.toDataURL();
+                image = image.replace("image/png",'image/octet-stream');
+                var saveFile = function(data, filename) {
+                    var save_link = document.createElementNS('http://www.w3.org/1999/xhtml', 'a');
+                    save_link.href = data;
+                    save_link.download = filename;
+                    var event = document.createEvent('MouseEvents');
+                    event.initMouseEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+                    save_link.dispatchEvent(event);
+                };
+                saveFile(image, 'gantt.png');
+                $node.remove();
+                parent.Gikam.cleanMask();
+            }
+        }); 
+    }
+    
+    function init(ganttVue) {
+        this.pdfName = ganttVue.options.pdfName;
+        
+        if (ganttVue.options.skin) {
+            this.changeSkin(ganttVue.options.skin);
+        }
+        
+        if (ganttVue.options.weekend) {
+            this.addWeekendStyle();
+        }
+        
+        if (ganttVue.options.controlButton) {
+            var gantt_controlButton = document.createElement('div')
+            gantt_controlButton.setAttribute('class', 'gantt_controlButton')
+            var buttonHtml = '<div class="gantt_controlButton">' + 
+            '<button onclick="toggleMode(this)">'+ fontI18N("zoom.to.fit") +'</button>'+
+            '<button onclick="exportToPNG()">'+ fontI18N("export.png") +'</button>'+
+            '<button onclick="exportToPDF()">'+ fontI18N("export.pdf") +'</button></div>';
+            parent.Gikam.jQuery(buttonHtml).insertBefore(document.getElementById('gantt_here'));
+        }
+        
+        gantt.templates.link_class = function (link) {
+            var types = gantt.config.links;
+            switch (link.type) {
+                case types.finish_to_start:
+                    return "finish_to_start";
+                    break;
+                case types.start_to_start:
+                    return "start_to_start";
+                    break;
+                case types.finish_to_finish:
+                    return "finish_to_finish";
+                    break;
+            }
+        };
+        
+        if (ganttVue.options.draggable) {
+            var dragging_task = 0;
+            gantt.attachEvent('onAfterTaskDrag', function (id, mode, e) {
+                gantt.dragId = null, gantt.afterDragParentId = null, gantt.beforeDragParentId = null;
+                var modes = gantt.config.drag_mode;
+                if (mode == modes.move) {
+                    if (dragging_task && id == dragging_task) {
+                        var target_index = Math.floor(y_pos / gantt.config.row_height);
+                        var target_task = gantt.getTaskByIndex(target_index - 1);
+                        if (!target_task) target_task = gantt.getTaskByIndex(gantt.getVisibleTaskCount() - 1);
+                        if (target_task.type != 'project') {
+                            var copy_object = gantt.copy(target_task);
+                            gantt.changeTaskId(target_task.id, +new Date());
+                            gantt.addTask(copy_object, target_task.id);
+                            target_task.type = 'project';
+                            target_task.render = ['split'];
+                        }
+                        var task = gantt.getTask(id);
+                        //获取拖拽后的id
+                        gantt.dragId = id;
+                        if (task.parent) {
+                            gantt.beforeDragParentId = task.parent;
+                            var original_parent = gantt.getTask(task.parent);
+                            var children = gantt.getChildren(task.parent);
+                            if (children.length == 1) original_parent.type = gantt.config.types.task;
+                        }
+                        gantt.afterDragParentId = target_task.id;
+                        task.parent = target_task.id;
+                        gantt.updateTask(target_task.id);
+                        gantt.updateTask(id);
+                        gantt.render();
+                    }
+                    dragging_task = 0;
+                    gantt.refreshTask(id);
+                }
+            });
+            // 渲染红能或者配置对象，将在图层中显示Dom元素
+            gantt.addTaskLayer({
+                renderer: function highlight_area() {
+                    var task = gantt.getTask(dragging_task);
+                    var sizes = gantt.getTaskPosition(task, task.start_date, task.end_date);
+                    var el = document.createElement('div');
+                    el.className = 'gantt_task_line';
+                    el.style.top = y_pos - 54 + 'px';
+                    if (task.type == gantt.config.types.milestone) {
+                        el.style.left = (sizes.left - 15) + 'px';
+                        el.style.width = '30px';
+                        el.style.height = '30px';
+                        el.style.transform = 'rotate(45deg)';
+                        el.style.background = '#D33DAF';
+                    }
+                    else {
+                        el.style.left = sizes.left + 'px';
+                        el.style.width = sizes.width + 'px';
+                        el.style.height = sizes.height + 'px';
+                    }
+                    el.style.opacity = 0.5;
+                    if (dragging_task) return el;
+                },
+                filter: function (task) {
+                    return dragging_task == gantt.getState().drag_id;
+                }
+            });
+            gantt.templates.tooltip_text = function(start,end,task) {
+                 return '<b>Task:</b> '+task.text+'<br/><b>任务：</b>' + task.text1;
+            };
+            var y_pos;
+            gantt.attachEvent('onMouseMove', function (id, e) {
+                y_pos = e.clientY;
+            });
+            gantt.attachEvent('onBeforeTaskDrag', function (id, mode, e) {
+                var modes = gantt.config.drag_mode;
+                if (mode == modes.move) {
+                    dragging_task = id;
+                    gantt.refreshTask(id);
+                }
+                return true;
+            });
+            gantt.templates.task_class = function (start, end, task) {
+                if (dragging_task && task.id == dragging_task) return 'dragging_task';
+            };
+
+            //激活“分支”模式，该模式允许在同一树级别内垂直重新排序任务
+            gantt.config.order_branch = true;
+            //激活“分支”模式，该模式允许在整个甘特图中重新排序任务
+            gantt.config.order_branch_free = true;
+            
+            //甘特图以自动扩展时间范围以适合所有显示的任务
+            gantt.config.fit_tasks = true;
+            //最初打开所有分支
+            gantt.config.open_tree_initially = true;
+            //可以将任务的开始和结束日期四舍五入到最接近的刻度
+            gantt.config.round_dnd_dates = false;
+        }
+        return gantt;
+    }
+</script>
+
+</html>

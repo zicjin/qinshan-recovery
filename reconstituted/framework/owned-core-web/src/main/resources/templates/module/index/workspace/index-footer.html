@@ -1,0 +1,20 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    const IFM_CONTEXT = [[${#httpServletRequest.getScheme() + '://' + #httpServletRequest.getServerName() + ':' + #httpServletRequest.getServerPort()}]];
+    /*]]>*/
+</script>
+<script th:src="@{/static/gikam/js/gikam.js}"></script>
+<script th:src="@{/static/gikam/js/gikam-extend.js}"></script>
+<script th:src="@{/static/module/index/workspace/js/index.js}"></script>
+<!-- 
+<script th:src="@{/static/config/core-select-config.js}"></script>
+<script th:src="@{/static/config/core-choose-config.js}"></script>
+ -->
+<script th:inline="javascript">
+/*<![CDATA[*/
+Gikam.choose.addConfigParam([[${@coreAdminChooseConfigServiceImpl.selectAll()}]]);
+
+Gikam.select.addConfigParam([[${@coreAdminSelectConfigServiceImpl.selectAll()}]]);
+/*]]>*/
+</script>
+

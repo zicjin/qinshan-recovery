@@ -1,0 +1,90 @@
+<body>
+    <div id="app" v-cloak="v-cloak">
+        <div class="sidebar skin" :class="[skin,{expand:sidebarExpand}]">
+            <header>
+                <div class="out-logo">
+                    <div class="logo" :style="logoImage"></div>
+                </div>
+                <div class="menu-mode-switch">
+                    <div class="switch-container" v-on:click="switchMenuMode">
+                        <div class="switch-btn" :class="{active:menuMode==='simple'}">快捷</div>
+                        <div class="switch-btn" :class="{active:menuMode==='all'}">全部</div>
+                    </div>
+                </div>
+                <div class="menu-search">
+                    <input placeholder="搜索" v-on:input="menuSearch" v-show="sidebarExpand" />
+                </div>
+            </header>
+            <section>
+                <div class="menu">
+                    <scroll>
+                        <menu-tree v-show="menuMode==='all'" :nodes="menuList" :skin = 'skin' :level="1"></menu-tree>
+                        <div class="menu" v-show="menuMode==='simple'">
+                            <ul>
+                                <li v-for="item in simpleMenuList" class="leaf" :key="item.id">
+                                    <div class="node" :id="'simple-' + item.menuId" v-on:click="toggleSimpleMenuNode(item, $event)" v-on:contextmenu.prevent="rightSimpleMenu(item, $event)"
+                                        :ref="item.id" :class="{active:item.active}">
+                                        <div class="menu-icon"></div>
+                                        <span class="menu-text" :title="item.text" v-if="item.ext$">{{item.ext$.menuname}}</span>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </scroll>
+                    <!-- 快捷菜单 -->
+                    <div class="right-simple-menu">
+                        <div v-if="menuMode==='all'" class="menu" @click="simpleMenuChange('add')">添加为快捷菜单</div>
+                        <div v-if="menuMode==='simple'" class="menu" @click="simpleMenuChange('cancel')">取消快捷菜单</div>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <div class="main-container">
+            <header>
+                <div class="top-toolbar">
+                    <div class="logo" v-if="!sidebarExpand" :style="fullScreenLogoImage"></div>
+                    <div class="menu-switch" :class="{expand:sidebarExpand}" v-on:click="sidebarSwitch"></div>
+                    <div class="sys-info">
+                        <div class="platform" v-on:click.stop="showTodoListPanel">
+                            <span class="todo-num" v-if="todoNum>0">{{todoNum}}</span>
+                        </div>
+                        <!-- <div class="message"></div> -->
+                        <div class="user" v-on:click.stop="showUserSettingPanel">
+                            <div class="user-photo" :class="user.userPhoto || 'common'"></div>
+                            <span>{{user.userName}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="page-switch-tab">
+                    <div class="home" v-on:click="switchHomeAndBiz">
+                        <div class="home-container" :class="{active: homeShow}">
+                            <div class="home-icon"></div>
+                            首页
+                        </div>
+                    </div>
+                    <div class="page-switch-container">
+                        <div class="items" :ref="'menuTab'+node.id" :key="node.id" :class="{active:node.active}" v-for="node in shownActiveLeafNode" @click="enterFromHisTab(node)"
+                            @contextmenu.prevent="closeOtherTab(node, $event)">
+                            {{node.text}}
+                            <div class="close" v-on:click.stop="closeTabPage(node)"></div>
+                        </div>
+                    </div>
+                    <div class="more" v-on:click.stop="showMoreHistoryMenu"></div>
+                    <!-- 右键改造 -->
+                    <div class="right-key-menu">
+                        <template v-for="item in tabRightMenu">
+                            <div class="menu" v-if="item.key !== 'refresh' || rightActiveNode.active" :key="item.key" :title="item.menu" @click="rightMenuClick(item.key)">{{item.menu}}</div>
+                        </template>
+                    </div>
+                </div>
+            </header>
+            <section>
+                <div id="home-container" class="home-container" v-show="homeShow">
+                    <scroll> </scroll>
+                </div>
+                <div id="business-container" v-show="!homeShow"></div>
+            </section>
+        </div>
+    </div>
+</body>
+

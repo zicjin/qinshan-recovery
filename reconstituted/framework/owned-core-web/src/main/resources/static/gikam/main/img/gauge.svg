@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="72px" height="56px" viewBox="0 0 72 56" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 64 (93537) - https://sketch.com -->
+    <title>仪表图</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <circle id="path-1" cx="45" cy="45" r="36"></circle>
+        <mask id="mask-2" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="72" height="72" fill="white">
+            <use xlink:href="#path-1"></use>
+        </mask>
+        <circle id="path-3" cx="45" cy="45" r="36"></circle>
+        <mask id="mask-4" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="72" height="72" fill="white">
+            <use xlink:href="#path-3"></use>
+        </mask>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="仪表图" transform="translate(-9.000000, -9.000000)">
+            <circle id="椭圆形" cx="45" cy="45" r="36"></circle>
+            <text id="A" font-family="PingFangSC-Regular, PingFang SC" font-size="8" font-weight="normal" fill="#000000" fill-opacity="0.847820149">
+                <tspan x="42" y="65">A</tspan>
+            </text>
+            <use id="椭圆形" stroke="#4C5666" mask="url(#mask-2)" stroke-width="8" stroke-linejoin="round" stroke-dasharray="134,226.08" transform="translate(45.000000, 45.000000) scale(1, -1) rotate(107.000000) translate(-45.000000, -45.000000) " xlink:href="#path-1"></use>
+            <use id="椭圆形" stroke="#587EF7" mask="url(#mask-4)" stroke-width="8" stroke-linejoin="round" stroke-dasharray="84,226.08" transform="translate(45.000000, 45.000000) scale(1, -1) rotate(107.000000) translate(-45.000000, -45.000000) " xlink:href="#path-3"></use>
+            <circle id="椭圆形" stroke="#587EF7" stroke-width="2" transform="translate(45.000000, 45.000000) rotate(27.000000) translate(-45.000000, -45.000000) " cx="45" cy="45" r="3"></circle>
+            <rect id="矩形" fill="#587EF7" transform="translate(50.447886, 34.307922) rotate(27.000000) translate(-50.447886, -34.307922) " x="49.447886" y="24.3079217" width="2" height="20" rx="1"></rect>
+            <rect id="矩形" stroke="#979797" fill="#D8D8D8" x="13.5" y="44.5" width="2" height="1"></rect>
+            <rect id="矩形" stroke="#979797" fill="#D8D8D8" x="13.5" y="44.5" width="2" height="1"></rect>
+            <rect id="矩形" stroke="#979797" fill="#D8D8D8" transform="translate(74.401688, 53.120182) rotate(196.500000) translate(-74.401688, -53.120182) " x="73.4016881" y="53.1201817" width="2" height="1"></rect>
+            <rect id="矩形" stroke="#979797" fill="#D8D8D8" transform="translate(74.589928, 37.588216) rotate(165.000000) translate(-74.589928, -37.588216) " x="73.5899276" y="37.5882162" width="2" height="1"></rect>
+            <rect id="矩形" stroke="#979797" fill="#D8D8D8" transform="translate(66.771935, 23.634525) rotate(134.600000) translate(-66.771935, -23.634525) " x="65.7719345" y="23.6345251" width="2" height="1"></rect>
+            <rect id="矩形" stroke="#979797" fill="#D8D8D8" transform="translate(52.967185, 15.554713) rotate(104.200000) translate(-52.967185, -15.554713) " x="51.9671848" y="15.5547125" width="2" height="1"></rect>
+            <rect id="矩形" stroke="#979797" fill="#D8D8D8" transform="translate(36.560815, 15.686519) rotate(73.000000) translate(-36.560815, -15.686519) " x="35.5608154" y="15.6865191" width="2" height="1"></rect>
+            <rect id="矩形" stroke="#979797" fill="#D8D8D8" transform="translate(23.034711, 23.833373) rotate(43.000000) translate(-23.034711, -23.833373) " x="22.0347113" y="23.8333732" width="2" height="1"></rect>
+            <rect id="矩形" stroke="#979797" fill="#D8D8D8" transform="translate(15.394189, 37.651808) rotate(13.000000) translate(-15.394189, -37.651808) " x="14.3941886" y="37.6518078" width="2" height="1"></rect>
+            <rect id="矩形" stroke="#979797" fill="#D8D8D8" transform="translate(15.686519, 53.439185) rotate(-17.000000) translate(-15.686519, -53.439185) " x="14.6865191" y="53.4391846" width="2" height="1"></rect>
+        </g>
+    </g>
+</svg>

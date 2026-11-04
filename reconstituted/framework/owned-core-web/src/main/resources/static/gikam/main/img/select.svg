@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="11px" height="6px" viewBox="0 0 11 6" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 64 (93537) - https://sketch.com -->
+    <title>下拉展开</title>
+    <desc>Created with Sketch.</desc>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="首页" transform="translate(-584.000000, -389.000000)" fill-rule="nonzero">
+            <g id="编组-11" transform="translate(502.000000, 382.000000)">
+                <g id="7.Icon/arrow/4.down" transform="translate(80.000000, 2.000000)">
+                    <g id="下拉展开">
+                        <rect id="矩形" fill="#000000" opacity="0" x="0" y="0" width="16" height="16"></rect>
+                        <path d="M10.4164156,8.40217345 L5.99534005,12.823249 C5.84998871,12.9737424 5.63474527,13.034098 5.43233873,12.9811181 C5.22993219,12.9281383 5.07186173,12.7700678 5.01888187,12.5676613 C4.965902,12.3652547 5.02625763,12.1500113 5.17675102,12.0046599 L9.18841625,7.99276314 L5.17675102,3.98109789 C4.95735763,3.75394295 4.96049535,3.39286897 5.18380324,3.16956108 C5.40711113,2.94625319 5.76818511,2.94311547 5.99534005,3.16250886 L10.4164156,7.5835844 C10.6424145,7.80965151 10.6424145,8.17610633 10.4164156,8.40217345 L10.4164156,8.40217345 Z" id="路径" fill="#999999" transform="translate(7.792957, 8.000000) rotate(90.000000) translate(-7.792957, -8.000000) "></path>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

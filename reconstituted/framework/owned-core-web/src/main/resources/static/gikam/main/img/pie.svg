@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="93px" height="64px" viewBox="0 0 93 64" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 64 (93537) - https://sketch.com -->
+    <title>编组 6</title>
+    <desc>Created with Sketch.</desc>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="饼图" transform="translate(-56.000000, -32.000000)">
+            <g id="编组-6" transform="translate(55.997378, 32.000000)">
+                <text id="A" font-family="PingFangSC-Regular, PingFang SC" font-size="6" font-weight="normal" fill="#000000" fill-opacity="0.847820149">
+                    <tspan x="88.0026221" y="46">A</tspan>
+                </text>
+                <text id="B" font-family="PingFangSC-Regular, PingFang SC" font-size="6" font-weight="normal" fill="#000000" fill-opacity="0.847820149">
+                    <tspan x="88.0026221" y="55">B</tspan>
+                </text>
+                <text id="C" font-family="PingFangSC-Regular, PingFang SC" font-size="6" font-weight="normal" fill="#000000" fill-opacity="0.847820149">
+                    <tspan x="88.0026221" y="62">C</tspan>
+                </text>
+                <circle id="椭圆形" fill="#587EF7" cx="82.0026221" cy="44" r="2"></circle>
+                <circle id="椭圆形" fill="#58A2F7" cx="82.0026221" cy="53" r="2"></circle>
+                <circle id="椭圆形" fill="#37CFC9" cx="82.0026221" cy="60" r="2"></circle>
+                <circle id="椭圆形" fill="#58A2F7" fill-rule="nonzero" cx="32.0026221" cy="32" r="32"></circle>
+                <path d="M32.0026221,32 L62.1226221,42.81 C56.6318104,58.1085035 40.5444185,66.8604493 24.7173708,63.1593976 C8.89032316,59.4583459 -1.64793379,44.4801659 0.214570623,28.3332065 C2.07707504,12.186247 15.7486004,0 32.0026221,0 L32.0026221,32 Z" id="路径" fill="#37CFC9" fill-rule="nonzero"></path>
+                <path d="M32.0026221,32 L55.8126221,53.38 C45.9934317,64.3150185 29.9881748,67.155816 17.0055687,60.2679231 C4.02296261,53.3800302 -2.59884823,38.5344921 0.950033475,24.2727752 C4.49891518,10.0110584 17.3059855,0 32.0026221,0 L32.0026221,32 Z" id="路径" fill="#37CFC9" fill-rule="nonzero"></path>
+                <path d="M32.0026221,32 L10.0026221,55.19 C0.52339537,46.1765979 -2.51579771,32.3013726 2.32771736,20.1507546 C7.17123244,8.00013653 18.9222272,0.0206194052 32.0026221,0 L32.0026221,32 Z" id="路径" fill="#587EF7" fill-rule="nonzero"></path>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,23 @@
+{
+  "artifact": {
+    "run_jar_sha256": "4a720797810fd2f8cca6e22604657028cb87830ca0e24bb55a5f42f040f6ee9f",
+    "source_jars": []
+  },
+  "compile_report": "compile-report.json",
+  "dependencies": [
+    "owned-core-common"
+  ],
+  "forbidden_content_report": "forbidden-content-report.json",
+  "module": "owned-core-web",
+  "module_reason": "Original Thymeleaf/static/MyBatis web resources at their source paths.",
+  "public_dependency_allowlist": "public-dependency-allowlist.json",
+  "schema": "supplier-reconstituted-module-v1",
+  "source_decompilers": {},
+  "source_file_count": 0,
+  "source_files": [],
+  "source_tree_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "status": "assembled-source-only",
+  "transformation_manifest": "docs/reconstitution/decompiler-transforms.json",
+  "transformation_manifest_sha256": "8dddef183eece740791f9b179ec2aad9e30a224a0546e971df380fdb576a1d0c",
+  "transformed_source_count": 0
+}

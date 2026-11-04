@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="6px" height="11px" viewBox="0 0 6 11" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 64 (93537) - https://sketch.com -->
+    <title>委托单趋势-展开箭头icon</title>
+    <desc>Created with Sketch.</desc>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="比亚迪首页-03-1-标注" transform="translate(-975.000000, -444.000000)">
+            <g id="委托单趋势-展开箭头icon" transform="translate(974.000000, 442.000000)">
+                <rect id="矩形备份-6" x="0" y="0" width="8" height="14"></rect>
+                <path d="M4.495,9.78626706 C4.355,9.91233995 4.165,10.0294076 3.985,9.9933868 C3.805,10.0204024 3.635,9.89432953 3.495,9.78626706 L-0.835,5.86900239 C-1.055,5.67088786 -1.055,5.34670044 -0.835,5.1485859 C-0.615,4.95047137 -0.255,4.95047137 -0.035,5.1485859 L3.995,8.87674124 L8.035,5.1485859 C8.255,4.95047137 8.615,4.95047137 8.835,5.1485859 C9.055,5.34670044 9.055,5.67088786 8.835,5.86900239 L4.495,9.78626706 Z" id="Shape" fill="#999999" fill-rule="nonzero" transform="translate(4.000000, 7.500000) rotate(-90.000000) translate(-4.000000, -7.500000) "></path>
+            </g>
+        </g>
+    </g>
+</svg>

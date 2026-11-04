@@ -1,0 +1,3113 @@
+{
+  "entries": [
+    {
+      "filename": "FastInfoset-1.2.15.jar",
+      "maven_coordinates_or_unknown": [
+        "com.sun.xml.fastinfoset:FastInfoset:1.2.15"
+      ],
+      "sha256": "785861db11ca1bd0d1956682b974ad73eb19cd3e01a4b3fa82d62eca97210aec",
+      "size": 311876
+    },
+    {
+      "filename": "HdrHistogram-2.1.9.jar",
+      "maven_coordinates_or_unknown": [
+        "org.hdrhistogram:HdrHistogram:2.1.9"
+      ],
+      "sha256": "95d40913be28dfd439cefea9170c40898ea84f11f25e6ff8de50339b8a7b5e3e",
+      "size": 114165
+    },
+    {
+      "filename": "HikariCP-3.4.5.jar",
+      "maven_coordinates_or_unknown": [
+        "com.zaxxer:HikariCP:3.4.5"
+      ],
+      "sha256": "8b732f9470570d4a841dc1ef6c826b586978b25ba830712ff1fa59de275dfa61",
+      "size": 156005
+    },
+    {
+      "filename": "SparseBitSet-1.2.jar",
+      "maven_coordinates_or_unknown": [
+        "com.zaxxer:SparseBitSet:1.2"
+      ],
+      "sha256": "91e6b318c901a0f2dd1f6ce781d62474435ae627d22fbac9b21bbc39ffd804b6",
+      "size": 24510
+    },
+    {
+      "filename": "accessors-smart-1.2.jar",
+      "maven_coordinates_or_unknown": [
+        "net.minidev:accessors-smart:1.2"
+      ],
+      "sha256": "0c7c265d62fc007124dc32b91336e9c4272651d629bc5fa1a4e4e3bc758eb2e4",
+      "size": 30035
+    },
+    {
+      "filename": "aggs-matrix-stats-client-7.6.2.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "5cae4cc1976fb46c4978123cdaf96a5f78abd3b17019fd3e21f05ac11f7ef4b9",
+      "size": 60623
+    },
+    {
+      "filename": "ant-1.8.2.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "952d86ae0bbe30447034ed1d318b41a8dc92e2fb74cadf2e913f04fd1925a970",
+      "size": 1933743
+    },
+    {
+      "filename": "ant-launcher-1.8.2.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "870a5e15c39fc6362d790402e2b0444e0c7fdf8484afa9b45c8f3de1f78a0186",
+      "size": 12322
+    },
+    {
+      "filename": "antlr-2.7.7.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "88fbda4b912596b9f56e8e12e580cc954bacfb51776ecfddd3e18fc1cf56dc4c",
+      "size": 445288
+    },
+    {
+      "filename": "antlr-runtime-3.5.2.jar",
+      "maven_coordinates_or_unknown": [
+        "org.antlr:antlr-runtime:3.5.2"
+      ],
+      "sha256": "ce3fc8ecb10f39e9a3cddcbb2ce350d272d9cd3d0b1e18e6fe73c3b9389c8734",
+      "size": 167761
+    },
+    {
+      "filename": "archaius-core-0.7.6.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "94b6f2b64bcf6f8996fb5b544304254cf0137ae30153a758f3ac9e74387b6bf6",
+      "size": 139662
+    },
+    {
+      "filename": "asm-9.4.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "39d0e2b3dc45af65a09b097945750a94a126e052e124f93468443a1d0e15f381",
+      "size": 122445
+    },
+    {
+      "filename": "aspectjweaver-1.9.6.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "3167577eaa4be02817295d320c5a6578de8b80d15615d719d5be0a0d65d16165",
+      "size": 2051606
+    },
+    {
+      "filename": "aspose-cells-8.5.2.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "453ffd600b8043ce6208d1586bfaff04dd55bfae6710af8537daa83b7a83dd62",
+      "size": 6062936
+    },
+    {
+      "filename": "aspose.words-19.2.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "525c1ff5a2c4fac9d5c00fdc02d22ea271387f7d5096cc77f8a801f0535b5daf",
+      "size": 12850185
+    },
+    {
+      "filename": "attoparser-2.0.5.RELEASE.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "d4015d56147f696ed0a90078675bc940529f907e7b2dfc1fad754e8033da8796",
+      "size": 244959
+    },
+    {
+      "filename": "avalon-framework-api-4.3.1.jar",
+      "maven_coordinates_or_unknown": [
+        "org.apache.avalon.framework:avalon-framework-api:4.3.1"
+      ],
+      "sha256": "bca4c94b5e53acee3c97fe11cce0749d682d5591bf4a217cd45273adeb08c60f",
+      "size": 33218
+    },
+    {
+      "filename": "avalon-framework-impl-4.3.1.jar",
+      "maven_coordinates_or_unknown": [
+        "org.apache.avalon.framework:avalon-framework-impl:4.3.1"
+      ],
+      "sha256": "1a429bd5ba87c55b9c84648d0404eb6499b7c05a2c9f21b1bb9621fbf117589f",
+      "size": 61021
+    },
+    {
+      "filename": "batik-anim-1.14.jar",
+      "maven_coordinates_or_unknown": [
+        "org.apache.xmlgraphics:batik-anim:1.14"
+      ],
+      "sha256": "a1953099e04c202ee32d8e13912326d15cc488538051c691e897b0b7d2523b40",
+      "size": 485809
+    },
+    {
+      "filename": "batik-awt-util-1.14.jar",
+      "maven_coordinates_or_unknown": [
+        "org.apache.xmlgraphics:batik-awt-util:1.14"
+      ],
+      "sha256": "9cbaeae98dacad502aa2b08f206a5c04f14703afe9d99d905f0f7f8b733db5e7",
+      "size": 424624
+    },
+    {
+      "filename": "batik-bridge-1.14.jar",
+      "maven_coordinates_or_unknown": [
+        "org.apache.xmlgraphics:batik-bridge:1.14"
+      ],
+      "sha256": "fc137699f14f9289732d4ff8214f0a14a7ea4f5ea7a6b24b745d9d6d943c259e",
+      "size": 703757
+    },
+    {
+      "filename": "batik-codec-1.14.jar",
+      "maven_coordinates_or_unknown": [
+        "org.apache.xmlgraphics:batik-codec:1.14"
+      ],
+      "sha256": "c6c0ea0f4ca00ca13d76f7ff0bf37042e5788af9f16cbe5892f40c91711359c4",
+      "size": 112373
+    },
+    {
+      "filename": "batik-constants-1.14.jar",
+      "maven_coordinates_or_unknown": [
+        "org.apache.xmlgraphics:batik-constants:1.14"
+      ],
+      "sha256": "7882eb789257905413bcb0adcb1562dd50b8103cadef9534c33612bf51527990",
+      "size": 8433
+    },
+    {
+      "filename": "batik-css-1.14.jar",
+      "maven_coordinates_or_unknown": [
+        "org.apache.xmlgraphics:batik-css:1.14"
+      ],
+      "sha256": "968ba271cab6dfdd0458eb9ff42cc51e258d471499225b9063edbda61becbe17",
+      "size": 330318
+    },
+    {
+      "filename": "batik-dom-1.14.jar",
+      "maven_coordinates_or_unknown": [
+        "org.apache.xmlgraphics:batik-dom:1.14"
+      ],
+      "sha256": "6b71b91514f2cbe9b9e46f9699803c1fe7434addf61388b07755d586e20c57de",
+      "size": 184487
+    },
+    {
+      "filename": "batik-ext-1.14.jar",
+      "maven_coordinates_or_unknown": [
+        "org.apache.xmlgraphics:batik-ext:1.14"
+      ],
+      "sha256": "1f74fc638058c5d05b6da7b207e895d1a04c19d64250ae9f52c059689e681a7a",
+      "size": 10238
+    },
+    {
+      "filename": "batik-gvt-1.14.jar",
+      "maven_coordinates_or_unknown": [
+        "org.apache.xmlgraphics:batik-gvt:1.14"
+      ],
+      "sha256": "5230e4339035867bbb9c82683a065fb2abe135779f57c43a70b7766395aeab38",
+      "size": 192087
+    },
+    {
+      "filename": "batik-i18n-1.14.jar",
+      "maven_coordinates_or_unknown": [
+        "org.apache.xmlgraphics:batik-i18n:1.14"
+      ],
+      "sha256": "fb1ad02ccaa36f5a60c4115316e15ac071386f96445e5d89bdad0c7e45da9560",
+      "size": 11466
+    },
+    {
+      "filename": "batik-parser-1.14.jar",
+      "maven_coordinates_or_unknown": [
+        "org.apache.xmlgraphics:batik-parser:1.14"
+      ],
+      "sha256": "aca5e08b52e54af0a1acaf9c134082a0ed0b357b8eef74de369bdba054d1e1e2",
+      "size": 76875
+    },
+    {
+      "filename": "batik-script-1.14.jar",
+      "maven_coordinates_or_unknown": [
+        "org.apache.xmlgraphics:batik-script:1.14"
+      ],
+      "sha256": "d3584655227b4f1b56beea081a5b0b1fa228aeb165f19895f10dfbae999bc4e4",
+      "size": 25876
+    },
+    {
+      "filename": "batik-shared-resources-1.14.jar",
+      "maven_coordinates_or_unknown": [
+        "org.apache.xmlgraphics:batik-shared-resources:1.14"
+      ],
+      "sha256": "987ceb566e2101418465bb3227ec60812b71e7c4b2c3e842d977efa732fa90f5",
+      "size": 6663
+    },
+    {
+      "filename": "batik-svg-dom-1.14.jar",
+      "maven_coordinates_or_unknown": [
+        "org.apache.xmlgraphics:batik-svg-dom:1.14"
+      ],
+      "sha256": "c6023eca4fe1c6c2616173d2308217713c76895b780167f19382db0e57eac412",
+      "size": 232734
+    },
+    {
+      "filename": "batik-svggen-1.14.jar",
+      "maven_coordinates_or_unknown": [
+        "org.apache.xmlgraphics:batik-svggen:1.14"
+      ],
+      "sha256": "c2a7fba84eddc3815992a1f14f554feeccaabf9c1730867b28569dcbbbc272e2",
+      "size": 227514
+    },
+    {
+      "filename": "batik-transcoder-1.14.jar",
+      "maven_coordinates_or_unknown": [
+        "org.apache.xmlgraphics:batik-transcoder:1.14"
+      ],
+      "sha256": "c5f863137fbfe440911b376a0a3e605c9e1b196d1b4a83854007e303a95b9889",
+      "size": 129300
+    },
+    {
+      "filename": "batik-util-1.14.jar",
+      "maven_coordinates_or_unknown": [
+        "org.apache.xmlgraphics:batik-util:1.14"
+      ],
+      "sha256": "ad76103ecb3fcad91aac1cd0a34f6d46cd1e4224d0406a5d58b269a64f6c3788",
+      "size": 127477
+    },
+    {
+      "filename": "batik-xml-1.14.jar",
+      "maven_coordinates_or_unknown": [
+        "org.apache.xmlgraphics:batik-xml:1.14"
+      ],
+      "sha256": "673a82f56185a023e5196a59eb16f8503071477af4a82bb58e7267bb3d4ff828",
+      "size": 33866
+    },
+    {
+      "filename": "bcmail-jdk15on-1.66.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "a4712bf5b7db107c3783b5ca55426780cecf2aed9a1288455de216598d0a29fb",
+      "size": 110736
+    },
+    {
+      "filename": "bcpkix-jdk15on-1.66.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "02d61268352fdb35dba996c9ca68a3f793d7b8bfa75754aac66d696517a421bd",
+      "size": 880303
+    },
+    {
+      "filename": "bcprov-jdk15on-1.66.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "1b861dba1c5445de9b38a1789c211ef28b9d07e26d1fa38bee717e5b51162ffe",
+      "size": 5884134
+    },
+    {
+      "filename": "browscap-java-1.2.11.jar",
+      "maven_coordinates_or_unknown": [
+        "com.blueconic:browscap-java:1.2.11"
+      ],
+      "sha256": "0a02b8cb0c89aaf61f45797d9632832967128da183803647849d27d818cd0a86",
+      "size": 4732972
+    },
+    {
+      "filename": "bsh-2.0b6.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "a17955976070c0573235ee662f2794a78082758b61accffce8d3f8aedcd91047",
+      "size": 389033
+    },
+    {
+      "filename": "byte-buddy-1.10.14.jar",
+      "maven_coordinates_or_unknown": [
+        "net.bytebuddy:byte-buddy-dep:1.10.14",
+        "net.bytebuddy:byte-buddy:1.10.14"
+      ],
+      "sha256": "0e6b935bfcb3e451d525956acad53ec86ff916d714abdbd32b3d2039771896f8",
+      "size": 3480727
+    },
+    {
+      "filename": "cglib-nodep-3.2.5.jar",
+      "maven_coordinates_or_unknown": [
+        "cglib:cglib-nodep:3.2.5",
+        "cglib:cglib:3.2.5"
+      ],
+      "sha256": "9ab68b361ffdce66747f63bbe0676391c0a96d6de3e743ac03d7e998ff0a1064",
+      "size": 352931
+    },
+    {
+      "filename": "checker-qual-3.5.0.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "729990b3f18a95606fc2573836b6958bcdb44cb52bfbd1b7aa9c339cff35a5a4",
+      "size": 214381
+    },
+    {
+      "filename": "classmate-1.5.1.jar",
+      "maven_coordinates_or_unknown": [
+        "com.fasterxml:classmate:1.5.1"
+      ],
+      "sha256": "aab4de3006808c09d25dd4ff4a3611cfb63c95463cfd99e73d2e1680d229a33b",
+      "size": 67815
+    },
+    {
+      "filename": "commons-beanutils-1.9.4.jar",
+      "maven_coordinates_or_unknown": [
+        "commons-beanutils:commons-beanutils:1.9.4"
+      ],
+      "sha256": "7d938c81789028045c08c065e94be75fc280527620d5bd62b519d5838532368a",
+      "size": 246918
+    },
+    {
+      "filename": "commons-cli-1.4.jar",
+      "maven_coordinates_or_unknown": [
+        "commons-cli:commons-cli:1.4"
+      ],
+      "sha256": "fd3c7c9545a9cdb2051d1f9155c4f76b1e4ac5a57304404a6eedb578ffba7328",
+      "size": 53820
+    },
+    {
+      "filename": "commons-codec-1.14.jar",
+      "maven_coordinates_or_unknown": [
+        "commons-codec:commons-codec:1.14"
+      ],
+      "sha256": "a128e4f93fabe5381ded64cf2873019e06030b718eb43ceeae0b0e5d17ad33e9",
+      "size": 347669
+    },
+    {
+      "filename": "commons-collections-3.2.2.jar",
+      "maven_coordinates_or_unknown": [
+        "commons-collections:commons-collections:3.2.2"
+      ],
+      "sha256": "eeeae917917144a68a741d4c0dff66aa5c5c5fd85593ff217bced3fc8ca783b8",
+      "size": 588337
+    },
+    {
+      "filename": "commons-collections4-4.4.jar",
+      "maven_coordinates_or_unknown": [
+        "org.apache.commons:commons-collections4:4.4"
+      ],
+      "sha256": "1df8b9430b5c8ed143d7815e403e33ef5371b2400aadbe9bda0883762e0846d1",
+      "size": 751914
+    },
+    {
+      "filename": "commons-compress-1.20.jar",
+      "maven_coordinates_or_unknown": [
+        "org.apache.commons:commons-compress:1.20"
+      ],
+      "sha256": "0aeb625c948c697ea7b205156e112363b59ed5e2551212cd4e460bdb72c7c06e",
+      "size": 632424
+    },
+    {
+      "filename": "commons-configuration-1.8.jar",
+      "maven_coordinates_or_unknown": [
+        "commons-configuration:commons-configuration:1.8"
+      ],
+      "sha256": "e229cf1fe95f7147cbc1f8d31affc07087c206bc8dc7e5b05b6be670910f87ba",
+      "size": 354491
+    },
+    {
+      "filename": "commons-csv-1.7.jar",
+      "maven_coordinates_or_unknown": [
+        "org.apache.commons:commons-csv:1.7"
+      ],
+      "sha256": "25f5e7914729a3cb9cbb83918b5f1116625cca63ce38a50f0fe596f837b9a524",
+      "size": 45065
+    },
+    {
+      "filename": "commons-fileupload-1.4.jar",
+      "maven_coordinates_or_unknown": [
+        "commons-fileupload:commons-fileupload:1.4"
+      ],
+      "sha256": "a4ec02336f49253ea50405698b79232b8c5cbf02cb60df3a674d77a749a1def7",
+      "size": 72446
+    },
+    {
+      "filename": "commons-io-2.4.jar",
+      "maven_coordinates_or_unknown": [
+        "commons-io:commons-io:2.4"
+      ],
+      "sha256": "cc6a41dc3eaacc9e440a6bd0d2890b20d36b4ee408fe2d67122f328bb6e01581",
+      "size": 185140
+    },
+    {
+      "filename": "commons-jexl3-3.1.jar",
+      "maven_coordinates_or_unknown": [
+        "org.apache.commons:commons-jexl3:3.1"
+      ],
+      "sha256": "d1f7e3bc145aa712736094a76b6ecc39623c29728fc0b3712666879131c89bab",
+      "size": 397422
+    },
+    {
+      "filename": "commons-lang-2.6.jar",
+      "maven_coordinates_or_unknown": [
+        "commons-lang:commons-lang:2.6"
+      ],
+      "sha256": "50f11b09f877c294d56f24463f47d28f929cf5044f648661c0f0cfbae9a2f49c",
+      "size": 284220
+    },
+    {
+      "filename": "commons-lang3-3.10.jar",
+      "maven_coordinates_or_unknown": [
+        "org.apache.commons:commons-lang3:3.10"
+      ],
+      "sha256": "28968ae55fff465494083aeba856f8824c34902329882bf61e77246a91e25aa9",
+      "size": 523372
+    },
+    {
+      "filename": "commons-logging-1.2.jar",
+      "maven_coordinates_or_unknown": [
+        "commons-logging:commons-logging:1.2"
+      ],
+      "sha256": "daddea1ea0be0f56978ab3006b8ac92834afeefbd9b7e4e6316fca57df0fa636",
+      "size": 61829
+    },
+    {
+      "filename": "commons-math3-3.6.1.jar",
+      "maven_coordinates_or_unknown": [
+        "org.apache.commons:commons-math3:3.6.1"
+      ],
+      "sha256": "1e56d7b058d28b65abd256b8458e3885b674c1d588fa43cd7d1cbb9c7ef2b308",
+      "size": 2213560
+    },
+    {
+      "filename": "commons-net-3.6.jar",
+      "maven_coordinates_or_unknown": [
+        "commons-net:commons-net:3.6"
+      ],
+      "sha256": "d3b3866c61a47ba3bf040ab98e60c3010d027da0e7a99e1755e407dd47bc2702",
+      "size": 307410
+    },
+    {
+      "filename": "commons-pool2-2.8.1.jar",
+      "maven_coordinates_or_unknown": [
+        "org.apache.commons:commons-pool2:2.8.1"
+      ],
+      "sha256": "16154621c8d292278d3849c7df6be8de8cdc9feb7479b2b2a0a917ee847bfce6",
+      "size": 133109
+    },
+    {
+      "filename": "compiler-0.9.6.jar",
+      "maven_coordinates_or_unknown": [
+        "com.github.spullara.mustache.java:compiler:0.9.6"
+      ],
+      "sha256": "c4d697fd3619cb616cc5e22e9530c8a4fd4a8e9a76953c0655ee627cb2d22318",
+      "size": 100892
+    },
+    {
+      "filename": "core-3.3.0.jar",
+      "maven_coordinates_or_unknown": [
+        "com.google.zxing:core:3.3.0"
+      ],
+      "sha256": "bba7724e02a997cec38213af77133ee8e24b0d5cf5fa7ecbc16a4fa93f11ee0d",
+      "size": 541078
+    },
+    {
+      "filename": "cron-parser-core-3.5-sunway.jar",
+      "maven_coordinates_or_unknown": [
+        "net.redhogs.cronparser:cron-parser-core:3.5-sunway"
+      ],
+      "sha256": "52d186409616a0f8be5d9715d4c2fdcd824e4dbca48204ebcf63ec78421fd5d0",
+      "size": 37508
+    },
+    {
+      "filename": "curvesapi-1.06.jar",
+      "maven_coordinates_or_unknown": [
+        "com.github.virtuald:curvesapi:1.06"
+      ],
+      "sha256": "38bb45c99e6153260c19b97b99b6a7370a067de63344de6d1ea11922acaed86b",
+      "size": 111875
+    },
+    {
+      "filename": "cxf-core-3.4.10.jar",
+      "maven_coordinates_or_unknown": [
+        "org.apache.cxf:cxf-core:3.4.10"
+      ],
+      "sha256": "a934cad1b533e6df9987f4d333103a436f64cb15abd404fb10bed14e795204c3",
+      "size": 1436646
+    },
+    {
+      "filename": "cxf-rt-bindings-soap-3.4.10.jar",
+      "maven_coordinates_or_unknown": [
+        "org.apache.cxf:cxf-rt-bindings-soap:3.4.10"
+      ],
+      "sha256": "8bd18558dfaca1fe4bf04600cd763eb80042c7a40760a5521f946c884784ed66",
+      "size": 182595
+    },
+    {
+      "filename": "cxf-rt-bindings-xml-3.4.10.jar",
+      "maven_coordinates_or_unknown": [
+        "org.apache.cxf:cxf-rt-bindings-xml:3.4.10"
+      ],
+      "sha256": "a03d7a62fffd7a587edb70deb710d2f65c219c290d6d45585f21897835fc5fed",
+      "size": 38505
+    },
+    {
+      "filename": "cxf-rt-databinding-jaxb-3.4.10.jar",
+      "maven_coordinates_or_unknown": [
+        "org.apache.cxf:cxf-rt-databinding-jaxb:3.4.10"
+      ],
+      "sha256": "2ffb9ed39916eb76ca79778118330d970f415958867ba014fe444729c8a642e9",
+      "size": 115642
+    },
+    {
+      "filename": "cxf-rt-features-metrics-3.4.10.jar",
+      "maven_coordinates_or_unknown": [
+        "org.apache.cxf:cxf-rt-features-metrics:3.4.10"
+      ],
+      "sha256": "c4e246ac4d4f023bf4f8d1d6cc43df0c64bc4c03e58594993b7b2095b7d1026d",
+      "size": 61817
+    },
+    {
+      "filename": "cxf-rt-frontend-jaxws-3.4.10.jar",
+      "maven_coordinates_or_unknown": [
+        "org.apache.cxf:cxf-rt-frontend-jaxws:3.4.10"
+      ],
+      "sha256": "0a1f4acec9ea16ce203aed860bb992c55e50e3cc1694fb93ef2b7de344e6276d",
+      "size": 371945
+    },
+    {
+      "filename": "cxf-rt-frontend-simple-3.4.10.jar",
+      "maven_coordinates_or_unknown": [
+        "org.apache.cxf:cxf-rt-frontend-simple:3.4.10"
+      ],
+      "sha256": "4e9f1ff0530cc55293b45242d8c1ef0ec7894a95e01356cd58e244eac7221af0",
+      "size": 107727
+    },
+    {
+      "filename": "cxf-rt-transports-http-3.4.10.jar",
+      "maven_coordinates_or_unknown": [
+        "org.apache.cxf:cxf-rt-transports-http:3.4.10"
+      ],
+      "sha256": "9272106b611a835f3d2d99834c317d77d1ec1e7db2547f633f54ca41c7fa00c1",
+      "size": 397209
+    },
+    {
+      "filename": "cxf-rt-ws-addr-3.4.10.jar",
+      "maven_coordinates_or_unknown": [
+        "org.apache.cxf:cxf-rt-ws-addr:3.4.10"
+      ],
+      "sha256": "6742c72f7fb99fd80fb3388c5efe90714bb4e2ccb4ef1f9c4eefd51c5c37fe80",
+      "size": 75834
+    },
+    {
+      "filename": "cxf-rt-ws-policy-3.4.10.jar",
+      "maven_coordinates_or_unknown": [
+        "org.apache.cxf:cxf-rt-ws-policy:3.4.10"
+      ],
+      "sha256": "7c4b367c553b6206b32fa752f8547606e6d3cf02ad052b46eb501c6011716cc2",
+      "size": 215234
+    },
+    {
+      "filename": "cxf-rt-wsdl-3.4.10.jar",
+      "maven_coordinates_or_unknown": [
+        "org.apache.cxf:cxf-rt-wsdl:3.4.10"
+      ],
+      "sha256": "fbe8601a31953a916343094d53a1d46f70fa4cc44bc2d8e2eb6225343358ecef",
+      "size": 178563
+    },
+    {
+      "filename": "cxf-spring-boot-autoconfigure-3.4.10.jar",
+      "maven_coordinates_or_unknown": [
+        "org.apache.cxf:cxf-spring-boot-autoconfigure:3.4.10"
+      ],
+      "sha256": "0ef0e784c5448a067128a1b27fd326316a8cc52c0fe8cde4bda72d9adc49bff6",
+      "size": 33073
+    },
+    {
+      "filename": "cxf-spring-boot-starter-jaxws-3.4.10.jar",
+      "maven_coordinates_or_unknown": [
+        "org.apache.cxf:cxf-spring-boot-starter-jaxws:3.4.10"
+      ],
+      "sha256": "f4bdfba2db9b8418f5471f2ef11db097605c960762748a97601f3214a1cc24fe",
+      "size": 9428
+    },
+    {
+      "filename": "decompiler-api-5.2.0.Final-forge-addon.jar",
+      "maven_coordinates_or_unknown": [
+        "org.jboss.windup.decompiler:decompiler-api:5.2.0.Final"
+      ],
+      "sha256": "b524e6fa429130ef5261afd49a6d51a77478a7ed4c3118d8217dfa457db3eed3",
+      "size": 12827
+    },
+    {
+      "filename": "decompiler-fernflower-5.2.0.Final.jar",
+      "maven_coordinates_or_unknown": [
+        "org.jboss.windup.decompiler:decompiler-fernflower:5.2.0.Final"
+      ],
+      "sha256": "a33ae236d606ccbef86c5593b2f9ff15dcfb40298ce9291a86e312841ef4d6e0",
+      "size": 18063
+    },
+    {
+      "filename": "disruptor-3.3.6.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "8c5df12a17f614464ccacc9b7c4935e5f16e694b7788e714cde4b7587d5dd266",
+      "size": 84123
+    },
+    {
+      "filename": "docx4j-3.3.7.jar",
+      "maven_coordinates_or_unknown": [
+        "org.docx4j:docx4j:3.3.7"
+      ],
+      "sha256": "3f2a83427d5e10dd72c1c280b36a1f7141637daccef6b09ebd049b994807c57a",
+      "size": 5276947
+    },
+    {
+      "filename": "docx4j-ImportXHTML-3.3.6-1-sunway.jar",
+      "maven_coordinates_or_unknown": [
+        "org.docx4j:docx4j-ImportXHTML:3.3.6-1"
+      ],
+      "sha256": "4e8040fb02d8e183b5cd0f6bdfa3fe538cc8f30845adaa065968cced9769770c",
+      "size": 114637
+    },
+    {
+      "filename": "dom4j-2.1.3.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "549f3007c6290f6a901e57d1d331b4ed0e6bf7384f78bf10316ffceeca834de6",
+      "size": 323630
+    },
+    {
+      "filename": "elasticsearch-7.6.2.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "951e627f72d47af6980f82c37a697b0df80f769b1ebb994eb727408e7e016163",
+      "size": 11826130
+    },
+    {
+      "filename": "elasticsearch-cli-7.6.2.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "6ea561644225efd3dd304ecf8ee26273e8dcea80cf2776022f60bd409258a08a",
+      "size": 17131
+    },
+    {
+      "filename": "elasticsearch-core-7.6.2.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "3c34ea425e25a47e0ebd82cf5def953507793c5c9837079b721e0c82b6e84930",
+      "size": 44668
+    },
+    {
+      "filename": "elasticsearch-geo-7.6.2.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "8259b80d12d6b91c3696ff2f07d9c271bfd92c93fe51ebcf757646b9d9db18ee",
+      "size": 45023
+    },
+    {
+      "filename": "elasticsearch-rest-client-7.6.2.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "3ffc97a0f50d18e90262ef50d1e05eca5a742231bdc4ddd482e3f9f066d64055",
+      "size": 63598
+    },
+    {
+      "filename": "elasticsearch-rest-high-level-client-7.6.2.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "bab7005f6244ed14e60e5c0286dd5a4a6762d0de13b581bae9d151d737f41039",
+      "size": 1472685
+    },
+    {
+      "filename": "elasticsearch-secure-sm-7.6.2.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "2025b99ebbfe5a3f8a88e9a191edf03280b2604394d83379b5283a959ebce9cc",
+      "size": 10958
+    },
+    {
+      "filename": "elasticsearch-x-content-7.6.2.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "d8f3252dad9da8a17c5008834180abf60c289f40084e54e168768a4e34fe2e1d",
+      "size": 132466
+    },
+    {
+      "filename": "error_prone_annotations-2.3.4.jar",
+      "maven_coordinates_or_unknown": [
+        "com.google.errorprone:error_prone_annotations:2.3.4"
+      ],
+      "sha256": "baf7d6ea97ce606c53e11b6854ba5f2ce7ef5c24dddf0afa18d1260bd25b002c",
+      "size": 13879
+    },
+    {
+      "filename": "evo-inflector-1.2.2.jar",
+      "maven_coordinates_or_unknown": [
+        "org.atteo:evo-inflector:1.2.2"
+      ],
+      "sha256": "c485c110870c597ba401dda2c7c5819a3b2e15ee064f539323138302bd591d48",
+      "size": 12809
+    },
+    {
+      "filename": "ews-java-api-2.0.jar",
+      "maven_coordinates_or_unknown": [
+        "com.microsoft.ews-java-api:ews-java-api:2.0"
+      ],
+      "sha256": "1319c01f9899c3174b4b49849bb92ce8db3e629786c56f733ffb62e1cd729415",
+      "size": 1199331
+    },
+    {
+      "filename": "failureaccess-1.0.1.jar",
+      "maven_coordinates_or_unknown": [
+        "com.google.guava:failureaccess:1.0.1"
+      ],
+      "sha256": "a171ee4c734dd2da837e4b16be9df4661afab72a41adaf31eb84dfdaf936ca26",
+      "size": 4617
+    },
+    {
+      "filename": "fastjson-1.2.83.jar",
+      "maven_coordinates_or_unknown": [
+        "com.alibaba:fastjson:1.2.83"
+      ],
+      "sha256": "641a4d65ab32fbfdccd9c718e3f83ebc4caabdb5e4fe5b3d51527c5fe692631d",
+      "size": 671701
+    },
+    {
+      "filename": "feign-core-10.10.1.jar",
+      "maven_coordinates_or_unknown": [
+        "io.github.openfeign:feign-core:10.10.1"
+      ],
+      "sha256": "118015d01fe5bd50684760c0272b78973c3383631bc4665177b827c3ad161059",
+      "size": 189346
+    },
+    {
+      "filename": "feign-form-3.8.0.jar",
+      "maven_coordinates_or_unknown": [
+        "io.github.openfeign.form:feign-form:3.8.0"
+      ],
+      "sha256": "b21d37321b390995c90b5dbb4ff0c33f09d1cc7768207cc0da910ad20bf58961",
+      "size": 29777
+    },
+    {
+      "filename": "feign-form-spring-3.8.0.jar",
+      "maven_coordinates_or_unknown": [
+        "io.github.openfeign.form:feign-form-spring:3.8.0"
+      ],
+      "sha256": "382fa8a69afea41653c6b1077773c5e80802d7617cd5ee31b93ef15166dc8e46",
+      "size": 14212
+    },
+    {
+      "filename": "feign-hystrix-10.10.1.jar",
+      "maven_coordinates_or_unknown": [
+        "io.github.openfeign:feign-hystrix:10.10.1"
+      ],
+      "sha256": "98048d57982ccce2d5ba376994fd3ebe432dc5af923fcc570139e9f307b4e491",
+      "size": 17792
+    },
+    {
+      "filename": "feign-slf4j-10.10.1.jar",
+      "maven_coordinates_or_unknown": [
+        "io.github.openfeign:feign-slf4j:10.10.1"
+      ],
+      "sha256": "13473d69b4546e077d669a4c836a7fd092d9c1ecfa97279999ec97c7910497e4",
+      "size": 3744
+    },
+    {
+      "filename": "filters-2.0.235-1.jar",
+      "maven_coordinates_or_unknown": [
+        "com.jhlabs:filters:2.0.235-1"
+      ],
+      "sha256": "a37202f03eae99ab1faf2a89eeaee3665c8489f45b1aeb0d5926d78a54c613bf",
+      "size": 382939
+    },
+    {
+      "filename": "fontbox-2.0.15.jar",
+      "maven_coordinates_or_unknown": [
+        "org.apache.pdfbox:fontbox:2.0.15"
+      ],
+      "sha256": "523ff2def3b1a279b3ff44c3f7e1acf386726ae31b94c1bc2fcf8faf5f68e4a5",
+      "size": 1557873
+    },
+    {
+      "filename": "freemarker-2.3.30.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "6586433d90957c0b05a32bce07c71e8cebcea6afbea2e043bfe0c576c4d94338",
+      "size": 1702975
+    },
+    {
+      "filename": "gexin-rp-fastjson-1.0.0.6.jar",
+      "maven_coordinates_or_unknown": [
+        "com.gexin.platform:gexin-rp-fastjson:1.0.0.6"
+      ],
+      "sha256": "cef9860f17d9b1f68f240832ad64bc54ac36dc63441653b7bb6b14e8391dfcd1",
+      "size": 643322
+    },
+    {
+      "filename": "gexin-rp-sdk-base-4.0.0.35.jar",
+      "maven_coordinates_or_unknown": [
+        "com.gexin.platform:gexin-rp-sdk-base:4.0.0.35"
+      ],
+      "sha256": "48ce54ee138c647cafe1d3f423f88340489be077de280404c22e6b48e05d3507",
+      "size": 560950
+    },
+    {
+      "filename": "gexin-rp-sdk-http-4.1.1.2.jar",
+      "maven_coordinates_or_unknown": [
+        "com.gexin.platform:gexin-rp-sdk-http:4.1.1.2"
+      ],
+      "sha256": "38859e9fed239fbdffd908a3e044e7df24a32eb626c38f58a7f25fe8ae559e7b",
+      "size": 48709
+    },
+    {
+      "filename": "gexin-rp-sdk-template-4.0.0.27.jar",
+      "maven_coordinates_or_unknown": [
+        "com.gexin.platform:gexin-rp-sdk-template:4.0.0.27"
+      ],
+      "sha256": "5cc6c161a45e31a4278b2baa6777771ebec944d0a4e5b9a5b99ba4ca4a40c148",
+      "size": 38587
+    },
+    {
+      "filename": "gmbal-api-only-3.1.0-b001.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "4b7c8dd878264bd4ab913b0cfe3e28bdf82fa81757e8cb8b373202e265cdbdbc",
+      "size": 21820
+    },
+    {
+      "filename": "google-java-format-1.7-sunway.jar",
+      "maven_coordinates_or_unknown": [
+        "com.google.googlejavaformat:google-java-format:1.7-sunway"
+      ],
+      "sha256": "554ef724054029da3e78c6e4b03a564d74c01f24ce3df79a534a184100a7f41e",
+      "size": 225148
+    },
+    {
+      "filename": "gson-2.8.6.jar",
+      "maven_coordinates_or_unknown": [
+        "com.google.code.gson:gson:2.8.6"
+      ],
+      "sha256": "c8fb4839054d280b3033f800d1f5a97de2f028eb8ba2eb458ad287e536f3f25f",
+      "size": 240255
+    },
+    {
+      "filename": "guava-29.0-jre.jar",
+      "maven_coordinates_or_unknown": [
+        "com.google.guava:guava:29.0-jre"
+      ],
+      "sha256": "b22c5fb66d61e7b9522531d04b2f915b5158e80aa0b40ee7282c8bfb07b0da25",
+      "size": 2792264
+    },
+    {
+      "filename": "ha-api-3.1.9.jar",
+      "maven_coordinates_or_unknown": [
+        "org.glassfish.ha:ha-api:3.1.9"
+      ],
+      "sha256": "ef3c515399e7ff43836d58e76baa1e876cfdd27c358baab12a96a7e0032c30a3",
+      "size": 36383
+    },
+    {
+      "filename": "hibernate-commons-annotations-5.1.0.Final.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "1e3bfcfe9efdb40e9d3c084c9bcf8597e492e30294c7e40b56ed18a67c2838cd",
+      "size": 76204
+    },
+    {
+      "filename": "hibernate-core-5.4.21.Final.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "568b6212aacbc04b57b1ea55a193e9d09ba2f8802286a64270d71baa782d9ddc",
+      "size": 7327515
+    },
+    {
+      "filename": "hibernate-validator-6.1.5.Final.jar",
+      "maven_coordinates_or_unknown": [
+        "org.hibernate.validator:hibernate-validator:6.1.5.Final"
+      ],
+      "sha256": "a142adb9e39d4010cde68448292e97be61f654a3942354e3c7f83a4f84ad63cc",
+      "size": 1292124
+    },
+    {
+      "filename": "hppc-0.8.1.jar",
+      "maven_coordinates_or_unknown": [
+        "com.carrotsearch:hppc:0.8.1"
+      ],
+      "sha256": "f540703478636d88f699f4666242e6fc9175a996c08ddceaf02106517b970406",
+      "size": 1159086
+    },
+    {
+      "filename": "httpasyncclient-4.1.4.jar",
+      "maven_coordinates_or_unknown": [
+        "org.apache.httpcomponents:httpasyncclient:4.1.4"
+      ],
+      "sha256": "50e981a8e567a16ebdad104605b156540a863459fa127b8ba647f310dfc83ef8",
+      "size": 179964
+    },
+    {
+      "filename": "httpclient-4.5.12.jar",
+      "maven_coordinates_or_unknown": [
+        "org.apache.httpcomponents:httpclient:4.5.12"
+      ],
+      "sha256": "bc5f065aba5dd815ee559dd24d9bcb797fb102ff9cfa036f5091ebc529bd3b93",
+      "size": 778156
+    },
+    {
+      "filename": "httpcore-4.4.13.jar",
+      "maven_coordinates_or_unknown": [
+        "org.apache.httpcomponents:httpcore:4.4.13"
+      ],
+      "sha256": "e06e89d40943245fcfa39ec537cdbfce3762aecde8f9c597780d2b00c2b43424",
+      "size": 328593
+    },
+    {
+      "filename": "httpcore-nio-4.4.13.jar",
+      "maven_coordinates_or_unknown": [
+        "org.apache.httpcomponents:httpcore-nio:4.4.13"
+      ],
+      "sha256": "71fcfbe869002c48563cc5979fc734571c8d0d167ccce42970c932f337981f19",
+      "size": 369320
+    },
+    {
+      "filename": "httpmime-4.5.12.jar",
+      "maven_coordinates_or_unknown": [
+        "org.apache.httpcomponents:httpmime:4.5.12"
+      ],
+      "sha256": "0cac77bd2f8cf326727f0516d6fcbe1aeddbab36e971a3da44ff47fa87b2eac4",
+      "size": 41792
+    },
+    {
+      "filename": "hystrix-core-1.5.18.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "e72775f2b5189a14000aa8002712a77eade6cc36e0c7f0edb576556ab707f905",
+      "size": 468084
+    },
+    {
+      "filename": "io-7.0.3.jar",
+      "maven_coordinates_or_unknown": [
+        "com.itextpdf:io:7.0.3"
+      ],
+      "sha256": "d383aa44771ba1d268748d3948129e4af98c5556a9a8b292ef7b5014ed6175e2",
+      "size": 662499
+    },
+    {
+      "filename": "istack-commons-runtime-3.0.11.jar",
+      "maven_coordinates_or_unknown": [
+        "com.sun.istack:istack-commons-runtime:3.0.11"
+      ],
+      "sha256": "cc3f3704ca7bf23e97653edcfc6bbcf9bfe3866b8aed7f290ae7809085d3a959",
+      "size": 29877
+    },
+    {
+      "filename": "itext-2.1.7.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "7d82c6b097a31cdf5a6d49a327bf582fdec7304da69308f9f6abf54aa9fd9055",
+      "size": 1130070
+    },
+    {
+      "filename": "itextpdf-5.5.13.jar",
+      "maven_coordinates_or_unknown": [
+        "com.itextpdf:itextpdf:5.5.13"
+      ],
+      "sha256": "368500a5f57fd0b04e565e78cfe469e61c362e86445667a29c9645dd2ce10b3d",
+      "size": 2320581
+    },
+    {
+      "filename": "j2objc-annotations-1.3.jar",
+      "maven_coordinates_or_unknown": [
+        "com.google.j2objc:j2objc-annotations:1.3"
+      ],
+      "sha256": "21af30c92267bd6122c0e0b4d20cccb6641a37eaf956c6540ec471d584e64a7b",
+      "size": 8781
+    },
+    {
+      "filename": "jackson-annotations-2.11.2.jar",
+      "maven_coordinates_or_unknown": [
+        "com.fasterxml.jackson.core:jackson-annotations:2.11.2"
+      ],
+      "sha256": "90d602d1955df509b1569618cff869994caf9483cb82a3ccb39782a5cda54126",
+      "size": 68217
+    },
+    {
+      "filename": "jackson-core-2.11.2.jar",
+      "maven_coordinates_or_unknown": [
+        "com.fasterxml.jackson.core:jackson-core:2.11.2"
+      ],
+      "sha256": "f8d768c4e8884522be5881dd2a91aec812d08d4f05852b434190e22de659dfc9",
+      "size": 351495
+    },
+    {
+      "filename": "jackson-databind-2.11.2.jar",
+      "maven_coordinates_or_unknown": [
+        "com.fasterxml.jackson.core:jackson-databind:2.11.2"
+      ],
+      "sha256": "cb890b4aad8ed21a7b57e3c8f7924dbdca1aeff9ddd27cb0ff37243037ae1342",
+      "size": 1420449
+    },
+    {
+      "filename": "jackson-dataformat-cbor-2.11.2.jar",
+      "maven_coordinates_or_unknown": [
+        "com.fasterxml.jackson.dataformat:jackson-dataformat-cbor:2.11.2"
+      ],
+      "sha256": "c8189a72c9e8cee79375b4c841766c42adad486db3010ef69b36ace1ebe0c6af",
+      "size": 58679
+    },
+    {
+      "filename": "jackson-dataformat-smile-2.11.2.jar",
+      "maven_coordinates_or_unknown": [
+        "com.fasterxml.jackson.dataformat:jackson-dataformat-smile:2.11.2"
+      ],
+      "sha256": "561140a1a1f374e9104d679aade9d73c644fa5c1025e1bdb0ea2e927d2980086",
+      "size": 90698
+    },
+    {
+      "filename": "jackson-dataformat-yaml-2.11.2.jar",
+      "maven_coordinates_or_unknown": [
+        "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.11.2"
+      ],
+      "sha256": "f23c1940596813adc1997374519b5ff8a516b5031bfd3702e4b063115fa36f03",
+      "size": 46919
+    },
+    {
+      "filename": "jackson-datatype-jdk8-2.11.2.jar",
+      "maven_coordinates_or_unknown": [
+        "com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.11.2"
+      ],
+      "sha256": "fa585ff4aed2b250538dd42d53d263fc96c9b1c720e836214e443e4cf28af61f",
+      "size": 34335
+    },
+    {
+      "filename": "jackson-datatype-jsr310-2.11.2.jar",
+      "maven_coordinates_or_unknown": [
+        "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.11.2"
+      ],
+      "sha256": "c8f7155c405cf1c521fb7f1cde610a0c488aad794b3c4ca7637a199dbc40850f",
+      "size": 111007
+    },
+    {
+      "filename": "jackson-module-parameter-names-2.11.2.jar",
+      "maven_coordinates_or_unknown": [
+        "com.fasterxml.jackson.module:jackson-module-parameter-names:2.11.2"
+      ],
+      "sha256": "1b5a7e61314a135bb44e99978801a111f18eb02c9bfe5cc5e5c9edb033369004",
+      "size": 9268
+    },
+    {
+      "filename": "jai-imageio-core-1.3.1.jar",
+      "maven_coordinates_or_unknown": [
+        "com.github.jai-imageio:jai-imageio-core:1.3.1"
+      ],
+      "sha256": "a973dab80558a288d9ee55e0d1a509cc3962cc9fadea82dc073ff007223fa35d",
+      "size": 602022
+    },
+    {
+      "filename": "jai-imageio-jpeg2000-1.3.0.jar",
+      "maven_coordinates_or_unknown": [
+        "com.github.jai-imageio:jai-imageio-jpeg2000:1.3.0"
+      ],
+      "sha256": "d7e1bc92ff198db14469826f1328802da0ef34e3d301fdb74eeb57bcf183e0f3",
+      "size": 460743
+    },
+    {
+      "filename": "jakarta.activation-1.2.2.jar",
+      "maven_coordinates_or_unknown": [
+        "com.sun.activation:jakarta.activation:1.2.2"
+      ],
+      "sha256": "02156773e4ae9d048d14a56ad35d644bee9f1052a791d072df3ded3c656e6e1a",
+      "size": 68453
+    },
+    {
+      "filename": "jakarta.annotation-api-1.3.5.jar",
+      "maven_coordinates_or_unknown": [
+        "jakarta.annotation:jakarta.annotation-api:1.3.5"
+      ],
+      "sha256": "85fb03fc054cdf4efca8efd9b6712bbb418e1ab98241c4539c8585bbc23e1b8a",
+      "size": 25058
+    },
+    {
+      "filename": "jakarta.el-3.0.3.jar",
+      "maven_coordinates_or_unknown": [
+        "org.glassfish:jakarta.el:3.0.3"
+      ],
+      "sha256": "e2bcb8551b02a5c2afdc4cab77302ba5c76705cf1fc832345ca880df80bf4716",
+      "size": 237826
+    },
+    {
+      "filename": "jakarta.mail-1.6.5.jar",
+      "maven_coordinates_or_unknown": [
+        "com.sun.mail:jakarta.mail:1.6.5"
+      ],
+      "sha256": "f4b500a1dd9ffd03ed7d8b2062fa5fd10d5beca4c42611672764bf4365751b53",
+      "size": 670100
+    },
+    {
+      "filename": "jakarta.persistence-api-2.2.3.jar",
+      "maven_coordinates_or_unknown": [
+        "jakarta.persistence:jakarta.persistence-api:2.2.3"
+      ],
+      "sha256": "0c2d73ab36ad24eeed6e0bea928e9d0ef771de8df689e23b7754d366dda27c53",
+      "size": 164392
+    },
+    {
+      "filename": "jakarta.transaction-api-1.3.3.jar",
+      "maven_coordinates_or_unknown": [
+        "jakarta.transaction:jakarta.transaction-api:1.3.3"
+      ],
+      "sha256": "0b02a194dd04ee2e192dc9da9579e10955dd6e8ac707adfc91d92f119b0e67ab",
+      "size": 15392
+    },
+    {
+      "filename": "jakarta.validation-api-2.0.2.jar",
+      "maven_coordinates_or_unknown": [
+        "jakarta.validation:jakarta.validation-api:2.0.2"
+      ],
+      "sha256": "b42d42428f3d922c892a909fa043287d577c0c5b165ad9b7d568cebf87fc9ea4",
+      "size": 91930
+    },
+    {
+      "filename": "jakarta.xml.bind-api-2.3.3.jar",
+      "maven_coordinates_or_unknown": [
+        "jakarta.xml.bind:jakarta.xml.bind-api:2.3.3"
+      ],
+      "sha256": "c04539f472e9a6dd0c7685ea82d677282269ab8e7baca2e14500e381e0c6cec5",
+      "size": 115638
+    },
+    {
+      "filename": "jakarta.xml.soap-api-1.4.2.jar",
+      "maven_coordinates_or_unknown": [
+        "jakarta.xml.soap:jakarta.xml.soap-api:1.4.2"
+      ],
+      "sha256": "0b2e9db574869c09b18e7fe87482be2e4e14b3f3cc8207646595806eede77706",
+      "size": 36922
+    },
+    {
+      "filename": "jandex-2.1.3.Final.jar",
+      "maven_coordinates_or_unknown": [
+        "org.jboss:jandex:2.1.3.Final"
+      ],
+      "sha256": "a003dcfe44818b7e02166a153342fcf792b8c569ac660496aaddc86ea7c2a0f0",
+      "size": 195684
+    },
+    {
+      "filename": "javac-shaded-9+181-r4173-1.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "ae6f663a36bac1855076072afd650cdc0076b08f8129fbff504e73e74095a021",
+      "size": 2853573
+    },
+    {
+      "filename": "javase-3.3.0.jar",
+      "maven_coordinates_or_unknown": [
+        "com.google.zxing:javase:3.3.0"
+      ],
+      "sha256": "ad4bebeb63befff39f2c0b71822226537ab280a48517f95b085b30cc52581799",
+      "size": 41451
+    },
+    {
+      "filename": "javassist-3.28.0-GA.jar",
+      "maven_coordinates_or_unknown": [
+        "org.javassist:javassist:3.28.0-GA"
+      ],
+      "sha256": "57d0a9e9286f82f4eaa851125186997f811befce0e2060ff0a15a77f5a9dd9a7",
+      "size": 851531
+    },
+    {
+      "filename": "javax.activation-1.2.0.jar",
+      "maven_coordinates_or_unknown": [
+        "com.sun.activation:javax.activation:1.2.0"
+      ],
+      "sha256": "993302b16cd7056f21e779cc577d175a810bb4900ef73cd8fbf2b50f928ba9ce",
+      "size": 78030
+    },
+    {
+      "filename": "javax.activation-api-1.2.0.jar",
+      "maven_coordinates_or_unknown": [
+        "javax.activation:javax.activation-api:1.2.0"
+      ],
+      "sha256": "43fdef0b5b6ceb31b0424b208b930c74ab58fac2ceeb7b3f6fd3aeb8b5ca4393",
+      "size": 56674
+    },
+    {
+      "filename": "javax.annotation-api-1.3.2.jar",
+      "maven_coordinates_or_unknown": [
+        "javax.annotation:javax.annotation-api:1.3.2"
+      ],
+      "sha256": "e04ba5195bcd555dc95650f7cc614d151e4bcd52d29a10b8aa2197f3ab89ab9b",
+      "size": 26586
+    },
+    {
+      "filename": "javax.jws-api-1.1.jar",
+      "maven_coordinates_or_unknown": [
+        "javax.jws:javax.jws-api:1.1"
+      ],
+      "sha256": "9f20ab1fea3f9571ed52a9d98e3c651cc7c04c8a709addf238312b60987c6f2c",
+      "size": 27212
+    },
+    {
+      "filename": "javax.servlet-api-4.0.1.jar",
+      "maven_coordinates_or_unknown": [
+        "javax.servlet:javax.servlet-api:4.0.1"
+      ],
+      "sha256": "83a03dd877d3674576f0da7b90755c8524af099ccf0607fc61aa971535ad7c60",
+      "size": 95505
+    },
+    {
+      "filename": "javax.xml.soap-api-1.4.0.jar",
+      "maven_coordinates_or_unknown": [
+        "javax.xml.soap:javax.xml.soap-api:1.4.0"
+      ],
+      "sha256": "141374e33be99768611a2d42b9d33571a0c5b9763beca9c2dc90900d8cc8f767",
+      "size": 46111
+    },
+    {
+      "filename": "jaxb-api-2.3.1.jar",
+      "maven_coordinates_or_unknown": [
+        "javax.xml.bind:jaxb-api:2.3.1"
+      ],
+      "sha256": "88b955a0df57880a26a74708bc34f74dcaf8ebf4e78843a28b50eae945732b06",
+      "size": 128076
+    },
+    {
+      "filename": "jaxb-impl-2.3.1.jar",
+      "maven_coordinates_or_unknown": [
+        "com.sun.xml.bind:jaxb-impl:2.3.1",
+        "org.glassfish.jaxb:jaxb-runtime:2.3.1"
+      ],
+      "sha256": "e6c9e0f1830fd5f7c30c25ecf5e2046c5668b06d304add89d2f027d5072297d0",
+      "size": 1099204
+    },
+    {
+      "filename": "jaxb-runtime-2.3.3.jar",
+      "maven_coordinates_or_unknown": [
+        "org.glassfish.jaxb:jaxb-runtime:2.3.3"
+      ],
+      "sha256": "3fcbf9247b08303ecaef2b8b91b47e220b6eced843e02837a5379d011c2c623d",
+      "size": 1035660
+    },
+    {
+      "filename": "jaxb-svg11-1.0.2.jar",
+      "maven_coordinates_or_unknown": [
+        "org.plutext:jaxb-svg11:1.0.2"
+      ],
+      "sha256": "6799f39d49d9dbfef140e76b33d0884d55372935768a3955900eb022576a760d",
+      "size": 280402
+    },
+    {
+      "filename": "jaxb-xjc-2.3.1.jar",
+      "maven_coordinates_or_unknown": [
+        "com.sun.istack:istack-commons-tools:3.0.7",
+        "com.sun.xml.bind.external:relaxng-datatype:2.3.1",
+        "com.sun.xml.bind.external:rngom:2.3.1",
+        "com.sun.xml.bind:jaxb-xjc:2.3.1",
+        "com.sun.xml.dtd-parser:dtd-parser:1.4",
+        "org.glassfish.jaxb:codemodel:2.3.1",
+        "org.glassfish.jaxb:jaxb-xjc:2.3.1",
+        "org.glassfish.jaxb:xsom:2.3.1"
+      ],
+      "sha256": "933a737282b70444119ea425acee694b3b0010691358457eb808ce58998b5be3",
+      "size": 1995775
+    },
+    {
+      "filename": "jaxen-1.2.0.jar",
+      "maven_coordinates_or_unknown": [
+        "jaxen:jaxen:1.2.0"
+      ],
+      "sha256": "70feef9dd75ad064def05a3ce8975aeba515ee7d1be146d12199c8828a64174c",
+      "size": 232455
+    },
+    {
+      "filename": "jaxws-api-2.3.1.jar",
+      "maven_coordinates_or_unknown": [
+        "javax.xml.ws:jaxws-api:2.3.1"
+      ],
+      "sha256": "a447f84f95658ea68b347acffe156f7700c62a37ede15d81e5298fb8e5fe6dcf",
+      "size": 56615
+    },
+    {
+      "filename": "jaxws-rt-2.3.1.jar",
+      "maven_coordinates_or_unknown": [
+        "com.sun.xml.ws:httpspi-servlet:2.3.1",
+        "com.sun.xml.ws:jaxws-rt-bundle:2.3.1",
+        "com.sun.xml.ws:rt-fi:2.3.1",
+        "com.sun.xml.ws:rt:2.3.1",
+        "com.sun.xml.ws:servlet:2.3.1"
+      ],
+      "sha256": "4f8d8d4008e0dffe575ce6d4a37cf1dc84ac32441679a4de13924202572d1b72",
+      "size": 2604243
+    },
+    {
+      "filename": "jbig2-imageio-3.0.3.jar",
+      "maven_coordinates_or_unknown": [
+        "org.apache.pdfbox:jbig2-imageio:3.0.3"
+      ],
+      "sha256": "c80110fda57128563d3d0656bff78da8bf35a934cf54edfa10e8b76fc6389929",
+      "size": 152680
+    },
+    {
+      "filename": "jboss-logging-3.4.1.Final.jar",
+      "maven_coordinates_or_unknown": [
+        "org.jboss.logging:jboss-logging:3.4.1.Final"
+      ],
+      "sha256": "8efe877d93e5e1057a1388b2950503b88b0c28447364fde08adbec61e524eeb8",
+      "size": 60790
+    },
+    {
+      "filename": "jcl-over-slf4j-1.7.30.jar",
+      "maven_coordinates_or_unknown": [
+        "org.slf4j:jcl-over-slf4j:1.7.30"
+      ],
+      "sha256": "71e9ee37b9e4eb7802a2acc5f41728a4cf3915e7483d798db3b4ff2ec8847c50",
+      "size": 16537
+    },
+    {
+      "filename": "jcommander-1.48.jar",
+      "maven_coordinates_or_unknown": [
+        "com.beust:jcommander:1.48"
+      ],
+      "sha256": "a7313fcfde070930e40ec79edf3c5948cf34e4f0d25cb3a09f9963d8bdd84113",
+      "size": 63504
+    },
+    {
+      "filename": "jgoodies-binding-2.10.0.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "4adc757d731590824b2356cc8d6070c6b39c05e9535b3720fae40f04ae94b876",
+      "size": 196632
+    },
+    {
+      "filename": "jgoodies-common-1.7.0.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "a17480c628e17dbe5fc1f5d866fa5db038a8b52359072c6076debeb07eef8bc9",
+      "size": 33832
+    },
+    {
+      "filename": "jna-4.5.1.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "8b95d97d2ba3235097a973fa4ddb4b1e5ccc0f91fa75a9e2fdcddcb35bf02217",
+      "size": 885297
+    },
+    {
+      "filename": "jna-5.8.0.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "930273cc1c492f25661ea62413a6da3fd7f6e01bf1c4dcc0817fc8696a7b07ac",
+      "size": 1729586
+    },
+    {
+      "filename": "jna-platform-5.8.0.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "ffd93fe1bc07de6f33eabf3d051c3636e01a01c17cb0da8448c53a2ac5e3bf7a",
+      "size": 1338206
+    },
+    {
+      "filename": "joda-time-2.8.jar",
+      "maven_coordinates_or_unknown": [
+        "joda-time:joda-time:2.8"
+      ],
+      "sha256": "55ae8d6baf406ccfec88cc444de4a452c5725859b70a076ba50a7a7b75f68ed1",
+      "size": 621926
+    },
+    {
+      "filename": "jodconverter-2.2.1.jar",
+      "maven_coordinates_or_unknown": [
+        "com.artofsolving:jodconverter:2.2.1"
+      ],
+      "sha256": "392f8d8200dd37ad01b5def9e4b0a9936b6fb89a3dd496488f47c454c5f02a8e",
+      "size": 31702
+    },
+    {
+      "filename": "jodconverter-core-1.0.5.jar",
+      "maven_coordinates_or_unknown": [
+        "com.github.livesense:jodconverter-core:1.0.5"
+      ],
+      "sha256": "a300129f2e24456b92f01ccd0cd58a0cd9b23366ca9d5bae0038ddf4f13d2596",
+      "size": 77876
+    },
+    {
+      "filename": "jopt-simple-5.0.2.jar",
+      "maven_coordinates_or_unknown": [
+        "net.sf.jopt-simple:jopt-simple:5.0.2"
+      ],
+      "sha256": "457877c79e038f390557db5f8e92c4436fb4f4b3ba63f28bc228500fee080193",
+      "size": 78074
+    },
+    {
+      "filename": "jpinyin-1.1.8.jar",
+      "maven_coordinates_or_unknown": [
+        "com.github.stuxuhai:jpinyin:1.1.8"
+      ],
+      "sha256": "e8b8f60bd11f9d2a721889832a6785e949fba68b4700e5f992b0c32eea2efdc8",
+      "size": 133998
+    },
+    {
+      "filename": "json-path-2.4.0.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "60441c74fb64e5a480070f86a604941927aaf684e2b513d780fb7a38fb4c5639",
+      "size": 223186
+    },
+    {
+      "filename": "json-smart-2.3.jar",
+      "maven_coordinates_or_unknown": [
+        "net.minidev:json-smart:2.3"
+      ],
+      "sha256": "903f48c8aa4c3f6426440b8d32de89fa1dc23b1169abde25e4e1d068aa67708b",
+      "size": 120316
+    },
+    {
+      "filename": "jsoup-1.13.1.jar",
+      "maven_coordinates_or_unknown": [
+        "org.jsoup:jsoup:1.13.1"
+      ],
+      "sha256": "e2b99c0d2fa39f69f27efb1c0016390713feb2f2e02d8ea7f1c36b780271598a",
+      "size": 393851
+    },
+    {
+      "filename": "jsr305-3.0.2.jar",
+      "maven_coordinates_or_unknown": [
+        "com.google.code.findbugs:jsr305:3.0.2"
+      ],
+      "sha256": "766ad2a0783f2687962c8ad74ceecc38a28b9f72a2d085ee438b7813e928d0c7",
+      "size": 19936
+    },
+    {
+      "filename": "jtar-2.3.jar",
+      "maven_coordinates_or_unknown": [
+        "org.kamranzafar:jtar:2.3"
+      ],
+      "sha256": "4e5d426813a4426e5aca874ab06cd01c5de53904e0147f38698b736ad519dda2",
+      "size": 17178
+    },
+    {
+      "filename": "jts-core-1.17.0.jar",
+      "maven_coordinates_or_unknown": [
+        "org.locationtech.jts:jts-core:1.17.0"
+      ],
+      "sha256": "774b17b1051403eecbd1415c377fba886ff0de997a06af968cc4204ffb603334",
+      "size": 888188
+    },
+    {
+      "filename": "juh-3.2.1.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "220fdb873dbdc867390bf9c589bac0262cf0d341484c72ac106c32772f442798",
+      "size": 55616
+    },
+    {
+      "filename": "jul-to-slf4j-1.7.32.jar",
+      "maven_coordinates_or_unknown": [
+        "org.slf4j:jul-to-slf4j:1.7.32"
+      ],
+      "sha256": "6dee8d85ad6943aff0600f14897c469e64bae0413ee33a15c448af00432c0642",
+      "size": 4589
+    },
+    {
+      "filename": "jurt-3.2.1.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "8beaeebe1787e12d7874ef5aa270c010b14016e0dff26af8d62740ae8841251f",
+      "size": 108323
+    },
+    {
+      "filename": "jxl-2.5.7.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "674606dd2932d3a8a5c9ebcdd084eee0220e71d468d8eff073edbaeb1650a0d9",
+      "size": 611696
+    },
+    {
+      "filename": "jxls-2.10.0.jar",
+      "maven_coordinates_or_unknown": [
+        "org.jxls:jxls:2.10.0"
+      ],
+      "sha256": "4c4e9bd852e7762bb62f83dd5a8c7d9181b103be8468d04597db6db0f9c4c47b",
+      "size": 158518
+    },
+    {
+      "filename": "jxls-poi-2.10.0.jar",
+      "maven_coordinates_or_unknown": [
+        "org.jxls:jxls-poi:2.10.0"
+      ],
+      "sha256": "c438b8565bf6fef7ba8cfbd511e2e26261a57853adc2a13366144978ea8688e7",
+      "size": 34018
+    },
+    {
+      "filename": "kaptcha-2.3.2.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "699a5ed8c202a5762455d57dd075441797a18383931bed254f40d49e1417de36",
+      "size": 95467
+    },
+    {
+      "filename": "kernel-7.0.3.jar",
+      "maven_coordinates_or_unknown": [
+        "com.itextpdf:kernel:7.0.3"
+      ],
+      "sha256": "67f52ef8bd01fa337f53ff58804e14c1b5ff22ae7d0fc51ca9716c22de09b708",
+      "size": 1040587
+    },
+    {
+      "filename": "kryo-5.0.0-RC9.jar",
+      "maven_coordinates_or_unknown": [
+        "com.esotericsoftware:kryo:5.0.0-RC9"
+      ],
+      "sha256": "3d9ef4b1e3c1741e5a59938b8e730b950dbed99b171103b61088cb2d66f3987d",
+      "size": 347136
+    },
+    {
+      "filename": "lang-mustache-client-7.6.2.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "9951bfacb004562c4708cd07db752c626d62d0c03a000a0f46e175002a85c540",
+      "size": 62747
+    },
+    {
+      "filename": "layout-7.0.3.jar",
+      "maven_coordinates_or_unknown": [
+        "com.itextpdf:layout:7.0.3"
+      ],
+      "sha256": "8893cc14bc1b2add59f130c1dc1f8e90ff57aa42ab461bbb517177e2bd497aa2",
+      "size": 344851
+    },
+    {
+      "filename": "lettuce-core-5.3.4.RELEASE.jar",
+      "maven_coordinates_or_unknown": [
+        "io.lettuce:lettuce-core:5.3.4.RELEASE"
+      ],
+      "sha256": "775efcc0364cdde963bbfd3dd9fbaf16991bc8b020700ba4fb89903d23d066e9",
+      "size": 1441187
+    },
+    {
+      "filename": "listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar",
+      "maven_coordinates_or_unknown": [
+        "com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava"
+      ],
+      "sha256": "b372a037d4230aa57fbeffdef30fd6123f9c0c2db85d0aced00c91b974f33f99",
+      "size": 2199
+    },
+    {
+      "filename": "log4j-api-2.17.1.jar",
+      "maven_coordinates_or_unknown": [
+        "org.apache.logging.log4j:log4j-api:2.17.1"
+      ],
+      "sha256": "b0d8a4c8ab4fb8b1888d0095822703b0e6d4793c419550203da9e69196161de4",
+      "size": 301872
+    },
+    {
+      "filename": "log4j-core-2.17.1.jar",
+      "maven_coordinates_or_unknown": [
+        "org.apache.logging.log4j:log4j-core:2.17.1"
+      ],
+      "sha256": "c967f223487980b9364e94a7c7f9a8a01fd3ee7c19bdbf0b0f9f8cb8511f3d41",
+      "size": 1790452
+    },
+    {
+      "filename": "log4j-jul-2.17.1.jar",
+      "maven_coordinates_or_unknown": [
+        "org.apache.logging.log4j:log4j-jul:2.17.1"
+      ],
+      "sha256": "b0bc5eeef841d4c22e0d7900d8545da7b1daa102b930483eed0459344816374f",
+      "size": 30994
+    },
+    {
+      "filename": "log4j-slf4j-impl-2.17.1.jar",
+      "maven_coordinates_or_unknown": [
+        "org.apache.logging.log4j:log4j-slf4j-impl:2.17.1"
+      ],
+      "sha256": "e9a03720e5d5076009c2530635da9d08485e28a0b0ec20708dadc51afb78e41e",
+      "size": 24279
+    },
+    {
+      "filename": "lorem-2.0.jar",
+      "maven_coordinates_or_unknown": [
+        "com.thedeanda:lorem:2.0"
+      ],
+      "sha256": "10d30321fe8ef98b80919322138320f914d3f64cb01826730c241e7eaf24f2f9",
+      "size": 28249
+    },
+    {
+      "filename": "lucene-analyzers-common-8.4.0.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "84c9a4dacda8b7e92de7a1325a185bafe3e599ef057376e3f9ee48954305a316",
+      "size": 1682324
+    },
+    {
+      "filename": "lucene-backward-codecs-8.4.0.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "3371dd4352499dc6d108a14df00252727d0bdb178d850215ad2c52e78c55663e",
+      "size": 139407
+    },
+    {
+      "filename": "lucene-core-8.4.0.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "2715688a4606978d8d0b4cb7aa1d3cbd865454da3e3880e2785a72137f75d327",
+      "size": 3300764
+    },
+    {
+      "filename": "lucene-grouping-8.4.0.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "25f6a5403eef9da51eac9ac1334695fb02874a1d6005af54df34a45cb636a7a7",
+      "size": 90762
+    },
+    {
+      "filename": "lucene-highlighter-8.4.0.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "31e6e77e27c155968a384bb493ff1cc08e2be33ae6eeae85a3dd3b4eebd785ed",
+      "size": 209180
+    },
+    {
+      "filename": "lucene-join-8.4.0.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "9f95f1327e2162d7192854ac6745bb1436f25c779dfde6832d30f6eb432b617c",
+      "size": 148883
+    },
+    {
+      "filename": "lucene-memory-8.4.0.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "b4d73c54459692d089705ab96cd431566a1200036242a1a482147a8ff6c53473",
+      "size": 51876
+    },
+    {
+      "filename": "lucene-misc-8.4.0.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "83f2dd316be13cf25788e5af5e70d50d6591acdbf6340f5a4bf6c99a9f0b7685",
+      "size": 99020
+    },
+    {
+      "filename": "lucene-queries-8.4.0.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "c3918bb8819c7e5ef27645b09171a58f9566bdb5ff2bce1fd26fd48d6d918e27",
+      "size": 369837
+    },
+    {
+      "filename": "lucene-queryparser-8.4.0.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "3974ab8d5eafe84eb9807599342377cb9e5bdf84c2834ac2fe8efb8e54e62134",
+      "size": 382134
+    },
+    {
+      "filename": "lucene-sandbox-8.4.0.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "d761d8d84198afac46f4d8ba289a4e2a0f3d053c085ac11de0f530b4c1122d2e",
+      "size": 320676
+    },
+    {
+      "filename": "lucene-spatial-8.4.0.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "4b6f4d3bd27f368721e48eb30eb6ea90eb4321b808f10717c10feda029f638d4",
+      "size": 14495
+    },
+    {
+      "filename": "lucene-spatial-extras-8.4.0.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "05d93b999707a4705cc5ed8606cb9c273166edcc77a3b604958279031ec1937a",
+      "size": 240314
+    },
+    {
+      "filename": "lucene-spatial3d-8.4.0.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "e998cbd05a0e56799a8b6b59ee7404e8932e8677be5cfd056595f8220fc3e0db",
+      "size": 306841
+    },
+    {
+      "filename": "lucene-suggest-8.4.0.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "d57754d998ed454e60c66819ffb8a4b93304eebda77bdf53f1dd77ce06ddd2d8",
+      "size": 249478
+    },
+    {
+      "filename": "management-api-3.0.0-b012.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "e114d4f4cf4261ab76d144c49d6ee1d75ddcfbb7c195260d1a782ebe0c34cb87",
+      "size": 42212
+    },
+    {
+      "filename": "mapper-extras-client-7.6.2.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "e3407ee8f0fbc55fda995983c784768e7dcfc1d16a2ef79dcf54b9359eba92e1",
+      "size": 88930
+    },
+    {
+      "filename": "mbassador-1.2.4.2.jar",
+      "maven_coordinates_or_unknown": [
+        "net.engio:mbassador:1.2.4.2"
+      ],
+      "sha256": "e7bc401a42df2167164067120ab28c4ceccb29b0b546fb31d3ad28f9d45c8944",
+      "size": 96506
+    },
+    {
+      "filename": "mchange-commons-java-0.2.15.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "2b8fce65e95a3e968d5ab3507e2833f43df3daee0635ee51c7ce33343bb3a21c",
+      "size": 624036
+    },
+    {
+      "filename": "metadata-extractor-2.15.0.jar",
+      "maven_coordinates_or_unknown": [
+        "com.drewnoakes:metadata-extractor:2.15.0"
+      ],
+      "sha256": "d9ab9b3a1e22b7245a50d734a4aa886eaafd836a76a480529953986beea1d48f",
+      "size": 735889
+    },
+    {
+      "filename": "mimepull-1.9.13.jar",
+      "maven_coordinates_or_unknown": [
+        "org.jvnet.mimepull:mimepull:1.9.13"
+      ],
+      "sha256": "5518bd3c5d88bea3b303952b22618313d6bf0ca7f131f78368108a04ebba3f17",
+      "size": 64921
+    },
+    {
+      "filename": "minlog-1.3.1.jar",
+      "maven_coordinates_or_unknown": [
+        "com.esotericsoftware:minlog:1.3.1"
+      ],
+      "sha256": "5d4d632cfbebfe0a7644501cc303570b691406181bee65e9916b921c767d7c72",
+      "size": 5923
+    },
+    {
+      "filename": "mpxj-7.1.0.jar",
+      "maven_coordinates_or_unknown": [
+        "net.sf.mpxj:mpxj:7.1.0"
+      ],
+      "sha256": "4efd206fb9e3671cde1a25a91144ce8c8a96c1a50edfe6494499bd2d9dce0173",
+      "size": 2388609
+    },
+    {
+      "filename": "mssql-jdbc-7.4.1.jre8.jar",
+      "maven_coordinates_or_unknown": [
+        "com.microsoft.sqlserver:mssql-jdbc:7.4.1"
+      ],
+      "sha256": "00a6eaf49184dbffd89c4baf21d08a471797ead9bf48ca38faf7f9fe4244e391",
+      "size": 1209660
+    },
+    {
+      "filename": "mxparser-1.2.2.jar",
+      "maven_coordinates_or_unknown": [
+        "io.github.x-stream:mxparser:1.2.2"
+      ],
+      "sha256": "aeeee23a3303d811bca8790ea7f25b534314861c03cff36dafdcc2180969eb97",
+      "size": 29680
+    },
+    {
+      "filename": "mybatis-3.5.6.jar",
+      "maven_coordinates_or_unknown": [
+        "ognl:ognl:3.2.15",
+        "org.javassist:javassist:3.27.0-GA",
+        "org.mybatis:mybatis:3.5.6"
+      ],
+      "sha256": "f32720f23f85d073da04e8d0742f2bdbbd90ca90269057407be4283a673b8f35",
+      "size": 1737471
+    },
+    {
+      "filename": "mybatis-spring-2.0.6.jar",
+      "maven_coordinates_or_unknown": [
+        "org.mybatis:mybatis-spring:2.0.6"
+      ],
+      "sha256": "ba7e3ee4f407eca50680485317713e4f86111a7db4dcb4a49792efd4a1d735a2",
+      "size": 71229
+    },
+    {
+      "filename": "mybatis-spring-boot-autoconfigure-2.1.4.jar",
+      "maven_coordinates_or_unknown": [
+        "org.mybatis.spring.boot:mybatis-spring-boot-autoconfigure:2.1.4"
+      ],
+      "sha256": "4dd5e491a938abfd8fe62d567284f663f4fef5a2e9b6a5d325c10ea8d31c15c1",
+      "size": 26079
+    },
+    {
+      "filename": "mybatis-spring-boot-starter-2.1.4.jar",
+      "maven_coordinates_or_unknown": [
+        "org.mybatis.spring.boot:mybatis-spring-boot-starter:2.1.4"
+      ],
+      "sha256": "2552759d30e3317eca8a90757f2d834d646f66eadadf70d6c8063b78d5c4bc5c",
+      "size": 2425
+    },
+    {
+      "filename": "mysql-connector-java-8.0.21.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "2f62d886270a75ebc8e8fd89127d4a30ccc711f02256ade2cfb7090817132003",
+      "size": 2397321
+    },
+    {
+      "filename": "neethi-3.1.1.jar",
+      "maven_coordinates_or_unknown": [
+        "org.apache.neethi:neethi:3.1.1"
+      ],
+      "sha256": "7f8c00d9bbfbaa97a97a461cdeadb20054b956acb7536782703ca5a9a330ff22",
+      "size": 74282
+    },
+    {
+      "filename": "netty-all-4.1.52.Final.jar",
+      "maven_coordinates_or_unknown": [
+        "io.netty:netty-all:4.1.52.Final"
+      ],
+      "sha256": "c5ef4240e89a9aa425f6dfabbb8a853cd7751b4da8e63e7c2ecd71c43c66a3da",
+      "size": 4275842
+    },
+    {
+      "filename": "netty-buffer-4.1.52.Final.jar",
+      "maven_coordinates_or_unknown": [
+        "io.netty:netty-buffer:4.1.52.Final"
+      ],
+      "sha256": "41ca1035aee6e0f8177597d0a7610a5aa2c6e6fac744ac81fde4e5e58f639675",
+      "size": 294187
+    },
+    {
+      "filename": "netty-codec-4.1.52.Final.jar",
+      "maven_coordinates_or_unknown": [
+        "io.netty:netty-codec:4.1.52.Final"
+      ],
+      "sha256": "3c7e78dcce7e353d86ac7dba2c251ab5cddd4eb86eaa889cfe4229782b828e52",
+      "size": 320330
+    },
+    {
+      "filename": "netty-codec-http-4.1.52.Final.jar",
+      "maven_coordinates_or_unknown": [
+        "io.netty:netty-codec-http:4.1.52.Final"
+      ],
+      "sha256": "b5da28d0ea878b07d3111acf5e4faf41288ef2302b26414190fdd1a7d973c80c",
+      "size": 618149
+    },
+    {
+      "filename": "netty-common-4.1.52.Final.jar",
+      "maven_coordinates_or_unknown": [
+        "io.netty:netty-common:4.1.52.Final",
+        "org.jctools:jctools-core:3.1.0"
+      ],
+      "sha256": "0d1f101e4db7d530ed04d7cabd57d95c0750f059bb6b3fadfed0c80d4734c717",
+      "size": 637548
+    },
+    {
+      "filename": "netty-handler-4.1.52.Final.jar",
+      "maven_coordinates_or_unknown": [
+        "io.netty:netty-handler:4.1.52.Final"
+      ],
+      "sha256": "2cdc21fbfae04940c85929039779c93f51f618f5efb216079319dcfcf32a55c1",
+      "size": 461084
+    },
+    {
+      "filename": "netty-resolver-4.1.52.Final.jar",
+      "maven_coordinates_or_unknown": [
+        "io.netty:netty-resolver:4.1.52.Final"
+      ],
+      "sha256": "6eeb72a233979cb45b0b4d6d46c5a41332c57c0cf8a803b1efc60dbbecba09a6",
+      "size": 33159
+    },
+    {
+      "filename": "netty-transport-4.1.52.Final.jar",
+      "maven_coordinates_or_unknown": [
+        "io.netty:netty-transport:4.1.52.Final"
+      ],
+      "sha256": "9a3e6f8c0e55de363eb1ea10fe781797eca394e62186df2ae0b4eb2bce0b4541",
+      "size": 474175
+    },
+    {
+      "filename": "objenesis-3.0.1.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "7a8ff780b9ff48415d7c705f60030b0acaa616e7f823c98eede3b63508d4e984",
+      "size": 60966
+    },
+    {
+      "filename": "ognl-3.2.10.jar",
+      "maven_coordinates_or_unknown": [
+        "ognl:ognl:3.2.10"
+      ],
+      "sha256": "44f47e5929d33dbf62de0b81b69dd9aaf668367899cc60055f843f92bcee57a9",
+      "size": 249736
+    },
+    {
+      "filename": "ojdbc6-11.2.0.3.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "b7a8656754c891f2d9605afc6d2f4d98a5a8d6fbafe0065b24590061794b1460",
+      "size": 2714189
+    },
+    {
+      "filename": "ojdbc8-19.3.0.0.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "a66d27a14f3adee484427cc4de008af85a5c3e78e2e3285a4dba1277332978a5",
+      "size": 4210517
+    },
+    {
+      "filename": "okhttp-3.14.9.jar",
+      "maven_coordinates_or_unknown": [
+        "com.squareup.okhttp3:okhttp:3.14.9"
+      ],
+      "sha256": "2570fab55515cbf881d7a4ceef49fc515490bc027057e666776a2832465aeca0",
+      "size": 430488
+    },
+    {
+      "filename": "okio-1.17.2.jar",
+      "maven_coordinates_or_unknown": [
+        "com.squareup.okio:okio:1.17.2"
+      ],
+      "sha256": "f80ce42d2ffac47ad4c47e1d6f980d604d247ceb1a886705cf4581ab0c9fe2b8",
+      "size": 91980
+    },
+    {
+      "filename": "ons-19.3.0.0.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "6e3f243700716c4fa2e9ddfaa08c9394ad6fda3a640d3bef03941f7b573df9d7",
+      "size": 144681
+    },
+    {
+      "filename": "ooxml-schemas-1.4.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "f8256738040d66ccb677814873674c1212464e00af491e9df490fc45decbd932",
+      "size": 16356588
+    },
+    {
+      "filename": "oraclepki-19.3.0.0.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "04bdcbaa8da2c5800403ad0f448bec2867c6e9a12665d3f2c2aba1539dec24dc",
+      "size": 306004
+    },
+    {
+      "filename": "orai18n-12.1.0.2.0.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "2a964242de495219171106fd2611e14cf5a041fb6747d12649a22372623a9540",
+      "size": 1659574
+    },
+    {
+      "filename": "osdt_cert-19.3.0.0.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "faa0cca594d354d5bb1f5eac3dafa1568387a27576813a9bd723d6fd8744be8c",
+      "size": 205154
+    },
+    {
+      "filename": "osdt_core-19.3.0.0.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "c7a90c07a12e73d03c1edd6a02e699001213e698fe0f5225a2771ccd46ab0b63",
+      "size": 306854
+    },
+    {
+      "filename": "oshi-core-5.7.0.jar",
+      "maven_coordinates_or_unknown": [
+        "com.github.oshi:oshi-core:5.7.0"
+      ],
+      "sha256": "8be3d4a20894e6809f0c29decd92b802dc9950ce58b29f0921b0aa12ee02bded",
+      "size": 834451
+    },
+    {
+      "filename": "pageoffice-6.4.1.1-javax.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "57d44202508c063ece613d354a7129dc7f00e9a2fe7617fc3d255b59dcd8a3d5",
+      "size": 11885146
+    },
+    {
+      "filename": "parent-join-client-7.6.2.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "377270f2d4a53e35ad54321bf927e258cd52fb46f606d26015f130161d17d82e",
+      "size": 82833
+    },
+    {
+      "filename": "pdfbox-2.0.15.jar",
+      "maven_coordinates_or_unknown": [
+        "org.apache.pdfbox:pdfbox:2.0.15"
+      ],
+      "sha256": "de5567666f7641bacdca2728096aef8db9e0be8d3f9faab9c6cbdbd3e3ed34c3",
+      "size": 2571007
+    },
+    {
+      "filename": "persistence-api-1.0.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "893c691a04a8722c165e3d5dfc94dfd6c1b07b283ab54c6b0d23a3bd3e75a121",
+      "size": 52150
+    },
+    {
+      "filename": "poi-4.1.2.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "ab1612406541968434044b2defad58aa8b657cad073baa22a04faaf9d7fb9d1c",
+      "size": 2915337
+    },
+    {
+      "filename": "poi-excelant-4.1.2.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "bc19a9aed9f4f51127f5e4c3c4286c6cb9cda9ea2726a7484f8c3ac2e09ccca9",
+      "size": 31321
+    },
+    {
+      "filename": "poi-ooxml-4.1.2.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "0aaaeeee3f5831b036b7053f8048b0f83aa9fa8897771ffd871ddfc84653eba1",
+      "size": 1888231
+    },
+    {
+      "filename": "poi-ooxml-schemas-4.1.2.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "b4c579f34c377008ec16a5a784539b73776a1dcedf15196f88a80f1b208d9bb2",
+      "size": 7912488
+    },
+    {
+      "filename": "poi-ooxml-schemas-extra-4.1.2.jar",
+      "maven_coordinates_or_unknown": [
+        "com.deepoove:poi-ooxml-schemas-extra:4.1.2"
+      ],
+      "sha256": "c65c38486cd53011a3464414db13c9eb1330169bc70a7b9a9a2b90cb56f92f22",
+      "size": 43491
+    },
+    {
+      "filename": "poi-scratchpad-4.1.2.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "4ad6a0579a0a216ff951a80f11c648792268189591fe86015b9d197d650424f3",
+      "size": 1834265
+    },
+    {
+      "filename": "poi-tl-1.10.0.jar",
+      "maven_coordinates_or_unknown": [
+        "com.deepoove:poi-tl:1.10.0"
+      ],
+      "sha256": "629ef8479b0bf146299fcd5e0340236886820f3d59182503e35555af98e31f96",
+      "size": 374431
+    },
+    {
+      "filename": "policy-2.7.5.jar",
+      "maven_coordinates_or_unknown": [
+        "com.sun.xml.ws:policy:2.7.5"
+      ],
+      "sha256": "34e254f415b94eab04bad700e9109359b60e01bcb9a7873bc2c934c424a2f965",
+      "size": 179041
+    },
+    {
+      "filename": "postgresql-42.2.16.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "82230367c0e9507be45981ce2aa059f7291d906f56ad820d0bab3db0cf1523cb",
+      "size": 1002883
+    },
+    {
+      "filename": "private-sdk-RELEASE.jar",
+      "maven_coordinates_or_unknown": [
+        "net.qiyuesuo.sdk:private-sdk:4.3.0"
+      ],
+      "sha256": "0eff84fe02f0e7b9e474f52fe94b7b2c6e862ab817eea6cd38845680160d5a8f",
+      "size": 504028
+    },
+    {
+      "filename": "protobuf-java-3.12.2.jar",
+      "maven_coordinates_or_unknown": [
+        "com.google.protobuf:protobuf-java:3.12.2"
+      ],
+      "sha256": "b385bef93bad20c5e7a6cf3b1c73edde29bdec4bb3bb75688d233b561f0dcaa0",
+      "size": 1670274
+    },
+    {
+      "filename": "quartz-2.3.2.jar",
+      "maven_coordinates_or_unknown": [
+        "org.quartz-scheduler:quartz:2.3.2"
+      ],
+      "sha256": "639c6a675bc472e1568df9d8c954ff702da6f83ed27da0ff9a7bd12ed73b8bf0",
+      "size": 693050
+    },
+    {
+      "filename": "rank-eval-client-7.6.2.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "b721557f219716fd3fae823a42421072b8c728b4653759d56f885ea2dce73c64",
+      "size": 77036
+    },
+    {
+      "filename": "reactive-streams-1.0.3.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "1dee0481072d19c929b623e155e14d2f6085dc011529a0a0dbefc84cf571d865",
+      "size": 11369
+    },
+    {
+      "filename": "reactor-core-3.3.10.RELEASE.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "f0b92788cc6d3ca9e5de0fed317faae629443ee348865e620d9160c83b218f59",
+      "size": 1568754
+    },
+    {
+      "filename": "reflectasm-1.11.8.jar",
+      "maven_coordinates_or_unknown": [
+        "com.esotericsoftware:reflectasm:1.11.8"
+      ],
+      "sha256": "d91dc2db686c0389763ae2253e43cfd1c7e175efcceeb3c59778d6deb86bef90",
+      "size": 72276
+    },
+    {
+      "filename": "ridl-3.2.1.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "8d8e4e3aa3cd06908ed939202edd7c89759516abcb7e7f617a47afde2caa63b7",
+      "size": 256521
+    },
+    {
+      "filename": "rxjava-1.3.8.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "387df880f226b01cea4b1026d96d34e1da27d5801562742cfce0413c21ef7690",
+      "size": 1159165
+    },
+    {
+      "filename": "saaj-impl-1.5.2.jar",
+      "maven_coordinates_or_unknown": [
+        "com.sun.xml.messaging.saaj:saaj-impl:1.5.2"
+      ],
+      "sha256": "2d74a4ef75bc6ab4cdc06ed3732aae0b821dc108c75e3ca53fc7305207e74b5a",
+      "size": 452868
+    },
+    {
+      "filename": "sentry-5.2.4.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "f720e9d95cca61fefa9cc9ec82f31b8d0b465f4792144c6ae8fc163211f75533",
+      "size": 347291
+    },
+    {
+      "filename": "sentry-spring-5.2.4.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "749c7de33006930b6b178923c5ae580135fbfc7c4a64f342adb32e46685f93e1",
+      "size": 53970
+    },
+    {
+      "filename": "sentry-spring-boot-starter-5.2.4.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "ceef6b1aa1bb3bc9f95617fcded20c274449ba81dfac16ee842a2571bb61c4a0",
+      "size": 29363
+    },
+    {
+      "filename": "serializer-2.7.2.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "e8f5b4340d3b12a0cfa44ac2db4be4e0639e479ae847df04c4ed8b521734bb4a",
+      "size": 276420
+    },
+    {
+      "filename": "simplefan-19.3.0.0.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "5138d658edff0e0106f0559f68c72fb90f1cd34381492995b75d0012ea9e12f2",
+      "size": 29205
+    },
+    {
+      "filename": "slf4j-api-1.7.30.jar",
+      "maven_coordinates_or_unknown": [
+        "org.slf4j:slf4j-api:1.7.30"
+      ],
+      "sha256": "cdba07964d1bb40a0761485c6b1e8c2f8fd9eb1d19c53928ac0d7f9510105c57",
+      "size": 41472
+    },
+    {
+      "filename": "snakeyaml-1.26.jar",
+      "maven_coordinates_or_unknown": [
+        "org.yaml:snakeyaml:1.26"
+      ],
+      "sha256": "d87d607e500885356c03c1cae61e8c2e05d697df8787d5aba13484c2eb76a844",
+      "size": 309001
+    },
+    {
+      "filename": "spire.office-8.11.3.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "c8c7944a6af7997ab9c9dbda431dc61c44b2218a923d21d6f4a8b50ef5ecd8e3",
+      "size": 69141832
+    },
+    {
+      "filename": "spring-aop-5.2.9.RELEASE.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "111f92160ac798d97de09930015286e043655c8a8d1b947a2f2195a76c3514e6",
+      "size": 372753
+    },
+    {
+      "filename": "spring-aspects-5.2.9.RELEASE.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "3080ad74dc7e228584704dba04c4b99599da89ad4bd640c975c620fe0fa59327",
+      "size": 47454
+    },
+    {
+      "filename": "spring-beans-5.2.9.RELEASE.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "7be619743e6312584deb8c436191cf322d6432131a21c93e723dddf41b3a23fc",
+      "size": 688380
+    },
+    {
+      "filename": "spring-boot-2.3.4.RELEASE.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "6f31d29d22fc2003fc77b90db2c028a1e2e8d4e6b2a6ed61b07269aeb1c3d4a9",
+      "size": 1122195
+    },
+    {
+      "filename": "spring-boot-autoconfigure-2.3.4.RELEASE.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "0c5645b638f3422d96411e4c47b6b5c217408d8e4314ff8fcb2aff29f7cba7a7",
+      "size": 1476367
+    },
+    {
+      "filename": "spring-boot-configuration-processor-2.3.4.RELEASE.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "96f24df8ccb9f788578a744a0bae649533e8bbf66b1c6d36fdf812406681f848",
+      "size": 115783
+    },
+    {
+      "filename": "spring-boot-loader-2.3.4.RELEASE.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "4101777e3bf4e80445d9ab8fca90b1277112cb831b8bb293c57c44d5239c8bcf",
+      "size": 122645
+    },
+    {
+      "filename": "spring-boot-starter-2.3.4.RELEASE.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "777c071bbc57bc76a44989c5c674472d1c1da491743998996a050b418d24a9b0",
+      "size": 4763
+    },
+    {
+      "filename": "spring-boot-starter-aop-2.3.4.RELEASE.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "e64b9946cfc493b3e88431a39dd0ed0f8c7b186fffe2714366540d7c8bc7ff26",
+      "size": 4766
+    },
+    {
+      "filename": "spring-boot-starter-cache-2.3.4.RELEASE.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "be9a5d98251fa0869e0de129ebf379cfd059a74dd27d8f1c0d46f8f6dd04de75",
+      "size": 4753
+    },
+    {
+      "filename": "spring-boot-starter-data-elasticsearch-2.3.4.RELEASE.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "a5927249a88d125afd3db696b86a6670be6658b418445b4ca6dca1d04a98a788",
+      "size": 4768
+    },
+    {
+      "filename": "spring-boot-starter-data-jpa-2.3.4.RELEASE.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "0695cdd777334c4d019c6230ef6a9a76151d7cd052a3345050664727aaf7d382",
+      "size": 4753
+    },
+    {
+      "filename": "spring-boot-starter-data-redis-2.3.4.RELEASE.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "3f216e3a0867bbf689c726c165c6b7bd89d5ccee349f7bc968ef743951de5de7",
+      "size": 4775
+    },
+    {
+      "filename": "spring-boot-starter-data-rest-2.3.4.RELEASE.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "74504c708d6843c92b78de1b00691eb3541ac0d9b3cc5c533259342295210867",
+      "size": 4761
+    },
+    {
+      "filename": "spring-boot-starter-freemarker-2.3.4.RELEASE.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "c907365a4a0936f6c3ffb544e0d5d20754c2460d1c0962c9a8cb86bc5b18c469",
+      "size": 4764
+    },
+    {
+      "filename": "spring-boot-starter-jdbc-2.3.4.RELEASE.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "9111ff873d44c0ee7f8fa9b2f17b1098b3e01935dccb567f01b06bde84cdfb38",
+      "size": 4759
+    },
+    {
+      "filename": "spring-boot-starter-json-2.3.4.RELEASE.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "b8be7b242e08fff5c12e8fdd98673aa7a55172700a03c27c8c35d2a06b619daf",
+      "size": 4741
+    },
+    {
+      "filename": "spring-boot-starter-mail-2.3.4.RELEASE.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "a4453b22fab102b258ab07e1c5f2b7427830451d27df7c6d698a3aa1b8e6ee89",
+      "size": 4766
+    },
+    {
+      "filename": "spring-boot-starter-security-2.3.4.RELEASE.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "03ff67ce30ee1352fd0c2e2e26e4ebb175af16976d65952216f78f6aac25c46c",
+      "size": 4737
+    },
+    {
+      "filename": "spring-boot-starter-thymeleaf-2.3.4.RELEASE.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "2108ba39bc3892e5103f09b33d4ef7845d0b80315ea8d782c3a212553cf4c669",
+      "size": 4762
+    },
+    {
+      "filename": "spring-boot-starter-tomcat-2.3.4.RELEASE.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "011aa5bdbd078c3ba6bbbecc709f9bdcf5442f319c71761f056dcb4eea930bc6",
+      "size": 4790
+    },
+    {
+      "filename": "spring-boot-starter-validation-2.3.4.RELEASE.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "340941589f603c0e9b6554166ec0f0d5ca9c673be28188d15f57b6a57f3facc1",
+      "size": 4758
+    },
+    {
+      "filename": "spring-boot-starter-web-2.3.4.RELEASE.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "c57b8e6a75b57b71f520b834bc321c9314dbd31ad4b9297719b5e2d8c44e36cf",
+      "size": 4798
+    },
+    {
+      "filename": "spring-boot-starter-websocket-2.3.4.RELEASE.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "cdf7961e0463111708fddfc185ce038a954cebba0045afd762ce896e4c8bcd9a",
+      "size": 4774
+    },
+    {
+      "filename": "spring-cloud-commons-2.2.5.RELEASE.jar",
+      "maven_coordinates_or_unknown": [
+        "org.springframework.cloud:spring-cloud-commons:2.2.5.RELEASE"
+      ],
+      "sha256": "188a1a4c3910c08252ed72bd13cffbf25679327553bc69b7df61197ee70be658",
+      "size": 225597
+    },
+    {
+      "filename": "spring-cloud-context-2.2.5.RELEASE.jar",
+      "maven_coordinates_or_unknown": [
+        "org.springframework.cloud:spring-cloud-context:2.2.5.RELEASE"
+      ],
+      "sha256": "ae271e742c3898b01c38eb4ad24fbfc7cf770b38f3895495933696840b655c65",
+      "size": 127562
+    },
+    {
+      "filename": "spring-cloud-netflix-archaius-2.2.5.RELEASE.jar",
+      "maven_coordinates_or_unknown": [
+        "org.springframework.cloud:spring-cloud-netflix-archaius:2.2.5.RELEASE"
+      ],
+      "sha256": "b8e77a4dace7bc067205c68921c41bd16ffbac96fa701b4b030e33244c92e455",
+      "size": 15139
+    },
+    {
+      "filename": "spring-cloud-netflix-ribbon-2.2.5.RELEASE.jar",
+      "maven_coordinates_or_unknown": [
+        "org.springframework.cloud:spring-cloud-netflix-ribbon:2.2.5.RELEASE"
+      ],
+      "sha256": "e2c339b0ad111a71321a4e0866e38ebe1d690d7b61e6da16a7a6bb36e743e60a",
+      "size": 109714
+    },
+    {
+      "filename": "spring-cloud-openfeign-core-2.2.5.RELEASE.jar",
+      "maven_coordinates_or_unknown": [
+        "org.springframework.cloud:spring-cloud-openfeign-core:2.2.5.RELEASE"
+      ],
+      "sha256": "59b8a3e613699f4248024b9973eab0630e5637d8c8d938057fc51cdd74f77b10",
+      "size": 148738
+    },
+    {
+      "filename": "spring-cloud-starter-2.2.5.RELEASE.jar",
+      "maven_coordinates_or_unknown": [
+        "org.springframework.cloud:spring-cloud-starter:2.2.5.RELEASE"
+      ],
+      "sha256": "dc31b7bbae31cfbd7cb14e10b6784baa54dfc404001998bc1557925a8b6601a9",
+      "size": 2735
+    },
+    {
+      "filename": "spring-cloud-starter-openfeign-2.2.5.RELEASE.jar",
+      "maven_coordinates_or_unknown": [
+        "org.springframework.cloud:spring-cloud-starter-openfeign:2.2.5.RELEASE"
+      ],
+      "sha256": "adf27b6b6cb44be623e9c7a3733fb4e0d0ac56725156a09a1c08af98f42d5616",
+      "size": 2814
+    },
+    {
+      "filename": "spring-context-5.2.9.RELEASE.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "cebfe9490d348d288fee54a526de69ea3378c92ae4b561511dd69692ac8201a9",
+      "size": 1229356
+    },
+    {
+      "filename": "spring-context-support-5.2.9.RELEASE.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "d8e9e8e572dee58c74f850f2b38af713ada52392037268bbe42707f6b89a8fe6",
+      "size": 182943
+    },
+    {
+      "filename": "spring-core-5.2.9.RELEASE.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "7cbae8ae5ccf5f238b101596c6a6d87e9451d98fbd9c4a6af1dac49cf1c0538a",
+      "size": 1442482
+    },
+    {
+      "filename": "spring-data-commons-2.3.4.RELEASE.jar",
+      "maven_coordinates_or_unknown": [
+        "org.springframework.data:spring-data-commons:2.3.4.RELEASE"
+      ],
+      "sha256": "9238de74decf24aa8e9ab2f0206f9e20f8a42096651f558160a7125014453f55",
+      "size": 1212127
+    },
+    {
+      "filename": "spring-data-elasticsearch-4.0.4.RELEASE.jar",
+      "maven_coordinates_or_unknown": [
+        "org.springframework.data:spring-data-elasticsearch:4.0.4.RELEASE"
+      ],
+      "sha256": "75ca73292d32cbb674b669ba4f04ecdd29ee03a4bb2c51ba1164ee81a5eae8c5",
+      "size": 561979
+    },
+    {
+      "filename": "spring-data-jpa-2.3.4.RELEASE.jar",
+      "maven_coordinates_or_unknown": [
+        "org.springframework.data:spring-data-jpa:2.3.4.RELEASE"
+      ],
+      "sha256": "c0486165ce6975ada64a8ea358cea730c1453c77bfb33bbbccca5175baf516ef",
+      "size": 368070
+    },
+    {
+      "filename": "spring-data-keyvalue-2.3.4.RELEASE.jar",
+      "maven_coordinates_or_unknown": [
+        "org.springframework.data:spring-data-keyvalue:2.3.4.RELEASE"
+      ],
+      "sha256": "af8547a4f6fea717f76456af6150ba814b585dfe2b83c3fa5f572f97d5398914",
+      "size": 107254
+    },
+    {
+      "filename": "spring-data-redis-2.3.4.RELEASE.jar",
+      "maven_coordinates_or_unknown": [
+        "org.springframework.data:spring-data-redis:2.3.4.RELEASE"
+      ],
+      "sha256": "fcd476ac2032bac7d6835e789b25578aa58a1ff1c980c43f7887f74fb4628db2",
+      "size": 1875097
+    },
+    {
+      "filename": "spring-data-rest-core-3.3.4.RELEASE.jar",
+      "maven_coordinates_or_unknown": [
+        "org.springframework.data:spring-data-rest-core:3.3.4.RELEASE"
+      ],
+      "sha256": "fb220f7f18e2360c20331d9e0e73884c7d130d2042c1b5b57fc9fc128f4d2b3f",
+      "size": 150537
+    },
+    {
+      "filename": "spring-data-rest-webmvc-3.3.4.RELEASE.jar",
+      "maven_coordinates_or_unknown": [
+        "org.springframework.data:spring-data-rest-webmvc:3.3.4.RELEASE"
+      ],
+      "sha256": "6c5c7e32fd2fbc5781d6eaf0861b05af9f9e16677eea4d2d4046f52cc056cc76",
+      "size": 341699
+    },
+    {
+      "filename": "spring-expression-5.2.9.RELEASE.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "923f9c5c7c06a4e6bd01e0c682a60570c239ee822915899f3b92e53c7dcc524a",
+      "size": 282217
+    },
+    {
+      "filename": "spring-hateoas-1.1.2.RELEASE.jar",
+      "maven_coordinates_or_unknown": [
+        "org.springframework.hateoas:spring-hateoas:1.1.2.RELEASE"
+      ],
+      "sha256": "c9328fc1f2c80c5450990f4d6bd78a04f8a6a899ff26d069e0e2ef2775515d3f",
+      "size": 553960
+    },
+    {
+      "filename": "spring-jcl-5.2.9.RELEASE.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "9d74112b01f62b15d3d4cb330db3af0977782c2422bd956463e20339ec3b0c29",
+      "size": 23962
+    },
+    {
+      "filename": "spring-jdbc-5.2.9.RELEASE.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "761ab1d101cf4961e6beae020511b09cfb8273f5a8b69c5ba52ade6209dfe535",
+      "size": 408962
+    },
+    {
+      "filename": "spring-messaging-5.2.9.RELEASE.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "3e9066063c6ac8a41b8fa689789a6eb2e992e9bc311d98d02dab90f4ec1bb925",
+      "size": 549164
+    },
+    {
+      "filename": "spring-orm-5.2.9.RELEASE.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "df874b22533788672cc0b7bb4c274029820cb35f0c75c087af42f70c6e14e3d2",
+      "size": 200829
+    },
+    {
+      "filename": "spring-oxm-5.2.9.RELEASE.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "220ea0fe563aa6068bf3df3af3acb309074810f4e71f27cc0deb79d16da2810f",
+      "size": 64162
+    },
+    {
+      "filename": "spring-plugin-core-2.0.0.RELEASE.jar",
+      "maven_coordinates_or_unknown": [
+        "org.springframework.plugin:spring-plugin-core:2.0.0.RELEASE"
+      ],
+      "sha256": "6e6d026d6b572495533692173a264c6959f48d5ef7f3d6faf4555a577d4a38d2",
+      "size": 28823
+    },
+    {
+      "filename": "spring-security-config-5.3.4.RELEASE.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "9578f6a25e57d3283af328d1e7e862598f49bf45fe15ef2ca53321509b2561c9",
+      "size": 1082259
+    },
+    {
+      "filename": "spring-security-core-5.3.4.RELEASE.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "b227c346b807dda45f4144e21df58560a2810af0c03dbbcb73e3119d3269608b",
+      "size": 443756
+    },
+    {
+      "filename": "spring-security-crypto-5.3.4.RELEASE.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "ec8a6c9138576a1e49071da96dc247b942d1ff84b04524e2cec77cea3cd4ed02",
+      "size": 80061
+    },
+    {
+      "filename": "spring-security-rsa-1.0.9.RELEASE.jar",
+      "maven_coordinates_or_unknown": [
+        "org.springframework.security:spring-security-rsa:1.0.9.RELEASE"
+      ],
+      "sha256": "a2f685f77c50d9efceb5c86bbbdb8b2980fb08d2edc7d555c2a12e8a9b0b531b",
+      "size": 19910
+    },
+    {
+      "filename": "spring-security-web-5.3.4.RELEASE.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "bac619908d96d79ef20375b430a451d8c782f1bd11295c57bf40e1accdfca273",
+      "size": 568115
+    },
+    {
+      "filename": "spring-tx-5.2.9.RELEASE.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "68a088fe9190321225d8bc84d971c1ca72580e84567cca4a806bea07a0eaecd8",
+      "size": 314820
+    },
+    {
+      "filename": "spring-web-5.2.9.RELEASE.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "76355c69937b0e8153169608532e8424cec029f51687f193bf72eb1ca109e7f2",
+      "size": 1441860
+    },
+    {
+      "filename": "spring-webmvc-5.2.9.RELEASE.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "2825194d46c244ff5e64fcba9273bfc8779667a3aac33eb4ea9ef87dfb4fa4ac",
+      "size": 956593
+    },
+    {
+      "filename": "spring-websocket-5.2.9.RELEASE.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "3dbf88f567c6001053e116ce652b451f5867d23be1d6cb72135489e6192152c7",
+      "size": 421422
+    },
+    {
+      "filename": "sqlite-jdbc-3.31.1.jar",
+      "maven_coordinates_or_unknown": [
+        "org.xerial:sqlite-jdbc:3.31.1"
+      ],
+      "sha256": "e15e75d49d2939a3c4c2146397c2d45f914f89d4abf5207465832afcfb1035e0",
+      "size": 7180428
+    },
+    {
+      "filename": "stax-ex-1.8.jar",
+      "maven_coordinates_or_unknown": [
+        "org.jvnet.staxex:stax-ex:1.8"
+      ],
+      "sha256": "95b05d9590af4154c6513b9c5dc1fb2e55b539972ba0a9ef28e9a0c01d83ad77",
+      "size": 36073
+    },
+    {
+      "filename": "stax2-api-4.1.jar",
+      "maven_coordinates_or_unknown": [
+        "org.codehaus.woodstox:stax2-api:4.1"
+      ],
+      "sha256": "3e99c678c42ce353595b6cc71e62f25bd6e58860b3cf79b60adc9240a967924f",
+      "size": 169541
+    },
+    {
+      "filename": "streambuffer-1.5.6.jar",
+      "maven_coordinates_or_unknown": [
+        "com.sun.xml.stream.buffer:streambuffer:1.5.6"
+      ],
+      "sha256": "d7bc9543b33a40e9f90cfbd02cf45f7b454a11d4a2703569a457438dab626a59",
+      "size": 71162
+    },
+    {
+      "filename": "stringtemplate-3.2.1.jar",
+      "maven_coordinates_or_unknown": [
+        "org.antlr:stringtemplate:3.2.1"
+      ],
+      "sha256": "f66ce72e965e5301cb0f020e54d2ba6ad76feb91b3cbfc30dbbf00c06a6df6d7",
+      "size": 148627
+    },
+    {
+      "filename": "t-digest-3.2.jar",
+      "maven_coordinates_or_unknown": [
+        "com.tdunning:t-digest:3.2"
+      ],
+      "sha256": "03db291a8887b474f90db67bfb1f92d084e990150037e231babbb374ee11d7c3",
+      "size": 51208
+    },
+    {
+      "filename": "tabula-1.0.4.jar",
+      "maven_coordinates_or_unknown": [
+        "technology.tabula:tabula:1.0.4"
+      ],
+      "sha256": "d468d310f6732ce2d309b60521e1d158bc8b7ab5c4e5f0af73b744772835be59",
+      "size": 130188
+    },
+    {
+      "filename": "taobao-sdk-java-auto-1479188381469-20210112.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "a935342209888cb5ce69f26cd16701a41e52473b4b051a8547ba499dea30bb3f",
+      "size": 5293285
+    },
+    {
+      "filename": "thumbnailator-0.4.8.jar",
+      "maven_coordinates_or_unknown": [
+        "net.coobird:thumbnailator:0.4.8"
+      ],
+      "sha256": "baa81866b0d0cb3bdbb3a2c5141e3f91e1f037baa94b7efc645b2be0b7f1d95c",
+      "size": 109720
+    },
+    {
+      "filename": "thymeleaf-3.0.11.RELEASE.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "c4decad2647404c3de7bf825e606008d5795738eaa0d12d5d38451de748f1961",
+      "size": 869740
+    },
+    {
+      "filename": "thymeleaf-extras-java8time-3.0.4.RELEASE.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "c07690c764329afd148a4134980d636911390a3fda45f6c6ae46517e4b4444d3",
+      "size": 40092
+    },
+    {
+      "filename": "thymeleaf-spring5-3.0.11.RELEASE.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "c2effd0f4a27419a83bed98f08aab913d00dfa66255768f11821f48867789d73",
+      "size": 177164
+    },
+    {
+      "filename": "tomcat-annotations-api-9.0.64.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "b09905efe807abc02cf1fec169e97451b507ef6df560d3f4d2f930b034f9006d",
+      "size": 13197
+    },
+    {
+      "filename": "tomcat-embed-core-9.0.64.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "bff331bbe5089f1cdef199591cec58020c4fa5772bd74065c8a717a72e463e72",
+      "size": 3425193
+    },
+    {
+      "filename": "tomcat-embed-websocket-9.0.64.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "9abaa5f82b906113aca7bb5beb3601174463c85d1745bca00f9e232153b1c806",
+      "size": 277168
+    },
+    {
+      "filename": "tools-1.0.0.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "6c5910dbc5c10213f3ad0b4d5fe14464b2cc9792c252157d4ea1b29d4e5ab46c",
+      "size": 18308000
+    },
+    {
+      "filename": "transport-netty4-client-7.6.2.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "807d1eed3118ded868768e5a85ddbe50969b7670d0d2aeade99d06868a0486d7",
+      "size": 74070
+    },
+    {
+      "filename": "txw2-2.3.3.jar",
+      "maven_coordinates_or_unknown": [
+        "org.glassfish.jaxb:txw2:2.3.3"
+      ],
+      "sha256": "97de89031348fced8d8d58b9c288c2185ab07bedc7a591f070377c45ddb05fee",
+      "size": 71976
+    },
+    {
+      "filename": "ucp-19.3.0.0.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "23d8debe40a764df74d5eda7e8c1ce9b2c190a34f739ca4d751eaa94114d31cc",
+      "size": 1680074
+    },
+    {
+      "filename": "unbescape-1.1.6.RELEASE.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "597cf87d5b1a4f385b9d1cec974b7b483abb3ee85fc5b3f8b62af8e4bec95c2c",
+      "size": 173935
+    },
+    {
+      "filename": "unoil-3.2.1.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "c56f17866a34e245d9033bc106587d08541141028e68eda6c00f5f193dd95ce9",
+      "size": 1415815
+    },
+    {
+      "filename": "validation-api-2.0.1.Final.jar",
+      "maven_coordinates_or_unknown": [
+        "javax.validation:validation-api:2.0.1.Final"
+      ],
+      "sha256": "9873b46df1833c9ee8f5bc1ff6853375115dadd8897bcb5a0dffb5848835ee6c",
+      "size": 93107
+    },
+    {
+      "filename": "windup-fernflower-1.0.0.20171018.jar",
+      "maven_coordinates_or_unknown": [
+        "org.jboss.windup.decompiler.fernflower:windup-fernflower:1.0.0.20171018"
+      ],
+      "sha256": "32be2ab105556c8478d2cc4cda8254d0bb139b03bef29334fe3bf4668034e30d",
+      "size": 661791
+    },
+    {
+      "filename": "windup-utils-5.2.0.Final-forge-addon.jar",
+      "maven_coordinates_or_unknown": [
+        "org.jboss.windup.utils:windup-utils:5.2.0.Final"
+      ],
+      "sha256": "84a8cc392d253a84149f15e032d9497eda918187d8451b1004fa89358cc6243e",
+      "size": 63223
+    },
+    {
+      "filename": "wmf2svg-0.9.8.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "c7f136558140c3fbe9410199ca509895faad4fa79bdc185e72a868f1c2819b4a",
+      "size": 86772
+    },
+    {
+      "filename": "woodstox-core-5.1.0.jar",
+      "maven_coordinates_or_unknown": [
+        "com.fasterxml.woodstox:woodstox-core:5.1.0"
+      ],
+      "sha256": "6d6107c3e6aac8f1c3e3762b89164b329fb2b15ec0afc8961cf6c4dc355f10bf",
+      "size": 513602
+    },
+    {
+      "filename": "wsdl4j-1.6.3.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "740f448e6b3bc110e02f4a1e56fb57672e732d2ecaf29ae15835051ae8af4725",
+      "size": 186758
+    },
+    {
+      "filename": "xalan-2.7.2.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "a44bd80e82cb0f4cfac0dac8575746223802514e3cec9dc75235bc0de646af14",
+      "size": 3154938
+    },
+    {
+      "filename": "xhtmlrenderer-3.0.0.jar",
+      "maven_coordinates_or_unknown": [
+        "org.docx4j:xhtmlrenderer:3.0.0"
+      ],
+      "sha256": "7189d588e7888c92da996eded1b5a17ac435eb6193b47e2207805fc458e318c9",
+      "size": 1023384
+    },
+    {
+      "filename": "xml-apis-1.4.01.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "a840968176645684bb01aed376e067ab39614885f9eee44abe35a5f20ebe7fad",
+      "size": 220536
+    },
+    {
+      "filename": "xml-apis-ext-1.3.04.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "d0b4887dc34d57de49074a58affad439a013d0baffa1a8034f8ef2a5ea191646",
+      "size": 85686
+    },
+    {
+      "filename": "xml-resolver-1.2.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "47dcde8986019314ef78ae7280a94973a21d2ed95075a40a000b42da956429e1",
+      "size": 84091
+    },
+    {
+      "filename": "xmlbeans-3.1.0.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "a19ea1ec835a101165f7aa3c55427e81b5f2b187bfe7689a19277c51402620b0",
+      "size": 2579738
+    },
+    {
+      "filename": "xmlgraphics-commons-2.1.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "b2b07f22040c11043b7315d2c7e49dcc04a9d0f989f2b980652f7eddcde3fcf2",
+      "size": 645023
+    },
+    {
+      "filename": "xmlpull-1.1.3.1.jar",
+      "maven_coordinates_or_unknown": [
+        "unknown"
+      ],
+      "sha256": "34e08ee62116071cbb69c0ed70d15a7a5b208d62798c59f2120bb8929324cb63",
+      "size": 7188
+    },
+    {
+      "filename": "xmlschema-core-2.2.5.jar",
+      "maven_coordinates_or_unknown": [
+        "org.apache.ws.xmlschema:xmlschema-core:2.2.5"
+      ],
+      "sha256": "803194d9877110ea2ca795b0b16b13c89851f631d5c601ab5ef9d8ec7e1b0ea6",
+      "size": 173293
+    },
+    {
+      "filename": "xmpcore-6.0.6.jar",
+      "maven_coordinates_or_unknown": [
+        "com.adobe.xmp:xmpcore:6.0.6"
+      ],
+      "sha256": "432f79a2380a3e65bea754c8d0be0c09c6938dfaea1f6e61b01784cad6c18cff",
+      "size": 131936
+    },
+    {
+      "filename": "xstream-1.4.18.jar",
+      "maven_coordinates_or_unknown": [
+        "com.thoughtworks.xstream:xstream:1.4.18"
+      ],
+      "sha256": "0af1a39b127fb2cae0d13de95cf13aaa4c9a7af525964573d3d278c06c4ececd",
+      "size": 629707
+    },
+    {
+      "filename": "zwdd-sdk-java-1.2.0.jar",
+      "maven_coordinates_or_unknown": [
+        "com.alibaba.openplatform.shared:sdk.client:1.0.0-SNAPSHOT"
+      ],
+      "sha256": "91a9c2b855c19c3de9a1ffa5f3a0186a5087825e4bf470f615516c8d17ff17dc",
+      "size": 345587
+    }
+  ],
+  "run_jar_sha256": "4a720797810fd2f8cca6e22604657028cb87830ca0e24bb55a5f42f040f6ee9f",
+  "runtime_dependency_on_supplier_run_jar": false,
+  "schema": "pinned-public-dependency-allowlist-v1",
+  "source": "stock BOOT-INF/lib public-dependency classification"
+}

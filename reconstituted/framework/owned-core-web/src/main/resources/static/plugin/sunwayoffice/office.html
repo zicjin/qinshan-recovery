@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>office编辑</title>
+    <style>
+        html,
+        body {
+            height: 100%;
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0px 8px 8px;
+        }
+
+        body,
+        body iframe {
+            border-radius: 4px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="officeEditor"></div>
+    <script type="text/javascript">
+        /**
+         * 初始化office编辑页面
+         * @param {String} serverUrl sunwayoffice服务器地址
+         * @param {Object} option sunwayoffice编辑页面配置参数
+         */
+        window.initDocEditorPage = function (serverUrl, option, listeners) {
+            //创建新的script标签，引入api.js
+            var script = document.createElement('script');
+            script.src = serverUrl + '/web-apps/apps/api/documents/api.js';
+            document.body.appendChild(script);
+
+            //配置默认参数
+            option['height'] = '100%';
+            option['width'] = '100%';
+
+            //计算文件类型，编辑页面打开方式
+            //text : word
+            //spreadsheet : excel
+            //presentation : ppt
+            option['documentType'] = decideDocumentType(option.document.fileType);
+
+            //注册sunwayoffice编辑器钩子函数
+            option['events'] = {
+                onAppReady: function () {
+                    if (listeners.hasOwnProperty('onAppReady')) listeners.onWarning(event);
+                },
+                onDocumentReady: function () {
+                    if (listeners.hasOwnProperty('onDocumentReady')) listeners.onWarning(event);
+                },
+                onDocumentStateChange: function () {
+                    if (listeners.hasOwnProperty('onDocumentStateChange')) listeners.onWarning(event);
+                },
+                onDocumentReady: function () {
+                    DocsAPI.DocEditor.status = "document-ready";
+                },
+                onWarning: function (event) {
+                    if (listeners.hasOwnProperty('onWarning')) listeners.onWarning(event);
+                    if (event.data.warningCode === -18) {
+                        location.reload(true);
+                    }
+                },
+                onError: function (event) {
+                    window.docEditor.destroyEditor();
+                    if (listeners.hasOwnProperty('onError')) listeners.onError(event);
+                },
+                onDocumentStateChange: function (event) {
+                    if (listeners.hasOwnProperty('onDocumentStateChange')) listeners.onDocumentStateChange(event);
+                },
+                //key值过期后调用，重新计算key
+                onOutdatedVersion: function () {
+                    var hourStr = null;
+                    var hourArray = paramHour ? paramHour.split('T') : "";
+                    if (!hourArray) {
+                        hourArray = [new Date().getHours(), 1];
+                    } else {
+                        hourArray[1] += parseInt(hourArray[1]) + 1
+
+                    }
+                    hourStr = hourArray.join("T");
+                    window.location.href = window.location.href.replace(window.location.search, "") + "?hour=H" + hourStr;
+                }
+            };
+
+            //当api.js加载失败，关闭modal并触发onScriptError函数
+            script.onerror = function () {
+                if (listeners.hasOwnProperty('onScriptError')) listeners.onScriptError();
+            };
+
+            //监听script的加载进度
+            script.onload = function () {
+                //初始化office编辑页面
+                window.docEditor = new DocsAPI.DocEditor("officeEditor", option);
+            };
+        }
+
+        /**
+         * 中继iframe中的变化, 交给web-ui中的editorOffice.js处理请求
+         */
+        window.addEventListener("message", function (e) {
+            if (e.data && (e.data.type === "PRINT" || e.data.type === "DOWNLOAD" || e.data.type === "PREVIEW")) {
+                window.parent.postMessage(e.data, "*")
+            }
+        });
+
+        //获取url指定参数
+        function GetQueryString(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+            //获取url中"?"符后的字符串并正则匹配
+            var r = window.location.search.substr(1).match(reg);
+            var context = "";
+            if (r != null)
+                context = r[2];
+            reg = null;
+            r = null;
+            return context == null || context == "" || context == "undefined" ? "" : context;
+        }
+
+        /**
+         *打开office编辑页面
+         * @param {String} fileType 文件类型
+         */
+        function decideDocumentType(fileType) {
+            var textArray = [
+                'doc', 'docm', 'docx', 'dot', 'dotm', 'dotx',
+                'epub', 'fodt', 'htm', 'html', 'mht', 'odt',
+                'ott', 'pdf', 'rtf', 'txt', 'djvu', 'xps'
+            ];
+
+            if (textArray.indexOf(fileType.toLocaleLowerCase()) != -1) return 'text';
+
+            var spreadsheetArray = [
+                'csv', 'fods', 'ods', 'ots', 'xls', 'xlsm',
+                'xlsx', 'xlt', 'xltm', 'xltx'
+            ];
+
+            if (spreadsheetArray.indexOf(fileType.toLocaleLowerCase()) != -1) return 'spreadsheet';
+
+            var presentationArray = [
+                'fodp', 'odp', 'otp', 'pot', 'potm', 'potx',
+                'pps', 'ppsm', 'ppsx', 'ppt', 'pptm', 'pptx'
+            ];
+
+            if (presentationArray.indexOf(fileType.toLocaleLowerCase()) != -1) return 'presentation';
+
+            return 'text';
+
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,28 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
+package com.sunwayworld.framework.log.annotation;
+
+public enum LogType {
+    DEFAULT,
+    CONTROLLER,
+    REST_CONTROLLER,
+    SERVICE,
+    DAO,
+    SQL,
+    EXCEPTION,
+    IMPORT,
+    EXPORT,
+    PROCESS,
+    ACTIVATE,
+    SUSPEND,
+    VALIDATE,
+    PRINT,
+    INSERT,
+    UPDATE,
+    DELETE,
+    SELECT,
+    OFFLINE,
+    SWAPEORDER;
+
+}

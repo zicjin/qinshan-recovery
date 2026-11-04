@@ -1,0 +1,82 @@
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.component.I18N.map = [[${@i18nHelper.i18nMap()}]];
+    
+    //sunwayoffice配置参数
+    Gikam.sunwayoffice = {
+        serverUrl: [[${@environment.getProperty('sunway.config.office.server.url')}]] || IFM_CONTEXT,
+        watermarkEnable : [[${@environment.getProperty('sunway.config.file.watermark.enabled')}]] || false,
+        downloadUrl : [[${@encryptUtils.base64Encode(@environment.getProperty('sunway.config.office.file.download.url'))}]] || Gikam.base64Encode(IFM_CONTEXT),
+        viewType : [[${@environment.getProperty('sunway.config.office.viewtype')}]] || 'sunwayoffice'
+    }
+    
+    Gikam.file = {
+        downloadUrl : [[${@environment.getProperty('sunway.config.file.download.url')}]] || IFM_CONTEXT
+    }
+    
+    Gikam.spreadjs = {
+         license : [[${@environment.getProperty('sunway.config.spreadjs.license')}]]
+    }
+    
+    Gikam.audit = {
+        trail : [[${@environment.getProperty('spring.profiles.active')}]]
+    }
+    
+    Gikam.pdf = {
+        view : [[${@environment.getProperty('sunway.config.pdf.viewtype')}]]
+    }
+
+    //在线地图配置参数
+    Gikam.map = {
+        key: [[${@environment.getProperty('sunway.config.map.key')}]] || '',
+		securityJsCode:[[${@environment.getProperty('sunway.config.map.security.jscode')}]] || ''
+    }
+
+    //报表版本
+    Gikam.report = {
+        version: [[${@environment.getProperty('sunway.config.fine.version')}]], // 版本
+        deployMode : [[${@environment.getProperty('sunway.config.fine.deploy-mode')}]], // 部署方式
+        independentDeployServerUrl : [[${@environment.getProperty('sunway.config.fine.independent-deploy-server.url')}]] // 独立部署时服务器url
+    }
+    
+    Gikam.ajaxConfig = {
+        // true时，不支持Delete和Put方法
+        deleteAndPutDisabled : [[${@environment.getProperty('spring.mvc.hiddenmethod.filter.enabled')}]]
+    }
+     
+    //页面编辑
+    Gikam.pageDesignConfig = {
+        enable : [[${@environment.getProperty('sunway.design.studio.enabled')}]]
+    }
+    
+    // 数据中心地址
+    Gikam.dataCenter = {
+        url : [[${@environment.getProperty('sunway.datacenter.url')}]]
+    }
+    
+    //下拉和选择组件配置参数
+    Gikam.choose.addConfigParam([[${@coreAdminChooseConfigServiceImpl.selectAll()}]]);
+    Gikam.select.addConfigParam([[${@coreAdminSelectConfigServiceImpl.selectAll()}]]);
+    Gikam.checkboxGroup.addConfigParam([[${@coreAdminCheckConfigServiceImpl.selectAllConfig()}]]);
+    
+    Gikam.component.Sentry.init({
+        dsn: [[${@environment.getProperty('sentry.vue.dsn')}]]
+    });
+    
+    Gikam.component.ApmRum.init({
+        serviceName: [[${@environment.getProperty('sunway.apmrum.service.name')}]],
+        serverUrl: [[${@environment.getProperty('sunway.apmrum.server.url')}]]
+    });
+    
+    // 系统配置
+    (function() {
+        var options = [[${@systemConfigHelper.getSystemConfig()}]];
+        var urlParam = Gikam.getElParam([[${param}]]);
+        options.urlParam = urlParam;
+        options.activeMenuId = urlParam.activeMenuId;
+        options.homeConfig = [[${@systemConfigHelper.getLoginConfig()}]];
+        window.IndexPage && IndexPage.setSystemConfig(options);
+    })();
+    
+/*]]>*/
+</script>

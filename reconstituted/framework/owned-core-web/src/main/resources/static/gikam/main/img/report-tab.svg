@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg  viewBox="0 0 144 80" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+     <g id="icon-bi-report-tab_页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="icon-bi-report-tab_白色版本" transform="translate(-88.000000, -1532.000000)">
+            <g id="icon-bi-report-tab_标签页" transform="translate(72.000000, 1508.000000)">
+                <g transform="translate(16.000000, 24.000000)">
+                    <path d="M13,18 L131,18 C131.552285,18 132,18.4477153 132,19 L132,61 C132,61.5522847 131.552285,62 131,62 L13,62 C12.4477152,62 12,61.5522847 12,61 L12,19 C12,18.4477153 12.4477152,18 13,18 Z" id="icon-bi-report-tab_矩形" fill="#587EF7" fill-rule="nonzero"></path>
+                    <path d="M19,26 L72,26 L72,26 L72,54 L19,54 C18.4477153,54 18,53.5522847 18,53 L18,27 C18,26.4477153 18.4477153,26 19,26 Z" id="icon-bi-report-tab_矩形" fill="#37CFC9" fill-rule="nonzero"></path>
+                    <path d="M72,26 L125,26 C125.552285,26 126,26.4477153 126,27 L126,53 C126,53.5522847 125.552285,54 125,54 L72,54 L72,54 L72,26 Z" id="icon-bi-report-tab_矩形" fill="#4763BA" fill-rule="nonzero"></path>
+                    <rect id="icon-bi-report-tab_矩形" x="0" y="0" width="144" height="80"></rect>
+                    <g id="icon-bi-report-tab_Tab2" transform="translate(86.000000, 35.000000)" fill="#FFFFFF" fill-rule="nonzero" font-family="SourceHanSansCN-Bold, Source Han Sans CN" font-size="10" font-weight="bold">
+                        <text>
+                            <tspan x="0" y="9">Tab2</tspan>
+                        </text>
+                    </g>
+                    <g id="icon-bi-report-tab_Tab1" transform="translate(32.000000, 35.000000)" fill="#FFFFFF" fill-rule="nonzero" font-family="SourceHanSansCN-Bold, Source Han Sans CN" font-size="10" font-weight="bold">
+                        <text>
+                            <tspan x="0" y="9">Tab1</tspan>
+                        </text>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

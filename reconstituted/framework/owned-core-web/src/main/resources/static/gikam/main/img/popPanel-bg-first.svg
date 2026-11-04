@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="194px" height="186px" viewBox="0 0 194 186" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>二维码背景_iPhone版</title>
+    <g id="场景插画风登录页" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="iPhone版" transform="translate(-891.000000, -435.000000)" fill="#FFFFFF" stroke="#2673B8">
+            <g id="编组-2" transform="translate(892.000000, 436.000000)">
+                <path d="M188,0 C190.209139,-4.05812251e-16 192,1.790861 192,4 L192,180 C192,182.209139 190.209139,184 188,184 L12,184 C9.790861,184 8,182.209139 8,180 L8,32 L6.21724894e-15,24 L8,16 L8,4 C8,1.790861 9.790861,4.05812251e-16 12,0 L188,0 Z" id="二维码背景_iPhone版"></path>
+            </g>
+        </g>
+    </g>
+</svg>

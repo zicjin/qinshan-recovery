@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>excel</title>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="输入关键词检索" transform="translate(-456.000000, -292.000000)">
+            <g id="excel" transform="translate(456.000000, 292.000000)">
+                <rect id="矩形" fill="#27AE67" x="0" y="0" width="16" height="16" rx="4"></rect>
+                <path d="M4.26666667,12 L6.86666666,8 L4.46666666,4 L6.36666667,4 L7.66666665,6.5 C7.86666664,6.8 7.86666664,7 7.96666665,7.1 L8.26666667,6.5 L9.66666666,4 L11.4666667,4 L9.06666666,8 L11.5666666,12 L9.56666665,12 L8.06666666,9.2 C8.06666666,9.09999999 7.96666665,9 7.86666666,8.79999999 C7.86666666,8.9 7.76666667,9 7.66666665,9.2 L6.16666665,12 L4.26666667,12 Z" id="路径" fill="#ECF3FF" fill-rule="nonzero"></path>
+            </g>
+        </g>
+    </g>
+</svg>

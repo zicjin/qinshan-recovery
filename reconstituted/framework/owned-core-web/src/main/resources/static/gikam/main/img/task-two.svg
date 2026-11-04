@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 64 (93537) - https://sketch.com -->
+    <title>即将超期任务2</title>
+    <desc>Created with Sketch.</desc>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="首页" transform="translate(-1628.000000, -566.000000)" fill-rule="nonzero">
+            <g id="即将超期任务2" transform="translate(1628.000000, 566.000000)">
+                <rect id="矩形" fill="#000000" opacity="0" x="0" y="0" width="16" height="16"></rect>
+                <path d="M9.6,14.4 C9.6,15.284 8.884,16 8,16 C7.116,16 6.4,15.284 6.4,14.4 L9.6,14.4 Z M14.4,12 C14.8416,12 15.2,12.3584 15.2,12.8 C15.2,13.2416 14.8416,13.6 14.4,13.6 L1.6,13.6 C1.1584,13.6 0.8,13.2416 0.8,12.8 C0.8,12.3584 1.1584,12 1.6,12 L14.4,12 Z M8,4.02640884e-14 C8.5304,4.02640884e-14 8.96,0.4296 8.96,0.96 L8.95956897,1.695907 C11.15088,2.14041299 12.8,4.07742032 12.8,6.4 L12.8,6.4 L12.8,12 L3.2,12 L3.2,6.4 C3.2,4.07777329 4.84861879,2.14100176 7.03943199,1.69610976 L7.04,0.96 C7.04,0.4296 7.4696,4.02640884e-14 8,4.02640884e-14 Z" id="形状" fill="#FF4D4F"></path>
+            </g>
+        </g>
+    </g>
+</svg>

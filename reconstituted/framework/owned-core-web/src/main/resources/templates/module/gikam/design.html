@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset=utf-8 />
+<meta http-equiv=X-UA-Compatible content="IE=edge" />
+<meta name=viewport content="width=device-width,initial-scale=0.6,minimum-scale=0.6,maximum-scale=0.6,user-scalable=no" />
+
+<script th:inline="javascript">
+/*<![CDATA[*/
+    (function(win) {
+        var servletContext = /*[[@{/}]]*/'';
+        if (servletContext !== '') {
+            servletContext = servletContext.replace(/\/$/,'');
+        }
+        win.IFM_CONTEXT = location.origin + servletContext;
+    })(window);
+/*]]>*/
+</script>
+
+<th:block th:replace="module/gikam/chunk" />
+<th:block th:replace="module/gikam/chunk-extend" />
+<th:block th:replace="module/gikam/chunk-design" />
+
+<link th:href="@{/static/gikam/main/css/chunk-common.css}" rel=preload as=style />
+<link th:href="@{/static/gikam/main/js/chunk-common.js}" rel=preload as=script />
+<link th:href="@{/static/gikam/main/js/chunk-vendors.js}" rel=preload as=script />
+<link th:href="@{/static/gikam/main/js/gikam.js}" rel=preload as=script />
+<link th:href="@{/static/gikam/main/css/chunk-common.css}" rel=stylesheet />
+
+</head>
+<body>
+    <div id=app></div>
+    <script th:src="@{/static/gikam/main/js/chunk-vendors.js}"></script>
+    <script th:src="@{/static/gikam/main/js/chunk-common.js}"></script>
+    <script th:src="@{/static/gikam/main/js/gikam.js}"></script>
+    <script th:src="@{/static/gikam/extends/gikam-extend.js}"></script>
+    <script th:src="@{/static/gikam/design/js/chunk-vendors.js}"></script>
+    <script th:src="@{/static/gikam/design/js/design.js}"></script>
+    <script th:src="@{/static/gikam/extend/js/chunk-vendors.js}"></script>
+    <script th:src="@{/static/gikam/extend/js/extend.js}"></script>
+</body>
+</html>
+
+<script th:inline="javascript">
+/*<![CDATA[*/
+    Gikam.sunwayoffice = {
+        serverUrl: [[${@environment.getProperty('sunway.config.office.server.url')}]] || ""
+    }
+    
+    //下拉和选择组件配置参数
+    Gikam.choose.addConfigParam([[${@coreAdminChooseConfigServiceImpl.selectAll()}]]);
+    Gikam.select.addConfigParam([[${@coreAdminSelectConfigServiceImpl.selectAll()}]]);
+    
+    new PageDesign({});
+/*]]>*/
+</script>

@@ -1,0 +1,10 @@
+/*可以在这里添加你自己的css*/
+body {
+    font-family: Microsoft YaHei,Serif,sunway-font,SimSun !important;
+    overflow-y: auto !important;
+}
+
+@font-face {
+    font-family: sunway-font;
+    src: url(/static/gikam/main/fonts/sunway-font.ttf);
+}

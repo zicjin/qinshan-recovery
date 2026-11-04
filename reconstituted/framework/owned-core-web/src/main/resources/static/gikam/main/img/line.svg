@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="133px" height="68px" viewBox="0 0 133 68" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 64 (93537) - https://sketch.com -->
+    <title>折线图</title>
+    <desc>Created with Sketch.</desc>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="折线图" transform="translate(-19.000000, -32.000000)">
+            <g transform="translate(19.000000, 32.000000)">
+                <text id="A" font-family="PingFangSC-Regular, PingFang SC" font-size="8" font-weight="normal" fill="" fill-opacity="0.847820149">
+                    <tspan x="25" y="67">A</tspan>
+                </text>
+                <text id="B" font-family="PingFangSC-Regular, PingFang SC" font-size="8" font-weight="normal" fill="#000000" fill-opacity="0.847820149">
+                    <tspan x="47" y="67">B</tspan>
+                </text>
+                <text id="C" font-family="PingFangSC-Regular, PingFang SC" font-size="8" font-weight="normal" fill="#000000" fill-opacity="0.847820149">
+                    <tspan x="69" y="67">C</tspan>
+                </text>
+                <text id="D" font-family="PingFangSC-Regular, PingFang SC" font-size="8" font-weight="normal" fill="#000000" fill-opacity="0.847820149">
+                    <tspan x="91" y="67">D</tspan>
+                </text>
+                <text id="E" font-family="PingFangSC-Regular, PingFang SC" font-size="8" font-weight="normal" fill="#000000" fill-opacity="0.847820149">
+                    <tspan x="113" y="67">E</tspan>
+                </text>
+                <rect id="矩形" fill="#2B2F31" x="13" y="0" width="1" height="56"></rect>
+                <rect id="矩形" fill="#2B2F31" x="13" y="55" width="120" height="1"></rect>
+                <text id="100" font-family="PingFangSC-Regular, PingFang SC" font-size="8" font-weight="normal" fill="#000000" fill-opacity="0.847820149">
+                    <tspan x="0" y="8">100</tspan>
+                </text>
+                <text id="50" font-family="PingFangSC-Regular, PingFang SC" font-size="8" font-weight="normal" fill="#000000" fill-opacity="0.847820149">
+                    <tspan x="3" y="34">50</tspan>
+                </text>
+                <text id="0" font-family="PingFangSC-Regular, PingFang SC" font-size="8" font-weight="normal" fill="#000000" fill-opacity="0.847820149">
+                    <tspan x="6" y="59">0</tspan>
+                </text>
+                <polyline id="路径-2" stroke="#587EF7" stroke-width="2" stroke-linecap="round" points="19.6580752 30.445972 28 25 50 36 72 15 94 8 116 30 123.46068 33.1429833"></polyline>
+                <circle id="椭圆形" fill="#37CFC9" cx="28" cy="25" r="2"></circle>
+                <circle id="椭圆形" fill="#37CFC9" cx="50" cy="36" r="2"></circle>
+                <circle id="椭圆形" fill="#37CFC9" cx="72" cy="15" r="2"></circle>
+                <circle id="椭圆形" fill="#37CFC9" cx="94" cy="8" r="2"></circle>
+                <circle id="椭圆形" fill="#37CFC9" cx="116" cy="30" r="2"></circle>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,24 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
+package com.sunwayworld.cloud.module.mobile.wechat.helper.msg.in.event;
+
+import com.sunwayworld.cloud.module.mobile.wechat.helper.msg.in.event.EventInMsg;
+import com.sunwayworld.cloud.module.mobile.wechat.helper.utils.XmlHelper;
+
+public class InNotDefinedEvent
+extends EventInMsg {
+    protected transient XmlHelper xmlHelper;
+
+    public InNotDefinedEvent(String toUserName, String fromUserName, Integer createTime, String event) {
+        super(toUserName, fromUserName, createTime, event);
+    }
+
+    public XmlHelper getXmlHelper() {
+        return this.xmlHelper;
+    }
+
+    public void setXmlHelper(XmlHelper xmlHelper) {
+        this.xmlHelper = xmlHelper;
+    }
+}

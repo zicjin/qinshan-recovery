@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="144px" height="80px" viewBox="0 0 144 80" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>单值极差控制图（X-R）</title>
+    <defs>
+        <rect id="path-1" x="49" y="47" width="1" height="16"></rect>
+        <mask id="mask-2" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="1" height="16" fill="white">
+            <use xlink:href="#path-1"></use>
+        </mask>
+        <rect id="path-3" x="43" y="34" width="1" height="29"></rect>
+        <mask id="mask-4" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="1" height="29" fill="white">
+            <use xlink:href="#path-3"></use>
+        </mask>
+        <rect id="path-5" x="100" y="19" width="1" height="44"></rect>
+        <mask id="mask-6" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="1" height="44" fill="white">
+            <use xlink:href="#path-5"></use>
+        </mask>
+        <rect id="path-7" x="87" y="11" width="1" height="52"></rect>
+        <mask id="mask-8" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="1" height="52" fill="white">
+            <use xlink:href="#path-7"></use>
+        </mask>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="报告中心-编辑报告（组件）-SPC" transform="translate(-56.000000, -144.000000)">
+            <g id="单值极差控制图（X-R）" transform="translate(56.000000, 144.000000)">
+                <rect id="矩形" x="0" y="0" width="144" height="80"></rect>
+                <text id="1" font-family="PingFangSC-Regular, PingFang SC" font-size="8" font-weight="normal" fill="#000000" fill-opacity="0.847820149">
+                    <tspan x="34" y="75">1</tspan>
+                </text>
+                <text id="2" font-family="PingFangSC-Regular, PingFang SC" font-size="8" font-weight="normal" fill="#000000" fill-opacity="0.847820149">
+                    <tspan x="56" y="75">2</tspan>
+                </text>
+                <text id="3" font-family="PingFangSC-Regular, PingFang SC" font-size="8" font-weight="normal" fill="#000000" fill-opacity="0.847820149">
+                    <tspan x="78" y="75">3</tspan>
+                </text>
+                <text id="4" font-family="PingFangSC-Regular, PingFang SC" font-size="8" font-weight="normal" fill="#000000" fill-opacity="0.847820149">
+                    <tspan x="100" y="75">4</tspan>
+                </text>
+                <text id="5" font-family="PingFangSC-Regular, PingFang SC" font-size="8" font-weight="normal" fill="#000000" fill-opacity="0.847820149">
+                    <tspan x="122" y="75">5</tspan>
+                </text>
+                <rect id="矩形" fill="#2B2F31" x="12" y="63" width="120" height="1"></rect>
+                <path d="M15,38.5872102 C15.7898865,38.3210928 16.6325405,38.1603208 17.527962,38.1048942 C18.8710942,38.0217542 20.4841737,39.0695262 21.8232049,38.5872102 C23.1622362,38.1048942 23.8747287,35.0997319 26.1184478,34.3472397 C28.362167,33.5947476 26.9913849,38.825372 30.2392724,37.2943068 C33.4871599,35.7632416 33.4871599,39.8634817 34.9974104,39.7146804 C35.2476632,39.6900236 37.8575437,39.9812211 39.3747861,38.5872102 C40.6476788,37.4177026 41.1420778,32.861033 43.3540063,32.6506634 C44.7458915,32.5182855 46.4503984,45.5163195 48.9480836,45.2788591 C50.6060817,45.1212296 50.8312729,25.0379896 54.9931919,30.5106251 C55.5149568,31.19671 55.5236258,38.1048942 59.2802791,38.1048942 C63.929372,38.1048942 61.2674724,32.095906 65.561244,32.6506634 C68.7456381,33.0620887 69.4538526,37.6465262 69.4538526,39.7146804 C69.4538526,40.3484863 69.8991798,42.1568047 71.3016832,42.1568047 C72.7041866,42.1568047 73.7816681,39.8448549 75.1512422,39.7146804 C76.5784058,39.5790323 80.3596245,41.8463858 81.7701159,36.6721712 C82.114148,35.4101318 86.3694821,10.1594387 88.0433634,10 C88.4536391,9.96134545 91.6622712,26.5404512 92.8188565,29.0661587 C93.9748878,31.5906564 94.5013236,18.6279125 96.0247657,17.3392453 C97.5482078,16.0505782 98.9285091,17.3392453 99.6084281,18.4043673 C100.288347,19.4694894 103.149286,50.571541 106.35089,51.018082 C108.507347,51.3188519 110.669749,29.1472933 111.523373,29.0661587 C113.006335,28.9252075 112.801017,30.4002931 115.948084,30.1011735 C116.559336,30.0430757 116.951121,26.8512219 118.948084,28.4981044 C121.710873,30.7765591 121.32455,34.5101798 123.038858,34.3472397 C124.374739,34.2202681 122.219415,34.6180624 125.068766,34.3472397 C126.246605,34.2352895 127.889579,31.0187646 129.997688,24.6976651" id="路径" stroke="#587EF7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                <use id="矩形" stroke="#979797" mask="url(#mask-2)" stroke-width="2" stroke-dasharray="1" xlink:href="#path-1"></use>
+                <use id="矩形" stroke="#979797" mask="url(#mask-4)" stroke-width="2" stroke-dasharray="1" xlink:href="#path-3"></use>
+                <use id="矩形" stroke="#979797" mask="url(#mask-6)" stroke-width="2" stroke-dasharray="1" xlink:href="#path-5"></use>
+                <use id="矩形" stroke="#979797" mask="url(#mask-8)" stroke-width="2" stroke-dasharray="1" xlink:href="#path-7"></use>
+                <rect id="矩形" fill="#81B4FF" x="79" y="36" width="4" height="4"></rect>
+                <rect id="矩形" fill="#81B4FF" x="58" y="36" width="4" height="4"></rect>
+                <rect id="矩形" fill="#81B4FF" x="43" y="36" width="4" height="4"></rect>
+                <rect id="矩形" fill="#587EF7" x="47" y="60" width="4" height="4"></rect>
+                <rect id="矩形" fill="#587EF7" x="41" y="60" width="4" height="4"></rect>
+                <rect id="矩形" fill="#37CFC9" x="47" y="53" width="4" height="4"></rect>
+                <rect id="矩形" fill="#37CFC9" x="85" y="60" width="4" height="4"></rect>
+                <rect id="矩形" fill="#37CFC9" x="98" y="60" width="4" height="4"></rect>
+                <rect id="矩形" fill="#81B4FF" x="33" y="38" width="4" height="4"></rect>
+                <rect id="矩形" fill="#81B4FF" x="108" y="39" width="4" height="4"></rect>
+                <rect id="矩形" fill="#81B4FF" x="52" y="27" width="4" height="4"></rect>
+                <circle id="椭圆形" fill="#5BF6F0" cx="22" cy="39" r="2"></circle>
+                <circle id="椭圆形" fill="#5BF6F0" cx="49" cy="45" r="2"></circle>
+                <circle id="椭圆形" fill="#5BF6F0" cx="106" cy="51" r="2"></circle>
+                <circle id="椭圆形" fill="#5BF6F0" cx="93" cy="28" r="2"></circle>
+                <circle id="椭圆形" fill="#5BF6F0" cx="72" cy="43" r="2"></circle>
+                <circle id="椭圆形" fill="#5BF6F0" cx="87" cy="11" r="2"></circle>
+                <circle id="椭圆形" fill="#5BF6F0" cx="95" cy="17" r="2"></circle>
+                <circle id="椭圆形" fill="#5BF6F0" cx="100" cy="19" r="2"></circle>
+                <circle id="椭圆形" fill="#5BF6F0" cx="112" cy="29" r="2"></circle>
+                <circle id="椭圆形" fill="#5BF6F0" cx="66" cy="33" r="2"></circle>
+                <circle id="椭圆形" fill="#5BF6F0" cx="43" cy="33" r="2"></circle>
+                <circle id="椭圆形" fill="#5BF6F0" cx="29" cy="38" r="2"></circle>
+                <circle id="椭圆形" fill="#5BF6F0" cx="122" cy="34" r="2"></circle>
+                <circle id="椭圆形" fill="#5BF6F0" cx="127" cy="34" r="2"></circle>
+                <circle id="椭圆形" fill="#5BF6F0" cx="131" cy="25" r="2"></circle>
+                <text id="0" font-family="PingFangSC-Regular, PingFang SC" font-size="8" font-weight="normal" fill="#000000" fill-opacity="0.847820149">
+                    <tspan x="12" y="75">0</tspan>
+                </text>
+                <rect id="矩形" fill="#81B4FF" x="12" y="37" width="4" height="4"></rect>
+            </g>
+        </g>
+    </g>
+</svg>

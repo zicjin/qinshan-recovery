@@ -1,0 +1,7 @@
+<th:block th:replace="${'module/index/'+@environment.getProperty('sunway.config.page.style')+'/workspace'}" />
+
+<script th:inline="javascript">
+    IndexPage.prototype.setConfig({
+        skin : [[${@environment.getProperty("sunway.config.page.skin")}]]
+    });
+</script>

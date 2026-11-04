@@ -1,0 +1,229 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <!-- disable IE compatible view -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="spreadjs culture" content="zh-cn" />
+    <title data-bind="text: res.title"></title>
+
+    <!-- Libraries -->
+    <link href="../lib/jquery-ui/css/smoothness/jquery-ui-1.10.3.custom.min.css" rel="stylesheet" type="text/css" />
+    <link href="../lib/gcui.css" rel="stylesheet" type="text/css" />
+    <link href="../lib/spread/gc.spread.sheets.excel2013white.11.1.0.css" rel="stylesheet" type="text/css" />
+    <link href="../lib/zTreeStyle/css/zTreeStyle.css" rel="stylesheet" type="text/css" />
+
+    <link href="../common/common.css" rel="stylesheet" type="text/css" />
+    <link href="../widgets/colorpicker/colorpicker.css" rel="stylesheet" type="text/css" />
+    <link href="../widgets/fontpicker/fontpicker.css" rel="stylesheet" type="text/css" />
+    <link href="../widgets/comboframe/comboframe.css" rel="stylesheet" type="text/css" />
+    <link href="../widgets/borderpicker/borderpicker.css" rel="stylesheet" type="text/css" />
+    <link href="../widgets/sliderpanel/sliderpanel.css" rel="stylesheet" type="text/css" />
+    <link href="../dialogs/dialogs.css" rel="stylesheet" type="text/css" />
+    <link href="../dialogs/dialogs2.css" rel="stylesheet" type="text/css" />
+    <link href="../dialogs/chartDialogs.css" rel="stylesheet" type="text/css" />
+    <link href="../formatDialog/formatDialog.css" rel="stylesheet" type="text/css" />
+    <link href="../ribbon/ribbon.css" rel="stylesheet" type="text/css" />
+    <link href="../formulaBar/formulaBar.css" rel="stylesheet" type="text/css" />
+    <link href="../spreadWrapper/spreadWrapper.css" rel="stylesheet" type="text/css" />
+    <link href="../statusBar/statusBar.css" rel="stylesheet" type="text/css" />
+    <link href="../contextMenu/contextMenu.css" rel="stylesheet" type="text/css" />
+    <link href="../fileMenu/fileMenu.css" rel="stylesheet" type="text/css" />
+    <link href="../index/index.css" rel="stylesheet" type="text/css" />
+    <link href="../chart/chartColorPicker/chart-colorPicker.css" rel="stylesheet" type="text/css" />
+    <link href="../chart/addChartElement/chartAddChartElement.css" rel="stylesheet" type="text/css" />
+    <link href="../chart/chartTypePicker/chartTypePicker.css" rel="stylesheet" type="text/css" />
+    <link href="../chart/chartLayoutPicker/chartLayoutPicker.css" rel="stylesheet" type="text/css" />
+
+    <!-- CN special -->
+    <link href="../common/local.cn.css" rel="stylesheet">
+</head>
+
+<body unselectable="on" style="-moz-user-select: none; -webkit-user-select: none; user-select: none;">
+    <div class="container">
+        <div class="content">
+            <div class="fill-spread-content fill-spread-content-readonly" data-include="spreadWrapper"></div>
+        </div>
+    </div>
+
+    <!-- Libraries -->
+    <script src="../lib/jquery.min.js"></script>
+    <script src="../lib/jquery-ui/js/jquery-ui-1.10.3.custom.min.js"></script>
+    <script src="../lib/knockout-2.3.0.min.js"></script>
+    <script src="../lib/spread/gc.spread.sheets.all.14.0.10.min.js"></script>
+    <script src="../lib/spread/plugins/gc.spread.sheets.charts.14.0.10.min.js"></script>
+    <script src="../lib/spread/resources/zh/gc.spread.sheets.resources.zh.14.0.10.min.js"></script>
+    <script src="../lib/spread/interop/gc.spread.excelio.14.0.10.min.js"></script>
+    <script src="../lib/spread/plugins/gc.spread.sheets.print.14.0.10.min.js"></script>
+    <script src="../lib/spread/plugins/gc.spread.sheets.pdf.14.0.10.min.js"></script>
+    <script src="../lib/zTreeStyle/js/jquery.ztree.all-3.5.min.js"></script>
+    <script src="../lib/FileSaver.min.js"></script>
+
+    <script src="../common/app.js"></script>
+    <script src="../common/resources.js"></script>
+    <script src="../common/resources.cn.js"></script>
+    <script src="../chart/chartWrapper.js"></script>
+    <script src="../widgets/gcui/gcui.js"></script>
+    <script src="../widgets/colorpicker/colorpicker.js"></script>
+    <script src="../widgets/fontpicker/fontpicker.js"></script>
+    <script src="../widgets/comboframe/comboframe.js"></script>
+    <script src="../widgets/borderpicker/borderpicker.js"></script>
+    <script src="../widgets/sliderpanel/sliderpanel.js"></script>
+    <script src="../chart/chart-templates.js"></script>
+    <script src="../common/colorHelper.js"></script>
+    <script src="../common/util.js"></script>
+    <script src="../common/asyncLoader.js"></script>
+    <script src="../common/metadata.js"></script>
+    <script src="../spreadWrapper/spreadMeta.js"></script>
+    <script src="../spreadWrapper/spreadWrapper.js"></script>
+    <script src="../spreadWrapper/spreadActions.js"></script>
+    <script src="../spreadWrapper/actions.js"></script>
+    <script src="../spreadWrapper/ceUtility.js"></script>
+    <script src="../spreadWrapper/spreadUtility.js"></script>
+    <script src="../dialogs/baseDialog.js"></script>
+    <script src="../dialogs/dialogs.js"></script>
+    <script src="../dialogs/dialogs2.js"></script>
+    <script src="../dialogs/chartDialogs.js"></script>
+    <script src="../formatDialog/formatDialog.js"></script>
+    <script src="../ribbon/ribbon.js"></script>
+    <script src="../formulaBar/formulaBar.js"></script>
+    <script src="../statusBar/statusBar.js"></script>
+    <script src="../chartPreviewer/chartPreviewer.js"></script>
+    <script src="../chart/addChartElement/chartAddChartElement.js"></script>
+    <script src="../chart/chartColorPicker/chart-colorPicker.js"></script>
+    <script src="../chart/chartLayoutPicker/chartLayoutPicker.js"></script>
+    <script src="../chart/chartTypePicker/chartTypePicker.js"></script>
+    <script src="../chart/chartSliderPanel.js"></script>
+    <script src="../chart/chartWrapper.js"></script>
+    <script src="../contextMenu/contextMenu.js"></script>
+    <script src="../fileMenu/fileMenu.js"></script>
+    <script src="index.js"></script>
+    <script src="../lib/html2canvas.min.js"></script>
+    <script src="spreadjs-sunway.js"></script>
+</body>
+
+<script>
+    var getData, setData, exportImg, image, scaleSheet;
+    GC.Spread.Sheets.LicenseKey = 'sunway';
+    var init = function (option, callback) {
+        var designer = GC.Spread.Sheets.Designer;
+        var spread = designer.wrapper.spread;
+        if (!spread) {
+            setTimeout(() => {
+                init(option, callback);
+            }, 300);
+            return;
+        }
+        
+     /*    var TopRowChanged = GC.Spread.Sheets.Events.TopRowChanged;
+        spread.bind(TopRowChanged, function () {
+            spread.getActiveSheet().showRow(0);
+        }); */
+        
+        var cellClick = GC.Spread.Sheets.Events.CellClick;
+        spread.bind(cellClick, option.clickComp);
+        
+        var CellDoubleClick = GC.Spread.Sheets.Events.CellDoubleClick;
+        spread.bind(CellDoubleClick, function () {
+            option.editEvent && option.editEvent();
+        });
+
+        exportImg = function () {
+            return image;
+        };
+        
+        getSpreadHeight = function (rows, rowCount) {
+            const sheet = spread.getActiveSheet()
+            let differentHeight = 0
+            const rowStart = parseInt(rows[0]), rowEnd = parseInt(rows[rows.length - 1])
+            for(let i = rowStart; i < rowEnd + 1; i++) {
+                const rHeight = sheet.getRowHeight(i)
+                if(rHeight !== 20) {
+                    differentHeight += rHeight
+                    --rowCount
+                }
+            }
+            return (rowCount * 21 + differentHeight)
+        };
+
+        getSpreadWidth = function (columns, columnCount) {
+            const sheet = spread.getActiveSheet()
+            let differentWidth = 0
+            const columnStart = parseInt(columns[0]), columnEnd = parseInt(columns[columns.length - 1])
+            for(let i = columnStart; i < columnEnd + 1; i++) {
+                const cWidth = sheet.getColumnWidth(i)
+                if(cWidth !== 62) {
+                    differentWidth += cWidth
+                    --columnCount
+                }
+            }
+            return (columnCount * 62 + differentWidth)
+        };
+        
+        exportLatestImg = async function () {
+            await html2canvas(document.body).then(function(canvas) {
+                image = canvas.toDataURL('image/png');
+            });
+            return image;
+        };
+
+        getData = function () {
+            return JSON.stringify(spread.toJSON());
+        };
+
+        scaleSheet = function (zoom) {
+            var sheet = spread.getActiveSheet()
+            sheet.zoom(zoom)
+        };
+        
+        cutTable = function (options) {
+            var sheet = spread.getActiveSheet()
+            sheet.deleteRows(options.rowIndex, options.rowCount)
+            sheet.deleteColumns(options.columnIndex, options.columnCount)
+        }
+
+        setData = function (data) {
+            spread.fromJSON(data);
+            var sheet = spread.getActiveSheet(), options = sheet.options;
+            spread.options.showVerticalScrollbar = false;
+            spread.options.showHorizontalScrollbar = false;
+            spread.options.tabStripVisible = false;
+            spread.options.hideSelection = true;
+            spread.options.scrollbarMaxAlign = true;
+            spread.options.scrollbarShowMax = true;
+            sheet.options.rowHeaderVisible = false;
+            sheet.options.colHeaderVisible = false;
+            options.protectionOptions = {
+                allowSelectLockedCells: false,
+                allowSelectUnlockedCells: false,
+                allowFilter: false,
+                allowSort: false,
+                allowResizeRows: false,
+                allowResizeColumns: false,
+                allowEditObjects: false,
+                allowDragInsertRows: false,
+                allowDragInsertColumns: false,
+                allowInsertRows: false,
+                allowInsertColumns: false,
+                allowDeleteRows: false,
+                allowDeleteColumns: false
+            };
+            options.isProtected = true;
+            sheet.clearSelection();
+        };
+        setData(JSON.parse(option.value));
+        
+        spread.getActiveSheet().clearSelection();
+        
+         html2canvas(document.body, {
+            onrendered: function(canvas) {
+                image = canvas.toDataURL('image/png');
+            }
+        });
+
+        callback && callback();
+    };
+</script>
+
+</html>

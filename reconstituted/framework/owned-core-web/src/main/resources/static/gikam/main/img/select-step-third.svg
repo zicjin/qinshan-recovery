@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="336px" height="188px" viewBox="0 0 336 188" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>框选步骤3</title>
+    <g id="框选步骤3" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="矩形" stroke="#D9D9D9" fill="#FFFFFF" x="0.5" y="0.5" width="335" height="187" rx="4"></rect>
+        <path d="M335.5,17.5 L335.5,184 C335.5,184.966498 335.108249,185.841498 334.474874,186.474874 C333.841498,187.108249 332.966498,187.5 332,187.5 L332,187.5 L4,187.5 C3.03350169,187.5 2.15850169,187.108249 1.52512627,186.474874 C0.891750844,185.841498 0.5,184.966498 0.5,184 L0.5,184 L0.5,17.5 L335.5,17.5 Z" id="矩形" stroke="#D9D9D9" fill="#F5F7FA"></path>
+        <path d="M3,1 L333,1 C334.104569,1 335,1.8954305 335,3 L335,17 L335,17 L1,17 L1,3 C1,1.8954305 1.8954305,1 3,1 Z" id="矩形" fill="#EAF0F6"></path>
+        <circle id="椭圆形" fill="#FFFFFF" cx="324" cy="9" r="3"></circle>
+        <circle id="椭圆形备份" fill="#FFFFFF" cx="310" cy="9" r="3"></circle>
+        <circle id="椭圆形备份-2" fill="#FFFFFF" cx="296" cy="9" r="3"></circle>
+        <rect id="矩形" fill="#FFFFFF" x="9" y="6" width="88" height="6" rx="1"></rect>
+        <path d="M2.27373675e-13,40 L15,40 C15.5522847,40 16,40.4477153 16,41 L16,143 C16,143.552285 15.5522847,144 15,144 L2.27373675e-13,144 L2.27373675e-13,144 L2.27373675e-13,40 Z" id="矩形备份" fill="#EAF0F6"></path>
+        <path d="M264,23 L335,23 L335,23 L335,183 C335,185.209139 333.209139,187 331,187 L263,187 L263,187 L263,24 C263,23.4477153 263.447715,23 264,23 Z" id="矩形备份-7" fill="#FFFFFF" fill-rule="nonzero"></path>
+        <rect id="矩形备份-4" fill="#EAF0F6" x="269" y="40" width="60" height="24" rx="2"></rect>
+        <rect id="矩形备份-9" fill="#EAF0F6" x="269" y="104" width="60" height="24" rx="2"></rect>
+        <rect id="矩形备份-8" fill="#EAF0F6" x="269" y="72" width="60" height="24" rx="2"></rect>
+        <rect id="矩形备份-10" fill="#EAF0F6" x="269" y="136" width="60" height="24" rx="2"></rect>
+        <path d="M265,24 L299,24 L299,24 L299,32 L264,32 L264,25 C264,24.4477153 264.447715,24 265,24 Z" id="矩形备份-7" fill-opacity="0.5" fill="#D9D9D9"></path>
+        <path d="M301,24 L334,24 L334,24 L334,32 L300,32 L300,25 C300,24.4477153 300.447715,24 301,24 Z" id="矩形备份-17" fill-opacity="0.297756" fill="#D9D9D9"></path>
+        <rect id="矩形" fill="#FFFFFF" x="4" y="48" width="8" height="8"></rect>
+        <rect id="矩形备份-3" fill="#FFFFFF" x="4" y="80" width="8" height="8"></rect>
+        <rect id="矩形备份-5" fill="#FFFFFF" x="4" y="112" width="8" height="8"></rect>
+        <rect id="矩形备份-2" fill="#FFFFFF" x="4" y="64" width="8" height="8"></rect>
+        <rect id="矩形备份-4" fill="#FFFFFF" x="4" y="96" width="8" height="8"></rect>
+        <rect id="矩形备份-6" fill="#FFFFFF" x="4" y="128" width="8" height="8"></rect>
+        <rect id="矩形" stroke="#EAEAEA" fill="#FFFFFF" x="30.5" y="24.5" width="219" height="155" rx="2"></rect>
+        <g id="编组" transform="translate(38.000000, 86.000000)" fill="#D9D9D9" fill-opacity="0.5">
+            <rect id="矩形" x="0" y="0" width="204" height="1"></rect>
+            <rect id="矩形备份-11" x="0" y="67" width="204" height="1"></rect>
+            <rect id="矩形备份-12" x="0" y="54" width="204" height="1"></rect>
+            <rect id="矩形备份-13" x="0" y="13" width="204" height="1"></rect>
+            <rect id="矩形备份-13" x="0" y="1" width="1" height="66"></rect>
+            <rect id="矩形备份-14" x="52" y="1" width="1" height="66"></rect>
+            <rect id="矩形备份-15" x="166" y="1" width="1" height="66"></rect>
+            <rect id="矩形备份-16" x="203" y="1" width="1" height="66"></rect>
+        </g>
+        <text id="报告编号:" fill="#1A1A1A" fill-rule="nonzero" font-family="STSongti-SC-Regular, Songti SC" font-size="7" font-weight="normal">
+            <tspan x="38" y="74">报告编号:</tspan>
+        </text>
+        <text id="2013WH558" fill="#1A1A1A" fill-rule="nonzero" font-family="STSongti-SC-Regular, Songti SC" font-size="7" font-weight="normal">
+            <tspan x="70" y="74">2013WH558</tspan>
+        </text>
+        <text id="检-验-报-告" fill="#1A1A1A" fill-rule="nonzero" font-family="STSongti-SC-Regular, Songti SC" font-size="16" font-weight="normal">
+            <tspan x="99" y="51">检 验 报 告</tspan>
+        </text>
+        <text id="GB" fill="#1A1A1A" fill-rule="nonzero" font-family="STSongti-SC-Regular, Songti SC" font-size="7" font-weight="normal" line-spacing="7">
+            <tspan x="193" y="38">GB</tspan>
+        </text>
+        <text id="2760-2014" fill="#1A1A1A" fill-rule="nonzero" font-family="STSongti-SC-Regular, Songti SC" font-size="7" font-weight="normal" line-spacing="7">
+            <tspan x="207" y="38">2760-2014</tspan>
+        </text>
+        <text id="送样日期：" fill="#1A1A1A" fill-rule="nonzero" font-family="STSongti-SC-Regular, Songti SC" font-size="7" font-weight="normal">
+            <tspan x="38" y="168">送样日期：</tspan>
+        </text>
+        <text id="2020年12月15日" fill="#1A1A1A" fill-rule="nonzero" font-family="STSongti-SC-Regular, Songti SC" font-size="7" font-weight="normal">
+            <tspan x="76" y="168">2020年12月15日</tspan>
+        </text>
+        <g id="成功图标-通用" transform="translate(187.000000, 116.000000)" fill-rule="nonzero">
+            <circle id="椭圆形" fill="#FF3B30" cx="5" cy="5" r="5"></circle>
+            <path d="M5,4.56011177 L3.38860364,2.94821621 C3.31006422,2.86967014 3.19559054,2.83899441 3.08830371,2.86774427 C2.98101688,2.89649412 2.89721632,2.98030177 2.86846891,3.08759769 C2.83972149,3.1948936 2.87039462,3.30937697 2.94893404,3.38792303 L4.55996764,4.9998186 L2.9482085,6.61135138 C2.86966909,6.68989744 2.83899595,6.80438081 2.86774337,6.91167673 C2.89649079,7.01897264 2.98029135,7.10278029 3.08757818,7.13153014 C3.19486501,7.16028 3.3093387,7.12960426 3.38787811,7.05105819 L5,5.43988821 L6.61139637,7.05178379 C6.68993578,7.13032985 6.80440947,7.16100557 6.9116963,7.13225573 C7.01898314,7.10350588 7.10278369,7.01969823 7.13153111,6.91240231 C7.1602785,6.8051064 7.12960539,6.69062302 7.05106597,6.61207696 L5.44003237,4.9998186 L7.05179151,3.38828582 C7.13033091,3.30973976 7.16100407,3.19525639 7.13225663,3.08796047 C7.10350921,2.98066456 7.01970865,2.89685691 6.91242182,2.86810706 C6.80513499,2.83935721 6.69066131,2.87003294 6.61212189,2.948579 L5,4.55974899 L5,4.56011177 Z" id="Shape" fill="#FFFFFF"></path>
+        </g>
+        <text id="北京三维天地科技股份-有限公司武汉分公司" font-family="STSongti-SC-Regular, Songti SC" font-size="7" font-weight="normal" fill="#000000" fill-opacity="0.85">
+            <tspan x="107" y="119">北京三维天地科技股份</tspan>
+            <tspan x="107" y="128">有限公司武汉分公司</tspan>
+        </text>
+        <rect id="矩形备份-4" fill-opacity="0.3" fill="#F9762B" x="100" y="108" width="83" height="24"></rect>
+    </g>
+</svg>

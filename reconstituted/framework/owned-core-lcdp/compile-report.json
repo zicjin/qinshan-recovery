@@ -1,0 +1,17 @@
+{
+  "command": "mvn -o -DskipTests clean package",
+  "exit_code": 0,
+  "host": "Linux",
+  "java_runtime": "java version \"1.8.0_391\"",
+  "java_version": "8",
+  "maven_runtime": "\u001b[1mApache Maven 3.9.12\u001b[m",
+  "module": "owned-core-lcdp",
+  "output_jar": "owned-core-lcdp/target/owned-core-lcdp-1.0.0-SNAPSHOT.jar",
+  "output_jar_sha256": "d580412184264abea9ed938ab430839b8677cb7f725d08a3158036bc8260f2f7",
+  "schema": "supplier-reconstituted-module-compile-v1",
+  "source_file_count": 500,
+  "source_only_framework_classpath": true,
+  "source_tree_sha256": "557f4b87f1d8b82a2d6895479bec20641e2956758d252ab721b5e6bb0bc695b5",
+  "status": "pass",
+  "supplier_private_jars_on_classpath": false
+}

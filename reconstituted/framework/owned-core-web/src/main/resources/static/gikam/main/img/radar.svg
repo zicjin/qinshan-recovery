@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="87px" height="75px" viewBox="0 0 87 75" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 64 (93537) - https://sketch.com -->
+    <title>填充雷达图</title>
+    <desc>Created with Sketch.</desc>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="填充雷达图" transform="translate(0.000000, -2.000000)">
+            <text id="E" font-family="PingFangSC-Regular, PingFang SC" font-size="8" font-weight="normal" fill="#000000" fill-opacity="0.847820149">
+                <tspan x="0" y="35">E</tspan>
+            </text>
+            <text id="B" font-family="PingFangSC-Regular, PingFang SC" font-size="8" font-weight="normal" fill="#000000" fill-opacity="0.847820149">
+                <tspan x="81" y="35">B</tspan>
+            </text>
+            <text id="C" font-family="PingFangSC-Regular, PingFang SC" font-size="8" font-weight="normal" fill="#000000" fill-opacity="0.847820149">
+                <tspan x="68" y="76">C</tspan>
+            </text>
+            <text id="D" font-family="PingFangSC-Regular, PingFang SC" font-size="8" font-weight="normal" fill="#000000" fill-opacity="0.847820149">
+                <tspan x="13" y="76">D</tspan>
+            </text>
+            <text id="A" font-family="PingFangSC-Regular, PingFang SC" font-size="8" font-weight="normal" fill="#000000" fill-opacity="0.847820149">
+                <tspan x="49" y="8">A</tspan>
+            </text>
+            <g id="编组" transform="translate(9.604959, 8.928810)" stroke="#E9E9E9" stroke-dasharray="0,0">
+                <g transform="translate(0.497772, 0.613173)" id="路径">
+                    <path d="M32.6076729,34.002603 L32.6076729,28.3355025 L32.6076729,22.668402 L32.6076729,17.0013015 L32.6076729,11.334201 L32.6076729,5.6671005 L32.6076729,0"></path>
+                    <path d="M32.6076729,34.002603 L38.0131915,32.2513726 L43.41871,30.5001423 L48.8242286,28.7489119 L54.2297471,26.9976815 L59.6352656,25.2464512 L65.0407842,23.4952208"></path>
+                    <path d="M32.6076729,34.002603 L35.9484671,38.5873836 L39.2892613,43.1721642 L42.6300555,47.7569448 L45.9708497,52.3417254 L49.3116439,56.926506 L52.652438,61.5112867"></path>
+                    <path d="M32.6076729,34.002603 L29.2668788,38.5873836 L25.9260846,43.1721642 L22.5852904,47.7569448 L19.2444962,52.3417254 L15.903702,56.926506 L12.9603156,61.4586254"></path>
+                    <path d="M32.6076729,34.002603 L27.2021544,32.2513726 L21.7966359,30.5001423 L16.3911173,28.7489119 L10.9855988,26.9976815 L5.58008024,25.2464512 L0.327546662,22.918231"></path>
+                    <path d="M32.6076729,34.002603 L32.6076729,28.3355025 L32.6076729,22.668402 L32.6076729,17.0013015 L32.6076729,11.334201 L32.6076729,5.6671005 L32.6076729,0"></path>
+                </g>
+            </g>
+            <g id="编组-3" transform="translate(10.604959, 8.928810)" stroke="#E9E9E9" stroke-dasharray="0,0">
+                <path d="M31.5,29 L37,32.8196601 L34.8991869,39 L28.1008131,39 L26,32.8196601 L31.5,29" id="路径"></path>
+                <path d="M31.5,24 L42,31.6393202 L37.9893569,44 L25.0106431,44 L21,31.6393202 L31.5,24" id="路径"></path>
+                <path d="M33,18 L49,29.4589803 L42.8885438,48 L23.1114562,48 L17,29.4589803 L33,18" id="路径"></path>
+                <path d="M32,11 L54,27.0425725 L45.5967478,53 L18.4032522,53 L10,27.0425725 L32,11" id="路径"></path>
+                <path d="M32.5,6 L60,25.8622326 L49.4959347,58 L15.5040653,58 L5,25.8622326 L32.5,6" id="路径"></path>
+                <path d="M65,23.6818927 L52.5861046,62 L12.4138954,62 L0,23.6818927 L32.5,0 L65,23.6818927 Z" id="路径"></path>
+            </g>
+            <polygon id="路径" stroke="#587EF7" fill="#587EF7" fill-rule="nonzero" points="60.6049592 37.8901579 57.5791707 63.9288102 32.8867254 57.2989284 20.0622123 36.2899538 42.7104041 26.0452574"></polygon>
+            <polygon id="路径" stroke="#37CFC9" fill="#37CFC9" fill-rule="nonzero" points="56.470687 38.9791627 54.4612908 59.4864886 36.0378231 53.9832759 15.6049592 34.7910427 42.8462694 14.9288102"></polygon>
+        </g>
+    </g>
+</svg>

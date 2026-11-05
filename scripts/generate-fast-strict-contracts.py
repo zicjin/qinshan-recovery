@@ -46,6 +46,17 @@ def build(fast: Mapping[str, Any], ledger: Mapping[str, Any], *, family: str | N
             reason = str(probe.get("classification", "unknown"))
             skipped[reason] = skipped.get(reason, 0) + 1
             continue
+        # A fast-equivalent comparison can mean that supplier and owned both
+        # returned the same error (for example an empty-clone 500).  That is
+        # diagnostic baseline evidence, never a strict behavior contract.
+        # Only successful HTTP responses may seed a strict replay case.
+        owned_observation = probe.get("owned") if isinstance(probe.get("owned"), dict) else {}
+        supplier_observation = probe.get("supplier") if isinstance(probe.get("supplier"), dict) else {}
+        owned_status = int(owned_observation.get("status", 0) or 0)
+        supplier_status = int(supplier_observation.get("status", 0) or 0)
+        if not (200 <= owned_status < 300 and 200 <= supplier_status < 300):
+            skipped["fast-equivalent-error"] = skipped.get("fast-equivalent-error", 0) + 1
+            continue
         if family and str(probe.get("family")) != family:
             continue
         route_ids = probe.get("route_ids") or ([probe["route_id"]] if probe.get("route_id") else [])
@@ -53,7 +64,7 @@ def build(fast: Mapping[str, Any], ledger: Mapping[str, Any], *, family: str | N
             skipped["missing-route-id"] = skipped.get("missing-route-id", 0) + 1
             continue
         request = probe.get("request") if isinstance(probe.get("request"), dict) else {}
-        owned = probe.get("owned") if isinstance(probe.get("owned"), dict) else {}
+        owned = owned_observation
         owned_json = owned.get("json") if isinstance(owned.get("json"), dict) else {}
         expected_status = int(owned.get("status", 200))
         profile = str(request.get("profile", "default"))

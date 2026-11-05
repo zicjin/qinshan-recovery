@@ -47,15 +47,15 @@ def write_json(path: Path, payload: object) -> None:
 def source_fqn(path: Path, source_root: Path) -> str | None:
     text = path.read_text(encoding="utf-8", errors="replace")
     package = re.search(r"^\s*package\s+([A-Za-z_$][\w.$]*)\s*;", text, re.MULTILINE)
-    type_name = re.search(
-        r"\b(?:class|interface|enum|@interface)\s+([A-Za-z_$][\w$]*)",
-        text,
-    )
-    if not type_name:
-        return None
+    # Source files in the recovered modules follow the Java convention that
+    # the top-level type matches the filename. This also handles annotations
+    # and compact decompiler formatting before the declaration.
     relative = path.relative_to(source_root).with_suffix("")
+    type_name = relative.name
+    if not re.match(r"^[A-Za-z_$][\w$]*$", type_name):
+        return None
     if package:
-        return f"{package.group(1)}.{type_name.group(1)}"
+        return f"{package.group(1)}.{type_name}"
     return ".".join(relative.parts)
 
 
@@ -218,6 +218,23 @@ def main(argv: list[str] | None = None) -> int:
     output_root = args.output_root.resolve()
     source_root = project_root / "src/main/java"
     resource_source_root = project_root / "src/main/resources"
+    # The source-only application must contain the tracked owned seams as
+    # source, alongside the original project and reconstructed framework.
+    # Building the transitional owned-framework JAR separately is insufficient:
+    # that JAR is intentionally not a runtime dependency of this distribution.
+    owned_source_roots = [
+        ROOT / name / "src/main/java"
+        for name in (
+            "owned-framework",
+            "owned-personnel",
+            "owned-equipment",
+            "owned-consumables",
+            "owned-attachments",
+            "owned-report",
+            "owned-scheduler",
+        )
+        if (ROOT / name / "src/main/java").is_dir()
+    ]
     if not args.javac.is_file():
         raise SystemExit(f"missing Java 8 javac: {args.javac}")
     if output_root.exists():
@@ -244,6 +261,16 @@ def main(argv: list[str] | None = None) -> int:
 
     framework_fqns = framework_source_fqns(framework_root)
     project_sources = sorted(source_root.rglob("*.java"))
+    project_fqns = {
+        value
+        for source in project_sources
+        if (value := source_fqn(source, source_root)) is not None
+    }
+    owned_sources = sorted(
+        source
+        for source_root_path in owned_source_roots
+        for source in source_root_path.rglob("*.java")
+    )
     compile_sources: list[Path] = []
     provided_by_framework: list[dict[str, str]] = []
     for source in project_sources:
@@ -252,6 +279,23 @@ def main(argv: list[str] | None = None) -> int:
             provided_by_framework.append(
                 {"fqn": fqn, "project_source": source.relative_to(project_root).as_posix()}
             )
+        else:
+            compile_sources.append(source)
+    # Owned seams are source-owned inputs. They are not supplied by a private
+    # framework JAR and therefore must always be compiled into the application.
+    owned_provided_by_framework: list[dict[str, str]] = []
+    owned_provided_by_project: list[dict[str, str]] = []
+    for source in owned_sources:
+        owned_root = next(root for root in owned_source_roots if root in source.parents)
+        fqn = source_fqn(source, owned_root)
+        # Reconstituted framework classes and original project classes are
+        # already compiled into their authoritative source-only inputs. Keep
+        # the transitional source tree available for provenance, but never
+        # emit duplicate runtime classes into the application JAR.
+        if fqn and fqn in framework_fqns:
+            owned_provided_by_framework.append({"fqn": fqn, "source": source.relative_to(ROOT).as_posix()})
+        elif fqn and fqn in project_fqns:
+            owned_provided_by_project.append({"fqn": fqn, "source": source.relative_to(ROOT).as_posix()})
         else:
             compile_sources.append(source)
 
@@ -301,6 +345,22 @@ def main(argv: list[str] | None = None) -> int:
     resource_records.extend(copy_license_clean_frontend_overlay(resources))
     java_tree_resources = copy_java_tree_resources(source_root, resources)
     resource_records.extend(java_tree_resources)
+    owned_resource_records: list[dict[str, object]] = []
+    for owned_root in (
+        ROOT / name / "src/main/resources"
+        for name in (
+            "owned-framework",
+            "owned-personnel",
+            "owned-equipment",
+            "owned-consumables",
+            "owned-attachments",
+            "owned-report",
+            "owned-scheduler",
+        )
+    ):
+        if owned_root.is_dir():
+            owned_resource_records.extend(copy_resource_tree(owned_root, resources))
+    resource_records.extend(owned_resource_records)
     app_jar = output_root / "lims-owned-application.jar"
     build_application_jar(classes, resources, app_jar)
     third_party_provenance = (
@@ -359,8 +419,12 @@ def main(argv: list[str] | None = None) -> int:
         "java_version": "8",
         "main_class": MAIN_CLASS,
         "project_source_file_count": len(project_sources),
+        "owned_source_roots": [path.relative_to(ROOT).as_posix() for path in owned_source_roots],
+        "owned_source_file_count": len(owned_sources),
         "compile_target_source_file_count": len(compile_sources),
         "provided_by_reconstituted_modules": provided_by_framework,
+        "owned_sources_provided_by_reconstituted_modules": owned_provided_by_framework,
+        "owned_sources_provided_by_project": owned_provided_by_project,
         "classpath": classpath_details,
         "supplier_private_jars_on_classpath": bool(private_classpath),
         "framework_module_jar_count": len(framework_jars),
@@ -370,6 +434,7 @@ def main(argv: list[str] | None = None) -> int:
         "compile_exit_code": result.returncode,
         "compile_error_count": compile_log.count("error:"),
         "java_source_resource_count": len(java_tree_resources),
+        "owned_resource_record_count": len(owned_resource_records),
         "resource_record_count": len(resource_records),
         "resource_tree_sha256": hashlib.sha256(
             json.dumps(resource_records, sort_keys=True, separators=(",", ":")).encode()

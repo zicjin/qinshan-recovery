@@ -56,6 +56,11 @@ def main():
     with zipfile.ZipFile(app) as jar:
         assert jar.namelist().count('com/sunwayworld/emc/projectfunction/GikamWpjcApplication.class') == 1
         assert 'com/sunwayworld/boot/ApplicationConfiguration.class' in jar.namelist()
+        # Source-only distribution must carry owned seams in the application
+        # archive. Building the transitional owned-framework JAR alone does
+        # not affect the deployed app classpath.
+        assert 'com/sunwayworld/owned/internal/web/OwnedReagentWriteController.class' in jar.namelist()
+        assert 'com/sunwayworld/owned/internal/web/OwnedIdentityConfiguration.class' in jar.namelist()
         assert not any('/src/test/' in name or name.endswith('ContractTest.class') for name in jar.namelist())
         assert not any(name.endswith('OwnedWebBrowserApplication.class') or name.endswith('OwnedInventoryBrowserApplication.class') for name in jar.namelist())
         assert len(jar.read('static/gikam/main/js/chunk-common.js')) > 1_000_000

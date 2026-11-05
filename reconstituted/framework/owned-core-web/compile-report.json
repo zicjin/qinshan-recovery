@@ -1,9 +1,11 @@
 {
-  "command": "mvn -o -DskipTests clean package",
+  "command": "mvn -o -Dmaven.repo.local=<isolated-plugin-seed-repo> -DskipTests clean package",
   "exit_code": 0,
   "host": "Linux",
   "java_runtime": "java version \"1.8.0_391\"",
   "java_version": "8",
+  "maven_plugin_seed_sha256": "625154286cb1d5b56e1ac8331537a151bec6e4a8d8284f2243c8444a257ae5d5",
+  "maven_repository_mode": "isolated-hash-pinned-plugin-seed",
   "maven_runtime": "\u001b[1mApache Maven 3.9.12\u001b[m",
   "module": "owned-core-web",
   "output_jar": "owned-core-web/target/owned-core-web-1.0.0-SNAPSHOT.jar",

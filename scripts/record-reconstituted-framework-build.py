@@ -30,6 +30,20 @@ def write_json(path: Path, payload: object) -> None:
     )
 
 
+def finalize_module_provenance(module_root: Path) -> None:
+    provenance_path = module_root / "module-provenance.json"
+    provenance = json.loads(provenance_path.read_text(encoding="utf-8"))
+    for record in provenance["source_files"]:
+        record["compile_status"] = "pass"
+    write_json(provenance_path, provenance)
+
+    resource_path = module_root / "resource-provenance.json"
+    resources = json.loads(resource_path.read_text(encoding="utf-8"))
+    for record in resources["resources"]:
+        record["compile_status"] = "not-applicable-resource"
+    write_json(resource_path, resources)
+
+
 def command_output(command: list[str], cwd: Path) -> str:
     result = subprocess.run(
         command,
@@ -39,6 +53,17 @@ def command_output(command: list[str], cwd: Path) -> str:
         capture_output=True,
     )
     return (result.stdout + result.stderr).strip()
+
+
+def plugin_seed_sha256() -> str:
+    manifest = ROOT / "evidence" / "t02-build-plugin-seed.sha256"
+    for line in manifest.read_text(encoding="utf-8").splitlines():
+        if not line or line.startswith("#"):
+            continue
+        expected, relative = line.split(maxsplit=1)
+        if relative.endswith("maven-build-plugin-seed.tar.gz"):
+            return expected
+    raise SystemExit("Maven plugin seed is not registered")
 
 
 def normalize_jar(path: Path) -> None:
@@ -95,7 +120,9 @@ def main() -> int:
             "java_version": "8",
             "java_runtime": java_version,
             "maven_runtime": maven_version,
-            "command": "mvn -o -DskipTests clean package",
+            "command": "mvn -o -Dmaven.repo.local=<isolated-plugin-seed-repo> -DskipTests clean package",
+            "maven_repository_mode": "isolated-hash-pinned-plugin-seed",
+            "maven_plugin_seed_sha256": plugin_seed_sha256(),
             "source_file_count": provenance["source_file_count"],
             "source_tree_sha256": provenance["source_tree_sha256"],
             "output_jar": str(jar.relative_to(root)),
@@ -105,6 +132,7 @@ def main() -> int:
             "host": platform.system(),
         }
         write_json(module_root / "compile-report.json", report)
+        finalize_module_provenance(module_root)
         summary["compile_status"] = "pass"
         summary["output_jar"] = report["output_jar"]
         summary["output_jar_sha256"] = report["output_jar_sha256"]

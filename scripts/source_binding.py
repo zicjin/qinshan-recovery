@@ -143,6 +143,7 @@ _IMPLEMENTATION_SUFFIXES = (
     "scripts/verify-reconstituted-framework.py",
     "scripts/assemble-reconstituted-framework-modules.py",
     "scripts/prepare-reconstituted-public-deps.py",
+    "scripts/prepare-reconstituted-maven-repo.py",
     "scripts/record-reconstituted-framework-build.py",
     "scripts/verify-reconstituted-framework-modules.py",
     "scripts/verify-owned-native-license-removal.py",

@@ -82,6 +82,7 @@
   "resources": [
     {
       "bytes": 270,
+      "compile_status": "not-applicable-resource",
       "destination_sha256": "23f4aac34e781a2cd59eff6caf8054ab040ced3ba7e5a25b970ee1a8d3a6cd8e",
       "path": "banner.txt",
       "sha256": "a6f8b1482d7d3be250eb67f07d67869d4267440bc8f139be4731f806b5430330",
@@ -89,72 +90,84 @@
     },
     {
       "bytes": 3619,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/fr/report/persistent/mapper/conf/core-report-config-line-mysql-mapper.xml",
       "sha256": "67051bf7a8d1b6d80da430f398ceb07cbf1b4598535133b6f2f95c381d4d2002",
       "source_jar": "gikam-core-fr-service-base-14.1.5.jar"
     },
     {
       "bytes": 3613,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/fr/report/persistent/mapper/conf/core-report-config-line-oracle-mapper.xml",
       "sha256": "25c412980f91ba86ad8d7fcebbb986a6d6e420218626f26a349f24c24c1b2243",
       "source_jar": "gikam-core-fr-service-base-14.1.5.jar"
     },
     {
       "bytes": 3647,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/fr/report/persistent/mapper/conf/core-report-config-line-postgresql-mapper.xml",
       "sha256": "53209a1bd9f1854bda276b986e5569c8ddd33759c2ebcebd7202259578f58ae1",
       "source_jar": "gikam-core-fr-service-base-14.1.5.jar"
     },
     {
       "bytes": 3640,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/fr/report/persistent/mapper/conf/core-report-config-line-sqlserver-mapper.xml",
       "sha256": "8c3af9d6706d0b93c5900cfa7d9c4fd2cef7f0602bd46f860c633d4456672380",
       "source_jar": "gikam-core-fr-service-base-14.1.5.jar"
     },
     {
       "bytes": 1071,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/fr/report/persistent/mapper/conf/core-report-config-mysql-mapper.xml",
       "sha256": "742a32396e03641358bb148c75a3e07e035617405cc059108f82a3fbe2bfadef",
       "source_jar": "gikam-core-fr-service-base-14.1.5.jar"
     },
     {
       "bytes": 891,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/fr/report/persistent/mapper/conf/core-report-config-oracle-mapper.xml",
       "sha256": "813c1e52e5269471b763963eb1e62ae31a7699ce85f0767dae88d503ed18126f",
       "source_jar": "gikam-core-fr-service-base-14.1.5.jar"
     },
     {
       "bytes": 891,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/fr/report/persistent/mapper/conf/core-report-config-postgresql-mapper.xml",
       "sha256": "813c1e52e5269471b763963eb1e62ae31a7699ce85f0767dae88d503ed18126f",
       "source_jar": "gikam-core-fr-service-base-14.1.5.jar"
     },
     {
       "bytes": 891,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/fr/report/persistent/mapper/conf/core-report-config-sqlserver-mapper.xml",
       "sha256": "813c1e52e5269471b763963eb1e62ae31a7699ce85f0767dae88d503ed18126f",
       "source_jar": "gikam-core-fr-service-base-14.1.5.jar"
     },
     {
       "bytes": 859,
+      "compile_status": "not-applicable-resource",
       "path": "config/application-file_dev.yml",
       "sha256": "ff7d2d7d22d4c6ba2b2fef2569e19741a13bc11a665f0c1d3df6c2f8041f29cf",
       "source_jar": "gikam-core-fr-service-base-14.1.5.jar"
     },
     {
       "bytes": 844,
+      "compile_status": "not-applicable-resource",
       "path": "config/application-file_pro.yml",
       "sha256": "ea50dfbacf6e7e4216c4c342669094b19da5e693910c9e81dfc54cd9d0c2cfa7",
       "source_jar": "gikam-core-fr-service-base-14.1.5.jar"
     },
     {
       "bytes": 2404,
+      "compile_status": "not-applicable-resource",
       "path": "config/application-file_test.yml",
       "sha256": "1284409601044cbf08eeefae3459b0795c4968a77263f4fcea2056a2adee00c7",
       "source_jar": "gikam-core-fr-service-base-14.1.5.jar"
     },
     {
       "bytes": 555,
+      "compile_status": "not-applicable-resource",
       "destination_sha256": "2ab22008864cb3f425d17a0703a1d39147abeed6464d0a2ca4668007b825b342",
       "path": "config/application.yml",
       "sha256": "d04fa05c0aeed491782bd418b5fb3c0efaffb349b7a2c4ee636fbc3b550293f4",
@@ -162,6 +175,7 @@
     },
     {
       "bytes": 686,
+      "compile_status": "not-applicable-resource",
       "destination_sha256": "b41faba3f315c0f24cce196de34e33b0e03791f34fa77eefaf4b52955f0e2137",
       "path": "config/bootstrap.yml",
       "sha256": "c63188595e8c78cad8e710a4a813536d16fc872cf6db586401688ff23d798e95",
@@ -169,6 +183,7 @@
     },
     {
       "bytes": 2898,
+      "compile_status": "not-applicable-resource",
       "destination_sha256": "6839ea17d6fae58874cabdb3d7f2d48ff87e02295b08cb993162d1f959fc9757",
       "path": "log4j2.xml",
       "sha256": "6839ea17d6fae58874cabdb3d7f2d48ff87e02295b08cb993162d1f959fc9757",
@@ -176,2100 +191,2450 @@
     },
     {
       "bytes": 1985,
+      "compile_status": "not-applicable-resource",
       "path": "static/module/eln/eln-dses/core-eln-ds-choose-list.js",
       "sha256": "4b04a01738b7e1ef9ad603f48bc170f5ee6ee4dcb647cb10f6720c3045bc84b7",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 4772,
+      "compile_status": "not-applicable-resource",
       "path": "static/module/eln/eln-dses/core-eln-ds-detail.js",
       "sha256": "d30243f2f49f2b947957fe950af1ade723954824469fbd921491935e896aa635",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 4479,
+      "compile_status": "not-applicable-resource",
       "path": "static/module/eln/eln-dses/core-eln-ds-edit-list.js",
       "sha256": "f29c194a7afa88ff3d09eb40a6b1483f5bf6917e00df93d03ef130487d339d70",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 9630,
+      "compile_status": "not-applicable-resource",
       "path": "static/module/eln/eln-dses/core-eln-ds.js",
       "sha256": "7e2109db7ce8ad7677feb2d9a15e4e6956edc4f0b998bd7592c49f43ca7206eb",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1906,
+      "compile_status": "not-applicable-resource",
       "path": "static/module/eln/eln-tmpls/core-eln-tmpl-choose-list.js",
       "sha256": "42479fffdea005cfb4f6fc93754b7096a37a146ebfceb7b26d9e223cf7aa48e6",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 9079,
+      "compile_status": "not-applicable-resource",
       "path": "static/module/eln/eln-tmpls/core-eln-tmpl-detail.js",
       "sha256": "f163c70234ab1f82b46d2d9b89a01f29cbf69377ae36b6f2d5d7dfd5a1393f04",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 11199,
+      "compile_status": "not-applicable-resource",
       "path": "static/module/eln/eln-tmpls/core-eln-tmpl-edit-list.js",
       "sha256": "954cc3cd40e0bf35b4eb625fd169b10008dd97baa38ed271ce4bea998ab5969c",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 3327,
+      "compile_status": "not-applicable-resource",
       "path": "static/module/eln/eln-tmpls/core-eln-tmpl-test.js",
       "sha256": "76199a873df72da24689fe4896291b12095f45579461797174521613745672ad",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 4701,
+      "compile_status": "not-applicable-resource",
       "path": "static/module/eln/eln-tmpls/core-eln-tmpl.js",
       "sha256": "0bbf0e692c25d99a8d8050b7252999983721ead32325b6d78cff8833c8e4be62",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 4088,
+      "compile_status": "not-applicable-resource",
       "path": "static/module/les/les-dses/core-les-ds-choose-list.js",
       "sha256": "e4ca0869718487754489329cfec0e0bbbad3d1f7d69015211ca917aaeba5ccfa",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 4166,
+      "compile_status": "not-applicable-resource",
       "path": "static/module/les/les-dses/core-les-ds-detail.js",
       "sha256": "c2f0668ea7982faf1b00bec22bfc3caead2f4e698bb99af73ffdb60c456b0974",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 4091,
+      "compile_status": "not-applicable-resource",
       "path": "static/module/les/les-dses/core-les-ds-edit-list.js",
       "sha256": "c5bf1723c919e2b818ad6c4ac3446cacf2698ccd2902964eb6a3848f80903fda",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 3473,
+      "compile_status": "not-applicable-resource",
       "path": "static/module/les/les-dses/core-les-ds.js",
       "sha256": "ff3342044ad9f616aaa06c11550b1086a882ce46db125aa96fe9aec15fa15076",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 2059,
+      "compile_status": "not-applicable-resource",
       "path": "static/module/les/les-templates/core-les-template-audit-list.js",
       "sha256": "dee7cd6bc03575660d44190c88ebfcdfb2aec1cc36ed6fac08b16c7a0ba81be4",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 3790,
+      "compile_status": "not-applicable-resource",
       "path": "static/module/les/les-templates/core-les-template-choose-list.js",
       "sha256": "2b01e051c49104b34f15210fed086d1e135f74076b134c729ed74d14ce434b74",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 13403,
+      "compile_status": "not-applicable-resource",
       "path": "static/module/les/les-templates/core-les-template-edit-list.js",
       "sha256": "e68840eb3b1207e844f9e7e0f7144d1ebdd3cfbff7fc40bf31ba59436ee50766",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 4932,
+      "compile_status": "not-applicable-resource",
       "path": "static/module/les/les-templates/core-les-template-results-weight.js",
       "sha256": "56e3d7dd3b8469eade92f029134fe23f86c15f0d904b01a1cc80a96974dbd1e5",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 5287,
+      "compile_status": "not-applicable-resource",
       "path": "static/module/les/les-templates/core-les-template-weighing-edit-list.js",
       "sha256": "8c4fe74ce8c29cd6874a0b4fe6a6ae0723502d71b5571445e3389e2fc6abe121",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 6128,
+      "compile_status": "not-applicable-resource",
       "path": "static/module/les/les-templates/core-les-template.js",
       "sha256": "f10b20f327dde1326407cad1530d5bf5dac607b96da1f946c82f254a2504e538",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 5622,
+      "compile_status": "not-applicable-resource",
       "path": "static/module/office/dses/core-office-ds-detail.js",
       "sha256": "444c69d3439f0bc547deef50e3e1dc496124aca610b03ab35bc379e2c3f764d2",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 4122,
+      "compile_status": "not-applicable-resource",
       "path": "static/module/office/dses/core-office-ds-edit-list.js",
       "sha256": "753ce31cf03c3f34f0508dea5a6f98789615960a582dd5319874a8ad5fb33f13",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 8858,
+      "compile_status": "not-applicable-resource",
       "path": "static/module/office/dses/core-office-ds.js",
       "sha256": "ceddc6ca23f7635f825b8f6f673dd84062d66b0b16e5608f631513c8a9593c3f",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1930,
+      "compile_status": "not-applicable-resource",
       "path": "static/module/office/tmpls/core-office-tmpl-choose-list.js",
       "sha256": "c00827dd29a076ed4ec741e00b140decba6a1ce16bfb1b117d334fa74ba45bfa",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 13053,
+      "compile_status": "not-applicable-resource",
       "path": "static/module/office/tmpls/core-office-tmpl-edit-list.js",
       "sha256": "4b6f62ed25918ce10a5c302a757b4f5a83482810f90befdb99b4f57774f89dc3",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 2655,
+      "compile_status": "not-applicable-resource",
       "path": "static/module/office/tmpls/core-office-tmpl-test.js",
       "sha256": "7b931edf59ba6622d75f369f0208f5dd34a9a5e709d211c9567b767e002d9751",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 2934,
+      "compile_status": "not-applicable-resource",
       "path": "static/module/office/tmpls/core-office-tmpl.js",
       "sha256": "5235f2b8e3ac6d8d7320eafb5bc8ef6e0cce38cae1d6ee5a3b04c9969f96afe5",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 132256,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/GrapeCity-EULA.docx",
       "sha256": "f1016208160ee2526ba91bc4645e04c87dc1e2a36b829a5f5760438ab8a22cac",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 27131,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/LICENSE",
       "sha256": "06fe6d155d0dc6ba82b0a91cfc9222ddf452f78b8e91b574851e73262d9f04c1",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 108894,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/css/gc.spread.sheets.11.2.6.css",
       "sha256": "af0574b9bfcbaf3e734ffd753e310fa211e2f554599d5b84727abcfefca408e2",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 51245,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/css/gc.spread.sheets.excel2013darkGray.11.2.6.css",
       "sha256": "c4dc108ecd0c28167daf4247a8377bb024f22aa0b2116208d1908d038c7b92ae",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 53211,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/css/gc.spread.sheets.excel2013lightGray.11.2.6.css",
       "sha256": "9d24573dbd53e4f1fe1c822448e6f6876fc2f63ec233537f2245d13613271802",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 51036,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/css/gc.spread.sheets.excel2013white.11.2.6.css",
       "sha256": "da9dd8a2df1cb806e4ee8a7fdeb1e834ee64c5f31f12e46090398e9fb6265720",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 51267,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/css/gc.spread.sheets.excel2016colorful.11.2.6.css",
       "sha256": "ca30528cc44180b146abbbb6efb4d56b3bbcb60f271edfb2d58e98484ca3e2a9",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 51039,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/css/gc.spread.sheets.excel2016darkGray.11.2.6.css",
       "sha256": "bfed5689c3d22211c4af05f3636f6d07ce81faba794ca0f9223859688d6d0dff",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1445767,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/definition/GC.Spread.Sheets.d.ts",
       "sha256": "bcdf00ca75a503531ba6bd146a9eb03a8654f5caa2dc33e47e599331488cbbba",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 7240,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/chart/addChartElement/chartAddChartElement.css",
       "sha256": "d1a7f28b641caaf22978a1ff5cb05de1273b70a87f10a08df9a33a136d4ecaa8",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 43877,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/chart/addChartElement/chartAddChartElement.js",
       "sha256": "cf00564e2340d6ea58fd5ce9834441d9d48aab0ef78eb9b5b39985d82a970c60",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 53160,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/chart/chart-templates.js",
       "sha256": "a28abeeacf4d00e6e01d9db162723d6bda809527685557e575b2f9296ed89663",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 965,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/chart/chartColorPicker/chart-colorPicker.css",
       "sha256": "6bdbbc771148aee16c726bd1721a0c6cf3b1937a8794d24d435985e5cda6729c",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 2935,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/chart/chartColorPicker/chart-colorPicker.js",
       "sha256": "5bb7c299ec5c5943af01af838938bdb576ecbde546eb93454922591426d069eb",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 4830,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/chart/chartLayoutPicker/chartLayoutPicker.css",
       "sha256": "20ffecac28ef6bdd9c66e65af346096818f52228175e9325ac988e438c6e82e9",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 115509,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/chart/chartLayoutPicker/chartLayoutPicker.js",
       "sha256": "7a280c4fa0197144d9fdd85234c9d4a5c4d0d9b6786515aa23b97eb9ab213c38",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 121581,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/chart/chartSliderPanel.js",
       "sha256": "6c3dd5ae619eb9eec8e2c1fa8ead627df8cb2cad6b62d7e9a39992fdcf9794a9",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1510,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/chart/chartTypePicker/chartTypePicker.css",
       "sha256": "07d89fcc22c8e840e3c7f8bd5d055473b55aa39b18a9f0b803f6ffae2b29bc08",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 10278,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/chart/chartTypePicker/chartTypePicker.js",
       "sha256": "e37e0d7e3ff6b275b411a46e04a1341e4702858a262cf077430ce6f378a0751d",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 898,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/chart/chartWrapper.js",
       "sha256": "f66f9b417e0e5177a8c0a0d684959b854c62f59935cda2446e74e7aa43bec54a",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 4625,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/chartPreviewer/chartPreviewer.js",
       "sha256": "58b3c85d8c7bc08f946f902e2d23cfb35eed4d8594436b4985d07fa1429b5c05",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 11400,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/common/app.js",
       "sha256": "2470647ece08bb3745fde8d414bb3873c30f151352831c23c40f4a4c3354c121",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 2765,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/common/asyncLoader.js",
       "sha256": "cbc8f3811f738b530d917f9a0f46c74281818f52e443404b4ad4afb172143a2d",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 5708,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/common/colorHelper.js",
       "sha256": "993223d1a45401feaa0e14e84c97adcd6b6505ffcb771d4d84fc41c3067cf790",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 3926,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/common/common.css",
       "sha256": "86fbbb0ca8ecf31c08edfdfc93af037abbc1a1b71d41827f3e4de2963b385e39",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 4914,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/common/local.cn.css",
       "sha256": "318af75f196ad34ab7ba7813f07b00229c523b372d57c0cad1676ce812dac109",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 11602,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/common/metadata.js",
       "sha256": "4a4da858568e0d4642894b32d8ad575c7b10061158e132ea30d6f7014b23cc9a",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 106270,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/common/resources.cn.js",
       "sha256": "0422faaad276030fae983ac827c0cb2f1601fb44a004f6abe9872174f3ab6ec0",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 109244,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/common/resources.en.js",
       "sha256": "c2a3c0e38f06bdbd02ad35bf97e8e8fb184f871f78b8a40d7a025580178f456d",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 376,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/common/resources.js",
       "sha256": "244b1f7708085c2e7e4336c42e66855f4d7b89b744e5f8c931766ea5aa0b6ee4",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 76158,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/common/util.js",
       "sha256": "57b606bf0c04af5bc673d7efb8387813d4cf34da8bf629f7cb17a906a25e02e3",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1941,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/contextMenu/contextMenu.css",
       "sha256": "f5192b7263eba290bd4a0a249775900917d719c7442dd40290ab2b99c42cdc15",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 42058,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/contextMenu/contextMenu.js",
       "sha256": "e8a332b43d58249c3b307da4941128e6fca250156d4fc224a19b818aea2422a0",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 10207,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/dialogs/baseDialog.js",
       "sha256": "a983eea3df543f1994cf18e41b4a36e0def2ffd94131f552a52d1736eb524c1c",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 21772,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/dialogs/chartDialogs.css",
       "sha256": "61b4846d36363096ffbbf408d97e8e27bdc2c1032c92c42a827d0a1547940258",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 33652,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/dialogs/chartDialogs.html",
       "sha256": "35f4e19bc10a253062e3b372bb2b0b3ccf73b8b2c43b3704d7de291448b5b017",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 76437,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/dialogs/chartDialogs.js",
       "sha256": "51cf2b087ee3f108130a41d5f9fdefcaf61b553d403f48af40eb19b7e840ba18",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 24465,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/dialogs/dialogs.css",
       "sha256": "1cdcc2cc75dca170467b4ab0a61f3361e87fbc989ef4328f30ea057d7da9084e",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 162613,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/dialogs/dialogs.html",
       "sha256": "4c9cf5db202de4ffb852517400d9eadad7324eadac69f0e2f54f67d5b84d0641",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 474696,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/dialogs/dialogs.js",
       "sha256": "58017cd675d2e1eb597b8c92b0c04de75d69cab3f31c5512a251adc1d98984a1",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 27388,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/dialogs/dialogs2.css",
       "sha256": "fb62752a5181ecf87d499c2a951c08af87eeec61607e0e34469d6cc315517daa",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 114940,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/dialogs/dialogs2.html",
       "sha256": "b5b0435a98b888588823fc377b203d4608f3c2e59b60c2411364f0debcd7a2e5",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 378513,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/dialogs/dialogs2.js",
       "sha256": "36af1e21d75d9ff5b374c2cc1d1f2a5b0fcee0bb9701e060522c7f79df56bab6",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1021,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/elnLoaderProgress/elnLoaderProgress.css",
       "sha256": "c99e6eb4925f2b5e41d804398aeee8890e98b62bb2aa9569356a4e8df08d8e09",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 2223,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/elnLoaderProgress/elnLoaderProgress.js",
       "sha256": "f74a2f8745bf02612bad43a213e35c8bbeffc2a19ad63ed5f772c0f991cd2e0a",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 8396,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/fileMenu/fileMenu.css",
       "sha256": "73ed4b88ec4e34578a32958529bc6717a3545036612a3ff76d38e0ca64aaa762",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 32378,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/fileMenu/fileMenu.html",
       "sha256": "323b92fb42811d9efb6fc21283ada768219f650b66fedafcb2dbcce652c25b14",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 18017,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/fileMenu/fileMenu.js",
       "sha256": "5a19ae910cdd4ee075ca2a574082f96a3ee90db784dfeefe7aa154041b24a0cc",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 14298,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/formatDialog/formatDialog.css",
       "sha256": "9a306daf6de63476f87c369b6a3db13d3d7c44cbcf12f0acd4705cf9492d03e4",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 21761,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/formatDialog/formatDialog.html",
       "sha256": "b6e7ae780c2ce5f455946e30635cadcfd1df4e84290f3d5a8c245168becf3cbd",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 162040,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/formatDialog/formatDialog.js",
       "sha256": "82c5b340bf585583a90fe54add72f61c4fe73da21c57f3dbc6459c39ec1c38c4",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 2417,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/formulaBar/formulaBar.css",
       "sha256": "a7825edcb544d8048530174df99cf6420d8671e5291cfbb8ed924e536a85ac21",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 2161,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/formulaBar/formulaBar.html",
       "sha256": "e30efb0a6aefa9b3707df70fe7ceb5a7f0950209da55383b87b44ebd7d99d086",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 20828,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/formulaBar/formulaBar.js",
       "sha256": "0a84283b191095e010dc7816ed650aedbaed4846a0e444ab7e8784ae10668ae3",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 314,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/images/Slicer.png",
       "sha256": "0aaa4a91ed4e96a1429e79d69fe0a60c22ed93d2e9a74fb9da668df077283e6a",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 210,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/images/addIcon.jpg",
       "sha256": "878a861f098ec881b61965521f263bc8fe865b27176086da0cadee99df85d3e6",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 881,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/images/binddata.png",
       "sha256": "63e3146bdd3b872a5e85809c3464890152b26c4d8b7ac9620ee1a730c7fe25c5",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 639,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/images/borderpicker.png",
       "sha256": "b5ac68a688bca6cda8fc8ffd060db0dc60ffaaf6f5de83be5939ccb34de9910e",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 2027,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/images/character.svg",
       "sha256": "ee35e94fd0abc88c982bab39c96eaa3929d4364b0d5c838121590f863e3b14a8",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 42321,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/images/chartIcon.png",
       "sha256": "e9fffb71e60de2313aa662bbead866eaa5ba1b73fbf944b8eb9ac916a7dd27a8",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 91537,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/images/chartIcon50-50.png",
       "sha256": "b3bca84171fbf712bc97ef52759038703f8da9c064236ae334c84c482cb7b3cf",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 61332,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/images/chartIcons.png",
       "sha256": "29165fc81de1e6c1178ea9cb01079690aa89162dcff320238bdc51001336a71a",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 22904,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/images/chartIcons1.png",
       "sha256": "931babd2cce70e9ee3a3466486973921e0bb9c8c7d97e3b5e95c52211dcfa40f",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 3449,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/images/chartIcons2.png",
       "sha256": "dca389f8acfbdcb8dd628c1b7dad21c7b127167b88df2d92dbb1be913985dbdc",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 2936,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/images/checkbox.png",
       "sha256": "6fe6a980b54bea85916ff64a9b3d1b552d9e0e87f04759a02738fb216734028c",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1420,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/images/chem.png",
       "sha256": "b9dbd49074fda0fbf315df771bfa156f04ddc2194ee6ad8214cb81825c7cc6fc",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1549,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/images/clearbindingpath.png",
       "sha256": "44b9de4015ecae1fdbcdc2310107f230dde0c11ee69a9a22f16f2927c96a6c65",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 419,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/images/close.png",
       "sha256": "45e4d286526612fc9e32ae2f463a5321140d08dfad81055b7b66d0c553772d09",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 113,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/images/closeButton.png",
       "sha256": "f4c062e41d1c190f2f2fa8af76af7e69906b861d8051c803c49542af4b43f584",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 4502,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/images/colorpicker.png",
       "sha256": "b884be0233987d7f2600759de259a6d4fd052a1a3ed1bfa6d881be9a39f93ae7",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 7742,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/images/date-icon.svg",
       "sha256": "61e4c846661714c26549b36259cc20748e01dd40ec27c913c6253fccdcc56050",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 3924,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/images/datetime-icon.svg",
       "sha256": "ac3a9bfd1e2584946f49ee11ccdbce70f39088d9cfcfebaa5949633a87bb7ad1",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 283,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/images/downward.png",
       "sha256": "92d8f13420c3357d6353b518f13b925a82224fd0fac42e8e6c9ee63ff2385953",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 339,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/images/elnDatasourceShow.png",
       "sha256": "d66fa2237702f15e5bcce62cfb560c4ec158902dc88b5cbba20cd44b36391244",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 22545,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/images/formattable.png",
       "sha256": "567603a47ed3618f61c62f995255fe66ba248a8e2f65d8122df0534bf403990b",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 28941,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/images/formattable2013.png",
       "sha256": "67f704851f58c87b8b1f5a19ddc79e8ad4e32393be6261a8c564cafa4012dcd0",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 206393,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/images/icons.png",
       "sha256": "4251a7257ec8471b402fb33ccff9d4943befd76aff7862bea329bbc594219cf5",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1995,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/images/initEln.png",
       "sha256": "9cd70bf55e5809d03ad67dc339f4d768e5d944cef7450280d089c4372a5eb062",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1546,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/images/initialization.png",
       "sha256": "4140e0d520e400997666537cccce1c9dad03cfc07d0503fbbef5d2d55af02b00",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1307,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/images/initializationdata.png",
       "sha256": "817d216ca687a4b6c0fdd0f22f68052232ee166e29e2212cb8d94d0e1c3f072a",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 749,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/images/leftArrow.jpg",
       "sha256": "8b553eb4b5f60232a1a1c6e000e61b7a4a4303225337ac2f8bd0efe2430e9f71",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 630,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/images/leftArrow.png",
       "sha256": "71e786496072a6f38e45eec5c310870d87139a588c53fc8242c58ee3a4bd18f2",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1402,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/images/lockcells.png",
       "sha256": "0ba18ad8b66bdc0dafeac3ed6ec5a609ace95d430b3e77a0e7813663c279e944",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 7751,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/images/messagebox.png",
       "sha256": "57904d6c1ed315828ad301ac43225c0b6371a23f5a5a19e4dbc31ca2806c26df",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1786,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/images/modifyrecord.png",
       "sha256": "0dcfd9c4a26e2beb951c8aabdbbf4bfec08cc46adf55c4a4b71de64b5e75dccf",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 242,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/images/paste_all.png",
       "sha256": "9031a904aee9d2727d593bed8919b9e051a78b6fbad200b5299fb89476f6c123",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 339,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/images/paste_value.png",
       "sha256": "8f46374e2b2300f82f31e44ae43964d5b9a929bdfb9b14229a6b3477635c1ec7",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 701,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/images/placeholder.gif",
       "sha256": "7c6380e9985c8e4982f41f8dba64d6b1c4a7997d0aa635d9f4bb7643ab815248",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1220,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/images/preview.png",
       "sha256": "300d57e10bbc6e5b185b7d4fc9ac9536abbb6ae97daa0a0199bb87ba5701bfc2",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1388,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/images/protectsheet.png",
       "sha256": "623de579be8c90d080bdae948d19810add9bf931d446e4d92449a49612abcfb4",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 556,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/images/psate_format.png",
       "sha256": "d5bec7d5ba94cd4197c96dc34047c9e8138a81c1de0cbed78eebd44ee22bed09",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 371,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/images/psate_formula.png",
       "sha256": "131cd475f4e40e2bb4f1f16cddfd5ec0522b3859f70e4a3828960cc3da3f7425",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 359,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/images/redo.png",
       "sha256": "d5517ea7902be73a8e1e43df82e1cc5a49bd4462434eb0ad88f3b56be9b07d9b",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 858,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/images/reload.png",
       "sha256": "7e7eb579afd19bac27a2a041860ba4a9dbab580c02732d316b33abbe3368055e",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 282,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/images/retract.png",
       "sha256": "1f1f5dd471ca79562d951db0374353b940a53da5f3b16d18040019721515ab7b",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 750,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/images/rightArrow.jpg",
       "sha256": "b8262d8cb1992f9b98d585ea864c7c824c610c7e2c705b4bc389e426427026d5",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 724,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/images/rightArrow.png",
       "sha256": "61b41ecad2d3ef0d0d4110e6ae83a9e3bd7b83fdc400dd06803f6aa36889d144",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1526,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/images/save.png",
       "sha256": "67d17e14e39ece09f1ffc96887663ab2a078e58404a71946058f536494c9fbbf",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1413,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/images/saveleave.png",
       "sha256": "5735e389d99da0f47db032c3a735f8201855e7fb96ee3476e304758ff6ee78dd",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 333,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/images/series-chart-type-selected.png",
       "sha256": "81e1e9138c8d3cba5e9ab49e464287677842db77401058cc35d8129c67f0c71d",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1227,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/images/showprintline.png",
       "sha256": "df1007a32ad7608e0b5b1e007efeaafc6f774b824c2af160436c5cad95fbd99a",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 7708,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/images/slicer2013.png",
       "sha256": "d3fbc61b96b75f9b25b95e4eff5968cc9d88cc685da23ddd603e5443e495f1ef",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 138,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/images/slicer_height.png",
       "sha256": "88e35dde0a24e5f5ffaf9175e5e85e8e66a943a9d08d166238a86ec4c05cc0a1",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 138,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/images/slicer_setting.png",
       "sha256": "6d56898e52a7da2795331324e2f5f134da2457d38c663dd7c9131125dad63241",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 144,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/images/slicer_width.png",
       "sha256": "3ce91699b7779e37feae672b776fbf1ba9c0ab3e324a08cd5e2d882185ec8ba8",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 133,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/images/splitter.png",
       "sha256": "7afce87d5912a808ae9116fc2b7996e2cd967d6af4298d4335542feca5b86bb5",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 323,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/images/subcornermark.png",
       "sha256": "8111e6f7e8d6e0a405a3c0afd76bec15e9ff82846d8440d2edf009e54442d5e7",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 317,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/images/supcornermark.png",
       "sha256": "2398859c7791838a771e9a900e040050eaa8e4a20f31d7ba69332b2345d81318",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1068,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/images/template.png",
       "sha256": "242b690ebb7b2ae1a6b280e5b586e05b853bcabe96923f0223abcad5deb17726",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 169733,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/images/templates.png",
       "sha256": "dd27480e9030e9824b95a6a03ca98af6b3a3781989f71ff3b618cea1c7392b93",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 3640,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/images/time-icon.svg",
       "sha256": "19e7f18ab157f35d375126e9624e3f11b1a7f3ec7a8ba61983e1ba3a95ec2961",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 252,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/images/ui-bg_glass_75_dadada_1x400.png",
       "sha256": "13505ba177d440f5d231248afc5d38069a4804939e54c617a1a9bd476d63ee1c",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 10092,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/images/ui-icons_000000_240x112.png",
       "sha256": "6a858e1c5db44e0c7882b44832f3f9c45af573b7adfbd5d58bb646b102d297fa",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 344,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/images/undo.png",
       "sha256": "464470e425168b142d939862d6123546b6b87ab4a6ab463675686fc70b0d78b6",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1498,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/images/uploadPdf.png",
       "sha256": "d9010654082cbf950355227ee606f4a9f5b6a0526106c7c288ec7e3ebaff4e37",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 273,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/index.html",
       "sha256": "f4b3c72358a7d5c2bf9ae8a2fa978dd7e53b5e304bbc34c4c6193110790e079c",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 198184,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/index/bigDecimal.js",
       "sha256": "78dbaa55a5bdc9551a77a4dd1d02c71137f27099c754e4ac0babed379678e11b",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 47214,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/index/dateTime/gcui.css",
       "sha256": "5be641fd97d057b6c9de67273cf6f0bf345757771bf3e85ab9331dc2693b7994",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1593268,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/index/font/calibri.ttf",
       "sha256": "f79071c0adb962aeff8aabb1027da58c20432c71a57ca7f8564246130a84913b",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 3996872,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/index/font/simfang.ttf",
       "sha256": "fef7cf991b458cabd184b73378918d9d15429010e1d6c804f08d394395c3c3b4",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 9751960,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/index/font/simhei.ttf",
       "sha256": "336a838f4a78e150826be608dae69de59d50948c3d2b71760e096ae764154bdc",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 4135804,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/index/font/simkai.ttf",
       "sha256": "99092cbb0df301625f46509e85854db8685556551742097ab3fbbc2e2ca0778b",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 9223160,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/index/font/simli.ttf",
       "sha256": "e5a3a1e2e2cb6fee66d1e7f821b5c04f3ad7792f1e5b3cac545c2e52173e908d",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 13976020,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/index/font/simsun-bold.ttf",
       "sha256": "41f06bcda3f55b20349b2f395c5a99a443164cc677d9b0a5b376a3d21f45e7db",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 10499104,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/index/font/simsun.ttf",
       "sha256": "ca4da082cd970f0c8abaa79f213ddcbc475f7b5afabcb81b385998f9ebfbb53f",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 7308,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/index/font/sunway-font.ttf",
       "sha256": "3ef46028528fc38f8fdc6b5e7c830d035ddfcfe9115afed44a5db7c53ca4953f",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1195688,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/index/font/times.ttf",
       "sha256": "2cff2a03d8034801979dd6d16f09b9a825c3d710fcf068f2ebfbf0e1425c87cf",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1175904,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/index/font/timesbd.ttf",
       "sha256": "621b4a765fef5d255d19530f4bf936104c6519f2e232a0eef1923474e5b9cf22",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 881860,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/index/font/timesbi.ttf",
       "sha256": "2852329a38acf9252504669d9c23d5e88366cf77e8209d508f5e7198639648ea",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 940288,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/index/font/timesi.ttf",
       "sha256": "3a1c2bc8528bfa432e0414d4ec69bf5813563c474e16a9ad0f57ca262f8d24a2",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 2140,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/index/index.css",
       "sha256": "111a47ed3229a6cbecf62a44894faebc677fd9c7af2999f0d86e6fe85c592881",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 700,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/index/index.html",
       "sha256": "af0024623de1af65b0b6e2a7d17e768e47f7f7b40a64517da9c615486278454f",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 3969,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/index/index.iife.js",
       "sha256": "a5419944e67bfa766f286ff87ecc6fb4c6aea07ac71eac4adcc7f2f931f12f4e",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 8206,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/index/index.js",
       "sha256": "97aea70b950ee7684e7a148fa13fca627897e4d844f7d36c57443464c7175e42",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 359,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/index/logo.png",
       "sha256": "afdef7c6b7151cb42262664861cd8dc0b88aa530a63c2383dd9c21180efe8527",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 45987,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/index/pako.min.js",
       "sha256": "988778d9429a189cabe5ac0e22ff0ecb9c025973ddbe9cd516b9e9c83c79ad0f",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 460,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/index/showDataSource/base.js",
       "sha256": "44265ec1a7eed8928ab217cdabed291f9cf0a41ec08c502c570cede66728210f",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 804,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/index/showDataSource/dataSource.js",
       "sha256": "de167b4b33e0007df2e8d92cea3b823aab8a3808b8d7e06c1dab9746bbbe7e6c",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 857,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/index/showDataSource/showBindDataSource.html",
       "sha256": "ab0d773fb81935c1f4092a361ca2ea78900de711ed0e936364fd20f352643e5a",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 197797,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/index/spreadjs-sunway.js",
       "sha256": "ec14b52652aecda947d2648865421f99b18958e21eae185748630332a1622d96",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 2993,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/lib/FileSaver.min.js",
       "sha256": "977991a3f41397b03f2dbdb4aac976ccab49a0e1e4bea6ffd4f000b87e4d75fb",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 68954,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/lib/bootstrap.min.js",
       "sha256": "defc39740ac1859d8e2785ed473208409627e87addd5f78f2deaacb93a12d51d",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 134078,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/lib/css/bootstrap.min.css",
       "sha256": "990109e2a180003f5aecd2acb57ef5c1544a400627bb2ba25c12cfa5c5199c96",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 47311,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/lib/gcui.css",
       "sha256": "d1ed5ec994cf9a5b580f18dd76f9848fa81c6d4c4211ec676c6a8a650ae7cdaa",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 242915,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/lib/jquery-2.0.2.js",
       "sha256": "d2ed0720108a75db0d53248ba8e36332658064c4189714d16c0f117efb42016d",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 83501,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/lib/jquery-2.0.2.min.js",
       "sha256": "4d9586a075f082a04fd40178499c472012b351db4c1a4d210907a0891f7d8ad9",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1738,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/lib/jquery-ui/css/smoothness/images/animated-overlay.gif",
       "sha256": "c7bcc76fb23c0430b36ec448eb79f8bc34129dae95da10f3c14ed0eacdf2f1b9",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 212,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/lib/jquery-ui/css/smoothness/images/ui-bg_flat_0_aaaaaa_40x100.png",
       "sha256": "46b8eebfda135c893133f9df8b277cec7a2d6f6d4a01f1377bc39da03e0ab2d1",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 208,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/lib/jquery-ui/css/smoothness/images/ui-bg_flat_75_ffffff_40x100.png",
       "sha256": "1e0ff4b2d948e715b42b6dd67bfb592c383fafb316260d4d34beb7e5d2536905",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 335,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/lib/jquery-ui/css/smoothness/images/ui-bg_glass_55_fbf9ee_1x400.png",
       "sha256": "43ce7db9f4a9c0a0f2abd8b3bc94ac86b69a441a76de71b5751a003055aa5d79",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 207,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/lib/jquery-ui/css/smoothness/images/ui-bg_glass_65_ffffff_1x400.png",
       "sha256": "94f56fca9c9f3378cfd718c8d0a82fc2311952d0302f77b54aea69f9bb699b17",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 252,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/lib/jquery-ui/css/smoothness/images/ui-bg_glass_75_dadada_1x400.png",
       "sha256": "13505ba177d440f5d231248afc5d38069a4804939e54c617a1a9bd476d63ee1c",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 252,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/lib/jquery-ui/css/smoothness/images/ui-bg_glass_75_e6e6e6_1x400.png",
       "sha256": "a4386b0cc7599af838605978f8b0dc6153d2a2454c866444f6c46c011347fb45",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 332,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/lib/jquery-ui/css/smoothness/images/ui-bg_glass_95_fef1ec_1x400.png",
       "sha256": "e24f60fe1bbfda4b74959100ef85d0b9cbe7db75a28897710f1435fbd0b90bc6",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 280,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/lib/jquery-ui/css/smoothness/images/ui-bg_highlight-soft_75_cccccc_1x100.png",
       "sha256": "689b1e154959b1056e02218ab16c47bf48715ee50259c34af953a737dc1da98a",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 6922,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/lib/jquery-ui/css/smoothness/images/ui-icons_222222_256x240.png",
       "sha256": "3b1ac036763d3a59c88578486ae698d22a37dd2d46a553485e1eabb9fe255b3f",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 4549,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/lib/jquery-ui/css/smoothness/images/ui-icons_2e83ff_256x240.png",
       "sha256": "3d3e274632c78c97b550bb7d2291462e2584f523a15cdc1b9535e7bfabd0ce30",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 6992,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/lib/jquery-ui/css/smoothness/images/ui-icons_454545_256x240.png",
       "sha256": "a8d28e2d83a807b2b86ed2a02e31086f6c0718dfa96e0ba6a4577b657f69cc34",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 6999,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/lib/jquery-ui/css/smoothness/images/ui-icons_888888_256x240.png",
       "sha256": "e2d1b1c7c51f8c30431327fe43029d62b6d5dfd2d95bbd6b8b9929c178dba4bf",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 4549,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/lib/jquery-ui/css/smoothness/images/ui-icons_cd0a0a_256x240.png",
       "sha256": "003822ed55ad9191e071798370e41363a617b138eae18623ad9d864ca5f357ce",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 32046,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/lib/jquery-ui/css/smoothness/jquery-ui-1.10.3.custom.css",
       "sha256": "801337e37f4322d391adf580397ecdedf070600539cf7e54ac800abcba16f5fa",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 26939,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/lib/jquery-ui/css/smoothness/jquery-ui-1.10.3.custom.min.css",
       "sha256": "924bebbd6d7c29a399c8c2b9e2c4bcf7d094b3ae9ac584084c972fa0a79501c8",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 435811,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/lib/jquery-ui/js/jquery-ui-1.10.3.custom.js",
       "sha256": "e725a6f5f27cdf36ef5945e518944b53991ef683fdc440c6a56c3eb840499f35",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 228137,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/lib/jquery-ui/js/jquery-ui-1.10.3.custom.min.js",
       "sha256": "3ef37811d7088d0499ecda5dbc12105cf684630f76b3cd7864091e527ac22715",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 183211,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/lib/knockout-2.3.0.js",
       "sha256": "d212e242f579a5434f510785bbdae0fa57e56bda5308fa86dff52e7280aa53d1",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 42732,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/lib/knockout-2.3.0.min.js",
       "sha256": "555644873432878f33e8213b2dac238b2ef966c573c3f5ddcdc04b94d4bca67f",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 769848,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/lib/spread/gc.spread.excelio.11.1.4.min.js",
       "sha256": "d426dd05fd76ba7c5e0cec58334866383bda1df018ddde0f8c8ab7a6201b081e",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1116760,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/lib/spread/gc.spread.excelio.14.0.10.min.js",
       "sha256": "f93a651829667c35d1693987843ae4e065cff9b0b6385c9e26a95e94d767d8d1",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1141438,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/lib/spread/gc.spread.excelio.14.1.3.min.js",
       "sha256": "09a69e3c307c3c56743d1bc686d3763ce3738150919bb1a8a66d55a452ad3a03",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1191515,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/lib/spread/gc.spread.excelio.16.2.2.min.js",
       "sha256": "7b7a1d2dfb8b13c670fa2c7c02f0f02ece84bdb6c6973e399382acd35fc7fa2c",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 601,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/lib/zTreeStyle/css/img/diy/1_close.png",
       "sha256": "677285d1c168b3b83254d84bbca15b5dc38385c52eabd6ccd003eff826bfc8b4",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 580,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/lib/zTreeStyle/css/img/diy/1_open.png",
       "sha256": "7a73b218961da8c19c9bfe482b06ab9a8aee540968e425df18483c91cbfd5e19",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 570,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/lib/zTreeStyle/css/img/diy/2.png",
       "sha256": "28b91cb9e74956d6ab6a2184afcbb2dfe72b7e63012140a1a7123e889f80a580",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 762,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/lib/zTreeStyle/css/img/diy/3.png",
       "sha256": "a4ebca91457f14fcee3c572808c4fbc733e4d097cf64bb7e193d94ed6e34d3aa",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 399,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/lib/zTreeStyle/css/img/diy/4.png",
       "sha256": "e27bf21a7727b4ed8780b743a7ef0021b5c378ae3c6f1e5d920cbcb8f13aeb7f",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 710,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/lib/zTreeStyle/css/img/diy/5.png",
       "sha256": "1ff3461637d84d6052b197f5496d833a2a5831435f4a59e490735160869a4b8d",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 432,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/lib/zTreeStyle/css/img/diy/6.png",
       "sha256": "a79c0efbe0f341325ddff1590a91f932a9a8d8392a158aa08ab0801618b10310",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 534,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/lib/zTreeStyle/css/img/diy/7.png",
       "sha256": "c47eb3b71e65a281be253559b55c3d885a976e77f1d7757c9bf98583d351078b",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 529,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/lib/zTreeStyle/css/img/diy/8.png",
       "sha256": "c3854d2adc094760108453dbec7c3fcb2b315e5cc46da9bfbab2901882c358a5",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 467,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/lib/zTreeStyle/css/img/diy/9.png",
       "sha256": "1be887e7c0ca0a7b717f83188f8a4e1f57157baa1a2b77b676ecb4b685d6893b",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 45,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/lib/zTreeStyle/css/img/line_conn.gif",
       "sha256": "b7d92aaf29b3e825c5965cbf8d670f066739c5e146e58530da208424692e8881",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 381,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/lib/zTreeStyle/css/img/loading.gif",
       "sha256": "f627b902dbb57bcca1ab7ccba32a015c45d2c84cae719ca5626993d7ced3c428",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 5564,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/lib/zTreeStyle/css/img/zTreeStandard.gif",
       "sha256": "b539bebb12163e45ffbc43e1fc90e5efaaeb123ad256df360cf56e27eb315ee2",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 11173,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/lib/zTreeStyle/css/img/zTreeStandard.png",
       "sha256": "b4c2be6c3138cbd3e1a53c589befdec96cc37001af1110a1806e3e55f9c8b5e4",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 6220,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/lib/zTreeStyle/css/zTreeStyle.css",
       "sha256": "ced6d4146ea8163d534b71192fb7c58026a539b14e648181e2c8abf57b2a4cee",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 60718,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/lib/zTreeStyle/js/jquery.ztree.all-3.5.min.js",
       "sha256": "1a71f66485b2ffa6745d8bedaa5a73c86dc0246fa35a35c90247c44671bbccfb",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 59842,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/resources/templates/Academic weekly lesson plan.ssjson",
       "sha256": "1718da77e2da04ebce8d0375b5e1aa73a3bd12290cfde4871b40fda9ba8b3eb5",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 176041,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/resources/templates/Babysitter checklist with schedule.ssjson",
       "sha256": "b721d8e977f58653ea73af14fb9ac7e94c1753097663c256bc3e0ca54f1992d6",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 183845,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/resources/templates/Car repair tracker.ssjson",
       "sha256": "dd1d834a543138055fb6bf8efeaf73014fb14d3ca0e14fae3c845559ea439de6",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 87344,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/resources/templates/Expense report.ssjson",
       "sha256": "9e621a781fe36920df3448808de0fe70c1e420f94113cec9f4a3342bb170a5e6",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 135051,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/resources/templates/Fitness plan.ssjson",
       "sha256": "3d9a27d37f0ab6bb9b143ee947f5a62d1c3f81db33d787c996a5bc9acef16e0f",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 68865,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/resources/templates/Holiday gift list.ssjson",
       "sha256": "f04036c335a4274f6cb3b89a12b895ac79090e879ae42b4ceee846bd8b3cd439",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 486867,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/resources/templates/Homework schedule.ssjson",
       "sha256": "f7a06ab60472ee028a2e23cf3330c13e37f1a52713a04d46339537f45998b5a2",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1605884,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/resources/templates/Photo calendar (Mon).ssjson",
       "sha256": "a1788fd2827b72d6633e5b2688def518f8b06fc79e5e135401117a388b8ec7ba",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 767,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/resources/templates/templatesconfig.js",
       "sha256": "d4c2b93a33ec009a3eb119610a597cddf82cecff4913c8b0fb8f3289b9ddaa77",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 68210,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/ribbon/ribbon.css",
       "sha256": "2b280f6615d2ec04d1bec2c12506774ad5164bb391d183ff0c1de51f44c78f6d",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 203790,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/ribbon/ribbon.html",
       "sha256": "a1e550e1f8bb420fd2b996469d9e3348d1ed54b7287b95be85afe2677b8bc3a7",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 283825,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/ribbon/ribbon.js",
       "sha256": "d69f5419144f7ea5f2a714fa625682181f43de4e940d3777e412fb0046d368cf",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 711,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/special-character-picker/picker.css",
       "sha256": "74a10d8181ae4d272ddbbd89c3addbc08be07322c5ff7b4618121f539a9937d4",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 4163,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/special-character-picker/picker.js",
       "sha256": "a8a734acf0c21e039841aab106816bcbc395fc95366aa0f00b054d07f7beebb3",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 31700,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/spreadWrapper/actions.js",
       "sha256": "f3fa7e9790ec1c10184265627c1a1fba9a010eff109f0e6bf6579fe10d51ebd8",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 2748,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/spreadWrapper/ceUtility.js",
       "sha256": "1d23cde398898693045ed9109df36c49a536a8a2c8c83faf4906a166a0187124",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 320645,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/spreadWrapper/spreadActions.js",
       "sha256": "1205220b58887d63b417417f66cf2fdf30aa1cb30627d25d60ac3fb5ed3430bf",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 9473,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/spreadWrapper/spreadMeta.js",
       "sha256": "0540ad251bf9d827012c2484a5ed367ce574667c4e0a07ac99fe6ecd5e2738bc",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1193,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/spreadWrapper/spreadUtility.js",
       "sha256": "7995d0b4900b876fc2275af61b4607e9e4a8736d7cdd43cacc6ca71b37fa9aed",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 531,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/spreadWrapper/spreadWrapper.css",
       "sha256": "1456f22891a70a4bb323feb88caa396feb9895d3e5b5daa61d29b00d38cbb5e7",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 497,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/spreadWrapper/spreadWrapper.html",
       "sha256": "ce7aea062a21ca98ab9dec417182e17698e76a0de464ec2e2e259b133d34a5b3",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 7115,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/spreadWrapper/spreadWrapper.js",
       "sha256": "a39bc1ccd8f4cb2e6145f4e662093a297648df677f8217810fa362019709c6ca",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1487,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/statusBar/statusBar.css",
       "sha256": "93816698caadcb6bfdeeb9570b3622aef9978c6657537d2e8f9fa3bc475db883",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 827,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/statusBar/statusBar.html",
       "sha256": "9b2150d53c02f2bc349e8055223a06f20950a65e6c45c9e988cf1cf687269337",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 718,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/statusBar/statusBar.js",
       "sha256": "5ca5177276cec3ed299837ae84e73a39b84b3ecd6ac074fadbc0051748835c3f",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 165228,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/sunway-compress/sunway-compress.css",
       "sha256": "3de9a5e31f4e84f83590c1aa00f590633a7505fc8b590e0e4d97473644da85b7",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 2745766,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/sunway-compress/sunway-compress.js",
       "sha256": "2a4716c785a0d95d1ad1cc40742469232384941a09aac5d28980abb0d0770982",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 212,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/web.config",
       "sha256": "394e91a2e5de920705966a2158649a5f629f41858facfd75e8b4c90025bb76a2",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 2493,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/widgets/borderpicker/borderpicker.css",
       "sha256": "f18a9efbc5e543625bdae464e5a6a8aa9079753dddc2b8c72fa29cc72b8d7663",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 10770,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/widgets/borderpicker/borderpicker.js",
       "sha256": "9dc1fe3b465c21d2d5798bab83046f80eca5177c87ceded66e9d2f12f68ea4a9",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 3997,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/widgets/colorpicker/colorpicker.css",
       "sha256": "e9a2c985037146025388add6b7d68fbcbe54976cc0227ceca4cdc9b772dd040b",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 53009,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/widgets/colorpicker/colorpicker.js",
       "sha256": "c655ebe680589eddbb3ce0bf5a696e76e9f65c574193b5e6aa8abd855bdc59c7",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 772,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/widgets/comboframe/comboframe.css",
       "sha256": "1dacc55026d4be59cc411eb70fc9aeea6a58b43df8e8e5273ead7281697fd71b",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 2703,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/widgets/comboframe/comboframe.js",
       "sha256": "3460370c77a61aa4b2e1f89f438046bb5051227062ddecc02e8d5ebb36b0862e",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1487,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/widgets/fontpicker/fontpicker.css",
       "sha256": "52955c73b1cc727a28af0d9980a7043a130e2eb616d67b17451393a417bed4d5",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 22836,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/widgets/fontpicker/fontpicker.js",
       "sha256": "de8aa1c989ea5d510d82ac5183f4922a6eea9d6b97b23f63cc6152868ee79cb2",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 964980,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/widgets/gcui/gcui.js",
       "sha256": "6fa53543843df8796ec45c0f8d95976300392b97b9ae7abb4edf835358eee07d",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1683,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/widgets/sliderpanel/sliderpanel.css",
       "sha256": "90c17bd5c531c7f632bc0d37b4ccc566cb6d3ed303a3350ad85d2c03953664d5",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 8566,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/designer/widgets/sliderpanel/sliderpanel.js",
       "sha256": "8192d38308dca510387af1fb270c22e7d80529ac9fa09e5809ff3a41cf9f1a79",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1606399,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/scripts/gc.spread.sheets.all.11.2.6.min.js",
       "sha256": "7301dda1c448a9f5e4f3bc751361c4349d8d97028874fd941f307332ea56ac41",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 2572678,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/scripts/gc.spread.sheets.all.14.0.10.min.js",
       "sha256": "edd4369505b5ba08a88f36d173c4a5697bb0de56e30a4e2b9cd1d0e97f44bdbf",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 5022572,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/scripts/gc.spread.sheets.all.14.1.3.min.js",
       "sha256": "16d0ce5035e8143321cc5d40da3c97e30c4585405fd66dad5f6b4d71f150025a",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 3906400,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/scripts/gc.spread.sheets.all.16.2.2.min.js",
       "sha256": "828f06687365a25adf6dab773fa0658f6890f32a75510436e049f5f67319a77d",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 159562,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/scripts/modules/gc.spread.calcengine.11.2.6.min.js",
       "sha256": "a1e848993ece74f98c51ca83e225455ac4d83ed3ff364595c361c6ffb627aeeb",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 92270,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/scripts/modules/gc.spread.calcengine.advancedfunctions.11.2.6.min.js",
       "sha256": "5f81ddb830a94d56a8288834729ce830d9f780abda7511417b6283cdc57dcdc1",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 33358,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/scripts/modules/gc.spread.calcengine.basicfunctions.11.2.6.min.js",
       "sha256": "e4d6f1d3dd144b65155e30b222bc6daa89f71cb4b65a6aa7dafe4cf2db1bf16c",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 122874,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/scripts/modules/gc.spread.common.11.2.6.min.js",
       "sha256": "76eca1f5fd20b9f0ee9942d6c40fa4a5b9ca0167d5e25cb34a65aa07886abf24",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 14736,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/scripts/modules/gc.spread.sheets.bindings.11.2.6.min.js",
       "sha256": "7ae7b08ba20e93c6f2af039379d15b9221546eb756638d41ffc145967da691b8",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 30148,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/scripts/modules/gc.spread.sheets.celltypes.11.2.6.min.js",
       "sha256": "84f1c81770ad0be3ee02b4c59493fb1423af29a74bd4b6c49df1794460c5347b",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 43280,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/scripts/modules/gc.spread.sheets.comments.11.2.6.min.js",
       "sha256": "1da0ebc8459eb793d98dcb8cb286f6b3c164d4cc9f285db157de149bd760caf8",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 74089,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/scripts/modules/gc.spread.sheets.conditionalformatting.11.2.6.min.js",
       "sha256": "feb03724f42d5dd1e35c32ec4df2f24d3e5a3f2040816030a6563c98431b5a3b",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 30222,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/scripts/modules/gc.spread.sheets.contextmenu.11.2.6.min.js",
       "sha256": "0ca5e1d9fc718ddfb3e56b3e5bedaa5a5702223a6d508095aaf33f79c8db8f4c",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 515483,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/scripts/modules/gc.spread.sheets.core.11.2.6.min.js",
       "sha256": "5f3375ba7c73dd2fe59bd9abeebc64ed1ec9f7a1a9a3e9a694a4ed8f078f376f",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 22430,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/scripts/modules/gc.spread.sheets.datavalidation.11.2.6.min.js",
       "sha256": "347d0a5fe5cdf6f23c8d95a17aaecdf9696cf043edfe5a8510a340e282a7a832",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 5446,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/scripts/modules/gc.spread.sheets.dragmerge.11.2.6.min.js",
       "sha256": "1597d107260907d2cc8ec25356cfc3475e2dab75e6857ecbfefa03b66c2c31c2",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 45264,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/scripts/modules/gc.spread.sheets.fill.11.2.6.min.js",
       "sha256": "fd0bb2e5418385eb7c2dc5d5886e13676a1317b2f4b246b5a67ed1f2db1f0328",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 129543,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/scripts/modules/gc.spread.sheets.filter.11.2.6.min.js",
       "sha256": "8247fd3383ef0eb3e270226557fbf5ceeba126d409f476e3befdf08e439b7989",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 45287,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/scripts/modules/gc.spread.sheets.floatingobjects.11.2.6.min.js",
       "sha256": "61115f5717ad7c51bad2542054559a67132e1d9d12b25a6f61c2e74dc94956c4",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 45172,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/scripts/modules/gc.spread.sheets.formulatextbox.11.2.6.min.js",
       "sha256": "2310513acb35d9fc6a35997bfdeb05ba1372eba050c92b6b727ad94b9c5d6d99",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 14787,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/scripts/modules/gc.spread.sheets.outlinecolumn.11.2.6.min.js",
       "sha256": "822ce18954a63d60c2d84d4da52035de3a47ae9cd6e8dff50927de162937f17b",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 26256,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/scripts/modules/gc.spread.sheets.outlines.11.2.6.min.js",
       "sha256": "58a5ecb380d4f81c55e384544e81e8c8d5f519952dd1ca316214a8cf7ba6171e",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 3087,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/scripts/modules/gc.spread.sheets.search.11.2.6.min.js",
       "sha256": "038c7cdb56853b4e86a6820f60b38b583a94e83e2517a53da5e78313628685a8",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 39952,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/scripts/modules/gc.spread.sheets.slicers.11.2.6.min.js",
       "sha256": "91143036efe97ce068bb022e81c9d3f84fc9a0e76105f4b03092d1f6b702f001",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 33566,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/scripts/modules/gc.spread.sheets.sparklines.11.2.6.min.js",
       "sha256": "7c82780322c68ac402315a7f28d6f58eb88debf7817b4a326ec930d74baacb51",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 39738,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/scripts/modules/gc.spread.sheets.tables.11.2.6.min.js",
       "sha256": "0f60ef2c46010c523a665f1f0e5c504f92f8a98fb0c5403bb2672f1656b3db83",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 52968,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/scripts/modules/gc.spread.sheets.touch.11.2.6.min.js",
       "sha256": "e776a9c5d26d782ed873653c1836d8b2cf09227625afa83ba711059b8e479763",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 859559,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/scripts/plugins/gc.spread.sheets.charts.11.2.6.min.js",
       "sha256": "399541115623a89fca681d1facd3e44ed0830cfd00dba9a42b3122a4f082e59c",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 2215337,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/scripts/plugins/gc.spread.sheets.charts.14.0.10.min.js",
       "sha256": "b78b3b281c26ae79a4f92a5b56d906a96150aa577495a15057d40ec3f7f392d3",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 2306849,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/scripts/plugins/gc.spread.sheets.charts.14.1.3.min.js",
       "sha256": "915c41cab42a8ed89ad46c0151416424cd4db8588f9adf848835dc4b4ddb97d9",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 2302358,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/scripts/plugins/gc.spread.sheets.charts.16.2.2.min.js",
       "sha256": "3fc8bd91a302ed30a1b5dabd5d253e4629eb87997a8a5bd5572283e732f8532b",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1361719,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/scripts/plugins/gc.spread.sheets.pdf.11.2.6.min.js",
       "sha256": "ff18eaae15c1ca9f665d6e2699760d8be16f62a7bbe6ca6274b7043b85803b5a",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1348102,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/scripts/plugins/gc.spread.sheets.pdf.14.0.10.min.js",
       "sha256": "ff178b96434ce8197b792698cd333d8bdb21aa39cac9aed2ffa1696e98f5376b",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 2018468,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/scripts/plugins/gc.spread.sheets.pdf.14.1.3.min.js",
       "sha256": "a363402c10ebce9bcf2814dc81c4195a3e02e09de0af6c853f5e643bc13abc6c",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 2024395,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/scripts/plugins/gc.spread.sheets.pdf.16.2.2.min.js",
       "sha256": "a87d16198362b0270ac20a879241eae09876a7cd594f9baa7ca3b6709330a2f1",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 37856,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/scripts/plugins/gc.spread.sheets.print.11.2.6.min.js",
       "sha256": "272448c0a802ad29ffecee6f63dd85b3dca3c79e67c555c736a1df8eacf00325",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 56968,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/scripts/plugins/gc.spread.sheets.print.14.0.10.min.js",
       "sha256": "8300fb2eec07e4fc41d1ac2c312e9d76e1b9f96f384c2e13aca5febe8670cf27",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 62097,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/scripts/plugins/gc.spread.sheets.print.14.1.3.min.js",
       "sha256": "3a5f58dd8ffe99fe4acd2886fcea07280308a99e7f6b779fa6ba06065cdd0a2d",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 82375,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/scripts/plugins/gc.spread.sheets.print.16.2.2.min.js",
       "sha256": "00a843a010bea6611c0eeddf591f42882bf2f495e6b4173d8ff99ccded33a2b9",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 129221,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/scripts/resources/ja/gc.spread.sheets.resources.ja.11.2.6.min.js",
       "sha256": "80102e5f209dac602d41b19ca540fe56e5e1d232b27cfc0fff85abc92b02cd3d",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 194605,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/scripts/resources/ja/gc.spread.sheets.resources.ja.14.1.3.min.js",
       "sha256": "bffb5319f86d7f406fb29a47aca1fb3031eafd5ba284cc29bbbfca8b8860070d",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 129008,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/scripts/resources/ko/gc.spread.sheets.resources.ko.11.2.6.min.js",
       "sha256": "c55801d29d2434c956e0d9c1ba742d642d7e9447a2fe7ea50a5b7170fc836002",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 189782,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/scripts/resources/ko/gc.spread.sheets.resources.ko.14.1.3.min.js",
       "sha256": "0eef2e6cb44d27c637392808224b1370942abd4f1dfd6f1358f6445a28889a60",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 111324,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/scripts/resources/zh/gc.spread.sheets.resources.zh.11.2.6.min.js",
       "sha256": "914e9bd6bfa2b98110d6e80f81b872e0aede23dcddaa6b1cbc1458ba9fc6bba4",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 147323,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/scripts/resources/zh/gc.spread.sheets.resources.zh.14.0.10.min.js",
       "sha256": "334c4e224d767cd125e551d9670e96e9dcd32bd1dd52ff8de40e677d885fa617",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 165863,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/scripts/resources/zh/gc.spread.sheets.resources.zh.14.1.3.min.js",
       "sha256": "34a0e2c59a3cec7ea2d89630cc1038b2b4357b47d67410cec960bfaa1096b924",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 221357,
+      "compile_status": "not-applicable-resource",
       "path": "static/plugin/spread-sheets-11.2.6/scripts/resources/zh/gc.spread.sheets.resources.zh.16.2.2.min.js",
       "sha256": "9d6d9d7d7b4993b01b01c7201c4f35f50c431054e2cdc6cfe689349eeed0cdd7",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 5318,
+      "compile_status": "not-applicable-resource",
       "path": "static/report/img/baseInfo-thumbnail.svg",
       "sha256": "d8b8af945c2d96781752b0587070da1c9c11840b6c98e57267eeaa14f7234ef7",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 4413,
+      "compile_status": "not-applicable-resource",
       "path": "static/report/img/baseInfo.svg",
       "sha256": "fc82b915d46144daef9deba2985202a456438f6a1206106085bb307011c07085",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 3997,
+      "compile_status": "not-applicable-resource",
       "path": "static/report/img/baseInfoGrid-thumbnail.svg",
       "sha256": "8f42be7ca81cc5563d3e2ad15fc0f9a20414659fe1418c4006173971343344c9",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 3667,
+      "compile_status": "not-applicable-resource",
       "path": "static/report/img/baseInfoGrid.svg",
       "sha256": "93b879db8b8d4b96fb901f8f7d9bc6dbd0e830ab7f311f832df0aafed6569b00",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 3150,
+      "compile_status": "not-applicable-resource",
       "path": "static/report/img/chapter-thumbnail.svg",
       "sha256": "6dad9b2683299b1ad1f14dd59ea9133220c6ba1442f2981f96659d76ee28d240",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 3406,
+      "compile_status": "not-applicable-resource",
       "path": "static/report/img/chapter.svg",
       "sha256": "bf52f9a6dd3898dc073d2adc5531280d9813831ebf1f59d694b34631b9526ca0",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 4358,
+      "compile_status": "not-applicable-resource",
       "path": "static/report/img/chemDoodle-thumbnail.svg",
       "sha256": "76bf37e064a65f3e74f061c8157523fefa537236fb0ee85c89e3c49cb8675ece",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 5636,
+      "compile_status": "not-applicable-resource",
       "path": "static/report/img/chemDoodle.svg",
       "sha256": "184b9159c6e74941bc0abcb26b51d57cb485fa3dced6240e89b9749aa82d6f08",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 3032,
+      "compile_status": "not-applicable-resource",
       "path": "static/report/img/ckeditor-thumbnail.svg",
       "sha256": "60b720a2e1be0e00889f8bbe48a147392d69658dfa21eab760c5c3dd0614e12e",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 2673,
+      "compile_status": "not-applicable-resource",
       "path": "static/report/img/ckeditor.svg",
       "sha256": "fad9f320d15c67ade2285848448bb36dc6f45b2de457ad1d044d3ef0c3e3d0c2",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 4550,
+      "compile_status": "not-applicable-resource",
       "path": "static/report/img/diagramDraw-thumbnail.svg",
       "sha256": "d5d1d0396823060ff3bf725b934d8fa107b9de4ace297683158fceb229fd34c9",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 3431,
+      "compile_status": "not-applicable-resource",
       "path": "static/report/img/diagramDraw.svg",
       "sha256": "9f9138777d84a86a45aa562352f4df00eba457bf8d4a3c48b2d337ad8443e005",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 4356,
+      "compile_status": "not-applicable-resource",
       "path": "static/report/img/formOrQueryList-thumbnail.svg",
       "sha256": "027054fc687d74e0f546ce692c03121a7e16e731f80c16704318f2ba42b05b34",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 2793,
+      "compile_status": "not-applicable-resource",
       "path": "static/report/img/formOrQueryList.svg",
       "sha256": "d45eb887430e1eb97fb4c92fba6daadec400291d5e2b04c6d7ef5a5fa2e29e13",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 3693,
+      "compile_status": "not-applicable-resource",
       "path": "static/report/img/imgDraw-thumbnail.svg",
       "sha256": "8a3846063969d1209b4a9522eb66e5ffee579657012740808ef777577fb0b394",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 2966,
+      "compile_status": "not-applicable-resource",
       "path": "static/report/img/imgDraw.svg",
       "sha256": "163bdcf26c060a876e9adf58772aa68a1a40e613fbc8f914e56c40c75d0ef257",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 3807,
+      "compile_status": "not-applicable-resource",
       "path": "static/report/img/imgEdit-thumbnail.svg",
       "sha256": "5fcbd95d08808e05f10b7fed24bf8321e565daa48d7f8bbe48e6a0500eb905b1",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 3324,
+      "compile_status": "not-applicable-resource",
       "path": "static/report/img/imgEdit.svg",
       "sha256": "35a3fd639bdd9c6e4081e7720fb84b51637c7c4e71b8fe4b88e17457806bcd8f",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 4269,
+      "compile_status": "not-applicable-resource",
       "path": "static/report/img/imgUpload-thumbnail.svg",
       "sha256": "2576d63ec0425b4661b1d28d7f99d7bf8298c62aa9f41d24410cf5fc9f2e9b4c",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 3888,
+      "compile_status": "not-applicable-resource",
       "path": "static/report/img/imgUpload.svg",
       "sha256": "f0528cc98f6928a748fb9e226aab287a34206f136934d68afc3ee34380931047",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 2525,
+      "compile_status": "not-applicable-resource",
       "path": "static/report/img/ketcher-thumbnail.svg",
       "sha256": "153cb4f029b7572142949c116eacfdd841d96a0c2d27ac957ac15d8760521d7b",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1799,
+      "compile_status": "not-applicable-resource",
       "path": "static/report/img/ketcher.svg",
       "sha256": "dc37d3c9f290d596fb83adc21c4c3725724ee0f61f284da6602438f3d7366a49",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 3291,
+      "compile_status": "not-applicable-resource",
       "path": "static/report/img/spread-thumbnail.svg",
       "sha256": "39094a7314894002fa4e5d9b7c7ca7d0e1ee3a2449cb592aa851562458a5f426",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 2793,
+      "compile_status": "not-applicable-resource",
       "path": "static/report/img/spread.svg",
       "sha256": "d45eb887430e1eb97fb4c92fba6daadec400291d5e2b04c6d7ef5a5fa2e29e13",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 320,
+      "compile_status": "not-applicable-resource",
       "path": "templates/module/eln/eln-dses/core-eln-ds-choose-list.html",
       "sha256": "ecbbb06a1c80a08c95b2a92d9371dbb525b8f5bbef80ff6b6f31005c7dc5aadb",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 317,
+      "compile_status": "not-applicable-resource",
       "path": "templates/module/eln/eln-dses/core-eln-ds-detail.html",
       "sha256": "1a4bac09309e9ff60aae95548c03a2db9281f4e6f68260f0bd42262740f1d8b6",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 288,
+      "compile_status": "not-applicable-resource",
       "path": "templates/module/eln/eln-dses/core-eln-ds-edit-list.html",
       "sha256": "ad3796286786b2fe77da84adeb8bd6b2eb51a96f743c08b2851bf771837ba737",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 330,
+      "compile_status": "not-applicable-resource",
       "path": "templates/module/eln/eln-tmpls/core-eln-tmpl-choose-list.html",
       "sha256": "af44b60584c95f90f72ab55b3ddbfe1ba370a066471ac84cce36f970c197a17d",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 325,
+      "compile_status": "not-applicable-resource",
       "path": "templates/module/eln/eln-tmpls/core-eln-tmpl-detail.html",
       "sha256": "db65e276bdb028ff1b33febb35841e7f65ca61ef27964a932feaa046bddede0d",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 326,
+      "compile_status": "not-applicable-resource",
       "path": "templates/module/eln/eln-tmpls/core-eln-tmpl-edit-list.html",
       "sha256": "fd562de730ba5c136a0f6918ebe96d34e0c5838a7c8e634e58253d38134dce7a",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 325,
+      "compile_status": "not-applicable-resource",
       "path": "templates/module/eln/eln-tmpls/core-eln-tmpl-test.html",
       "sha256": "7d54ad9d3d55e518245a820f73dd884aef79aa539a78b21786be9d2ac6916fa2",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 559,
+      "compile_status": "not-applicable-resource",
       "path": "templates/module/eln/elns/bind-data-source.html",
       "sha256": "0efa64ec1d03f2a4d68330414ca0557649e16dbc804ba71ba856b050263baef8",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 8340,
+      "compile_status": "not-applicable-resource",
       "path": "templates/module/eln/elns/core-eln-spreadjs-web-designer-en.html",
       "sha256": "45e1c88856ee7e0870856c04ce9e20fceba93afdf30de879f80dbe69690a4def",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 8492,
+      "compile_status": "not-applicable-resource",
       "path": "templates/module/eln/elns/core-eln-spreadjs-web-designer.html",
       "sha256": "9103bedc16f2d75147c9333540cb3be5ee7298bdc2575a5a03b2a5e721111171",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 320,
+      "compile_status": "not-applicable-resource",
       "path": "templates/module/les/les-dses/core-les-ds-choose-list.html",
       "sha256": "da2ad5ebf535b6d455d39c35f05feabe0dc84162743c58b363a4b1d884885ede",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 315,
+      "compile_status": "not-applicable-resource",
       "path": "templates/module/les/les-dses/core-les-ds-detail.html",
       "sha256": "d2c8a20defcaae35ea4744471eade3e78fada977de3edace0ef0d60d87ae083f",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 286,
+      "compile_status": "not-applicable-resource",
       "path": "templates/module/les/les-dses/core-les-ds-edit-list.html",
       "sha256": "802f6539a6b153d8fbc777d84aed2d3c06701cc80d9d61232c56ecae65291a15",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 305,
+      "compile_status": "not-applicable-resource",
       "path": "templates/module/les/les-templates/core-les-template-audit-list.html",
       "sha256": "812eda84a8f647ad2e2387b9a36561136a9f9b7e5e6f90877591f96b4aee6f1b",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 2142,
+      "compile_status": "not-applicable-resource",
       "path": "templates/module/les/les-templates/core-les-template-chem-doodle-web.html",
       "sha256": "5c4afc5ecf47f33d06ca3a486b130412f8aa23f83ed4702940b45d2ae69ff6ef",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 307,
+      "compile_status": "not-applicable-resource",
       "path": "templates/module/les/les-templates/core-les-template-choose-list.html",
       "sha256": "d9096ca383d853ea018d3acf3a634a4320c6d32aaecddc49816be98225b27954",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 517,
+      "compile_status": "not-applicable-resource",
       "path": "templates/module/les/les-templates/core-les-template-detail.html",
       "sha256": "8d7ab74e90b5db4be8bc25d030da1ca1de91bcefc53202a2dd58209cbfa89a94",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 303,
+      "compile_status": "not-applicable-resource",
       "path": "templates/module/les/les-templates/core-les-template-edit-list.html",
       "sha256": "793a84be1ff8fb67bc00f2de6a944513d79d33d1d0e14c7625a810c90148e86d",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 691,
+      "compile_status": "not-applicable-resource",
       "path": "templates/module/les/les-templates/core-les-template-results-weight.html",
       "sha256": "5b8049f01391ed7d2571545760fd959696bc6379f07e65136349ce724d755b5d",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1404,
+      "compile_status": "not-applicable-resource",
       "path": "templates/module/les/les-templates/core-les-template-spread-sheet.html",
       "sha256": "ff82becf279dca447bf17f810b92615384194d22db09548a337a8c295c4a8029",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 407,
+      "compile_status": "not-applicable-resource",
       "path": "templates/module/les/les-templates/core-les-template-weighing-edit-list.html",
       "sha256": "60f6626fab4b3250ff1e9b595b434b237a81b3983624777150a70b75dcfe8a5d",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 322,
+      "compile_status": "not-applicable-resource",
       "path": "templates/module/office/dses/core-office-ds-detail.html",
       "sha256": "5023f20bea0eb9dfc59dedd0509717187a3177665057e0b33fb531257034e0ef",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 293,
+      "compile_status": "not-applicable-resource",
       "path": "templates/module/office/dses/core-office-ds-edit-list.html",
       "sha256": "29a1c5d5a292aea1a8f35381aed31765d1e0a83a177e96c4268cd73fcff669ae",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 337,
+      "compile_status": "not-applicable-resource",
       "path": "templates/module/office/tmpls/core-office-tmpl-choose-list.html",
       "sha256": "2faea68a57a79c0733546a31ed6a2d58a17fbe3f4f24f3edecf908769379c234",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 333,
+      "compile_status": "not-applicable-resource",
       "path": "templates/module/office/tmpls/core-office-tmpl-edit-list.html",
       "sha256": "5a3f4a589dfacbf0cc2a1108b4ebf490dd474f122bd80ecb16a2fef28226ffaa",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 332,
+      "compile_status": "not-applicable-resource",
       "path": "templates/module/office/tmpls/core-office-tmpl-test.html",
       "sha256": "990c55fc21b8f43f0281a261a3e5085cd683e92e3393ebe05e431e01d2418883",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 4963,
+      "compile_status": "not-applicable-resource",
       "path": "templates/module/pageoffice/pageOffice.html",
       "sha256": "dbffe380f1151eb67e0f8af02154a54aa3e450af50bd250c5edfb48e403d1ad8",
       "source_jar": "gikam-core-report-interface-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 396,
+      "compile_status": "not-applicable-resource",
       "destination_sha256": "23f4aac34e781a2cd59eff6caf8054ab040ced3ba7e5a25b970ee1a8d3a6cd8e",
       "path": "banner.txt",
       "sha256": "23f4aac34e781a2cd59eff6caf8054ab040ced3ba7e5a25b970ee1a8d3a6cd8e",
@@ -2277,636 +2642,742 @@
     },
     {
       "bytes": 1068,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/eln/persistent/mapper/conf/core-eln-at-record-mysql-mapper.xml",
       "sha256": "0975cc8d557bfd977cc065a1e3c93a6dfb6aa625ce6c6797c161016cc3e65045",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1068,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/eln/persistent/mapper/conf/core-eln-at-record-oracle-mapper.xml",
       "sha256": "0975cc8d557bfd977cc065a1e3c93a6dfb6aa625ce6c6797c161016cc3e65045",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1068,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/eln/persistent/mapper/conf/core-eln-at-record-postgresql-mapper.xml",
       "sha256": "0975cc8d557bfd977cc065a1e3c93a6dfb6aa625ce6c6797c161016cc3e65045",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1068,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/eln/persistent/mapper/conf/core-eln-at-record-sqlserver-mapper.xml",
       "sha256": "0975cc8d557bfd977cc065a1e3c93a6dfb6aa625ce6c6797c161016cc3e65045",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1064,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/eln/persistent/mapper/conf/core-eln-ds-field-mysql-mapper.xml",
       "sha256": "2b5de419ee987912f86d5385ee1b6e43d8df83cb0d2403a84289e7411bf8d2cf",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1064,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/eln/persistent/mapper/conf/core-eln-ds-field-oracle-mapper.xml",
       "sha256": "2b5de419ee987912f86d5385ee1b6e43d8df83cb0d2403a84289e7411bf8d2cf",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1064,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/eln/persistent/mapper/conf/core-eln-ds-field-postgresql-mapper.xml",
       "sha256": "2b5de419ee987912f86d5385ee1b6e43d8df83cb0d2403a84289e7411bf8d2cf",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1064,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/eln/persistent/mapper/conf/core-eln-ds-field-sqlserver-mapper.xml",
       "sha256": "2b5de419ee987912f86d5385ee1b6e43d8df83cb0d2403a84289e7411bf8d2cf",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1572,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/eln/persistent/mapper/conf/core-eln-ds-mysql-mapper.xml",
       "sha256": "527ed84a7f69d78c413914232137c23b020146cec9fc38c970cb0001b1848f5b",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1572,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/eln/persistent/mapper/conf/core-eln-ds-oracle-mapper.xml",
       "sha256": "527ed84a7f69d78c413914232137c23b020146cec9fc38c970cb0001b1848f5b",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1572,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/eln/persistent/mapper/conf/core-eln-ds-postgresql-mapper.xml",
       "sha256": "b013d750ae03d5825baa453ee5071fad240065e167ddf5bc9127dfb5db98ea28",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1572,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/eln/persistent/mapper/conf/core-eln-ds-sqlserver-mapper.xml",
       "sha256": "527ed84a7f69d78c413914232137c23b020146cec9fc38c970cb0001b1848f5b",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1057,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/eln/persistent/mapper/conf/core-eln-field-mysql-mapper.xml",
       "sha256": "a9c7f6dcb6c9b62d45a8b82d5b66ca7d47d3471638318ffa0e6c7030018e6bd8",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1057,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/eln/persistent/mapper/conf/core-eln-field-oracle-mapper.xml",
       "sha256": "a9c7f6dcb6c9b62d45a8b82d5b66ca7d47d3471638318ffa0e6c7030018e6bd8",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1057,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/eln/persistent/mapper/conf/core-eln-field-postgresql-mapper.xml",
       "sha256": "a9c7f6dcb6c9b62d45a8b82d5b66ca7d47d3471638318ffa0e6c7030018e6bd8",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1057,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/eln/persistent/mapper/conf/core-eln-field-sqlserver-mapper.xml",
       "sha256": "a9c7f6dcb6c9b62d45a8b82d5b66ca7d47d3471638318ffa0e6c7030018e6bd8",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1040,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/eln/persistent/mapper/conf/core-eln-mysql-mapper.xml",
       "sha256": "d74b75f1c7250b56c41fd5a26411c78b7ebe29fd6c7ba3fd7437fa08ec5f0fb2",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1040,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/eln/persistent/mapper/conf/core-eln-oracle-mapper.xml",
       "sha256": "d74b75f1c7250b56c41fd5a26411c78b7ebe29fd6c7ba3fd7437fa08ec5f0fb2",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1040,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/eln/persistent/mapper/conf/core-eln-postgresql-mapper.xml",
       "sha256": "d74b75f1c7250b56c41fd5a26411c78b7ebe29fd6c7ba3fd7437fa08ec5f0fb2",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1040,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/eln/persistent/mapper/conf/core-eln-sqlserver-mapper.xml",
       "sha256": "d74b75f1c7250b56c41fd5a26411c78b7ebe29fd6c7ba3fd7437fa08ec5f0fb2",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1243,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/eln/persistent/mapper/conf/core-eln-tmpl-ds-mysql-mapper.xml",
       "sha256": "076c6b07483c8eb2736b997519ac3ac16bc6e39ed4f76924af49f0857d3382d3",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1243,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/eln/persistent/mapper/conf/core-eln-tmpl-ds-oracle-mapper.xml",
       "sha256": "076c6b07483c8eb2736b997519ac3ac16bc6e39ed4f76924af49f0857d3382d3",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1243,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/eln/persistent/mapper/conf/core-eln-tmpl-ds-postgresql-mapper.xml",
       "sha256": "076c6b07483c8eb2736b997519ac3ac16bc6e39ed4f76924af49f0857d3382d3",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1243,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/eln/persistent/mapper/conf/core-eln-tmpl-ds-sqlserver-mapper.xml",
       "sha256": "076c6b07483c8eb2736b997519ac3ac16bc6e39ed4f76924af49f0857d3382d3",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1040,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/eln/persistent/mapper/conf/core-eln-tmpl-mysql-mapper.xml",
       "sha256": "e1969f4c1a427c9a87153380212a7f278768e448a651527bbd88ab7c1ae17165",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1040,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/eln/persistent/mapper/conf/core-eln-tmpl-oracle-mapper.xml",
       "sha256": "e1969f4c1a427c9a87153380212a7f278768e448a651527bbd88ab7c1ae17165",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1040,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/eln/persistent/mapper/conf/core-eln-tmpl-postgresql-mapper.xml",
       "sha256": "e1969f4c1a427c9a87153380212a7f278768e448a651527bbd88ab7c1ae17165",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1040,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/eln/persistent/mapper/conf/core-eln-tmpl-sqlserver-mapper.xml",
       "sha256": "e1969f4c1a427c9a87153380212a7f278768e448a651527bbd88ab7c1ae17165",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1077,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/eln/persistent/mapper/conf/core-eln-tmpl-version-mysql-mapper.xml",
       "sha256": "57cb88b3350c264a97f50a652c55712dc641c49a71db1a0b8cb3d68977d2ef85",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1077,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/eln/persistent/mapper/conf/core-eln-tmpl-version-oracle-mapper.xml",
       "sha256": "57cb88b3350c264a97f50a652c55712dc641c49a71db1a0b8cb3d68977d2ef85",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1077,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/eln/persistent/mapper/conf/core-eln-tmpl-version-postgresql-mapper.xml",
       "sha256": "57cb88b3350c264a97f50a652c55712dc641c49a71db1a0b8cb3d68977d2ef85",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1077,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/eln/persistent/mapper/conf/core-eln-tmpl-version-sqlserver-mapper.xml",
       "sha256": "57cb88b3350c264a97f50a652c55712dc641c49a71db1a0b8cb3d68977d2ef85",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1005,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/les/persistent/mapper/conf/core-les-ds-field-mysql-mapper.xml",
       "sha256": "cfd48a511b38aa0275393d7850f09ee3ca25ab8d76cae947d6cda56d76306e42",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1005,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/les/persistent/mapper/conf/core-les-ds-field-oracle-mapper.xml",
       "sha256": "cfd48a511b38aa0275393d7850f09ee3ca25ab8d76cae947d6cda56d76306e42",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1005,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/les/persistent/mapper/conf/core-les-ds-field-postgresql-mapper.xml",
       "sha256": "cfd48a511b38aa0275393d7850f09ee3ca25ab8d76cae947d6cda56d76306e42",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1005,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/les/persistent/mapper/conf/core-les-ds-field-sqlserver-mapper.xml",
       "sha256": "cfd48a511b38aa0275393d7850f09ee3ca25ab8d76cae947d6cda56d76306e42",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1392,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/les/persistent/mapper/conf/core-les-ds-mysql-mapper.xml",
       "sha256": "2dd3d71ad8ff2dfa045829556c8a55f0b7dd43033b31891cb9f8e3bad7e32ec3",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1392,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/les/persistent/mapper/conf/core-les-ds-oracle-mapper.xml",
       "sha256": "2dd3d71ad8ff2dfa045829556c8a55f0b7dd43033b31891cb9f8e3bad7e32ec3",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1392,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/les/persistent/mapper/conf/core-les-ds-postgresql-mapper.xml",
       "sha256": "2dd3d71ad8ff2dfa045829556c8a55f0b7dd43033b31891cb9f8e3bad7e32ec3",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1392,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/les/persistent/mapper/conf/core-les-ds-sqlserver-mapper.xml",
       "sha256": "2dd3d71ad8ff2dfa045829556c8a55f0b7dd43033b31891cb9f8e3bad7e32ec3",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1069,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/les/persistent/mapper/conf/core-les-instance-mysql-mapper.xml",
       "sha256": "66271083b0f4fe33b926c27943da82cb1cfde1ff3030298d19c2998ab0296123",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1069,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/les/persistent/mapper/conf/core-les-instance-oracle-mapper.xml",
       "sha256": "66271083b0f4fe33b926c27943da82cb1cfde1ff3030298d19c2998ab0296123",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1069,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/les/persistent/mapper/conf/core-les-instance-postgresql-mapper.xml",
       "sha256": "66271083b0f4fe33b926c27943da82cb1cfde1ff3030298d19c2998ab0296123",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1069,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/les/persistent/mapper/conf/core-les-instance-sqlserver-mapper.xml",
       "sha256": "66271083b0f4fe33b926c27943da82cb1cfde1ff3030298d19c2998ab0296123",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 893,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/les/persistent/mapper/conf/core-les-instance-unit-mysql-mapper.xml",
       "sha256": "576d468a1df8b99e9e09d61221bce862f63faa7e5713f71d2545513c8e72475d",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 893,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/les/persistent/mapper/conf/core-les-instance-unit-oracle-mapper.xml",
       "sha256": "576d468a1df8b99e9e09d61221bce862f63faa7e5713f71d2545513c8e72475d",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 893,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/les/persistent/mapper/conf/core-les-instance-unit-postgresql-mapper.xml",
       "sha256": "576d468a1df8b99e9e09d61221bce862f63faa7e5713f71d2545513c8e72475d",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 893,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/les/persistent/mapper/conf/core-les-instance-unit-sqlserver-mapper.xml",
       "sha256": "576d468a1df8b99e9e09d61221bce862f63faa7e5713f71d2545513c8e72475d",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1069,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/les/persistent/mapper/conf/core-les-template-mysql-mapper.xml",
       "sha256": "fb78d183bc4a9b0e33c3f5f461800e5b3fc65a9aba2e714b83df1c22aba23a67",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1069,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/les/persistent/mapper/conf/core-les-template-oracle-mapper.xml",
       "sha256": "fb78d183bc4a9b0e33c3f5f461800e5b3fc65a9aba2e714b83df1c22aba23a67",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1063,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/les/persistent/mapper/conf/core-les-template-org-mysql-mapper.xml",
       "sha256": "33ec7cf4db791ab7add80252bc0374a8e0ead90d8085c1fd51a4b5fa1b3cd593",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1063,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/les/persistent/mapper/conf/core-les-template-org-oracle-mapper.xml",
       "sha256": "33ec7cf4db791ab7add80252bc0374a8e0ead90d8085c1fd51a4b5fa1b3cd593",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1063,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/les/persistent/mapper/conf/core-les-template-org-postgresql-mapper.xml",
       "sha256": "33ec7cf4db791ab7add80252bc0374a8e0ead90d8085c1fd51a4b5fa1b3cd593",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1063,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/les/persistent/mapper/conf/core-les-template-org-sqlserver-mapper.xml",
       "sha256": "33ec7cf4db791ab7add80252bc0374a8e0ead90d8085c1fd51a4b5fa1b3cd593",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1069,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/les/persistent/mapper/conf/core-les-template-postgresql-mapper.xml",
       "sha256": "fb78d183bc4a9b0e33c3f5f461800e5b3fc65a9aba2e714b83df1c22aba23a67",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1069,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/les/persistent/mapper/conf/core-les-template-sqlserver-mapper.xml",
       "sha256": "fb78d183bc4a9b0e33c3f5f461800e5b3fc65a9aba2e714b83df1c22aba23a67",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1044,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/les/persistent/mapper/conf/core-les-template-unit-mysql-mapper.xml",
       "sha256": "19a37431e972d5c316c693ae89aa90d4efd02e271d9b35d90374dfad3a5fec9d",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1044,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/les/persistent/mapper/conf/core-les-template-unit-oracle-mapper.xml",
       "sha256": "19a37431e972d5c316c693ae89aa90d4efd02e271d9b35d90374dfad3a5fec9d",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1044,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/les/persistent/mapper/conf/core-les-template-unit-postgresql-mapper.xml",
       "sha256": "19a37431e972d5c316c693ae89aa90d4efd02e271d9b35d90374dfad3a5fec9d",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1044,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/les/persistent/mapper/conf/core-les-template-unit-sqlserver-mapper.xml",
       "sha256": "19a37431e972d5c316c693ae89aa90d4efd02e271d9b35d90374dfad3a5fec9d",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1044,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/les/persistent/mapper/conf/core-les-template-unit-tmpl-mysql-mapper.xml",
       "sha256": "b29eaace4e1dc61983e8fcc16924a37b79fe818bcc4394d4cd8ec1f93c2825cd",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1044,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/les/persistent/mapper/conf/core-les-template-unit-tmpl-oracle-mapper.xml",
       "sha256": "b29eaace4e1dc61983e8fcc16924a37b79fe818bcc4394d4cd8ec1f93c2825cd",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1044,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/les/persistent/mapper/conf/core-les-template-unit-tmpl-postgresql-mapper.xml",
       "sha256": "b29eaace4e1dc61983e8fcc16924a37b79fe818bcc4394d4cd8ec1f93c2825cd",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1044,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/les/persistent/mapper/conf/core-les-template-unit-tmpl-sqlserver-mapper.xml",
       "sha256": "b29eaace4e1dc61983e8fcc16924a37b79fe818bcc4394d4cd8ec1f93c2825cd",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 874,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/les/persistent/mapper/conf/core-les-unit-comment-mysql-mapper.xml",
       "sha256": "1c308203ad71d571dffe06d93a23071d46670be8cd04f1b6eef2f2f2609446e5",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 874,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/les/persistent/mapper/conf/core-les-unit-comment-oracle-mapper.xml",
       "sha256": "1c308203ad71d571dffe06d93a23071d46670be8cd04f1b6eef2f2f2609446e5",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 874,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/les/persistent/mapper/conf/core-les-unit-comment-postgresql-mapper.xml",
       "sha256": "1c308203ad71d571dffe06d93a23071d46670be8cd04f1b6eef2f2f2609446e5",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 874,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/les/persistent/mapper/conf/core-les-unit-comment-sqlserver-mapper.xml",
       "sha256": "1c308203ad71d571dffe06d93a23071d46670be8cd04f1b6eef2f2f2609446e5",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1002,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/les/persistent/mapper/conf/core-les-unit-mysql-mapper.xml",
       "sha256": "e66c929eec70a66f4539f86ccfe1f0dba354acb7a34ca28d7a87c88be72d585d",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1002,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/les/persistent/mapper/conf/core-les-unit-oracle-mapper.xml",
       "sha256": "e66c929eec70a66f4539f86ccfe1f0dba354acb7a34ca28d7a87c88be72d585d",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1002,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/les/persistent/mapper/conf/core-les-unit-postgresql-mapper.xml",
       "sha256": "e66c929eec70a66f4539f86ccfe1f0dba354acb7a34ca28d7a87c88be72d585d",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1002,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/les/persistent/mapper/conf/core-les-unit-sqlserver-mapper.xml",
       "sha256": "e66c929eec70a66f4539f86ccfe1f0dba354acb7a34ca28d7a87c88be72d585d",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1093,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/office/persistent/mapper/conf/core-office-customization-mysql-mapper.xml",
       "sha256": "77d71793c8915d75ac8873ea9bbf6c0cc39d568692339532d029b81f4a385641",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1092,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/office/persistent/mapper/conf/core-office-customization-oracle-mapper.xml",
       "sha256": "da42af9badae3bbd729138040e1ba5745cb4786a91fc5c0edea12ec34f126272",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1092,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/office/persistent/mapper/conf/core-office-customization-postgresql-mapper.xml",
       "sha256": "da42af9badae3bbd729138040e1ba5745cb4786a91fc5c0edea12ec34f126272",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1093,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/office/persistent/mapper/conf/core-office-customization-sqlserver-mapper.xml",
       "sha256": "77d71793c8915d75ac8873ea9bbf6c0cc39d568692339532d029b81f4a385641",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 886,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/office/persistent/mapper/conf/core-office-ds-field-mysql-mapper.xml",
       "sha256": "dec08b0b5929a75ecb1dc67503fee7b5bebbf1e67797a2a3d4732f29abcad2a4",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 886,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/office/persistent/mapper/conf/core-office-ds-field-oracle-mapper.xml",
       "sha256": "dec08b0b5929a75ecb1dc67503fee7b5bebbf1e67797a2a3d4732f29abcad2a4",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 886,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/office/persistent/mapper/conf/core-office-ds-field-postgresql-mapper.xml",
       "sha256": "dec08b0b5929a75ecb1dc67503fee7b5bebbf1e67797a2a3d4732f29abcad2a4",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 886,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/office/persistent/mapper/conf/core-office-ds-field-sqlserver-mapper.xml",
       "sha256": "dec08b0b5929a75ecb1dc67503fee7b5bebbf1e67797a2a3d4732f29abcad2a4",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 864,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/office/persistent/mapper/conf/core-office-ds-mysql-mapper.xml",
       "sha256": "44343be7f39d51713992f9bfc62ae224d0d0021f8253273a18a73af9d56e102b",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 864,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/office/persistent/mapper/conf/core-office-ds-oracle-mapper.xml",
       "sha256": "44343be7f39d51713992f9bfc62ae224d0d0021f8253273a18a73af9d56e102b",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 864,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/office/persistent/mapper/conf/core-office-ds-postgresql-mapper.xml",
       "sha256": "44343be7f39d51713992f9bfc62ae224d0d0021f8253273a18a73af9d56e102b",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 864,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/office/persistent/mapper/conf/core-office-ds-sqlserver-mapper.xml",
       "sha256": "44343be7f39d51713992f9bfc62ae224d0d0021f8253273a18a73af9d56e102b",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 876,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/office/persistent/mapper/conf/core-office-instance-mysql-mapper.xml",
       "sha256": "1d0dd47c7efac8abdf6284daa5311dd3c98bc22af196984ac5b11812e7cba3c2",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 876,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/office/persistent/mapper/conf/core-office-instance-oracle-mapper.xml",
       "sha256": "1d0dd47c7efac8abdf6284daa5311dd3c98bc22af196984ac5b11812e7cba3c2",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 876,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/office/persistent/mapper/conf/core-office-instance-postgresql-mapper.xml",
       "sha256": "1d0dd47c7efac8abdf6284daa5311dd3c98bc22af196984ac5b11812e7cba3c2",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 876,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/office/persistent/mapper/conf/core-office-instance-sqlserver-mapper.xml",
       "sha256": "1d0dd47c7efac8abdf6284daa5311dd3c98bc22af196984ac5b11812e7cba3c2",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1124,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/office/persistent/mapper/conf/core-office-tmpl-mysql-mapper.xml",
       "sha256": "c19be99e8e68d428cf9a6cf9f093aba479c9b6d45bfc811bb78cb6d03c8dfe1f",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1117,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/office/persistent/mapper/conf/core-office-tmpl-oracle-mapper.xml",
       "sha256": "3487ad4dac4e21a082fe430fe93957c70dd704edd29948db0b8493074d946efa",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1117,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/office/persistent/mapper/conf/core-office-tmpl-postgresql-mapper.xml",
       "sha256": "3487ad4dac4e21a082fe430fe93957c70dd704edd29948db0b8493074d946efa",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1134,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/office/persistent/mapper/conf/core-office-tmpl-sqlserver-mapper.xml",
       "sha256": "e0a345732733ff71e8231aeb05233c1270b346461926669e3e7f22791141ff40",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1089,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/office/persistent/mapper/conf/core-office-toolbar-line-mysql-mapper.xml",
       "sha256": "9d139d34b6e7ff9e3edcdb07ad672bd4e88cb53401a0c854c297c9eeb73882e9",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1089,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/office/persistent/mapper/conf/core-office-toolbar-line-oracle-mapper.xml",
       "sha256": "9d139d34b6e7ff9e3edcdb07ad672bd4e88cb53401a0c854c297c9eeb73882e9",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1089,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/office/persistent/mapper/conf/core-office-toolbar-line-postgresql-mapper.xml",
       "sha256": "9d139d34b6e7ff9e3edcdb07ad672bd4e88cb53401a0c854c297c9eeb73882e9",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1089,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/office/persistent/mapper/conf/core-office-toolbar-line-sqlserver-mapper.xml",
       "sha256": "9d139d34b6e7ff9e3edcdb07ad672bd4e88cb53401a0c854c297c9eeb73882e9",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1075,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/office/persistent/mapper/conf/core-office-toolbar-mysql-mapper.xml",
       "sha256": "644c8e767357b322b62aafa3802f7bf08a6149cd81f865fbe84c89c25f7bb516",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1075,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/office/persistent/mapper/conf/core-office-toolbar-oracle-mapper.xml",
       "sha256": "644c8e767357b322b62aafa3802f7bf08a6149cd81f865fbe84c89c25f7bb516",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1075,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/office/persistent/mapper/conf/core-office-toolbar-postgresql-mapper.xml",
       "sha256": "644c8e767357b322b62aafa3802f7bf08a6149cd81f865fbe84c89c25f7bb516",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 1075,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/office/persistent/mapper/conf/core-office-toolbar-sqlserver-mapper.xml",
       "sha256": "644c8e767357b322b62aafa3802f7bf08a6149cd81f865fbe84c89c25f7bb516",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 13002,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/office/service/impl/templates/blank-template.docx",
       "sha256": "6836d1f896652d036dbfe55eb9a6d52c6659d09ef9da743429eddcf6f5693058",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 8440,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/office/service/impl/templates/blank-template.xlsx",
       "sha256": "d1c7519fcae9d89421272fd8aedd0d63e394bb1526f581897195e4673c405b1e",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 815,
+      "compile_status": "not-applicable-resource",
       "path": "config/application-report_dev.yml",
       "sha256": "7de8cad94f6c5697d96d3cd5921a5e27dd0482bbe3b8c383f1873eb4ed2cb93d",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 654,
+      "compile_status": "not-applicable-resource",
       "path": "config/application-report_pro.yml",
       "sha256": "8f83cd54658520fb714e43030a4e566a42aeabc55787fa246b20164f3b36ebdb",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 2205,
+      "compile_status": "not-applicable-resource",
       "path": "config/application-report_test.yml",
       "sha256": "53e66476198dfce9fc51c6873917198b21aeae8be526409757fd12f9a69ebb0f",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 559,
+      "compile_status": "not-applicable-resource",
       "destination_sha256": "2ab22008864cb3f425d17a0703a1d39147abeed6464d0a2ca4668007b825b342",
       "path": "config/application.yml",
       "sha256": "2ab22008864cb3f425d17a0703a1d39147abeed6464d0a2ca4668007b825b342",
@@ -2914,6 +3385,7 @@
     },
     {
       "bytes": 662,
+      "compile_status": "not-applicable-resource",
       "destination_sha256": "b41faba3f315c0f24cce196de34e33b0e03791f34fa77eefaf4b52955f0e2137",
       "path": "config/bootstrap.yml",
       "sha256": "b41faba3f315c0f24cce196de34e33b0e03791f34fa77eefaf4b52955f0e2137",
@@ -2921,6 +3393,7 @@
     },
     {
       "bytes": 2898,
+      "compile_status": "not-applicable-resource",
       "destination_sha256": "6839ea17d6fae58874cabdb3d7f2d48ff87e02295b08cb993162d1f959fc9757",
       "path": "log4j2.xml",
       "sha256": "6839ea17d6fae58874cabdb3d7f2d48ff87e02295b08cb993162d1f959fc9757",
@@ -2928,144 +3401,168 @@
     },
     {
       "bytes": 10983,
+      "compile_status": "not-applicable-resource",
       "path": "static/office/logo/officeAboutLogo.svg",
       "sha256": "2a0454e792f818fabfad810fc6c3c9301556cf40be028a966aeeb310de39e3fc",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 12256,
+      "compile_status": "not-applicable-resource",
       "path": "static/office/logo/officeLogo.svg",
       "sha256": "b132c7711f233d21c530de63f3efc942b09d68ecd36bf626da2099cca3b2f27d",
       "source_jar": "gikam-core-report-service-14.1.5-pageoffice6.jar"
     },
     {
       "bytes": 914,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/lims/reporttemplate/persistent/mapper/conf/lims-report-template-column-mysql-mapper.xml",
       "sha256": "06c6e645030f3ccd768b85512499e8dff5e90e6299c82078a1af610567569a17",
       "source_jar": "lims2-report-template-14.1.5.jar"
     },
     {
       "bytes": 914,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/lims/reporttemplate/persistent/mapper/conf/lims-report-template-column-oracle-mapper.xml",
       "sha256": "06c6e645030f3ccd768b85512499e8dff5e90e6299c82078a1af610567569a17",
       "source_jar": "lims2-report-template-14.1.5.jar"
     },
     {
       "bytes": 914,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/lims/reporttemplate/persistent/mapper/conf/lims-report-template-column-sqlserver-mapper.xml",
       "sha256": "06c6e645030f3ccd768b85512499e8dff5e90e6299c82078a1af610567569a17",
       "source_jar": "lims2-report-template-14.1.5.jar"
     },
     {
       "bytes": 911,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/lims/reporttemplate/persistent/mapper/conf/lims-report-template-func-mysql-mapper.xml",
       "sha256": "c2cfe7a081d4edca877cd251d4ff3b7efbb20416e6e362075e864622514c4bea",
       "source_jar": "lims2-report-template-14.1.5.jar"
     },
     {
       "bytes": 911,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/lims/reporttemplate/persistent/mapper/conf/lims-report-template-func-oracle-mapper.xml",
       "sha256": "c2cfe7a081d4edca877cd251d4ff3b7efbb20416e6e362075e864622514c4bea",
       "source_jar": "lims2-report-template-14.1.5.jar"
     },
     {
       "bytes": 911,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/lims/reporttemplate/persistent/mapper/conf/lims-report-template-func-sqlserver-mapper.xml",
       "sha256": "c2cfe7a081d4edca877cd251d4ff3b7efbb20416e6e362075e864622514c4bea",
       "source_jar": "lims2-report-template-14.1.5.jar"
     },
     {
       "bytes": 902,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/lims/reporttemplate/persistent/mapper/conf/lims-report-template-mysql-mapper.xml",
       "sha256": "c242e42046b188dfc418227019a38f600134d7afe48a99a23f9ba8219cad2231",
       "source_jar": "lims2-report-template-14.1.5.jar"
     },
     {
       "bytes": 2446,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/lims/reporttemplate/persistent/mapper/conf/lims-report-template-oracle-mapper.xml",
       "sha256": "6d13d8156c1a8e53dd12a3bed434d704482da1c315cbf1ea6533a7e98a17761e",
       "source_jar": "lims2-report-template-14.1.5.jar"
     },
     {
       "bytes": 1466,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/lims/reporttemplate/persistent/mapper/conf/lims-report-template-source-mysql-mapper.xml",
       "sha256": "7dd914775c4113a93598ba64d4fe40db9ecc56fbb72f1a1d17bcf359d49eac9a",
       "source_jar": "lims2-report-template-14.1.5.jar"
     },
     {
       "bytes": 1464,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/lims/reporttemplate/persistent/mapper/conf/lims-report-template-source-oracle-mapper.xml",
       "sha256": "7413cd45d65302b8b5f02a5a0ba05b526ef1f1b56416494fb00cff20856826ef",
       "source_jar": "lims2-report-template-14.1.5.jar"
     },
     {
       "bytes": 1464,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/lims/reporttemplate/persistent/mapper/conf/lims-report-template-source-sqlserver-mapper.xml",
       "sha256": "831d3a0a03b0eb189aa67c6ef687a9eb22b5ef883f895a38f45cac04021aed31",
       "source_jar": "lims2-report-template-14.1.5.jar"
     },
     {
       "bytes": 902,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/lims/reporttemplate/persistent/mapper/conf/lims-report-template-sqlserver-mapper.xml",
       "sha256": "c242e42046b188dfc418227019a38f600134d7afe48a99a23f9ba8219cad2231",
       "source_jar": "lims2-report-template-14.1.5.jar"
     },
     {
       "bytes": 909,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/lims/reporttemplate/persistent/mapper/conf/lims-report-template-sub-mysql-mapper.xml",
       "sha256": "34bd4de91f56c15e7805e43b5fde6121449aa325ddfb57f731afbc6e575140c8",
       "source_jar": "lims2-report-template-14.1.5.jar"
     },
     {
       "bytes": 909,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/lims/reporttemplate/persistent/mapper/conf/lims-report-template-sub-oracle-mapper.xml",
       "sha256": "34bd4de91f56c15e7805e43b5fde6121449aa325ddfb57f731afbc6e575140c8",
       "source_jar": "lims2-report-template-14.1.5.jar"
     },
     {
       "bytes": 909,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/lims/reporttemplate/persistent/mapper/conf/lims-report-template-sub-sqlserver-mapper.xml",
       "sha256": "34bd4de91f56c15e7805e43b5fde6121449aa325ddfb57f731afbc6e575140c8",
       "source_jar": "lims2-report-template-14.1.5.jar"
     },
     {
       "bytes": 3825,
+      "compile_status": "not-applicable-resource",
       "path": "static/lims/module/report-templates/lims-report-template-choose-list.js",
       "sha256": "cd466233762e6a0d1431f498c60f599170f760101bbe9c7884a1242a0f48d1fb",
       "source_jar": "lims2-report-template-14.1.5.jar"
     },
     {
       "bytes": 18943,
+      "compile_status": "not-applicable-resource",
       "path": "static/lims/module/report-templates/lims-report-template-edit-list.js",
       "sha256": "2c280106f761bda414f6cd6b3aa67a20382af1b58837a922495527d30d099987",
       "source_jar": "lims2-report-template-14.1.5.jar"
     },
     {
       "bytes": 3701,
+      "compile_status": "not-applicable-resource",
       "path": "static/lims/module/report-templates/lims-report-template-source-detail.js",
       "sha256": "925c16e6c6180f42d6b07988eac54a6c23cf1f69ec30146b51aad190983bf822",
       "source_jar": "lims2-report-template-14.1.5.jar"
     },
     {
       "bytes": 8291,
+      "compile_status": "not-applicable-resource",
       "path": "static/lims/module/report-templates/lims-report-template.js",
       "sha256": "2db89cf7e7f33e0ddd51c1d6102424d27bf04337d8877565c3cda533f60e3416",
       "source_jar": "lims2-report-template-14.1.5.jar"
     },
     {
       "bytes": 353,
+      "compile_status": "not-applicable-resource",
       "path": "templates/lims/module/report-templates/lims-report-template-choose-list.html",
       "sha256": "4d94d4367593c99de73ffbf844d85ddb06c8c210ac298375af2bd032a34fde71",
       "source_jar": "lims2-report-template-14.1.5.jar"
     },
     {
       "bytes": 319,
+      "compile_status": "not-applicable-resource",
       "path": "templates/lims/module/report-templates/lims-report-template-edit-list.html",
       "sha256": "9d2452b2e8925ff77e18b0ae4ba3577036d1e01070207f774e85cd5918d419e4",
       "source_jar": "lims2-report-template-14.1.5.jar"
     },
     {
       "bytes": 361,
+      "compile_status": "not-applicable-resource",
       "path": "templates/lims/module/report-templates/lims-report-template-source-detail.html",
       "sha256": "dc3b50afb8d862a88bf2e6eae077871d3ebf76645a27fcac1515023b7af8e593",
       "source_jar": "lims2-report-template-14.1.5.jar"

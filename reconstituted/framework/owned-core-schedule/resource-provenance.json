@@ -13,114 +13,133 @@
   "resources": [
     {
       "bytes": 450,
+      "compile_status": "not-applicable-resource",
       "path": "banner.txt",
       "sha256": "d209648f503b46a1cfb868d701b092ca718298c860b6bd661ef87207adaad356",
       "source_jar": "gikam-core-schedule-service-14.1.5.jar"
     },
     {
       "bytes": 1285,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/schedule/schedule/persistent/mapper/conf/core-schedule-task-config-mysql-mapper.xml",
       "sha256": "5182aab8a81899116c409aadf6ff21017ac07cd6838a96a80322f42e9e44009a",
       "source_jar": "gikam-core-schedule-service-14.1.5.jar"
     },
     {
       "bytes": 1285,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/schedule/schedule/persistent/mapper/conf/core-schedule-task-config-oracle-mapper.xml",
       "sha256": "5182aab8a81899116c409aadf6ff21017ac07cd6838a96a80322f42e9e44009a",
       "source_jar": "gikam-core-schedule-service-14.1.5.jar"
     },
     {
       "bytes": 1285,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/schedule/schedule/persistent/mapper/conf/core-schedule-task-config-postgresql-mapper.xml",
       "sha256": "5182aab8a81899116c409aadf6ff21017ac07cd6838a96a80322f42e9e44009a",
       "source_jar": "gikam-core-schedule-service-14.1.5.jar"
     },
     {
       "bytes": 1279,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/schedule/schedule/persistent/mapper/conf/core-schedule-task-config-sqlserver-mapper.xml",
       "sha256": "371893a864183406afc176c0375d4ec8bf461e02b3e3c8fd218b553aebbe2472",
       "source_jar": "gikam-core-schedule-service-14.1.5.jar"
     },
     {
       "bytes": 1478,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/schedule/schedule/persistent/mapper/conf/core-schedule-task-log-mysql-mapper.xml",
       "sha256": "ae3459480143e3c8dfc8ad1aef2276e05c13286a07f6c99ecce5cd2bc2593a62",
       "source_jar": "gikam-core-schedule-service-14.1.5.jar"
     },
     {
       "bytes": 1478,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/schedule/schedule/persistent/mapper/conf/core-schedule-task-log-oracle-mapper.xml",
       "sha256": "ae3459480143e3c8dfc8ad1aef2276e05c13286a07f6c99ecce5cd2bc2593a62",
       "source_jar": "gikam-core-schedule-service-14.1.5.jar"
     },
     {
       "bytes": 1478,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/schedule/schedule/persistent/mapper/conf/core-schedule-task-log-postgresql-mapper.xml",
       "sha256": "ae3459480143e3c8dfc8ad1aef2276e05c13286a07f6c99ecce5cd2bc2593a62",
       "source_jar": "gikam-core-schedule-service-14.1.5.jar"
     },
     {
       "bytes": 1524,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/schedule/schedule/persistent/mapper/conf/core-schedule-task-log-sqlserver-mapper.xml",
       "sha256": "6e23b4d3d23653d0b101467d3f09310d784a5239b89e1ce79b74bf38f9e13cb0",
       "source_jar": "gikam-core-schedule-service-14.1.5.jar"
     },
     {
       "bytes": 1050,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/schedule/schedule/persistent/mapper/conf/core-schedule-task-mysql-mapper.xml",
       "sha256": "94333c605f5e47a6b0c56e334869d0ca4f14b53ff7b09b784d7a4f0c83041827",
       "source_jar": "gikam-core-schedule-service-14.1.5.jar"
     },
     {
       "bytes": 1050,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/schedule/schedule/persistent/mapper/conf/core-schedule-task-oracle-mapper.xml",
       "sha256": "94333c605f5e47a6b0c56e334869d0ca4f14b53ff7b09b784d7a4f0c83041827",
       "source_jar": "gikam-core-schedule-service-14.1.5.jar"
     },
     {
       "bytes": 1050,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/schedule/schedule/persistent/mapper/conf/core-schedule-task-postgresql-mapper.xml",
       "sha256": "94333c605f5e47a6b0c56e334869d0ca4f14b53ff7b09b784d7a4f0c83041827",
       "source_jar": "gikam-core-schedule-service-14.1.5.jar"
     },
     {
       "bytes": 1044,
+      "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/cloud/module/schedule/schedule/persistent/mapper/conf/core-schedule-task-sqlserver-mapper.xml",
       "sha256": "007dc3ef2faac54eab3a83f575823d71652aa3292b3e17431aa1819056ebb1b8",
       "source_jar": "gikam-core-schedule-service-14.1.5.jar"
     },
     {
       "bytes": 700,
+      "compile_status": "not-applicable-resource",
       "path": "config/application-schedule_dev.yml",
       "sha256": "64df5b1d12c1530af9cbcdf793c9d863cdd364cc886d649fc4aba3d088806cb9",
       "source_jar": "gikam-core-schedule-service-14.1.5.jar"
     },
     {
       "bytes": 656,
+      "compile_status": "not-applicable-resource",
       "path": "config/application-schedule_pro.yml",
       "sha256": "6454512aca1ed63948cf3a7bf0c9ae063e60d3be7185f681102facd91f5ad87b",
       "source_jar": "gikam-core-schedule-service-14.1.5.jar"
     },
     {
       "bytes": 2207,
+      "compile_status": "not-applicable-resource",
       "path": "config/application-schedule_test.yml",
       "sha256": "df6a9ecac39b05bab8bf80fba519cc389e5237e9a9821dc5dac779cc9f38d949",
       "source_jar": "gikam-core-schedule-service-14.1.5.jar"
     },
     {
       "bytes": 563,
+      "compile_status": "not-applicable-resource",
       "path": "config/application.yml",
       "sha256": "8023607669d6dd2618f1408557d77e9c0bc218baa560d1279b5f8717617373ad",
       "source_jar": "gikam-core-schedule-service-14.1.5.jar"
     },
     {
       "bytes": 686,
+      "compile_status": "not-applicable-resource",
       "path": "config/bootstrap.yml",
       "sha256": "c63188595e8c78cad8e710a4a813536d16fc872cf6db586401688ff23d798e95",
       "source_jar": "gikam-core-schedule-service-14.1.5.jar"
     },
     {
       "bytes": 2880,
+      "compile_status": "not-applicable-resource",
       "path": "log4j2.xml",
       "sha256": "486a5d8624355274996ddc21ebd225b51d88b1217b078b7c0d93b9c1b753de90",
       "source_jar": "gikam-core-schedule-service-14.1.5.jar"

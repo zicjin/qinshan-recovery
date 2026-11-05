@@ -57,6 +57,17 @@ def pom_dependencies(path: Path) -> list[str]:
     ]
 
 
+def registered_plugin_seed_sha256() -> str:
+    manifest = ROOT / "evidence" / "t02-build-plugin-seed.sha256"
+    for line in manifest.read_text(encoding="utf-8").splitlines():
+        if not line or line.startswith("#"):
+            continue
+        expected, relative = line.split(maxsplit=1)
+        if relative.endswith("maven-build-plugin-seed.tar.gz"):
+            return expected
+    raise ValueError("Maven plugin seed is not registered")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", type=Path, default=ROOT / "reconstituted" / "framework")
@@ -127,6 +138,32 @@ def main() -> int:
             require(path.is_file(), f"{module}: missing {record['path']}", errors)
             if path.is_file():
                 require(sha256_file(path) == record["sha256"], f"{module}: hash {record['path']}", errors)
+            if args.compiled:
+                require(
+                    record.get("compile_status") == "pass",
+                    f"{module}: compile status {record['path']}",
+                    errors,
+                )
+            else:
+                require(
+                    record.get("compile_status") in {"pending-module-assembly", "pass"},
+                    f"{module}: compile status {record['path']}",
+                    errors,
+                )
+            require(record.get("source_jar"), f"{module}: source jar {record['path']}", errors)
+            require(record.get("source_class_path"), f"{module}: source class {record['path']}", errors)
+            require(
+                isinstance(record.get("transformations"), list),
+                f"{module}: transformations {record['path']}",
+                errors,
+            )
+            if record.get("source_jar") == "tracked-override":
+                require(record.get("decompiler") == "tracked-override", f"{module}: override origin {record['path']}", errors)
+            else:
+                require(record.get("class_sha256"), f"{module}: class hash {record['path']}", errors)
+                require(record.get("source_sha256_before_transform"), f"{module}: pre-transform hash {record['path']}", errors)
+                require(record.get("decompiler"), f"{module}: decompiler {record['path']}", errors)
+                require(record.get("decompiler_version"), f"{module}: decompiler version {record['path']}", errors)
         module_allowlist = json.loads(
             (module_root / "public-dependency-allowlist.json").read_text(encoding="utf-8")
         )
@@ -157,6 +194,16 @@ def main() -> int:
             )
             require(compile_report["status"] == "pass", f"{module}: compile status", errors)
             require(compile_report["supplier_private_jars_on_classpath"] is False, f"{module}: private classpath", errors)
+            require(
+                compile_report.get("maven_repository_mode") == "isolated-hash-pinned-plugin-seed",
+                f"{module}: Maven repository mode",
+                errors,
+            )
+            require(
+                compile_report.get("maven_plugin_seed_sha256") == registered_plugin_seed_sha256(),
+                f"{module}: Maven plugin seed identity",
+                errors,
+            )
             jar = root / compile_report["output_jar"]
             require(jar.is_file(), f"{module}: missing jar", errors)
             if jar.is_file():
@@ -177,6 +224,12 @@ def main() -> int:
             require(
                 not str(record["path"]).startswith("third-party/sunway-app/"),
                 f"{module}: forbidden native resource {record['path']}",
+                errors,
+            )
+            require(record.get("source_jar"), f"{module}: resource source jar {record['path']}", errors)
+            require(
+                record.get("compile_status") == "not-applicable-resource",
+                f"{module}: resource compile status {record['path']}",
                 errors,
             )
             path = root / module / "src/main/resources" / str(record["path"])

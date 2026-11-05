@@ -247,6 +247,44 @@ def verify_tracked_all_framework_snapshot() -> None:
     assert snapshot["verification"]["status"] == "pass"
 
 
+def verify_tracked_module_provenance_statuses() -> None:
+    registry = json.loads(
+        (
+            ROOT
+            / "docs"
+            / "reconstitution"
+            / "framework-module-registry.json"
+        ).read_text(encoding="utf-8")
+    )
+    assert registry["module_count"] == len(registry["modules"])
+    for summary in registry["modules"]:
+        module_root = ROOT / "reconstituted" / "framework" / summary["module"]
+        provenance = json.loads(
+            (module_root / "module-provenance.json").read_text(encoding="utf-8")
+        )
+        assert len(provenance["source_files"]) == summary["source_file_count"]
+        for record in provenance["source_files"]:
+            assert record["compile_status"] == "pass", record["path"]
+            assert record["source_jar"]
+            assert record["source_class_path"]
+            assert isinstance(record["transformations"], list)
+            if record["source_jar"] == "tracked-override":
+                assert record["decompiler"] == "tracked-override"
+            else:
+                assert record["class_sha256"]
+                assert record["source_sha256_before_transform"]
+                assert record["decompiler_version"]
+
+        resources = json.loads(
+            (module_root / "resource-provenance.json").read_text(encoding="utf-8")
+        )
+        assert len(resources["resources"]) == summary["resource_file_count"]
+        for record in resources["resources"]:
+            assert record["compile_status"] == "not-applicable-resource", record["path"]
+            assert record["source_jar"]
+            assert record["sha256"]
+
+
 def verify_file_utils_source_contract() -> None:
     source = (
         ROOT
@@ -652,6 +690,7 @@ def main() -> int:
     verify_mapper_scanner_covers_both_supplier_conventions()
     verify_tracked_full_closure_snapshot()
     verify_tracked_all_framework_snapshot()
+    verify_tracked_module_provenance_statuses()
     verify_deterministic_assembler_helpers()
     module = load_module("resolve_java_source_closure", MODULE_PATH)
     verify_module = load_module("verify_reconstituted_framework", VERIFY_PATH)

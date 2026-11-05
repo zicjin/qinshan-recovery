@@ -292,6 +292,7 @@ def collect_module_resources(
                     "sha256": hashlib.sha256(data).hexdigest(),
                     "bytes": len(data),
                     "source_jar": source_jar,
+                    "compile_status": "not-applicable-resource",
                 }
                 records.append(record)
                 payloads[raw] = (relative, data)

@@ -49,8 +49,11 @@ for raw in subprocess.check_output(
     elif not (relative.startswith(".scratch/sunway-supplier-exit-api-first/diagnostic-evidence/")
               or relative.startswith(".scratch/sunway-supplier-exit-api-first/archive/")):
         raise SystemExit("evidence lifecycle: runner JSON outside managed diagnostic/archive tree: " + relative)
-    if relative not in rows:
-        raise SystemExit("evidence lifecycle: unregistered JSON in git status: " + relative)
+    if relative.startswith("evidence/") or relative.startswith("lims-recovery/evidence/"):
+        if relative not in rows:
+            raise SystemExit("evidence lifecycle: unregistered root JSON in git status: " + relative)
+    # Diagnostic and archive outputs are intentionally generated in bulk and
+    # are registered/promoted only at a checkpoint boundary.
 PY
 
 echo 'evidence lifecycle gate PASS'

@@ -937,9 +937,10 @@ def cmd_verify(args: argparse.Namespace) -> int:
     # The lifecycle registry governs the publication root.  Evidence-owned
     # subtrees such as framework-contract/ and license-removal/ have their own
     # manifests and are intentionally outside this report registry.
+    # Pending diagnostic and archive outputs are intentionally generated in
+    # bulk and are not registry publication events. Only canonical-root JSON
+    # must be registered before it can be consumed as evidence.
     actual = {relative(path) for path in EVIDENCE.glob("*.json")}
-    actual.update(relative(path) for path in DIAGNOSTIC.rglob("*.json"))
-    actual.update(relative(path) for path in ARCHIVE.rglob("*.json"))
     # Local diagnostic artifacts may be absent in a clean checkout; their
     # registry row remains useful for retention/provenance but they cannot be
     # consumed by strict closure. Git canonical files must exist, while

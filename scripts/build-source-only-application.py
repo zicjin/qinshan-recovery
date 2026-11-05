@@ -136,6 +136,8 @@ def copy_license_clean_frontend_overlay(
         data = source.read_bytes()
         if b"/core/module/sys/licenses" in data or b"/open/security/licenses" in data:
             raise SystemExit(f"frontend overlay retains removed license route: {source}")
+        if relative.name == "workspace.js" and b"return v.initEln()" in data:
+            raise SystemExit("frontend overlay enables missing ELN preload resource")
         destination = target_root / relative
         destination.parent.mkdir(parents=True, exist_ok=True)
         destination.write_bytes(data)

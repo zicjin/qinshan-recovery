@@ -6,6 +6,7 @@ package com.sunwayworld.boot;
 import com.sunwayworld.framework.context.ApplicationContextHelper;
 import com.sunwayworld.framework.i18n.DatabaseDrivenMessageSource;
 import com.sunwayworld.framework.thymeleaf.templateresolver.GikamResourceTemplateResolver;
+import com.zaxxer.hikari.HikariDataSource;
 import java.util.HashMap;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -182,10 +183,20 @@ public class ApplicationConfiguration extends ApplicationObjectSupport
     }
 
     @Bean
-    @Profile("tenant")
+    @Primary
+    @ConditionalOnMissingBean(DataSource.class)
     @ConfigurationProperties(prefix = "spring.datasource.hikari")
-    public DataSource dataSource(DataSourceProperties properties) {
-        return properties.initializeDataSourceBuilder().build();
+    public HikariDataSource dataSource(DataSourceProperties properties) {
+        HikariDataSource dataSource = properties.initializeDataSourceBuilder()
+                .type(HikariDataSource.class)
+                .build();
+        dataSource.setPoolName("lims-owned-oracle");
+        dataSource.setMinimumIdle(2);
+        dataSource.setMaximumPoolSize(8);
+        dataSource.setConnectionTimeout(10000L);
+        dataSource.setValidationTimeout(3000L);
+        dataSource.setInitializationFailTimeout(5000L);
+        return dataSource;
     }
 
     private DataSource dataSource() {

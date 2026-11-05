@@ -60,6 +60,13 @@ done
 [[ "$(docker network inspect "$NET" -f '{{.Internal}}')" == true ]] || { echo "$NET must remain internal" >&2; exit 3; }
 [[ -f "$ROOT/application.properties" ]] || { echo "owned application.properties is missing" >&2; exit 3; }
 grep -q '^server\.servlet\.session\.cookie\.name=OWNED_SSS2_SESSION$' "$ROOT/application.properties" || { echo "owned session cookie name is missing" >&2; exit 3; }
+sed -i 's#^spring\.datasource\.type=.*#spring.datasource.type=com.zaxxer.hikari.HikariDataSource#' "$ROOT/application.properties"
+grep -q '^spring\.datasource\.hikari\.minimum-idle=' "$ROOT/application.properties" || echo 'spring.datasource.hikari.minimum-idle=2' >> "$ROOT/application.properties"
+grep -q '^spring\.datasource\.hikari\.maximum-pool-size=' "$ROOT/application.properties" || echo 'spring.datasource.hikari.maximum-pool-size=8' >> "$ROOT/application.properties"
+grep -q '^spring\.datasource\.hikari\.connection-timeout=' "$ROOT/application.properties" || echo 'spring.datasource.hikari.connection-timeout=10000' >> "$ROOT/application.properties"
+grep -q '^spring\.datasource\.hikari\.validation-timeout=' "$ROOT/application.properties" || echo 'spring.datasource.hikari.validation-timeout=3000' >> "$ROOT/application.properties"
+grep -q '^spring\.datasource\.hikari\.initialization-fail-timeout=' "$ROOT/application.properties" || echo 'spring.datasource.hikari.initialization-fail-timeout=5000' >> "$ROOT/application.properties"
+pkill -f "$ROOT/port-forward.py" >/dev/null 2>&1 || true
 if [[ -s "$ROOT/port-forward.pid" ]]; then
   old_pid="$(cat "$ROOT/port-forward.pid" 2>/dev/null || true)"
   [[ "$old_pid" =~ ^[0-9]+$ ]] && kill "$old_pid" >/dev/null 2>&1 || true
@@ -143,6 +150,7 @@ def relay(src,dst):
 def serve(conn):
     try: upstream=socket.create_connection((target,target_port),5)
     except OSError: conn.close(); return
+    upstream.settimeout(None)
     threading.Thread(target=relay,args=(conn,upstream),daemon=True).start()
     threading.Thread(target=relay,args=(upstream,conn),daemon=True).start()
 with socket.socket() as server:

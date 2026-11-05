@@ -19,7 +19,10 @@ def main():
         assert path.is_file(), row["path"]
         assert path.stat().st_size == int(row["size"]), row["path"]
         assert hashlib.sha256(path.read_bytes()).hexdigest() == row["sha256"], row["path"]
-        assert row["source"] == "sss2:18081"
+        expected_sources = {"sss2:18081"}
+        if row["provenance"] == "optional-css-fallback":
+            expected_sources.add("owned-web")
+        assert row["source"] in expected_sources, row["path"]
     for name, minimum in {
         "chunk-common.js": 1_000_000,
         "chunk-vendors.js": 1_000_000,
@@ -36,6 +39,7 @@ def main():
     workspace_text = workspace.read_bytes().decode("utf-8", "ignore")
     assert "owned-web" not in workspace_text
     assert "owned-gikam" not in workspace_text
+    assert "return v.initEln()" not in workspace.read_text(encoding="utf-8", errors="ignore")
     assert not (SIMPLIFIED / "gikam").exists(), "simplified Gikam shell still overrides original frontend"
     assert not (SIMPLIFIED / "module/lcdp").exists(), "simplified LCDP shell still overrides original frontend"
     forbidden = ("/core/module/sys/licenses", "/open/security/licenses", "sunway-app.so")

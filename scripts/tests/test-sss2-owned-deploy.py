@@ -44,6 +44,9 @@ class Sss2OwnedDeployTest(unittest.TestCase):
         self.assertEqual(script.count("--env SPRING_PROFILES_ACTIVE=oracle"), 2)
         self.assertIn("--env SUNWAY_LCDP_ENABLE=false", script)
         self.assertIn("rsync -a --delete --checksum", script)
+        self.assertIn('pkill -f "$ROOT/port-forward.py"', script)
+        self.assertIn("upstream.settimeout(None)", script)
+        self.assertIn("spring.datasource.type=com.zaxxer.hikari.HikariDataSource", script)
 
     def test_plan_scans_supplier_free_distribution(self):
         with tempfile.TemporaryDirectory() as temp:

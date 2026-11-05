@@ -86,6 +86,21 @@ def main() -> int:
         else:
             raise AssertionError("license route was accepted in frontend overlay")
 
+        (frontend_overlay / "static/gikam/main/js/home.js").write_text(
+            "window.original = true;\n",
+            encoding="utf-8",
+        )
+        (frontend_overlay / "static/gikam/main/js/workspace.js").write_text(
+            "return v.initEln(),n.next=3\n",
+            encoding="utf-8",
+        )
+        try:
+            builder.copy_license_clean_frontend_overlay(copied_root, frontend_overlay)
+        except SystemExit as error:
+            assert "missing ELN preload resource" in str(error)
+        else:
+            raise AssertionError("missing ELN preload was enabled in frontend overlay")
+
     print("source-only application builder: PASS")
     return 0
 

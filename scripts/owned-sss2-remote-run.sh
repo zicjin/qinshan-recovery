@@ -129,7 +129,7 @@ server.port=8080
 server.servlet.session.cookie.name=OWNED_SSS2_SESSION
 spring.main.banner-mode=off
 spring.datasource.driver-class-name=oracle.jdbc.OracleDriver
-spring.datasource.type=org.springframework.jdbc.datasource.DriverManagerDataSource
+spring.datasource.type=com.zaxxer.hikari.HikariDataSource
 spring.datasource.url=jdbc:oracle:thin:@//oracle-owned:1521/XEPDB1
 spring.datasource.username=$TARGET_USER
 spring.datasource.password=$APP_PASS
@@ -188,6 +188,7 @@ def relay(src,dst):
 def serve(conn):
     try: upstream=socket.create_connection((target,target_port),5)
     except OSError: conn.close(); return
+    upstream.settimeout(None)
     threading.Thread(target=relay,args=(conn,upstream),daemon=True).start()
     threading.Thread(target=relay,args=(upstream,conn),daemon=True).start()
 with socket.socket() as server:

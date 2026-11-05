@@ -173,7 +173,12 @@ server.address=0.0.0.0
 server.port=8080
 spring.main.banner-mode=off
 spring.datasource.driver-class-name=oracle.jdbc.OracleDriver
-spring.datasource.type=org.springframework.jdbc.datasource.DriverManagerDataSource
+spring.datasource.type=com.zaxxer.hikari.HikariDataSource
+spring.datasource.hikari.minimum-idle=2
+spring.datasource.hikari.maximum-pool-size=8
+spring.datasource.hikari.connection-timeout=10000
+spring.datasource.hikari.validation-timeout=3000
+spring.datasource.hikari.initialization-fail-timeout=5000
 spring.datasource.url=jdbc:oracle:thin:@//oracle-strict:1521/XEPDB1
 spring.datasource.username=$TARGET_USER
 spring.datasource.password=$APP_PASS
@@ -234,6 +239,7 @@ def relay(a,b):
 def serve(c):
  try:u=socket.create_connection((target,target_port),5)
  except OSError:c.close();return
+ u.settimeout(None)
  threading.Thread(target=relay,args=(c,u),daemon=True).start(); threading.Thread(target=relay,args=(u,c),daemon=True).start()
 with socket.socket() as s:
  s.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1); s.bind((bind_host,port)); s.listen(32)

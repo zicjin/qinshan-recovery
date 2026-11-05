@@ -392,6 +392,44 @@ def verify_mapper_scanner_covers_both_supplier_conventions() -> None:
     assert "extends WebMvcConfigurationSupport" in mvc_configuration
     assert "implements WebMvcConfigurer" not in mvc_configuration
     assert "public void configureContentNegotiation" in mvc_configuration
+
+
+def verify_framework_runtime_contracts() -> None:
+    source_paths = (
+        ROOT
+        / "reconstituted"
+        / "overrides"
+        / "framework"
+        / "owned-core-common"
+        / "src"
+        / "main"
+        / "java"
+        / "com"
+        / "sunwayworld"
+        / "boot"
+        / "ApplicationConfiguration.java",
+        ROOT
+        / "reconstituted"
+        / "framework"
+        / "owned-core-common"
+        / "src"
+        / "main"
+        / "java"
+        / "com"
+        / "sunwayworld"
+        / "boot"
+        / "ApplicationConfiguration.java",
+    )
+    for source_path in source_paths:
+        source = source_path.read_text(encoding="utf-8")
+        normalized = " ".join(source.split())
+        assert "import com.zaxxer.hikari.HikariDataSource;" in source
+        assert '@Profile("tenant")' not in source
+        assert "@ConditionalOnMissingBean(DataSource.class)" in source
+        assert ".type(HikariDataSource.class)" in normalized
+        assert "dataSource.setMinimumIdle(2)" in source
+        assert "dataSource.setMaximumPoolSize(8)" in source
+        assert "dataSource.setConnectionTimeout(10000L)" in source
     security_configuration = (
         ROOT
         / "reconstituted"
@@ -783,6 +821,7 @@ def main() -> int:
     verify_file_utils_source_contract()
     verify_lcdp_database_conditions_are_null_safe()
     verify_mapper_scanner_covers_both_supplier_conventions()
+    verify_framework_runtime_contracts()
     verify_locale_resolver_matches_native_seam()
     verify_removed_license_negative_sources()
     verify_tracked_full_closure_snapshot()

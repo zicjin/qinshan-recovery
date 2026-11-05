@@ -172,6 +172,7 @@ def serve(connection):
     except OSError:
         connection.close()
         return
+    upstream.settimeout(None)
     threading.Thread(target=relay, args=(connection, upstream), daemon=True).start()
     threading.Thread(target=relay, args=(upstream, connection), daemon=True).start()
 

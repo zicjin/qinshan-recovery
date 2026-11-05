@@ -137,6 +137,7 @@ _IMPLEMENTATION_SUFFIXES = (
     "scripts/start-reused-sss2-api-runtime.sh",
     "scripts/cleanup-strict-sss2-api-runtime.sh",
     "scripts/refresh-owned-sss2-app.sh",
+    "scripts/owned-sss2-remote-run.sh",
     "scripts/owned_readiness.py",
     "scripts/reconstitute-framework-source.sh",
     "scripts/resolve-java-source-closure.py",

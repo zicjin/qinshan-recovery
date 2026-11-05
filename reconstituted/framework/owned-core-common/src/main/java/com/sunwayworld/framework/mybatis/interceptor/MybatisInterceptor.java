@@ -114,6 +114,8 @@ implements Interceptor {
         boundSql.setAdditionalParameter("_locale", I18nHelper.getLang(LocaleContextHolder.getLocale()));
         if (!StringUtils.startsWith(mappedStatement.getId(), DaoMapper.class.getName()) && LocalContextHelper.isUserLogin()) {
             boundSql.setAdditionalParameter("loginUser", LocalContextHelper.getLoginUser());
+            boundSql.setAdditionalParameter("loginUserId", LocalContextHelper.getLoginUserId());
+            boundSql.setAdditionalParameter("loginUserName", LocalContextHelper.getLoginUserName());
             boundSql.setAdditionalParameter("loginOrgId", LocalContextHelper.getLoginOrgId());
             boundSql.setAdditionalParameter("loginOrgName", LocalContextHelper.getLoginOrgName());
             boundSql.setAdditionalParameter("loginRoleId", LocalContextHelper.getLoginRoleId());
@@ -122,6 +124,12 @@ implements Interceptor {
             if (currentProxy != null && GenericDao.class.isAssignableFrom(ClassUtils.getRawType(currentProxy.getClass()))) {
                 boundSql.setAdditionalParameter("service_table", ((GenericDao)currentProxy).getTable());
             }
+        }
+        Object paramObj = boundSql.getParameterObject();
+        if (paramObj instanceof Map) {
+            @SuppressWarnings("unchecked")
+            Map<String, Object> map = (Map<String, Object>) paramObj;
+            this.enhanceParameter(map);
         }
     }
 
@@ -146,6 +154,12 @@ implements Interceptor {
         if (LocalContextHelper.isUserLogin()) {
             if (!map.containsKey("loginUser")) {
                 map.put("loginUser", LocalContextHelper.getLoginUser());
+            }
+            if (!map.containsKey("loginUserId")) {
+                map.put("loginUserId", LocalContextHelper.getLoginUserId());
+            }
+            if (!map.containsKey("loginUserName")) {
+                map.put("loginUserName", LocalContextHelper.getLoginUserName());
             }
             if (!map.containsKey("loginOrgId")) {
                 map.put("loginOrgId", LocalContextHelper.getLoginOrgId());
@@ -182,6 +196,8 @@ implements Interceptor {
         }
         if (LocalContextHelper.isUserLogin()) {
             newBoundSql.setAdditionalParameter("loginUser", LocalContextHelper.getLoginUser());
+            newBoundSql.setAdditionalParameter("loginUserId", LocalContextHelper.getLoginUserId());
+            newBoundSql.setAdditionalParameter("loginUserName", LocalContextHelper.getLoginUserName());
             newBoundSql.setAdditionalParameter("loginOrgId", LocalContextHelper.getLoginOrgId());
             newBoundSql.setAdditionalParameter("loginOrgName", LocalContextHelper.getLoginOrgName());
             newBoundSql.setAdditionalParameter("loginRoleId", LocalContextHelper.getLoginRoleId());

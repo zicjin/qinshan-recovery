@@ -130,7 +130,8 @@ implements Dialect {
     @Override
     public boolean isClob(ColumnContext columnContext) {
         switch (columnContext.getDataType().toLowerCase()) {
-            case "clob": {
+            case "clob":
+            case "nclob": {
                 return true;
             }
         }
@@ -140,7 +141,9 @@ implements Dialect {
     @Override
     public boolean isBlob(ColumnContext columnContext) {
         switch (columnContext.getDataType().toLowerCase()) {
-            case "blob": {
+            case "blob":
+            case "raw":
+            case "long raw": {
                 return true;
             }
         }

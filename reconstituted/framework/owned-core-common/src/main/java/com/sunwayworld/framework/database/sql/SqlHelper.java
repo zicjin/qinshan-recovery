@@ -27,10 +27,105 @@ public abstract class SqlHelper {
     public static final String QTY_COLUMN_NAME = "QTY_";
     private static final Pattern SQL_ENDING_ORDER_BY_PATTERN = Pattern.compile("\\s+(?i)order\\s+(?i)by\\s+([^()]*[(][^()]*([(][^()]*([(][^()]*[)][^()]*)*[)][^()]*)*[)][^()]*)*[^()]*$");
     private static final Pattern SQL_ORDER_BY_PATTERN = Pattern.compile("(?i)order\\s+by");
-    private static final Pattern DANGLING_WHERE_PATTERN = Pattern.compile("(?i)\\bwhere\\s*(?:/\\*[\\s\\S]*?\\*/|--[^\\r\\n]*[\\r\\n]|\\s)*$");
-    private static final Pattern WHERE_AND_OR_PATTERN = Pattern.compile("(?i)\\bwhere\\s*(?:/\\*[\\s\\S]*?\\*/|--[^\\r\\n]*[\\r\\n]|\\s)*\\b(and|or)\\b\\s+");
-    private static final Pattern DANGLING_AND_OR_PATTERN = Pattern.compile("(?i)\\b(and|or)\\s*(?:/\\*[\\s\\S]*?\\*/|--[^\\r\\n]*[\\r\\n]|\\s)*$");
+    private static final String WS_OR_COMMENT = "(?:/\\*[\\s\\S]*?\\*/|--[^\\r\\n]*[\\r\\n]|\\s)";
+    private static final Pattern DANGLING_WHERE_PATTERN = Pattern.compile("(?i)\\bwhere(" + WS_OR_COMMENT + "*)(?=$|\\)|\\bgroup\\s+by\\b|\\bhaving\\b|\\border\\s+by\\b|\\bunion\\b|\\bintersect\\b|\\bminus\\b)");
+    private static final Pattern WHERE_AND_OR_PATTERN = Pattern.compile("(?i)\\bwhere" + WS_OR_COMMENT + "*\\b(and|or)\\b\\s*");
+    private static final Pattern DANGLING_AND_OR_PATTERN = Pattern.compile("(?i)\\b(and|or)(" + WS_OR_COMMENT + "*)(?=$|\\)|\\bgroup\\s+by\\b|\\bhaving\\b|\\border\\s+by\\b|\\bunion\\b|\\bintersect\\b|\\bminus\\b)");
+    private static final Pattern CONSECUTIVE_AND_OR = Pattern.compile("(?i)\\b(and|or)" + WS_OR_COMMENT + "+\\b(and|or)\\b\\s*");
+    private static final Pattern EMPTY_PARENS = Pattern.compile("\\(\\s*\\)");
     public static final String REPLACE_KEY_EXT = "EXT$.";
+
+    public static int findOuterOrderByPos(String sql) {
+        if (StringUtils.isEmpty(sql)) {
+            return -1;
+        }
+        int n = sql.length();
+        int depth = 0;
+        boolean inSingleQuote = false;
+        boolean inBlockComment = false;
+        boolean inLineComment = false;
+        int orderPos = -1;
+        int i = 0;
+        while (i < n) {
+            char c = sql.charAt(i);
+            if (inSingleQuote) {
+                if (c == '\'') {
+                    if (i + 1 < n && sql.charAt(i + 1) == '\'') {
+                        i++;
+                    } else {
+                        inSingleQuote = false;
+                    }
+                }
+                i++;
+                continue;
+            }
+            if (inBlockComment) {
+                if (c == '*' && i + 1 < n && sql.charAt(i + 1) == '/') {
+                    inBlockComment = false;
+                    i += 2;
+                    continue;
+                }
+                i++;
+                continue;
+            }
+            if (inLineComment) {
+                if (c == '\r' || c == '\n') {
+                    inLineComment = false;
+                }
+                i++;
+                continue;
+            }
+            if (c == '\'') {
+                inSingleQuote = true;
+                i++;
+                continue;
+            }
+            if (c == '/' && i + 1 < n && sql.charAt(i + 1) == '*') {
+                inBlockComment = true;
+                i += 2;
+                continue;
+            }
+            if (c == '-' && i + 1 < n && sql.charAt(i + 1) == '-') {
+                inLineComment = true;
+                i += 2;
+                continue;
+            }
+            if (c == '(') {
+                depth++;
+                i++;
+                continue;
+            }
+            if (c == ')') {
+                depth--;
+                i++;
+                continue;
+            }
+            if (depth == 0) {
+                if (i + 5 <= n && sql.substring(i, i + 5).equalsIgnoreCase("ORDER")) {
+                    boolean prevWordBoundary = (i == 0 || (!Character.isLetterOrDigit(sql.charAt(i - 1)) && sql.charAt(i - 1) != '_'));
+                    int next = i + 5;
+                    boolean nextWordBoundary = (next >= n || (!Character.isLetterOrDigit(sql.charAt(next)) && sql.charAt(next) != '_'));
+                    if (prevWordBoundary && nextWordBoundary) {
+                        int j = next;
+                        while (j < n && Character.isWhitespace(sql.charAt(j))) {
+                            j++;
+                        }
+                        if (j + 2 <= n && sql.substring(j, j + 2).equalsIgnoreCase("BY")) {
+                            int afterBy = j + 2;
+                            boolean afterByBoundary = (afterBy >= n || (!Character.isLetterOrDigit(sql.charAt(afterBy)) && sql.charAt(afterBy) != '_'));
+                            if (afterByBoundary) {
+                                orderPos = i;
+                                i = afterBy;
+                                continue;
+                            }
+                        }
+                    }
+                }
+            }
+            i++;
+        }
+        return orderPos;
+    }
 
     public static final String cleanDanglingWhereClause(String sql) {
         if (StringUtils.isEmpty(sql)) {
@@ -39,9 +134,11 @@ public abstract class SqlHelper {
         String prev;
         do {
             prev = sql;
+            sql = EMPTY_PARENS.matcher(sql).replaceAll("");
+            sql = CONSECUTIVE_AND_OR.matcher(sql).replaceAll("$2 ");
             sql = WHERE_AND_OR_PATTERN.matcher(sql).replaceAll("WHERE ");
-            sql = DANGLING_AND_OR_PATTERN.matcher(sql).replaceAll("");
-            sql = DANGLING_WHERE_PATTERN.matcher(sql).replaceAll("");
+            sql = DANGLING_AND_OR_PATTERN.matcher(sql).replaceAll("$2");
+            sql = DANGLING_WHERE_PATTERN.matcher(sql).replaceAll("$1");
         } while (!sql.equals(prev));
         return sql;
     }
@@ -49,6 +146,10 @@ public abstract class SqlHelper {
     public static final String removeEndingOrderIfPresent(String sql) {
         if (StringUtils.isEmpty(sql)) {
             return sql;
+        }
+        int pos = findOuterOrderByPos(sql);
+        if (pos != -1) {
+            return cleanDanglingWhereClause(sql.substring(0, pos));
         }
         Matcher matcher = SQL_ENDING_ORDER_BY_PATTERN.matcher(sql);
         if (matcher.find()) {
@@ -59,16 +160,25 @@ public abstract class SqlHelper {
 
     public static final boolean hasOrderSegment(String sql) {
         Objects.requireNonNull(sql);
+        int pos = findOuterOrderByPos(sql);
+        if (pos != -1) {
+            return true;
+        }
         Matcher matcher = SQL_ENDING_ORDER_BY_PATTERN.matcher(sql);
         return matcher.find();
     }
 
     public static final String getOrderSegment(String sql) {
         Objects.requireNonNull(sql);
+        int pos = findOuterOrderByPos(sql);
+        if (pos != -1) {
+            String orderBySql = sql.substring(pos).trim();
+            return SQL_ORDER_BY_PATTERN.matcher(orderBySql).replaceFirst("").trim();
+        }
         Matcher matcher = SQL_ENDING_ORDER_BY_PATTERN.matcher(sql);
         if (matcher.find()) {
-            int pos = matcher.start();
-            String orderBySql = sql.substring(pos).trim();
+            int posOld = matcher.start();
+            String orderBySql = sql.substring(posOld).trim();
             return SQL_ORDER_BY_PATTERN.matcher(orderBySql).replaceFirst("").trim();
         }
         throw new UnexpectedException("Not an ordered sql.");

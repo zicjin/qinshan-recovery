@@ -27,7 +27,10 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
 @Configuration
-@ComponentScan(useDefaultFilters=false, basePackages={"com.sunwayworld"}, includeFilters={@ComponentScan.Filter(type=FilterType.ANNOTATION, value={Controller.class}), @ComponentScan.Filter(type=FilterType.ANNOTATION, value={RestController.class})}, excludeFilters={@ComponentScan.Filter(type=FilterType.ASPECTJ, pattern={"com.sunwayworld.test..*"})})
+@ComponentScan(useDefaultFilters=false, basePackages={"com.sunwayworld"}, includeFilters={@ComponentScan.Filter(type=FilterType.ANNOTATION, value={Controller.class}), @ComponentScan.Filter(type=FilterType.ANNOTATION, value={RestController.class})}, excludeFilters={
+        @ComponentScan.Filter(type=FilterType.ASPECTJ, pattern={"com.sunwayworld.test..*"}),
+        @ComponentScan.Filter(type=FilterType.REGEX, pattern={"com\\.sunwayworld\\.owned\\..*"})
+})
 public class ApplicationMvcConfiguration
 extends WebMvcConfigurationSupport {
     private final WebMvcProperties mvcProperties;

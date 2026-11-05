@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 /** Main/runtime wiring for unchanged original consumables contracts. */
 @AutoConfigureAfter(OwnedIdentityConfiguration.class)
 @ConditionalOnBean({DataSource.class, JdbcPersonnelIdentity.class, JdbcPersonnelIdentityProvider.class, OwnedIdentityHttpBoundary.class})
+@org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "owned.source-seams.consumables", havingValue = "true")
 public class OwnedConsumablesConfiguration {
     @Bean public OwnedConsumablesReads ownedConsumablesReads(DataSource source, JdbcPersonnelIdentity identity, JdbcPersonnelIdentityProvider provider, OwnedIdentityHttpBoundary boundary) { return new OwnedConsumablesReads(source, identity, provider, boundary); }
     @Bean public OwnedConsumablesReadDao ownedConsumablesReadDao(OwnedConsumablesReads reads, DataSource source,
@@ -35,7 +36,11 @@ public class OwnedConsumablesConfiguration {
     @Bean public OwnedConsumablesReadService ownedConsumablesReadService(OwnedConsumablesReadDao dao) { return new OwnedConsumablesReadService(dao); }
     @Bean public OwnedConsumablesStockService ownedConsumablesStockService(OwnedConsumablesStockDao dao) { return new OwnedConsumablesStockService(dao); }
     @Bean public OwnedConsumablesStockLogService ownedConsumablesStockLogService(OwnedConsumablesStockLogDao dao) { return new OwnedConsumablesStockLogService(dao); }
-    @Bean @ConditionalOnMissingBean(OwnedMdmStockReadController.class)
+    // The original project resource is authoritative for the EMC material
+    // namespace. Only create this owned controller when that source resource
+    // is absent; otherwise its overlapping mappings make the single Spring
+    // application fail during handler registration.
+    @Bean @ConditionalOnMissingBean({OwnedMdmStockReadController.class, com.sunwayworld.emc.module.mdm.basemdm.mtl.resource.impl.EmcMtlResourceImpl.class})
     public OwnedMdmStockReadController ownedMdmStockReadController(DataSource source,
             JdbcPersonnelIdentityProvider provider, OwnedIdentityHttpBoundary boundary,
             org.springframework.core.env.Environment environment, AuditEventSink audit) {

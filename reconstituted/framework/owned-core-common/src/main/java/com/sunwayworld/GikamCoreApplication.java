@@ -39,6 +39,7 @@ import org.springframework.boot.web.servlet.server.ConfigurableServletWebServerF
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -46,7 +47,9 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Import(value={ServletWebServerFactoryAutoConfiguration.class, DispatcherServletAutoConfiguration.class, WebMvcAutoConfiguration.class, ErrorMvcAutoConfiguration.class, HttpEncodingAutoConfiguration.class, HttpMessageConvertersAutoConfiguration.class, JacksonAutoConfiguration.class, JmxAutoConfiguration.class, MultipartAutoConfiguration.class, PropertyPlaceholderAutoConfiguration.class, ThymeleafAutoConfiguration.class, RedisAutoConfiguration.class, DataSourceAutoConfiguration.class, RestTemplateAutoConfiguration.class, TaskSchedulingAutoConfiguration.class, TaskExecutionAutoConfiguration.class, MailSenderAutoConfiguration.class, DataSourceTransactionManagerAutoConfiguration.class, AopAutoConfiguration.class, ElasticsearchRestClientAutoConfiguration.class, ElasticsearchDataAutoConfiguration.class})
 @EnableElasticsearchRepositories
-@ComponentScan(basePackages={"com.sunwayworld"})
+@ComponentScan(basePackages={"com.sunwayworld"}, excludeFilters={
+    @ComponentScan.Filter(type=FilterType.REGEX, pattern="com\\.sunwayworld\\.owned\\..*")
+})
 @EnableTransactionManagement
 @ConditionalOnProperty(prefix="sunway.app.stand-alone", value={"enabled"}, havingValue="true", matchIfMissing=true)
 public class GikamCoreApplication

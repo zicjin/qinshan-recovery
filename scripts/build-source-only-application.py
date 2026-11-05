@@ -128,6 +128,40 @@ def copy_java_tree_resources(source_root: Path, target_root: Path) -> list[dict[
     return records
 
 
+def merge_spring_factories(resource_sources: list[Path], target_root: Path) -> None:
+    """Merge auto-configuration registrations into the single app archive."""
+    values: dict[str, list[str]] = {}
+    for source_root in resource_sources:
+        path = source_root / "META-INF" / "spring.factories"
+        if not path.is_file():
+            continue
+        key = None
+        for raw in path.read_text(encoding="utf-8", errors="replace").splitlines():
+            line = raw.strip()
+            if not line or line.startswith("#"):
+                continue
+            if "=" in line:
+                key, value = line.split("=", 1)
+                values.setdefault(key.strip(), [])
+                value = value.rstrip("\\").strip()
+                if value:
+                    values[key.strip()].extend(x.strip() for x in value.split(",") if x.strip())
+            elif key:
+                line = line.rstrip("\\").strip()
+                values[key].extend(x.strip() for x in line.split(",") if x.strip())
+    if not values:
+        return
+    destination = target_root / "META-INF" / "spring.factories"
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    lines: list[str] = []
+    for key in sorted(values):
+        unique = list(dict.fromkeys(values[key]))
+        lines.append(key + "=\\")
+        for index, item in enumerate(unique):
+            lines.append("  " + item + (",\\" if index < len(unique) - 1 else ""))
+    destination.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
 def copy_license_clean_frontend_overlay(
     target_root: Path,
     overlay_root: Path = ROOT / "owned-web" / "src" / "main" / "resources" / "frontend-original",
@@ -361,6 +395,11 @@ def main(argv: list[str] | None = None) -> int:
         if owned_root.is_dir():
             owned_resource_records.extend(copy_resource_tree(owned_root, resources))
     resource_records.extend(owned_resource_records)
+    merge_spring_factories(
+        [resource_source_root]
+        + [ROOT / "owned-framework" / "src/main/resources"],
+        resources,
+    )
     app_jar = output_root / "lims-owned-application.jar"
     build_application_jar(classes, resources, app_jar)
     third_party_provenance = (

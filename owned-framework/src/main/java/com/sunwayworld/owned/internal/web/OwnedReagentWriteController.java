@@ -36,7 +36,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @ConditionalOnBean({OwnedIdentityHttpBoundary.class, DataSource.class})
 public final class OwnedReagentWriteController {
-    private static final String[] ROOTS = {"/secure/core/module/bp/reagents", "/secure/emc/module/bp/reagents"};
+    // The original project resource owns the /secure/emc namespace. This
+    // source-only seam supplies only the missing /secure/core boundary alias;
+    // registering both namespaces creates an ambiguous Spring mapping when
+    // the original project is present in the same application.
     private final OwnedIdentityHttpBoundary boundary;
     private final DataSource dataSource;
     private final Environment environment;
@@ -48,7 +51,7 @@ public final class OwnedReagentWriteController {
         this.boundary = boundary; this.dataSource = dataSource; this.environment = environment;
     }
 
-    @PostMapping(path = {"/secure/core/module/bp/reagents", "/secure/emc/module/bp/reagents"},
+    @PostMapping(path = "/secure/core/module/bp/reagents",
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> insert(HttpServletRequest request, @RequestBody(required = false) String body) {
         try {
@@ -62,7 +65,7 @@ public final class OwnedReagentWriteController {
         catch (SQLException failure) { denied(request); return unavailable(); }
     }
 
-    @PutMapping(path = {"/secure/core/module/bp/reagents/{id}", "/secure/emc/module/bp/reagents/{id}"},
+    @PutMapping(path = "/secure/core/module/bp/reagents/{id}",
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> update(HttpServletRequest request, @PathVariable("id") String id,
             @RequestBody(required = false) String body) {
@@ -77,7 +80,7 @@ public final class OwnedReagentWriteController {
         catch (SQLException failure) { denied(request); return unavailable(); }
     }
 
-    @DeleteMapping(path = {"/secure/core/module/bp/reagents", "/secure/emc/module/bp/reagents"},
+    @DeleteMapping(path = "/secure/core/module/bp/reagents",
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> delete(HttpServletRequest request, @RequestBody(required = false) String body) {
         try {
@@ -90,7 +93,7 @@ public final class OwnedReagentWriteController {
         catch (SQLException failure) { denied(request); return unavailable(); }
     }
 
-    @PostMapping(path = {"/secure/core/module/bp/reagents/{id}/compositions", "/secure/emc/module/bp/reagents/{id}/compositions"},
+    @PostMapping(path = "/secure/core/module/bp/reagents/{id}/compositions",
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> insertComposition(HttpServletRequest request, @PathVariable("id") String id,
             @RequestBody(required = false) String body) {
@@ -105,7 +108,7 @@ public final class OwnedReagentWriteController {
         catch (SQLException failure) { denied(request); return unavailable(); }
     }
 
-    @DeleteMapping(path = {"/secure/core/module/bp/reagents/{id}/compositions", "/secure/emc/module/bp/reagents/{id}/compositions"},
+    @DeleteMapping(path = "/secure/core/module/bp/reagents/{id}/compositions",
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> deleteComposition(HttpServletRequest request, @PathVariable("id") String id,
             @RequestBody(required = false) String body) {
@@ -121,7 +124,7 @@ public final class OwnedReagentWriteController {
         catch (SQLException failure) { denied(request); return unavailable(); }
     }
 
-    @PostMapping(path = {"/secure/core/module/bp/reagents/{id}/copyReagent", "/secure/emc/module/bp/reagents/{id}/copyReagent"},
+    @PostMapping(path = "/secure/core/module/bp/reagents/{id}/copyReagent",
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> copy(HttpServletRequest request, @PathVariable("id") String id,
             @RequestBody(required = false) String body) {

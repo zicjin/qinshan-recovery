@@ -50,8 +50,7 @@ public final class OwnedReagentQueryController {
     }
 
     @PostMapping(path = {"/secure/core/module/bp/reagents/queries", "/secure/core/module/bp/reagents/queries/raw",
-            "/secure/emc/module/bp/reagents/queries", "/secure/emc/module/bp/reagents/queries/raw",
-            "/secure/core/module/bp/reagents/queries/searchable", "/secure/emc/module/bp/reagents/queries/searchable"},
+            "/secure/core/module/bp/reagents/queries/searchable"},
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> reagents(HttpServletRequest request,
             @RequestBody(required = false) String body) {
@@ -61,7 +60,7 @@ public final class OwnedReagentQueryController {
         catch (SQLException failure) { return unavailable(); }
     }
 
-    @GetMapping(path = {"/secure/core/module/bp/reagents/info/status", "/secure/emc/module/bp/reagents/info/status"},
+    @GetMapping(path = "/secure/core/module/bp/reagents/info/status",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> status(HttpServletRequest request) {
         try { require(request); return ok("{\"ext$\":{}}"); }
@@ -69,8 +68,7 @@ public final class OwnedReagentQueryController {
         catch (SQLException failure) { return unavailable(); }
     }
 
-    @PostMapping(path = {"/secure/core/module/bp/reagents/{id}/compositions/queries",
-            "/secure/emc/module/bp/reagents/{id}/compositions/queries"},
+    @PostMapping(path = "/secure/core/module/bp/reagents/{id}/compositions/queries",
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> compositions(HttpServletRequest request, @PathVariable("id") Long id,
             @RequestBody(required = false) String body) {

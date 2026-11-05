@@ -13,18 +13,9 @@ public final class OwnedReagentPageController {
         return "emc/module/bp/reagents/emc-reagent-edit-list";
     }
 
-    @GetMapping("/secure/emc/module/bp/reagents/page/edit-list")
-    public String emcEditList() {
-        return "emc/module/bp/reagents/emc-reagent-edit-list";
-    }
-
     @GetMapping("/secure/core/module/bp/reagents/page/stock-choose-list")
     public String coreStockChooseList() {
         return "emc/module/bp/reagents/emc-mtl-stock-choose-list";
     }
 
-    @GetMapping("/secure/emc/module/bp/reagents/page/stock-choose-list")
-    public String emcStockChooseList() {
-        return "emc/module/bp/reagents/emc-mtl-stock-choose-list";
-    }
 }

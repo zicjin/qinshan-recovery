@@ -47,7 +47,6 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 /** Source-owned read facade for the original mdm/basemdm/mtl stock routes. */
-@RestController
 @RequestMapping("/secure/emc/module/mdm/basemdm/mtls")
 public final class OwnedMdmStockReadController {
     private final DataSource dataSource;

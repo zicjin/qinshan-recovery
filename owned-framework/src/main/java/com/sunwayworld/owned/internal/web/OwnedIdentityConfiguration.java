@@ -94,26 +94,27 @@ public class OwnedIdentityConfiguration {
         return new OwnedRsaLoginCredentialDecoder();
     }
 
-    @Bean
-    @ConditionalOnMissingBean(OwnedIdentityHttpController.class)
-    public OwnedIdentityHttpController ownedIdentityHttpController(OwnedIdentityHttpBoundary boundary,
-            OwnedRsaLoginCredentialDecoder decoder) {
-        return new OwnedIdentityHttpController(boundary, decoder);
-    }
+    // The original project owns /core/module/sys/logins/account and its
+    // login resource. Keep the owned identity facade available for the
+    // explicit source-backed seam, but do not register overlapping handler
+    // methods in the project application.
 
     @Bean
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "owned.source-seams.enabled", havingValue = "true")
     @ConditionalOnMissingBean(OwnedSecurityKeyController.class)
     public OwnedSecurityKeyController ownedSecurityKeyController(OwnedRsaLoginCredentialDecoder decoder) {
         return new OwnedSecurityKeyController(decoder);
     }
 
     @Bean
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "owned.source-seams.enabled", havingValue = "true")
     @ConditionalOnMissingBean(OwnedMenuController.class)
     public OwnedMenuController ownedMenuController(OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
         return new OwnedMenuController(boundary, dataSource);
     }
 
     @Bean
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "owned.source-seams.enabled", havingValue = "true")
     @ConditionalOnMissingBean(OwnedRoleMenuMatrixController.class)
     public OwnedRoleMenuMatrixController ownedRoleMenuMatrixController(OwnedIdentityHttpBoundary boundary,
             DataSource dataSource, Environment environment) {
@@ -121,6 +122,7 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "owned.source-seams.enabled", havingValue = "true")
     @ConditionalOnMissingBean(OwnedMenuManagementController.class)
     public OwnedMenuManagementController ownedMenuManagementController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource, Environment environment) {
@@ -128,6 +130,7 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "owned.source-seams.enabled", havingValue = "true")
     @ConditionalOnMissingBean(OwnedRoleUserMatrixController.class)
     public OwnedRoleUserMatrixController ownedRoleUserMatrixController(OwnedIdentityHttpBoundary boundary,
             DataSource dataSource, Environment environment) {
@@ -135,6 +138,7 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "owned.source-seams.enabled", havingValue = "true")
     @ConditionalOnMissingBean(OwnedOrganizationManagementController.class)
     public OwnedOrganizationManagementController ownedOrganizationManagementController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource, Environment environment) {
@@ -142,6 +146,7 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "owned.source-seams.enabled", havingValue = "true")
     @ConditionalOnMissingBean(OwnedResultRunController.class)
     public OwnedResultRunController ownedResultRunController(OwnedIdentityHttpBoundary boundary,
             DataSource dataSource) {
@@ -149,6 +154,7 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "owned.source-seams.enabled", havingValue = "true")
     @ConditionalOnMissingBean(OwnedResultRunWriteController.class)
     public OwnedResultRunWriteController ownedResultRunWriteController(OwnedIdentityHttpBoundary boundary,
             DataSource dataSource, Environment environment) {
@@ -156,6 +162,7 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "owned.source-seams.enabled", havingValue = "true")
     @ConditionalOnMissingBean(OwnedResultItemController.class)
     public OwnedResultItemController ownedResultItemController(OwnedIdentityHttpBoundary boundary,
             DataSource dataSource, Environment environment) {
@@ -163,6 +170,7 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "owned.source-seams.enabled", havingValue = "true")
     @ConditionalOnMissingBean(OwnedOrderRetainController.class)
     public OwnedOrderRetainController ownedOrderRetainController(OwnedIdentityHttpBoundary boundary,
             DataSource dataSource) {
@@ -170,12 +178,14 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "owned.source-seams.enabled", havingValue = "true")
     @ConditionalOnMissingBean(OwnedOrderRetainWriteController.class)
     public OwnedOrderRetainWriteController ownedOrderRetainWriteController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource, Environment environment) {
         return new OwnedOrderRetainWriteController(boundary, dataSource, environment);
     }
     @Bean
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "owned.source-seams.enabled", havingValue = "true")
     @ConditionalOnMissingBean(OwnedOrderRetainHandleController.class)
     public OwnedOrderRetainHandleController ownedOrderRetainHandleController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource, Environment environment) {
@@ -183,6 +193,7 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "owned.source-seams.reagent", havingValue = "true", matchIfMissing = true)
     @ConditionalOnMissingBean(OwnedReagentQueryController.class)
     public OwnedReagentQueryController ownedReagentQueryController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
@@ -190,6 +201,7 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "owned.source-seams.enabled", havingValue = "true")
     @ConditionalOnMissingBean(OwnedSolQueryController.class)
     public OwnedSolQueryController ownedSolQueryController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
@@ -197,6 +209,7 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "owned.source-seams.enabled", havingValue = "true")
     @ConditionalOnMissingBean(OwnedSubpackageQueryController.class)
     public OwnedSubpackageQueryController ownedSubpackageQueryController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
@@ -204,6 +217,7 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "owned.source-seams.enabled", havingValue = "true")
     @ConditionalOnMissingBean(OwnedWorkConditionQueryController.class)
     public OwnedWorkConditionQueryController ownedWorkConditionQueryController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
@@ -211,6 +225,7 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "owned.source-seams.enabled", havingValue = "true")
     @ConditionalOnMissingBean(OwnedSampleRemindQueryController.class)
     public OwnedSampleRemindQueryController ownedSampleRemindQueryController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
@@ -218,6 +233,7 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "owned.source-seams.enabled", havingValue = "true")
     @ConditionalOnMissingBean(OwnedSampleRecordQueryController.class)
     public OwnedSampleRecordQueryController ownedSampleRecordQueryController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
@@ -225,6 +241,7 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "owned.source-seams.enabled", havingValue = "true")
     @ConditionalOnMissingBean(OwnedOrderReceiptQueryController.class)
     public OwnedOrderReceiptQueryController ownedOrderReceiptQueryController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
@@ -232,6 +249,7 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "owned.source-seams.enabled", havingValue = "true")
     @ConditionalOnMissingBean(OwnedSampleMainReadController.class)
     public OwnedSampleMainReadController ownedSampleMainReadController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
@@ -239,6 +257,7 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "owned.source-seams.enabled", havingValue = "true")
     @ConditionalOnMissingBean(OwnedIndexCategoryReadController.class)
     public OwnedIndexCategoryReadController ownedIndexCategoryReadController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
@@ -246,6 +265,7 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "owned.source-seams.enabled", havingValue = "true")
     @ConditionalOnMissingBean(OwnedMaterialApplyQueryController.class)
     public OwnedMaterialApplyQueryController ownedMaterialApplyQueryController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
@@ -253,6 +273,7 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "owned.source-seams.enabled", havingValue = "true")
     @ConditionalOnMissingBean(OwnedMtlPerCheckQueryController.class)
     public OwnedMtlPerCheckQueryController ownedMtlPerCheckQueryController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
@@ -260,6 +281,7 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "owned.source-seams.enabled", havingValue = "true")
     @ConditionalOnMissingBean(OwnedMtlCategoryQueryController.class)
     public OwnedMtlCategoryQueryController ownedMtlCategoryQueryController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
@@ -267,6 +289,7 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "owned.source-seams.reagent", havingValue = "true", matchIfMissing = true)
     @ConditionalOnMissingBean(OwnedReagentWriteController.class)
     public OwnedReagentWriteController ownedReagentWriteController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource, Environment environment) {
@@ -274,6 +297,7 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "owned.source-seams.enabled", havingValue = "true")
     @ConditionalOnMissingBean(OwnedMaterialApplyController.class)
     public OwnedMaterialApplyController ownedMaterialApplyController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource, Environment environment) {
@@ -281,6 +305,7 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "owned.source-seams.enabled", havingValue = "true")
     @ConditionalOnMissingBean(OwnedAuditTrailController.class)
     public OwnedAuditTrailController ownedAuditTrailController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
@@ -288,6 +313,7 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "owned.source-seams.enabled", havingValue = "true")
     @ConditionalOnMissingBean(OwnedAuditRecordController.class)
     public OwnedAuditRecordController ownedAuditRecordController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
@@ -295,6 +321,7 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "owned.source-seams.enabled", havingValue = "true")
     @ConditionalOnMissingBean(OwnedOrganizationMappingController.class)
     public OwnedOrganizationMappingController ownedOrganizationMappingController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
@@ -302,6 +329,7 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "owned.source-seams.enabled", havingValue = "true")
     @ConditionalOnMissingBean(OwnedEquipmentResourceStatusController.class)
     public OwnedEquipmentResourceStatusController ownedEquipmentResourceStatusController(
             OwnedIdentityHttpBoundary boundary) {
@@ -309,6 +337,7 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "owned.source-seams.enabled", havingValue = "true")
     @ConditionalOnMissingBean(OwnedEquipmentGenericResourceController.class)
     public OwnedEquipmentGenericResourceController ownedEquipmentGenericResourceController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
@@ -316,6 +345,7 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "owned.source-seams.enabled", havingValue = "true")
     @ConditionalOnMissingBean(OwnedResultGenericResourceController.class)
     public OwnedResultGenericResourceController ownedResultGenericResourceController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
@@ -323,6 +353,7 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "owned.source-seams.enabled", havingValue = "true")
     @ConditionalOnMissingBean(OwnedCurveQueryController.class)
     public OwnedCurveQueryController ownedCurveQueryController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
@@ -330,6 +361,7 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "owned.source-seams.enabled", havingValue = "true")
     @ConditionalOnMissingBean(OwnedEquipmentCurveConfigQueryController.class)
     public OwnedEquipmentCurveConfigQueryController ownedEquipmentCurveConfigQueryController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
@@ -337,6 +369,7 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "owned.source-seams.enabled", havingValue = "true")
     @ConditionalOnMissingBean(OwnedSampleBottleQueryController.class)
     public OwnedSampleBottleQueryController ownedSampleBottleQueryController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
@@ -344,6 +377,7 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "owned.source-seams.enabled", havingValue = "true")
     @ConditionalOnMissingBean(OwnedSampleSetQueryController.class)
     public OwnedSampleSetQueryController ownedSampleSetQueryController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
@@ -351,6 +385,7 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "owned.source-seams.enabled", havingValue = "true")
     @ConditionalOnMissingBean(OwnedVocQueryController.class)
     public OwnedVocQueryController ownedVocQueryController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
@@ -358,6 +393,7 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "owned.source-seams.enabled", havingValue = "true")
     @ConditionalOnMissingBean(OwnedPhysChemicQueryController.class)
     public OwnedPhysChemicQueryController ownedPhysChemicQueryController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
@@ -365,6 +401,7 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "owned.source-seams.enabled", havingValue = "true")
     @ConditionalOnMissingBean(OwnedOilFilmQueryController.class)
     public OwnedOilFilmQueryController ownedOilFilmQueryController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
@@ -372,6 +409,7 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "owned.source-seams.enabled", havingValue = "true")
     @ConditionalOnMissingBean(OwnedTempHumidityQueryController.class)
     public OwnedTempHumidityQueryController ownedTempHumidityQueryController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
@@ -379,6 +417,7 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "owned.source-seams.enabled", havingValue = "true")
     @ConditionalOnMissingBean(OwnedRunRemindQueryController.class)
     public OwnedRunRemindQueryController ownedRunRemindQueryController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
@@ -386,6 +425,7 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "owned.source-seams.enabled", havingValue = "true")
     @ConditionalOnMissingBean(OwnedPretreatmentQueryController.class)
     public OwnedPretreatmentQueryController ownedPretreatmentQueryController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
@@ -393,6 +433,7 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "owned.source-seams.enabled", havingValue = "true")
     @ConditionalOnMissingBean(OwnedProjectQueryController.class)
     public OwnedProjectQueryController ownedProjectQueryController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
@@ -400,6 +441,7 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "owned.source-seams.enabled", havingValue = "true")
     @ConditionalOnMissingBean(OwnedFolderGenericResourceController.class)
     public OwnedFolderGenericResourceController ownedFolderGenericResourceController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
@@ -407,6 +449,7 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "owned.source-seams.enabled", havingValue = "true")
     @ConditionalOnMissingBean(OwnedProjectTaskQueryController.class)
     public OwnedProjectTaskQueryController ownedProjectTaskQueryController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
@@ -414,6 +457,7 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "owned.source-seams.enabled", havingValue = "true")
     @ConditionalOnMissingBean(OwnedProjectQcQueryController.class)
     public OwnedProjectQcQueryController ownedProjectQcQueryController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
@@ -421,6 +465,7 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "owned.source-seams.enabled", havingValue = "true")
     @ConditionalOnMissingBean(OwnedProjectEditLogQueryController.class)
     public OwnedProjectEditLogQueryController ownedProjectEditLogQueryController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
@@ -428,6 +473,7 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "owned.source-seams.enabled", havingValue = "true")
     @ConditionalOnMissingBean(OwnedProjectOtherFeeQueryController.class)
     public OwnedProjectOtherFeeQueryController ownedProjectOtherFeeQueryController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
@@ -435,6 +481,7 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "owned.source-seams.enabled", havingValue = "true")
     @ConditionalOnMissingBean(OwnedProjectSchemeQueryController.class)
     public OwnedProjectSchemeQueryController ownedProjectSchemeQueryController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
@@ -442,6 +489,7 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "owned.source-seams.enabled", havingValue = "true")
     @ConditionalOnMissingBean(OwnedProjectChangeQueryController.class)
     public OwnedProjectChangeQueryController ownedProjectChangeQueryController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
@@ -449,6 +497,7 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "owned.source-seams.enabled", havingValue = "true")
     @ConditionalOnMissingBean(OwnedOrderTaskResultQueryController.class)
     public OwnedOrderTaskResultQueryController ownedOrderTaskResultQueryController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
@@ -456,6 +505,7 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "owned.source-seams.enabled", havingValue = "true")
     @ConditionalOnMissingBean(OwnedOrderTaskQueryController.class)
     public OwnedOrderTaskQueryController ownedOrderTaskQueryController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
@@ -463,6 +513,7 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "owned.source-seams.enabled", havingValue = "true")
     @ConditionalOnMissingBean(OwnedOrderContainerQueryController.class)
     public OwnedOrderContainerQueryController ownedOrderContainerQueryController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
@@ -470,6 +521,7 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "owned.source-seams.enabled", havingValue = "true")
     @ConditionalOnMissingBean(OwnedGisMapQueryController.class)
     public OwnedGisMapQueryController ownedGisMapQueryController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
@@ -477,6 +529,7 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "owned.source-seams.enabled", havingValue = "true")
     @ConditionalOnMissingBean(OwnedCrmReadController.class)
     public OwnedCrmReadController ownedCrmReadController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
@@ -484,6 +537,7 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "owned.source-seams.enabled", havingValue = "true")
     @ConditionalOnMissingBean(OwnedResultFieldDescriptorController.class)
     public OwnedResultFieldDescriptorController ownedResultFieldDescriptorController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
@@ -491,6 +545,7 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "owned.source-seams.enabled", havingValue = "true")
     @ConditionalOnMissingBean(OwnedOrderQueryController.class)
     public OwnedOrderQueryController ownedOrderQueryController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
@@ -498,6 +553,7 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "owned.source-seams.enabled", havingValue = "true")
     @ConditionalOnMissingBean(OwnedDeliveryOrderLabelQueryController.class)
     public OwnedDeliveryOrderLabelQueryController ownedDeliveryOrderLabelQueryController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
@@ -505,6 +561,7 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "owned.source-seams.enabled", havingValue = "true")
     @ConditionalOnMissingBean(OwnedMobileProjectController.class)
     public OwnedMobileProjectController ownedMobileProjectController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
@@ -512,6 +569,7 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "owned.source-seams.enabled", havingValue = "true")
     @ConditionalOnMissingBean(OwnedQualityControlChartController.class)
     public OwnedQualityControlChartController ownedQualityControlChartController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
@@ -519,6 +577,7 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "owned.source-seams.enabled", havingValue = "true")
     @ConditionalOnMissingBean(OwnedAdmQuotationGenericResourceController.class)
     public OwnedAdmQuotationGenericResourceController ownedAdmQuotationGenericResourceController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
@@ -526,6 +585,7 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "owned.source-seams.enabled", havingValue = "true")
     @ConditionalOnMissingBean(OwnedTestMethodAliasReadController.class)
     public OwnedTestMethodAliasReadController ownedTestMethodAliasReadController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
@@ -533,6 +593,7 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "owned.source-seams.enabled", havingValue = "true")
     @ConditionalOnMissingBean(OwnedMdmSpecializedReadController.class)
     public OwnedMdmSpecializedReadController ownedMdmSpecializedReadController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
@@ -540,6 +601,7 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "owned.source-seams.enabled", havingValue = "true")
     @ConditionalOnMissingBean(OwnedMdmGenericReadController.class)
     public OwnedMdmGenericReadController ownedMdmGenericReadController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
@@ -547,6 +609,7 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "owned.source-seams.enabled", havingValue = "true")
     @ConditionalOnMissingBean(OwnedClientResourceExtensionController.class)
     public OwnedClientResourceExtensionController ownedClientResourceExtensionController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
@@ -554,6 +617,7 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "owned.source-seams.enabled", havingValue = "true")
     @ConditionalOnMissingBean(OwnedOrderRetainQueryExtensionController.class)
     public OwnedOrderRetainQueryExtensionController ownedOrderRetainQueryExtensionController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
@@ -561,6 +625,7 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "owned.source-seams.enabled", havingValue = "true")
     @ConditionalOnMissingBean(OwnedItemEquipmentResourceController.class)
     public OwnedItemEquipmentResourceController ownedItemEquipmentResourceController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
@@ -568,6 +633,7 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "owned.source-seams.enabled", havingValue = "true")
     @ConditionalOnMissingBean(OwnedEquipmentMdmResourceController.class)
     public OwnedEquipmentMdmResourceController ownedEquipmentMdmResourceController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
@@ -575,6 +641,7 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "owned.source-seams.enabled", havingValue = "true")
     @ConditionalOnMissingBean(OwnedOaGenericResourceController.class)
     public OwnedOaGenericResourceController ownedOaGenericResourceController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
@@ -582,6 +649,7 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "owned.source-seams.enabled", havingValue = "true")
     @ConditionalOnMissingBean(OwnedCrmOpportunityOrdtaskController.class)
     public OwnedCrmOpportunityOrdtaskController ownedCrmOpportunityOrdtaskController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
@@ -589,6 +657,7 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "owned.source-seams.enabled", havingValue = "true")
     @ConditionalOnMissingBean(OwnedReportSampleTaskQueryController.class)
     public OwnedReportSampleTaskQueryController ownedReportSampleTaskQueryController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
@@ -596,6 +665,7 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "owned.source-seams.enabled", havingValue = "true")
     @ConditionalOnMissingBean(OwnedReportReferenceController.class)
     public OwnedReportReferenceController ownedReportReferenceController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
@@ -603,6 +673,7 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "owned.source-seams.enabled", havingValue = "true")
     @ConditionalOnMissingBean(OwnedReportSendInfoController.class)
     public OwnedReportSendInfoController ownedReportSendInfoController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
@@ -610,6 +681,7 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "owned.source-seams.enabled", havingValue = "true")
     @ConditionalOnMissingBean(OwnedReportResultController.class)
     public OwnedReportResultController ownedReportResultController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
@@ -617,6 +689,7 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "owned.source-seams.enabled", havingValue = "true")
     @ConditionalOnMissingBean(OwnedItemTaskQueryController.class)
     public OwnedItemTaskQueryController ownedItemTaskQueryController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
@@ -624,6 +697,7 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "owned.source-seams.enabled", havingValue = "true")
     @ConditionalOnMissingBean(OwnedMdmTaskQueryController.class)
     public OwnedMdmTaskQueryController ownedMdmTaskQueryController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
@@ -631,6 +705,7 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "owned.source-seams.enabled", havingValue = "true")
     @ConditionalOnMissingBean(OwnedInfoIndexController.class)
     public OwnedInfoIndexController ownedInfoIndexController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
@@ -638,6 +713,7 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "owned.source-seams.enabled", havingValue = "true")
     @ConditionalOnMissingBean(OwnedInfoConfigDataController.class)
     public OwnedInfoConfigDataController ownedInfoConfigDataController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
@@ -645,6 +721,7 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "owned.source-seams.enabled", havingValue = "true")
     @ConditionalOnMissingBean(OwnedInfoTmplController.class)
     public OwnedInfoTmplController ownedInfoTmplController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {
@@ -652,6 +729,7 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "owned.source-seams.enabled", havingValue = "true")
     @ConditionalOnMissingBean(OwnedReportTmplController.class)
     public OwnedReportTmplController ownedReportTmplController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {

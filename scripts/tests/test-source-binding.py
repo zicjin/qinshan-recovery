@@ -29,6 +29,10 @@ class SourceBindingTest(unittest.TestCase):
         (self.root / "evidence" / "index.tsv").write_text("index-v1\n", encoding="utf-8")
         (self.root / "project").mkdir()
         (self.root / "owned-framework").mkdir()
+        (self.root / ".gitignore").write_text(
+            "target/\n__pycache__/\n*.pyc\n*.pyo\n",
+            encoding="utf-8",
+        )
         subprocess.run(["git", "init", "-q"], cwd=self.root, check=True)
         subprocess.run(["git", "config", "user.email", "test@example.invalid"], cwd=self.root, check=True)
         subprocess.run(["git", "config", "user.name", "source-binding-test"], cwd=self.root, check=True)
@@ -74,6 +78,18 @@ class SourceBindingTest(unittest.TestCase):
         second = self.capture()
         self.assertNotEqual(first["implementation_tree_digest"], second["implementation_tree_digest"])
         self.assertTrue(second["implementation_dirty"])
+
+    def test_generated_target_and_bytecode_are_excluded(self):
+        first = self.capture()
+        target = self.root / "src" / "target"
+        target.mkdir()
+        (target / "Owned.class").write_bytes(b"build-output")
+        cache = self.root / "src" / "__pycache__"
+        cache.mkdir()
+        (cache / "runner.pyc").write_bytes(b"bytecode")
+        second = self.capture()
+        self.assertEqual(first["implementation_tree_digest"], second["implementation_tree_digest"])
+        self.assertFalse(second["implementation_dirty"])
 
     def test_reconstituted_source_and_transformations_change_digest(self):
         first = self.capture()

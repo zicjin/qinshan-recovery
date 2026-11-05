@@ -235,7 +235,14 @@ def _files_for(path: Path) -> list[Path]:
         return [path]
     if not path.is_dir():
         return []
-    return sorted(item for item in path.rglob("*") if item.is_file() and ".git" not in item.parts)
+    ignored_parts = {".git", "target", "__pycache__"}
+    return sorted(
+        item
+        for item in path.rglob("*")
+        if item.is_file()
+        and not any(part in ignored_parts for part in item.parts)
+        and item.suffix not in {".pyc", ".pyo"}
+    )
 
 
 def _manifest(repo_root: Path, scopes: Iterable[str]) -> list[dict[str, str]]:

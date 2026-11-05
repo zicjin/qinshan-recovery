@@ -9,7 +9,7 @@
   "maven_runtime": "\u001b[1mApache Maven 3.9.12\u001b[m",
   "module": "owned-core-ext",
   "output_jar": "owned-core-ext/target/owned-core-ext-1.0.0-SNAPSHOT.jar",
-  "output_jar_sha256": "25ecbe5be84005107824965f12b0952983d9ec543bb4c10f61e145a27e6ebda4",
+  "output_jar_sha256": "0497eaa71d50fcff4873cff639d70488ee749187169f90272a40473573b114be",
   "schema": "supplier-reconstituted-module-compile-v1",
   "source_file_count": 644,
   "source_only_framework_classpath": true,

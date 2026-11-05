@@ -13,6 +13,13 @@ import zipfile
 
 
 ROOT = Path(__file__).resolve().parents[1]
+PROJECT_JAVAC_FLAGS = (
+    "-parameters",
+    "-source",
+    "8",
+    "-target",
+    "8",
+)
 MAIN_CLASS = "com.sunwayworld.emc.projectfunction.GikamWpjcApplication"
 SUPPLIER_PRIVATE_MARKERS = (
     "gikam-core-",
@@ -255,10 +262,7 @@ def main(argv: list[str] | None = None) -> int:
     )
     command = [
         str(args.javac),
-        "-source",
-        "8",
-        "-target",
-        "8",
+        *PROJECT_JAVAC_FLAGS,
         "-encoding",
         "UTF-8",
         "-Xmaxerrs",

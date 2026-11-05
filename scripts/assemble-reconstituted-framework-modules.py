@@ -214,6 +214,7 @@ def render_parent_pom(modules: Iterable[str]) -> str:
             <source>1.8</source>
             <target>1.8</target>
             <encoding>UTF-8</encoding>
+            <parameters>true</parameters>
           </configuration>
         </plugin>
       </plugins>

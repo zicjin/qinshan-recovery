@@ -23,6 +23,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
@@ -212,7 +213,7 @@ public class MybatisHelper {
             }
         }
         try (InputStream is = MybatisHelper.class.getResourceAsStream(name);){
-            String string = new BufferedReader(new InputStreamReader(is)).lines().collect(Collectors.joining(System.lineSeparator()));
+            String string = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8)).lines().collect(Collectors.joining(System.lineSeparator()));
             return string;
         }
         catch (IOException ioe) {

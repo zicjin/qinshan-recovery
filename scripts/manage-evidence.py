@@ -483,6 +483,8 @@ def ticket_for(path: Path, payload: Mapping[str, Any]) -> str:
     name = path.name.lower()
     if "fast" in name:
         return "09/13"
+    if "full-read" in name:
+        return "09/13"
     if "strict-api-runtime" in name:
         return "08"
     if any(token in name for token in ("personnel", "equipment", "consumable", "material")):

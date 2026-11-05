@@ -163,10 +163,13 @@ promote` can publish a report. A
 strict write case is accepted only when the report contains HTTP business
 write, API restore, rollback and audit observations for that case.
 
-The 2026-11-05 `impl-10a2662ff53853fb` milestone published eight strict reports
-and one combined closure after 3,160 representative HTTP cases and a single
-runtime cleanup. `verify` then reported 4,287 registered rows, 11
-`canonical-strict` rows and zero `canonical-diagnostic` rows. The canonical root
-contains only registered JSON. A subsequent evidence-only commit can change
-repository HEAD while retaining the same implementation binding; closure and
-registry freshness are checked against `implementation_tree_digest`.
+The 2026-11-05 `impl-4b7a3b416f41ac85` milestone published one combined
+read-behavior report and closure after 5,247 representative HTTP cases and a
+single runtime cleanup. Alias mapping closed 2,087 of 6,806 routes; 4,719
+require further evidence. `verify` reports 4,289 registered rows, two
+`canonical-strict` rows and zero `canonical-diagnostic` rows. The 11
+canonical-strict artifacts from the superseded binding are retained under the
+historical archive with their original SHA-256 and move audit. A subsequent
+evidence-only commit can change repository HEAD while retaining the same
+implementation binding; closure and registry freshness are checked against
+`implementation_tree_digest`.

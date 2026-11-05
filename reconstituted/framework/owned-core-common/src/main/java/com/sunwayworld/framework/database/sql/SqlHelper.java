@@ -25,7 +25,6 @@ import org.mybatis.spring.SqlSessionUtils;
 
 public abstract class SqlHelper {
     public static final String QTY_COLUMN_NAME = "QTY_";
-    private static final Pattern SQL_ENDING_ORDER_BY_PATTERN = Pattern.compile("\\s+(?i)order\\s+(?i)by\\s+([^()]*[(][^()]*([(][^()]*([(][^()]*[)][^()]*)*[)][^()]*)*[)][^()]*)*[^()]*$");
     private static final Pattern SQL_ORDER_BY_PATTERN = Pattern.compile("(?i)order\\s+by");
     private static final String WS_OR_COMMENT = "(?:/\\*[\\s\\S]*?\\*/|--[^\\r\\n]*[\\r\\n]|\\s)";
     private static final Pattern DANGLING_WHERE_PATTERN = Pattern.compile("(?i)\\bwhere(" + WS_OR_COMMENT + "*)(?=$|\\)|\\bgroup\\s+by\\b|\\bhaving\\b|\\border\\s+by\\b|\\bunion\\b|\\bintersect\\b|\\bminus\\b)");
@@ -161,21 +160,12 @@ public abstract class SqlHelper {
         if (pos != -1) {
             return cleanDanglingWhereClause(sql.substring(0, pos));
         }
-        Matcher matcher = SQL_ENDING_ORDER_BY_PATTERN.matcher(sql);
-        if (matcher.find()) {
-            return cleanDanglingWhereClause(matcher.replaceFirst(""));
-        }
         return cleanDanglingWhereClause(sql);
     }
 
     public static final boolean hasOrderSegment(String sql) {
         Objects.requireNonNull(sql);
-        int pos = findOuterOrderByPos(sql);
-        if (pos != -1) {
-            return true;
-        }
-        Matcher matcher = SQL_ENDING_ORDER_BY_PATTERN.matcher(sql);
-        return matcher.find();
+        return findOuterOrderByPos(sql) != -1;
     }
 
     public static final String getOrderSegment(String sql) {
@@ -183,12 +173,6 @@ public abstract class SqlHelper {
         int pos = findOuterOrderByPos(sql);
         if (pos != -1) {
             String orderBySql = sql.substring(pos).trim();
-            return SQL_ORDER_BY_PATTERN.matcher(orderBySql).replaceFirst("").trim();
-        }
-        Matcher matcher = SQL_ENDING_ORDER_BY_PATTERN.matcher(sql);
-        if (matcher.find()) {
-            int posOld = matcher.start();
-            String orderBySql = sql.substring(posOld).trim();
             return SQL_ORDER_BY_PATTERN.matcher(orderBySql).replaceFirst("").trim();
         }
         throw new UnexpectedException("Not an ordered sql.");

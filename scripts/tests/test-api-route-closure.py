@@ -50,7 +50,7 @@ class ClosureTest(unittest.TestCase):
         self.assertEqual(result["diagnostic_observation_count"], 1)
         self.assertFalse(result["failures"])
 
-    def test_fast_aliases_require_matching_source_class(self):
+    def test_fast_aliases_use_explicit_route_ids_across_owned_source_class_seam(self):
         ledger = dict(self.ledger)
         ledger["routes"] = [dict(self.ledger["routes"][0], id="r1", **{"class": "a.Resource"})]
         with tempfile.TemporaryDirectory() as temp:
@@ -65,7 +65,9 @@ class ClosureTest(unittest.TestCase):
                 encoding="utf-8")
             result = module.build_closure(ledger, [path])
         self.assertEqual(result["strict_pass_count"], 0)
-        self.assertTrue(any("source class" in item.get("reason", "") for item in result["diagnostics"]))
+        self.assertEqual(result["diagnostic_observation_count"], 1)
+        self.assertFalse(any("source class" in item.get("reason", "") for item in result["diagnostics"]))
+        self.assertEqual(result["routes"][0]["diagnostic_observations"][0]["source_class"], "b.Resource")
 
     def test_strict_report_promotes_only_unique_route(self):
         with tempfile.TemporaryDirectory() as temp:

@@ -87,12 +87,15 @@ strict evidence accepted by the registry.
 `prune --apply` writes its deletion preview before unlinking and records the
 executed hashes in the prune audit.
 
-The source binding is exact: a report whose `source_commit` differs from the
-current implementation source binding is historical and must be replayed.
-`source_scope` is used to select affected runners, never to keep an ancestor
-report publishable. `source_commit_exception` is not a promotion mechanism. A
-failed or interrupted runner is registered in diagnostic storage on the next
-scan and cannot leave an unclassified JSON file in the canonical root.
+Freshness is controlled by `implementation_tree_digest`. `source_commit` and
+`repository_head_at_capture` are provenance and may differ after a docs,
+ticket, registry or archive-only commit. A changed implementation scope,
+nested project commit, runtime/runner contract or distribution input changes the
+binding and requires an affected replay. `source_scope` is used to select those
+affected runners, never to keep stale behavior evidence publishable.
+`source_commit_exception` is not a promotion mechanism. A failed or interrupted
+runner is registered in diagnostic storage on the next scan and cannot leave an
+unclassified JSON file in the canonical root.
 
 The output guard is unconditional for runners. Setting an environment variable
 cannot publish into `lims-recovery/evidence/`; publication always goes through

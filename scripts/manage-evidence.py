@@ -487,7 +487,10 @@ def ticket_for(path: Path, payload: Mapping[str, Any]) -> str:
         return "08"
     if any(token in name for token in ("personnel", "equipment", "consumable", "material")):
         return "11"
-    if any(token in name for token in ("secondary", "report", "attachment", "scheduler", "erp")):
+    if any(token in name for token in (
+        "secondary", "report", "attachment", "scheduler", "erp",
+        "core", "result", "order", "project", "task", "integration", "page-other",
+    )):
         return "12"
     if any(token in name for token in ("foundation", "identity", "workspace", "boundary")):
         return "10"

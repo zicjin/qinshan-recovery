@@ -23,14 +23,17 @@ or diagnostic root file is a gate failure. The registry also records
 `referenced_by` and `generated_at`, so retention and supersession decisions do
 not depend on filename conventions.
 
-Published evidence must bind the exact current implementation source commit and
-`source_dirty=false`. A report whose `source_commit` differs from the current
-source binding is historical, even when its declared implementation scope looks
-unchanged; it must be replayed before publication. `source_scope` remains an
+Published evidence must bind the current implementation tree digest and
+`implementation_dirty=false`. `repository_head_at_capture` and the legacy
+`source_commit` field are provenance only: a documentation, ticket, registry or
+archive commit may advance repository HEAD without invalidating behavior
+evidence when `implementation_tree_digest` is unchanged. A changed implementation
+scope, nested project commit, runtime/runner contract or distribution input
+changes the binding and requires affected replay. `source_scope` remains an
 affected-runner selection hint, never a publication exception. Neither
-`source_commit_exception` nor a docs-only explanation can promote stale
-evidence. The closure, wave and fast-differential validators apply the same
-exact-binding rule.
+`source_commit_exception` nor a docs-only explanation can promote a report with
+a stale implementation binding. The closure, wave and fast-differential
+validators apply the same implementation-tree rule.
 
 The registry classes are:
 
@@ -159,3 +162,11 @@ output guard has no environment-variable bypass; only `manage-evidence.py
 promote` can publish a report. A
 strict write case is accepted only when the report contains HTTP business
 write, API restore, rollback and audit observations for that case.
+
+The 2026-11-05 `impl-10a2662ff53853fb` milestone published eight strict reports
+and one combined closure after 3,160 representative HTTP cases and a single
+runtime cleanup. `verify` then reported 4,287 registered rows, 11
+`canonical-strict` rows and zero `canonical-diagnostic` rows. The canonical root
+contains only registered JSON. A subsequent evidence-only commit can change
+repository HEAD while retaining the same implementation binding; closure and
+registry freshness are checked against `implementation_tree_digest`.

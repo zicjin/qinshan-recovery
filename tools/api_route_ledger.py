@@ -115,10 +115,14 @@ def classify_route_kind(route: Dict[str, object]) -> Dict[str, str]:
     text = _route_text(route)
     source = str(route.get("source", "")).lower()
     annotation = str(route.get("annotation", ""))
-    if "workspace" in text or "gikam" in text or "/module/index" in text:
-        return {"route_kind": "workspace"}
+    # Inherited GenericResource paths often contain ``gikam-attrs``.  The
+    # annotation/source relationship is authoritative; a path token must not
+    # reclassify those routes as workspace pages and hide them from API
+    # differential screening.
     if annotation.startswith("inherited."):
         return {"route_kind": "inherited-api"}
+    if "workspace" in text or "gikam" in text or "/module/index" in text:
+        return {"route_kind": "workspace"}
     if "/resource/" in source or re.search(r"resource", str(route.get("class", "")), re.I):
         return {"route_kind": "api-resource"}
     if "/controller/" in source or re.search(r"controller", str(route.get("class", "")), re.I):

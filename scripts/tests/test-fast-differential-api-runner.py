@@ -246,6 +246,18 @@ class FastDifferentialTest(unittest.TestCase):
         self.assertEqual(result, "blocked")
         self.assertEqual(detail["side"], "supplier")
 
+    def test_no_match_assertion_is_not_applicable_to_non_page_envelopes(self):
+        route = {"method": "POST", "path": "/x/{id}/data/queries"}
+        profile = MODULE.request_profiles(route, ("empty",))[0]
+        observation = {
+            "status": 200,
+            "content_type": "application/json",
+            "json": {"message": "查询类型不能为空"},
+        }
+        result, detail = MODULE.compare(observation, observation, profile=profile)
+        self.assertEqual(result, "fast-equivalent")
+        self.assertNotEqual(detail["reason"], "no-match-filter-not-applied")
+
     def test_ignored_sort_is_not_hidden_by_id_or_row_normalization(self):
         profile = MODULE.request_profiles({"method": "POST", "path": "/x/queries"}, ("ascending",))[0]
         supplier = {"status": 200, "content_type": "application/json", "json": {"rows": [{"id": 1}, {"id": 2}]}}

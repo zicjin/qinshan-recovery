@@ -92,4 +92,10 @@ assert minimal["planning_metadata"]["native_registry"]["path"] is None
 assert MODULE.classify_family({"source": "x/mdm/emp/EmpResource.java", "class": "EmpResource", "path": "/secure/emc/module/mdm/emp/emps", "annotation": "RequestMapping"})["family"] == "personnel"
 assert MODULE.classify_family({"source": "x/bp/result/RunResource.java", "class": "RunResource", "path": "/secure/emc/module/bp/result/runs", "annotation": "RequestMapping"})["family"] == "result-order-project"
 assert MODULE.classify_route_kind({"source": "x/controller/WorkspaceController.java", "class": "WorkspaceController", "path": "/workspace", "annotation": "RequestMapping"})["route_kind"] == "workspace"
+assert MODULE.classify_route_kind({
+    "source": "x/resource/CarResource.java",
+    "class": "CarResource",
+    "path": "/secure/emc/module/item/emc-cars/gikam-attrs/mybatis-mapper",
+    "annotation": "inherited.GenericResource",
+})["route_kind"] == "inherited-api"
 print("API route ledger: PASS (%d project routes + %d owned boundary routes; family/route-kind/disposition fields present; behavior remains unknown)" % (len(routes), len(boundary_routes)))

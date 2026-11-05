@@ -458,7 +458,12 @@ def compare(supplier: Mapping[str, Any], owned: Mapping[str, Any], path: str = "
                 continue
             failure = None
             if profile and profile.get("assert_no_rows"):
-                if payload.get("total") != 0 or payload.get("rows") != []:
+                # ``empty`` uses a page filter for paged endpoints.  Some read
+                # routes return a domain object or validation message instead
+                # of a page envelope; the page assertion is not applicable when
+                # neither ``rows`` nor ``total`` is exposed.
+                paged = isinstance(payload.get("rows"), list) or "total" in payload
+                if paged and (payload.get("total") != 0 or payload.get("rows") != []):
                     failure = "no-match-filter-not-applied"
             ordering = profile.get("assert_order") if profile else None
             if ordering:

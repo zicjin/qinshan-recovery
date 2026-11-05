@@ -27,6 +27,11 @@ class TestSqlHelperRegex(unittest.TestCase):
             re.IGNORECASE,
         )
         self.empty_parens = re.compile(r"\(\s*\)")
+        self.open_paren_and_or = re.compile(
+            r"\(" + ws_or_comment + r"*\b(and|or)\b\s*",
+            re.IGNORECASE,
+        )
+        self.ext_prefix = re.compile(r"ext\$\.", re.IGNORECASE)
         self.ending_order = re.compile(
             r"\s+order\s+by\s+([^()]*[(][^()]*([(][^()]*([(][^()]*[)][^()]*)*[)][^()]*)*[)][^()]*)*[^()]*$",
             re.IGNORECASE,
@@ -37,6 +42,7 @@ class TestSqlHelperRegex(unittest.TestCase):
         while sql != prev:
             prev = sql
             sql = self.empty_parens.sub("", sql)
+            sql = self.open_paren_and_or.sub("(", sql)
             sql = self.consecutive_and_or.sub(r"\2 ", sql)
             sql = self.where_and_or.sub("WHERE ", sql)
             sql = self.dangling_and_or_boundary.sub(r"\2", sql)
@@ -194,6 +200,21 @@ class TestSqlHelperRegex(unittest.TestCase):
         cleaned = self.clean_sql(sql).strip()
         self.assertEqual(cleaned, "SELECT * FROM t WHERE a = 1")
 
+    def test_open_paren_and_cleaned(self):
+        sql = "SELECT * FROM t WHERE ( AND a = 1 )"
+        cleaned = self.clean_sql(sql).strip()
+        self.assertEqual(cleaned, "SELECT * FROM t WHERE (a = 1 )")
+
+    def test_open_paren_or_cleaned(self):
+        sql = "SELECT * FROM t WHERE ( OR a = 1 )"
+        cleaned = self.clean_sql(sql).strip()
+        self.assertEqual(cleaned, "SELECT * FROM t WHERE (a = 1 )")
+
+    def test_clean_ext_prefix_case_insensitive(self):
+        sql = "SELECT ext$.NAME, EXT$.AGE, Ext$.ID FROM t"
+        cleaned = self.ext_prefix.sub("", sql)
+        self.assertEqual(cleaned, "SELECT NAME, AGE, ID FROM t")
+
 
 class TestMapperXmlHygiene(unittest.TestCase):
     def test_emc_stock_oracle_mapper_no_raw_sql_comments_in_where(self):
@@ -293,6 +314,16 @@ class TestSqlHelperSource(unittest.TestCase):
             "int pos = findOuterOrderByPos(sql);",
             text,
             "removeEndingOrderIfPresent must use findOuterOrderByPos scanner",
+        )
+        self.assertIn(
+            "cleanExtPrefix",
+            text,
+            "SqlHelper must define case-insensitive cleanExtPrefix",
+        )
+        self.assertIn(
+            'append(" ").append(c.toUpperCase())',
+            text,
+            "SqlHelper.getSelectTotalSql must place space before sum alias",
         )
 
 

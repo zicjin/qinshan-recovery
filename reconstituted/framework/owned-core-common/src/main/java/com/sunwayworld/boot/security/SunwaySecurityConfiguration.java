@@ -90,6 +90,7 @@ public class SunwaySecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                 .logout()
                     .logoutUrl("/core/module/sys/logout")
+                    .logoutSuccessHandler(new com.sunwayworld.framework.security.support.AjaxLogoutSuccessHandler())
                 .and()
                 .rememberMe()
                     .rememberMeServices(this.rememberMeServices())

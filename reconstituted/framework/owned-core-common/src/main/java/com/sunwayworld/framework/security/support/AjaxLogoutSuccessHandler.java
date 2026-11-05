@@ -19,5 +19,11 @@ implements LogoutSuccessHandler {
     @Override
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         response.setStatus(200);
+        response.setContentType("application/json;charset=UTF-8");
+        response.setCharacterEncoding("UTF-8");
+        try (java.io.PrintWriter pw = response.getWriter()) {
+            pw.print("{\"authenticated\":false}");
+            pw.flush();
+        }
     }
 }

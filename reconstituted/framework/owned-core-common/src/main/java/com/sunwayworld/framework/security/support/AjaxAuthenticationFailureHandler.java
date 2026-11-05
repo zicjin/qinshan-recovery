@@ -28,10 +28,18 @@ extends SimpleUrlAuthenticationFailureHandler {
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
         String message = exception.getMessage();
         logger.warn("Authentication failure: " + message, (Throwable) exception);
-        if (PreviousLoginDetectedException.class.equals(exception.getClass())) {
-            ServletUtils.responseError(HttpErrorMessage.of(HttpStatus.PAYMENT_REQUIRED, message));
+        HttpStatus status = PreviousLoginDetectedException.class.equals(exception.getClass()) ? HttpStatus.PAYMENT_REQUIRED : HttpStatus.UNAUTHORIZED;
+        if (response != null && !response.isCommitted()) {
+            response.reset();
+            response.setStatus(status.value());
+            response.setContentType("application/json;charset=UTF-8");
+            response.setCharacterEncoding("UTF-8");
+            try (java.io.PrintWriter pw = response.getWriter()) {
+                pw.print(HttpErrorMessage.of(status, message).toString());
+                pw.flush();
+            }
         } else {
-            ServletUtils.responseError(HttpErrorMessage.of(HttpStatus.UNAUTHORIZED, message));
+            ServletUtils.responseError(HttpErrorMessage.of(status, message));
         }
     }
 }

@@ -70,6 +70,9 @@ implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String loginId) throws UsernameNotFoundException {
+        if (StringUtils.isBlank(loginId)) {
+            throw new UsernameNotFoundException("GIKAM.SECURITY.LOGIN.INCORRECT_USER_OR_PASSWORD");
+        }
         CoreUserBean user = this.getLoginUser(loginId);
         return this.handleLoginUser(user);
     }

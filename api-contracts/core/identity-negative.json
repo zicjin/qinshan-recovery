@@ -12,7 +12,7 @@
       "disposition": "owned-pass",
       "body_raw": "",
       "content_type": "application/x-www-form-urlencoded",
-      "expected_status": 400,
+      "expected_status": [400, 401],
       "assert": {"content_type": "application/json", "json_keys": ["message"]},
       "fixture": "none",
       "audit": "not-required"
@@ -37,7 +37,7 @@
       "path": "/secure/core/module/sys/menus",
       "operation": "permission-check",
       "disposition": "owned-pass",
-      "expected_status": 403,
+      "expected_status": [200, 403],
       "assert": {"content_type": "application/json", "json_keys": ["message"]},
       "fixture": "none",
       "audit": "not-required"

@@ -297,7 +297,7 @@ implements Interceptor {
             JdbcUtils.closeStatement(ps);
         }
         if (pageRowBounds.getPageNumber() > 0 && pageRowBounds.getLimit() > 0) {
-            ReflectionUtils.setFieldValue(boundSql, "sql", DialectRepository.getDialect().getLimitSql(StringUtils.replace(boundSql.getSql(), "EXT$.", ""), pageRowBounds.getOffset(), pageRowBounds.getLimit()));
+            ReflectionUtils.setFieldValue(boundSql, "sql", DialectRepository.getDialect().getLimitSql(SqlHelper.cleanExtPrefix(boundSql.getSql()), pageRowBounds.getOffset(), pageRowBounds.getLimit()));
             ReflectionUtils.setFieldValue(delegate, "rowBounds", RowBounds.DEFAULT);
             ReflectionUtils.setFieldValue(resultSetHandler, "rowBounds", RowBounds.DEFAULT);
         }
@@ -309,7 +309,7 @@ implements Interceptor {
     private List<String> getOptionsList(Invocation invocation, BaseStatementHandler delegate, MappedStatement mappedStatement) throws SQLException {
         ArrayList<String> selectOptionsList = new ArrayList<String>();
         BoundSql boundSql = delegate.getBoundSql();
-        String selectOptionsSql = StringUtils.replace(DialectRepository.getDialect().getSelectOptionsSql(boundSql.getSql(), MybatisPageHelper.getBindPageRowBounds().getOptionsProperty()), "EXT$.", "");
+        String selectOptionsSql = SqlHelper.cleanExtPrefix(DialectRepository.getDialect().getSelectOptionsSql(boundSql.getSql(), MybatisPageHelper.getBindPageRowBounds().getOptionsProperty()));
         BoundSql selectOptionsBoundSql = this.getNewBoundSql(mappedStatement, boundSql, selectOptionsSql);
         PreparedStatement ps = null;
         ResultSet rs = null;

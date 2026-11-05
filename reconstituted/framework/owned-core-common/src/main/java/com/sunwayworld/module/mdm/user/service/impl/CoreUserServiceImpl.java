@@ -202,6 +202,9 @@ public class CoreUserServiceImpl implements CoreUserService {
 
    @Override
    public CoreUserBean selectByLoginId(String loginId) {
+      if (StringUtils.isBlank(loginId)) {
+         return null;
+      }
       CoreUserBean selectedUser = this.proxyInstance.selectById(loginId);
       if (selectedUser != null) {
          return selectedUser;

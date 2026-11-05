@@ -33,6 +33,8 @@ public abstract class SqlHelper {
     private static final Pattern DANGLING_AND_OR_PATTERN = Pattern.compile("(?i)\\b(and|or)(" + WS_OR_COMMENT + "*)(?=$|\\)|\\bgroup\\s+by\\b|\\bhaving\\b|\\border\\s+by\\b|\\bunion\\b|\\bintersect\\b|\\bminus\\b)");
     private static final Pattern CONSECUTIVE_AND_OR = Pattern.compile("(?i)\\b(and|or)" + WS_OR_COMMENT + "+\\b(and|or)\\b\\s*");
     private static final Pattern EMPTY_PARENS = Pattern.compile("\\(\\s*\\)");
+    private static final Pattern OPEN_PAREN_AND_OR = Pattern.compile("(?i)\\(" + WS_OR_COMMENT + "*\\b(and|or)\\b\\s*");
+    private static final Pattern EXT_PREFIX_PATTERN = Pattern.compile("(?i)ext\\$\\.");
     public static final String REPLACE_KEY_EXT = "EXT$.";
 
     public static int findOuterOrderByPos(String sql) {
@@ -135,12 +137,20 @@ public abstract class SqlHelper {
         do {
             prev = sql;
             sql = EMPTY_PARENS.matcher(sql).replaceAll("");
+            sql = OPEN_PAREN_AND_OR.matcher(sql).replaceAll("(");
             sql = CONSECUTIVE_AND_OR.matcher(sql).replaceAll("$2 ");
             sql = WHERE_AND_OR_PATTERN.matcher(sql).replaceAll("WHERE ");
             sql = DANGLING_AND_OR_PATTERN.matcher(sql).replaceAll("$2");
             sql = DANGLING_WHERE_PATTERN.matcher(sql).replaceAll("$1");
         } while (!sql.equals(prev));
         return sql;
+    }
+
+    public static final String cleanExtPrefix(String sql) {
+        if (StringUtils.isEmpty(sql)) {
+            return sql;
+        }
+        return EXT_PREFIX_PATTERN.matcher(sql).replaceAll("");
     }
 
     public static final String removeEndingOrderIfPresent(String sql) {
@@ -188,14 +198,14 @@ public abstract class SqlHelper {
         Dialect dialect = DialectRepository.getDialect();
         StringBuilder newSql = new StringBuilder("SELECT COUNT(1) ").append(QTY_COLUMN_NAME);
         if (sumProperties.length > 0) {
-            Arrays.asList(sumProperties).forEach(c -> newSql.append(", ").append(dialect.getSumColumnSql(c.toUpperCase(), "0")).append(c.toUpperCase()));
+            Arrays.asList(sumProperties).forEach(c -> newSql.append(", ").append(dialect.getSumColumnSql(c.toUpperCase(), "0")).append(" ").append(c.toUpperCase()));
         }
         if (countProperties.length > 0) {
             Arrays.asList(countProperties).forEach(c -> newSql.append(", COUNT(DISTINCT ").append(c.toUpperCase()).append(") ").append(c.toUpperCase()));
         }
         String innerSql = cleanDanglingWhereClause(SqlHelper.removeEndingOrderIfPresent(sql));
         newSql.append(" FROM (\n").append(innerSql).append("\n").append(") T");
-        return newSql.toString().replace(REPLACE_KEY_EXT, "");
+        return cleanExtPrefix(newSql.toString());
     }
 
     public static final boolean isRiskySqlSegment(String sqlSegment) {

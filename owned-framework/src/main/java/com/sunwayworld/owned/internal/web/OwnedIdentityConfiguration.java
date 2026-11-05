@@ -305,7 +305,7 @@ public class OwnedIdentityConfiguration {
     }
 
     @Bean
-    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "owned.source-seams.enabled", havingValue = "true")
+    @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "owned.source-seams.audit", havingValue = "true", matchIfMissing = true)
     @ConditionalOnMissingBean(OwnedAuditTrailController.class)
     public OwnedAuditTrailController ownedAuditTrailController(
             OwnedIdentityHttpBoundary boundary, DataSource dataSource) {

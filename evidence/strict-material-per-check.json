@@ -14,9 +14,9 @@
     "internal_http_bridge": false,
     "jni_replacement_process": false
   },
-  "started_at": "2026-11-05T15:54:05.091478+00:00",
-  "source_commit": "4fa844879b21310c27ac7f16f346be4051c68b2d",
-  "repository_head_at_capture": "4fa844879b21310c27ac7f16f346be4051c68b2d",
+  "started_at": "2026-11-05T21:19:45.032988+00:00",
+  "source_commit": "a42ede56d4f5a8c3b4cd507b91beeaabb28b58e3",
+  "repository_head_at_capture": "a42ede56d4f5a8c3b4cd507b91beeaabb28b58e3",
   "source_dirty": false,
   "source_scope": [
     "project/src/main/java",
@@ -90,8 +90,8 @@
     "build/oracle-free-source-manifest.json",
     "docker/Dockerfile.built"
   ],
-  "implementation_binding": "impl-8be5f8be996354f6",
-  "implementation_tree_digest": "8be5f8be996354f6a0451b9d8a43c062c25840610512988d5bd3af0318eb0ce0",
+  "implementation_binding": "impl-8280eb36a1b2acc7",
+  "implementation_tree_digest": "8280eb36a1b2acc7c982f4b80906226bf2209aed9ab6104625e5deeaac2a2f69",
   "implementation_dirty": false,
   "implementation_scope": [
     "project/src/main/java",
@@ -168,10 +168,10 @@
   "nested_project_commit": "27932b1fe4d71d64a02f9a63e55f56acb403e3a0",
   "distribution_input_digest": "1c9d07fc7584b549e8fc19172e337253e2d9e05722fa1e3e91c8a2adfa7f39ef",
   "artifact_sha256": {
-    "owned-distribution/target/distribution/app/lims-owned-application.jar": "8401926effd0ce569dcc658accc6dc63ec7235128fdd1f813d4ac049460b7323"
+    "lims-recovery/owned-distribution/target/distribution/app/lims-owned-application.jar": "4e60ef795fadb85a45e4945510ea9968d5391e5af7e13a2c7c58ea1db85edd09"
   },
-  "clone_identity": "lims-owned-sss2-oracle:LIMS_BASELINE_SSS2:LIMS_RUNTIME_SSS2",
-  "runtime_report": "/home/ts/qinshan/.scratch/sunway-supplier-exit-api-first/diagnostic-evidence/runtime/strict-api-runtime-manifest-sqlseam8be5.json",
+  "clone_identity": "lims-owned-sss2-oracle:LIMS_BASELINE_SSS2:LIMS_RUNTIME_SSS2:a60fc4519f2a89fb6b1761d6e0a2a6480cef8d4bbeab40a2144141f13a9a1dec",
+  "runtime_report": "lims-recovery/../.scratch/sunway-supplier-exit-api-first/diagnostic-evidence/runtime/strict-api-runtime-manifest-impl8280-m1.json",
   "runtime_contract": {
     "mode": "strict",
     "strict_evidence": false,
@@ -183,9 +183,9 @@
     "baseline_schema_hash": "a60fc4519f2a89fb6b1761d6e0a2a6480cef8d4bbeab40a2144141f13a9a1dec",
     "runtime_schema_hash_before": "39334b147ee5249484a426a3e57c4d563a0ef9b7be17faf6840f73e56fa1610c",
     "runtime_schema_hash_after": "39334b147ee5249484a426a3e57c4d563a0ef9b7be17faf6840f73e56fa1610c",
-    "source_commit": "4fa844879b21310c27ac7f16f346be4051c68b2d",
-    "implementation_binding": "impl-8be5f8be996354f6",
-    "implementation_tree_digest": "8be5f8be996354f6a0451b9d8a43c062c25840610512988d5bd3af0318eb0ce0",
+    "source_commit": "a42ede56d4f5a8c3b4cd507b91beeaabb28b58e3",
+    "implementation_binding": "impl-8280eb36a1b2acc7",
+    "implementation_tree_digest": "8280eb36a1b2acc7c982f4b80906226bf2209aed9ab6104625e5deeaac2a2f69",
     "implementation_scope": [
       "project/src/main/java",
       "project/src/main/resources",
@@ -259,13 +259,13 @@
       "docker/Dockerfile.built"
     ],
     "implementation_dirty": false,
-    "repository_head_at_capture": "4fa844879b21310c27ac7f16f346be4051c68b2d"
+    "repository_head_at_capture": "a42ede56d4f5a8c3b4cd507b91beeaabb28b58e3"
   },
-  "role": "manager",
-  "organization": "org-a",
+  "role": "anonymous",
+  "organization": "none",
   "mode": "strict",
-  "base_url": "http://127.0.0.1:18090",
-  "case_count": 3,
+  "base_url": "http://127.0.0.1:18089",
+  "case_count": 1,
   "cases": [
     {
       "expected_status": [
@@ -283,53 +283,46 @@
         "totalMap",
         "totalPages"
       ],
-      "body_sha256": "a2441f1a1dd0f0b0ed832325e9a0e8a2423e579ba5ec959b219bc343c866c996",
-      "body_bytes": 5474,
+      "body_sha256": "fe04dc14afb44f5226317968ba834559d3ee4661572ab36ceef5467ebda11108",
+      "body_bytes": 739,
       "assertions": {
-        "content_type": "application/json",
         "json_keys": [
-          "columnTypeMap",
-          "first",
-          "last",
-          "numberOfElements",
-          "pageNumber",
-          "pageSize",
           "rows",
-          "total",
-          "totalMap",
-          "totalPages"
+          "total"
         ]
       },
-      "id": "strict-qc-std-stock",
+      "id": "material-per-check.query",
       "method": "POST",
-      "path": "/secure/emc/module/mdm/basemdm/mtls/queries/qc-std-stock",
-      "url": "http://127.0.0.1:18090/secure/emc/module/mdm/basemdm/mtls/queries/qc-std-stock",
+      "path": "/secure/emc/module/item/mtl-per-checks/queries",
+      "url": "http://127.0.0.1:18089/secure/emc/module/item/mtl-per-checks/queries",
       "status": 200,
       "response_headers": {
         "access-control-allow-headers": "security-rsa-key",
         "access-control-allow-methods": "*",
         "access-control-allow-credentials": "true",
-        "gikam-instant-save-path": "/secure/emc/module/mdm/basemdm/mtls/instant",
+        "gikam-instant-save-path": "/secure/emc/module/item/mtl-per-checks/instant",
         "x-content-type-options": "nosniff",
         "x-xss-protection": "1; mode=block",
         "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
         "pragma": "no-cache",
         "expires": "0",
         "content-type": "application/json",
-        "content-length": "5474",
-        "date": "Thu, 05 Nov 2026 15:54:05 GMT",
+        "content-length": "739",
+        "date": "Thu, 05 Nov 2026 21:19:46 GMT",
         "connection": "close"
       },
       "request_headers": {
         "accept": "application/json, text/plain, */*",
         "content-type": "application/json"
       },
-      "elapsed_ms": 312.482,
+      "elapsed_ms": 251.442,
       "route": {
         "method": "POST",
-        "path": "/secure/emc/module/mdm/basemdm/mtls/queries/qc-std-stock",
+        "path": "/secure/emc/module/item/mtl-per-checks/queries",
         "operation": "read",
-        "disposition": "owned-pass"
+        "disposition": "owned-pass",
+        "scope": "project-route",
+        "route_id": "d5909e14f79b5744"
       },
       "fixture": {
         "mode": "none",
@@ -338,7 +331,7 @@
         "setup": "not-required",
         "restore": "not-required",
         "runtime_values": {
-          "id": "rc7d658e26a98"
+          "id": "r2e546df9cd9b"
         },
         "setup_http": [],
         "restore_http": []
@@ -347,167 +340,7 @@
       "readback_required": false,
       "audit": {
         "required": false,
-        "status": "not-required",
-        "event": null,
-        "outcome": null,
-        "source": "external-observation"
-      },
-      "rollback": {
-        "status": "verified-via-fixture-restore",
-        "source": "api-fixture-restore"
-      }
-    },
-    {
-      "expected_status": [
-        200
-      ],
-      "json_top_level_keys": [
-        "ext$"
-      ],
-      "body_sha256": "f195ca8381d65972cfe1ebdeed49720de585abba84c3789dd8919375d419e7bf",
-      "body_bytes": 11,
-      "assertions": {
-        "content_type": "application/json",
-        "json_keys": [
-          "ext$"
-        ]
-      },
-      "id": "strict-reagents-status",
-      "method": "GET",
-      "path": "/secure/emc/module/bp/reagents/info/status",
-      "url": "http://127.0.0.1:18090/secure/emc/module/bp/reagents/info/status",
-      "status": 200,
-      "response_headers": {
-        "access-control-allow-headers": "security-rsa-key",
-        "access-control-allow-methods": "*",
-        "access-control-allow-credentials": "true",
-        "gikam-instant-save-path": "/secure/emc/module/bp/reagents/instant",
-        "x-content-type-options": "nosniff",
-        "x-xss-protection": "1; mode=block",
-        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
-        "pragma": "no-cache",
-        "expires": "0",
-        "content-type": "application/json",
-        "content-length": "11",
-        "date": "Thu, 05 Nov 2026 15:54:05 GMT",
-        "connection": "close"
-      },
-      "request_headers": {
-        "accept": "application/json, text/plain, */*"
-      },
-      "elapsed_ms": 63.766,
-      "route": {
-        "method": "GET",
-        "path": "/secure/emc/module/bp/reagents/info/status",
-        "operation": "read",
-        "disposition": "owned-pass"
-      },
-      "fixture": {
-        "mode": "none",
-        "setup_requests": [],
-        "restore_requests": [],
-        "setup": "not-required",
-        "restore": "not-required",
-        "runtime_values": {
-          "id": "rf7b2ee4bfeee"
-        },
-        "setup_http": [],
-        "restore_http": []
-      },
-      "readback_http": [],
-      "readback_required": false,
-      "audit": {
-        "required": false,
-        "status": "not-required",
-        "event": null,
-        "outcome": null,
-        "source": "external-observation"
-      }
-    },
-    {
-      "expected_status": [
-        200
-      ],
-      "json_top_level_keys": [
-        "columnTypeMap",
-        "first",
-        "last",
-        "numberOfElements",
-        "pageNumber",
-        "pageSize",
-        "rows",
-        "total",
-        "totalMap",
-        "totalPages"
-      ],
-      "body_sha256": "49ad152ce9315e595de82c38182e95ce99447ff4e704de4534fd023c2a510ee3",
-      "body_bytes": 4179,
-      "assertions": {
-        "content_type": "application/json",
-        "json_keys": [
-          "columnTypeMap",
-          "first",
-          "last",
-          "numberOfElements",
-          "pageNumber",
-          "pageSize",
-          "rows",
-          "total",
-          "totalMap",
-          "totalPages"
-        ]
-      },
-      "id": "strict-mtl-category",
-      "method": "POST",
-      "path": "/secure/emc/module/mdm/basemdm/mtls/queries",
-      "url": "http://127.0.0.1:18090/secure/emc/module/mdm/basemdm/mtls/queries",
-      "status": 200,
-      "response_headers": {
-        "access-control-allow-headers": "security-rsa-key",
-        "access-control-allow-methods": "*",
-        "access-control-allow-credentials": "true",
-        "gikam-instant-save-path": "/secure/emc/module/mdm/basemdm/mtls/instant",
-        "x-content-type-options": "nosniff",
-        "x-xss-protection": "1; mode=block",
-        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
-        "pragma": "no-cache",
-        "expires": "0",
-        "content-type": "application/json",
-        "content-length": "4179",
-        "date": "Thu, 05 Nov 2026 15:54:05 GMT",
-        "connection": "close"
-      },
-      "request_headers": {
-        "accept": "application/json, text/plain, */*",
-        "content-type": "application/json"
-      },
-      "elapsed_ms": 70.904,
-      "route": {
-        "method": "POST",
-        "path": "/secure/emc/module/mdm/basemdm/mtls/queries",
-        "operation": "read",
-        "disposition": "owned-pass"
-      },
-      "fixture": {
-        "mode": "none",
-        "setup_requests": [],
-        "restore_requests": [],
-        "setup": "not-required",
-        "restore": "not-required",
-        "runtime_values": {
-          "id": "r41d1d84b3fdb"
-        },
-        "setup_http": [],
-        "restore_http": []
-      },
-      "readback_http": [],
-      "readback_required": false,
-      "audit": {
-        "required": false,
-        "status": "not-required",
-        "event": null,
-        "outcome": null,
-        "source": "external-observation"
+        "status": "not-required"
       },
       "rollback": {
         "status": "verified-via-fixture-restore",
@@ -516,33 +349,28 @@
     }
   ],
   "cleanup": {
-    "application_absent": true,
-    "application_stopped": true,
-    "baseline_key_data_hash_after": "09437a80d60cd8dad0c92dafe804398ccd2a48b1ddf3be08cf5bda18814a8af4",
-    "baseline_schema_hash_after": "a60fc4519f2a89fb6b1761d6e0a2a6480cef8d4bbeab40a2144141f13a9a1dec",
-    "baseline_schema_immutable": true,
     "cleanup_mode": "persistent-oracle",
-    "network_preserved": true,
-    "oracle_preserved": true,
-    "oracle_reused": true,
+    "application_stopped": true,
     "oracle_stopped": false,
-    "redis_preserved": true,
     "redis_stopped": false,
-    "runtime_dirty": false,
-    "runtime_key_data_hash_after": "09437a80d60cd8dad0c92dafe804398ccd2a48b1ddf3be08cf5bda18814a8af4",
-    "runtime_schema_hash_after": "39334b147ee5249484a426a3e57c4d563a0ef9b7be17faf6840f73e56fa1610c",
+    "redis_preserved": true,
+    "oracle_reused": true,
+    "oracle_preserved": true,
+    "baseline_schema_immutable": true,
     "runtime_schema_restored": true,
-    "temporary_files_removed": true,
-    "volume_preserved": true
+    "runtime_dirty": false,
+    "network_preserved": true,
+    "volume_preserved": true,
+    "temporary_files_removed": true
   },
   "cleanup_pending": false,
   "phase_timings_ms": {
-    "http_cases": 882.993
+    "http_cases": 609.071
   },
   "authentication": {
     "attempted": true,
     "authenticated": true,
     "status": 200
   },
-  "finished_at": "2026-11-05T15:54:05.974521+00:00"
+  "finished_at": "2026-11-05T21:19:45.642105+00:00"
 }

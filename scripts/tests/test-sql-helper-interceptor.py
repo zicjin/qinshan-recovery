@@ -291,6 +291,11 @@ class TestMybatisInterceptorSource(unittest.TestCase):
             text,
             "enhanceParameter on statement handler must enhance parameter map",
         )
+        self.assertLess(
+            text.index("DaoMapper.class.getName()"),
+            text.index("cleanDanglingWhereClause(boundSql.getSql())"),
+            "framework-owned DaoMapper SQL must bypass dangling-clause cleanup",
+        )
 
 
 class TestSqlHelperSource(unittest.TestCase):
@@ -314,6 +319,11 @@ class TestSqlHelperSource(unittest.TestCase):
             "int pos = findOuterOrderByPos(sql);",
             text,
             "removeEndingOrderIfPresent must use findOuterOrderByPos scanner",
+        )
+        self.assertNotIn(
+            "SQL_ENDING_ORDER_BY_PATTERN",
+            text,
+            "SqlHelper must not retain the catastrophic backtracking pattern",
         )
         self.assertIn(
             "cleanExtPrefix",

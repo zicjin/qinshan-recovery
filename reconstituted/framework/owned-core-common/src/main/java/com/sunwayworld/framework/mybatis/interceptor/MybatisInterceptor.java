@@ -67,13 +67,13 @@ implements Interceptor {
             BaseStatementHandler delegate = (BaseStatementHandler)ReflectionUtils.getFieldValue(statementHandler, "delegate");
             MappedStatement mappedStatement2 = (MappedStatement)ReflectionUtils.getFieldValue(delegate, "mappedStatement");
             this.enhanceParameter(delegate, mappedStatement2);
+            if (StringUtils.startsWith(mappedStatement2.getId(), DaoMapper.class.getName()) || StringUtils.startsWith(mappedStatement2.getId(), GlobalMapper.class.getName())) {
+                return invocation.proceed();
+            }
             BoundSql boundSql = delegate.getBoundSql();
             String cleanedSql = SqlHelper.cleanDanglingWhereClause(boundSql.getSql());
             if (!cleanedSql.equals(boundSql.getSql())) {
                 ReflectionUtils.setFieldValue(boundSql, "sql", cleanedSql);
-            }
-            if (StringUtils.startsWith(mappedStatement2.getId(), DaoMapper.class.getName()) || StringUtils.startsWith(mappedStatement2.getId(), GlobalMapper.class.getName())) {
-                return invocation.proceed();
             }
             if (MybatisPageHelper.isResponseMappedStatementId() && (response = ServletUtils.getCurrentResponse()) != null && mappedStatement2.getId() != null) {
                 response.setHeader(mappedStatementIdKey, mappedStatement2.getId());

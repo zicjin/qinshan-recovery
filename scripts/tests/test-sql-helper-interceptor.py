@@ -27,9 +27,12 @@ class TestSqlHelperRegex(unittest.TestCase):
         )
 
     def clean_sql(self, sql: str) -> str:
-        sql = self.where_and_or.sub("WHERE ", sql)
-        sql = self.dangling_where.sub("", sql)
-        sql = self.dangling_and_or.sub("", sql)
+        prev = None
+        while sql != prev:
+            prev = sql
+            sql = self.where_and_or.sub("WHERE ", sql)
+            sql = self.dangling_and_or.sub("", sql)
+            sql = self.dangling_where.sub("", sql)
         return sql
 
     def test_strip_dangling_where_with_comments(self):
@@ -67,6 +70,21 @@ class TestSqlHelperRegex(unittest.TestCase):
         self.assertIsNotNone(m)
         stripped = self.ending_order.sub("", sql, count=1).strip()
         self.assertEqual(stripped, "SELECT * FROM (SELECT id FROM t ORDER BY id) T")
+
+    def test_loop_cleaning_dangling_where_and(self):
+        sql = "SELECT * FROM t WHERE AND"
+        cleaned = self.clean_sql(sql).strip()
+        self.assertEqual(cleaned, "SELECT * FROM t")
+
+    def test_loop_cleaning_dangling_where_or(self):
+        sql = "SELECT * FROM t WHERE OR"
+        cleaned = self.clean_sql(sql).strip()
+        self.assertEqual(cleaned, "SELECT * FROM t")
+
+    def test_loop_cleaning_multiple_dangling_ands(self):
+        sql = "SELECT * FROM t WHERE a = 1 AND AND"
+        cleaned = self.clean_sql(sql).strip()
+        self.assertEqual(cleaned, "SELECT * FROM t WHERE a = 1")
 
 
 class TestMapperXmlHygiene(unittest.TestCase):
@@ -114,6 +132,35 @@ class TestMybatisInterceptorSource(unittest.TestCase):
             'newBoundSql.setAdditionalParameter("loginUser", LocalContextHelper.getLoginUser())',
             text,
             "getNewBoundSql must inject loginUser for pagination total count",
+        )
+        self.assertIn(
+            '@Signature(type=Executor.class, method="update", args={MappedStatement.class, Object.class})',
+            text,
+            "Interceptor must intercept Executor.update to inject parameters for write operations",
+        )
+        self.assertIn(
+            'if (!map.containsKey("loginOrgId"))',
+            text,
+            "enhanceParameter must avoid overwriting existing loginOrgId",
+        )
+
+
+class TestSqlHelperSource(unittest.TestCase):
+    def test_sql_helper_loop_cleaning_and_order_by_cleaning(self):
+        path = (
+            ROOT
+            / "reconstituted/framework/owned-core-common/src/main/java/com/sunwayworld/framework/database/sql/SqlHelper.java"
+        )
+        text = path.read_text(encoding="utf-8")
+        self.assertIn(
+            "do {",
+            text,
+            "cleanDanglingWhereClause must loop until stable",
+        )
+        self.assertIn(
+            'return cleanDanglingWhereClause(matcher.replaceFirst(""));',
+            text,
+            "removeEndingOrderIfPresent must clean dangling where after stripping order by",
         )
 
 

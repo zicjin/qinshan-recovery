@@ -36,9 +36,13 @@ public abstract class SqlHelper {
         if (StringUtils.isEmpty(sql)) {
             return sql;
         }
-        sql = WHERE_AND_OR_PATTERN.matcher(sql).replaceAll("WHERE ");
-        sql = DANGLING_WHERE_PATTERN.matcher(sql).replaceAll("");
-        sql = DANGLING_AND_OR_PATTERN.matcher(sql).replaceAll("");
+        String prev;
+        do {
+            prev = sql;
+            sql = WHERE_AND_OR_PATTERN.matcher(sql).replaceAll("WHERE ");
+            sql = DANGLING_AND_OR_PATTERN.matcher(sql).replaceAll("");
+            sql = DANGLING_WHERE_PATTERN.matcher(sql).replaceAll("");
+        } while (!sql.equals(prev));
         return sql;
     }
 
@@ -48,7 +52,7 @@ public abstract class SqlHelper {
         }
         Matcher matcher = SQL_ENDING_ORDER_BY_PATTERN.matcher(sql);
         if (matcher.find()) {
-            return matcher.replaceFirst("");
+            return cleanDanglingWhereClause(matcher.replaceFirst(""));
         }
         return cleanDanglingWhereClause(sql);
     }

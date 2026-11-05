@@ -52,7 +52,7 @@ import org.apache.ibatis.session.ResultHandler;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.context.i18n.LocaleContextHolder;
 
-@Intercepts(value={@Signature(type=StatementHandler.class, method="prepare", args={Connection.class, Integer.class}), @Signature(type=Executor.class, method="query", args={MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class})})
+@Intercepts(value={@Signature(type=StatementHandler.class, method="prepare", args={Connection.class, Integer.class}), @Signature(type=Executor.class, method="query", args={MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class}), @Signature(type=Executor.class, method="update", args={MappedStatement.class, Object.class})})
 public class MybatisInterceptor
 implements Interceptor {
     private static final String mappedStatementIdKey = "SUNWAY-MYBATIS-MAPPED-STATEMENT-ID";
@@ -147,10 +147,18 @@ implements Interceptor {
             if (!map.containsKey("loginUser")) {
                 map.put("loginUser", LocalContextHelper.getLoginUser());
             }
-            map.put("loginOrgId", LocalContextHelper.getLoginOrgId());
-            map.put("loginOrgName", LocalContextHelper.getLoginOrgName());
-            map.put("loginRoleId", LocalContextHelper.getLoginRoleId());
-            map.put("loginRoleName", LocalContextHelper.getLoginRoleName());
+            if (!map.containsKey("loginOrgId")) {
+                map.put("loginOrgId", LocalContextHelper.getLoginOrgId());
+            }
+            if (!map.containsKey("loginOrgName")) {
+                map.put("loginOrgName", LocalContextHelper.getLoginOrgName());
+            }
+            if (!map.containsKey("loginRoleId")) {
+                map.put("loginRoleId", LocalContextHelper.getLoginRoleId());
+            }
+            if (!map.containsKey("loginRoleName")) {
+                map.put("loginRoleName", LocalContextHelper.getLoginRoleName());
+            }
         }
         if (!map.containsKey("service_table") && (currentProxy = SunwayAopContext.currentProxy()) != null && GenericDao.class.isAssignableFrom(ClassUtils.getRawType(currentProxy.getClass()))) {
             map.put("service_table", ((GenericDao)currentProxy).getTable());

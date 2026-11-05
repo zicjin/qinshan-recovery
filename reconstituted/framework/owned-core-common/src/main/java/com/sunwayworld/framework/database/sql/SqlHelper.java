@@ -15,7 +15,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -28,13 +30,110 @@ public abstract class SqlHelper {
     private static final Pattern SQL_ORDER_BY_PATTERN = Pattern.compile("(?i)order\\s+by");
     private static final String WS_OR_COMMENT = "(?:/\\*[\\s\\S]*?\\*/|--[^\\r\\n]*[\\r\\n]|\\s)";
     private static final Pattern DANGLING_WHERE_PATTERN = Pattern.compile("(?i)\\bwhere(" + WS_OR_COMMENT + "*)(?=$|\\)|\\bgroup\\s+by\\b|\\bhaving\\b|\\border\\s+by\\b|\\bunion\\b|\\bintersect\\b|\\bminus\\b)");
-    private static final Pattern WHERE_AND_OR_PATTERN = Pattern.compile("(?i)\\bwhere" + WS_OR_COMMENT + "*\\b(and|or)\\b\\s*");
+    private static final Pattern WHERE_AND_OR_PATTERN = Pattern.compile("(?i)(\\bwhere)(" + WS_OR_COMMENT + "*)\\b(and|or)\\b\\s*");
     private static final Pattern DANGLING_AND_OR_PATTERN = Pattern.compile("(?i)\\b(and|or)(" + WS_OR_COMMENT + "*)(?=$|\\)|\\bgroup\\s+by\\b|\\bhaving\\b|\\border\\s+by\\b|\\bunion\\b|\\bintersect\\b|\\bminus\\b)");
     private static final Pattern CONSECUTIVE_AND_OR = Pattern.compile("(?i)\\b(and|or)" + WS_OR_COMMENT + "+\\b(and|or)\\b\\s*");
     private static final Pattern EMPTY_PARENS = Pattern.compile("\\(\\s*\\)");
-    private static final Pattern OPEN_PAREN_AND_OR = Pattern.compile("(?i)\\(" + WS_OR_COMMENT + "*\\b(and|or)\\b\\s*");
+    private static final Pattern OPEN_PAREN_AND_OR = Pattern.compile("(?i)(\\()(" + WS_OR_COMMENT + "*)\\b(and|or)\\b\\s*");
     private static final Pattern EXT_PREFIX_PATTERN = Pattern.compile("(?i)ext\\$\\.");
     public static final String REPLACE_KEY_EXT = "EXT$.";
+
+    private static final class MaskedSql {
+        private final String sql;
+        private final Map<String, String> fragments;
+
+        private MaskedSql(String sql, Map<String, String> fragments) {
+            this.sql = sql;
+            this.fragments = fragments;
+        }
+
+        private String restore(String value) {
+            String result = value;
+            for (Map.Entry<String, String> entry : this.fragments.entrySet()) {
+                result = result.replace(entry.getKey(), entry.getValue());
+            }
+            return result;
+        }
+    }
+
+    private static MaskedSql maskSqlFragments(String sql) {
+        Map<String, String> fragments = new LinkedHashMap<String, String>();
+        StringBuilder masked = new StringBuilder(sql.length());
+        int index = 0;
+        int i = 0;
+        int n = sql.length();
+        while (i < n) {
+            char c = sql.charAt(i);
+            int end;
+            String marker;
+            if (c == '\'') {
+                end = i + 1;
+                while (end < n) {
+                    if (sql.charAt(end) != '\'') {
+                        end++;
+                        continue;
+                    }
+                    if (end + 1 < n && sql.charAt(end + 1) == '\'') {
+                        end += 2;
+                        continue;
+                    }
+                    end++;
+                    break;
+                }
+                marker = "__SQL_LITERAL_" + index++ + "__";
+            } else if (c == '"') {
+                end = i + 1;
+                while (end < n) {
+                    if (sql.charAt(end) != '"') {
+                        end++;
+                        continue;
+                    }
+                    if (end + 1 < n && sql.charAt(end + 1) == '"') {
+                        end += 2;
+                        continue;
+                    }
+                    end++;
+                    break;
+                }
+                marker = "__SQL_IDENTIFIER_" + index++ + "__";
+            } else if (c == '/' && i + 1 < n && sql.charAt(i + 1) == '*') {
+                int depth = 1;
+                end = i + 2;
+                while (end + 1 < n && depth > 0) {
+                    if (sql.charAt(end) == '/' && sql.charAt(end + 1) == '*') {
+                        depth++;
+                        end += 2;
+                    } else if (sql.charAt(end) == '*' && sql.charAt(end + 1) == '/') {
+                        depth--;
+                        end += 2;
+                    } else {
+                        end++;
+                    }
+                }
+                marker = "/*__SQL_COMMENT_" + index++ + "____*/";
+                if (depth != 0) {
+                    end = n;
+                }
+            } else if (c == '-' && i + 1 < n && sql.charAt(i + 1) == '-') {
+                end = i + 2;
+                while (end < n && sql.charAt(end) != '\r' && sql.charAt(end) != '\n') {
+                    end++;
+                }
+                if (end < n) {
+                    end++;
+                }
+                marker = "/*__SQL_COMMENT_" + index++ + "____*/";
+            } else {
+                masked.append(c);
+                i++;
+                continue;
+            }
+            fragments.put(marker, sql.substring(i, end));
+            masked.append(marker);
+            i = end;
+        }
+        return new MaskedSql(masked.toString(), fragments);
+    }
 
     public static int findOuterOrderByPos(String sql) {
         if (StringUtils.isEmpty(sql)) {
@@ -43,6 +142,7 @@ public abstract class SqlHelper {
         int n = sql.length();
         int depth = 0;
         boolean inSingleQuote = false;
+        boolean inDoubleQuote = false;
         boolean inBlockComment = false;
         boolean inLineComment = false;
         int orderPos = -1;
@@ -55,6 +155,17 @@ public abstract class SqlHelper {
                         i++;
                     } else {
                         inSingleQuote = false;
+                    }
+                }
+                i++;
+                continue;
+            }
+            if (inDoubleQuote) {
+                if (c == '"') {
+                    if (i + 1 < n && sql.charAt(i + 1) == '"') {
+                        i++;
+                    } else {
+                        inDoubleQuote = false;
                     }
                 }
                 i++;
@@ -78,6 +189,11 @@ public abstract class SqlHelper {
             }
             if (c == '\'') {
                 inSingleQuote = true;
+                i++;
+                continue;
+            }
+            if (c == '"') {
+                inDoubleQuote = true;
                 i++;
                 continue;
             }
@@ -132,17 +248,19 @@ public abstract class SqlHelper {
         if (StringUtils.isEmpty(sql)) {
             return sql;
         }
+        MaskedSql maskedSql = maskSqlFragments(sql);
+        sql = maskedSql.sql;
         String prev;
         do {
             prev = sql;
             sql = EMPTY_PARENS.matcher(sql).replaceAll("");
-            sql = OPEN_PAREN_AND_OR.matcher(sql).replaceAll("(");
+            sql = OPEN_PAREN_AND_OR.matcher(sql).replaceAll("$1$2 ");
             sql = CONSECUTIVE_AND_OR.matcher(sql).replaceAll("$2 ");
-            sql = WHERE_AND_OR_PATTERN.matcher(sql).replaceAll("WHERE ");
+            sql = WHERE_AND_OR_PATTERN.matcher(sql).replaceAll("$1$2 ");
             sql = DANGLING_AND_OR_PATTERN.matcher(sql).replaceAll("$2");
             sql = DANGLING_WHERE_PATTERN.matcher(sql).replaceAll("$1");
         } while (!sql.equals(prev));
-        return sql;
+        return maskedSql.restore(sql);
     }
 
     public static final String cleanExtPrefix(String sql) {

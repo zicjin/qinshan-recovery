@@ -375,11 +375,11 @@ public class MapperParameter extends HashMap<String, Object> {
 
    private void enhanceLoginUser() {
       if (LocalContextHelper.isUserLogin()) {
-         this.put("loginUser", LocalContextHelper.getLoginUser());
-         this.put("loginOrgId", LocalContextHelper.getLoginOrgId());
-         this.put("loginOrgName", LocalContextHelper.getLoginOrgName());
-         this.put("loginRoleId", LocalContextHelper.getLoginRoleId());
-         this.put("loginRoleName", LocalContextHelper.getLoginRoleName());
+         if (!this.containsKey("loginUser")) this.put("loginUser", LocalContextHelper.getLoginUser());
+         if (!this.containsKey("loginOrgId")) this.put("loginOrgId", LocalContextHelper.getLoginOrgId());
+         if (!this.containsKey("loginOrgName")) this.put("loginOrgName", LocalContextHelper.getLoginOrgName());
+         if (!this.containsKey("loginRoleId")) this.put("loginRoleId", LocalContextHelper.getLoginRoleId());
+         if (!this.containsKey("loginRoleName")) this.put("loginRoleName", LocalContextHelper.getLoginRoleName());
       }
    }
 }

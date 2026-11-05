@@ -31,6 +31,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 public class OracleDialect
@@ -66,7 +67,7 @@ implements Dialect {
         if (dataType == null) {
             return Object.class;
         }
-        switch (dataType.toLowerCase()) {
+        switch (dataType.toLowerCase(Locale.ROOT)) {
             case "varchar":
             case "varchar2":
             case "nvarchar2":
@@ -129,7 +130,7 @@ implements Dialect {
 
     @Override
     public boolean isClob(ColumnContext columnContext) {
-        switch (columnContext.getDataType().toLowerCase()) {
+        switch (columnContext.getDataType().toLowerCase(Locale.ROOT)) {
             case "clob":
             case "nclob": {
                 return true;
@@ -140,7 +141,7 @@ implements Dialect {
 
     @Override
     public boolean isBlob(ColumnContext columnContext) {
-        switch (columnContext.getDataType().toLowerCase()) {
+        switch (columnContext.getDataType().toLowerCase(Locale.ROOT)) {
             case "blob":
             case "raw":
             case "long raw": {

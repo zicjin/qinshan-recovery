@@ -19,7 +19,7 @@ class TestSqlHelperRegex(unittest.TestCase):
             re.IGNORECASE,
         )
         self.where_and_or = re.compile(
-            r"\bwhere" + ws_or_comment + r"*\b(and|or)\b\s*",
+            r"(\bwhere)(" + ws_or_comment + r"*)\b(and|or)\b\s*",
             re.IGNORECASE,
         )
         self.consecutive_and_or = re.compile(
@@ -28,7 +28,7 @@ class TestSqlHelperRegex(unittest.TestCase):
         )
         self.empty_parens = re.compile(r"\(\s*\)")
         self.open_paren_and_or = re.compile(
-            r"\(" + ws_or_comment + r"*\b(and|or)\b\s*",
+            r"(\()(" + ws_or_comment + r"*)\b(and|or)\b\s*",
             re.IGNORECASE,
         )
         self.ext_prefix = re.compile(r"ext\$\.", re.IGNORECASE)
@@ -38,21 +38,83 @@ class TestSqlHelperRegex(unittest.TestCase):
         )
 
     def clean_sql(self, sql: str) -> str:
+        fragments = {}
+        masked = []
+        i = 0
+        while i < len(sql):
+            char = sql[i]
+            end = None
+            marker = None
+            if char == "'":
+                end = i + 1
+                while end < len(sql):
+                    if sql[end] != "'":
+                        end += 1
+                    elif end + 1 < len(sql) and sql[end + 1] == "'":
+                        end += 2
+                    else:
+                        end += 1
+                        break
+                marker = f"__SQL_LITERAL_{len(fragments)}__"
+            elif char == '"':
+                end = i + 1
+                while end < len(sql):
+                    if sql[end] != '"':
+                        end += 1
+                    elif end + 1 < len(sql) and sql[end + 1] == '"':
+                        end += 2
+                    else:
+                        end += 1
+                        break
+                marker = f"__SQL_IDENTIFIER_{len(fragments)}__"
+            elif sql.startswith("/*", i):
+                depth = 1
+                end = i + 2
+                while end + 1 < len(sql) and depth:
+                    if sql.startswith("/*", end):
+                        depth += 1
+                        end += 2
+                    elif sql.startswith("*/", end):
+                        depth -= 1
+                        end += 2
+                    else:
+                        end += 1
+                if depth:
+                    end = len(sql)
+                marker = f"/*__SQL_COMMENT_{len(fragments)}____*/"
+            elif sql.startswith("--", i):
+                end = i + 2
+                while end < len(sql) and sql[end] not in "\r\n":
+                    end += 1
+                if end < len(sql):
+                    end += 1
+                marker = f"/*__SQL_COMMENT_{len(fragments)}____*/"
+            if marker is None:
+                masked.append(char)
+                i += 1
+                continue
+            fragments[marker] = sql[i:end]
+            masked.append(marker)
+            i = end
+        sql = "".join(masked)
         prev = None
         while sql != prev:
             prev = sql
             sql = self.empty_parens.sub("", sql)
-            sql = self.open_paren_and_or.sub("(", sql)
+            sql = self.open_paren_and_or.sub(r"\1\2 ", sql)
             sql = self.consecutive_and_or.sub(r"\2 ", sql)
-            sql = self.where_and_or.sub("WHERE ", sql)
+            sql = self.where_and_or.sub(r"\1\2 ", sql)
             sql = self.dangling_and_or_boundary.sub(r"\2", sql)
             sql = self.dangling_where_boundary.sub(r"\1", sql)
+        for marker, fragment in fragments.items():
+            sql = sql.replace(marker, fragment)
         return sql
 
     def find_outer_order_by_pos(self, sql: str) -> int:
         n = len(sql)
         depth = 0
         in_single_quote = False
+        in_double_quote = False
         in_block_comment = False
         in_line_comment = False
         order_pos = -1
@@ -65,6 +127,14 @@ class TestSqlHelperRegex(unittest.TestCase):
                         i += 1
                     else:
                         in_single_quote = False
+                i += 1
+                continue
+            if in_double_quote:
+                if c == '"':
+                    if i + 1 < n and sql[i + 1] == '"':
+                        i += 1
+                    else:
+                        in_double_quote = False
                 i += 1
                 continue
             if in_block_comment:
@@ -81,6 +151,10 @@ class TestSqlHelperRegex(unittest.TestCase):
                 continue
             if c == "'":
                 in_single_quote = True
+                i += 1
+                continue
+            if c == '"':
+                in_double_quote = True
                 i += 1
                 continue
             if c == "/" and i + 1 < n and sql[i + 1] == "*":
@@ -125,8 +199,8 @@ class TestSqlHelperRegex(unittest.TestCase):
 
     def test_fix_where_comment_and(self):
         sql = "SELECT T.* FROM T_STOCK T WHERE /* comment */ AND T.ID = 1"
-        cleaned = self.clean_sql(sql).strip()
-        self.assertEqual(cleaned, "SELECT T.* FROM T_STOCK T WHERE T.ID = 1")
+        cleaned = re.sub(r"\s+", " ", self.clean_sql(sql)).strip()
+        self.assertEqual(cleaned, "SELECT T.* FROM T_STOCK T WHERE /* comment */ T.ID = 1")
 
     def test_remove_ending_order_and_clean_dangling_where(self):
         sql = (
@@ -197,23 +271,36 @@ class TestSqlHelperRegex(unittest.TestCase):
 
     def test_empty_parentheses_cleaned(self):
         sql = "SELECT * FROM t WHERE () AND a = 1"
-        cleaned = self.clean_sql(sql).strip()
+        cleaned = re.sub(r"\s+", " ", self.clean_sql(sql)).strip()
         self.assertEqual(cleaned, "SELECT * FROM t WHERE a = 1")
 
     def test_open_paren_and_cleaned(self):
         sql = "SELECT * FROM t WHERE ( AND a = 1 )"
-        cleaned = self.clean_sql(sql).strip()
-        self.assertEqual(cleaned, "SELECT * FROM t WHERE (a = 1 )")
+        cleaned = re.sub(r"\s+", " ", self.clean_sql(sql)).strip()
+        self.assertEqual(cleaned, "SELECT * FROM t WHERE ( a = 1 )")
 
     def test_open_paren_or_cleaned(self):
         sql = "SELECT * FROM t WHERE ( OR a = 1 )"
-        cleaned = self.clean_sql(sql).strip()
-        self.assertEqual(cleaned, "SELECT * FROM t WHERE (a = 1 )")
+        cleaned = re.sub(r"\s+", " ", self.clean_sql(sql)).strip()
+        self.assertEqual(cleaned, "SELECT * FROM t WHERE ( a = 1 )")
 
     def test_clean_ext_prefix_case_insensitive(self):
         sql = "SELECT ext$.NAME, EXT$.AGE, Ext$.ID FROM t"
         cleaned = self.ext_prefix.sub("", sql)
         self.assertEqual(cleaned, "SELECT NAME, AGE, ID FROM t")
+
+    def test_cleanup_preserves_literals_and_quoted_identifiers(self):
+        sql = 'SELECT * FROM t WHERE \'WHERE AND\' = \'x\' AND "ORDER BY" = 1'
+        self.assertEqual(self.clean_sql(sql), sql)
+
+    def test_outer_order_scan_ignores_quoted_identifier(self):
+        sql = 'SELECT "ORDER BY" FROM t'
+        self.assertEqual(self.find_outer_order_by_pos(sql), -1)
+
+    def test_cleanup_preserves_diagnostic_comments(self):
+        cleaned = self.clean_sql("SELECT * FROM t WHERE /* keep-diagnostic-context */ AND id = 1")
+        self.assertIn("/* keep-diagnostic-context */", cleaned)
+        self.assertIn("id = 1", cleaned)
 
 
 class TestMapperXmlHygiene(unittest.TestCase):
@@ -257,19 +344,24 @@ class TestMybatisInterceptorSource(unittest.TestCase):
             "getNewBoundSql must copy all additional parameters",
         )
         self.assertIn(
-            'newBoundSql.setAdditionalParameter("loginUser", LocalContextHelper.getLoginUser())',
+            "private boolean hasParameter(BoundSql boundSql, String property)",
             text,
-            "getNewBoundSql must inject loginUser for pagination total count",
+            "MybatisInterceptor must check explicit parameters before context injection",
         )
         self.assertIn(
-            'newBoundSql.setAdditionalParameter("loginUserId", LocalContextHelper.getLoginUserId())',
+            'if (!this.hasParameter(boundSql, "loginUser"))',
             text,
-            "getNewBoundSql must inject loginUserId for pagination total count",
+            "pagination BoundSql must preserve an explicit loginUser",
         )
         self.assertIn(
-            'newBoundSql.setAdditionalParameter("loginUserName", LocalContextHelper.getLoginUserName())',
+            'if (!map.containsKey("loginOrgId"))',
             text,
-            "getNewBoundSql must inject loginUserName for pagination total count",
+            "mapper maps must preserve an explicit loginOrgId",
+        )
+        self.assertIn(
+            "this.enhanceContextParameter(newBoundSql);",
+            text,
+            "pagination BoundSql must receive login context without overwriting explicit values",
         )
         self.assertIn(
             '@Signature(type=Executor.class, method="update", args={MappedStatement.class, Object.class})',
@@ -335,6 +427,16 @@ class TestSqlHelperSource(unittest.TestCase):
             text,
             "SqlHelper.getSelectTotalSql must place space before sum alias",
         )
+        self.assertIn(
+            "private static MaskedSql maskSqlFragments(String sql)",
+            text,
+            "SqlHelper cleanup must mask literals, identifiers and comments",
+        )
+        self.assertIn(
+            "boolean inDoubleQuote = false",
+            text,
+            "outer ORDER BY scanning must ignore quoted Oracle identifiers",
+        )
 
 
 class TestOracleDialectSource(unittest.TestCase):
@@ -349,6 +451,7 @@ class TestOracleDialectSource(unittest.TestCase):
         self.assertIn('case "nclob":', text, "isClob must support nclob")
         self.assertIn('case "long raw":', text, "isBlob must support long raw")
         self.assertIn("return Object.class;", text)
+        self.assertEqual(text.count("toLowerCase(Locale.ROOT)"), 3, "Oracle type switches must be locale stable")
 
 
 if __name__ == "__main__":

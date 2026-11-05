@@ -4,11 +4,13 @@ from __future__ import annotations
 import hashlib
 import importlib.util
 import io
+import json
 from pathlib import Path
 import subprocess
 import sys
 import tarfile
 import tempfile
+import zipfile
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -53,6 +55,34 @@ def main() -> int:
         expected = hashlib.sha256(seed.read_bytes()).hexdigest()
         manifest = root / "seed.sha256"
         manifest.write_text(f"{expected}  materials/{seed.name}\n", encoding="utf-8")
+        public_deps = root / "public-deps"
+        public_deps.mkdir()
+        public_jar = public_deps / "commons-io-2.4.jar"
+        with zipfile.ZipFile(public_jar, "w") as archive:
+            archive.writestr(
+                "META-INF/maven/commons-io/commons-io/pom.properties",
+                "groupId=commons-io\nartifactId=commons-io\nversion=2.4\n",
+            )
+            archive.writestr(
+                "META-INF/maven/commons-io/commons-io/pom.xml",
+                "<project><modelVersion>4.0.0</modelVersion></project>\n",
+            )
+        allowlist = root / "allowlist.json"
+        allowlist.write_text(
+            json.dumps(
+                {
+                    "entries": [
+                        {
+                            "filename": public_jar.name,
+                            "size": public_jar.stat().st_size,
+                            "sha256": hashlib.sha256(public_jar.read_bytes()).hexdigest(),
+                            "maven_coordinates_or_unknown": ["commons-io:commons-io:2.4"],
+                        }
+                    ]
+                }
+            ),
+            encoding="utf-8",
+        )
         output = root / "repo"
         result = subprocess.run(
             [
@@ -63,12 +93,18 @@ def main() -> int:
                 str(seed),
                 "--manifest",
                 str(manifest),
+                "--public-deps",
+                str(public_deps),
+                "--allowlist",
+                str(allowlist),
             ],
             text=True,
             capture_output=True,
         )
         assert result.returncode == 0, result.stderr
         assert all((output / relative).is_file() for relative in REQUIRED)
+        assert (output / "commons-io/commons-io/2.4/commons-io-2.4.jar").is_file()
+        assert (output / "commons-io/commons-io/2.4/commons-io-2.4.pom").is_file()
 
         manifest.write_text(f"{'0' * 64}  materials/{seed.name}\n", encoding="utf-8")
         failed = subprocess.run(

@@ -30,11 +30,35 @@ def write_json(path: Path, payload: object) -> None:
     )
 
 
-def finalize_module_provenance(module_root: Path) -> None:
+def tree_digest(records: list[dict[str, object]]) -> str:
+    digest = hashlib.sha256()
+    for record in sorted(records, key=lambda item: str(item["path"])):
+        digest.update(str(record["path"]).encode("utf-8"))
+        digest.update(b"\0")
+        digest.update(bytes.fromhex(str(record["sha256"])))
+    return digest.hexdigest()
+
+
+def finalize_module_provenance(module_root: Path) -> dict[str, object]:
     provenance_path = module_root / "module-provenance.json"
     provenance = json.loads(provenance_path.read_text(encoding="utf-8"))
+    override_root = ROOT / "reconstituted" / "overrides" / "framework" / module_root.name
     for record in provenance["source_files"]:
+        source_path = module_root / str(record["path"])
+        record["sha256"] = sha256_file(source_path)
         record["compile_status"] = "pass"
+        override_path = override_root / str(record["path"])
+        if override_path.is_file():
+            record.setdefault(
+                "source_sha256_before_overlay",
+                record.get("source_sha256_before_transform"),
+            )
+            transformations = list(record.get("transformations", []))
+            transformation = f"overlay:{record['path']}"
+            if transformation not in transformations:
+                transformations.append(transformation)
+            record["transformations"] = transformations
+    provenance["source_tree_sha256"] = tree_digest(provenance["source_files"])
     write_json(provenance_path, provenance)
 
     resource_path = module_root / "resource-provenance.json"
@@ -42,6 +66,7 @@ def finalize_module_provenance(module_root: Path) -> None:
     for record in resources["resources"]:
         record["compile_status"] = "not-applicable-resource"
     write_json(resource_path, resources)
+    return provenance
 
 
 def command_output(command: list[str], cwd: Path) -> str:
@@ -109,9 +134,7 @@ def main() -> int:
             raise SystemExit(f"expected one module jar for {module}, found {jars}")
         jar = jars[0]
         normalize_jar(jar)
-        provenance = json.loads(
-            (module_root / "module-provenance.json").read_text(encoding="utf-8")
-        )
+        provenance = finalize_module_provenance(module_root)
         report = {
             "schema": "supplier-reconstituted-module-compile-v1",
             "module": module,
@@ -132,8 +155,9 @@ def main() -> int:
             "host": platform.system(),
         }
         write_json(module_root / "compile-report.json", report)
-        finalize_module_provenance(module_root)
         summary["compile_status"] = "pass"
+        summary["source_file_count"] = provenance["source_file_count"]
+        summary["source_tree_sha256"] = provenance["source_tree_sha256"]
         summary["output_jar"] = report["output_jar"]
         summary["output_jar_sha256"] = report["output_jar_sha256"]
         summaries.append(summary)

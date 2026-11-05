@@ -3,13 +3,14 @@
  */
 package com.sunwayworld.framework.security.resource.impl;
 
-import com.sunwayworld.framework.context.ApplicationContextHelper;
-import com.sunwayworld.framework.security.bean.CoreLicenseDTO;
 import com.sunwayworld.framework.security.captcha.SecurityCaptchaService;
 import com.sunwayworld.framework.security.resource.SecurityResource;
 import com.sunwayworld.framework.spring.annotation.GikamBean;
-import java.time.LocalDate;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 @GikamBean
@@ -25,13 +26,11 @@ implements SecurityResource {
     }
 
     @Override
-    public CoreLicenseDTO getLicense() {
-        CoreLicenseDTO license = new CoreLicenseDTO();
-        LocalDate expiredDate = ApplicationContextHelper.getLicenseDeadline();
-        if (expiredDate.isBefore(LocalDate.now().plusMonths(6L))) {
-            license.setExpiredDate(expiredDate);
-        }
-        license.setLoginLimit(Integer.valueOf(ApplicationContextHelper.getLoginUserLimitation()).longValue());
-        return license;
+    public ResponseEntity<Map<String, Object>> getLicense() {
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("status", HttpStatus.NOT_FOUND.value());
+        body.put("error", HttpStatus.NOT_FOUND.getReasonPhrase());
+        body.put("path", "/open/security/licenses");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body);
     }
 }

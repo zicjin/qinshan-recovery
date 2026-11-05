@@ -3,7 +3,8 @@
  */
 package com.sunwayworld.framework.security.resource;
 
-import com.sunwayworld.framework.security.bean.CoreLicenseDTO;
+import java.util.Map;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -13,5 +14,5 @@ public interface SecurityResource {
     public void captchaImage();
 
     @RequestMapping(value={"/licenses"}, method={RequestMethod.GET})
-    public CoreLicenseDTO getLicense();
+    public ResponseEntity<Map<String, Object>> getLicense();
 }

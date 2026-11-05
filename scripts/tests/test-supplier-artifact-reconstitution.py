@@ -561,6 +561,101 @@ def verify_mapper_scanner_covers_both_supplier_conventions() -> None:
     ) in bean_context
 
 
+def verify_locale_resolver_matches_native_seam() -> None:
+    source_paths = (
+        ROOT
+        / "reconstituted"
+        / "overrides"
+        / "framework"
+        / "owned-core-common"
+        / "src"
+        / "main"
+        / "java"
+        / "com"
+        / "sunwayworld"
+        / "boot"
+        / "ApplicationConfiguration.java",
+        ROOT
+        / "reconstituted"
+        / "framework"
+        / "owned-core-common"
+        / "src"
+        / "main"
+        / "java"
+        / "com"
+        / "sunwayworld"
+        / "boot"
+        / "ApplicationConfiguration.java",
+    )
+    for source_path in source_paths:
+        source = source_path.read_text(encoding="utf-8")
+        assert "CookieLocaleResolver resolver = new CookieLocaleResolver()" in source
+        assert "resolver.setDefaultLocale(Locale.CHINA)" in source
+        assert 'resolver.setCookieName("locale")' in source
+        assert "SessionLocaleResolver" not in source
+        assert "AcceptHeaderLocaleResolver" not in source
+
+
+def verify_removed_license_negative_sources() -> None:
+    source_paths = (
+        ROOT
+        / "reconstituted"
+        / "overrides"
+        / "framework"
+        / "owned-core-common"
+        / "src"
+        / "main"
+        / "java"
+        / "com"
+        / "sunwayworld"
+        / "framework"
+        / "security"
+        / "resource"
+        / "impl"
+        / "SecurityResourceImpl.java",
+        ROOT
+        / "reconstituted"
+        / "overrides"
+        / "framework"
+        / "owned-core-common"
+        / "src"
+        / "main"
+        / "java"
+        / "com"
+        / "sunwayworld"
+        / "module"
+        / "sys"
+        / "license"
+        / "resource"
+        / "impl"
+        / "CoreLicenseResourceImpl.java",
+    )
+    for source_path in source_paths:
+        source = source_path.read_text(encoding="utf-8")
+        assert "HttpStatus.NOT_FOUND" in source
+        assert "getLicenseDeadline" not in source
+        assert "getLicenseCountdownDays" not in source or "CoreLicenseResourceImpl" in source_path.name
+        assert "licenseService" not in source
+
+    provenance = json.loads(
+        (
+            ROOT
+            / "reconstituted"
+            / "framework"
+            / "owned-core-common"
+            / "module-provenance.json"
+        ).read_text(encoding="utf-8")
+    )
+    by_path = {record["path"]: record for record in provenance["source_files"]}
+    for path in (
+        "src/main/java/com/sunwayworld/framework/security/resource/impl/SecurityResourceImpl.java",
+        "src/main/java/com/sunwayworld/module/sys/license/resource/impl/CoreLicenseResourceImpl.java",
+        "src/main/java/com/sunwayworld/boot/ApplicationConfiguration.java",
+    ):
+        assert f"overlay:{path}" in by_path[path]["transformations"]
+        assert by_path[path]["source_sha256_before_overlay"]
+
+
 def verify_deterministic_assembler_helpers() -> None:
     assembler = load_module("assemble_reconstituted_framework_modules", ASSEMBLER_PATH)
     with tempfile.TemporaryDirectory(prefix="supplier-assembler-test-") as temp_name:
@@ -688,6 +783,8 @@ def main() -> int:
     verify_file_utils_source_contract()
     verify_lcdp_database_conditions_are_null_safe()
     verify_mapper_scanner_covers_both_supplier_conventions()
+    verify_locale_resolver_matches_native_seam()
+    verify_removed_license_negative_sources()
     verify_tracked_full_closure_snapshot()
     verify_tracked_all_framework_snapshot()
     verify_tracked_module_provenance_statuses()

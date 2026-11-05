@@ -87,6 +87,38 @@
     ],
     "forbidden_in_distribution": true
   },
+  "source_reconstruction_findings": [
+    {
+      "java_class": "com.sunwayworld.boot.ApplicationConfiguration",
+      "java_member": "localeResolver",
+      "native_symbol": "Java_com_sunwayworld_boot_ApplicationConfiguration_localeResolver",
+      "evidence_type": "static-disassembly-and-strings",
+      "observed_behavior": "constructs CookieLocaleResolver, sets default Locale.CHINA and cookie name locale",
+      "owned_replacement": "CookieLocaleResolver with setDefaultLocale(Locale.CHINA) and setCookieName(\"locale\")",
+      "confidence": "observed",
+      "runtime_reachability": "not-executed"
+    },
+    {
+      "java_class": "com.sunwayworld.framework.security.resource.impl.SecurityResourceImpl",
+      "java_member": "getLicense",
+      "native_symbol": "Java_com_sunwayworld_framework_context_ApplicationContextHelper_getLicenseDeadline",
+      "evidence_type": "java-bytecode-and-policy",
+      "observed_behavior": "supplier path exposes native-backed license state",
+      "owned_replacement": "explicit removed-negative HTTP 404 at /open/security/licenses",
+      "confidence": "derived",
+      "runtime_reachability": "not-executed"
+    },
+    {
+      "java_class": "com.sunwayworld.module.sys.license.resource.impl.CoreLicenseResourceImpl",
+      "java_member": "getLicenseCountdownDays/getNumberOfOnlineUsers",
+      "native_symbol": "Java_com_sunwayworld_framework_context_ApplicationContextHelper_getLicenseCountdownDays",
+      "evidence_type": "java-bytecode-and-policy",
+      "observed_behavior": "supplier routes expose native-backed license countdown and online-user limits",
+      "owned_replacement": "explicit removed-negative HTTP 404 at /core/module/sys/licenses and /core/module/sys/licenses/number-of-online-users",
+      "confidence": "derived",
+      "runtime_reachability": "not-executed"
+    }
+  ],
   "jni_declaration_export_map": {
     "summary": {
       "java_native_declarations": 48,

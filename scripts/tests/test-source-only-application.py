@@ -65,6 +65,27 @@ def main() -> int:
         assert [record["path"] for record in records] == ["static/app.js"]
         assert not (copied_root / "lib/private-sdk.jar").exists()
 
+        frontend_overlay = root / "frontend-original"
+        for relative in ("static/gikam/main/js/home.js", "static/gikam/main/js/workspace.js"):
+            path = frontend_overlay / relative
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text("window.original = true;\n", encoding="utf-8")
+        overlay_records = builder.copy_license_clean_frontend_overlay(copied_root, frontend_overlay)
+        assert {record["path"] for record in overlay_records} == {
+            "static/gikam/main/js/home.js",
+            "static/gikam/main/js/workspace.js",
+        }
+        (frontend_overlay / "static/gikam/main/js/home.js").write_text(
+            "fetch('/core/module/sys/licenses');\n",
+            encoding="utf-8",
+        )
+        try:
+            builder.copy_license_clean_frontend_overlay(copied_root, frontend_overlay)
+        except SystemExit as error:
+            assert "retains removed license route" in str(error)
+        else:
+            raise AssertionError("license route was accepted in frontend overlay")
+
     print("source-only application builder: PASS")
     return 0
 

@@ -59,6 +59,9 @@ def main():
         assert not any('/src/test/' in name or name.endswith('ContractTest.class') for name in jar.namelist())
         assert not any(name.endswith('OwnedWebBrowserApplication.class') or name.endswith('OwnedInventoryBrowserApplication.class') for name in jar.namelist())
         assert len(jar.read('static/gikam/main/js/chunk-common.js')) > 1_000_000
+        for frontend_entry in ('static/gikam/main/js/home.js', 'static/gikam/main/js/workspace.js'):
+            assert b'/core/module/sys/licenses' not in jar.read(frontend_entry)
+            assert b'/open/security/licenses' not in jar.read(frontend_entry)
     classpath_file = DIST / 'lib/classpath.txt'
     classpath = [line for line in classpath_file.read_text().splitlines() if line]
     assert classpath == manifest['dependency_classpath']

@@ -121,6 +121,40 @@ def copy_java_tree_resources(source_root: Path, target_root: Path) -> list[dict[
     return records
 
 
+def copy_license_clean_frontend_overlay(
+    target_root: Path,
+    overlay_root: Path = ROOT / "owned-web" / "src" / "main" / "resources" / "frontend-original",
+) -> list[dict[str, object]]:
+    records: list[dict[str, object]] = []
+    for relative in (
+        PurePosixPath("static/gikam/main/js/home.js"),
+        PurePosixPath("static/gikam/main/js/workspace.js"),
+    ):
+        source = overlay_root / relative
+        if not source.is_file():
+            raise SystemExit(f"missing license-clean frontend overlay: {source}")
+        data = source.read_bytes()
+        if b"/core/module/sys/licenses" in data or b"/open/security/licenses" in data:
+            raise SystemExit(f"frontend overlay retains removed license route: {source}")
+        destination = target_root / relative
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        destination.write_bytes(data)
+        try:
+            source_path = source.relative_to(ROOT).as_posix()
+        except ValueError:
+            source_path = source.as_posix()
+        records.append(
+            {
+                "path": relative.as_posix(),
+                "sha256": digest(destination),
+                "bytes": destination.stat().st_size,
+                "source_path": source_path,
+                "classification": "license-clean-original-frontend-overlay",
+            }
+        )
+    return records
+
+
 def build_application_jar(classes: Path, resources: Path, output: Path) -> None:
     output.parent.mkdir(parents=True, exist_ok=True)
     entries: dict[str, bytes] = {}
@@ -258,6 +292,7 @@ def main(argv: list[str] | None = None) -> int:
         return result.returncode
 
     resource_records = copy_resource_tree(resource_source_root, resources)
+    resource_records.extend(copy_license_clean_frontend_overlay(resources))
     java_tree_resources = copy_java_tree_resources(source_root, resources)
     resource_records.extend(java_tree_resources)
     app_jar = output_root / "lims-owned-application.jar"

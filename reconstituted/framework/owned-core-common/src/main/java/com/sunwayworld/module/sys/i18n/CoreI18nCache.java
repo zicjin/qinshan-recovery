@@ -36,6 +36,8 @@ import org.springframework.core.env.Environment;
 public class CoreI18nCache {
    public static final String REDIS_I18N_MD5_NAME = "PERM_$I18N";
    public static final String REDIS_I18N_MD5_KEY = "MD5";
+   private static final String DEFAULT_MESSAGE_BASENAMES =
+      "static/emc/i18n/messages-emc,static/emc/projectfunction/i18n/messages-weipu";
    private static final Logger logger = LogManager.getLogger(CoreI18nCache.class);
    private Map<String, Map<String, String>> fileI18nMap;
    private Map<String, CoreI18nCache.I18nStore> cache = new ConcurrentHashMap<>();
@@ -79,6 +81,9 @@ public class CoreI18nCache {
    private void loadFileI18n() {
       Environment environment = ApplicationContextHelper.getBean(Environment.class);
       String baseNames = environment.getProperty("spring.messages.basename");
+      if (StringUtils.isBlank(baseNames)) {
+         baseNames = DEFAULT_MESSAGE_BASENAMES;
+      }
       Map<String, Map<String, String>> fileMap = new TreeMap<>();
       CoreI18nConfigService configService = ApplicationContextHelper.getBean(CoreI18nConfigService.class);
       List<CoreI18nConfigBean> configList = new ArrayList<>();

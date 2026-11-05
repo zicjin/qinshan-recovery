@@ -525,6 +525,7 @@ def request_case(base_url: str, case: Mapping[str, Any], *, timeout: float) -> D
         raise ValueError("case path must start with /")
     url = base_url.rstrip("/") + path
     headers = {str(key): str(value) for key, value in (case.get("headers") or {}).items()}
+    headers.setdefault("Accept", "application/json, text/plain, */*")
     body_value = case.get("body")
     body: Optional[bytes] = None
     if case.get("multipart") is not None:

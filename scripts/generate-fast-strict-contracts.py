@@ -62,6 +62,7 @@ def build(fast: Mapping[str, Any], ledger: Mapping[str, Any], *, family: str | N
             "id": "fast-strict-" + behavior_family + "-" + profile,
             "method": request.get("method", probe.get("method", "GET")),
             "path": probe.get("request_path") or probe.get("path"),
+            "headers": {"Accept": "application/json, text/plain, */*"},
             "route_ids": [str(item) for item in route_ids],
             "operation": "read",
             "scope": "behavior-family-strict-read",

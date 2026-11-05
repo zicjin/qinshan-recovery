@@ -123,7 +123,7 @@
         ) T
         <where>
             <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
-            /*查询关联该批下测试的标样*/
+            <!-- 查询关联该批下测试的标样 -->
             <if test='runId != "" and runId != null'>
                 AND EXISTS (
                 SELECT 1 FROM T_EMC_RUN R
@@ -134,7 +134,7 @@
                 WHERE R.ID = #{runId} AND MM.MTLID = T.MTLID
                 )
             </if>
-            /*查询已经领取的标样*/
+            <!-- 查询已经领取的标样 -->
             <if test='isReceive == "1"'>
                 AND EXISTS(SELECT 1 FROM T_EMC_STOCK_LOG F WHERE F.STOCKID = T.ID AND F.LOGTYPE = '领取' AND F.RECEIVEDBYID = #{loginUser.id})
             </if>

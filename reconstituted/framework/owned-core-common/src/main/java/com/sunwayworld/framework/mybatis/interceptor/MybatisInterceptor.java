@@ -67,6 +67,11 @@ implements Interceptor {
             BaseStatementHandler delegate = (BaseStatementHandler)ReflectionUtils.getFieldValue(statementHandler, "delegate");
             MappedStatement mappedStatement2 = (MappedStatement)ReflectionUtils.getFieldValue(delegate, "mappedStatement");
             this.enhanceParameter(delegate, mappedStatement2);
+            BoundSql boundSql = delegate.getBoundSql();
+            String cleanedSql = SqlHelper.cleanDanglingWhereClause(boundSql.getSql());
+            if (!cleanedSql.equals(boundSql.getSql())) {
+                ReflectionUtils.setFieldValue(boundSql, "sql", cleanedSql);
+            }
             if (StringUtils.startsWith(mappedStatement2.getId(), DaoMapper.class.getName()) || StringUtils.startsWith(mappedStatement2.getId(), GlobalMapper.class.getName())) {
                 return invocation.proceed();
             }
@@ -88,7 +93,7 @@ implements Interceptor {
             if (MybatisPageHelper.isResponseNoListData()) {
                 this.reassignNoResultSql(delegate);
             }
-        } else if (invocation.getTarget() instanceof SimpleExecutor && !StringUtils.startsWith((mappedStatement = (MappedStatement)invocation.getArgs()[0]).getId(), DaoMapper.class.getName()) && invocation.getArgs().length > 1 && (parameter = invocation.getArgs()[1]) != null && Map.class.isAssignableFrom(parameter.getClass())) {
+        } else if (invocation.getTarget() instanceof Executor && !StringUtils.startsWith((mappedStatement = (MappedStatement)invocation.getArgs()[0]).getId(), DaoMapper.class.getName()) && invocation.getArgs().length > 1 && (parameter = invocation.getArgs()[1]) != null && Map.class.isAssignableFrom(parameter.getClass())) {
             Map map = (Map)parameter;
             this.enhanceParameter(map);
         }
@@ -154,11 +159,27 @@ implements Interceptor {
 
     private BoundSql getNewBoundSql(MappedStatement ms, BoundSql boundSql, String newSql) {
         BoundSql newBoundSql = new BoundSql(ms.getConfiguration(), newSql, boundSql.getParameterMappings(), boundSql.getParameterObject());
-        for (ParameterMapping mapping : boundSql.getParameterMappings()) {
-            String prop = mapping.getProperty();
-            if (!boundSql.hasAdditionalParameter(prop)) continue;
-            newBoundSql.setAdditionalParameter(prop, boundSql.getAdditionalParameter(prop));
+        try {
+            @SuppressWarnings("unchecked")
+            Map<String, Object> additionalParams = (Map<String, Object>) ReflectionUtils.getFieldValue(boundSql, "additionalParameters");
+            if (additionalParams != null) {
+                additionalParams.forEach(newBoundSql::setAdditionalParameter);
+            }
+        } catch (Exception e) {
+            for (ParameterMapping mapping : boundSql.getParameterMappings()) {
+                String prop = mapping.getProperty();
+                if (!boundSql.hasAdditionalParameter(prop)) continue;
+                newBoundSql.setAdditionalParameter(prop, boundSql.getAdditionalParameter(prop));
+            }
         }
+        if (LocalContextHelper.isUserLogin()) {
+            newBoundSql.setAdditionalParameter("loginUser", LocalContextHelper.getLoginUser());
+            newBoundSql.setAdditionalParameter("loginOrgId", LocalContextHelper.getLoginOrgId());
+            newBoundSql.setAdditionalParameter("loginOrgName", LocalContextHelper.getLoginOrgName());
+            newBoundSql.setAdditionalParameter("loginRoleId", LocalContextHelper.getLoginRoleId());
+            newBoundSql.setAdditionalParameter("loginRoleName", LocalContextHelper.getLoginRoleName());
+        }
+        newBoundSql.setAdditionalParameter("_locale", I18nHelper.getLang(LocaleContextHolder.getLocale()));
         return newBoundSql;
     }
 

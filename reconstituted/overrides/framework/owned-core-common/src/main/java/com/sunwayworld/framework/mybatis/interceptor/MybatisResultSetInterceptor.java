@@ -129,16 +129,18 @@ implements Interceptor {
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
             if ("next".equals(method.getName())) {
                 ++this.qty;
-                int resultThreshold = MybatisResultSetInterceptor.this.getResultThreshold();
-                if (resultThreshold > 0 && this.qty > resultThreshold) {
-                    throw new ApplicationWarningException("\u6570\u636e\u67e5\u8be2\u6570\u91cf\u5df2\u8d85\u8fc7\u9608\u503c\uff1a" + resultThreshold, new String[0]);
-                }
-                if (this.qty % 100 == 0) {
-                    int memoryThreshold = MybatisResultSetInterceptor.this.getMemoryThreshold();
-                    int ratio = SystemUtils.getMemoryUsageRatio();
-                    if (ratio > memoryThreshold) {
-                        logger.warn("\u5185\u5b58\u4f7f\u7528\u7387\uff1a" + ratio + "\uff0c\u5df2\u8d85\u8fc7\u9608\u503c\uff1a" + memoryThreshold);
-                        throw new ApplicationWarningException("EXECUTOR.RESOURCE_MONITORING.MEMORY_USAGE_OVERLOAD", new String[0]);
+                if (MybatisResultSetInterceptor.this.isGuard().booleanValue()) {
+                    int resultThreshold = MybatisResultSetInterceptor.this.getResultThreshold();
+                    if (resultThreshold > 0 && this.qty > resultThreshold) {
+                        throw new ApplicationWarningException("\u6570\u636e\u67e5\u8be2\u6570\u91cf\u5df2\u8d85\u8fc7\u9608\u503c\uff1a" + resultThreshold, new String[0]);
+                    }
+                    if (this.qty % 100 == 0) {
+                        int memoryThreshold = MybatisResultSetInterceptor.this.getMemoryThreshold();
+                        int ratio = SystemUtils.getMemoryUsageRatio();
+                        if (ratio > memoryThreshold) {
+                            logger.warn("\u5185\u5b58\u4f7f\u7528\u7387\uff1a" + ratio + "\uff0c\u5df2\u8d85\u8fc7\u9608\u503c\uff1a" + memoryThreshold);
+                            throw new ApplicationWarningException("EXECUTOR.RESOURCE_MONITORING.MEMORY_USAGE_OVERLOAD", new String[0]);
+                        }
                     }
                 }
             }

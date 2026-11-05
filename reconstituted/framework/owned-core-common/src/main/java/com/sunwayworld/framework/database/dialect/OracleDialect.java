@@ -63,6 +63,9 @@ implements Dialect {
 
     @Override
     public Class<?> getJavaType(String columnName, String dataType, int scale) {
+        if (dataType == null) {
+            return Object.class;
+        }
         switch (dataType.toLowerCase()) {
             case "varchar":
             case "varchar2":
@@ -72,9 +75,15 @@ implements Dialect {
             case "clob":
             case "nclob":
             case "char":
+            case "nchar":
             case "text":
             case "name":
-            case "varcharbyte": {
+            case "varcharbyte":
+            case "raw":
+            case "rowid":
+            case "urowid":
+            case "long":
+            case "xmltype": {
                 return String.class;
             }
             case "number":
@@ -85,7 +94,9 @@ implements Dialect {
             case "int":
             case "float":
             case "real":
-            case "numeric": {
+            case "numeric":
+            case "binary_float":
+            case "binary_double": {
                 return Number.class;
             }
             case "bytea": {
@@ -113,7 +124,7 @@ implements Dialect {
         if (StringUtils.startsWithIgnoreCase(dataType, "timestamp")) {
             return LocalDateTime.class;
         }
-        throw new UnsupportedDataTypeJdbcException(columnName + "@" + dataType + "@" + scale);
+        return Object.class;
     }
 
     @Override

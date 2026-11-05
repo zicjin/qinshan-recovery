@@ -27,7 +27,20 @@ public abstract class SqlHelper {
     public static final String QTY_COLUMN_NAME = "QTY_";
     private static final Pattern SQL_ENDING_ORDER_BY_PATTERN = Pattern.compile("\\s+(?i)order\\s+(?i)by\\s+([^()]*[(][^()]*([(][^()]*([(][^()]*[)][^()]*)*[)][^()]*)*[)][^()]*)*[^()]*$");
     private static final Pattern SQL_ORDER_BY_PATTERN = Pattern.compile("(?i)order\\s+by");
+    private static final Pattern DANGLING_WHERE_PATTERN = Pattern.compile("(?i)\\bwhere\\s*(?:/\\*[\\s\\S]*?\\*/|--[^\\r\\n]*[\\r\\n]|\\s)*$");
+    private static final Pattern WHERE_AND_OR_PATTERN = Pattern.compile("(?i)\\bwhere\\s*(?:/\\*[\\s\\S]*?\\*/|--[^\\r\\n]*[\\r\\n]|\\s)*\\b(and|or)\\b\\s+");
+    private static final Pattern DANGLING_AND_OR_PATTERN = Pattern.compile("(?i)\\b(and|or)\\s*(?:/\\*[\\s\\S]*?\\*/|--[^\\r\\n]*[\\r\\n]|\\s)*$");
     public static final String REPLACE_KEY_EXT = "EXT$.";
+
+    public static final String cleanDanglingWhereClause(String sql) {
+        if (StringUtils.isEmpty(sql)) {
+            return sql;
+        }
+        sql = WHERE_AND_OR_PATTERN.matcher(sql).replaceAll("WHERE ");
+        sql = DANGLING_WHERE_PATTERN.matcher(sql).replaceAll("");
+        sql = DANGLING_AND_OR_PATTERN.matcher(sql).replaceAll("");
+        return sql;
+    }
 
     public static final String removeEndingOrderIfPresent(String sql) {
         if (StringUtils.isEmpty(sql)) {
@@ -37,7 +50,7 @@ public abstract class SqlHelper {
         if (matcher.find()) {
             return matcher.replaceFirst("");
         }
-        return sql;
+        return cleanDanglingWhereClause(sql);
     }
 
     public static final boolean hasOrderSegment(String sql) {
@@ -66,7 +79,8 @@ public abstract class SqlHelper {
         if (countProperties.length > 0) {
             Arrays.asList(countProperties).forEach(c -> newSql.append(", COUNT(DISTINCT ").append(c.toUpperCase()).append(") ").append(c.toUpperCase()));
         }
-        newSql.append(" FROM (\n").append(SqlHelper.removeEndingOrderIfPresent(sql)).append("\n").append(") T");
+        String innerSql = cleanDanglingWhereClause(SqlHelper.removeEndingOrderIfPresent(sql));
+        newSql.append(" FROM (\n").append(innerSql).append("\n").append(") T");
         return newSql.toString().replace(REPLACE_KEY_EXT, "");
     }
 

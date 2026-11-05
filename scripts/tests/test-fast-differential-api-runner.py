@@ -58,6 +58,55 @@ class FastDifferentialTest(unittest.TestCase):
         self.assertFalse(MODULE.route_safe({"method": "PUT", "path": "/x/{id}", "route_kind": "inherited-api"})[0])
         self.assertTrue(MODULE.route_safe({"method": "GET", "path": "/open/security/public-key", "route_kind": "web-controller"})[0])
 
+    def test_read_path_templates_render_without_real_business_ids(self):
+        self.assertEqual(
+            MODULE.render_path_template("/x/{id}/columns/{column}"),
+            "/x/0/columns/id",
+        )
+        self.assertEqual(
+            MODULE.render_path_template("/x/{roleId}/action/validate-unique/{columnName}/{columnValue}"),
+            "/x/0/action/validate-unique/id/__sunway_fast_empty__",
+        )
+        self.assertTrue(MODULE.route_safe({
+            "method": "GET",
+            "path": "/x/{id}",
+            "route_kind": "inherited-api",
+        })[0])
+        self.assertTrue(MODULE.route_safe({
+            "method": "POST",
+            "path": "/x/{id}/queries",
+            "route_kind": "inherited-api",
+        })[0])
+        self.assertFalse(MODULE.route_safe({
+            "method": "PUT",
+            "path": "/x/{id}",
+            "route_kind": "inherited-api",
+        })[0])
+
+    def test_templated_query_profiles_use_concrete_no_match_paths(self):
+        profiles = MODULE.request_profiles({
+            "method": "POST",
+            "path": "/x/{testMethodId}/item-groups/queries",
+            "route_kind": "inherited-api",
+        })
+        self.assertEqual(profiles[0]["path"], "/x/0/item-groups/queries")
+        self.assertEqual(profiles[1]["path"], "/x/0/item-groups/queries")
+
+    def test_templated_family_key_uses_rendered_behavior_not_variable_name(self):
+        left = {
+            "method": "POST",
+            "path": "/x/{id}/queries",
+            "route_kind": "inherited-api",
+            "class": "x.Resource",
+        }
+        right = {
+            "method": "POST",
+            "path": "/x/{testMethodId}/queries",
+            "route_kind": "inherited-api",
+            "class": "x.Resource",
+        }
+        self.assertEqual(MODULE.behavior_family_key(left), MODULE.behavior_family_key(right))
+
     def test_public_key_uses_wire_shape_not_dynamic_bytes(self):
         classification, diff = MODULE.compare(
             {"status": 200, "content_type": "application/json", "body_sha256": "a"},

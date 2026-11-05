@@ -22,7 +22,7 @@ import subprocess
 import sys
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
 from urllib.error import HTTPError, URLError
-from urllib.parse import urlencode, urlsplit
+from urllib.parse import quote, urlencode, urlsplit
 from urllib.request import (build_opener, HTTPBasicAuthHandler, HTTPCookieProcessor,
                             ProxyHandler, Request)
 import http.cookiejar
@@ -41,6 +41,7 @@ UNSAFE_MARKERS = (
 )
 DYNAMIC_KEY = re.compile(r"(?:^|_)(?:id|ids|token|timestamp|time|date|nonce|uuid|session)(?:$|_)", re.I)
 PATH_ID = re.compile(r"(?<![A-Za-z])\d{4,}(?![A-Za-z])")
+PATH_TEMPLATE = re.compile(r"\{([^{}]+)\}")
 
 
 class ProbeError(RuntimeError):
@@ -83,6 +84,36 @@ def read_password(path: Path) -> str:
         if line.startswith("TEST_PASSWORD=") and line.split("=", 1)[1]:
             return line.split("=", 1)[1]
     raise ProbeError("password file has no TEST_PASSWORD entry")
+
+
+def render_path_template(path: str, values: Optional[Mapping[str, str]] = None) -> str:
+    """Render a read-only route template with deterministic no-match values.
+
+    Differential probes must exercise the same concrete URI on supplier and
+    owned applications.  Numeric identifiers therefore use ``0`` and
+    non-identifying path values use a fixed impossible sentinel.  This function
+    never selects a real business row and is called only after ``route_safe``
+    has classified the route as a read-only query.
+    """
+    supplied = {str(key): str(value) for key, value in (values or {}).items()}
+
+    def replacement(match: re.Match[str]) -> str:
+        name = match.group(1)
+        if name in supplied:
+            value = supplied[name]
+        else:
+            normalized = name.lower()
+            if normalized == "column" or normalized == "columnname":
+                value = "id"
+            elif normalized == "columnvalue":
+                value = "__sunway_fast_empty__"
+            elif "id" in normalized or normalized.endswith(("no", "nos")):
+                value = "0"
+            else:
+                value = "__sunway_fast_empty__"
+        return quote(value, safe="")
+
+    return PATH_TEMPLATE.sub(replacement, path)
 
 
 class Session:
@@ -194,13 +225,12 @@ def route_safe(route: Mapping[str, Any]) -> Tuple[bool, str]:
     unsafe_path = any(marker in lower_path for marker in UNSAFE_MARKERS)
     if unsafe_path and not (method == "POST" and "/queries/tasks" in lower_path):
         return False, "state-changing-path"
-    if method == "GET" and not any(marker in lower_path for marker in GET_READ_MARKERS):
+    has_path_template = bool(PATH_TEMPLATE.search(path))
+    if method == "GET" and not any(marker in lower_path for marker in GET_READ_MARKERS) and not has_path_template:
         return False, "get-not-query"
     if method == "POST" and not any(marker in path.lower() for marker in READ_MARKERS):
         return False, "post-not-query"
-    if "{" in path or "}" in path:
-        return False, "path-template-needs-fixture"
-    return True, "read-only-query"
+    return True, "read-only-templated-query" if has_path_template else "read-only-query"
 
 
 def request_profiles(route: Mapping[str, Any], enabled: Optional[Sequence[str]] = None) -> List[Dict[str, Any]]:
@@ -209,11 +239,12 @@ def request_profiles(route: Mapping[str, Any], enabled: Optional[Sequence[str]] 
     Variants are deliberately generic and diagnostic.  They never perform a
     write: page-2 changes only the pagination cursor, ``empty`` uses an
     impossible search token, and ``malformed`` exercises the endpoint's
-    validation/error envelope.  Routes with path templates are rejected by
-    ``route_safe`` before any variant is selected.
+    validation/error envelope.  Path templates are rendered with impossible
+    no-match values before profiles are created.
     """
     method = str(route.get("method", "")).upper()
-    path = str(route.get("path", ""))
+    route_path = str(route.get("path", ""))
+    path = render_path_template(route_path)
     requested = list(enabled or ("default", "page-2", "empty", "malformed"))
     requested_set = set(requested)
     if method == "GET":
@@ -242,13 +273,13 @@ def request_profiles(route: Mapping[str, Any], enabled: Optional[Sequence[str]] 
         return [{"profile": profile_id, "method": "GET", "path": path, "body": None}]
     if method == "POST" and "/queries" in path.lower():
         profiles = {
-            "default": {"profile": "default", "method": "POST", "body": {"p": {"n": 1, "s": 10}}},
-            "page-2": {"profile": "page-2", "method": "POST", "body": {"p": {"n": 2, "s": 10}}},
+            "default": {"profile": "default", "method": "POST", "path": path, "body": {"p": {"n": 1, "s": 10}}},
+            "page-2": {"profile": "page-2", "method": "POST", "path": path, "body": {"p": {"n": 2, "s": 10}}},
             # Use the mapper's actual filter envelope. A top-level q.keyword
             # was silently ignored by both applications, so it never tested filtering.
-            "empty": {"profile": "empty", "method": "POST", "body": {"p": {"n": 1, "s": 10, "f": {"id_SEQ": "-987654321"}}}, "assert_no_rows": True},
-            "malformed": {"profile": "malformed", "method": "POST", "body": {"p": {"n": "invalid", "s": 10}}},
-            "ascending": {"profile": "ascending", "method": "POST", "body": {"p": {"n": 1, "s": 10, "o": [{"id": "asc"}]}}, "assert_order": {"field": "id", "direction": "asc"}},
+            "empty": {"profile": "empty", "method": "POST", "path": path, "body": {"p": {"n": 1, "s": 10, "f": {"id_SEQ": "-987654321"}}}, "assert_no_rows": True},
+            "malformed": {"profile": "malformed", "method": "POST", "path": path, "body": {"p": {"n": "invalid", "s": 10}}},
+            "ascending": {"profile": "ascending", "method": "POST", "path": path, "body": {"p": {"n": 1, "s": 10, "o": [{"id": "asc"}]}}, "assert_order": {"field": "id", "direction": "asc"}},
         }
         return [profiles[name] for name in requested if name in requested_set and name in profiles]
     return []
@@ -272,7 +303,7 @@ def behavior_family_key(route: Mapping[str, Any], profile: Mapping[str, Any] | N
     examples.
     """
     method = str(route.get("method", "")).upper()
-    path = PATH_ID.sub("{id}", str(route.get("path", "")))
+    path = PATH_ID.sub("{id}", render_path_template(str(route.get("path", ""))))
     profile = dict(profile or request_profile(route) or {})
     if "path" in profile:
         profile["path"] = PATH_ID.sub("{id}", str(profile["path"]))
@@ -596,10 +627,17 @@ def run(args: argparse.Namespace) -> Dict[str, Any]:
     wanted_kinds = set(args.route_kind.split(",")) if args.route_kind else {"inherited-api", "api-resource"}
     wanted_families = set(args.family.split(",")) if args.family else None
     enabled_profiles = tuple(getattr(args, "profiles", "default,page-2,empty,malformed").split(","))
+    template_mode = getattr(args, "path_templates", "include")
     for route in routes:
         if wanted_families and str(route.get("family")) not in wanted_families:
             continue
         if str(route.get("route_kind")) not in wanted_kinds:
+            continue
+        has_path_template = bool(PATH_TEMPLATE.search(str(route.get("path", ""))))
+        if template_mode == "only" and not has_path_template:
+            continue
+        if template_mode == "exclude" and has_path_template:
+            skipped["path-template-excluded"] = skipped.get("path-template-excluded", 0) + 1
             continue
         safe, reason = route_safe(route)
         if not safe:
@@ -741,6 +779,8 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     parser.add_argument("--route-kind", default="inherited-api,api-resource")
     parser.add_argument("--profiles", default="default,page-2,empty,malformed",
                         help="comma-separated read profiles (default,page-2,empty,malformed,ascending)")
+    parser.add_argument("--path-templates", choices=("include", "exclude", "only"), default="include",
+                        help="include or isolate templated routes using deterministic no-match path values")
     parser.add_argument("--role", default="manager")
     parser.add_argument("--organization", default="org-a")
     parser.add_argument("--limit", type=int, default=20)

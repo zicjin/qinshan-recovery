@@ -541,6 +541,29 @@ def main() -> int:
                 owned_route_map.setdefault(key, []).append(str(info["source"]))
     rows = build_inventory(args.source_root, _packaged_classes(args.distribution), owned_route_map)
     boundary_routes = build_owned_boundary_inventory(args.owned_source_root, rows)
+    # Framework resources that are real HTTP routes but are not discovered by
+    # the project/owned source scanners. Keep this list explicit and small;
+    # it prevents strict closure from rejecting a verified reconstructed
+    # framework route as an unbound case.
+    lcdp_source = SCRIPT_ROOT / "reconstituted/framework/owned-core-lcdp/src/main/java/com/sunwayworld/cloud/module/lcdp/resource/resource/LcdpResourceResource.java"
+    if lcdp_source.is_file():
+        boundary_routes.append({
+            "id": hashlib.sha256(b"framework-boundary POST /secure/core/module/lcdp/resources/action/call-script").hexdigest()[:16],
+            "method": "POST",
+            "path": "/secure/core/module/lcdp/resources/action/call-script",
+            "class": "com.sunwayworld.cloud.module.lcdp.resource.resource.LcdpResourceResource",
+            "source": str(lcdp_source.relative_to(REPO_ROOT)),
+            "annotation": "@RequestMapping(value=\"/action/call-script\", method=POST)",
+            "runtime_status": "owned-class-present",
+            "owned_sources": [str(lcdp_source.relative_to(REPO_ROOT))],
+            "behavior_status": "unknown",
+            "evidence_status": "unknown",
+            "boundary_scope": "owned-framework-source-only",
+            "route_origin": "reconstituted-framework",
+            "boundary_semantics": "same Spring application framework route",
+            "runtime_model": "same-spring-application",
+        })
+        boundary_routes = sorted(boundary_routes, key=lambda row: (row["path"], row["method"], row["id"]))
     binding = capture_binding(REPO_ROOT)
     payload = {
         "schema": 1,

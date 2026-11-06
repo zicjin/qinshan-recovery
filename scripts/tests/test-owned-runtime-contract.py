@@ -63,6 +63,10 @@ class RuntimeContractTest(unittest.TestCase):
         }, "strict")
         self.assertTrue(result["reuse"])
         self.assertEqual(result["baseline_schema"], "LIMS_BASELINE_SSS2")
+        self.assertEqual(result["baseline_key_data_hash"], "c" * 64)
+        self.assertEqual(result["runtime_key_data_hash_before"], "d" * 64)
+        self.assertEqual(result["runtime_key_data_hash_after"], "d" * 64)
+        self.assertEqual(result["schema_copy_method"], "baseline-expdp-impdp-same-instance")
 
     def test_schema_metadata_hash_can_be_used_when_dump_was_cleaned(self):
         result = module.validate_report({

@@ -66,6 +66,26 @@ def main() -> int:
         if sha256(path) != item["sha256"]:
             raise SystemExit(f"public dependency hash mismatch: {filename}")
     if output.exists():
+        # The standalone build uses the default directory as both its
+        # externally supplied input and its staged output.  Do not delete the
+        # input before copying from it: that turns a valid dependency set into
+        # an empty directory and makes the next build fail with a misleading
+        # missing-JAR error.  Validation above already proves that this tree
+        # is the exact pinned allowlist, so it is safe to reuse it in place.
+        if source == output:
+            print(
+                json.dumps(
+                    {
+                        "status": "pass",
+                        "input": str(source),
+                        "output": str(output),
+                        "public_dependency_count": len(expected),
+                        "staged_in_place": True,
+                    },
+                    sort_keys=True,
+                )
+            )
+            return 0
         shutil.rmtree(output)
     output.mkdir(parents=True)
     for filename in sorted(expected):

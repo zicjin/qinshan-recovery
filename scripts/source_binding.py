@@ -224,6 +224,7 @@ _GOVERNANCE_SUFFIXES = (
     "scripts/migrate-evidence-registry.py",
     "scripts/generate-framework-contract-evidence.sh",
     "scripts/verify-owned-native-license-removal.py",
+    "scripts/verify-source-only-checkpoint.py",
     "scripts/reject-supplier-runtime.sh",
     "tools/api_route_closure.py",
     "tools/finalize_api_report.py",

@@ -137,3 +137,22 @@ of a private `gikam-core-*` JAR on javac's classpath. A
 This source-only compile gate does not prove runtime startup, route behavior or
 API closure. Fast-equivalent HTTP results, class presence, compilation and
 process startup remain separate from strict API evidence.
+
+## Verify the tracked source-only checkpoint
+
+After the framework modules and source-only application have been built, run
+the offline checkpoint gate:
+
+```bash
+python3 scripts/verify-source-only-checkpoint.py \
+  --run-jar .external-materials/gikam-third-czjky-14.1.5-run.jar \
+  --distribution owned-distribution/target/distribution
+```
+
+The stock run JAR is optional when only the tracked snapshot is available. If
+it is supplied, its SHA-256 must match `artifact-inventory-current.json`. The
+gate verifies the seven compiled framework modules, every tracked provenance
+and resource hash, the Java 8 source-only project compile report, and the
+distribution classpath/native-license boundary. It is an offline source and
+distribution gate; it does not start Spring, Oracle or Redis and does not
+promote API evidence.

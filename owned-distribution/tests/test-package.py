@@ -145,6 +145,7 @@ def main():
     framework_target = ROOT / 'owned-framework/target'
     conflict = framework_target / 'distribution-conflicting-class.jar'
     conflicting_app = framework_target / 'distribution-conflicting-app.jar'
+    framework_target.mkdir(parents=True, exist_ok=True)
     try:
         with zipfile.ZipFile(conflict, 'w') as jar:
             jar.writestr('com/sunwayworld/emc/projectfunction/GikamWpjcApplication.class', b'conflicting')

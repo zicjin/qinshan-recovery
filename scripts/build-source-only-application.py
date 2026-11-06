@@ -249,7 +249,12 @@ def main(argv: list[str] | None = None) -> int:
         type=Path,
         default=ROOT / "build" / "source-only-application",
     )
-    parser.add_argument("--javac", type=Path, default=ROOT / "build/jdk1.8.0_391/bin/javac")
+    parser.add_argument(
+        "--javac",
+        type=Path,
+        default=Path(os.environ.get("JAVA_HOME", ROOT / "build/jdk1.8.0_391"))
+        / "bin/javac",
+    )
     args = parser.parse_args(argv)
 
     project_root = args.project_root.resolve()

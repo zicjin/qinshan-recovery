@@ -6,6 +6,7 @@ import argparse
 import hashlib
 import io
 import json
+import os
 from pathlib import Path
 import platform
 import subprocess
@@ -115,8 +116,9 @@ def main() -> int:
     root = args.root.resolve()
     registry_path = root.parent.parent / "docs" / "reconstitution" / "framework-module-registry.json"
     registry = json.loads(registry_path.read_text(encoding="utf-8"))
+    java_home = Path(os.environ.get("JAVA_HOME", ROOT / "build/jdk1.8.0_391"))
     java_version = command_output(
-        [str(ROOT / "build" / "jdk1.8.0_391" / "bin" / "java"), "-version"],
+        [str(java_home / "bin" / "java"), "-version"],
         ROOT,
     ).splitlines()[0]
     maven_version = command_output(["mvn", "-version"], ROOT).splitlines()[0]

@@ -14,6 +14,7 @@ PLUGIN_SEED="${MAVEN_PLUGIN_SEED:-$ARTIFACT_ROOT/maven-build-plugin-seed.tar.gz}
   exit 2
 }
 mkdir -p "$ROOT/build/tmp"
+export JAVA_TOOL_OPTIONS="${JAVA_TOOL_OPTIONS:-} -Djava.io.tmpdir=$ROOT/build/tmp"
 
 python3 "$ROOT/scripts/stage-source-only-public-deps.py" \
   --input "$PUBLIC_DEPS" \

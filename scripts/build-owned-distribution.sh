@@ -12,7 +12,7 @@ PUBLIC_DEPS="$ROOT/build/reconstituted-public-deps"
 export LIMS_PUBLIC_DEPENDENCY_DIR="$PUBLIC_DEPS_INPUT"
 APPLICATION_DIR="$ROOT/build/source-only-application"
 OUT="$ROOT/owned-distribution/target"
-mkdir -p "$OUT"
+mkdir -p "$APPLICATION_DIR" "$OUT"
 
 BUILD_STARTED_NS="$(date +%s%N)"
 exec 9>"$OUT/.build.lock"

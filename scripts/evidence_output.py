@@ -59,9 +59,20 @@ def current_implementation_binding(repo_root: Path | None = None, *, extra_scope
 
 def implementation_binding_valid(payload: Mapping[str, Any], *, require_clean: bool = True) -> bool:
     current = current_implementation_binding()
+    surfaces = ("application", "harness", "runtime_contract", "planning")
+    if all(surface + "_binding" in payload for surface in surfaces):
+        if any(payload.get(surface + "_binding") != current.get(surface + "_binding")
+               for surface in surfaces):
+            return False
+        if require_clean and any(
+            payload.get(surface + "_dirty") is True or current.get(surface + "_dirty") is True
+            for surface in surfaces
+        ):
+            return False
+        return True
+
     payload_binding = binding_from_payload(payload)
-    current_binding = current["binding_id"]
-    if payload_binding != current_binding:
+    if payload_binding != current["binding_id"]:
         return False
     if payload.get("implementation_tree_digest") != current["implementation_tree_digest"]:
         return False
@@ -169,6 +180,7 @@ def strict_case_contract(report: Mapping[str, Any]) -> Tuple[bool, str]:
     cases = report.get("cases")
     if not isinstance(cases, list) or not cases:
         return False, "strict report has no cases"
+    fingerprinted_schema = int(report.get("schema", 1)) >= 2
     for index, case in enumerate(cases):
         if not isinstance(case, Mapping):
             return False, "case %d is not an object" % index
@@ -184,6 +196,26 @@ def strict_case_contract(report: Mapping[str, Any]) -> Tuple[bool, str]:
         audit = case.get("audit")
         if audit is None:
             return False, "case %d has no audit observation" % index
+        if fingerprinted_schema:
+            for field in (
+                "request_fingerprint", "stimulus_contract_version",
+                "response_fingerprint", "normalizer_version",
+                "validation_mode", "batch_id",
+            ):
+                if not case.get(field):
+                    return False, "case %d lacks %s" % (index, field)
+            for field in (
+                "application_binding", "harness_binding",
+                "runtime_contract_binding", "family_fingerprint",
+            ):
+                if not case.get(field):
+                    return False, "case %d lacks %s" % (index, field)
+            if not str(case["request_fingerprint"]).startswith("req-"):
+                return False, "case %d has invalid request fingerprint" % index
+            if not str(case["response_fingerprint"]).startswith("res-"):
+                return False, "case %d has invalid response fingerprint" % index
+            if case["validation_mode"] not in {"executed", "revalidated-by-fingerprint"}:
+                return False, "case %d has invalid validation mode" % index
         method = str(route.get("method", case.get("method", "GET"))).upper()
         operation = str(route.get("operation", case.get("operation", "read"))).lower()
         # POST is also the legacy query verb for many inherited/resource

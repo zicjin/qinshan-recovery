@@ -80,6 +80,19 @@ class RunnerTest(unittest.TestCase):
         self.assertFalse(report["strict_evidence"])
         self.assertEqual(report["cases"][0]["status"], 200)
         self.assertTrue(report["cases"][0]["body_sha256"])
+        self.assertTrue(report["cases"][0]["request_fingerprint"].startswith("req-"))
+        self.assertEqual(
+            report["cases"][0]["request_fingerprint"],
+            "req-fb1d3902b73003bca8867730d7dadb1f5d756ce5123812499a6f1c22044101e0",
+        )
+        self.assertTrue(report["cases"][0]["response_fingerprint"].startswith("res-"))
+        self.assertEqual(report["cases"][0]["validation_mode"], "executed")
+        self.assertEqual(report["cases"][0]["batch_id"], report["batch_id"])
+        self.assertTrue(report["cases"][0]["application_binding"].startswith("app-"))
+        self.assertTrue(report["cases"][0]["harness_binding"].startswith("harness-"))
+        self.assertTrue(report["cases"][0]["runtime_contract_binding"].startswith("rt-"))
+        self.assertEqual(report["stimulus_contract_version"], "3")
+        self.assertEqual(report["normalizer_version"], "2")
 
     def test_json_contains_assertion_selects_a_row(self):
         body = b'{"rows":[{"id":"00375QS","role":"0"},{"id":"Test","role":"1"}]}'

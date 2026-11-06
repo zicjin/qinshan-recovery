@@ -176,6 +176,7 @@ _APPLICATION_SUFFIXES = (
 # classify outcomes and manage the test runtime lifecycle.
 _HARNESS_SUFFIXES = (
     "scripts/source_binding.py",
+    "scripts/evidence_fingerprint.py",
     "scripts/evidence_output.py",
     "scripts/spring_api_contract_runner.py",
     "scripts/fast_differential_api_runner.py",
@@ -194,6 +195,9 @@ _HARNESS_SUFFIXES = (
     "scripts/replay-independent-current.py",
     "scripts/replay-vertical-slice.py",
     "scripts/app-ctl.sh",
+    "scripts/verify-harness-semantics.py",
+    "scripts/tests/fixtures/harness-golden-transcript-corpus.jsonl",
+    "scripts/tests/fixtures/harness-golden-transcript-expected.json",
 )
 
 # Planning inputs define route inventory, alias mapping and replay grouping.
@@ -652,6 +656,32 @@ def binding_delta(before: Mapping[str, Any],
         surface: before.get(surface + "_binding") != current.get(surface + "_binding")
         for surface in BINDING_SURFACES
     }
+
+
+def binding_metadata(binding: Optional[Mapping[str, Any]] = None) -> dict[str, Any]:
+    """Return the common provenance/binding fields for reports and manifests."""
+    current = dict(binding or capture_binding())
+    keys = (
+        "repository_head_at_capture",
+        "application_binding",
+        "harness_binding",
+        "runtime_contract_binding",
+        "planning_binding",
+        "governance_binding",
+        "implementation_binding",
+        "binding_id",
+        "implementation_tree_digest",
+        "implementation_dirty",
+        "implementation_scope",
+        "application_scope",
+        "harness_scope",
+        "runtime_contract_scope",
+        "planning_scope",
+        "governance_scope",
+        "nested_project_commit",
+        "distribution_input_digest",
+    )
+    return {key: current[key] for key in keys if key in current}
 
 
 def replay_surfaces(before: Mapping[str, Any],

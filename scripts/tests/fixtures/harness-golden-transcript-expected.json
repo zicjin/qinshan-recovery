@@ -1,0 +1,12 @@
+{
+  "classification_counts": {
+    "data-scope-mismatch": 3,
+    "fast-equivalent": 9,
+    "fast-mismatch": 8
+  },
+  "normalizer_version": "2",
+  "record_count": 20,
+  "schema": 1,
+  "semantic_digest": "53dc2c11b2d2d2cce5a4321dfe9e964f8aebd1f9e0ae24299d6c8766ace21daa",
+  "stimulus_contract_version": "3"
+}

@@ -40,6 +40,12 @@ from evidence_output import (
     current_implementation_binding,
     guard_output_path,
 )
+from evidence_fingerprint import (
+    NORMALIZER_VERSION,
+    STIMULUS_CONTRACT_VERSION,
+    transcript_fingerprints,
+)
+from source_binding import binding_metadata, capture_binding
 from source_binding import REPO_ROOT as DISCOVERED_REPO_ROOT
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -165,11 +171,12 @@ def git_value(*args: str) -> str:
     return result.stdout.strip()
 
 
-def source_metadata(case_file: Path) -> Dict[str, Any]:
+def source_metadata(case_file: Path,
+                    runtime_contract: Optional[Mapping[str, Any]] = None) -> Dict[str, Any]:
     # Contract documents are evidence inputs, not implementation scope. They
     # must never change the implementation binding merely because a case file
     # was regenerated or moved.
-    binding = current_implementation_binding()
+    binding = capture_binding(runtime_contract=runtime_contract)
     scope = list(binding["implementation_scope"])
     status = subprocess.run(
         ["git", "-C", str(REPO_ROOT), "status", "--porcelain", "--untracked-files=all", "--", *scope],
@@ -178,18 +185,16 @@ def source_metadata(case_file: Path) -> Dict[str, Any]:
     # ``source_commit`` remains a compatibility/provenance field.  Strict
     # validity is decided by the implementation binding below.
     binding_dirty = bool(status.stdout.strip()) or bool(binding["implementation_dirty"])
-    return {
+    metadata = {
         "source_commit": binding["repository_head_at_capture"],
-        "repository_head_at_capture": binding["repository_head_at_capture"],
         "source_dirty": binding_dirty,
         "source_scope": scope,
-        "implementation_binding": binding["binding_id"],
-        "implementation_tree_digest": binding["implementation_tree_digest"],
         "implementation_dirty": binding_dirty,
-        "implementation_scope": scope,
-        "nested_project_commit": binding["nested_project_commit"],
-        "distribution_input_digest": binding["distribution_input_digest"],
     }
+    metadata.update(binding_metadata(binding))
+    metadata["implementation_scope"] = scope
+    metadata["implementation_dirty"] = binding_dirty
+    return metadata
 
 
 def validate_base_url(base_url: str, *, strict: bool) -> None:
@@ -224,6 +229,15 @@ def redact_headers(headers: Mapping[str, str]) -> Dict[str, str]:
     return {
         key.lower(): "<REDACTED>" if key.lower() in SENSITIVE_HEADERS else str(value)
         for key, value in headers.items()
+    }
+
+
+def cookie_auth_context(jar: CookieJar) -> Dict[str, Any]:
+    return {
+        "cookies": {
+            cookie.name: sha256_bytes(cookie.value.encode("utf-8"))
+            for cookie in sorted(jar, key=lambda item: item.name)
+        }
     }
 
 
@@ -335,12 +349,17 @@ def _expand_fixture_value(value: Any, captures: Mapping[str, Any],
 
 def _run_fixture_requests(base_url: str, requests: Iterable[Mapping[str, Any]], *, timeout: float,
                           captures: Optional[Dict[str, Any]] = None,
-                          runtime: Optional[Mapping[str, Any]] = None) -> List[Dict[str, Any]]:
+                          runtime: Optional[Mapping[str, Any]] = None,
+                          batch_id: str = "",
+                          role: str = "",
+                          organization: str = "") -> List[Dict[str, Any]]:
     results: List[Dict[str, Any]] = []
     for raw_request in requests:
         request = _expand_fixture_value(raw_request, captures if captures is not None else {}, runtime)
+        request.setdefault("role", role)
+        request.setdefault("organization", organization)
         try:
-            observation = request_case(base_url, request, timeout=timeout)
+            observation = request_case(base_url, request, timeout=timeout, batch_id=batch_id)
         except Exception as error:
             raise FixtureError("fixture request %s %s failed: %s" %
                                (str(request.get("method", "GET")).upper(),
@@ -518,7 +537,8 @@ def _multipart_body(document: Mapping[str, Any]) -> Tuple[bytes, str]:
     return b"".join(chunks), "multipart/form-data; boundary=" + boundary
 
 
-def request_case(base_url: str, case: Mapping[str, Any], *, timeout: float) -> Dict[str, Any]:
+def request_case(base_url: str, case: Mapping[str, Any], *, timeout: float,
+                 batch_id: str = "") -> Dict[str, Any]:
     method = str(case.get("method", "GET")).upper()
     path = str(case.get("path", ""))
     if not path.startswith("/"):
@@ -543,6 +563,10 @@ def request_case(base_url: str, case: Mapping[str, Any], *, timeout: float) -> D
     elif body_value is not None:
         body = json.dumps(body_value, ensure_ascii=False, separators=(",", ":")).encode("utf-8")
         headers.setdefault("Content-Type", "application/json")
+    request_descriptor = dict(case)
+    request_descriptor["headers"] = headers
+    request_descriptor["path_template"] = case.get("path_template", path)
+    request_descriptor["auth"] = cookie_auth_context(COOKIE_JAR)
     request = Request(url, data=body, headers=headers, method=method)
     started = time.perf_counter()
     try:
@@ -567,6 +591,13 @@ def request_case(base_url: str, case: Mapping[str, Any], *, timeout: float) -> D
         "request_headers": redact_headers(headers),
         "elapsed_ms": round((time.perf_counter() - started) * 1000, 3),
     })
+    observation.update(transcript_fingerprints(
+        request_descriptor,
+        status,
+        response_headers,
+        response_body,
+        batch_id=batch_id,
+    ))
     if case.get("capture_json"):
         try:
             observation["_captured_json"] = json.loads(response_body.decode("utf-8"))
@@ -594,6 +625,7 @@ def run_cases(case_document: Mapping[str, Any], *, base_url: str, mode: str,
               password_file: Optional[Path] = None) -> Dict[str, Any]:
     if mode not in {"debug", "strict"}:
         raise ValueError("mode must be debug or strict")
+    batch_id = uuid.uuid4().hex
     # Each contract job is an independent authentication boundary.  The
     # orchestrator reuses this module across jobs; retaining the previous
     # CookieJar would let an anonymous/default-deny job inherit the prior
@@ -611,7 +643,10 @@ def run_cases(case_document: Mapping[str, Any], *, base_url: str, mode: str,
         clone_identity = runtime_contract["runtime_identity"] if runtime_contract else None
     if strict and not clone_identity:
         raise ValueError("strict mode requires clone_identity")
-    metadata = source_metadata(Path(case_document.get("case_file", output)))
+    metadata = source_metadata(
+        Path(case_document.get("case_file", output)),
+        runtime_contract=runtime_contract,
+    )
     if strict and runtime_contract:
         runtime_binding = runtime_contract.get("implementation_binding")
         if runtime_binding and runtime_binding != metadata["implementation_binding"]:
@@ -638,10 +673,14 @@ def run_cases(case_document: Mapping[str, Any], *, base_url: str, mode: str,
         if not cleanup_contract_complete(cleanup_contract) and not defer_cleanup:
             raise ValueError("strict cleanup contract is incomplete")
     report: Dict[str, Any] = {
-        "schema": 1,
+        "schema": 2,
         "status": "executed-fail",
         "execution": "strict" if strict else "diagnostic",
         "strict_evidence": strict,
+        "batch_id": batch_id,
+        "stimulus_contract_version": STIMULUS_CONTRACT_VERSION,
+        "normalizer_version": NORMALIZER_VERSION,
+        "validation_mode": "executed",
         "production_access": False,
         "scope": "clone-derived Spring Web API contract runner",
         "route_execution_model": {
@@ -711,8 +750,12 @@ def run_cases(case_document: Mapping[str, Any], *, base_url: str, mode: str,
                         raise FixtureError("sql-control fixture has no executor")
                     fixture["setup_sql"] = [execute_fixture(sql_fixture_executor, _fixture_path(item), "setup")
                                              for item in fixture["setup_sql_files"]]
-                setup_results = _run_fixture_requests(base_url, fixture["setup_requests"], timeout=timeout,
-                                                      captures=fixture_captures, runtime=runtime_values)
+                setup_results = _run_fixture_requests(
+                    base_url, fixture["setup_requests"], timeout=timeout,
+                    captures=fixture_captures, runtime=runtime_values,
+                    batch_id=batch_id,
+                    role=role, organization=organization,
+                )
                 fixture["setup"] = "executed" if fixture["setup_requests"] else "not-required"
                 # Keep restore/setup declarations opaque until their own
                 # request is executed.  Expanding the whole case here would
@@ -720,6 +763,8 @@ def run_cases(case_document: Mapping[str, Any], *, base_url: str, mode: str,
                 # returned by the just-executed insert) before that insert
                 # has happened.
                 request_case_document = dict(raw_case)
+                request_case_document.setdefault("role", role)
+                request_case_document.setdefault("organization", organization)
                 request_case_document.pop("fixture", None)
                 # Readback requests are a sequential mini-workflow.  Keep
                 # them opaque until after the operation so an earlier
@@ -728,7 +773,9 @@ def run_cases(case_document: Mapping[str, Any], *, base_url: str, mode: str,
                 # readback reference before the first readback has run.
                 readback_declarations = request_case_document.pop("readback_requests", [])
                 expanded_case = _expand_fixture_value(request_case_document, fixture_captures, runtime_values)
-                observation = request_case(base_url, expanded_case, timeout=timeout)
+                observation = request_case(
+                    base_url, expanded_case, timeout=timeout, batch_id=batch_id,
+                )
                 # A business write may return the generated child-row id that
                 # the restore phase needs.  Keep the capture local to this
                 # case, just like fixture setup captures, so a subsequent
@@ -747,15 +794,23 @@ def run_cases(case_document: Mapping[str, Any], *, base_url: str, mode: str,
                 if readback_requests:
                     if not isinstance(readback_requests, list):
                         raise ValueError("readback_requests must be a list")
-                    readback_results = _run_fixture_requests(base_url, readback_requests, timeout=timeout,
-                                                             captures=fixture_captures, runtime=runtime_values)
+                readback_results = _run_fixture_requests(
+                    base_url, readback_requests, timeout=timeout,
+                    captures=fixture_captures, runtime=runtime_values,
+                    batch_id=batch_id,
+                    role=role, organization=organization,
+                )
             except BaseException as failure:
                 case_error = failure
                 observation = None
             finally:
                 try:
-                    restore_results = _run_fixture_requests(base_url, fixture["restore_requests"], timeout=timeout,
-                                                            captures=fixture_captures, runtime=runtime_values)
+                    restore_results = _run_fixture_requests(
+                        base_url, fixture["restore_requests"], timeout=timeout,
+                        captures=fixture_captures, runtime=runtime_values,
+                        batch_id=batch_id,
+                        role=role, organization=organization,
+                    )
                     if fixture["restore_requests"]:
                         fixture["restore"] = "restored"
                     elif fixture.get("cleanup_via") == "case-http":
@@ -794,6 +849,10 @@ def run_cases(case_document: Mapping[str, Any], *, base_url: str, mode: str,
                 observation["class"] = raw_case["source_class"]
             if raw_case.get("behavior_family"):
                 observation["behavior_family"] = raw_case["behavior_family"]
+            if raw_case.get("behavior_family_id"):
+                observation["behavior_family_id"] = raw_case["behavior_family_id"]
+            if raw_case.get("family_fingerprint"):
+                observation["family_fingerprint"] = raw_case["family_fingerprint"]
             if raw_case.get("request_profile"):
                 observation["request_profile"] = raw_case["request_profile"]
             observation["fixture"] = fixture
@@ -803,6 +862,12 @@ def run_cases(case_document: Mapping[str, Any], *, base_url: str, mode: str,
             observation["readback_required"] = bool(raw_case.get("readback_requests"))
             observation["fixture"]["restore_http"] = restore_results
             observation["audit"] = audit
+            for field in (
+                "application_binding", "harness_binding", "runtime_contract_binding",
+                "planning_binding", "governance_binding", "implementation_binding",
+                "implementation_tree_digest",
+            ):
+                observation[field] = metadata.get(field)
             if strict and (method in WRITE_METHODS or operation == "write"):
                 observation["rollback"] = {
                     "status": "verified-via-fixture-restore",

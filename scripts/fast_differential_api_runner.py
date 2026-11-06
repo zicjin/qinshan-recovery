@@ -21,6 +21,7 @@ import re
 import subprocess
 import sys
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
+import uuid
 from urllib.error import HTTPError, URLError
 from urllib.parse import quote, urlencode, urlsplit
 from urllib.request import (build_opener, HTTPBasicAuthHandler, HTTPCookieProcessor,
@@ -28,6 +29,13 @@ from urllib.request import (build_opener, HTTPBasicAuthHandler, HTTPCookieProces
 import http.cookiejar
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from evidence_output import DIAGNOSTIC_ROOT, current_implementation_binding, guard_output_path
+from evidence_fingerprint import (
+    NORMALIZER_VERSION,
+    STIMULUS_CONTRACT_VERSION,
+    request_fingerprint,
+    response_fingerprint,
+)
+from source_binding import binding_metadata
 from source_binding import REPO_ROOT as DISCOVERED_REPO_ROOT
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -117,9 +125,12 @@ def render_path_template(path: str, values: Optional[Mapping[str, str]] = None) 
 
 
 class Session:
-    def __init__(self, base_url: str, timeout: float):
+    def __init__(self, base_url: str, timeout: float,
+                 role: str = "", organization: str = ""):
         self.base_url = base_url.rstrip("/")
         self.timeout = timeout
+        self.role = role
+        self.organization = organization
         self.jar = http.cookiejar.CookieJar()
         self.opener = build_opener(ProxyHandler({}), HTTPCookieProcessor(self.jar))
 
@@ -131,24 +142,51 @@ class Session:
             data = json.dumps(body, ensure_ascii=False).encode("utf-8")
             headers["Content-Type"] = "application/json"
         request = Request(url, data=data, headers=headers, method=method.upper())
+        request_identity = {
+            "method": method.upper(),
+            "path_template": path,
+            "body": body,
+            "headers": headers,
+            "role": self.role,
+            "organization": self.organization,
+            "auth": {
+                "cookies": {
+                    cookie.name: hashlib.sha256(cookie.value.encode("utf-8")).hexdigest()
+                    for cookie in sorted(self.jar, key=lambda item: item.name)
+                }
+            },
+        }
+        request_id = request_fingerprint(request_identity)
         try:
             with self.opener.open(request, timeout=self.timeout) as response:
                 payload = response.read()
-                return self._observation(response.status, response.headers, payload)
+                return self._observation(
+                    response.status, response.headers, payload,
+                    request_id=request_id,
+                )
         except HTTPError as error:
             payload = error.read() if error.fp else b""
-            return self._observation(error.code, error.headers, payload)
+            return self._observation(
+                error.code, error.headers, payload,
+                request_id=request_id,
+            )
         except (OSError, URLError, TimeoutError) as error:
             raise ProbeError(f"{method} {path}: {error}") from error
 
     @staticmethod
-    def _observation(status: int, headers: Mapping[str, str], payload: bytes) -> Dict[str, Any]:
+    def _observation(status: int, headers: Mapping[str, str], payload: bytes,
+                     request_id: str = "") -> Dict[str, Any]:
         content_type = headers.get("Content-Type", "").split(";", 1)[0].strip().lower()
         result: Dict[str, Any] = {
             "status": status,
             "content_type": content_type,
             "body_bytes": len(payload),
             "body_sha256": hashlib.sha256(payload).hexdigest(),
+            "request_fingerprint": request_id,
+            "response_fingerprint": response_fingerprint(status, headers, payload),
+            "stimulus_contract_version": STIMULUS_CONTRACT_VERSION,
+            "normalizer_version": NORMALIZER_VERSION,
+            "validation_mode": "executed",
         }
         try:
             result["json"] = json.loads(payload.decode("utf-8"))
@@ -595,6 +633,7 @@ def validate_execution_plan(plan: Mapping[str, Any], *, head: str,
 
 
 def run(args: argparse.Namespace) -> Dict[str, Any]:
+    batch_id = uuid.uuid4().hex
     supplier_base_url = validate_loopback_url(args.supplier_base_url, "supplier_base_url")
     owned_base_url = validate_loopback_url(args.owned_base_url, "owned_base_url")
     ledger = json.loads(args.ledger.read_text(encoding="utf-8"))
@@ -603,6 +642,7 @@ def run(args: argparse.Namespace) -> Dict[str, Any]:
     # Ledger/plan JSON are generated evidence inputs, not implementation
     # scope. Their regeneration must not invalidate behavior evidence.
     binding = current_implementation_binding()
+    binding_fields = binding_metadata(binding)
     if ledger.get("implementation_tree_digest"):
         if ledger.get("implementation_tree_digest") != binding["implementation_tree_digest"]:
             raise ProbeError("ledger implementation binding does not match current implementation")
@@ -664,8 +704,8 @@ def run(args: argparse.Namespace) -> Dict[str, Any]:
                 break
         if args.limit and len(selected) >= args.limit:
             break
-    supplier = Session(supplier_base_url, args.timeout)
-    owned = Session(owned_base_url, args.timeout)
+    supplier = Session(supplier_base_url, args.timeout, args.role, args.organization)
+    owned = Session(owned_base_url, args.timeout, args.role, args.organization)
     password = read_password(args.password_file)
     try:
         auth = {"supplier": supplier.login(args.auth_user, password), "owned": owned.login(args.auth_user, password)}
@@ -680,11 +720,14 @@ def run(args: argparse.Namespace) -> Dict[str, Any]:
         for value in auth.values() if isinstance(value, Mapping)
     ):
         return {
-            "schema": 1, "status": "diagnostic-blocked", "execution": "fast-differential",
+            "schema": 2, "status": "diagnostic-blocked", "execution": "fast-differential",
             "strict_evidence": False, "production_access": False, "source_commit": head,
-            "source_dirty": binding["implementation_dirty"], "repository_head_at_capture": head,
-            "implementation_binding": binding["binding_id"], "implementation_tree_digest": binding["implementation_tree_digest"],
-            "implementation_dirty": binding["implementation_dirty"], "implementation_scope": binding["implementation_scope"],
+            "source_dirty": binding["implementation_dirty"],
+            "batch_id": batch_id,
+            "stimulus_contract_version": STIMULUS_CONTRACT_VERSION,
+            "normalizer_version": NORMALIZER_VERSION,
+            "validation_mode": "diagnostic",
+            **binding_metadata(binding),
             "generated_at": now(),
             "scope": "read-only supplier-vs-owned Spring API screening",
             "route_execution_model": {"application": "same Spring application for owned routes", "boundary_process": False, "internal_http_bridge": False},
@@ -714,7 +757,12 @@ def run(args: argparse.Namespace) -> Dict[str, Any]:
         except ProbeError as error:
             left = right = {"error": str(error)}
             classification, diff = "blocked", {"reason": str(error)}
+        for observed in (left, right):
+            if isinstance(observed, dict):
+                observed["batch_id"] = batch_id
         cases.append({
+            "batch_id": batch_id,
+            **binding_fields,
             "route_id": route.get("id") if len(selected_route_ids[family_id]) == 1 else None,
             "route_ids": selected_route_ids[family_id],
             "behavior_family": family_id,
@@ -739,11 +787,14 @@ def run(args: argparse.Namespace) -> Dict[str, Any]:
         counts[case["classification"]] = counts.get(case["classification"], 0) + 1
     counts["not-safe-to-probe"] = sum(skipped.values())
     return {
-        "schema": 1, "status": "diagnostic-pass", "execution": "fast-differential",
+        "schema": 2, "status": "diagnostic-pass", "execution": "fast-differential",
         "strict_evidence": False, "production_access": False, "source_commit": head,
-        "source_dirty": binding["implementation_dirty"], "repository_head_at_capture": head,
-        "implementation_binding": binding["binding_id"], "implementation_tree_digest": binding["implementation_tree_digest"],
-        "implementation_dirty": binding["implementation_dirty"], "implementation_scope": binding["implementation_scope"],
+        "source_dirty": binding["implementation_dirty"],
+        "batch_id": batch_id,
+        "stimulus_contract_version": STIMULUS_CONTRACT_VERSION,
+        "normalizer_version": NORMALIZER_VERSION,
+        "validation_mode": "diagnostic",
+        **binding_metadata(binding),
         "generated_at": now(),
         "scope": "read-only supplier-vs-owned Spring API screening",
         "route_execution_model": {"application": "same Spring application for owned routes", "boundary_process": False, "internal_http_bridge": False},

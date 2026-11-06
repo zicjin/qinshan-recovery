@@ -14,6 +14,51 @@ SPEC.loader.exec_module(MODULE)
 
 
 class EvidenceOutputPolicyTest(unittest.TestCase):
+    def test_surface_bindings_prefer_dependency_face_over_aggregate(self):
+        current = MODULE.current_implementation_binding()
+        payload = {
+            surface + "_binding": current[surface + "_binding"]
+            for surface in ("application", "harness", "runtime_contract", "planning")
+        }
+        payload.update({
+            surface + "_dirty": False
+            for surface in ("application", "harness", "runtime_contract", "planning")
+        })
+        self.assertTrue(MODULE.implementation_binding_valid(payload, require_clean=False))
+
+        payload["application_binding"] = "app-stale"
+        self.assertFalse(MODULE.implementation_binding_valid(payload, require_clean=False))
+
+        payload["application_binding"] = current["application_binding"]
+        payload["application_dirty"] = True
+        self.assertFalse(MODULE.implementation_binding_valid(payload, require_clean=True))
+
+    def test_schema_two_strict_case_requires_fingerprints(self):
+        case = {
+            "status": 200,
+            "route": {"method": "GET", "path": "/ok"},
+            "fixture": {"required": False, "status": "not-required"},
+            "audit": {"required": False, "status": "not-required"},
+        }
+        ok, reason = MODULE.strict_case_contract({"schema": 2, "cases": [case]})
+        self.assertFalse(ok)
+        self.assertIn("request_fingerprint", reason)
+
+        case.update({
+            "request_fingerprint": "req-" + "a" * 64,
+            "stimulus_contract_version": "3",
+            "response_fingerprint": "res-" + "b" * 64,
+            "normalizer_version": "2",
+            "validation_mode": "executed",
+            "batch_id": "batch-1",
+            "application_binding": "app-" + "c" * 16,
+            "harness_binding": "harness-" + "d" * 16,
+            "runtime_contract_binding": "rt-" + "e" * 16,
+            "family_fingerprint": "fam-" + "f" * 64,
+        })
+        ok, reason = MODULE.strict_case_contract({"schema": 2, "cases": [case]})
+        self.assertTrue(ok, reason)
+
     def test_canonical_requires_finalize_context(self):
         with self.assertRaises(ValueError):
             MODULE.guard_output_path(MODULE.CANONICAL_ROOT / "unapproved.json")

@@ -22,7 +22,7 @@ from typing import Dict, Iterable, List, Mapping, Optional, Sequence, Set, Tuple
 SCRIPT_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(SCRIPT_ROOT / "scripts"))
 from evidence_output import guard_output_path  # noqa: E402
-from source_binding import REPO_ROOT, capture_binding, implementation_dirty  # noqa: E402
+from source_binding import REPO_ROOT, binding_metadata, capture_binding, implementation_dirty  # noqa: E402
 
 
 HTTP_ANNOTATIONS = {
@@ -547,11 +547,7 @@ def main() -> int:
         "scope": "project-java-http-api-source-inventory",
         "source_commit": _source_commit(),
         "source_dirty": _source_dirty(),
-        "repository_head_at_capture": binding["repository_head_at_capture"],
-        "implementation_binding": binding["binding_id"],
-        "implementation_tree_digest": binding["implementation_tree_digest"],
-        "implementation_dirty": binding["implementation_dirty"],
-        "implementation_scope": binding["implementation_scope"],
+        **binding_metadata(binding),
         "source_root": str(args.source_root),
         "distribution": str(args.distribution) if args.distribution else None,
         "counts": {

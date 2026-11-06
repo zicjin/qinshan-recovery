@@ -116,6 +116,19 @@ class FastDifferentialTest(unittest.TestCase):
         self.assertEqual(classification, "fast-equivalent")
         self.assertEqual(diff["reason"], "rsa-public-key-shape")
 
+    def test_observation_records_response_and_stimulus_semantics(self):
+        result = MODULE.Session._observation(
+            200,
+            {"Content-Type": "application/json"},
+            b'{"rows":[{"id":"1"}],"total":1}',
+            request_id="req-golden",
+        )
+        self.assertEqual(result["request_fingerprint"], "req-golden")
+        self.assertTrue(result["response_fingerprint"].startswith("res-"))
+        self.assertEqual(result["stimulus_contract_version"], "3")
+        self.assertEqual(result["normalizer_version"], "2")
+        self.assertEqual(result["validation_mode"], "executed")
+
     def test_normalization_removes_dynamic_ids(self):
         value = MODULE.normalize({"id": 1, "name": "same", "rows": [{"id": 2}, {"id": 1}]})
         self.assertEqual(value["id"], "<NORMALIZED>")

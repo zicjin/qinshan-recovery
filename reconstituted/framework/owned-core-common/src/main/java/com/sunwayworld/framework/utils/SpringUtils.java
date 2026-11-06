@@ -4,6 +4,7 @@
 package com.sunwayworld.framework.utils;
 
 import com.sunwayworld.framework.context.ApplicationContextHelper;
+import com.sunwayworld.framework.jdk.tools.DynamicClassLoader;
 import com.sunwayworld.framework.exception.core.ApplicationRuntimeException;
 import com.sunwayworld.framework.utils.ArrayUtils;
 import com.sunwayworld.framework.utils.ClassUtils;
@@ -38,11 +39,30 @@ public abstract class SpringUtils {
             Thread.currentThread().setContextClassLoader(clazz.getClassLoader());
         }
         ApplicationContext applicationContext = ApplicationContextHelper.getApplicationContext();
+        // Dynamic LCDP classes are defined by DynamicClassLoader.  Spring's
+        // post processors (notably CGLIB proxy creation for @Repository and
+        // @Transactional script services) resolve the target class through
+        // the bean factory class loader rather than the thread context loader.
+        // Keep that loader aligned with the class being registered so a valid
+        // database-backed script is not rejected as NoClassDefFoundError.
         if (beanName == null) {
             beanName = clazz.getName();
         }
         if ((defaultListableBeanFactory = (DefaultListableBeanFactory)((ConfigurableApplicationContext)applicationContext).getBeanFactory()).containsBeanDefinition(beanName)) {
             defaultListableBeanFactory.removeBeanDefinition(beanName);
+        }
+        defaultListableBeanFactory.setBeanClassLoader(clazz.getClassLoader());
+        if (clazz.getClassLoader() instanceof DynamicClassLoader) {
+            try {
+                Object instance = clazz.newInstance();
+                defaultListableBeanFactory.autowireBean(instance);
+                defaultListableBeanFactory.registerSingleton(beanName, instance);
+                return;
+            } catch (InstantiationException e) {
+                throw new IllegalStateException("Cannot instantiate dynamic LCDP bean " + clazz.getName(), e);
+            } catch (IllegalAccessException e) {
+                throw new IllegalStateException("Cannot access dynamic LCDP bean " + clazz.getName(), e);
+            }
         }
         BeanDefinitionBuilder beanDefinitionBuilder = BeanDefinitionBuilder.genericBeanDefinition(clazz);
         defaultListableBeanFactory.registerBeanDefinition(beanName, beanDefinitionBuilder.getRawBeanDefinition());

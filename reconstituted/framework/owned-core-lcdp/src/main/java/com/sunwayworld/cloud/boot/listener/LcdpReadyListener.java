@@ -49,7 +49,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.context.event.ApplicationPreparedEvent;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -61,7 +61,15 @@ import org.springframework.stereotype.Service;
    havingValue = "true",
    matchIfMissing = true
 )
-public class LcdpReadyListener implements ApplicationListener<ApplicationPreparedEvent> {
+/**
+ * Loads database-backed LCDP Java resources after the application context is
+ * fully created.  ApplicationPreparedEvent is published before regular
+ * {@code @Service} beans are instantiated, so a listener registered only as a
+ * component never receives that event.  That left valid resource rows in the
+ * database and cache while their dynamic service beans were absent.
+ */
+public class LcdpReadyListener implements ApplicationListener<ApplicationReadyEvent> {
+   private boolean initialized;
    @Autowired
    private LcdpResourceService lcdpResourceService;
    @Autowired
@@ -85,7 +93,12 @@ public class LcdpReadyListener implements ApplicationListener<ApplicationPrepare
    private LcdpResourceCheckoutRecordService resourceCheckoutRecordService;
    private static final Logger log = LoggerFactory.getLogger(LcdpReadyListener.class);
 
-   public void onApplicationEvent(ApplicationPreparedEvent event) {
+   public synchronized void onApplicationEvent(ApplicationReadyEvent event) {
+      if (initialized) {
+         log.info("============>LCDP scripts already loaded; skipping duplicate ApplicationReadyEvent");
+         return;
+      }
+      initialized = true;
       long now = System.currentTimeMillis();
       this.initAppUUID();
       SearchFilter filter = SearchFilter.instance().match("RESOURCECATEGORY", "java").filter(MatchPattern.EQ);
@@ -672,7 +685,7 @@ public class LcdpReadyListener implements ApplicationListener<ApplicationPrepare
                         RedisHelper.put("SCRIPT_TABLE_PATH_MAPPING_CACHE", tableName, sourceConfig.getPath());
                      }
                   } catch (Exception var7) {
-                     log.error("============>脚本提醒加载异常：类名为" + sourceConfig.getClassName() + "，异常日志如下：" + var7.getMessage());
+                     log.error("============>脚本提醒加载异常：类名为" + sourceConfig.getClassName(), var7);
                   }
                }
             });
@@ -690,7 +703,7 @@ public class LcdpReadyListener implements ApplicationListener<ApplicationPrepare
             log.info("============>spring加载类" + resource.getClassName());
             SpringUtils.registerBean(beanName, clazz);
          } catch (Exception var8) {
-            log.error("============>脚本加载异常：类名为" + resource.getClassName() + "，异常日志如下：" + var8);
+            log.error("============>脚本加载异常：类名为" + resource.getClassName(), var8);
          }
 
          CodeHintsManager.register(resource.getHintName(), SpringUtils.getBean(beanName).getClass());

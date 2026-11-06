@@ -109,7 +109,7 @@ docker rm --force "$APP" >/dev/null 2>&1 || true
 docker create --name "$APP" --network "$NET" --network-alias app \
   --env LIMS_BIND_ADDRESS=0.0.0.0 \
   --env SPRING_PROFILES_ACTIVE=oracle \
-  --env SUNWAY_LCDP_ENABLE=false \
+  --env SUNWAY_LCDP_ENABLE=true \
   --env JAVA_TOOL_OPTIONS=-Djava.security.egd=file:/dev/./urandom \
   --volume "$ROOT/application.properties:/run/config/application.properties:ro" \
   "$DEPLOY_IMAGE" >/dev/null
@@ -118,7 +118,7 @@ if [[ "$DEPLOY_MODE" == "app-only-refresh-fallback" ]]; then
   docker create --name "$APP" --network "$NET" --network-alias app \
     --env LIMS_BIND_ADDRESS=0.0.0.0 \
     --env SPRING_PROFILES_ACTIVE=oracle \
-    --env SUNWAY_LCDP_ENABLE=false \
+    --env SUNWAY_LCDP_ENABLE=true \
     --env JAVA_TOOL_OPTIONS=-Djava.security.egd=file:/dev/./urandom \
     --volume "$ROOT/application.properties:/run/config/application.properties:ro" \
     --entrypoint /bin/sh "$DEPLOY_IMAGE" -c \

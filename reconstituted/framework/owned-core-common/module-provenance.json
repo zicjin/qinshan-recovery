@@ -265,7 +265,7 @@
       "decompiler": "CFR",
       "decompiler_version": "0.152",
       "path": "src/main/java/com/sunwayworld/GikamCoreApplication.java",
-      "sha256": "b2d1112ac1b9edb1d308300bc9da5f49783313fc1170ecc50e67648acfe7a338",
+      "sha256": "59d5051c8920edad95aac0a296ca89e8cfe7c77fc08487e333bded24fdfaf7d5",
       "source_class_path": "com/sunwayworld/GikamCoreApplication.class",
       "source_jar": "BOOT-INF/lib/gikam-core-common-14.1.5.jar",
       "source_sha256_before_overlay": "b272e82eee19a98666c4eb41143c03c2c3ba15d637b8b8b5bcf8e382e049a86a",
@@ -297,7 +297,7 @@
       "decompiler": "CFR",
       "decompiler_version": "0.152",
       "path": "src/main/java/com/sunwayworld/boot/ApplicationMvcConfiguration.java",
-      "sha256": "ed45491a7be6227bd68d6fca63f70dd43e13ddd02c51c67fd721b43aa49e3693",
+      "sha256": "1f36e32a3cb06896bb7e6058a451c76e7b53e82715135491c8ffa19327f0185f",
       "source_class_path": "com/sunwayworld/boot/ApplicationMvcConfiguration.class",
       "source_jar": "BOOT-INF/lib/gikam-core-common-14.1.5.jar",
       "source_sha256_before_overlay": "28254dca68035a6bed133a2cb1d10e53fd06e4a4e5aed49ae9d7a3c0a55fcbb0",
@@ -31474,7 +31474,7 @@
       ]
     }
   ],
-  "source_tree_sha256": "9c01c8c579354fdf08b2af1a7f99020b7011d4eb1d82be58c3994d35f3ebdf99",
+  "source_tree_sha256": "c3db5710a2724dd8925f5e45238a6e43bcc6cf8e9efe0b55ed6ee15ab223a85f",
   "status": "assembled-source-only",
   "transformation_manifest": "docs/reconstitution/decompiler-transforms.json",
   "transformation_manifest_sha256": "30ab06626f3e4c863a2855790b0ec6211499394852f2a8598ea3bd444ce87fe8",

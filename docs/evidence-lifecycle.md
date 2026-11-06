@@ -1,10 +1,12 @@
 # Evidence lifecycle
 
-`lims-recovery/evidence/` is the canonical publication area. It contains the
-machine-readable registry and only promoted canonical reports. A clean
-standalone checkout may have only the registry header before a current report
-is promoted. Historical and diagnostic rows are retained in the parent
-workspace archive registry under `.scratch/.../evidence-archive/`. Runner output belongs in
+`lims-recovery/evidence/` is the optional canonical publication area. It contains
+the machine-readable registry only after a canonical report is promoted, together
+with those promoted reports. A clean standalone checkout with no canonical
+publication may have no `evidence/` directory or registry at all. Historical and
+diagnostic rows are retained in the parent workspace archive registry under
+`.scratch/.../evidence-archive/`; those paths are deliberately outside a
+standalone clone. Runner output belongs in
 `.scratch/sunway-supplier-exit-api-first/diagnostic-evidence/` until it has
 passed the appropriate contract.
 
@@ -19,7 +21,7 @@ bash scripts/tests/test-evidence-lifecycle.sh
 bash scripts/tests/test-api-evidence-gate.sh
 ```
 
-The registry is authoritative for JSON in the publication root. A root JSON
+When present, the registry is authoritative for JSON in the publication root. A root JSON
 must have class `canonical-strict` or `canonical-diagnostic`; an unregistered
 or diagnostic root file is a gate failure. The registry also records
 `referenced_by` and `generated_at`, so retention and supersession decisions do

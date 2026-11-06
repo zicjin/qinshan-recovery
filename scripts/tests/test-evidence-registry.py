@@ -34,6 +34,34 @@ class EvidenceRegistryTest(unittest.TestCase):
     def test_registry_path_guard_rejects_escape(self):
         self.assertFalse(MANAGE.inside(MANAGE.EVIDENCE.parent / "outside.json", MANAGE.EVIDENCE))
 
+    def test_classify_does_not_materialize_external_scratch_registry(self):
+        with tempfile.TemporaryDirectory(prefix="evidence-classify-standalone-") as temporary:
+            base = Path(temporary)
+            evidence = base / "evidence"
+            feature = base / "parent" / ".scratch" / "sunway-supplier-exit-api-first"
+            diagnostic = feature / "diagnostic-evidence"
+            archive = feature / "archive"
+            external = diagnostic / "pending" / "old.json"
+            external.parent.mkdir(parents=True)
+            external.write_text(json.dumps({"status": "diagnostic-pass"}) + "\n", encoding="utf-8")
+            registry = evidence / "evidence-index.tsv"
+            patched = mock.patch.multiple(
+                MANAGE, ROOT=base, EVIDENCE=evidence, FEATURE=feature,
+                DIAGNOSTIC=diagnostic, ARCHIVE=archive, REGISTRY=registry,
+                head=mock.Mock(return_value="fixture-head"),
+                scan_rows=mock.Mock(return_value=[{
+                    "path": ".scratch/sunway-supplier-exit-api-first/diagnostic-evidence/pending/old.json",
+                    "class": "diagnostic-failed",
+                }]),
+            )
+            with patched:
+                output = io.StringIO()
+                with contextlib.redirect_stdout(output):
+                    self.assertEqual(MANAGE.cmd_classify(type("Args", (), {})()), 0)
+            self.assertFalse(registry.exists())
+            self.assertFalse(evidence.exists())
+            self.assertIn('"ignored_external_rows": 1', output.getvalue())
+
     def test_promoted_report_uses_canonical_closure_reference(self):
         pending = MANAGE.FEATURE / "diagnostic-evidence/pending/closure.json"
         canonical = MANAGE.EVIDENCE / "closure.json"
@@ -201,7 +229,10 @@ class EvidenceRegistryTest(unittest.TestCase):
     def test_registry_is_current_and_complete(self):
         if not REGISTRY.is_file():
             # The standalone deploy tree may have no published evidence at all;
-            # historical rows live in the parent archive registry.
+            # historical rows live in the parent archive registry.  In that
+            # state the evidence directory itself is optional; a clean clone
+            # must not be forced to materialize a parent-workspace path.
+            self.assertFalse((ROOT / "evidence").exists())
             return
         result = subprocess.run([sys.executable, str(ROOT / "scripts" / "manage-evidence.py"), "verify"], cwd=ROOT.parent, text=True, capture_output=True)
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)

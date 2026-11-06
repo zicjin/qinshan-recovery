@@ -820,6 +820,32 @@ def load_registry(path: Optional[Path] = None) -> List[Dict[str, str]]:
         return list(csv.DictReader(handle, delimiter="\t"))
 
 
+def canonical_registry_rows(rows: Sequence[Mapping[str, str]]) -> List[Dict[str, str]]:
+    """Return only publication-root rows suitable for the standalone registry.
+
+    Diagnostic and historical files are deliberately outside the deploy tree
+    in the parent workspace.  They may be included in an inventory or a
+    migration plan, but must never be copied into the standalone registry:
+    their ``.scratch/...`` paths do not exist in a clean standalone clone.
+    """
+    result: List[Dict[str, str]] = []
+    for row in rows:
+        raw = str(row.get("path", ""))
+        if not raw.endswith(".json"):
+            continue
+        path = resolve_registry_path(raw)
+        if not inside(path, EVIDENCE):
+            continue
+        # Evidence-owned support directories have their own manifests.  The
+        # publication registry is intentionally limited to root reports.
+        if path.parent.resolve() != EVIDENCE.resolve():
+            continue
+        if row.get("class") not in {"canonical-strict", "canonical-diagnostic"}:
+            continue
+        result.append(dict(row))
+    return result
+
+
 def planned_destination(row: Mapping[str, str], occupied: set[str], demote_canonical: bool = False) -> Tuple[str, str]:
     """Return the reviewed destination and action for one registry row.
 
@@ -961,16 +987,28 @@ def cmd_scan(args: argparse.Namespace) -> int:
 
 def cmd_classify(args: argparse.Namespace) -> int:
     rows = scan_rows()
-    # Preserve archived/diagnostic rows outside the canonical root. A later
-    # classify pass must refresh root metadata without erasing the retention
-    # ledger for moved artifacts.
-    existing = {row.get("path", ""): row for row in load_registry()}
-    merged = dict(existing)
-    for row in rows:
-        merged[row["path"]] = {key: row.get(key, "") for key in REGISTRY_FIELDS}
-    ordered = [merged[key] for key in sorted(merged)]
-    write_tsv(REGISTRY, ordered, REGISTRY_FIELDS)
-    print(json.dumps({"registry": relative(REGISTRY), "rows": len(ordered), "scanned_root": len(rows)}, ensure_ascii=False))
+    # The standalone registry is a publication index, not the parent
+    # workspace's historical/diagnostic ledger.  Keep existing canonical rows,
+    # refresh only canonical root JSON, and do not create an empty registry in
+    # a clean checkout that has never promoted evidence.
+    existing = {
+        row.get("path", ""): row
+        for row in canonical_registry_rows(load_registry())
+    }
+    for row in canonical_registry_rows(rows):
+        existing[row["path"]] = {key: row.get(key, "") for key in REGISTRY_FIELDS}
+    ordered = [existing[key] for key in sorted(existing)]
+    if ordered or REGISTRY.is_file():
+        write_tsv(REGISTRY, ordered, REGISTRY_FIELDS)
+        registry_display = relative(REGISTRY)
+    else:
+        registry_display = None
+    print(json.dumps({
+        "registry": registry_display,
+        "rows": len(ordered),
+        "scanned_root": len(canonical_registry_rows(rows)),
+        "ignored_external_rows": len(rows) - len(canonical_registry_rows(rows)),
+    }, ensure_ascii=False))
     return 0
 
 

@@ -151,6 +151,28 @@ SELECT A.ID,A.NAME FROM T_PEOPLE A
         self.assertEqual(family["organization_policy"], "unknown")
         self.assertTrue(any("permission" in reason for reason in family["unknown_reasons"]))
         self.assertTrue(all(node["evidence_kind"] == "static-source-reference" for node in family["dependency_chain"]))
+        self.assertTrue(family["family_fingerprint"].startswith("fam-"))
+        self.assertEqual(family["family_fingerprint_schema"], 1)
+        self.assertIn("framework_seams", family["family_fingerprint_inputs"])
+
+    def test_family_fingerprint_changes_only_for_changed_dependency_inputs(self):
+        first = self.build()
+        first_family = next(f for f in first["behavior_families"] if "p-query" in f["alias_route_ids"])
+        first_equipment = next(f for f in first["behavior_families"] if "e-query" in f["alias_route_ids"])
+        self.controller.with_name("QueryService.java").write_text(
+            "package fixture; public class QueryService { public Object query(String body) { return null; } }\n"
+        )
+        second = self.build()
+        second_family = next(f for f in second["behavior_families"] if "p-query" in f["alias_route_ids"])
+        second_equipment = next(f for f in second["behavior_families"] if "e-query" in f["alias_route_ids"])
+        self.assertNotEqual(first_family["family_fingerprint"], second_family["family_fingerprint"])
+        self.assertNotEqual(
+            first_equipment["family_fingerprint"],
+            second_equipment["family_fingerprint"],
+        )
+
+        cases = [case for wave in second["waves"] for case in wave["cases"]]
+        self.assertTrue(all(case["family_fingerprint"].startswith("fam-") for case in cases))
 
     def test_parameterized_jobs_keep_each_alias_unexecuted(self):
         output = self.build()

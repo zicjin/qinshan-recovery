@@ -22,7 +22,9 @@ from typing import Any, Dict, Iterable, List, Mapping
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "tools"))
+sys.path.insert(0, str(ROOT / "scripts"))
 from business_api_inventory import _annotation, _class_mapping_paths, _class_name
+from source_binding import binding_metadata
 
 
 WAVE_ORDER = (
@@ -32,6 +34,16 @@ WAVE_ORDER = (
     "consumables-materials",
     "secondary",
 )
+
+GLOBAL_QUERY_SEAM_PATHS = (
+    "reconstituted/framework/owned-core-common/src/main/java/com/sunwayworld/framework/database/sql/SqlHelper.java",
+    "reconstituted/framework/owned-core-common/src/main/java/com/sunwayworld/framework/mybatis/interceptor/MybatisInterceptor.java",
+    "reconstituted/framework/owned-core-common/src/main/java/com/sunwayworld/framework/mybatis/page/MybatisPageHelper.java",
+    "reconstituted/framework/owned-core-common/src/main/java/com/sunwayworld/framework/exception/advice/GlobalExceptionHandler.java",
+    "owned-framework/src/main/java/com/sunwayworld/owned/internal/web/QueryRequest.java",
+)
+FAMILY_FINGERPRINT_SCHEMA = 1
+FAMILY_RESPONSE_CONTRACT_VERSION = "3"
 
 
 def wave_for_family(family: str) -> str:
@@ -257,9 +269,59 @@ def _resource_path(route: Mapping[str, Any]) -> str:
     return str(route.get("class_base") or re.sub(r"/queries(?:/(?:raw|searchable))?$", "", str(route.get("path", ""))))
 
 
+def _global_seam_references(source_root: Path) -> List[Dict[str, str]]:
+    references = []
+    for relative in GLOBAL_QUERY_SEAM_PATHS:
+        path = source_root / relative
+        if path.is_file():
+            references.append({
+                "path": relative,
+                "sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
+                "evidence_kind": "framework-seam-source",
+            })
+    return sorted(references, key=lambda item: item["path"])
+
+
+def _family_fingerprint(family: Mapping[str, Any],
+                        global_seams: List[Dict[str, str]]) -> Dict[str, Any]:
+    provenance = sorted(
+        family.get("source_provenance", []),
+        key=lambda item: (str(item.get("path", "")), str(item.get("sha256", ""))),
+    )
+    mapper_statements = sorted(
+        family.get("mapper_statements", []),
+        key=lambda item: (
+            str(item.get("path", "")),
+            str(item.get("namespace", "")),
+            str(item.get("statement_id", "")),
+            str(item.get("operation", "")),
+        ),
+    )
+    payload = {
+        "schema": FAMILY_FINGERPRINT_SCHEMA,
+        "response_contract_version": FAMILY_RESPONSE_CONTRACT_VERSION,
+        "source_provenance": provenance,
+        "mapper_statements": mapper_statements,
+        "framework_seams": global_seams,
+        "permission_policy": family.get("permission_policy"),
+        "organization_policy": family.get("organization_policy"),
+        "response_envelope": family.get("response_envelope"),
+        "error_contract": family.get("error_contract"),
+        "pagination_policy": family.get("pagination_policy"),
+    }
+    return {
+        "family_fingerprint": "fam-" + hashlib.sha256(
+            json.dumps(payload, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
+        ).hexdigest(),
+        "family_fingerprint_schema": FAMILY_FINGERPRINT_SCHEMA,
+        "family_fingerprint_inputs": payload,
+    }
+
+
 def behavior_manifest(routes: List[Mapping[str, Any]], assignment: Mapping[str, Any],
                       source_root: Path) -> tuple[List[Dict[str, Any]], List[Dict[str, Any]], Dict[str, str]]:
     source = SourceManifest(source_root)
+    global_seams = _global_seam_references(source_root)
     grouped: Dict[str, Dict[str, Any]] = {}
     route_assignment = {}
     for route in routes:
@@ -310,6 +372,7 @@ def behavior_manifest(routes: List[Mapping[str, Any]], assignment: Mapping[str, 
         family["alias_route_ids"].sort()
         family["aliases"].sort(key=lambda item: item["route_id"])
         family["source_provenance"].sort(key=lambda item: item["path"])
+        family.update(_family_fingerprint(family, global_seams))
         families.append(family)
         jobs.append({"id": "job-" + family_id, "behavior_family_id": family_id, "wave": family["wave"],
                      "job_kind": "parameterized-http-contract-planning", "strict_ready": False, "strict_evidence": False,
@@ -336,9 +399,18 @@ def build(ledger: Mapping[str, Any], plan: Mapping[str, Any], *, source_root: Pa
         waves[wave].append(_case(route, str(group_id), wave))
 
     families, jobs, family_assignment = behavior_manifest(routes, assignment, source_root)
+    family_by_id = {family["id"]: family for family in families}
+    planned_fingerprints = plan.get("family_fingerprints", {})
+    if isinstance(planned_fingerprints, Mapping):
+        for family_id, fingerprint in family_by_id.items():
+            planned = planned_fingerprints.get(family_id)
+            if planned and planned != fingerprint["family_fingerprint"]:
+                raise ValueError("behavior family fingerprint differs from execution plan: " + family_id)
     for cases in waves.values():
         for case in cases:
             case["behavior_family_id"] = family_assignment[case["route_id"]]
+            family = family_by_id[case["behavior_family_id"]]
+            case["family_fingerprint"] = family["family_fingerprint"]
 
     output_waves: List[Dict[str, Any]] = []
     for wave in WAVE_ORDER:
@@ -362,11 +434,8 @@ def build(ledger: Mapping[str, Any], plan: Mapping[str, Any], *, source_root: Pa
         "scope": "current-head-api-contract-skeleton-and-continuous-waves",
         "source_commit": ledger.get("source_commit"),
         "source_dirty": ledger.get("source_dirty"),
-        "repository_head_at_capture": ledger.get("repository_head_at_capture", ledger.get("source_commit")),
-        "implementation_binding": ledger.get("implementation_binding"),
-        "implementation_tree_digest": ledger.get("implementation_tree_digest"),
+        **binding_metadata(ledger),
         "implementation_dirty": ledger.get("implementation_dirty", ledger.get("source_dirty")),
-        "implementation_scope": ledger.get("implementation_scope", []),
         "route_count": len(routes),
         "project_route_count": len(ledger.get("routes", [])),
         "boundary_route_count": len(ledger.get("boundary_routes", [])),

@@ -18,8 +18,10 @@ from typing import Dict, List
 
 SCRIPT_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(SCRIPT_ROOT / "scripts"))
+sys.path.insert(0, str(SCRIPT_ROOT / "tools"))
 from evidence_output import guard_output_path  # noqa: E402
-from source_binding import REPO_ROOT, capture_binding, is_standalone_root  # noqa: E402
+from api_contract_skeleton import behavior_manifest  # noqa: E402
+from source_binding import REPO_ROOT, binding_metadata, capture_binding, is_standalone_root  # noqa: E402
 ROOT = REPO_ROOT
 
 
@@ -198,6 +200,16 @@ def build(inventory: Dict[str, object], native_registry: Dict[str, object] | Non
     boundary_routes: List[Dict[str, object]] = [
         enrich(source_route, boundary=True) for source_route in inventory.get("boundary_routes", [])
     ]
+    families, _jobs, family_assignment = behavior_manifest(
+        routes + boundary_routes,
+        {str(route.get("id")): "planning-only" for route in routes + boundary_routes},
+        ROOT,
+    )
+    family_by_id = {family["id"]: family for family in families}
+    for route in routes + boundary_routes:
+        family_id = family_assignment[str(route.get("id"))]
+        route["behavior_family_id"] = family_id
+        route["family_fingerprint"] = family_by_id[family_id]["family_fingerprint"]
     priority = collections.Counter(route["native_relevance"] for route in routes)
     waves = collections.Counter(route["wave"] for route in routes)
     return {
@@ -205,11 +217,8 @@ def build(inventory: Dict[str, object], native_registry: Dict[str, object] | Non
         "scope": "current-head-spring-web-api-route-ledger",
         "source_commit": inventory.get("source_commit"),
         "source_dirty": inventory.get("source_dirty"),
-        "repository_head_at_capture": inventory.get("repository_head_at_capture", inventory.get("source_commit")),
-        "implementation_binding": inventory.get("implementation_binding"),
-        "implementation_tree_digest": inventory.get("implementation_tree_digest"),
+        **binding_metadata(inventory),
         "implementation_dirty": inventory.get("implementation_dirty", inventory.get("source_dirty")),
-        "implementation_scope": inventory.get("implementation_scope", []),
         "inventory_source": inventory_source or ".scratch/sunway-supplier-exit-api-first/archive/historical/business-api-inventory-current-head--14a87746122d.json",
         "planning_metadata": {
             "native_registry": {

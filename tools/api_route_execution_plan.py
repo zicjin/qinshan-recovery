@@ -18,7 +18,7 @@ from typing import Any, Dict, List, Mapping
 SCRIPT_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(SCRIPT_ROOT / "scripts"))
 from evidence_output import guard_output_path  # noqa: E402
-from source_binding import REPO_ROOT  # noqa: E402
+from source_binding import REPO_ROOT, binding_metadata  # noqa: E402
 ROOT = REPO_ROOT
 
 DEFAULT_GROUP_SIZE = 100
@@ -91,6 +91,11 @@ def build_plan(ledger: Mapping[str, Any], group_size: int = DEFAULT_GROUP_SIZE) 
                 "internal_http_bridge": False,
                 "parallel_policy": "requires isolated checkout,target,ports,containers,network and temporary root",
                 "behavior_status": "unknown",
+                "family_fingerprints": dict(sorted({
+                    str(route.get("behavior_family_id", "")): str(route.get("family_fingerprint", ""))
+                    for route in chunk
+                    if route.get("family_fingerprint")
+                }.items())),
             })
     route_count = len(all_routes)
     if len(assignment) != route_count:
@@ -105,11 +110,8 @@ def build_plan(ledger: Mapping[str, Any], group_size: int = DEFAULT_GROUP_SIZE) 
         "scope": "current-head-spring-web-api-execution-plan",
         "source_commit": ledger.get("source_commit"),
         "source_dirty": ledger.get("source_dirty"),
-        "repository_head_at_capture": ledger.get("repository_head_at_capture", ledger.get("source_commit")),
-        "implementation_binding": ledger.get("implementation_binding"),
-        "implementation_tree_digest": ledger.get("implementation_tree_digest"),
+        **binding_metadata(ledger),
         "implementation_dirty": ledger.get("implementation_dirty", ledger.get("source_dirty")),
-        "implementation_scope": ledger.get("implementation_scope", []),
         "route_count": route_count,
         "project_route_count": len(routes),
         "boundary_route_count": len(boundary_routes),
@@ -119,6 +121,11 @@ def build_plan(ledger: Mapping[str, Any], group_size: int = DEFAULT_GROUP_SIZE) 
         "wave_counts": wave_counts,
         "runtime_count": len([wave for wave in WAVE_ORDER if wave_counts[wave] > 0]),
         "plan_id": plan_id,
+        "family_fingerprints": dict(sorted({
+            str(route.get("behavior_family_id", "")): str(route.get("family_fingerprint", ""))
+            for route in all_routes
+            if route.get("family_fingerprint")
+        }.items())),
         "groups": groups,
         "assignment": assignment,
         "policy": "planning only; no route behavior is promoted by group assignment",

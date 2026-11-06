@@ -8,15 +8,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 public final class OwnedReagentPageControllerContractTest {
     public static void main(String[] args) throws Exception {
         OwnedReagentPageController controller = new OwnedReagentPageController();
-        if (!"emc/module/bp/reagents/emc-reagent-edit-list".equals(controller.emcEditList())
-                || !"emc/module/bp/reagents/emc-mtl-stock-choose-list".equals(controller.emcStockChooseList())) {
+        if (!"emc/module/bp/reagents/emc-reagent-edit-list".equals(controller.coreEditList())
+                || !"emc/module/bp/reagents/emc-mtl-stock-choose-list".equals(controller.coreStockChooseList())) {
             throw new AssertionError("reagent page view names changed");
         }
         int mapped = 0;
         for (Method method : OwnedReagentPageController.class.getDeclaredMethods()) {
             if (method.getAnnotation(GetMapping.class) != null) mapped++;
         }
-        if (mapped != 4) throw new AssertionError("reagent page route count=" + mapped);
+        if (mapped != 2) throw new AssertionError("reagent page route count=" + mapped);
         System.out.println("owned reagent page controller contract checks passed (" + mapped + " routes)");
     }
 }

@@ -9,7 +9,7 @@ python3 - "$ROOT" "$TMP/supplier.jar" <<'PY'
 import hashlib,json,pathlib,sys,zipfile
 root,out=map(pathlib.Path,sys.argv[1:])
 name='BOOT-INF/lib/gikam-core-common-14.1.5.jar'
-expected=next(row['sha256'] for row in json.loads((root/'.scratch/sunway-supplier-exit-api-first/evidence-archive/framework-contract/jars.json').read_text()) if row['jar']==name)
+expected=next(row['sha256'] for row in json.loads((root.parent/'.scratch/sunway-supplier-exit-api-first/evidence-archive/framework-contract/jars.json').read_text()) if row['jar']==name)
 with zipfile.ZipFile(root/'materials/gikam-third-czjky-14.1.5-run.jar') as archive:
     content=archive.read(name)
     assert hashlib.sha256(content).hexdigest()==expected

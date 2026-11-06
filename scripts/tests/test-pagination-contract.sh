@@ -7,7 +7,7 @@ mkdir -p "$TMP/supplier"
 python3 - "$ROOT" "$TMP" <<'PY'
 import hashlib,json,pathlib,sys,zipfile
 root=pathlib.Path(sys.argv[1]); out=pathlib.Path(sys.argv[2])/'supplier'
-identities={r['jar']:r['sha256'] for r in json.loads((root/'.scratch/sunway-supplier-exit-api-first/evidence-archive/framework-contract/jars.json').read_text())}
+identities={r['jar']:r['sha256'] for r in json.loads((root.parent/'.scratch/sunway-supplier-exit-api-first/evidence-archive/framework-contract/jars.json').read_text())}
 with zipfile.ZipFile(root/'materials/gikam-third-czjky-14.1.5-run.jar') as z:
     for n in ('BOOT-INF/lib/gikam-core-common-14.1.5.jar','BOOT-INF/lib/spring-data-commons-2.3.4.RELEASE.jar','BOOT-INF/lib/mybatis-3.5.6.jar'):
         content=z.read(n)

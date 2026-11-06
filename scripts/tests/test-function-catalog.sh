@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd -P)"
-CATALOG="$ROOT/.scratch/sunway-supplier-exit-api-first/evidence-archive/function-coverage-catalog.tsv"
+CATALOG="$ROOT/../.scratch/sunway-supplier-exit-api-first/evidence-archive/function-coverage-catalog.tsv"
 VALIDATOR="$ROOT/tools/validate_function_catalog.py"
 bash "$ROOT/scripts/tests/test-api-evidence-gate.sh" >/dev/null
-python3 "$VALIDATOR" "$CATALOG" --source-inventory "$ROOT/.scratch/sunway-supplier-exit-api-first/evidence-archive/t02-source-inventory.tsv" >/dev/null
+python3 "$VALIDATOR" "$CATALOG" --source-inventory "$ROOT/../.scratch/sunway-supplier-exit-api-first/evidence-archive/t02-source-inventory.tsv" >/dev/null
 fixture="$(mktemp -d)"; trap 'rm -rf "$fixture"' EXIT
 cp "$CATALOG" "$fixture/catalog.tsv"
 printf 'identity.login\tidentity\tduplicate\tx\tx\tx\tx\tx\tx\tx\tx\tx\tevidence/x.md\tunknown\tstatic-present\tlow\tx\n' >> "$fixture/catalog.tsv"

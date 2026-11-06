@@ -6,7 +6,7 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 SSH_HOST="${SSH_HOST:-sss2}"
 REMOTE_ROOT="${REMOTE_ROOT:-/data/lims-owned-sss2}"
-OUTPUT="${OUTPUT:-$ROOT/.scratch/sunway-supplier-exit-api-first/diagnostic-evidence/runtime/sss2-clone-runtime-manifest-20261027.json}"
+OUTPUT="${OUTPUT:-$ROOT/../.scratch/sunway-supplier-exit-api-first/diagnostic-evidence/runtime/sss2-clone-runtime-manifest-20261027.json}"
 
 mkdir -p "$(dirname "$OUTPUT")"
 ssh -o BatchMode=yes -o ConnectTimeout=5 "$SSH_HOST" bash -s -- "$REMOTE_ROOT" <<'REMOTE' > "$OUTPUT.tmp"

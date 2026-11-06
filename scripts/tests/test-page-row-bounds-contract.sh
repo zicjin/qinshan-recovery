@@ -8,7 +8,7 @@ JAVAC_BIN="$JDK/bin/javac" JAR_BIN="$JDK/bin/jar" JAVA_BIN="$JDK/bin/java" "$ROO
 mkdir -p "$TMP/supplier"
 python3 - "$ROOT" "$TMP" <<'PY'
 import hashlib,json,pathlib,sys,zipfile,shutil
-root=pathlib.Path(sys.argv[1]);out=pathlib.Path(sys.argv[2])/'supplier';ids={r['jar']:r['sha256'] for r in json.loads((root/'.scratch/sunway-supplier-exit-api-first/evidence-archive/framework-contract/jars.json').read_text())}
+root=pathlib.Path(sys.argv[1]);out=pathlib.Path(sys.argv[2])/'supplier';ids={r['jar']:r['sha256'] for r in json.loads((root.parent/'.scratch/sunway-supplier-exit-api-first/evidence-archive/framework-contract/jars.json').read_text())}
 with zipfile.ZipFile(root/'materials/gikam-third-czjky-14.1.5-run.jar') as z:
  n='BOOT-INF/lib/gikam-core-common-14.1.5.jar';data=z.read(n);assert hashlib.sha256(data).hexdigest()==ids[n];
  (out/'common.jar').write_bytes(data)

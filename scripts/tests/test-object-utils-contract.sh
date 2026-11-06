@@ -15,7 +15,7 @@ for library in commons-beanutils-1.9.4.jar commons-collections-3.2.2.jar commons
 python3 - "$ROOT" "$tmp" <<'PY'
 import hashlib, json, pathlib, sys
 root, temporary = map(pathlib.Path, sys.argv[1:])
-expected = next(x['sha256'] for x in json.loads((root/'.scratch/sunway-supplier-exit-api-first/evidence-archive/framework-contract/jars.json').read_text()) if x['jar'] == 'BOOT-INF/lib/gikam-core-common-14.1.5.jar')
+expected = next(x['sha256'] for x in json.loads((root.parent/'.scratch/sunway-supplier-exit-api-first/evidence-archive/framework-contract/jars.json').read_text()) if x['jar'] == 'BOOT-INF/lib/gikam-core-common-14.1.5.jar')
 assert hashlib.sha256((temporary/'gikam-core-common-14.1.5.jar').read_bytes()).hexdigest() == expected, 'supplier reference hash differs'
 for name, digest in {
  'ojdbc8-19.3.0.0.jar': 'a66d27a14f3adee484427cc4de008af85a5c3e78e2e3285a4dba1277332978a5',

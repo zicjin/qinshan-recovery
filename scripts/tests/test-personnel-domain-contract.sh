@@ -8,7 +8,7 @@ python3 - "$ROOT" "$TMP" <<'PY'
 import hashlib,json,pathlib,sys,zipfile
 root=pathlib.Path(sys.argv[1]); output=pathlib.Path(sys.argv[2])
 name='BOOT-INF/lib/gikam-core-common-14.1.5.jar'
-expected=next(row['sha256'] for row in json.loads((root/'.scratch/sunway-supplier-exit-api-first/evidence-archive/framework-contract/jars.json').read_text()) if row['jar']==name)
+expected=next(row['sha256'] for row in json.loads((root.parent/'.scratch/sunway-supplier-exit-api-first/evidence-archive/framework-contract/jars.json').read_text()) if row['jar']==name)
 source=root/'project/src/main/java/com/sunwayworld/emc/module/mdm/emp/emp/bean/EmcEmpBean.java'
 assert hashlib.sha256(source.read_bytes()).hexdigest()=='e83c14c067c2df9da3473de8b0259fc9e786041ea36e7063d607206df52df768', 'personnel source identity differs'
 with zipfile.ZipFile(root/'materials/gikam-third-czjky-14.1.5-run.jar') as archive:

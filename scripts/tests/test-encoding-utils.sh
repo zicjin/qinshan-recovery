@@ -10,7 +10,7 @@ from pathlib import Path
 import hashlib, json, sys, zipfile
 root, run, output = map(Path, sys.argv[1:])
 name = 'BOOT-INF/lib/gikam-core-common-14.1.5.jar'
-expected = next(row['sha256'] for row in json.loads((root/'.scratch/sunway-supplier-exit-api-first/evidence-archive/framework-contract/jars.json').read_text()) if row['jar'] == name)
+expected = next(row['sha256'] for row in json.loads((root.parent/'.scratch/sunway-supplier-exit-api-first/evidence-archive/framework-contract/jars.json').read_text()) if row['jar'] == name)
 with zipfile.ZipFile(run) as archive:
     data = archive.read(name)
 assert hashlib.sha256(data).hexdigest() == expected

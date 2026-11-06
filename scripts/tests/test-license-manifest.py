@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import json, re
 from pathlib import Path
-p=Path(__file__).parents[1].parent/'.scratch/sunway-supplier-exit-api-first/evidence-archive/license-removal/manifest.json'
+p=Path(__file__).parents[1].parent.parent/'.scratch/sunway-supplier-exit-api-first/evidence-archive/license-removal/manifest.json'
 r=json.loads(p.read_text())
 assert r['status']=='static-manifest' and r['runtime_reachability']=='unknown'
 policy=r['scanner_policy']

@@ -153,6 +153,7 @@ _APPLICATION_SUFFIXES = (
     "scripts/build-owned-scheduler.sh",
     "scripts/build-reconstituted-framework.sh",
     "scripts/build-source-only-application.py",
+    "scripts/update-project-source-closure-snapshot.py",
     "scripts/reconstitute-framework-source.sh",
     "scripts/resolve-java-source-closure.py",
     "scripts/verify-reconstituted-framework.py",

@@ -56,6 +56,18 @@ public final class OwnedQueryAccessFilter extends GenericFilterBean {
             deny(request, response, "non-canonical-path"); return;
         }
         if (identity == null) { deny(response); return; }
+        // This filter is registered before Spring Security's session and
+        // remember-me filters. A project-authenticated request therefore has
+        // an HTTP session but no SecurityContext yet. Let the security chain
+        // restore that identity; controllers and the boundary will re-read
+        // the account and menu grant before dispatching the protected work.
+        // Anonymous requests without a session still fail closed here.
+        if (request.getSession(false) != null
+                && !hasOwnedPrincipal(request.getSession(false))
+                && org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication() == null) {
+            chain.doFilter(input, output);
+            return;
+        }
         String relative = path.canonical.substring(PREFIXES[path.domain].length());
         boolean personnelWrite = isolatedPersonnelWrites && path.domain == 0
                 && personnelWrite(request, relative);
@@ -78,6 +90,15 @@ public final class OwnedQueryAccessFilter extends GenericFilterBean {
             deny(response); return;
         }
         chain.doFilter(input, output);
+    }
+
+    private static boolean hasOwnedPrincipal(javax.servlet.http.HttpSession session) {
+        try {
+            return session.getAttribute(OwnedIdentityHttpBoundary.SESSION_ATTRIBUTE)
+                    instanceof com.sunwayworld.owned.internal.security.OwnedPrincipal;
+        } catch (IllegalStateException invalidated) {
+            return false;
+        }
     }
 
     private static boolean readOnly(HttpServletRequest request, int domain, String relative) {

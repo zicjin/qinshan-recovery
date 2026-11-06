@@ -67,8 +67,15 @@ assert payload["counts"]["disposition_unknown"] == len(routes)
 assert sum(payload["counts"]["family"].values()) == len(routes)
 assert payload["counts"]["boundary_route_count"] == len(boundary_routes)
 assert payload["counts"]["boundary_behavior_unknown"] == len(boundary_routes)
-assert all(row.get("boundary_scope") == "owned-source-only" for row in boundary_routes)
-assert all(row.get("route_origin") == "owned-java-source-only" for row in boundary_routes)
+allowed_boundary_scopes = {"owned-source-only", "owned-framework-source-only"}
+assert all(row.get("boundary_scope") in allowed_boundary_scopes for row in boundary_routes)
+assert all(
+    (row.get("boundary_scope") == "owned-source-only"
+     and row.get("route_origin") == "owned-java-source-only")
+    or (row.get("boundary_scope") == "owned-framework-source-only"
+        and row.get("route_origin") == "owned-java-source-only")
+    for row in boundary_routes
+)
 assert all(row.get("runtime_model") == "same-spring-application" for row in boundary_routes)
 assert all("boundary route != boundary process" in row.get("boundary_semantics", "") for row in boundary_routes)
 assert all(

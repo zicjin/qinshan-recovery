@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""Regression tests for implementation binding versus repository provenance."""
+"""Regression tests for orthogonal bindings and repository provenance."""
 from __future__ import annotations
 
 import importlib.util
 import os
+from pathlib import Path
 import subprocess
 import tempfile
-from pathlib import Path
 import unittest
 from unittest import mock
 
@@ -21,97 +21,228 @@ class SourceBindingTest(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
         self.root = Path(self.temp.name)
-        (self.root / "src").mkdir()
-        (self.root / "runner.py").write_text("runner-v1\n", encoding="utf-8")
-        (self.root / "docs").mkdir()
-        (self.root / "docs" / "spec.md").write_text("docs-v1\n", encoding="utf-8")
-        (self.root / "evidence").mkdir()
-        (self.root / "evidence" / "index.tsv").write_text("index-v1\n", encoding="utf-8")
-        (self.root / "project").mkdir()
-        (self.root / "owned-framework").mkdir()
+        files = {
+            "project/src/main/java/Owned.java": "class Owned {}\n",
+            "project/pom.xml": "<project/>\n",
+            "owned-framework/src/Framework.java": "class Framework {}\n",
+            "reconstituted/framework/Reconstituted.java": "class Reconstituted {}\n",
+            "docs/reconstitution/decompiler-transforms.json": '{"rules":[]}\n',
+            "scripts/source_binding.py": "binding-v1\n",
+            "scripts/evidence_output.py": "output-v1\n",
+            "scripts/spring_api_contract_runner.py": "runner-v1\n",
+            "scripts/api_fixture.py": "fixture-v1\n",
+            "scripts/build-prep.sh": "build-v1\n",
+            "scripts/manage-evidence.py": "governance-v1\n",
+            "tools/api_route_ledger.py": "ledger-v1\n",
+            "tools/api_route_closure.py": "closure-v1\n",
+            "docs/spec.md": "docs-v1\n",
+            "evidence/index.tsv": "index-v1\n",
+            "archive/audit.txt": "archive-v1\n",
+        }
+        for relative, value in files.items():
+            path = self.root / relative
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(value, encoding="utf-8")
+        (self.root / "owned-framework").mkdir(exist_ok=True)
         (self.root / ".gitignore").write_text(
             "target/\n__pycache__/\n*.pyc\n*.pyo\n",
             encoding="utf-8",
         )
-        subprocess.run(["git", "init", "-q"], cwd=self.root, check=True)
-        subprocess.run(["git", "config", "user.email", "test@example.invalid"], cwd=self.root, check=True)
-        subprocess.run(["git", "config", "user.name", "source-binding-test"], cwd=self.root, check=True)
-        subprocess.run(["git", "add", "."], cwd=self.root, check=True)
-        subprocess.run(["git", "commit", "-qm", "initial"], cwd=self.root, check=True)
+        self.git("init", "-q")
+        self.git("config", "user.email", "test@example.invalid")
+        self.git("config", "user.name", "source-binding-test")
+        self.git("add", ".")
+        self.git("commit", "-qm", "initial")
 
     def tearDown(self):
         self.temp.cleanup()
 
-    def capture(self):
-        return binding.capture_binding(
-            self.root,
-            extra_scope=("runner.py", "src"),
-        )
+    def git(self, *args: str) -> None:
+        subprocess.run(["git", *args], cwd=self.root, check=True)
 
-    def test_docs_only_change_preserves_digest_but_head_changes(self):
+    def capture(self, runtime_contract=None):
+        return binding.capture_binding(self.root, runtime_contract=runtime_contract)
+
+    def test_docs_and_registry_archive_only_commit_preserve_all_bindings(self):
         first = self.capture()
         (self.root / "docs" / "spec.md").write_text("docs-v2\n", encoding="utf-8")
-        subprocess.run(["git", "add", "docs/spec.md"], cwd=self.root, check=True)
-        subprocess.run(["git", "commit", "-qm", "docs"], cwd=self.root, check=True)
-        second = self.capture()
-        self.assertNotEqual(first["repository_head_at_capture"], second["repository_head_at_capture"])
-        self.assertEqual(first["implementation_tree_digest"], second["implementation_tree_digest"])
-        self.assertFalse(second["implementation_dirty"])
-
-    def test_evidence_only_change_preserves_digest(self):
-        first = self.capture()
         (self.root / "evidence" / "index.tsv").write_text("index-v2\n", encoding="utf-8")
+        (self.root / "archive" / "audit.txt").write_text("archive-v2\n", encoding="utf-8")
+        self.git("add", "docs/spec.md", "evidence/index.tsv", "archive/audit.txt")
+        self.git("commit", "-qm", "docs registry archive")
         second = self.capture()
+
+        self.assertNotEqual(
+            first["repository_head_at_capture"],
+            second["repository_head_at_capture"],
+        )
         self.assertEqual(first["implementation_tree_digest"], second["implementation_tree_digest"])
+        self.assertEqual(binding.binding_delta(first, second), {
+            "application": False,
+            "harness": False,
+            "runtime_contract": False,
+            "planning": False,
+            "governance": False,
+        })
+        self.assertEqual(binding.replay_surfaces(first, second), ())
         self.assertFalse(second["implementation_dirty"])
 
-    def test_implementation_change_changes_digest_and_dirty(self):
+    def test_application_source_change_only_changes_application_surface(self):
         first = self.capture()
-        (self.root / "src" / "Owned.java").write_text("class Owned {}\n", encoding="utf-8")
+        (self.root / "project" / "src" / "main" / "java" / "Owned.java").write_text(
+            "class Owned { int version = 2; }\n", encoding="utf-8",
+        )
         second = self.capture()
-        self.assertNotEqual(first["implementation_tree_digest"], second["implementation_tree_digest"])
+
+        self.assertNotEqual(first["application_binding"], second["application_binding"])
+        self.assertEqual(first["harness_binding"], second["harness_binding"])
+        self.assertEqual(first["runtime_contract_binding"], second["runtime_contract_binding"])
+        self.assertEqual(first["planning_binding"], second["planning_binding"])
+        self.assertEqual(first["governance_binding"], second["governance_binding"])
+        self.assertEqual(binding.replay_surfaces(first, second), ("application",))
+        self.assertTrue(second["application_dirty"])
         self.assertTrue(second["implementation_dirty"])
 
-    def test_runner_change_changes_digest(self):
+    def test_harness_change_only_changes_harness_surface(self):
         first = self.capture()
-        (self.root / "runner.py").write_text("runner-v2\n", encoding="utf-8")
+        (self.root / "scripts" / "evidence_output.py").write_text("output-v2\n", encoding="utf-8")
         second = self.capture()
-        self.assertNotEqual(first["implementation_tree_digest"], second["implementation_tree_digest"])
-        self.assertTrue(second["implementation_dirty"])
+
+        self.assertEqual(first["application_binding"], second["application_binding"])
+        self.assertNotEqual(first["harness_binding"], second["harness_binding"])
+        self.assertEqual(first["planning_binding"], second["planning_binding"])
+        self.assertEqual(first["governance_binding"], second["governance_binding"])
+        self.assertEqual(binding.replay_surfaces(first, second), ("harness",))
+        self.assertTrue(second["harness_dirty"])
+        self.assertFalse(second["application_dirty"])
+
+    def test_planning_change_only_changes_planning_surface(self):
+        first = self.capture()
+        (self.root / "tools" / "api_route_ledger.py").write_text("ledger-v2\n", encoding="utf-8")
+        second = self.capture()
+
+        self.assertEqual(first["application_binding"], second["application_binding"])
+        self.assertEqual(first["harness_binding"], second["harness_binding"])
+        self.assertNotEqual(first["planning_binding"], second["planning_binding"])
+        self.assertEqual(first["governance_binding"], second["governance_binding"])
+        self.assertEqual(binding.replay_surfaces(first, second), ("planning",))
+
+    def test_governance_change_requires_no_http_replay(self):
+        first = self.capture()
+        (self.root / "scripts" / "manage-evidence.py").write_text(
+            "governance-v2\n", encoding="utf-8",
+        )
+        second = self.capture()
+
+        self.assertEqual(first["application_binding"], second["application_binding"])
+        self.assertEqual(first["harness_binding"], second["harness_binding"])
+        self.assertEqual(first["runtime_contract_binding"], second["runtime_contract_binding"])
+        self.assertEqual(first["planning_binding"], second["planning_binding"])
+        self.assertNotEqual(first["governance_binding"], second["governance_binding"])
+        self.assertEqual(binding.replay_surfaces(first, second), ())
+        self.assertTrue(second["governance_dirty"])
+
+    def test_distribution_input_change_changes_application_and_distribution_digest(self):
+        first = self.capture()
+        (self.root / "project" / "pom.xml").write_text("<project>v2</project>\n", encoding="utf-8")
+        second = self.capture()
+
+        self.assertNotEqual(first["application_binding"], second["application_binding"])
+        self.assertNotEqual(
+            first["distribution_input_digest"],
+            second["distribution_input_digest"],
+        )
+        self.assertEqual(binding.replay_surfaces(first, second), ("application",))
+
+    def test_runtime_contract_hash_changes_only_runtime_surface(self):
+        first = self.capture()
+        second = self.capture(runtime_contract={
+            "baseline_schema_hash": "a" * 64,
+            "runtime_schema_hash_before": "b" * 64,
+            "runtime_schema_hash_after": "b" * 64,
+        })
+
+        self.assertEqual(first["application_binding"], second["application_binding"])
+        self.assertEqual(first["harness_binding"], second["harness_binding"])
+        self.assertNotEqual(first["runtime_contract_binding"], second["runtime_contract_binding"])
+        self.assertEqual(first["planning_binding"], second["planning_binding"])
+        self.assertEqual(first["governance_binding"], second["governance_binding"])
+        self.assertEqual(binding.replay_surfaces(first, second), ("runtime_contract",))
+        self.assertFalse(second["runtime_contract_dirty"])
+        self.assertFalse(second["implementation_dirty"])
+
+    def test_runner_change_preserves_legacy_compatibility_aggregate_change(self):
+        first = self.capture()
+        (self.root / "scripts" / "spring_api_contract_runner.py").write_text(
+            "runner-v2\n", encoding="utf-8",
+        )
+        second = self.capture()
+
+        self.assertNotEqual(first["implementation_binding"], second["implementation_binding"])
+        self.assertNotEqual(
+            first["implementation_tree_digest"],
+            second["implementation_tree_digest"],
+        )
+        self.assertEqual(
+            second["implementation_tree_digest"],
+            binding.implementation_tree_digest(self.root),
+        )
+
+    def test_repository_head_can_change_without_replay(self):
+        first = self.capture()
+        (self.root / "docs" / "spec.md").write_text("docs-v2\n", encoding="utf-8")
+        self.git("add", "docs/spec.md")
+        self.git("commit", "-qm", "docs")
+        second = self.capture()
+
+        self.assertNotEqual(
+            first["repository_head_at_capture"],
+            second["repository_head_at_capture"],
+        )
+        self.assertEqual(first["implementation_binding"], second["implementation_binding"])
+        self.assertEqual(binding.replay_surfaces(first, second), ())
+
+    def test_scopes_are_disjoint_except_compatibility_union(self):
+        payload = self.capture()
+        application = set(payload["application_scope"])
+        harness = set(payload["harness_scope"])
+        planning = set(payload["planning_scope"])
+        governance = set(payload["governance_scope"])
+
+        self.assertFalse(application & harness)
+        self.assertFalse(application & planning)
+        self.assertFalse(application & governance)
+        self.assertFalse(harness & planning)
+        self.assertFalse(harness & governance)
+        self.assertFalse(planning & governance)
+        self.assertTrue(set(payload["runtime_contract_scope"]).isdisjoint(application))
+        self.assertEqual(
+            set(payload["implementation_scope"]),
+            application | harness | set(payload["runtime_contract_scope"]) | planning | governance,
+        )
+        self.assertTrue(payload["implementation_binding"].startswith("impl-"))
+        self.assertTrue(payload["application_binding"].startswith("app-"))
+        self.assertTrue(payload["harness_binding"].startswith("harness-"))
+        self.assertTrue(payload["runtime_contract_binding"].startswith("rt-"))
+        self.assertTrue(payload["planning_binding"].startswith("plan-"))
+        self.assertTrue(payload["governance_binding"].startswith("gov-"))
 
     def test_generated_target_and_bytecode_are_excluded(self):
         first = self.capture()
-        target = self.root / "src" / "target"
+        target = self.root / "project" / "src" / "main" / "java" / "target"
         target.mkdir()
         (target / "Owned.class").write_bytes(b"build-output")
-        cache = self.root / "src" / "__pycache__"
+        cache = self.root / "scripts" / "__pycache__"
         cache.mkdir()
-        (cache / "runner.pyc").write_bytes(b"bytecode")
+        (cache / "source_binding.pyc").write_bytes(b"bytecode")
         second = self.capture()
+
         self.assertEqual(first["implementation_tree_digest"], second["implementation_tree_digest"])
         self.assertFalse(second["implementation_dirty"])
 
-    def test_reconstituted_source_and_transformations_change_digest(self):
-        first = self.capture()
-        source = self.root / "reconstituted" / "pilot" / "Framework.java"
-        source.parent.mkdir(parents=True)
-        source.write_text("package fixture; public class Framework {}\n", encoding="utf-8")
-        second = self.capture()
-        self.assertNotEqual(first["implementation_tree_digest"], second["implementation_tree_digest"])
-        self.assertTrue(second["implementation_dirty"])
-
-        subprocess.run(["git", "add", "reconstituted"], cwd=self.root, check=True)
-        subprocess.run(["git", "commit", "-qm", "reconstituted source"], cwd=self.root, check=True)
-        clean_source = self.capture()
-        transforms = self.root / "docs" / "reconstitution" / "decompiler-transforms.json"
-        transforms.parent.mkdir(parents=True)
-        transforms.write_text('{"rules": []}\n', encoding="utf-8")
-        transformed = self.capture()
-        self.assertNotEqual(
-            clean_source["implementation_tree_digest"],
-            transformed["implementation_tree_digest"],
-        )
-        self.assertTrue(transformed["implementation_dirty"])
+    def test_custom_implementation_scope_is_rejected(self):
+        with self.assertRaisesRegex(ValueError, "centralized"):
+            binding.implementation_dirty(self.root, ("project/src/main/java",))
 
     def test_feature_root_prefers_parent_workspace_for_standalone_repo(self):
         parent = self.root.parent
@@ -121,9 +252,7 @@ class SourceBindingTest(unittest.TestCase):
 
     def test_feature_root_override_is_respected(self):
         override = self.root / "external-feature"
-        with mock.patch.dict(os.environ, {
-            "SUNWAY_FEATURE_ROOT": str(override),
-        }):
+        with mock.patch.dict(os.environ, {"SUNWAY_FEATURE_ROOT": str(override)}):
             self.assertEqual(binding.feature_root(self.root), override.resolve())
 
     def test_workspace_path_resolves_legacy_prefixes_in_standalone_mode(self):
@@ -132,11 +261,14 @@ class SourceBindingTest(unittest.TestCase):
         feature.mkdir(parents=True, exist_ok=True)
         self.assertEqual(
             binding.resolve_workspace_path("lims-recovery/api-contracts/core/read.json", self.root),
-            self.root / "api-contracts/core/read.json",
+            self.root / "api-contracts" / "core" / "read.json",
         )
         self.assertEqual(
-            binding.resolve_workspace_path(".scratch/sunway-supplier-exit-api-first/diagnostic-evidence/pending/jobs.json", self.root),
-            parent / ".scratch/sunway-supplier-exit-api-first/diagnostic-evidence/pending/jobs.json",
+            binding.resolve_workspace_path(
+                ".scratch/sunway-supplier-exit-api-first/diagnostic-evidence/pending/jobs.json",
+                self.root,
+            ),
+            parent / ".scratch" / binding.FEATURE_SLUG / "diagnostic-evidence" / "pending" / "jobs.json",
         )
 
 

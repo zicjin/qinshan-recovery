@@ -14,6 +14,7 @@ from typing import Dict, Iterable, List, Optional, Sequence, Tuple
 SCRIPTS_ROOT = Path(__file__).resolve().parents[2] / "scripts"
 sys.path.insert(0, str(SCRIPTS_ROOT))
 from evidence_output import current_implementation_binding  # noqa: E402
+from source_binding import resolve_workspace_path  # noqa: E402
 
 REQUIRED_COLUMNS = (
     "case_id", "route", "role", "organization", "mode", "seed",
@@ -178,7 +179,7 @@ def _sha_at_commit(root: Path, commit: str, path: str) -> str:
 
 
 def _sha_at_worktree(root: Path, path: str) -> str:
-    candidate = root / path
+    candidate = resolve_workspace_path(path, root)
     if not candidate.is_file():
         raise ValueError("source file is missing from current worktree: %s" % path)
     return hashlib.sha256(candidate.read_bytes()).hexdigest()

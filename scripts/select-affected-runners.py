@@ -15,10 +15,13 @@ import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "tools"))
+sys.path.insert(0, str(ROOT / "scripts"))
 from vertical_slices.matrix import load_runner_registry
+from source_binding import REPO_ROOT, feature_root
 
-GROUPS = ROOT / ".scratch/sunway-supplier-exit-api-first/evidence-archive/vertical-slice-execution-groups.tsv"
-REGISTRY = ROOT / ".scratch/sunway-supplier-exit-api-first/evidence-archive/vertical-slice-runners.tsv"
+FEATURE_ROOT = feature_root(REPO_ROOT)
+GROUPS = FEATURE_ROOT / "evidence-archive/vertical-slice-execution-groups.tsv"
+REGISTRY = FEATURE_ROOT / "evidence-archive/vertical-slice-runners.tsv"
 
 FAST_GATE_PATHS = (
     "evidence/", "tools/vertical_slices/", "scripts/tests/",
@@ -42,12 +45,12 @@ def changed_paths(base=None):
     commands.append(["git", "diff", "--cached", "--name-only", "--no-renames", "--"])
     paths = set()
     for command in commands:
-        result = subprocess.run(command, cwd=ROOT.parent, text=True,
+        result = subprocess.run(command, cwd=REPO_ROOT, text=True,
                                 capture_output=True, check=True)
         paths.update(relative_path(line) for line in result.stdout.splitlines() if line)
     if not base:
         status = subprocess.run(["git", "status", "--short", "--untracked-files=all"],
-                                cwd=ROOT.parent, text=True, capture_output=True,
+                                cwd=REPO_ROOT, text=True, capture_output=True,
                                 check=True)
         for line in status.stdout.splitlines():
             if len(line) >= 3 and (line[:2].strip() or line.startswith("??")):

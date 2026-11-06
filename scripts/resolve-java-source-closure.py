@@ -577,8 +577,59 @@ def project_class_names(source_root: Path) -> set[str]:
     }
 
 
+def project_source_import_graph(source_root: Path) -> dict[str, set[str]]:
+    """Map project-provided classes to their private-framework imports."""
+    graph: dict[str, set[str]] = {}
+    for path in sorted(source_root.rglob("*.java")):
+        graph[project_source_class_name(source_root, path)] = {
+            match.group(1) for match in JAVA_IMPORT_RE.finditer(
+                path.read_text(encoding="utf-8", errors="replace")
+            )
+        }
+    return graph
+
+
 def project_source_class_name(source_root: Path, source: Path) -> str:
     return ".".join(source.relative_to(source_root).with_suffix("").parts)
+
+
+def compile_project_support_sources(project_source: Path,
+                                    framework_sources: Sequence[Path],
+                                    target_sources: Sequence[Path]) -> list[Path]:
+    """Include only original project sources required by recovered framework code.
+
+    Reconstituted framework classes may import project-owned framework utility
+    classes such as ``FileUtils``. Those sources are source-only inputs and must
+    participate in the javac invocation; treating every project class as merely
+    a provided symbol causes false missing-symbol failures.
+    """
+    target = {path.resolve() for path in target_sources}
+    imports: set[str] = set()
+    pending = [path for path in framework_sources if path.is_file()]
+    seen: set[Path] = set()
+    while pending:
+        source = pending.pop()
+        source = source.resolve()
+        if source in seen:
+            continue
+        seen.add(source)
+        text = source.read_text(encoding="utf-8", errors="replace")
+        for match in JAVA_IMPORT_RE.finditer(text):
+            symbol = match.group(1)
+            if symbol in imports:
+                continue
+            imports.add(symbol)
+            candidate = project_source / Path(*symbol.split("."))
+            candidate = candidate.with_suffix(".java")
+            if candidate.is_file():
+                pending.append(candidate)
+    support = []
+    for symbol in sorted(imports):
+        candidate = project_source / Path(*symbol.split("."))
+        candidate = candidate.with_suffix(".java")
+        if candidate.is_file() and candidate.resolve() not in target:
+            support.append(candidate.resolve())
+    return support
 
 
 def resolve_closure(
@@ -586,9 +637,14 @@ def resolve_closure(
     entries: Mapping[str, list[ClassEntry]],
     seeds: Iterable[str],
     provided_classes: Iterable[str] = (),
+    provided_imports: Mapping[str, Iterable[str]] | None = None,
 ) -> tuple[set[str], dict[str, list[str]], list[str]]:
     by_fqn = {fqn.replace("$", "."): fqn for fqn in entries}
     provided = set(provided_classes)
+    provided_import_graph = {
+        str(key): set(str(item) for item in values)
+        for key, values in (provided_imports or {}).items()
+    }
     queue = list(seeds)
     closure: set[str] = set()
     edges: dict[str, list[str]] = {}
@@ -596,6 +652,7 @@ def resolve_closure(
     while queue:
         requested = queue.pop()
         if requested in provided:
+            queue.extend(provided_import_graph.get(requested, ()))
             continue
         actual = requested if requested in entries else by_fqn.get(requested)
         if actual is None:
@@ -1094,6 +1151,7 @@ def pilot(args: argparse.Namespace) -> int:
         else target_sources
     )
     provided_project_classes = project_class_names(project_source)
+    project_import_graph = project_source_import_graph(project_source)
     transform_manifest_path = Path(args.transform_manifest).resolve()
     transform_manifest = load_transform_manifest(transform_manifest_path)
     for target in target_sources:
@@ -1140,6 +1198,7 @@ def pilot(args: argparse.Namespace) -> int:
             private_entries,
             seeds,
             provided_classes=provided_for_resolution,
+            provided_imports=project_import_graph,
         )
 
         if args.work_dir:
@@ -1200,6 +1259,17 @@ def pilot(args: argparse.Namespace) -> int:
                 private_jar_names=private_jar_names,
             )
             sources = sorted(source_dir.rglob("*.java"))
+            compile_target_sources = [
+                *compile_target_sources,
+                *compile_project_support_sources(
+                    project_source,
+                    sources,
+                    compile_target_sources,
+                ),
+            ]
+            compile_target_sources = sorted(
+                dict.fromkeys(path.resolve() for path in compile_target_sources),
+            )
             fallback_compile_round_count = 0
             fallback_replacement_count = 0
             fallback_attempted: set[str] = set()

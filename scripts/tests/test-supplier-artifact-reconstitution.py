@@ -888,6 +888,34 @@ def main() -> int:
         imports = module.project_imports([main_source])
         assert imports == {"com.sunwayworld.framework.A": [str(main_source)]}
 
+        framework_source = work / "framework-src" / "com" / "sunwayworld" / "framework" / "UsesProject.java"
+        framework_source.parent.mkdir(parents=True)
+        framework_source.write_text(
+            "package com.sunwayworld.framework;\n"
+            "import com.sunwayworld.framework.utils.FileUtils;\n"
+            "public class UsesProject { FileUtils value; }\n",
+            encoding="utf-8",
+        )
+        project_file_utils = (
+            project_source
+            / "com"
+            / "sunwayworld"
+            / "framework"
+            / "utils"
+            / "FileUtils.java"
+        )
+        project_file_utils.parent.mkdir(parents=True)
+        project_file_utils.write_text(
+            "package com.sunwayworld.framework.utils; public class FileUtils {}\n",
+            encoding="utf-8",
+        )
+        support_sources = module.compile_project_support_sources(
+            project_source,
+            [framework_source],
+            [main_source],
+        )
+        assert support_sources == [project_file_utils.resolve()]
+
         transform_manifest = module.load_transform_manifest(
             module.DEFAULT_TRANSFORM_MANIFEST
         )

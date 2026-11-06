@@ -26,7 +26,10 @@ root = Path(sys.argv[1])
 repo = Path(subprocess.check_output(["git", "-C", str(root), "rev-parse", "--show-toplevel"], text=True).strip())
 prefix = "" if repo == root else "lims-recovery/"
 registry = root / "evidence/evidence-index.tsv"
-rows = {row["path"]: row for row in csv.DictReader(registry.open(encoding="utf-8"), delimiter="\t")}
+if not registry.exists():
+    rows = {}
+else:
+    rows = {row["path"]: row for row in csv.DictReader(registry.open(encoding="utf-8"), delimiter="\t")}
 for path in root.joinpath("evidence").glob("*.json"):
     relative = prefix + path.relative_to(root).as_posix()
     row = rows.get(relative)

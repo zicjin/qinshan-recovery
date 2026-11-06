@@ -176,7 +176,16 @@ def source_metadata(case_file: Path,
     # Contract documents are evidence inputs, not implementation scope. They
     # must never change the implementation binding merely because a case file
     # was regenerated or moved.
-    binding = capture_binding(runtime_contract=runtime_contract)
+    # The implementation aggregate is a repository/application/harness
+    # property. A strict runtime manifest may carry a different runtime
+    # contract (for example an isolated schema name), so do not feed that
+    # runtime-only value back into the aggregate and accidentally stale the
+    # application binding. Keep the runtime surface orthogonal instead.
+    binding = capture_binding()
+    if runtime_contract is not None:
+        runtime_binding = capture_binding(runtime_contract=runtime_contract)
+        binding["runtime_contract_binding"] = runtime_binding["runtime_contract_binding"]
+        binding["runtime_contract_digest"] = runtime_binding["runtime_contract_digest"]
     scope = list(binding["implementation_scope"])
     status = subprocess.run(
         ["git", "-C", str(REPO_ROOT), "status", "--porcelain", "--untracked-files=all", "--", *scope],

@@ -1,32 +1,30 @@
 {
-  "schema": "supplier-project-source-closure-snapshot-v1",
-  "status": "diagnostic-project-source-compile-pass",
-  "generated_at_utc": "2026-11-04T03:53:20.550451+00:00",
-  "generated_from": "scripts/resolve-java-source-closure.py pilot --project-closure",
-  "canonical": false,
-  "strict_evidence": false,
   "api_evidence": false,
-  "stock_artifact": {
-    "path": ".external-materials/gikam-third-czjky-14.1.5-run.jar",
-    "bytes": 546766277,
-    "sha256": "4a720797810fd2f8cca6e22604657028cb87830ca0e24bb55a5f42f040f6ee9f"
-  },
   "artifact_inventory": {
-    "outer_member_count": 5641,
-    "manifest_member_count": 19973,
-    "nested_jar_count": 402,
     "application_class_count": 3088,
     "application_top_level_class_count": 3034,
-    "application_top_level_source_present": 3034,
     "application_top_level_source_missing": 0,
-    "private_framework_jar_count": 16,
+    "application_top_level_source_present": 3034,
+    "manifest_member_count": 19973,
+    "nested_jar_count": 402,
+    "outer_member_count": 5641,
     "private_framework_class_entry_count": 4876,
     "private_framework_distinct_class_count": 4876,
     "private_framework_duplicate_class_count": 0,
+    "private_framework_jar_count": 16,
     "public_dependency_jar_count": 386
   },
+  "canonical": false,
+  "diagnostic_output_sha256": {
+    "artifact-manifest.json": "ad672276ad269a95494a70bacdef0ece579777f72b6c40270bc80ce0d0532b8c",
+    "javac.log": "23b23b456c82f365a1e30d5cdfae2d1d0c59a8d08948c76cbcc4e9e332748647",
+    "source-closure.json": "5324bfe2c4a51bb6386d7480c97c850f71793ac122013d5989fe76bd51e11752"
+  },
   "framework_closure": {
-    "direct_project_import_count": 229,
+    "closure_class_count": 756,
+    "direct_project_import_count": 231,
+    "fallback_compile_round_count": 3,
+    "fallback_replacement_count": 60,
     "framework_input_jars": [
       "gikam-core-base-interface-14.1.5.jar",
       "gikam-core-base-service-14.1.5.jar",
@@ -45,56 +43,58 @@
       "gikam-core-web-14.1.5.jar",
       "lims2-report-template-14.1.5.jar"
     ],
-    "closure_class_count": 748,
-    "generated_source_file_count": 603,
+    "generated_source_file_count": 611,
+    "missing_external_framework_classes": [],
+    "normalized_source_count": 551,
     "source_decompilers": {
-      "CFR": 543,
+      "CFR": 551,
       "Vineflower": 60
     },
-    "fallback_compile_round_count": 3,
-    "fallback_replacement_count": 60,
-    "transformed_source_count": 12,
-    "normalized_source_count": 543,
-    "source_tree_sha256": "6768199e89c25ac8cdb5f1863459080c22bd46842fe4bdcc10b2858a325e7c85",
-    "missing_external_framework_classes": []
+    "source_tree_sha256": "d83d0af424190b280efb2e4adce2076c5feacdf8cdc131e9bdb2e59912310465",
+    "transformed_source_count": 12
   },
+  "generated_at_utc": "2026-11-06T05:09:05.834612+00:00",
+  "generated_from": "scripts/resolve-java-source-closure.py pilot --project-closure",
+  "limitations": [
+    "This proves a source-only Java compile closure for the imported project source.",
+    "It does not prove Spring runtime startup, module assembly, native/license removal, HTTP behavior, or API closure.",
+    "The generated full-closure source tree remains external diagnostic output pending module and provenance promotion."
+  ],
   "project_compile": {
+    "compile_target_source_file_count": 3038,
+    "error_count": 0,
+    "exit_code": 0,
+    "failed_source_count": 0,
+    "java_version": "8",
+    "missing_symbol_queue": [],
     "project_source_file_count": 3038,
     "provided_project_class_count": 3038,
-    "compile_target_source_file_count": 3038,
-    "java_version": "8",
-    "exit_code": 0,
-    "error_count": 0,
-    "failed_source_count": 0,
-    "missing_symbol_queue": [],
     "source_only_framework_classpath": true,
-    "supplier_private_jars_on_classpath": false,
-    "status": "pass"
+    "status": "pass",
+    "supplier_private_jars_on_classpath": false
   },
+  "schema": "supplier-project-source-closure-snapshot-v1",
+  "source_commit": "408f93f79f4fcca2c8e729dbe2dd3a31970a4abc",
   "source_conflict_repair": {
-    "path": "project/src/main/java/com/sunwayworld/framework/utils/FileUtils.java",
+    "focused_runtime_test": "FileUtilsReconstructionTest PASS",
     "methods_restored_from_supplier_bytecode": [
       "createFile(Path)",
       "isImage(File)",
       "isExtension(File,String)"
     ],
-    "focused_runtime_test": "FileUtilsReconstructionTest PASS"
+    "path": "project/src/main/java/com/sunwayworld/framework/utils/FileUtils.java"
   },
+  "status": "diagnostic-project-source-compile-pass",
+  "stock_artifact": {
+    "bytes": 546766277,
+    "path": ".external-materials/gikam-third-czjky-14.1.5-run.jar",
+    "sha256": "4a720797810fd2f8cca6e22604657028cb87830ca0e24bb55a5f42f040f6ee9f"
+  },
+  "strict_evidence": false,
   "web_resources": {
-    "source_jar": "BOOT-INF/lib/gikam-core-web-14.1.5.jar",
-    "source_jar_sha256": "26ee3d912789318d3cc0a23136a17382e34cfede3cd65d83d4dbc113b8245628",
     "resource_count": 5302,
-    "resource_tree_sha256": "fe712b1ae17796a339410050a3d940e4f0cd094555b0c07a04781b507ca0a6d3"
-  },
-  "diagnostic_output_sha256": {
-    "artifact-manifest.json": "b6ada7be676d3df0ce42b2e69356659607e4315a9b4a738e14e6a762880f4aba",
-    "source-closure.json": "7f8bedad9b78156644da8f85bfa55104e11b9e3db5339af33eca3ff72da80c8c",
-    "javac.log": "576130e32ebe89bb8676e29e87d8a0cfe539e82ad0e246deed3eeb6f450a2fc2",
-    "web-resources.json": "593c04753dd30a1f2665873a19df604385c216b74fefe23ae306332c9b0017d8"
-  },
-  "limitations": [
-    "This proves a source-only Java compile closure for the imported project source.",
-    "It does not prove Spring runtime startup, module assembly, native/license removal, HTTP behavior, or API closure.",
-    "The generated full-closure source tree remains external diagnostic output pending module and provenance promotion."
-  ]
+    "resource_tree_sha256": "fe712b1ae17796a339410050a3d940e4f0cd094555b0c07a04781b507ca0a6d3",
+    "source_jar": "BOOT-INF/lib/gikam-core-web-14.1.5.jar",
+    "source_jar_sha256": "26ee3d912789318d3cc0a23136a17382e34cfede3cd65d83d4dbc113b8245628"
+  }
 }

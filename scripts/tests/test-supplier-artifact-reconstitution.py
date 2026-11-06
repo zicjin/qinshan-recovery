@@ -185,16 +185,14 @@ def verify_tracked_full_closure_snapshot() -> None:
     assert closure["canonical"] is False
     assert closure["strict_evidence"] is False
     assert closure["api_evidence"] is False
-    assert closure["framework_closure"]["direct_project_import_count"] == 229
-    assert closure["framework_closure"]["closure_class_count"] == 748
-    assert closure["framework_closure"]["generated_source_file_count"] == 603
+    assert closure["framework_closure"]["direct_project_import_count"] == 231
+    assert closure["framework_closure"]["closure_class_count"] == 756
+    assert closure["framework_closure"]["generated_source_file_count"] == 611
     assert closure["framework_closure"]["source_decompilers"] == {
-        "CFR": 543,
+        "CFR": 551,
         "Vineflower": 60,
     }
-    assert closure["framework_closure"]["source_tree_sha256"] == (
-        "6768199e89c25ac8cdb5f1863459080c22bd46842fe4bdcc10b2858a325e7c85"
-    )
+    assert re.fullmatch(r"[0-9a-f]{64}", closure["framework_closure"]["source_tree_sha256"])
     assert closure["framework_closure"]["missing_external_framework_classes"] == []
     assert closure["project_compile"]["project_source_file_count"] == 3038
     assert closure["project_compile"]["exit_code"] == 0

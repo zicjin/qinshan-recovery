@@ -19,6 +19,8 @@ import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -65,6 +67,15 @@ public final class OwnedAuditTrailControllerContractTest {
         }
         if (provider.authorizations != 0) {
             throw new AssertionError("status projection invoked an entity permission validator");
+        }
+
+        SecurityContextHolder.getContext().setAuthentication(
+                new UsernamePasswordAuthenticationToken("global-user", null, Collections.emptyList()));
+        ResponseEntity<String> globalStatus = controller.status(request(null));
+        SecurityContextHolder.clearContext();
+        if (globalStatus.getStatusCodeValue() != 200
+                || !"{\"ext$\":{}}".equals(globalStatus.getBody())) {
+            throw new AssertionError("status projection must accept the original project session");
         }
 
         ResponseEntity<String> queryResponse = controller.records(request(session.httpSession()), "{}");

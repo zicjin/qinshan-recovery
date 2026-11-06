@@ -17,12 +17,15 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -74,7 +77,18 @@ public final class OwnedAuditTrailController {
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> status(HttpServletRequest request) {
         try {
-            boundary.currentPrincipal(request.getSession(false));
+            HttpSession session = request.getSession(false);
+            Object ownedPrincipal = session == null ? null
+                    : session.getAttribute(OwnedIdentityHttpBoundary.SESSION_ATTRIBUTE);
+            if (ownedPrincipal instanceof OwnedPrincipal) {
+                boundary.currentPrincipal(session);
+            } else {
+                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+                if (authentication == null || !authentication.isAuthenticated()
+                        || "anonymousUser".equals(authentication.getName())) {
+                    return forbidden();
+                }
+            }
             return ok("{\"ext$\":{}}");
         } catch (AccessDeniedException denied) {
             return forbidden();

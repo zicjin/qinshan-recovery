@@ -69,6 +69,19 @@ def build(fast: Mapping[str, Any], ledger: Mapping[str, Any], *, family: str | N
         expected_status = int(owned.get("status", 200))
         profile = str(request.get("profile", "default"))
         behavior_family = str(probe.get("behavior_family", "unknown"))
+        route_index = {
+            str(route.get("id")): route
+            for route in list(ledger.get("routes", [])) + list(ledger.get("boundary_routes", []))
+            if isinstance(route, dict) and route.get("id")
+        }
+        family_fingerprints = sorted({
+            str(route_index[str(route_id)].get("family_fingerprint"))
+            for route_id in route_ids
+            if str(route_id) in route_index and route_index[str(route_id)].get("family_fingerprint")
+        })
+        if len(family_fingerprints) != 1:
+            skipped["missing-or-ambiguous-family-fingerprint"] = skipped.get("missing-or-ambiguous-family-fingerprint", 0) + 1
+            continue
         case: Dict[str, Any] = {
             "id": "fast-strict-" + behavior_family + "-" + profile,
             "method": request.get("method", probe.get("method", "GET")),
@@ -84,6 +97,7 @@ def build(fast: Mapping[str, Any], ledger: Mapping[str, Any], *, family: str | N
             "audit": "not-required",
             "source_class": probe.get("class"),
             "behavior_family": behavior_family,
+            "family_fingerprint": family_fingerprints[0],
             "request_profile": profile,
         }
         if request.get("body") is not None:

@@ -625,7 +625,7 @@ def run_cases(case_document: Mapping[str, Any], *, base_url: str, mode: str,
               password_file: Optional[Path] = None) -> Dict[str, Any]:
     if mode not in {"debug", "strict"}:
         raise ValueError("mode must be debug or strict")
-    batch_id = uuid.uuid4().hex
+    batch_id = "batch-" + uuid.uuid4().hex
     # Each contract job is an independent authentication boundary.  The
     # orchestrator reuses this module across jobs; retaining the previous
     # CookieJar would let an anonymous/default-deny job inherit the prior

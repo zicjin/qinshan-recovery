@@ -22,6 +22,15 @@ SPEC.loader.exec_module(MANAGE)
 
 
 class EvidenceRegistryTest(unittest.TestCase):
+    def test_registry_exposes_dependency_and_fingerprint_view_fields(self):
+        required = {
+            "application_binding", "harness_binding", "runtime_contract_binding",
+            "planning_binding", "governance_binding", "family_fingerprint",
+            "stimulus_fingerprint", "response_fingerprint", "validation_mode",
+            "stale_reason", "batch_id",
+        }
+        self.assertTrue(required.issubset(set(MANAGE.REGISTRY_FIELDS)))
+
     def test_registry_path_guard_rejects_escape(self):
         self.assertFalse(MANAGE.inside(MANAGE.EVIDENCE.parent / "outside.json", MANAGE.EVIDENCE))
 

@@ -21,6 +21,12 @@ import sys
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+from evidence_batch import (
+    EvidenceBatchError,
+    materialize_batch,
+    registry_metadata,
+    verify_batch,
+)
 from evidence_output import (
     cleanup_contract_complete,
     current_implementation_binding,
@@ -53,6 +59,10 @@ REGISTRY_FIELDS = (
     "reason", "referenced_by", "generated_at", "superseded_by",
     "storage", "repository_head_at_capture", "implementation_binding",
     "implementation_tree_digest", "implementation_dirty", "implementation_scope", "artifact_ref",
+    "application_binding", "harness_binding", "runtime_contract_binding",
+    "planning_binding", "governance_binding", "family_fingerprint",
+    "stimulus_fingerprint", "response_fingerprint", "validation_mode",
+    "stale_reason", "batch_id",
 )
 SCAN_FIELDS = REGISTRY_FIELDS + ("tracked", "untracked")
 PLAN_FIELDS = (
@@ -204,6 +214,16 @@ def report_cases(value: Mapping[str, Any]) -> bool:
 def current_source_clean(payload: Mapping[str, Any], current: str) -> bool:
     """Validate the implementation binding, with legacy HEAD fallback."""
     current_binding_value = current_binding()
+    surfaces = ("application", "harness", "runtime_contract", "planning")
+    if all(surface + "_binding" in payload for surface in surfaces):
+        return (
+            all(
+                payload.get(surface + "_binding") == current_binding_value.get(surface + "_binding")
+                for surface in surfaces
+            )
+            and payload.get("implementation_dirty") is False
+            and all(current_binding_value.get(surface + "_dirty") is False for surface in surfaces)
+        )
     digest = payload.get("implementation_tree_digest")
     if digest:
         declared_scope = set(str(item) for item in payload.get("implementation_scope", ()))
@@ -235,15 +255,27 @@ def closure_reports_strict(value: Mapping[str, Any]) -> bool:
 def closure_reports_current(value: Mapping[str, Any], current: str) -> bool:
     """Require every strict report listed by a closure to share its binding."""
     reports = value.get("reports")
+    surfaces = ("application", "harness", "runtime_contract", "planning")
     digest = value.get("implementation_tree_digest")
     binding = value.get("implementation_binding")
-    return isinstance(reports, list) and bool(reports) and all(
-        isinstance(item, Mapping)
-        and ((digest and item.get("implementation_tree_digest") == digest and item.get("implementation_binding") == binding)
-             or (not digest and item.get("source_commit") == current))
-        and (item.get("implementation_dirty", item.get("source_dirty", False)) is False)
-        for item in reports
-    )
+    if not isinstance(reports, list) or not reports:
+        return False
+    for item in reports:
+        if not isinstance(item, Mapping):
+            return False
+        if all(surface + "_binding" in value for surface in surfaces):
+            if any(item.get(surface + "_binding") != value.get(surface + "_binding")
+                   for surface in surfaces):
+                return False
+        elif digest:
+            if (item.get("implementation_tree_digest") != digest
+                    or item.get("implementation_binding") != binding):
+                return False
+        elif item.get("source_commit") != current:
+            return False
+        if item.get("implementation_dirty", item.get("source_dirty", False)) is not False:
+            return False
+    return True
 
 
 def closure_report_paths_exist(value: Mapping[str, Any], root: Path = ROOT) -> Tuple[bool, str]:
@@ -291,7 +323,12 @@ def closure_report_registry_valid(value: Mapping[str, Any], registry: Mapping[st
             return False, "closure report index has stale or non-strict metadata: " + rel
         closure_digest = value.get("implementation_tree_digest")
         closure_binding = value.get("implementation_binding")
-        if closure_digest:
+        surfaces = ("application", "harness", "runtime_contract", "planning")
+        if all(surface + "_binding" in value for surface in surfaces):
+            if any(row.get(surface + "_binding") != value.get(surface + "_binding")
+                   for surface in surfaces):
+                return False, "registry report dependency-surface binding differs from closure: " + rel
+        elif closure_digest:
             if row.get("implementation_tree_digest") != closure_digest:
                 return False, "registry report implementation digest differs from closure: " + rel
             if closure_binding and row.get("implementation_binding") != closure_binding:
@@ -694,6 +731,7 @@ def classify(path: Path, payload: Mapping[str, Any], refs: Sequence[str],
     elif len(same_hash) > 1 and cls == "duplicate-or-unreferenced":
         superseded_by = primary if rel != primary else ""
     return {
+        **registry_metadata(payload),
         "path": rel,
         "class": cls,
         "status": status,
@@ -969,31 +1007,20 @@ def cmd_verify(args: argparse.Namespace) -> int:
             invalid.append(f"{path}: canonical root JSON is not canonical class")
         payload = json_payload(file)
         if row.get("class") in {"canonical-strict", "canonical-diagnostic"}:
-            if row.get("implementation_tree_digest"):
-                if row.get("implementation_tree_digest") != current_binding()["implementation_tree_digest"]:
-                    invalid.append(f"{path}: canonical class implementation binding is stale")
-                if row.get("implementation_dirty") != "false":
-                    invalid.append(f"{path}: canonical class implementation_dirty is not false")
-            else:
-                if row.get("source_commit") != current:
-                    invalid.append(f"{path}: canonical class is bound to a stale source_commit")
-                if row.get("source_dirty") != "false":
-                    invalid.append(f"{path}: canonical class source_dirty is not false")
+            if row.get("implementation_dirty") != "false":
+                invalid.append(f"{path}: canonical class implementation_dirty is not false")
+            for surface in ("application", "harness", "runtime_contract", "planning"):
+                field = surface + "_binding"
+                if payload.get(field) and row.get(field) != payload.get(field):
+                    invalid.append(f"{path}: canonical class {field} differs from payload")
             if not current_source_clean(payload, current):
                 invalid.append(f"{path}: canonical class implementation source is not clean/current")
         if row.get("class") == "canonical-diagnostic" and payload.get("strict_evidence") is True:
             invalid.append(f"{path}: canonical-diagnostic payload cannot claim strict_evidence=true")
-        if is_root_json and row.get("implementation_tree_digest"):
-            if row.get("implementation_tree_digest") != current_binding()["implementation_tree_digest"]:
-                invalid.append(f"{path}: implementation binding is not current")
-            if row.get("implementation_dirty") != "false":
-                invalid.append(f"{path}: implementation_dirty is not false")
-        elif is_root_json and row.get("source_commit") != current:
-            invalid.append(f"{path}: source_commit is not current HEAD")
-        elif is_root_json and row.get("source_dirty") != "false":
+        if is_root_json and row.get("source_dirty") != "false":
             invalid.append(f"{path}: source_dirty is not false")
         if is_root_json and not current_source_clean(payload, current):
-            invalid.append(f"{path}: implementation source is dirty or not bound to current HEAD")
+            invalid.append(f"{path}: implementation source is dirty or not bound to current dependency surfaces")
         if has_reference(row.get("referenced_by")):
             for reference in str(row.get("referenced_by")).split(";"):
                 if reference and reference != "-":
@@ -1036,6 +1063,13 @@ def cmd_verify(args: argparse.Namespace) -> int:
         unregistered.extend(root_unregistered)
     invalid.extend(authoritative_reference_violations(by_path))
     invalid.extend(registry_contract_violations(by_path, current))
+    batch_root = FEATURE / "evidence-batches"
+    if batch_root.is_dir():
+        for batch_manifest in sorted(batch_root.rglob("batch.json")):
+            try:
+                verify_batch(batch_manifest)
+            except (EvidenceBatchError, OSError, json.JSONDecodeError) as error:
+                invalid.append(f"{batch_manifest}: immutable batch verification failed: {error}")
     if missing or unregistered or invalid:
         print(json.dumps({"missing": missing, "unregistered": unregistered, "invalid": invalid}, ensure_ascii=False, indent=2))
         return 1
@@ -1122,6 +1156,20 @@ def cmd_promote(args: argparse.Namespace) -> int:
         )
     if not referenced:
         raise SystemExit("promotion rejected: report is not referenced by closure")
+    batch_info = None
+    if not is_closure and int(payload.get("schema", 1)) >= 2:
+        milestone_id = str(getattr(args, "milestone", "") or payload.get("milestone_id", ""))
+        if not milestone_id:
+            raise SystemExit("schema-2 promotion requires --milestone or report milestone_id")
+        try:
+            batch_info = materialize_batch(
+                payload,
+                source,
+                FEATURE / "evidence-batches",
+                milestone_id=milestone_id,
+            )
+        except EvidenceBatchError as error:
+            raise SystemExit("promotion rejected: " + str(error)) from error
     if is_closure:
         def rewrite(value: Any) -> Any:
             if isinstance(value, Mapping):
@@ -1138,6 +1186,7 @@ def cmd_promote(args: argparse.Namespace) -> int:
     else:
         shutil.copy2(source, target)
     registry_rows[relative(target)] = {
+        **registry_metadata(payload),
         "path": relative(target),
         "class": "canonical-strict",
         "status": str(payload.get("status", "executed-pass")),
@@ -1160,6 +1209,10 @@ def cmd_promote(args: argparse.Namespace) -> int:
         "implementation_scope": ";".join(str(item) for item in payload.get("implementation_scope", ())),
         "artifact_ref": str(payload.get("artifact_ref", "")),
     }
+    if batch_info:
+        registry_rows[relative(target)]["reason"] += (
+            "; immutable batch " + str(payload.get("batch_id", ""))
+        )
     write_tsv(REGISTRY, [registry_rows[key] for key in sorted(registry_rows)], REGISTRY_FIELDS)
     try:
         closure_display = relative(closure) if closure else "-"
@@ -1458,7 +1511,12 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     plan.set_defaults(func=cmd_plan)
     classify_parser = sub.add_parser("classify"); classify_parser.set_defaults(func=cmd_classify)
     verify = sub.add_parser("verify"); verify.set_defaults(func=cmd_verify)
-    promote = sub.add_parser("promote"); promote.add_argument("--report", required=True); promote.add_argument("--closure"); promote.add_argument("--output"); promote.set_defaults(func=cmd_promote)
+    promote = sub.add_parser("promote")
+    promote.add_argument("--report", required=True)
+    promote.add_argument("--closure")
+    promote.add_argument("--output")
+    promote.add_argument("--milestone")
+    promote.set_defaults(func=cmd_promote)
     archive = sub.add_parser("archive"); archive.add_argument("--path", action="append"); archive.add_argument("--dry-run", action="store_true"); archive.add_argument("--demote-canonical", action="store_true"); archive.add_argument("--references-updated", action="store_true"); archive.set_defaults(func=cmd_archive)
     rewrite = sub.add_parser("rewrite"); rewrite.add_argument("--plan", type=Path, required=True); rewrite.add_argument("--dry-run", action="store_true"); rewrite.add_argument("--include-json", action="store_true", help="also rewrite diagnostic/archive JSON references"); rewrite.set_defaults(func=cmd_rewrite)
     archive.add_argument("--apply", action="store_true", help="apply the reviewed move plan (default is dry-run)")

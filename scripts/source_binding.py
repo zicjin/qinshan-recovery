@@ -176,6 +176,7 @@ _APPLICATION_SUFFIXES = (
 # classify outcomes and manage the test runtime lifecycle.
 _HARNESS_SUFFIXES = (
     "scripts/source_binding.py",
+    "scripts/evidence_batch.py",
     "scripts/evidence_fingerprint.py",
     "scripts/evidence_output.py",
     "scripts/spring_api_contract_runner.py",

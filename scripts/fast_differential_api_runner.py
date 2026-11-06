@@ -633,7 +633,7 @@ def validate_execution_plan(plan: Mapping[str, Any], *, head: str,
 
 
 def run(args: argparse.Namespace) -> Dict[str, Any]:
-    batch_id = uuid.uuid4().hex
+    batch_id = "batch-" + uuid.uuid4().hex
     supplier_base_url = validate_loopback_url(args.supplier_base_url, "supplier_base_url")
     owned_base_url = validate_loopback_url(args.owned_base_url, "owned_base_url")
     ledger = json.loads(args.ledger.read_text(encoding="utf-8"))

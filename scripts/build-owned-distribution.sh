@@ -7,8 +7,9 @@ JAVA_HOME="${JAVA_HOME:-$ROOT/build/jdk1.8.0_391}"
 export LIMS_PROJECT_ROOT JAVA_HOME
 
 FRAMEWORK="$ROOT/reconstituted/framework"
-PUBLIC_DEPS="${LIMS_PUBLIC_DEPENDENCY_DIR:-$ROOT/build/reconstituted-public-deps}"
-export LIMS_PUBLIC_DEPENDENCY_DIR="$PUBLIC_DEPS"
+PUBLIC_DEPS_INPUT="${LIMS_PUBLIC_DEPENDENCY_DIR:-$ROOT/build/reconstituted-public-deps}"
+PUBLIC_DEPS="$ROOT/build/reconstituted-public-deps"
+export LIMS_PUBLIC_DEPENDENCY_DIR="$PUBLIC_DEPS_INPUT"
 APPLICATION_DIR="$ROOT/build/source-only-application"
 OUT="$ROOT/owned-distribution/target"
 mkdir -p "$OUT"
@@ -31,6 +32,7 @@ source_hash() {
         docs/reconstitution/decompiler-transforms.json
       printf '%s\0' scripts/build-reconstituted-framework.sh \
         scripts/build-source-only-application.py \
+        scripts/stage-source-only-public-deps.py \
         scripts/prepare-reconstituted-maven-repo.py \
         scripts/record-reconstituted-framework-build.py \
         scripts/verify-reconstituted-framework-modules.py \

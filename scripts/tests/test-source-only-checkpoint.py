@@ -28,6 +28,7 @@ def main() -> int:
         ROOT / "scripts/build-owned-distribution.sh",
         ROOT / "scripts/build-reconstituted-framework.sh",
         ROOT / "scripts/build-source-only-application.py",
+        ROOT / "scripts/stage-source-only-public-deps.py",
         ROOT / "scripts/prepare-reconstituted-maven-repo.py",
     )
     forbidden = (

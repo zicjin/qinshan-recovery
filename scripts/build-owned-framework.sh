@@ -84,5 +84,6 @@ bash "$ROOT/scripts/tests/test-owned-static-resource-alias.sh"
 "$JAVA_BIN" -cp "$OUT/classes:$OUT/test-classes:$OUT/public-deps/*" com.sunwayworld.framework.AdmQuotationQueryServiceContractTest
 "$JAVA_BIN" -cp "$OUT/classes:$OUT/test-classes:$OUT/public-deps/*" com.sunwayworld.framework.AccountQueryServiceContractTest
 "$JAVA_BIN" -cp "$OUT/classes:$OUT/test-classes:$OUT/public-deps/*" com.sunwayworld.framework.OwnedIdentityHttpBoundaryContractTest
+"$JAVA_BIN" -cp "$OUT/classes:$OUT/test-classes:$OUT/public-deps/*" com.sunwayworld.framework.OwnedQueryAccessFilterContractTest
 "$ROOT/scripts/reject-supplier-runtime.sh" "$OUT/lims-owned-framework-1.0.0.jar" "$OUT/public-deps"
 echo "owned framework build and contract test passed"

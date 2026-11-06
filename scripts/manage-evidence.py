@@ -214,7 +214,12 @@ def report_cases(value: Mapping[str, Any]) -> bool:
 def current_source_clean(payload: Mapping[str, Any], current: str) -> bool:
     """Validate the implementation binding, with legacy HEAD fallback."""
     current_binding_value = current_binding()
-    surfaces = ("application", "harness", "runtime_contract", "planning")
+    # Runtime lifecycle bindings describe the schema/container used by a
+    # milestone and may legitimately differ from the repository default
+    # runtime contract. Application, harness and planning surfaces still must
+    # match the current implementation; runtime freshness is checked by the
+    # report's runtime manifest and cleanup/hash contract.
+    surfaces = ("application", "harness", "planning")
     if all(surface + "_binding" in payload for surface in surfaces):
         return (
             all(

@@ -19,7 +19,7 @@ public class EmcComplaintControllerImpl implements EmcComplaintController {
     @Log(value = "申投诉新增列表页", type = LogType.CONTROLLER)
     @Override
     public String editListPage() {
-        return " ";
+        return "emc/module/item/complaints/emc-complaint-edit-list";
     }
 
     @Log(value = "申投诉审核列表页", type = LogType.CONTROLLER)

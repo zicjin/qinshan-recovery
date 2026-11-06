@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd -P)"
-CATALOG="$ROOT/evidence/function-coverage-catalog.tsv"
+CATALOG="$ROOT/.scratch/sunway-supplier-exit-api-first/evidence-archive/function-coverage-catalog.tsv"
 VALIDATOR="$ROOT/tools/validate_function_catalog.py"
 bash "$ROOT/scripts/tests/test-api-evidence-gate.sh" >/dev/null
-python3 "$VALIDATOR" "$CATALOG" --source-inventory "$ROOT/evidence/t02-source-inventory.tsv" >/dev/null
+python3 "$VALIDATOR" "$CATALOG" --source-inventory "$ROOT/.scratch/sunway-supplier-exit-api-first/evidence-archive/t02-source-inventory.tsv" >/dev/null
 fixture="$(mktemp -d)"; trap 'rm -rf "$fixture"' EXIT
 cp "$CATALOG" "$fixture/catalog.tsv"
 printf 'identity.login\tidentity\tduplicate\tx\tx\tx\tx\tx\tx\tx\tx\tx\tevidence/x.md\tunknown\tstatic-present\tlow\tx\n' >> "$fixture/catalog.tsv"
@@ -26,7 +26,7 @@ with open(sys.argv[1],newline='',encoding='utf-8') as f: reader=csv.DictReader(f
 rows[0]['status']='read-flow-verified'; rows[0]['state_history']+=';read-flow-verified'
 rows[0]['provenance']='historical/vendor evidence only'
 with open(sys.argv[3],'w',newline='',encoding='utf-8') as f: w=csv.DictWriter(f,fieldnames=fields,delimiter='\t',lineterminator='\n');w.writeheader();w.writerows(rows)
-rows[0]['provenance']+='; owned-runtime-evidence: evidence/personnel-identity-security.md'
+rows[0]['provenance']+='; owned-runtime-evidence: .scratch/sunway-supplier-exit-api-first/evidence-archive/personnel-identity-security.md'
 with open(sys.argv[2],'w',newline='',encoding='utf-8') as f: w=csv.DictWriter(f,fieldnames=fields,delimiter='\t',lineterminator='\n');w.writeheader();w.writerows(rows)
 PY
 if python3 "$VALIDATOR" "$fixture/historical-promotion.tsv" >/dev/null 2>&1; then echo 'catalog test: historical evidence promoted owned status' >&2; exit 1; fi

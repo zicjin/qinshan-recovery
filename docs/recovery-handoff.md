@@ -8,8 +8,8 @@
 - 源码根目录：本仓库根目录；应用源码是嵌套仓库 `project/`，必须记录其独立提交号。
 - 私有框架、原生库和许可证按 [ADR-0001](adr/0001-retain-private-framework.md) 保持固定依赖；
   不尝试重写、篡改或绕过许可证。
-- `evidence/t01-manifest.sha256` 列出的 56 项 `materials/` 和固定 `private/` 材料，以及
-  `evidence/t02-build-plugin-seed.sha256` 列出的离线 Maven 插件种子，进入受控私有 Git，以便另一台设备
+- `build-support/t01-manifest.sha256` 列出的 56 项 `materials/` 和固定 `private/` 材料，以及
+  `build-support/t02-build-plugin-seed.sha256` 列出的离线 Maven 插件种子，进入受控私有 Git，以便另一台设备
   直接检出后完成材料校验和离线构建。其他 `private/` 输入、构建缓存、数据库卷、快照、附件和验收
   账号信息不进入 Git，必须通过受限渠道取得。
 - 首轮验收是人员、设备和耗材的查询行为；它不代表全部业务流程或生产全量数据、附件的一致性。
@@ -152,7 +152,7 @@ bash scripts/oracle-snapshot.sh restore private/snapshots/<snapshot-name> \
 
 恢复后的卷必须在单独、经批准的隔离实例中启动并完成数据、附件、登录、页面和网络边界复验后，才能
 作为任何交接证据。2026-10-12 已实际完成冷快照导出、校验、新卷恢复和同机回放启动，见
-[回放记录](../evidence/t07-ac10-replay-20261012.md)；正式 AC-10 仍待独立交接复验。
+[回放记录](../.scratch/sunway-supplier-exit-api-first/evidence-archive/t07-ac10-replay-20261012.md)；正式 AC-10 仍待独立交接复验。
 快照不包含应用镜像、`private/` 配置、Redis 状态、`files/` 附件或生产数据采集过程。
 
 ### 独立离线回放实例
@@ -238,11 +238,11 @@ bash scripts/oracle-snapshot.sh restore private/snapshots/<snapshot-name> \
    并把报告、JAR 校验、启动日志和浏览器结果写入同一实例目录。
 
    2026-09-28 已在同一 Docker daemon 做过一次受限回放试验，结果和边界见
-   [evidence/t07-offline-replay-c3f4.md](../evidence/t07-offline-replay-c3f4.md)；该试验明确不替代
+   [.scratch/sunway-supplier-exit-api-first/evidence-archive/t07-offline-replay-c3f4.md](../.scratch/sunway-supplier-exit-api-first/evidence-archive/t07-offline-replay-c3f4.md)；该试验明确不替代
    另一份独立工作目录/主机的 AC-10 验收。
 
 2026-10-12 已在同一工作目录和 Docker daemon 使用新恢复卷实际运行该回放入口；启动、隔离、登录、人员
-页面和耗材页面结果见 [evidence/t07-ac10-replay-20261012.md](../evidence/t07-ac10-replay-20261012.md)。
+页面和耗材页面结果见 [.scratch/sunway-supplier-exit-api-first/evidence-archive/t07-ac10-replay-20261012.md](../.scratch/sunway-supplier-exit-api-first/evidence-archive/t07-ac10-replay-20261012.md)。
 这证明了同机独立回放路径，但不等同于正式 AC-10：另一名开发者仍必须在独立工作目录或主机取得受控材料，
 完成上述启动，并重新记录启动日志、宿主/容器 JAR 标识、隔离边界、登录、权限、三类查询和附件样本的页面结果。
 
@@ -257,8 +257,8 @@ bash scripts/oracle-snapshot.sh restore private/snapshots/<snapshot-name> \
 - 附件样本：人员 `00550` 的签名 URL 需由框架带 `security`/`token` 参数生成并返回文件；裸 URL
   不应返回文件内容。
 
-详见 `evidence/t03-personnel-query.md`、`evidence/t04-equipment-query.md`、
-`evidence/t05-consumables-query.md`、`evidence/t06-data-and-attachments.md`。
+详见 `.scratch/sunway-supplier-exit-api-first/evidence-archive/t03-personnel-query.md`、`.scratch/sunway-supplier-exit-api-first/evidence-archive/t04-equipment-query.md`、
+`.scratch/sunway-supplier-exit-api-first/evidence-archive/t05-consumables-query.md`、`.scratch/sunway-supplier-exit-api-first/evidence-archive/t06-data-and-attachments.md`。
 
 ## 二次开发与回退
 

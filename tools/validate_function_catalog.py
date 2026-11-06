@@ -118,7 +118,7 @@ def validate(path: Path, source_inventory: Path | None = None) -> int:
 
 def main(argv=None):
     ap = argparse.ArgumentParser()
-    ap.add_argument("catalog", nargs="?", type=Path, default=Path("evidence/function-coverage-catalog.tsv"))
+    ap.add_argument("catalog", nargs="?", type=Path, default=Path(".scratch/sunway-supplier-exit-api-first/evidence-archive/function-coverage-catalog.tsv"))
     ap.add_argument("--source-inventory", type=Path)
     args = ap.parse_args(argv)
     try: return validate(args.catalog, args.source_inventory)

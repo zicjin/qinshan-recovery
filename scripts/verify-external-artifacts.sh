@@ -3,7 +3,7 @@ set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 ARTIFACT_ROOT="${LIMS_EXTERNAL_ARTIFACT_ROOT:-$ROOT/.external-materials}"
-MANIFEST="${EXTERNAL_ARTIFACT_MANIFEST:-$ROOT/evidence/external-artifacts.sha256}"
+MANIFEST="${EXTERNAL_ARTIFACT_MANIFEST:-$ROOT/build-support/external-artifacts.sha256}"
 
 [ -d "$ARTIFACT_ROOT" ] || { echo "external artifact root is missing: $ARTIFACT_ROOT" >&2; exit 1; }
 [ -f "$MANIFEST" ] || { echo "external artifact manifest is missing: $MANIFEST" >&2; exit 1; }

@@ -127,7 +127,7 @@ def main():
             report['verifier_sha256'] = {
                 path: digest(ROOT / path) for path in (
                     'tools/vertical_slices/matrix.py', 'scripts/replay-vertical-slice.py',
-                    'scripts/tests/test-strict-vertical-slice.py', 'evidence/vertical-slice-runners.tsv')}
+                    'scripts/tests/test-strict-vertical-slice.py', '.scratch/sunway-supplier-exit-api-first/evidence-archive/vertical-slice-runners.tsv')}
             report['source_coverage'] = {
                 'roots': list(strict_scopes),
                 'files': {str(path.relative_to(ROOT)): digest(path) for path in strict_files},

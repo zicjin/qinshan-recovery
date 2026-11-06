@@ -4,7 +4,7 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"; JDK="${JAVA_HOME:-$R
 tmp="$(mktemp -d)"; trap 'rm -rf "$tmp"' EXIT; mkdir "$tmp/refdeps" "$tmp/owneddeps"
 python3 - "$ROOT" "$RUN_JAR" "$tmp" <<'PY'
 import hashlib,json,pathlib,sys,zipfile
-root,run,out=map(pathlib.Path,sys.argv[1:]); expected=next(r['sha256'] for r in json.loads((root/'evidence/framework-contract/jars.json').read_text()) if r['jar']=='BOOT-INF/lib/gikam-core-common-14.1.5.jar')
+root,run,out=map(pathlib.Path,sys.argv[1:]); expected=next(r['sha256'] for r in json.loads((root/'.scratch/sunway-supplier-exit-api-first/evidence-archive/framework-contract/jars.json').read_text()) if r['jar']=='BOOT-INF/lib/gikam-core-common-14.1.5.jar')
 with zipfile.ZipFile(run) as z:
  data=z.read('BOOT-INF/lib/gikam-core-common-14.1.5.jar'); assert hashlib.sha256(data).hexdigest()==expected; (out/'supplier.jar').write_bytes(data)
 PY

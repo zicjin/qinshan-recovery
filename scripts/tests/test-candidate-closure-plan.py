@@ -11,8 +11,8 @@ from function_catalog.build_candidate_plan import FIELDS, build
 
 
 def main():
-    ledger = ROOT / "evidence/function-catalog/candidate-closure.tsv"
-    plan = ROOT / "evidence/function-catalog/candidate-closure-plan.tsv"
+    ledger = ROOT / ".scratch/sunway-supplier-exit-api-first/evidence-archive/function-catalog/candidate-closure.tsv"
+    plan = ROOT / ".scratch/sunway-supplier-exit-api-first/evidence-archive/function-catalog/candidate-closure-plan.tsv"
     with tempfile.TemporaryDirectory(prefix="candidate-plan-") as temp:
         generated = Path(temp) / "candidate-closure-plan.tsv"
         if build(ledger, generated) != 914 or generated.read_bytes() != plan.read_bytes():

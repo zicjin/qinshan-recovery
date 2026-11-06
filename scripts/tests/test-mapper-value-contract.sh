@@ -8,7 +8,7 @@ unzip -p "$ROOT/materials/gikam-third-czjky-14.1.5-run.jar" BOOT-INF/lib/gikam-c
 python3 - "$ROOT" "$TMP/supplier.jar" <<'PY'
 import hashlib, json, pathlib, sys
 root, supplier = map(pathlib.Path, sys.argv[1:])
-expected = next(x['sha256'] for x in json.loads((root/'evidence/framework-contract/jars.json').read_text()) if x['jar'] == 'BOOT-INF/lib/gikam-core-common-14.1.5.jar')
+expected = next(x['sha256'] for x in json.loads((root/'.scratch/sunway-supplier-exit-api-first/evidence-archive/framework-contract/jars.json').read_text()) if x['jar'] == 'BOOT-INF/lib/gikam-core-common-14.1.5.jar')
 assert hashlib.sha256(supplier.read_bytes()).hexdigest() == expected, 'supplier reference hash differs'
 PY
 mkdir -p "$TMP/fixture/com/sunwayworld/framework"

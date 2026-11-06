@@ -1,6 +1,6 @@
 # 材料完整性清单：sha256  相对 lims-recovery 根目录的路径
 # 来源：ssh sss，生产部署目录 /data/LIMS/jiankeyuan/lims-czjky-emc（JDK 位于 /usr/java）。
-# 生成依据：2026-09-23 对生产文件的只读 sha256 计算，见 evidence/t01-material-integrity.md。
+# 生成依据：2026-09-23 对生产文件的只读 sha256 计算，见 .scratch/sunway-supplier-exit-api-first/evidence-archive/t01-material-integrity.md。
 4a720797810fd2f8cca6e22604657028cb87830ca0e24bb55a5f42f040f6ee9f  materials/gikam-third-czjky-14.1.5-run.jar
 c2f9513727fa7a06d6cf9a10a4c1712a984baa33a69373c0b909785b1f805108  materials/jdk-8u391-linux-x64.tar.gz
 dc06e05d55252211e44b3a177267b68efc970b095d74c7ebd815057f5393d40a  materials/sunway-app.so

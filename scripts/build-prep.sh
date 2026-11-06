@@ -7,7 +7,7 @@
 #   build/maven-repo/                        本地 Maven 仓库（-Dmaven.repo.local 指向它）
 #   build/jdk1.8.0_391/                      JDK 8（自外部受控 artifact 解出）
 #   build-support/gikam-core-parent-14.1.5.pom.xml   重建 parent 的可读副本
-#   evidence/t02-deps-manifest.sha256        依赖完整性清单
+#   build-support/t02-deps-manifest.sha256        依赖完整性清单
 #
 # 依赖取得方式（AC-02）：
 #   - 私有框架与原生组件按 ADR-0001 以固定版本保留：直接取自生产 run.jar 的 BOOT-INF/lib，
@@ -21,7 +21,7 @@ ARTIFACT_ROOT="${LIMS_EXTERNAL_ARTIFACT_ROOT:-$ROOT/.external-materials}"
 RUN_JAR="${SUPPLIER_RUN_JAR:-$ARTIFACT_ROOT/gikam-third-czjky-14.1.5-run.jar}"
 JDK_TGZ="${JDK_ARCHIVE:-$ARTIFACT_ROOT/jdk-8u391-linux-x64.tar.gz}"
 PLUGIN_SEED="${MAVEN_PLUGIN_SEED:-$ARTIFACT_ROOT/maven-build-plugin-seed.tar.gz}"
-PLUGIN_SEED_MANIFEST="$ROOT/evidence/t02-build-plugin-seed.sha256"
+PLUGIN_SEED_MANIFEST="$ROOT/build-support/t02-build-plugin-seed.sha256"
 
 [ -f "$RUN_JAR" ] || { echo "缺少 $RUN_JAR" >&2; exit 1; }
 [ -f "$JDK_TGZ" ] || { echo "缺少 $JDK_TGZ" >&2; exit 1; }
@@ -79,7 +79,7 @@ python3 "$ROOT/tools/deps_repo.py" \
   --jar "$RUN_JAR" \
   --repo "$ROOT/build/maven-repo" \
   --parent-out "$ROOT/build-support/gikam-core-parent-14.1.5.pom.xml" \
-  --manifest "$ROOT/evidence/t02-deps-manifest.sha256"
+  --manifest "$ROOT/build-support/t02-deps-manifest.sha256"
 
 echo "[build-prep] 校验并解包离线 Maven 插件种子"
 expected_seed_hash="$(awk '$2 ~ /maven-build-plugin-seed/ {print $1; exit}' "$PLUGIN_SEED_MANIFEST")"

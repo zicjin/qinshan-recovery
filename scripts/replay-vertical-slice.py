@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Run one explicitly registered vertical-slice replay and verify its report.
 
-Only runners listed in evidence/vertical-slice-runners.tsv can be selected.
+Only runners listed in .scratch/sunway-supplier-exit-api-first/evidence-archive/vertical-slice-runners.tsv can be selected.
 The command is assembled as an argv list; shell evaluation is deliberately
 not supported.
 """
@@ -22,8 +22,8 @@ def main(argv=None):
     parser.add_argument("case_id")
     parser.add_argument("--output", type=Path)
     args = parser.parse_args(argv)
-    cases = {case.case_id: case for case in load_matrix(LIMS / "evidence/vertical-slice-matrix.tsv")}
-    registry = load_runner_registry(LIMS / "evidence/vertical-slice-runners.tsv")
+    cases = {case.case_id: case for case in load_matrix(LIMS / ".scratch/sunway-supplier-exit-api-first/evidence-archive/vertical-slice-matrix.tsv")}
+    registry = load_runner_registry(LIMS / ".scratch/sunway-supplier-exit-api-first/evidence-archive/vertical-slice-runners.tsv")
     if args.case_id not in cases or args.case_id not in registry:
         raise SystemExit("case is not explicitly registered for replay: " + args.case_id)
     registration = registry[args.case_id]

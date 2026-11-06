@@ -23,7 +23,7 @@ PORT="${PORT:-8081}"
 # 运行镜像：默认使用当前自包含构建镜像；可用 IMAGE 显式选择已审计本地镜像。
 IMAGE="${IMAGE:-lims-app:14.1.5-built}"
 
-# 许可证与机器网卡绑定（见 evidence/t01-license-blocker.md）：容器复刻被许可机器的网卡标识，
+# 许可证与机器网卡绑定（见 .scratch/sunway-supplier-exit-api-first/evidence-archive/t01-license-blocker.md）：容器复刻被许可机器的网卡标识，
 # 许可证校验照常真实执行。严格解析受限材料，不把它作为 shell 脚本执行。
 MAC_ADDRESS="${MAC_ADDRESS:-}"
 if [ -z "$MAC_ADDRESS" ] && [ -f "$ROOT/private/license-machine.env" ]; then

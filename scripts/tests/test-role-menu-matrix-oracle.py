@@ -105,7 +105,7 @@ def main():
         report['verifier_sha256'] = {
             path: hashlib.sha256((ROOT / path).read_bytes()).hexdigest() for path in (
                 'tools/vertical_slices/matrix.py', 'scripts/replay-vertical-slice.py',
-                'scripts/tests/test-strict-vertical-slice.py', 'evidence/vertical-slice-runners.tsv')}
+                'scripts/tests/test-strict-vertical-slice.py', '.scratch/sunway-supplier-exit-api-first/evidence-archive/vertical-slice-runners.tsv')}
         report['source_coverage'] = {
             'roots': list(strict_scopes),
             'files': {path: hashlib.sha256((ROOT / path).read_bytes()).hexdigest() for path in strict_scopes},

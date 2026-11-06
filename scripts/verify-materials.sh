@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
-# 校验本机材料库完整性：逐项比对 evidence/t01-manifest.sha256 中记录的 sha256。
+# 校验本机材料库完整性：逐项比对 build-support/t01-manifest.sha256 中记录的 sha256。
 #
 # 用法: scripts/verify-materials.sh [manifest]
-#   manifest 默认为 evidence/t01-manifest.sha256；可通过参数或 MANIFEST 环境变量指向其他清单（供测试）。
+#   manifest 默认为 build-support/t01-manifest.sha256；可通过参数或 MANIFEST 环境变量指向其他清单（供测试）。
 #
 # 退出码: 0 = 全部一致；1 = 存在缺失或校验不符（逐项打印 FAIL）。
 set -euo pipefail
 
 ROOT="${ROOT:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"
-MANIFEST="${1:-${MANIFEST:-$ROOT/evidence/t01-manifest.sha256}}"
+MANIFEST="${1:-${MANIFEST:-$ROOT/build-support/t01-manifest.sha256}}"
 
 if [ ! -f "$MANIFEST" ]; then
   echo "FAIL 清单不存在: $MANIFEST" >&2

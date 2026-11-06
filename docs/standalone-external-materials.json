@@ -2,7 +2,7 @@
   "schema": 1,
   "storage": "external-artifact",
   "root_env": "LIMS_EXTERNAL_ARTIFACT_ROOT",
-  "manifest": "evidence/external-artifacts.sha256",
+  "manifest": "build-support/external-artifacts.sha256",
   "artifacts": [
     {
       "name": "gikam-third-czjky-14.1.5-run.jar",

@@ -15,8 +15,8 @@ assert {item["execution_group"] for item in equipment["execution_shards"]} == {
 assert len(equipment["execution_shards"]) == 15
 assert all(item["cases"] for item in equipment["execution_shards"])
 
-metadata = module.select(["evidence/vertical-slice-matrix.tsv"])
-assert metadata["fast_gate_only"] and metadata["fast_gate_paths"] == ["evidence/vertical-slice-matrix.tsv"]
+metadata = module.select([".scratch/sunway-supplier-exit-api-first/evidence-archive/vertical-slice-matrix.tsv"])
+assert metadata["fast_gate_only"] and metadata["fast_gate_paths"] == [".scratch/sunway-supplier-exit-api-first/evidence-archive/vertical-slice-matrix.tsv"]
 assert metadata["execution_shards"] == []
 
 print("affected runner selector: PASS (source scope selection and metadata fast gate)")

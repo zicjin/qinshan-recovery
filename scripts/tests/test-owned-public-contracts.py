@@ -9,7 +9,7 @@ root = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(root / "tools"))
 from framework_contract_inventory import class_info
 
-references = {row["name"]: row for row in map(json.loads, (root / "evidence/framework-contract/classes.jsonl").open())}
+references = {row["name"]: row for row in map(json.loads, (root / ".scratch/sunway-supplier-exit-api-first/evidence-archive/framework-contract/classes.jsonl").open())}
 artifact = Path(sys.argv[1]) if len(sys.argv) > 1 else root / "owned-framework/target/lims-owned-framework-1.0.0.jar"
 # Visibility, static/final, bridge, varargs, abstract and synthetic flags matter
 # to a source-facing method declaration. Native implementation is intentionally

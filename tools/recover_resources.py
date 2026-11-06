@@ -4,7 +4,7 @@
 用法：
     recover_resources.py --jar <run.jar> --src <工程根目录> --inventory <t02-source-inventory.tsv> [--apply]
 
-规则（对应 evidence/t02-source-inventory.md 第 5 节处置结论）：
+规则（对应 .scratch/sunway-supplier-exit-api-first/evidence-archive/t02-source-inventory.md 第 5 节处置结论）：
 - both/changed   以生产内容为准更新；文本类资源换行归一为 LF 后入库
 - prod-only      从生产包补入源码树：com/** 进 src/main/java，其余进 src/main/resources
 - 二进制按字节原样；both/eol-only 与 both/identical 不动（已判定可复用）

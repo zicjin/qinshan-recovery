@@ -30,7 +30,7 @@ SCOPES = (
     'owned-framework/src/test/java/com/sunwayworld/framework/OwnedResultRunWriteHttpContractTest.java',
 )
 VERIFIERS = ('tools/vertical_slices/matrix.py', 'scripts/replay-vertical-slice.py',
-             'scripts/tests/test-strict-vertical-slice.py', 'evidence/vertical-slice-runners.tsv')
+             'scripts/tests/test-strict-vertical-slice.py', '.scratch/sunway-supplier-exit-api-first/evidence-archive/vertical-slice-runners.tsv')
 
 
 def run(command, **kwargs):

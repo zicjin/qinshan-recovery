@@ -12,8 +12,8 @@ import tempfile
 from vertical_slices.matrix import load_matrix, load_runner_registry, validate_evidence
 
 root = Path(sys.argv[1])
-cases = load_matrix(root / "evidence/vertical-slice-matrix.tsv")
-registry = load_runner_registry(root / "evidence/vertical-slice-runners.tsv")
+cases = load_matrix(root / ".scratch/sunway-supplier-exit-api-first/evidence-archive/vertical-slice-matrix.tsv")
+registry = load_runner_registry(root / ".scratch/sunway-supplier-exit-api-first/evidence-archive/vertical-slice-runners.tsv")
 counts = validate_evidence(cases, root, registry, root.parent)
 if counts["cases"] != 92 or counts["pass"] != counts["cases"]:
     raise SystemExit("unexpected matrix counts: %s" % counts)
@@ -33,7 +33,7 @@ for case in cases:
 # Every evidence revision has an explicit status. Historical and diagnostic
 # reports remain useful, but they cannot silently count as current clean
 # source acceptance; strict registrations must be current-strict.
-status_rows = (root / "evidence/vertical-slice-evidence-status.tsv").read_text(encoding="utf-8").splitlines()
+status_rows = (root / ".scratch/sunway-supplier-exit-api-first/evidence-archive/vertical-slice-evidence-status.tsv").read_text(encoding="utf-8").splitlines()
 if not status_rows or status_rows[0].split("\t") != ["evidence", "classification", "rationale"]:
     raise ValueError("evidence status table has no declared interface")
 evidence_status = {}
@@ -111,7 +111,7 @@ with tempfile.TemporaryDirectory(prefix="vertical-matrix-negative-") as temporar
     temporary = Path(temporary)
     for malformed in ("GET /ok;garbage", "GET /ok;POST relative"):
         fixture = temporary / "matrix.tsv"
-        fixture.write_text((root / "evidence/vertical-slice-matrix.tsv").read_text().replace(browser.route, malformed))
+        fixture.write_text((root / ".scratch/sunway-supplier-exit-api-first/evidence-archive/vertical-slice-matrix.tsv").read_text().replace(browser.route, malformed))
         rejected(lambda: load_matrix(fixture), "malformed secondary route accepted")
     browser_evidence_path = root.parent / browser.evidence if browser.evidence.startswith(".scratch/") else root / browser.evidence
     payload = json.loads(browser_evidence_path.read_text())

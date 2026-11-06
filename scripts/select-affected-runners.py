@@ -17,8 +17,8 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "tools"))
 from vertical_slices.matrix import load_runner_registry
 
-GROUPS = ROOT / "evidence/vertical-slice-execution-groups.tsv"
-REGISTRY = ROOT / "evidence/vertical-slice-runners.tsv"
+GROUPS = ROOT / ".scratch/sunway-supplier-exit-api-first/evidence-archive/vertical-slice-execution-groups.tsv"
+REGISTRY = ROOT / ".scratch/sunway-supplier-exit-api-first/evidence-archive/vertical-slice-runners.tsv"
 
 FAST_GATE_PATHS = (
     "evidence/", "tools/vertical_slices/", "scripts/tests/",

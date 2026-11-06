@@ -15,7 +15,7 @@ import hashlib, json, sys, zipfile
 root, run, output, ojdbc = map(Path, sys.argv[1:])
 with zipfile.ZipFile(run) as archive:
     data = archive.read('BOOT-INF/lib/gikam-core-common-14.1.5.jar')
-    expected = next(row['sha256'] for row in json.loads((root/'evidence/framework-contract/jars.json').read_text())
+    expected = next(row['sha256'] for row in json.loads((root/'.scratch/sunway-supplier-exit-api-first/evidence-archive/framework-contract/jars.json').read_text())
                     if row['jar'] == 'BOOT-INF/lib/gikam-core-common-14.1.5.jar')
     assert hashlib.sha256(data).hexdigest() == expected
     output.write_bytes(data)

@@ -184,7 +184,11 @@ _DISTRIBUTION_INPUT_SUFFIXES = (
     "scripts/build-owned-scheduler.sh",
     "scripts/build-prep.sh",
     "scripts/verify-external-artifacts.sh",
-    "evidence/external-artifacts.sha256",
+    "build-support/external-artifacts.sha256",
+    "build-support/t01-manifest.sha256",
+    "build-support/t02-deps-manifest.sha256",
+    "build-support/t02-build-plugin-seed.sha256",
+    "build-support/t02-deps-manifest.sha256",
     "build/oracle-free-source-manifest.json",
     "docker/Dockerfile.built",
 )

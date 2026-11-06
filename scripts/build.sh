@@ -7,7 +7,7 @@
 # 构建环境（AC-02）：
 #   - 运行时/编译 JDK：Oracle JDK 8u391（materials/jdk-8u391-linux-x64.tar.gz 解包）
 #   - 构建工具：Maven 3.9.x（本机 3.9.12）
-#   - 依赖：全部来自 build/maven-repo（固定版本，见 evidence/t02-deps-manifest.sha256）；
+#   - 依赖：全部来自 build/maven-repo（固定版本，见 build-support/t02-deps-manifest.sha256）；
 #     公共构建插件来自 build-prep 校验并解包的离线种子包。
 #
 # 产物：project/target/gikam-third-czjky-14.1.5-run.jar（由 project/pom.xml 的

@@ -1,6 +1,0 @@
-FORMAT=lims-source-tree-v1
-SOURCE_ONLY_ROOT=/home/ts/qinshan/lims-source-package-r0930f
-ROOT_TREE_SHA256=sha256:ff22141e49a9dd163c040faca365c62e0b1b24efffcd55f04ea12dca8c54d8b5
-PROJECT_TREE_SHA256=sha256:8af57689f414c2c81799fd3720d9a627d76c67ab4f1a912c38e39d9975f5111c
-RUNTIME_TREE=/home/ts/qinshan/lims-recovery-clean-20260930
-RUNTIME_TREE_NOTE=source-only identity is verified before injecting private/materials/runtime inputs

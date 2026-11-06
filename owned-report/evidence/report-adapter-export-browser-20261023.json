@@ -861,7 +861,7 @@
     "tools/vertical_slices/matrix.py": "241295ce86090ed5b3aca71bf379fd5cb5a69ef8608001940fc2670d63c7bdec",
     "scripts/replay-vertical-slice.py": "056756d6ca5284757d71f2915e64d24ad9b16b85c8cb454c8452c79a4ad7be9d",
     "scripts/tests/test-strict-vertical-slice.py": "2ae0f6a011218723a84c1406dc164cb9c7e5477ac807dcdb6452c2ecb8a7cc07",
-    "evidence/vertical-slice-runners.tsv": "faf1cae53ff3c8f9dc0c5af617a893293fe0983ef5fc0a9339331025e7f8c240"
+    ".scratch/sunway-supplier-exit-api-first/evidence-archive/vertical-slice-runners.tsv": "faf1cae53ff3c8f9dc0c5af617a893293fe0983ef5fc0a9339331025e7f8c240"
   },
   "artifact_sha256": {
     "owned-framework/target/lims-owned-framework-1.0.0.jar": "ef78fb8e8717e3245b8779e4b10f0c3d9bada896f30d6bdad0c7305b8db4fce3",

@@ -13,8 +13,8 @@ from function_catalog.build_candidate_closure import FIELDS, build
 
 
 def main() -> int:
-    catalog = ROOT / "evidence/function-catalog/full-candidate-capabilities.json"
-    ledger = ROOT / "evidence/function-catalog/candidate-closure.tsv"
+    catalog = ROOT / ".scratch/sunway-supplier-exit-api-first/evidence-archive/function-catalog/full-candidate-capabilities.json"
+    ledger = ROOT / ".scratch/sunway-supplier-exit-api-first/evidence-archive/function-catalog/candidate-closure.tsv"
     with tempfile.TemporaryDirectory(prefix="candidate-closure-") as temporary:
         generated = Path(temporary) / "candidate-closure.tsv"
         count = build(catalog, generated)

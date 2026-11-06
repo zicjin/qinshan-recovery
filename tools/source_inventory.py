@@ -428,7 +428,7 @@ def _normalize_javap(text: str) -> str:
 
 
 # This pair was audited against the complete Vineflower reconstruction in
-# evidence/t02-report-semantic-audit.md.  Keep the exception byte-bound: a
+# .scratch/sunway-supplier-exit-api-first/evidence-archive/t02-report-semantic-audit.md.  Keep the exception byte-bound: a
 # later edit or a different compiler output must go through the normal digest
 # comparison and cannot inherit this result.
 _AUDITED_CLASS_EQUIVALENCE = {

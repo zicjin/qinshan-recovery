@@ -7,7 +7,7 @@
 #
 # 生产侧只读：expdp 通过 database link 对生产执行 SELECT，不写入、不修改生产对象。
 # 复制范围：排除 9 张与首轮验收无关的大表（订单/检测结果/日志/设备采集文件类），
-# 清单见 EXCLUDE_TABLES，范围说明记录在 evidence/t01-material-integrity.md。
+# 清单见 EXCLUDE_TABLES，范围说明记录在 .scratch/sunway-supplier-exit-api-first/evidence-archive/t01-material-integrity.md。
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"

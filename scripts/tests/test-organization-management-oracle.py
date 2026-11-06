@@ -14,7 +14,7 @@ import uuid
 ROOT = Path(__file__).resolve().parents[2]
 IMAGE = 'ghcr.io/gvenzl/oracle-free@sha256:cd3dff6649f5d67ca3121f5e064b5a5680611e5d34f03442423110778c47dda4'
 VERIFIERS = ('tools/vertical_slices/matrix.py', 'scripts/replay-vertical-slice.py',
-             'scripts/tests/test-strict-vertical-slice.py', 'evidence/vertical-slice-runners.tsv')
+             'scripts/tests/test-strict-vertical-slice.py', '.scratch/sunway-supplier-exit-api-first/evidence-archive/vertical-slice-runners.tsv')
 SCOPES = ('scripts/tests/test-organization-management-oracle.py', 'scripts/build-owned-framework.sh',
           'owned-framework/src/main/resources/META-INF/spring.factories',
           'owned-framework/src/main/java/com/sunwayworld/owned/internal/security/OwnedIdentityProvider.java',

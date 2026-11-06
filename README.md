@@ -39,7 +39,7 @@
   - `redis:7.4-alpine`（隔离 Redis）
   - `lims-app:14.1.5-built`（下面由当前源码构建）
 
-- `evidence/t01-manifest.sha256` 列出的 56 项固定材料，以及 `evidence/t02-build-plugin-seed.sha256` 列出的
+- `build-support/t01-manifest.sha256` 列出的 56 项固定材料，以及 `build-support/t02-build-plugin-seed.sha256` 列出的
   离线 Maven 插件种子，由受控私有 Git 提供；其他 `private/` 配置、口令、
   快照、附件和验收输入仍只通过受限渠道提供，不写入 README、提交消息或公开仓库。
 
@@ -251,9 +251,9 @@ bash scripts/tests/test-sunway-application-selection.sh
 bash scripts/tests/test-sunway-application-run-contract.sh
 ```
 
-真实 Oracle/PostgreSQL 合成 schema 探针与镜像来源见 [数据库探针说明](scripts/db-slice/README.md) 和 [结果边界](evidence/t15-database-mainline.md)。合成 SQL 结果只证明声明范围；随后实际 PostgreSQL 应用止损记录了登录 `NVL` 与报表 `TO_CHAR` 不兼容，已选择 Oracle 单一主线，完整应用兼容性仍未验收。
+真实 Oracle/PostgreSQL 合成 schema 探针与镜像来源见 [数据库探针说明](scripts/db-slice/README.md) 和 [结果边界](.scratch/sunway-supplier-exit-api-first/evidence-archive/t15-database-mainline.md)。合成 SQL 结果只证明声明范围；随后实际 PostgreSQL 应用止损记录了登录 `NVL` 与报表 `TO_CHAR` 不兼容，已选择 Oracle 单一主线，完整应用兼容性仍未验收。
 
-人员原始 Oracle Mapper 的六场景 BoundSql 与隔离执行记录见 [personnel-mapper-reference.md](evidence/personnel-mapper-reference.md)。其中详情 SQL 对组织过滤参数没有追加限制；该结果是参照行为，不是权限验收。
+人员原始 Oracle Mapper 的六场景 BoundSql 与隔离执行记录见 [personnel-mapper-reference.md](.scratch/sunway-supplier-exit-api-first/evidence-archive/personnel-mapper-reference.md)。其中详情 SQL 对组织过滤参数没有追加限制；该结果是参照行为，不是权限验收。
 
 现有 `scripts/build.sh` 和 `docker/Dockerfile.built` 仍构建供应商运行时，属于行为参照和迁移输入。
 自有运行时已有显式身份自动配置、RSA 登录/退出、文件审计及三类查询的当前会话/菜单/组织范围检查。Oracle 合成身份与菜单回归记录见 [身份/菜单 Oracle 报告](.scratch/sunway-supplier-exit-api-first/archive/historical/owned-menu-oracle-integration-20261020.json)。
@@ -281,19 +281,19 @@ python3 owned-web/src/test/browser/run-browser.py \
 缺失、撤权、无授权和退出后的内容访问均按预期拒绝；原始脚本哈希保持不变。ERP 文件回放仍为
 显式 loopback 隔离边界，未声称全部外部集成等价。见
 [附件浏览器报告](.scratch/sunway-supplier-exit-api-first/archive/historical/attachment-browser-integration-20261020.json)和
-[附件和回放边界](evidence/attachment-replay-runtime-20261020.md)。
+[附件和回放边界](.scratch/sunway-supplier-exit-api-first/evidence-archive/attachment-replay-runtime-20261020.md)。
 
 设备/耗材的 55 项组合浏览器检查及人员 22 项回归见
 [库存浏览器报告](.scratch/sunway-supplier-exit-api-first/archive/historical/inventory-browser-clean-20261020.json)。报表的本地回放页面 25 项检查与
-调度测试入口 39 项检查分别见 [报表边界](evidence/report-adapter-boundary-20261020.md) 和
+调度测试入口 39 项检查分别见 [报表边界](.scratch/sunway-supplier-exit-api-first/evidence-archive/report-adapter-boundary-20261020.md) 和
 [调度说明](owned-scheduler/README.md)；第三方渲染器与历史采集任务等价仍未证明。
 
 独立分发包使用 `scripts/build-owned-distribution.sh` 构建，外置配置后由
 `owned-distribution/target/distribution/start.sh` 启动真实主类。双次字节一致重建、供应商残留
-扫描和集成附件前端后的人员分发浏览器 19 项记录见 [分发证据](evidence/owned-distribution-package-20261020.md)
+扫描和集成附件前端后的人员分发浏览器 19 项记录见 [分发证据](.scratch/sunway-supplier-exit-api-first/evidence-archive/owned-distribution-package-20261020.md)
 及 [集成后浏览器报告](.scratch/sunway-supplier-exit-api-first/archive/historical/owned-distribution-browser-attachment-integration-20261020.json)。
 完整进度与未完成项见
-[实施状态](evidence/rebuild-implementation-status.md)。
+[实施状态](.scratch/sunway-supplier-exit-api-first/evidence-archive/rebuild-implementation-status.md)。
 
 `tools/vertical_slices/` 提供隔离 fixture 的身份、查询、附件、回放、报表和任务契约测试。它明确标为 `unavailable-runtime`，不会冒充真实页面或数据库验收：
 
@@ -309,7 +309,7 @@ source materialized from the project commit recorded in
 `docs/standalone-root-migration.json`; it is not a nested submodule.
 
 Build and deployment require an externally supplied `LIMS_EXTERNAL_ARTIFACT_ROOT`
-containing only the artifacts listed in `evidence/external-artifacts.sha256`.
+containing only the artifacts listed in `build-support/external-artifacts.sha256`.
 Private configuration, credentials, Oracle/Redis data, attachments, supplier
 JARs and native/license inputs are injected through an approved restricted
 channel. They are not part of this Git tree or the owned distribution.

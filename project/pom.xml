@@ -11,9 +11,9 @@
     <name>Gikam THIRD CZJKY</name>
 
     <!--
-      2026-09-23 构建恢复调整（依据见 evidence/t02-source-inventory.md 第 6 节、evidence/t02-build.md）：
+      2026-09-23 构建恢复调整（依据见 .scratch/sunway-supplier-exit-api-first/evidence-archive/t02-source-inventory.md 第 6 节、evidence/t02-build.md）：
       1) 依赖声明集中于重建的 gikam-core-parent:14.1.5 = 生产 run.jar BOOT-INF/lib 的固定版本
-         清单（scripts/build-prep.sh 生成，逐 jar sha256 见 evidence/t02-deps-manifest.sha256）。
+         清单（scripts/build-prep.sh 生成，逐 jar sha256 见 build-support/t02-deps-manifest.sha256）。
          历史 pom 的逐项声明与生产依赖集不一致（spire.office 5.3.2→生产 8.11.3、
          com.itextpdf:kernel/layout 7.0.3→生产 itext 2.1.7 + itextpdf 5.5.13、
          gikam-core-file-default→生产 gikam-core-file-ftp、gikam-core-report-service→生产

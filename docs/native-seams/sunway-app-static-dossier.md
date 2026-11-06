@@ -33,10 +33,10 @@ Existing repository evidence, read as input to this dossier:
 
 | Evidence | Observation |
 | --- | --- |
-| `evidence/framework-contract/native-exports.jsonl` | 128 defined exports recorded; 54 names use the Java JNI export convention. |
-| `evidence/framework-contract/native-declarations.jsonl` | 48 Java native declarations recovered from selected supplier JARs. |
-| `evidence/framework-contract/native-correspondence.jsonl` | 54 correspondence rows; 47 declaration matches and 7 unmatched-in-selected-jars rows. Runtime observation is unknown for every row. |
-| `evidence/license-removal/manifest.json` | Records native/license deletion boundaries, external provenance, and static security markers without retaining license values. |
+| `.scratch/sunway-supplier-exit-api-first/evidence-archive/framework-contract/native-exports.jsonl` | 128 defined exports recorded; 54 names use the Java JNI export convention. |
+| `.scratch/sunway-supplier-exit-api-first/evidence-archive/framework-contract/native-declarations.jsonl` | 48 Java native declarations recovered from selected supplier JARs. |
+| `.scratch/sunway-supplier-exit-api-first/evidence-archive/framework-contract/native-correspondence.jsonl` | 54 correspondence rows; 47 declaration matches and 7 unmatched-in-selected-jars rows. Runtime observation is unknown for every row. |
+| `.scratch/sunway-supplier-exit-api-first/evidence-archive/license-removal/manifest.json` | Records native/license deletion boundaries, external provenance, and static security markers without retaining license values. |
 | `docs/standalone-external-materials.json` | Marks the native library and supplier run JAR as external/non-runtime material. |
 | `com.sunwayworld.boot.thirdparty.sunwaylibrary.SunwayLibraryExtractor` | Static resource paths for platform-specific supplier native files were observed; runtime invocation remains unknown. |
 

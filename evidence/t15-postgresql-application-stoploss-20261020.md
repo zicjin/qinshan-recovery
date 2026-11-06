@@ -1,9 +1,0 @@
-# PostgreSQL application stop-loss
-
-The executable report `t15-postgresql-application-stoploss-20261020.json` records a real owned-runtime attempt against PostgreSQL 16.15 from the digest-pinned image `public.ecr.aws/docker/library/postgres@sha256:0ea6700a3b4f0ae6ce746519073558aed4d88a79d8d07622a9a644946c7319c4`.
-
-The database ran in a disposable Docker network marked `internal=true`, with no published ports or bind mounts. The probe seeded only synthetic LIMS-shaped rows, started the owned Spring application with the PostgreSQL JDBC driver, fetched the RSA public-key route, encrypted the test password, and sent the real login request. It also called the personnel, equipment, consumables, report, and menu HTTP routes. An invalid-object SQL control failed as expected, and cleanup removed the container, anonymous volume, and network.
-
-Authentication reached PostgreSQL and failed at the existing `NVL` password-policy expression with SQLSTATE `42883`. The HTTP controller translated that database failure to `500 LOGIN_UNAVAILABLE`. Because no principal was minted, personnel, equipment, consumables, report, and menu routes returned their existing anonymous `403` boundary. The menu route is registered in the owned runtime, but this stop-loss run did not mint a principal and therefore does not establish permission-tree compatibility. The report DAO was attempted separately and remains Oracle-specific, so its SQL compatibility is not claimed.
-
-This is an application compatibility failure observation, not a PostgreSQL pass. No SQL rewrite, compatibility function, Oracle semantic change, or production connection was introduced. Oracle remains the single fallback/mainline decision; PostgreSQL exploration stops here until a separately approved compatibility plan exists. Database-level SQL probe results remain in `t15-postgresql-probe.json` and are not promoted to application acceptance.

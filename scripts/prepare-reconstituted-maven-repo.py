@@ -135,7 +135,7 @@ def main() -> int:
     parser.add_argument(
         "--manifest",
         type=Path,
-        default=ROOT / "evidence" / "t02-build-plugin-seed.sha256",
+        default=ROOT / "build-support" / "t02-build-plugin-seed.sha256",
     )
     parser.add_argument("--public-deps", type=Path)
     parser.add_argument(

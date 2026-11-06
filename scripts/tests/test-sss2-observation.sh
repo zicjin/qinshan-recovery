@@ -6,8 +6,8 @@ bash -n "$OBS" "$REG"
 tmp="$(mktemp -d)"; trap 'rm -rf "$tmp"' EXIT
 receipt="$tmp/clone-a"
 "$OBS" init clone-a "$receipt" fixture-baseline
-"$OBS" record "$receipt" personnel.query read-flow-verified evidence/t03-personnel-query.md authorized fixture-data
-"$OBS" record "$receipt" tasks.scheduler disabled-in-isolated-env evidence/t06-isolation-current.txt operator fixture-data
+"$OBS" record "$receipt" personnel.query read-flow-verified .scratch/sunway-supplier-exit-api-first/evidence-archive/t03-personnel-query.md authorized fixture-data
+"$OBS" record "$receipt" tasks.scheduler disabled-in-isolated-env .scratch/sunway-supplier-exit-api-first/evidence-archive/t06-isolation-current.txt operator fixture-data
 "$REG" "$receipt" personnel.write 0f06391 3578b2f evidence/sss2-code-regression.md >/dev/null
 "$OBS" verify "$receipt" >/dev/null
 grep -Fxq 'environment=sss2-writable-clone' "$receipt/metadata.env"

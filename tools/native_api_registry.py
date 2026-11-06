@@ -89,7 +89,7 @@ def build_registry(root: Path) -> Dict[str, Any]:
             status="unknown",
             outcome="owned implementation or explicit removal",
             key=f"{row['class']}#{row['name']}{row['descriptor']}",
-            source={"evidence": "evidence/framework-contract/native-declarations.jsonl", "jar": row["jar"], "entry": row["entry"]},
+            source={"evidence": ".scratch/sunway-supplier-exit-api-first/evidence-archive/framework-contract/native-declarations.jsonl", "jar": row["jar"], "entry": row["entry"]},
             owner=row["class"],
             name=row["name"],
             descriptor=row["descriptor"],
@@ -108,7 +108,7 @@ def build_registry(root: Path) -> Dict[str, Any]:
             status="unknown",
             outcome="owned implementation or explicit removal",
             key=row["symbol"],
-            source={"evidence": "evidence/framework-contract/native-exports.jsonl"},
+            source={"evidence": ".scratch/sunway-supplier-exit-api-first/evidence-archive/framework-contract/native-exports.jsonl"},
             export_symbol=row["symbol"],
             export_family="java-jni" if row["symbol"].startswith("Java_") else "native-helper",
             declaration_status=corr.get("status", "unmatched"),
@@ -118,82 +118,82 @@ def build_registry(root: Path) -> Dict[str, Any]:
     deletion = manifest["sunway_license_deletion"]
     for index, row in enumerate(deletion["classes"]):
         add_item(items, kind="license-class", scope="sunway-license", status="removed-negative-pass",
-                 outcome="removed from owned runtime", key=row["name"], source=manifest_source("evidence/license-removal/manifest.json", "sunway_license_deletion.classes", index),
+                 outcome="removed from owned runtime", key=row["name"], source=manifest_source(".scratch/sunway-supplier-exit-api-first/evidence-archive/license-removal/manifest.json", "sunway_license_deletion.classes", index),
                  class_name=row["name"], entry=row["entry"])
     for index, row in enumerate(deletion["services_and_routes"]):
         if "route" in row:
             routes = [row["route"]] + [row["route"] + suffix for suffix in row.get("route_suffixes", [])]
             for route in routes:
                 add_item(items, kind="license-route", scope="sunway-license", status="removed-negative-pass",
-                         outcome="route returns removed negative result", key=route, source=manifest_source("evidence/license-removal/manifest.json", "sunway_license_deletion.services_and_routes", index),
+                         outcome="route returns removed negative result", key=route, source=manifest_source(".scratch/sunway-supplier-exit-api-first/evidence-archive/license-removal/manifest.json", "sunway_license_deletion.services_and_routes", index),
                          owner=row["class"], methods=row.get("methods", []), route=route)
         for method_key in ("method",):
             if method_key in row:
                 add_item(items, kind="license-api", scope="sunway-license", status="removed-negative-pass",
-                         outcome="API removed from owned runtime", key=f"{row['class']}#{row[method_key]}", source=manifest_source("evidence/license-removal/manifest.json", "sunway_license_deletion.services_and_routes", index),
+                         outcome="API removed from owned runtime", key=f"{row['class']}#{row[method_key]}", source=manifest_source(".scratch/sunway-supplier-exit-api-first/evidence-archive/license-removal/manifest.json", "sunway_license_deletion.services_and_routes", index),
                          owner=row["class"], method=row[method_key])
         for method in row.get("methods", []):
             add_item(items, kind="license-api", scope="sunway-license", status="removed-negative-pass",
-                     outcome="API removed from owned runtime", key=f"{row['class']}#{method}", source=manifest_source("evidence/license-removal/manifest.json", "sunway_license_deletion.services_and_routes", index),
+                     outcome="API removed from owned runtime", key=f"{row['class']}#{method}", source=manifest_source(".scratch/sunway-supplier-exit-api-first/evidence-archive/license-removal/manifest.json", "sunway_license_deletion.services_and_routes", index),
                      owner=row["class"], method=method)
     for index, row in enumerate(deletion["native_methods"]):
         add_item(items, kind="license-native-method", scope="sunway-license", status="removed-negative-pass",
-                 outcome="native license path has no owned runtime call", key=f"{row['owner']}#{row['name']}{row['descriptor']}", source=manifest_source("evidence/license-removal/manifest.json", "sunway_license_deletion.native_methods", index),
+                 outcome="native license path has no owned runtime call", key=f"{row['owner']}#{row['name']}{row['descriptor']}", source=manifest_source(".scratch/sunway-supplier-exit-api-first/evidence-archive/license-removal/manifest.json", "sunway_license_deletion.native_methods", index),
                  owner=row["owner"], name=row["name"], descriptor=row["descriptor"], jni_symbol=row["jni_symbol"])
     runtime = deletion["runtime_loading"]
     add_item(items, kind="license-runtime-loader", scope="sunway-license", status="removed-negative-pass",
-             outcome="supplier native loader absent from owned runtime", key=runtime["class"], source=manifest_source("evidence/license-removal/manifest.json", "sunway_license_deletion.runtime_loading"),
+             outcome="supplier native loader absent from owned runtime", key=runtime["class"], source=manifest_source(".scratch/sunway-supplier-exit-api-first/evidence-archive/license-removal/manifest.json", "sunway_license_deletion.runtime_loading"),
              class_name=runtime["class"], resources=runtime["resources"])
     for resource in runtime["resources"]:
         add_item(items, kind="license-native-resource", scope="sunway-license", status="removed-negative-pass",
-                 outcome="resource absent from owned runtime", key=resource, source=manifest_source("evidence/license-removal/manifest.json", "sunway_license_deletion.runtime_loading"),
+                 outcome="resource absent from owned runtime", key=resource, source=manifest_source(".scratch/sunway-supplier-exit-api-first/evidence-archive/license-removal/manifest.json", "sunway_license_deletion.runtime_loading"),
                  resource=resource)
 
     for index, row in enumerate(manifest["sunway_config_and_host_inputs"]):
         key = row.get("key") or row.get("path")
         add_item(items, kind="license-input", scope="sunway-license", status="removed-negative-pass" if row["classification"] == "delete" else "deferred",
                  outcome="deleted when Sunway is the consumer" if row["classification"] != "retain-for-PageOffice-until-authority-review" else "retained only for third-party boundary review",
-                 key=key, source=manifest_source("evidence/license-removal/manifest.json", "sunway_config_and_host_inputs", index),
+                 key=key, source=manifest_source(".scratch/sunway-supplier-exit-api-first/evidence-archive/license-removal/manifest.json", "sunway_config_and_host_inputs", index),
                  classification=row["classification"], source_reference=row.get("source"), reason=row.get("reason"))
 
     policy = manifest["scanner_policy"]
     for filename in policy["forbidden_filenames"]:
         add_item(items, kind="license-forbidden-filename", scope="sunway-license", status="removed-negative-pass",
-                 outcome="filename absent from owned runtime", key=filename, source=manifest_source("evidence/license-removal/manifest.json", "scanner_policy.forbidden_filenames"), filename=filename)
+                 outcome="filename absent from owned runtime", key=filename, source=manifest_source(".scratch/sunway-supplier-exit-api-first/evidence-archive/license-removal/manifest.json", "scanner_policy.forbidden_filenames"), filename=filename)
     for prefix in policy["forbidden_class_prefixes"]:
         add_item(items, kind="license-forbidden-class-prefix", scope="sunway-license", status="removed-negative-pass",
-                 outcome="class prefix absent from owned runtime", key=prefix, source=manifest_source("evidence/license-removal/manifest.json", "scanner_policy.forbidden_class_prefixes"), prefix=prefix)
+                 outcome="class prefix absent from owned runtime", key=prefix, source=manifest_source(".scratch/sunway-supplier-exit-api-first/evidence-archive/license-removal/manifest.json", "scanner_policy.forbidden_class_prefixes"), prefix=prefix)
     for row in policy["forbidden_classes"]:
         add_item(items, kind="license-forbidden-class", scope="sunway-license", status="removed-negative-pass",
-                 outcome="class absent from owned runtime", key=row, source=manifest_source("evidence/license-removal/manifest.json", "scanner_policy.forbidden_classes"), class_name=row)
+                 outcome="class absent from owned runtime", key=row, source=manifest_source(".scratch/sunway-supplier-exit-api-first/evidence-archive/license-removal/manifest.json", "scanner_policy.forbidden_classes"), class_name=row)
     for row in policy["forbidden_methods"]:
         key = f"{row['owner']}#{row['name']}{row['descriptor']}"
         add_item(items, kind="license-forbidden-method", scope="sunway-license", status="removed-negative-pass",
-                 outcome="method absent from owned runtime", key=key, source=manifest_source("evidence/license-removal/manifest.json", "scanner_policy.forbidden_methods"), **row)
+                 outcome="method absent from owned runtime", key=key, source=manifest_source(".scratch/sunway-supplier-exit-api-first/evidence-archive/license-removal/manifest.json", "scanner_policy.forbidden_methods"), **row)
     for route in policy["forbidden_routes"]:
         add_item(items, kind="license-forbidden-route", scope="sunway-license", status="removed-negative-pass",
-                 outcome="route returns removed negative result", key=route, source=manifest_source("evidence/license-removal/manifest.json", "scanner_policy.forbidden_routes"), route=route)
+                 outcome="route returns removed negative result", key=route, source=manifest_source(".scratch/sunway-supplier-exit-api-first/evidence-archive/license-removal/manifest.json", "scanner_policy.forbidden_routes"), route=route)
     for key_name in policy["forbidden_config_keys"]:
         add_item(items, kind="license-forbidden-config", scope="sunway-license", status="removed-negative-pass",
-                 outcome="config key absent from owned runtime", key=key_name, source=manifest_source("evidence/license-removal/manifest.json", "scanner_policy.forbidden_config_keys"), config_key=key_name)
+                 outcome="config key absent from owned runtime", key=key_name, source=manifest_source(".scratch/sunway-supplier-exit-api-first/evidence-archive/license-removal/manifest.json", "scanner_policy.forbidden_config_keys"), config_key=key_name)
     for token in policy["forbidden_runtime_tokens"]:
         add_item(items, kind="license-forbidden-runtime-token", scope="sunway-license", status="removed-negative-pass",
-                 outcome="token absent from owned process and distribution", key=token, source=manifest_source("evidence/license-removal/manifest.json", "scanner_policy.forbidden_runtime_tokens"), token=token)
+                 outcome="token absent from owned process and distribution", key=token, source=manifest_source(".scratch/sunway-supplier-exit-api-first/evidence-archive/license-removal/manifest.json", "scanner_policy.forbidden_runtime_tokens"), token=token)
     for index, row in enumerate(manifest["web_resource_branches"]):
         add_item(items, kind="license-web-resource", scope="sunway-license", status="removed-negative-pass",
-                 outcome="license-related resource branch removed while retained resource remains scoped", key=f"{row['jar']}!{row['entry']}", source=manifest_source("evidence/license-removal/manifest.json", "web_resource_branches", index),
+                 outcome="license-related resource branch removed while retained resource remains scoped", key=f"{row['jar']}!{row['entry']}", source=manifest_source(".scratch/sunway-supplier-exit-api-first/evidence-archive/license-removal/manifest.json", "web_resource_branches", index),
                  jar=row["jar"], entry=row["entry"], action=row["action"])
 
     # Third-party consumer observations are kept as explicit boundary references,
     # but are not counted as Sunway API closure items.
     for index, row in enumerate(manifest["static_consumer_evidence"]):
         add_item(items, kind="third-party-boundary", scope="excluded-third-party", status="deferred",
-                 outcome="retain and review under third-party authorization boundary", key=f"{row.get('jar')}!{row['entry']}", source=manifest_source("evidence/license-removal/manifest.json", "static_consumer_evidence", index),
+                 outcome="retain and review under third-party authorization boundary", key=f"{row.get('jar')}!{row['entry']}", source=manifest_source(".scratch/sunway-supplier-exit-api-first/evidence-archive/license-removal/manifest.json", "static_consumer_evidence", index),
                  observation=row["observation"])
     for index, row in enumerate(manifest["retained_third_party_or_business"]):
         key = row.get("path") or row.get("class") or row.get("consumer") or str(index)
         add_item(items, kind="retained-boundary", scope="excluded-third-party", status="deferred",
-                 outcome="retain under scoped allowlist", key=key, source=manifest_source("evidence/license-removal/manifest.json", "retained_third_party_or_business", index),
+                 outcome="retain under scoped allowlist", key=key, source=manifest_source(".scratch/sunway-supplier-exit-api-first/evidence-archive/license-removal/manifest.json", "retained_third_party_or_business", index),
                  classification=row.get("classification"))
 
     items.sort(key=lambda row: row["id"])
@@ -204,9 +204,9 @@ def build_registry(root: Path) -> Dict[str, Any]:
         "schema": SCHEMA,
         "scope": "external-native-api-registry",
         "source": {
-            "contract_inventory": "evidence/framework-contract",
-            "license_manifest": "evidence/license-removal/manifest.json",
-            "source_index": "evidence/function-catalog/recovered-source.json",
+            "contract_inventory": ".scratch/sunway-supplier-exit-api-first/evidence-archive/framework-contract",
+            "license_manifest": ".scratch/sunway-supplier-exit-api-first/evidence-archive/license-removal/manifest.json",
+            "source_index": ".scratch/sunway-supplier-exit-api-first/evidence-archive/function-catalog/recovered-source.json",
             "nested_project_commit": recovered_data.get("source_commit"),
             "nested_project_tree_sha256": recovered_data.get("source_tree_sha256"),
             "nested_project_dirty": recovered_data.get("source_worktree_dirty"),

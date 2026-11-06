@@ -24,7 +24,7 @@ RUNNER_COLUMNS = ("case_id", "runner", "source_scopes", "contract")
 ALLOWED_CONTRACTS = {"legacy", "strict"}
 VERIFIER_PATHS = (
     "tools/vertical_slices/matrix.py", "scripts/replay-vertical-slice.py",
-    "scripts/tests/test-strict-vertical-slice.py", "evidence/vertical-slice-runners.tsv",
+    "scripts/tests/test-strict-vertical-slice.py", ".scratch/sunway-supplier-exit-api-first/evidence-archive/vertical-slice-runners.tsv",
 )
 
 

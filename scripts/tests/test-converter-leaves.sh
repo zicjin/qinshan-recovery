@@ -5,7 +5,7 @@ python3 - "$ROOT" "$TMP" <<'PY'
 from pathlib import Path
 import sys,zipfile,hashlib,json
 r,o=map(Path,sys.argv[1:]);
-expected=next(x['sha256'] for x in json.loads((r/'evidence/framework-contract/jars.json').read_text()) if x['jar']=='BOOT-INF/lib/gikam-core-common-14.1.5.jar')
+expected=next(x['sha256'] for x in json.loads((r/'.scratch/sunway-supplier-exit-api-first/evidence-archive/framework-contract/jars.json').read_text()) if x['jar']=='BOOT-INF/lib/gikam-core-common-14.1.5.jar')
 with zipfile.ZipFile(r/'materials/gikam-third-czjky-14.1.5-run.jar') as z:
  data=z.read('BOOT-INF/lib/gikam-core-common-14.1.5.jar')
  assert hashlib.sha256(data).hexdigest()==expected,'supplier reference hash differs'

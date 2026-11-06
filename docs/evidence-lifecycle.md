@@ -173,3 +173,15 @@ retained under the historical archive with their original SHA-256 and move
 audit. A subsequent evidence-only commit can change repository HEAD while
 retaining the same implementation binding; closure and registry freshness are
 checked against `implementation_tree_digest`.
+
+## Evidence and build-support boundary
+
+`evidence/` is the canonical registry and its small set of directly consumed canonical-support
+inputs. It is not a temporary runner output directory and is not a general deployment input.
+Runners write pending/failed/runtime output under the parent workspace
+`.scratch/sunway-supplier-exit-api-first/diagnostic-evidence/`; historical and governance material
+is retained under the parent `evidence-archive/` and registry references preserve provenance.
+
+Build integrity manifests are under `build-support/`: `t01-manifest.sha256`,
+`t02-deps-manifest.sha256`, `t02-build-plugin-seed.sha256`, and
+`external-artifacts.sha256`. Build and verification scripts read those paths directly.

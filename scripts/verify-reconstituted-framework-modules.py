@@ -58,7 +58,7 @@ def pom_dependencies(path: Path) -> list[str]:
 
 
 def registered_plugin_seed_sha256() -> str:
-    manifest = ROOT / "evidence" / "t02-build-plugin-seed.sha256"
+    manifest = ROOT / "build-support" / "t02-build-plugin-seed.sha256"
     for line in manifest.read_text(encoding="utf-8").splitlines():
         if not line or line.startswith("#"):
             continue

@@ -6,6 +6,8 @@ JDK="${JAVA_HOME:-$ROOT/build/jdk1.8.0_391}"
 FRAMEWORK="$ROOT/reconstituted/framework"
 MAVEN_REPO="$ROOT/build/reconstituted-maven-repo"
 PUBLIC_DEPS="${LIMS_PUBLIC_DEPENDENCY_DIR:-$ROOT/build/reconstituted-public-deps}"
+ARTIFACT_ROOT="${LIMS_EXTERNAL_ARTIFACT_ROOT:-$ROOT/.external-materials}"
+PLUGIN_SEED="${MAVEN_PLUGIN_SEED:-$ARTIFACT_ROOT/maven-build-plugin-seed.tar.gz}"
 [ -d "$PUBLIC_DEPS" ] || {
   echo "missing external public dependency directory: $PUBLIC_DEPS" >&2
   exit 2
@@ -13,6 +15,8 @@ PUBLIC_DEPS="${LIMS_PUBLIC_DEPENDENCY_DIR:-$ROOT/build/reconstituted-public-deps
 
 python3 "$ROOT/scripts/prepare-reconstituted-maven-repo.py" \
   "$MAVEN_REPO" --overwrite \
+  --seed "$PLUGIN_SEED" \
+  --manifest "$ROOT/build-support/t02-build-plugin-seed.sha256" \
   --public-deps "$PUBLIC_DEPS"
 
 JAVA_HOME="$JDK" PATH="$JDK/bin:$PATH" mvn -q -f "$FRAMEWORK/pom.xml" \

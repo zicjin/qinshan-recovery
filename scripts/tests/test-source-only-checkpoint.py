@@ -42,6 +42,9 @@ def main() -> int:
     for path in build_inputs:
         text = path.read_text(encoding="utf-8")
         assert not any(token in text for token in forbidden), path
+    framework_build = (ROOT / "scripts/build-reconstituted-framework.sh").read_text(encoding="utf-8")
+    assert "LIMS_EXTERNAL_ARTIFACT_ROOT" in framework_build
+    assert "--seed \"$PLUGIN_SEED\"" in framework_build
 
     result = subprocess.run(
         [sys.executable, str(SCRIPT)], cwd=ROOT, text=True,

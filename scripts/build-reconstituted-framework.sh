@@ -5,14 +5,15 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 JDK="${JAVA_HOME:-$ROOT/build/jdk1.8.0_391}"
 FRAMEWORK="$ROOT/reconstituted/framework"
 MAVEN_REPO="$ROOT/build/reconstituted-maven-repo"
-
-python3 "$ROOT/scripts/prepare-reconstituted-public-deps.py" \
-  "$ROOT/build/reconstituted-public-deps" \
-  --overwrite
+PUBLIC_DEPS="${LIMS_PUBLIC_DEPENDENCY_DIR:-$ROOT/build/reconstituted-public-deps}"
+[ -d "$PUBLIC_DEPS" ] || {
+  echo "missing external public dependency directory: $PUBLIC_DEPS" >&2
+  exit 2
+}
 
 python3 "$ROOT/scripts/prepare-reconstituted-maven-repo.py" \
   "$MAVEN_REPO" --overwrite \
-  --public-deps "$ROOT/build/reconstituted-public-deps"
+  --public-deps "$PUBLIC_DEPS"
 
 JAVA_HOME="$JDK" PATH="$JDK/bin:$PATH" mvn -q -f "$FRAMEWORK/pom.xml" \
   -Dmaven.repo.local="$MAVEN_REPO" \

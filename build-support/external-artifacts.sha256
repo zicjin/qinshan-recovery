@@ -1,4 +1,6 @@
-# SHA-256 values for restricted build/forensics artifacts supplied outside the standalone Git tree.
+# SHA-256 values for controlled external artifacts. Source-only build requires
+# only the Maven plugin seed; the supplier run JAR and JDK archive are optional
+# provenance/tooling inputs and are never distribution runtime dependencies.
 4a720797810fd2f8cca6e22604657028cb87830ca0e24bb55a5f42f040f6ee9f  gikam-third-czjky-14.1.5-run.jar
 c2f9513727fa7a06d6cf9a10a4c1712a984baa33a69373c0b909785b1f805108  jdk-8u391-linux-x64.tar.gz
 625154286cb1d5b56e1ac8331537a151bec6e4a8d8284f2243c8444a257ae5d5  maven-build-plugin-seed.tar.gz

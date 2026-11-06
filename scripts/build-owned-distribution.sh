@@ -7,7 +7,8 @@ JAVA_HOME="${JAVA_HOME:-$ROOT/build/jdk1.8.0_391}"
 export LIMS_PROJECT_ROOT JAVA_HOME
 
 FRAMEWORK="$ROOT/reconstituted/framework"
-PUBLIC_DEPS="$ROOT/build/reconstituted-public-deps"
+PUBLIC_DEPS="${LIMS_PUBLIC_DEPENDENCY_DIR:-$ROOT/build/reconstituted-public-deps}"
+export LIMS_PUBLIC_DEPENDENCY_DIR="$PUBLIC_DEPS"
 APPLICATION_DIR="$ROOT/build/source-only-application"
 OUT="$ROOT/owned-distribution/target"
 mkdir -p "$OUT"
@@ -20,9 +21,20 @@ source_hash() {
   (
     cd "$ROOT"
     {
-      find project/src reconstituted/overrides scripts -type f \
-        ! -path 'scripts/__pycache__/*' ! -name '*.pyc' -print0
-      printf '%s\0' project/pom.xml reconstituted/framework/pom.xml
+      find project/src owned-framework/src owned-personnel/src owned-equipment/src \
+        owned-consumables/src owned-attachments/src owned-report/src owned-scheduler/src \
+        owned-web/src reconstituted/framework reconstituted/overrides -type f \
+        ! -path '*/target/*' -print0
+      printf '%s\0' project/pom.xml reconstituted/framework/pom.xml \
+        reconstituted/framework/public-dependency-allowlist.json \
+        docs/reconstitution/framework-module-registry.json \
+        docs/reconstitution/decompiler-transforms.json
+      printf '%s\0' scripts/build-reconstituted-framework.sh \
+        scripts/build-source-only-application.py \
+        scripts/prepare-reconstituted-maven-repo.py \
+        scripts/record-reconstituted-framework-build.py \
+        scripts/verify-reconstituted-framework-modules.py \
+        scripts/reject-supplier-runtime.sh
       printf '%s\0' owned-distribution/package.py owned-distribution/start.sh
       printf '%s\0' owned-distribution/example/owned-application.properties
     } | sort -z | xargs -0 sha256sum
@@ -53,8 +65,10 @@ if [ "${OWNED_DISTRIBUTION_REUSE:-0}" = "1" ] \
   exit 0
 fi
 
+bash "$ROOT/scripts/verify-external-artifacts.sh" --source-only
 bash "$ROOT/scripts/build-reconstituted-framework.sh"
 python3 "$ROOT/scripts/build-source-only-application.py" \
+  --public-deps "$PUBLIC_DEPS" \
   > "$APPLICATION_DIR/build-output.json"
 
 if [ "${OWNED_DISTRIBUTION_REUSE:-0}" = "1" ]; then

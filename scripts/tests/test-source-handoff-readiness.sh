@@ -10,18 +10,22 @@ trap 'rm -rf "$tmp"' EXIT
 
 make_tree() {
   local tree="$1"
-  mkdir -p "$tree/docs" "$tree/project/src/main/java/example" "$tree/scripts" "$tree/tools"
+  mkdir -p "$tree/docs" "$tree/project/src/main/java/example" \
+    "$tree/reconstituted/framework" "$tree/scripts" "$tree/tools"
   printf '# recovered source\n' > "$tree/README.md"
-  printf '# recovery glossary\n' > "$tree/GLOSSARY.md"
-  printf '# handoff\n' > "$tree/docs/recovery-handoff.md"
+  printf '# deployment\n' > "$tree/docs/owned-sss2-deployment.md"
   printf '<project/>\n' > "$tree/project/pom.xml"
+  printf '<project/>\n' > "$tree/reconstituted/framework/pom.xml"
   printf 'class Example {}\n' > "$tree/project/src/main/java/example/Example.java"
-  printf '#!/usr/bin/env bash\n' > "$tree/scripts/build-prep.sh"
-  printf '#!/usr/bin/env bash\n' > "$tree/scripts/build.sh"
-  printf '#!/usr/bin/env bash\n' > "$tree/scripts/verify-materials.sh"
-  printf 'print("class diff")\n' > "$tree/tools/class_diff.py"
+  printf '#!/usr/bin/env bash\n' > "$tree/scripts/build-owned-distribution.sh"
+  printf '#!/usr/bin/env bash\n' > "$tree/scripts/build-reconstituted-framework.sh"
+  printf 'print("build")\n' > "$tree/scripts/build-source-only-application.py"
+  printf 'print("checkpoint")\n' > "$tree/scripts/verify-source-only-checkpoint.py"
+  printf 'print("native")\n' > "$tree/scripts/verify-owned-native-license-removal.py"
+  printf '#!/usr/bin/env bash\n' > "$tree/scripts/refresh-owned-sss2-app.sh"
+  printf '#!/usr/bin/env bash\n' > "$tree/scripts/rollback-owned-sss2-app.sh"
   printf 'print("inventory")\n' > "$tree/tools/source_inventory.py"
-  chmod 755 "$tree/scripts/build-prep.sh" "$tree/scripts/build.sh" "$tree/scripts/verify-materials.sh"
+  chmod 755 "$tree/scripts/"*.sh
 }
 
 expect_fail() {
@@ -92,10 +96,10 @@ mkdir "$tmp/with-git/.git"
 expect_fail "git metadata" 'forbidden handoff path component: .git' \
   python3 "$VERIFY" --root "$tmp/with-git" --emit-attestation
 
-make_tree "$tmp/without-glossary"
-mv "$tmp/without-glossary/GLOSSARY.md" "$tmp/glossary-outside-candidate.md"
-expect_fail "required glossary" 'required source file is missing or not regular: GLOSSARY.md' \
-  python3 "$VERIFY" --root "$tmp/without-glossary" --emit-attestation
+make_tree "$tmp/without-build"
+rm "$tmp/without-build/scripts/build-owned-distribution.sh"
+expect_fail "required source-only build" 'required source file is missing or not regular: scripts/build-owned-distribution.sh' \
+  python3 "$VERIFY" --root "$tmp/without-build" --emit-attestation
 
 make_tree "$tmp/with-private"
 mkdir "$tmp/with-private/private"

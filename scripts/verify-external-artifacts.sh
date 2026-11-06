@@ -4,6 +4,12 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 ARTIFACT_ROOT="${LIMS_EXTERNAL_ARTIFACT_ROOT:-$ROOT/.external-materials}"
 MANIFEST="${EXTERNAL_ARTIFACT_MANIFEST:-$ROOT/build-support/external-artifacts.sha256}"
+MODE="${1:-full}"
+if [ "$MODE" = "--source-only" ]; then MODE="source-only"; fi
+case "$MODE" in
+  full|source-only) ;;
+  *) echo "usage: $0 [full|source-only]" >&2; exit 2 ;;
+esac
 
 [ -d "$ARTIFACT_ROOT" ] || { echo "external artifact root is missing: $ARTIFACT_ROOT" >&2; exit 1; }
 [ -f "$MANIFEST" ] || { echo "external artifact manifest is missing: $MANIFEST" >&2; exit 1; }
@@ -13,6 +19,9 @@ checked=0
 while read -r expected relative; do
     [ -z "${expected:-}" ] && continue
     case "$expected" in \#*) continue ;; esac
+    if [ "$MODE" = source-only ] && [[ "$relative" != *maven-build-plugin-seed.tar.gz ]]; then
+        continue
+    fi
     file="$ARTIFACT_ROOT/$relative"
     checked=$((checked + 1))
     if [ ! -f "$file" ]; then

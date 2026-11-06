@@ -24,6 +24,25 @@ def load_module():
 
 
 def main() -> int:
+    build_inputs = (
+        ROOT / "scripts/build-owned-distribution.sh",
+        ROOT / "scripts/build-reconstituted-framework.sh",
+        ROOT / "scripts/build-source-only-application.py",
+        ROOT / "scripts/prepare-reconstituted-maven-repo.py",
+    )
+    forbidden = (
+        "gikam-third-czjky-14.1.5-run.jar",
+        "SUPPLIER_RUN_JAR",
+        "cfr-0.152",
+        "Vineflower",
+        "prepare-reconstituted-public-deps.py",
+        "build-prep.sh",
+        "docker/Dockerfile.built",
+    )
+    for path in build_inputs:
+        text = path.read_text(encoding="utf-8")
+        assert not any(token in text for token in forbidden), path
+
     result = subprocess.run(
         [sys.executable, str(SCRIPT)], cwd=ROOT, text=True,
         capture_output=True, check=False,

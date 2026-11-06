@@ -124,6 +124,26 @@ def populate_public_dependencies(
     return len(artifacts)
 
 
+def validate_public_dependency_directory(
+    public_deps: Path,
+    allowlist_path: Path,
+) -> None:
+    allowlist = json.loads(allowlist_path.read_text(encoding="utf-8"))
+    expected = {
+        str(item["filename"])
+        for item in allowlist.get("entries", [])
+        if not item.get("prepare_excluded")
+    }
+    actual = {path.name for path in public_deps.glob("*.jar")}
+    missing = sorted(expected - actual)
+    extra = sorted(actual - expected)
+    if missing or extra:
+        raise SystemExit(
+            "public dependency directory differs from allowlist: "
+            f"missing={missing[:8]} extra={extra[:8]}"
+        )
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("output", type=Path)
@@ -159,6 +179,11 @@ def main() -> int:
     if actual != expected:
         raise SystemExit("Maven plugin seed SHA-256 mismatch")
     validate_archive(seed)
+    if args.public_deps:
+        validate_public_dependency_directory(
+            args.public_deps.resolve(),
+            args.allowlist.resolve(),
+        )
 
     if output.exists():
         if not args.overwrite:

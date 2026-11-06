@@ -106,6 +106,54 @@ def main() -> int:
         assert (output / "commons-io/commons-io/2.4/commons-io-2.4.jar").is_file()
         assert (output / "commons-io/commons-io/2.4/commons-io-2.4.pom").is_file()
 
+        public_jar.unlink()
+        missing = subprocess.run(
+            [
+                sys.executable,
+                str(SCRIPT),
+                str(root / "missing-repo"),
+                "--seed",
+                str(seed),
+                "--manifest",
+                str(manifest),
+                "--public-deps",
+                str(public_deps),
+                "--allowlist",
+                str(allowlist),
+            ],
+            text=True,
+            capture_output=True,
+        )
+        assert missing.returncode != 0
+        assert "differs from allowlist" in missing.stderr
+        public_jar.write_bytes(b"")
+        with zipfile.ZipFile(public_jar, "w") as archive:
+            archive.writestr(
+                "META-INF/maven/commons-io/commons-io/pom.properties",
+                "groupId=commons-io\nartifactId=commons-io\nversion=2.4\n",
+            )
+        (public_deps / "unexpected.jar").write_bytes(b"unexpected")
+        extra = subprocess.run(
+            [
+                sys.executable,
+                str(SCRIPT),
+                str(root / "extra-repo"),
+                "--seed",
+                str(seed),
+                "--manifest",
+                str(manifest),
+                "--public-deps",
+                str(public_deps),
+                "--allowlist",
+                str(allowlist),
+            ],
+            text=True,
+            capture_output=True,
+        )
+        assert extra.returncode != 0
+        assert "differs from allowlist" in extra.stderr
+        (public_deps / "unexpected.jar").unlink()
+
         manifest.write_text(f"{'0' * 64}  materials/{seed.name}\n", encoding="utf-8")
         failed = subprocess.run(
             [

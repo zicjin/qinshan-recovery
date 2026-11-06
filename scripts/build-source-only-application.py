@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
 from pathlib import Path, PurePosixPath
 import re
 import shutil
@@ -236,7 +237,12 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--public-deps",
         type=Path,
-        default=ROOT / "build" / "reconstituted-public-deps",
+        default=Path(
+            os.environ.get(
+                "LIMS_PUBLIC_DEPENDENCY_DIR",
+                ROOT / "build" / "reconstituted-public-deps",
+            )
+        ),
     )
     parser.add_argument(
         "--output-root",

@@ -74,8 +74,7 @@ class EvidenceOutputPolicyTest(unittest.TestCase):
 
     def test_api_runners_use_guard_and_diagnostic_runtime_defaults(self):
         scripts = ROOT / "scripts"
-        for name in ("spring_api_contract_runner.py", "fast_differential_api_runner.py",
-                     "frontend-baseline-readonly.py", "frontend-authenticated-baseline-sss2.py"):
+        for name in ("spring_api_contract_runner.py", "fast_differential_api_runner.py"):
             text = (scripts / name).read_text(encoding="utf-8")
             self.assertIn("guard_output_path", text, name)
         closure = (ROOT / "tools" / "api_route_closure.py").read_text(encoding="utf-8")
@@ -84,7 +83,6 @@ class EvidenceOutputPolicyTest(unittest.TestCase):
                      "fast_contract_skeleton.py", "business_api_inventory.py"):
             text = (ROOT / "tools" / name).read_text(encoding="utf-8")
             self.assertIn("guard_output_path", text, name)
-        self.assertIn("guard_output_path", (scripts / "frontend-source-runtime-inventory.py").read_text(encoding="utf-8"))
         self.assertIn("guard_output_path", (ROOT / "tools" / "finalize_api_report.py").read_text(encoding="utf-8"))
         orchestrator = (scripts / "api_wave_orchestrator.py").read_text(encoding="utf-8")
         self.assertIn("DIAGNOSTIC_ROOT", orchestrator)
@@ -110,8 +108,6 @@ class EvidenceOutputPolicyTest(unittest.TestCase):
             text = path.read_text(encoding="utf-8")
             if "--output" in text:
                 self.assertIn("guard_output_path", text, str(path))
-        independent = (ROOT / "scripts/replay-independent-current.py").read_text(encoding="utf-8")
-        self.assertNotIn("'--output', 'evidence/", independent)
 
 
 if __name__ == "__main__":

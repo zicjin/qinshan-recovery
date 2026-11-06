@@ -25,21 +25,24 @@ SHA256_RE = re.compile(r"^sha256:[0-9a-f]{64}$")
 # These are runtime, build, or repository-control inputs.  A clean source
 # handoff must receive them through the separately controlled material channel.
 FORBIDDEN_COMPONENTS = frozenset(
-    {".git", "private", "materials", "build", "target", "logs", ".m2"}
+    {".git", ".external-materials", ".scratch", "private", "materials", "target", "logs", ".m2"}
 )
 FORBIDDEN_SUFFIXES = (".env", ".lic", ".pem", ".key")
 REQUIRED_FILES = (
     "README.md",
-    "GLOSSARY.md",
-    "docs/recovery-handoff.md",
+    "docs/owned-sss2-deployment.md",
     "project/pom.xml",
-    "scripts/build-prep.sh",
-    "scripts/build.sh",
-    "scripts/verify-materials.sh",
-    "tools/class_diff.py",
+    "reconstituted/framework/pom.xml",
+    "scripts/build-owned-distribution.sh",
+    "scripts/build-reconstituted-framework.sh",
+    "scripts/build-source-only-application.py",
+    "scripts/verify-source-only-checkpoint.py",
+    "scripts/verify-owned-native-license-removal.py",
+    "scripts/refresh-owned-sss2-app.sh",
+    "scripts/rollback-owned-sss2-app.sh",
     "tools/source_inventory.py",
 )
-REQUIRED_DIRECTORIES = ("project/src",)
+REQUIRED_DIRECTORIES = ("project/src", "reconstituted/framework")
 
 
 class VerificationError(Exception):
@@ -92,6 +95,8 @@ def check_component_policy(relative: Path) -> None:
         fail(f"runtime configuration must not be handed off: {relative.as_posix()}")
     if lowered.endswith(FORBIDDEN_SUFFIXES):
         fail(f"restricted runtime material must not be handed off: {relative.as_posix()}")
+    if relative.parts[0] == "build" and relative.as_posix() != "build/oracle-free-source-manifest.json":
+        fail(f"generated build output must not be handed off: {relative.as_posix()}")
     # Control characters make the canonical line format ambiguous and are not
     # useful in a portable source tree.
     if any(ord(char) < 0x20 or ord(char) == 0x7F for char in relative.as_posix()):

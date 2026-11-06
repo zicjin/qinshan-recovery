@@ -24,13 +24,8 @@ def main() -> int:
         "source_only_builder_parameters",
         ROOT / "scripts/build-source-only-application.py",
     )
-    assembler = load(
-        "reconstituted_framework_assembler_parameters",
-        ROOT / "scripts/assemble-reconstituted-framework-modules.py",
-    )
-
     assert "-parameters" in builder.PROJECT_JAVAC_FLAGS
-    parent_pom = assembler.render_parent_pom(["owned-core-common"])
+    parent_pom = (ROOT / "reconstituted/framework/pom.xml").read_text(encoding="utf-8")
     assert "<parameters>true</parameters>" in parent_pom
 
     javac = shutil.which("javac")

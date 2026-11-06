@@ -31,7 +31,7 @@ class SourceBindingTest(unittest.TestCase):
             "scripts/evidence_output.py": "output-v1\n",
             "scripts/spring_api_contract_runner.py": "runner-v1\n",
             "scripts/api_fixture.py": "fixture-v1\n",
-            "scripts/build-prep.sh": "build-v1\n",
+            "scripts/build-owned-distribution.sh": "build-v1\n",
             "scripts/manage-evidence.py": "governance-v1\n",
             "tools/api_route_ledger.py": "ledger-v1\n",
             "tools/api_route_closure.py": "closure-v1\n",

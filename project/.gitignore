@@ -1,4 +1,4 @@
-# Maven build output (recreated by scripts/build.sh)
+# Maven build output (not source-only distribution input)
 target/
 pom.xml.tag
 pom.xml.releaseBackup

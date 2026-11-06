@@ -116,6 +116,23 @@ class SourceBindingTest(unittest.TestCase):
         self.assertTrue(second["harness_dirty"])
         self.assertFalse(second["application_dirty"])
 
+    def test_harness_bookkeeping_change_requires_no_replay_when_semantics_are_unchanged(self):
+        first = self.capture()
+        (self.root / "scripts" / "evidence_output.py").write_text(
+            "output-v2 logging-only\n", encoding="utf-8",
+        )
+        second = self.capture()
+
+        self.assertNotEqual(first["harness_binding"], second["harness_binding"])
+        self.assertEqual(
+            binding.replay_surfaces(first, second, harness_semantics_unchanged=True),
+            (),
+        )
+        self.assertEqual(
+            binding.replay_surfaces(first, second, harness_semantics_unchanged=False),
+            ("harness",),
+        )
+
     def test_planning_change_only_changes_planning_surface(self):
         first = self.capture()
         (self.root / "tools" / "api_route_ledger.py").write_text("ledger-v2\n", encoding="utf-8")

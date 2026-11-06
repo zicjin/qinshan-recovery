@@ -235,5 +235,36 @@ def transcript_fingerprints(
     }
 
 
+def request_fingerprint_delta(
+    before: Mapping[str, Mapping[str, Any]] | list[Mapping[str, Any]],
+    after: Mapping[str, Mapping[str, Any]] | list[Mapping[str, Any]],
+) -> dict[str, list[str]]:
+    """Return only cases whose stimulus semantics changed or appeared."""
+    def indexed(value):
+        if isinstance(value, Mapping):
+            return {
+                str(key): request_fingerprint(item)
+                for key, item in value.items()
+                if isinstance(item, Mapping)
+            }
+        result = {}
+        for item in value:
+            if not isinstance(item, Mapping):
+                continue
+            key = str(item.get("id") or item.get("case_id") or "")
+            if not key:
+                raise ValueError("fingerprint delta case has no id")
+            result[key] = request_fingerprint(item.get("request", item))
+        return result
+
+    old = indexed(before)
+    new = indexed(after)
+    return {
+        "changed": sorted(key for key in old.keys() & new.keys() if old[key] != new[key]),
+        "added": sorted(new.keys() - old.keys()),
+        "removed": sorted(old.keys() - new.keys()),
+    }
+
+
 if __name__ == "__main__":
     raise SystemExit("import evidence_fingerprint from a runner or test")

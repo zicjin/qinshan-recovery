@@ -687,9 +687,18 @@ def binding_metadata(binding: Optional[Mapping[str, Any]] = None) -> dict[str, A
 
 
 def replay_surfaces(before: Mapping[str, Any],
-                    after: Optional[Mapping[str, Any]] = None) -> tuple[str, ...]:
+                    after: Optional[Mapping[str, Any]] = None,
+                    *,
+                    harness_semantics_unchanged: Optional[bool] = None) -> tuple[str, ...]:
     delta = binding_delta(before, after)
-    return tuple(surface for surface in REPLAY_SURFACES if delta[surface])
+    selected = []
+    for surface in REPLAY_SURFACES:
+        if not delta[surface]:
+            continue
+        if surface == "harness" and harness_semantics_unchanged is True:
+            continue
+        selected.append(surface)
+    return tuple(selected)
 
 
 def binding_from_payload(payload: Mapping[str, Any]) -> Optional[str]:

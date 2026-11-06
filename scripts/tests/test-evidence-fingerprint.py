@@ -100,6 +100,22 @@ class EvidenceFingerprintTest(unittest.TestCase):
         self.assertEqual(result["stimulus_contract_version"], "3")
         self.assertEqual(result["normalizer_version"], "2")
 
+    def test_request_delta_selects_only_changed_stimuli(self):
+        before = {
+            "stable": {"method": "GET", "path_template": "/stable", "headers": {"Accept": "application/json"}},
+            "changed": {"method": "GET", "path_template": "/changed", "headers": {"Accept": "application/json"}},
+        }
+        after = {
+            "stable": {"method": "GET", "path_template": "/stable", "headers": {"Accept": "application/json"}},
+            "changed": {"method": "GET", "path_template": "/changed", "headers": {"Accept": "text/html"}},
+            "added": {"method": "GET", "path_template": "/added"},
+        }
+        self.assertEqual(fingerprints.request_fingerprint_delta(before, after), {
+            "changed": ["changed"],
+            "added": ["added"],
+            "removed": [],
+        })
+
 
 if __name__ == "__main__":
     unittest.main()

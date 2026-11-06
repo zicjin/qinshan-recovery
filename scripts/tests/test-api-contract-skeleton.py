@@ -171,6 +171,12 @@ SELECT A.ID,A.NAME FROM T_PEOPLE A
             second_equipment["family_fingerprint"],
         )
 
+        unrelated = self.root / "owned-framework/src/main/java/fixture/UnrelatedService.java"
+        unrelated.write_text("package fixture; public class UnrelatedService {}\n")
+        third = self.build()
+        third_family = next(f for f in third["behavior_families"] if "p-query" in f["alias_route_ids"])
+        self.assertEqual(second_family["family_fingerprint"], third_family["family_fingerprint"])
+
         cases = [case for wave in second["waves"] for case in wave["cases"]]
         self.assertTrue(all(case["family_fingerprint"].startswith("fam-") for case in cases))
 

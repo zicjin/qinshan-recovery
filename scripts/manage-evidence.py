@@ -317,6 +317,8 @@ def closure_report_registry_valid(value: Mapping[str, Any], registry: Mapping[st
         row = registry.get(rel)
         if row is None or row.get("class") != "canonical-strict":
             return False, "closure report is not canonical-strict: " + rel
+        if row.get("storage") != "git":
+            return False, "closure report storage must be storage=git: " + rel
         if row.get("implementation_dirty", row.get("source_dirty")) != "false":
             return False, "closure report is not current clean evidence: " + rel
         if item.get("strict_evidence") is not True or (value.get("implementation_tree_digest") and item.get("implementation_tree_digest") != value.get("implementation_tree_digest")):
@@ -1007,6 +1009,8 @@ def cmd_verify(args: argparse.Namespace) -> int:
             invalid.append(f"{path}: canonical root JSON is not canonical class")
         payload = json_payload(file)
         if row.get("class") in {"canonical-strict", "canonical-diagnostic"}:
+            if row.get("storage") != "git":
+                invalid.append(f"{path}: canonical class must use storage=git")
             if row.get("implementation_dirty") != "false":
                 invalid.append(f"{path}: canonical class implementation_dirty is not false")
             for surface in ("application", "harness", "runtime_contract", "planning"):

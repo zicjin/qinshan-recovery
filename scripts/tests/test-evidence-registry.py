@@ -106,6 +106,23 @@ class EvidenceRegistryTest(unittest.TestCase):
         self.assertFalse(ok)
         self.assertIn("diagnostic", reason)
 
+    def test_strict_closure_rejects_local_storage_evidence(self):
+        ok, reason = MANAGE.closure_report_registry_valid({
+            "reports": [{
+                "path": "evidence/report.json",
+                "strict_evidence": True,
+                "implementation_dirty": False,
+            }],
+        }, {
+            "evidence/report.json": {
+                "class": "canonical-strict",
+                "storage": "local",
+                "implementation_dirty": "false",
+            },
+        }, "current")
+        self.assertFalse(ok)
+        self.assertIn("storage=git", reason)
+
     def test_strict_contract_rejects_ancestor_even_when_scope_is_unchanged(self):
         payload = {
             "status": "executed-pass",

@@ -216,6 +216,9 @@ def strict_case_contract(report: Mapping[str, Any]) -> Tuple[bool, str]:
                 return False, "case %d has invalid response fingerprint" % index
             if case["validation_mode"] not in {"executed", "revalidated-by-fingerprint"}:
                 return False, "case %d has invalid validation mode" % index
+            if (case["validation_mode"] == "revalidated-by-fingerprint"
+                    and report.get("harness_semantics_unchanged") is not True):
+                return False, "case %d lacks golden harness revalidation proof" % index
         method = str(route.get("method", case.get("method", "GET"))).upper()
         operation = str(route.get("operation", case.get("operation", "read"))).lower()
         # POST is also the legacy query verb for many inherited/resource

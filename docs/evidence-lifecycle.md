@@ -1,8 +1,10 @@
 # Evidence lifecycle
 
 `lims-recovery/evidence/` is the canonical publication area. It contains the
-machine-readable registry and only reports that are explicitly classified as
-`canonical-strict` or `canonical-diagnostic`. Runner output belongs in
+machine-readable registry and only promoted canonical reports. A clean
+standalone checkout may have only the registry header before a current report
+is promoted. Historical and diagnostic rows are retained in the parent
+workspace archive registry under `.scratch/.../evidence-archive/`. Runner output belongs in
 `.scratch/sunway-supplier-exit-api-first/diagnostic-evidence/` until it has
 passed the appropriate contract.
 

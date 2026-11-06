@@ -29,6 +29,8 @@ def main():
     registry_rows = None
     if not reports:
         registry = ROOT / "evidence/evidence-index.tsv"
+        if not registry.is_file():
+            raise SystemExit("current-head evidence: canonical registry is missing: " + str(registry))
         with registry.open(encoding="utf-8", newline="") as handle:
             registry_rows = [row for row in csv.DictReader(handle, delimiter="\t")
                              if row.get("class") in {"canonical-strict", "canonical-diagnostic"}]

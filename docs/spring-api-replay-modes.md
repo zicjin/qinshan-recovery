@@ -49,9 +49,11 @@ Strict evidence is promoted only when every declared case is executed against th
 `lims-recovery/evidence/` is the canonical publication area, not a runner
 scratch directory. Runners write pending reports below
 `.scratch/sunway-supplier-exit-api-first/diagnostic-evidence/`; direct writes to
-the canonical root are rejected. The registry
-`evidence/evidence-index.tsv` records every canonical and retained diagnostic
-artifact, its source binding, class, hash, retention and supersession reason.
+the canonical root are rejected. The standalone registry
+`evidence/evidence-index.tsv` records promoted canonical artifacts. Historical
+and diagnostic rows are retained in the parent workspace registry at
+`.scratch/sunway-supplier-exit-api-first/evidence-archive/evidence-index.tsv`;
+they are not deployment inputs or current strict evidence.
 
 Use the governance commands before publishing a report:
 

@@ -23,6 +23,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 /** Public HTTP/session identity seam; no supplier classes, database, or production endpoint. */
 public final class OwnedIdentityHttpBoundaryContractTest {
@@ -91,6 +93,18 @@ public final class OwnedIdentityHttpBoundaryContractTest {
 
         provider.failAuthentication = false;
         provider.deny = false;
+        fails(AccessDeniedException.class, new Attempt() {
+            public void run() throws Exception { boundary.currentPrincipal(session.httpSession()); }
+        });
+        check(provider.issueAuthenticatedCalls == 0, "anonymous context cannot adopt a project identity");
+        SecurityContextHolder.getContext().setAuthentication(
+                new UsernamePasswordAuthenticationToken("project-user", null, Collections.emptyList()));
+        check("project-user".equals(boundary.currentPrincipal(session.httpSession()).getId()),
+                "authenticated project session is adapted to an owned principal");
+        boundary.requirePermission(session.httpSession(), OwnedIdentityProvider.PERSONNEL_READ);
+        check("project-user".equals(provider.seenAuthenticatedUser),
+                "project identity adoption revalidates through the provider");
+        SecurityContextHolder.clearContext();
         final RequestFixture http = new RequestFixture(session.httpSession(), "u-a", "ciphertext", "rsa-fixture");
         OwnedIdentityHttpController controller = new OwnedIdentityHttpController(boundary, new OwnedLoginCredentialDecoder() {
             public char[] decode(String userId, String encodedPassword, String transportKey) {
@@ -144,6 +158,8 @@ public final class OwnedIdentityHttpBoundaryContractTest {
     private static final class FakeIdentityProvider implements OwnedIdentityProvider {
         private final OwnedPrincipal principal = new OwnedPrincipal("u-a", "org-a", "Fixture Org");
         private String seenPassword;
+        private String seenAuthenticatedUser;
+        private int issueAuthenticatedCalls;
         private boolean deny;
         private boolean failAuthentication;
 
@@ -151,6 +167,11 @@ public final class OwnedIdentityHttpBoundaryContractTest {
             seenPassword = new String(password);
             if (failAuthentication) throw new BadCredentialsException("GIKAM.SECURITY.LOGIN.INCORRECT_USER_OR_PASSWORD");
             return principal;
+        }
+        public OwnedPrincipal issueAuthenticated(String userId) throws SQLException {
+            issueAuthenticatedCalls++;
+            seenAuthenticatedUser = userId;
+            return new OwnedPrincipal(userId, "org-a", "Fixture Org");
         }
         public void authorize(OwnedPrincipal value, String permission) throws SQLException {
             if (deny || !PERSONNEL_READ.equals(permission)) throw new AccessDeniedException("GIKAM.PERMISSION.UNAUTHORIZED");

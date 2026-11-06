@@ -9,6 +9,8 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 import javax.servlet.http.HttpSession;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 /**
  * Owned session boundary for the LIMS login, permission, and organization
@@ -70,9 +72,24 @@ public final class OwnedIdentityHttpBoundary {
     public OwnedPrincipal currentPrincipal(HttpSession session) throws SQLException {
         OwnedPrincipal stored = session == null ? null : principalAttribute(session);
         if (stored == null) {
-            clearPrincipal(session);
-            record("session", null, null, null, AuditEvent.Outcome.DENIED, "unauthenticated");
-            throw denied();
+            String authenticatedUserId = authenticatedUserId();
+            if (authenticatedUserId == null) {
+                clearPrincipal(session);
+                record("session", null, null, null, AuditEvent.Outcome.DENIED, "unauthenticated");
+                throw denied();
+            }
+            try {
+                OwnedPrincipal adopted = provider.issueAuthenticated(authenticatedUserId);
+                if (adopted == null) throw denied();
+                if (session != null) session.setAttribute(SESSION_ATTRIBUTE, adopted);
+                return adopted;
+            } catch (SQLException failure) {
+                record("session", authenticatedUserId, null, null, AuditEvent.Outcome.DENIED, "identity-provider-failure");
+                throw failure;
+            } catch (RuntimeException failure) {
+                record("session", authenticatedUserId, null, null, AuditEvent.Outcome.DENIED, reason(failure));
+                throw failure;
+            }
         }
         try {
             OwnedPrincipal refreshed = provider.refresh(stored);
@@ -88,6 +105,16 @@ public final class OwnedIdentityHttpBoundary {
             record("session", stored.getId(), stored.getOrgId(), null, AuditEvent.Outcome.DENIED, reason(failure));
             throw failure;
         }
+    }
+
+    private static String authenticatedUserId() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()
+                || "anonymousUser".equals(authentication.getName())) {
+            return null;
+        }
+        String name = authentication.getName();
+        return name == null || name.trim().length() == 0 ? null : name;
     }
 
     /** One projection serves login and account reads; role assignments are loaded afresh. */

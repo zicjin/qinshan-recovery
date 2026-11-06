@@ -47,9 +47,8 @@ public class LcdpScriptUtils {
    private static final Logger logger = LoggerFactory.getLogger(LcdpScriptUtils.class);
 
    public static String callScriptMethod(String scriptPath, Object... args) {
-      int lastDotIndex = scriptPath.lastIndexOf(".");
-      String path = scriptPath.substring(0, lastDotIndex);
-      String methodName = scriptPath.substring(lastDotIndex + 1);
+      String path = LcdpScriptPath.methodPath(scriptPath);
+      String methodName = LcdpScriptPath.methodName(scriptPath);
       return isDebugCall() ? devCallScriptMethod(path, methodName, args) : proCallScriptMethod(path, methodName, args);
    }
 

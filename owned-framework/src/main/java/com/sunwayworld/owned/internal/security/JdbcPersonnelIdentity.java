@@ -112,6 +112,22 @@ public final class JdbcPersonnelIdentity {
         }
     }
 
+    /**
+     * Re-read an identity that the original project authentication chain has
+     * already accepted. No password is accepted here and every account state
+     * check is repeated against the live database.
+     */
+    public Principal authenticatedPrincipal(String userId) throws SQLException {
+        if (userId == null || userId.trim().length() == 0) throw new AccessDeniedException(DENIED);
+        try (Connection connection = dataSource.getConnection()) {
+            checkLoginConfiguration(connection);
+            UserRecord record = readUser(connection, userId);
+            if (record == null) throw new AccessDeniedException(DENIED);
+            checkActive(record);
+            return new Principal(issuer, record.id, record.orgId, record.orgName);
+        }
+    }
+
     /** Return current database identity fields, keeping the prior snapshot immutable. */
     public Principal refreshPrincipal(Principal principal) throws SQLException {
         requireIssued(principal);

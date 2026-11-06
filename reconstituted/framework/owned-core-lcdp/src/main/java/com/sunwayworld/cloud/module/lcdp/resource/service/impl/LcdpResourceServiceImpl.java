@@ -49,6 +49,7 @@ import com.sunwayworld.cloud.module.lcdp.resource.service.LcdpServerScriptMethod
 import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpMapperUtils;
 import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpPageCompConfigAnalyseHelper;
 import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpScriptUtils;
+import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpScriptPath;
 import com.sunwayworld.cloud.module.lcdp.resourcedocument.bean.LcdpResourceDocumentBean;
 import com.sunwayworld.cloud.module.lcdp.resourcedocument.support.LuceneIndexManager;
 import com.sunwayworld.cloud.module.lcdp.resourcedocument.support.LuceneSearchManager;
@@ -2565,6 +2566,9 @@ public class LcdpResourceServiceImpl implements LcdpResourceService {
    public String callScript(Object... args) {
       String scriptPath = ServletUtils.getCurrentRequest().getHeader("script-path");
       log.info("脚本调用 ==>" + scriptPath);
+      if (StringUtils.isEmpty(scriptPath)) {
+         throw new CheckedException("GIKAM.LCDP.SCRIPT_PATH_REQUIRED");
+      }
       if (!this.validateScriptCallable(scriptPath)) {
          return "";
       } else {
@@ -4392,32 +4396,26 @@ public class LcdpResourceServiceImpl implements LcdpResourceService {
    }
 
    private boolean validateScriptCallable(String scriptPath) {
-      boolean valiate = true;
+      if (StringUtils.isEmpty(scriptPath)) {
+         throw new CheckedException("GIKAM.LCDP.SCRIPT_PATH_REQUIRED");
+      }
       if (scriptPath.indexOf("lcdp.file.server.FileScript") >= 0) {
          return true;
-      } else {
-         if (StringUtils.isEmpty(scriptPath)) {
-            valiate = false;
-         }
-
-         int lastDotIndex = scriptPath.lastIndexOf(".");
-         String path = scriptPath.substring(0, lastDotIndex);
-         List<LcdpResourceHistoryBean> existResourceList = this.lcdpResourceHistoryService
-            .getDao()
-            .selectListByOneColumnValue(path, "PATH", ArrayUtils.asList("DELETEFLAG"));
-         if (existResourceList.isEmpty()) {
-            throw new CheckedException(I18nHelper.getMessage("LCDP.MODULE.RESOUCES.TIP.METHOD_NOT_EXITS") + ":" + scriptPath);
-         } else {
-            List<LcdpResourceHistoryBean> resourceList = existResourceList.stream()
-               .filter(re -> StringUtils.equals("0", re.getDeleteFlag()))
-               .collect(Collectors.toList());
-            if (resourceList.isEmpty()) {
-               throw new CheckedException(I18nHelper.getMessage("LCDP.MODULE.RESOUCES.TIP.HAS_BEEN_DELETED") + ":" + scriptPath);
-            } else {
-               return valiate;
-            }
-         }
       }
+      String path = LcdpScriptPath.methodPath(scriptPath);
+      List<LcdpResourceHistoryBean> existResourceList = this.lcdpResourceHistoryService
+         .getDao()
+         .selectListByOneColumnValue(path, "PATH", ArrayUtils.asList("DELETEFLAG"));
+      if (existResourceList.isEmpty()) {
+         throw new CheckedException(I18nHelper.getMessage("LCDP.MODULE.RESOUCES.TIP.METHOD_NOT_EXITS") + ":" + scriptPath);
+      }
+      List<LcdpResourceHistoryBean> resourceList = existResourceList.stream()
+         .filter(re -> StringUtils.equals("0", re.getDeleteFlag()))
+         .collect(Collectors.toList());
+      if (resourceList.isEmpty()) {
+         throw new CheckedException(I18nHelper.getMessage("LCDP.MODULE.RESOUCES.TIP.HAS_BEEN_DELETED") + ":" + scriptPath);
+      }
+      return true;
    }
 
    private void checkAccessPermission(String scriptPath) {

@@ -23,6 +23,10 @@ public final class JdbcPersonnelIdentityProvider implements OwnedIdentityProvide
         return issued(principal);
     }
 
+    @Override public OwnedPrincipal issueAuthenticated(String userId) throws SQLException {
+        return issued(delegate.authenticatedPrincipal(userId));
+    }
+
     @Override public void authorize(OwnedPrincipal principal, String permission) throws SQLException {
         Principal delegatePrincipal = delegatePrincipal(principal);
         if (PERSONNEL_READ.equals(permission)) delegate.authorizePersonnel(delegatePrincipal);

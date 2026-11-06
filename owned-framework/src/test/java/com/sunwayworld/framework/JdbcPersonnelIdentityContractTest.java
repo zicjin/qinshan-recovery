@@ -75,6 +75,9 @@ public final class JdbcPersonnelIdentityContractTest {
         fails(DisabledException.class,()->identity.authenticate("unknown-state","secret".toCharArray()));
         JdbcPersonnelIdentity.Principal allowed=identity.authenticate("allowed","secret".toCharArray());
         check("allowed".equals(allowed.getId()),"database user identity");check("org-a".equals(allowed.getOrgId()),"database organization");
+        JdbcPersonnelIdentity.Principal adopted=identity.authenticatedPrincipal("allowed");
+        check("allowed".equals(adopted.getId()) && "org-a".equals(adopted.getOrgId()),"authenticated project identity is revalidated");
+        fails(AccessDeniedException.class,()->identity.authenticatedPrincipal("missing"));
         identity.authorizePersonnel(allowed);checks++;
         fails(AccessDeniedException.class,()->identity.authorizePersonnel(identity.authenticate("low","secret".toCharArray())));
         identity.authorizePersonnel(identity.authenticate("admin","secret".toCharArray()));checks++;

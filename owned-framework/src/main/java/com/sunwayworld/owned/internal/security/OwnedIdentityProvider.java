@@ -23,6 +23,15 @@ public interface OwnedIdentityProvider {
 
     OwnedPrincipal authenticate(String userId, char[] password) throws SQLException;
 
+    /**
+     * Adapts an identity already authenticated by the original project's
+     * Spring Security/remember-me chain. The provider must re-read and validate
+     * the user before issuing a principal; this is not a passwordless login.
+     */
+    default OwnedPrincipal issueAuthenticated(String userId) throws SQLException {
+        throw new org.springframework.security.access.AccessDeniedException("GIKAM.PERMISSION.UNAUTHORIZED");
+    }
+
     /** Revalidates a session snapshot before protected work. */
     OwnedPrincipal refresh(OwnedPrincipal principal) throws SQLException;
 

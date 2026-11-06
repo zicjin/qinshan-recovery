@@ -65,15 +65,16 @@ public final class OwnedAuditTrailController {
      * The recovered GenericResource exposes status routes for every resource,
      * including entities that do not implement Activatable, Suspendable or
      * Auditable.  The supplier serializes the resulting empty status DTO as
-     * {"ext$":{}}.  Keep that route on the same owned Spring application and
-     * apply the normal audit-read permission boundary before returning it.
+     * {"ext$":{}}. GenericResource does not apply an entity permission
+     * annotation to this projection, so the owned seam refreshes the session
+     * identity but does not require the separate audit-log read grant.
      */
     @GetMapping(path = {"/secure/emc/module/bp/audit-records/info/status",
             "/secure/emc/module/bp/audit-records/{id}/info/status"},
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> status(HttpServletRequest request) {
         try {
-            boundary.requireAuditRead(request.getSession(false));
+            boundary.currentPrincipal(request.getSession(false));
             return ok("{\"ext$\":{}}");
         } catch (AccessDeniedException denied) {
             return forbidden();

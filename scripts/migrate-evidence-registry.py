@@ -48,6 +48,7 @@ def migrate(registry: Path, report: Path, *, apply: bool) -> dict[str, Any]:
     class_counts: dict[str, int] = {}
     storage_counts: dict[str, int] = {}
     validation_counts: dict[str, int] = {}
+    stale_counts: dict[str, int] = {}
     for row in rows:
         cls = row.get("class", "")
         storage = row.get("storage", "")
@@ -56,14 +57,28 @@ def migrate(registry: Path, report: Path, *, apply: bool) -> dict[str, Any]:
         old = {field: row.get(field, "") for field in NEW_FIELDS}
         for field in NEW_FIELDS:
             if not row.get(field) or row.get(field) == "-":
+                legacy_record = (
+                    row.get("strict_evidence") == "true"
+                    or row.get("implementation_binding") not in {"", "-"}
+                )
                 if field == "validation_mode":
-                    row[field] = "legacy-composite-binding"
+                    row[field] = (
+                        "legacy-composite-binding"
+                        if legacy_record else "not-applicable"
+                    )
                 elif field == "stale_reason":
-                    row[field] = "legacy-composite-binding"
+                    if legacy_record:
+                        row[field] = "legacy-composite-binding"
+                    elif cls == "duplicate-or-unreferenced":
+                        row[field] = "retained-duplicate"
+                    else:
+                        row[field] = "not-strict-evidence"
                 else:
                     row[field] = "-"
         validation = row.get("validation_mode", "")
         validation_counts[validation] = validation_counts.get(validation, 0) + 1
+        stale = row.get("stale_reason", "")
+        stale_counts[stale] = stale_counts.get(stale, 0) + 1
         changes.append({
             "path": row.get("path", ""),
             "class": cls,
@@ -111,6 +126,7 @@ def migrate(registry: Path, report: Path, *, apply: bool) -> dict[str, Any]:
         "class_counts": dict(sorted(class_counts.items())),
         "storage_counts": dict(sorted(storage_counts.items())),
         "validation_counts": dict(sorted(validation_counts.items())),
+        "stale_counts": dict(sorted(stale_counts.items())),
         "registry_sha256_before": registry_sha256_before,
         "applied": apply,
     }

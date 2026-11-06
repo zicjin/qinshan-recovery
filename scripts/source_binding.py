@@ -220,6 +220,7 @@ _PLANNING_SUFFIXES = (
 # registry/closure rebuild, but never an HTTP replay by itself.
 _GOVERNANCE_SUFFIXES = (
     "scripts/manage-evidence.py",
+    "scripts/migrate-evidence-registry.py",
     "scripts/generate-framework-contract-evidence.sh",
     "scripts/verify-owned-native-license-removal.py",
     "scripts/reject-supplier-runtime.sh",

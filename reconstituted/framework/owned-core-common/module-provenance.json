@@ -12667,13 +12667,13 @@
       "sha256": "10d57c6ae3a7ee01d57e667ae1f0bc2d8bc1e4c1b4b3de3ed51248ffc93ddee3",
       "source_class_path": "com/sunwayworld/framework/support/selectable/service/GenericSelectableService.class",
       "source_jar": "BOOT-INF/lib/gikam-core-common-14.1.5.jar",
+      "source_sha256_before_overlay": "3fbcc3fd280770a7f205091bc138718e12223c1646460442a9639882215ef866",
       "source_sha256_before_transform": "3fbcc3fd280770a7f205091bc138718e12223c1646460442a9639882215ef866",
       "transformations": [
         "cfr-to-vineflower-fallback",
         "source-backed:selectable-comma-multi-seq-equality-union",
         "overlay:src/main/java/com/sunwayworld/framework/support/selectable/service/GenericSelectableService.java"
-      ],
-      "source_sha256_before_overlay": "3fbcc3fd280770a7f205091bc138718e12223c1646460442a9639882215ef866"
+      ]
     },
     {
       "class_sha256": "b8493947828fcd6150dfd4eb8d218266247e77a2d6c69c90cce38cc1ba336bd8",

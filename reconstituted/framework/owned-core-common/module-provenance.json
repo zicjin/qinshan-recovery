@@ -86,6 +86,11 @@
       "generated_sha256": "old",
       "override_sha256": "cd9b073254cbfa8707c0739742dc814ac2ac5db43d4f49aecd6f37a97dbe77b2",
       "path": "src/main/java/com/sunwayworld/framework/mybatis/interceptor/MybatisResultSetInterceptor.java"
+    },
+    {
+      "generated_sha256": "ec47f7d446ffa9f9f4f9ff3943f1efb79346acce99c855b6007907d8339ccb40",
+      "override_sha256": "b9a56b8ac5e24b525ae990d3a92e0ab914635eab764bbb7200b6d291b07f342b",
+      "path": "src/main/java/com/sunwayworld/framework/at/aspect/AuditTrailAspect.java"
     }
   ],
   "override_source_files": [
@@ -5151,12 +5156,13 @@
       "decompiler": "Vineflower",
       "decompiler_version": "1.11.1",
       "path": "src/main/java/com/sunwayworld/framework/at/aspect/AuditTrailAspect.java",
-      "sha256": "ec47f7d446ffa9f9f4f9ff3943f1efb79346acce99c855b6007907d8339ccb40",
+      "sha256": "b9a56b8ac5e24b525ae990d3a92e0ab914635eab764bbb7200b6d291b07f342b",
       "source_class_path": "com/sunwayworld/framework/at/aspect/AuditTrailAspect.class",
       "source_jar": "BOOT-INF/lib/gikam-core-common-14.1.5.jar",
       "source_sha256_before_transform": "ec47f7d446ffa9f9f4f9ff3943f1efb79346acce99c855b6007907d8339ccb40",
       "transformations": [
-        "cfr-to-vineflower-fallback"
+        "cfr-to-vineflower-fallback",
+        "bytecode-backed:auditTrailService-return-proceed-object-with-finally-cleanup"
       ]
     },
     {
@@ -31474,7 +31480,7 @@
       ]
     }
   ],
-  "source_tree_sha256": "c45ca9799457d10bffbef138c809b516a8e307d9dd53a2fdbfc6766efabfb60d",
+  "source_tree_sha256": "6b90f0dd99e01cdcc1ec927c3c24954bb818b58c4158558463394f7e4ac1fb8a",
   "status": "assembled-source-only",
   "transformation_manifest": "docs/reconstitution/decompiler-transforms.json",
   "transformation_manifest_sha256": "30ab06626f3e4c863a2855790b0ec6211499394852f2a8598ea3bd444ce87fe8",

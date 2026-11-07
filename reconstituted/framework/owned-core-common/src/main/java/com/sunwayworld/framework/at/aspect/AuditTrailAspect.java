@@ -78,15 +78,13 @@ public class AuditTrailAspect {
                this.insertAuditTrail();
             }
 
-            entryData = (AuditTrailAspect.AuditTrailEntryData)retValue;
+            return retValue;
          } finally {
             if (init) {
                RECORD_DATA.remove();
                ENTRY_DATA.remove();
             }
          }
-
-         return entryData;
       } else {
          return pjp.proceed();
       }

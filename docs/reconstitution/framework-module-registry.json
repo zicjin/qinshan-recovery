@@ -29,7 +29,7 @@
         "gikam-core-base-interface-14.1.5.jar",
         "gikam-core-common-14.1.5.jar"
       ],
-      "source_tree_sha256": "c45ca9799457d10bffbef138c809b516a8e307d9dd53a2fdbfc6766efabfb60d"
+      "source_tree_sha256": "6b90f0dd99e01cdcc1ec927c3c24954bb818b58c4158558463394f7e4ac1fb8a"
     },
     {
       "compile_status": "pass",

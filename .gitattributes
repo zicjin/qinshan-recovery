@@ -1,5 +1,7 @@
 reconstituted/framework/**/src/main/resources/** -whitespace
 reconstituted/framework/**/src/main/java/** -whitespace
 reconstituted/overrides/** -whitespace
+# Preserve original Oracle statement bytes bound by the schema fixture manifest.
+api-fixtures/schema/missing-runtime-tables.sql whitespace=-blank-at-eol
 project/sql/核心发版/1.1.0/SWLIMS[[:space:]]V12版本_1.1.0/Spire-HTML2PDF-plugin.zip filter=lfs diff=lfs merge=lfs -text
 sql/核心发版/1.1.0/SWLIMS[[:space:]]V12版本_1.1.0/Spire-HTML2PDF-plugin.zip filter=lfs diff=lfs merge=lfs -text

@@ -1,0 +1,2307 @@
+{
+  "schema": 3,
+  "http_write_proof_version": 2,
+  "status": "executed-pass",
+  "execution": "strict",
+  "strict_evidence": true,
+  "batch_id": "batch-3f797a3f43e64520aacd9b3b796d0888",
+  "milestone_id": "milestone-current-read-20261107",
+  "prepared_manifest": {
+    "path": "/home/ts/qinshan/lims-recovery/private/local-runtime/current-read-milestone/prepared.json",
+    "sha256": "aca1cb23e282c40838402a4ff93228380395bfbcd3f40036da1b00be23a314de"
+  },
+  "stimulus_contract_version": "3",
+  "normalizer_version": "2",
+  "validation_mode": "executed",
+  "production_access": false,
+  "scope": "clone-derived Spring Web API contract runner",
+  "route_execution_model": {
+    "application": "one owned Spring application per wave",
+    "oracle": "persistent Oracle baseline/runtime schema",
+    "redis": "reused sss2 Redis database 15",
+    "boundary_route": "owned Java source-only route in the same Spring application",
+    "boundary_process": false,
+    "internal_http_bridge": false,
+    "jni_replacement_process": false
+  },
+  "started_at": "2026-11-07T13:19:14.220324+00:00",
+  "source_commit": "a8321601fcf2a9020c552cca62c9bd4b11ea5b55",
+  "source_dirty": false,
+  "source_scope": [
+    "project/src/main/java",
+    "project/src/main/resources",
+    "owned-framework/src",
+    "owned-personnel/src",
+    "owned-equipment/src",
+    "owned-consumables/src",
+    "owned-attachments/src",
+    "owned-report/src",
+    "owned-scheduler/src",
+    "owned-web/src",
+    "reconstituted",
+    "docs/reconstitution/decompiler-transforms.json",
+    "project/pom.xml",
+    "owned-framework/pom.xml",
+    "owned-personnel/pom.xml",
+    "owned-equipment/pom.xml",
+    "owned-consumables/pom.xml",
+    "owned-attachments/pom.xml",
+    "owned-report/pom.xml",
+    "owned-scheduler/pom.xml",
+    "owned-web/pom.xml",
+    "owned-distribution/package.py",
+    "owned-distribution/start.sh",
+    "owned-distribution/example",
+    "owned-web/build-owned-web.sh",
+    "scripts/build-owned-distribution.sh",
+    "scripts/build-owned-framework.sh",
+    "scripts/build-owned-personnel.sh",
+    "scripts/build-owned-equipment.sh",
+    "scripts/build-owned-consumables.sh",
+    "scripts/build-owned-attachments.sh",
+    "scripts/build-owned-report.sh",
+    "scripts/build-owned-scheduler.sh",
+    "scripts/build-reconstituted-framework.sh",
+    "scripts/build-source-only-application.py",
+    "scripts/stage-source-only-public-deps.py",
+    "scripts/prepare-reconstituted-maven-repo.py",
+    "scripts/record-reconstituted-framework-build.py",
+    "scripts/verify-reconstituted-framework-modules.py",
+    "scripts/verify-external-artifacts.sh",
+    "build-support/external-artifacts.sha256",
+    "build-support/t01-manifest.sha256",
+    "build-support/t02-deps-manifest.sha256",
+    "build-support/t02-build-plugin-seed.sha256",
+    "build/oracle-free-source-manifest.json",
+    "scripts/source_binding.py",
+    "scripts/evidence_batch.py",
+    "scripts/evidence_fingerprint.py",
+    "scripts/evidence_output.py",
+    "scripts/spring_api_contract_runner.py",
+    "scripts/fast_differential_api_runner.py",
+    "scripts/run-fast-differential-jobs.py",
+    "scripts/api_wave_orchestrator.py",
+    "scripts/owned_runtime_contract.py",
+    "scripts/local-runtime-transport.py",
+    "scripts/observe-local-runtime.py",
+    "scripts/verify-local-runtime-milestone.py",
+    "scripts/restore-local-menu-i18n.py",
+    "scripts/repair-local-menu-hrefs.py",
+    "scripts/repair-local-org-select-config.py",
+    "tools/api/OracleContentFingerprint.java",
+    "scripts/api_fixture.py",
+    "scripts/schema_fixture.py",
+    "scripts/local_schema_policy.py",
+    "scripts/http_write_proof.py",
+    "scripts/audit_fixture_cleanup.py",
+    "api-fixtures/audit",
+    "scripts/lifecycle_proof.py",
+    "api-fixtures/schema",
+    "project/sql/oracle/oracle_sql_emc.txt",
+    "project/sql/核心发版14.1.5/init-sql/oracle/0.common_sql_oracle-1.txt",
+    "scripts/remote-sql-fixture-executor.py",
+    "scripts/start-strict-sss2-api-runtime.sh",
+    "scripts/start-reused-sss2-api-runtime.sh",
+    "scripts/cleanup-strict-sss2-api-runtime.sh",
+    "scripts/refresh-owned-sss2-app.sh",
+    "scripts/rollback-owned-sss2-app.sh",
+    "scripts/owned_readiness.py",
+    "scripts/observe-sss2-clone-runtime.sh",
+    "scripts/replay-vertical-slice.py",
+    "scripts/app-ctl.sh",
+    "scripts/verify-harness-semantics.py",
+    "scripts/tests/fixtures/harness-golden-transcript-corpus.jsonl",
+    "scripts/tests/fixtures/harness-golden-transcript-expected.json",
+    "runtime.contract_version",
+    "runtime.runtime_profile",
+    "runtime.oracle_instance_id",
+    "runtime.oracle_container",
+    "runtime.redis_container",
+    "runtime.baseline_schema",
+    "runtime.runtime_schema",
+    "runtime.baseline_schema_hash",
+    "runtime.runtime_schema_hash_before",
+    "runtime.runtime_schema_hash_after",
+    "runtime.baseline_key_data_hash",
+    "runtime.runtime_key_data_hash_before",
+    "runtime.runtime_key_data_hash_after",
+    "runtime.schema_policy_id",
+    "runtime.schema_policy_sha256",
+    "runtime.schema_copy_method",
+    "runtime.baseline_refreshed",
+    "runtime.oracle_reused",
+    "runtime.redis_reused",
+    "runtime.jvm_major",
+    "runtime.container_runtime",
+    "runtime.database",
+    "runtime.db_pool",
+    "runtime.db_pool_version",
+    "runtime.cleanup_contract_version",
+    "runtime.baseline_schema_immutable",
+    "runtime.runtime_schema_restored",
+    "runtime.application_instances",
+    "runtime.oracle_instances",
+    "runtime.redis_instances",
+    "runtime.boundary_process",
+    "runtime.internal_http_bridge",
+    "runtime.jni_replacement_process",
+    "tools/business_api_inventory.py",
+    "tools/api_route_ledger.py",
+    "tools/api_route_execution_plan.py",
+    "tools/api_contract_skeleton.py",
+    "tools/fast_contract_skeleton.py",
+    "tools/framework_contract_inventory.py",
+    "tools/source_inventory.py",
+    "tools/vertical_slices/matrix.py",
+    "tools/function_catalog/build_candidate_closure.py",
+    "scripts/generate-fast-strict-contracts.py",
+    "scripts/select-affected-runners.py",
+    "scripts/manage-evidence.py",
+    "scripts/verify-owned-native-license-removal.py",
+    "scripts/verify-source-only-checkpoint.py",
+    "scripts/reject-supplier-runtime.sh",
+    "tools/api_route_closure.py",
+    "tools/finalize_api_report.py"
+  ],
+  "implementation_dirty": false,
+  "repository_head_at_capture": "a8321601fcf2a9020c552cca62c9bd4b11ea5b55",
+  "application_binding": "app-4b5d03f3064ec777",
+  "harness_binding": "harness-1f8dac578cdaee54",
+  "runtime_contract_binding": "rt-5afe8c623f983305",
+  "planning_binding": "plan-6afcf78fa2aae820",
+  "governance_binding": "gov-4ac5ccaf8a555cc6",
+  "implementation_binding": "impl-f1116cfd53b591bd",
+  "binding_id": "impl-f1116cfd53b591bd",
+  "implementation_tree_digest": "f1116cfd53b591bd1c9890e2d091b08737de418bfba5818f2a4d844873f4e749",
+  "implementation_scope": [
+    "project/src/main/java",
+    "project/src/main/resources",
+    "owned-framework/src",
+    "owned-personnel/src",
+    "owned-equipment/src",
+    "owned-consumables/src",
+    "owned-attachments/src",
+    "owned-report/src",
+    "owned-scheduler/src",
+    "owned-web/src",
+    "reconstituted",
+    "docs/reconstitution/decompiler-transforms.json",
+    "project/pom.xml",
+    "owned-framework/pom.xml",
+    "owned-personnel/pom.xml",
+    "owned-equipment/pom.xml",
+    "owned-consumables/pom.xml",
+    "owned-attachments/pom.xml",
+    "owned-report/pom.xml",
+    "owned-scheduler/pom.xml",
+    "owned-web/pom.xml",
+    "owned-distribution/package.py",
+    "owned-distribution/start.sh",
+    "owned-distribution/example",
+    "owned-web/build-owned-web.sh",
+    "scripts/build-owned-distribution.sh",
+    "scripts/build-owned-framework.sh",
+    "scripts/build-owned-personnel.sh",
+    "scripts/build-owned-equipment.sh",
+    "scripts/build-owned-consumables.sh",
+    "scripts/build-owned-attachments.sh",
+    "scripts/build-owned-report.sh",
+    "scripts/build-owned-scheduler.sh",
+    "scripts/build-reconstituted-framework.sh",
+    "scripts/build-source-only-application.py",
+    "scripts/stage-source-only-public-deps.py",
+    "scripts/prepare-reconstituted-maven-repo.py",
+    "scripts/record-reconstituted-framework-build.py",
+    "scripts/verify-reconstituted-framework-modules.py",
+    "scripts/verify-external-artifacts.sh",
+    "build-support/external-artifacts.sha256",
+    "build-support/t01-manifest.sha256",
+    "build-support/t02-deps-manifest.sha256",
+    "build-support/t02-build-plugin-seed.sha256",
+    "build/oracle-free-source-manifest.json",
+    "scripts/source_binding.py",
+    "scripts/evidence_batch.py",
+    "scripts/evidence_fingerprint.py",
+    "scripts/evidence_output.py",
+    "scripts/spring_api_contract_runner.py",
+    "scripts/fast_differential_api_runner.py",
+    "scripts/run-fast-differential-jobs.py",
+    "scripts/api_wave_orchestrator.py",
+    "scripts/owned_runtime_contract.py",
+    "scripts/local-runtime-transport.py",
+    "scripts/observe-local-runtime.py",
+    "scripts/verify-local-runtime-milestone.py",
+    "scripts/restore-local-menu-i18n.py",
+    "scripts/repair-local-menu-hrefs.py",
+    "scripts/repair-local-org-select-config.py",
+    "tools/api/OracleContentFingerprint.java",
+    "scripts/api_fixture.py",
+    "scripts/schema_fixture.py",
+    "scripts/local_schema_policy.py",
+    "scripts/http_write_proof.py",
+    "scripts/audit_fixture_cleanup.py",
+    "api-fixtures/audit",
+    "scripts/lifecycle_proof.py",
+    "api-fixtures/schema",
+    "project/sql/oracle/oracle_sql_emc.txt",
+    "project/sql/核心发版14.1.5/init-sql/oracle/0.common_sql_oracle-1.txt",
+    "scripts/remote-sql-fixture-executor.py",
+    "scripts/start-strict-sss2-api-runtime.sh",
+    "scripts/start-reused-sss2-api-runtime.sh",
+    "scripts/cleanup-strict-sss2-api-runtime.sh",
+    "scripts/refresh-owned-sss2-app.sh",
+    "scripts/rollback-owned-sss2-app.sh",
+    "scripts/owned_readiness.py",
+    "scripts/observe-sss2-clone-runtime.sh",
+    "scripts/replay-vertical-slice.py",
+    "scripts/app-ctl.sh",
+    "scripts/verify-harness-semantics.py",
+    "scripts/tests/fixtures/harness-golden-transcript-corpus.jsonl",
+    "scripts/tests/fixtures/harness-golden-transcript-expected.json",
+    "runtime.contract_version",
+    "runtime.runtime_profile",
+    "runtime.oracle_instance_id",
+    "runtime.oracle_container",
+    "runtime.redis_container",
+    "runtime.baseline_schema",
+    "runtime.runtime_schema",
+    "runtime.baseline_schema_hash",
+    "runtime.runtime_schema_hash_before",
+    "runtime.runtime_schema_hash_after",
+    "runtime.baseline_key_data_hash",
+    "runtime.runtime_key_data_hash_before",
+    "runtime.runtime_key_data_hash_after",
+    "runtime.schema_policy_id",
+    "runtime.schema_policy_sha256",
+    "runtime.schema_copy_method",
+    "runtime.baseline_refreshed",
+    "runtime.oracle_reused",
+    "runtime.redis_reused",
+    "runtime.jvm_major",
+    "runtime.container_runtime",
+    "runtime.database",
+    "runtime.db_pool",
+    "runtime.db_pool_version",
+    "runtime.cleanup_contract_version",
+    "runtime.baseline_schema_immutable",
+    "runtime.runtime_schema_restored",
+    "runtime.application_instances",
+    "runtime.oracle_instances",
+    "runtime.redis_instances",
+    "runtime.boundary_process",
+    "runtime.internal_http_bridge",
+    "runtime.jni_replacement_process",
+    "tools/business_api_inventory.py",
+    "tools/api_route_ledger.py",
+    "tools/api_route_execution_plan.py",
+    "tools/api_contract_skeleton.py",
+    "tools/fast_contract_skeleton.py",
+    "tools/framework_contract_inventory.py",
+    "tools/source_inventory.py",
+    "tools/vertical_slices/matrix.py",
+    "tools/function_catalog/build_candidate_closure.py",
+    "scripts/generate-fast-strict-contracts.py",
+    "scripts/select-affected-runners.py",
+    "scripts/manage-evidence.py",
+    "scripts/verify-owned-native-license-removal.py",
+    "scripts/verify-source-only-checkpoint.py",
+    "scripts/reject-supplier-runtime.sh",
+    "tools/api_route_closure.py",
+    "tools/finalize_api_report.py"
+  ],
+  "application_scope": [
+    "project/src/main/java",
+    "project/src/main/resources",
+    "owned-framework/src",
+    "owned-personnel/src",
+    "owned-equipment/src",
+    "owned-consumables/src",
+    "owned-attachments/src",
+    "owned-report/src",
+    "owned-scheduler/src",
+    "owned-web/src",
+    "reconstituted",
+    "docs/reconstitution/decompiler-transforms.json",
+    "project/pom.xml",
+    "owned-framework/pom.xml",
+    "owned-personnel/pom.xml",
+    "owned-equipment/pom.xml",
+    "owned-consumables/pom.xml",
+    "owned-attachments/pom.xml",
+    "owned-report/pom.xml",
+    "owned-scheduler/pom.xml",
+    "owned-web/pom.xml",
+    "owned-distribution/package.py",
+    "owned-distribution/start.sh",
+    "owned-distribution/example",
+    "owned-web/build-owned-web.sh",
+    "scripts/build-owned-distribution.sh",
+    "scripts/build-owned-framework.sh",
+    "scripts/build-owned-personnel.sh",
+    "scripts/build-owned-equipment.sh",
+    "scripts/build-owned-consumables.sh",
+    "scripts/build-owned-attachments.sh",
+    "scripts/build-owned-report.sh",
+    "scripts/build-owned-scheduler.sh",
+    "scripts/build-reconstituted-framework.sh",
+    "scripts/build-source-only-application.py",
+    "scripts/stage-source-only-public-deps.py",
+    "scripts/prepare-reconstituted-maven-repo.py",
+    "scripts/record-reconstituted-framework-build.py",
+    "scripts/verify-reconstituted-framework-modules.py",
+    "scripts/verify-external-artifacts.sh",
+    "build-support/external-artifacts.sha256",
+    "build-support/t01-manifest.sha256",
+    "build-support/t02-deps-manifest.sha256",
+    "build-support/t02-build-plugin-seed.sha256",
+    "build/oracle-free-source-manifest.json"
+  ],
+  "harness_scope": [
+    "scripts/source_binding.py",
+    "scripts/evidence_batch.py",
+    "scripts/evidence_fingerprint.py",
+    "scripts/evidence_output.py",
+    "scripts/spring_api_contract_runner.py",
+    "scripts/fast_differential_api_runner.py",
+    "scripts/run-fast-differential-jobs.py",
+    "scripts/api_wave_orchestrator.py",
+    "scripts/owned_runtime_contract.py",
+    "scripts/local-runtime-transport.py",
+    "scripts/observe-local-runtime.py",
+    "scripts/verify-local-runtime-milestone.py",
+    "scripts/restore-local-menu-i18n.py",
+    "scripts/repair-local-menu-hrefs.py",
+    "scripts/repair-local-org-select-config.py",
+    "tools/api/OracleContentFingerprint.java",
+    "scripts/api_fixture.py",
+    "scripts/schema_fixture.py",
+    "scripts/local_schema_policy.py",
+    "scripts/http_write_proof.py",
+    "scripts/audit_fixture_cleanup.py",
+    "api-fixtures/audit",
+    "scripts/lifecycle_proof.py",
+    "api-fixtures/schema",
+    "project/sql/oracle/oracle_sql_emc.txt",
+    "project/sql/核心发版14.1.5/init-sql/oracle/0.common_sql_oracle-1.txt",
+    "scripts/remote-sql-fixture-executor.py",
+    "scripts/start-strict-sss2-api-runtime.sh",
+    "scripts/start-reused-sss2-api-runtime.sh",
+    "scripts/cleanup-strict-sss2-api-runtime.sh",
+    "scripts/refresh-owned-sss2-app.sh",
+    "scripts/rollback-owned-sss2-app.sh",
+    "scripts/owned_readiness.py",
+    "scripts/observe-sss2-clone-runtime.sh",
+    "scripts/replay-vertical-slice.py",
+    "scripts/app-ctl.sh",
+    "scripts/verify-harness-semantics.py",
+    "scripts/tests/fixtures/harness-golden-transcript-corpus.jsonl",
+    "scripts/tests/fixtures/harness-golden-transcript-expected.json"
+  ],
+  "runtime_contract_scope": [
+    "runtime.contract_version",
+    "runtime.runtime_profile",
+    "runtime.oracle_instance_id",
+    "runtime.oracle_container",
+    "runtime.redis_container",
+    "runtime.baseline_schema",
+    "runtime.runtime_schema",
+    "runtime.baseline_schema_hash",
+    "runtime.runtime_schema_hash_before",
+    "runtime.runtime_schema_hash_after",
+    "runtime.baseline_key_data_hash",
+    "runtime.runtime_key_data_hash_before",
+    "runtime.runtime_key_data_hash_after",
+    "runtime.schema_policy_id",
+    "runtime.schema_policy_sha256",
+    "runtime.schema_copy_method",
+    "runtime.baseline_refreshed",
+    "runtime.oracle_reused",
+    "runtime.redis_reused",
+    "runtime.jvm_major",
+    "runtime.container_runtime",
+    "runtime.database",
+    "runtime.db_pool",
+    "runtime.db_pool_version",
+    "runtime.cleanup_contract_version",
+    "runtime.baseline_schema_immutable",
+    "runtime.runtime_schema_restored",
+    "runtime.application_instances",
+    "runtime.oracle_instances",
+    "runtime.redis_instances",
+    "runtime.boundary_process",
+    "runtime.internal_http_bridge",
+    "runtime.jni_replacement_process"
+  ],
+  "planning_scope": [
+    "tools/business_api_inventory.py",
+    "tools/api_route_ledger.py",
+    "tools/api_route_execution_plan.py",
+    "tools/api_contract_skeleton.py",
+    "tools/fast_contract_skeleton.py",
+    "tools/framework_contract_inventory.py",
+    "tools/source_inventory.py",
+    "tools/vertical_slices/matrix.py",
+    "tools/function_catalog/build_candidate_closure.py",
+    "scripts/generate-fast-strict-contracts.py",
+    "scripts/select-affected-runners.py"
+  ],
+  "governance_scope": [
+    "scripts/manage-evidence.py",
+    "scripts/verify-owned-native-license-removal.py",
+    "scripts/verify-source-only-checkpoint.py",
+    "scripts/reject-supplier-runtime.sh",
+    "tools/api_route_closure.py",
+    "tools/finalize_api_report.py"
+  ],
+  "nested_project_commit": "27932b1fe4d71d64a02f9a63e55f56acb403e3a0",
+  "distribution_input_digest": "d438d5546aa34af7d5bfbfa28eef4d89ccde2754c077323b437d3d9a6e553add",
+  "runtime_contract_digest": "5afe8c623f983305af0249238c99201453cfd40e22fb5028efaf1465a6a46b13",
+  "artifact_sha256": {
+    "/home/ts/qinshan/lims-recovery/owned-distribution/target/46eb11dbbd558ef9c0b5d6f9bc8729bae714b7ed4979fe33e2d4a181303d8b53/distribution/app/lims-owned-application.jar": "76d762cb6a046336ee366f6ffa1ca362d4bd17e51b7f926ccf994c21b1da9791"
+  },
+  "clone_identity": "local-existing-5b47e398923cf9fc",
+  "runtime_report": "/home/ts/qinshan/lims-recovery/private/local-runtime/current-read-milestone/prepared.json",
+  "runtime_contract": {
+    "application_binding": "app-4b5d03f3064ec777",
+    "application_dirty": false,
+    "application_scope": [
+      "project/src/main/java",
+      "project/src/main/resources",
+      "owned-framework/src",
+      "owned-personnel/src",
+      "owned-equipment/src",
+      "owned-consumables/src",
+      "owned-attachments/src",
+      "owned-report/src",
+      "owned-scheduler/src",
+      "owned-web/src",
+      "reconstituted",
+      "docs/reconstitution/decompiler-transforms.json",
+      "project/pom.xml",
+      "owned-framework/pom.xml",
+      "owned-personnel/pom.xml",
+      "owned-equipment/pom.xml",
+      "owned-consumables/pom.xml",
+      "owned-attachments/pom.xml",
+      "owned-report/pom.xml",
+      "owned-scheduler/pom.xml",
+      "owned-web/pom.xml",
+      "owned-distribution/package.py",
+      "owned-distribution/start.sh",
+      "owned-distribution/example",
+      "owned-web/build-owned-web.sh",
+      "scripts/build-owned-distribution.sh",
+      "scripts/build-owned-framework.sh",
+      "scripts/build-owned-personnel.sh",
+      "scripts/build-owned-equipment.sh",
+      "scripts/build-owned-consumables.sh",
+      "scripts/build-owned-attachments.sh",
+      "scripts/build-owned-report.sh",
+      "scripts/build-owned-scheduler.sh",
+      "scripts/build-reconstituted-framework.sh",
+      "scripts/build-source-only-application.py",
+      "scripts/stage-source-only-public-deps.py",
+      "scripts/prepare-reconstituted-maven-repo.py",
+      "scripts/record-reconstituted-framework-build.py",
+      "scripts/verify-reconstituted-framework-modules.py",
+      "scripts/verify-external-artifacts.sh",
+      "build-support/external-artifacts.sha256",
+      "build-support/t01-manifest.sha256",
+      "build-support/t02-deps-manifest.sha256",
+      "build-support/t02-build-plugin-seed.sha256",
+      "build/oracle-free-source-manifest.json"
+    ],
+    "application_tree_digest": "4b5d03f3064ec777567c95dc7da51410b103804100efdf83f5dc470391cfeb81",
+    "artifact_observation": {
+      "path": "/home/ts/qinshan/lims-recovery/private/local-runtime/current-read-milestone/prepared.json.artifacts.json",
+      "sha256": "239df2ab058ffed7c7dfb002a626a1e2d4e97cf0a2acc1a8d13f443270b8f898"
+    },
+    "artifact_sha256": {
+      "/home/ts/qinshan/lims-recovery/owned-distribution/target/46eb11dbbd558ef9c0b5d6f9bc8729bae714b7ed4979fe33e2d4a181303d8b53/distribution/app/lims-owned-application.jar": "76d762cb6a046336ee366f6ffa1ca362d4bd17e51b7f926ccf994c21b1da9791"
+    },
+    "baseline_key_data_hash": "f34832019c97e5c967489d9b8598e5380f9d8343977decc5bd2ff0fec23ccbc2",
+    "baseline_refreshed": false,
+    "baseline_schema": "LIMS_BASELINE_LOCAL",
+    "baseline_schema_hash": "c6f6d4683d164b15c478eb734aefd4f3c9ac49d0cf5649380db1bfeebc78d46c",
+    "baseline_schema_immutable": null,
+    "before_files": {
+      "baseline_before": {
+        "path": "/home/ts/qinshan/lims-recovery/private/local-runtime/current-read-milestone/baseline_before.json",
+        "sha256": "eba6334b1521381a100c1b21059ae60193f908e7e9cb4612e0a28b0100aab980"
+      },
+      "observation_before": {
+        "path": "/home/ts/qinshan/lims-recovery/private/local-runtime/current-read-milestone/observation_before.json",
+        "sha256": "746ff3dae2029297eae5cd141d630e767b7f788f3525f614abd94966b89b5578"
+      },
+      "runtime_before": {
+        "path": "/home/ts/qinshan/lims-recovery/private/local-runtime/current-read-milestone/runtime_before.json",
+        "sha256": "c0d0c151ee40fa24620c6e5eb7b2f2e0708152f1cce75e7fc0710c20b5bd6d6d"
+      }
+    },
+    "binding_id": "impl-f1116cfd53b591bd",
+    "clone_identity": "local-existing-5b47e398923cf9fc",
+    "distribution_input_digest": "d438d5546aa34af7d5bfbfa28eef4d89ccde2754c077323b437d3d9a6e553add",
+    "execution": "local-prepared-unverified",
+    "execution_location": "local-wsl-docker",
+    "existing_application_preserved": true,
+    "governance_binding": "gov-4ac5ccaf8a555cc6",
+    "governance_dirty": false,
+    "governance_scope": [
+      "scripts/manage-evidence.py",
+      "scripts/verify-owned-native-license-removal.py",
+      "scripts/verify-source-only-checkpoint.py",
+      "scripts/reject-supplier-runtime.sh",
+      "tools/api_route_closure.py",
+      "tools/finalize_api_report.py"
+    ],
+    "governance_tree_digest": "4ac5ccaf8a555cc6392bcfe626c1e0b460627483f7d2d5a8e0f878e668e6d37a",
+    "harness_binding": "harness-1f8dac578cdaee54",
+    "harness_dirty": false,
+    "harness_scope": [
+      "scripts/source_binding.py",
+      "scripts/evidence_batch.py",
+      "scripts/evidence_fingerprint.py",
+      "scripts/evidence_output.py",
+      "scripts/spring_api_contract_runner.py",
+      "scripts/fast_differential_api_runner.py",
+      "scripts/run-fast-differential-jobs.py",
+      "scripts/api_wave_orchestrator.py",
+      "scripts/owned_runtime_contract.py",
+      "scripts/local-runtime-transport.py",
+      "scripts/observe-local-runtime.py",
+      "scripts/verify-local-runtime-milestone.py",
+      "scripts/restore-local-menu-i18n.py",
+      "scripts/repair-local-menu-hrefs.py",
+      "scripts/repair-local-org-select-config.py",
+      "tools/api/OracleContentFingerprint.java",
+      "scripts/api_fixture.py",
+      "scripts/schema_fixture.py",
+      "scripts/local_schema_policy.py",
+      "scripts/http_write_proof.py",
+      "scripts/audit_fixture_cleanup.py",
+      "api-fixtures/audit",
+      "scripts/lifecycle_proof.py",
+      "api-fixtures/schema",
+      "project/sql/oracle/oracle_sql_emc.txt",
+      "project/sql/核心发版14.1.5/init-sql/oracle/0.common_sql_oracle-1.txt",
+      "scripts/remote-sql-fixture-executor.py",
+      "scripts/start-strict-sss2-api-runtime.sh",
+      "scripts/start-reused-sss2-api-runtime.sh",
+      "scripts/cleanup-strict-sss2-api-runtime.sh",
+      "scripts/refresh-owned-sss2-app.sh",
+      "scripts/rollback-owned-sss2-app.sh",
+      "scripts/owned_readiness.py",
+      "scripts/observe-sss2-clone-runtime.sh",
+      "scripts/replay-vertical-slice.py",
+      "scripts/app-ctl.sh",
+      "scripts/verify-harness-semantics.py",
+      "scripts/tests/fixtures/harness-golden-transcript-corpus.jsonl",
+      "scripts/tests/fixtures/harness-golden-transcript-expected.json"
+    ],
+    "harness_tree_digest": "1f8dac578cdaee5419914776aaf206e10abfac8b79b63b2265d68c96827de0b6",
+    "implementation_binding": "impl-f1116cfd53b591bd",
+    "implementation_dirty": false,
+    "implementation_scope": [
+      "project/src/main/java",
+      "project/src/main/resources",
+      "owned-framework/src",
+      "owned-personnel/src",
+      "owned-equipment/src",
+      "owned-consumables/src",
+      "owned-attachments/src",
+      "owned-report/src",
+      "owned-scheduler/src",
+      "owned-web/src",
+      "reconstituted",
+      "docs/reconstitution/decompiler-transforms.json",
+      "project/pom.xml",
+      "owned-framework/pom.xml",
+      "owned-personnel/pom.xml",
+      "owned-equipment/pom.xml",
+      "owned-consumables/pom.xml",
+      "owned-attachments/pom.xml",
+      "owned-report/pom.xml",
+      "owned-scheduler/pom.xml",
+      "owned-web/pom.xml",
+      "owned-distribution/package.py",
+      "owned-distribution/start.sh",
+      "owned-distribution/example",
+      "owned-web/build-owned-web.sh",
+      "scripts/build-owned-distribution.sh",
+      "scripts/build-owned-framework.sh",
+      "scripts/build-owned-personnel.sh",
+      "scripts/build-owned-equipment.sh",
+      "scripts/build-owned-consumables.sh",
+      "scripts/build-owned-attachments.sh",
+      "scripts/build-owned-report.sh",
+      "scripts/build-owned-scheduler.sh",
+      "scripts/build-reconstituted-framework.sh",
+      "scripts/build-source-only-application.py",
+      "scripts/stage-source-only-public-deps.py",
+      "scripts/prepare-reconstituted-maven-repo.py",
+      "scripts/record-reconstituted-framework-build.py",
+      "scripts/verify-reconstituted-framework-modules.py",
+      "scripts/verify-external-artifacts.sh",
+      "build-support/external-artifacts.sha256",
+      "build-support/t01-manifest.sha256",
+      "build-support/t02-deps-manifest.sha256",
+      "build-support/t02-build-plugin-seed.sha256",
+      "build/oracle-free-source-manifest.json",
+      "scripts/source_binding.py",
+      "scripts/evidence_batch.py",
+      "scripts/evidence_fingerprint.py",
+      "scripts/evidence_output.py",
+      "scripts/spring_api_contract_runner.py",
+      "scripts/fast_differential_api_runner.py",
+      "scripts/run-fast-differential-jobs.py",
+      "scripts/api_wave_orchestrator.py",
+      "scripts/owned_runtime_contract.py",
+      "scripts/local-runtime-transport.py",
+      "scripts/observe-local-runtime.py",
+      "scripts/verify-local-runtime-milestone.py",
+      "scripts/restore-local-menu-i18n.py",
+      "scripts/repair-local-menu-hrefs.py",
+      "scripts/repair-local-org-select-config.py",
+      "tools/api/OracleContentFingerprint.java",
+      "scripts/api_fixture.py",
+      "scripts/schema_fixture.py",
+      "scripts/local_schema_policy.py",
+      "scripts/http_write_proof.py",
+      "scripts/audit_fixture_cleanup.py",
+      "api-fixtures/audit",
+      "scripts/lifecycle_proof.py",
+      "api-fixtures/schema",
+      "project/sql/oracle/oracle_sql_emc.txt",
+      "project/sql/核心发版14.1.5/init-sql/oracle/0.common_sql_oracle-1.txt",
+      "scripts/remote-sql-fixture-executor.py",
+      "scripts/start-strict-sss2-api-runtime.sh",
+      "scripts/start-reused-sss2-api-runtime.sh",
+      "scripts/cleanup-strict-sss2-api-runtime.sh",
+      "scripts/refresh-owned-sss2-app.sh",
+      "scripts/rollback-owned-sss2-app.sh",
+      "scripts/owned_readiness.py",
+      "scripts/observe-sss2-clone-runtime.sh",
+      "scripts/replay-vertical-slice.py",
+      "scripts/app-ctl.sh",
+      "scripts/verify-harness-semantics.py",
+      "scripts/tests/fixtures/harness-golden-transcript-corpus.jsonl",
+      "scripts/tests/fixtures/harness-golden-transcript-expected.json",
+      "runtime.contract_version",
+      "runtime.runtime_profile",
+      "runtime.oracle_instance_id",
+      "runtime.oracle_container",
+      "runtime.redis_container",
+      "runtime.baseline_schema",
+      "runtime.runtime_schema",
+      "runtime.baseline_schema_hash",
+      "runtime.runtime_schema_hash_before",
+      "runtime.runtime_schema_hash_after",
+      "runtime.baseline_key_data_hash",
+      "runtime.runtime_key_data_hash_before",
+      "runtime.runtime_key_data_hash_after",
+      "runtime.schema_policy_id",
+      "runtime.schema_policy_sha256",
+      "runtime.schema_copy_method",
+      "runtime.baseline_refreshed",
+      "runtime.oracle_reused",
+      "runtime.redis_reused",
+      "runtime.jvm_major",
+      "runtime.container_runtime",
+      "runtime.database",
+      "runtime.db_pool",
+      "runtime.db_pool_version",
+      "runtime.cleanup_contract_version",
+      "runtime.baseline_schema_immutable",
+      "runtime.runtime_schema_restored",
+      "runtime.application_instances",
+      "runtime.oracle_instances",
+      "runtime.redis_instances",
+      "runtime.boundary_process",
+      "runtime.internal_http_bridge",
+      "runtime.jni_replacement_process",
+      "tools/business_api_inventory.py",
+      "tools/api_route_ledger.py",
+      "tools/api_route_execution_plan.py",
+      "tools/api_contract_skeleton.py",
+      "tools/fast_contract_skeleton.py",
+      "tools/framework_contract_inventory.py",
+      "tools/source_inventory.py",
+      "tools/vertical_slices/matrix.py",
+      "tools/function_catalog/build_candidate_closure.py",
+      "scripts/generate-fast-strict-contracts.py",
+      "scripts/select-affected-runners.py",
+      "scripts/manage-evidence.py",
+      "scripts/verify-owned-native-license-removal.py",
+      "scripts/verify-source-only-checkpoint.py",
+      "scripts/reject-supplier-runtime.sh",
+      "tools/api_route_closure.py",
+      "tools/finalize_api_report.py"
+    ],
+    "implementation_tree_digest": "f1116cfd53b591bd1c9890e2d091b08737de418bfba5818f2a4d844873f4e749",
+    "lifecycle_phase": "prepared",
+    "loopback_url": "http://127.0.0.1:18087",
+    "milestone_id": "milestone-current-read-20261107",
+    "nested_project_commit": "27932b1fe4d71d64a02f9a63e55f56acb403e3a0",
+    "operated_artifact": {
+      "container_path": "/opt/current-owned/app/lims-owned-application.jar",
+      "path": "/home/ts/qinshan/lims-recovery/owned-distribution/target/46eb11dbbd558ef9c0b5d6f9bc8729bae714b7ed4979fe33e2d4a181303d8b53/distribution/app/lims-owned-application.jar",
+      "sha256": "76d762cb6a046336ee366f6ffa1ca362d4bd17e51b7f926ccf994c21b1da9791"
+    },
+    "oracle_container": "lims-local-runtime-oracle",
+    "oracle_instance_id": "lims-local-runtime-oracle",
+    "oracle_reused": true,
+    "planning_binding": "plan-6afcf78fa2aae820",
+    "planning_dirty": false,
+    "planning_scope": [
+      "tools/business_api_inventory.py",
+      "tools/api_route_ledger.py",
+      "tools/api_route_execution_plan.py",
+      "tools/api_contract_skeleton.py",
+      "tools/fast_contract_skeleton.py",
+      "tools/framework_contract_inventory.py",
+      "tools/source_inventory.py",
+      "tools/vertical_slices/matrix.py",
+      "tools/function_catalog/build_candidate_closure.py",
+      "scripts/generate-fast-strict-contracts.py",
+      "scripts/select-affected-runners.py"
+    ],
+    "planning_tree_digest": "6afcf78fa2aae8209f23709a19c2332a64c044ed8e1471508af63081a25fee08",
+    "production_access": false,
+    "redis_container": "lims-local-runtime-redis",
+    "redis_reused": true,
+    "repository_head_at_capture": "a8321601fcf2a9020c552cca62c9bd4b11ea5b55",
+    "route_execution_model": {
+      "boundary_process": false,
+      "internal_http_bridge": false,
+      "jni_replacement_process": false
+    },
+    "runtime_contract_binding": "rt-5afe8c623f983305",
+    "runtime_contract_digest": "5afe8c623f983305af0249238c99201453cfd40e22fb5028efaf1465a6a46b13",
+    "runtime_contract_dirty": false,
+    "runtime_contract_scope": [
+      "runtime.contract_version",
+      "runtime.runtime_profile",
+      "runtime.oracle_instance_id",
+      "runtime.oracle_container",
+      "runtime.redis_container",
+      "runtime.baseline_schema",
+      "runtime.runtime_schema",
+      "runtime.baseline_schema_hash",
+      "runtime.runtime_schema_hash_before",
+      "runtime.runtime_schema_hash_after",
+      "runtime.baseline_key_data_hash",
+      "runtime.runtime_key_data_hash_before",
+      "runtime.runtime_key_data_hash_after",
+      "runtime.schema_policy_id",
+      "runtime.schema_policy_sha256",
+      "runtime.schema_copy_method",
+      "runtime.baseline_refreshed",
+      "runtime.oracle_reused",
+      "runtime.redis_reused",
+      "runtime.jvm_major",
+      "runtime.container_runtime",
+      "runtime.database",
+      "runtime.db_pool",
+      "runtime.db_pool_version",
+      "runtime.cleanup_contract_version",
+      "runtime.baseline_schema_immutable",
+      "runtime.runtime_schema_restored",
+      "runtime.application_instances",
+      "runtime.oracle_instances",
+      "runtime.redis_instances",
+      "runtime.boundary_process",
+      "runtime.internal_http_bridge",
+      "runtime.jni_replacement_process"
+    ],
+    "runtime_dirty": null,
+    "runtime_identity": {
+      "container_ids": {
+        "app": "5b47e398923cf9fc122eefadf9e2a70369032b322552ca1ebcbdf406d96e609b",
+        "oracle": "b6c0f35374a5cc46efe731447169a4de2119686e560c10324d02192fced7d77d",
+        "redis": "46529c6d33d23c9882e67405a203aa8464f122c0a508234e7523d3dda95eeaa8"
+      },
+      "containers": {
+        "app": {
+          "id": "5b47e398923cf9fc122eefadf9e2a70369032b322552ca1ebcbdf406d96e609b",
+          "image_id": "sha256:837982131237bc008e1a71e04150337ef1e397670e15b056e62c214039355fa5",
+          "name": "lims-local-runtime-app",
+          "running": true,
+          "started_at": "2026-11-07T11:31:06.600795444Z"
+        },
+        "oracle": {
+          "id": "b6c0f35374a5cc46efe731447169a4de2119686e560c10324d02192fced7d77d",
+          "image_id": "sha256:cd3dff6649f5d67ca3121f5e064b5a5680611e5d34f03442423110778c47dda4",
+          "name": "lims-local-runtime-oracle",
+          "running": true,
+          "started_at": "2026-11-07T03:54:42.489365053Z"
+        },
+        "redis": {
+          "id": "46529c6d33d23c9882e67405a203aa8464f122c0a508234e7523d3dda95eeaa8",
+          "image_id": "sha256:57e4255cc971b1c8d6f8a6ca283ac01bc3ecdd914273ef6bfaede87aaecd6541",
+          "name": "lims-local-runtime-redis",
+          "running": true,
+          "started_at": "2026-11-07T03:54:41.986176262Z"
+        }
+      },
+      "network_id": "d8943819986f79ef8a3bbd0f77c6e21eba60e0259fab771f0df7e9c916b92d26"
+    },
+    "runtime_key_data_hash_after": null,
+    "runtime_key_data_hash_before": "7d382dbe9d56b6c779956324ffe25b8db58e53abd820feaba722eb124eb92a3f",
+    "runtime_manifest_schema": "local-prepared-v1",
+    "runtime_profile": "local-wsl",
+    "runtime_schema": "LIMS_RUNTIME_LOCAL",
+    "runtime_schema_hash_after": null,
+    "runtime_schema_hash_before": "b00caba32e00b00f8d71aaf6f3570c42bff5ff7c733dd779350d2673673bfc00",
+    "runtime_schema_reset": false,
+    "runtime_schema_restored": null,
+    "runtime_schema_reused": true,
+    "schema_copy_method": "supplied-runtime-before-content-restore-target",
+    "schema_policy_id": "approved-missing-runtime-tables-v1",
+    "schema_policy_sha256": "48233a6db2976b6a2120b1013543e609fa6519a73711f4f74acb5f240b2b3137",
+    "schema_version": 2,
+    "source_commit": "a8321601fcf2a9020c552cca62c9bd4b11ea5b55",
+    "source_dirty": false,
+    "status": "local-prepared-unverified",
+    "strict_evidence": false,
+    "prepared_manifest": {
+      "path": "/home/ts/qinshan/lims-recovery/private/local-runtime/current-read-milestone/prepared.json",
+      "sha256": "aca1cb23e282c40838402a4ff93228380395bfbcd3f40036da1b00be23a314de"
+    },
+    "mode": "strict",
+    "reuse": true,
+    "cleanup_pending": true
+  },
+  "role": "1160933173854272",
+  "principal": "Test",
+  "organization": "dept_2054",
+  "mode": "strict",
+  "base_url": "http://127.0.0.1:18087",
+  "case_count": 8,
+  "cases": [
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "a38bc504ff8d83b8b2b4a5c7464b0bb90858c2edbbd778a13428de9e83723a44",
+      "body_bytes": 689,
+      "assertions": {
+        "json_keys": [
+          "rows",
+          "total"
+        ],
+        "json_values": {
+          "total": 1
+        },
+        "content_type": "application/json"
+      },
+      "id": "audit-INSERT",
+      "method": "POST",
+      "path": "/secure/core/module/sys/at-records/queries",
+      "url": "http://127.0.0.1:18087/secure/core/module/sys/at-records/queries",
+      "status": 200,
+      "response_headers": {
+        "access-control-allow-headers": "security-rsa-key",
+        "access-control-allow-methods": "*",
+        "access-control-allow-credentials": "true",
+        "cache-control": "no-store",
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "content-type": "application/json",
+        "content-length": "689",
+        "date": "Sat, 07 Nov 2026 13:19:14 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "accept": "application/json, text/plain, */*",
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 147.876,
+      "request_fingerprint": "req-1da91e71adb330012b1f4987a6e436d10f6f492570ce513cb9d37b22a335c442",
+      "stimulus_contract_version": "3",
+      "response_fingerprint": "res-54cf73ab883fe779635ab9173b6e339118918fbd8e2275abe9235fdfef2e0385",
+      "normalizer_version": "2",
+      "validation_mode": "executed",
+      "batch_id": "batch-3f797a3f43e64520aacd9b3b796d0888",
+      "route": {
+        "method": "POST",
+        "path": "/secure/core/module/sys/at-records/queries",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "route_id": "747d36f59e1ce3e8"
+      },
+      "behavior_family_id": "behavior-edad466a314a4d0b",
+      "family_fingerprint": "fam-676b5720c712907fa0534d2591510dfd48d0bb4b21b7a3cf8beaf1c1eb7d6571",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r053225422c38"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "application_binding": "app-4b5d03f3064ec777",
+      "harness_binding": "harness-1f8dac578cdaee54",
+      "runtime_contract_binding": "rt-5afe8c623f983305",
+      "planning_binding": "plan-6afcf78fa2aae820",
+      "governance_binding": "gov-4ac5ccaf8a555cc6",
+      "implementation_binding": "impl-f1116cfd53b591bd",
+      "implementation_tree_digest": "f1116cfd53b591bd1c9890e2d091b08737de418bfba5818f2a4d844873f4e749"
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "471835364af1c83709fab4f5304c02957ceeeccd3b3ccab360a9b876692e0ade",
+      "body_bytes": 689,
+      "assertions": {
+        "json_keys": [
+          "rows",
+          "total"
+        ],
+        "json_values": {
+          "total": 1
+        },
+        "content_type": "application/json"
+      },
+      "id": "audit-UPDATE",
+      "method": "POST",
+      "path": "/secure/core/module/sys/at-records/queries",
+      "url": "http://127.0.0.1:18087/secure/core/module/sys/at-records/queries",
+      "status": 200,
+      "response_headers": {
+        "access-control-allow-headers": "security-rsa-key",
+        "access-control-allow-methods": "*",
+        "access-control-allow-credentials": "true",
+        "cache-control": "no-store",
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "content-type": "application/json",
+        "content-length": "689",
+        "date": "Sat, 07 Nov 2026 13:19:14 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "accept": "application/json, text/plain, */*",
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 179.091,
+      "request_fingerprint": "req-627adf21eaf3f48b13260d5a61dfe2396d0fa826bd80a5039f4859b0ef8d9750",
+      "stimulus_contract_version": "3",
+      "response_fingerprint": "res-d4c112e7914568d21a6c5bf3b961712624d1bb0e68fd1bffa9d4154737a4b82c",
+      "normalizer_version": "2",
+      "validation_mode": "executed",
+      "batch_id": "batch-3f797a3f43e64520aacd9b3b796d0888",
+      "route": {
+        "method": "POST",
+        "path": "/secure/core/module/sys/at-records/queries",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "route_id": "747d36f59e1ce3e8"
+      },
+      "behavior_family_id": "behavior-edad466a314a4d0b",
+      "family_fingerprint": "fam-676b5720c712907fa0534d2591510dfd48d0bb4b21b7a3cf8beaf1c1eb7d6571",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r628ea2a47dfb"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "application_binding": "app-4b5d03f3064ec777",
+      "harness_binding": "harness-1f8dac578cdaee54",
+      "runtime_contract_binding": "rt-5afe8c623f983305",
+      "planning_binding": "plan-6afcf78fa2aae820",
+      "governance_binding": "gov-4ac5ccaf8a555cc6",
+      "implementation_binding": "impl-f1116cfd53b591bd",
+      "implementation_tree_digest": "f1116cfd53b591bd1c9890e2d091b08737de418bfba5818f2a4d844873f4e749"
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "6578ffec40f0a7a31c1a275c0f39c4154dbb8bed13a2e08e0aa53394a603ecdc",
+      "body_bytes": 398,
+      "assertions": {
+        "json_keys": [
+          "rows",
+          "total"
+        ],
+        "json_values": {
+          "total": 0
+        },
+        "content_type": "application/json"
+      },
+      "id": "audit-NO_SUCH_AUDIT_TYPE",
+      "method": "POST",
+      "path": "/secure/core/module/sys/at-records/queries",
+      "url": "http://127.0.0.1:18087/secure/core/module/sys/at-records/queries",
+      "status": 200,
+      "response_headers": {
+        "access-control-allow-headers": "security-rsa-key",
+        "access-control-allow-methods": "*",
+        "access-control-allow-credentials": "true",
+        "cache-control": "no-store",
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "content-type": "application/json",
+        "content-length": "398",
+        "date": "Sat, 07 Nov 2026 13:19:14 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "accept": "application/json, text/plain, */*",
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 132.42,
+      "request_fingerprint": "req-d21eb4048d3599b8686224aa350ba770e3be3a6ca938c220715431edca0c0444",
+      "stimulus_contract_version": "3",
+      "response_fingerprint": "res-922011996f24843dfcd9018d3b7be8aae9e8a91c5c1b375a7de15a6c36256640",
+      "normalizer_version": "2",
+      "validation_mode": "executed",
+      "batch_id": "batch-3f797a3f43e64520aacd9b3b796d0888",
+      "route": {
+        "method": "POST",
+        "path": "/secure/core/module/sys/at-records/queries",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "route_id": "747d36f59e1ce3e8"
+      },
+      "behavior_family_id": "behavior-edad466a314a4d0b",
+      "family_fingerprint": "fam-676b5720c712907fa0534d2591510dfd48d0bb4b21b7a3cf8beaf1c1eb7d6571",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "rf1753b5be7ff"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "application_binding": "app-4b5d03f3064ec777",
+      "harness_binding": "harness-1f8dac578cdaee54",
+      "runtime_contract_binding": "rt-5afe8c623f983305",
+      "planning_binding": "plan-6afcf78fa2aae820",
+      "governance_binding": "gov-4ac5ccaf8a555cc6",
+      "implementation_binding": "impl-f1116cfd53b591bd",
+      "implementation_tree_digest": "f1116cfd53b591bd1c9890e2d091b08737de418bfba5818f2a4d844873f4e749"
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "471835364af1c83709fab4f5304c02957ceeeccd3b3ccab360a9b876692e0ade",
+      "body_bytes": 689,
+      "assertions": {
+        "json_keys": [
+          "rows",
+          "total"
+        ],
+        "json_values": {
+          "total": 1
+        },
+        "content_type": "application/json"
+      },
+      "id": "audit-qf",
+      "method": "POST",
+      "path": "/secure/core/module/sys/at-records/queries",
+      "url": "http://127.0.0.1:18087/secure/core/module/sys/at-records/queries",
+      "status": 200,
+      "response_headers": {
+        "access-control-allow-headers": "security-rsa-key",
+        "access-control-allow-methods": "*",
+        "access-control-allow-credentials": "true",
+        "cache-control": "no-store",
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "content-type": "application/json",
+        "content-length": "689",
+        "date": "Sat, 07 Nov 2026 13:19:14 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "accept": "application/json, text/plain, */*",
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 87.337,
+      "request_fingerprint": "req-96d30213dda32c8778818778ec3ce633612cbf66f4fc7ecc7a790b11f626a803",
+      "stimulus_contract_version": "3",
+      "response_fingerprint": "res-d4c112e7914568d21a6c5bf3b961712624d1bb0e68fd1bffa9d4154737a4b82c",
+      "normalizer_version": "2",
+      "validation_mode": "executed",
+      "batch_id": "batch-3f797a3f43e64520aacd9b3b796d0888",
+      "route": {
+        "method": "POST",
+        "path": "/secure/core/module/sys/at-records/queries",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "route_id": "747d36f59e1ce3e8"
+      },
+      "behavior_family_id": "behavior-edad466a314a4d0b",
+      "family_fingerprint": "fam-676b5720c712907fa0534d2591510dfd48d0bb4b21b7a3cf8beaf1c1eb7d6571",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r509e927bf05a"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "application_binding": "app-4b5d03f3064ec777",
+      "harness_binding": "harness-1f8dac578cdaee54",
+      "runtime_contract_binding": "rt-5afe8c623f983305",
+      "planning_binding": "plan-6afcf78fa2aae820",
+      "governance_binding": "gov-4ac5ccaf8a555cc6",
+      "implementation_binding": "impl-f1116cfd53b591bd",
+      "implementation_tree_digest": "f1116cfd53b591bd1c9890e2d091b08737de418bfba5818f2a4d844873f4e749"
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "5e01b581e4bcd6e5df45e2c800343d86bf76149aaf873f14d32c87bf9c12613b",
+      "body_bytes": 990,
+      "assertions": {
+        "json_keys": [
+          "rows",
+          "total"
+        ],
+        "json_values": {
+          "total": 1
+        },
+        "content_type": "application/json"
+      },
+      "id": "audit-lines",
+      "method": "POST",
+      "path": "/secure/core/module/sys/at-records/record-lines/queries",
+      "url": "http://127.0.0.1:18087/secure/core/module/sys/at-records/record-lines/queries",
+      "status": 200,
+      "response_headers": {
+        "access-control-allow-headers": "security-rsa-key",
+        "access-control-allow-methods": "*",
+        "access-control-allow-credentials": "true",
+        "cache-control": "no-store",
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "content-type": "application/json",
+        "content-length": "990",
+        "date": "Sat, 07 Nov 2026 13:19:14 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "accept": "application/json, text/plain, */*",
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 109.693,
+      "request_fingerprint": "req-d69da400d7cf368bd62eccb45b75054a5ddd8783a8785438d6f4a4ce1721759a",
+      "stimulus_contract_version": "3",
+      "response_fingerprint": "res-754f69202bcb0754131fbcea3764773be6d2e31ae3d6bd0c64275ff72763b042",
+      "normalizer_version": "2",
+      "validation_mode": "executed",
+      "batch_id": "batch-3f797a3f43e64520aacd9b3b796d0888",
+      "route": {
+        "method": "POST",
+        "path": "/secure/core/module/sys/at-records/record-lines/queries",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "route_id": "2587be1807735bce"
+      },
+      "behavior_family_id": "behavior-7fbdcff0f6ce9a14",
+      "family_fingerprint": "fam-676b5720c712907fa0534d2591510dfd48d0bb4b21b7a3cf8beaf1c1eb7d6571",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r09cff8bb88c6"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "application_binding": "app-4b5d03f3064ec777",
+      "harness_binding": "harness-1f8dac578cdaee54",
+      "runtime_contract_binding": "rt-5afe8c623f983305",
+      "planning_binding": "plan-6afcf78fa2aae820",
+      "governance_binding": "gov-4ac5ccaf8a555cc6",
+      "implementation_binding": "impl-f1116cfd53b591bd",
+      "implementation_tree_digest": "f1116cfd53b591bd1c9890e2d091b08737de418bfba5818f2a4d844873f4e749"
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "02575ed74d7e54be2ed2b9353321b54a2923c838b9a07295ddae8a1928259c87",
+      "body_bytes": 519,
+      "assertions": {
+        "json_keys": [
+          "rows",
+          "total"
+        ],
+        "json_values": {
+          "total": 0
+        },
+        "content_type": "application/json"
+      },
+      "id": "audit-lines-no-match",
+      "method": "POST",
+      "path": "/secure/core/module/sys/at-records/record-lines/queries",
+      "url": "http://127.0.0.1:18087/secure/core/module/sys/at-records/record-lines/queries",
+      "status": 200,
+      "response_headers": {
+        "access-control-allow-headers": "security-rsa-key",
+        "access-control-allow-methods": "*",
+        "access-control-allow-credentials": "true",
+        "cache-control": "no-store",
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "content-type": "application/json",
+        "content-length": "519",
+        "date": "Sat, 07 Nov 2026 13:19:14 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "accept": "application/json, text/plain, */*",
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 95.463,
+      "request_fingerprint": "req-d4bc0ecf051443a523f9cc4bf7cd7e632d6fe09021f0b7913ee077575549a9de",
+      "stimulus_contract_version": "3",
+      "response_fingerprint": "res-de10456b3c225b902c67b85810a7cc3cda4f8c2ce962b39cd6188048f860caef",
+      "normalizer_version": "2",
+      "validation_mode": "executed",
+      "batch_id": "batch-3f797a3f43e64520aacd9b3b796d0888",
+      "route": {
+        "method": "POST",
+        "path": "/secure/core/module/sys/at-records/record-lines/queries",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "route_id": "2587be1807735bce"
+      },
+      "behavior_family_id": "behavior-7fbdcff0f6ce9a14",
+      "family_fingerprint": "fam-676b5720c712907fa0534d2591510dfd48d0bb4b21b7a3cf8beaf1c1eb7d6571",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r2d5c3d101d80"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "application_binding": "app-4b5d03f3064ec777",
+      "harness_binding": "harness-1f8dac578cdaee54",
+      "runtime_contract_binding": "rt-5afe8c623f983305",
+      "planning_binding": "plan-6afcf78fa2aae820",
+      "governance_binding": "gov-4ac5ccaf8a555cc6",
+      "implementation_binding": "impl-f1116cfd53b591bd",
+      "implementation_tree_digest": "f1116cfd53b591bd1c9890e2d091b08737de418bfba5818f2a4d844873f4e749"
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "d1071d0dc938cb8597d4679977f91cfe4c6e0459d417190fde4c8a9fcdd72702",
+      "body_bytes": 460,
+      "assertions": {
+        "json_keys": [
+          "rows",
+          "total"
+        ],
+        "json_values": {
+          "total": 0
+        },
+        "content_type": "application/json"
+      },
+      "id": "consume-no-match",
+      "method": "POST",
+      "path": "/secure/emc/module/item/consume/consumes/queries/raw",
+      "url": "http://127.0.0.1:18087/secure/emc/module/item/consume/consumes/queries/raw",
+      "status": 200,
+      "response_headers": {
+        "access-control-allow-headers": "security-rsa-key",
+        "access-control-allow-methods": "*",
+        "access-control-allow-credentials": "true",
+        "gikam-instant-save-path": "/secure/emc/module/item/consume/consumes/instant",
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "content-type": "application/json",
+        "content-length": "460",
+        "date": "Sat, 07 Nov 2026 13:19:15 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "accept": "application/json, text/plain, */*",
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 206.081,
+      "request_fingerprint": "req-5e6838d11175fef072c106e7a43bb4b08530d08646f4e7d5c4eaa41a35c710db",
+      "stimulus_contract_version": "3",
+      "response_fingerprint": "res-07bcb4a549dd419baeaefd07d754192d3965bbe83b871141b0e002719cb3c9ec",
+      "normalizer_version": "2",
+      "validation_mode": "executed",
+      "batch_id": "batch-3f797a3f43e64520aacd9b3b796d0888",
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/item/consume/consumes/queries/raw",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "route_id": "dd7e0271a7b832eb"
+      },
+      "behavior_family_id": "behavior-22de802b8f69889c",
+      "family_fingerprint": "fam-78a276cb50871150713baa2e61ed3aa71224194a5943ce20e26fd73e5f3f71fa",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "ra6a601c295da"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "application_binding": "app-4b5d03f3064ec777",
+      "harness_binding": "harness-1f8dac578cdaee54",
+      "runtime_contract_binding": "rt-5afe8c623f983305",
+      "planning_binding": "plan-6afcf78fa2aae820",
+      "governance_binding": "gov-4ac5ccaf8a555cc6",
+      "implementation_binding": "impl-f1116cfd53b591bd",
+      "implementation_tree_digest": "f1116cfd53b591bd1c9890e2d091b08737de418bfba5818f2a4d844873f4e749"
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "a2441f1a1dd0f0b0ed832325e9a0e8a2423e579ba5ec959b219bc343c866c996",
+      "body_bytes": 5474,
+      "assertions": {
+        "json_keys": [
+          "rows",
+          "total"
+        ],
+        "json_values": {
+          "total": 104
+        },
+        "content_type": "application/json"
+      },
+      "id": "qc-stock",
+      "method": "POST",
+      "path": "/secure/emc/module/mdm/basemdm/mtls/queries/qc-std-stock",
+      "url": "http://127.0.0.1:18087/secure/emc/module/mdm/basemdm/mtls/queries/qc-std-stock",
+      "status": 200,
+      "response_headers": {
+        "access-control-allow-headers": "security-rsa-key",
+        "access-control-allow-methods": "*",
+        "access-control-allow-credentials": "true",
+        "gikam-instant-save-path": "/secure/emc/module/mdm/basemdm/mtls/instant",
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "content-type": "application/json",
+        "content-length": "5474",
+        "date": "Sat, 07 Nov 2026 13:19:15 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "accept": "application/json, text/plain, */*",
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 30.623,
+      "request_fingerprint": "req-5abded2e6ebb2926ad0fef36ff6cd5aff2745f32ead2d82594bb386ee21da86b",
+      "stimulus_contract_version": "3",
+      "response_fingerprint": "res-ea041eca7cbbc41ba5f6d40c9fc501e03b4832fadb788c0cef1bb5742e264a67",
+      "normalizer_version": "2",
+      "validation_mode": "executed",
+      "batch_id": "batch-3f797a3f43e64520aacd9b3b796d0888",
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/mdm/basemdm/mtls/queries/qc-std-stock",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "route_id": "7401f5c1ce05b5ef"
+      },
+      "behavior_family_id": "behavior-59488f1e31bd0a9a",
+      "family_fingerprint": "fam-e37460c89c139e299a8e1f081598df1bd325dcbc2cb65f39f0a9a152b37253b1",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r254b4a280577"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "application_binding": "app-4b5d03f3064ec777",
+      "harness_binding": "harness-1f8dac578cdaee54",
+      "runtime_contract_binding": "rt-5afe8c623f983305",
+      "planning_binding": "plan-6afcf78fa2aae820",
+      "governance_binding": "gov-4ac5ccaf8a555cc6",
+      "implementation_binding": "impl-f1116cfd53b591bd",
+      "implementation_tree_digest": "f1116cfd53b591bd1c9890e2d091b08737de418bfba5818f2a4d844873f4e749"
+    }
+  ],
+  "cleanup": {
+    "application_stopped": true,
+    "baseline_schema_immutable": true,
+    "cleanup_mode": "persistent-oracle",
+    "lifecycle_proof": {
+      "artifact_ref": "sha256:3a434113c31720b7122cb444195e510ac945a8533c6403a3fd602013dbcdf206",
+      "schema": 1,
+      "sha256": "3a434113c31720b7122cb444195e510ac945a8533c6403a3fd602013dbcdf206",
+      "storage": "artifact"
+    },
+    "network_preserved": true,
+    "oracle_preserved": true,
+    "oracle_reused": true,
+    "private_capture_retention": "registered-permanent-proof",
+    "redis_preserved": true,
+    "runtime_dirty": false,
+    "runtime_schema_restored": true,
+    "temporary_files_removed": false,
+    "volume_preserved": true
+  },
+  "cleanup_pending": false,
+  "phase_timings_ms": {
+    "http_cases": 1183.607
+  },
+  "authentication": {
+    "attempted": true,
+    "status": 200,
+    "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "authenticated": true,
+    "account_validated": true,
+    "account_status": 200,
+    "account_body_sha256": "0b32f1ef1da4b287741b86069e704f4cd3153428c87ec2038a88d9023d3bbfec",
+    "login_response_fingerprint": "res-80e83fb795199e89b4d5652a29b72d3903d75e7cc1529aadb9c0359c8e493576",
+    "identity": {
+      "principal": "Test",
+      "account_organization": "dept_2054",
+      "organization": "dept_2054",
+      "roles": [
+        {
+          "role_id": "1160933173854272",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1189432031920192",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1189432105295936",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1189432176296000",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1189432248565824",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1189432348786752",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1189432452751424",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1189432531009600",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1189432648368192",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1189432692162624",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1189432735293504",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1189432989335616",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1189433059639360",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1189433111257152",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1189433193898048",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1189433242828864",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1189433295257664",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1189435382169664",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1194388196384832",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1235883924111424",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1241710208245824",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1249996911648832",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1249997078413376",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1253678574411840",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1274981895118912",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1279131697446976",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1335062763313312",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1358478346385440",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1358479062374432",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1358479212369952",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1358479430924320",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1358480236771360",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1358481402902560",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1358481553463328",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1358482018367520",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1373299196952992",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1398684374457120",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1449060899626688",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1496368496737504",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1512733649279680",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1518572870740256",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1526070171521696",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1527459809739648",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1566379864797376",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1579156530695616",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1581302074327040",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1585133573646880",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1597053920749760",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1598285727715424",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1605678303834912",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1610279635600096",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1612569354362208",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1632471349920288",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1641583891343584",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1669730651238048",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1669731057356448",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1669746617659040",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1682634233166400",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1686693783311712",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1691653976980096",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1712176912170208",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1717135613989120",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1720865075738432",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1735776418495392",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1771761826664032",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1783807648071744",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1849707893640160",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1865065704216000",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1882804096120256",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1882804191049152",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1882804302730688",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1988387661476288",
+          "principal": "Test"
+        }
+      ]
+    },
+    "projection_metadata": {
+      "kind": "allowlist-json-projection",
+      "adapter": "sunway-account-v1",
+      "selectors": {
+        "principal": "id",
+        "account_organization": "orgId",
+        "organization": "ext$.loginorgid",
+        "roles": "ext$.roles"
+      },
+      "raw_body_sha256": "0b32f1ef1da4b287741b86069e704f4cd3153428c87ec2038a88d9023d3bbfec",
+      "raw_body_bytes": 18035,
+      "projection_sha256": "6d0045e004d25ef7f6e3f751b0dd081d81d28592507c01727ad8e96d26ebc119",
+      "raw_body_recomputable": false,
+      "trust": "executed-runner-source-bound-producer"
+    },
+    "response_fingerprint": "res-63091fb4bbc65e95792f1ad5567da92f139006bacddc0ddf5ad5ce53d997be07",
+    "account_observation": {
+      "request": {
+        "method": "GET",
+        "path": "/core/module/sys/logins/account",
+        "operation": "read",
+        "headers": {
+          "Connection": "close",
+          "Accept": "application/json"
+        },
+        "auth": {
+          "cookies": {
+            "OWNED_LOCAL_SESSION": "864a6384fcf88665251f380302ddb7059a1ab86bb92f59fb53e953daf774c6ce",
+            "sunway-remember-me-cookie": "805b7e478acad6e5b638066d66a0a8c08511f1d457574682b56c8cfb22c9fa07"
+          }
+        },
+        "role": "1160933173854272",
+        "organization": "dept_2054"
+      },
+      "status": 200,
+      "response_headers": {
+        "content-type": "application/json"
+      },
+      "started_at": "2026-11-07T13:19:14.319822+00:00",
+      "finished_at": "2026-11-07T13:19:14.411118+00:00",
+      "request_fingerprint": "req-6b1db5b0202df99f62adfd2f06579d3fe5f35fdd8759cfc841fec8b11c8f69cd",
+      "response_fingerprint": "res-63091fb4bbc65e95792f1ad5567da92f139006bacddc0ddf5ad5ce53d997be07",
+      "response_projection": {
+        "principal": "Test",
+        "account_organization": "dept_2054",
+        "organization": "dept_2054",
+        "roles": [
+          {
+            "role_id": "1160933173854272",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1189432031920192",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1189432105295936",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1189432176296000",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1189432248565824",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1189432348786752",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1189432452751424",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1189432531009600",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1189432648368192",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1189432692162624",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1189432735293504",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1189432989335616",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1189433059639360",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1189433111257152",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1189433193898048",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1189433242828864",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1189433295257664",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1189435382169664",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1194388196384832",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1235883924111424",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1241710208245824",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1249996911648832",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1249997078413376",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1253678574411840",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1274981895118912",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1279131697446976",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1335062763313312",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1358478346385440",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1358479062374432",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1358479212369952",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1358479430924320",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1358480236771360",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1358481402902560",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1358481553463328",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1358482018367520",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1373299196952992",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1398684374457120",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1449060899626688",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1496368496737504",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1512733649279680",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1518572870740256",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1526070171521696",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1527459809739648",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1566379864797376",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1579156530695616",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1581302074327040",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1585133573646880",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1597053920749760",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1598285727715424",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1605678303834912",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1610279635600096",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1612569354362208",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1632471349920288",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1641583891343584",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1669730651238048",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1669731057356448",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1669746617659040",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1682634233166400",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1686693783311712",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1691653976980096",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1712176912170208",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1717135613989120",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1720865075738432",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1735776418495392",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1771761826664032",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1783807648071744",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1849707893640160",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1865065704216000",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1882804096120256",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1882804191049152",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1882804302730688",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1988387661476288",
+            "principal": "Test"
+          }
+        ]
+      },
+      "projection_metadata": {
+        "kind": "allowlist-json-projection",
+        "adapter": "sunway-account-v1",
+        "selectors": {
+          "principal": "id",
+          "account_organization": "orgId",
+          "organization": "ext$.loginorgid",
+          "roles": "ext$.roles"
+        },
+        "raw_body_sha256": "0b32f1ef1da4b287741b86069e704f4cd3153428c87ec2038a88d9023d3bbfec",
+        "raw_body_bytes": 18035,
+        "projection_sha256": "6d0045e004d25ef7f6e3f751b0dd081d81d28592507c01727ad8e96d26ebc119",
+        "raw_body_recomputable": false,
+        "trust": "executed-runner-source-bound-producer"
+      }
+    },
+    "session_context": {
+      "cookies": {
+        "OWNED_LOCAL_SESSION": "864a6384fcf88665251f380302ddb7059a1ab86bb92f59fb53e953daf774c6ce",
+        "sunway-remember-me-cookie": "805b7e478acad6e5b638066d66a0a8c08511f1d457574682b56c8cfb22c9fa07"
+      }
+    }
+  },
+  "proof_registration_pending": false,
+  "finished_at": "2026-11-07T13:19:15.404000+00:00",
+  "cleanup_finalized_at": "2026-11-07T13:22:11.480665+00:00"
+}

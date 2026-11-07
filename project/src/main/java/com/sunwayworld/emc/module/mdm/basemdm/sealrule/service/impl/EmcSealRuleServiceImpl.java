@@ -12,6 +12,7 @@ import com.sunwayworld.emc.module.mdm.basemdm.sealrule.dao.EmcSealRuleDao;
 import com.sunwayworld.emc.module.mdm.basemdm.sealrule.bean.EmcSealRuleBean;
 import com.sunwayworld.emc.module.mdm.basemdm.sealrule.service.EmcSealRuleService;
 import com.sunwayworld.framework.context.ApplicationContextHelper;
+import com.sunwayworld.framework.exception.checked.CheckedException;
 import java.util.List;
 import com.sunwayworld.framework.data.page.Page;
 import com.sunwayworld.framework.mybatis.mapper.MatchPattern;
@@ -72,6 +73,18 @@ public class EmcSealRuleServiceImpl implements EmcSealRuleService {
     @Transactional
     @AuditTrailEntry(AuditTrailType.DELETE)
     public void deleteRuleDetails(Long id, RestJsonWrapperBean wrapper) {
+        if (id == null) {
+            throw new CheckedException("GIKAM.EXCEPTION.PARAM_ERROR");
+        }
+        for (EmcSealRuleDetailsBean selected : wrapper.parse(EmcSealRuleDetailsBean.class)) {
+            if (selected.getId() == null) {
+                throw new CheckedException("GIKAM.EXCEPTION.PARAM_ERROR");
+            }
+            EmcSealRuleDetailsBean stored = emcSealRuleDetailsService.selectByIdIfPresent(selected.getId());
+            if (stored != null && !id.equals(stored.getSealRuleId())) {
+                throw new CheckedException("GIKAM.EXCEPTION.PARAM_ERROR");
+            }
+        }
         emcSealRuleDetailsService.delete(wrapper);
     }
 

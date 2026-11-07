@@ -302,6 +302,9 @@
                         <when test='columnInstance.value == null or columnInstance.value.toString() == ""'>
                             "${columnInstance.columnContext.columnName.toUpperCase}" IS NULL
                         </when>
+                        <when test="columnInstance.columnContext.clob">
+                            DBMS_LOB.COMPARE("${columnInstance.columnContext.columnName.toUpperCase}", #{columnInstance.value,jdbcType=CLOB}) = 0
+                        </when>
                         <otherwise>
                             "${columnInstance.columnContext.columnName.toUpperCase}" = #{columnInstance.value}
                         </otherwise>
@@ -339,6 +342,9 @@
                         <choose>
                             <when test='columnInstance.value == null or columnInstance.value.toString() == ""'>
                                 "${columnInstance.columnContext.columnName.toUpperCase}" IS NULL
+                            </when>
+                            <when test="columnInstance.columnContext.clob">
+                                DBMS_LOB.COMPARE("${columnInstance.columnContext.columnName.toUpperCase}", #{columnInstance.value,jdbcType=CLOB}) = 0
                             </when>
                             <otherwise>
                                 "${columnInstance.columnContext.columnName.toUpperCase}" = #{columnInstance.value}
@@ -379,6 +385,9 @@
                             <when test='columnInstance.value == null or columnInstance.value.toString() == ""'>
                                 "${columnInstance.columnContext.columnName.toUpperCase}" IS NULL
                             </when>
+                            <when test="columnInstance.columnContext.clob">
+                                DBMS_LOB.COMPARE("${columnInstance.columnContext.columnName.toUpperCase}", #{columnInstance.value,jdbcType=CLOB}) = 0
+                            </when>
                             <otherwise>
                                 "${columnInstance.columnContext.columnName.toUpperCase}" = #{columnInstance.value}
                             </otherwise>
@@ -416,6 +425,9 @@
                     <choose>
                         <when test='columnInstance.value == null or columnInstance.value.toString() == ""'>
                             "${columnInstance.columnContext.columnName.toUpperCase}" IS NULL
+                        </when>
+                        <when test="columnInstance.columnContext.clob">
+                            DBMS_LOB.COMPARE("${columnInstance.columnContext.columnName.toUpperCase}", #{columnInstance.value,jdbcType=CLOB}) = 0
                         </when>
                         <otherwise>
                             "${columnInstance.columnContext.columnName.toUpperCase}" = #{columnInstance.value}
@@ -490,6 +502,9 @@
                         <when test='columnInstance.value == null or columnInstance.value.toString() == ""'>
                             "${columnInstance.columnContext.columnName.toUpperCase}" IS NULL
                         </when>
+                        <when test="columnInstance.columnContext.clob">
+                            DBMS_LOB.COMPARE("${columnInstance.columnContext.columnName.toUpperCase}", #{columnInstance.value,jdbcType=CLOB}) = 0
+                        </when>
                         <otherwise>
                             "${columnInstance.columnContext.columnName.toUpperCase}" = #{columnInstance.value}
                         </otherwise>
@@ -508,6 +523,9 @@
                         <choose>
                             <when test='columnInstance.value == null or columnInstance.value.toString() == ""'>
                                 "${columnInstance.columnContext.columnName.toUpperCase}" IS NULL
+                            </when>
+                            <when test="columnInstance.columnContext.clob">
+                                DBMS_LOB.COMPARE("${columnInstance.columnContext.columnName.toUpperCase}", #{columnInstance.value,jdbcType=CLOB}) = 0
                             </when>
                             <otherwise>
                                 "${columnInstance.columnContext.columnName.toUpperCase}" = #{columnInstance.value}

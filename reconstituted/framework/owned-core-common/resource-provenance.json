@@ -888,7 +888,11 @@
       "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/framework/mybatis/mapper/conf/dao-oracle-mapper.xml",
       "sha256": "beecfaca1f03da179c67eb4f502155bbb4cea69926576959cd7e84824a7b3abc",
-      "source_jar": "gikam-core-common-14.1.5.jar"
+      "source_jar": "gikam-core-common-14.1.5.jar",
+      "destination_sha256": "a6137c3a5ec6530b6d91201fc1a4ccd154f56a9fa6eeaecdb2adb7e7ea0e17ce",
+      "transformations": [
+        "read-side equality uses full DBMS_LOB.COMPARE with jdbcType=CLOB only when existing columnContext.clob is true; preserve null/empty IS NULL, scalar and original AND/OR/order/projection/count structure"
+      ]
     },
     {
       "bytes": 21500,
@@ -944,7 +948,11 @@
       "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/framework/mybatis/mapper/conf/map-dao-oracle-mapper.xml",
       "sha256": "b246ca8ebbf45d9ea0469c9ac1bd09f91445ec426082eefd3bbd32266e5efd9f",
-      "source_jar": "gikam-core-common-14.1.5.jar"
+      "source_jar": "gikam-core-common-14.1.5.jar",
+      "destination_sha256": "e94aaa312ced2003494051aa81cebe7d99d4608e2ebd452774d90e13f3808078",
+      "transformations": [
+        "read-side equality uses full DBMS_LOB.COMPARE with jdbcType=CLOB only when existing columnContext.clob is true; preserve null/empty IS NULL, scalar and original AND/OR/order/projection/count structure"
+      ]
     },
     {
       "bytes": 22642,

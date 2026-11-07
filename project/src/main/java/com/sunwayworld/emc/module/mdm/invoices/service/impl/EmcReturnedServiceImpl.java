@@ -9,6 +9,7 @@ import com.sunwayworld.emc.module.mdm.invoices.service.EmcReturnedService;
 import com.sunwayworld.framework.at.annotation.AuditTrailEntry;
 import com.sunwayworld.framework.at.annotation.AuditTrailType;
 import com.sunwayworld.framework.audit.aunnotation.Audit;
+import com.sunwayworld.framework.beans.BeanPropertyListener;
 import com.sunwayworld.framework.context.ApplicationContextHelper;
 import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;
 import com.sunwayworld.framework.spring.annotation.GikamBean;
@@ -18,8 +19,11 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -73,6 +77,84 @@ public class EmcReturnedServiceImpl implements EmcReturnedService {
             getDao().insert(emcReturned);
         return emcReturned.getId();
     }
+    @Override
+    @Transactional
+    @AuditTrailEntry(AuditTrailType.UPDATE)
+    @Audit("AUDIT.SAVE")
+    public void updateIfChanged(EmcReturnedBean item) {
+        updateIfChanged(Collections.singletonList(item));
+    }
+
+    @Override
+    @Transactional
+    @AuditTrailEntry(AuditTrailType.UPDATE)
+    @Audit("AUDIT.SAVE")
+    public void updateIfChanged(List<EmcReturnedBean> items) {
+        if (items == null || items.isEmpty()) {
+            return;
+        }
+        Map<Long, EmcReturnedBean> stored = new LinkedHashMap<>();
+        Map<Long, BigDecimal> amounts = new LinkedHashMap<>();
+        Set<Long> invoiceIds = new LinkedHashSet<>();
+        for (EmcReturnedBean item : items) {
+            Long id = Objects.requireNonNull(item.getId(), "Return id is required");
+            if (stored.containsKey(id)) {
+                throw new IllegalArgumentException("Duplicate return id in update batch");
+            }
+            EmcReturnedBean previous = getDao().selectById(id);
+            stored.put(id, previous);
+            // The stored relationship is authoritative, including for partial JSON patches.
+            item.setInvoiceId(previous.getInvoiceId());
+            item.setInvoiceAmount(previous.getInvoiceAmount());
+            item.setUncollectedAmount(previous.getUncollectedAmount());
+            if (hasReturnedAmount(item)) {
+                BigDecimal amount = new BigDecimal(Objects.requireNonNull(item.getReturnedAmount(), "Return amount is required"));
+                amounts.put(id, amount);
+                if (amount.compareTo(new BigDecimal(previous.getReturnedAmount())) != 0) {
+                    invoiceIds.add(previous.getInvoiceId());
+                }
+            }
+        }
+        Map<Long, EmcInvoiceBean> invoices = new LinkedHashMap<>();
+        Map<Long, BigDecimal> balances = new LinkedHashMap<>();
+        for (Long invoiceId : invoiceIds) {
+            EmcInvoiceBean invoice = invoiceService.selectById(invoiceId);
+            if (invoice.getInvoiceAmount() == null || invoice.getInvoiceAmount().trim().isEmpty()) {
+                throw new AuthenticationServiceException("请输入开票金额！");
+            }
+            BigDecimal total = BigDecimal.ZERO;
+            for (EmcReturnedBean sibling : getDao().selectListByOneColumnValue(invoiceId, "invoiceId")) {
+                total = total.add(amounts.containsKey(sibling.getId())
+                        ? amounts.get(sibling.getId()) : new BigDecimal(sibling.getReturnedAmount()));
+            }
+            BigDecimal balance = new BigDecimal(invoice.getInvoiceAmount()).subtract(total);
+            if (balance.compareTo(BigDecimal.ZERO) < 0) {
+                throw new AuthenticationServiceException("输入的回款金额大于未回款金额！");
+            }
+            invoices.put(invoiceId, invoice);
+            balances.put(invoiceId, balance);
+        }
+        for (EmcReturnedBean item : items) {
+            EmcReturnedBean previous = stored.get(item.getId());
+            if (hasReturnedAmount(item) && balances.containsKey(previous.getInvoiceId())
+                    && new BigDecimal(item.getReturnedAmount()).compareTo(new BigDecimal(previous.getReturnedAmount())) != 0) {
+                item.setInvoiceAmount(invoices.get(previous.getInvoiceId()).getInvoiceAmount());
+                item.setUncollectedAmount(balances.get(previous.getInvoiceId()).toString());
+            }
+        }
+        // Preserve framework partial-property merging, created fields, update hooks and audit.
+        EmcReturnedService.super.updateIfChanged(items);
+        invoiceIds.forEach(this::refreshDoneFlag);
+    }
+
+    private boolean hasReturnedAmount(EmcReturnedBean item) {
+        if (item instanceof BeanPropertyListener) {
+            return ((BeanPropertyListener) item).getChangedPropertyEventList().stream()
+                    .anyMatch(event -> "returnedAmount".equalsIgnoreCase(event.getPropertyDescriptor().getName()));
+        }
+        return item.getReturnedAmount() != null;
+    }
+
     @Override
     @Transactional
     @AuditTrailEntry(AuditTrailType.DELETE)

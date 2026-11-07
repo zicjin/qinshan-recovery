@@ -80,6 +80,9 @@ public class EmcInvoiceServiceImpl implements EmcInvoiceService {
         List<EmcContractBean> contractList = contractService.selectListByFilter(SearchFilter.instance().match("id",contractIdList).filter(MatchPattern.OR));
         contractList.forEach(e -> {
             for (int i = 0; i < emcInvoiceList.size(); i++) {
+                if (!e.getId().equals(NumberUtils.parseLong(emcInvoiceList.get(i).getContractId()))) {
+                    continue;
+                }
                 if (ObjectUtils.isEmpty(e.getExt$Item("uninvoicedAmount")) || ObjectUtils.isEmpty(emcInvoiceList.get(i).getInvoiceAmount())) {
                     throw new AuthenticationServiceException("有未开票金额或开票收入金额为空！");
                 }
@@ -105,6 +108,12 @@ public class EmcInvoiceServiceImpl implements EmcInvoiceService {
         List<EmcContractBean> contractList = contractService.selectListByFilter(SearchFilter.instance().match("id",contractIdList).filter(MatchPattern.OR));
         contractList.forEach(e -> {
             for (int i = 0; i < emcInvoiceList.size(); i++) {
+                if (!e.getId().equals(NumberUtils.parseLong(emcInvoiceList.get(i).getContractId()))) {
+                    continue;
+                }
+                if (ObjectUtils.isEmpty(e.getExt$Item("uninvoicedAmount")) || ObjectUtils.isEmpty(emcInvoiceList.get(i).getInvoiceAmount())) {
+                    throw new AuthenticationServiceException("有未开票金额或开票收入金额为空！");
+                }
                 BigDecimal uninvoicedAmount = new BigDecimal(e.getExt$Item("uninvoicedAmount"));
                 BigDecimal invoiceAmount = new BigDecimal(emcInvoiceList.get(i).getInvoiceAmount());
                 BigDecimal last = uninvoicedAmount.add(invoiceAmount);

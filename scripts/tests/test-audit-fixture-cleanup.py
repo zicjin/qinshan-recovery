@@ -38,10 +38,10 @@ class CleanupCliTest(unittest.TestCase):
         self.addCleanup(self.tmp.cleanup)
         self.directory = Path(self.tmp.name)
         self.journal = example()
-        def observation(method, path, body, status=200):
+        def observation(method, path, body, request_body=None, status=200):
             raw = json.dumps(body, ensure_ascii=False)
             return {'method': method, 'path': path, 'status': status,
-                    'rawBody': raw, 'bodySha256': hashlib.sha256(raw.encode()).hexdigest()}
+                    'requestBody': request_body, 'rawBody': raw, 'bodySha256': hashlib.sha256(raw.encode()).hexdigest()}
         transcript = {'version': 1, 'baseUrl': 'http://127.0.0.1:18089',
                       'principal': 'fixture-user', 'organization': 'fixture-org',
                       'marker': 'owned-strict-fixture',
@@ -50,9 +50,9 @@ class CleanupCliTest(unittest.TestCase):
                       'requests': [
                           observation('GET', '/secure/emc/module/mdm/basemdm/seal-rules/901',
                                       {'id': 901, 'name': 'owned-strict-fixture'}),
-                          observation('DELETE', '/secure/emc/module/mdm/basemdm/seal-rules/901', None),
-                          observation('POST', '/secure/emc/module/mdm/basemdm/seal-rules/queries', {'total': 0, 'rows': []}),
-                          observation('DELETE', '/secure/core/module/sys/at-configs/T_EMC_SEAL_RULE', None)]}
+                          observation('DELETE', '/secure/emc/module/mdm/basemdm/seal-rules', None, {'b': ['', [{'id': 901}]], 'p': {}}),
+                          observation('POST', '/secure/emc/module/mdm/basemdm/seal-rules/queries', {'total': 0, 'rows': []}, {'p': {'n': 1, 's': 10, 'f': {'id_SEQ': 901}}}),
+                          observation('DELETE', '/secure/core/module/sys/at-configs', None, {'b': ['', [{'id': 'T_EMC_SEAL_RULE'}]], 'p': {}})]}
         data = json.dumps(transcript).encode()
         (self.directory / 'http.json').write_bytes(data)
         self.journal['apiRestore']['sha256'] = hashlib.sha256(data).hexdigest()
@@ -77,6 +77,35 @@ class CleanupCliTest(unittest.TestCase):
                 for request in proof['requests']:
                     if 'rawBody' in request:
                         request['bodySha256'] = hashlib.sha256(request['rawBody'].encode()).hexdigest()
+                data = json.dumps(proof).encode()
+                proof_path.write_bytes(data)
+                self.journal['apiRestore']['sha256'] = hashlib.sha256(data).hexdigest()
+                result = self.run_cli()
+                self.assertNotEqual(result.returncode, 0)
+                self.assertFalse((self.directory / 'cleanup.sql').exists())
+
+    def test_collection_delete_requires_exact_single_business_and_config_ids(self):
+        proof_path = self.directory / 'http.json'
+        original = json.loads(proof_path.read_text())
+        for mutation in ('wrong-business-id', 'wrong-config-id', 'extra-business-id',
+                         'legacy-item-path', 'missing-request-body', 'unfiltered-query', 'get-body'):
+            with self.subTest(mutation=mutation):
+                proof = copy.deepcopy(original)
+                rows = proof['requests']
+                if mutation == 'wrong-business-id':
+                    rows[1]['requestBody']['b'][1][0]['id'] = 999
+                elif mutation == 'wrong-config-id':
+                    rows[3]['requestBody']['b'][1][0]['id'] = 'T_CORE_USER'
+                elif mutation == 'extra-business-id':
+                    rows[1]['requestBody']['b'][1].append({'id': 999})
+                elif mutation == 'legacy-item-path':
+                    rows[1]['path'] += '/901'
+                elif mutation == 'missing-request-body':
+                    del rows[1]['requestBody']
+                elif mutation == 'unfiltered-query':
+                    rows[2]['requestBody']['p']['f'] = {}
+                else:
+                    rows[0]['requestBody'] = {}
                 data = json.dumps(proof).encode()
                 proof_path.write_bytes(data)
                 self.journal['apiRestore']['sha256'] = hashlib.sha256(data).hexdigest()

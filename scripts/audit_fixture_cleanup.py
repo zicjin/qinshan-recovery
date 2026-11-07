@@ -12,7 +12,7 @@ import sys
 OWNER = 'LIMS_RUNTIME_LOCAL'
 TABLE = 'T_EMC_SEAL_RULE'
 BASE = '/secure/emc/module/mdm/basemdm/seal-rules/'
-CONFIG = '/secure/core/module/sys/at-configs/T_EMC_SEAL_RULE'
+CONFIG = '/secure/core/module/sys/at-configs'
 GROUPS = (('records', 'T_CORE_AT_RECORD', 'recordIds'),
           ('lines', 'T_CORE_AT_RECORD_LINE', 'lineIds'),
           ('configLines', 'T_CORE_AT_CONFIG_LINE', 'configLineIds'))
@@ -147,7 +147,7 @@ def load(journal_path):
     require(isinstance(p['requests'], list), 'missing HTTP requests')
     observed = {}
     for request in p['requests']:
-        exact(request, 'method path status rawBody bodySha256')
+        exact(request, 'method path status requestBody rawBody bodySha256')
         require(isinstance(request['rawBody'], str) and sha(request['rawBody'].encode('utf-8')) == digest(request['bodySha256']), 'HTTP response body hash mismatch')
         body = json.loads(request['rawBody'], object_pairs_hook=unique_object) if request['rawBody'] else None
         require(type(request['status']) is int, 'invalid HTTP status')
@@ -156,7 +156,8 @@ def load(journal_path):
         require(key not in observed, 'duplicate HTTP restore observation')
         observed[key] = body
     business = BASE + str(j['targetId'])
-    required = {('DELETE', business, 200), ('GET', business, 200),
+    collection = BASE.rstrip('/')
+    required = {('DELETE', collection, 200), ('GET', business, 200),
                 ('POST', BASE + 'queries', 200), ('DELETE', CONFIG, 200)}
     require(required <= observed.keys(), 'missing successful API removal and absent business proof')
     before = observed[('GET', business, 200)]
@@ -164,10 +165,20 @@ def load(journal_path):
     page = observed[('POST', BASE + 'queries', 200)]
     require(isinstance(page, dict) and type(page.get('total')) is int and page['total'] == 0 and
             page.get('rows') == [] and not ({'error', 'exception', 'login', 'success'} & page.keys()), 'HTTP business not empty')
+    expected_bodies = {
+        ('GET', business, 200): None,
+        ('DELETE', collection, 200): {'b': ['', [{'id': j['targetId']}]], 'p': {}},
+        ('DELETE', CONFIG, 200): {'b': ['', [{'id': TABLE}]], 'p': {}},
+        ('POST', BASE + 'queries', 200): {'p': {'n': 1, 's': 10, 'f': {'id_SEQ': j['targetId']}}},
+    }
+    for request in p['requests']:
+        key = (request['method'], request['path'], request['status'])
+        require(key in expected_bodies and request['requestBody'] == expected_bodies[key],
+                'HTTP restore request body or route mismatch')
     sequence = [(r['method'], r['path'], r['status']) for r in p['requests']]
-    require(sequence.index(('GET', business, 200)) < sequence.index(('DELETE', business, 200)) <
+    require(sequence.index(('GET', business, 200)) < sequence.index(('DELETE', collection, 200)) <
             sequence.index(('POST', BASE + 'queries', 200)), 'HTTP restore observations out of order')
-    for path in (business, CONFIG):
+    for path in (collection, CONFIG):
         result = observed[('DELETE', path, 200)]
         require(result is None or (type(result) is int and result >= 0), 'unexpected HTTP removal body')
     return j, sha(raw), proof['sha256']

@@ -63,17 +63,28 @@ The private HTTP transcript has exact keys `version=1`, `baseUrl`, `principal`,
 `http://127.0.0.1:18087`, `18088` or `18089`.
 `authentication` contains `sessionCookieSha256` (hash only) and `identity` with
 `id` and `organizationId` matching the journal. Each request observation contains
-`method`, `path`, integer `status`, `rawBody` (actual response text, including
+`method`, `path`, `requestBody` (the exact parsed JSON request, null for GET),
+integer `status`, `rawBody` (actual response text, including
 whitespace), and `bodySha256` (SHA256 of those UTF-8 bytes). The required sequence:
 
 1. GET `/secure/emc/module/mdm/basemdm/seal-rules/<targetId>` returns 200 JSON
    with the exact numeric `id` and `name=marker` before deletion.
-2. DELETE that item returns 200 with empty body, JSON null or a nonnegative
-   integer result.
+2. DELETE `/secure/emc/module/mdm/basemdm/seal-rules` with
+   `requestBody={"b":["",[{"id":<numeric targetId>}]],"p":{}}` returns 200 with
+   empty body, JSON null or a nonnegative integer result. The original
+   `GenericResource.delete` maps DELETE at the collection path; an item DELETE
+   path is not supported.
 3. POST `/secure/emc/module/mdm/basemdm/seal-rules/queries` returns 200 JSON
-   with integer `total=0`, `rows=[]`; normal Page pagination fields are accepted.
-4. DELETE `/secure/core/module/sys/at-configs/T_EMC_SEAL_RULE` returns 200 with
+   with `requestBody={"p":{"n":1,"s":10,"f":{"id_SEQ":<numeric targetId>}}}`
+   and integer `total=0`, `rows=[]`; normal Page pagination fields are accepted.
+4. DELETE `/secure/core/module/sys/at-configs` with
+   `requestBody={"b":["",[{"id":"T_EMC_SEAL_RULE"}]],"p":{}}` returns 200 with
    empty body, JSON null or a nonnegative integer result.
+
+The GET observation must have `requestBody=null`. All four observations require
+exact request body shapes; extra IDs, unrelated routes, unfiltered queries and
+missing bodies are rejected. The transcript file SHA256 binds these parsed
+request bodies along with the original response text and response hashes.
 
 Capture observations from the actual authenticated runner; do not fabricate or
 rewrite responses to fit the format. A JSON file and cookie hash are integrity

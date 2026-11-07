@@ -179,6 +179,7 @@ _HARNESS_SUFFIXES = (
     "scripts/owned_runtime_contract.py",
     "scripts/local-runtime-transport.py",
     "scripts/observe-local-runtime.py",
+    "scripts/restore-local-menu-i18n.py",
     "tools/api/OracleContentFingerprint.java",
     "scripts/api_fixture.py",
     "scripts/remote-sql-fixture-executor.py",

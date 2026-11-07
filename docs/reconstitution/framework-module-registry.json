@@ -21,7 +21,7 @@
       "forbidden_content_status": "pass",
       "module": "owned-core-common",
       "output_jar": "owned-core-common/target/owned-core-common-1.0.0-SNAPSHOT.jar",
-      "output_jar_sha256": "fa054462839116894b338ed07318e8b70cb427acc0053e4e316aa70285bebaef",
+      "output_jar_sha256": "aed3f4aaa0ce1e239f9267364eddb425613152672e60623600816d3f6b935b55",
       "reason": "Merges the common foundation and its immediately downstream base-interface JAR to avoid a two-module cycle-free core with no independent runtime boundary.",
       "resource_file_count": 1063,
       "source_file_count": 2222,

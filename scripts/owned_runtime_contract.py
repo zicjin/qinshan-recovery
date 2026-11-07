@@ -115,9 +115,22 @@ def validate_report(report: Mapping[str, Any], mode: str) -> Dict[str, Any]:
     _require(report, "strict_evidence", False)
     _require(report, "existing_application_preserved", True)
     binding = _implementation_binding(report, mode)
+    profile = report.get("runtime_profile", "sss2")
+    if not isinstance(profile, str) or profile not in {"sss2", "local-wsl"}:
+        raise RuntimeContractError("unknown runtime_profile")
+    if profile == "local-wsl":
+        _require(report, "oracle_reused", True)
     if report.get("oracle_reused") is True:
-        _require(report, "oracle_instance_id", "lims-owned-sss2-oracle")
-        _require(report, "oracle_container", "lims-owned-sss2-oracle")
+        oracle = "lims-local-runtime-oracle" if profile == "local-wsl" else "lims-owned-sss2-oracle"
+        _require(report, "oracle_instance_id", oracle)
+        _require(report, "oracle_container", oracle)
+        profile_identity = {"runtime_profile": profile, "oracle_instance_id": oracle, "oracle_container": oracle}
+        if profile == "local-wsl":
+            _require(report, "baseline_schema", "LIMS_BASELINE_LOCAL")
+            _require(report, "runtime_schema", "LIMS_RUNTIME_LOCAL")
+            _require(report, "redis_container", "lims-local-runtime-redis")
+            _require(report, "redis_reused", True)
+            profile_identity.update(redis_container=report["redis_container"], redis_reused=True)
         _require(report, "baseline_schema")
         _require(report, "runtime_schema")
         for key in ("baseline_schema_hash", "runtime_schema_hash_before", "runtime_schema_hash_after",
@@ -155,6 +168,7 @@ def validate_report(report: Mapping[str, Any], mode: str) -> Dict[str, Any]:
             "runtime_schema_restored": report["runtime_schema_restored"],
             "runtime_dirty": report["runtime_dirty"],
             "source_commit": report.get("source_commit"),
+            **profile_identity,
             **binding,
         }
     _require(report, "source_schema")

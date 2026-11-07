@@ -14,6 +14,94 @@ spec.loader.exec_module(module)
 
 
 class RuntimeContractTest(unittest.TestCase):
+    def local_runtime_report(self):
+        return {
+            "status": "clone-ready-unverified", "execution": "clone-ready-unverified",
+            "strict_evidence": False, "production_access": False,
+            "existing_application_preserved": True, "loopback_url": "http://127.0.0.1:18089",
+            "runtime_profile": "local-wsl",
+            "oracle_instance_id": "lims-local-runtime-oracle", "oracle_container": "lims-local-runtime-oracle",
+            "oracle_reused": True, "redis_container": "lims-local-runtime-redis", "redis_reused": True,
+            "baseline_schema": "LIMS_BASELINE_LOCAL", "runtime_schema": "LIMS_RUNTIME_LOCAL",
+            "baseline_schema_hash": "a" * 64, "runtime_schema_hash_before": "b" * 64,
+            "runtime_schema_hash_after": "b" * 64, "schema_copy_method": "existing-runtime-schema",
+            "baseline_key_data_hash": "c" * 64, "runtime_key_data_hash_before": "d" * 64,
+            "runtime_key_data_hash_after": "d" * 64,
+            "baseline_refreshed": False, "baseline_schema_immutable": True,
+            "runtime_schema_restored": True, "runtime_dirty": False,
+            "route_execution_model": {"boundary_process": False, "internal_http_bridge": False},
+        }
+
+    def test_local_wsl_persistent_runtime_preserves_local_identity(self):
+        result = module.validate_report(self.local_runtime_report(), "strict")
+        self.assertEqual(result["runtime_profile"], "local-wsl")
+        self.assertEqual(result["oracle_instance_id"], "lims-local-runtime-oracle")
+        self.assertEqual(result["oracle_container"], "lims-local-runtime-oracle")
+        self.assertEqual(result["redis_container"], "lims-local-runtime-redis")
+        self.assertEqual(result["runtime_identity"], "lims-local-runtime-oracle:LIMS_BASELINE_LOCAL:LIMS_RUNTIME_LOCAL:" + "a" * 64)
+        self.assertTrue(result["reuse"])
+        self.assertFalse(result["strict_evidence"])
+
+    def test_local_wsl_profile_cannot_fall_back_to_unverified_clone_identity(self):
+        report = self.local_runtime_report()
+        report.update(oracle_reused=False, source_schema="SOURCE", target_schema="TARGET",
+                      clone_baseline={"source_dump_sha256": "a" * 64,
+                                      "target_schema_metadata_sha256": "b" * 64,
+                                      "source_read_only": True, "target_isolated": True})
+        with self.assertRaises(module.RuntimeContractError):
+            module.validate_report(report, "strict")
+
+    def test_local_wsl_profile_rejects_unknown_or_mixed_runtime_identities(self):
+        invalid_fields = {
+            "runtime_profile": ("unknown", None, [], "sss2"),
+            "oracle_instance_id": ("lims-owned-sss2-oracle", "unknown"),
+            "oracle_container": ("lims-owned-sss2-oracle", "unknown"),
+            "baseline_schema": ("LIMS_BASELINE_SSS2", "unknown"),
+            "runtime_schema": ("LIMS_RUNTIME_SSS2", "unknown"),
+            "redis_container": ("lims-owned-sss2-redis", "unknown", None),
+            "redis_reused": (False, None),
+        }
+        for field, values in invalid_fields.items():
+            for value in values:
+                with self.subTest(field=field, value=value):
+                    report = self.local_runtime_report()
+                    report[field] = value
+                    with self.assertRaises(module.RuntimeContractError):
+                        module.validate_report(report, "strict")
+        report = self.local_runtime_report()
+        del report["runtime_profile"]
+        with self.assertRaises(module.RuntimeContractError):
+            module.validate_report(report, "strict")
+
+    def test_local_wsl_profile_retains_strict_lifecycle_and_process_guards(self):
+        invalid_fields = {
+            "production_access": True, "existing_application_preserved": False,
+            "strict_evidence": True, "loopback_url": "http://runtime.invalid:18089",
+            "runtime_dirty": True, "baseline_schema_immutable": False,
+            "baseline_schema_hash": "missing", "runtime_schema_hash_before": "missing",
+            "runtime_schema_hash_after": "missing", "baseline_key_data_hash": "missing",
+            "runtime_key_data_hash_before": "missing", "runtime_key_data_hash_after": "missing",
+            "route_execution_model": {"boundary_process": True, "internal_http_bridge": False},
+        }
+        for field, value in invalid_fields.items():
+            with self.subTest(field=field):
+                report = self.local_runtime_report()
+                report[field] = value
+                with self.assertRaises(module.RuntimeContractError):
+                    module.validate_report(report, "strict")
+        report = self.local_runtime_report()
+        report["route_execution_model"]["internal_http_bridge"] = True
+        with self.assertRaises(module.RuntimeContractError):
+            module.validate_report(report, "strict")
+
+    def test_unknown_persistent_oracle_is_not_accepted_as_sss2(self):
+        report = self.local_runtime_report()
+        del report["runtime_profile"]
+        report.update(oracle_instance_id="unknown-oracle", oracle_container="unknown-oracle",
+                      baseline_schema="LIMS_BASELINE_SSS2", runtime_schema="LIMS_RUNTIME_SSS2")
+        with self.assertRaises(module.RuntimeContractError):
+            module.validate_report(report, "strict")
+
     def test_debug_runtime_requires_reuse_and_supplier_preservation(self):
         result = module.validate_report({
             "status": "diagnostic-running", "strict_evidence": False,

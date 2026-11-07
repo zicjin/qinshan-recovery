@@ -178,6 +178,7 @@ _HARNESS_SUFFIXES = (
     "scripts/api_wave_orchestrator.py",
     "scripts/owned_runtime_contract.py",
     "scripts/local-runtime-transport.py",
+    "scripts/observe-local-runtime.py",
     "scripts/api_fixture.py",
     "scripts/remote-sql-fixture-executor.py",
     "scripts/start-strict-sss2-api-runtime.sh",

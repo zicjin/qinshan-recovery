@@ -170,14 +170,17 @@ def checks(table, definition):
     """Return exact logical metadata predicates, independent of storage/tablespace."""
     filt = 'OWNER=' + literal(OWNER) + ' AND TABLE_NAME=' + literal(table)
     queries = [('ALL_TABLES', filt + " AND TEMPORARY='N' AND NESTED='NO' AND SECONDARY='N' AND PARTITIONED='NO'", 1),
-               ('ALL_TAB_COLUMNS', filt, len(definition['columns']))]
+               # ALL_TAB_COLS exposes hidden/virtual flags; count every column
+               # so an unexpected hidden column cannot escape equivalence checks.
+               ('ALL_TAB_COLS', filt, len(definition['columns']))]
     for position, col in enumerate(definition['columns'], 1):
-        terms = [filt, 'COLUMN_ID=' + str(position), 'DEFAULT_LENGTH IS NULL', "VIRTUAL_COLUMN='NO'"]
+        terms = [filt, 'COLUMN_ID=' + str(position), 'DEFAULT_LENGTH IS NULL',
+                 "HIDDEN_COLUMN='NO'", "VIRTUAL_COLUMN='NO'"]
         for field, key in [('COLUMN_NAME', 'name'), ('DATA_TYPE', 'type'), ('DATA_PRECISION', 'precision'), ('DATA_SCALE', 'scale'), ('NULLABLE', 'nullable')]:
             terms.append(predicate(field, col[key]))
         if col['type'] == 'VARCHAR2':
             terms += ['CHAR_LENGTH=' + str(col['length']), "CHAR_USED='B'", 'DATA_LENGTH=' + str(col['length'])]
-        queries.append(('ALL_TAB_COLUMNS', ' AND '.join(terms), 1))
+        queries.append(('ALL_TAB_COLS', ' AND '.join(terms), 1))
     pk = definition['primary_key']
     notnulls = sum(c['nullable'] == 'N' for c in definition['columns'])
     queries.append(('ALL_CONSTRAINTS', filt, notnulls + bool(pk)))

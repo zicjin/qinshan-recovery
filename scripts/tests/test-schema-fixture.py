@@ -55,7 +55,7 @@ class SchemaFixtureTest(unittest.TestCase):
         self.assertIn("SYS_CONTEXT('USERENV', 'CURRENT_SCHEMA')", sql)
         self.assertIn('LIMS_RUNTIME_LOCAL', sql)
         self.assertIn('WHENEVER SQLERROR EXIT FAILURE ROLLBACK', sql)
-        self.assertLess(sql.index('ALL_TAB_COLUMNS'), sql.index('EXECUTE IMMEDIATE'))
+        self.assertLess(sql.index('ALL_TAB_COLS'), sql.index('EXECUTE IMMEDIATE'))
         self.assertNotRegex(sql, r'(?i)\b(?:INSERT|UPDATE|DELETE|MERGE|DROP|TRUNCATE)\b')
 
     def test_wrong_owner_is_rejected_before_plan_or_render(self):
@@ -66,6 +66,21 @@ class SchemaFixtureTest(unittest.TestCase):
                     fixture.plan(loaded, owner)
                 with self.assertRaises(fixture.FixtureError):
                     fixture.render(loaded, owner)
+
+    def test_column_dictionary_checks_use_oracle_hidden_and_virtual_flags(self):
+        loaded = fixture.load_fixture(self.root)
+        queries = fixture.checks('T_EMC_INVOICE', loaded['T_EMC_INVOICE'])
+        columns = [(where, count) for view, where, count in queries if view == 'ALL_TAB_COLS']
+        self.assertEqual(len(columns), 3)  # total count plus both declared columns
+        # Count all columns, including hidden ones, to reject unexpected extras.
+        self.assertEqual(columns[0], (
+            "OWNER='LIMS_RUNTIME_LOCAL' AND TABLE_NAME='T_EMC_INVOICE'", 2))
+        for where, count in columns[1:]:
+            self.assertEqual(count, 1)
+            self.assertIn("HIDDEN_COLUMN='NO'", where)
+            self.assertIn("VIRTUAL_COLUMN='NO'", where)
+        # ALL_TAB_COLUMNS omits these flags in the target Oracle dictionary.
+        self.assertFalse(any(view == 'ALL_TAB_COLUMNS' for view, _, _ in queries))
 
     def test_equivalent_existing_table_is_skipped_without_mutation(self):
         loaded = fixture.load_fixture(self.root)

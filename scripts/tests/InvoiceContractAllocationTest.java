@@ -156,6 +156,8 @@ public final class InvoiceContractAllocationTest {
             GenericDao contractDao = adapter(GenericDao.class, store::contractDao);
             ctx.registerBean(DataSource.class, () -> ds);
             ctx.registerBean(DataSourceTransactionManager.class, () -> new DataSourceTransactionManager(ds));
+            ctx.registerBean(com.sunwayworld.emc.module.mdm.invoices.dao.EmcReturnedDao.class, () -> adapter(com.sunwayworld.emc.module.mdm.invoices.dao.EmcReturnedDao.class,
+                (m,a) -> { throw new AssertionError("Contract allocation must not query return records"); }));
             ctx.registerBean(EmcInvoiceDao.class, () -> adapter(EmcInvoiceDao.class, store::invoiceDao));
             ctx.registerBean(EmcContractService.class, () -> adapter(EmcContractService.class, (m,a) -> {
                 if (m.getName().equals("getDao")) return contractDao;

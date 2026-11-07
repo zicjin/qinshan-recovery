@@ -16,6 +16,7 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -69,10 +70,10 @@ public final class InvoiceReturnedAmountTest {
             }
             if (method.getName().equals("updateIfChanged")) {
                 invoiceWrites++;
-                EmcInvoiceBean updated = (EmcInvoiceBean) args[0];
+                EmcInvoiceBean updated = args[0] instanceof List ? (EmcInvoiceBean) ((List<?>) args[0]).get(0) : (EmcInvoiceBean) args[0];
                 expect(INVOICE_ID, updated.getId(), "updated invoice");
                 invoice.setDoneFlag(updated.getDoneFlag());
-                return updated;
+                return args[0] instanceof List ? args[0] : updated;
             }
             throw new AssertionError("Unexpected invoice DAO call: " + method);
         }

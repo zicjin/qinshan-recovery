@@ -107,7 +107,7 @@ public final class InvoiceReturnedDeleteTest {
                 }, a[0]); return Objects.requireNonNull(rows.isEmpty() ? null : rows.get(0));
             }
             if (m.getName().equals("updateIfChanged")) {
-                EmcInvoiceBean row = (EmcInvoiceBean) a[0];
+                EmcInvoiceBean row = a[0] instanceof List ? (EmcInvoiceBean) ((List<?>) a[0]).get(0) : (EmcInvoiceBean) a[0];
                 db.update("UPDATE T_EMC_INVOICE SET DONEFLAG=? WHERE ID=?", row.getDoneFlag(), row.getId()); return null;
             }
             return unused(m,a);

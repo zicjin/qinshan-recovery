@@ -3,11 +3,15 @@ package com.sunwayworld.emc.module.mdm.invoices.service.impl;
 import com.sunwayworld.emc.module.mdm.contract.bean.EmcContractBean;
 import com.sunwayworld.emc.module.mdm.contract.service.EmcContractService;
 import com.sunwayworld.emc.module.mdm.invoices.bean.EmcInvoiceBean;
+import com.sunwayworld.emc.module.mdm.invoices.bean.EmcReturnedBean;
 import com.sunwayworld.emc.module.mdm.invoices.dao.EmcInvoiceDao;
+import com.sunwayworld.emc.module.mdm.invoices.dao.EmcReturnedDao;
 import com.sunwayworld.emc.module.mdm.invoices.service.EmcInvoiceService;
 import com.sunwayworld.framework.at.annotation.AuditTrailEntry;
 import com.sunwayworld.framework.at.annotation.AuditTrailType;
 import com.sunwayworld.framework.context.ApplicationContextHelper;
+import com.sunwayworld.framework.audit.aunnotation.Audit;
+import com.sunwayworld.framework.beans.BeanPropertyListener;
 import com.sunwayworld.framework.mybatis.mapper.MatchPattern;
 import com.sunwayworld.framework.mybatis.mapper.SearchFilter;
 import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;
@@ -25,6 +29,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Collections;
+import java.util.LinkedHashSet;
+import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Repository
@@ -36,6 +44,9 @@ public class EmcInvoiceServiceImpl implements EmcInvoiceService {
 
     @Autowired
     private EmcContractService contractService;
+
+    @Autowired
+    private EmcReturnedDao returnedDao;
 
     @Override
     @SuppressWarnings("unchecked")
@@ -58,6 +69,7 @@ public class EmcInvoiceServiceImpl implements EmcInvoiceService {
         insertBean.setSysNo(sysNo);
         if (!ObjectUtils.isEmpty(emcInvoice.getId())) {
             insertBean.setInvoiceAmount(null);
+            insertBean.setDoneFlag(null);
             insertBean.setContractId(null);
             insertBean.setContractName(null);
             insertBean.setProjectId(null);
@@ -69,6 +81,63 @@ public class EmcInvoiceServiceImpl implements EmcInvoiceService {
 
         getDao().insert(insertBean);
         return insertBean.getId();
+    }
+
+    @Override
+    @Transactional
+    @AuditTrailEntry(AuditTrailType.UPDATE)
+    @Audit("AUDIT.SAVE")
+    public void updateIfChanged(EmcInvoiceBean item) {
+        updateIfChanged(Collections.singletonList(item));
+    }
+
+    @Override
+    @Transactional
+    @AuditTrailEntry(AuditTrailType.UPDATE)
+    @Audit("AUDIT.SAVE")
+    public void updateIfChanged(List<EmcInvoiceBean> items) {
+        if (items == null || items.isEmpty()) {
+            return;
+        }
+        Set<Long> ids = new LinkedHashSet<>();
+        for (EmcInvoiceBean item : items) {
+            Long id = Objects.requireNonNull(item.getId(), "Invoice id is required");
+            if (!ids.add(id)) {
+                throw new IllegalArgumentException("Duplicate invoice id in update batch");
+            }
+            boolean amountProvided = item instanceof BeanPropertyListener
+                    ? ((BeanPropertyListener) item).getChangedPropertyEventList().stream()
+                        .anyMatch(event -> "invoiceAmount".equalsIgnoreCase(event.getPropertyDescriptor().getName()))
+                    : item.getInvoiceAmount() != null;
+            if (!amountProvided) {
+                continue;
+            }
+            EmcInvoiceBean stored = getDao().selectById(id);
+            if (Objects.equals(stored.getInvoiceAmount(), item.getInvoiceAmount())
+                    || stored.getInvoiceAmount() != null && !stored.getInvoiceAmount().trim().isEmpty()
+                        && item.getInvoiceAmount() != null && !item.getInvoiceAmount().trim().isEmpty()
+                        && new BigDecimal(stored.getInvoiceAmount()).compareTo(new BigDecimal(item.getInvoiceAmount())) == 0) {
+                continue;
+            }
+            List<EmcReturnedBean> returns = returnedDao.selectListByOneColumnValue(id, "invoiceId");
+            if (returns.isEmpty()) {
+                continue;
+            }
+            if (item.getInvoiceAmount() == null || item.getInvoiceAmount().trim().isEmpty()) {
+                throw new AuthenticationServiceException("请输入开票金额！");
+            }
+            BigDecimal collected = BigDecimal.ZERO;
+            for (EmcReturnedBean returned : returns) {
+                collected = collected.add(new BigDecimal(returned.getReturnedAmount()));
+            }
+            int balance = new BigDecimal(item.getInvoiceAmount()).subtract(collected).compareTo(BigDecimal.ZERO);
+            if (balance < 0) {
+                throw new AuthenticationServiceException("输入的回款金额大于未回款金额！");
+            }
+            item.setDoneFlag(balance == 0 ? "1" : "0");
+        }
+        // Keep original partial-property updates and audit; validate every parent before any write.
+        EmcInvoiceService.super.updateIfChanged(items);
     }
 
     @Override

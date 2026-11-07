@@ -1,6 +1,7 @@
 import com.sunwayworld.emc.module.mdm.contract.service.EmcContractService;
 import com.sunwayworld.emc.module.mdm.invoices.bean.EmcInvoiceBean;
 import com.sunwayworld.emc.module.mdm.invoices.dao.EmcInvoiceDao;
+import com.sunwayworld.emc.module.mdm.invoices.dao.EmcReturnedDao;
 import com.sunwayworld.emc.module.mdm.invoices.service.EmcInvoiceService;
 import com.sunwayworld.emc.module.mdm.invoices.service.impl.EmcInvoiceServiceImpl;
 import com.sunwayworld.framework.context.ApplicationContextHelper;
@@ -111,6 +112,8 @@ public final class InvoiceInsertIdentityTest {
             context.getBeanFactory().registerSingleton("sequenceService", adapter(CoreSequenceService.class, sequence));
             context.getBeanFactory().registerSingleton("contractService", adapter(EmcContractService.class,
                 (proxy, method, params) -> { throw new AssertionError("Insert must not call contract service"); }));
+            context.getBeanFactory().registerSingleton("returnedDao", adapter(EmcReturnedDao.class,
+                (proxy, method, params) -> { throw new AssertionError("Insert must not query return records"); }));
             context.registerBean(EmcInvoiceServiceImpl.class);
             context.refresh();
             ApplicationContextHelper.setApplicationContext(context);
@@ -130,7 +133,7 @@ public final class InvoiceInsertIdentityTest {
                 boolean copy = scenario.equals("copy");
                 String json = "{\"invoiceName\":\"identity-fixture\",\"invoiceAmount\":\"37.50\","
                     + "\"contractId\":\"contract-1\",\"contractName\":\"contract\","
-                    + "\"projectId\":\"project-1\",\"projectName\":\"project\""
+                    + "\"projectId\":\"project-1\",\"projectName\":\"project\",\"doneFlag\":\"1\""
                     + (copy ? ",\"id\":41" : "") + "}";
                 Long returned = service.insert(scenario.equals("empty") ? new RestJsonWrapperBean() : body(json));
                 expect(1, store.rows.size(), "one DAO write");
@@ -142,6 +145,7 @@ public final class InvoiceInsertIdentityTest {
                 expect(scenario.equals("empty") ? null : "identity-fixture", stored.getInvoiceName(), "name copied");
                 boolean clear = copy || scenario.equals("empty");
                 expect(clear ? null : "37.50", stored.getInvoiceAmount(), "invoice amount copy semantics");
+                expect(clear ? null : "1", stored.getDoneFlag(), "copy resets completion to fresh invoice default; normal insert preserves supplied value");
                 expect(clear ? null : "contract-1", stored.getContractId(), "contract ID copy semantics");
                 expect(clear ? null : "contract", stored.getContractName(), "contract name copy semantics");
                 expect(clear ? null : "project-1", stored.getProjectId(), "project ID copy semantics");

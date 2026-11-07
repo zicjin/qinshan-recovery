@@ -76,7 +76,7 @@ public final class InvoiceReturnedUpdateTest {
     }
     static final EntityContext RETURNS = entity(EmcReturnedBean.class,"T_EMC_RETURNED",
             "id","invoiceId","returnedAmount","invoiceAmount","uncollectedAmount","remark");
-    static final EntityContext INVOICES = entity(EmcInvoiceBean.class,"T_EMC_INVOICE","id","invoiceAmount","doneFlag");
+    static final EntityContext INVOICES = entity(EmcInvoiceBean.class,"T_EMC_INVOICE","id","invoiceAmount","doneFlag","remark");
     /** Only the database/metadata-cache boundary is adapted. Real framework patch merging,
      * changed-column selection, old/new audit generation and Spring transactions execute. */
     static final class LocalMetadataCache extends RedisTemplate<String,Object> {
@@ -128,6 +128,7 @@ public final class InvoiceReturnedUpdateTest {
             values.add(item.getIdInstance().getValue());
             int count=store.db.update("UPDATE "+item.getContext().getTableName()+" SET "+String.join(",",assignments)+" WHERE ID=?",values.toArray());
             if(item.getContext().getTableName().equals("T_EMC_RETURNED")) store.childUpdates++;
+            else store.invoiceUpdates++;
             return count;
         }));
     }
@@ -135,6 +136,7 @@ public final class InvoiceReturnedUpdateTest {
         final JdbcTemplate db;
         Store(DataSource source) { db = new JdbcTemplate(source); }
         int childUpdates;
+        int invoiceUpdates;
         List<EmcReturnedBean> returns(String where,Object... params) {
             return db.query("SELECT ID,INVOICEID,RETURNEDAMOUNT,INVOICEAMOUNT,UNCOLLECTEDAMOUNT,REMARK FROM T_EMC_RETURNED "+where,(rs,n)-> {
                 EmcReturnedBean row=new EmcReturnedBean(); row.setId(rs.getLong(1)); row.setInvoiceId(rs.getLong(2));
@@ -142,12 +144,12 @@ public final class InvoiceReturnedUpdateTest {
             },params);
         }
         EmcInvoiceBean invoice(Long id) {
-            List<EmcInvoiceBean> rows=db.query("SELECT ID,INVOICEAMOUNT,DONEFLAG FROM T_EMC_INVOICE WHERE ID=?",(rs,n)-> {
-                EmcInvoiceBean row=new EmcInvoiceBean(); row.setId(rs.getLong(1)); row.setInvoiceAmount(rs.getString(2)); row.setDoneFlag(rs.getString(3)); return row;
+            List<EmcInvoiceBean> rows=db.query("SELECT ID,INVOICEAMOUNT,DONEFLAG,REMARK FROM T_EMC_INVOICE WHERE ID=?",(rs,n)-> {
+                EmcInvoiceBean row=new EmcInvoiceBean(); row.setId(rs.getLong(1)); row.setInvoiceAmount(rs.getString(2)); row.setDoneFlag(rs.getString(3)); row.setRemark(rs.getString(4)); return row;
             },id); return rows.isEmpty()?null:rows.get(0);
         }
         void schema() {
-            db.execute("CREATE TABLE T_EMC_INVOICE(ID BIGINT PRIMARY KEY, INVOICEAMOUNT VARCHAR(40), DONEFLAG VARCHAR(1), LOCK_DONE BOOLEAN DEFAULT FALSE, CHECK (NOT LOCK_DONE OR DONEFLAG='1'))");
+            db.execute("CREATE TABLE T_EMC_INVOICE(ID BIGINT PRIMARY KEY, INVOICEAMOUNT VARCHAR(40), DONEFLAG VARCHAR(1), REMARK VARCHAR(100) DEFAULT 'invoice note', LOCK_DONE BOOLEAN DEFAULT FALSE, CHECK (NOT LOCK_DONE OR DONEFLAG='1'))");
             db.execute("CREATE TABLE T_EMC_RETURNED(ID BIGINT PRIMARY KEY, INVOICEID BIGINT REFERENCES T_EMC_INVOICE(ID), RETURNEDAMOUNT VARCHAR(40),INVOICEAMOUNT VARCHAR(40),UNCOLLECTEDAMOUNT VARCHAR(40),REMARK VARCHAR(100))");
             db.execute("CREATE TABLE AUDIT_RECORD(ID BIGINT PRIMARY KEY, EVENT VARCHAR(40), TARGET VARCHAR(100))");
             db.execute("CREATE TABLE AUDIT_LINE(RECORD_ID BIGINT, EVENT VARCHAR(40), OLD_VALUE VARCHAR(100),NEW_VALUE VARCHAR(100),COL VARCHAR(60))");
@@ -164,6 +166,9 @@ public final class InvoiceReturnedUpdateTest {
     }
     static void save(AnnotationConfigApplicationContext ctx,String... rows) {
         ctx.getBean(EmcInvoiceResourceImpl.class).save(41L,body(ctx.getBean(EmcReturnedService.class),rows));
+    }
+    static void saveInvoices(AnnotationConfigApplicationContext ctx,String... rows) {
+        ctx.getBean(EmcInvoiceResourceImpl.class).save(41L,new RestJsonWrapperBean(Collections.emptyMap(),Collections.singletonList(Arrays.asList(rows)),Collections.singletonList(null)));
     }
     static void flag(EmcInvoiceService invoices, long id, String expected) { equal(expected, invoices.selectById(id).getDoneFlag(), "invoice " + id + " doneFlag"); }
     static void gone(EmcReturnedService service, long id) { equal(null, service.selectByIdIfPresent(id), "deleted return readback"); }
@@ -247,7 +252,59 @@ public final class InvoiceReturnedUpdateTest {
             SunwayAopContext.setCurrentProxy(returnDao);
             try {
                 store.invoice(41, "100", "1"); store.returned(301,41,"30"); store.returned(302,41,"70");
-                if (scenario.equals("partial")) {
+                if(scenario.equals("parent-overpay")) {
+                    boolean rejected=false;
+                    try { saveInvoices(ctx,"{\"id\":41,\"invoiceAmount\":\"50\"}"); }
+                    catch(AuthenticationServiceException expected) { rejected=true; equal("输入的回款金额大于未回款金额！",expected.getMessage(),"existing overpay guard"); }
+                    equal(true,rejected,"invoice amount cannot fall below collected returns");
+                    equal("100",invoices.selectById(41L).getInvoiceAmount(),"rejected invoice amount unchanged"); flag(invoices,41,"1");
+                    equal("70",service.selectById(302L).getReturnedAmount(),"child unaffected"); equal(0,store.audit("AUDIT_RECORD"),"rejection audit absent");
+                } else if(scenario.equals("parent-transitions")) {
+                    saveInvoices(ctx,"{\"id\":41,\"invoiceAmount\":\"150\"}"); flag(invoices,41,"0");
+                    equal("150",invoices.selectById(41L).getInvoiceAmount(),"larger invoice amount persisted");
+                    equal("invoice note",invoices.selectById(41L).getRemark(),"omitted parent note preserved");
+                    equal("70",service.selectById(301L).getUncollectedAmount(),"parent change preserves historical child balance");
+                    equal("1",store.db.queryForObject("SELECT OLD_VALUE FROM AUDIT_LINE WHERE COL='DONEFLAG'",String.class),"completion audit previous value");
+                    equal("0",store.db.queryForObject("SELECT NEW_VALUE FROM AUDIT_LINE WHERE COL='DONEFLAG'",String.class),"completion audit new value");
+                    saveInvoices(ctx,"{\"id\":41,\"invoiceAmount\":\"100\"}"); flag(invoices,41,"1");
+                } else if(scenario.equals("parent-notes")) {
+                    saveInvoices(ctx,"{\"id\":41,\"remark\":\"new invoice note\"}");
+                    equal("new invoice note",invoices.selectById(41L).getRemark(),"parent notes update without amount");
+                    equal("100",invoices.selectById(41L).getInvoiceAmount(),"omitted parent amount preserved"); flag(invoices,41,"1");
+                    EmcInvoiceBean raw=new EmcInvoiceBean(); raw.setId(41L); raw.setRemark("raw invoice note"); invoices.updateIfChanged(raw);
+                    equal("raw invoice note",invoices.selectById(41L).getRemark(),"raw parent notes update"); flag(invoices,41,"1");
+                } else if(scenario.equals("parent-missing-amount")) {
+                    for(String amount:Arrays.asList(null,""," \t ")) {
+                        EmcInvoiceBean patch=com.sunwayworld.framework.utils.BeanUtils.getPropertyListenerProxy(EmcInvoiceBean.class);
+                        patch.setId(41L); patch.setInvoiceAmount(amount); boolean rejected=false;
+                        try { invoices.updateIfChanged(patch); } catch(AuthenticationServiceException expected) { rejected=true; equal("请输入开票金额！",expected.getMessage(),"existing missing amount message"); }
+                        equal(true,rejected,"cannot clear amount with stored returns"); equal("100",invoices.selectById(41L).getInvoiceAmount(),"missing amount rejected without writes");
+                    }
+                    equal(0,store.invoiceUpdates,"amount guards precede first UPDATE"); flag(invoices,41,"1");
+                } else if(scenario.equals("parent-batch-reject") || scenario.equals("parent-batch-rollback")) {
+                    store.invoice(42,"100","1"); store.returned(401,42,"100");
+                    if(scenario.equals("parent-batch-rollback")) store.db.update("UPDATE T_EMC_INVOICE SET LOCK_DONE=TRUE WHERE ID=42");
+                    boolean rejected=false;
+                    try { saveInvoices(ctx,"{\"id\":41,\"invoiceAmount\":\"150\",\"remark\":\"attempted\"}","{\"id\":42,\"invoiceAmount\":\""+(scenario.equals("parent-batch-reject")?"50":"150")+"\"}"); }
+                    catch(AuthenticationServiceException expected) { rejected=scenario.equals("parent-batch-reject"); }
+                    catch(org.springframework.dao.DataIntegrityViolationException expected) { rejected=scenario.equals("parent-batch-rollback"); }
+                    equal(true,rejected,"second parent rejects whole batch");
+                    equal(scenario.equals("parent-batch-reject")?0:1,store.invoiceUpdates,"prevalidation or actual first UPDATE before second constraint failure");
+                    equal("100",invoices.selectById(41L).getInvoiceAmount(),"first parent amount restored"); equal("invoice note",invoices.selectById(41L).getRemark(),"first parent note restored");
+                    equal("100",invoices.selectById(42L).getInvoiceAmount(),"second parent amount unchanged"); flag(invoices,41,"1"); flag(invoices,42,"1");
+                    equal(0,store.audit("AUDIT_RECORD"),"no committed audit after failed batch"); equal(0,store.audit("AUDIT_LINE"),"no committed audit lines after failed batch");
+                } else if(scenario.equals("parent-direct")) {
+                    EmcInvoiceBean raw=new EmcInvoiceBean(); raw.setId(41L); raw.setInvoiceAmount("150"); invoices.updateIfChanged(raw);
+                    flag(invoices,41,"0"); equal("150",invoices.selectById(41L).getInvoiceAmount(),"direct single amount update");
+                } else if(scenario.equals("parent-no-returns")) {
+                    store.invoice(42,"100",null);
+                    saveInvoices(ctx,"{\"id\":42,\"invoiceAmount\":\"50\"}"); equal("50",invoices.selectById(42L).getInvoiceAmount(),"uncollected invoice retains original amount edit behavior"); flag(invoices,42,null);
+                } else if(scenario.equals("parent-duplicate")) {
+                    boolean rejected=false;
+                    try { saveInvoices(ctx,"{\"id\":41,\"invoiceAmount\":\"150\"}","{\"id\":41,\"invoiceAmount\":\"100\"}"); }
+                    catch(IllegalArgumentException expected) { rejected=true; }
+                    equal(true,rejected,"duplicate invoice patches rejected"); equal(0,store.invoiceUpdates,"duplicate parent batch no writes"); equal("100",invoices.selectById(41L).getInvoiceAmount(),"duplicate leaves prior amount");
+                } else if (scenario.equals("partial")) {
                     save(ctx,"{\"id\":302,\"returnedAmount\":\"60\"}");
                     equal("60",service.selectById(302L).getReturnedAmount(),"saved return amount");
                     flag(invoices,41,"0");

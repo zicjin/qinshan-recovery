@@ -131,6 +131,9 @@ public class AuditTrailAspect {
    }
 
    public static final void addRecordLine(String targetId, List<CoreAuditTrailRecordLineBean> recordLineList) {
+      if (recordLineList.isEmpty()) {
+         return;
+      }
       Map<String, List<CoreAuditTrailRecordLineBean>> map = RECORD_DATA.get();
       if (map != null) {
          List<CoreAuditTrailRecordLineBean> lineList = map.get(targetId);
@@ -151,6 +154,9 @@ public class AuditTrailAspect {
             List<CoreAuditTrailRecordBean> insertRecordList = new ArrayList<>();
             List<CoreAuditTrailRecordLineBean> insertRecordLineList = new ArrayList<>();
             map.forEach((k, v) -> {
+               if (v.isEmpty()) {
+                  return;
+               }
                CoreAuditTrailRecordBean record = new CoreAuditTrailRecordBean();
                record.setId(ApplicationContextHelper.getNextIdentity());
                AuditTrailEntry entry = entryData.getEntry();

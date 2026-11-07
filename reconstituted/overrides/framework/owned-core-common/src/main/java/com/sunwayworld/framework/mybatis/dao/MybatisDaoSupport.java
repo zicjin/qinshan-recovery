@@ -343,6 +343,7 @@ public abstract class MybatisDaoSupport<T extends Persistable<ID>, ID extends Se
          if (idList.stream().anyMatch(i -> i == null)) {
             throw new JdbcException("GIKAM.EXCEPTION.DELETE_REQUIRE_ID");
          } else {
+            List<T> selectedItemList = ApplicationContextHelper.stressTesting() ? null : this.selectListByIds(idList, new Order[0]);
             if (!ApplicationContextHelper.stressTesting()
                && AuditTrailHelper.auditTrail()
                && AuditTrailHelper.auditTrailable(this.getTable(), AuditDatabaseOperation.DELETE)) {
@@ -351,7 +352,8 @@ public abstract class MybatisDaoSupport<T extends Persistable<ID>, ID extends Se
                   String table = this.getTable();
                   Map<ID, CoreAuditTrailRecordLineBean> map = new HashMap<>();
 
-                  for (ID id : idList) {
+                  for (T selectedItem : selectedItemList) {
+                     ID id = selectedItem.getId();
                      CoreAuditTrailRecordLineBean line = new CoreAuditTrailRecordLineBean();
                      line.setRecordType(SqlType.DELETE.name());
                      line.setTargetId(table + "$" + id);
@@ -368,7 +370,6 @@ public abstract class MybatisDaoSupport<T extends Persistable<ID>, ID extends Se
                }
             }
 
-            List<T> selectedItemList = ApplicationContextHelper.stressTesting() ? null : this.selectListByIds(idList, new Order[0]);
             EntityContext context = this.getEntityContext();
             boolean loop = idList.size() > this.dialect.getInClauseIdMaxQty();
             if (loop) {

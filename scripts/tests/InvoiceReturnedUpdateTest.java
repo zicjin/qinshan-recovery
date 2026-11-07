@@ -119,6 +119,11 @@ public final class InvoiceReturnedUpdateTest {
     static void mapper(Object dao, Store store) throws Exception {
         Field field=MybatisDaoSupport.class.getDeclaredField("daoMapper"); field.setAccessible(true);
         field.set(dao,adapter(DaoMapper.class,(m,a) -> {
+            if(m.getName().equals("batchDeleteById")) {
+                EntityContext context=(EntityContext)a[0];
+                for(Object id:(List<?>)a[1]) store.db.update("DELETE FROM "+context.getTableName()+" WHERE ID=?",id);
+                return null;
+            }
             if(!m.getName().equals("updateById")) return unused(m,a);
             EntityContextInstance item=(EntityContextInstance)a[0];
             List<String> assignments=new ArrayList<>(); List<Object> values=new ArrayList<>();
@@ -180,13 +185,19 @@ public final class InvoiceReturnedUpdateTest {
         localIdentity();
         try (AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext()) {
             ctx.getEnvironment().setActiveProfiles("audit-trail");
-            ctx.getEnvironment().getPropertySources().addFirst(new MapPropertySource("fixture", new HashMap<String,Object>() {{ put(AuditDatabaseOperation.UPDATE.getPropertyKey(),true); put("spring.datasource.driver-class-name","org.h2.Driver"); }}));
+            ctx.getEnvironment().getPropertySources().addFirst(new MapPropertySource("fixture", new HashMap<String,Object>() {{ put(AuditDatabaseOperation.UPDATE.getPropertyKey(),true); put(AuditDatabaseOperation.DELETE.getPropertyKey(),true); put("spring.datasource.driver-class-name","org.h2.Driver"); }}));
             DataSource ds = new DriverManagerDataSource("jdbc:h2:mem:return_update;DB_CLOSE_DELAY=-1", "sa", "");
             Store store = new Store(ds); store.schema();
             ctx.registerBean(DataSource.class, () -> ds);
             ctx.registerBean(DataSourceTransactionManager.class, () -> new DataSourceTransactionManager(ds));
             ReturnDao returnDao=new ReturnDao(store); InvoiceDao invoiceDao=new InvoiceDao(store);
             mapper(returnDao,store); mapper(invoiceDao,store);
+            Dialect dialect=adapter(Dialect.class,(m,a)-> { if(m.getName().equals("getInClauseIdMaxQty")) return 1000; return unused(m,a); });
+            for(Object dao:Arrays.asList(returnDao,invoiceDao)) {
+                Field field=MybatisDaoSupport.class.getDeclaredField("dialect"); field.setAccessible(true); field.set(dao,dialect);
+                field=MybatisDaoSupport.class.getDeclaredField("daoAfterDeleteSupport"); field.setAccessible(true);
+                field.set(dao,new com.sunwayworld.framework.mybatis.dao.support.DaoAfterDeleteSupport());
+            }
             ctx.getBeanFactory().registerSingleton("emcReturnedDao",returnDao);
             ctx.getBeanFactory().registerSingleton("emcInvoiceDao",invoiceDao);
             LocalMetadataCache metadata=new LocalMetadataCache();
@@ -252,7 +263,23 @@ public final class InvoiceReturnedUpdateTest {
             SunwayAopContext.setCurrentProxy(returnDao);
             try {
                 store.invoice(41, "100", "1"); store.returned(301,41,"30"); store.returned(302,41,"70");
-                if(scenario.equals("parent-overpay")) {
+                if(scenario.equals("delete-absent") || scenario.equals("delete-mixed") || scenario.equals("delete-rollback")) {
+                    if(scenario.equals("delete-rollback")) store.db.update("UPDATE T_EMC_INVOICE SET LOCK_DONE=TRUE WHERE ID=41");
+                    List<String> rows=new ArrayList<>(); rows.add("{\"id\":999}");
+                    if(!scenario.equals("delete-absent")) rows.add("{\"id\":301}");
+                    boolean rejected=false;
+                    try { ctx.getBean(EmcInvoiceResourceImpl.class).deleteReturns(new RestJsonWrapperBean(Collections.emptyMap(),Collections.singletonList(rows),Collections.singletonList(null))); }
+                    catch(org.springframework.dao.DataIntegrityViolationException expected) { rejected=true; }
+                    equal(scenario.equals("delete-rollback"),rejected,"parent failure propagated on deletion");
+                    if(scenario.equals("delete-mixed")) {
+                        equal(null,service.selectByIdIfPresent(301L),"existing child deleted"); flag(invoices,41,"0");
+                        equal(0,store.db.queryForObject("SELECT COUNT(*) FROM AUDIT_LINE WHERE OLD_VALUE='999'",Integer.class),"missing requested ID never audited");
+                        equal(2,store.db.queryForObject("SELECT COUNT(*) FROM AUDIT_LINE WHERE COL='ID' AND OLD_VALUE='301'",Integer.class),"original cascade and DAO deletion audit retained");
+                    } else {
+                        equal("30",service.selectById(301L).getReturnedAmount(),"no-op or rollback retains child"); flag(invoices,41,"1");
+                        equal(0,store.audit("AUDIT_RECORD"),"missing deletion or rollback has no audit headers"); equal(0,store.audit("AUDIT_LINE"),"missing deletion or rollback has no audit lines");
+                    }
+                } else if(scenario.equals("parent-overpay")) {
                     boolean rejected=false;
                     try { saveInvoices(ctx,"{\"id\":41,\"invoiceAmount\":\"50\"}"); }
                     catch(AuthenticationServiceException expected) { rejected=true; equal("输入的回款金额大于未回款金额！",expected.getMessage(),"existing overpay guard"); }

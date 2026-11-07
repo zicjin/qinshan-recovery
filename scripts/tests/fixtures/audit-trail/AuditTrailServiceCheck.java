@@ -69,6 +69,25 @@ public class AuditTrailServiceCheck {
         public Object insertNull() { write(4, false); return null; }
         @Transactional @AuditTrailEntry(AuditTrailType.INSERT)
         public Object insertVoidLike() { return null; }
+        @Transactional @AuditTrailEntry(AuditTrailType.DELETE)
+        public Object deleteMissing() {
+            if (AuditTrailHelper.auditTrail()) {
+                AuditTrailAspect.addRecordLine("FIXTURE$missing", Collections.<CoreAuditTrailRecordLineBean>emptyList());
+            }
+            return null;
+        }
+        @Transactional @AuditTrailEntry(AuditTrailType.DELETE)
+        public Object mixedEmptyAndValid() {
+            if (AuditTrailHelper.auditTrail()) {
+                AuditTrailAspect.addRecordLine("FIXTURE$missing", Collections.<CoreAuditTrailRecordLineBean>emptyList());
+            }
+            write(10, false);
+            if (AuditTrailHelper.auditTrail()) {
+                AuditTrailAspect.addRecordLine("FIXTURE$10", Collections.<CoreAuditTrailRecordLineBean>emptyList());
+            }
+            return OBJECT;
+        }
+
         @Transactional @AuditTrailEntry(AuditTrailType.INSERT)
         public Long throwing() { write(5, false); throw BUSINESS_FAILURE; }
         @Transactional @AuditTrailEntry(AuditTrailType.INSERT)
@@ -207,6 +226,11 @@ public class AuditTrailServiceCheck {
             reset(db); same(LIST, writer.insertList(), "list result identity"); persisted(db,1,active?1:0,active?1:0);
             reset(db); same(null, writer.insertNull(), "null result"); persisted(db,1,active?1:0,active?1:0);
             System.out.println("PASS " + (active?"active":"disabled") + " object/list/null return");
+            reset(db);
+            same(null, writer.deleteMissing(), "missing deletion result unchanged"); persisted(db,0,0,0);
+            same(OBJECT, writer.mixedEmptyAndValid(), "mixed empty/valid result unchanged"); persisted(db,1,active?1:0,active?1:0);
+            if(active) equal("FIXTURE$10",db.queryForObject("SELECT TARGET FROM AUDIT_RECORD",String.class),"only valid target gets an audit header");
+            System.out.println("PASS " + (active?"active":"disabled") + " empty deletion has no audit; mixed target keeps only valid audit");
             reset(db);
             try { writer.throwing(); throw new AssertionError("business exception swallowed"); }
             catch (RuntimeException failure) { same(BUSINESS_FAILURE, failure, "business exception identity"); }

@@ -18,7 +18,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--prerequisite-root', type=Path, default=ROOT)
     parser.add_argument('--h2', type=Path, required=True)
-    parser.add_argument('--case', default='all', choices=['partial', 'parent-overpay', 'parent-transitions', 'parent-notes', 'parent-missing-amount', 'parent-batch-reject', 'parent-batch-rollback', 'parent-direct', 'parent-no-returns', 'parent-duplicate', 'overpay', 'batch-net', 'batch-partial', 'batch-overpay', 'multiple-parent', 'multiple-parent-valid', 'forged', 'notes', 'clear-note', 'raw-notes', 'direct', 'rollback', 'direct-rollback', 'missing', 'null-id', 'null-amount', 'missing-amount', 'duplicate', 'empty', 'all'])
+    parser.add_argument('--case', default='all', choices=['partial', 'delete-absent', 'delete-mixed', 'delete-rollback', 'parent-overpay', 'parent-transitions', 'parent-notes', 'parent-missing-amount', 'parent-batch-reject', 'parent-batch-rollback', 'parent-direct', 'parent-no-returns', 'parent-duplicate', 'overpay', 'batch-net', 'batch-partial', 'batch-overpay', 'multiple-parent', 'multiple-parent-valid', 'forged', 'notes', 'clear-note', 'raw-notes', 'direct', 'rollback', 'direct-rollback', 'missing', 'null-id', 'null-amount', 'missing-amount', 'duplicate', 'empty', 'all'])
     args = parser.parse_args()
     prereq = args.prerequisite_root.resolve()
     jdk = prereq / 'build/jdk1.8.0_391/bin'
@@ -42,6 +42,7 @@ def main():
         'service/impl/EmcReturnedServiceImpl.java', 'resource/EmcInvoiceResource.java',
         'resource/impl/EmcInvoiceResourceImpl.java']]
     sources.extend([ROOT / 'scripts/tests/InvoiceReturnedUpdateTest.java',
+        ROOT / 'reconstituted/framework/owned-core-common/src/main/java/com/sunwayworld/framework/mybatis/dao/MybatisDaoSupport.java',
         ROOT / 'reconstituted/framework/owned-core-common/src/main/java/com/sunwayworld/framework/at/aspect/AuditTrailAspect.java',
         ROOT / 'reconstituted/framework/owned-core-common/src/main/java/com/sunwayworld/module/sys/metadata/service/impl/CoreTableServiceImpl.java'])
     with tempfile.TemporaryDirectory(prefix='invoice-returned-update-') as directory:
@@ -51,7 +52,7 @@ def main():
         cp = ':'.join(map(str, [temporary, application, *framework, args.h2.resolve(), *dependencies]))
         subprocess.run([str(jdk / 'javac'), '-encoding', 'UTF-8', '-sourcepath', str(temporary),
                         '-cp', cp, '-d', str(temporary), *map(str, sources)], check=True)
-        scenarios = ['partial', 'parent-overpay', 'parent-transitions', 'parent-notes', 'parent-missing-amount', 'parent-batch-reject', 'parent-batch-rollback', 'parent-direct', 'parent-no-returns', 'parent-duplicate', 'overpay', 'batch-net', 'batch-partial', 'batch-overpay', 'multiple-parent', 'multiple-parent-valid', 'forged', 'notes', 'clear-note', 'raw-notes', 'direct', 'rollback', 'direct-rollback', 'missing', 'null-id', 'null-amount', 'missing-amount', 'duplicate', 'empty'] if args.case == 'all' else [args.case]
+        scenarios = ['partial', 'delete-absent', 'delete-mixed', 'delete-rollback', 'parent-overpay', 'parent-transitions', 'parent-notes', 'parent-missing-amount', 'parent-batch-reject', 'parent-batch-rollback', 'parent-direct', 'parent-no-returns', 'parent-duplicate', 'overpay', 'batch-net', 'batch-partial', 'batch-overpay', 'multiple-parent', 'multiple-parent-valid', 'forged', 'notes', 'clear-note', 'raw-notes', 'direct', 'rollback', 'direct-rollback', 'missing', 'null-id', 'null-amount', 'missing-amount', 'duplicate', 'empty'] if args.case == 'all' else [args.case]
         for scenario in scenarios:
             result = subprocess.run([str(jdk / 'java'), '-Dlog4j.configurationFile=' + str(logging),
                                      '-cp', cp, 'InvoiceReturnedUpdateTest', scenario])

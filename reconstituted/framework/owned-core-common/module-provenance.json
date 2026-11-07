@@ -29,7 +29,7 @@
     },
     {
       "generated_sha256": "38a6bcf47632f4e8de9550939894dbb3653d79dba86ca9a0b5d01c21ffcebcde",
-      "override_sha256": "fcd853e1f375c347875d8fb069ea2d5b9dc9edf8c35ea399e881fafd8d5423fa",
+      "override_sha256": "b50ebe9cab951c7fd4c7b64a6b9937a7a9c8f79d134eab3dca2826c06e22257f",
       "path": "src/main/java/com/sunwayworld/framework/mybatis/dao/MybatisDaoSupport.java"
     },
     {
@@ -89,7 +89,7 @@
     },
     {
       "generated_sha256": "ec47f7d446ffa9f9f4f9ff3943f1efb79346acce99c855b6007907d8339ccb40",
-      "override_sha256": "b9a56b8ac5e24b525ae990d3a92e0ab914635eab764bbb7200b6d291b07f342b",
+      "override_sha256": "612a1a05c2f031d194fcaeca0711ce059cb6d20f2f5826bffd79baf4ae9511c5",
       "path": "src/main/java/com/sunwayworld/framework/at/aspect/AuditTrailAspect.java"
     },
     {
@@ -5206,7 +5206,7 @@
       "decompiler": "Vineflower",
       "decompiler_version": "1.11.1",
       "path": "src/main/java/com/sunwayworld/framework/at/aspect/AuditTrailAspect.java",
-      "sha256": "b9a56b8ac5e24b525ae990d3a92e0ab914635eab764bbb7200b6d291b07f342b",
+      "sha256": "612a1a05c2f031d194fcaeca0711ce059cb6d20f2f5826bffd79baf4ae9511c5",
       "source_class_path": "com/sunwayworld/framework/at/aspect/AuditTrailAspect.class",
       "source_jar": "BOOT-INF/lib/gikam-core-common-14.1.5.jar",
       "source_sha256_before_overlay": "ec47f7d446ffa9f9f4f9ff3943f1efb79346acce99c855b6007907d8339ccb40",
@@ -5214,6 +5214,7 @@
       "transformations": [
         "cfr-to-vineflower-fallback",
         "bytecode-backed:auditTrailService-return-proceed-object-with-finally-cleanup",
+        "source-backed:skip-empty-audit-target-records",
         "overlay:src/main/java/com/sunwayworld/framework/at/aspect/AuditTrailAspect.java"
       ]
     },
@@ -9723,13 +9724,14 @@
       "decompiler": "Vineflower",
       "decompiler_version": "1.11.1",
       "path": "src/main/java/com/sunwayworld/framework/mybatis/dao/MybatisDaoSupport.java",
-      "sha256": "fcd853e1f375c347875d8fb069ea2d5b9dc9edf8c35ea399e881fafd8d5423fa",
+      "sha256": "b50ebe9cab951c7fd4c7b64a6b9937a7a9c8f79d134eab3dca2826c06e22257f",
       "source_class_path": "com/sunwayworld/framework/mybatis/dao/MybatisDaoSupport.class",
       "source_jar": "BOOT-INF/lib/gikam-core-common-14.1.5.jar",
       "source_sha256_before_overlay": "38a6bcf47632f4e8de9550939894dbb3653d79dba86ca9a0b5d01c21ffcebcde",
       "source_sha256_before_transform": "38a6bcf47632f4e8de9550939894dbb3653d79dba86ca9a0b5d01c21ffcebcde",
       "transformations": [
         "cfr-to-vineflower-fallback",
+        "source-backed:delete-audit-only-existing-selected-ids",
         "overlay:src/main/java/com/sunwayworld/framework/mybatis/dao/MybatisDaoSupport.java"
       ]
     },
@@ -31563,7 +31565,7 @@
       ]
     }
   ],
-  "source_tree_sha256": "662dd75ae0e0e7271941c351bd01cb73e99e138969fc7d3d8804974efd4f5f7c",
+  "source_tree_sha256": "2abe2a9412e7748046f46158b96e7d40ff13e9e4a42faac0025b7311adc4875a",
   "status": "assembled-source-only",
   "transformation_manifest": "docs/reconstitution/decompiler-transforms.json",
   "transformation_manifest_sha256": "30ab06626f3e4c863a2855790b0ec6211499394852f2a8598ea3bd444ce87fe8",

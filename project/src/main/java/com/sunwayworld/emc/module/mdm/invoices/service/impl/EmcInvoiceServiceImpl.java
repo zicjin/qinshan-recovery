@@ -68,7 +68,7 @@ public class EmcInvoiceServiceImpl implements EmcInvoiceService {
 
 
         getDao().insert(insertBean);
-        return emcInvoice.getId();
+        return insertBean.getId();
     }
 
     @Override

@@ -11,6 +11,17 @@
                   FROM T_CORE_AT_RECORD_LINE L, T_CORE_AT_RECORD R
                  WHERE L.RECORDID = R.ID) T
         <where>
+            <!-- Supplied after caller filter extraction by the owned audit read adapter. -->
+            <if test="_parameter.containsKey('ownedAuditOrgId')">
+                <choose>
+                    <when test="ownedAuditOrgId != null and ownedAuditOrgId != ''">
+                        AND EXISTS (SELECT 1 FROM T_CORE_AT_RECORD OWNED_PARENT
+                                     WHERE OWNED_PARENT.ID = T.RECORDID
+                                       AND OWNED_PARENT.CREATEDBYORGID = #{ownedAuditOrgId})
+                    </when>
+                    <otherwise>AND 1 = 2</otherwise>
+                </choose>
+            </if>
             <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
         </where>
         ORDER BY

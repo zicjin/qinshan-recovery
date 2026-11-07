@@ -78,9 +78,16 @@ public final class OwnedAuditTrailControllerContractTest {
             throw new AssertionError("status projection must accept the original project session");
         }
 
-        ResponseEntity<String> queryResponse = controller.records(request(session.httpSession()), "{}");
+        ResponseEntity<?> queryResponse = controller.records(request(session.httpSession()),
+                new com.sunwayworld.framework.restful.data.RestJsonWrapperBean());
         if (queryResponse.getStatusCodeValue() != 403 || provider.authorizations != 1) {
             throw new AssertionError("audit record queries must continue to require audit.read");
+        }
+        provider.deny = false;
+        ResponseEntity<?> missingAdapter = controller.records(request(session.httpSession()),
+                new com.sunwayworld.framework.restful.data.RestJsonWrapperBean());
+        if (missingAdapter.getStatusCodeValue() != 500) {
+            throw new AssertionError("missing original audit adapter must fail closed without SQL fallback");
         }
         System.out.println("owned audit trail controller contract checks passed (record, line and status permission split)");
     }

@@ -2373,28 +2373,44 @@
       "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/module/sys/at/mapper/conf/core-audit-trail-record-line-mysql-mapper.xml",
       "sha256": "f0bfaac914e7b45e2acbf57aeec58bf5964983d971a2b1c8f617af0a463bbeb9",
-      "source_jar": "gikam-core-common-14.1.5.jar"
+      "source_jar": "gikam-core-common-14.1.5.jar",
+      "destination_sha256": "fa4f0dc4d52ed23d3fbee88d27d1bb4f28bb9e6b1f6f82854724b8636f3ac789",
+      "transformations": [
+        "owned-audit-read adapter parent organization EXISTS when trusted key present; null or empty trusted key denies; unrelated original callers unchanged"
+      ]
     },
     {
       "bytes": 2297,
       "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/module/sys/at/mapper/conf/core-audit-trail-record-line-oracle-mapper.xml",
       "sha256": "6eb47bcb0280bdce3e0c09e9d9e2bfaca13a0914267b8108abf59b6c3d677902",
-      "source_jar": "gikam-core-common-14.1.5.jar"
+      "source_jar": "gikam-core-common-14.1.5.jar",
+      "destination_sha256": "71464fcae2756e9f2b5d19eac1de95c7e882433c80fbcc3e1dce522408633c8d",
+      "transformations": [
+        "owned-audit-read adapter parent organization EXISTS when trusted key present; null or empty trusted key denies; unrelated original callers unchanged"
+      ]
     },
     {
       "bytes": 2293,
       "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/module/sys/at/mapper/conf/core-audit-trail-record-line-postgresql-mapper.xml",
       "sha256": "1b20e5eb65e87c54e12775607388564ebaa09ee841b3c15ff6022f1f162dfe5b",
-      "source_jar": "gikam-core-common-14.1.5.jar"
+      "source_jar": "gikam-core-common-14.1.5.jar",
+      "destination_sha256": "21fe8c8b636515efa1a43d9c5abb416bf31da46c43f0efb2c76043d8fc6f82df",
+      "transformations": [
+        "owned-audit-read adapter parent organization EXISTS when trusted key present; null or empty trusted key denies; unrelated original callers unchanged"
+      ]
     },
     {
       "bytes": 2276,
       "compile_status": "not-applicable-resource",
       "path": "com/sunwayworld/module/sys/at/mapper/conf/core-audit-trail-record-line-sqlserver-mapper.xml",
       "sha256": "93e9ac610a896f73670bfe039e086c0b4cc2ad65ecf6405f9e9be839b9acee81",
-      "source_jar": "gikam-core-common-14.1.5.jar"
+      "source_jar": "gikam-core-common-14.1.5.jar",
+      "destination_sha256": "51e36a9680f86b6ddc07d332f69bca05b8a50f73579d199b174b4dc4fe5aaef6",
+      "transformations": [
+        "owned-audit-read adapter parent organization EXISTS when trusted key present; null or empty trusted key denies; unrelated original callers unchanged"
+      ]
     },
     {
       "bytes": 1672,

@@ -10535,7 +10535,7 @@
     },
     {
       "class_sha256": "c79585578379d93d0ffae0077ee9b0fc885c1d5ab274ce70c183fbcafaef5e1f",
-      "compile_status": "pending-module-assembly",
+      "compile_status": "pass",
       "decompiler": "Vineflower",
       "decompiler_version": "1.11.1",
       "path": "src/main/java/com/sunwayworld/framework/restful/data/RestJsonWrapperBean.java",

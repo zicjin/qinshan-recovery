@@ -11,7 +11,8 @@ import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
-from evidence_output import cleanup_contract_complete, guard_output_path  # noqa: E402
+from evidence_output import guard_output_path
+from lifecycle_proof import validate_cleanup, read, decode  # noqa: E402
 
 
 def finalize(report: Dict[str, Any], cleanup: Dict[str, Any]) -> Dict[str, Any]:
@@ -19,8 +20,7 @@ def finalize(report: Dict[str, Any], cleanup: Dict[str, Any]) -> Dict[str, Any]:
         raise ValueError("report is not awaiting cleanup finalization")
     if report.get("strict_evidence") is not True or report.get("production_access") is not False:
         raise ValueError("only isolated strict reports can be finalized")
-    if not cleanup_contract_complete(cleanup):
-        raise ValueError("cleanup contract is incomplete")
+    validate_cleanup(cleanup, report)
     report = dict(report)
     report["cleanup"] = dict(cleanup)
     report["cleanup_pending"] = False
@@ -35,8 +35,8 @@ def main(argv=None) -> int:
     parser.add_argument("--cleanup-contract", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args(argv)
-    report = json.loads(args.input.read_text(encoding="utf-8"))
-    cleanup = json.loads(args.cleanup_contract.read_text(encoding="utf-8"))
+    report = decode(read(args.input))
+    cleanup = decode(read(args.cleanup_contract))
     finalized = finalize(report, cleanup)
     guard_output_path(args.output)
     args.output.parent.mkdir(parents=True, exist_ok=True)

@@ -184,6 +184,10 @@ def canonical_closure_reference(closure: Optional[Path]) -> str:
 
 
 def cleanup_complete(value: Any) -> bool:
+    # Registered lifecycle cleanup retains private captures as evidence rather
+    # than pretending they were deleted. Deep validation is strict_case_contract.
+    if isinstance(value, Mapping) and value.get("lifecycle_proof"):
+        return cleanup_contract_complete(value)
     if not isinstance(value, Mapping):
         return False
     disposable = all(value.get(key) is True for key in REQUIRED_CLEANUP)

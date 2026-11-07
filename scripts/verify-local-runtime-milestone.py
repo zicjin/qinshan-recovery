@@ -42,7 +42,7 @@ COLUMN_KEYS = ('name', 'native_type', 'jdbc_type', 'precision', 'scale', 'nullab
 SUPPORTED = {1, 12, -1, -15, -9, -16, 2, 3, 4, 5, -6, -5, 6, 7, 8, 91, 93, -2, -3, -4, 2004, 2005, 2011}
 
 
-class VerificationError(Exception):
+class VerificationError(ValueError):
     """Fixed safe errors; external output and file contents never escape."""
 
 
@@ -235,7 +235,7 @@ def cleanup_inspection(args):
     return {'network': network, 'containers': containers}
 
 
-def verify(args, report):
+def verify(args, report, *, recorded_cleanup=None):
     path = args.manifest.absolute()
     snapshots, pins, paths, raw_manifest = read_inputs(path)
     report.update(inputs=pins, manifest_sha256=sha(raw_manifest))
@@ -259,9 +259,11 @@ def verify(args, report):
         comparisons[role]['observer_columns_equal'] = before['schemas'][owner]['column_metadata'] == after['schemas'][owner]['column_metadata']
     report['baseline_schema_immutable'] = comparisons['baseline']['equal'] and comparisons['baseline']['observer_columns_equal']
     report['runtime_schema_restored'] = comparisons['runtime']['equal'] and comparisons['runtime']['observer_columns_equal']
-    cleanup = cleanup_inspection(args)
-    # Inspect twice to reject identity/state races during cleanup observation.
-    require(cleanup == cleanup_inspection(args), 'cleanup identity changed during inspection')
+    cleanup = cleanup_inspection(args) if recorded_cleanup is None else recorded_cleanup[0]
+    # Historical replay rechecks both pinned inspections without stopping a recovered app.
+    second = cleanup_inspection(args) if recorded_cleanup is None else recorded_cleanup[1]
+    require(cleanup == second, 'cleanup identity changed during inspection')
+    report['cleanup_inspections'] = [cleanup, second]
     report['cleanup_observation'] = cleanup
     report['runtime_identity'] = {'network_id': before['network']['id'],
                                   'container_ids': {role: item['id'] for role, item in before['containers'].items()}}
@@ -294,6 +296,13 @@ def verify(args, report):
     checks = ('baseline_schema_immutable', 'runtime_schema_restored', 'application_stopped', 'oracle_reused', 'redis_reused')
     report['failed_checks'] = [key for key in checks if not report[key]]
     require(not report['failed_checks'], 'milestone lifecycle checks failed')
+    manifest = decode(raw_manifest)
+    if 'context' in manifest or 'prepared_runtime' in manifest:
+        from lifecycle_proof import validate_lifecycle_context
+        validate_lifecycle_context(manifest, path, snapshots, report)
+        report['context'] = manifest['context']
+        report['prepared_runtime'] = manifest['prepared_runtime']
+    report['manifest_ref'] = {'path': str(path), 'sha256': sha(raw_manifest)}
     report.update(status='diagnostic-lifecycle-verified', lifecycle_verified=True, runtime_dirty=False)
 
 

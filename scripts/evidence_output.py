@@ -153,6 +153,19 @@ def route_execution_model_valid(value: Any) -> bool:
 def cleanup_contract_complete(value: Any) -> bool:
     if not isinstance(value, Mapping):
         return False
+    if value.get("lifecycle_proof"):
+        ref = value["lifecycle_proof"]
+        if not isinstance(ref, Mapping):
+            return False
+        import re
+        return (ref.get("schema") == 1 and ref.get("storage") == "artifact"
+                and re.fullmatch("[a-f0-9]{64}", str(ref.get("sha256", ""))) is not None
+                and ref.get("artifact_ref") == "sha256:" + ref["sha256"]
+                and value.get("cleanup_mode") == "persistent-oracle"
+                and all(value.get(key) is True for key in (
+                    "application_stopped", "redis_preserved", "oracle_reused", "oracle_preserved",
+                    "baseline_schema_immutable", "runtime_schema_restored", "network_preserved", "volume_preserved"))
+                and value.get("runtime_dirty") is False)
     disposable = all(value.get(key) is True for key in REQUIRED_CLEANUP)
     persistent = (
         value.get("cleanup_mode") == "persistent-oracle"
@@ -173,13 +186,20 @@ def cleanup_contract_complete(value: Any) -> bool:
 from http_write_proof import validate_case_proof
 
 
-def strict_case_contract(report: Mapping[str, Any]) -> Tuple[bool, str]:
+def strict_case_contract(report: Mapping[str, Any], *, check_cleanup: bool = True) -> Tuple[bool, str]:
     """Validate the per-case evidence required before strict promotion.
 
     Read-only cases may declare fixture/audit as ``not-required``.  A business
     write must use HTTP, restore through the API (or an explicitly named
     case-HTTP cleanup), record rollback proof, and carry an audit observation.
     """
+    if check_cleanup and (report.get("runtime_contract", {}).get("runtime_profile") == "local-wsl"
+                          or report.get("cleanup", {}).get("lifecycle_proof")):
+        try:
+            from lifecycle_proof import validate_cleanup
+            validate_cleanup(report.get("cleanup", {}), report)
+        except (ValueError, OSError, KeyError, TypeError, AttributeError) as error:
+            return False, "invalid lifecycle cleanup proof: " + str(error)
     cases = report.get("cases")
     if not isinstance(cases, list) or not cases:
         return False, "strict report has no cases"

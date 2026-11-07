@@ -339,35 +339,23 @@
 
     <!-- 平板详细标签信息 -->
     <select id="selectDetailLabel" parameterType="map" resultType="map">
-        SELECT T.*
-          FROM (SELECT A.ID,
-                       A.SAMPLENO,
-                       A.CREATEDBYNAME,
-                       A.REMARK,
-                       C.ORDERNO,
-                       C.SAMPLEBEGINDATE,
-                       C.ORDERDESC,
+        SELECT A.ID, A.SAMPLENO, A.CREATEDBYNAME, A.REMARK,
+               T.ORDERNO, T.SAMPLEBEGINDATE, T.ORDERDESC, T.TESTNAME, T.LABELID, T.STATUS
+          FROM T_EMC_SAMPLE A
+          JOIN (SELECT C.SAMPLEID, C.ORDERNO, C.SAMPLEBEGINDATE, C.ORDERDESC,
                        LISTAGG(DISTINCT D.TESTNAME, ',') WITHIN GROUP (ORDER BY D.TESTNAME) AS TESTNAME,
-                       CONCAT(CONCAT(NVL(C.ORDERNO, ''),
-                              NVL(D.CONTAINERCATEGORYCODE, '')),
+                       CONCAT(CONCAT(NVL(C.ORDERNO, ''), NVL(D.CONTAINERCATEGORYCODE, '')),
                               NVL(D.CONTAINERGROUP, '')) AS LABELID,
                        CASE D.SCANNED WHEN '1' THEN '已扫描' ELSE '未扫描' END STATUS
-                  FROM T_EMC_SAMPLE A
-                  LEFT JOIN T_EMC_PROJECT B
-                    ON B.ID = A.PROJID
-                  LEFT JOIN T_EMC_ORDER C
-                    ON A.ID = C.SAMPLEID
-                  LEFT JOIN T_EMC_ORDER_TASK D
-                    ON C.ID = D.ORDERID
-                  LEFT JOIN T_EMC_FOLDER E
-                    ON C.FOLDERID = E.ID
-                 WHERE A.ID = #{id}
+                  FROM T_EMC_ORDER C
+                  LEFT JOIN T_EMC_ORDER_TASK D ON C.ID = D.ORDERID
+                 WHERE C.SAMPLEID = #{id}
                    AND D.CONTAINERCATEGORYCODE IS NOT NULL
-                 GROUP BY A.ID, A.SAMPLENO, A.CREATEDBYNAME, A.REMARK,
-                          C.ORDERNO, C.SAMPLEBEGINDATE, C.ORDERDESC,
+                 GROUP BY C.SAMPLEID, C.ORDERNO, C.SAMPLEBEGINDATE, C.ORDERDESC,
                           CONCAT(CONCAT(NVL(C.ORDERNO, ''), NVL(D.CONTAINERCATEGORYCODE, '')),
                                  NVL(D.CONTAINERGROUP, '')),
                           CASE D.SCANNED WHEN '1' THEN '已扫描' ELSE '未扫描' END) T
+            ON T.SAMPLEID = A.ID
 
     </select>
 

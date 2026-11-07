@@ -38,7 +38,12 @@ public class MobileLabelOracleCheck {
         while (result.next()) {
           Map<String,Object> row = new LinkedHashMap<>();
           for (int i = 1; i <= result.getMetaData().getColumnCount(); i++) {
-            row.put(result.getMetaData().getColumnLabel(i), result.getObject(i));
+            Object value = result.getObject(i);
+            if (value instanceof Clob) {
+              Clob clob = (Clob)value;
+              value = clob.getSubString(1, Math.toIntExact(clob.length()));
+            }
+            row.put(result.getMetaData().getColumnLabel(i), value);
           }
           rows.add(row);
         }
@@ -63,12 +68,15 @@ public class MobileLabelOracleCheck {
   }
   static String normalized(String sql) { return sql.replaceAll("\\s+", "").toUpperCase(Locale.ROOT); }
   static void oracleGrouping(String sql) {
-    int projectionStart = sql.indexOf("SELECT A.ID") + "SELECT ".length();
-    int projectionEnd = sql.indexOf("FROM T_EMC_SAMPLE", projectionStart);
+    int projectionStart = sql.lastIndexOf("SELECT ", sql.indexOf("LISTAGG(")) + "SELECT ".length();
+    int projectionEnd = sql.indexOf("FROM ", projectionStart);
     int groupStart = sql.lastIndexOf("GROUP BY") + "GROUP BY".length();
     int groupEnd = sql.lastIndexOf(") T");
     Set<String> grouping = new HashSet<>();
-    for (String group : expressions(sql.substring(groupStart, groupEnd))) grouping.add(normalized(group));
+    for (String group : expressions(sql.substring(groupStart, groupEnd))) {
+      if (normalized(group).contains(".REMARK")) throw new AssertionError("Oracle cannot group the sample REMARK CLOB");
+      grouping.add(normalized(group));
+    }
     for (String expression : expressions(sql.substring(projectionStart, projectionEnd))) {
       if (expression.startsWith("LISTAGG(")) continue;
       expression = expression.replaceFirst("(?i)\\s+AS\\s+LABELID$", "").replaceFirst("(?i)\\s+STATUS$", "");
@@ -79,7 +87,7 @@ public class MobileLabelOracleCheck {
     if (!Objects.equals(wanted, actual)) throw new AssertionError("Expected " + wanted + ", got " + actual);
   }
   static void fixture() throws Exception {
-    execute("CREATE TABLE T_EMC_SAMPLE (ID VARCHAR(20), STATUS VARCHAR(20), PROCESSSTATUS VARCHAR(20), SAMPLENO VARCHAR(20), ORDERCATEGORY VARCHAR(20), PROJID VARCHAR(20), CREATEDBYNAME VARCHAR(20), REMARK VARCHAR(100))");
+    execute("CREATE TABLE T_EMC_SAMPLE (ID VARCHAR(20), STATUS VARCHAR(20), PROCESSSTATUS VARCHAR(20), SAMPLENO VARCHAR(20), ORDERCATEGORY VARCHAR(20), PROJID VARCHAR(20), CREATEDBYNAME VARCHAR(20), REMARK CLOB)");
     execute("CREATE TABLE T_EMC_PROJECT (ID VARCHAR(20), PROJNO VARCHAR(20), PROJNAME VARCHAR(20), TESTORGNAME VARCHAR(20), BIZCATEGORYID VARCHAR(20), STATUS VARCHAR(20))");
     execute("CREATE TABLE T_EMC_ORDER (ID VARCHAR(20), SAMPLEID VARCHAR(20), ORDERNO VARCHAR(20), SAMPLEBEGINDATE VARCHAR(20), ORDERDESC VARCHAR(20), FOLDERID VARCHAR(20))");
     execute("CREATE TABLE T_EMC_ORDER_TASK (ORDERID VARCHAR(20), CONTAINERCATEGORYCODE VARCHAR(20), CONTAINERGROUP VARCHAR(20), SCANNED VARCHAR(1), TESTNAME VARCHAR(20))");
@@ -108,6 +116,13 @@ public class MobileLabelOracleCheck {
     expect(0, query("selectMobileScanner", Collections.emptyMap()).size());
   }
   static void detail() throws Exception {
+    StringBuilder content = new StringBuilder();
+    for (int i = 0; i < 5000; i++) content.append("备注");
+    String longRemark = content.toString();
+    try (PreparedStatement update = connection.prepareStatement("UPDATE T_EMC_SAMPLE SET REMARK = ? WHERE ID = 's1'")) {
+      update.setCharacterStream(1, new StringReader(longRemark), longRemark.length());
+      update.executeUpdate();
+    }
     Map<String,Object> parameters = new HashMap<>(); parameters.put("id", "s1");
     List<Map<String,Object>> rows = query("selectDetailLabel", parameters);
     expect(2, rows.size());
@@ -115,7 +130,8 @@ public class MobileLabelOracleCheck {
     for (Map<String,Object> row : rows) byLabel.put((String)row.get("LABELID"), row);
     Map<String,Object> first = byLabel.get("1234567890123B1");
     expect("Alpha,Beta", first.get("TESTNAME")); expect("已扫描", first.get("STATUS"));
-    expect("creator", first.get("CREATEDBYNAME")); expect("note", first.get("REMARK"));
+    expect("creator", first.get("CREATEDBYNAME")); expect(longRemark, first.get("REMARK"));
+    expect(longRemark, byLabel.get("1234567890123B2").get("REMARK"));
     expect("未扫描", byLabel.get("1234567890123B2").get("STATUS"));
     parameters.put("id", "s2");
     expect("未扫描", query("selectDetailLabel", parameters).get(0).get("STATUS"));

@@ -207,5 +207,19 @@ class RestoreTest(unittest.TestCase):
         self.assertFalse(self.journal.exists())
         self.assertEqual(len(self.calls), 1)
 
+    def test_exact_original_role_matrix_menu_key_is_allowed_without_broadening_scope(self):
+        code = 'CORE.MODULE.MENU.MENU_ROLE_MATRIX'
+        entry = dict(ENTRY, code=code)
+        result = M.restore(self.session.request, [entry], self.journal)
+        self.assertEqual(result['missing'], 1)
+        self.assertEqual(self.calls[-1][2]['p']['f']['code_SEQ'], code)
+        self.assertFalse(self.journal.exists())
+        self.calls.clear()
+        for neighbor in (code + '_OTHER', code + '.OTHER', 'CORE.MODULE.MENU.OTHER',
+                         'CORE.MODULE.MENU.MENU_ROLE_MATRIC', code.lower()):
+            with self.subTest(code=neighbor), self.assertRaises(M.RestoreError):
+                M.restore(self.session.request, [dict(ENTRY, code=neighbor)], self.journal)
+        self.assertFalse(self.calls)
+
 
 if __name__ == '__main__': unittest.main()

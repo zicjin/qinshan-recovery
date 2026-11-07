@@ -20,6 +20,8 @@ from urllib.parse import urlsplit
 
 ROOT = '/secure/core/module/sys/i18ns'
 MESSAGE_ROOT = '/secure/core/module/sys/i18n-messages'
+# Original menu metadata uses this one nonstandard code outside CORE.MENU.*.
+EXACT_MENU_CODES = frozenset({'CORE.MODULE.MENU.MENU_ROLE_MATRIX'})
 
 
 class RestoreError(RuntimeError):
@@ -44,7 +46,8 @@ def validate_entries(entries):
         if not isinstance(entry, dict) or set(entry) != {'code', 'description', 'defaultMessage', 'messages'}:
             raise RestoreError('invalid input fields')
         code = entry['code']
-        if not isinstance(code, str) or not re.fullmatch(r'CORE\.MENU\.[A-Z0-9_.-]+', code) or code in seen:
+        if (not isinstance(code, str) or code in seen or
+                (not re.fullmatch(r'CORE\.MENU\.[A-Z0-9_.-]+', code) and code not in EXACT_MENU_CODES)):
             raise RestoreError('invalid or duplicate menu code')
         seen.add(code)
         if not all(isinstance(entry[x], str) for x in ('description', 'defaultMessage')):

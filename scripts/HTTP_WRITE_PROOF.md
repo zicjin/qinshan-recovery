@@ -93,6 +93,24 @@ finally; no SQL business writes are introduced.
 
 ## Identity role proof and privacy boundary
 
+RSA authentication always follows login with a current-account GET using the
+same fresh cookie opener before transferring verified cookies to contract
+requests. The reconstructed source
+`reconstituted/framework/owned-core-common/src/main/java/com/sunwayworld/framework/security/support/AjaxAuthenticationSuccessHandler.java`
+sets only HTTP 200 in `onAuthenticationSuccess`; an empty successful login body
+is expected. Login HTTP 200 alone never authenticates. The account read must
+return HTTP 200, a matching principal, valid user-role assignments and the
+requested role/organization, with nonempty session cookies unchanged by that
+read. Declared roles must be server role IDs, not descriptive role labels.
+The same account verification is required when login returns account JSON.
+
+Authentication `body_sha256` and `login_response_fingerprint` describe the login
+response. `account_body_sha256`, `projection_metadata`, `response_fingerprint`
+and the projected `account_observation` describe the separate account response.
+The account request records method/path, timestamps, request fingerprint and
+hashed session context. Only the existing allowlisted projection is retained;
+neither raw login/account bodies nor cookie values enter reports.
+
 Every strict write declares this exact source-backed account observation. It is
 executed in the fresh login session before and after the business stimulus:
 

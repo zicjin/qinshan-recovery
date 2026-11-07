@@ -33,6 +33,7 @@ class Handler(BaseHTTPRequestHandler):
     account_reads = 0
     public_key = b''
     source_shape = False
+    empty_login = False
 
     def do_PUT(self):
         body = json.loads(self.rfile.read(int(self.headers.get('Content-Length', 0))))
@@ -56,7 +57,7 @@ class Handler(BaseHTTPRequestHandler):
         if cls.account_reads and cls.identity_problem == 'account-org': identity['ext$']['loginorgid'] = 'other'
         if cls.identity_problem == 'principal': identity['id'] = 'other'
         if cls.identity_problem == 'organization': identity['ext$']['loginorgid'] = 'other'
-        if cls.identity_problem == 'missing-role' or (cls.identity_problem == 'revoked' and cls.account_reads > 1): identity['ext$']['roles'] = '[]'
+        if cls.identity_problem == 'missing-role' or (cls.identity_problem == 'revoked' and cls.account_reads > 2): identity['ext$']['roles'] = '[]'
         return identity
 
     def respond(self, value, status=200):
@@ -74,7 +75,15 @@ class Handler(BaseHTTPRequestHandler):
             return
         if self.path == '/core/module/sys/logins/account':
             type(self).account_reads += 1
-            self.respond(self.account() if self.headers.get('Cookie') == 'SESSION=private-session-value' else {'error': 'unauthenticated'})
+            if self.identity_problem in ('fake-login', 'unauthorized'):
+                self.respond({'error': 'unauthenticated'}, 401)
+            elif self.identity_problem == 'changed-cookie':
+                self.send_response(200)
+                self.send_header('Set-Cookie', 'SESSION=different-private-session; Path=/; HttpOnly')
+                self.end_headers()
+                self.wfile.write(json.dumps(self.account()).encode())
+            else:
+                self.respond(self.account() if self.headers.get('Cookie') == 'SESSION=private-session-value' else {'error': 'unauthenticated'})
             return
         if self.path == '/state/queries' and self.source_shape:
             self.respond({'rows': [] if self.value is None else [{'id': 71, 'name': self.value, 'createdTime': 'dynamic-server-time', 'version': 7}]})
@@ -90,9 +99,12 @@ class Handler(BaseHTTPRequestHandler):
         if self.path == '/core/module/sys/login':
             self.send_response(200)
             self.send_header('Content-Type', 'application/json')
-            self.send_header('Set-Cookie', 'SESSION=private-session-value; Path=/; HttpOnly')
+            if self.identity_problem != 'no-cookie':
+                cookie = '' if self.identity_problem == 'empty-cookie' else 'private-session-value'
+                self.send_header('Set-Cookie', 'SESSION=' + cookie + '; Path=/; HttpOnly')
             self.end_headers()
-            self.wfile.write(json.dumps({'ok': True} if self.identity_problem == 'fake-login' else self.account()).encode())
+            if not self.empty_login:
+                self.wfile.write(json.dumps({'ok': True} if self.identity_problem == 'fake-login' else self.account()).encode())
             return
         body = json.loads(raw or b'{}')
         if self.path == '/source-setup':
@@ -150,6 +162,7 @@ class ProofTest(unittest.TestCase):
         Handler.event_value = 'I'
         Handler.identity_problem, Handler.account_reads = None, 0
         Handler.source_shape = False
+        Handler.empty_login = False
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
         self.root = Path(self.temp.name)
@@ -188,6 +201,23 @@ class ProofTest(unittest.TestCase):
     def check_pending_proof(self, report):
         return validate_case_proof(report, report['cases'][0], require_registered=False)
 
+    def test_empty_login_body_authenticates_only_through_current_account(self):
+        Handler.empty_login = True
+        report = self.run_document(self.document())
+        self.assertEqual(report['status'], 'executed-pass-pending-cleanup', report.get('reason'))
+        self.assertTrue(self.check_pending_proof(report)[0])
+        auth = report['authentication']
+        self.assertTrue(auth['account_validated'])
+        self.assertEqual(auth['body_sha256'], 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855')
+        self.assertEqual(auth['account_body_sha256'], auth['projection_metadata']['raw_body_sha256'])
+        account = auth['account_observation']
+        self.assertEqual(account['request']['path'], '/core/module/sys/logins/account')
+        self.assertEqual(account['request']['auth'], auth['session_context'])
+        self.assertEqual(auth['response_fingerprint'], account['response_fingerprint'])
+        self.assertNotEqual(auth['login_response_fingerprint'], auth['response_fingerprint'])
+        self.assertNotIn('body_base64', account)
+        self.assertEqual(Handler.account_reads, 3)
+
     def test_server_identity_allows_roleless_audit_without_persisting_secrets(self):
         document = self.document()
         document['cases'][0]['audit']['fields'].pop('role')
@@ -197,7 +227,7 @@ class ProofTest(unittest.TestCase):
         persisted = json.dumps(report) + Path(report['cases'][0]['http_write_proof']['path']).read_text()
         for secret in ('private-login-token', 'private-session-value', 'private-role-extra', 'private-account-extra', 'loginToken'):
             self.assertNotIn(secret, persisted)
-        self.assertEqual(Handler.account_reads, 2)
+        self.assertEqual(Handler.account_reads, 3)
 
     def test_http_200_login_without_account_identity_is_not_authenticated(self):
         Handler.identity_problem = 'fake-login'
@@ -205,8 +235,19 @@ class ProofTest(unittest.TestCase):
         self.assertEqual(report['status'], 'executed-fail')
         self.assertIn('valid authenticated identity', report['reason'])
         self.assertFalse(report['authentication']['authenticated'])
-        self.assertEqual(Handler.account_reads, 0)
+        self.assertEqual(Handler.account_reads, 1)
         self.assertIsNone(Handler.value)
+
+    def test_empty_login_requires_account_identity_and_unchanged_nonempty_cookie(self):
+        Handler.empty_login = True
+        for problem in ('unauthorized', 'principal', 'organization', 'missing-role', 'changed-cookie', 'no-cookie', 'empty-cookie'):
+            with self.subTest(problem=problem):
+                Handler.identity_problem, Handler.account_reads = problem, 0
+                report = self.run_document(self.document())
+                self.assertEqual(report['status'], 'executed-fail', report)
+                self.assertFalse(report['authentication']['authenticated'])
+                self.assertIsNone(Handler.value)
+                self.assertEqual(Handler.audits, [])
 
     def test_role_revocation_and_wrong_principal_or_organization_fail_closed_and_restore(self):
         for problem in ('missing-role', 'revoked', 'principal', 'organization', 'account-principal', 'account-org', 'assignment', 'missing-org', 'labels'):

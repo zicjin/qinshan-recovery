@@ -47,7 +47,7 @@ from evidence_fingerprint import (
 )
 from http_write_proof import (VERSION as HTTP_WRITE_PROOF_VERSION, business_write, context as proof_context,
                               transcript as proof_transcript, write_artifact, validate_case_proof, validate_read_request,
-                              IDENTITY_ADAPTER, IDENTITY_SELECTORS, projected_response, validate_identity)
+                              IDENTITY_ADAPTER, IDENTITY_SELECTORS, validate_identity)
 from source_binding import binding_metadata, capture_binding
 from source_binding import REPO_ROOT as DISCOVERED_REPO_ROOT
 
@@ -112,7 +112,8 @@ def _authentication_request(opener: Any, request: Request, *, timeout: float,
     raise RuntimeError("authentication transport failed: %s" % last_error)
 
 
-def rsa_login(base_url: str, username: str, password: str, *, timeout: float) -> Dict[str, Any]:
+def rsa_login(base_url: str, username: str, password: str, *, timeout: float,
+              role: Optional[str] = None, organization: Optional[str] = None) -> Dict[str, Any]:
     # Use a fresh opener for each authentication boundary. The global opener
     # is intentionally retained for contract requests, but stale cookies or a
     # relay's half-closed keep-alive must not poison public-key/login.
@@ -162,23 +163,44 @@ def rsa_login(base_url: str, username: str, password: str, *, timeout: float) ->
     status, response_body, login_headers = _authentication_request(auth_opener, login_request, timeout=timeout)
     if status != 200:
         raise RuntimeError("RSA login returned %d" % status)
+    # AjaxAuthenticationSuccessHandler.onAuthenticationSuccess sets only HTTP
+    # 200. Identity must come from CoreLoginController's current-account read,
+    # even when another login controller returns account JSON in its body.
     try:
-        projection_metadata, identity = projected_response(response_body,
-            {'adapter': IDENTITY_ADAPTER, 'selectors': IDENTITY_SELECTORS})
-        validate_identity(identity, principal=username)
-        if not list(auth_jar):
+        session_context = cookie_auth_context(auth_jar)
+        if not session_context['cookies'] or any(not cookie.value for cookie in auth_jar):
             raise ValueError('login established no session cookies')
+        account_path = '/core/module/sys/logins/account'
+        started_at = now()
+        account_status, account_body, account_headers = _authentication_request(
+            auth_opener, Request(base_url.rstrip('/') + account_path,
+                                 headers={'Connection': 'close', 'Accept': 'application/json'}, method='GET'), timeout=timeout)
+        finished_at = now()
+        if account_status != 200:
+            raise ValueError('current account request was not successful')
+        if cookie_auth_context(auth_jar) != session_context:
+            raise ValueError('current account changed authenticated session context')
+        account_observation = proof_transcript(
+            {'method': 'GET', 'path': account_path, 'operation': 'read',
+             'headers': {'Connection': 'close', 'Accept': 'application/json'}, 'auth': session_context,
+             'role': role, 'organization': organization,
+             '_identity_projection': {'adapter': IDENTITY_ADAPTER, 'selectors': IDENTITY_SELECTORS}},
+            account_status, account_headers, account_body, started_at, finished_at)
+        identity = account_observation['response_projection']
+        validate_identity(identity, principal=username, role=role, organization=organization)
     except (ValueError, TypeError, KeyError) as error:
         raise RuntimeError('RSA login did not return a valid authenticated identity') from error
-    # Transfer only the session cookies produced by this login into the
-    # contract opener. No supplier/owned or prior-job cookies are reused.
+    # Transfer only the session cookies verified by this current-account read.
     COOKIE_JAR.clear()
     for cookie in auth_jar:
         COOKIE_JAR.set_cookie(cookie)
     return {"status": status, "body_sha256": sha256_bytes(response_body), "authenticated": True,
-            "identity": identity, "projection_metadata": projection_metadata,
-            "response_fingerprint": transcript_fingerprints({}, status, login_headers, response_body)['response_fingerprint'],
-            "session_context": cookie_auth_context(COOKIE_JAR)}
+            "account_validated": True, "account_status": account_status,
+            "account_body_sha256": sha256_bytes(account_body),
+            "login_response_fingerprint": transcript_fingerprints({}, status, login_headers, response_body)['response_fingerprint'],
+            "identity": identity, "projection_metadata": account_observation['projection_metadata'],
+            "response_fingerprint": account_observation['response_fingerprint'],
+            "account_observation": account_observation, "session_context": session_context}
 
 
 def git_value(*args: str) -> str:
@@ -773,7 +795,8 @@ def run_cases(case_document: Mapping[str, Any], *, base_url: str, mode: str,
         if bool(auth_user) != bool(password_file):
             raise ValueError("auth_user and password_file must be supplied together")
         if auth_user and password_file:
-            authentication = rsa_login(base_url, auth_user, read_password_file(password_file), timeout=timeout)
+            authentication = rsa_login(base_url, auth_user, read_password_file(password_file), timeout=timeout,
+                                       role=role, organization=organization)
             if authentication.get("authenticated") is not True:
                 raise ValueError("authentication did not establish authenticated identity")
             report["authentication"] = {"attempted": True, **authentication}

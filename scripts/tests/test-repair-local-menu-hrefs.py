@@ -65,6 +65,8 @@ class RepairTest(unittest.TestCase):
 
     def api(self, method, path, body):
         if path == ROOT + '/queries/raw':
+            if body.get('p', {}).get('o') != [{'id': 'asc'}]:
+                return 400, 'application/json', {'error': 'explicit unique ID ordering required'}
             all_rows = list(self.data.values())
             n, size = body['p']['n'], body['p']['s']
             if self.failure == 'duplicate-inventory': all_rows += all_rows

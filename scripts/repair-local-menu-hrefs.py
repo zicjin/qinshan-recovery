@@ -76,7 +76,9 @@ def replacement(href):
 def inventory(request):
     found, seen, expected, page = [], set(), None, 1
     while True:
-        result = call(request, 'POST', ROOT + '/queries/raw', {'p': {'n': page, 's': 100}})
+        # Default ORDERNO sort is nonunique; ID order prevents page overlap.
+        result = call(request, 'POST', ROOT + '/queries/raw',
+                      {'p': {'n': page, 's': 100, 'o': [{'id': 'asc'}]}})
         if (not isinstance(result, dict) or not isinstance(result.get('rows'), list)
                 or type(result.get('total')) is not int or result['total'] < 0):
             raise RestoreError('invalid menu inventory')

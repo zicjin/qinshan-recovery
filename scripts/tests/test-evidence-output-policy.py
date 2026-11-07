@@ -59,6 +59,15 @@ class EvidenceOutputPolicyTest(unittest.TestCase):
         ok, reason = MODULE.strict_case_contract({"schema": 2, "cases": [case]})
         self.assertTrue(ok, reason)
 
+    def test_declared_write_statuses_cannot_be_promoted(self):
+        case = {"status": 200, "route": {"method": "PUT", "path": "/items/1"},
+                "fixture": {"business_write_via": "http", "restore": "restored"},
+                "audit": {"status": "verified"},
+                "rollback": {"status": "verified-via-fixture-restore"}}
+        valid, reason = MODULE.strict_case_contract({"cases": [case]})
+        self.assertFalse(valid)
+        self.assertIn("proof", reason)
+
     def test_canonical_requires_finalize_context(self):
         with self.assertRaises(ValueError):
             MODULE.guard_output_path(MODULE.CANONICAL_ROOT / "unapproved.json")

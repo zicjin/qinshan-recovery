@@ -124,7 +124,7 @@ class RunnerTest(unittest.TestCase):
         self.assertEqual(report["status"], "diagnostic-pass")
         self.assertEqual(report["cases"][0]["status"], 200)
 
-    def test_strict_requires_clone_and_fixture_restore_for_declared_fixture(self):
+    def test_strict_rejects_declared_audit_and_restore_success_without_state_proof(self):
         with tempfile.TemporaryDirectory() as temp:
             artifact = Path(temp) / "app.jar"
             artifact.write_bytes(b"owned-test-artifact")
@@ -167,8 +167,8 @@ class RunnerTest(unittest.TestCase):
                                           clone_identity="clone-test", artifacts=[artifact],
                                           output=output, timeout=3,
                                           runtime_report=runtime_report)
-        self.assertEqual(report["status"], "executed-pass")
-        self.assertTrue(report["strict_evidence"])
+        self.assertEqual(report["status"], "executed-fail")
+        self.assertIn("proof", report["reason"])
 
     def test_strict_accepts_persistent_oracle_cleanup_contract(self):
         with tempfile.TemporaryDirectory() as temp:

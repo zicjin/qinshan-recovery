@@ -170,6 +170,9 @@ def cleanup_contract_complete(value: Any) -> bool:
     return disposable or persistent
 
 
+from http_write_proof import validate_case_proof
+
+
 def strict_case_contract(report: Mapping[str, Any]) -> Tuple[bool, str]:
     """Validate the per-case evidence required before strict promotion.
 
@@ -231,15 +234,9 @@ def strict_case_contract(report: Mapping[str, Any]) -> Tuple[bool, str]:
                 return False, "case %d business write did not use HTTP" % index
             if fixture.get("restore") not in {"restored", "case-http-operation"}:
                 return False, "case %d business write has no API restore" % index
-            rollback = case.get("rollback")
-            if not isinstance(rollback, Mapping) or rollback.get("status") not in {
-                "verified", "verified-via-fixture-restore", "not-required",
-            }:
-                return False, "case %d business write has no rollback proof" % index
-            if audit == "not-required" or not isinstance(audit, Mapping):
-                return False, "case %d business write has no audit observation" % index
-            if audit.get("required", True) and audit.get("status") not in {"observed", "verified"}:
-                return False, "case %d audit was not observed" % index
+            valid, reason = validate_case_proof(report, case)
+            if not valid:
+                return False, "case %d %s" % (index, reason)
         if case.get("readback_required"):
             readback = case.get("readback_http")
             if not isinstance(readback, list) or not readback:

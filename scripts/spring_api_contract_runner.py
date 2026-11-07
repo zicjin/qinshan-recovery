@@ -45,6 +45,8 @@ from evidence_fingerprint import (
     STIMULUS_CONTRACT_VERSION,
     transcript_fingerprints,
 )
+from http_write_proof import (VERSION as HTTP_WRITE_PROOF_VERSION, business_write, context as proof_context,
+                              transcript as proof_transcript, write_artifact, validate_case_proof, validate_read_request)
 from source_binding import binding_metadata, capture_binding
 from source_binding import REPO_ROOT as DISCOVERED_REPO_ROOT
 
@@ -578,6 +580,7 @@ def request_case(base_url: str, case: Mapping[str, Any], *, timeout: float,
     request_descriptor["auth"] = cookie_auth_context(COOKIE_JAR)
     request = Request(url, data=body, headers=headers, method=method)
     started = time.perf_counter()
+    request_started_at = now()
     try:
         with LOOPBACK_OPENER.open(request, timeout=timeout) as response:
             status = response.status
@@ -607,6 +610,9 @@ def request_case(base_url: str, case: Mapping[str, Any], *, timeout: float,
         response_body,
         batch_id=batch_id,
     ))
+    if case.get("_http_proof"):
+        observation["_http_transcript"] = proof_transcript(
+            request_descriptor, status, response_headers, response_body, request_started_at, now())
     if case.get("capture_json"):
         try:
             observation["_captured_json"] = json.loads(response_body.decode("utf-8"))
@@ -682,7 +688,8 @@ def run_cases(case_document: Mapping[str, Any], *, base_url: str, mode: str,
         if not cleanup_contract_complete(cleanup_contract) and not defer_cleanup:
             raise ValueError("strict cleanup contract is incomplete")
     report: Dict[str, Any] = {
-        "schema": 2,
+        "schema": 3,
+        "http_write_proof_version": HTTP_WRITE_PROOF_VERSION,
         "status": "executed-fail",
         "execution": "strict" if strict else "diagnostic",
         "strict_evidence": strict,
@@ -708,6 +715,7 @@ def run_cases(case_document: Mapping[str, Any], *, base_url: str, mode: str,
         "runtime_report": str(runtime_report) if runtime_report else None,
         "runtime_contract": runtime_contract,
         "role": role,
+        "principal": auth_user or role,
         "organization": organization,
         "mode": mode,
         "base_url": base_url,
@@ -747,7 +755,27 @@ def run_cases(case_document: Mapping[str, Any], *, base_url: str, mode: str,
                 # Keep the generated fixture key within that production limit.
                 "id": "r" + uuid.uuid4().hex[:12],
             }
-            audit = _audit_observation(raw_case, strict=strict)
+            needs_proof = strict and business_write(raw_case)
+            audit = _audit_observation(raw_case, strict=False)
+            proof_observations = {}
+            def proof_read(declaration, phase):
+                if not isinstance(declaration, dict):
+                    raise ValueError("HTTP write proof requires " + phase + " request")
+                validate_read_request(declaration)
+                request = _expand_fixture_value(declaration, fixture_captures, runtime_values)
+                request.update({"role": role, "organization": organization, "_http_proof": True})
+                result = request_case(base_url, request, timeout=timeout, batch_id=batch_id)
+                proof_observations[phase] = result.pop("_http_transcript")
+                if request.get("capture_json"):
+                    fixture_captures[str(request.get("id", phase))] = result.pop("_captured_json")
+                return result
+            if needs_proof:
+                if report["authentication"].get("authenticated") is not True:
+                    raise ValueError("HTTP write proof requires successfully authenticated principal")
+                if not isinstance(raw_case.get("audit"), dict) or not isinstance(raw_case.get("audit_requests"), dict):
+                    raise ValueError("strict write requires executed HTTP audit proof")
+                if not isinstance(raw_case.get("state_proof"), dict) or not isinstance(raw_case.get("rollback"), dict):
+                    raise ValueError("strict write requires state/rollback proof")
             setup_results: List[Dict[str, Any]] = []
             readback_results: List[Dict[str, Any]] = []
             restore_results: List[Dict[str, Any]] = []
@@ -766,6 +794,9 @@ def run_cases(case_document: Mapping[str, Any], *, base_url: str, mode: str,
                     role=role, organization=organization,
                 )
                 fixture["setup"] = "executed" if fixture["setup_requests"] else "not-required"
+                if needs_proof:
+                    proof_read(raw_case["state_proof"].get("before_request"), "state_before")
+                    proof_read(raw_case["audit_requests"].get("before"), "audit_before")
                 # Keep restore/setup declarations opaque until their own
                 # request is executed.  Expanding the whole case here would
                 # try to resolve a restore reference (for example the id
@@ -775,6 +806,10 @@ def run_cases(case_document: Mapping[str, Any], *, base_url: str, mode: str,
                 request_case_document.setdefault("role", role)
                 request_case_document.setdefault("organization", organization)
                 request_case_document.pop("fixture", None)
+                for proof_field in ("audit_requests", "audit", "state_proof", "rollback"):
+                    request_case_document.pop(proof_field, None)
+                if needs_proof:
+                    request_case_document["_http_proof"] = True
                 # Readback requests are a sequential mini-workflow.  Keep
                 # them opaque until after the operation so an earlier
                 # readback can capture a URL/text/id used by the next one.
@@ -785,6 +820,8 @@ def run_cases(case_document: Mapping[str, Any], *, base_url: str, mode: str,
                 observation = request_case(
                     base_url, expanded_case, timeout=timeout, batch_id=batch_id,
                 )
+                if needs_proof:
+                    proof_observations["operation"] = observation.pop("_http_transcript")
                 # A business write may return the generated child-row id that
                 # the restore phase needs.  Keep the capture local to this
                 # case, just like fixture setup captures, so a subsequent
@@ -799,6 +836,11 @@ def run_cases(case_document: Mapping[str, Any], *, base_url: str, mode: str,
                 # Pass declarations to the request loop unchanged.  Each
                 # request is expanded immediately before it runs, allowing
                 # an earlier readback to populate captures for the next one.
+                if needs_proof:
+                    proof_read(raw_case["audit_requests"].get("after"), "audit_after")
+                    if raw_case["audit_requests"].get("lines"):
+                        proof_read(raw_case["audit_requests"]["lines"], "audit_lines")
+                    proof_read(raw_case["state_proof"].get("after_request"), "state_after")
                 readback_requests = readback_declarations
                 if readback_requests:
                     if not isinstance(readback_requests, list):
@@ -815,11 +857,16 @@ def run_cases(case_document: Mapping[str, Any], *, base_url: str, mode: str,
             finally:
                 try:
                     restore_results = _run_fixture_requests(
-                        base_url, fixture["restore_requests"], timeout=timeout,
+                        base_url, [{**request, "_http_proof": True} if needs_proof else request
+                                   for request in fixture["restore_requests"]], timeout=timeout,
                         captures=fixture_captures, runtime=runtime_values,
                         batch_id=batch_id,
                         role=role, organization=organization,
                     )
+                    if needs_proof:
+                        for restore_index, restore_result in enumerate(restore_results):
+                            proof_observations["restore_%d" % restore_index] = restore_result.pop("_http_transcript")
+                        proof_read(raw_case["state_proof"].get("restored_request"), "state_restored")
                     if fixture["restore_requests"]:
                         fixture["restore"] = "restored"
                     elif fixture.get("cleanup_via") == "case-http":
@@ -877,14 +924,26 @@ def run_cases(case_document: Mapping[str, Any], *, base_url: str, mode: str,
                 "implementation_tree_digest",
             ):
                 observation[field] = metadata.get(field)
-            if strict and (method in WRITE_METHODS or operation == "write"):
-                observation["rollback"] = {
-                    "status": "verified-via-fixture-restore",
-                    "source": fixture.get("cleanup_via", "api-fixture-restore"),
-                }
+            if needs_proof:
+                payload = {"schema": HTTP_WRITE_PROOF_VERSION,
+                           "context": proof_context(report, observation),
+                           "observations": proof_observations,
+                           "audit": _expand_fixture_value(raw_case["audit"], fixture_captures, runtime_values),
+                           "state": _expand_fixture_value({"expected": raw_case["state_proof"].get("expected"), "expected_after": raw_case["state_proof"].get("expected_after"), "records_path": raw_case["state_proof"].get("records_path"), "entity_field": raw_case["state_proof"].get("entity_field")}, fixture_captures, runtime_values),
+                           "rollback": _expand_fixture_value(raw_case["rollback"], fixture_captures, runtime_values)}
+                proof_path = output.parent / (output.stem + ".http-proofs") / batch_id / (sha256_bytes(case_id.encode()) + ".json")
+                observation["http_write_proof"] = write_artifact(proof_path, payload)
+                observation["rollback"] = {"status": "observed", "kind": payload["rollback"].get("kind")}
+                observation["audit"] = {"required": True, "status": "observed", "source": "executed-http-proof"}
+                observation["fixture"]["state_restore_proof"] = "executed-http-proof"
+                # Validate before granting pass; promotion repeats the same check.
+                valid, reason = validate_case_proof({**report, "finished_at": now()}, observation, require_registered=False)
+                if not valid:
+                    raise ValueError(reason)
             report["cases"].append(observation)
         report["phase_timings_ms"]["http_cases"] = round((time.perf_counter() - started) * 1000, 3)
-        report["status"] = ("executed-pass-pending-cleanup" if strict and report.get("cleanup_pending")
+        report["proof_registration_pending"] = any("http_write_proof" in case for case in report["cases"])
+        report["status"] = ("executed-pass-pending-cleanup" if strict and (report.get("cleanup_pending") or report["proof_registration_pending"])
                              else "executed-pass" if strict else "diagnostic-pass")
     except Exception as failure:
         report["reason"] = str(failure)

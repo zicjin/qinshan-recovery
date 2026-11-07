@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 """Exercise the evidence identity CLI against isolated, real Git histories."""
+import copy
+import csv
+import hashlib
+import importlib.util
 import json
 import os
 from pathlib import Path
@@ -187,6 +191,121 @@ class CurrentHeadEvidenceContractTest(unittest.TestCase):
         self.commit("governance only")
         self.assertNotEqual(self.report["implementation_binding"], self.capture()["implementation_binding"])
         self.assert_current()
+
+
+class PreparedCurrentHeadEvidenceContractTest(unittest.TestCase):
+    """Exercise registered lifecycle custody through the public evidence CLI."""
+    def setUp(self):
+        spec = importlib.util.spec_from_file_location(
+            "lifecycle_fixture", ROOT / "scripts/tests/test-lifecycle-proof.py")
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        self.fixture = module.LifecycleProofTest(methodName="runTest")
+        self.addCleanup(self.fixture.doCleanups)
+        self.fixture.setUp()
+        self.fixture.verify()
+        self.fixture.export()
+        self.fixture.finalize()
+        self.report = json.loads((self.fixture.private / "final.json").read_text())
+
+    def evaluate(self):
+        path = self.fixture.private / "gate-report.json"
+        path.write_text(json.dumps(self.report))
+        return subprocess.run(
+            [sys.executable, str(self.fixture.repo / "scripts/tests/test-current-head-evidence.py"),
+             "--repo-root", str(self.fixture.repo), str(path)],
+            env=self.fixture.env, capture_output=True, text=True, timeout=60)
+
+    def test_registered_complete_prepared_lifecycle_passes_without_mutating_contract(self):
+        before = copy.deepcopy(self.report)
+        self.assertIsNone(self.report["runtime_contract"]["runtime_dirty"])
+        result = self.evaluate()
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertEqual(self.report, before)
+
+
+    def test_null_dirty_without_registered_proof_is_rejected(self):
+        self.report.pop("cleanup")
+        result = self.evaluate()
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("invalid lifecycle cleanup proof", result.stderr)
+
+    def test_registered_proof_tamper_is_rejected(self):
+        artifact = next((self.fixture.private / "store/sha256").iterdir())
+        artifact.write_bytes(artifact.read_bytes() + b" ")
+        result = self.evaluate()
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("SHA256 mismatch", result.stderr)
+
+    def test_explicit_runtime_dirty_is_rejected_even_with_proof(self):
+        self.report["runtime_contract"]["runtime_dirty"] = True
+        result = self.evaluate()
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("runtime contract is dirty", result.stderr)
+
+    def publish_closure(self):
+        evidence = self.fixture.repo / "evidence"
+        evidence.mkdir()
+        report_path = evidence / "api-contract-strict-test.json"
+        report_path.write_text(json.dumps(self.report))
+        sha = hashlib.sha256(report_path.read_bytes()).hexdigest()
+        closure = {key: self.report[key] for key in (
+            "source_commit", "source_dirty", "implementation_binding",
+            "implementation_tree_digest", "implementation_scope", "implementation_dirty",
+            "route_execution_model")}
+        closure.update(scope="current-head-spring-web-api-route-closure", failures=[],
+                       strict_pass_count=1, reports=[{
+                           "path":"evidence/" + report_path.name, "sha256":sha,
+                           "status":"executed-pass", "strict_evidence":True,
+                           "strict_contract":"strict report contract valid",
+                           **{key: closure[key] for key in (
+                               "source_commit", "implementation_binding",
+                               "implementation_tree_digest", "implementation_dirty")}}])
+        row = {"path":"evidence/" + report_path.name, "sha256":sha,
+               "class":"canonical-strict", "storage":"git", "implementation_dirty":"false",
+               "implementation_binding":self.report["implementation_binding"],
+               "implementation_tree_digest":self.report["implementation_tree_digest"]}
+        self.registry_path = evidence / "evidence-index.tsv"
+        with self.registry_path.open("w") as stream:
+            writer = csv.DictWriter(stream, fieldnames=list(row), delimiter="\t")
+            writer.writeheader(); writer.writerow(row)
+        self.report = closure
+        return report_path
+
+    def test_closure_validates_pinned_current_strict_dependencies(self):
+        self.publish_closure()
+        result = self.evaluate()
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
+
+    def test_closure_report_tamper_is_rejected(self):
+        path = self.publish_closure()
+        path.write_bytes(path.read_bytes() + b" ")
+        result = self.evaluate()
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("closure report SHA256 mismatch", result.stderr)
+
+    def test_old_closure_aggregate_is_rejected(self):
+        self.publish_closure()
+        self.report["implementation_tree_digest"] = "0" * 64
+        self.report["implementation_binding"] = "impl-" + "0" * 16
+        result = self.evaluate()
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("closure source is stale", result.stderr)
+
+    def test_closure_cannot_hide_missing_report_fingerprints(self):
+        del self.report["cases"][0]["request_fingerprint"]
+        self.publish_closure()
+        result = self.evaluate()
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("request_fingerprint", result.stderr)
+
+    def test_closure_requires_canonical_strict_registration(self):
+        self.publish_closure()
+        self.registry_path.write_text(self.registry_path.read_text().replace("canonical-strict", "canonical-diagnostic"))
+        result = self.evaluate()
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("not canonical-strict", result.stderr)
 
 
 if __name__ == "__main__":

@@ -2,6 +2,8 @@
 """Require published evidence to bind current implementation source."""
 import argparse
 import csv
+import hashlib
+import importlib.util
 import json
 import re
 import subprocess
@@ -11,10 +13,11 @@ import sys
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "scripts"))
-from evidence_output import current_implementation_binding
+from evidence_output import current_implementation_binding, strict_case_contract
+from lifecycle_proof import validate_cleanup
 from source_binding import (
     BINDING_SCHEMA_VERSION, BINDING_SURFACES, REPO_ROOT,
-    is_standalone_root, runtime_contract_digest,
+    is_standalone_root, runtime_contract_digest, workspace_root,
 )
 DEFAULT_REPORTS = ()
 
@@ -65,13 +68,79 @@ def identity_error(payload, current):
     runtime = payload.get("runtime_contract")
     if not isinstance(runtime, Mapping) or not runtime.get("runtime_schema") or not runtime.get("baseline_schema"):
         return "runtime contract or schema identity is missing"
-    if payload.get("runtime_contract_dirty", False) is not False or runtime.get("runtime_dirty", False) is not False:
+    if payload.get("runtime_contract_dirty", False) is not False:
         return "runtime contract is dirty"
+    if runtime.get("runtime_dirty", False) is not False:
+        # A prepared manifest is immutable and deliberately has no after-state.
+        # Only independently replayed, registered lifecycle custody can supply
+        # that observation; never rewrite the contract or its fingerprint.
+        if (runtime.get("runtime_dirty", False) is not None
+                or runtime.get("runtime_manifest_schema") != "local-prepared-v1"
+                or runtime.get("lifecycle_phase") != "prepared"):
+            return "runtime contract is dirty"
+        try:
+            validate_cleanup(payload.get("cleanup", {}), payload)
+        except (ValueError, OSError, KeyError, TypeError, AttributeError) as error:
+            return "invalid lifecycle cleanup proof: " + str(error)
     digest = runtime_contract_digest(runtime)
     if payload["runtime_contract_binding"] != "rt-" + digest[:16]:
         return "runtime contract binding does not match report runtime"
     if "runtime_contract_digest" in payload and payload["runtime_contract_digest"] != digest:
         return "runtime contract digest does not match report runtime"
+    return None
+
+
+def closure_error(payload, current, repo_root, report_root, head):
+    """Validate an aggregate through its registered, hash-pinned strict inputs.
+
+    Existing closure schema has no runtime manifest or orthogonal metadata.
+    Its compatibility aggregate must still be current; each actual dependency
+    must independently satisfy the stronger report identity and strict gates.
+    """
+    spec = importlib.util.spec_from_file_location("closure_governance", ROOT / "scripts/manage-evidence.py")
+    governance = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(governance)
+    governance.ROOT = repo_root
+    governance.WORKSPACE = workspace_root(repo_root)
+    governance._CURRENT_BINDING_CACHE = current
+    try:
+        with (report_root / "evidence/evidence-index.tsv").open(encoding="utf-8", newline="") as handle:
+            rows = list(csv.DictReader(handle, delimiter="\t"))
+        registry = {}
+        for row in rows:
+            path = governance.resolve_registry_path(row["path"]).resolve()
+            if not path.is_relative_to(repo_root):
+                # Historical rows can live in the parent archive. Referenced
+                # strict inputs are separately required to stay in the repo.
+                continue
+            key = path.relative_to(repo_root).as_posix()
+            if key in registry:
+                return "closure registry path is duplicated"
+            registry[key] = row
+        valid, reason = governance.strict_closure_contract(payload, head, registry)
+        if not valid:
+            return reason
+        for item in payload["reports"]:
+            path = governance.resolve_registry_path(item["path"]).resolve()
+            key = path.relative_to(repo_root).as_posix()
+            raw = path.read_bytes()
+            digest = hashlib.sha256(raw).hexdigest()
+            if digest != item.get("sha256") or digest != registry[key].get("sha256"):
+                return "closure report SHA256 mismatch"
+            report = json.loads(raw)
+            if any(report.get(field) != item.get(field) for field in (
+                    "status", "strict_evidence", "implementation_binding", "implementation_tree_digest")):
+                return "closure report index differs from actual report"
+            error = identity_error(report, current)
+            if error:
+                return "closure dependency: " + error
+            valid, reason = strict_case_contract(report)
+            if not valid:
+                return "closure dependency: " + reason
+            if not governance.cleanup_complete(report.get("cleanup")):
+                return "closure dependency cleanup is incomplete"
+    except (ValueError, OSError, KeyError, TypeError, AttributeError) as error:
+        return "invalid closure dependency: " + str(error)
     return None
 
 
@@ -114,7 +183,10 @@ def main():
         if subprocess.run(["git", "cat-file", "-e", commit + "^{commit}"], cwd=repo_root,
                           stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode:
             raise SystemExit("current-head evidence: repository_head_at_capture is not a Git object: " + str(path))
-        error = identity_error(payload, current)
+        if payload.get("scope") == "current-head-spring-web-api-route-closure":
+            error = closure_error(payload, current, repo_root, report_root, head)
+        else:
+            error = identity_error(payload, current)
         if error:
             raise SystemExit("current-head evidence: " + error + ": " + str(path))
     print("current-head evidence identity: PASS (%d reports; HEAD=%s)" % (len(reports), head[:12]))

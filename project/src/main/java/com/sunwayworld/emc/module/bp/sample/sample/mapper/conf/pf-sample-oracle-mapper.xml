@@ -313,36 +313,28 @@
 
     <!-- 平板扫描查询 -->
     <select id="selectMobileScanner" parameterType="map" resultType="map">
-        SELECT T.*, CONCAT(CONCAT(SUMNUMBER, '/'), TOTAL) AS NUM
-          FROM (SELECT S.*, COUNT(1) AS TOTAL, NVL(SUM(SCANNED), 0) AS SUMNUMBER
-                  FROM (SELECT U.*
-                          FROM (SELECT A.ID,
-                                       A.STATUS,
-                                       A.PROCESSSTATUS,
-                                       A.SAMPLENO,
-                                       A.ORDERCATEGORY,
-                                       B.PROJNO,
-                                       B.PROJNAME,
-                                       B.TESTORGNAME,
-                                       B.BIZCATEGORYID,
-                                       B. STATUS AS PROJECTSTATUS,
-                                       (CONCAT(CONCAT(NVL(D.CONTAINERCATEGORYCODE, ''),
-                                                      NVL(C.ORDERNO, '')),
-                                               NVL(D.CONTAINERGROUP, ''))) AS NUMBER,
-                                       D.SCANNED
-
-                                  FROM T_EMC_SAMPLE A
-                                  LEFT JOIN T_EMC_PROJECT B
-                                    ON B.ID = A.PROJID
-                                  LEFT JOIN T_EMC_ORDER C
-                                    ON A.ID = C.SAMPLEID
-                                  LEFT JOIN T_EMC_ORDER_TASK D
-                                    ON C.ID = D.ORDERID
-                                  WHERE D.CONTAINERCATEGORYCODE IS NOT NULL ) U
-                         WHERE U.STATUS = 'preLogged'
-                           AND U.PROCESSSTATUS = 'done'
-                           AND U.PROJECTSTATUS <![CDATA[<>]]> 'cancel'
-                         GROUP BY NUMBER) S GROUP BY S.ID) T
+        SELECT T.*, CONCAT(CONCAT(T.SUMNUMBER, '/'), T.TOTAL) AS NUM
+          FROM (SELECT S.ID, S.STATUS, S.PROCESSSTATUS, S.SAMPLENO, S.ORDERCATEGORY,
+                       S.PROJNO, S.PROJNAME, S.TESTORGNAME, S.BIZCATEGORYID, S.PROJECTSTATUS,
+                       COUNT(1) AS TOTAL, SUM(S.SCANNED) AS SUMNUMBER
+                  FROM (SELECT A.ID, A.STATUS, A.PROCESSSTATUS, A.SAMPLENO, A.ORDERCATEGORY,
+                               B.PROJNO, B.PROJNAME, B.TESTORGNAME, B.BIZCATEGORYID,
+                               B.STATUS AS PROJECTSTATUS,
+                               MAX(CASE D.SCANNED WHEN '1' THEN 1 ELSE 0 END) AS SCANNED
+                          FROM T_EMC_SAMPLE A
+                          LEFT JOIN T_EMC_PROJECT B ON B.ID = A.PROJID
+                          LEFT JOIN T_EMC_ORDER C ON A.ID = C.SAMPLEID
+                          LEFT JOIN T_EMC_ORDER_TASK D ON C.ID = D.ORDERID
+                         WHERE D.CONTAINERCATEGORYCODE IS NOT NULL
+                           AND A.STATUS = 'preLogged'
+                           AND A.PROCESSSTATUS = 'done'
+                           AND B.STATUS <![CDATA[<>]]> 'cancel'
+                         GROUP BY A.ID, A.STATUS, A.PROCESSSTATUS, A.SAMPLENO, A.ORDERCATEGORY,
+                                  B.PROJNO, B.PROJNAME, B.TESTORGNAME, B.BIZCATEGORYID, B.STATUS,
+                                  CONCAT(CONCAT(NVL(D.CONTAINERCATEGORYCODE, ''), NVL(C.ORDERNO, '')),
+                                         NVL(D.CONTAINERGROUP, ''))) S
+                 GROUP BY S.ID, S.STATUS, S.PROCESSSTATUS, S.SAMPLENO, S.ORDERCATEGORY,
+                          S.PROJNO, S.PROJNAME, S.TESTORGNAME, S.BIZCATEGORYID, S.PROJECTSTATUS) T
     </select>
 
     <!-- 平板详细标签信息 -->
@@ -371,7 +363,11 @@
                     ON C.FOLDERID = E.ID
                  WHERE A.ID = #{id}
                    AND D.CONTAINERCATEGORYCODE IS NOT NULL
-                 GROUP BY LABELID) T
+                 GROUP BY A.ID, A.SAMPLENO, A.CREATEDBYNAME, A.REMARK,
+                          C.ORDERNO, C.SAMPLEBEGINDATE, C.ORDERDESC,
+                          CONCAT(CONCAT(NVL(C.ORDERNO, ''), NVL(D.CONTAINERCATEGORYCODE, '')),
+                                 NVL(D.CONTAINERGROUP, '')),
+                          CASE D.SCANNED WHEN '1' THEN '已扫描' ELSE '未扫描' END) T
 
     </select>
 
@@ -403,7 +399,10 @@
                    AND CONCAT(CONCAT(NVL(C.ORDERNO, ''),
                               NVL(D.CONTAINERCATEGORYCODE, '')),
                               NVL(D.CONTAINERGROUP, '')) = #{labelId}
-                 GROUP BY LABELID) T
+                 GROUP BY A.ID, B.PROJNO, B.PROJNAME, C.ORDERNO, C.SAMPLEBEGINDATE,
+                          C.ORDERDESC, E.MONITORPOINTNAME,
+                          CONCAT(CONCAT(NVL(C.ORDERNO, ''), NVL(D.CONTAINERCATEGORYCODE, '')),
+                                 NVL(D.CONTAINERGROUP, ''))) T
     </select>
 
     <select id="selectAssignSampleList" parameterType="map" resultType="map">

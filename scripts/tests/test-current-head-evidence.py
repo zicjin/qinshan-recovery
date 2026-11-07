@@ -5,39 +5,99 @@ import csv
 import json
 import re
 import subprocess
+from collections.abc import Mapping
 from pathlib import Path
 import sys
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "scripts"))
 from evidence_output import current_implementation_binding
-from source_binding import REPO_ROOT
+from source_binding import (
+    BINDING_SCHEMA_VERSION, BINDING_SURFACES, REPO_ROOT,
+    is_standalone_root, runtime_contract_digest,
+)
 DEFAULT_REPORTS = ()
 
 
-def git_head():
-    return subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=REPO_ROOT, text=True).strip()
+def git_head(repo_root):
+    return subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=repo_root, text=True).strip()
+
+
+def identity_error(payload, current):
+    """Check exact dependency identity; this does not authorize strict closure."""
+    surfaces = ("application", "harness", "planning")
+    if not all(payload.get(surface + "_binding") for surface in BINDING_SURFACES):
+        return "legacy composite binding is stale; orthogonal evidence or replay is required"
+    # Report schema and binding schema are distinct. Existing schema=2 runner
+    # reports predate an explicit binding schema field and carry canonical
+    # scopes instead; never infer the binding version from report schema.
+    for key in ("schema_version", "binding_schema_version"):
+        if key in payload and (type(payload[key]) is not int or payload[key] != BINDING_SCHEMA_VERSION):
+            return "unsupported binding schema"
+    for surface in (*surfaces, "runtime_contract"):
+        key = surface + "_scope"
+        declared = payload.get(key)
+        canonical = current[key]
+        if (not isinstance(declared, list)
+                or any(not isinstance(item, str) for item in declared)
+                or len(declared) != len(canonical) or set(declared) != set(canonical)):
+            return surface + " scope is not canonical"
+    # Bookkeeping scopes and the compatibility aggregate are provenance;
+    # their evolution does not change the behavior dependencies above.
+    for surface in ("governance", "implementation"):
+        declared = payload.get(surface + "_scope")
+        if (not isinstance(declared, list) or not declared
+                or any(not isinstance(item, str) or not item for item in declared)
+                or len(declared) != len(set(declared))):
+            return surface + " provenance scope is malformed"
+    for surface in surfaces:
+        if payload[surface + "_binding"] != current[surface + "_binding"]:
+            return surface + " binding is stale"
+        digest_key = surface + "_tree_digest"
+        if digest_key in payload and payload[digest_key] != current[digest_key]:
+            return surface + " digest is stale"
+        if current[surface + "_dirty"] is not False:
+            return surface + " scope is dirty"
+        # Old runner metadata has only implementation_dirty. New captures
+        # have per-surface flags, so governance dirtiness need not stale HTTP.
+        if payload.get(surface + "_dirty", payload.get("implementation_dirty")) is not False:
+            return surface + " report scope is dirty"
+    runtime = payload.get("runtime_contract")
+    if not isinstance(runtime, Mapping) or not runtime.get("runtime_schema") or not runtime.get("baseline_schema"):
+        return "runtime contract or schema identity is missing"
+    if payload.get("runtime_contract_dirty", False) is not False or runtime.get("runtime_dirty", False) is not False:
+        return "runtime contract is dirty"
+    digest = runtime_contract_digest(runtime)
+    if payload["runtime_contract_binding"] != "rt-" + digest[:16]:
+        return "runtime contract binding does not match report runtime"
+    if "runtime_contract_digest" in payload and payload["runtime_contract_digest"] != digest:
+        return "runtime contract digest does not match report runtime"
+    return None
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("reports", nargs="*", type=Path, default=list(DEFAULT_REPORTS))
+    parser.add_argument("--repo-root", type=Path, default=REPO_ROOT,
+                        help="repository whose canonical source binding and Git provenance to validate")
     args = parser.parse_args()
-    head = git_head()
-    current = current_implementation_binding()
+    repo_root = args.repo_root.resolve()
+    report_root = repo_root if is_standalone_root(repo_root) else repo_root / "lims-recovery"
+    head = git_head(repo_root)
+    current = current_implementation_binding(repo_root)
     reports = list(args.reports)
     registry_rows = None
     if not reports:
-        registry = ROOT / "evidence/evidence-index.tsv"
+        registry = report_root / "evidence/evidence-index.tsv"
         if not registry.is_file():
             print("current-head evidence identity: PASS (0 reports; no canonical registry)")
             return
         with registry.open(encoding="utf-8", newline="") as handle:
             registry_rows = [row for row in csv.DictReader(handle, delimiter="\t")
                              if row.get("class") in {"canonical-strict", "canonical-diagnostic"}]
-        reports = [REPO_ROOT / row["path"] for row in registry_rows]
+        reports = [repo_root / row["path"] for row in registry_rows]
     for index, given in enumerate(reports):
-        path = given if given.is_absolute() else ROOT / given
+        path = given if given.is_absolute() else report_root / given
         row = registry_rows[index] if registry_rows is not None else {}
         storage = row.get("storage", "git")
         if not path.is_file() and storage in {"artifact", "local"}:
@@ -51,27 +111,12 @@ def main():
         commit = payload.get("source_commit")
         if not isinstance(commit, str) or not re.fullmatch(r"[0-9a-f]{7,40}", commit):
             raise SystemExit("current-head evidence: malformed repository_head_at_capture/source_commit: " + str(path))
-        if subprocess.run(["git", "cat-file", "-e", commit + "^{commit}"], cwd=REPO_ROOT,
+        if subprocess.run(["git", "cat-file", "-e", commit + "^{commit}"], cwd=repo_root,
                           stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode:
             raise SystemExit("current-head evidence: repository_head_at_capture is not a Git object: " + str(path))
-        if payload.get("implementation_tree_digest"):
-            if payload.get("implementation_tree_digest") != current["implementation_tree_digest"]:
-                raise SystemExit("current-head evidence: implementation digest is stale: " + str(path))
-            binding = payload.get("implementation_binding")
-            if isinstance(binding, dict):
-                binding = binding.get("binding_id")
-            if binding != current["binding_id"]:
-                raise SystemExit("current-head evidence: implementation binding is stale: " + str(path))
-            if payload.get("implementation_dirty") is not False or current["implementation_dirty"]:
-                raise SystemExit("current-head evidence: implementation scope is dirty: " + str(path))
-            declared = set(str(item) for item in payload.get("implementation_scope", ()))
-            if not set(current["implementation_scope"]).issubset(declared):
-                raise SystemExit("current-head evidence: implementation scope is incomplete: " + str(path))
-        else:
-            if payload.get("source_dirty") is not False:
-                raise SystemExit("current-head evidence: source_dirty is not false: " + str(path))
-            if commit != head:
-                raise SystemExit("current-head evidence: legacy source_commit is not current HEAD: " + str(path))
+        error = identity_error(payload, current)
+        if error:
+            raise SystemExit("current-head evidence: " + error + ": " + str(path))
     print("current-head evidence identity: PASS (%d reports; HEAD=%s)" % (len(reports), head[:12]))
 
 

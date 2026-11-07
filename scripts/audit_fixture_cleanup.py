@@ -212,6 +212,10 @@ def predicate(row):
             col = {'commentHash': '"COMMENT"', 'oldValueHash': 'OLDVALUE', 'newValueHash': 'NEWVALUE'}[key]
             terms.append(col + ' IS NULL' if value is None else
                          f"LOWER(RAWTOHEX(DBMS_CRYPTO.HASH(TO_CLOB({col}),4)))='{value}'")
+        elif key == 'auditTrailName':
+            # Live Oracle declares this field CLOB; never compare it with '='.
+            terms.append("LOWER(RAWTOHEX(DBMS_CRYPTO.HASH(TO_CLOB(AUDITTRAILNAME),4)))='" +
+                         sha(value.encode('utf-8')) + "'")
         elif key == 'createdTime':
             terms.append("CREATEDTIME=TO_DATE(" + text(value) + ",'YYYY-MM-DD HH24:MI:SS')")
         else:

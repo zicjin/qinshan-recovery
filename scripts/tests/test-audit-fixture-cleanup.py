@@ -84,6 +84,16 @@ class CleanupCliTest(unittest.TestCase):
                 self.assertNotEqual(result.returncode, 0)
                 self.assertFalse((self.directory / 'cleanup.sql').exists())
 
+    def test_clob_audit_name_is_hashed_without_sql_literal_or_equality(self):
+        self.journal['records'][0]['auditTrailName'] = '创建审计记录'
+        result = self.run_cli()
+        self.assertEqual(result.returncode, 0, result.stderr)
+        sql = (self.directory / 'cleanup.sql').read_text()
+        expected = hashlib.sha256('创建审计记录'.encode('utf-8')).hexdigest()
+        self.assertIn("LOWER(RAWTOHEX(DBMS_CRYPTO.HASH(TO_CLOB(AUDITTRAILNAME),4)))='" + expected + "'", sql)
+        self.assertNotRegex(sql, r"AUDITTRAILNAME\s*=")
+        self.assertNotIn('创建审计记录', sql)
+
     def test_collection_delete_requires_exact_single_business_and_config_ids(self):
         proof_path = self.directory / 'http.json'
         original = json.loads(proof_path.read_text())

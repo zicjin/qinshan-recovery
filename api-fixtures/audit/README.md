@@ -53,6 +53,10 @@ corresponding delete group. Record and line targets are exactly
 Configuration lines must belong to that table. Uppercase database column names
 are required. `auditTrail` accepts the captured `0` or `1`, never a wildcard.
 At least one NAME old/new hash must equal the exact marker's UTF-8 SHA256.
+`auditTrailName` remains the observed text in the journal. The live Oracle schema
+stores it as CLOB (unlike the historical initialization DDL); the renderer hashes
+its complete UTF-8 text and compares the Oracle CLOB hash, never CLOB equality
+or a text prefix. This also supports Unicode without embedding the name in SQL.
 All hashes are lowercase hexadecimal SHA256 over the **complete** value. JSON
 null means Oracle NULL; it differs from a non-null empty CLOB. Oracle uses
 `DBMS_CRYPTO.HASH(TO_CLOB(value),4)` and performs no truncation. Capture hashes

@@ -94,7 +94,7 @@
     },
     {
       "generated_sha256": "20bb55d07df3d0d88f60512ebcee5fdf52d07cf3a32dac822bdfe86b9f9cac35",
-      "override_sha256": "411d509a97fff7b176ce19b60750410ce46d3872903c4c941d938c7f67375ee3",
+      "override_sha256": "c0e7f608221c8117e8ade68aa4394ef8914f09cfd88e5652190a343ae1157e06",
       "path": "src/main/java/com/sunwayworld/framework/restful/data/RestJsonWrapperBean.java"
     },
     {
@@ -10535,11 +10535,11 @@
     },
     {
       "class_sha256": "c79585578379d93d0ffae0077ee9b0fc885c1d5ab274ce70c183fbcafaef5e1f",
-      "compile_status": "pass",
+      "compile_status": "pending-module-assembly",
       "decompiler": "Vineflower",
       "decompiler_version": "1.11.1",
       "path": "src/main/java/com/sunwayworld/framework/restful/data/RestJsonWrapperBean.java",
-      "sha256": "411d509a97fff7b176ce19b60750410ce46d3872903c4c941d938c7f67375ee3",
+      "sha256": "c0e7f608221c8117e8ade68aa4394ef8914f09cfd88e5652190a343ae1157e06",
       "source_class_path": "com/sunwayworld/framework/restful/data/RestJsonWrapperBean.class",
       "source_jar": "BOOT-INF/lib/gikam-core-common-14.1.5.jar",
       "source_sha256_before_overlay": "20bb55d07df3d0d88f60512ebcee5fdf52d07cf3a32dac822bdfe86b9f9cac35",
@@ -10547,7 +10547,8 @@
       "transformations": [
         "cfr-to-vineflower-fallback",
         "overlay:src/main/java/com/sunwayworld/framework/restful/data/RestJsonWrapperBean.java",
-        "restore original application.yml comma default when multi-value matching separator absent or blank; preserve nonblank overrides"
+        "restore original application.yml comma default when multi-value matching separator absent or blank; preserve nonblank overrides",
+        "emit existing grouped OR equality for separator-delimited SEQ values instead of unsupported OSEQ; preserve other match patterns"
       ]
     },
     {
@@ -31562,7 +31563,7 @@
       ]
     }
   ],
-  "source_tree_sha256": "e48658ab1585e09d573086435ae3f94111bdf2c4ee1fcab50a3bacc571c76436",
+  "source_tree_sha256": "662dd75ae0e0e7271941c351bd01cb73e99e138969fc7d3d8804974efd4f5f7c",
   "status": "assembled-source-only",
   "transformation_manifest": "docs/reconstitution/decompiler-transforms.json",
   "transformation_manifest_sha256": "30ab06626f3e4c863a2855790b0ec6211499394852f2a8598ea3bd444ce87fe8",

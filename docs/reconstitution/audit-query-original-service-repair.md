@@ -100,3 +100,30 @@ The original Mapper's separate multi-value `SEQ`/`OSEQ` behavior is preserved;
 `auditTrailType_SEQ=INSERT,UPDATE` is not a valid assertion of this repair, because
 that stock Oracle Mapper has no dedicated OSEQ OR branch. No global Mapper
 semantics or access scope were widened.
+
+## Follow-up: multi-value exact equality uses the existing grouped OR contract
+
+Real HTTP diagnosis found each single `auditTrailType_SEQ` value matching rows,
+while `INSERT,UPDATE`, `INSERT,NO_SUCH_AUDIT` and three-value lists returned zero.
+The wrapper generated an `OSEQ` pattern that none of the four global Mapper
+dialects handles. The reconstructed wrapper and tracked override now emit the
+existing `OR` pattern only for separator-delimited `SEQ`. Every dialect's `OR`
+branch uses parenthesized equality alternatives with bound values and an outer
+AND; the original grouping is retained. No Mapper resource changes are needed.
+Single values, null/empty/VOID handling, `CISEQ`, other string patterns and
+advanced filters retain their original paths.
+
+The existing MVC fixture first failed with `expected 2, got 0`, then passed 239
+checks. It covers owned audit queries and original query/raw/searchable paths,
+`f`/`qf` same-field intersection and separate multi-value groups, mixed/no-match
+lists, three values, case sensitivity, unchanged `CISEQ`, 16-digit IDs, pagination,
+conflicting organization scope, SQL-looking and quote/wildcard literal values,
+and the original single/list `VOID` semantics. It runs with missing/default,
+blank and explicitly configured separators. The source provenance retains its
+original class/JAR/decompiler hashes and records the new override hash and
+transformation. Module compilation remains pending until the main agent's
+source-only build; the prior compile report belongs to its recorded source tree.
+
+These disposable in-process MVC/H2 checks do not prove deployed Oracle HTTP or
+strict API closure. No application refresh or database server action was performed
+for this follow-up. API-ALIGNMENT-GATE remains OPEN; strict passes added: zero.

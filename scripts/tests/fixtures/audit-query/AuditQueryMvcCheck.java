@@ -47,6 +47,25 @@ public class AuditQueryMvcCheck {
         equal(status,result.getResponse().getStatus(),"HTTP status "+path);
         return JSON.parseObject(result.getResponse().getContentAsString());
     }
+    static void multiSeqQueries(MockMvc mvc,MockHttpSession session,String path,String separator) throws Exception {
+        equal(2,query(mvc,session,path,"{\"p\":{\"f\":{\"auditTrailType_SEQ\":\"INSERT"+separator+"UPDATE\"},\"n\":1,\"s\":20}}",200).getIntValue("total"),"multi SEQ equality union "+path);
+        equal(1,query(mvc,session,path,"{\"p\":{\"qf\":{\"auditTrailType_SEQ\":\"INSERT"+separator+"NO_SUCH_AUDIT\"}}}",200).getIntValue("total"),"qf mixed matching and absent values");
+        equal(0,query(mvc,session,path,"{\"p\":{\"f\":{\"auditTrailType_SEQ\":\"ABSENT"+separator+"NO_SUCH_AUDIT\"}}}",200).getIntValue("total"),"multi SEQ no match");
+        equal(2,query(mvc,session,path,"{\"p\":{\"f\":{\"auditTrailType_SEQ\":\"INSERT"+separator+"UPDATE"+separator+"DELETE\"}}}",200).getIntValue("total"),"three values retain exact organization scope");
+        equal(1,query(mvc,session,path,"{\"p\":{\"f\":{\"auditTrailType_SEQ\":\"INSERT"+separator+"DELETE\"},\"qf\":{\"targetId_SEQ\":\"target-a\"}}}",200).getIntValue("total"),"union AND other criterion");
+        equal(0,query(mvc,session,path,"{\"p\":{\"f\":{\"auditTrailType_SEQ\":\"INSERT"+separator+"UPDATE\"},\"qf\":{\"targetId_SEQ\":\"NO-MATCH\"}}}",200).getIntValue("total"),"union cannot bypass conflicting criterion");
+        equal(1,query(mvc,session,path,"{\"p\":{\"f\":{\"auditTrailType_SEQ\":\"INSERT\"},\"qf\":{\"auditTrailType_SEQ\":\"INSERT"+separator+"UPDATE\"}}}",200).getIntValue("total"),"f and qf on same field remain AND");
+        equal(1,query(mvc,session,path,"{\"p\":{\"f\":{\"auditTrailType_SEQ\":\"INSERT"+separator+"UPDATE\",\"auditTrailName_SEQ\":\"create item"+separator+"NO-MATCH\"}}}",200).getIntValue("total"),"separate multi value fields remain AND groups");
+        equal(1,query(mvc,session,path,"{\"p\":{\"f\":{\"auditTrailType_SEQ\":\"INSERT"+separator+"update\"}}}",200).getIntValue("total"),"SEQ stays case sensitive");
+        equal(2,query(mvc,session,path,"{\"p\":{\"f\":{\"auditTrailType_CISEQ\":\"insert"+separator+"update\"}}}",200).getIntValue("total"),"CISEQ keeps case insensitive union");
+        equal(2,query(mvc,session,path,"{\"p\":{\"f\":{\"id_SEQ\":\"2030254965053728"+separator+"2\"}}}",200).getIntValue("total"),"multi SEQ preserves 16 digit ID precision");
+        equal(2,query(mvc,session,path,"{\"p\":{\"f\":{\"auditTrailType_SEQ\":\"INSERT"+separator+"UPDATE\",\"createdByOrgId_SEQ\":\"org-a"+separator+"org-b\",\"ownedAuditOrgId\":\"org-b\"}}}",200).getIntValue("total"),"multi org client filter cannot broaden scope");
+        equal(0,query(mvc,session,path,"{\"p\":{\"f\":{\"auditTrailType_SEQ\":\"INSERT"+separator+"DELETE\"},\"qf\":{\"createdByOrgId_SEQ\":\"org-b\"}}}",200).getIntValue("total"),"foreign org criterion AND server scope");
+        JSONObject page=query(mvc,session,path,"{\"p\":{\"f\":{\"auditTrailType_SEQ\":\"INSERT"+separator+"UPDATE\"},\"o\":[{\"ID\":\"asc\"}],\"n\":2,\"s\":1}}",200);
+        equal(2,page.getIntValue("total"),"union count before paging");
+        equal(1,page.getJSONArray("rows").size(),"union page size");
+        equal(LARGE_ID,page.getJSONArray("rows").getJSONObject(0).getLongValue("id"),"union sorted second page");
+    }
     static com.sunwayworld.framework.database.context.EntityContext entity(Class<?> type, String table, DataSource ds) throws Exception {
         com.sunwayworld.framework.database.context.EntityContext entity=new com.sunwayworld.framework.database.context.EntityContext();
         entity.setTableName(table);
@@ -202,6 +221,16 @@ public class AuditQueryMvcCheck {
         db.update("UPDATE T_CORE_AT_RECORD_LINE SET TARGETID='target-b' WHERE RECORDID=3");
         String separator=System.getProperty("audit.fixture.separator",",");
         if(separator.trim().isEmpty()) separator=",";
+        multiSeqQueries(mvc,session,RECORDS,separator);
+        for(String path:Arrays.asList(RECORDS,RECORDS+"/raw",RECORDS+"/searchable")) multiSeqQueries(originalMvc,session,path,separator);
+        db.update("UPDATE T_CORE_AT_RECORD SET AUDITTRAILNAME=?,\"COMMENT\"=NULL WHERE ID=2","update'_% item");
+        equal(1,query(mvc,session,RECORDS,"{\"p\":{\"f\":{\"auditTrailName_SEQ\":\"update'_% item"+separator+"ABSENT\"}}}",200).getIntValue("total"),"quote and wildcard characters bind as equality literals");
+        equal(0,query(mvc,session,RECORDS,"{\"p\":{\"f\":{\"auditTrailName_SEQ\":\"' OR 1=1 --"+separator+"ABSENT\"}}}",200).getIntValue("total"),"SQL-looking value remains bound data");
+        equal(0,query(mvc,session,RECORDS,"{\"p\":{\"f\":{\"auditTrailName_SEQ\":\"update%"+separator+"ABSENT\"}}}",200).getIntValue("total"),"SEQ does not become LIKE");
+        equal(1,query(mvc,session,RECORDS,"{\"p\":{\"f\":{\"comment_SEQ\":\"VOID\"}}}",200).getIntValue("total"),"single VOID retains IS NULL semantics");
+        equal(1,query(mvc,session,RECORDS,"{\"p\":{\"f\":{\"comment_SEQ\":\"\"}}}",200).getIntValue("total"),"single empty value retains IS NULL semantics");
+        equal(1,query(mvc,session,RECORDS,"{\"p\":{\"f\":{\"comment_SEQ\":\"note"+separator+"VOID\"}}}",200).getIntValue("total"),"VOID within a list stays a literal");
+        db.update("UPDATE T_CORE_AT_RECORD SET AUDITTRAILNAME='update item',\"COMMENT\"='note' WHERE ID=2");
         equal(2,query(mvc,session,RECORDS,"{\"p\":{\"f\":{\"auditTrailName_SC\":\"create"+separator+"update\"},\"n\":1,\"s\":20}}",200).getIntValue("total"),"configured/default multi value string filter");
         JSONObject result=query(mvc,session,RECORDS,"{\"p\":{\"f\":{\"auditTrailType_SEQ\":\"INSERT\"},\"n\":1,\"s\":20}}",200);
         equal(1,result.getIntValue("total"),"original audit type filter");

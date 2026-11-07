@@ -669,7 +669,9 @@ public class RestJsonWrapperBean {
                String[] values = StringUtils.split(strValue, filterSeparator);
 
                for (String value : values) {
-                  filterDataList.add(new RestJsonWrapperBean.FilterData(name, value, "O" + matchPattern.name(), group));
+                  // All global Mapper dialects support grouped OR equality, not OSEQ.
+                  String unionPattern = MatchPattern.SEQ.equals(matchPattern) ? MatchPattern.OR.name() : "O" + matchPattern.name();
+                  filterDataList.add(new RestJsonWrapperBean.FilterData(name, value, unionPattern, group));
                }
             } else {
                filterDataList.add(new RestJsonWrapperBean.FilterData(name, strValue, matchPattern.name()));

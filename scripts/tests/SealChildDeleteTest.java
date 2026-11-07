@@ -112,6 +112,20 @@ public final class SealChildDeleteTest {
     static void mapper(Object dao, Store store) throws Exception {
         Field field=MybatisDaoSupport.class.getDeclaredField("daoMapper"); field.setAccessible(true);
         field.set(dao,adapter(DaoMapper.class,(m,a) -> {
+            if(m.getName().equals("batchInsert")) {
+                for(EntityContextInstance row:(List<EntityContextInstance>)a[1]) {
+                    List<String> names=new ArrayList<>(); List<Object> values=new ArrayList<>();
+                    for(EntityColumnContextInstance col:row.getColumnContextInstanceList()) { names.add(col.getColumnContext().getColumnName()); values.add(col.getValue()); }
+                    store.db.update("INSERT INTO "+row.getContext().getTableName()+"("+String.join(",",names)+") VALUES("+String.join(",",Collections.nCopies(names.size(),"?"))+")",values.toArray()); store.inserts++;
+                }
+                return null;
+            }
+            if(m.getName().equals("updateById")) {
+                EntityContextInstance row=(EntityContextInstance)a[0]; List<String> names=new ArrayList<>(); List<Object> values=new ArrayList<>();
+                for(EntityColumnContextInstance col:row.getColumnContextInstanceList()) if(col.isActive()) { names.add(col.getColumnContext().getColumnName()+"=?"); values.add(col.getValue()); }
+                values.add(row.getIdInstance().getValue());
+                store.db.update("UPDATE "+row.getContext().getTableName()+" SET "+String.join(",",names)+" WHERE ID=?",values.toArray()); store.updates++; return null;
+            }
             if(m.getName().equals("batchDeleteById")) {
                 EntityContext context=(EntityContext)a[0];
                 for(Object id:(List<?>)a[1]) {
@@ -127,6 +141,8 @@ public final class SealChildDeleteTest {
         final JdbcTemplate db;
         Store(DataSource source) { db = new JdbcTemplate(source); }
         int deletes;
+        int inserts;
+        int updates;
         int attachmentCalls;
         List<EmcSealRuleDetailsBean> details(String where,Object... params) {
             return db.query("SELECT ID,SEALRULEID,SEALNAME FROM T_EMC_SEAL_RULE_DETAILS "+where,(rs,n)-> {
@@ -135,7 +151,7 @@ public final class SealChildDeleteTest {
         }
         void schema() {
             db.execute("CREATE TABLE T_EMC_SEAL_RULE(ID BIGINT PRIMARY KEY)");
-            db.execute("CREATE TABLE T_EMC_SEAL_RULE_DETAILS(ID BIGINT PRIMARY KEY,SEALRULEID BIGINT REFERENCES T_EMC_SEAL_RULE(ID),SEALNAME VARCHAR(100))");
+            db.execute("CREATE TABLE T_EMC_SEAL_RULE_DETAILS(ID BIGINT PRIMARY KEY,SEALRULEID BIGINT,SEALNAME VARCHAR(100))");
             db.execute("CREATE TABLE ATTACHMENT_FIXTURE(CHILD_ID BIGINT PRIMARY KEY,NAME VARCHAR(40))");
             db.execute("CREATE TABLE AUDIT_RECORD(ID BIGINT PRIMARY KEY, EVENT VARCHAR(40), TARGET VARCHAR(100))");
             db.execute("CREATE TABLE AUDIT_LINE(RECORD_ID BIGINT, EVENT VARCHAR(40), OLD_VALUE VARCHAR(100),NEW_VALUE VARCHAR(100),COL VARCHAR(60))");
@@ -151,6 +167,13 @@ public final class SealChildDeleteTest {
     static void delete(AnnotationConfigApplicationContext ctx,Long parent,String... rows) {
         ctx.getBean(EmcSealRuleResourceImpl.class).deleteRuleDetails(parent,body(rows));
     }
+    static Long create(AnnotationConfigApplicationContext ctx,Long parent,String... rows) {
+        return ctx.getBean(EmcSealRuleResourceImpl.class).insertRuleDetails(parent,body(rows));
+    }
+    static void update(AnnotationConfigApplicationContext ctx,String... rows) {
+        RestJsonWrapperBean wrapper=new RestJsonWrapperBean(Collections.emptyMap(),Collections.singletonList(Arrays.asList(rows)),Collections.singletonList(ctx.getBean(EmcSealRuleDetailsService.class)));
+        ctx.getBean(EmcSealRuleResourceImpl.class).save(41L,wrapper);
+    }
     static void localIdentity() throws Exception {
         Constructor<?> ctor = Class.forName("com.sunwayworld.framework.id.SnowflakeIdWorker").getDeclaredConstructor(long.class);
         ctor.setAccessible(true); Field worker = GikamIdHelper.class.getDeclaredField("worker"); worker.setAccessible(true); worker.set(null, ctor.newInstance(1L));
@@ -159,19 +182,22 @@ public final class SealChildDeleteTest {
         localIdentity();
         try (AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext()) {
             ctx.getEnvironment().setActiveProfiles("audit-trail");
-            ctx.getEnvironment().getPropertySources().addFirst(new MapPropertySource("fixture", new HashMap<String,Object>() {{ put(AuditDatabaseOperation.UPDATE.getPropertyKey(),true); put(AuditDatabaseOperation.DELETE.getPropertyKey(),true); put("spring.datasource.driver-class-name","org.h2.Driver"); }}));
+            ctx.getEnvironment().getPropertySources().addFirst(new MapPropertySource("fixture", new HashMap<String,Object>() {{ put(AuditDatabaseOperation.UPDATE.getPropertyKey(),true); put(AuditDatabaseOperation.INSERT.getPropertyKey(),true); put(AuditDatabaseOperation.DELETE.getPropertyKey(),true); put("spring.datasource.driver-class-name","org.h2.Driver"); }}));
             DataSource ds = new DriverManagerDataSource("jdbc:h2:mem:seal_child_delete;DB_CLOSE_DELAY=-1", "sa", "");
             Store store = new Store(ds); store.schema();
             if(scenario.equals("rollback")) store.db.execute("ALTER TABLE AUDIT_RECORD ADD CHECK(EVENT<>'DELETE')");
+            if(scenario.equals("create-rollback")) store.db.execute("ALTER TABLE AUDIT_RECORD ADD CHECK(EVENT<>'INSERT')");
+            if(scenario.equals("update-rollback")) store.db.execute("ALTER TABLE AUDIT_RECORD ADD CHECK(EVENT<>'UPDATE')");
             ctx.registerBean(DataSource.class, () -> ds);
             ctx.registerBean(DataSourceTransactionManager.class, () -> new DataSourceTransactionManager(ds));
             DetailsDao detailsDao=new DetailsDao(store); RuleDao ruleDao=new RuleDao(store);
             mapper(detailsDao,store);
-            Dialect dialect=adapter(Dialect.class,(m,a)-> { if(m.getName().equals("getInClauseIdMaxQty")) return 1000; return unused(m,a); });
+            Dialect dialect=adapter(Dialect.class,(m,a)-> { if(m.getName().equals("getInClauseIdMaxQty") || m.getName().equals("getMaxBatchInsertQty") || m.getName().equals("getMaxParamQty")) return 1000; return unused(m,a); });
             for(Object dao:Arrays.asList(detailsDao,ruleDao)) {
                 Field field=MybatisDaoSupport.class.getDeclaredField("dialect"); field.setAccessible(true); field.set(dao,dialect);
                 field=MybatisDaoSupport.class.getDeclaredField("daoAfterDeleteSupport"); field.setAccessible(true);
                 field.set(dao,new com.sunwayworld.framework.mybatis.dao.support.DaoAfterDeleteSupport());
+                field=MybatisDaoSupport.class.getDeclaredField("daoAfterInsertSupport"); field.setAccessible(true); field.set(dao,new com.sunwayworld.framework.mybatis.dao.support.DaoAfterInsertSupport());
             }
             ctx.getBeanFactory().registerSingleton("emcSealRuleDetailsDao",detailsDao);
             ctx.getBeanFactory().registerSingleton("emcSealRuleDao",ruleDao);
@@ -247,7 +273,61 @@ public final class SealChildDeleteTest {
             LocalContextHelper.setServletRequest(request);
             SunwayAopContext.setCurrentProxy(detailsDao);
             try {
-                if(Arrays.asList("foreign","mixed","forged","null-id","null-parent","stored-null").contains(scenario)) {
+                if(scenario.equals("create-absent")) {
+                    boolean rejected=false;
+                    try { create(ctx,999L,"{\"sealName\":\"orphan attempt\"}"); } catch(CheckedException expected) { rejected=true; }
+                    equal(true,rejected,"nonexistent parent rejects nested create"); equal(0,store.inserts,"parent guard before any child INSERT"); equal(2,store.audit("T_EMC_SEAL_RULE_DETAILS"),"no orphan row created");
+                } else if(scenario.equals("update-reparent")) {
+                    boolean rejected=false;
+                    try { update(ctx,"{\"id\":301,\"sealRuleId\":42,\"sealName\":\"moved\"}"); } catch(CheckedException expected) { rejected=true; }
+                    equal(true,rejected,"stored relationship cannot be reassigned"); equal(0,store.updates,"reparent rejects before UPDATE");
+                    equal(41L,service.selectById(301L).getSealRuleId(),"child parent unchanged"); equal("seal A",service.selectById(301L).getSealName(),"child name unchanged");
+                } else if(scenario.equals("create-null") || scenario.equals("create-empty")) {
+                    boolean rejected=false;
+                    try { if(scenario.equals("create-null")) create(ctx,null,"{\"sealName\":\"attempt\"}"); else create(ctx,41L); }
+                    catch(CheckedException expected) { rejected=true; equal("GIKAM.EXCEPTION.PARAM_ERROR",expected.getMessage(),"controlled create parameter error"); }
+                    equal(true,rejected,"invalid nested creation rejected"); equal(0,store.inserts,"invalid create has no INSERT"); equal(0,store.audit("AUDIT_RECORD"),"invalid create has no audit");
+                } else if(scenario.equals("create-valid") || scenario.equals("create-rollback")) {
+                    boolean rejected=false; Long id=null;
+                    try { id=create(ctx,41L,"{\"id\":301,\"sealRuleId\":42,\"sealName\":\"created A\"}","{\"sealName\":\"created B\"}"); }
+                    catch(org.springframework.dao.DataIntegrityViolationException expected) { rejected=true; }
+                    equal(scenario.equals("create-rollback"),rejected,"create audit constraint failure propagated"); equal(2,store.inserts,"both child INSERTs executed");
+                    if(rejected) {
+                        equal(2,store.audit("T_EMC_SEAL_RULE_DETAILS"),"create failure rolls both children back"); equal(0,store.audit("AUDIT_RECORD"),"create rollback audit header absent"); equal(0,store.audit("AUDIT_LINE"),"create rollback audit lines absent");
+                    } else {
+                        if(id==null || id.equals(301L)) throw new AssertionError("creation returns fresh first ID");
+                        equal(41L,service.selectById(id).getSealRuleId(),"route parent overwrites forged body"); equal("created A",service.selectById(id).getSealName(),"returned ID points to inserted first child");
+                        equal(4,store.audit("T_EMC_SEAL_RULE_DETAILS"),"both new children persisted"); equal(2,store.db.queryForObject("SELECT COUNT(*) FROM T_EMC_SEAL_RULE_DETAILS WHERE SEALRULEID=41 AND ID<>301",Integer.class),"both rows scoped to route parent");
+                        equal("seal A",service.selectById(301L).getSealName(),"caller ID does not overwrite stored child"); equal(1,store.audit("AUDIT_RECORD"),"original insert audit header");
+                    }
+                } else if(scenario.equals("update-valid")) {
+                    update(ctx,"{\"id\":301,\"sealName\":\"updated A\"}","{\"id\":302,\"sealRuleId\":42,\"sealName\":\"updated B\"}");
+                    equal("updated A",service.selectById(301L).getSealName(),"omitted parent permits normal edit"); equal(41L,service.selectById(301L).getSealRuleId(),"omitted parent preserved"); equal("updated B",service.selectById(302L).getSealName(),"same parent permits normal edit");
+                    equal("seal A",store.db.queryForObject("SELECT OLD_VALUE FROM AUDIT_LINE WHERE COL='SEALNAME' AND OLD_VALUE='seal A'",String.class),"original update old value audit");
+                    equal("updated A",store.db.queryForObject("SELECT NEW_VALUE FROM AUDIT_LINE WHERE COL='SEALNAME' AND OLD_VALUE='seal A'",String.class),"original update new value audit");
+                } else if(scenario.equals("update-mixed") || scenario.equals("update-null-parent") || scenario.equals("update-missing") || scenario.equals("update-null-id")) {
+                    boolean rejected=false;
+                    try {
+                        if(scenario.equals("update-mixed")) update(ctx,"{\"id\":301,\"sealName\":\"attempted\"}","{\"id\":302,\"sealRuleId\":41}");
+                        else if(scenario.equals("update-missing")) update(ctx,"{\"id\":999,\"sealName\":\"attempted\"}");
+                        else {
+                            EmcSealRuleDetailsBean patch=com.sunwayworld.framework.utils.BeanUtils.getPropertyListenerProxy(EmcSealRuleDetailsBean.class);
+                            if(!scenario.equals("update-null-id")) patch.setId(301L); patch.setSealRuleId(null); patch.setSealName("attempted"); service.updateIfChanged(patch);
+                        }
+                    } catch(CheckedException expected) { rejected=true; equal("GIKAM.EXCEPTION.PARAM_ERROR",expected.getMessage(),"controlled update parameter error"); }
+                    equal(true,rejected,"invalid update batch rejected"); equal(0,store.updates,"whole update batch validates before writes"); equal("seal A",service.selectById(301L).getSealName(),"first child unchanged"); equal("seal B",service.selectById(302L).getSealName(),"second child unchanged"); equal(0,store.audit("AUDIT_RECORD"),"update rejection audit absent");
+                } else if(scenario.equals("update-raw")) {
+                    EmcSealRuleDetailsBean patch=new EmcSealRuleDetailsBean(); patch.setId(301L); patch.setSealName("raw update"); service.updateIfChanged(patch);
+                    equal("raw update",service.selectById(301L).getSealName(),"raw null parent means omitted"); equal(41L,service.selectById(301L).getSealRuleId(),"raw missing parent preserved");
+                    patch.setSealRuleId(42L); boolean rejected=false; try { service.updateIfChanged(patch); } catch(CheckedException expected) { rejected=true; }
+                    equal(true,rejected,"raw foreign parent rejected"); equal(41L,service.selectById(301L).getSealRuleId(),"raw attempted reparent leaves parent");
+                } else if(scenario.equals("update-rollback")) {
+                    boolean rejected=false;
+                    try { update(ctx,"{\"id\":301,\"sealName\":\"attempted A\"}","{\"id\":302,\"sealName\":\"attempted B\"}"); }
+                    catch(org.springframework.dao.DataIntegrityViolationException expected) { rejected=true; }
+                    equal(true,rejected,"update audit constraint failure propagated"); equal(2,store.updates,"both UPDATEs executed before audit constraint failure");
+                    equal("seal A",service.selectById(301L).getSealName(),"first UPDATE rolled back"); equal("seal B",service.selectById(302L).getSealName(),"second UPDATE rolled back"); equal(0,store.audit("AUDIT_RECORD"),"update rollback audit header absent"); equal(0,store.audit("AUDIT_LINE"),"update rollback audit lines absent"); equal(2,store.audit("ATTACHMENT_FIXTURE"),"update leaves attachments intact");
+                } else if(Arrays.asList("foreign","mixed","forged","null-id","null-parent","stored-null").contains(scenario)) {
                     if(scenario.equals("stored-null")) store.db.update("UPDATE T_EMC_SEAL_RULE_DETAILS SET SEALRULEID=NULL WHERE ID=301");
                     boolean rejected=false;
                     try {
@@ -285,7 +365,7 @@ public final class SealChildDeleteTest {
                 equal(null,AuditTrailAspect.getAuditTrailEntryData(),"audit entry thread state cleaned");
             } finally { RequestContextHolder.resetRequestAttributes(); LocalContextHelper.removeServletRequest(); store.db.execute("SHUTDOWN"); SunwayAopContext.setCurrentProxy(null); }
         }
-        System.out.println(scenario + ": PASS (original Resource.deleteRuleDetails + Service + CoreTable cascade + MybatisDaoSupport + audit/TX + JDBC/H2)");
+        System.out.println(scenario + ": PASS (original Resource CRUD + Service + CoreTable cascade + MybatisDaoSupport + audit/TX + JDBC/H2)");
     }
     public static void main(String[] args) throws Exception { run(args[0]); }
 }

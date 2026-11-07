@@ -56,9 +56,13 @@ public class EmcSealRuleServiceImpl implements EmcSealRuleService {
     @Transactional
     @AuditTrailEntry(AuditTrailType.INSERT)
     public Long insertRuleDetails(Long id, RestJsonWrapperBean wrapper) {
-
+        if (id == null || getDao().selectByIdIfPresent(id) == null) {
+            throw new CheckedException("GIKAM.EXCEPTION.PARAM_ERROR");
+        }
         List<EmcSealRuleDetailsBean> emcSealRuleDetailsList = wrapper.parse(EmcSealRuleDetailsBean.class);
-
+        if (emcSealRuleDetailsList.isEmpty()) {
+            throw new CheckedException("GIKAM.EXCEPTION.PARAM_ERROR");
+        }
         emcSealRuleDetailsList.forEach(e -> {
             e.setId(ApplicationContextHelper.getNextIdentity());
             e.setSealRuleId(id);

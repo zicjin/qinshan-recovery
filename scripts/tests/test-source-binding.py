@@ -116,6 +116,25 @@ class SourceBindingTest(unittest.TestCase):
         self.assertTrue(second["harness_dirty"])
         self.assertFalse(second["application_dirty"])
 
+    def test_schema_fixture_and_renderer_change_harness_without_application_rebuild(self):
+        for relative in ('api-fixtures/schema/missing-runtime-tables.sql',
+                         'api-fixtures/schema/missing-runtime-tables.json',
+                         'scripts/schema_fixture.py',
+                         'project/sql/oracle/oracle_sql_emc.txt',
+                         'project/sql/核心发版14.1.5/init-sql/oracle/0.common_sql_oracle-1.txt'):
+            with self.subTest(relative=relative):
+                first = self.capture()
+                target = self.root / relative
+                target.parent.mkdir(parents=True, exist_ok=True)
+                target.write_text('schema-fixture-input\n', encoding='utf-8')
+                second = self.capture()
+                self.assertEqual(first['application_binding'], second['application_binding'])
+                self.assertNotEqual(first['harness_binding'], second['harness_binding'])
+                self.assertEqual(first['runtime_contract_binding'], second['runtime_contract_binding'])
+                self.assertEqual(binding.replay_surfaces(first, second), ('harness',))
+                self.assertTrue(second['harness_dirty'])
+                self.assertFalse(second['application_dirty'])
+
     def test_harness_bookkeeping_change_requires_no_replay_when_semantics_are_unchanged(self):
         first = self.capture()
         (self.root / "scripts" / "evidence_output.py").write_text(

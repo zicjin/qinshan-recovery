@@ -1,0 +1,1044 @@
+{
+  "version": 1,
+  "owner": "LIMS_RUNTIME_LOCAL",
+  "source_commit": "f428a2b0a31b6b06cf457e21a51fdf6e0208e0d3",
+  "sources": [
+    {
+      "path": "project/sql/oracle/oracle_sql_emc.txt",
+      "sha256": "7a933bb2f4463a046600d17dc6621e37839e7dd433f4b8bf8fdad60bc1b5cb73"
+    },
+    {
+      "path": "project/sql/核心发版14.1.5/init-sql/oracle/0.common_sql_oracle-1.txt",
+      "sha256": "99c1ba18054594384cc88a28ecc5c8c44f540e089e4c92ca92eddb94c2f17be1"
+    }
+  ],
+  "fixture_sha256": "d1227563b5a27ef249376a0652ddd10f9edb6526f64a0df7b2e466ac9b5adfcb",
+  "statements": [
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17029,
+      "line_end": 17053,
+      "source_sha256": "777623c64553a518c30a423fb8cbd06db9a212d9eec94c09d2b6a84931961291",
+      "sha256": "777623c64553a518c30a423fb8cbd06db9a212d9eec94c09d2b6a84931961291",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17054,
+      "line_end": 17054,
+      "source_sha256": "1a7de814e995233e1aa876389c01fa8c4b90b3ec1cc572235f88a7ed880c294f",
+      "sha256": "1a7de814e995233e1aa876389c01fa8c4b90b3ec1cc572235f88a7ed880c294f",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17055,
+      "line_end": 17055,
+      "source_sha256": "5be7dca186a601e530dcb19aa801b128fe7616e60bf7cfd158b9870ff143e21a",
+      "sha256": "5be7dca186a601e530dcb19aa801b128fe7616e60bf7cfd158b9870ff143e21a",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17056,
+      "line_end": 17056,
+      "source_sha256": "119d6b5863e7d22da2152ad6092f4e558733a60919dfcd6df07ee9cda9f2aa80",
+      "sha256": "119d6b5863e7d22da2152ad6092f4e558733a60919dfcd6df07ee9cda9f2aa80",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17057,
+      "line_end": 17057,
+      "source_sha256": "7753cb76fceba367e3b7c51b5a2ee67585b607754fca75d195254ae1de6d9b09",
+      "sha256": "7753cb76fceba367e3b7c51b5a2ee67585b607754fca75d195254ae1de6d9b09",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17058,
+      "line_end": 17058,
+      "source_sha256": "70a21cf7429a5a82e641cb00cdc674949ba9603992098184a98ce4ff160b5eb1",
+      "sha256": "70a21cf7429a5a82e641cb00cdc674949ba9603992098184a98ce4ff160b5eb1",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17059,
+      "line_end": 17059,
+      "source_sha256": "80d2fb44ad5b43f895c7044476c1c0d12cc977352f3a3f621a7592310f3be5c3",
+      "sha256": "80d2fb44ad5b43f895c7044476c1c0d12cc977352f3a3f621a7592310f3be5c3",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17060,
+      "line_end": 17060,
+      "source_sha256": "d64850de15d9de4bf975d958abaa596eea392ddc65f529913c9279044d5fbe90",
+      "sha256": "d64850de15d9de4bf975d958abaa596eea392ddc65f529913c9279044d5fbe90",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17061,
+      "line_end": 17061,
+      "source_sha256": "9c8a5ecfa806e5a330d67edc52e32e445d43a7d3a26ba53fd77025f411b7815e",
+      "sha256": "9c8a5ecfa806e5a330d67edc52e32e445d43a7d3a26ba53fd77025f411b7815e",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17062,
+      "line_end": 17062,
+      "source_sha256": "c440797e558eea142c5eab2a46d04ab77108839efeafbdba4fbbcaa036aeae51",
+      "sha256": "c440797e558eea142c5eab2a46d04ab77108839efeafbdba4fbbcaa036aeae51",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17063,
+      "line_end": 17063,
+      "source_sha256": "03a06f9eb3fd8e22a7d05e01d6b5c53d279b212780ead503f102f1dd6788ec6f",
+      "sha256": "03a06f9eb3fd8e22a7d05e01d6b5c53d279b212780ead503f102f1dd6788ec6f",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17064,
+      "line_end": 17064,
+      "source_sha256": "3c7d92b67e5383cc1d3edb1e22d996d134372c99fba5197378ffcae9adb1af94",
+      "sha256": "3c7d92b67e5383cc1d3edb1e22d996d134372c99fba5197378ffcae9adb1af94",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17065,
+      "line_end": 17065,
+      "source_sha256": "e2ed2228ef26124e458176716fefde4368962c78559d40397cfd340b306d4f0f",
+      "sha256": "e2ed2228ef26124e458176716fefde4368962c78559d40397cfd340b306d4f0f",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17066,
+      "line_end": 17066,
+      "source_sha256": "d471858c6ddcffbb355dada3a9be15ae0916bbe99e660aaf66978a57e2b4b17b",
+      "sha256": "d471858c6ddcffbb355dada3a9be15ae0916bbe99e660aaf66978a57e2b4b17b",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17067,
+      "line_end": 17067,
+      "source_sha256": "ea73a73257dbc94c74fbc70d33810df8974cc770dd8666329c696d3f235f2d8f",
+      "sha256": "ea73a73257dbc94c74fbc70d33810df8974cc770dd8666329c696d3f235f2d8f",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17068,
+      "line_end": 17068,
+      "source_sha256": "aac9b1ecbe9abb2fa7838ca7c0525d671186a7eabc03a501a25f078bb600779e",
+      "sha256": "aac9b1ecbe9abb2fa7838ca7c0525d671186a7eabc03a501a25f078bb600779e",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17069,
+      "line_end": 17069,
+      "source_sha256": "d2aee589a352e03924aa887b4eed017260aec7a4cd1d402e89adafc2d36d41a6",
+      "sha256": "d2aee589a352e03924aa887b4eed017260aec7a4cd1d402e89adafc2d36d41a6",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17070,
+      "line_end": 17070,
+      "source_sha256": "f504548d463979adcab85836b01958a9d42590a34eccc8462bfeb6f256b3d5ef",
+      "sha256": "f504548d463979adcab85836b01958a9d42590a34eccc8462bfeb6f256b3d5ef",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17071,
+      "line_end": 17071,
+      "source_sha256": "7d12d0d4af809f7b778fa7be4f4210a3b7c3426856ae8dcd478e894b3013c8b0",
+      "sha256": "7d12d0d4af809f7b778fa7be4f4210a3b7c3426856ae8dcd478e894b3013c8b0",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17072,
+      "line_end": 17072,
+      "source_sha256": "4c6b4856da6a2755eb833cea3423a8e44e499aa0c866bd72ef5f88fbd91ffb18",
+      "sha256": "4c6b4856da6a2755eb833cea3423a8e44e499aa0c866bd72ef5f88fbd91ffb18",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17073,
+      "line_end": 17073,
+      "source_sha256": "ca78ed6ceba8e2a6c823eccfd22f051494f2530d72524227ab13926c1328a524",
+      "sha256": "ca78ed6ceba8e2a6c823eccfd22f051494f2530d72524227ab13926c1328a524",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17074,
+      "line_end": 17074,
+      "source_sha256": "9a0cebec7168feee282e292b4d9cfcaac775082b787c85581f53ed0afb7dd08b",
+      "sha256": "9a0cebec7168feee282e292b4d9cfcaac775082b787c85581f53ed0afb7dd08b",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17075,
+      "line_end": 17075,
+      "source_sha256": "d86be7424ea756883ac4a7a87fa36c728f5c12369101ac3aa1821d8042843dae",
+      "sha256": "d86be7424ea756883ac4a7a87fa36c728f5c12369101ac3aa1821d8042843dae",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17076,
+      "line_end": 17076,
+      "source_sha256": "7c9e0e77c38035880b51c381ccad26ce6a27c7feb4047f5728e316548274e7ee",
+      "sha256": "7c9e0e77c38035880b51c381ccad26ce6a27c7feb4047f5728e316548274e7ee",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17077,
+      "line_end": 17077,
+      "source_sha256": "f734a3ca087bc7e5253fea8d4c81fc87e47b6bccfa66e8e740764d98070dedcd",
+      "sha256": "f734a3ca087bc7e5253fea8d4c81fc87e47b6bccfa66e8e740764d98070dedcd",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17079,
+      "line_end": 17079,
+      "source_sha256": "162acee2a540733c3564708ba5769c0d1dda2bcff9de685b7242e09f286a7c07",
+      "sha256": "162acee2a540733c3564708ba5769c0d1dda2bcff9de685b7242e09f286a7c07",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17145,
+      "line_end": 17145,
+      "source_sha256": "72771858a6f9c904148d5ab8078df9e1139e7ee0d16806ecd980c35efc3497ff",
+      "sha256": "ebdfa613bae32999baaa8ccb1240899b1950a124f073b4176d191f1bffa698b5",
+      "transformations": [
+        "fullwidth-semicolon-terminator"
+      ]
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17148,
+      "line_end": 17149,
+      "source_sha256": "f43c97d3e9245690974a0757d405f4308d83de48f89e9db10a56af619088f70e",
+      "sha256": "f43c97d3e9245690974a0757d405f4308d83de48f89e9db10a56af619088f70e",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17082,
+      "line_end": 17097,
+      "source_sha256": "57ecd993a590bad0a1bee49a79cb1f3210c3a7a607d313d973b62ff922170f87",
+      "sha256": "57ecd993a590bad0a1bee49a79cb1f3210c3a7a607d313d973b62ff922170f87",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17098,
+      "line_end": 17098,
+      "source_sha256": "a697226cdd62170bca3c994f425c80b414900ea749af68ba99664bd83189c956",
+      "sha256": "a697226cdd62170bca3c994f425c80b414900ea749af68ba99664bd83189c956",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17099,
+      "line_end": 17099,
+      "source_sha256": "c5f63bd1d6f665402691f113c408b992fa6321f758d1c898046328ff32a9faa0",
+      "sha256": "c5f63bd1d6f665402691f113c408b992fa6321f758d1c898046328ff32a9faa0",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17100,
+      "line_end": 17100,
+      "source_sha256": "4c2f74eda461e1a0e22ad8311226e1eb673197e1fa883df0002d4bd6ca36a021",
+      "sha256": "4c2f74eda461e1a0e22ad8311226e1eb673197e1fa883df0002d4bd6ca36a021",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17101,
+      "line_end": 17101,
+      "source_sha256": "856856353f160ce22ea9af7975cabf04781beb4711e5edacb4ada9c4002e3649",
+      "sha256": "856856353f160ce22ea9af7975cabf04781beb4711e5edacb4ada9c4002e3649",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17102,
+      "line_end": 17102,
+      "source_sha256": "4eadf2056be110fd27c74f27417023faefbe24170044c2ead3e84c3a5ab562e3",
+      "sha256": "4eadf2056be110fd27c74f27417023faefbe24170044c2ead3e84c3a5ab562e3",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17103,
+      "line_end": 17103,
+      "source_sha256": "debb832df9be552020faa7ebad394819a13184ea0621401ae3e1d0c70cae9168",
+      "sha256": "debb832df9be552020faa7ebad394819a13184ea0621401ae3e1d0c70cae9168",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17104,
+      "line_end": 17104,
+      "source_sha256": "614359da8c62f10524b76e4eb33285d1f0d48be615018ebbf0aa75dede77e47e",
+      "sha256": "614359da8c62f10524b76e4eb33285d1f0d48be615018ebbf0aa75dede77e47e",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17105,
+      "line_end": 17105,
+      "source_sha256": "23ab888af230e75db7d1248a218591d90da95d6ef91a0a710fd72fea87807002",
+      "sha256": "23ab888af230e75db7d1248a218591d90da95d6ef91a0a710fd72fea87807002",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17106,
+      "line_end": 17106,
+      "source_sha256": "24620ed1b361d1eeff195e5dbcb48b8cbafa9624e2e79c1cdfe2e5c10aa210a4",
+      "sha256": "24620ed1b361d1eeff195e5dbcb48b8cbafa9624e2e79c1cdfe2e5c10aa210a4",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17107,
+      "line_end": 17107,
+      "source_sha256": "cbb0082eb95e9c0f8e1b809061313c6277a6b2a6ee82579130f9c29f68f7d473",
+      "sha256": "cbb0082eb95e9c0f8e1b809061313c6277a6b2a6ee82579130f9c29f68f7d473",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17108,
+      "line_end": 17108,
+      "source_sha256": "bab1f6dc3f6b6e5ff010ba7afd4cdf0590f7f7b5707e733c07dc6623d2f87978",
+      "sha256": "bab1f6dc3f6b6e5ff010ba7afd4cdf0590f7f7b5707e733c07dc6623d2f87978",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17109,
+      "line_end": 17109,
+      "source_sha256": "2541a82f93298058a8c6aac711d933d6fd803d4cdf3899a67cf185c869f8ca65",
+      "sha256": "2541a82f93298058a8c6aac711d933d6fd803d4cdf3899a67cf185c869f8ca65",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17110,
+      "line_end": 17110,
+      "source_sha256": "c276199d70840740e50d6301125e71ea4bd1e17e396fc40cf9180acf21bd235d",
+      "sha256": "c276199d70840740e50d6301125e71ea4bd1e17e396fc40cf9180acf21bd235d",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17111,
+      "line_end": 17111,
+      "source_sha256": "c0d200f1250c9b99a66ee944ff0a484852912d12a8fa7d0c4ebfa1c90e8d5170",
+      "sha256": "c0d200f1250c9b99a66ee944ff0a484852912d12a8fa7d0c4ebfa1c90e8d5170",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17112,
+      "line_end": 17112,
+      "source_sha256": "39d9e3db8890674f763fdbf03f2b19947d1d9e2f246eb57bcdf72e66f8515da5",
+      "sha256": "39d9e3db8890674f763fdbf03f2b19947d1d9e2f246eb57bcdf72e66f8515da5",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17114,
+      "line_end": 17114,
+      "source_sha256": "5c0d0276b7354611cbe3a3325f724affe4630eb40853b43902c04bb804bf08f2",
+      "sha256": "5c0d0276b7354611cbe3a3325f724affe4630eb40853b43902c04bb804bf08f2",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17402,
+      "line_end": 17412,
+      "source_sha256": "b7d1c5f0a83d719a7e3fb0e6246eea169146e9655b2272e27fe8be6eb4d90f43",
+      "sha256": "b7d1c5f0a83d719a7e3fb0e6246eea169146e9655b2272e27fe8be6eb4d90f43",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17414,
+      "line_end": 17414,
+      "source_sha256": "6c91d316fa44942e8b2d91d6f4098b46914687e6c33bc680f9e2b9c208f608ee",
+      "sha256": "6c91d316fa44942e8b2d91d6f4098b46914687e6c33bc680f9e2b9c208f608ee",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17415,
+      "line_end": 17415,
+      "source_sha256": "5456b9c1a64fe5deb4e550bb2ab9f8dc799b7ba370b9516a4580cbb78d7cf2be",
+      "sha256": "5456b9c1a64fe5deb4e550bb2ab9f8dc799b7ba370b9516a4580cbb78d7cf2be",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17416,
+      "line_end": 17416,
+      "source_sha256": "b11b5b90a7e30b367e532e7d78de507f573ccdc86fc3871943b7a64b4751a5ad",
+      "sha256": "b11b5b90a7e30b367e532e7d78de507f573ccdc86fc3871943b7a64b4751a5ad",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17417,
+      "line_end": 17417,
+      "source_sha256": "fdcf64fec1ca78559a48a71604af3e4e6178c4b2d887278316d35f51952abcd8",
+      "sha256": "fdcf64fec1ca78559a48a71604af3e4e6178c4b2d887278316d35f51952abcd8",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17418,
+      "line_end": 17418,
+      "source_sha256": "8b104052e826a4a104067010465a16425fdb0ae96dd6c1bef888016a24c2106b",
+      "sha256": "8b104052e826a4a104067010465a16425fdb0ae96dd6c1bef888016a24c2106b",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17419,
+      "line_end": 17419,
+      "source_sha256": "5909c532a3bc1777ee2e5b3410c0f1cdeeb6815cd6a029695be089ce917c51e3",
+      "sha256": "5909c532a3bc1777ee2e5b3410c0f1cdeeb6815cd6a029695be089ce917c51e3",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17420,
+      "line_end": 17420,
+      "source_sha256": "bfb3e752d1c91fe7977b5d9a097a22638e5df4adfbbde140434399733035cbeb",
+      "sha256": "bfb3e752d1c91fe7977b5d9a097a22638e5df4adfbbde140434399733035cbeb",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17421,
+      "line_end": 17421,
+      "source_sha256": "6cb60ccb3ca34820c3fcb553527853b82db5351942d17b2d2c3728010afb6c6b",
+      "sha256": "6cb60ccb3ca34820c3fcb553527853b82db5351942d17b2d2c3728010afb6c6b",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17422,
+      "line_end": 17422,
+      "source_sha256": "b646410a147c324c1077aa04748d7b39780f047cedee7d9305a2ef211bce104a",
+      "sha256": "b646410a147c324c1077aa04748d7b39780f047cedee7d9305a2ef211bce104a",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17424,
+      "line_end": 17424,
+      "source_sha256": "07c83a00b9f4baa09ba17f6c1d9cdc34be35412a746c72c4d1fa540e2390e41b",
+      "sha256": "07c83a00b9f4baa09ba17f6c1d9cdc34be35412a746c72c4d1fa540e2390e41b",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17484,
+      "line_end": 17496,
+      "source_sha256": "2cc59edd5b58da56741f6bf45c38636799726be0d8e363553a7e14570fe5863c",
+      "sha256": "2cc59edd5b58da56741f6bf45c38636799726be0d8e363553a7e14570fe5863c",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17497,
+      "line_end": 17497,
+      "source_sha256": "bb0b6eca3a11031c43ce558fbdf60f7fa87911a7334008b5b9f63f5d8e872524",
+      "sha256": "bb0b6eca3a11031c43ce558fbdf60f7fa87911a7334008b5b9f63f5d8e872524",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17498,
+      "line_end": 17498,
+      "source_sha256": "7b54ed21966653c8b8cb11a404dded01eec81eab1eead6c163f82cc8e6afec69",
+      "sha256": "7b54ed21966653c8b8cb11a404dded01eec81eab1eead6c163f82cc8e6afec69",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17499,
+      "line_end": 17499,
+      "source_sha256": "50516d5028424317ca6ee502dbed1600e699310f1dd37f35e9dcd7f8f484b6c5",
+      "sha256": "50516d5028424317ca6ee502dbed1600e699310f1dd37f35e9dcd7f8f484b6c5",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17500,
+      "line_end": 17500,
+      "source_sha256": "23a64c3a170e58857c8fff2718da32a3dd12c95395d75ea768b67104466d14d1",
+      "sha256": "23a64c3a170e58857c8fff2718da32a3dd12c95395d75ea768b67104466d14d1",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17501,
+      "line_end": 17501,
+      "source_sha256": "62c3b9d099c39d2e9ff2e8bf84356a6bc37e798018943ff0057f2f086950cb39",
+      "sha256": "62c3b9d099c39d2e9ff2e8bf84356a6bc37e798018943ff0057f2f086950cb39",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17502,
+      "line_end": 17502,
+      "source_sha256": "c2dcc1db8af962fc01ca15994b16ecbdbca208fbf81d280adaaada86636030e9",
+      "sha256": "c2dcc1db8af962fc01ca15994b16ecbdbca208fbf81d280adaaada86636030e9",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17503,
+      "line_end": 17503,
+      "source_sha256": "c65586984bebf2079d03799ca936bd3327bacccc31228a9027970533c89eaa53",
+      "sha256": "c65586984bebf2079d03799ca936bd3327bacccc31228a9027970533c89eaa53",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17504,
+      "line_end": 17504,
+      "source_sha256": "59885bdaea109a114077b2f20fb54bb4b1cf9648532b2e254e8a581e7066b815",
+      "sha256": "59885bdaea109a114077b2f20fb54bb4b1cf9648532b2e254e8a581e7066b815",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17505,
+      "line_end": 17505,
+      "source_sha256": "2a481ff12dde94a30d472650145b81168964eafe2dd9a59c646463a218828a20",
+      "sha256": "2a481ff12dde94a30d472650145b81168964eafe2dd9a59c646463a218828a20",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17506,
+      "line_end": 17506,
+      "source_sha256": "819839f7b3ddbae2cd369f5ac7fc83b0dbb5845fbd5a27483931cfcb8e081fdf",
+      "sha256": "819839f7b3ddbae2cd369f5ac7fc83b0dbb5845fbd5a27483931cfcb8e081fdf",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17507,
+      "line_end": 17507,
+      "source_sha256": "23d6cf28162aabebcda85e500240fc9381901cd346a0baddfb1379b297e73319",
+      "sha256": "23d6cf28162aabebcda85e500240fc9381901cd346a0baddfb1379b297e73319",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17508,
+      "line_end": 17508,
+      "source_sha256": "b11e6d980f594fe0e8cc0b6ab446ec40e18eb4ad57362ea621898a8620c741a8",
+      "sha256": "b11e6d980f594fe0e8cc0b6ab446ec40e18eb4ad57362ea621898a8620c741a8",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17510,
+      "line_end": 17510,
+      "source_sha256": "0ca9fc1302933210d1756b1d68b735a975288a0cc97c4c205ec0f4307ec29177",
+      "sha256": "0ca9fc1302933210d1756b1d68b735a975288a0cc97c4c205ec0f4307ec29177",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17512,
+      "line_end": 17529,
+      "source_sha256": "a38d0c3a43364d15a6e3a02cb15b6291e500f9489857054aba541e016da2c53f",
+      "sha256": "a38d0c3a43364d15a6e3a02cb15b6291e500f9489857054aba541e016da2c53f",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17530,
+      "line_end": 17530,
+      "source_sha256": "39b38de3443db36dabeb1a3c098fe3a87b7426c845a5fb082c05582d144a9124",
+      "sha256": "39b38de3443db36dabeb1a3c098fe3a87b7426c845a5fb082c05582d144a9124",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17531,
+      "line_end": 17531,
+      "source_sha256": "89e83a36bd3c31865b302a14ecbe093e900b5f8d0c8e4ec02bcd36f0905ed3cb",
+      "sha256": "89e83a36bd3c31865b302a14ecbe093e900b5f8d0c8e4ec02bcd36f0905ed3cb",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17532,
+      "line_end": 17532,
+      "source_sha256": "0d689bbdeeea69008abc8035da5043723d29c6f8930230f8513d134543cd2e56",
+      "sha256": "0d689bbdeeea69008abc8035da5043723d29c6f8930230f8513d134543cd2e56",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17533,
+      "line_end": 17533,
+      "source_sha256": "4ad1a53dbc1cd8ed80b858509ab435a21d6743420aac93a812fdd8cfaf95a1b8",
+      "sha256": "4ad1a53dbc1cd8ed80b858509ab435a21d6743420aac93a812fdd8cfaf95a1b8",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17534,
+      "line_end": 17534,
+      "source_sha256": "2ea54ff5392a0b51845c74bc8c5a9f4ea0060012198d8063a467abb5655cc3e9",
+      "sha256": "2ea54ff5392a0b51845c74bc8c5a9f4ea0060012198d8063a467abb5655cc3e9",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17535,
+      "line_end": 17535,
+      "source_sha256": "8aef709f0d0fdd35219356ff6b152bcd7df0fa35cb9dd7f73ee6e112ab51233e",
+      "sha256": "8aef709f0d0fdd35219356ff6b152bcd7df0fa35cb9dd7f73ee6e112ab51233e",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17536,
+      "line_end": 17536,
+      "source_sha256": "b66b5009cf8ecd0fc2a679818ba18d70953c92dce42f404f568ba97e89ada34e",
+      "sha256": "b66b5009cf8ecd0fc2a679818ba18d70953c92dce42f404f568ba97e89ada34e",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17537,
+      "line_end": 17537,
+      "source_sha256": "a74086787d47c49f311edeee0aff892c2483eea784ec6403a62a41a1b0dfce8c",
+      "sha256": "a74086787d47c49f311edeee0aff892c2483eea784ec6403a62a41a1b0dfce8c",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17538,
+      "line_end": 17538,
+      "source_sha256": "bd03abe8cc5054b85fe94d7fa0664042d6bbf656ba5320cedf36162e1d7169ce",
+      "sha256": "bd03abe8cc5054b85fe94d7fa0664042d6bbf656ba5320cedf36162e1d7169ce",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17539,
+      "line_end": 17539,
+      "source_sha256": "e05fdf71ff6537cdc7e7d91ced40b0ee94489820ad19554a2d769258316ebba3",
+      "sha256": "e05fdf71ff6537cdc7e7d91ced40b0ee94489820ad19554a2d769258316ebba3",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17540,
+      "line_end": 17540,
+      "source_sha256": "0188f855f44d2a6d8f70999cb5fdaffa4e87f7e8c59cd3c0572d71b08234fbf5",
+      "sha256": "0188f855f44d2a6d8f70999cb5fdaffa4e87f7e8c59cd3c0572d71b08234fbf5",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17541,
+      "line_end": 17541,
+      "source_sha256": "efd3922693f2eba11bd77d5156f92418737d3d0362e9b32643ba8196f8741fb7",
+      "sha256": "efd3922693f2eba11bd77d5156f92418737d3d0362e9b32643ba8196f8741fb7",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17542,
+      "line_end": 17542,
+      "source_sha256": "c01e664c74985f21ef8c83ed1f178b0227d64cb2c5930d327583042ebeb3a1e8",
+      "sha256": "c01e664c74985f21ef8c83ed1f178b0227d64cb2c5930d327583042ebeb3a1e8",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17543,
+      "line_end": 17543,
+      "source_sha256": "fcf5e95ca1df138a8259c6f536e2079900ad6af5cb591a63b45da4db7797ae71",
+      "sha256": "fcf5e95ca1df138a8259c6f536e2079900ad6af5cb591a63b45da4db7797ae71",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17544,
+      "line_end": 17544,
+      "source_sha256": "c163bff20e13f13192b270cfe008e15835bfa614bc00aa0fbde4be516a8455af",
+      "sha256": "c163bff20e13f13192b270cfe008e15835bfa614bc00aa0fbde4be516a8455af",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17545,
+      "line_end": 17545,
+      "source_sha256": "8f89173018b524c0911cfc22157314544d445f84cbd142fc9a8f07bc9cc2c0a1",
+      "sha256": "8f89173018b524c0911cfc22157314544d445f84cbd142fc9a8f07bc9cc2c0a1",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17546,
+      "line_end": 17546,
+      "source_sha256": "549dabe4fe85f133451b64468b0e7098854a3447b3cf0f0de9ed0d2d3ae74431",
+      "sha256": "549dabe4fe85f133451b64468b0e7098854a3447b3cf0f0de9ed0d2d3ae74431",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17548,
+      "line_end": 17548,
+      "source_sha256": "272394379b1de9432be84fc669d5cedc5edca3e79b68ce0175bc0fe31ee37145",
+      "sha256": "272394379b1de9432be84fc669d5cedc5edca3e79b68ce0175bc0fe31ee37145",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17549,
+      "line_end": 17549,
+      "source_sha256": "0183b691347958163d34433e75b0aff24920b3c9b9cef5879a981c1681728d0a",
+      "sha256": "0183b691347958163d34433e75b0aff24920b3c9b9cef5879a981c1681728d0a",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/核心发版14.1.5/init-sql/oracle/0.common_sql_oracle-1.txt",
+      "line_start": 1364,
+      "line_end": 1379,
+      "source_sha256": "ecfe5d693d1d7499458f187fa2a61ed8172e3de4dcfc775fcc3ff5f5f652c76e",
+      "sha256": "ecfe5d693d1d7499458f187fa2a61ed8172e3de4dcfc775fcc3ff5f5f652c76e",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/核心发版14.1.5/init-sql/oracle/0.common_sql_oracle-1.txt",
+      "line_start": 1380,
+      "line_end": 1380,
+      "source_sha256": "6f27937d39f0de111c5b2aff823b4c45a53373d293f5ddeb08fbb63495160fd9",
+      "sha256": "6f27937d39f0de111c5b2aff823b4c45a53373d293f5ddeb08fbb63495160fd9",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/核心发版14.1.5/init-sql/oracle/0.common_sql_oracle-1.txt",
+      "line_start": 1381,
+      "line_end": 1381,
+      "source_sha256": "085afd2b6d65399725b261dcedbc03a09612f668d15d18e4db35b537d55c2ef0",
+      "sha256": "085afd2b6d65399725b261dcedbc03a09612f668d15d18e4db35b537d55c2ef0",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/核心发版14.1.5/init-sql/oracle/0.common_sql_oracle-1.txt",
+      "line_start": 1382,
+      "line_end": 1382,
+      "source_sha256": "213514f7ea339e7cba05d80eeca7aedac1f51029f23466706d7bf7ef695ab7de",
+      "sha256": "213514f7ea339e7cba05d80eeca7aedac1f51029f23466706d7bf7ef695ab7de",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/核心发版14.1.5/init-sql/oracle/0.common_sql_oracle-1.txt",
+      "line_start": 1383,
+      "line_end": 1383,
+      "source_sha256": "9910b9520e0e6a05d55f14ab18a724dbdbc1c95d6876c8cc3666e762f6de67d8",
+      "sha256": "9910b9520e0e6a05d55f14ab18a724dbdbc1c95d6876c8cc3666e762f6de67d8",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/核心发版14.1.5/init-sql/oracle/0.common_sql_oracle-1.txt",
+      "line_start": 1384,
+      "line_end": 1384,
+      "source_sha256": "4952853f85e51abff245c18238f48e791e307acb6416f711bf3e61a1bc87983b",
+      "sha256": "4952853f85e51abff245c18238f48e791e307acb6416f711bf3e61a1bc87983b",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/核心发版14.1.5/init-sql/oracle/0.common_sql_oracle-1.txt",
+      "line_start": 1385,
+      "line_end": 1385,
+      "source_sha256": "51dd9b7c54e06755cb63794acd88af1284b5b0bd8edaf6927614fc0cb30a599d",
+      "sha256": "51dd9b7c54e06755cb63794acd88af1284b5b0bd8edaf6927614fc0cb30a599d",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/核心发版14.1.5/init-sql/oracle/0.common_sql_oracle-1.txt",
+      "line_start": 1386,
+      "line_end": 1386,
+      "source_sha256": "6b769b7695ca6b698d9de883d3c537c19d61862667af8b0405b2f4036019aa42",
+      "sha256": "6b769b7695ca6b698d9de883d3c537c19d61862667af8b0405b2f4036019aa42",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/核心发版14.1.5/init-sql/oracle/0.common_sql_oracle-1.txt",
+      "line_start": 1387,
+      "line_end": 1387,
+      "source_sha256": "a04258891b859de7608545ddde96362c6354620940d629fd8c21402291d0690c",
+      "sha256": "a04258891b859de7608545ddde96362c6354620940d629fd8c21402291d0690c",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/核心发版14.1.5/init-sql/oracle/0.common_sql_oracle-1.txt",
+      "line_start": 1388,
+      "line_end": 1388,
+      "source_sha256": "946980f8510bb7d21b1475f1d01f8174e8f82d032e60c78925b365983b74889c",
+      "sha256": "946980f8510bb7d21b1475f1d01f8174e8f82d032e60c78925b365983b74889c",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/核心发版14.1.5/init-sql/oracle/0.common_sql_oracle-1.txt",
+      "line_start": 1389,
+      "line_end": 1389,
+      "source_sha256": "442ecf69ac5c2765e05a77c50da627848140b6d1bfe3af8d6c2408fd0183f184",
+      "sha256": "442ecf69ac5c2765e05a77c50da627848140b6d1bfe3af8d6c2408fd0183f184",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/核心发版14.1.5/init-sql/oracle/0.common_sql_oracle-1.txt",
+      "line_start": 1390,
+      "line_end": 1390,
+      "source_sha256": "ebdb0f6a1a000769069ee7b4a1170d16f87fae4bdc76beb250805ba203e0f2f2",
+      "sha256": "ebdb0f6a1a000769069ee7b4a1170d16f87fae4bdc76beb250805ba203e0f2f2",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/核心发版14.1.5/init-sql/oracle/0.common_sql_oracle-1.txt",
+      "line_start": 1391,
+      "line_end": 1391,
+      "source_sha256": "e46d8c89be1433bf69e0dda111bee750a5454602af22492f3806ac1e0078ac15",
+      "sha256": "e46d8c89be1433bf69e0dda111bee750a5454602af22492f3806ac1e0078ac15",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/核心发版14.1.5/init-sql/oracle/0.common_sql_oracle-1.txt",
+      "line_start": 1392,
+      "line_end": 1392,
+      "source_sha256": "c1f73279dfcc65f9a7ee8eb64cd2866f7a4928128d908da0038a06a6b45b85c7",
+      "sha256": "c1f73279dfcc65f9a7ee8eb64cd2866f7a4928128d908da0038a06a6b45b85c7",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/核心发版14.1.5/init-sql/oracle/0.common_sql_oracle-1.txt",
+      "line_start": 1393,
+      "line_end": 1393,
+      "source_sha256": "288bd8b7a21e7719f6bdf2433571b2d6e4aa5aa0599323f4cdeb0a4f943a2364",
+      "sha256": "288bd8b7a21e7719f6bdf2433571b2d6e4aa5aa0599323f4cdeb0a4f943a2364",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/核心发版14.1.5/init-sql/oracle/0.common_sql_oracle-1.txt",
+      "line_start": 1394,
+      "line_end": 1394,
+      "source_sha256": "f4d1f78d8dd285f70053be2d3b265470ca081b27cd8d878081f64f89bca41add",
+      "sha256": "f4d1f78d8dd285f70053be2d3b265470ca081b27cd8d878081f64f89bca41add",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/核心发版14.1.5/init-sql/oracle/0.common_sql_oracle-1.txt",
+      "line_start": 1395,
+      "line_end": 1395,
+      "source_sha256": "518797fc361c1ef5056660dacf782931a142905a768fd816e192f3810221e63a",
+      "sha256": "518797fc361c1ef5056660dacf782931a142905a768fd816e192f3810221e63a",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/核心发版14.1.5/init-sql/oracle/0.common_sql_oracle-1.txt",
+      "line_start": 1221,
+      "line_end": 1239,
+      "source_sha256": "271816bf3f9d993ff7d3e2a0474fc7f95a652d4c5d4c6510c95c939142234a7c",
+      "sha256": "271816bf3f9d993ff7d3e2a0474fc7f95a652d4c5d4c6510c95c939142234a7c",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/核心发版14.1.5/init-sql/oracle/0.common_sql_oracle-1.txt",
+      "line_start": 1240,
+      "line_end": 1240,
+      "source_sha256": "b787d77a3864976473bcebbe90bd0973fac8c4f57f3bf38dad0333546e8d5330",
+      "sha256": "b787d77a3864976473bcebbe90bd0973fac8c4f57f3bf38dad0333546e8d5330",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/核心发版14.1.5/init-sql/oracle/0.common_sql_oracle-1.txt",
+      "line_start": 1241,
+      "line_end": 1241,
+      "source_sha256": "073aa38f6bd6a2ff9d48d5bd13a997a4439327e33a6b258ffff924852c723e97",
+      "sha256": "073aa38f6bd6a2ff9d48d5bd13a997a4439327e33a6b258ffff924852c723e97",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/核心发版14.1.5/init-sql/oracle/0.common_sql_oracle-1.txt",
+      "line_start": 1242,
+      "line_end": 1242,
+      "source_sha256": "c14ac46be7bfa215488ef1b8899c83cd156cbd3abd567d92f1887b7a7f240870",
+      "sha256": "c14ac46be7bfa215488ef1b8899c83cd156cbd3abd567d92f1887b7a7f240870",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/核心发版14.1.5/init-sql/oracle/0.common_sql_oracle-1.txt",
+      "line_start": 1243,
+      "line_end": 1243,
+      "source_sha256": "0305d5682fd7082fe12f4445e9f60974f5f90705b3e40f2a627999e7ea7e44fc",
+      "sha256": "0305d5682fd7082fe12f4445e9f60974f5f90705b3e40f2a627999e7ea7e44fc",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/核心发版14.1.5/init-sql/oracle/0.common_sql_oracle-1.txt",
+      "line_start": 1244,
+      "line_end": 1244,
+      "source_sha256": "31e0be5be806906886f877c69cf806fb29a05f54604f3ae4dbe0dc98561f7c25",
+      "sha256": "31e0be5be806906886f877c69cf806fb29a05f54604f3ae4dbe0dc98561f7c25",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/核心发版14.1.5/init-sql/oracle/0.common_sql_oracle-1.txt",
+      "line_start": 1245,
+      "line_end": 1245,
+      "source_sha256": "d702d0ca0fd50b90449b5e8e857be72b81d5b8b412e17943e95b9046436ae42a",
+      "sha256": "d702d0ca0fd50b90449b5e8e857be72b81d5b8b412e17943e95b9046436ae42a",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/核心发版14.1.5/init-sql/oracle/0.common_sql_oracle-1.txt",
+      "line_start": 1246,
+      "line_end": 1246,
+      "source_sha256": "bf6df2f612d99c0acab17fb8473271d4d1bb168a76512c605d1dc3e68f239fec",
+      "sha256": "bf6df2f612d99c0acab17fb8473271d4d1bb168a76512c605d1dc3e68f239fec",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/核心发版14.1.5/init-sql/oracle/0.common_sql_oracle-1.txt",
+      "line_start": 1247,
+      "line_end": 1247,
+      "source_sha256": "cb9d49b462ce4f01f32bfd276633d93bc66c05c273e606b36d4be43fd82e4b3f",
+      "sha256": "cb9d49b462ce4f01f32bfd276633d93bc66c05c273e606b36d4be43fd82e4b3f",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/核心发版14.1.5/init-sql/oracle/0.common_sql_oracle-1.txt",
+      "line_start": 1248,
+      "line_end": 1248,
+      "source_sha256": "b32305dc6b059f5ba5788d1e3af758841269ab8f916d9f245ffb893a5ad23e61",
+      "sha256": "b32305dc6b059f5ba5788d1e3af758841269ab8f916d9f245ffb893a5ad23e61",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/核心发版14.1.5/init-sql/oracle/0.common_sql_oracle-1.txt",
+      "line_start": 1249,
+      "line_end": 1249,
+      "source_sha256": "f919bc4c46f4d96b4dfad1f4955618a32e3114423b2da22ffe91a7cf35132e50",
+      "sha256": "f919bc4c46f4d96b4dfad1f4955618a32e3114423b2da22ffe91a7cf35132e50",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/核心发版14.1.5/init-sql/oracle/0.common_sql_oracle-1.txt",
+      "line_start": 1250,
+      "line_end": 1250,
+      "source_sha256": "9dfe62c876ff8a7c2d1936fc338a7796a70ad9cd80bb4ab02b750bf65800387f",
+      "sha256": "9dfe62c876ff8a7c2d1936fc338a7796a70ad9cd80bb4ab02b750bf65800387f",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/核心发版14.1.5/init-sql/oracle/0.common_sql_oracle-1.txt",
+      "line_start": 1251,
+      "line_end": 1251,
+      "source_sha256": "7a357c2d3a2770cd22ce39b6c8ab03359741bf9fa5539b61b4a1f12260af7806",
+      "sha256": "7a357c2d3a2770cd22ce39b6c8ab03359741bf9fa5539b61b4a1f12260af7806",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/核心发版14.1.5/init-sql/oracle/0.common_sql_oracle-1.txt",
+      "line_start": 1252,
+      "line_end": 1252,
+      "source_sha256": "3f069bd7a3a17a24119fa04941cc4c54a7f9b957fd9effd871be9ef736748e98",
+      "sha256": "3f069bd7a3a17a24119fa04941cc4c54a7f9b957fd9effd871be9ef736748e98",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/核心发版14.1.5/init-sql/oracle/0.common_sql_oracle-1.txt",
+      "line_start": 1253,
+      "line_end": 1253,
+      "source_sha256": "0fae844bc1f512670ce603d8cd8fd400b92559914338d6a4312b041734b25d06",
+      "sha256": "0fae844bc1f512670ce603d8cd8fd400b92559914338d6a4312b041734b25d06",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/核心发版14.1.5/init-sql/oracle/0.common_sql_oracle-1.txt",
+      "line_start": 1254,
+      "line_end": 1254,
+      "source_sha256": "ebb53ba654cc4f86ce782cb6ace29014fd02a7efbf24fab4fca9c917267b563c",
+      "sha256": "ebb53ba654cc4f86ce782cb6ace29014fd02a7efbf24fab4fca9c917267b563c",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/核心发版14.1.5/init-sql/oracle/0.common_sql_oracle-1.txt",
+      "line_start": 1255,
+      "line_end": 1255,
+      "source_sha256": "7e58b7b7475cb1b1bba5209f560a39fd54b86e74c47aab9f8bddbaaf6b2994e9",
+      "sha256": "7e58b7b7475cb1b1bba5209f560a39fd54b86e74c47aab9f8bddbaaf6b2994e9",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/核心发版14.1.5/init-sql/oracle/0.common_sql_oracle-1.txt",
+      "line_start": 1256,
+      "line_end": 1256,
+      "source_sha256": "c0f7921205a32b9798be718cf55e800b0391f50fdc273ace54250d8006253b89",
+      "sha256": "c0f7921205a32b9798be718cf55e800b0391f50fdc273ace54250d8006253b89",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/核心发版14.1.5/init-sql/oracle/0.common_sql_oracle-1.txt",
+      "line_start": 1257,
+      "line_end": 1257,
+      "source_sha256": "fe42f3b98bdfd077f398570efa94d58a6a8673e15387ba57dde00260530e687d",
+      "sha256": "fe42f3b98bdfd077f398570efa94d58a6a8673e15387ba57dde00260530e687d",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/核心发版14.1.5/init-sql/oracle/0.common_sql_oracle-1.txt",
+      "line_start": 1258,
+      "line_end": 1258,
+      "source_sha256": "591a8af2f8871667cba860358a4d09c349b8d52f6e324883ce9441dbf5df5a58",
+      "sha256": "591a8af2f8871667cba860358a4d09c349b8d52f6e324883ce9441dbf5df5a58",
+      "transformations": []
+    },
+    {
+      "source": "project/sql/核心发版14.1.5/init-sql/oracle/0.common_sql_oracle-1.txt",
+      "line_start": 1259,
+      "line_end": 1259,
+      "source_sha256": "eafb17eed293ec2c105a23fb74c6244d0776994a66b4041a4f072933f754a21c",
+      "sha256": "eafb17eed293ec2c105a23fb74c6244d0776994a66b4041a4f072933f754a21c",
+      "transformations": []
+    }
+  ]
+}

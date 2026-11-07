@@ -1,0 +1,68 @@
+{
+  "schema": 1,
+  "kind": "owned-source-repair",
+  "source_only": true,
+  "supplier_byte_identical": false,
+  "files": [
+    {
+      "path": "project/src/main/java/com/sunwayworld/emc/module/mdm/filemodification/mapper/conf/emc-file-modification-oracle-mapper.xml",
+      "original_sha256": "e7ea75dd050e691d13a3e4392536e04fd1a27494d5de04c60490386e75c352bd",
+      "destination_sha256": "b1fc984b30201d0305249095482eb596373fb843dc90d30393f73d4e71f65a24",
+      "transformation": "Bind original SQL to existing Java Mapper FQN; business SQL, organization and audit predicates unchanged"
+    },
+    {
+      "path": "project/src/main/java/com/sunwayworld/emc/module/mdm/filemodification/mapper/conf/emc-file-modification-sqlserver-mapper.xml",
+      "original_sha256": "e7ea75dd050e691d13a3e4392536e04fd1a27494d5de04c60490386e75c352bd",
+      "destination_sha256": "b1fc984b30201d0305249095482eb596373fb843dc90d30393f73d4e71f65a24",
+      "transformation": "Bind original SQL to existing Java Mapper FQN; business SQL, organization and audit predicates unchanged"
+    },
+    {
+      "path": "project/src/main/java/com/sunwayworld/emc/module/mdm/invoices/mapper/conf/emc-invoice-oracle-mapper.xml",
+      "original_sha256": "2e5de06053be3d1a9f118f5708af22198350a3af175fb1c6a05b65bfc049cbf9",
+      "destination_sha256": "919c80e03bab21fc99a08ea3352b7c22a253b4d0d7fd278848cfe993ddb83056",
+      "transformation": "Bind original SQL to existing Java Mapper FQN; business SQL, organization and audit predicates unchanged"
+    },
+    {
+      "path": "project/src/main/java/com/sunwayworld/emc/module/mdm/invoices/mapper/conf/emc-invoice-sqlserver-mapper.xml",
+      "original_sha256": "2e5de06053be3d1a9f118f5708af22198350a3af175fb1c6a05b65bfc049cbf9",
+      "destination_sha256": "919c80e03bab21fc99a08ea3352b7c22a253b4d0d7fd278848cfe993ddb83056",
+      "transformation": "Bind original SQL to existing Java Mapper FQN; business SQL, organization and audit predicates unchanged"
+    },
+    {
+      "path": "project/src/main/java/com/sunwayworld/emc/module/mdm/invoices/mapper/conf/emc-returned-oracle-mapper.xml",
+      "original_sha256": "59b06aa9447d6855b01ad18e7e99d8d482e91700329fd7b0dc16f317984ada21",
+      "destination_sha256": "e09918117fa65d07a71094eb2d23d4223b4f2eb798158713eded43841e9426c1",
+      "transformation": "Bind original SQL to existing Java Mapper FQN; business SQL, organization and audit predicates unchanged"
+    },
+    {
+      "path": "project/src/main/java/com/sunwayworld/emc/module/mdm/invoices/mapper/conf/emc-returned-sqlserver-mapper.xml",
+      "original_sha256": "59b06aa9447d6855b01ad18e7e99d8d482e91700329fd7b0dc16f317984ada21",
+      "destination_sha256": "e09918117fa65d07a71094eb2d23d4223b4f2eb798158713eded43841e9426c1",
+      "transformation": "Bind original SQL to existing Java Mapper FQN; business SQL, organization and audit predicates unchanged"
+    },
+    {
+      "path": "project/src/main/java/com/sunwayworld/emc/module/mdm/purchapply/mapper/conf/emc-purch-apply-oracle-mapper.xml",
+      "original_sha256": "7cf8646479b2c94b5cb8ba66b8898abe4b8efc46d2698ab666094725bac0c808",
+      "destination_sha256": "bdf1181094c6f9e97d9db8b05b5ef447923a19e9c53655980bb4aa4b94e98f03",
+      "transformation": "Bind original SQL to existing Java Mapper FQN; business SQL, organization and audit predicates unchanged"
+    },
+    {
+      "path": "project/src/main/java/com/sunwayworld/emc/module/mdm/purchapply/mapper/conf/emc-purch-apply-sqlserver-mapper.xml",
+      "original_sha256": "7cf8646479b2c94b5cb8ba66b8898abe4b8efc46d2698ab666094725bac0c808",
+      "destination_sha256": "bdf1181094c6f9e97d9db8b05b5ef447923a19e9c53655980bb4aa4b94e98f03",
+      "transformation": "Bind original SQL to existing Java Mapper FQN; business SQL, organization and audit predicates unchanged"
+    },
+    {
+      "path": "project/src/main/java/com/sunwayworld/emc/module/mdm/purchapply/mapper/conf/emc-purch-detail-oracle-mapper.xml",
+      "original_sha256": "9117ce0760b46e597899262219c532565972fda29b73f3e9bb3745d1cb64b570",
+      "destination_sha256": "dbde614176f69671582af1efc34bfd942ebc5c593c0f2359d06d0f68bd75d297",
+      "transformation": "Bind original SQL to existing Java Mapper FQN; business SQL, organization and audit predicates unchanged"
+    },
+    {
+      "path": "project/src/main/java/com/sunwayworld/emc/module/mdm/purchapply/mapper/conf/emc-purch-detail-sqlserver-mapper.xml",
+      "original_sha256": "9117ce0760b46e597899262219c532565972fda29b73f3e9bb3745d1cb64b570",
+      "destination_sha256": "dbde614176f69671582af1efc34bfd942ebc5c593c0f2359d06d0f68bd75d297",
+      "transformation": "Bind original SQL to existing Java Mapper FQN; business SQL, organization and audit predicates unchanged"
+    }
+  ]
+}

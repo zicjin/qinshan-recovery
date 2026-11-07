@@ -188,6 +188,27 @@ class SourceBindingTest(unittest.TestCase):
         self.assertFalse(second["runtime_contract_dirty"])
         self.assertFalse(second["implementation_dirty"])
 
+    def test_local_runtime_profile_and_redis_identity_are_binding_inputs(self):
+        first = self.capture()
+        local_contract = {
+            "runtime_profile": "local-wsl",
+            "oracle_instance_id": "lims-local-runtime-oracle",
+            "oracle_container": "lims-local-runtime-oracle",
+            "redis_container": "lims-local-runtime-redis",
+            "baseline_schema": "LIMS_BASELINE_LOCAL",
+            "runtime_schema": "LIMS_RUNTIME_LOCAL",
+        }
+        local = self.capture(runtime_contract=local_contract)
+        self.assertEqual(local["runtime_contract"]["runtime_profile"], "local-wsl")
+        self.assertEqual(local["runtime_contract"]["redis_container"], "lims-local-runtime-redis")
+        self.assertNotEqual(first["runtime_contract_binding"], local["runtime_contract_binding"])
+        self.assertEqual(first["application_binding"], local["application_binding"])
+        self.assertEqual(first["harness_binding"], local["harness_binding"])
+        changed_profile = self.capture(runtime_contract={**local_contract, "runtime_profile": "sss2"})
+        changed_redis = self.capture(runtime_contract={**local_contract, "redis_container": "another-redis"})
+        self.assertNotEqual(local["runtime_contract_binding"], changed_profile["runtime_contract_binding"])
+        self.assertNotEqual(local["runtime_contract_binding"], changed_redis["runtime_contract_binding"])
+
     def test_runner_change_preserves_legacy_compatibility_aggregate_change(self):
         first = self.capture()
         (self.root / "scripts" / "spring_api_contract_runner.py").write_text(

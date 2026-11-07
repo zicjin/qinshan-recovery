@@ -177,6 +177,7 @@ _HARNESS_SUFFIXES = (
     "scripts/run-fast-differential-jobs.py",
     "scripts/api_wave_orchestrator.py",
     "scripts/owned_runtime_contract.py",
+    "scripts/local-runtime-transport.py",
     "scripts/api_fixture.py",
     "scripts/remote-sql-fixture-executor.py",
     "scripts/start-strict-sss2-api-runtime.sh",
@@ -251,8 +252,10 @@ _DISTRIBUTION_INPUT_SUFFIXES = (
 
 RUNTIME_CONTRACT_SCOPE = (
     "runtime.contract_version",
+    "runtime.runtime_profile",
     "runtime.oracle_instance_id",
     "runtime.oracle_container",
+    "runtime.redis_container",
     "runtime.baseline_schema",
     "runtime.runtime_schema",
     "runtime.baseline_schema_hash",
@@ -283,8 +286,10 @@ RUNTIME_CONTRACT_SCOPE = (
 
 _DEFAULT_RUNTIME_CONTRACT: dict[str, Any] = {
     "contract_version": RUNTIME_CONTRACT_VERSION,
+    "runtime_profile": "sss2",
     "oracle_instance_id": "lims-owned-sss2-oracle",
     "oracle_container": "lims-owned-sss2-oracle",
+    "redis_container": "lims-owned-sss2-redis",
     "baseline_schema": "LIMS_BASELINE_SSS2",
     "runtime_schema": "LIMS_RUNTIME_SSS2",
     "baseline_schema_hash": "unbound",

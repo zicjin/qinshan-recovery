@@ -4,13 +4,46 @@ import hashlib
 import json
 import os
 from pathlib import Path
+import shutil
 import subprocess
 import sys
 import tempfile
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[2]
-DIST = ROOT / 'owned-distribution/target/distribution'
+
+
+def file_hashes(directory):
+    return {str(path.relative_to(directory)): hashlib.sha256(path.read_bytes()).hexdigest()
+            for path in directory.rglob('*') if path.is_file()}
+
+
+def verify_package_determinism(root, distribution, sources, environment):
+    # The active distribution may be an immutable cache mounted by a running
+    # application. Copy only the builder-supplied files; regenerate all package
+    # outputs so stale files cannot make the comparison pass.
+    before = file_hashes(distribution)
+    with tempfile.TemporaryDirectory(prefix='owned-distribution-repackage-') as temporary:
+        output = Path(temporary) / 'distribution'
+        output.mkdir()
+        for path in distribution.iterdir():
+            if path.name in ('app', 'modules', 'lib', 'manifest.json'):
+                continue
+            destination = output / path.name
+            if path.is_dir():
+                shutil.copytree(path, destination)
+            else:
+                shutil.copy2(path, destination)
+        result = subprocess.run(
+            [sys.executable, str(root / 'owned-distribution/package.py'), str(output)]
+            + [str(source) for source in sources],
+            text=True, capture_output=True, env=environment,
+        )
+        assert result.returncode == 0, result.stderr
+        assert file_hashes(output)['app/lims-owned-application.jar'] == before[
+            'app/lims-owned-application.jar'], 'application JAR merge is not deterministic'
+        assert file_hashes(output) == before, 'distribution differs after repackaging'
+    assert file_hashes(distribution) == before, 'repackaging changed the active distribution'
 
 
 def main():
@@ -23,9 +56,34 @@ def main():
             'evidence lifecycle gate failed: '
             + (lifecycle.stdout + lifecycle.stderr)[-2000:]
         )
+    # All compilation outputs and cache activation belong to this disposable
+    # source snapshot, never the checkout's target or a mounted distribution.
+    with tempfile.TemporaryDirectory(prefix='owned-distribution-build-') as temporary:
+        root = Path(temporary) / 'source'
+        for name in ('project', 'reconstituted', 'scripts', 'docs', 'build-support',
+                     *[path.name for path in ROOT.glob('owned-*') if path.is_dir()]):
+            shutil.copytree(ROOT / name, root / name,
+                            ignore=shutil.ignore_patterns('target', '__pycache__', '.git'))
+        environment = dict(os.environ)
+        environment.update({
+            # This is the clean-build gate, even when callers reuse artifacts
+            # for runtime tests. Neither build may short-circuit via the cache.
+            'OWNED_DISTRIBUTION_REUSE': '0',
+            'JAVA_HOME': str(Path(os.environ.get('JAVA_HOME', ROOT / 'build/jdk1.8.0_391')).resolve()),
+            'LIMS_PUBLIC_DEPENDENCY_DIR': str(Path(os.environ.get(
+                'LIMS_PUBLIC_DEPENDENCY_DIR', ROOT / 'build/reconstituted-public-deps')).resolve()),
+            'LIMS_EXTERNAL_ARTIFACT_ROOT': str(Path(os.environ.get(
+                'LIMS_EXTERNAL_ARTIFACT_ROOT', ROOT / '.external-materials')).resolve()),
+            'LIMS_PROJECT_ROOT': str(root / 'project'),
+        })
+        verify_distribution(root, environment)
+
+
+def verify_distribution(ROOT, build_environment):
+    DIST = ROOT / 'owned-distribution/target/distribution'
     builder = ROOT / 'scripts/build-owned-distribution.sh'
     assert builder.is_file(), 'standalone distribution builder must exist'
-    result = subprocess.run([str(builder)], text=True, capture_output=True)
+    result = subprocess.run([str(builder)], text=True, capture_output=True, env=build_environment)
     assert result.returncode == 0, 'standalone distribution build failed: ' + result.stderr[-2000:]
     with tempfile.TemporaryDirectory(prefix='owned-native-license-gate-') as temporary:
         gate_report = Path(temporary) / 'native-license-removal.json'
@@ -101,7 +159,6 @@ def main():
     assert 'owned.report.replay.mode=disabled' in example
     assert 'owned.scheduler.mode=disabled' in example
     # Re-merging unchanged module inputs must produce the same application JAR.
-    before = hashlib.sha256(app.read_bytes()).digest()
     sources = [
         ROOT / 'build/source-only-application/lims-owned-application.jar',
         *[
@@ -111,7 +168,7 @@ def main():
             )['modules']
         ],
     ]
-    package_environment = dict(os.environ)
+    package_environment = dict(build_environment)
     package_environment.update({
         'OWNED_PUBLIC_DEPENDENCY_DIR': str(ROOT / 'build/reconstituted-public-deps'),
         'OWNED_ADDITIONAL_DEPENDENCY_DIRS': str(
@@ -122,44 +179,29 @@ def main():
         ),
         'OWNED_DISTRIBUTION_MODE': 'source-only-reconstituted',
     })
-    result = subprocess.run(
-        [sys.executable, str(ROOT / 'owned-distribution/package.py'), str(DIST)]
-        + [str(source) for source in sources],
-        text=True,
-        capture_output=True,
-        env=package_environment,
-    )
-    assert result.returncode == 0, result.stderr
-    assert hashlib.sha256(app.read_bytes()).digest() == before, 'application JAR merge is not deterministic'
+    verify_package_determinism(ROOT, DIST, sources, package_environment)
     # A complete clean rebuild must reproduce every shipped file, including provenance.
-    first = {str(p.relative_to(DIST)): hashlib.sha256(p.read_bytes()).hexdigest()
-             for p in DIST.rglob('*') if p.is_file()}
-    result = subprocess.run([str(builder)], text=True, capture_output=True)
+    first = file_hashes(DIST)
+    clean_environment = dict(build_environment, OWNED_DISTRIBUTION_REUSE='0')
+    result = subprocess.run([str(builder)], text=True, capture_output=True, env=clean_environment)
     assert result.returncode == 0, 'second clean build failed: ' + result.stderr[-2000:]
-    second = {str(p.relative_to(DIST)): hashlib.sha256(p.read_bytes()).hexdigest()
-              for p in DIST.rglob('*') if p.is_file()}
+    second = file_hashes(DIST)
     assert first == second, 'distribution differs after clean rebuild: ' + str(sorted(
         key for key in set(first) | set(second) if first.get(key) != second.get(key)))
     # A differing class with the same name must stop packaging instead of
     # allowing classpath order to select one implementation silently.
-    framework_target = ROOT / 'owned-framework/target'
-    conflict = framework_target / 'distribution-conflicting-class.jar'
-    conflicting_app = framework_target / 'distribution-conflicting-app.jar'
-    framework_target.mkdir(parents=True, exist_ok=True)
-    try:
+    with tempfile.TemporaryDirectory(prefix='owned-distribution-conflict-') as temporary:
+        conflict = Path(temporary) / 'distribution-conflicting-class.jar'
+        conflicting_app = Path(temporary) / 'distribution-conflicting-app.jar'
         with zipfile.ZipFile(conflict, 'w') as jar:
             jar.writestr('com/sunwayworld/emc/projectfunction/GikamWpjcApplication.class', b'conflicting')
         with zipfile.ZipFile(conflicting_app, 'w') as jar:
             jar.writestr('com/sunwayworld/emc/projectfunction/GikamWpjcApplication.class', b'primary')
-        with tempfile.TemporaryDirectory(prefix='owned-distribution-conflict-') as temporary:
-            result = subprocess.run([
-                sys.executable, str(ROOT / 'owned-distribution/package.py'), temporary,
-                str(conflicting_app), str(conflict)],
-                text=True, capture_output=True, env=package_environment)
-            assert result.returncode != 0 and 'conflicting duplicate' in result.stderr
-    finally:
-        conflict.unlink(missing_ok=True)
-        conflicting_app.unlink(missing_ok=True)
+        result = subprocess.run([
+            sys.executable, str(ROOT / 'owned-distribution/package.py'),
+            str(Path(temporary) / 'distribution'), str(conflicting_app), str(conflict)],
+            text=True, capture_output=True, env=package_environment)
+        assert result.returncode != 0 and 'conflicting duplicate' in result.stderr
     print('owned distribution package: PASS')
 
 

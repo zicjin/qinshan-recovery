@@ -6,6 +6,11 @@ reported as sss2 execution. Private configuration, database dumps and credential
 remain external. An imported historical application image is not approved release
 material; final distribution still comes from standalone tracked source.
 
+The user tests at `http://127.0.0.1:18087`. Daily refreshes stay local; sss2 is
+reserved for the delivery smoke. Mount a resolved immutable distribution path,
+not the mutable `target/distribution` alias: replacing that directory while it is
+bind-mounted can leave the running container without readable JAR/resources.
+
 The read-only observer requires these running containers, each attached only to
 the internal `lims-local-runtime-isolated` Docker network:
 
@@ -49,13 +54,89 @@ port, the foreground byte transport can provide local diagnostic access:
 ```bash
 # Obtain the actual application IPv4 from Docker inspect first.
 python3 scripts/local-runtime-transport.py \
-  --listen-port 18187 --target-host 172.19.0.4 --target-port 18187
+  --listen-port 18087 --target-host 172.19.0.4 --target-port 18187
 ```
 
 The address above is an example, not a fixed identity. The transport binds only
 127.0.0.1 and does not interpret HTTP. Bridged requests reach the application from a
 Docker gateway: they do not establish that loopback-only write guards will accept
 writes. Do not relax write guards or call this a completed strict transport.
+
+## Content and milestone verification
+
+`tools/api/OracleContentFingerprint.java` reads every table in one read-only
+Oracle transaction. Compile it with the external JDK 8 and use an external JDBC
+driver. Its stdin properties must contain exactly `url`, `user`, `password` and
+`schema`; only `LIMS_BASELINE_LOCAL` and `LIMS_RUNTIME_LOCAL` are allowed. Keep
+those properties private, and never pass credentials on the command line. SYS
+connections are rejected. An authorized read-only observer account can read the
+locked baseline without unlocking it.
+
+```bash
+mkdir -p private/local-runtime/content-classes
+"$JAVA_HOME/bin/javac" -encoding UTF-8 \
+  -d private/local-runtime/content-classes tools/api/OracleContentFingerprint.java
+# LIMS_JDBC_JAR points to the externally supplied Oracle JDBC driver.
+"$JAVA_HOME/bin/java" -Xmx512m \
+  -cp "private/local-runtime/content-classes:$LIMS_JDBC_JAR" \
+  OracleContentFingerprint < private/local-runtime/fingerprint.properties \
+  > private/local-runtime/content.json
+```
+
+The content format is `oracle-content-sha256-v1`: typed, length-framed row hashes
+retain duplicate rows and ignore retrieval order. LOBs stream; sorting retains
+row hashes in memory. Unsupported column types fail the entire capture without
+a partial success report. The report contains metadata, counts and hashes, not
+row values. Take independent before/after captures for both baseline and runtime.
+
+`scripts/verify-local-runtime-milestone.py` accepts a private manifest with six
+distinct relative file paths, each pinned by raw SHA-256:
+
+```json
+{
+  "schema_version": 1,
+  "kind": "local-runtime-milestone-inputs",
+  "files": {
+    "observation_before": {"path": "before.json", "sha256": "<64 hex characters>"},
+    "observation_after": {"path": "after.json", "sha256": "<64 hex characters>"},
+    "baseline_before": {"path": "baseline-before.json", "sha256": "<64 hex characters>"},
+    "baseline_after": {"path": "baseline-after.json", "sha256": "<64 hex characters>"},
+    "runtime_before": {"path": "runtime-before.json", "sha256": "<64 hex characters>"},
+    "runtime_after": {"path": "runtime-after.json", "sha256": "<64 hex characters>"}
+  }
+}
+```
+
+Replace each placeholder with the corresponding file's actual `sha256sum`.
+The two observations are captured while the application is running. After an
+authorized milestone has restored its fixtures and stopped that application,
+run the read-only verifier:
+
+```bash
+python3 scripts/verify-local-runtime-milestone.py \
+  --manifest private/local-runtime/milestone-inputs.json \
+  > private/local-runtime/lifecycle-verification.json
+```
+
+It rechecks file pins, table/column coverage and schema digests, compares baseline
+before/after separately from runtime before/after, then inspects local Docker
+twice. Runtime-before is the restoration target; it may legitimately differ from
+the locked baseline after versioned API configuration repairs. Audit/error tables
+are included. Oracle/Redis identity and start time must remain unchanged, and
+the application must be stopped. A running user application causes a failed
+report; the verifier never stops it. Do not stop the user's test application just
+to obtain a passing report.
+
+Even a verified lifecycle component has `strict_evidence=false` and `real_http=false`.
+It does not prove snapshot acquisition authenticity, fixture/audit/rollback,
+constraints, defaults, indexes, stored code or API behavior. Case HTTP evidence,
+source binding and the full promotion contract remain separate requirements.
+
+The current-head identity gate validates application/harness/planning bindings
+against current source and runtime against the report's own runtime contract.
+HEAD remains provenance. Governance-only changes do not invalidate behavior;
+changed harness semantics, missing runtime contracts and old composite-only
+reports remain stale. Identity validation never creates a strict pass.
 
 The source-only package gate builds twice in a disposable source snapshot and
 compares all shipped hashes. It never repackages into the mounted active distribution

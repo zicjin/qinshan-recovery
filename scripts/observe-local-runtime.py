@@ -42,7 +42,13 @@ def digest(value):
 
 
 def identifier(value):
-    if not isinstance(value, str) or not re.fullmatch(r'[A-Z][A-Z0-9_$#]{0,127}', value):
+    # Oracle quoted names preserve case and may contain Unicode. Reject SQL and
+    # record delimiters so the same exact name is safe both in the quoted FROM
+    # identifier and in the COUNT record's SQL string literal. No normalization.
+    if (not isinstance(value, str) or not value or not value.isprintable()
+            or len(value.encode('utf-8')) > 128
+            or any(char in value for char in ('"', "'", '|', ';', '\\'))
+            or any(token in value for token in ('--', '/*', '*/'))):
         raise ObservationError('invalid database identifier')
     return value
 
@@ -116,7 +122,7 @@ class Observer:
                'alter session set container = FREEPDB1;\n'
                'prompt OBSERVE_BEGIN\n' + '\n'.join(selects) + '\n'
                'prompt OBSERVE_END\nexit\n')
-        output = self.command(['exec', '-i', '-u', 'oracle', CONTAINERS['oracle'], 'sh', '-c',
+        output = self.command(['exec', '-i', '-e', 'NLS_LANG=.AL32UTF8', '-u', 'oracle', CONTAINERS['oracle'], 'sh', '-c',
                                'exec "$ORACLE_HOME/bin/sqlplus" -s / as sysdba'], sql)
         if re.search(r'\b(?:ORA|SP2|TNS|LRM)-\d+', output):
             raise ObservationError('Oracle observation failed')
@@ -131,7 +137,7 @@ class Observer:
         records = [row[1:] for row in rows]
         if len({tuple(row) for row in records}) != expected:
             raise ObservationError('duplicate SQL observation records')
-        self.queries.append({'name': name, 'sql_sha256': hashlib.sha256(sql.encode('ascii')).hexdigest(),
+        self.queries.append({'name': name, 'sql_sha256': hashlib.sha256(sql.encode('utf-8')).hexdigest(),
                              'expected_records': expected, 'parsed_records': len(records),
                              'parsed_rows_sha256': digest(records), 'coverage_complete': True})
         return records

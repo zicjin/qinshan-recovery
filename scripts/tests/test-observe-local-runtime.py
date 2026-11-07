@@ -20,6 +20,11 @@ with open(os.environ['OBSERVER_LOG'], 'a') as log:
 assert args[:2] == ['--host', 'unix:///var/run/docker.sock'], args
 args = args[2:]
 network_id = 'd' * 64
+tables = ['objectdr', 'test'] if scenario == 'quoted-identifiers' else ['ALPHA', 'BETA']
+if scenario == 'unicode-table': tables = ['检验表$#', 'test']
+if scenario.startswith('bad-table-'):
+    tables[0] = {'quote': 'bad"name', 'apostrophe': "bad'name", 'delimiter': 'bad|name',
+                 'newline': 'bad\nname', 'semicolon': 'bad;delete', 'control': 'bad\x00name'}[scenario[10:]]
 if scenario == 'docker-error':
     print('private-secret-must-not-escape', file=sys.stderr)
     sys.exit(1)
@@ -45,7 +50,7 @@ elif args[:1] == ['inspect']:
         if any(c['sql'] for c in prior): data['id'] = 'f'*64
     print(json.dumps(data))
 elif args[:1] == ['exec']:
-    assert args == ['exec','-i','-u','oracle','lims-local-runtime-oracle','sh','-c',
+    assert args == ['exec','-i','-e','NLS_LANG=.AL32UTF8','-u','oracle','lims-local-runtime-oracle','sh','-c',
                     'exec "$ORACLE_HOME/bin/sqlplus" -s / as sysdba'], args
     assert 'alter session set container = FREEPDB1;' in sql
     # Refuse lifecycle, business SQL writes and unexpected SQLPlus commands.
@@ -64,14 +69,17 @@ elif args[:1] == ['exec']:
     elif "'COLUMN|'" in sql:
         print('EXPECTED|' + ('5' if scenario == 'truncated-metadata' else '4'))
         for owner in ['LIMS_BASELINE_LOCAL', 'LIMS_RUNTIME_LOCAL']:
-            for table in ['ALPHA', 'BETA']:
+            for table in tables:
                 name = 'BAD;DELETE' if scenario == 'invalid-identifier' else table
-                print(f'COLUMN|{owner}|{name}|ID|1|NUMBER|22|10|0|N|0|-|-')
+                column = '检验名称$#' if scenario == 'quoted-identifiers' else 'ID'
+                if scenario.startswith('bad-column-'):
+                    column = {'quote': 'bad"name', 'delimiter': 'bad|name', 'newline': 'bad\nname'}[scenario[11:]]
+                print(f'COLUMN|{owner}|{name}|{column}|1|NUMBER|22|10|0|N|0|-|-')
     elif 'from dba_tables' in sql:
         print('EXPECTED|' + ('0' if scenario == 'empty-tables' else '4'))
         if scenario != 'empty-tables':
             for owner in ['LIMS_BASELINE_LOCAL', 'LIMS_RUNTIME_LOCAL']:
-                for table in ['ALPHA', 'BETA']:
+                for table in tables:
                     if scenario == 'mismatched-tables' and owner == 'LIMS_RUNTIME_LOCAL' and table == 'BETA': table = 'GAMMA'
                     print(f'TABLE|{owner}|{table}')
     else:
@@ -81,7 +89,7 @@ elif args[:1] == ['exec']:
         for label, owner, table in statements:
             assert label == owner + '|' + table
             if scenario == 'missing-count' and owner == 'LIMS_RUNTIME_LOCAL' and table == 'BETA': continue
-            n = 7 if table == 'ALPHA' else 0
+            n = 7 if table in ('ALPHA', 'objectdr') else 0
             if scenario == 'drift' and owner == 'LIMS_RUNTIME_LOCAL' and table == 'ALPHA': n = 8
             print(f'COUNT|{owner}|{table}|{n}')
     print('OBSERVE_END')
@@ -133,6 +141,38 @@ class ObserveLocalRuntimeTest(unittest.TestCase):
         self.assertNotIn('num_rows', count_sql.lower())
         self.assertTrue(all(c['args'][2] in ['inspect', 'network', 'exec'] for c in calls))
 
+
+    def test_preserves_quoted_lowercase_tables_and_unicode_column_metadata(self):
+        result, snapshot = self.run_cli('quoted-identifiers')
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        columns = snapshot['schemas']['LIMS_RUNTIME_LOCAL']['column_metadata']['rows']
+        self.assertEqual([row[:2] for row in columns], [['objectdr', '检验名称$#'], ['test', '检验名称$#']])
+        self.assertEqual(snapshot['schemas']['LIMS_RUNTIME_LOCAL']['row_counts']['rows'],
+                         [{'table': 'objectdr', 'count': 7}, {'table': 'test', 'count': 0}])
+        calls = [json.loads(line) for line in self.log.read_text().splitlines()]
+        generated_sql = '\n'.join(c['sql'] for c in calls if "'COUNT|" in c['sql'])
+        self.assertIn('from "LIMS_RUNTIME_LOCAL"."objectdr";', generated_sql)
+        self.assertIn('from "LIMS_BASELINE_LOCAL"."test";', generated_sql)
+
+    def test_quotes_unicode_table_identifiers_and_hashes_actual_utf8_sql(self):
+        result, snapshot = self.run_cli('unicode-table')
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertEqual({row['table'] for row in snapshot['schemas']['LIMS_RUNTIME_LOCAL']['row_counts']['rows']},
+                         {'检验表$#', 'test'})
+        calls = [json.loads(line) for line in self.log.read_text().splitlines()]
+        self.assertTrue(any('from "LIMS_RUNTIME_LOCAL"."检验表$#";' in call['sql'] for call in calls))
+
+    def test_rejects_identifier_injection_before_generating_count_sql(self):
+        for scenario in ('bad-table-quote', 'bad-table-apostrophe', 'bad-table-delimiter',
+                         'bad-table-newline', 'bad-table-semicolon', 'bad-table-control',
+                         'bad-column-quote', 'bad-column-delimiter', 'bad-column-newline'):
+            with self.subTest(scenario=scenario):
+                self.log.write_text('')
+                result, report = self.run_cli(scenario)
+                self.assertEqual(result.returncode, 1)
+                self.assertEqual(report['status'], 'diagnostic-failed')
+                calls = [json.loads(line) for line in self.log.read_text().splitlines()]
+                self.assertFalse(any("'COUNT|" in call['sql'] for call in calls))
 
     def test_fails_closed_for_missing_stopped_detached_or_nonisolated_runtime(self):
         for scenario in ('stopped-app', 'stopped-oracle', 'stopped-redis', 'external-network',

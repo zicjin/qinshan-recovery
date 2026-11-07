@@ -31,7 +31,7 @@ from urllib.parse import urlsplit
 from urllib.request import HTTPCookieProcessor, ProxyHandler, Request, build_opener
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from owned_runtime_contract import RuntimeContractError, validate_file
+from owned_runtime_contract import PREPARED_SCHEMA, RuntimeContractError, validate_file
 from api_fixture import FixtureError, execute_fixture, validate_sql_fixture
 from evidence_output import (
     DIAGNOSTIC_ROOT,
@@ -205,6 +205,7 @@ def source_metadata(case_file: Path,
     metadata.update(binding_metadata(binding))
     metadata["implementation_scope"] = scope
     metadata["implementation_dirty"] = binding_dirty
+    metadata["runtime_contract_digest"] = binding["runtime_contract_digest"]
     return metadata
 
 
@@ -651,6 +652,16 @@ def run_cases(case_document: Mapping[str, Any], *, base_url: str, mode: str,
     if strict and runtime_report is None:
         raise RuntimeContractError("strict API evidence requires a clone runtime report")
     runtime_contract = validate_file(runtime_report, mode) if runtime_report else None
+    prepared = bool(strict and runtime_contract and
+                    runtime_contract.get("runtime_manifest_schema") == PREPARED_SCHEMA)
+    if prepared:
+        if base_url != runtime_contract["loopback_url"]:
+            raise RuntimeContractError("prepared runtime loopback URL does not match execution URL")
+        if clone_identity and clone_identity != runtime_contract.get("clone_identity"):
+            raise RuntimeContractError("prepared runtime clone_identity does not match execution")
+        if not defer_cleanup:
+            raise RuntimeContractError("prepared runtime requires deferred cleanup finalization")
+        clone_identity = runtime_contract.get("clone_identity")
     cases = case_document.get("cases")
     if not isinstance(cases, list) or not cases:
         raise ValueError("case document must contain a non-empty cases list")
@@ -678,8 +689,18 @@ def run_cases(case_document: Mapping[str, Any], *, base_url: str, mode: str,
         raise ValueError("strict API evidence requires implementation_dirty=false")
     if strict and not artifact_hashes:
         raise ValueError("strict API evidence requires at least one artifact hash")
+    if prepared:
+        actual_artifacts = {str(Path(path).resolve()): digest for path, digest in artifact_hashes.items()}
+        expected_artifacts = runtime_contract.get("artifact_sha256")
+        if not isinstance(expected_artifacts, Mapping) or actual_artifacts != expected_artifacts:
+            raise RuntimeContractError("prepared runtime operated artifact hashes do not match execution artifacts")
+        artifact_hashes = actual_artifacts
     cleanup_contract = cleanup_contract or case_document.get("cleanup_contract")
     cleanup_missing: List[str] = []
+    if prepared:
+        if cleanup_contract is not None and cleanup_contract != {"cleanup_pending": True}:
+            raise RuntimeContractError("prepared runtime cannot accept future cleanup claims")
+        cleanup_contract = {"cleanup_pending": True}
     if strict:
         if not isinstance(cleanup_contract, Mapping):
             if not defer_cleanup:
@@ -694,6 +715,8 @@ def run_cases(case_document: Mapping[str, Any], *, base_url: str, mode: str,
         "execution": "strict" if strict else "diagnostic",
         "strict_evidence": strict,
         "batch_id": batch_id,
+        **({"milestone_id": runtime_contract["milestone_id"],
+            "prepared_manifest": runtime_contract["prepared_manifest"]} if prepared else {}),
         "stimulus_contract_version": STIMULUS_CONTRACT_VERSION,
         "normalizer_version": NORMALIZER_VERSION,
         "validation_mode": "executed",

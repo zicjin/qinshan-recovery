@@ -32,34 +32,18 @@ class RuntimeContractTest(unittest.TestCase):
             "route_execution_model": {"boundary_process": False, "internal_http_bridge": False},
         }
 
-    def test_local_schema_policy_pins_survive_validation_and_unknown_policies_fail(self):
+    def test_legacy_local_policy_pins_do_not_upgrade_a_historical_manifest(self):
         import local_schema_policy
         descriptor, _ = local_schema_policy.definition(local_schema_policy.APPROVED)
         report = self.local_runtime_report()
         report.update(schema_policy_id=local_schema_policy.APPROVED,
                       schema_policy_sha256=local_schema_policy.digest(descriptor))
-        result = module.validate_report(report, 'strict')
-        self.assertEqual(result['schema_policy_sha256'], report['schema_policy_sha256'])
-        self.assertEqual(result['schema_policy_id'], report['schema_policy_id'])
-        for change in ({'schema_policy_id': 'arbitrary-tables'}, {'schema_policy_sha256': 'a'*64},
-                       {'schema_policy_id': None}):
-            with self.subTest(change=change):
-                invalid = dict(report, **change)
-                with self.assertRaises(module.RuntimeContractError):
-                    module.validate_report(invalid, 'strict')
-        del report['schema_policy_sha256']
-        with self.assertRaises(module.RuntimeContractError):
-            module.validate_report(report, 'strict')
+        with self.assertRaisesRegex(module.RuntimeContractError, "prepared"):
+            module.validate_report(report, "strict")
 
-    def test_local_wsl_persistent_runtime_preserves_local_identity(self):
-        result = module.validate_report(self.local_runtime_report(), "strict")
-        self.assertEqual(result["runtime_profile"], "local-wsl")
-        self.assertEqual(result["oracle_instance_id"], "lims-local-runtime-oracle")
-        self.assertEqual(result["oracle_container"], "lims-local-runtime-oracle")
-        self.assertEqual(result["redis_container"], "lims-local-runtime-redis")
-        self.assertEqual(result["runtime_identity"], "lims-local-runtime-oracle:LIMS_BASELINE_LOCAL:LIMS_RUNTIME_LOCAL:" + "a" * 64)
-        self.assertTrue(result["reuse"])
-        self.assertFalse(result["strict_evidence"])
+    def test_legacy_local_manifest_cannot_admit_a_new_strict_run(self):
+        with self.assertRaisesRegex(module.RuntimeContractError, "prepared"):
+            module.validate_report(self.local_runtime_report(), "strict")
 
     def test_local_wsl_profile_cannot_fall_back_to_unverified_clone_identity(self):
         report = self.local_runtime_report()

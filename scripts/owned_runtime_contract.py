@@ -9,6 +9,7 @@ from urllib.parse import urlsplit
 import sys
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from source_binding import IMPLEMENTATION_SCOPE, DISTRIBUTION_INPUT_SCOPE, capture_binding
+import re
 
 
 class RuntimeContractError(ValueError):
@@ -46,13 +47,13 @@ def _loopback_url(report: Mapping[str, Any]) -> None:
         raise RuntimeContractError("runtime report loopback_url must be an explicit loopback HTTP URL")
 
 
-def _implementation_binding(report: Mapping[str, Any], mode: str) -> Dict[str, Any]:
+def _implementation_binding(report: Mapping[str, Any], mode: str, *, required: bool = False) -> Dict[str, Any]:
     if mode != "strict":
         return {}
     # Preserve validation compatibility for pre-migration unit fixtures and
     # historical diagnostic manifests.  New runtime manifests emitted by the
     # scripts always carry the complete binding and are checked below.
-    if not any(key in report for key in ("implementation_binding", "implementation_tree_digest", "implementation_scope")):
+    if not required and not any(key in report for key in ("implementation_binding", "implementation_tree_digest", "implementation_scope")):
         return {}
     for key in ("repository_head_at_capture", "implementation_binding",
                 "implementation_tree_digest", "implementation_scope", "implementation_dirty"):
@@ -88,6 +89,69 @@ def _implementation_binding(report: Mapping[str, Any], mode: str) -> Dict[str, A
     }
 
 
+PREPARED_SCHEMA = "local-prepared-v1"
+PREPARED_STATUS = "local-prepared-unverified"
+
+
+def _prepared_local(report: Mapping[str, Any]) -> Dict[str, Any]:
+    """Admit observed before state; lifecycle outcomes belong to finalization."""
+    expected = {
+        "runtime_manifest_schema": PREPARED_SCHEMA,
+        "status": PREPARED_STATUS, "execution": PREPARED_STATUS,
+        "lifecycle_phase": "prepared", "strict_evidence": False, "production_access": False,
+        "existing_application_preserved": True, "runtime_profile": "local-wsl",
+        "execution_location": "local-wsl-docker", "oracle_reused": True,
+        "oracle_instance_id": "lims-local-runtime-oracle",
+        "oracle_container": "lims-local-runtime-oracle",
+        "redis_container": "lims-local-runtime-redis", "redis_reused": True,
+        "baseline_schema": "LIMS_BASELINE_LOCAL", "runtime_schema": "LIMS_RUNTIME_LOCAL",
+        "baseline_refreshed": False,
+        "schema_copy_method": "supplied-runtime-before-content-restore-target",
+    }
+    for key, value in expected.items():
+        if type(report.get(key)) is not type(value) or report.get(key) != value:
+            raise RuntimeContractError("prepared runtime " + key + " mismatch")
+    if report.get("source_dirty") is not False:
+        raise RuntimeContractError("prepared runtime source_dirty must be false")
+    for key in ("application_stopped", "lifecycle_verified", "cleanup"):
+        if key in report:
+            raise RuntimeContractError("prepared runtime cannot declare future cleanup: " + key)
+    # Null is explicit pending state. Never accept a predicted final hash or a
+    # successful restore/immutability/cleanliness outcome before execution.
+    for key in ("runtime_schema_hash_after", "runtime_key_data_hash_after",
+                "baseline_schema_immutable", "runtime_schema_restored", "runtime_dirty"):
+        if key not in report or report[key] is not None:
+            raise RuntimeContractError("prepared runtime future outcome must be pending: " + key)
+    for key in ("baseline_schema_hash", "runtime_schema_hash_before",
+                "baseline_key_data_hash", "runtime_key_data_hash_before"):
+        if not isinstance(report.get(key), str) or re.fullmatch(r"[a-f0-9]{64}", report[key]) is None:
+            raise RuntimeContractError("prepared runtime lacks valid " + key)
+    model = report.get("route_execution_model")
+    if not isinstance(model, Mapping) or any(model.get(key) is not False for key in
+            ("boundary_process", "internal_http_bridge", "jni_replacement_process")):
+        raise RuntimeContractError("prepared runtime cannot contain a boundary process, JNI process or HTTP bridge")
+    binding = _implementation_binding(report, "strict", required=True)
+    current = capture_binding()
+    for key in ("application_binding", "harness_binding", "planning_binding"):
+        if report.get(key) != current.get(key):
+            raise RuntimeContractError("prepared runtime " + key + " is missing or stale")
+    import local_schema_policy as policy
+    try:
+        descriptor, _ = policy.definition(report.get("schema_policy_id"))
+        if report.get("schema_policy_sha256") != policy.digest(descriptor):
+            raise policy.PolicyError("schema policy pin mismatch")
+    except policy.PolicyError:
+        raise RuntimeContractError("prepared runtime schema policy identity or provenance mismatch") from None
+    try:
+        from lifecycle_proof import validate_prepared
+        verified = validate_prepared(report)
+    except (ValueError, OSError, KeyError, TypeError, ImportError) as error:
+        raise RuntimeContractError("prepared runtime before proof rejected") from error
+    return {**{key: value for key, value in report.items() if not key.startswith("_")},
+            **verified, **binding, "mode": "strict", "strict_evidence": False,
+            "reuse": True, "cleanup_pending": True}
+
+
 def validate_report(report: Mapping[str, Any], mode: str) -> Dict[str, Any]:
     if mode not in {"debug", "strict"}:
         raise RuntimeContractError("mode must be debug or strict")
@@ -109,6 +173,10 @@ def validate_report(report: Mapping[str, Any], mode: str) -> Dict[str, Any]:
             "source_commit": report.get("source_commit"),
         }
 
+    if report.get("runtime_manifest_schema") == PREPARED_SCHEMA:
+        return _prepared_local(report)
+    if report.get("runtime_profile") == "local-wsl":
+        raise RuntimeContractError("new strict local runtime requires an observed prepared manifest")
     if report.get("status") != "clone-ready-unverified":
         raise RuntimeContractError("strict runtime must be clone-ready-unverified before API replay")
     _require(report, "execution", "clone-ready-unverified")
@@ -223,7 +291,9 @@ def validate_report(report: Mapping[str, Any], mode: str) -> Dict[str, Any]:
 
 
 def validate_file(path: Path, mode: str) -> Dict[str, Any]:
-    return validate_report(load_report(path), mode)
+    report = load_report(path)
+    report["_manifest_path"] = str(path.absolute())
+    return validate_report(report, mode)
 
 
 if __name__ == "__main__":

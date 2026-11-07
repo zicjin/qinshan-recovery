@@ -9,12 +9,11 @@
   "maven_runtime": "\u001b[1mApache Maven 3.9.12\u001b[m",
   "module": "owned-core-common",
   "output_jar": "owned-core-common/target/owned-core-common-1.0.0-SNAPSHOT.jar",
-  "output_jar_sha256": "b255a41778a5e6b04ab2644e397e70c60c6e8fcf8252322c26a2780891e0b0f6",
-  "pending_reason": "Audit read scope source overlay changed; isolated Java MVC/Mapper regression passes; full module build required.",
+  "output_jar_sha256": "ae30b868394e5fcd35d67dbee46924db218a817721a2197522e7ce1bebb0ad44",
   "schema": "supplier-reconstituted-module-compile-v1",
   "source_file_count": 2222,
   "source_only_framework_classpath": true,
-  "source_tree_sha256": "ca33a1eb43981e2b06104bdd7715fa003bb2ee33f550f9495b310854895925cb",
-  "status": "pending-module-assembly",
+  "source_tree_sha256": "e48658ab1585e09d573086435ae3f94111bdf2c4ee1fcab50a3bacc571c76436",
+  "status": "pass",
   "supplier_private_jars_on_classpath": false
 }

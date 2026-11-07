@@ -46,7 +46,8 @@ from evidence_fingerprint import (
     transcript_fingerprints,
 )
 from http_write_proof import (VERSION as HTTP_WRITE_PROOF_VERSION, business_write, context as proof_context,
-                              transcript as proof_transcript, write_artifact, validate_case_proof, validate_read_request)
+                              transcript as proof_transcript, write_artifact, validate_case_proof, validate_read_request,
+                              IDENTITY_ADAPTER, IDENTITY_SELECTORS, projected_response, validate_identity)
 from source_binding import binding_metadata, capture_binding
 from source_binding import REPO_ROOT as DISCOVERED_REPO_ROOT
 
@@ -115,6 +116,7 @@ def rsa_login(base_url: str, username: str, password: str, *, timeout: float) ->
     # Use a fresh opener for each authentication boundary. The global opener
     # is intentionally retained for contract requests, but stale cookies or a
     # relay's half-closed keep-alive must not poison public-key/login.
+    COOKIE_JAR.clear()
     auth_jar = CookieJar()
     auth_opener = build_opener(ProxyHandler({}), HTTPCookieProcessor(auth_jar))
     key_request = Request(
@@ -157,15 +159,26 @@ def rsa_login(base_url: str, username: str, password: str, *, timeout: float) ->
                  "SECURITY-RSA-KEY": key_body.decode("ascii").strip()},
         method="POST",
     )
-    status, response_body, _ = _authentication_request(auth_opener, login_request, timeout=timeout)
+    status, response_body, login_headers = _authentication_request(auth_opener, login_request, timeout=timeout)
     if status != 200:
         raise RuntimeError("RSA login returned %d" % status)
+    try:
+        projection_metadata, identity = projected_response(response_body,
+            {'adapter': IDENTITY_ADAPTER, 'selectors': IDENTITY_SELECTORS})
+        validate_identity(identity, principal=username)
+        if not list(auth_jar):
+            raise ValueError('login established no session cookies')
+    except (ValueError, TypeError, KeyError) as error:
+        raise RuntimeError('RSA login did not return a valid authenticated identity') from error
     # Transfer only the session cookies produced by this login into the
     # contract opener. No supplier/owned or prior-job cookies are reused.
     COOKIE_JAR.clear()
     for cookie in auth_jar:
         COOKIE_JAR.set_cookie(cookie)
-    return {"status": status, "body_sha256": sha256_bytes(response_body), "authenticated": True}
+    return {"status": status, "body_sha256": sha256_bytes(response_body), "authenticated": True,
+            "identity": identity, "projection_metadata": projection_metadata,
+            "response_fingerprint": transcript_fingerprints({}, status, login_headers, response_body)['response_fingerprint'],
+            "session_context": cookie_auth_context(COOKIE_JAR)}
 
 
 def git_value(*args: str) -> str:
@@ -761,7 +774,9 @@ def run_cases(case_document: Mapping[str, Any], *, base_url: str, mode: str,
             raise ValueError("auth_user and password_file must be supplied together")
         if auth_user and password_file:
             authentication = rsa_login(base_url, auth_user, read_password_file(password_file), timeout=timeout)
-            report["authentication"] = {"attempted": True, "authenticated": True, "status": authentication["status"]}
+            if authentication.get("authenticated") is not True:
+                raise ValueError("authentication did not establish authenticated identity")
+            report["authentication"] = {"attempted": True, **authentication}
         for raw_case in cases:
             if not isinstance(raw_case, dict):
                 raise ValueError("each case must be an object")
@@ -787,14 +802,28 @@ def run_cases(case_document: Mapping[str, Any], *, base_url: str, mode: str,
                 validate_read_request(declaration)
                 request = _expand_fixture_value(declaration, fixture_captures, runtime_values)
                 request.update({"role": role, "organization": organization, "_http_proof": True})
+                if phase.startswith("identity_"):
+                    if request.get("method") != "GET" or request.get("path") != "/core/module/sys/logins/account":
+                        raise ValueError("identity proof requires declared current account request")
+                    if request.get("capture_json") or request.get("capture_text"):
+                        raise ValueError("identity proof refuses raw account capture")
+                    request["_identity_projection"] = request.pop("projection", None)
                 result = request_case(base_url, request, timeout=timeout, batch_id=batch_id)
                 proof_observations[phase] = result.pop("_http_transcript")
+                if phase.startswith("identity_"):
+                    item = proof_observations[phase]
+                    validate_identity(item["response_projection"], principal=auth_user, role=role, organization=organization)
+                    if item["request"]["auth"] != report["authentication"]["session_context"] or cookie_auth_context(COOKIE_JAR) != item["request"]["auth"]:
+                        raise ValueError("identity proof session context mismatch")
                 if request.get("capture_json"):
                     fixture_captures[str(request.get("id", phase))] = result.pop("_captured_json")
                 return result
             if needs_proof:
                 if report["authentication"].get("authenticated") is not True:
                     raise ValueError("HTTP write proof requires successfully authenticated principal")
+                validate_identity(report["authentication"]["identity"], principal=auth_user, role=role, organization=organization)
+                if not isinstance(raw_case.get("identity_request"), dict):
+                    raise ValueError("strict write requires declared identity_request")
                 if not isinstance(raw_case.get("audit"), dict) or not isinstance(raw_case.get("audit_requests"), dict):
                     raise ValueError("strict write requires executed HTTP audit proof")
                 if not isinstance(raw_case.get("state_proof"), dict) or not isinstance(raw_case.get("rollback"), dict):
@@ -818,6 +847,7 @@ def run_cases(case_document: Mapping[str, Any], *, base_url: str, mode: str,
                 )
                 fixture["setup"] = "executed" if fixture["setup_requests"] else "not-required"
                 if needs_proof:
+                    proof_read(raw_case["identity_request"], "identity_before")
                     proof_read(raw_case["state_proof"].get("before_request"), "state_before")
                     proof_read(raw_case["audit_requests"].get("before"), "audit_before")
                 # Keep restore/setup declarations opaque until their own
@@ -829,7 +859,7 @@ def run_cases(case_document: Mapping[str, Any], *, base_url: str, mode: str,
                 request_case_document.setdefault("role", role)
                 request_case_document.setdefault("organization", organization)
                 request_case_document.pop("fixture", None)
-                for proof_field in ("audit_requests", "audit", "state_proof", "rollback"):
+                for proof_field in ("identity_request", "audit_requests", "audit", "state_proof", "rollback"):
                     request_case_document.pop(proof_field, None)
                 if needs_proof:
                     request_case_document["_http_proof"] = True
@@ -864,6 +894,7 @@ def run_cases(case_document: Mapping[str, Any], *, base_url: str, mode: str,
                     if raw_case["audit_requests"].get("lines"):
                         proof_read(raw_case["audit_requests"]["lines"], "audit_lines")
                     proof_read(raw_case["state_proof"].get("after_request"), "state_after")
+                    proof_read(raw_case["identity_request"], "identity_after")
                 readback_requests = readback_declarations
                 if readback_requests:
                     if not isinstance(readback_requests, list):
@@ -952,7 +983,7 @@ def run_cases(case_document: Mapping[str, Any], *, base_url: str, mode: str,
                            "context": proof_context(report, observation),
                            "observations": proof_observations,
                            "audit": _expand_fixture_value(raw_case["audit"], fixture_captures, runtime_values),
-                           "state": _expand_fixture_value({"expected": raw_case["state_proof"].get("expected"), "expected_after": raw_case["state_proof"].get("expected_after"), "records_path": raw_case["state_proof"].get("records_path"), "entity_field": raw_case["state_proof"].get("entity_field")}, fixture_captures, runtime_values),
+                           "state": _expand_fixture_value({"expected": raw_case["state_proof"].get("expected"), "expected_after": raw_case["state_proof"].get("expected_after"), "records_path": raw_case["state_proof"].get("records_path"), "entity_field": raw_case["state_proof"].get("entity_field"), **({"projection_fields": raw_case["state_proof"]["projection_fields"]} if "projection_fields" in raw_case["state_proof"] else {})}, fixture_captures, runtime_values),
                            "rollback": _expand_fixture_value(raw_case["rollback"], fixture_captures, runtime_values)}
                 proof_path = output.parent / (output.stem + ".http-proofs") / batch_id / (sha256_bytes(case_id.encode()) + ".json")
                 observation["http_write_proof"] = write_artifact(proof_path, payload)

@@ -188,6 +188,8 @@ _HARNESS_SUFFIXES = (
     "scripts/schema_fixture.py",
     "scripts/local_schema_policy.py",
     "scripts/http_write_proof.py",
+    "scripts/audit_fixture_cleanup.py",
+    "api-fixtures/audit",
     "scripts/lifecycle_proof.py",
     "api-fixtures/schema",
     "project/sql/oracle/oracle_sql_emc.txt",

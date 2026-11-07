@@ -10,6 +10,7 @@ from pathlib import Path
 import sys
 import tempfile
 import threading
+import subprocess
 import unittest
 from unittest import mock
 
@@ -28,6 +29,35 @@ class Handler(BaseHTTPRequestHandler):
     wrong_audit = None
     naive_timestamp = False
     event_value = 'I'
+    identity_problem = None
+    account_reads = 0
+    public_key = b''
+    source_shape = False
+
+    def do_PUT(self):
+        body = json.loads(self.rfile.read(int(self.headers.get('Content-Length', 0))))
+        old = type(self).value
+        type(self).value = body['name']
+        type(self).audits.append({'id': 81, 'targetId': 'T_EMC_SEAL_RULE$71', 'auditTrailType': 'UPDATE',
+            'createdById': 'manager', 'createdByOrgId': 'org-1', 'createdTime': dt.datetime.now(dt.timezone.utc).isoformat(),
+            'lines': [{'id': 91, 'column': 'NAME', 'oldValue': old, 'newValue': body['name']}]})
+        self.send_response(200)
+        self.end_headers()
+
+    def account(self):
+        cls = type(self)
+        identity = {'id': 'manager', 'orgId': 'org-1', 'loginToken': 'private-login-token',
+                    'ext$': {'loginorgid': 'org-1', 'roles': json.dumps([{'roleId': 'manager', 'userId': 'manager', 'secret': 'private-role-extra'}])},
+                    'email': 'private-account-extra'}
+        if cls.identity_problem == 'missing-org': identity['ext$']['loginorgid'] = ''
+        if cls.identity_problem == 'labels': identity['ext$']['roles'] = '["manager"]'
+        if cls.identity_problem == 'assignment': identity['ext$']['roles'] = '[{"roleId":"manager","userId":"other"}]'
+        if cls.account_reads and cls.identity_problem == 'account-principal': identity['id'] = 'other'
+        if cls.account_reads and cls.identity_problem == 'account-org': identity['ext$']['loginorgid'] = 'other'
+        if cls.identity_problem == 'principal': identity['id'] = 'other'
+        if cls.identity_problem == 'organization': identity['ext$']['loginorgid'] = 'other'
+        if cls.identity_problem == 'missing-role' or (cls.identity_problem == 'revoked' and cls.account_reads > 1): identity['ext$']['roles'] = '[]'
+        return identity
 
     def respond(self, value, status=200):
         data = json.dumps(value).encode()
@@ -37,6 +67,18 @@ class Handler(BaseHTTPRequestHandler):
         self.wfile.write(data)
 
     def do_GET(self):
+        if self.path == '/open/security/public-key':
+            self.send_response(200)
+            self.end_headers()
+            self.wfile.write(self.public_key)
+            return
+        if self.path == '/core/module/sys/logins/account':
+            type(self).account_reads += 1
+            self.respond(self.account() if self.headers.get('Cookie') == 'SESSION=private-session-value' else {'error': 'unauthenticated'})
+            return
+        if self.path == '/state/queries' and self.source_shape:
+            self.respond({'rows': [] if self.value is None else [{'id': 71, 'name': self.value, 'createdTime': 'dynamic-server-time', 'version': 7}]})
+            return
         if self.path == '/lines/queries':
             self.respond({'rows': [{**line, 'record': row['id']} for row in self.audits for line in row['lines']]})
         else:
@@ -44,7 +86,19 @@ class Handler(BaseHTTPRequestHandler):
 
     def do_POST(self):
         length = int(self.headers.get('Content-Length', 0))
-        body = json.loads(self.rfile.read(length) or b'{}')
+        raw = self.rfile.read(length)
+        if self.path == '/core/module/sys/login':
+            self.send_response(200)
+            self.send_header('Content-Type', 'application/json')
+            self.send_header('Set-Cookie', 'SESSION=private-session-value; Path=/; HttpOnly')
+            self.end_headers()
+            self.wfile.write(json.dumps({'ok': True} if self.identity_problem == 'fake-login' else self.account()).encode())
+            return
+        body = json.loads(raw or b'{}')
+        if self.path == '/source-setup':
+            type(self).value = 'before'
+            self.respond(71)
+            return
         if self.path == '/restore':
             if not self.broken_restore:
                 type(self).value = None
@@ -71,6 +125,12 @@ class Handler(BaseHTTPRequestHandler):
 class ProofTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
+        with tempfile.TemporaryDirectory() as keydir:
+            key = Path(keydir) / 'key.pem'
+            subprocess.run(['openssl', 'genpkey', '-algorithm', 'RSA', '-pkeyopt', 'rsa_keygen_bits:2048', '-out', str(key)], check=True, capture_output=True)
+            der = subprocess.run(['openssl', 'pkey', '-in', str(key), '-pubout', '-outform', 'DER'], check=True, capture_output=True).stdout
+            import base64
+            Handler.public_key = base64.b64encode(der)
         cls.server = ThreadingHTTPServer(('127.0.0.1', 0), Handler)
         cls.thread = threading.Thread(target=cls.server.serve_forever, daemon=True)
         cls.thread.start()
@@ -88,6 +148,8 @@ class ProofTest(unittest.TestCase):
         Handler.wrong_audit = None
         Handler.naive_timestamp = False
         Handler.event_value = 'I'
+        Handler.identity_problem, Handler.account_reads = None, 0
+        Handler.source_shape = False
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
         self.root = Path(self.temp.name)
@@ -99,6 +161,8 @@ class ProofTest(unittest.TestCase):
             'family_fingerprint': 'fam-test', 'body': {'id': 'entity-7', 'reject': rejected},
             'expected_status': 422 if rejected else 201,
             'fixture': {'mode': 'api', 'restore_requests': [{'method': 'POST', 'path': '/restore'}]},
+            'identity_request': {'method': 'GET', 'operation': 'read', 'path': '/core/module/sys/logins/account',
+                                 'projection': {'adapter': 'sunway-account-v1', 'selectors': {'principal': 'id', 'account_organization': 'orgId', 'organization': 'ext$.loginorgid', 'roles': 'ext$.roles'}}},
             'audit_requests': {'before': audit, 'after': audit},
             'audit': {'expected': {'entity': 'entity-7', 'event': 'I', 'principal': 'manager', 'role': 'manager', 'organization': 'org-1'},
                       'entity_binding': {'source': 'request', 'path': 'body.id'},
@@ -116,13 +180,118 @@ class ProofTest(unittest.TestCase):
         metadata = {key: key + '-test' for key in ('application_binding', 'harness_binding', 'runtime_contract_binding', 'implementation_binding')}
         metadata.update({'source_dirty': False, 'implementation_dirty': False, 'source_commit': 'test'})
         contract = {'runtime_identity': 'test-runtime'}
-        with mock.patch.object(runner, 'source_metadata', return_value=metadata), mock.patch.object(runner, 'validate_file', return_value=contract), mock.patch.object(runner, 'rsa_login', return_value={'authenticated': True, 'status': 200}), mock.patch.object(runner, 'read_password_file', return_value='test-only'):
+        with mock.patch.object(runner, 'source_metadata', return_value=metadata), mock.patch.object(runner, 'validate_file', return_value=contract), mock.patch.object(runner, 'read_password_file', return_value='test-only'):
             return runner.run_cases(document, base_url=self.base, mode='strict', role='manager', organization='org-1',
                 clone_identity='test-runtime', artifacts=[artifact], output=self.root / 'pending.json', timeout=2,
                 runtime_report=self.root / 'runtime.json', defer_cleanup=True, auth_user='manager', password_file=self.root / 'test-password')
 
     def check_pending_proof(self, report):
         return validate_case_proof(report, report['cases'][0], require_registered=False)
+
+    def test_server_identity_allows_roleless_audit_without_persisting_secrets(self):
+        document = self.document()
+        document['cases'][0]['audit']['fields'].pop('role')
+        report = self.run_document(document)
+        self.assertEqual(report['status'], 'executed-pass-pending-cleanup', report.get('reason'))
+        self.assertTrue(self.check_pending_proof(report)[0])
+        persisted = json.dumps(report) + Path(report['cases'][0]['http_write_proof']['path']).read_text()
+        for secret in ('private-login-token', 'private-session-value', 'private-role-extra', 'private-account-extra', 'loginToken'):
+            self.assertNotIn(secret, persisted)
+        self.assertEqual(Handler.account_reads, 2)
+
+    def test_http_200_login_without_account_identity_is_not_authenticated(self):
+        Handler.identity_problem = 'fake-login'
+        report = self.run_document(self.document())
+        self.assertEqual(report['status'], 'executed-fail')
+        self.assertIn('valid authenticated identity', report['reason'])
+        self.assertFalse(report['authentication']['authenticated'])
+        self.assertEqual(Handler.account_reads, 0)
+        self.assertIsNone(Handler.value)
+
+    def test_role_revocation_and_wrong_principal_or_organization_fail_closed_and_restore(self):
+        for problem in ('missing-role', 'revoked', 'principal', 'organization', 'account-principal', 'account-org', 'assignment', 'missing-org', 'labels'):
+            with self.subTest(problem=problem):
+                Handler.identity_problem, Handler.account_reads = problem, 0
+                Handler.value, Handler.audits = None, []
+                report = self.run_document(self.document())
+                self.assertEqual(report['status'], 'executed-fail', report)
+                self.assertIsNone(Handler.value)
+                self.assertTrue('identity' in report['reason'])
+                if problem in ('account-principal', 'account-org'):
+                    self.assertEqual(Handler.audits, [])
+
+    def test_identity_projection_and_session_metadata_tampering_is_rejected(self):
+        report = self.run_document(self.document())
+        self.assertTrue(self.check_pending_proof(report)[0], report.get('reason'))
+        ref = report['cases'][0]['http_write_proof']
+        path = Path(ref['path'])
+        original = path.read_bytes()
+        mutations = {
+            'projection_hash': lambda p: p['observations']['identity_after']['projection_metadata'].update(projection_sha256='0' * 64),
+            'adapter': lambda p: p['observations']['identity_before']['projection_metadata'].update(adapter='untrusted'),
+            'raw_hash': lambda p: p['observations']['identity_after']['projection_metadata'].update(raw_body_sha256='not-sha'),
+            'missing_before': lambda p: p['observations'].pop('identity_before'),
+            'missing_after': lambda p: p['observations'].pop('identity_after'),
+            'role': lambda p: p['observations']['identity_after']['response_projection'].update(roles=[]),
+            'privacy': lambda p: p['observations']['identity_after']['response_projection'].update(loginToken='must-reject'),
+            'session': lambda p: p['observations']['identity_before']['request'].update(auth={'cookies': {'SESSION': '0' * 64}}),
+        }
+        for name, mutation in mutations.items():
+            with self.subTest(name=name):
+                payload = json.loads(original)
+                mutation(payload)
+                if name == 'session':
+                    from evidence_fingerprint import request_fingerprint
+                    item = payload['observations']['identity_before']
+                    item['request_fingerprint'] = request_fingerprint(item['request'])
+                raw = json.dumps(payload).encode()
+                path.write_bytes(raw)
+                ref['sha256'] = hashlib.sha256(raw).hexdigest()
+                self.assertFalse(self.check_pending_proof(report)[0])
+        path.write_bytes(original)
+        ref['sha256'] = hashlib.sha256(original).hexdigest()
+        report['authentication']['identity']['principal'] = 'other'
+        self.assertFalse(self.check_pending_proof(report)[0])
+
+    def test_identity_source_selectors_cannot_extract_private_account_fields(self):
+        document = self.document()
+        document['cases'][0]['identity_request']['projection']['selectors']['principal'] = 'loginToken'
+        report = self.run_document(document)
+        self.assertEqual(report['status'], 'executed-fail')
+        self.assertIn('allowlist adapter/selectors', report['reason'])
+        self.assertIsNone(Handler.value)
+
+    def test_source_shaped_update_numeric_capture_prefixed_audit_empty_put_and_projection(self):
+        Handler.source_shape = True
+        document = self.document()
+        case = document['cases'][0]
+        case.update(method='PUT', path='/seal-rule', operation='update', expected_status=200,
+                    body={'id': '${fixture.created}', 'name': 'after'})
+        case['fixture'] = {'mode': 'api',
+            'setup_requests': [{'id': 'created', 'method': 'POST', 'path': '/source-setup', 'capture_json': True}],
+            'restore_requests': [{'method': 'PUT', 'path': '/seal-rule', 'body': {'id': '${fixture.created}', 'name': 'before'}}]}
+        case['audit'].update(entity_binding={'source': 'request', 'path': 'body.id',
+            'format': {'prefix': 'T_EMC_SEAL_RULE$', 'convert': 'string'}},
+            expected={'entity': 'T_EMC_SEAL_RULE$${fixture.created}', 'event': 'U', 'principal': 'manager', 'role': 'manager', 'organization': 'org-1'},
+            fields={'entity': 'targetId', 'event': 'auditTrailType', 'principal': 'createdById', 'organization': 'createdByOrgId',
+                    'record_id': 'id', 'timestamp': 'createdTime', 'lines': 'lines'},
+            event_values={'I': 'INSERT', 'U': 'UPDATE', 'D': 'DELETE'},
+            line_fields={'line_id': 'id', 'field': 'column', 'old': 'oldValue', 'new': 'newValue'},
+            changes=[{'field': 'NAME', 'state_field': 'name', 'value_type': 'string', 'old': 'before', 'new': 'after'}])
+        case['state_proof'].update(projection_fields=['id', 'name'],
+            expected={'rows': [{'id': '${fixture.created}', 'name': 'before'}]},
+            expected_after={'rows': [{'id': '${fixture.created}', 'name': 'after'}]})
+        report = self.run_document(document)
+        self.assertEqual(report['status'], 'executed-pass-pending-cleanup', report.get('reason'))
+        self.assertTrue(self.check_pending_proof(report)[0])
+        self.assertEqual(Handler.value, 'before')
+
+    def test_version_one_write_reports_are_never_upgraded(self):
+        report = self.run_document(self.document())
+        report['http_write_proof_version'] = 1
+        valid, reason = self.check_pending_proof(report)
+        self.assertFalse(valid)
+        self.assertIn('version missing or incompatible', reason)
 
     def test_positive_write_has_executed_audit_and_compensation_proof(self):
         report = self.run_document(self.document())

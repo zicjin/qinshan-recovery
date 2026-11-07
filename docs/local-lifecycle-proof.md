@@ -97,3 +97,13 @@ never copy only an unregistered cleanup JSON.
 promotion and closure gates pass. This change does not upgrade old reports,
 widen source exceptions, prove sequence rollback, or claim temporary private
 captures were removed: retained proof artifacts are intentional.
+
+Strict write inputs use HTTP proof version 2 and must declare the current-account
+identity request in [HTTP_WRITE_PROOF.md](../scripts/HTTP_WRITE_PROOF.md). The runner
+validates the actual login identity and observes the same authenticated session's
+principal, selected organization and role assignments before and after each write.
+Account responses contain secrets and are retained only as the documented minimal
+projection plus raw body hashes; the raw account/login response is never archived.
+A declared state projection proves those fields only. The lifecycle before/after
+content snapshots remain the complete table/content restoration check. Version 1
+write proofs cannot be upgraded by export or cleanup finalization.

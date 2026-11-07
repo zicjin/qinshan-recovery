@@ -179,6 +179,7 @@ _HARNESS_SUFFIXES = (
     "scripts/owned_runtime_contract.py",
     "scripts/local-runtime-transport.py",
     "scripts/observe-local-runtime.py",
+    "scripts/verify-local-runtime-milestone.py",
     "scripts/restore-local-menu-i18n.py",
     "scripts/repair-local-menu-hrefs.py",
     "scripts/repair-local-org-select-config.py",

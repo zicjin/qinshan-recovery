@@ -131,6 +131,17 @@ def validate_report(report: Mapping[str, Any], mode: str) -> Dict[str, Any]:
             _require(report, "redis_container", "lims-local-runtime-redis")
             _require(report, "redis_reused", True)
             profile_identity.update(redis_container=report["redis_container"], redis_reused=True)
+            if "schema_policy_id" in report or "schema_policy_sha256" in report:
+                import local_schema_policy as policy
+                try:
+                    descriptor, _ = policy.definition(report.get("schema_policy_id"))
+                    if report.get("schema_policy_sha256") != policy.digest(descriptor):
+                        raise policy.PolicyError("schema policy pin mismatch")
+                except policy.PolicyError:
+                    raise RuntimeContractError("local schema policy identity or provenance mismatch") from None
+                profile_identity.update(schema_policy_id=descriptor["id"],
+                                        schema_policy_sha256=policy.digest(descriptor))
+
         _require(report, "baseline_schema")
         _require(report, "runtime_schema")
         for key in ("baseline_schema_hash", "runtime_schema_hash_before", "runtime_schema_hash_after",

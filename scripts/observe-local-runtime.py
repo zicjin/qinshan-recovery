@@ -4,6 +4,9 @@
 No lifecycle operations, credentials, SQL files or arbitrary SQL are accepted.
 COUNT(*) observations detect row-count drift, not changes to row contents.
 These sequential reads are not a transactional cross-schema snapshot.
+--schema-policy approved-missing-runtime-tables-v1 admits only the seven
+source-pinned tables after every fixture metadata predicate passes SELECT.
+The default equal-schema policy continues to require identical table sets.
 """
 from __future__ import annotations
 
@@ -19,6 +22,7 @@ import subprocess
 import sys
 
 from source_binding import capture_binding
+import local_schema_policy as policy
 
 NETWORK = 'lims-local-runtime-isolated'
 CONTAINERS = {role: 'lims-local-runtime-' + role for role in ('app', 'oracle', 'redis')}
@@ -116,12 +120,7 @@ class Observer:
         return network, containers
 
     def query(self, name, selects, prefix, fields):
-        sql = ('whenever oserror exit failure\nwhenever sqlerror exit failure\n'
-               'set echo off\nset feedback off\nset heading off\nset pagesize 0\n'
-               'set linesize 32767\nset trimout on\nset tab off\nset verify off\nset define off\n'
-               'alter session set container = FREEPDB1;\n'
-               'prompt OBSERVE_BEGIN\n' + '\n'.join(selects) + '\n'
-               'prompt OBSERVE_END\nexit\n')
+        sql = policy.query_sql(selects)
         output = self.command(['exec', '-i', '-e', 'NLS_LANG=.AL32UTF8', '-u', 'oracle', CONTAINERS['oracle'], 'sh', '-c',
                                'exec "$ORACLE_HOME/bin/sqlplus" -s / as sysdba'], sql)
         if re.search(r'\b(?:ORA|SP2|TNS|LRM)-\d+', output):
@@ -158,8 +157,7 @@ class Observer:
             identifier(table)
             expected_tables.add((owner, table))
         table_sets = [{table for owner, table in expected_tables if owner == schema} for schema in OWNERS]
-        if not table_sets[0] or table_sets[0] != table_sets[1]:
-            raise ObservationError('baseline/runtime table inventories mismatch or empty')
+        policy.check_inventories(*table_sets, getattr(self.args, 'schema_policy', policy.EQUAL))
         columns = self.query('column-metadata', [
             "select 'EXPECTED|' || to_char(count(*),'FM9999999990') " + COLUMN_FROM + ';',
             "select 'COLUMN|' || c.owner || '|' || c.table_name || '|' || c.column_name || '|' || "
@@ -203,23 +201,25 @@ class Observer:
             schemas[owner] = {'account_status': dict(users)[owner],
                               'column_metadata': {'record_count': len(metadata), 'sha256': digest(metadata), 'rows': metadata},
                               'row_counts': {'sha256': digest(actual), 'rows': actual,
-                                             'coverage': {'expected_tables': len(table_sets[0]), 'observed_tables': len(actual), 'complete': True}}}
+                                             'coverage': {'expected_tables': len({table for schema, table in expected_tables if schema == owner}), 'observed_tables': len(actual), 'complete': True}}}
         return schemas
 
     def observe(self):
         network, containers = self.identities()
         schemas = self.schemas()
+        schema_policy = policy.observe(getattr(self.args, 'schema_policy', policy.EQUAL), self.query)
         after_network, after_containers = self.identities()
         if network != after_network or containers != after_containers:
             raise ObservationError('runtime identity changed during observation')
         binding = capture_binding(runtime_contract={
+            'schema_policy_id': schema_policy['id'], 'schema_policy_sha256': schema_policy['sha256'],
             'runtime_profile': 'local-wsl', 'oracle_instance_id': CONTAINERS['oracle'],
             'oracle_container': CONTAINERS['oracle'], 'redis_container': CONTAINERS['redis'],
             'baseline_schema': OWNERS[0], 'runtime_schema': OWNERS[1],
             'baseline_schema_hash': schemas[OWNERS[0]]['column_metadata']['sha256'],
             'runtime_schema_hash_before': schemas[OWNERS[1]]['column_metadata']['sha256'],
             'baseline_schema_immutable': False, 'runtime_schema_restored': False})
-        return {'schema_version': 1, 'kind': 'local-runtime-observation',
+        snapshot = {'schema_version': 1, 'kind': 'local-runtime-observation',
                 'observed_at': datetime.now(timezone.utc).isoformat(), 'status': 'diagnostic-observed',
                 'execution_location': 'local-wsl-docker', 'strict_evidence': False,
                 'runtime_schema_restored': False, 'restoration': 'not-verified',
@@ -229,15 +229,17 @@ class Observer:
                 'fixture_restore': 'not-verified', 'audit': 'not-observed', 'rollback': 'not-executed',
                 'cleanup': 'not-executed-read-only-observation', 'real_http': False,
                 'network': network, 'application': containers['app'], 'containers': containers,
-                'schemas': schemas, 'queries': self.queries, 'source_binding': binding,
+                'schemas': schemas, 'schema_policy': schema_policy, 'queries': self.queries, 'source_binding': binding,
                 'runtime_contract': binding['runtime_contract'],
                 'limitations': ['account LOCKED is observed, not proof of baseline content immutability',
-                                'column metadata excludes defaults, indexes, constraints and stored code',
+                                'general column metadata excludes defaults, indexes, constraints and stored code; approved fixture proof checks its exact DDL properties',
                                 'row counts cannot detect equal-count content changes']}
+        policy.validate(snapshot, getattr(self.args, 'schema_policy', policy.EQUAL))
+        return snapshot
 
 
 
-def validate_previous(before):
+def validate_previous(before, schema_policy=policy.EQUAL):
     """Require complete, self-consistent observations before reporting no drift."""
     try:
         if (before['schema_version'] != 1 or before['kind'] != 'local-runtime-observation'
@@ -265,12 +267,15 @@ def validate_previous(before):
                     or any(type(row['count']) is not int or row['count'] < 0 for row in actual)
                     or counts['coverage'] != {'expected_tables': len(tables), 'observed_tables': len(tables), 'complete': True}):
                 raise ValueError
+        policy.validate(before, schema_policy)
     except (KeyError, TypeError, ValueError, ObservationError):
         raise ObservationError('invalid previous observation') from None
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--schema-policy', choices=policy.POLICIES, default=policy.EQUAL,
+                        help='explicit source-pinned schema delta; default requires equal table sets')
     parser.add_argument('--docker', default='docker', help='Docker executable (default: docker)')
     parser.add_argument('--timeout', type=positive_timeout, default=120, help='per-command timeout in seconds')
     parser.add_argument('--before', type=Path, help='compare a previous diagnostic observation; never promotes evidence')
@@ -282,16 +287,16 @@ def main():
                 before = json.loads(args.before.read_text())
             except (OSError, ValueError):
                 raise ObservationError('invalid previous observation') from None
-            validate_previous(before)
+            validate_previous(before, args.schema_policy)
             changes = []
-            for field in ('network', 'containers', 'schemas'):
+            for field in ('network', 'containers', 'schemas', 'schema_policy'):
                 if before.get(field) != snapshot[field]:
                     changes.append(field)
             snapshot['comparison'] = {'drift_detected': bool(changes), 'changed_sections': changes,
                                       'content_comparison': 'not-performed', 'strict_evidence': False}
         print(json.dumps(snapshot, sort_keys=True, indent=2))
         return 0
-    except ObservationError as error:
+    except (ObservationError, policy.PolicyError) as error:
         print(json.dumps({'schema_version': 1, 'kind': 'local-runtime-observation',
                           'status': 'diagnostic-failed', 'strict_evidence': False,
                           'runtime_schema_restored': False, 'error': str(error)}, sort_keys=True))

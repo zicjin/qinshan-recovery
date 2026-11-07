@@ -12,6 +12,8 @@ Git. Runtime-before is the restoration target, independent of baseline content.
 The verifier only inspects the local Docker Unix socket. It never stops apps,
 resets data, executes SQL or promotes strict evidence. It compares supplied
 snapshots, not their authenticity, acquisition timing or fixture/audit/rollback.
+Approved seven-table observations require the same explicit --schema-policy;
+source provenance, definitions and SELECT predicate/result coverage are rechecked.
 """
 from __future__ import annotations
 
@@ -28,6 +30,7 @@ import struct
 import sys
 
 from source_binding import capture_binding
+import local_schema_policy as policy
 
 _spec = importlib.util.spec_from_file_location('local_runtime_observer', Path(__file__).with_name('observe-local-runtime.py'))
 observer = importlib.util.module_from_spec(_spec)
@@ -173,8 +176,8 @@ def content_snapshot(snapshot, owner, schema):
     return by_name
 
 
-def validate_observation(snapshot):
-    observer.validate_previous(snapshot)
+def validate_observation(snapshot, schema_policy=policy.EQUAL):
+    observer.validate_previous(snapshot, schema_policy)
     require(snapshot.get('execution_location') == 'local-wsl-docker', 'observation execution location mismatch')
     require(snapshot.get('application') == snapshot['containers']['app'], 'application observation mismatch')
     network = snapshot['network']
@@ -186,9 +189,6 @@ def validate_observation(snapshot):
                 and isinstance(item.get('started_at'), str) and item['started_at'], 'invalid observation container identity')
         ids.add(item['id'])
     require(len(ids) == 3, 'duplicate observation container IDs')
-    require({row['table'] for row in snapshot['schemas'][OWNERS[0]]['row_counts']['rows']} ==
-            {row['table'] for row in snapshot['schemas'][OWNERS[1]]['row_counts']['rows']},
-            'baseline/runtime observation table inventories differ')
     for owner in OWNERS:
         require(snapshot['schemas'][owner]['account_status'] == ('LOCKED' if owner == OWNERS[0] else 'OPEN'), 'baseline must remain LOCKED and runtime OPEN')
         seen = set()
@@ -240,7 +240,11 @@ def verify(args, report):
     snapshots, pins, paths, raw_manifest = read_inputs(path)
     report.update(inputs=pins, manifest_sha256=sha(raw_manifest))
     before, after = snapshots['observation_before'], snapshots['observation_after']
-    require(validate_observation(before) <= validate_observation(after), 'observation time order invalid')
+    schema_policy_id = getattr(args, 'schema_policy', policy.EQUAL)
+    require(validate_observation(before, schema_policy_id) <= validate_observation(after, schema_policy_id), 'observation time order invalid')
+    schema_policy = policy.validate(before, schema_policy_id)
+    require(schema_policy == policy.validate(after, schema_policy_id), 'schema policy changed between observations')
+    report['schema_policy'] = schema_policy
     for field in ('network', 'containers'):
         require(before[field] == after[field], 'runtime identity changed between observations')
     tables = {}
@@ -273,6 +277,7 @@ def verify(args, report):
         require(sha(read_regular(target)) == pins[role]['sha256'], 'snapshot changed during verification')
     require(read_regular(path) == raw_manifest, 'manifest changed during verification')
     report['source_binding'] = capture_binding(runtime_contract={
+        'schema_policy_id': schema_policy['id'], 'schema_policy_sha256': schema_policy['sha256'],
         'runtime_profile': 'local-wsl', 'oracle_instance_id': observer.CONTAINERS['oracle'],
         'oracle_container': observer.CONTAINERS['oracle'], 'redis_container': observer.CONTAINERS['redis'],
         'baseline_schema': OWNERS[0], 'runtime_schema': OWNERS[1],
@@ -294,6 +299,8 @@ def verify(args, report):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument('--schema-policy', choices=policy.POLICIES, default=policy.EQUAL,
+                        help='must explicitly match the approved observation policy')
     parser.add_argument('--manifest', type=Path, required=True)
     parser.add_argument('--docker', default='docker')
     parser.add_argument('--timeout', type=observer.positive_timeout, default=30)
@@ -307,7 +314,7 @@ def main():
               'audit': 'not-verified', 'rollback': 'not-verified',
               'limitations': ['compares supplied snapshots; acquisition authenticity and timing are not established',
                               'baseline immutability means sampled content and columns before/after only',
-                              'column metadata excludes defaults, indexes, constraints and stored code',
+                              'general column metadata excludes defaults, indexes, constraints and stored code; approved fixture proof checks its exact DDL properties',
                               'sequential observations do not prove absence of intervening changes',
                               'no API, fixture restore, audit, rollback or strict evidence approval']}
     try:

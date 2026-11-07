@@ -40,6 +40,43 @@ truncated or invalid SQL results. Quoted lowercase and Unicode identifiers retai
 their exact spelling. No row bodies, credentials or Docker environment are emitted.
 The output can still contain internal table/column names; keep full snapshots private.
 
+The default `equal-schema` policy requires identical table sets. The approved
+source fixture adds exactly seven runtime-only tables (105 columns). Opt in on
+each capture and on the offline verifier; an observation cannot opt itself in:
+
+```bash
+python3 scripts/observe-local-runtime.py \
+  --schema-policy approved-missing-runtime-tables-v1 \
+  > private/local-runtime/before.json
+python3 scripts/observe-local-runtime.py \
+  --schema-policy approved-missing-runtime-tables-v1 \
+  --before private/local-runtime/before.json > private/local-runtime/after.json
+# Only after the separately authorized milestone restore/stop lifecycle:
+python3 scripts/verify-local-runtime-milestone.py \
+  --schema-policy approved-missing-runtime-tables-v1 \
+  --manifest private/local-runtime/milestone-inputs.json \
+  > private/local-runtime/lifecycle-verification.json
+```
+
+This policy reuses `schema_fixture.load_fixture()` provenance and
+`schema_fixture.checks()` logical predicates. It pins the fixture SQL hash,
+manifest hash, source hashes and seven exact definition hashes. Baseline tables
+must remain present in runtime, baseline must contain none of the fixture tables,
+and runtime must contain exactly baseline plus all seven. Row-count coverage uses
+each owner's table inventory independently; baseline/runtime content need not
+match each other.
+
+The observer executes 314 metadata SELECT predicates for exact columns, positions,
+types, nullable/default/hidden/virtual properties, PK and check constraints,
+indexes and index columns, table/column comments and absent triggers. It executes
+no fixture DDL. The output contains the exact predicates, counts, definition pins
+and query/result hashes. The offline verifier recomputes the source provenance,
+pins, predicates, query hashes and full result coverage on both observations;
+arbitrary allowlists or claimed match booleans are rejected. Shared column
+metadata must also agree with baseline. `schema_policy_id` and
+`schema_policy_sha256` enter the runtime contract digest; the helper, fixture and
+original source inputs enter the canonical harness scope.
+
 These are sequential observations, not a transactional snapshot. Unchanged row
 counts cannot prove unchanged row contents. Account locking cannot prove baseline
 immutability. This tool therefore always emits diagnostic evidence with restoration,
@@ -129,7 +166,9 @@ to obtain a passing report.
 
 Even a verified lifecycle component has `strict_evidence=false` and `real_http=false`.
 It does not prove snapshot acquisition authenticity, fixture/audit/rollback,
-constraints, defaults, indexes, stored code or API behavior. Case HTTP evidence,
+stored code or API behavior. General metadata remains limited to observed
+columns; the optional approved fixture proof additionally checks its exact DDL
+properties for those seven tables. Case HTTP evidence,
 source binding and the full promotion contract remain separate requirements.
 
 The current-head identity gate validates application/harness/planning bindings

@@ -2,6 +2,7 @@
 """Exercise the observer CLI at the Docker/database boundary, without Docker."""
 import json
 import os
+import shutil
 from pathlib import Path
 import subprocess
 import sys
@@ -20,6 +21,7 @@ with open(os.environ['OBSERVER_LOG'], 'a') as log:
 assert args[:2] == ['--host', 'unix:///var/run/docker.sock'], args
 args = args[2:]
 network_id = 'd' * 64
+fixture = json.loads(Path(os.environ['OBSERVER_FIXTURE']).read_text()) if os.environ.get('OBSERVER_FIXTURE') else {}
 tables = ['objectdr', 'test'] if scenario == 'quoted-identifiers' else ['ALPHA', 'BETA']
 if scenario == 'unicode-table': tables = ['检验表$#', 'test']
 if scenario.startswith('bad-table-'):
@@ -66,7 +68,26 @@ elif args[:1] == ['exec']:
         print('EXPECTED|2')
         print('USER|LIMS_BASELINE_LOCAL|' + ('OPEN' if scenario == 'baseline-open' else 'LOCKED'))
         print('USER|LIMS_RUNTIME_LOCAL|' + ('LOCKED' if scenario == 'runtime-locked' else 'OPEN'))
+    elif "'FIXTURE|" in sql:
+        records = fixture['checks']
+        print('EXPECTED|' + str(len(records)))
+        statements = [line for line in sql.splitlines() if line.startswith("select 'FIXTURE|")]
+        tokens = {'defaults': 'DEFAULT_LENGTH IS NULL', 'pk': "CONSTRAINT_TYPE='P'",
+                  'constraint': 'from ALL_CONSTRAINTS', 'index': 'from ALL_INDEXES',
+                  'index-column': 'from ALL_IND_COLUMNS', 'comment': 'from ALL_COL_COMMENTS',
+                  'trigger': 'from ALL_TRIGGERS'}
+        for i, count in enumerate(records):
+            mismatch = (scenario == 'fixture-mismatch' and i == 0)
+            if scenario.startswith('metadata-mismatch-'):
+                mismatch = tokens[scenario[len('metadata-mismatch-'):]] in statements[i]
+            print(f'FIXTURE|{i}|' + str(count + (1 if mismatch else 0)))
     elif "'COLUMN|'" in sql:
+        if fixture:
+            rows = [[owner, *row] for owner in ['LIMS_BASELINE_LOCAL', 'LIMS_RUNTIME_LOCAL']
+                    for row in fixture['columns'][owner]]
+            print('EXPECTED|' + str(len(rows)))
+            for row in rows: print('COLUMN|' + '|'.join(row))
+            print('OBSERVE_END'); sys.exit(0)
         print('EXPECTED|' + ('5' if scenario == 'truncated-metadata' else '4'))
         for owner in ['LIMS_BASELINE_LOCAL', 'LIMS_RUNTIME_LOCAL']:
             for table in tables:
@@ -76,6 +97,15 @@ elif args[:1] == ['exec']:
                     column = {'quote': 'bad"name', 'delimiter': 'bad|name', 'newline': 'bad\nname'}[scenario[11:]]
                 print(f'COLUMN|{owner}|{name}|{column}|1|NUMBER|22|10|0|N|0|-|-')
     elif 'from dba_tables' in sql:
+        if fixture:
+            rows = [[owner, table] for owner in ['LIMS_BASELINE_LOCAL', 'LIMS_RUNTIME_LOCAL']
+                    for table in sorted({row[0] for row in fixture['columns'][owner]})]
+            if scenario == 'unknown-extra': rows.append(['LIMS_RUNTIME_LOCAL', 'UNKNOWN_EXTRA'])
+            if scenario == 'missing-fixture': rows = [r for r in rows if r[1] != 'T_EMC_INVOICE']
+            if scenario == 'base-removal': rows.remove(['LIMS_RUNTIME_LOCAL', 'BETA'])
+            print('EXPECTED|' + str(len(rows)))
+            for row in rows: print('TABLE|' + '|'.join(row))
+            print('OBSERVE_END'); sys.exit(0)
         print('EXPECTED|' + ('0' if scenario == 'empty-tables' else '4'))
         if scenario != 'empty-tables':
             for owner in ['LIMS_BASELINE_LOCAL', 'LIMS_RUNTIME_LOCAL']:
@@ -84,8 +114,8 @@ elif args[:1] == ['exec']:
                     print(f'TABLE|{owner}|{table}')
     else:
         statements = re.findall(r"select 'COUNT\|([^']+)\|' \|\| to_char\(count\(\*\).*? from \"([^\"]+)\"\.\"([^\"]+)\";", sql, re.I)
-        assert len(statements) == 4, sql
-        print('EXPECTED|4')
+        assert len(statements) == (11 if fixture else 4), sql
+        print('EXPECTED|' + str(len(statements)))
         for label, owner, table in statements:
             assert label == owner + '|' + table
             if scenario == 'missing-count' and owner == 'LIMS_RUNTIME_LOCAL' and table == 'BETA': continue
@@ -110,9 +140,94 @@ class ObserveLocalRuntimeTest(unittest.TestCase):
 
     def run_cli(self, scenario='valid', *extra):
         env = dict(os.environ, OBSERVER_SCENARIO=scenario, OBSERVER_LOG=str(self.log))
-        result = subprocess.run([sys.executable, str(SCRIPT), '--docker', str(self.docker), *extra],
+        if hasattr(self, 'fixture_path'): env['OBSERVER_FIXTURE'] = str(self.fixture_path)
+        result = subprocess.run([sys.executable, str(getattr(self, 'script', SCRIPT)), '--docker', str(self.docker), *extra],
                                 env=env, text=True, capture_output=True, timeout=60)
         return result, json.loads(result.stdout) if result.stdout else None
+
+    def enable_fixture(self):
+        sys.path.insert(0, str(SCRIPT.parent))
+        import schema_fixture
+        loaded = schema_fixture.load_fixture(SCRIPT.parents[1])
+        columns = {owner: [[table, 'ID', '1', 'NUMBER', '22', '10', '0', 'N', '0', '-', '-']
+                           for table in ('ALPHA', 'BETA')] for owner in ('LIMS_BASELINE_LOCAL', 'LIMS_RUNTIME_LOCAL')}
+        for table, definition in sorted(loaded.items()):
+            for i, col in enumerate(definition['columns'], 1):
+                length = col['length'] if col['type'] == 'VARCHAR2' else {'NUMBER': 22, 'DATE': 7, 'CLOB': 4000}[col['type']]
+                columns['LIMS_RUNTIME_LOCAL'].append([table, col['name'], str(i), col['type'], str(length),
+                    str(col['precision']) if col['precision'] is not None else '-',
+                    str(col['scale']) if col['scale'] is not None else '-', col['nullable'],
+                    str(col['length'] or 0), 'B' if col['type'] == 'VARCHAR2' else '-', '-'])
+        self.fixture_path = self.root / 'oracle-metadata.json'
+        self.fixture_path.write_text(json.dumps({'columns': columns,
+            'checks': [count for table, definition in sorted(loaded.items()) for _, _, count in schema_fixture.checks(table, definition)]}))
+
+    def test_explicit_source_policy_observes_exact_seven_tables_and_full_predicates(self):
+        self.enable_fixture()
+        result, report = self.run_cli('valid', '--schema-policy', 'approved-missing-runtime-tables-v1')
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertEqual(report['schemas']['LIMS_BASELINE_LOCAL']['row_counts']['coverage']['expected_tables'], 2)
+        self.assertEqual(report['schemas']['LIMS_RUNTIME_LOCAL']['row_counts']['coverage']['expected_tables'], 9)
+        self.assertEqual(report['schemas']['LIMS_RUNTIME_LOCAL']['column_metadata']['record_count'], 107)
+        self.assertEqual(report['schema_policy']['metadata_proof']['record_count'], 314)
+        self.assertEqual(report['runtime_contract']['schema_policy_id'], 'approved-missing-runtime-tables-v1')
+        sql = '\n'.join(json.loads(line)['sql'] for line in self.log.read_text().splitlines())
+        for predicate in ('DEFAULT_LENGTH IS NULL', 'ALL_CONSTRAINTS', 'ALL_INDEXES', 'ALL_IND_COLUMNS',
+                          'ALL_COL_COMMENTS', 'ALL_TRIGGERS', "HIDDEN_COLUMN='NO'"):
+            self.assertIn(predicate, sql)
+        self.assertNotIn('EXECUTE IMMEDIATE', sql)
+        self.assertNotIn('CREATE TABLE', sql)
+
+    def test_opt_in_rejects_unknown_extra_missing_fixture_and_removed_base_tables(self):
+        self.enable_fixture()
+        for scenario in ('unknown-extra', 'missing-fixture', 'base-removal', 'fixture-mismatch',
+                         *['metadata-mismatch-' + kind for kind in ('defaults', 'pk', 'constraint', 'index', 'index-column', 'comment', 'trigger')]):
+            with self.subTest(scenario=scenario):
+                result, report = self.run_cli(scenario, '--schema-policy', 'approved-missing-runtime-tables-v1')
+                self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
+                self.assertEqual(report['status'], 'diagnostic-failed')
+                self.assertFalse(report['strict_evidence'])
+        result, report = self.run_cli('valid')
+        self.assertEqual(result.returncode, 1)
+        self.assertIn('inventories mismatch', report['error'])
+
+    def test_previous_policy_observation_requires_fresh_pins_and_complete_query_proof(self):
+        self.enable_fixture()
+        result, before = self.run_cli('valid', '--schema-policy', 'approved-missing-runtime-tables-v1')
+        self.assertEqual(result.returncode, 0, result.stderr)
+        path = self.root / 'before.json'
+        path.write_text(json.dumps(before))
+        result, report = self.run_cli('valid', '--schema-policy', 'approved-missing-runtime-tables-v1', '--before', str(path))
+        self.assertEqual(result.returncode, 0, result.stdout)
+        self.assertFalse(report['comparison']['drift_detected'])
+        before['schema_policy']['sources'][0]['sha256'] = '0'*64
+        path.write_text(json.dumps(before))
+        result, report = self.run_cli('valid', '--schema-policy', 'approved-missing-runtime-tables-v1', '--before', str(path))
+        self.assertEqual(result.returncode, 1)
+        self.assertEqual(report['error'], 'invalid previous observation')
+
+    def test_changed_source_or_fixture_is_rejected_from_real_tool_files(self):
+        self.enable_fixture()
+        copied = self.root / 'tool-checkout'
+        sys.path.insert(0, str(SCRIPT.parent))
+        import schema_fixture
+        paths = ['scripts/observe-local-runtime.py', 'scripts/local_schema_policy.py', 'scripts/schema_fixture.py',
+                 'scripts/source_binding.py', schema_fixture.BASE + '.json', schema_fixture.BASE + '.sql',
+                 *schema_fixture.SOURCE_PATHS]
+        for relative in paths:
+            target = copied / relative
+            target.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(SCRIPT.parents[1] / relative, target)
+        self.script = copied / 'scripts/observe-local-runtime.py'
+        for relative in [schema_fixture.BASE + '.sql', *sorted(schema_fixture.SOURCE_PATHS)]:
+            with self.subTest(path=relative):
+                path = copied / relative
+                original = path.read_bytes()
+                path.write_bytes(original + b'\n-- drift\n')
+                result, report = self.run_cli('valid', '--schema-policy', 'approved-missing-runtime-tables-v1')
+                self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
+                self.assertEqual(report['error'], 'approved schema fixture provenance or definition rejected')
+                path.write_bytes(original)
 
     def test_observes_normalized_schema_and_actual_counts_without_claiming_restore(self):
         result, snapshot = self.run_cli()

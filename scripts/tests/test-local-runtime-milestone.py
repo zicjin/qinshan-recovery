@@ -3,6 +3,7 @@
 import copy
 import hashlib
 import json
+import importlib.util
 import os
 from pathlib import Path
 import struct
@@ -130,12 +131,134 @@ class LocalRuntimeMilestoneTest(unittest.TestCase):
     def save_manifest(self):
         (self.root / 'manifest.json').write_text(json.dumps(self.manifest))
 
-    def run_cli(self, scenario='valid'):
+    def run_cli(self, scenario='valid', *extra):
         env = dict(os.environ, MILESTONE_SCENARIO=scenario, MILESTONE_LOG=str(self.log),
                    DOCKER_HOST='tcp://forbidden.invalid', DOCKER_CONTEXT='remote', DOCKER_TLS_VERIFY='1')
         result = subprocess.run([sys.executable, str(SCRIPT), '--manifest', str(self.root / 'manifest.json'),
-                                 '--docker', str(self.docker)], env=env, capture_output=True, text=True, timeout=30)
+                                 '--docker', str(self.docker), *extra], env=env, capture_output=True, text=True, timeout=30)
         return result, json.loads(result.stdout) if result.stdout else None
+
+    def enable_schema_policy(self):
+        # Obtain the observation through the public observer CLI and fake SELECT boundary.
+        path = SCRIPT.parent / 'tests/test-observe-local-runtime.py'
+        spec = importlib.util.spec_from_file_location('observer_boundary_test', path)
+        boundary = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(boundary)
+        test = boundary.ObserveLocalRuntimeTest()
+        test.setUp()
+        self.addCleanup(test.doCleanups)
+        test.enable_fixture()
+        result, observed = test.run_cli('valid', '--schema-policy', 'approved-missing-runtime-tables-v1')
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        for moment, at in [('before', '2026-11-07T02:00:00+00:00'), ('after', '2026-11-07T04:00:00+00:00')]:
+            snapshot = copy.deepcopy(observed)
+            snapshot['observed_at'] = at
+            self.inputs['observation_' + moment] = snapshot
+            for role, owner in zip(('baseline', 'runtime'), OWNERS):
+                tables = []
+                schema = snapshot['schemas'][owner]
+                for count in schema['row_counts']['rows']:
+                    name = count['table']
+                    columns = []
+                    for row in sorted([r for r in schema['column_metadata']['rows'] if r[0] == name], key=lambda r: int(r[2])):
+                        native = row[3]
+                        columns.append({'name': row[1], 'native_type': native,
+                            'jdbc_type': {'NUMBER': 2, 'VARCHAR2': 12, 'DATE': 93, 'CLOB': 2005}[native],
+                            'precision': int(row[5]) if row[5] != '-' else (-1 if native == 'CLOB' else 0),
+                            'scale': int(row[6]) if row[6] != '-' else 0,
+                            'nullable': 0 if row[7] == 'N' else 1})
+                    tables.append({'name': name, 'columns': columns, 'row_count': count['count'], 'content_sha256': '3'*64})
+                content = {'format': 'oracle-content-sha256-v1', 'schema': owner, 'transaction_read_only': True,
+                           'tables': tables, 'type_coverage': sorted({c['jdbc_type'] for t in tables for c in t['columns']})}
+                seal_fingerprint(content)
+                self.inputs[role + '_' + moment] = content
+        self.write_manifest()
+
+    def test_explicit_policy_accepts_verified_seven_table_delta_and_own_content_restore(self):
+        self.enable_schema_policy()
+        result, report = self.run_cli('valid', '--schema-policy', 'approved-missing-runtime-tables-v1')
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertTrue(report['lifecycle_verified'])
+        self.assertEqual(report['comparisons']['baseline']['table_count_before'], 2)
+        self.assertEqual(report['comparisons']['runtime']['table_count_before'], 9)
+        self.assertEqual(report['source_binding']['runtime_contract']['schema_policy_id'], 'approved-missing-runtime-tables-v1')
+        self.assertFalse(report['strict_evidence'])
+
+    def test_policy_cannot_mask_fixture_column_metadata_disagreement(self):
+        self.enable_schema_policy()
+        for moment in ('before', 'after'):
+            metadata = self.inputs['observation_' + moment]['schemas'][OWNERS[1]]['column_metadata']
+            row = next(r for r in metadata['rows'] if r[0] == 'T_EMC_INVOICE' and r[1] == 'ID')
+            row[7] = 'Y'
+            metadata['sha256'] = digest(metadata['rows'])
+            table = next(t for t in self.inputs['runtime_' + moment]['tables'] if t['name'] == 'T_EMC_INVOICE')
+            table['columns'][0]['nullable'] = 1
+            seal_fingerprint(self.inputs['runtime_' + moment])
+        self.write_manifest()
+        result, report = self.run_cli('valid', '--schema-policy', 'approved-missing-runtime-tables-v1')
+        self.assertEqual(result.returncode, 1, result.stdout)
+        self.assertFalse(self.log.exists())
+
+    def test_policy_default_is_equal_schema_and_cannot_use_claimed_allowlist(self):
+        self.enable_schema_policy()
+        result, report = self.run_cli()
+        self.assertEqual(result.returncode, 1)
+        self.assertFalse(self.log.exists())
+        # Neither an ignored-tables list nor a claimed match can replace predicate proof.
+        for role in ('observation_before', 'observation_after'):
+            self.inputs[role]['schema_policy'] = {'id': 'approved-missing-runtime-tables-v1',
+                                                 'verified': True, 'allowed_tables': ['T_EMC_INVOICE']}
+        self.write_manifest()
+        result, report = self.run_cli('valid', '--schema-policy', 'approved-missing-runtime-tables-v1')
+        self.assertEqual(result.returncode, 1)
+        self.assertFalse(self.log.exists())
+
+    def test_policy_rejects_source_pin_definition_predicate_result_and_query_coverage_drift(self):
+        self.enable_schema_policy()
+        original = copy.deepcopy(self.inputs['observation_after'])
+        for case in ('source-pin', 'fixture-pin', 'definition', 'missing-proof', 'predicate', 'result',
+                     'duplicate-predicate', 'missing-query', 'query-hash', 'query-coverage', 'query-result',
+                     'runtime-pin', 'runtime-digest'):
+            with self.subTest(case=case):
+                after = copy.deepcopy(original)
+                p = after['schema_policy']
+                if case == 'source-pin': p['sources'][0]['sha256'] = '0'*64
+                if case == 'fixture-pin': p['fixture_sha256'] = '0'*64
+                if case == 'definition': p['definition_sha256']['T_EMC_INVOICE'] = '0'*64
+                if case == 'missing-proof': del p['metadata_proof']
+                if case in ('predicate', 'result', 'duplicate-predicate'):
+                    proof = p['metadata_proof']
+                    if case == 'predicate': proof['rows'][0]['predicate'] = '1=1'
+                    if case == 'result': proof['rows'][0]['observed_count'] = 0
+                    if case == 'duplicate-predicate': proof['rows'][-1] = copy.deepcopy(proof['rows'][0])
+                    proof['sha256'] = digest(proof['rows'])
+                q = next(q for q in after['queries'] if q['name'] == 'approved-schema-metadata')
+                if case == 'missing-query': after['queries'].remove(q)
+                if case == 'query-hash': q['sql_sha256'] = '0'*64
+                if case == 'query-coverage': q['parsed_records'] -= 1
+                if case == 'query-result': q['parsed_rows_sha256'] = '0'*64
+                if case == 'runtime-pin': after['runtime_contract']['schema_policy_sha256'] = '0'*64
+                if case == 'runtime-digest': after['source_binding']['runtime_contract_digest'] = '0'*64
+                self.inputs['observation_after'] = after
+                self.write_manifest()
+                result, report = self.run_cli('valid', '--schema-policy', 'approved-missing-runtime-tables-v1')
+                self.assertEqual(result.returncode, 1, case)
+                self.assertFalse(self.log.exists())
+
+    def test_policy_keeps_content_restore_and_running_app_guards_for_fixture_tables(self):
+        self.enable_schema_policy()
+        result, report = self.run_cli('app-running', '--schema-policy', 'approved-missing-runtime-tables-v1')
+        self.assertEqual(result.returncode, 1)
+        self.assertEqual(report['failed_checks'], ['application_stopped'])
+        target = next(t for t in self.inputs['runtime_after']['tables'] if t['name'] == 'T_EMC_SEAL_RULE')
+        target['content_sha256'] = '9'*64
+        seal_fingerprint(self.inputs['runtime_after'])
+        self.write_manifest()
+        result, report = self.run_cli('valid', '--schema-policy', 'approved-missing-runtime-tables-v1')
+        self.assertEqual(result.returncode, 1)
+        self.assertEqual(report['failed_checks'], ['runtime_schema_restored'])
+        self.assertEqual(report['comparisons']['runtime']['changed_tables'], [
+            {'table': 'T_EMC_SEAL_RULE', 'changed_fields': ['content_sha256']}])
 
     def test_validates_content_restoration_and_actual_cleanup_without_strict_claim(self):
         result, report = self.run_cli()

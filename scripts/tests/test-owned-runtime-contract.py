@@ -32,6 +32,25 @@ class RuntimeContractTest(unittest.TestCase):
             "route_execution_model": {"boundary_process": False, "internal_http_bridge": False},
         }
 
+    def test_local_schema_policy_pins_survive_validation_and_unknown_policies_fail(self):
+        import local_schema_policy
+        descriptor, _ = local_schema_policy.definition(local_schema_policy.APPROVED)
+        report = self.local_runtime_report()
+        report.update(schema_policy_id=local_schema_policy.APPROVED,
+                      schema_policy_sha256=local_schema_policy.digest(descriptor))
+        result = module.validate_report(report, 'strict')
+        self.assertEqual(result['schema_policy_sha256'], report['schema_policy_sha256'])
+        self.assertEqual(result['schema_policy_id'], report['schema_policy_id'])
+        for change in ({'schema_policy_id': 'arbitrary-tables'}, {'schema_policy_sha256': 'a'*64},
+                       {'schema_policy_id': None}):
+            with self.subTest(change=change):
+                invalid = dict(report, **change)
+                with self.assertRaises(module.RuntimeContractError):
+                    module.validate_report(invalid, 'strict')
+        del report['schema_policy_sha256']
+        with self.assertRaises(module.RuntimeContractError):
+            module.validate_report(report, 'strict')
+
     def test_local_wsl_persistent_runtime_preserves_local_identity(self):
         result = module.validate_report(self.local_runtime_report(), "strict")
         self.assertEqual(result["runtime_profile"], "local-wsl")

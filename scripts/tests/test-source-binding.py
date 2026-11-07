@@ -63,6 +63,19 @@ class SourceBindingTest(unittest.TestCase):
     def capture(self, runtime_contract=None):
         return binding.capture_binding(self.root, runtime_contract=runtime_contract)
 
+    def test_schema_policy_identity_changes_runtime_and_helper_changes_harness_only(self):
+        first = self.capture()
+        policy = self.capture({'schema_policy_id': 'approved-missing-runtime-tables-v1', 'schema_policy_sha256': 'a'*64})
+        self.assertNotEqual(first['runtime_contract_digest'], policy['runtime_contract_digest'])
+        changed_pin = self.capture({'schema_policy_id': 'approved-missing-runtime-tables-v1', 'schema_policy_sha256': 'b'*64})
+        self.assertNotEqual(policy['runtime_contract_digest'], changed_pin['runtime_contract_digest'])
+        self.assertIn('runtime.schema_policy_sha256', policy['runtime_contract_scope'])
+        (self.root / 'scripts/local_schema_policy.py').write_text('policy-v1\n')
+        second = self.capture()
+        self.assertNotEqual(first['harness_binding'], second['harness_binding'])
+        self.assertEqual(first['application_binding'], second['application_binding'])
+        self.assertIn('scripts/http_write_proof.py', second['harness_scope'])
+
     def test_docs_and_registry_archive_only_commit_preserve_all_bindings(self):
         first = self.capture()
         (self.root / "docs" / "spec.md").write_text("docs-v2\n", encoding="utf-8")

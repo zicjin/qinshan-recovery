@@ -42,14 +42,14 @@ public class EmcReturnedServiceImpl implements EmcReturnedService {
     public Long insert(Long id ,RestJsonWrapperBean jsonWrapper) {
         EmcReturnedBean emcReturned = jsonWrapper.parseUnique(EmcReturnedBean.class);
         EmcInvoiceBean invoiceBean = invoiceService.selectById(id);
+        if (invoiceBean.getInvoiceAmount() == null || invoiceBean.getInvoiceAmount().trim().isEmpty()) {
+            throw new AuthenticationServiceException("请输入开票金额！");
+        }
         List<EmcReturnedBean> returnedList = getDao().selectListByOneColumnValue(id, "invoiceId");
         List<BigDecimal> returnedAmountList = returnedList.stream().map(e -> new BigDecimal(e.getReturnedAmount())).collect(Collectors.toList());
         BigDecimal returnedAmount = new BigDecimal(emcReturned.getReturnedAmount());
         for (int i = 0; i < returnedAmountList.size(); i++) {
             returnedAmount = returnedAmount.add(returnedAmountList.get(i));
-        }
-        if (invoiceBean.getInvoiceAmount() == null&&invoiceBean.getInvoiceAmount()=="") {
-            throw new AuthenticationServiceException("请输入开票金额！");
         }
             BigDecimal uncollected = new BigDecimal(invoiceBean.getInvoiceAmount()).subtract(returnedAmount);
             emcReturned.setId(ApplicationContextHelper.getNextIdentity());

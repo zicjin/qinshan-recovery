@@ -1,0 +1,74 @@
+-- Final cleanup only: remove one empty row created by the diagnostic GET
+-- read-or-create path. Never use this as evidence for a business DELETE API.
+-- Caller supplies the observed numeric ID; runtime owner is fixed and local.
+WHENEVER SQLERROR EXIT SQL.SQLCODE ROLLBACK
+SET SERVEROUTPUT ON
+DECLARE
+    affected NUMBER;
+BEGIN
+    DELETE FROM LIMS_RUNTIME_LOCAL.T_EMC_PROPERTY_DATA
+     WHERE ID = &1 AND BIZID = 0 AND TMPLID = 0
+       AND TABLENAME IS NULL AND FLAG1 IS NULL AND BIZID2 IS NULL
+       AND COPYSTATUS IS NULL
+       AND CREATEDBYORGNAME = (SELECT ORGNAME FROM LIMS_RUNTIME_LOCAL.T_CORE_ORG
+                                WHERE ID = (SELECT ORGID FROM LIMS_RUNTIME_LOCAL.T_CORE_USER WHERE ID = 'Test'))
+       AND SAMPLINGEQUIPTID IS NULL AND SAMPLINGEQUIPTNAME IS NULL
+       AND EXT1 IS NULL
+       AND EXT2 IS NULL
+       AND EXT3 IS NULL
+       AND EXT4 IS NULL
+       AND EXT5 IS NULL
+       AND EXT6 IS NULL
+       AND EXT7 IS NULL
+       AND EXT8 IS NULL
+       AND EXT9 IS NULL
+       AND EXT10 IS NULL
+       AND EXT11 IS NULL
+       AND EXT12 IS NULL
+       AND EXT13 IS NULL
+       AND EXT14 IS NULL
+       AND EXT15 IS NULL
+       AND EXT16 IS NULL
+       AND EXT17 IS NULL
+       AND EXT18 IS NULL
+       AND EXT19 IS NULL
+       AND EXT20 IS NULL
+       AND EXT21 IS NULL
+       AND EXT22 IS NULL
+       AND EXT23 IS NULL
+       AND EXT24 IS NULL
+       AND EXT25 IS NULL
+       AND EXT26 IS NULL
+       AND EXT27 IS NULL
+       AND EXT28 IS NULL
+       AND EXT29 IS NULL
+       AND EXT30 IS NULL
+       AND EXT31 IS NULL
+       AND EXT32 IS NULL
+       AND EXT33 IS NULL
+       AND EXT34 IS NULL
+       AND EXT35 IS NULL
+       AND EXT36 IS NULL
+       AND EXT37 IS NULL
+       AND EXT38 IS NULL
+       AND EXT39 IS NULL
+       AND EXT40 IS NULL
+       AND EXT41 IS NULL
+       AND EXT42 IS NULL
+       AND EXT43 IS NULL
+       AND EXT44 IS NULL
+       AND EXT45 IS NULL
+       AND EXT46 IS NULL
+       AND EXT47 IS NULL
+       AND EXT48 IS NULL
+       AND EXT49 IS NULL
+       AND EXT50 IS NULL
+    ;
+    affected := SQL%ROWCOUNT;
+    IF affected != 1 THEN
+        RAISE_APPLICATION_ERROR(-20001, 'Expected exactly one empty diagnostic row');
+    END IF;
+    COMMIT;
+    DBMS_OUTPUT.PUT_LINE('diagnostic-row-cleanup: 1');
+END;
+/

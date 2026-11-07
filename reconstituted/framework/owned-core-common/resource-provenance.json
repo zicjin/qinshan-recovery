@@ -777,9 +777,13 @@
     {
       "bytes": 300,
       "compile_status": "not-applicable-resource",
+      "destination_sha256": "3dc40f1a1842f52574dc2cbbcf44e31ba09153a5ade2de7e06162f3405364f54",
       "path": "templates/module/item/sample-schemes/core-sample-scheme-edit-list.html",
       "sha256": "3010a28f59d3e6160ac0fa2b2b093f1212aa923cbc74431f06d8598f4a25ac97",
-      "source_jar": "gikam-core-base-interface-14.1.5.jar"
+      "source_jar": "gikam-core-base-interface-14.1.5.jar",
+      "transformations": [
+        "remove-unresolvable-stock-sample-scheme-script-reference; existing edit-list script initializes coreSampleScheme"
+      ]
     },
     {
       "bytes": 324,

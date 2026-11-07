@@ -17,6 +17,18 @@ public class EmcEquiptRequisitionControllerImpl implements EmcEquiptRequisitionC
         return "emc/module/mdm/basemdm/equipt-requisitions/emc-equipt-requisition-edit-list";
     }
 
+    @Log(value = "仪器出入库审核列表页", type = LogType.CONTROLLER)
+    @Override
+    public String auditListPage() {
+        return "emc/module/mdm/basemdm/equipt-requisitions/emc-equipt-requisition-audit-list";
+    }
+
+    @Log(value = "仪器出入库查询列表页", type = LogType.CONTROLLER)
+    @Override
+    public String searchListPage() {
+        return "emc/module/mdm/basemdm/equipt-requisitions/emc-equipt-requisition-search-list";
+    }
+
     @Log(value = "仪器出库编制列表页", type = LogType.CONTROLLER)
     @RequestMapping(value = "/instrument-out")
     public String instrumentOutListPage() {

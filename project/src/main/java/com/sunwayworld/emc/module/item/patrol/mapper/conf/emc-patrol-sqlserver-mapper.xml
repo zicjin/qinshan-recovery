@@ -8,6 +8,16 @@
         <where>
             <include
                 refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+            <if test="_parameter.containsKey('patrolUserIdExact')">
+                <choose>
+                    <when test="patrolUserIdExact != null and patrolUserIdExact != ''">
+                        AND CONVERT(NVARCHAR(MAX), T.PATROLUSERID) = #{patrolUserIdExact}
+                    </when>
+                    <otherwise>
+                        AND 1 = 2
+                    </otherwise>
+                </choose>
+            </if>
         </where>
         ORDER BY
         <choose>

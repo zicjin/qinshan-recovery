@@ -24,7 +24,7 @@
         CASE WHEN T.SCHEMENAME = 'default' THEN
         T.TESTNO
         ELSE
-        T.SCHEMENAME
+        TO_CLOB(T.SCHEMENAME)
         END AS GROUPFIELDS,
         T.TESTNO AS TESTNAME,
         T.TESTMETHODS AS METHODNAME,

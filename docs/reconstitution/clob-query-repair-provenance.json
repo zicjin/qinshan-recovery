@@ -1,0 +1,32 @@
+{
+  "schema": "source-backed-query-repair-provenance-v1",
+  "source_files": [
+    {
+      "path": "project/src/main/java/com/sunwayworld/emc/module/mdm/crm/mapper/conf/crm-opportunity-ordtask-oracle-mapper.xml",
+      "source_checkpoint": "b54b4bc3",
+      "before_sha256": "6ee28bd465321a1efd383a5c599526bc78b4a89440337f95bfbf0254984afdbc",
+      "after_sha256": "2b35cd1ed85252ce9d66f41aba27a15684a8dfcc2816d792ac09724ce57aefb5"
+    },
+    {
+      "path": "project/src/main/java/com/sunwayworld/emc/module/item/patrol/mapper/conf/emc-patrol-oracle-mapper.xml",
+      "source_checkpoint": "b54b4bc3",
+      "before_sha256": "bef235a2a37cf2de5d1baaddddfa4ca60b40c4670cd0e856be13008797ff45b8",
+      "after_sha256": "4bc2f98871ebf246ff092c962edbcd24687e7ce62234b1c64ff52d62d32d05b3"
+    },
+    {
+      "path": "project/src/main/java/com/sunwayworld/emc/module/item/patrol/mapper/conf/emc-patrol-sqlserver-mapper.xml",
+      "source_checkpoint": "b54b4bc3",
+      "before_sha256": "f616270705707ba3cb9b515b78f69c2b6b4307a772645e18df55c5d6d3143c7b",
+      "after_sha256": "751320f8a4acd4f6bdb474d42435a7302c352a2ea6eaf8454815022474219ea0"
+    },
+    {
+      "path": "project/src/main/java/com/sunwayworld/emc/module/item/patrol/service/impl/EmcPatrolServiceImpl.java",
+      "source_checkpoint": "b54b4bc3",
+      "before_sha256": "5d80de35746eddbba5419b1d19369d5d5a35b211715ac004142b27ee803210ae",
+      "after_sha256": "e321e8cc567ef757b2cead14ef84da9ce35938bed05557ee3402cb840c310169"
+    }
+  ],
+  "scope": "CRM CASE type unification and patrol original query identity/month filters",
+  "validation": "real MyBatis/H2 fixture plus Oracle-only expression checks; live Oracle HTTP pending root",
+  "strict_passes_added": 0
+}

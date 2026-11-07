@@ -90,7 +90,7 @@ public class EmcPatrolServiceImpl implements EmcPatrolService {
         Date d = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
         String dateNowStr = sdf.format(d);
-        return selectPaginationByFilter(SearchFilter.instance().match("patrolDate", dateNowStr + "%").filter(MatchPattern.SC), wrapper);
+        return selectPaginationByFilter(SearchFilter.instance().match("patrolDate", dateNowStr).filter(MatchPattern.SC), wrapper);
     }
 
     @Override
@@ -100,8 +100,10 @@ public class EmcPatrolServiceImpl implements EmcPatrolService {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
         String dateNowStr = sdf.format(d);
         SearchFilter searchFilter = SearchFilter.instance();
-        searchFilter.stdFilterList.add(new FilterParamPattern(MatchPattern.SC.name(), "patrolDate", dateNowStr + "%"));
-        searchFilter.stdFilterList.add(new FilterParamPattern(MatchPattern.EQ.name(), "patrolUserId", LocalContextHelper.getLoginUserId()));
+        searchFilter.stdFilterList.add(new FilterParamPattern(MatchPattern.SC.name(), "patrolDate", dateNowStr));
+        // PATROLUSERID is CLOB in Oracle; the mapper compares the full LOB.
+        // Applied after request filters, this value belongs to the login context.
+        searchFilter.match("patrolUserIdExact", LocalContextHelper.getLoginUserId()).special();
         return selectPaginationByFilter(searchFilter, wrapper);
     }
 
@@ -111,7 +113,7 @@ public class EmcPatrolServiceImpl implements EmcPatrolService {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
         String dateNowStr = sdf.format(d);
         SearchFilter searchFilter = SearchFilter.instance();
-        searchFilter.stdFilterList.add(new FilterParamPattern(MatchPattern.SC.name(), "patrolDate", dateNowStr + "%"));
+        searchFilter.stdFilterList.add(new FilterParamPattern(MatchPattern.SC.name(), "patrolDate", dateNowStr));
         searchFilter.stdFilterList.add(new FilterParamPattern(MatchPattern.SC.name(), "handleUserIds", "%" + LocalContextHelper.getLoginUserId() + "%"));
 
         Page<EmcPatrolBean> page = selectPaginationByFilter(searchFilter, wrapper);

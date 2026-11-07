@@ -547,7 +547,12 @@ public class RestJsonWrapperBean {
 
       List<RestJsonWrapperBean.FilterData> filterDataList = new ArrayList<>();
       String name = StringUtils.removeEndIgnoreCase(originalName.toUpperCase(), "_" + matchPattern.name());
-      String filterSeparator = ApplicationContextHelper.getEnvironment().getProperty("sunway.search.multi-value-matching-seperator");
+      String filterSeparator = ApplicationContextHelper.getEnvironment().getProperty("sunway.search.multi-value-matching-seperator", ",");
+      // External-only Spring configuration may omit the original application.yml default.
+      // Empty separators otherwise make contains() true for every nonempty filter value.
+      if (StringUtils.isBlank(filterSeparator)) {
+         filterSeparator = ",";
+      }
       if (MatchPattern.DEQ.equals(matchPattern)) {
          LocalDate date = matchPattern.parse(originalValue);
          if (date == null) {

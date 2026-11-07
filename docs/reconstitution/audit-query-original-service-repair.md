@@ -63,3 +63,40 @@ HTTP/Oracle diagnostics before any strict promotion. Original raw/custom/detail
 routes still have their pre-existing weaker access policy; this repair does not
 close that family-wide bypass surface. API-ALIGNMENT-GATE remains OPEN; strict
 passes added by this fixture: zero.
+
+## Follow-up: external-only configuration omits the original separator default
+
+The first real HTTP check found filtered `recordId_SEQ=2030254965053728`
+returning 400, while the same direct `p.recordId_SEQ` worked. The same exact
+16-digit ID passes the fixture with the original comma configuration; ID size
+and numeric/string JSON representation were not the cause.
+
+`owned-distribution/start.sh` selects `spring.config.location=file:$CONFIG`.
+An external-only configuration can therefore omit the original framework
+`application.yml` default `sunway.search.multi-value-matching-seperator: ','`.
+`RestJsonWrapperBean.parseFilterData` previously read the missing property as
+null. Original `StringUtils.contains(nonemptyText, null)` returns true, so a
+single `SEQ` value was transformed to `OSEQ`; the guarded adapter correctly
+rejected that unsupported ID criterion. The same configuration also broke
+ordinary multi-value string searches (`auditTrailName_SC=create,update` returned
+zero rows instead of two).
+
+The reconstructed wrapper and its tracked source override now restore the
+original comma default only for absent or blank configuration. Explicit nonblank
+separators remain unchanged. The adapter's required numeric ID validation,
+complete original wrapper criteria and parent organization enforcement remain
+intact. Module provenance records the overlay, original source hash, destination
+hash and recomputed source tree hash. The fixture recompiles the changed wrapper
+alongside the controller, port and adapter; it does not rely on a stale compiled
+wrapper. It uses the actual 16-digit ID for all successful line paths, tests both
+numeric and string filtered ID values, and retains all original scope/deny/CLOB
+checks.
+
+The fixture defaults to missing separator configuration. Repeat with
+`--separator ''`, `--separator '   '`, `--separator ','` and `--separator ';'`
+to exercise empty, whitespace, original and explicitly customized configuration.
+The multi-value SC assertion uses the selected separator and requires two rows.
+The original Mapper's separate multi-value `SEQ`/`OSEQ` behavior is preserved;
+`auditTrailType_SEQ=INSERT,UPDATE` is not a valid assertion of this repair, because
+that stock Oracle Mapper has no dedicated OSEQ OR branch. No global Mapper
+semantics or access scope were widened.

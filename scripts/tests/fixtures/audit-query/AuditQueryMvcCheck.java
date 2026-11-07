@@ -19,6 +19,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 /** DispatcherServlet regression; uses actual wrapper resolver and JDBC rows. */
 public class AuditQueryMvcCheck {
     static final String RECORDS="/secure/core/module/sys/at-records/queries";
+    static final long LARGE_ID=2030254965053728L;
     static final String LINES="/secure/core/module/sys/at-records/record-lines/queries";
     static int checks;
     static org.mybatis.spring.SqlSessionTemplate mapperSession;
@@ -73,7 +74,8 @@ public class AuditQueryMvcCheck {
     static AuditTrailReadOperations original(DataSource ds,String root) throws Exception {
         org.springframework.context.support.GenericApplicationContext context=new org.springframework.context.support.GenericApplicationContext();
         context.getEnvironment().getPropertySources().addFirst(new org.springframework.core.env.MapPropertySource("fixture",Collections.singletonMap("spring.datasource.driver-class-name","org.h2.Driver")));
-        context.getEnvironment().getPropertySources().addFirst(new org.springframework.core.env.MapPropertySource("original wrapper defaults",Collections.singletonMap("sunway.search.multi-value-matching-seperator",",")));
+        String configuredSeparator=System.getProperty("audit.fixture.separator");
+        if (configuredSeparator != null) context.getEnvironment().getPropertySources().addFirst(new org.springframework.core.env.MapPropertySource("original wrapper defaults",Collections.singletonMap("sunway.search.multi-value-matching-seperator",configuredSeparator)));
         context.refresh();
         com.sunwayworld.framework.context.ApplicationContextHelper.setApplicationContext(context);
         com.sunwayworld.framework.database.dialect.DialectRepository.setDialect(new com.sunwayworld.framework.database.dialect.OracleDialect());
@@ -121,6 +123,8 @@ public class AuditQueryMvcCheck {
         db.update("INSERT INTO T_CORE_AT_RECORD_LINE VALUES(11,1,'target-a','org-b',TIMESTAMP '2026-01-01 12:00:00',?,?,?)",fullText,"old text","FIELD_A");
         db.update("INSERT INTO T_CORE_AT_RECORD_LINE VALUES(12,1,'target-a','org-a',TIMESTAMP '2026-01-01 12:00:00','short','old','FIELD_B')");
         db.update("INSERT INTO T_CORE_AT_RECORD_LINE VALUES(13,3,'target-b','org-a',TIMESTAMP '2026-01-03 12:00:00','secret','old','FIELD_A')");
+        db.update("UPDATE T_CORE_AT_RECORD_LINE SET RECORDID=? WHERE RECORDID=1",LARGE_ID);
+        db.update("UPDATE T_CORE_AT_RECORD SET ID=? WHERE ID=1",LARGE_ID);
         Identity identity=new Identity();
         OwnedIdentityHttpBoundary boundary=new OwnedIdentityHttpBoundary(identity,event -> {});
         MockHttpSession session=new MockHttpSession();
@@ -129,6 +133,9 @@ public class AuditQueryMvcCheck {
         AuditTrailReadOperations operations=original(ds,args[0]);
         controller.setReadOperations(operations);
         MockMvc mvc=MockMvcBuilders.standaloneSetup(controller).setCustomArgumentResolvers(new ToRestJsonWrapperResolver()).setMessageConverters(new org.springframework.http.converter.StringHttpMessageConverter(java.nio.charset.StandardCharsets.UTF_8), new FastJsonHttpMessageConverter()).build();
+        String separator=System.getProperty("audit.fixture.separator",",");
+        if(separator.trim().isEmpty()) separator=",";
+        equal(2,query(mvc,session,RECORDS,"{\"p\":{\"f\":{\"auditTrailName_SC\":\"create"+separator+"update\"},\"n\":1,\"s\":20}}",200).getIntValue("total"),"configured/default multi value string filter");
         JSONObject result=query(mvc,session,RECORDS,"{\"p\":{\"f\":{\"auditTrailType_SEQ\":\"INSERT\"},\"n\":1,\"s\":20}}",200);
         equal(1,result.getIntValue("total"),"original audit type filter");
         equal("INSERT",result.getJSONArray("rows").getJSONObject(0).getString("auditTrailType"),"original typed camelCase field");
@@ -143,25 +150,27 @@ public class AuditQueryMvcCheck {
         equal(1,query(mvc,session,RECORDS,"{\"p\":{\"f\":{\"targetId_SEQ\":\"target-a\",\"createdTime_TGOE\":\"2026-01-02 00:00:00\"},\"n\":1,\"s\":20}}",200).getIntValue("total"),"target and time criteria");
         result=query(mvc,session,RECORDS,"{\"p\":{\"o\":[{\"ID\":\"asc\"}],\"n\":2,\"s\":1}}",200);
         equal(2,result.getIntValue("total"),"page count scoped exact org");
-        equal(2,result.getJSONArray("rows").getJSONObject(0).getIntValue("id"),"explicit ascending second page");
+        equal(LARGE_ID,result.getJSONArray("rows").getJSONObject(0).getLongValue("id"),"explicit ascending second page");
         equal(2,result.getIntValue("pageNumber"),"original page number");
         equal(2,result.getIntValue("totalPages"),"original total pages");
         result=query(mvc,session,RECORDS,"{\"p\":{\"f\":{\"createdByOrgId_SEQ\":\"org-b\",\"loginOrgId\":\"org-b\",\"ownedAuditOrgId\":\"org-b\"},\"n\":1,\"s\":20}}",200);
         equal(0,result.getIntValue("total"),"caller org filter AND server org");
         equal(2,query(mvc,session,RECORDS,"{\"p\":{\"f\":{\"loginOrgId\":\"org-b\",\"ownedAuditOrgId\":\"org-b\"},\"ownedAuditOrgId\":\"org-b\",\"n\":1,\"s\":20}}",200).getIntValue("total"),"spoofed scope cannot broaden records");
-        result=query(mvc,session,LINES,"{\"p\":{\"f\":{\"recordId_SEQ\":1},\"o\":[{\"ID\":\"asc\"}],\"n\":1,\"s\":20}}",200);
+        result=query(mvc,session,LINES,"{\"p\":{\"f\":{\"recordId_SEQ\":2030254965053728},\"o\":[{\"ID\":\"asc\"}],\"n\":1,\"s\":20}}",200);
         equal(2,result.getIntValue("total"),"parent org permits child from different org");
         equal(fullText,result.getJSONArray("rows").getJSONObject(0).getString("newValue"),"full CLOB value preserved");
         equal("INSERT",result.getJSONArray("rows").getJSONObject(0).getJSONObject("ext$").getString("audittrailtype"),"original parent projection extension preserved");
         equal(false,result.toJSONString().contains("ownedAuditOrg"),"scope parameter never projected");
-        equal(0,query(mvc,session,LINES,"{\"p\":{\"f\":{\"recordId_SEQ\":1,\"column_SEQ\":\"NO-MATCH\"},\"n\":1,\"s\":20}}",200).getIntValue("total"),"line column no match");
-        equal(1,query(mvc,session,LINES,"{\"p\":{\"f\":{\"recordId_SEQ\":1,\"targetId_SEQ\":\"target-a\",\"column_SEQ\":\"FIELD_A\"},\"n\":1,\"s\":20}}",200).getIntValue("total"),"line original target and column filters");
-        equal(1,query(mvc,session,LINES,"{\"p\":{\"f\":{\"recordId_SEQ\":1},\"qf\":{\"auditTrailName_SEQ\":\"create item\"},\"n\":2,\"s\":1}}",200).getJSONArray("rows").size(),"line parent metadata filter and second page");
-        result=query(mvc,session,LINES,"{\"p\":{\"recordId_SEQ\":1,\"n\":1,\"s\":20}}",200);
+        equal(0,query(mvc,session,LINES,"{\"p\":{\"f\":{\"recordId_SEQ\":2030254965053728,\"column_SEQ\":\"NO-MATCH\"},\"n\":1,\"s\":20}}",200).getIntValue("total"),"line column no match");
+        equal(1,query(mvc,session,LINES,"{\"p\":{\"f\":{\"recordId_SEQ\":2030254965053728,\"targetId_SEQ\":\"target-a\",\"column_SEQ\":\"FIELD_A\"},\"n\":1,\"s\":20}}",200).getIntValue("total"),"line original target and column filters");
+        equal(1,query(mvc,session,LINES,"{\"p\":{\"f\":{\"recordId_SEQ\":2030254965053728},\"qf\":{\"auditTrailName_SEQ\":\"create item\"},\"n\":2,\"s\":1}}",200).getJSONArray("rows").size(),"line parent metadata filter and second page");
+        equal(2,query(mvc,session,LINES,"{\"p\":{\"f\":{\"recordId_SEQ\":\"2030254965053728\"},\"n\":1,\"s\":20}}",200).getIntValue("total"),"large string filtered record ID");
+        equal(2,query(mvc,session,LINES,"{\"p\":{\"qf\":{\"recordId_SEQ\":\"2030254965053728\"},\"n\":1,\"s\":20}}",200).getIntValue("total"),"large string qf record ID");
+        result=query(mvc,session,LINES,"{\"p\":{\"recordId_SEQ\":2030254965053728,\"n\":1,\"s\":20}}",200);
         equal(2,result.getIntValue("total"),"legacy direct recordId accepted");
         result=query(mvc,session,LINES,"{\"p\":{\"f\":{\"recordId_SEQ\":3,\"ownedAuditOrgId\":\"org-b\",\"loginOrgId\":\"org-b\"},\"ownedAuditOrgId\":\"org-b\",\"n\":1,\"s\":20}}",200);
         equal(0,result.getIntValue("total"),"same root foreign parent excluded despite child org and spoofed special scope");
-        equal(0,query(mvc,session,LINES,"{\"p\":{\"f\":{\"recordId_SEQ\":1},\"qf\":{\"recordId_SEQ\":3},\"n\":1,\"s\":20}}",200).getIntValue("total"),"conflicting record filters remain AND");
+        equal(0,query(mvc,session,LINES,"{\"p\":{\"f\":{\"recordId_SEQ\":2030254965053728},\"qf\":{\"recordId_SEQ\":3},\"n\":1,\"s\":20}}",200).getIntValue("total"),"conflicting record filters remain AND");
         query(mvc,session,LINES,"{}",400);
         query(mvc,session,LINES,"{\"p\":{\"f\":{\"recordId_SEQ\":\"bad\"}}}",400);
         for(String path:Arrays.asList(RECORDS,LINES)) {
@@ -174,7 +183,7 @@ public class AuditQueryMvcCheck {
             boundary.login(session,new OwnedLoginRequest("user-a","fixture".toCharArray()));
         }
         query(mvc,session,"/secure/emc/module/sys/at-records/queries","{}",200);
-        query(mvc,session,"/secure/emc/module/sys/at-records/record-lines/queries","{\"p\":{\"f\":{\"recordId_SEQ\":1}}}",200);
+        query(mvc,session,"/secure/emc/module/sys/at-records/record-lines/queries","{\"p\":{\"f\":{\"recordId_SEQ\":2030254965053728}}}",200);
         identity.deny=true;
         for(String path:Arrays.asList("/secure/emc/module/bp/audit-records/info/status","/secure/emc/module/bp/audit-records/1/info/status")) {
             equal(200,mvc.perform(get(path).session(session)).andReturn().getResponse().getStatus(),"status authentication only");

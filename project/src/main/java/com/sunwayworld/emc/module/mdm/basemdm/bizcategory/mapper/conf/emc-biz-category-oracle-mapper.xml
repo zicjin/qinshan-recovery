@@ -9,14 +9,18 @@
                        O.ORGNAME AS SAMPLEORGNAME,
                        L.ORGNAME AS REPORTEDITORGNAME,
                        P.ORGNAME AS REPORTSENDORGNAME,
-                        (
-                        SELECT
-                        LISTAGG(DISTINCT A.ORGNAME, ',') WITHIN GROUP (ORDER BY A.ORGNAME)
-                        FROM
-                        T_EMC_ORG_PERMISSION A
-                        WHERE
-                        A.TARGETID = C.ID
-                        AND A.PERMISSIONTYPEID = 'T_EMC_BIZ_CATEGORY' GROUP BY C.ID) AS ORGNAMES
+                       (SELECT /*+ NO_XML_QUERY_REWRITE */
+                               CASE WHEN XMLEXISTS('$d/R/N/text()' PASSING G.ORGNAME_DOC AS "d")
+                               THEN XMLCAST(XMLQUERY(
+                                   'string-join(for $n in distinct-values($d/R/N/text()) order by $n return $n, ",")'
+                                   PASSING G.ORGNAME_DOC AS "d" RETURNING CONTENT) AS CLOB)
+                               END
+                          FROM (
+                               SELECT XMLELEMENT("R", XMLAGG(XMLELEMENT("N", A.ORGNAME))) AS ORGNAME_DOC
+                                 FROM T_EMC_ORG_PERMISSION A
+                                WHERE A.TARGETID = C.ID
+                                  AND A.PERMISSIONTYPEID = 'T_EMC_BIZ_CATEGORY'
+                          ) G) AS ORGNAMES
                   FROM T_EMC_BIZ_CATEGORY C
                   LEFT JOIN T_CORE_ORG O
                     ON C.SAMPLEORGID = O.ID

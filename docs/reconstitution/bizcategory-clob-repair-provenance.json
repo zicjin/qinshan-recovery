@@ -1,0 +1,20 @@
+{
+  "schema": "source-backed-query-repair-provenance-v1",
+  "source_files": [
+    {
+      "path": "project/src/main/java/com/sunwayworld/emc/module/mdm/basemdm/bizcategory/mapper/conf/emc-biz-category-oracle-mapper.xml",
+      "source_checkpoint": "02ffaa0922ea09d9dbabbcf4d9f926aa5e6d23cd",
+      "before_sha256": "1805017d659a927e45532c7aa397b305f2289a484b26fade9e142d079a7c302b",
+      "after_sha256": "417c5e5debd9768416666698b6c2061e3d88ead75a4f7f3bd046f9fd2d93380d"
+    }
+  ],
+  "scope": "Original EmcBizCategoryMapper.selectByCondition permission ORGNAME complete CLOB aggregation",
+  "transformations": [
+    "Keep original correlated TARGETID=C.ID and permission-type predicates; aggregate complete CLOB names in a scalar-query derived XML document",
+    "Use XMLQUERY distinct-values/order/string-join and XMLCAST AS CLOB with scalar NO_XML_QUERY_REWRITE to avoid Oracle long-value scalar rewrite",
+    "Use XMLEXISTS CASE guard to preserve SQL NULL for absent/all-null names; all original scopes/filter/order and aliases preserved"
+  ],
+  "validation": "Real Oracle original BoundSql CTE reproduced ORA-22848; final ten SELECT-only actual MyBatis BoundSql scenarios passed root Oracle including complete 20003-character aggregation and leading-zero TARGETID coercion",
+  "collation_scope": "Verified local Oracle NLS_SORT=BINARY and NLS_COMP=BINARY; same-session VARCHAR LISTAGG oracle fixture covers accented and CJK ordering. Other collations unverified.",
+  "strict_passes_added": 0
+}

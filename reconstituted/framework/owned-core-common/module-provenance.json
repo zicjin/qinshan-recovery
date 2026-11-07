@@ -141,6 +141,11 @@
       "generated_sha256": "b094433a011880bdaed1a0fe31904656bd92a9de56a8f49485b5d1bf75517e94",
       "override_sha256": "4531c6369e8158020fffc94e5fad91e9079ee10b635d8e4a9b570e2889eb5a74",
       "path": "src/main/java/com/sunwayworld/module/sys/at/service/impl/CoreAuditTrailRecordServiceImpl.java"
+    },
+    {
+      "generated_sha256": "3fbcc3fd280770a7f205091bc138718e12223c1646460442a9639882215ef866",
+      "override_sha256": "10d57c6ae3a7ee01d57e667ae1f0bc2d8bc1e4c1b4b3de3ed51248ffc93ddee3",
+      "path": "src/main/java/com/sunwayworld/framework/support/selectable/service/GenericSelectableService.java"
     }
   ],
   "override_source_files": [
@@ -12659,13 +12664,16 @@
       "decompiler": "Vineflower",
       "decompiler_version": "1.11.1",
       "path": "src/main/java/com/sunwayworld/framework/support/selectable/service/GenericSelectableService.java",
-      "sha256": "3fbcc3fd280770a7f205091bc138718e12223c1646460442a9639882215ef866",
+      "sha256": "10d57c6ae3a7ee01d57e667ae1f0bc2d8bc1e4c1b4b3de3ed51248ffc93ddee3",
       "source_class_path": "com/sunwayworld/framework/support/selectable/service/GenericSelectableService.class",
       "source_jar": "BOOT-INF/lib/gikam-core-common-14.1.5.jar",
       "source_sha256_before_transform": "3fbcc3fd280770a7f205091bc138718e12223c1646460442a9639882215ef866",
       "transformations": [
-        "cfr-to-vineflower-fallback"
-      ]
+        "cfr-to-vineflower-fallback",
+        "source-backed:selectable-comma-multi-seq-equality-union",
+        "overlay:src/main/java/com/sunwayworld/framework/support/selectable/service/GenericSelectableService.java"
+      ],
+      "source_sha256_before_overlay": "3fbcc3fd280770a7f205091bc138718e12223c1646460442a9639882215ef866"
     },
     {
       "class_sha256": "b8493947828fcd6150dfd4eb8d218266247e77a2d6c69c90cce38cc1ba336bd8",
@@ -31565,7 +31573,7 @@
       ]
     }
   ],
-  "source_tree_sha256": "2abe2a9412e7748046f46158b96e7d40ff13e9e4a42faac0025b7311adc4875a",
+  "source_tree_sha256": "d2accd8ed9ebac163ffc02504a4f8c6c95388c34240b452811402b59506f4e9a",
   "status": "assembled-source-only",
   "transformation_manifest": "docs/reconstitution/decompiler-transforms.json",
   "transformation_manifest_sha256": "30ab06626f3e4c863a2855790b0ec6211499394852f2a8598ea3bd444ce87fe8",

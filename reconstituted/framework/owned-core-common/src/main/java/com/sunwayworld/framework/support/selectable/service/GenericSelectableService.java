@@ -86,6 +86,9 @@ public interface GenericSelectableService<T extends Persistable<ID>, ID extends 
                }
 
                if (StringUtils.contains(v, ",")) {
+                  if (MatchPattern.SEQ.equals(match)) {
+                     match = MatchPattern.OR;
+                  }
                   filter.match(key, Arrays.asList(StringUtils.split(v, ","))).filter(match);
                } else {
                   filter.match(key, v).filter(match);

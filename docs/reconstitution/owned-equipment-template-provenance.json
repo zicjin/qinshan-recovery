@@ -1,0 +1,323 @@
+{
+  "schema": "owned-source-backed-template-provenance-v1",
+  "source_checkpoint": "e946f34d72b1d0bb18ae9fbab51000a188007301",
+  "classification": "owned-source-backed-resource-reconstruction",
+  "supplier_byte_identical": false,
+  "supplier_template_available": false,
+  "status": "diagnostic-controller-render-and-javascript-initialization-pass",
+  "api_evidence": false,
+  "strict_evidence": false,
+  "rationale": "The original controller view names and JavaScript page implementations exist in tracked source; the eight template resources are absent. Thin inline fragments bind those existing resources using neighboring original template conventions. No new business JavaScript, controller aliases, or HTTP bridge is introduced. This is owned reconstruction, not recovery of supplier template bytes.",
+  "transformation": "Create script th:inline=javascript fragments with CDATA markers, ordered Gikam.requirejs dependencies and the original page initializer. Audit and choose initializers receive Gikam.getElParam so original scripts retain current-user audit scope and chooser parameters.",
+  "convention_inputs": [
+    {
+      "path": "project/src/main/resources/templates/emc/module/mdm/equipt/equipt-cali-results/emc-equipt-cali-result-edit-list.html",
+      "sha256": "894f5c156712bd9c6bf90b76d77b1e0d5554b3785e3986d8aa6e6bef8bbcc050"
+    },
+    {
+      "path": "project/src/main/resources/templates/emc/module/mdm/equipt/equipt-cali-results/emc-equipt-cali-result-audit-list.html",
+      "sha256": "efd74e2160744d8fcb9ef28d19614887d9b585bc0c963267b62e96b64bedaba5"
+    },
+    {
+      "path": "project/src/main/resources/templates/emc/module/mdm/equipt/equipt-cali-results/emc-equipt-cali-result-search-list.html",
+      "sha256": "5f34dd6eeb96105d7029b317e9b1c9652c17a1c1d203c6317126efce6ec94a4b"
+    },
+    {
+      "path": "project/src/main/resources/templates/emc/module/mdm/basemdm/certs/emc-cert-choose-list.html",
+      "sha256": "c4bd3582f482fde60b9ed8601b053e9e94d4c00a26a88dcdb121d28786b4bd38"
+    }
+  ],
+  "validation": {
+    "test": "scripts/tests/test-equipment-page-fragments.py",
+    "seams": [
+      "original Controller HTTP GET through Spring MockMvc with real Thymeleaf rendering",
+      "rendered inline script evaluates in JDK8 Nashorn and loads actual original JS resources in declared dependency order",
+      "original JS initializes grid URL, columns, layout, audit user/request scope, parts/data tabs and modal chooser context"
+    ],
+    "boundary_mocks": [
+      "workspace user and render target",
+      "Gikam page-object factory, script loader, parameter decoder, workflow status column and UI layout sink"
+    ],
+    "limitations": [
+      "No browser DOM widget execution or business HTTP is claimed.",
+      "No database, permissions, business writes or strict closure is verified.",
+      "UI framework boundary mocks do not establish frontend framework behavior equivalence."
+    ],
+    "checks": {
+      "red_before_green": "Each of the eight cases first failed with the missing original Thymeleaf resource, then passed after its fragment was added.",
+      "all_cases": "8/8 original Controller GET, Thymeleaf render and actual original JS initialization passed.",
+      "negative_controls": [
+        "A nonexistent JS resource requested by a rendered fragment fails the test.",
+        "Loading the page implementation before its base page object fails the test."
+      ],
+      "existing_regression": "test-original-page-fragments.py requisition audit/search passed.",
+      "provenance": "All template, original controller, original JS and convention-input hashes verified."
+    }
+  },
+  "templates": [
+    {
+      "template": {
+        "path": "project/src/main/resources/templates/emc/module/mdm/equipt/equip-verifications/emc-equip-verification-edit-list.html",
+        "sha256": "b442e92b61624911c3d07455cce2207d9d23619ea422e38ba3d02564386a3b97"
+      },
+      "controller_inputs": [
+        {
+          "path": "project/src/main/java/com/sunwayworld/emc/module/mdm/equipt/verification/controller/EmcEquipVerificationController.java",
+          "sha256": "40399acdc7f275f051c090a908b8eff7ea1b49f4f22e5121d2c3634296824291"
+        },
+        {
+          "path": "project/src/main/java/com/sunwayworld/emc/module/mdm/equipt/verification/controller/impl/EmcEquipVerificationControllerImpl.java",
+          "sha256": "4165c2b996c7360adb39e06c63b6e65bd9b58852eb6db9a05f3aa9e5d8187f55"
+        }
+      ],
+      "javascript_inputs": [
+        {
+          "path": "project/src/main/resources/static/emc/module/mdm/equipt/equip-verifications/emc-equip-verification.js",
+          "sha256": "de64b9293838ca6ea795f3764862ec73eed2140531eaa0486ccac5e39e0f3554"
+        },
+        {
+          "path": "project/src/main/resources/static/emc/module/mdm/equipt/equip-verifications/emc-equip-verification-edit-list.js",
+          "sha256": "9a1d96547216e43957f24045ff261d43fa8181fbb41e07ec03ee224af7072e90"
+        }
+      ],
+      "initializer": {
+        "object": "emcEquipVerification",
+        "method": "editPage.init",
+        "parameters": "none"
+      },
+      "controller_route": "/secure/emc/module/mdm/equipt/equip-verifications/page/edit-list",
+      "dependency_order": "original base page object, then original page implementation, then inline initializer"
+    },
+    {
+      "template": {
+        "path": "project/src/main/resources/templates/emc/module/mdm/equipt/equip-verifications/emc-equip-verification-audit-list.html",
+        "sha256": "55e8956d2fb2dd3f748b5b80192b2ab791dee0d8b64c779a0bb7dc29a306a478"
+      },
+      "controller_inputs": [
+        {
+          "path": "project/src/main/java/com/sunwayworld/emc/module/mdm/equipt/verification/controller/EmcEquipVerificationController.java",
+          "sha256": "40399acdc7f275f051c090a908b8eff7ea1b49f4f22e5121d2c3634296824291"
+        },
+        {
+          "path": "project/src/main/java/com/sunwayworld/emc/module/mdm/equipt/verification/controller/impl/EmcEquipVerificationControllerImpl.java",
+          "sha256": "4165c2b996c7360adb39e06c63b6e65bd9b58852eb6db9a05f3aa9e5d8187f55"
+        }
+      ],
+      "javascript_inputs": [
+        {
+          "path": "project/src/main/resources/static/emc/module/mdm/equipt/equip-verifications/emc-equip-verification.js",
+          "sha256": "de64b9293838ca6ea795f3764862ec73eed2140531eaa0486ccac5e39e0f3554"
+        },
+        {
+          "path": "project/src/main/resources/static/emc/module/mdm/equipt/equip-verifications/emc-equip-verification-audit-list.js",
+          "sha256": "4dff59809e0fb3396ac881eeed5f7e5f0b625b6b1d8e9a1dbc4780930e72a18b"
+        }
+      ],
+      "initializer": {
+        "object": "emcEquipVerification",
+        "method": "auditPage.init",
+        "parameters": "Gikam.getElParam([[${param}]])"
+      },
+      "controller_route": "/secure/emc/module/mdm/equipt/equip-verifications/page/audit-list",
+      "dependency_order": "original base page object, then original page implementation, then inline initializer"
+    },
+    {
+      "template": {
+        "path": "project/src/main/resources/templates/emc/module/mdm/equipt/equip-verifications/emc-equip-verification-search-list.html",
+        "sha256": "7a3b031bf392ca72433f4985ae93b4caeb41d1b17d433e9d763a95144cda54f8"
+      },
+      "controller_inputs": [
+        {
+          "path": "project/src/main/java/com/sunwayworld/emc/module/mdm/equipt/verification/controller/EmcEquipVerificationController.java",
+          "sha256": "40399acdc7f275f051c090a908b8eff7ea1b49f4f22e5121d2c3634296824291"
+        },
+        {
+          "path": "project/src/main/java/com/sunwayworld/emc/module/mdm/equipt/verification/controller/impl/EmcEquipVerificationControllerImpl.java",
+          "sha256": "4165c2b996c7360adb39e06c63b6e65bd9b58852eb6db9a05f3aa9e5d8187f55"
+        }
+      ],
+      "javascript_inputs": [
+        {
+          "path": "project/src/main/resources/static/emc/module/mdm/equipt/equip-verifications/emc-equip-verification.js",
+          "sha256": "de64b9293838ca6ea795f3764862ec73eed2140531eaa0486ccac5e39e0f3554"
+        },
+        {
+          "path": "project/src/main/resources/static/emc/module/mdm/equipt/equip-verifications/emc-equip-verification-search-list.js",
+          "sha256": "c6cf6527f5ee9906f053d396dbd4c66bd9feaeba7c5eea713ce19c3fca76d921"
+        }
+      ],
+      "initializer": {
+        "object": "emcEquipVerification",
+        "method": "searchPage.init",
+        "parameters": "none"
+      },
+      "controller_route": "/secure/emc/module/mdm/equipt/equip-verifications/page/search-list",
+      "dependency_order": "original base page object, then original page implementation, then inline initializer"
+    },
+    {
+      "template": {
+        "path": "project/src/main/resources/templates/emc/module/mdm/equipt/equip-checks/emc-equip-check-edit-list.html",
+        "sha256": "f7a527469f58c5b61b0377647a5f9c1d7b435251f8012418269952e9ef4d4039"
+      },
+      "controller_inputs": [
+        {
+          "path": "project/src/main/java/com/sunwayworld/emc/module/mdm/equipt/equiptcheck/controller/EmcEquipCheckController.java",
+          "sha256": "1a25f97e0ea02f5f9922ca12f0f4befba6ae24c281555ca65a963387fffb3672"
+        },
+        {
+          "path": "project/src/main/java/com/sunwayworld/emc/module/mdm/equipt/equiptcheck/controller/impl/EmcEquipCheckControllerImpl.java",
+          "sha256": "42e5e113c5b1808887faf6b9896ca97b9d058afdb89f07191dfdf3324b49e5ce"
+        }
+      ],
+      "javascript_inputs": [
+        {
+          "path": "project/src/main/resources/static/emc/module/mdm/equipt/equip-checks/emc-equip-check.js",
+          "sha256": "0b68cfdeecfb9d1923c2d22a4961f8f2f7a10b6edf2095052f4042c6697027d0"
+        },
+        {
+          "path": "project/src/main/resources/static/emc/module/mdm/equipt/equip-checks/emc-equip-check-edit-list.js",
+          "sha256": "4f93fa1dd596dc75452765773453eb90d81f74b4576bd45136fbb400c86dddba"
+        }
+      ],
+      "initializer": {
+        "object": "emcEquipCheck",
+        "method": "editPage.init",
+        "parameters": "none"
+      },
+      "controller_route": "/secure/emc/module/mdm/equipt/equip-checks/page/edit-list",
+      "dependency_order": "original base page object, then original page implementation, then inline initializer"
+    },
+    {
+      "template": {
+        "path": "project/src/main/resources/templates/emc/module/mdm/equipt/equip-checks/emc-equip-check-audit-list.html",
+        "sha256": "ecaa622daf71f36678a8d8c1bf14a4a5a789e48d27c78d3bb4d0f34df9f0929f"
+      },
+      "controller_inputs": [
+        {
+          "path": "project/src/main/java/com/sunwayworld/emc/module/mdm/equipt/equiptcheck/controller/EmcEquipCheckController.java",
+          "sha256": "1a25f97e0ea02f5f9922ca12f0f4befba6ae24c281555ca65a963387fffb3672"
+        },
+        {
+          "path": "project/src/main/java/com/sunwayworld/emc/module/mdm/equipt/equiptcheck/controller/impl/EmcEquipCheckControllerImpl.java",
+          "sha256": "42e5e113c5b1808887faf6b9896ca97b9d058afdb89f07191dfdf3324b49e5ce"
+        }
+      ],
+      "javascript_inputs": [
+        {
+          "path": "project/src/main/resources/static/emc/module/mdm/equipt/equip-checks/emc-equip-check.js",
+          "sha256": "0b68cfdeecfb9d1923c2d22a4961f8f2f7a10b6edf2095052f4042c6697027d0"
+        },
+        {
+          "path": "project/src/main/resources/static/emc/module/mdm/equipt/equip-checks/emc-equip-check-audit-list.js",
+          "sha256": "331d18586043aa8be5fdbcca31685cd3af5964113f521cf678359f1f7d929aac"
+        }
+      ],
+      "initializer": {
+        "object": "emcEquipCheck",
+        "method": "auditPage.init",
+        "parameters": "Gikam.getElParam([[${param}]])"
+      },
+      "controller_route": "/secure/emc/module/mdm/equipt/equip-checks/page/audit-list",
+      "dependency_order": "original base page object, then original page implementation, then inline initializer"
+    },
+    {
+      "template": {
+        "path": "project/src/main/resources/templates/emc/module/mdm/equipt/equip-checks/emc-equip-check-search-list.html",
+        "sha256": "787f24d104a4d925610897e08317356f745278e748b1532cbb7571c4d3d81439"
+      },
+      "controller_inputs": [
+        {
+          "path": "project/src/main/java/com/sunwayworld/emc/module/mdm/equipt/equiptcheck/controller/EmcEquipCheckController.java",
+          "sha256": "1a25f97e0ea02f5f9922ca12f0f4befba6ae24c281555ca65a963387fffb3672"
+        },
+        {
+          "path": "project/src/main/java/com/sunwayworld/emc/module/mdm/equipt/equiptcheck/controller/impl/EmcEquipCheckControllerImpl.java",
+          "sha256": "42e5e113c5b1808887faf6b9896ca97b9d058afdb89f07191dfdf3324b49e5ce"
+        }
+      ],
+      "javascript_inputs": [
+        {
+          "path": "project/src/main/resources/static/emc/module/mdm/equipt/equip-checks/emc-equip-check.js",
+          "sha256": "0b68cfdeecfb9d1923c2d22a4961f8f2f7a10b6edf2095052f4042c6697027d0"
+        },
+        {
+          "path": "project/src/main/resources/static/emc/module/mdm/equipt/equip-checks/emc-equip-check-search-list.js",
+          "sha256": "2134183c7b0ea33c5094479037e90d30303e2a34a3aee9ee84f19e3402ca3193"
+        }
+      ],
+      "initializer": {
+        "object": "emcEquipCheck",
+        "method": "searchPage.init",
+        "parameters": "none"
+      },
+      "controller_route": "/secure/emc/module/mdm/equipt/equip-checks/page/search-list",
+      "dependency_order": "original base page object, then original page implementation, then inline initializer"
+    },
+    {
+      "template": {
+        "path": "project/src/main/resources/templates/emc/module/mdm/equipt/equip-checks/emc-equip-appearance-edit-list.html",
+        "sha256": "a6e98810379b669eaa9ee374979cce76b1cb21fb6573454b66b9de41724d6599"
+      },
+      "controller_inputs": [
+        {
+          "path": "project/src/main/java/com/sunwayworld/emc/module/mdm/equipt/equiptcheck/controller/EmcEquipCheckController.java",
+          "sha256": "1a25f97e0ea02f5f9922ca12f0f4befba6ae24c281555ca65a963387fffb3672"
+        },
+        {
+          "path": "project/src/main/java/com/sunwayworld/emc/module/mdm/equipt/equiptcheck/controller/impl/EmcEquipCheckControllerImpl.java",
+          "sha256": "42e5e113c5b1808887faf6b9896ca97b9d058afdb89f07191dfdf3324b49e5ce"
+        }
+      ],
+      "javascript_inputs": [
+        {
+          "path": "project/src/main/resources/static/emc/module/mdm/equipt/equip-checks/emc-equip-appearance.js",
+          "sha256": "cd467997ab6bf806e149becf982c72fcf8efc60d083b1b54aa74d60feefdbde0"
+        },
+        {
+          "path": "project/src/main/resources/static/emc/module/mdm/equipt/equip-checks/emc-equip-appearance-edit-list.js",
+          "sha256": "39ada888c860e61c9b6171784ee5cd6212c76a769a6065d1e4cf51c9b6d826b2"
+        }
+      ],
+      "initializer": {
+        "object": "emcEquipAppearance",
+        "method": "editPage.init",
+        "parameters": "none"
+      },
+      "controller_route": "/secure/emc/module/mdm/equipt/equip-checks/page/appearance-list",
+      "dependency_order": "original base page object, then original page implementation, then inline initializer"
+    },
+    {
+      "template": {
+        "path": "project/src/main/resources/templates/emc/module/mdm/equipt/equip-checks/emc-equip-appearance-choose-list.html",
+        "sha256": "5f0e28d9b0a6fbba5f7faeb09d75f0219066c4961212850d21c6a82153c50b49"
+      },
+      "controller_inputs": [
+        {
+          "path": "project/src/main/java/com/sunwayworld/emc/module/mdm/equipt/equiptcheck/controller/EmcEquipCheckController.java",
+          "sha256": "1a25f97e0ea02f5f9922ca12f0f4befba6ae24c281555ca65a963387fffb3672"
+        },
+        {
+          "path": "project/src/main/java/com/sunwayworld/emc/module/mdm/equipt/equiptcheck/controller/impl/EmcEquipCheckControllerImpl.java",
+          "sha256": "42e5e113c5b1808887faf6b9896ca97b9d058afdb89f07191dfdf3324b49e5ce"
+        }
+      ],
+      "javascript_inputs": [
+        {
+          "path": "project/src/main/resources/static/emc/module/mdm/equipt/equip-checks/emc-equip-appearance.js",
+          "sha256": "cd467997ab6bf806e149becf982c72fcf8efc60d083b1b54aa74d60feefdbde0"
+        },
+        {
+          "path": "project/src/main/resources/static/emc/module/mdm/equipt/equip-checks/emc-equip-appearance-choose-list.js",
+          "sha256": "8b27f0d271f10cdc151545e40aa0749b60b479c0a54dedd6a3ff21ac2106552a"
+        }
+      ],
+      "initializer": {
+        "object": "emcEquipAppearance",
+        "method": "choosePage.init",
+        "parameters": "Gikam.getElParam([[${param}]])"
+      },
+      "controller_route": "/secure/emc/module/mdm/equipt/equip-checks/page/check-list",
+      "dependency_order": "original base page object, then original page implementation, then inline initializer"
+    }
+  ]
+}

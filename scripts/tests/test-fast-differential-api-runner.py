@@ -58,6 +58,64 @@ class FastDifferentialTest(unittest.TestCase):
         self.assertFalse(MODULE.route_safe({"method": "PUT", "path": "/x/{id}", "route_kind": "inherited-api"})[0])
         self.assertTrue(MODULE.route_safe({"method": "GET", "path": "/open/security/public-key", "route_kind": "web-controller"})[0])
 
+    def test_property_data_reads_that_can_insert_are_not_safe_to_probe(self):
+        base = "/secure/emc/module/mdm/basemdm/property-tmpls"
+        paths = (
+            "/index-sets/{id}/{tmplId}/queries/property-datas",
+            "/property-fields/{id}/queries/property-datas/{tmplId}",
+            "/folders/{folderId}/property-data/queries",
+        )
+        for suffix in paths:
+            for path in (base + suffix, MODULE.render_path_template(base + suffix),
+                         MODULE.render_path_template(base + suffix) + "?page=2&size=10"):
+                for kind in ("api-resource", "inherited-api"):
+                    with self.subTest(path=path, kind=kind):
+                        self.assertEqual(MODULE.route_safe({
+                            "method": "GET", "path": path, "route_kind": kind,
+                        }), (False, "read-can-create-business-data"))
+
+    def test_property_data_read_or_create_profiles_cannot_be_generated(self):
+        base = "/secure/emc/module/mdm/basemdm/property-tmpls"
+        for suffix in (
+            "/index-sets/{id}/{tmplId}/queries/property-datas",
+            "/property-fields/{id}/queries/property-datas/{tmplId}",
+            "/folders/{folderId}/property-data/queries",
+        ):
+            for path in (base + suffix, MODULE.render_path_template(base + suffix)):
+                with self.subTest(path=path):
+                    route = {"method": "GET", "path": path, "route_kind": "api-resource"}
+                    self.assertEqual(MODULE.request_profiles(route), [])
+                    self.assertEqual(MODULE.request_profiles(route, ("default", "page-2")), [])
+                    self.assertIsNone(MODULE.request_profile(route))
+
+    def test_neighboring_property_data_reads_remain_probeable(self):
+        base = "/secure/emc/module/mdm/basemdm/property-tmpls"
+        for suffix in (
+            "/property-fields/{id}/queries/property-datas/{monitorPointId}/{monitorPointCategoryId}",
+            "/monitor-points/queries/property-datas/{id}",
+            "/test-methods/{tmplId}/property-datas/{testMethodId}",
+            "/test-capacity/{tmplId}/property-datas/{testCapacityId}/flag/{flag1}",
+            "/result-order-task/{tmplId}/property-datas/{orderTaskId}",
+            "/result-runs/{tmplId}/property-datas/{runId}",
+            "/result-runs/property-datas/{runId}",
+            "/property-fields/queries/{id}",
+        ):
+            with self.subTest(path=base + suffix):
+                route = {"method": "GET", "path": base + suffix, "route_kind": "api-resource"}
+                self.assertTrue(MODULE.route_safe(route)[0])
+                self.assertEqual(MODULE.request_profiles(route)[0]["path"],
+                                 MODULE.render_path_template(base + suffix))
+
+    def test_request_profiles_reject_unselected_and_state_changing_routes(self):
+        for route in (
+            {"method": "GET", "path": "/x/{id}/action/export", "route_kind": "api-resource"},
+            {"method": "POST", "path": "/x/action/save/queries", "route_kind": "api-resource"},
+            {"method": "GET", "path": "/x/{id}", "route_kind": "web-controller"},
+            {"method": "POST", "path": "/x/queries"},
+        ):
+            with self.subTest(route=route):
+                self.assertEqual(MODULE.request_profiles(route), [])
+
     def test_read_path_templates_render_without_real_business_ids(self):
         self.assertEqual(
             MODULE.render_path_template("/x/{id}/columns/{column}"),
@@ -248,7 +306,7 @@ class FastDifferentialTest(unittest.TestCase):
         self.assertEqual(profiles[3]["body"]["p"]["n"], "invalid")
 
     def test_ignored_no_match_filter_is_behavior_mismatch_not_data_scope(self):
-        route = {"method": "POST", "path": "/x/queries"}
+        route = {"method": "POST", "path": "/x/queries", "route_kind": "inherited-api"}
         profile = MODULE.request_profiles(route, ("empty",))[0]
         supplier = {"status": 200, "content_type": "application/json", "json": {"total": 0, "rows": []}}
         owned = {"status": 200, "content_type": "application/json", "json": {"total": 100, "rows": [{"id": 1}]}}
@@ -260,7 +318,7 @@ class FastDifferentialTest(unittest.TestCase):
         self.assertEqual(detail["side"], "supplier")
 
     def test_no_match_assertion_is_not_applicable_to_non_page_envelopes(self):
-        route = {"method": "POST", "path": "/x/{id}/data/queries"}
+        route = {"method": "POST", "path": "/x/{id}/data/queries", "route_kind": "inherited-api"}
         profile = MODULE.request_profiles(route, ("empty",))[0]
         observation = {
             "status": 200,
@@ -272,7 +330,7 @@ class FastDifferentialTest(unittest.TestCase):
         self.assertNotEqual(detail["reason"], "no-match-filter-not-applied")
 
     def test_ignored_sort_is_not_hidden_by_id_or_row_normalization(self):
-        profile = MODULE.request_profiles({"method": "POST", "path": "/x/queries"}, ("ascending",))[0]
+        profile = MODULE.request_profiles({"method": "POST", "path": "/x/queries", "route_kind": "inherited-api"}, ("ascending",))[0]
         supplier = {"status": 200, "content_type": "application/json", "json": {"rows": [{"id": 1}, {"id": 2}]}}
         owned = {"status": 200, "content_type": "application/json", "json": {"rows": [{"id": 2}, {"id": 1}]}}
         result, detail = MODULE.compare(supplier, owned, profile=profile)

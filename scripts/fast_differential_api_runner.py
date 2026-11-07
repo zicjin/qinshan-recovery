@@ -50,6 +50,15 @@ UNSAFE_MARKERS = (
 DYNAMIC_KEY = re.compile(r"(?:^|_)(?:id|ids|token|timestamp|time|date|nonce|uuid|session)(?:$|_)", re.I)
 PATH_ID = re.compile(r"(?<![A-Za-z])\d{4,}(?![A-Za-z])")
 PATH_TEMPLATE = re.compile(r"\{([^{}]+)\}")
+# EmcPropertyDataServiceImpl.selectPropertyData(id, tmplId) and
+# PfPropertyDataServiceImpl.selectPropertyDataByFolderId insert missing rows.
+# Match both source templates and rendered paths: even 0 is a business value
+# to these methods. The three-argument monitor-point overload only reads.
+READ_CAN_CREATE_PATHS = tuple(re.compile(pattern) for pattern in (
+    r"/property-tmpls/index-sets/[^/]+/[^/]+/queries/property-datas/?$",
+    r"/property-tmpls/property-fields/[^/]+/queries/property-datas/[^/]+/?$",
+    r"/property-tmpls/folders/[^/]+/property-data/queries/?$",
+))
 
 
 class ProbeError(RuntimeError):
@@ -253,6 +262,10 @@ def route_safe(route: Mapping[str, Any]) -> Tuple[bool, str]:
     if kind not in {"inherited-api", "api-resource"}:
         return False, "route-kind-not-selected"
     lower_path = path.lower()
+    if method == "GET" and any(
+        pattern.search(urlsplit(lower_path).path) for pattern in READ_CAN_CREATE_PATHS
+    ):
+        return False, "read-can-create-business-data"
     # ``/action/print`` renders a read-only projection.  Other action routes
     # may mutate state and remain excluded from the fast tier.
     if "/action/" in lower_path and not lower_path.endswith("/action/print"):
@@ -280,6 +293,8 @@ def request_profiles(route: Mapping[str, Any], enabled: Optional[Sequence[str]] 
     validation/error envelope.  Path templates are rendered with impossible
     no-match values before profiles are created.
     """
+    if not route_safe(route)[0]:
+        return []
     method = str(route.get("method", "")).upper()
     route_path = str(route.get("path", ""))
     path = render_path_template(route_path)

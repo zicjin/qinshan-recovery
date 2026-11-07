@@ -32,7 +32,7 @@
                 <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
             </when>
             <otherwise>
-                CAST(T.ORDERNO AS VARCHAR)
+                CAST(T.ORDERNO AS VARCHAR), T.ID
             </otherwise>
         </choose>
     </select>

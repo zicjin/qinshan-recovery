@@ -3623,30 +3623,46 @@
     {
       "bytes": 2450,
       "compile_status": "not-applicable-resource",
+      "destination_sha256": "71a93f6150ac49ab8e43c3a6ff4375f3ff24529afa4d03ba2ff58eef9abb89fa",
       "path": "com/sunwayworld/module/sys/menu/mapper/conf/core-menu-mysql-mapper.xml",
       "sha256": "180db2748a7b0a1fb7dc3d2e8fd264dd714c1823d1b865e28f732af2633d35db",
-      "source_jar": "gikam-core-common-14.1.5.jar"
+      "source_jar": "gikam-core-common-14.1.5.jar",
+      "transformations": [
+        "append-unique-menu-id-to-selectByCondition-default-order; preserve ORDERNO conversion, explicit orderParams and ORDER SIBLINGS BY branch for deterministic pagination"
+      ]
     },
     {
       "bytes": 2661,
       "compile_status": "not-applicable-resource",
+      "destination_sha256": "cf721b57ab03d29d81be2d58df36ffd0363afbdd95b046ccff34844b7d732b54",
       "path": "com/sunwayworld/module/sys/menu/mapper/conf/core-menu-oracle-mapper.xml",
       "sha256": "d311c697e9918929fe7ecc00f4bfe2333a59775501e09982e7c7bc916a0b89b1",
-      "source_jar": "gikam-core-common-14.1.5.jar"
+      "source_jar": "gikam-core-common-14.1.5.jar",
+      "transformations": [
+        "append-unique-menu-id-to-selectByCondition-default-order; preserve ORDERNO conversion, explicit orderParams and ORDER SIBLINGS BY branch for deterministic pagination"
+      ]
     },
     {
       "bytes": 2436,
       "compile_status": "not-applicable-resource",
+      "destination_sha256": "4f8bf7048e7ebc783fce7962c4a91074ce4a5afc9733fdffe2f9392934b0e963",
       "path": "com/sunwayworld/module/sys/menu/mapper/conf/core-menu-postgresql-mapper.xml",
       "sha256": "e1833dcd756f11662a3660982ccc2c5fc3787ab74635aea11dde8e46721bc12a",
-      "source_jar": "gikam-core-common-14.1.5.jar"
+      "source_jar": "gikam-core-common-14.1.5.jar",
+      "transformations": [
+        "append-unique-menu-id-to-selectByCondition-default-order; preserve ORDERNO conversion, explicit orderParams and ORDER SIBLINGS BY branch for deterministic pagination"
+      ]
     },
     {
       "bytes": 2666,
       "compile_status": "not-applicable-resource",
+      "destination_sha256": "8e8d94722e8a30ad975b172a7ed3e61f5a47937d103671777d5dd7e37c7ad95c",
       "path": "com/sunwayworld/module/sys/menu/mapper/conf/core-menu-sqlserver-mapper.xml",
       "sha256": "ac58f564b9c8e310f1de2fc106751f5066d92fd02d7d98ffbb73ba91e0a95351",
-      "source_jar": "gikam-core-common-14.1.5.jar"
+      "source_jar": "gikam-core-common-14.1.5.jar",
+      "transformations": [
+        "append-unique-menu-id-to-selectByCondition-default-order; preserve ORDERNO conversion, explicit orderParams and ORDER SIBLINGS BY branch for deterministic pagination"
+      ]
     },
     {
       "bytes": 874,

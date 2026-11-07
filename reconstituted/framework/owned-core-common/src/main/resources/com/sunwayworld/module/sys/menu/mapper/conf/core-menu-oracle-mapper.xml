@@ -32,7 +32,7 @@
                 <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />
             </when>
             <otherwise>
-                TO_CHAR(T.ORDERNO)
+                TO_CHAR(T.ORDERNO), T.ID
             </otherwise>
         </choose>
     </select>

@@ -70,3 +70,15 @@ The helper, fixtures, manifest and original source SQL files are central harness
 binding inputs. Observed schema hashes remain runtime-contract inputs. This work
 does not change application source, provide API equivalence, promote strict
 evidence or close `API-ALIGNMENT-GATE`.
+
+`invoice-returned-hierarchy.sql` is a separate metadata DML fixture, not part of
+this directory's seven-table schema DDL fixture. It restores only the three
+original invoice/return `T_CORE_TABLE` and `T_CORE_TABLE_HIERARCHY` records needed
+by the original cascade deletion path. Its adjacent JSON binds the original
+statements and fixture hashes. All three absence/equivalence/collision checks
+run before any INSERT; equivalent rows are skipped and conflicts fail. Execute
+only through the authorized local runtime SQLPlus session with no pending work;
+the script requires `CURRENT_SCHEMA=LIMS_RUNTIME_LOCAL` and session user `SYS`
+or `LIMS_RUNTIME_LOCAL`, and commits the metadata DML together. This fixture
+writes no business rows and performs no DDL or cache operations. Real HTTP
+cascade replay and targeted metadata cache diagnosis remain separate work.

@@ -1,0 +1,70 @@
+{
+  "version": 1,
+  "purpose": "Restore original metadata needed for invoice parent API deletion to cascade to return rows; no business data writes.",
+  "owner": "LIMS_RUNTIME_LOCAL",
+  "source_commit": "2fe628b4e07cd4ea902775eadf15702e679d1612",
+  "source": {
+    "path": "project/sql/oracle/oracle_sql_emc.txt",
+    "sha256": "7a933bb2f4463a046600d17dc6621e37839e7dd433f4b8bf8fdad60bc1b5cb73"
+  },
+  "fixture": {
+    "path": "api-fixtures/schema/invoice-returned-hierarchy.sql",
+    "sha256": "a5d3ab34b7aedb5aa912ec3f6a852249c7ca04f0b4f5209efd3b354569608a30"
+  },
+  "statements": [
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17127,
+      "line_end": 17128,
+      "source_statement_sha256": "d9d009f0151d0187d64888060e8a64546d35719160850af7dbcd761ae3907ea6",
+      "transformations": [
+        "Retain original INSERT columns and values; execute only after exact absence/equivalence preflight in guarded CURRENT_SCHEMA."
+      ]
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17133,
+      "line_end": 17134,
+      "source_statement_sha256": "325436dbccadce3122b45594e22a45a9dba50cd830073f0fee9309700382c692",
+      "transformations": [
+        "Retain original INSERT columns and values; execute only after exact absence/equivalence preflight in guarded CURRENT_SCHEMA."
+      ]
+    },
+    {
+      "source": "project/sql/oracle/oracle_sql_emc.txt",
+      "line_start": 17136,
+      "line_end": 17137,
+      "source_statement_sha256": "52cb4f26d3494761bcbd24fec16be08733f85df7aa7c0c6a6631c06477e30326",
+      "transformations": [
+        "Retain original INSERT columns and values; execute only after exact absence/equivalence preflight in guarded CURRENT_SCHEMA."
+      ]
+    }
+  ],
+  "preflight": {
+    "hierarchy": "Zero rows matching pinned ID OR case-insensitive child name, or exactly one row with exact original ID, child, master and refer column.",
+    "table_metadata": "Each case-insensitive table ID is absent or occurs exactly once with exact original ID, AUDITABLE and ATTACHMENT; unrelated columns on equivalent rows are preserved.",
+    "order": "Check all three records before any INSERT; skip equivalent records; never UPDATE or DELETE existing metadata.",
+    "schema": "CURRENT_SCHEMA must already be LIMS_RUNTIME_LOCAL; SESSION_USER SYS or LIMS_RUNTIME_LOCAL. Instance identity remains the authorized local executor responsibility."
+  },
+  "transaction": "Three INSERTs are DML only. Savepoint rolls back the fixture on any insertion failure, SQLPlus exits with ROLLBACK on errors; COMMIT only after all insertions succeed. Use a dedicated session with no pending caller work.",
+  "execution_limits": [
+    "No database execution or Redis cache change was performed to create this fixture.",
+    "No concurrency isolation claim: execute while metadata administration is idle; this fixture does not lock against competing metadata writers.",
+    "Application metadata cache inspection/targeted refresh and real HTTP deletion replay remain separate authorized runtime work.",
+    "No baseline/supplier mutation, schema DDL, Java fallback, business rows, menu/workflow/sequence seeds or strict API completion claim."
+  ],
+  "source_contract": [
+    {
+      "path": "reconstituted/framework/owned-core-common/src/main/java/com/sunwayworld/module/sys/metadata/service/impl/CoreTableServiceImpl.java",
+      "line_start": 215,
+      "line_end": 220,
+      "meaning": "Cascade traverses hierarchy, resolves child table metadata and dereferences child table ID."
+    },
+    {
+      "path": "reconstituted/framework/owned-core-common/src/main/java/com/sunwayworld/module/sys/metadata/service/impl/CoreTableServiceImpl.java",
+      "line_start": 309,
+      "line_end": 311,
+      "meaning": "selectTable reads T_CORE_TABLE directly without a physical-table fallback."
+    }
+  ]
+}

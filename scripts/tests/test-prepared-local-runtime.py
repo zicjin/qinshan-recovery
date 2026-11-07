@@ -154,7 +154,8 @@ class PreparedAdmissionTest(unittest.TestCase):
         self.assertEqual(admitted['runtime_contract_binding'], self.report['runtime_contract_binding'])
 
     def run_http_batch(self, **changes):
-        self.manifest.write_text(json.dumps(self.report))
+        if not self.manifest.exists() or json.loads(self.manifest.read_text()) != self.report:
+            self.manifest.write_text(json.dumps(self.report))
         document = {'cases': [{'id': 'read', 'method': 'GET', 'path': '/ok', 'expected_status': 200}]}
         arguments = {'base_url': self.report['loopback_url'], 'mode': 'strict', 'role': 'anonymous',
                      'organization': 'none', 'clone_identity': None, 'artifacts': [str(self.artifact)],
@@ -221,7 +222,8 @@ class PreparedAdmissionTest(unittest.TestCase):
 
     def test_public_prepare_output_is_accepted_by_strict_admission(self):
         # Acquire through the public preparation CLI, including fake Docker
-        # inspect/mounted-file hashes, then admit the exact emitted manifest.
+        # inspect/mounted-file hashes, then admit and execute that exact manifest.
+        self.start_http()
         path = ROOT / 'scripts/tests/test-lifecycle-proof.py'
         spec = importlib.util.spec_from_file_location('public_prepare_boundary', path)
         boundary = importlib.util.module_from_spec(spec)
@@ -229,12 +231,32 @@ class PreparedAdmissionTest(unittest.TestCase):
         prepared = boundary.LifecycleProofTest()
         prepared.setUp()
         self.addCleanup(prepared.doCleanups)
-        result = prepared.cli('scripts/owned_runtime_contract.py', '--report', prepared.prepared_path,
+        seed_path = prepared.private / 'seed.json'
+        seed = json.loads(seed_path.read_text())
+        seed['loopback_url'] = self.report['loopback_url']
+        seed_path.write_text(json.dumps(seed))
+        manifest = prepared.private / 'prepared-http.json'
+        prepared.cli('scripts/lifecycle_proof.py', '--prepare-input', seed_path,
+                     '--docker', prepared.docker, '--output', manifest)
+        result = prepared.cli('scripts/owned_runtime_contract.py', '--report', manifest,
                               '--mode', 'strict')
         admitted = json.loads(result.stdout)
         self.assertEqual(admitted['runtime_manifest_schema'], 'local-prepared-v1')
         self.assertIsNone(admitted['runtime_schema_hash_after'])
         self.assertTrue(admitted['cleanup_pending'])
+        self.repo, self.private, self.manifest = prepared.repo, prepared.private, manifest
+        self.report = json.loads(manifest.read_text())
+        self.artifact = Path(self.report['operated_artifact']['path'])
+        before = Handler.requests
+        executed = self.run_http_batch()
+        self.assertEqual(executed.returncode, 0, executed.stderr)
+        self.assertEqual(Handler.requests, before + 1)
+        report = json.loads(executed.stdout)
+        self.assertEqual(report['status'], 'executed-pass-pending-cleanup')
+        self.assertEqual(report['prepared_manifest']['sha256'],
+                         hashlib.sha256(manifest.read_bytes()).hexdigest())
+        self.assertEqual(report['runtime_contract_binding'], self.report['runtime_contract_binding'])
+        self.assertIsNone(report['runtime_contract']['runtime_schema_restored'])
 
     def test_prepared_rejects_missing_binding_before_any_replay(self):
         del self.report['implementation_binding']

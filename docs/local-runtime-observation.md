@@ -6,6 +6,10 @@ reported as sss2 execution. Private configuration, database dumps and credential
 remain external. An imported historical application image is not approved release
 material; final distribution still comes from standalone tracked source.
 
+For observed preparation, deferred HTTP execution and registered cleanup
+finalization, follow [Local milestone preparation and proof-bound cleanup](local-lifecycle-proof.md).
+An observation alone cannot admit or finalize a new local strict run.
+
 The user tests at `http://127.0.0.1:18087`. Daily refreshes stay local; sss2 is
 reserved for the delivery smoke. Mount a resolved immutable distribution path,
 not the mutable `target/distribution` alias: replacing that directory while it is

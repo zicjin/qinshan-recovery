@@ -32,6 +32,10 @@ implements CoreAuditTrailRecordLineDao {
 
     @Override
     public List<CoreAuditTrailRecordLineNameDTO> selectDeletedNames(List<String> targetIds, String nameField) {
-        return this.getMapper().selectDeletedNames(targetIds, nameField);
+        return this.getMapper().selectDeletedNames(targetIds, nameField, null);
+    }
+    @Override
+    public List<CoreAuditTrailRecordLineNameDTO> selectDeletedNames(List<String> targetIds, String nameField, String organization) {
+        return this.getMapper().selectDeletedNames(targetIds, nameField, organization);
     }
 }

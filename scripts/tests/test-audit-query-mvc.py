@@ -30,6 +30,15 @@ def main():
                    ROOT / 'project/src/main/java/com/sunwayworld/emc/framework/security/OriginalAuditTrailReadOperations.java',
                    ROOT / 'owned-framework/src/main/java/com/sunwayworld/owned/internal/web/OwnedAuditTrailController.java',
                    ROOT / 'scripts/tests/fixtures/audit-query/AuditQueryMvcCheck.java']
+        audit_base = ROOT / 'reconstituted/framework/owned-core-common/src/main/java/com/sunwayworld/module/sys/at'
+        sources += [audit_base / 'service/CoreAuditTrailRecordService.java',
+                    ROOT / 'project/src/main/java/com/sunwayworld/emc/framework/security/OriginalAuditTrailReadScope.java']
+        for kind, names in {'service/impl': ['CoreAuditTrailRecord', 'CoreAuditTrailRecordLine'],
+                            'dao': ['CoreAuditTrailRecord', 'CoreAuditTrailRecordLine'],
+                            'dao/impl': ['CoreAuditTrailRecord', 'CoreAuditTrailRecordLine'],
+                            'mapper': ['CoreAuditTrailRecord', 'CoreAuditTrailRecordLine']}.items():
+            suffix = 'ServiceImpl' if kind == 'service/impl' else 'DaoImpl' if kind == 'dao/impl' else 'Dao' if kind == 'dao' else 'Mapper'
+            sources += [audit_base / kind / (name + suffix + '.java') for name in names]
         subprocess.run([str(args.jdk / 'bin/javac'), '-encoding', 'UTF-8', '-parameters', '-cp', cp, '-d', temp,
                         *map(str, sources)], check=True)
         subprocess.run([str(args.jdk / 'bin/java'), *(['-Daudit.fixture.separator=' + args.separator] if args.separator is not None else []), '-cp', cp,

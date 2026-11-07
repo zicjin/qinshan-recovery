@@ -27,6 +27,10 @@ implements CoreAuditTrailRecordDao {
 
     @Override
     public List<CoreAuditTraceOverviewDTO> selectTraceOverview(String targetId, String tableName, String nameField) {
-        return this.getMapper().selectTraceOverview(targetId, tableName, nameField);
+        return this.getMapper().selectTraceOverview(targetId, tableName, nameField, null);
+    }
+    @Override
+    public List<CoreAuditTraceOverviewDTO> selectTraceOverview(String targetId, String tableName, String nameField, String organization) {
+        return this.getMapper().selectTraceOverview(targetId, tableName, nameField, organization);
     }
 }

@@ -3,6 +3,13 @@
  */
 package com.sunwayworld.module.sys.at.service;
 
+import com.sunwayworld.module.sys.at.resource.CoreAuditTrailRecordResource;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.method.HandlerMethod;
+import org.springframework.web.servlet.HandlerMapping;
+
 import com.sunwayworld.framework.data.page.Page;
 import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;
 import com.sunwayworld.framework.support.base.service.GenericService;
@@ -37,4 +44,24 @@ extends GenericService<CoreAuditTrailRecordBean, Long> {
     public Page<CoreAuditTraceOverviewDTO> selectTraceOverview(RestJsonWrapperBean var1);
 
     public List<CoreAuditTrailRecordLineDTO> selectRecordLineDTOByTableNameAndTargetId(String var1, String var2);
+    /** Scope only public audit reads; business audit writers and non-HTTP callers remain unchanged. */
+    public final class ReadScope {
+        private ReadScope() { }
+        public interface Provider { String requireOrganization(); }
+    
+        public static String organization(Provider provider) {
+            if (!(RequestContextHolder.getRequestAttributes() instanceof ServletRequestAttributes)) return null;
+            Object handler=((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest()
+                    .getAttribute(HandlerMapping.BEST_MATCHING_HANDLER_ATTRIBUTE);
+            if (!(handler instanceof HandlerMethod)) return null;
+            HandlerMethod method=(HandlerMethod)handler;
+            if (!CoreAuditTrailRecordResource.class.isAssignableFrom(method.getBeanType())
+                    || !method.getMethod().getName().startsWith("select")
+                    || "selectStatus".equals(method.getMethod().getName())) return null;
+            if (provider == null) throw new AccessDeniedException("audit read identity unavailable");
+            String organization=provider.requireOrganization();
+            if (organization == null || organization.trim().isEmpty()) throw new AccessDeniedException("audit organization required");
+            return organization;
+        }
+    }
 }

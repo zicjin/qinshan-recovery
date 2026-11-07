@@ -27,6 +27,41 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 public class CoreAuditTrailRecordLineServiceImpl
 implements CoreAuditTrailRecordLineService {
+    @Autowired(required = false)
+    private com.sunwayworld.module.sys.at.service.CoreAuditTrailRecordService.ReadScope.Provider auditReadScope;
+
+    private String readOrganization() {
+        return com.sunwayworld.module.sys.at.service.CoreAuditTrailRecordService.ReadScope.organization(auditReadScope);
+    }
+
+    private com.sunwayworld.framework.mybatis.mapper.MapperParameter scoped(com.sunwayworld.framework.mybatis.mapper.MapperParameter parameter) {
+        String organization=readOrganization();
+        if (organization != null) parameter.put("ownedAuditOrgId",organization);
+        return parameter;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public com.sunwayworld.framework.data.page.Page<CoreAuditTrailRecordLineBean> selectPagination(
+            com.sunwayworld.framework.mybatis.mapper.MapperParameter parameter, com.sunwayworld.framework.mybatis.page.PageRowBounds bounds) {
+        return CoreAuditTrailRecordLineService.super.selectPagination(scoped(parameter),bounds);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<CoreAuditTrailRecordLineBean> selectList(com.sunwayworld.framework.mybatis.mapper.MapperParameter parameter) {
+        return CoreAuditTrailRecordLineService.super.selectList(scoped(parameter));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public CoreAuditTrailRecordLineBean selectByIdIfPresent(Long id) {
+        if (readOrganization() == null) return CoreAuditTrailRecordLineService.super.selectByIdIfPresent(id);
+        List<CoreAuditTrailRecordLineBean> rows=selectListByFilter(com.sunwayworld.framework.mybatis.mapper.SearchFilter.instance()
+                .match("ID",id).filter(com.sunwayworld.framework.mybatis.mapper.MatchPattern.EQ),new Order[0]);
+        return rows.isEmpty() ? null : rows.get(0);
+    }
+
     @Autowired
     private CoreAuditTrailRecordLineDao recordLineDao;
 
@@ -49,8 +84,13 @@ implements CoreAuditTrailRecordLineService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<CoreAuditTrailRecordLineBean> selectRecordLineTableNameList(Long recordId) {
-        List<String> tableNameList = this.getDao().selectTableNameByRecordId(recordId + "");
+        List<String> tableNameList;
+        if (readOrganization() == null) tableNameList=this.getDao().selectTableNameByRecordId(recordId + "");
+        else tableNameList=selectListByFilter(com.sunwayworld.framework.mybatis.mapper.SearchFilter.instance()
+                .match("RECORDID",recordId).filter(com.sunwayworld.framework.mybatis.mapper.MatchPattern.EQ),new Order[0])
+                .stream().map(CoreAuditTrailRecordLineBean::getTableName).distinct().collect(java.util.stream.Collectors.toList());
         if (tableNameList.isEmpty()) {
             return null;
         }
@@ -65,11 +105,16 @@ implements CoreAuditTrailRecordLineService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<CoreAuditTrailRecordLineBean> selectRecordLineList(Long recordId, String tableName) {
         CoreAuditTrailRecordLineBean recordLine = new CoreAuditTrailRecordLineBean();
         recordLine.setRecordId(recordId);
         recordLine.setTableName(tableName);
-        List<CoreAuditTrailRecordLineBean> lineList = this.getDao().selectList(recordLine, Order.asc("TARGETID"));
+        List<CoreAuditTrailRecordLineBean> lineList;
+        if (readOrganization() == null) lineList=this.getDao().selectList(recordLine, Order.asc("TARGETID"));
+        else lineList=selectListByFilter(com.sunwayworld.framework.mybatis.mapper.SearchFilter.instance()
+                .match("RECORDID",recordId).filter(com.sunwayworld.framework.mybatis.mapper.MatchPattern.EQ)
+                .match("TABLENAME",tableName).filter(com.sunwayworld.framework.mybatis.mapper.MatchPattern.EQ),Order.asc("TARGETID"));
         if (lineList.isEmpty()) {
             return null;
         }
@@ -77,10 +122,11 @@ implements CoreAuditTrailRecordLineService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<CoreAuditTrailRecordLineNameDTO> selectDeletedNames(List<String> targetIds, String nameField) {
         if (StringUtils.isBlank(nameField) || CollectionUtils.isEmpty(targetIds)) {
             return Collections.emptyList();
         }
-        return this.getDao().selectDeletedNames(targetIds, nameField);
+        return this.getDao().selectDeletedNames(targetIds, nameField, readOrganization());
     }
 }

@@ -96,6 +96,51 @@
       "generated_sha256": "20bb55d07df3d0d88f60512ebcee5fdf52d07cf3a32dac822bdfe86b9f9cac35",
       "override_sha256": "411d509a97fff7b176ce19b60750410ce46d3872903c4c941d938c7f67375ee3",
       "path": "src/main/java/com/sunwayworld/framework/restful/data/RestJsonWrapperBean.java"
+    },
+    {
+      "generated_sha256": "91d464a2992cf51e44f03cfdd414bf92e4efc663ce7d27693718b60307ad902d",
+      "override_sha256": "273a6a9f69ed225a5e5c9aff1e4c3ca208f43367dad324bde577af01e0c88169",
+      "path": "src/main/java/com/sunwayworld/module/sys/at/dao/CoreAuditTrailRecordDao.java"
+    },
+    {
+      "generated_sha256": "91d19fde3e31ba9b30d315297d14a576f2d11762720b21822533969c464a4ac5",
+      "override_sha256": "7eff553c67f69a7feaf177155b1700377989ec85bb55f465a5aac660ff6c34af",
+      "path": "src/main/java/com/sunwayworld/module/sys/at/dao/CoreAuditTrailRecordLineDao.java"
+    },
+    {
+      "generated_sha256": "022302f8d1cd73c67f90495b8f8bd7cf2c383b51a6d69e7f36d708bf2d354b6a",
+      "override_sha256": "5c267c7af5afa5bfdb198590f2f723ff37e22c65ec1214826012b03b4372d156",
+      "path": "src/main/java/com/sunwayworld/module/sys/at/dao/impl/CoreAuditTrailRecordDaoImpl.java"
+    },
+    {
+      "generated_sha256": "166decaa3d60c93013ae6e5a2af2f963c232a0ea16cc10acca742e277d936fe3",
+      "override_sha256": "31560a80a7552c68c16debba5bd900468d5380665705805fd05313e7485a4de7",
+      "path": "src/main/java/com/sunwayworld/module/sys/at/dao/impl/CoreAuditTrailRecordLineDaoImpl.java"
+    },
+    {
+      "generated_sha256": "2262d5e463e27d72d37015c12d46c36365da52d10d9837aef56cd562677ccabc",
+      "override_sha256": "534315e6b99af0362961c5f22af9f4f898b66327d5eefd321b43454efd6a9013",
+      "path": "src/main/java/com/sunwayworld/module/sys/at/mapper/CoreAuditTrailRecordLineMapper.java"
+    },
+    {
+      "generated_sha256": "c98aeb6084bfcb85c1bbc9dc77969b0492604eda9a883a812e7b0336ffe5480e",
+      "override_sha256": "b2cd2f4f8a329a79040297826ad971b4ccf7c87389c2a10dea1eb099401a2653",
+      "path": "src/main/java/com/sunwayworld/module/sys/at/mapper/CoreAuditTrailRecordMapper.java"
+    },
+    {
+      "generated_sha256": "0c57523720a2e445f14c13e62f47189e0eee8a526c9e237530172a66fcfc9d6b",
+      "override_sha256": "e300f461c697c936a77f1a88c550ed4610a8480942f1361d28988150e4d4f9e3",
+      "path": "src/main/java/com/sunwayworld/module/sys/at/service/CoreAuditTrailRecordService.java"
+    },
+    {
+      "generated_sha256": "67f3c4e347839854bb32ed7af89ff51e7f54d6fd8eb66ce9e7ee05ef8c84cf11",
+      "override_sha256": "8540ed01d6874ad409fca9dd9ddcf19dc262fbef529c281696c5b23c9073896c",
+      "path": "src/main/java/com/sunwayworld/module/sys/at/service/impl/CoreAuditTrailRecordLineServiceImpl.java"
+    },
+    {
+      "generated_sha256": "b094433a011880bdaed1a0fe31904656bd92a9de56a8f49485b5d1bf75517e94",
+      "override_sha256": "4531c6369e8158020fffc94e5fad91e9079ee10b635d8e4a9b570e2889eb5a74",
+      "path": "src/main/java/com/sunwayworld/module/sys/at/service/impl/CoreAuditTrailRecordServiceImpl.java"
     }
   ],
   "override_source_files": [
@@ -20716,30 +20761,36 @@
     },
     {
       "class_sha256": "17b45e89b949acf8e2e980fd023a146390a8ea731238ba642c9998fd024e80d0",
-      "compile_status": "pass",
+      "compile_status": "pending-module-assembly",
       "decompiler": "CFR",
       "decompiler_version": "0.152",
       "path": "src/main/java/com/sunwayworld/module/sys/at/dao/CoreAuditTrailRecordDao.java",
-      "sha256": "91d464a2992cf51e44f03cfdd414bf92e4efc663ce7d27693718b60307ad902d",
+      "sha256": "273a6a9f69ed225a5e5c9aff1e4c3ca208f43367dad324bde577af01e0c88169",
       "source_class_path": "com/sunwayworld/module/sys/at/dao/CoreAuditTrailRecordDao.class",
       "source_jar": "BOOT-INF/lib/gikam-core-common-14.1.5.jar",
+      "source_sha256_before_overlay": "91d464a2992cf51e44f03cfdd414bf92e4efc663ce7d27693718b60307ad902d",
       "source_sha256_before_transform": "972c8f0271b3b93ca2dc8738b85c5c83b50d0a156e150d0fb0f7f18031ead6ee",
       "transformations": [
-        "normalization:generated-source"
+        "normalization:generated-source",
+        "overlay:src/main/java/com/sunwayworld/module/sys/at/dao/CoreAuditTrailRecordDao.java",
+        "original audit read handler scope: refreshed audit.read and exact organization; preserve internal audit callers"
       ]
     },
     {
       "class_sha256": "e8f3800f9a290e47e365300145f0975617aeb6e234a965fe795cf9a08a22f392",
-      "compile_status": "pass",
+      "compile_status": "pending-module-assembly",
       "decompiler": "CFR",
       "decompiler_version": "0.152",
       "path": "src/main/java/com/sunwayworld/module/sys/at/dao/CoreAuditTrailRecordLineDao.java",
-      "sha256": "91d19fde3e31ba9b30d315297d14a576f2d11762720b21822533969c464a4ac5",
+      "sha256": "7eff553c67f69a7feaf177155b1700377989ec85bb55f465a5aac660ff6c34af",
       "source_class_path": "com/sunwayworld/module/sys/at/dao/CoreAuditTrailRecordLineDao.class",
       "source_jar": "BOOT-INF/lib/gikam-core-common-14.1.5.jar",
+      "source_sha256_before_overlay": "91d19fde3e31ba9b30d315297d14a576f2d11762720b21822533969c464a4ac5",
       "source_sha256_before_transform": "f2d958de9edbd1ed01d07a36efcdc03235ef2b65a014c74968b2b22b89b3a23f",
       "transformations": [
-        "normalization:generated-source"
+        "normalization:generated-source",
+        "overlay:src/main/java/com/sunwayworld/module/sys/at/dao/CoreAuditTrailRecordLineDao.java",
+        "original audit read handler scope: refreshed audit.read and exact organization; preserve internal audit callers"
       ]
     },
     {
@@ -20772,30 +20823,36 @@
     },
     {
       "class_sha256": "ef021189ebbc8f0d606c8d863326e919bda88be79585839b70b4dfb51937f734",
-      "compile_status": "pass",
+      "compile_status": "pending-module-assembly",
       "decompiler": "CFR",
       "decompiler_version": "0.152",
       "path": "src/main/java/com/sunwayworld/module/sys/at/dao/impl/CoreAuditTrailRecordDaoImpl.java",
-      "sha256": "022302f8d1cd73c67f90495b8f8bd7cf2c383b51a6d69e7f36d708bf2d354b6a",
+      "sha256": "5c267c7af5afa5bfdb198590f2f723ff37e22c65ec1214826012b03b4372d156",
       "source_class_path": "com/sunwayworld/module/sys/at/dao/impl/CoreAuditTrailRecordDaoImpl.class",
       "source_jar": "BOOT-INF/lib/gikam-core-common-14.1.5.jar",
+      "source_sha256_before_overlay": "022302f8d1cd73c67f90495b8f8bd7cf2c383b51a6d69e7f36d708bf2d354b6a",
       "source_sha256_before_transform": "1af8bf9f37ac67dad52600dad15d92f4f3581ad45cec2f88ffa3ef9279ed07fb",
       "transformations": [
-        "normalization:generated-source"
+        "normalization:generated-source",
+        "overlay:src/main/java/com/sunwayworld/module/sys/at/dao/impl/CoreAuditTrailRecordDaoImpl.java",
+        "original audit read handler scope: refreshed audit.read and exact organization; preserve internal audit callers"
       ]
     },
     {
       "class_sha256": "9bc294bd299345b72807b4ddcdb1ed78ddfc6c3239ffa22c5ed91ebb0b4ae0fa",
-      "compile_status": "pass",
+      "compile_status": "pending-module-assembly",
       "decompiler": "CFR",
       "decompiler_version": "0.152",
       "path": "src/main/java/com/sunwayworld/module/sys/at/dao/impl/CoreAuditTrailRecordLineDaoImpl.java",
-      "sha256": "166decaa3d60c93013ae6e5a2af2f963c232a0ea16cc10acca742e277d936fe3",
+      "sha256": "31560a80a7552c68c16debba5bd900468d5380665705805fd05313e7485a4de7",
       "source_class_path": "com/sunwayworld/module/sys/at/dao/impl/CoreAuditTrailRecordLineDaoImpl.class",
       "source_jar": "BOOT-INF/lib/gikam-core-common-14.1.5.jar",
+      "source_sha256_before_overlay": "166decaa3d60c93013ae6e5a2af2f963c232a0ea16cc10acca742e277d936fe3",
       "source_sha256_before_transform": "bd82abf155b58a937aaec76dfde9497f8d432dea8ae3895cc9f98acb3959fb76",
       "transformations": [
-        "normalization:generated-source"
+        "normalization:generated-source",
+        "overlay:src/main/java/com/sunwayworld/module/sys/at/dao/impl/CoreAuditTrailRecordLineDaoImpl.java",
+        "original audit read handler scope: refreshed audit.read and exact organization; preserve internal audit callers"
       ]
     },
     {
@@ -20968,30 +21025,36 @@
     },
     {
       "class_sha256": "1d5e5716b517a4a31544489e7daef782d6f8d054ac8e91b996fd2884c720d98e",
-      "compile_status": "pass",
+      "compile_status": "pending-module-assembly",
       "decompiler": "CFR",
       "decompiler_version": "0.152",
       "path": "src/main/java/com/sunwayworld/module/sys/at/mapper/CoreAuditTrailRecordLineMapper.java",
-      "sha256": "2262d5e463e27d72d37015c12d46c36365da52d10d9837aef56cd562677ccabc",
+      "sha256": "534315e6b99af0362961c5f22af9f4f898b66327d5eefd321b43454efd6a9013",
       "source_class_path": "com/sunwayworld/module/sys/at/mapper/CoreAuditTrailRecordLineMapper.class",
       "source_jar": "BOOT-INF/lib/gikam-core-common-14.1.5.jar",
+      "source_sha256_before_overlay": "2262d5e463e27d72d37015c12d46c36365da52d10d9837aef56cd562677ccabc",
       "source_sha256_before_transform": "131e00099ec83bcb56b055004419c41c9c871492149b63549b29e937e88bccbf",
       "transformations": [
-        "normalization:generated-source"
+        "normalization:generated-source",
+        "overlay:src/main/java/com/sunwayworld/module/sys/at/mapper/CoreAuditTrailRecordLineMapper.java",
+        "original audit read handler scope: refreshed audit.read and exact organization; preserve internal audit callers"
       ]
     },
     {
       "class_sha256": "68e089831f7eaaa68cc17d3b6566347a228d59851d26b437ee1b80df4a03e623",
-      "compile_status": "pass",
+      "compile_status": "pending-module-assembly",
       "decompiler": "CFR",
       "decompiler_version": "0.152",
       "path": "src/main/java/com/sunwayworld/module/sys/at/mapper/CoreAuditTrailRecordMapper.java",
-      "sha256": "c98aeb6084bfcb85c1bbc9dc77969b0492604eda9a883a812e7b0336ffe5480e",
+      "sha256": "b2cd2f4f8a329a79040297826ad971b4ccf7c87389c2a10dea1eb099401a2653",
       "source_class_path": "com/sunwayworld/module/sys/at/mapper/CoreAuditTrailRecordMapper.class",
       "source_jar": "BOOT-INF/lib/gikam-core-common-14.1.5.jar",
+      "source_sha256_before_overlay": "c98aeb6084bfcb85c1bbc9dc77969b0492604eda9a883a812e7b0336ffe5480e",
       "source_sha256_before_transform": "210b53ddd85963c4893714e80419c45871dfe448e0d612ec467597ab5b111af7",
       "transformations": [
-        "normalization:generated-source"
+        "normalization:generated-source",
+        "overlay:src/main/java/com/sunwayworld/module/sys/at/mapper/CoreAuditTrailRecordMapper.java",
+        "original audit read handler scope: refreshed audit.read and exact organization; preserve internal audit callers"
       ]
     },
     {
@@ -21094,16 +21157,19 @@
     },
     {
       "class_sha256": "63a47841f8ba163ac695d38760c6b02e469d1c686354d71b2855ba9746a5a679",
-      "compile_status": "pass",
+      "compile_status": "pending-module-assembly",
       "decompiler": "CFR",
       "decompiler_version": "0.152",
       "path": "src/main/java/com/sunwayworld/module/sys/at/service/CoreAuditTrailRecordService.java",
-      "sha256": "0c57523720a2e445f14c13e62f47189e0eee8a526c9e237530172a66fcfc9d6b",
+      "sha256": "e300f461c697c936a77f1a88c550ed4610a8480942f1361d28988150e4d4f9e3",
       "source_class_path": "com/sunwayworld/module/sys/at/service/CoreAuditTrailRecordService.class",
       "source_jar": "BOOT-INF/lib/gikam-core-common-14.1.5.jar",
+      "source_sha256_before_overlay": "0c57523720a2e445f14c13e62f47189e0eee8a526c9e237530172a66fcfc9d6b",
       "source_sha256_before_transform": "f57284d7d77a8fbfa6fa287867936fb3b808767c8d19bdf5a9bac50ffbbc4406",
       "transformations": [
-        "normalization:generated-source"
+        "normalization:generated-source",
+        "overlay:src/main/java/com/sunwayworld/module/sys/at/service/CoreAuditTrailRecordService.java",
+        "original audit read handler scope: refreshed audit.read and exact organization; preserve internal audit callers"
       ]
     },
     {
@@ -21136,30 +21202,36 @@
     },
     {
       "class_sha256": "27c35596edb084a6c85b33539d3f242ce64248f3ab4e4e5541caf34e6c323076",
-      "compile_status": "pass",
+      "compile_status": "pending-module-assembly",
       "decompiler": "CFR",
       "decompiler_version": "0.152",
       "path": "src/main/java/com/sunwayworld/module/sys/at/service/impl/CoreAuditTrailRecordLineServiceImpl.java",
-      "sha256": "67f3c4e347839854bb32ed7af89ff51e7f54d6fd8eb66ce9e7ee05ef8c84cf11",
+      "sha256": "8540ed01d6874ad409fca9dd9ddcf19dc262fbef529c281696c5b23c9073896c",
       "source_class_path": "com/sunwayworld/module/sys/at/service/impl/CoreAuditTrailRecordLineServiceImpl.class",
       "source_jar": "BOOT-INF/lib/gikam-core-common-14.1.5.jar",
+      "source_sha256_before_overlay": "67f3c4e347839854bb32ed7af89ff51e7f54d6fd8eb66ce9e7ee05ef8c84cf11",
       "source_sha256_before_transform": "01fc1ab7e913d31b2de7428a9db5b2bf4cc8fcf641628b61d516abb633cf72c1",
       "transformations": [
-        "normalization:generated-source"
+        "normalization:generated-source",
+        "overlay:src/main/java/com/sunwayworld/module/sys/at/service/impl/CoreAuditTrailRecordLineServiceImpl.java",
+        "original audit read handler scope: refreshed audit.read and exact organization; preserve internal audit callers"
       ]
     },
     {
       "class_sha256": "bf610fb3f818072691711e2a4472ca0b2b244d622ae2e62271dbfcc2c149642b",
-      "compile_status": "pass",
+      "compile_status": "pending-module-assembly",
       "decompiler": "Vineflower",
       "decompiler_version": "1.11.1",
       "path": "src/main/java/com/sunwayworld/module/sys/at/service/impl/CoreAuditTrailRecordServiceImpl.java",
-      "sha256": "b094433a011880bdaed1a0fe31904656bd92a9de56a8f49485b5d1bf75517e94",
+      "sha256": "4531c6369e8158020fffc94e5fad91e9079ee10b635d8e4a9b570e2889eb5a74",
       "source_class_path": "com/sunwayworld/module/sys/at/service/impl/CoreAuditTrailRecordServiceImpl.class",
       "source_jar": "BOOT-INF/lib/gikam-core-common-14.1.5.jar",
+      "source_sha256_before_overlay": "b094433a011880bdaed1a0fe31904656bd92a9de56a8f49485b5d1bf75517e94",
       "source_sha256_before_transform": "b094433a011880bdaed1a0fe31904656bd92a9de56a8f49485b5d1bf75517e94",
       "transformations": [
-        "cfr-to-vineflower-fallback"
+        "cfr-to-vineflower-fallback",
+        "overlay:src/main/java/com/sunwayworld/module/sys/at/service/impl/CoreAuditTrailRecordServiceImpl.java",
+        "original audit read handler scope: refreshed audit.read and exact organization; preserve internal audit callers"
       ]
     },
     {
@@ -31490,7 +31562,7 @@
       ]
     }
   ],
-  "source_tree_sha256": "ca33a1eb43981e2b06104bdd7715fa003bb2ee33f550f9495b310854895925cb",
+  "source_tree_sha256": "e48658ab1585e09d573086435ae3f94111bdf2c4ee1fcab50a3bacc571c76436",
   "status": "assembled-source-only",
   "transformation_manifest": "docs/reconstitution/decompiler-transforms.json",
   "transformation_manifest_sha256": "30ab06626f3e4c863a2855790b0ec6211499394852f2a8598ea3bd444ce87fe8",

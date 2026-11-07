@@ -11,4 +11,5 @@ import java.util.List;
 public interface CoreAuditTrailRecordDao
 extends GenericDao<CoreAuditTrailRecordBean, Long> {
     public List<CoreAuditTraceOverviewDTO> selectTraceOverview(String var1, String var2, String var3);
+    public List<CoreAuditTraceOverviewDTO> selectTraceOverview(String targetId, String tableName, String nameField, String organization);
 }

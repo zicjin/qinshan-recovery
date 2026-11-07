@@ -12,5 +12,5 @@ import org.apache.ibatis.annotations.Param;
 @GikamBean
 public interface CoreAuditTrailRecordMapper
 extends GenericMapper<Long> {
-    public List<CoreAuditTraceOverviewDTO> selectTraceOverview(@Param(value="targetId") String var1, @Param(value="tableName") String var2, @Param(value="nameField") String var3);
+    public List<CoreAuditTraceOverviewDTO> selectTraceOverview(@Param(value="targetId") String var1, @Param(value="tableName") String var2, @Param(value="nameField") String var3, @Param("ownedAuditOrgId") String organization);
 }

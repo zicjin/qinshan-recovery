@@ -1,5 +1,5 @@
 {
-  "all_modules_compile_pass": true,
+  "all_modules_compile_pass": false,
   "api_evidence": false,
   "artifact_sha256": "4a720797810fd2f8cca6e22604657028cb87830ca0e24bb55a5f42f040f6ee9f",
   "candidate_group_count": 8,
@@ -16,7 +16,7 @@
   "module_count": 7,
   "modules": [
     {
-      "compile_status": "pass",
+      "compile_status": "pending-module-assembly",
       "dependencies": [],
       "forbidden_content_status": "pass",
       "module": "owned-core-common",
@@ -29,7 +29,7 @@
         "gikam-core-base-interface-14.1.5.jar",
         "gikam-core-common-14.1.5.jar"
       ],
-      "source_tree_sha256": "ca33a1eb43981e2b06104bdd7715fa003bb2ee33f550f9495b310854895925cb"
+      "source_tree_sha256": "e48658ab1585e09d573086435ae3f94111bdf2c4ee1fcab50a3bacc571c76436"
     },
     {
       "compile_status": "pass",

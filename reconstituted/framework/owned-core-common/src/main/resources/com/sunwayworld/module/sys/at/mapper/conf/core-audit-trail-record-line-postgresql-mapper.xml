@@ -59,6 +59,11 @@
                   FROM T_CORE_AT_RECORD_LINE A
                  WHERE A."column" = #{nameField}
                    AND A.RECORDTYPE != 'DELETE'
+                   <if test="ownedAuditOrgId != null">
+                       AND EXISTS (SELECT 1 FROM T_CORE_AT_RECORD OWNED_PARENT
+                                    WHERE OWNED_PARENT.ID = A.RECORDID
+                                      AND OWNED_PARENT.CREATEDBYORGID = #{ownedAuditOrgId})
+                   </if>
                    AND A.TARGETID IN
         <foreach collection="list" separator="," open="(" item="item" index="idx" close=")">
             #{item}

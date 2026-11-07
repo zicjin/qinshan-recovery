@@ -13,4 +13,5 @@ extends GenericDao<CoreAuditTrailRecordLineBean, Long> {
     public List<String> selectTableNameByRecordId(String var1);
 
     public List<CoreAuditTrailRecordLineNameDTO> selectDeletedNames(List<String> var1, String var2);
+    public List<CoreAuditTrailRecordLineNameDTO> selectDeletedNames(List<String> targetIds, String nameField, String organization);
 }

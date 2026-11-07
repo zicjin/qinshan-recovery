@@ -23,6 +23,10 @@ public class AuditQueryMvcCheck {
     static final String LINES="/secure/core/module/sys/at-records/record-lines/queries";
     static int checks;
     static org.mybatis.spring.SqlSessionTemplate mapperSession;
+    static com.sunwayworld.owned.internal.web.OwnedIdentityHttpBoundary auditBoundary;
+    static Object recordTarget,lineTarget;
+    static com.sunwayworld.module.sys.at.service.CoreAuditTrailRecordService originalRecords;
+    static com.sunwayworld.module.sys.at.service.CoreAuditTrailRecordLineService originalLines;
     static class Identity implements OwnedIdentityProvider {
         boolean deny, stale, fail;
         public OwnedPrincipal authenticate(String id,char[] password) { return new OwnedPrincipal("user-a","org-a","Org A"); }
@@ -95,6 +99,10 @@ public class AuditQueryMvcCheck {
         lines.entity=entity(com.sunwayworld.module.sys.at.bean.CoreAuditTrailRecordLineBean.class,"T_CORE_AT_RECORD_LINE",ds);
         com.sunwayworld.module.sys.at.service.impl.CoreAuditTrailRecordServiceImpl recordService=new com.sunwayworld.module.sys.at.service.impl.CoreAuditTrailRecordServiceImpl();
         com.sunwayworld.module.sys.at.service.impl.CoreAuditTrailRecordLineServiceImpl lineService=new com.sunwayworld.module.sys.at.service.impl.CoreAuditTrailRecordLineServiceImpl();
+        com.sunwayworld.emc.framework.security.OriginalAuditTrailReadScope scope=new com.sunwayworld.emc.framework.security.OriginalAuditTrailReadScope(auditBoundary);
+        org.springframework.test.util.ReflectionTestUtils.setField(recordService,"auditReadScope",scope);
+        org.springframework.test.util.ReflectionTestUtils.setField(lineService,"auditReadScope",scope);
+        recordTarget=recordService; lineTarget=lineService;
         // Fixture dependency assembly only: exercised methods are the actual inherited service/DAO implementations.
         org.springframework.test.util.ReflectionTestUtils.setField(recordService,"recordDao",records);
         org.springframework.test.util.ReflectionTestUtils.setField(recordService,"recordLineService",lineService);
@@ -105,6 +113,8 @@ public class AuditQueryMvcCheck {
         recordProxy.addAdvice(transactions);
         org.springframework.aop.framework.ProxyFactory lineProxy=new org.springframework.aop.framework.ProxyFactory(lineService);
         lineProxy.addAdvice(transactions);
+        originalRecords=(com.sunwayworld.module.sys.at.service.CoreAuditTrailRecordService)recordProxy.getProxy();
+        originalLines=(com.sunwayworld.module.sys.at.service.CoreAuditTrailRecordLineService)lineProxy.getProxy();
         return new com.sunwayworld.emc.framework.security.OriginalAuditTrailReadOperations(
                 (com.sunwayworld.module.sys.at.service.CoreAuditTrailRecordService)recordProxy.getProxy(),
                 (com.sunwayworld.module.sys.at.service.CoreAuditTrailRecordLineService)lineProxy.getProxy());
@@ -114,15 +124,16 @@ public class AuditQueryMvcCheck {
         JdbcTemplate db=new JdbcTemplate(ds);
         db.execute("CREATE TABLE T_CORE_AT_RECORD(ID BIGINT PRIMARY KEY,AUDITTRAILTYPE VARCHAR(30),AUDITTRAILNAME VARCHAR(100),TARGETID VARCHAR(100),CREATEDBYORGID VARCHAR(100),CREATEDTIME TIMESTAMP, \"COMMENT\" VARCHAR(100))");
         db.execute("CREATE TABLE T_CORE_AT_RECORD_LINE(ID BIGINT PRIMARY KEY,RECORDID BIGINT,TARGETID VARCHAR(100),CREATEDBYORGID VARCHAR(100),CREATEDTIME TIMESTAMP,NEWVALUE CLOB,OLDVALUE CLOB,\"COLUMN\" VARCHAR(100))");
+        db.execute("ALTER TABLE T_CORE_AT_RECORD_LINE ADD TABLENAME VARCHAR(100)");
         db.update("INSERT INTO T_CORE_AT_RECORD VALUES(1,'INSERT','create item','target-a','org-a',TIMESTAMP '2026-01-01 12:00:00','note')");
         db.update("INSERT INTO T_CORE_AT_RECORD VALUES(2,'UPDATE','update item','target-a','org-a',TIMESTAMP '2026-01-02 12:00:00','note')");
         db.execute("CREATE TABLE T_CORE_ORG(ID VARCHAR(100),ROOTORGID VARCHAR(100))");
         db.update("INSERT INTO T_CORE_ORG VALUES('org-a','root-shared'),('org-b','root-shared')");
         db.update("INSERT INTO T_CORE_AT_RECORD VALUES(3,'DELETE','delete item','target-b','org-b',TIMESTAMP '2026-01-03 12:00:00','note')");
         String fullText=String.join("",Collections.nCopies(6000,"audit-value-"));
-        db.update("INSERT INTO T_CORE_AT_RECORD_LINE VALUES(11,1,'target-a','org-b',TIMESTAMP '2026-01-01 12:00:00',?,?,?)",fullText,"old text","FIELD_A");
-        db.update("INSERT INTO T_CORE_AT_RECORD_LINE VALUES(12,1,'target-a','org-a',TIMESTAMP '2026-01-01 12:00:00','short','old','FIELD_B')");
-        db.update("INSERT INTO T_CORE_AT_RECORD_LINE VALUES(13,3,'target-b','org-a',TIMESTAMP '2026-01-03 12:00:00','secret','old','FIELD_A')");
+        db.update("INSERT INTO T_CORE_AT_RECORD_LINE(ID,RECORDID,TARGETID,CREATEDBYORGID,CREATEDTIME,NEWVALUE,OLDVALUE,\"COLUMN\") VALUES(11,1,'target-a','org-b',TIMESTAMP '2026-01-01 12:00:00',?,?,?)",fullText,"old text","FIELD_A");
+        db.update("INSERT INTO T_CORE_AT_RECORD_LINE(ID,RECORDID,TARGETID,CREATEDBYORGID,CREATEDTIME,NEWVALUE,OLDVALUE,\"COLUMN\") VALUES(12,1,'target-a','org-a',TIMESTAMP '2026-01-01 12:00:00','short','old','FIELD_B')");
+        db.update("INSERT INTO T_CORE_AT_RECORD_LINE(ID,RECORDID,TARGETID,CREATEDBYORGID,CREATEDTIME,NEWVALUE,OLDVALUE,\"COLUMN\") VALUES(13,3,'target-b','org-a',TIMESTAMP '2026-01-03 12:00:00','secret','old','FIELD_A')");
         db.update("UPDATE T_CORE_AT_RECORD_LINE SET RECORDID=? WHERE RECORDID=1",LARGE_ID);
         db.update("UPDATE T_CORE_AT_RECORD SET ID=? WHERE ID=1",LARGE_ID);
         Identity identity=new Identity();
@@ -130,9 +141,65 @@ public class AuditQueryMvcCheck {
         MockHttpSession session=new MockHttpSession();
         boundary.login(session,new OwnedLoginRequest("user-a","fixture".toCharArray()));
         OwnedAuditTrailController controller=new OwnedAuditTrailController(boundary,ds);
+        auditBoundary=boundary;
         AuditTrailReadOperations operations=original(ds,args[0]);
         controller.setReadOperations(operations);
         MockMvc mvc=MockMvcBuilders.standaloneSetup(controller).setCustomArgumentResolvers(new ToRestJsonWrapperResolver()).setMessageConverters(new org.springframework.http.converter.StringHttpMessageConverter(java.nio.charset.StandardCharsets.UTF_8), new FastJsonHttpMessageConverter()).build();
+        com.sunwayworld.module.sys.at.resource.impl.CoreAuditTrailRecordResourceImpl resource=new com.sunwayworld.module.sys.at.resource.impl.CoreAuditTrailRecordResourceImpl();
+        org.springframework.test.util.ReflectionTestUtils.setField(resource,"recordService",originalRecords);
+        org.springframework.test.util.ReflectionTestUtils.setField(resource,"recordLineService",originalLines);
+        MockMvc originalMvc=MockMvcBuilders.standaloneSetup(resource).setCustomArgumentResolvers(new ToRestJsonWrapperResolver()).setMessageConverters(new org.springframework.http.converter.StringHttpMessageConverter(java.nio.charset.StandardCharsets.UTF_8),new FastJsonHttpMessageConverter()).build();
+        equal(2,query(originalMvc,session,RECORDS,"{}",200).getIntValue("total"),"original raw read excludes foreign organization");
+        equal(2,query(originalMvc,session,RECORDS+"/raw","{}",200).getIntValue("total"),"original raw scoped");
+        equal(2,query(originalMvc,session,RECORDS+"/searchable","{}",200).getIntValue("total"),"original searchable scoped");
+        for(String path:Arrays.asList(RECORDS,RECORDS+"/raw",RECORDS+"/searchable")) {
+            equal(0,query(originalMvc,session,path,"{\"p\":{\"f\":{\"createdByOrgId_SEQ\":\"org-b\",\"ownedAuditOrgId\":\"org-b\"}}}",200).getIntValue("total"),"forged org cannot broaden original");
+        }
+        db.update("UPDATE T_CORE_AT_RECORD_LINE SET TABLENAME='T_DEMO'");
+        equal(3,originalRecords.selectPagination(new com.sunwayworld.framework.restful.data.RestJsonWrapperBean()).getTotal(),"non HTTP service read preserved");
+        String auditBase=RECORDS.substring(0,RECORDS.length()-8);
+        equal("",originalMvc.perform(get(auditBase+"/3").session(session).accept("application/json")).andReturn().getResponse().getContentAsString(),"foreign detail suppressed");
+        equal("create item",JSON.parseObject(originalMvc.perform(get(auditBase+"/"+LARGE_ID).session(session).accept("application/json")).andReturn().getResponse().getContentAsString()).getString("auditTrailName"),"own detail retained");
+        equal(0,JSON.parseArray(originalMvc.perform(post(RECORDS+"/searchable/T_DEMO/none").session(session).contentType("application/json").accept("application/json").content("{}")).andReturn().getResponse().getContentAsString()).size(),"empty derived id list cannot broaden");
+        // Direct original custom queries retain original list/null envelopes.
+        db.update("UPDATE T_CORE_AT_RECORD SET TARGETID='T_DEMO$1' WHERE ID=?",LARGE_ID);
+        db.update("UPDATE T_CORE_AT_RECORD SET TARGETID='T_DEMO$3' WHERE ID=3");
+        db.update("UPDATE T_CORE_AT_RECORD_LINE SET TARGETID='T_DEMO$1' WHERE RECORDID=?",LARGE_ID);
+        db.update("UPDATE T_CORE_AT_RECORD_LINE SET TARGETID='T_DEMO$3' WHERE RECORDID=3");
+        equal(1,JSON.parseArray(originalMvc.perform(post(RECORDS+"/atrecord/T_DEMO/1").session(session).contentType("application/json").accept("application/json").content("{}")).andReturn().getResponse().getContentAsString()).size(),"own custom target retained");
+        equal("",originalMvc.perform(post(RECORDS+"/atrecord/T_DEMO/3").session(session).contentType("application/json").accept("application/json").content("{}")).andReturn().getResponse().getContentAsString(),"foreign custom target null");
+        equal("",originalMvc.perform(post(RECORDS+"/record-lines/3").session(session).accept("application/json").contentType("application/json").content("{}")).andReturn().getResponse().getContentAsString(),"foreign parent table names suppressed");
+        equal(1,JSON.parseArray(originalMvc.perform(post(RECORDS+"/record-lines/"+LARGE_ID).session(session).accept("application/json").contentType("application/json").content("{}")).andReturn().getResponse().getContentAsString()).size(),"own parent table names retained");
+        db.execute("CREATE TABLE T_DEMO(ID VARCHAR(20),NAME VARCHAR(100))");
+        db.update("INSERT INTO T_DEMO VALUES('1','own'),('3','foreign')");
+        equal(1,mapperSession.getMapper(com.sunwayworld.module.sys.at.mapper.CoreAuditTrailRecordMapper.class)
+                .selectTraceOverview(null,"T_DEMO","NAME","org-a").size(),"trace overview Mapper binds organization");
+        equal(2,mapperSession.getMapper(com.sunwayworld.module.sys.at.mapper.CoreAuditTrailRecordMapper.class)
+                .selectTraceOverview(null,"T_DEMO","NAME",null).size(),"internal trace Mapper keeps original scope");
+        equal(1,query(originalMvc,session,auditBase+"/atrecord/T_DEMO/queries","{}",200).getIntValue("total"),"custom table pagination scoped");
+        equal(1,JSON.parseArray(originalMvc.perform(post(RECORDS+"/searchable/T_DEMO/1").session(session).contentType("application/json").accept("application/json").content("{}")).andReturn().getResponse().getContentAsString()).size(),"derived id list uses bound OIN");
+        equal("",originalMvc.perform(get(auditBase+"/record-lines/13").session(session).accept("application/json")).andReturn().getResponse().getContentAsString(),"foreign parent line suppressed despite local child org");
+        equal("create item",JSON.parseObject(originalMvc.perform(get(auditBase+"/record-lines/11").session(session).accept("application/json")).andReturn().getResponse().getContentAsString()).getJSONObject("ext$").getString("audittrailname"),"own parent permits foreign child org");
+        identity.deny=true;
+        try { originalMvc.perform(get(auditBase+"/"+LARGE_ID).session(session).accept("application/json")); throw new AssertionError("missing grant accepted detail"); }
+        catch(org.springframework.web.util.NestedServletException denied) { if (!(denied.getRootCause() instanceof AccessDeniedException)) throw denied; checks++; }
+        for(String path:Arrays.asList(RECORDS,RECORDS+"/raw",RECORDS+"/searchable",RECORDS+"/atrecord/T_DEMO/1")) {
+            try { originalMvc.perform(post(path).session(session).contentType("application/json").accept("application/json").content("{}")); throw new AssertionError("missing grant accepted "+path); }
+            catch(org.springframework.web.util.NestedServletException denied) {
+                if (!(denied.getRootCause() instanceof AccessDeniedException)) throw denied;
+                checks++;
+            }
+        }
+        equal(200,originalMvc.perform(get(auditBase+"/info/status").session(session).accept("application/json")).andReturn().getResponse().getStatus(),"original empty status has no audit grant requirement");
+        identity.deny=false;
+        org.springframework.test.util.ReflectionTestUtils.setField(recordTarget,"auditReadScope",null);
+        try { originalMvc.perform(post(RECORDS).session(session).accept("application/json").contentType("application/json").content("{}")); throw new AssertionError("absent provider accepted"); }
+        catch(org.springframework.web.util.NestedServletException denied) { if (!(denied.getRootCause() instanceof AccessDeniedException)) throw denied; checks++; }
+        org.springframework.test.util.ReflectionTestUtils.setField(recordTarget,"auditReadScope",new com.sunwayworld.emc.framework.security.OriginalAuditTrailReadScope(boundary));
+        db.update("UPDATE T_CORE_AT_RECORD SET TARGETID='target-a' WHERE ID=?",LARGE_ID);
+        db.update("UPDATE T_CORE_AT_RECORD SET TARGETID='target-b' WHERE ID=3");
+        db.update("UPDATE T_CORE_AT_RECORD_LINE SET TARGETID='target-a' WHERE RECORDID=?",LARGE_ID);
+        db.update("UPDATE T_CORE_AT_RECORD_LINE SET TARGETID='target-b' WHERE RECORDID=3");
         String separator=System.getProperty("audit.fixture.separator",",");
         if(separator.trim().isEmpty()) separator=",";
         equal(2,query(mvc,session,RECORDS,"{\"p\":{\"f\":{\"auditTrailName_SC\":\"create"+separator+"update\"},\"n\":1,\"s\":20}}",200).getIntValue("total"),"configured/default multi value string filter");
@@ -186,7 +253,7 @@ public class AuditQueryMvcCheck {
         query(mvc,session,"/secure/emc/module/sys/at-records/record-lines/queries","{\"p\":{\"f\":{\"recordId_SEQ\":2030254965053728}}}",200);
         identity.deny=true;
         for(String path:Arrays.asList("/secure/emc/module/bp/audit-records/info/status","/secure/emc/module/bp/audit-records/1/info/status")) {
-            equal(200,mvc.perform(get(path).session(session)).andReturn().getResponse().getStatus(),"status authentication only");
+            equal(200,mvc.perform(get(path).session(session).accept("application/json")).andReturn().getResponse().getStatus(),"status authentication only");
         }
         for(String org:Arrays.asList(null,"","  ")) {
             try { operations.records(new com.sunwayworld.framework.restful.data.RestJsonWrapperBean(),org); throw new AssertionError("blank trusted org accepted"); }

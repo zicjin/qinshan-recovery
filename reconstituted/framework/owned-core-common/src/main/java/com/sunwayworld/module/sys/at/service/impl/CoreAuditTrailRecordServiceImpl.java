@@ -43,6 +43,56 @@ import org.springframework.transaction.annotation.Transactional;
 @GikamBean
 @Repository
 public class CoreAuditTrailRecordServiceImpl implements CoreAuditTrailRecordService {
+   @Autowired(required = false)
+   private com.sunwayworld.module.sys.at.service.CoreAuditTrailRecordService.ReadScope.Provider auditReadScope;
+
+   private String readOrganization() {
+      return com.sunwayworld.module.sys.at.service.CoreAuditTrailRecordService.ReadScope.organization(auditReadScope);
+   }
+
+   private com.sunwayworld.framework.mybatis.mapper.MapperParameter scoped(com.sunwayworld.framework.mybatis.mapper.MapperParameter parameter) {
+      String organization=readOrganization();
+      if (organization != null) parameter.setFilter(SearchFilter.instance().match("CREATEDBYORGID",organization).filter(MatchPattern.EQ));
+      return parameter;
+   }
+
+   @Override
+   @Transactional(readOnly = true)
+   public Page<CoreAuditTrailRecordBean> selectPagination(com.sunwayworld.framework.mybatis.mapper.MapperParameter parameter, PageRowBounds bounds) {
+      return CoreAuditTrailRecordService.super.selectPagination(scoped(parameter),bounds);
+   }
+
+   @Override
+   @Transactional(readOnly = true)
+   public List<CoreAuditTrailRecordBean> selectList(com.sunwayworld.framework.mybatis.mapper.MapperParameter parameter) {
+      return CoreAuditTrailRecordService.super.selectList(scoped(parameter));
+   }
+
+   private List<CoreAuditTrailRecordBean> recordsByIds(List<Long> ids,Order... orders) {
+      if (readOrganization() == null) return this.getDao().selectListByIds(ids,orders);
+      if (ids.isEmpty()) return Collections.emptyList();
+      return selectListByFilter(SearchFilter.instance().match("ID",ids).filter(MatchPattern.OIN),orders);
+   }
+
+   private boolean visible(Long id) {
+      String organization=readOrganization();
+      if (organization == null) return true;
+      return !selectListByFilter(SearchFilter.instance().match("ID",id).filter(MatchPattern.EQ)
+            .match("CREATEDBYORGID",organization).filter(MatchPattern.EQ),new Order[0]).isEmpty();
+   }
+
+   @Override
+   @Transactional(readOnly = true)
+   public CoreAuditTrailRecordBean selectDetail(Long id) {
+      return visible(id) ? CoreAuditTrailRecordService.super.selectDetail(id) : null;
+   }
+
+   @Override
+   @Transactional(readOnly = true)
+   public String selectColumnById(Long id,String column) {
+      return visible(id) ? CoreAuditTrailRecordService.super.selectColumnById(id,column) : null;
+   }
+
    @Autowired
    private CoreAuditTrailRecordDao recordDao;
    @Autowired
@@ -68,11 +118,12 @@ public class CoreAuditTrailRecordServiceImpl implements CoreAuditTrailRecordServ
    }
 
    @Override
+   @Transactional(readOnly = true)
    public List<CoreAuditTrailRecordDTO> selectRecordList(String tableName, String id) {
       SearchFilter recordLineFilter = SearchFilter.instance().match("TARGETID", tableName + "$" + id).filter(MatchPattern.EQ);
       List<CoreAuditTrailRecordLineBean> recordLineList = this.recordLineService.selectListByFilter(recordLineFilter, new Order[0]);
       List<Long> recordIdList = recordLineList.stream().map(CoreAuditTrailRecordLineBean::getRecordId).distinct().collect(Collectors.toList());
-      List<CoreAuditTrailRecordBean> recordList = this.getDao().selectListByIds(recordIdList, new Order[]{Order.desc("ID")});
+      List<CoreAuditTrailRecordBean> recordList = recordsByIds(recordIdList, Order.desc("ID"));
       return recordList.stream()
          .map(
             r -> new CoreAuditTrailRecordDTO(
@@ -87,15 +138,18 @@ public class CoreAuditTrailRecordServiceImpl implements CoreAuditTrailRecordServ
    }
 
    @Override
+   @Transactional(readOnly = true)
    public List<CoreAuditTrailRecordBean> selectAtRecordList(String tableName, String id) {
       String targetId = tableName + "$" + id;
-      List<CoreAuditTrailRecordBean> recordList = this.getDao().selectListByOneColumnValue(targetId, "TARGETID", new Order[]{Order.desc("ID")});
+      List<CoreAuditTrailRecordBean> recordList = readOrganization() == null
+         ? this.getDao().selectListByOneColumnValue(targetId,"TARGETID",Order.desc("ID"))
+         : this.selectListByFilter(SearchFilter.instance().match("TARGETID",targetId).filter(MatchPattern.EQ),Order.desc("ID"));
       if (recordList.isEmpty()) {
          List<CoreAuditTrailRecordLineBean> recordLineList = this.recordLineService
             .selectListByFilter(SearchFilter.instance().match("TARGETID", tableName + "$" + id).filter(MatchPattern.EQ), new Order[0]);
          if (!recordLineList.isEmpty()) {
             List<Long> recordIdList = recordLineList.stream().map(e -> e.getRecordId()).distinct().collect(Collectors.toList());
-            return this.getDao().selectListByIds(recordIdList, new Order[0]);
+            return recordsByIds(recordIdList);
          } else {
             return null;
          }
@@ -105,6 +159,7 @@ public class CoreAuditTrailRecordServiceImpl implements CoreAuditTrailRecordServ
    }
 
    @Override
+   @Transactional(readOnly = true)
    public List<CoreAuditTrailRecordBean> selectAtRecordList(String tableName, RestJsonWrapperBean wrapper) {
       String recordId = wrapper.getFilterValue("recordId");
       SearchFilter recordFilter = SearchFilter.instance();
@@ -119,6 +174,7 @@ public class CoreAuditTrailRecordServiceImpl implements CoreAuditTrailRecordServ
    }
 
    @Override
+   @Transactional(readOnly = true)
    public Page<CoreAuditTrailRecordBean> selectAtRecordPaginationList(String tableName, RestJsonWrapperBean wrapper) {
       String recordId = wrapper.getFilterValue("recordId");
       SearchFilter recordFilter = SearchFilter.instance();
@@ -132,7 +188,9 @@ public class CoreAuditTrailRecordServiceImpl implements CoreAuditTrailRecordServ
    }
 
    @Override
+   @Transactional(readOnly = true)
    public Page<CoreAuditTraceOverviewDTO> selectTraceOverview(RestJsonWrapperBean wrapper) {
+      String organization=readOrganization();
       String tableName = wrapper.getFilterValue("tableName");
       this.checkAvailable(tableName);
       String targetId = wrapper.getFilterValue("targetId");
@@ -141,7 +199,7 @@ public class CoreAuditTrailRecordServiceImpl implements CoreAuditTrailRecordServ
       return MybatisPageHelper.get(
          rowBounds,
          () -> {
-            List<CoreAuditTraceOverviewDTO> overviewDTOList = this.getDao().selectTraceOverview(targetId, tableName, nameField);
+            List<CoreAuditTraceOverviewDTO> overviewDTOList = this.getDao().selectTraceOverview(targetId, tableName, nameField, organization);
             List<CoreAuditTraceOverviewDTO> deletedOverviewList = overviewDTOList.stream()
                .filter(coreAuditTraceOverviewDTOx -> StringUtils.isBlank(coreAuditTraceOverviewDTOx.getTargetName()))
                .peek(coreAuditTraceOverviewDTOx -> coreAuditTraceOverviewDTOx.setDeleted(true))
@@ -166,6 +224,7 @@ public class CoreAuditTrailRecordServiceImpl implements CoreAuditTrailRecordServ
    }
 
    @Override
+   @Transactional(readOnly = true)
    public List<CoreAuditTrailRecordLineDTO> selectRecordLineDTOByTableNameAndTargetId(String tableName, String bizId) {
       String targetId = tableName + "$" + bizId;
       SearchFilter recordFilter = SearchFilter.instance().match("targetId", targetId).filter(MatchPattern.EQ);
@@ -204,21 +263,25 @@ public class CoreAuditTrailRecordServiceImpl implements CoreAuditTrailRecordServ
    }
 
    @Override
+   @Transactional(readOnly = true)
    public List<CoreAuditTrailRecordLineBean> selectRecordLineTableNameList(Long recordId) {
       return this.recordLineService.selectRecordLineTableNameList(recordId);
    }
 
    @Override
+   @Transactional(readOnly = true)
    public List<CoreAuditTrailRecordLineBean> selectRecordLineList(Long recordId, String tableName) {
       return this.recordLineService.selectRecordLineList(recordId, tableName);
    }
 
    @Override
+   @Transactional(readOnly = true)
    public Page<CoreAuditTrailRecordLineBean> selectRecordLinePaginationList(RestJsonWrapperBean wrapper) {
       return this.recordLineService.selectPagination(wrapper);
    }
 
    @Override
+   @Transactional(readOnly = true)
    public CoreAuditTrailRecordLineBean selectRecordLineDetail(Long id) {
       return this.recordLineService.selectByIdIfPresent(id);
    }

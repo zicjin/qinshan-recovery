@@ -36,6 +36,7 @@
          <if test="targetId == null">
              T.TARGETID LIKE CONCAT(#{tableName}, '$%')
          </if>
+         <if test="ownedAuditOrgId != null">AND T.CREATEDBYORGID = #{ownedAuditOrgId}</if>
          GROUP BY T.TARGETID
          ORDER BY CREATEDTIME DESC
     </select>

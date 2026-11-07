@@ -14,5 +14,5 @@ public interface CoreAuditTrailRecordLineMapper
 extends GenericMapper<Long> {
     public List<String> selectTableNameByRecordId(String var1);
 
-    public List<CoreAuditTrailRecordLineNameDTO> selectDeletedNames(@Param(value="list") List<String> var1, @Param(value="nameField") String var2);
+    public List<CoreAuditTrailRecordLineNameDTO> selectDeletedNames(@Param(value="list") List<String> var1, @Param(value="nameField") String var2, @Param("ownedAuditOrgId") String organization);
 }

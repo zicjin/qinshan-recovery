@@ -294,6 +294,30 @@ public final class InvoiceReturnedUpdateTest {
                     equal("1",store.db.queryForObject("SELECT OLD_VALUE FROM AUDIT_LINE WHERE COL='DONEFLAG'",String.class),"completion audit previous value");
                     equal("0",store.db.queryForObject("SELECT NEW_VALUE FROM AUDIT_LINE WHERE COL='DONEFLAG'",String.class),"completion audit new value");
                     saveInvoices(ctx,"{\"id\":41,\"invoiceAmount\":\"100\"}"); flag(invoices,41,"1");
+                } else if(scenario.equals("parent-forged-status")) {
+                    saveInvoices(ctx,"{\"id\":41,\"doneFlag\":\"0\"}");
+                    flag(invoices,41,"1");
+                    equal(0,store.invoiceUpdates,"forged flag alone is a no-op");
+                    equal(0,store.audit("AUDIT_RECORD"),"no audit for unchanged derived status");
+                    saveInvoices(ctx,"{\"id\":41,\"invoiceAmount\":\"100.00\",\"doneFlag\":\"0\",\"remark\":\"legitimate note\"}");
+                    flag(invoices,41,"1");
+                    equal("legitimate note",invoices.selectById(41L).getRemark(),"valid note survives ignored forged flag");
+                    equal("100.00",invoices.selectById(41L).getInvoiceAmount(),"equivalent amount formatting remains supported");
+                    equal(0,store.db.queryForObject("SELECT COUNT(*) FROM AUDIT_LINE WHERE COL='DONEFLAG'",Integer.class),"forged state is never audited as persisted");
+                } else if(scenario.equals("parent-forged-unpaid")) {
+                    store.invoice(42,"100","0");
+                    saveInvoices(ctx,"{\"id\":42,\"doneFlag\":\"1\"}"); flag(invoices,42,"0");
+                    equal(0,store.invoiceUpdates,"unpaid invoice cannot be marked collected");
+                    store.invoice(43,"100","0"); store.returned(401,43,"30");
+                    saveInvoices(ctx,"{\"id\":43,\"doneFlag\":\"1\",\"remark\":\"partial note\"}"); flag(invoices,43,"0");
+                    equal("partial note",invoices.selectById(43L).getRemark(),"unpaid notes persist");
+                } else if(scenario.equals("parent-forged-direct")) {
+                    EmcInvoiceBean raw=new EmcInvoiceBean(); raw.setId(41L); raw.setDoneFlag("0");
+                    invoices.updateIfChanged(raw); flag(invoices,41,"1");
+                    EmcInvoiceBean proxy=com.sunwayworld.framework.utils.BeanUtils.getPropertyListenerProxy(EmcInvoiceBean.class);
+                    proxy.setId(41L); proxy.setDoneFlag(null); invoices.updateIfChanged(proxy); flag(invoices,41,"1");
+                    equal(0,store.invoiceUpdates,"raw and explicit proxy cannot bypass derived state");
+                    equal(0,store.audit("AUDIT_RECORD"),"ignored flags create no audit");
                 } else if(scenario.equals("parent-notes")) {
                     saveInvoices(ctx,"{\"id\":41,\"remark\":\"new invoice note\"}");
                     equal("new invoice note",invoices.selectById(41L).getRemark(),"parent notes update without amount");

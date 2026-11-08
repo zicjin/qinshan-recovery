@@ -62,6 +62,8 @@ public class EmcInvoiceServiceImpl implements EmcInvoiceService {
         EmcInvoiceBean insertBean = new EmcInvoiceBean();
         String copyFlag = "1";
         BeanUtils.copyProperties(emcInvoice,insertBean);
+        // A fresh identity has no collected returns, including when copying a paid invoice.
+        insertBean.setDoneFlag(null);
 
         String key = LocalDateTime.now().getYear() + "" +  StringUtils.leftPad(LocalDateTime.now().getMonthValue() + "", 2);
         String sysNo = ApplicationContextHelper.getNextSequence(getDao().getTable(), key);
@@ -69,7 +71,6 @@ public class EmcInvoiceServiceImpl implements EmcInvoiceService {
         insertBean.setSysNo(sysNo);
         if (!ObjectUtils.isEmpty(emcInvoice.getId())) {
             insertBean.setInvoiceAmount(null);
-            insertBean.setDoneFlag(null);
             insertBean.setContractId(null);
             insertBean.setContractName(null);
             insertBean.setProjectId(null);
@@ -109,28 +110,39 @@ public class EmcInvoiceServiceImpl implements EmcInvoiceService {
                     ? ((BeanPropertyListener) item).getChangedPropertyEventList().stream()
                         .anyMatch(event -> "invoiceAmount".equalsIgnoreCase(event.getPropertyDescriptor().getName()))
                     : item.getInvoiceAmount() != null;
-            if (!amountProvided) {
+            boolean statusProvided = item instanceof BeanPropertyListener
+                    ? ((BeanPropertyListener) item).getChangedPropertyEventList().stream()
+                        .anyMatch(event -> "doneFlag".equalsIgnoreCase(event.getPropertyDescriptor().getName()))
+                    : item.getDoneFlag() != null;
+            if (!amountProvided && !statusProvided) {
                 continue;
             }
             EmcInvoiceBean stored = getDao().selectById(id);
-            if (Objects.equals(stored.getInvoiceAmount(), item.getInvoiceAmount())
+            boolean amountChanged = amountProvided && !(Objects.equals(stored.getInvoiceAmount(), item.getInvoiceAmount())
                     || stored.getInvoiceAmount() != null && !stored.getInvoiceAmount().trim().isEmpty()
                         && item.getInvoiceAmount() != null && !item.getInvoiceAmount().trim().isEmpty()
-                        && new BigDecimal(stored.getInvoiceAmount()).compareTo(new BigDecimal(item.getInvoiceAmount())) == 0) {
+                        && new BigDecimal(stored.getInvoiceAmount()).compareTo(new BigDecimal(item.getInvoiceAmount())) == 0);
+            if (!amountChanged && !statusProvided) {
                 continue;
             }
             List<EmcReturnedBean> returns = returnedDao.selectListByOneColumnValue(id, "invoiceId");
-            if (returns.isEmpty()) {
+            if (returns.isEmpty() && !statusProvided) {
                 continue;
             }
-            if (item.getInvoiceAmount() == null || item.getInvoiceAmount().trim().isEmpty()) {
-                throw new AuthenticationServiceException("请输入开票金额！");
+            String effectiveAmount = amountProvided ? item.getInvoiceAmount() : stored.getInvoiceAmount();
+            if (effectiveAmount == null || effectiveAmount.trim().isEmpty()) {
+                if (amountChanged && !returns.isEmpty()) {
+                    throw new AuthenticationServiceException("请输入开票金额！");
+                }
+                // An absent amount cannot establish completion; preserve historical state.
+                if (statusProvided) item.setDoneFlag(stored.getDoneFlag());
+                continue;
             }
             BigDecimal collected = BigDecimal.ZERO;
             for (EmcReturnedBean returned : returns) {
                 collected = collected.add(new BigDecimal(returned.getReturnedAmount()));
             }
-            int balance = new BigDecimal(item.getInvoiceAmount()).subtract(collected).compareTo(BigDecimal.ZERO);
+            int balance = new BigDecimal(effectiveAmount).subtract(collected).compareTo(BigDecimal.ZERO);
             if (balance < 0) {
                 throw new AuthenticationServiceException("输入的回款金额大于未回款金额！");
             }

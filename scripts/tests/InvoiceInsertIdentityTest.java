@@ -145,7 +145,7 @@ public final class InvoiceInsertIdentityTest {
                 expect(scenario.equals("empty") ? null : "identity-fixture", stored.getInvoiceName(), "name copied");
                 boolean clear = copy || scenario.equals("empty");
                 expect(clear ? null : "37.50", stored.getInvoiceAmount(), "invoice amount copy semantics");
-                expect(clear ? null : "1", stored.getDoneFlag(), "copy resets completion to fresh invoice default; normal insert preserves supplied value");
+                expect(null, stored.getDoneFlag(), "new or copied invoice has no returns; client cannot forge completion");
                 expect(clear ? null : "contract-1", stored.getContractId(), "contract ID copy semantics");
                 expect(clear ? null : "contract", stored.getContractName(), "contract name copy semantics");
                 expect(clear ? null : "project-1", stored.getProjectId(), "project ID copy semantics");

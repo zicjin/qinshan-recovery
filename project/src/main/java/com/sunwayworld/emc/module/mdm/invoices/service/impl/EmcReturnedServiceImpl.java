@@ -73,8 +73,9 @@ public class EmcReturnedServiceImpl implements EmcReturnedService {
                 invoiceBean.setDoneFlag("1");
             }
 
-            invoiceService.updateIfChanged(invoiceBean);
             getDao().insert(emcReturned);
+            // Parent completion derives from persisted returns in this same transaction.
+            invoiceService.updateIfChanged(invoiceBean);
         return emcReturned.getId();
     }
     @Override

@@ -34,6 +34,8 @@ class Handler(BaseHTTPRequestHandler):
     public_key = b''
     source_shape = False
     empty_login = False
+    string_category = False
+    string_response = b'category-7'
 
     def do_PUT(self):
         body = json.loads(self.rfile.read(int(self.headers.get('Content-Length', 0))))
@@ -42,6 +44,18 @@ class Handler(BaseHTTPRequestHandler):
         type(self).audits.append({'id': 81, 'targetId': 'T_EMC_SEAL_RULE$71', 'auditTrailType': 'UPDATE',
             'createdById': 'manager', 'createdByOrgId': 'org-1', 'createdTime': dt.datetime.now(dt.timezone.utc).isoformat(),
             'lines': [{'id': 91, 'column': 'NAME', 'oldValue': old, 'newValue': body['name']}]})
+        self.send_response(200)
+        self.end_headers()
+
+    def do_DELETE(self):
+        body = json.loads(self.rfile.read(int(self.headers.get('Content-Length', 0))))
+        identifier = body['b'][1][0]['id']
+        assert self.string_category and identifier == 'category-7' and self.value == 'before'
+        type(self).value = None
+        type(self).audits.append({'id': 'audit-delete', 'entity': identifier, 'event': 'D',
+            'principal': 'manager', 'role': 'manager', 'org': 'org-1',
+            'at': dt.datetime.now(dt.timezone.utc).isoformat(),
+            'lines': [{'id': 'line-delete', 'field': 'id', 'old': identifier, 'new': None}]})
         self.send_response(200)
         self.end_headers()
 
@@ -88,6 +102,9 @@ class Handler(BaseHTTPRequestHandler):
         if self.path == '/state/queries' and self.source_shape:
             self.respond({'rows': [] if self.value is None else [{'id': 71, 'name': self.value, 'createdTime': 'dynamic-server-time', 'version': 7}]})
             return
+        if self.path == '/state/queries' and self.string_category:
+            self.respond({'rows': [] if self.value is None else [{'id': 'category-7', 'name': self.value}]})
+            return
         if self.path == '/lines/queries':
             self.respond({'rows': [{**line, 'record': row['id']} for row in self.audits for line in row['lines']]})
         else:
@@ -107,6 +124,14 @@ class Handler(BaseHTTPRequestHandler):
                 self.wfile.write(json.dumps({'ok': True} if self.identity_problem == 'fake-login' else self.account()).encode())
             return
         body = json.loads(raw or b'{}')
+        if self.path == '/source-category':
+            assert self.string_category and body['b'][1][0]['id'] == 'category-7'
+            type(self).value = 'before'
+            self.send_response(200)
+            self.send_header('Content-Type', 'application/json')
+            self.end_headers()
+            self.wfile.write(self.string_response)
+            return
         if self.path == '/source-setup':
             type(self).value = 'before'
             self.respond(71)
@@ -163,6 +188,8 @@ class ProofTest(unittest.TestCase):
         Handler.identity_problem, Handler.account_reads = None, 0
         Handler.source_shape = False
         Handler.empty_login = False
+        Handler.string_category = False
+        Handler.string_response = b'category-7'
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
         self.root = Path(self.temp.name)
@@ -333,6 +360,66 @@ class ProofTest(unittest.TestCase):
         valid, reason = self.check_pending_proof(report)
         self.assertFalse(valid)
         self.assertIn('version missing or incompatible', reason)
+
+    def category_delete_document(self):
+        Handler.string_category = True
+        document = self.document()
+        case = document['cases'][0]
+        body = {'b': ['', [{'id': 'category-7'}]], 'p': {}}
+        create = {'method': 'POST', 'path': '/source-category', 'operation': 'create',
+                  'body': body, 'capture_text': True, 'expected_status': 200}
+        case.update(method='DELETE', path='/source-category', operation='delete',
+                    expected_status=200, body=body)
+        case['fixture'] = {'mode': 'api', 'setup_requests': [create], 'restore_requests': [create]}
+        case['audit'].update(entity_binding={'source': 'request', 'path': 'body.b.1.0.id'},
+            expected={'entity': 'category-7', 'event': 'D', 'principal': 'manager',
+                      'role': 'manager', 'organization': 'org-1'},
+            changes=[{'field': 'id', 'old': 'category-7', 'new': None}])
+        case['state_proof'].update(projection_fields=['id'],
+            expected={'rows': [{'id': 'category-7'}]}, expected_after={'rows': []})
+        return document
+
+    def test_bare_string_create_compensates_audited_delete_and_validates_raw_proof(self):
+        import base64
+        report = self.run_document(self.category_delete_document())
+        self.assertEqual(report['status'], 'executed-pass-pending-cleanup', report.get('reason'))
+        self.assertEqual(Handler.value, 'before')
+        self.assertTrue(self.check_pending_proof(report)[0])
+        ref = report['cases'][0]['http_write_proof']
+        path = Path(ref['path'])
+        payload = json.loads(path.read_bytes())
+        restore = payload['observations']['restore_0']
+        self.assertIs(restore['request']['capture_text'], True)
+        self.assertEqual(base64.b64decode(restore['body_base64']), b'category-7')
+        for mutation in ('opt-in', 'response-bytes'):
+            changed = copy.deepcopy(payload)
+            item = changed['observations']['restore_0']
+            if mutation == 'opt-in':
+                item['request'].pop('capture_text')
+            else:
+                item['body_base64'] = base64.b64encode(b'category-8').decode()
+            raw = json.dumps(changed).encode()
+            path.write_bytes(raw)
+            ref['sha256'] = hashlib.sha256(raw).hexdigest()
+            self.assertFalse(self.check_pending_proof(report)[0], mutation)
+
+    def test_bare_text_is_rejected_except_explicit_matching_structured_create_id(self):
+        now = dt.datetime.now(dt.timezone.utc).isoformat()
+        request = {'method': 'POST', 'path': '/source-category', 'operation': 'create',
+                   'body': {'b': ['', [{'id': 'category-7'}]], 'p': {}},
+                   'capture_text': True, 'auth': {'cookies': {}}}
+        invalid = [(b'category-8', {}), (b'category-7\n', {}), (b'\xff', {}),
+                   (b'<html>failure</html>', {}), (b'password=private', {}),
+                   (b'-----BEGIN PRIVATE KEY-----', {}), (b'{broken', {}),
+                   (b'category-7', {'capture_text': False}),
+                   (b'category-7', {'capture_text': 'true'}),
+                   (b'category-7', {'method': 'GET'}),
+                   (b'category-7', {'operation': 'read'}),
+                   (b'category-7', {'body': {'id': 'category-7'}}),
+                   (b'category-7', {'body': {'b': ['', [{'id': 'category-7'}, {'id': 'other'}]]}})]
+        for raw, changes in invalid:
+            with self.subTest(raw=raw, changes=changes), self.assertRaises(ValueError):
+                transcript({**request, **changes}, 200, {}, raw, now, now)
 
     def test_positive_write_has_executed_audit_and_compensation_proof(self):
         report = self.run_document(self.document())

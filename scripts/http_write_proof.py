@@ -13,6 +13,7 @@ import datetime as dt
 import hashlib
 import json
 import os
+import re
 from pathlib import Path
 from urllib.parse import parse_qsl, urlsplit
 from evidence_fingerprint import SENSITIVE_HEADERS, request_fingerprint, response_fingerprint
@@ -174,6 +175,30 @@ def validate_projected_response(metadata, projection, fingerprint):
     validate_identity(projection)
 
 
+def _parse_response(body, request):
+    if not body:
+        return None
+    try:
+        return json.loads(body)
+    except json.JSONDecodeError:
+        # CoreCodeCategoryResource.insert returns its supplied String ID via
+        # Spring's String converter, even with application/json content type.
+        # Admit only that explicit single-create response contract; arbitrary
+        # error text cannot bypass the structured transcript privacy checks.
+        wrapper = request.get('body')
+        entries = wrapper.get('b') if isinstance(wrapper, dict) else None
+        rows = entries[1] if isinstance(entries, list) and len(entries) == 2 else None
+        identifier = rows[0].get('id') if (isinstance(rows, list) and len(rows) == 1
+                                         and isinstance(rows[0], dict)) else None
+        if (request.get('capture_text') is not True
+                or request.get('method') != 'POST' or request.get('operation') != 'create'
+                or not isinstance(identifier, str)
+                or re.fullmatch(r'[A-Za-z_][A-Za-z0-9_.-]{0,127}', identifier) is None
+                or body.decode('utf-8', errors='strict') != identifier):
+            raise ValueError('HTTP proof refuses text outside explicit single-create ID contract') from None
+        return identifier
+
+
 def transcript(request, status, headers, body, started, finished):
     # Session context consists solely of hashed cookies, never raw credentials.
     request = dict(request)
@@ -183,10 +208,10 @@ def transcript(request, status, headers, body, started, finished):
     if declaration is not None:
         metadata, projection = projected_response(body, declaration)
     else:
-        parsed = json.loads(body) if body else None
+        parsed = _parse_response(body, request)
         _check_sensitive(parsed)
     safe_request = {key: request[key] for key in ('method', 'path', 'path_template', 'operation', 'route_kind', 'body',
-                    'body_raw', 'headers', 'auth', 'role', 'organization') if key in request}
+                    'body_raw', 'headers', 'auth', 'role', 'organization', 'capture_text') if key in request}
     result = {'request': safe_request, 'status': status,
             'response_headers': {'content-type': headers.get('content-type', '')},
             'body_base64': base64.b64encode(body).decode('ascii'),
@@ -251,7 +276,7 @@ def validate_payload(payload, report, case):
             if 'projection_metadata' in item or 'response_projection' in item:
                 raise ValueError('HTTP proof projection only admitted for identity observations')
             raw = base64.b64decode(item['body_base64'], validate=True)
-            parsed = json.loads(raw) if raw else None
+            parsed = _parse_response(raw, item['request'])
         if item['request_fingerprint'] != request_fingerprint(item['request']):
             raise ValueError('HTTP proof request fingerprint mismatch')
         if not projected and item['response_fingerprint'] != response_fingerprint(item['status'], item['response_headers'], raw):

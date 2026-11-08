@@ -12,6 +12,7 @@ import com.sunwayworld.framework.at.annotation.AuditTrailType;
 import com.sunwayworld.framework.context.ApplicationContextHelper;
 import com.sunwayworld.framework.audit.aunnotation.Audit;
 import com.sunwayworld.framework.beans.BeanPropertyListener;
+import com.sunwayworld.framework.exception.checked.CheckedException;
 import com.sunwayworld.framework.mybatis.mapper.MatchPattern;
 import com.sunwayworld.framework.mybatis.mapper.SearchFilter;
 import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;
@@ -65,10 +66,7 @@ public class EmcInvoiceServiceImpl implements EmcInvoiceService {
         // A fresh identity has no collected returns, including when copying a paid invoice.
         insertBean.setDoneFlag(null);
 
-        String key = LocalDateTime.now().getYear() + "" +  StringUtils.leftPad(LocalDateTime.now().getMonthValue() + "", 2);
-        String sysNo = ApplicationContextHelper.getNextSequence(getDao().getTable(), key);
         insertBean.setExt$Item("COPYFLAG",copyFlag);
-        insertBean.setSysNo(sysNo);
         if (!ObjectUtils.isEmpty(emcInvoice.getId())) {
             insertBean.setInvoiceAmount(null);
             insertBean.setContractId(null);
@@ -77,9 +75,11 @@ public class EmcInvoiceServiceImpl implements EmcInvoiceService {
             insertBean.setProjectName(null);
         }
 
+        parseInvoiceAmount(insertBean.getInvoiceAmount());
+        String key = LocalDateTime.now().getYear() + "" + StringUtils.leftPad(LocalDateTime.now().getMonthValue() + "", 2);
+        String sysNo = ApplicationContextHelper.getNextSequence(getDao().getTable(), key);
+        insertBean.setSysNo(sysNo);
         insertBean.setId(ApplicationContextHelper.getNextIdentity());
-
-
         getDao().insert(insertBean);
         return insertBean.getId();
     }
@@ -117,11 +117,14 @@ public class EmcInvoiceServiceImpl implements EmcInvoiceService {
             if (!amountProvided && !statusProvided) {
                 continue;
             }
+            if (amountProvided) {
+                parseInvoiceAmount(item.getInvoiceAmount());
+            }
             EmcInvoiceBean stored = getDao().selectById(id);
             boolean amountChanged = amountProvided && !(Objects.equals(stored.getInvoiceAmount(), item.getInvoiceAmount())
                     || stored.getInvoiceAmount() != null && !stored.getInvoiceAmount().trim().isEmpty()
                         && item.getInvoiceAmount() != null && !item.getInvoiceAmount().trim().isEmpty()
-                        && new BigDecimal(stored.getInvoiceAmount()).compareTo(new BigDecimal(item.getInvoiceAmount())) == 0);
+                        && parseInvoiceAmount(stored.getInvoiceAmount()).compareTo(parseInvoiceAmount(item.getInvoiceAmount())) == 0);
             if (!amountChanged && !statusProvided) {
                 continue;
             }
@@ -142,7 +145,7 @@ public class EmcInvoiceServiceImpl implements EmcInvoiceService {
             for (EmcReturnedBean returned : returns) {
                 collected = collected.add(new BigDecimal(returned.getReturnedAmount()));
             }
-            int balance = new BigDecimal(effectiveAmount).subtract(collected).compareTo(BigDecimal.ZERO);
+            int balance = parseInvoiceAmount(effectiveAmount).subtract(collected).compareTo(BigDecimal.ZERO);
             if (balance < 0) {
                 throw new AuthenticationServiceException("输入的回款金额大于未回款金额！");
             }
@@ -150,6 +153,17 @@ public class EmcInvoiceServiceImpl implements EmcInvoiceService {
         }
         // Keep original partial-property updates and audit; validate every parent before any write.
         EmcInvoiceService.super.updateIfChanged(items);
+    }
+
+    static BigDecimal parseInvoiceAmount(String value) {
+        if (value == null || value.trim().isEmpty()) {
+            return null;
+        }
+        try {
+            return new BigDecimal(value);
+        } catch (NumberFormatException error) {
+            throw new CheckedException("GIKAM.EXCEPTION.PARAM_ERROR", error);
+        }
     }
 
     @Override

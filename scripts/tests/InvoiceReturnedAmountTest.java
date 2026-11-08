@@ -50,6 +50,7 @@ public final class InvoiceReturnedAmountTest {
     private static final class Store {
         final EmcInvoiceBean invoice = new EmcInvoiceBean();
         final Map<Long, EmcReturnedBean> returns = new LinkedHashMap<>();
+        boolean parentMissing;
         int invoiceWrites;
         int returnWrites;
 
@@ -60,8 +61,9 @@ public final class InvoiceReturnedAmountTest {
         }
 
         Object invoiceDao(Object proxy, Method method, Object[] args) {
-            if (method.getName().equals("selectById")) {
+            if (method.getName().equals("selectById") || method.getName().equals("selectByIdIfPresent")) {
                 expect(INVOICE_ID, args[0], "invoice selection");
+                if (parentMissing) return null;
                 EmcInvoiceBean selected = new EmcInvoiceBean();
                 selected.setId(invoice.getId());
                 selected.setInvoiceAmount(invoice.getInvoiceAmount());
@@ -161,7 +163,33 @@ public final class InvoiceReturnedAmountTest {
             ApplicationContextHelper.setApplicationContext(context);
             EmcInvoiceService invoices = context.getBean(EmcInvoiceService.class);
             EmcReturnedService service = context.getBean(EmcReturnedService.class);
-            if (scenario.equals("invalid-input")) {
+            if(scenario.equals("missing-parent")) {
+                store.parentMissing=true; boolean rejected=false;
+                try { service.insert(INVOICE_ID,body("1")); }
+                catch(com.sunwayworld.framework.exception.checked.CheckedException error) { rejected=true; }
+                expect(true,rejected,"nonexistent parent rejected");
+                expect(0,store.returnWrites,"missing parent creates no orphan");
+                expect(0,store.invoiceWrites,"missing parent does not update invoice");
+            } else if(scenario.equals("invalid-parent")) {
+                for(String parentAmount:java.util.Arrays.asList("text","1,000","NaN","Infinity")) {
+                    store.invoice.setInvoiceAmount(parentAmount); boolean rejected=false;
+                    try { service.insert(INVOICE_ID,body("1")); }
+                    catch(com.sunwayworld.framework.exception.checked.CheckedException error) { rejected=true; }
+                    expect(true,rejected,"invalid stored parent amount rejected");
+                    expect(0,store.invoiceWrites,"invalid parent leaves invoice unchanged");
+                    expect(0,store.returnWrites,"invalid parent inserts no return");
+                }
+            } else if(scenario.equals("empty-body")) {
+                for(RestJsonWrapperBean wrapper:java.util.Arrays.asList(new RestJsonWrapperBean(),
+                    new RestJsonWrapperBean(Collections.emptyMap(),Collections.singletonList(Collections.emptyList()),Collections.singletonList(null)))) {
+                    boolean rejected=false;
+                    try { service.insert(INVOICE_ID,wrapper); }
+                    catch(com.sunwayworld.framework.exception.checked.CheckedException error) { rejected=true; }
+                    expect(true,rejected,"empty return body controlled rejection");
+                    expect(0,store.invoiceWrites,"empty body leaves invoice unchanged");
+                    expect(0,store.returnWrites,"empty body inserts no return");
+                }
+            } else if (scenario.equals("invalid-input")) {
                 for (String value : java.util.Arrays.asList(null, "", " \t ", "not-a-number", "1,000", "NaN", "Infinity")) {
                     boolean rejected = false;
                     try { service.insert(INVOICE_ID, body(value)); }

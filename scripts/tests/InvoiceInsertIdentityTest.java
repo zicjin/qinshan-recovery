@@ -120,6 +120,20 @@ public final class InvoiceInsertIdentityTest {
             EmcInvoiceService service = context.getBean(EmcInvoiceService.class);
             expect(context.getBean(EmcInvoiceDao.class), service.getDao(), "Spring DAO injection");
             String monthBefore = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMM"));
+            if (scenario.equals("invalid-amount")) {
+                for (String amount : java.util.Arrays.asList("text", "1,000", "NaN", "Infinity")) {
+                    boolean rejected=false;
+                    try { service.insert(body(com.alibaba.fastjson.JSON.toJSONString(Collections.singletonMap("invoiceAmount",amount)))); }
+                    catch(com.sunwayworld.framework.exception.checked.CheckedException error) {
+                        rejected=true; expect("GIKAM.EXCEPTION.PARAM_ERROR",error.getMessage(),"controlled invoice amount");
+                    }
+                    expect(true,rejected,"invalid invoice amount rejected before sequence/DAO");
+                }
+                expect(0,store.attempts,"invalid input writes no invoice");
+                expect(0,sequence.keys.size(),"invalid input consumes no business sequence");
+                System.out.println(scenario+": PASS (actual invoice insert validation before sequence and DAO)");
+                return;
+            }
             if (scenario.equals("failure")) {
                 store.reject = true;
                 try {

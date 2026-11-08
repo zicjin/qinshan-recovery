@@ -49,18 +49,29 @@ public class EmcReturnedServiceImpl implements EmcReturnedService {
     @Transactional
     @AuditTrailEntry(AuditTrailType.INSERT)
     public Long insert(Long id ,RestJsonWrapperBean jsonWrapper) {
-        EmcReturnedBean emcReturned = jsonWrapper.parseUnique(EmcReturnedBean.class);
-        EmcInvoiceBean invoiceBean = invoiceService.selectById(id);
+        if (id == null || jsonWrapper == null) {
+            throw new CheckedException("GIKAM.EXCEPTION.PARAM_ERROR");
+        }
+        List<EmcReturnedBean> rows = jsonWrapper.parse(EmcReturnedBean.class);
+        if (rows.size() != 1 || rows.get(0) == null) {
+            throw new CheckedException("GIKAM.EXCEPTION.PARAM_ERROR");
+        }
+        EmcReturnedBean emcReturned = rows.get(0);
+        EmcInvoiceBean invoiceBean = invoiceService.selectByIdIfPresent(id);
+        if (invoiceBean == null) {
+            throw new CheckedException("GIKAM.EXCEPTION.PARAM_ERROR");
+        }
         if (invoiceBean.getInvoiceAmount() == null || invoiceBean.getInvoiceAmount().trim().isEmpty()) {
             throw new AuthenticationServiceException("请输入开票金额！");
         }
+        BigDecimal invoiceAmount = EmcInvoiceServiceImpl.parseInvoiceAmount(invoiceBean.getInvoiceAmount());
         List<EmcReturnedBean> returnedList = getDao().selectListByOneColumnValue(id, "invoiceId");
         List<BigDecimal> returnedAmountList = returnedList.stream().map(e -> new BigDecimal(e.getReturnedAmount())).collect(Collectors.toList());
         BigDecimal returnedAmount = parseReturnedAmount(emcReturned.getReturnedAmount());
         for (int i = 0; i < returnedAmountList.size(); i++) {
             returnedAmount = returnedAmount.add(returnedAmountList.get(i));
         }
-            BigDecimal uncollected = new BigDecimal(invoiceBean.getInvoiceAmount()).subtract(returnedAmount);
+            BigDecimal uncollected = invoiceAmount.subtract(returnedAmount);
             emcReturned.setId(ApplicationContextHelper.getNextIdentity());
             emcReturned.setInvoiceId(id);
             emcReturned.setInvoiceAmount(invoiceBean.getInvoiceAmount());
@@ -129,7 +140,7 @@ public class EmcReturnedServiceImpl implements EmcReturnedService {
                 total = total.add(amounts.containsKey(sibling.getId())
                         ? amounts.get(sibling.getId()) : new BigDecimal(sibling.getReturnedAmount()));
             }
-            BigDecimal balance = new BigDecimal(invoice.getInvoiceAmount()).subtract(total);
+            BigDecimal balance = EmcInvoiceServiceImpl.parseInvoiceAmount(invoice.getInvoiceAmount()).subtract(total);
             if (balance.compareTo(BigDecimal.ZERO) < 0) {
                 throw new AuthenticationServiceException("输入的回款金额大于未回款金额！");
             }
@@ -208,7 +219,7 @@ public class EmcReturnedServiceImpl implements EmcReturnedService {
         for (EmcReturnedBean remaining : getDao().selectListByOneColumnValue(invoiceId, "invoiceId")) {
             returnedAmount = returnedAmount.add(new BigDecimal(remaining.getReturnedAmount()));
         }
-        String doneFlag = new BigDecimal(invoice.getInvoiceAmount()).subtract(returnedAmount)
+        String doneFlag = EmcInvoiceServiceImpl.parseInvoiceAmount(invoice.getInvoiceAmount()).subtract(returnedAmount)
                 .compareTo(BigDecimal.ZERO) == 0 ? "1" : "0";
         if (!doneFlag.equals(invoice.getDoneFlag())) {
             invoice.setDoneFlag(doneFlag);

@@ -350,6 +350,19 @@ public final class InvoiceReturnedUpdateTest {
                 } else if(scenario.equals("parent-no-returns")) {
                     store.invoice(42,"100",null);
                     saveInvoices(ctx,"{\"id\":42,\"invoiceAmount\":\"50\"}"); equal("50",invoices.selectById(42L).getInvoiceAmount(),"uncollected invoice retains original amount edit behavior"); flag(invoices,42,null);
+                } else if(scenario.equals("parent-invalid-input")) {
+                    store.invoice(42,"100",null);
+                    for(String amount:Arrays.asList("text","1,000","NaN","Infinity")) {
+                        boolean rejected=false;
+                        try { saveInvoices(ctx,"{\"id\":41,\"invoiceAmount\":\"150\"}",
+                            com.alibaba.fastjson.JSON.toJSONString(new java.util.LinkedHashMap<String,Object>() {{ put("id",42L); put("invoiceAmount",amount); }})); }
+                        catch(com.sunwayworld.framework.exception.checked.CheckedException error) {
+                            rejected=true; equal("GIKAM.EXCEPTION.PARAM_ERROR",error.getMessage(),"controlled invoice amount");
+                        }
+                        equal(true,rejected,"invalid second parent rejected before first SQL");
+                        equal("100",invoices.selectById(41L).getInvoiceAmount(),"first parent amount unchanged");
+                        equal(0,store.invoiceUpdates,"no first parent SQL"); equal(0,store.audit("AUDIT_RECORD"),"no invalid audit");
+                    }
                 } else if(scenario.equals("parent-duplicate")) {
                     boolean rejected=false;
                     try { saveInvoices(ctx,"{\"id\":41,\"invoiceAmount\":\"150\"}","{\"id\":41,\"invoiceAmount\":\"100\"}"); }

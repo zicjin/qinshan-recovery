@@ -17,7 +17,7 @@ PACKAGE = 'com/sunwayworld/emc/module/mdm/invoices'
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--prerequisite-root', type=Path, default=ROOT)
-    parser.add_argument('--case', choices=['new', 'copy', 'empty', 'failure', 'all'], default='all')
+    parser.add_argument('--case', choices=['new', 'copy', 'empty', 'failure', 'invalid-amount', 'all'], default='all')
     args = parser.parse_args()
     prereq = args.prerequisite_root.resolve()
     jdk = prereq / 'build/jdk1.8.0_391/bin'
@@ -45,7 +45,7 @@ def main():
         cp = ':'.join(map(str, [temporary, application, *framework, *dependencies]))
         subprocess.run([str(jdk / 'javac'), '-encoding', 'UTF-8', '-sourcepath', str(temporary),
                         '-cp', cp, '-d', str(temporary), *map(str, sources)], check=True)
-        scenarios = ['new', 'copy', 'empty', 'failure'] if args.case == 'all' else [args.case]
+        scenarios = ['new', 'copy', 'empty', 'failure', 'invalid-amount'] if args.case == 'all' else [args.case]
         for scenario in scenarios:
             result = subprocess.run([str(jdk / 'java'), '-Dlog4j.configurationFile=' + str(logging),
                                      '-cp', cp, 'InvoiceInsertIdentityTest', scenario])

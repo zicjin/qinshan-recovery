@@ -36,6 +36,7 @@ class Handler(BaseHTTPRequestHandler):
     empty_login = False
     string_category = False
     string_response = b'category-7'
+    omit_audit_field = None
 
     def do_PUT(self):
         body = json.loads(self.rfile.read(int(self.headers.get('Content-Length', 0))))
@@ -75,6 +76,11 @@ class Handler(BaseHTTPRequestHandler):
         return identity
 
     def respond(self, value, status=200):
+        if isinstance(value, dict) and self.omit_audit_field:
+            value = copy.deepcopy(value)
+            for row in value.get('rows', []):
+                for line in row.get('lines', []):
+                    line.pop(self.omit_audit_field, None)
         data = json.dumps(value).encode()
         self.send_response(status)
         self.send_header('Content-Type', 'application/json')
@@ -190,6 +196,7 @@ class ProofTest(unittest.TestCase):
         Handler.empty_login = False
         Handler.string_category = False
         Handler.string_response = b'category-7'
+        Handler.omit_audit_field = None
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
         self.root = Path(self.temp.name)
@@ -420,6 +427,32 @@ class ProofTest(unittest.TestCase):
         for raw, changes in invalid:
             with self.subTest(raw=raw, changes=changes), self.assertRaises(ValueError):
                 transcript({**request, **changes}, 200, {}, raw, now, now)
+
+    def test_source_audit_omits_null_old_or_new_value(self):
+        Handler.omit_audit_field = 'new'
+        report = self.run_document(self.category_delete_document())
+        self.assertEqual(report['status'], 'executed-pass-pending-cleanup', report.get('reason'))
+        self.assertTrue(self.check_pending_proof(report)[0])
+        Handler.value, Handler.audits, Handler.account_reads = None, [], 0
+        Handler.string_category = False
+        Handler.omit_audit_field = 'old'
+        report = self.run_document(self.document())
+        self.assertEqual(report['status'], 'executed-pass-pending-cleanup', report.get('reason'))
+        self.assertTrue(self.check_pending_proof(report)[0])
+
+    def test_missing_nonnull_audit_value_or_required_structure_still_fails(self):
+        for field in ('new', 'field', 'id'):
+            with self.subTest(field=field):
+                Handler.value, Handler.audits, Handler.account_reads = None, [], 0
+                Handler.omit_audit_field = field
+                report = self.run_document(self.document())
+                self.assertEqual(report['status'], 'executed-fail')
+        Handler.value, Handler.audits, Handler.account_reads = None, [], 0
+        Handler.omit_audit_field = None
+        document = self.document()
+        document['cases'][0]['audit']['line_fields']['old'] = 'missing_parent.old'
+        report = self.run_document(document)
+        self.assertEqual(report['status'], 'executed-fail')
 
     def test_positive_write_has_executed_audit_and_compensation_proof(self):
         report = self.run_document(self.document())

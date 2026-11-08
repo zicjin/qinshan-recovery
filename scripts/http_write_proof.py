@@ -404,12 +404,21 @@ def validate_payload(payload, report, case):
         lf = audit['line_fields']
         actual = []
         line_ids = []
+        def nullable_line_value(line, path):
+            # The source Fastjson converter omits null bean properties. Only
+            # old/new leaf values may be absent; missing parents stay invalid.
+            parent_path, _, leaf = str(path).rpartition('.')
+            parent = at(line, parent_path) if parent_path else line
+            if not isinstance(parent, dict):
+                raise ValueError('audit proof old/new parent must be an object')
+            return parent.get(leaf)
         for line in lines:
             lid = at(line, lf['line_id'])
             if not lid or lid in line_ids:
                 raise ValueError('audit proof line IDs missing/duplicated')
             line_ids.append(lid)
-            actual.append({k: at(line, lf[k]) for k in ('field', 'old', 'new')})
+            actual.append({'field': at(line, lf['field']),
+                           **{k: nullable_line_value(line, lf[k]) for k in ('old', 'new')}})
         declared_changes = [{k: change[k] for k in ('field', 'old', 'new')} for change in changes]
         if sorted(actual, key=digest) != sorted(declared_changes, key=digest):
             raise ValueError('audit proof old/new fields mismatch')

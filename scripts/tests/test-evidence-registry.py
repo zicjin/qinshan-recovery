@@ -134,6 +134,23 @@ class EvidenceRegistryTest(unittest.TestCase):
         self.assertFalse(ok)
         self.assertIn("diagnostic", reason)
 
+    def test_registry_report_closure_link_uses_behavior_surfaces(self):
+        bindings = {"application_binding": "app", "harness_binding": "harness", "planning_binding": "plan"}
+        report = {**bindings, "class": "canonical-strict", "strict_evidence": "true",
+                  "closure": "evidence/api-route-closure.json", "implementation_tree_digest": "0" * 64}
+        closure = {**bindings, "class": "canonical-strict", "strict_evidence": "true",
+                   "implementation_tree_digest": "1" * 64, "implementation_dirty": "false"}
+        registry = {"evidence/report.json": report, "evidence/api-route-closure.json": closure}
+        self.assertFalse(MANAGE.registry_contract_violations(registry, "new-head"))
+        closure["application_binding"] = "stale"
+        self.assertTrue(MANAGE.registry_contract_violations(registry, "new-head"))
+        closure["application_binding"] = "app"
+        closure["implementation_dirty"] = "true"
+        self.assertTrue(MANAGE.registry_contract_violations(registry, "new-head"))
+        closure["implementation_dirty"] = "false"
+        del report["planning_binding"]
+        self.assertTrue(MANAGE.registry_contract_violations(registry, "new-head"))
+
     def test_strict_closure_rejects_local_storage_evidence(self):
         ok, reason = MANAGE.closure_report_registry_valid({
             "reports": [{
@@ -150,6 +167,43 @@ class EvidenceRegistryTest(unittest.TestCase):
         }, "current")
         self.assertFalse(ok)
         self.assertIn("storage=git", reason)
+
+    def test_closure_preserves_captured_runtime_and_governance_provenance(self):
+        surfaces = {"application_binding": "app-current", "harness_binding": "harness-current",
+                    "planning_binding": "plan-current"}
+        item = {**surfaces, "path": "evidence/report.json", "strict_evidence": True,
+                "implementation_dirty": False, "implementation_binding": "impl-captured",
+                "implementation_tree_digest": "0" * 64, "runtime_contract_binding": "rt-milestone",
+                "governance_binding": "gov-captured"}
+        closure = {**surfaces, "runtime_contract_binding": "rt-default",
+                   "governance_binding": "gov-new", "implementation_binding": "impl-new",
+                   "implementation_tree_digest": "1" * 64, "reports": [item]}
+        row = {**{k: v for k, v in item.items() if k.endswith("_binding")},
+               "implementation_tree_digest": "0" * 64, "class": "canonical-strict",
+               "storage": "git", "implementation_dirty": "false"}
+        self.assertTrue(MANAGE.closure_reports_current(closure, "new-head"))
+        ok, reason = MANAGE.closure_report_registry_valid(closure, {"evidence/report.json": row}, "new-head")
+        self.assertTrue(ok, reason)
+        row["runtime_contract_binding"] = "rt-other"
+        ok, reason = MANAGE.closure_report_registry_valid(closure, {"evidence/report.json": row}, "new-head")
+        self.assertFalse(ok)
+        self.assertIn("binding", reason)
+        row["runtime_contract_binding"] = "rt-milestone"
+        row["implementation_tree_digest"] = "2" * 64
+        ok, reason = MANAGE.closure_report_registry_valid(closure, {"evidence/report.json": row}, "new-head")
+        self.assertFalse(ok)
+        row["implementation_tree_digest"] = "0" * 64
+        for field in ("implementation_binding", "implementation_tree_digest"):
+            saved_item, saved_row = item.pop(field), row.pop(field)
+            self.assertFalse(MANAGE.closure_reports_current(closure, "new-head"))
+            ok, reason = MANAGE.closure_report_registry_valid(closure, {"evidence/report.json": row}, "new-head")
+            self.assertFalse(ok)
+            item[field], row[field] = saved_item, saved_row
+        for surface in surfaces:
+            with self.subTest(surface=surface):
+                item[surface] = "stale"
+                self.assertFalse(MANAGE.closure_reports_current(closure, "new-head"))
+                item[surface] = surfaces[surface]
 
     def test_strict_contract_rejects_ancestor_even_when_scope_is_unchanged(self):
         payload = {

@@ -262,9 +262,9 @@ def closure_reports_strict(value: Mapping[str, Any]) -> bool:
 
 
 def closure_reports_current(value: Mapping[str, Any], current: str) -> bool:
-    """Require every strict report listed by a closure to share its binding."""
+    """Match behavior surfaces while retaining each report's runtime provenance."""
     reports = value.get("reports")
-    surfaces = ("application", "harness", "runtime_contract", "planning")
+    surfaces = ("application", "harness", "planning")
     digest = value.get("implementation_tree_digest")
     binding = value.get("implementation_binding")
     if not isinstance(reports, list) or not reports:
@@ -275,6 +275,10 @@ def closure_reports_current(value: Mapping[str, Any], current: str) -> bool:
         if all(surface + "_binding" in value for surface in surfaces):
             if any(item.get(surface + "_binding") != value.get(surface + "_binding")
                    for surface in surfaces):
+                return False
+            if not item.get("runtime_contract_binding"):
+                return False
+            if not item.get("implementation_binding") or not item.get("implementation_tree_digest"):
                 return False
         elif digest:
             if (item.get("implementation_tree_digest") != digest
@@ -330,16 +334,25 @@ def closure_report_registry_valid(value: Mapping[str, Any], registry: Mapping[st
             return False, "closure report storage must be storage=git: " + rel
         if row.get("implementation_dirty", row.get("source_dirty")) != "false":
             return False, "closure report is not current clean evidence: " + rel
-        if item.get("strict_evidence") is not True or (value.get("implementation_tree_digest") and item.get("implementation_tree_digest") != value.get("implementation_tree_digest")):
+        if item.get("strict_evidence") is not True:
             return False, "closure report index has stale or non-strict metadata: " + rel
         closure_digest = value.get("implementation_tree_digest")
         closure_binding = value.get("implementation_binding")
-        surfaces = ("application", "harness", "runtime_contract", "planning")
+        surfaces = ("application", "harness", "planning")
         if all(surface + "_binding" in value for surface in surfaces):
             if any(row.get(surface + "_binding") != value.get(surface + "_binding")
                    for surface in surfaces):
                 return False, "registry report dependency-surface binding differs from closure: " + rel
+            if (not item.get("runtime_contract_binding")
+                    or row.get("runtime_contract_binding") != item.get("runtime_contract_binding")):
+                return False, "registry report runtime binding differs from captured report: " + rel
+            if (not item.get("implementation_binding") or not item.get("implementation_tree_digest")
+                    or any(row.get(field) != item.get(field) for field in
+                           ("implementation_binding", "implementation_tree_digest"))):
+                return False, "registry report provenance differs from captured report: " + rel
         elif closure_digest:
+            if item.get("implementation_tree_digest") != closure_digest:
+                return False, "closure report index has stale metadata: " + rel
             if row.get("implementation_tree_digest") != closure_digest:
                 return False, "registry report implementation digest differs from closure: " + rel
             if closure_binding and row.get("implementation_binding") != closure_binding:
@@ -428,10 +441,15 @@ def registry_contract_violations(registry: Mapping[str, Mapping[str, str]], curr
             closure_row = registry.get(closure)
             if closure_row is None or closure_row.get("class") != "canonical-strict":
                 violations.append(path + ": closure is not canonical-strict: " + closure)
-            elif row.get("implementation_tree_digest") and closure_row.get("implementation_tree_digest") != row.get("implementation_tree_digest"):
-                violations.append(path + ": closure implementation binding differs: " + closure)
-            elif closure_row.get("implementation_dirty", closure_row.get("source_dirty")) != "false":
-                violations.append(path + ": closure is not current clean evidence: " + closure)
+            else:
+                surfaces = ("application_binding", "harness_binding", "planning_binding")
+                if all(row.get(field) and closure_row.get(field) for field in surfaces):
+                    if any(row[field] != closure_row[field] for field in surfaces):
+                        violations.append(path + ": closure behavior binding differs: " + closure)
+                elif row.get("implementation_tree_digest") and closure_row.get("implementation_tree_digest") != row.get("implementation_tree_digest"):
+                    violations.append(path + ": closure implementation binding differs: " + closure)
+                if closure_row.get("implementation_dirty", closure_row.get("source_dirty")) != "false":
+                    violations.append(path + ": closure is not current clean evidence: " + closure)
     return violations
 
 

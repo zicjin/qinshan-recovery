@@ -246,6 +246,24 @@ class ClosureTest(unittest.TestCase):
         self.assertFalse(result["failures"])
         self.assertEqual(report["cases"][0]["route"]["method"], "POST")
 
+    def test_closure_serializes_report_surfaces_across_governance_only_change(self):
+        report, ledger = self.fingerprint_report()
+        ledger["implementation_binding"] = "impl-new-governance"
+        ledger["implementation_tree_digest"] = "1" * 64
+        ledger["governance_binding"] = "gov-new"
+        report["governance_binding"] = "gov-captured"
+        report["runtime_contract_binding"] = "rt-milestone"
+        report["cases"][0]["runtime_contract_binding"] = "rt-milestone"
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / "strict.json"
+            path.write_text(json.dumps(report))
+            result = module.build_closure(ledger, [path])
+        self.assertEqual(result["strict_pass_count"], 1)
+        for surface in ("application", "harness", "planning", "governance"):
+            self.assertEqual(result[surface + "_binding"], ledger[surface + "_binding"])
+        for surface in ("application", "harness", "runtime_contract", "planning", "governance"):
+            self.assertEqual(result["reports"][0][surface + "_binding"], report[surface + "_binding"])
+
     def test_explicit_route_id_still_rejects_different_concrete_method(self):
         report, ledger = self.fingerprint_report()
         report["cases"][0]["route"]["method"] = "POST"

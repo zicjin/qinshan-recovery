@@ -229,6 +229,9 @@ def build_closure(ledger: Mapping[str, Any], report_paths: Iterable[Path]) -> Di
             "implementation_binding": report.get("implementation_binding"),
             "implementation_tree_digest": report.get("implementation_tree_digest"),
             "implementation_dirty": report.get("implementation_dirty"),
+            **{surface + "_binding": report[surface + "_binding"]
+               for surface in ("application", "harness", "runtime_contract", "planning", "governance")
+               if surface + "_binding" in report},
             "validation_mode": report.get("validation_mode"),
             "harness_semantics_unchanged": report.get("harness_semantics_unchanged"),
             "family_stale": family_stale,
@@ -416,6 +419,9 @@ def build_closure(ledger: Mapping[str, Any], report_paths: Iterable[Path]) -> Di
         "implementation_tree_digest": ledger.get("implementation_tree_digest"),
         "implementation_dirty": ledger.get("implementation_dirty", ledger.get("source_dirty")),
         "implementation_scope": ledger.get("implementation_scope", []),
+        **{surface + "_binding": ledger[surface + "_binding"]
+           for surface in ("application", "harness", "runtime_contract", "planning", "governance")
+           if surface + "_binding" in ledger},
         "source_scope": sorted(source_scopes),
         "route_execution_model": ledger.get("route_execution_model"),
         "route_count": len(rows),

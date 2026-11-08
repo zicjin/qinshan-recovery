@@ -165,8 +165,10 @@ twice. Runtime-before is the restoration target; it may legitimately differ from
 the locked baseline after versioned API configuration repairs. Audit/error tables
 are included. Oracle/Redis identity and start time must remain unchanged, and
 the application must be stopped. A running user application causes a failed
-report; the verifier never stops it. Do not stop the user's test application just
-to obtain a passing report.
+report; the verifier never stops it. Finish active verification and fixture cleanup
+before the milestone's necessary app-only stop, then restore availability after
+verification. App-only refresh and stop/restart need no additional approval;
+batch them for throughput while keeping Oracle running and avoiding data reimport.
 
 Even a verified lifecycle component has `strict_evidence=false` and `real_http=false`.
 It does not prove snapshot acquisition authenticity, fixture/audit/rollback,

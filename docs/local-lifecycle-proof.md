@@ -48,9 +48,11 @@ runs. Use the existing six-role `local-runtime-milestone-inputs` manifest, with:
   `application_binding`, `harness_binding`, `runtime_contract_binding` and the
   complete `artifact_sha256` mapping copied from the pending report.
 
-Only in an explicitly authorized app-only cleanup window, stop the same app and
-run the verifier. Its existing double inspection requires that app to be stopped
-and the same Oracle/Redis to remain running. Full baseline contents/columns must
+After active verification and fixture cleanup finish, stop the same app in the
+batched milestone cleanup window and run the verifier. This necessary app-only
+stop/restart requires no additional approval. Its existing double inspection
+requires that app to be stopped and the same Oracle/Redis to remain running.
+Full baseline contents/columns must
 match their before capture; runtime contents/columns must match runtime_before.
 Use the same schema policy selected for preparation. Save the exact verifier JSON.
 Restore app availability independently of export/finalization success. The

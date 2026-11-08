@@ -95,3 +95,30 @@ existing equivalent table skips; inspect retained logs after any partial failure
 The actual HTTP delete failure and after-repair replay are separate diagnostic
 observations. A runtime with these additional tables needs its own truthful schema
 contract before any strict promotion; this fixture does not grant one.
+
+`core-file-restoration.sql` repairs the historical empty ten-column `T_CORE_FILE`
+after real queries referencing `size`, `version`, `permanent` and `createdByOrgId`
+failed with ORA-00904. Its manifest pins the original 21-column DDL, comments and
+TARGETID index, plus the original SIZE patch and historical ten-column seam.
+Run `python3 scripts/tests/test-core-file-restoration.py` first. Apply only in the
+existing local `FREEPDB1 / LIMS_RUNTIME_LOCAL`, with the application and jobs idle
+until all postchecks finish. The exclusive preflight lock is released by Oracle
+DDL commits and cannot protect later statements from concurrent writers.
+
+The fixture requires the exact empty ten-column table and its constraints,
+indexes, comments and dependencies before any DDL. It adds eleven columns and
+modifies nine existing columns in place, preserving the original table, ID,
+existing physical column positions and `PK_OWNED_CORE_FILE` name. The complete
+source types, lengths, nullability, 19 comments and TARGETID index are restored;
+the manifest explicitly records the different physical column order. An exact
+restored empty table is a verified no-op; nonempty, unknown or partial states
+fail. No business rows, attachment bytes, baseline changes or atomic DDL rollback
+are provided. Preserve execution logs on any failure.
+
+After targeted CoreFile TC/EC metadata invalidation and app recovery, rerun the
+original HTTP requests. The explicit `approved-runtime-core-file-v3` observation
+policy pins the baseline's ten columns and runtime's restored 21 columns, plus
+the existing nine added tables; all other shared metadata must match. Its 492
+predicates verify both CoreFile definitions. Existing equal/v1/v2 policies retain
+their original contracts and reject this new schema difference. A successful
+fixture, observer or differential remains separate from strict HTTP evidence.

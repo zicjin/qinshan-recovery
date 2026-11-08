@@ -14,7 +14,8 @@ from schema_fixture import BASE, OWNER, TABLES, FixtureError, checks, load_fixtu
 EQUAL = 'equal-schema'
 APPROVED = 'approved-missing-runtime-tables-v1'
 APPROVED_EMAIL = 'approved-missing-runtime-and-email-tables-v2'
-POLICIES = (EQUAL, APPROVED, APPROVED_EMAIL)
+APPROVED_FILE = 'approved-runtime-core-file-v3'
+POLICIES = (EQUAL, APPROVED, APPROVED_EMAIL, APPROVED_FILE)
 ROOT = Path(__file__).resolve().parents[1]
 FIXTURE_SHA256 = 'd1227563b5a27ef249376a0652ddd10f9edb6526f64a0df7b2e466ac9b5adfcb'
 DEFINITIONS = {
@@ -32,6 +33,9 @@ EMAIL_DEFINITIONS = {
     'T_CORE_EMAIL_CONFIG_RECEIPENT': '4636062c627dc070fc1bc727abaa4056a7492fce95c013774aceb483a05b049d',
     'T_CORE_EMAIL_CONFIG_REC_ROLE': '95f8e73cd203db23ff742c5c849496d93322bb861b708121664cc18ccd2377d9',
 }
+FILE_BASE = 'api-fixtures/schema/core-file-restoration'
+FILE_MANIFEST_SHA256 = '60817ef5a5073e7077cafeb12847a2660fffb70195d8a12e56f5cf717688acb2'
+FILE_TABLE = 'T_CORE_FILE'
 
 
 class PolicyError(ValueError):
@@ -98,7 +102,75 @@ def email_fixture(root):
 
 def policy_tables(policy):
     require(policy in POLICIES, 'unknown local schema policy')
-    return TABLES | frozenset(EMAIL_DEFINITIONS) if policy == APPROVED_EMAIL else TABLES
+    return TABLES | frozenset(EMAIL_DEFINITIONS) if policy in (APPROVED_EMAIL, APPROVED_FILE) else TABLES
+
+
+def core_file_fixture(root):
+    """Pin the one existing-table transformation; the baseline remains old10."""
+    root = Path(root)
+    raw = (root / (FILE_BASE + '.json')).read_bytes()
+    require(hashlib.sha256(raw).hexdigest() == FILE_MANIFEST_SHA256, 'CoreFile schema manifest drift')
+    manifest = json.loads(raw)
+    require(manifest['owner'] == OWNER and manifest['table'] == FILE_TABLE
+            and manifest['container'] == 'FREEPDB1', 'CoreFile fixture target mismatch')
+    for source in manifest['sources']:
+        data = (root / source['path']).read_bytes()
+        require(hashlib.sha256(data).hexdigest() == source['sha256'], 'CoreFile schema source drift')
+        lines = data.decode('utf-8').splitlines()
+        for block in source['blocks']:
+            start, end = block['line_start'], block['line_end']
+            require(1 <= start <= end <= len(lines), 'CoreFile source range mismatch')
+            text = '\n'.join(lines[start - 1:end])
+            require(hashlib.sha256(text.encode()).hexdigest() == block['sha256'], 'CoreFile source block drift')
+    fixture = manifest['fixture']
+    require(fixture['path'] == FILE_BASE + '.sql'
+            and hashlib.sha256((root / fixture['path']).read_bytes()).hexdigest() == fixture['sha256']
+            == manifest['fixture_sha256'], 'CoreFile schema fixture drift')
+    historical = {'columns': manifest['historical_columns'],
+                  'primary_key': {'name': manifest['retained_primary_key'], 'column': 'ID'},
+                  'indexes': [], 'comments': {}}
+    target = manifest['target_definition']
+    require(len(historical['columns']) == 10 and len(target['columns']) == 21
+            and historical['columns'] == manifest['old_columns']
+            and target['columns'] == manifest['restored_columns']
+            and [c['name'] for c in target['columns']] == manifest['physical_order'],
+            'CoreFile physical column definition mismatch')
+    provenance = {'manifest_path': FILE_BASE + '.json', 'manifest_sha256': FILE_MANIFEST_SHA256,
+                  'fixture_path': fixture['path'], 'fixture_sha256': fixture['sha256'],
+                  'sources': manifest['sources'], 'baseline_definition_sha256': digest(historical),
+                  'runtime_definition_sha256': digest(target)}
+    return historical, target, provenance
+
+
+def core_file_predicates(historical, target):
+    predicates = []
+    for owner, definition in (('LIMS_BASELINE_LOCAL', historical), (OWNER, target)):
+        for view, where, count in checks(FILE_TABLE, definition):
+            predicates.append({'table': FILE_TABLE, 'view': view,
+                               'predicate': where.replace("'" + OWNER + "'", "'" + owner + "'"),
+                               'expected_count': count})
+        predicates.extend([
+            {'table': FILE_TABLE, 'view': 'ALL_CONSTRAINTS',
+             'predicate': "CONSTRAINT_TYPE='R' AND R_OWNER='" + owner
+                          + "' AND R_CONSTRAINT_NAME='" + definition['primary_key']['name'] + "'",
+             'expected_count': 0},
+            {'table': FILE_TABLE, 'view': 'ALL_TAB_IDENTITY_COLS',
+             'predicate': "OWNER='" + owner + "' AND TABLE_NAME='T_CORE_FILE'", 'expected_count': 0},
+        ])
+    return predicates
+
+
+def core_file_column_rows(columns):
+    """Exact existing observer row shape, including fixed Oracle type lengths."""
+    rows = []
+    for ordinal, col in enumerate(columns, 1):
+        varchar = col['type'] == 'VARCHAR2'
+        length = col['length'] if varchar else {'NUMBER': 22, 'DATE': 7, 'TIMESTAMP(6)': 11}[col['type']]
+        rows.append([FILE_TABLE, col['name'], str(ordinal), col['type'], str(length),
+                     str(col['precision']) if col['precision'] is not None else '-',
+                     str(col['scale']) if col['scale'] is not None else '-', col['nullable'],
+                     str(col['length']) if varchar else '0', 'B' if varchar else '-', '-'])
+    return sorted(rows)
 
 
 def definition(policy=EQUAL, root=ROOT):
@@ -123,13 +195,18 @@ def definition(policy=EQUAL, root=ROOT):
                       'sources': sorted(manifest['sources'], key=lambda x: x['path']),
                       'definition_sha256': DEFINITIONS, 'table_count': 7, 'column_count': 105,
                       'predicates_sha256': digest(predicates)}
-        if policy == APPROVED_EMAIL:
+        if policy in (APPROVED_EMAIL, APPROVED_FILE):
             email, provenance = email_fixture(root)
             loaded.update(email)
             predicates = [{'table': table, 'view': view, 'predicate': where, 'expected_count': count}
                           for table, d in sorted(loaded.items()) for view, where, count in checks(table, d)]
             descriptor.update(id=APPROVED_EMAIL, definition_sha256={**DEFINITIONS, **EMAIL_DEFINITIONS},
                               table_count=9, column_count=125, additional_fixtures=[provenance],
+                              predicates_sha256=digest(predicates))
+        if policy == APPROVED_FILE:
+            historical, target, provenance = core_file_fixture(root)
+            predicates.extend(core_file_predicates(historical, target))
+            descriptor.update(id=APPROVED_FILE, altered_tables=[FILE_TABLE], core_file=provenance,
                               predicates_sha256=digest(predicates))
         return descriptor, predicates
     except (FixtureError, OSError, KeyError, TypeError, ValueError) as error:
@@ -143,8 +220,10 @@ def check_inventories(baseline, runtime, policy=EQUAL):
         require(baseline == runtime, 'baseline/runtime table inventories mismatch or empty')
     else:
         tables = policy_tables(policy)
-        require(policy in (APPROVED, APPROVED_EMAIL) and not baseline.intersection(tables)
+        require(policy in (APPROVED, APPROVED_EMAIL, APPROVED_FILE) and not baseline.intersection(tables)
                 and runtime == baseline.union(tables), 'approved schema table delta mismatch')
+        if policy == APPROVED_FILE:
+            require(FILE_TABLE in baseline, 'CoreFile historical baseline table missing')
 
 
 def proof_selects(predicates):
@@ -192,7 +271,7 @@ def validate(snapshot, policy=EQUAL):
                     'schema policy column hash runtime binding mismatch')
         columns = snapshot['schemas'][OWNER]['column_metadata']['rows']
         loaded = load_fixture(ROOT)
-        if policy == APPROVED_EMAIL:
+        if policy in (APPROVED_EMAIL, APPROVED_FILE):
             loaded.update(email_fixture(ROOT)[0])
         for table, d in loaded.items():
             actual = sorted([r for r in columns if r[0] == table], key=lambda r: int(r[2]))
@@ -206,7 +285,16 @@ def validate(snapshot, policy=EQUAL):
                     require(row[4] == row[8] == str(col['length']) and row[9] == 'B',
                             'approved fixture character metadata mismatch')
         shared = [r for r in columns if r[0] not in policy_tables(policy)]
-        require(sorted(shared) == sorted(snapshot['schemas']['LIMS_BASELINE_LOCAL']['column_metadata']['rows']),
+        baseline = snapshot['schemas']['LIMS_BASELINE_LOCAL']['column_metadata']['rows']
+        if policy == APPROVED_FILE:
+            historical, target, _ = core_file_fixture(ROOT)
+            require(sorted(r for r in baseline if r[0] == FILE_TABLE) == core_file_column_rows(historical['columns']),
+                    'CoreFile baseline column metadata mismatch')
+            require(sorted(r for r in shared if r[0] == FILE_TABLE) == core_file_column_rows(target['columns']),
+                    'CoreFile runtime column metadata mismatch')
+            shared = [r for r in shared if r[0] != FILE_TABLE]
+            baseline = [r for r in baseline if r[0] != FILE_TABLE]
+        require(sorted(shared) == sorted(baseline),
                 'baseline/runtime shared column metadata mismatch')
         binding = snapshot.get('source_binding', {})
         from source_binding import runtime_contract_digest

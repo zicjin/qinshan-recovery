@@ -1,0 +1,679 @@
+{
+  "version": 1,
+  "purpose": "Repair four demonstrated CoreFile query ORA-00904 errors by restoring original logical schema; DDL only, no business writes.",
+  "owner": "LIMS_RUNTIME_LOCAL",
+  "container": "FREEPDB1",
+  "table": "T_CORE_FILE",
+  "retained_primary_key": "PK_OWNED_CORE_FILE",
+  "sources": [
+    {
+      "path": "project/sql/核心发版14.1.5/init-sql/oracle/0.common_sql_oracle-1.txt",
+      "sha256": "99c1ba18054594384cc88a28ecc5c8c44f540e089e4c92ca92eddb94c2f17be1",
+      "blocks": [
+        {
+          "line_start": 1400,
+          "line_end": 1442,
+          "sha256": "024ada8693cc1ee057290c6221fd611f4387c0f4b6fe944222719b66337c9620"
+        },
+        {
+          "line_start": 14282,
+          "line_end": 14282,
+          "sha256": "2f412da00297b1801aad901b637283e15232c3e87b5e78e81603a7b262e1c83f"
+        }
+      ]
+    },
+    {
+      "path": "project/sql/oracle/oracle_sql_emc.txt",
+      "sha256": "7a933bb2f4463a046600d17dc6621e37839e7dd433f4b8bf8fdad60bc1b5cb73",
+      "blocks": [
+        {
+          "line_start": 5294,
+          "line_end": 5294,
+          "sha256": "15a46ea9afc0af1a5ecc483c7c63201831e13cad55d833e057589e5e6c564f31"
+        }
+      ]
+    },
+    {
+      "path": "scripts/start-reused-sss2-api-runtime.sh",
+      "sha256": "bfd8de878bbc6ba25ce2cd39e912f4cef71015d454af68d7f5b257d314cf227f",
+      "blocks": [
+        {
+          "line_start": 70,
+          "line_end": 88,
+          "sha256": "bf31cdceb1bcd5670e99c1764b9aa1079f219ff6e06bcfe5b5abda11e55d9a3a"
+        }
+      ]
+    }
+  ],
+  "old_columns": [
+    {
+      "name": "ID",
+      "type": "NUMBER",
+      "length": null,
+      "precision": null,
+      "scale": null,
+      "nullable": "N"
+    },
+    {
+      "name": "TARGETID",
+      "type": "VARCHAR2",
+      "length": 200,
+      "precision": null,
+      "scale": null,
+      "nullable": "Y"
+    },
+    {
+      "name": "NAME",
+      "type": "VARCHAR2",
+      "length": 256,
+      "precision": null,
+      "scale": null,
+      "nullable": "Y"
+    },
+    {
+      "name": "FILEEXT",
+      "type": "VARCHAR2",
+      "length": 32,
+      "precision": null,
+      "scale": null,
+      "nullable": "Y"
+    },
+    {
+      "name": "SCOPE",
+      "type": "VARCHAR2",
+      "length": 32,
+      "precision": null,
+      "scale": null,
+      "nullable": "Y"
+    },
+    {
+      "name": "MD5NAME",
+      "type": "VARCHAR2",
+      "length": 128,
+      "precision": null,
+      "scale": null,
+      "nullable": "Y"
+    },
+    {
+      "name": "CREATEDTIME",
+      "type": "TIMESTAMP(6)",
+      "length": null,
+      "precision": null,
+      "scale": 6,
+      "nullable": "Y"
+    },
+    {
+      "name": "BIZCATEGORY",
+      "type": "VARCHAR2",
+      "length": 128,
+      "precision": null,
+      "scale": null,
+      "nullable": "Y"
+    },
+    {
+      "name": "EXT",
+      "type": "VARCHAR2",
+      "length": 64,
+      "precision": null,
+      "scale": null,
+      "nullable": "Y"
+    },
+    {
+      "name": "DOWNLOADABLE",
+      "type": "VARCHAR2",
+      "length": 8,
+      "precision": null,
+      "scale": null,
+      "nullable": "Y"
+    }
+  ],
+  "restored_columns": [
+    {
+      "name": "ID",
+      "type": "NUMBER",
+      "length": null,
+      "precision": null,
+      "scale": null,
+      "nullable": "N"
+    },
+    {
+      "name": "TARGETID",
+      "type": "VARCHAR2",
+      "length": 60,
+      "precision": null,
+      "scale": null,
+      "nullable": "Y"
+    },
+    {
+      "name": "NAME",
+      "type": "VARCHAR2",
+      "length": 258,
+      "precision": null,
+      "scale": null,
+      "nullable": "Y"
+    },
+    {
+      "name": "FILEEXT",
+      "type": "VARCHAR2",
+      "length": 6,
+      "precision": null,
+      "scale": null,
+      "nullable": "N"
+    },
+    {
+      "name": "SCOPE",
+      "type": "VARCHAR2",
+      "length": 12,
+      "precision": null,
+      "scale": null,
+      "nullable": "N"
+    },
+    {
+      "name": "MD5NAME",
+      "type": "VARCHAR2",
+      "length": 36,
+      "precision": null,
+      "scale": null,
+      "nullable": "N"
+    },
+    {
+      "name": "CREATEDTIME",
+      "type": "DATE",
+      "length": null,
+      "precision": null,
+      "scale": null,
+      "nullable": "Y"
+    },
+    {
+      "name": "BIZCATEGORY",
+      "type": "VARCHAR2",
+      "length": 36,
+      "precision": null,
+      "scale": null,
+      "nullable": "Y"
+    },
+    {
+      "name": "EXT",
+      "type": "VARCHAR2",
+      "length": 129,
+      "precision": null,
+      "scale": null,
+      "nullable": "Y"
+    },
+    {
+      "name": "DOWNLOADABLE",
+      "type": "VARCHAR2",
+      "length": 3,
+      "precision": null,
+      "scale": null,
+      "nullable": "N"
+    },
+    {
+      "name": "TIMES",
+      "type": "NUMBER",
+      "length": null,
+      "precision": 4,
+      "scale": 0,
+      "nullable": "N"
+    },
+    {
+      "name": "VALIDTIMEFROM",
+      "type": "DATE",
+      "length": null,
+      "precision": null,
+      "scale": null,
+      "nullable": "Y"
+    },
+    {
+      "name": "VALIDTIMETO",
+      "type": "DATE",
+      "length": null,
+      "precision": null,
+      "scale": null,
+      "nullable": "Y"
+    },
+    {
+      "name": "CREATEDBYID",
+      "type": "VARCHAR2",
+      "length": 36,
+      "precision": null,
+      "scale": null,
+      "nullable": "Y"
+    },
+    {
+      "name": "CREATEDBYNAME",
+      "type": "VARCHAR2",
+      "length": 60,
+      "precision": null,
+      "scale": null,
+      "nullable": "Y"
+    },
+    {
+      "name": "PERMANENT",
+      "type": "VARCHAR2",
+      "length": 1,
+      "precision": null,
+      "scale": null,
+      "nullable": "N"
+    },
+    {
+      "name": "REMARK",
+      "type": "VARCHAR2",
+      "length": 258,
+      "precision": null,
+      "scale": null,
+      "nullable": "Y"
+    },
+    {
+      "name": "CREATEDBYORGID",
+      "type": "VARCHAR2",
+      "length": 36,
+      "precision": null,
+      "scale": null,
+      "nullable": "Y"
+    },
+    {
+      "name": "CREATEDBYORGNAME",
+      "type": "VARCHAR2",
+      "length": 270,
+      "precision": null,
+      "scale": null,
+      "nullable": "Y"
+    },
+    {
+      "name": "SIZE",
+      "type": "NUMBER",
+      "length": null,
+      "precision": 20,
+      "scale": 0,
+      "nullable": "Y"
+    },
+    {
+      "name": "VERSION",
+      "type": "NUMBER",
+      "length": null,
+      "precision": 20,
+      "scale": 0,
+      "nullable": "Y"
+    }
+  ],
+  "source_logical_column_order": [
+    "ID",
+    "TARGETID",
+    "MD5NAME",
+    "FILEEXT",
+    "SCOPE",
+    "TIMES",
+    "VALIDTIMEFROM",
+    "VALIDTIMETO",
+    "EXT",
+    "CREATEDTIME",
+    "NAME",
+    "CREATEDBYID",
+    "CREATEDBYNAME",
+    "PERMANENT",
+    "DOWNLOADABLE",
+    "BIZCATEGORY",
+    "REMARK",
+    "CREATEDBYORGID",
+    "CREATEDBYORGNAME",
+    "SIZE",
+    "VERSION"
+  ],
+  "comments": {
+    "ID": "主键",
+    "TARGETID": "对应业务主键",
+    "MD5NAME": "MD5加密的文件名称（主键+$+文件名称后加密）",
+    "FILEEXT": "文件扩展名（如：jpg,doc,gif等）",
+    "SCOPE": "访问范围（如：secure-登录才能访问 open-开放 temp-临时文件 import-数据导入）",
+    "TIMES": "下载次数",
+    "VALIDTIMEFROM": "生效开始日期",
+    "VALIDTIMETO": "生效截止日期",
+    "EXT": "额外信息",
+    "CREATEDTIME": "制单日期",
+    "NAME": "文件名称",
+    "CREATEDBYID": "制单人编码",
+    "CREATEDBYNAME": "制单人名称",
+    "PERMANENT": "长期生效（0-否 1-是）",
+    "DOWNLOADABLE": "是否允许下载（no-否 yes-是）",
+    "CREATEDBYORGID": "制单单位编码",
+    "CREATEDBYORGNAME": "制单单位名称",
+    "VERSION": "版本",
+    "": "文件"
+  },
+  "targetid_index": {
+    "name": "IDX_T_CORE_FILE_TARGETID",
+    "column": "TARGETID"
+  },
+  "fixture_sha256": "7c5b4e2ca3714a2789254adab692c42ffb44ee2e1d18dc5eb824c5daebb2730b",
+  "transformations": [
+    "Replace original CREATE with guarded in-place ADD of11 missing columns and MODIFY of9 existing non-ID columns; require exact10-column empty seam first.",
+    "Retain original10 physical column positions; append missing11 in their original relative order. Logical21-column types/lengths/nullability/default absence and original comments/index restored, physical ordinal intentionally differs from original CREATE.",
+    "Retain existing PK_OWNED_CORE_FILE constraint and index name instead of original PK_CORE_FILE; ID-only semantics unchanged.",
+    "Explicit owner and BYTE length semantics added; no table replacement, backup, business rows, or attachment bytes."
+  ],
+  "accepted_states": {
+    "old10_empty": "All old metadata/PK/index/comments/FK/trigger/dependency checks must pass before DDL.",
+    "restored21_empty": "Exact transformed metadata and original comments/index verified; no-op.",
+    "all_other_states": "Reject nonempty, partial, extra/default/hidden/virtual/identity, unknown constraints/indexes/comments/dependencies before DDL."
+  },
+  "execution_precondition": "Owned application and verification jobs quiescent; root independently reviews fixture and captures before state. SQL has owner/PDB/session/BYTE guards and exclusive NOWAIT lock. DDL implicit commits release locks, so prevent concurrent application writes externally.",
+  "limitations": [
+    "Oracle DDL implicitly commits; SQLERROR ROLLBACK cannot undo prior DDL. Preserve execution log and inspect partial state; unknown partial state is refused.",
+    "Baseline remains untouched. No production/supplier target, database connect, application refresh, cache invalidation or runtime execution is performed by fixture generation.",
+    "This fixture is not automatically applied at build/start; exact T_CORE_FILE runtime metadata cache followup and truthful schema policy are separate root-owned tasks."
+  ],
+  "strict_evidence": false,
+  "target_definition": {
+    "columns": [
+      {
+        "name": "ID",
+        "type": "NUMBER",
+        "length": null,
+        "precision": null,
+        "scale": null,
+        "nullable": "N"
+      },
+      {
+        "name": "TARGETID",
+        "type": "VARCHAR2",
+        "length": 60,
+        "precision": null,
+        "scale": null,
+        "nullable": "Y"
+      },
+      {
+        "name": "NAME",
+        "type": "VARCHAR2",
+        "length": 258,
+        "precision": null,
+        "scale": null,
+        "nullable": "Y"
+      },
+      {
+        "name": "FILEEXT",
+        "type": "VARCHAR2",
+        "length": 6,
+        "precision": null,
+        "scale": null,
+        "nullable": "N"
+      },
+      {
+        "name": "SCOPE",
+        "type": "VARCHAR2",
+        "length": 12,
+        "precision": null,
+        "scale": null,
+        "nullable": "N"
+      },
+      {
+        "name": "MD5NAME",
+        "type": "VARCHAR2",
+        "length": 36,
+        "precision": null,
+        "scale": null,
+        "nullable": "N"
+      },
+      {
+        "name": "CREATEDTIME",
+        "type": "DATE",
+        "length": null,
+        "precision": null,
+        "scale": null,
+        "nullable": "Y"
+      },
+      {
+        "name": "BIZCATEGORY",
+        "type": "VARCHAR2",
+        "length": 36,
+        "precision": null,
+        "scale": null,
+        "nullable": "Y"
+      },
+      {
+        "name": "EXT",
+        "type": "VARCHAR2",
+        "length": 129,
+        "precision": null,
+        "scale": null,
+        "nullable": "Y"
+      },
+      {
+        "name": "DOWNLOADABLE",
+        "type": "VARCHAR2",
+        "length": 3,
+        "precision": null,
+        "scale": null,
+        "nullable": "N"
+      },
+      {
+        "name": "TIMES",
+        "type": "NUMBER",
+        "length": null,
+        "precision": 4,
+        "scale": 0,
+        "nullable": "N"
+      },
+      {
+        "name": "VALIDTIMEFROM",
+        "type": "DATE",
+        "length": null,
+        "precision": null,
+        "scale": null,
+        "nullable": "Y"
+      },
+      {
+        "name": "VALIDTIMETO",
+        "type": "DATE",
+        "length": null,
+        "precision": null,
+        "scale": null,
+        "nullable": "Y"
+      },
+      {
+        "name": "CREATEDBYID",
+        "type": "VARCHAR2",
+        "length": 36,
+        "precision": null,
+        "scale": null,
+        "nullable": "Y"
+      },
+      {
+        "name": "CREATEDBYNAME",
+        "type": "VARCHAR2",
+        "length": 60,
+        "precision": null,
+        "scale": null,
+        "nullable": "Y"
+      },
+      {
+        "name": "PERMANENT",
+        "type": "VARCHAR2",
+        "length": 1,
+        "precision": null,
+        "scale": null,
+        "nullable": "N"
+      },
+      {
+        "name": "REMARK",
+        "type": "VARCHAR2",
+        "length": 258,
+        "precision": null,
+        "scale": null,
+        "nullable": "Y"
+      },
+      {
+        "name": "CREATEDBYORGID",
+        "type": "VARCHAR2",
+        "length": 36,
+        "precision": null,
+        "scale": null,
+        "nullable": "Y"
+      },
+      {
+        "name": "CREATEDBYORGNAME",
+        "type": "VARCHAR2",
+        "length": 270,
+        "precision": null,
+        "scale": null,
+        "nullable": "Y"
+      },
+      {
+        "name": "SIZE",
+        "type": "NUMBER",
+        "length": null,
+        "precision": 20,
+        "scale": 0,
+        "nullable": "Y"
+      },
+      {
+        "name": "VERSION",
+        "type": "NUMBER",
+        "length": null,
+        "precision": 20,
+        "scale": 0,
+        "nullable": "Y"
+      }
+    ],
+    "primary_key": {
+      "name": "PK_OWNED_CORE_FILE",
+      "column": "ID"
+    },
+    "indexes": [
+      {
+        "name": "IDX_T_CORE_FILE_TARGETID",
+        "column": "TARGETID"
+      }
+    ],
+    "comments": {
+      "ID": "主键",
+      "TARGETID": "对应业务主键",
+      "MD5NAME": "MD5加密的文件名称（主键+$+文件名称后加密）",
+      "FILEEXT": "文件扩展名（如：jpg,doc,gif等）",
+      "SCOPE": "访问范围（如：secure-登录才能访问 open-开放 temp-临时文件 import-数据导入）",
+      "TIMES": "下载次数",
+      "VALIDTIMEFROM": "生效开始日期",
+      "VALIDTIMETO": "生效截止日期",
+      "EXT": "额外信息",
+      "CREATEDTIME": "制单日期",
+      "NAME": "文件名称",
+      "CREATEDBYID": "制单人编码",
+      "CREATEDBYNAME": "制单人名称",
+      "PERMANENT": "长期生效（0-否 1-是）",
+      "DOWNLOADABLE": "是否允许下载（no-否 yes-是）",
+      "CREATEDBYORGID": "制单单位编码",
+      "CREATEDBYORGNAME": "制单单位名称",
+      "VERSION": "版本",
+      "": "文件"
+    }
+  },
+  "physical_order": [
+    "ID",
+    "TARGETID",
+    "NAME",
+    "FILEEXT",
+    "SCOPE",
+    "MD5NAME",
+    "CREATEDTIME",
+    "BIZCATEGORY",
+    "EXT",
+    "DOWNLOADABLE",
+    "TIMES",
+    "VALIDTIMEFROM",
+    "VALIDTIMETO",
+    "CREATEDBYID",
+    "CREATEDBYNAME",
+    "PERMANENT",
+    "REMARK",
+    "CREATEDBYORGID",
+    "CREATEDBYORGNAME",
+    "SIZE",
+    "VERSION"
+  ],
+  "historical_columns": [
+    {
+      "name": "ID",
+      "type": "NUMBER",
+      "length": null,
+      "precision": null,
+      "scale": null,
+      "nullable": "N"
+    },
+    {
+      "name": "TARGETID",
+      "type": "VARCHAR2",
+      "length": 200,
+      "precision": null,
+      "scale": null,
+      "nullable": "Y"
+    },
+    {
+      "name": "NAME",
+      "type": "VARCHAR2",
+      "length": 256,
+      "precision": null,
+      "scale": null,
+      "nullable": "Y"
+    },
+    {
+      "name": "FILEEXT",
+      "type": "VARCHAR2",
+      "length": 32,
+      "precision": null,
+      "scale": null,
+      "nullable": "Y"
+    },
+    {
+      "name": "SCOPE",
+      "type": "VARCHAR2",
+      "length": 32,
+      "precision": null,
+      "scale": null,
+      "nullable": "Y"
+    },
+    {
+      "name": "MD5NAME",
+      "type": "VARCHAR2",
+      "length": 128,
+      "precision": null,
+      "scale": null,
+      "nullable": "Y"
+    },
+    {
+      "name": "CREATEDTIME",
+      "type": "TIMESTAMP(6)",
+      "length": null,
+      "precision": null,
+      "scale": 6,
+      "nullable": "Y"
+    },
+    {
+      "name": "BIZCATEGORY",
+      "type": "VARCHAR2",
+      "length": 128,
+      "precision": null,
+      "scale": null,
+      "nullable": "Y"
+    },
+    {
+      "name": "EXT",
+      "type": "VARCHAR2",
+      "length": 64,
+      "precision": null,
+      "scale": null,
+      "nullable": "Y"
+    },
+    {
+      "name": "DOWNLOADABLE",
+      "type": "VARCHAR2",
+      "length": 8,
+      "precision": null,
+      "scale": null,
+      "nullable": "Y"
+    }
+  ],
+  "fixture": {
+    "path": "api-fixtures/schema/core-file-restoration.sql",
+    "sha256": "7c5b4e2ca3714a2789254adab692c42ffb44ee2e1d18dc5eb824c5daebb2730b"
+  }
+}

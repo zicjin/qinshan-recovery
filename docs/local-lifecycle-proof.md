@@ -6,6 +6,13 @@ private artifact observations and controlled proof-store objects stay outside Gi
 The local preparation and verifier are evidence components; they do not establish
 strict API coverage by themselves.
 
+The application may be refreshed for a new implementation checkpoint and briefly
+stopped/restarted for the existing milestone cleanup contract. Batch these actions
+around active verification; keep Oracle and Redis running and do not reimport
+data. Capture lifecycle snapshots after any app refresh so application identity
+and start time refer to the actual tested process. These proof tools do not
+perform the application lifecycle operations themselves.
+
 A clean source checkpoint is required. First acquire a current local observation
 and full baseline/runtime content snapshots with the existing read-only tools.
 Prepare a private seed JSON containing `before_files` with exactly

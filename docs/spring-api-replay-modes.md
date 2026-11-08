@@ -4,7 +4,14 @@ The supplier-exit work has two runtime modes. They share the same owned distribu
 
 ## Development debug mode
 
-Use the existing `sss2` clone and its long-lived owned Oracle, Redis and application. Keep the supplier application on `18081` untouched and use the separate owned loopback port. Reuse the same containers and application across cases.
+Use the existing local WSL application on `18087` with its long-lived Oracle and
+Redis. Keep Oracle running and do not reimport data. Reuse resources across cases;
+when application source or configuration changes, batch the changes into one
+checkpoint and perform the necessary app-only refresh before replay. Finish active
+verification and fixture cleanup first. Application refresh is allowed and does
+not require an additional approval; avoiding unnecessary restarts is an efficiency
+rule, not an uninterrupted-application requirement. Keep supplier `18081` read-only;
+sss2 deployment belongs to final delivery acceptance.
 
 Each case must:
 

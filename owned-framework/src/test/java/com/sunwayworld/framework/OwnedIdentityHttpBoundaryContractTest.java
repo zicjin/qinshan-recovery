@@ -101,9 +101,13 @@ public final class OwnedIdentityHttpBoundaryContractTest {
                 new UsernamePasswordAuthenticationToken("project-user", null, Collections.emptyList()));
         check("project-user".equals(boundary.currentPrincipal(session.httpSession()).getId()),
                 "authenticated project session is adapted to an owned principal");
+        check(!session.contains(OwnedIdentityHttpBoundary.SESSION_ATTRIBUTE),
+                "project identity adaptation does not create an explicit owned-login session");
         boundary.requirePermission(session.httpSession(), OwnedIdentityProvider.PERSONNEL_READ);
         check("project-user".equals(provider.seenAuthenticatedUser),
                 "project identity adoption revalidates through the provider");
+        check(provider.issueAuthenticatedCalls == 2,
+                "each original-session access obtains a fresh provider snapshot");
         SecurityContextHolder.clearContext();
         final RequestFixture http = new RequestFixture(session.httpSession(), "u-a", "ciphertext", "rsa-fixture");
         OwnedIdentityHttpController controller = new OwnedIdentityHttpController(boundary, new OwnedLoginCredentialDecoder() {

@@ -81,7 +81,10 @@ public final class OwnedIdentityHttpBoundary {
             try {
                 OwnedPrincipal adopted = provider.issueAuthenticated(authenticatedUserId);
                 if (adopted == null) throw denied();
-                if (session != null) session.setAttribute(SESSION_ATTRIBUTE, adopted);
+                // The original Spring Security session owns this identity.
+                // A read adapter must not turn it into an explicit owned login:
+                // the early owned filter uses that session state to select its
+                // isolated route/write policy on subsequent requests.
                 return adopted;
             } catch (SQLException failure) {
                 record("session", authenticatedUserId, null, null, AuditEvent.Outcome.DENIED, "identity-provider-failure");

@@ -12,7 +12,7 @@ emcAuditedAnalysis.editPage = {
                     grid.setOptions({
                         requestData : {
                             // monitorTmplId : row.monitorTmplId,
-                            projId : row.projId,
+                            projId : row.id,
                             scheme_only : '',
             	            orgId_filter : '1',
 

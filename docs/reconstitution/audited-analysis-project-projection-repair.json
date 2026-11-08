@@ -1,0 +1,96 @@
+{
+  "schema": 1,
+  "classification": "original-application-UI-query-contract-defect",
+  "source_checkpoint": "4d7025a54d8fc223d3d0a7608eff5fce6d275e41",
+  "route": {
+    "method": "POST",
+    "path": "/secure/emc/module/bp/project/projects/analysis-projects/queries"
+  },
+  "baseline": {
+    "supplier_artifact_sha256": "4a720797810fd2f8cca6e22604657028cb87830ca0e24bb55a5f42f040f6ee9f",
+    "same_request_failure": "Both isolated supplier and owned return HTTP500 / ORA-00904 PROJECTNO for the original ext$.projectno_CISC quick filter under matching principal, organization and roles.",
+    "stock_resource_comparison": "Original audited-analysis JavaScript and both project Oracle mapper XML files match the approved stock artifact after line-ending normalization.",
+    "scope": "This corrects an original UI contract. It is not classified as a reconstructed framework regression or a strict API pass."
+  },
+  "original_source_chain": [
+    "emc-audited-analysis.js getEditListColumns",
+    "original Grid header filter setHeadRequestData appends CISC to the actual UI column field",
+    "EmcProjectResourceImpl.selectAnalysisAuditProject",
+    "EmcProjectServiceImpl.selectAnalysisAuditProject",
+    "EmcProjectDaoImpl injects PfProjectMapper",
+    "pf-project-oracle-mapper.xml selectAnalysisAuditProject projects T_EMC_PROJECT A.* and B.BIZCATEGORYNAME",
+    "GenericService.selectPagination maps projected rows to EmcProjectBean"
+  ],
+  "column_contract": [
+    {"previous": "ext$.projectno", "field": "projNo", "projection": "A.PROJNO", "binding": "EmcProjectBean.projNo"},
+    {"previous": "ext$.projname", "field": "projName", "projection": "A.PROJNAME", "binding": "EmcProjectBean.projName"},
+    {"previous": "ext$.projcreatedbyname", "field": "createdByName", "projection": "A.CREATEDBYNAME", "binding": "EmcProjectBean.createdByName"},
+    {"previous": "ext$.testorgname", "field": "testOrgName", "projection": "A.TESTORGNAME", "binding": "EmcProjectBean.testOrgName"},
+    {"previous": "ext$.entrustorgname", "field": "entrustOrgName", "projection": "A.ENTRUSTORGNAME", "binding": "EmcProjectBean.entrustOrgName"},
+    {"previous": "ext$.bizcategoryname", "field": "ext$.bizcategoryname", "projection": "B.BIZCATEGORYNAME", "binding": "original extension property"}
+  ],
+  "row_activation": {
+    "previous": "projId: row.projId",
+    "current": "projId: row.id",
+    "reason": "The project query exposes its primary key as id. It does not project projId. Passing undefined drops the intended project scope from the child run query.",
+    "preserved": ["original asynchronous child readiness", "scheme_only", "orgId_filter", "original child URL"]
+  },
+  "unresolved_order_category": {
+    "field": "orderCategory",
+    "status": "source-model-gap",
+    "projection_present": false,
+    "display_column_retained": true,
+    "filter": false,
+    "sort": false,
+    "reason": "The active PfProjectMapper does not project report category, and EmcProjectBean has no orderCategory. The earlier base mapper joins T_EMC_REPORT, but restoring that one-to-many join would change shared query cardinality and totals for several consumers. This repair does not make that business choice.",
+    "actual_grid_contract": "Original Grid header renders no editor when column.filter === false. Original Grid.sort emits no ordering when column.sort === false. search:false is not used because it does not control these Grid operations."
+  },
+  "preserved_contracts": [
+    "status_SEQ=auditQuery",
+    "org_filter=1",
+    "original pagination and sorting for the six supported fields",
+    "original query URL and original Mapper SQL",
+    "original urgent indicator and column labels",
+    "GlobalMapper filtering and all Java implementations"
+  ],
+  "regression": {
+    "command": "node scripts/tests/test-audited-analysis-projection.js",
+    "before": "0/4 assertions pass: original column projection, actual header controls, CISC keys and selected project ID all fail.",
+    "after": "4/4 assertions pass using actual current chunk-common header render, filter-key generation and sort methods plus the actual page callback.",
+    "limits": "VM tests simulate Vue DOM/child readiness collaborators. They are not browser or real HTTP evidence."
+  },
+  "read_only_HTTP_validation": {
+    "checkpoint_application": "Existing unmodified source-only API; this change only corrects UI requests and was not deployed during validation.",
+    "identity": "Supplier and owned principal, organization and roles matched through real current-account reads.",
+    "original_page_profile": {
+      "preserved_filter": {"status_SEQ": "auditQuery", "org_filter": "1"},
+      "requests": "Default plus each of six corrected CISC no-match filters, once per side: 14 HTTP query requests.",
+      "result": "Both sides HTTP200, total0, rows[] for all profiles; no ORA-00904.",
+      "positive_data": "Blocked: the original auditQuery profile has no matching rows. Empty equivalence is not positive behavior coverage."
+    },
+    "independent_source_projection_profile": {
+      "scope": "Explicit separate read-only profile preserving org_filter while omitting the auditQuery status filter. No status or fixture was written.",
+      "requests": "Two existing-project reads, six actual-value CISC probes per side and one page2/size1/descending probe per side: 16 HTTP query requests.",
+      "result": "Both sides expose91 organization-scoped projects; common real sample fields match. Each six-field actual-value probe returns exactly the same existing entity with total1. Page2/size1 returns one row. Actual response lacks orderCategory, confirming the separate model gap.",
+      "limits": "This demonstrates the existing query supports the corrected six fields and pagination. It is not a positive replay of the original auditQuery page state, deployed UI acceptance or strict evidence."
+    },
+    "total_query_HTTP_requests": 30,
+    "SQL_statements": 0,
+    "business_writes": 0,
+    "supplier_changes": 0,
+    "runtime_refreshes": 0
+  },
+  "related_equipment_findings": {
+    "shared_safe_UI_patch": false,
+    "DTO_ledger_queries": "Three equipment summary endpoints assign displayed equiptNo only after pagination. Their child queries use equipment foreign keys, so renaming equiptNo to equiptId would compare a display code with a numeric FK and corrupt filter semantics.",
+    "period_check_plan": "The plan UI calls a record resource while the intended plan Mapper projects CODENAME. This is a different entity/route contract and cannot be fixed by this project's field mapping.",
+    "disposition": "Keep those original failures separately attributed; do not rewrite controllers or globally translate field names."
+  },
+  "deployment": {
+    "source_only": true,
+    "supplier_changed": false,
+    "runtime_refreshed_by_this_change": false,
+    "business_data_written": false,
+    "strict_evidence_promoted": false
+  }
+}

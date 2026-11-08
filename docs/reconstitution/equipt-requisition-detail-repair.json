@@ -1,0 +1,90 @@
+{
+  "schema": "source-backed-equipment-requisition-detail-repair-v1",
+  "finding": "BUG-13",
+  "classification": "explicit-original-system-defect-repair",
+  "strict_evidence": false,
+  "base_checkpoint": "4d7025a5",
+  "approved_stock_sha256": "4a720797810fd2f8cca6e22604657028cb87830ca0e24bb55a5f42f040f6ee9f",
+  "observed_before": "Supplier and owned identical404 for existingentity detail page; original source/stock have detail template andJS but no controller detail mapping. Existing private route-sql diagnosis preserves both responses and source hashes.",
+  "exact_route": "/secure/emc/module/mdm/basemdm/equipt-requisitions/page/detail?id={id}&operType=search",
+  "layered_failures": [
+    {
+      "layer": "Spring handler",
+      "red": "actual MockMvc GET404",
+      "fix": "Extend original GenericDetailPageController; implement detailPage returning the existing original template, using the same annotation pattern as adjacent controllers."
+    },
+    {
+      "layer": "original detail initializer",
+      "red": "Real Thymeleaf render loading both originalJS scripts then fails TypeError getDetailFormColumns not a function.",
+      "fix": "Build22read-only detail fields by copying existing original search columns and excluding the selection checkbox; existing field titles/types/categories and entity URL remain."
+    }
+  ],
+  "search_mode": {
+    "readonly": true,
+    "field_count": 22,
+    "no_Save_button": true,
+    "existing_entity_read_path": "/secure/emc/module/mdm/basemdm/equipt-requisitions/{id}",
+    "original_params": [
+      "id",
+      "operType=search"
+    ],
+    "no_business_writes": true
+  },
+  "outside_scope": [
+    "No new detail edit/save behavior",
+    "No new DAO orbusinessfilter",
+    "No new permission rules",
+    "No HTTP bridge/process",
+    "No placeholder template or fixedsuccess"
+  ],
+  "source_files": [
+    {
+      "path": "project/src/main/java/com/sunwayworld/emc/module/mdm/basemdm/equiptrequisition/controller/EmcEquiptRequisitionController.java",
+      "before_sha256": "f5d46c1ae3e65f06e9d6c5904c219c952fa2e4d0083a4e85054a9b41f18c1085",
+      "after_sha256": "16adefa356a4c16125c2bce4d5b22b54714cbbf825f5b8020f10a74e0d5588bd"
+    },
+    {
+      "path": "project/src/main/java/com/sunwayworld/emc/module/mdm/basemdm/equiptrequisition/controller/impl/EmcEquiptRequisitionControllerImpl.java",
+      "before_sha256": "c6d3707d5a332e6a97511621f2d3be9c42e7172d9c30752a0d7927ae8cd6d52a",
+      "after_sha256": "305ce6c98c68a71b5105810955caebf989ac6eb4341a180a123f0411955f8495"
+    },
+    {
+      "path": "project/src/main/resources/static/emc/module/mdm/basemdm/equipt-requisitions/emc-equipt-requisition.js",
+      "before_sha256": "60f2884d81453ba6524b3d32e8c2b6cdf32953bdfa37ed0732307a5a823be773",
+      "after_sha256": "a94e30420bafba6e8fa004a688de706dc71d1ffe87f9783d19a250e7ba286e50"
+    }
+  ],
+  "stock_resources": [
+    {
+      "stock_member": "BOOT-INF/classes/static/emc/module/mdm/basemdm/equipt-requisitions/emc-equipt-requisition.js",
+      "stock_sha256": "917d4fb4db629304ff95f24f8804f02c2f8b1f5046bef45bf1ecf51a8dfc4c88",
+      "current_sha256": "a94e30420bafba6e8fa004a688de706dc71d1ffe87f9783d19a250e7ba286e50",
+      "unchanged_detail_template_or_JS_normalized_matches_stock": false
+    },
+    {
+      "stock_member": "BOOT-INF/classes/static/emc/module/mdm/basemdm/equipt-requisitions/emc-equipt-requisition-detail.js",
+      "stock_sha256": "d757b5c400ea528685a4357d4eff0e7e76b2d28923e3436df33b6ab7cffe5fca",
+      "current_sha256": "db75e9f4c248c1a2ab07f4bed87bc14eb5b7d39ee60f3df0a285c943332aa686",
+      "unchanged_detail_template_or_JS_normalized_matches_stock": true
+    },
+    {
+      "stock_member": "BOOT-INF/classes/templates/emc/module/mdm/basemdm/equipt-requisitions/emc-equipt-requisition-detail.html",
+      "stock_sha256": "0e15421b7aa30b6c771c886e9377a60404bd7390d0f58f4b43113e2ef0a076d5",
+      "current_sha256": "df6aefdf395fe9c4eef6060d8f780195d68e81f49a41c54f3b70420be487add9",
+      "unchanged_detail_template_or_JS_normalized_matches_stock": true
+    }
+  ],
+  "regression": {
+    "command": "python3 scripts/tests/test-equipt-requisition-detail.py --dependency-root <existing-source-only-build-root> --spring-test <public-spring-test-5.2.9.RELEASE.jar>",
+    "real_chain": "Actual controllers → Spring MVC mapping → real Thymeleaf → original dependency load order → original JS initialization → 22 readonly fields and original /{id} entity URL",
+    "test_fixture": "Static ID23 in isolated context only; no HTTP/database",
+    "adjacent_pages": [
+      "edit-list",
+      "audit-list",
+      "search-list",
+      "instrument-out"
+    ],
+    "other_tests": "Existing11 business page initialization checks PASS",
+    "runtime_after": "Pending root source-only build/app-only refresh and original entity modal readback; no strict pass claimed"
+  }
+}

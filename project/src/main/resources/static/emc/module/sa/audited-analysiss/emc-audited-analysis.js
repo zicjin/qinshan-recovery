@@ -7,7 +7,7 @@ var emcAuditedAnalysis = Gikam.getPageObject({
         return [ {
             index : true
         }, {
-            field : 'ext$.projectno',
+            field : 'projNo',
             title : 'T_EMC_PROJECT.PROJNO',
             formatter : function(i, v ,r) {
                 if(r.urgent==1){
@@ -18,19 +18,23 @@ var emcAuditedAnalysis = Gikam.getPageObject({
                 }
             },
         }, {
-            field : 'ext$.projname',
+            field : 'projName',
             title : 'T_EMC_PROJECT.PROJNAME',
         }, {
             field : 'orderCategory',
-            title : 'T_EMC_REPORT.ORDERCATEGORY'
+            title : 'T_EMC_REPORT.ORDERCATEGORY',
+            // PfProjectMapper returns project rows without a report category.
+            // Keep the display column pending that separate model contract.
+            filter : false,
+            sort : false
         }, {
-            field : 'ext$.projcreatedbyname',
+            field : 'createdByName',
             title : 'T_EMC_PROJECT.CREATEDBYNAME'
         }, {
-            field : 'ext$.testorgname',
+            field : 'testOrgName',
             title : 'T_EMC_PROJECT.TESTORG'
         }, {
-            field : 'ext$.entrustorgname',
+            field : 'entrustOrgName',
             title : 'T_EMC_PROJECT.ENTRUSTORG'
         }, {
             field : 'ext$.bizcategoryname',

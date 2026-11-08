@@ -118,6 +118,15 @@ var emcEquiptRequisition = Gikam.getPageObject({
             return readonlyColumn;
         });
     },
+    getDetailFormColumns: function () {
+        return this.getSearchListColumns().filter(function (column) {
+            return !!column.field;
+        }).map(function (column) {
+            var field = Object.assign({}, column);
+            field.readonly = true;
+            return field;
+        });
+    },
     getInstrumentOutEditListColumns: function () {
         return [{
             checkbox: true

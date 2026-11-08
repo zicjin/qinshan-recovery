@@ -99,7 +99,7 @@ public final class InvoiceReturnedAmountTest {
 
     private static RestJsonWrapperBean body(String amount) {
         return new RestJsonWrapperBean(Collections.emptyMap(),
-            Collections.singletonList(Collections.singletonList("{\"returnedAmount\":\"" + amount + "\"}")),
+            Collections.singletonList(Collections.singletonList(amount == null ? "{}" : com.alibaba.fastjson.JSON.toJSONString(Collections.singletonMap("returnedAmount", amount)))),
             Collections.singletonList(null));
     }
 
@@ -161,7 +161,19 @@ public final class InvoiceReturnedAmountTest {
             ApplicationContextHelper.setApplicationContext(context);
             EmcInvoiceService invoices = context.getBean(EmcInvoiceService.class);
             EmcReturnedService service = context.getBean(EmcReturnedService.class);
-            if (scenario.equals("null") || scenario.equals("empty") || scenario.equals("blank")) {
+            if (scenario.equals("invalid-input")) {
+                for (String value : java.util.Arrays.asList(null, "", " \t ", "not-a-number", "1,000", "NaN", "Infinity")) {
+                    boolean rejected = false;
+                    try { service.insert(INVOICE_ID, body(value)); }
+                    catch (com.sunwayworld.framework.exception.checked.CheckedException error) {
+                        rejected = true;
+                        expect("GIKAM.EXCEPTION.PARAM_ERROR", error.getMessage(), "controlled amount input error");
+                    }
+                    expect(true, rejected, "invalid monetary input rejected");
+                    expect(0, store.invoiceWrites, "invalid input does not update parent");
+                    expect(0, store.returnWrites, "invalid input does not insert return");
+                }
+            } else if (scenario.equals("null") || scenario.equals("empty") || scenario.equals("blank")) {
                 rejected(service, store, "1", "请输入开票金额！");
                 expect(amount, invoices.selectById(INVOICE_ID).getInvoiceAmount(), "rejected invoice amount retained");
             } else {

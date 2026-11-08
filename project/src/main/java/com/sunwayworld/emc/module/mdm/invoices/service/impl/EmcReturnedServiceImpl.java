@@ -11,6 +11,7 @@ import com.sunwayworld.framework.at.annotation.AuditTrailType;
 import com.sunwayworld.framework.audit.aunnotation.Audit;
 import com.sunwayworld.framework.beans.BeanPropertyListener;
 import com.sunwayworld.framework.context.ApplicationContextHelper;
+import com.sunwayworld.framework.exception.checked.CheckedException;
 import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;
 import com.sunwayworld.framework.spring.annotation.GikamBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,7 +56,7 @@ public class EmcReturnedServiceImpl implements EmcReturnedService {
         }
         List<EmcReturnedBean> returnedList = getDao().selectListByOneColumnValue(id, "invoiceId");
         List<BigDecimal> returnedAmountList = returnedList.stream().map(e -> new BigDecimal(e.getReturnedAmount())).collect(Collectors.toList());
-        BigDecimal returnedAmount = new BigDecimal(emcReturned.getReturnedAmount());
+        BigDecimal returnedAmount = parseReturnedAmount(emcReturned.getReturnedAmount());
         for (int i = 0; i < returnedAmountList.size(); i++) {
             returnedAmount = returnedAmount.add(returnedAmountList.get(i));
         }
@@ -109,7 +110,7 @@ public class EmcReturnedServiceImpl implements EmcReturnedService {
             item.setInvoiceAmount(previous.getInvoiceAmount());
             item.setUncollectedAmount(previous.getUncollectedAmount());
             if (hasReturnedAmount(item)) {
-                BigDecimal amount = new BigDecimal(Objects.requireNonNull(item.getReturnedAmount(), "Return amount is required"));
+                BigDecimal amount = parseReturnedAmount(item.getReturnedAmount());
                 amounts.put(id, amount);
                 if (amount.compareTo(new BigDecimal(previous.getReturnedAmount())) != 0) {
                     invoiceIds.add(previous.getInvoiceId());
@@ -154,6 +155,17 @@ public class EmcReturnedServiceImpl implements EmcReturnedService {
                     .anyMatch(event -> "returnedAmount".equalsIgnoreCase(event.getPropertyDescriptor().getName()));
         }
         return item.getReturnedAmount() != null;
+    }
+
+    private BigDecimal parseReturnedAmount(String value) {
+        if (value == null || value.trim().isEmpty()) {
+            throw new CheckedException("GIKAM.EXCEPTION.PARAM_ERROR");
+        }
+        try {
+            return new BigDecimal(value);
+        } catch (NumberFormatException error) {
+            throw new CheckedException("GIKAM.EXCEPTION.PARAM_ERROR", error);
+        }
     }
 
     @Override

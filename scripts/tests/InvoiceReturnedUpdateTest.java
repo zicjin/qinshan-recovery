@@ -464,7 +464,8 @@ public final class InvoiceReturnedUpdateTest {
                         if(scenario.equals("missing")) save(ctx,"{\"id\":999,\"returnedAmount\":\"60\"}");
                         else if(scenario.equals("null-id")) { EmcReturnedBean patch=new EmcReturnedBean(); patch.setReturnedAmount("60"); service.updateIfChanged(patch); }
                         else { EmcReturnedBean patch=com.sunwayworld.framework.utils.BeanUtils.getPropertyListenerProxy(EmcReturnedBean.class); patch.setId(302L); patch.setReturnedAmount(null); service.updateIfChanged(patch); }
-                    } catch(NullPointerException expected) { rejected=true; }
+                    } catch(NullPointerException expected) { if(scenario.equals("null-amount")) throw expected; rejected=true; }
+                    catch(com.sunwayworld.framework.exception.checked.CheckedException expected) { if(!scenario.equals("null-amount")) throw expected; rejected=true; }
                     equal(true,rejected,"invalid update never silently inserts or succeeds"); equal("70",service.selectById(302L).getReturnedAmount(),"invalid update retains existing amount");
                     flag(invoices,41,"1"); equal(0,store.childUpdates,"invalid input writes no child"); equal(0,store.audit("AUDIT_RECORD"),"invalid input creates no audit");
                 } else if(scenario.equals("missing-amount")) {
@@ -475,6 +476,21 @@ public final class InvoiceReturnedUpdateTest {
                         catch(AuthenticationServiceException expected) { rejected=true; equal("请输入开票金额！",expected.getMessage(),"existing amount guard"); }
                         equal(true,rejected,"amount change cannot infer absent invoice amount");
                         equal("70",service.selectById(302L).getReturnedAmount(),"amount guard preserves return"); flag(invoices,41,"1");
+                    }
+                } else if(scenario.equals("invalid-amount-input")) {
+                    for (String value : Arrays.asList("", " \t ", "not-a-number", "1,000", "NaN", "Infinity")) {
+                        boolean rejected=false;
+                        try {
+                            save(ctx,"{\"id\":301,\"returnedAmount\":\"20\"}",
+                                com.alibaba.fastjson.JSON.toJSONString(new java.util.LinkedHashMap<String,Object>() {{ put("id",302L); put("returnedAmount",value); }}));
+                        } catch(com.sunwayworld.framework.exception.checked.CheckedException error) {
+                            rejected=true; equal("GIKAM.EXCEPTION.PARAM_ERROR",error.getMessage(),"controlled malformed amount");
+                        }
+                        equal(true,rejected,"invalid second row rejects entire batch before write");
+                        equal("30",service.selectById(301L).getReturnedAmount(),"first valid row unchanged");
+                        equal("70",service.selectById(302L).getReturnedAmount(),"second invalid row unchanged");
+                        equal(0,store.childUpdates,"validation precedes first SQL update");
+                        equal(0,store.audit("AUDIT_RECORD"),"invalid batch has no audit"); flag(invoices,41,"1");
                     }
                 } else if(scenario.equals("duplicate")) {
                     boolean rejected=false;

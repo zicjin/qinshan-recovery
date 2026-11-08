@@ -9,13 +9,15 @@ import hashlib
 import importlib.util
 import json
 from pathlib import Path
+import re
 from schema_fixture import BASE, OWNER, TABLES, FixtureError, checks, load_fixture
 
 EQUAL = 'equal-schema'
 APPROVED = 'approved-missing-runtime-tables-v1'
 APPROVED_EMAIL = 'approved-missing-runtime-and-email-tables-v2'
 APPROVED_FILE = 'approved-runtime-core-file-v3'
-POLICIES = (EQUAL, APPROVED, APPROVED_EMAIL, APPROVED_FILE)
+APPROVED_LES = 'approved-runtime-les-data-source-v4'
+POLICIES = (EQUAL, APPROVED, APPROVED_EMAIL, APPROVED_FILE, APPROVED_LES)
 ROOT = Path(__file__).resolve().parents[1]
 FIXTURE_SHA256 = 'd1227563b5a27ef249376a0652ddd10f9edb6526f64a0df7b2e466ac9b5adfcb'
 DEFINITIONS = {
@@ -36,6 +38,12 @@ EMAIL_DEFINITIONS = {
 FILE_BASE = 'api-fixtures/schema/core-file-restoration'
 FILE_MANIFEST_SHA256 = '60817ef5a5073e7077cafeb12847a2660fffb70195d8a12e56f5cf717688acb2'
 FILE_TABLE = 'T_CORE_FILE'
+LES_BASE = 'api-fixtures/schema/les-data-source-restoration'
+LES_MANIFEST_SHA256 = 'a38f468b4db751e1fac4854ffd9482c7a56fea4ad2dfaeb7fe843fef6f691919'
+LES_DEFINITIONS = {
+    'T_CORE_LES_DS': 'fe554b8dae313c9f1a7a8db1c6a59583fbd5232fcc3dc7b43360e8ac19df049e',
+    'T_CORE_LES_DS_FIELD': '319730d6ed00daae131146e97bc0ceca38353772841b5f65b7cd16f0b9ae80da',
+}
 
 
 class PolicyError(ValueError):
@@ -102,7 +110,59 @@ def email_fixture(root):
 
 def policy_tables(policy):
     require(policy in POLICIES, 'unknown local schema policy')
-    return TABLES | frozenset(EMAIL_DEFINITIONS) if policy in (APPROVED_EMAIL, APPROVED_FILE) else TABLES
+    tables = TABLES | frozenset(EMAIL_DEFINITIONS) if policy in (APPROVED_EMAIL, APPROVED_FILE, APPROVED_LES) else TABLES
+    return tables | frozenset(LES_DEFINITIONS) if policy == APPROVED_LES else tables
+
+
+def les_fixture(root):
+    """Verify the existing finite R02 fixture, without changing old admission."""
+    root = Path(root)
+    raw = (root / (LES_BASE + '.json')).read_bytes()
+    require(hashlib.sha256(raw).hexdigest() == LES_MANIFEST_SHA256, 'LES schema manifest drift')
+    manifest = json.loads(raw)
+    require(manifest['owner'] == OWNER and set(manifest['tables']) == set(LES_DEFINITIONS),
+            'LES schema fixture table coverage mismatch')
+    sources = {}
+    for source in manifest['sources']:
+        data = (root / source['path']).read_bytes()
+        require(hashlib.sha256(data).hexdigest() == source['sha256'], 'LES schema source drift')
+        sources[source['path']] = data.decode('utf-8').splitlines(keepends=True)
+    renderer = root / 'scripts/schema_fixture.py'
+    require(hashlib.sha256(renderer.read_bytes()).hexdigest() == manifest['generator_sha256'],
+            'LES schema renderer drift')
+    spec = importlib.util.spec_from_file_location('les_schema_fixture', renderer)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    module.TABLES = frozenset(LES_DEFINITIONS)
+    statements = []
+    for block in manifest['source_blocks']:
+        lines = sources[block['source']]
+        start, end = block['line_start'], block['line_end']
+        require(1 <= start <= end <= len(lines), 'LES schema source range mismatch')
+        text = ''.join(lines[start - 1:end]).strip()
+        require(hashlib.sha256(text.encode()).hexdigest() == block['source_sha256'], 'LES source block drift')
+        original = module.statements(text)
+        require([hashlib.sha256(s.encode()).hexdigest() for s in original] == block['statement_sha256'],
+                'LES source statement drift')
+        normalized = []
+        for statement in original:
+            parts = re.split(r"('(?:''|[^'])*')", statement)
+            for position in range(0, len(parts), 2):
+                parts[position] = re.sub(r'\s+', ' ', parts[position]).replace(' add ORDERNO', ' ADD ORDERNO')
+            normalized.append(''.join(parts).strip())
+        require([hashlib.sha256(s.encode()).hexdigest() for s in normalized] == block['normalized_sha256'],
+                'LES normalized statement drift')
+        statements.extend(normalized)
+    loaded = module.definitions(statements)
+    logical = {t: {k: v for k, v in d.items() if k != 'statements'} for t, d in loaded.items()}
+    require({t: digest(d) for t, d in logical.items()} == LES_DEFINITIONS, 'LES schema definition drift')
+    fixture = manifest['fixture']
+    data = (root / fixture['path']).read_bytes()
+    require(fixture['path'] == LES_BASE + '.sql' and hashlib.sha256(data).hexdigest() == fixture['sha256']
+            and data == module.render(loaded, OWNER).encode('utf-8'), 'LES schema fixture drift')
+    return loaded, {'manifest_path': LES_BASE + '.json', 'manifest_sha256': LES_MANIFEST_SHA256,
+                    'fixture_path': fixture['path'], 'fixture_sha256': fixture['sha256'],
+                    'source_blocks': manifest['source_blocks'], 'generator_sha256': manifest['generator_sha256']}
 
 
 def core_file_fixture(root):
@@ -195,7 +255,7 @@ def definition(policy=EQUAL, root=ROOT):
                       'sources': sorted(manifest['sources'], key=lambda x: x['path']),
                       'definition_sha256': DEFINITIONS, 'table_count': 7, 'column_count': 105,
                       'predicates_sha256': digest(predicates)}
-        if policy in (APPROVED_EMAIL, APPROVED_FILE):
+        if policy in (APPROVED_EMAIL, APPROVED_FILE, APPROVED_LES):
             email, provenance = email_fixture(root)
             loaded.update(email)
             predicates = [{'table': table, 'view': view, 'predicate': where, 'expected_count': count}
@@ -203,10 +263,19 @@ def definition(policy=EQUAL, root=ROOT):
             descriptor.update(id=APPROVED_EMAIL, definition_sha256={**DEFINITIONS, **EMAIL_DEFINITIONS},
                               table_count=9, column_count=125, additional_fixtures=[provenance],
                               predicates_sha256=digest(predicates))
-        if policy == APPROVED_FILE:
+        if policy in (APPROVED_FILE, APPROVED_LES):
             historical, target, provenance = core_file_fixture(root)
             predicates.extend(core_file_predicates(historical, target))
             descriptor.update(id=APPROVED_FILE, altered_tables=[FILE_TABLE], core_file=provenance,
+                              predicates_sha256=digest(predicates))
+        if policy == APPROVED_LES:
+            les, provenance = les_fixture(root)
+            loaded.update(les)
+            predicates.extend({'table': table, 'view': view, 'predicate': where, 'expected_count': count}
+                              for table, d in sorted(les.items()) for view, where, count in checks(table, d))
+            descriptor.update(id=APPROVED_LES, definition_sha256={**DEFINITIONS, **EMAIL_DEFINITIONS, **LES_DEFINITIONS},
+                              table_count=11, column_count=152,
+                              additional_fixtures=[*descriptor['additional_fixtures'], provenance],
                               predicates_sha256=digest(predicates))
         return descriptor, predicates
     except (FixtureError, OSError, KeyError, TypeError, ValueError) as error:
@@ -220,9 +289,9 @@ def check_inventories(baseline, runtime, policy=EQUAL):
         require(baseline == runtime, 'baseline/runtime table inventories mismatch or empty')
     else:
         tables = policy_tables(policy)
-        require(policy in (APPROVED, APPROVED_EMAIL, APPROVED_FILE) and not baseline.intersection(tables)
+        require(policy in (APPROVED, APPROVED_EMAIL, APPROVED_FILE, APPROVED_LES) and not baseline.intersection(tables)
                 and runtime == baseline.union(tables), 'approved schema table delta mismatch')
-        if policy == APPROVED_FILE:
+        if policy in (APPROVED_FILE, APPROVED_LES):
             require(FILE_TABLE in baseline, 'CoreFile historical baseline table missing')
 
 
@@ -271,8 +340,10 @@ def validate(snapshot, policy=EQUAL):
                     'schema policy column hash runtime binding mismatch')
         columns = snapshot['schemas'][OWNER]['column_metadata']['rows']
         loaded = load_fixture(ROOT)
-        if policy in (APPROVED_EMAIL, APPROVED_FILE):
+        if policy in (APPROVED_EMAIL, APPROVED_FILE, APPROVED_LES):
             loaded.update(email_fixture(ROOT)[0])
+        if policy == APPROVED_LES:
+            loaded.update(les_fixture(ROOT)[0])
         for table, d in loaded.items():
             actual = sorted([r for r in columns if r[0] == table], key=lambda r: int(r[2]))
             require(len(actual) == len(d['columns']), 'approved fixture column metadata coverage mismatch')
@@ -286,7 +357,7 @@ def validate(snapshot, policy=EQUAL):
                             'approved fixture character metadata mismatch')
         shared = [r for r in columns if r[0] not in policy_tables(policy)]
         baseline = snapshot['schemas']['LIMS_BASELINE_LOCAL']['column_metadata']['rows']
-        if policy == APPROVED_FILE:
+        if policy in (APPROVED_FILE, APPROVED_LES):
             historical, target, _ = core_file_fixture(ROOT)
             require(sorted(r for r in baseline if r[0] == FILE_TABLE) == core_file_column_rows(historical['columns']),
                     'CoreFile baseline column metadata mismatch')

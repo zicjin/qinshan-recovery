@@ -2,6 +2,9 @@
 """Contract tests for the source-to-owned business API inventory."""
 import tempfile
 import unittest
+import hashlib
+import json
+import subprocess
 from pathlib import Path
 import sys
 
@@ -14,6 +17,144 @@ from business_api_inventory import (extract_routes, build_inventory,
 
 
 class BusinessApiInventoryTest(unittest.TestCase):
+    def test_explicit_trace_is_not_unrestricted_any(self):
+        rows = extract_routes('''
+@RequestMapping("/files")
+public class Files {
+ @RequestMapping(method={RequestMethod.TRACE}) void insert() {}
+ @RequestMapping(value="/headers", method={RequestMethod.HEAD, RequestMethod.OPTIONS}) void headers() {}
+}
+''', "Files.java")
+        self.assertEqual({("TRACE", "/files"), ("HEAD", "/files/headers"),
+                          ("OPTIONS", "/files/headers")},
+                         {(row["method"], row["path"]) for row in rows})
+
+    def test_cli_scans_compiler_main_roots_and_preserves_old_project_id(self):
+        with tempfile.TemporaryDirectory() as raw:
+            root = Path(raw)
+            def write(path, text):
+                path = root / path
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_text(text, encoding="utf-8")
+                return path
+            write("scripts/build-source-only-application.py", '''
+owned_source_roots = [ROOT / name / "src/main/java"
+                      for name in ("owned-demo",)]
+''')
+            write("docs/reconstitution/framework-module-registry.json", json.dumps({
+                "modules": [{"module": "owned-core-demo"}]
+            }))
+            source = write("project/src/main/java/demo/ProjectResource.java", '''
+package demo;
+@RequestMapping("/project")
+public interface ProjectResource {
+ @GetMapping("/one") String one();
+}
+''')
+            write("owned-demo/src/main/java/demo/MainController.java", '''
+package demo;
+@RestController
+public class MainController {
+ @GetMapping("/owned-main") String main() {return "main";}
+}
+''')
+            write("owned-demo/src/test/java/demo/TestController.java", '''
+package demo;
+@RestController
+public class TestController {
+ @GetMapping("/test-only") String main() {return "test";}
+}
+''')
+            base = "reconstituted/framework/owned-core-demo/src/main/java/"
+            write(base + "demo/GenericTree.java", '''
+package demo;
+public interface GenericTree<T> {
+ @PostMapping("/tree/{parentId}") Object tree();
+}
+''')
+            write(base + "demo/Selector.java", '''
+package demo;
+public interface Selector<T> extends GenericTree<java.util.Map<String,java.util.List<T>>> {
+ @GetMapping("/selectable") Object select();
+}
+''')
+            write(base + "demo/test/FrameworkResource.java", '''
+package demo.test;
+import demo.Selector;
+@RequestMapping("/framework")
+public interface FrameworkResource extends Selector<java.util.Map<String,java.util.List<Long>>> {}
+''')
+            write(base + "demo/test/FrameworkResourceImpl.java", '''
+package demo.test;
+@RestController
+@ConditionalOnProperty("enabled")
+public class FrameworkResourceImpl implements FrameworkResource {}
+''')
+            write(base + "demo/UnimplementedResource.java", '''
+package demo;
+@RequestMapping("/no-bean")
+public interface UnimplementedResource extends Selector<String> {}
+''')
+            write("project/src/main/java/demo/PageImpl.java", '''
+package demo;
+import demo.ParentPage;
+@Controller
+public class PageImpl implements ParentPage {
+ @GetMapping("/detail") String detail() {return "detail";}
+}
+''')
+            write(base + "demo/ParentPage.java", '''
+package demo;
+@RequestMapping("/page")
+public interface ParentPage { String detail(); }
+''')
+            output = root / "inventory.json"
+            result = subprocess.run([
+                sys.executable, "-B", str(ROOT / "tools/business_api_inventory.py"),
+                "--source-root", str(source.parents[1]), "--output", str(output),
+            ], text=True, capture_output=True)
+            self.assertEqual(0, result.returncode, result.stderr)
+            payload = json.loads(output.read_text())
+        project = payload["routes"]
+        original = next(row for row in project if row["path"] == "/project/one")
+        self.assertEqual("demo/ProjectResource.java", original["source"])
+        self.assertEqual(hashlib.sha256(b"GET /project/one demo.ProjectResource").hexdigest()[:16], original["id"])
+        page = next(row for row in project if row["path"] == "/page/detail")
+        wrong_id = hashlib.sha256(b"GET /detail demo.PageImpl").hexdigest()[:16]
+        self.assertNotIn(wrong_id, page.get("source_route_ids", []))
+        self.assertIn(wrong_id, {row["id"] for row in payload["removed_source_rows"]})
+        boundary = payload["boundary_routes"]
+        self.assertEqual({("GET", "/owned-main"), ("GET", "/framework/selectable"),
+                          ("POST", "/framework/tree/{parentId}")},
+                         {(row["method"], row["path"]) for row in boundary})
+        selected = next(row for row in boundary if row["path"] == "/framework/selectable")
+        self.assertEqual("unverified", selected["runtime_registration"])
+        self.assertEqual(["ConditionalOnProperty"], selected["handler_candidates"][0]["conditions"])
+
+    def test_compiled_framework_interfaces_include_observed_inherited_routes(self):
+        framework = ROOT / "reconstituted/framework"
+        roots = [path for path in sorted(framework.glob("*/src/main/java"))]
+        rows = build_owned_boundary_inventory(roots, [])
+        keys = {(row["method"], row["path"]) for row in rows}
+        expected = {
+            ("GET", "/secure/core/module/mdm/orgs/queries/selectable"),
+            ("POST", "/secure/core/module/mdm/orgs/queries/choosable"),
+            ("GET", "/core/module/sys/role-permission-types/queries/selectable"),
+            ("GET", "/secure/core/module/mdm/user-permission-types/queries/selectable"),
+            ("ANY", "/secure/core/les/les-dses/page/edit-list"),
+            ("ANY", "/secure/core/les/les-templates/page/edit-list"),
+            ("ANY", "/secure/core/les/les-templates/page/audit-list"),
+            ("ANY", "/secure/core/module/sys/audit/audit-logs/page/search-list"),
+            ("POST", "/secure/core/module/mdm/orgs/tree/{parentId}"),
+            ("POST", "/secure/core/module/mdm/orgs/pop-tree/{parentId}"),
+            ("POST", "/secure/core/module/sys/tables/{table}/columns/queries/choosable"),
+        }
+        self.assertFalse(expected - keys, sorted(expected - keys))
+        selected = [row for row in rows if (row["method"], row["path"]) in expected]
+        self.assertTrue(all(row["behavior_status"] == "unknown" for row in selected))
+        self.assertTrue(all(row["handler_candidates"] for row in selected))
+        self.assertTrue(all(row["runtime_registration"] == "unverified" for row in selected))
+
     def test_extracts_class_and_method_routes(self):
         source = '''
 @RequestMapping("/secure/emc/module/demo")

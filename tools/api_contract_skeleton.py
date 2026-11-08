@@ -355,7 +355,34 @@ def behavior_manifest(routes: List[Mapping[str, Any]], assignment: Mapping[str, 
                                   "route_kind": route.get("route_kind"), "route_origin": route.get("route_origin", "project-spring-source"),
                                   "role": route.get("roles", "unknown"), "organization": route.get("organizations", "unknown"),
                                   "unknown_reason": route.get("unknown_reason", "HTTP contract not executed")})
-        for reference in chain + ([source.reference(path)] if (path := source.resolve(str(route.get("source", "")))) else []):
+        declarations = [route] + list(route.get("route_sources", []))
+        # Retain every candidate's bytes without inferring which conditional
+        # handler Spring selected. Source references define conservative replay
+        # dependencies; they do not establish dispatch or alias equivalence.
+        pending_declarations = list(declarations)
+        seen_declarations = set()
+        declarations = []
+        while pending_declarations:
+            declaration = pending_declarations.pop()
+            if isinstance(declaration, str):
+                declaration = {"source": declaration}
+            if not isinstance(declaration, Mapping):
+                continue
+            marker = json.dumps(declaration, sort_keys=True)
+            if marker in seen_declarations:
+                continue
+            seen_declarations.add(marker)
+            declarations.append(declaration)
+            for field in ("inherited_mapping_sources", "handler_candidates", "shadowed_sources", "route_sources"):
+                pending_declarations.extend(declaration.get(field, []))
+            if declaration.get("mapping_source"):
+                pending_declarations.append(declaration["mapping_source"])
+        declaration_references = []
+        for declaration in declarations:
+            path = source.resolve(str(declaration.get("source", "")))
+            if path:
+                declaration_references.append(source.reference(path))
+        for reference in chain + declaration_references:
             if reference not in family["source_provenance"]:
                 family["source_provenance"].append(reference)
         for statement in source.mapper_statements(route):

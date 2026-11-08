@@ -164,6 +164,55 @@ def wave(route: Dict[str, object]) -> str:
     return "secondary"
 
 
+def unique_routes(inventory: Dict[str, object]) -> tuple[List[Dict[str, object]], List[Dict[str, object]]]:
+    """Keep a single disposition for a wire route, with every declaration pinned.
+
+    Duplicate source declarations (base interface, specialized interface and
+    implementation) are provenance, not additional HTTP routes. This does not
+    resolve Spring bean conditions or prove which candidate handler is active.
+    Existing single-route IDs survive; merged declarations retain their IDs as
+    explicit source aliases for evidence remapping.
+    """
+    groups: Dict[tuple[str, str], List[tuple[bool, Dict[str, object]]]] = collections.defaultdict(list)
+    for boundary, name in ((False, "routes"), (True, "boundary_routes")):
+        for source in inventory.get(name, []):
+            route = dict(source)
+            groups[(str(route.get("method", "")).upper(), str(route.get("path", "")))].append((boundary, route))
+    project, boundary_rows = [], []
+    for key, declarations in sorted(groups.items()):
+        # Preserve project ownership when a framework/owned facade advertises
+        # the same route. The source scanner records actual shadow candidates.
+        declarations.sort(key=lambda item: (item[0], str(item[1].get("class", "")),
+                                           str(item[1].get("source", "")), str(item[1].get("id", ""))))
+        is_boundary, selected = declarations[0]
+        route = dict(selected)
+        route["method"], route["path"] = key
+        ids, sources, owned_sources = set(), [], set()
+        seen = set()
+        for declared_boundary, item in declarations:
+            ids.add(str(item["id"]))
+            ids.update(str(value) for value in item.get("source_route_ids", []))
+            ids.update(str(value) for value in item.get("legacy_route_ids", []))
+            owned_sources.update(str(value) for value in item.get("owned_sources", []))
+            provenance = {name: item[name] for name in (
+                "id", "source", "class", "annotation", "route_origin",
+                "mapping_source", "handler_candidates", "source_sha256",
+                "inherited_mapping_sources", "shadowed_sources",
+            ) if name in item}
+            provenance["boundary_source"] = declared_boundary
+            serialized = json.dumps(provenance, sort_keys=True)
+            if serialized not in seen:
+                seen.add(serialized)
+                sources.append(provenance)
+        route["source_route_ids"] = sorted(ids)
+        route["route_sources"] = sources
+        route["owned_sources"] = sorted(owned_sources)
+        route["source_declaration_count"] = len(declarations)
+        route["handler_registration"] = "source-candidate; real Spring registration requires runtime observation"
+        (boundary_rows if is_boundary else project).append(route)
+    return project, boundary_rows
+
+
 def build(inventory: Dict[str, object], native_registry: Dict[str, object] | None = None,
           inventory_source: str | None = None) -> Dict[str, object]:
     # Native registry/history is browser-priority metadata.  It must not be a
@@ -190,7 +239,7 @@ def build(inventory: Dict[str, object], native_registry: Dict[str, object] | Non
         route["unknown_reason"] = "no clone-derived HTTP evidence registered"
         # Boundary is an ownership classification only.  It is served by an
         # owned Java Controller/Resource in the same Spring application.
-        route["route_origin"] = "owned-java-source-only" if boundary else "project-spring-source"
+        route.setdefault("route_origin", "owned-java-source-only" if boundary else "project-spring-source")
         route["boundary_semantics"] = (
             "owned Java source-only route; boundary route != boundary process"
             if boundary else "project Spring route"
@@ -198,9 +247,10 @@ def build(inventory: Dict[str, object], native_registry: Dict[str, object] | Non
         route["runtime_model"] = "same-spring-application"
         return route
 
-    routes: List[Dict[str, object]] = [enrich(source_route) for source_route in inventory.get("routes", [])]
+    project_sources, boundary_sources = unique_routes(inventory)
+    routes: List[Dict[str, object]] = [enrich(source_route) for source_route in project_sources]
     boundary_routes: List[Dict[str, object]] = [
-        enrich(source_route, boundary=True) for source_route in inventory.get("boundary_routes", [])
+        enrich(source_route, boundary=True) for source_route in boundary_sources
     ]
     families, _jobs, family_assignment = behavior_manifest(
         routes + boundary_routes,
@@ -255,6 +305,8 @@ def build(inventory: Dict[str, object], native_registry: Dict[str, object] | Non
             "page-other": "routes without a higher-priority family marker",
         },
         "counts": {
+            "source_route_count": len(inventory.get("routes", [])) + len(inventory.get("boundary_routes", [])),
+            "deduplicated_source_rows": len(inventory.get("routes", [])) + len(inventory.get("boundary_routes", [])) - len(routes) - len(boundary_routes),
             "route_count": len(routes),
             "project_route_count": len(routes),
             "total_route_count": len(routes) + len(boundary_routes),

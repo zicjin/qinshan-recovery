@@ -136,6 +136,34 @@ SELECT A.ID,A.NAME FROM T_PEOPLE A
             self.assertIsNone(family["source_handler"])
             self.assertIn("source handler", " ".join(family["unknown_reasons"]))
 
+    def test_duplicate_declaration_source_is_retained_in_family_dependencies(self):
+        other = self.root / "reconstituted/framework/owned-core-common/src/main/java/fixture/OtherResource.java"
+        other.parent.mkdir(parents=True)
+        other.write_text("package fixture; public interface OtherResource {}")
+        row = self.ledger["routes"][0]
+        row["route_sources"] = [{"source": str(other.relative_to(self.root)),
+                                 "class": "fixture.OtherResource", "id": "old-other-id"}]
+        first = next(f for f in self.build()["behavior_families"] if "p-query" in f["alias_route_ids"])
+        self.assertIn(str(other.relative_to(self.root)), {r["path"] for r in first["source_provenance"]})
+        other.write_text("package fixture; public interface OtherResource { String SHAPE = \"v2\"; }")
+        second = next(f for f in self.build()["behavior_families"] if "p-query" in f["alias_route_ids"])
+        self.assertNotEqual(first["family_fingerprint"], second["family_fingerprint"])
+
+    def test_candidate_implementation_changes_affect_family_without_claiming_dispatch(self):
+        row = self.ledger["routes"][0]
+        row["owned_sources"] = []
+        row["handler_candidates"] = [{"class": "fixture.SharedController",
+                                       "source": str(self.controller.relative_to(self.root)),
+                                       "runtime_registration": "unverified"}]
+        row["route_sources"] = [{"source": row["source"], "handler_candidates": row["handler_candidates"]}]
+        first = next(f for f in self.build()["behavior_families"] if "p-query" in f["alias_route_ids"])
+        self.assertIsNone(first["source_handler"])
+        self.assertIn(str(self.controller.relative_to(self.root)),
+                      {r["path"] for r in first["source_provenance"]})
+        self.controller.write_text(self.controller.read_text().replace("return service.query(body)", "return null"))
+        second = next(f for f in self.build()["behavior_families"] if "p-query" in f["alias_route_ids"])
+        self.assertNotEqual(first["family_fingerprint"], second["family_fingerprint"])
+
     def test_source_chain_and_mapper_are_hashed_static_provenance(self):
         family = next(f for f in self.build()["behavior_families"] if "p-query" in f["alias_route_ids"])
         source = next(f for f in family["source_provenance"] if f["path"].endswith("SharedController.java"))

@@ -10,6 +10,7 @@ Spring application as project routes; they are not separate processes.
 from __future__ import annotations
 
 import argparse
+import ast
 import hashlib
 import json
 import re
@@ -32,7 +33,7 @@ HTTP_ANNOTATIONS = {
     "DeleteMapping": "DELETE",
     "PatchMapping": "PATCH",
 }
-REQUEST_METHODS = {"GET", "POST", "PUT", "DELETE", "PATCH", "HEAD", "OPTIONS"}
+REQUEST_METHODS = {"GET", "POST", "PUT", "DELETE", "PATCH", "HEAD", "OPTIONS", "TRACE"}
 OWNED_ROUTE_ALIAS_EXPANSIONS = {
     # The controller intentionally uses one bounded {resource} mapping for
     # these concrete GenericResource status aliases. Keep the inventory
@@ -131,6 +132,13 @@ def _source_dirty() -> bool:
     return implementation_dirty(REPO_ROOT)
 
 
+def _source_reference(path: Path) -> str:
+    try:
+        return str(path.resolve().relative_to(REPO_ROOT))
+    except ValueError:
+        return str(path)
+
+
 def _quoted_values(text: str, key: str = "", constants: Optional[Mapping[str, str]] = None) -> List[str]:
     if key:
         # Stop at the array's closing brace, allowing a quoted route itself
@@ -176,7 +184,7 @@ def _annotation(line: str, constants: Optional[Mapping[str, str]] = None) -> Opt
         methods = [HTTP_ANNOTATIONS[name]]
     else:
         found = re.findall(r"RequestMethod\.([A-Z]+)", args)
-        methods = [item for item in found if item in REQUEST_METHODS] or ["ANY"]
+        methods = [item for item in found if item in REQUEST_METHODS] if found else ["ANY"]
     return {"name": name, "paths": paths, "methods": methods, "has_explicit_method": bool(re.search(r"RequestMethod\.", args))}
 
 
@@ -221,34 +229,42 @@ def _class_mapping_paths(source: str) -> List[str]:
 
 
 def _declared_types(source: str) -> List[str]:
-    parents: List[str] = []
-    declaration = re.search(
-        r"\b(?:class|interface|enum)\s+\w+\s+(?:(?:extends|implements)\s+([^\{]+))?\{",
-        source,
-        flags=re.S,
-    )
+    declaration = re.search(r"\b(?:class|interface|enum)\s+\w+([^\{]*)\{", source)
     if not declaration:
-        return parents
-    clause = declaration.group(1) or ""
-    for item in clause.split(","):
-        # Remove generic arguments and annotations; simple names are enough
-        # because the source index also keeps fully-qualified names.
-        value = re.sub(r"<[^>]*>", "", item)
-        value = re.sub(r"@\w+(?:\([^)]*\))?", "", value).strip()
-        if value:
-            parents.append(value.split()[-1].split(".")[-1])
-    # Generic type arguments contain commas, so the simple comma split above
-    # can leave fragments such as ``GenericResource<Object``.  Preserve the
-    # framework parents that control inherited HTTP mappings explicitly.
-    for known in ("GenericResource", "GenericAuditableResource"):
-        if re.search(r"\b" + known + r"\b", clause):
-            parents.append(known)
-    return sorted(set(parents))
+        return []
+    # Remove complete nested generic arguments before splitting parents. A
+    # comma inside Map<String,List<T>> never separates two Java parent types.
+    depth = 0
+    plain = []
+    for char in declaration.group(1):
+        if char == "<":
+            depth += 1
+        elif char == ">":
+            depth -= 1
+        elif depth == 0:
+            plain.append(char)
+    clause = "".join(plain)
+    parent_clause = re.search(r"\b(?:extends|implements)\s+(.+)", clause, re.S)
+    if not parent_clause:
+        return []
+    return sorted(set(re.findall(
+        r"[A-Za-z_$][\w.$]*", re.sub(r"\bimplements\b", ",", parent_clause.group(1))
+    )))
+
+
+def _test_source_path(path: Path) -> bool:
+    parts = path.parts
+    return any(parts[index:index + 2] in {
+        ("src", "test"), ("src", "testFixtures"), ("src", "integrationTest"),
+    } for index in range(len(parts) - 1))
 
 
 def _source_infos(source_root: Path) -> Dict[str, Dict[str, object]]:
+    source_root = source_root.resolve()
     infos: Dict[str, Dict[str, object]] = {}
     for source_path in sorted(source_root.rglob("*.java")):
+        if _test_source_path(source_path):
+            continue
         relative = str(source_path.relative_to(source_root)).replace("\\", "/")
         source = source_path.read_text(encoding="utf-8", errors="replace")
         constants = {
@@ -264,10 +280,49 @@ def _source_infos(source_root: Path) -> Dict[str, Dict[str, object]]:
             "class_bases": _class_mapping_paths(source),
             "parents": _declared_types(source),
             "constants": constants,
+            "text": source,
+            "source_root": source_root,
+            "imports": dict((name.rsplit(".", 1)[-1], name) for name in
+                            re.findall(r"^\s*import\s+([\w.]+)\s*;", source, re.M)),
+            "is_interface": bool(re.search(r"\binterface\s+" + re.escape(source_path.stem) + r"\b", source)),
+            "is_handler": bool(re.search(r"@(RestController|Controller)\b", source))
+                          and not bool(re.search(r"\babstract\s+class\b", source)),
         }
         infos[str(info["simple"])] = info
         infos[str(info["qualified"])] = info
     return infos
+
+
+def _parent_info(info: Dict[str, object], parent: str,
+                 infos: Dict[str, Dict[str, object]]) -> Optional[Dict[str, object]]:
+    imported = info.get("imports", {}).get(parent)
+    package = str(info["qualified"]).rsplit(".", 1)[0]
+    for name in (imported, parent if "." in parent else package + "." + parent, parent):
+        if name and name in infos:
+            return infos[name]
+    return None
+
+
+def _source_index(roots: Sequence[Path]) -> Dict[str, Dict[str, object]]:
+    """First FQN wins, matching framework > project > transitional owned."""
+    qualified = {}
+    for root in roots:
+        for name, info in _source_infos(root).items():
+            if name != info["qualified"]:
+                continue
+            if name in qualified:
+                if info["source"] != qualified[name]["source"]:
+                    qualified[name].setdefault("shadowed_sources", []).append(str(info["source"]))
+            else:
+                qualified[name] = info
+    result = dict(qualified)
+    simple = {}
+    for info in qualified.values():
+        simple.setdefault(str(info["simple"]), []).append(info)
+    for name, candidates in simple.items():
+        if len(candidates) == 1:
+            result[name] = candidates[0]
+    return result
 
 
 def _resolved_class_bases(info: Dict[str, object], infos: Dict[str, Dict[str, object]], seen: Optional[Set[str]] = None) -> List[str]:
@@ -278,7 +333,7 @@ def _resolved_class_bases(info: Dict[str, object], infos: Dict[str, Dict[str, ob
     seen.add(key)
     bases = list(info["class_bases"])
     for parent in info["parents"]:
-        parent_info = infos.get(str(parent))
+        parent_info = _parent_info(info, str(parent), infos)
         if parent_info:
             bases.extend(_resolved_class_bases(parent_info, infos, seen))
     return sorted(set(str(item) for item in bases))
@@ -295,7 +350,7 @@ def _inherits(info: Dict[str, object], infos: Dict[str, Dict[str, object]], targ
     if target in parents:
         return True
     for parent in parents:
-        parent_info = infos.get(parent)
+        parent_info = _parent_info(info, parent, infos)
         if parent_info and _inherits(parent_info, infos, target, seen):
             return True
     return False
@@ -303,7 +358,7 @@ def _inherits(info: Dict[str, object], infos: Dict[str, Dict[str, object]], targ
 
 def _routes_for_source(info: Dict[str, object], infos: Dict[str, Dict[str, object]]) -> List[Dict[str, str]]:
     source_path = info["source"]
-    source = source_path.read_text(encoding="utf-8", errors="replace")
+    source = info.get("text") or source_path.read_text(encoding="utf-8", errors="replace")
     routes = extract_routes(source, str(info["relative"]), info.get("constants", {}))
     bases = _resolved_class_bases(info, infos)
     resolved: List[Dict[str, str]] = []
@@ -352,6 +407,42 @@ def _routes_for_source(info: Dict[str, object], infos: Dict[str, Dict[str, objec
     unique = {}
     for route in resolved:
         unique[(route["method"], route["path"], route["class"], route["annotation"])] = route
+    # Walk the actual source parents, including selector/chooser/tree and
+    # custom interfaces across module roots. Rootless Generic interfaces are
+    # never materialized as independent handlers.
+    if bases and (info["class_bases"] or not info.get("is_interface", False)):
+        visited = set()
+        def inherit(child):
+            for name in child["parents"]:
+                parent = _parent_info(child, str(name), infos)
+                if not parent or parent["qualified"] in visited:
+                    continue
+                visited.add(parent["qualified"])
+                parent_routes = extract_routes(parent["text"], str(parent["relative"]), parent["constants"])
+                for route in parent_routes:
+                    suffix = route["path"]
+                    if route.get("class_base"):
+                        suffix = suffix[len(route["class_base"]):]
+                    for base in bases:
+                        # An inherited class mapping is already in bases;
+                        # never append the same base twice.
+                        path = _join(base, suffix)
+                        provenance = {"source": _source_reference(parent["source"]), "class": parent["qualified"],
+                                      "annotation": route["annotation"]}
+                        matches = [row for row in unique.values()
+                                   if row["method"] == route["method"] and row["path"] == path]
+                        if matches:
+                            for row in matches:
+                                if provenance not in row.setdefault("inherited_mapping_sources", []):
+                                    row["inherited_mapping_sources"].append(provenance)
+                            continue
+                        item = {"source": str(info["relative"]), "class": str(info["qualified"]),
+                                "class_base": base, "method": route["method"], "path": path,
+                                "annotation": "inherited." + str(parent["simple"]),
+                                "inherited_mapping_sources": [provenance]}
+                        unique[(item["method"], path, item["class"], item["annotation"])] = item
+                inherit(parent)
+        inherit(info)
     return list(unique.values())
 
 
@@ -480,25 +571,87 @@ def _packaged_classes(distribution: Optional[Path]) -> Set[str]:
 
 
 def _runtime_java_sources(source_root: Path) -> Dict[str, Dict[str, object]]:
-    return {
-        qualified: info
-        for qualified, info in _source_infos(source_root).items()
-        if not any(
-            part in {"test", "testFixtures", "integrationTest"}
-            for part in Path(str(info["relative"])).parts
-        )
-    }
+    return _source_infos(source_root)
+
+
+def _handler_candidates(info: Dict[str, object], infos: Dict[str, Dict[str, object]]) -> List[Dict[str, object]]:
+    if "_handler_candidates" in info:
+        return info["_handler_candidates"]
+    candidates = []
+    for name, handler in infos.items():
+        if name != handler["qualified"] or not handler.get("is_handler"):
+            continue
+        if handler is not info and not _inherits(handler, infos, str(info["qualified"])):
+            # _inherits also accepts short generic fallback names. Candidate
+            # matching must resolve the actual FQN to avoid package collisions.
+            seen = set()
+            def implements(child):
+                if child["qualified"] in seen:
+                    return False
+                seen.add(child["qualified"])
+                for parent in child["parents"]:
+                    found = _parent_info(child, str(parent), infos)
+                    if found and (found is info or implements(found)):
+                        return True
+                return False
+            if not implements(handler):
+                continue
+        conditions = re.findall(r"@(GikamBean|Profile|Conditional\w*)\b", str(handler["text"]))
+        candidates.append({"class": handler["qualified"], "source": _source_reference(handler["source"]),
+                           "conditions": sorted(set(conditions)),
+                           "runtime_registration": "unverified"})
+    info["_handler_candidates"] = sorted(candidates, key=lambda row: str(row["class"]))
+    return info["_handler_candidates"]
+
+
+def _compiled_source_roots(source_root: Path, explicit_owned: Sequence[Path]) -> Tuple[List[Path], List[Path]]:
+    """Read existing build inputs; do not maintain a second module allowlist."""
+    source_root = source_root.resolve()
+    root = source_root.parents[3]  # project/src/main/java -> repository
+    registry = root / "docs/reconstitution/framework-module-registry.json"
+    framework = []
+    if registry.is_file():
+        for module in json.loads(registry.read_text())["modules"]:
+            path = root / "reconstituted/framework" / module["module"] / "src/main/java"
+            if path.is_dir():
+                framework.append(path)
+    owned = list(explicit_owned)
+    compiler = root / "scripts/build-source-only-application.py"
+    if compiler.is_file():
+        # The source-only compiler is authoritative for which transitional
+        # modules enter this application. Read its literal module tuple.
+        for node in ast.walk(ast.parse(compiler.read_text())):
+            if not isinstance(node, ast.Assign) or not any(
+                isinstance(target, ast.Name) and target.id == "owned_source_roots"
+                for target in node.targets
+            ):
+                continue
+            if isinstance(node.value, ast.ListComp):
+                for generator in node.value.generators:
+                    try:
+                        names = ast.literal_eval(generator.iter)
+                    except (ValueError, TypeError):
+                        continue
+                    for name in names:
+                        path = root / name / "src/main/java"
+                        if path.is_dir():
+                            owned.append(path)
+    return framework, list(dict.fromkeys(path.resolve() for path in owned))
 
 
 def build_inventory(source_root: Path, packaged_classes: Set[str],
-                    owned_route_map: Optional[Dict[str, List[str]]] = None) -> List[Dict[str, object]]:
+                    owned_route_map: Optional[Dict[str, List[str]]] = None,
+                    source_index: Optional[Dict[str, Dict[str, object]]] = None) -> List[Dict[str, object]]:
     owned_route_map = owned_route_map or {}
+    source_root = source_root.resolve()
     rows: List[Dict[str, object]] = []
     inherited_pages: Dict[Tuple[str, str], Dict[str, object]] = {}
-    infos = _source_infos(source_root)
+    infos = source_index if source_index is not None else _source_infos(source_root)
     for qualified in sorted({str(item["qualified"]) for item in infos.values()}):
         info = infos[qualified]
         source_path = info["source"]
+        if not source_path.is_relative_to(source_root.resolve()):
+            continue
         relative = str(info["relative"])
         routes = _routes_for_source(info, infos)
         # The source-root-relative path is authoritative even when a fixture
@@ -514,6 +667,8 @@ def build_inventory(source_root: Path, packaged_classes: Set[str],
                 **route,
                 "runtime_status": "owned-class-present" if class_entry in packaged_classes or owned_sources else "source-only",
                 "owned_sources": owned_sources,
+                "handler_candidates": _handler_candidates(info, infos),
+                "runtime_registration": "unverified",
                 "behavior_status": "unknown",
                 "evidence_status": "unknown",
             }
@@ -529,7 +684,8 @@ def build_inventory(source_root: Path, packaged_classes: Set[str],
     return sorted(rows, key=lambda row: (row["path"], row["method"], row["class"], row["source"]))
 
 
-def build_owned_boundary_inventory(owned_roots: Sequence[Path], project_routes: Sequence[Dict[str, object]]) -> List[Dict[str, object]]:
+def build_owned_boundary_inventory(owned_roots: Sequence[Path], project_routes: Sequence[Dict[str, object]],
+                                   source_index: Optional[Dict[str, Dict[str, object]]] = None) -> List[Dict[str, object]]:
     """Index concrete owned Java routes with no project source counterpart.
 
     These are owned Java source-only/framework entry points (login, workspace,
@@ -539,10 +695,18 @@ def build_owned_boundary_inventory(owned_roots: Sequence[Path], project_routes: 
     """
     project_keys = {(str(row["method"]), str(row["path"])) for row in project_routes}
     owned: Dict[Tuple[str, str], Dict[str, object]] = {}
+    infos = source_index if source_index is not None else _source_index(owned_roots)
     for owned_root in owned_roots:
-        infos = _runtime_java_sources(owned_root)
+        owned_root = owned_root.resolve()
         for qualified in sorted({str(item["qualified"]) for item in infos.values()}):
             info = infos[qualified]
+            if not info["source"].is_relative_to(owned_root.resolve()):
+                continue
+            if not info.get("is_handler") and not info["class_bases"]:
+                continue
+            candidates = _handler_candidates(info, infos)
+            if not candidates:
+                continue
             for route in _routes_for_source(info, infos):
                 if not _owned_route_is_concrete(route):
                     continue
@@ -553,19 +717,33 @@ def build_owned_boundary_inventory(owned_roots: Sequence[Path], project_routes: 
                     source = str(owned_root.relative_to(REPO_ROOT) / str(info["relative"]))
                 except ValueError:
                     source = str(owned_root / str(info["relative"]))
+                framework = "reconstituted/framework/" in str(info["source"])
                 item = owned.setdefault(key, {
                     "id": hashlib.sha256(("owned-boundary " + key[0] + " " + key[1]).encode("utf-8")).hexdigest()[:16],
                     **route,
-                    "boundary_scope": "owned-source-only",
+                    "source": source,
+                    "source_relative_to_module": route["source"],
+                    "boundary_scope": "owned-framework-source-only" if framework else "owned-source-only",
                     "route_origin": "owned-java-source-only",
                     "boundary_semantics": "owned Java source-only route; boundary route != boundary process",
                     "runtime_model": "same-spring-application",
                     "owned_sources": [],
+                    "handler_candidates": [],
+                    "runtime_registration": "unverified",
+                    "registration_notes": ["source candidate; conditional/component-scan/override selection is not runtime proof"],
                     "behavior_status": "unknown",
                     "evidence_status": "unknown",
                 })
                 if source not in item["owned_sources"]:
                     item["owned_sources"].append(source)
+                for candidate in candidates:
+                    if candidate not in item["handler_candidates"]:
+                        item["handler_candidates"].append(candidate)
+                for provenance in route.get("inherited_mapping_sources", []):
+                    if provenance not in item.setdefault("inherited_mapping_sources", []):
+                        item["inherited_mapping_sources"].append(provenance)
+                if info.get("shadowed_sources"):
+                    item["shadowed_sources"] = [_source_reference(Path(path)) for path in info["shadowed_sources"]]
     return sorted(owned.values(), key=lambda row: (row["path"], row["method"], row["source"]))
 
 
@@ -576,42 +754,51 @@ def main() -> int:
     parser.add_argument("--owned-source-root", type=Path, action="append", default=[])
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
+    framework_roots, owned_roots = _compiled_source_roots(args.source_root, args.owned_source_root)
+    boundary_roots = framework_roots + owned_roots
+    infos = _source_index(framework_roots + [args.source_root] + owned_roots)
     owned_route_map: Dict[str, List[str]] = {}
-    for owned_root in args.owned_source_root:
-        infos = _runtime_java_sources(owned_root)
+    for owned_root in boundary_roots:
         for qualified in sorted({str(item["qualified"]) for item in infos.values()}):
             info = infos[qualified]
+            if not info["source"].is_relative_to(owned_root.resolve()):
+                continue
+            if not info["class_bases"] and not info.get("is_handler"):
+                continue
+            if not _handler_candidates(info, infos):
+                continue
             routes = _routes_for_source(info, infos) + _owned_alias_routes(info)
             for route in routes:
                 if not _owned_route_is_concrete(route):
                     continue
                 key = "%s %s" % (route["method"], route["path"])
-                owned_route_map.setdefault(key, []).append(str(info["source"]))
-    rows = build_inventory(args.source_root, _packaged_classes(args.distribution), owned_route_map)
-    boundary_routes = build_owned_boundary_inventory(args.owned_source_root, rows)
-    # Framework resources that are real HTTP routes but are not discovered by
-    # the project/owned source scanners. Keep this list explicit and small;
-    # it prevents strict closure from rejecting a verified reconstructed
-    # framework route as an unbound case.
-    lcdp_source = SCRIPT_ROOT / "reconstituted/framework/owned-core-lcdp/src/main/java/com/sunwayworld/cloud/module/lcdp/resource/resource/LcdpResourceResource.java"
-    if lcdp_source.is_file():
-        boundary_routes.append({
-            "id": hashlib.sha256(b"framework-boundary POST /secure/core/module/lcdp/resources/action/call-script").hexdigest()[:16],
-            "method": "POST",
-            "path": "/secure/core/module/lcdp/resources/action/call-script",
-            "class": "com.sunwayworld.cloud.module.lcdp.resource.resource.LcdpResourceResource",
-            "source": str(lcdp_source.relative_to(REPO_ROOT)),
-            "annotation": "@RequestMapping(value=\"/action/call-script\", method=POST)",
-            "runtime_status": "owned-class-present",
-            "owned_sources": [str(lcdp_source.relative_to(REPO_ROOT))],
-            "behavior_status": "unknown",
-            "evidence_status": "unknown",
-            "boundary_scope": "owned-framework-source-only",
-            "route_origin": "reconstituted-framework",
-            "boundary_semantics": "same Spring application framework route",
-            "runtime_model": "same-spring-application",
-        })
-        boundary_routes = sorted(boundary_routes, key=lambda row: (row["path"], row["method"], row["id"]))
+                owned_route_map.setdefault(key, []).append(_source_reference(info["source"]))
+    rows = build_inventory(args.source_root, _packaged_classes(args.distribution), owned_route_map, infos)
+    boundary_routes = build_owned_boundary_inventory(boundary_roots, rows, infos)
+    # Retain former project provenance only when method/path still matches.
+    # Newly resolved inherited bases must not alias an old wrong root path to
+    # a different real HTTP request.
+    old_rows = build_inventory(args.source_root, set())
+    current_by_key = {}
+    for route in rows + boundary_routes:
+        current_by_key.setdefault((route["method"], route["path"]), []).append(route)
+    active_ids = {route["id"] for route in rows + boundary_routes}
+    removed_rows = []
+    for old in old_rows:
+        if old["id"] in active_ids:
+            continue
+        matches = current_by_key.get((old["method"], old["path"]), [])
+        if matches:
+            matches[0].setdefault("source_route_ids", []).append(old["id"])
+        else:
+            removed_rows.append({name: old[name] for name in ("id", "method", "path", "source", "class")})
+            removed_rows[-1]["reason"] = "old isolated source-root mapping has no matching authoritative method/path; not an evidence alias"
+    # Keep identifiers from earlier source-accounting views addressable. This
+    # is an alias formula, not a route list: discovery comes from Java source.
+    for route in boundary_routes:
+        key = str(route["method"]) + " " + str(route["path"])
+        route["source_route_ids"] = sorted(set(route.get("source_route_ids", [])) | {str(route["id"]), hashlib.sha256(
+            ("framework-boundary " + key).encode("utf-8")).hexdigest()[:16]})
     binding = capture_binding(REPO_ROOT)
     payload = {
         "schema": 1,
@@ -620,6 +807,8 @@ def main() -> int:
         "source_dirty": _source_dirty(),
         **binding_metadata(binding),
         "source_root": str(args.source_root),
+        "source_index_roots": [_source_reference(path) for path in framework_roots + [args.source_root] + owned_roots],
+        "removed_source_rows": removed_rows,
         "distribution": str(args.distribution) if args.distribution else None,
         "counts": {
             "route_count": len(rows),

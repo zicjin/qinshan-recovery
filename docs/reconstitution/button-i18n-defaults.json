@@ -1,0 +1,182 @@
+{
+  "schema": "source-backed-button-i18n-defaults-v1",
+  "classification": "original-release-configuration-restoration",
+  "source_path": "project/sql/核心发版14.1.5/init-sql/oracle/0.common_sql_oracle-1.txt",
+  "source_sha256": "99c1ba18054594384cc88a28ecc5c8c44f540e089e4c92ca92eddb94c2f17be1",
+  "source_locale": "zh-CN",
+  "resource_path": "reconstituted/framework/owned-core-common/src/main/resources/i18n/core-button-defaults_zh-cn.properties",
+  "resource_sha256": "3a28f48d19d478eb12bce6014f65226f5946b249accd709b254f987f479f961f",
+  "entry_count": 25,
+  "entries": [
+    {
+      "code": "GIKAM.BUTTON.YES",
+      "value": "是",
+      "line": 5866,
+      "statement_sha256": "8b98006d8d6325b4507ff932ff3500315cc3eba99eed02bb644bc3b5aad2b930"
+    },
+    {
+      "code": "GIKAM.BUTTON.NO",
+      "value": "否",
+      "line": 5867,
+      "statement_sha256": "89b8a15a050a350141568934a9a4f15b6b9e7ccdd1cda8c6da62b9b8ee3cffc0"
+    },
+    {
+      "code": "GIKAM.BUTTON.CONFIRM",
+      "value": "确认",
+      "line": 5868,
+      "statement_sha256": "e711536914d5df6930dba29863589376b2a776a9e15307914253996a027d6a63"
+    },
+    {
+      "code": "GIKAM.BUTTON.CLOSE",
+      "value": "关闭",
+      "line": 5869,
+      "statement_sha256": "8355d3c712db9613bfe5400a7ae6002eef24df29239363157f71765a10a111c6"
+    },
+    {
+      "code": "GIKAM.BUTTON.BACK",
+      "value": "返回",
+      "line": 5870,
+      "statement_sha256": "6edaef8fbcf3b32598d554e4dc927649e1fe645f0ba63a0b86b52f988e69fbc5"
+    },
+    {
+      "code": "GIKAM.BUTTON.CANCEL",
+      "value": "取消",
+      "line": 5871,
+      "statement_sha256": "ef1a676846315e992563fdf91de435fccb02340a6353a7cfa52390c3b0042849"
+    },
+    {
+      "code": "GIKAM.BUTTON.ACTIVE",
+      "value": "启用",
+      "line": 5872,
+      "statement_sha256": "b000567072d4b7dde98900142f52b1ad530aa9c4afa2e28804e3f8ad24b609f2"
+    },
+    {
+      "code": "GIKAM.BUTTON.DEACTIVE",
+      "value": "停用",
+      "line": 5873,
+      "statement_sha256": "97a7ed57e0581b47a02b28735bdd87356b7e690c7ea11f5e72b11cd15544311f"
+    },
+    {
+      "code": "GIKAM.BUTTON.SAVE",
+      "value": "保存",
+      "line": 5877,
+      "statement_sha256": "2c957764a84a31bac8d4bb5d71feeaa192c3274d28a07b8a0e15503b1a7d10fe"
+    },
+    {
+      "code": "GIKAM.BUTTON.SUSPEND",
+      "value": "注销",
+      "line": 5878,
+      "statement_sha256": "72442e19494a7ee3332953b2cf65f93194cd8bc9919668bbbd5d2c344bf6e1a2"
+    },
+    {
+      "code": "GIKAM.BUTTON.UNSUSPEND",
+      "value": "恢复",
+      "line": 5879,
+      "statement_sha256": "85932773c1b03a391bd6f226f40917c57aa973e450403fdcc7e97053ea27b8d8"
+    },
+    {
+      "code": "GIKAM.BUTTON.INSERT",
+      "value": "添加",
+      "line": 5887,
+      "statement_sha256": "b0038887e2eb0ae75358e8eac626a9d4c4b1025f27c7a9357c6bb5361cc0d7a6"
+    },
+    {
+      "code": "GIKAM.BUTTON.MODIFY",
+      "value": "变更",
+      "line": 5888,
+      "statement_sha256": "e41b7d3f06e6548b9a25c62a0a0e03a431a3a16eafae0f2450136f92ad819953"
+    },
+    {
+      "code": "GIKAM.BUTTON.DELETE",
+      "value": "删除",
+      "line": 5889,
+      "statement_sha256": "27a2310d5841b4acdd53c7fac3ddea10242c378c03f119cbc0ea3e6120b9cb6a"
+    },
+    {
+      "code": "GIKAM.BUTTON.MOVE_UP",
+      "value": "上移",
+      "line": 5890,
+      "statement_sha256": "713c8a9ab1db7c1d0a0a87bb697f88c4f275ca88ba79575bec0c650ff18d618c"
+    },
+    {
+      "code": "GIKAM.BUTTON.MOVE_DOWN",
+      "value": "下移",
+      "line": 5891,
+      "statement_sha256": "bb729334c49f44cbe4098d4fedf5e701471e8683e9a6169aefa262248e38b39e"
+    },
+    {
+      "code": "GIKAM.BUTTON.OFFLINE",
+      "value": "强制下线",
+      "line": 5892,
+      "statement_sha256": "3e3ce37fa90300ec017fbe508ef3e4c40f40ad6c7a975f6cb1e432ddabe59544"
+    },
+    {
+      "code": "GIKAM.BUTTON.EDIT",
+      "value": "编辑",
+      "line": 5893,
+      "statement_sha256": "4ea8b41e738fa6dc9e5b546ac18cbb2121987fc60e66851b7103dcbb986d1f83"
+    },
+    {
+      "code": "GIKAM.BUTTON.IMPORT",
+      "value": "导入",
+      "line": 5894,
+      "statement_sha256": "c5dedd7faf311c9274a6ec38c877b87600df0818955c23121f25b9a37f0ad9cd"
+    },
+    {
+      "code": "GIKAM.BUTTON.EXPORT",
+      "value": "导出",
+      "line": 5895,
+      "statement_sha256": "71b3ba23609f5d6dd5bc6aa96be0c802403b60693b0c065d90d9c9cac27f33bc"
+    },
+    {
+      "code": "GIKAM.BUTTON.VIEWAUDIT",
+      "value": "审计跟踪",
+      "line": 5896,
+      "statement_sha256": "fc29069654f09850d78e6a866b7d38ca743c1e2dccc0d7803012d9a8ead318f1"
+    },
+    {
+      "code": "GIKAM.BUTTON.VIEW",
+      "value": "预览",
+      "line": 5897,
+      "statement_sha256": "41be320ff48abc3c0afd2f662ea0ccb949b414f877d99281334790fb3299a112"
+    },
+    {
+      "code": "GIKAM.BUTTON.DESIGN",
+      "value": "设计",
+      "line": 5898,
+      "statement_sha256": "41255aa2e362a89c633416a5ed4ca4b41a8cc947873bd9cd7b43e8cde0daf172"
+    },
+    {
+      "code": "GIKAM.BUTTON.RESET",
+      "value": "重置",
+      "line": 12463,
+      "statement_sha256": "95e578fafdb3e5d872dfde40c85ecfd536d84dc91c3a60b0aca15ac6cc65b697"
+    },
+    {
+      "code": "GIKAM.BUTTON.EXECUTE",
+      "value": "执行",
+      "line": 12823,
+      "statement_sha256": "7320936492092507daffdd0ab0b5f15d92ea22a147d62dd3234d44f2833c1729"
+    }
+  ],
+  "merge": "Existing database and configured project resources retain their original precedence. Button defaults fill only absent keys after the original merge. Per-load maps copy project maps so later database overrides are not shadowed by defaults from an earlier load.",
+  "scope_exclusions": [
+    "No new English translations",
+    "No GIKAM.SEARCH or other R21 key",
+    "No license/runtime input",
+    "No database mutation"
+  ],
+  "before_evidence": {
+    "owned_locale_size": 7353,
+    "supplier_locale_size": 7292,
+    "both_missing_button_keys": 24,
+    "browser_menu": "100539",
+    "browser_actual_untranslated": [
+      "GIKAM.BUTTON.INSERT",
+      "GIKAM.BUTTON.DELETE"
+    ],
+    "classification": "Missing original release configuration in both testing baselines; source-backed restoration explicitly requested by user, not an owned-only regression.",
+    "owned_locale_sha256": "c67dc7296bfc25e221e0d02ed5f8110e6ee64e463df4663a37c672de74103e4f",
+    "supplier_locale_sha256": "9043d8806821c3355dc0a267fa72aac3b2e209af8e5ff5182b2a2b4ff29ecb36"
+  }
+}

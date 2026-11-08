@@ -72,7 +72,7 @@ def verify_snapshots(root: Path, artifact_sha: str, errors: list[str]) -> None:
     require(registry.get("artifact_sha256") == artifact_sha, "framework registry artifact identity differs", errors)
     require(registry.get("module_count") == 7, "framework registry module count", errors)
     require(registry.get("source_file_count") == 4576, "framework registry source count", errors)
-    require(registry.get("resource_file_count") == 9426, "framework registry resource count", errors)
+    require(registry.get("resource_file_count") == 9427, "framework registry resource count", errors)
     require(registry.get("native_removal", {}).get("status") == "pass", "framework native removal status", errors)
     runtime_model = registry.get("runtime_model", {})
     require(runtime_model.get("boundary_process") is False, "framework boundary process enabled", errors)

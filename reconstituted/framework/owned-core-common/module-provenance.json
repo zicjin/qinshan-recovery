@@ -156,6 +156,11 @@
       "generated_sha256": "ca5acd8b19b95d2684d1ec2f93841f2c04fb433041fbea6c8150622d77d4fe30",
       "override_sha256": "ec954c0434ca29b25d2fc5328f776453b5726fa5281dcd85956c58316b746475",
       "path": "src/main/java/com/sunwayworld/module/sys/menu/service/impl/CoreMenuServiceImpl.java"
+    },
+    {
+      "generated_sha256": "2d7a78e7142e1ccd9fa93057ccb72b5aae426d0c84cdc03fd7ff1c2fa7ba9af7",
+      "override_sha256": "2fef763e0c9eee7d0fa67709150fbecffdf2180a3d886053b93427015097775f",
+      "path": "src/main/java/com/sunwayworld/module/sys/i18n/CoreI18nCache.java"
     }
   ],
   "override_source_files": [
@@ -313,6 +318,11 @@
       "generated_sha256": "ba683fe91e610ac1a24f38d8847c766062b8b5cd07d2b157fab4462768aac2e4",
       "override_sha256": "bfe9e81b1a81c8628d39d991ccd22b2982169299b67725ab09d20a72380d35d2",
       "path": "src/main/java/com/sunwayworld/framework/database/dialect/OracleDialect.java"
+    },
+    {
+      "generated_sha256": "2d7a78e7142e1ccd9fa93057ccb72b5aae426d0c84cdc03fd7ff1c2fa7ba9af7",
+      "override_sha256": "2fef763e0c9eee7d0fa67709150fbecffdf2180a3d886053b93427015097775f",
+      "path": "src/main/java/com/sunwayworld/module/sys/i18n/CoreI18nCache.java"
     }
   ],
   "public_dependency_allowlist": "public-dependency-allowlist.json",
@@ -323,9 +333,9 @@
       "source": "tracked-override-removal"
     }
   ],
-  "resource_file_count": 1063,
+  "resource_file_count": 1064,
   "resource_provenance": "resource-provenance.json",
-  "resource_tree_sha256": "0f0a7c13099dfb1633ad93dcb7aaaec2946fe92b2b461da2bf1f5e096127040e",
+  "resource_tree_sha256": "df0cbb22ee7438f4321959ceb6f69896283aff8e41aa77ad5f1d455ad867f306",
   "schema": "supplier-reconstituted-module-v1",
   "source_decompilers": {
     "CFR": 2073,
@@ -26242,12 +26252,14 @@
       "decompiler": "Vineflower",
       "decompiler_version": "1.11.1",
       "path": "src/main/java/com/sunwayworld/module/sys/i18n/CoreI18nCache.java",
-      "sha256": "2d7a78e7142e1ccd9fa93057ccb72b5aae426d0c84cdc03fd7ff1c2fa7ba9af7",
+      "sha256": "2fef763e0c9eee7d0fa67709150fbecffdf2180a3d886053b93427015097775f",
       "source_class_path": "com/sunwayworld/module/sys/i18n/CoreI18nCache.class",
       "source_jar": "BOOT-INF/lib/gikam-core-common-14.1.5.jar",
+      "source_sha256_before_overlay": "2d7a78e7142e1ccd9fa93057ccb72b5aae426d0c84cdc03fd7ff1c2fa7ba9af7",
       "source_sha256_before_transform": "fbe50831ae666dde4391c6eb087a8e0162a564bb9fae601100ef6cd9fffa7165",
       "transformations": [
-        "cfr-to-vineflower-fallback"
+        "cfr-to-vineflower-fallback",
+        "overlay:src/main/java/com/sunwayworld/module/sys/i18n/CoreI18nCache.java"
       ]
     },
     {
@@ -31595,7 +31607,7 @@
       ]
     }
   ],
-  "source_tree_sha256": "ed5b0d516e6a289a68535b5a5b536c578f1f92519763040bcfd867d0875d5625",
+  "source_tree_sha256": "6ae3928de547de5f49b0635d8c89e551cbe7a9de1a0b657ce3a95b20c18e19d8",
   "status": "assembled-source-only",
   "transformation_manifest": "docs/reconstitution/decompiler-transforms.json",
   "transformation_manifest_sha256": "30ab06626f3e4c863a2855790b0ec6211499394852f2a8598ea3bd444ce87fe8",

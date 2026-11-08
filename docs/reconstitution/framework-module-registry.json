@@ -21,15 +21,15 @@
       "forbidden_content_status": "pass",
       "module": "owned-core-common",
       "output_jar": "owned-core-common/target/owned-core-common-1.0.0-SNAPSHOT.jar",
-      "output_jar_sha256": "45591c1063f8b237ac6bd7d5793ec1083717e955f8fcf47bbe4cc60ff95b2d69",
+      "output_jar_sha256": "556a7fc9e69f6585b01c9ebb8d62219b5fc083a8a6e8fbc640cb6d3a2a8b8d37",
       "reason": "Merges the common foundation and its immediately downstream base-interface JAR to avoid a two-module cycle-free core with no independent runtime boundary.",
-      "resource_file_count": 1063,
+      "resource_file_count": 1064,
       "source_file_count": 2222,
       "source_jars": [
         "gikam-core-base-interface-14.1.5.jar",
         "gikam-core-common-14.1.5.jar"
       ],
-      "source_tree_sha256": "ed5b0d516e6a289a68535b5a5b536c578f1f92519763040bcfd867d0875d5625"
+      "source_tree_sha256": "6ae3928de547de5f49b0635d8c89e551cbe7a9de1a0b657ce3a95b20c18e19d8"
     },
     {
       "compile_status": "pass",
@@ -152,7 +152,7 @@
   },
   "public_dependency_allowlist": "reconstituted/framework/public-dependency-allowlist.json",
   "public_dependency_count": 386,
-  "resource_file_count": 9426,
+  "resource_file_count": 9427,
   "runtime_model": {
     "application": "one Spring application",
     "boundary_process": false,

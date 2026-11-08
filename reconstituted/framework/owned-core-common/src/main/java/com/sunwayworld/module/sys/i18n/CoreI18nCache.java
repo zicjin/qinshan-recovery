@@ -40,6 +40,7 @@ public class CoreI18nCache {
       "static/emc/i18n/messages-emc,static/emc/projectfunction/i18n/messages-weipu";
    private static final Logger logger = LogManager.getLogger(CoreI18nCache.class);
    private Map<String, Map<String, String>> fileI18nMap;
+   private Map<String, Map<String, String>> buttonDefaultMap;
    private Map<String, CoreI18nCache.I18nStore> cache = new ConcurrentHashMap<>();
    private static volatile CoreI18nCache instance;
 
@@ -96,31 +97,45 @@ public class CoreI18nCache {
          for (String baseName : StringUtils.split(baseNames, ",")) {
             String name = "/" + baseName + "_" + locale + ".properties";
 
-            try (InputStream is = DatabaseDrivenMessageSource.class.getResourceAsStream(name)) {
-               BufferedReader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
-               String line = null;
-
-               while ((line = reader.readLine()) != null) {
-                  if (!StringUtils.startsWith(line.trim(), "#") && !StringUtils.isBlank(line)) {
-                     int index = line.indexOf("=");
-                     if (index > 0) {
-                        String code = line.substring(0, index).trim();
-                        if (!messageMap.containsKey(code)) {
-                           String value = line.substring(index + 1).trim();
-                           messageMap.put(code, value);
-                        }
-                     }
-                  }
-               }
-            } catch (Exception var32) {
-               logger.warn("Unable load message properties from [" + name + "]");
-            }
+            this.loadMessageFile(name, messageMap);
          }
 
          fileMap.put(locale, messageMap);
       }
 
       this.fileI18nMap = fileMap;
+      // These original release SQL values are defaults only. Database messages
+      // and the existing project basename precedence remain authoritative.
+      Map<String, Map<String, String>> defaults = new TreeMap<>();
+      for (CoreI18nConfigBean config : configList) {
+         String locale = config.getId().toLowerCase();
+         if ("zh-cn".equals(locale)) {
+            Map<String, String> values = new TreeMap<>();
+            this.loadMessageFile("/i18n/core-button-defaults_zh-cn.properties", values);
+            defaults.put(locale, values);
+         }
+      }
+      this.buttonDefaultMap = defaults;
+   }
+
+   private void loadMessageFile(String name, Map<String, String> messageMap) {
+      try (InputStream is = DatabaseDrivenMessageSource.class.getResourceAsStream(name)) {
+         BufferedReader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+         String line;
+         while ((line = reader.readLine()) != null) {
+            if (!StringUtils.startsWith(line.trim(), "#") && !StringUtils.isBlank(line)) {
+               int index = line.indexOf("=");
+               if (index > 0) {
+                  String code = line.substring(0, index).trim();
+                  if (!messageMap.containsKey(code)) {
+                     messageMap.put(code, line.substring(index + 1).trim());
+                  }
+               }
+            }
+         }
+      } catch (Exception exception) {
+         logger.warn("Unable load message properties from [" + name + "]");
+      }
    }
 
    private void load() {
@@ -192,8 +207,13 @@ public class CoreI18nCache {
             if (map.containsKey(entry.getKey())) {
                map.get(entry.getKey()).putAll(entry.getValue());
             } else {
-               map.put(entry.getKey(), entry.getValue());
+               map.put(entry.getKey(), new TreeMap<>(entry.getValue()));
             }
+         }
+
+         for (Entry<String, Map<String, String>> entry : this.buttonDefaultMap.entrySet()) {
+            Map<String, String> messages = map.computeIfAbsent(entry.getKey(), key -> new TreeMap<>());
+            entry.getValue().forEach(messages::putIfAbsent);
          }
 
          store.setI18nMap(map);

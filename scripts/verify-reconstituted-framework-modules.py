@@ -83,7 +83,7 @@ def main() -> int:
     require(registry["module_count"] == 7, "module count is not seven", errors)
     require(registry["candidate_group_count"] == 8, "candidate count changed", errors)
     require(registry["source_file_count"] == 4576, "source total mismatch", errors)
-    require(registry["resource_file_count"] == 9426, "resource total mismatch", errors)
+    require(registry["resource_file_count"] == 9427, "resource total mismatch", errors)
     require(registry["runtime_model"]["boundary_process"] is False, "boundary process flag", errors)
     require(registry["runtime_model"]["internal_http_bridge"] is False, "HTTP bridge flag", errors)
     require(registry["native_removal"]["status"] == "pass", "native removal status", errors)

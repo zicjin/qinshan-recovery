@@ -138,7 +138,7 @@ class LocalRuntimeMilestoneTest(unittest.TestCase):
                                  '--docker', str(self.docker), *extra], env=env, capture_output=True, text=True, timeout=30)
         return result, json.loads(result.stdout) if result.stdout else None
 
-    def enable_schema_policy(self):
+    def enable_schema_policy(self, schema_policy='approved-missing-runtime-tables-v1'):
         # Obtain the observation through the public observer CLI and fake SELECT boundary.
         path = SCRIPT.parent / 'tests/test-observe-local-runtime.py'
         spec = importlib.util.spec_from_file_location('observer_boundary_test', path)
@@ -147,8 +147,8 @@ class LocalRuntimeMilestoneTest(unittest.TestCase):
         test = boundary.ObserveLocalRuntimeTest()
         test.setUp()
         self.addCleanup(test.doCleanups)
-        test.enable_fixture()
-        result, observed = test.run_cli('valid', '--schema-policy', 'approved-missing-runtime-tables-v1')
+        test.enable_fixture(schema_policy)
+        result, observed = test.run_cli('valid', '--schema-policy', schema_policy)
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
         for moment, at in [('before', '2026-11-07T02:00:00+00:00'), ('after', '2026-11-07T04:00:00+00:00')]:
             snapshot = copy.deepcopy(observed)
@@ -183,6 +183,27 @@ class LocalRuntimeMilestoneTest(unittest.TestCase):
         self.assertEqual(report['comparisons']['runtime']['table_count_before'], 9)
         self.assertEqual(report['source_binding']['runtime_contract']['schema_policy_id'], 'approved-missing-runtime-tables-v1')
         self.assertFalse(report['strict_evidence'])
+
+    def test_email_policy_reuses_lifecycle_checks_and_rejects_email_column_drift(self):
+        selected = 'approved-missing-runtime-and-email-tables-v2'
+        self.enable_schema_policy(selected)
+        result, report = self.run_cli('valid', '--schema-policy', selected)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertTrue(report['lifecycle_verified'])
+        self.assertEqual(report['comparisons']['runtime']['table_count_before'], 11)
+        self.assertFalse(report['strict_evidence'])
+        result, report = self.run_cli('app-running', '--schema-policy', selected)
+        self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
+        self.assertIn('application_stopped', report['failed_checks'])
+        for moment in ('before', 'after'):
+            metadata = self.inputs['observation_' + moment]['schemas'][OWNERS[1]]['column_metadata']
+            row = next(r for r in metadata['rows'] if r[0] == 'T_CORE_EMAIL_CONFIG_RECEIPENT' and r[1] == 'CONFIGID')
+            row[4] = row[8] = '95'
+            metadata['sha256'] = digest(metadata['rows'])
+        self.write_manifest()
+        result, report = self.run_cli('valid', '--schema-policy', selected)
+        self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
+        self.assertFalse(report['lifecycle_verified'])
 
     def test_policy_cannot_mask_fixture_column_metadata_disagreement(self):
         self.enable_schema_policy()

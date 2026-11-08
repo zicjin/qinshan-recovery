@@ -6,13 +6,15 @@ Proof validates supplied observations, not their acquisition authenticity.
 """
 from __future__ import annotations
 import hashlib
+import importlib.util
 import json
 from pathlib import Path
 from schema_fixture import BASE, OWNER, TABLES, FixtureError, checks, load_fixture
 
 EQUAL = 'equal-schema'
 APPROVED = 'approved-missing-runtime-tables-v1'
-POLICIES = (EQUAL, APPROVED)
+APPROVED_EMAIL = 'approved-missing-runtime-and-email-tables-v2'
+POLICIES = (EQUAL, APPROVED, APPROVED_EMAIL)
 ROOT = Path(__file__).resolve().parents[1]
 FIXTURE_SHA256 = 'd1227563b5a27ef249376a0652ddd10f9edb6526f64a0df7b2e466ac9b5adfcb'
 DEFINITIONS = {
@@ -23,6 +25,12 @@ DEFINITIONS = {
     'T_EMC_RETURNED': '5de6bdfee9385bc3df967a03f54ad016e048e40ba4667a101f599233f6a0d3b4',
     'T_EMC_SEAL_RULE': '5c37eafd2f39a51f1312ab014cb884d4a7ec2f82dc4e509c5eb822aaace90646',
     'T_EMC_SEAL_RULE_DETAILS': 'd119290e28bcac59f88381eeb7601f7848957634185f08d2a4c232967628769a',
+}
+EMAIL_BASE = 'api-fixtures/schema/email-config-associations'
+EMAIL_MANIFEST_SHA256 = 'd41487c4bcb21da1903952a2296c0ef49fab83eed94307a00298f017cea49eb1'
+EMAIL_DEFINITIONS = {
+    'T_CORE_EMAIL_CONFIG_RECEIPENT': '4636062c627dc070fc1bc727abaa4056a7492fce95c013774aceb483a05b049d',
+    'T_CORE_EMAIL_CONFIG_REC_ROLE': '95f8e73cd203db23ff742c5c849496d93322bb861b708121664cc18ccd2377d9',
 }
 
 
@@ -49,6 +57,50 @@ def query_sql(selects):
             'prompt OBSERVE_END\nexit\n')
 
 
+def email_fixture(root):
+    """Read the existing two-table fixture with its original pinned renderer."""
+    root = Path(root)
+    manifest_raw = (root / (EMAIL_BASE + '.json')).read_bytes()
+    require(hashlib.sha256(manifest_raw).hexdigest() == EMAIL_MANIFEST_SHA256,
+            'email schema manifest drift')
+    manifest = json.loads(manifest_raw)
+    require(manifest['owner'] == OWNER and set(manifest['tables']) == set(EMAIL_DEFINITIONS),
+            'email schema fixture table coverage mismatch')
+    source = (root / manifest['source']['path']).read_bytes()
+    require(hashlib.sha256(source).hexdigest() == manifest['source']['sha256'], 'email schema source drift')
+    lines = source.decode('utf-8').splitlines(keepends=True)
+    statements = []
+    for block in manifest['source_blocks']:
+        start, end = block['line_start'], block['line_end']
+        require(1 <= start <= end <= len(lines), 'email schema source range mismatch')
+        raw = ''.join(lines[start - 1:end]).strip()
+        require(hashlib.sha256(raw.encode()).hexdigest() == block['sha256'], 'email schema source block drift')
+        statements.append(raw)
+    renderer = root / 'scripts/schema_fixture.py'
+    require(hashlib.sha256(renderer.read_bytes()).hexdigest() == manifest['generator_sha256'],
+            'email schema renderer drift')
+    # Isolated module state preserves schema_fixture.TABLES and the seven-table policy.
+    spec = importlib.util.spec_from_file_location('email_schema_fixture', renderer)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    module.TABLES = frozenset(EMAIL_DEFINITIONS)
+    loaded = module.definitions(module.statements('\n'.join(statements)))
+    require(set(loaded) == set(EMAIL_DEFINITIONS), 'email schema definition coverage mismatch')
+    logical = {t: {k: v for k, v in d.items() if k != 'statements'} for t, d in loaded.items()}
+    require({t: digest(d) for t, d in logical.items()} == EMAIL_DEFINITIONS, 'email schema definition drift')
+    fixture = (root / manifest['fixture']['path']).read_bytes()
+    require(hashlib.sha256(fixture).hexdigest() == manifest['fixture']['sha256']
+            and fixture == module.render(loaded, OWNER).encode('utf-8'), 'email schema fixture drift')
+    return loaded, {'fixture_path': manifest['fixture']['path'], 'fixture_sha256': manifest['fixture']['sha256'],
+                    'manifest_path': EMAIL_BASE + '.json', 'manifest_sha256': EMAIL_MANIFEST_SHA256,
+                    'generator_sha256': manifest['generator_sha256'], 'source_blocks': manifest['source_blocks']}
+
+
+def policy_tables(policy):
+    require(policy in POLICIES, 'unknown local schema policy')
+    return TABLES | frozenset(EMAIL_DEFINITIONS) if policy == APPROVED_EMAIL else TABLES
+
+
 def definition(policy=EQUAL, root=ROOT):
     require(policy in POLICIES, 'unknown local schema policy')
     if policy == EQUAL:
@@ -71,6 +123,14 @@ def definition(policy=EQUAL, root=ROOT):
                       'sources': sorted(manifest['sources'], key=lambda x: x['path']),
                       'definition_sha256': DEFINITIONS, 'table_count': 7, 'column_count': 105,
                       'predicates_sha256': digest(predicates)}
+        if policy == APPROVED_EMAIL:
+            email, provenance = email_fixture(root)
+            loaded.update(email)
+            predicates = [{'table': table, 'view': view, 'predicate': where, 'expected_count': count}
+                          for table, d in sorted(loaded.items()) for view, where, count in checks(table, d)]
+            descriptor.update(id=APPROVED_EMAIL, definition_sha256={**DEFINITIONS, **EMAIL_DEFINITIONS},
+                              table_count=9, column_count=125, additional_fixtures=[provenance],
+                              predicates_sha256=digest(predicates))
         return descriptor, predicates
     except (FixtureError, OSError, KeyError, TypeError, ValueError) as error:
         # Do not echo private source contents or filesystem diagnostics.
@@ -82,8 +142,9 @@ def check_inventories(baseline, runtime, policy=EQUAL):
     if policy == EQUAL:
         require(baseline == runtime, 'baseline/runtime table inventories mismatch or empty')
     else:
-        require(policy == APPROVED and not baseline.intersection(TABLES)
-                and runtime == baseline.union(TABLES), 'approved schema table delta mismatch')
+        tables = policy_tables(policy)
+        require(policy in (APPROVED, APPROVED_EMAIL) and not baseline.intersection(tables)
+                and runtime == baseline.union(tables), 'approved schema table delta mismatch')
 
 
 def proof_selects(predicates):
@@ -124,13 +185,15 @@ def validate(snapshot, policy=EQUAL):
         actual = [q for q in snapshot.get('queries', []) if q.get('name') == query['name']]
         require(digest(actual) == digest([query]), 'approved schema metadata query coverage mismatch')
         runtime = snapshot.get('runtime_contract', {})
-        require(runtime.get('schema_policy_id') == APPROVED and runtime.get('schema_policy_sha256') == expected['sha256'],
+        require(runtime.get('schema_policy_id') == policy and runtime.get('schema_policy_sha256') == expected['sha256'],
                 'approved schema policy runtime binding mismatch')
         for owner, hash_key in (('LIMS_BASELINE_LOCAL', 'baseline_schema_hash'), (OWNER, 'runtime_schema_hash_before')):
             require(runtime.get(hash_key) == snapshot['schemas'][owner]['column_metadata']['sha256'],
                     'schema policy column hash runtime binding mismatch')
         columns = snapshot['schemas'][OWNER]['column_metadata']['rows']
         loaded = load_fixture(ROOT)
+        if policy == APPROVED_EMAIL:
+            loaded.update(email_fixture(ROOT)[0])
         for table, d in loaded.items():
             actual = sorted([r for r in columns if r[0] == table], key=lambda r: int(r[2]))
             require(len(actual) == len(d['columns']), 'approved fixture column metadata coverage mismatch')
@@ -142,7 +205,7 @@ def validate(snapshot, policy=EQUAL):
                 if col['type'] == 'VARCHAR2':
                     require(row[4] == row[8] == str(col['length']) and row[9] == 'B',
                             'approved fixture character metadata mismatch')
-        shared = [r for r in columns if r[0] not in TABLES]
+        shared = [r for r in columns if r[0] not in policy_tables(policy)]
         require(sorted(shared) == sorted(snapshot['schemas']['LIMS_BASELINE_LOCAL']['column_metadata']['rows']),
                 'baseline/runtime shared column metadata mismatch')
         binding = snapshot.get('source_binding', {})

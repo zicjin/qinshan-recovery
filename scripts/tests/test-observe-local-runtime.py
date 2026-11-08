@@ -114,7 +114,7 @@ elif args[:1] == ['exec']:
                     print(f'TABLE|{owner}|{table}')
     else:
         statements = re.findall(r"select 'COUNT\|([^']+)\|' \|\| to_char\(count\(\*\).*? from \"([^\"]+)\"\.\"([^\"]+)\";", sql, re.I)
-        assert len(statements) == (11 if fixture else 4), sql
+        assert len(statements) == (sum(len({row[0] for row in rows}) for rows in fixture['columns'].values()) if fixture else 4), sql
         print('EXPECTED|' + str(len(statements)))
         for label, owner, table in statements:
             assert label == owner + '|' + table
@@ -145,10 +145,13 @@ class ObserveLocalRuntimeTest(unittest.TestCase):
                                 env=env, text=True, capture_output=True, timeout=60)
         return result, json.loads(result.stdout) if result.stdout else None
 
-    def enable_fixture(self):
+    def enable_fixture(self, schema_policy='approved-missing-runtime-tables-v1'):
         sys.path.insert(0, str(SCRIPT.parent))
         import schema_fixture
         loaded = schema_fixture.load_fixture(SCRIPT.parents[1])
+        if schema_policy == 'approved-missing-runtime-and-email-tables-v2':
+            import local_schema_policy
+            loaded.update(local_schema_policy.email_fixture(SCRIPT.parents[1])[0])
         columns = {owner: [[table, 'ID', '1', 'NUMBER', '22', '10', '0', 'N', '0', '-', '-']
                            for table in ('ALPHA', 'BETA')] for owner in ('LIMS_BASELINE_LOCAL', 'LIMS_RUNTIME_LOCAL')}
         for table, definition in sorted(loaded.items()):
@@ -161,6 +164,31 @@ class ObserveLocalRuntimeTest(unittest.TestCase):
         self.fixture_path = self.root / 'oracle-metadata.json'
         self.fixture_path.write_text(json.dumps({'columns': columns,
             'checks': [count for table, definition in sorted(loaded.items()) for _, _, count in schema_fixture.checks(table, definition)]}))
+
+    def test_explicit_email_policy_observes_nine_tables_and_validates_previous_observation(self):
+        selected = 'approved-missing-runtime-and-email-tables-v2'
+        self.enable_fixture(selected)
+        result, report = self.run_cli('valid', '--schema-policy', selected)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertEqual(report['schemas']['LIMS_RUNTIME_LOCAL']['row_counts']['coverage']['expected_tables'], 11)
+        self.assertEqual(report['schemas']['LIMS_RUNTIME_LOCAL']['column_metadata']['record_count'], 127)
+        self.assertEqual(report['schema_policy']['metadata_proof']['record_count'], 389)
+        self.assertEqual(report['runtime_contract']['schema_policy_id'], selected)
+        path = self.root / 'before-email.json'
+        path.write_text(json.dumps(report))
+        result, observed = self.run_cli('valid', '--schema-policy', selected, '--before', str(path))
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertFalse(observed['comparison']['drift_detected'])
+        for legacy in ((), ('--schema-policy', 'approved-missing-runtime-tables-v1')):
+            result, rejected = self.run_cli('valid', *legacy)
+            self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
+            self.assertFalse(rejected['strict_evidence'])
+        for scenario in ('unknown-extra', 'missing-fixture', 'base-removal', 'fixture-mismatch',
+                         *['metadata-mismatch-' + kind for kind in ('defaults', 'pk', 'constraint', 'index', 'index-column', 'comment', 'trigger')]):
+            with self.subTest(scenario=scenario):
+                result, rejected = self.run_cli(scenario, '--schema-policy', selected)
+                self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
+                self.assertFalse(rejected['strict_evidence'])
 
     def test_explicit_source_policy_observes_exact_seven_tables_and_full_predicates(self):
         self.enable_fixture()

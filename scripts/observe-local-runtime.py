@@ -7,6 +7,8 @@ These sequential reads are not a transactional cross-schema snapshot.
 --schema-policy approved-missing-runtime-tables-v1 admits only the seven
 source-pinned tables after every fixture metadata predicate passes SELECT.
 The default equal-schema policy continues to require identical table sets.
+--schema-policy approved-missing-runtime-and-email-tables-v2 additionally requires
+the two source-pinned email association tables and their exact metadata guards.
 """
 from __future__ import annotations
 

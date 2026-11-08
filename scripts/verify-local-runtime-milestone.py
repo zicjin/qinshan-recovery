@@ -12,7 +12,7 @@ Git. Runtime-before is the restoration target, independent of baseline content.
 The verifier only inspects the local Docker Unix socket. It never stops apps,
 resets data, executes SQL or promotes strict evidence. It compares supplied
 snapshots, not their authenticity, acquisition timing or fixture/audit/rollback.
-Approved seven-table observations require the same explicit --schema-policy;
+Approved seven- or nine-table observations require the same explicit --schema-policy;
 source provenance, definitions and SELECT predicate/result coverage are rechecked.
 """
 from __future__ import annotations

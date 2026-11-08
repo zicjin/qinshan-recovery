@@ -4,6 +4,10 @@ import java.util.List;
 import java.util.Map;
 
 import com.sunwayworld.emc.module.mdm.equipt.equipt.bean.EmcEquiptBean;
+import com.sunwayworld.emc.module.mdm.equipt.equipt.bean.PfEquiptPlanDTO;
+import com.sunwayworld.emc.module.mdm.equipt.equipt.bean.PfEquiptPerCheckDTO;
+import com.sunwayworld.emc.module.mdm.equipt.equipt.bean.PfEquiptUserDTO;
+import com.sunwayworld.framework.mybatis.mapper.MapperParameter;
 import com.sunwayworld.framework.spring.annotation.GikamBean;
 import com.sunwayworld.framework.support.base.mapper.GenericMapper;
 
@@ -19,5 +23,11 @@ public interface EmcEquiptMapper extends GenericMapper<Long> {
     List<Map<String, Object>> selectPerCheckChoose();
 
     List<EmcEquiptBean> selectMaxEquiptIdByEquiptCategoryId(long equiptCategoryId);
+
+    List<PfEquiptPlanDTO> selectLedgerPlan(MapperParameter parameter);
+
+    List<PfEquiptPerCheckDTO> selectLedgerPerCheck(MapperParameter parameter);
+
+    List<PfEquiptUserDTO> selectLedgerUser(MapperParameter parameter);
 
 }

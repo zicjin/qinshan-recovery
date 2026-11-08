@@ -1,0 +1,100 @@
+{
+  "schema": "original-equipment-ledger-projection-repair-v1",
+  "classification": "source-backed-original-system-query-contract-defect-repair",
+  "base_checkpoint": "4c3b61a8343771eaee5aa47bc075ec4f492615e6",
+  "strict_evidence": false,
+  "runtime_deployed": false,
+  "routes": [
+    "POST /secure/emc/module/mdm/equipt/equipts/action/select-equipt-plan",
+    "POST /secure/emc/module/mdm/equipt/equipts/action/select-equipt-per-check-search",
+    "POST /secure/emc/module/mdm/equipt/equipts/action/select-equipt-user"
+  ],
+  "original_failure": "Allthree actual supplier and owned equiptNo_CISC no-match andequiptNo asc requests return500/ORA00904EQUIPTNO under equal actualprincipal/roles/org. Defaults retain plan10/percheck0,user supplier73owned72 data difference.",
+  "root_cause": "Original Service paginateschild/entitySQL before DTO transformation,so wrapperfilters/order refer to DTOequiptNo not exposed inSQL. Equipment EQUIPTID String code differs from plan EQUIPTID Long FK.",
+  "repair": [
+    "Add three dedicated SELECTs in baseequipmentMapper,typed result DTOs; inherited actual PfMapper resolves new parentstatementIDs through realMyBatis registration.",
+    "Preserve original sourceDTOfields,join plan.EQUIPTID=equipment.ID,scopeequipmentORGID againstserveractualparentOrgId. Trustedparameteroverridesclient input;null/emptyorganizationmatchesnorows.",
+    "Use sharedGlobalMappercondition/orderfragments insideprojectedaliasT. Count/rownum paginateexact samefilteredprojection;appendIDdesc tie-breaker.",
+    "ExistingthreeService methodsuseMybatisPageHelper withtypedDAO lists,avoiding GenericService map-to-EmcEquiptBean fieldloss. Markreadonlytransactions.",
+    "Originalresource/HTTPURLs/DTOclassesandfourthplan-recordendpointunchanged. GenericSQL/normalizer/sourcebindingtoolsunchanged."
+  ],
+  "original_scope_review": "Originalplan andpercheck selectByCondition WHERE onlyincludesGlobalMapper;no additional delete/status predicate omitted. NewSQL retainsGlobalMapper andindependentparentOrg. OriginalequipmentparentIDsetalreadyexcludesorphanplanreferences.",
+  "not_invented": [
+    "maintLastDate/maintPlanDate/checkIndexhave no selectedsourcealiases inoldmappers;remainnull/nocontriveddateorindexexpression.",
+    "No fourthplanpage/recordResource rebinding.",
+    "No all-family coverageclaim;onlythree equiptNo filter/sort andexistingmappedfields admitted."
+  ],
+  "validation": {
+    "unit_command": "python3 scripts/tests/test-equipment-ledger-projections.py --dependency-root <existing-source-only-build-root>",
+    "unit_runtime": "Actual changedService/DAO/Mapper compiledJDK8 totemporaryoutput; actualMyBatisXML+GlobalMapper+MybatisInterceptor+MybatisPageHelper,typedDTOs;SQLiteinmemoryfixtureonly. No network/container created.",
+    "checks": [
+      "Three realtypedqueries count/filter/caseinsens/no-match/defaultorder/ascdesc/page1page2",
+      "Foreignorg/nullorg/emptyorgexcluded",
+      "ClientledgerParentOrgId cannot overrideactualServiceparentOrg",
+      "ActualPfMapperinheritancestatementfallback",
+      "JSONDTOexcludes SQLscope/tiebreakercolumns",
+      "DuplicateequiptNostableIDdesctiebreaker acrosspages",
+      "OracleSQLwrapper ordersbeforeROWNUMlimit",
+      "Actualsource-backedDTOfields plusmissingdate/indexremainnull"
+    ],
+    "regression_red": "Existing source lacks dedicated projected statements; actual MyBatis test fails selectLedgerPlan missing. PriorHTTPproves exactoriginalEQUIPTNO failure.",
+    "green": "Four groupedchecks PASS;allthreeSQL+actualServicechain",
+    "test_only_adjustments": [
+      "Disable testMyBatisSESSIONcache (productionMybatisPageHelperphysicalpaginationusesThreadLocal;testsession reusedmultiplepages).",
+      "SQLite3.31JDBCdoesnotimplementgetObject(LocalDateTime.class);testonlytypehandlerusesTimestamp. Productionframeworkunchanged."
+    ],
+    "live_before": "9same-requestpairs only;default+equiptNo no-match+sortperfamily. Root4c3bappunpatched.",
+    "local_Oracle_SQL": "SETTRANSACTIONREADONLY;rollback;newactualgeneratedMapperSQL eachfamily<=3 queries. Planpositive2/displaycodecount1,userpositive2/displaycodecount1,no-match0all;percheckpositiveblocked0existingrows. NoORA. DirectSQLisnotnewJavaHTTPacceptance.",
+    "after_HTTP": "Pendingroot combinedbuild/deployandrealHTTPsamecaseafter. NoPasspromotion."
+  },
+  "source_files": [
+    {
+      "path": "project/src/main/java/com/sunwayworld/emc/module/mdm/equipt/equipt/dao/EmcEquiptDao.java",
+      "sha256": "feb169ecfe685408660397da12c5aba233307bdb7b2a93f422fc84931a777275"
+    },
+    {
+      "path": "project/src/main/java/com/sunwayworld/emc/module/mdm/equipt/equipt/dao/impl/EmcEquiptDaoImpl.java",
+      "sha256": "9dbcbe7314b14a310fbda3020e1a1e8cb0722723f7620dade54942e196fd3e85"
+    },
+    {
+      "path": "project/src/main/java/com/sunwayworld/emc/module/mdm/equipt/equipt/mapper/EmcEquiptMapper.java",
+      "sha256": "5449b295f1bc63ea3b4a670c4700944f5d212b95ab349c2884d0ade966a554bc"
+    },
+    {
+      "path": "project/src/main/java/com/sunwayworld/emc/module/mdm/equipt/equipt/mapper/conf/emc-equipt-oracle-mapper.xml",
+      "sha256": "cf2850c3b7c896d6f97e61553415a2fa31662ce7273920e5923f6b2a77a0a7c6"
+    },
+    {
+      "path": "project/src/main/java/com/sunwayworld/emc/module/mdm/equipt/equipt/service/impl/PfEquiptServiceImpl.java",
+      "sha256": "ae4b42604f182ddc96f7f77d3cd3241fa881280567fd1be130bc8ae876d56800"
+    },
+    {
+      "path": "project/src/main/java/com/sunwayworld/emc/module/mdm/equipt/equipt/dao/PfEquiptLedgerDao.java",
+      "sha256": "0f80be8a30c72710822536b8eb43d8725a1c3b9fa78f75924d55ad4d93cbeeae"
+    }
+  ],
+  "private_receipts": {
+    "before_HTTP": {
+      "path": "private/new-page-body-repairs-20261109/equipment-query-next-review/before-http-safe.json",
+      "sha256": "c9ce236ccb00347b69cde203a7c6dadc48341e20ade03452d62cc9accf094fbe"
+    },
+    "Oracle_READONLY": {
+      "path": "private/new-page-body-repairs-20261109/equipment-query-next-review/oracle-read-safe.json",
+      "sha256": "86b77b782d4c3589430a13e84b306922746da226574712ce5a5901b381dfb198"
+    },
+    "regression_green_sha256": "4a15774fe4dc7f1597f33d40cd310e4cc48ceb80958ab6556a5ca38648c5b41e"
+  },
+  "business_writes": false,
+  "fixture_on_long_lived_runtime": false,
+  "runtime_restarts": false,
+  "source_commit_exception_expanded": false,
+  "API_ALIGNMENT_GATE": "OPEN",
+  "compile_closure_followup": {
+    "actual_failure": "Root real source-only javac failed: OwnedEquipmentReadDao implements EmcEquiptDao did not implement the three newly added ledger methods. Narrow unit had compiled only real projectDAO and missed this existing implementor.",
+    "root_cause": "DTO-only read seam was incorrectly added to the generic equipment DAO contract shared by transitional owned facade.",
+    "minimal_fix": "Restore original EmcEquiptDao API; new PfEquiptLedgerDao contains exactly3typedDTO query methods. EmcEquiptDaoImpl implements original andledger interfaces. PfEquiptServiceImpl injects dedicatedledgerDAO only for3queries;all other originalgetDao paths retained.",
+    "unchanged": "No old facade edits,stub,empty success,duplicate SQL ornewprocess. Mapperbase additions retained;no hand-written Mapper implementor.",
+    "regression": "Actual changedService/DAO/interface compile and allthreeMyBatis/typedDTO/count/page/org testsPASS withdedicated3methodDAOproxy. Assert EmcEquiptDao declares/inherits no selectLedger methods andrealDAOimplements newinterface.",
+    "root_full_source_only_build": "Pending root rerun after followup;unit success not claimed wholebuild success."
+  }
+}

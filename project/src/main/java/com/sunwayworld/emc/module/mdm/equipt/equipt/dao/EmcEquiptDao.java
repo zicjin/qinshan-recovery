@@ -17,4 +17,5 @@ public interface EmcEquiptDao extends GenericDao<EmcEquiptBean, Long>{
     List<Map<String, Object>> selectPerCheckChoose();
 
     List<EmcEquiptBean> selectMaxEquiptIdByEquiptCategoryId(long equiptCategoryId);
+
 }

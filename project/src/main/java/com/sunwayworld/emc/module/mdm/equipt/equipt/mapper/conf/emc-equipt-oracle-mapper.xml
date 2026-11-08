@@ -158,4 +158,55 @@
             WHERE T.EQUIPTCATEGORYID = #{equiptCategoryId}
             ) E
     </select>
+
+    <!-- Dedicated DTO projections keep filtering/count/order ahead of pagination.
+         EQUIPTID is the equipment display code only on E; plan.EQUIPTID is E.ID. -->
+    <sql id="ledgerScopeAndFilter">
+        <where>
+            T.ORGID = #{ledgerParentOrgId}
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />,
+            </when>
+        </choose>
+        T.ID DESC
+    </sql>
+
+    <select id="selectLedgerPlan" parameterType="map"
+            resultType="com.sunwayworld.emc.module.mdm.equipt.equipt.bean.PfEquiptPlanDTO">
+        SELECT T.*
+          FROM (SELECT A.ID, E.ORGID, A.CREATEDBYORGID,
+                       E.EQUIPTID AS EQUIPTNO, E.EQUIPTNAME, E.SPECIFICATION,
+                       A.VERIFYORG, A.CYCLE, A.REMARK,
+                       E.KEEPUSERID, U.USERNAME AS KEEPUSERNAME
+                  FROM T_EMC_EQUIPT_PLAN A
+                  INNER JOIN T_EMC_EQUIPT E ON A.EQUIPTID = E.ID
+                  LEFT JOIN T_CORE_USER U ON E.KEEPUSERID = U.ID) T
+        <include refid="ledgerScopeAndFilter" />
+    </select>
+
+    <select id="selectLedgerPerCheck" parameterType="map"
+            resultType="com.sunwayworld.emc.module.mdm.equipt.equipt.bean.PfEquiptPerCheckDTO">
+        SELECT T.*
+          FROM (SELECT A.ID, E.ORGID, A.CREATEDBYORGID,
+                       E.EQUIPTID AS EQUIPTNO, E.EQUIPTNAME, E.SPECIFICATION,
+                       A.MAINTDATE, A.CHECKWAY, A.CHECKREASON,
+                       A.CHECKUSERID, A.CHECKUSERNAME, A.REMARK
+                  FROM T_EMC_EQUIPT_PER_CHECK_PLAN A
+                  INNER JOIN T_EMC_EQUIPT E ON A.EQUIPTID = E.ID) T
+        <include refid="ledgerScopeAndFilter" />
+    </select>
+
+    <select id="selectLedgerUser" parameterType="map"
+            resultType="com.sunwayworld.emc.module.mdm.equipt.equipt.bean.PfEquiptUserDTO">
+        SELECT T.*
+          FROM (SELECT E.ID, E.ORGID, E.CREATEDBYORGID,
+                       E.EQUIPTID AS EQUIPTNO, E.EQUIPTNAME, E.SPECIFICATION,
+                       E.USEDUSERNAME AS USERS
+                  FROM T_EMC_EQUIPT E) T
+        <include refid="ledgerScopeAndFilter" />
+    </select>
 </mapper>

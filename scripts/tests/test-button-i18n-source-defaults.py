@@ -62,7 +62,7 @@ public class ButtonI18nContract {
         CoreI18nConfigBean zh=new CoreI18nConfigBean();zh.setId("zh-CN");
         CoreI18nConfigBean en=new CoreI18nConfigBean();en.setId("en-US");
         List<CoreI18nMessageBean> db=new ArrayList<>();
-        if (custom) {db.add(message(1L,"GIKAM.BUTTON.INSERT","数据库添加"));db.add(message(2L,"GIKAM.BUTTON.SAVE","数据库保存"));db.add(message(3L,"GIKAM.BUTTON.DELETE","数据库删除"));} else if (project) {db.add(message(4L,"GIKAM.BUTTON.SEARCH","数据库查询"));db.add(message(5L,"GIKAM.BUTTON.COPY","数据库复制"));}
+        if (custom) {db.add(message(1L,"GIKAM.BUTTON.INSERT","数据库添加"));db.add(message(2L,"GIKAM.BUTTON.SAVE","数据库保存"));db.add(message(3L,"GIKAM.BUTTON.DELETE","数据库删除"));db.add(message(7L,"GIKAM.TIP.CHOOSE_ONE_ITEM","数据库选择提示"));db.add(message(8L,"GIKAM.TIP.INVALID_INPUT_FIELDS","数据库输入提示"));db.add(message(9L,"GIKAM.VALIDATOR.REQUIRED","数据库必填提示"));} else if (project) {db.add(message(4L,"GIKAM.BUTTON.SEARCH","数据库查询"));db.add(message(5L,"GIKAM.BUTTON.COPY","数据库复制"));}
         CoreI18nConfigService configs=(CoreI18nConfigService)Proxy.newProxyInstance(CoreI18nConfigService.class.getClassLoader(),
             new Class<?>[]{CoreI18nConfigService.class},(p,m,a)->{
                 if(m.getName().equals("selectAll"))return Arrays.asList(zh,en);
@@ -95,19 +95,29 @@ public class ButtonI18nContract {
             equal("导出",I18nHelper.getMessage("GIKAM.BUTTON.EXPORT"),"actual helper EXPORT");
             if(!custom){equal("查询",I18nHelper.getMessage("GIKAM.BUTTON.SEARCH"),"existing project SEARCH");equal("复制",I18nHelper.getMessage("GIKAM.BUTTON.COPY"),"existing project COPY");}
             equal("GIKAM.BUTTON.NOT_DEFINED",I18nHelper.getMessage("GIKAM.BUTTON.NOT_DEFINED"),"unknown key remains unknown");
+            equal(custom?"项目选择提示":"请选择一条数据",I18nHelper.getMessage("GIKAM.TIP.CHOOSE_ONE_ITEM"),"actual selection prompt/default and project override");
+            equal(custom?"数据库输入提示":"突出显示的字段的输入无效:",I18nHelper.getMessage("GIKAM.TIP.INVALID_INPUT_FIELDS"),"actual invalid input prompt/default and database override");
+            equal(custom?"项目必填提示":"必填项，请填写",I18nHelper.getMessage("GIKAM.VALIDATOR.REQUIRED"),"actual required validator/default and project override");
+            equal("GIKAM.TIP.NOT_DEFINED",I18nHelper.getMessage("GIKAM.TIP.NOT_DEFINED"),"unknown prompt remains unknown");
+            for(String code:Arrays.asList("GIKAM.TIP.CHOOSE_ONE_ITEM","GIKAM.TIP.INVALID_INPUT_FIELDS","GIKAM.VALIDATOR.REQUIRED"))
+                equal(null,CoreI18nCache.instance().getI18nLocaleMap("en-US").get(code),"no invented prompt English locale "+code);
+
             if(!custom) {
                 Properties defaults=new Properties();
                 try(java.io.Reader reader=new java.io.InputStreamReader(ButtonI18nContract.class.getResourceAsStream("/i18n/core-button-defaults_zh-cn.properties"),"UTF-8")){defaults.load(reader);}
-                equal(25,defaults.size(),"all source-backed defaults packaged");
+                equal(28,defaults.size(),"finite25button plus3source-backed prompts packaged");
                 for(String code:defaults.stringPropertyNames())equal(defaults.getProperty(code),I18nHelper.getMessage(code),"original SQL default "+code);
             }
             equal(null,CoreI18nCache.instance().getI18nLocaleMap("en-US").get("GIKAM.BUTTON.INSERT"),"no invented English locale");
             equal(null,CoreI18nCache.instance().getI18nLocaleMap("zh-CN").get("GIKAM.SEARCH"),"unrelated R21 key excluded");
             if(!custom && !project) {
                 db.add(message(6L,"GIKAM.BUTTON.INSERT","重载后的数据库添加"));
+                db.add(message(10L,"GIKAM.TIP.CHOOSE_ONE_ITEM","重载后的数据库选择提示"));
                 Method load=CoreI18nCache.class.getDeclaredMethod("load");load.setAccessible(true);load.invoke(CoreI18nCache.instance());
                 equal("重载后的数据库添加",I18nHelper.getMessage("GIKAM.BUTTON.INSERT"),"later database override must survive repeated cache reload");
                 equal("删除",I18nHelper.getMessage("GIKAM.BUTTON.DELETE"),"defaults remain available after reload");
+                equal("重载后的数据库选择提示",I18nHelper.getMessage("GIKAM.TIP.CHOOSE_ONE_ITEM"),"later database prompt override survives cache reload");
+                equal("必填项，请填写",I18nHelper.getMessage("GIKAM.VALIDATOR.REQUIRED"),"other prompt default remains after reload");
             }
             System.out.println("button i18n actual cache/helper "+(custom?"database/custom precedence":project?"original project-over-database precedence":"source defaults and subsequent database reload")+": PASS");
         } finally {executor.shutdownNow();LocaleContextHolder.resetLocaleContext();ctx.close();}
@@ -130,14 +140,21 @@ def main():
     resource=ROOT/provenance['resource_path']
     if hashlib.sha256(resource.read_bytes()).hexdigest()!=provenance['resource_sha256']:raise AssertionError('button defaults resource hash changed')
     entries={line.split('=',1)[0]:line.split('=',1)[1]for line in resource.read_text().splitlines()if line and not line.startswith('#')}
-    if len(entries)!=25 or set(entries)!={x['code']for x in provenance['entries']}:raise AssertionError('finite25button provenance mismatch')
+    button_entries={k:v for k,v in entries.items()if k.startswith('GIKAM.BUTTON.')}
+    if len(button_entries)!=25 or set(button_entries)!={x['code']for x in provenance['entries']}:raise AssertionError('finite25button provenance mismatch')
+    prompt_provenance=json.loads((ROOT/'docs/reconstitution/validation-i18n-defaults.json').read_text())
+    if len(entries)!=28 or set(entries)-set(button_entries)!={x['code']for x in prompt_provenance['entries']}:raise AssertionError('finite3prompt provenance mismatch')
+    if prompt_provenance['source_sha256']!=hashlib.sha256(sql).hexdigest()or prompt_provenance['resource_sha256']!=hashlib.sha256(resource.read_bytes()).hexdigest():raise AssertionError('prompt source/resource provenance hash changed')
+    for item in prompt_provenance['entries']:
+        statement=sql.decode().splitlines()[item['line']-1]
+        if hashlib.sha256(statement.encode()).hexdigest()!=item['statement_sha256']or entries[item['code']]!=item['value']:raise AssertionError('SQL exact prompt mismatch: '+item['code'])
     for item in provenance['entries']:
         statement=sql.decode().splitlines()[item['line']-1]
         if hashlib.sha256(statement.encode()).hexdigest()!=item['statement_sha256'] or entries[item['code']]!=item['value']:raise AssertionError('SQL exact translation mismatch: '+item['code'])
     source=ROOT/'reconstituted/framework/owned-core-common/src/main/java/com/sunwayworld/module/sys/i18n/CoreI18nCache.java'
     resources=ROOT/'reconstituted/framework/owned-core-common/src/main/resources'
     with tempfile.TemporaryDirectory(prefix='button-i18n-')as directory:
-        out=Path(directory);test=out/'ButtonI18nContract.java';test.write_text(JAVA,encoding='utf-8');custom=out/'custom';custom.mkdir();(custom/'messages_zh-cn.properties').write_text('GIKAM.BUTTON.DELETE=自定义删除\n',encoding='utf-8')
+        out=Path(directory);test=out/'ButtonI18nContract.java';test.write_text(JAVA,encoding='utf-8');custom=out/'custom';custom.mkdir();(custom/'messages_zh-cn.properties').write_text('GIKAM.BUTTON.DELETE=自定义删除\nGIKAM.TIP.CHOOSE_ONE_ITEM=项目选择提示\nGIKAM.VALIDATOR.REQUIRED=项目必填提示\n',encoding='utf-8')
         cp=':'.join(str(x)for x in [out,resources,ROOT/'project/src/main/resources',*jars])
         subprocess.run([javac,'-source','8','-target','8','-encoding','UTF-8','-proc:none','-cp',cp,'-d',str(out),str(source),str(test)],check=True)
         for scenario in [[],['custom'],['project']]:subprocess.run([java,'-cp',cp,'ButtonI18nContract',*scenario],check=True)

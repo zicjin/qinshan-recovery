@@ -9,7 +9,7 @@
   "module": "owned-core-common",
   "resource_count": 1064,
   "resource_file_count": 1064,
-  "resource_tree_sha256": "df0cbb22ee7438f4321959ceb6f69896283aff8e41aa77ad5f1d455ad867f306",
+  "resource_tree_sha256": "cbbc7904422cf70097a8bfc7722445a7692ee13f07d9952539ee60ec3fc30eb7",
   "resources": [
     {
       "bytes": 440,
@@ -7529,16 +7529,18 @@
       "source_jar": "gikam-core-common-14.1.5.jar"
     },
     {
-      "bytes": 770,
+      "additional_provenance_manifest": "docs/reconstitution/validation-i18n-defaults.json",
+      "bytes": 1016,
       "compile_status": "not-applicable-resource",
       "path": "i18n/core-button-defaults_zh-cn.properties",
       "provenance_manifest": "docs/reconstitution/button-i18n-defaults.json",
-      "sha256": "3a28f48d19d478eb12bce6014f65226f5946b249accd709b254f987f479f961f",
+      "sha256": "4c54b05d376dab5735793bb1044af79458f74f37efd7839d1fbe00140e711635",
       "source_jar": "tracked-release-sql",
       "source_path": "project/sql/核心发版14.1.5/init-sql/oracle/0.common_sql_oracle-1.txt",
       "source_sha256": "99c1ba18054594384cc88a28ecc5c8c44f540e089e4c92ca92eddb94c2f17be1",
       "transformations": [
         "extract25exactGIKAM.BUTTON.zh-CN.releaseSQLvalues",
+        "extract3exactselection_validation.zh-CN.releaseSQLvalues",
         "overlay:src/main/resources/i18n/core-button-defaults_zh-cn.properties"
       ]
     }

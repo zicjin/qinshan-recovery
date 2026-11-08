@@ -5,7 +5,7 @@
   "source_sha256": "99c1ba18054594384cc88a28ecc5c8c44f540e089e4c92ca92eddb94c2f17be1",
   "source_locale": "zh-CN",
   "resource_path": "reconstituted/framework/owned-core-common/src/main/resources/i18n/core-button-defaults_zh-cn.properties",
-  "resource_sha256": "3a28f48d19d478eb12bce6014f65226f5946b249accd709b254f987f479f961f",
+  "resource_sha256": "4c54b05d376dab5735793bb1044af79458f74f37efd7839d1fbe00140e711635",
   "entry_count": 25,
   "entries": [
     {
@@ -178,5 +178,11 @@
     "classification": "Missing original release configuration in both testing baselines; source-backed restoration explicitly requested by user, not an owned-only regression.",
     "owned_locale_sha256": "c67dc7296bfc25e221e0d02ed5f8110e6ee64e463df4663a37c672de74103e4f",
     "supplier_locale_sha256": "9043d8806821c3355dc0a267fa72aac3b2e209af8e5ff5182b2a2b4ff29ecb36"
+  },
+  "additional_source_backed_entries": {
+    "manifest": "docs/reconstitution/validation-i18n-defaults.json",
+    "count": 3,
+    "scope": "This finite25 BUTTON inventory remains unchanged;three exactselection/validation originals share the existing defaults resource.",
+    "resource_total_entries": 28
   }
 }

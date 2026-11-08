@@ -1,0 +1,51 @@
+{
+  "schema": "source-backed-validation-i18n-defaults-v1",
+  "classification": "original-release-configuration-restoration",
+  "source_checkpoint": "4c3b61a8343771eaee5aa47bc075ec4f492615e6",
+  "source_path": "project/sql/核心发版14.1.5/init-sql/oracle/0.common_sql_oracle-1.txt",
+  "source_sha256": "99c1ba18054594384cc88a28ecc5c8c44f540e089e4c92ca92eddb94c2f17be1",
+  "source_locale": "zh-CN",
+  "resource_path": "reconstituted/framework/owned-core-common/src/main/resources/i18n/core-button-defaults_zh-cn.properties",
+  "resource_sha256": "4c54b05d376dab5735793bb1044af79458f74f37efd7839d1fbe00140e711635",
+  "entry_count": 3,
+  "entries": [
+    {
+      "code": "GIKAM.TIP.CHOOSE_ONE_ITEM",
+      "value": "请选择一条数据",
+      "line": 5943,
+      "statement_sha256": "950060fbab6cef2a762f0064bc88bcda411b6a9960051f9444f2f086c4dc4e64"
+    },
+    {
+      "code": "GIKAM.TIP.INVALID_INPUT_FIELDS",
+      "value": "突出显示的字段的输入无效:",
+      "line": 5958,
+      "statement_sha256": "ce462646d5ed2849605e0ef844611e352ab208edec38f6449c258b1bea4454ce"
+    },
+    {
+      "code": "GIKAM.VALIDATOR.REQUIRED",
+      "value": "必填项，请填写",
+      "line": 7408,
+      "statement_sha256": "fc3d29b4d9fc34f040e6bae56f1df51b46905ab83cdfafbd41bbd0bffd10bc8b"
+    }
+  ],
+  "merge": "Existing database and configured project resource values retain original precedence;these three defaults fill absent keys using the already existing putIfAbsent phase.",
+  "scope_exclusions": [
+    "No additional locales or guessed translations",
+    "No unlisted prompt keys",
+    "No changed BUTTON25 values",
+    "Unknown keys retain original unresolved behavior",
+    "No HTTP,SQL,Redis,runtime refresh or database mutation"
+  ],
+  "regression": {
+    "path": "scripts/tests/test-button-i18n-source-defaults.py",
+    "actual_production_sources": "Unchanged CoreI18nCache and DatabaseDrivenMessageSource/I18nHelper with temporary StaticApplicationContext and primitive in-memory DAO/Redis boundaries. Reuses existing source-only dependency JARs;compiles the unchanged cache and test only to temporary output.",
+    "red": "Before resource loading,the actual cache/helper returns raw GIKAM.TIP.CHOOSE_ONE_ITEM and assertion fails.",
+    "green": "Source defaults, custom project/database precedence, and original project-over-database scenarios PASS, including the three exact source keys, later database reload override, unknown key and English exclusion.",
+    "command": "python3 scripts/tests/test-button-i18n-source-defaults.py --dependency-root <existing-built-checkout> --jdk <existing-jdk8>",
+    "API_or_runtime_completion_claimed": false,
+    "test_sha256": "5c20d7fb24c808b47e7854a8b60688195a52c1bbb532aab7d12b99eb99ccf18e"
+  },
+  "implementation": "Append only3 exactsource values to existing already-loaded defaults resource. No Java cache/merge change,no resource/modulecount change,no newlocale.",
+  "existing_BUTTON_entries_unchanged": 25,
+  "approved_stock_artifact_sha256": "4a720797810fd2f8cca6e22604657028cb87830ca0e24bb55a5f42f040f6ee9f"
+}

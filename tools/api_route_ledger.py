@@ -117,6 +117,8 @@ def classify_route_kind(route: Dict[str, object]) -> Dict[str, str]:
     text = _route_text(route)
     source = str(route.get("source", "")).lower()
     annotation = str(route.get("annotation", ""))
+    if annotation.startswith("inherited.Generic") and annotation.endswith("PageController"):
+        return {"route_kind": "web-controller"}
     # Inherited GenericResource paths often contain ``gikam-attrs``.  The
     # annotation/source relationship is authoritative; a path token must not
     # reclassify those routes as workspace pages and hide them from API

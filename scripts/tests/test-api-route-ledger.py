@@ -100,6 +100,10 @@ assert MODULE.classify_family({"source": "x/mdm/emp/EmpResource.java", "class": 
 assert MODULE.classify_family({"source": "x/bp/result/RunResource.java", "class": "RunResource", "path": "/secure/emc/module/bp/result/runs", "annotation": "RequestMapping"})["family"] == "result-order-project"
 assert MODULE.classify_route_kind({"source": "x/controller/WorkspaceController.java", "class": "WorkspaceController", "path": "/workspace", "annotation": "RequestMapping"})["route_kind"] == "workspace"
 assert MODULE.classify_route_kind({
+    "source": "x/controller/DemoController.java", "class": "DemoController",
+    "path": "/demo/page/edit-list", "annotation": "inherited.GenericEditListPageController",
+})["route_kind"] == "web-controller"
+assert MODULE.classify_route_kind({
     "source": "x/resource/CarResource.java",
     "class": "CarResource",
     "path": "/secure/emc/module/item/emc-cars/gikam-attrs/mybatis-mapper",

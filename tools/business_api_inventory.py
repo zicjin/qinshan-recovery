@@ -97,6 +97,32 @@ GENERIC_AUDITABLE_INHERITED_ROUTES = (
     ("PUT", "/action/undo-with-progress"),
     ("GET", "/{id}/previous-tasks"),
 )
+# Exact mappings from reconstructed framework/controller/Generic*PageController.
+# Their @RequestMapping declarations do not restrict the HTTP method. Keep ANY
+# rather than inferring GET from the page requests observed during screening.
+GENERIC_PAGE_INHERITED_ROUTES = {
+    "GenericAuditListPageController": (("ANY", "/audit-list"),),
+    "GenericChooseMultPageController": (("ANY", "/choose-mult-list"),),
+    "GenericChoosePageController": (("ANY", "/choose-list"), ("ANY", "/simple-choose-list")),
+    "GenericDeactivatedListPageController": (("ANY", "/deactivated-list"),),
+    "GenericDetailPageController": (("ANY", "/detail"),),
+    "GenericEditListPageController": (("ANY", "/edit-list"),),
+    "GenericIndexPageController": (("ANY", ""),),
+    "GenericInnerSelectPageController": (("ANY", "/inner-select"),),
+    "GenericLineDetailPageController": (("ANY", "/line-detail"),),
+    "GenericLineSearchListPageController": (("ANY", "/line-search-list"),),
+    "GenericMatrixPageController": (("ANY", "/matrix"),),
+    "GenericPreInsertPageController": (("ANY", "/pre-insert"),),
+    "GenericPrintPageController": (("ANY", "/print"),),
+    "GenericQueryListPageController": (("ANY", "/query-list"),),
+    "GenericRejectListPageController": (("ANY", "/reject-list"),),
+    "GenericSearchListPageController": (("ANY", "/search-list"),),
+    "GenericSuspendListPageController": (("ANY", "/suspend-list"),),
+    "GenericUndoActivitedListPageController": (("ANY", "/undoactivite-list"),),
+    "GenericUndoListPageController": (("ANY", "/undo-list"),),
+}
+
+
 def _source_commit() -> str:
     return subprocess.check_output(["git", "-C", str(REPO_ROOT), "rev-parse", "HEAD"], text=True).strip()
 
@@ -301,9 +327,20 @@ def _routes_for_source(info: Dict[str, object], infos: Dict[str, Dict[str, objec
             inherited_groups.append(("inherited.GenericResource", GENERIC_RESOURCE_INHERITED_ROUTES))
         if _inherits(info, infos, "GenericAuditableResource"):
             inherited_groups.append(("inherited.GenericAuditableResource", GENERIC_AUDITABLE_INHERITED_ROUTES))
+        for parent, page_routes in GENERIC_PAGE_INHERITED_ROUTES.items():
+            if _inherits(info, infos, parent):
+                inherited_groups.append(("inherited." + parent, page_routes))
         for annotation, inherited_routes in inherited_groups:
             for base in bases:
                 for method, path in inherited_routes:
+                    if annotation.removeprefix("inherited.") in GENERIC_PAGE_INHERITED_ROUTES:
+                        # A rootless shared interface is not an application route;
+                        # an explicit override already supplies its own provenance.
+                        if base not in info["class_bases"] or not base.strip("/") or any(
+                            row["method"] == method and row["path"] == _join(base, path)
+                            for row in resolved
+                        ):
+                            continue
                     resolved.append({
                         "source": str(info["relative"]),
                         "class": str(info["qualified"]),
@@ -316,7 +353,6 @@ def _routes_for_source(info: Dict[str, object], infos: Dict[str, Dict[str, objec
     for route in resolved:
         unique[(route["method"], route["path"], route["class"], route["annotation"])] = route
     return list(unique.values())
-    return resolved
 
 
 def extract_routes(source: str, source_path: str, constants: Optional[Mapping[str, str]] = None) -> List[Dict[str, str]]:
@@ -393,6 +429,8 @@ def _owned_route_is_concrete(route: Dict[str, str]) -> bool:
     """
     path = route["path"]
     base = route.get("class_base", "")
+    if route.get("class", "").rsplit(".", 1)[-1] in GENERIC_PAGE_INHERITED_ROUTES:
+        return False
     return bool(base.strip("/")) or path not in GENERIC_INHERITED_PATHS
 
 
@@ -456,6 +494,7 @@ def build_inventory(source_root: Path, packaged_classes: Set[str],
                     owned_route_map: Optional[Dict[str, List[str]]] = None) -> List[Dict[str, object]]:
     owned_route_map = owned_route_map or {}
     rows: List[Dict[str, object]] = []
+    inherited_pages: Dict[Tuple[str, str], Dict[str, object]] = {}
     infos = _source_infos(source_root)
     for qualified in sorted({str(item["qualified"]) for item in infos.values()}):
         info = infos[qualified]
@@ -470,14 +509,23 @@ def build_inventory(source_root: Path, packaged_classes: Set[str],
             canonical = f"{route['method']} {route['path']} {route['class']}"
             route_key = "%s %s" % (route["method"], route["path"])
             owned_sources = sorted(set(owned_route_map.get(route_key, [])))
-            rows.append({
+            row = {
                 "id": hashlib.sha256(canonical.encode("utf-8")).hexdigest()[:16],
                 **route,
                 "runtime_status": "owned-class-present" if class_entry in packaged_classes or owned_sources else "source-only",
                 "owned_sources": owned_sources,
                 "behavior_status": "unknown",
                 "evidence_status": "unknown",
-            })
+            }
+            if route["annotation"].removeprefix("inherited.") in GENERIC_PAGE_INHERITED_ROUTES:
+                key = (route["method"], route["path"])
+                provenance = {name: route[name] for name in ("source", "class", "annotation")}
+                if key in inherited_pages:
+                    inherited_pages[key]["inherited_page_sources"].append(provenance)
+                    continue
+                row["inherited_page_sources"] = [provenance]
+                inherited_pages[key] = row
+            rows.append(row)
     return sorted(rows, key=lambda row: (row["path"], row["method"], row["class"], row["source"]))
 
 

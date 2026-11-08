@@ -94,6 +94,106 @@ public interface DemoResource extends GenericResource<Object,Object,Long>, Gener
         self.assertEqual("owned-class-present", result[0]["runtime_status"])
         self.assertEqual([str(owned)], result[0]["owned_sources"])
 
+    def test_inherited_page_routes_follow_transitive_controller_interfaces(self):
+        with tempfile.TemporaryDirectory() as raw:
+            source_root = Path(raw)
+            (source_root / "BasePages.java").write_text('''
+public interface BasePages extends GenericEditListPageController,
+        GenericAuditListPageController, GenericSearchListPageController {}
+''', encoding="utf-8")
+            (source_root / "EquipmentController.java").write_text('''
+@RequestMapping("/secure/equipment/page")
+public interface EquipmentController extends BasePages {}
+''', encoding="utf-8")
+            (source_root / "EquipmentControllerImpl.java").write_text('''
+public class EquipmentControllerImpl implements EquipmentController {}
+''', encoding="utf-8")
+            rows = build_inventory(source_root, set())
+        self.assertEqual([
+            ("ANY", "/secure/equipment/page/audit-list"),
+            ("ANY", "/secure/equipment/page/edit-list"),
+            ("ANY", "/secure/equipment/page/search-list"),
+        ], [(row["method"], row["path"]) for row in rows])
+        self.assertTrue(all(row["source"] == "EquipmentController.java" for row in rows))
+        self.assertTrue(all(row["behavior_status"] == "unknown" for row in rows))
+        self.assertTrue(all(row["annotation"].startswith("inherited.Generic") for row in rows))
+
+    def test_explicit_page_override_is_not_duplicated(self):
+        with tempfile.TemporaryDirectory() as raw:
+            source_root = Path(raw)
+            (source_root / "EquipmentController.java").write_text('''
+@RequestMapping("/secure/equipment/page")
+public interface EquipmentController extends GenericEditListPageController {
+    @RequestMapping("/edit-list") String editListPage();
+}
+''', encoding="utf-8")
+            rows = build_inventory(source_root, set())
+        self.assertEqual(1, len(rows))
+        self.assertEqual("RequestMapping", rows[0]["annotation"])
+
+    def test_unmapped_child_does_not_repeat_parent_page_routes(self):
+        with tempfile.TemporaryDirectory() as raw:
+            source_root = Path(raw)
+            (source_root / "EquipmentController.java").write_text('''
+@RequestMapping("/secure/equipment/page")
+public interface EquipmentController extends GenericEditListPageController {}
+''', encoding="utf-8")
+            (source_root / "CustomizedEquipmentController.java").write_text('''
+public interface CustomizedEquipmentController extends EquipmentController {}
+''', encoding="utf-8")
+            rows = build_inventory(source_root, set())
+        self.assertEqual(1, len(rows))
+        self.assertEqual("EquipmentController.java", rows[0]["source"])
+
+    def test_redeclared_page_base_merges_source_provenance(self):
+        with tempfile.TemporaryDirectory() as raw:
+            source_root = Path(raw)
+            for name in ("EquipmentController", "CustomizedEquipmentController"):
+                (source_root / (name + ".java")).write_text(
+                    '@RequestMapping("/secure/equipment/page")\n'
+                    'public interface ' + name + ' extends GenericEditListPageController {}\n',
+                    encoding="utf-8",
+                )
+            rows = build_inventory(source_root, set())
+        self.assertEqual(1, len(rows))
+        self.assertEqual({"EquipmentController.java", "CustomizedEquipmentController.java"},
+                         {row["source"] for row in rows[0]["inherited_page_sources"]})
+
+    def test_page_inheritance_contract_matches_reconstructed_source(self):
+        with tempfile.TemporaryDirectory() as raw:
+            source_root = Path(raw)
+            controllers = ROOT / "reconstituted/framework/owned-core-common/src/main/java/com/sunwayworld/framework/controller"
+            for controller in sorted(controllers.glob("Generic*PageController.java")):
+                name = controller.stem
+                (source_root / "DemoController.java").write_text(
+                    '@RequestMapping("/demo/page")\n'
+                    'public interface DemoController extends ' + name + ' {}\n',
+                    encoding="utf-8",
+                )
+                expected = [(row["method"], "/demo/page" + row["path"].rstrip("/"))
+                            for row in extract_routes(controller.read_text(), controller.name)]
+                actual = [(row["method"], row["path"]) for row in build_inventory(source_root, set())]
+                with self.subTest(controller=name):
+                    self.assertTrue(expected)
+                    self.assertEqual(sorted(expected), sorted(actual))
+
+    def test_unbound_generic_pages_are_not_owned_boundary_routes(self):
+        with tempfile.TemporaryDirectory() as raw:
+            source_root = Path(raw)
+            (source_root / "GenericEditListPageController.java").write_text('''
+public interface GenericEditListPageController {
+    @RequestMapping("/edit-list") String editListPage();
+}
+''', encoding="utf-8")
+            (source_root / "GenericChoosePageController.java").write_text('''
+public interface GenericChoosePageController {
+    @RequestMapping("/choose-list") String chooseListPage();
+    @RequestMapping("/simple-choose-list") default String simpleChooseListPage() { throw new RuntimeException(); }
+}
+''', encoding="utf-8")
+            rows = build_owned_boundary_inventory([source_root], [])
+        self.assertEqual([], rows)
+
     def test_generic_owned_routes_do_not_match_unrelated_project_resources(self):
         with tempfile.TemporaryDirectory() as raw:
             root = Path(raw)

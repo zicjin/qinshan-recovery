@@ -1,0 +1,2794 @@
+{
+  "schema": 3,
+  "http_write_proof_version": 2,
+  "status": "executed-pass",
+  "execution": "strict",
+  "strict_evidence": true,
+  "batch_id": "batch-0ee9a78b30434347bcb92e29406fffd1",
+  "milestone_id": "milestone-read-families-20261108",
+  "prepared_manifest": {
+    "path": "/home/ts/qinshan/lims-recovery/private/local-runtime/current-read-strict-20261108/prepared.json",
+    "sha256": "f745e6b8e27b5346360646a464d83b2c036475605aeee102b8306162dd22b0f1"
+  },
+  "stimulus_contract_version": "3",
+  "normalizer_version": "2",
+  "validation_mode": "executed",
+  "production_access": false,
+  "scope": "clone-derived Spring Web API contract runner",
+  "route_execution_model": {
+    "application": "one owned Spring application per wave",
+    "oracle": "persistent Oracle baseline/runtime schema",
+    "redis": "reused sss2 Redis database 15",
+    "boundary_route": "owned Java source-only route in the same Spring application",
+    "boundary_process": false,
+    "internal_http_bridge": false,
+    "jni_replacement_process": false
+  },
+  "started_at": "2026-11-08T07:51:33.060112+00:00",
+  "source_commit": "1cb20771f2ff4fef81afe96f832a4c9aacaa54d5",
+  "source_dirty": false,
+  "source_scope": [
+    "project/src/main/java",
+    "project/src/main/resources",
+    "owned-framework/src",
+    "owned-personnel/src",
+    "owned-equipment/src",
+    "owned-consumables/src",
+    "owned-attachments/src",
+    "owned-report/src",
+    "owned-scheduler/src",
+    "owned-web/src",
+    "reconstituted",
+    "docs/reconstitution/decompiler-transforms.json",
+    "project/pom.xml",
+    "owned-framework/pom.xml",
+    "owned-personnel/pom.xml",
+    "owned-equipment/pom.xml",
+    "owned-consumables/pom.xml",
+    "owned-attachments/pom.xml",
+    "owned-report/pom.xml",
+    "owned-scheduler/pom.xml",
+    "owned-web/pom.xml",
+    "owned-distribution/package.py",
+    "owned-distribution/start.sh",
+    "owned-distribution/example",
+    "owned-web/build-owned-web.sh",
+    "scripts/build-owned-distribution.sh",
+    "scripts/build-owned-framework.sh",
+    "scripts/build-owned-personnel.sh",
+    "scripts/build-owned-equipment.sh",
+    "scripts/build-owned-consumables.sh",
+    "scripts/build-owned-attachments.sh",
+    "scripts/build-owned-report.sh",
+    "scripts/build-owned-scheduler.sh",
+    "scripts/build-reconstituted-framework.sh",
+    "scripts/build-source-only-application.py",
+    "scripts/stage-source-only-public-deps.py",
+    "scripts/prepare-reconstituted-maven-repo.py",
+    "scripts/record-reconstituted-framework-build.py",
+    "scripts/verify-reconstituted-framework-modules.py",
+    "scripts/verify-external-artifacts.sh",
+    "build-support/external-artifacts.sha256",
+    "build-support/t01-manifest.sha256",
+    "build-support/t02-deps-manifest.sha256",
+    "build-support/t02-build-plugin-seed.sha256",
+    "build/oracle-free-source-manifest.json",
+    "scripts/source_binding.py",
+    "scripts/evidence_batch.py",
+    "scripts/evidence_fingerprint.py",
+    "scripts/evidence_output.py",
+    "scripts/spring_api_contract_runner.py",
+    "scripts/fast_differential_api_runner.py",
+    "scripts/run-fast-differential-jobs.py",
+    "scripts/api_wave_orchestrator.py",
+    "scripts/owned_runtime_contract.py",
+    "scripts/local-runtime-transport.py",
+    "scripts/observe-local-runtime.py",
+    "scripts/verify-local-runtime-milestone.py",
+    "scripts/restore-local-menu-i18n.py",
+    "scripts/repair-local-menu-hrefs.py",
+    "scripts/repair-local-org-select-config.py",
+    "tools/api/OracleContentFingerprint.java",
+    "scripts/api_fixture.py",
+    "scripts/schema_fixture.py",
+    "scripts/local_schema_policy.py",
+    "scripts/http_write_proof.py",
+    "scripts/audit_fixture_cleanup.py",
+    "api-fixtures/audit",
+    "scripts/lifecycle_proof.py",
+    "api-fixtures/schema",
+    "project/sql/oracle/oracle_sql_emc.txt",
+    "project/sql/核心发版14.1.5/init-sql/oracle/0.common_sql_oracle-1.txt",
+    "scripts/remote-sql-fixture-executor.py",
+    "scripts/start-strict-sss2-api-runtime.sh",
+    "scripts/start-reused-sss2-api-runtime.sh",
+    "scripts/cleanup-strict-sss2-api-runtime.sh",
+    "scripts/refresh-owned-sss2-app.sh",
+    "scripts/rollback-owned-sss2-app.sh",
+    "scripts/owned_readiness.py",
+    "scripts/observe-sss2-clone-runtime.sh",
+    "scripts/replay-vertical-slice.py",
+    "scripts/app-ctl.sh",
+    "scripts/verify-harness-semantics.py",
+    "scripts/tests/fixtures/harness-golden-transcript-corpus.jsonl",
+    "scripts/tests/fixtures/harness-golden-transcript-expected.json",
+    "runtime.contract_version",
+    "runtime.runtime_profile",
+    "runtime.oracle_instance_id",
+    "runtime.oracle_container",
+    "runtime.redis_container",
+    "runtime.baseline_schema",
+    "runtime.runtime_schema",
+    "runtime.baseline_schema_hash",
+    "runtime.runtime_schema_hash_before",
+    "runtime.runtime_schema_hash_after",
+    "runtime.baseline_key_data_hash",
+    "runtime.runtime_key_data_hash_before",
+    "runtime.runtime_key_data_hash_after",
+    "runtime.schema_policy_id",
+    "runtime.schema_policy_sha256",
+    "runtime.schema_copy_method",
+    "runtime.baseline_refreshed",
+    "runtime.oracle_reused",
+    "runtime.redis_reused",
+    "runtime.jvm_major",
+    "runtime.container_runtime",
+    "runtime.database",
+    "runtime.db_pool",
+    "runtime.db_pool_version",
+    "runtime.cleanup_contract_version",
+    "runtime.baseline_schema_immutable",
+    "runtime.runtime_schema_restored",
+    "runtime.application_instances",
+    "runtime.oracle_instances",
+    "runtime.redis_instances",
+    "runtime.boundary_process",
+    "runtime.internal_http_bridge",
+    "runtime.jni_replacement_process",
+    "tools/business_api_inventory.py",
+    "tools/api_route_ledger.py",
+    "tools/api_route_execution_plan.py",
+    "tools/api_contract_skeleton.py",
+    "tools/fast_contract_skeleton.py",
+    "tools/framework_contract_inventory.py",
+    "tools/source_inventory.py",
+    "tools/vertical_slices/matrix.py",
+    "tools/function_catalog/build_candidate_closure.py",
+    "scripts/generate-fast-strict-contracts.py",
+    "scripts/select-affected-runners.py",
+    "scripts/manage-evidence.py",
+    "scripts/verify-owned-native-license-removal.py",
+    "scripts/verify-source-only-checkpoint.py",
+    "scripts/reject-supplier-runtime.sh",
+    "tools/api_route_closure.py",
+    "tools/finalize_api_report.py"
+  ],
+  "implementation_dirty": false,
+  "repository_head_at_capture": "1cb20771f2ff4fef81afe96f832a4c9aacaa54d5",
+  "application_binding": "app-79417c8a100d2350",
+  "harness_binding": "harness-5e2267e8fcc0ef86",
+  "runtime_contract_binding": "rt-331e8857e49b9aaa",
+  "planning_binding": "plan-660e4d5fa5de3b9f",
+  "governance_binding": "gov-4ac5ccaf8a555cc6",
+  "implementation_binding": "impl-d9ccc8ccf97eba91",
+  "binding_id": "impl-d9ccc8ccf97eba91",
+  "implementation_tree_digest": "d9ccc8ccf97eba9181a8f9ba0694f3a54bed4dde48920c603480d5c3ae862314",
+  "implementation_scope": [
+    "project/src/main/java",
+    "project/src/main/resources",
+    "owned-framework/src",
+    "owned-personnel/src",
+    "owned-equipment/src",
+    "owned-consumables/src",
+    "owned-attachments/src",
+    "owned-report/src",
+    "owned-scheduler/src",
+    "owned-web/src",
+    "reconstituted",
+    "docs/reconstitution/decompiler-transforms.json",
+    "project/pom.xml",
+    "owned-framework/pom.xml",
+    "owned-personnel/pom.xml",
+    "owned-equipment/pom.xml",
+    "owned-consumables/pom.xml",
+    "owned-attachments/pom.xml",
+    "owned-report/pom.xml",
+    "owned-scheduler/pom.xml",
+    "owned-web/pom.xml",
+    "owned-distribution/package.py",
+    "owned-distribution/start.sh",
+    "owned-distribution/example",
+    "owned-web/build-owned-web.sh",
+    "scripts/build-owned-distribution.sh",
+    "scripts/build-owned-framework.sh",
+    "scripts/build-owned-personnel.sh",
+    "scripts/build-owned-equipment.sh",
+    "scripts/build-owned-consumables.sh",
+    "scripts/build-owned-attachments.sh",
+    "scripts/build-owned-report.sh",
+    "scripts/build-owned-scheduler.sh",
+    "scripts/build-reconstituted-framework.sh",
+    "scripts/build-source-only-application.py",
+    "scripts/stage-source-only-public-deps.py",
+    "scripts/prepare-reconstituted-maven-repo.py",
+    "scripts/record-reconstituted-framework-build.py",
+    "scripts/verify-reconstituted-framework-modules.py",
+    "scripts/verify-external-artifacts.sh",
+    "build-support/external-artifacts.sha256",
+    "build-support/t01-manifest.sha256",
+    "build-support/t02-deps-manifest.sha256",
+    "build-support/t02-build-plugin-seed.sha256",
+    "build/oracle-free-source-manifest.json",
+    "scripts/source_binding.py",
+    "scripts/evidence_batch.py",
+    "scripts/evidence_fingerprint.py",
+    "scripts/evidence_output.py",
+    "scripts/spring_api_contract_runner.py",
+    "scripts/fast_differential_api_runner.py",
+    "scripts/run-fast-differential-jobs.py",
+    "scripts/api_wave_orchestrator.py",
+    "scripts/owned_runtime_contract.py",
+    "scripts/local-runtime-transport.py",
+    "scripts/observe-local-runtime.py",
+    "scripts/verify-local-runtime-milestone.py",
+    "scripts/restore-local-menu-i18n.py",
+    "scripts/repair-local-menu-hrefs.py",
+    "scripts/repair-local-org-select-config.py",
+    "tools/api/OracleContentFingerprint.java",
+    "scripts/api_fixture.py",
+    "scripts/schema_fixture.py",
+    "scripts/local_schema_policy.py",
+    "scripts/http_write_proof.py",
+    "scripts/audit_fixture_cleanup.py",
+    "api-fixtures/audit",
+    "scripts/lifecycle_proof.py",
+    "api-fixtures/schema",
+    "project/sql/oracle/oracle_sql_emc.txt",
+    "project/sql/核心发版14.1.5/init-sql/oracle/0.common_sql_oracle-1.txt",
+    "scripts/remote-sql-fixture-executor.py",
+    "scripts/start-strict-sss2-api-runtime.sh",
+    "scripts/start-reused-sss2-api-runtime.sh",
+    "scripts/cleanup-strict-sss2-api-runtime.sh",
+    "scripts/refresh-owned-sss2-app.sh",
+    "scripts/rollback-owned-sss2-app.sh",
+    "scripts/owned_readiness.py",
+    "scripts/observe-sss2-clone-runtime.sh",
+    "scripts/replay-vertical-slice.py",
+    "scripts/app-ctl.sh",
+    "scripts/verify-harness-semantics.py",
+    "scripts/tests/fixtures/harness-golden-transcript-corpus.jsonl",
+    "scripts/tests/fixtures/harness-golden-transcript-expected.json",
+    "runtime.contract_version",
+    "runtime.runtime_profile",
+    "runtime.oracle_instance_id",
+    "runtime.oracle_container",
+    "runtime.redis_container",
+    "runtime.baseline_schema",
+    "runtime.runtime_schema",
+    "runtime.baseline_schema_hash",
+    "runtime.runtime_schema_hash_before",
+    "runtime.runtime_schema_hash_after",
+    "runtime.baseline_key_data_hash",
+    "runtime.runtime_key_data_hash_before",
+    "runtime.runtime_key_data_hash_after",
+    "runtime.schema_policy_id",
+    "runtime.schema_policy_sha256",
+    "runtime.schema_copy_method",
+    "runtime.baseline_refreshed",
+    "runtime.oracle_reused",
+    "runtime.redis_reused",
+    "runtime.jvm_major",
+    "runtime.container_runtime",
+    "runtime.database",
+    "runtime.db_pool",
+    "runtime.db_pool_version",
+    "runtime.cleanup_contract_version",
+    "runtime.baseline_schema_immutable",
+    "runtime.runtime_schema_restored",
+    "runtime.application_instances",
+    "runtime.oracle_instances",
+    "runtime.redis_instances",
+    "runtime.boundary_process",
+    "runtime.internal_http_bridge",
+    "runtime.jni_replacement_process",
+    "tools/business_api_inventory.py",
+    "tools/api_route_ledger.py",
+    "tools/api_route_execution_plan.py",
+    "tools/api_contract_skeleton.py",
+    "tools/fast_contract_skeleton.py",
+    "tools/framework_contract_inventory.py",
+    "tools/source_inventory.py",
+    "tools/vertical_slices/matrix.py",
+    "tools/function_catalog/build_candidate_closure.py",
+    "scripts/generate-fast-strict-contracts.py",
+    "scripts/select-affected-runners.py",
+    "scripts/manage-evidence.py",
+    "scripts/verify-owned-native-license-removal.py",
+    "scripts/verify-source-only-checkpoint.py",
+    "scripts/reject-supplier-runtime.sh",
+    "tools/api_route_closure.py",
+    "tools/finalize_api_report.py"
+  ],
+  "application_scope": [
+    "project/src/main/java",
+    "project/src/main/resources",
+    "owned-framework/src",
+    "owned-personnel/src",
+    "owned-equipment/src",
+    "owned-consumables/src",
+    "owned-attachments/src",
+    "owned-report/src",
+    "owned-scheduler/src",
+    "owned-web/src",
+    "reconstituted",
+    "docs/reconstitution/decompiler-transforms.json",
+    "project/pom.xml",
+    "owned-framework/pom.xml",
+    "owned-personnel/pom.xml",
+    "owned-equipment/pom.xml",
+    "owned-consumables/pom.xml",
+    "owned-attachments/pom.xml",
+    "owned-report/pom.xml",
+    "owned-scheduler/pom.xml",
+    "owned-web/pom.xml",
+    "owned-distribution/package.py",
+    "owned-distribution/start.sh",
+    "owned-distribution/example",
+    "owned-web/build-owned-web.sh",
+    "scripts/build-owned-distribution.sh",
+    "scripts/build-owned-framework.sh",
+    "scripts/build-owned-personnel.sh",
+    "scripts/build-owned-equipment.sh",
+    "scripts/build-owned-consumables.sh",
+    "scripts/build-owned-attachments.sh",
+    "scripts/build-owned-report.sh",
+    "scripts/build-owned-scheduler.sh",
+    "scripts/build-reconstituted-framework.sh",
+    "scripts/build-source-only-application.py",
+    "scripts/stage-source-only-public-deps.py",
+    "scripts/prepare-reconstituted-maven-repo.py",
+    "scripts/record-reconstituted-framework-build.py",
+    "scripts/verify-reconstituted-framework-modules.py",
+    "scripts/verify-external-artifacts.sh",
+    "build-support/external-artifacts.sha256",
+    "build-support/t01-manifest.sha256",
+    "build-support/t02-deps-manifest.sha256",
+    "build-support/t02-build-plugin-seed.sha256",
+    "build/oracle-free-source-manifest.json"
+  ],
+  "harness_scope": [
+    "scripts/source_binding.py",
+    "scripts/evidence_batch.py",
+    "scripts/evidence_fingerprint.py",
+    "scripts/evidence_output.py",
+    "scripts/spring_api_contract_runner.py",
+    "scripts/fast_differential_api_runner.py",
+    "scripts/run-fast-differential-jobs.py",
+    "scripts/api_wave_orchestrator.py",
+    "scripts/owned_runtime_contract.py",
+    "scripts/local-runtime-transport.py",
+    "scripts/observe-local-runtime.py",
+    "scripts/verify-local-runtime-milestone.py",
+    "scripts/restore-local-menu-i18n.py",
+    "scripts/repair-local-menu-hrefs.py",
+    "scripts/repair-local-org-select-config.py",
+    "tools/api/OracleContentFingerprint.java",
+    "scripts/api_fixture.py",
+    "scripts/schema_fixture.py",
+    "scripts/local_schema_policy.py",
+    "scripts/http_write_proof.py",
+    "scripts/audit_fixture_cleanup.py",
+    "api-fixtures/audit",
+    "scripts/lifecycle_proof.py",
+    "api-fixtures/schema",
+    "project/sql/oracle/oracle_sql_emc.txt",
+    "project/sql/核心发版14.1.5/init-sql/oracle/0.common_sql_oracle-1.txt",
+    "scripts/remote-sql-fixture-executor.py",
+    "scripts/start-strict-sss2-api-runtime.sh",
+    "scripts/start-reused-sss2-api-runtime.sh",
+    "scripts/cleanup-strict-sss2-api-runtime.sh",
+    "scripts/refresh-owned-sss2-app.sh",
+    "scripts/rollback-owned-sss2-app.sh",
+    "scripts/owned_readiness.py",
+    "scripts/observe-sss2-clone-runtime.sh",
+    "scripts/replay-vertical-slice.py",
+    "scripts/app-ctl.sh",
+    "scripts/verify-harness-semantics.py",
+    "scripts/tests/fixtures/harness-golden-transcript-corpus.jsonl",
+    "scripts/tests/fixtures/harness-golden-transcript-expected.json"
+  ],
+  "runtime_contract_scope": [
+    "runtime.contract_version",
+    "runtime.runtime_profile",
+    "runtime.oracle_instance_id",
+    "runtime.oracle_container",
+    "runtime.redis_container",
+    "runtime.baseline_schema",
+    "runtime.runtime_schema",
+    "runtime.baseline_schema_hash",
+    "runtime.runtime_schema_hash_before",
+    "runtime.runtime_schema_hash_after",
+    "runtime.baseline_key_data_hash",
+    "runtime.runtime_key_data_hash_before",
+    "runtime.runtime_key_data_hash_after",
+    "runtime.schema_policy_id",
+    "runtime.schema_policy_sha256",
+    "runtime.schema_copy_method",
+    "runtime.baseline_refreshed",
+    "runtime.oracle_reused",
+    "runtime.redis_reused",
+    "runtime.jvm_major",
+    "runtime.container_runtime",
+    "runtime.database",
+    "runtime.db_pool",
+    "runtime.db_pool_version",
+    "runtime.cleanup_contract_version",
+    "runtime.baseline_schema_immutable",
+    "runtime.runtime_schema_restored",
+    "runtime.application_instances",
+    "runtime.oracle_instances",
+    "runtime.redis_instances",
+    "runtime.boundary_process",
+    "runtime.internal_http_bridge",
+    "runtime.jni_replacement_process"
+  ],
+  "planning_scope": [
+    "tools/business_api_inventory.py",
+    "tools/api_route_ledger.py",
+    "tools/api_route_execution_plan.py",
+    "tools/api_contract_skeleton.py",
+    "tools/fast_contract_skeleton.py",
+    "tools/framework_contract_inventory.py",
+    "tools/source_inventory.py",
+    "tools/vertical_slices/matrix.py",
+    "tools/function_catalog/build_candidate_closure.py",
+    "scripts/generate-fast-strict-contracts.py",
+    "scripts/select-affected-runners.py"
+  ],
+  "governance_scope": [
+    "scripts/manage-evidence.py",
+    "scripts/verify-owned-native-license-removal.py",
+    "scripts/verify-source-only-checkpoint.py",
+    "scripts/reject-supplier-runtime.sh",
+    "tools/api_route_closure.py",
+    "tools/finalize_api_report.py"
+  ],
+  "nested_project_commit": "27932b1fe4d71d64a02f9a63e55f56acb403e3a0",
+  "distribution_input_digest": "d438d5546aa34af7d5bfbfa28eef4d89ccde2754c077323b437d3d9a6e553add",
+  "runtime_contract_digest": "331e8857e49b9aaa4c0a0f4d503e9fbf745fbf7b42f1db8c5a30418ee823b901",
+  "artifact_sha256": {
+    "/home/ts/qinshan/lims-recovery/owned-distribution/target/oracle-batch-clob-a682b22ceaf3da30/distribution/app/lims-owned-application.jar": "46aae55326f6bdb7e2a1229dc5ed4077d468ef161b54260ce76d15ce894acf6f"
+  },
+  "clone_identity": "local-existing-adbe778e7bbfb96e",
+  "runtime_report": "/home/ts/qinshan/lims-recovery/private/local-runtime/current-read-strict-20261108/prepared.json",
+  "runtime_contract": {
+    "application_binding": "app-79417c8a100d2350",
+    "application_dirty": false,
+    "application_scope": [
+      "project/src/main/java",
+      "project/src/main/resources",
+      "owned-framework/src",
+      "owned-personnel/src",
+      "owned-equipment/src",
+      "owned-consumables/src",
+      "owned-attachments/src",
+      "owned-report/src",
+      "owned-scheduler/src",
+      "owned-web/src",
+      "reconstituted",
+      "docs/reconstitution/decompiler-transforms.json",
+      "project/pom.xml",
+      "owned-framework/pom.xml",
+      "owned-personnel/pom.xml",
+      "owned-equipment/pom.xml",
+      "owned-consumables/pom.xml",
+      "owned-attachments/pom.xml",
+      "owned-report/pom.xml",
+      "owned-scheduler/pom.xml",
+      "owned-web/pom.xml",
+      "owned-distribution/package.py",
+      "owned-distribution/start.sh",
+      "owned-distribution/example",
+      "owned-web/build-owned-web.sh",
+      "scripts/build-owned-distribution.sh",
+      "scripts/build-owned-framework.sh",
+      "scripts/build-owned-personnel.sh",
+      "scripts/build-owned-equipment.sh",
+      "scripts/build-owned-consumables.sh",
+      "scripts/build-owned-attachments.sh",
+      "scripts/build-owned-report.sh",
+      "scripts/build-owned-scheduler.sh",
+      "scripts/build-reconstituted-framework.sh",
+      "scripts/build-source-only-application.py",
+      "scripts/stage-source-only-public-deps.py",
+      "scripts/prepare-reconstituted-maven-repo.py",
+      "scripts/record-reconstituted-framework-build.py",
+      "scripts/verify-reconstituted-framework-modules.py",
+      "scripts/verify-external-artifacts.sh",
+      "build-support/external-artifacts.sha256",
+      "build-support/t01-manifest.sha256",
+      "build-support/t02-deps-manifest.sha256",
+      "build-support/t02-build-plugin-seed.sha256",
+      "build/oracle-free-source-manifest.json"
+    ],
+    "application_tree_digest": "79417c8a100d235008bb20d3027d5be6655a2b8d1216c84eb1919faa81ca372d",
+    "artifact_observation": {
+      "path": "/home/ts/qinshan/lims-recovery/private/local-runtime/current-read-strict-20261108/prepared.json.artifacts.json",
+      "sha256": "a6e5e55fadb4f311bb9bfada95850ffedf4748410332088bd010843b067473b8"
+    },
+    "artifact_sha256": {
+      "/home/ts/qinshan/lims-recovery/owned-distribution/target/oracle-batch-clob-a682b22ceaf3da30/distribution/app/lims-owned-application.jar": "46aae55326f6bdb7e2a1229dc5ed4077d468ef161b54260ce76d15ce894acf6f"
+    },
+    "baseline_key_data_hash": "f34832019c97e5c967489d9b8598e5380f9d8343977decc5bd2ff0fec23ccbc2",
+    "baseline_refreshed": false,
+    "baseline_schema": "LIMS_BASELINE_LOCAL",
+    "baseline_schema_hash": "c6f6d4683d164b15c478eb734aefd4f3c9ac49d0cf5649380db1bfeebc78d46c",
+    "baseline_schema_immutable": null,
+    "before_files": {
+      "baseline_before": {
+        "path": "/home/ts/qinshan/lims-recovery/private/local-runtime/current-read-strict-20261108/baseline_before.json",
+        "sha256": "eba6334b1521381a100c1b21059ae60193f908e7e9cb4612e0a28b0100aab980"
+      },
+      "observation_before": {
+        "path": "/home/ts/qinshan/lims-recovery/private/local-runtime/current-read-strict-20261108/observation_before.json",
+        "sha256": "9ca42cc6e40ae3886e6711284e00a321380908702d95058c16da9942f055174d"
+      },
+      "runtime_before": {
+        "path": "/home/ts/qinshan/lims-recovery/private/local-runtime/current-read-strict-20261108/runtime_before.json",
+        "sha256": "c7a781a0210a2ec6b6491e2d7c9924f12d3570be7cf5fdd3248cae3bf89938a4"
+      }
+    },
+    "binding_id": "impl-d9ccc8ccf97eba91",
+    "clone_identity": "local-existing-adbe778e7bbfb96e",
+    "distribution_input_digest": "d438d5546aa34af7d5bfbfa28eef4d89ccde2754c077323b437d3d9a6e553add",
+    "execution": "local-prepared-unverified",
+    "execution_location": "local-wsl-docker",
+    "existing_application_preserved": true,
+    "governance_binding": "gov-4ac5ccaf8a555cc6",
+    "governance_dirty": false,
+    "governance_scope": [
+      "scripts/manage-evidence.py",
+      "scripts/verify-owned-native-license-removal.py",
+      "scripts/verify-source-only-checkpoint.py",
+      "scripts/reject-supplier-runtime.sh",
+      "tools/api_route_closure.py",
+      "tools/finalize_api_report.py"
+    ],
+    "governance_tree_digest": "4ac5ccaf8a555cc6392bcfe626c1e0b460627483f7d2d5a8e0f878e668e6d37a",
+    "harness_binding": "harness-5e2267e8fcc0ef86",
+    "harness_dirty": false,
+    "harness_scope": [
+      "scripts/source_binding.py",
+      "scripts/evidence_batch.py",
+      "scripts/evidence_fingerprint.py",
+      "scripts/evidence_output.py",
+      "scripts/spring_api_contract_runner.py",
+      "scripts/fast_differential_api_runner.py",
+      "scripts/run-fast-differential-jobs.py",
+      "scripts/api_wave_orchestrator.py",
+      "scripts/owned_runtime_contract.py",
+      "scripts/local-runtime-transport.py",
+      "scripts/observe-local-runtime.py",
+      "scripts/verify-local-runtime-milestone.py",
+      "scripts/restore-local-menu-i18n.py",
+      "scripts/repair-local-menu-hrefs.py",
+      "scripts/repair-local-org-select-config.py",
+      "tools/api/OracleContentFingerprint.java",
+      "scripts/api_fixture.py",
+      "scripts/schema_fixture.py",
+      "scripts/local_schema_policy.py",
+      "scripts/http_write_proof.py",
+      "scripts/audit_fixture_cleanup.py",
+      "api-fixtures/audit",
+      "scripts/lifecycle_proof.py",
+      "api-fixtures/schema",
+      "project/sql/oracle/oracle_sql_emc.txt",
+      "project/sql/核心发版14.1.5/init-sql/oracle/0.common_sql_oracle-1.txt",
+      "scripts/remote-sql-fixture-executor.py",
+      "scripts/start-strict-sss2-api-runtime.sh",
+      "scripts/start-reused-sss2-api-runtime.sh",
+      "scripts/cleanup-strict-sss2-api-runtime.sh",
+      "scripts/refresh-owned-sss2-app.sh",
+      "scripts/rollback-owned-sss2-app.sh",
+      "scripts/owned_readiness.py",
+      "scripts/observe-sss2-clone-runtime.sh",
+      "scripts/replay-vertical-slice.py",
+      "scripts/app-ctl.sh",
+      "scripts/verify-harness-semantics.py",
+      "scripts/tests/fixtures/harness-golden-transcript-corpus.jsonl",
+      "scripts/tests/fixtures/harness-golden-transcript-expected.json"
+    ],
+    "harness_tree_digest": "5e2267e8fcc0ef86b0bec16d4ba0167ffef2850a4c348c753e38a862d5b4886b",
+    "implementation_binding": "impl-d9ccc8ccf97eba91",
+    "implementation_dirty": false,
+    "implementation_scope": [
+      "project/src/main/java",
+      "project/src/main/resources",
+      "owned-framework/src",
+      "owned-personnel/src",
+      "owned-equipment/src",
+      "owned-consumables/src",
+      "owned-attachments/src",
+      "owned-report/src",
+      "owned-scheduler/src",
+      "owned-web/src",
+      "reconstituted",
+      "docs/reconstitution/decompiler-transforms.json",
+      "project/pom.xml",
+      "owned-framework/pom.xml",
+      "owned-personnel/pom.xml",
+      "owned-equipment/pom.xml",
+      "owned-consumables/pom.xml",
+      "owned-attachments/pom.xml",
+      "owned-report/pom.xml",
+      "owned-scheduler/pom.xml",
+      "owned-web/pom.xml",
+      "owned-distribution/package.py",
+      "owned-distribution/start.sh",
+      "owned-distribution/example",
+      "owned-web/build-owned-web.sh",
+      "scripts/build-owned-distribution.sh",
+      "scripts/build-owned-framework.sh",
+      "scripts/build-owned-personnel.sh",
+      "scripts/build-owned-equipment.sh",
+      "scripts/build-owned-consumables.sh",
+      "scripts/build-owned-attachments.sh",
+      "scripts/build-owned-report.sh",
+      "scripts/build-owned-scheduler.sh",
+      "scripts/build-reconstituted-framework.sh",
+      "scripts/build-source-only-application.py",
+      "scripts/stage-source-only-public-deps.py",
+      "scripts/prepare-reconstituted-maven-repo.py",
+      "scripts/record-reconstituted-framework-build.py",
+      "scripts/verify-reconstituted-framework-modules.py",
+      "scripts/verify-external-artifacts.sh",
+      "build-support/external-artifacts.sha256",
+      "build-support/t01-manifest.sha256",
+      "build-support/t02-deps-manifest.sha256",
+      "build-support/t02-build-plugin-seed.sha256",
+      "build/oracle-free-source-manifest.json",
+      "scripts/source_binding.py",
+      "scripts/evidence_batch.py",
+      "scripts/evidence_fingerprint.py",
+      "scripts/evidence_output.py",
+      "scripts/spring_api_contract_runner.py",
+      "scripts/fast_differential_api_runner.py",
+      "scripts/run-fast-differential-jobs.py",
+      "scripts/api_wave_orchestrator.py",
+      "scripts/owned_runtime_contract.py",
+      "scripts/local-runtime-transport.py",
+      "scripts/observe-local-runtime.py",
+      "scripts/verify-local-runtime-milestone.py",
+      "scripts/restore-local-menu-i18n.py",
+      "scripts/repair-local-menu-hrefs.py",
+      "scripts/repair-local-org-select-config.py",
+      "tools/api/OracleContentFingerprint.java",
+      "scripts/api_fixture.py",
+      "scripts/schema_fixture.py",
+      "scripts/local_schema_policy.py",
+      "scripts/http_write_proof.py",
+      "scripts/audit_fixture_cleanup.py",
+      "api-fixtures/audit",
+      "scripts/lifecycle_proof.py",
+      "api-fixtures/schema",
+      "project/sql/oracle/oracle_sql_emc.txt",
+      "project/sql/核心发版14.1.5/init-sql/oracle/0.common_sql_oracle-1.txt",
+      "scripts/remote-sql-fixture-executor.py",
+      "scripts/start-strict-sss2-api-runtime.sh",
+      "scripts/start-reused-sss2-api-runtime.sh",
+      "scripts/cleanup-strict-sss2-api-runtime.sh",
+      "scripts/refresh-owned-sss2-app.sh",
+      "scripts/rollback-owned-sss2-app.sh",
+      "scripts/owned_readiness.py",
+      "scripts/observe-sss2-clone-runtime.sh",
+      "scripts/replay-vertical-slice.py",
+      "scripts/app-ctl.sh",
+      "scripts/verify-harness-semantics.py",
+      "scripts/tests/fixtures/harness-golden-transcript-corpus.jsonl",
+      "scripts/tests/fixtures/harness-golden-transcript-expected.json",
+      "runtime.contract_version",
+      "runtime.runtime_profile",
+      "runtime.oracle_instance_id",
+      "runtime.oracle_container",
+      "runtime.redis_container",
+      "runtime.baseline_schema",
+      "runtime.runtime_schema",
+      "runtime.baseline_schema_hash",
+      "runtime.runtime_schema_hash_before",
+      "runtime.runtime_schema_hash_after",
+      "runtime.baseline_key_data_hash",
+      "runtime.runtime_key_data_hash_before",
+      "runtime.runtime_key_data_hash_after",
+      "runtime.schema_policy_id",
+      "runtime.schema_policy_sha256",
+      "runtime.schema_copy_method",
+      "runtime.baseline_refreshed",
+      "runtime.oracle_reused",
+      "runtime.redis_reused",
+      "runtime.jvm_major",
+      "runtime.container_runtime",
+      "runtime.database",
+      "runtime.db_pool",
+      "runtime.db_pool_version",
+      "runtime.cleanup_contract_version",
+      "runtime.baseline_schema_immutable",
+      "runtime.runtime_schema_restored",
+      "runtime.application_instances",
+      "runtime.oracle_instances",
+      "runtime.redis_instances",
+      "runtime.boundary_process",
+      "runtime.internal_http_bridge",
+      "runtime.jni_replacement_process",
+      "tools/business_api_inventory.py",
+      "tools/api_route_ledger.py",
+      "tools/api_route_execution_plan.py",
+      "tools/api_contract_skeleton.py",
+      "tools/fast_contract_skeleton.py",
+      "tools/framework_contract_inventory.py",
+      "tools/source_inventory.py",
+      "tools/vertical_slices/matrix.py",
+      "tools/function_catalog/build_candidate_closure.py",
+      "scripts/generate-fast-strict-contracts.py",
+      "scripts/select-affected-runners.py",
+      "scripts/manage-evidence.py",
+      "scripts/verify-owned-native-license-removal.py",
+      "scripts/verify-source-only-checkpoint.py",
+      "scripts/reject-supplier-runtime.sh",
+      "tools/api_route_closure.py",
+      "tools/finalize_api_report.py"
+    ],
+    "implementation_tree_digest": "d9ccc8ccf97eba9181a8f9ba0694f3a54bed4dde48920c603480d5c3ae862314",
+    "lifecycle_phase": "prepared",
+    "loopback_url": "http://127.0.0.1:18087",
+    "milestone_id": "milestone-read-families-20261108",
+    "nested_project_commit": "27932b1fe4d71d64a02f9a63e55f56acb403e3a0",
+    "operated_artifact": {
+      "container_path": "/opt/current-owned/app/lims-owned-application.jar",
+      "path": "/home/ts/qinshan/lims-recovery/owned-distribution/target/oracle-batch-clob-a682b22ceaf3da30/distribution/app/lims-owned-application.jar",
+      "sha256": "46aae55326f6bdb7e2a1229dc5ed4077d468ef161b54260ce76d15ce894acf6f"
+    },
+    "oracle_container": "lims-local-runtime-oracle",
+    "oracle_instance_id": "lims-local-runtime-oracle",
+    "oracle_reused": true,
+    "planning_binding": "plan-660e4d5fa5de3b9f",
+    "planning_dirty": false,
+    "planning_scope": [
+      "tools/business_api_inventory.py",
+      "tools/api_route_ledger.py",
+      "tools/api_route_execution_plan.py",
+      "tools/api_contract_skeleton.py",
+      "tools/fast_contract_skeleton.py",
+      "tools/framework_contract_inventory.py",
+      "tools/source_inventory.py",
+      "tools/vertical_slices/matrix.py",
+      "tools/function_catalog/build_candidate_closure.py",
+      "scripts/generate-fast-strict-contracts.py",
+      "scripts/select-affected-runners.py"
+    ],
+    "planning_tree_digest": "660e4d5fa5de3b9f10323e4987282c31cc670f70c01144e76610fffa11f22d1c",
+    "production_access": false,
+    "redis_container": "lims-local-runtime-redis",
+    "redis_reused": true,
+    "repository_head_at_capture": "1cb20771f2ff4fef81afe96f832a4c9aacaa54d5",
+    "route_execution_model": {
+      "boundary_process": false,
+      "internal_http_bridge": false,
+      "jni_replacement_process": false
+    },
+    "runtime_contract_binding": "rt-331e8857e49b9aaa",
+    "runtime_contract_digest": "331e8857e49b9aaa4c0a0f4d503e9fbf745fbf7b42f1db8c5a30418ee823b901",
+    "runtime_contract_dirty": false,
+    "runtime_contract_scope": [
+      "runtime.contract_version",
+      "runtime.runtime_profile",
+      "runtime.oracle_instance_id",
+      "runtime.oracle_container",
+      "runtime.redis_container",
+      "runtime.baseline_schema",
+      "runtime.runtime_schema",
+      "runtime.baseline_schema_hash",
+      "runtime.runtime_schema_hash_before",
+      "runtime.runtime_schema_hash_after",
+      "runtime.baseline_key_data_hash",
+      "runtime.runtime_key_data_hash_before",
+      "runtime.runtime_key_data_hash_after",
+      "runtime.schema_policy_id",
+      "runtime.schema_policy_sha256",
+      "runtime.schema_copy_method",
+      "runtime.baseline_refreshed",
+      "runtime.oracle_reused",
+      "runtime.redis_reused",
+      "runtime.jvm_major",
+      "runtime.container_runtime",
+      "runtime.database",
+      "runtime.db_pool",
+      "runtime.db_pool_version",
+      "runtime.cleanup_contract_version",
+      "runtime.baseline_schema_immutable",
+      "runtime.runtime_schema_restored",
+      "runtime.application_instances",
+      "runtime.oracle_instances",
+      "runtime.redis_instances",
+      "runtime.boundary_process",
+      "runtime.internal_http_bridge",
+      "runtime.jni_replacement_process"
+    ],
+    "runtime_dirty": null,
+    "runtime_identity": {
+      "container_ids": {
+        "app": "adbe778e7bbfb96ec90b2ce19ccba5801f4a3608cdb19fe90463f0b68f290b2b",
+        "oracle": "b6c0f35374a5cc46efe731447169a4de2119686e560c10324d02192fced7d77d",
+        "redis": "46529c6d33d23c9882e67405a203aa8464f122c0a508234e7523d3dda95eeaa8"
+      },
+      "containers": {
+        "app": {
+          "id": "adbe778e7bbfb96ec90b2ce19ccba5801f4a3608cdb19fe90463f0b68f290b2b",
+          "image_id": "sha256:837982131237bc008e1a71e04150337ef1e397670e15b056e62c214039355fa5",
+          "name": "lims-local-runtime-app",
+          "running": true,
+          "started_at": "2026-11-08T07:00:04.578645975Z"
+        },
+        "oracle": {
+          "id": "b6c0f35374a5cc46efe731447169a4de2119686e560c10324d02192fced7d77d",
+          "image_id": "sha256:cd3dff6649f5d67ca3121f5e064b5a5680611e5d34f03442423110778c47dda4",
+          "name": "lims-local-runtime-oracle",
+          "running": true,
+          "started_at": "2026-11-07T03:54:42.489365053Z"
+        },
+        "redis": {
+          "id": "46529c6d33d23c9882e67405a203aa8464f122c0a508234e7523d3dda95eeaa8",
+          "image_id": "sha256:57e4255cc971b1c8d6f8a6ca283ac01bc3ecdd914273ef6bfaede87aaecd6541",
+          "name": "lims-local-runtime-redis",
+          "running": true,
+          "started_at": "2026-11-07T03:54:41.986176262Z"
+        }
+      },
+      "network_id": "d8943819986f79ef8a3bbd0f77c6e21eba60e0259fab771f0df7e9c916b92d26"
+    },
+    "runtime_key_data_hash_after": null,
+    "runtime_key_data_hash_before": "badb4fed15ea60cefefdebb23d5927e2ce863640a0b775f5b26d4bc780a0c49b",
+    "runtime_manifest_schema": "local-prepared-v1",
+    "runtime_profile": "local-wsl",
+    "runtime_schema": "LIMS_RUNTIME_LOCAL",
+    "runtime_schema_hash_after": null,
+    "runtime_schema_hash_before": "97fe5d77823445b67160415fc86702f13adcf4419e0e1a8b4c04bc48d3ff07d2",
+    "runtime_schema_reset": false,
+    "runtime_schema_restored": null,
+    "runtime_schema_reused": true,
+    "schema_copy_method": "supplied-runtime-before-content-restore-target",
+    "schema_policy_id": "approved-missing-runtime-and-email-tables-v2",
+    "schema_policy_sha256": "65084d7a081a8087e6f2ad4dd9a36eeed33014932540586e4d76445586ffdffd",
+    "schema_version": 2,
+    "source_commit": "1cb20771f2ff4fef81afe96f832a4c9aacaa54d5",
+    "source_dirty": false,
+    "status": "local-prepared-unverified",
+    "strict_evidence": false,
+    "prepared_manifest": {
+      "path": "/home/ts/qinshan/lims-recovery/private/local-runtime/current-read-strict-20261108/prepared.json",
+      "sha256": "f745e6b8e27b5346360646a464d83b2c036475605aeee102b8306162dd22b0f1"
+    },
+    "mode": "strict",
+    "reuse": true,
+    "cleanup_pending": true
+  },
+  "role": "1160933173854272",
+  "principal": "Test",
+  "organization": "dept_2054",
+  "mode": "strict",
+  "base_url": "http://127.0.0.1:18087",
+  "case_count": 12,
+  "cases": [
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "4a1685b6953987a04c29e11db587d98f44964ea272ec28375540f0fefb50e371",
+      "body_bytes": 1973,
+      "assertions": {
+        "json_keys": [
+          "rows",
+          "total",
+          "pageNumber",
+          "pageSize",
+          "numberOfElements"
+        ],
+        "json_values": {
+          "total": 5,
+          "pageNumber": 1,
+          "pageSize": 50,
+          "numberOfElements": 5,
+          "rows.0.id": 1387340218302784,
+          "rows.1.id": 1412281780626944,
+          "rows.2.id": 1412281995396608,
+          "rows.3.id": 1412282444932608,
+          "rows.4.id": 1709540665621152
+        },
+        "content_type": "application/json"
+      },
+      "id": "oa-org-relations-control",
+      "method": "POST",
+      "path": "/secure/emc/module/mdm/oa-org-relations/queries/raw",
+      "url": "http://127.0.0.1:18087/secure/emc/module/mdm/oa-org-relations/queries/raw",
+      "status": 200,
+      "response_headers": {
+        "access-control-allow-headers": "security-rsa-key",
+        "access-control-allow-methods": "*",
+        "access-control-allow-credentials": "true",
+        "gikam-instant-save-path": "/secure/emc/module/mdm/oa-org-relations/instant",
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "content-type": "application/json",
+        "content-length": "1973",
+        "date": "Sun, 08 Nov 2026 07:51:33 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "accept": "application/json, text/plain, */*",
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 24.371,
+      "request_fingerprint": "req-4c31decec161f8d8460ec84de9e9f263b098333d8fdb94ac14b9615dda6bcf46",
+      "stimulus_contract_version": "3",
+      "response_fingerprint": "res-75c10925b70e5843c2e0207f4ffeff0d7c737c4fc66147ac98fc228d4cef6031",
+      "normalizer_version": "2",
+      "validation_mode": "executed",
+      "batch_id": "batch-0ee9a78b30434347bcb92e29406fffd1",
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/mdm/oa-org-relations/queries/raw",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "route_id": "5265e187c8e8e94a"
+      },
+      "behavior_family_id": "behavior-d7e581e4732935b6",
+      "family_fingerprint": "fam-461c11d295fb040bc73b9897865e670f3c211df74feece4c9121fa3ed4398414",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r7ea3cf152ae4"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "application_binding": "app-79417c8a100d2350",
+      "harness_binding": "harness-5e2267e8fcc0ef86",
+      "runtime_contract_binding": "rt-331e8857e49b9aaa",
+      "planning_binding": "plan-660e4d5fa5de3b9f",
+      "governance_binding": "gov-4ac5ccaf8a555cc6",
+      "implementation_binding": "impl-d9ccc8ccf97eba91",
+      "implementation_tree_digest": "d9ccc8ccf97eba9181a8f9ba0694f3a54bed4dde48920c603480d5c3ae862314"
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "86bfcdfebf3fc49fbb7b754bc6aec8fdcecdb3414574fe9ccdc0a11b548eae0c",
+      "body_bytes": 715,
+      "assertions": {
+        "json_keys": [
+          "rows",
+          "total",
+          "pageNumber",
+          "pageSize",
+          "numberOfElements"
+        ],
+        "json_values": {
+          "total": 1,
+          "pageNumber": 1,
+          "pageSize": 50,
+          "numberOfElements": 1,
+          "rows.0.id": 1709540665621152
+        },
+        "content_type": "application/json"
+      },
+      "id": "oa-org-relations-quick-exact",
+      "method": "POST",
+      "path": "/secure/emc/module/mdm/oa-org-relations/queries/raw",
+      "url": "http://127.0.0.1:18087/secure/emc/module/mdm/oa-org-relations/queries/raw",
+      "status": 200,
+      "response_headers": {
+        "access-control-allow-headers": "security-rsa-key",
+        "access-control-allow-methods": "*",
+        "access-control-allow-credentials": "true",
+        "gikam-instant-save-path": "/secure/emc/module/mdm/oa-org-relations/instant",
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "content-type": "application/json",
+        "content-length": "715",
+        "date": "Sun, 08 Nov 2026 07:51:33 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "accept": "application/json, text/plain, */*",
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 16.465,
+      "request_fingerprint": "req-baebfdd9852742ff414e96b9dc83cbc761b9055bc29897f127c2aa977d6947af",
+      "stimulus_contract_version": "3",
+      "response_fingerprint": "res-b7fb68902fa197f191c522ceec990951015909448136400cf480efae8497c6ee",
+      "normalizer_version": "2",
+      "validation_mode": "executed",
+      "batch_id": "batch-0ee9a78b30434347bcb92e29406fffd1",
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/mdm/oa-org-relations/queries/raw",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "route_id": "5265e187c8e8e94a"
+      },
+      "behavior_family_id": "behavior-d7e581e4732935b6",
+      "family_fingerprint": "fam-461c11d295fb040bc73b9897865e670f3c211df74feece4c9121fa3ed4398414",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r394a192ea895"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "application_binding": "app-79417c8a100d2350",
+      "harness_binding": "harness-5e2267e8fcc0ef86",
+      "runtime_contract_binding": "rt-331e8857e49b9aaa",
+      "planning_binding": "plan-660e4d5fa5de3b9f",
+      "governance_binding": "gov-4ac5ccaf8a555cc6",
+      "implementation_binding": "impl-d9ccc8ccf97eba91",
+      "implementation_tree_digest": "d9ccc8ccf97eba9181a8f9ba0694f3a54bed4dde48920c603480d5c3ae862314"
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "1135069fc76fafbb9a8408ae7f29bc3c3c8cf7582390711c50a9e46fdb0438ab",
+      "body_bytes": 394,
+      "assertions": {
+        "json_keys": [
+          "rows",
+          "total",
+          "pageNumber",
+          "pageSize",
+          "numberOfElements"
+        ],
+        "json_values": {
+          "total": 0,
+          "pageNumber": 1,
+          "pageSize": 50,
+          "numberOfElements": 0
+        },
+        "content_type": "application/json"
+      },
+      "id": "oa-org-relations-quick-and-conflict",
+      "method": "POST",
+      "path": "/secure/emc/module/mdm/oa-org-relations/queries/raw",
+      "url": "http://127.0.0.1:18087/secure/emc/module/mdm/oa-org-relations/queries/raw",
+      "status": 200,
+      "response_headers": {
+        "access-control-allow-headers": "security-rsa-key",
+        "access-control-allow-methods": "*",
+        "access-control-allow-credentials": "true",
+        "gikam-instant-save-path": "/secure/emc/module/mdm/oa-org-relations/instant",
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "content-type": "application/json",
+        "content-length": "394",
+        "date": "Sun, 08 Nov 2026 07:51:33 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "accept": "application/json, text/plain, */*",
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 14.385,
+      "request_fingerprint": "req-af86fa2229338d662c180a9d8e2e3acee6d8c7253926982ff0ed01b4f9eafb83",
+      "stimulus_contract_version": "3",
+      "response_fingerprint": "res-ef2793f825433bff46581b9b29eb5df93eba5399ae7e3cdf75dfa38a2334b146",
+      "normalizer_version": "2",
+      "validation_mode": "executed",
+      "batch_id": "batch-0ee9a78b30434347bcb92e29406fffd1",
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/mdm/oa-org-relations/queries/raw",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "route_id": "5265e187c8e8e94a"
+      },
+      "behavior_family_id": "behavior-d7e581e4732935b6",
+      "family_fingerprint": "fam-461c11d295fb040bc73b9897865e670f3c211df74feece4c9121fa3ed4398414",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "ra358c18eb45c"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "application_binding": "app-79417c8a100d2350",
+      "harness_binding": "harness-5e2267e8fcc0ef86",
+      "runtime_contract_binding": "rt-331e8857e49b9aaa",
+      "planning_binding": "plan-660e4d5fa5de3b9f",
+      "governance_binding": "gov-4ac5ccaf8a555cc6",
+      "implementation_binding": "impl-d9ccc8ccf97eba91",
+      "implementation_tree_digest": "d9ccc8ccf97eba9181a8f9ba0694f3a54bed4dde48920c603480d5c3ae862314"
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "cfb54be2a9beb2c38859754548c452d9aed07261352bfc209b7e90e466da2f8a",
+      "body_bytes": 1112,
+      "assertions": {
+        "json_keys": [
+          "rows",
+          "total",
+          "pageNumber",
+          "pageSize",
+          "numberOfElements"
+        ],
+        "json_values": {
+          "total": 3,
+          "pageNumber": 1,
+          "pageSize": 50,
+          "numberOfElements": 3,
+          "rows.0.id": 201823440568064,
+          "rows.1.id": 201823507144448,
+          "rows.2.id": 615348928847936
+        },
+        "content_type": "application/json"
+      },
+      "id": "equipment-categories-control",
+      "method": "POST",
+      "path": "/secure/emc/module/mdm/basemdm/equipt-categories/queries/raw",
+      "url": "http://127.0.0.1:18087/secure/emc/module/mdm/basemdm/equipt-categories/queries/raw",
+      "status": 200,
+      "response_headers": {
+        "access-control-allow-headers": "security-rsa-key",
+        "access-control-allow-methods": "*",
+        "access-control-allow-credentials": "true",
+        "gikam-instant-save-path": "/secure/emc/module/mdm/basemdm/equipt-categories/instant",
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "content-type": "application/json",
+        "content-length": "1112",
+        "date": "Sun, 08 Nov 2026 07:51:33 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "accept": "application/json, text/plain, */*",
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 21.406,
+      "request_fingerprint": "req-1bfb0c54f01ea87e4a5a9846247511e5c1351b0d3fee407b16c84fdcb62713db",
+      "stimulus_contract_version": "3",
+      "response_fingerprint": "res-46395436a86ee4801960b47e2f7401f79850c1d1f51313f6e5788020ae12d5b7",
+      "normalizer_version": "2",
+      "validation_mode": "executed",
+      "batch_id": "batch-0ee9a78b30434347bcb92e29406fffd1",
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/mdm/basemdm/equipt-categories/queries/raw",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "route_id": "dc8f44d0f0a02c1e"
+      },
+      "behavior_family_id": "behavior-d885715d5ab971c2",
+      "family_fingerprint": "fam-d715e52ae3c7bb658d5885d9470e9af24afffb9cccbecdee640500ce99d112a2",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r4483cfd7d537"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "application_binding": "app-79417c8a100d2350",
+      "harness_binding": "harness-5e2267e8fcc0ef86",
+      "runtime_contract_binding": "rt-331e8857e49b9aaa",
+      "planning_binding": "plan-660e4d5fa5de3b9f",
+      "governance_binding": "gov-4ac5ccaf8a555cc6",
+      "implementation_binding": "impl-d9ccc8ccf97eba91",
+      "implementation_tree_digest": "d9ccc8ccf97eba9181a8f9ba0694f3a54bed4dde48920c603480d5c3ae862314"
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "2fa883882f8ed6ca88014ea04fae5cac2a25dc3b1b838d6769e0fb89e93e4e4e",
+      "body_bytes": 618,
+      "assertions": {
+        "json_keys": [
+          "rows",
+          "total",
+          "pageNumber",
+          "pageSize",
+          "numberOfElements"
+        ],
+        "json_values": {
+          "total": 1,
+          "pageNumber": 1,
+          "pageSize": 50,
+          "numberOfElements": 1,
+          "rows.0.id": 615348928847936
+        },
+        "content_type": "application/json"
+      },
+      "id": "equipment-categories-quick-exact",
+      "method": "POST",
+      "path": "/secure/emc/module/mdm/basemdm/equipt-categories/queries/raw",
+      "url": "http://127.0.0.1:18087/secure/emc/module/mdm/basemdm/equipt-categories/queries/raw",
+      "status": 200,
+      "response_headers": {
+        "access-control-allow-headers": "security-rsa-key",
+        "access-control-allow-methods": "*",
+        "access-control-allow-credentials": "true",
+        "gikam-instant-save-path": "/secure/emc/module/mdm/basemdm/equipt-categories/instant",
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "content-type": "application/json",
+        "content-length": "618",
+        "date": "Sun, 08 Nov 2026 07:51:33 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "accept": "application/json, text/plain, */*",
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 14.303,
+      "request_fingerprint": "req-4ab19efa5ac76c3e5f490f9d5c645e847d88baf67f85a7a1be74ffd9c9db88a2",
+      "stimulus_contract_version": "3",
+      "response_fingerprint": "res-c65b545722f7b05681c49fa4192a7f4025d95aefe6d810e5bc87312e5335963e",
+      "normalizer_version": "2",
+      "validation_mode": "executed",
+      "batch_id": "batch-0ee9a78b30434347bcb92e29406fffd1",
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/mdm/basemdm/equipt-categories/queries/raw",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "route_id": "dc8f44d0f0a02c1e"
+      },
+      "behavior_family_id": "behavior-d885715d5ab971c2",
+      "family_fingerprint": "fam-d715e52ae3c7bb658d5885d9470e9af24afffb9cccbecdee640500ce99d112a2",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r66f7d4219f14"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "application_binding": "app-79417c8a100d2350",
+      "harness_binding": "harness-5e2267e8fcc0ef86",
+      "runtime_contract_binding": "rt-331e8857e49b9aaa",
+      "planning_binding": "plan-660e4d5fa5de3b9f",
+      "governance_binding": "gov-4ac5ccaf8a555cc6",
+      "implementation_binding": "impl-d9ccc8ccf97eba91",
+      "implementation_tree_digest": "d9ccc8ccf97eba9181a8f9ba0694f3a54bed4dde48920c603480d5c3ae862314"
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "b569cf8ce81b8993819c5c346a3285e4370d6d2417e14690112742a2c802c2dd",
+      "body_bytes": 380,
+      "assertions": {
+        "json_keys": [
+          "rows",
+          "total",
+          "pageNumber",
+          "pageSize",
+          "numberOfElements"
+        ],
+        "json_values": {
+          "total": 0,
+          "pageNumber": 1,
+          "pageSize": 50,
+          "numberOfElements": 0
+        },
+        "content_type": "application/json"
+      },
+      "id": "equipment-categories-quick-and-conflict",
+      "method": "POST",
+      "path": "/secure/emc/module/mdm/basemdm/equipt-categories/queries/raw",
+      "url": "http://127.0.0.1:18087/secure/emc/module/mdm/basemdm/equipt-categories/queries/raw",
+      "status": 200,
+      "response_headers": {
+        "access-control-allow-headers": "security-rsa-key",
+        "access-control-allow-methods": "*",
+        "access-control-allow-credentials": "true",
+        "gikam-instant-save-path": "/secure/emc/module/mdm/basemdm/equipt-categories/instant",
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "content-type": "application/json",
+        "content-length": "380",
+        "date": "Sun, 08 Nov 2026 07:51:33 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "accept": "application/json, text/plain, */*",
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 14.84,
+      "request_fingerprint": "req-cb7f2760d86f1d59427a6dafa2225a63de415d9d6f9167122566ee61b76348b5",
+      "stimulus_contract_version": "3",
+      "response_fingerprint": "res-f1598b57ed429b998a651bf3c5e01ef96feb3a5933d69defa213d31028e855cb",
+      "normalizer_version": "2",
+      "validation_mode": "executed",
+      "batch_id": "batch-0ee9a78b30434347bcb92e29406fffd1",
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/mdm/basemdm/equipt-categories/queries/raw",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "route_id": "dc8f44d0f0a02c1e"
+      },
+      "behavior_family_id": "behavior-d885715d5ab971c2",
+      "family_fingerprint": "fam-d715e52ae3c7bb658d5885d9470e9af24afffb9cccbecdee640500ce99d112a2",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r7a6621070508"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "application_binding": "app-79417c8a100d2350",
+      "harness_binding": "harness-5e2267e8fcc0ef86",
+      "runtime_contract_binding": "rt-331e8857e49b9aaa",
+      "planning_binding": "plan-660e4d5fa5de3b9f",
+      "governance_binding": "gov-4ac5ccaf8a555cc6",
+      "implementation_binding": "impl-d9ccc8ccf97eba91",
+      "implementation_tree_digest": "d9ccc8ccf97eba9181a8f9ba0694f3a54bed4dde48920c603480d5c3ae862314"
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "e12b9eeb814b3ff1da12f38780faab95d9b3036496639bd6e0f25b134dd0b8b8",
+      "body_bytes": 978,
+      "assertions": {
+        "json_keys": [
+          "rows",
+          "total",
+          "pageNumber",
+          "pageSize",
+          "numberOfElements"
+        ],
+        "json_values": {
+          "total": 3,
+          "pageNumber": 1,
+          "pageSize": 50,
+          "numberOfElements": 3,
+          "rows.0.id": 439868152193088,
+          "rows.1.id": 532327826473024,
+          "rows.2.id": 532329398034496
+        },
+        "content_type": "application/json"
+      },
+      "id": "equipment-appearance-control",
+      "method": "POST",
+      "path": "/secure/emc/module/mdm/equipt/equip-appearances/queries/raw",
+      "url": "http://127.0.0.1:18087/secure/emc/module/mdm/equipt/equip-appearances/queries/raw",
+      "status": 200,
+      "response_headers": {
+        "access-control-allow-headers": "security-rsa-key",
+        "access-control-allow-methods": "*",
+        "access-control-allow-credentials": "true",
+        "gikam-instant-save-path": "/secure/emc/module/mdm/equipt/equip-appearances/instant",
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "content-type": "application/json",
+        "content-length": "978",
+        "date": "Sun, 08 Nov 2026 07:51:33 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "accept": "application/json, text/plain, */*",
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 20.972,
+      "request_fingerprint": "req-63c122c633c24e5f161b08af7b65e284bee3a957bb681db690cefb3142ab801f",
+      "stimulus_contract_version": "3",
+      "response_fingerprint": "res-5ccb685e7c9064ffef62b6a22c9a7ac39903efacc717b9c51a01d4b84294f4d0",
+      "normalizer_version": "2",
+      "validation_mode": "executed",
+      "batch_id": "batch-0ee9a78b30434347bcb92e29406fffd1",
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/mdm/equipt/equip-appearances/queries/raw",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "route_id": "3d0634bf950b54e8"
+      },
+      "behavior_family_id": "behavior-179e371ec10bca98",
+      "family_fingerprint": "fam-006d21327c4f881f5d92bda6a13a583910b569a2257b4421d1a95fb3512a0418",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "rcb52f8b9e662"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "application_binding": "app-79417c8a100d2350",
+      "harness_binding": "harness-5e2267e8fcc0ef86",
+      "runtime_contract_binding": "rt-331e8857e49b9aaa",
+      "planning_binding": "plan-660e4d5fa5de3b9f",
+      "governance_binding": "gov-4ac5ccaf8a555cc6",
+      "implementation_binding": "impl-d9ccc8ccf97eba91",
+      "implementation_tree_digest": "d9ccc8ccf97eba9181a8f9ba0694f3a54bed4dde48920c603480d5c3ae862314"
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "7c2c5d06b32d0633dc5b1b0261dcbe4983b7ec154b807494adb4521f56c2d83f",
+      "body_bytes": 558,
+      "assertions": {
+        "json_keys": [
+          "rows",
+          "total",
+          "pageNumber",
+          "pageSize",
+          "numberOfElements"
+        ],
+        "json_values": {
+          "total": 1,
+          "pageNumber": 1,
+          "pageSize": 50,
+          "numberOfElements": 1,
+          "rows.0.id": 532329398034496
+        },
+        "content_type": "application/json"
+      },
+      "id": "equipment-appearance-quick-exact",
+      "method": "POST",
+      "path": "/secure/emc/module/mdm/equipt/equip-appearances/queries/raw",
+      "url": "http://127.0.0.1:18087/secure/emc/module/mdm/equipt/equip-appearances/queries/raw",
+      "status": 200,
+      "response_headers": {
+        "access-control-allow-headers": "security-rsa-key",
+        "access-control-allow-methods": "*",
+        "access-control-allow-credentials": "true",
+        "gikam-instant-save-path": "/secure/emc/module/mdm/equipt/equip-appearances/instant",
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "content-type": "application/json",
+        "content-length": "558",
+        "date": "Sun, 08 Nov 2026 07:51:33 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "accept": "application/json, text/plain, */*",
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 13.404,
+      "request_fingerprint": "req-2689d87a4d2230aa78b7b32ca6b968e643a0a8e94cccf003c1a4553d281130c8",
+      "stimulus_contract_version": "3",
+      "response_fingerprint": "res-3a219d239251d5ecd2ca9399bb7f70d68ccdb4b75202ab5d2cc0838663f62e41",
+      "normalizer_version": "2",
+      "validation_mode": "executed",
+      "batch_id": "batch-0ee9a78b30434347bcb92e29406fffd1",
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/mdm/equipt/equip-appearances/queries/raw",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "route_id": "3d0634bf950b54e8"
+      },
+      "behavior_family_id": "behavior-179e371ec10bca98",
+      "family_fingerprint": "fam-006d21327c4f881f5d92bda6a13a583910b569a2257b4421d1a95fb3512a0418",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "rbfbe4cbe20fc"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "application_binding": "app-79417c8a100d2350",
+      "harness_binding": "harness-5e2267e8fcc0ef86",
+      "runtime_contract_binding": "rt-331e8857e49b9aaa",
+      "planning_binding": "plan-660e4d5fa5de3b9f",
+      "governance_binding": "gov-4ac5ccaf8a555cc6",
+      "implementation_binding": "impl-d9ccc8ccf97eba91",
+      "implementation_tree_digest": "d9ccc8ccf97eba9181a8f9ba0694f3a54bed4dde48920c603480d5c3ae862314"
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "f50720387c1a291ed6d661bdc644c41eb43780d8d09a3bbf437134414f2b04ee",
+      "body_bytes": 330,
+      "assertions": {
+        "json_keys": [
+          "rows",
+          "total",
+          "pageNumber",
+          "pageSize",
+          "numberOfElements"
+        ],
+        "json_values": {
+          "total": 0,
+          "pageNumber": 1,
+          "pageSize": 50,
+          "numberOfElements": 0
+        },
+        "content_type": "application/json"
+      },
+      "id": "equipment-appearance-quick-and-conflict",
+      "method": "POST",
+      "path": "/secure/emc/module/mdm/equipt/equip-appearances/queries/raw",
+      "url": "http://127.0.0.1:18087/secure/emc/module/mdm/equipt/equip-appearances/queries/raw",
+      "status": 200,
+      "response_headers": {
+        "access-control-allow-headers": "security-rsa-key",
+        "access-control-allow-methods": "*",
+        "access-control-allow-credentials": "true",
+        "gikam-instant-save-path": "/secure/emc/module/mdm/equipt/equip-appearances/instant",
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "content-type": "application/json",
+        "content-length": "330",
+        "date": "Sun, 08 Nov 2026 07:51:33 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "accept": "application/json, text/plain, */*",
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 15.063,
+      "request_fingerprint": "req-f4f806b324afae2794ecef1b4022845409861cb9765e9ea73113cbd1d9a5512f",
+      "stimulus_contract_version": "3",
+      "response_fingerprint": "res-f4569d4ece0c3a50064f83280283f09581d1564da0206d218d17081c88e5e14f",
+      "normalizer_version": "2",
+      "validation_mode": "executed",
+      "batch_id": "batch-0ee9a78b30434347bcb92e29406fffd1",
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/mdm/equipt/equip-appearances/queries/raw",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "route_id": "3d0634bf950b54e8"
+      },
+      "behavior_family_id": "behavior-179e371ec10bca98",
+      "family_fingerprint": "fam-006d21327c4f881f5d92bda6a13a583910b569a2257b4421d1a95fb3512a0418",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r34602dc6a3b3"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "application_binding": "app-79417c8a100d2350",
+      "harness_binding": "harness-5e2267e8fcc0ef86",
+      "runtime_contract_binding": "rt-331e8857e49b9aaa",
+      "planning_binding": "plan-660e4d5fa5de3b9f",
+      "governance_binding": "gov-4ac5ccaf8a555cc6",
+      "implementation_binding": "impl-d9ccc8ccf97eba91",
+      "implementation_tree_digest": "d9ccc8ccf97eba9181a8f9ba0694f3a54bed4dde48920c603480d5c3ae862314"
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "adee2e81d77066747d2e2e9593a11c2442eaf5a3c9bfacb5ca156ad1062f24ec",
+      "body_bytes": 1772,
+      "assertions": {
+        "json_keys": [
+          "rows",
+          "total",
+          "pageNumber",
+          "pageSize",
+          "numberOfElements"
+        ],
+        "json_values": {
+          "total": 6,
+          "pageNumber": 1,
+          "pageSize": 50,
+          "numberOfElements": 6,
+          "rows.0.id": 257846679252480,
+          "rows.1.id": 257846683282944,
+          "rows.2.id": 257846686223872,
+          "rows.3.id": 1228459590623296,
+          "rows.4.id": 1532530581933216,
+          "rows.5.id": 1532530634566816
+        },
+        "content_type": "application/json"
+      },
+      "id": "equipment-acquisition-parameters-control",
+      "method": "POST",
+      "path": "/secure/emc/module/mdm/equipt/equipt-acq-params/queries/raw",
+      "url": "http://127.0.0.1:18087/secure/emc/module/mdm/equipt/equipt-acq-params/queries/raw",
+      "status": 200,
+      "response_headers": {
+        "access-control-allow-headers": "security-rsa-key",
+        "access-control-allow-methods": "*",
+        "access-control-allow-credentials": "true",
+        "gikam-instant-save-path": "/secure/emc/module/mdm/equipt/equipt-acq-params/instant",
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "content-type": "application/json",
+        "content-length": "1772",
+        "date": "Sun, 08 Nov 2026 07:51:33 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "accept": "application/json, text/plain, */*",
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 20.83,
+      "request_fingerprint": "req-cc80f07b1e3a90f953754e7847459859ee574881cb017d09dae3d9332c619a3b",
+      "stimulus_contract_version": "3",
+      "response_fingerprint": "res-ca529aba458cf180a5e3d2cb9ce8439edc61947fa941109685dd96fb99078ab4",
+      "normalizer_version": "2",
+      "validation_mode": "executed",
+      "batch_id": "batch-0ee9a78b30434347bcb92e29406fffd1",
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/mdm/equipt/equipt-acq-params/queries/raw",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "route_id": "8b9f2903ce6f6ccf"
+      },
+      "behavior_family_id": "behavior-72017d24c49efe48",
+      "family_fingerprint": "fam-db383a7ea455c53c839f200e7a24de85c9191f81991b544bd5637f6783f3459e",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r45c59b5cf4c3"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "application_binding": "app-79417c8a100d2350",
+      "harness_binding": "harness-5e2267e8fcc0ef86",
+      "runtime_contract_binding": "rt-331e8857e49b9aaa",
+      "planning_binding": "plan-660e4d5fa5de3b9f",
+      "governance_binding": "gov-4ac5ccaf8a555cc6",
+      "implementation_binding": "impl-d9ccc8ccf97eba91",
+      "implementation_tree_digest": "d9ccc8ccf97eba9181a8f9ba0694f3a54bed4dde48920c603480d5c3ae862314"
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "3daea715530a1c0c7ec6c09216923cd828380d7450078c0805148e4d4ec13517",
+      "body_bytes": 616,
+      "assertions": {
+        "json_keys": [
+          "rows",
+          "total",
+          "pageNumber",
+          "pageSize",
+          "numberOfElements"
+        ],
+        "json_values": {
+          "total": 1,
+          "pageNumber": 1,
+          "pageSize": 50,
+          "numberOfElements": 1,
+          "rows.0.id": 1532530634566816
+        },
+        "content_type": "application/json"
+      },
+      "id": "equipment-acquisition-parameters-quick-exact",
+      "method": "POST",
+      "path": "/secure/emc/module/mdm/equipt/equipt-acq-params/queries/raw",
+      "url": "http://127.0.0.1:18087/secure/emc/module/mdm/equipt/equipt-acq-params/queries/raw",
+      "status": 200,
+      "response_headers": {
+        "access-control-allow-headers": "security-rsa-key",
+        "access-control-allow-methods": "*",
+        "access-control-allow-credentials": "true",
+        "gikam-instant-save-path": "/secure/emc/module/mdm/equipt/equipt-acq-params/instant",
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "content-type": "application/json",
+        "content-length": "616",
+        "date": "Sun, 08 Nov 2026 07:51:33 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "accept": "application/json, text/plain, */*",
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 14.418,
+      "request_fingerprint": "req-7757a67d90edc3950f3a1fbae0e6854a29fab35fefe29cb2cc784f282410e8eb",
+      "stimulus_contract_version": "3",
+      "response_fingerprint": "res-21c16c694df1a342ffac29e7dff9ba29a260092b6a97e655e5f1a17e86cdf3e4",
+      "normalizer_version": "2",
+      "validation_mode": "executed",
+      "batch_id": "batch-0ee9a78b30434347bcb92e29406fffd1",
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/mdm/equipt/equipt-acq-params/queries/raw",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "route_id": "8b9f2903ce6f6ccf"
+      },
+      "behavior_family_id": "behavior-72017d24c49efe48",
+      "family_fingerprint": "fam-db383a7ea455c53c839f200e7a24de85c9191f81991b544bd5637f6783f3459e",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "rde5b97b3654c"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "application_binding": "app-79417c8a100d2350",
+      "harness_binding": "harness-5e2267e8fcc0ef86",
+      "runtime_contract_binding": "rt-331e8857e49b9aaa",
+      "planning_binding": "plan-660e4d5fa5de3b9f",
+      "governance_binding": "gov-4ac5ccaf8a555cc6",
+      "implementation_binding": "impl-d9ccc8ccf97eba91",
+      "implementation_tree_digest": "d9ccc8ccf97eba9181a8f9ba0694f3a54bed4dde48920c603480d5c3ae862314"
+    },
+    {
+      "expected_status": [
+        200
+      ],
+      "json_top_level_keys": [
+        "columnTypeMap",
+        "first",
+        "last",
+        "numberOfElements",
+        "pageNumber",
+        "pageSize",
+        "rows",
+        "total",
+        "totalMap",
+        "totalPages"
+      ],
+      "body_sha256": "959a043028ca7c955ef958f6d9178dc49dcc1ebe6c6af7145b07b5b951aac8f2",
+      "body_bytes": 394,
+      "assertions": {
+        "json_keys": [
+          "rows",
+          "total",
+          "pageNumber",
+          "pageSize",
+          "numberOfElements"
+        ],
+        "json_values": {
+          "total": 0,
+          "pageNumber": 1,
+          "pageSize": 50,
+          "numberOfElements": 0
+        },
+        "content_type": "application/json"
+      },
+      "id": "equipment-acquisition-parameters-quick-and-conflict",
+      "method": "POST",
+      "path": "/secure/emc/module/mdm/equipt/equipt-acq-params/queries/raw",
+      "url": "http://127.0.0.1:18087/secure/emc/module/mdm/equipt/equipt-acq-params/queries/raw",
+      "status": 200,
+      "response_headers": {
+        "access-control-allow-headers": "security-rsa-key",
+        "access-control-allow-methods": "*",
+        "access-control-allow-credentials": "true",
+        "gikam-instant-save-path": "/secure/emc/module/mdm/equipt/equipt-acq-params/instant",
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "1; mode=block",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "pragma": "no-cache",
+        "expires": "0",
+        "content-type": "application/json",
+        "content-length": "394",
+        "date": "Sun, 08 Nov 2026 07:51:33 GMT",
+        "connection": "close"
+      },
+      "request_headers": {
+        "accept": "application/json, text/plain, */*",
+        "content-type": "application/json"
+      },
+      "elapsed_ms": 15.244,
+      "request_fingerprint": "req-722f94f9160a76378ae2f528f87da4161528f67498f73fa2bdf9e2ab68f43f5a",
+      "stimulus_contract_version": "3",
+      "response_fingerprint": "res-59c3ba1719903fd684b612be89d724e570e612516558f7ef4ae546e6be854c29",
+      "normalizer_version": "2",
+      "validation_mode": "executed",
+      "batch_id": "batch-0ee9a78b30434347bcb92e29406fffd1",
+      "route": {
+        "method": "POST",
+        "path": "/secure/emc/module/mdm/equipt/equipt-acq-params/queries/raw",
+        "operation": "read",
+        "disposition": "owned-pass",
+        "route_id": "8b9f2903ce6f6ccf"
+      },
+      "behavior_family_id": "behavior-72017d24c49efe48",
+      "family_fingerprint": "fam-db383a7ea455c53c839f200e7a24de85c9191f81991b544bd5637f6783f3459e",
+      "fixture": {
+        "mode": "none",
+        "setup_requests": [],
+        "restore_requests": [],
+        "setup": "not-required",
+        "restore": "not-required",
+        "runtime_values": {
+          "id": "r9d226e7cd748"
+        },
+        "setup_http": [],
+        "restore_http": []
+      },
+      "readback_http": [],
+      "readback_required": false,
+      "audit": {
+        "required": false,
+        "status": "not-required"
+      },
+      "application_binding": "app-79417c8a100d2350",
+      "harness_binding": "harness-5e2267e8fcc0ef86",
+      "runtime_contract_binding": "rt-331e8857e49b9aaa",
+      "planning_binding": "plan-660e4d5fa5de3b9f",
+      "governance_binding": "gov-4ac5ccaf8a555cc6",
+      "implementation_binding": "impl-d9ccc8ccf97eba91",
+      "implementation_tree_digest": "d9ccc8ccf97eba9181a8f9ba0694f3a54bed4dde48920c603480d5c3ae862314"
+    }
+  ],
+  "cleanup": {
+    "application_stopped": true,
+    "baseline_schema_immutable": true,
+    "cleanup_mode": "persistent-oracle",
+    "lifecycle_proof": {
+      "artifact_ref": "sha256:a9f8dfa085a3e88e005118df8fc3d147c04934345142d778aad58f00f6276ee6",
+      "schema": 1,
+      "sha256": "a9f8dfa085a3e88e005118df8fc3d147c04934345142d778aad58f00f6276ee6",
+      "storage": "artifact"
+    },
+    "network_preserved": true,
+    "oracle_preserved": true,
+    "oracle_reused": true,
+    "private_capture_retention": "registered-permanent-proof",
+    "redis_preserved": true,
+    "runtime_dirty": false,
+    "runtime_schema_restored": true,
+    "temporary_files_removed": false,
+    "volume_preserved": true
+  },
+  "cleanup_pending": false,
+  "phase_timings_ms": {
+    "http_cases": 481.298
+  },
+  "authentication": {
+    "attempted": true,
+    "status": 200,
+    "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "authenticated": true,
+    "account_validated": true,
+    "account_status": 200,
+    "account_body_sha256": "1d6ca966ed8c0f298b712b38e483d921360d4c76083ce4d9412ae146fa5fc6a6",
+    "login_response_fingerprint": "res-80e83fb795199e89b4d5652a29b72d3903d75e7cc1529aadb9c0359c8e493576",
+    "identity": {
+      "principal": "Test",
+      "account_organization": "dept_2054",
+      "organization": "dept_2054",
+      "roles": [
+        {
+          "role_id": "1160933173854272",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1189432031920192",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1189432105295936",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1189432176296000",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1189432248565824",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1189432348786752",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1189432452751424",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1189432531009600",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1189432648368192",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1189432692162624",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1189432735293504",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1189432989335616",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1189433059639360",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1189433111257152",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1189433193898048",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1189433242828864",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1189433295257664",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1189435382169664",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1194388196384832",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1235883924111424",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1241710208245824",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1249996911648832",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1249997078413376",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1253678574411840",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1274981895118912",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1279131697446976",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1335062763313312",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1358478346385440",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1358479062374432",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1358479212369952",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1358479430924320",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1358480236771360",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1358481402902560",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1358481553463328",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1358482018367520",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1373299196952992",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1398684374457120",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1449060899626688",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1496368496737504",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1512733649279680",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1518572870740256",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1526070171521696",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1527459809739648",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1566379864797376",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1579156530695616",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1581302074327040",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1585133573646880",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1597053920749760",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1598285727715424",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1605678303834912",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1610279635600096",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1612569354362208",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1632471349920288",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1641583891343584",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1669730651238048",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1669731057356448",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1669746617659040",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1682634233166400",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1686693783311712",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1691653976980096",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1712176912170208",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1717135613989120",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1720865075738432",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1735776418495392",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1771761826664032",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1783807648071744",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1849707893640160",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1865065704216000",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1882804096120256",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1882804191049152",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1882804302730688",
+          "principal": "Test"
+        },
+        {
+          "role_id": "1988387661476288",
+          "principal": "Test"
+        }
+      ]
+    },
+    "projection_metadata": {
+      "kind": "allowlist-json-projection",
+      "adapter": "sunway-account-v1",
+      "selectors": {
+        "principal": "id",
+        "account_organization": "orgId",
+        "organization": "ext$.loginorgid",
+        "roles": "ext$.roles"
+      },
+      "raw_body_sha256": "1d6ca966ed8c0f298b712b38e483d921360d4c76083ce4d9412ae146fa5fc6a6",
+      "raw_body_bytes": 18035,
+      "projection_sha256": "6d0045e004d25ef7f6e3f751b0dd081d81d28592507c01727ad8e96d26ebc119",
+      "raw_body_recomputable": false,
+      "trust": "executed-runner-source-bound-producer"
+    },
+    "response_fingerprint": "res-745573772f6a8143753b0582b6133de7923f1f1e3f69c11aff06907e827631ae",
+    "account_observation": {
+      "request": {
+        "method": "GET",
+        "path": "/core/module/sys/logins/account",
+        "operation": "read",
+        "headers": {
+          "Connection": "close",
+          "Accept": "application/json"
+        },
+        "auth": {
+          "cookies": {
+            "OWNED_LOCAL_SESSION": "4b14f31dce78b9f39b6dbdbf282128f0f2a627b6b8edd821973df562c8da4587",
+            "sunway-remember-me-cookie": "d67abeb33569bfa6f676505dfc5a7752d676a4d41725db6cee5ee614cd2fd31c"
+          }
+        },
+        "role": "1160933173854272",
+        "organization": "dept_2054"
+      },
+      "status": 200,
+      "response_headers": {
+        "content-type": "application/json"
+      },
+      "started_at": "2026-11-08T07:51:33.203373+00:00",
+      "finished_at": "2026-11-08T07:51:33.330935+00:00",
+      "request_fingerprint": "req-886cba76bc8234fd95d2e8a15ca1a11976ad1c121bb316322215750695a1a8f5",
+      "response_fingerprint": "res-745573772f6a8143753b0582b6133de7923f1f1e3f69c11aff06907e827631ae",
+      "response_projection": {
+        "principal": "Test",
+        "account_organization": "dept_2054",
+        "organization": "dept_2054",
+        "roles": [
+          {
+            "role_id": "1160933173854272",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1189432031920192",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1189432105295936",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1189432176296000",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1189432248565824",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1189432348786752",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1189432452751424",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1189432531009600",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1189432648368192",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1189432692162624",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1189432735293504",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1189432989335616",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1189433059639360",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1189433111257152",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1189433193898048",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1189433242828864",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1189433295257664",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1189435382169664",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1194388196384832",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1235883924111424",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1241710208245824",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1249996911648832",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1249997078413376",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1253678574411840",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1274981895118912",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1279131697446976",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1335062763313312",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1358478346385440",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1358479062374432",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1358479212369952",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1358479430924320",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1358480236771360",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1358481402902560",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1358481553463328",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1358482018367520",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1373299196952992",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1398684374457120",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1449060899626688",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1496368496737504",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1512733649279680",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1518572870740256",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1526070171521696",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1527459809739648",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1566379864797376",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1579156530695616",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1581302074327040",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1585133573646880",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1597053920749760",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1598285727715424",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1605678303834912",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1610279635600096",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1612569354362208",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1632471349920288",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1641583891343584",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1669730651238048",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1669731057356448",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1669746617659040",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1682634233166400",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1686693783311712",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1691653976980096",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1712176912170208",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1717135613989120",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1720865075738432",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1735776418495392",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1771761826664032",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1783807648071744",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1849707893640160",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1865065704216000",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1882804096120256",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1882804191049152",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1882804302730688",
+            "principal": "Test"
+          },
+          {
+            "role_id": "1988387661476288",
+            "principal": "Test"
+          }
+        ]
+      },
+      "projection_metadata": {
+        "kind": "allowlist-json-projection",
+        "adapter": "sunway-account-v1",
+        "selectors": {
+          "principal": "id",
+          "account_organization": "orgId",
+          "organization": "ext$.loginorgid",
+          "roles": "ext$.roles"
+        },
+        "raw_body_sha256": "1d6ca966ed8c0f298b712b38e483d921360d4c76083ce4d9412ae146fa5fc6a6",
+        "raw_body_bytes": 18035,
+        "projection_sha256": "6d0045e004d25ef7f6e3f751b0dd081d81d28592507c01727ad8e96d26ebc119",
+        "raw_body_recomputable": false,
+        "trust": "executed-runner-source-bound-producer"
+      }
+    },
+    "session_context": {
+      "cookies": {
+        "OWNED_LOCAL_SESSION": "4b14f31dce78b9f39b6dbdbf282128f0f2a627b6b8edd821973df562c8da4587",
+        "sunway-remember-me-cookie": "d67abeb33569bfa6f676505dfc5a7752d676a4d41725db6cee5ee614cd2fd31c"
+      }
+    }
+  },
+  "proof_registration_pending": false,
+  "finished_at": "2026-11-08T07:51:33.541503+00:00",
+  "cleanup_finalized_at": "2026-11-08T07:55:08.747732+00:00"
+}

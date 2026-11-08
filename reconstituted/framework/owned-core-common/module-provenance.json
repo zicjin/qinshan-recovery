@@ -146,6 +146,11 @@
       "generated_sha256": "3fbcc3fd280770a7f205091bc138718e12223c1646460442a9639882215ef866",
       "override_sha256": "10d57c6ae3a7ee01d57e667ae1f0bc2d8bc1e4c1b4b3de3ed51248ffc93ddee3",
       "path": "src/main/java/com/sunwayworld/framework/support/selectable/service/GenericSelectableService.java"
+    },
+    {
+      "generated_sha256": "ba683fe91e610ac1a24f38d8847c766062b8b5cd07d2b157fab4462768aac2e4",
+      "override_sha256": "bfe9e81b1a81c8628d39d991ccd22b2982169299b67725ab09d20a72380d35d2",
+      "path": "src/main/java/com/sunwayworld/framework/database/dialect/OracleDialect.java"
     }
   ],
   "override_source_files": [
@@ -298,6 +303,11 @@
       "generated_sha256": "8c0e74212e37c0e451383faae4d0d00d8fe221fce610478b38fb3e0ad864125b",
       "override_sha256": "a86fa2c28ba95545b88db18e536e044e6845f13311a36092394f67e038dcdbaf",
       "path": "src/main/java/com/sunwayworld/module/sys/todo/callable/SelectTodoCallable.java"
+    },
+    {
+      "generated_sha256": "ba683fe91e610ac1a24f38d8847c766062b8b5cd07d2b157fab4462768aac2e4",
+      "override_sha256": "bfe9e81b1a81c8628d39d991ccd22b2982169299b67725ab09d20a72380d35d2",
+      "path": "src/main/java/com/sunwayworld/framework/database/dialect/OracleDialect.java"
     }
   ],
   "public_dependency_allowlist": "public-dependency-allowlist.json",
@@ -7430,12 +7440,15 @@
       "decompiler": "CFR",
       "decompiler_version": "0.152",
       "path": "src/main/java/com/sunwayworld/framework/database/dialect/OracleDialect.java",
-      "sha256": "ba683fe91e610ac1a24f38d8847c766062b8b5cd07d2b157fab4462768aac2e4",
+      "sha256": "bfe9e81b1a81c8628d39d991ccd22b2982169299b67725ab09d20a72380d35d2",
       "source_class_path": "com/sunwayworld/framework/database/dialect/OracleDialect.class",
       "source_jar": "BOOT-INF/lib/gikam-core-common-14.1.5.jar",
+      "source_sha256_before_overlay": "ba683fe91e610ac1a24f38d8847c766062b8b5cd07d2b157fab4462768aac2e4",
       "source_sha256_before_transform": "875300ae353036f04bb5dcb9957ad09c77e29fa3b46ba9dc39844c9121de36a0",
       "transformations": [
-        "normalization:generated-source"
+        "normalization:generated-source",
+        "overlay:src/main/java/com/sunwayworld/framework/database/dialect/OracleDialect.java",
+        "compatibility:oracle-batch-clob-default-kingbase-disabled"
       ]
     },
     {
@@ -31573,7 +31586,7 @@
       ]
     }
   ],
-  "source_tree_sha256": "d2accd8ed9ebac163ffc02504a4f8c6c95388c34240b452811402b59506f4e9a",
+  "source_tree_sha256": "9262c8b0162008437d408cde7f252ecc1589b03d287b02d132bee9e2a39175b2",
   "status": "assembled-source-only",
   "transformation_manifest": "docs/reconstitution/decompiler-transforms.json",
   "transformation_manifest_sha256": "30ab06626f3e4c863a2855790b0ec6211499394852f2a8598ea3bd444ce87fe8",

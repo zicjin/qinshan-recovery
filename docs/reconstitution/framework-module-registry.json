@@ -21,7 +21,7 @@
       "forbidden_content_status": "pass",
       "module": "owned-core-common",
       "output_jar": "owned-core-common/target/owned-core-common-1.0.0-SNAPSHOT.jar",
-      "output_jar_sha256": "e03ef98bc57470e2cc681b588982e8b6b000d6f11bc0dde231a710ecb2dfb0e6",
+      "output_jar_sha256": "3e7029220fb277ec1c10088c28e5a60a32ee5603fddac9bcc1317dbbbd02848f",
       "reason": "Merges the common foundation and its immediately downstream base-interface JAR to avoid a two-module cycle-free core with no independent runtime boundary.",
       "resource_file_count": 1063,
       "source_file_count": 2222,
@@ -29,7 +29,7 @@
         "gikam-core-base-interface-14.1.5.jar",
         "gikam-core-common-14.1.5.jar"
       ],
-      "source_tree_sha256": "d2accd8ed9ebac163ffc02504a4f8c6c95388c34240b452811402b59506f4e9a"
+      "source_tree_sha256": "9262c8b0162008437d408cde7f252ecc1589b03d287b02d132bee9e2a39175b2"
     },
     {
       "compile_status": "pass",

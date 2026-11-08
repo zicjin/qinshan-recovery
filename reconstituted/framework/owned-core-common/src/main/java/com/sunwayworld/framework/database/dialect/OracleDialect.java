@@ -308,7 +308,7 @@ implements Dialect {
                 }
                 String value = ConvertUtils.convert(columnInstance.getValue(), String.class);
                 if (columnInstance.getColumnContext().isClob() || value.length() > 1000) {
-                    boolean enabledKingbase = ApplicationContextHelper.getEnvironment().getProperty("kingbase.enabled", Boolean.TYPE);
+                    boolean enabledKingbase = ApplicationContextHelper.getEnvironment().getProperty("kingbase.enabled", Boolean.class, false);
                     if (enabledKingbase) {
                         String key = columnInstance.getColumnContext().getColumnName() + "_" + i + "_" + m;
                         sql.append("#{").append(key).append(",jdbcType=CLOB}");
@@ -376,7 +376,7 @@ implements Dialect {
                 }
                 String value = ConvertUtils.convert(columnInstance.getValue(), String.class);
                 if (columnInstance.getColumnContext().isClob() || value.length() > 1000) {
-                    boolean enabledKingbase = ApplicationContextHelper.getEnvironment().getProperty("kingbase.enabled", Boolean.TYPE);
+                    boolean enabledKingbase = ApplicationContextHelper.getEnvironment().getProperty("kingbase.enabled", Boolean.class, false);
                     if (enabledKingbase) {
                         String key = columnInstance.getColumnContext().getColumnName() + "_" + i + "_" + m;
                         sql.append("#{").append(key).append(",jdbcType=CLOB}");
@@ -459,7 +459,7 @@ implements Dialect {
                 }
                 String value = ConvertUtils.convert(columnInstance.getValue(), String.class);
                 if (columnInstance.getColumnContext().isClob() || value.length() > 1000) {
-                    boolean enabledKingbase = ApplicationContextHelper.getEnvironment().getProperty("kingbase.enabled", Boolean.TYPE);
+                    boolean enabledKingbase = ApplicationContextHelper.getEnvironment().getProperty("kingbase.enabled", Boolean.class, false);
                     if (enabledKingbase) {
                         String key = columnInstance.getColumnContext().getColumnName() + "_" + i + "_" + m;
                         sql.append("#{").append(key).append(",jdbcType=CLOB}");

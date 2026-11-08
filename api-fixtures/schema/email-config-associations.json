@@ -1,0 +1,39 @@
+{
+  "version": 1,
+  "purpose": "Restore two original missing email configuration association tables required by real cascade deletion; DDL only, no business writes.",
+  "owner": "LIMS_RUNTIME_LOCAL",
+  "source": {
+    "path": "project/sql/核心发版14.1.5/init-sql/oracle/0.common_sql_oracle-1.txt",
+    "sha256": "99c1ba18054594384cc88a28ecc5c8c44f540e089e4c92ca92eddb94c2f17be1"
+  },
+  "source_blocks": [
+    {
+      "line_start": 1264,
+      "line_end": 1284,
+      "sha256": "f7e3fecbf942611880ba45512240b7a392ee2bb5eb9c3194a36ed6deb57b9e37"
+    },
+    {
+      "line_start": 1289,
+      "line_end": 1317,
+      "sha256": "059743cf353e330b5cffc36e54f507a36bbd4fe2e7e9a878025dc4eead69c229"
+    }
+  ],
+  "tables": [
+    "T_CORE_EMAIL_CONFIG_RECEIPENT",
+    "T_CORE_EMAIL_CONFIG_REC_ROLE"
+  ],
+  "fixture": {
+    "path": "api-fixtures/schema/email-config-associations.sql",
+    "sha256": "73fab487b8612cc4ba9d0cfe254f7db1816b83b0debab63e71344edfa7d8fbb6"
+  },
+  "generator": "scripts/schema_fixture.py definitions/checks/render; only these two source-backed table definitions supplied; existing seven-table fixture and schema policy unchanged.",
+  "generator_sha256": "36dbc87c71c2838bcd942c1f1e90fc80ed14af745aa7e0411cb46b18acc4d215",
+  "transformations": [
+    "Retain original CREATE/COMMENT/PK/INDEX statements; guard CURRENT_SCHEMA/SESSION_USER/length semantics and all targets metadata before DDL; quote each original statement for EXECUTE IMMEDIATE."
+  ],
+  "limitations": [
+    "Oracle DDL implicitly commits; no atomic DDL rollback claim.",
+    "Existing equivalent tables skip; incompatible objects rejected before DDL. On partial failure preserve tables and logs; rerun after inspection.",
+    "Baseline untouched; local runtime schema only; not a strict lifecycle proof."
+  ]
+}

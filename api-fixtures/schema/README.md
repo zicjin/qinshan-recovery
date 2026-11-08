@@ -82,3 +82,16 @@ the script requires `CURRENT_SCHEMA=LIMS_RUNTIME_LOCAL` and session user `SYS`
 or `LIMS_RUNTIME_LOCAL`, and commits the metadata DML together. This fixture
 writes no business rows and performs no DDL or cache operations. Real HTTP
 cascade replay and targeted metadata cache diagnosis remain separate work.
+
+`email-config-associations.sql` restores two original missing association tables,
+`T_CORE_EMAIL_CONFIG_RECEIPENT` and `T_CORE_EMAIL_CONFIG_REC_ROLE`, needed by the
+original email configuration queries and cascade deletion. Its manifest pins the
+original source SQL ranges, generated guarded SQL and existing schema renderer.
+Run `python3 scripts/tests/test-email-config-associations.py` before execution.
+It uses the same local owner/session, exact metadata and name-collision guards;
+Oracle DDL implicitly commits. It contains no business DML, does not change the
+baseline, and does not expand the existing seven-table lifecycle policy. An
+existing equivalent table skips; inspect retained logs after any partial failure.
+The actual HTTP delete failure and after-repair replay are separate diagnostic
+observations. A runtime with these additional tables needs its own truthful schema
+contract before any strict promotion; this fixture does not grant one.

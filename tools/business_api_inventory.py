@@ -322,6 +322,25 @@ def _source_index(roots: Sequence[Path]) -> Dict[str, Dict[str, object]]:
     for name, candidates in simple.items():
         if len(candidates) == 1:
             result[name] = candidates[0]
+    # Existing owned mapped classes can be explicitly created by @Bean with
+    # no component stereotype. Conditions remain unverified source metadata.
+    for config in qualified.values():
+        for method in re.finditer(
+            r"@(?:[\w.]+\.)?Bean\b(?P<prefix>[\s\S]*?)\bpublic\s+"
+            r"(?P<type>[\w.$]+)\s+(?P<method>\w+)\s*\(", str(config["text"])
+        ):
+            if re.search(r"\breturn\b|;", method.group("prefix")):
+                continue
+            target = _parent_info(config, method.group("type"), result)
+            if not target or not target["class_bases"] or target["is_interface"]:
+                continue
+            conditions = re.findall(r"@(?:[\w.]+\.)?(GikamBean|Profile|Conditional\w*)\b",
+                                    str(config["text"]))
+            target["is_handler"] = True
+            target.setdefault("bean_factory_sources", []).append({
+                "source": _source_reference(config["source"]), "class": config["qualified"],
+                "method": method.group("method"), "conditions": sorted(set(conditions)),
+            })
     return result
 
 
@@ -597,8 +616,11 @@ def _handler_candidates(info: Dict[str, object], infos: Dict[str, Dict[str, obje
             if not implements(handler):
                 continue
         conditions = re.findall(r"@(GikamBean|Profile|Conditional\w*)\b", str(handler["text"]))
+        factories = handler.get("bean_factory_sources", [])
+        conditions.extend(value for factory in factories for value in factory["conditions"])
         candidates.append({"class": handler["qualified"], "source": _source_reference(handler["source"]),
                            "conditions": sorted(set(conditions)),
+                           "bean_factory_sources": factories,
                            "runtime_registration": "unverified"})
     info["_handler_candidates"] = sorted(candidates, key=lambda row: str(row["class"]))
     return info["_handler_candidates"]
@@ -793,6 +815,30 @@ def main() -> int:
         else:
             removed_rows.append({name: old[name] for name in ("id", "method", "path", "source", "class")})
             removed_rows[-1]["reason"] = "old isolated source-root mapping has no matching authoritative method/path; not an evidence alias"
+    # A former owned-only route may now share its wire contract with a newly
+    # discovered project declaration. Preserve only its same-method/path ID.
+    for route in rows:
+        key = str(route["method"]) + " " + str(route["path"])
+        if key in owned_route_map:
+            route.setdefault("source_route_ids", []).append(hashlib.sha256(
+                ("owned-boundary " + key).encode("utf-8")).hexdigest()[:16])
+    # Audit old rootless owned interface rows without retaining them as HTTP
+    # candidates. These were previously scanned without a concrete bean/base.
+    for owned_root in owned_roots:
+        for name, info in _source_infos(owned_root).items():
+            if name != info["qualified"] or not info["is_interface"] or info["class_bases"]:
+                continue
+            if _handler_candidates(info, infos):
+                continue
+            for route in extract_routes(info["text"], info["relative"], info["constants"]):
+                if not _owned_route_is_concrete(route):
+                    continue
+                if (route["method"], route["path"]) in current_by_key:
+                    continue
+                key = str(route["method"]) + " " + str(route["path"])
+                removed_rows.append({"id": hashlib.sha256(("owned-boundary " + key).encode()).hexdigest()[:16],
+                                     **{field: route[field] for field in ("method", "path", "source", "class")},
+                                     "reason": "rootless interface has no concrete mapped handler candidate; not an HTTP route"})
     # Keep identifiers from earlier source-accounting views addressable. This
     # is an alias formula, not a route list: discovery comes from Java source.
     for route in boundary_routes:

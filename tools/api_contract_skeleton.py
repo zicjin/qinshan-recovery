@@ -373,7 +373,8 @@ def behavior_manifest(routes: List[Mapping[str, Any]], assignment: Mapping[str, 
                 continue
             seen_declarations.add(marker)
             declarations.append(declaration)
-            for field in ("inherited_mapping_sources", "handler_candidates", "shadowed_sources", "route_sources"):
+            for field in ("inherited_mapping_sources", "handler_candidates", "bean_factory_sources",
+                          "shadowed_sources", "route_sources"):
                 pending_declarations.extend(declaration.get(field, []))
             if declaration.get("mapping_source"):
                 pending_declarations.append(declaration["mapping_source"])

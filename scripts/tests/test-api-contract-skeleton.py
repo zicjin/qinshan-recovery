@@ -164,6 +164,22 @@ SELECT A.ID,A.NAME FROM T_PEOPLE A
         second = next(f for f in self.build()["behavior_families"] if "p-query" in f["alias_route_ids"])
         self.assertNotEqual(first["family_fingerprint"], second["family_fingerprint"])
 
+    def test_bean_factory_configuration_is_a_family_dependency(self):
+        configuration = self.controller.with_name("HandlerConfiguration.java")
+        configuration.write_text("package fixture; public class HandlerConfiguration {}")
+        row = self.ledger["routes"][0]
+        row["handler_candidates"] = [{
+            "source": str(self.controller.relative_to(self.root)),
+            "runtime_registration": "unverified",
+            "bean_factory_sources": [{"source": str(configuration.relative_to(self.root)),
+                                      "method": "handler", "conditions": ["ConditionalOnProperty"]}],
+        }]
+        first = next(f for f in self.build()["behavior_families"] if "p-query" in f["alias_route_ids"])
+        self.assertIn(str(configuration.relative_to(self.root)), {r["path"] for r in first["source_provenance"]})
+        configuration.write_text("package fixture; public class HandlerConfiguration { boolean enabled = false; }")
+        second = next(f for f in self.build()["behavior_families"] if "p-query" in f["alias_route_ids"])
+        self.assertNotEqual(first["family_fingerprint"], second["family_fingerprint"])
+
     def test_source_chain_and_mapper_are_hashed_static_provenance(self):
         family = next(f for f in self.build()["behavior_families"] if "p-query" in f["alias_route_ids"])
         source = next(f for f in family["source_provenance"] if f["path"].endswith("SharedController.java"))

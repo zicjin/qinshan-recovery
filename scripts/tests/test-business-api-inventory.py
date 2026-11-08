@@ -17,6 +17,25 @@ from business_api_inventory import (extract_routes, build_inventory,
 
 
 class BusinessApiInventoryTest(unittest.TestCase):
+    def test_explicit_bean_returned_mapped_controllers_remain_conditional_candidates(self):
+        roots = [ROOT / name / "src/main/java" for name in
+                 ("owned-consumables", "owned-scheduler")]
+        rows = build_owned_boundary_inventory(roots, [])
+        scheduler = [row for row in rows if row["path"].startswith("/secure/owned-scheduler")]
+        self.assertEqual(5, len(scheduler))
+        stock = next(row for row in rows if row["path"].endswith("/stocks/concents/queries"))
+        for row in scheduler + [stock]:
+            self.assertEqual("unverified", row["runtime_registration"])
+            candidate = next(c for c in row["handler_candidates"]
+                             if c["class"].endswith(("OwnedSchedulerIsolatedController", "OwnedMdmStockReadController")))
+            self.assertTrue(candidate["bean_factory_sources"])
+            self.assertIn("ConditionalOnMissingBean", candidate["conditions"])
+        with tempfile.TemporaryDirectory() as raw:
+            source = Path(raw) / "Unregistered.java"
+            source.write_text('@RequestMapping("/unregistered")\n'
+                              'public class Unregistered { @GetMapping("/one") String one(){return "x";} }')
+            self.assertEqual([], build_owned_boundary_inventory([Path(raw)], []))
+
     def test_explicit_trace_is_not_unrestricted_any(self):
         rows = extract_routes('''
 @RequestMapping("/files")
@@ -56,7 +75,12 @@ package demo;
 @RestController
 public class MainController {
  @GetMapping("/owned-main") String main() {return "main";}
+ @GetMapping("/project/one") String alias() {return "one";}
 }
+''')
+            write("owned-demo/src/main/java/demo/GenericOrphan.java", '''
+package demo;
+public interface GenericOrphan { @PutMapping("/activate") void activate(); }
 ''')
             write("owned-demo/src/test/java/demo/TestController.java", '''
 package demo;
@@ -119,10 +143,14 @@ public interface ParentPage { String detail(); }
         original = next(row for row in project if row["path"] == "/project/one")
         self.assertEqual("demo/ProjectResource.java", original["source"])
         self.assertEqual(hashlib.sha256(b"GET /project/one demo.ProjectResource").hexdigest()[:16], original["id"])
+        self.assertIn(hashlib.sha256(b"owned-boundary GET /project/one").hexdigest()[:16],
+                      original.get("source_route_ids", []))
         page = next(row for row in project if row["path"] == "/page/detail")
         wrong_id = hashlib.sha256(b"GET /detail demo.PageImpl").hexdigest()[:16]
         self.assertNotIn(wrong_id, page.get("source_route_ids", []))
         self.assertIn(wrong_id, {row["id"] for row in payload["removed_source_rows"]})
+        removed = next(row for row in payload["removed_source_rows"] if row["path"] == "/activate")
+        self.assertIn("rootless", removed["reason"])
         boundary = payload["boundary_routes"]
         self.assertEqual({("GET", "/owned-main"), ("GET", "/framework/selectable"),
                           ("POST", "/framework/tree/{parentId}")},

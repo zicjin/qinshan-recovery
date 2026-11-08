@@ -1,67 +1,93 @@
 emcEquiptPerCheckPlan.editPage = {
 
+    // Global Plan reads are separate from the shared formal CHECK resource.
+    // Plan maintenance is not restored here until the device/maint authorization is verified.
+    getReadonlyFields : function(fields) {
+        return [ {
+            field : 'ext$.equiptno',
+            title : 'T_EMC_EQUIPT.EQUIPTID',
+            readonly : true
+        }, {
+            field : 'ext$.equiptname',
+            title : 'T_EMC_EQUIPT.EQUIPTNAME',
+            readonly : true
+        }, {
+            field : 'ext$.specification',
+            title : 'T_EMC_EQUIPT.SPECIFICATION',
+            readonly : true
+        } ].concat(fields.filter(function(field) {
+            return !field.checkbox;
+        }).map(function(field) {
+            var readonlyField = Gikam.deepExtend(field);
+            readonlyField.readonly = true;
+            delete readonlyField.editor;
+            delete readonlyField.preInsert;
+            delete readonlyField.onChange;
+            delete readonlyField.onAfterChoose;
+            delete readonlyField.onClean;
+            return readonlyField;
+        }));
+    },
+
+    showPlan : function(row) {
+        var _this = this;
+        var generation = this.selectionGeneration = (this.selectionGeneration || 0) + 1;
+        var data = row && Gikam.deepExtend(row);
+        Gikam.getAsyncComp('emc-equipt-per-check-plan-edit-list-base-info-form').done(function(form) {
+            if (_this.selectionGeneration !== generation) {
+                return;
+            }
+            form.cleanData().done(function() {
+                if (_this.selectionGeneration !== generation || !data) {
+                    return;
+                }
+                // Form.setData preserves its existing id; seed the actual Plan id after clearing.
+                form.setOptions({ data : { id : data.id } });
+                form.setData(data, false);
+            });
+        });
+        Gikam.getAsyncComp('emc-equipt-per-check-plan-edit-list-uploader').done(function(uploader) {
+            if (_this.selectionGeneration !== generation) {
+                return;
+            }
+            // Grid.refresh returns early for an empty URL before aborting its previous request.
+            if (!data && uploader.grid.requestDeferred) {
+                uploader.grid.requestDeferred.abort();
+            }
+            // Uploader.setOptions refreshes its own grid; do not issue a second request.
+            uploader.setOptions({ bizId : data ? data.id : '' });
+            if (!data) {
+                uploader.grid.cleanData();
+            }
+        });
+    },
+
     getGridParam : function() {
         var _this = this;
         return {
             type : 'grid',
             id : 'emc-equipt-per-check-plan-edit-list-grid',
-            url : emcEquiptPerCheckPlan.baseUrl + '/queries/raw',
+            url : IFM_CONTEXT + '/secure/emc/module/mdm/equipt/equipts/per-check-plans/queries',
             service : 'emcEquiptPerCheckPlanServiceImpl',
             dbTable : 'T_EMC_EQUIPT_PER_CHECK_PLAN',
-            columns : emcEquiptPerCheckPlan.getPerCheckListColumns(),
+            readonly : true,
+            autoSave : false,
+            columns : this.getReadonlyFields(emcEquiptPerCheckPlan.getPerCheckListColumns()),
             onLoadSuccess : function(data) {
                 if (!Gikam.isEmpty(data)) {
                     this.activeRowByIndex(0);
                 } else {
-                    Gikam.cleanCompData([ 'emc-equipt-per-check-plan-edit-list-base-info-form' ]);
+                    _this.showPlan(null);
                 }
-                var uploader = Gikam.getComp('emc-equipt-per-check-plan-edit-list-uploader');
-                uploader.setOptions({
-                    bizId : ''
-                });
-                uploader.grid.cleanData();
             },
             onRowActive : function(index, row) {
-
-                Gikam.getAsyncComp('emc-equipt-per-check-plan-edit-list-base-info-form').done(function(form) {
-                    form.refresh({
-                        url : Gikam.printf(emcEquiptPerCheckPlan.baseUrl + '/{id}', {
-                            id : row.id
-                        })
-                    });
-                });
-                var uploader = Gikam.getComp('emc-equipt-per-check-plan-edit-list-uploader');
-                uploader.setOptions({
-                    bizId : row.id
-                })
-                uploader.grid.refresh();
+                _this.showPlan(row);
             },
-            toolbar : [ {
-                type : 'button',
-                text : 'GIKAM.BUTTON.INSERT',
-                icon : 'add',
-                onClick : function() {
-                    Gikam.preInsert({
-                        modalTitle : '新增',
-                        fields : emcEquiptPerCheckPlan.getBaseInfoFormFields(),
-                        url : emcEquiptPerCheckPlan.baseUrl
-                    }).done(function(id) {
-                        Gikam.getComp('emc-equipt-per-check-plan-edit-list-grid').refresh();
-                    });
-                }
-            }, {
-                type : 'button',
-                text : 'GIKAM.BUTTON.DELETE',
-                icon : 'remove-row',
-                onClick : function() {
-                    Gikam.getComp('emc-equipt-per-check-plan-edit-list-grid').deleteRows(emcEquiptPerCheckPlan.baseUrl);
-                }
-            } ]
+            toolbar : []
         }
     },
 
     getBaseInfoTab : function() {
-        var _this = this;
         return {
             type : 'tab',
             panels : [ {
@@ -71,11 +97,9 @@ emcEquiptPerCheckPlan.editPage = {
                     service : 'emcEquiptPerCheckPlanServiceImpl',
                     dbTable : 'T_EMC_EQUIPT_PER_CHECK_PLAN',
                     id : 'emc-equipt-per-check-plan-edit-list-base-info-form',
-                    fields : emcEquiptPerCheckPlan.getBaseInfoFormFields(),
-                    onUpdated : function() {
-                        var grid = Gikam.getComp('emc-equipt-per-check-plan-edit-list-grid');
-                        grid.refreshRowById(grid.getActivedRow().id);
-                    },
+                    readonly : true,
+                    autoSave : false,
+                    fields : this.getReadonlyFields(emcEquiptPerCheckPlan.getBaseInfoFormFields())
                 } ]
             }, {
                 title : 'GIKAM.FILE.ATTACHMENT',
@@ -83,9 +107,9 @@ emcEquiptPerCheckPlan.editPage = {
                     type : 'uploader',
                     id : 'emc-equipt-per-check-plan-edit-list-uploader',
                     dbTable : 'T_EMC_EQUIPT_PER_CHECK_PLAN',
-                    onBeforeUpload : function() {
-                        this.setUploadData({})
-                    }
+                    readonly : true,
+                    gridOptions : { readonly : true, autoSave : false },
+                    formatterGridToolbar : function() { return []; }
                 } ]
             } ]
         }

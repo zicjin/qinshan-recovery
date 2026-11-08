@@ -1,0 +1,164 @@
+{
+  "schema": "source-backed-global-per-check-plan-query-v1",
+  "classification": "original-system-Plan-page-entity-contract-repair",
+  "base_checkpoint": "b8cd12dad3e30776ac3f4a8de83d13646f8b5951",
+  "menu": "407001",
+  "new_route": {
+    "method": "POST",
+    "path": "/secure/emc/module/mdm/equipt/equipts/per-check-plans/queries",
+    "count": 1,
+    "read_only": true
+  },
+  "source_contract": "Original407001 query/detail/create/delete target formalCHECK while its fields/service/table expressPLAN; no equipment/maint selector supplied. Separate explicitglobalPLANreadquery repairs model mismatch without rebindingCHECK. UI implementation owned separately.",
+  "chain": [
+    "PfEquiptResourceImpl.selectGlobalPerCheckPlans",
+    "PfEquiptServiceImpl.selectGlobalPerCheckPlans",
+    "EmcEquiptPerCheckPlanService.selectPagination(Supplier,PageRowBounds)",
+    "EmcEquiptPerCheckPlanQueryDao singlemethod on originalEmcEquiptPerCheckPlanDaoImpl",
+    "EmcEquiptPerCheckPlanMapper.selectGlobalPerCheckPlans",
+    "MybatisPageHelper + originalPersistableHelper map-to-PlanBean"
+  ],
+  "source_authority": {
+    "organization": "Equipment.ORIGIN ORGID equals actualLocalContext user.ext$.parentOrgId. This follows original equipment page explicitparentorg selection and prior source-backed ledgerseam, nowhardANDindependentoffilter. Missingorg yields0.",
+    "category": "ExactoriginalEmcEquiptMapper.selectByCondition target_type=equipList OP_/UP_ EXISTS, unconditionallyappliedinnewstatement. OP.PERMISSIONTYPEID=T_EMC_EQUIPT_CATEGORY, OP.TARGETID=equipmentcategory; UP.USERID=actualuserID, UP.PERMISSIONTYPEID=T_CORE_ORG, UP.TARGETID=OP.ORGID. Neverclientflag.",
+    "trusted_override": "AfterextractMapFilter overwriteglobalPlanParentOrgId/globalPlanLoginUserId with actualLocalContext. Client loginUser or target_type cannot controltheseindependentpredicates.",
+    "conservative_limit": "Requires BOTHactualparentorgandequipmentcategorypermission. UngrantedTest may return0/blocked; do not drop grantpredicate to satisfypositive. Runtimepermissionfilter/anonymous/session behavior stillrequiresactualHTTP.",
+    "resource_permission_note": "GenericResourceDefaultAvailablePermissionValidator is annotated on detail/column GET, not inherited onto unrelated custom query. No fake annotation added; custom POST uses originalSpringrequestsecurity plus explicitserverscope. Newroute is not addedtoownedcompatallowlist.",
+    "existing_menu_filter": "Project QueryAccessFilter covers all /equipts/* and accepts POST containing /queries only when actual current menu set includes equipment management101501 or equipment read20251000001. This is existing equipment-read policy, not a new407001-specific grant. Do not claim more than this until actual HTTP.",
+    "owned_filter": "OwnedQueryAccessFilter explicit-owned identity path remains fail-closed for this new relative route; no allowlist expansion. Original Spring session without owned marker uses existing delegate behavior. Actual mode/auth acceptance remains root responsibility."
+  },
+  "projection": {
+    "original_bean": "EmcEquiptPerCheckPlanBean",
+    "unchanged_numeric_FKs": [
+      "equiptId",
+      "maintId"
+    ],
+    "original_joins": "LEFT JOIN maint onA.MAINTID=B.ID; LEFTJOINcode onB.MAINTEVENT=C.CODE andcodecategory maintainEvent;duplicatecodesretainoriginalcardinality.",
+    "global_join": "INNERJOINequipment onA.EQUIPTID=E.ID;orphansnotauthorized.",
+    "fields": [
+      "A.*",
+      "B.MAINTEVENT -> beanmaintEvent",
+      "C.CODENAME -> ext$.codename",
+      "E.EQUIPTID AS EQUIPTNO -> ext$.equiptno",
+      "E.EQUIPTNAME -> ext$.equiptname",
+      "E.SPECIFICATION -> ext$.specification",
+      "E.ORGID AS EQUIPTORGID -> ext$.equiptorgid",
+      "E.EQUIPTCATEGORYID -> ext$.equiptcategoryid"
+    ],
+    "metadata": "GlobalMapper filters projectedaliases beforecount/ROWNUM;defaultIDdesc,clientorderthenIDdesctiebreaker. NoresponsefieldnormalizationorDTOinvented."
+  },
+  "preserved": {
+    "old_nested_selectByCondition_sha256": "b2e4f4f144b6ef3bd766c3f9fb45b36e996abcf4f52600cb3d439ee205d93848",
+    "old_nested_statement_byte_equal": true,
+    "generic_Plan_DAO_interface_unchanged": true,
+    "old_OwnedPlan_DAO_compiled_unchanged": true,
+    "formal_CHECK_Resource_CRUD_BPM_unchanged": true,
+    "407002_unchanged": true,
+    "new_generic_CRUD_or_detail_routes": false,
+    "client_global_query_flag": false,
+    "business_write_guards_changed": false
+  },
+  "regression": {
+    "seam": "ActualResource/PfService/PlanService/DAO/MyBatis/GlobalMapper/PageHelper/PlanBean mapping;inmemorySQLiteDBboundaryonly,existingJDK8/publicdepsread. NoHTTP/Oracle/Redis/runtime.",
+    "red": [
+      "ActualMyBatisassertfailsmissingindependentselectGlobalPerCheckPlansstatement",
+      "PublicPfEquiptServicereflectionfailsmissingselectGlobalPerCheckPlanscontract"
+    ],
+    "green": [
+      "ActualtypedPlanBeansandcorrectnumericFKs/equipmentextaliases/realCODENAME",
+      "Count/defaultascdesc/page2/filtercodename+equipment/no-match",
+      "Hardorgforeign/null/emptydeny;no/ungrantedactualprincipalno rows",
+      "Sameorgungrantedcategoryexcluded;duplicatedOP/UPgrantsdonotmultiplyrows",
+      "Clienttrustedorg/principalspoofcannotbroaden;clienttarget_typeabsentstillscoped",
+      "Originalcodejoincardinalityretainedwhenadditionalcodeexists",
+      "InheritedMyBatisMappermethodfallbacktooriginalPlanstatement",
+      "ActualResourceandPfServiceinvocationwithoriginalPlanService/DAO",
+      "OriginalPlanDAOandunchangedOwnedPlanDAOcompilewithoutnewquerymethod",
+      "Prior3ledgeractualService/MyBatisregressiongreen"
+    ],
+    "commands": [
+      "python3 scripts/tests/test-global-per-check-plan-query.py --dependency-root <existing-built-checkout> --temp-root <persistent-private-test-tmp>",
+      "TMPDIR=<persistent-private-test-tmp> python3 scripts/tests/test-equipment-ledger-projections.py --dependency-root <existing-built-checkout>",
+      "git diff --check"
+    ],
+    "test_boundary_adjustment": "SQLitetestSqlSessionautocommitonlypermitsequivalentsyntheticcodefixtureadditionafterread; noproductiontransactionconfigurationchanged."
+  },
+  "private_receipts": [
+    {
+      "path": "private/new-page-body-repairs-20261109/per-check-plan-contract/global-query-red.txt",
+      "sha256": "017c217cbb1f7e6fbae26fff276692f43346b5fd453c2a3ae46a0cff8589918a"
+    },
+    {
+      "path": "private/new-page-body-repairs-20261109/per-check-plan-contract/global-query-service-red.txt",
+      "sha256": "b50b6b4129024ab138fe29bb0b79a250e3d97660502deb2730acc9659709b3b5"
+    },
+    {
+      "path": "private/new-page-body-repairs-20261109/per-check-plan-contract/global-query-green.txt",
+      "sha256": "86a961d04991f75f5ca17e82700efee9d3db1d4bd937b8c7495567660fb0c2ab"
+    },
+    {
+      "path": "private/new-page-body-repairs-20261109/per-check-plan-contract/global-query-prior-ledgers-green.txt",
+      "sha256": "c7ff343c719bcfe0902645ef30ed81b96cc9d69b604d7af848ffb4a3e1d950a8"
+    }
+  ],
+  "source_files": [
+    {
+      "path": "project/src/main/java/com/sunwayworld/emc/module/mdm/equipt/equipt/dao/impl/EmcEquiptPerCheckPlanDaoImpl.java",
+      "sha256": "e7aa965adead4dd51acc1ea0a57eabbb514d0a7ead48f4e2b09ad615064c8ce4"
+    },
+    {
+      "path": "project/src/main/java/com/sunwayworld/emc/module/mdm/equipt/equipt/mapper/EmcEquiptPerCheckPlanMapper.java",
+      "sha256": "d070bc4fddedeca550c5f085571ffc2bad40fe50ba88664787c3614ed1cd21fb"
+    },
+    {
+      "path": "project/src/main/java/com/sunwayworld/emc/module/mdm/equipt/equipt/mapper/conf/emc-equipt-per-check-plan-oracle-mapper.xml",
+      "sha256": "13cf6d008ad83d8fc5031a2e490c8c2ab13c620194ed2ff24530c6f6aac3d19a"
+    },
+    {
+      "path": "project/src/main/java/com/sunwayworld/emc/module/mdm/equipt/equipt/resource/PfEquiptResource.java",
+      "sha256": "09beb28f9df9545ea836155a8de7fb39473e79d91311e5e4a5a827b289f5a8b0"
+    },
+    {
+      "path": "project/src/main/java/com/sunwayworld/emc/module/mdm/equipt/equipt/resource/impl/PfEquiptResourceImpl.java",
+      "sha256": "79f0d5d5598becb18f331875cd21933a44888f3991626dce645bd3c0fb774c66"
+    },
+    {
+      "path": "project/src/main/java/com/sunwayworld/emc/module/mdm/equipt/equipt/service/PfEquiptService.java",
+      "sha256": "89f78b470c6f44e43a9592012618f0bbdb9753b722838b4de616446f0f8ab314"
+    },
+    {
+      "path": "project/src/main/java/com/sunwayworld/emc/module/mdm/equipt/equipt/service/impl/PfEquiptServiceImpl.java",
+      "sha256": "c8d9d6a0efdd5cfe61863374633db3c210c3139ce04e0ac91ed7051286a523cc"
+    },
+    {
+      "path": "project/src/main/java/com/sunwayworld/emc/module/mdm/equipt/equipt/dao/EmcEquiptPerCheckPlanQueryDao.java",
+      "sha256": "c8f311d8c8f2890df3b4d74a2c1b5ffc3f15c80921c2d9677525d646129011d9"
+    },
+    {
+      "path": "scripts/tests/test-global-per-check-plan-query.py",
+      "sha256": "44cc9fd18a4aa6fc21c0dde83a389e3da9d1a6882144c18e95fc78399d5e2deb"
+    },
+    {
+      "path": "scripts/tests/test-equipment-ledger-projections.py",
+      "sha256": "b7a84d756881d52a7c5fbe8464584c62b72dab54fd8185f391e071f34579e746"
+    },
+    {
+      "path": "project/src/main/java/com/sunwayworld/emc/framework/security/QueryAccessFilter.java",
+      "sha256": "525b83c9f15abe6152317088c5a14ee9f5d1c256b4374bf34a44ca202d601f3e",
+      "changed": false
+    }
+  ],
+  "runtime_deployed": false,
+  "real_HTTP": false,
+  "strict_evidence": false,
+  "strict_increment": 0,
+  "source_commit_exception_expanded": false,
+  "API_ALIGNMENT_GATE": "OPEN",
+  "remaining_acceptance": [
+    "Rootfullsource-onlybuild/package",
+    "RootcombinedUIintegration",
+    "RealHTTPloggedin/anonymous/foreignorg/categoryauthorizedcases",
+    "OracleSQLmetadata/cardinality/Paginationactualresponse",
+    "Affectedrouteplanningandstrictmilestoneonlyafterfreeze"
+  ]
+}

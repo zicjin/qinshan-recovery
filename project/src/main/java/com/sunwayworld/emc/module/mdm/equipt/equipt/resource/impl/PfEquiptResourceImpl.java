@@ -3,6 +3,7 @@ package com.sunwayworld.emc.module.mdm.equipt.equipt.resource.impl;
 
 
 import com.sunwayworld.emc.module.mdm.equipt.equipt.bean.EmcEquiptMaintainRepairBean;
+import com.sunwayworld.emc.module.mdm.equipt.equipt.bean.EmcEquiptPerCheckPlanBean;
 import com.sunwayworld.emc.module.mdm.equipt.equipt.bean.EmcEquiptPerCheckRecordBean;
 import com.sunwayworld.emc.module.mdm.equipt.equipt.bean.PfEquiptMaintainRepairDTO;
 import com.sunwayworld.emc.module.mdm.equipt.equipt.bean.PfEquiptPerCheckDTO;
@@ -34,6 +35,13 @@ public class PfEquiptResourceImpl extends EmcEquipCertResourceImpl implements Pf
     
     @Autowired
     private EmcEquiptMaintainRepairService equiptMaintainRepairService;
+
+    @Override
+    @Log(value = "查询仪器期间核查计划", type = LogType.SELECT)
+    @RequestMapping(value = "/per-check-plans/queries", method = RequestMethod.POST)
+    public Page<EmcEquiptPerCheckPlanBean> selectGlobalPerCheckPlans(RestJsonWrapperBean wrapper) {
+        return pfEquiptService.selectGlobalPerCheckPlans(wrapper);
+    }
     
     @Log(value = "仪器检定查询", type = LogType.SELECT)
     @RequestMapping(value = "/action/select-equipt-plan", method = RequestMethod.POST)

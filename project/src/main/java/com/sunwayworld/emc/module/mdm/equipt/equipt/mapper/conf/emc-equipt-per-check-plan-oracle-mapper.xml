@@ -69,4 +69,40 @@
         WHERE ID = #{id}
     </update>
 
+    <!-- The global Plan page reads the Plan entity, independently of formal CHECK
+         and the existing equipment-scoped selectByCondition statement. -->
+    <select id="selectGlobalPerCheckPlans" parameterType="map" resultType="map">
+        SELECT T.*
+          FROM (SELECT A.*, B.MAINTEVENT, C.CODENAME,
+                       E.EQUIPTID AS EQUIPTNO, E.EQUIPTNAME, E.SPECIFICATION,
+                       E.ORGID AS EQUIPTORGID, E.EQUIPTCATEGORYID
+                  FROM T_EMC_EQUIPT_PER_CHECK_PLAN A
+                  INNER JOIN T_EMC_EQUIPT E ON A.EQUIPTID = E.ID
+                  LEFT JOIN T_EMC_EQUIPT_MAINT B ON A.MAINTID = B.ID
+                  LEFT JOIN T_CORE_CODE C ON B.MAINTEVENT = C.CODE
+                       AND C.CODECATEGORYID = 'maintainEvent') T
+        <where>
+            T.EQUIPTORGID = #{globalPlanParentOrgId}
+            <!-- Preserve the original equipment-list category/user-org permission
+                 independently of any client target_type flag. -->
+            AND EXISTS (SELECT 1
+                          FROM T_EMC_ORG_PERMISSION OP_
+                         WHERE OP_.PERMISSIONTYPEID = 'T_EMC_EQUIPT_CATEGORY'
+                           AND OP_.TARGETID = T.EQUIPTCATEGORYID
+                           AND EXISTS (SELECT 1
+                                         FROM T_CORE_USER_PERMISSION UP_
+                                        WHERE UP_.USERID = #{globalPlanLoginUserId}
+                                          AND UP_.PERMISSIONTYPEID = 'T_CORE_ORG'
+                                          AND UP_.TARGETID = OP_.ORGID))
+            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderParams != null and orderParams.size > 0">
+                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />,
+            </when>
+        </choose>
+        T.ID DESC
+    </select>
+
 </mapper>

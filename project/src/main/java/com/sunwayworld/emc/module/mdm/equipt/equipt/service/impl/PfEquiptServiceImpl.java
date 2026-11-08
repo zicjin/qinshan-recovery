@@ -6,11 +6,14 @@ import com.sunwayworld.framework.database.sql.Order;
 
 import com.sunwayworld.emc.module.mdm.equipt.equipt.bean.EmcEquiptBean;
 import com.sunwayworld.emc.module.mdm.equipt.equipt.bean.EmcEquiptMaintainRepairBean;
+import com.sunwayworld.emc.module.mdm.equipt.equipt.bean.EmcEquiptPerCheckPlanBean;
 import com.sunwayworld.emc.module.mdm.equipt.equipt.bean.PfEquiptMaintainRepairDTO;
 import com.sunwayworld.emc.module.mdm.equipt.equipt.bean.PfEquiptPerCheckDTO;
 import com.sunwayworld.emc.module.mdm.equipt.equipt.bean.PfEquiptPlanDTO;
 import com.sunwayworld.emc.module.mdm.equipt.equipt.bean.PfEquiptUserDTO;
 import com.sunwayworld.emc.module.mdm.equipt.equipt.dao.PfEquiptLedgerDao;
+import com.sunwayworld.emc.module.mdm.equipt.equipt.dao.EmcEquiptPerCheckPlanQueryDao;
+import com.sunwayworld.emc.module.mdm.equipt.equipt.service.EmcEquiptPerCheckPlanService;
 import com.sunwayworld.emc.module.mdm.equipt.equipt.service.EmcEquiptMaintainRepairService;
 import com.sunwayworld.emc.module.mdm.equipt.equipt.service.EmcEquiptService;
 import com.sunwayworld.emc.module.mdm.equipt.equipt.service.PfEquiptService;
@@ -26,6 +29,7 @@ import com.sunwayworld.framework.mybatis.mapper.SearchFilter;
 import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;
 import com.sunwayworld.framework.spring.annotation.GikamBean;
 import com.sunwayworld.framework.utils.ObjectUtils;
+import com.sunwayworld.module.mdm.user.bean.CoreUserBean;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -47,6 +51,27 @@ public class PfEquiptServiceImpl extends EmcEquiptServiceImpl implements PfEquip
 
     @Autowired
     private PfEquiptLedgerDao equiptLedgerDao;
+
+    @Autowired
+    private EmcEquiptPerCheckPlanService perCheckPlanService;
+
+    @Autowired
+    private EmcEquiptPerCheckPlanQueryDao perCheckPlanQueryDao;
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<EmcEquiptPerCheckPlanBean> selectGlobalPerCheckPlans(RestJsonWrapperBean wrapper) {
+        MapperParameter parameter = wrapper.extractMapFilter();
+        CoreUserBean user = LocalContextHelper.getLoginUser();
+        // Independent predicates always use the actual session, never client
+        // scope flags or a supplied principal in the JSON wrapper.
+        parameter.put("globalPlanParentOrgId", user == null ? null : user.getExt$Item("parentOrgId"));
+        parameter.put("globalPlanLoginUserId", user == null ? null : user.getId());
+        parameter.setTableName("T_EMC_EQUIPT_PER_CHECK_PLAN");
+        return perCheckPlanService.selectPagination(
+                () -> perCheckPlanQueryDao.selectGlobalPerCheckPlans(parameter),
+                wrapper.extractPageRowBounds());
+    }
 
     
     @Override

@@ -107,6 +107,17 @@ var emcEquiptRequisition = Gikam.getPageObject({
             title: '配件',
         },];
     },
+    getAuditListColumns: function () {
+        return this.getSearchListColumns();
+    },
+    getSearchListColumns: function () {
+        return this.getEditListColumns().map(function (column) {
+            var readonlyColumn = Object.assign({}, column);
+            delete readonlyColumn.editor;
+            delete readonlyColumn.preInsert;
+            return readonlyColumn;
+        });
+    },
     getInstrumentOutEditListColumns: function () {
         return [{
             checkbox: true

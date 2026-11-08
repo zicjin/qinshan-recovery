@@ -11,17 +11,18 @@ emcImprovement.searchPage = {
                 if (!Gikam.isEmpty(data)) {
                     Gikam.getComp('emc-improvement-search-list-grid').activeRowByIndex(0);
                 } else {
-                    if (Gikam.getComp('emc-improvement-search-list-form')) {
-                        Gikam.getComp('emc-improvement-search-list-form').cleanData();
-                    }
-
-                    if (Gikam.getComp('emc-improvement-search-list-uploader')) {
-                        Gikam.getComp('emc-improvement-search-list-uploader').grid.cleanData();
-                    }
-                    
-                    if (Gikam.getComp('emc-improvement-search-report-list-form')) {
-                        Gikam.getComp('emc-improvement-search-report-list-form').grid.cleanData();
-                    }
+                    Gikam.getAsyncComp('emc-improvement-search-list-form').done(function(form) {
+                        form.cleanData();
+                        form.setOptions({ url : '' });
+                    });
+                    Gikam.getAsyncComp('emc-improvement-search-report-list-form').done(function(form) {
+                        form.cleanData();
+                        form.setOptions({ url : '' });
+                    });
+                    Gikam.getAsyncComp('emc-improvement-search-list-uploader').done(function(uploader) {
+                        uploader.setOptions({ bizId : '' });
+                        uploader.grid.cleanData();
+                    });
                 }
             },
             onRowActive : function(index, row) {
@@ -42,8 +43,8 @@ emcImprovement.searchPage = {
                     });
                 });
                 
-                Gikam.getComp('emc-improvement-search-list-uploader').setOptions({
-                    bizId : row.id
+                Gikam.getAsyncComp('emc-improvement-search-list-uploader').done(function(uploader) {
+                    uploader.setOptions({ bizId : row.id });
                 });
             },
             toolbar : [ {
@@ -81,7 +82,7 @@ emcImprovement.searchPage = {
     getAttachmentGridParam : function() {
         return {
             type : 'uploader',
-            id : 'emc-improvement-search-report-list-uploader',
+            id : 'emc-improvement-search-list-uploader',
             dbTable : 'T_EMC_IMPROVEMENT',
             readonly : true
         }

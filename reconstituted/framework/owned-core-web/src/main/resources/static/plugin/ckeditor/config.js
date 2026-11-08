@@ -50,7 +50,7 @@ CKEDITOR.editorConfig = function(config) {
 
     config.uploadUrl = IFM_CONTEXT + '/core/module/item/files/action/ckeditor-upload';
     
-    config.removePlugins = 'resize';
+    config.removePlugins = 'resize,image';
     
     config.resize_enabled = false;
     

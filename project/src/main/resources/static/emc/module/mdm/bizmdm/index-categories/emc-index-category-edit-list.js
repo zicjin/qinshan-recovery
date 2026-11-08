@@ -230,12 +230,37 @@ emcIndexCategory.editPage = {
 
     onIndexCategoryActive: function (row) {
         var _this = this;
+        Gikam.getAsyncComp('emc-index-set-detail-field-grid').done(function (grid) {
+            var currentRow = Gikam.getComp('emc-index-category-edit-list-grid').getActivedRow();
+            _this.setIndexSetTemplateColumns(grid, currentRow);
+        });
         if (row) {
             Gikam.getAsyncComp('emc-order-index-detail-field-grid').done(function (grid) {
                 grid.refresh({
                     url: _this.getOrderIndexUrl(row.id),
                 });
             })
+        }
+    },
+
+    setIndexSetTemplateColumns: function (grid, row) {
+        var fields = ['indexLowLimit', 'indexHighLimit', 'textIndexValue'];
+        var columns = grid.store.state.columns;
+        var visibleFields = columns.map(function (column) { return column.field; });
+        // Dynamic refreshColumns can restore fields without clearing Grid's hide cache.
+        grid.hideColumnArray = grid.hideColumnArray.filter(function (column) {
+            return fields.indexOf(column.field.field) === -1 || visibleFields.indexOf(column.field.field) === -1;
+        });
+        var dayNight = row && row.ext$ && row.ext$.templatename === '昼夜评价';
+        var changedFields = fields.filter(function (field) {
+            return dayNight ? visibleFields.indexOf(field) !== -1 : visibleFields.indexOf(field) === -1;
+        });
+        if (changedFields.length > 0) {
+            if (dayNight) {
+                grid.hideColumns(changedFields);
+            } else {
+                grid.showColumns(changedFields);
+            }
         }
     },
 
@@ -321,9 +346,7 @@ emcIndexCategory.editPage = {
                     })
                     var targetColumns = emcIndexCategory.getIndexSetColumns().concat(addColumns);
                     targetComp.refreshColumns(targetColumns);
-                    if (indexCategoryRow.ext$.templatename == '昼夜评价') {
-                        targetComp.hideColumns(['indexLowLimit', 'indexHighLimit', 'textIndexValue']);
-                    }
+                    _this.setIndexSetTemplateColumns(targetComp, Gikam.getComp('emc-index-category-edit-list-grid').getActivedRow());
                     _this.propertyDataColumns = addColumns;
 
                     // 指标设置数据
@@ -504,9 +527,7 @@ emcIndexCategory.editPage = {
                     },
                     onRendered: function () {
                         var indexCategoryActivedRow = Gikam.getComp('emc-index-category-edit-list-grid').getActivedRow();
-                        if (indexCategoryActivedRow.ext$.templatename == '昼夜评价') {
-                            this.hideColumns(['indexLowLimit', 'indexHighLimit', 'textIndexValue']);
-                        }
+                        _this.setIndexSetTemplateColumns(this, indexCategoryActivedRow);
                     },
                     onUpdated: function (row, key) {
                         // key 0 是 当前行的 id, key n 是当前修改的列的 field

@@ -11,21 +11,18 @@ emcImprovement.editPage = {
                 if (!Gikam.isEmpty(data)) {
                     Gikam.getComp('emc-improvement-edit-list-grid').activeRowByIndex(0);
                 } else {
-                    if (Gikam.getComp('emc-improvement-edit-list-form')) {
-                        Gikam.getComp('emc-improvement-edit-list-form').cleanData();
-                        Gikam.getComp('emc-improvement-edit-list-form').setOptions({
-                            url : ''
-                        });
-                    }
-                    if (Gikam.getComp('emc-improvement-edit-list-uploader')) {
-                        Gikam.getComp('emc-improvement-edit-list-uploader').grid.cleanData();
-                    }
-                    if (Gikam.getComp('emc-improvement-edit-report-list-form')) {
-                        Gikam.getComp('emc-improvement-edit-report-list-form').grid.cleanData();
-                        Gikam.getComp('emc-improvement-edit-report-list-form').setOptions({
-                            url : ''
-                        });
-                    }
+                    Gikam.getAsyncComp('emc-improvement-edit-list-form').done(function(form) {
+                        form.cleanData();
+                        form.setOptions({ url : '' });
+                    });
+                    Gikam.getAsyncComp('emc-improvement-edit-report-list-form').done(function(form) {
+                        form.cleanData();
+                        form.setOptions({ url : '' });
+                    });
+                    Gikam.getAsyncComp('emc-improvement-edit-list-uploader').done(function(uploader) {
+                        uploader.setOptions({ bizId : '' });
+                        uploader.grid.cleanData();
+                    });
                 }
             },
             onRowActive : function(index, row) {
@@ -45,8 +42,8 @@ emcImprovement.editPage = {
                     });
                 });
                 
-                Gikam.getComp('emc-improvement-edit-list-uploader').setOptions({
-                    bizId : row.id
+                Gikam.getAsyncComp('emc-improvement-edit-list-uploader').done(function(uploader) {
+                    uploader.setOptions({ bizId : row.id });
                 });
 
             },

@@ -1,5 +1,35 @@
 # Source-backed local schema restoration
 
+`les-data-source-restoration.sql` is the separate R02 restoration for the
+original `T_CORE_LES_DS` and `T_CORE_LES_DS_FIELD` tables, including the later
+`ORDERNO` field patch. Its adjacent manifest pins both original release SQL
+files, line ranges, statement hashes and the unchanged schema renderer. Run
+`python3 scripts/tests/test-les-source-restoration.py` before any application.
+The fixture uses the existing exact missing/equivalent/conflicting metadata
+checks and local owner/session guards. It contains no data-source business rows
+or metadata DML. Oracle DDL implicitly commits; retain logs on partial failure.
+This fixture does not extend the seven-table runtime policy or grant lifecycle
+acceptance. The coordinator must establish a truthful new schema contract.
+
+`les-data-source-metadata.sql` separately restores the two original
+`T_CORE_TABLE` rows and the field-to-source `LESDSID` hierarchy. It checks all
+three for absence or source equivalence before metadata INSERTs, preserves an
+existing equivalent generated hierarchy ID and rejects conflicting or duplicate
+relationships. Use a dedicated approved local runtime session while metadata
+administration is idle. Its savepoint covers metadata DML, not DDL or sequence
+allocation. Neither fixture changes the baseline or invalidates Redis caches.
+
+`les-pdf-select-config-restoration.json` is a finite source-pinned HTTP plan for
+the missing `les-template-category` and `file-acq-preprocess-operation` mappings,
+their two code categories and the three original PDF preprocessing options.
+The original category POST forces class `sys` and creates a camelCase mapping;
+the plan requires actual readback and minimal HTTP PUTs to restore source class
+`biz` and the hyphenated UI mapping. It is not an automatic SQL bootstrap or a
+general runner. No LES template option values are defined in the original
+release block, so none are invented. The coordinator owns preflight, real HTTP
+execution, recorded generated IDs, configuration retention and actual page
+verification. Prepared fixtures and empty-query success are not API closure.
+
 `missing-runtime-tables.sql` contains only 128 original Oracle CREATE TABLE,
 ALTER TABLE, COMMENT and CREATE INDEX statements for these seven missing tables:
 

@@ -481,7 +481,7 @@ public class CoreMenuServiceImpl implements CoreMenuService {
    }
 
    private String getMenuIconUrl(String menuIcon) {
-      if (StringUtils.isEmpty(menuIcon)) {
+      if (StringUtils.isBlank(menuIcon) || "null".equalsIgnoreCase(menuIcon.trim()) || "undefined".equalsIgnoreCase(menuIcon.trim())) {
          return null;
       } else {
          CoreMenuServiceImpl.SelectMenuRequiredData data = LOCAL_SELECT_MENU_REQUIRED_DATA.get();

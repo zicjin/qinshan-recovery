@@ -1,0 +1,92 @@
+{
+  "schema": "original-business-page-defect-repair-provenance-v1",
+  "classification": "source-backed-original-system-defect-repair",
+  "strict_evidence": false,
+  "API_completion_claimed": false,
+  "source_checkpoint_before_repair": "69f430ba",
+  "approved_stock_artifact_sha256": "4a720797810fd2f8cca6e22604657028cb87830ca0e24bb55a5f42f040f6ee9f",
+  "supplier_version": "gikam-third-czjky-14.1.5",
+  "source_runtime_comparison": "The four JavaScript files have identical text after LF normalization in the approved stock artifact, tracked project source, and real HTTP supplier and owned responses. Raw SHA-256 can differ because of CRLF line endings. Original diagnostics remain unchanged.",
+  "repairs": [
+    {
+      "finding": "R03",
+      "pages": [
+        "/secure/emc/module/mdm/basemdm/equipt-requisitions/page/audit-list",
+        "/secure/emc/module/mdm/basemdm/equipt-requisitions/page/search-list"
+      ],
+      "original_fault": "The original base page object exposes getEditListColumns but has no getAuditListColumns or getSearchListColumns. The audit and search page initializers call these missing methods. Supplier and owned both contain this defect.",
+      "change": "Build audit and search columns from copies of all 23 original edit columns: 22 business fields plus the selection checkbox. Remove editor and preInsert from the copies. Preserve the original query URLs and keep editable columns unchanged.",
+      "semantics": "Audit and search fields remain read-only for inline editing. Existing workflow toolbar actions and detail navigation retain their original contracts."
+    },
+    {
+      "finding": "R04",
+      "pages": [
+        "/secure/emc/module/item/improvements/page/edit-list",
+        "/secure/emc/module/item/improvements/page/search-list",
+        "/secure/emc/module/item/improvements/page/audit-list"
+      ],
+      "original_fault": "Edit and search callbacks invoke grid.cleanData on a Form, which has no grid. The search uploader ID differs from the ID used by its callbacks. Synchronous getComp also misses forms and uploaders that mount after the query callback.",
+      "change": "Resolve the original components with getAsyncComp readiness Deferred callbacks. Clear forms through Form.cleanData and clear the uploader through Uploader.grid.cleanData. Align the search uploader ID, clear its bizId when no row is selected, and set the actual selected entity ID after it is ready.",
+      "semantics": "Both detail and report forms and the attachment grid initialize and clear when mounted early or late. No required panel is disabled and no exception is hidden by optional chaining."
+    }
+  ],
+  "files": [
+    {
+      "path": "project/src/main/resources/static/emc/module/mdm/basemdm/equipt-requisitions/emc-equipt-requisition.js",
+      "before_source_sha256": "999534d2356a9d8054bd485e25572283b13d0191edd4db376bc38ef01ad52e53",
+      "after_source_sha256": "60f2884d81453ba6524b3d32e8c2b6cdf32953bdfa37ed0732307a5a823be773",
+      "stock_member": "BOOT-INF/classes/static/emc/module/mdm/basemdm/equipt-requisitions/emc-equipt-requisition.js",
+      "stock_member_sha256": "917d4fb4db629304ff95f24f8804f02c2f8b1f5046bef45bf1ecf51a8dfc4c88"
+    },
+    {
+      "path": "project/src/main/resources/static/emc/module/item/improvements/emc-improvement-audit-list.js",
+      "before_source_sha256": "77d2bc288ed088903d18bbe627a718452ffd27a4b6ef96361960d6d5ac388879",
+      "after_source_sha256": "85b18a001a927967fa0db1ca14b1bb46b76d7b984a582315b6c13f988105a371",
+      "stock_member": "BOOT-INF/classes/static/emc/module/item/improvements/emc-improvement-audit-list.js",
+      "stock_member_sha256": "bd6701fa1a81393ed7702841f422051d15882e378d1d815718d9cebdb977d01d"
+    },
+    {
+      "path": "project/src/main/resources/static/emc/module/item/improvements/emc-improvement-search-list.js",
+      "before_source_sha256": "effb4f05783a609151b85ab84b2e22e7cb6b0e224f05b128fcceb0e52ea0d890",
+      "after_source_sha256": "960cf9cc4df3e15d76cfb928c2ca7a44218a5896d05e3beeb048835a26c0d498",
+      "stock_member": "BOOT-INF/classes/static/emc/module/item/improvements/emc-improvement-search-list.js",
+      "stock_member_sha256": "ca4f446034f804c3608ac6afc76fe39e98ff4269788c67eec79f0bca30e5aec9"
+    },
+    {
+      "path": "project/src/main/resources/static/emc/module/item/improvements/emc-improvement-edit-list.js",
+      "before_source_sha256": "c340bf21a2efebab568f2da6744a951411f9363440b65a7e1cd60dba03f31251",
+      "after_source_sha256": "0e7dbff0e6afbd906f883e20d53b8987b55eb00416eb184523c38de556863e13",
+      "stock_member": "BOOT-INF/classes/static/emc/module/item/improvements/emc-improvement-edit-list.js",
+      "stock_member_sha256": "41aa1ebc8b8d434331dd93ceec4e691e44250f797fa74db69ba1e0ec13001083"
+    }
+  ],
+  "regression": {
+    "path": "scripts/tests/test-business-page-initialization.js",
+    "sha256": "074392030006147e7c6a9b89a653e5bb2665af09069f090d79fdd0588bd1b2cd",
+    "execution": "node scripts/tests/test-business-page-initialization.js",
+    "before": "Ten checks executing actual project JavaScript failed. The original failing capture is retained privately.",
+    "after": "All eleven checks passed after the four JavaScript repairs.",
+    "asserted": [
+      "Audit and search getGridParam execute with all 23 original columns, including 22 business fields and the checkbox, and the original query URLs.",
+      "Original edit columns remain editable after read-only columns are created.",
+      "An empty response clears both forms and the attachment grid.",
+      "Delayed component mounting completes pending clear operations and selected entity refresh and attachment bizId assignment.",
+      "Search callbacks target the uploader ID that is actually created."
+    ],
+    "scope": "Executes actual project JavaScript with UI registry, readiness, and primitive component API boundary doubles. No HTTP, database, or browser execution is claimed.",
+    "limitations": "The parent agent will run the combined source-only build and deployment and verify affected menus in a real browser. These test passes do not close the API gate."
+  },
+  "unchanged_blockers": [
+    {
+      "finding": "R01",
+      "disposition": "external-blocked",
+      "reason": "The three project queries depend on external HT, SP, and XFP Oracle DBLINKs. Previous identical supplier and owned requests both returned HTTP 500 with ORA-02019. No joins were removed and no empty successful response was fabricated."
+    },
+    {
+      "finding": "R07",
+      "disposition": "original-defect-unresolved",
+      "reason": "project-run-list returns an identical HTTP 404 on supplier and owned. No exact route token occurs in approved stock application classes, templates, JavaScript, or the original controller source. It was not replaced with the separate analysis record query page or a modal project chooser."
+    }
+  ],
+  "no_Java_or_SQL_or_runtime_change": true
+}

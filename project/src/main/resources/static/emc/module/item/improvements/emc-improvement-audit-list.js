@@ -12,23 +12,18 @@ emcImprovement.auditPage = {
                 if (!Gikam.isEmpty(data)) {
                     Gikam.getComp('emc-improvement-audit-list-grid').activeRowByIndex(0);
                 } else {
-                    if (Gikam.getComp('emc-improvement-audit-list-form')) {
-                        Gikam.getComp('emc-improvement-audit-list-form').cleanData();
-                        Gikam.getComp('emc-improvement-audit-list-form').setOptions({
-                            url : ''
-                        });
-                    }
-
-                    if (Gikam.getComp('emc-improvement-audit-list-uploader')) {
-                        Gikam.getComp('emc-improvement-audit-list-uploader').grid.cleanData();
-                    }
-                    
-                    if (Gikam.getComp('emc-improvement-audit-report-list-form')) {
-                        Gikam.getComp('emc-improvement-audit-report-list-form').cleanData();
-                        Gikam.getComp('emc-improvement-audit-report-list-form').setOptions({
-                            url : ''
-                        });
-                    }
+                    Gikam.getAsyncComp('emc-improvement-audit-list-form').done(function(form) {
+                        form.cleanData();
+                        form.setOptions({ url : '' });
+                    });
+                    Gikam.getAsyncComp('emc-improvement-audit-report-list-form').done(function(form) {
+                        form.cleanData();
+                        form.setOptions({ url : '' });
+                    });
+                    Gikam.getAsyncComp('emc-improvement-audit-list-uploader').done(function(uploader) {
+                        uploader.setOptions({ bizId : '' });
+                        uploader.grid.cleanData();
+                    });
                 }
             },
             onRowActive : function(index, row) {
@@ -50,8 +45,8 @@ emcImprovement.auditPage = {
                     });
                 });
                 
-                Gikam.getComp('emc-improvement-audit-list-uploader').setOptions({
-                    bizId : row.id,
+                Gikam.getAsyncComp('emc-improvement-audit-list-uploader').done(function(uploader) {
+                    uploader.setOptions({ bizId : row.id });
                 });
             },
             toolbar : [ {

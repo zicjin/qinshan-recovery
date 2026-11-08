@@ -1,0 +1,174 @@
+{
+  "version": 1,
+  "purpose": "Restore exactly original LES-template and PDF/file preprocessing select metadata;finite source-bound plan,not a generic bootstrap runner.",
+  "execution_mode": "root-coordinated-existing-HTTP-APIs",
+  "SQL_business_writes": false,
+  "sources": [
+    {
+      "path": "project/sql/核心发版14.1.5/init-sql/oracle/2.report_sql_oracle.txt",
+      "sha256": "c71a03eded0abffc7306d27bb8bb3b0960bb638d46b2466576b6db58e7bc21ae"
+    },
+    {
+      "path": "project/sql/核心发版14.1.5/init-sql/oracle/1.base_sql_oracle.txt",
+      "sha256": "ccf69e405b323c1d3fa825f9aeb645e1187119cc795b4dbd76f66699caafe68a"
+    }
+  ],
+  "source_blocks": [
+    {
+      "source": "project/sql/核心发版14.1.5/init-sql/oracle/2.report_sql_oracle.txt",
+      "line_start": 456,
+      "line_end": 460,
+      "source_sha256": "ceb593226c92df0d0bd23daef5f774b3b785cf3749c4b2ae1f175a8e9be6b951"
+    },
+    {
+      "source": "project/sql/核心发版14.1.5/init-sql/oracle/1.base_sql_oracle.txt",
+      "line_start": 9055,
+      "line_end": 9065,
+      "source_sha256": "c63e350d6544e52c44abcb397d7ab7b7de90d80e0e3fa03f72e129c016fe68b2"
+    }
+  ],
+  "categories": [
+    {
+      "id": "lesTemplateCategory",
+      "source_values": {
+        "id": "lesTemplateCategory",
+        "codeCategoryName": "LES模板类型",
+        "codeClassId": "biz",
+        "orderNo": "1"
+      },
+      "select_config": {
+        "name": "LES模板类型",
+        "category": "les-template-category",
+        "url": "/secure/core/module/sys/codes/queries/selectable?codeCategoryId=lesTemplateCategory",
+        "valueField": "code",
+        "textField": "codeName"
+      },
+      "options": []
+    },
+    {
+      "id": "fileAcqPreprocessOperation",
+      "source_values": {
+        "id": "fileAcqPreprocessOperation",
+        "codeCategoryName": "文件采集预处理操作",
+        "codeClassId": "biz",
+        "orderNo": "1"
+      },
+      "select_config": {
+        "name": "文件采集预处理操作",
+        "category": "file-acq-preprocess-operation",
+        "url": "/secure/core/module/sys/codes/queries/selectable?codeCategoryId=fileAcqPreprocessOperation",
+        "valueField": "code",
+        "textField": "codeName"
+      },
+      "options": [
+        {
+          "code": "remove",
+          "codeName": "删除",
+          "orderNo": 1,
+          "codeCategoryId": "fileAcqPreprocessOperation",
+          "lastSuspendedFlag": "0",
+          "version": 0
+        },
+        {
+          "code": "removeRow",
+          "codeName": "删除行",
+          "orderNo": 2,
+          "codeCategoryId": "fileAcqPreprocessOperation",
+          "lastSuspendedFlag": "0",
+          "version": 0
+        },
+        {
+          "code": "replace",
+          "codeName": "替换",
+          "orderNo": 3,
+          "codeCategoryId": "fileAcqPreprocessOperation",
+          "lastSuspendedFlag": "0",
+          "version": 0
+        }
+      ]
+    }
+  ],
+  "HTTP_sequence": [
+    {
+      "operation": "read-preflight",
+      "method": "POST",
+      "path": "/secure/core/module/sys/code-categories/queries/raw",
+      "purpose": "Exact source category ID inventory;then original GET effective and raw selectConfig + codes query inventory before any write;unexpected duplicate/conflict stops."
+    },
+    {
+      "operation": "create-if-absent",
+      "method": "POST",
+      "path": "/secure/core/module/sys/code-categories",
+      "purpose": "Use actual String ID API and source name/order;capture actual effect before retry because success returns bare String ID."
+    },
+    {
+      "operation": "update-if-needed",
+      "method": "PUT",
+      "path": "/secure/core/module/sys/code-categories/{source-category-id}",
+      "purpose": "Restore source biz class after original POST forces sys"
+    },
+    {
+      "operation": "read-auto-select-config",
+      "method": "POST",
+      "path": "/secure/core/module/admin/select-configs/queries/raw",
+      "purpose": "Query actual generated camelCase selectConfig;record its real ID and fields,never assume sequence value."
+    },
+    {
+      "operation": "update-if-needed",
+      "method": "PUT",
+      "path": "/secure/core/module/admin/select-configs/{actual-generated-id}",
+      "purpose": "Rename the actual automatically created camelCase select config to source hyphenated alias"
+    },
+    {
+      "operation": "create-if-absent",
+      "method": "POST",
+      "path": "/secure/core/module/sys/codes",
+      "purpose": "Only three original PDF codes;actual generated Long IDs;never insert LES template values absent from source."
+    },
+    {
+      "operation": "read-verify",
+      "method": "GET",
+      "path": "/secure/core/module/admin/select-configs/queries/selectable",
+      "purpose": "Compare raw and effective exact source mapping;then both codes selectable endpoints and actual LES/PDF menu grids/current value rendering."
+    }
+  ],
+  "wrapper_contract": {
+    "mutation": {
+      "b": [
+        "",
+        [
+          {
+            "id": "source-or-actual-generated-id",
+            "sourceFields": "only finite fields above"
+          }
+        ]
+      ],
+      "p": {}
+    },
+    "query": {
+      "p": {
+        "n": 1,
+        "s": 100,
+        "f": {
+          "exactSourceField_SEQ": "source-value"
+        },
+        "o": [
+          {
+            "id": "asc"
+          }
+        ]
+      }
+    }
+  },
+  "safety": [
+    "Production never targeted;root verifies named isolated instance before any action.",
+    "No arbitrary enums,empty200 fallback,source code IDs,duplicate blind POST,SQL business writes or broad supplementSelectConfig.",
+    "CoreCodeCategoryService insert automatically creates one camelCase selectConfig and forces class sys;read actual record,then minimal PUT class/mapping to original source.",
+    "Existing equivalent source rows skip;conflicting existing values require explicit diagnosis,never overwrite unrelated metadata.",
+    "Record HTTP request/status/body hash,actual generated IDs,principal/org,and source values;no auth secrets persisted.",
+    "If API effect succeeds but parser fails,read exact source category/marker before retry;no unconditional recreate.",
+    "Source release defines no lesTemplateCategory option rows;retain existing configured values or empty source category without inventing choices.",
+    "Table/schema and config changes are runtime preparation;new schema contract/lifecycle acceptance is root-owned,not granted by fixture."
+  ],
+  "regression": "scripts/tests/test-les-source-restoration.py"
+}

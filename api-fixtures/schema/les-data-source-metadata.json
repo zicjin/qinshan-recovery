@@ -1,0 +1,36 @@
+{
+  "version": 1,
+  "purpose": "Restore only original two LES table metadata rows and one field-to-data-source relationship;no business records.",
+  "owner": "LIMS_RUNTIME_LOCAL",
+  "sources": [
+    {
+      "path": "project/sql/核心发版14.1.5/init-sql/oracle/0.common_sql_oracle-1.txt",
+      "sha256": "99c1ba18054594384cc88a28ecc5c8c44f540e089e4c92ca92eddb94c2f17be1"
+    }
+  ],
+  "source_blocks": [
+    {
+      "source": "project/sql/核心发版14.1.5/init-sql/oracle/0.common_sql_oracle-1.txt",
+      "line_start": 5335,
+      "line_end": 5337,
+      "source_sha256": "1d6fc6cc1191b6d38754153e859c807dee66c3e5c41796ac6f0e03af90617b7d"
+    }
+  ],
+  "fixture": {
+    "path": "api-fixtures/schema/les-data-source-metadata.sql",
+    "sha256": "ee970c0d0de3042958b8b17305b65ed8cc2f460762c59931b063179abe7d2406"
+  },
+  "preflight": {
+    "tables": "Each case-insensitive ID absent or exactly one row with source ID,AUDITABLE0,ATTACHMENT0.",
+    "hierarchy": "No child relationship or exactly one source child/master/refer tuple;preserve actual generated ID;reject duplicate/case/conflicting tuple.",
+    "order": "Check all three before INSERT;equivalent rows skip;no UPDATE/DELETE.",
+    "session": "Dedicated CURRENT_SCHEMA=LIMS_RUNTIME_LOCAL;SESSION_USER SYS or local owner;root verifies actual Docker instance."
+  },
+  "transaction": "Metadata DML uses savepoint and rollback on failure;commit only after all INSERTs. Sequence allocation is not transaction rollback. No DDL.",
+  "limitations": [
+    "Prepared only;root owns application and cleanup coordination.",
+    "No baseline or runtime policy changes,cache mutation,business rows or strict promotion.",
+    "No concurrency lock against other metadata administrators;execute idle."
+  ],
+  "source_contract": "CoreTableServiceImpl.selectTable and hierarchy traversal require these original metadata rows before cascade business acceptance."
+}

@@ -1,0 +1,148 @@
+{
+  "version": 1,
+  "owner": "LIMS_RUNTIME_LOCAL",
+  "purpose": "Source-backed LES DS/field schema restoration R02;no datasource business rows/runtime execution.",
+  "sources": [
+    {
+      "path": "project/sql/核心发版14.1.5/init-sql/oracle/0.common_sql_oracle-1.txt",
+      "sha256": "99c1ba18054594384cc88a28ecc5c8c44f540e089e4c92ca92eddb94c2f17be1"
+    },
+    {
+      "path": "project/sql/核心发版14.1.5/init-sql/oracle/2.report_sql_oracle.txt",
+      "sha256": "c71a03eded0abffc7306d27bb8bb3b0960bb638d46b2466576b6db58e7bc21ae"
+    }
+  ],
+  "source_blocks": [
+    {
+      "source": "project/sql/核心发版14.1.5/init-sql/oracle/0.common_sql_oracle-1.txt",
+      "line_start": 4989,
+      "line_end": 5024,
+      "source_sha256": "274aba26eb2c38faf3e559d7a089e4ce4de308e415824eabbf5b10f52f6381d6",
+      "statement_sha256": [
+        "4cce3fd41e1e890c69a29df32127ef36e400e6afdc36eb4ca293f75c01ed3bbf",
+        "395d71350500807551131d916e67c27ab897eaab09603ab8b59bf55a160e9d61",
+        "f496e39dbe6111a041ef566feb6d31c7581f41782312b5bd9a1d299d379f9e70",
+        "fb3e2e2fd12ef6e63d8f7ab157893ba7b3d3872b42776fd572f83d9389d8ec46",
+        "73d094f0bd3169f3c84e237488d181dc1ca6eebd99c2457d54f732ec21a02bf1",
+        "ce5ce4a85d1ced8be46ad97c28af3868c11fddb3f8bf02b8d2d02d6e6b166323",
+        "12081e8ad2833c10589f74419e770ce8290753d6f214657268f0cd6116dfbc3b",
+        "ed16994bdd79116f7c00bb68fc93435b7330279e280c5954962b115aefa354cc",
+        "18e0f69147a1b884370f30f82c758591d0ec5e8769074e5f5be32ec2c7cac3ef",
+        "34497865a2e7cf5c2ae120f18882ae39896c89e17f050fc50cc088a94c24bdfd",
+        "a175d9fa5355255ee1b1286ae1e73ca4db69b4738d5290bd93a450548b22245b",
+        "65be7a10f4e3262b2fb1d2f8f56b8ffd9f49a7ebf747a8cbc14f58ecdb5b83a4",
+        "f89652c975582be4e07732c06115b58c905bcd2d3fb70aa8424716012ef22dfa",
+        "4d957a52d04af15844af270eafb9c6e092759e063ed609f14480581c6c0c1c91",
+        "68f835d7281d199f02ab74abfcf4e4aa23823be4744778d66ed8f4cf524d576a",
+        "243f98343704785ff55f8f0181a91bff78e14e00c6e07fea5bac2f229de1aaee",
+        "c745083582b8606b27ba4226e2c9a0ac974616ab5dffc263571256959d19cecd",
+        "3fb2d7c7024fc829b94137591ac572e4411d3fb164d3f102b5c33a4178d3afda"
+      ],
+      "normalized_sha256": [
+        "c8f22fbafa250ebec562479d81db76e968711ce618dab815d7da9d54f4c17773",
+        "395d71350500807551131d916e67c27ab897eaab09603ab8b59bf55a160e9d61",
+        "f496e39dbe6111a041ef566feb6d31c7581f41782312b5bd9a1d299d379f9e70",
+        "fb3e2e2fd12ef6e63d8f7ab157893ba7b3d3872b42776fd572f83d9389d8ec46",
+        "73d094f0bd3169f3c84e237488d181dc1ca6eebd99c2457d54f732ec21a02bf1",
+        "ce5ce4a85d1ced8be46ad97c28af3868c11fddb3f8bf02b8d2d02d6e6b166323",
+        "12081e8ad2833c10589f74419e770ce8290753d6f214657268f0cd6116dfbc3b",
+        "ed16994bdd79116f7c00bb68fc93435b7330279e280c5954962b115aefa354cc",
+        "18e0f69147a1b884370f30f82c758591d0ec5e8769074e5f5be32ec2c7cac3ef",
+        "34497865a2e7cf5c2ae120f18882ae39896c89e17f050fc50cc088a94c24bdfd",
+        "a175d9fa5355255ee1b1286ae1e73ca4db69b4738d5290bd93a450548b22245b",
+        "65be7a10f4e3262b2fb1d2f8f56b8ffd9f49a7ebf747a8cbc14f58ecdb5b83a4",
+        "f89652c975582be4e07732c06115b58c905bcd2d3fb70aa8424716012ef22dfa",
+        "4d957a52d04af15844af270eafb9c6e092759e063ed609f14480581c6c0c1c91",
+        "68f835d7281d199f02ab74abfcf4e4aa23823be4744778d66ed8f4cf524d576a",
+        "243f98343704785ff55f8f0181a91bff78e14e00c6e07fea5bac2f229de1aaee",
+        "c745083582b8606b27ba4226e2c9a0ac974616ab5dffc263571256959d19cecd",
+        "6714ca7d63626ff7ec3ea82bbbdedaf6f755185fc7be387716922862e13666b0"
+      ],
+      "transformations": [
+        "normalize-whitespace-outside-string-literals",
+        "uppercase-ADD-keyword"
+      ]
+    },
+    {
+      "source": "project/sql/核心发版14.1.5/init-sql/oracle/0.common_sql_oracle-1.txt",
+      "line_start": 5026,
+      "line_end": 5056,
+      "source_sha256": "7d875e998f7f063db313158f5c75a0c0642cfd9f62abc33d05335bead56f6542",
+      "statement_sha256": [
+        "0da13aef20d33861e347bc3f459160fb6122952e2bb127c0d80dbc6f64827de8",
+        "d280431064b3d2dec82df6937c41b52d4794752262c58faa8c8fc705aad7288e",
+        "49ae59e210a37dda39702996dd34ed9690476746c86d8f6928e6d6eb688daafa",
+        "0b969f10eda4e0e0bd18ef00010cfcc6ad7542919d32e79c12ef0390cd00e8af",
+        "f535eaf6e446dd4a5a401220811a7a6c4c8d50eade8cd95c1046acd322436660",
+        "22f61485cd81163b6cb4c6cf45187a191ce51cd48909fcf03ee18d1f6eb8861d",
+        "cf05300d2c6a334e6f737db3d0dfe745b62309e0921bbbd0bc231e6f0bacd342",
+        "71490d804f238e1f86c833eb37918d7e22f4abeb27ea008e34662708f793e540",
+        "85f0c9aff9f90ca098ca600d28074a96c5a843fe53621d80ec1044ee86782fc6",
+        "735761786ff8195485749e986c8ff33c7c00e9ebfd54e8aa99d2a8b9418c8650",
+        "ee5d92da2d9582657b5df66f26b1f283277fd5f6be825762749c7c126a42c26c",
+        "6e57642f56f602aed93ce4961bd42d27373ac29d1b290da0d9c2b08d62b71747",
+        "a9696e5968155ced9f16fd1a7c83b7009657730390be44e98311f704a1e48f71",
+        "3c572ab1e5803403594517a0df57b97c1f8e864f5a34f84c82e3aea0778d3c92",
+        "8e28c69c8813cf735ba1251851be0d3f3eeca911e0a86ca3c748416c8ea608da"
+      ],
+      "normalized_sha256": [
+        "ad89f0864f2f49b9f4cc4639b622e68488dffa6fe9f58b5b5981439a4a5cb07b",
+        "d280431064b3d2dec82df6937c41b52d4794752262c58faa8c8fc705aad7288e",
+        "49ae59e210a37dda39702996dd34ed9690476746c86d8f6928e6d6eb688daafa",
+        "0b969f10eda4e0e0bd18ef00010cfcc6ad7542919d32e79c12ef0390cd00e8af",
+        "f535eaf6e446dd4a5a401220811a7a6c4c8d50eade8cd95c1046acd322436660",
+        "22f61485cd81163b6cb4c6cf45187a191ce51cd48909fcf03ee18d1f6eb8861d",
+        "cf05300d2c6a334e6f737db3d0dfe745b62309e0921bbbd0bc231e6f0bacd342",
+        "71490d804f238e1f86c833eb37918d7e22f4abeb27ea008e34662708f793e540",
+        "85f0c9aff9f90ca098ca600d28074a96c5a843fe53621d80ec1044ee86782fc6",
+        "735761786ff8195485749e986c8ff33c7c00e9ebfd54e8aa99d2a8b9418c8650",
+        "ee5d92da2d9582657b5df66f26b1f283277fd5f6be825762749c7c126a42c26c",
+        "6e57642f56f602aed93ce4961bd42d27373ac29d1b290da0d9c2b08d62b71747",
+        "a9696e5968155ced9f16fd1a7c83b7009657730390be44e98311f704a1e48f71",
+        "99f9372747133f4adec911ed1f8431a00525ab59a8597e9a7ac3d8df497235d1",
+        "79e5fcd1e1920e92c593a06bb223e75afae0af1070e501a877372a8f6d7c2201"
+      ],
+      "transformations": [
+        "normalize-whitespace-outside-string-literals",
+        "uppercase-ADD-keyword"
+      ]
+    },
+    {
+      "source": "project/sql/核心发版14.1.5/init-sql/oracle/2.report_sql_oracle.txt",
+      "line_start": 231,
+      "line_end": 232,
+      "source_sha256": "2bcbbb90f484a81cf8b8fd202430993f8559f5da5a0b997ec2b1ce363f93febe",
+      "statement_sha256": [
+        "da4d1cc70a874c4b2f4dc3cc40e04dfe477a02bfd463c806dd6252e3fd38ed54",
+        "dce6c87aa09cf351a84b0f1fb4f787843961647274a787c98233db493e26a204"
+      ],
+      "normalized_sha256": [
+        "1a4ec28e714535df103419f333c88a65431985341e64ac44873db5cfac336ea5",
+        "dce6c87aa09cf351a84b0f1fb4f787843961647274a787c98233db493e26a204"
+      ],
+      "transformations": [
+        "normalize-whitespace-outside-string-literals",
+        "uppercase-ADD-keyword"
+      ]
+    }
+  ],
+  "tables": [
+    "T_CORE_LES_DS",
+    "T_CORE_LES_DS_FIELD"
+  ],
+  "fixture": {
+    "path": "api-fixtures/schema/les-data-source-restoration.sql",
+    "sha256": "9f19dc31ecf697e914e3b46caf30791c68e6c68be209d4bea2def4df8b1c35ae"
+  },
+  "generator": "scripts/schema_fixture.py definitions/checks/render(existing helper unchanged,local table admission only)",
+  "generator_sha256": "36dbc87c71c2838bcd942c1f1e90fc80ed14af745aa7e0411cb46b18acc4d215",
+  "transformations": [
+    "Normalize source statement whitespace outside string literals and lowercase ADD keyword for existing strict parser;all identifiers/types/comments unchanged."
+  ],
+  "limitations": [
+    "DDL implicit commits;preflight/exact metadata do not provide atomic rollback.",
+    "No LES datasource business rows or arbitrary template category choices.",
+    "Old seven-table fixture,baseline,lifecycle policy,canonical evidence unchanged."
+  ],
+  "execution": "Prepared only. Root coordinates current instance/schema verification and execution while application/jobs are idle; no automatic baseline or lifecycle policy changes."
+}

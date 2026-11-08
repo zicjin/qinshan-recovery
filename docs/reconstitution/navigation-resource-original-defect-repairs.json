@@ -1,0 +1,172 @@
+{
+  "schema": "original-navigation-resource-defect-repair-provenance-v1",
+  "classification": "source-backed-original-system-defect-repair",
+  "source_checkpoint_before_repair": "69f430ba53da5584ea7d766b2ee787fbf46db535",
+  "approved_stock_artifact_sha256": "4a720797810fd2f8cca6e22604657028cb87830ca0e24bb55a5f42f040f6ee9f",
+  "strict_evidence": false,
+  "API_completion_claimed": false,
+  "runtime_after_repair": "local18087 source-only distribution 81475281f7e3db6da4b209a8673102b738b01022b59b41498b6bce5b9772cc2a; app jar c98385d1820535c2c66451fc29f25bd1252ac37026b41a3e35c0a1d2e27afde6; targeted same-menu and component diagnostic smoke passed within stated limits",
+  "baseline_comparison": {
+    "real_HTTP": true,
+    "principal": "Test",
+    "same_roles_and_organization": true,
+    "page_count_per_side": 9,
+    "static_count_per_side": 22,
+    "page_status_both": "all200",
+    "static_status_both": "all200",
+    "stock_and_supplier_matches": "Framework common/diagram chunk and CKEditor config are original stock bytes on both live sides. Original project index-category/project-change resources match stock/supplier/owned after CRLF normalization.",
+    "evaluation_query": "Both real POST /secure/emc/module/mdm/bizmdm/index-categories/queries/raw responses match complete raw hash and total140; null active row is initial component timing, not absence of category data."
+  },
+  "repairs": [
+    {
+      "finding": "R09",
+      "original_fault": "Index-set child grid onRendered dereferences the parent grid active row before default selection exists.",
+      "change": "Apply original template-specific columns from actual parent onRowActive after detail readiness, child onRendered and dynamic refreshColumns. Day/night hides three original fields; ordinary/no selection shows them again. Deferred callbacks read latest actual active row. Actual browser day-to-normal switching exposed duplicate restored columns. Apply hide/show only to presently changed fields from actual Grid store columns and remove only stale hide-cache entries of these three already-visible fields; all unrelated hidden columns remain intact.",
+      "validation": "Original onRendered null failure and actual parent onRowActive day/ordinary switching fail before patch. Regression invokes real parent onRowActive configuration, deferred child readiness, repeated selection and late rendering; original detail query URL retained. Actual browser regression and screenshot retained privately. Focused regression now executes original Grid.hideColumns/showColumns bodies, repeated day/normal cycles and refreshColumns with stale hide cache; column count/uniqueness and unrelated hidden cache are asserted. Rebuilt browser verification pending."
+    },
+    {
+      "finding": "R10",
+      "original_fault": "AuditViewContainer setData reads $children[0].$refs while its asynchronous Vue component is not mounted.",
+      "change": "Retain latest actual id/tableName/vertical in existing options and invoke original setData on nextTick after lazy child hook:mounted, including warm-cache synchronous mount before root model assignment. Already-mounted selection and both orientation refs retain original init.",
+      "validation": "Cold asynchronous and warm synchronous mount regression preserve latest selection and real init; normal post-mount time-view selection still invokes original init. Actual browser audit details pending."
+    },
+    {
+      "finding": "R11",
+      "original_fault": "Task-change edit and search sample branches remove a copied optional panel ID never declared by their original layouts.",
+      "change": "Check original tab.options.panels for that exact optional ID before removing it; keep removal if custom layout declares it and preserve other panels/query context.",
+      "validation": "Both original branches fail exact removePanel; patched branches preserve scheme/order transitions with and without optional panel."
+    },
+    {
+      "finding": "R12",
+      "original_fault": "SystemMonitoring root Vue mounted expects a DOM parameter, but Vue lifecycle hook supplies no argument.",
+      "change": "Register the actual mounted this.$el and original component options.id within SystemMonitoring only.",
+      "validation": "No-argument lifecycle test registers actual instance. Original audit.trail guard and explicit monitoring-disabled alert remain unchanged; monitor is not enabled."
+    },
+    {
+      "finding": "R13",
+      "original_fault": "Original diagram background computed style constructs url(undefined) without configured backgroundImageUrl.",
+      "change": "Leave backgroundImage unset for absent URL; preserve exact original configured URL.",
+      "validation": "Undefined/null/empty produce no URL; configured sample path unchanged. Actual topology diagram display pending."
+    },
+    {
+      "finding": "R14",
+      "original_fault": "Menu icon URL builder concatenates literal null sentinel even though original frontend SVG logic treats it as absent.",
+      "change": "Return null only for blank or literal null/undefined sentinel; named resource style/skin prefix logic unchanged.",
+      "validation": "Actual CoreMenuServiceImpl source compiled to isolated temporary output; reflection exercises missing values, valid005/061/common/png, direct config and cached prefix branches."
+    },
+    {
+      "finding": "R15",
+      "original_fault": "Original CKEditor config enables image and image2 simultaneously; image plugin detectConflict warns and yields to image2. C11 is the link accompanying C10.",
+      "change": "In original config remove deprecated image alongside existing resize, retaining image2 and unchanged upload URLs/skin/content settings.",
+      "validation": "Original config conflict test red, replacement conflict removed and image2/settings retained. Actual toolbar, content and upload dependency are pending browser verification."
+    },
+    {
+      "finding": "R20",
+      "original_fault": "WindowPageProgress data.show=true renders an idle0% bar if its initial pageRequesting prop is false, because the original watcher only runs on changes. Root observed real system-config inputs ready/no request or mask but two progress bars remained.",
+      "change": "Initialize show from actual pageRequesting prop; on mounted start existing percentHandle only when initial request is active. Keep original request-change watcher and completion timer unchanged.",
+      "validation": "Extracted actual component fixture reproduces initialfalse visiblebar, then verifies false/true initialstate, true request animation and true-to-false100% completion/reset/hide. Actual system-config targeted browser retest is root-owned pending."
+    }
+  ],
+  "deferred_findings": [
+    {
+      "finding": "R16",
+      "disposition": "original-defect",
+      "code_change": false,
+      "reason": "Original SimpleGrid constructor always emits deprecation through Gikam.error then delegates to inherited real Grid. Notification attachment grid intentionally requests simpleGrid; no measured functional regression justifies rewriting table/logging. Query/pagination/display smoke remains required."
+    },
+    {
+      "finding": "R21",
+      "disposition": "original-defect",
+      "code_change": false,
+      "reason": "Current supplier and owned locale maps both lack the three captured page keys. Both include GIKAM.BUTTON.SEARCH=查询. No locale packaging mismatch; no dictionary values invented. Side navigation issue was not reproduced in original capture.",
+      "locale_values_on_both": {
+        "GIKAM.SEARCH": null,
+        "GIKAM.BUTTON.SEARCH": "查询",
+        "GIKAM.BPMN.FIELD.TITLE.STATUS": null,
+        "GIKAM.BPMN.STATUS.DONE": null
+      }
+    }
+  ],
+  "files": [
+    {
+      "path": "project/src/main/resources/static/emc/module/mdm/bizmdm/index-categories/emc-index-category-edit-list.js",
+      "before_sha256": "3c72c503b2931aa772035ed6dec70c2cc88ff200b3605d2e33534fcf795d6e80",
+      "after_sha256": "de1c3873ebcfc2cfed21f3d6950adcd1636c0ae95f962de338d7ef6f81482572",
+      "override_path": null,
+      "classification": "source-backed-original-system-defect-repair",
+      "stock_member": "BOOT-INF/classes/static/emc/module/mdm/bizmdm/index-categories/emc-index-category-edit-list.js",
+      "stock_member_sha256": "dceda055a7da80701f0424e64a483c5b76670ffef058f0767c5ce65ab70d4331"
+    },
+    {
+      "path": "project/src/main/resources/static/emc/module/bp/edit/project-changes/emc-project-change-edit-list.js",
+      "before_sha256": "e7d44713161d6e75663b1990626ac7d00a9cd6854f9b4122333b1ff7ee741cbb",
+      "after_sha256": "0ad2ae110b29fe18c61681b562962e2a16f5f66596f6065ec5c8279f4fdbb925",
+      "override_path": null,
+      "classification": "source-backed-original-system-defect-repair",
+      "stock_member": "BOOT-INF/classes/static/emc/module/bp/edit/project-changes/emc-project-change-edit-list.js",
+      "stock_member_sha256": "d2aea97b0af3b1e8c4beaf4fcb89feb593dbd7aaedfc9180fee8b776fa0cf98f"
+    },
+    {
+      "path": "project/src/main/resources/static/emc/module/bp/edit/project-changes/emc-project-change-search-list.js",
+      "before_sha256": "648834c8a183e284c1bdc5e400ad7439c0136e4a1ffe28bb64d40c30149facff",
+      "after_sha256": "7b55cf45f1134010dc9c23fd061d14fd7a689d4a4d616f7950748e5a0dfa8b2d",
+      "override_path": null,
+      "classification": "source-backed-original-system-defect-repair",
+      "stock_member": "BOOT-INF/classes/static/emc/module/bp/edit/project-changes/emc-project-change-search-list.js",
+      "stock_member_sha256": "df77bfafd1c3cfb65e40a0c07de792bf3536c0c2a6243d952123cbb565d44787"
+    },
+    {
+      "path": "reconstituted/framework/owned-core-web/src/main/resources/static/gikam/main/js/chunk-common.js",
+      "before_sha256": "bab2b36a4f72cecfad12f837625ce17a5d3151fd91b6a5113b454d1550363f14",
+      "after_sha256": "26c1b2913c445866be20facb1dc934ade5e3be469ba6a4c36598944d8709e44c",
+      "override_path": "reconstituted/overrides/framework/owned-core-web/src/main/resources/static/gikam/main/js/chunk-common.js",
+      "classification": "source-backed-original-system-defect-repair",
+      "stock_member": "BOOT-INF/lib/gikam-core-web-14.1.5.jar!/static/gikam/main/js/chunk-common.js",
+      "stock_member_sha256": "bab2b36a4f72cecfad12f837625ce17a5d3151fd91b6a5113b454d1550363f14"
+    },
+    {
+      "path": "reconstituted/framework/owned-core-web/src/main/resources/static/gikam/main/js/chunk-b0813c9a.js",
+      "before_sha256": "04545aada92bc8c9661ec58a3eeca9305b61a8144e2f92fe1086e2dab0365957",
+      "after_sha256": "78727ef4bfb320ee14d1547dc4112b642c48c63453f60f0167858faec9c83098",
+      "override_path": "reconstituted/overrides/framework/owned-core-web/src/main/resources/static/gikam/main/js/chunk-b0813c9a.js",
+      "classification": "source-backed-original-system-defect-repair",
+      "stock_member": "BOOT-INF/lib/gikam-core-web-14.1.5.jar!/static/gikam/main/js/chunk-b0813c9a.js",
+      "stock_member_sha256": "04545aada92bc8c9661ec58a3eeca9305b61a8144e2f92fe1086e2dab0365957"
+    },
+    {
+      "path": "reconstituted/framework/owned-core-common/src/main/java/com/sunwayworld/module/sys/menu/service/impl/CoreMenuServiceImpl.java",
+      "before_sha256": "ca5acd8b19b95d2684d1ec2f93841f2c04fb433041fbea6c8150622d77d4fe30",
+      "after_sha256": "ec954c0434ca29b25d2fc5328f776453b5726fa5281dcd85956c58316b746475",
+      "override_path": "reconstituted/overrides/framework/owned-core-common/src/main/java/com/sunwayworld/module/sys/menu/service/impl/CoreMenuServiceImpl.java",
+      "classification": "source-backed-original-system-defect-repair"
+    },
+    {
+      "path": "reconstituted/framework/owned-core-web/src/main/resources/static/plugin/ckeditor/config.js",
+      "before_sha256": "a7b5a9c41fb5611b089a80ac5139bdf2d3bd4fd59ef1fc8fcec167cb90db5f35",
+      "after_sha256": "e219d5f1bd22fb00a28693e1a1b8cb7fed28fb3860f7bcdb74b06772c2aa193a",
+      "override_path": "reconstituted/overrides/framework/owned-core-web/src/main/resources/static/plugin/ckeditor/config.js",
+      "classification": "source-backed-original-system-defect-repair",
+      "stock_member": "BOOT-INF/lib/gikam-core-web-14.1.5.jar!/static/plugin/ckeditor/config.js",
+      "stock_member_sha256": "a7b5a9c41fb5611b089a80ac5139bdf2d3bd4fd59ef1fc8fcec167cb90db5f35"
+    }
+  ],
+  "focused_regressions": {
+    "node": "scripts/tests/test-navigation-resource-initialization.js",
+    "java": "scripts/tests/test-menu-icon-sentinel.py",
+    "red_observed_before_patch": true,
+    "green_after_patch": true,
+    "HTTP_browser_acceptance_after_patch": true
+  },
+  "resource_recovery": "Framework resource mirrors are tracked under reconstituted/overrides/framework/owned-core-web/src/main/resources. Resource provenance preserves stock sha256 and records destination_sha256, overlay and this provenance path. Parent assembler resource recovery is root-owned.",
+  "runtime_constraints": "No Oracle/Redis restart,Data Pump,build,deploy,browser or commit performed by this partition. Only approved named supplier and local owned read HTTP; no SQL or business writes.",
+  "runtime_validation": {
+    "strict_increment": 0,
+    "audit_detail": "real config row selection/mounted child and label verified; individual event detail lacks positive sample",
+    "R09": "actual day/normal4cycles, no duplicate fields; prior v1 regression retained",
+    "R12": "disabled notice, real mounted component, zero progress; monitoring not enabled",
+    "R13": "actual canvas ready and no undefined resource request; populated topology untested",
+    "R14": "no sentinel request;005/061 realHTTP200; actual Java guard test",
+    "R15": "notice/template actual content109/19 chars,41toolbarbuttons,image2 present/image absent; upload remains storage-dependent",
+    "R20": "system configuration same menu settles2.1seconds,61controls enabled, no requesting or persistent progress; idle session TTL unproven"
+  }
+}

@@ -261,7 +261,9 @@ emcProjectChange.editPage = {
             if (row.sample === "1") {
                 tab.removePanel('emc-project-change-edit-list-order-panel');
                 tab.showPanel('emc-project-change-edit-list-base-info-panel');
-                tab.removePanel('emc-project-sample-subpackage-info-panel');
+                if (tab.options.panels.some(function (panel) { return panel.id === 'emc-project-sample-subpackage-info-panel'; })) {
+                    tab.removePanel('emc-project-sample-subpackage-info-panel');
+                }
                 tab.revertPanel('emc-project-scheme-edit-panel');
             } else {
                 tab.revertPanel('emc-project-change-edit-list-order-panel');

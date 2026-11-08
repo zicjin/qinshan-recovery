@@ -8554,9 +8554,15 @@
     {
       "bytes": 266300,
       "compile_status": "not-applicable-resource",
+      "destination_sha256": "78727ef4bfb320ee14d1547dc4112b642c48c63453f60f0167858faec9c83098",
+      "override_path": "reconstituted/overrides/framework/owned-core-web/src/main/resources/static/gikam/main/js/chunk-b0813c9a.js",
       "path": "static/gikam/main/js/chunk-b0813c9a.js",
+      "repair_provenance": "docs/reconstitution/navigation-resource-original-defect-repairs.json",
       "sha256": "04545aada92bc8c9661ec58a3eeca9305b61a8144e2f92fe1086e2dab0365957",
-      "source_jar": "gikam-core-web-14.1.5.jar"
+      "source_jar": "gikam-core-web-14.1.5.jar",
+      "transformations": [
+        "overlay:src/main/resources/static/gikam/main/js/chunk-b0813c9a.js"
+      ]
     },
     {
       "bytes": 1151,
@@ -8687,9 +8693,15 @@
     {
       "bytes": 1868329,
       "compile_status": "not-applicable-resource",
+      "destination_sha256": "26c1b2913c445866be20facb1dc934ade5e3be469ba6a4c36598944d8709e44c",
+      "override_path": "reconstituted/overrides/framework/owned-core-web/src/main/resources/static/gikam/main/js/chunk-common.js",
       "path": "static/gikam/main/js/chunk-common.js",
+      "repair_provenance": "docs/reconstitution/navigation-resource-original-defect-repairs.json",
       "sha256": "bab2b36a4f72cecfad12f837625ce17a5d3151fd91b6a5113b454d1550363f14",
-      "source_jar": "gikam-core-web-14.1.5.jar"
+      "source_jar": "gikam-core-web-14.1.5.jar",
+      "transformations": [
+        "overlay:src/main/resources/static/gikam/main/js/chunk-common.js"
+      ]
     },
     {
       "bytes": 2505,
@@ -18711,9 +18723,15 @@
     {
       "bytes": 4343,
       "compile_status": "not-applicable-resource",
+      "destination_sha256": "e219d5f1bd22fb00a28693e1a1b8cb7fed28fb3860f7bcdb74b06772c2aa193a",
+      "override_path": "reconstituted/overrides/framework/owned-core-web/src/main/resources/static/plugin/ckeditor/config.js",
       "path": "static/plugin/ckeditor/config.js",
+      "repair_provenance": "docs/reconstitution/navigation-resource-original-defect-repairs.json",
       "sha256": "a7b5a9c41fb5611b089a80ac5139bdf2d3bd4fd59ef1fc8fcec167cb90db5f35",
-      "source_jar": "gikam-core-web-14.1.5.jar"
+      "source_jar": "gikam-core-web-14.1.5.jar",
+      "transformations": [
+        "overlay:src/main/resources/static/plugin/ckeditor/config.js"
+      ]
     },
     {
       "bytes": 3221,

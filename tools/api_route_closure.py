@@ -275,7 +275,7 @@ def build_closure(ledger: Mapping[str, Any], report_paths: Iterable[Path]) -> Di
                     # implementation seam.
                     alias_candidates = [candidate for candidate in rows.values()
                                         if candidate.get("id") == str(alias_id)
-                                        and str(candidate.get("method", "")).upper() == method]
+                                        and str(candidate.get("method", "")).upper() in {method, "ANY"}]
                     if len(alias_candidates) == 1:
                         alias_target = rows[str(alias_candidates[0]["id"])]
                         alias_observation = {"report": str(report_path), "report_sha256": digest,
@@ -327,7 +327,7 @@ def build_closure(ledger: Mapping[str, Any], report_paths: Iterable[Path]) -> Di
                 # case; still enforce the declared HTTP method.
                 candidates = [candidate for candidate in rows.values()
                               if candidate.get("id") == route_id
-                              and str(candidate.get("method", "")).upper() == method]
+                              and str(candidate.get("method", "")).upper() in {method, "ANY"}]
             else:
                 candidates = route_index.get((method, path), [])
             if len(candidates) != 1:

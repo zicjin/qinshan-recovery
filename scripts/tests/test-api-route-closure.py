@@ -234,6 +234,45 @@ class ClosureTest(unittest.TestCase):
         self.assertEqual(result["strict_pass_count"], 1)
         self.assertFalse(result["failures"])
 
+    def test_explicit_route_id_accepts_ledger_any_but_preserves_actual_method(self):
+        report, ledger = self.fingerprint_report()
+        ledger["routes"][0]["method"] = "ANY"
+        report["cases"][0]["route"]["method"] = "POST"
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / "strict.json"
+            path.write_text(json.dumps(report))
+            result = module.build_closure(ledger, [path])
+        self.assertEqual(result["strict_pass_count"], 1)
+        self.assertFalse(result["failures"])
+        self.assertEqual(report["cases"][0]["route"]["method"], "POST")
+
+    def test_explicit_route_id_still_rejects_different_concrete_method(self):
+        report, ledger = self.fingerprint_report()
+        report["cases"][0]["route"]["method"] = "POST"
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / "strict.json"
+            path.write_text(json.dumps(report))
+            result = module.build_closure(ledger, [path])
+        self.assertEqual(result["strict_pass_count"], 0)
+        self.assertTrue(result["failures"])
+
+    def test_alias_id_accepts_ledger_any_for_diagnostic_observation(self):
+        ledger = dict(self.ledger)
+        ledger["routes"] = [dict(self.ledger["routes"][0], method="ANY")]
+        report = {"status": "diagnostic-pass", "execution": "fast-differential",
+                  "strict_evidence": False, "production_access": False,
+                  "source_commit": "head", "source_dirty": False,
+                  "cases": [{"id": "any-alias", "route_ids": ["r1"],
+                             "method": "POST", "path": "/ok",
+                             "classification": "fast-equivalent"}]}
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / "fast.json"
+            path.write_text(json.dumps(report))
+            result = module.build_closure(ledger, [path])
+        self.assertEqual(result["strict_pass_count"], 0)
+        self.assertEqual(result["diagnostic_observation_count"], 1)
+        self.assertFalse(result["failures"])
+
     def test_strict_write_requires_http_restore_rollback_and_audit(self):
         report = {
             "status": "executed-pass", "strict_evidence": True,

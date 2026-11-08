@@ -4,6 +4,7 @@ emcInconformity.editPage = {
         var _this = this;
         return {
             type : 'grid',
+            toolbarWrap : true,
             id : 'emc-inconformity-edit-list-grid',
             url : emcInconformity.baseUrl + '/queries/raw',
             service : 'emcInconformityServiceImpl',

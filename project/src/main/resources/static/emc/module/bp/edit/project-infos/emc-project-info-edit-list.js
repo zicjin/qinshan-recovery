@@ -23,7 +23,6 @@ emcProjectInfo.editPage = {
                     this.activeRowByIndex(0);
                 } else {
                     Gikam.cleanCompData([ "emc-project-info-edit-list-order-grid", "emc-project-info-edit-list-order-item-group-grid", "emc-project-info-edit-list-director-grid" ]);
-                    Gikam.getComp('emc-project-info-edit-list-base-info-tab').removePanel('emc-project-info-edit-list-order-panel');
                 }
             },
             onRowActive : function(index, row) {

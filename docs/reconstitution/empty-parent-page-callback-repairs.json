@@ -1,0 +1,92 @@
+{
+  "schema": "original-empty-parent-page-callback-repair-v1",
+  "classification": "source-backed-original-system-defect-repair",
+  "source_checkpoint_before_repair": "a57dda9c088bb385c65fa19abb07b1bafcb4aa24",
+  "approved_stock_artifact_sha256": "4a720797810fd2f8cca6e22604657028cb87830ca0e24bb55a5f42f040f6ee9f",
+  "strict_evidence": false,
+  "API_completion_claimed": false,
+  "files": [
+    {
+      "finding": "BUG-04",
+      "path": "reconstituted/framework/owned-core-web/src/main/resources/static/gikam/main/js/chunk-common.js",
+      "before_sha256": "26c1b2913c445866be20facb1dc934ade5e3be469ba6a4c36598944d8709e44c",
+      "after_sha256": "7bfba121c930e1b8f69cb9462a6c5e54d6394a4a07969ecf9ecc38e7cdd49ba0",
+      "stock_member": "BOOT-INF/lib/gikam-core-web-14.1.5.jar!/static/gikam/main/js/chunk-common.js",
+      "stock_member_sha256": "bab2b36a4f72cecfad12f837625ce17a5d3151fd91b6a5113b454d1550363f14",
+      "stock_fault_confirmed": true,
+      "stock_source_equivalent_after_CRLF_normalization": null
+    },
+    {
+      "finding": "BUG-05",
+      "path": "reconstituted/framework/owned-core-common/src/main/resources/static/module/sys/todo-configs/core-todo-config-edit-list.js",
+      "before_sha256": "11291190b36fddbdad09bd62680b702bd4d732e3dd6f0f00daac09d2c3570e2b",
+      "after_sha256": "b12e9f5223874cf18c4509e3faff82f3247f92fcbd01abe92a5c60a136b12e73",
+      "stock_member": "BOOT-INF/lib/gikam-core-common-14.1.5.jar!/static/module/sys/todo-configs/core-todo-config-edit-list.js",
+      "stock_member_sha256": "11291190b36fddbdad09bd62680b702bd4d732e3dd6f0f00daac09d2c3570e2b",
+      "stock_fault_confirmed": true,
+      "stock_source_equivalent_after_CRLF_normalization": true
+    },
+    {
+      "finding": "BUG-07",
+      "path": "project/src/main/resources/static/emc/module/mdm/basemdm/monitor-abilities/emc-monitor-ability-edit-list.js",
+      "before_sha256": "028a16e0adaa47f57e1084ec646b57c36593d6d4f84edd8a908048bb6d783aff",
+      "after_sha256": "b25b032958bd5c6dad50bfe1da133d13c6b567092c568e895b9c297e3472e853",
+      "stock_member": "BOOT-INF/classes/static/emc/module/mdm/basemdm/monitor-abilities/emc-monitor-ability-edit-list.js",
+      "stock_member_sha256": "8724a325b04ae8110098993799a6453dac4ebded8aaf45d583d28f3f8d44e2d0",
+      "stock_fault_confirmed": true,
+      "stock_source_equivalent_after_CRLF_normalization": true
+    },
+    {
+      "finding": "BUG-08",
+      "path": "reconstituted/framework/owned-core-common/src/main/resources/static/module/equipt/pdf-acq-configs/core-pdf-acq-config-edit-list.js",
+      "before_sha256": "45854d9a68e5feb7974cf0829720c2600484bfccc064258e84f29d906b9a5347",
+      "after_sha256": "da37ac3bf3c1862271993500f8b8afa300d068b79152d29c659ca4c754514b3f",
+      "stock_member": "BOOT-INF/lib/gikam-core-base-interface-14.1.5.jar!/static/module/equipt/pdf-acq-configs/core-pdf-acq-config-edit-list.js",
+      "stock_member_sha256": "45854d9a68e5feb7974cf0829720c2600484bfccc064258e84f29d906b9a5347",
+      "stock_fault_confirmed": true,
+      "stock_source_equivalent_after_CRLF_normalization": true
+    }
+  ],
+  "repairs": [
+    {
+      "finding": "BUG-04",
+      "fault": "AuditTrail history tree-grid onLoadSuccess dereferences data[0].id for empty local filter result. Original stock has the same exact callback.",
+      "repair": "Clear current tableName,details grid,and collapse existing east panel when response is empty;preserve first actual table id otherwise."
+    },
+    {
+      "finding": "BUG-05",
+      "fault": "Empty todo grid cleans form then calls real Form.setData(defaults) with default autoSave=true. Original Form uses stale initData.id and can perform implicit instant PUT;onUpdated then reads null active row.",
+      "repair": "Apply empty form default values with existing setData(data,false) to suppress business autosave;onUpdated refreshes only when actual updatedData.id matches current active row. No fabricated row or placeholder ID."
+    },
+    {
+      "finding": "BUG-07",
+      "fault": "Monitor ability addTestItem dereferences null parent before chooser;chooser close re-reads possibly changed active parent.",
+      "repair": "Require actual parent before modal via existing CHOOSE_ONE_ITEM message,capture its actual id and use that same parent for chooser query and eventual real insert."
+    },
+    {
+      "finding": "BUG-08",
+      "fault": "PDF preprocess preInsert URL dereferences getSelections()[0].id with no parent.",
+      "repair": "Require exactly one actual selected PDF config via existing selection message before opening original preInsert;keep original fields and create URL."
+    }
+  ],
+  "validation": {
+    "command": "node scripts/tests/test-empty-parent-page-callbacks.js",
+    "before": "Seven actual-source callback regressions failed;private source-tests-red.txt retained.",
+    "after": "Seven actual-source callback regressions pass. Todo test extracts and executes actual bundled Form.setData and its nextTick autosave decision.",
+    "scope": "Actual original JS callbacks with primitive UI registry/component boundaries. No HTTP mock,no database,no API closure claim.",
+    "runtime_after_patch": "Not built,deployed,or refreshed by this isolated agent;root combines checkpoint and verifies actual browser.",
+    "actual_before_browser": "Independent owned session reproduced todo null.id callback;observed implicit /todo-configs/instant network resource timing. Exact request body and before values not captured,therefore restoration must not be guessed;root assigned targeted read-only audit attribution. Audit filter attempt did not independently capture BUG04 console;stock callback/offline exact-source regression proves unsafe empty branch.",
+    "positive_controls": "Actual extracted Form.setData without false still autosaves;normal todo updated current id refreshes;monitor chooser sends real child data to originally captured parent;PDF one selected parent retains exact create URL."
+  },
+  "supplier_baseline": {
+    "read_only_static_GET": true,
+    "todo_and_pdf_static_exact_stock_and_both_sides_equal": true,
+    "monitor_original_CRLF_only_difference": true,
+    "audit_fault_exists_in_stock_and_supplier_bundle": true,
+    "original_defect_not_owned_regression": true
+  },
+  "runtime_change": false,
+  "SQL_change": false,
+  "business_HTTP_writes_by_test": "Offline tests perform none;before live filter unexpectedly autosaved via original code and is separately journaled for root review.",
+  "regression_source_sha256": "0101df766ea070e51b5139b5e0ef44e92c942fb333a038c3f7a36142ee9dc1c8"
+}

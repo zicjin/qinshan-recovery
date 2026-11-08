@@ -168,9 +168,15 @@
     {
       "bytes": 12085,
       "compile_status": "not-applicable-resource",
+      "destination_sha256": "da37ac3bf3c1862271993500f8b8afa300d068b79152d29c659ca4c754514b3f",
+      "override_path": "reconstituted/overrides/framework/owned-core-common/src/main/resources/static/module/equipt/pdf-acq-configs/core-pdf-acq-config-edit-list.js",
       "path": "static/module/equipt/pdf-acq-configs/core-pdf-acq-config-edit-list.js",
+      "repair_provenance": "docs/reconstitution/empty-parent-page-callback-repairs.json",
       "sha256": "45854d9a68e5feb7974cf0829720c2600484bfccc064258e84f29d906b9a5347",
-      "source_jar": "gikam-core-base-interface-14.1.5.jar"
+      "source_jar": "gikam-core-base-interface-14.1.5.jar",
+      "transformations": [
+        "overlay:src/main/resources/static/module/equipt/pdf-acq-configs/core-pdf-acq-config-edit-list.js"
+      ]
     },
     {
       "bytes": 3386,
@@ -6371,9 +6377,15 @@
     {
       "bytes": 6856,
       "compile_status": "not-applicable-resource",
+      "destination_sha256": "b12e9f5223874cf18c4509e3faff82f3247f92fcbd01abe92a5c60a136b12e73",
+      "override_path": "reconstituted/overrides/framework/owned-core-common/src/main/resources/static/module/sys/todo-configs/core-todo-config-edit-list.js",
       "path": "static/module/sys/todo-configs/core-todo-config-edit-list.js",
+      "repair_provenance": "docs/reconstitution/empty-parent-page-callback-repairs.json",
       "sha256": "11291190b36fddbdad09bd62680b702bd4d732e3dd6f0f00daac09d2c3570e2b",
-      "source_jar": "gikam-core-common-14.1.5.jar"
+      "source_jar": "gikam-core-common-14.1.5.jar",
+      "transformations": [
+        "overlay:src/main/resources/static/module/sys/todo-configs/core-todo-config-edit-list.js"
+      ]
     },
     {
       "bytes": 5137,

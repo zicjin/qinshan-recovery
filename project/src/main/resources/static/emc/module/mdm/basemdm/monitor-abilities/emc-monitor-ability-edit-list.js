@@ -198,6 +198,12 @@ emcMonitorAbility.editPage = {
 
     addTestItem : function() {
         var _this = this;
+        var parentRow = Gikam.getComp('emc-monitor-ability-edit-list-grid').getActivedRow();
+        if (!parentRow) {
+            Gikam.alert('GIKAM.TIP.CHOOSE_ONE_ITEM');
+            return;
+        }
+        var parentId = parentRow.id;
         Gikam.create('modal', {
             title : 'EMC.MODULE.MDM.BASEMDM.MONITORABILITIES.TAB.TEST_ADD',
             url : Gikam.choose.getConfig('testMethod').url + Gikam.param({
@@ -205,14 +211,14 @@ emcMonitorAbility.editPage = {
                 targetTable : 'T_EMC_MONITOR_ABILITY_TEST',
                 targetTestMethodIdColumn : 'TESTMETHODID',
                 targetFilterColumn : 'MONITORABILITYID',
-                targetFilterValue : Gikam.getComp('emc-monitor-ability-edit-list-grid').getActivedRow().id
+                targetFilterValue : parentId
 
             }),
             onAfterClose : function(rows, index) {
                 if (Gikam.isEmpty(rows)) {
                     return;
                 }
-                var gridId = Gikam.getComp('emc-monitor-ability-edit-list-grid').getActivedRow().id;
+                var gridId = parentId;
                 var url = _this.getTestItemUrl(gridId);
                 var chooseData = [];
                 Gikam.each(rows, function(index, item) {

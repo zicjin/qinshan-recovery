@@ -1,0 +1,118 @@
+{
+  "schema": "original-page-callback-repair-provenance-v1",
+  "classification": "source-backed-original-system-defect-repair",
+  "strict_evidence": false,
+  "API_completion_claimed": false,
+  "base_commit": "a57dda9c088bb385c65fa19abb07b1bafcb4aa24",
+  "approved_stock_artifact_sha256": "4a720797810fd2f8cca6e22604657028cb87830ca0e24bb55a5f42f040f6ee9f",
+  "supplier_version": "gikam-third-czjky-14.1.5",
+  "source_comparison": "All three original project resources equal approved stock and live supplier/owned JavaScript after LF normalization. These are original page defects, not new source-restoration differences.",
+  "repairs": [
+    {
+      "finding": "BUG-02",
+      "page": "emc-cert-edit-list",
+      "original_fault": "onEmpCertActive synchronously refreshes method,monitor-ability,log grids. The latter two are commented out in the actual getOtherGridParam layout. The declared method/uploader can also mount after default row activation.",
+      "change": "Refresh only the declared method grid and uploader through getAsyncComp. Selection generation invalidates queued callbacks when certificate or employee changes, preserving the latest selection. Do not recreate removed monitor/log business tabs.",
+      "preserved": "Original certificate-method URL, certificate ID, uploader bizId and all business APIs unchanged. No certificate insert performed for verification."
+    },
+    {
+      "finding": "BUG-06",
+      "page": "emc-samplenumber-edit-list",
+      "original_fault": "After opening own preInsert modal, the original click callback calls insert on nonexistent emc-project-edit-list-grid with undeclared url. Form initialization also delays an already-ready onRendered callback unnecessarily.",
+      "change": "Remove the unrelated project-grid insert. Initialize reportconfiglineid immediately through onFormRendered this (the original Form trigger supplies no argument). Keep selected report-line requirement and own preInsert completion refresh.",
+      "preserved": "Original form fields, selection validation, report line foreign key and samplenumber create endpoint unchanged; opening modal does not perform a second write."
+    },
+    {
+      "finding": "BUG-14",
+      "page": "emc-project-info-edit-list",
+      "original_fault": "Empty-query callback removes emc-project-info-edit-list-order-panel although getBaseInfoTab never declares this ID; actual sample/order-registration panels are managed by onProjectActive.",
+      "change": "Retain clearing of original dependent grids and remove only the invalid removePanel call.",
+      "preserved": "Existing sample/send-sample panel switching, validators, project actions and original data requests unchanged."
+    }
+  ],
+  "source_files": [
+    {
+      "path": "project/src/main/resources/static/emc/module/mdm/basemdm/certs/emc-cert-edit-list.js",
+      "stock_member": "BOOT-INF/classes/static/emc/module/mdm/basemdm/certs/emc-cert-edit-list.js",
+      "stock_sha256": "d9fbe2b739e4a89ef34bf3b649bee4c33e19127563399d785076e4ed7f75b2b4",
+      "current_sha256": "1f54a27a637ff0e94d8563d5a57a799a4688ed38872b394c1b76c334756d650a",
+      "normalized_content_equal": true,
+      "runtime_static": {
+        "supplier": {
+          "status": 200,
+          "bytes": 17610,
+          "sha256": "d9fbe2b739e4a89ef34bf3b649bee4c33e19127563399d785076e4ed7f75b2b4",
+          "normalized_text_equals_original": true
+        },
+        "owned": {
+          "status": 200,
+          "bytes": 17180,
+          "sha256": "1f54a27a637ff0e94d8563d5a57a799a4688ed38872b394c1b76c334756d650a",
+          "normalized_text_equals_original": true
+        }
+      },
+      "repaired_sha256": "9d1acffe1beed0f2edd9643a6cdfed4ad550b8c5d235652d4acac8d8bbdbb5d9"
+    },
+    {
+      "path": "project/src/main/resources/static/emc/module/mdm/bizmdm/samplenumbers/emc-samplenumber-edit-list.js",
+      "stock_member": "BOOT-INF/classes/static/emc/module/mdm/bizmdm/samplenumbers/emc-samplenumber-edit-list.js",
+      "stock_sha256": "395e9107f3858fd07428ed86982cc6d11809babf8a6dfbfc1cacb6ec24698230",
+      "current_sha256": "034fa013bff8d3605269d411b5933114c9a30cd15c5728fcb45b6b93ebe541da",
+      "normalized_content_equal": true,
+      "runtime_static": {
+        "supplier": {
+          "status": 200,
+          "bytes": 4983,
+          "sha256": "395e9107f3858fd07428ed86982cc6d11809babf8a6dfbfc1cacb6ec24698230",
+          "normalized_text_equals_original": true
+        },
+        "owned": {
+          "status": 200,
+          "bytes": 4854,
+          "sha256": "034fa013bff8d3605269d411b5933114c9a30cd15c5728fcb45b6b93ebe541da",
+          "normalized_text_equals_original": true
+        }
+      },
+      "repaired_sha256": "91a4e7918120b80b8ecd7f7c142faeac300e346961d1706e97ab8675ba0269fc"
+    },
+    {
+      "path": "project/src/main/resources/static/emc/module/bp/edit/project-infos/emc-project-info-edit-list.js",
+      "stock_member": "BOOT-INF/classes/static/emc/module/bp/edit/project-infos/emc-project-info-edit-list.js",
+      "stock_sha256": "2f48829678fd7acbad4f1ebf43c7331838d42f91c37d725b07287577ac037b81",
+      "current_sha256": "ccb65eb79cd777cbc4200c129716b2a7867d5f5cde236be6a395c7bc5702c078",
+      "normalized_content_equal": true,
+      "runtime_static": {
+        "supplier": {
+          "status": 200,
+          "bytes": 79415,
+          "sha256": "2f48829678fd7acbad4f1ebf43c7331838d42f91c37d725b07287577ac037b81",
+          "normalized_text_equals_original": true
+        },
+        "owned": {
+          "status": 200,
+          "bytes": 77778,
+          "sha256": "ccb65eb79cd777cbc4200c129716b2a7867d5f5cde236be6a395c7bc5702c078",
+          "normalized_text_equals_original": true
+        }
+      },
+      "repaired_sha256": "96f88f7e474b2ccb9dcf605ddb41895fd14fb1cb5971359f3c84ba4c5bd12f0d"
+    }
+  ],
+  "regression": {
+    "path": "scripts/tests/test-cert-sampling-project-callbacks.js",
+    "command": "node scripts/tests/test-cert-sampling-project-callbacks.js",
+    "original": "Five failing checks out of six:exact undefined.refresh,undefined.insert,and undeclared order-panel path;no-report selection already passed.",
+    "repaired": "Six checks pass executing the actual three page objects/callbacks. Tests cover delayed mounted children,latest certificate,employee changes,sampling modal/report FK and successful own insert refresh,and empty/nonempty project activation.",
+    "boundary": "Component registry/deferred readiness/Form primitives are test doubles. No HTTP or business write executed by regression;full UI acceptance is pending combined build/deploy.",
+    "actual_Form_event_contract": "Original chunk-common Form.readyHandle triggers rendered with no arguments;BaseEvent.trigger applies listener with this=component. preInsert forwards onFormRendered as Form.onRendered.",
+    "actual_framework_resource": "reconstituted/framework/owned-core-web/src/main/resources/static/gikam/main/js/chunk-common.js",
+    "actual_framework_resource_sha256": "26c1b2913c445866be20facb1dc934ade5e3be469ba6a4c36598944d8709e44c"
+  },
+  "runtime_observation": {
+    "mode": "diagnostic-before-patch",
+    "real_browser": "Isolated authenticated session,original menu -> certificate page -> existing employee selection;no add/submit/delete. Actual method-grid and uploader present;monitor/log absent. Current selected employees have no certificate rows so positive certificate activation was not newly exercised. Existing browser report supplies the positive failure trace.",
+    "static_HTTP": "Three source paths read from existing supplier and owned,all200;original content matches.",
+    "after_patch_browser": "Pending root combined application checkpoint;no patch-in-browser or runtime refresh performed."
+  },
+  "no_Java_SQL_business_write_or_runtime_change": true
+}

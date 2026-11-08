@@ -287,11 +287,16 @@ corePdfAcqConfig.editPage = {
                     text : 'GIKAM.BUTTON.INSERT',
                     icon : 'add-row',
                     onClick : function() {
+                        var parents = Gikam.getComp('core-pdf-acq-config-edit-list-grid').getSelections();
+                        if (parents.length !== 1) {
+                            Gikam.alert('GIKAM.TIP.CHOOSE_ONE_ITEM');
+                            return;
+                        }
                         Gikam.preInsert({
                             modalTitle : 'CORE.MODULE.EQUIPT.FILEACQCONFIGS.MODAL.ADD',
                             fields : corePdfAcqConfig.getPdfAcqPreprocessFields(),
                             url : Gikam.printf(corePdfAcqConfig.baseUrl + '/{id}/acq-preprocesses', {
-                                id : Gikam.getComp('core-pdf-acq-config-edit-list-grid').getSelections()[0].id
+                                id : parents[0].id
                             })
                         }).done(function(id) {
                             Gikam.getComp('core-pdf-acq-config-edit-list-acq-preprocess-grid').refresh();

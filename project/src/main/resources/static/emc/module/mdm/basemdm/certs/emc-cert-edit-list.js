@@ -2,6 +2,7 @@ emcCert.editPage = {
 
     empGrid : null,
     ready : false,
+    certActivationVersion : 0,
     getEmpGridParam : function() {
         var _this = this;
         return {
@@ -224,6 +225,7 @@ emcCert.editPage = {
 
     onEmpActive : function(row) {
         var _this = this;
+        _this.certActivationVersion++;
         if (row) {
             Gikam.getComp('emc-cert-edit-list-grid').refresh({
                 url : _this.getEmpCertUrl(row.id),
@@ -242,18 +244,23 @@ emcCert.editPage = {
 
     onEmpCertActive : function(row) {
         var _this = this;
+        var activationVersion = ++_this.certActivationVersion;
         if (row) {
-            Gikam.getComp('emc-cert-method-edit-list-grid').refresh({
-                url : _this.getCertTestMethodUrl(row.id),
+            Gikam.getAsyncComp('emc-cert-method-edit-list-grid').done(function(grid) {
+                if (activationVersion !== _this.certActivationVersion) {
+                    return;
+                }
+                grid.refresh({
+                    url : _this.getCertTestMethodUrl(row.id),
+                });
             });
-            Gikam.getComp('emc-cert-monitor-ability-edit-list-grid').refresh({
-                url : _this.getCertMonitorAbilityUrl(row.id),
-            });
-            Gikam.getComp('emc-cert-log-list-grid').refresh({
-                url : _this.getCertLogUrl(row.id),
-            });
-            Gikam.getComp('emc-cert-detail-uploader').setOptions({
-                bizId : row.id
+            Gikam.getAsyncComp('emc-cert-detail-uploader').done(function(uploader) {
+                if (activationVersion !== _this.certActivationVersion) {
+                    return;
+                }
+                uploader.setOptions({
+                    bizId : row.id
+                });
             });
         }
     },

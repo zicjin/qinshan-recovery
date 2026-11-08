@@ -29,15 +29,12 @@ emcSamplenumber.editPage = {
                             modalTitle : 'EMC.MODULE.MDM.BIZMDM.SAMPLENUMBERS.MODAL.ADD',
                             fields : emcSamplenumber.getBaseInfoFormFields(),
                             url : emcSamplenumber.baseUrl,
-                            onFormRendered : function(form) {
-                                setTimeout(() => {
-                                    this.setData({reportconfiglineid : selections[0].id},false);
-                                }, 10)
+                            onFormRendered : function() {
+                                this.setData({reportconfiglineid : selections[0].id}, false);
                             }
                         }).done(function(id) {
                             Gikam.getComp('emc-samplenumber-edit-list-grid').refresh();
                         });
-                        Gikam.getComp('emc-project-edit-list-grid').insert(url, selections);
                     } else {
                         Gikam.alert('GIKAM.TIP.CHOOSE_ONE_ITEM');
                         return;

@@ -23,7 +23,7 @@ coreTodoConfig.editPage = {
                             form.setData({
                                 category : 'business',
                                 inheritParam : '1'
-                            })
+                            }, false)
                         });
                     });
                 }
@@ -119,9 +119,12 @@ coreTodoConfig.editPage = {
                     fields : coreTodoConfig.getBaseInfoFormFields(),
                     service : 'coreTodoConfigServiceImpl',
                     autoSave : true,
-                    onUpdated : function() {
+                    onUpdated : function(updatedData) {
                         var grid = Gikam.getComp('core-todo-config-edit-list-grid');
-                        grid.refreshRowById(grid.getActivedRow().id);
+                        var row = grid.getActivedRow();
+                        if (row && updatedData && row.id === updatedData.id) {
+                            grid.refreshRowById(updatedData.id);
+                        }
                     }
                 } ]
             } ]

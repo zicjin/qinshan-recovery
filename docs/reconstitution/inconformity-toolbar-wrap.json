@@ -1,0 +1,22 @@
+{
+  "schema": "inconformity-toolbar-original-resource-repair-v1",
+  "finding": "BUG-11",
+  "classification": "source-backed-original-page-layout-defect",
+  "strict_evidence": false,
+  "source_path": "project/src/main/resources/static/emc/module/item/inconformitys/emc-inconformity-edit-list.js",
+  "before_sha256": "0e1ddaeaafeaf6ecef99ec1b0b4b2f8530455aac79f2f353d914c4d3445283f4",
+  "after_sha256": "005988c8a545e3f3a85328b5f0119d5176e2c664c003fa5b6b1e8c3c813cb424",
+  "stock_member": "BOOT-INF/classes/static/emc/module/item/inconformitys/emc-inconformity-edit-list.js",
+  "stock_member_sha256": "08e3208304e49a06e440c235f247cc1d4654e5199785815c70ee03c31e7ab99d",
+  "source_supplier_stock_normalized_equal": true,
+  "current_reproduction": "With25button translations applied, original250px grid exposes add/delete/submit, but preview extends beyond grid and its center is covered by general settings trigger. Its dropdown does not contain preview.",
+  "repair": "Enable the original Grid toolbarWrap option only for this page; existing framework CSS flex-wrap and handleBtnMore wrap branch are retained.",
+  "unchanged": [
+    "original250px west width",
+    "all four original buttons and handlers",
+    "queries/raw URL",
+    "permissions and workflow behavior"
+  ],
+  "BUG09": "Fresh same-page1280→1366→1280 twice did not reproduce l.getAttribute error.14 current document event handlers are line0 from large original bundles; none match recorded anonymous:39. No resize or event code changed.",
+  "runtime_after": "Requires root checkpoint build/app-only refresh and same-menu hit-test; no browser mutation claimed"
+}

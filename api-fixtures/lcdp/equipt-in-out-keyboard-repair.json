@@ -1,0 +1,34 @@
+{
+  "schema": "source-backed-lcdp-view-keyboard-repair-v1",
+  "resource_path": "emc.equiptInOut.page.equiptInOutButtonPage",
+  "category": "view",
+  "source_version": 7,
+  "source_content_utf8_sha256": "4fa3e196b8545294655122250ec8b6fb7d0e707ce82497c583eec17a41691d6d",
+  "source_content_text_origin": "Active owned and named supplier TEST view V7 read via original search-by-path; exact UTF-8 content hashes equal before publication. IDs and authenticated observations remain private.",
+  "source_file": "project/src/main/resources/lcdp-source/emc/equiptInOut/page/equiptInOutButtonPage.js",
+  "source_sha256": "8b4abe2652d6b176727bfb0e5a485c7013327fc5d08cddb8ff08d0cd7beaa7da",
+  "change": "Remove page-lifetime document.onkeydown assignment. Use existing Modal.bindButtonEnter with explicit original confirm button ID; existing beforeClose unbind keeps Enter within login dialog lifetime.",
+  "preserved": [
+    "existingconfirmvalidation",
+    "logincheckscriptpath",
+    "username/passwordfields",
+    "out/inpageparams",
+    "normalbuttonclick",
+    "nolicensemock"
+  ],
+  "deployment": "Existing HTTP checkout → history save → submit resource; no SQL business DML, no active classpath facade. Preflight requires exact version/hash and no unsubmitted history/lock; retain original submitted history.",
+  "strict_evidence": false,
+  "verified_publication": {
+    "previous_version": 7,
+    "published_version": 8,
+    "old_history_retained": true,
+    "drafts": 0,
+    "checkout_records": 0,
+    "unlocked": true,
+    "source_sha256": "8b4abe2652d6b176727bfb0e5a485c7013327fc5d08cddb8ff08d0cd7beaa7da",
+    "SQL_DML": false,
+    "app_restart": false,
+    "strict": false
+  },
+  "regression": "node scripts/tests/test-lcdp-modal-keyboard.js; executes original view JavaScript and shipped Modal helpers; DOM/lifecycle/HTTP collaborators simulated. Original source2/7, repaired7/7; real browser validation is separate."
+}

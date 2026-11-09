@@ -53,9 +53,22 @@ extends WebMvcConfigurationSupport {
 
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-        converters.add(new org.springframework.http.converter.StringHttpMessageConverter(java.nio.charset.StandardCharsets.UTF_8));
-        converters.add(SingletonFastJsonConverter.getInstance());
-        addDefaultHttpMessageConverters(converters);
+        java.nio.charset.Charset utf8 = java.nio.charset.StandardCharsets.UTF_8;
+        org.springframework.http.converter.StringHttpMessageConverter stringConverter =
+                new org.springframework.http.converter.StringHttpMessageConverter(utf8);
+        stringConverter.setSupportedMediaTypes(java.util.Arrays.asList(
+                new MediaType("text", "plain", utf8),
+                new MediaType("application", "json", utf8)));
+        converters.add(stringConverter);
+        SingletonFastJsonConverter jsonConverter = SingletonFastJsonConverter.getInstance();
+        jsonConverter.setSupportedMediaTypes(java.util.Arrays.asList(
+                new MediaType("application", "json", utf8),
+                new MediaType("application", "xml", utf8),
+                new MediaType("text", "html", utf8),
+                new MediaType("text", "plain", utf8),
+                new MediaType("text", "xml", utf8),
+                new MediaType("text", "javascript", utf8)));
+        converters.add(jsonConverter);
     }
 
     @Override

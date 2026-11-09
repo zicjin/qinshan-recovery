@@ -129,6 +129,18 @@
       "runtime_reachability": "native-not-executed",
       "provenance": "docs/reconstitution/native-file-resource-mapping.json",
       "correction_to_prior_analysis": "Prior excerpt ended at 0xe25d; the exact export continues to 0xf9a3 and contains the omitted /files registration."
+    },
+    {
+      "java_class": "com.sunwayworld.boot.ApplicationMvcConfiguration",
+      "java_member": "configureMessageConverters",
+      "native_symbol": "Java_com_sunwayworld_boot_ApplicationMvcConfiguration_configureMessageConverters",
+      "evidence_type": "complete-export-static-disassembly-original-class-declaration-and-diagnostic-HTTP",
+      "observed_behavior": "Registers exactly UTF-8 StringHttpMessageConverter for text/plain and application/json, then SingletonFastJsonConverter for application/json, application/xml, text/html, text/plain, text/xml and text/javascript; no default converters appended.",
+      "owned_replacement": "Restore the original accepted media types, ordering and public FastJson String quoting; preserve static/files resource handlers and argument resolvers.",
+      "confidence": "observed",
+      "runtime_reachability": "supplier diagnostic HTTP observed; native artifact not executed by analysis",
+      "provenance": "docs/reconstitution/native-mvc-message-converters.json",
+      "correction_to_prior_analysis": "Prior source reconstruction omitted setSupportedMediaTypes and appended Spring defaults, accepting arbitrary media types and changing String response serialization."
     }
   ],
   "jni_declaration_export_map": {

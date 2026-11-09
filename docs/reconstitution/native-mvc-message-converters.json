@@ -1,0 +1,394 @@
+{
+  "schema": "native-mvc-message-converters-attribution-v1",
+  "conclusion": "observed-original-shared-message-converter-contract",
+  "canonical": false,
+  "strict_evidence": false,
+  "input": {
+    "stock_jar_sha256": "4a720797810fd2f8cca6e22604657028cb87830ca0e24bb55a5f42f040f6ee9f",
+    "nested_jar": "BOOT-INF/lib/gikam-core-common-14.1.5.jar",
+    "nested_jar_sha256": "1075fda5ac05d4292b8c2efe2d9b3cc8379ce049c133221c27ba8f2cee7e1089",
+    "mvc_class": {
+      "member": "com/sunwayworld/boot/ApplicationMvcConfiguration.class",
+      "sha256": "4e112e181b8a694eaa5b14dceea4fe8bfd215f94502c775b1bfcb3ffee98620b",
+      "declared_method": {
+        "name": "configureMessageConverters",
+        "descriptor": "(Ljava/util/List;)V",
+        "access_flags": "0x101",
+        "native": true
+      }
+    },
+    "singleton_class": {
+      "member": "com/sunwayworld/framework/json/fastjson/SingletonFastJsonConverter.class",
+      "sha256": "6ef3a54128c45842ac6324a1dc3eff388d76b6ede60fc9830f67eb20879671e2"
+    },
+    "native_member": "third-party/sunway-app/linux/sunway-app.so",
+    "native_sha256": "dc06e05d55252211e44b3a177267b68efc970b095d74c7ebd815057f5393d40a"
+  },
+  "native_export": {
+    "name": "Java_com_sunwayworld_boot_ApplicationMvcConfiguration_configureMessageConverters",
+    "start_address": "0xd0f5",
+    "size_bytes": 4135,
+    "exclusive_end_address": "0xe11c",
+    "complete_export_sha256": "03218e9d35a31c94b23f2652fd781fe088d2164edd0b039b8a5f762c7d842a8f",
+    "complete_export_bytes": 50166,
+    "rea_parent_evidence_id": "ev_e0002195c757ca290c8d693b36afc09b33d5b98b412be8c2789dad44ff587d44"
+  },
+  "observations": [
+    {
+      "range": "0xd258..0xd44a",
+      "meaning": "Construct StringHttpMessageConverter with StandardCharsets.UTF_8, setSupportedMediaTypes to text/plain then application/json, both charset=UTF-8, add to converters."
+    },
+    {
+      "range": "0xd475..0xd794",
+      "meaning": "Construct ordered six-element media list: application/json, application/xml, text/html, text/plain, text/xml, text/javascript, each charset=UTF-8."
+    },
+    {
+      "range": "0xdbad..0xe030",
+      "meaning": "Resolve SingletonFastJsonConverter.getInstance, call setSupportedMediaTypes with the six-element list, then add converter."
+    }
+  ],
+  "converter_order": [
+    {
+      "class": "org.springframework.http.converter.StringHttpMessageConverter",
+      "charset": "UTF-8",
+      "supported_media_types": [
+        "text/plain;charset=UTF-8",
+        "application/json;charset=UTF-8"
+      ],
+      "serialization": "Write String bodies unchanged; application/json remains a raw String body rather than JSON quoting."
+    },
+    {
+      "class": "com.sunwayworld.framework.json.fastjson.SingletonFastJsonConverter",
+      "supported_media_types": [
+        "application/json;charset=UTF-8",
+        "application/xml;charset=UTF-8",
+        "text/html;charset=UTF-8",
+        "text/plain;charset=UTF-8",
+        "text/xml;charset=UTF-8",
+        "text/javascript;charset=UTF-8"
+      ],
+      "serialization": "Use original public FastJson serialization; String bodies selected for HTML/XML/JavaScript are JSON quoted and escaped, not rendered as raw text. Public FastJson BrowserSecure behavior remains unchanged."
+    }
+  ],
+  "default_converters_appended": false,
+  "prior_owned_difference": {
+    "configuration": "Unrestricted default String converter and singleton FastJson MediaType.ALL, followed by addDefaultHttpMessageConverters.",
+    "effect": "Unadvertised Accept image/png was emitted as successful non-image content; String HTML/XML/JavaScript responses bypassed original JSON serialization and negotiated UTF-8 headers differed.",
+    "public_fastjson_constructor_evidence": {
+      "jar_sha256": "641a4d65ab32fbfdccd9c718e3f83ebc4caabdb5e4fe5b3d51527c5fe692631d",
+      "supported_media_types": "MediaType.ALL",
+      "constructor_javap_sha256": "cfea4a110dd7fd20d626029824bf19b96a2e800909ac645d2320c0047c4b8966"
+    }
+  },
+  "diagnostic_http_before": {
+    "request_count": 32,
+    "business_writes": false,
+    "SQL": false,
+    "endpoints": [
+      {
+        "method": "GET",
+        "path": "/core/module/sys/login-links/gikam-attrs/mybatis-mapper",
+        "return_kind": "string"
+      },
+      {
+        "method": "GET",
+        "path": "/open/core/module/sys/i18ns/configs",
+        "return_kind": "list"
+      }
+    ],
+    "paired_matrix": [
+      {
+        "return_kind": "string",
+        "accept": "application/json",
+        "owned": {
+          "status": 200,
+          "raw_content_type": "application/json",
+          "body_bytes": 863,
+          "body_sha256": "e5b437c81047a781de11d4ab674c7fc5c88eea1b63b16f52d46028d309984fad"
+        },
+        "supplier": {
+          "status": 200,
+          "raw_content_type": "application/json;charset=UTF-8",
+          "body_bytes": 863,
+          "body_sha256": "e5b437c81047a781de11d4ab674c7fc5c88eea1b63b16f52d46028d309984fad"
+        },
+        "supplier_serialization": "raw-string"
+      },
+      {
+        "return_kind": "string",
+        "accept": "text/plain",
+        "owned": {
+          "status": 200,
+          "raw_content_type": "text/plain;charset=UTF-8",
+          "body_bytes": 863,
+          "body_sha256": "e5b437c81047a781de11d4ab674c7fc5c88eea1b63b16f52d46028d309984fad"
+        },
+        "supplier": {
+          "status": 200,
+          "raw_content_type": "text/plain;charset=UTF-8",
+          "body_bytes": 863,
+          "body_sha256": "e5b437c81047a781de11d4ab674c7fc5c88eea1b63b16f52d46028d309984fad"
+        },
+        "supplier_serialization": "raw-string"
+      },
+      {
+        "return_kind": "string",
+        "accept": "text/html",
+        "owned": {
+          "status": 200,
+          "raw_content_type": "text/html;charset=UTF-8",
+          "body_bytes": 863,
+          "body_sha256": "e5b437c81047a781de11d4ab674c7fc5c88eea1b63b16f52d46028d309984fad"
+        },
+        "supplier": {
+          "status": 200,
+          "raw_content_type": "text/html;charset=UTF-8",
+          "body_bytes": 1072,
+          "body_sha256": "10fb32fdaf3b16110e592cf205d7e8dc1476399f6c5e9bfcb772afb7a8c10904"
+        },
+        "supplier_serialization": "json-quoted-string"
+      },
+      {
+        "return_kind": "string",
+        "accept": "application/xml",
+        "owned": {
+          "status": 200,
+          "raw_content_type": "application/xml;charset=UTF-8",
+          "body_bytes": 863,
+          "body_sha256": "e5b437c81047a781de11d4ab674c7fc5c88eea1b63b16f52d46028d309984fad"
+        },
+        "supplier": {
+          "status": 200,
+          "raw_content_type": "application/xml;charset=UTF-8",
+          "body_bytes": 1072,
+          "body_sha256": "10fb32fdaf3b16110e592cf205d7e8dc1476399f6c5e9bfcb772afb7a8c10904"
+        },
+        "supplier_serialization": "json-quoted-string"
+      },
+      {
+        "return_kind": "string",
+        "accept": "text/xml",
+        "owned": {
+          "status": 200,
+          "raw_content_type": "text/xml;charset=UTF-8",
+          "body_bytes": 863,
+          "body_sha256": "e5b437c81047a781de11d4ab674c7fc5c88eea1b63b16f52d46028d309984fad"
+        },
+        "supplier": {
+          "status": 200,
+          "raw_content_type": "text/xml;charset=UTF-8",
+          "body_bytes": 1072,
+          "body_sha256": "10fb32fdaf3b16110e592cf205d7e8dc1476399f6c5e9bfcb772afb7a8c10904"
+        },
+        "supplier_serialization": "json-quoted-string"
+      },
+      {
+        "return_kind": "string",
+        "accept": "text/javascript",
+        "owned": {
+          "status": 200,
+          "raw_content_type": "text/javascript;charset=UTF-8",
+          "body_bytes": 863,
+          "body_sha256": "e5b437c81047a781de11d4ab674c7fc5c88eea1b63b16f52d46028d309984fad"
+        },
+        "supplier": {
+          "status": 200,
+          "raw_content_type": "text/javascript;charset=UTF-8",
+          "body_bytes": 1072,
+          "body_sha256": "10fb32fdaf3b16110e592cf205d7e8dc1476399f6c5e9bfcb772afb7a8c10904"
+        },
+        "supplier_serialization": "json-quoted-string"
+      },
+      {
+        "return_kind": "string",
+        "accept": "image/png",
+        "owned": {
+          "status": 200,
+          "raw_content_type": "image/png;charset=UTF-8",
+          "body_bytes": 863,
+          "body_sha256": "e5b437c81047a781de11d4ab674c7fc5c88eea1b63b16f52d46028d309984fad"
+        },
+        "supplier": {
+          "status": 500,
+          "raw_content_type": null,
+          "body_bytes": 12336,
+          "body_sha256": "7f4b697c7d6030ec7b3e9d47f5b75ec1ee5d398b99d960edf485f213414d9ca9"
+        },
+        "supplier_serialization": "error-envelope"
+      },
+      {
+        "return_kind": "string",
+        "accept": "*/*",
+        "owned": {
+          "status": 200,
+          "raw_content_type": "text/plain;charset=UTF-8",
+          "body_bytes": 863,
+          "body_sha256": "e5b437c81047a781de11d4ab674c7fc5c88eea1b63b16f52d46028d309984fad"
+        },
+        "supplier": {
+          "status": 200,
+          "raw_content_type": "text/plain;charset=UTF-8",
+          "body_bytes": 863,
+          "body_sha256": "e5b437c81047a781de11d4ab674c7fc5c88eea1b63b16f52d46028d309984fad"
+        },
+        "supplier_serialization": "raw-string"
+      },
+      {
+        "return_kind": "list",
+        "accept": "application/json",
+        "owned": {
+          "status": 200,
+          "raw_content_type": "application/json",
+          "body_bytes": 119,
+          "body_sha256": "bd46f8535407892579a48473fd95dc845367d605d4ee8cca94fe6af5aa28a258"
+        },
+        "supplier": {
+          "status": 200,
+          "raw_content_type": "application/json;charset=UTF-8",
+          "body_bytes": 119,
+          "body_sha256": "bd46f8535407892579a48473fd95dc845367d605d4ee8cca94fe6af5aa28a258"
+        },
+        "supplier_serialization": "json-body"
+      },
+      {
+        "return_kind": "list",
+        "accept": "text/plain",
+        "owned": {
+          "status": 200,
+          "raw_content_type": "text/plain",
+          "body_bytes": 119,
+          "body_sha256": "bd46f8535407892579a48473fd95dc845367d605d4ee8cca94fe6af5aa28a258"
+        },
+        "supplier": {
+          "status": 200,
+          "raw_content_type": "text/plain;charset=UTF-8",
+          "body_bytes": 119,
+          "body_sha256": "bd46f8535407892579a48473fd95dc845367d605d4ee8cca94fe6af5aa28a258"
+        },
+        "supplier_serialization": "json-body"
+      },
+      {
+        "return_kind": "list",
+        "accept": "text/html",
+        "owned": {
+          "status": 200,
+          "raw_content_type": "text/html",
+          "body_bytes": 119,
+          "body_sha256": "bd46f8535407892579a48473fd95dc845367d605d4ee8cca94fe6af5aa28a258"
+        },
+        "supplier": {
+          "status": 200,
+          "raw_content_type": "text/html;charset=UTF-8",
+          "body_bytes": 119,
+          "body_sha256": "bd46f8535407892579a48473fd95dc845367d605d4ee8cca94fe6af5aa28a258"
+        },
+        "supplier_serialization": "json-body"
+      },
+      {
+        "return_kind": "list",
+        "accept": "application/xml",
+        "owned": {
+          "status": 200,
+          "raw_content_type": "application/xml",
+          "body_bytes": 119,
+          "body_sha256": "bd46f8535407892579a48473fd95dc845367d605d4ee8cca94fe6af5aa28a258"
+        },
+        "supplier": {
+          "status": 200,
+          "raw_content_type": "application/xml;charset=UTF-8",
+          "body_bytes": 119,
+          "body_sha256": "bd46f8535407892579a48473fd95dc845367d605d4ee8cca94fe6af5aa28a258"
+        },
+        "supplier_serialization": "json-body"
+      },
+      {
+        "return_kind": "list",
+        "accept": "text/xml",
+        "owned": {
+          "status": 200,
+          "raw_content_type": "text/xml",
+          "body_bytes": 119,
+          "body_sha256": "bd46f8535407892579a48473fd95dc845367d605d4ee8cca94fe6af5aa28a258"
+        },
+        "supplier": {
+          "status": 200,
+          "raw_content_type": "text/xml;charset=UTF-8",
+          "body_bytes": 119,
+          "body_sha256": "bd46f8535407892579a48473fd95dc845367d605d4ee8cca94fe6af5aa28a258"
+        },
+        "supplier_serialization": "json-body"
+      },
+      {
+        "return_kind": "list",
+        "accept": "text/javascript",
+        "owned": {
+          "status": 200,
+          "raw_content_type": "text/javascript",
+          "body_bytes": 119,
+          "body_sha256": "bd46f8535407892579a48473fd95dc845367d605d4ee8cca94fe6af5aa28a258"
+        },
+        "supplier": {
+          "status": 200,
+          "raw_content_type": "text/javascript;charset=UTF-8",
+          "body_bytes": 119,
+          "body_sha256": "bd46f8535407892579a48473fd95dc845367d605d4ee8cca94fe6af5aa28a258"
+        },
+        "supplier_serialization": "json-body"
+      },
+      {
+        "return_kind": "list",
+        "accept": "image/png",
+        "owned": {
+          "status": 200,
+          "raw_content_type": "image/png",
+          "body_bytes": 119,
+          "body_sha256": "bd46f8535407892579a48473fd95dc845367d605d4ee8cca94fe6af5aa28a258"
+        },
+        "supplier": {
+          "status": 500,
+          "raw_content_type": null,
+          "body_bytes": 12316,
+          "body_sha256": "256cc118a0e9db0287e0b081115921f1ab0ddc78f5053ceea8bb06936ff11057"
+        },
+        "supplier_serialization": "error-envelope"
+      },
+      {
+        "return_kind": "list",
+        "accept": "*/*",
+        "owned": {
+          "status": 200,
+          "raw_content_type": "application/json",
+          "body_bytes": 119,
+          "body_sha256": "bd46f8535407892579a48473fd95dc845367d605d4ee8cca94fe6af5aa28a258"
+        },
+        "supplier": {
+          "status": 200,
+          "raw_content_type": "application/json;charset=UTF-8",
+          "body_bytes": 119,
+          "body_sha256": "bd46f8535407892579a48473fd95dc845367d605d4ee8cca94fe6af5aa28a258"
+        },
+        "supplier_serialization": "json-body"
+      }
+    ],
+    "capture_sha256": "267c49e8f76b1f4e2e0a8245d916f7a864666b95e273f1fa8d884872ce195726",
+    "interpretation": "These real responses establish the pre-repair compatibility difference only. Matching status, normalized content type or parsed JSON alone would miss raw-header and String quoting differences. Unsupported image/png reached the original error handling as HTTP500 without Content-Type; no change to exception classification is part of this repair."
+  },
+  "replacement": {
+    "source": "reconstituted/framework/owned-core-common/src/main/java/com/sunwayworld/boot/ApplicationMvcConfiguration.java",
+    "override": "reconstituted/overrides/framework/owned-core-common/src/main/java/com/sunwayworld/boot/ApplicationMvcConfiguration.java",
+    "behavior": "Restore the original two converters in order, their exact UTF-8 supported media types and existing public FastJson serialization; do not append Spring defaults. Preserve resource mappings, path matching, resolvers and component-scan exclusions.",
+    "resource_boundary": "Static and /files resources are served by ResourceHttpRequestHandler with its own resource converters. Ordinary MultipartFile parameters use multipart resolvers, and RestJsonWrapperBean uses its original direct JSON-stream resolver. This repair does not change multipart limits or storage."
+  },
+  "analysis_method": [
+    "complete exact-symbol native disassembly; no native execution",
+    "original Java class method declaration and class hashes",
+    "public FastJson constructor bytecode inspection",
+    "existing real HTTP same-request Accept matrix"
+  ],
+  "limitations": [
+    "Static export evidence and diagnostic HTTP are not API strict closure.",
+    "Retain original supplier serialization, including JSON String quoting under HTML/XML/JavaScript media types; do not redesign it as XML rendering.",
+    "No supplier private class, native loader, license behavior, extra runtime or new compatibility process is introduced.",
+    "No multipart configuration or currently excluded transitional byte-array controller is activated."
+  ]
+}

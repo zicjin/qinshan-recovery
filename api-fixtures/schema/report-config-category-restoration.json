@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "purpose": "Restore original nullable report-group CATEGORY required by stock selectTreeList; one column and comment only, no business values or permission backfill.",
+  "purpose": "Add the historical stock 14.1.5 nullable report-group CATEGORY compatibility column; current production also lacks it. No business values or permission backfill.",
   "owner": "LIMS_RUNTIME_LOCAL",
   "container": "FREEPDB1",
   "table": "T_CORE_REPORT_CONFIG",
@@ -187,7 +187,7 @@
   ],
   "fixture": {
     "path": "api-fixtures/schema/report-config-category-restoration.sql",
-    "sha256": "6b22a336765d4cb4cc4a0db91b5382d3000e0e111f723ac36e05fe8808bf410e"
+    "sha256": "b52aa40120191a7b5a7c17917ea2135ca3023d56dfd78ec4164203f5430088a4"
   },
   "transformations": [
     "Extract only CATEGORY VARCHAR2(36 BYTE), nullable without default, from source CREATE TABLE into qualified ALTER TABLE ADD; preserve existing seven runtime columns and row values.",
@@ -199,7 +199,7 @@
     "permissions": "Stock tree mapper role-permission OR branches additionally require CATEGORY=select and ACTIVATEDFLAG=1. NULL does not satisfy those branches. Original UI separately filters category_SEQ=select.",
     "existing_rows": "Adding a nullable column without DEFAULT leaves existing rows NULL. Do not assign select/common/reportlet or infer values from REPORTCONFIGCATEGORY.",
     "distinct_fields": "REPORTCONFIGCATEGORY is a project ext$ classification. Child REPORTCATEGORY has source reportlet backfill; that does not apply to parent CATEGORY.",
-    "attribution": "Stock 14.1.5 mapper expects a column absent in both snapshot schemas. Existing dictionaries are partly bootstrapped. Historical skipped migration versus divergent/customized schema cannot be proven from current metadata."
+    "attribution": "2026-11-09 production metadata and both test snapshots lack CATEGORY. The historical 14.1.5 release SQL and stock Mapper require it: this is an application/schema version-contract difference, not evidence of a production column lost during import. Retain the local column as an explicit stock compatibility extension."
   },
   "limits": [
     "Oracle DDL implicitly commits; this fixture is not atomic and cannot claim transaction rollback. Use a dedicated session without pending DML.",
@@ -209,5 +209,13 @@
     "No baseline refresh, policy/helper extension, seed creation, permission grant, external report execution, app refresh or API evidence promotion.",
     "If ADD succeeds but COMMENT fails, retain the error and inspect partial schema; rerun rejects incomplete metadata rather than repairing silently.",
     "Positive report-tree and no-match HTTP must be rerun after authorized application; category-filtered positives remain unknown without explicit legitimate configuration."
-  ]
+  ],
+  "production_schema_observation": {
+    "captured_date": "2026-11-09",
+    "table": "T_CORE_REPORT_CONFIG",
+    "category_present": false,
+    "source_metadata_ddl_sha256": "f3c6fd01bfea34aef1acd553d149b7c844792ecf3df1f4f8cf08bd9b11cadb88",
+    "source_artifact_sha256": "43fe29d8053bad811c8639dbea99104b538dd3b1b0bdf0c64f7261d282afede6",
+    "repository_release_sql_is_production_snapshot": false
+  }
 }

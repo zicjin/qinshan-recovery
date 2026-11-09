@@ -125,6 +125,14 @@ invalid source identifiers and Oracle-generated hidden columns are not guessed.
 Existing schema policies are unchanged, so this runtime delta is diagnostic
 until explicitly covered by a subsequent milestone contract.
 
+The original `project/sql/` release files are historical inputs, not a current
+production DDL snapshot; see [their scope](../../project/sql/README.md). In
+particular, `report-config-category-restoration.sql` adds a stock 14.1.5
+compatibility column. The 2026-11-09 production metadata also lacks CATEGORY,
+so this fixture must not be described as restoring a column lost during import.
+Its historical CREATE TABLE source and Mapper pins stay unchanged. Current
+production alignment and explicit stock/test extensions remain separate.
+
 `invoice-returned-hierarchy.sql` is a separate metadata DML fixture, not part of
 this directory's seven-table schema DDL fixture. It restores only the three
 original invoice/return `T_CORE_TABLE` and `T_CORE_TABLE_HIERARCHY` records needed

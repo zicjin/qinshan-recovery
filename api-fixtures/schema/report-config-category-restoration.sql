@@ -1,4 +1,6 @@
--- Restore only the source-declared nullable report group CATEGORY column.
+-- Add the historical stock 14.1.5 report CATEGORY compatibility column only.
+-- Production metadata captured 2026-11-09 also lacks CATEGORY: this is not a
+-- production-import repair or an assertion of current production equivalence.
 -- Source: project/sql/核心发版14.1.5/init-sql/oracle/0.common_sql_oracle-1.txt:2321-2334.
 -- Oracle DDL implicitly commits: this is not an atomic transaction rollback.
 -- Use a dedicated session with no pending writes. Preserve partial-failure logs;

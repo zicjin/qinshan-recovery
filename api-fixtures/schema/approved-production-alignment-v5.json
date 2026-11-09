@@ -1,0 +1,189 @@
+{
+  "schema": "approved-production-alignment-policy-input-v1",
+  "policy_id": "approved-runtime-production-alignment-v5",
+  "owner": "LIMS_RUNTIME_LOCAL",
+  "container": "FREEPDB1",
+  "predecessor_id": "approved-runtime-les-data-source-v4",
+  "predecessor_descriptor_sha256": "c6af89101645d95c767bdd68bc331700f34b2b2eee1ee8b38a28ba8f95f0e92a",
+  "migration_commit": "4532ae55242dd14a90905c22fe2fa43d7691cefc",
+  "category_implementation_commit": "083b4e6e",
+  "pins": [
+    {
+      "path": "api-fixtures/schema/production-ddl-alignment-20261109.json",
+      "sha256": "1a5317b6f0a53dfec48341d6b9d0463056c931b2259c238bf93797ace0e6358b"
+    },
+    {
+      "path": "api-fixtures/schema/production-ddl-alignment-20261109.sql",
+      "sha256": "20a53eab2bffc80a4491fa0625efccb75ff0caecee8abe8f285383ed77da1325"
+    },
+    {
+      "path": "api-fixtures/schema/production-ddl-field-alignment-20261109.json",
+      "sha256": "68aa2532cda2aa1155300341d7511279a429c1620eb6e81960a566d9e28e4a8e"
+    },
+    {
+      "path": "api-fixtures/schema/production-ddl-field-alignment-20261109.sql",
+      "sha256": "edc02b1d487e2821ee3ebad839186d4a93ff5de46ef1d8df9240be6db3a6b3b1"
+    },
+    {
+      "path": "api-fixtures/schema/production-ddl-source-20261109.json",
+      "sha256": "4553859307cd4c60a6ac847e779b719d9562c28a3c178d40d728402b6c2acab5"
+    },
+    {
+      "path": "api-fixtures/schema/report-config-category-restoration.json",
+      "sha256": "7308d7827324ff8240327a201db86d3a16adf8b6b405b0f2dacc4f97e793d2ba"
+    },
+    {
+      "path": "api-fixtures/schema/report-config-category-restoration.sql",
+      "sha256": "b52aa40120191a7b5a7c17917ea2135ca3023d56dfd78ec4164203f5430088a4"
+    }
+  ],
+  "added_table": "T_EMC_EQUIPT_ACQ_FILE",
+  "shared_width_transforms": [
+    {
+      "table": "T_CORE_AT_RECORD_LINE",
+      "column": "COLUMN",
+      "before_bytes": 60,
+      "after_bytes": 64
+    },
+    {
+      "table": "T_CORE_AT_RECORD_LINE",
+      "column": "CREATEDBYNAME",
+      "before_bytes": 60,
+      "after_bytes": 64
+    },
+    {
+      "table": "T_CORE_AT_RECORD_LINE",
+      "column": "CREATEDBYID",
+      "before_bytes": 36,
+      "after_bytes": 32
+    },
+    {
+      "table": "T_CORE_AT_RECORD_LINE",
+      "column": "CREATEDBYORGID",
+      "before_bytes": 36,
+      "after_bytes": 32
+    },
+    {
+      "table": "T_CORE_AT_RECORD_LINE",
+      "column": "CREATEDBYORGNAME",
+      "before_bytes": 270,
+      "after_bytes": 256
+    },
+    {
+      "table": "T_CORE_AT_RECORD_LINE",
+      "column": "TARGETID",
+      "before_bytes": 129,
+      "after_bytes": 128
+    },
+    {
+      "table": "T_CORE_BPMN_COMMENT",
+      "column": "COMMENT",
+      "before_bytes": 300,
+      "after_bytes": 4000
+    },
+    {
+      "table": "T_EMC_AUDIT_RECORD",
+      "column": "COMMENTS",
+      "before_bytes": 600,
+      "after_bytes": 4000
+    },
+    {
+      "table": "T_EMC_FOLDER",
+      "column": "MONITORPOINTNAME",
+      "before_bytes": 300,
+      "after_bytes": 900
+    }
+  ],
+  "core_file_width_transforms": {
+    "TARGETID": [
+      60,
+      64
+    ],
+    "NAME": [
+      258,
+      3000
+    ],
+    "MD5NAME": [
+      36,
+      32
+    ],
+    "BIZCATEGORY": [
+      36,
+      32
+    ],
+    "EXT": [
+      129,
+      128
+    ],
+    "CREATEDBYID": [
+      36,
+      32
+    ],
+    "CREATEDBYNAME": [
+      60,
+      64
+    ],
+    "CREATEDBYORGID": [
+      36,
+      32
+    ]
+  },
+  "core_file_number_transforms": {
+    "TIMES": [
+      4,
+      0
+    ],
+    "SIZE": [
+      20,
+      0
+    ],
+    "VERSION": [
+      20,
+      0
+    ]
+  },
+  "core_file_remark_transformation": "drop-empty-varchar258-ordinal17-add-clob-ordinal21",
+  "report_category_fixture": "api-fixtures/schema/report-config-category-restoration.json",
+  "indexes": [
+    {
+      "table": "T_CORE_AT_RECORD_LINE",
+      "name": "IDX_CORE_ATRECORDLINE_TARGETID",
+      "columns": [
+        "TARGETID"
+      ]
+    },
+    {
+      "table": "T_CORE_FILE",
+      "name": "IDX_CORE_FILE_TARGET_BIZ_ID",
+      "columns": [
+        "TARGETID",
+        "BIZCATEGORY",
+        "ID"
+      ]
+    },
+    {
+      "table": "T_CORE_FILE",
+      "name": "IDX_CORE_FILE_TARGET_ID",
+      "columns": [
+        "TARGETID",
+        "ID"
+      ]
+    },
+    {
+      "table": "T_CORE_FILE",
+      "name": "IDX_CORE_FILE_TARGET_SCOPE_ID",
+      "columns": [
+        "TARGETID",
+        "SCOPE",
+        "ID"
+      ]
+    }
+  ],
+  "function": "STRINGTOSCIENCE",
+  "retained_differences": [
+    "T_CORE_AT_RECORD_LINE.ID and RECORDID retain baseline unbounded NUMBER, not production NUMBER(20,0).",
+    "T_CORE_FILE physical order follows approved in-place v3 restoration then REMARK DROP/ADD, not production whole-table ordinals.",
+    "T_CORE_REPORT_CONFIG.CATEGORY is an explicit stock 14.1.5 extension; current production also lacks it."
+  ],
+  "acceptance": "Only source-pinned ordered transformations; no schema acquisition, DDL execution, content mutation or API pass is provided."
+}

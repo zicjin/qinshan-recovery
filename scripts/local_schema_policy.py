@@ -5,19 +5,21 @@ This module neither connects to a database nor renders or executes fixture DDL.
 Proof validates supplied observations, not their acquisition authenticity.
 """
 from __future__ import annotations
+import copy
 import hashlib
 import importlib.util
 import json
 from pathlib import Path
 import re
-from schema_fixture import BASE, OWNER, TABLES, FixtureError, checks, load_fixture
+from schema_fixture import BASE, OWNER, TABLES, FixtureError, checks, load_fixture, literal
 
 EQUAL = 'equal-schema'
 APPROVED = 'approved-missing-runtime-tables-v1'
 APPROVED_EMAIL = 'approved-missing-runtime-and-email-tables-v2'
 APPROVED_FILE = 'approved-runtime-core-file-v3'
 APPROVED_LES = 'approved-runtime-les-data-source-v4'
-POLICIES = (EQUAL, APPROVED, APPROVED_EMAIL, APPROVED_FILE, APPROVED_LES)
+APPROVED_PRODUCTION = 'approved-runtime-production-alignment-v5'
+POLICIES = (EQUAL, APPROVED, APPROVED_EMAIL, APPROVED_FILE, APPROVED_LES, APPROVED_PRODUCTION)
 ROOT = Path(__file__).resolve().parents[1]
 FIXTURE_SHA256 = 'd1227563b5a27ef249376a0652ddd10f9edb6526f64a0df7b2e466ac9b5adfcb'
 DEFINITIONS = {
@@ -44,6 +46,9 @@ LES_DEFINITIONS = {
     'T_CORE_LES_DS': 'fe554b8dae313c9f1a7a8db1c6a59583fbd5232fcc3dc7b43360e8ac19df049e',
     'T_CORE_LES_DS_FIELD': '319730d6ed00daae131146e97bc0ceca38353772841b5f65b7cd16f0b9ae80da',
 }
+PRODUCTION_BASE = 'api-fixtures/schema/approved-production-alignment-v5.json'
+PRODUCTION_MANIFEST_SHA256 = 'e464f124d77911f5e3f7d190d5089d71e061bb929e16da4fc0dd634ecc8217cf'
+ACQUISITION_TABLE = 'T_EMC_EQUIPT_ACQ_FILE'
 
 
 class PolicyError(ValueError):
@@ -110,6 +115,8 @@ def email_fixture(root):
 
 def policy_tables(policy):
     require(policy in POLICIES, 'unknown local schema policy')
+    if policy == APPROVED_PRODUCTION:
+        return policy_tables(APPROVED_LES) | frozenset({ACQUISITION_TABLE})
     tables = TABLES | frozenset(EMAIL_DEFINITIONS) if policy in (APPROVED_EMAIL, APPROVED_FILE, APPROVED_LES) else TABLES
     return tables | frozenset(LES_DEFINITIONS) if policy == APPROVED_LES else tables
 
@@ -233,8 +240,278 @@ def core_file_column_rows(columns):
     return sorted(rows)
 
 
+def production_column(row):
+    return {'name': row['COLUMN_NAME'], 'type': row['DATA_TYPE'],
+            'length': int(row['DATA_LENGTH']) if row['DATA_TYPE'] == 'VARCHAR2' else None,
+            'precision': int(row['DATA_PRECISION']) if row['DATA_PRECISION'] is not None else None,
+            'scale': int(row['DATA_SCALE']) if row['DATA_SCALE'] is not None else None,
+            'nullable': row['NULLABLE']}
+
+
+def production_column_rows(table, columns):
+    rows = []
+    for ordinal, col in enumerate(columns, 1):
+        varchar = col['type'] == 'VARCHAR2'
+        length = col['length'] if varchar else {'NUMBER': 22, 'DATE': 7, 'CLOB': 4000}[col['type']]
+        rows.append([table, col['name'], str(ordinal), col['type'], str(length),
+                     str(col['precision']) if col['precision'] is not None else '-',
+                     str(col['scale']) if col['scale'] is not None else '-', col['nullable'],
+                     str(col['length']) if varchar else '0', 'B' if varchar else '-', '-'])
+    return sorted(rows)
+
+
+def production_index_predicates(item):
+    name, table, columns = item['name'], item['table'], item['columns']
+    key = "OWNER='LIMS_RUNTIME_LOCAL' AND INDEX_NAME=" + literal(name)
+    result = [{'table': table, 'view': 'ALL_INDEXES', 'predicate': key
+               + ' AND TABLE_NAME=' + literal(table)
+               + " AND INDEX_TYPE='NORMAL' AND STATUS='VALID' AND UNIQUENESS='NONUNIQUE'",
+               'expected_count': 1}]
+    key = "INDEX_OWNER='LIMS_RUNTIME_LOCAL' AND INDEX_NAME=" + literal(name)
+    result.append({'table': table, 'view': 'ALL_IND_COLUMNS', 'predicate': key,
+                   'expected_count': len(columns)})
+    result.extend({'table': table, 'view': 'ALL_IND_COLUMNS', 'predicate': key
+                   + ' AND COLUMN_NAME=' + literal(column) + ' AND COLUMN_POSITION=' + str(position)
+                   + " AND DESCEND='ASC'", 'expected_count': 1}
+                  for position, column in enumerate(columns, 1))
+    return result
+
+
+def production_fixture(root):
+    """Derive only the already-reviewed v5 changes from immutable source inputs.
+
+    This is an offline finite contract, not a schema learner or DDL executor.
+    """
+    root = Path(root)
+    try:
+        raw = (root / PRODUCTION_BASE).read_bytes()
+        require(hashlib.sha256(raw).hexdigest() == PRODUCTION_MANIFEST_SHA256,
+                'production alignment policy manifest drift')
+        manifest = json.loads(raw)
+        require(manifest['policy_id'] == APPROVED_PRODUCTION and manifest['owner'] == OWNER
+                and manifest['container'] == 'FREEPDB1', 'production alignment target drift')
+        for pin in manifest['pins']:
+            require(hashlib.sha256((root / pin['path']).read_bytes()).hexdigest() == pin['sha256'],
+                    'production alignment source pin drift')
+        predecessor, _ = definition(APPROVED_LES, root)
+        require(digest(predecessor) == manifest['predecessor_descriptor_sha256'],
+                'production alignment predecessor drift')
+        source = json.loads((root / 'api-fixtures/schema/production-ddl-source-20261109.json').read_text())
+        source_columns = {(r['TABLE_NAME'], r['COLUMN_NAME']): r for r in source['columns']}
+        sql_texts = []
+        for name in ('production-ddl-alignment-20261109', 'production-ddl-field-alignment-20261109'):
+            migration = json.loads((root / ('api-fixtures/schema/' + name + '.json')).read_text())
+            sql = (root / migration['sql']['path']).read_bytes()
+            require(hashlib.sha256(sql).hexdigest() == migration['sql']['sha256']
+                    and migration['reviewed_source']['sha256'] == hashlib.sha256(
+                        (root / migration['reviewed_source']['path']).read_bytes()).hexdigest(),
+                    'production migration provenance drift')
+            sql_texts.append(sql.decode('utf-8'))
+        migration_sql = '\n'.join(sql_texts)
+        transforms = []
+        for item in manifest['shared_width_transforms']:
+            table, name = item['table'], item['column']
+            after = production_column(source_columns[table, name])
+            require(after['type'] == 'VARCHAR2' and after['length'] == item['after_bytes'],
+                    'production shared target differs from reviewed source')
+            require(f'ALTER TABLE "{OWNER}"."{table}" MODIFY ("{name}" VARCHAR2({after["length"]} BYTE));'
+                    in migration_sql, 'production shared transformation missing from migration')
+            before = {**after, 'length': item['before_bytes']}
+            transforms.append({'table': table, 'column': name, 'before': before, 'after': after})
+        historical, target, file_provenance = core_file_fixture(root)
+        target = copy.deepcopy(target)
+        for name, (before_width, after_width) in manifest['core_file_width_transforms'].items():
+            col = next(c for c in target['columns'] if c['name'] == name)
+            require(col['type'] == 'VARCHAR2' and col['length'] == before_width,
+                    'production CoreFile predecessor width drift')
+            after = production_column(source_columns[FILE_TABLE, name])
+            require(after['length'] == after_width
+                    and f'ALTER TABLE "{OWNER}"."{FILE_TABLE}" MODIFY ("{name}" VARCHAR2({after_width} BYTE));'
+                    in migration_sql, 'production CoreFile width not source-bound')
+            col.update(after)
+        for name, (precision, scale) in manifest['core_file_number_transforms'].items():
+            col = next(c for c in target['columns'] if c['name'] == name)
+            require((col['type'], col['precision'], col['scale']) == ('NUMBER', precision, scale),
+                    'production CoreFile predecessor number drift')
+            after = production_column(source_columns[FILE_TABLE, name])
+            require(after['precision'] is None and after['scale'] is None
+                    and f'ALTER TABLE "{OWNER}"."{FILE_TABLE}" MODIFY ("{name}" NUMBER);'
+                    in migration_sql, 'production CoreFile number not source-bound')
+            col.update(after)
+        remark = next(c for c in target['columns'] if c['name'] == 'REMARK')
+        require(remark['type'] == 'VARCHAR2' and remark['length'] == 258
+                and target['columns'].index(remark) == 16
+                and f'ALTER TABLE "{OWNER}"."{FILE_TABLE}" DROP COLUMN "REMARK";' in migration_sql
+                and f'ALTER TABLE "{OWNER}"."{FILE_TABLE}" ADD ("REMARK" CLOB);' in migration_sql,
+                'production CoreFile REMARK migration drift')
+        target['columns'].remove(remark)
+        target['columns'].append(production_column(source_columns[FILE_TABLE, 'REMARK']))
+        require(len(target['columns']) == 21 and target['columns'][-1]['type'] == 'CLOB',
+                'production CoreFile physical order drift')
+        acquisition_columns = sorted((r for r in source['columns'] if r['TABLE_NAME'] == ACQUISITION_TABLE),
+                                     key=lambda r: int(r['COLUMN_ID']))
+        require(len(acquisition_columns) == 9, 'production acquisition column coverage drift')
+        added = {'columns': [production_column(r) for r in acquisition_columns],
+                 'primary_key': {'name': 'APPROVED_ACQ_PK', 'column': 'ID'},
+                 'indexes': [], 'comments': {}}
+        acquisition_ddl = source['table_ddl'][0]['ddl']
+        require(source['table_ddl'][0]['name'] == ACQUISITION_TABLE
+                and '\n'.join(line.rstrip() for line in acquisition_ddl.replace(
+                    '"SOURCE_SCHEMA".', '"' + OWNER + '".').splitlines()).strip() in migration_sql,
+                'production acquisition DDL not source-bound')
+        for column, text in re.findall(r'COMMENT ON COLUMN "LIMS_RUNTIME_LOCAL"\."T_EMC_EQUIPT_ACQ_FILE"\."([A-Z_]+)" IS \'((?:[^\']|\'\')*)\';', migration_sql):
+            added['comments'][column] = text.replace("''", "'")
+        require(len(added['comments']) == 8, 'production acquisition comments incomplete')
+        category = json.loads((root / manifest['report_category_fixture']).read_text())
+        for item in category['sources']:
+            data = (root / item['path']).read_bytes()
+            require(hashlib.sha256(data).hexdigest() == item['sha256'], 'report category source drift')
+            lines = data.decode('utf-8').splitlines()
+            for block in item['blocks']:
+                text = '\n'.join(lines[block['line_start'] - 1:block['line_end']])
+                require(hashlib.sha256(text.encode()).hexdigest() == block['sha256'],
+                        'report category source block drift')
+        require(hashlib.sha256((root / category['fixture']['path']).read_bytes()).hexdigest()
+                == category['fixture']['sha256'], 'report category fixture drift')
+        report_columns = [production_column({'COLUMN_NAME': c['name'], 'DATA_TYPE': c['type'],
+                           'DATA_LENGTH': c['data_length'], 'DATA_PRECISION': c['precision'],
+                           'DATA_SCALE': c['scale'], 'NULLABLE': c['nullable']})
+                          for c in category['existing_columns']]
+        report_column = {'name': 'CATEGORY', 'type': 'VARCHAR2', 'length': 36,
+                         'precision': None, 'scale': None, 'nullable': 'Y'}
+        require(category['added_column'] == {'name': 'CATEGORY', 'type': 'VARCHAR2', 'length': 36,
+                'length_semantics': 'BYTE', 'nullable': 'Y', 'default': None, 'comment': '类别'},
+                'report category finite definition drift')
+        # Reuse the existing count/coverage proof envelope, including the function body.
+        predicates = []
+        for view, where, count in checks(ACQUISITION_TABLE, added):
+            # Stock CREATE TABLE has an unnamed primary key. Pin its exact structure,
+            # not the Oracle-generated identifier on this particular imported schema.
+            pk_query = "(SELECT CONSTRAINT_NAME FROM ALL_CONSTRAINTS WHERE OWNER='" + OWNER + "' AND TABLE_NAME='" + ACQUISITION_TABLE + "' AND CONSTRAINT_TYPE='P')"
+            index_query = "(SELECT INDEX_NAME FROM ALL_CONSTRAINTS WHERE OWNER='" + OWNER + "' AND TABLE_NAME='" + ACQUISITION_TABLE + "' AND CONSTRAINT_TYPE='P')"
+            where = where.replace("CONSTRAINT_NAME='APPROVED_ACQ_PK'", 'CONSTRAINT_NAME=' + pk_query)
+            where = where.replace("INDEX_NAME='APPROVED_ACQ_PK'", 'INDEX_NAME=' + index_query)
+            predicates.append({'table': ACQUISITION_TABLE, 'view': view, 'predicate': where, 'expected_count': count})
+        predicates.extend([
+            {'table': ACQUISITION_TABLE, 'view': 'ALL_CONSTRAINTS',
+             'predicate': "R_OWNER='" + OWNER + "' AND CONSTRAINT_TYPE='R' AND R_CONSTRAINT_NAME=" + pk_query,
+             'expected_count': 0},
+            {'table': ACQUISITION_TABLE, 'view': 'ALL_TAB_IDENTITY_COLS',
+             'predicate': "OWNER='" + OWNER + "' AND TABLE_NAME='" + ACQUISITION_TABLE + "'",
+             'expected_count': 0},
+        ])
+        for item in manifest['indexes']:
+            ddl = next(d['ddl'] for d in source['index_ddl'] if d['name'] == item['name'])
+            require('\n'.join(line.rstrip() for line in ddl.replace('"SOURCE_SCHEMA".',
+                    '"' + OWNER + '".').splitlines()).strip() in migration_sql,
+                    'production index DDL not source-bound')
+            require(re.findall(r'"([A-Z_]+)"', ddl)[-len(item['columns']):] == item['columns'],
+                    'production index column order drift')
+            predicates.extend(production_index_predicates(item))
+        function = source['function_ddl'][0]
+        require(function['name'] == manifest['function'] == 'STRINGTOSCIENCE',
+                'production function identity drift')
+        function_text = '\n'.join(line.rstrip() for line in function['ddl'].replace(
+            '"SOURCE_SCHEMA".', '"' + OWNER + '".').splitlines()).strip()
+        require(function_text in migration_sql, 'production function body not migration-bound')
+        function_text = re.sub(r'^CREATE OR REPLACE EDITIONABLE ', '', function_text)
+        function_text = function_text.replace('"' + OWNER + '".', '', 1)
+        function_lines = function_text.splitlines()
+        require(len(function_lines) == 44, 'production function line coverage drift')
+        function_filter = "OWNER='" + OWNER + "' AND NAME='STRINGTOSCIENCE' AND TYPE='FUNCTION'"
+        predicates.append({'table': 'STRINGTOSCIENCE', 'view': 'ALL_OBJECTS',
+                           'predicate': "OWNER='" + OWNER + "' AND OBJECT_NAME='STRINGTOSCIENCE' AND OBJECT_TYPE='FUNCTION' AND STATUS='VALID'",
+                           'expected_count': 1})
+        predicates.append({'table': 'STRINGTOSCIENCE', 'view': 'ALL_SOURCE',
+                           'predicate': function_filter, 'expected_count': len(function_lines)})
+        expression = "RAWTOHEX(UTL_RAW.CAST_TO_RAW(REGEXP_REPLACE(RTRIM(TEXT,CHR(10)||CHR(13)||' '),'^FUNCTION[[:space:]]+','FUNCTION ')))"
+        for number, line in enumerate(function_lines, 1):
+            hexadecimal = line.encode('utf-8').hex().upper()
+            predicates.append({'table': 'STRINGTOSCIENCE', 'view': 'ALL_SOURCE',
+                               'predicate': function_filter + ' AND LINE=' + str(number) + ' AND '
+                               + expression + ('=' + literal(hexadecimal) if hexadecimal else ' IS NULL'),
+                               'expected_count': 1})
+        provenance = {'manifest_path': PRODUCTION_BASE, 'manifest_sha256': PRODUCTION_MANIFEST_SHA256,
+                      'pins': manifest['pins'], 'predecessor_descriptor_sha256': digest(predecessor)}
+        return {'added_table': added, 'core_file_target': target, 'historical_core_file': historical,
+                'shared_column_transforms': transforms,
+                'report_category': {'baseline_columns': report_columns, 'column': report_column,
+                                    'comment': category['added_column']['comment']},
+                'indexes': manifest['indexes'], 'function': {'name': 'STRINGTOSCIENCE',
+                    'line_count': len(function_lines), 'source_sha256': digest(function_lines)},
+                'provenance': provenance}, predicates
+    except (OSError, KeyError, TypeError, ValueError, StopIteration) as error:
+        raise PolicyError('production alignment provenance or finite definition rejected') from error
+
+
+def production_shared_rows(baseline, production):
+    """Apply declared before/after shapes; every other baseline row stays exact."""
+    expected = copy.deepcopy(baseline)
+    for item in production['shared_column_transforms']:
+        matches = [r for r in expected if r[:2] == [item['table'], item['column']]]
+        require(len(matches) == 1, 'production shared predecessor column missing or duplicate')
+        row = matches[0]
+        before = production_column_rows(item['table'], [item['before']])[0]
+        require(row[3:] == before[3:], 'production shared predecessor column drift')
+        after = production_column_rows(item['table'], [item['after']])[0]
+        row[3:] = after[3:]
+    report = production['report_category']
+    require(sorted(r for r in expected if r[0] == 'T_CORE_REPORT_CONFIG')
+            == production_column_rows('T_CORE_REPORT_CONFIG', report['baseline_columns']),
+            'report category baseline metadata drift')
+    expected = [r for r in expected if r[0] != 'T_CORE_REPORT_CONFIG']
+    expected.extend(production_column_rows('T_CORE_REPORT_CONFIG',
+                    report['baseline_columns'] + [report['column']]))
+    return sorted(expected)
+
+
+def production_definition(root):
+    predecessor, predicates = definition(APPROVED_LES, root)
+    production, additional = production_fixture(root)
+    # Old policy paths and descriptors stay untouched. Only v5 replaces the
+    # runtime CoreFile target that was subsequently changed by approved DDL.
+    predicates = [p for p in predicates if p['table'] != FILE_TABLE]
+    file_predicates = core_file_predicates(production['historical_core_file'], production['core_file_target'])
+    for item in file_predicates:
+        if item['view'] == 'ALL_INDEXES' and item['predicate'] == "TABLE_OWNER='" + OWNER + "' AND TABLE_NAME='T_CORE_FILE' AND INDEX_TYPE<>'LOB'":
+            item['expected_count'] = 5
+    predicates.extend(file_predicates)
+    predicates.extend(additional)
+    for item in production['shared_column_transforms']:
+        col = item['after']
+        predicates.append({'table': item['table'], 'view': 'ALL_TAB_COLS',
+            'predicate': "OWNER='" + OWNER + "' AND TABLE_NAME=" + literal(item['table'])
+                + ' AND COLUMN_NAME=' + literal(item['column'])
+                + " AND DEFAULT_LENGTH IS NULL AND HIDDEN_COLUMN='NO' AND VIRTUAL_COLUMN='NO'"
+                + " AND DATA_TYPE='VARCHAR2' AND CHAR_USED='B' AND NULLABLE=" + literal(col['nullable'])
+                + ' AND DATA_LENGTH=' + str(col['length']) + ' AND CHAR_LENGTH=' + str(col['length'])
+                + ' AND DATA_PRECISION IS NULL AND DATA_SCALE IS NULL', 'expected_count': 1})
+    predicates.extend([
+        {'table': 'T_CORE_REPORT_CONFIG', 'view': 'ALL_TAB_COLS',
+         'predicate': "OWNER='" + OWNER + "' AND TABLE_NAME='T_CORE_REPORT_CONFIG' AND COLUMN_NAME='CATEGORY' AND COLUMN_ID=8 AND DATA_TYPE='VARCHAR2' AND DATA_LENGTH=36 AND CHAR_LENGTH=36 AND CHAR_USED='B' AND NULLABLE='Y' AND DATA_PRECISION IS NULL AND DATA_SCALE IS NULL AND DEFAULT_LENGTH IS NULL AND HIDDEN_COLUMN='NO' AND VIRTUAL_COLUMN='NO'", 'expected_count': 1},
+        {'table': 'T_CORE_REPORT_CONFIG', 'view': 'ALL_COL_COMMENTS',
+         'predicate': "OWNER='" + OWNER + "' AND TABLE_NAME='T_CORE_REPORT_CONFIG' AND COLUMN_NAME='CATEGORY' AND COMMENTS=" + literal(production['report_category']['comment']), 'expected_count': 1},
+        {'table': 'T_CORE_REPORT_CONFIG', 'view': 'ALL_CONS_COLUMNS',
+         'predicate': "OWNER='" + OWNER + "' AND TABLE_NAME='T_CORE_REPORT_CONFIG' AND COLUMN_NAME='CATEGORY'", 'expected_count': 0},
+    ])
+    descriptor = {**predecessor, 'id': APPROVED_PRODUCTION, 'table_count': 12,
+                  'column_count': 161, 'altered_tables': sorted({FILE_TABLE, 'T_CORE_REPORT_CONFIG',
+                     *(i['table'] for i in production['shared_column_transforms'])}),
+                  'core_file': {**predecessor['core_file'],
+                     'predecessor_runtime_definition_sha256': predecessor['core_file']['runtime_definition_sha256'],
+                     'runtime_definition_sha256': digest(production['core_file_target'])},
+                  'production_alignment': production['provenance'],
+                  'production_definition_sha256': digest({k: v for k, v in production.items() if k != 'provenance'}),
+                  'definition_sha256': {**predecessor['definition_sha256'],
+                     ACQUISITION_TABLE: digest(production['added_table'])},
+                  'predicates_sha256': digest(predicates)}
+    return descriptor, predicates
+
+
 def definition(policy=EQUAL, root=ROOT):
     require(policy in POLICIES, 'unknown local schema policy')
+    if policy == APPROVED_PRODUCTION:
+        return production_definition(root)
     if policy == EQUAL:
         return {'id': EQUAL}, []
     try:
@@ -289,9 +566,9 @@ def check_inventories(baseline, runtime, policy=EQUAL):
         require(baseline == runtime, 'baseline/runtime table inventories mismatch or empty')
     else:
         tables = policy_tables(policy)
-        require(policy in (APPROVED, APPROVED_EMAIL, APPROVED_FILE, APPROVED_LES) and not baseline.intersection(tables)
+        require(policy in (APPROVED, APPROVED_EMAIL, APPROVED_FILE, APPROVED_LES, APPROVED_PRODUCTION) and not baseline.intersection(tables)
                 and runtime == baseline.union(tables), 'approved schema table delta mismatch')
-        if policy in (APPROVED_FILE, APPROVED_LES):
+        if policy in (APPROVED_FILE, APPROVED_LES, APPROVED_PRODUCTION):
             require(FILE_TABLE in baseline, 'CoreFile historical baseline table missing')
 
 
@@ -340,10 +617,14 @@ def validate(snapshot, policy=EQUAL):
                     'schema policy column hash runtime binding mismatch')
         columns = snapshot['schemas'][OWNER]['column_metadata']['rows']
         loaded = load_fixture(ROOT)
-        if policy in (APPROVED_EMAIL, APPROVED_FILE, APPROVED_LES):
+        if policy in (APPROVED_EMAIL, APPROVED_FILE, APPROVED_LES, APPROVED_PRODUCTION):
             loaded.update(email_fixture(ROOT)[0])
-        if policy == APPROVED_LES:
+        if policy in (APPROVED_LES, APPROVED_PRODUCTION):
             loaded.update(les_fixture(ROOT)[0])
+        production = None
+        if policy == APPROVED_PRODUCTION:
+            production, _ = production_fixture(ROOT)
+            loaded[ACQUISITION_TABLE] = production['added_table']
         for table, d in loaded.items():
             actual = sorted([r for r in columns if r[0] == table], key=lambda r: int(r[2]))
             require(len(actual) == len(d['columns']), 'approved fixture column metadata coverage mismatch')
@@ -357,14 +638,23 @@ def validate(snapshot, policy=EQUAL):
                             'approved fixture character metadata mismatch')
         shared = [r for r in columns if r[0] not in policy_tables(policy)]
         baseline = snapshot['schemas']['LIMS_BASELINE_LOCAL']['column_metadata']['rows']
-        if policy in (APPROVED_FILE, APPROVED_LES):
+        if policy in (APPROVED_FILE, APPROVED_LES, APPROVED_PRODUCTION):
             historical, target, _ = core_file_fixture(ROOT)
             require(sorted(r for r in baseline if r[0] == FILE_TABLE) == core_file_column_rows(historical['columns']),
                     'CoreFile baseline column metadata mismatch')
-            require(sorted(r for r in shared if r[0] == FILE_TABLE) == core_file_column_rows(target['columns']),
+            if production is not None:
+                target = production['core_file_target']
+            target_rows = (production_column_rows(FILE_TABLE, target['columns']) if production is not None
+                           else core_file_column_rows(target['columns']))
+            require(sorted(r for r in shared if r[0] == FILE_TABLE) == target_rows,
                     'CoreFile runtime column metadata mismatch')
             shared = [r for r in shared if r[0] != FILE_TABLE]
             baseline = [r for r in baseline if r[0] != FILE_TABLE]
+        if production is not None:
+            baseline = production_shared_rows(baseline, production)
+            require(sorted(r for r in columns if r[0] == ACQUISITION_TABLE)
+                    == production_column_rows(ACQUISITION_TABLE, production['added_table']['columns']),
+                    'production acquisition exact column metadata mismatch')
         require(sorted(shared) == sorted(baseline),
                 'baseline/runtime shared column metadata mismatch')
         binding = snapshot.get('source_binding', {})

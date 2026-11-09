@@ -14,7 +14,7 @@
   "overridden_files": [
     {
       "generated_sha256": "d3bc4f64de478834bc6684cea03daf0e03e0e554e170f770b5c6dcb3974febd2",
-      "override_sha256": "442b736245df1e7ef0f8a866755e0caea4fbcf87c2579ab65bb888d12d1c8543",
+      "override_sha256": "d047b21675a3bfa4d3dd2516186a419c7a18affa012f2c0bf30f4f3e06c64ad5",
       "path": "src/main/java/com/sunwayworld/boot/ApplicationConfiguration.java"
     },
     {
@@ -171,7 +171,7 @@
     },
     {
       "generated_sha256": "d3bc4f64de478834bc6684cea03daf0e03e0e554e170f770b5c6dcb3974febd2",
-      "override_sha256": "e0b8544dd170cbbc2d4f3c6cd85ec75cc8e7cdfa86d434cc69580b0980e9be5e",
+      "override_sha256": "d047b21675a3bfa4d3dd2516186a419c7a18affa012f2c0bf30f4f3e06c64ad5",
       "path": "src/main/java/com/sunwayworld/boot/ApplicationConfiguration.java"
     },
     {
@@ -366,14 +366,15 @@
       "decompiler": "CFR",
       "decompiler_version": "0.152",
       "path": "src/main/java/com/sunwayworld/boot/ApplicationConfiguration.java",
-      "sha256": "63b9c9d3bf2882831d722483f497a9b1bd39f75504312b224a52323f5c0336e8",
+      "sha256": "d047b21675a3bfa4d3dd2516186a419c7a18affa012f2c0bf30f4f3e06c64ad5",
       "source_class_path": "com/sunwayworld/boot/ApplicationConfiguration.class",
       "source_jar": "BOOT-INF/lib/gikam-core-common-14.1.5.jar",
       "source_sha256_before_overlay": "d3bc4f64de478834bc6684cea03daf0e03e0e554e170f770b5c6dcb3974febd2",
       "source_sha256_before_transform": "fb6c3789e2af6a055aac9d37e3092004b6671472b8d43cee7a6c5c52b883f12a",
       "transformations": [
         "normalization:generated-source",
-        "overlay:src/main/java/com/sunwayworld/boot/ApplicationConfiguration.java"
+        "overlay:src/main/java/com/sunwayworld/boot/ApplicationConfiguration.java",
+        "source-repair:discover-Oracle-mappers-in-original-conf-config-impl-resource-directories"
       ]
     },
     {
@@ -31609,7 +31610,7 @@
       ]
     }
   ],
-  "source_tree_sha256": "08807739420ab8cbb523ed09e5438ad9c5138c324ef498144d9c43103aa5f678",
+  "source_tree_sha256": "123aff858f5cde4f68439a6685400eae6695ef5e3a39976082d3cbc5bf5d6cf1",
   "status": "assembled-source-only",
   "transformation_manifest": "docs/reconstitution/decompiler-transforms.json",
   "transformation_manifest_sha256": "30ab06626f3e4c863a2855790b0ec6211499394852f2a8598ea3bd444ce87fe8",

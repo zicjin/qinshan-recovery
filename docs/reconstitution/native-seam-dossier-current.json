@@ -184,6 +184,18 @@
       "runtime_reachability": "Pre-repair dedicated business HTTP on both sides persisted title B; only owned cached layout remained A. Three fixture attempts have entity/link zero checks and authenticated exact cache-key absence; native artifact not executed.",
       "provenance": "docs/reconstitution/native-redis-cache-config.json",
       "correction_to_prior_analysis": "This is a confirmed business cache invalidation gap rather than static serializer variation. Original invalid NOAUTH/SCAN observation is retained separately and superseded only by exact authenticated cache reads. No after-repair pass or complete audit/rollback is claimed."
+    },
+    {
+      "java_class": "com.sunwayworld.boot.ApplicationConfiguration",
+      "java_member": "gikamTemplateResolver",
+      "native_symbol": "Java_com_sunwayworld_boot_ApplicationConfiguration_gikamTemplateResolver",
+      "evidence_type": "complete-export-static-disassembly-original-source-and-real-rendered-HTTP",
+      "observed_behavior": "Original factory applies encoding/prefix/suffix Environment values with null-only defaults and unconditionally disables template caching; HTML mode is the public resolver default. Original Gikam reader injects request/user-specific page configuration.",
+      "owned_replacement": "Restore original Environment-backed settings and cacheable=false without changing resolver ordering, reader or templates.",
+      "confidence": "observed",
+      "runtime_reachability": "Before-repair 48 HTTP requests showed DTO111->222 on both sides, owned rendered HTML still111 and supplier222. The unique user/config injection proves original Gikam reader participation; native input not executed.",
+      "provenance": "docs/reconstitution/native-template-config.json",
+      "correction_to_prior_analysis": "The prior owned factory cached request-sensitive parsed HTML. This is a demonstrated stale-rendering gap, not merely a missing class or competing-default-resolver hypothesis. API config/user cleanup is verified, while old parsed cache persists until refresh and technical cleanup is pending; no after-repair pass is claimed."
     }
   ],
   "jni_declaration_export_map": {

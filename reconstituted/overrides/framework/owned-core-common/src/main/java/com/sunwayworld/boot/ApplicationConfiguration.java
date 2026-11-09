@@ -230,10 +230,14 @@ public class ApplicationConfiguration extends ApplicationObjectSupport
     @Bean
     public ITemplateResolver gikamTemplateResolver() {
         GikamResourceTemplateResolver resolver = new GikamResourceTemplateResolver(getApplicationContext());
-        resolver.setPrefix("classpath:/templates/");
-        resolver.setSuffix(".html");
-        resolver.setTemplateMode("HTML");
-        resolver.setCacheable(true);
+        org.springframework.core.env.Environment environment = getApplicationContext().getEnvironment();
+        String encoding = environment.getProperty("spring.thymeleaf.encoding");
+        String prefix = environment.getProperty("spring.thymeleaf.prefix");
+        String suffix = environment.getProperty("spring.thymeleaf.suffix");
+        resolver.setCharacterEncoding(encoding == null ? "utf-8" : encoding);
+        resolver.setPrefix(prefix == null ? "classpath:/templates/" : prefix);
+        resolver.setSuffix(suffix == null ? ".html" : suffix);
+        resolver.setCacheable(false);
         return resolver;
     }
 

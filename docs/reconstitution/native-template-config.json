@@ -1,0 +1,217 @@
+{
+  "schema": "native-template-config-attribution-v1",
+  "conclusion": "observed-original-request-sensitive-template-cache-contract",
+  "canonical": false,
+  "strict_evidence": false,
+  "input": {
+    "stock_jar_sha256": "4a720797810fd2f8cca6e22604657028cb87830ca0e24bb55a5f42f040f6ee9f",
+    "nested_jar": "BOOT-INF/lib/gikam-core-common-14.1.5.jar",
+    "nested_jar_sha256": "1075fda5ac05d4292b8c2efe2d9b3cc8379ce049c133221c27ba8f2cee7e1089",
+    "original_classes": [
+      {
+        "path": "com/sunwayworld/boot/ApplicationConfiguration.class",
+        "sha256": "5a7da14a648726ff8954910350fa1b987d89003b2f7e108b35e67e8ba2553d08"
+      },
+      {
+        "path": "com/sunwayworld/framework/thymeleaf/templateresolver/GikamResourceTemplateResolver.class",
+        "sha256": "ed4b90b8b57d2a4d45f7cab8fb7a53e000aa669a4935b7a55db7901eb910681a"
+      },
+      {
+        "path": "com/sunwayworld/framework/thymeleaf/templateresource/GikamPageConfigResourceTemplateResource.class",
+        "sha256": "7f6d1b9f9229d9197eb3edf71558ad078031ca40f479af51d639b9a7e7ca2afc"
+      },
+      {
+        "path": "com/sunwayworld/module/sys/page/service/impl/CorePageGridFieldConfigServiceImpl.class",
+        "sha256": "1550f6e45cf64e2a08cf19ae00ca8e8e2a88062dba9d7caf5b1904a1467a57a1"
+      }
+    ],
+    "native_member": "third-party/sunway-app/linux/sunway-app.so",
+    "native_sha256": "dc06e05d55252211e44b3a177267b68efc970b095d74c7ebd815057f5393d40a"
+  },
+  "native_export": {
+    "symbol": "Java_com_sunwayworld_boot_ApplicationConfiguration_gikamTemplateResolver",
+    "start": "0x13728",
+    "size_bytes": 2176,
+    "end_exclusive": "0x13fa8",
+    "asm_sha256": "30961f364fbd3cdd8925546136a2f3cdecd312c09ac00d37c4f61462fb2e4505",
+    "native_sha256": "dc06e05d55252211e44b3a177267b68efc970b095d74c7ebd815057f5393d40a"
+  },
+  "original_contract": {
+    "resolver_class": "com.sunwayworld.framework.thymeleaf.templateresolver.GikamResourceTemplateResolver",
+    "application_context": "Construct with the already initialized application context; the owned factory uses its own getApplicationContext().",
+    "setter_order": [
+      {
+        "setter": "setCharacterEncoding",
+        "environment_property": "spring.thymeleaf.encoding",
+        "fallback": "utf-8",
+        "lookup": "0x13c5e",
+        "setter_call": "0x13c8e"
+      },
+      {
+        "setter": "setPrefix",
+        "environment_property": "spring.thymeleaf.prefix",
+        "fallback": "classpath:/templates/",
+        "lookup": "0x13cf3",
+        "setter_call": "0x13d23"
+      },
+      {
+        "setter": "setSuffix",
+        "environment_property": "spring.thymeleaf.suffix",
+        "fallback": ".html",
+        "lookup": "0x13d88",
+        "setter_call": "0x13db8"
+      },
+      {
+        "setter": "setCacheable",
+        "value": false,
+        "environment_property": null,
+        "setter_call": "0x13ea0"
+      }
+    ],
+    "environment_helper": {
+      "symbol": "_Z26_getEnvironmentStringValueP7JNIEnv_PKcP8_jstring",
+      "descriptor": "Environment.getProperty(String) -> String",
+      "fallback": "Use supplied default only for null. Do not convert blank or non-null invalid values to defaults.",
+      "helper_disassembly_sha256": "0f8b92c000d4835d7b0f295aa59df121a3e1f34900c7f2c63c19cd89bab7b664"
+    },
+    "cache": "Unconditionally false. Complete native export does not consult spring.thymeleaf.cache.",
+    "template_mode": "No setTemplateMode call in the complete native export. Public AbstractConfigurableTemplateResolver default is TemplateMode.HTML.",
+    "other_configuration": "No added resolver order, cache TTL, check-existence, resolver chain or template resource rewriting."
+  },
+  "prior_owned_difference": {
+    "configuration": "Hardcoded prefix/suffix, no explicit encoding, explicit HTML mode and cacheable=true.",
+    "effect": "Parsed template content retained the first request user-specific configuration even after the original per-user grid configuration API and its DTO cache reflected the update."
+  },
+  "reader_contract": {
+    "source": "reconstituted/framework/owned-core-common/src/main/java/com/sunwayworld/framework/thymeleaf/templateresource/GikamPageConfigResourceTemplateResource.java",
+    "reader_source_sha256": "3687f8ae19761155688c18b5cfd630d53c7a895699996cacd3b407f405d684a6",
+    "behavior": "reader() obtains current request URI and current user, applies original page revisions and advanced-search configuration, reads CorePageConfigDTO, and prepends Gikam.setCompParam(JSON) when grid is nonempty.",
+    "pageId": "Exact requestURI minus servlet context path, including leading slash and excluding query. The measured path is /open/home-resource-page, not a classpath filename.",
+    "unique_grid": "A saved per-user grid entry need not be a visible DOM component. The original reader injects the complete nonempty DTO; HTTP captures it without executing arbitrary JavaScript.",
+    "actual_selection_evidence": "Both initial HTML responses contain the exact unique grid, field, actual fixture user and database-generated config identifiers in Gikam.setCompParam. This specific injection establishes that the inspected Gikam reader participates on the measured path, despite possible coexistence of Boot defaultTemplateResolver.",
+    "scope_limit": "This does not establish all template resolver precedence, cross-user isolation or every design-studio branch."
+  },
+  "diagnostic_http_before": {
+    "capture_sha256": "06a1d827775c65eaa69cc95ed426bb0fef0917f49fc4aee821bc701c1ed96b8b",
+    "request_count": 48,
+    "requests_per_side": 24,
+    "actual_business_writes_via_HTTP": true,
+    "business_SQL_DML": false,
+    "dedicated_users": true,
+    "sides": [
+      {
+        "side": "owned",
+        "request_count": 24,
+        "observations": [
+          {
+            "request_width": 111,
+            "grid_API_width": 111,
+            "DTO_width": 111,
+            "HTML_marker_present": true,
+            "HTML_contains_width111": true,
+            "HTML_contains_width222": false,
+            "HTML_sha256": "e0e899a15a17b36a4502cb81280039e9532068704ac579859c06d2d72be5f3ce"
+          },
+          {
+            "request_width": 222,
+            "grid_API_width": 222,
+            "DTO_width": 222,
+            "HTML_marker_present": true,
+            "HTML_contains_width111": true,
+            "HTML_contains_width222": false,
+            "HTML_sha256": "e0e899a15a17b36a4502cb81280039e9532068704ac579859c06d2d72be5f3ce"
+          }
+        ],
+        "HTML_bytes_same_after_update": true,
+        "API_config_empty": true,
+        "API_user_delete_zero": true
+      },
+      {
+        "side": "supplier",
+        "request_count": 24,
+        "observations": [
+          {
+            "request_width": 111,
+            "grid_API_width": 111,
+            "DTO_width": 111,
+            "HTML_marker_present": true,
+            "HTML_contains_width111": true,
+            "HTML_contains_width222": false,
+            "HTML_sha256": "19c2150d657b704e48821eb7c23169eb029fd7dec12199c6474349b782d44ed6"
+          },
+          {
+            "request_width": 222,
+            "grid_API_width": 222,
+            "DTO_width": 222,
+            "HTML_marker_present": true,
+            "HTML_contains_width111": false,
+            "HTML_contains_width222": true,
+            "HTML_sha256": "659e1a2acd2c41a2bb2e6db7d5615a8406003e93bc1bb5699226dcc424cd7d6d"
+          }
+        ],
+        "HTML_bytes_same_after_update": false,
+        "API_config_empty": true,
+        "API_user_delete_zero": true
+      }
+    ],
+    "measured_cycle": [
+      {
+        "method": "POST",
+        "path": "/core/module/sys/page-grid-field-configs",
+        "purpose": "Save dedicated current-user/page/grid field width111, then width222."
+      },
+      {
+        "method": "GET",
+        "path": "/core/module/sys/page-grid-field-configs?pageId=%2Fopen%2Fhome-resource-page&gridId={fixtureGrid}",
+        "purpose": "Read exact persisted current-user config."
+      },
+      {
+        "method": "GET",
+        "path": "/core/module/sys/page-configs?pageId=%2Fopen%2Fhome-resource-page",
+        "purpose": "Verify original DTO cache now reflects width222."
+      },
+      {
+        "method": "GET",
+        "path": "/open/home-resource-page",
+        "purpose": "Read real rendered HTML: owned retained111; supplier reflected222."
+      }
+    ],
+    "interpretation": "Matching width222 persistence and DTO on both sides isolate the old owned parsed HTML from business write failure or Redis DTO invalidation. Owned HTML was byte-identical after the update, retaining width111 and old generated config ID; supplier HTML contained222 and the new ID.",
+    "comparison_policy": "Each side uses its own actual generated IDs. Whole HTML body equality between supplier and owned is not required because fixture/config identifiers and other environment values differ."
+  },
+  "cleanup_before": {
+    "API_config_empty": true,
+    "dedicated_user_deleted_zero": true,
+    "basis": "Original POST with same user/page/grid and empty field list, API readback [], DTO marker absence, dedicated user collection DELETE and exact query zero.",
+    "compensation": "Restoring width111 and removing fixture data are HTTP compensation, not demonstrated transaction rollback.",
+    "parsed_cache_limit": "Under the old cache=true defect, the parsed HTML marker may remain cached after its backing row/user is removed, until the necessary implementation checkpoint app refresh. Preserve before HTML as diagnostic and do not claim runtime cache restored merely from API row cleanup.",
+    "technical_side_records": "Pending precise fixture technical-record cleanup; not complete in this source attribution."
+  },
+  "public_dependency": {
+    "jar": "thymeleaf-3.0.11.RELEASE.jar",
+    "sha256": "c4decad2647404c3de7bf825e606008d5795738eaa0d12d5d38451de748f1961",
+    "identical_to_stock": true,
+    "default_mode": "HTML",
+    "template_cache_scope": "TemplateCacheKey uses owner/template/selectors/offset/mode/resolution attributes; it does not implicitly vary by request principal or config version."
+  },
+  "replacement": {
+    "source": "reconstituted/framework/owned-core-common/src/main/java/com/sunwayworld/boot/ApplicationConfiguration.java",
+    "source_sha256": "ef65fd415c4a2b838869ed4b0f03bcffd86139f4c4af4674bbf58bacfe057d5f",
+    "override": "reconstituted/overrides/framework/owned-core-common/src/main/java/com/sunwayworld/boot/ApplicationConfiguration.java",
+    "override_sha256": "ef65fd415c4a2b838869ed4b0f03bcffd86139f4c4af4674bbf58bacfe057d5f",
+    "behavior": "Restore encoding/prefix/suffix Environment lookups with original null-only defaults and disable parsed-template caching unconditionally. Leave default HTML mode and original reader/resource/business paths intact.",
+    "scope": "No schedule, executor, external send, simplified shell, new resolver facade or extra runtime."
+  },
+  "analysis_method": [
+    "Complete native exact export without execution",
+    "Stock private class hashes and existing generated Java source",
+    "Public Thymeleaf default mode/cache-key and Boot resolver assembly bytecode",
+    "Existing 48 real HTTP requests plus saved rendered HTML"
+  ],
+  "limitations": [
+    "No after-repair HTTP success is recorded here; the same fixture loop must be replayed after the implementation checkpoint refresh.",
+    "Single dedicated-user updates prove observed stale rendering; cross-user leakage and the full permission/organization matrix have not been executed.",
+    "Business fixture API cleanup does not prove pending technical side-record cleanup or transaction rollback.",
+    "No private supplier class, native artifact, license/MAC loader or external schedule is introduced."
+  ]
+}

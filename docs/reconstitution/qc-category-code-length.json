@@ -1,0 +1,52 @@
+{
+  "schema": "qc-category-code-length-repair-v1",
+  "issue": "BUG-10",
+  "classification": "original-system-invalid-input-controlled-rejection-repair",
+  "base_commit": "878596ee81f50ad340ced0d563a6411ea33a47dd",
+  "contract": {
+    "table": "T_EMC_QC_CATEGORY",
+    "column": "QCCATEGORYID",
+    "original_DDL": "project/sql/oracle/oracle_sql_emc.txt:1783 VARCHAR2(16)",
+    "confirmed_database": "VARCHAR2(16 BYTE), AL32UTF8",
+    "maximum_UTF8_bytes": 16,
+    "null_or_empty": "optional contract unchanged"
+  },
+  "actual_before": {
+    "same_stimulus": true,
+    "code_ASCII_bytes": 21,
+    "owned_status": 500,
+    "supplier_status": 500,
+    "oracle_error": "ORA-12899 actual21 maximum16",
+    "marker_readback_both_zero": true,
+    "same_principal_role_org": true,
+    "SQL_business_writes": false,
+    "sessions_logged_out": true
+  },
+  "minimum_fix": {
+    "server": "Original EmcQcCategoryServiceImpl validates the code before ID generation/insert. Overrides both updateIfChanged bean and List public methods; List fully prevalidates before DAO write. Existing transaction/audit annotations retained. No generic framework/schema changes.",
+    "UI": "Original preInsert field and inline column use existing strLength[0,16] plus local QC UTF8 byte validator. Original Chinese i18n resource adds explicit field-length message.",
+    "error": "Existing ApplicationWarningException and GlobalExceptionHandler return controlled400 with field-specific16-byte message; no catch-and-success."
+  },
+  "actual_write_route_trace": [
+    "GenericResource.insert -> originalQCResource.insert -> originalQCService.insert",
+    "GenericResource.instantSave -> GenericService.instantSave -> service.updateIfChanged(List)",
+    "GenericResource.save -> GenericService.save -> service.updateIfChanged(List)",
+    "Direct GenericService caller updateIfChanged(bean) -> QC override"
+  ],
+  "production_scope": [
+    "QC field only",
+    "no Bean format/GenericService/global validator rewrites",
+    "no Oracle column resize",
+    "no new proof or evidence platform"
+  ],
+  "provenance_pins": {
+    "invalid_before_safe": "9aba019e81f47a4a37c4642221cf09dd12d16d2b673f960d923fe4a0d8e58168",
+    "readonly_column_contract": "d41e842593db775ae91248fbfdaaccd74de072f3b1fc35f0cdc318a13bf2874a"
+  },
+  "source_files": {
+    "project/src/main/java/com/sunwayworld/emc/module/mdm/basemdm/qccategory/service/impl/EmcQcCategoryServiceImpl.java": "a82393ba76b4c38f61e3bb54dbd4901127760777e79585484f3f7fa42bafd413",
+    "project/src/main/resources/static/emc/module/mdm/basemdm/qc-categories/emc-qc-category.js": "535ab39bc59843b06d7431ec4a466a05d326ecc29cf353200d13d23bd4bb992e",
+    "project/src/main/resources/static/emc/i18n/messages-emc_zh-cn.properties": "2eadd9e8b3c01ecef618fb369eecdb2d7b48704feb1a0aef3da80f7dbe22d54f"
+  },
+  "classification_note": "This addresses the reported original-system invalid-input failure; it is not supplier compatibility equivalence or API closure evidence."
+}

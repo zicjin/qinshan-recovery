@@ -1,3 +1,10 @@
+// The original Oracle QC code is limited to 16 AL32UTF8 bytes, not 16 characters.
+// Keep this validator specific to QC; other text fields retain their own contracts.
+Gikam.validator.emcQcCategoryCodeBytes = function(value) {
+    var valid = value == null || new TextEncoder().encode(String(value)).length <= 16;
+    return { result : valid, message : Gikam.propI18N('EMC.QC_CATEGORY.CODE_MAX_BYTES') };
+};
+
 var emcQcCategory = Gikam.getPageObject({
 
     baseUrl : IFM_CONTEXT + '/secure/emc/module/mdm/basemdm/qc-categories',
@@ -8,6 +15,7 @@ var emcQcCategory = Gikam.getPageObject({
         }, {
             field : 'qcCategoryId',
             title : 'T_EMC_QC_CATEGORY.QCCATEGORYID',
+            validators : [ 'strLength[0,16]', 'emcQcCategoryCodeBytes' ],
             editor : true,
             width : 120,
         }, {
@@ -127,6 +135,7 @@ var emcQcCategory = Gikam.getPageObject({
         return [ {
             field : 'qcCategoryId',
             title : 'T_EMC_QC_CATEGORY.QCCATEGORYID',
+            validators : [ 'strLength[0,16]', 'emcQcCategoryCodeBytes' ],
             preInsert : true
         }, {
             field : 'qcName',

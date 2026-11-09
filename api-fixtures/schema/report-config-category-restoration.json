@@ -1,0 +1,213 @@
+{
+  "version": 1,
+  "purpose": "Restore original nullable report-group CATEGORY required by stock selectTreeList; one column and comment only, no business values or permission backfill.",
+  "owner": "LIMS_RUNTIME_LOCAL",
+  "container": "FREEPDB1",
+  "table": "T_CORE_REPORT_CONFIG",
+  "stock": {
+    "artifact_sha256": "4a720797810fd2f8cca6e22604657028cb87830ca0e24bb55a5f42f040f6ee9f",
+    "nested_jar": "BOOT-INF/lib/gikam-core-fr-service-base-14.1.5.jar",
+    "nested_jar_sha256": "f1bfa4931821a69936405c78181d1fd7badbb2c21b0fb4f69fd7b0e70ca5b3ca",
+    "mapper_member": "com/sunwayworld/cloud/module/fr/report/persistent/mapper/conf/core-report-config-line-oracle-mapper.xml",
+    "mapper_member_sha256": "25c412980f91ba86ad8d7fcebbb986a6d6e420218626f26a349f24c24c1b2243",
+    "tracked_mapper_byte_identical": true
+  },
+  "sources": [
+    {
+      "path": "project/sql/核心发版14.1.5/init-sql/oracle/0.common_sql_oracle-1.txt",
+      "sha256": "99c1ba18054594384cc88a28ecc5c8c44f540e089e4c92ca92eddb94c2f17be1",
+      "blocks": [
+        {
+          "line_start": 2321,
+          "line_end": 2334,
+          "sha256": "0818185b4bc0c885a13de595e4a0e8a15cbaba964c8a95bcb91edf21d73a03a0"
+        },
+        {
+          "line_start": 3190,
+          "line_end": 3190,
+          "sha256": "b4391019ce879b86374cc89055cf657e924189d8475fb765623666cc7ef6479c"
+        },
+        {
+          "line_start": 5105,
+          "line_end": 5109,
+          "sha256": "a4e8bf548ed22e3ed55518711afcde1d07d797ff3cd7c0892a57ccc4946c593b"
+        },
+        {
+          "line_start": 8252,
+          "line_end": 8254,
+          "sha256": "9e21346e9aa53b47350d3624e7626ee0f7d5977b26856ae0c41e54418cbece7f"
+        }
+      ]
+    },
+    {
+      "path": "reconstituted/framework/owned-core-report/src/main/resources/com/sunwayworld/cloud/module/fr/report/persistent/mapper/conf/core-report-config-line-oracle-mapper.xml",
+      "sha256": "25c412980f91ba86ad8d7fcebbb986a6d6e420218626f26a349f24c24c1b2243",
+      "blocks": [
+        {
+          "line_start": 35,
+          "line_end": 73,
+          "sha256": "8fad1cd80ef5ae820965a861ed8b015b43adffd2a94ca77b23aa03a923eb4864"
+        }
+      ]
+    },
+    {
+      "path": "reconstituted/framework/owned-core-report/src/main/java/com/sunwayworld/cloud/module/fr/report/bean/CoreReportConfigBean.java",
+      "sha256": "91725b10c316266512418cde0aff76f27c69d24e8e74e1d1a3207a28cb70ff08",
+      "blocks": []
+    },
+    {
+      "path": "reconstituted/framework/owned-core-report/src/main/java/com/sunwayworld/cloud/module/fr/report/service/impl/CoreReportConfigServiceImpl.java",
+      "sha256": "77bfe076e66e947427b571dfdd1f36510d2c1e8913fcec0e2ae9edfddda53695",
+      "blocks": []
+    },
+    {
+      "path": "reconstituted/framework/owned-core-common/src/main/resources/static/module/sys/reports/core-report-config-line-search-list.js",
+      "sha256": "96d92ce9fbf6dbe62ec8968aefba139d16bf78bf343c78f9710002208a725ceb",
+      "blocks": [
+        {
+          "line_start": 10,
+          "line_end": 16,
+          "sha256": "69a11fac8e6ffdb7677938d8df8914fad167689297ab26d5f816306a6dec398c"
+        }
+      ]
+    },
+    {
+      "path": "project/src/main/resources/static/emc/module/sys/reports/emc-report-config.js",
+      "sha256": "c659c0a8d03b323f21a5c596c26a1b31c01b587cf301f1b7059392f1f70f7010",
+      "blocks": [
+        {
+          "line_start": 13,
+          "line_end": 16,
+          "sha256": "e1dbf3130c518bde3045b997d0abc24e9a16a0d37b044602dbd4fcb27f449673"
+        }
+      ]
+    }
+  ],
+  "added_column": {
+    "name": "CATEGORY",
+    "type": "VARCHAR2",
+    "length": 36,
+    "length_semantics": "BYTE",
+    "nullable": "Y",
+    "default": null,
+    "comment": "类别"
+  },
+  "existing_columns": [
+    {
+      "position": 1,
+      "name": "ID",
+      "type": "VARCHAR2",
+      "data_length": 128,
+      "nullable": "N",
+      "precision": null,
+      "scale": null,
+      "default": null,
+      "hidden": "NO",
+      "virtual": "NO",
+      "char_used": "B"
+    },
+    {
+      "position": 2,
+      "name": "VERSION",
+      "type": "NUMBER",
+      "data_length": 22,
+      "nullable": "Y",
+      "precision": null,
+      "scale": null,
+      "default": null,
+      "hidden": "NO",
+      "virtual": "NO",
+      "char_used": null
+    },
+    {
+      "position": 3,
+      "name": "ORDERNO",
+      "type": "NUMBER",
+      "data_length": 22,
+      "nullable": "Y",
+      "precision": null,
+      "scale": null,
+      "default": null,
+      "hidden": "NO",
+      "virtual": "NO",
+      "char_used": null
+    },
+    {
+      "position": 4,
+      "name": "REMARK",
+      "type": "CLOB",
+      "data_length": 4000,
+      "nullable": "Y",
+      "precision": null,
+      "scale": null,
+      "default": null,
+      "hidden": "NO",
+      "virtual": "NO",
+      "char_used": null
+    },
+    {
+      "position": 5,
+      "name": "NAME",
+      "type": "CLOB",
+      "data_length": 4000,
+      "nullable": "Y",
+      "precision": null,
+      "scale": null,
+      "default": null,
+      "hidden": "NO",
+      "virtual": "NO",
+      "char_used": null
+    },
+    {
+      "position": 6,
+      "name": "CREATEDBYORGNAME",
+      "type": "VARCHAR2",
+      "data_length": 270,
+      "nullable": "Y",
+      "precision": null,
+      "scale": null,
+      "default": null,
+      "hidden": "NO",
+      "virtual": "NO",
+      "char_used": "B"
+    },
+    {
+      "position": 7,
+      "name": "REPORTCONFIGCATEGORY",
+      "type": "VARCHAR2",
+      "data_length": 120,
+      "nullable": "Y",
+      "precision": null,
+      "scale": null,
+      "default": null,
+      "hidden": "NO",
+      "virtual": "NO",
+      "char_used": "B"
+    }
+  ],
+  "fixture": {
+    "path": "api-fixtures/schema/report-config-category-restoration.sql",
+    "sha256": "6b22a336765d4cb4cc4a0db91b5382d3000e0e111f723ac36e05fe8808bf410e"
+  },
+  "transformations": [
+    "Extract only CATEGORY VARCHAR2(36 BYTE), nullable without default, from source CREATE TABLE into qualified ALTER TABLE ADD; preserve existing seven runtime columns and row values.",
+    "Retain original CATEGORY comment; verify exact local owner/container and seven-column shape before DDL.",
+    "Equivalent eight-column shape with exact CATEGORY comment and no CATEGORY constraints returns without DDL; incompatible or partial shape is rejected."
+  ],
+  "semantics": {
+    "parent_CATEGORY_dictionary": "reportCategory common/select; no parent CATEGORY default or backfill found in tracked project SQL.",
+    "permissions": "Stock tree mapper role-permission OR branches additionally require CATEGORY=select and ACTIVATEDFLAG=1. NULL does not satisfy those branches. Original UI separately filters category_SEQ=select.",
+    "existing_rows": "Adding a nullable column without DEFAULT leaves existing rows NULL. Do not assign select/common/reportlet or infer values from REPORTCONFIGCATEGORY.",
+    "distinct_fields": "REPORTCONFIGCATEGORY is a project ext$ classification. Child REPORTCATEGORY has source reportlet backfill; that does not apply to parent CATEGORY.",
+    "attribution": "Stock 14.1.5 mapper expects a column absent in both snapshot schemas. Existing dictionaries are partly bootstrapped. Historical skipped migration versus divergent/customized schema cannot be proven from current metadata."
+  },
+  "limits": [
+    "Oracle DDL implicitly commits; this fixture is not atomic and cannot claim transaction rollback. Use a dedicated session without pending DML.",
+    "The first seven columns are pinned to the actual local runtime preflight, not replaced with the older complete CREATE TABLE definition.",
+    "Do not run on baseline, production or supplier schemas; owner/container guards admit only the named local runtime.",
+    "Run existing source-pinning verification before SQL review/application; coordinate inactive verification and capture original-column row/content hashes outside this fixture.",
+    "No baseline refresh, policy/helper extension, seed creation, permission grant, external report execution, app refresh or API evidence promotion.",
+    "If ADD succeeds but COMMENT fails, retain the error and inspect partial schema; rerun rejects incomplete metadata rather than repairing silently.",
+    "Positive report-tree and no-match HTTP must be rerun after authorized application; category-filtered positives remain unknown without explicit legitimate configuration."
+  ]
+}

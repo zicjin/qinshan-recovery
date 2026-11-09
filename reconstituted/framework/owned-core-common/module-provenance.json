@@ -14,12 +14,12 @@
   "overridden_files": [
     {
       "generated_sha256": "d3bc4f64de478834bc6684cea03daf0e03e0e554e170f770b5c6dcb3974febd2",
-      "override_sha256": "dc8e670efb9cfa394760c5f9306f6ca43683703cbb73e55c298d8980033a2572",
+      "override_sha256": "90d1d55f2a70b265a9dfc73a51276f4780a28c1b23f71c2b6edb8e115c51f46b",
       "path": "src/main/java/com/sunwayworld/boot/ApplicationConfiguration.java"
     },
     {
       "generated_sha256": "28254dca68035a6bed133a2cb1d10e53fd06e4a4e5aed49ae9d7a3c0a55fcbb0",
-      "override_sha256": "2f98c012130da758db7cf84b14de0b3a6810cf688ffefa4f04839a5c7082ef0b",
+      "override_sha256": "eae2efd485e1c7b1f5f8d21d06cd0e6fe1c6e20ed1285304aff143e0f5feb678",
       "path": "src/main/java/com/sunwayworld/boot/ApplicationMvcConfiguration.java"
     },
     {
@@ -171,12 +171,12 @@
     },
     {
       "generated_sha256": "d3bc4f64de478834bc6684cea03daf0e03e0e554e170f770b5c6dcb3974febd2",
-      "override_sha256": "dc8e670efb9cfa394760c5f9306f6ca43683703cbb73e55c298d8980033a2572",
+      "override_sha256": "90d1d55f2a70b265a9dfc73a51276f4780a28c1b23f71c2b6edb8e115c51f46b",
       "path": "src/main/java/com/sunwayworld/boot/ApplicationConfiguration.java"
     },
     {
       "generated_sha256": "28254dca68035a6bed133a2cb1d10e53fd06e4a4e5aed49ae9d7a3c0a55fcbb0",
-      "override_sha256": "2f98c012130da758db7cf84b14de0b3a6810cf688ffefa4f04839a5c7082ef0b",
+      "override_sha256": "eae2efd485e1c7b1f5f8d21d06cd0e6fe1c6e20ed1285304aff143e0f5feb678",
       "path": "src/main/java/com/sunwayworld/boot/ApplicationMvcConfiguration.java"
     },
     {
@@ -366,7 +366,7 @@
       "decompiler": "CFR",
       "decompiler_version": "0.152",
       "path": "src/main/java/com/sunwayworld/boot/ApplicationConfiguration.java",
-      "sha256": "dc8e670efb9cfa394760c5f9306f6ca43683703cbb73e55c298d8980033a2572",
+      "sha256": "90d1d55f2a70b265a9dfc73a51276f4780a28c1b23f71c2b6edb8e115c51f46b",
       "source_class_path": "com/sunwayworld/boot/ApplicationConfiguration.class",
       "source_jar": "BOOT-INF/lib/gikam-core-common-14.1.5.jar",
       "source_sha256_before_overlay": "d3bc4f64de478834bc6684cea03daf0e03e0e554e170f770b5c6dcb3974febd2",
@@ -375,7 +375,8 @@
         "normalization:generated-source",
         "overlay:src/main/java/com/sunwayworld/boot/ApplicationConfiguration.java",
         "source-repair:discover-Oracle-mappers-in-original-conf-config-impl-resource-directories",
-        "source-repair:restore-original-multipart-location-and-environment-size-limits;docs/reconstitution/native-multipart-config.json"
+        "source-repair:restore-original-multipart-location-and-environment-size-limits;docs/reconstitution/native-multipart-config.json",
+        "source-repair:restore-original-locale-lang-bean-and-static-exclusion;docs/reconstitution/native-locale-config.json"
       ]
     },
     {
@@ -384,7 +385,7 @@
       "decompiler": "CFR",
       "decompiler_version": "0.152",
       "path": "src/main/java/com/sunwayworld/boot/ApplicationMvcConfiguration.java",
-      "sha256": "cc2b6d938dcf059aaa29ec4e25dc60170763895e3129286e70a248b813830110",
+      "sha256": "21e55033e1dbd13234be4a172c58ae9bbf47b816307d95cd7f9c007659bf5e39",
       "source_class_path": "com/sunwayworld/boot/ApplicationMvcConfiguration.class",
       "source_jar": "BOOT-INF/lib/gikam-core-common-14.1.5.jar",
       "source_sha256_before_overlay": "28254dca68035a6bed133a2cb1d10e53fd06e4a4e5aed49ae9d7a3c0a55fcbb0",
@@ -393,7 +394,8 @@
         "normalization:generated-source",
         "overlay:src/main/java/com/sunwayworld/boot/ApplicationMvcConfiguration.java",
         "source-repair:restore-original-files-resource-mapping;docs/reconstitution/native-file-resource-mapping.json",
-        "source-repair:restore-original-message-converter-media-types;docs/reconstitution/native-mvc-message-converters.json"
+        "source-repair:restore-original-message-converter-media-types;docs/reconstitution/native-mvc-message-converters.json",
+        "source-repair:restore-original-locale-lang-owner-context-bean-and-static-exclusion;docs/reconstitution/native-locale-config.json"
       ]
     },
     {
@@ -31612,7 +31614,7 @@
       ]
     }
   ],
-  "source_tree_sha256": "6e9d2cf8261b3e3e1b0c308026dcf4484ade74f94c939495158bd5eb4db20031",
+  "source_tree_sha256": "55d87d7755690ebd4c1e8998868e2aa206478ca969addd4b63f99211e4dc3fe0",
   "status": "assembled-source-only",
   "transformation_manifest": "docs/reconstitution/decompiler-transforms.json",
   "transformation_manifest_sha256": "30ab06626f3e4c863a2855790b0ec6211499394852f2a8598ea3bd444ce87fe8",

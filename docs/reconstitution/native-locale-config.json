@@ -1,0 +1,410 @@
+{
+  "schema": "native-locale-config-attribution-v1",
+  "conclusion": "observed-original-shared-locale-interceptor-contract",
+  "canonical": false,
+  "strict_evidence": false,
+  "input": {
+    "stock_jar_sha256": "4a720797810fd2f8cca6e22604657028cb87830ca0e24bb55a5f42f040f6ee9f",
+    "nested_jar": "BOOT-INF/lib/gikam-core-common-14.1.5.jar",
+    "nested_jar_sha256": "1075fda5ac05d4292b8c2efe2d9b3cc8379ce049c133221c27ba8f2cee7e1089",
+    "classes": [
+      {
+        "path": "com/sunwayworld/boot/ApplicationConfiguration.class",
+        "sha256": "5a7da14a648726ff8954910350fa1b987d89003b2f7e108b35e67e8ba2553d08",
+        "methods": [
+          {
+            "name": "localeResolver",
+            "descriptor": "()Lorg/springframework/web/servlet/LocaleResolver;",
+            "flags": "0x101",
+            "native": true,
+            "attributes": [
+              "RuntimeVisibleAnnotations"
+            ],
+            "annotations": [
+              "Lorg/springframework/context/annotation/Bean;"
+            ]
+          },
+          {
+            "name": "localeChangeInterceptor",
+            "descriptor": "()Lorg/springframework/web/servlet/i18n/LocaleChangeInterceptor;",
+            "flags": "0x101",
+            "native": true,
+            "attributes": [
+              "RuntimeVisibleAnnotations"
+            ],
+            "annotations": [
+              "Lorg/springframework/context/annotation/Bean;"
+            ]
+          }
+        ]
+      },
+      {
+        "path": "com/sunwayworld/boot/ApplicationMvcConfiguration.class",
+        "sha256": "4e112e181b8a694eaa5b14dceea4fe8bfd215f94502c775b1bfcb3ffee98620b",
+        "methods": [
+          {
+            "name": "addInterceptors",
+            "descriptor": "(Lorg/springframework/web/servlet/config/annotation/InterceptorRegistry;)V",
+            "flags": "0x101",
+            "native": true,
+            "attributes": [
+              "MethodParameters"
+            ],
+            "annotations": []
+          }
+        ]
+      }
+    ],
+    "native_member": "third-party/sunway-app/linux/sunway-app.so",
+    "native_sha256": "dc06e05d55252211e44b3a177267b68efc970b095d74c7ebd815057f5393d40a"
+  },
+  "native_exports": [
+    {
+      "symbol": "Java_com_sunwayworld_boot_ApplicationConfiguration_localeResolver",
+      "start_address": "0xb99f",
+      "size_bytes": 458,
+      "exclusive_end_address": "0xbb69",
+      "complete_asm_sha256": "5776a51e15fc732166a5a14fa3d996152b78f6dde8ea370594f1b553d611b78e",
+      "complete_asm_bytes": 7195
+    },
+    {
+      "symbol": "Java_com_sunwayworld_boot_ApplicationConfiguration_localeChangeInterceptor",
+      "start_address": "0xbb69",
+      "size_bytes": 273,
+      "exclusive_end_address": "0xbc7a",
+      "complete_asm_sha256": "c3ecea26929f6b19dae0aba39f14d8fa470bb28087fe1daf2ac86c49b765e2bf",
+      "complete_asm_bytes": 4458
+    },
+    {
+      "symbol": "Java_com_sunwayworld_boot_ApplicationMvcConfiguration_addInterceptors",
+      "start_address": "0xfb8f",
+      "size_bytes": 2101,
+      "exclusive_end_address": "0x103c4",
+      "complete_asm_sha256": "f5ae121cf716f7f1d4dc154cc1a0ac2292676f18ef8ab50f7118d328d3ff9994",
+      "complete_asm_bytes": 25709
+    }
+  ],
+  "observations": [
+    {
+      "export": "localeResolver",
+      "range": "0xb99f..0xbb69",
+      "meaning": "Construct CookieLocaleResolver, set default Locale.CHINA, set cookie name locale, and return. The complete export has no other cookie attribute setter. Current owned resolver already matches; preserve it."
+    },
+    {
+      "export": "localeChangeInterceptor",
+      "range": "0xbb69..0xbc7a",
+      "meaning": "Construct LocaleChangeInterceptor and setParamName(\"lang\") before returning the Spring bean."
+    },
+    {
+      "export": "addInterceptors",
+      "range": "0xfb8f..0xff29",
+      "meaning": "Construct original TenantInterceptor and add it first."
+    },
+    {
+      "export": "addInterceptors",
+      "range": "0xff2e..0x10074",
+      "meaning": "Resolve LocaleChangeInterceptor by type through native getSpringBean(env, this, type); its owner-aware initialization obtains this.getApplicationContext() before lookup when needed. Register that instance and excludePathPatterns(\"/static/**\")."
+    },
+    {
+      "export": "addInterceptors",
+      "range": "0x100f6..0x103c4",
+      "meaning": "The remaining native export constructs bsh.Interpreter and evaluates an opaque fixed string. Its role is not decoded or executed here and it is outside this public locale configuration repair."
+    }
+  ],
+  "original_public_contract": {
+    "locale_cookie_name": "locale",
+    "default_locale": "zh-CN",
+    "change_parameter": "lang",
+    "registration": "Reuse the same Spring LocaleChangeInterceptor bean from the MVC owner ApplicationContext after TenantInterceptor.",
+    "locale_excluded_paths": [
+      "/static/**"
+    ],
+    "unrelated_query_parameter": "locale remains an endpoint parameter and is not a second locale-changing alias.",
+    "cookie_resolver_changed": false
+  },
+  "prior_owned_difference": {
+    "bean": "ApplicationConfiguration returned an unconfigured LocaleChangeInterceptor using public Spring default paramName locale.",
+    "mvc_registration": "ApplicationMvcConfiguration allocated a second unconfigured interceptor and registered it for every path.",
+    "effect": "lang requests did not switch the locale cookie; ordinary locale query parameters and static resource requests could accidentally rewrite it."
+  },
+  "diagnostic_http_before": {
+    "request_count": 16,
+    "business_writes": false,
+    "SQL": false,
+    "configuration_query_matrix": {
+      "capture_sha256": "d5812c095e2439436f62a06d337a75abfed477503b938ff88cc32a5cfd340f7e",
+      "request_count": 10,
+      "requests": [
+        {
+          "side": "owned",
+          "path": "/open/core/module/sys/i18ns/configs",
+          "status": 200,
+          "content_type": "application/json;charset=UTF-8",
+          "locale_cookie": [],
+          "body_sha256": "bd46f8535407892579a48473fd95dc845367d605d4ee8cca94fe6af5aa28a258"
+        },
+        {
+          "side": "owned",
+          "path": "/open/core/module/sys/i18ns/configs?lang=en-US",
+          "status": 200,
+          "content_type": "application/json;charset=UTF-8",
+          "locale_cookie": [],
+          "body_sha256": "bd46f8535407892579a48473fd95dc845367d605d4ee8cca94fe6af5aa28a258"
+        },
+        {
+          "side": "owned",
+          "path": "/open/core/module/sys/i18ns/configs?locale=en-US",
+          "status": 200,
+          "content_type": "application/json;charset=UTF-8",
+          "locale_cookie": [
+            "locale=en-US; Path=/"
+          ],
+          "body_sha256": "bd46f8535407892579a48473fd95dc845367d605d4ee8cca94fe6af5aa28a258"
+        },
+        {
+          "side": "owned",
+          "path": "/open/core/module/sys/i18ns/configs?lang=zh-CN",
+          "status": 200,
+          "content_type": "application/json;charset=UTF-8",
+          "locale_cookie": [],
+          "body_sha256": "bd46f8535407892579a48473fd95dc845367d605d4ee8cca94fe6af5aa28a258"
+        },
+        {
+          "side": "owned",
+          "path": "/open/core/module/sys/i18ns/configs?lang=en-US&locale=zh-CN",
+          "status": 200,
+          "content_type": "application/json;charset=UTF-8",
+          "locale_cookie": [
+            "locale=zh-CN; Path=/"
+          ],
+          "body_sha256": "bd46f8535407892579a48473fd95dc845367d605d4ee8cca94fe6af5aa28a258"
+        },
+        {
+          "side": "supplier",
+          "path": "/open/core/module/sys/i18ns/configs",
+          "status": 200,
+          "content_type": "application/json;charset=UTF-8",
+          "locale_cookie": [],
+          "body_sha256": "bd46f8535407892579a48473fd95dc845367d605d4ee8cca94fe6af5aa28a258"
+        },
+        {
+          "side": "supplier",
+          "path": "/open/core/module/sys/i18ns/configs?lang=en-US",
+          "status": 200,
+          "content_type": "application/json;charset=UTF-8",
+          "locale_cookie": [
+            "locale=en-US; Path=/"
+          ],
+          "body_sha256": "bd46f8535407892579a48473fd95dc845367d605d4ee8cca94fe6af5aa28a258"
+        },
+        {
+          "side": "supplier",
+          "path": "/open/core/module/sys/i18ns/configs?locale=en-US",
+          "status": 200,
+          "content_type": "application/json;charset=UTF-8",
+          "locale_cookie": [],
+          "body_sha256": "bd46f8535407892579a48473fd95dc845367d605d4ee8cca94fe6af5aa28a258"
+        },
+        {
+          "side": "supplier",
+          "path": "/open/core/module/sys/i18ns/configs?lang=zh-CN",
+          "status": 200,
+          "content_type": "application/json;charset=UTF-8",
+          "locale_cookie": [
+            "locale=zh-CN; Path=/"
+          ],
+          "body_sha256": "bd46f8535407892579a48473fd95dc845367d605d4ee8cca94fe6af5aa28a258"
+        },
+        {
+          "side": "supplier",
+          "path": "/open/core/module/sys/i18ns/configs?lang=en-US&locale=zh-CN",
+          "status": 200,
+          "content_type": "application/json;charset=UTF-8",
+          "locale_cookie": [
+            "locale=en-US; Path=/"
+          ],
+          "body_sha256": "bd46f8535407892579a48473fd95dc845367d605d4ee8cca94fe6af5aa28a258"
+        }
+      ]
+    },
+    "business_and_static_matrix": {
+      "capture_sha256": "8a623cf67c52c9d39b35e8ef69caa2bebb3f3886a98868795ea3a02a20d3b86e",
+      "request_count": 6,
+      "requests": [
+        {
+          "side": "owned",
+          "path": "/open/core/module/sys/i18ns/messages?locale=en-US",
+          "status": 200,
+          "content_type": "application/json;charset=UTF-8",
+          "locale_cookie": [
+            "locale=en-US; Path=/"
+          ],
+          "body_bytes": 3387,
+          "body_sha256": "d70367b39c2da4f92def3eec230612d06090d3394e5ddf6cf4c7b6f5fa37569f"
+        },
+        {
+          "side": "owned",
+          "path": "/static/module/index/homepage/img/logo.png?lang=en-US",
+          "status": 200,
+          "content_type": "image/png",
+          "locale_cookie": [],
+          "body_bytes": 20710,
+          "body_sha256": "4632b00c741be188d7e5056878af6cf8b89ca130f1d4643c7ae6e1f51373deb5"
+        },
+        {
+          "side": "owned",
+          "path": "/static/module/index/homepage/img/logo.png?locale=en-US",
+          "status": 200,
+          "content_type": "image/png",
+          "locale_cookie": [
+            "locale=en-US; Path=/"
+          ],
+          "body_bytes": 20710,
+          "body_sha256": "4632b00c741be188d7e5056878af6cf8b89ca130f1d4643c7ae6e1f51373deb5"
+        },
+        {
+          "side": "supplier",
+          "path": "/open/core/module/sys/i18ns/messages?locale=en-US",
+          "status": 200,
+          "content_type": "application/json;charset=UTF-8",
+          "locale_cookie": [],
+          "body_bytes": 2,
+          "body_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+        },
+        {
+          "side": "supplier",
+          "path": "/static/module/index/homepage/img/logo.png?lang=en-US",
+          "status": 200,
+          "content_type": "image/png",
+          "locale_cookie": [],
+          "body_bytes": 20710,
+          "body_sha256": "4632b00c741be188d7e5056878af6cf8b89ca130f1d4643c7ae6e1f51373deb5"
+        },
+        {
+          "side": "supplier",
+          "path": "/static/module/index/homepage/img/logo.png?locale=en-US",
+          "status": 200,
+          "content_type": "image/png",
+          "locale_cookie": [],
+          "body_bytes": 20710,
+          "body_sha256": "4632b00c741be188d7e5056878af6cf8b89ca130f1d4643c7ae6e1f51373deb5"
+        }
+      ]
+    },
+    "interpretation": "Matching config-list bodies do not conceal the cookie difference. Supplier recognizes lang and ignores locale as a mutation trigger. The prior owned path does the opposite, including when locale is a message-query parameter or a static-resource query.",
+    "existing_message_data_difference": {
+      "path": "/open/core/module/sys/i18ns/messages?locale=en-US",
+      "owned_body_bytes": 3387,
+      "supplier_body_bytes": 2,
+      "classification": "Existing i18n data/configuration difference retained separately; no body equivalence claimed or translation data changed."
+    }
+  },
+  "browser_before_limitation": {
+    "observed_by_root": "Both loaded home pages opened with lang=en-US remained Chinese before repair. The original frontend I18N.setLocale writes locale cookie directly.",
+    "conclusion": "The request-parameter and interceptor registration repair does not establish a fix for homepage language switching, missing translations or all navigation labels.",
+    "scope": "Existing limited smoke only; no new browser matrix."
+  },
+  "replacement": {
+    "sources": [
+      {
+        "source": "reconstituted/framework/owned-core-common/src/main/java/com/sunwayworld/boot/ApplicationConfiguration.java",
+        "source_sha256": "90d1d55f2a70b265a9dfc73a51276f4780a28c1b23f71c2b6edb8e115c51f46b",
+        "override": "reconstituted/overrides/framework/owned-core-common/src/main/java/com/sunwayworld/boot/ApplicationConfiguration.java",
+        "override_sha256": "90d1d55f2a70b265a9dfc73a51276f4780a28c1b23f71c2b6edb8e115c51f46b",
+        "same_bytes": true
+      },
+      {
+        "source": "reconstituted/framework/owned-core-common/src/main/java/com/sunwayworld/boot/ApplicationMvcConfiguration.java",
+        "source_sha256": "21e55033e1dbd13234be4a172c58ae9bbf47b816307d95cd7f9c007659bf5e39",
+        "override": "reconstituted/overrides/framework/owned-core-common/src/main/java/com/sunwayworld/boot/ApplicationMvcConfiguration.java",
+        "override_sha256": "eae2efd485e1c7b1f5f8d21d06cd0e6fe1c6e20ed1285304aff143e0f5feb678",
+        "same_bytes": false
+      }
+    ],
+    "behavior": "Set the original locale bean parameter to lang; remove the second MVC-created instance; resolve the same bean from the MVC configuration own ApplicationContext and exclude static paths. Preserve TenantInterceptor, the matching CookieLocaleResolver and all unrelated MVC behavior.",
+    "source_of_truth": "Complete native exports and owner-aware lookup helper, stock native Java declarations, public Spring interceptor semantics and pre-repair diagnostic HTTP.",
+    "opaque_native_behavior": "Do not restore or attribute semantics to the undecoded bsh eval body; do not introduce native/license/MAC loader behavior."
+  },
+  "public_dependency": {
+    "jar": "spring-webmvc-5.2.9.RELEASE.jar",
+    "sha256": "2825194d46c244ff5e64fcba9273bfc8779667a3aac33eb4ea9ef87dfb4fa4ac",
+    "default_interceptor_param_name": "locale",
+    "evidence": "Public constructor bytecode sets paramName locale; preHandle reads getParamName then calls the DispatcherServlet locale resolver."
+  },
+  "analysis_method": [
+    "Read-only stock Java method declaration inspection without class execution",
+    "Complete exact-symbol disassembly without native execution",
+    "Exact native getSpringBean/initApplicationContext helper disassembly confirms owner context lookup and lazy native global initialization; no helper execution",
+    "Public Spring LocaleChangeInterceptor and CookieLocaleResolver bytecode inspection",
+    "Sixteen existing pre-repair real HTTP requests and bounded root browser observation"
+  ],
+  "limitations": [
+    "This provenance records source attribution and pre-repair diagnostics only; it does not claim after-repair HTTP success or strict API closure.",
+    "Do not count matching list bodies or HTTP200 as proof of locale switching; cookie and actual resolved locale are separate observations.",
+    "Retain existing i18n response data differences and frontend behavior separately.",
+    "No supplier private class, native artifact, opaque eval body, extra application or compatibility process is introduced.",
+    "The owned MVC lookup must work without a preinitialized global ApplicationContextHelper; using a fixture that seeds it would conceal a startup-order dependency."
+  ],
+  "lookup_helper_evidence": {
+    "native_sha256": "dc06e05d55252211e44b3a177267b68efc970b095d74c7ebd815057f5393d40a",
+    "helpers": [
+      {
+        "symbol": "_Z14_getSpringBeanP7JNIEnv_P8_jobjectPKc",
+        "start_address": "0x1d363",
+        "size_bytes": 386,
+        "exclusive_end_address": "0x1d4e5",
+        "sha256": "9d3a754ab9bb4f85d51de8dc40aae133f4cb611f885c880595f7fb262d4f2632"
+      },
+      {
+        "symbol": "_Z23_initApplicationContextP7JNIEnv_P8_jobject",
+        "start_address": "0x1c76b",
+        "size_bytes": 3064,
+        "exclusive_end_address": "0x1d363",
+        "sha256": "6a8bcd732574ad209130d6026f9277501388d61dca058edfa916556bf069571b"
+      }
+    ],
+    "selected_literals": [
+      {
+        "address": "0x24570",
+        "value": "org/springframework/context/ApplicationContext"
+      },
+      {
+        "address": "0x245e0",
+        "value": "(Ljava/lang/Class;)Ljava/lang/Object;"
+      },
+      {
+        "address": "0x24606",
+        "value": "getBean"
+      },
+      {
+        "address": "0x23290",
+        "value": "()Lorg/springframework/context/ApplicationContext;"
+      },
+      {
+        "address": "0x232c3",
+        "value": "getApplicationContext"
+      }
+    ],
+    "owner_initialization": "getSpringBean(env, owner, type) calls initApplicationContext when owner is non-null. If native global context is absent, that helper invokes owner.getApplicationContext(), retains it, then getSpringBean calls ApplicationContext.getBean(Class).",
+    "observed_call_ranges": [
+      {
+        "range": "0x1d38e..0x1d3a3",
+        "meaning": "getSpringBean(env, owner, type) initializes native context from the supplied non-null owner before lookup."
+      },
+      {
+        "range": "0x1d238..0x1d2c7",
+        "meaning": "If native global context is absent, initApplicationContext calls owner.getApplicationContext()."
+      },
+      {
+        "range": "0x1d30f..0x1d328",
+        "meaning": "Returned owner context is held as native global reference."
+      },
+      {
+        "range": "0x1d412..0x1d44f",
+        "meaning": "ApplicationContext.getBean(Class) then runs on that initialized context."
+      }
+    ],
+    "owned_expression": "getApplicationContext().getBean(LocaleChangeInterceptor.class)",
+    "startup_boundary": "Resolve through the MVC configuration own ApplicationContext. Do not require ApplicationContextHelper static context to have been seeded by another bean PostConstruct, and do not reintroduce the native global-context mechanism."
+  }
+}

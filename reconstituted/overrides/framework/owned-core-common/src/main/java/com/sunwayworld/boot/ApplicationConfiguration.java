@@ -187,7 +187,9 @@ public class ApplicationConfiguration extends ApplicationObjectSupport
 
     @Bean
     public LocaleChangeInterceptor localeChangeInterceptor() {
-        return new LocaleChangeInterceptor();
+        LocaleChangeInterceptor interceptor = new LocaleChangeInterceptor();
+        interceptor.setParamName("lang");
+        return interceptor;
     }
 
     @Bean

@@ -32,8 +32,6 @@ public class ApplicationMvcConfiguration
 extends WebMvcConfigurationSupport {
     private final WebMvcProperties mvcProperties;
 
-    private final org.springframework.web.servlet.i18n.LocaleChangeInterceptor localeChangeInterceptor = new org.springframework.web.servlet.i18n.LocaleChangeInterceptor();
-
     public ApplicationMvcConfiguration(WebMvcProperties mvcProperties) {
         this.mvcProperties = mvcProperties;
     }
@@ -84,7 +82,9 @@ extends WebMvcConfigurationSupport {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new TenantInterceptor());
-        registry.addInterceptor(this.localeChangeInterceptor);
+        registry.addInterceptor(getApplicationContext().getBean(
+                org.springframework.web.servlet.i18n.LocaleChangeInterceptor.class))
+                .excludePathPatterns("/static/**");
     }
 
     @Override

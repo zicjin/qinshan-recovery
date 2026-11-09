@@ -153,6 +153,22 @@
       "runtime_reachability": "Supplier diagnostic HTTP length rejection observed during RememberMe getParameter before MVC; native artifact never executed by this analysis.",
       "provenance": "docs/reconstitution/native-multipart-config.json",
       "correction_to_prior_analysis": "Prior owned bean used null location, zero threshold and unlimited maxima, bypassing original Environment configuration. Deliberately short-body declared-length diagnostic proves eager limit assembly, not complete oversized transfer or strict API closure."
+    },
+    {
+      "java_class": "com.sunwayworld.boot.ApplicationConfiguration / com.sunwayworld.boot.ApplicationMvcConfiguration",
+      "java_member": "localeChangeInterceptor / addInterceptors",
+      "native_symbols": [
+        "Java_com_sunwayworld_boot_ApplicationConfiguration_localeResolver",
+        "Java_com_sunwayworld_boot_ApplicationConfiguration_localeChangeInterceptor",
+        "Java_com_sunwayworld_boot_ApplicationMvcConfiguration_addInterceptors"
+      ],
+      "evidence_type": "complete-export-and-owner-helper-static-disassembly-original-class-declarations-and-diagnostic-HTTP",
+      "observed_behavior": "The locale bean sets change parameter lang; MVC resolves this same Spring bean through an owner-aware native helper that initializes context from this.getApplicationContext() when needed, and excludes /static/** after TenantInterceptor. CookieLocaleResolver default CHINA and cookie name locale already match current source.",
+      "owned_replacement": "Restore lang, resolve the same context bean using MVC getApplicationContext().getBean(LocaleChangeInterceptor.class) without preinitialized static ApplicationContextHelper, and exclude static paths; preserve resolver and unrelated MVC semantics.",
+      "confidence": "observed",
+      "runtime_reachability": "Pre-repair supplier/owned real HTTP confirmed opposite lang/locale cookie behavior and unintended owned static/business-query cookie changes; native artifact not executed by this analysis.",
+      "provenance": "docs/reconstitution/native-locale-config.json",
+      "correction_to_prior_analysis": "Prior owned MVC created an independent default locale interceptor, ignoring the declared bean and original lang parameter/static exclusion. Existing messages data difference and both Chinese homepages remain separate limitations; no after-repair pass is claimed."
     }
   ],
   "jni_declaration_export_map": {

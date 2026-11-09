@@ -25,6 +25,7 @@ emcSample.annexPage = {
     getBaseInfoForm : function() {
         var _this = this;
         var  readonly = _this.param.readonly ? Gikam.isTrue(_this.param.readonly) : false;
+        var hideUploadAndDelete = Gikam.isTrue(_this.param.hideUploadAndDelete);
         return {
             type : 'uploader',
             id : 'emc-sample-file-uploader',
@@ -36,7 +37,7 @@ emcSample.annexPage = {
                 columns.splice(3, 0, {
                     field : 'bizCategory',
                     title : 'T_CORE_FILE.BIZCATEGORY',
-                    editor : true,
+                    editor : !hideUploadAndDelete,
                     type : 'select',
                     search : true,
                     category : 'sys',
@@ -49,6 +50,18 @@ emcSample.annexPage = {
                 });
 
                 return columns;
+            },
+            formatterGridToolbar : function (toolbar) {
+                if (!hideUploadAndDelete) {
+                    return toolbar;
+                }
+
+                return toolbar.filter(function (button) {
+                    var icon = (button.icon || '').toLowerCase();
+                    var text = (button.text || '').toLowerCase();
+                    return !/upload|remove|delete/.test(icon)
+                        && !/upload|remove|delete|上传|删除/.test(text);
+                });
             },
             onUploadSuccess : function (fileList) {
                 if (Gikam.isEmpty(fileList)) {

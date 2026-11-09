@@ -108,7 +108,7 @@ emcSample.sampleQuerySearchPage = {
                         width : 800,
                         height : 500,
                         title : 'EMC.MODULE.BP.SAMPLE.SAMPLES.MODAL.ANNEX',
-                        url : emcSample.baseUrl + '/page/sample-annex-list?id=' + rows[0].id
+                        url : emcSample.baseUrl + '/page/sample-annex-list?id=' + rows[0].id + '&hideUploadAndDelete=true'
                     });
                 } else {
                     Gikam.alert('GIKAM.TIP.CHOOSE_ONE_ITEM');

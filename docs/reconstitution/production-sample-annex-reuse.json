@@ -1,0 +1,61 @@
+{
+  "schema": "production-frontend-resource-adoption-v1",
+  "production_artifact_sha256": "ab90fda1331c08d58a58914db280a59c667ad3a15412e8b2ec1aa0d14be81168",
+  "approved_stock_artifact_sha256": "4a720797810fd2f8cca6e22604657028cb87830ca0e24bb55a5f42f040f6ee9f",
+  "production_version": "14.1.5",
+  "captured_at_utc": "2026-11-09T12:48:50.546334Z",
+  "strict_evidence": false,
+  "classification": "version-alignment-original-resource-reuse",
+  "group": "sample-query-attachment-controls",
+  "resources": [
+    {
+      "path": "project/src/main/resources/static/emc/module/bp/sample/samples/emc-sample-annex.js",
+      "source_member": "BOOT-INF/classes/static/emc/module/bp/sample/samples/emc-sample-annex.js",
+      "source_sha256": "5f105415a76082a77cf5ca6623f5d3548eb3c122b380ce46df340e1ea0f24ced",
+      "destination_sha256": "5f105415a76082a77cf5ca6623f5d3548eb3c122b380ce46df340e1ea0f24ced",
+      "prior_owned_sha256": "afa0b171800bf69bae1123bde9dae288d30b557b6cdfa64600e82481ddc2fe9a",
+      "transformation": "none; original production bytes",
+      "disposition": "reuse-production"
+    },
+    {
+      "path": "project/src/main/resources/static/emc/module/bp/sample/samples/emc-sample-query-search-list.js",
+      "source_member": "BOOT-INF/classes/static/emc/module/bp/sample/samples/emc-sample-query-search-list.js",
+      "source_sha256": "afca49b11ba9719a1a78572989eeaf7971e210619260465b07b51f5328b0ec7e",
+      "destination_sha256": "afca49b11ba9719a1a78572989eeaf7971e210619260465b07b51f5328b0ec7e",
+      "prior_owned_sha256": "bebffc7f218366df61e761276cc06ebc83a0caac4e45a05ecd202a3f6a88dd89",
+      "transformation": "none; original production bytes",
+      "disposition": "reuse-production"
+    }
+  ],
+  "contract": {
+    "query": "Original four tabs open the existing sample-annex-list with hideUploadAndDelete=true.",
+    "attachment": "Use the existing uploader formatterGridToolbar and formatterGridColumns; hide upload/delete and disable category editing in the query context while retaining download and the original editable context.",
+    "backend": "No new endpoint, permission relaxation or Java behavior is introduced.",
+    "core_dependencies": "Production and approved stock private framework JAR hashes are identical; existing formatterGridToolbar is invoked by uploader.getGridToolbar.",
+    "unchanged_companion": "Current emc-sample.js remains at its source-backed version. Its production update requires a missing update-actual-sample-user endpoint and is tracked as version-or-config-mismatch."
+  },
+  "http_verification": {
+    "production_static_status": 200,
+    "production_body_matches_source_member": true,
+    "scope": "Two adopted JavaScript files only; no production business calls.",
+    "captured_at_utc": "2026-11-09T13:01:24.918538+00:00"
+  },
+  "template_dependencies": [
+    {
+      "path": "templates/emc/module/bp/sample/samples/emc-sample-annex-list.html",
+      "production_sha256": "18c2bb04399e861682e9cc21b1cc919383318ddfaf88ade1cbea4ca4ff02f957",
+      "disposition": "current owned equivalent after CRLF normalization; unchanged"
+    },
+    {
+      "path": "templates/emc/module/bp/sample/samples/emc-sample-query-search-list.html",
+      "production_sha256": "f1ed12b7a0b54e6721b48a2ffa6e9ac48e843c0caabec4672c584bb76a963a98",
+      "disposition": "current owned equivalent after CRLF normalization; unchanged"
+    }
+  ],
+  "limitations": [
+    "UI controls do not replace server authorization.",
+    "No attachment upload/download storage acceptance or business write proof is claimed.",
+    "No runtime-generated HTML is used as a source template."
+  ],
+  "byte_preservation": "Two path-scoped .gitattributes entries recognize original CRLF as line endings without disabling other whitespace checks; source and distribution hashes retain the production bytes."
+}

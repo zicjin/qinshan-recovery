@@ -1,0 +1,155 @@
+{
+  "schema": "production-ddl-alignment-v1",
+  "target_owner": "LIMS_RUNTIME_LOCAL",
+  "target_container": "FREEPDB1",
+  "production_access": "metadata SELECT in READ ONLY transactions; session-local DBMS_METADATA transforms",
+  "business_data_exported": false,
+  "baseline_modified": false,
+  "operations": [
+    {
+      "kind": "widen-varchar",
+      "table": "T_CORE_AT_RECORD_LINE",
+      "column": "COLUMN",
+      "before": "60",
+      "after": "64",
+      "statement_sha256": "c641ab72fc0ede6f6707f4d539f47b48fe42c8af2d6c35f749d7bdbb07b34b26"
+    },
+    {
+      "kind": "widen-varchar",
+      "table": "T_CORE_AT_RECORD_LINE",
+      "column": "CREATEDBYNAME",
+      "before": "60",
+      "after": "64",
+      "statement_sha256": "43353532aaa089c079364a8850aa298c244729efec51fd6755b6abfb30acaeef"
+    },
+    {
+      "kind": "widen-varchar",
+      "table": "T_CORE_BPMN_COMMENT",
+      "column": "COMMENT",
+      "before": "300",
+      "after": "4000",
+      "statement_sha256": "2b488ed0dc100d897cce2e4268dc552469c8334e1b19a3c6b435b0a26204507a"
+    },
+    {
+      "kind": "widen-varchar",
+      "table": "T_CORE_FILE",
+      "column": "CREATEDBYNAME",
+      "before": "60",
+      "after": "64",
+      "statement_sha256": "ff1e600f0c3eb73b581eb369f7167abae873c85d9eabdc162c83148facfd9eb8"
+    },
+    {
+      "kind": "widen-varchar",
+      "table": "T_CORE_FILE",
+      "column": "NAME",
+      "before": "258",
+      "after": "3000",
+      "statement_sha256": "274930cfbaed39478b5586b66f46f0d71fbe3914d6f43c45a7316e2f49ae3d52"
+    },
+    {
+      "kind": "widen-varchar",
+      "table": "T_CORE_FILE",
+      "column": "TARGETID",
+      "before": "60",
+      "after": "64",
+      "statement_sha256": "6da73b7eaf41fb8ada870384339f7578e4f467b413cf9b693ffa5ee94cfb73aa"
+    },
+    {
+      "kind": "widen-varchar",
+      "table": "T_EMC_AUDIT_RECORD",
+      "column": "COMMENTS",
+      "before": "600",
+      "after": "4000",
+      "statement_sha256": "3a803ecc3e1757e30c78e5aa07fe183d43fc98403f2b08ca7bb09a48167b42be"
+    },
+    {
+      "kind": "widen-varchar",
+      "table": "T_EMC_FOLDER",
+      "column": "MONITORPOINTNAME",
+      "before": "300",
+      "after": "900",
+      "statement_sha256": "6330fab1b7120429bc682fe935b4f12bde1379e90a6cf4f6a4f29c2e800e7595"
+    },
+    {
+      "kind": "widen-number",
+      "table": "T_CORE_FILE",
+      "column": "SIZE",
+      "before_precision": "20",
+      "before_scale": "0",
+      "after_precision": null,
+      "after_scale": null,
+      "statement_sha256": "c5191122cb5265b18739ffe346ff92fafd8c9fc86a8bf9993120ab044a4ee588"
+    },
+    {
+      "kind": "widen-number",
+      "table": "T_CORE_FILE",
+      "column": "TIMES",
+      "before_precision": "4",
+      "before_scale": "0",
+      "after_precision": null,
+      "after_scale": null,
+      "statement_sha256": "e226c3be0db556829bbc9e12682611834cf1f5bc7d6f8f6c9255aab5c479736f"
+    },
+    {
+      "kind": "widen-number",
+      "table": "T_CORE_FILE",
+      "column": "VERSION",
+      "before_precision": "20",
+      "before_scale": "0",
+      "after_precision": null,
+      "after_scale": null,
+      "statement_sha256": "186fbb000b0b63c0539cfc571ffc95a9bf0fd8684b964912daeb771d0c444193"
+    },
+    {
+      "kind": "create-table",
+      "table": "T_EMC_EQUIPT_ACQ_FILE",
+      "production_ddl_sha256": "2307a61ade07af1d7cd81a469e857778c92d220019dcbf6e076d3544ce427f89",
+      "statement_sha256": "1920d11792fdcc51f7f47b7d7cfc8d553477278d203b7b40823c54cc5bf7f2cd"
+    },
+    {
+      "kind": "create-index",
+      "name": "IDX_CORE_ATRECORDLINE_TARGETID",
+      "production_ddl_sha256": "42648cd677cbd0645933eb66d034fb4df22537292382ab2a7cc27e93cdd6c1a1",
+      "statement_sha256": "57e760e01b2cb7b94b0d3c9c257bc6a4cef020b3604de71f9e47e8740f180936"
+    },
+    {
+      "kind": "create-index",
+      "name": "IDX_CORE_FILE_TARGET_BIZ_ID",
+      "production_ddl_sha256": "eb9b4a73a20cc091b3b0ca3394c2aa6e686de0e36f315a23b9521bb73f6f22c0",
+      "statement_sha256": "a007864b91da9d59962856068d37399ded72187c23a3c1e78cee3bc8357aa4bc"
+    },
+    {
+      "kind": "create-index",
+      "name": "IDX_CORE_FILE_TARGET_ID",
+      "production_ddl_sha256": "08bc241fe10655c6c887b45807ffcfe6e638263104725c01bc8acaac3b4cce38",
+      "statement_sha256": "b83fa614d2faf2f6d9138f12525aadf72fd84ec5ca030e71f2df4c4b31232b55"
+    },
+    {
+      "kind": "create-index",
+      "name": "IDX_CORE_FILE_TARGET_SCOPE_ID",
+      "production_ddl_sha256": "3c06f283e7918cf9f80b98deaef379768a8da01a534d170ff2863b35a529565c",
+      "statement_sha256": "105a929ad4e40a6f1f5c5bd6c595b7b98b752ebd37fd59df34a36253d10412fe"
+    }
+  ],
+  "source_artifacts": {
+    "production-columns-private.json": "802ec266dd541ffa7c1d5b85a87e4893eb8da93af87a037b6fb2182fb86f9146",
+    "production-table-ddl-private.json": "43fe29d8053bad811c8639dbea99104b538dd3b1b0bdf0c64f7261d282afede6",
+    "production-other-ddl-private.json": "52da9231a1146761c10edef09618f6567ad65b0e642eca1a2d2908fe1330f70c",
+    "owned-columns-private.json": "fa6744ace28218e98a03c8ab8f49d2755a5d09b03a5925333eeec7a45e5398f3"
+  },
+  "sql": {
+    "path": "api-fixtures/schema/production-ddl-alignment-20261109.sql",
+    "sha256": "20a53eab2bffc80a4491fa0625efccb75ff0caecee8abe8f285383ed77da1325"
+  },
+  "limitations": [
+    "Only additive and widening differences are applied; shrinking/type conversion/precision restriction retained for explicit version and data review.",
+    "No malformed identifiers, Data Pump master tables, database links, credentials, production endpoints or production row values copied.",
+    "DDL implicitly commits; no transaction rollback claim.",
+    "Current schema policy is unchanged; diagnostic only, no strict promotion."
+  ],
+  "reviewed_source": {
+    "path": "api-fixtures/schema/production-ddl-source-20261109.json",
+    "sha256": "4553859307cd4c60a6ac847e779b719d9562c28a3c178d40d728402b6c2acab5"
+  },
+  "publication_transform": "Strip line-ending whitespace only; exact executed SQL and SHA-256 retained privately."
+}

@@ -101,6 +101,30 @@ binding inputs. Observed schema hashes remain runtime-contract inputs. This work
 does not change application source, provide API equivalence, promote strict
 evidence or close `API-ALIGNMENT-GATE`.
 
+`production-ddl-alignment-20261109.sql` and
+`production-ddl-field-alignment-20261109.sql` are reviewed, one-time incremental
+alignment scripts for `LIMS_RUNTIME_LOCAL` in `FREEPDB1`. Their adjacent manifests
+bind a sanitized production metadata subset in
+`production-ddl-source-20261109.json`; raw extraction and execution receipts stay
+private. Production access used metadata SELECT within READ ONLY transactions,
+not a business-data export. Run the source-pinning regression with
+`python3 scripts/tests/test-production-ddl-alignment.py`.
+
+The first script adds the missing acquisition-file table and four indexes,
+widens eight VARCHAR2 columns and removes three narrower NUMBER precision
+restrictions. The second aligns nine VARCHAR2 widths after checking existing
+value lengths, replaces REMARK with CLOB only when the file table is empty and
+the column has no index/constraint dependency, and restores the production
+STRINGTOSCIENCE function's text-buffer widths. These scripts are preconditioned
+one-time migrations, not repeatable bootstrap scripts: preserve logs and inspect
+partial state on failure. DDL implicitly commits. The empty REMARK conversion
+changes its column ordinal. Do not run against baseline or production, reset
+sequences, copy database links, or remove test extensions. Two populated audit-ID
+columns retain their broader NUMBER type pending a separate precision migration;
+invalid source identifiers and Oracle-generated hidden columns are not guessed.
+Existing schema policies are unchanged, so this runtime delta is diagnostic
+until explicitly covered by a subsequent milestone contract.
+
 `invoice-returned-hierarchy.sql` is a separate metadata DML fixture, not part of
 this directory's seven-table schema DDL fixture. It restores only the three
 original invoice/return `T_CORE_TABLE` and `T_CORE_TABLE_HIERARCHY` records needed

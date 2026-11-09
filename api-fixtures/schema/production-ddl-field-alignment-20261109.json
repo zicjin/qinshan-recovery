@@ -1,0 +1,107 @@
+{
+  "schema": "production-ddl-field-alignment-v1",
+  "target_owner": "LIMS_RUNTIME_LOCAL",
+  "target_container": "FREEPDB1",
+  "lengths": [
+    {
+      "table": "T_CORE_AT_RECORD_LINE",
+      "column": "CREATEDBYID",
+      "target_bytes": 32,
+      "rows": 25,
+      "max_bytes": 4,
+      "too_long": 0
+    },
+    {
+      "table": "T_CORE_AT_RECORD_LINE",
+      "column": "CREATEDBYORGID",
+      "target_bytes": 32,
+      "rows": 25,
+      "max_bytes": 9,
+      "too_long": 0
+    },
+    {
+      "table": "T_CORE_AT_RECORD_LINE",
+      "column": "CREATEDBYORGNAME",
+      "target_bytes": 256,
+      "rows": 25,
+      "max_bytes": 9,
+      "too_long": 0
+    },
+    {
+      "table": "T_CORE_AT_RECORD_LINE",
+      "column": "TARGETID",
+      "target_bytes": 128,
+      "rows": 25,
+      "max_bytes": 33,
+      "too_long": 0
+    },
+    {
+      "table": "T_CORE_FILE",
+      "column": "BIZCATEGORY",
+      "target_bytes": 32,
+      "rows": 0,
+      "max_bytes": 0,
+      "too_long": 0
+    },
+    {
+      "table": "T_CORE_FILE",
+      "column": "CREATEDBYID",
+      "target_bytes": 32,
+      "rows": 0,
+      "max_bytes": 0,
+      "too_long": 0
+    },
+    {
+      "table": "T_CORE_FILE",
+      "column": "CREATEDBYORGID",
+      "target_bytes": 32,
+      "rows": 0,
+      "max_bytes": 0,
+      "too_long": 0
+    },
+    {
+      "table": "T_CORE_FILE",
+      "column": "EXT",
+      "target_bytes": 128,
+      "rows": 0,
+      "max_bytes": 0,
+      "too_long": 0
+    },
+    {
+      "table": "T_CORE_FILE",
+      "column": "MD5NAME",
+      "target_bytes": 32,
+      "rows": 0,
+      "max_bytes": 0,
+      "too_long": 0
+    }
+  ],
+  "remark_conversion": {
+    "rows_before": 0,
+    "old": "VARCHAR2(258 BYTE)",
+    "new": "CLOB",
+    "method": "drop empty unindexed unconstrained column and add CLOB; column ordinal changes",
+    "data_deleted": false
+  },
+  "function": {
+    "name": "STRINGTOSCIENCE",
+    "source_ddl_sha256": "4978013b3b4ea70e7939bc427bc42c36b905f187dd78565e5e637a3a0c31d85c",
+    "difference": "four local text buffers 50 -> 150, identical remaining implementation"
+  },
+  "sql": {
+    "path": "api-fixtures/schema/production-ddl-field-alignment-20261109.sql",
+    "sha256": "edc02b1d487e2821ee3ebad839186d4a93ff5de46ef1d8df9240be6db3a6b3b1"
+  },
+  "production_ddl_source_sha256": "52da9231a1146761c10edef09618f6567ad65b0e642eca1a2d2908fe1330f70c",
+  "limits": [
+    "DDL implicitly commits; preserve partial failure and do not rerun blindly.",
+    "Production and baseline read only; no business rows copied or written.",
+    "Number precision narrowing on populated audit IDs is intentionally deferred.",
+    "No sequence reset, malformed identifier conversion, DB link, or environment URL copied."
+  ],
+  "reviewed_source": {
+    "path": "api-fixtures/schema/production-ddl-source-20261109.json",
+    "sha256": "4553859307cd4c60a6ac847e779b719d9562c28a3c178d40d728402b6c2acab5"
+  },
+  "publication_transform": "Strip line-ending whitespace only; exact executed SQL and SHA-256 retained privately."
+}

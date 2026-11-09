@@ -34,8 +34,12 @@ public final class OriginalAuditTrailReadOperations implements AuditTrailReadOpe
     public Page<?> lines(RestJsonWrapperBean wrapper, String trustedOrganization) {
         requireOrganization(trustedOrganization);
         Long recordId = recordId(wrapper);
-        SearchFilter scope = SearchFilter.instance().match("RECORDID", recordId).filter(MatchPattern.EQ)
-                .match("ownedAuditOrgId", trustedOrganization).special();
+        SearchFilter scope = SearchFilter.instance().match("ownedAuditOrgId", trustedOrganization).special();
+        if (recordId != null) {
+            scope.match("RECORDID", recordId).filter(MatchPattern.EQ);
+        } else {
+            scope.match("TARGETID", targetId(wrapper)).filter(MatchPattern.EQ);
+        }
         // GenericService extracts all caller criteria before applying this server filter.
         // The line Mapper binds parent record organization, without projecting an internal column.
         return lines.selectPaginationByFilter(scope, wrapper);
@@ -65,8 +69,29 @@ public final class OriginalAuditTrailReadOperations implements AuditTrailReadOpe
                 if (value != null) break;
             }
         }
-        if (value == null || value.trim().isEmpty()) throw new IllegalArgumentException("recordId is required for audit lines");
+        if (value == null) return null;
+        if (value.trim().isEmpty()) throw new IllegalArgumentException("recordId is invalid");
         try { return Long.valueOf(value.trim()); }
         catch (NumberFormatException invalid) { throw new IllegalArgumentException("recordId is invalid", invalid); }
+    }
+
+    private static String targetId(RestJsonWrapperBean wrapper) {
+        MapperParameter parameter = wrapper.extractMapFilter();
+        FilterParamPattern[] patterns = parameter.getFilterParamPatterns();
+        if (patterns != null) for (FilterParamPattern pattern : patterns) {
+            if (!"SEQ".equalsIgnoreCase(pattern.getMatchPattern()) && !"EQ".equalsIgnoreCase(pattern.getMatchPattern())) continue;
+            for (Map.Entry<String, Object> entry : pattern.getMap().entrySet()) {
+                if ("TARGETID".equalsIgnoreCase(entry.getKey()) && entry.getValue() != null) {
+                    String value = String.valueOf(entry.getValue());
+                    // Original entity audit detail supplies TABLE$ID; require its exact
+                    // target rather than accepting a prefix or an unbounded table read.
+                    if (!value.matches("[A-Za-z][A-Za-z0-9_]*\\$(?s:.+)") || value.substring(value.indexOf('$') + 1).trim().isEmpty()) {
+                        throw new IllegalArgumentException("audit target is invalid");
+                    }
+                    return value;
+                }
+            }
+        }
+        throw new IllegalArgumentException("recordId or exact targetId is required for audit lines");
     }
 }

@@ -66,6 +66,62 @@ public class AuditQueryMvcCheck {
         equal(1,page.getJSONArray("rows").size(),"union page size");
         equal(LARGE_ID,page.getJSONArray("rows").getJSONObject(0).getLongValue("id"),"union sorted second page");
     }
+    static void targetLineQueries(MockMvc mvc,MockHttpSession session,JdbcTemplate db,String fullText,String separator) throws Exception {
+        // Original core-at-record-detail.js sends targetId_EQ=tableName+'$'+id,
+        // without a recordId. Use actual wrapper/service/Mapper and parent rows.
+        db.update("UPDATE T_CORE_AT_RECORD SET TARGETID='T_DEMO$code-A' WHERE ID=?",LARGE_ID);
+        db.update("UPDATE T_CORE_AT_RECORD_LINE SET TARGETID='T_DEMO$code-A' WHERE RECORDID=?",LARGE_ID);
+        db.update("UPDATE T_CORE_AT_RECORD SET TARGETID='T_DEMO$code-B' WHERE ID=3");
+        db.update("UPDATE T_CORE_AT_RECORD_LINE SET TARGETID='T_DEMO$code-B' WHERE RECORDID=3");
+        // Same exact target in another parent organization must remain invisible,
+        // even when the child incorrectly carries the local organization.
+        db.update("INSERT INTO T_CORE_AT_RECORD VALUES(4,'UPDATE','foreign exact target','T_DEMO$code-A','org-b',TIMESTAMP '2026-01-04 12:00:00','note')");
+        db.update("INSERT INTO T_CORE_AT_RECORD_LINE(ID,RECORDID,TARGETID,CREATEDBYORGID,TABLENAME,NEWVALUE,OLDVALUE,\"COLUMN\") VALUES(14,4,'T_DEMO$code-A','org-a','T_DEMO','foreign secret','old','FIELD_A')");
+        JSONObject page=query(mvc,session,LINES,"{\"p\":{\"f\":{\"targetId_EQ\":\"T_DEMO$code-A\"},\"o\":[{\"ID\":\"asc\"}],\"n\":1,\"s\":20}}",200);
+        equal(2,page.getIntValue("total"),"original UI targetId_EQ admits exact target without recordId");
+        equal(fullText,page.getJSONArray("rows").getJSONObject(0).getString("newValue"),"target query preserves full actual CLOB");
+        equal(false,page.toJSONString().contains("foreign secret"),"same target foreign parent excluded despite local child org");
+        equal(false,page.toJSONString().contains("ownedAuditOrg"),"target query never projects trusted scope");
+        for (String container:Arrays.asList("f","qf")) {
+            for (String match:Arrays.asList("EQ","SEQ")) {
+                equal(2,query(mvc,session,LINES,"{\"p\":{\""+container+"\":{\"tableName_SEQ\":\"T_DEMO\",\"targetId_"+match+"\":\"T_DEMO$code-A\"},\"n\":1,\"s\":20}}",200).getIntValue("total"),"exact target "+container+" "+match);
+            }
+        }
+        equal(0,query(mvc,session,LINES,"{\"p\":{\"f\":{\"targetId_EQ\":\"T_DEMO$code-A\",\"tableName_SEQ\":\"T_OTHER\"}}}",200).getIntValue("total"),"original table criterion remains AND");
+        equal(1,query(mvc,session,LINES,"{\"p\":{\"f\":{\"targetId_EQ\":\"T_DEMO$code-A\",\"column_SEQ\":\"FIELD_A\"}}}",200).getIntValue("total"),"original column criterion remains AND");
+        equal(0,query(mvc,session,LINES,"{\"p\":{\"f\":{\"targetId_EQ\":\"T_DEMO$code-A\"},\"qf\":{\"targetId_SEQ\":\"T_DEMO$code-B\"}}}",200).getIntValue("total"),"conflicting exact target criteria remain AND, not first match wins");
+        equal(0,query(mvc,session,LINES,"{\"p\":{\"f\":{\"targetId_EQ\":\"T_DEMO$code-B\",\"ownedAuditOrgId\":\"org-b\",\"loginOrgId\":\"org-b\"},\"ownedAuditOrgId\":\"org-b\"}}",200).getIntValue("total"),"foreign target cannot spoof trusted organization");
+        page=query(mvc,session,LINES,"{\"p\":{\"f\":{\"targetId_SEQ\":\"T_DEMO$code-A\"},\"o\":[{\"ID\":\"asc\"}],\"n\":2,\"s\":1}}",200);
+        equal(2,page.getIntValue("total"),"target pagination total remains scoped");
+        equal(1,page.getJSONArray("rows").size(),"target pagination second page size");
+        equal(12L,page.getJSONArray("rows").getJSONObject(0).getLongValue("id"),"target pagination preserves ordering and page");
+        for (String value:Arrays.asList("T_DEMO$%","T_DEMO$_","T_DEMO$' OR 1=1 --","T_DEMO$NO-MATCH")) {
+            JSONObject body=new JSONObject();JSONObject p=new JSONObject();JSONObject f=new JSONObject();
+            f.put("targetId_EQ",value);p.put("f",f);body.put("p",p);
+            equal(0,query(mvc,session,LINES,body.toJSONString(),200).getIntValue("total"),"EQ target value remains literal bound data "+value);
+        }
+        for (String value:Arrays.asList("", " ", "VOID", "T_DEMO", "T_DEMO$", "$code-A")) {
+            JSONObject body=new JSONObject();JSONObject p=new JSONObject();JSONObject f=new JSONObject();
+            f.put("targetId_EQ",value);p.put("f",f);body.put("p",p);
+            query(mvc,session,LINES,body.toJSONString(),400);
+        }
+        for (String filter:Arrays.asList("{\"tableName_SEQ\":\"T_DEMO\"}","{\"targetId_CISC\":\"T_DEMO$\"}","{\"targetId_SC\":\"T_DEMO$code-A\"}","{\"targetId_IN\":\"T_DEMO$code-A\"}","{\"targetId\":\"T_DEMO$code-A\"}","{\"targetId_EQ\":null}")) {
+            query(mvc,session,LINES,"{\"p\":{\"f\":"+filter+"}}",400);
+        }
+        JSONObject body=new JSONObject();JSONObject p=new JSONObject();JSONObject f=new JSONObject();
+        f.put("targetId_SEQ","T_DEMO$code-A"+separator+"T_DEMO$code-B");p.put("f",f);body.put("p",p);
+        query(mvc,session,LINES,body.toJSONString(),400);
+        query(mvc,session,LINES,"{\"p\":{\"recordId_SEQ\":\"bad\",\"f\":{\"targetId_EQ\":\"T_DEMO$code-A\"}}}",400);
+        query(mvc,session,LINES,"{\"p\":{\"f\":{\"recordId_SEQ\":\"bad\",\"targetId_EQ\":\"T_DEMO$code-A\"}}}",400);
+        query(mvc,session,LINES,"{\"p\":{\"qf\":{\"recordId_SEQ\":\"bad\"},\"f\":{\"targetId_EQ\":\"T_DEMO$code-A\"}}}",400);
+        equal(2,query(mvc,session,LINES,"{\"p\":{\"f\":{\"recordId_SEQ\":2030254965053728,\"targetId_EQ\":\"T_DEMO$code-A\"}}}",200).getIntValue("total"),"recordId anchor remains compatible with exact target criterion");
+        equal(0,query(mvc,session,LINES,"{\"p\":{\"f\":{\"recordId_SEQ\":3,\"targetId_EQ\":\"T_DEMO$code-A\"}}}",200).getIntValue("total"),"recordId cannot be bypassed by same-org target");
+        db.update("DELETE FROM T_CORE_AT_RECORD_LINE WHERE ID=14");db.update("DELETE FROM T_CORE_AT_RECORD WHERE ID=4");
+        db.update("UPDATE T_CORE_AT_RECORD SET TARGETID='target-a' WHERE ID=?",LARGE_ID);
+        db.update("UPDATE T_CORE_AT_RECORD_LINE SET TARGETID='target-a' WHERE RECORDID=?",LARGE_ID);
+        db.update("UPDATE T_CORE_AT_RECORD SET TARGETID='target-b' WHERE ID=3");
+        db.update("UPDATE T_CORE_AT_RECORD_LINE SET TARGETID='target-b' WHERE RECORDID=3");
+    }
     static com.sunwayworld.framework.database.context.EntityContext entity(Class<?> type, String table, DataSource ds) throws Exception {
         com.sunwayworld.framework.database.context.EntityContext entity=new com.sunwayworld.framework.database.context.EntityContext();
         entity.setTableName(table);
@@ -269,6 +325,7 @@ public class AuditQueryMvcCheck {
         equal(0,query(mvc,session,LINES,"{\"p\":{\"f\":{\"recordId_SEQ\":2030254965053728},\"qf\":{\"recordId_SEQ\":3},\"n\":1,\"s\":20}}",200).getIntValue("total"),"conflicting record filters remain AND");
         query(mvc,session,LINES,"{}",400);
         query(mvc,session,LINES,"{\"p\":{\"f\":{\"recordId_SEQ\":\"bad\"}}}",400);
+        targetLineQueries(mvc,session,db,fullText,separator);
         for(String path:Arrays.asList(RECORDS,LINES)) {
             query(mvc,new MockHttpSession(),path,"{}",403);
             identity.deny=true; query(mvc,session,path,"{}",403); identity.deny=false;

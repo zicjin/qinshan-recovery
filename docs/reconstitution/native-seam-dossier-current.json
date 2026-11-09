@@ -141,6 +141,18 @@
       "runtime_reachability": "supplier diagnostic HTTP observed; native artifact not executed by analysis",
       "provenance": "docs/reconstitution/native-mvc-message-converters.json",
       "correction_to_prior_analysis": "Prior source reconstruction omitted setSupportedMediaTypes and appended Spring defaults, accepting arbitrary media types and changing String response serialization."
+    },
+    {
+      "java_class": "com.sunwayworld.boot.ApplicationConfiguration",
+      "java_member": "multipartConfigElement",
+      "native_symbol": "Java_com_sunwayworld_boot_ApplicationConfiguration_multipartConfigElement",
+      "evidence_type": "complete-export-static-disassembly-original-class-declaration-and-diagnostic-HTTP",
+      "observed_behavior": "Creates <user.dir>/files/temp/multipart, applies Environment-backed MultipartConfigFactory threshold/max-file/max-request DataSize properties with null-only fallbacks 2MB/100MB/100MB, then returns createMultipartConfig. Stock application.yml configures 1024MB maxima; supplier diagnostic reports effective max-request 1073741824 bytes.",
+      "owned_replacement": "Restore original temporary location and public Spring multipart configuration from Environment; propagate invalid size/directory errors, preserve overrides, and exclude native/license/MAC behavior.",
+      "confidence": "observed",
+      "runtime_reachability": "Supplier diagnostic HTTP length rejection observed during RememberMe getParameter before MVC; native artifact never executed by this analysis.",
+      "provenance": "docs/reconstitution/native-multipart-config.json",
+      "correction_to_prior_analysis": "Prior owned bean used null location, zero threshold and unlimited maxima, bypassing original Environment configuration. Deliberately short-body declared-length diagnostic proves eager limit assembly, not complete oversized transfer or strict API closure."
     }
   ],
   "jni_declaration_export_map": {

@@ -155,8 +155,21 @@ public class ApplicationConfiguration extends ApplicationObjectSupport
     }
 
     @Bean
-    public MultipartConfigElement multipartConfigElement() {
-        return new MultipartConfigElement(null, -1L, -1L, 0);
+    public MultipartConfigElement multipartConfigElement() throws java.io.IOException {
+        java.nio.file.Path location = com.sunwayworld.framework.io.file.FilePathManager
+                .getLocalPath(com.sunwayworld.framework.io.file.FileScope.temp).resolve("multipart");
+        java.nio.file.Files.createDirectories(location);
+        org.springframework.boot.web.servlet.MultipartConfigFactory factory =
+                new org.springframework.boot.web.servlet.MultipartConfigFactory();
+        factory.setLocation(location.toString());
+        org.springframework.core.env.Environment environment = getApplicationContext().getEnvironment();
+        String threshold = environment.getProperty("spring.servlet.multipart.file-size-threshold");
+        String maxFile = environment.getProperty("spring.servlet.multipart.max-file-size");
+        String maxRequest = environment.getProperty("spring.servlet.multipart.max-request-size");
+        factory.setFileSizeThreshold(org.springframework.util.unit.DataSize.parse(threshold == null ? "2MB" : threshold));
+        factory.setMaxFileSize(org.springframework.util.unit.DataSize.parse(maxFile == null ? "100MB" : maxFile));
+        factory.setMaxRequestSize(org.springframework.util.unit.DataSize.parse(maxRequest == null ? "100MB" : maxRequest));
+        return factory.createMultipartConfig();
     }
 
     @Bean

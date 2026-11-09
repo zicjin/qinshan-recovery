@@ -14,7 +14,7 @@
   "overridden_files": [
     {
       "generated_sha256": "d3bc4f64de478834bc6684cea03daf0e03e0e554e170f770b5c6dcb3974febd2",
-      "override_sha256": "d047b21675a3bfa4d3dd2516186a419c7a18affa012f2c0bf30f4f3e06c64ad5",
+      "override_sha256": "dc8e670efb9cfa394760c5f9306f6ca43683703cbb73e55c298d8980033a2572",
       "path": "src/main/java/com/sunwayworld/boot/ApplicationConfiguration.java"
     },
     {
@@ -171,7 +171,7 @@
     },
     {
       "generated_sha256": "d3bc4f64de478834bc6684cea03daf0e03e0e554e170f770b5c6dcb3974febd2",
-      "override_sha256": "d047b21675a3bfa4d3dd2516186a419c7a18affa012f2c0bf30f4f3e06c64ad5",
+      "override_sha256": "dc8e670efb9cfa394760c5f9306f6ca43683703cbb73e55c298d8980033a2572",
       "path": "src/main/java/com/sunwayworld/boot/ApplicationConfiguration.java"
     },
     {
@@ -366,7 +366,7 @@
       "decompiler": "CFR",
       "decompiler_version": "0.152",
       "path": "src/main/java/com/sunwayworld/boot/ApplicationConfiguration.java",
-      "sha256": "d047b21675a3bfa4d3dd2516186a419c7a18affa012f2c0bf30f4f3e06c64ad5",
+      "sha256": "dc8e670efb9cfa394760c5f9306f6ca43683703cbb73e55c298d8980033a2572",
       "source_class_path": "com/sunwayworld/boot/ApplicationConfiguration.class",
       "source_jar": "BOOT-INF/lib/gikam-core-common-14.1.5.jar",
       "source_sha256_before_overlay": "d3bc4f64de478834bc6684cea03daf0e03e0e554e170f770b5c6dcb3974febd2",
@@ -374,7 +374,8 @@
       "transformations": [
         "normalization:generated-source",
         "overlay:src/main/java/com/sunwayworld/boot/ApplicationConfiguration.java",
-        "source-repair:discover-Oracle-mappers-in-original-conf-config-impl-resource-directories"
+        "source-repair:discover-Oracle-mappers-in-original-conf-config-impl-resource-directories",
+        "source-repair:restore-original-multipart-location-and-environment-size-limits;docs/reconstitution/native-multipart-config.json"
       ]
     },
     {
@@ -31611,7 +31612,7 @@
       ]
     }
   ],
-  "source_tree_sha256": "7b8bca87613e8551d1eeee6552c2bd430a3e3c8989db80a60e3fc94c374ad129",
+  "source_tree_sha256": "6e9d2cf8261b3e3e1b0c308026dcf4484ade74f94c939495158bd5eb4db20031",
   "status": "assembled-source-only",
   "transformation_manifest": "docs/reconstitution/decompiler-transforms.json",
   "transformation_manifest_sha256": "30ab06626f3e4c863a2855790b0ec6211499394852f2a8598ea3bd444ce87fe8",

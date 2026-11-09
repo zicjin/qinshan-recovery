@@ -113,6 +113,8 @@ public class ApplicationConfiguration extends ApplicationObjectSupport
         RedisTemplate<String, Object> template = new RedisTemplate<>();
         template.setConnectionFactory(factory);
         template.afterPropertiesSet();
+        template.setKeySerializer(new com.sunwayworld.framework.cache.redis.serializer.RedisKeySerializer());
+        template.setHashKeySerializer(new com.sunwayworld.framework.cache.redis.serializer.RedisKeySerializer());
         return template;
     }
 
@@ -123,7 +125,11 @@ public class ApplicationConfiguration extends ApplicationObjectSupport
 
     @Bean
     public CacheManager cacheManager(RedisConnectionFactory factory) {
-        return new RedisCacheManager(redisCacheWriter(factory), RedisCacheConfiguration.defaultCacheConfig());
+        RedisCacheConfiguration configuration = RedisCacheConfiguration.defaultCacheConfig()
+                .disableCachingNullValues()
+                .serializeKeysWith(org.springframework.data.redis.serializer.RedisSerializationContext.SerializationPair
+                        .fromSerializer(new com.sunwayworld.framework.cache.redis.serializer.RedisKeySerializer()));
+        return new RedisCacheManager(redisCacheWriter(factory), configuration);
     }
 
     @Bean

@@ -1,0 +1,265 @@
+{
+  "schema": "native-redis-cache-config-attribution-v1",
+  "conclusion": "observed-original-shared-cache-key-contract-and-stale-workspace-layout",
+  "canonical": false,
+  "strict_evidence": false,
+  "input": {
+    "stock_jar_sha256": "4a720797810fd2f8cca6e22604657028cb87830ca0e24bb55a5f42f040f6ee9f",
+    "nested_jars": [
+      {
+        "member": "BOOT-INF/lib/gikam-core-common-14.1.5.jar",
+        "sha256": "1075fda5ac05d4292b8c2efe2d9b3cc8379ce049c133221c27ba8f2cee7e1089"
+      },
+      {
+        "member": "BOOT-INF/lib/gikam-core-base-service-14.1.5.jar",
+        "sha256": "5d64d5f336464e76078ace721fbc088e94d17129061b1e321de9df8d7be7f0d5"
+      }
+    ],
+    "original_classes": [
+      {
+        "source_jar": "common",
+        "path": "com/sunwayworld/boot/ApplicationConfiguration.class",
+        "sha256": "5a7da14a648726ff8954910350fa1b987d89003b2f7e108b35e67e8ba2553d08"
+      },
+      {
+        "source_jar": "common",
+        "path": "com/sunwayworld/framework/cache/redis/serializer/RedisKeySerializer.class",
+        "sha256": "92b55bc8e3fad68301c8bee8722a967c699793991235a6b5fcf1ea55f2c34dcd"
+      },
+      {
+        "source_jar": "common",
+        "path": "com/sunwayworld/framework/cache/redis/RedisHelper.class",
+        "sha256": "2360485a2eac59e728ffc6809103cfe9dd768f957a0fe357da9690f0e7976ad2"
+      },
+      {
+        "source_jar": "base-service",
+        "path": "com/sunwayworld/cloud/module/item/workspacepanel/persistent/dao/impl/CoreWorkspacePanelDaoImpl.class",
+        "sha256": "431a3b6fba8e03246155dd6e917181f5bf5e286311368b16478a999d8ec9a457"
+      },
+      {
+        "source_jar": "base-service",
+        "path": "com/sunwayworld/cloud/module/item/workspacescheme/service/impl/CoreWorkspaceUserSchemeServiceImpl.class",
+        "sha256": "cccd08888573088a12b792984f9ce702743f47831eeb0b710b64fb41a8c79eb1"
+      }
+    ],
+    "native_member": "third-party/sunway-app/linux/sunway-app.so",
+    "native_sha256": "dc06e05d55252211e44b3a177267b68efc970b095d74c7ebd815057f5393d40a"
+  },
+  "native_exports": [
+    {
+      "name": "redisTemplate",
+      "symbol": "Java_com_sunwayworld_boot_ApplicationConfiguration_redisTemplate",
+      "start": "0x5282",
+      "size_bytes": 1557,
+      "end_exclusive": "0x5897",
+      "assembly_sha256": "03155f80cc7a36610c9b0e1a9a18337acf4ec4fe09b0a584fcafb94d4aaa1248"
+    },
+    {
+      "name": "redisCacheWriter",
+      "symbol": "Java_com_sunwayworld_boot_ApplicationConfiguration_redisCacheWriter",
+      "start": "0x5897",
+      "size_bytes": 165,
+      "end_exclusive": "0x593c",
+      "assembly_sha256": "218e9c2dc7d97b04e8376e902f09d2ceb5da1d8be2166696564eef8431f4b0c9"
+    },
+    {
+      "name": "cacheManager",
+      "symbol": "Java_com_sunwayworld_boot_ApplicationConfiguration_cacheManager",
+      "start": "0x593c",
+      "size_bytes": 1904,
+      "end_exclusive": "0x60ac",
+      "assembly_sha256": "5845a5dca8725b8cedb2472c035a81f5fc3b145f611a00c41b95551592bf4c35"
+    }
+  ],
+  "original_contract": {
+    "redisTemplate": {
+      "order": [
+        "new RedisTemplate",
+        "setConnectionFactory(factory)",
+        "afterPropertiesSet()",
+        "setKeySerializer(new RedisKeySerializer())",
+        "setHashKeySerializer(new RedisKeySerializer())"
+      ],
+      "independent_serializer_instances": 2,
+      "call_sites": {
+        "afterPropertiesSet": "0x53bd",
+        "key_serializer_constructor": "0x5787",
+        "setKeySerializer": "0x57b1",
+        "hash_key_serializer_constructor": "0x57fe",
+        "setHashKeySerializer": "0x582b"
+      },
+      "value_and_hash_value_serializers": "Public JDK defaults, with no native setter override."
+    },
+    "cacheManager": {
+      "order": [
+        "redisCacheWriter(factory)",
+        "RedisCacheConfiguration.defaultCacheConfig()",
+        "disableCachingNullValues()",
+        "serializeKeysWith(SerializationPair.fromSerializer(new RedisKeySerializer()))",
+        "new RedisCacheManager(writer, configuration)"
+      ],
+      "independent_serializer_instances": 1,
+      "call_sites": {
+        "disableCachingNullValues": "0x5a98",
+        "key_serializer_constructor": "0x5ec3",
+        "fromSerializer": "0x5eed",
+        "serializeKeysWith": "0x5f17",
+        "RedisCacheManager_constructor": "0x5f96"
+      },
+      "TTL": "Default eternal TTL (Duration.ZERO); no new TTL override.",
+      "key_prefix": "Default cacheName:: prefix.",
+      "value_serializer": "Public JDK default remains."
+    },
+    "redisCacheWriter": "nonLockingRedisCacheWriter(factory), already matching current owned implementation; unchanged.",
+    "RedisKeySerializer": "Original source extends StringRedisSerializer, prepends spring.redis.namespace (default empty), and in tenant profile appends the existing tenant suffix once. Separate original constructor calls remain separate; no shared singleton added."
+  },
+  "prior_owned_difference": {
+    "template": "No key/hash-key override after afterPropertiesSet, leaving JDK-serialized keys.",
+    "cacheManager": "Default String-serialized cache keys and cached nulls enabled.",
+    "business_effect": "CacheManager writes String layout cache keys. Original RedisHelper bulk eviction scans those raw String keys, then calls RedisTemplate.delete(Collection); the prior template serializes the scanned Strings as different JDK byte keys, so the actual layout entry survives a successful panel update."
+  },
+  "source_causal_chain": [
+    {
+      "source": "reconstituted/framework/owned-core-base-service/src/main/java/com/sunwayworld/cloud/module/item/workspacescheme/service/impl/CoreWorkspaceUserSchemeServiceImpl.java",
+      "method": "selectUserPanelLayout",
+      "meaning": "Original @Cacheable core-user-panel-config-layout uses user/role key generator and copies panel title/URL/config to the cached representation."
+    },
+    {
+      "source": "reconstituted/framework/owned-core-base-service/src/main/java/com/sunwayworld/cloud/module/item/workspacepanel/persistent/dao/impl/CoreWorkspacePanelDaoImpl.java",
+      "method": "cacheEvict",
+      "meaning": "Actual panel update invokes RedisHelper.evict(\"core-user-panel-config-layout\")."
+    },
+    {
+      "source": "reconstituted/framework/owned-core-common/src/main/java/com/sunwayworld/framework/cache/redis/RedisHelper.java",
+      "method": "evictCacheByPattern",
+      "meaning": "Raw SCAN by cacheName::* -> String key set -> RedisTemplate.delete(keySet)."
+    },
+    {
+      "public_class": "org.springframework.data.redis.core.RedisTemplate",
+      "meaning": "delete(Collection) calls rawKeys/rawKey with the template key serializer; default initialization uses JdkSerializationRedisSerializer."
+    }
+  ],
+  "diagnostic_http_before": {
+    "capture_sha256": "c1a30ab0f5f8c8ed35fe773c931d69793fca33127c79e234f4a34b0213727e8b",
+    "request_count": 72,
+    "requests_per_side": 36,
+    "actual_business_writes_via_HTTP": true,
+    "business_SQL_DML": false,
+    "dedicated_fixture": true,
+    "sides": [
+      {
+        "side": "owned",
+        "request_count": 36,
+        "panel_detail_after_update": "B",
+        "layout_after_update": "A",
+        "stale_layout_observed": true,
+        "entity_API_cleanup_zero": true,
+        "personal_scheme_zero": true,
+        "sequence_retained": true
+      },
+      {
+        "side": "supplier",
+        "request_count": 36,
+        "panel_detail_after_update": "B",
+        "layout_after_update": "B",
+        "stale_layout_observed": false,
+        "entity_API_cleanup_zero": true,
+        "personal_scheme_zero": true,
+        "sequence_retained": true
+      }
+    ],
+    "measured_cycle": [
+      {
+        "method": "GET",
+        "path": "/secure/core/module/item/workspace-user-schemes/layouts",
+        "purpose": "Warm dedicated panel layout with title A."
+      },
+      {
+        "method": "PUT",
+        "path": "/secure/core/module/item/workspace-panels/{fixturePanelId}",
+        "purpose": "Change original panel title to B."
+      },
+      {
+        "method": "GET",
+        "path": "/secure/core/module/item/workspace-panels/{fixturePanelId}",
+        "purpose": "Read actual persisted title B on both sides."
+      },
+      {
+        "method": "GET",
+        "path": "/secure/core/module/item/workspace-user-schemes/layouts",
+        "purpose": "Owned still returns cached A while supplier returns B."
+      }
+    ],
+    "interpretation": "The original update persisted B in both runtimes, while only owned returned stale layout A. This is a source-backed cache eviction compatibility failure rather than a failed write, response-only inference or different test record.",
+    "GET_side_effect_boundary": "Original layouts may initialize scheme rows when absent. The measurement uses already-created dedicated personal schemes; setup and cleanup HTTP writes remain explicit.",
+    "not_strict": "This real HTTP reproduction is diagnostic; it does not establish the post-repair outcome or promote API strict evidence."
+  },
+  "fixture_cleanup_before": {
+    "business_zero": {
+      "receipt_sha256": "9805ca3844c89f1c8ce47394afb98aa3524e3ea0187b37efaf41f5e96e2501fa",
+      "attempts_checked": 3,
+      "checked_categories": [
+        "userRows",
+        "schemeRows",
+        "personalRows",
+        "panelRows",
+        "schemePanelLinks",
+        "personalPanelLinks"
+      ],
+      "all_reported_counts": 0,
+      "scope": "Both earlier owned-only failed attempts and the final owned/supplier reproduction are retained and checked."
+    },
+    "exact_layout_cache_zero": {
+      "receipt_sha256": "13f8d6a7c3041af3d580c9a52293e488d253751b25681c5eaa70a9507f33d886",
+      "sides": {
+        "owned": {
+          "side": "owned",
+          "exact_fixture_cache_keys_checked": 3,
+          "remaining": 0,
+          "cache_values_read": false
+        },
+        "supplier": {
+          "side": "supplier",
+          "exact_fixture_cache_keys_checked": 3,
+          "remaining": 0,
+          "cache_values_read": false
+        }
+      },
+      "scope": "Authenticated exact existence reads for three dedicated fixture cache keys per side; cache values were not read."
+    },
+    "invalid_scan_retained": {
+      "receipt_sha256": "68c3fb8da5fbd8548b692314c9f973f1fc16f4ce3515ecb799148f2458e7630f",
+      "valid_cleanup_evidence": false,
+      "reason": "Original SCAN cursor was incomplete and supplier returned NOAUTH. Its original error fields remain; only subsequent authenticated exact-key reads establish cache absence."
+    },
+    "restoration": "HTTP restore title A and API fixture removal are compensation, not a demonstrated transaction rollback. Original empty personal-layout PUT performs exact user-scope @CacheEvict before final deletion. Monotonic sequence allocations remain retained.",
+    "audit_limitation": "Existing preflight reports auditTrail disabled for USER and workspace scheme; this reproduction does not claim complete audit or transaction rollback acceptance."
+  },
+  "public_dependency": {
+    "jar": "spring-data-redis-2.3.4.RELEASE.jar",
+    "sha256": "fcd476ac2032bac7d6835e789b25578aa58a1ff1c980c43f7887f74fb4628db2",
+    "identical_to_stock": true,
+    "configuration_defaults": "String key serializer and JDK value serializer in default RedisCacheConfiguration; JDK key/hash-key defaults in RedisTemplate without explicit overrides."
+  },
+  "replacement": {
+    "source": "reconstituted/framework/owned-core-common/src/main/java/com/sunwayworld/boot/ApplicationConfiguration.java",
+    "source_sha256": "005cb4c6030c15c38d89a0d5b7fe552d8987d17e03b9d66da46362c283303fd1",
+    "override": "reconstituted/overrides/framework/owned-core-common/src/main/java/com/sunwayworld/boot/ApplicationConfiguration.java",
+    "override_sha256": "005cb4c6030c15c38d89a0d5b7fe552d8987d17e03b9d66da46362c283303fd1",
+    "behavior": "Restore original key/hash-key RedisKeySerializer constructors after template initialization, and original no-null/cache-key configuration for CacheManager. Keep all value serializers, TTL, prefix, writer, native-removal boundaries and business source unchanged.",
+    "startup": "RedisKeySerializer reads the existing ApplicationContextHelper Environment. ApplicationConfiguration already initializes that helper in its PostConstruct before its bean methods; no new lifecycle or context facade is added."
+  },
+  "analysis_method": [
+    "Complete exact-symbol native disassembly without execution",
+    "Original private class hashes and reconstructed serializer/helper/business source",
+    "Byte-identical public Spring Data Redis bytecode",
+    "Existing real HTTP dedicated fixture reproduction and precise business/cache cleanup reads"
+  ],
+  "limitations": [
+    "No after-repair HTTP success is recorded in this provenance; source repair outcome remains to be verified against the same business loop.",
+    "Workspace layout excludes null via its own unless expression; this reproduction specifically proves key/eviction behavior, not every cached-null contract.",
+    "Existing nonempty namespace/tenant raw SCAN behavior is not redesigned here; observed fixture uses the reviewed non-tenant/default-namespace configuration.",
+    "Changing key serializers does not migrate old JDK-keyed sessions/RSA/captcha entries. No Redis flush, broad deletion or generic migration is part of this repair; fresh authenticated sessions may be required.",
+    "No private supplier class or native artifact is added to the final runtime, and no extra process/runtime is introduced."
+  ]
+}

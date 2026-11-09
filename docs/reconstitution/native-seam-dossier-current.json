@@ -169,6 +169,21 @@
       "runtime_reachability": "Pre-repair supplier/owned real HTTP confirmed opposite lang/locale cookie behavior and unintended owned static/business-query cookie changes; native artifact not executed by this analysis.",
       "provenance": "docs/reconstitution/native-locale-config.json",
       "correction_to_prior_analysis": "Prior owned MVC created an independent default locale interceptor, ignoring the declared bean and original lang parameter/static exclusion. Existing messages data difference and both Chinese homepages remain separate limitations; no after-repair pass is claimed."
+    },
+    {
+      "java_class": "com.sunwayworld.boot.ApplicationConfiguration",
+      "java_member": "redisTemplate / cacheManager",
+      "native_symbols": [
+        "Java_com_sunwayworld_boot_ApplicationConfiguration_redisTemplate",
+        "Java_com_sunwayworld_boot_ApplicationConfiguration_cacheManager"
+      ],
+      "evidence_type": "complete-export-static-disassembly-public-redis-bytecode-and-real-business-HTTP",
+      "observed_behavior": "Original RedisTemplate key/hash-key and CacheManager key serialization use separate RedisKeySerializer instances; CacheManager disables null caching. Prior owned default JDK template keys mismatched String cache keys, leaving workspace layouts stale after a persisted panel update.",
+      "owned_replacement": "Restore original template key/hash-key setters and cache configuration; preserve JDK value serializers, TTL, prefix and existing nonlocking writer.",
+      "confidence": "observed",
+      "runtime_reachability": "Pre-repair dedicated business HTTP on both sides persisted title B; only owned cached layout remained A. Three fixture attempts have entity/link zero checks and authenticated exact cache-key absence; native artifact not executed.",
+      "provenance": "docs/reconstitution/native-redis-cache-config.json",
+      "correction_to_prior_analysis": "This is a confirmed business cache invalidation gap rather than static serializer variation. Original invalid NOAUTH/SCAN observation is retained separately and superseded only by exact authenticated cache reads. No after-repair pass or complete audit/rollback is claimed."
     }
   ],
   "jni_declaration_export_map": {

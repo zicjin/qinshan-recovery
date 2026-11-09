@@ -14,7 +14,7 @@
   "overridden_files": [
     {
       "generated_sha256": "d3bc4f64de478834bc6684cea03daf0e03e0e554e170f770b5c6dcb3974febd2",
-      "override_sha256": "90d1d55f2a70b265a9dfc73a51276f4780a28c1b23f71c2b6edb8e115c51f46b",
+      "override_sha256": "005cb4c6030c15c38d89a0d5b7fe552d8987d17e03b9d66da46362c283303fd1",
       "path": "src/main/java/com/sunwayworld/boot/ApplicationConfiguration.java"
     },
     {
@@ -171,7 +171,7 @@
     },
     {
       "generated_sha256": "d3bc4f64de478834bc6684cea03daf0e03e0e554e170f770b5c6dcb3974febd2",
-      "override_sha256": "90d1d55f2a70b265a9dfc73a51276f4780a28c1b23f71c2b6edb8e115c51f46b",
+      "override_sha256": "005cb4c6030c15c38d89a0d5b7fe552d8987d17e03b9d66da46362c283303fd1",
       "path": "src/main/java/com/sunwayworld/boot/ApplicationConfiguration.java"
     },
     {
@@ -366,7 +366,7 @@
       "decompiler": "CFR",
       "decompiler_version": "0.152",
       "path": "src/main/java/com/sunwayworld/boot/ApplicationConfiguration.java",
-      "sha256": "90d1d55f2a70b265a9dfc73a51276f4780a28c1b23f71c2b6edb8e115c51f46b",
+      "sha256": "005cb4c6030c15c38d89a0d5b7fe552d8987d17e03b9d66da46362c283303fd1",
       "source_class_path": "com/sunwayworld/boot/ApplicationConfiguration.class",
       "source_jar": "BOOT-INF/lib/gikam-core-common-14.1.5.jar",
       "source_sha256_before_overlay": "d3bc4f64de478834bc6684cea03daf0e03e0e554e170f770b5c6dcb3974febd2",
@@ -376,7 +376,8 @@
         "overlay:src/main/java/com/sunwayworld/boot/ApplicationConfiguration.java",
         "source-repair:discover-Oracle-mappers-in-original-conf-config-impl-resource-directories",
         "source-repair:restore-original-multipart-location-and-environment-size-limits;docs/reconstitution/native-multipart-config.json",
-        "source-repair:restore-original-locale-lang-bean-and-static-exclusion;docs/reconstitution/native-locale-config.json"
+        "source-repair:restore-original-locale-lang-bean-and-static-exclusion;docs/reconstitution/native-locale-config.json",
+        "source-repair:restore-original-redis-cache-key-serialization;docs/reconstitution/native-redis-cache-config.json"
       ]
     },
     {
@@ -31614,7 +31615,7 @@
       ]
     }
   ],
-  "source_tree_sha256": "55d87d7755690ebd4c1e8998868e2aa206478ca969addd4b63f99211e4dc3fe0",
+  "source_tree_sha256": "05c9e6fd7ad86627b8ee054692a4e2b7c286c3ef52465ed45561e0578a91d0b3",
   "status": "assembled-source-only",
   "transformation_manifest": "docs/reconstitution/decompiler-transforms.json",
   "transformation_manifest_sha256": "30ab06626f3e4c863a2855790b0ec6211499394852f2a8598ea3bd444ce87fe8",

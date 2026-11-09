@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-"""Foreground, loopback-only TCP byte transport for a local runtime.
+"""Foreground TCP byte transport for a local runtime; loopback by default.
+
+An explicit RFC1918 listen address enables access through that LAN interface.
 
 This transports bytes without HTTP parsing, normalization, authentication, or
 proxy-environment handling. It is neither HTTP evidence nor runtime lifecycle
@@ -118,7 +120,7 @@ def run(args):
         listener.bind((args.listen_host, args.listen_port))
         listener.listen(32)
         listener.settimeout(0.2)
-        print(f"listening on 127.0.0.1:{args.listen_port}", flush=True)
+        print(f"listening on {args.listen_host}:{args.listen_port}", flush=True)
         try:
             while not stopping.is_set():
                 try:
@@ -146,7 +148,8 @@ def run(args):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--listen-host", choices=("127.0.0.1",), default="127.0.0.1")
+    parser.add_argument("--listen-host", type=private_ipv4, default="127.0.0.1",
+                        help="IPv4 loopback or an explicit RFC1918 interface address")
     parser.add_argument("--listen-port", required=True, type=port_number)
     parser.add_argument("--target-host", required=True, type=private_ipv4)
     parser.add_argument("--target-port", required=True, type=port_number)

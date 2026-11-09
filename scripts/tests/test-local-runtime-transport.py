@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Transport CLI and actual socket seams; no Docker, SSH, or runtime services."""
 import contextlib
+import importlib.util
 import os
 from pathlib import Path
 import select
@@ -46,8 +47,10 @@ class LocalRuntimeTransportTest(unittest.TestCase):
 
     @contextlib.contextmanager
     def transport(self, target_port, *extra):
+        listen_host = (extra[extra.index("--listen-host") + 1]
+                       if "--listen-host" in extra else "127.0.0.1")
         with socket.socket() as reservation:
-            reservation.bind(("127.0.0.1", 0))
+            reservation.bind((listen_host, 0))
             listen_port = reservation.getsockname()[1]
         env = dict(os.environ, HTTP_PROXY="http://127.0.0.1:1",
                    HTTPS_PROXY="http://127.0.0.1:1", ALL_PROXY="http://127.0.0.1:1")
@@ -55,7 +58,7 @@ class LocalRuntimeTransportTest(unittest.TestCase):
                                 stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
         try:
             self.assertTrue(select.select([proc.stdout], [], [], 5)[0], "no startup status")
-            self.assertEqual(proc.stdout.readline().strip(), f"listening on 127.0.0.1:{listen_port}")
+            self.assertEqual(proc.stdout.readline().strip(), f"listening on {listen_host}:{listen_port}")
             yield listen_port, proc
         finally:
             if proc.poll() is None:
@@ -176,9 +179,30 @@ class LocalRuntimeTransportTest(unittest.TestCase):
             self.assertEqual(result.stdout, "")
             self.assertEqual(result.stderr.strip(), "transport listener failed")
 
-    def test_rejects_nonloopback_listener_nonprivate_targets_and_invalid_ports(self):
+    def test_explicit_interface_listener_preserves_stream(self):
+        def exchange(conn):
+            self.assertEqual(self.receive_all(conn), b"interface request")
+            conn.sendall(b"interface response")
+
+        with self.upstream(exchange) as target_port:
+            with self.transport(target_port, "--listen-host", "127.0.0.2") as (port, _):
+                with socket.create_connection(("127.0.0.2", port), timeout=5) as conn:
+                    conn.sendall(b"interface request")
+                    conn.shutdown(socket.SHUT_WR)
+                    self.assertEqual(self.receive_all(conn), b"interface response")
+
+    def test_private_interface_addresses_are_explicitly_accepted(self):
+        spec = importlib.util.spec_from_file_location("local_runtime_transport", SCRIPT)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        for address in ("10.0.0.2", "172.16.72.127", "192.168.1.2"):
+            with self.subTest(address=address):
+                self.assertEqual(module.private_ipv4(address), address)
+
+    def test_rejects_public_or_wildcard_listener_nonprivate_targets_and_invalid_ports(self):
         invalid = [
-            ("--listen-host", "0.0.0.0"), ("--listen-host", "192.168.1.1"),
+            ("--listen-host", "0.0.0.0"), ("--listen-host", "8.8.8.8"),
+            ("--listen-host", "localhost"), ("--listen-host", "169.254.1.1"),
             ("--listen-host", "::1"), ("--target-host", "8.8.8.8"),
             ("--target-host", "0.0.0.0"), ("--target-host", "169.254.1.1"),
             ("--target-host", "224.0.0.1"), ("--target-host", "240.0.0.1"),

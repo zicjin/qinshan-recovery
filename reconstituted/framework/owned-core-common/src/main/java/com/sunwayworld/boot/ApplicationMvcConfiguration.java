@@ -61,6 +61,8 @@ extends WebMvcConfigurationSupport {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
+        registry.addResourceHandler("/files/**").addResourceLocations(
+                "file:" + com.sunwayworld.framework.io.file.FilePathManager.getApplicationFilePath() + "/");
     }
 
     @Override

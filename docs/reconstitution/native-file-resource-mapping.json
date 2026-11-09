@@ -1,0 +1,135 @@
+{
+  "schema": "native-resource-registration-attribution-v1",
+  "conclusion": "observed-original-registration",
+  "mapping": {
+    "url_pattern": "/files/**",
+    "resource_location_expression": "\"file:\" + FilePathManager.getApplicationFilePath() + \"/\"",
+    "filesystem_root_expression": "Paths.get(System.getProperty(\"user.dir\")).resolve(\"files\")"
+  },
+  "input": {
+    "stock_jar_sha256": "4a720797810fd2f8cca6e22604657028cb87830ca0e24bb55a5f42f040f6ee9f",
+    "nested_jar": "BOOT-INF/lib/gikam-core-common-14.1.5.jar",
+    "nested_jar_sha256": "1075fda5ac05d4292b8c2efe2d9b3cc8379ce049c133221c27ba8f2cee7e1089",
+    "native_member": "third-party/sunway-app/linux/sunway-app.so",
+    "native_sha256": "dc06e05d55252211e44b3a177267b68efc970b095d74c7ebd815057f5393d40a",
+    "native_bytes": 186512
+  },
+  "native_export": {
+    "name": "Java_com_sunwayworld_boot_ApplicationMvcConfiguration_addResourceHandlers",
+    "start_address": "0xe11c",
+    "size_bytes": 6279,
+    "exclusive_end_address": "0xf9a3",
+    "old_dossier_excerpt_exclusive_end": "0xe25d",
+    "old_excerpt_limitation": "only the beginning of this export; omitted file resource registration"
+  },
+  "observations": [
+    {
+      "addresses": "0xe193..0xe1a4",
+      "meaning": "Resolve ResourceHandlerRegistry.addResourceHandler(String[]) and store method id at rbp-0x10."
+    },
+    {
+      "addresses": "0xe1d2..0xe1e3",
+      "meaning": "Resolve ResourceHandlerRegistration.addResourceLocations(String[]) and store method id at rbp-0x20."
+    },
+    {
+      "addresses": "0xf2c5..0xf56e",
+      "meaning": "Assemble com/sunwayworld/framework/io/file/FilePathManager from referenced one-letter constants, then resolve class."
+    },
+    {
+      "addresses": "0xf57a..0xf6bf",
+      "meaning": "Assemble getApplicationFilePath and resolve its static method id with descriptor ()Ljava/nio/file/Path;."
+    },
+    {
+      "addresses": "0xf6cb..0xf6eb",
+      "meaning": "Call FilePathManager.getApplicationFilePath(); store returned Path at rbp-0x318."
+    },
+    {
+      "addresses": "0xf6f7..0xf82a",
+      "meaning": "Construct StringBuilder; append literal file:, returned Path object, then literal /; convert to string."
+    },
+    {
+      "addresses": "0xf83d..0xf874",
+      "meaning": "Build String[] with /files/**; invoke stored addResourceHandler on original registry."
+    },
+    {
+      "addresses": "0xf899..0xf8da",
+      "meaning": "Build String[] from constructed location string; invoke stored addResourceLocations on returned registration."
+    }
+  ],
+  "supporting_bytecode": [
+    {
+      "class": {
+        "member": "com/sunwayworld/framework/io/file/FilePathManager.class",
+        "sha256": "163d92502c854cf163d7098c231f702eafdf923f2e7f80fc6bc868e957a8ee73"
+      },
+      "method": "getApplicationRootPath",
+      "behavior": "Calls SystemUtils.getWorkingPath() and caches returned Path."
+    },
+    {
+      "class": {
+        "member": "com/sunwayworld/framework/io/file/FilePathManager.class",
+        "sha256": "163d92502c854cf163d7098c231f702eafdf923f2e7f80fc6bc868e957a8ee73"
+      },
+      "method": "getApplicationFilePath",
+      "behavior": "Calls getApplicationRootPath().resolve(\"files\")."
+    },
+    {
+      "class": {
+        "member": "com/sunwayworld/framework/utils/SystemUtils.class",
+        "sha256": "7e02e5202858e57bdd478394af6f50e8990e3767608db01be992d19aa52ef0b4"
+      },
+      "method": "getWorkingPath",
+      "behavior": "Returns Paths.get(System.getProperty(\"user.dir\"))."
+    }
+  ],
+  "native_execution": false,
+  "java_class_execution": false,
+  "runtime_access": false,
+  "java_changed": false,
+  "analysis_method": [
+    "ELF exact export symbol size",
+    "objdump static disassembly",
+    "ELF literal/data pointer resolution",
+    "offline javap selected original methods"
+  ],
+  "limitations": [
+    "Exact addresses apply only to the stated native SHA-256.",
+    "No native pseudocode decompiler or native execution used.",
+    "This proves original MVC resource registration, not file authorization/filter policy, signing validity, or runtime file availability.",
+    "Current original source and bytecode establish working-directory files path; deployment user.dir must still be confirmed by root runtime work."
+  ],
+  "files": [
+    {
+      "path": "offline-inputs-safe.json",
+      "sha256": "f8759e2de4e4fc3e0c6bac309141b77b7a904c642d8793c2a6d1a64ee6484c5e",
+      "bytes": 600
+    },
+    {
+      "path": "addResourceHandlers-exact-export.asm",
+      "sha256": "478b3ad81ad966610f870a8fd6672b3ce16f3a1be3f889ca4f95288eecb612d7",
+      "bytes": 79265
+    },
+    {
+      "path": "addResourceHandlers-literal-references-safe.json",
+      "sha256": "2b683889d8eb9e82288b8ae1cd01d81c8a027a6b0cc1d755edfd94f524ca2fa5",
+      "bytes": 8359
+    },
+    {
+      "path": "addResourceHandlers-character-map-safe.json",
+      "sha256": "34fb098d0602d71e425feac24c625467fe1cae3540bebdf416609df6f1926119",
+      "bytes": 2547
+    },
+    {
+      "path": "FilePathManager-selected-methods.javap",
+      "sha256": "880f5673d48c7d5596e96d0eb9a401d203e9967eb29196862c028a8ee78eeb9e",
+      "bytes": 1502
+    },
+    {
+      "path": "SystemUtils-selected-methods.javap",
+      "sha256": "f183b45cb96042ad9269f266024916f2a6673ed9235cd752f1cd23d4b272a09d",
+      "bytes": 500
+    }
+  ],
+  "evidence_receipt_sha256": "7209a2d3a3d72caa1d6335d537d09994923db7bee04b48192528ff3bed7df681",
+  "receipt_storage": "private/native-file-resource-seam-20261109/; hashes bind static analysis, not HTTP strict evidence"
+}

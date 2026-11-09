@@ -19,7 +19,7 @@
     },
     {
       "generated_sha256": "28254dca68035a6bed133a2cb1d10e53fd06e4a4e5aed49ae9d7a3c0a55fcbb0",
-      "override_sha256": "ed45491a7be6227bd68d6fca63f70dd43e13ddd02c51c67fd721b43aa49e3693",
+      "override_sha256": "89c1985059f3da3cae88ddada3cb76edbb0881f0aaa3e8897bdf42c5512fa862",
       "path": "src/main/java/com/sunwayworld/boot/ApplicationMvcConfiguration.java"
     },
     {
@@ -176,7 +176,7 @@
     },
     {
       "generated_sha256": "28254dca68035a6bed133a2cb1d10e53fd06e4a4e5aed49ae9d7a3c0a55fcbb0",
-      "override_sha256": "98117ac888b71e27dd76fb288341a770290be93346223e03cbca29fdd2aeef9e",
+      "override_sha256": "89c1985059f3da3cae88ddada3cb76edbb0881f0aaa3e8897bdf42c5512fa862",
       "path": "src/main/java/com/sunwayworld/boot/ApplicationMvcConfiguration.java"
     },
     {
@@ -382,14 +382,15 @@
       "decompiler": "CFR",
       "decompiler_version": "0.152",
       "path": "src/main/java/com/sunwayworld/boot/ApplicationMvcConfiguration.java",
-      "sha256": "1f36e32a3cb06896bb7e6058a451c76e7b53e82715135491c8ffa19327f0185f",
+      "sha256": "673328a64d9f94574ffff6cc1729710b2020cfa0943ed4d7764f75b46926d6dc",
       "source_class_path": "com/sunwayworld/boot/ApplicationMvcConfiguration.class",
       "source_jar": "BOOT-INF/lib/gikam-core-common-14.1.5.jar",
       "source_sha256_before_overlay": "28254dca68035a6bed133a2cb1d10e53fd06e4a4e5aed49ae9d7a3c0a55fcbb0",
       "source_sha256_before_transform": "4835e14a2c06e56917cb29db21d27b852f5818473c20d5aa59a7abcc49ba48c5",
       "transformations": [
         "normalization:generated-source",
-        "overlay:src/main/java/com/sunwayworld/boot/ApplicationMvcConfiguration.java"
+        "overlay:src/main/java/com/sunwayworld/boot/ApplicationMvcConfiguration.java",
+        "source-repair:restore-original-files-resource-mapping;docs/reconstitution/native-file-resource-mapping.json"
       ]
     },
     {
@@ -9179,12 +9180,13 @@
       "decompiler": "CFR",
       "decompiler_version": "0.152",
       "path": "src/main/java/com/sunwayworld/framework/io/filter/FileSecureFilter.java",
-      "sha256": "d2b319fcff1adb7e4a73efe6edd44dc2789b8973c5f3e696ebcdebde7ad78d4e",
+      "sha256": "abbb119acbcc8bf1a1a7d67baac974fab8b43cbdb2ed35fe97f1d2728f1f654e",
       "source_class_path": "com/sunwayworld/framework/io/filter/FileSecureFilter.class",
       "source_jar": "BOOT-INF/lib/gikam-core-common-14.1.5.jar",
       "source_sha256_before_transform": "b772214f8ccfbab7c0caf7d553b8b350fd824d7813a4b99ce54c4f2983cbd644",
       "transformations": [
-        "normalization:generated-source"
+        "normalization:generated-source",
+        "security-repair:apply-file-signature-contract-to-HEAD-and-reject-unparseable-resource-paths"
       ]
     },
     {
@@ -31607,7 +31609,7 @@
       ]
     }
   ],
-  "source_tree_sha256": "6ae3928de547de5f49b0635d8c89e551cbe7a9de1a0b657ce3a95b20c18e19d8",
+  "source_tree_sha256": "08807739420ab8cbb523ed09e5438ad9c5138c324ef498144d9c43103aa5f678",
   "status": "assembled-source-only",
   "transformation_manifest": "docs/reconstitution/decompiler-transforms.json",
   "transformation_manifest_sha256": "30ab06626f3e4c863a2855790b0ec6211499394852f2a8598ea3bd444ce87fe8",

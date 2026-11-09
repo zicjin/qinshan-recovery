@@ -117,6 +117,18 @@
       "owned_replacement": "explicit removed-negative HTTP 404 at /core/module/sys/licenses and /core/module/sys/licenses/number-of-online-users",
       "confidence": "derived",
       "runtime_reachability": "not-executed"
+    },
+    {
+      "java_class": "com.sunwayworld.boot.ApplicationMvcConfiguration",
+      "java_member": "addResourceHandlers",
+      "native_symbol": "Java_com_sunwayworld_boot_ApplicationMvcConfiguration_addResourceHandlers",
+      "evidence_type": "complete-export-static-disassembly-and-original-java-bytecode",
+      "observed_behavior": "Registers /files/** at file: + FilePathManager.getApplicationFilePath() + / after the classpath static resource mapping.",
+      "owned_replacement": "Spring MVC filesystem resource handler under the original working-directory files root; preserve the existing file filters. Runtime authorization and signing behavior require separate HTTP verification.",
+      "confidence": "observed",
+      "runtime_reachability": "native-not-executed",
+      "provenance": "docs/reconstitution/native-file-resource-mapping.json",
+      "correction_to_prior_analysis": "Prior excerpt ended at 0xe25d; the exact export continues to 0xf9a3 and contains the omitted /files registration."
     }
   ],
   "jni_declaration_export_map": {

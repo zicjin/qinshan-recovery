@@ -46,13 +46,21 @@ implements Filter {
         String requestUri;
         HttpServletRequest hsr;
         String method;
-        if (this.accessPermissionEnabled && "GET".equals(method = (hsr = (HttpServletRequest)request).getMethod()) && StringUtils.startsWith(requestUri = ServletUtils.getRequestUri(hsr), DOWNLOAD_URL_PREFIX)) {
+        if (this.accessPermissionEnabled && ("GET".equals(method = (hsr = (HttpServletRequest)request).getMethod()) || "HEAD".equals(method)) && StringUtils.startsWith(requestUri = ServletUtils.getRequestUri(hsr), DOWNLOAD_URL_PREFIX)) {
             String security = hsr.getParameter("security");
             String token = hsr.getParameter("token");
             if (StringUtils.isBlank(security)) {
                 throw new ApplicationRuntimeException("You are not permitted to download file.", new String[0]);
             }
-            FilePathDTO filePath = FilePathManager.toFilePath(requestUri);
+            FilePathDTO filePath;
+            try {
+                filePath = FilePathManager.toFilePath(requestUri);
+            } catch (IllegalArgumentException invalidPath) {
+                throw new ApplicationRuntimeException("You are not permitted to download file.", new String[0]);
+            }
+            if (filePath == null) {
+                throw new ApplicationRuntimeException("You are not permitted to download file.", new String[0]);
+            }
             if (filePath != null) {
                 if (StringUtils.isBlank(token)) {
                     if (!Objects.equals(security, this.fileManager.getSecurity(filePath))) {

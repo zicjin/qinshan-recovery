@@ -36,7 +36,7 @@ source_hash() {
     {
       find project/src owned-framework/src owned-personnel/src owned-equipment/src \
         owned-consumables/src owned-attachments/src owned-report/src owned-scheduler/src \
-        owned-web/src reconstituted/framework reconstituted/overrides -type f \
+        owned-web/src owned-distribution/src reconstituted/framework reconstituted/overrides -type f \
         ! -path '*/target/*' -print0
       printf '%s\0' project/pom.xml reconstituted/framework/pom.xml \
         reconstituted/framework/public-dependency-allowlist.json \
@@ -50,7 +50,8 @@ source_hash() {
         scripts/record-reconstituted-framework-build.py \
         scripts/verify-reconstituted-framework-modules.py \
         scripts/reject-supplier-runtime.sh
-      printf '%s\0' owned-distribution/package.py owned-distribution/start.sh
+      printf '%s\0' owned-distribution/package.py owned-distribution/start.sh \
+        owned-distribution/initialize-admin.sh
       printf '%s\0' owned-distribution/example/owned-application.properties
       if [[ -n "${EXTERNAL_SCHEMA_PROFILE:-}" ]]; then
         printf '%s\0' "$EXTERNAL_SCHEMA_PROFILE"
@@ -112,7 +113,9 @@ fi
 mkdir -p "$PACKAGE_OUTPUT/app" "$PACKAGE_OUTPUT/lib" \
   "$PACKAGE_OUTPUT/modules" "$PACKAGE_OUTPUT/example" "$PACKAGE_OUTPUT/provenance"
 cp "$ROOT/owned-distribution/start.sh" "$PACKAGE_OUTPUT/start.sh"
+cp "$ROOT/owned-distribution/initialize-admin.sh" "$PACKAGE_OUTPUT/initialize-admin.sh"
 chmod 0755 "$PACKAGE_OUTPUT/start.sh"
+chmod 0755 "$PACKAGE_OUTPUT/initialize-admin.sh"
 cp "$ROOT/owned-distribution/example/owned-application.properties" "$PACKAGE_OUTPUT/example/"
 cp "$APPLICATION_DIR/compile-report.json" "$PACKAGE_OUTPUT/provenance/source-only-application.json"
 cp "$ROOT/docs/reconstitution/framework-module-registry.json" "$PACKAGE_OUTPUT/provenance/framework-module-registry.json"

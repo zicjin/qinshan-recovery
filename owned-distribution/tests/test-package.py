@@ -132,6 +132,7 @@ def verify_distribution(ROOT, build_environment):
         assert json.loads(gate_report.read_text())['findings'] == []
     manifest = json.loads((DIST / 'manifest.json').read_text())
     assert manifest['distribution_mode'] == 'source-only-reconstituted'
+    assert (DIST / 'initialize-admin.sh').is_file(), 'one-time first-admin command must ship'
     schema_contract = manifest['external_schema']
     expected_schema_mode = 'original-db-link'
     if build_environment.get('EXTERNAL_SCHEMA_PROFILE'):
@@ -155,6 +156,7 @@ def verify_distribution(ROOT, build_environment):
             assert hashlib.sha256(jar.read(mapper['path'])).hexdigest() == mapper['sha256']
         assert jar.namelist().count('com/sunwayworld/emc/projectfunction/GikamWpjcApplication.class') == 1
         assert 'com/sunwayworld/boot/ApplicationConfiguration.class' in jar.namelist()
+        assert 'com/sunwayworld/owned/install/FirstAdministrator.class' in jar.namelist()
         # Source-only distribution must carry owned seams in the application
         # archive. Building the transitional owned-framework JAR alone does
         # not affect the deployed app classpath.

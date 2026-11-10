@@ -126,8 +126,13 @@ This does not grant deployment readiness. The normal package gate and SQL
 installer still reject the incomplete package before applying DDL.
 Its finite `70-bootstrap.sql` now supplies reviewed technical locale, menu,
 entity and UI configuration from a separate 2026-11-10 production capture.
-Account provisioning, permissions, workflows and dynamic LCDP initialization
-remain incomplete; the phase is not a replacement for the full bootstrap.
+Complete permissions, workflows and dynamic LCDP initialization remain
+incomplete; the phase is not a replacement for the full bootstrap.
+The distribution now includes a one-time
+[first-administrator command](docs/deployment/first-administrator.md), accepting
+private installer identities, password and policy. It initializes a verified
+empty identity set using the original Java password encoder; it is not a public
+bootstrap endpoint or a complete application configuration installer.
 
 Before deployment, an operator must provide one Oracle PDB, one Redis instance,
 an application schema/user with grants, a private runtime properties file, the

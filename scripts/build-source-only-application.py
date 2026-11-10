@@ -396,6 +396,7 @@ def main(argv: list[str] | None = None) -> int:
         ROOT / name / "src/main/java"
         for name in (
             "owned-framework",
+            "owned-distribution",
             "owned-personnel",
             "owned-equipment",
             "owned-consumables",

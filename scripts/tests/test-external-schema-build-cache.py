@@ -22,7 +22,7 @@ class ExternalSchemaBuildCacheTest(unittest.TestCase):
         for directory in (
             "project/src", "owned-framework/src", "owned-personnel/src",
             "owned-equipment/src", "owned-consumables/src", "owned-attachments/src",
-            "owned-report/src", "owned-scheduler/src", "owned-web/src",
+            "owned-report/src", "owned-scheduler/src", "owned-web/src", "owned-distribution/src",
             "reconstituted/framework", "reconstituted/overrides",
         ):
             (self.root / directory).mkdir(parents=True, exist_ok=True)
@@ -50,6 +50,7 @@ root=$(cd "$(dirname "$0")/.." && pwd)
 printf 'built\n' >> "$root/build/framework-invocations.txt"
 """, executable=True)
         self.write("owned-distribution/start.sh", "#!/bin/sh\nexit 0\n", executable=True)
+        self.write("owned-distribution/initialize-admin.sh", "#!/bin/sh\nexit 0\n", executable=True)
         self.write("jdk/bin/java", '#!/bin/sh\necho "java version fixture-8" >&2\n', executable=True)
         self.write("scripts/build-source-only-application.py", """from pathlib import Path
 import argparse

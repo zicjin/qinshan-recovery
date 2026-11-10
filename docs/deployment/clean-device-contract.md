@@ -102,7 +102,11 @@ only validates this explicit blocked state offline; it is not a deployment gate.
    core schema package. Do not run all files under `project/sql/`.
 3. Run the core schema verifier supplied with that package and retain its hash
    receipt. Apply and verify versioned configuration bootstrap separately from
-   ordinary business data.
+   ordinary business data. The distribution's one-time
+   `initialize-admin.sh` now provides the first identity/policy installation
+   step, with explicit private operator inputs; see
+   [first-administrator.md](first-administrator.md). It refuses existing identity
+   tables and does not complete remaining workflow/LCDP/configuration bootstrap.
 4. Apply `api-fixtures/schema/external-logical-clone.sql` to the same runtime
    schema if the selected profile uses `local-view`; otherwise apply the
    approved direct-schema package and use its explicit mapper profile.

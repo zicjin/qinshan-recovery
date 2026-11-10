@@ -14,6 +14,10 @@
     {
       "path": "private/production-baseline-20261110/external-schema-remote-metadata-private.json",
       "sha256": "c268df8626f7848e7674430d02d66d0a822afd9897b6e4b3a2472280fb836a89"
+    },
+    {
+      "path": "private/production-baseline-20261110/external-schema-remote-full-metadata-private.json",
+      "sha256": "40b3572fd2a16ea44daa379fc984c32dd47783fe369eba4d30ddeaaa8bafea04"
     }
   ],
   "domains": [
@@ -39,6 +43,11 @@
         "indexes": 10,
         "index_columns": 10,
         "triggers": 0,
+        "owner_objects": 3155,
+        "views": 92,
+        "sequences": 2,
+        "dependency_edges": 347,
+        "procedural_types_grants": "blocked-remote-dictionary-ora-00904",
         "dependencies": 0,
         "grants": "blocked-remote-dictionary-ora-00904"
       },
@@ -63,6 +72,11 @@
         "indexes": 21,
         "index_columns": 23,
         "triggers": 0,
+        "owner_objects": 11923,
+        "views": 143,
+        "sequences": 33,
+        "dependency_edges": 3229,
+        "procedural_types_grants": "blocked-remote-dictionary-ora-00904",
         "dependencies": 0,
         "grants": "blocked-remote-dictionary-ora-00904"
       },
@@ -83,6 +97,11 @@
         "indexes": 14,
         "index_columns": 14,
         "triggers": 0,
+        "owner_objects": 1708,
+        "views": 0,
+        "sequences": 1,
+        "dependency_edges": 12,
+        "procedural_types_grants": "blocked-remote-dictionary-ora-00904",
         "dependencies": 0,
         "grants": "blocked-remote-dictionary-ora-00904"
       },

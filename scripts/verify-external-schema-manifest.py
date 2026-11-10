@@ -75,6 +75,11 @@ def main() -> int:
         for key in ("objects", "columns", "constraints", "constraint_columns", "indexes", "index_columns", "triggers"):
             if not isinstance(counts.get(key), int) or counts[key] < 0:
                 fail(f"{name} metadata count missing: {key}")
+        for key in ("owner_objects", "views", "sequences", "dependency_edges"):
+            if not isinstance(counts.get(key), int) or counts[key] < 0:
+                fail(f"{name} full metadata count missing: {key}")
+        if counts.get("procedural_types_grants") != "blocked-remote-dictionary-ora-00904":
+            fail(f"{name} procedural/type/grant gap must remain explicit")
         if counts.get("grants") != "blocked-remote-dictionary-ora-00904":
             fail(f"{name} grant gap must remain explicit")
     for receipt in manifest.get("private_receipts", []):

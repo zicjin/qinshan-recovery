@@ -161,7 +161,14 @@ An operator supplies the target environment and private inputs:
   required feature settings;
 - a persistent writable application working directory with its `files/` volume,
   kept outside the immutable distribution and preserved across app rollback;
-- public dependency JARs and the Maven plugin seed listed in `README.md`.
+- a verified matching distribution; a host building it from source also needs
+  the public dependency JARs, Maven and plugin seed listed in `README.md`.
+
+An already built distribution carries its public runtime dependencies under
+`lib/`, selected by `lib/classpath.txt`; the runtime host needs no separate
+dependency directory or Maven plugin seed. Keep Python 3.10+ for the installation
+integrity checks and a matching SQLPlus client for the completed Oracle package.
+The complete JDK 8 remains a runtime prerequisite for dynamic LCDP compilation.
 
 The runtime configuration must contain at least datasource URL/user/password,
 Redis URL or host/port plus an explicit `spring.redis.database`, `server.port`,
@@ -258,14 +265,6 @@ only validates this explicit blocked state offline; it is not a deployment gate.
    JSON and password policy. It requires empty identity tables and technical
    prerequisites; it does not complete remaining workflow/LCDP/configuration
    bootstrap.
-   The matching distribution also includes a separate
-   [workflow configuration command](workflows.md). After preparing every target
-   identity and membership, stop the target application and provide its complete
-   private mapping to `initialize-workflows.sh`. It preserves the 20 nonempty
-   latest definitions and refuses existing workflow state; seven source-empty
-   definitions remain blocked. Restarting an application does not clear Redis:
-   use a dedicated unused workflow cache namespace for this first installation.
-   The combined structural SQL plan does not invoke this command automatically.
 6. Start one Spring application from its stable writable working directory,
    owned by the application account:
 
@@ -299,7 +298,32 @@ only validates this explicit blocked state offline; it is not a deployment gate.
    real RSA login and read `/core/module/sys/logins/account` in the same session
    to confirm principal, organization and roles; verify protected requests and
    menus as described in the first-administrator guide.
-8. Retain the distribution and runtime configuration as the rollback pair.
+8. Prepare every target workflow role, user, organization, membership and
+   required permission through the original authenticated management APIs, or a
+   separately reviewed identity bootstrap. The first administrator alone is not
+   the workflow identity closure. Do this after the initial start and login above
+   when using HTTP; do not require HTTP identity creation before an application
+   has started.
+9. Finish active verification and fixtures, then stop only this target
+   application. Use the separate [workflow configuration command](workflows.md)
+   with the complete private identity mapping:
+
+   ```bash
+   "$LIMS_DEPLOY_DIST/initialize-workflows.sh" /private/path/runtime.properties \
+     < /private/path/workflows.json
+   ```
+
+   It preserves the 20 nonempty latest definitions and refuses existing workflow
+   state; seven source-empty definitions remain blocked. The combined structural
+   SQL plan does not invoke this command. Before restarting the same application
+   as in step 6, select a dedicated Redis logical database not previously used
+   for workflow caches, with matching URL/database properties. Restarting an
+   application does not clear Redis; never flush a shared logical database.
+   Oracle and Redis stay running. Repeat step 7 for the restarted application,
+   then verify the intended workflow candidates, organization boundaries and
+   actual business process. Installing definitions alone does not accept those
+   behaviors.
+10. Retain the distribution and runtime configuration as the rollback pair.
    Rollback replaces only the application distribution; it does not recreate
    Oracle or Redis. Reuse the same working directory and persistent file volume.
    Data recovery requires matching database and file backups, separately from

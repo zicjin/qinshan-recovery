@@ -54,6 +54,13 @@ The supplier run JAR remains an optional read-only provenance input for
 `verify-source-only-checkpoint.py --run-jar`; it is never a runtime or normal
 build dependency.
 
+These dependency directories, Maven and its plugin seed are build-host inputs.
+A runtime host using an already built distribution uses its bundled `lib/`
+classpath; it does not need Maven, the plugin seed or a separate public-JAR
+directory. It still needs the complete JDK 8 because published LCDP Java compiles
+at runtime. Python 3.10+ is needed for the bundled installation integrity checks,
+and applying the completed Oracle package requires a matching SQLPlus client.
+
 ## Build and verify
 
 Run these commands from the standalone repository root. Select the database
@@ -166,9 +173,9 @@ python3 scripts/verify-core-schema-package.py --check-package
 
 This does not grant deployment readiness. The normal package gate and SQL
 installer still reject the incomplete package before applying DDL.
-Its finite `70-bootstrap.sql` supplies reviewed technical locale, menu,
-entity and UI configuration, plus the 27 explicitly referenced dictionary
-categories, 118 options and their translation dependencies. Captures are bound
+Its finite `70-bootstrap.sql` supplies 4,857 reviewed technical rows across 22
+tables, including locale, menu, entity and UI configuration, 28 dictionary
+categories, 120 options and their translation dependencies. Captures are bound
 separately; empty production categories remain empty.
 It additionally carries seven reviewed published LCDP modules for equipment,
 folder/order/project/sample information, report lookup and delivery, with ten
@@ -226,9 +233,11 @@ not an instruction for an operator to reconstruct it manually.
 
 Before deployment, an operator must provide one Oracle PDB, one Redis instance,
 an application schema/user with grants, a private runtime properties file, the
-project's completed schema package for the target version, JDK 8, public dependency
-JARs and the Maven plugin seed. Credentials, license material, private keys,
-DB-link strings and business data stay outside Git and the distribution.
+project's completed schema package for the target version, a verified matching
+distribution and a complete JDK 8. A host building from source also supplies the
+public dependency JARs and Maven plugin seed described above. Credentials,
+license material, private keys, DB-link strings and business data stay outside
+Git and the distribution.
 
 The portable [external table package](deployment/oracle/external-schema/README.md)
 can now be checked without private receipts or parent files:

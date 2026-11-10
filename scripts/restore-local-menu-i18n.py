@@ -241,11 +241,11 @@ def local_url(value):
     try:
         parts = urlsplit(value)
         if (parts.scheme != 'http' or parts.hostname not in ('127.0.0.1', 'localhost')
-                or parts.port not in (18087, 18187) or parts.username or parts.password
+                or parts.port not in (None, 18087) or parts.username or parts.password
                 or parts.path not in ('', '/') or parts.query or parts.fragment):
             raise ValueError()
     except ValueError:
-        raise RestoreError('only local HTTP loopback ports 18087/18187 are allowed') from None
+        raise RestoreError('only local HTTP loopback port 18087 is allowed') from None
     return value.rstrip('/')
 
 

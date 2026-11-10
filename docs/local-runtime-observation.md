@@ -90,12 +90,13 @@ audit/rollback observations and lifecycle cleanup before promotion. Error respon
 can themselves create error-log rows; reads do not guarantee a pristine schema.
 
 For an internal-only Docker network whose publish option does not expose a host
-port, the foreground byte transport can provide local diagnostic access:
+port, the foreground byte transport can provide local diagnostic access while
+preserving the same application port at both ends:
 
 ```bash
 # Obtain the actual application IPv4 from Docker inspect first.
 python3 scripts/local-runtime-transport.py \
-  --listen-port 18087 --target-host 172.19.0.4 --target-port 18187
+  --listen-port 18087 --target-host 172.19.0.4 --target-port 18087
 ```
 
 The address above is an example, not a fixed identity. The transport binds only
